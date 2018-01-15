@@ -928,7 +928,6 @@
     <Compile Include="InterfaceLegacy\Domain\IPersonSkillPeriodsDataHolderManager.cs" />
     <Compile Include="InterfaceLegacy\Domain\IPersonWriteProtectionInfo.cs" />
     <Compile Include="InterfaceLegacy\Domain\IPerstistableScheduleData.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IPopulationStatisticsCalculatedValues.cs" />
     <Compile Include="InterfaceLegacy\Domain\IPopulationStatisticsData.cs" />
     <Compile Include="InterfaceLegacy\Domain\IPossibleMinMaxWorkShiftLengthExtractor.cs" />
     <Compile Include="InterfaceLegacy\Domain\IPreferenceAbsenceChecker.cs" />

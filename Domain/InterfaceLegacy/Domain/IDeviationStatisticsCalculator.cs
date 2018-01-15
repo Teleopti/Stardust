@@ -6,13 +6,6 @@
     public interface IDeviationStatisticsCalculator
     {
         /// <summary>
-        /// Adds an item.
-        /// </summary>
-        /// <param name="expectedValue">The expected value.</param>
-        /// <param name="realValue">The real value.</param>
-        void AddItem(double expectedValue, double realValue);
-
-        /// <summary>
         /// Gets the absolute deviation average.
         /// </summary>
         /// <value>The absolute deviation average.</value>

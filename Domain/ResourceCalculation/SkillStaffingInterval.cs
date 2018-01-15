@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -82,7 +83,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			IntraIntervalRootMeanSquare = 0;
 		}
 
-		public void SetDistributionValues(IPopulationStatisticsCalculatedValues calculatedValues,
+		public void SetDistributionValues(PopulationStatisticsCalculatedValues calculatedValues,
 										  IPeriodDistribution periodDistribution)
 		{
 			IntraIntervalDeviation = calculatedValues.StandardDeviation;

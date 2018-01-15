@@ -292,7 +292,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         {
             if (!skillStaffPeriods.Any())
                 return null;
-            SkillStaffPeriodStatisticsForSkillIntraday statistics = new SkillStaffPeriodStatisticsForSkillIntraday(skillStaffPeriods.ToList());
+            SkillStaffPeriodStatisticsForSkillIntraday statistics = new SkillStaffPeriodStatisticsForSkillIntraday(skillStaffPeriods);
             return statistics.StatisticsCalculator.RelativeStandardDeviation.Equals(double.NaN)
                        ? 0d
                        : statistics.StatisticsCalculator.RelativeStandardDeviation;

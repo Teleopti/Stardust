@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
@@ -10,36 +9,20 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     /// </summary>
     public class SkillStaffPeriodStatisticsForSkillIntraday
     {
-        private readonly IEnumerable<ISkillStaffPeriod> _periods;
-
 	    /// <summary>
         /// Initializes a new instance of the <see cref="SkillStaffPeriodStatisticsForSkillIntraday"/> class.
         /// </summary>
         /// <param name="periods">The periods.</param>
         public SkillStaffPeriodStatisticsForSkillIntraday(IEnumerable<ISkillStaffPeriod> periods)
-        {
-            _periods = periods;
-            StatisticsCalculator = new DeviationStatisticsCalculator();
-            InitializeStatisticCalculator();
-        }
+		{
+			StatisticsCalculator = new DeviationStatisticsCalculator(periods.Where(p => p.FStaff > 0)
+				.Select(p => new DeviationStatisticData(p.FStaff, p.CalculatedResource)));
+		}
 
 	    /// <summary>
 	    /// Gets the deviation statistics calculator.
 	    /// </summary>
 	    /// <value>The deviation statistics calculator.</value>
-	    public IDeviationStatisticsCalculator StatisticsCalculator { get; set; }
-
-        /// <summary>
-        /// Initializes the statistic calculator.
-        /// </summary>
-        protected void InitializeStatisticCalculator()
-        {
-	        var items = _periods.Select(p => new Tuple<double, double>(p.FStaff, p.CalculatedResource));
-            foreach (var item in items)
-            {
-                if (item.Item1 <= 0) continue;
-                StatisticsCalculator.AddItem(item.Item1, item.Item2);
-            }
-        }
+	    public IDeviationStatisticsCalculator StatisticsCalculator { get; }
     }
 }

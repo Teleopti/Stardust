@@ -287,7 +287,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             return newViews;
         }
 
-        public void SetDistributionValues(IPopulationStatisticsCalculatedValues calculatedValues, IPeriodDistribution periodDistribution)
+        public void SetDistributionValues(PopulationStatisticsCalculatedValues calculatedValues, IPeriodDistribution periodDistribution)
         {
             IntraIntervalDeviation = calculatedValues.StandardDeviation;
             IntraIntervalRootMeanSquare = calculatedValues.RootMeanSquare;
@@ -835,7 +835,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		}
     }
 
-	public class PopulationStatisticsCalculatedValues : IPopulationStatisticsCalculatedValues
+	public class PopulationStatisticsCalculatedValues
 	{
 		public PopulationStatisticsCalculatedValues(double standardDeviation, double rootMeanSquare)
 		{

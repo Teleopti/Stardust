@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         private ISkillStaffPeriod stPeriod5;
         private ISkillStaffPeriod stPeriod6;
         private ISkillStaffPeriod stPeriod7;
-        private IPopulationStatisticsCalculatedValues _populationStatisticsCalculatedValues;
+        private PopulationStatisticsCalculatedValues _populationStatisticsCalculatedValues;
 	    private ISkill _skill;
 	    private ISkillDay _skillDay;
 	    private IList<int> _intraIntervalSamples;

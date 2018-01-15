@@ -11,15 +11,16 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
         [SetUp]
         public void Setup()
-        {
-            _target = new DeviationStatisticsCalculator();
-            _target.AddItem(11.4d, 13.4d); //    2      
-            _target.AddItem(17.3d, 18.3d); //    1
-            _target.AddItem(21.3d, 20.5d); //   -0.8
-            _target.AddItem(25.9d, 25d);   //   -0.9 
-            _target.AddItem(40.1d, 32.1d); //   -8
-
-        }
+		{
+			_target = new DeviationStatisticsCalculator(new[]
+			{
+				new DeviationStatisticData(11.4d, 13.4d), //    2      
+				new DeviationStatisticData(17.3d, 18.3d), //    1
+				new DeviationStatisticData(21.3d, 20.5d), //   -0.8
+				new DeviationStatisticData(25.9d, 25d), //   -0.9 
+				new DeviationStatisticData(40.1d, 32.1d), //   -8
+			});
+		}
 
         [Test]
         public void VerifyConstructors()
@@ -45,65 +46,50 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         [Test]
         public void VerifyCalculatorConstructorWithLists()
         {
-            double[] expected = { 11.4d, 17.3d, 21.3d, 25.9d, 40.1d };
-            double[] real = { 13.4d, 18.3d, 20.5d, 25d, 32.1d };
+            var expected = new []
+			{
+				new DeviationStatisticData(11.4d,13.4d),
+				new DeviationStatisticData(17.3d,18.3d),
+				new DeviationStatisticData(21.3d,20.5d),
+				new DeviationStatisticData(25.9d,25.0d),
+				new DeviationStatisticData(40.1d,32.1d),
+			};
+            Assert.AreEqual(0.1237d, new DeviationStatisticsCalculator(expected).RelativeRootMeanSquare, 0.01d);
 
-            Assert.AreEqual(0.1237d, new DeviationStatisticsCalculator(expected, real).RelativeRootMeanSquare, 0.01d);
+			expected = new[]
+			{
+				new DeviationStatisticData(11.4d,13.4d),
+				new DeviationStatisticData(17.3d,18.3d),
+				new DeviationStatisticData(21.3d,20.5d),
+				new DeviationStatisticData(25.9d,25.0d),
+				new DeviationStatisticData(40.1d,32.1d),
+				new DeviationStatisticData(0.1d, 5.0d)
+			}; 
 
-            expected = new double[] { 11.4d, 17.3d, 21.3d, 25.9d, 40.1d, 0.1d };
-            real = new double[] { 13.4d, 18.3d, 20.5d, 25d, 32.1d, 5.0d};
-
-            Assert.AreEqual(20d, new DeviationStatisticsCalculator(expected, real).RelativeRootMeanSquare, 0.01d);
+            Assert.AreEqual(20d, new DeviationStatisticsCalculator(expected).RelativeRootMeanSquare, 0.01d);
         }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
+		
         [Test]
-        public void VerifyCalculatorConstructorWithNullExpectedParameter()
+        public void VerifyCalculatorConstructorWithNullParameter()
         {
-            double[] real = { 13.4d, 18.3d, 20.5d, 25d, 32.1d };
-
 	        Assert.Throws<ArgumentNullException>(() =>
 	        {
-				Assert.AreEqual(0.1237d, new DeviationStatisticsCalculator(null, real).RelativeRootMeanSquare, 0.01d);
+				Assert.AreEqual(0.1237d, new DeviationStatisticsCalculator(null).RelativeRootMeanSquare, 0.01d);
 			});
             
         }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-        [Test]
-        public void VerifyCalculatorConstructorWithNullRealParameter()
-        {
-            double[] expected = { 13.4d, 18.3d, 20.5d, 25d, 32.1d };
-
-			Assert.Throws<ArgumentNullException>(() =>
-			{
-				Assert.AreEqual(0.1237d, new DeviationStatisticsCalculator(expected, null).RelativeRootMeanSquare, 0.01d);
-			});
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-        [Test]
-        public void VerifyCalculatorConstructorWithDifferentLength()
-        {
-            double[] expected = { 11.4d, 17.3d, 21.3d, 25.9d, 40.1d, 0d };
-            double[] real = { 13.4d, 18.3d, 20.5d, 25d, 32.1d };
-
-			Assert.Throws<ArgumentException>(() =>
-			{
-
-				Assert.AreEqual(0.1237d, new DeviationStatisticsCalculator(expected, real).RelativeRootMeanSquare, 0.01d);
-			});
-        }
-
+		
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         [Test]
         public void VerifyCalculatorWorksWithNonNumberValues()
         {
-            double[] expected = { 1, 0d  };
-            double[] real = { 1.5, 1d };
+            var expected = new[]
+			{
+				new DeviationStatisticData(1,1.5),
+				new DeviationStatisticData(0d,1)
+			};
 
-            _target = new DeviationStatisticsCalculator(expected, real);
-            Assert.IsFalse(double.IsNaN(new DeviationStatisticsCalculator(expected, real).RelativeStandardDeviation));
+            Assert.IsFalse(double.IsNaN(new DeviationStatisticsCalculator(expected).RelativeStandardDeviation));
         }
     }
 }

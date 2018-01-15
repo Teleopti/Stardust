@@ -44,12 +44,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// Gets or sets the skill collection.
         /// </summary>
         /// <value>The skill collection.</value>
-        public IEnumerable<ISkill> SkillCollection
-        {
-            get { return _skillCollection; }
-        }
+        public IEnumerable<ISkill> SkillCollection => _skillCollection;
 
-        /// <summary>
+		/// <summary>
         /// Gets or sets the virtual skill staff period. 
         /// The combined SkillStaffPeriods that corresponds to the skills in SkillCollection.
         /// </summary>
@@ -144,7 +141,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// </returns>
         public override bool Equals(object obj)
         {
-            if (obj == null || !(obj is SkillCollectionKey))
+            if (!(obj is SkillCollectionKey))
             {
                 return false;
             }

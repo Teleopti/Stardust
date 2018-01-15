@@ -1,3 +1,4 @@
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
@@ -14,7 +15,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		void SetCalculatedUsedSeats(double usedSeats);
 		double FStaff { get; }
 		void ClearIntraIntervalDistribution();
-		void SetDistributionValues(IPopulationStatisticsCalculatedValues calculatedValues, IPeriodDistribution periodDistribution);
+		void SetDistributionValues(PopulationStatisticsCalculatedValues calculatedValues, IPeriodDistribution periodDistribution);
 		double IntraIntervalDeviation { get; }
 		double IntraIntervalRootMeanSquare { get; }
 	}

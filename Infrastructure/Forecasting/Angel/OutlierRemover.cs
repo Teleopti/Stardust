@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Infrastructure.Forecasting.Angel
 					}
 				}
 			}
-
+			
 			var descriptiveStatistics = new DescriptiveStatistics(normalDistribution.Values);
 			var mean = descriptiveStatistics.Mean;
 			var stdDev = descriptiveStatistics.StandardDeviation;
