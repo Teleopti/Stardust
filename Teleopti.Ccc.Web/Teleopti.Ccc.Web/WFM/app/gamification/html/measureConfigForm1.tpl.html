@@ -1,3 +1,5 @@
-<label>Badge threshold</label>
-<input type="text" ng-model="$ctrl._badgeThreshold" ng-change="$ctrl.validate()" ng-model-options="{debounce:200}" />
+<label>
+	Badge threshold
+	<input type="text" ng-model="$ctrl._badgeThreshold" ng-change="$ctrl.validate(); $ctrl.updateThreshold()" ng-model-options="{ updateOn: 'blur change', debounce:200}" />
+</label>
 <span ng-show="$ctrl.hasError">{{$ctrl.errorMsg | translate}}</span>

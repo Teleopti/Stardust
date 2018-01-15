@@ -1,6 +1,12 @@
-<label>Gold badge threshold</label>
-<input type="text" ng-model="$ctrl.goldBadgeThreshold" />
-<label>Silver badge threshold</label>
-<input type="text" ng-model="$ctrl.silverBadgeThreshold" />
-<label>Bronze badge threshold</label>
-<input type="text" ng-model="$ctrl.bronzeBadgeThreshold" />
+<label>
+	Gold badge threshold
+	<input type="text" ng-model="$ctrl.goldBadgeThreshold" ng-change="$ctrl.validate(); $ctrl.updateGoldThreshold()" ng-model-options="{ updateOn: 'blur change', debounce:200}" />
+</label>
+<label>
+	Silver badge threshold
+	<input type="text" ng-model="$ctrl.silverBadgeThreshold" />
+</label>
+<label>
+	Bronze badge threshold
+	<input type="text" ng-model="$ctrl.bronzeBadgeThreshold" />
+</label>

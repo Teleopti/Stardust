@@ -4,21 +4,22 @@
 			templateUrl: 'app/gamification/html/measureConfigForm1.tpl.html',
 			bindings: {
 				badgeThreshold: '<',
-				onUpdateConfig:'<',
+				onUpdate:'&',
 				dataType:'<'
 			},
 			controller: [function measureConfigForm1Ctrl() {
 				var ctrl = this;
 				ctrl.hasError = false;
-				ctrl.updateThreshould = function () {
+
+				ctrl.updateThreshold = function () {
 					if (!ctrl.hasError) {
-						ctrl.onUpdateConfig(ctrl._badgeThreshold);
-					}else{
+						ctrl.onUpdate({ badgeThreshold: ctrl._badgeThreshold });
+					} else {
 						ctrl._badgeThreshold = ctrl.badgeThreshold;
 						ctrl.hasError = false;
 						ctrl.errorMsg = '';
 					}
-				}
+				};
 
 				ctrl.validate = function () {
 					var pattern = /^[1-9]\d*.\d*|0.\d*[1-9]\d*$/;

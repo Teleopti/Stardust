@@ -37,7 +37,7 @@
 			<card-body>
 				<measure-config-form1 ng-if="$ctrl.rule == 0" style="display:block;"
 					badge-threshold="config.badgeThreshold"
-					on-update-config="config.updateMeasureConfig(badgeThreshold)">
+					on-update="config.setBadgeThreshold(badgeThreshold)">
 				</measure-config-form1>
 
 				<measure-config-form2 ng-if="$ctrl.rule == 1" style="display:block;" bronze-badge-threshold="config.bronzeBadgeThreshold"
@@ -61,12 +61,16 @@
 				<measure-config-form1 ng-if="$ctrl.rule == 0" style="display:block;"
 					badge-threshold="config.badgeThreshold"
 					data-type="config.dataType"
-					on-update-config="config.updateMeasureConfig(threshold)">
+					on-update="config.setBadgeThreshold(threshold)">
 				</measure-config-form1>
 
-				<measure-config-form2 ng-if="$ctrl.rule == 1" style="display:block;" on-update-config="config.updateMeasureConfig(bronze, silver, gold)"
-				 bronze-badge-threshold="config.bronzeBadgeThreshold" bronze-update="config.updateBronzeThreshold()" silver-badge-threshold="config.silverBadgeThreshold"
-				 gold-badge-threshold="config.goldBadgeThreshold">
+				<measure-config-form2 ng-if="$ctrl.rule == 1" style="display:block;"
+					 bronze-badge-threshold="config.bronzeBadgeThreshold"
+					 update-bronze="config.setBronzeBadgeThreshold(bronzeBadgeThreshold)"
+					 silver-badge-threshold="config.silverBadgeThreshold"
+					 update-silver="config.setSilverBadgeThreshold(silverBadgeThreshold)"
+					 gold-badge-threshold="config.goldBadgeThreshold"
+					 update-gold="config.setGoldBadgeThreshold(goldBadgeThreshold)">
 				</measure-config-form2>
 			</card-body>
 		</wfm-card>
