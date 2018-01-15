@@ -10,16 +10,16 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     /// </summary>
     public class DeviationStatisticsCalculator : IDeviationStatisticsCalculator
     {
-		private readonly List<double> _absoluteStatisticsValues = new List<double>();
-		private readonly List<double> _relativeStatisticsValues = new List<double>();
+		private readonly double[] _absoluteStatisticsValues;
+		private readonly double[] _relativeStatisticsValues;
 
 		public DeviationStatisticsCalculator(IEnumerable<DeviationStatisticData> statisticData)
         {
             if (statisticData == null)
                 throw new ArgumentNullException(nameof(statisticData));
 
-			_absoluteStatisticsValues.AddRange(statisticData.Select(r => r.AbsoluteDeviation));
-			_relativeStatisticsValues.AddRange(statisticData.Select(r => r.RelativeDeviation).Where(d => !double.IsNaN(d)));
+			_absoluteStatisticsValues = statisticData.Select(r => r.AbsoluteDeviation).ToArray();
+			_relativeStatisticsValues = statisticData.Select(r => r.RelativeDeviation).Where(d => !double.IsNaN(d)).ToArray();
         }
 		
         /// <summary>
