@@ -1,0 +1,78 @@
+<label>Description</label>
+<input type="text" ng-model="$ctrl.name" />
+
+<div>{{$ctrl.changeInfo}}</div>
+
+<label>Rule</label>
+<md-select ng-model="$ctrl.rule" aria-label="Select Rule">
+	<md-option value="0">Ratio conversion</md-option>
+	<md-option value="1">Different thresholds</md-option>
+</md-select>
+
+<div ng-if="$ctrl.rule == 'ratioconversion'">
+	<label>The number of bronze badges that can be converted into silver ones</label>
+	<input ng-model="$ctrl.silverBadgeThreshold" />
+	<label>The threshold of one gold badge for silver badges</label>
+	<input ng-model="$ctrl.goldBadgeThreshold" />
+</div>
+
+<div>
+	<!-- <div ng-repeat="config in $ctrl.builtinMeasureConfigs" style="display:block;" class="measure-config">
+		<div style="font-weight:bold;">{{config.name|translate}}</div>
+
+
+	</div> -->
+	<wfm-card-list multi-select>
+		<wfm-card ng-repeat="config in $ctrl.builtinMeasureConfigs" style="display:block;">
+			<card-header tabindex="-1">
+				<div>
+					<span style="float: right;" class="chevron">
+						<i class="mdi mdi-chevron-right"></i>
+					</span>
+					<div ng-show="!$ctrl.nameEditModel" style="float: right; line-height: 18px!important;" ng-click="$event.stopPropagation()"
+					 tabindex="0" class="context-menu card-context">
+						<i style="margin-left: 0; margin-right: 0;" class="mdi mdi-lead-pencil edit-icon"></i>
+						<md-tooltip>{{'Rename'|translate}}</md-tooltip>
+					</div>
+					<div style="display: inline-block;" ng-click="$event.stopPropagation()">
+						<md-checkbox style="display: inline-block; margin-top: 0; margin-bottom: 0;" aria-label="Enable measure" ng-model="$ctrl.settingInfo.enable">
+							<b ng-show="!$ctrl.nameEditModel">{{config.name}}</b>
+						</md-checkbox>
+					</div>
+					<div ng-show="$ctrl.nameEditModel" style="display: inline-block;">
+						<input type="text" ng-model="config.name" ng-blur="$event.stopPropagation()">
+					</div>
+				</div>
+			</card-header>
+			<card-body>
+				<measure-config-form1 ng-if="$ctrl.rule == 0" style="display:block;" badge-threshold="config.badgeThreshold" on-update-config="config.updateMeasureConfig(badgeThreshold)">
+				</measure-config-form1>
+
+				<measure-config-form2 ng-if="$ctrl.rule == 1" style="display:block;" bronze-badge-threshold="config.bronzeBadgeThreshold"
+				 on-bronze-badge-threshold-update="config.updateBronzeBadgeThreshold(value)" silver-badge-threshold="config.silverBadgeThreshold"
+				 gold-badge-threshold="config.goldBadgeThreshold">
+				</measure-config-form2>
+			</card-body>
+		</wfm-card>
+		<wfm-card ng-repeat="config in $ctrl.externalMeasureConfigs" style="display:block;">
+			<card-header tabindex="-1">
+				<div tabindex="0">
+					<measure-config-header name="config.name" allow-rename="!config.builtin" checked="config.enabled" on-name-update="config.setName(name)"
+					 on-checkbox-update="config.setEnabled(enabled)">
+					</measure-config-header>
+				</div>
+			</card-header>
+			<card-body>
+				<measure-config-form1 ng-if="$ctrl.rule == 0" style="display:block;" badge-threshold="config.badgeThreshold"
+				data-type='config.dataType'
+				on-update-config="config.updateMeasureConfig(threshold)">
+				</measure-config-form1>
+
+				<measure-config-form2 ng-if="$ctrl.rule == 1" style="display:block;" on-update-config="config.updateMeasureConfig(bronze, silver, gold)"
+				 bronze-badge-threshold="config.bronzeBadgeThreshold" bronze-update="config.updateBronzeThreshold()" silver-badge-threshold="config.silverBadgeThreshold"
+				 gold-badge-threshold="config.goldBadgeThreshold">
+				</measure-config-form2>
+			</card-body>
+		</wfm-card>
+	</wfm-card-list>
+</div>
