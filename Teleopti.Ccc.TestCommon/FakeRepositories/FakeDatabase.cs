@@ -280,7 +280,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return database.WithAssignedActivity(null, startTime, endTime);
 		}
-		
+
 		public static FakeDatabase WithDayOffTemplate(this FakeDatabase database, Guid? id)
 		{
 			return database.WithDayOffTemplate(id, null, null);
@@ -437,7 +437,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			// default data already created. ugly for now...
 			if (_applicationFunctions.LoadAll().Count > 0)
 				return;
-			
+
 			// all application functions
 			_allApplicationFunctions.ApplicationFunctions.ForEach(_applicationFunctions.Add);
 
@@ -535,12 +535,22 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_dataSources.Add(sourceId, datasourceId);
 			return this;
 		}
-
+		
 		public FakeDatabase WithBusinessUnit(Guid? id)
 		{
-			if (id.HasValue && _businessUnits.LoadAll().Any(x => x.Id.Equals(id)))
+			return WithBusinessUnit(id, null);
+		}
+
+		public FakeDatabase WithBusinessUnit(Guid? id, string name)
+		{
+			var existing = _businessUnits.LoadAll().FirstOrDefault(x => x.Id.GetValueOrDefault() == id.GetValueOrDefault());
+			if (existing != null)
+			{
+				_businessUnit = existing as BusinessUnit;
 				return this;
-			_businessUnit = new BusinessUnit(RandomName.Make());
+			}
+
+			_businessUnit = new BusinessUnit(name ?? RandomName.Make());
 			_businessUnit.SetId(id ?? Guid.NewGuid());
 			_businessUnits.Has(_businessUnit);
 			return this;
@@ -1090,6 +1100,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 					return;
 				createAction();
 			}
+
 			if (all.IsEmpty())
 				createAction();
 		}

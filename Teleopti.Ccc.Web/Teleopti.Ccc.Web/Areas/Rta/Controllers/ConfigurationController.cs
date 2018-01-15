@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 
 		[HttpGet, Route("Rta/Configuration/Validate")]
 		[TenantScope]
-		[UnitOfWork]
+		[AllBusinessUnitsUnitOfWork]
 		public virtual IHttpActionResult Validate([FromUri] string tenant = null)
 		{
 			return Ok(_validator.Validate());

@@ -16942,7 +16942,7 @@ Do you want to participate?</value>
     <value>Configuration issues found</value>
   </data>
   <data name="LoggedOutStateGroupMissingInConfiguration" xml:space="preserve">
-    <value>Logged out state group is missing in configuration for business unit '{0}'</value>
+    <value>Business unit '{0}' does not have a state group specified as agents being logged out. State snapshot feature will not work until this is configured. Configure this in Windows client's options.</value>
   </data>
   <data name="PickATemplate" xml:space="preserve">
     <value>Pick a template</value>

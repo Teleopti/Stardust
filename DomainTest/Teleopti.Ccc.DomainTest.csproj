@@ -219,6 +219,7 @@
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsTimeZoneUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\RemoveActivityCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\ClearPlanningPeriodSchedulingCommandHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\Configuration\LoggedOutStateGroupMissingInConfigurationTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherencePercentage\PackageTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AgentState\UnorderedEventsTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AgentState\SiteNameChangedTest.cs" />

@@ -307,6 +307,9 @@
     <Compile Include="ApplicationLayer\ResourcePlanner\CrossAgentsAndSkills.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\IIslandInfo.cs" />
     <Compile Include="ApplicationLayer\Rta\Configuration\ConfigurationValidationViewModel.cs" />
+    <Compile Include="ApplicationLayer\Rta\Configuration\ConfigurationValidator.cs" />
+    <Compile Include="ApplicationLayer\Rta\Configuration\IConfigurationValidator.cs" />
+    <Compile Include="ApplicationLayer\Rta\Configuration\NoConfigurationValidator.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\IOrganizationReader.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\OrganizationSiteModel.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\HistoricalAdherenceMaintainer.cs" />

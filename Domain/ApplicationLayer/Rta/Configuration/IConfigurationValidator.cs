@@ -2,9 +2,8 @@
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Configuration
 {
-	public class ConfigurationValidationViewModel
+	public interface IConfigurationValidator
 	{
-		public string Resource;
-		public IEnumerable<string> Data;
+		IEnumerable<ConfigurationValidationViewModel> Validate();
 	}
 }
