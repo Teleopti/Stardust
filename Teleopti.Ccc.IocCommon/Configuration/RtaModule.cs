@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Configuration;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.RtaTool;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
@@ -79,7 +80,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<AdherencePercentageCalculator>().As<IAdherencePercentageCalculator>();
 			else
 				builder.RegisterType<NoAdherencePercentageCalculator>().As<IAdherencePercentageCalculator>();
-			
+
 			builder.RegisterType<HistoricalAdherenceReadModelReader>().As<IHistoricalAdherenceReadModelReader>();
 			builder.RegisterType<HistoricalAdherenceReadModelPersister>().As<IHistoricalAdherenceReadModelPersister>();
 
@@ -119,12 +120,17 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			}
 			else
 				builder.RegisterType<NoRtaTracer>().As<IRtaTracer>().SingleInstance();
+
 			builder.RegisterType<RtaTracerRefresher>().SingleInstance().ApplyAspects();
 			builder.RegisterType<RtaTracerReader>().As<IRtaTracerReader>().SingleInstance();
 			builder.RegisterType<RtaTracerWriter>().As<IRtaTracerWriter>().SingleInstance();
 			builder.RegisterType<RtaTracerConfigPersister>().As<IRtaTracerConfigPersister>().SingleInstance();
 			builder.RegisterType<RtaTracerSessionFactory>().SingleInstance();
+			
+			if (_config.Toggle(Toggles.RTA_ConfigurationValidationNotification_46933))
+				builder.RegisterType<ConfigurationValidator>().As<IConfigurationValidator>().SingleInstance();
+			else
+				builder.RegisterType<NoConfigurationValidator>().As<IConfigurationValidator>().SingleInstance();
 		}
 	}
-
 }
