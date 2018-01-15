@@ -7034,7 +7034,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void openResourcePlannerInWfm(string what)
 		{
-			var wfmPath = _container.Resolve<IConfigReader>().AppConfig("FeatureToggle");
+			var wfmPath = _container.Resolve<IConfigReader>().AppConfig("WebApp");
 			var url = $"{wfmPath}WFM/#/resourceplanner/{what}";
 			if (url.IsAnUrl())
 				Process.Start(url);
