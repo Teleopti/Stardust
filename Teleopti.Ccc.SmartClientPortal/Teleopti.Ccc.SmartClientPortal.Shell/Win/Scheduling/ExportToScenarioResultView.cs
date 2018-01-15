@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -15,6 +16,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_PrepareToRemoveExportSchedule_46576)]
 	public partial class ExportToScenarioResultView : BaseDialogForm, IExportToScenarioResultView
 	{
 		private ExportToScenarioResultPresenter _presenter;

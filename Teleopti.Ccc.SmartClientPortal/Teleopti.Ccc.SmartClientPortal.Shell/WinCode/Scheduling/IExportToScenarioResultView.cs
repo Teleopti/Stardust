@@ -1,8 +1,10 @@
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Foundation;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 {
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_PrepareToRemoveExportSchedule_46576)]
 	public interface IExportToScenarioResultView
 	{
 		void CloseForm();

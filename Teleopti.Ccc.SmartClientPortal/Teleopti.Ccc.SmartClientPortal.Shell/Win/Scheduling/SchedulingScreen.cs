@@ -4679,7 +4679,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			enableSave();
 		}
 
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_PrepareToRemoveExportSchedule_46576)]
+		[RemoveMeWithToggle("function + flowLayoutExportToScenario from designer", Toggles.ResourcePlanner_PrepareToRemoveExportSchedule_46576)]
 		private void loadScenarioMenuItems()
 		{
 			IList<IScenario> scenarios;
@@ -4736,6 +4736,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			}
 		}
 
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_PrepareToRemoveExportSchedule_46576)]
 		private void menuItemClick(object sender, EventArgs e)
 		{
 			var buttonAdv = sender as ButtonAdv;

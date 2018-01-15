@@ -2,10 +2,12 @@
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using System.Linq;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_PrepareToRemoveExportSchedule_46576)]
 	public class MoveDataBetweenSchedules : IMoveDataBetweenSchedules
 	{
 		private readonly INewBusinessRuleCollection _newBusinessRules;

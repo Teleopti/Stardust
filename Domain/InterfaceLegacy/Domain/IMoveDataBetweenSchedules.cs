@@ -1,16 +1,11 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Ccc.Domain.FeatureFlags;
+
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
-
-    /// <summary>
-    /// A service that moves data between two IScheduleDictionaries
-    /// </summary>
-    /// <remarks>
-    /// Created by: rogerkr
-    /// Created date: 2009-10-12
-    /// </remarks>
-    public interface IMoveDataBetweenSchedules
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_PrepareToRemoveExportSchedule_46576)]
+	public interface IMoveDataBetweenSchedules
     {
         /// <summary>
         /// Exports the specified persons and period.
