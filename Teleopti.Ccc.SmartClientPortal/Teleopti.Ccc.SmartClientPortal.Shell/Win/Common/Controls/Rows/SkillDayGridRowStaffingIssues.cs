@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Rows
         private void drawStaffingIssues(CellInfo cellInfo)
         {
             var skillStaffPeriods = SkillStaffPeriodList;
-            if (skillStaffPeriods == null || skillStaffPeriods.Count() == 0) return;
+            if (skillStaffPeriods == null || !skillStaffPeriods.Any()) return;
 
             StringBuilder toolTip = new StringBuilder();
             if (overstaffing.IsSatisfiedBy(skillStaffPeriods))

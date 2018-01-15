@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.ForecastsFile
     public class ForecastsRow : IForecastsRow
     {
         private const string dateTimeFormat = "yyyyMMdd HH:mm";
-        private const char seperator = ',';
+        private const char separator = ',';
         private static readonly CultureInfo CultureInfo = CultureInfo.InvariantCulture;
 
 	    public string SkillName { get; set; }
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.ForecastsFile
         public ForecastsRow(string forecastsRow)
         {
             InParameter.NotNull(nameof(forecastsRow),forecastsRow);
-            var parts = forecastsRow.Split(seperator);
+            var parts = forecastsRow.Split(separator);
             SkillName = parts[0];
             LocalDateTimeFrom = DateTime.ParseExact(parts[1], dateTimeFormat, CultureInfo);
             LocalDateTimeTo = DateTime.ParseExact(parts[2], dateTimeFormat, CultureInfo);
@@ -50,16 +50,16 @@ namespace Teleopti.Ccc.Domain.Forecasting.ForecastsFile
         public override String ToString()
         {
             var str = new StringBuilder();
-            str.Append(SkillName);str.Append(seperator);
-            str.Append(LocalDateTimeFrom.ToString(dateTimeFormat, CultureInfo)); str.Append(seperator);
-            str.Append(LocalDateTimeTo.ToString(dateTimeFormat, CultureInfo)); str.Append(seperator);
-            str.Append(UtcDateTimeFrom.ToString(dateTimeFormat, CultureInfo)); str.Append(seperator);
-            str.Append(UtcDateTimeTo.ToString(dateTimeFormat, CultureInfo)); str.Append(seperator);
-            str.Append(Tasks.ToString("F", CultureInfo)); str.Append(seperator);
-            str.Append(TaskTime.ToString("F", CultureInfo)); str.Append(seperator);
-            str.Append(AfterTaskTime.ToString("F", CultureInfo)); str.Append(seperator);
+            str.Append(SkillName);str.Append(separator);
+            str.Append(LocalDateTimeFrom.ToString(dateTimeFormat, CultureInfo)); str.Append(separator);
+            str.Append(LocalDateTimeTo.ToString(dateTimeFormat, CultureInfo)); str.Append(separator);
+            str.Append(UtcDateTimeFrom.ToString(dateTimeFormat, CultureInfo)); str.Append(separator);
+            str.Append(UtcDateTimeTo.ToString(dateTimeFormat, CultureInfo)); str.Append(separator);
+            str.Append(Tasks.ToString("F", CultureInfo)); str.Append(separator);
+            str.Append(TaskTime.ToString("F", CultureInfo)); str.Append(separator);
+            str.Append(AfterTaskTime.ToString("F", CultureInfo)); str.Append(separator);
             str.Append(Agents.HasValue ? Agents.Value.ToString("F", CultureInfo) : " ");
-            str.Append(seperator);
+            str.Append(separator);
             str.Append(Shrinkage.HasValue ? Shrinkage.Value.ToString("F", CultureInfo) : " ");
             return str.ToString();
         }

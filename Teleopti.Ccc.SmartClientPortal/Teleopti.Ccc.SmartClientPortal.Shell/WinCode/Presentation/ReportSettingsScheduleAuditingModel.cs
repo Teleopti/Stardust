@@ -43,12 +43,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Presentation
             _agents.Remove(person);
         }
 
-        public IList<IPerson> Agents
-        {
-            get { return _agents; }
-        }
+        public IList<IPerson> Agents => _agents;
 
-        public string AgentsNameCommaSeparated()
+		public string AgentsNameCommaSeparated()
         {
             if (_agents == null || _agents.Count == 0)
                 return string.Empty;

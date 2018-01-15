@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin
@@ -39,20 +39,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin
 
         public string GetRoleCollectionDisplayText(IEnumerable<IApplicationRole> roleCollection)
         {
-            StringBuilder roleCollectionDisplayString = new StringBuilder();
-
             if (roleCollection != null)
-            {
-                foreach (IApplicationRole role in roleCollection)
-                {
-                    if (roleCollectionDisplayString.Length > 0)
-                        roleCollectionDisplayString.Append(", ");
-
-                    roleCollectionDisplayString.Append(_roleDisplay.Description(role));
-                }
+			{
+				return string.Join(", ", roleCollection.Select(role => _roleDisplay.Description(role)));
             }
 
-            return roleCollectionDisplayString.ToString();
+            return string.Empty;
         }
     }
 }

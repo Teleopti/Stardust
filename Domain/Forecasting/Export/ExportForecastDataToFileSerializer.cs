@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
     public class ExportForecastDataToFileSerializer : IExportForecastDataToFileSerializer
     {
         private const string DateTimeFormat = "yyyyMMdd HH:mm";
-        private const string Seperator = ",";
+        private const string Separator = ",";
 
         public IEnumerable<string> SerializeForecastData(ISkill skill, ExportSkillToFileCommandModel model, IEnumerable<ISkillDay> skillDays)
         {
@@ -26,26 +26,26 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
                 {
                     var row = new StringBuilder();
                     row.Append(skill.Name);
-                    row.Append(Seperator);
+                    row.Append(Separator);
                     row.Append(skillStaffPeriod.Period.StartDateTimeLocal(skill.TimeZone).ToString(DateTimeFormat, CultureInfo.InvariantCulture));
-                    row.Append(Seperator);
+                    row.Append(Separator);
                     row.Append(skillStaffPeriod.Period.EndDateTimeLocal(skill.TimeZone).ToString(DateTimeFormat, CultureInfo.InvariantCulture));
-                    row.Append(Seperator);
+                    row.Append(Separator);
 
                     if (model.ExportType.Equals(TypeOfExport.Calls) ||
                         model.ExportType.Equals(TypeOfExport.AgentsAndCalls))
                     {
 	                    row.Append(Math.Round((decimal) skillStaffPeriod.Payload.TaskData.Tasks, 0));
-                        row.Append(Seperator);
+                        row.Append(Separator);
                         row.Append(skillStaffPeriod.Payload.TaskData.AverageTaskTime.TotalSeconds.ToString("F",
                                                                                                            CultureInfo.InvariantCulture));
-                        row.Append(Seperator);
+                        row.Append(Separator);
                         row.Append(skillStaffPeriod.Payload.TaskData.AverageAfterTaskTime.TotalSeconds.ToString(
                             "F", CultureInfo.InvariantCulture));
 
                         if (model.ExportType.Equals(TypeOfExport.AgentsAndCalls))
                         {
-                            row.Append(Seperator);
+                            row.Append(Separator);
                             row.Append(skillStaffPeriod.Payload.ForecastedIncomingDemand.ToString("F", CultureInfo.InvariantCulture));
                         }
                     }
@@ -53,11 +53,11 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
                     if (model.ExportType.Equals(TypeOfExport.Agents))
                     {
                         row.Append(0);
-                        row.Append(Seperator);
+                        row.Append(Separator);
                         row.Append(0D);
-                        row.Append(Seperator);
+                        row.Append(Separator);
                         row.Append(0D);
-                        row.Append(Seperator);
+                        row.Append(Separator);
                         row.Append(skillStaffPeriod.Payload.ForecastedIncomingDemand.ToString("F", CultureInfo.InvariantCulture));
                     }
 

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
@@ -114,13 +114,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// Created date: 2008-03-06
         /// </remarks>
         public override string ToString()
-        {
-            StringBuilder builder = new StringBuilder();
-            foreach (ISkill skill in _skillCollection)
-            {
-                builder.Append(skill.Name);
-            }
-            return builder.ToString();
+		{
+			return string.Join("",_skillCollection.Select(s => s.Name));
         }
 
         #region IEquatable<Description> Members

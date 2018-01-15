@@ -1623,17 +1623,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void toolStripMenuItemNotifyAgentClick(object sender, EventArgs e)
 		{
-			var builder = new StringBuilder();
-			var agents = _scheduleView.AllSelectedPersons(_scheduleView.SelectedSchedules()).ToArray();
-
-			foreach (var agent in agents)
-			{
-				builder.Append(agent.Id);
-				if (agent != agents.Last())
-					builder.Append(",");
-			}
-
-			var url = _container.Resolve<IConfigReader>().AppConfig("FeatureToggle") + "Messages#" + builder;
+			var agents = string.Join(",",_scheduleView.AllSelectedPersons(_scheduleView.SelectedSchedules()).Select(a => a.Id.ToString()));
+			var url = _container.Resolve<IConfigReader>().AppConfig("FeatureToggle") + "Messages#" + agents;
 			if (url.IsAnUrl())
 				Process.Start(url);
 		}

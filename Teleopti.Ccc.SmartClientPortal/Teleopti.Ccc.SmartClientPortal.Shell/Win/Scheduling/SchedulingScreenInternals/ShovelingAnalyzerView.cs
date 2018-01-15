@@ -53,12 +53,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 			resourceCalculationData.SetShovelingCallback(trackShovling);
 			_resourceCalculation.ResourceCalculate(date, resourceCalculationData);
 
-			var output = new StringBuilder();
-			foreach (var skill in skills)
-			{
-				output.Append(createOutputForOneSkill(trackShovling.For(skill), skill, period));
-			}
-			textBox1.Text = output.ToString();
+			var output = string.Join("",skills.Select(skill => createOutputForOneSkill(trackShovling.For(skill), skill, period)));
+			textBox1.Text = output;
 		}
 
 		private static string createOutputForOneSkill(TrackShovelingOneSkill trackShovling, ISkill skill, DateTimePeriod period)

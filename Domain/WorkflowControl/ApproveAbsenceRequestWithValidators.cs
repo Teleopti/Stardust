@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using log4net;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -47,11 +46,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 			if (logger.IsDebugEnabled)
 			{
-				var errorMessageBuilder = new StringBuilder();
-				foreach (var ruleResponse in result)
-				{
-					errorMessageBuilder.AppendLine(ruleResponse.Message);
-				}
+				var errorMessageBuilder = string.Join(Environment.NewLine, result.Select(ruleResponse => ruleResponse.Message));
 				logger.DebugFormat("{0} validation rule(s) failed on approving request with Id=\"{1}\", "
 								   + "the schedule cannot be changed. Below is the error messages: \r\n{2}",
 					result.Count, absenceRequest.Id, errorMessageBuilder);

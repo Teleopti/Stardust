@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -73,10 +74,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
         public override string ToString()
         {
-            var str = new StringBuilder();
-            foreach (var day in _unsavedDays)
-                str.AppendLine(day.DateTime + " " + day.Scenario.Description.Name);
-            return str.ToString();
+            return string.Join(Environment.NewLine,_unsavedDays.Select(day => day.DateTime + " " + day.Scenario.Description.Name));
         }
     }
 }

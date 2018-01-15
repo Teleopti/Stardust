@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
@@ -39,20 +39,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
 
         public string GetExternalLogOnsDisplayText(IEnumerable<IExternalLogOn> externalLogOns)
         {
-            StringBuilder personExternalLogOnDisplayString = new StringBuilder();
-
             if (externalLogOns != null)
-            {
-                foreach (IExternalLogOn externalLogOn in externalLogOns)
-                {
-                    if (personExternalLogOnDisplayString.Length > 0)
-                        personExternalLogOnDisplayString.Append(", ");
-                    
-                    personExternalLogOnDisplayString.Append(_externalLogOnDisplay.Description(externalLogOn));
-                }
-            }
+			{
+				return string.Join(", ", externalLogOns.Select(externalLogOn => _externalLogOnDisplay.Description(externalLogOn)));
+			}
 
-            return personExternalLogOnDisplayString.ToString();
+            return string.Empty;
         }
     }
 }

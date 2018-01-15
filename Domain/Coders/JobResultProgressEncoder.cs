@@ -49,11 +49,8 @@ namespace Teleopti.Ccc.Domain.Coders
             sb.Append(message);
             sb.Append(Consts.Separator);
             sb.Append(item.TotalPercentage.ToString(CultureInfo.InvariantCulture));
-
-            var encodedList = new List<byte>();
-            encodedList.AddRange(_encoding.GetBytes(sb.ToString()));
-            
-            byte[] buf = encodedList.ToArray();
+			
+            byte[] buf = _encoding.GetBytes(sb.ToString());
             return buf;
 
         }

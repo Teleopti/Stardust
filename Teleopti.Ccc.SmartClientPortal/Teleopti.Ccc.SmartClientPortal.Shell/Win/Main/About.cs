@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Globalization;
 using System.Reflection;
-using System.Text;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -48,13 +47,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main
         {
             ILicenseActivator license = DefinedLicenseDataFactory.GetLicenseActivator(UnitOfWorkFactory.Current.Name);
 
-            var options = new StringBuilder();
-            foreach(string option in license.EnabledLicenseOptionPaths)
-            {
-                options.AppendLine(option);
-            }
-        		var licenseResource = Resources.ProductActivationKeyV8;
-        		var max = license.MaxActiveAgents;
+            var options = string.Join(Environment.NewLine, license.EnabledLicenseOptionPaths);
+			var licenseResource = Resources.ProductActivationKeyV8;
+			var max = license.MaxActiveAgents;
 
 	        if (license.LicenseType == LicenseType.Seat)
 	        {

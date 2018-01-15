@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers;
@@ -149,39 +148,18 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
 
         private static string GetSkills(IEnumerable<IPersonSkill> personSkillCollection)
         {
-            StringBuilder personSkillString = new StringBuilder();
-
             if (personSkillCollection != null)
             {
-                IList<IPersonSkill> skillCollection = personSkillCollection.OrderBy(s => s.Skill.Name).ToList();
-
-                foreach (IPersonSkill personSkill in skillCollection)
-                {
-                    if (!string.IsNullOrEmpty(personSkillString.ToString()))
-                        personSkillString.Append(", " + personSkill.Skill.Name);
-                    else personSkillString.Append(personSkill.Skill.Name);
-                }
+                return string.Join(", ", personSkillCollection.Select(s => s.Skill.Name).OrderBy(s => s));
             }
-            return personSkillString.ToString();
+            return string.Empty;
         }
 
         private static string GetPersonExternalLogOnNames(IEnumerable<IExternalLogOn> personExternalLogOnCollection)
         {
-            StringBuilder personExternalLogOnNameString = new StringBuilder();
-
             if (personExternalLogOnCollection != null)
             {
-                IList<IExternalLogOn> externalLogOnCollection = 
-                    personExternalLogOnCollection.OrderBy(s => s.AcdLogOnName).ToList();
-
-                foreach (IExternalLogOn externalLogOn in externalLogOnCollection)
-                {
-                    if (!string.IsNullOrEmpty(personExternalLogOnNameString.ToString()))
-                        personExternalLogOnNameString.Append(", " + externalLogOn.AcdLogOnName);
-                    else personExternalLogOnNameString.Append(externalLogOn.AcdLogOnName);
-                }
-
-                return personExternalLogOnNameString.ToString();
+                return string.Join(", ", personExternalLogOnCollection.Select(s => s.AcdLogOnName).OrderBy(s => s));
             }
 
             return string.Empty;

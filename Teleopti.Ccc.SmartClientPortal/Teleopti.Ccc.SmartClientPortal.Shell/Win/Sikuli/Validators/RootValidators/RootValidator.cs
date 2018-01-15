@@ -30,12 +30,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Validators.RootValidat
 			{
 				if (!AtomicValidators.Any())
 					return string.Empty;
-				var stringBuilder = new StringBuilder();
-				foreach (var validator in AtomicValidators)
-				{
-					stringBuilder.Append(" " + validator.Description);
-				}
-				return stringBuilder.ToString();
+				return string.Join(" ", AtomicValidators.Select(validator => validator.Description));
 			}
 		}
 
