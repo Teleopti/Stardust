@@ -14,7 +14,7 @@
             templateUrl: 'app/staffing/staffing.html',
             controller: 'StaffingController as vm'
         })
-            .state('staffingModule.import-export', {
+            .state('staffingModule-import-export', {
                 templateUrl: 'app/staffing/import_export/importexport.overview.html',
                 controller: 'ImportexportController as vm'
             })
@@ -31,7 +31,7 @@
                     var data = staffingService.staffingSettings.get();
                     data.$promise.then(function (response) {
                         if (response.isLicenseAvailable && response.HasPermissionForBpoExchange) {
-                            $state.go('staffingModule.import-export');
+                            $state.go('staffingModule-import-export');
                         } else {
                             $state.go('staffingModule');
                         }
