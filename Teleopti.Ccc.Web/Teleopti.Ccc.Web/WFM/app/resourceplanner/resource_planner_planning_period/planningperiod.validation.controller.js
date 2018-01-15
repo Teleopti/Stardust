@@ -6,9 +6,9 @@
         .controller('planningPeriodValidationController', Controller)
         .directive('ppValidation', planningperiodValidationDirective);
 
-    Controller.$inject = ['$stateParams', '$translate', '$timeout', 'planningPeriodServiceNew'];
+    Controller.$inject = ['$stateParams', '$translate', '$timeout', 'planningPeriodServiceNew', 'localeLanguageSortingService'];
 
-    function Controller($stateParams, $translate, $timeout, planningPeriodServiceNew) {
+    function Controller($stateParams, $translate, $timeout, planningPeriodServiceNew, localeLanguageSortingService) {
         var vm = this;
 
         vm.valLoading = false;
@@ -27,6 +27,7 @@
             vm.valLoading = true;
             planningPeriodServiceNew.getValidation({ id: $stateParams.ppId }).$promise.then(function (data) {
                 vm.valData.preValidation = data.InvalidResources;
+                vm.valData.preValidation.sort(localeLanguageSortingService.localeSort('+ResourceName'));
                 vm.valLoading = false;
                 vm.valNumber();
             });

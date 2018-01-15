@@ -5,9 +5,9 @@
     .module('wfm.resourceplanner')
     .controller('planningPeriodOverviewController', Controller);
 
-  Controller.$inject = ['$stateParams', '$state', 'planningPeriodServiceNew', 'NoticeService', '$translate', '$interval', '$scope', '$timeout', 'selectedPp', 'planningGroupInfo'];
+  Controller.$inject = ['$stateParams', '$state', 'planningPeriodServiceNew', 'NoticeService', '$translate', '$interval', '$scope', '$timeout', 'selectedPp', 'planningGroupInfo', 'localeLanguageSortingService'];
 
-  function Controller($stateParams, $state, planningPeriodServiceNew, NoticeService, $translate, $interval, $scope, $timeout, selectedPp, planningGroupInfo) {
+  function Controller($stateParams, $state, planningPeriodServiceNew, NoticeService, $translate, $interval, $scope, $timeout, selectedPp, planningGroupInfo, localeLanguageSortingService) {
     var vm = this;
     var selectedPpId = $stateParams.ppId ? $stateParams.ppId : null;
     var checkProgressRef;
@@ -256,6 +256,7 @@
             vm.isScheduled = true;
             vm.scheduledAgents = data.OptimizationResult.ScheduledAgentsCount;
             vm.valData.scheduleIssues = data.OptimizationResult.BusinessRulesValidationResults;
+            vm.valData.scheduleIssues.sort(localeLanguageSortingService.localeSort('+ResourceName'));
             getTotalValidationErrorsNumber();
             initResult(data.OptimizationResult);
             return data;
@@ -290,6 +291,7 @@
       if (!interResult)
         return;
       vm.dayNodes = interResult.SkillResultList ? interResult.SkillResultList : undefined;
+      vm.dayNodes.sort(localeLanguageSortingService.localeSort('+SkillName'));
       parseRelativeDifference(vm.dayNodes);
       parseWeekends(vm.dayNodes);
       displayGrid();

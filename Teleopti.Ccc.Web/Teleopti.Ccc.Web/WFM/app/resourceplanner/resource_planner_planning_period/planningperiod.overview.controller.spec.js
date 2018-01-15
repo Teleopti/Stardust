@@ -29,7 +29,7 @@ describe('planningPeriodOverviewController', function () {
         };
 
     beforeEach(function () {
-        module('wfm.resourceplanner');
+        module('wfm.resourceplanner', 'localeLanguageSortingService');
     });
 
     beforeEach(inject(function (_$httpBackend_, _$controller_, _$interval_, _$rootScope_, _fakeResourcePlanningBackend_, _NoticeService_, _planningPeriodServiceNew_) {
@@ -45,6 +45,10 @@ describe('planningPeriodOverviewController', function () {
 
         spyOn(planningPeriodServiceNew, 'lastJobStatus').and.callThrough();
         spyOn(planningPeriodServiceNew, 'lastIntradayOptimizationJobStatus').and.callThrough();
+
+        $httpBackend.whenGET('../ToggleHandler/AllToggles').respond(function (method, url, data, headers) {
+            return [200];
+        });
 
         $httpBackend.whenGET('../api/resourceplanner/planningperiod/a557210b-99cc-4128-8ae0-138d812974b6/countagents?endDate=2018-07-15T00:00:00&startDate=2018-06-18T00:00:00').respond(function (method, url, data, headers) {
             return [200, {
@@ -243,7 +247,7 @@ describe('planningPeriodOverviewController', function () {
         spyOn(planningPeriodServiceNew, 'clearSchedules').and.callThrough();
         fakeBackend.withScheduleResult({
             OptimizationResult: {
-                BusinessRulesValidationResults: {},
+                BusinessRulesValidationResults: [],
                 SkillResultList: []
             },
             PlanningPeriod: {
@@ -251,7 +255,7 @@ describe('planningPeriodOverviewController', function () {
                 EndDate: "2018-07-15T00:00:00"
             },
             ScheduleResult: {
-                BusinessRulesValidationResults: {},
+                BusinessRulesValidationResults: [],
                 ScheduledAgentsCount: 44
             }
         });
