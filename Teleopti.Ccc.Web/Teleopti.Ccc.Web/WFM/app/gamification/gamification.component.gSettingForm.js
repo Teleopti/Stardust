@@ -26,6 +26,49 @@
 
 		var makeBuiltinMeasureConfigs = function (data) {
 			var measureConfigs = [];
+
+			measureConfigs.push(new MeasureConfig(
+				true,
+				data.AnsweredCallsBadgeEnabled,
+				null,
+				null,
+				'AnsweredCalls',
+				null,
+				true,
+				data.AnsweredCallsThreshold,
+				data.AnsweredCallsBronzeThreshold,
+				data.AnsweredCallsSilverThreshold,
+				data.AnsweredCallsGoldThreshold
+			));
+
+			measureConfigs.push(new MeasureConfig(
+				true,
+				data.AdherenceBadgeEnabled,
+				null,
+				null,
+				'Adherence',
+				null,
+				true,
+				data.AdherenceThreshold,
+				data.AdherenceBronzeThreshold,
+				data.AdherenceSilverThreshold,
+				data.AdherenceGoldThreshold
+			));
+
+			measureConfigs.push(new MeasureConfig(
+				true,
+				data.AHTBadgeEnabled,
+				null,
+				null,
+				'AHT',
+				null,
+				true,
+				data.AHTThreshold,
+				data.AHTBronzeThreshold,
+				data.AHTSilverThreshold,
+				data.AHTGoldThreshold
+			));
+
 			return measureConfigs;
 		};
 
@@ -58,13 +101,14 @@
 			ctrl.rule = data.GamificationSettingRuleSet;
 			ctrl.silverRate = data.SilverToBronzeBadgeRate;
 			ctrl.goldRate = data.GoldToSilverBadgeRate;
+			ctrl.builtinMeasureConfigs = makeBuiltinMeasureConfigs(data);
 			ctrl.externalMeasureConfigs = makeExternalMeasureConfigs(data);
 		};
 
 		ctrl.$onChanges = function (changesObj) {
-			$log.log(changesObj);
+			// $log.log(changesObj);
 			if (changesObj.setting && changesObj.setting.currentValue) {
-				updateSettingForm(changesObj.setting.currentValue)
+				updateSettingForm(changesObj.setting.currentValue);
 			}
 		};
 
@@ -87,6 +131,9 @@
 		}
 
 		MeasureConfig.prototype.setName = function (name) {
+			if (this.builtin)
+				return;
+
 			$log.log(this.name + ': set name to ' + name);
 
 			var previous = this.name;
