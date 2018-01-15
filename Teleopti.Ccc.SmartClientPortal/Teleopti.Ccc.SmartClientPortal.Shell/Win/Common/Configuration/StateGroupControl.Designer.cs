@@ -16,6 +16,7 @@
         private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StateGroupControl));
 			this.gradientPanelHeader = new Syncfusion.Windows.Forms.Tools.GradientPanel();
 			this.tableLayoutPanelHeader = new System.Windows.Forms.TableLayoutPanel();
 			this.labelHeader = new System.Windows.Forms.Label();
@@ -84,7 +85,7 @@
 			// treeViewAdv1
 			// 
 			this.treeViewAdv1.BackColor = System.Drawing.Color.White;
-			this.treeViewAdv1.BeforeTouchSize = new System.Drawing.Size(636, 358);
+			this.treeViewAdv1.BeforeTouchSize = new System.Drawing.Size(636, 322);
 			this.treeViewAdv1.Border3DStyle = System.Windows.Forms.Border3DStyle.Flat;
 			this.treeViewAdv1.BorderSingle = System.Windows.Forms.ButtonBorderStyle.None;
 			this.treeViewAdv1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -100,13 +101,13 @@
 			this.treeViewAdv1.HelpTextControl.Size = new System.Drawing.Size(49, 15);
 			this.treeViewAdv1.HelpTextControl.TabIndex = 0;
 			this.treeViewAdv1.HelpTextControl.Text = "help text";
-			this.treeViewAdv1.Location = new System.Drawing.Point(3, 93);
+			this.treeViewAdv1.Location = new System.Drawing.Point(3, 129);
 			this.treeViewAdv1.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
 			this.treeViewAdv1.Name = "treeViewAdv1";
 			this.treeViewAdv1.SelectedNodeBackground = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220))))));
 			this.treeViewAdv1.SelectionMode = Syncfusion.Windows.Forms.Tools.TreeSelectionMode.MultiSelectSameLevel;
 			this.treeViewAdv1.ShowFocusRect = false;
-			this.treeViewAdv1.Size = new System.Drawing.Size(636, 358);
+			this.treeViewAdv1.Size = new System.Drawing.Size(636, 322);
 			this.treeViewAdv1.Style = Syncfusion.Windows.Forms.Tools.TreeStyle.Metro;
 			this.treeViewAdv1.TabIndex = 65;
 			this.treeViewAdv1.Text = "treeViewAdv1";
@@ -215,7 +216,7 @@
 			this.tableLayoutPanelBody.Name = "tableLayoutPanelBody";
 			this.tableLayoutPanelBody.RowCount = 3;
 			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 86F));
 			this.tableLayoutPanelBody.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanelBody.Size = new System.Drawing.Size(642, 454);
 			this.tableLayoutPanelBody.TabIndex = 67;
@@ -234,19 +235,20 @@
 			this.gradientPanelRtaConfigurationValidation.Location = new System.Drawing.Point(3, 43);
 			this.gradientPanelRtaConfigurationValidation.Name = "gradientPanelRtaConfigurationValidation";
 			this.gradientPanelRtaConfigurationValidation.Padding = new System.Windows.Forms.Padding(10);
-			this.gradientPanelRtaConfigurationValidation.Size = new System.Drawing.Size(636, 44);
+			this.gradientPanelRtaConfigurationValidation.Size = new System.Drawing.Size(636, 80);
 			this.gradientPanelRtaConfigurationValidation.TabIndex = 67;
 			// 
 			// autoLabelRtaConfigurationValidation
 			// 
+			this.autoLabelRtaConfigurationValidation.AutoSize = false;
 			this.autoLabelRtaConfigurationValidation.BackColor = System.Drawing.Color.Transparent;
 			this.autoLabelRtaConfigurationValidation.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.autoLabelRtaConfigurationValidation.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.autoLabelRtaConfigurationValidation.Location = new System.Drawing.Point(10, 10);
 			this.autoLabelRtaConfigurationValidation.Name = "autoLabelRtaConfigurationValidation";
-			this.autoLabelRtaConfigurationValidation.Size = new System.Drawing.Size(151, 19);
+			this.autoLabelRtaConfigurationValidation.Size = new System.Drawing.Size(616, 60);
 			this.autoLabelRtaConfigurationValidation.TabIndex = 0;
-			this.autoLabelRtaConfigurationValidation.Text = "Frimming the frim fram";
+			this.autoLabelRtaConfigurationValidation.Text = resources.GetString("autoLabelRtaConfigurationValidation.Text");
 			// 
 			// StateGroupControl
 			// 
@@ -268,7 +270,6 @@
 			this.tableLayoutPanelBody.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.gradientPanelRtaConfigurationValidation)).EndInit();
 			this.gradientPanelRtaConfigurationValidation.ResumeLayout(false);
-			this.gradientPanelRtaConfigurationValidation.PerformLayout();
 			this.ResumeLayout(false);
 
         }

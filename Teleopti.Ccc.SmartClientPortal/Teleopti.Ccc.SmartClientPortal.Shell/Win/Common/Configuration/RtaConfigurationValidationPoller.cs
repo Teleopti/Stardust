@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 				var json = _client.GetStringAsync(_serverUrl + "Rta/Configuration/Validate?tenant=" + _dataSource.CurrentName()).Result;
 				var models = JsonConvert.DeserializeObject<IEnumerable<ConfigurationValidationViewModel>>(json);
 				var texts = models
-					.Select(x => string.Format(UserTexts.Resources.ResourceManager.GetString(x.Resource), x.Data.Cast<object>().ToArray()))
+					.Select(x => string.Format(UserTexts.Resources.ResourceManager.GetString(x.Resource), x.Data.EmptyIfNull().Cast<object>().ToArray()))
 					.ToArray();
 				return texts;
 			}
