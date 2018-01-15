@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			_scheduleStorage = scheduleStorage;
 		}
 
-
 		public void Handle(RemoveDayOffCommand command)
 		{
 			var scenario = _currentScenario.Current();

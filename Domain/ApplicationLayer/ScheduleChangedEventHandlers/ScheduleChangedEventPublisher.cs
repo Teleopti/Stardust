@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		IHandleEvent<ActivityMovedEvent>,
 		IHandleEvent<PersonAbsenceModifiedEvent>,
 		IHandleEvent<DayOffAddedEvent>,
+		IHandleEvent<DayOffDeletedEvent>,
 		IHandleEvent<DayUnscheduledEvent>,
 		IHandleEvent<PersonAssignmentLayerRemovedEvent>,
 		IHandleEvent<MainShiftCategoryReplaceEvent>,
@@ -139,6 +140,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		}
 
 		public void Handle(DayOffAddedEvent @event)
+		{
+			var dateTimeperiod = dateOnlyToScheduleChangedPeriodWithOverflowBecauseWeAreScared(@event.Date);
+			_publisher.Publish(new ScheduleChangedEvent
+			{
+				Timestamp = @event.Timestamp,
+				LogOnDatasource = @event.LogOnDatasource,
+				LogOnBusinessUnitId = @event.LogOnBusinessUnitId,
+				PersonId = @event.PersonId,
+				ScenarioId = @event.ScenarioId,
+				StartDateTime = dateTimeperiod.StartDateTime,
+				EndDateTime = dateTimeperiod.EndDateTime,
+				InitiatorId = @event.InitiatorId,
+				CommandId = @event.CommandId
+			});
+		}
+		public void Handle(DayOffDeletedEvent @event)
 		{
 			var dateTimeperiod = dateOnlyToScheduleChangedPeriodWithOverflowBecauseWeAreScared(@event.Date);
 			_publisher.Publish(new ScheduleChangedEvent

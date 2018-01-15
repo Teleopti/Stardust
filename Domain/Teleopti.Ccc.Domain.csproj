@@ -163,6 +163,7 @@
     <Compile Include="ApplicationLayer\Commands\AddDayOffCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\AddDayOffCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\RemoveDayOffCommand.cs" />
+    <Compile Include="ApplicationLayer\Events\DayOffDeletedEvent.cs" />
     <Compile Include="ApplicationLayer\ImportExternalPerformance\ExternalPerformancePersister.cs" />
     <Compile Include="ApplicationLayer\ImportExternalPerformance\IExternalPerformancePersister.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\ IOvertimeRequestAvailability.cs" />

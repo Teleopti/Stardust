@@ -670,7 +670,29 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public virtual void SetDayOff(IDayOffTemplate template, bool muteEvent = false, TrackedCommandInfo trackedCommandInfo = null)
 		{
 			_dayOffTemplate = template;
-			if (_dayOffTemplate == null) return;
+			if (_dayOffTemplate == null)
+			{
+				if (!muteEvent)
+				{
+					AddEvent(() =>
+					{
+						var @event = new DayOffDeletedEvent
+						{
+							Date = Date.Date,
+							PersonId = Person.Id.Value,
+							ScenarioId = Scenario.Id.Value,
+							LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
+						};
+						if (trackedCommandInfo != null)
+						{
+							@event.InitiatorId = trackedCommandInfo.OperatedPersonId;
+							@event.CommandId = trackedCommandInfo.TrackId;
+						}
+						return @event;
+					});
+				}
+				return;
+			}
 
 			ClearMainActivities();
 

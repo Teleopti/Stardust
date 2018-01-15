@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			personAssignment.Date.Should().Be.EqualTo(date);
 			personAssignment.DayOff().Should().Be.Null();
 		}
-		[Test, Ignore("TODO")]
+		[Test]
 		public void ShouldRaiseEvent()
 		{
 			var date = new DateOnly(2018, 1, 11);
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			};
 			Target.Handle(command);
 
-			var theEvent = personAssignment.PopAllEvents().OfType<DayOffAddedEvent>().Single();
+			var theEvent = PersonAssignmentRepository.LoadAll().Single(p => p.Person.Id == person.Id.Value).PopAllEvents().Single(e => e is DayOffDeletedEvent) as DayOffDeletedEvent;
 			theEvent.Date.Should().Be.EqualTo(date.Date);
 			theEvent.PersonId.Should().Be.EqualTo(person.Id.Value);
 			theEvent.CommandId.Should().Be.EqualTo(trackId);
