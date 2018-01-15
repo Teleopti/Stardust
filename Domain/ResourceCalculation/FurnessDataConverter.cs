@@ -117,8 +117,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 foreach (ISkill skillKey in _dividedActivityData.TargetDemands.Keys)
                 {
                     int productIndex = _skillIndexRegister[skillKey];
-                    double weightedSkillValue;
-	                if (!weightedRelativeKeyedSkillResourceResource.TryGetValue(skillKey, out weightedSkillValue))
+					if (!weightedRelativeKeyedSkillResourceResource.TryGetValue(skillKey, out var weightedSkillValue))
                         weightedSkillValue = 0;
 	                resourceMatrix[producerIndex][productIndex] = weightedSkillValue;
 
@@ -137,8 +136,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             foreach (var personKey in _personIndexRegister)
             {
                 int producerIndex = personKey.Value;
-	            Dictionary<ISkill, double> skillValues;
-	            if (!_dividedActivityData.WeightedRelativeKeyedSkillResourceResources.TryGetValue(personKey.Key, out skillValues)) continue;
+				if (!_dividedActivityData.WeightedRelativeKeyedSkillResourceResources.TryGetValue(personKey.Key, out var skillValues)) continue;
                 foreach (var skillKeyPair in _skillIndexRegister)
                 {
                     if (skillValues.ContainsKey(skillKeyPair.Key))
