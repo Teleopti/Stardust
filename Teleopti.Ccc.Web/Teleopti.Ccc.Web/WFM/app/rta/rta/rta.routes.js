@@ -54,6 +54,8 @@ angular.module('wfm.rta').config(function ($stateProvider, ToggleProvider) {
 				return 'app/rta/rta/agents/rta-agents.RTA_UnifiedSkillGroupManagement_45417.html';
 			},
 			controllerProvider: function () {
+				if (toggles.RTA_ConfigurationValidationNotification_46933)
+					return 'RtaAgentsController46933 as vm';
 				if (toggles.RTA_ViewHistoricalAhderenceForRecentShifts_46786)
 					return 'RtaAgentsController46786 as vm';
 				if (toggles.RTA_MobileFriendlyCheckboxes_46758)

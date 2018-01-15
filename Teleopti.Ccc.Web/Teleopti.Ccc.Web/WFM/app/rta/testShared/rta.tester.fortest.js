@@ -245,7 +245,7 @@ var rtaTester = (function () {
 			state.lastNotice = undefined;
 		});
 
-		var bagOfCandy = controllerName == 'RtaAgentsController46786';
+		var bagOfCandy = controllerName == 'RtaAgentsController46933';
 		injectTester(state, tests, bagOfCandy);
 	};
 
@@ -253,7 +253,7 @@ var rtaTester = (function () {
 		if (description === 'RtaOverviewController')
 			setup(tests, '', 'RtaOverviewController46933');
 		if (description === 'RtaAgentsController')
-			setup(tests, '', 'RtaAgentsController46786');
+			setup(tests, '', 'RtaAgentsController46933');
 		if (description === 'RtaHistoricalController')
 			setup(tests, 'rta-historical', 'RtaHistoricalController46826');
 		if (description === 'RtaTracerController')
