@@ -19,12 +19,14 @@
 		ctrl.$onInit = function () {
 			ctrl.selectedDate = moment(ctrl.containerCtrl.getDate()).toDate();
 			ctrl.trackId = ctrl.containerCtrl.getTrackId();
+			ctrl.getActionCb = ctrl.containerCtrl.getActionCb;
 			ctrl.resetActiveCmd = ctrl.containerCtrl.resetActiveCmd;
 			ctrl.popDialog();
 		}
 
 		ctrl.removeDayOff = function () {
-			var personIds = personSelectionSvc.getCheckedPersonInfoList()
+			var personInfos = personSelectionSvc.getCheckedPersonInfoList();
+			var personIds = personInfos
 				.map(function (p) { return p.PersonId; });
 
 			var input = {
@@ -34,14 +36,14 @@
 			}
 			return dayOffService.removeDayOff(input).then(function(response) {
 				$scope.$emit('teamSchedule.hide.loading');
-				if (vm.getActionCb(vm.label)) {
-					vm.getActionCb(vm.label)(vm.trackId, personIds);
+				if (ctrl.getActionCb(ctrl.label)) {
+					ctrl.getActionCb(ctrl.label)(ctrl.trackId, personIds);
 				}
 
-				notification.reportActionResult({
+				teamScheduleNotificationService.reportActionResult({
 					"success": 'FinishedRemoveDayOff',
 					"warning": 'PartialSuccessMessageForRemovingDayOff'
-				}, selectedPersonAbsences.map(function (x) {
+				}, personInfos.map(function (x) {
 					return {
 						PersonId: x.PersonId,
 						Name: x.Name

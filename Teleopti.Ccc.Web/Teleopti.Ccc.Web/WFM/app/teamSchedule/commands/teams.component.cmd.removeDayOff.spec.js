@@ -117,6 +117,9 @@
 			}
 			this.removeDayOff = function (input) {
 				this.lastPostData = input;
+				return $q(function(resolve, reject) {
+					resolve({ data: [] });
+				});
 			}
 		}
 
