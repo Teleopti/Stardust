@@ -37,31 +37,25 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_matrixesForMembers = matrixesForMembers;
 		}
 
-		public IEnumerable<IPerson> GroupMembers
-		{
-			get
-			{
-				return _groupMembers;
-			}
-		}
+		public IEnumerable<IPerson> GroupMembers => _groupMembers;
 
 		public void LockMember(DateOnlyPeriod period, IPerson member)
 		{
 			if(!GroupMembers.Contains(member))
-				throw new ArgumentOutOfRangeException("member", "Must be within group members");
+				throw new ArgumentOutOfRangeException(nameof(member), "Must be within group members");
 
 
 			foreach (var dateOnly in period.DayCollection())
 			{
-				if (_lockedMemberDictionary.ContainsKey(dateOnly))
+				if (_lockedMemberDictionary.TryGetValue(dateOnly, out var personList))
 				{
-					if(!_lockedMemberDictionary[dateOnly].Contains(member))
-						_lockedMemberDictionary[dateOnly].Add(member);
+					if(!personList.Contains(member))
+						personList.Add(member);
 				}
 
 				else
 				{
-					_lockedMemberDictionary.Add(dateOnly, new List<IPerson>() {member});
+					_lockedMemberDictionary.Add(dateOnly, new List<IPerson> {member});
 				}
 			}
 		}
@@ -71,11 +65,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			IList<IPerson> ret = new List<IPerson>();
 			foreach (var groupMember in GroupMembers)
 			{
-				if (!_lockedMemberDictionary.ContainsKey(dateOnly))
+				if (!_lockedMemberDictionary.TryGetValue(dateOnly, out var members))
 				{
 					ret.Add(groupMember);
 				}
-				else if (!_lockedMemberDictionary[dateOnly].Contains(groupMember))
+				else if (!members.Contains(groupMember))
 				{
 					ret.Add(groupMember);
 				}
@@ -84,10 +78,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			return ret;
 		}
 
-		public string Name
-		{
-			get { return _name; }
-		}
+		public string Name => _name;
 
 		public IEnumerable<IScheduleMatrixPro> MatrixesForGroup()
 		{
