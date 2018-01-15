@@ -5,6 +5,8 @@ using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
@@ -17,6 +19,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 		private readonly INow _now;
 		private readonly IActivityRepository _activityRepository;
 		private readonly ISkillRepository _skillRepository;
+		private readonly IUpdatedByScope _updatedByScope;
+		private readonly IPersonRepository _personRepository;
 		private readonly ISkillTypeRepository _skillTypeRepository;
 
 		private static readonly ILog logger = LogManager.GetLogger(typeof(OvertimeRequestProcessor));
@@ -25,7 +29,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			IEnumerable<IOvertimeRequestValidator> overtimeRequestValidators, IActivityRepository activityRepository,
 			ISkillRepository skillRepository, ISkillTypeRepository skillTypeRepository,
 			IOvertimeRequestAvailableSkillsValidator overtimeRequestAvailableSkillsValidator,
-			INow now)
+			INow now, IPersonRepository personRepository, IUpdatedByScope updatedByScope)
 		{
 			_commandDispatcher = commandDispatcher;
 			_overtimeRequestValidators = overtimeRequestValidators;
@@ -34,6 +38,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			_skillTypeRepository = skillTypeRepository;
 			_overtimeRequestAvailableSkillsValidator = overtimeRequestAvailableSkillsValidator;
 			_now = now;
+			_personRepository = personRepository;
+			_updatedByScope = updatedByScope;
 		}
 
 		public int StaffingDataAvailableDays { get; set; }
@@ -105,6 +111,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 
 			if (overtimeOpenPeriod.AutoGrantType == WorkflowControl.OvertimeRequestAutoGrantType.No)
 				return;
+
+
+			var person = _personRepository.Get(SystemUser.Id);
+			_updatedByScope.OnThisThreadUse(person);
 
 			executeApproveCommand(personRequest, validateSkillsResult.Skills);
 		}

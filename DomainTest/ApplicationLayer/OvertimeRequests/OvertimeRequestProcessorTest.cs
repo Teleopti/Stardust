@@ -17,6 +17,8 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
+using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -36,6 +38,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 	public class OvertimeRequestProcessorTest : ISetup
 	{
 		public IOvertimeRequestProcessor Target;
+		public UpdatedBy UpdatedBy;
+		public FakePersonRepository PersonRepository;
 		public IPersonRequestRepository PersonRequestRepository;
 		public FakeLoggedOnUser LoggedOnUser;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
@@ -60,6 +64,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<OvertimeRequestProcessor>().For<IOvertimeRequestProcessor>();
+			system.UseTestDouble<UpdatedBy>().For<IUpdatedByScope>();
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			system.UseTestDouble<DoNothingScheduleDayChangeCallBack>().For<IScheduleDayChangeCallback>();
 			system.UseTestDouble<SiteOpenHoursSpecification>().For<ISiteOpenHoursSpecification>();
@@ -474,6 +479,29 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			getTarget().Process(personRequest);
 
 			personRequest.IsPending.Should().Be.True();
+		}
+
+		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
+		public void ShouldApproveAndChangeUpdatedByToSystemUserWhenAutoGrantOfOpenPeriodIsYes()
+		{
+			PersonRepository.Add(PersonFactory.CreatePerson().WithId(SystemUser.Id));
+
+			setupPerson(8, 21);
+			var workflowControlSet = new WorkflowControlSet();
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
+				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(13)))
+			});
+			LoggedOnUser.CurrentUser().WorkflowControlSet = workflowControlSet;
+			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 5d);
+
+			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 25, 8, 0, 0, DateTimeKind.Utc), 1);
+			getTarget().Process(personRequest);
+
+			personRequest.IsApproved.Should().Be.True();
+			UpdatedBy.Person().Id.Value.Should().Be(SystemUser.Id);
 		}
 
 		[Test]
