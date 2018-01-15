@@ -5,29 +5,12 @@
 		.module('wfm.rta')
 		.controller('RtaOverviewController46933', RtaOverviewController);
 
-	RtaOverviewController.$inject = ['rtaService', 'rtaStateService', 'rtaPollingService', 'skills', 'skillAreas', '$http', '$state', '$stateParams', '$scope', 'NoticeService', '$translate'];
+	RtaOverviewController.$inject = ['rtaService', 'rtaStateService', 'rtaPollingService', 'rtaConfigurationValidator', 'skills', 'skillAreas', '$http', '$state', '$stateParams', '$scope'];
 
-	function RtaOverviewController(rtaService, rtaStateService, rtaPollingService, skills, skillAreas, $http, $state, $stateParams, $scope, NoticeService, $translate) {
+	function RtaOverviewController(rtaService, rtaStateService, rtaPollingService, rtaConfigurationValidator, skills, skillAreas, $http, $state, $stateParams, $scope) {
 		var vm = this;
 
-		$http.get('../Rta/Configuration/Validate/')
-			.then(function (response) {
-				if (!response.data.length)
-					return;
-
-				var notification = response.data.reduce(function (message, validation) {
-					message += '<li>' + $translate.instant(validation.Resource) + '</li>';
-					
-					if (validation.Data)
-						validation.Data.forEach(function (data, index) {
-							message = message.replace('{' + index + '}', data);
-						});
-					
-					return message;
-				}, $translate.instant('RtaConfigurationIssuesFound') + '</br></br><ul>');
-
-				NoticeService.warning(notification, 10000, true);
-			});
+		rtaConfigurationValidator.validate();
 
 		vm.skills = skills || [];
 		vm.skillAreas = skillAreas || [];

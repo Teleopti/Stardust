@@ -19,7 +19,8 @@
 		'rtaAgentsBuildService',
 		'rtaRouteService',
 		'rtaStateService',
-		'NoticeService'
+		'NoticeService',
+		'rtaConfigurationValidator'
 	];
 
 	function RtaAgentsController($scope,
@@ -35,9 +36,12 @@
 								 rtaAgentsBuildService,
 								 rtaRouteService,
 								 rtaStateService,
-								 NoticeService) {
+								 NoticeService,
+								 rtaConfigurationValidator) {
 
 		var vm = this;
+
+		rtaConfigurationValidator.validate();
 
 		vm.agentStates = [];
 
@@ -61,26 +65,7 @@
 		vm.pause = false;
 		vm.pausedAt = null;
 
-		$http.get('../Rta/Configuration/Validate/')
-			.then(function (response) {
-				if (!response.data.length)
-					return;
-
-				var notification = response.data.reduce(function (message, validation) {
-					message += '<li>' + $translate.instant(validation.Resource) + '</li>';
-
-					if (validation.Data)
-						validation.Data.forEach(function (data, index) {
-							message = message.replace('{' + index + '}', data);
-						});
-
-					return message;
-				}, $translate.instant('RtaConfigurationIssuesFound') + '</br></br><ul>');
-
-				NoticeService.warning(notification, 10000, true);
-			});
-
-
+			
 		vm.displayNoAgentsMessage = function () {
 			return vm.agentStates.length === 0;
 		};
