@@ -9,6 +9,7 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Gamification.Mapping;
 using Teleopti.Ccc.Web.Areas.Gamification.Models;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 {
@@ -179,36 +180,52 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 		{
 			var gamificationSetting = getGamificationSetting(input.GamificationSettingId);
 			if (gamificationSetting == null) return null;
-			if (gamificationSetting.AdherenceThreshold != input.Value) gamificationSetting.AdherenceThreshold = input.Value;
+			if (!gamificationSetting.AdherenceThreshold.Value.Equals(input.Value)) gamificationSetting.AdherenceThreshold = new Percent(input.Value);
 
-			return new GamificationAdherenceThresholdViewModel() { GamificationSettingId = gamificationSetting.Id.Value, Value = gamificationSetting.AdherenceThreshold };
+			return new GamificationAdherenceThresholdViewModel()
+			{
+				GamificationSettingId = gamificationSetting.Id.Value,
+				Value = gamificationSetting.AdherenceThreshold.Value
+			};
 		}
 
 		public GamificationAdherenceThresholdViewModel PersistAdherenceGoldThreshold(GamificationAdherenceThresholdViewModel input)
 		{
 			var gamificationSetting = getGamificationSetting(input.GamificationSettingId);
 			if (gamificationSetting == null) return null;
-			if (gamificationSetting.AdherenceGoldThreshold != input.Value) gamificationSetting.AdherenceGoldThreshold = input.Value;
+			if (!gamificationSetting.AdherenceGoldThreshold.Value.Equals(input.Value)) gamificationSetting.AdherenceGoldThreshold = new Percent(input.Value);
 
-			return new GamificationAdherenceThresholdViewModel() { GamificationSettingId = gamificationSetting.Id.Value, Value = gamificationSetting.AdherenceGoldThreshold };
+			return new GamificationAdherenceThresholdViewModel()
+			{
+				GamificationSettingId = gamificationSetting.Id.Value,
+				Value = gamificationSetting.AdherenceGoldThreshold.Value
+			};
 		}
 
 		public GamificationAdherenceThresholdViewModel PersistAdherenceSilverThreshold(GamificationAdherenceThresholdViewModel input)
 		{
 			var gamificationSetting = getGamificationSetting(input.GamificationSettingId);
 			if (gamificationSetting == null) return null;
-			if (gamificationSetting.AdherenceSilverThreshold != input.Value) gamificationSetting.AdherenceSilverThreshold = input.Value;
+			if (!gamificationSetting.AdherenceSilverThreshold.Value.Equals(input.Value)) gamificationSetting.AdherenceSilverThreshold = new Percent(input.Value);
 
-			return new GamificationAdherenceThresholdViewModel() { GamificationSettingId = gamificationSetting.Id.Value, Value = gamificationSetting.AdherenceSilverThreshold };
+			return new GamificationAdherenceThresholdViewModel()
+			{
+				GamificationSettingId = gamificationSetting.Id.Value,
+				Value = gamificationSetting.AdherenceSilverThreshold.Value
+			};
 		}
 
 		public GamificationAdherenceThresholdViewModel PersistAdherenceBronzeThreshold(GamificationAdherenceThresholdViewModel input)
 		{
 			var gamificationSetting = getGamificationSetting(input.GamificationSettingId);
 			if (gamificationSetting == null) return null;
-			if (gamificationSetting.AdherenceBronzeThreshold != input.Value) gamificationSetting.AdherenceBronzeThreshold = input.Value;
+			if (!gamificationSetting.AdherenceBronzeThreshold.Value.Equals(input.Value)) gamificationSetting.AdherenceBronzeThreshold = new Percent(input.Value);
 
-			return new GamificationAdherenceThresholdViewModel() { GamificationSettingId = gamificationSetting.Id.Value, Value = gamificationSetting.AdherenceBronzeThreshold};
+			return new GamificationAdherenceThresholdViewModel()
+			{
+				GamificationSettingId = gamificationSetting.Id.Value,
+				Value = gamificationSetting.AdherenceBronzeThreshold.Value
+			};
 		}
 
 		public GamificationSettingViewModel PersistRuleChange(GamificationChangeRuleForm input)
@@ -243,6 +260,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 			if (setting == null) return null;
 
 			var externalBadgeSetting = getExternalBadgeSetting(setting, input.QualityId);
+			if (externalBadgeSetting == null) return null;
 			externalBadgeSetting.Name = input.Name;
 
 			return new ExternalBadgeSettingDescriptionViewModel()
@@ -259,6 +277,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 			if (setting == null) return null;
 
 			var externalBadgeSetting = getExternalBadgeSetting(setting, input.QualityId);
+			if (externalBadgeSetting == null) return null;
 			externalBadgeSetting.Threshold = _converter.GetBadgeSettingValue(input.DataType, input.ThresholdValue);
 
 			return new ExternalBadgeSettingThresholdViewModel
@@ -276,6 +295,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 			if (setting == null) return null;
 
 			var externalBadgeSetting = getExternalBadgeSetting(setting, input.QualityId);
+			if (externalBadgeSetting == null) return null;
 			externalBadgeSetting.GoldThreshold = _converter.GetBadgeSettingValue(input.DataType, input.ThresholdValue);
 
 			return new ExternalBadgeSettingThresholdViewModel
@@ -293,6 +313,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 			if (setting == null) return null;
 
 			var externalBadgeSetting = getExternalBadgeSetting(setting, input.QualityId);
+			if (externalBadgeSetting == null) return null;
 			externalBadgeSetting.SilverThreshold = _converter.GetBadgeSettingValue(input.DataType, input.ThresholdValue);
 
 			return new ExternalBadgeSettingThresholdViewModel
@@ -310,6 +331,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 			if (setting == null) return null;
 
 			var externalBadgeSetting = getExternalBadgeSetting(setting, input.QualityId);
+			if (externalBadgeSetting == null) return null;
 			externalBadgeSetting.BronzeThreshold = _converter.GetBadgeSettingValue(input.DataType, input.ThresholdValue);
 
 			return new ExternalBadgeSettingThresholdViewModel
@@ -327,6 +349,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 			if (setting == null) return null;
 
 			var externalBadgeSetting = getExternalBadgeSetting(setting, input.QualityId);
+			if (externalBadgeSetting == null) return null;
 			externalBadgeSetting.Enabled = input.Value;
 
 			return new ExternalBadgeSettingBooleanViewModel()
@@ -343,6 +366,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 			if (setting == null) return null;
 
 			var externalBadgeSetting = getExternalBadgeSetting(setting, input.QualityId);
+			if (externalBadgeSetting == null) return null;
 			externalBadgeSetting.LargerIsBetter = input.Value;
 
 			return new ExternalBadgeSettingBooleanViewModel()
@@ -353,17 +377,14 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 			};
 		}
 
-		private IBadgeSetting getExternalBadgeSetting(IGamificationSetting setting , int qualityId)
+		private IBadgeSetting getExternalBadgeSetting(IGamificationSetting setting, int qualityId)
 		{
-			if (setting.BadgeSettings == null)
-			{
-				setting.BadgeSettings = new List<IBadgeSetting>();
-			}
-
 			var externalBadgeSetting = setting.BadgeSettings.FirstOrDefault(x => x.QualityId == qualityId);
 			if (externalBadgeSetting != null) return externalBadgeSetting;
 
 			var externalPerformance = getExternalPerformance(qualityId);
+			if (externalPerformance == null) return null;
+
 			externalBadgeSetting = new BadgeSetting
 			{
 				Name = externalPerformance.Name,

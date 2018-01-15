@@ -23,10 +23,10 @@ namespace Teleopti.Ccc.Domain.Common
 		private bool _enabled;
 		private bool _largerIsBetter;
 		private ExternalPerformanceDataType _dataType;
-		private int _threshold;
-		private int _bronzeThreshold;
-		private int _silverThreshold;
-		private int _goldThreshold;
+		private double _threshold;
+		private double _bronzeThreshold;
+		private double _silverThreshold;
+		private double _goldThreshold;
 
 		public virtual string Name
 		{
@@ -58,25 +58,25 @@ namespace Teleopti.Ccc.Domain.Common
 			set => _dataType = value;
 		}
 
-		public virtual int Threshold
+		public virtual double Threshold
 		{
 			get => _threshold;
 			set => _threshold = value;
 		}
 
-		public virtual int BronzeThreshold
+		public virtual double BronzeThreshold
 		{
 			get => _bronzeThreshold;
 			set => _bronzeThreshold = value;
 		}
 
-		public virtual int SilverThreshold
+		public virtual double SilverThreshold
 		{
 			get => _silverThreshold;
 			set => _silverThreshold = value;
 		}
 
-		public virtual int GoldThreshold
+		public virtual double GoldThreshold
 		{
 			get => _goldThreshold;
 			set => _goldThreshold = value;

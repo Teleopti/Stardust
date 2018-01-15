@@ -12,10 +12,10 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Models
 
 		public bool Enabled { get; set; }
 
-		public int Threshold { get; set; }
-		public int BronzeThreshold { get; set; }
-		public int SilverThreshold { get; set; }
-		public int GoldThreshold { get; set; }
+		public double Threshold { get; set; }
+		public double BronzeThreshold { get; set; }
+		public double SilverThreshold { get; set; }
+		public double GoldThreshold { get; set; }
 
 		public ExternalPerformanceDataType DataType { get; set; }
 	}

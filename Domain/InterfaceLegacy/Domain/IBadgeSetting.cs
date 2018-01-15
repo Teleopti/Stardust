@@ -10,10 +10,10 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 
 		bool Enabled { get; set; }
 
-		int Threshold { get; set; }
-		int BronzeThreshold { get; set; }
-		int SilverThreshold { get; set; }
-		int GoldThreshold { get; set; }
+		double Threshold { get; set; }
+		double BronzeThreshold { get; set; }
+		double SilverThreshold { get; set; }
+		double GoldThreshold { get; set; }
 
 		ExternalPerformanceDataType DataType { get; set; }
 	}

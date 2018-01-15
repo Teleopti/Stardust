@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Models
 	public class GamificationAdherenceThresholdViewModel
 	{
 		public Guid GamificationSettingId { get; set; }
-		public Percent Value { get; set; }
+		public double Value { get; set; }
 	}
 
 	public class GamificationBadgeConversRateViewModel

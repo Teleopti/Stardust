@@ -11,9 +11,9 @@
 		<property name="Enabled" type="boolean" not-null="true"/>
 		<property name="LargerIsBetter" type="boolean" not-null="true"/>
 		<property name="DataType" not-null="true" />
-		<property name="Threshold" type="int"/>
-		<property name="BronzeThreshold" type="int"/>
-		<property name="SilverThreshold" type="int"/>
-		<property name="GoldThreshold" type="int"/>
+		<property name="Threshold" type="double"/>
+		<property name="BronzeThreshold" type="double"/>
+		<property name="SilverThreshold" type="double"/>
+		<property name="GoldThreshold" type="double"/>
 	</class>
 </hibernate-mapping>
