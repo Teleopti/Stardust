@@ -35,7 +35,7 @@ Scenario: View staffing for one skillgroup
 	Then I should see the selected skill group 'Group A' 
 	And I should see staffing data in the graph
 
-
+@OnlyRunIfEnabled('WfmStaffing_AddOvertime_42524')
 Scenario: Show overtime settings
 	Given the time is '2017-09-25 08:00'
 	And there is queue statistics for skill 'Skill A' until '2017-09-27 17:00'
@@ -59,7 +59,8 @@ Scenario: Use shrinkage when toggling shrinkage to on
 	Then Using shrinkage should be used
 	#Then I should see the staffing chart update // How?
 	
-
+	
+@OnlyRunIfEnabled('Staffing_BPOExchangeImport_45202')
 Scenario: Show bpo exchange page
 	Given I am viewing staffing page
 	When I press the BPO exchange button 
