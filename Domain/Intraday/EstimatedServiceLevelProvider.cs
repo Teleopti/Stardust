@@ -14,16 +14,19 @@ namespace Teleopti.Ccc.Domain.Intraday
 		private readonly ForecastedStaffingProvider _forecastedStaffingProvider;
 		private readonly ScheduledStaffingProvider _scheduledStaffingProvider;
 		private readonly IUserTimeZone _timeZone;
+		private readonly IStaffingCalculatorServiceFacade _staffingCalculatorService;
 
 		public EstimatedServiceLevelProvider(ForecastedCallsProvider forecastedCallsProvider,
 			ForecastedStaffingProvider forecastedStaffingProvider,
 			ScheduledStaffingProvider scheduledStaffingProvider,
-			IUserTimeZone timeZone)
+			IUserTimeZone timeZone,
+			IStaffingCalculatorServiceFacade staffingCalculatorService)
 		{
 			_forecastedCallsProvider = forecastedCallsProvider;
 			_forecastedStaffingProvider = forecastedStaffingProvider;
 			_scheduledStaffingProvider = scheduledStaffingProvider;
 			_timeZone = timeZone;
+			_staffingCalculatorService = staffingCalculatorService;
 		}
 
 		public double EslSummary(IList<EslInterval> eslIntervals)
@@ -43,8 +46,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			var eslIntervals = new List<EslInterval>();
 			if (!skillDays.Any())
 				return eslIntervals;
-			var serviceCalculatorService = new StaffingCalculatorServiceFacade();
-
+			
 			var userDateOnly = (currDate != null) ? new DateOnly(TimeZoneHelper.ConvertFromUtc(currDate.Value, _timeZone.TimeZone())) : new DateOnly?();
 			
 			var forecastedCalls = _forecastedCallsProvider.Load(skillDays, queueStatistics.LatestActualIntervalStart, minutesPerInterval, currDate);
@@ -63,7 +65,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 				foreach (var interval in skillForecastedStaffing)
 				{
 					eslIntervals.Add(calculateEslInterval(skillDays, 
-						minutesPerInterval, interval, skill, scheduledStaffing, forecastedCalls, serviceCalculatorService));
+						minutesPerInterval, interval, skill, scheduledStaffing, forecastedCalls, _staffingCalculatorService));
 				}
 			}
 			
@@ -85,7 +87,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			ISkill skill, 
 			IList<SkillStaffingIntervalLightModel> scheduledStaffing, 
 			ForecastedCallsModel forecastedCalls,
-			StaffingCalculatorServiceFacade serviceCalculatorService)
+			IStaffingCalculatorServiceFacade serviceCalculatorService)
 		{
 			var intervalStartTimeUtc = TimeZoneHelper.ConvertToUtc(interval.StartTime, _timeZone.TimeZone());
 			var skillDaysForSkill = skillDays[skill];
