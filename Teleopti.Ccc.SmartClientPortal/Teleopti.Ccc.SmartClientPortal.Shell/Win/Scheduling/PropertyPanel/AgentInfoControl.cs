@@ -523,128 +523,113 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.PropertyPanel
 			}
 		}
 
-        private void updatePersonPeriodData(IPerson person, DateOnly dateOnly)
-        {
-            listViewPersonPeriod.Items.Clear();
+		private void updatePersonPeriodData(IPerson person, DateOnly dateOnly)
+		{
+			listViewPersonPeriod.Items.Clear();
 
 			var personNameItem = new ListViewItem(person.Name.ToString(NameOrderOption.FirstNameLastName));
 			personNameItem.Font = personNameItem.Font.ChangeToBold();
 			listViewPersonPeriod.Items.Add(personNameItem);
 
-            IPersonPeriod personPeriod = person.Period(dateOnly);
-	        if (personPeriod == null)
-	        {
+			IPersonPeriod personPeriod = person.Period(dateOnly);
+			if (personPeriod == null)
+			{
 				var noPeriodPresentItem = new ListViewItem(Resources.NoPeriodPresent);
 				listViewPersonPeriod.Items.Add(noPeriodPresentItem);
 				return;
-	        }
+			}
 
-            DateOnlyPeriod period = personPeriod.Period;
+			DateOnlyPeriod period = personPeriod.Period;
 
-            createAndAddItem(listViewPersonPeriod, Resources.Period, period.DateString, 1);
-            createAndAddItem(listViewPersonPeriod, Resources.Team, personPeriod.Team.SiteAndTeam, 2);
-            createAndAddItem(listViewPersonPeriod, Resources.PersonSkills, "", 1);
+			createAndAddItem(listViewPersonPeriod, Resources.Period, period.DateString, 1);
+			createAndAddItem(listViewPersonPeriod, Resources.Team, personPeriod.Team.SiteAndTeam, 2);
+			createAndAddItem(listViewPersonPeriod, Resources.PersonSkills, "", 1);
 
-	        if (_container.Resolve<IToggleManager>().IsEnabled(Toggles.Scheduler_ShowSkillPrioLevels_41980))
-	        {
-		        var sortedDic = new SortedDictionary<int, IList<IPersonSkill>>();
 
-		        var livingSkills =
-			        personPeriod.PersonSkillCollection.Where(
-				        personSkill => personSkill.Active && !((IDeleteTag) personSkill.Skill).IsDeleted).ToList();
-				var primaryLevel = 1;
-				if (livingSkills.Any())
+			var sortedDic = new SortedDictionary<int, IList<IPersonSkill>>();
+
+			var livingSkills =
+				personPeriod.PersonSkillCollection.Where(
+					personSkill => personSkill.Active && !((IDeleteTag) personSkill.Skill).IsDeleted).ToList();
+			var primaryLevel = 1;
+			if (livingSkills.Any())
+			{
+				var livingCascadingSkills = livingSkills.Where(personSkill => personSkill.Skill.IsCascading()).ToList();
+
+				if (livingCascadingSkills.Any())
+					primaryLevel = livingCascadingSkills.Min(personSkill => personSkill.Skill.CascadingIndex.Value);
+			}
+
+			foreach (var personSkill in livingSkills)
+			{
+				var skillPrioIndex = personSkill.Skill.CascadingIndex.GetValueOrDefault(primaryLevel);
+				IList<IPersonSkill> skillList;
+				if (!sortedDic.TryGetValue(skillPrioIndex, out skillList))
 				{
-					var livingCascadingSkills = livingSkills.Where(personSkill => personSkill.Skill.IsCascading()).ToList();
-				
-					if(livingCascadingSkills.Any())
-						primaryLevel = livingCascadingSkills.Min(personSkill => personSkill.Skill.CascadingIndex.Value);
+					sortedDic.Add(skillPrioIndex, new List<IPersonSkill> {personSkill});
 				}
-
-		        foreach (var personSkill in livingSkills)
-		        {
-			        var skillPrioIndex = personSkill.Skill.CascadingIndex.GetValueOrDefault(primaryLevel);
-			        IList<IPersonSkill> skillList;
-			        if (!sortedDic.TryGetValue(skillPrioIndex, out skillList))
-			        {
-				        sortedDic.Add(skillPrioIndex, new List<IPersonSkill> {personSkill});
-			        }
-			        else
-			        {
-				        skillList.Add(personSkill);
-			        }
-		        }
-
-		        var personalIndex = 0;
-		        var levelString = Resources.Level;
-				foreach (var keyValuePair in sortedDic)
-		        {
-			        personalIndex++;
-			        string level = levelString + " " + personalIndex;
-			        if (personalIndex == 1)
-				        level = Resources.Primary;
-
-			        createAndAddItem(listViewPersonPeriod, level, "", 2);
-			        foreach (IPersonSkill personSkill in keyValuePair.Value.OrderBy(ps => ps.Skill.Name))
-			        {
-				        createAndAddItem(listViewPersonPeriod, personSkill.Skill.Name, personSkill.SkillPercentage.ToString(), 3);
-			        }
-		        }
-
-		        if (personPeriod.MaxSeatSkill != null)
-		        {
-			        createAndAddItem(listViewPersonPeriod, Resources.MaxSeats, "", 1);
-			        createAndAddItem(listViewPersonPeriod, personPeriod.MaxSeatSkill.Name, "", 2);
-		        }
-	        }
-	        else
-	        {
-				createAndAddItem(listViewPersonPeriod, Resources.PersonSkills, "", 2);
-				foreach (IPersonSkill personSkill in personPeriod.PersonSkillCollection.OrderBy(ps => ps.Skill.Name))
+				else
 				{
-					if (personSkill.Active && !((IDeleteTag)personSkill.Skill).IsDeleted)
-						createAndAddItem(listViewPersonPeriod, personSkill.Skill.Name, personSkill.SkillPercentage.ToString(), 3);
-				}
-
-				if (personPeriod.MaxSeatSkill != null)
-				{
-					createAndAddItem(listViewPersonPeriod, "===================", "", 3);
-					createAndAddItem(listViewPersonPeriod, personPeriod.MaxSeatSkill.Name, "", 3);
+					skillList.Add(personSkill);
 				}
 			}
-            
+
+			var personalIndex = 0;
+			var levelString = Resources.Level;
+			foreach (var keyValuePair in sortedDic)
+			{
+				personalIndex++;
+				string level = levelString + " " + personalIndex;
+				if (personalIndex == 1)
+					level = Resources.Primary;
+
+				createAndAddItem(listViewPersonPeriod, level, "", 2);
+				foreach (IPersonSkill personSkill in keyValuePair.Value.OrderBy(ps => ps.Skill.Name))
+				{
+					createAndAddItem(listViewPersonPeriod, personSkill.Skill.Name, personSkill.SkillPercentage.ToString(), 3);
+				}
+			}
+
+			if (personPeriod.MaxSeatSkill != null)
+			{
+				createAndAddItem(listViewPersonPeriod, Resources.MaxSeats, "", 1);
+				createAndAddItem(listViewPersonPeriod, personPeriod.MaxSeatSkill.Name, "", 2);
+			}
+
+
 			listViewPersonPeriod.Items.Add("");
 
 			string name = string.Empty;
-	        if (!((IDeleteTag) personPeriod.PersonContract.Contract).IsDeleted)
-		        name = personPeriod.PersonContract.Contract.Description.Name;
+			if (!((IDeleteTag) personPeriod.PersonContract.Contract).IsDeleted)
+				name = personPeriod.PersonContract.Contract.Description.Name;
 
 			createAndAddItem(listViewPersonPeriod, Resources.Contract, name, 2);
 
-	        name = string.Empty;
-	        if (!((IDeleteTag) personPeriod.PersonContract.ContractSchedule).IsDeleted)
-		        name = personPeriod.PersonContract.ContractSchedule.Description.Name;
+			name = string.Empty;
+			if (!((IDeleteTag) personPeriod.PersonContract.ContractSchedule).IsDeleted)
+				name = personPeriod.PersonContract.ContractSchedule.Description.Name;
 
 			createAndAddItem(listViewPersonPeriod, Resources.ContractScheduleLower, name, 2);
 
 			name = string.Empty;
-	        if (!((IDeleteTag) personPeriod.PersonContract.PartTimePercentage).IsDeleted)
-		        name = personPeriod.PersonContract.PartTimePercentage.Description.Name;
+			if (!((IDeleteTag) personPeriod.PersonContract.PartTimePercentage).IsDeleted)
+				name = personPeriod.PersonContract.PartTimePercentage.Description.Name;
 
 			createAndAddItem(listViewPersonPeriod, Resources.PartTimePercentageLower, name, 2);
 
-			createAndAddItem(listViewPersonPeriod, Resources.EmploymentType, _employmentTypeList[personPeriod.PersonContract.Contract.EmploymentType], 2);
+			createAndAddItem(listViewPersonPeriod, Resources.EmploymentType,
+				_employmentTypeList[personPeriod.PersonContract.Contract.EmploymentType], 2);
 
 			name = string.Empty;
-	        if (personPeriod.RuleSetBag != null && !((IDeleteTag) personPeriod.RuleSetBag).IsDeleted)
-		        name = personPeriod.RuleSetBag.Description.Name;
+			if (personPeriod.RuleSetBag != null && !((IDeleteTag) personPeriod.RuleSetBag).IsDeleted)
+				name = personPeriod.RuleSetBag.Description.Name;
 
 			createAndAddItem(listViewPersonPeriod, Resources.RuleSetBag, name, 2);
-            listViewPersonPeriod.Columns[0].AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
-            listViewPersonPeriod.Columns[1].AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
-        }
+			listViewPersonPeriod.Columns[0].AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
+			listViewPersonPeriod.Columns[1].AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
+		}
 
-        private void updateSchedulePeriodData(IPerson person, DateOnly dateOnly, ISchedulingResultStateHolder state)
+		private void updateSchedulePeriodData(IPerson person, DateOnly dateOnly, ISchedulingResultStateHolder state)
         {
             listViewSchedulePeriod.Items.Clear();
 
