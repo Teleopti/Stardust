@@ -101,6 +101,7 @@
 		}
 
 		function selectFirstCompensation(compensations) {
+			vm.overtimeForm = {};
 			vm.overtimeForm.Compensation = compensations[0].Id;
 			setDefaultValueForOvertimeRange();
 		}

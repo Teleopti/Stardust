@@ -105,6 +105,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Staffing
 			DataMaker.Data().Apply(new ForecastConfigurable(skillName, theDate));
 		}
 
+		[Given(@"There is a compensation with name '(.*)'")]
+		public void GivenThereIsACompensationWithName(string name)
+		{
+			DataMaker.Data().Apply(new MultiplicatorDefinitionSetConfigurable { Name = name });
+		}
+
+
 		[When(@"I select skill group '(.*)'")]
 		public void WhenISelectSkillGroup(string group)
 		{
