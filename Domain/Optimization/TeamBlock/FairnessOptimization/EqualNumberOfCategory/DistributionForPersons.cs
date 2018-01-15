@@ -1,6 +1,7 @@
 ﻿
 
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory
@@ -14,20 +15,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 	{
 		public IDistributionSummary CreateSummary(IEnumerable<IPerson> personList, IScheduleDictionary scheduleDictionary)
 		{
-			var totalsDictionary = new Dictionary<IShiftCategory, int>();
-			foreach (var person in personList)
-			{
-				var fairness = scheduleDictionary[person].CachedShiftCategoryFairness();
-				foreach (var categoryValue in fairness.ShiftCategoryFairnessDictionary)
-				{
-					var shiftCategory = categoryValue.Key;
-					if (!totalsDictionary.ContainsKey(shiftCategory))
-						totalsDictionary.Add(shiftCategory, 0);
-					totalsDictionary[shiftCategory] += categoryValue.Value;
-				}
-			}
-
-			return new DistributionSummary(totalsDictionary);
+			return new DistributionSummary(personList.SelectMany(person =>
+					scheduleDictionary[person].CachedShiftCategoryFairness().ShiftCategoryFairnessDictionary)
+				.GroupBy(k => k.Key, (v, y) => new {Category = v, Sum = y.Sum(x => x.Value)})
+				.ToDictionary(g => g.Category, v => v.Sum));
 		}
 	}
 }

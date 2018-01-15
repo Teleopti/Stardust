@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Secrets.Furness;
 
@@ -14,8 +15,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private IFurnessData _furnessData;
         private readonly IDividedActivityData _dividedActivityData;
 
-        private readonly IDictionary<ISkill, int> _skillIndexRegister = new Dictionary<ISkill, int>();
-        private readonly IDictionary<DoubleGuidCombinationKey, int> _personIndexRegister = new Dictionary<DoubleGuidCombinationKey, int>();
+        private IDictionary<ISkill, int> _skillIndexRegister = new Dictionary<ISkill, int>();
+        private IDictionary<DoubleGuidCombinationKey, int> _personIndexRegister = new Dictionary<DoubleGuidCombinationKey, int>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FurnessDataConverter"/> class.
@@ -57,14 +58,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// Creates a dictionary that keeps track on skill index in the FurnessData arrays.
         /// </summary>
         private void CreateSkillIndexRegister()
-        {
-            _skillIndexRegister.Clear();
-            int currentIndex = 0;
-            foreach (ISkill key in _dividedActivityData.TargetDemands.Keys)
-            {
-                _skillIndexRegister.Add(key, currentIndex);
-                currentIndex++;
-            }
+		{
+			_skillIndexRegister = _dividedActivityData.TargetDemands.Keys.Select((k, i) => new {k, i})
+				.ToDictionary(k => k.k, v => v.i);
         }
 
         /// <summary>
@@ -72,14 +68,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// </summary>
         private void CreatePersonIndexRegister()
         {
-            _personIndexRegister.Clear();
-            int currentIndex = 0;
-            foreach (var key in _dividedActivityData.PersonResources.Keys)
-            {
-                _personIndexRegister.Add(key, currentIndex);
-                currentIndex++;
-            }
-        }
+            _personIndexRegister = _dividedActivityData.PersonResources.Keys.Select((k, i) => new { k, i })
+				.ToDictionary(k => k.k, v => v.i);
+		}
 
         /// <summary>
         /// Converts the target demands to furness data ProductionDemand.

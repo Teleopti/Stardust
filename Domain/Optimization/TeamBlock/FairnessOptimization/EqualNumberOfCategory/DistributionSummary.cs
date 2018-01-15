@@ -1,6 +1,5 @@
-﻿
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory
@@ -12,8 +11,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 
 	public class DistributionSummary : IDistributionSummary
 	{
-		private readonly IDictionary<IShiftCategory, double> _percentDicionary = new Dictionary<IShiftCategory, double>();
-
 		public DistributionSummary(Dictionary<IShiftCategory, int> distribution)
 		{
 			var sumOfCategories = 0;
@@ -22,16 +19,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 				sumOfCategories += keyValurPair.Value;
 			}
 
-			foreach (var keyValurPair in distribution)
-			{
-				var percentOfTotal = (double)keyValurPair.Value/sumOfCategories;
-				PercentDicionary.Add(keyValurPair.Key, percentOfTotal);
-			}
+			PercentDicionary = distribution.ToDictionary(k => k.Key, v => (double) v.Value / sumOfCategories);
 		}
 
-		public IDictionary<IShiftCategory, double> PercentDicionary
-		{
-			get { return _percentDicionary; }
-		}
+		public IDictionary<IShiftCategory, double> PercentDicionary { get; }
 	}
 }
