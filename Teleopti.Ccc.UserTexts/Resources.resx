@@ -16955,4 +16955,24 @@ Do you want to participate?</value>
     <value>Please note Export to is available for a limited time only.</value>
     <comment>Hint to show users that feature Export to from scheduler will be removed</comment>
   </data>
+  <data name="AreYouSureToRemoveSelectedDayOff" xml:space="preserve">
+    <value>Are you sure you wish to remove {0} day offs from {1} agents?</value>
+    <comment>Message to confirm person day off removing</comment>
+  </data>
+  <data name="FinishedRemoveDayOff" xml:space="preserve">
+    <value>Day off removed successfully.</value>
+    <comment>Tips after remove person day off in WFM team schedule</comment>
+  </data>
+  <data name="PartialSuccessMessageForAddingDayOff" xml:space="preserve">
+    <value>Adding a day off for {0} agent(s), {1} succeeded and {2} failed.</value>
+    <comment>partially successful message for adding day offs in WFM-Teams</comment>
+  </data>
+  <data name="PartialSuccessMessageForRemovingDayOff" xml:space="preserve">
+    <value>Removing day offs for {0} agent(s): {1} succeeded, {2} failed.</value>
+    <comment>partially successful message for deleting day offs in WFM-Teams</comment>
+  </data>
+  <data name="SuccessfulMessageForAddingDayOff" xml:space="preserve">
+    <value>Successfully added day offs for the selected agents.</value>
+    <comment>successful message for adding day offs in WFM-Teams</comment>
+  </data>
 </root>

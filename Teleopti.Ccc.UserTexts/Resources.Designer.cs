@@ -3115,6 +3115,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you wish to remove {0} day offs from {1} agents?.
+        /// </summary>
+        public static string AreYouSureToRemoveSelectedDayOff {
+            get {
+                return ResourceManager.GetString("AreYouSureToRemoveSelectedDayOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you wish to undo last schedule change for selected agents?.
         /// </summary>
         public static string AreYouSureToUndoSelectedSchedule {
@@ -12545,6 +12554,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string FinishedRemoveAbsence {
             get {
                 return ResourceManager.GetString("FinishedRemoveAbsence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Day off removed successfully..
+        /// </summary>
+        public static string FinishedRemoveDayOff {
+            get {
+                return ResourceManager.GetString("FinishedRemoveDayOff", resourceCulture);
             }
         }
         
@@ -23058,6 +23076,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Adding a day off for {0} agent(s), {1} succeeded and {2} failed..
+        /// </summary>
+        public static string PartialSuccessMessageForAddingDayOff {
+            get {
+                return ResourceManager.GetString("PartialSuccessMessageForAddingDayOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Adding an overtime activity for {0} agent(s), {1} succeeded and {2} failed..
         /// </summary>
         public static string PartialSuccessMessageForAddingOvertime {
@@ -23108,6 +23135,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string PartialSuccessMessageForRemovingActivity {
             get {
                 return ResourceManager.GetString("PartialSuccessMessageForRemovingActivity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Removing day offs for {0} agent(s): {1} succeeded, {2} failed..
+        /// </summary>
+        public static string PartialSuccessMessageForRemovingDayOff {
+            get {
+                return ResourceManager.GetString("PartialSuccessMessageForRemovingDayOff", resourceCulture);
             }
         }
         
@@ -33283,6 +33319,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SuccessfulMessageForAddingActivity {
             get {
                 return ResourceManager.GetString("SuccessfulMessageForAddingActivity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Successfully added day offs for the selected agents..
+        /// </summary>
+        public static string SuccessfulMessageForAddingDayOff {
+            get {
+                return ResourceManager.GetString("SuccessfulMessageForAddingDayOff", resourceCulture);
             }
         }
         

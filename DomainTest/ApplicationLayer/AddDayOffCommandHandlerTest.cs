@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var personAssignments = PersonAssignmentRepository.LoadAll()
 									.Where(p => p.Person.Id == person.Id.Value)
 									.ToArray();
-			personAssignments.Count().Should().Be.EqualTo(5);
+			personAssignments.Length.Should().Be.EqualTo(5);
 
 			var days = dateOnlyPeriod.DayCollection();
 			foreach (var personAssignment in personAssignments)
@@ -112,7 +112,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				personAssignment.Date.Date.Should().Be.EqualTo(date);
 				personAssignment.DayOff().DayOffTemplateId.Should().Be.EqualTo(dayOffTemplate.Id.Value);
 
-				var dayOffResult = personAssignment.DayOff();
 				var theEvent = personAssignment.PopAllEvents().OfType<DayOffAddedEvent>().Single();
 				theEvent.Date.Should().Be.EqualTo(date);
 				theEvent.PersonId.Should().Be.EqualTo(person.Id.Value);
