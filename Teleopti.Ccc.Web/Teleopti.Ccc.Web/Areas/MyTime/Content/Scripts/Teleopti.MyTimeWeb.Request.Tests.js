@@ -11,28 +11,30 @@ $(document).ready(function () {
 	});
 
 	var overtimeRequestsToggle = false,
-		fakeLicenseAvailabilityData = false;
+		fakeOvertimeLicenseAvailabilityBool = false;
 
 	var tempToggleFn,
 		tempList,
-		tempAjax,
 		tempAddShiftTradeRequest;
 
 	test('should not show overtime request tab when has no license availability', function () {
+		fakeOvertimeLicenseAvailabilityBool = false;
+		fakeOvertimeRequestsLicenseAvailability(fakeOvertimeLicenseAvailabilityBool);
 		Teleopti.MyTimeWeb.Request.RequestPartialInit(null, null);
 
 		var target = Teleopti.MyTimeWeb.Request.RequestNavigationViewModel();
 
-		equal(target.overtimeRequestsLicenseAvailable(), false);
+		equal(target.overtimeRequestsLicenseAvailable, false);
 	});
 
 	test('should show overtime request tab when has license availability and permission', function () {
-		fakeLicenseAvailabilityData = true;
+		fakeOvertimeLicenseAvailabilityBool = true;
+		fakeOvertimeRequestsLicenseAvailability(fakeOvertimeLicenseAvailabilityBool);
 
 		Teleopti.MyTimeWeb.Request.RequestPartialInit(null, null);
 		var target = Teleopti.MyTimeWeb.Request.RequestNavigationViewModel();
 
-		equal(target.overtimeRequestsLicenseAvailable(), true);
+		equal(target.overtimeRequestsLicenseAvailable, true);
 	});
 
 	function setUpFunctionsBeforeRun() {
@@ -52,23 +54,19 @@ $(document).ready(function () {
 		Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = {
 			Init: function () { }
 		};
-
-		tempAjax = Teleopti.MyTimeWeb.Ajax;
-		Teleopti.MyTimeWeb.Ajax = function () {
-			return {
-				Ajax: function (option) {
-					if (option.url === 'OvertimeRequests/GetLicenseAvailability') {
-						return option.success(fakeLicenseAvailabilityData);
-					}
-				}
-			};
-		};
 	}
 
 	function restoreFuntionsAfterRun() {
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = tempToggleFn;
 		Teleopti.MyTimeWeb.Request.List = tempList;
-		Teleopti.MyTimeWeb.Ajax = tempAjax;
 		Teleopti.MyTimeWeb.Request.tempAddShiftTradeRequest = tempAddShiftTradeRequest;
+	}
+
+	function fakeOvertimeRequestsLicenseAvailability(available) {
+		Teleopti.MyTimeWeb.OvertimeRequestsLicense = {
+			GetLicenseAvailability: function(done) {
+				done && done(available);
+			}
+		};
 	}
 });

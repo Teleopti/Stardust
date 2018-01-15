@@ -160,7 +160,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		});
 	};
 
-	var WeekScheduleViewModel = function (addRequestViewModel, navigateToRequestsMethod, defaultDateTimes, weekStart) {
+	var WeekScheduleViewModel = function (addRequestViewModel, navigateToRequestsMethod, defaultDateTimes, weekStart, overtimeLicAvailable) {
 		var self = this;
 		var serviceDateFormat = Teleopti.MyTimeWeb.Common.Constants.serviceDateTimeFormat.dateOnly;
 
@@ -181,7 +181,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.absenceProbabilityEnabled = ko.observable();
 		self.overtimeProbabilityEnabled = ko.observable();
 		self.isOvertimeRequestAvailable = ko.observable();
-		self.overtimeRequestsLicenseAvailable = ko.observable(false);
+		self.overtimeRequestsLicenseAvailable = overtimeLicAvailable;
 		self.showProbabilityToggle = ko.observable();
 		self.loadingProbabilityData = ko.observable(false);
 
@@ -496,28 +496,11 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		};
 
 		self.showAddRequestForm = function (day) {
-			self.checkOvertimeRequestsLicenseAvailability(self);
 			self.showAddRequestFormWithData(day.fixedDate(), day.overtimeAvailability());
 		};
 
-		self.checkOvertimeRequestsLicenseAvailability = function (self) {
-			var ajax = new Teleopti.MyTimeWeb.Ajax();
-			ajax.Ajax({
-				url: 'OvertimeRequests/GetLicenseAvailability',
-				dataType: "json",
-				type: 'GET',
-				success: function (response) {
-					self.overtimeRequestsLicenseAvailable(response);
-				},
-				error: function (error) {
-					self.overtimeRequestsLicenseAvailable(false);
-					throw error;
-				}
-			});
-		}
-
 		self.showAddOvertimeRequestForm = function (data) {
-			if (!self.isOvertimeRequestAvailable()) {
+			if (!self.isOvertimeRequestAvailable() || !self.overtimeRequestsLicenseAvailable) {
 				return;
 			}
 			var addOvertimeRequestModel = {
@@ -810,17 +793,19 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		},
 		SetupViewModel: function (defaultDateTimes, callback) {
 			Teleopti.MyTimeWeb.UserInfo.WhenLoaded(function (data) {
-				var addRequestViewModel = function () {
-					var model = new Teleopti.MyTimeWeb.Request.RequestViewModel(Teleopti.MyTimeWeb.Request.RequestDetail.AddTextOrAbsenceRequest, _displayRequest, data.WeekStart, defaultDateTimes);
-
-					return model;
-				};
-
-				vm = new WeekScheduleViewModel(addRequestViewModel, _navigateToRequests, defaultDateTimes, data.WeekStart);
-
-				callback();
-				$(".moment-datepicker").attr("data-bind", "datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart: " + data.WeekStart + " }");
-				ko.applyBindings(vm, $("#page")[0]);
+				Teleopti.MyTimeWeb.OvertimeRequestsLicense.GetLicenseAvailability(function(overtimeLicAvailable){
+					var addRequestViewModel = function () {
+						var model = new Teleopti.MyTimeWeb.Request.RequestViewModel(Teleopti.MyTimeWeb.Request.RequestDetail.AddTextOrAbsenceRequest, _displayRequest, data.WeekStart, defaultDateTimes);
+						
+						return model;
+					};
+					
+					vm = new WeekScheduleViewModel(addRequestViewModel, _navigateToRequests, defaultDateTimes, data.WeekStart, overtimeLicAvailable);
+					
+					callback();
+					$(".moment-datepicker").attr("data-bind", "datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart: " + data.WeekStart + " }");
+					ko.applyBindings(vm, $("#page")[0]);
+				});
 			});
 		},
 		TimelineViewModel: TimelineViewModel,

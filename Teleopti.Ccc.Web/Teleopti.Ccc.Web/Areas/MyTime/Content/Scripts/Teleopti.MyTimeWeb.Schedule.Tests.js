@@ -5,14 +5,7 @@
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.js" />
 
 $(document).ready(function () {
-	module("Teleopti.MyTimeWeb.Schedule", {
-			setup: function() {
-				setUpFunctionsBeforeRun();
-			},
-			teardown: function() {
-				restoreFuntionsAfterRun();
-			}
-		});
+	module("Teleopti.MyTimeWeb.Schedule");
 
 	var hash = "";
 	var fakeAddRequestViewModel = Teleopti.MyTimeWeb.Schedule.FakeData.fakeAddRequestViewModel;
@@ -159,10 +152,12 @@ $(document).ready(function () {
 	});
 
 	test("should increase request count after creating an overtime request", function () {
+		fakeOvertimeRequestsLicenseAvailability(true);
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
 			if (x === "MyTimeWeb_OvertimeRequest_44558") return true;
 			return false;
 		};
+
 
 		Teleopti.MyTimeWeb.UserInfo.WhenLoaded = function (callback) {
 			callback({ WeekStart: 1 });
@@ -213,35 +208,28 @@ $(document).ready(function () {
 	});
 
 	test('should not show overtime request tab when has no license availability', function () {
-		var vm = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null);
-		fakeLicenseAvailabilityData = false;
-		vm.checkOvertimeRequestsLicenseAvailability(vm);
+		fakeOvertimeLicenseAvailabilityBool = false;
+		fakeOvertimeRequestsLicenseAvailability(fakeOvertimeLicenseAvailabilityBool);
 
-		equal(vm.overtimeRequestsLicenseAvailable(), false);
+		var vm = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null, fakeOvertimeLicenseAvailabilityBool);
+
+		equal(vm.overtimeRequestsLicenseAvailable, false);
 	});
 
-	test('should not show overtime request tab when has no license availability', function () {
-		var vm = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null);
-		fakeLicenseAvailabilityData = true;
-		vm.checkOvertimeRequestsLicenseAvailability(vm);
+	test('should show overtime request tab when has license availability', function () {
+		fakeOvertimeLicenseAvailabilityBool = true;
+		fakeOvertimeRequestsLicenseAvailability(fakeOvertimeLicenseAvailabilityBool);
 
-		equal(vm.overtimeRequestsLicenseAvailable(), true);
+		var vm = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null, fakeOvertimeLicenseAvailabilityBool);
+
+		equal(vm.overtimeRequestsLicenseAvailable, true);
 	});
 
-	function setUpFunctionsBeforeRun() {
-		tempAjax = Teleopti.MyTimeWeb.Ajax;
-		Teleopti.MyTimeWeb.Ajax = function () {
-			return {
-				Ajax: function (option) {
-					if (option.url === 'OvertimeRequests/GetLicenseAvailability') {
-						return option.success(fakeLicenseAvailabilityData);
-					}
-				}
-			};
+	function fakeOvertimeRequestsLicenseAvailability(available) {
+		Teleopti.MyTimeWeb.OvertimeRequestsLicense = {
+			GetLicenseAvailability: function(done) {
+				done && done(available);
+			}
 		};
-	}
-
-	function restoreFuntionsAfterRun() {
-		Teleopti.MyTimeWeb.Ajax = tempAjax;
 	}
 });

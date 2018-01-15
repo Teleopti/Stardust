@@ -33,9 +33,7 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 		self.addOvertimeRequestActive = ko.observable(false);
 		self.menuIsVisible = ko.observable(false);
 		self.addOvertimeRequestEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_OvertimeRequest_44558');
-		self.overtimeRequestsLicenseAvailable = ko.observable(false);
-
-		checkOvertimeRequestsLicenseAvailability(self);
+		self.overtimeRequestsLicenseAvailable = false;
 
 		self.enableMenu = function (blah, e) {
 			self.menuIsVisible(true);
@@ -115,29 +113,14 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 		};
 	}
 
-	function _initNavigationViewModel() {
+	function _initNavigationViewModel(overtimeLicAvailable) {
 		requestNavigationViewModel = new RequestNavigationViewModel();
+		requestNavigationViewModel.overtimeRequestsLicenseAvailable = overtimeLicAvailable;
 		var elementToBind = $('div.navbar-container')[0];
 		if (elementToBind) {
 			ko.cleanNode(elementToBind);
 		}
 		ko.applyBindings(requestNavigationViewModel, elementToBind);
-	}
-
-	function checkOvertimeRequestsLicenseAvailability(self) {
-		var ajax = new Teleopti.MyTimeWeb.Ajax();
-		ajax.Ajax({
-			url: 'OvertimeRequests/GetLicenseAvailability',
-			dataType: "json",
-			type: 'GET',
-			success: function (response) {
-				self.overtimeRequestsLicenseAvailable(response);
-			},
-			error: function (error) {
-				self.overtimeRequestsLicenseAvailable(false);
-				throw error;
-			}
-		});
 	}
 
 	return {
@@ -147,20 +130,22 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 				Teleopti.MyTimeWeb.Request.RequestPartialDispose);
 		},
 		RequestPartialInit: function (readyForInteractionCallback, completelyLoadedCallback) {
-			readyForInteraction = readyForInteractionCallback;
-			completelyLoaded = completelyLoadedCallback;
+			Teleopti.MyTimeWeb.OvertimeRequestsLicense.GetLicenseAvailability(function(overtimeLicAvailable){
+				readyForInteraction = readyForInteractionCallback;
+				completelyLoaded = completelyLoadedCallback;
 
-			if (!$('#Requests-body-inner').length) {
-				readyForInteraction && readyForInteraction();
-				completelyLoaded && completelyLoaded();
-				return;
-			}
+				if (!$('#Requests-body-inner').length) {
+					readyForInteraction && readyForInteraction();
+					completelyLoaded && completelyLoaded();
+					return;
+				}
 
-			Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.Init();
-			Teleopti.MyTimeWeb.Request.List.Init(readyForInteraction, completelyLoaded);
+				Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.Init();
+				Teleopti.MyTimeWeb.Request.List.Init(readyForInteraction, completelyLoaded);
 
-			_initNavigationViewModel();
-			Teleopti.MyTimeWeb.Request.RequestDetail.Init();
+				_initNavigationViewModel(overtimeLicAvailable);
+				Teleopti.MyTimeWeb.Request.RequestDetail.Init();
+			});
 		},
 		RequestPartialDispose: function () {
 			Teleopti.MyTimeWeb.Request.List.Dispose();

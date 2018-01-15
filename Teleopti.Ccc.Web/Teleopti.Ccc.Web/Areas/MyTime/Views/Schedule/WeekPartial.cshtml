@@ -106,7 +106,7 @@
         <li data-bind="visible: isAbsenceReportAvailable, css: { active: requestViewModel()!=undefined && requestViewModel().type() == requestViewModelTypes.absenceReport  }">
             <a id="addAbsenceReport" class="addAbsenceReport" href="#" data-bind="click: showAddAbsenceReportForm"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AbsenceReport</a>
         </li>
-        <li data-bind="visible: overtimeRequestsLicenseAvailable() && isOvertimeRequestAvailable, css: { active: requestViewModel()!=undefined && requestViewModel().type() == requestViewModelTypes.overtimeRequest }">
+        <li data-bind="visible: isOvertimeRequestAvailable() && overtimeRequestsLicenseAvailable , css: { active: requestViewModel()!=undefined && requestViewModel().type() == requestViewModelTypes.overtimeRequest }">
             <a id="addOvertimeRequest" href="#" data-bind="click: showAddOvertimeRequestForm"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.OvertimeRequest</a>
         </li>
     </ul>
