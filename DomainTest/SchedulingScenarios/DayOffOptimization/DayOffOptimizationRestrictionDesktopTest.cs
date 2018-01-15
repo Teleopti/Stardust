@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 {
 	[DomainTest]
 	[UseIocForFatClient]
+	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
 	public class DayOffOptimizationRestrictionDesktopTest : DayOffOptimizationScenario
 	{
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;

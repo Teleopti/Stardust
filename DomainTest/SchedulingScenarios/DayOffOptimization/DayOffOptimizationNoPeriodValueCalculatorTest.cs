@@ -18,6 +18,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 {
 	[DomainTest]
+	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
 	public class DayOffOptimizationNoPeriodValueCalculatorTest : DayOffOptimizationScenario
 	{
 		public DayOffOptimizationWeb Target;

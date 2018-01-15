@@ -20,6 +20,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 {
 	[DomainTest]
+	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
 	public class DayOffOptimizationResultTest : DayOffOptimizationScenario
 	{
 		public DayOffOptimizationWeb Target;

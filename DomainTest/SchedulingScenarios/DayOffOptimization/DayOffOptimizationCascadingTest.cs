@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -17,6 +18,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 {
 	[DomainTest]
+	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
 	public class DayOffOptimizationCascadingTest : DayOffOptimizationScenario
 	{
 		public Domain.Optimization.DayOffOptimizationWeb Target;

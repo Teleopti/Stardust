@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 	[TestFixture(SeperateWebRequest.SimulateFirstRequest, false)]
 	[TestFixture(SeperateWebRequest.SimulateSecondRequestOrScheduler, true)]
 	[TestFixture(SeperateWebRequest.SimulateSecondRequestOrScheduler, false)]
-	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
 	[LoggedOnAppDomain]
 	public abstract class DayOffOptimizationScenario : ISetup, IConfigureToggleManager, ITestInterceptor
 	{

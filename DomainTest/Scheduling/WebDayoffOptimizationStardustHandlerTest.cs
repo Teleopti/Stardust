@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.DomainTest.SchedulingScenarios;
 using Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -22,6 +23,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling
 {
 	[DomainTest]
+	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
 	public class WebDayOffOptimizationStardustHandlerTest : DayOffOptimizationScenario
 	{
 		public WebDayoffOptimizationStardustHandler Target;

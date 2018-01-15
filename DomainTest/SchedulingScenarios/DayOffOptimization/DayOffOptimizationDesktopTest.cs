@@ -14,6 +14,7 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -27,6 +28,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 	*/
 	[DomainTest]
 	[UseIocForFatClient]
+	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
 	public class DayOffOptimizationDesktopTest : DayOffOptimizationScenario
 	{
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
