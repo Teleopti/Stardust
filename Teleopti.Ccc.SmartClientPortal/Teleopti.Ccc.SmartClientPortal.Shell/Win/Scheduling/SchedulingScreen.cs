@@ -1006,6 +1006,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			var publishScedule = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.PublishSchedule);
 			toolStripMenuItemPublish.Visible = publishScedule;
 
+			backStageButtonManiMenuImport.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ImportSchedule);
+			backStageButtonMainMenuArchive.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ArchiveSchedule);
+
 			setPermissionOnControls();
 			schedulerSplitters1.AgentRestrictionGrid.SelectedAgentIsReady += agentRestrictionGridSelectedAgentIsReady;
 			schedulerSplitters1.MultipleHostControl3.GotFocus += multipleHostControl3OnGotFocus;
@@ -4685,6 +4688,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			enableSave();
 		}
 
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_PrepareToRemoveExportSchedule_46576)]
 		private void loadScenarioMenuItems()
 		{
 			IList<IScenario> scenarios;
@@ -4704,6 +4708,24 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 			if (RightToLeftLayout) flowLayoutExportToScenario.ReverseRows = true;
 
+			if (_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_PrepareToRemoveExportSchedule_46576))
+			{
+				var exportLimitedTime = new Label
+				{
+					Text = Resources.ExportAvailableLimitedTime,
+					Width = 300,
+					Height = 80,
+					BackColor = Color.Green,
+					ForeColor = Color.White,
+					TextAlign = ContentAlignment.MiddleCenter
+				};
+				exportLimitedTime.Font.ChangeToBold();
+				flowLayoutExportToScenario.ContainerControl.Controls.Add(exportLimitedTime);
+			}
+		
+			backStageButtonManiMenuImport.Visible = _container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_PrepareToRemoveExportSchedule_46576);
+			backStageButtonMainMenuArchive.Visible = _container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_PrepareToRemoveExportSchedule_46576);
+			
 			foreach (var scenario in scenarios)
 			{
 				if (_scenario.Description.Name == scenario.Description.Name) continue;
@@ -7006,6 +7028,24 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private void toolStripButtonRefreshLargeClick(object sender, EventArgs e)
 		{
 			refreshData();
+		}
+
+		private void backStageButtonManiMenuImportClick(object sender, EventArgs e)
+		{
+			openResourcePlannerInWfm("importschedule");
+		}
+
+		private void backStageButtonMainMenuArchiveClick(object sender, EventArgs e)
+		{
+			openResourcePlannerInWfm("archiveschedule");
+		}
+
+		private void openResourcePlannerInWfm(string what)
+		{
+			var wfmPath = _container.Resolve<IConfigReader>().AppConfig("FeatureToggle");
+			var url = $"{wfmPath}WFM/#/resourceplanner/{what}";
+			if (url.IsAnUrl())
+				Process.Start(url);
 		}
 	}
 }
