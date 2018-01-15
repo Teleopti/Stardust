@@ -15,17 +15,16 @@
 				if (!response.data.length)
 					return;
 
-				var notification = $translate.instant('RtaConfigurationIssuesFound') + '</br></br><ul>';
-
-				response.data.forEach(function (message) {
-					notification += '<li>' + $translate.instant(message.Resource) + '</li>';
-
-					(message.Data || []).forEach(function (data, index) {
-						notification = notification.replace('{' + index + '}', data);
-					});
-				});
-
-				notification += '</ul>';
+				var notification = response.data.reduce(function (message, validation) {
+					message += '<li>' + $translate.instant(validation.Resource) + '</li>';
+					
+					if (validation.Data)
+						validation.Data.forEach(function (data, index) {
+							message = message.replace('{' + index + '}', data);
+						});
+					
+					return message;
+				}, $translate.instant('RtaConfigurationIssuesFound') + '</br></br><ul>');
 
 				NoticeService.warning(notification, 10000, true);
 			});
