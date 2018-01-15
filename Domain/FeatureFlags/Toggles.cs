@@ -112,6 +112,7 @@
 		ResourcePlanner_DayOffOptimizationIslands_47208,
 		ResourcePlanner_XXL_47258,
 		ResourcePlanner_NoPytteIslands_47500,
+		ResourcePlanner_PrepareToRemoveExportSchedule_46576,
 
 		Wfm_DisplayOnlineHelp_39402,
 

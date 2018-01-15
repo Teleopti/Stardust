@@ -11405,6 +11405,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please note Export to is available for a limited time only..
+        /// </summary>
+        public static string ExportAvailableLimitedTime {
+            get {
+                return ResourceManager.GetString("ExportAvailableLimitedTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Payroll System Code.
         /// </summary>
         public static string ExportCode {

@@ -16951,4 +16951,8 @@ Do you want to participate?</value>
     <value>Remove Day Off</value>
     <comment>teams command menu: Remove Day Off</comment>
   </data>
+  <data name="ExportAvailableLimitedTime" xml:space="preserve">
+    <value>Please note Export to is available for a limited time only.</value>
+    <comment>Hint to show users that feature Export to from scheduler will be removed</comment>
+  </data>
 </root>
