@@ -17,8 +17,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			return Session.CreateCriteria<ExternalPerformanceData>()
 				.Add(Restrictions.Conjunction()
-					.Add(Restrictions.Ge("DateFrom", period.StartDateTime))
-					.Add(Restrictions.Le("DateFrom", period.EndDateTime)))
+					.Add(Restrictions.Between("DateFrom", period.StartDateTime, period.EndDateTime)))
 				.List<IExternalPerformanceData>();
 		}
 	}
