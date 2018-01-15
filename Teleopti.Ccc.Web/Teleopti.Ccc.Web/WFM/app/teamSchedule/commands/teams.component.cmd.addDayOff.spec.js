@@ -7,7 +7,8 @@
 			$q,
 			$httpBackend,
 			fakeDayOffService,
-			fakePersonSelectionService;
+			fakePersonSelectionService,
+			fakeNoticeService;
 
 		beforeEach(module('wfm.templates', 'wfm.teamSchedule'));
 
@@ -21,6 +22,11 @@
 				fakePersonSelectionService = new FakePersonSelectionService();
 				return fakePersonSelectionService;
 			});
+			$provide.service('NoticeService',
+				function () {
+					fakeNoticeService = new FakeNoticeService();
+					return fakeNoticeService;
+				});
 		}));
 
 		beforeEach(inject(function (_$rootScope_, _$compile_, _$document_, _$q_, _$httpBackend_) {
@@ -221,7 +227,36 @@
 			expect(fakeDayOffService.lastPostData).toEqual(null);
 		});
 
-	
+		it('should show success notification and reset active command when add day off apply succeed', function () {
+			var result = setUpAndApplyDayOff();
+			expect(fakeNoticeService.successMessage).toEqual('SuccessfulMessageForAddingDayOff');
+			expect(!!result.scope.$ctrl.containerCtrl.activeCmd).toEqual(false);
+		});
+
+		it('should show warning and success notification and reset active command when add day off apply with warning', function () {
+			var result = setUpAndApplyDayOff({
+				data: [{
+					PersonId: 'agent1', WarningMessages: ['warning']
+				}]
+			});
+			
+			expect(fakeNoticeService.successMessage).toEqual('SuccessfulMessageForAddingDayOff');
+			expect(fakeNoticeService.warningMessage).toEqual('warning : agent1');
+			expect(!!result.scope.$ctrl.containerCtrl.activeCmd).toEqual(false);
+		});
+
+		it('should show error notification and reset active command when add day off apply with error', function () {
+			var result = setUpAndApplyDayOff({
+				data: [{
+					PersonId: 'agent1', ErrorMessages: ['error' ]
+				}]
+			});
+			expect(fakeNoticeService.successMessage).toEqual('');
+			expect(fakeNoticeService.errorMessage).toEqual('error : agent1');
+			expect(!!result.scope.$ctrl.containerCtrl.activeCmd).toEqual(false);
+		});
+
+
 		function setUp(inputDate) {
 			var date;
 			var html = '<teamschedule-command-container date="curDate" timezone="timezone"></teamschedule-command-container>';
@@ -245,6 +280,25 @@
 			return element;
 		}
 
+		function setUpAndApplyDayOff(applyResponse) {
+			var panel = setUp("2018-01-09");
+			var scope = panel.isolateScope();
+			var ctrl = scope.$ctrl;
+
+			ctrl.selectedTemplateId = "template1";
+			fakePersonSelectionService.setFakeCheckedPersonInfoList();
+			scope.$apply();
+
+			fakeDayOffService.setApplyResponse(applyResponse);
+
+			var applyButton = panel[0].querySelector("#applyDayOff");
+			applyButton.click();
+			return {
+				panel: panel,
+				scope: scope
+			};
+		}
+
 		function expectApplyButtonStatus(isDisabled, panel) {
 			var applyButton = panel[0].querySelector("#applyDayOff");
 			if (isDisabled) {
@@ -258,6 +312,8 @@
 		}
 
 		function FakeDayOffService() {
+			var self = this;
+			var applyResponse = null;
 			this.lastPostData = null;
 			this.getAllDayOffTemplates = function () {
 				return $q(function (resolve, reject) {
@@ -267,8 +323,14 @@
 					]);
 				});
 			}
+			this.setApplyResponse = function (response) {
+				applyResponse = response;
+			}
 			this.addDayOff = function (input) {
 				this.lastPostData = input;
+				return $q(function (resolve, reject) {
+					resolve(applyResponse || { data: [] });
+				});
 			}
 		}
 
@@ -288,6 +350,21 @@
 
 			this.getCheckedPersonInfoList = function () {
 				return checkedPersonList;
+			}
+		}
+
+		function FakeNoticeService() {
+			this.successMessage = '';
+			this.errorMessage = '';
+			this.warningMessage = '';
+			this.success = function (message, time, destroyOnStateChange) {
+				this.successMessage = message;
+			}
+			this.error = function (message, time, destroyOnStateChange) {
+				this.errorMessage = message;
+			}
+			this.warning = function (message, time, destroyOnStateChange) {
+				this.warningMessage = message;
 			}
 		}
 
