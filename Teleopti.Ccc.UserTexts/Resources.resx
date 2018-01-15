@@ -16940,13 +16940,15 @@ Do you want to participate?</value>
   </data>
   <data name="RtaConfigurationIssuesFound" xml:space="preserve">
     <value>Configuration issues found</value>
-    <comment></comment>
   </data>
   <data name="LoggedOutStateGroupMissingInConfiguration" xml:space="preserve">
     <value>Logged out state group is missing in configuration for business unit '{0}'</value>
-    <comment></comment>
   </data>
   <data name="PickATemplate" xml:space="preserve">
     <value>Pick a template</value>
+  </data>
+  <data name="RemoveDayOff" xml:space="preserve">
+    <value>Remove Day Off</value>
+    <comment>teams command menu: Remove Day Off</comment>
   </data>
 </root>
