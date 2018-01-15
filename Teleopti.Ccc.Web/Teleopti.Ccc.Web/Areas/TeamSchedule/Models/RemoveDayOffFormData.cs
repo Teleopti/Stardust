@@ -8,6 +8,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 	{
 		public DateOnly Date { get; set; }
 		public Guid[] PersonIds { get; set; }
-		public TrackedCommandInfo TrackedCommandInfo { get; internal set; }
+		public TrackedCommandInfo TrackedCommandInfo { get; set; }
 	}
 }

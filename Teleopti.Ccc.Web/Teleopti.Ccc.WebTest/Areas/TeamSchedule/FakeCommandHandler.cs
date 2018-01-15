@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		private void handle(ITrackableCommand command)
 		{
 			calledCount++;
-			if (command is IErrorAttachedCommand)
+			if (command is IErrorAttachedCommand && HasError)
 			{
 				var msgs = (command as IErrorAttachedCommand).ErrorMessages ?? new List<string>();
 				msgs.Add("Execute command failed.");

@@ -28,11 +28,26 @@
 				.map(function (p) { return p.PersonId; });
 
 			var input = {
-				Date: ctrl.selectedDate,
+				Date: moment(ctrl.selectedDate).format('YYYY-MM-DD'),
 				PersonIds: personIds,
 				TrackedCommandInfo: { TrackId: ctrl.trackId }
 			}
-			dayOffService.removeDayOff(input);
+			return dayOffService.removeDayOff(input).then(function(response) {
+				$scope.$emit('teamSchedule.hide.loading');
+				if (vm.getActionCb(vm.label)) {
+					vm.getActionCb(vm.label)(vm.trackId, personIds);
+				}
+
+				notification.reportActionResult({
+					"success": 'FinishedRemoveDayOff',
+					"warning": 'PartialSuccessMessageForRemovingDayOff'
+				}, selectedPersonAbsences.map(function (x) {
+					return {
+						PersonId: x.PersonId,
+						Name: x.Name
+					};
+				}), response.data);
+			});
 		}
 
 		ctrl.popDialog = function () {
