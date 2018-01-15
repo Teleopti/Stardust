@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 					case DifferenceStatus.Deleted:
 						var orgItem = scheduleChange.OriginalItem;
 						_scheduleStorage.Remove(orgItem);
-						stateInMemoryUpdater.SolveConflictBecauseOfExternalDeletion(orgItem.Id.Value, true);
+						stateInMemoryUpdater.SolveConflictBecauseOfExternalDeletion(orgItem.Id.GetValueOrDefault(), true);
 						break;
 					case DifferenceStatus.Modified:
 						var unitOfWork = _currentUnitOfWork.Current();
