@@ -16465,6 +16465,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Real time adherence service does not have a state group specified as agents being logged out. State snapshot feature will not work until this is configured and the services cache is refreshed. Configure this in the Windows client&apos;s options and wait for the service&apos;s cache to update..
+        /// </summary>
+        public static string LoggedOutStateGroupMissingInRtaService {
+            get {
+                return ResourceManager.GetString("LoggedOutStateGroupMissingInRtaService", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Logging on....
         /// </summary>
         public static string LoggingOnTreeDots {

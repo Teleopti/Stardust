@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly IMappingReader _reader;
 		private readonly ICurrentEventPublisher _eventPublisher;
 		private readonly IRtaStateGroupRepository _stateGroups;
+		private readonly IKeyValueStorePersister _keyValues;
 
 		private readonly PerTenant<string> _version;
 
@@ -42,11 +43,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly PerTenant<IDictionary<Guid, MappedState>> _stateMappings;
 		private readonly PerTenant<IEnumerable<Guid>> _loggedOutStateGroupIds;
 
-		public StateMapper(IMappingReader reader, ICurrentDataSource dataSource, ICurrentEventPublisher eventPublisher, IRtaStateGroupRepository stateGroups)
+		public StateMapper(IMappingReader reader, ICurrentDataSource dataSource, ICurrentEventPublisher eventPublisher, IRtaStateGroupRepository stateGroups, IKeyValueStorePersister keyValues)
 		{
 			_reader = reader;
 			_eventPublisher = eventPublisher;
 			_stateGroups = stateGroups;
+			_keyValues = keyValues;
 
 			_version = new PerTenant<string>(dataSource);
 			_ruleMappings = new PerTenant<IDictionary<ruleMappingKey, MappedRule>>(dataSource);
@@ -109,7 +111,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				StateGroupName = null
 			};
 		}
-		
+
 		public MappedRule RuleFor(Guid businessUnitId, Guid? stateGroupId, Guid? activityId)
 		{
 			var match = queryRule(businessUnitId, stateGroupId, activityId);
@@ -139,6 +141,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		protected virtual IEnumerable<Mapping> Read()
 		{
 			return _reader.Read();
+		}
+
+		[ReadModelUnitOfWork]
+		protected virtual string ReadLatestVerion()
+		{
+			return _keyValues.Get("RuleMappingsVersion");
+		}
+
+		public void Refresh()
+		{
+			Refresh(ReadLatestVerion());
 		}
 
 		public void Refresh(string latestVersion)
@@ -232,8 +245,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			protected bool Equals(ruleMappingKey other)
 			{
 				return businessUnitId.Equals(other.businessUnitId)
-					&& stateGroupId.Equals(other.stateGroupId)
-					&& activityId.Equals(other.activityId);
+					   && stateGroupId.Equals(other.stateGroupId)
+					   && activityId.Equals(other.activityId);
 			}
 
 			public override bool Equals(object obj)
@@ -241,7 +254,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				if (ReferenceEquals(null, obj)) return false;
 				if (ReferenceEquals(this, obj)) return true;
 				if (obj.GetType() != GetType()) return false;
-				return Equals((ruleMappingKey)obj);
+				return Equals((ruleMappingKey) obj);
 			}
 
 			public override int GetHashCode()
@@ -263,12 +276,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			public Guid businessUnitId;
 			public string stateCode;
 
-			#region 
+			#region
 
 			protected bool Equals(stateCodeMappingKey other)
 			{
 				return businessUnitId.Equals(other.businessUnitId)
-					&& string.Equals(stateCode, other.stateCode, StringComparison.OrdinalIgnoreCase);
+					   && string.Equals(stateCode, other.stateCode, StringComparison.OrdinalIgnoreCase);
 			}
 
 			public override bool Equals(object obj)
@@ -276,7 +289,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				if (ReferenceEquals(null, obj)) return false;
 				if (ReferenceEquals(this, obj)) return true;
 				if (obj.GetType() != GetType()) return false;
-				return Equals((stateCodeMappingKey)obj);
+				return Equals((stateCodeMappingKey) obj);
 			}
 
 			public override int GetHashCode()
@@ -292,5 +305,4 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			#endregion
 		}
 	}
-
 }

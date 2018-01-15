@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Configuration
@@ -8,18 +10,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Configuration
 	{
 		private readonly IRtaStateGroupRepository _stateGroups;
 		private readonly IBusinessUnitRepository _businessUnits;
+		private readonly StateMapper _stateMapper;
 
-		public ConfigurationValidator(IRtaStateGroupRepository stateGroups, IBusinessUnitRepository businessUnits)
+		public ConfigurationValidator(IRtaStateGroupRepository stateGroups, IBusinessUnitRepository businessUnits, StateMapper stateMapper)
 		{
 			_stateGroups = stateGroups;
 			_businessUnits = businessUnits;
+			_stateMapper = stateMapper;
 		}
 
 		public IEnumerable<ConfigurationValidationViewModel> Validate()
 		{
 			var stateGroups = _stateGroups.LoadAll();
 
-			var loggedOutStateGroupMissingMessages = from businessUnit in _businessUnits.LoadAll()
+			var messages = from businessUnit in _businessUnits.LoadAll()
 				let valid = stateGroups.Where(x => x.BusinessUnit == businessUnit).Any(x => x.IsLogOutState)
 				where !valid
 				select new ConfigurationValidationViewModel
@@ -28,45 +32,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Configuration
 					Data = new[] {businessUnit.Name}
 				};
 
-			return loggedOutStateGroupMissingMessages.ToArray();
+			_stateMapper.Refresh();
+			if (_stateMapper.LoggedOutStateGroupIds().IsEmpty())
+				messages = messages.Append(new ConfigurationValidationViewModel
+				{
+					Resource = nameof(UserTexts.Resources.LoggedOutStateGroupMissingInRtaService)
+				});
 
-//			var random = new Random().Next(0, 100);
-//			if (random < 25)
-//				throw new Exception();
-//			if (random < 50)
-//				return Enumerable.Empty<ConfigurationValidationViewModel>();
-//			if (random < 75)
-//				return new[]
-//				{
-//					new ConfigurationValidationViewModel
-//					{
-//						Resource = "LoggedOutStateGroupMissingInConfiguration",
-//						Data = new[] {"Blip blop unit", _dataSource.CurrentName()}
-//					}
-//				};
-//			return new[]
-//			{
-//				new ConfigurationValidationViewModel
-//				{
-//					Resource = "LoggedOutStateGroupMissingInConfiguration",
-//					Data = new[] {"Blip blop unit", _dataSource.CurrentName()}
-//				},
-//				new ConfigurationValidationViewModel
-//				{
-//					Resource = "LoggedOutStateGroupMissingInRtaService",
-//					Data = new[] {"Blip blop unit", _dataSource.CurrentName()}
-//				},
-//				new ConfigurationValidationViewModel
-//				{
-//					Resource = "DefaultStateGroupMissingInConfiguration",
-//					Data = new[] {"Blip blop unit", _dataSource.CurrentName()}
-//				},
-//				new ConfigurationValidationViewModel
-//				{
-//					Resource = "DefaultStateGroupMissingInRtaService",
-//					Data = new[] {"Blip blop unit", _dataSource.CurrentName()}
-//				},
-//			};
+			return messages.ToArray();
 		}
 	}
 }

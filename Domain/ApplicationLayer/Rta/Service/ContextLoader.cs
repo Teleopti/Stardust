@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					{
 						var result = _agentStatePersister.LockNLoad(some, strategy.DeadLockVictim);
 						refreshCaches(strategy, strategyContext, result.ScheduleVersion, result.MappingVersion);
-						return result.AgentStates.Select(x => new Tuple<AgentState,StateTraceLog>(x, strategy.GetTraceFor(x)));
+						return result.AgentStates.Select(x => new Tuple<AgentState, StateTraceLog>(x, strategy.GetTraceFor(x)));
 					}))
 					.ToArray();
 
@@ -94,13 +94,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			else
 			{
 				CurrentScheduleReadModelVersion scheduleVersion = null;
-				string mappingVersion = null;
-				strategyContext.WithReadModelUnitOfWork(() =>
-				{
-					scheduleVersion = _keyValues.Get("CurrentScheduleReadModelVersion", () => null);
-					mappingVersion = _keyValues.Get("RuleMappingsVersion");
-				});
-				refreshCaches(strategy, strategyContext, scheduleVersion, mappingVersion);
+				strategyContext.WithReadModelUnitOfWork(() => { scheduleVersion = _keyValues.Get("CurrentScheduleReadModelVersion", () => null); });
+				refreshCaches(strategy, strategyContext, scheduleVersion, null);
 			}
 
 			if (exceptions.Count == 1)
@@ -116,7 +111,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private void refreshCaches(IContextLoadingStrategy strategy, StrategyContext strategyContext, CurrentScheduleReadModelVersion scheduleVersion, string mappingVersion)
 		{
 			_scheduleCache.Refresh(scheduleVersion);
-			_stateMapper.Refresh(mappingVersion);
+			if (mappingVersion != null)
+				_stateMapper.Refresh(mappingVersion);
+			else
+				_stateMapper.Refresh();
 			strategy.VerifyConfiguration(strategyContext);
 		}
 
@@ -130,7 +128,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private void processTransactions(
 			string tenant,
 			IContextLoadingStrategy strategy,
-			IEnumerable<Func<IEnumerable<Tuple<AgentState,StateTraceLog>>>> transactions,
+			IEnumerable<Func<IEnumerable<Tuple<AgentState, StateTraceLog>>>> transactions,
 			ConcurrentBag<Exception> exceptions)
 		{
 			// transaction spreading over sql clustered index strategy optimization...
