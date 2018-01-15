@@ -77,7 +77,7 @@ angular.module('wfm.rta').config(function ($stateProvider, ToggleProvider) {
 					{params: {personId: $stateParams.personId}}
 				).then(function (response) {
 					$stateParams.date = response.data;
-					$state.go('rta-historical', $stateParams);
+					$state.go('rta-historical', $stateParams, {location: 'replace'});
 				});
 			}
 		})
