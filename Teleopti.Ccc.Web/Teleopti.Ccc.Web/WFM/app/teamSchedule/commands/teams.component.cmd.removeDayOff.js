@@ -25,7 +25,12 @@
 		}
 
 		ctrl.removeDayOff = function () {
-			var personInfos = personSelectionSvc.getCheckedPersonInfoList();
+			var personInfos = personSelectionSvc.getCheckedPersonInfoList().filter(function(p) {
+				var dayoffsOnSelectedDay = p.SelectedDayOffs.filter(function(d) {
+					return d.Date === moment(ctrl.selectedDate).format('YYYY-MM-DD')
+				});
+				return dayoffsOnSelectedDay.length > 0;
+			});
 			var personIds = personInfos
 				.map(function (p) { return p.PersonId; });
 
