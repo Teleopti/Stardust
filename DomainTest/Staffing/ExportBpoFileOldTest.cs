@@ -240,7 +240,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			var skill = createSkill(15, "skill", new TimePeriod(8, 0, 8, 30));
 			skill.SetId(Guid.NewGuid());
 			var scenario = SkillSetupHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository);
-			var skillDay = SkillSetupHelper.CreateSkillDayWithDemand(skill, scenario, new DateTime(2017, 8, 15), new TimePeriod(8, 0, 8, 30), 15.7);
+			var skillDay = SkillSetupHelper.CreateSkillDayWithDemand(skill, scenario, new DateTime(2017, 8, 15), new TimePeriod(8, 0, 8, 30), 15.751221212);
 			SkillRepository.Add(skill);
 			SkillDayRepository.Add(skillDay);
 			SkillCombinationResourceRepository.PersistSkillCombinationResourceBpo(new List<ImportSkillCombinationResourceBpo>()
@@ -268,14 +268,14 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 				{
 					StartDateTime = new DateTime(2017, 08, 15, 8, 0, 0).Utc(),
 					EndDateTime = new DateTime(2017, 08, 15, 8, 15, 0).Utc(),
-					Resource = 4,
+					Resource = 4.1111111,
 					SkillCombination = new[] { skill.Id.GetValueOrDefault()}
 				},
 				new SkillCombinationResource
 				{
 					StartDateTime = new DateTime(2017, 08, 15, 8, 15, 0).Utc(),
 					EndDateTime = new DateTime(2017, 08, 15, 8, 30, 0).Utc(),
-					Resource = 3,
+					Resource = 3.11111,
 					SkillCombination = new[] { skill.Id.GetValueOrDefault()}
 				}
 			});
@@ -284,8 +284,8 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			var forecastedData = Target.ExportDemand(skill, period, new CultureInfo("en-US", false));
 			var rows = forecastedData.Split(new[] { "\r\n" }, StringSplitOptions.None);
 			
-			rows.First().Should().Be.EqualTo("skill,20170815 08:00,20170815 08:15,0,0,0,11.7");
-			rows.Second().Should().Be.EqualTo("skill,20170815 08:15,20170815 08:30,0,0,0,12.7");
+			rows.First().Should().Be.EqualTo("skill,20170815 08:00,20170815 08:15,0,0,0,11.64");
+			rows.Second().Should().Be.EqualTo("skill,20170815 08:15,20170815 08:30,0,0,0,12.64");
 		}
 		
 		private ISkill createSkill(int intervalLength, string skillName, TimePeriod openHours)

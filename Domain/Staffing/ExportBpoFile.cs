@@ -61,6 +61,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 				var endDateTime = skillStaffPeriod.Period.EndDateTimeLocal(_userTimeZone.TimeZone()).ToString(dateTimeFormat, formatProvider);
 				var newDemand = skillStaffPeriod.FStaff - staffing;
 				if (newDemand < 0) newDemand = 0;
+				newDemand = Math.Round(newDemand, 2);
 				var row = $"{skill.Name}{seperator}{startDateTime}{seperator}{endDateTime}{seperator}" +
 						  $"0{seperator}0{seperator}0{seperator}{newDemand.ToString(formatProvider)}";
 				forecastedData.AppendLine(row);
