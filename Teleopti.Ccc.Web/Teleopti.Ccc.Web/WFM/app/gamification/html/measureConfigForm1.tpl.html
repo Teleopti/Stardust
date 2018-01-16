@@ -1,6 +1,7 @@
 <form name="form">
 	<label for="badgeThreshold">Badge threshold</label>
-	<input type="text" name="threshold" ng-model="$ctrl._badgeThreshold" threshold-validator="{{::$ctrl.valueFormat}}" />
+	<input type="text" name="threshold" ng-model="$ctrl._badgeThreshold" threshold-validator="{{::$ctrl.valueFormat}}" threshold-max='{{::$ctrl.max}}'
+	/>
 	<div class="text-danger" style="height: 1em;">
 		<span ng-show="form.threshold.$invalid">{{'Invalid'|translate}}</span>
 	</div>

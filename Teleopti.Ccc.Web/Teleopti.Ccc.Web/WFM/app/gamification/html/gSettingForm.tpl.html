@@ -31,52 +31,39 @@
 		<wfm-card ng-repeat="config in $ctrl.builtinMeasureConfigs" style="display:block;">
 			<card-header tabindex="-1">
 				<div tabindex="0">
-					<measure-config-header name="config.name"
-						allow-rename="!config.builtin"
-						checked="config.enabled"
-						on-name-update="config.setName(name)"
-						on-checkbox-update="config.setEnabled(enabled)">
+					<measure-config-header name="config.name" allow-rename="!config.builtin" checked="config.enabled" on-name-update="config.setName(name)"
+					 on-checkbox-update="config.setEnabled(enabled)">
 					</measure-config-header>
 				</div>
 			</card-header>
 			<card-body>
-				<measure-config-form1 ng-if="$ctrl.ruleSet == 0" style="display:block;"
-					badge-threshold="config.badgeThreshold"
-					on-update="config.setBadgeThreshold(badgeThreshold)"
-					value-format="config.valueFormat">
+				<measure-config-form1 ng-if="$ctrl.ruleSet == 0" style="display:block;" badge-threshold="config.badgeThreshold" on-update="config.setBadgeThreshold(badgeThreshold)"
+				 value-format="config.valueFormat" max="config.max">
 				</measure-config-form1>
 
 				<measure-config-form2 ng-if="$ctrl.ruleSet == 1" style="display:block;" bronze-badge-threshold="config.bronzeBadgeThreshold"
 				 on-bronze-badge-threshold-update="config.updateBronzeBadgeThreshold(value)" silver-badge-threshold="config.silverBadgeThreshold"
-				 gold-badge-threshold="config.goldBadgeThreshold">
+				 gold-badge-threshold="config.goldBadgeThreshold" max="config.max" valur-order="config.valueOrder">
 				</measure-config-form2>
 			</card-body>
 		</wfm-card>
 		<wfm-card ng-repeat="config in $ctrl.externalMeasureConfigs" style="display:block;">
 			<card-header tabindex="-1">
 				<div tabindex="0">
-					<measure-config-header name="config.name"
-						allow-rename="!config.builtin"
-						checked="config.enabled"
-						on-name-update="config.setName(name)"
-						on-checkbox-update="config.setEnabled(enabled)">
+					<measure-config-header name="config.name" allow-rename="!config.builtin" checked="config.enabled" on-name-update="config.setName(name)"
+					 on-checkbox-update="config.setEnabled(enabled)">
 					</measure-config-header>
 				</div>
 			</card-header>
 			<card-body>
-				<measure-config-form1 ng-if="$ctrl.ruleSet == 0" style="display:block;"
-					badge-threshold="config.badgeThreshold"
-					data-type="config.dataType"
-					on-update="config.setBadgeThreshold(threshold)">
+				<measure-config-form1 ng-if="$ctrl.ruleSet == 0" style="display:block;" badge-threshold="config.badgeThreshold" data-type="config.dataType"
+				 on-update="config.setBadgeThreshold(threshold)">
 				</measure-config-form1>
 
-				<measure-config-form2 ng-if="$ctrl.ruleSet == 1" style="display:block;"
-					 bronze-badge-threshold="config.bronzeBadgeThreshold"
-					 update-bronze="config.setBronzeBadgeThreshold(bronzeBadgeThreshold)"
-					 silver-badge-threshold="config.silverBadgeThreshold"
-					 update-silver="config.setSilverBadgeThreshold(silverBadgeThreshold)"
-					 gold-badge-threshold="config.goldBadgeThreshold"
-					 update-gold="config.setGoldBadgeThreshold(goldBadgeThreshold)">
+				<measure-config-form2 ng-if="$ctrl.ruleSet == 1" style="display:block;" bronze-badge-threshold="config.bronzeBadgeThreshold"
+				 update-bronze="config.setBronzeBadgeThreshold(bronzeBadgeThreshold)" silver-badge-threshold="config.silverBadgeThreshold"
+				 update-silver="config.setSilverBadgeThreshold(silverBadgeThreshold)" gold-badge-threshold="config.goldBadgeThreshold"
+				 update-gold="config.setGoldBadgeThreshold(goldBadgeThreshold)">
 				</measure-config-form2>
 			</card-body>
 		</wfm-card>

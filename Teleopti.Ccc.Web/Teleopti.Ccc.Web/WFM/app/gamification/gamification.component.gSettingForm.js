@@ -27,7 +27,9 @@
 				data.AnsweredCallsBronzeThreshold,
 				data.AnsweredCallsSilverThreshold,
 				data.AnsweredCallsGoldThreshold,
-				'^\\d+$'
+				'^\\d+$',
+				10000,
+				'desc'
 			));
 
 			measureConfigs.push(new MeasureConfig(
@@ -42,7 +44,9 @@
 				data.AdherenceBronzeThreshold.Value,
 				data.AdherenceSilverThreshold.Value,
 				data.AdherenceGoldThreshold.Value,
-				'^0.\\d+$'
+				'^0.\\d+$',
+				20.0,
+				'desc'
 			));
 
 			measureConfigs.push(new MeasureConfig(
@@ -57,7 +61,9 @@
 				data.AHTBronzeThreshold,
 				data.AHTSilverThreshold,
 				data.AHTGoldThreshold,
-				''
+				'^(0[0-1]):([0-5][0-9]):([0-5][0-9])$',
+				'01:00:00',
+				'asc'
 			));
 
 			return measureConfigs;
@@ -118,7 +124,7 @@
 			});
 		};
 
-		function MeasureConfig(builtin, enabled, id, externalId, name, dataType, largerIsBetter, threshold, bronzeThreshold, silverThreshold, goldThreshold, valueFormat) {
+		function MeasureConfig(builtin, enabled, id, externalId, name, dataType, largerIsBetter, threshold, bronzeThreshold, silverThreshold, goldThreshold, valueFormat, max, valueOrder) {
 			this.builtin = builtin;
 			this.enabled = enabled;
 			this.id = id;
@@ -131,6 +137,8 @@
 			this.silverBadgeThreshold = silverThreshold;
 			this.goldBadgeThreshold = goldThreshold;
 			this.valueFormat = valueFormat;
+			this.max = max;
+			this.valueOrder = valueOrder;
 		}
 
 		MeasureConfig.prototype.setName = function (name) {
@@ -168,7 +176,7 @@
 				GamificationSettingId: ctrl.id,
 				QualityId: this.externalId,
 				Value: enabled
-			    }).then(function () {
+			}).then(function () {
 				$log.log('updated enabled');
 			}, function () {
 				$log.log('failed to update enabled. restoring: ' + previous);
