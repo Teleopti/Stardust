@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		}
 
 		[Test]
-		public void ShouldGetCorrectDefaultStartTimeConsideringWorkDefaultStartTimeAndCurrentTimeAndThe15MinGap()
+		public void ShouldGetCorrectDefaultStartTimeConsideringShiftEndTimeAndCurrentTimeAndThe15MinGap()
 		{
 			Now.Is(new DateTime(2018, 1, 8, 16, 49, 00, DateTimeKind.Utc));
 			var date = new DateOnly(2018, 1, 8);
@@ -206,7 +206,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		}
 
 		[Test]
-		public void ShouldGetCorrectDefaultStartTimeConsideringShiftEndTimeAndCurrentTimeAndThe15MinGap()
+		public void ShouldGetCorrectDefaultStartTimeConsideringWorkDefaultStartTimeAndCurrentTimeAndThe15MinGap()
 		{
 			Now.Is(new DateTime(2018, 1, 8, 07, 49, 00, DateTimeKind.Utc));
 			var date = new DateOnly(2018, 1, 8);
