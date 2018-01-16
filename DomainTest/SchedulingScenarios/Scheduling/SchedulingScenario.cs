@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				toggleManager.Enable(Toggles.ResourcePlanner_NoPytteIslands_47500);
 		}
 
-		public void OnBefore()
+		public virtual void OnBefore()
 		{
 			if (_seperateWebRequest == SeperateWebRequest.SimulateSecondRequestOrScheduler)
 				IoCTestContext.SimulateNewRequest();
