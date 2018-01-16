@@ -24,6 +24,7 @@
 		RTA_ViewHistoricalAhderenceForRecentShifts_46786,
 		RTA_ViewHistoricalAhderence7DaysBack_46826,
 		RTA_ConfigurationValidationNotification_46933,
+		RTA_ApprovePreviousOOA_47230,
 		
 		MyTimeWeb_TeamScheduleNoReadModel_36210,
 		MyTimeWeb_ShiftTradePossibleTradedSchedulesNoReadModel_36211,
