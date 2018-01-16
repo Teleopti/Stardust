@@ -62,7 +62,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 
 		[Test]
-		[Ignore("#47664 Failing test")]
 		public void ShouldNotFailToPlaceShiftsDueToRaceConditionWhenSettingDate()
 		{
 			const int numberOfIslands = 10;

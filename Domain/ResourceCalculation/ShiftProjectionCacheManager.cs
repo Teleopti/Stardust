@@ -7,28 +7,13 @@ using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-	[RemoveMeWithToggle("Merge with base class", Toggles.ResourcePlanner_XXL_47258)]
-	public class ShiftProjectionCacheManagerNew : ShiftProjectionCacheManager
-	{
-		public ShiftProjectionCacheManagerNew(IRuleSetDeletedActivityChecker ruleSetDeletedActivityChecker, IRuleSetDeletedShiftCategoryChecker rulesSetDeletedShiftCategoryChecker, IWorkShiftFromEditableShift workShiftFromEditableShift, ShiftProjectionCacheFetcher shiftProjectionCacheFetcher) : base(ruleSetDeletedActivityChecker, rulesSetDeletedShiftCategoryChecker, workShiftFromEditableShift, shiftProjectionCacheFetcher)
-		{
-		}
-
-		protected override IEnumerable<ShiftProjectionCache> getShiftsForRuleSet(IWorkShiftRuleSet ruleSet)
-		{
-			return _shiftProjectionCacheFetcher.Execute(ruleSet);
-		}
-	}
-	
 	public class ShiftProjectionCacheManager : IShiftProjectionCacheManager, IDisposable
     {
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_XXL_47258)]
         private readonly IDictionary<IWorkShiftRuleSet, List<ShiftProjectionCache>> _ruleSetListDictionary = new Dictionary<IWorkShiftRuleSet, List<ShiftProjectionCache>>();
         private readonly IRuleSetDeletedActivityChecker _ruleSetDeletedActivityChecker;
     	private readonly IRuleSetDeletedShiftCategoryChecker _rulesSetDeletedShiftCategoryChecker;
 	    private readonly IWorkShiftFromEditableShift _workShiftFromEditableShift;
-		[RemoveMeWithToggle("make private", Toggles.ResourcePlanner_XXL_47258)]
-		protected readonly ShiftProjectionCacheFetcher _shiftProjectionCacheFetcher;
+		private readonly ShiftProjectionCacheFetcher _shiftProjectionCacheFetcher;
 		private readonly IPersonalShiftMeetingTimeChecker personalShiftMeetingTimeChecker = new PersonalShiftMeetingTimeChecker();
 
 	    public ShiftProjectionCacheManager(IRuleSetDeletedActivityChecker ruleSetDeletedActivityChecker, 
@@ -84,8 +69,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		    return ShiftProjectionCachesFromRuleSets(dateOnlyAsDateTimePeriod, ruleSets, checkExcluded);
 	    }
 
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_XXL_47258)]
-	    protected virtual IEnumerable<ShiftProjectionCache> getShiftsForRuleSet(IWorkShiftRuleSet ruleSet)
+		private IEnumerable<ShiftProjectionCache> getShiftsForRuleSet(IWorkShiftRuleSet ruleSet)
         {
 			List<ShiftProjectionCache> shiftProjectionCacheList;
 
@@ -98,8 +82,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return shiftProjectionCacheList;
         }
 
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_XXL_47258)]
-	    public void Dispose()
+		public void Dispose()
 	    {
 			_ruleSetListDictionary.Clear();
 	    }
