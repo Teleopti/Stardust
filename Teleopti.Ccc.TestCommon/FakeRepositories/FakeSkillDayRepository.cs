@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -80,12 +81,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public ICollection<ISkillDay> FindReadOnlyRange(DateOnlyPeriod period, IEnumerable<ISkill> skills, IScenario scenario)
 		{
-			return _skillDays
-				.Where(skillDayInDb => 
-						skillDayInDb.Scenario.Equals(scenario) && 
-						period.Contains(skillDayInDb.CurrentDate) && 
-						skills.Contains(skillDayInDb.Skill))
-				.ToList();
+			return _skillDays.Where(skillDayInDb => skillDayInDb.Scenario.Equals(scenario) && period.Contains(skillDayInDb.CurrentDate) && skills.Contains(skillDayInDb.Skill))
+				.Select(skillDay => new SkillDay(skillDay.CurrentDate, skillDay.Skill, skillDay.Scenario, skillDay.WorkloadDayCollection, skillDay.SkillDataPeriodCollection))
+				.Cast<ISkillDay>().ToList();
 		}
 	}
 }
