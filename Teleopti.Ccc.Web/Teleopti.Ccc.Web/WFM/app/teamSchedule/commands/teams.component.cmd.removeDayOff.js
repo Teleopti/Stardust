@@ -24,15 +24,8 @@
 			ctrl.popDialog();
 		}
 
-		ctrl.removeDayOff = function () {
-			var personInfos = personSelectionSvc.getCheckedPersonInfoList().filter(function(p) {
-				var dayoffsOnSelectedDay = p.SelectedDayOffs.filter(function(d) {
-					return d.Date === moment(ctrl.selectedDate).format('YYYY-MM-DD')
-				});
-				return dayoffsOnSelectedDay.length > 0;
-			});
-			var personIds = personInfos
-				.map(function (p) { return p.PersonId; });
+		ctrl.removeDayOff = function (personIds) {
+			
 
 			var input = {
 				Date: moment(ctrl.selectedDate).format('YYYY-MM-DD'),
@@ -58,21 +51,31 @@
 		}
 
 		ctrl.popDialog = function () {
-			var selectedPeople = personSelectionSvc.getCheckedPersonInfoList();
+			var personInfos = personSelectionSvc.getCheckedPersonInfoList().filter(function(p) {
+				var dayoffsOnSelectedDay = p.SelectedDayOffs.filter(function(d) {
+					return d.Date === moment(ctrl.selectedDate).format('YYYY-MM-DD');
+				});
+				return dayoffsOnSelectedDay.length > 0;
+			});
+			var personIds = personInfos
+				.map(function (p) { return p.PersonId; });
+
 			var title = ctrl.label;
 			var message = teamScheduleNotificationService.buildConfirmationMessage(
 				'AreYouSureToRemoveSelectedDayOff',
-				selectedPeople.length,
-				selectedPeople.length,
+				personIds.length,
+				personIds.length,
 				true
 			);
 			$wfmModal.confirm(message, title).then(function (result) {
 				ctrl.resetActiveCmd();
 				if (result) {
 					$scope.$emit('teamSchedule.show.loading');
-					ctrl.removeDayOff();
+					ctrl.removeDayOff(personIds);
 				}
 			});
 		};
+
+	
 	}
 })();
