@@ -13,7 +13,7 @@ And There is a skill to monitor called 'Skill A' with queue id '1' and queue nam
 And There is a skill to monitor called 'Skill B' with queue id '2' and queue name 'queue2' and activity 'Chat'
 And There is a compensation with name 'Comparera'
 
-@Ignore
+
 Scenario: View staffing for one skill on selected date
 	Given the time is '2017-09-25 08:00'
 	And there is queue statistics for skill 'Skill A' until '2017-09-27 17:00'
@@ -22,7 +22,6 @@ Scenario: View staffing for one skill on selected date
 	And I change staffing date to '2017-09-25'
 	Then I should see staffing data in the graph
 
-@Ignore
 Scenario: View staffing for one skillgroup
 	Given the time is '2017-09-25 08:00'
 	And there is queue statistics for skill 'Skill A' until '2017-09-27 17:00'
@@ -47,7 +46,6 @@ Scenario: Show overtime settings
 	And I press the get suggestions for overtime button
 	Then I should see overtime settings
 
-@Ignore
 Scenario: Use shrinkage when toggling shrinkage to on
 	Given the time is '2017-09-25 08:00'
 	And there is queue statistics for skill 'Skill A' until '2017-09-27 17:00'

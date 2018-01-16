@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
@@ -152,6 +153,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Staffing
 				"#teamschedule-datepicker-input",
 				date
 			);
+			Thread.Sleep(400);
 			Browser.Interactions.PressEnter("#teamschedule-datepicker-input");
 		}
 
