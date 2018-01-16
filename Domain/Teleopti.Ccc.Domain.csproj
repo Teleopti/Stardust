@@ -173,6 +173,7 @@
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestAvailability.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestMaximumtimeValidator.cs" />
     <Compile Include="ApplicationLayer\ImportExternalPerformance\ImportExternalPerformanceJobStatus.cs" />
+    <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsPersonTerminalDateChangedEventHandler.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsTimeZoneUpdater.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\WaitlistRequestHandler.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\RequestProcessor.cs" />

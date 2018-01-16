@@ -173,6 +173,18 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				.ExecuteUpdate();
 		}
 
+		public void DeleteFactScheduleAfterTerminalDate(Guid personCode, DateTime terminalDate)
+		{
+			var sql = "Delete schedule From mart.fact_schedule schedule "
+					  + "Join mart.dim_person person ON schedule.person_id = person.person_id "
+					  + $"Where person.person_code = :{nameof(personCode)} "
+					  + $"And schedule.activity_starttime >= :{nameof(terminalDate)}";
+			_analyticsUnitOfWork.Current().Session().CreateSQLQuery(sql)
+				.SetParameter(nameof(personCode), personCode)
+				.SetParameter(nameof(terminalDate), terminalDate)
+				.ExecuteUpdate();
+		}
+
 		public void InsertStageScheduleChangedServicebus(DateOnly date, Guid personId, Guid scenarioId, Guid businessUnitId, DateTime datasourceUpdateDate)
 		{
 			_analyticsUnitOfWork.Current().Session().CreateSQLQuery($@"exec mart.etl_stage_schedule_day_changed_servicebus_insert 
@@ -215,13 +227,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 		public void UpdateUnlinkedPersonids(int[] personPeriodIds)
 		{
 			_analyticsUnitOfWork.Current()
-			.Session()
-			.CreateSQLQuery(
-				$@"exec mart.etl_fact_schedule_update_unlinked_personids 
-						@person_periodids=:PersonIds
-						")
-			.SetString("PersonIds", string.Join(",", personPeriodIds))
-			.ExecuteUpdate();
+				.Session()
+				.CreateSQLQuery(@"exec mart.etl_fact_schedule_update_unlinked_personids @person_periodids=:PersonIds")
+				.SetString("PersonIds", string.Join(",", personPeriodIds))
+				.ExecuteUpdate();
 		}
 
 		public void RunWithExceptionHandling(Action action)
@@ -288,7 +297,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 
 		private static Func<DateTime> throwOnNotCompatible(string parameterName, DateTime value)
 		{
-			return () => { throw new ArgumentOutOfRangeException(parameterName, $"'{value}' is not valid to convert to a SqlDateTime"); };
+			return () =>
+			{
+				throw new ArgumentOutOfRangeException(parameterName, $"'{value}' is not valid to convert to a SqlDateTime");
+			};
 		}
 	}
 
