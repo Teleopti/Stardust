@@ -21,6 +21,12 @@
 					}
 				};
 
+				ctrl.keyUp = function (event) {
+					if (event && event.which === 13) {
+						event.target.blur();
+					}
+				}
+
 				ctrl.$onChanges = function (changesObj) {
 					if (changesObj.badgeThreshold) {
 						ctrl._badgeThreshold = changesObj.badgeThreshold.currentValue;
