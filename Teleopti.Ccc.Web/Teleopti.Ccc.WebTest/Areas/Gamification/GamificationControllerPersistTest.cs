@@ -666,7 +666,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification
 		[Test]
 		public void ShouldPersistExternalBadgeSettingThreshold()
 		{
-			var expectedThreshold = "60";
+			var expectedThreshold = 60;
 
 			var gamificationSetting = createDefaultGamificationSetting();
 			GamificationSettingRepository.Add(gamificationSetting);
@@ -686,7 +686,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification
 		[Test]
 		public void ShouldPersistExternalBadgeSettingGoldThreshold()
 		{
-			var expactedThreshold = "20";
+			var expactedThreshold = 20;
 
 			var gamificationSetting = createDefaultGamificationSetting();
 			GamificationSettingRepository.Add(gamificationSetting);
@@ -707,7 +707,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification
 		[SetCulture("en-US")]
 		public void ShouldPersistExternalBadgeSettingSilverThreshold()
 		{
-			var expectedThreshold = "0.3846";
+			var expectedThreshold = 0.3846;
 
 			var gamificationSetting = createDefaultGamificationSetting();
 			gamificationSetting.BadgeSettings[0].DataType = ExternalPerformanceDataType.Percent;
@@ -728,7 +728,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification
 		[Test]
 		public void ShouldPersistExternalBadgeSettingBronzeThreshold()
 		{
-			var expactedThreshold = "20";
+			var expactedThreshold = 20;
 
 			var gamificationSetting = createDefaultGamificationSetting();
 			GamificationSettingRepository.Add(gamificationSetting);
@@ -802,7 +802,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification
 		[SetCulture("en-US")]
 		public void ShouldUpateBadgeSettingThreshold()
 		{
-			var expectedThreshold = "75.46";
+			var expectedThreshold = 75.46;
 			var gamificationSetting = new GamificationSetting("bla").WithId();
 			var existingBadgeSetting = new BadgeSetting() { Threshold = 80.45, QualityId = 1 };
 			gamificationSetting.AddBadgeSetting(existingBadgeSetting);
@@ -825,7 +825,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification
 		[SetCulture("en-US")]
 		public void ShouldUpateBadgeSettingGoldThreshold()
 		{
-			var expectedThreshold = "0.5678";
+			var expectedThreshold = 0.5678;
 			var gamificationSetting = new GamificationSetting("bla").WithId();
 			var existingBadgeSetting = new BadgeSetting() { Threshold = 0.4567, QualityId = 1 };
 			gamificationSetting.AddBadgeSetting(existingBadgeSetting);
@@ -855,7 +855,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification
 				DataType = ExternalPerformanceDataType.Percent,
 				GamificationSettingId = gamificationSetting.Id.Value,
 				QualityId = 2,
-				ThresholdValue = "45"
+				ThresholdValue = 45
 			};
 
 			var result = Target.UpdateExternalBadgeSettingSilverThreshold(viewModel);

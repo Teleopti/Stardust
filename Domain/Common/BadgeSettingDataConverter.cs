@@ -5,28 +5,27 @@ namespace Teleopti.Ccc.Domain.Common
 {
 	public class BadgeSettingDataConverter
 	{
-		public double GetBadgeSettingValue(ExternalPerformanceDataType type, string input)
+		public double GetBadgeSettingValue(ExternalPerformanceDataType type, double input)
 		{
 			switch (type)
 			{
 				case ExternalPerformanceDataType.Numeric:
-					return getNumericValue(double.Parse(input));
+					return getNumericValue(input);
 				case ExternalPerformanceDataType.Percent:
-					var value = double.Parse(input);
-					return getPercentValue(value);
+					return getPercentValue(input);
 				default:
 					throw new ArgumentException($@"Unsupported badge unit type '{type}'", nameof(type));
 			}
 		}
 
-		public string GetBadgeSettingValueForViewModel(ExternalPerformanceDataType type, double valueInDB)
+		public double GetBadgeSettingValueForViewModel(ExternalPerformanceDataType type, double valueInDB)
 		{
 			switch (type)
 			{
 				case ExternalPerformanceDataType.Numeric:
-					return getNumericValue(valueInDB).ToString();
+					return getNumericValue(valueInDB);
 				case ExternalPerformanceDataType.Percent:
-					return getPercentValue(valueInDB).ToString();
+					return getPercentValue(valueInDB);
 				default:
 					throw new ArgumentException($@"Unsupported badge unit type '{type}'", nameof(type));
 			}
