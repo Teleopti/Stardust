@@ -22,7 +22,7 @@ Scenario: View staffing for one skill on selected date
 	And I change staffing date to '2017-09-25'
 	Then I should see staffing data in the graph
 
-
+@Ignore
 Scenario: View staffing for one skillgroup
 	Given the time is '2017-09-25 08:00'
 	And there is queue statistics for skill 'Skill A' until '2017-09-27 17:00'
