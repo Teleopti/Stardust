@@ -3,9 +3,11 @@
 		<div class="con-flex">
 			<label>
 				Gold badge threshold
-				<input type="text" ng-model="$ctrl.goldBadgeThreshold"
+				<input type="text" ng-disabled="$ctrl.disabled"
+					ng-model="$ctrl.goldBadgeThreshold"
 					ng-model-options="{updateOn: 'default blur change', debounce: {default: 2000, change: 0, blur: 0}}"
 					ng-change="$ctrl.updateGoldThreshold()"
+					autofocus
 				/>
 			</label>
 		</div>
@@ -13,7 +15,8 @@
 
 			<label>
 				Silver badge threshold
-				<input type="text" ng-model="$ctrl.silverBadgeThreshold"
+				<input type="text" ng-disabled="$ctrl.disabled"
+					ng-model="$ctrl.silverBadgeThreshold"
 					ng-model-options="{updateOn: 'default blur change', debounce: {default: 2000, change: 0, blur: 0}}"
 					ng-change="$ctrl.updateSilverThreshold()"
 				/>
@@ -22,7 +25,8 @@
 		<div class="con-flex">
 			<label>
 				Bronze badge threshold
-				<input type="text" ng-model="$ctrl.bronzeBadgeThreshold"
+				<input type="text" ng-disabled="$ctrl.disabled"
+					ng-model="$ctrl.bronzeBadgeThreshold"
 					ng-model-options="{updateOn: 'default blur change', debounce: {default: 2000, change: 0, blur: 0}}"
 					ng-change="$ctrl.updateBronzeThreshold()"
 				/>

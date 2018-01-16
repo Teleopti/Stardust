@@ -4,6 +4,7 @@
 		.component('measureConfigForm1', {
 			templateUrl: 'app/gamification/html/measureConfigForm1.tpl.html',
 			bindings: {
+				disabled: '<readOnly',
 				badgeThreshold: '<',
 				onUpdate: '&',
 				valueFormat: '<',

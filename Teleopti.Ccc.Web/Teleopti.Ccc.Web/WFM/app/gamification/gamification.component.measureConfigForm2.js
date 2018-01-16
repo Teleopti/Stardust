@@ -3,6 +3,7 @@
 		.component('measureConfigForm2', {
 			templateUrl: 'app/gamification/html/measureConfigForm2.tpl.html',
 			bindings: {
+				disabled: '<readOnly',
 				bronzeBadgeThreshold: '<',
 				updateBronze: '&',
 				silverBadgeThreshold: '<',

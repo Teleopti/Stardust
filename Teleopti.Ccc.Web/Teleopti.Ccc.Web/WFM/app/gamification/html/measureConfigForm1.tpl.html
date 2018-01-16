@@ -1,9 +1,8 @@
 <form name="form">
 	<div class="con-row">
 		<div class="con-flex">
-
 			<label for="badgeThreshold">Badge threshold</label>
-			<input type="text" name="threshold" ng-model="$ctrl._badgeThreshold" ng-keyup="$ctrl.keyUp($event, form.threshold.$invalid)"
+			<input type="text" name="threshold" autofocus ng-disabled="$ctrl.disabled" ng-model="$ctrl._badgeThreshold" ng-keyup="$ctrl.keyUp($event, form.threshold.$invalid)"
 			 ng-blur="$ctrl.updateThreshold(form.threshold.$invalid)" threshold-validator="{{::$ctrl.valueFormat}};{{$ctrl.max}};{{$ctrl.valueDataType}}"
 			/>
 			<div class="text-danger" style="height: 1em;">
