@@ -317,7 +317,8 @@
 			ScheduleEndTime: personSchedule.ScheduleEndTime(),
 			SelectedAbsences: absences || [],
 			SelectedActivities: activities || [],
-			Timezone: personSchedule.Timezone
+			Timezone: personSchedule.Timezone,
+			SelectedDayOffs:personSchedule.DayOffs || []
 		};
 	}
 

@@ -58,7 +58,7 @@
 			var projectionVms = createProjections(schedule.Projection, timeLine, shiftVm);
 			shiftVm.Projections = projectionVms;
 
-			var dayOffVm = createDayOffViewModel(schedule.DayOff, timeLine, personSchedule);
+			var dayOffVm = createDayOffViewModel(schedule.Date, schedule.DayOff, timeLine, personSchedule);
 						
 			if (angular.isDefined(projectionVms)) personSchedule.Shifts = [shiftVm];
 			if (angular.isDefined(dayOffVm)) personSchedule.DayOffs = [dayOffVm];
@@ -84,7 +84,7 @@
 			return projectionVms;
 		}
 
-		function createDayOffViewModel(dayOff, timeLine, personSchedule) {
+		function createDayOffViewModel(scheduleDate, dayOff, timeLine, personSchedule) {
 			if (angular.isUndefined(dayOff) || dayOff === null) {
 				return undefined;
 			}
@@ -110,7 +110,7 @@
 			var displayEnd = endTimeMinutes <= timelineEndMinute ? endTimeMinutes : timelineEndMinute;
 			var length = (displayEnd - displayStart) * lengthPercentPerMinute;
 
-			var dayOffVm = new DayOffViewModel(dayOff.DayOffName, startPosition, length, personSchedule);
+			var dayOffVm = new DayOffViewModel(scheduleDate, dayOff.DayOffName, startPosition, length, personSchedule);
 			return dayOffVm;
 		}
 
@@ -191,7 +191,7 @@
 				this.Shifts.push(newShift);
 			}
 
-			var otherDayOffVm = createDayOffViewModel(otherSchedule.DayOff, timeLine, this);
+			var otherDayOffVm = createDayOffViewModel(otherSchedule.Date, otherSchedule.DayOff, timeLine, this);
 
 			if (angular.isDefined(otherDayOffVm)) {
 				this.DayOffs.push(otherDayOffVm);
@@ -214,7 +214,7 @@
 				this.ExtraShifts.push(newShift);
 			}
 
-			var otherDayOffVm = createDayOffViewModel(otherSchedule.DayOff, timeLine, this);
+			var otherDayOffVm = createDayOffViewModel(otherSchedule.Date, otherSchedule.DayOff, timeLine, this);
 
 			if (angular.isDefined(otherDayOffVm)) {
 				this.DayOffs.push(otherDayOffVm);
@@ -349,11 +349,12 @@
 			this.Selected = !this.Selected;
 		};
 
-		function DayOffViewModel(name, startPosition, length, parent) {
+		function DayOffViewModel(scheduleDate, name, startPosition, length, parent) {
 			this.DayOffName = name;
 			this.StartPosition = startPosition;
 			this.Length = length;
 			this.Parent = parent;
+			this.Date = scheduleDate;
 		}
 
 		function ShiftCategory(shiftCategory) {

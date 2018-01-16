@@ -7,7 +7,8 @@
 			restrict: 'E',
 			scope: {
 				validateWarningEnabled: '=?',
-				triggerCommand: '&?'
+				triggerCommand: '&?',
+				selectedDate:'<'
 			},
 			controller: ['$scope', 'PersonSelection', 'ValidateRulesService','ShortCuts', 'keyCodes', 'teamsPermissions', 'teamsToggles',  teamscheduleCommandMenuCtrl],
 			controllerAs: 'vm',
@@ -124,7 +125,7 @@
 				shortcut: "Alt+B",
 				keys: [[keyCodes.B], [keyCodes.ALT]],
 				action: buildAction("RemoveDayOff", false),
-				clickable: function () { return personSelectionSvc.anyAgentChecked(); },
+				clickable: function () { return vm.canRemoveDayOff(); },
 				visible: function () { return vm.canActiveDayOff(); }
 			},
 			{
@@ -228,7 +229,17 @@
 		vm.canUndoSchedule = function () {
 			return personSelectionSvc.anyAgentChecked();
 		};
-
+		vm.canRemoveDayOff = function() {
+			var selectedPersonInfoList = personSelectionSvc.getCheckedPersonInfoList();
+			if (selectedPersonInfoList.length === 0) return false;
+			var selectedDayOffs = selectedPersonInfoList.filter(function(p) {
+				var dayOffsOnCurrentDay = p.SelectedDayOffs.filter(function(d) {
+					return d.Date === moment(vm.selectedDate).format('YYYY-MM-DD');
+				});
+				return dayOffsOnCurrentDay.length > 0;
+			});
+			return selectedDayOffs.length > 0;
+		}
 		vm.activateCommandMenu = function(){
 			return vm.canRemoveActivity() || vm.canRemoveAbsence() || personSelectionSvc.anyAgentChecked();
 		};
