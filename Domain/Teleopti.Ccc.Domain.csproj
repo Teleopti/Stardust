@@ -409,6 +409,7 @@
     <Compile Include="Repositories\IASMScheduleChangeTimeRepository.cs" />
     <Compile Include="Repositories\IExternalPerformanceDataRepository.cs" />
     <Compile Include="Repositories\IExternalPerformanceRepository.cs" />
+    <Compile Include="Repositories\IPersonLoadAllWithPeriodAndExternalLogOn.cs" />
     <Compile Include="Repositories\PersonBudgetGroupName.cs" />
     <Compile Include="Reports\IScheduleAnalysisProvider.cs" />
     <Compile Include="Reports\ScheduleAnalysisAuditTrailProvider.cs" />

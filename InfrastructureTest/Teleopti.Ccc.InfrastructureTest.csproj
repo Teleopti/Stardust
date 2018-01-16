@@ -185,6 +185,7 @@
     <Compile Include="ApplicationLayer\Events\MultiEventPublishingTest.cs" />
     <Compile Include="ApplicationLayer\Events\SyncEventPublisherTest.cs" />
     <Compile Include="ApplicationLayer\Events\SyncInFatClientProcessEventPublisherTest.cs" />
+    <Compile Include="ApplicationLayer\PersonAssociationChanged\PerformanceMeasurementTest.cs" />
     <Compile Include="ApplicationLayer\PersonAssociationPublisherCheckSumPersisterTest.cs" />
     <Compile Include="ApplicationLayer\PersonScheduleDayReadModel\PersonScheduleDayReadModelUpdaterConcurrencyTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleDayReadModel\ScheduleDayReadModelUpdaterHangfireConcurrencyTest.cs" />

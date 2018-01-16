@@ -15,7 +15,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
-	public class FakePersonRepository : IPersonRepository, IEnumerable<IPerson>, IWriteSideRepository<IPerson>, IProxyForId<IPerson>
+	public class FakePersonRepository : IPersonRepository, IEnumerable<IPerson>, IWriteSideRepository<IPerson>, IProxyForId<IPerson>, IPersonLoadAllWithPeriodAndExternalLogOn
 	{
 		private readonly IFakeStorage _storage;
 		private readonly IList<PersonExternalLogonInfo> _externalLogonInfos;
@@ -373,6 +373,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public void SetPersonExternalLogonInfo(PersonExternalLogonInfo info)
 		{
 			_externalLogonInfos.Add(info);
+		}
+
+		IEnumerable<IPerson> IPersonLoadAllWithPeriodAndExternalLogOn.LoadAll()
+		{
+			return LoadAll();
 		}
 	}
 }

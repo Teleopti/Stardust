@@ -399,6 +399,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				var foundPeople = CollectionHelper.ToDistinctGenericCollection<IPerson>(queryResult[0]);
 				result.AddRange(foundPeople);
 			}
+
 			return result;
 		}
 
@@ -418,6 +419,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				var foundPeople = CollectionHelper.ToDistinctGenericCollection<IPerson>(queryResult[0]);
 				result.AddRange(foundPeople);
 			}
+
 			return result;
 		}
 
@@ -673,6 +675,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			{
 				foundPerson = loadPermissionData(foundPerson);
 			}
+
 			return foundPerson;
 		}
 
@@ -730,8 +733,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 						groupings.Add(Subqueries.Exists(findBySkill(((SkillFilter) filter).Skill, period)));
 					}
 				}
+
 				filterCriteria.Add(groupings);
 			}
+
 			criteria.Add(filterCriteria);
 			return criteria
 				.SetProjection(Projections.Id())
@@ -751,6 +756,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.SetReadOnly(true)
 					.List<PersonBudgetGroupName>());
 			}
+
 			return results;
 		}
 
@@ -774,12 +780,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			foreach (var identitiesInBatch in identityList.Batch(batchSize))
 			{
 				//TODO: Try get EmploymentNumber from ReadModel.FindPerson and apply BusinessUnit filter
-				var sql = $@"Select EmploymentNumber as [Identity], Id as PersonId, {(int)IdentityMatchField.EmploymentNumber} as MatchField -- Match EmployeementNumber
+				var sql = $@"Select EmploymentNumber as [Identity], Id as PersonId, {(int) IdentityMatchField.EmploymentNumber} as MatchField -- Match EmployeementNumber
 							     From Person
 							    Where IsDeleted = 0
 							      And EmploymentNumber in (:{paraName})
 							   Union
-							   Select Distinct UserCode, PersonId, {(int)IdentityMatchField.ExternalLogon} -- Match ExternalLogon
+							   Select Distinct UserCode, PersonId, {(int) IdentityMatchField.ExternalLogon} -- Match ExternalLogon
 							     From ReadModel.ExternalLogon
 							    Where Deleted = 0
 							      And UserCode in (:{paraName})";

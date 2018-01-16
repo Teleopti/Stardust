@@ -66,60 +66,69 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Service.PerformanceMeasurement
 			SetupFixtureForAssembly.RestoreAnalyticsDatabase();
 		}
 
-		public IEnumerable<int> ParallelTransactions() => new[] { 5, 6, 7, 8, 9 };
-		public IEnumerable<int> TransactionSize() => new[] { 50, 80, 100, 120, 150 };
-		public IEnumerable<int> BatchSize() => new[] { 50, 250, 500, 750, 1000 };
+		public IEnumerable<int> ParallelTransactions() => new[] {5, 6, 7, 8, 9};
+		public IEnumerable<int> TransactionSize() => new[] {50, 80, 100, 120, 150};
+		public IEnumerable<int> BatchSize() => new[] {50, 250, 500, 750, 1000};
 		public IEnumerable<string> Variation() => new[] {"A", "B", "C"};
 
 		public void MakeUsersFaster(IEnumerable<string> userCodes)
 		{
+			Contract contract = null;
+			PartTimePercentage partTimePercentage = null;
+			ContractSchedule contractSchedule = null;
+			Team team = null;
 
 			Uow.Do(() =>
 			{
-				var contract = new Contract(RandomName.Make());
+				contract = new Contract(RandomName.Make());
 				Contracts.Add(contract);
 
-				var partTimePercentage = new PartTimePercentage(RandomName.Make());
+				partTimePercentage = new PartTimePercentage(RandomName.Make());
 				PartTimePercentages.Add(partTimePercentage);
 
-				var contractSchedule = new ContractSchedule(RandomName.Make());
+				contractSchedule = new ContractSchedule(RandomName.Make());
 				ContractSchedules.Add(contractSchedule);
 
 				var site = new Site(RandomName.Make());
 				Sites.Add(site);
 
-				var team = new Team { Site = site }
+				team = new Team {Site = site}
 					.WithDescription(new Description(RandomName.Make()));
 				Teams.Add(team);
 				site.AddTeam(team);
+			});
 
-				userCodes.ForEach(name =>
+			userCodes.Batch(5_000).ForEach(names =>
+			{
+				Uow.Do(() =>
 				{
-					var person = new Person().WithName(new Name(name, name));
-					person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
-
-					var personContract = new PersonContract(
-						contract,
-						partTimePercentage,
-						contractSchedule);
-
-					var personPeriod = new PersonPeriod("2001-01-01".Date(), personContract, team);
-					person.AddPersonPeriod(personPeriod);
-
-					var exteralLogOn = new ExternalLogOn
+					names.ForEach(name =>
 					{
-						//AcdLogOnName = name, // is not used?
-						AcdLogOnMartId = -1, // NotDefined should be there, 0 probably wont
-						DataSourceId = Analytics.CurrentDataSourceId,
-						AcdLogOnOriginalId = name // this is what the rta receives
-					};
-					ExternalLogOns.Add(exteralLogOn);
-					person.AddExternalLogOn(exteralLogOn, personPeriod);
+						var person = new Person().WithName(new Name(name, name));
+						person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
 
-					Persons.Add(person);
+						var personContract = new PersonContract(
+							contract,
+							partTimePercentage,
+							contractSchedule);
+
+						var personPeriod = new PersonPeriod("2001-01-01".Date(), personContract, team);
+						person.AddPersonPeriod(personPeriod);
+
+						var exteralLogOn = new ExternalLogOn
+						{
+							//AcdLogOnName = name, // is not used?
+							AcdLogOnMartId = -1, // NotDefined should be there, 0 probably wont
+							DataSourceId = Analytics.CurrentDataSourceId,
+							AcdLogOnOriginalId = name // this is what the rta receives
+						};
+						ExternalLogOns.Add(exteralLogOn);
+						person.AddExternalLogOn(exteralLogOn, personPeriod);
+
+						Persons.Add(person);
+					});
 				});
 			});
 		}
-
 	}
 }

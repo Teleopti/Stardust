@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		IRunOnHangfire
 	{
 		private readonly IPersonRepository _persons;
+		private readonly IPersonLoadAllWithPeriodAndExternalLogOn _persons2;
 		private readonly ICurrentEventPublisher _eventPublisher;
 		private readonly INow _now;
 		private readonly IDistributedLockAcquirer _distributedLock;
@@ -28,6 +29,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 
 		public PersonAssociationChangedEventPublisher(
 			IPersonRepository persons,
+			IPersonLoadAllWithPeriodAndExternalLogOn persons2,
 			ICurrentEventPublisher eventPublisher,
 			INow now,
 			IDistributedLockAcquirer distributedLock,
@@ -35,6 +37,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			IPersonAssociationPublisherCheckSumPersister checkSums)
 		{
 			_persons = persons;
+			_persons2 = persons2;
 			_eventPublisher = eventPublisher;
 			_now = now;
 			_distributedLock = distributedLock;
@@ -91,7 +94,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			var now = _now.UtcDateTime();
 			var checkSums = _checkSums.Get().ToLookup(c => c.PersonId);
 
-			_persons
+			_persons2
 				.LoadAll()
 				.ForEach(person =>
 				{
