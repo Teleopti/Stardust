@@ -1,15 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using log4net;
+using Stardust.Manager.Extensions;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 {
 	public class RequestCommandHandlingProvider : IRequestCommandHandlingProvider
 	{
+		private static readonly ILog _logger = LogManager.GetLogger(typeof(RequestCommandHandlingProvider));
 		private readonly ICommandDispatcher _commandDispatcher;
 		private readonly ILoggedOnUser _loggedOnUser;
 
@@ -122,8 +126,16 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 					PersonRequestId = personRequestId,
 					ReplyMessage = replyMessage
 				};
-
-				_commandDispatcher.Execute(command);
+				try
+				{
+					_commandDispatcher.Execute(command);
+				}
+				catch (Exception ex)
+				{
+					if (!(ex.InnerException is OptimisticLockException)) throw;
+					logOptimisticLockException(ex, personRequestId);
+					_commandDispatcher.Execute(command);
+				}
 
 				if (command.AffectedRequestId.HasValue) affectedRequestIds.Add(command.AffectedRequestId.Value);
 
@@ -201,6 +213,14 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 				TrackId = Guid.NewGuid(),
 				OperatedPersonId = _loggedOnUser.CurrentUser().Id.GetValueOrDefault()
 			};
+		}
+
+		private static void logOptimisticLockException(Exception ex, Guid personRequestId)
+		{
+			var optimisticLockException = (OptimisticLockException)ex.InnerException;
+			if (optimisticLockException != null)
+				_logger.Warn(
+					$"Optimistic lock when cancelling request ({personRequestId}),details:{optimisticLockException.EntityName},{optimisticLockException.RootId}");
 		}
 	}
 }
