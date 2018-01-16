@@ -1,5 +1,7 @@
-<label>
-	Badge threshold
-	<input type="text" ng-model="$ctrl._badgeThreshold" ng-change="$ctrl.validate(); $ctrl.updateThreshold()" ng-model-options="{ updateOn: 'blur change', debounce:200}" />
-</label>
-<span ng-show="$ctrl.hasError">{{$ctrl.errorMsg | translate}}</span>
+<form name="form">
+	<label for="badgeThreshold">Badge threshold</label>
+	<input type="text" name="threshold" ng-model="$ctrl._badgeThreshold" threshold-validator="{{::$ctrl.valueFormat}}" />
+	<div class="text-danger" style="height: 1em;">
+		<span ng-show="form.threshold.$invalid">{{'Invalid'|translate}}</span>
+	</div>
+</form>

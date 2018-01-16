@@ -24,6 +24,8 @@
 
 		ctrl.getSettingById = function (id) {
 			gamificationSettingService.getSettingById(id).then(function (data) {
+				console.log(data);
+				ctrl.settingData = data;
 				var settingData = ctrl.convertSettingToModel(data);
 				if (!ctrl.findElementInArray(ctrl.allSettings, settingData.id)) {
 					ctrl.allSettings.push(settingData);

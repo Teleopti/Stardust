@@ -1,27 +1,32 @@
-<label>Description</label>
-<input type="text" ng-model="$ctrl.name" />
+<form class="wfm-form">
+	<div class="form-input-wrap">
+		<label>{{'Description'|translate}}</label>
+		<input type="text" ng-model="$ctrl.name" />
+	</div>
 
-<div>{{$ctrl.changeInfo}}</div>
+	<div class="form-input-wrap">
+		<label>{{'ChangeInfoColon'|translate}}</label>
+		<div>{{$ctrl.changeInfo}}</div>
+	</div>
 
-<label>Rule</label>
-<md-select ng-model="$ctrl.rule" aria-label="Select Rule">
-	<md-option value="0">Ratio conversion</md-option>
-	<md-option value="1">Different thresholds</md-option>
-</md-select>
+	<div class="form-input-wrap">
+		<label>{{'Rule'|translate}}</label>
+		<md-select ng-model="$ctrl.ruleSet" aria-label="Select Rule Set" ng-change="$ctrl.updateRuleSet()">
+			<md-option value="0">Ratio conversion</md-option>
+			<md-option value="1">Different thresholds</md-option>
+		</md-select>
+	</div>
 
-<div ng-if="$ctrl.rule == 'ratioconversion'">
-	<label>The number of bronze badges that can be converted into silver ones</label>
-	<input ng-model="$ctrl.silverBadgeThreshold" />
-	<label>The threshold of one gold badge for silver badges</label>
-	<input ng-model="$ctrl.goldBadgeThreshold" />
-</div>
+
+	<div ng-if="$ctrl.ruleSet == 0" class="form-input-wrap">
+		<label>The number of bronze badges that can be converted into silver ones</label>
+		<input type="text" ng-model="$ctrl.silverRate" />
+		<label>The threshold of one gold badge for silver badges</label>
+		<input type="text" ng-model="$ctrl.goldRate" />
+	</div>
+</form>
 
 <div>
-	<!-- <div ng-repeat="config in $ctrl.builtinMeasureConfigs" style="display:block;" class="measure-config">
-		<div style="font-weight:bold;">{{config.name|translate}}</div>
-
-
-	</div> -->
 	<wfm-card-list multi-select>
 		<wfm-card ng-repeat="config in $ctrl.builtinMeasureConfigs" style="display:block;">
 			<card-header tabindex="-1">
@@ -35,12 +40,13 @@
 				</div>
 			</card-header>
 			<card-body>
-				<measure-config-form1 ng-if="$ctrl.rule == 0" style="display:block;"
+				<measure-config-form1 ng-if="$ctrl.ruleSet == 0" style="display:block;"
 					badge-threshold="config.badgeThreshold"
-					on-update="config.setBadgeThreshold(badgeThreshold)">
+					on-update="config.setBadgeThreshold(badgeThreshold)"
+					value-format="config.valueFormat">
 				</measure-config-form1>
 
-				<measure-config-form2 ng-if="$ctrl.rule == 1" style="display:block;" bronze-badge-threshold="config.bronzeBadgeThreshold"
+				<measure-config-form2 ng-if="$ctrl.ruleSet == 1" style="display:block;" bronze-badge-threshold="config.bronzeBadgeThreshold"
 				 on-bronze-badge-threshold-update="config.updateBronzeBadgeThreshold(value)" silver-badge-threshold="config.silverBadgeThreshold"
 				 gold-badge-threshold="config.goldBadgeThreshold">
 				</measure-config-form2>
@@ -58,13 +64,13 @@
 				</div>
 			</card-header>
 			<card-body>
-				<measure-config-form1 ng-if="$ctrl.rule == 0" style="display:block;"
+				<measure-config-form1 ng-if="$ctrl.ruleSet == 0" style="display:block;"
 					badge-threshold="config.badgeThreshold"
 					data-type="config.dataType"
 					on-update="config.setBadgeThreshold(threshold)">
 				</measure-config-form1>
 
-				<measure-config-form2 ng-if="$ctrl.rule == 1" style="display:block;"
+				<measure-config-form2 ng-if="$ctrl.ruleSet == 1" style="display:block;"
 					 bronze-badge-threshold="config.bronzeBadgeThreshold"
 					 update-bronze="config.setBronzeBadgeThreshold(bronzeBadgeThreshold)"
 					 silver-badge-threshold="config.silverBadgeThreshold"

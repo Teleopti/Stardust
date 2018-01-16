@@ -26,7 +26,8 @@
 				data.AnsweredCallsThreshold,
 				data.AnsweredCallsBronzeThreshold,
 				data.AnsweredCallsSilverThreshold,
-				data.AnsweredCallsGoldThreshold
+				data.AnsweredCallsGoldThreshold,
+				'^\\d+$'
 			));
 
 			measureConfigs.push(new MeasureConfig(
@@ -37,10 +38,11 @@
 				'Adherence',
 				null,
 				true,
-				data.AdherenceThreshold,
-				data.AdherenceBronzeThreshold,
-				data.AdherenceSilverThreshold,
-				data.AdherenceGoldThreshold
+				data.AdherenceThreshold.Value,
+				data.AdherenceBronzeThreshold.Value,
+				data.AdherenceSilverThreshold.Value,
+				data.AdherenceGoldThreshold.Value,
+				'^0.\\d+$'
 			));
 
 			measureConfigs.push(new MeasureConfig(
@@ -54,7 +56,8 @@
 				data.AHTThreshold,
 				data.AHTBronzeThreshold,
 				data.AHTSilverThreshold,
-				data.AHTGoldThreshold
+				data.AHTGoldThreshold,
+				''
 			));
 
 			return measureConfigs;
@@ -86,7 +89,7 @@
 			ctrl.id = data.Id;
 			ctrl.name = data.Name;
 			ctrl.changeInfo = data.UpdatedBy + ' ' + data.UpdatedOn;
-			ctrl.rule = data.GamificationSettingRuleSet;
+			ctrl.ruleSet = data.GamificationSettingRuleSet;
 			ctrl.silverRate = data.SilverToBronzeBadgeRate;
 			ctrl.goldRate = data.GoldToSilverBadgeRate;
 			ctrl.builtinMeasureConfigs = makeBuiltinMeasureConfigs(data);
@@ -104,7 +107,18 @@
 			dataService.updateMeasureConfig().then();
 		};
 
-		function MeasureConfig(builtin, enabled, id, externalId, name, dataType, largerIsBetter, threshold, bronzeThreshold, silverThreshold, goldThreshold) {
+		ctrl.updateRuleSet = function () {
+			dataService.saveData('ModifyChangeRule', {
+				GamificationSettingId: ctrl.id,
+				Rule: ctrl.ruleSet
+			}).then(function () {
+				$log.log('updated rule set successfully');
+			}, function () {
+				$log.log('failed to update rule set')
+			});
+		};
+
+		function MeasureConfig(builtin, enabled, id, externalId, name, dataType, largerIsBetter, threshold, bronzeThreshold, silverThreshold, goldThreshold, valueFormat) {
 			this.builtin = builtin;
 			this.enabled = enabled;
 			this.id = id;
@@ -116,6 +130,7 @@
 			this.bronzeBadgeThreshold = bronzeThreshold;
 			this.silverBadgeThreshold = silverThreshold;
 			this.goldBadgeThreshold = goldThreshold;
+			this.valueFormat = valueFormat;
 		}
 
 		MeasureConfig.prototype.setName = function (name) {
@@ -162,83 +177,99 @@
 		};
 
 		MeasureConfig.prototype.setBadgeThreshold = function (badgeThreshold) {
-			$log.log(this.name + ': set badge threshold for answered calls to ' + badgeThreshold);
+			if (!badgeThreshold || badgeThreshold === this.badgeThreshold) return;
+
+			$log.log(this.name + ': set badge threshold to ' + badgeThreshold);
 
 			var previous = this.badgeThreshold;
 			this.badgeThreshold = badgeThreshold;
 
 			var self = this;
-			if (this.name === 'AnsweredCalls') {
-				dataService.saveData('AnsweredCallsThreshold', {
-					GamificationSettingId: ctrl.id,
-					Value: this.badgeThreshold
-				}).then(function () {
-					$log.log('updated badge threshold for answered calls')
-				}, function () {
-					$log.log('failed to update badge threshold for answered calls. restoring: ' + previous);
-					self.badgeThreshold = previous;
-				});
+
+			switch (this.name) {
+				case 'AnsweredCalls':
+					dataService.saveData('AnsweredCallsThreshold', {
+						GamificationSettingId: ctrl.id,
+						Value: this.badgeThreshold
+					}).then(function () {
+						$log.log(self.name + ': updated badge threshold')
+					}, function () {
+						$log.log(self.name + ': failed to update badge threshold. restoring: ' + previous);
+						self.badgeThreshold = previous;
+					});
+
+					break;
+
+				case 'Adherence':
+					dataService.saveData('AdherenceThreshold', {
+						GamificationSettingId: ctrl.id,
+						Value: this.badgeThreshold
+					}).then(function () {
+						$log.info(self.name + ': updated badge threshold')
+					}, function () {
+						$log.error(self.name + ': failed to update badge threshold. restoring: ' + previous);
+						self.badgeThreshold = previous;
+					});
+					break;
+
+				default:
+					break;
 			}
 		};
 
 		MeasureConfig.prototype.setBronzeBadgeThreshold = function (bronzeBadgeThreshold) {
-			$log.log(this.name + ': set badge threshold for answered calls to ' + bronzeBadgeThreshold);
+			$log.log(this.name + ': set bronze badge threshold to ' + bronzeBadgeThreshold);
 
-			var previous = this.badgeThreshold;
-			this.badgeThreshold = bronzeBadgeThreshold;
+			var previous = this.bronzeBadgeThreshold;
+			this.bronzeBadgeThreshold = bronzeBadgeThreshold;
 
 			var self = this;
-			if (this.name === 'AnsweredCalls') {
-				dataService.saveData('AnsweredCallsThreshold', {
-					GamificationSettingId: ctrl.id,
-					Value: this.badgeThreshold
-				}).then(function () {
-					$log.log('updated badge threshold for answered calls')
-				}, function () {
-					$log.log('failed to update badge threshold for answered calls. restoring: ' + previous);
-					self.badgeThreshold = previous;
-				});
-			}
+			dataService.saveData('AnsweredCallsThreshold', {
+				GamificationSettingId: ctrl.id,
+				Value: this.bronzeBadgeThreshold
+			}).then(function () {
+				$log.log('updated bronze badge threshold')
+			}, function () {
+				$log.log('failed to update bronze badge threshold. restoring: ' + previous);
+				self.bronzeBadgeThreshold = previous;
+			});
 		};
 
 		MeasureConfig.prototype.setSilverBadgeThreshold = function (silverBadgeThreshold) {
-			$log.log(this.name + ': set badge threshold for answered calls to ' + silverBadgeThreshold);
+			$log.log(this.name + ': set silver badge threshold to ' + silverBadgeThreshold);
 
-			var previous = this.badgeThreshold;
-			this.badgeThreshold = silverBadgeThreshold;
+			var previous = this.silverBadgeThreshold;
+			this.silverBadgeThreshold = silverBadgeThreshold;
 
 			var self = this;
-			if (this.name === 'AnsweredCalls') {
-				dataService.saveData('AnsweredCallsThreshold', {
-					GamificationSettingId: ctrl.id,
-					Value: this.badgeThreshold
-				}).then(function () {
-					$log.log('updated badge threshold for answered calls')
-				}, function () {
-					$log.log('failed to update badge threshold for answered calls. restoring: ' + previous);
-					self.badgeThreshold = previous;
-				});
-			}
+			dataService.saveData('AnsweredCallsThreshold', {
+				GamificationSettingId: ctrl.id,
+				Value: this.silverBadgeThreshold
+			}).then(function () {
+				$log.log('updated silver badge threshold')
+			}, function () {
+				$log.log('failed to update silver badge threshold. restoring: ' + previous);
+				self.silverBadgeThreshold = previous;
+			});
 		};
 
 		MeasureConfig.prototype.setGoldBadgeThreshold = function (goldBadgeThreshold) {
-			$log.log(this.name + ': set badge threshold for answered calls to ' + goldBadgeThreshold);
+			$log.log(this.name + ': set gold badge threshold to ' + goldBadgeThreshold);
 
-			var previous = this.badgeThreshold;
-			this.badgeThreshold = goldBadgeThreshold;
+			var previous = this.goldBadgeThreshold;
+			this.goldBadgeThreshold = goldBadgeThreshold;
 
 			var self = this;
-			if (this.name === 'AnsweredCalls') {
-				dataService.saveData('AnsweredCallsThreshold', {
-					GamificationSettingId: ctrl.id,
-					Value: this.badgeThreshold
-				}).then(function () {
-					$log.log('updated badge threshold for answered calls')
-				}, function () {
-					$log.log('failed to update badge threshold for answered calls. restoring: ' + previous);
-					self.badgeThreshold = previous;
-				});
-			}
+
+			dataService.saveData('AnsweredCallsThreshold', {
+				GamificationSettingId: ctrl.id,
+				Value: this.goldBadgeThreshold
+			}).then(function () {
+				$log.log('updated gold badge threshold')
+			}, function () {
+				$log.log('failed to update gold badge threshold. restoring: ' + previous);
+				self.goldBadgeThreshold = previous;
+			});
 		};
 	}
 

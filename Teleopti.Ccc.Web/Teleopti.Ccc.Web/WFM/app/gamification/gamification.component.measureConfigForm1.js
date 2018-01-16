@@ -4,45 +4,21 @@
 			templateUrl: 'app/gamification/html/measureConfigForm1.tpl.html',
 			bindings: {
 				badgeThreshold: '<',
-				onUpdate:'&',
-				dataType:'<'
+				onUpdate: '&',
+				valueFormat: '<'
 			},
-			controller: [function measureConfigForm1Ctrl() {
+			controller: ['$scope', function measureConfigForm1Ctrl($scope) {
 				var ctrl = this;
-				ctrl.hasError = false;
 
 				ctrl.updateThreshold = function () {
-					if (!ctrl.hasError) {
-						ctrl.onUpdate({ badgeThreshold: ctrl._badgeThreshold });
-					} else {
-						ctrl._badgeThreshold = ctrl.badgeThreshold;
-						ctrl.hasError = false;
-						ctrl.errorMsg = '';
-					}
+					ctrl.onUpdate({ badgeThreshold: ctrl._badgeThreshold });
 				};
-
-				ctrl.validate = function () {
-					var pattern = /^[1-9]\d*.\d*|0.\d*[1-9]\d*$/;
-					if (ctrl.dataType == 1) {
-						pattern = /^0.\d+$/;
-					}
-
-					if (!pattern.test(ctrl._badgeThreshold)) {
-						ctrl.hasError = true;
-						ctrl.errorMsg = 'invalidFormat';
-					}else{
-						ctrl.hasError = false;
-						ctrl.errorMsg = '';
-					}
-				}
 
 				ctrl.$onChanges = function (changesObj) {
 					if (changesObj.badgeThreshold) {
 						ctrl._badgeThreshold = changesObj.badgeThreshold.currentValue;
 					}
-
-				}
-
+				};
 
 			}]
 		});
