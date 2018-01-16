@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -60,46 +62,39 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 
 		[Test]
-		[Ignore("#47664 This should be red somehow... Just a start")]
-		public void ShouldNotCrashDueToMultipleThreadsUsingSameShifts()
+		[Ignore("#47664 Failing test")]
+		public void ShouldNotFailToPlaceShiftsDueToRaceConditionWhenSettingDate()
 		{
-			const int numberOfIslands = 5000;
-			const int numberOfAgentsInEachIsland = 1;
-			const int numberOfRulesets = 1;
+			const int numberOfIslands = 10;
+			const int numberOfAgentsInEachIsland = 10;
 			var date = new DateOnly(2017, 1, 10);
 			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1);
 			var scenario = new Scenario();
 			var agents = new List<IPerson>();
 			var skillDays = new List<ISkillDay>();
 			var activity = new Activity().WithId();
-			var ruleSets = new List<IWorkShiftRuleSet>();
-			for (var i = 0; i < numberOfRulesets; i++)
-			{
-				ruleSets.Add(new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(7, 0, 10, 0, 5), new TimePeriodWithSegment(15, 0, 18, 0, 5), new ShiftCategory("_").WithId())).WithId());
-			}
-			var rulesetBag = new RuleSetBag(ruleSets.ToArray());
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(7, 0, 10, 0, 60), new TimePeriodWithSegment(15, 0, 18, 0, 60), new ShiftCategory("_").WithId())).WithId();
 			for (var i = 0; i < numberOfIslands; i++)
 			{
 				var skill = new Skill().For(activity).WithId().IsOpen();
 				skillDays.AddRange(skill.CreateSkillDayWithDemand(scenario, period, TimeSpan.FromDays(10000)));
-				for (int j = 0; j < numberOfAgentsInEachIsland; j++)
+				for (var j = 0; j < numberOfAgentsInEachIsland; j++)
 				{
-					var contractPreventingSchedules = new Contract("_");
 					agents.Add(new Person().WithId()
-						.WithPersonPeriod(rulesetBag, contractPreventingSchedules, skill)
+						.WithPersonPeriod(ruleSet, skill)
 						.WithSchedulePeriodOneWeek(date));	
 				}			
 			}
-			SchedulerStateHolderFrom.Fill(scenario, period, agents, skillDays);
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, period, agents, skillDays);
 
-			Assert.DoesNotThrow(() =>
-			{
-				Target.Execute(new NoSchedulingCallback(),
+			Target.Execute(new NoSchedulingCallback(),
 					new SchedulingOptions(), 
 					new NoSchedulingProgress(),
 					agents, 
 					period);
-			});
+
+			stateHolder.Schedules.SchedulesForPeriod(period, agents.ToArray()).Count(x => x.IsScheduled())
+				.Should().Be.EqualTo(agents.Count * period.DayCollection().Count);
 		}
 
 		public override void OnBefore()
