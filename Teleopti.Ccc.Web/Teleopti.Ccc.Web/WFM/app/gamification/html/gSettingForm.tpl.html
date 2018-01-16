@@ -38,12 +38,12 @@
 			</card-header>
 			<card-body>
 				<measure-config-form1 ng-if="$ctrl.ruleSet == 0" style="display:block;" badge-threshold="config.badgeThreshold" on-update="config.setBadgeThreshold(badgeThreshold)"
-				 value-format="config.valueFormat" max="config.max">
+				 value-format="config.valueFormat" max="config.max" value-data-type="config.dataType">
 				</measure-config-form1>
 
 				<measure-config-form2 ng-if="$ctrl.ruleSet == 1" style="display:block;" bronze-badge-threshold="config.bronzeBadgeThreshold"
 				 on-bronze-badge-threshold-update="config.updateBronzeBadgeThreshold(value)" silver-badge-threshold="config.silverBadgeThreshold"
-				 gold-badge-threshold="config.goldBadgeThreshold" max="config.max" valur-order="config.valueOrder">
+				 gold-badge-threshold="config.goldBadgeThreshold" max="config.max" value-order="config.valueOrder" value-data-type="config.dataType">
 				</measure-config-form2>
 			</card-body>
 		</wfm-card>
@@ -56,14 +56,14 @@
 				</div>
 			</card-header>
 			<card-body>
-				<measure-config-form1 ng-if="$ctrl.ruleSet == 0" style="display:block;" badge-threshold="config.badgeThreshold" data-type="config.dataType"
+				<measure-config-form1 ng-if="$ctrl.ruleSet == 0" style="display:block;" badge-threshold="config.badgeThreshold" value-data-type="config.dataType"
 				 on-update="config.setBadgeThreshold(threshold)">
 				</measure-config-form1>
 
 				<measure-config-form2 ng-if="$ctrl.ruleSet == 1" style="display:block;" bronze-badge-threshold="config.bronzeBadgeThreshold"
 				 update-bronze="config.setBronzeBadgeThreshold(bronzeBadgeThreshold)" silver-badge-threshold="config.silverBadgeThreshold"
 				 update-silver="config.setSilverBadgeThreshold(silverBadgeThreshold)" gold-badge-threshold="config.goldBadgeThreshold"
-				 update-gold="config.setGoldBadgeThreshold(goldBadgeThreshold)">
+				 update-gold="config.setGoldBadgeThreshold(goldBadgeThreshold)" value-data-type="config.dataType">
 				</measure-config-form2>
 			</card-body>
 		</wfm-card>

@@ -7,13 +7,18 @@
 				badgeThreshold: '<',
 				onUpdate: '&',
 				valueFormat: '<',
-				max: '<'
+				max: '<',
+				valueDataType: '<',
 			},
 			controller: ['$scope', function measureConfigForm1Ctrl($scope) {
 				var ctrl = this;
 
-				ctrl.updateThreshold = function () {
-					ctrl.onUpdate({ badgeThreshold: ctrl._badgeThreshold });
+				ctrl.updateThreshold = function (invalid) {
+					if (invalid) {
+						ctrl._badgeThreshold = ctrl.badgeThreshold;
+					} else {
+						ctrl.onUpdate({ badgeThreshold: ctrl._badgeThreshold });
+					}
 				};
 
 				ctrl.$onChanges = function (changesObj) {
@@ -21,7 +26,6 @@
 						ctrl._badgeThreshold = changesObj.badgeThreshold.currentValue;
 					}
 				};
-
 			}]
 		});
 })(angular);
