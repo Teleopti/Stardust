@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Scheduling;
@@ -64,23 +63,34 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		[Ignore("#47664 This should be red somehow... Just a start")]
 		public void ShouldNotCrashDueToMultipleThreadsUsingSameShifts()
 		{
-			const int numberOfIslands = 1000;
+			const int numberOfIslands = 5000;
+			const int numberOfAgentsInEachIsland = 1;
+			const int numberOfRulesets = 1;
 			var date = new DateOnly(2017, 1, 10);
-			var scenario = new Scenario("_");
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1);
+			var scenario = new Scenario();
 			var agents = new List<IPerson>();
 			var skillDays = new List<ISkillDay>();
 			var activity = new Activity().WithId();
-			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), new ShiftCategory("_").WithId()));
+			var ruleSets = new List<IWorkShiftRuleSet>();
+			for (var i = 0; i < numberOfRulesets; i++)
+			{
+				ruleSets.Add(new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(7, 0, 10, 0, 5), new TimePeriodWithSegment(15, 0, 18, 0, 5), new ShiftCategory("_").WithId())).WithId());
+			}
+			var rulesetBag = new RuleSetBag(ruleSets.ToArray());
 			for (var i = 0; i < numberOfIslands; i++)
 			{
 				var skill = new Skill().For(activity).WithId().IsOpen();
-				var skillDay = skill.CreateSkillDayWithDemand(scenario, date, 10);
-				skillDays.Add(skillDay);
-				agents.Add(new Person().WithId()
-						.WithPersonPeriod(ruleSet, skill)
-						.WithSchedulePeriodOneWeek(date));					
+				skillDays.AddRange(skill.CreateSkillDayWithDemand(scenario, period, TimeSpan.FromDays(10000)));
+				for (int j = 0; j < numberOfAgentsInEachIsland; j++)
+				{
+					var contractPreventingSchedules = new Contract("_");
+					agents.Add(new Person().WithId()
+						.WithPersonPeriod(rulesetBag, contractPreventingSchedules, skill)
+						.WithSchedulePeriodOneWeek(date));	
+				}			
 			}
-			SchedulerStateHolderFrom.Fill(scenario, new DateOnly(2017, 1, 10), agents, skillDays);
+			SchedulerStateHolderFrom.Fill(scenario, period, agents, skillDays);
 
 			Assert.DoesNotThrow(() =>
 			{
@@ -88,8 +98,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 					new SchedulingOptions(), 
 					new NoSchedulingProgress(),
 					agents, 
-					new DateOnlyPeriod(date, date.AddDays(1))
-				);
+					period);
 			});
 		}
 
