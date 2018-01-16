@@ -122,8 +122,8 @@
 			},
 			{
 				label: "RemoveDayOff",
-				shortcut: "Alt+D",
-				keys: [[keyCodes.D], [keyCodes.ALT]],
+				shortcut: "Alt+B",
+				keys: [[keyCodes.B], [keyCodes.ALT]],
 				action: buildAction("RemoveDayOff", false),
 				clickable: function () { return vm.canRemoveDayOff(); },
 				visible: function () { return vm.canActiveDayOff(); }
