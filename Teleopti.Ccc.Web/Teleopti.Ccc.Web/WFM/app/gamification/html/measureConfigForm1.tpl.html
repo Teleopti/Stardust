@@ -3,8 +3,8 @@
 		<div class="con-flex">
 
 			<label for="badgeThreshold">Badge threshold</label>
-			<input type="text" name="threshold" ng-model="$ctrl._badgeThreshold" ng-model-options="{debounce: 2000}" threshold-validator="{{::$ctrl.valueFormat}}"
-			 threshold-max="{{::$ctrl.max}}" />
+			<input type="text" name="threshold" ng-model="$ctrl._badgeThreshold" ng-blur="$ctrl.updateThreshold(form.threshold.$invalid)"
+	 threshold-validator="{{::$ctrl.valueFormat}};{{$ctrl.max}};{{$ctrl.valueDataType}}"/>
 			<div class="text-danger" style="height: 1em;">
 				<span ng-show="form.threshold.$invalid">{{'Invalid'|translate}}</span>
 			</div>
