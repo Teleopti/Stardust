@@ -585,15 +585,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			var query = Session.CreateSQLQuery(@"
 									SELECT StartDateTime,EndDateTime
-									FROM PersonRequest AS pr
-									JOIN Request AS req on(req.Parent = pr.id)
+									FROM PersonRequest AS pr with(nolock)
+									JOIN Request AS req with(nolock) on(req.Parent = pr.id)
 									WHERE req.StartDateTime <= :EndDateTime
 										AND req.EndDateTime >= :StartDateTime
 										AND pr.IsDeleted = :IsDeleted
 										AND pr.Person = :Person
 										AND pr.BusinessUnit = :BusinessUnit
 										AND NOT EXISTS
-										(SELECT 1 FROM ShiftTradeRequest sr
+										(SELECT 1 FROM ShiftTradeRequest sr with(nolock)
 										WHERE sr.Request = req.Id)");
 
 			return query.SetDateTime("StartDateTime", period.StartDateTime)
