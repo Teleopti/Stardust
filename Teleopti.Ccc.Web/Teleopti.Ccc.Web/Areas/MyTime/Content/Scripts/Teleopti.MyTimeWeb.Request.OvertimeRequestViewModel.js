@@ -1,5 +1,6 @@
 ﻿Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel = function (ajax, doneCallback, parentViewModel, weekStart, isViewingDetail) {
 	var self = this,
+		timeFormat = Teleopti.MyTimeWeb.Common.TimeFormat,
 		dateTimeFormats = Teleopti.MyTimeWeb.Common.Constants.serviceDateTimeFormat,
 		dateOnlyFormat =Teleopti.MyTimeWeb.Common.Constants.serviceDateTimeFormat.dateOnly,
 		defaultStartTimeSubscription;
@@ -114,7 +115,7 @@
 			self.Message(data.Text);
 
 			self.DateFrom(moment(data.DateTimeFrom).format(dateTimeFormats.dateOnly));
-			self.StartTime(moment(data.DateTimeFrom).format(Teleopti.MyTimeWeb.Common.TimeFormat));
+			self.StartTime(moment(data.DateTimeFrom).format(timeFormat));
 
 			var seconds = (moment(data.DateTimeTo) - moment(data.DateTimeFrom)) / 1000;
 			var hours = '0' + moment.duration(seconds, 'seconds').hours();
@@ -164,7 +165,7 @@
 					self.DateFrom(moment(startDate));
 				}
 				
-				self.StartTime(moment(startDate).format(Teleopti.MyTimeWeb.Common.TimeFormat));
+				self.StartTime(moment(startDate).format(timeFormat));
 				setDefaultStartTimeSubscription();
 
 				self.IsLoading(false);
@@ -175,7 +176,7 @@
 		});
 	}
 
-	function setDefaultStartTimeSubscription(currentUserDateTime) {
+	function setDefaultStartTimeSubscription() {
 		disposeDefaultStartTimeSubscription();
 		defaultStartTimeSubscription = self.getDefaultStartTime.subscribe(function() {
 			setDefaultStartTime();
@@ -259,18 +260,9 @@
 		return days < 0;
 	}
 
-	function _isDateFromExceedsAvailableDays() {
-		var dateFromMoment = self.DateFrom();
-		if (!moment.isMoment(dateFromMoment))
-			dateFromMoment = moment(dateFromMoment, dateTimeFormats.dateOnly);
-		var days = Math.ceil(moment.duration(dateFromMoment - moment().startOf("day")).asDays());
-		return days > 13;
-	}
-
 	function _buildPostData() {
 		var startDate = !moment.isMoment(self.DateFrom()) ? moment(self.DateFrom()) : moment().startOf("day");
-		var format = dateTimeFormats.dateOnly + " " + Teleopti.MyTimeWeb.Common.TimeFormat;
-		var periodStart = moment(startDate.format(dateTimeFormats.dateOnly) + " " + self.StartTime(), format);
+		var periodStart = moment(startDate.format(dateTimeFormats.dateOnly) + " " + self.StartTime(), dateTimeFormats.dateOnly + " " + timeFormat);
 		var periodEnd = moment(periodStart);
 		if (self.RequestDuration()) {
 			var durationParts = self.RequestDuration().split(":");
@@ -298,7 +290,7 @@
 			? Teleopti.MyTimeWeb.Common.GetCurrentUserDateTime(parentViewModel.baseUtcOffsetInMinutes, parentViewModel.daylightSavingAdjustment)
 			: moment();
 		var defaultStartTime = currentUserDateTime.add(20, 'minutes');
-		self.StartTime(defaultStartTime.format(Teleopti.MyTimeWeb.Common.TimeFormat));
+		self.StartTime(defaultStartTime.format(timeFormat));
 		self.TimeList = _createTimeList();
 		self.RequestDuration(self.TimeList[0]);
 		self.CancelAddRequest = parentViewModel.CancelAddingNewRequest;
@@ -306,7 +298,7 @@
 			setAvailableDays();
 		}
 		if (Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_OvertimeRequestDefaultStartTime_47513')) {
-			setDefaultStartTimeSubscription(currentUserDateTime);
+			setDefaultStartTimeSubscription();
 		}
 	}
 
