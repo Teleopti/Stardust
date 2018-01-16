@@ -14,7 +14,6 @@
 	function RemoveDayOffCtrl($scope, $wfmModal, personSelectionSvc, dayOffService, teamScheduleNotificationService) {
 		var ctrl = this;
 		ctrl.label = 'RemoveDayOff';
-		
 
 		ctrl.$onInit = function () {
 			ctrl.selectedDate = moment(ctrl.containerCtrl.getDate()).toDate();
@@ -24,8 +23,9 @@
 			ctrl.popDialog();
 		}
 
-		ctrl.removeDayOff = function (personIds) {
-			
+		ctrl.removeDayOff = function () {
+			var personInfos = getCheckedPersonInfoListWithDayOff();
+			var personIds = personInfos.map(function(p) { return p.PersonId; });
 
 			var input = {
 				Date: moment(ctrl.selectedDate).format('YYYY-MM-DD'),
@@ -51,31 +51,32 @@
 		}
 
 		ctrl.popDialog = function () {
-			var personInfos = personSelectionSvc.getCheckedPersonInfoList().filter(function(p) {
-				var dayoffsOnSelectedDay = p.SelectedDayOffs.filter(function(d) {
-					return d.Date === moment(ctrl.selectedDate).format('YYYY-MM-DD');
-				});
-				return dayoffsOnSelectedDay.length > 0;
-			});
-			var personIds = personInfos
-				.map(function (p) { return p.PersonId; });
+			var personInfos = getCheckedPersonInfoListWithDayOff();
 
 			var title = ctrl.label;
 			var message = teamScheduleNotificationService.buildConfirmationMessage(
 				'AreYouSureToRemoveSelectedDayOff',
-				personIds.length,
-				personIds.length,
+				personInfos.length,
+				personInfos.length,
 				true
 			);
 			$wfmModal.confirm(message, title).then(function (result) {
 				ctrl.resetActiveCmd();
 				if (result) {
 					$scope.$emit('teamSchedule.show.loading');
-					ctrl.removeDayOff(personIds);
+					ctrl.removeDayOff();
 				}
 			});
 		};
 
+		function getCheckedPersonInfoListWithDayOff() {
+			return personSelectionSvc.getCheckedPersonInfoList().filter(function(p) {
+				var dayoffsOnSelectedDay = p.SelectedDayOffs.filter(function(d) {
+					return d.Date === moment(ctrl.selectedDate).format('YYYY-MM-DD');
+				});
+				return dayoffsOnSelectedDay.length > 0;
+			});
+		}
 	
 	}
 })();

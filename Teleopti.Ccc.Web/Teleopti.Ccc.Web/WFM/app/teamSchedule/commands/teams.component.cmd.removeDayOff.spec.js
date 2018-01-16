@@ -63,10 +63,11 @@
 			dialog = $document[0].querySelector(".modal-box");
 			expect(dialog).toEqual(null);
 		});
+
 		it("should call remove day off when click apply button with selected day offs", function () {
 			var date = "2018-01-12";
 			var document = setUp(date);
-			fakePersonSelectionService.setFakeCheckedPersonInfoList([
+			var checkedPersonInfos = [
 				{
 					PersonId: 'agent1',
 					Name: 'agent1',
@@ -88,7 +89,8 @@
 					ScheduleEndTime: null,
 					SelectedDayOffs: [{Date:'2018-01-11'}]
 				}
-			]);
+			];
+			fakePersonSelectionService.setFakeCheckedPersonInfoList(checkedPersonInfos);
 
 			var dialog = document.dialog;
 			var ctrl = document.removeElement.isolateScope().$ctrl;
@@ -102,6 +104,7 @@
 			expect(removeDayOffData.PersonIds[0]).toEqual('agent1');
 			expect(removeDayOffData.TrackedCommandInfo.TrackId).toEqual(ctrl.trackId);
 		});
+
 		it("should show success notification and reset active cmd when remove day off successed", function () {
 			var result = setUpAndApplyRemoveDayOff("2018-01-12");
 			expect(fakeNoticeService.successMessage).toEqual('FinishedRemoveDayOff');
@@ -129,6 +132,7 @@
 		});
 
 		function setUpAndApplyRemoveDayOff(date, applyResponse) {
+			personList[0].SelectedDayOffs.push({ Date: date });
 			var document = setUp(date);
 			fakePersonSelectionService.setFakeCheckedPersonInfoList();
 
@@ -202,7 +206,8 @@
 				PersonId: 'agent1',
 				Name: 'agent1',
 				ScheduleStartTime: null,
-				ScheduleEndTime: null
+				ScheduleEndTime: null,
+				SelectedDayOffs:[]
 			}];
 
 		function FakePersonSelectionService() {
