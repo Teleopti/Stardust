@@ -23,7 +23,7 @@
 					ctrl.onNameUpdate({ name: ctrl._name });
 				};
 				ctrl.onCheckboxChange = function () {
-					ctrl.onCheckboxUpdate({ enabled: ctrl._checked });
+					ctrl.onCheckboxUpdate({ enable: ctrl._checked });
 				};
 
 				ctrl.$onChanges = function (changesObj) {
@@ -33,7 +33,11 @@
 					if (changesObj.checked) {
 						ctrl._checked = changesObj.checked.currentValue;
 					}
-				}
+				};
+
+				ctrl.preventExpanding = function (configIsEnabled, event) {
+					if (!configIsEnabled) event.stopPropagation();
+				};
 			}]
 		});
 })(angular);

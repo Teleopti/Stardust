@@ -17,12 +17,11 @@
 		</md-select>
 	</div>
 
-
 	<div ng-if="$ctrl.ruleSet == 0" class="form-input-wrap">
 		<label>The number of bronze badges that can be converted into silver ones</label>
-		<input type="text" ng-model="$ctrl.silverRate" />
+		<input type="text" ng-model="$ctrl.silverRate" ng-change="$ctrl.updateSilverRate()" />
 		<label>The threshold of one gold badge for silver badges</label>
-		<input type="text" ng-model="$ctrl.goldRate" />
+		<input type="text" ng-model="$ctrl.goldRate" ng-change="$ctrl.updateGoldRate()" />
 	</div>
 </form>
 
@@ -32,7 +31,7 @@
 			<card-header tabindex="-1">
 				<div tabindex="0">
 					<measure-config-header name="config.name" allow-rename="!config.builtin" checked="config.enabled" on-name-update="config.setName(name)"
-					 on-checkbox-update="config.setEnabled(enabled)">
+					 on-checkbox-update="$ctrl.enableConfig(config, enable)">
 					</measure-config-header>
 				</div>
 			</card-header>
@@ -51,7 +50,7 @@
 			<card-header tabindex="-1">
 				<div tabindex="0">
 					<measure-config-header name="config.name" allow-rename="!config.builtin" checked="config.enabled" on-name-update="config.setName(name)"
-					 on-checkbox-update="config.setEnabled(enabled)">
+					 on-checkbox-update="$ctrl.enableConfig(config, enable)">
 					</measure-config-header>
 				</div>
 			</card-header>

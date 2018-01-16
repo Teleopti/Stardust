@@ -11,11 +11,12 @@
 
 	function gSettingFormCtrl(dataService, $log, $scope) {
 		var ctrl = this;
+		var enabled = [];
 
 		var makeBuiltinMeasureConfigs = function (data) {
 			var measureConfigs = [];
 
-			measureConfigs.push(new MeasureConfig(
+			var answeredCalls = new MeasureConfig(
 				true,
 				data.AnsweredCallsBadgeEnabled,
 				null,
@@ -30,9 +31,11 @@
 				'^\\d+$',
 				10000,
 				'desc'
-			));
+			);
+			measureConfigs.push(answeredCalls);
+			if (answeredCalls.enabled) enabled.push(answeredCalls);
 
-			measureConfigs.push(new MeasureConfig(
+			var adherence = new MeasureConfig(
 				true,
 				data.AdherenceBadgeEnabled,
 				null,
@@ -47,9 +50,11 @@
 				'^0.\\d+$',
 				20.0,
 				'desc'
-			));
+			);
+			measureConfigs.push(adherence);
+			if (adherence.enabled) enabled.push(adherence);
 
-			measureConfigs.push(new MeasureConfig(
+			var aht = new MeasureConfig(
 				true,
 				data.AHTBadgeEnabled,
 				null,
@@ -64,7 +69,9 @@
 				'^(0[0-1]):([0-5][0-9]):([0-5][0-9])$',
 				'01:00:00',
 				'asc'
-			));
+			);
+			measureConfigs.push(aht);
+			if (aht.enabled) enabled.push(aht);
 
 			return measureConfigs;
 		};
@@ -73,7 +80,7 @@
 			var measureConfigs = [];
 
 			data.ExternalBadgeSettings.forEach(function (x) {
-				measureConfigs.push(new MeasureConfig(
+				var config = new MeasureConfig(
 					false,
 					x.Enabled,
 					x.Id,
@@ -85,7 +92,9 @@
 					x.BronzeThreshold,
 					x.SilverThreshold,
 					x.GoldThreshold
-				));
+				);
+				measureConfigs.push(config);
+				if (config.enabled) enabled.push(config);
 			});
 
 			return measureConfigs;
@@ -100,6 +109,8 @@
 			ctrl.goldRate = data.GoldToSilverBadgeRate;
 			ctrl.builtinMeasureConfigs = makeBuiltinMeasureConfigs(data);
 			ctrl.externalMeasureConfigs = makeExternalMeasureConfigs(data);
+
+			if (enabled.length > 3) $log.error('more than 3 measures are enabled!');
 		};
 
 		ctrl.$onChanges = function (changesObj) {
@@ -109,9 +120,20 @@
 			}
 		};
 
-		ctrl.updateMeasureConfig = function () {
-			dataService.updateMeasureConfig().then();
-		};
+		ctrl.enableConfig = function (config, enable) {
+			if (!enable) {
+				config.setEnabled(false);
+				enabled = enabled.filter(function (x) { return x.enabled; });
+				return;
+			}
+
+			config.setEnabled(true);
+			enabled.push(config);
+
+			if (enabled.length > 3) {
+				enabled.shift().setEnabled(false);
+			}
+		}
 
 		ctrl.updateRuleSet = function () {
 			dataService.saveData('ModifyChangeRule', {
@@ -121,6 +143,28 @@
 				$log.log('updated rule set successfully');
 			}, function () {
 				$log.log('failed to update rule set')
+			});
+		};
+
+		ctrl.updateSilverRate = function () {
+			dataService.saveData('SilverToBronzeBadgeRate', {
+				GamificationSettingId: ctrl.id,
+				Rate: ctrl.silverRate
+			}).then(function () {
+				$log.log('updated bronze/silver rate successfully');
+			}, function () {
+				$log.error('failed to update bronze/silver rate')
+			});
+		};
+
+		ctrl.updateGoldRate = function () {
+			dataService.saveData('GoldToSilverBadgeRate', {
+				GamificationSettingId: ctrl.id,
+				Rate: ctrl.goldRate
+			}).then(function () {
+				$log.log('updated silver/gold rate successfully');
+			}, function () {
+				$log.error('failed to update silver/gold rate');
 			});
 		};
 
@@ -164,24 +208,68 @@
 			});
 		};
 
-		MeasureConfig.prototype.setEnabled = function (enabled) {
-			$log.log(this.name + ': set enabled to ' + enabled);
+		MeasureConfig.prototype.setEnabled = function (enable) {
+			$log.log(this.name + ': set enabled to ' + enable);
 
 			var previous = this.enabled;
-			this.enabled = enabled;
+			this.enabled = enable;
 
 			var self = this;
 
-			dataService.saveData('ExternalBadgeSettingEnabled', {
-				GamificationSettingId: ctrl.id,
-				QualityId: this.externalId,
-				Value: enabled
-			}).then(function () {
-				$log.log('updated enabled');
-			}, function () {
-				$log.log('failed to update enabled. restoring: ' + previous);
-				self.enabled = previous;
-			});
+			if (!this.builtin) {
+				dataService.saveData('ExternalBadgeSettingEnabled', {
+					GamificationSettingId: ctrl.id,
+					QualityId: this.externalId,
+					Value: enable
+				}).then(function () {
+					$log.log('updated enabled');
+				}, function () {
+					$log.log('failed to update enabled. restoring: ' + previous);
+					self.enabled = previous;
+				});
+			}
+
+			switch (this.name) {
+				case 'AnsweredCalls':
+					dataService.saveData('UseBadgeForAnsweredCalls', {
+						GamificationSettingId: ctrl.id,
+						Value: enable
+					}).then(function () {
+						$log.log('updated enabled');
+					}, function () {
+						$log.log('failed to update enabled. restoring: ' + previous);
+						self.enabled = previous;
+					});
+					break;
+
+				case 'Adherence':
+					dataService.saveData('UseBadgeForAdherence', {
+						GamificationSettingId: ctrl.id,
+						Value: enable
+					}).then(function () {
+						$log.log('updated enabled');
+					}, function () {
+						$log.log('failed to update enabled. restoring: ' + previous);
+						self.enabled = previous;
+					});
+					break;
+
+				case 'AHT':
+					dataService.saveData('UseBadgeForAHT', {
+						GamificationSettingId: ctrl.id,
+						Value: enable
+					}).then(function () {
+						$log.log('updated enabled');
+					}, function () {
+						$log.log('failed to update enabled. restoring: ' + previous);
+						self.enabled = previous;
+					});
+					break;
+
+				default:
+					break;
+			}
+
 		};
 
 		MeasureConfig.prototype.setBadgeThreshold = function (badgeThreshold) {
