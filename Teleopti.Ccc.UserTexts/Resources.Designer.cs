@@ -14331,6 +14331,78 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No default resolution found for skill: {0}..
+        /// </summary>
+        public static string ImportBpoNoDefaultResolutionForSkill {
+            get {
+                return ResourceManager.GetString("ImportBpoNoDefaultResolutionForSkill", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The imported resource interval length: {0} minutes differs from the skill: {1} default resolution: {2} minutes.
+        /// </summary>
+        public static string ImportBpoResourceIntervalLengthDiffersFromTheSkill {
+            get {
+                return ResourceManager.GetString("ImportBpoResourceIntervalLengthDiffersFromTheSkill", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Resources of imported staffing cannot be less than 0..
+        /// </summary>
+        public static string ImportBpoResourcesCannotBeLessThanZero {
+            get {
+                return ResourceManager.GetString("ImportBpoResourcesCannotBeLessThanZero", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The skill: {0} is listed more than once on the same line..
+        /// </summary>
+        public static string ImportBpoSkillListedMoreThanOnce {
+            get {
+                return ResourceManager.GetString("ImportBpoSkillListedMoreThanOnce", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skill with skill id:{0} not found..
+        /// </summary>
+        public static string ImportBpoSkillNotFound {
+            get {
+                return ResourceManager.GetString("ImportBpoSkillNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Source name is too long. Max 100 characters is allowed..
+        /// </summary>
+        public static string ImportBpoSourceNameTooLong {
+            get {
+                return ResourceManager.GetString("ImportBpoSourceNameTooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start time for the period must be a time before end time..
+        /// </summary>
+        public static string ImportBpoStartDateTimeMustBeBeforeEndDateTime {
+            get {
+                return ResourceManager.GetString("ImportBpoStartDateTimeMustBeBeforeEndDateTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start time for the period must be a time in the future..
+        /// </summary>
+        public static string ImportBpoStartDateTimeMustBeInTheFuture {
+            get {
+                return ResourceManager.GetString("ImportBpoStartDateTimeMustBeInTheFuture", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The date format is incorrect.
         /// </summary>
         public static string ImportBpoWrongDateFormat {

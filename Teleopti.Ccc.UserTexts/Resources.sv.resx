@@ -15350,4 +15350,28 @@ Vill du registrera dig?</value>
     <value>Importen misslyckades!</value>
     <comment>Failed BPO import</comment>
   </data>
+  <data name="ImportBpoNoDefaultResolutionForSkill" xml:space="preserve">
+    <value>Hittade ingen intervallupplösning på kompetensen: {0}.</value>
+  </data>
+  <data name="ImportBpoResourceIntervalLengthDiffersFromTheSkill" xml:space="preserve">
+    <value>Intervallupplösningen på de importerande resurserna: {0} minuter stämmer inte överens med kompetensen {1} intervallupplösning {2} minuter.</value>
+  </data>
+  <data name="ImportBpoResourcesCannotBeLessThanZero" xml:space="preserve">
+    <value>Importerade resurser kan inte vara mindre än 0.</value>
+  </data>
+  <data name="ImportBpoSkillListedMoreThanOnce" xml:space="preserve">
+    <value>Komptensen: {0} är listad mer än en gång på samma rad.</value>
+  </data>
+  <data name="ImportBpoSkillNotFound" xml:space="preserve">
+    <value>Kompetensen med id: {0} finns inte i systemet.</value>
+  </data>
+  <data name="ImportBpoSourceNameTooLong" xml:space="preserve">
+    <value>Namnet på underleverantören (Source) är för långt. Max 100 tecken är tillåtet.</value>
+  </data>
+  <data name="ImportBpoStartDateTimeMustBeBeforeEndDateTime" xml:space="preserve">
+    <value>Starttiden på intervallet måste vara en tidpunkt innan sluttiden.</value>
+  </data>
+  <data name="ImportBpoStartDateTimeMustBeInTheFuture" xml:space="preserve">
+    <value>Starttiden på intervallet måste vara en tidpunkt i framtiden.</value>
+  </data>
 </root>

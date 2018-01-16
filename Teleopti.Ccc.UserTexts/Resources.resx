@@ -16989,4 +16989,28 @@ Do you want to participate?</value>
     <value>You can enable 3 measures at maximum. </value>
     <comment>Message shown when the user tries to enable more than 3 measures. </comment>
   </data>
+  <data name="ImportBpoStartDateTimeMustBeBeforeEndDateTime" xml:space="preserve">
+    <value>Start time for the period must be a time before end time.</value>
+  <comment>The period given has a End date earlier than the start date</comment></data>
+  <data name="ImportBpoResourcesCannotBeLessThanZero" xml:space="preserve">
+    <value>Resources of imported staffing cannot be less than 0.</value>
+  <comment>Resource field in the text file has been given a negeative value.</comment></data>
+  <data name="ImportBpoStartDateTimeMustBeInTheFuture" xml:space="preserve">
+    <value>Start time for the period must be a time in the future.</value>
+  <comment>The peirod given has a start date that already occured.</comment></data>
+  <data name="ImportBpoSkillNotFound" xml:space="preserve">
+    <value>Skill with skill id:{0} not found.</value>
+  <comment>The skill is not found in the system</comment></data>
+  <data name="ImportBpoNoDefaultResolutionForSkill" xml:space="preserve">
+    <value>No default resolution found for skill: {0}.</value>
+  <comment>Found a default resolution of 0 for the skill</comment></data>
+  <data name="ImportBpoResourceIntervalLengthDiffersFromTheSkill" xml:space="preserve">
+    <value>The imported resource interval length: {0} minutes differs from the skill: {1} default resolution: {2} minutes</value>
+  <comment>The default resolution that is given this skill in the system differs from the interval om the given text row.</comment></data>
+  <data name="ImportBpoSourceNameTooLong" xml:space="preserve">
+    <value>Source name is too long. Max 100 characters is allowed.</value>
+  <comment>The source field in the text file is given a value with more than 100 characters</comment></data>
+  <data name="ImportBpoSkillListedMoreThanOnce" xml:space="preserve">
+    <value>The skill: {0} is listed more than once on the same line.</value>
+  <comment>The same skill name is listed more than once on the same row in the text file.</comment></data>
 </root>
