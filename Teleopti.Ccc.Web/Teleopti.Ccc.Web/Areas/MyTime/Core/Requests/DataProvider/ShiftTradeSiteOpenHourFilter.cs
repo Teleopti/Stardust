@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			IEnumerable<ShiftTradeAddPersonScheduleViewModel> personToScheduleViews,
 			ShiftTradeAddPersonScheduleViewModel personFromScheduleView, DatePersons datePersons)
 		{
-			if (personFromScheduleView.ScheduleLayers == null || !personFromScheduleView.ScheduleLayers.Any())
+			if (personFromScheduleView == null || personFromScheduleView.ScheduleLayers == null || !personFromScheduleView.ScheduleLayers.Any())
 			{
 				return personToScheduleViews;
 			}

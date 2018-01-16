@@ -188,6 +188,36 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		}
 
 		[Test]
+		public void ShouldNotFilterScheduleViewWhenFromPersonScheduleIsNull()
+		{
+			prepareData();
+
+			var person1 = createPersonWithSiteOpenHours(8, 19);
+			var person2 = createPersonWithSiteOpenHours(8, 19);
+
+			var shiftTradeAddPersonScheduleViews = new[]
+			{
+				createShiftTradeAddPersonScheduleViewModel(person1, _shiftTradeDate, new[]
+				{
+					new TimePeriod(8, 30, 10, 30),
+					new TimePeriod(11, 30, 14, 30),
+				}),
+				createShiftTradeAddPersonScheduleViewModel(person2, _shiftTradeDate, new[]
+				{
+					new TimePeriod(8, 30, 10, 30),
+					new TimePeriod(11, 30, 14, 30),
+					new TimePeriod(16, 00, 18, 30),
+				})
+			};
+			_personFromScheduleView = null;
+			var datePersons = new DatePersons {Date = _shiftTradeDate, Persons = new[] { person1, person2 } };
+			var filteredShiftTradeAddPersonScheduleViews =
+				Target.FilterScheduleView(shiftTradeAddPersonScheduleViews, _personFromScheduleView, datePersons).ToList();
+
+			filteredShiftTradeAddPersonScheduleViews.Count.Should().Be(2);
+		}
+
+		[Test]
 		public void ShouldFilterScheduleViewByOtherAgentSiteOpenHour()
 		{
 			prepareData();
