@@ -64,20 +64,21 @@
 			expect(dialog).toEqual(null);
 		});
 		it("should call remove day off when click apply button", function () {
-			setUpAndApplyRemoveDayOff();
+			var date = "2018-01-12";
+			var result = setUpAndApplyRemoveDayOff(date);
 
 			var removeDayOffData = fakeDayOffService.lastPostData;
 			expect(moment(removeDayOffData.Date).format("YYYY-MM-DD")).toEqual(date);
 			expect(removeDayOffData.PersonIds).toEqual(personList.map(function (p) { return p.PersonId; }));
-			expect(removeDayOffData.TrackedCommandInfo.TrackId).toEqual(ctrl.trackId);
+			expect(removeDayOffData.TrackedCommandInfo.TrackId).toEqual(result.ctrl.trackId);
 		});
 		it("should show success notification and reset active cmd when remove day off successed", function () {
-			var result = setUpAndApplyRemoveDayOff();
+			var result = setUpAndApplyRemoveDayOff("2018-01-12");
 			expect(fakeNoticeService.successMessage).toEqual('FinishedRemoveDayOff');
 			expect(!!result.ctrl.containerCtrl.activeCmd).toEqual(false);
 		});
 		it('should show warning and success notification and reset active command when remove day off apply with warning', function () {
-			var result = setUpAndApplyRemoveDayOff({
+			var result = setUpAndApplyRemoveDayOff("2018-01-12", {
 				data: [{
 					PersonId: 'agent1', WarningMessages: ['warning']
 				}]
@@ -87,9 +88,9 @@
 			expect(!!result.ctrl.containerCtrl.activeCmd).toEqual(false);
 		});
 		it('should show error notification and reset active command when remove day off apply with remove', function () {
-			var result = setUpAndApplyRemoveDayOff({
+			var result = setUpAndApplyRemoveDayOff("2018-01-12", {
 				data: [{
-					PersonId: 'agent1',ErrorMessages: ['error']
+					PersonId: 'agent1', ErrorMessages: ['error']
 				}]
 			});
 			expect(fakeNoticeService.successMessage).toEqual("");
@@ -97,15 +98,14 @@
 			expect(!!result.ctrl.containerCtrl.activeCmd).toEqual(false);
 		});
 
-		function setUpAndApplyRemoveDayOff(applyData) {
-			var date = "2018-01-12";
+		function setUpAndApplyRemoveDayOff(date, applyResponse) {
 			var document = setUp(date);
 			fakePersonSelectionService.setFakeCheckedPersonInfoList();
 
 			var dialog = document.dialog;
 			var ctrl = document.removeElement.isolateScope().$ctrl;
 
-			fakeDayOffService.setApplyResponse(applyData);
+			fakeDayOffService.setApplyResponse(applyResponse);
 			var applyButton = dialog.querySelectorAll("button")[1];
 			applyButton.click();
 
@@ -158,7 +158,7 @@
 			}
 			this.removeDayOff = function (input) {
 				this.lastPostData = input;
-				return $q(function(resolve, reject) {
+				return $q(function (resolve, reject) {
 					resolve(applyResponse || { data: [] });
 				});
 			}
