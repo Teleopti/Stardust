@@ -177,7 +177,8 @@
 			line-height: 18px;
 			border-bottom: $SEPARATOR;
 			font-weight: bold;
-			color: $gray054;
+			color: $text-color-standard;
+			background-color: $blue-300;
 		}
 
 		md-virtual-repeat-container {
@@ -313,7 +314,8 @@
 				line-height: 18px;
 				border-bottom: $SEPARATOR;
 				font-weight: bold;
-				color: $gray054;
+				color: $text-color-standard;
+				background-color: $blue-300;
 
 				& > * {
 					padding: $PADDING 0;
