@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			var validEndTimeList = possibleShiftEndTimes
 				.Where(e => _now.UtcDateTime().CompareTo(e) < 0 && e.CompareTo(requestDate) >= 0).ToList();
 
-			if (validEndTimeList.Any())
+			if (validEndTimeList.Any(v => _now.UtcDateTime().AddMinutes(OvertimeMinimumApprovalThresholdInMinutes.MinimumApprovalThresholdTimeInMinutes + _overtimeRequestStartTimeFlexibilityInMinutes).CompareTo(v) <= 0))
 			{
 				return TimeZoneHelper.ConvertFromUtc(validEndTimeList.Min(), _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone());
 			}

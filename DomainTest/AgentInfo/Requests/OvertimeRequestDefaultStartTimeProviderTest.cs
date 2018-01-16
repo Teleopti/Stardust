@@ -186,6 +186,41 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		}
 
 		[Test]
+		public void ShouldGetCorrectDefaultStartTimeConsideringWorkDefaultStartTimeAndCurrentTimeAndThe15MinGap()
+		{
+			Now.Is(new DateTime(2018, 1, 8, 16, 49, 00, DateTimeKind.Utc));
+			var date = new DateOnly(2018, 1, 8);
+			var agent = PersonFactory.CreatePersonWithGuid("agent", "one");
+			FakeLoggedOnUser.SetFakeLoggedOnUser(agent);
+
+			var phone = ActivityFactory.CreateActivity("phone activity");
+			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(agent, CurrentScenario.Current(), date);
+			personAssignment.AddActivity(phone, new DateTimePeriod(2018, 1, 8, 08, 2018, 1, 8, 17));
+			FakeAssignmentRepository.Has(personAssignment);
+
+			var result = OvertimeRequestDefaultStartTimeProvider.GetDefaultStartTime(date);
+
+			result.Date.Should().Be(date.Date);
+			result.Hour.Should().Be(17);
+			result.Minute.Should().Be(30);
+		}
+
+		[Test]
+		public void ShouldGetCorrectDefaultStartTimeConsideringShiftEndTimeAndCurrentTimeAndThe15MinGap()
+		{
+			Now.Is(new DateTime(2018, 1, 8, 07, 49, 00, DateTimeKind.Utc));
+			var date = new DateOnly(2018, 1, 8);
+			var agent = PersonFactory.CreatePersonWithGuid("agent", "one");
+			FakeLoggedOnUser.SetFakeLoggedOnUser(agent);
+
+			var result = OvertimeRequestDefaultStartTimeProvider.GetDefaultStartTime(date);
+
+			result.Date.Should().Be(date.Date);
+			result.Hour.Should().Be(8);
+			result.Minute.Should().Be(30);
+		}
+
+		[Test]
 		public void ShouldGetWorkDefaultStartTimeAsDefaultStartTimeWhenThereIsNoOvernightShiftOrNormalShiftOnSelectedDay()
 		{
 			Now.Is(new DateTime(2018, 1, 8, 10, 00, 00, DateTimeKind.Utc));
