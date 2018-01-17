@@ -27,14 +27,8 @@ namespace Teleopti.Ccc.Domain.GroupPageCreator
                                        {
                                            Person = p,
                                            pp.PersonContract.PartTimePercentage
-                                       }).ToList();
-
-            var connectedPartTimePercentages = new HashSet<IPartTimePercentage>();
-            foreach (var ppp in allPersonPeriods)
-            {
-                connectedPartTimePercentages.Add(ppp.PartTimePercentage);
-            }
-
+                                       }).ToLookup(k => k.PartTimePercentage);
+			
             foreach (IPartTimePercentage partTimePercentage in entityCollection.OrderBy(c => c.Description.Name))
             {
                 if (((IDeleteTag)partTimePercentage).IsDeleted) continue;
@@ -44,14 +38,9 @@ namespace Teleopti.Ccc.Domain.GroupPageCreator
             	if (!groupPage.IsUserDefined())
             		rootGroup.SetId(partTimePercentage.Id);
 
-            	if (connectedPartTimePercentages.Contains(partTimePercentage))
+            	if (allPersonPeriods[partTimePercentage].Any())
                 {
-                    var percentage = partTimePercentage;
-                    var personPeriodsWithPartTimePercentage =
-                        allPersonPeriods.Where(
-                            p => percentage.Equals(p.PartTimePercentage));
-                    var personsWithPartTimePercentage =
-                        personPeriodsWithPartTimePercentage.Select(pp => pp.Person).Distinct();
+                    var personsWithPartTimePercentage = allPersonPeriods[partTimePercentage].Select(pp => pp.Person).Distinct();
                     foreach (var personWithPartTimePercentage in personsWithPartTimePercentage)
                     {
                         rootGroup.AddPerson(personWithPartTimePercentage);

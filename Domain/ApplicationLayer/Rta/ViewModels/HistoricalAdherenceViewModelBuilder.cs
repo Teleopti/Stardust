@@ -185,8 +185,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 					scenario);
 
 				data.Schedule = schedules[data.Person]
-					.ScheduledDayCollection(period)
-					.Single()
+					.ScheduledDay(data.Date)
 					.ProjectionService()
 					.CreateProjection();
 			}

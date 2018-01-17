@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					return;
 				}
 			}
-			var person = _personRepository.FindPeople(new List<Guid> {message.PersonId}).Single();
+			var person = _personRepository.Get(message.PersonId);
 			var agentTimeZone = person.PermissionInformation.DefaultTimeZone();
 
 			//create one full day period

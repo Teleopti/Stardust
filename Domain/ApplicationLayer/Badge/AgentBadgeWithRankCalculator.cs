@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 			}
 
 			var agentsShouldGetBadge = agentsListShouldGetBadge.Select(
-				agent => allPersons.SingleOrDefault(x => x.Id != null && x.Id.Value == agent.Key))
+				agent => allPersons.SingleOrDefault(x => x.Id == agent.Key))
 				.Where(agent => agent != null);
 			foreach (var person in agentsShouldGetBadge)
 			{

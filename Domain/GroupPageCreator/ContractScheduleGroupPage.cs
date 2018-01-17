@@ -27,14 +27,8 @@ namespace Teleopti.Ccc.Domain.GroupPageCreator
 									   {
 										   Person = p,
 										   pp.PersonContract.ContractSchedule
-									   }).ToList();
-
-			var connectedContractSchedules = new HashSet<IContractSchedule>();
-			foreach (var ppp in allPersonPeriods)
-			{
-				connectedContractSchedules.Add(ppp.ContractSchedule);
-			}
-
+									   }).ToLookup(k => k.ContractSchedule);
+			
 			foreach (IContractSchedule contractSchedule in entityCollection.OrderBy(c => c.Description.Name))
 			{
 				if (((IDeleteTag)contractSchedule).IsDeleted) continue;
@@ -44,13 +38,9 @@ namespace Teleopti.Ccc.Domain.GroupPageCreator
 				if (!groupPage.IsUserDefined())
 					rootGroup.SetId(contractSchedule.Id);
 
-				if (connectedContractSchedules.Contains(contractSchedule))
+				if (allPersonPeriods[contractSchedule].Any())
 				{
-					var schedule = contractSchedule;
-					var personPeriodsWithContractSchedule =
-						allPersonPeriods.Where(p => schedule.Equals(p.ContractSchedule));
-					var personsWithContractSchedule =
-						personPeriodsWithContractSchedule.Select(pp => pp.Person).Distinct();
+					var personsWithContractSchedule = allPersonPeriods[contractSchedule].Select(pp => pp.Person).Distinct();
 					foreach (var personWithContractSchedule in personsWithContractSchedule)
 					{
 						rootGroup.AddPerson(personWithContractSchedule);

@@ -43,10 +43,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			if (lockInfoForStateHolder == null)
 				return;
 
+			var choosenAgentLookup = schedulerStateHolderTo.ChoosenAgents.ToDictionary(a => a.Id.Value);
 			foreach (var lockInfo in lockInfoForStateHolder.Locks)
 			{
-				var agent = schedulerStateHolderTo.ChoosenAgents.SingleOrDefault(x => x.Id.Value == lockInfo.AgentId);
-				if (agent != null)
+				if (choosenAgentLookup.TryGetValue(lockInfo.AgentId, out var agent) && agent != null)
 				{
 					lockInfoForStateHolder.GridlockManager.AddLock(agent, lockInfo.Date, lockInfo.LockType);
 				}

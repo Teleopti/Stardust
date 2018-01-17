@@ -23,13 +23,8 @@ namespace Teleopti.Ccc.Domain.GroupPageCreator
                                            {
                                                Person = p,
                                                pp.PersonContract.Contract
-                                           }).ToList();
-
-            var connectedContracts = new HashSet<IContract>();
-            foreach (var ppp in allPersonPeriods)
-            {
-                connectedContracts.Add(ppp.Contract);
-            }
+                                           }).ToLookup(k => k.Contract);
+			
             foreach (IContract contract in entityCollection.OrderBy(c => c.Description.Name))
             {
                 if (((IDeleteTag)contract).IsDeleted) continue;
@@ -39,11 +34,9 @@ namespace Teleopti.Ccc.Domain.GroupPageCreator
 				if (!groupPage.IsUserDefined())
 					rootGroup.SetId(contract.Id);
 
-                if (connectedContracts.Contains(contract))
+                if (allPersonPeriods[contract].Any())
                 {
-                    var personPeriodsWithContract =
-                        allPersonPeriods.Where(p => contract.Equals(p.Contract));
-                    var personsWithContract = personPeriodsWithContract.Select(pp => pp.Person).Distinct();
+                    var personsWithContract = allPersonPeriods[contract].Select(pp => pp.Person).Distinct();
                     foreach (var personWithContract in personsWithContract)
                     {
                         rootGroup.AddPerson(personWithContract);

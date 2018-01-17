@@ -243,17 +243,18 @@ namespace Teleopti.Ccc.Domain.Staffing
 		{
 			var skillIds = new List<Guid>();
 			var skillStringList = skillGroupString.Split(skillSeparator);
+			var skillLookup = allSkills.ToLookup(s => s.Name);
 			foreach (var skillString in skillStringList)
 			{
 				var skillStringTrimmed = skillString.Trim();
-				var skills = allSkills.Where(s => s.Name == skillStringTrimmed).ToList();
+				var skills = skillLookup[skillStringTrimmed].ToArray();
 				if (skills.IsEmpty())
 				{
 					result.Success = false;
 					result.ErrorInformation.Add(formatGeneralLineErrorMessage(lineWithNumber,
 						string.Format(Resources.TheSkillWithNameIsNotDefinedInTheSystem, skillStringTrimmed)));
 				}
-				if (skills.Count == 1)
+				if (skills.Length == 1)
 				{
 					var skill = skills.SingleOrDefault();
 					if (skillIds.Contains(skill.Id.GetValueOrDefault()))
@@ -265,13 +266,13 @@ namespace Teleopti.Ccc.Domain.Staffing
 					}
 					skillIds.Add(skills.First().Id.GetValueOrDefault());
 				}
-				else if (skills.Count > 1)
+				else if (skills.Length > 1)
 				{
 					result.Success = false;
 					result.ErrorInformation.Add(formatGeneralLineErrorMessage(lineWithNumber,
 						string.Format(
 							Resources.SkillDefinedMultipleTimesInTheSystem,
-							skillStringTrimmed, skills.Count)));
+							skillStringTrimmed, skills.Length)));
 				}
 			}
 			return skillIds; // replace with real guid

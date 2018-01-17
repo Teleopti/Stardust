@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		private void prepareAbsenceReport()
 		{
 			_scenarioRepository.Stub(x => x.Current()).Return(_scenario);
-			_personRepository.Stub(x => x.FindPeople(new List<Guid>())).IgnoreArguments().Return(new List<IPerson> {_person});
+			_personRepository.Stub(x => x.Get(Guid.Empty)).IgnoreArguments().Return(_person);
 		}
 
 		private void createServices()

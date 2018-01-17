@@ -34,11 +34,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			});
 
 			var ruleBagIdList = new HashSet<Guid>(allRuleSetBagIds.Values.Where(v => v.HasValue).Select(v => v.Value));
-			var allRuleSetBags = ruleBagIdList.IsEmpty()
+			var allRuleSetBags = (ruleBagIdList.IsEmpty()
 				? Enumerable.Empty<IRuleSetBag>()
-				: _repository.FindWithRuleSetsAndAccessibility(ruleBagIdList.ToArray());
+				: _repository.FindWithRuleSetsAndAccessibility(ruleBagIdList.ToArray())).ToLookup(b => b.Id);
 
-			return allRuleSetBagIds.ToDictionary(item => item.Key, item => allRuleSetBags.SingleOrDefault(b => b.Id == item.Value));
+			return allRuleSetBagIds.ToDictionary(item => item.Key, item => allRuleSetBags[item.Value].SingleOrDefault());
 		}
 	}
 }

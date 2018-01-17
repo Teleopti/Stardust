@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Configuration
 
 		public IEnumerable<ConfigurationValidationViewModel> Validate()
 		{
-			var stateGroups = _stateGroups.LoadAll();
+			var stateGroups = _stateGroups.LoadAll().ToLookup(s => s.BusinessUnit);
 			var businessUnits = _businessUnits.LoadAll();
 
 			return validateLoggedOutStateGroupInConfiguration(businessUnits, stateGroups)
@@ -31,10 +31,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Configuration
 				.ToArray();
 		}
 
-		private static IEnumerable<ConfigurationValidationViewModel> validateDefaultStateGroupInConfiguration(IEnumerable<IBusinessUnit> businessUnits, IEnumerable<IRtaStateGroup> stateGroups)
+		private static IEnumerable<ConfigurationValidationViewModel> validateDefaultStateGroupInConfiguration(IEnumerable<IBusinessUnit> businessUnits, ILookup<IBusinessUnit, IRtaStateGroup> stateGroups)
 		{
 			return from businessUnit in businessUnits
-				let valid = stateGroups.Where(x => x.BusinessUnit == businessUnit).Any(x => x.DefaultStateGroup)
+				let valid = stateGroups[businessUnit].Any(x => x.DefaultStateGroup)
 				where !valid
 				select new ConfigurationValidationViewModel
 				{
@@ -43,10 +43,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Configuration
 				};
 		}
 
-		private static IEnumerable<ConfigurationValidationViewModel> validateLoggedOutStateGroupInConfiguration(IEnumerable<IBusinessUnit> businessUnits, IEnumerable<IRtaStateGroup> stateGroups)
+		private static IEnumerable<ConfigurationValidationViewModel> validateLoggedOutStateGroupInConfiguration(IEnumerable<IBusinessUnit> businessUnits, ILookup<IBusinessUnit, IRtaStateGroup> stateGroups)
 		{
 			return from businessUnit in businessUnits
-				let valid = stateGroups.Where(x => x.BusinessUnit == businessUnit).Any(x => x.IsLogOutState)
+				let valid = stateGroups[businessUnit].Any(x => x.IsLogOutState)
 				where !valid
 				select new ConfigurationValidationViewModel
 				{

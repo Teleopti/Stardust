@@ -52,15 +52,14 @@ namespace Teleopti.Ccc.Domain.Intraday
 			var forecastedStaffing = _forecastedStaffingProvider
 				.StaffingPerSkill(skillDays, minutesPerInterval, userDateOnly, false)
 				.Where(x => x.StartTime <= queueStatistics.LatestActualIntervalStart && x.StartTime >= queueStatistics.FirstIntervalStart)
-				.ToList();
-			var scheduledStaffing = _scheduledStaffingProvider.StaffingPerSkill(skillDays.Keys.ToList(), minutesPerInterval, userDateOnly);
+				.ToLookup(s => s.SkillId);
+			var scheduledStaffing = _scheduledStaffingProvider.StaffingPerSkill(skillDays.Keys.ToList(), minutesPerInterval, userDateOnly).ToLookup(s => s.Id);
 
 			foreach (var skill in skillDays.Keys)
 			{
 				if(skill is IChildSkill)
 					continue;
-				var skillForecastedStaffing = forecastedStaffing
-					.Where(s => s.SkillId == skill.Id.Value).ToList();
+				var skillForecastedStaffing = forecastedStaffing[skill.Id.Value].ToArray();
 				foreach (var interval in skillForecastedStaffing)
 				{
 					eslIntervals.Add(calculateEslInterval(skillDays, 
@@ -84,7 +83,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			int minutesPerInterval, 
 			StaffingIntervalModel interval,
 			ISkill skill, 
-			IList<SkillStaffingIntervalLightModel> scheduledStaffing, 
+			ILookup<Guid, SkillStaffingIntervalLightModel> scheduledStaffing, 
 			ForecastedCallsModel forecastedCalls,
 			IStaffingCalculatorServiceFacade serviceCalculatorService)
 		{
@@ -95,8 +94,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			if (serviceAgreement == new ServiceAgreement())
 				return new EslInterval();
 
-			var scheduledStaffingInterval = scheduledStaffing
-				.SingleOrDefault(x => x.Id == interval.SkillId && x.StartDateTime == interval.StartTime).StaffingLevel;
+			var scheduledStaffingInterval = scheduledStaffing[interval.SkillId].SingleOrDefault(x => x.StartDateTime == interval.StartTime).StaffingLevel;
 			var task = forecastedCalls.CallsPerSkill[skill.Id.Value].FirstOrDefault(x => x.StartTime == interval.StartTime);
 
 			if(task == null)
