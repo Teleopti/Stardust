@@ -23,5 +23,8 @@
         <property name="AutoGrantType" not-null ="true" />
         <property name="EnableWorkRuleValidation" not-null ="true" />
         <property name="WorkRuleValidationHandleType"/>
+        <many-to-one name="SkillType"
+                     class="Teleopti.Ccc.Domain.Forecasting.SkillType"
+                     foreign-key="FK_OvertimeRequestOpenPeriod_SkillType"/>
     </class>
 </hibernate-mapping>

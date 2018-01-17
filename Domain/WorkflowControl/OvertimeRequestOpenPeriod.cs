@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		private OvertimeRequestAutoGrantType _autoGrantType;
 		private bool _enableWorkRuleValidation;
 		private OvertimeValidationHandleType? _workRuleValidationHandleType;
+		private ISkillType _skillType;
 		public abstract DateOnlyPeriod GetPeriod(DateOnly viewpointDateOnly);
 
 		public virtual OvertimeRequestAutoGrantType AutoGrantType
@@ -42,6 +43,12 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		}
 
 		public virtual string DenyReason { get; set; }
+
+		public virtual ISkillType SkillType
+		{
+			get => _skillType;
+			set => _skillType = value;
+		}
 
 		public virtual object Clone()
 		{

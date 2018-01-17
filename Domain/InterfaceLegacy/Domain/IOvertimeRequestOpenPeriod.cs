@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		int OrderIndex { get; }
 		string DenyReason { get; set; }
 		bool EnableWorkRuleValidation { get; set; }
+		ISkillType SkillType { get; set; }
 
 		OvertimeValidationHandleType? WorkRuleValidationHandleType { get; set; }
 	}
