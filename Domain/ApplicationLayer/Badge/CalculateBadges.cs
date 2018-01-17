@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
@@ -47,7 +48,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 
 		public void Calculate(CalculateBadgeMessage message)
 		{
-			var teamSettings = _teamSettingsRepository.FindAllTeamGamificationSettingsSortedByTeam().ToLookup(t => t.GamificationSetting);
+			var teamSettings = _teamSettingsRepository.FindAllTeamGamificationSettingsSortedByTeam().Where(t => t.GamificationSetting!=null).ToLookup(t => t.GamificationSetting);
 			var settings = teamSettings.Select(t => t.Key);
 			var calculateDate = new DateOnly(message.CalculationDate);
 
@@ -175,8 +176,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 		{
 			var agentBadgeTransactions = newAwardedBadges as IList<IAgentBadgeTransaction> ?? newAwardedBadges.ToList();
 
-			var existedBadges = _badgeRepository.Find(agentBadgeTransactions.Select(x => x.Person.Id.GetValueOrDefault()),
-				badgeType).ToLookup(b => b.Person);
+			var existedBadges = (_badgeRepository.Find(agentBadgeTransactions.Select(x => x.Person.Id.GetValueOrDefault()),
+				badgeType) ?? new AgentBadge[0]).ToLookup(b => b.Person);
 			foreach (var badgeTransaction in agentBadgeTransactions)
 			{
 				var person = badgeTransaction.Person;
@@ -256,7 +257,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 												 newAwardedBadges.ToList();
 
 			var existedBadges =
-				_badgeWithRankRepository.Find(agentBadgeWithRankTransactions.Select(x => x.Person.Id.GetValueOrDefault()), badgeType).ToLookup(b => b.Person);
+				(_badgeWithRankRepository.Find(agentBadgeWithRankTransactions.Select(x => x.Person.Id.GetValueOrDefault()), badgeType) ?? new IAgentBadgeWithRank[0]).ToLookup(b => b.Person);
 			foreach (var badgeTransaction in agentBadgeWithRankTransactions)
 			{
 				var person = badgeTransaction.Person;

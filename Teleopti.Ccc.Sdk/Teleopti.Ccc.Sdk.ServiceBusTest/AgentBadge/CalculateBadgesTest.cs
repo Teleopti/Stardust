@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -45,7 +46,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			badgeWithRankRepository = MockRepository.GenerateMock<IAgentBadgeWithRankRepository>();
 			personRepository = MockRepository.GenerateMock<IPersonRepository>();
 
-			var period = new DateOnlyPeriod(new DateOnly(2014, 8, 7), new DateOnly(2014, 8, 9));
+			var period = new DateOnlyPeriod(2014, 8, 7, 2014, 8, 9);
 			personRepository.Stub(x => x.FindAllAgents(period, false))
 				.Return(new List<IPerson> {new Person()});
 
@@ -104,8 +105,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				GamificationSettingRuleSet = GamificationSettingRuleSet.RuleWithRatioConvertor
 			};
 
-			var team = TeamFactory.CreateSimpleTeam("team");
-			team.SetId(Guid.NewGuid());
+			var team = TeamFactory.CreateSimpleTeam("team").WithId();
 
 			var teamGamificationSetting = new TeamGamificationSetting
 			{
