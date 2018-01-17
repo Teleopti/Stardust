@@ -7,7 +7,7 @@
 				allowRename: '<',
 				checked: '<',
 				onNameUpdate: '&',
-				onCheckboxUpdate: '&'
+				onEnable: '&'
 			},
 			controller: [function MeasureConfigHeaderCtrl() {
 				var ctrl = this;
@@ -22,16 +22,13 @@
 					ctrl.finishRename();
 					ctrl.onNameUpdate({ name: ctrl._name });
 				};
-				ctrl.onCheckboxChange = function () {
-					ctrl.onCheckboxUpdate({ enable: ctrl._checked });
+				ctrl.onCheckboxClick = function () {
+					ctrl.onEnable({ enable: !ctrl.checked });
 				};
 
 				ctrl.$onChanges = function (changesObj) {
 					if (changesObj.name) {
 						ctrl._name = changesObj.name.currentValue;
-					}
-					if (changesObj.checked) {
-						ctrl._checked = changesObj.checked.currentValue;
 					}
 				};
 

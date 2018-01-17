@@ -30,12 +30,15 @@
 
 <div>
 	<div>{{'Measures'|translate}}</div>
+	<div class="text-danger validation">
+		<div ng-if="$ctrl.errors.hasReachedLimitOfEnabledMeasures">{{'YouCanEnable3MeasuresAtMaximum'|translate}}</div>
+	</div>
 	<wfm-card-list multi-select>
 		<wfm-card ng-repeat="config in $ctrl.builtinMeasureConfigs">
 			<card-header tabindex="-1">
 				<div tabindex="0">
 					<measure-config-header name="config.name" allow-rename="!config.builtin" checked="config.enabled" on-name-update="config.setName(name)"
-					 on-checkbox-update="$ctrl.enableConfig(config, enable)">
+					 on-enable="$ctrl.enableConfig(config, enable)">
 					</measure-config-header>
 				</div>
 			</card-header>
@@ -55,7 +58,7 @@
 			<card-header tabindex="-1">
 				<div tabindex="0">
 					<measure-config-header name="config.name" allow-rename="!config.builtin" checked="config.enabled" on-name-update="config.setName(name)"
-					 on-checkbox-update="$ctrl.enableConfig(config, enable)">
+					 on-enable="$ctrl.enableConfig(config, enable)">
 					</measure-config-header>
 				</div>
 			</card-header>

@@ -8,7 +8,7 @@
 </div>
 
 <div class="enable" ng-click="$event.stopPropagation()">
-	<md-checkbox aria-label="Enable measure" ng-model="$ctrl._checked" ng-change="$ctrl.onCheckboxChange()">
+	<md-checkbox aria-label="Enable measure" ng-checked="$ctrl.checked" ng-click="$ctrl.onCheckboxClick()">
 		<b ng-show="!$ctrl.renameMode">{{$ctrl.name}}</b>
 	</md-checkbox>
 </div>

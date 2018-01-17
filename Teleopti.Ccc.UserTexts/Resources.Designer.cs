@@ -38188,6 +38188,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You can enable 3 measures at maximum. .
+        /// </summary>
+        public static string YouCanEnable3MeasuresAtMaximum {
+            get {
+                return ResourceManager.GetString("YouCanEnable3MeasuresAtMaximum", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You must provide a description.
         /// </summary>
         public static string YouCannotHaveABlankDescription {

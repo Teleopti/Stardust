@@ -13,6 +13,7 @@
 	function gSettingFormCtrl(dataService, $log, $scope) {
 		var ctrl = this;
 		var enabled = [];
+		var numOfEnabledMeasures = 0;
 		var originalName = '';
 
 		var makeBuiltinMeasureConfigs = function (data) {
@@ -116,6 +117,11 @@
 			ctrl.externalMeasureConfigs = makeExternalMeasureConfigs(data);
 
 			if (enabled.length > 3) $log.error('more than 3 measures are enabled!');
+			numOfEnabledMeasures = enabled.length;
+		};
+
+		ctrl.$onInit = function () {
+			ctrl.errors = {};
 		};
 
 		ctrl.$onChanges = function (changesObj) {
@@ -125,18 +131,20 @@
 		};
 
 		ctrl.enableConfig = function (config, enable) {
+			var maxEnabledMeasures = 3;
 			if (!enable) {
-				config.setEnabled(false);
-				enabled = enabled.filter(function (x) { return x.enabled; });
+				config.setEnabled(false).then(function () { numOfEnabledMeasures--; });
+				if (numOfEnabledMeasures <= maxEnabledMeasures)
+					ctrl.errors.hasReachedLimitOfEnabledMeasures = false;
 				return;
 			}
-
-			config.setEnabled(true);
-			enabled.push(config);
-
-			if (enabled.length > 3) {
-				enabled.shift().setEnabled(false);
+			if (numOfEnabledMeasures + 1 > maxEnabledMeasures) {
+				ctrl.errors.hasReachedLimitOfEnabledMeasures = true;
+				return;
 			}
+			config.setEnabled(true).then(function () {
+				numOfEnabledMeasures++;
+			});
 		}
 
 		ctrl.updateRuleSet = function () {
@@ -237,9 +245,10 @@
 			this.enabled = enable;
 
 			var self = this;
+			var promise;
 
 			if (!this.builtin) {
-				dataService.saveData('ExternalBadgeSettingEnabled', {
+				promise = dataService.saveData('ExternalBadgeSettingEnabled', {
 					GamificationSettingId: ctrl.id,
 					QualityId: this.externalId,
 					Value: enable
@@ -249,12 +258,12 @@
 					$log.log('failed to update enabled. restoring: ' + previous);
 					self.enabled = previous;
 				});
-				return;
+				return promise;
 			}
 
 			switch (this.name) {
 				case 'AnsweredCalls':
-					dataService.saveData('UseBadgeForAnsweredCalls', {
+					promise = dataService.saveData('UseBadgeForAnsweredCalls', {
 						GamificationSettingId: ctrl.id,
 						Value: enable
 					}).then(function () {
@@ -266,7 +275,7 @@
 					break;
 
 				case 'Adherence':
-					dataService.saveData('UseBadgeForAdherence', {
+					promise = dataService.saveData('UseBadgeForAdherence', {
 						GamificationSettingId: ctrl.id,
 						Value: enable
 					}).then(function () {
@@ -278,7 +287,7 @@
 					break;
 
 				case 'AHT':
-					dataService.saveData('UseBadgeForAHT', {
+					promise = dataService.saveData('UseBadgeForAHT', {
 						GamificationSettingId: ctrl.id,
 						Value: enable
 					}).then(function () {
@@ -293,6 +302,7 @@
 					break;
 			}
 
+			return promise;
 		};
 
 		MeasureConfig.prototype.setBadgeThreshold = function (badgeThreshold) {

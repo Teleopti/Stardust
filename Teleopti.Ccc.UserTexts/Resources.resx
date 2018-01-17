@@ -16985,4 +16985,8 @@ Do you want to participate?</value>
     <value>The import failed!</value>
     <comment>Failed BPO import</comment>
   </data>
+  <data name="YouCanEnable3MeasuresAtMaximum" xml:space="preserve">
+    <value>You can enable 3 measures at maximum. </value>
+    <comment>Message shown when the user tries to enable more than 3 measures. </comment>
+  </data>
 </root>
