@@ -164,6 +164,47 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		}
 
 		[Test]
+		public void ShouldNotThrowPermissionCheckExceptionWhenAddOvertimeActivityToAgentWithoutSchedulePeriod()
+		{
+			var person = PersonFactory.CreatePersonWithId();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.MountainTimeZoneInfo());
+			PersonRepository.Add(person);
+			var activity = ActivityFactory.CreateActivity("Phone").WithId();
+			var mainActivity = ActivityFactory.CreateActivity("Phone").WithId();
+			ActivityRepository.Add(activity);
+			ActivityRepository.Add(mainActivity);
+
+
+			var mds = MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("double pay", MultiplicatorType.Overtime);
+			mds.WithId();
+			MultiplicatorDefinitionSetRepository.Add(mds);
+
+			var command = new AddOvertimeActivityCommand
+			{
+				Person = person,
+				Date = new DateOnly(2013, 11, 14),
+				ActivityId = activity.Id.GetValueOrDefault(),
+				Period = new DateTimePeriod(2013, 11, 14, 13, 2013, 11, 14, 18),
+				MultiplicatorDefinitionSetId = mds.Id.GetValueOrDefault(),
+				TrackedCommandInfo = new TrackedCommandInfo
+				{
+					OperatedPersonId = Guid.NewGuid(),
+					TrackId = Guid.NewGuid()
+				}
+			};
+			Target.Handle(command);
+
+			var addedPersonAssignment = PersonAssignmentRepository.LoadAll().Single();
+
+			addedPersonAssignment.Date.Should().Be.EqualTo(command.Date);
+			addedPersonAssignment.Period.Should().Be.EqualTo(command.Period);
+			var overtimeLayer = addedPersonAssignment.ShiftLayers.Single() as OvertimeShiftLayer;
+			overtimeLayer.Should().Not.Be.Null();
+			overtimeLayer.DefinitionSet.Should().Be.EqualTo(mds);
+
+		}
+
+		[Test]
 		public void ShouldNotAddOvertimeActivityWhenActivityPeriodStartDateBeforeScheduleDateAndIntersectedWithAssPeriod()
 		{
 			var person = PersonFactory.CreatePersonWithId();

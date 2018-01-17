@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 {
@@ -37,10 +36,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			var multiplicatorDefinitionSet = _multiplicatorDefinitionSetForId.Load(command.MultiplicatorDefinitionSetId);
 
 			command.ErrorMessages = new List<string>();
-			var dateTime = DateTime.SpecifyKind(command.Date.Date,DateTimeKind.Utc);
-			var loadedPeriod = new DateTimePeriod(dateTime, dateTime);
+			var loadedPeriod = command.Date.ToDateOnlyPeriod();
 
-			var dic = _scheduleStorage.FindSchedulesForPersons(scenario, new[] { person }, new ScheduleDictionaryLoadOptions(false, false), loadedPeriod, new[] { person }, false);
+			var dic = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false), loadedPeriod, scenario);
 			var scheduleRange = dic[person];
 			var scheduleDay = scheduleRange.ScheduledDay(command.Date);
 			if (!isActivityPeriodValid(command, scheduleDay))
@@ -49,6 +47,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				return;
 			}
 			scheduleDay.CreateAndAddOvertime(activity, command.Period, multiplicatorDefinitionSet, false, command.TrackedCommandInfo);
+			((ReadOnlyScheduleDictionary)dic).MakeEditable();
 			dic.Modify(scheduleDay, NewBusinessRuleCollection.Minimum());
 			_scheduleDifferenceSaver.SaveChanges(scheduleRange.DifferenceSinceSnapshot(new DifferenceEntityCollectionService<IPersistableScheduleData>()), (ScheduleRange)scheduleRange);
 		}
