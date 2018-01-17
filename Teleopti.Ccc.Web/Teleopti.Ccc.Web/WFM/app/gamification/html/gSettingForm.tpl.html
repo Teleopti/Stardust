@@ -26,9 +26,9 @@
 </form>
 
 <div>
-	<div>{{'ConfigureMeasures'|translate}}</div>
+	<div>{{'Measures'|translate}}</div>
 	<wfm-card-list multi-select>
-		<wfm-card ng-repeat="config in $ctrl.builtinMeasureConfigs" style="display:block;">
+		<wfm-card ng-repeat="config in $ctrl.builtinMeasureConfigs">
 			<card-header tabindex="-1">
 				<div tabindex="0">
 					<measure-config-header name="config.name" allow-rename="!config.builtin" checked="config.enabled" on-name-update="config.setName(name)"
@@ -37,18 +37,18 @@
 				</div>
 			</card-header>
 			<card-body>
-				<measure-config-form1 ng-if="$ctrl.ruleSet == 0" style="display:block;" read-only="!config.enabled" badge-threshold="config.badgeThreshold" on-update="config.setBadgeThreshold(badgeThreshold)"
+				<measure-config-form1 ng-if="$ctrl.ruleSet == 0" read-only="!config.enabled" badge-threshold="config.badgeThreshold" on-update="config.setBadgeThreshold(badgeThreshold)"
 				 value-format="config.valueFormat" max="config.max" value-data-type="config.dataType">
 				</measure-config-form1>
 
-				<measure-config-form2 ng-if="$ctrl.ruleSet == 1" style="display:block;" read-only="!config.enabled" bronze-badge-threshold="config.bronzeBadgeThreshold"
+				<measure-config-form2 ng-if="$ctrl.ruleSet == 1" read-only="!config.enabled" bronze-badge-threshold="config.bronzeBadgeThreshold"
 				 update-bronze="config.setBronzeBadgeThreshold(bronzeBadgeThreshold)" update-silver="config.setSilverBadgeThreshold(silverBadgeThreshold)"
 				 update-gold="config.setGoldBadgeThreshold(goldBadgeThreshold)" silver-badge-threshold="config.silverBadgeThreshold" gold-badge-threshold="config.goldBadgeThreshold"
 				 value-order="config.valueOrder" value-format="config.valueFormat" max="config.max" value-data-type="config.dataType">
 				</measure-config-form2>
 			</card-body>
 		</wfm-card>
-		<wfm-card ng-repeat="config in $ctrl.externalMeasureConfigs" style="display:block;">
+		<wfm-card ng-repeat="config in $ctrl.externalMeasureConfigs">
 			<card-header tabindex="-1">
 				<div tabindex="0">
 					<measure-config-header name="config.name" allow-rename="!config.builtin" checked="config.enabled" on-name-update="config.setName(name)"
@@ -57,11 +57,11 @@
 				</div>
 			</card-header>
 			<card-body>
-				<measure-config-form1 ng-if="$ctrl.ruleSet == 0" style="display:block;" read-only="!config.enabled" badge-threshold="config.badgeThreshold" value-data-type="config.dataType"
+				<measure-config-form1 ng-if="$ctrl.ruleSet == 0" read-only="!config.enabled" badge-threshold="config.badgeThreshold" value-data-type="config.dataType"
 				 on-update="config.setBadgeThreshold(threshold)">
 				</measure-config-form1>
 
-				<measure-config-form2 ng-if="$ctrl.ruleSet == 1" style="display:block;" read-only="!config.enabled" bronze-badge-threshold="config.bronzeBadgeThreshold"
+				<measure-config-form2 ng-if="$ctrl.ruleSet == 1" read-only="!config.enabled" bronze-badge-threshold="config.bronzeBadgeThreshold"
 				 update-bronze="config.setBronzeBadgeThreshold(bronzeBadgeThreshold)" silver-badge-threshold="config.silverBadgeThreshold"
 				 update-silver="config.setSilverBadgeThreshold(silverBadgeThreshold)" gold-badge-threshold="config.goldBadgeThreshold"
 				 update-gold="config.setGoldBadgeThreshold(goldBadgeThreshold)" value-data-type="config.dataType">

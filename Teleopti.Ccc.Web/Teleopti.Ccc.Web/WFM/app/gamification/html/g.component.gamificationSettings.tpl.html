@@ -1,68 +1,26 @@
-<div>
-    <div class="setting-list">
-        <div class="inline-block setting-name">
-            <md-select aria-label="label" ng-model="$ctrl.currentSettingId" ng-change="$ctrl.settingSelectionChanged()" placeholder="{{'SelectAGamificationSetting'|translate}}">
-                <md-option ng-repeat="setting in $ctrl.settingDescriptors" value="{{setting.GamificationSettingId}}">
-                    <span ng-bind="setting.Value.Name"></span>
-                </md-option>
-            </md-select>
-        </div>
-
-        <div class="icon-button">
-            <button class="wfm-fab  material-depth-1" aria-label="Add setting" ng-click="$ctrl.addNewSetting()" md-labeled-by-tooltip="md-tooltip-1">
-                <i class="mdi mdi-plus"></i>
-            </button>
-        </div>
-
-        <div class="icon-button">
-            <button class="wfm-fab material-depth-1" ng-disabled="$ctrl.settingDescriptors.length==1" aria-label="Delete setting" ng-click="$ctrl.deleteSetting()"
-                md-labeled-by-tooltip="md-tooltip-1">
-                <i class="mdi mdi-close"></i>
-            </button>
-        </div>
-        <div class="inline-block">
-            <button class="wfm-btn wfm-btn-invis-default" ng-click="$ctrl.resetBadges()">{{'ResetBadges'|translate}}</button>
-        </div>
+<div class="con-fluid-row setting-list">
+    <div class="con-fluid-flex">
+        <md-select aria-label="Settings" ng-model="$ctrl.currentSettingId" ng-change="$ctrl.settingSelectionChanged()" placeholder="{{'SelectAGamificationSetting'|translate}}">
+            <md-option ng-repeat="setting in $ctrl.settingDescriptors" value="{{setting.GamificationSettingId}}">
+                <span ng-bind="setting.Value.Name"></span>
+            </md-option>
+        </md-select>
     </div>
-    <g-setting-form style="display: block; max-width: 1000px;" class="setting-propterties wfm-form" setting="$ctrl.settingData"></g-setting-form>
-    <div style="display: none;" class="setting-container">
-        <div class="setting-propterties wfm-form">
-            <div class="con-row">
-                <div class="con-flex">
-                    <div class="form-input-wrap">
-                        <label>{{'Description'|translate}}{{'Colon'|translate}}</label>
-                        <input type="text" class="setting-name-input" ng-model="$ctrl.currentSetting.name" ng-blur="$ctrl.changeSettingDescription()">
-                    </div>
 
-                    <div class="form-input-wrap">
-                        <label>{{'ChangeInfoColon'|translate}}</label>
-                        <p>Updated by {{$ctrl.currentSetting.updated_by}} on {{$ctrl.currentSetting.updated_on}}</p>
-                    </div>
+    <div class="con-fluid-flex">
+        <button class="wfm-btn wfm-btn-invis-default" ng-click="$ctrl.resetBadges()">{{'ResetBadges'|translate}}</button>
+    </div>
 
-                    <div class="form-input-wrap">
-                        <label>{{'Rule'|translate}}{{'Colon'|translate}}</label>
-                        <md-select aria-label="label" id="gamificationSettingType" ng-change="$ctrl.ruleSelectionChanged()" ng-model="$ctrl.currentSetting.rule_id">
-                            <md-option ng-repeat="rule in $ctrl.currentSetting.rules" value="{{rule.id}}">
-                                <span>{{rule.name | translate}}</span>
-                            </md-option>
-                        </md-select>
-                    </div>
-
-                    <div ng-show="$ctrl.currentRule.items">
-                        <div ng-repeat="item in $ctrl.currentRule.items" class="form-input-wrap">
-                            <label>{{item.name | translate}}</label>
-                            <input ng-blur="$ctrl.changeRuleValue(item)" type="number" min="2" ng-model="item.value">
-                        </div>
-                    </div>
-                </div>
-                <div class="con-flex x2"></div>
-            </div>
-        </div>
-        <div class="quality-container">
-            <div class="inline-block material-depth-1 setting-item-panel" ng-repeat="settingInfo in $ctrl.currentSetting.settings">
-                <gamification-setting-info setting-info="settingInfo" current-rule-id="$ctrl.currentSetting.rule_id" save-data-callback="$ctrl.saveData"
-                    current-setting-id="$ctrl.currentSettingId" save-value-callback="$ctrl.saveValue" select-item-callback="$ctrl.reachedMaxSelectedItems"></gamification-setting-info>
-            </div>
-        </div>
+    <div class="con-fluid-flex">
+        <button class="wfm-fab material-depth-1" aria-label="Add setting" ng-click="$ctrl.addNewSetting()">
+            <i class="mdi mdi-plus"></i>
+            <md-tooltip>{{'New'|translate}}</md-tooltip>
+        </button>
+        <button class="wfm-fab material-depth-1" ng-if="$ctrl.settingDescriptors.length > 1" aria-label="Delete setting" ng-click="$ctrl.deleteSetting()">
+            <i class="mdi mdi-close"></i>
+            <md-tooltip>{{'Remove'|translate}}</md-tooltip>
+        </button>
     </div>
 </div>
+
+<g-setting-form class="setting-propterties wfm-form" setting="$ctrl.settingData"></g-setting-form>
