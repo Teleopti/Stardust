@@ -23,10 +23,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			return new[] { new PersonAssignment(Person, Scenario, date) };
 		}
 
-		protected override void WhenOtherHasChanged(IScheduleRange othersScheduleRange)
-		{
-		}
-
 		protected override IScheduleRangePersister CreateTarget()
 		{
 			return new ScheduleRangePersister(CurrentUnitOfWorkFactory.Make(),
@@ -60,10 +56,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			var conflictCollector = MockRepository.GenerateMock<IScheduleRangeConflictCollector>();
 			conflictCollector.Stub(x => x.GetConflicts(null, null)).IgnoreArguments().Return(Enumerable.Empty<PersistConflict>());
 			return conflictCollector;
-		}
-
-		public override void ReassociateDataFor(IPerson person)
-		{
 		}
 	}
 }

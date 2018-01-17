@@ -49,9 +49,5 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			LazyLoadingManager.IsInitialized(conflict.RestrictionCollection.Single().EndTimeLimitation);
 			LazyLoadingManager.IsInitialized(conflict.RestrictionCollection.Single().WorkTimeLimitation);
 		}
-
-		protected override void Then(IScheduleRange myScheduleRange)
-		{
-		}
 	}
 }

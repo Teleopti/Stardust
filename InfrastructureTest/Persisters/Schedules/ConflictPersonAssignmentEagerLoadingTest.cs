@@ -46,9 +46,5 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			LazyLoadingManager.IsInitialized(dbConflict.ShiftCategory).Should().Be.True();
 			LazyLoadingManager.IsInitialized(dbConflict.Scenario).Should().Be.True();
 		}
-
-		protected override void Then(IScheduleRange myScheduleRange)
-		{
-		}
 	}
 }

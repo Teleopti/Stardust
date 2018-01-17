@@ -27,10 +27,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			personAbsence.GetHashCode();
 		}
 
-		protected override void WhenOtherHasChanged(IScheduleRange othersScheduleRange)
-		{
-		}
-
 		protected override void WhenImChanging(IScheduleRange myScheduleRange)
 		{
 			var scheduleDay = myScheduleRange.ScheduledDay(date);

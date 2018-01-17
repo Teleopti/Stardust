@@ -33,6 +33,5 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 
 			WithUnitOfWork.Do(() => PersonAssignments.LoadAll().Single().Person.Should().Be(person));
 		}
-
 	}
 }

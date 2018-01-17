@@ -13,14 +13,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			return Enumerable.Empty<IPersistableScheduleData>();
 		}
 
-		protected override void WhenOtherHasChanged(IScheduleRange othersScheduleRange)
-		{
-		}
-
-		protected override void WhenImChanging(IScheduleRange myScheduleRange)
-		{
-		}
-
 		protected override void Then(IEnumerable<PersistConflict> conflicts)
 		{
 			conflicts.Should().Be.Empty();

@@ -20,11 +20,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules.Performance
 			return new[] { new PersonAssignment(Person, Scenario, date) };
 		}
 
-		protected override void WhenOtherHasChanged(IScheduleRange othersScheduleRange)
-		{
-		}
-
-
 		protected override void WhenImChanging(IScheduleRange myScheduleRange)
 		{
 			var start = new DateTime(2001, 1, 1, 10, 0, 0, DateTimeKind.Utc);
@@ -37,14 +32,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules.Performance
 		{
 			//only assignment should be updated
 			statistics.EntityUpdateCount.Should().Be.EqualTo(1);
-		}
-
-		protected override void Then(IEnumerable<PersistConflict> conflicts)
-		{
-		}
-
-		protected override void Then(IScheduleRange myScheduleRange)
-		{
 		}
 	}
 }

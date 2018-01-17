@@ -16,10 +16,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			return new[] { new PersonAssignment(Person, Scenario, date) };
 		}
 
-		protected override void WhenOtherHasChanged(IScheduleRange othersScheduleRange)
-		{
-		}
-
 		protected override void WhenImChanging(IScheduleRange myScheduleRange)
 		{
 			var day = myScheduleRange.ScheduledDay(new DateOnly(2000, 1, 1));

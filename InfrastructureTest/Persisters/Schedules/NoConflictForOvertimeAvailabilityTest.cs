@@ -37,9 +37,5 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		{
 			conflicts.Should().Be.Empty();
 		}
-
-		protected override void Then(IScheduleRange myScheduleRange)
-		{
-		}
 	}
 }

@@ -25,10 +25,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			return new[] { studAvail };
 		}
 
-		protected override void WhenOtherHasChanged(IScheduleRange othersScheduleRange)
-		{
-		}
-
 		protected override void WhenImChanging(IScheduleRange myScheduleRange)
 		{
 			var day = myScheduleRange.ScheduledDay(date);

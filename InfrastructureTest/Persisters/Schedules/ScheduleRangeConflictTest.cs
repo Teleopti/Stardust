@@ -12,10 +12,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 {
 	public abstract class ScheduleRangeConflictTest : ScheduleRangePersisterBaseTest
 	{
-		protected abstract void WhenOtherHasChanged(IScheduleRange othersScheduleRange);
-		protected abstract void WhenImChanging(IScheduleRange myScheduleRange);
-		protected abstract void Then(IEnumerable<PersistConflict> conflicts);
-		protected abstract void Then(IScheduleRange myScheduleRange);
+		protected virtual void WhenOtherHasChanged(IScheduleRange othersScheduleRange){}
+		protected virtual void WhenImChanging(IScheduleRange myScheduleRange){}
+		protected virtual void Then(IEnumerable<PersistConflict> conflicts){}
+		protected virtual void Then(IScheduleRange myScheduleRange){}
 		protected virtual void Then(IStatistics statistics){}
 
 		[Test]

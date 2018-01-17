@@ -52,9 +52,5 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			LazyLoadingManager.IsInitialized(prefDay.Restriction);
 			LazyLoadingManager.IsInitialized(prefDay.Restriction);
 		}
-
-		protected override void Then(IScheduleRange myScheduleRange)
-		{
-		}
 	}
 }

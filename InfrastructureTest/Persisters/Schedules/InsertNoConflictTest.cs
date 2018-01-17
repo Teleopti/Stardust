@@ -15,11 +15,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			return Enumerable.Empty<IPersistableScheduleData>();
 		}
 
-		protected override void WhenOtherHasChanged(IScheduleRange othersScheduleRange)
-		{
-		}
-
-
 		protected override void WhenImChanging(IScheduleRange myScheduleRange)
 		{
 			var start = new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc);
