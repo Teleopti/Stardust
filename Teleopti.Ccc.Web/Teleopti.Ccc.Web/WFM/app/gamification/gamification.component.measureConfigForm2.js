@@ -67,33 +67,49 @@
 					if (event && event.which === 13) {
 						event.target.blur();
 					}
+
+					checkValueOrder();
 				}
 
-				function checkValueOrder(current, target) {
-					if (!ctrl.valueDataType) {
+				function checkValueOrder() {
+					if (!ctrl.valueDataType || !ctrl.valueOrder) {
 						return;
 					}
-
+					var valueOrder = ctrl.valueOrder;
 					if (valueOrder == 'asc') {
 						if (ctrl.valueDataType == '0' || ctrl.valueDataType == '1') {
-							if (parseFloat(current) < parseFloat(target)) {
-								return 'Glod value should be large than others';
+							var glodValue = parseFloat(ctrl._goldBadgeThreshold);
+							if (glodValue > parseFloat(ctrl._silverBadgeThreshold) || glodValue > parseFloat(ctrl._bronzeBadgeThreshold)) {
+								ctrl.errorMsg = 'GoldValueShouldSmallerThenRest';
+							}
+							else {
+								ctrl.errorMsg = '';
 							}
 						}
 						else {
-							if (convertValueForTime(current) < convertValueForTime(target)) {
-								return 'Glod value should be large than others';
+							var glodValue = convertValueForTime(ctrl._goldBadgeThreshold);
+							if (glodValue > convertValueForTime(ctrl._silverBadgeThreshold) || glodValue > convertValueForTime(ctrl._bronzeBadgeThreshold)) {
+								ctrl.errorMsg = 'GoldValueShouldSmallerThenRest';
+							} else {
+								ctrl.errorMsg = '';
 							}
 						}
 					} else if (valueOrder == 'desc') {
 						if (ctrl.valueDataType == '0' || ctrl.valueDataType == '1') {
-							if (parseFloat(current) < parseFloat(target)) {
-								return 'Glod value should be large than others';
+							var glodValue = parseFloat(ctrl._goldBadgeThreshold);
+							if (glodValue < parseFloat(ctrl._silverBadgeThreshold) || glodValue < parseFloat(ctrl._bronzeBadgeThreshold)) {
+								ctrl.errorMsg = "GoldValueShouldLargerThenRest";
+							}
+							else {
+								ctrl.errorMsg = '';
 							}
 						}
 						else {
-							if (convertValueForTime(current) < convertValueForTime(target)) {
-								return 'Glod value should be large than others';
+							var glodValue = convertValueForTime(ctrl._goldBadgeThreshold);
+							if (glodValue < convertValueForTime(ctrl._silverBadgeThreshold) || glodValue < convertValueForTime(ctrl._bronzeBadgeThreshold)) {
+								ctrl.errorMsg = 'GoldValueShouldLargerThenRest';
+							} else {
+								ctrl.errorMsg = '';
 							}
 						}
 					}

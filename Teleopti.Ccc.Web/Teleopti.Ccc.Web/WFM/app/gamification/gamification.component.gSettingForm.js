@@ -51,7 +51,7 @@
 				data.AdherenceSilverThreshold.Value,
 				data.AdherenceGoldThreshold.Value,
 				'^0.\\d+$',
-				20.0,
+				100.0,
 				'desc'
 			);
 			measureConfigs.push(adherence);

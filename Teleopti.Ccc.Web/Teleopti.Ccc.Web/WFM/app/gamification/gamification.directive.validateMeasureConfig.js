@@ -22,7 +22,8 @@
 					}
 
 					ngModel.$validators.validFormat = function (modelValue, viewValue) {
-						var valid = validate(modelValue, pattern);
+						var value = modelValue || viewValue;
+						var valid = validate(value, pattern);
 
 						return valid;
 					};
