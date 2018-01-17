@@ -8,6 +8,7 @@ using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration.Columns;
@@ -70,6 +71,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			if (selectedModelOvertimeRequestMaximumTime.HasValue && selectedModelOvertimeRequestMaximumTime.Value != TimeSpan.Zero) { 
 				timeSpanTextBoxOvertimeRequestMaximumTime.SetInitialResolution(selectedModelOvertimeRequestMaximumTime.Value);
 				comboBoxOvertimeRequestMaximumTimeHandleType.Enabled = true;
+			}
+		}
+
+		private void checkOvertimeProbabilityLicense()
+		{
+			var licenseAvailability = new LicenseAvailability(CurrentDataSource.Make());
+			if (!licenseAvailability.IsLicenseEnabled(DefinedLicenseOptionPaths.TeleoptiCccOvertimeAvailability) &&
+				!licenseAvailability.IsLicenseEnabled(DefinedLicenseOptionPaths.TeleoptiWfmOvertimeRequests))
+			{
+				checkBoxAdvOvertimeProbability.Visible = false;
 			}
 		}
 
