@@ -53,13 +53,16 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void DeleteFactScheduleAfterTerminalDate(Guid personCode, DateTime terminalDate)
 		{
+			var leavingDate = terminalDate.Date.AddDays(1);
 			var periods = _personPeriodRepository.GetPersonPeriods(personCode)
-				.Where(x => x.ValidFromDate <= terminalDate && terminalDate <= x.ValidToDate);
-			var personId = periods.First().PersonId;
+				.Where(x => x.ValidFromDate <= leavingDate && leavingDate <= x.ValidToDate).ToList();
+			if (periods.Count != 1) return;
+
+			var personId = periods.Single().PersonId;
 			FactScheduleRows.RemoveAll(x => x.PersonPart != null
 											&& x.PersonPart.PersonId == personId
 											&& x.DatePart != null
-											&& x.DatePart.ActivityStartTime >= terminalDate);
+											&& x.DatePart.ActivityStartTime >= leavingDate);
 		}
 
 		public IList<IAnalyticsShiftLength> ShiftLengths()
