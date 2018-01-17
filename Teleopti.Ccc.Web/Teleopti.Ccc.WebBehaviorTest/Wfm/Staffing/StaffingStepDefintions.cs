@@ -153,7 +153,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Staffing
 				"#teamschedule-datepicker-input",
 				date
 			);
-			Thread.Sleep(400);
+			Thread.Sleep(600);
 			Browser.Interactions.PressEnter("#teamschedule-datepicker-input");
 		}
 
@@ -201,6 +201,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Staffing
 		public void WhenTogglingUsingShrinkageToOn()
 		{
 			Browser.Interactions.Click("md-checkbox");
+			Thread.Sleep(400);
 			Browser.Interactions.AssertJavascriptResultContains(
 				"var scope = angular.element(document.querySelector('md-checkbox')).scope();" +
 				"var isUsingShrinkage = scope.vm.useShrinkage;" +
