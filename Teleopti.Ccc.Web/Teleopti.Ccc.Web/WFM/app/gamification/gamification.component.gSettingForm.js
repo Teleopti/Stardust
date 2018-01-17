@@ -159,6 +159,7 @@
 		};
 
 		ctrl.updateSilverRate = function () {
+			if (!ctrl.silverRate) return;
 			dataService.saveData('SilverToBronzeBadgeRate', {
 				GamificationSettingId: ctrl.id,
 				Rate: ctrl.silverRate
@@ -170,6 +171,7 @@
 		};
 
 		ctrl.updateGoldRate = function () {
+			if (!ctrl.goldRate) return;
 			dataService.saveData('GoldToSilverBadgeRate', {
 				GamificationSettingId: ctrl.id,
 				Rate: ctrl.goldRate
