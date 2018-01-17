@@ -46,8 +46,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		public IDataSourceScope DataSourceScope;
 		public IPersonRepository Persons;
 		public Lazy<FakeDatabase> Database;
-
-		private IDisposable _authorizationScope;
+		
 		private IDisposable _tenantScope;
 		private Person _loggedOnPerson;
 
