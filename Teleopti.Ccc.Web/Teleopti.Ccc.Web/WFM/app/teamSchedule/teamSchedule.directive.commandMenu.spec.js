@@ -51,7 +51,7 @@
 	}));
 
 	it('should view menu when add absence is permitted', function () {
-		var html = '<teamschedule-command-menu></teamschedule-command>';
+		var html = '<teamschedule-command-menu></teamschedule-command-menu>';
 		var scope = $rootScope.$new();
 		scope.vm = {
 			toggleCurrentSidenav: function () { }
@@ -74,7 +74,7 @@
 	});
 
 	it('should view menu when add activity is permitted', function () {
-		var html = '<teamschedule-command-menu></teamschedule-command>';
+		var html = '<teamschedule-command-menu></teamschedule-command-menu>';
 		var scope = $rootScope.$new();
 		scope.vm = {
 			toggleCurrentSidenav: function () { }
@@ -96,7 +96,7 @@
 	});
 
 	it('should view menu when add personal activity is permitted', function () {
-		var html = '<teamschedule-command-menu></teamschedule-command>';
+		var html = '<teamschedule-command-menu></teamschedule-command-menu>';
 		var scope = $rootScope.$new();
 		scope.vm = {
 			toggleCurrentSidenav: function () { }
@@ -118,7 +118,7 @@
 	});
 
 	it('should view menu when move activity is permitted', function () {
-		var html = '<teamschedule-command-menu></teamschedule-command>';
+		var html = '<teamschedule-command-menu></teamschedule-command-menu>';
 		var scope = $rootScope.$new();
 		scope.vm = {
 			toggleCurrentSidenav: function () { }
@@ -143,7 +143,7 @@
 		toggles.set({
 			WfmTeamSchedule_MoveOvertimeActivity_44888: true
 		});
-		var html = '<teamschedule-command-menu></teamschedule-command>';
+		var html = '<teamschedule-command-menu></teamschedule-command-menu>';
 		var scope = $rootScope.$new();
 		scope.vm = {
 			toggleCurrentSidenav: function () { }
@@ -165,7 +165,7 @@
 	});
 
 	it('should view menu when swap shift is permitted', function () {
-		var html = '<teamschedule-command-menu></teamschedule-command>';
+		var html = '<teamschedule-command-menu></teamschedule-command-menu>';
 		var scope = $rootScope.$new();
 		scope.vm = {
 			toggleCurrentSidenav: function () { }
@@ -187,7 +187,7 @@
 	});
 
 	it('should view menu when remove absence is permitted', function () {
-		var html = '<teamschedule-command-menu></teamschedule-command>';
+		var html = '<teamschedule-command-menu></teamschedule-command-menu>';
 		var scope = $rootScope.$new();
 		scope.vm = {
 			toggleCurrentSidenav: function () { }
@@ -209,7 +209,7 @@
 	});
 
 	it('should view menu when remove activity is permitted', function () {
-		var html = '<teamschedule-command-menu></teamschedule-command>';
+		var html = '<teamschedule-command-menu></teamschedule-command-menu>';
 		var scope = $rootScope.$new();
 		scope.vm = {
 			toggleCurrentSidenav: function () { }
@@ -231,7 +231,7 @@
 	});
 
 	it('should view menu when undo schedule is permitted', function () {
-		var html = '<teamschedule-command-menu></teamschedule-command>';
+		var html = '<teamschedule-command-menu></teamschedule-command-menu>';
 		var scope = $rootScope.$new();
 		scope.vm = {
 			toggleCurrentSidenav: function () { }
@@ -247,7 +247,7 @@
 	});
 
 	it('should view day off menu when toggle is on', function () {
-		var html = '<teamschedule-command-menu></teamschedule-command>';
+		var html = '<teamschedule-command-menu></teamschedule-command-menu>';
 		var scope = $rootScope.$new();
 		scope.vm = {
 			toggleCurrentSidenav: function () { }
@@ -266,12 +266,12 @@
 
 
 	it('should add day off menu item unclickable unless at least one person is selected', function () {
-		var html = '<teamschedule-command-menu></teamschedule-command>';
-		var scope = $rootScope.$new();
 		var date = "2018-01-16";
+		var html = '<teamschedule-command-menu selected-date="vm.selectedDate"></teamschedule-command-menu>';
+		var scope = $rootScope.$new();
 		scope.vm = {
 			toggleCurrentSidenav: function () { },
-			selectedDate: new Date(date)
+			selectedDate: date
 		};
 
 		var element = $compile(html)(scope);
@@ -288,42 +288,41 @@
 	});
 
 	it('should remove day off menu item unclickable unless day off on view date is selected', function () {
-		var html = '<teamschedule-command-menu></teamschedule-command>';
+		var html = '<teamschedule-command-menu selected-date="vm.selectedDate"></teamschedule-command-menu>';
 		var scope = $rootScope.$new();
 		var date = "2018-01-16";
 		scope.vm = {
 			toggleCurrentSidenav: function () { },
 			selectedDate: new Date(date)
 		};
-
 		var element = $compile(html)(scope);
 		scope.$apply();
 
 		var menuListItemForRemovingDayOff = angular.element(element[0].querySelector('.wfm-list #menuItemRemoveDayOff'));
 		expect(menuListItemForRemovingDayOff[0].disabled).toEqual(true);
 
-		
+
 		var selectedAgents = [
 			{
 				PersonId: 'agent1',
 				Name: 'agent1',
 				Checked: true,
-				SelectedDayOffs: [{Date: '2018-01-15'}]
-			}];		
+				SelectedDayOffs: [{ Date: '2018-01-15' }]
+			}];
 		personSelectionSvc.setFakeCheckedPersonInfoList(selectedAgents);
 		scope.$apply();
 
 		menuListItemForRemovingDayOff = angular.element(element[0].querySelector('.wfm-list #menuItemRemoveDayOff'));
 		expect(menuListItemForRemovingDayOff[0].disabled).toEqual(true);
 
-		
+
 		var selectedAgents = [
 			{
 				PersonId: 'agent1',
 				Name: 'agent1',
 				Checked: true,
-				SelectedDayOffs: [{Date: date}]
-			}];		
+				SelectedDayOffs: [{ Date: date }]
+			}];
 		personSelectionSvc.setFakeCheckedPersonInfoList(selectedAgents);
 		scope.$apply();
 
@@ -468,17 +467,17 @@
 		this.getCheckedPersonIds = function () {
 			return personIds;
 		};
-		this.getCheckedPersonInfoList = function() {
+		this.getCheckedPersonInfoList = function () {
 			return fakePersonList;
 		};
-		this.setFakeCheckedPersonInfoList = function(input){
+		this.setFakeCheckedPersonInfoList = function (input) {
 			fakePersonList = input;
 		}
 
 	}
 
 	function FakeToggles() {
-		var _toggles = { WfmTeamSchedule_AddNDeleteDayOff_40555: true};
+		var _toggles = { WfmTeamSchedule_AddNDeleteDayOff_40555: true };
 		this.set = function (toggles) {
 			_toggles = toggles;
 		}
