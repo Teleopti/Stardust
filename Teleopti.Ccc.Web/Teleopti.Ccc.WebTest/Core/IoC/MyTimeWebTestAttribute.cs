@@ -1,20 +1,30 @@
 using System;
+using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
+using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
+using Teleopti.Ccc.Infrastructure.Licensing;
+using Teleopti.Ccc.Infrastructure.MultiTenancy;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Web;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory;
@@ -26,6 +36,21 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 {
 	public class MyTimeWebTestAttribute : IoCTestAttribute
 	{
+		public static string DefaultTenantName = "default";
+		public static Guid DefaultBusinessUnitId = Guid.NewGuid();
+
+		public IAuthorizationScope AuthorizationScope;
+		public IAuthorization Authorization;
+		public IThreadPrincipalContext PrincipalContext;
+		public FakeDataSourceForTenant DataSourceForTenant;
+		public IDataSourceScope DataSourceScope;
+		public IPersonRepository Persons;
+		public Lazy<FakeDatabase> Database;
+
+		private IDisposable _authorizationScope;
+		private IDisposable _tenantScope;
+		private Person _loggedOnPerson;
+
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			var principalAuthorization = new FullPermission();
@@ -81,6 +106,59 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			system.UseTestDouble<SiteOpenHourProvider>().For<ISiteOpenHourProvider>();
 			system.UseTestDouble<ScheduledSkillOpenHourProvider>().For<IScheduledSkillOpenHourProvider>();
 			system.UseTestDouble<StaffingDataAvailablePeriodProvider>().For<IStaffingDataAvailablePeriodProvider>();
+
+			// Tenant (and datasource) stuff
+			var tenants = new FakeTenants();
+			tenants.Has(DefaultTenantName, LegacyAuthenticationKey.TheKey);
+			system.UseTestDouble(tenants).For<IFindTenantNameByRtaKey, ICountTenants, ILoadAllTenants, IFindTenantByName, IAllTenantNames>();
+			system.UseTestDouble<TenantAuthenticationFake>().For<ITenantAuthentication>();
+			system.UseTestDouble<TenantUnitOfWorkFake>().For<ITenantUnitOfWork>();
+			system.UseTestDouble<FakeDataSourceForTenant>().For<IDataSourceForTenant>();
+			system.UseTestDouble<FakeDataSourcesFactory>().For<IDataSourcesFactory>();
+			system.AddService<FakeDatabase>();
+
+			//license
+			system.UseTestDouble<FakeLicenseRepository>().For<ILicenseRepository, ILicenseRepositoryForLicenseVerifier>();
+		}
+
+		protected override void BeforeTest()
+		{
+			base.BeforeTest();
+
+			fakeSignin();
+		}
+
+		private void fakeSignin()
+		{
+			var signedIn = QueryAllAttributes<LoggedOffAttribute>().IsEmpty();
+			if (signedIn)
+			{
+				_loggedOnPerson = new Person()
+					.WithName(new Name("Fake", "Login"))
+					.WithId();
+				_loggedOnPerson.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+				_loggedOnPerson.PermissionInformation.SetCulture(CultureInfoFactory.CreateEnglishCulture());
+				_loggedOnPerson.PermissionInformation.SetUICulture(CultureInfoFactory.CreateEnglishCulture());
+
+				var principal = new TeleoptiPrincipal(
+					new TeleoptiIdentity(
+						"Fake Login",
+						DataSourceForTenant.Tenant(DefaultTenantName),
+						new BusinessUnit("loggedOnBu").WithId(),
+						null,
+						null
+					),
+					_loggedOnPerson);
+
+				PrincipalContext.SetCurrentPrincipal(principal);
+			}
+			else
+			{
+				// assuming that if you specify default data you are using FakeDatabase...
+				// ... and thereby you want a current tenant for it to work...
+				if (QueryAllAttributes<DefaultDataAttribute>().Any())
+					_tenantScope = DataSourceScope.OnThisThreadUse(DefaultTenantName);
+			}
 		}
 	}
 }

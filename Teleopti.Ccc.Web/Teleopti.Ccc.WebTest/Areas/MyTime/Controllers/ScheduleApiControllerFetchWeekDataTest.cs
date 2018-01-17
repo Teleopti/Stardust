@@ -26,6 +26,8 @@ using Teleopti.Ccc.WebTest.Core.IoC;
 using Teleopti.Interfaces.Domain;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Infrastructure.Licensing;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 {
@@ -43,6 +45,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public FakePersonRequestRepository PersonRequestRepository;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeMeetingRepository MeetingRepository;
+		public ICurrentDataSource CurrentDataSource;
 
 		[Test]
 		public void ShouldMap()
@@ -61,6 +64,71 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var workFlowControlSet = new WorkflowControlSet();
 			workFlowControlSet.OvertimeProbabilityEnabled= true;
+			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
+
+			var result = Target.FetchWeekData(null);
+			result.OvertimeProbabilityEnabled.Should().Be(true);
+		}
+
+		[Test]
+		public void ShouldReturnOvertimeProbabilityEnabledFalseWhenItHasBeenToggledOffInFatClient()
+		{
+			var workFlowControlSet = new WorkflowControlSet
+			{
+				OvertimeProbabilityEnabled = false
+			};
+			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
+
+			var result = Target.FetchWeekData(null);
+			result.OvertimeProbabilityEnabled.Should().Be(false);
+		}
+
+		[Test]
+		public void ShouldReturnFalseForOvertimeProbabilityEnabledWhenOvertimeRequestsAndOvertimeAvailabilityLicensesAreNotAvailable()
+		{
+			var licenseActivator = LicenseProvider.GetLicenseActivator(new OvertimeFakeLicenseService(false, false));
+			DefinedLicenseDataFactory.SetLicenseActivator(CurrentDataSource.CurrentName(), licenseActivator);
+
+			var workFlowControlSet = new WorkflowControlSet { OvertimeProbabilityEnabled = true };
+			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
+
+			var result = Target.FetchWeekData(null);
+			result.OvertimeProbabilityEnabled.Should().Be(false);
+		}
+
+		[Test]
+		public void ShouldReturnTrueForOvertimeProbabilityEnabledWhenOvertimeAvailabilityLicenseIsAvailable()
+		{
+			var licenseActivator = LicenseProvider.GetLicenseActivator(new OvertimeFakeLicenseService(true, false));
+			DefinedLicenseDataFactory.SetLicenseActivator(CurrentDataSource.CurrentName(), licenseActivator);
+
+			var workFlowControlSet = new WorkflowControlSet { OvertimeProbabilityEnabled = true };
+			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
+
+			var result = Target.FetchWeekData(null);
+			result.OvertimeProbabilityEnabled.Should().Be(true);
+		}
+
+		[Test]
+		public void ShouldReturnTrueForOvertimeProbabilityEnabledWhenOvertimeRequestsLicenseIsAvailable()
+		{
+			var licenseActivator = LicenseProvider.GetLicenseActivator(new OvertimeFakeLicenseService(false, true));
+			DefinedLicenseDataFactory.SetLicenseActivator(CurrentDataSource.CurrentName(), licenseActivator);
+
+			var workFlowControlSet = new WorkflowControlSet { OvertimeProbabilityEnabled = true };
+			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
+
+			var result = Target.FetchWeekData(null);
+			result.OvertimeProbabilityEnabled.Should().Be(true);
+		}
+
+		[Test]
+		public void ShouldReturnTrueForOvertimeProbabilityEnabledWhenOvertimeAvailabilityAndOvertimeRequestsLicenseAreBothAvailable()
+		{
+			var licenseActivator = LicenseProvider.GetLicenseActivator(new OvertimeFakeLicenseService(true, true));
+			DefinedLicenseDataFactory.SetLicenseActivator(CurrentDataSource.CurrentName(), licenseActivator);
+
+			var workFlowControlSet = new WorkflowControlSet { OvertimeProbabilityEnabled = true };
 			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
 
 			var result = Target.FetchWeekData(null);
