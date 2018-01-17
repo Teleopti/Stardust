@@ -25,14 +25,16 @@
 		ctrl.getSettingById = function (id) {
 			gamificationSettingService.getSettingById(id).then(function (data) {
 				ctrl.settingData = data;
-				var settingData = ctrl.convertSettingToModel(data);
-				if (!ctrl.findElementInArray(ctrl.allSettings, settingData.id)) {
-					ctrl.allSettings.push(settingData);
-				}
+				ctrl.currentSettingId = data.Id;
+				ctrl.allSettings.push(data);
+				// var settingData = ctrl.convertSettingToModel(data);
+				// if (!ctrl.findElementInArray(ctrl.allSettings, settingData.id)) {
+				// 	ctrl.allSettings.push(settingData);
+				// }
 
-				ctrl.currentSetting = settingData;
-				ctrl.currentSettingId = settingData.id;
-				ctrl.resetRuleSelection();
+				// ctrl.currentSetting = settingData;
+				// ctrl.currentSettingId = settingData.id;
+				// ctrl.resetRuleSelection();
 			});
 		};
 
@@ -253,8 +255,7 @@
 				if (!setting) {
 					ctrl.getSettingById(ctrl.currentSettingId);
 				} else {
-					ctrl.currentSetting = setting;
-					ctrl.resetRuleSelection();
+					ctrl.settingData = setting;
 				}
 			}
 		};
@@ -281,7 +282,7 @@
 			if (target && target.length > 0) {
 				for (var index = 0; index < target.length; index++) {
 					var item = target[index];
-					if (item.id == id) {
+					if (item.Id == id) {
 						return item;
 					}
 				}
