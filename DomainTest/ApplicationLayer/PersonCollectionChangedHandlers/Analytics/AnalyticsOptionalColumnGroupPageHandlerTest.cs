@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
@@ -21,6 +22,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		public FakeOptionalColumnRepository OptionalColumnRepository;
 		public FakeAnalyticsGroupPageRepository AnalyticsGroupPageRepository;
 		public FakeAnalyticsBridgeGroupPagePersonRepository AnalyticsBridgeGroupPagePersonRepository;
+		public FakePersonRepository PersonRepository;
+		public FakeBusinessUnitRepository BusinessUnitRepository;
 
 		private Guid _businessUnitId;
 		private Guid _entityId;
@@ -117,9 +120,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			OptionalColumnRepository.AddPersonValues(person1.OptionalColumnValueCollection.First());
 			OptionalColumnRepository.AddPersonValues(person2.OptionalColumnValueCollection.First());
 			OptionalColumnRepository.AddPersonValues(person3.OptionalColumnValueCollection.First());
-			AnalyticsBridgeGroupPagePersonRepository.WithPersonMapping(person1.Id.Value, 5);
-			AnalyticsBridgeGroupPagePersonRepository.WithPersonMapping(person2.Id.Value, 6);
-			AnalyticsBridgeGroupPagePersonRepository.WithPersonMapping(person3.Id.Value, 7);
+			AnalyticsBridgeGroupPagePersonRepository.WithPersonMapping(person1.Id.GetValueOrDefault(), 5);
+			AnalyticsBridgeGroupPagePersonRepository.WithPersonMapping(person2.Id.GetValueOrDefault(), 6);
+			AnalyticsBridgeGroupPagePersonRepository.WithPersonMapping(person3.Id.GetValueOrDefault(), 7);
 
 			new FakePersonRepositoryLegacy(new IPerson[] {person1, person2, person3});
 
@@ -128,7 +131,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 			Target.Handle(message);
 
-			IEnumerable<AnalyticsGroup> analyticsGroups =AnalyticsGroupPageRepository.GetGroupPage(optionalColumn.Id.Value, _businessUnitId);
+			IEnumerable<AnalyticsGroup> analyticsGroups =AnalyticsGroupPageRepository.GetGroupPage(optionalColumn.Id.GetValueOrDefault(), _businessUnitId).ToList();
 			var groupCode1 = analyticsGroups.Single(x => x.GroupName == "group1").GroupCode;
 			var groupCode2 = analyticsGroups.Single(x => x.GroupName == "group2").GroupCode;
 
@@ -165,7 +168,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 			Target.Handle(message);
 
-			IEnumerable<AnalyticsGroup> analyticsGroups = AnalyticsGroupPageRepository.GetGroupPage(optionalColumn.Id.Value, _businessUnitId);
+			IEnumerable<AnalyticsGroup> analyticsGroups = AnalyticsGroupPageRepository.GetGroupPage(optionalColumn.Id.GetValueOrDefault(), _businessUnitId);
 
 			analyticsGroups
 				.Should().Be.Empty();
@@ -174,7 +177,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		}
 
 		[Test]
-		public void ShouldUpdateDynamicOptionalColumnGroupPageForChangedPerson()
+		public void ShouldCreateGroupPageForTwoPersonsWithSameValue()
 		{
 			IOptionalColumn optionalColumn = new OptionalColumn("opt1")
 			{
@@ -182,18 +185,194 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			};
 			optionalColumn.SetId(_entityId);
 			var person1 = new Person().WithId();
-			person1.AddOptionalColumnValue(new OptionalColumnValue("group1"), optionalColumn);
 			var person2 = new Person().WithId();
+			person1.AddOptionalColumnValue(new OptionalColumnValue("group1"), optionalColumn);
+			person2.AddOptionalColumnValue(new OptionalColumnValue("group1"), optionalColumn);
 
 			OptionalColumnRepository.Add(optionalColumn);
 			OptionalColumnRepository.AddPersonValues(person1.OptionalColumnValueCollection.First());
-			new FakePersonRepositoryLegacy(new IPerson[] { person1});
+			OptionalColumnRepository.AddPersonValues(person2.OptionalColumnValueCollection.First());
+			AnalyticsBridgeGroupPagePersonRepository.WithPersonMapping(person1.Id.GetValueOrDefault(), 5);
+			AnalyticsBridgeGroupPagePersonRepository.WithPersonMapping(person2.Id.GetValueOrDefault(), 6);
+			AnalyticsGroupPageRepository.AnalyticsBridgeGroupPagePersonRepository = AnalyticsBridgeGroupPagePersonRepository;
+			PersonRepository.Add(person1);
+			PersonRepository.Add(person2);
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(_businessUnitId));
 
-			var message = new PersonCollectionChangedEvent { LogOnBusinessUnitId = _businessUnitId };
-			//message.PersonIdCollection = new List<Guid>()
-			//{
-			//	person1.Id.Value
-			//};
+			var personCollectionChangedEvent = new PersonCollectionChangedEvent
+			{
+				LogOnBusinessUnitId = _businessUnitId,
+				SerializedPeople = $"{person1.Id.GetValueOrDefault()},{person2.Id.GetValueOrDefault()}"
+			};
+
+			Target.Handle(personCollectionChangedEvent);
+
+			IEnumerable<AnalyticsGroup> analyticsGroups = AnalyticsGroupPageRepository.GetGroupPage(optionalColumn.Id.GetValueOrDefault(), _businessUnitId).ToList();
+			var groupCode1 = analyticsGroups.Single(x => x.GroupName == "group1").GroupCode;
+
+			analyticsGroups.Count()
+				.Should().Be.EqualTo(1);
+			analyticsGroups.SingleOrDefault(x => x.GroupPageCode == _entityId && x.GroupPageName == "opt1" && x.GroupName == "group1" && x.GroupIsCustom == false)
+				.Should().Not.Be.Null();
+			AnalyticsBridgeGroupPagePersonRepository.Bridges.Count
+				.Should().Be.EqualTo(2);
+			AnalyticsBridgeGroupPagePersonRepository.Bridges.SingleOrDefault(x => x.PersonCode == person1.Id.Value && x.GroupCode == groupCode1)
+				.Should().Not.Be.Null();
+			AnalyticsBridgeGroupPagePersonRepository.Bridges.SingleOrDefault(x => x.PersonCode == person2.Id.Value && x.GroupCode == groupCode1)
+				.Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldUpdateExistingGroupPageForOneChangedPerson()
+		{
+			var person1 = new Person();
+			person1.SetId(_bridgePersonGroupPage.PersonCode);
+			AnalyticsGroupPageRepository.AddGroupPageIfNotExisting(_analyticsGroupPage);
+			AnalyticsBridgeGroupPagePersonRepository
+				.Has(_bridgePersonGroupPage)
+				.WithPersonMapping(_bridgePersonGroupPage.PersonCode, _bridgePersonGroupPage.PersonId);
+			AnalyticsGroupPageRepository.AnalyticsBridgeGroupPagePersonRepository = AnalyticsBridgeGroupPagePersonRepository;
+
+			IOptionalColumn optionalColumn = new OptionalColumn(_analyticsGroupPage.GroupPageName)
+			{
+				AvailableAsGroupPage = true
+			};
+			optionalColumn.SetId(_entityId);
+			person1.AddOptionalColumnValue(new OptionalColumnValue("My new group"), optionalColumn);
+
+			OptionalColumnRepository.Add(optionalColumn);
+			OptionalColumnRepository.AddPersonValues(person1.OptionalColumnValueCollection.First());
+			PersonRepository.Add(person1);
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(_businessUnitId));
+
+			var personCollectionChangedEvent = new PersonCollectionChangedEvent
+			{
+				LogOnBusinessUnitId = _businessUnitId,
+				SerializedPeople = $"{person1.Id.GetValueOrDefault()}"
+			};
+
+			Target.Handle(personCollectionChangedEvent);
+
+			IEnumerable<AnalyticsGroup> analyticsGroups = AnalyticsGroupPageRepository.GetGroupPage(optionalColumn.Id.GetValueOrDefault(), _businessUnitId).ToList();
+			var groupCode1 = analyticsGroups.Single(x => x.GroupName == "My new group").GroupCode;
+
+			analyticsGroups.Count()
+				.Should().Be.EqualTo(1);
+			analyticsGroups.SingleOrDefault(x => x.GroupPageCode == _entityId && x.GroupPageName == "opt1" && x.GroupName == "My new group" && x.GroupIsCustom == false)
+				.Should().Not.Be.Null();
+			AnalyticsBridgeGroupPagePersonRepository.Bridges.Count
+				.Should().Be.EqualTo(1);
+			AnalyticsBridgeGroupPagePersonRepository.Bridges.SingleOrDefault(x => x.PersonCode == person1.Id.GetValueOrDefault() && x.GroupCode == groupCode1)
+				.Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldRemoveUnusedGroupPage()
+		{
+			var person1 = new Person();
+			person1.SetId(_bridgePersonGroupPage.PersonCode);
+
+			AnalyticsGroupPageRepository.AddGroupPageIfNotExisting(_analyticsGroupPage);
+			AnalyticsBridgeGroupPagePersonRepository
+				.Has(_bridgePersonGroupPage)
+				.WithPersonMapping(_bridgePersonGroupPage.PersonCode, _bridgePersonGroupPage.PersonId);
+			AnalyticsGroupPageRepository.AnalyticsBridgeGroupPagePersonRepository = AnalyticsBridgeGroupPagePersonRepository;
+
+			IOptionalColumn optionalColumn = new OptionalColumn(_analyticsGroupPage.GroupPageName)
+			{
+				AvailableAsGroupPage = true
+			};
+			optionalColumn.SetId(_entityId);
+
+			OptionalColumnRepository.Add(optionalColumn);
+			PersonRepository.Add(person1);
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(_businessUnitId));
+
+			var personCollectionChangedEvent = new PersonCollectionChangedEvent
+			{
+				LogOnBusinessUnitId = _businessUnitId,
+				SerializedPeople = $"{person1.Id.GetValueOrDefault()}"
+			};
+
+			Target.Handle(personCollectionChangedEvent);
+
+			var analyticsGroups = AnalyticsGroupPageRepository.GetGroupPage(optionalColumn.Id.GetValueOrDefault(), _businessUnitId).ToList();
+			analyticsGroups.Any().Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldNotChangeExistingGroupPageWhenNoChangesToOptionalColumnValue()
+		{
+			var person1 = new Person();
+			person1.SetId(_bridgePersonGroupPage.PersonCode);
+			AnalyticsGroupPageRepository.AddGroupPageIfNotExisting(_analyticsGroupPage);
+			AnalyticsBridgeGroupPagePersonRepository
+				.Has(_bridgePersonGroupPage)
+				.WithPersonMapping(_bridgePersonGroupPage.PersonCode, _bridgePersonGroupPage.PersonId);
+			AnalyticsGroupPageRepository.AnalyticsBridgeGroupPagePersonRepository = AnalyticsBridgeGroupPagePersonRepository;
+
+			IOptionalColumn optionalColumn = new OptionalColumn(_analyticsGroupPage.GroupPageName)
+			{
+				AvailableAsGroupPage = true
+			};
+			optionalColumn.SetId(_entityId);
+			person1.AddOptionalColumnValue(new OptionalColumnValue(_analyticsGroupPage.GroupName), optionalColumn);
+
+			OptionalColumnRepository.Add(optionalColumn);
+			OptionalColumnRepository.AddPersonValues(person1.OptionalColumnValueCollection.First());
+			PersonRepository.Add(person1);
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(_businessUnitId));
+
+			var personCollectionChangedEvent = new PersonCollectionChangedEvent
+			{
+				LogOnBusinessUnitId = _businessUnitId,
+				SerializedPeople = $"{person1.Id.GetValueOrDefault()}"
+			};
+
+			Target.Handle(personCollectionChangedEvent);
+
+			IEnumerable<AnalyticsGroup> analyticsGroups = AnalyticsGroupPageRepository.GetGroupPage(optionalColumn.Id.GetValueOrDefault(), _businessUnitId).ToList();
+			var groupCode = analyticsGroups.Single(x => x.GroupPageCode == optionalColumn.Id &&  x.GroupName == _analyticsGroupPage.GroupName).GroupCode;
+
+			analyticsGroups.Count()
+				.Should().Be.EqualTo(1);
+			analyticsGroups.SingleOrDefault(x => x.GroupPageCode == _entityId && x.GroupPageName == "opt1" && x.GroupName == _analyticsGroupPage.GroupName && x.GroupIsCustom == false)
+				.Should().Not.Be.Null();
+			AnalyticsBridgeGroupPagePersonRepository.Bridges.Count
+				.Should().Be.EqualTo(1);
+			AnalyticsBridgeGroupPagePersonRepository.Bridges.SingleOrDefault(x => x.PersonCode == person1.Id.GetValueOrDefault() && x.GroupCode == groupCode)
+				.Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldTreatEmptyPersonValueAsNoValueWhenCreatingGroupPage()
+		{
+			IOptionalColumn optionalColumn = new OptionalColumn("opt1")
+			{
+				AvailableAsGroupPage = true
+			};
+			optionalColumn.SetId(_entityId);
+			var person1 = new Person().WithId();
+			person1.AddOptionalColumnValue(new OptionalColumnValue(""), optionalColumn);
+
+			OptionalColumnRepository.Add(optionalColumn);
+			OptionalColumnRepository.AddPersonValues(person1.OptionalColumnValueCollection.First());
+			PersonRepository.Add(person1);
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(_businessUnitId));
+			AnalyticsGroupPageRepository.AnalyticsBridgeGroupPagePersonRepository = AnalyticsBridgeGroupPagePersonRepository;
+			AnalyticsBridgeGroupPagePersonRepository
+				.WithPersonMapping(person1.Id.GetValueOrDefault(), 5);
+
+			var personCollectionChangedEvent = new PersonCollectionChangedEvent
+			{
+				LogOnBusinessUnitId = _businessUnitId,
+				SerializedPeople = $"{person1.Id.GetValueOrDefault()}"
+			};
+
+			Target.Handle(personCollectionChangedEvent);
+
+			IEnumerable<AnalyticsGroup> analyticsGroups = AnalyticsGroupPageRepository.GetGroupPage(optionalColumn.Id.GetValueOrDefault(), _businessUnitId).ToList();
+			analyticsGroups.Any().Should().Be.False();
 		}
 	}
 }

@@ -5,7 +5,9 @@ using log4net;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
@@ -19,16 +21,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		private readonly IOptionalColumnRepository _optionalColumnRepository;
 		private readonly IAnalyticsGroupPageRepository _analyticsGroupPageRepository;
 		private readonly IAnalyticsBridgeGroupPagePersonRepository _analyticsBridgeGroupPagePersonRepository;
+		private readonly IPersonRepository _personRepository;
 
 		public AnalyticsOptionalColumnGroupPageHandler(
 			IOptionalColumnRepository optionalColumnRepository, 
 			IAnalyticsGroupPageRepository analyticsGroupPageRepository,
-			IAnalyticsBridgeGroupPagePersonRepository analyticsBridgeGroupPagePersonRepository
+			IAnalyticsBridgeGroupPagePersonRepository analyticsBridgeGroupPagePersonRepository,
+			IPersonRepository personRepository
 			)
 		{
 			_optionalColumnRepository = optionalColumnRepository;
 			_analyticsGroupPageRepository = analyticsGroupPageRepository;
 			_analyticsBridgeGroupPagePersonRepository = analyticsBridgeGroupPagePersonRepository;
+			_personRepository = personRepository;
 		}
 
 		[UnitOfWork, AnalyticsUnitOfWork]
@@ -57,14 +62,42 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			
 		}
 
+		[ImpersonateSystem]
 		[UnitOfWork, AnalyticsUnitOfWork]
 		[Attempts(10)]
 		public virtual void Handle(PersonCollectionChangedEvent @event)
 		{
-			throw new NotImplementedException();
+			var optionalColumns = _optionalColumnRepository.GetOptionalColumns<Person>()
+				.Where(x => x.AvailableAsGroupPage)
+				.ToList();
+			var persons = _personRepository.FindPeopleSimplify(@event.PersonIdCollection);
+
+			foreach (var column in optionalColumns)
+			{
+				var personColumnValues = new List<IOptionalColumnValue>();
+				foreach (var person in persons)
+				{
+					var personColumnValue = person.OptionalColumnValueCollection
+						.SingleOrDefault(x => ((IOptionalColumn)x.Parent).Id.GetValueOrDefault() == column.Id.GetValueOrDefault());
+					if (string.IsNullOrWhiteSpace(personColumnValue?.Description))
+						continue;
+					personColumnValues.Add(personColumnValue);
+				}
+				_analyticsBridgeGroupPagePersonRepository.DeleteAllForPersons(
+					column.Id.GetValueOrDefault(),
+					persons.Select(x => x.Id.GetValueOrDefault()).ToList(), 
+					@event.LogOnBusinessUnitId);
+
+				IList<AnalyticsGroup> newDimGroupPages = createNewDimGroupPages(column, personColumnValues, @event.LogOnBusinessUnitId);
+				saveNewDimGroupPagesOrGet(newDimGroupPages);
+				IDictionary<Guid, IList<Guid>> newBridgeGroupPagePersons = createNewBridgeGroupPagePerson(personColumnValues, newDimGroupPages);
+				saveNewBridgeGroupPagePersonsWithoutDelete(newBridgeGroupPagePersons, @event.LogOnBusinessUnitId);
+			}
+
+			_analyticsGroupPageRepository.DeleteUnusedGroupPages(@event.LogOnBusinessUnitId);
 		}
 
-		private void saveNewBridgeGroupPagePersons(IDictionary<Guid, IList<Guid>> newBridgeGroupPagePersons, Guid businessUnitId)
+		private void saveNewBridgeGroupPagePersonsWithoutDelete(IDictionary<Guid, IList<Guid>> newBridgeGroupPagePersons, Guid businessUnitId)
 		{
 			foreach (var bridgeGroupPagePerson in newBridgeGroupPagePersons)
 			{
@@ -73,7 +106,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			}
 		}
 
-		private void saveNewDimGroupPages(IList<AnalyticsGroupPerson> newDimGroupPages)
+		private void saveNewBridgeGroupPagePersons(IDictionary<Guid, IList<Guid>> newBridgeGroupPagePersons, Guid businessUnitId)
+		{
+			foreach (var bridgeGroupPagePerson in newBridgeGroupPagePersons)
+			{
+				logger.Debug($"Insert into bridge group page person for {bridgeGroupPagePerson.Value.Count} persons and group {bridgeGroupPagePerson.Key}");
+				_analyticsBridgeGroupPagePersonRepository.DeleteBridgeGroupPagePerson(bridgeGroupPagePerson.Value, bridgeGroupPagePerson.Key, businessUnitId);
+				_analyticsBridgeGroupPagePersonRepository.AddBridgeGroupPagePerson(bridgeGroupPagePerson.Value, bridgeGroupPagePerson.Key, businessUnitId);
+			}
+		}
+
+		private void saveNewDimGroupPages(IList<AnalyticsGroup> newDimGroupPages)
 		{
 			foreach (var dimGroupPage in newDimGroupPages)
 			{
@@ -82,9 +125,23 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			}
 		}
 
+		private void saveNewDimGroupPagesOrGet(IList<AnalyticsGroup> newDimGroupPages)
+		{
+			foreach (var dimGroupPage in newDimGroupPages)
+			{
+				logger.Debug($"Insert or get group page for {dimGroupPage.GroupPageName}/{dimGroupPage.GroupName}. Group page code: {dimGroupPage.GroupPageCode}");
+				var existingGroupPage = _analyticsGroupPageRepository.AddOrGetGroupPage(dimGroupPage);
+				if (existingGroupPage == null)
+					continue;
+
+				dimGroupPage.GroupId = existingGroupPage.GroupId;
+				dimGroupPage.GroupCode = existingGroupPage.GroupCode;
+			}
+		}
+
 		private IDictionary<Guid, IList<Guid>> createNewBridgeGroupPagePerson(
 			IEnumerable<IOptionalColumnValue> personValues, 
-			IList<AnalyticsGroupPerson> newDimGroupPages)
+			IList<AnalyticsGroup> newDimGroupPages)
 		{
 			var bridgePersonPeriod = new Dictionary<Guid, IList<Guid>>();
 
@@ -109,14 +166,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			return bridgePersonPeriod;
 		}
 
-		private IList<AnalyticsGroupPerson> createNewDimGroupPages(
+		private IList<AnalyticsGroup> createNewDimGroupPages(
 			IOptionalColumn optionalColumn, 
 			IEnumerable<IOptionalColumnValue> personValues, 
 			Guid businessUnitId)
 		{
 			var dimGroupPages = personValues
 				.GroupBy(g => g.Description)
-				.Select(s => new AnalyticsGroupPerson
+				.Select(s => new AnalyticsGroup
 				{
 					GroupPageCode = optionalColumn.Id.Value,
 					GroupPageName = optionalColumn.Name,

@@ -88,10 +88,15 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			}));
 		}
 
-		public void DeleteBridgeGroupPagePersonExcludingPersonPeriods(Guid personId, ICollection<int> personPeriodIds)
+		public void DeleteBridgeGroupPagePersonExcludingPersonPeriods(Guid personCode, ICollection<int> personPeriodIds)
 		{
 			Bridges.RemoveAll(
-				x => x.PersonCode == personId && !personPeriodIds.Contains(x.PersonId));
+				x => x.PersonCode == personCode && !personPeriodIds.Contains(x.PersonId));
+		}
+
+		public void DeleteAllForPersons(Guid groupPageId, ICollection<Guid> personIds, Guid businessUnitId)
+		{
+			Bridges.RemoveAll(x => x.BusinessUnitCode == businessUnitId && x.GroupPageCode == groupPageId && personIds.Contains(x.PersonCode));
 		}
 	}
 }

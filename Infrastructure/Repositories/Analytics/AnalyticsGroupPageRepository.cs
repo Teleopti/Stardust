@@ -118,6 +118,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				.List<AnalyticsGroupPage>();
 		}
 
+		public void DeleteUnusedGroupPages(Guid businessUnitCode)
+		{
+			var query = _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
+					$@"exec mart.[etl_dim_group_page_delete_unused]
+                     @business_unit_code=:{nameof(businessUnitCode)}")
+				.SetParameter(nameof(businessUnitCode), businessUnitCode);
+			query.ExecuteUpdate();
+		}
+
 		public void AddGroupPageIfNotExisting(AnalyticsGroup analyticsGroup)
 		{
 			var query = _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
@@ -137,6 +146,31 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				.SetBoolean(nameof(AnalyticsGroup.GroupIsCustom), analyticsGroup.GroupIsCustom)
 				.SetGuid(nameof(AnalyticsGroup.BusinessUnitCode), analyticsGroup.BusinessUnitCode);
 			query.ExecuteUpdate();
+		}
+
+		public AnalyticsGroup AddOrGetGroupPage(AnalyticsGroup analyticsGroup)
+		{
+			var existingGroupPage = _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
+					$@"exec mart.[etl_dim_group_page_insert_or_get]
+                    @group_page_code=:{nameof(AnalyticsGroup.GroupPageCode)}
+					,@group_page_name=:{nameof(AnalyticsGroup.GroupPageName)}
+					,@group_page_name_resource_key=:{nameof(AnalyticsGroup.GroupPageNameResourceKey)}
+					,@group_code=:{nameof(AnalyticsGroup.GroupCode)}
+					,@group_name=:{nameof(AnalyticsGroup.GroupName)}
+					,@group_is_custom=:{nameof(AnalyticsGroup.GroupIsCustom)}
+					,@business_unit_code=:{nameof(AnalyticsGroup.BusinessUnitCode)}")
+				.SetGuid(nameof(AnalyticsGroup.GroupPageCode), analyticsGroup.GroupPageCode)
+				.SetString(nameof(AnalyticsGroup.GroupPageName), analyticsGroup.GroupPageName)
+				.SetString(nameof(AnalyticsGroup.GroupPageNameResourceKey), analyticsGroup.GroupPageNameResourceKey)
+				.SetGuid(nameof(AnalyticsGroup.GroupCode), analyticsGroup.GroupCode)
+				.SetString(nameof(AnalyticsGroup.GroupName), analyticsGroup.GroupName)
+				.SetBoolean(nameof(AnalyticsGroup.GroupIsCustom), analyticsGroup.GroupIsCustom)
+				.SetGuid(nameof(AnalyticsGroup.BusinessUnitCode), analyticsGroup.BusinessUnitCode)
+				.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsGroup)))
+				.SetReadOnly(true)
+				.UniqueResult<AnalyticsGroup>();
+
+			return existingGroupPage;
 		}
 
 		public void DeleteGroupPages(IEnumerable<Guid> groupPageIds, Guid businessUnitCode)

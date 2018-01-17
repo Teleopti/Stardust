@@ -17,6 +17,18 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			groups.Add(analyticsGroup);
 		}
 
+		public AnalyticsGroup AddOrGetGroupPage(AnalyticsGroup analyticsGroup)
+		{
+			var groupPageGroup = groups.SingleOrDefault(x =>
+				x.BusinessUnitCode == analyticsGroup.BusinessUnitCode && x.GroupPageCode == analyticsGroup.GroupPageCode &&
+				x.GroupName == analyticsGroup.GroupName);
+			if (groupPageGroup != null)
+				return groupPageGroup;
+
+			groups.Add(analyticsGroup);
+			return null;
+		}
+
 		public void DeleteGroupPages(IEnumerable<Guid> groupPageIds, Guid businessUnitCode)
 		{
 			var codes = groupPageIds.ToList();
@@ -52,5 +64,22 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return groups.Where(x => x.GroupPageNameResourceKey != null && x.BusinessUnitCode == businessUnitCode).ToList();
 		}
+
+		public void DeleteUnusedGroupPages(Guid businessUnitCode)
+		{ 
+			if (AnalyticsBridgeGroupPagePersonRepository == null)
+				throw new ArgumentException($"You must set a value for property '{nameof(AnalyticsBridgeGroupPagePersonRepository)}'");
+
+			var usedGroups = AnalyticsBridgeGroupPagePersonRepository.Bridges;
+			var groupsToRemove = groups
+				.Where(x => x.BusinessUnitCode == businessUnitCode && usedGroups.All(y => y.GroupCode != x.GroupCode && y.BusinessUnitCode == businessUnitCode))
+				.ToList();
+			foreach (var group in groupsToRemove)
+			{
+				groups.Remove(group);
+			}
+		}
+
+		public FakeAnalyticsBridgeGroupPagePersonRepository AnalyticsBridgeGroupPagePersonRepository { get; set; }
 	}
 }

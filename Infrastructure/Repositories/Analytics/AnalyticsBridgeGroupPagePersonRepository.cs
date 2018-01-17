@@ -119,15 +119,33 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			}
 		}
 
-		public void DeleteBridgeGroupPagePersonExcludingPersonPeriods(Guid personId, ICollection<int> personPeriodIds)
+		public void DeleteBridgeGroupPagePersonExcludingPersonPeriods(Guid personCode, ICollection<int> personPeriodIds)
 		{
 			var query = _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
 				$@"exec mart.[etl_bridge_group_page_person_delete_removed]
-					 @person_code=:{nameof(personId)}
+					 @person_code=:{nameof(personCode)}
 					,@person_ids=:{nameof(personPeriodIds)}")
-				.SetParameter(nameof(personId), personId)
+				.SetParameter(nameof(personCode), personCode)
 				.SetParameter(nameof(personPeriodIds), string.Join(",", personPeriodIds));
 			query.ExecuteUpdate();
+		}
+
+		public void DeleteAllForPersons(Guid groupPageId, ICollection<Guid> personIds, Guid businessUnitId)
+		{
+			if (!personIds.Any())
+				return;
+			foreach (var batch in personIds.Batch(100))
+			{
+				var query = _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
+						$@"exec mart.[etl_bridge_group_page_person_delete_for_persons]
+					 @group_page_code=:{nameof(groupPageId)}
+					,@person_codes=:{nameof(personIds)}
+					,@business_unit_code=:{nameof(businessUnitId)}")
+					.SetParameter(nameof(groupPageId), groupPageId)
+					.SetParameter(nameof(personIds), string.Join(",", batch))
+					.SetParameter(nameof(businessUnitId), businessUnitId);
+				query.ExecuteUpdate();
+			}
 		}
 
 		public void AddBridgeGroupPagePerson(ICollection<Guid> personIds, Guid groupId, Guid businessUnitId)

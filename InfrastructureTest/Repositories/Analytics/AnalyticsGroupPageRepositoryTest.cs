@@ -1,10 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Analytics;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
@@ -14,11 +15,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 {
 	[Category("BucketB")]
 	[TestFixture]
-	[AnalyticsUnitOfWorkTest]
+	[AnalyticsDatabaseTest]
 	public class AnalyticsGroupPageRepositoryTest
 	{
-		public ICurrentAnalyticsUnitOfWork UnitOfWork;
+		public WithAnalyticsUnitOfWork WithAnalyticsUnitOfWork;
 		public IAnalyticsGroupPageRepository Target;
+		public IAnalyticsBridgeGroupPagePersonRepository BridgeGroupPagePersonRepository;
+		public IAnalyticsPersonPeriodRepository AnalyticsPersonPeriodRepository;
 
 		[SetUp]
 		public void SetUp()
@@ -45,9 +48,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				GroupIsCustom = true,
 				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
 			};
-			Target.AddGroupPageIfNotExisting(groupPage);
+			WithAnalyticsUnitOfWork.Do(() => Target.AddGroupPageIfNotExisting(groupPage));
 
-			var result = Target.GetGroupPage(groupPage.GroupPageCode, groupPage.BusinessUnitCode).First();
+			var result = WithAnalyticsUnitOfWork.Get(() => Target.GetGroupPage(groupPage.GroupPageCode, groupPage.BusinessUnitCode).First());
 			result.GroupPageCode.Should().Be.EqualTo(groupPage.GroupPageCode);
 			result.GroupPageName.Should().Be.EqualTo(groupPage.GroupPageName);
 			result.GroupPageNameResourceKey.Should().Be.EqualTo(groupPage.GroupPageNameResourceKey);
@@ -70,10 +73,100 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				GroupIsCustom = true,
 				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
 			};
-			Target.AddGroupPageIfNotExisting(groupPage);
-			Target.AddGroupPageIfNotExisting(groupPage);
-			var result = Target.GetGroupPageByGroupCode(groupPage.GroupCode, groupPage.BusinessUnitCode);
+			WithAnalyticsUnitOfWork.Do(() => Target.AddGroupPageIfNotExisting(groupPage));
+			WithAnalyticsUnitOfWork.Do(() => Target.AddGroupPageIfNotExisting(groupPage));
+			var result = WithAnalyticsUnitOfWork.Get(() => Target.GetGroupPageByGroupCode(groupPage.GroupCode, groupPage.BusinessUnitCode));
 			result.Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldGetIfExisting()
+		{
+			var existingGroupPage = new AnalyticsGroup
+			{
+				GroupPageCode = Guid.NewGuid(),
+				GroupPageName = "GroupPageName1",
+				GroupPageNameResourceKey = "GroupPageNameResourceKey1",
+				GroupCode = Guid.NewGuid(),
+				GroupName = "GroupName1",
+				GroupIsCustom = true,
+				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
+			};
+			var potentialGroupPage = new AnalyticsGroup
+			{
+				GroupPageCode = existingGroupPage.GroupPageCode,
+				GroupPageName = existingGroupPage.GroupPageName,
+				GroupCode = Guid.NewGuid(),
+				GroupName = "GroupName1",
+				BusinessUnitCode = existingGroupPage.BusinessUnitCode
+			};
+
+			WithAnalyticsUnitOfWork.Do(() => Target.AddGroupPageIfNotExisting(existingGroupPage));
+			var result = WithAnalyticsUnitOfWork.Get(() => Target.AddOrGetGroupPage(potentialGroupPage));
+			result.GroupCode.Should().Be(existingGroupPage.GroupCode);
+		}
+
+		[Test]
+		public void ShouldAddNewIfNotExistingAndReturnNull()
+		{
+			var newGroupPage = new AnalyticsGroup
+			{
+				GroupPageCode = Guid.NewGuid(),
+				GroupPageName = "GroupPageName1",
+				GroupPageNameResourceKey = "GroupPageNameResourceKey1",
+				GroupCode = Guid.NewGuid(),
+				GroupName = "GroupName1",
+				GroupIsCustom = true,
+				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
+			};
+			var result = WithAnalyticsUnitOfWork.Get(() => Target.AddOrGetGroupPage(newGroupPage));
+			result.Should().Be.Null();
+		}
+
+		[Test]
+		public void ShouldDeleteUnusedGroupPage()
+		{
+			var groupPageToKeep = new AnalyticsGroup
+			{
+				GroupPageCode = Guid.NewGuid(),
+				GroupPageName = "GroupPageName1",
+				GroupPageNameResourceKey = "GroupPageNameResourceKey1",
+				GroupCode = Guid.NewGuid(),
+				GroupName = "GroupName1",
+				GroupIsCustom = true,
+				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
+			};
+			WithAnalyticsUnitOfWork.Do(() => Target.AddOrGetGroupPage(groupPageToKeep));
+
+			var person = CreateAndPersistPerson();
+			WithAnalyticsUnitOfWork.Do(() => BridgeGroupPagePersonRepository.AddBridgeGroupPagePerson(
+				new List<Guid> { person.PersonCode },
+				groupPageToKeep.GroupCode,
+				groupPageToKeep.BusinessUnitCode
+			));
+
+			var groupPageToDelete = new AnalyticsGroup
+			{
+				GroupPageCode = Guid.NewGuid(),
+				GroupPageName = "GroupPageName1",
+				GroupPageNameResourceKey = "GroupPageNameResourceKey1",
+				GroupCode = Guid.NewGuid(),
+				GroupName = "GroupName2",
+				GroupIsCustom = true,
+				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
+			};
+
+			WithAnalyticsUnitOfWork.Do(() => Target.AddOrGetGroupPage(groupPageToDelete));
+
+			WithAnalyticsUnitOfWork.Do(() => Target.DeleteUnusedGroupPages(groupPageToDelete.BusinessUnitCode));
+
+			var deletedGroupPage = WithAnalyticsUnitOfWork.Get(() =>
+				Target.GetGroupPageByGroupCode(groupPageToDelete.GroupCode, groupPageToDelete.BusinessUnitCode));
+			deletedGroupPage.Should().Be.Null();
+
+			var keptGroupPage = WithAnalyticsUnitOfWork.Get(() =>
+				Target.GetGroupPageByGroupCode(groupPageToKeep.GroupCode, groupPageToKeep.BusinessUnitCode));
+			keptGroupPage.Should().Not.Be.Null();
 		}
 
 		[Test]
@@ -89,9 +182,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				GroupIsCustom = true,
 				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
 			};
-			Target.AddGroupPageIfNotExisting(groupPage);
+			WithAnalyticsUnitOfWork.Do(() => Target.AddGroupPageIfNotExisting(groupPage));
 
-			var result = Target.GetGroupPageByGroupCode(groupPage.GroupCode, groupPage.BusinessUnitCode);
+			var result = WithAnalyticsUnitOfWork.Get(() =>
+			Target.GetGroupPageByGroupCode(groupPage.GroupCode, groupPage.BusinessUnitCode));
 			result.GroupPageCode.Should().Be.EqualTo(groupPage.GroupPageCode);
 			result.GroupPageName.Should().Be.EqualTo(groupPage.GroupPageName);
 			result.GroupPageNameResourceKey.Should().Be.EqualTo(groupPage.GroupPageNameResourceKey);
@@ -114,13 +208,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				GroupIsCustom = true,
 				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
 			};
-			Target.AddGroupPageIfNotExisting(groupPage);
+			WithAnalyticsUnitOfWork.Do(() => Target.AddGroupPageIfNotExisting(groupPage));
 
 			groupPage.GroupPageName = "GroupPageName2";
 
-			Target.UpdateGroupPage(groupPage);
+			WithAnalyticsUnitOfWork.Do(() => Target.UpdateGroupPage(groupPage));
 
-			var result = Target.GetGroupPage(groupPage.GroupPageCode, groupPage.BusinessUnitCode).First();
+			var result = WithAnalyticsUnitOfWork.Get(() =>
+				Target.GetGroupPage(groupPage.GroupPageCode, groupPage.BusinessUnitCode).First());
 			result.GroupPageCode.Should().Be.EqualTo(groupPage.GroupPageCode);
 			result.GroupPageName.Should().Be.EqualTo("GroupPageName2");
 			result.GroupPageNameResourceKey.Should().Be.EqualTo(groupPage.GroupPageNameResourceKey);
@@ -143,10 +238,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				GroupIsCustom = true,
 				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
 			};
-			Target.AddGroupPageIfNotExisting(groupPage);
-			Target.DeleteGroupPages(new[] { groupPage.GroupPageCode }, groupPage.BusinessUnitCode);
+			WithAnalyticsUnitOfWork.Do(() => Target.AddGroupPageIfNotExisting(groupPage));
+			WithAnalyticsUnitOfWork.Do(() => Target.DeleteGroupPages(new[] { groupPage.GroupPageCode }, groupPage.BusinessUnitCode));
 
-			Target.GetGroupPage(groupPage.GroupPageCode, groupPage.BusinessUnitCode).Should().Be.Empty();
+			WithAnalyticsUnitOfWork.Do(() => Target.GetGroupPage(groupPage.GroupPageCode, groupPage.BusinessUnitCode).Should().Be.Empty());
 		}
 
 		[Test]
@@ -162,7 +257,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				GroupIsCustom = true,
 				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
 			};
-			Target.AddGroupPageIfNotExisting(groupPage);
+			WithAnalyticsUnitOfWork.Do(() => Target.AddGroupPageIfNotExisting(groupPage));
 			var groupPage2 = new AnalyticsGroup
 			{
 				GroupPageCode = Guid.NewGuid(),
@@ -173,12 +268,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				GroupIsCustom = true,
 				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
 			};
-			Target.AddGroupPageIfNotExisting(groupPage2);
+			WithAnalyticsUnitOfWork.Do(() => Target.AddGroupPageIfNotExisting(groupPage2));
 
-			Target.DeleteGroupPagesByGroupCodes(new [] { groupPage.GroupCode}, groupPage.BusinessUnitCode);
+			WithAnalyticsUnitOfWork.Do(() =>
+				Target.DeleteGroupPagesByGroupCodes(new[] {groupPage.GroupCode}, groupPage.BusinessUnitCode));
 
-			var result = Target.GetGroupPageByGroupCode(groupPage.GroupCode, groupPage.BusinessUnitCode);
-			var result2 = Target.GetGroupPageByGroupCode(groupPage2.GroupCode, groupPage2.BusinessUnitCode);
+			var result = WithAnalyticsUnitOfWork.Get(() =>
+				Target.GetGroupPageByGroupCode(groupPage.GroupCode, groupPage.BusinessUnitCode));
+			var result2 = WithAnalyticsUnitOfWork.Get(() =>
+				Target.GetGroupPageByGroupCode(groupPage2.GroupCode, groupPage2.BusinessUnitCode));
 			result.Should().Be.Null();
 			result2.Should().Not.Be.Null();
 		}
@@ -196,7 +294,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				GroupIsCustom = true,
 				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
 			};
-			Target.AddGroupPageIfNotExisting(groupPage);
+			WithAnalyticsUnitOfWork.Do(() => Target.AddGroupPageIfNotExisting(groupPage));
 			var groupPage2 = new AnalyticsGroup
 			{
 				GroupPageCode = Guid.NewGuid(),
@@ -207,14 +305,70 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				GroupIsCustom = true,
 				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
 			};
-			Target.AddGroupPageIfNotExisting(groupPage2);
+			WithAnalyticsUnitOfWork.Do(() => Target.AddGroupPageIfNotExisting(groupPage2));
 
-			var result = Target.GetBuildInGroupPageBase(BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()).FirstOrDefault();
+			var result = WithAnalyticsUnitOfWork.Get(() =>
+				Target.GetBuildInGroupPageBase(BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()).FirstOrDefault());
 
 			result.Should().Not.Be.Null();
 			result.GroupPageName.Should().Be.EqualTo(groupPage.GroupPageName);
 			result.GroupPageCode.Should().Be.EqualTo(groupPage.GroupPageCode);
 			result.GroupPageNameResourceKey.Should().Be.EqualTo(groupPage.GroupPageNameResourceKey);
+		}
+
+		private AnalyticsPersonPeriod CreateAndPersistPerson()
+		{
+			var personPeriod1 = new AnalyticsPersonPeriod
+			{
+				PersonPeriodCode = Guid.NewGuid(),
+				ValidFromDate = new DateTime(2000, 1, 1),
+				ValidToDate = new DateTime(2001, 1, 1),
+				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault(),
+				BusinessUnitName = BusinessUnitFactory.BusinessUnitUsedInTest.Name,
+				BusinessUnitId = 1,
+				ContractCode = Guid.NewGuid(),
+				ContractName = "Test contract",
+				DatasourceId = 1,
+				DatasourceUpdateDate = DateTime.Now,
+				Email = string.Empty,
+				EmploymentStartDate = new DateTime(2000, 1, 1),
+				EmploymentEndDate = AnalyticsDate.Eternity.DateDate,
+				EmploymentNumber = "1337",
+				EmploymentTypeCode = 0,
+				EmploymentTypeName = "",
+				FirstName = "John",
+				LastName = "Smith",
+				IsUser = false,
+				Note = string.Empty,
+				PersonCode = Guid.NewGuid(),
+				PersonName = string.Empty,
+				ToBeDeleted = false,
+				TeamId = 2,
+				TeamCode = Guid.NewGuid(),
+				TeamName = string.Empty,
+				SiteId = 1,
+				SiteCode = Guid.NewGuid(),
+				SiteName = "site",
+				SkillsetId = null,
+				WindowsDomain = "domain\\user",
+				WindowsUsername = "user",
+				ValidToDateIdMaxDate = 1,
+				ValidToIntervalIdMaxDate = 1,
+				ValidFromDateIdLocal = 1,
+				ValidToDateIdLocal = 1,
+				ValidFromDateLocal = DateTime.Now,
+				ValidToDateLocal = DateTime.Now.AddYears(1),
+				ValidToIntervalId = 1,
+				ParttimeCode = Guid.NewGuid(),
+				ParttimePercentage = "100%",
+				TimeZoneId = 1,
+				ValidFromDateId = 1,
+				ValidFromIntervalId = 1,
+				ValidToDateId = 1
+			};
+
+			WithAnalyticsUnitOfWork.Do(() => AnalyticsPersonPeriodRepository.AddOrUpdatePersonPeriod(personPeriod1));
+			return personPeriod1;
 		}
 	}
 }
