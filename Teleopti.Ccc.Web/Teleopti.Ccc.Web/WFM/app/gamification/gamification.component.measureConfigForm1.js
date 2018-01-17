@@ -9,7 +9,7 @@
 				onUpdate: '&',
 				valueFormat: '<',
 				max: '<',
-				valueDataType: '<',
+				valueDataType: '<'
 			},
 			controller: ['$scope', function measureConfigForm1Ctrl($scope) {
 				var ctrl = this;
