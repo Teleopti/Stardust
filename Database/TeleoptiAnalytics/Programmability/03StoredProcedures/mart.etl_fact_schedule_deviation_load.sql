@@ -151,9 +151,8 @@ CREATE TABLE #shift_start_intervals(
 )
 
 --get the number of intervals outside shift to consider for adherence calc
-SELECT @interval_length_minutes = 1440/COUNT(*) from mart.dim_interval 
-SELECT @minutes_outside_shift = value FROM mart.sys_configuration WHERE [KEY]='AdherenceMinutesOutsideShift'  
-
+SELECT @interval_length_minutes = [value] FROM mart.sys_configuration WHERE [key] = 'IntervalLengthMinutes'
+SELECT @minutes_outside_shift = [value] FROM mart.sys_configuration WHERE [KEY] = 'AdherenceMinutesOutsideShift'  
 SELECT @intervals_outside_shift = ISNULL(@minutes_outside_shift,120)/@interval_length_minutes 
 
 /*Remove timestamp from datetime*/
