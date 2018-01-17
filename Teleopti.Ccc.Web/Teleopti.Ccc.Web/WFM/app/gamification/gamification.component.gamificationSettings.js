@@ -24,7 +24,6 @@
 
 		ctrl.getSettingById = function (id) {
 			gamificationSettingService.getSettingById(id).then(function (data) {
-				console.log(data);
 				ctrl.settingData = data;
 				var settingData = ctrl.convertSettingToModel(data);
 				if (!ctrl.findElementInArray(ctrl.allSettings, settingData.id)) {
@@ -35,16 +34,13 @@
 				ctrl.currentSettingId = settingData.id;
 				ctrl.resetRuleSelection();
 			});
-		}
-
+		};
 
 		ctrl.saveValue = function (apiKey, value) {
 			var data = { GamificationSettingId: ctrl.currentSettingId, Value: value };
 			gamificationSettingService.saveData(apiKey, data).then(function (response) {
-				//show message that says saved successfully
 				console.log('Save data successfully', apiKey);
 			}, function (error) {
-				// show message that says save failed
 				console.log('Fail to save data', error);
 			});
 		}
@@ -248,7 +244,6 @@
 
 
 			ctrl.currentSetting = ctrl.allSettings[ctrl.selectedSettingIndex];
-			ctrl
 		}
 
 		ctrl.settingSelectionChanged = function () {
@@ -262,7 +257,7 @@
 					ctrl.resetRuleSelection();
 				}
 			}
-		}
+		};
 
 		ctrl.resetRuleSelection = function () {
 			ctrl.currentRule = ctrl.currentSetting.rules.find(function (element) {
@@ -338,9 +333,11 @@
 
 					ctrl.settingDescriptors.push(newSettingDescriptor);
 					ctrl.currentSettingId = newSetting.id;
+
+					ctrl.settingData = data;
 				}
 			});
-		}
+		};
 
 		ctrl.deleteSetting = function () {
 			var deletedId = ctrl.currentSettingId;

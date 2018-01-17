@@ -168,6 +168,17 @@
 			});
 		};
 
+		ctrl.onNameChange = function () {
+			dataService.saveData('ModifyDescription', {
+				Name: ctrl.name,
+				GamificationSettingId: ctrl.id
+			}).then(function () {
+				$log.log('updated setting name successfully');
+			}, function () {
+				$log.error('failed to update setting name');
+			});
+		};
+
 		function MeasureConfig(builtin, enabled, id, externalId, name, dataType, largerIsBetter, threshold, bronzeThreshold, silverThreshold, goldThreshold, valueFormat, max, valueOrder) {
 			this.builtin = builtin;
 			this.enabled = enabled;
