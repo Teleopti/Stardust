@@ -211,6 +211,7 @@
     <Compile Include="MessageBroker\MailboxNotSignedInTest.cs" />
     <Compile Include="MultiTenancy\Server\Queries\TenantPersonLogonQuerierTest.cs" />
     <Compile Include="Performance\NumberOfDbCallsTest.cs" />
+    <Compile Include="Persisters\Schedules\Performance\NoUnnecessaryUpdatesWhenAddingLayer.cs" />
     <Compile Include="Persisters\Schedules\ScheduleDifferenceSaverTest.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsSiteRepositoryTest.cs" />
     <Compile Include="Repositories\ASMScheduleChangeTimeRepositoryTest.cs" />

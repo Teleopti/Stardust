@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NHibernate.Stat;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -15,6 +16,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		protected abstract void WhenImChanging(IScheduleRange myScheduleRange);
 		protected abstract void Then(IEnumerable<PersistConflict> conflicts);
 		protected abstract void Then(IScheduleRange myScheduleRange);
+		protected virtual void Then(IStatistics statistics){}
 
 		[Test]
 		public void DoTheTest()
@@ -33,7 +35,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			}
 			else
 			{
+				var statistics = ((NHibernateUnitOfWorkFactory) UnitOfWorkFactory.Current).SessionFactory.Statistics;
+				statistics.Clear();
 				var conflicts = Target.Persist(myRange, myRange.Period.ToDateOnlyPeriod(TimeZoneInfo.Utc)).PersistConflicts;
+
+				Then(statistics);
 				Then(conflicts);
 				Then(myRange);
 
