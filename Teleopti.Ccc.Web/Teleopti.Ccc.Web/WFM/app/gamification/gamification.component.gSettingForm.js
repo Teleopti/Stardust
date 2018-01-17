@@ -103,6 +103,8 @@
 		};
 
 		var updateSettingForm = function (data) {
+			enabled = [];
+
 			ctrl.id = data.Id;
 			ctrl.name = data.Name;
 			originalName = ctrl.name;
