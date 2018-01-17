@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		private List<OvertimeRequestAutoGrantTypeAdapter> _overtimeRequestAutoGrantTypeAdapterCollection;
 		private static readonly int _enableWorkRuleColumnIndex = 3;
 		private static readonly int _overtimeRequestOpenPeriodDataStartRowIndex = 2;
+		private ILicenseAvailability _licenseAvailability = new LicenseAvailability(CurrentDataSource.Make());
 
 		public void SetOvertimeOpenPeriodsGridRowCount(int rowCount)
 		{
@@ -76,9 +77,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 		private void checkOvertimeProbabilityLicense()
 		{
-			var licenseAvailability = new LicenseAvailability(CurrentDataSource.Make());
-			if (!licenseAvailability.IsLicenseEnabled(DefinedLicenseOptionPaths.TeleoptiCccOvertimeAvailability) &&
-				!licenseAvailability.IsLicenseEnabled(DefinedLicenseOptionPaths.TeleoptiWfmOvertimeRequests))
+			if (!_licenseAvailability.IsLicenseEnabled(DefinedLicenseOptionPaths.TeleoptiCccOvertimeAvailability) &&
+				!_licenseAvailability.IsLicenseEnabled(DefinedLicenseOptionPaths.TeleoptiWfmOvertimeRequests))
 			{
 				checkBoxAdvOvertimeProbability.Visible = false;
 			}
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		private void checkOvertimeRequestsLicense()
 		{
 			var toggleEnabled = _toggleManager.IsEnabled(Toggles.Staffing_Info_Configuration_44687);
-			var hasLicense = new OvertimeRequestAvailability(CurrentDataSource.Make(), PrincipalAuthorization.Current()).IsLicenseEnabled();
+			var hasLicense = _licenseAvailability.IsLicenseEnabled(DefinedLicenseOptionPaths.TeleoptiWfmOvertimeRequests);
 
 			var visible = hasLicense && toggleEnabled;
 			if (visible)

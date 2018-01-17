@@ -3,6 +3,5 @@
 	public interface IOvertimeRequestAvailability
 	{
 		bool IsEnabled();
-		bool IsLicenseEnabled();
 	}
 }

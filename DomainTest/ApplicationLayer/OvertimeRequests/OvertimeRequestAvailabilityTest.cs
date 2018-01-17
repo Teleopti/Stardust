@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			DefinedLicenseDataFactory.SetLicenseActivator(CurrentDataSource.CurrentName(), licenseActivator);
 
-			var result = Target.IsLicenseEnabled();
+			var result = Target.IsEnabled();
 
 			result.Should().Be.False();
 		}

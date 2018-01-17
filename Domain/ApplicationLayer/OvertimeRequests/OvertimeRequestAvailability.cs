@@ -6,28 +6,24 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 {
 	public class OvertimeRequestAvailability : IOvertimeRequestAvailability
 	{
-		private readonly ICurrentDataSource _currentDataSource;
+		private readonly ILicenseAvailability _licenseAvailability;
 		private readonly IAuthorization _authorization;
 
-		public OvertimeRequestAvailability(ICurrentDataSource currentDataSource, IAuthorization authorization)
+		public OvertimeRequestAvailability(ILicenseAvailability licenseAvailability, IAuthorization authorization)
 		{
-			_currentDataSource = currentDataSource;
+			_licenseAvailability = licenseAvailability;
 			_authorization = authorization;
 		}
 
 		public bool IsEnabled()
 		{
 			var hasPermission = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.OvertimeRequestWeb);
-			return IsLicenseEnabled() && hasPermission;
+			return isLicenseEnabled() && hasPermission;
 		}
 
-		public bool IsLicenseEnabled()
+		private bool isLicenseEnabled()
 		{
-			var currentName = _currentDataSource.CurrentName();
-			var isLicenseAvailible = DefinedLicenseDataFactory.HasLicense(currentName) &&
-									DefinedLicenseDataFactory.GetLicenseActivator(currentName).EnabledLicenseOptionPaths.Contains(
-									DefinedLicenseOptionPaths.TeleoptiWfmOvertimeRequests);
-			return isLicenseAvailible;
+			return _licenseAvailability.IsLicenseEnabled(DefinedLicenseOptionPaths.TeleoptiWfmOvertimeRequests);
 		}
 	}
 }
