@@ -23,4 +23,6 @@
     </div>
 </div>
 
-<g-setting-form class="setting-propterties wfm-form" setting="$ctrl.settingData"></g-setting-form>
+<g-setting-form class="setting-propterties wfm-form" setting="$ctrl.settingData"
+    on-name-update="$ctrl.updateCurrentSettingNameInList(name)">
+</g-setting-form>

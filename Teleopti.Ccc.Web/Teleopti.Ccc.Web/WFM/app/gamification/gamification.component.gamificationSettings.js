@@ -288,24 +288,13 @@
 			}
 		}
 
-		ctrl.changeSettingDescription = function () {
-			var data = {
-				GamificationSettingId: ctrl.currentSetting.id,
-				Name: ctrl.currentSetting.name
-			};
-
-
-			ctrl.updateName();
-			ctrl.saveData('ModifyDescription', data);
-		}
-
-		ctrl.updateName = function () {
+		ctrl.updateCurrentSettingNameInList = function (settingName) {
 			var settingDescriptor = ctrl.settingDescriptors.find(function (item) {
 				return item.GamificationSettingId == ctrl.currentSetting.id;
 			})
 
-			settingDescriptor.Value.Name = ctrl.currentSetting.name;
-		}
+			settingDescriptor.Value.Name = settingName;
+		};
 
 		ctrl.changeRuleValue = function (item) {
 			var data = {

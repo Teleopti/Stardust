@@ -4,6 +4,7 @@
 		.component('gSettingForm', {
 			templateUrl: 'app/gamification/html/gSettingForm.tpl.html',
 			bindings: {
+				onNameUpdate: '&',
 				setting: '<'
 			},
 			controller: ['gamificationSettingService', '$log', '$scope', gSettingFormCtrl]
@@ -12,6 +13,7 @@
 	function gSettingFormCtrl(dataService, $log, $scope) {
 		var ctrl = this;
 		var enabled = [];
+		var originalName = '';
 
 		var makeBuiltinMeasureConfigs = function (data) {
 			var measureConfigs = [];
@@ -103,6 +105,7 @@
 		var updateSettingForm = function (data) {
 			ctrl.id = data.Id;
 			ctrl.name = data.Name;
+			originalName = ctrl.name;
 			ctrl.changeInfo = data.UpdatedBy + ' ' + data.UpdatedOn;
 			ctrl.ruleSet = data.GamificationSettingRuleSet;
 			ctrl.silverRate = data.SilverToBronzeBadgeRate;
@@ -114,7 +117,6 @@
 		};
 
 		ctrl.$onChanges = function (changesObj) {
-			// $log.log(changesObj);
 			if (changesObj.setting && changesObj.setting.currentValue) {
 				updateSettingForm(changesObj.setting.currentValue);
 			}
@@ -169,13 +171,20 @@
 		};
 
 		ctrl.onNameChange = function () {
+			var newNameIsValid = ctrl.name.length > 0;
+			if (!newNameIsValid) return;
+
 			dataService.saveData('ModifyDescription', {
 				Name: ctrl.name,
 				GamificationSettingId: ctrl.id
 			}).then(function () {
 				$log.log('updated setting name successfully');
+				originalName = ctrl.name;
+				if (ctrl.onNameUpdate)
+					ctrl.onNameUpdate({ name: ctrl.name });
 			}, function () {
 				$log.error('failed to update setting name');
+				ctrl.name = originalName;
 			});
 		};
 
