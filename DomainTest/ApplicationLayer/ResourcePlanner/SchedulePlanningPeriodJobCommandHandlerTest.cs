@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 		public FakePersonRepository PersonRepository;
 
 
-		[Test, Ignore("failed for now")]
+		[Test]
 		public void ShouldCalculateStaffingCorrectly()
 		{
 			setup();

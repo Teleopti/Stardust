@@ -7,9 +7,11 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Export.Web;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.DomainTest.Intraday;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -19,13 +21,13 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Forecasting.Export.Web
 {
 	[DomainTest]
-	public class ForecastExportModelCreatorTest
+	public class ForecastExportModelCreatorTest : ISetup
 	{
 		public ForecastExportModelCreator Target;
 		public FakeScenarioRepository ScenarioRepository;
 		public FakeSkillRepository SkillRepository;
 		public FakeWorkloadRepository WorkloadRepository;
-		public FakeSkillDayRepository SkillDayRepository;
+		public ISkillDayRepository SkillDayRepository;
 		public FakeIntervalLengthFetcher IntervalLengthFetcher;
 
 		private const int minutesPerInterval = 15;
@@ -292,6 +294,11 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export.Web
 			workload.SetId(Guid.NewGuid());
 
 			return skill;
+		}
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.UseTestDouble<FakeSkillDayRepository_DoNotUse>().For<ISkillDayRepository>();
 		}
 	}
 }
