@@ -21,10 +21,14 @@
 	</div>
 
 	<div ng-if="$ctrl.ruleSet == 0" class="form-input-wrap">
-		<label>The number of bronze badges that can be converted into silver ones</label>
-		<input type="number" pattern="^\d+$" ng-model="$ctrl.silverRate" ng-model-options="{allowInvalid: false}" ng-change="$ctrl.updateSilverRate()" />
-		<label>The threshold of one gold badge for silver badges</label>
-		<input type="number" pattern="^\d+$" ng-model="$ctrl.goldRate" ng-model-options="{allowInvalid: false}" ng-change="$ctrl.updateGoldRate()" />
+		<label>
+			{{'OneSilverBadgeEqualsBronzeBadgeCount'|translate}}
+			<input type="number" pattern="^\d+$" ng-model="$ctrl.silverRate" ng-model-options="{allowInvalid: false}" ng-change="$ctrl.updateSilverRate()" />
+		</label>
+		<label>
+			{{'OneGoldBadgeEqualsSilverBadgeCount'|translate}}
+			<input type="number" pattern="^\d+$" ng-model="$ctrl.goldRate" ng-model-options="{allowInvalid: false}" ng-change="$ctrl.updateGoldRate()" />
+		</label>
 	</div>
 </form>
 
