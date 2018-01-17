@@ -50,7 +50,7 @@
 				data.AdherenceBronzeThreshold.Value,
 				data.AdherenceSilverThreshold.Value,
 				data.AdherenceGoldThreshold.Value,
-				'^0.\\d+$',
+				'\\d+(\.\d+)?$',
 				100.0,
 				'desc'
 			);
@@ -109,7 +109,7 @@
 			ctrl.id = data.Id;
 			ctrl.name = data.Name;
 			originalName = ctrl.name;
-			ctrl.changeInfo = data.UpdatedBy + ' ' + data.UpdatedOn;
+			// ctrl.changeInfo = data.UpdatedBy + ' ' + data.UpdatedOn;
 			ctrl.ruleSet = data.GamificationSettingRuleSet;
 			ctrl.silverRate = data.SilverToBronzeBadgeRate;
 			ctrl.goldRate = data.GoldToSilverBadgeRate;

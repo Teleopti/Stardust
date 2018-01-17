@@ -1,16 +1,17 @@
 <form name="form" class="wfm-form">
 	<div class="form-input-wrap">
 		<label>{{'Description'|translate}}</label>
-		<input type="text" name="settingname" required ng-model="$ctrl.name" ng-change="$ctrl.onNameChange()" ng-model-options="{updateOn: 'default blur change', debounce: {default: 1000, blur: 0, change: 0}}" />
+		<input type="text" name="settingname" required ng-model="$ctrl.name" ng-change="$ctrl.onNameChange()" ng-model-options="{updateOn: 'default blur change', debounce: {default: 1000, blur: 0, change: 0}}"
+		/>
 		<div class="text-danger validation">
 			<span ng-if="form.settingname.$error.required">{{'Required'|translate}}</span>
 		</div>
 	</div>
 
-	<div class="form-input-wrap">
+	<!-- <div class="form-input-wrap">
 		<label>{{'ChangeInfoColon'|translate}}</label>
 		<div>{{$ctrl.changeInfo}}</div>
-	</div>
+	</div> -->
 
 	<div class="form-input-wrap">
 		<label>{{'Rule'|translate}}</label>
@@ -23,11 +24,13 @@
 	<div ng-if="$ctrl.ruleSet == 0" class="form-input-wrap">
 		<label>
 			{{'OneSilverBadgeEqualsBronzeBadgeCount'|translate}}
-			<input type="number" pattern="^\d+$" ng-model="$ctrl.silverRate" ng-model-options="{allowInvalid: false}" ng-change="$ctrl.updateSilverRate()" />
+			<input type="number" pattern="^\d+$" ng-model="$ctrl.silverRate" ng-model-options="{allowInvalid: false}" ng-change="$ctrl.updateSilverRate()"
+			/>
 		</label>
 		<label>
 			{{'OneGoldBadgeEqualsSilverBadgeCount'|translate}}
-			<input type="number" pattern="^\d+$" ng-model="$ctrl.goldRate" ng-model-options="{allowInvalid: false}" ng-change="$ctrl.updateGoldRate()" />
+			<input type="number" pattern="^\d+$" ng-model="$ctrl.goldRate" ng-model-options="{allowInvalid: false}" ng-change="$ctrl.updateGoldRate()"
+			/>
 		</label>
 	</div>
 </form>
