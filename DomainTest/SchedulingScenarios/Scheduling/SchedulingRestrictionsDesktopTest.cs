@@ -15,6 +15,7 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Scheduling;
@@ -172,6 +173,40 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new[] { agent }, date.ToDateOnlyPeriod());
 			
 			return schedulerStateHolder.Schedules[agent].ScheduledDay(date).PersonAssignment().Period.StartDateTime.TimeOfDay.Hours;
+		}
+
+		[TestCase(true, false, false, false)]
+		[TestCase(false, true, false, false)]
+		[TestCase(false, false, true, false)]
+		[TestCase(false, false, false, true)]
+		[Ignore("47686 to be fixed")]
+		public void SolveNightlyRestWhiteSpotShouldConsiderRestrictionDaysOnly(bool onlyPrefrenceDays, bool onlyMustHavePrefrenceDays, bool onlyRotationDays, bool onlyAvailabilityDays)
+		{
+			var activity = new Activity().WithId();
+			var date = new DateOnly(2016, 10, 25);
+			var period = new DateOnlyPeriod(date, date.AddDays(6));
+			var scenario = new Scenario();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(7, 0, 8, 0, 60), new TimePeriodWithSegment(15, 0, 16, 0, 60), new ShiftCategory("_").WithId()));
+			var skill = new Skill().For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
+			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, date, 5, 5, 5, 5, 5, 5, 5);
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, new ContractWithMaximumTolerance(), skill).WithSchedulePeriodOneWeek(date);
+			var ass = new PersonAssignment(agent, scenario, date.AddDays(4)).WithLayer(activity, new TimePeriod(7, 8));
+			var dayOff = new PersonAssignment(agent, scenario, date.AddDays(6)).WithDayOff();
+			var schedulerStateHolder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, new IScheduleData[] { ass, dayOff }, skillDays);
+			var schedulingOptions = new SchedulingOptions
+			{
+				UsePreferences = true,
+				UseRotations = true,
+				UseAvailability = true,
+				PreferencesDaysOnly = onlyPrefrenceDays,
+				UsePreferencesMustHaveOnly = onlyMustHavePrefrenceDays,
+				RotationDaysOnly = onlyRotationDays,
+				AvailabilityDaysOnly = onlyAvailabilityDays
+			};
+
+			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new[] { agent }, period);
+
+			schedulerStateHolder.Schedules[agent].ScheduledDay(date.AddDays(4)).IsScheduled().Should().Be.True();
 		}
 
 		public SchedulingRestrictionsDesktopTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerNoPytteIslands47500, bool resourcePlannerXxl47258) : base(seperateWebRequest, resourcePlannerNoPytteIslands47500, resourcePlannerXxl47258)
