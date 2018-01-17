@@ -6,7 +6,6 @@ using System.Web.Http.Results;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
-using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.IocCommon;
@@ -124,7 +123,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 		}
 
 		[Test]
-		public void ShouldSaveManualJobScheduleForSingleTenant()
+		public void ShouldEnqueueInitialJob()
 		{
 			const string connectionString = "Server=.;DataBase=a";
 			BaseConfigurationRepository.SaveBaseConfiguration(connectionString, new BaseConfiguration(1053, 15, "W. Europe Standard Time", false));
@@ -159,7 +158,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			scheduledJob.ScheduleType.Should().Be(JobScheduleType.Manual);
 			scheduledJob.Description.Should().Be("Manual ETL");
 			scheduledPeriods.Count.Should().Be(1);
-			scheduledPeriods.First().JobCategoryName.Should().Be(nameof(JobCategoryType.Initial));
+			scheduledPeriods.First().JobCategoryName.Should().Be("Initial");
 			scheduledPeriods.First().RelativePeriod.Minimum.Should().Be(-1);
 			scheduledPeriods.First().RelativePeriod.Maximum.Should().Be(1);
 		}
@@ -174,6 +173,37 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			result.StatusCode.Should().Be(HttpStatusCode.NotFound);
 		}
 
+		[Test]
+		public void ShouldEnqueueIntradayJobWithTwoJobCategoryPeriods()
+		{
+			const string connectionString = "Server=.;DataBase=a";
+			BaseConfigurationRepository.SaveBaseConfiguration(connectionString, new BaseConfiguration(1053, 15, "W. Europe Standard Time", false));
+			AllTenants.HasWithAnalyticsConnectionsTring("Tenant", connectionString);
 
+			var localToday = new DateTime(2017, 12, 11);
+			var utcToday = TimeZoneHelper.ConvertToUtc(localToday, TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+			Now.Is(utcToday);
+
+			var jobToEnqueue = new JobEnqueModel
+			{
+				JobName = "Intraday",
+				JobPeriods = new List<JobPeriod>(),
+				LogDataSourceId = -2,
+				TenantName = "Tenant"
+			};
+			var result = (OkResult)Target.EnqueueJob(jobToEnqueue);
+
+			var scheduledPeriods = JobScheduleRepository.GetEtlJobSchedulePeriods(1);
+			result.Should().Be.OfType<OkResult>();
+			scheduledPeriods.Count.Should().Be(2);
+			scheduledPeriods.Any(x => x.JobCategoryName == "Agent Statistics"
+									  && x.RelativePeriod.Minimum == 0
+									  && x.RelativePeriod.Maximum == 0)
+				.Should().Be.True();
+			scheduledPeriods.Any(x => x.JobCategoryName == "Queue Statistics"
+									  && x.RelativePeriod.Minimum == 0
+									  && x.RelativePeriod.Maximum == 0)
+				.Should().Be.True();
+		}
 	}
 }

@@ -36,7 +36,7 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 			var connectionString = _analyticsConnectionsStringExtractor.Extract(jobEnqueModel.TenantName);
 			var baseConfig = _baseConfigurationRepository.LoadBaseConfiguration(connectionString);
 			IList<IEtlJobRelativePeriod> relativePeriodCollection =
-				GetRelativePeriods(jobEnqueModel.JobPeriods, baseConfig.TimeZoneCode);
+				GetRelativePeriods(jobEnqueModel, baseConfig.TimeZoneCode);
 			var etlJobSchedule = new EtlJobSchedule(-1, "Manual ETL", jobEnqueModel.JobName, true, jobEnqueModel.LogDataSourceId,
 				"Manual ETL", DateTime.MinValue, relativePeriodCollection);
 			_jobScheduleRepository.SetDataMartConnectionString(connectionString);
@@ -45,12 +45,20 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 			_jobScheduleRepository.SaveSchedulePeriods(etlJobSchedule);
 		}
 
-		public IList<IEtlJobRelativePeriod> GetRelativePeriods(IList<JobPeriod> jobPeriods, string timeZoneId)
+		public IList<IEtlJobRelativePeriod> GetRelativePeriods(JobEnqueModel job, string timeZoneId)
 		{
+			var ret = new List<IEtlJobRelativePeriod>();
+			if (job.JobName == "Intraday")
+			{
+				ret.Add(new EtlJobRelativePeriod(new MinMax<int>(0, 0), JobCategoryType.AgentStatistics));
+				ret.Add(new EtlJobRelativePeriod(new MinMax<int>(0, 0), JobCategoryType.QueueStatistics));
+				return ret;
+			}
+
 			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
 			var localNow = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), timeZone);
-			var ret = new List<IEtlJobRelativePeriod>();
-			foreach (var jobPeriod in jobPeriods)
+			
+			foreach (var jobPeriod in job.JobPeriods)
 			{
 				var jobCategory = Enum.GetValues(typeof(JobCategoryType)).Cast<JobCategoryType>().First(x => x.ToString() == jobPeriod.JobCategoryName);
 				var localStart = TimeZoneHelper.ConvertFromUtc(jobPeriod.Start, timeZone);
