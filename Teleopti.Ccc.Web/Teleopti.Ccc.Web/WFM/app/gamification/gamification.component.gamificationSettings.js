@@ -38,7 +38,9 @@
 
 		ctrl.settingSelectionChanged = function () {
 			if (ctrl.currentSettingId) {
-				var setting = ctrl.findElementInArray(ctrl.allSettings, ctrl.currentSettingId);
+				var setting = ctrl.allSettings.find(function (item) {
+					return item.Id == ctrl.currentSettingId;
+				});
 
 				if (!setting) {
 					ctrl.getSettingById(ctrl.currentSettingId);
@@ -47,17 +49,6 @@
 				}
 			}
 		};
-
-		ctrl.findElementInArray = function (target, id) {
-			if (target && target.length > 0) {
-				for (var index = 0; index < target.length; index++) {
-					var item = target[index];
-					if (item.Id == id) {
-						return item;
-					}
-				}
-			}
-		}
 
 		ctrl.updateCurrentSettingNameInList = function (settingName) {
 			var settingDescriptor = ctrl.settingDescriptors.find(function (item) {
@@ -132,7 +123,7 @@
 
 		ctrl.resetBadges = function name() {
 			gamificationSettingService.resetBadge().then(function (response) {
-			})
+			});
 		}
 	}
 
