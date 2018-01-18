@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			if (!_licenseAvailability.IsLicenseEnabled(DefinedLicenseOptionPaths.TeleoptiCccOvertimeAvailability) &&
 				!_licenseAvailability.IsLicenseEnabled(DefinedLicenseOptionPaths.TeleoptiWfmOvertimeRequests))
 			{
-				checkBoxAdvOvertimeProbability.Visible = false;
+				tabPageAdvETOTRequest.Hide();
 			}
 		}
 
