@@ -861,5 +861,49 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification
 			var result = Target.UpdateExternalBadgeSettingSilverThreshold(viewModel);
 			result.Should().Be.Null();
 		}
+
+		[Test]
+		public void ShouldAllowZeroForPercentValue()
+		{
+			var expectedThreshold = 0;
+			var gamificationSetting = new GamificationSetting("bla").WithId();
+			var existingBadgeSetting = new BadgeSetting() { Threshold = 0.4567, QualityId = 1 };
+			gamificationSetting.AddBadgeSetting(existingBadgeSetting);
+			GamificationSettingRepository.Add(gamificationSetting);
+
+			var viewModel = new ExternalBadgeSettingThresholdViewModel()
+			{
+				DataType = ExternalPerformanceDataType.Percent,
+				GamificationSettingId = gamificationSetting.Id.Value,
+				QualityId = existingBadgeSetting.QualityId,
+				ThresholdValue = expectedThreshold
+			};
+
+			var result = Target.UpdateExternalBadgeSettingGoldThreshold(viewModel);
+
+			result.ThresholdValue.Should().Be.EqualTo(expectedThreshold);
+		}
+
+		[Test]
+		public void ShouldAllowZeroForNumericValue()
+		{
+			var expectedThreshold = 0;
+			var gamificationSetting = new GamificationSetting("bla").WithId();
+			var existingBadgeSetting = new BadgeSetting() { Threshold = 0.45, QualityId = 1 };
+			gamificationSetting.AddBadgeSetting(existingBadgeSetting);
+			GamificationSettingRepository.Add(gamificationSetting);
+
+			var viewModel = new ExternalBadgeSettingThresholdViewModel()
+			{
+				DataType = ExternalPerformanceDataType.Numeric,
+				GamificationSettingId = gamificationSetting.Id.Value,
+				QualityId = existingBadgeSetting.QualityId,
+				ThresholdValue = expectedThreshold
+			};
+
+			var result = Target.UpdateExternalBadgeSettingGoldThreshold(viewModel);
+
+			result.ThresholdValue.Should().Be.EqualTo(expectedThreshold);
+		}
 	}
 }

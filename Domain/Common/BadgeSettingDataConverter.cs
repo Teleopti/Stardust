@@ -33,13 +33,13 @@ namespace Teleopti.Ccc.Domain.Common
 
 		private static double getNumericValue(double originalValue)
 		{
-			InParameter.MustBeTrue(nameof(originalValue), originalValue > 0);
+			InParameter.MustBeTrue(nameof(originalValue), originalValue >= 0);
 			return originalValue;
 		}
 
 		private static double getPercentValue(double originalValue)
 		{
-			InParameter.MustBeTrue(nameof(originalValue), originalValue > 0 && originalValue <= 1);
+			InParameter.MustBeTrue(nameof(originalValue), originalValue >= 0 && originalValue <= 1);
 			return originalValue;
 		}
 	}
