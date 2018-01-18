@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public ICollection<ITeam> FindTeams (IEnumerable<Guid> teamId)
 		{
-			return _teams.Where(team => teamId.Contains(team.Id.Value)).ToList();
+			return _teams.Where(team => teamId.Contains(team.Id.Value) && team.IsChoosable).ToList();
 		}
 
 		public IEnumerable<ITeam> FindTeamsContain(string searchString, int maxHits)

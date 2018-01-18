@@ -52,12 +52,15 @@ namespace Teleopti.Ccc.Web.Areas.Global.Core
 				var permittedTeamGroups = orgsLookup[siteLookUp.Key].Where(team => _permissionProvider.HasOrganisationDetailPermission(functionPath, period.StartDate, team));
 				if (!permittedTeamGroups.Any())
 					continue;
-				var permittedTeams = _teamRepository.FindTeams(permittedTeamGroups.Select(x => x.GroupId));
+				var permittedTeams = _teamRepository.FindTeams(permittedTeamGroups.Select(x => x.TeamId.Value));
+				if (!permittedTeams.Any())
+					continue;
 				var children = permittedTeams.Select(t => new TeamViewModel
 				{
 					Name = t.Description.Name,
 					Id = t.Id.GetValueOrDefault()
 				}).OrderBy(c => c.Name, stringComparer);
+
 				actualOrgs.Add(new SiteViewModelWithTeams
 				{
 					
@@ -169,5 +172,6 @@ namespace Teleopti.Ccc.Web.Areas.Global.Core
 
 			return new { GroupPages = actualGroupPages, DefaultGroupId = defaultGroupId };
 		}
+		
 	}
 }
