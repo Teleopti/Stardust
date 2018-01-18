@@ -89,6 +89,51 @@ describe('AuditTrailCtrl', function () {
     expect(vm.changedBy.length).toBe(2);
   });
 
+  it('should not allow invalid start or end date', function () {
+    var vm = $controller('AuditTrailController');
+
+    vm.dateChangeRange = {
+			startDate: moment(),
+			endDate: moment().subtract(3, 'days')
+		};
+		vm.dateModifyRange = {
+      startDate: moment(),
+			endDate: moment().subtract(3, 'days')
+		};
+    var form = {
+      drop: {
+        Id:'123'
+      }
+    }
+
+    vm.sendForm(form);
+
+    //expect http.post not to have been called
+  });
+
+  it('should not allow missing start or end date', function () {
+    var vm = $controller('AuditTrailController');
+
+    vm.dateChangeRange = {
+			startDate: null,
+			endDate: moment().subtract(3, 'days')
+		};
+		vm.dateModifyRange = {
+      startDate: moment(),
+			endDate: null
+		};
+    var form = {
+      drop: {
+        Id:'123'
+      }
+    }
+
+    vm.sendForm(form);
+
+    //expect http.post not to have been called
+  });
+
+
   it('should find selected organization data', function () {
     var vm = $controller('AuditTrailController');
     var orgData = [
