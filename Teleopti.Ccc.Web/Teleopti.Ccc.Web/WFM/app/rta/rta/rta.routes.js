@@ -84,11 +84,15 @@ angular.module('wfm.rta').config(function ($stateProvider, ToggleProvider) {
 		.state('rta-historical', {
 			url: '/rta/agent-historical/:personId/:date?open',
 			templateUrl: function () {
+				if (toggles.RTA_ApprovePreviousOOA_47230)
+					return 'app/rta/rta/historical/rta-historical.approvePreviousOOA_47230.html';
 				if (toggles.RTA_ViewHistoricalAhderence7DaysBack_46826)
 					return 'app/rta/rta/historical/rta-historical.adherence7DaysBack_46826.html';
 				return 'app/rta/rta/historical/rta-historical.html';
 			},
 			controllerProvider: function () {
+				if (toggles.RTA_ApprovePreviousOOA_47230)
+					return 'RtaHistoricalController47230 as vm';
 				if (toggles.RTA_ViewHistoricalAhderence7DaysBack_46826)
 					return 'RtaHistoricalController46826 as vm';
 				return 'RtaHistoricalController as vm';
