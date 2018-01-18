@@ -118,15 +118,15 @@
 									<div class="con-row pp-calendar-wrapper">
 										<div class="con-flex" ng-if="vm.planningPeriods.length > 1">
 											<wfm-calendar-picker ng-model="vm.selectedSuggestion" ng-change="vm.isSelectedChanged()" interval-rule="week" disable="all"
-											 ng-show="vm.intervalType == 'Week'"></wfm-calendar-picker>
+											custom-validate="vm.intervalLengthValid()" ng-show="vm.intervalType == 'Week'"></wfm-calendar-picker>
 											<wfm-calendar-picker ng-model="vm.selectedSuggestion" ng-change="vm.isSelectedChanged()" interval-rule="month" disable="all"
-											 ng-show="vm.intervalType == 'Month'"></wfm-calendar-picker>
+											custom-validate="vm.intervalLengthValid()" ng-show="vm.intervalType == 'Month'"></wfm-calendar-picker>
 										</div>
 										<div class="con-flex" ng-if="vm.planningPeriods.length == 1">
 											<wfm-calendar-picker ng-model="vm.selectedSuggestion" ng-change="vm.isSelectedChanged()" interval-rule="week" disable="end-date"
-											 ng-show="vm.intervalType == 'Week'"></wfm-calendar-picker>
+											custom-validate="vm.intervalLengthValid()" ng-show="vm.intervalType == 'Week'"></wfm-calendar-picker>
 											<wfm-calendar-picker ng-model="vm.selectedSuggestion" ng-change="vm.isSelectedChanged()" interval-rule="month" disable="end-date"
-											 ng-show="vm.intervalType == 'Month'"></wfm-calendar-picker>
+											custom-validate="vm.intervalLengthValid()" ng-show="vm.intervalType == 'Month'"></wfm-calendar-picker>
 										</div>
 									</div>
 								</md-content>
@@ -208,9 +208,9 @@
 									<div class="con-row pp-calendar-wrapper">
 										<div class="con-flex ">
 											<wfm-calendar-picker ng-model="vm.selectedSuggestion" ng-change="vm.isSelectedChanged()" interval-rule="week" disable="end-date"
-											 ng-show="vm.intervalType == 'Week'"></wfm-calendar-picker>
+											custom-validate="vm.intervalLengthValid()" ng-show="vm.intervalType == 'Week'"></wfm-calendar-picker>
 											<wfm-calendar-picker ng-model="vm.selectedSuggestion" ng-change="vm.isSelectedChanged()" interval-rule="month" disable="end-date"
-											 ng-show="vm.intervalType == 'Month'"></wfm-calendar-picker>
+											custom-validate="vm.intervalLengthValid()" ng-show="vm.intervalType == 'Month'"></wfm-calendar-picker>
 										</div>
 									</div>
 								</md-content>

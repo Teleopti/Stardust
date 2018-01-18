@@ -32,6 +32,7 @@
 		vm.isNonePp = isNonePp;
 		vm.typeChanged = typeChanged;
 		vm.intervalChanged = intervalChanged;
+		vm.intervalLengthValid = intervalLengthValid;
 		vm.startNextPlanningPeriod = startNextPlanningPeriod;
 		vm.selectPp = selectPp;
 		vm.getLastPp = getLastPp;
@@ -116,11 +117,24 @@
 			return autoUpdateEndDate();
 		}
 
+		function intervalLengthValid() {
+			if(vm.selectedSuggestion.endDate == null) {
+				return "SetupIntervalLength"
+			}
+		}
+
 		function autoUpdateEndDate() {
+			if(vm.intervalRange == 0) {
+				var startDate = vm.selectedSuggestion.startDate;
+				return vm.selectedSuggestion = {
+					startDate: moment(startDate).toDate(),
+					endDate: null
+				};
+			}
 			var startDate = vm.selectedSuggestion.startDate;
 			return vm.selectedSuggestion = {
 				startDate: moment(startDate).toDate(),
-				endDate: moment(startDate).add(vm.intervalRange, vm.intervalType.toLowerCase()).subtract(1, 'day').toDate()
+				endDate: vm.intervalRange == 0 ? null : moment(startDate).add(vm.intervalRange, vm.intervalType.toLowerCase()).subtract(1, 'day').toDate()
 			};
 		}
 

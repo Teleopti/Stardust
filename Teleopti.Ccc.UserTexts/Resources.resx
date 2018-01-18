@@ -17029,4 +17029,20 @@ Do you want to participate?</value>
     <value>Value of gold threshold should be smaller than the rest.</value>
     <comment>Value of gold threshold should be smaller than the rest.</comment>
   </data>
+  <data name="NoEndToDisplay" xml:space="preserve">
+    <value>No end date to display</value>
+    <comment>No end date to display on date range picker</comment>
+  </data>
+  <data name="NoStartAndEndDateToDisplay" xml:space="preserve">
+    <value>No start date and end date to display</value>
+    <comment>No start date and end date to display on date range picker</comment>
+  </data>
+  <data name="NoStartDateToDisplay" xml:space="preserve">
+    <value>No start date to display</value>
+    <comment>No start date to display on date range picker</comment>
+  </data>
+  <data name="SetupIntervalLength" xml:space="preserve">
+    <value>Please setup your interval length</value>
+    <comment>please setup your interval length on web plan for date range picker</comment>
+  </data>
 </root>

@@ -20564,6 +20564,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No end date to display.
+        /// </summary>
+        public static string NoEndToDisplay {
+            get {
+                return ResourceManager.GetString("NoEndToDisplay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No existing shift was selected.
         /// </summary>
         public static string NoExistingShiftSelected {
@@ -21163,6 +21172,24 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NoSkillMatchingPropertiesForCurrentSkillFound {
             get {
                 return ResourceManager.GetString("NoSkillMatchingPropertiesForCurrentSkillFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No start date and end date to display.
+        /// </summary>
+        public static string NoStartAndEndDateToDisplay {
+            get {
+                return ResourceManager.GetString("NoStartAndEndDateToDisplay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No start date to display.
+        /// </summary>
+        public static string NoStartDateToDisplay {
+            get {
+                return ResourceManager.GetString("NoStartDateToDisplay", resourceCulture);
             }
         }
         
@@ -30868,6 +30895,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SetTresholdTime {
             get {
                 return ResourceManager.GetString("SetTresholdTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please setup your interval length.
+        /// </summary>
+        public static string SetupIntervalLength {
+            get {
+                return ResourceManager.GetString("SetupIntervalLength", resourceCulture);
             }
         }
         
