@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	    private bool resolveExecute(IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions,
 		    ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
 	    {
-		    NightRestWhiteSpotSolverResult solverResult = _solver.Resolve(matrix);
+		    NightRestWhiteSpotSolverResult solverResult = _solver.Resolve(matrix, schedulingOptions);
 		    // om inte solvern returnerar något så returnera false
 		    if (!solverResult.DaysToDelete.Any())
 			    return false;

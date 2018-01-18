@@ -2,17 +2,24 @@
 using Teleopti.Interfaces.Domain;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
     public interface INightRestWhiteSpotSolver
     {
-        NightRestWhiteSpotSolverResult Resolve(IScheduleMatrixPro matrix);
+        NightRestWhiteSpotSolverResult Resolve(IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions);
     }
 
     public class NightRestWhiteSpotSolver : INightRestWhiteSpotSolver
     {
-        public NightRestWhiteSpotSolverResult Resolve(IScheduleMatrixPro matrix)
+		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
+
+		public NightRestWhiteSpotSolver(IEffectiveRestrictionCreator effectiveRestrictionCreator)
+		{
+			_effectiveRestrictionCreator = effectiveRestrictionCreator;
+		}
+        public NightRestWhiteSpotSolverResult Resolve(IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions)
         {
             NightRestWhiteSpotSolverResult result = new NightRestWhiteSpotSolverResult();
 
@@ -41,11 +48,24 @@ namespace Teleopti.Ccc.Domain.Optimization
 
                 if (previousMatrixEffectivePeriodDay.DaySchedulePart().SignificantPart() == SchedulePartView.DayOff)
                     continue;
-                if (matrix.GetScheduleDayByKey(matrixEffectivePeriodDay.Day.AddDays(-1)).DaySchedulePart().IsScheduled())
-                    result.AddDayToDelete(matrixEffectivePeriodDay.Day.AddDays(-1));
+
+				var previousScheduleDay = matrix.GetScheduleDayByKey(matrixEffectivePeriodDay.Day.AddDays(-1)).DaySchedulePart();
+				var effectiveRestrictions =_effectiveRestrictionCreator.GetEffectiveRestriction(previousScheduleDay, schedulingOptions);
+				var removePreviousDay = previousScheduleDay.IsScheduled();
+
+				if ((schedulingOptions.PreferencesDaysOnly || schedulingOptions.UsePreferencesMustHaveOnly) && schedulingOptions.UsePreferences && !effectiveRestrictions.IsPreferenceDay)
+					removePreviousDay = false;
+
+				if (schedulingOptions.AvailabilityDaysOnly && schedulingOptions.UseAvailability && !effectiveRestrictions.IsAvailabilityDay)
+					removePreviousDay = false;
+
+				if (schedulingOptions.RotationDaysOnly && schedulingOptions.UseRotations && !effectiveRestrictions.IsRotationDay)
+					removePreviousDay = false;
+
+				if (removePreviousDay) result.AddDayToDelete(matrixEffectivePeriodDay.Day.AddDays(-1));
                 result.AddDayToReschedule(matrixEffectivePeriodDay.Day.AddDays(-1));
-                result.AddDayToReschedule(matrixEffectivePeriodDay.Day);
-            }
+				result.AddDayToReschedule(matrixEffectivePeriodDay.Day);
+			}
 
             return result;
         }

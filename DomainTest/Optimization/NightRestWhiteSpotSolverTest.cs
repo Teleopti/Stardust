@@ -1,8 +1,11 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -11,7 +14,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
     [TestFixture]
     public class NightRestWhiteSpotSolverTest
     {
-        private INightRestWhiteSpotSolver _target;
+		private INightRestWhiteSpotSolver _target;
         private MockRepository _mocks;
         private IScheduleMatrixPro _matrix;
         private IScheduleDayPro _scheduleDayPro1;
@@ -28,13 +31,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IScheduleDay _schedulePartContractDo;
         private IScheduleDay _schedulePartAbsence;
         private IScheduleDay _schedulePartShift;
+		private IEffectiveRestrictionCreator _effectiveRestrictionCreator;
+		private IEffectiveRestriction _effectiveRestriction;
 
         [SetUp]
         public void Setup()
         {
-            _target = new NightRestWhiteSpotSolver();
             _mocks = new MockRepository();
-            _matrix = _mocks.StrictMock<IScheduleMatrixPro>();
+			_effectiveRestrictionCreator = _mocks.StrictMock<IEffectiveRestrictionCreator>();
+			_effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(), new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
+			_matrix = _mocks.StrictMock<IScheduleMatrixPro>();
             _scheduleDayPro1 = _mocks.StrictMock<IScheduleDayPro>();
             _scheduleDayPro2 = _mocks.StrictMock<IScheduleDayPro>();
             _scheduleDayPro3 = _mocks.StrictMock<IScheduleDayPro>();
@@ -48,8 +54,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _schedulePartContractDo = _mocks.StrictMock<IScheduleDay>();
             _schedulePartAbsence = _mocks.StrictMock<IScheduleDay>();
             _schedulePartShift = _mocks.StrictMock<IScheduleDay>();
-
-        }
+			_target = new NightRestWhiteSpotSolver(_effectiveRestrictionCreator);
+		}
 
         [Test]
         public void SolverShouldFindWhiteSpotsAndSuggestDayBefore()
@@ -57,13 +63,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Record())
             {
                 mockExpectations(allUnlocked());
-                simplePeriod();
+				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(null, null)).Return(_effectiveRestriction).Repeat.AtLeastOnce().IgnoreArguments();
+				simplePeriod();
             }
             NightRestWhiteSpotSolverResult result;
 
             using(_mocks.Playback())
             {
-                result = _target.Resolve(_matrix);
+                result = _target.Resolve(_matrix, new SchedulingOptions());
             }
 
             Assert.AreEqual(2, result.DaysToDelete.Count());
@@ -83,13 +90,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Record())
             {
                 mockExpectations(allUnlocked());
-                firstDay();
+				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(null, null)).Return(_effectiveRestriction).IgnoreArguments();
+				firstDay();
             }
             NightRestWhiteSpotSolverResult result;
 
             using(_mocks.Playback())
             {
-                result = _target.Resolve(_matrix);
+                result = _target.Resolve(_matrix, new SchedulingOptions());
             }
 
             Assert.AreEqual(1, result.DaysToDelete.Count());
@@ -106,13 +114,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Record())
             {
                 mockExpectations(allUnlocked());
-                twoDaysInARow();
+				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(null, null)).Return(_effectiveRestriction).IgnoreArguments();
+				twoDaysInARow();
             }
             NightRestWhiteSpotSolverResult result;
 
             using (_mocks.Playback())
             {
-                result = _target.Resolve(_matrix);
+                result = _target.Resolve(_matrix, new SchedulingOptions());
             }
 
             Assert.AreEqual(1, result.DaysToDelete.Count());
@@ -129,13 +138,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Record())
             {
                 mockExpectations(allUnlocked());
-                lastAndNextDayEmpty();
+				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(null, null)).Return(_effectiveRestriction).IgnoreArguments();
+				lastAndNextDayEmpty();
             }
             NightRestWhiteSpotSolverResult result;
 
             using (_mocks.Playback())
             {
-                result = _target.Resolve(_matrix);
+                result = _target.Resolve(_matrix, new SchedulingOptions());
             }
 
             Assert.AreEqual(1, result.DaysToDelete.Count());
@@ -152,13 +162,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Record())
             {
                 mockExpectations(lockDay2());
-                simplePeriod();
+				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(null, null)).Return(_effectiveRestriction).IgnoreArguments();
+				simplePeriod();
             }
             NightRestWhiteSpotSolverResult result;
 
             using (_mocks.Playback())
             {
-                result = _target.Resolve(_matrix);
+                result = _target.Resolve(_matrix, new SchedulingOptions());
             }
 
             Assert.AreEqual(1, result.DaysToDelete.Count());
@@ -175,13 +186,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Record())
             {
                 mockExpectations(lockDay3());
-                simplePeriod();
+				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(null, null)).Return(_effectiveRestriction).IgnoreArguments();
+				simplePeriod();
             }
             NightRestWhiteSpotSolverResult result;
 
             using (_mocks.Playback())
             {
-                result = _target.Resolve(_matrix);
+                result = _target.Resolve(_matrix, new SchedulingOptions());
             }
 
             Assert.AreEqual(1, result.DaysToDelete.Count());
@@ -198,13 +210,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Record())
             {
                 mockExpectations(allUnlocked());
-                firstTwoDaysAreEmpty();
+				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(null, null)).Return(_effectiveRestriction).IgnoreArguments();
+				firstTwoDaysAreEmpty();
             }
             NightRestWhiteSpotSolverResult result;
 
             using (_mocks.Playback())
             {
-                result = _target.Resolve(_matrix);
+                result = _target.Resolve(_matrix, new SchedulingOptions());
             }
 
             Assert.AreEqual(0, result.DaysToDelete.Count());
@@ -222,7 +235,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             using (_mocks.Playback())
             {
-                result = _target.Resolve(_matrix);
+                result = _target.Resolve(_matrix, new SchedulingOptions());
             }
 
             Assert.AreEqual(0, result.DaysToDelete.Count());
@@ -266,8 +279,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(_matrix.UnlockedDays).Return(unlockedList).Repeat.Any();
             Expect.Call(_matrix.FullWeeksPeriodDays).Return(periodList).Repeat.Any();
             Expect.Call(_matrix.Person).Return(person).Repeat.Any();
-
-        }
+		}
 
         private void simplePeriod()
         {

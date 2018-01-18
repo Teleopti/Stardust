@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceCalculation, true, schedulerStateHolder.SchedulingResultState, _userTimeZone);
 
 				INightRestWhiteSpotSolverService nightRestWhiteSpotSolverService =
-					new NightRestWhiteSpotSolverService(new NightRestWhiteSpotSolver(),
+					new NightRestWhiteSpotSolverService(new NightRestWhiteSpotSolver(_effectiveRestrictionCreator),
 						deleteAndResourceCalculateService,
 						scheduleServiceForFlexibleAgents, resourceCalculateDelayer);
 
