@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.OvertimeRequests
 				AsSystem.Logon(tenantName, businessUnitId);
 
 			var now = Now.UtcDateTime();
-			var period = new DateTimePeriod(now.AddMonths(-6), now.AddYears(1));
+			var period = new DateTimePeriod(now.AddDays(-7), now.AddDays(49));
 			var deltas = new List<SkillCombinationResource>();
 			WithUnitOfWork.Do((uow) =>
 			{
