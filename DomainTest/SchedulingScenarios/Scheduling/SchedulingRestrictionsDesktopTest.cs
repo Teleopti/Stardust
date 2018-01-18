@@ -210,7 +210,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 
 		[Test]
-		[Ignore("47687 to be fixed")]
 		public void ShouldRespectAbsencePrefrenceOnlyOnPreferenceDay()
 		{
 			var activity = new Activity().WithId();

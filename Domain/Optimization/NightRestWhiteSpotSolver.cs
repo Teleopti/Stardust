@@ -53,9 +53,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 				var effectiveRestrictions =_effectiveRestrictionCreator.GetEffectiveRestriction(previousScheduleDay, schedulingOptions);
 				var removePreviousDay = previousScheduleDay.IsScheduled();
 
-				if ((schedulingOptions.PreferencesDaysOnly || schedulingOptions.UsePreferencesMustHaveOnly) && schedulingOptions.UsePreferences && !effectiveRestrictions.IsPreferenceDay)
+				if (schedulingOptions.UsePreferences && effectiveRestrictions.Absence != null && effectiveRestrictions.IsPreferenceDay)
 					removePreviousDay = false;
 
+				if ((schedulingOptions.PreferencesDaysOnly || schedulingOptions.UsePreferencesMustHaveOnly) && schedulingOptions.UsePreferences && !effectiveRestrictions.IsPreferenceDay)
+						removePreviousDay = false;
+						
 				if (schedulingOptions.AvailabilityDaysOnly && schedulingOptions.UseAvailability && !effectiveRestrictions.IsAvailabilityDay)
 					removePreviousDay = false;
 
