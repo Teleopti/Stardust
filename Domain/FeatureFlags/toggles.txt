@@ -49,7 +49,7 @@ RTA_MobileFriendlyCheckboxes_46758 = true
 RTA_ViewHistoricalAhderenceForRecentShifts_46786 = true
 RTA_ViewHistoricalAhderence7DaysBack_46826 = RC
 RTA_ConfigurationValidationNotification_46933 = RC
-RTA_ApprovePreviousOOA_47230 = DEV
+RTA_ApprovePreviousOOA_47230 = false
 
 # Dumplings, can any of these be removed? #
 WfmTeamSchedule_MoveOvertimeActivity_44888 = true
