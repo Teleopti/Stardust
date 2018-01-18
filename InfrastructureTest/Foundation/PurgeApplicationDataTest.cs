@@ -1,24 +1,54 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
+using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.InfrastructureTest.Helper;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Foundation
 {
-    [TestFixture]
-    public class PurgeApplicationDataTest : DatabaseTest
-    {
-    	private IExecutableCommand target;
-
-		protected override void SetupForRepositoryTest()
-		{
-			target = new PurgeApplicationData(SetupFixtureForAssembly.DataSource.Application);
-		}
-
+    [InfrastructureTest]
+    public class PurgeApplicationDataTest
+	{
+		public ICurrentUnitOfWorkFactory UnitOfWorkFactory;
+		public IPersonAssignmentRepository PersonAssignmentRepository;
+		public IPersonRepository PersonRepository;
+		public IActivityRepository ActivityRepository;
+		public IScenarioRepository ScenarioRepository;
+		
 		[Test]
-		public void ShouldCallPurgeProcedure()
+		public void ShouldDeleteOldAssignments()
 		{
-			target.Execute();
+			var longTimeAgo = new DateOnly(1800, 1, 1);
+			var agent = new Person().InTimeZone(TimeZoneInfo.Utc);
+			var scenario = new Scenario("_");
+			var activity = new Activity("_");
+			var ass = new PersonAssignment(agent, scenario, longTimeAgo)
+				.WithLayer(activity, new TimePeriod(8, 17));
+
+			using (var uow = UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			{
+				ScenarioRepository.Add(scenario);
+				PersonRepository.Add(agent);
+				ActivityRepository.Add(activity);
+				PersonAssignmentRepository.Add(ass);
+				uow.PersistAll();
+			}
+			using (UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			{
+				var target = new PurgeApplicationData(UnitOfWorkFactory.Current());
+				target.Execute();
+
+				PersonAssignmentRepository.LoadAll()
+					.Should().Be.Empty();
+			}
 		}
     }
 }
