@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 	{
 		public RotationBaseGridView(GridControl grid, FilteredPeopleHolder filteredPeopleHolder,
 		                            IList<TAdapterParent> parentAdapterCollection, ViewType viewType,
-		                            IToggleManager toggleManager, IBusinessRuleConfigProvider businessRuleConfigProvider)
+		                            IToggleManager toggleManager, IBusinessRuleConfigProvider businessRuleConfigProvider, IConfigReader configReader)
 			: base(grid, filteredPeopleHolder)
 		{
 			Init();
@@ -40,6 +41,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 			_viewType = viewType;
 			_toggleManager = toggleManager;
 			_businessRuleConfigProvider = businessRuleConfigProvider;
+			_configReader = configReader;
+
 			_parentAdapterCollection = parentAdapterCollection;
 		}
 
@@ -100,7 +103,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 		private ViewType _viewType;
 		private readonly IToggleManager _toggleManager;
 		private readonly IBusinessRuleConfigProvider _businessRuleConfigProvider;
-
+		private readonly IConfigReader _configReader;
+		
 		internal override ViewType Type => _viewType;
 
 		public override int ParentGridLastColumnIndex => _parentGridColumns.Count;
@@ -348,7 +352,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 
 			if (selectedEntity != null)
 			{
-				var screen = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider(_toggleManager, _businessRuleConfigProvider)), selectedEntity);
+				var screen = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider(_toggleManager, _businessRuleConfigProvider, _configReader)), selectedEntity);
 				screen.Show();
 			}
 		}

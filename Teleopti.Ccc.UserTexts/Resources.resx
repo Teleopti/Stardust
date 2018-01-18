@@ -17045,4 +17045,17 @@ Do you want to participate?</value>
     <value>Please setup your interval length</value>
     <comment>please setup your interval length on web plan for date range picker</comment>
   </data>
+  <data name="GamificationSettingsMovedToWeb" xml:space="preserve">
+    <value>Gamification settings are now available via the Teleopti WFM Web site</value>
+    <comment>Title on the Gamification Settings Page alerting the user that the gamification settings are now on the web</comment>
+  </data>
+  <data name="GamificationSettingsRedirectWebManualMessage" xml:space="preserve">
+    <value>Click here to manually open the gamification settings web page.</value>
+    <comment>Hyperlink text on the Gamification Settings Page.</comment>
+  </data>
+  <data name="GamificationSettingsRedirectWebMessage" xml:space="preserve">
+    <value>The gamification settings page should have been automatically launched when you opened this page. </value>
+    <comment>Explanation on the Gamification Settings Page alerting the user that there has been a web page launched automatically to load the settings.</comment>
+  </data>
+
 </root>

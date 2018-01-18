@@ -12,6 +12,7 @@ using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -85,6 +86,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 		private bool _forceClose;
 		private Form _mainWindow;
 		private readonly IStaffingCalculatorServiceFacade _staffingCalculatorServiceFacade;
+		private readonly IConfigReader _configReader;
 		private readonly IStatisticHelper _statisticHelper;
 		private readonly IBusinessRuleConfigProvider _businessRuleConfigProvider;
 
@@ -941,13 +943,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 		public Forecaster(ISkill skill, DateOnlyPeriod dateTimePeriod, IScenario scenario, bool longterm,
 			IToggleManager toggleManager, Form mainWindow, IStatisticHelper statisticHelper,
 			IBusinessRuleConfigProvider businessRuleConfigProvider,
-			IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade)
+			IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade, IConfigReader configReader)
 			: this(statisticHelper, businessRuleConfigProvider)
 		{
 			_toggleManager = toggleManager;
 			_dateTimePeriod = dateTimePeriod;
 			_mainWindow = mainWindow;
 			_staffingCalculatorServiceFacade = staffingCalculatorServiceFacade;
+			_configReader = configReader;
 
 			_zoomButtons = new ZoomButtons();
 			_zoomButtons.ZoomChanged += buttonsZoomChanged;
@@ -2182,7 +2185,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 		{
 			try
 			{
-				var settings = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider(_toggleManager, _businessRuleConfigProvider)));
+				var settings = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider(_toggleManager, _businessRuleConfigProvider, _configReader)));
 				settings.Show();
 			}
 			catch (DataSourceException ex)
@@ -2421,7 +2424,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 		{
 			try
 			{
-				var settings = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider(_toggleManager, _businessRuleConfigProvider)));
+				var settings = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider(_toggleManager, _businessRuleConfigProvider, _configReader)));
 				settings.Show();
 			}
 			catch (DataSourceException ex)

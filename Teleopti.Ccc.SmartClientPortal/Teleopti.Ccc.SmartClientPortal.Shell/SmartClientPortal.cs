@@ -13,7 +13,6 @@ using System.Windows.Forms;
 using Autofac;
 using EO.Base;
 using EO.WebBrowser;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Ccc.SmartClientPortal.Shell.Controls;
@@ -76,7 +75,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		private readonly IToggleManager _toggleManager;
 		readonly int homeCommand = CommandIds.RegisterUserCommand("StartPage");
 		private bool showCustomerWebMenu = true;
-		private const string permissionModule = "/permissions";
 		private readonly WebUrlHolder _webUrlHolder;
 		private bool showDataProtectionWebPage;
 
@@ -829,7 +827,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		{
 			try
 			{
-				var settings = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider(_toggleManager, _container.Resolve<IBusinessRuleConfigProvider>())));
+				var settings = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider(_toggleManager, _container.Resolve<IBusinessRuleConfigProvider>(), _container.Resolve<IConfigReader>())));
 				settings.Show();
 				settings.BringToFront();
 			}
@@ -887,5 +885,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			var wfmPath = _container.Resolve<IConfigReader>().AppConfig("FeatureToggle");
 			return new Uri($"{wfmPath}{relativePath}");
 		}
+	
 	}
 }

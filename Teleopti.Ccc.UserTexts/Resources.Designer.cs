@@ -13413,6 +13413,33 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Gamification settings are now available via the Teleopti WFM Web site.
+        /// </summary>
+        public static string GamificationSettingsMovedToWeb {
+            get {
+                return ResourceManager.GetString("GamificationSettingsMovedToWeb", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Click here to manually open the gamification settings web page..
+        /// </summary>
+        public static string GamificationSettingsRedirectWebManualMessage {
+            get {
+                return ResourceManager.GetString("GamificationSettingsRedirectWebManualMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The gamification settings page should have been automatically launched when you opened this page. .
+        /// </summary>
+        public static string GamificationSettingsRedirectWebMessage {
+            get {
+                return ResourceManager.GetString("GamificationSettingsRedirectWebMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to View detail of import file format.
         /// </summary>
         public static string GamificationViewImportFileFormat {

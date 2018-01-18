@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Autofac;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -151,11 +152,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 	{
 		private readonly IToggleManager _toggleManager;
 		private readonly IBusinessRuleConfigProvider _businessRuleConfigProvider;
+		private readonly IConfigReader _configReader;
 
-		public OptionsSettingPagesProvider(IToggleManager toggleManager, IBusinessRuleConfigProvider businessRuleConfigProvider)
+		public OptionsSettingPagesProvider(IToggleManager toggleManager, IBusinessRuleConfigProvider businessRuleConfigProvider, IConfigReader configReader)
 		{
 			_toggleManager = toggleManager;
 			_businessRuleConfigProvider = businessRuleConfigProvider;
+			_configReader = configReader;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
@@ -190,10 +193,21 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 				new WorkflowControlSetView(_toggleManager),
 				new AuditingPage(),
 				new ScheduleTagControl(),
-				new GamificationSettingControl(_toggleManager),
-				new SetGamificationSettingTargetsControl(),
 				new SeniorityControl()
 			};
+
+			if (_toggleManager.IsEnabled(Toggles.WFM_Gamification_Setting_With_External_Quality_Values_45003))
+			{
+				if (_configReader != null)
+				{
+					allSupportedPages.Add(new GamificationSettingRedirectWebControl(_configReader));
+				}
+			}
+			else
+			{
+				allSupportedPages.Add(new GamificationSettingControl(_toggleManager));
+				allSupportedPages.Add(new SetGamificationSettingTargetsControl());
+			}
 
 			if (PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.PayrollIntegration))
 				allSupportedPages.Add(new MultiplicatorControlView());

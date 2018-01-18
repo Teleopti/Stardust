@@ -8,6 +8,7 @@ using log4net;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
@@ -44,8 +45,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Budgeting
 		private bool _weekHasSelectedCell;
 		private bool _monthHasSelectedCell;
 		private readonly IBusinessRuleConfigProvider _businessRuleConfigProvider;
+		private readonly IConfigReader _configReader;
 
-		public BudgetGroupMainView(IBudgetGroupTabView budgetGroupTabView, IEventAggregatorLocator eventAggregatorLocator, IGracefulDataSourceExceptionHandler dataSourceExceptionHandler, IBudgetPermissionService budgetPermissionService, IUnitOfWorkFactory unitOfWorkFactory, IRepositoryFactory repositoryFactory, IToggleManager toggleManager, IBusinessRuleConfigProvider businessRuleConfigProvider)
+		public BudgetGroupMainView(IBudgetGroupTabView budgetGroupTabView, IEventAggregatorLocator eventAggregatorLocator, IGracefulDataSourceExceptionHandler dataSourceExceptionHandler, IBudgetPermissionService budgetPermissionService, IUnitOfWorkFactory unitOfWorkFactory, IRepositoryFactory repositoryFactory, IToggleManager toggleManager, IBusinessRuleConfigProvider businessRuleConfigProvider, IConfigReader configReader)
 		{
 			_dataSourceExceptionHandler = dataSourceExceptionHandler;
 			_budgetPermissionService = budgetPermissionService;
@@ -53,6 +55,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Budgeting
 			_repositoryFactory = repositoryFactory;
 			_toggleManager = toggleManager;
 			_businessRuleConfigProvider = businessRuleConfigProvider;
+			_configReader = configReader;
+
 			_localEventAggregator = eventAggregatorLocator.LocalAggregator();
 			_globalEventAggregator = eventAggregatorLocator.GlobalAggregator();
 			InitializeComponent();
@@ -516,7 +520,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Budgeting
 		{
 			try
 			{
-				var settings = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider(_toggleManager, _businessRuleConfigProvider)));
+				var settings = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider(_toggleManager, _businessRuleConfigProvider, _configReader)));
 				settings.Show();
 			}
 			catch (DataSourceException ex)

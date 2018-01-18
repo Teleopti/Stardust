@@ -5964,7 +5964,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 			try
 			{
-				var settings = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider(toggleManager, _container.Resolve<IBusinessRuleConfigProvider>())));
+				var settings = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider(toggleManager, _container.Resolve<IBusinessRuleConfigProvider>(), _container.Resolve<IConfigReader>())));
 				settings.Show();
 				settings.BringToFront();
 			}

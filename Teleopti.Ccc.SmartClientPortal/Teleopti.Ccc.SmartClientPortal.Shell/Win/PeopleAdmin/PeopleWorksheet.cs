@@ -10,6 +10,7 @@ using Microsoft.Practices.Composite.Events;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -52,8 +53,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin
         private GridConstructor _panelConstructor;
         private FilteredPeopleHolder _filteredPeopleHolder;
         private IEventAggregator _globalEventAggregator;
-
-        private static WorksheetStateHolder _stateHolder;
+		
+		private static WorksheetStateHolder _stateHolder;
         private TabControlAdv _tabControlPeopleAdmin;
         private readonly bool _readOnly;
         private ILifetimeScope _container;
@@ -62,8 +63,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin
 		private Form _mainWindow;
         private DateNavigateControl _dateNavigatePeriods;
 	    private static int _numberOfOpened = 0;
+		private readonly IConfigReader _configReader;
 
-        protected PeopleWorksheet()
+		protected PeopleWorksheet()
         {
             InitializeComponent();
             if (!DesignMode)
@@ -87,7 +89,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin
             _mainWindow = mainWindow;
             _filteredPeopleHolder = filteredPeopleHolder;
             _globalEventAggregator = globalEventAggregator;
-            var lifetimeScope = componentContext.Resolve<ILifetimeScope>();
+			var lifetimeScope = componentContext.Resolve<ILifetimeScope>();
             _container = lifetimeScope.BeginLifetimeScope();
             _toggleManager = componentContext.Resolve<IToggleManager>();
 
@@ -95,8 +97,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin
             _filteredPeopleHolder.TabControlPeopleAdmin = _tabControlPeopleAdmin;
 
 			_businessRuleConfigProvider = componentContext.Resolve<IBusinessRuleConfigProvider>();
-			_gridConstructor = new GridConstructor(filteredPeopleHolder, _toggleManager, _businessRuleConfigProvider);
-            _panelConstructor = new GridConstructor(filteredPeopleHolder, _toggleManager, _businessRuleConfigProvider);
+			_configReader = componentContext.Resolve<IConfigReader>();
+
+			_gridConstructor = new GridConstructor(filteredPeopleHolder, _toggleManager, _businessRuleConfigProvider, _configReader);
+            _panelConstructor = new GridConstructor(filteredPeopleHolder, _toggleManager, _businessRuleConfigProvider, _configReader);
             _domainFinder = new PeopleDomainFinder(filteredPeopleHolder);
             shiftCategoryLimitationView.SetState(filteredPeopleHolder, _gridConstructor);
 
@@ -767,7 +771,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin
             _filteredPeopleHolder = filteredPeopleHolder;
             _filteredPeopleHolder.TabControlPeopleAdmin = _tabControlPeopleAdmin;
 
-            _gridConstructor = new GridConstructor(filteredPeopleHolder, _toggleManager, _businessRuleConfigProvider);
+            _gridConstructor = new GridConstructor(filteredPeopleHolder, _toggleManager, _businessRuleConfigProvider, _configReader);
 
             _panelConstructor.GridViewChanged -= panelConstructorGridViewChanged;
             _panelConstructor.View.ClearView();
@@ -809,7 +813,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin
             //löjligt men...
             _gridConstructor.View.SetSelectedPersons(_gridConstructor.View.GetSelectedPersons());
 
-            _panelConstructor = new GridConstructor(filteredPeopleHolder, _toggleManager, _businessRuleConfigProvider);
+            _panelConstructor = new GridConstructor(filteredPeopleHolder, _toggleManager, _businessRuleConfigProvider, _configReader);
             _panelConstructor.GridViewChanged += panelConstructorGridViewChanged;
             _panelConstructor.BuildGridView(panelViewType);
 
@@ -1717,7 +1721,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin
             var toggleManager = _container.Resolve<IToggleManager>();
             try
             {
-                var settings = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider(toggleManager, _container.Resolve<IBusinessRuleConfigProvider>())));
+                var settings = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider(toggleManager, _businessRuleConfigProvider, _configReader)));
                 settings.Show();
             }
             catch (DataSourceException ex)

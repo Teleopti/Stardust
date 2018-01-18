@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -34,14 +35,17 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts
 		private readonly IToggleManager _toggleManager;
 		private readonly IExternalExceptionHandler _externalExceptionHandler = new ExternalExceptionHandler();
 		private readonly IBusinessRuleConfigProvider _businessRuleConfigProvider;
+		private readonly IConfigReader _configReader;
 
 		private bool ruleSetBagCopyClicked, ruleSetCopyClicked;
 
-		public WorkShiftsExplorer(IEventAggregator eventAggregator, IToggleManager toggleManager, IBusinessRuleConfigProvider businessRuleConfigProvider)
+		public WorkShiftsExplorer(IEventAggregator eventAggregator, IToggleManager toggleManager, IBusinessRuleConfigProvider businessRuleConfigProvider, IConfigReader configReader)
 		{
 			_eventAggregator = eventAggregator;
 			_toggleManager = toggleManager;
 			_businessRuleConfigProvider = businessRuleConfigProvider;
+			_configReader = configReader;
+
 			InitializeComponent();
 			if (!DesignMode)
 			{
@@ -641,7 +645,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts
 		{
 			try
 			{
-				var settings = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider(_toggleManager, _businessRuleConfigProvider)));
+				var settings = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider(_toggleManager, _businessRuleConfigProvider, _configReader)));
 				settings.Show();
 			}
 			catch (DataSourceException ex)

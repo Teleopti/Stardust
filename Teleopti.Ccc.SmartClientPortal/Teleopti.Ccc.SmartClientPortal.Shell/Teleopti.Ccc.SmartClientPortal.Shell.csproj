@@ -2049,6 +2049,12 @@
     </Compile>
     <Compile Include="Win\Common\SortingBase.cs" />
     <Compile Include="Win\Common\SortingModes.cs" />
+    <Compile Include="Win\Common\Configuration\GamificationSettingsRedirectWebControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Win\Common\Configuration\GamificationSettingsRedirectWebControl.Designer.cs">
+      <DependentUpon>GamificationSettingsRedirectWebControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Win\Common\TextBoxNameExtender.cs" />
     <Compile Include="Win\Common\TimedWarningDialog.cs">
       <SubType>Form</SubType>
@@ -4340,6 +4346,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Win\Common\SearchPerson.resx">
       <DependentUpon>SearchPerson.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Win\Common\Configuration\GamificationSettingsRedirectWebControl.resx">
+      <DependentUpon>GamificationSettingsRedirectWebControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Win\Common\TimedWarningDialog.resx">
       <DependentUpon>TimedWarningDialog.cs</DependentUpon>

@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -33,12 +34,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 		private FilteredPeopleHolder _filteredPeopleHolder;
 		private IToggleManager _toggleManager;
 		private readonly IBusinessRuleConfigProvider _businessRuleConfigProvider;
+		private readonly IConfigReader _configReader;
 
-		public GridConstructor(FilteredPeopleHolder filteredPeopleHolder, IToggleManager toggleManager, IBusinessRuleConfigProvider businessRuleConfigProvider)
+		public GridConstructor(FilteredPeopleHolder filteredPeopleHolder, IToggleManager toggleManager, IBusinessRuleConfigProvider businessRuleConfigProvider, IConfigReader configReader)
 		{
 			_filteredPeopleHolder = filteredPeopleHolder;
 			_toggleManager = toggleManager;
 			_businessRuleConfigProvider = businessRuleConfigProvider;
+			_configReader = configReader;
+
 			_readOnly =
 				 !PrincipalAuthorization.Current().IsPermitted(
 					  DefinedRaptorApplicationFunctionPaths.AllowPersonModifications);
@@ -137,13 +141,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 				case ViewType.PersonRotationView:
 					view = new RotationBaseGridView<PersonRotationModelParent,
 						 PersonRotationModelChild, IPersonRotation, IRotation>(new GridControl(), _filteredPeopleHolder,
-						 _filteredPeopleHolder.PersonRotationParentAdapterCollection, ViewType.PersonRotationView, _toggleManager, _businessRuleConfigProvider);
+						 _filteredPeopleHolder.PersonRotationParentAdapterCollection, ViewType.PersonRotationView, _toggleManager, _businessRuleConfigProvider, _configReader );
 					break;
 
 				case ViewType.PersonAvailabilityView:
 					view = new RotationBaseGridView<PersonAvailabilityModelParent,
 						 PersonAvailabilityModelChild, IPersonAvailability, IAvailabilityRotation>(new GridControl(), _filteredPeopleHolder,
-						 _filteredPeopleHolder.PersonAvailabilityParentAdapterCollection, ViewType.PersonAvailabilityView, _toggleManager, _businessRuleConfigProvider);
+						 _filteredPeopleHolder.PersonAvailabilityParentAdapterCollection, ViewType.PersonAvailabilityView, _toggleManager, _businessRuleConfigProvider, _configReader);
 					break;
 
 				case ViewType.ExternalLogOnView:

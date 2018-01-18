@@ -9,6 +9,7 @@ using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
@@ -66,6 +67,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 		private Form _mainWindow;
 		private IEventInfrastructureInfoPopulator _eventInfrastructureInfoPopulator;
 		private readonly IStaffingCalculatorServiceFacade _staffingCalculatorServiceFacade;
+		private readonly IConfigReader _configReader;
 		private readonly IStatisticHelper _statisticHelper;
 		private bool _hidePriorityToggle;
 
@@ -112,7 +114,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 			IEventInfrastructureInfoPopulator eventInfrastructureInfoPopulator, 
 			IStatisticHelper statisticHelper, 
 			IBusinessRuleConfigProvider businessRuleConfigProvider,
-			IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade)
+			IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade,
+			IConfigReader configReader)
 			: this(statisticHelper, businessRuleConfigProvider)
 		{
 			_jobHistoryViewFactory = jobHistoryViewFactory;
@@ -123,6 +126,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 			_publisher = publisher;
 			_eventInfrastructureInfoPopulator = eventInfrastructureInfoPopulator;
 			_staffingCalculatorServiceFacade = staffingCalculatorServiceFacade;
+			_configReader = configReader;
+			
 
 			setVisibility();
 		}
@@ -1060,7 +1065,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 		private void startForecaster(DateOnlyPeriod selectedPeriod, IScenario scenario, ISkill skill)
 		{
 			Cursor = Cursors.WaitCursor;
-			var forecaster = new Forecaster(skill, selectedPeriod, scenario, true, _toggleManager, _mainWindow, _statisticHelper, _businessRuleConfigProvider, _staffingCalculatorServiceFacade);
+			var forecaster = new Forecaster(skill, selectedPeriod, scenario, true, _toggleManager, _mainWindow, _statisticHelper, _businessRuleConfigProvider, _staffingCalculatorServiceFacade, _configReader);
 			forecaster.Show();
 			Cursor = Cursors.Default;
 		}
