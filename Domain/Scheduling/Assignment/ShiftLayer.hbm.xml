@@ -32,8 +32,9 @@
 		<many-to-one name="Parent"
 						 class="PersonAssignment"
 						 not-null ="true"
-						 foreign-key="PersonAssignment"
-						update="false"
-						insert="false"/>
+						 foreign-key="PersonAssignment"/>
+		<property name="OrderIndex"
+					 access="readonly"
+					 not-null ="true" />
 	</class>
 </hibernate-mapping>
