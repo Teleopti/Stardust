@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public IEffectiveRestriction CombineEffectiveRestrictions(IEnumerable<IEffectiveRestriction> effectiveRestrictions, IEffectiveRestriction  effectiveRestriction)
 		{
-			if (effectiveRestriction == null) return null;
+			if (effectiveRestriction == null || effectiveRestrictions == null) return null;
 			foreach (var restriction in effectiveRestrictions)
 			{
 				effectiveRestriction = effectiveRestriction.Combine(restriction);
