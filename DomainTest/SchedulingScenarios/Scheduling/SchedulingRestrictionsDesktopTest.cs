@@ -209,6 +209,34 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			schedulerStateHolder.Schedules[agent].ScheduledDay(date.AddDays(4)).IsScheduled().Should().Be.True();
 		}
 
+		[Test]
+		[Ignore("47687 to be fixed")]
+		public void ShouldRespectAbsencePrefrenceOnlyOnPreferenceDay()
+		{
+			var activity = new Activity().WithId();
+			var date = new DateOnly(2016, 10, 25);
+			var period = new DateOnlyPeriod(date, date.AddDays(6));
+			var scenario = new Scenario();
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(7, 0, 8, 0, 60), new TimePeriodWithSegment(15, 0, 16, 0, 60), shiftCategory));
+			var skill = new Skill().For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
+			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, date, 5, 5, 5, 5, 5, 5, 5);
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, new ContractWithMaximumTolerance(), skill).WithSchedulePeriodOneWeek(date);
+			var absenceRestriction = new PreferenceRestriction { Absence = new Absence().WithId() };
+			var preferenceDay = new PreferenceDay(agent, date.AddDays(4), absenceRestriction).WithId();
+			var dayOff = new PersonAssignment(agent, scenario, date.AddDays(6)).WithDayOff();
+			var schedulerStateHolder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, new IScheduleData[] { preferenceDay, dayOff }, skillDays);
+			var schedulingOptions = new SchedulingOptions
+			{
+				UsePreferences = true,
+				PreferencesDaysOnly = true
+			};
+
+			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new[] { agent }, period);
+
+			schedulerStateHolder.Schedules[agent].ScheduledDay(date.AddDays(4)).PersonAbsenceCollection().Count.Should().Be.EqualTo(1);
+		}
+
 		public SchedulingRestrictionsDesktopTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerNoPytteIslands47500, bool resourcePlannerXxl47258) : base(seperateWebRequest, resourcePlannerNoPytteIslands47500, resourcePlannerXxl47258)
 		{
 		}
