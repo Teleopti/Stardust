@@ -67,19 +67,19 @@
 		isUnifiedSkillGroupManagementEnabled();
 
 		vm.onStateChanged = function(evt, to, params, from) {
-			if(to.name !== 'staffing'){
+			if(to.name !== 'staffingModule'){
 				return;
 			}
-			
+
 			if(params.isNewSkillArea === true){
 				getSkillAreas();
 			}
 		};
-	  
+
 		$scope.$on('$stateChangeSuccess', vm.onStateChanged);
 
 		vm.configMode = function() {
-			$state.go('staffing.skill-area-config', {
+			$state.go('staffingModule.skill-area-config', {
 			  isNewSkillArea: false
 			});
 		};
@@ -231,7 +231,7 @@
 			if(document.getElementById("skill-tooltip")){
 				document.getElementById("skill-tooltip").remove();
 			}
-			
+
 			if (skill == null) return;
 			generateChart(skill, null);
 			selectSkillOrArea(skill, null);
