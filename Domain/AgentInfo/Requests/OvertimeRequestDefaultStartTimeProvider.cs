@@ -30,11 +30,19 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			var validEndTimeList = possibleShiftEndTimes
 				.Where(e => _now.UtcDateTime().CompareTo(e) < 0 && e.CompareTo(requestDate) >= 0).ToList();
 
-			if (validEndTimeList.Any(v => _now.UtcDateTime().AddMinutes(OvertimeMinimumApprovalThresholdInMinutes.MinimumApprovalThresholdTimeInMinutes + _overtimeRequestStartTimeFlexibilityInMinutes).CompareTo(v) <= 0))
+			var utcNowPlusGap = _now.UtcDateTime().AddMinutes(OvertimeMinimumApprovalThresholdInMinutes.MinimumApprovalThresholdTimeInMinutes +
+														   _overtimeRequestStartTimeFlexibilityInMinutes);
+
+			if (validEndTimeList.Any(v => utcNowPlusGap.CompareTo(v) <= 0))
 			{
-				return TimeZoneHelper.ConvertFromUtc(validEndTimeList.Min(), _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone());
+				if (utcNowPlusGap.CompareTo(validEndTimeList.Min()) <= 0)
+				{
+					return TimeZoneHelper.ConvertFromUtc(validEndTimeList.Min(), _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone());
+				}
+				return getLocalRoundUpHour(utcNowPlusGap);
 			}
-			return getNowRoundUpHour();
+
+			return getLocalRoundUpHour(_now.UtcDateTime());
 		}
 
 		private DateTime[] getPossibleShiftEndTimes(DateOnly date)
@@ -53,9 +61,9 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 				_loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone());
 		}
 
-		private DateTime getNowRoundUpHour()
+		private DateTime getLocalRoundUpHour(DateTime utcNow)
 		{
-			var localNow = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone());
+			var localNow = TimeZoneHelper.ConvertFromUtc(utcNow, _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone());
 			var newLocalNow = localNow.AddMinutes(OvertimeMinimumApprovalThresholdInMinutes.MinimumApprovalThresholdTimeInMinutes + _overtimeRequestStartTimeFlexibilityInMinutes);
 
 			if (newLocalNow.Minute > _overtimeRequestStartTimeRoundMinutes)
