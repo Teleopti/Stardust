@@ -80,7 +80,7 @@
 						if (ctrl.valueDataType == '0' || ctrl.valueDataType == '1') {
 							var glodValue = parseFloat(ctrl._goldBadgeThreshold);
 							if (glodValue > parseFloat(ctrl._silverBadgeThreshold) || glodValue > parseFloat(ctrl._bronzeBadgeThreshold)) {
-								ctrl.errorMsg = 'GoldValueShouldSmallerThenRest';
+								ctrl.errorMsg = 'GoldThresholdValueShouldSmallerThenRest';
 							}
 							else {
 								ctrl.errorMsg = '';
@@ -89,7 +89,7 @@
 						else {
 							var glodValue = convertValueForTime(ctrl._goldBadgeThreshold);
 							if (glodValue > convertValueForTime(ctrl._silverBadgeThreshold) || glodValue > convertValueForTime(ctrl._bronzeBadgeThreshold)) {
-								ctrl.errorMsg = 'GoldValueShouldSmallerThenRest';
+								ctrl.errorMsg = 'GoldThresholdValueShouldSmallerThenRest';
 							} else {
 								ctrl.errorMsg = '';
 							}
@@ -98,7 +98,7 @@
 						if (ctrl.valueDataType == '0' || ctrl.valueDataType == '1') {
 							var glodValue = parseFloat(ctrl._goldBadgeThreshold);
 							if (glodValue < parseFloat(ctrl._silverBadgeThreshold) || glodValue < parseFloat(ctrl._bronzeBadgeThreshold)) {
-								ctrl.errorMsg = "GoldValueShouldLargerThenRest";
+								ctrl.errorMsg = "GoldThresholdValueShouldLargerThenRest";
 							}
 							else {
 								ctrl.errorMsg = '';
@@ -107,7 +107,7 @@
 						else {
 							var glodValue = convertValueForTime(ctrl._goldBadgeThreshold);
 							if (glodValue < convertValueForTime(ctrl._silverBadgeThreshold) || glodValue < convertValueForTime(ctrl._bronzeBadgeThreshold)) {
-								ctrl.errorMsg = 'GoldValueShouldLargerThenRest';
+								ctrl.errorMsg = 'GoldThresholdValueShouldLargerThenRest';
 							} else {
 								ctrl.errorMsg = '';
 							}

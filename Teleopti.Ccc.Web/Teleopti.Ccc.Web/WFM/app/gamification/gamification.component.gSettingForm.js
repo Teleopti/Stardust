@@ -117,7 +117,7 @@
 			ctrl.builtinMeasureConfigs = makeBuiltinMeasureConfigs(data);
 			ctrl.externalMeasureConfigs = makeExternalMeasureConfigs(data);
 
-			if (enabled.length > 3) $log.error('more than 3 measures are enabled!');
+			//if (enabled.length > 3) $log.error('more than 3 measures are enabled!');
 			numOfEnabledMeasures = enabled.length;
 		};
 
