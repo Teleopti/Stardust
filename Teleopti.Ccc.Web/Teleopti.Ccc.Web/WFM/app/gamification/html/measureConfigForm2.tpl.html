@@ -6,7 +6,7 @@
 				Gold badge threshold
 				<input name="goldBadgeThreshold" ng-model-options="{allowInvalid:true}" ng-disabled="$ctrl.disabled" type="text" ng-model="$ctrl._goldBadgeThreshold"
 				 ng-blur="$ctrl.updateGoldThreshold(form2.goldBadgeThreshold.$invalid)" ng-keyup="$ctrl.keyUp($event, form2.goldBadgeThreshold.$invalid)"
-				 threshold-validator="{{::$ctrl.valueFormat}};{{$ctrl.max}};{{$ctrl.valueDataType}}" autofocus />
+				 threshold-validator="{{::$ctrl.valueFormat}};{{$ctrl.max}};{{$ctrl.valueDataType}}" />
 			</label>
 			<div class="text-danger" style="height: 1em;">
 				<span ng-show="form2.goldBadgeThreshold.$invalid">{{'Invalid'|translate}}</span>
