@@ -559,7 +559,6 @@
     <Compile Include="Repositories\ImportForecastRepositoryTest.cs" />
     <Compile Include="Repositories\JobResultRepositoryTest.cs" />
     <Compile Include="Repositories\PeopleAndSkillLoaderDeciderForTeamLeaderModeTest.cs" />
-    <Compile Include="Repositories\PersonAssignmentCascadeDeleteTest.cs" />
     <Compile Include="Repositories\PersonFinderReadOnlyRepositoryTest.cs" />
     <Compile Include="Repositories\PersonRequestReadOnlyRepositoryTest.cs" />
     <Compile Include="Repositories\PersonScheduleDayReadModelPersisterTest.cs" />
