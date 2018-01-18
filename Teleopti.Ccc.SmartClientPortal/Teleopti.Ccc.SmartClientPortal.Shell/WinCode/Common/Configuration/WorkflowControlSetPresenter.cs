@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl;
@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		private IList<IShiftCategory> _shiftCategories;
 		private IList<IAbsence> _absences;
 		private IList<IDayOffTemplate> _dayOffTemplates;
+		private IList<ISkillType> _supportedSkillTypes;
 		private IToggleManager _toggleManager;
 
 		public WorkflowControlSetPresenter(IWorkflowControlSetView view,
@@ -150,6 +151,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 
 				var skillRepository = _repositoryFactory.CreateSkillRepository(uow);
 				_skillCollection = new List<ISkill>(skillRepository.FindAllWithoutMultisiteSkills());
+
+				initializeSupportedSkillTypes(uow);
 			}
 			_view.EnableHandlingOfAbsenceRequestPeriods(DoRequestableAbsencesExist);
 			_view.InitializeView();
@@ -175,6 +178,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		public IList<IAbsence> AbsencesCollection()
 		{
 			return _absences;
+		}
+
+		public IList<ISkillType> SupportedSkillTypes()
+		{
+			return _supportedSkillTypes;
 		}
 
 		private void refreshListOrAddNewIfEmpty()
@@ -328,6 +336,21 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 
 			var newOvertimeRequestOpenPeriod = periodTypeModel.Item;
 			resetOvertimeRequestDefaultPeriod(newOvertimeRequestOpenPeriod);
+
+			_selectedModel.DomainEntity.InsertOvertimePeriod(newOvertimeRequestOpenPeriod, currentIndex);
+			overtimeRequestPeriodModel.SetDomainEntity(newOvertimeRequestOpenPeriod);
+
+			_selectedModel.IsDirty = true;
+		}
+
+		public void SetOvertimeRequestPeriodSkillType(OvertimeRequestPeriodModel overtimeRequestPeriodModel, OvertimeRequestPeriodSkillTypeModel chosenOvertimeRequestPeriodSkillTypeModel)
+		{
+			int currentIndex =
+				_selectedModel.DomainEntity.OvertimeRequestOpenPeriods.IndexOf(overtimeRequestPeriodModel.DomainEntity);
+			_selectedModel.DomainEntity.RemoveOpenOvertimeRequestPeriod(overtimeRequestPeriodModel.DomainEntity);
+
+			var newOvertimeRequestOpenPeriod = overtimeRequestPeriodModel.DomainEntity;
+			newOvertimeRequestOpenPeriod.SkillType = chosenOvertimeRequestPeriodSkillTypeModel.SkillType;
 
 			_selectedModel.DomainEntity.InsertOvertimePeriod(newOvertimeRequestOpenPeriod, currentIndex);
 			overtimeRequestPeriodModel.SetDomainEntity(newOvertimeRequestOpenPeriod);
@@ -736,6 +759,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		public void SetOvertimeRequestMaximumEnabled(bool overtimeRequestMaximumTimeEnabled)
 		{
 			_selectedModel.OvertimeRequestMaximumTimeEnabled = overtimeRequestMaximumTimeEnabled;
+		}
+
+		private void initializeSupportedSkillTypes(IUnitOfWork uow)
+		{
+			var skillTypeRepository = _repositoryFactory.CreateSkillTypeRepository(uow);
+			var skillTypeNames = new[] { SkillTypeIdentifier.Phone, SkillTypeIdentifier.Chat, SkillTypeIdentifier.Email };
+			_supportedSkillTypes = skillTypeRepository.LoadAll()
+				.Where(a => skillTypeNames.Contains(a.Description.Name)).ToList();
 		}
 	}
 }

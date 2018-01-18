@@ -1,4 +1,6 @@
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Settings;
 using Teleopti.Ccc.UserTexts;
@@ -12,6 +14,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		public WorkflowControlSetModel Owner { get; set; }
 		private IOvertimeRequestOpenPeriod _overtimeRequestOpenPeriod;
 		private OvertimeRequestPeriodTypeModel _periodType;
+		private OvertimeRequestPeriodSkillTypeModel _periodSkillType;
 		private OvertimeRequestValidationHandleOptionView _workRuleValidationHandleType;
 
 		internal static readonly HandleOptionViewDictionary
@@ -38,6 +41,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		public IOvertimeRequestOpenPeriod DomainEntity => _overtimeRequestOpenPeriod;
 
 		public OvertimeRequestPeriodTypeModel PeriodType => _periodType;
+		public OvertimeRequestPeriodSkillTypeModel SkillType => _periodSkillType;
 
 		public OvertimeRequestAutoGrantType AutoGrantType
 		{
@@ -170,6 +174,24 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			{
 				if (_periodType.Equals(periodType))
 					_periodType.DisplayText = periodType.DisplayText;
+			}
+
+			if (_overtimeRequestOpenPeriod.SkillType != null)
+			{
+				_periodSkillType = new OvertimeRequestPeriodSkillTypeModel(_overtimeRequestOpenPeriod.SkillType, string.Empty);
+				foreach (var periodType in WorkflowControlSetModel.DefaultOvertimeRequestSkillTypeAdapters)
+				{
+					if (_periodSkillType.Equals(periodType))
+						_periodSkillType.DisplayText = periodType.DisplayText;
+				}
+			}
+			else
+			{
+				_overtimeRequestOpenPeriod.SkillType = WorkflowControlSetModel.GetSupportedSkillTypes()
+					.FirstOrDefault(a => a.Description.Name.Equals(SkillTypeIdentifier.Phone));
+				_periodSkillType = new OvertimeRequestPeriodSkillTypeModel(_overtimeRequestOpenPeriod.SkillType
+					, Resources.ResourceManager.GetString(SkillTypeIdentifier.Phone));
+				Owner.IsDirty = true;
 			}
 
 			if (overtimeRequestOpenPeriod.WorkRuleValidationHandleType.HasValue)

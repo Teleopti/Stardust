@@ -1,11 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Intraday;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Requests;
 using Teleopti.Ccc.IocCommon;
@@ -17,6 +21,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Configuration
@@ -31,13 +36,23 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		public FakeAbsenceRepository AbsenceRepository;
 		public FakeToggleManager ToggleManager;
 		public FakeActivityRepository ActivityRepository;
+		public FakeSkillTypeRepository SkillTypeRepository;
 
 		private WorkflowControlSetPresenter _target;
 		private WorkflowControlSetView _view;
+		private static IList<ISkillType> _skillTypes;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<FakeUnitOfWorkFactory>().For<IUnitOfWorkFactory>();
+
+			if (_skillTypes == null)
+				_skillTypes = new List<ISkillType>
+				{
+					new SkillTypeEmail(new Description(SkillTypeIdentifier.Email), ForecastSource.Email).WithId(),
+					new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony).WithId(),
+					new SkillTypePhone(new Description(SkillTypeIdentifier.Chat), ForecastSource.Chat).WithId()
+				};
 		}
 
 		[TearDown]
@@ -62,6 +77,8 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			var workflowControlSet = new WorkflowControlSet("My Workflow Control Set").WithId();
 			WorkflowControlSetRepository.Add(workflowControlSet);
 
+			SkillTypeRepository.AddRange(_skillTypes);
+
 			initialize();
 			_target.SetSelectedWorkflowControlSetModel(_target.WorkflowControlSetModelCollection.First());
 
@@ -70,8 +87,13 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 
 			var staffingInfoAvailableDays = StaffingInfoAvailableDaysProvider.GetDays(ToggleManager);
 			Assert.AreEqual(1, _target.SelectedModel.OvertimeRequestPeriodModels.Count);
-			Assert.AreEqual(DateOnly.Today, _target.SelectedModel.OvertimeRequestPeriodModels[0].PeriodStartDate);
-			Assert.AreEqual(DateOnly.Today.AddDays(staffingInfoAvailableDays), _target.SelectedModel.OvertimeRequestPeriodModels[0].PeriodEndDate);
+
+			var overtimeRequestPeriod = _target.SelectedModel.OvertimeRequestPeriodModels[0];
+
+			Assert.AreEqual(DateOnly.Today, overtimeRequestPeriod.PeriodStartDate);
+			Assert.AreEqual(DateOnly.Today.AddDays(staffingInfoAvailableDays), overtimeRequestPeriod.PeriodEndDate);
+			Assert.IsNotNull(overtimeRequestPeriod.SkillType);
+			Assert.AreEqual(Resources.ResourceManager.GetString(SkillTypeIdentifier.Phone), overtimeRequestPeriod.SkillType.DisplayText);
 		}
 
 		[Theory]
@@ -96,11 +118,35 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		}
 
 		[Test]
+		public void VerifyDefaultValueToPhoneWhenNoSkillTypeOfModel()
+		{
+			var workflowControlSet = new WorkflowControlSet("My Workflow Control Set").WithId();
+			WorkflowControlSetRepository.Add(workflowControlSet);
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod());
+
+			SkillTypeRepository.AddRange(_skillTypes);
+			var skillPhone = _skillTypes.FirstOrDefault(s => s.Description.Name.Equals(SkillTypeIdentifier.Phone));
+
+			_target = new WorkflowControlSetPresenter(null, UnitOfWorkFactory, RepositoryFactory, ToggleManager);
+			_view = new FixConfirmResultWorkflowControlSetView(ToggleManager, _target, true);
+			_target.Initialize();
+			_view.SetOvertimeOpenPeriodsGridRowCount(0);
+			_view.RefreshOvertimeOpenPeriodsGrid();
+			_target.SetSelectedWorkflowControlSetModel(_target.WorkflowControlSetModelCollection.First());
+
+			Assert.AreEqual(1, _target.SelectedModel.OvertimeRequestPeriodModels.Count);
+			var skillType = _target.SelectedModel.OvertimeRequestPeriodModels[0].SkillType;
+			Assert.IsNotNull(skillType);
+			Assert.AreEqual(Resources.ResourceManager.GetString(SkillTypeIdentifier.Phone), skillType.DisplayText);
+			Assert.AreEqual(skillType.Item, skillPhone.Id);
+		}
+
+		[Test]
 		public void VerifyDeleteOvertimeRequestPeriodCanDelete()
 		{
 			var workflowControlSet = new WorkflowControlSet("My Workflow Control Set").WithId();
 			WorkflowControlSetRepository.Add(workflowControlSet);
-			workflowControlSet.AddOpenOvertimeRequestPeriod(WorkflowControlSetModel.DefaultOvertimeRequestPeriodAdapters[0].Item);
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod());
 			_target = new WorkflowControlSetPresenter(null, UnitOfWorkFactory, RepositoryFactory, ToggleManager);
 			_view = new FixConfirmResultWorkflowControlSetView(ToggleManager, _target, true);
 			_target.Initialize();
@@ -119,7 +165,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		{
 			var workflowControlSet = new WorkflowControlSet("My Workflow Control Set").WithId();
 			WorkflowControlSetRepository.Add(workflowControlSet);
-			workflowControlSet.AddOpenOvertimeRequestPeriod(WorkflowControlSetModel.DefaultOvertimeRequestPeriodAdapters[0].Item);
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod());
 			_target = new WorkflowControlSetPresenter(null, UnitOfWorkFactory, RepositoryFactory, ToggleManager);
 			_view = new FixConfirmResultWorkflowControlSetView(ToggleManager, _target, false);
 			_target.Initialize();
@@ -202,12 +248,8 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		{
 			var workflowControlSet = new WorkflowControlSet("My Workflow Control Set").WithId();
 			WorkflowControlSetRepository.Add(workflowControlSet);
-			var openDatePeriod =
-				(OvertimeRequestOpenDatePeriod)WorkflowControlSetModel.DefaultOvertimeRequestPeriodAdapters[0].Item;
-			((IEntity)openDatePeriod).SetId(Guid.NewGuid());
-			var openRollingPeriod =
-				(OvertimeRequestOpenRollingPeriod)WorkflowControlSetModel.DefaultOvertimeRequestPeriodAdapters[1].Item;
-			((IEntity)openRollingPeriod).SetId(Guid.NewGuid());
+			var openDatePeriod =new OvertimeRequestOpenDatePeriod().WithId();
+			var openRollingPeriod = new OvertimeRequestOpenRollingPeriod().WithId();
 			workflowControlSet.AddOpenOvertimeRequestPeriod(openDatePeriod);
 			workflowControlSet.AddOpenOvertimeRequestPeriod(openRollingPeriod);
 
@@ -222,6 +264,31 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			_target.MoveDown(_target.SelectedModel.OvertimeRequestPeriodModels[0]);
 			Assert.AreEqual(openDatePeriod, _target.SelectedModel.OvertimeRequestPeriodModels[0].DomainEntity);
 			Assert.AreEqual(openRollingPeriod, _target.SelectedModel.OvertimeRequestPeriodModels[1].DomainEntity);
+		}
+
+		[Test]
+		public void ShouldNotChangeDatePeriodWhenSetOvertimeRequestPeriodSkillType()
+		{
+			ToggleManager.Enable(Toggles.OvertimeRequestPeriodSetting_46417);
+
+			var workflowControlSet = new WorkflowControlSet("My Workflow Control Set").WithId();
+			WorkflowControlSetRepository.Add(workflowControlSet);
+
+			SkillTypeRepository.AddRange(_skillTypes);
+
+			initialize();
+			_target.SetSelectedWorkflowControlSetModel(_target.WorkflowControlSetModelCollection.First());
+
+			Assert.AreEqual(0, _target.SelectedModel.OvertimeRequestPeriodModels.Count);
+			_target.AddOvertimeRequestOpenDatePeriod();
+
+			var overtimeRequestPeriodModel = _target.SelectedModel.OvertimeRequestPeriodModels[0];
+			var orginalStartDate = overtimeRequestPeriodModel.PeriodStartDate;
+			overtimeRequestPeriodModel.PeriodStartDate = orginalStartDate.Value.AddDays(1);
+
+			_target.SetOvertimeRequestPeriodSkillType(overtimeRequestPeriodModel, new OvertimeRequestPeriodSkillTypeModel(_skillTypes.FirstOrDefault(), "Phone"));
+
+			Assert.AreEqual(overtimeRequestPeriodModel.PeriodStartDate, orginalStartDate.Value.AddDays(1));
 		}
 
 		private void initialize()

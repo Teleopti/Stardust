@@ -361,5 +361,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			return new PersonalSettingDataRepository(unitOfWork);
 		}
+
+		public ISkillTypeRepository CreateSkillTypeRepository(IUnitOfWork unitOfWork)
+		{
+			return new SkillTypeRepository(unitOfWork);
+		}
 	}
 }

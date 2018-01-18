@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Settings;
 using Teleopti.Ccc.UserTexts;
@@ -11,71 +12,14 @@ using HandleOptionViewDictionary = System.Collections.Generic.Dictionary<Teleopt
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 {
-	public interface IWorkflowControlSetModel
-	{
-		Guid? Id { get; }
-		string Name { get; set; }
-		TimeSpan ShiftTradeTargetTimeFlexibility { get; set; }
-		int? WriteProtection { get; set; }
-		IActivity AllowedPreferenceActivity { get; set; }
-		string UpdatedInfo { get; }
-		IWorkflowControlSet DomainEntity { get; }
-		bool ToBeDeleted { get; set; }
-		bool IsNew { get; }
-		IWorkflowControlSet OriginalDomainEntity { get; }
-		IList<AbsenceRequestPeriodModel> AbsenceRequestPeriodModels { get; }
-		IList<OvertimeRequestPeriodModel> OvertimeRequestPeriodModels { get; }
-		DateTime? SchedulePublishedToDate { get; set; }
-		DateOnlyPeriod PreferenceInputPeriod { get; set; }
-		DateOnlyPeriod PreferencePeriod { get; set; }
-		DateOnlyPeriod StudentAvailabilityInputPeriod { get; set; }
-		DateOnlyPeriod StudentAvailabilityPeriod { get; set; }
-		MinMax<int> ShiftTradeOpenPeriodDays { get; set; }
-		IEnumerable<IDayOffTemplate> AllowedPreferenceDayOffs { get; }
-		IEnumerable<IShiftCategory> AllowedPreferenceShiftCategories { get; }
-		IEnumerable<IAbsence> AllowedPreferenceAbsences { get; }
-		IEnumerable<IAbsence> AllowedAbsencesForReport { get; }
-		IEnumerable<ISkill> MustMatchSkills { get; }
-		bool AutoGrantShiftTradeRequest { get; set; }
-		TimeSpan? OvertimeRequestMaximumTime { get; set; }
-		OvertimeRequestValidationHandleOptionView OvertimeRequestValidationHandleOptionView { get; set; }
-
-		void AddAllowedPreferenceDayOff(IDayOffTemplate dayOff);
-		void RemoveAllowedPreferenceDayOff(IDayOffTemplate dayOff);
-		void AddAllowedPreferenceShiftCategory(IShiftCategory shiftCategory);
-		void RemoveAllowedPreferenceShiftCategory(IShiftCategory shiftCategory);
-		void AddAllowedPreferenceAbsence(IAbsence absence);
-		void RemoveAllowedPreferenceAbsence(IAbsence absence);
-		void AddAllowedAbsenceForReport(IAbsence absence);
-		void RemoveAllowedAbsenceForReport(IAbsence absence);
-		void UpdateAfterMerge(IWorkflowControlSet updatedWorkflowControlSet);
-		void AddSkillToMatchList(ISkill skill);
-		void RemoveSkillFromMatchList(ISkill skill);
-		FairnessType GetFairnessType();
-		void SetFairnessType(FairnessType fairnessType);
-
-		bool IsDirty { get; set; }
-		bool AnonymousTrading { get; set; }
-		bool LockTrading { get; set; }
-		bool AbsenceRequestWaitlistingEnabled { get; set; }
-		WaitlistProcessOrder AbsenceRequestWaitlistingProcessOrder { get; set; }
-		int? AbsenceRequestCancellationThreshold { get; set; }
-		int? AbsenceRequestExpiredThreshold { get; set; }
-
-		bool AbsenceProbabilityEnabled { get; set; }
-
-		bool IsOvertimeProbabilityEnabled { get; set; }
-		bool AutoGrantOvertimeRequest { get; set; }
-
-		bool OvertimeRequestMaximumTimeEnabled { get; set; }
-	}
-
 	public class WorkflowControlSetModel : IWorkflowControlSetModel
 	{
 		private static IList<AbsenceRequestPeriodTypeModel> _defaultAbsenceRequestPeriodAdapters;
 		private static IList<OvertimeRequestPeriodTypeModel> _defaultOvertimeRequestPeriodAdapters;
+		private static IList<OvertimeRequestPeriodSkillTypeModel> _defaultOvertimeRequestSkillTypeAdapters;
 		private readonly List<AbsenceRequestPeriodModel> _absenceRequestPeriodModels = new List<AbsenceRequestPeriodModel>();
 		private readonly List<OvertimeRequestPeriodModel> _overtimeRequestPeriodModels = new List<OvertimeRequestPeriodModel>();
+		private static IList<ISkillType> _supportedSkillTypes = new List<ISkillType>();
 		internal static readonly HandleOptionViewDictionary
 			OvertimeRequestWorkRuleValidationHandleOptionViews
 				= new HandleOptionViewDictionary
@@ -181,6 +125,26 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 				setDefaultOvertimePeriodIfMissing();
 				return _defaultOvertimeRequestPeriodAdapters;
 			}
+		}
+
+		public static IList<OvertimeRequestPeriodSkillTypeModel> DefaultOvertimeRequestSkillTypeAdapters
+		{
+			get
+			{
+				setDefaultOvertimePeriodIfMissing();
+				initialOvertimeRequestSkillTypeAdapters();
+				return _defaultOvertimeRequestSkillTypeAdapters;
+			}
+		}
+
+		public static void SetSupportedSkillTypes(IList<ISkillType> skillTypes)
+		{
+			_supportedSkillTypes = skillTypes;
+		}
+
+		public static IList<ISkillType> GetSupportedSkillTypes()
+		{
+			return _supportedSkillTypes;
 		}
 
 		public IList<AbsenceRequestPeriodModel> AbsenceRequestPeriodModels
@@ -372,23 +336,35 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		{
 			if (_defaultOvertimeRequestPeriodAdapters != null) return;
 
+			var phoneSkillType = _supportedSkillTypes.FirstOrDefault(s => s.Description.Name.Equals(SkillTypeIdentifier.Phone));
+
 			var overtimeOpenDatePeriod = new OvertimeRequestOpenDatePeriod
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.No,
-				Period = getCurrentMonthPeriod(new DateOnly(DateOnly.Today.Date.AddMonths(1)))
+				Period = getCurrentMonthPeriod(new DateOnly(DateOnly.Today.Date.AddMonths(1))),
+				SkillType = phoneSkillType
 			};
 
 			var overtimeOpenRollingPeriod = new OvertimeRequestOpenRollingPeriod
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.No,
 				BetweenDays = new MinMax<int>(2, 15),
+				SkillType = phoneSkillType
 			};
-			
+
 			_defaultOvertimeRequestPeriodAdapters = new List<OvertimeRequestPeriodTypeModel>
 			{
 				new OvertimeRequestPeriodTypeModel(overtimeOpenDatePeriod, Resources.FromTo),
 				new OvertimeRequestPeriodTypeModel(overtimeOpenRollingPeriod, Resources.Rolling)
 			};
+		}
+
+		private static void initialOvertimeRequestSkillTypeAdapters()
+		{
+			if (_defaultOvertimeRequestSkillTypeAdapters != null && _defaultOvertimeRequestSkillTypeAdapters.Count > 0) return;
+			_defaultOvertimeRequestSkillTypeAdapters = _supportedSkillTypes
+				.Select(a => new OvertimeRequestPeriodSkillTypeModel(a, Resources.ResourceManager.GetString(a.Description.Name)))
+				.ToList();
 		}
 
 		private static DateOnlyPeriod getCurrentMonthPeriod(DateOnly dateViewPoint)

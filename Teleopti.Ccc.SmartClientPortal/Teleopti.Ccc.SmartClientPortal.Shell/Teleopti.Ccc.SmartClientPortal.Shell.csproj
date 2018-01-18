@@ -435,6 +435,8 @@
     <Compile Include="WinCode\Common\Commands\TextBoxBehavior.cs" />
     <Compile Include="WinCode\Common\Commands\TwoStepCommandModel.cs" />
     <Compile Include="WinCode\Common\CommonAgentNameProvider.cs" />
+    <Compile Include="WinCode\Common\Configuration\IWorkflowControlSetModel.cs" />
+    <Compile Include="WinCode\Common\Configuration\OvertimeRequestPeriodSkillTypeModel.cs" />
     <Compile Include="WinCode\Common\Configuration\OvertimeRequestPeriodTypeModel.cs" />
     <Compile Include="WinCode\Common\Configuration\OvertimeRequestPeriodModel.cs" />
     <Compile Include="WinCode\Common\Configuration\AbsenceRequestPeriodModel.cs" />

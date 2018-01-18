@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private readonly IPublicNoteRepository _publicNoteRepository;
 		private readonly IGroupPageRepository _groupPageRepository;
 		private readonly ISkillRepository _skillRepository;
+		private readonly ISkillTypeRepository _skillTypeRepository;
 
 		public FakeRepositoryFactory(
 			IPersonRepository personRepository,
@@ -60,7 +61,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			INoteRepository noteRepository, 
 			IPublicNoteRepository publicNoteRepository,
 			IGroupPageRepository groupPageRepository,
-			ISkillRepository skillRepository)
+			ISkillRepository skillRepository,
+			ISkillTypeRepository skillTypeRepository)
 		{
 			_personRepository = personRepository;
 			_businessUnitRepository = businessUnitRepository;
@@ -88,6 +90,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_publicNoteRepository = publicNoteRepository;
 			_groupPageRepository = groupPageRepository;
 			_skillRepository = skillRepository;
+			_skillTypeRepository = skillTypeRepository;
 		}
 
 		public IPersonRepository CreatePersonRepository(IUnitOfWork unitOfWork)
@@ -358,6 +361,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public IPersonalSettingDataRepository CreatePersonalSettingDataRepository(IUnitOfWork unitOfWork)
 		{
 			throw new System.NotImplementedException();
+		}
+
+		public ISkillTypeRepository CreateSkillTypeRepository(IUnitOfWork unitOfWork)
+		{
+			return _skillTypeRepository;
 		}
 	}
 }

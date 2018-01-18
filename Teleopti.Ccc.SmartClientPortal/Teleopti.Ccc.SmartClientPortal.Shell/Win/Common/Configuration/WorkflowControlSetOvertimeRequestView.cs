@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration.Columns;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells;
@@ -151,7 +150,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 				new SFGridRowHeaderColumn<OvertimeRequestPeriodModel>(string.Empty)
 			};
 
-			gridControlOvertimeRequestOpenPeriods.CellModels.Add("IgnoreCell", new IgnoreCellModel(gridControlOvertimeRequestOpenPeriods.Model));
+			gridControlOvertimeRequestOpenPeriods.CellModels.Add("IgnoreCell",
+				new IgnoreCellModel(gridControlOvertimeRequestOpenPeriods.Model));
 			var cellModel = new GridDropDownMonthCalendarAdvCellModel(gridControlOvertimeRequestOpenPeriods.Model);
 			cellModel.HideNoneButton();
 			cellModel.HideTodayButton();
@@ -163,26 +163,43 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			};
 			gridControlOvertimeRequestOpenPeriods.CellModels.Add("IntegerCellModel", cell);
 
+			WorkflowControlSetModel.SetSupportedSkillTypes(_presenter.SupportedSkillTypes());
+
 			var periodTypeDropDownColumn = new SFGridDropDownColumn
 				<OvertimeRequestPeriodModel, OvertimeRequestPeriodTypeModel>(
-				"PeriodType", Resources.Type, " ", WorkflowControlSetModel.DefaultOvertimeRequestPeriodAdapters, "DisplayText", null);
+					"PeriodType", Resources.Type, " ", WorkflowControlSetModel.DefaultOvertimeRequestPeriodAdapters, "DisplayText",
+					null);
 
 			columnList.Add(periodTypeDropDownColumn);
 
 			var autoGrantColumn =
-				new SFGridDropDownEnumColumn<OvertimeRequestPeriodModel, OvertimeRequestAutoGrantTypeAdapter, OvertimeRequestAutoGrantType>(
-					"AutoGrantType", Resources.AutoGrant, " ", _overtimeRequestAutoGrantTypeAdapterCollection, "DisplayName", "AutoGrantType");
+				new SFGridDropDownEnumColumn<OvertimeRequestPeriodModel, OvertimeRequestAutoGrantTypeAdapter,
+					OvertimeRequestAutoGrantType>(
+					"AutoGrantType", Resources.AutoGrant, " ", _overtimeRequestAutoGrantTypeAdapterCollection, "DisplayName",
+					"AutoGrantType");
 
 			columnList.Add(autoGrantColumn);
 
 			if (_toggleManager.IsEnabled(Toggles.OvertimeRequestPeriodWorkRuleSetting_46638))
 			{
-				columnList.Add(new SFGridCheckBoxColumn<OvertimeRequestPeriodModel>("EnableWorkRuleValidation", Resources.Enabled, Resources.ContractWorkRuleValidation));
-				columnList.Add(new SFGridDropDownColumn<OvertimeRequestPeriodModel, OvertimeRequestValidationHandleOptionView>("WorkRuleValidationHandleType",
-					Resources.WhenValidationFails, Resources.ContractWorkRuleValidation, OvertimeRequestPeriodModel.OvertimeRequestWorkRuleValidationHandleOptionViews.Values.ToList(), "Description", typeof(OvertimeRequestValidationHandleOptionView)));
+				columnList.Add(new SFGridCheckBoxColumn<OvertimeRequestPeriodModel>("EnableWorkRuleValidation", Resources.Enabled,
+					Resources.ContractWorkRuleValidation));
+				columnList.Add(new SFGridDropDownColumn<OvertimeRequestPeriodModel, OvertimeRequestValidationHandleOptionView>(
+					"WorkRuleValidationHandleType",
+					Resources.WhenValidationFails, Resources.ContractWorkRuleValidation,
+					OvertimeRequestPeriodModel.OvertimeRequestWorkRuleValidationHandleOptionViews.Values.ToList(), "Description",
+					typeof(OvertimeRequestValidationHandleOptionView)));
 			}
 
-			
+			if (_toggleManager.IsEnabled(Toggles.OvertimeRequestPeriodSkillTypeSetting_47290))
+			{
+				var skillTypeColumn =
+					new SFGridDropDownColumn
+						<OvertimeRequestPeriodModel, OvertimeRequestPeriodSkillTypeModel>(
+							"SkillType", Resources.SkillType, " ", WorkflowControlSetModel.DefaultOvertimeRequestSkillTypeAdapters,
+							"DisplayText", null);
+				columnList.Add(skillTypeColumn);
+			}
 
 			columnList.Add(new DateOnlyColumn<OvertimeRequestPeriodModel>("PeriodStartDate", Resources.Start, Resources.Period)
 			{
@@ -192,16 +209,20 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			{
 				CellValidator = new OvertimeRequestDatePeriodEndCellValidator(_toggleManager)
 			});
-			columnList.Add(new SFGridIntegerCellWithIgnoreColumn<OvertimeRequestPeriodModel>("RollingStart", Resources.Start, Resources.Rolling)
-			{
-				CellValidator = new OvertimeRequestRollingPeriodStartCellValidator(_toggleManager)
-			});
-			columnList.Add(new SFGridIntegerCellWithIgnoreColumn<OvertimeRequestPeriodModel>("RollingEnd", Resources.End, Resources.Rolling)
-			{
-				CellValidator = new OvertimeRequestRollingPeriodEndCellValidator(_toggleManager)
-			});
+			columnList.Add(
+				new SFGridIntegerCellWithIgnoreColumn<OvertimeRequestPeriodModel>("RollingStart", Resources.Start,
+					Resources.Rolling)
+				{
+					CellValidator = new OvertimeRequestRollingPeriodStartCellValidator(_toggleManager)
+				});
+			columnList.Add(
+				new SFGridIntegerCellWithIgnoreColumn<OvertimeRequestPeriodModel>("RollingEnd", Resources.End, Resources.Rolling)
+				{
+					CellValidator = new OvertimeRequestRollingPeriodEndCellValidator(_toggleManager)
+				});
 
-			gridControlOvertimeRequestOpenPeriods.Model.Options.MergeCellsMode = GridMergeCellsMode.OnDemandCalculation | GridMergeCellsMode.MergeColumnsInRow;
+			gridControlOvertimeRequestOpenPeriods.Model.Options.MergeCellsMode =
+				GridMergeCellsMode.OnDemandCalculation | GridMergeCellsMode.MergeColumnsInRow;
 			gridControlOvertimeRequestOpenPeriods.Rows.HeaderCount = 1;
 
 			var gridColumns = new ReadOnlyCollection<SFGridColumnBase<OvertimeRequestPeriodModel>>(columnList);
@@ -216,7 +237,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 				gridControlOvertimeRequestOpenPeriods.CheckBoxClick += gridControlOvertimeRequestOpenPeriods_CheckBoxClick;
 				gridControlOvertimeRequestOpenPeriods.QueryCellInfo += gridControlOvertimeRequestOpenPeriods_QueryCellInfo;
 			}
-			gridControlOvertimeRequestOpenPeriods.CurrentCellCloseDropDown += gridControlOvertimeRequestOpenPeriods_CurrentCellCloseDropDown;
+			gridControlOvertimeRequestOpenPeriods.CurrentCellCloseDropDown +=
+				gridControlOvertimeRequestOpenPeriods_CurrentCellCloseDropDown;
 			gridControlOvertimeRequestOpenPeriods.KeyDown += gridControlOvertimeRequestOpenPeriods_KeyDown;
 			gridControlOvertimeRequestOpenPeriods.ActivateToolTip += gridControlOvertimeRequestOpenPeriods_ActivateToolTip;
 		}
@@ -284,13 +306,29 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		{
 			var gridBase = (GridControl)sender;
 			if (gridBase == null) return;
+
+			var chosenOvertimeRequestPeriodSkillTypeModel =
+				gridBase.CurrentCellInfo.CellView.ControlValue as OvertimeRequestPeriodSkillTypeModel;
+			var chosenOvertimeRequestPeriodTypeModel = gridBase.CurrentCellInfo.CellView.ControlValue as OvertimeRequestPeriodTypeModel;
+
 			if (gridBase.CurrentCell.RowIndex <= gridBase.CurrentCell.Model.Grid.Rows.HeaderCount ||
-				gridBase.CurrentCell.ColIndex != 1) return;
-			var chosenOvertimeRequestPeriodTypeModel = (OvertimeRequestPeriodTypeModel)gridBase.CurrentCellInfo.CellView.ControlValue;
+				chosenOvertimeRequestPeriodTypeModel == null && chosenOvertimeRequestPeriodSkillTypeModel == null) return;
 
 			var overtimeRequestPeriodModel = _overtimeRequestOpenPeriodGridHelper.FindSelectedItem();
-			if (overtimeRequestPeriodModel.PeriodType.Equals(chosenOvertimeRequestPeriodTypeModel)) return;
-			_presenter.SetOvertimeRequestPeriodType(overtimeRequestPeriodModel, chosenOvertimeRequestPeriodTypeModel);
+			if (chosenOvertimeRequestPeriodTypeModel!= null)
+			{
+				if (overtimeRequestPeriodModel.PeriodType.Equals(chosenOvertimeRequestPeriodTypeModel)) return;
+				_presenter.SetOvertimeRequestPeriodType(overtimeRequestPeriodModel, chosenOvertimeRequestPeriodTypeModel);
+			}
+
+			if (chosenOvertimeRequestPeriodSkillTypeModel != null)
+			{
+				if (overtimeRequestPeriodModel.SkillType != null &&
+					overtimeRequestPeriodModel.SkillType.Equals(chosenOvertimeRequestPeriodSkillTypeModel))
+					return;
+				_presenter.SetOvertimeRequestPeriodSkillType(overtimeRequestPeriodModel, chosenOvertimeRequestPeriodSkillTypeModel);
+			}
+
 			gridControlOvertimeRequestOpenPeriods.Invalidate();
 		}
 
