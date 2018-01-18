@@ -12,21 +12,24 @@
 					if (!ngModel || !measureConfigForm) return;
 
 					var validator = attrs.thresholdValidator;
-					var validators = validator.split(';')
-					var pattern = validators[0];
-					var max;
-					var dataType;
-					if (validators.length === 3) {
-						max = validators[1];
-						dataType = validators[2];
+					if (validator) {
+						var validators = validator.split(';')
+						var pattern = validators[0];
+						var max;
+						var dataType;
+						if (validators.length === 3) {
+							max = validators[1];
+							dataType = validators[2];
+						}
+
+						ngModel.$validators.validFormat = function (modelValue, viewValue) {
+							var value = modelValue || viewValue;
+							var valid = validate(value, pattern);
+
+							return valid;
+						};
 					}
 
-					ngModel.$validators.validFormat = function (modelValue, viewValue) {
-						var value = modelValue || viewValue;
-						var valid = validate(value, pattern);
-
-						return valid;
-					};
 
 					function validate(value, pattern) {
 						var result = new RegExp(pattern).test(value);

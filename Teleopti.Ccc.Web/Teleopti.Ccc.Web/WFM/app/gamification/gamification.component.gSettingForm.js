@@ -94,7 +94,8 @@
 					x.Threshold,
 					x.BronzeThreshold,
 					x.SilverThreshold,
-					x.GoldThreshold
+					x.GoldThreshold,
+					'\\d+(\.\d+)?$',
 				);
 				measureConfigs.push(config);
 				if (config.enabled) enabled.push(config);
