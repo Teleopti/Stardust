@@ -120,10 +120,11 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			{
 				taskList.Add(Task.Run(() =>
 				{
-					WithUnitOfWork.Do(() =>
+
+					StardustJobFeedback.SendProgress($"Starting processing for period start " + periods[intervalIndex].ToLongDateString());
+					foreach (var request in requests)
 					{
-						StardustJobFeedback.SendProgress($"Starting processing for period start " + periods[intervalIndex].ToLongDateString());
-						foreach (var request in requests)
+						WithUnitOfWork.Do(() =>
 						{
 							AbsencePersister.PersistIntradayAbsence(new AddIntradayAbsenceCommand
 							{
@@ -132,9 +133,10 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 								StartTime = periods[intervalIndex],
 								PersonId = request.Person.Id.GetValueOrDefault()
 							});
-						}
-						StardustJobFeedback.SendProgress($"Processing finished for period start " + periods[intervalIndex].ToLongDateString());
-					});
+						});
+					}
+					StardustJobFeedback.SendProgress($"Processing finished for period start " + periods[intervalIndex].ToLongDateString());
+
 				}));
 			}
 
@@ -212,7 +214,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 						IList<OverTimeModel> overTimeModels = new List<OverTimeModel>();
 						foreach (var request in someRequests[1])
 						{
-							
+
 							new OverTimeModel()
 							{
 								StartDateTime = periods[intervalIndex],
@@ -221,7 +223,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 								PersonId = request.Person.Id.Value
 
 							};
-							
+
 						}
 						//if not ignoring might need a "real" multiId
 						AddOverTime.Apply(overTimeModels, Guid.NewGuid());
