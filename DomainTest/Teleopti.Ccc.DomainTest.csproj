@@ -279,7 +279,6 @@
     <Compile Include="ApplicationLayer\Rta\ViewModels\HistoricalAdherenceViewModelBuilder\ChangesTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\HistoricalAdherenceViewModelBuilder\ScheduleTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\SiteCardViewModelBuilderTeamsTest.cs" />
-    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsPersonTerminalDateChangedEventHandlerTest.cs" />
     <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradeTargetTimeSpecificationTests.cs" />
     <Compile Include="ApplicationLayer\SiteTeamChangedHandlers\AnalyticsSiteUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\SiteTeamChangedHandlers\AnalyticsTeamUpdaterTest.cs" />

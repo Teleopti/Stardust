@@ -51,17 +51,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 													&& x.ScenarioId == scenarioId);
 		}
 
-		public void DeleteFactScheduleAfterTerminalDate(Guid personCode, DateTime terminalDate)
-		{
-			var periods = _personPeriodRepository.GetPersonPeriods(personCode)
-				.Where(x => x.ValidFromDate <= terminalDate && terminalDate <= x.ValidToDate);
-			var personId = periods.First().PersonId;
-			FactScheduleRows.RemoveAll(x => x.PersonPart != null
-											&& x.PersonPart.PersonId == personId
-											&& x.DatePart != null
-											&& x.DatePart.ActivityStartTime >= terminalDate);
-		}
-
 		public IList<IAnalyticsShiftLength> ShiftLengths()
 		{
 			return AnalyticsShiftLengths;
@@ -75,6 +64,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public void InsertStageScheduleChangedServicebus(DateOnly date, Guid personId, Guid scenarioId, Guid businessUnitId,
 			DateTime datasourceUpdateDate)
 		{
+			
 		}
 
 		public void UpdateUnlinkedPersonids(int[] personPeriodIds)

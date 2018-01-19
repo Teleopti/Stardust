@@ -45,6 +45,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			analyticsDataFactory.Setup(act);
 			analyticsDataFactory.Persist();
 
+
 			var acts = WithAnalyticsUnitOfWork.Get(() => TargetActivityRepository.Activities());
 			acts.Count.Should().Be.EqualTo(1);
 		}
@@ -329,15 +330,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			WithAnalyticsUnitOfWork.Do(() =>
 			{
 				Target.DeleteFactSchedule(1, Guid.NewGuid(), 1);
-			});
-		}
-
-		[Test]
-		public void ShouldBeAbleToDeleteFactScheduleForPersonWithTerminalDateChanged()
-		{
-			WithAnalyticsUnitOfWork.Do(() =>
-			{
-				Target.DeleteFactScheduleAfterTerminalDate(Guid.NewGuid(), new DateTime(2018, 01, 01));
 			});
 		}
 
