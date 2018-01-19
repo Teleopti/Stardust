@@ -119,7 +119,7 @@
             this.buttonAdvOk.TabIndex = 6;
             this.buttonAdvOk.Text = "xxOK";
             this.buttonAdvOk.UseVisualStyle = true;
-            this.buttonAdvOk.Click += new System.EventHandler(this.ButtonAdvOkClick);
+            this.buttonAdvOk.Click += new System.EventHandler(this.buttonAdvOkClick);
             // 
             // ReportSettingsScheduleTimeVersusTargetTimeView
             // 
