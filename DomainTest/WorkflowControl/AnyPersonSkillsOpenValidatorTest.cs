@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 {
 	public class AnyPersonSkillsOpenValidatorTest
 	{
-		private readonly AnyPersonSkillsOpenValidator _target = new AnyPersonSkillsOpenValidator();
+		private readonly AnyPersonSkillsOpenValidator _target = new AnyPersonSkillsOpenValidator(new FakeSkillRepository());
 		private IPerson _person;
 		private Absence _absence;
 		private ISkill _skill;
@@ -111,6 +111,23 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			WorkloadFactory.CreateWorkloadWithOpenHours(_skill, timePeriods);
 			var request = new PersonRequest(_person, new AbsenceRequest(_absence, new DateTimePeriod(2017,10,21,8,2017,10,22,9))).WithId();
 			var validatedRequest = _target.Validate(request.Request as IAbsenceRequest, _person.PersonPeriodCollection.First().PersonSkillCollection, _scheduleRange);
+			validatedRequest.IsValid.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldHandleMultisiteSkill()
+		{
+			var skill = SkillFactory.CreateMultisiteSkill("multi", SkillTypeFactory.CreateSkillType(), 15);
+			var child = SkillFactory.CreateChildSkill("child", skill);
+			
+			var date = new DateOnly(2016, 4, 1);
+			var person = PersonFactory.CreatePersonWithPersonPeriodTeamSite(date);
+			person.AddSkill(child, date);
+
+			var timePeriods = Enumerable.Repeat(new TimePeriod(8, 18), 7).ToArray();
+			WorkloadFactory.CreateWorkloadWithOpenHours(skill, timePeriods);
+			var request = new PersonRequest(person, new AbsenceRequest(_absence, new DateTimePeriod(2017, 10, 21, 8, 2017, 10, 22, 9))).WithId();
+			var validatedRequest = _target.Validate(request.Request as IAbsenceRequest, person.PersonPeriodCollection.First().PersonSkillCollection, _scheduleRange);
 			validatedRequest.IsValid.Should().Be.True();
 		}
 	}

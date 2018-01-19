@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -23,8 +24,15 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 	public class AnyPersonSkillsOpenValidator : IAnyPersonSkillsOpenValidator
 	{
+		private readonly ISkillRepository _skillRepository;
+
+		public AnyPersonSkillsOpenValidator(ISkillRepository skillRepository)
+		{
+			_skillRepository = skillRepository;
+		}
 		public IValidatedRequest Validate(IAbsenceRequest absenceRequest, IEnumerable<IPersonSkill> personSkills, IScheduleRange scheduleRange)
 		{
+			_skillRepository.LoadAllSkills();
 			var requestPeriod = absenceRequest.Period;
 			foreach (var personSkill in personSkills)
 			{
@@ -34,7 +42,17 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 				foreach (var requestDay in dateOnlyPeriod.DayCollection())
 				{
-					foreach (var workload in skill.WorkloadCollection)
+					IEnumerable<IWorkload> workloadCollection;
+					if (skill is IChildSkill)
+					{
+						var child = skill as IChildSkill;
+						workloadCollection = child.ParentSkill.WorkloadCollection;
+					}
+					else
+					{
+						workloadCollection = skill.WorkloadCollection;
+					}
+					foreach (var workload in workloadCollection)
 					{
 						var openHoursForRequestDay = workload.TemplateWeekCollection[(int) requestDay.DayOfWeek].OpenHourList;
 						if (!openHoursForRequestDay.Any()) continue;
