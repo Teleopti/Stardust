@@ -1,129 +1,44 @@
-<style>
-	
-	.rta-view card-panel .card-panel-header-wrapper{
-		border-left: 10px solid #66c2ff;
-	}
+<div class="rta-view historical prototype">
 
-
-	.rta-view .rta-alarmline.highlight {
-		outline: 1px solid #B22222;
-		outline-offset: 2px;
-	}
-
-	.rta-view .rta-approvedline {
-		background-color: darkred;
-		z-index: 6;
-		position: absolute;
-		right: 75%;
-		margin-top: 0;
-		bottom: 44%;
-		opacity: 0.6;
-		min-width: 1px;
-	}
-
-	.rta-view .rta-approvedline.highlight {
-		outline: 1px solid #556B2F;
-		outline-offset: 2px;
-	}
-	
-</style>
-
-<div class="rta-historical-view" xmlns="http://www.w3.org/1999/html">
-	<div class="rta-view">
-
-		<div class="view-header with-fab with-desc">
-			<div class="view-title">
-				<h1>
-					<i class="mdi mdi-alarm"></i>
-					<b>{{vm.agentName}}</b> {{vm.date}}
-				</h1>
-			</div>
-			<div class="fab-wrapper" style="width: 30%">
-				<div class="pull-right">
-					<a ng-href="{{vm.previousHref}}" style="display: inline-block"
-					   class="wfm-btn wfm-btn-default" ng-disabled="!vm.previousHref">
-						<md-tooltip ng-if="vm.previousTooltip">{{vm.previousTooltip}}</md-tooltip>
-						<i class="mdi mdi-chevron-left" style="font-size: 14px !important;"></i>
-						{{'Previous' | translate}}
-					</a>
-					<a ng-href="{{vm.nextHref}}" style="display: inline-block"
-					   class="wfm-btn wfm-btn-default" ng-disabled="!vm.nextHref">
-						<md-tooltip ng-if="vm.nextTooltip">{{vm.nextTooltip}}</md-tooltip>
-						{{'Next' | translate}}
-						<i class="mdi mdi-chevron-right" style="font-size: 14px !important;"></i>
-					</a>
-				</div>
+	<div class="view-header with-fab with-desc">
+		<div class="view-title">
+			<h1>
+				<i class="mdi mdi-alarm"></i>
+				<b>{{vm.agentName}}</b> {{vm.date}}
+			</h1>
+		</div>
+		<div class="fab-wrapper" style="width: 30%">
+			<div class="pull-right">
+				<a ng-href="{{vm.previousHref}}" style="display: inline-block"
+				   class="wfm-btn wfm-btn-default" ng-disabled="!vm.previousHref">
+					<md-tooltip ng-if="vm.previousTooltip">{{vm.previousTooltip}}</md-tooltip>
+					<i class="mdi mdi-chevron-left" style="font-size: 14px !important;"></i>
+					{{'Previous' | translate}}
+				</a>
+				<a ng-href="{{vm.nextHref}}" style="display: inline-block"
+				   class="wfm-btn wfm-btn-default" ng-disabled="!vm.nextHref">
+					<md-tooltip ng-if="vm.nextTooltip">{{vm.nextTooltip}}</md-tooltip>
+					{{'Next' | translate}}
+					<i class="mdi mdi-chevron-right" style="font-size: 14px !important;"></i>
+				</a>
 			</div>
 		</div>
+	</div>
 
-
-		<!--<div class="con-row animate-show" ng-show="vm.showApprovePanel" aria-hidden="false" style="">-->
-		<!--<div class="con-flex">-->
-		<!--<div class="panel material-depth-1" ng-show="vm.showApprovePanel">-->
-		<!--<div class="sub-header">-->
-		<!--<h2 class="ng-binding">Approve out of adherence</h2>-->
-		<!--</div>-->
-		<!--<div class="con-row">-->
-		<!--<div class="con-flex">-->
-		<!--<label>-->
-		<!--<span style="line-height: 2">Start:</span>-->
-		<!--<input type="text" value="10:00"/>-->
-		<!--</label>-->
-		<!--</div>-->
-		<!--<div class="con-flex">-->
-		<!--<label>-->
-		<!--<span style="line-height: 2">End:</span>-->
-		<!--<input type="text" value="12:00"/>-->
-		<!--</label>-->
-		<!--</div>-->
-		<!--</div>-->
-		<!--<div class="con-footer">-->
-		<!--<button type="button" class="wfm-btn wfm-btn-invis-default"-->
-		<!--ng-click="vm.showApprovePanel = !vm.showApprovePanel">Cancel-->
-		<!--</button>-->
-		<!--<button type="submit" class="wfm-btn wfm-btn-invis-primary" ng-click="vm.approveOOA()">Apply-->
-		<!--</button>-->
-		<!--</div>-->
-		<!--</div>-->
-		<!--</div>-->
-		<!--<div class="con-flex x3">-->
-		<!--</div>-->
-		<!--</div>-->
-
-		<div class="panel material-depth-1">
-			<!--<div class="con-row" style="align-items: center">-->
-			<!--<div class="con-flex adherence-percent" ng-show="vm.showAdherencePercentage">-->
-			<!--</div>-->
-			<!--<div class="con-flex">-->
-			<!--<span class="pull-right">-->
-			<!--<a ng-href="{{vm.previousHref}}" style="display: inline-block"-->
-			<!--class="wfm-btn wfm-btn-invis-primary wfm-btn-sm" ng-disabled="!vm.previousHref">-->
-			<!--<md-tooltip ng-if="vm.previousTooltip">{{vm.previousTooltip}}</md-tooltip>-->
-			<!--<i class="mdi mdi-chevron-left" style="font-size: 14px !important;"></i>-->
-			<!--{{'Previous' | translate}}-->
-			<!--</a>-->
-			<!--<a ng-href="{{vm.nextHref}}" style="display: inline-block"-->
-			<!--class="wfm-btn wfm-btn-invis-primary wfm-btn-sm" ng-disabled="!vm.nextHref">-->
-			<!--<md-tooltip ng-if="vm.nextTooltip">{{vm.nextTooltip}}</md-tooltip>-->
-			<!--{{'Next' | translate}}-->
-			<!--<i class="mdi mdi-chevron-right" style="font-size: 14px !important;"></i>-->
-			<!--</a>-->
-			<!--</span>-->
-			<!--</div>-->
-			<!--</div>-->
-			<div class="con-row">
-				<div class="con-flex">
-					{{'Adherence' | translate}} 60%
-				</div>
-				<div class="con-flex" style="flex-basis: 80%!important">
-					<div class="rta-historical-adherence-row-wrapper">
-						<div ng-repeat="row in vm.fullTimeline" class="label label-info"
-							 ng-attr-style="position: absolute; left: {{row.Offset}}; top: 10%; width: 36px; margin-left: -18px;">
-							{{row.Time | amDateFormat: 'HH.mm'}}
-						</div>
+	<div class="panel material-depth-1">
+		<div class="con-row">
+			<div class="con-flex">
+				{{'Adherence' | translate}} 60%
+			</div>
+			<div class="con-flex" style="flex-basis: 80%!important">
+				<div class="rta-historical-adherence-row-wrapper">
+					<div ng-repeat="row in vm.fullTimeline" class="label label-info"
+						 ng-attr-style="position: absolute; left: {{row.Offset}}; top: 10%; width: 36px; margin-left: -18px;">
+						{{row.Time | amDateFormat: 'HH.mm'}}
 					</div>
+				</div>
 
-					<div class="rta-out-of-adherences-wrapper">
+				<div class="rta-out-of-adherences-wrapper">
 						<span ng-repeat="outOfAdherence in vm.outOfAdherences"
 							  class="rta-alarmline out-of-adherence"
 							  ng-attr-style="left: {{outOfAdherence.Offset}}; width: {{outOfAdherence.Width}}; bottom: 46%;"
@@ -133,50 +48,50 @@
 							</md-tooltip>
 						</span>
 
-						<span class="rta-current-time" ng-if="vm.currentTimeOffset"
-							  ng-attr-style="left: {{vm.currentTimeOffset}};" style="height: 70%; margin-top: 6px;">
+					<span class="rta-current-time" ng-if="vm.currentTimeOffset"
+						  ng-attr-style="left: {{vm.currentTimeOffset}};" style="height: 70%; margin-top: 6px;">
 							<md-tooltip md-direction="top">
 								{{vm.date | amDateFormat: "HH:mm:ss"}}
 							</md-tooltip>
 						</span>
 
-						<div class="rta-shift rta-full-shift-wrapper">
-							<div ng-repeat="activity in vm.agentsFullSchedule"
-								 class="rta-layer absolute floatleft activity" tabindex="0"
-								 ng-attr-style="width: {{activity.Width}}; left: {{activity.Offset}}; background-color: {{activity.Color}}; top: 12%;"
-								 data-starttime="{{activity.StartTime | amDateFormat: 'YYYY-MM-DD HH:mm:ss'}}"
-								 data-endtime="{{activity.EndTime | amDateFormat: 'YYYY-MM-DD HH:mm:ss'}}">
-							</div>
+					<div class="rta-shift rta-full-shift-wrapper">
+						<div ng-repeat="activity in vm.agentsFullSchedule"
+							 class="rta-layer absolute floatleft activity" tabindex="0"
+							 ng-attr-style="width: {{activity.Width}}; left: {{activity.Offset}}; background-color: {{activity.Color}}; top: 12%;"
+							 data-starttime="{{activity.StartTime | amDateFormat: 'YYYY-MM-DD HH:mm:ss'}}"
+							 data-endtime="{{activity.EndTime | amDateFormat: 'YYYY-MM-DD HH:mm:ss'}}">
 						</div>
+					</div>
 
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="panel material-depth-1">
+
+		<div class="con-row">
+			<div class="con-flex">
+				Changes
+			</div>
+			<div class="con-flex" style="flex-basis: 80%!important">
+				<div class="hidden-md" style="height: 15px; position: relative;">
+					<div ng-repeat="diamond in vm.diamonds"
+						 ng-class="{'diamond': true, 'highlight': diamond.highlight}" ng-click="diamond.click()"
+						 ng-attr-style="top: 4px; margin-top: 0; left: {{diamond.Offset}}; border-color: {{diamond.RuleColor}};">
+						<div class="inner" ng-attr-style="background-color: {{diamond.RuleColor}};"></div>
 					</div>
 				</div>
 			</div>
 		</div>
 
-		<div class="panel material-depth-1">
-
-			<div class="con-row">
-				<div class="con-flex">
-					Changes
-				</div>
-				<div class="con-flex" style="flex-basis: 80%!important">
-					<div class="hidden-md" style="height: 15px; position: relative;">
-						<div ng-repeat="diamond in vm.diamonds"
-							 ng-class="{'diamond': true, 'highlight': diamond.highlight}" ng-click="diamond.click()"
-							 ng-attr-style="top: 4px; margin-top: 0; left: {{diamond.Offset}}; border-color: {{diamond.RuleColor}};">
-							<div class="inner" ng-attr-style="background-color: {{diamond.RuleColor}};"></div>
-						</div>
-					</div>
-				</div>
+		<div class="con-row">
+			<div class="con-flex">
+				Adherence deviation
 			</div>
-
-			<div class="con-row">
-				<div class="con-flex">
-					Out of adherence
-				</div>
-				<div class="con-flex" style="flex-basis: 80%!important">
-					<div style="height: 20px; position: relative">
+			<div class="con-flex" style="flex-basis: 80%!important">
+				<div style="height: 20px; position: relative">
 						<span ng-click="outOfAdherence.highlight = !outOfAdherence.highlight; openCard = !openCard"
 							  ng-repeat="outOfAdherence in vm.outOfAdherences2"
 							  ng-class="{'highlight': outOfAdherence.highlight}"
@@ -188,229 +103,239 @@
 									{{outOfAdherence.StartTime}} - {{outOfAdherence.EndTime}}
 								</md-tooltip>
 						</span>
-					</div>
 				</div>
 			</div>
+		</div>
 
-			<div class="con-row">
-				<div class="con-flex">
-					Approved adherence
-				</div>
-				<div class="con-flex" style="flex-basis: 80%!important">
-					<div style="height: 20px; position: relative">
+		<div class="con-row">
+			<div class="con-flex">
+				Approved periods
+			</div>
+			<div class="con-flex" style="flex-basis: 80%!important">
+				<div style="height: 20px; position: relative">
 						<span ng-repeat="foo in vm.foos"
 							  ng-click="foo.highlight = !foo.highlight"
 							  class="rta-approvedline"
 							  ng-class="{'highlight': foo.highlight}"
 							  ng-attr-style="height: 20px; background-color: #556B2F; opacity: 1; left: {{foo.Offset}}; width: {{foo.Width}}; bottom: 0;"
 							  data-starttime="{{foo.StartTime}}" data-endtime="{{foo.EndTime}}" role="button">
-								<!--<md-tooltip md-direction="top">-->
-							<!--{{foo.StartTime}} - {{foo.EndTime}}-->
-							<!--</md-tooltip>-->
 						</span>
-					</div>
-					<!--<span ng-if="vm.showApprovedOOA"-->
-					<!--class="rta-alarmline out-of-adherence"-->
-					<!--ng-attr-style="left: {{vm.approvedOOA.Offset}}; width: {{vm.approvedOOA.Width}}; bottom: 46%; margin-top: 30px"-->
-					<!--data-starttime="{{vm.approvedOOA.StartTime}}" data-endtime="{{vm.approvedOOA.EndTime}}">-->
-					<!--<md-tooltip md-direction="top">-->
-					<!--{{outOfAdherence.StartTime}} - {{outOfAdherence.EndTime}}-->
-					<!--</md-tooltip>-->
-					<!--</span>-->
 				</div>
 			</div>
 		</div>
-
-		<card-panel-list>
-			<card-panel open="openCard">
-				<card-panel-header>
-					<b>Periods out of adherence</b>
-				</card-panel-header>
-				<card-panel-content>
-					<div class="panel">
-						<table class="wfm-table">
-							<th>Start</th>
-							<th>End</th>
-							<th>Approve out of adherence</th>
-							<tr ng-repeat="outOfAdherence in vm.outOfAdherences2"
-								ng-class="{'highlight': outOfAdherence.highlight}"
-								ng-click="outOfAdherence.highlight = !outOfAdherence.highlight">
-								<td>
-									{{outOfAdherence.StartTime}}
-								</td>
-								<td>
-									{{outOfAdherence.EndTime}}
-								</td>
-								<td width="550px">
-									<div tabindex=0 class="context-menu card-context"
-										 ng-click="outOfAdherence.approve()"
-										 ng-show="!outOfAdherence.ShowApprovePanel">
-										<i class="mdi mdi-thumb-up"></i> Approve as in adherence
-										<md-tooltip>Approve out of adherence</md-tooltip>
-									</div>
-									<div ng-show="outOfAdherence.ShowApprovePanel">
-										<label style="padding-right: 20px">
-											Start:
-											<input type="text" value="{{outOfAdherence.StartTime}}" style="width: 60px"/>
-										</label>
-										<label style="padding-right: 20px">
-											End:
-											<input type="text" value="{{outOfAdherence.EndTime}}" style="width: 60px"/>
-										</label>
-										<button type="button" class="wfm-btn wfm-btn-invis-default"
-												ng-click="outOfAdherence.ShowApprovePanel = !outOfAdherence.ShowApprovePanel">
-											Cancel
-										</button>
-										<button type="submit" class="wfm-btn wfm-btn-invis-primary"
-												ng-click="vm.approveOOA()">Approve as in adherence
-										</button>
-									</div>
-								</td>
-							</tr>
-						</table>
-					</div>
-				</card-panel-content>
-			</card-panel>
-		</card-panel-list>
-
-
-		<card-panel-list>
-			<card-panel>
-				<card-panel-header>
-					<b>Approved periods</b>
-				</card-panel-header>
-				<card-panel-content>
-					<div class="panel">
-						<table class="wfm-table">
-							<th>Start</th>
-							<th>End</th>
-							<tr ng-repeat="foo in vm.foos" ng-class="{'highlight': foo.highlight}"
-								ng-click="foo.highlight = !foo.highlight">
-								<td>
-									{{foo.StartTime}}
-								</td>
-								<td>
-									{{foo.EndTime}}
-								</td>
-							</tr>
-						</table>
-					</div>
-				</card-panel-content>
-			</card-panel>
-		</card-panel-list>
-
-		<rta-card ng-repeat="card in vm.cards" ng-open="card.isOpen">
-			<rta-card-header ng-attr-styles="border-left-color: {{card.Color}}">{{card.Header}}</rta-card-header>
-			<rta-card-body>
-				<div class="con-row">
-					<div class="con-flex">
-						<ul class="wfm-simple-list rta-list">
-							<li>
-								<div class="con-row rta-change-row hidden-sm">
-									<div class="con-flex">
-										<b>{{'Time' | translate}}</b>
-									</div>
-									<div class="con-flex">
-										<b>{{'Activity' | translate}}</b>
-									</div>
-									<div class="con-flex">
-										<b>{{'State' | translate}}</b>
-									</div>
-									<div class="con-flex">
-										<b>{{'Rule' | translate}}</b>
-									</div>
-									<div class="con-flex">
-										<b>{{'Adherence' | translate}}</b>
-									</div>
-								</div>
-							</li>
-							<li ng-repeat="item in card.Items" class="change" ng-class="{'highlight': item.highlight}"
-								data-time="{{item.Time | amDateFormat: 'HH:mm:ss'}}"
-								ng-click="item.click()">
-								<div class="con-row rta-change-row">
-									<div class="con-flex time">{{item.Time | amDateFormat: 'HH:mm:ss' }}</div>
-									<div class="con-flex">
-									<span ng-if="item.Activity" class="historical-label"
-										  ng-attr-style="border: 1px solid {{item.ActivityColor}}; border-left: 10px solid {{item.ActivityColor}};">
-										{{item.Activity}}
-									</span>
-									</div>
-									<div class="con-flex">{{item.State}}</div>
-									<div class="con-flex">
-									<span ng-if="item.Rule" class="historical-label"
-										  ng-attr-style="border: 1px solid {{item.RuleColor}}; border-left: 10px solid {{item.RuleColor}};">
-										{{item.Rule}}
-									</span>
-									</div>
-									<div class="con-flex">
-									<span ng-if="item.Adherence" class="historical-label"
-										  ng-attr-style="border: 1px solid {{item.AdherenceColor}}; border-left: 10px solid {{item.AdherenceColor}};">
-										{{item.Adherence}}
-									</span>
-									</div>
-								</div>
-							</li>
-						</ul>
-					</div>
-				</div>
-			</rta-card-body>
-		</rta-card>
-
-		<rta-card ng-repeat="card in vm.cards" ng-open="card.isOpen">
-			<rta-card-header ng-attr-styles="border-left-color: {{card.Color}}">{{card.Header}}</rta-card-header>
-			<rta-card-body>
-				<div class="con-row">
-					<div class="con-flex">
-						<ul class="wfm-simple-list rta-list">
-							<li>
-								<div class="con-row rta-change-row hidden-sm">
-									<div class="con-flex">
-										<b>{{'Time' | translate}}</b>
-									</div>
-									<div class="con-flex">
-										<b>{{'Activity' | translate}}</b>
-									</div>
-									<div class="con-flex">
-										<b>{{'State' | translate}}</b>
-									</div>
-									<div class="con-flex">
-										<b>{{'Rule' | translate}}</b>
-									</div>
-									<div class="con-flex">
-										<b>{{'Adherence' | translate}}</b>
-									</div>
-								</div>
-							</li>
-							<li ng-repeat="item in card.Items" class="change" ng-class="{'highlight': item.highlight}"
-								data-time="{{item.Time | amDateFormat: 'HH:mm:ss'}}"
-								ng-click="item.click()">
-								<div class="con-row rta-change-row">
-									<div class="con-flex time">{{item.Time | amDateFormat: 'HH:mm:ss' }}</div>
-									<div class="con-flex">
-									<span ng-if="item.Activity" class="historical-label"
-										  ng-attr-style="border: 1px solid {{item.ActivityColor}}; border-left: 10px solid {{item.ActivityColor}};">
-										{{item.Activity}}
-									</span>
-									</div>
-									<div class="con-flex">{{item.State}}</div>
-									<div class="con-flex">
-									<span ng-if="item.Rule" class="historical-label"
-										  ng-attr-style="border: 1px solid {{item.RuleColor}}; border-left: 10px solid {{item.RuleColor}};">
-										{{item.Rule}}
-									</span>
-									</div>
-									<div class="con-flex">
-									<span ng-if="item.Adherence" class="historical-label"
-										  ng-attr-style="border: 1px solid {{item.AdherenceColor}}; border-left: 10px solid {{item.AdherenceColor}};">
-										{{item.Adherence}}
-									</span>
-									</div>
-								</div>
-							</li>
-						</ul>
-					</div>
-				</div>
-			</rta-card-body>
-		</rta-card>
 	</div>
+
+
+	<div class="con-row" style="padding: 0; margin: 0">
+		<div class="con-flex" style="padding: 0; margin: 0 5px -8px 0;">
+
+
+			<card-panel-list>
+				<card-panel open="openCard">
+					<card-panel-header>
+						<b>Adherence deviation</b>
+					</card-panel-header>
+					<card-panel-content>
+						<div class="panel">
+							<table class="wfm-table">
+								<th style="width: 8.5%">Start</th>
+								<th style="width: 8.5%">End</th>
+								<th></th>
+								<tr ng-repeat="outOfAdherence in vm.outOfAdherences2"
+									ng-class="{'highlight': outOfAdherence.highlight}"
+									ng-click="outOfAdherence.highlight = !outOfAdherence.highlight">
+									<td>
+										{{outOfAdherence.StartTime}}
+									</td>
+									<td>
+										{{outOfAdherence.EndTime}}
+									</td>
+									<td width="550px" ng-style="outOfAdherence.ShowApprovePanel && {'background-color': '#fff'}">
+											<span ng-show="!outOfAdherence.ShowApprovePanel"
+												  ng-click="outOfAdherence.approve(); $event.stopPropagation()">
+												<i class="mdi mdi-thumb-up"></i> Approve deviation
+											</span>
+										<div ng-show="outOfAdherence.ShowApprovePanel"
+											 ng-click="$event.stopPropagation()">
+
+											<!--<time-range-picker ng-model="outOfAdherence.timeRange" disable-next-day="disableNextDay"></time-range-picker>-->
+
+											<label>
+												Approve:
+												<input type="text" value="{{outOfAdherence.StartTime}}"
+													   style="width: 55px"/>
+											</label>
+											<label style="margin-right: 5px">
+												-
+												<input type="text" value="{{outOfAdherence.EndTime}}"
+													   style="width: 55px"/>
+											</label>
+											<div tabindex=0 class="context-menu card-context"
+												 ng-click="outOfAdherence.ShowApprovePanel = !outOfAdherence.ShowApprovePanel">
+												<i class="mdi mdi-close"></i>
+												<md-tooltip>Close</md-tooltip>
+											</div>
+											<div tabindex=0 class="context-menu card-context">
+												<i class="mdi mdi-check"></i>
+												<md-tooltip>Approve deviation as in adherence</md-tooltip>
+											</div>
+										</div>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</card-panel-content>
+				</card-panel>
+			</card-panel-list>
+
+		</div>
+		<div class="con-flex" style="padding: 0; margin: 0 0 -8px;">
+
+
+			<card-panel-list>
+				<card-panel>
+					<card-panel-header>
+						<b>Approved periods</b>
+					</card-panel-header>
+					<card-panel-content>
+						<div class="panel">
+							<table class="wfm-table">
+								<th style="width: 8.5%">Start</th>
+								<th style="width: 8.5%">End</th>
+								<th></th>
+								<tr ng-repeat="foo in vm.foos" ng-class="{'highlight': foo.highlight}"
+									ng-click="foo.highlight = !foo.highlight">
+									<td>
+										{{foo.StartTime}}
+									</td>
+									<td>
+										{{foo.EndTime}}
+									</td>
+									<td></td>
+								</tr>
+							</table>
+						</div>
+					</card-panel-content>
+				</card-panel>
+			</card-panel-list>
+
+
+		</div>
+	</div>
+
+
+	<rta-card ng-repeat="card in vm.cards" ng-open="card.isOpen">
+		<rta-card-header ng-attr-styles="border-left-color: {{card.Color}}">{{card.Header}}</rta-card-header>
+		<rta-card-body>
+			<div class="con-row">
+				<div class="con-flex">
+					<ul class="wfm-simple-list rta-list">
+						<li>
+							<div class="con-row rta-change-row hidden-sm">
+								<div class="con-flex">
+									<b>{{'Time' | translate}}</b>
+								</div>
+								<div class="con-flex">
+									<b>{{'Activity' | translate}}</b>
+								</div>
+								<div class="con-flex">
+									<b>{{'State' | translate}}</b>
+								</div>
+								<div class="con-flex">
+									<b>{{'Rule' | translate}}</b>
+								</div>
+								<div class="con-flex">
+									<b>{{'Adherence' | translate}}</b>
+								</div>
+							</div>
+						</li>
+						<li ng-repeat="item in card.Items" class="change" ng-class="{'highlight': item.highlight}"
+							data-time="{{item.Time | amDateFormat: 'HH:mm:ss'}}"
+							ng-click="item.click()">
+							<div class="con-row rta-change-row">
+								<div class="con-flex time">{{item.Time | amDateFormat: 'HH:mm:ss' }}</div>
+								<div class="con-flex">
+									<span ng-if="item.Activity" class="historical-label"
+										  ng-attr-style="border: 1px solid {{item.ActivityColor}}; border-left: 10px solid {{item.ActivityColor}};">
+										{{item.Activity}}
+									</span>
+								</div>
+								<div class="con-flex">{{item.State}}</div>
+								<div class="con-flex">
+									<span ng-if="item.Rule" class="historical-label"
+										  ng-attr-style="border: 1px solid {{item.RuleColor}}; border-left: 10px solid {{item.RuleColor}};">
+										{{item.Rule}}
+									</span>
+								</div>
+								<div class="con-flex">
+									<span ng-if="item.Adherence" class="historical-label"
+										  ng-attr-style="border: 1px solid {{item.AdherenceColor}}; border-left: 10px solid {{item.AdherenceColor}};">
+										{{item.Adherence}}
+									</span>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</rta-card-body>
+	</rta-card>
+
+	<rta-card ng-repeat="card in vm.cards" ng-open="card.isOpen">
+		<rta-card-header ng-attr-styles="border-left-color: {{card.Color}}">{{card.Header}}</rta-card-header>
+		<rta-card-body>
+			<div class="con-row">
+				<div class="con-flex">
+					<ul class="wfm-simple-list rta-list">
+						<li>
+							<div class="con-row rta-change-row hidden-sm">
+								<div class="con-flex">
+									<b>{{'Time' | translate}}</b>
+								</div>
+								<div class="con-flex">
+									<b>{{'Activity' | translate}}</b>
+								</div>
+								<div class="con-flex">
+									<b>{{'State' | translate}}</b>
+								</div>
+								<div class="con-flex">
+									<b>{{'Rule' | translate}}</b>
+								</div>
+								<div class="con-flex">
+									<b>{{'Adherence' | translate}}</b>
+								</div>
+							</div>
+						</li>
+						<li ng-repeat="item in card.Items" class="change" ng-class="{'highlight': item.highlight}"
+							data-time="{{item.Time | amDateFormat: 'HH:mm:ss'}}"
+							ng-click="item.click()">
+							<div class="con-row rta-change-row">
+								<div class="con-flex time">{{item.Time | amDateFormat: 'HH:mm:ss' }}</div>
+								<div class="con-flex">
+									<span ng-if="item.Activity" class="historical-label"
+										  ng-attr-style="border: 1px solid {{item.ActivityColor}}; border-left: 10px solid {{item.ActivityColor}};">
+										{{item.Activity}}
+									</span>
+								</div>
+								<div class="con-flex">{{item.State}}</div>
+								<div class="con-flex">
+									<span ng-if="item.Rule" class="historical-label"
+										  ng-attr-style="border: 1px solid {{item.RuleColor}}; border-left: 10px solid {{item.RuleColor}};">
+										{{item.Rule}}
+									</span>
+								</div>
+								<div class="con-flex">
+									<span ng-if="item.Adherence" class="historical-label"
+										  ng-attr-style="border: 1px solid {{item.AdherenceColor}}; border-left: 10px solid {{item.AdherenceColor}};">
+										{{item.Adherence}}
+									</span>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</rta-card-body>
+	</rta-card>
+	
 </div>

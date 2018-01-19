@@ -1718,6 +1718,8 @@
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.staffing.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.staffingChart.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.staffingChart.spec.js" />
+    <Content Include="WFM\css\_rta.legacy.scss" />
+    <Content Include="WFM\css\_rta.prototype.scss" />
     <Content Include="WFM\css\_staffing.scss" />
     <Content Include="WFM\css\_grouppage.scss" />
     <Content Include="WFM\css\_organizationpicker.scss" />
