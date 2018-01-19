@@ -97,11 +97,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			}
 			else
 			{
-				foreach (var d in week.DayCollection())
-				{
-					personIds.AddRange(_searchProvider.FindPersonIds(d, input.GroupIds, input.CriteriaDictionary));
-				}
-				personIds = personIds.Distinct().ToList();
+				personIds = week.DayCollection()
+					.SelectMany(d => _searchProvider.FindPersonIds(d, input.GroupIds, input.CriteriaDictionary)).Distinct().ToList();
 			}
 			return createWeekViewModelForPeople(personIds, input);
 		}
@@ -195,7 +192,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		private GroupScheduleViewModel createViewModelForPeople(IList<Guid> targetIds, SearchDaySchedulesInput input)
 		{
 			var permittedPersons = new List<IPerson>();
-			foreach (var batch in targetIds.Batch(500))
+			foreach (var batch in targetIds.Batch(501))
 			{
 				var batchPermittedPersons = getPermittedPersons(batch.ToArray(), input.DateInUserTimeZone);
 				if (input.IsOnlyAbsences)

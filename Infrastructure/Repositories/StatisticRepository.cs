@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			if (sources.Count == 0) return new List<IStatisticTask>();
 
-			ICollection<IStatisticTask> statisticTasks = new Collection<IStatisticTask>();
+			List<IStatisticTask> statisticTasks = new List<IStatisticTask>();
 
 			using (IStatelessUnitOfWork uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
@@ -90,10 +90,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					IQuery query = createQuery(uow, period, queueList);
 					query.SetTimeout(1200);
 
-					foreach (var item in query.List<IStatisticTask>())
-					{
-						statisticTasks.Add(item);
-					}
+					statisticTasks.AddRange(query.List<IStatisticTask>());
 				}
 
 				return statisticTasks;
@@ -105,7 +102,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			if (sources.Count == 0) return new List<IStatisticTask>();
 
-			ICollection<IStatisticTask> statisticTasks = new Collection<IStatisticTask>();
+			var statisticTasks = new List<IStatisticTask>();
 
 			using (IStatelessUnitOfWork uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
@@ -115,10 +112,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					IQuery query = createDailyStatisticQuery(uow, period, queueList, timeZoneId, midnightBreakOffset);
 					query.SetTimeout(1200);
 
-					foreach (var item in query.List<IStatisticTask>())
-					{
-						statisticTasks.Add(item);
-					}
+					statisticTasks.AddRange(query.List<IStatisticTask>());
 				}
 
 				return statisticTasks;

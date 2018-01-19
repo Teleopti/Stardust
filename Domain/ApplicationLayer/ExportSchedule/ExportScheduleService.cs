@@ -72,8 +72,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ExportSchedule
 			{
 				var matchedPersons = _personRepository.FindPeople(batch);
 				var permittedPeopleBatch = _searchProvider
-					.GetPermittedPersonList(matchedPersons, input.StartDate, DefinedRaptorApplicationFunctionPaths.ViewSchedules)
-					.ToList();
+					.GetPermittedPersonList(matchedPersons, input.StartDate, DefinedRaptorApplicationFunctionPaths.ViewSchedules);
 				people.AddRange(permittedPeopleBatch);
 			}
 			return people;
