@@ -134,7 +134,7 @@
 					return o;
 				})
 				.filter(function (ooa) {
-					if (ooa.Offset.startsWith('-'))
+					if (ooa.Offset.indexOf('-') === 0)
 						return false;
 					if (ooa.StartTime >= '18:00:00')
 						return false;
@@ -255,6 +255,14 @@
 			}
 
 			return timeline;
+		}
+		
+		vm.showApprovePanel = function (ooa) {
+			if (ooa) {
+				vm.approveStartTime = ooa.StartTime;
+				vm.approveEndTime = ooa.EndTime;
+			}
+			return !!vm.approveStartTime;
 		}
 	}
 })();
