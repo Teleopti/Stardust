@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			system.UseTestDouble<ScheduleDayDifferenceSaver>().For<IScheduleDayDifferenceSaver>();
 			system.UseTestDouble<AddPersonalActivityCommandHandler>().For<IHandleCommand<AddPersonalActivityCommand>>();
 			system.UseTestDouble<FakeWriteSideRepository<IMultiplicatorDefinitionSet>>().For<IProxyForId<IMultiplicatorDefinitionSet>>();
-			
+
 			_date = new DateOnly(2016, 05, 17);
 			_startTime = new DateTime(2016, 05, 17, 10, 0, 0, DateTimeKind.Utc);
 			_endTime = new DateTime(2016, 05, 17, 12, 0, 0, DateTimeKind.Utc);
@@ -70,10 +70,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var activity = ActivityFactory.CreateActivity("Phone").WithId();
 			ActivityRepository.Add(activity);
 			ActivityRepository.Add(_mainActivity);
-			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, scenario,_date);
+			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, scenario, _date);
 			personAssignment.AddActivity(_mainActivity, _mainActivityDateTimePeriod);
 			PersonAssignmentRepository.Add(personAssignment);
-				
+
 			var command = new AddPersonalActivityCommand
 			{
 				Person = person,
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			Now.Is(new DateTime(2016, 5, 17, 0, 0, 0, DateTimeKind.Utc));
 			IntervalLengthFetcher.Has(15);
-			var person = PersonRepository.Has(_skill,_skill2);
+			var person = PersonRepository.Has(_skill, _skill2);
 			var activity = ActivityFactory.CreateActivity("Phone");
 			activity.WithId();
 			_skill2.Activity = activity;
@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var yesterdayActivityPeriod = new DateTimePeriod(new DateTime(2016, 05, 16, 19, 0, 0, DateTimeKind.Utc), new DateTime(2016, 05, 17, 09, 0, 0, DateTimeKind.Utc));
 			var personAssignmentYesterday = PersonAssignmentFactory.CreatePersonAssignment(person, scenario, _date.AddDays(-1));
 			personAssignmentYesterday.AddActivity(_mainActivity, yesterdayActivityPeriod);
-			
+
 			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, scenario, _date);
 			personAssignment.AddActivity(_mainActivity, _mainActivityDateTimePeriod);
 			PersonAssignmentRepository.Add(personAssignment);
@@ -185,5 +185,45 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			Target.Handle(command);
 			command.ErrorMessages.Single().Should().Be(Resources.ActivityConflictsWithOvernightShiftsFromPreviousDay);
 		}
+
+		[Test]
+		public void ShouldCanAddPersonalActivityIfPersonAssignmentIsNotExists()
+		{
+			var scenario = CurrentScenario.Has("Default");
+			SkillRepository.Add(_skill);
+			Now.Is(new DateTime(2016, 5, 17, 0, 0, 0, DateTimeKind.Utc));
+			IntervalLengthFetcher.Has(15);
+
+			var person = PersonRepository.Has(_skill, _skill2);
+			var activity = ActivityFactory.CreateActivity("Phone");
+			activity.WithId();
+			_skill2.Activity = activity;
+
+			activity.RequiresSkill = true;
+			ActivityRepository.Add(activity);
+
+			var command = new AddPersonalActivityCommand
+			{
+				Person = person,
+				Date = _date,
+				PersonalActivityId = activity.Id.GetValueOrDefault(),
+				StartTime = _startTime,
+				EndTime = _endTime,
+				TrackedCommandInfo = new TrackedCommandInfo
+				{
+					OperatedPersonId = Guid.NewGuid(),
+					TrackId = Guid.NewGuid()
+				}
+			};
+			Target.Handle(command);
+
+			command.ErrorMessages.Should().Be.Empty();
+			var ass = PersonAssignmentRepository.LoadAll().Single();
+			ass.Period.StartDateTime.Should().Be.EqualTo(_startTime);
+			ass.Period.EndDateTime.Should().Be.EqualTo(_endTime);
+			ass.ShiftLayers.Single().Payload.RequiresSkill.Should().Be.EqualTo(true);
+			ass.ShiftLayers.Single().Payload.Name.Should().Be("Phone");
+		}
+
 	}
 }

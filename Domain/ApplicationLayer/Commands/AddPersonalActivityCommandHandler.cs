@@ -43,15 +43,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			var scheduleRange = dic[person];
 
 			command.ErrorMessages = new List<string>();
-
-			var scheduleDay = scheduleRange.ScheduledDay(command.Date);
-			var personAssignment = scheduleDay.PersonAssignment();
-			if (personAssignment == null)
-			{
-				command.ErrorMessages.Add(Resources.FailedMessageForAddingActivity);
-				return;
-			}
-
+		
 			var schedulePreviousDay = scheduleRange.ScheduledDay(command.Date.AddDays(-1));
 			var personAssignmentOfPreviousDay = schedulePreviousDay.PersonAssignment();
 			if (personAssignmentOfPreviousDay != null && personAssignmentOfPreviousDay.Period.EndDateTime >= period.StartDateTime)
@@ -60,6 +52,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				return;
 			}
 
+			var scheduleDay = scheduleRange.ScheduledDay(command.Date);
 			scheduleDay.CreateAndAddPersonalActivity(activity, period, false, command.TrackedCommandInfo);
 			dic.Modify(scheduleDay, NewBusinessRuleCollection.Minimum());
 			_scheduleDifferenceSaver.SaveChanges(scheduleRange.DifferenceSinceSnapshot(new DifferenceEntityCollectionService<IPersistableScheduleData>()), (ScheduleRange)scheduleRange);
