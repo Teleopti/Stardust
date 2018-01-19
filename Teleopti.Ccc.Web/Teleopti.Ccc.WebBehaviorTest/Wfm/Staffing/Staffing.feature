@@ -25,7 +25,6 @@ Scenario: View staffing for one skillgroup
 	And I select skill group 'Group A'
 	And I change staffing date to '2017-09-25'
 	Then I should see the selected skill group 'Group A' 
-	And I should see staffing data in the graph
 	
 @OnlyRunIfEnabled('Staffing_BPOExchangeImport_45202')
 Scenario: Show bpo exchange page

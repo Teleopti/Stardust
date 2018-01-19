@@ -67,6 +67,21 @@ describe('StaffingController', function () {
     expect(a).toBe('mdi mdi-message-text-outline');
   });
 
+  it('should update chart when changing skill', function () {
+    var skill = { DoDisplayData: true, IsMultisiteSkill: false, SkillType: 'SkillTypeChat', Id:'123'  };
+    var skill2 = { DoDisplayData: true, IsMultisiteSkill: false, SkillType: 'SkillTypeChat', Id:'321'  };
+
+    var vm = $controller('StaffingController', {
+      $scope: scope
+    });
+    var a = vm.dynamicIcon(skill)
+
+    vm.selectedSkill = skill;
+    vm.selectedSkillChange(skill2);
+
+    expect(vm.selectedSkill.Id).toBe('321');
+  });
+
 
   it('should be able to use shrinkage', function () {
     var skill = { DoDisplayData: true, IsMultisiteSkill: false, SkillType: 'SkillTypeChat', Id:'123'  }
