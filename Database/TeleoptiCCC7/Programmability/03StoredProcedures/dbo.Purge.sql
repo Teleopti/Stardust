@@ -192,34 +192,73 @@ if datediff(second,@start,getdate()) > @timeout
 
 --Schedule
 select @KeepUntil = dateadd(year,-1*(select isnull(Value,100) from PurgeSetting where [Key] = 'YearsToKeepSchedule'),getdate())
-select @MaxDate = dateadd(day,@BatchSize,isnull(min(Date),'19900101')) from PersonAssignment
+/*
+exec Purge
+*/
 
-delete PersonAssignment --Lovely, cascade delete is on...
-from PersonAssignment pa
-where 1 = 1
-and pa.Date < @KeepUntil
-and pa.Date < @MaxDate
+set @RowCount = 1
+while @RowCount > 0
+begin
+	truncate table #Deleted
 
-delete PersonAbsence --Lovely, cascade delete is on...
-from PersonAbsence pa
-where 1 = 1
-and pa.Maximum < @KeepUntil
-and pa.Maximum < @MaxDate
+	insert into #Deleted
+	select top(1000) Id
+	from PersonAssignment pa
+	where pa.Date < @KeepUntil
 
-delete Note
-from Note n
-where 1 = 1
-and n.NoteDate < @KeepUntil
-and n.NoteDate < @MaxDate
+	delete ShiftLayer
+	from ShiftLayer sl
+	inner join #Deleted d on d.Id = sl.Parent
 
-delete AgentDayScheduleTag
-from AgentDayScheduleTag ad
-where 1 = 1
-and ad.TagDate < @KeepUntil
-and ad.TagDate < @MaxDate
+	delete PersonAssignment
+	from PersonAssignment pa
+	inner join #Deleted d on d.Id = pa.Id
 
-if datediff(second,@start,getdate()) > @timeout 
-	return
+	select @RowCount = @@rowcount
+
+	if datediff(second,@start,getdate()) > @timeout 
+		return
+end
+
+set @RowCount = 1
+while @RowCount > 0
+begin
+	delete top(1000) PersonAbsence
+	from PersonAbsence pa
+	where pa.Maximum < @KeepUntil
+
+	select @RowCount = @@rowcount
+
+	if datediff(second,@start,getdate()) > @timeout 
+		return
+end
+
+set @RowCount = 1
+while @RowCount > 0
+begin
+	delete top(1000) Note
+	from Note n
+	where n.NoteDate < @KeepUntil
+
+	select @RowCount = @@rowcount
+
+	if datediff(second,@start,getdate()) > @timeout 
+		return
+end
+
+set @RowCount = 1
+while @RowCount > 0
+begin
+	delete top(1000) AgentDayScheduleTag
+	from AgentDayScheduleTag ad
+	where ad.TagDate < @KeepUntil
+
+	select @RowCount = @@rowcount
+
+	if datediff(second,@start,getdate()) > @timeout 
+		return
+end
+
 
 --Audit trails must be purged as part of schedules, at least until they get their own setting. Purge based on schedule date, not change date.
 set @RowCount = 1
