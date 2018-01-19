@@ -7,10 +7,7 @@ Feature: Planning Period
 Scenario: The first planning period suggestion should be the next upcoming schedule period
 	Given the time is '2016-06-07'
 	And I am swedish
-	And I have a role with
-		| Field                                 | Value             |
-		| Name                                  | Resource Planner  |
-		| Access to resource planner            | True              |
+	And I have a role with full access
 	And there is a site named 'Site 1'
 	And there is a team named 'Team 1' on 'Site 1'
 	And Ashley Andeen has a person period with
