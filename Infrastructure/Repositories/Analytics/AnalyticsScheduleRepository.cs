@@ -175,14 +175,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 
 		public void DeleteFactScheduleAfterTerminalDate(Guid personCode, DateTime terminalDate)
 		{
-			var leavingDate = terminalDate.Date.AddDays(1);
 			var sql = "Delete schedule From mart.fact_schedule schedule "
 					  + "Join mart.dim_person person ON schedule.person_id = person.person_id "
 					  + $"Where person.person_code = :{nameof(personCode)} "
-					  + $"And schedule.activity_starttime >= :{nameof(leavingDate)}";
+					  + $"And schedule.activity_starttime >= :{nameof(terminalDate)}";
 			_analyticsUnitOfWork.Current().Session().CreateSQLQuery(sql)
 				.SetParameter(nameof(personCode), personCode)
-				.SetParameter(nameof(leavingDate), leavingDate)
+				.SetParameter(nameof(terminalDate), terminalDate)
 				.ExecuteUpdate();
 		}
 

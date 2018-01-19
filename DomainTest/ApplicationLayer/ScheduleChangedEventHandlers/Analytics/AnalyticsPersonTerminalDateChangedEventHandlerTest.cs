@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		public void ShouldDeleteFactSchedulesAfterTerminalDate()
 		{
 			// Fact schedules after 2018-01-04 will be deleted.
-			handleEventAndCheckResult(new DateTime(2018, 01, 04), 4 * intervalCountPerDay);
+			handleEventAndCheckResult(new DateTime(2018, 01, 04), 3 * intervalCountPerDay);
 		}
 
 		private void setupData()
