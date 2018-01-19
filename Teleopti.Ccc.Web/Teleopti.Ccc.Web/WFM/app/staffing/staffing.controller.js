@@ -1,9 +1,9 @@
-﻿(function () {
+(function () {
 	'use strict';
 
 	angular
-		.module('wfm.staffing')
-		.controller('StaffingController', StaffingController);
+	.module('wfm.staffing')
+	.controller('StaffingController', StaffingController);
 
 	StaffingController.$inject = ['staffingService', '$state', 'Toggle', 'UtilService', 'ChartService', '$filter', 'NoticeService', '$translate', '$scope'];
 	function StaffingController(staffingService, $state, toggleService, utilService, chartService, $filter, NoticeService, $translate, $scope) {
@@ -80,7 +80,7 @@
 
 		vm.configMode = function() {
 			$state.go('staffingModule.skill-area-config', {
-			  isNewSkillArea: false
+				isNewSkillArea: false
 			});
 		};
 
@@ -245,13 +245,13 @@
 
 		function querySearchSkills(query) {
 			var results = query ? allSkills.filter(createFilterFor(query)) : allSkills,
-				deferred;
+			deferred;
 			return results;
 		};
 
 		function querySearchAreas(query) {
 			var results = query ? allSkillAreas.filter(createFilterFor(query)) : allSkillAreas,
-				deferred;
+			deferred;
 			return results;
 		};
 
@@ -271,6 +271,8 @@
 					return 'mdi mdi-phone';
 				case 'SkillTypeRetail':
 					return 'mdi mdi-credit-card';
+				case 'SkillTypeBackoffice':
+					return 'mdi mdi-archive';
 				default:
 					return 'mdi mdi-creation'
 			}
