@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -81,13 +80,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private static Dictionary<ISkill, IEnumerable<ISkillDay>> getAllSkillsForPlanningGroup(DateOnlyPeriod period, IEnumerable<IPerson> fixedStaffPeople,
 			ISchedulingResultStateHolder resultStateHolder)
 		{
-			var planningGroupSkills = new HashSet<ISkill>();
-			foreach (var person in fixedStaffPeople)
-			{
-				var periods = person.PersonPeriods(period);
-				periods.SelectMany(p => p.PersonSkillCollection).ForEach(s => planningGroupSkills.Add(s.Skill));
-			}
-
+			var planningGroupSkills = fixedStaffPeople.SelectMany(person => person.PersonPeriods(period)).SelectMany(p => p.PersonSkillCollection.Select(s => s.Skill)).Distinct().ToArray();
+		
 			var planningGroupSkillsDictionary =
 				resultStateHolder.SkillDays.Where(skill => planningGroupSkills.Contains(skill.Key))
 					.ToDictionary(skill => skill.Key, skill => skill.Value);

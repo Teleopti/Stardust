@@ -16,11 +16,7 @@ namespace Teleopti.Ccc.Domain.GroupPageCreator
             var allPersonPeriods = (from p in groupPageOptions.Persons
                                    from pp in p.PersonPeriods(groupPageOptions.SelectedPeriod)
                                    select
-                                       new
-                                       {
-                                           Person = p,
-                                           pp.PersonSkillCollection
-                                       }).ToList();
+									   pp.PersonSkillCollection.Where(ps => ps.Active).Select(ps => new {ps.Skill,p})).SelectMany(p => p).ToLookup(p => p.Skill);
 
             foreach (ISkill skill in entityCollection.OrderBy(c => c.Name))
             {
@@ -30,24 +26,10 @@ namespace Teleopti.Ccc.Domain.GroupPageCreator
                 IRootPersonGroup rootGroup = new RootPersonGroup(skill.Name);
 				if (!groupPage.IsUserDefined())
 					rootGroup.SetId(skill.Id);
-
-                var personsWithSkill = new HashSet<IPerson>();
-
-                foreach (var personPeriod in allPersonPeriods)
+				
+                foreach (var person in allPersonPeriods[skill])
                 {
-                    foreach (IPersonSkill personSkill in personPeriod.PersonSkillCollection.Where(s => s.Active))
-                    {
-                        if(personSkill.Skill.Equals(skill))
-                        {
-                            personsWithSkill.Add(personPeriod.Person);
-                            break;
-                        }
-                    }
-                }
-                
-                foreach (IPerson person in personsWithSkill)
-                {
-                    rootGroup.AddPerson(person);
+                    rootGroup.AddPerson(person.p);
                 }
 
                 if(rootGroup.PersonCollection.Count > 0)

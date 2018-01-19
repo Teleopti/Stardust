@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
@@ -6,26 +7,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 {
 	public class MaxSeatSitesExtractor
     {
-		public HashSet<ISite> MaxSeatSites(DateOnlyPeriod requestedPeriod, IEnumerable<IPerson> personsInOrganization)
-        {
-            var sitesWithMaxSeats = new HashSet<ISite>();
-
-			foreach (var person in personsInOrganization)
-            {
-                for (DateOnly currentDate = requestedPeriod.StartDate; currentDate <= requestedPeriod.EndDate; currentDate = currentDate.AddDays(1))
-                {
-                    IPersonPeriod personPeriod = person.Period(currentDate);
-                    if (personPeriod == null)
-                        continue;
-
-                    var site = personPeriod.Team.Site;
-                    if (site?.MaxSeats != null)
-                        sitesWithMaxSeats.Add(site);
-
-                    currentDate = personPeriod.EndDate().AddDays(1);
-                }
-            }
-            return sitesWithMaxSeats;
+		public ISite[] MaxSeatSites(DateOnlyPeriod requestedPeriod, IEnumerable<IPerson> personsInOrganization)
+		{
+			return personsInOrganization.SelectMany(p => p.PersonPeriods(requestedPeriod))
+				.Select(pp => pp.Team?.Site)
+				.Distinct()
+				.Where(s => s?.MaxSeats != null)
+				.ToArray();
         }
     }
 }

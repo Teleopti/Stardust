@@ -56,16 +56,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 
 		private IEnumerable<IPerson> filterOnEqualNumberOfCategorySetting(IEnumerable<IPerson> personList)
 		{
-			IList<IPerson> filteredList = new List<IPerson>();
-			foreach (var person in personList)
-			{
-				var wfcs = person.WorkflowControlSet;
-				if (wfcs == null) continue;
-				if (wfcs.GetFairnessType() == FairnessType.EqualNumberOfShiftCategory)
-					filteredList.Add(person);
-			}
-
-			return filteredList;
+			return personList.Where(p => p.WorkflowControlSet!=null).GroupBy(p => p.WorkflowControlSet)
+				.Where(k => k.Key?.GetFairnessType() == FairnessType.EqualNumberOfShiftCategory).SelectMany(p => p).ToArray();
 		}
 	}
 }

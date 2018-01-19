@@ -283,7 +283,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			var week = new DateOnlyPeriod(input.DateInUserTimeZone, input.DateInUserTimeZone.AddDays(6));
 			var weekDays = week.DayCollection();
 			var people = new List<IPerson>();
-			foreach (var batch in personIds.Batch(500))
+			foreach (var batch in personIds.Batch(501))
 			{
 				var batchPermittedPersons = getPermittedPersons(batch.ToArray(), input.DateInUserTimeZone);
 				people.AddRange(batchPermittedPersons);
@@ -365,10 +365,11 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 						else if (significantPart == SchedulePartView.MainShift)
 						{
 							dayScheduleViewModel.Title = personAssignment.ShiftCategory.Description.Name;
+							var timeZone = scheduleDay.Person.PermissionInformation.DefaultTimeZone();
 							dayScheduleViewModel.Timezone = new TimeZoneViewModel
 							{
-								IanaId = _ianaTimeZoneProvider.WindowsToIana(scheduleDay.Person.PermissionInformation.DefaultTimeZone().Id),
-								DisplayName = scheduleDay.Person.PermissionInformation.DefaultTimeZone().DisplayName
+								IanaId = _ianaTimeZoneProvider.WindowsToIana(timeZone.Id),
+								DisplayName = timeZone.DisplayName
 							};
 							dayScheduleViewModel.DateTimeSpan = personAssignment.PeriodExcludingPersonalActivity();
 

@@ -17,10 +17,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 			var teamInfo = teamBlockInfo.TeamInfo;
 			var groupMembers = teamInfo.GroupMembers;
 
-			foreach (var workflowControlSet in groupMembers.Select(groupMember => groupMember.WorkflowControlSet))
+			foreach (var workflowControlSet in groupMembers.Select(groupMember => groupMember.WorkflowControlSet).Distinct())
 			{
-				if (workflowControlSet == null) return false;
-				if (workflowControlSet.GetFairnessType() != FairnessType.Seniority) return false;
+				if (workflowControlSet?.GetFairnessType() != FairnessType.Seniority) return false;
 			}
 
 			return true;

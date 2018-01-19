@@ -79,15 +79,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 				var scheduleDays = schedules.ScheduledDayCollection(dateOnlyPeriod);
 				
-
-				var skillIds = new HashSet<Guid>();
-				foreach (var skillCombinationResource in combinationResources)
-				{
-					foreach (var skillId in skillCombinationResource.SkillCombination)
-					{
-						skillIds.Add(skillId);
-					}
-				}
+				var skillIds = combinationResources.SelectMany(s => s.SkillCombination).Distinct().ToArray();
 				var skillInterval = allSkills.Where(x => skillIds.Contains(x.Id.GetValueOrDefault())).Min(x => x.DefaultResolution);
 
 				var mergedPeriod = personRequest.Request.Person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod((IAbsenceRequest)personRequest.Request);

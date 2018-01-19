@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
     {
         private MockRepository _mocks;
         private MaxSeatSitesExtractor _target;
-        private DateOnly _dateOnly;
         private DateOnlyPeriod _dateOnlyPeriod;
         private IList<IPerson> _peopleList;
 
@@ -24,7 +23,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
             _mocks = new MockRepository();
             _peopleList = new List<IPerson>();
             _target = new MaxSeatSitesExtractor();
-            _dateOnly = new DateOnly(2011, 1, 19);
             _dateOnlyPeriod = new DateOnlyPeriod(2011, 1, 19, 2011, 1, 19);
         }
 
@@ -36,15 +34,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
             var team = new Team();
             var site = new Site("site") {MaxSeats = 10};
             team.Site = site;
-            Expect.Call(person.Period(_dateOnly)).Return(personPeriod);
+            Expect.Call(person.PersonPeriods(_dateOnlyPeriod)).Return(new [] {personPeriod});
             Expect.Call(personPeriod.Team).Return(team);
-            Expect.Call(personPeriod.EndDate()).Return(_dateOnlyPeriod.EndDate);
-
+            
             _mocks.ReplayAll();
 
             _peopleList.Add(person);
 			var result = _target.MaxSeatSites(_dateOnlyPeriod, _peopleList);
-            Assert.That(result.Count, Is.EqualTo(1));
+            Assert.That(result.Length, Is.EqualTo(1));
             _mocks.VerifyAll();
         }
 
@@ -52,13 +49,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
         public void ShouldContinueWhenNoPersonPeriod()
         {
             var person = _mocks.StrictMock<IPerson>();
-            Expect.Call(person.Period(_dateOnly)).Return(null);
+            Expect.Call(person.PersonPeriods(_dateOnlyPeriod)).Return(new IPersonPeriod[0]);
             
             _mocks.ReplayAll();
 
             _peopleList.Add(person);
 			var result = _target.MaxSeatSites(_dateOnlyPeriod, _peopleList);
-            Assert.That(result.Count, Is.EqualTo(0));
+            Assert.That(result.Length, Is.EqualTo(0));
             _mocks.VerifyAll();
         }
 
@@ -70,20 +67,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
             var team = new Team();
             var site = new Site("site");
             team.Site = site;
-            Expect.Call(person.Period(_dateOnly)).Return(personPeriod);
+            Expect.Call(person.PersonPeriods(_dateOnlyPeriod)).Return(new []{personPeriod});
             Expect.Call(personPeriod.Team).Return(team);
-            Expect.Call(personPeriod.EndDate()).Return(_dateOnlyPeriod.EndDate);
-
+            
             _mocks.ReplayAll();
 
             _peopleList.Add(person);
 			var result = _target.MaxSeatSites(_dateOnlyPeriod, _peopleList);
-            Assert.That(result.Count, Is.EqualTo(0));
+            Assert.That(result.Length, Is.EqualTo(0));
             _mocks.VerifyAll();
         }
-
-        
     }
-
-   
 }

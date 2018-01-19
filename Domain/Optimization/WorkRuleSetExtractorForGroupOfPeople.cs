@@ -16,36 +16,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         public IEnumerable<IWorkShiftRuleSet> ExtractRuleSets(DateOnlyPeriod period)
         {
-            var extractedWorkShiftRuleSets = new HashSet<IWorkShiftRuleSet>();
-
-            IEnumerable<IRuleSetBag> extractedRuleSetBags = extractRuleSetBags(period);
-
-            foreach (IRuleSetBag ruleSetBag in extractedRuleSetBags)
-            {
-                foreach (IWorkShiftRuleSet workShiftRuleSet in ruleSetBag.RuleSetCollection)
-                {
-                    extractedWorkShiftRuleSets.Add(workShiftRuleSet);
-                } 
-            }
-            return extractedWorkShiftRuleSets.ToList();
+            return extractRuleSetBags(period).SelectMany(b => b.RuleSetCollection).Distinct().ToArray();
         }
 
         private IEnumerable<IRuleSetBag> extractRuleSetBags(DateOnlyPeriod period)
         {
-            var extractedRuleSetBag = new HashSet<IRuleSetBag>();
-
-            foreach (IPerson person in _persons)
-            {
-                IList<IPersonPeriod> validPeriods = person.PersonPeriods(period);
-                if (validPeriods.Count == 0)
-                    continue;
-                foreach (IPersonPeriod personPeriod in validPeriods)
-                {
-					if (personPeriod.RuleSetBag != null)
-						extractedRuleSetBag.Add(personPeriod.RuleSetBag);
-                }
-            }
-            return extractedRuleSetBag.ToList();
+			return _persons.SelectMany(person => person.PersonPeriods(period)).Select(pp => pp.RuleSetBag).Where(r => r != null)
+				.Distinct();
         }
     }
 }

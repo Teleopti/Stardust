@@ -19,13 +19,9 @@ namespace Teleopti.Ccc.Domain.GroupPageCreator
                                        new
                                        {
                                            Person = p, pp.RuleSetBag
-                                       }).ToList();
+                                       }).ToLookup(k => k.RuleSetBag);
 
-            var connectedRuleSets = new HashSet<IRuleSetBag>();
-            foreach (var ppp in allPersonPeriods)
-            {
-                connectedRuleSets.Add(ppp.RuleSetBag);
-            }
+			var connectedRuleSets = allPersonPeriods.Select(k => k.Key).ToArray();
 
             foreach (IRuleSetBag ruleSetBag in entityCollection.OrderBy(c => c.Description.Name))
             {
@@ -39,8 +35,7 @@ namespace Teleopti.Ccc.Domain.GroupPageCreator
                 if(connectedRuleSets.Contains(ruleSetBag))
                 {
                     // find all persons with rulesetbag
-                    var bag = ruleSetBag;
-                    foreach (var ppp in allPersonPeriods.Where(ppp => bag.Equals(ppp.RuleSetBag)).Select(ppp => ppp.Person).Distinct())
+                    foreach (var ppp in allPersonPeriods[ruleSetBag].Select(ppp => ppp.Person).Distinct())
                     {
                         rootGroup.AddPerson(ppp);
                     }

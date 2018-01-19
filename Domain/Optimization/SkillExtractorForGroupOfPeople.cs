@@ -16,18 +16,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 
         public IEnumerable<ISkill> ExtractSkills()
-        {
-            HashSet<ISkill> extractedSkills = new HashSet<ISkill>();
-
-            foreach (IPerson person in _persons)
-            { 
-                var periodToday =  person.Period(DateOnly.Today);
-                if(periodToday == null) continue;
-
-                foreach (IPersonSkill personSkill in periodToday.PersonSkillCollection)
-                    extractedSkills.Add(personSkill.Skill);
-            }
-            return extractedSkills.ToList();
+		{
+			var dateOnly = DateOnly.Today;
+			return _persons.Select(person => person.Period(dateOnly)).Where(pp => pp != null)
+				.SelectMany(ps => ps.PersonSkillCollection).Select(s => s.Skill).Distinct().ToArray();
         }
     }
 }

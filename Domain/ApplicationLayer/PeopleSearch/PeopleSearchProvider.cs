@@ -107,6 +107,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch
 		public IEnumerable<IPerson> GetPermittedPersonList(IEnumerable<IPerson> people, DateOnly currentDate,
 			string function)
 		{
+			var businessUnitId = _businessUnitProvider.Current().Id.GetValueOrDefault();
 			return
 				people.Where(p =>
 				{
@@ -116,7 +117,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch
 						PersonId = p.Id.GetValueOrDefault(),
 						TeamId = myTeam?.Id,
 						SiteId = myTeam?.Site.Id,
-						BusinessUnitId = _businessUnitProvider.Current().Id.GetValueOrDefault()
+						BusinessUnitId = businessUnitId
 					});
 				});
 		}

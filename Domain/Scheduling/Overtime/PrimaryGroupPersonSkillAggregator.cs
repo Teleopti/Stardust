@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -17,21 +18,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 
 		public IEnumerable<ISkill> AggregatedSkills(IEnumerable<IPerson> groupMembers, DateOnlyPeriod dateOnlyPeriod)
 		{
-			var ret = new HashSet<ISkill>();
-
-			foreach (var person in groupMembers)
-			{
-				var personPeriods = person.PersonPeriods(dateOnlyPeriod);
-				foreach (var personPeriod in personPeriods)
-				{
-					foreach (var personSkill in _personalSkillsProvider.PersonSkills(personPeriod))
-					{
-						ret.Add(personSkill.Skill);
-					}
-				}
-			}
-
-			return ret;
+			return groupMembers.SelectMany(p => p.PersonPeriods(dateOnlyPeriod))
+				.SelectMany(pp => _personalSkillsProvider.PersonSkills(pp)).Select(ps => ps.Skill).Distinct().ToArray();
 		}
 	}
 }

@@ -157,15 +157,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				dataHolder.InitSuccess = false;
 				return dataHolder;
 			}
-			var skillIds = new HashSet<Guid>();
-			foreach (var skillCombinationResource in dataHolder.CombinationResources)
-			{
-				foreach (var skillId in skillCombinationResource.SkillCombination)
-				{
-					skillIds.Add(skillId);
-				}
-			}
-
+			
 			dataHolder.SkillStaffingIntervals = _extractSkillForecastIntervals.GetBySkills(dataHolder.Skills, inflatedPeriod).ToList();
 			dataHolder.SkillStaffingIntervals.ForEach(s => s.StaffingLevel = 0);
 
@@ -177,12 +169,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 							new ResourceCalculationPeriodDictionary(v.ToDictionary(d => d.DateTimePeriod,
 								s => (IResourceCalculationPeriod)s)));
 			dataHolder.ResCalcData = new ResourceCalculationData(dataHolder.Skills, new SlimSkillResourceCalculationPeriodWrapper(relevantSkillStaffPeriods));
-			var personHashset = new HashSet<IPerson>();
-			foreach (var wr in waitlistedRequests)
-			{
-				personHashset.Add(wr.Person);
-			}
-			var persons = personHashset.ToList();
+			
+			var persons = waitlistedRequests.Select(wr => wr.Person).Distinct().ToList();
 			ExtractSkillForecastIntervals.GetLongestPeriod(dataHolder.Skills, inflatedPeriod);
 			dataHolder.PersonsSchedules =
 				_scheduleStorage.FindSchedulesForPersons(_currentScenario.Current(),

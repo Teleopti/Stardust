@@ -1,6 +1,7 @@
 ﻿
 
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory
@@ -15,14 +16,14 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 
 		public IEnumerable<IPerson> Filter(IEnumerable<IScheduleMatrixPro> allPersonMatrixList)
 		{
-			var personListForTotalDistribution = new HashSet<IPerson>();
-			foreach (var scheduleMatrixPro in allPersonMatrixList)
+			var groupedByWorkflowControlSet = allPersonMatrixList.Select(m => m.Person).Where(p => p.WorkflowControlSet != null)
+				.ToLookup(w => w.WorkflowControlSet);
+
+			var personListForTotalDistribution = new List<IPerson>();
+			foreach (var group in groupedByWorkflowControlSet)
 			{
-				var person = scheduleMatrixPro.Person;
-				var workflowControlSet = person.WorkflowControlSet;
-				if (workflowControlSet == null) continue;
-				if (workflowControlSet.GetFairnessType() == FairnessType.EqualNumberOfShiftCategory)
-					personListForTotalDistribution.Add(person);
+				if (group.Key.GetFairnessType() == FairnessType.EqualNumberOfShiftCategory)
+					personListForTotalDistribution.AddRange(group.Distinct());
 			}
 
 			return personListForTotalDistribution;

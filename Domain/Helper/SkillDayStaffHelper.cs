@@ -197,15 +197,9 @@ namespace Teleopti.Ccc.Domain.Helper
         }
 
         private static IList<DateTime> SortedUniqueTimes(IEnumerable<DateTimePeriod> allPeriods)
-        {
-            var result = new HashSet<DateTime>();
-            foreach (var dateTimePeriod in allPeriods)
-            {
-                result.Add(dateTimePeriod.StartDateTime);
-                result.Add(dateTimePeriod.EndDateTime);
-            }
-            return result.OrderBy(t => t).ToList();
-        }
+		{
+			return allPeriods.SelectMany(p => new[] {p.StartDateTime, p.EndDateTime}).Distinct().OrderBy(t => t).ToList();
+		}
 
         private static ITemplateTaskPeriod CreatePercentageTask(DateTimePeriod basePeriod, ITemplateTaskPeriod taskPeriod)
         {

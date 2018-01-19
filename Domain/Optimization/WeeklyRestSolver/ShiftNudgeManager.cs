@@ -246,13 +246,8 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 		{
 			rollbackService.ModifyParts(clonedSchedules);
 			rollbackService.ClearModificationCollection();
-			var dateList = new HashSet<DateOnly>();
-			foreach (var cloneSchedule in clonedSchedules)
-			{
-				var dateOnly = cloneSchedule.DateOnlyAsPeriod.DateOnly;
-				dateList.Add(dateOnly);
-				dateList.Add(dateOnly.AddDays(1));
-			}
+			var dateList = clonedSchedules
+				.SelectMany(c => new[] {c.DateOnlyAsPeriod.DateOnly, c.DateOnlyAsPeriod.DateOnly.AddDays(1)}).Distinct();
 			foreach (var dateOnly in dateList)
 			{
 				resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null, false);
