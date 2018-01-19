@@ -91,25 +91,6 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		}
 
 		[Test]
-		public void ShouldGetShiftEndTimeAsDefaultStartTimeWhenCurrentTimeIsEarlierThanShiftStartTime()
-		{
-			Now.Is(new DateTime(2018, 1, 8, 6, 09, 00, DateTimeKind.Utc));
-			var date = new DateOnly(2018, 1, 8);
-			var agent = PersonFactory.CreatePersonWithGuid("agent", "one");
-			FakeLoggedOnUser.SetFakeLoggedOnUser(agent);
-			var phone = ActivityFactory.CreateActivity("phone activity");
-			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(agent, CurrentScenario.Current(), date);
-			personAssignment.AddActivity(phone, new DateTimePeriod(2018, 1, 8, 08, 2018, 1, 8, 17));
-			FakeAssignmentRepository.Has(personAssignment);
-
-			var result = OvertimeRequestDefaultStartTimeProvider.GetDefaultStartTime(date);
-
-			result.Date.Should().Be(date.Date);
-			result.Hour.Should().Be(17);
-			result.Minute.Should().Be(0);
-		}
-
-		[Test]
 		public void ShouldGetYesterdayOvernightShiftEndTimeAsDefaultStartTimeWhenCurrentTimeIsEarlierThanThatTime()
 		{
 			Now.Is(new DateTime(2018, 1, 8, 2, 09, 00, DateTimeKind.Utc));
@@ -129,9 +110,9 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		}
 
 		[Test]
-		public void ShouldGetTodayOvernightShiftEndTimeAsDefaultStartTime()
+		public void ShouldGetTodayOvernightShiftEndTimeAsDefaultStartTimeWhenCurrentTimeIsWithinTheShift()
 		{
-			Now.Is(new DateTime(2018, 1, 8, 10, 00, 00, DateTimeKind.Utc));
+			Now.Is(new DateTime(2018, 1, 8, 18, 00, 00, DateTimeKind.Utc));
 			var date = new DateOnly(2018, 1, 8);
 			var agent = PersonFactory.CreatePersonWithGuid("agent", "one");
 			FakeLoggedOnUser.SetFakeLoggedOnUser(agent);
@@ -148,9 +129,47 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		}
 
 		[Test]
-		public void ShouldGetSelectedDayOvernightShiftEndTimeAsDefaultStartTime()
+		public void ShouldGetTodayOvernightShiftStartTimeAsDefaultStartTimeWhenCurrentTimeIsBeforeTheShiftStarts()
 		{
-			Now.Is(new DateTime(2018, 1, 8, 10, 00, 00, DateTimeKind.Utc));
+			Now.Is(new DateTime(2018, 1, 8, 8, 00, 00, DateTimeKind.Utc));
+			var date = new DateOnly(2018, 1, 8);
+			var agent = PersonFactory.CreatePersonWithGuid("agent", "one");
+			FakeLoggedOnUser.SetFakeLoggedOnUser(agent);
+			var phone = ActivityFactory.CreateActivity("phone activity");
+			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(agent, CurrentScenario.Current(), date);
+			personAssignment.AddActivity(phone, new DateTimePeriod(2018, 1, 8, 17, 2018, 1, 9, 03));
+			FakeAssignmentRepository.Has(personAssignment);
+
+			var result = OvertimeRequestDefaultStartTimeProvider.GetDefaultStartTime(date);
+
+			result.Date.Should().Be(date.Date);
+			result.Hour.Should().Be(17);
+			result.Minute.Should().Be(0);
+		}
+
+		[Test]
+		public void ShouldGetShiftEndTimeAsDefaultStartTimeWhenTheGapBetweenCurrentTimeAndShiftStartTimeIsLessThan20Min()
+		{
+			Now.Is(new DateTime(2018, 1, 8, 07, 45, 00, DateTimeKind.Utc));
+			var date = new DateOnly(2018, 1, 8);
+			var agent = PersonFactory.CreatePersonWithGuid("agent", "one");
+			FakeLoggedOnUser.SetFakeLoggedOnUser(agent);
+			var phone = ActivityFactory.CreateActivity("phone activity");
+			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(agent, CurrentScenario.Current(), date);
+			personAssignment.AddActivity(phone, new DateTimePeriod(2018, 1, 8, 08, 2018, 1, 8, 17));
+			FakeAssignmentRepository.Has(personAssignment);
+
+			var result = OvertimeRequestDefaultStartTimeProvider.GetDefaultStartTime(date);
+
+			result.Date.Should().Be(date.Date);
+			result.Hour.Should().Be(17);
+			result.Minute.Should().Be(0);
+		}
+
+		[Test]
+		public void ShouldGetSelectedDayOvernightShiftStartTimeAsDefaultStartTime()
+		{
+			Now.Is(new DateTime(2018, 1, 8, 18, 00, 00, DateTimeKind.Utc));
 			var date = new DateOnly(2018, 1, 9);
 			var agent = PersonFactory.CreatePersonWithGuid("agent", "one");
 			FakeLoggedOnUser.SetFakeLoggedOnUser(agent);
@@ -161,13 +180,13 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 
 			var result = OvertimeRequestDefaultStartTimeProvider.GetDefaultStartTime(date);
 
-			result.Date.Should().Be(date.AddDays(1).Date);
-			result.Hour.Should().Be(3);
+			result.Date.Should().Be(date.Date);
+			result.Hour.Should().Be(17);
 			result.Minute.Should().Be(0);
 		}
 
 		[Test]
-		public void ShouldGetRoundUpHalfHourAsDefaultStartTimeWhenCurrentTimeIsEarlierThanShiftEndTimePlus15Min()
+		public void ShouldGetRoundUpHalfHourAsDefaultStartTimeWhenCurrentTimeIsEarlierThanShiftEndTimePlus20Min()
 		{
 			Now.Is(new DateTime(2018, 1, 8, 17, 49, 00, DateTimeKind.Utc));
 			var date = new DateOnly(2018, 1, 8);
@@ -186,7 +205,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		}
 
 		[Test]
-		public void ShouldGetCorrectDefaultStartTimeConsideringShiftEndTimeAndCurrentTimeAndThe15MinGap()
+		public void ShouldGetCorrectDefaultStartTimeConsideringShiftEndTimeAndCurrentTimeAndThe20MinGap()
 		{
 			Now.Is(new DateTime(2018, 1, 8, 16, 49, 00, DateTimeKind.Utc));
 			var date = new DateOnly(2018, 1, 8);
@@ -206,7 +225,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		}
 
 		[Test]
-		public void ShouldGetCorrectDefaultStartTimeConsideringOvernightShiftEndTimeAndCurrentTimeAndThe15MinGap()
+		public void ShouldGetCorrectDefaultStartTimeConsideringOvernightShiftEndTimeAndCurrentTimeAndThe20MinGap()
 		{
 			Now.Is(new DateTime(2018, 1, 8, 6, 49, 00, DateTimeKind.Utc));
 			var date = new DateOnly(2018, 1, 8);
@@ -226,7 +245,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		}
 
 		[Test]
-		public void ShouldGetCorrectDefaultStartTimeConsideringWorkDefaultStartTimeAndCurrentTimeAndThe15MinGap()
+		public void ShouldGetCorrectDefaultStartTimeConsideringWorkDefaultStartTimeAndCurrentTimeAndThe20MinGap()
 		{
 			Now.Is(new DateTime(2018, 1, 8, 07, 49, 00, DateTimeKind.Utc));
 			var date = new DateOnly(2018, 1, 8);
@@ -292,7 +311,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			var result = OvertimeRequestDefaultStartTimeProvider.GetDefaultStartTime(date);
 
 			result.Date.Should().Be(date.Date);
-			result.Hour.Should().Be(18);
+			result.Hour.Should().Be(9);
 			result.Minute.Should().Be(0);
 		}
 	}

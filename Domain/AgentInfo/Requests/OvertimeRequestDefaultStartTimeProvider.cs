@@ -9,35 +9,46 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 	public class OvertimeRequestDefaultStartTimeProvider : IOvertimeRequestDefaultStartTimeProvider
 	{
 		private readonly IShiftEndTimeProvider _shiftEndTimeProvider;
+		private readonly IShiftStartTimeProvider _shiftStartTimeProvider;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly INow _now;
 		private static readonly int _overtimeRequestStartTimeFlexibilityInMinutes = 5;
 		private static readonly int _overtimeRequestStartTimeRoundMinutes = 30;
 		private static readonly int _defaultWorkDayStartTimeInHour = 8;
 
-		public OvertimeRequestDefaultStartTimeProvider(IShiftEndTimeProvider shiftEndTimeProvider, ILoggedOnUser loggedOnUser, INow now)
+		public OvertimeRequestDefaultStartTimeProvider(ILoggedOnUser loggedOnUser, INow now, IShiftStartTimeProvider shiftStartTimeProvider, IShiftEndTimeProvider shiftEndTimeProvider)
 		{
-			_shiftEndTimeProvider = shiftEndTimeProvider;
 			_loggedOnUser = loggedOnUser;
 			_now = now;
+			_shiftEndTimeProvider = shiftEndTimeProvider;
+			_shiftStartTimeProvider = shiftStartTimeProvider;
 		}
 
 		public DateTime GetDefaultStartTime(DateOnly date)
 		{
-			var possibleShiftEndTimes = getPossibleShiftEndTimes(date);
-			var requestDate = TimeZoneHelper.ConvertToUtc(date.Date, _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone());
+			var currentUser = _loggedOnUser.CurrentUser();
+			var currentUserTimeZone = currentUser.PermissionInformation.DefaultTimeZone();
 
+			var possibleShiftEndTimes = getPossibleShiftEndTimes(date);
+			var requestDate = TimeZoneHelper.ConvertToUtc(date.Date, currentUserTimeZone);
+
+			var shiftStartTime = _shiftStartTimeProvider.GetShiftStartTimeForPerson(currentUser, date);
 			var validEndTimeList = possibleShiftEndTimes
 				.Where(e => _now.UtcDateTime().CompareTo(e) < 0 && e.CompareTo(requestDate) >= 0).ToList();
 
 			var utcNowPlusGap = _now.UtcDateTime().AddMinutes(OvertimeMinimumApprovalThresholdInMinutes.MinimumApprovalThresholdTimeInMinutes +
 														   _overtimeRequestStartTimeFlexibilityInMinutes);
 
-			if (validEndTimeList.Any(v => utcNowPlusGap.CompareTo(v) <= 0))
+			if (shiftStartTime.HasValue && utcNowPlusGap.CompareTo(shiftStartTime) <= 0)
+			{
+				return TimeZoneHelper.ConvertFromUtc(shiftStartTime.GetValueOrDefault(), currentUserTimeZone);
+			}
+
+			if (validEndTimeList.Any(e => utcNowPlusGap.CompareTo(e) <= 0))
 			{
 				if (utcNowPlusGap.CompareTo(validEndTimeList.Min()) <= 0)
 				{
-					return TimeZoneHelper.ConvertFromUtc(validEndTimeList.Min(), _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone());
+					return TimeZoneHelper.ConvertFromUtc(validEndTimeList.Min(), currentUserTimeZone);
 				}
 				return getLocalRoundUpHour(utcNowPlusGap);
 			}
