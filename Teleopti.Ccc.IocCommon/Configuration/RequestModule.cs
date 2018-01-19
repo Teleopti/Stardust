@@ -115,6 +115,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					Toggles.Wfm_Requests_DenyRequestWhenAllSkillsClosed_46384
 				);
 			builder.RegisterType<ShiftEndTimeProvider>().As<IShiftEndTimeProvider>().SingleInstance();
+			builder.RegisterType<ShiftStartTimeProvider>().As<IShiftStartTimeProvider>().SingleInstance();
 			builder.RegisterType<OvertimeRequestDefaultStartTimeProvider>().As<IOvertimeRequestDefaultStartTimeProvider>().SingleInstance();
 		}
 

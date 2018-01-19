@@ -141,6 +141,7 @@
     <Compile Include="AgentInfo\PrimaryPersonSkillFilter.cs" />
     <Compile Include="AgentInfo\Requests\IOvertimeRequestDefaultStartTimeProvider.cs" />
     <Compile Include="AgentInfo\Requests\IOvertimeRequestSkillProvider.cs" />
+    <Compile Include="AgentInfo\Requests\IShiftStartTimeProvider.cs" />
     <Compile Include="AgentInfo\Requests\IShiftEndTimeProvider.cs" />
     <Compile Include="AgentInfo\Requests\ISkillOpenHourFilter.cs" />
     <Compile Include="AgentInfo\Requests\OvertimeRequestApprovalService.cs" />
@@ -150,6 +151,7 @@
     <Compile Include="AgentInfo\Requests\OvertimeRequestSkillProvider.cs" />
     <Compile Include="AgentInfo\Requests\NotOvertimeRequestSpecification.cs" />
     <Compile Include="AgentInfo\Requests\OvertimeRequestSkillProviderToggle47290On.cs" />
+    <Compile Include="AgentInfo\Requests\ShiftStartTimeProvider.cs" />
     <Compile Include="AgentInfo\Requests\ShiftEndTimeProvider.cs" />
     <Compile Include="AgentInfo\Requests\SkillOpenHourFilter.cs" />
     <Compile Include="AgentInfo\ScheduleStaffingPossibilityConsts.cs" />
