@@ -47,19 +47,19 @@ RTA_RtaTracer_45597 = true
 RTA_MonitorAgentsWithLongTimeInState_46475 = true
 RTA_MobileFriendlyCheckboxes_46758 = true
 RTA_ViewHistoricalAhderenceForRecentShifts_46786 = true
-RTA_ViewHistoricalAhderence7DaysBack_46826 = RC
-RTA_ConfigurationValidationNotification_46933 = RC
+RTA_ViewHistoricalAhderence7DaysBack_46826 = true
+RTA_ConfigurationValidationNotification_46933 = true
 RTA_ApprovePreviousOOA_47230 = false
 
 # Dumplings, can any of these be removed? #
 WfmTeamSchedule_MoveOvertimeActivity_44888 = true
 WfmTeamSchedule_SortRows_45056 = true
 WfmTeamSchedule_DisplayAndEditPublicNote_44783 = true
-WfmTeamSchedule_ShowStaffingInfo_45206 = RC
+WfmTeamSchedule_ShowStaffingInfo_45206 = true
 WfmTeamSchedule_ExportSchedulesToExcel_45795 = true
-WfmTeamSchedule_ShowSkillsForSelectedSkillGroupInStaffingInfo_47202 = RC
-WfmTeamSchedule_AddAbsenceFromPartOfDayToXDay_46010 = RC
-WfmTeamSchedule_AddNDeleteDayOff_40555 = RC
+WfmTeamSchedule_ShowSkillsForSelectedSkillGroupInStaffingInfo_47202 = true
+WfmTeamSchedule_AddAbsenceFromPartOfDayToXDay_46010 = true
+WfmTeamSchedule_AddNDeleteDayOff_40555 = true
 Wfm_HideUnusedTeamsAndSites_42690 = true
 Wfm_SearchAgentBasedOnCorrectPeriod_44552 = true
 Wfm_AddMyTimeLink_45088 = true
@@ -129,7 +129,7 @@ Wfm_ImportSchedule_41247 = true
 WFM_WebScheduling_LowPriority_44320 = RC
 Wfm_WebPlan_Pilot_46815 = RC #Switch this on to try out the new web based scheduling in Plans#
 ResourcePlanner_HideSkillPrioSliders_41312 = RC
-ResourcePlanner_BlockSchedulingValidation_46092 = RC
+ResourcePlanner_BlockSchedulingValidation_46092 = true
 ResourcePlanner_UseErlangAWithInfinitePatience_45845 = false #need to fix some test issues
 
 # Bugs&Roses #
