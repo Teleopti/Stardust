@@ -10,6 +10,7 @@
 	function Controller($state, $stateParams, $translate, planningPeriodServiceNew, planningGroupInfo, planningPeriods, localeLanguageSortingService) {
 		var vm = this;
 		var planningGroupId = $stateParams.groupId ? $stateParams.groupId : null;
+		var saveLocalSelections;
 		vm.planningGroup = planningGroupInfo;
 		vm.planningPeriods = planningPeriods.sort(localeLanguageSortingService.localeSort('-EndDate'));
 		vm.suggestions = [];
@@ -85,6 +86,7 @@
 			};
 			vm.intervalRange = s.Number;
 			vm.intervalType = s.PeriodType || s.Type;
+			vm.selectedIsValid = checkSelectedIsValid();
 			return vm.selectedSuggestion;
 		}
 
@@ -108,34 +110,36 @@
 
 		function typeChanged(output) {
 			vm.intervalType = output;
-			vm.selectedIsValid = checkSelectedIsValid();
 			return autoUpdateEndDate();
 		}
 
 		function intervalChanged() {
-			vm.selectedIsValid = checkSelectedIsValid();
 			return autoUpdateEndDate();
 		}
 
 		function intervalLengthValid() {
-			if(vm.selectedSuggestion.endDate == null) {
+			if (vm.selectedSuggestion.endDate == null) {
 				return "SetupIntervalLength"
 			}
 		}
 
 		function autoUpdateEndDate() {
-			if(vm.intervalRange == 0) {
+			if (vm.intervalRange == (0 || null)) {
 				var startDate = vm.selectedSuggestion.startDate;
-				return vm.selectedSuggestion = {
+				vm.selectedSuggestion = {
 					startDate: moment(startDate).toDate(),
 					endDate: null
 				};
+				vm.selectedIsValid = checkSelectedIsValid();
+				return;
 			}
 			var startDate = vm.selectedSuggestion.startDate;
-			return vm.selectedSuggestion = {
+			vm.selectedSuggestion = {
 				startDate: moment(startDate).toDate(),
-				endDate: vm.intervalRange == 0 ? null : moment(startDate).add(vm.intervalRange, vm.intervalType.toLowerCase()).subtract(1, 'day').toDate()
+				endDate: moment(startDate).add(vm.intervalRange, vm.intervalType.toLowerCase()).subtract(1, 'day').toDate()
 			};
+			vm.selectedIsValid = checkSelectedIsValid();
+			return;
 		}
 
 		function openModifyModal(type) {

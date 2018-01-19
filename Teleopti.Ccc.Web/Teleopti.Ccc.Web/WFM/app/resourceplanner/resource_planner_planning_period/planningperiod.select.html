@@ -174,7 +174,8 @@
 									</div>
 									<div class="con-row pp-calendar-wrapper">
 										<div class="con-flex ">
-											<wfm-calendar-picker disable="all" ng-model="vm.selectedSuggestion" interval-rule="week"></wfm-calendar-picker>
+											<wfm-calendar-picker custom-validate="vm.intervalLengthValid()" disable="all" ng-model="vm.selectedSuggestion" interval-rule="week" ng-show="vm.intervalType == 'Week'"></wfm-calendar-picker>
+											<wfm-calendar-picker custom-validate="vm.intervalLengthValid()" disable="all" ng-model="vm.selectedSuggestion" interval-rule="month" ng-show="vm.intervalType == 'Month'"></wfm-calendar-picker>
 										</div>
 									</div>
 								</md-content>
