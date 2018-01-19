@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			_supportedSkillsInIntradayProvider = supportedSkillsInIntradayProvider;
 		}
 
-		public IEnumerable<ISkill> GetAvailableSkills(IPerson person, DateTimePeriod requestPeriod)
+		public IEnumerable<ISkill> GetAvailableSkills(IPerson person, DateTimePeriod requestPeriod, IOvertimeRequestOpenPeriod overtimeRequestOpenPeriod)
 		{
 			var period = requestPeriod.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone());
 			return _primaryPersonSkillFilter.Filter(getSupportedPersonSkills(person, period)).Select(s => s.Skill).ToList();

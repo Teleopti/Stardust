@@ -49,14 +49,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var businessRules = new BusinessRulesForPersonalAccountUpdate(_personAbsenceAccountRepository, new SchedulingResultStateHolder());
 
 			var overtimeRequestSkillProvider = MockRepository.GenerateMock<IOvertimeRequestSkillProvider>();
-			overtimeRequestSkillProvider.Stub(s => s.GetAvailableSkills(null, new DateTimePeriod()))
+			overtimeRequestSkillProvider.Stub(s => s.GetAvailableSkills(null, new DateTimePeriod(),null))
 				.IgnoreArguments()
 				.Return(new ISkill[] {});
 			_requestApprovalServiceFactory = new RequestApprovalServiceFactory(
 				new SwapAndModifyService(null, null),
 				new FakeGlobalSettingDataRepository(),
 				businessRules, new CheckingPersonalAccountDaysProvider(_personAbsenceAccountRepository), new DoNothingScheduleDayChangeCallBack()
-				, null, null, overtimeRequestSkillProvider, null
+				, null, null, overtimeRequestSkillProvider, null,null
 			);
 
 			var writeProtectedScheduleCommandValidator = new WriteProtectedScheduleCommandValidator(

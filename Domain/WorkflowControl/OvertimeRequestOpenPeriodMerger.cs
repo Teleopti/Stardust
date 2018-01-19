@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 					mergedPeriod.DenyReason = overtimeRequestOpenPeriod.DenyReason;
 					mergedPeriod.EnableWorkRuleValidation = overtimeRequestOpenPeriod.EnableWorkRuleValidation;
 					mergedPeriod.WorkRuleValidationHandleType = overtimeRequestOpenPeriod.WorkRuleValidationHandleType;
+					mergedPeriod.SkillType = overtimeRequestOpenPeriod.SkillType;
 				}
 			}
 			return mergedPeriod;

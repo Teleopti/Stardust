@@ -16,15 +16,17 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		private readonly IOvertimeRequestSkillProvider _overtimeRequestSkillProvider;
 		private readonly ICommandDispatcher _commandDispatcher;
 		private readonly ISkill[] _validatedSkills;
+		private readonly INow _now;
 
 		public OvertimeRequestApprovalService(
 			IOvertimeRequestUnderStaffingSkillProvider overtimeRequestUnderStaffingSkillProvider,
-			IOvertimeRequestSkillProvider overtimeRequestSkillProvider, ICommandDispatcher commandDispatcher, ISkill[] validatedSkills)
+			IOvertimeRequestSkillProvider overtimeRequestSkillProvider, ICommandDispatcher commandDispatcher, ISkill[] validatedSkills, INow now)
 		{
 			_overtimeRequestUnderStaffingSkillProvider = overtimeRequestUnderStaffingSkillProvider;
 			_overtimeRequestSkillProvider = overtimeRequestSkillProvider;
 			_commandDispatcher = commandDispatcher;
 			_validatedSkills = validatedSkills;
+			_now = now;
 		}
 
 		public IEnumerable<IBusinessRuleResponse> Approve(IRequest request)
@@ -42,9 +44,10 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 				return new List<IBusinessRuleResponse>();
 			}
 
+			var overtimeRequestOpenPeriod = getOvertimeRequestOpenPeriod(request.Parent as IPersonRequest);
 			var period = overtimeRequest.Period;
 			var person = overtimeRequest.Person;
-			var skills = _overtimeRequestSkillProvider.GetAvailableSkills(request.Person, period).ToList();
+			var skills = _overtimeRequestSkillProvider.GetAvailableSkills(request.Person, period, overtimeRequestOpenPeriod).ToList();
 			if (!skills.Any())
 			{
 				return getBusinessRuleResponses(Resources.NoAvailableSkillForOvertime, period, person);
@@ -65,7 +68,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 			return new List<IBusinessRuleResponse>();
 		}
-
+		
 		public void addOvertimeActivity(Guid activityId, IOvertimeRequest overtimeRequest)
 		{
 			var agentDateTime = TimeZoneHelper.ConvertFromUtc(overtimeRequest.Period.StartDateTime, overtimeRequest.Person.PermissionInformation.DefaultTimeZone());
@@ -86,6 +89,12 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 				new BusinessRuleResponse(null, message, true, true, period
 					, person, period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone()), string.Empty)
 			};
+		}
+
+		private IOvertimeRequestOpenPeriod getOvertimeRequestOpenPeriod(IPersonRequest personRequest)
+		{
+			return personRequest.Person.WorkflowControlSet.GetMergedOvertimeRequestOpenPeriod(personRequest.Request as IOvertimeRequest,
+				new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), personRequest.Person.PermissionInformation.DefaultTimeZone())));
 		}
 	}
 }

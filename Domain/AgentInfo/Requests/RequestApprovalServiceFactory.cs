@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		private readonly IPersonRequestCheckAuthorization _personRequestCheckAuthorization;
 		private readonly IOvertimeRequestUnderStaffingSkillProvider _overtimeRequestUnderStaffingSkillProvider;
 		private readonly IOvertimeRequestSkillProvider _overtimeRequestSkillProvider;
+		private readonly INow _now;
 		private readonly ICommandDispatcher _commandDispatcher;
 
 		public RequestApprovalServiceFactory(ISwapAndModifyService swapAndModifyService,
@@ -25,7 +26,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			IPersonRequestCheckAuthorization personRequestCheckAuthorization,
 			IOvertimeRequestUnderStaffingSkillProvider overtimeRequestUnderStaffingSkillProvider,
 			IOvertimeRequestSkillProvider overtimeRequestSkillProvider,
-			ICommandDispatcher commandDispatcher)
+			ICommandDispatcher commandDispatcher, INow now)
 		{
 			_businessRulesForPersonalAccountUpdate = businessRulesForPersonalAccountUpdate;
 			_checkingPersonalAccountDaysProvider = checkingPersonalAccountDaysProvider;
@@ -34,6 +35,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			_overtimeRequestUnderStaffingSkillProvider = overtimeRequestUnderStaffingSkillProvider;
 			_overtimeRequestSkillProvider = overtimeRequestSkillProvider;
 			_commandDispatcher = commandDispatcher;
+			_now = now;
 			_swapAndModifyService = swapAndModifyService;
 			_globalSettingDataRepository = globalSettingDataRepository;
 		}
@@ -68,7 +70,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		public IRequestApprovalService MakeOvertimeRequestApprovalService(ISkill[] validatedSkills)
 		{
 			return new OvertimeRequestApprovalService(_overtimeRequestUnderStaffingSkillProvider, _overtimeRequestSkillProvider,
-				_commandDispatcher, validatedSkills);
+				_commandDispatcher, validatedSkills,_now);
 		}
 	}
 }

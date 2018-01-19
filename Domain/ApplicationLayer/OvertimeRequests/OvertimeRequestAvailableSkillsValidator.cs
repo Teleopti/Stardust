@@ -19,10 +19,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			_skillOpenHourFilter = skillOpenHourFilter;
 		}
 
-		public OvertimeRequestAvailableSkillsValidationResult Validate(IPersonRequest personRequest)
+		public OvertimeRequestAvailableSkillsValidationResult Validate(IPersonRequest personRequest, IOvertimeRequestOpenPeriod overtimeRequestOpenPeriod)
 		{
 			var period = personRequest.Request.Period;
-			var skills = _overtimeRequestSkillProvider.GetAvailableSkills(personRequest.Person, period).ToList();
+			var skills = _overtimeRequestSkillProvider.GetAvailableSkills(personRequest.Person, period, overtimeRequestOpenPeriod).ToList();
 			if (!skills.Any())
 			{
 				return new OvertimeRequestAvailableSkillsValidationResult

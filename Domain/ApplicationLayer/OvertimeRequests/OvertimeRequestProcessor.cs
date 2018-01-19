@@ -53,7 +53,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 				return;
 			}
 
-			var validateSkillsResult = validateSkills(personRequest);
+			var overtimeRequestOpenPeriod = getOvertimeRequestOpenPeriod(personRequest);
+			var validateSkillsResult = validateSkills(personRequest, overtimeRequestOpenPeriod);
 			if (!validateSkillsResult.IsValid)
 			{
 				handleOvertimeRequestValidationResult(personRequest, validateSkillsResult);
@@ -69,7 +70,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 				return;
 			}
 
-			var validateSkillsResult = validateSkills(personRequest);
+			var validateSkillsResult = validateSkills(personRequest, null);
 			if (!validateSkillsResult.IsValid)
 			{
 				handleOvertimeRequestValidationResult(personRequest, validateSkillsResult);
@@ -102,7 +103,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 				return;
 			}
 
-			var validateSkillsResult = validateSkills(personRequest);
+			var validateSkillsResult = validateSkills(personRequest, overtimeOpenPeriod);
 			if (!validateSkillsResult.IsValid)
 			{
 				handleOvertimeRequestValidationResult(personRequest, validateSkillsResult);
@@ -164,9 +165,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			return new OvertimeRequestValidationResult { IsValid = true };
 		}
 
-		private OvertimeRequestAvailableSkillsValidationResult validateSkills(IPersonRequest personRequest)
+		private OvertimeRequestAvailableSkillsValidationResult validateSkills(IPersonRequest personRequest,IOvertimeRequestOpenPeriod overtimeRequestOpenPeriod)
 		{
-			return _overtimeRequestAvailableSkillsValidator.Validate(personRequest);
+			return _overtimeRequestAvailableSkillsValidator.Validate(personRequest, overtimeRequestOpenPeriod);
 		}
 
 		private void handleOvertimeRequestValidationResult(IPersonRequest personRequest,
@@ -182,6 +183,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 
 		private IOvertimeRequestOpenPeriod getOvertimeRequestOpenPeriod(IPersonRequest personRequest)
 		{
+			if (personRequest.Person.WorkflowControlSet == null)
+				return null;
 			return personRequest.Person.WorkflowControlSet.GetMergedOvertimeRequestOpenPeriod(personRequest.Request as IOvertimeRequest,
 				new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), personRequest.Person.PermissionInformation.DefaultTimeZone())));
 		}
