@@ -10,7 +10,6 @@ using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -44,7 +43,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 		private readonly CultureInfo _currentCulture;
 		private const int maximumRows = 1000;
 
-		public SchedulerReportsViewer(IEventAggregator eventAggregator, IComponentContext componentContext, IApplicationFunction applicationFunction)
+		public SchedulerReportsViewer(IEventAggregator eventAggregator, IComponentContext componentContext,
+			IApplicationFunction applicationFunction)
 		{
 			_eventAggregator = eventAggregator;
 			_componentContext = componentContext;
@@ -61,13 +61,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 			reportViewerControl1.ReportViewerControl1.ReportRefresh += reportViewerControlReportRefresh;
 			Height = 900;
 			Width = 1200;
-			
+
 			eventSubscriptions();
 		}
 
 		private void eventSubscriptions()
 		{
-			reportSettings1.Init(_eventAggregator, _componentContext,_applicationFunction);
+			reportSettings1.Init(_eventAggregator, _componentContext, _applicationFunction);
 			_eventAggregator.GetEvent<LoadReport>().Subscribe(onLoadReport);
 			_eventAggregator.GetEvent<ViewerFoldingChangedEvent>().Subscribe(SetSize);
 		}
@@ -81,7 +81,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 
 		void reportViewerControlReportRefresh(object sender, CancelEventArgs e)
 		{
-
 			try
 			{
 				switch (_reportDetail.FunctionPath)
@@ -99,30 +98,33 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 			}
 			catch (DataSourceException dataSourceException)
 			{
-				using (var view = new SimpleExceptionHandlerView(dataSourceException, Resources.OpenReports, Resources.ServerUnavailable))
+				using (var view =
+					new SimpleExceptionHandlerView(dataSourceException, Resources.OpenReports, Resources.ServerUnavailable))
 				{
 					view.ShowDialog();
 				}
 			}
 		}
-		
+
 		void backgroundWorkerLoadReportDoWork(object sender, DoWorkEventArgs e)
 		{
 			setThreadCulture();
 			switch (_reportDetail.FunctionPath)
 			{
 				case DefinedRaptorApplicationFunctionPaths.ScheduledTimePerActivityReport:
-					e.Result = getReportDataForScheduleTimePerActivityReport(e.Argument as ReportSettingsScheduledTimePerActivityModel);
+					e.Result = getReportDataForScheduleTimePerActivityReport(
+						e.Argument as ReportSettingsScheduledTimePerActivityModel);
 					break;
 				case DefinedRaptorApplicationFunctionPaths.ScheduleAuditTrailReport:
 					//NEW_AUDIT
-					e.Result = getReportDataForScheduleAuditingReport(e.Argument as ReportSettingsScheduleAuditingModel);   
+					e.Result = getReportDataForScheduleAuditingReport(e.Argument as ReportSettingsScheduleAuditingModel);
 					break;
 				case DefinedRaptorApplicationFunctionPaths.ScheduleTimeVersusTargetTimeReport:
-						e.Result = getReportDataForScheduledTimeVersusTarget(e.Argument as ReportSettingsScheduleTimeVersusTargetTimeModel);
+					e.Result = getReportDataForScheduledTimeVersusTarget(
+						e.Argument as ReportSettingsScheduleTimeVersusTargetTimeModel);
 					break;
 			}
-			
+
 			Application.DoEvents();
 		}
 
@@ -142,84 +144,96 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 			switch (_reportDetail.FunctionPath)
 			{
 				case DefinedRaptorApplicationFunctionPaths.ScheduledTimePerActivityReport:
-					var reportDataPackage1 = e.Result as ReportDataPackage<IReportData>;
-					if (reportDataPackage1 != null)
+					if (e.Result is ReportDataPackage<IReportData> reportDataPackage1)
+					{
 						reportViewerControl1.LoadReport(_reportDetail.File, reportDataPackage1);
+					}
+
 					break;
-				case DefinedRaptorApplicationFunctionPaths.ScheduleAuditTrailReport:  
-					var reportDataPackage2 = e.Result as ReportDataPackage<ScheduleAuditingReportData>;
-					if (reportDataPackage2 != null)
+				case DefinedRaptorApplicationFunctionPaths.ScheduleAuditTrailReport:
+					if (e.Result is ReportDataPackage<ScheduleAuditingReportData> reportDataPackage2)
 					{
 						reportViewerControl1.LoadReport(_reportDetail.File, reportDataPackage2);
 						if (reportDataPackage2.LimitReached)
+						{
 							MessageBox.Show(this, Resources.MaximumNumberOfReportRowsReached,
 								Resources.NarrowToSeeAll, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+						}
 					}
-					
+
 					break;
 				case DefinedRaptorApplicationFunctionPaths.ScheduleTimeVersusTargetTimeReport:
-					var reportDataPackage3 = e.Result as ReportDataPackage<IScheduledTimeVersusTargetTimeReportData>;
-					if(reportDataPackage3 != null)
+					if (e.Result is ReportDataPackage<IScheduledTimeVersusTargetTimeReportData> reportDataPackage3)
+					{
 						reportViewerControl1.LoadReport(_reportDetail.File, reportDataPackage3);
+					}
+
 					break;
 			}
 
-			
 			_eventAggregator.GetEvent<LoadReportDone>().Publish(true);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes")]
 		private bool rethrowBackgroundException(RunWorkerCompletedEventArgs e)
 		{
-			if (e.Error != null)
+			if (e.Error == null) return false;
+
+			var dataSourceException = e.Error as DataSourceException;
+			if (dataSourceException == null)
 			{
-				var dataSourceException = e.Error as DataSourceException;
-				if (dataSourceException == null)
-				{
-					var ex = new Exception("Background thread exception", e.Error);
-					throw ex;
-				}
-			
-				using (var view = new SimpleExceptionHandlerView(dataSourceException, Resources.OpenReports, Resources.ServerUnavailable))
-				{
-					view.ShowDialog();
-					_eventAggregator.GetEvent<LoadReportDone>().Publish(true);
-					return true;
-				}
+				var ex = new Exception("Background thread exception", e.Error);
+				throw ex;
 			}
 
-			return false;
+			using (var view =
+				new SimpleExceptionHandlerView(dataSourceException, Resources.OpenReports, Resources.ServerUnavailable))
+			{
+				view.ShowDialog();
+				_eventAggregator.GetEvent<LoadReportDone>().Publish(true);
+				return true;
+			}
 		}
 
 		private void refreshScheduleAuditing()
 		{
 			//NEW_AUDIT
-			var reportDataPackage = getReportDataForScheduleAuditingReport(getReportSettingsModel() as ReportSettingsScheduleAuditingModel);
+			var reportDataPackage =
+				getReportDataForScheduleAuditingReport(getReportSettingsModel() as ReportSettingsScheduleAuditingModel);
 			reportViewerControl1.LoadReport(_reportDetail.File, reportDataPackage);
 		}
 
 		private void refreshScheduleTimeVersusTarget()
 		{
-			ReportDataPackage<IScheduledTimeVersusTargetTimeReportData> reportDataPackage = getReportDataForScheduledTimeVersusTarget(getReportSettingsModel() as ReportSettingsScheduleTimeVersusTargetTimeModel);
+			var reportDataPackage =
+				getReportDataForScheduledTimeVersusTarget(
+					getReportSettingsModel() as ReportSettingsScheduleTimeVersusTargetTimeModel);
 			reportViewerControl1.LoadReport(_reportDetail.File, reportDataPackage);
 		}
 
 		private void refreshScheduledTimePerActivity()
 		{
 			if (_openFromScheduler)
+			{
 				ReportHandler.RefreshScheduleTimePerActivity(this, _reportDetail, _scheduleViewBase, _scenario, _currentCulture);
+			}
 			else
 			{
-				ReportDataPackage<IReportData> reportDataPackage =
-					getReportDataForScheduleTimePerActivityReport(getReportSettingsModel() as ReportSettingsScheduledTimePerActivityModel);
+				var reportDataPackage =
+					getReportDataForScheduleTimePerActivityReport(
+						getReportSettingsModel() as ReportSettingsScheduledTimePerActivityModel);
 				reportViewerControl1.LoadReport(_reportDetail.File, reportDataPackage);
 			}
 		}
 
-
 		//from scheduler
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-		public void LoadScheduledTimePerActivityReport(ReportDetail reportDetail, IDictionary<string, IList<IReportData>> reportData, IList<IReportDataParameter> reportDataParameters, ScheduleViewBase scheduleViewBase, IScenario scenario)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
+			 MessageId = "0"),
+		 System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design",
+			 "CA1006:DoNotNestGenericTypesInMemberSignatures")]
+		public void LoadScheduledTimePerActivityReport(ReportDetail reportDetail,
+			IDictionary<string, IList<IReportData>> reportData, IList<IReportDataParameter> reportDataParameters,
+			ScheduleViewBase scheduleViewBase, IScenario scenario)
 		{
 			var reportDataPackage = new ReportDataPackage<IReportData>(reportData, reportDataParameters, false);
 			reportViewerControl1.LoadReport(reportDetail.File, reportDataPackage);
@@ -229,7 +243,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 			_reportDetail = reportDetail;
 			_openFromScheduler = true;
 			reportSettings1.Fold();
-			
 		}
 
 		//from scheduler
@@ -246,36 +259,41 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 			_reportDetail = reportDetail;
 		}
 
-		private ReportDataPackage<IScheduledTimeVersusTargetTimeReportData> getReportDataForScheduledTimeVersusTarget(ReportSettingsScheduleTimeVersusTargetTimeModel model)
+		private ReportDataPackage<IScheduledTimeVersusTargetTimeReportData> getReportDataForScheduledTimeVersusTarget(
+			ReportSettingsScheduleTimeVersusTargetTimeModel model)
 		{
-			
 			var data = new Dictionary<string, IList<IScheduledTimeVersusTargetTimeReportData>>
 			{
 				{"DataSet1", new List<IScheduledTimeVersusTargetTimeReportData>()}
 			};
-			var parameters = ReportHandler.CreateScheduledTimeVersusTargetParameters(model,_currentCulture);
-			if (model.Persons.Any())
-			{
-				using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-				{
-					var settingDataRepository = new RepositoryFactory().CreateGlobalSettingDataRepository(unitOfWork);
-					var commonNameDescriptionSetting = settingDataRepository.FindValueByKey("CommonNameDescription", new CommonNameDescriptionSetting());
 
-					ReportHandler.CreateScheduledTimeVersusTargetData(unitOfWork, model, data, StateHolderReader.Instance.StateReader.UserTimeZone, commonNameDescriptionSetting);
-				}
+			var parameters = ReportHandler.CreateScheduledTimeVersusTargetParameters(model, _currentCulture);
+			if (!model.Persons.Any())
+			{
+				return new ReportDataPackage<IScheduledTimeVersusTargetTimeReportData>(data, parameters, false);
 			}
-			
+
+			using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var settingDataRepository = new RepositoryFactory().CreateGlobalSettingDataRepository(unitOfWork);
+				var commonNameDescriptionSetting =
+					settingDataRepository.FindValueByKey("CommonNameDescription", new CommonNameDescriptionSetting());
+
+				ReportHandler.CreateScheduledTimeVersusTargetData(unitOfWork, model, data,
+					StateHolderReader.Instance.StateReader.UserTimeZone, commonNameDescriptionSetting);
+			}
+
 			return new ReportDataPackage<IScheduledTimeVersusTargetTimeReportData>(data, parameters, false);
 		}
 
-		private ReportDataPackage<ScheduleAuditingReportData> getReportDataForScheduleAuditingReport(ReportSettingsScheduleAuditingModel model)
+		private ReportDataPackage<ScheduleAuditingReportData> getReportDataForScheduleAuditingReport(
+			ReportSettingsScheduleAuditingModel model)
 		{
 			IList<ScheduleAuditingReportData> reportData;
 
-			IScheduleHistoryReport rep;
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				 rep = new ScheduleHistoryReport(UnitOfWorkFactory.Current, TeleoptiPrincipal.CurrentPrincipal.Regional);
+				var rep = new ScheduleHistoryReport(UnitOfWorkFactory.Current, TeleoptiPrincipal.CurrentPrincipal.Regional);
 
 				if (model.ModifiedBy.Count > 1 || model.ModifiedBy.Count == 0)
 				{
@@ -283,40 +301,42 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 				}
 				else
 				{
-					reportData = rep.Report(model.ModifiedBy[0], model.ChangePeriod, model.SchedulePeriod, model.Agents, maximumRows).ToList();
+					reportData = rep.Report(model.ModifiedBy[0], model.ChangePeriod, model.SchedulePeriod, model.Agents, maximumRows)
+						.ToList();
 				}
 			}
-			var data = new Dictionary<string, IList<ScheduleAuditingReportData>> { { "DataSet2", reportData } };
+
+			var data = new Dictionary<string, IList<ScheduleAuditingReportData>> {{"DataSet2", reportData}};
 			var parameters = ReportHandler.CreateScheduleAuditingParameters(model, _currentCulture);
 
 			return new ReportDataPackage<ScheduleAuditingReportData>(data, parameters, reportData.Count > maximumRows);
 		}
 
 		//from tree
-		private ReportDataPackage<IReportData> getReportDataForScheduleTimePerActivityReport(ReportSettingsScheduledTimePerActivityModel model)
+		private ReportDataPackage<IReportData> getReportDataForScheduleTimePerActivityReport(
+			ReportSettingsScheduledTimePerActivityModel model)
 		{
 			var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(false, false);
 			var data = new Dictionary<string, IList<IReportData>>();
 
-			using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				using (unitOfWork.DisableFilter(QueryFilter.Deleted))
 				{
 					//get these first so they are loaded
 					_componentContext.Resolve<IActivityRepository>().LoadAll();
 					unitOfWork.Reassociate(model.Persons);
-					IScheduleDictionary dic = _componentContext.Resolve<IScheduleStorage>().FindSchedulesForPersons(model.Scenario,
+					var dic = _componentContext.Resolve<IScheduleStorage>().FindSchedulesForPersons(model.Scenario,
 						model.Persons,
-							scheduleDictionaryLoadOptions,
-							model.Period.ToDateTimePeriod(model.TimeZone),
-							model.Persons, false);
+						scheduleDictionaryLoadOptions,
+						model.Period.ToDateTimePeriod(model.TimeZone),
+						model.Persons, false);
 
-					IList<IReportDataParameter> parameters = ReportHandler.CreateScheduleTimePerActivityParameters(model, _currentCulture);
+					var parameters = ReportHandler.CreateScheduleTimePerActivityParameters(model, _currentCulture);
 					ReportHandler.CreateScheduleTimePerActivityData(dic, model, data);
 
 					return new ReportDataPackage<IReportData>(data, parameters, false);
 				}
-				
 			}
 		}
 
@@ -338,8 +358,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 
 		private void releaseManagedResources()
 		{
-			if (reportViewerControl1!=null && reportViewerControl1.ReportViewerControl1!=null)
-			reportViewerControl1.ReportViewerControl1.ReportRefresh -= reportViewerControlReportRefresh;
+			if (reportViewerControl1?.ReportViewerControl1 != null)
+			{
+				reportViewerControl1.ReportViewerControl1.ReportRefresh -= reportViewerControlReportRefresh;
+			}
 		}
 
 		private void schedulerReportsViewerResize(object sender, EventArgs e)

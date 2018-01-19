@@ -34,7 +34,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 		private SchedulerStateHolder _schedulerStateHolder;
 		private ReportSettingsScheduledTimeVersusTarget _setting;
 
-		public ReportSettingsScheduleTimeVersusTargetTimeView(IEventAggregator eventAggregator, IComponentContext componentContext)
+		public ReportSettingsScheduleTimeVersusTargetTimeView(IEventAggregator eventAggregator,
+			IComponentContext componentContext)
 		{
 			_eventAggregator = eventAggregator;
 			_componentContext = componentContext;
@@ -58,12 +59,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 
 			SetTexts();
 
-			LoadSetting();
+			loadSetting();
 			reportAgentSelector1.ComponentContext = _componentContext;
 			reportAgentSelector1.ReportApplicationFunction =
 				ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctions,
 					DefinedRaptorApplicationFunctionPaths.ScheduleTimeVersusTargetTimeReport);
-			reportAgentSelector1.OpenDialog += ReportAgentSelector1BeforeDialog;
+			reportAgentSelector1.OpenDialog += reportAgentSelector1BeforeDialog;
 		}
 
 		public void InitializeSettings()
@@ -80,33 +81,25 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 			}
 		}
 
-		public IScenario Scenario
-		{
-			get { return reportScenarioSelector1.SelectedItem; }
-		}
+		public IScenario Scenario => reportScenarioSelector1.SelectedItem;
 
-		public DateOnlyPeriod Period
-		{
-			get { return reportDateFromToSelector1.GetSelectedDates.First(); }
-		}
+		public DateOnlyPeriod Period => reportDateFromToSelector1.GetSelectedDates.First();
 
-		public ReportSettingsScheduleTimeVersusTargetTimeModel ScheduleTimeVersusTargetTimeModel
-		{
-			get { return _presenter.GetSettingsModel; }
-		}
+		public ReportSettingsScheduleTimeVersusTargetTimeModel ScheduleTimeVersusTargetTimeModel =>
+			_presenter.GetSettingsModel;
 
-		void ReportAgentSelector1BeforeDialog(object sender, EventArgs e)
+		private void reportAgentSelector1BeforeDialog(object sender, EventArgs e)
 		{
 			_schedulerStateHolder.RequestedPeriod =
-				new DateOnlyPeriodAsDateTimePeriod(reportDateFromToSelector1.GetSelectedDates[0],TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+				new DateOnlyPeriodAsDateTimePeriod(reportDateFromToSelector1.GetSelectedDates[0],
+					TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
 		}
 
-		private SchedulerStateHolder CreateStateHolder()
+		private SchedulerStateHolder createStateHolder()
 		{
 			using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var rep = new PersonRepository(new FromFactory(() => UnitOfWorkFactory.Current));
-
 				var period = new DateOnlyPeriod(DateOnly.Today.AddDays(-366), DateOnly.Today.AddDays(366));
 
 				using (unitOfWork.DisableFilter(QueryFilter.Deleted))
@@ -129,20 +122,21 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 
 		public void InitAgentSelector()
 		{
-			_schedulerStateHolder = CreateStateHolder();
+			_schedulerStateHolder = createStateHolder();
 			reportAgentSelector1.SetStateHolder(_schedulerStateHolder);
 		}
 
-		private void ButtonAdvOkClick(object sender, EventArgs e)
+		private void buttonAdvOkClick(object sender, EventArgs e)
 		{
 			Enabled = false;
 			try
 			{
-				SaveSetting();
+				saveSetting();
 			}
 			catch (DataSourceException dataSourceException)
 			{
-				using (var view = new SimpleExceptionHandlerView(dataSourceException, Resources.OpenReports, Resources.ServerUnavailable))
+				using (var view =
+					new SimpleExceptionHandlerView(dataSourceException, Resources.OpenReports, Resources.ServerUnavailable))
 				{
 					view.ShowDialog();
 				}
@@ -155,7 +149,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 			_eventAggregator.GetEvent<LoadReport>().Publish(true);
 		}
 
-		private void SaveSetting()
+		private void saveSetting()
 		{
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
@@ -180,10 +174,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 
 				new PersonalSettingDataRepository(uow).PersistSettingValue(_setting);
 				uow.PersistAll();
-			}	
+			}
 		}
 
-		private void LoadSetting()
+		private void loadSetting()
 		{
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
@@ -191,10 +185,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 					new ReportSettingsScheduledTimeVersusTarget());
 			}
 
-			ApplySetting();
+			applySetting();
 		}
 
-		private void ApplySetting()
+		private void applySetting()
 		{
 			if (!_setting.Scenario.HasValue) return;
 

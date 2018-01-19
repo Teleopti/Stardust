@@ -19,10 +19,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 {
 	public partial class ReportAgentSelector : BaseUserControl
 	{
-		private HashSet<Guid> _selectedPersonGuids = new HashSet<Guid>();
 		private SchedulerStateHolder _stateHolder;
-		private string _selectedGroupPageKey;
-		
+
 		public ReportAgentSelector()
 		{
 			InitializeComponent();
@@ -33,24 +31,19 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 		protected override void OnLoad(EventArgs e)
 		{
 			base.OnLoad(e);
-		   
-			if (!DesignMode && StateHolderReader.IsInitialized)
-			{
-				comboBoxAdv1.PopupContainer.Popup += popupContainerPopup;
-				comboBoxAdv1.PopupContainer.CloseUp += popupContainerCloseUp;
 
+			if (DesignMode || !StateHolderReader.IsInitialized) return;
 
-				SetTexts();
+			comboBoxAdv1.PopupContainer.Popup += popupContainerPopup;
+			comboBoxAdv1.PopupContainer.CloseUp += popupContainerCloseUp;
 
-				UpdateComboWithSelectedAgents();
-			}     
+			SetTexts();
+			UpdateComboWithSelectedAgents();
 		}
 
 		void popupContainerCloseUp(object sender, Syncfusion.Windows.Forms.PopupClosedEventArgs e)
 		{
-			var handler = OpenDialog;
-			if(handler != null)
-				handler(this, EventArgs.Empty);
+			OpenDialog?.Invoke(this, EventArgs.Empty);
 
 			try
 			{
@@ -60,7 +53,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 			}
 			catch (DataSourceException dataSourceException)
 			{
-				using (var view = new SimpleExceptionHandlerView(dataSourceException, Resources.OpenReports, Resources.ServerUnavailable))
+				using (var view =
+					new SimpleExceptionHandlerView(dataSourceException, Resources.OpenReports, Resources.ServerUnavailable))
 				{
 					view.ShowDialog();
 					Cursor = Cursors.Default;
@@ -78,42 +72,34 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 			_stateHolder = stateHolder;
 		}
 
-		public HashSet<Guid> SelectedPersonGuids
-		{
-			get { return _selectedPersonGuids; }
-		}
+		public HashSet<Guid> SelectedPersonGuids { get; private set; } = new HashSet<Guid>();
 
 		public void SetSelectedPersons(HashSet<Guid> persons)
 		{
-			_selectedPersonGuids = persons;
+			SelectedPersonGuids = persons;
 		}
 
-		public string SelectedGroupPageKey
-		{
-			get { return _selectedGroupPageKey; }
-			set { _selectedGroupPageKey = value; }
-		}
+		public string SelectedGroupPageKey { get; set; }
 
 		private void showFilterDialog()
 		{
 			var all = _stateHolder.ChoosenAgents.Select(p => p.Id.Value).ToList();
 
-			using (var scheduleFilterView = new PersonsFilterView(_stateHolder.RequestedPeriod.DateOnlyPeriod, _stateHolder.FilteredCombinedAgentsDictionary,
-				ComponentContext,ReportApplicationFunction, _selectedGroupPageKey, all, false))
+			using (var scheduleFilterView = new PersonsFilterView(_stateHolder.RequestedPeriod.DateOnlyPeriod,
+				_stateHolder.FilteredCombinedAgentsDictionary,
+				ComponentContext, ReportApplicationFunction, SelectedGroupPageKey, all, false))
 			{
 				scheduleFilterView.StartPosition = FormStartPosition.Manual;
-				Point pointToScreen =
-					comboBoxAdv1.PointToScreen(new Point(comboBoxAdv1.Bounds.Y - 4,
-															  comboBoxAdv1.Bounds.Y + comboBoxAdv1.Height));
+				var pointToScreen =
+					comboBoxAdv1.PointToScreen(new Point(comboBoxAdv1.Bounds.Y - 4, comboBoxAdv1.Bounds.Y + comboBoxAdv1.Height));
 				scheduleFilterView.Location = pointToScreen;
 				scheduleFilterView.AutoLocate();
-				if (scheduleFilterView.ShowDialog() == DialogResult.OK)
-				{
-					_selectedGroupPageKey = scheduleFilterView.SelectedGroupPageKey;
-					_selectedPersonGuids = scheduleFilterView.SelectedAgentGuids();
-					
-					UpdateComboWithSelectedAgents();
-				}
+				if (scheduleFilterView.ShowDialog() != DialogResult.OK) return;
+
+				SelectedGroupPageKey = scheduleFilterView.SelectedGroupPageKey;
+				SelectedPersonGuids = scheduleFilterView.SelectedAgentGuids();
+
+				UpdateComboWithSelectedAgents();
 			}
 		}
 
@@ -123,9 +109,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 
 			var builder = new StringBuilder();
 
-			builder.Append(_selectedPersonGuids.Count.ToString(currentCultureInfo));
+			builder.Append(SelectedPersonGuids.Count.ToString(currentCultureInfo));
 			builder.Append(":");
-			_stateHolder.FilterPersons(_selectedPersonGuids);
+			_stateHolder.FilterPersons(SelectedPersonGuids);
 			foreach (var person in _stateHolder.FilteredCombinedAgentsDictionary.Values)
 			{
 				builder.Append(person.Name);
@@ -135,13 +121,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
 			comboBoxAdv1.Text = builder.ToString();
 		}
 
-		public override bool HasHelp
-		{
-			get
-			{
-				return false;
-			}
-		}
+		public override bool HasHelp => false;
 
 		public IComponentContext ComponentContext { get; set; }
 		public IApplicationFunction ReportApplicationFunction { get; set; }
