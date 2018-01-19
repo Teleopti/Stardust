@@ -83,6 +83,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			system.UseTestDouble<FakeBusinessUnitRepository>().For<IBusinessUnitRepository>();
 			system.UseTestDouble<FakePersonAbsenceRepository>().For<IPersonAbsenceRepository>();
 			system.UseTestDouble<FakeSkillCombinationResourceRepository>().For<ISkillCombinationResourceRepository>();
+			system.UseTestDouble<FakeSkillRepository>().For<ISkillRepository>();
 			var tenants = new FakeTenants();
 			var DefaultTenantName = "default";
 			tenants.Has(DefaultTenantName, LegacyAuthenticationKey.TheKey);
