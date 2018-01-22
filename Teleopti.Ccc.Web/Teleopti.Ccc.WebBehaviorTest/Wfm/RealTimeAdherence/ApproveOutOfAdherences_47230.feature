@@ -24,22 +24,15 @@ Feature: Approve out of adherences
 	  | Activity    | Phone     |
 	  | Phone state | LoggedOff |
 	  | Adherence   | Out       |
-  	  
-  Scenario: See period out of adherence
-  	Given Mikkey Dee has a 'Phone' shift between '2018-01-18 09:00' and '17:00'
-	And at '2018-01-18 10:00:00' 'Mikkey Dee' sets his phone state to 'LoggedOff'
-	And at '2018-01-18 11:00:00' 'Mikkey Dee' sets his phone state to 'Ready'
-	When I view historical adherence for 'Mikkey Dee' on '2018-01-18'
-	Then I should see period out of adherence between '10:00:00' and '11:00:00'
-  
-  Scenario: See out of adherence line
 
-  Scenario: Approve period out of adherence
+  Scenario: See recorded out of adherence
 
-  Scenario: Update adherence percentage with approved as in adherence
-  
-  Scenario: See approved period
-	
-  Scenario: See approved as in adherence line
-	
-  Scenario: Not display line for approved as in adherence
+  Scenario: See approved periods
+  # see approved line
+  # see approved table
+
+  Scenario: Approve as in adherence
+ # update line
+  # update percentage
+  # update approved table
+  # not update recorded
