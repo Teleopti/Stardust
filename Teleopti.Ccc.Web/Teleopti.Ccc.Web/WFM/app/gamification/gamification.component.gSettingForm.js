@@ -25,7 +25,7 @@
 				null,
 				null,
 				'AnsweredCalls',
-				'0',
+				0,
 				true,
 				data.AnsweredCallsThreshold,
 				data.AnsweredCallsBronzeThreshold,
@@ -44,12 +44,12 @@
 				null,
 				null,
 				'Adherence',
-				'0',
+				1,
 				true,
-				data.AdherenceThreshold.Value,
-				data.AdherenceBronzeThreshold.Value,
-				data.AdherenceSilverThreshold.Value,
-				data.AdherenceGoldThreshold.Value,
+				data.AdherenceThreshold.Value * 100,
+				data.AdherenceBronzeThreshold.Value * 100,
+				data.AdherenceSilverThreshold.Value * 100,
+				data.AdherenceGoldThreshold.Value * 100,
 				'\\d+(\.\d+)?$',
 				100.0,
 				'desc'
@@ -63,7 +63,7 @@
 				null,
 				null,
 				'AHT',
-				'2',
+				2,
 				true,
 				data.AHTThreshold,
 				data.AHTBronzeThreshold,
@@ -97,6 +97,17 @@
 					x.GoldThreshold,
 					'\\d+(\.\d+)?$'
 				);
+
+				if (config.dataType == 0) {
+					config.valueFormat = '^\\d+$';
+				} else {
+					config.valueFormat = '\\d+(\.\d+)?$';
+					config.badgeThreshold = config.badgeThreshold * 100;
+					config.goldBadgeThreshold = config.goldBadgeThreshold * 100;
+					config.silverBadgeThreshold = config.silverBadgeThreshold * 100;
+					config.bronzeBadgeThreshold = config.bronzeBadgeThreshold * 100;
+				}
+
 				measureConfigs.push(config);
 				if (config.enabled) enabled.push(config);
 			});
@@ -318,6 +329,21 @@
 
 			var self = this;
 
+			if (!this.builtin) {
+				dataService.saveData('ExternalBadgeSettingThreshold', {
+					GamificationSettingId: ctrl.id,
+					QualityId: this.externalId,
+					DataType: this.dataType,
+					ThresholdValue: this.dataType === 1 ? this.badgeThreshold / 100 : this.badgeThreshold
+				}).then(function () {
+					$log.log('updated badge threshold')
+				}, function () {
+					$log.error('failed to update badge threshold. restoring: ' + previous);
+					self.bronzeBadgeThreshold = previous;
+				});
+				return;
+			}
+
 			switch (this.name) {
 				case 'AnsweredCalls':
 					dataService.saveData('AnsweredCallsThreshold', {
@@ -335,7 +361,7 @@
 				case 'Adherence':
 					dataService.saveData('AdherenceThreshold', {
 						GamificationSettingId: ctrl.id,
-						Value: this.badgeThreshold
+						Value: this.badgeThreshold / 100
 					}).then(function () {
 						$log.info(self.name + ': updated badge threshold')
 					}, function () {
@@ -344,6 +370,17 @@
 					});
 					break;
 
+				case 'AHT':
+					dataService.saveData('AHTThreshold', {
+						GamificationSettingId: ctrl.id,
+						Value: this.badgeThresholds
+					}).then(function () {
+						$log.info(self.name + ': updated badge threshold')
+					}, function () {
+						$log.error(self.name + ': failed to update badge threshold. restoring: ' + previous);
+						self.badgeThreshold = previous;
+					});
+					break;
 				default:
 					break;
 			}
@@ -362,7 +399,7 @@
 					GamificationSettingId: ctrl.id,
 					QualityId: this.externalId,
 					DataType: this.dataType,
-					ThresholdValue: this.bronzeBadgeThreshold
+					ThresholdValue: this.dataType === 1 ? this.bronzeBadgeThreshold / 100 : this.bronzeBadgeThreshold
 				}).then(function () {
 					$log.log('updated bronze badge threshold')
 				}, function () {
@@ -388,7 +425,7 @@
 				case 'Adherence':
 					dataService.saveData('AdherenceBronzeThreshold', {
 						GamificationSettingId: ctrl.id,
-						Value: this.bronzeBadgeThreshold
+						Value: this.bronzeBadgeThreshold / 100
 					}).then(function () {
 						$log.log('updated bronze badge threshold')
 					}, function () {
@@ -427,7 +464,7 @@
 					GamificationSettingId: ctrl.id,
 					QualityId: this.externalId,
 					DataType: this.dataType,
-					ThresholdValue: this.silverBadgeThreshold
+					ThresholdValue: this.dataType === 1 ? this.silverBadgeThreshold / 100 : this.silverBadgeThreshold
 				}).then(function () {
 					$log.log('updated silver badge threshold')
 				}, function () {
@@ -453,7 +490,7 @@
 				case 'Adherence':
 					dataService.saveData('AdherenceSilverThreshold', {
 						GamificationSettingId: ctrl.id,
-						Value: this.silverBadgeThreshold
+						Value: this.silverBadgeThreshold / 100
 					}).then(function () {
 						$log.log('updated silver badge threshold')
 					}, function () {
@@ -492,7 +529,7 @@
 					GamificationSettingId: ctrl.id,
 					QualityId: this.externalId,
 					DataType: this.dataType,
-					ThresholdValue: this.goldBadgeThreshold
+					ThresholdValue: this.dataType === 1 ? this.goldBadgeThreshold / 100 : this.goldBadgeThreshold
 				}).then(function () {
 					$log.log('updated gold badge threshold')
 				}, function () {
@@ -518,7 +555,7 @@
 				case 'Adherence':
 					dataService.saveData('AdherenceGoldThreshold', {
 						GamificationSettingId: ctrl.id,
-						Value: this.goldBadgeThreshold
+						Value: this.goldBadgeThreshold / 100
 					}).then(function () {
 						$log.log('updated gold badge threshold')
 					}, function () {

@@ -25,14 +25,16 @@
 	<div ng-if="$ctrl.ruleSet == 0" class="form-input-wrap">
 		<div>
 			<label for="silverRate">{{'OneSilverBadgeEqualsBronzeBadgeCount'|translate}}</label>
-			<input type="number" name="silverRate" pattern="^\d+$" max="100" min="2" ng-model="$ctrl.silverRate" ng-model-options="{allowInvalid: false}" ng-change="$ctrl.updateSilverRate()" />
+			<input type="number" name="silverRate" pattern="^\d+$" max="100" min="2" ng-model="$ctrl.silverRate" ng-model-options="{allowInvalid: false}"
+			 ng-change="$ctrl.updateSilverRate()" />
 			<div class="text-danger validation">
 				<span ng-if="form.silverRate.$invalid">{{'Invalid'|translate}}</span>
 			</div>
 		</div>
 		<div>
 			<label for="goldRate">{{'OneGoldBadgeEqualsSilverBadgeCount'|translate}}</label>
-			<input type="number" name="goldRate" pattern="^\d+$" max="100" min="2" ng-model="$ctrl.goldRate" ng-model-options="{allowInvalid: false}" ng-change="$ctrl.updateGoldRate()" />
+			<input type="number" name="goldRate" pattern="^\d+$" max="100" min="2" ng-model="$ctrl.goldRate" ng-model-options="{allowInvalid: false}"
+			 ng-change="$ctrl.updateGoldRate()" />
 			<div class="text-danger validation">
 				<span ng-if="form.goldRate.$invalid">{{'Invalid'|translate}}</span>
 			</div>
@@ -76,7 +78,7 @@
 			</card-header>
 			<card-body>
 				<measure-config-form1 ng-if="$ctrl.ruleSet == 0" read-only="!config.enabled" badge-threshold="config.badgeThreshold" value-data-type="config.dataType"
-				 value-format="config.valueFormat" on-update="config.setBadgeThreshold(threshold)">
+				 value-format="config.valueFormat" on-update="config.setBadgeThreshold(badgeThreshold)">
 				</measure-config-form1>
 
 				<measure-config-form2 ng-if="$ctrl.ruleSet == 1" read-only="!config.enabled" bronze-badge-threshold="config.bronzeBadgeThreshold"
