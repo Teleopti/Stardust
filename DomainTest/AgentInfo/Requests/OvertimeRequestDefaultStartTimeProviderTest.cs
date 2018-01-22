@@ -167,6 +167,25 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		}
 
 		[Test]
+		public void ShouldStillGetShiftEndTimeAsDefaultStartTimeWhenShiftEndsTodayThoughTheGapBetweenCurrentTimeAndShiftStartTimeIsMoreThan20Min()
+		{
+			Now.Is(new DateTime(2018, 1, 8, 07, 00, 00, DateTimeKind.Utc));
+			var date = new DateOnly(2018, 1, 8);
+			var agent = PersonFactory.CreatePersonWithGuid("agent", "one");
+			FakeLoggedOnUser.SetFakeLoggedOnUser(agent);
+			var phone = ActivityFactory.CreateActivity("phone activity");
+			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(agent, CurrentScenario.Current(), date);
+			personAssignment.AddActivity(phone, new DateTimePeriod(2018, 1, 8, 08, 2018, 1, 8, 17));
+			FakeAssignmentRepository.Has(personAssignment);
+
+			var result = OvertimeRequestDefaultStartTimeProvider.GetDefaultStartTime(date);
+
+			result.Date.Should().Be(date.Date);
+			result.Hour.Should().Be(17);
+			result.Minute.Should().Be(0);
+		}
+
+		[Test]
 		public void ShouldGetSelectedDayOvernightShiftStartTimeAsDefaultStartTime()
 		{
 			Now.Is(new DateTime(2018, 1, 8, 18, 00, 00, DateTimeKind.Utc));
@@ -311,7 +330,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			var result = OvertimeRequestDefaultStartTimeProvider.GetDefaultStartTime(date);
 
 			result.Date.Should().Be(date.Date);
-			result.Hour.Should().Be(9);
+			result.Hour.Should().Be(18);
 			result.Minute.Should().Be(0);
 		}
 	}

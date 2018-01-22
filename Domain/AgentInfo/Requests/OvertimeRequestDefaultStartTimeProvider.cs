@@ -29,17 +29,18 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			var currentUser = _loggedOnUser.CurrentUser();
 			var currentUserTimeZone = currentUser.PermissionInformation.DefaultTimeZone();
 
-			var possibleShiftEndTimes = getPossibleShiftEndTimes(date);
+			var yesterdayAndTodaysPossibleShiftEndTimes = getPossibleShiftEndTimes(date);
 			var requestDate = TimeZoneHelper.ConvertToUtc(date.Date, currentUserTimeZone);
 
 			var shiftStartTime = _shiftStartTimeProvider.GetShiftStartTimeForPerson(currentUser, date);
-			var validEndTimeList = possibleShiftEndTimes
+			var validEndTimeList = yesterdayAndTodaysPossibleShiftEndTimes
 				.Where(e => _now.UtcDateTime().CompareTo(e) < 0 && e.CompareTo(requestDate) >= 0).ToList();
 
 			var utcNowPlusGap = _now.UtcDateTime().AddMinutes(OvertimeMinimumApprovalThresholdInMinutes.MinimumApprovalThresholdTimeInMinutes +
 														   _overtimeRequestStartTimeFlexibilityInMinutes);
 
-			if (shiftStartTime.HasValue && utcNowPlusGap.CompareTo(shiftStartTime) <= 0)
+			if (shiftStartTime.HasValue && utcNowPlusGap.CompareTo(shiftStartTime) <= 0 &&
+				yesterdayAndTodaysPossibleShiftEndTimes.Last().Date == date.AddDays(1).Date)
 			{
 				return TimeZoneHelper.ConvertFromUtc(shiftStartTime.GetValueOrDefault(), currentUserTimeZone);
 			}
