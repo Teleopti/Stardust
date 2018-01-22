@@ -9,7 +9,7 @@
 			<i class="mdi mdi-content-save"></i>
 			<md-tooltip>{{'Save'|translate}}</md-tooltip>
 		</button>
-		<button class="wfm-fab material-depth-1 grow-out pull-right" id="exit_sgm" ng-click="vm.canSave ? vm.closeConfirmation=true : vm.exitConfigMode();">
+		<button class="wfm-fab material-depth-1 grow-out pull-right" id="exit_sgm" ng-click="vm.hasChanges() || vm.hasEmptySkillList() ? vm.closeConfirmation=true : vm.exitConfigMode();">
 			<i class="mdi mdi-close"></i>
 			<md-tooltip>{{'Close'|translate}}</md-tooltip>
 		</button>
