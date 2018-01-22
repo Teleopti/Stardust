@@ -1,5 +1,5 @@
 <form autocomplete="off" name="form2" class="wfm-form">
-	<span class="text-danger" style="height: 1em;">{{$ctrl.errorMsg|translate}}</span>
+	<div class="text-danger validation">{{$ctrl.errorMsg|translate}}</div>
 	<div class="con-row">
 		<div class="con-flex">
 			<label>
@@ -8,8 +8,8 @@
 				 ng-blur="$ctrl.updateGoldThreshold(form2.goldBadgeThreshold.$invalid)" ng-keyup="$ctrl.keyUp($event, form2.goldBadgeThreshold.$invalid)"
 				 threshold-validator="{{::$ctrl.valueFormat}};{{$ctrl.max}};{{$ctrl.valueDataType}}" />
 			</label>
-			<div class="text-danger" style="height: 1em;">
-				<span ng-show="form2.goldBadgeThreshold.$invalid">{{'Invalid'|translate}}</span>
+			<div class="text-danger validation">
+				<div ng-show="form2.goldBadgeThreshold.$invalid">{{'Invalid'|translate}}</div>
 			</div>
 		</div>
 		<div class="con-flex">
@@ -20,8 +20,8 @@
 				 ng-blur="$ctrl.updateSilverThreshold(form2.silverBadgeThreshold.$invalid)" ng-keyup="$ctrl.keyUp($event, form2.silverBadgeThreshold.$invalid)"
 				 threshold-validator="{{::$ctrl.valueFormat}};{{$ctrl.max}};{{$ctrl.valueDataType}}" />
 			</label>
-			<div class="text-danger" style="height: 1em;">
-				<span ng-show="form2.silverBadgeThreshold.$invalid">{{'Invalid'|translate}}</span>
+			<div class="text-danger validation">
+				<div ng-show="form2.silverBadgeThreshold.$invalid">{{'Invalid'|translate}}</div>
 			</div>
 		</div>
 		<div class="con-flex">
@@ -31,8 +31,8 @@
 				 ng-blur="$ctrl.updateBronzeThreshold(form2.bronzeBadgeThreshold.$invalid)" ng-keyup="$ctrl.keyUp($event, form2.bronzeBadgeThreshold.$invalid)"
 				 threshold-validator="{{::$ctrl.valueFormat}};{{$ctrl.max}};{{$ctrl.valueDataType}}" />
 			</label>
-			<div class="text-danger" style="height: 1em;">
-				<span ng-show="form2.bronzeBadgeThreshold.$invalid">{{'Invalid'|translate}}</span>
+			<div class="text-danger validation">
+				<div ng-show="form2.bronzeBadgeThreshold.$invalid">{{'Invalid'|translate}}</div>
 			</div>
 		</div>
 		<div class="con-flex">

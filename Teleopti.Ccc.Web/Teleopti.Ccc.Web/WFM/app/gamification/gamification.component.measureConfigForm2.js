@@ -71,44 +71,82 @@
 					checkValueOrder();
 				}
 
+				function silverIsGreaterThanBronzeAndLessThanGold(gold, silver, bronze) {
+					return (silver <  gold && silver > bronze);
+				}
+
+				function silverIsGreaterThanGoldAndLessThanBronze(gold, silver, bronze) {
+					return (silver >  gold && silver < bronze);
+				}
+
 				function checkValueOrder() {
 					if (!ctrl.valueDataType || !ctrl.valueOrder) {
 						return;
 					}
+
+					var goldValue, silverValue, bronzeValue;
+
 					var valueOrder = ctrl.valueOrder;
 					if (valueOrder == 'asc') {
 						if (ctrl.valueDataType == '0' || ctrl.valueDataType == '1') {
-							var glodValue = parseFloat(ctrl._goldBadgeThreshold);
-							if (glodValue > parseFloat(ctrl._silverBadgeThreshold) || glodValue > parseFloat(ctrl._bronzeBadgeThreshold)) {
+							goldValue = parseFloat(ctrl._goldBadgeThreshold);
+							silverValue = parseFloat(ctrl._silverBadgeThreshold);
+							bronzeValue = parseFloat(ctrl._bronzeBadgeThreshold);
+
+							if (goldValue > silverValue || goldValue > bronzeValue) {
 								ctrl.errorMsg = 'GoldThresholdValueShouldSmallerThenRest';
+							}
+							else if (!silverIsGreaterThanGoldAndLessThanBronze(goldValue, silverValue, bronzeValue)) {
+								ctrl.errorMsg = 'ValuesShouldBeInAscendingOrder';
 							}
 							else {
 								ctrl.errorMsg = '';
 							}
 						}
 						else {
-							var glodValue = convertValueForTime(ctrl._goldBadgeThreshold);
-							if (glodValue > convertValueForTime(ctrl._silverBadgeThreshold) || glodValue > convertValueForTime(ctrl._bronzeBadgeThreshold)) {
+							goldValue = convertValueForTime(ctrl._goldBadgeThreshold);
+							silverValue = convertValueForTime(ctrl._silverBadgeThreshold);
+							bronzeValue = convertValueForTime(ctrl._bronzeBadgeThreshold);
+
+							if (goldValue > silverValue || goldValue > bronzeValue) {
 								ctrl.errorMsg = 'GoldThresholdValueShouldSmallerThenRest';
-							} else {
+							}
+							else if (!silverIsGreaterThanGoldAndLessThanBronze(goldValue, silverValue, bronzeValue)) {
+								ctrl.errorMsg = 'ValuesShouldBeInAscendingOrder';
+							}
+							else {
 								ctrl.errorMsg = '';
 							}
 						}
-					} else if (valueOrder == 'desc') {
+					}
+					else if (valueOrder == 'desc') {
 						if (ctrl.valueDataType == '0' || ctrl.valueDataType == '1') {
-							var glodValue = parseFloat(ctrl._goldBadgeThreshold);
-							if (glodValue < parseFloat(ctrl._silverBadgeThreshold) || glodValue < parseFloat(ctrl._bronzeBadgeThreshold)) {
-								ctrl.errorMsg = "GoldThresholdValueShouldLargerThenRest";
+							goldValue = parseFloat(ctrl._goldBadgeThreshold);
+							silverValue = parseFloat(ctrl._silverBadgeThreshold);
+							bronzeValue = parseFloat(ctrl._bronzeBadgeThreshold);
+
+							if (goldValue < silverValue || goldValue < bronzeValue) {
+								ctrl.errorMsg = 'GoldThresholdValueShouldLargerThenRest';
+							}
+							else if (!silverIsGreaterThanBronzeAndLessThanGold(goldValue, silverValue, bronzeValue)) {
+								ctrl.errorMsg = 'ValuesShouldBeInDescendingOrder';
 							}
 							else {
 								ctrl.errorMsg = '';
 							}
 						}
 						else {
-							var glodValue = convertValueForTime(ctrl._goldBadgeThreshold);
-							if (glodValue < convertValueForTime(ctrl._silverBadgeThreshold) || glodValue < convertValueForTime(ctrl._bronzeBadgeThreshold)) {
+							goldValue = convertValueForTime(ctrl._goldBadgeThreshold);
+							silverValue = convertValueForTime(ctrl._silverBadgeThreshold);
+							bronzeValue = convertValueForTime(ctrl._bronzeBadgeThreshold);
+
+							if (goldValue < silverValue || goldValue < bronzeValue) {
 								ctrl.errorMsg = 'GoldThresholdValueShouldLargerThenRest';
-							} else {
+							}
+							else if (!silverIsGreaterThanBronzeAndLessThanGold(goldValue, silverValue, bronzeValue)) {
+								ctrl.errorMsg = 'ValuesShouldBeInDescendingOrder';
+							}
+							else {
 								ctrl.errorMsg = '';
 							}
 						}

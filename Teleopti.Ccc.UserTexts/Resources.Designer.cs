@@ -17618,6 +17618,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Measures.
+        /// </summary>
+        public static string Measures {
+            get {
+                return ResourceManager.GetString("Measures", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Measure type must be either &quot;Numeric&quot; or &quot;Percent&quot;.
         /// </summary>
         public static string MeasureTypeMustBeEitherNumericOrPercent {
@@ -36993,6 +37002,24 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ValueRange {
             get {
                 return ResourceManager.GetString("ValueRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Values should be in ascending order.
+        /// </summary>
+        public static string ValuesShouldBeInAscendingOrder {
+            get {
+                return ResourceManager.GetString("ValuesShouldBeInAscendingOrder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Values should be in descending order.
+        /// </summary>
+        public static string ValuesShouldBeInDescendingOrder {
+            get {
+                return ResourceManager.GetString("ValuesShouldBeInDescendingOrder", resourceCulture);
             }
         }
         

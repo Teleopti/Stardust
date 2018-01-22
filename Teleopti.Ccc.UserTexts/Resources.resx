@@ -17061,4 +17061,16 @@ Do you want to participate?</value>
     <value>Skill type</value>
     <comment>column name for skill type in overtime request open period</comment>
   </data>
+  <data name="Measures" xml:space="preserve">
+    <value>Measures</value>
+    <comment>As in Gamification, e.g. Answered Calls</comment>
+  </data>
+  <data name="ValuesShouldBeInAscendingOrder" xml:space="preserve">
+    <value>Values should be in ascending order</value>
+    <comment>Message shown when the gold, silver and bronze thresholds are not in ascending order</comment>
+  </data>
+  <data name="ValuesShouldBeInDescendingOrder" xml:space="preserve">
+    <value>Values should be in descending order</value>
+    <comment>Message shown when the gold, silver and bronze thresholds are not in descending order</comment>
+  </data>
 </root>
