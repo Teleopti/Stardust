@@ -254,6 +254,7 @@
     <Compile Include="Transformer\Job\JobsParameters.cs" />
     <Compile Include="Transformer\Job\JobStepBase.cs" />
     <Compile Include="Transformer\Job\JobStepResult.cs" />
+    <Compile Include="Transformer\Job\Jobs\UpgradeMaintenanceJobCollection.cs" />
     <Compile Include="Transformer\Job\Jobs\AgentSkillCollection.cs" />
     <Compile Include="Transformer\Job\Jobs\AgentStatisticsJobCollection.cs" />
     <Compile Include="Transformer\Job\Jobs\JobStepCollectionBase.cs" />
@@ -333,6 +334,7 @@
     <Compile Include="Transformer\Job\Steps\IntradayStageAvailabilityJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\JobBase.cs" />
     <Compile Include="Transformer\Job\Steps\LicenseCheckJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\DelayedJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\MaintenanceJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\NotificationFactory.cs" />
     <Compile Include="Transformer\Job\Steps\PerformanceManagerJobStep.cs" />

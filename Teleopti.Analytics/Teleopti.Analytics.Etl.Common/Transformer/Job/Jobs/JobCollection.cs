@@ -30,6 +30,8 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			// If PM is installed then show ETL job for processing cube
 			if (jobParameters.IsPmInstalled)
 				Add(new JobBase(jobParameters, new PerformanceManagerJobCollection(jobParameters), "Process Cube", false, false));
+
+			Add(new JobBase(jobParameters, new UpgradeMaintenanceJobCollection(jobParameters), "Upgrade Maintenance", false, false));
 		}
 
 
