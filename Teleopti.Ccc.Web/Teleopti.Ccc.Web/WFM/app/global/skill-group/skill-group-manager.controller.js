@@ -274,7 +274,6 @@
 					return item.Name;
 				}
 			);
-			setSaveableState();
 			unselectAllSkills();
 		};
 
