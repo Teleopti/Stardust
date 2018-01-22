@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
@@ -8,6 +9,7 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Interfaces.Domain;
@@ -23,11 +25,15 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		private readonly INow _now;
 		private readonly PersonalSkills _personalSkills = new PersonalSkills();
 		private readonly ISupportedSkillsInIntradayProvider _supportedSkillsInIntradayProvider;
-		private readonly IPrimaryPersonSkillFilter _primaryPersonSkillFilter;
+		private readonly IOvertimeRequestSkillProvider _overtimeRequestSkillProvider;
 
-
-		public ScheduleStaffingPossibilityCalculator(ILoggedOnUser loggedOnUser, IScheduleStorage scheduleStorage,
-			ICurrentScenario scenarioRepository, ISkillStaffingDataLoader skillStaffingDataLoader, INow now, ISupportedSkillsInIntradayProvider supportedSkillsInIntradayProvider, IPrimaryPersonSkillFilter primaryPersonSkillFilter)
+		public ScheduleStaffingPossibilityCalculator(ILoggedOnUser loggedOnUser, 
+			IScheduleStorage scheduleStorage,
+			ICurrentScenario scenarioRepository, 
+			ISkillStaffingDataLoader skillStaffingDataLoader,
+			INow now, 
+			ISupportedSkillsInIntradayProvider supportedSkillsInIntradayProvider, 
+			IOvertimeRequestSkillProvider overtimeRequestSkillProvider)
 		{
 			_loggedOnUser = loggedOnUser;
 			_scheduleStorage = scheduleStorage;
@@ -35,7 +41,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			_skillStaffingDataLoader = skillStaffingDataLoader;
 			_now = now;
 			_supportedSkillsInIntradayProvider = supportedSkillsInIntradayProvider;
-			_primaryPersonSkillFilter = primaryPersonSkillFilter;
+			_overtimeRequestSkillProvider = overtimeRequestSkillProvider;
 		}
 
 		public IList<CalculatedPossibilityModel> CalculateIntradayAbsenceIntervalPossibilities(DateOnlyPeriod period)
@@ -52,8 +58,18 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		public IList<CalculatedPossibilityModel> CalculateIntradayOvertimeIntervalPossibilities(DateOnlyPeriod period)
 		{
 			var scheduleDictionary = loadScheduleDictionary(period);
-			var skills = _primaryPersonSkillFilter.Filter(getSupportedPersonSkills(period)).Select(s => s.Skill).ToArray();
+
+			var person = _loggedOnUser.CurrentUser();
+			var wfcs = person.WorkflowControlSet;
+			var defaultTimeZone = person.PermissionInformation.DefaultTimeZone();
+			var dateTimePeriod = period.ToDateTimePeriod(defaultTimeZone);
+			var overtimeRequestOpenPeriod = wfcs?.GetMergedOvertimeRequestOpenPeriod(dateTimePeriod,
+				new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), defaultTimeZone)), person.PermissionInformation);
+
+			var skills = _overtimeRequestSkillProvider.GetAvailableSkills(person, dateTimePeriod, overtimeRequestOpenPeriod).ToList();
+			
 			var useShrinkage = true;
+
 			var skillStaffingDatas = _skillStaffingDataLoader.Load(skills, period, useShrinkage, isSiteOpened);
 			Func<ISkill, IValidatePeriod, bool> isSatisfied =
 				(skill, validatePeriod) => !new IntervalHasSeriousUnderstaffing(skill).IsSatisfiedBy(validatePeriod);

@@ -321,5 +321,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		bool OvertimeRequestMaximumTimeEnabled { get; set; }
 		void InsertOvertimePeriod(IOvertimeRequestOpenPeriod newOvertimeRequestOpenPeriod, int currentIndex);
 		IOvertimeRequestOpenPeriod GetMergedOvertimeRequestOpenPeriod(IOvertimeRequest overtimeRequest, DateOnly viewpointDate);
+		IOvertimeRequestOpenPeriod GetMergedOvertimeRequestOpenPeriod(DateTimePeriod period, DateOnly viewpointDate, IPermissionInformation permissionInformation);
 	}
 }

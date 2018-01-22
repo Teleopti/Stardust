@@ -9,10 +9,13 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -44,6 +47,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakeSkillRepository SkillRepository;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
+		public FakeSkillTypeRepository SkillTypeRepository;
 
 		private readonly TimeSpan[] intervals = { TimeSpan.FromMinutes(495), TimeSpan.FromMinutes(510) };
 
@@ -54,6 +58,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			system.UseTestDouble<FakeSkillCombinationResourceRepository>().For<ISkillCombinationResourceRepository>();
 			system.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
 			system.UseTestDouble<FakeTimeZoneGuard>().For<ITimeZoneGuard>();
+			system.UseTestDouble<FakeSkillTypeRepository>().For<ISkillTypeRepository>();
 		}
 
 		[Test, SetCulture("en-US")]
@@ -264,6 +269,96 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			setupSiteOpenHour();
 			setupDefaultTestData(new double?[] { 10d, 10d }, new double?[] { 22d, 22d });
+			var possibilities = getPossibilityViewModels(null, StaffingPossiblityType.Overtime)
+				.Where(d => d.Date == Now.ServerDate_DontUse().ToFixedClientDateOnlyFormat()).ToList();
+			Assert.AreEqual(2, possibilities.Count);
+			Assert.AreEqual(0, possibilities.ElementAt(0).Possibility);
+			Assert.AreEqual(0, possibilities.ElementAt(1).Possibility);
+		}
+
+		[Test]
+		[Toggle(Toggles.OvertimeRequestPeriodSetting_46417)]
+		[Toggle(Toggles.OvertimeRequestPeriodSkillTypeSetting_47290)]
+		public void ShouldNotGetPossibilitiesForOvertimeWhenOverstaffingAndNoSkillTypeIsMatched()
+		{
+			setupSiteOpenHour();
+
+			var person = User.CurrentUser();
+			var activity1 = createActivity();
+			var skill1 = createSkill("skill1");
+			var personSkill1 = createPersonSkill(activity1, skill1);
+			setupIntradayStaffingForSkill(skill1, new double?[] { 10d, 10d }, new double?[] { 22d, 22d });
+			addPersonSkillsToPersonPeriod(personSkill1);
+
+			createAssignment(person, activity1);
+
+			var workflowControlSet = new WorkflowControlSet();
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod{
+				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
+				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(13))),
+				SkillType = new SkillTypeEmail(new Description(SkillTypeIdentifier.Email), ForecastSource.Email).WithId()});
+			User.CurrentUser().WorkflowControlSet = workflowControlSet;
+
+			var possibilities = getPossibilityViewModels(null, StaffingPossiblityType.Overtime)
+				.Where(d => d.Date == Now.ServerDate_DontUse().ToFixedClientDateOnlyFormat()).ToList();
+			Assert.AreEqual(0, possibilities.Count);
+		}
+
+		[Test]
+		[Toggle(Toggles.OvertimeRequestPeriodSetting_46417)]
+		[Toggle(Toggles.OvertimeRequestPeriodSkillTypeSetting_47290)]
+		public void ShouldGetFairPossibilitiesForOvertimeWhenOverstaffingAndSkillTypeIsMatched()
+		{
+			setupSiteOpenHour();
+			var person = User.CurrentUser();
+			var activity1 = createActivity();
+			var skill1 = createSkill("skill1");
+			var personSkill1 = createPersonSkill(activity1, skill1);
+			setupIntradayStaffingForSkill(skill1, new double?[] { 10d, 10d }, new double?[] { 22d, 22d });
+			addPersonSkillsToPersonPeriod(personSkill1);
+
+			createAssignment(person, activity1);
+
+			var workflowControlSet = new WorkflowControlSet();
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
+				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(13))),
+				SkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony).WithId()
+			});
+			User.CurrentUser().WorkflowControlSet = workflowControlSet;
+
+			var possibilities = getPossibilityViewModels(null, StaffingPossiblityType.Overtime)
+				.Where(d => d.Date == Now.ServerDate_DontUse().ToFixedClientDateOnlyFormat()).ToList();
+			Assert.AreEqual(2, possibilities.Count);
+			Assert.AreEqual(0, possibilities.ElementAt(0).Possibility);
+			Assert.AreEqual(0, possibilities.ElementAt(1).Possibility);
+		}
+
+		[Test]
+		[Toggle(Toggles.OvertimeRequestPeriodSetting_46417)]
+		[Toggle(Toggles.OvertimeRequestPeriodSkillTypeSetting_47290)]
+		public void ShouldGetFairPossibilitiesForOvertimeWhenOverstaffingAndSkillTypeIsNotSet()
+		{
+			setupSiteOpenHour();
+			var person = User.CurrentUser();
+			var activity1 = createActivity();
+			var skill1 = createSkill("skill1");
+			var personSkill1 = createPersonSkill(activity1, skill1);
+			setupIntradayStaffingForSkill(skill1, new double?[] { 10d, 10d }, new double?[] { 22d, 22d });
+			addPersonSkillsToPersonPeriod(personSkill1);
+
+			SkillTypeRepository.Add(new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony));
+			createAssignment(person, activity1);
+
+			var workflowControlSet = new WorkflowControlSet();
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
+				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(13)))
+			});
+			User.CurrentUser().WorkflowControlSet = workflowControlSet;
+
 			var possibilities = getPossibilityViewModels(null, StaffingPossiblityType.Overtime)
 				.Where(d => d.Date == Now.ServerDate_DontUse().ToFixedClientDateOnlyFormat()).ToList();
 			Assert.AreEqual(2, possibilities.Count);
@@ -519,7 +614,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 		[Test]
 		[Toggle(Toggles.MyTimeWeb_CalculateOvertimeProbabilityByPrimarySkill_44686)]
-		public void ShouldGetOvertimePossibiliesWhenAgentHasNoCascadingSkillInPrimarySkills()
+		public void ShouldGetOvertimePossibilitiesWhenAgentHasNoCascadingSkillInPrimarySkills()
 		{
 			var primarySkill = createSkill("primarySkill");
 			primarySkill.SetCascadingIndex(1);
@@ -545,7 +640,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		public void ShouldNotGetOvertimePossibiliesWhenSiteOpenHourIsClosed()
+		public void ShouldNotGetOvertimePossibilitiesWhenSiteOpenHourIsClosed()
 		{
 			var personPeriod = getOrAddPersonPeriod();
 			var team = personPeriod.Team;
@@ -563,7 +658,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test, SetCulture("en-US")]
-		public void ShouldNotGetOvertimePossibiliesForDaysWhichSiteOpenHourIsClosed()
+		public void ShouldNotGetOvertimePossibilitiesForDaysWhichSiteOpenHourIsClosed()
 		{
 			var personPeriod = getOrAddPersonPeriod();
 			var team = personPeriod.Team;

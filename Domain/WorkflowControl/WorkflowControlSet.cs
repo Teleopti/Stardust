@@ -477,12 +477,18 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 		public virtual IAbsenceRequestOpenPeriod GetMergedAbsenceRequestOpenPeriod(IAbsenceRequest absenceRequest)
 		{
-			return getMergedOpenPeriods(absenceRequest, getRequestPeriod(absenceRequest));
+			var agentTimeZone = absenceRequest.Person.PermissionInformation.DefaultTimeZone();
+			return getMergedOpenPeriods(absenceRequest, absenceRequest.Period.ToDateOnlyPeriod(agentTimeZone));
 		}
 
 		public virtual IOvertimeRequestOpenPeriod GetMergedOvertimeRequestOpenPeriod(IOvertimeRequest overtimeRequest, DateOnly viewpointDate)
 		{
 			return getMergedOvertimeRequestOpenPeriod(overtimeRequest, viewpointDate);
+		}
+
+		public virtual IOvertimeRequestOpenPeriod GetMergedOvertimeRequestOpenPeriod(DateTimePeriod period, DateOnly viewpointDate, IPermissionInformation permissionInformation)
+		{
+			return getMergedOvertimeRequestOpenPeriod(viewpointDate, permissionInformation, period);
 		}
 
 		public virtual bool IsAbsenceRequestValidatorEnabled<T>(TimeZoneInfo timeZone)
@@ -520,12 +526,6 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 				   && openPeriod.StaffingThresholdValidator.GetType() != typeof(AbsenceRequestNoneValidator);
 		}
 
-		private DateOnlyPeriod getRequestPeriod(IRequest request)
-		{
-			var agentTimeZone = request.Person.PermissionInformation.DefaultTimeZone();
-			return request.Period.ToDateOnlyPeriod(agentTimeZone);
-		}
-
 		private IAbsenceRequestOpenPeriod getMergedOpenPeriods(IAbsenceRequest absenceRequest, DateOnlyPeriod dateOnlyPeriod)
 		{
 			var extractor = GetExtractorForAbsence(absenceRequest.Absence);
@@ -541,11 +541,22 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 		private IOvertimeRequestOpenPeriod getMergedOvertimeRequestOpenPeriod(IOvertimeRequest overtimeRequest, DateOnly viewpointDate)
 		{
+			var permissionInformation = overtimeRequest.Person.PermissionInformation;
+			var period = overtimeRequest.Period;
+
+			return getMergedOvertimeRequestOpenPeriod(viewpointDate, permissionInformation, period);
+		}
+
+		private IOvertimeRequestOpenPeriod getMergedOvertimeRequestOpenPeriod(DateOnly viewpointDate,
+			IPermissionInformation permissionInformation, DateTimePeriod period)
+		{
 			var overtimePeriodProjection = new OvertimeRequestPeriodProjection(OvertimeRequestOpenPeriods,
-				overtimeRequest.Person.PermissionInformation.Culture(), 
-				overtimeRequest.Person.PermissionInformation.UICulture(),
+				permissionInformation.Culture(),
+				permissionInformation.UICulture(),
 				viewpointDate);
-			var dateOnlyPeriod = getRequestPeriod(overtimeRequest);
+
+			var agentTimeZone = permissionInformation.DefaultTimeZone();
+			var dateOnlyPeriod = period.ToDateOnlyPeriod(agentTimeZone);
 			var openPeriods = overtimePeriodProjection.GetProjectedOvertimeRequestsOpenPeriods(dateOnlyPeriod);
 			return new OvertimeRequestOpenPeriodMerger().Merge(openPeriods);
 		}
