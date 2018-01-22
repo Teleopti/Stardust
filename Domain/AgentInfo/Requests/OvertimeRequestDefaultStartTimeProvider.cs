@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			_shiftStartTimeProvider = shiftStartTimeProvider;
 		}
 
-		public DateTime GetDefaultStartTime(DateOnly date)
+		public OvertimeDefaultStartTimeResult GetDefaultStartTime(DateOnly date)
 		{
 			var currentUser = _loggedOnUser.CurrentUser();
 			var currentUserTimeZone = currentUser.PermissionInformation.DefaultTimeZone();
@@ -42,19 +42,31 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			if (shiftStartTime.HasValue && utcNowPlusGap.CompareTo(shiftStartTime) <= 0 &&
 				yesterdayAndTodaysPossibleShiftEndTimes.Last().Date == date.AddDays(1).Date)
 			{
-				return TimeZoneHelper.ConvertFromUtc(shiftStartTime.GetValueOrDefault(), currentUserTimeZone);
+				return buildDefaultStartTimeResult(TimeZoneHelper.ConvertFromUtc(shiftStartTime.GetValueOrDefault(), currentUserTimeZone), true, false);
 			}
 
 			if (validEndTimeList.Any(e => utcNowPlusGap.CompareTo(e) <= 0))
 			{
 				if (utcNowPlusGap.CompareTo(validEndTimeList.Min()) <= 0)
 				{
-					return TimeZoneHelper.ConvertFromUtc(validEndTimeList.Min(), currentUserTimeZone);
+					return buildDefaultStartTimeResult(TimeZoneHelper.ConvertFromUtc(validEndTimeList.Min(), currentUserTimeZone), false, true);
 				}
-				return getLocalRoundUpHour(utcNowPlusGap);
+				return buildDefaultStartTimeResult(getLocalRoundUpHour(utcNowPlusGap), false, false);
 			}
 
-			return getLocalRoundUpHour(_now.UtcDateTime());
+			return buildDefaultStartTimeResult(getLocalRoundUpHour(_now.UtcDateTime()), false, false);
+		}
+
+		private OvertimeDefaultStartTimeResult buildDefaultStartTimeResult(DateTime datetime, bool isShiftStartTime, bool isShiftEndTime)
+		{
+			var result = new OvertimeDefaultStartTimeResult
+			{
+				IsShiftStartTime = isShiftStartTime,
+				IsShiftEndTime = isShiftEndTime,
+				DefaultStartTime = datetime
+			};
+
+			return result;
 		}
 
 		private DateTime[] getPossibleShiftEndTimes(DateOnly date)

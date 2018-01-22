@@ -144,6 +144,7 @@
     <Compile Include="AgentInfo\Requests\IShiftStartTimeProvider.cs" />
     <Compile Include="AgentInfo\Requests\IShiftEndTimeProvider.cs" />
     <Compile Include="AgentInfo\Requests\ISkillOpenHourFilter.cs" />
+    <Compile Include="AgentInfo\Requests\OvertimeDefaultStartTimeResult.cs" />
     <Compile Include="AgentInfo\Requests\OvertimeRequestApprovalService.cs" />
     <Compile Include="AgentInfo\Requests\AbsenceRequestApprovalService.cs" />
     <Compile Include="AgentInfo\Requests\OvertimeRequest.cs" />

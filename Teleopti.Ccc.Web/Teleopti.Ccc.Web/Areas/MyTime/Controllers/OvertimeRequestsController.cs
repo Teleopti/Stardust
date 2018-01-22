@@ -3,14 +3,12 @@ using System.Web.Mvc;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests;
-using Teleopti.Ccc.Infrastructure.MessageBroker;
 using Teleopti.Ccc.Infrastructure.Requests;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Core;
-using Teleopti.Ccc.Web.Core.Extensions;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
@@ -66,7 +64,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[UnitOfWork, HttpGet]
 		public virtual JsonResult GetDefaultStartTime(DateOnly date)
 		{
-			return Json(_overtimeRequestDefaultStartTimeProvider.GetDefaultStartTime(date).ToString(DateTimeFormatExtensions.FixedDateTimeFormat), JsonRequestBehavior.AllowGet);
+			return Json(_overtimeRequestDefaultStartTimeProvider.GetDefaultStartTime(date), JsonRequestBehavior.AllowGet);
 		}
 	}
 }
