@@ -19,13 +19,14 @@ using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
 	[TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
+	[DomainTest]
 	class ApproveRequestCommandHandlerTest
 	{
 		private FakeCurrentScenario_DoNotUse _scenario;
@@ -56,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				new SwapAndModifyService(null, null),
 				new FakeGlobalSettingDataRepository(),
 				businessRules, new CheckingPersonalAccountDaysProvider(_personAbsenceAccountRepository), new DoNothingScheduleDayChangeCallBack()
-				, null, null, overtimeRequestSkillProvider, null, new Now()
+				, null, null, overtimeRequestSkillProvider, null, null
 			);
 
 			var writeProtectedScheduleCommandValidator = new WriteProtectedScheduleCommandValidator(

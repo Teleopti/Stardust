@@ -93,6 +93,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 		private IOvertimeRequestOpenPeriod getOvertimeRequestOpenPeriod(IPersonRequest personRequest)
 		{
+			if (personRequest.Person.WorkflowControlSet == null)
+				return null;
 			return personRequest.Person.WorkflowControlSet.GetMergedOvertimeRequestOpenPeriod(personRequest.Request as IOvertimeRequest,
 				new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), personRequest.Person.PermissionInformation.DefaultTimeZone())));
 		}
