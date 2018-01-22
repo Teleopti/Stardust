@@ -8,9 +8,9 @@
 			controller: GamificationSettingsController
 		});
 
-	GamificationSettingsController.$inject = ['$mdSelect', '$element', '$scope', '$translate', '$q', 'gamificationSettingService'];
+	GamificationSettingsController.$inject = ['$translate', '$mdDialog', 'gamificationSettingService'];
 
-	function GamificationSettingsController($mdSelect, $element, $scope, $translate, $q, gamificationSettingService) {
+	function GamificationSettingsController($translate, $mdDialog, gamificationSettingService) {
 		var ctrl = this;
 
 		ctrl.getGamificationSettingsDescriptors = function () {
@@ -33,7 +33,6 @@
 		ctrl.$onInit = function () {
 			ctrl.allSettings = [];
 			ctrl.getGamificationSettingsDescriptors();
-			ctrl.title = 'Gamification Settings';
 		}
 
 		ctrl.settingSelectionChanged = function () {
@@ -118,13 +117,19 @@
 
 			}, function (error) {
 				console.log(error);
-			})
+			});
 		}
 
-		ctrl.resetBadges = function name() {
-			gamificationSettingService.resetBadge().then(function (response) {
+		ctrl.confirmResetBadges = function name() {
+			var confirm = $mdDialog.confirm()
+				.title($translate.instant('ResetBadges'))
+				.textContent($translate.instant('ResetBadgesConfirm'))
+				.ok($translate.instant('Ok'))
+				.cancel($translate.instant('Cancel'));
+
+			$mdDialog.show(confirm).then(function () {
+				gamificationSettingService.resetBadge().then(function(response) {});
 			});
 		}
 	}
-
 })(angular);
