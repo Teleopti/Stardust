@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
 		[HttpPost, Route("api/Gamification/ModifyAnsweredCallsForBronze"), UnitOfWork]
 		public virtual GamificationAnsweredCallsThresholdViewModel GamificationAnsweredCallsForBronze([FromBody]GamificationAnsweredCallsThresholdViewModel input)
 		{
-			return _gamificationSettingPersister.PersistAnsweredCallsGoldThreshold(input);
+			return _gamificationSettingPersister.PersistAnsweredCallsBronzeThreshold(input);
 		}
 
 		[HttpPost, Route("api/Gamification/ModifyAHTEnabled"), UnitOfWork]
