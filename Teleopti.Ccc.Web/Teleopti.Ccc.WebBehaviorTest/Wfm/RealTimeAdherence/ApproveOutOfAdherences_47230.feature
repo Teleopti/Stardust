@@ -26,13 +26,31 @@ Feature: Approve out of adherences
 	  | Adherence   | Out       |
 
   Scenario: See recorded out of adherence
+	Given Mikkey Dee has a 'Phone' shift between '2018-01-22 09:00' and '17:00'
+	And at '2018-01-22 09:00:00' 'Mikkey Dee' sets his phone state to 'LoggedOff'
+	And at '2018-01-22 10:00:00' 'Mikkey Dee' sets his phone state to 'Ready'
+	When I view historical adherence for 'Mikkey Dee' on '2018-01-22'
+	Then I should see recorded out of adherence between '09:00:00' and '10:00:00'
 
   Scenario: See approved periods
-  # see approved line
-  # see approved table
+	Given Mikkey Dee has an approved adherence between '09:00:00' and '10:00:00'
+	When I view historical adherence for 'Mikkey Dee' on '2018-01-22'
+	Then I should see approved adherence between '09:00:00' and '10:00:00'
+  # asserts approved as a line
+  # asserts approved in a table
 
   Scenario: Approve as in adherence
- # update line
-  # update percentage
-  # update approved table
-  # not update recorded
+	Given Mikkey Dee has a 'Phone' shift between '2018-01-22 10:00' and '12:00'
+	And at '2018-01-22 10:00:00' 'Mikkey Dee' sets his phone state to 'LoggedOff'
+	And at '2018-01-22 11:00:00' 'Mikkey Dee' sets his phone state to 'Ready'
+	When I view historical adherence for 'Mikkey Dee' on '2018-01-22'
+	And I approve adherence as in adherence between '10:00:00' and '11:00:00'
+	Then I should see approved adherence between '10:00:00' and '11:00:00'
+  # asserts approved as a line
+  # asserts approved in a table
+	And I should not see any out of adherences
+  # asserts out of adherence line
+	And I should see adherence percentage of 100%
+  # asserts adherence percentage update
+	And I should see recorded out of adherence between '09:00:00' and '10:00:00'
+  # asserts recorded out of adherence is still there
