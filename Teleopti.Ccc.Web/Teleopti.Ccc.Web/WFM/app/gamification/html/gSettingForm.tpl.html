@@ -22,16 +22,20 @@
 	</div>
 
 	<div ng-if="$ctrl.ruleSet == 0" class="form-input-wrap">
-		<label>
-			{{'OneSilverBadgeEqualsBronzeBadgeCount'|translate}}
-			<input type="number" pattern="^\d+$" ng-model="$ctrl.silverRate" ng-model-options="{allowInvalid: false}" ng-change="$ctrl.updateSilverRate()"
-			/>
-		</label>
-		<label>
-			{{'OneGoldBadgeEqualsSilverBadgeCount'|translate}}
-			<input type="number" pattern="^\d+$" ng-model="$ctrl.goldRate" ng-model-options="{allowInvalid: false}" ng-change="$ctrl.updateGoldRate()"
-			/>
-		</label>
+		<div>
+			<label for="silverRate">{{'OneSilverBadgeEqualsBronzeBadgeCount'|translate}}</label>
+			<input type="number" name="silverRate" pattern="^\d+$" max="100" min="2" ng-model="$ctrl.silverRate" ng-model-options="{allowInvalid: false}" ng-change="$ctrl.updateSilverRate()" />
+			<div class="text-danger validation">
+				<span ng-if="form.silverRate.$invalid">{{'Invalid'|translate}}</span>
+			</div>
+		</div>
+		<div>
+			<label for="goldRate">{{'OneGoldBadgeEqualsSilverBadgeCount'|translate}}</label>
+			<input type="number" name="goldRate" pattern="^\d+$" max="100" min="2" ng-model="$ctrl.goldRate" ng-model-options="{allowInvalid: false}" ng-change="$ctrl.updateGoldRate()" />
+			<div class="text-danger validation">
+				<span ng-if="form.goldRate.$invalid">{{'Invalid'|translate}}</span>
+			</div>
+		</div>
 	</div>
 </form>
 
