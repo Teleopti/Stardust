@@ -14,5 +14,6 @@
 </div>
 
 <div ng-if="$ctrl.allowRename && $ctrl.renameMode" class="name-textbox" ng-click="$event.stopPropagation()">
-	<input type="text" ng-model="$ctrl._name" ng-model-options="{ updateOn: 'change blur' }" ng-change="$ctrl.onNameChange()" ng-blur="$ctrl.finishRename()" autofocus>
+	<input type="text" ng-model="$ctrl._name" ng-model-options="{ updateOn: 'change blur', allowInvalid: false }" ng-change="$ctrl.onNameChange()" ng-blur="$ctrl.finishRename()" autofocus
+		ng-minlength="1" ng-maxlength="50" />
 </div>

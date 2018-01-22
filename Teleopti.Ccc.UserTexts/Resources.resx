@@ -17073,4 +17073,8 @@ Do you want to participate?</value>
     <value>Values should be in descending order</value>
     <comment>Message shown when the gold, silver and bronze thresholds are not in descending order</comment>
   </data>
+  <data name="TextIsTooLong" xml:space="preserve">
+    <value>The text is too long</value>
+    <comment>A generic message for length validation in forms</comment>
+  </data>
 </root>

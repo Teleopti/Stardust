@@ -34368,6 +34368,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The text is too long.
+        /// </summary>
+        public static string TextIsTooLong {
+            get {
+                return ResourceManager.GetString("TextIsTooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fill in information to create new scheduling setting.
         /// </summary>
         public static string TextOFCreatePlanGroupSchedulingSetting {
