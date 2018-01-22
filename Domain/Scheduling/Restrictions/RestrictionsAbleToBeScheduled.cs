@@ -75,7 +75,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 				{
 					Agent = schedulePeriod.Person,
 					Reason = RestrictionNotAbleToBeScheduledReason.TooMuchWorkTimeInPeriod,
-					Period = selectedPeriod
+					Period = selectedPeriod,
+					Matrix = matrixList.First()
 				};
 			}
 			if (minMaxTime.Maximum < targetTimePeriod.StartTime)
@@ -85,33 +86,36 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 				{
 					Agent = schedulePeriod.Person,
 					Reason = RestrictionNotAbleToBeScheduledReason.TooLittleWorkTimeInPeriod,
-					Period = selectedPeriod
+					Period = selectedPeriod,
+					Matrix = matrixList.First()
 				};
 			}
 
 			IDictionary<DateOnly, MinMax<TimeSpan>> possibleMinMaxWorkShiftLengths =
 				_workShiftMinMaxCalculator.PossibleMinMaxWorkShiftLengths(matrixList.First(), new SchedulingOptions());
 			var failingPeriod = checkWeeks(matrixList.First(), schedulePeriod, possibleMinMaxWorkShiftLengths);
-			if (failingPeriod != null)
+			if (failingPeriod.HasValue)
 			{
 				schedulePartModifyAndRollbackServiceForContractDaysOff.RollbackMinimumChecks();
 				return new RestrictionsNotAbleToBeScheduledResult
 				{
 					Agent = schedulePeriod.Person,
 					Reason = RestrictionNotAbleToBeScheduledReason.TooMuchWorkTimeInPeriod,
-					Period = failingPeriod.Value
+					Period = failingPeriod.Value,
+					Matrix = matrixList.First()
 				};
 			}
 
 			failingPeriod = checkNigthlyRest(matrixList.First());
-			if (failingPeriod != null)
+			if (failingPeriod.HasValue)
 			{
 				schedulePartModifyAndRollbackServiceForContractDaysOff.RollbackMinimumChecks();
 				return new RestrictionsNotAbleToBeScheduledResult
 				{
 					Agent = schedulePeriod.Person,
 					Reason = RestrictionNotAbleToBeScheduledReason.NightlyRestMightBeBroken,
-					Period = failingPeriod.Value
+					Period = failingPeriod.Value,
+					Matrix = matrixList.First()
 				};
 			}
 

@@ -16,6 +16,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 		private DateOnly _selectedDate;
 		private IEnumerable<RestrictionsNotAbleToBeScheduledResult> _result;
 		private SchedulerSplitters _parent;
+		private AgentRestrictionsDetailView _detailView;
+		private IRestrictionExtractor _restrictionExtractor;
 
 		public AgentsNotPossibleToSchedule()
 		{
@@ -26,6 +28,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 		{
 			_restrictionNotAbleToBeScheduledReport = restrictionNotAbleToBeScheduledReport;
 			_parent = parent;
+			_restrictionExtractor = new RestrictionExtractor(new RestrictionCombiner(),
+				new RestrictionRetrievalOperation());
 		}
 
 		private void toolStripButtonRefreshClick(object sender, EventArgs e)
@@ -37,10 +41,26 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 			backgroundWorker1.RunWorkerAsync();
 		}
 
-		public void SetSelected(IEnumerable<IPerson> selectedAgents, DateOnly selectedDate)
+		public void SetSelected(IEnumerable<IPerson> selectedAgents, DateOnly selectedDate, AgentRestrictionsDetailView detailView)
 		{
 			_selectedAgents = selectedAgents;
 			_selectedDate = selectedDate;
+			_detailView = detailView;
+		}
+
+		public void ReselectSelected()
+		{
+			if (listViewResult.Items.Count == 0 && listViewResult.SelectedItems.Count == 0)
+				return;
+
+			var selected = listViewResult.SelectedItems[0];
+			var matrix = ((RestrictionsNotAbleToBeScheduledResult)selected.Tag).Matrix;
+			_detailView.LoadDetails(matrix, _restrictionExtractor);
+			_detailView.TheGrid.Refresh();
+			_detailView.InitializeGrid();
+			_detailView.SelectDateIfExists(matrix.SchedulePeriod.DateOnlyPeriod.StartDate);
+			_detailView.TheGrid.Enabled = true;
+			_detailView.TheGrid.Cursor = Cursors.Arrow;
 		}
 
 		private void backgroundWorker1DoWork(object sender, DoWorkEventArgs e)
@@ -63,14 +83,25 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 
 			foreach (var restrictionsAbleToBeScheduledResult in _result)
 			{
-				var item = new ListViewItem(restrictionsAbleToBeScheduledResult.Agent.Name.ToString());
+				var item = new ListViewItem(restrictionsAbleToBeScheduledResult.Agent.Name.ToString())
+				{
+					Tag = restrictionsAbleToBeScheduledResult
+				};
 				item.SubItems.Add(restrictionsAbleToBeScheduledResult.Reason.ToString());
 				item.SubItems.Add(restrictionsAbleToBeScheduledResult.Period.ToShortDateString(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture));
 				listViewResult.Items.Add(item);
 			}
 
 			listViewResult.ResumeLayout(true);
+			if (listViewResult.Items.Count > 0)
+				listViewResult.Items[0].Selected = true;
+
 			toolStripButtonRefresh.Enabled = true;
+		}
+
+		private void listViewResult_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			ReselectSelected();
 		}
 	}
 }

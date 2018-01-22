@@ -116,6 +116,28 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 			_useScheduling = schedulingOptions.UseScheduling;
 		}
 
+		public void LoadDetails(IScheduleMatrixPro scheduleMatrixPro, IRestrictionExtractor restrictionExtractor)
+		{
+			var restrictionCombiner = new RestrictionCombiner();
+			var personalShiftRestrictionCombiner = new PersonalShiftRestrictionCombiner(restrictionCombiner);
+			var meetingRestrictionCombinder = new MeetingRestrictionCombiner(restrictionCombiner);
+			var schedulingOptions = new RestrictionSchedulingOptions
+			{
+				UseScheduling = true,
+				UseAvailability = true,
+				UsePreferences = true,
+				UseRotations = true,
+				UseStudentAvailability = false
+			};
+			IAgentRestrictionsDetailEffectiveRestrictionExtractor effectiveRestrictionExtractor =
+				new AgentRestrictionsDetailEffectiveRestrictionExtractor(_workShiftWorkTime, restrictionExtractor,
+					schedulingOptions, personalShiftRestrictionCombiner, meetingRestrictionCombinder);
+			var preferenceNightRestChecker = new PreferenceNightRestChecker();
+
+			_model.LoadDetails(scheduleMatrixPro, schedulingOptions, effectiveRestrictionExtractor, TimeSpan.FromHours(150), preferenceNightRestChecker);
+			_useScheduling = schedulingOptions.UseScheduling;
+		}
+
 		public override void AddSelectedSchedulesInColumnToList(GridRangeInfo range, int colIndex, List<IScheduleDay> selectedSchedules)
 		{
 			if(range == null) throw new ArgumentNullException("range");

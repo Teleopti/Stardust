@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -42,6 +41,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 		public IPerson Agent { get; set; }
 		public RestrictionNotAbleToBeScheduledReason Reason { get; set; }
 		public DateOnlyPeriod Period { get; set; }
+		public IScheduleMatrixPro Matrix { get; set; }
 	}
 
 	public enum RestrictionNotAbleToBeScheduledReason

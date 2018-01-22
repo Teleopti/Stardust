@@ -66,12 +66,15 @@
             this.columnHeaderReason,
             this.columnHeaderPeriod});
 			this.listViewResult.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.listViewResult.FullRowSelect = true;
+			this.listViewResult.HideSelection = false;
 			this.listViewResult.Location = new System.Drawing.Point(0, 25);
 			this.listViewResult.Name = "listViewResult";
 			this.listViewResult.Size = new System.Drawing.Size(1050, 327);
 			this.listViewResult.TabIndex = 1;
 			this.listViewResult.UseCompatibleStateImageBehavior = false;
 			this.listViewResult.View = System.Windows.Forms.View.Details;
+			this.listViewResult.SelectedIndexChanged += new System.EventHandler(this.listViewResult_SelectedIndexChanged);
 			// 
 			// columnHeaderAgent
 			// 

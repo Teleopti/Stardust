@@ -4482,9 +4482,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			var schedulingOptions = schedulerSplitters1.SchedulingOptions;
 			var view = (AgentRestrictionsDetailView) detailView;
 			_splitContainerLessIntellegentRestriction.SplitterDistance = 300;
-			schedulerSplitters1.AgentRestrictionGrid.MergeHeaders();
-			schedulerSplitters1.AgentRestrictionGrid.LoadData(SchedulerState, persons, schedulingOptions, selectedPerson, view, schedulePart, _container);
-			schedulerSplitters1.SetSelectedAgentsOnAgentsNotPossibleToSchedule(persons, selectedDate);
+			if (!_container.Resolve<IToggleManager>().IsEnabled(Toggles.Scheduler_RestrictionReport_47013))
+			{
+				schedulerSplitters1.AgentRestrictionGrid.MergeHeaders();
+				schedulerSplitters1.AgentRestrictionGrid.LoadData(SchedulerState, persons, schedulingOptions, selectedPerson, view, schedulePart, _container);
+			}
+			schedulerSplitters1.SetSelectedAgentsOnAgentsNotPossibleToSchedule(persons, selectedDate, view);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"),
@@ -4577,6 +4580,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 						_defaultScheduleTag, _workShiftWorkTime);
 					_scheduleView.TheGrid.ContextMenuStrip = contextMenuStripRestrictionView;
 					prepareAgentRestrictionView(selectedPart, _scheduleView, selectedPersons);
+
 					if (scheduleParts != null)
 					{
 						if (!scheduleParts.IsEmpty())
@@ -6764,7 +6768,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			{
 				schedulerSplitters1.RecalculateRestrictions();
 				schedulerSplitters1.AgentRestrictionGrid.LoadData(schedulerSplitters1.SchedulingOptions);
-			}
+				schedulerSplitters1.ReselectSelectedAgentNotPossibleToSchedule();			}
 			updateSelectionInfo(new List<IScheduleDay> {scheduleDay});
 			enableSave();
 		}

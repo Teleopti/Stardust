@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Autofac;
 using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -15,6 +16,7 @@ using IContainer = System.ComponentModel.IContainer;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 {
+	[RemoveMeWithToggle(Toggles.Scheduler_RestrictionReport_47013)]
 	public partial class AgentRestrictionGrid : GridControl, IAgentRestrictionsView, IHelpContext
 	{
 		private AgentRestrictionsPresenter _presenter;
