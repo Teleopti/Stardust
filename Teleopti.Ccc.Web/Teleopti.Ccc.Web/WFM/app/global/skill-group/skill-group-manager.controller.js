@@ -64,6 +64,7 @@
 		vm.newGroupName = '';
 		vm.deleteConfirmation = false;
 		vm.modalShown = false;
+		vm.skillNameMaxLength = 50;
 
 		//----------- scoped functions ----------------------------------------------------
 
@@ -93,7 +94,7 @@
 		vm.copyGroupClicked = function(skillGroup, ev) {
 			ev.stopPropagation();
 			var clone = _.cloneDeep(skillGroup);
-			clone.Name = $translate.instant('CopyOf') + ' ' + skillGroup.Name;
+			clone.Name = ($translate.instant('CopyOf') + ' ' + skillGroup.Name).substr(0,vm.skillNameMaxLength);
 			clone.Id = skillGroup.Id + '-' + getRandom();
 			vm.skillGroups.push(clone);
 			vm.skillGroups = _.sortBy(vm.skillGroups, function(item) {
