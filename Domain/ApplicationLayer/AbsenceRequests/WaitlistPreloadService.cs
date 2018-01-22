@@ -113,7 +113,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_contractScheduleRepository.LoadAllAggregate();
 			_activityRepository.LoadAll();
 			dataHolder.Skills = _skillRepository.LoadAllSkills().ToList();
-			dataHolder.AllRequests = new List<IPersonRequest>();
 			_stardustJobFeedback.SendProgress("Done preloading the data");
 
 
@@ -129,12 +128,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 						x.Request.Period.StartDateTime >= validPeriod.StartDateTime &&
 						x.Request.Period.EndDateTime <= validPeriod.EndDateTime).ToList();
 
-			_personRepository.FindPeople(waitlistedRequests.Select(x => x.Person.Id.GetValueOrDefault()).ToList());
-			foreach (var pRequest in waitlistedRequests)
-			{
-				if (isRequestUsingStaffingValidation(pRequest))
-					dataHolder.AllRequests.Add(pRequest);
-			}
+			_personRepository.FindPeople(waitlistedRequests.Select(x => x.Person.Id.GetValueOrDefault()).ToArray());
+			dataHolder.AllRequests = waitlistedRequests.Where(isRequestUsingStaffingValidation).ToList();
 
 			if (!dataHolder.AllRequests.Any())
 			{
@@ -180,7 +175,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 								s => (IResourceCalculationPeriod)s)));
 			dataHolder.ResCalcData = new ResourceCalculationData(dataHolder.Skills, new SlimSkillResourceCalculationPeriodWrapper(relevantSkillStaffPeriods));
 			
-			var persons = waitlistedRequests.Select(wr => wr.Person).Distinct().ToList();
+			var persons = waitlistedRequests.Select(wr => wr.Person).Distinct().ToArray();
 			ExtractSkillForecastIntervals.GetLongestPeriod(dataHolder.Skills, inflatedPeriod);
 			dataHolder.PersonsSchedules =
 				_scheduleStorage.FindSchedulesForPersons(_currentScenario.Current(),
