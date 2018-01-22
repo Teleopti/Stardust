@@ -95,11 +95,12 @@
 			ev.stopPropagation();
 			var clone = _.cloneDeep(skillGroup);
 			clone.Name = ($translate.instant('CopyOf') + ' ' + skillGroup.Name).substr(0, vm.skillNameMaxLength);
-			clone.Id = skillGroup.Id + '-' + getRandom();
+			clone.Id = 'Copy' + skillGroup.Id + '-' + getRandom();
 			vm.skillGroups.push(clone);
 			vm.skillGroups = _.sortBy(vm.skillGroups, function (item) {
 				return item.Name;
 			});
+			setSaveableState();
 		};
 
 		vm.createSkillGroup = function (ev) {
@@ -114,11 +115,16 @@
 		};
 
 		vm.deleteSkillGroup = function () {
-			SkillGroupSvc.deleteSkillGroup(vm.selectedSkillGroup).then(function () {
-				getAllSkillGroups();
-				unselectAllSkills();
-				vm.selectedSkillGroup = null;
-			});
+			if (vm.selectedSkillGroup.Id.indexOf('Copy') === 0) {
+				_.remove(vm.skillGroups, vm.selectedSkillGroup);
+				setSaveableState();
+			} else {
+				SkillGroupSvc.deleteSkillGroup(vm.selectedSkillGroup).then(function () {
+					getAllSkillGroups();
+					unselectAllSkills();
+					vm.selectedSkillGroup = null;
+				});
+			}
 		};
 
 		vm.editNameClicked = function (skillGroup) {
@@ -142,7 +148,7 @@
 			return !_.isEqual(originalGroups, vm.skillGroups);
 		}
 
-		vm.hasEmptySkillList = function() {
+		vm.hasEmptySkillList = function () {
 			var hasEmpty = false;
 			_.each(vm.skillGroups, function (item) {
 				if (item.Skills.length === 0) {

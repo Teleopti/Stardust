@@ -15,7 +15,10 @@ namespace Teleopti.Ccc.Domain.SkillGroupManagement
 		public void Do(Guid id)
 		{
 			var itemToRemove = _skillGroupRepository.Get(id);
-			_skillGroupRepository.Remove(itemToRemove);
+			if (itemToRemove != null)
+			{
+				_skillGroupRepository.Remove(itemToRemove);
+			}
 		}
 	}
 }
