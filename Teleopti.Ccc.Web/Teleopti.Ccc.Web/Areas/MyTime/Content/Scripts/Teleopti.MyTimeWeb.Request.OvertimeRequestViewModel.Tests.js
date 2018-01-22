@@ -15,11 +15,15 @@ $(document).ready(function() {
 		},
 		fakeAvailableDays = 13,
 		dateOnlyFormat = Teleopti.MyTimeWeb.Common.Constants.serviceDateTimeFormat.dateOnly,
-		requestDate = moment().format(dateOnlyFormat);
+		requestDate = moment().format(dateOnlyFormat),
+		toggleFnTemp, enabledTogglesList = [];
 
 	module('Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel', {
 		setup: function() {
 			setup();
+		},
+		teardown: function () {
+			restoreToggleFn();
 		}
 	});
 
@@ -33,6 +37,16 @@ $(document).ready(function() {
 			addedOvertimeRequest = data;
 		}, fakeRequestDetailViewModel);
 		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
+
+		toggleFnTemp = Teleopti.MyTimeWeb.Common.IsToggleEnabled;
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(toggle) {
+			if (enabledTogglesList.indexOf(toggle) > -1)
+				return true;
+		};
+	}
+
+	function restoreToggleFn() {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = toggleFnTemp;
 	}
 
 	function setupAjax() {
@@ -206,11 +220,7 @@ $(document).ready(function() {
 	});
 
 	test('should set PeriodEndDate according to available days when toggle OvertimeRequestPeriodSetting_46417 is on', function() {
-		var toggleFnTemp = Teleopti.MyTimeWeb.Common.IsToggleEnabled;
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(toggle) {
-			if (toggle === 'OvertimeRequestPeriodSetting_46417')
-				return true;
-		};
+		enabledTogglesList = ['OvertimeRequestPeriodSetting_46417'];
 
 		var vm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, function(data) {
 			addedOvertimeRequest = data;
@@ -224,8 +234,6 @@ $(document).ready(function() {
 		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
 
 		equal(vm.PeriodEndDate().format(dateOnlyFormat), moment().add(fakeAvailableDays, 'days').format(dateOnlyFormat));
-
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = toggleFnTemp;
 	});
 
 	test('should not pass validation when request date is past date', function () {
