@@ -28,22 +28,34 @@ INSERT [mart].[etl_jobstep] ([jobstep_id], [jobstep_name]) VALUES (99, N'Delayed
 
 DECLARE @schedule_id int
 -- Save/Schedule new ETL job to run every other minute between 00:00-23:55
-EXEC [mart].[etl_job_save_schedule]
-	-1,
-	'Temporary schedule for Upgrade Maintenance',
-	1,
-	1,
-	0,
-	1,
-	0,
-	1430,
-	'Upgrade Maintenance',
-	0,
-	365,
-	-1,
-	'Occurs every day every 1 minute(s) between 00:00 and 23:55.'
+INSERT INTO Mart.[etl_job_schedule]
+	([schedule_name]
+	,[enabled]
+	,[schedule_type]
+	,[occurs_daily_at]
+	,[occurs_every_minute]
+	,[recurring_starttime]
+	,[recurring_endtime]
+	,[etl_job_name]
+	,[etl_relative_period_start]
+	,[etl_relative_period_end]
+	,[etl_datasource_id]
+	,[description])
+VALUES
+	('Temporary schedule for Upgrade Maintenance'
+	,1
+	,1
+	,0
+	,1
+	,0
+	,1430
+	,'Upgrade Maintenance'
+	,0
+	,365
+	,-1
+	,'Occurs every day every 1 minute(s) between 00:00 and 23:55.')
 
-select @schedule_id = @@IDENTITY
+SET @schedule_id = @@IDENTITY
 
 -- Add a new row to mart.etl_job_delayed for first 10 agents
 INSERT INTO mart.etl_job_delayed (stored_procedured, parameter_string)
