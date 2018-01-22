@@ -615,7 +615,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var target = new OvertimeRequestApprovalService(
 				OvertimeRequestUnderStaffingSkillProvider, OvertimeRequestSkillProvider,
-				CommandDispatcher, null,null);
+				CommandDispatcher, null, Now);
 
 			var result = target.Approve(personRequest.Request);
 
