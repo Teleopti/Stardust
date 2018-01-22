@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
@@ -28,11 +29,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		public INewBusinessRuleCollection BusinessRules;
 		public IDictionary<IPerson, IPersonAccountCollection> PersonAbsenceAccounts;
 	}
-	
+
 	public class WaitlistPreloadService
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(WaitlistPreloadService));
-		
+
 		private readonly ISkillCombinationResourceRepository _skillCombinationResourceRepository;
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly ICurrentScenario _currentScenario;
@@ -55,6 +56,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 		private readonly IBusinessRulesForPersonalAccountUpdate _personalAccountUpdate;
 		private readonly ICurrentBusinessUnit _currentBusinessUnit;
+		private readonly IAbsenceRequestValidatorProvider _absenceRequestValidatorProvider;
 
 		public WaitlistPreloadService(ISkillCombinationResourceRepository skillCombinationResourceRepository,
 		IScheduleStorage scheduleStorage, ICurrentScenario currentScenario,
@@ -64,8 +66,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		IAbsenceRequestSetting absenceRequestSetting,
 		ExtractSkillForecastIntervals extractSkillForecastIntervals,
 		INow now,
-		ISkillTypeRepository skillTypeRepository, IPersonRepository personRepository, 
-		IContractRepository contractRepository, 
+		ISkillTypeRepository skillTypeRepository, IPersonRepository personRepository,
+		IContractRepository contractRepository,
 		IPartTimePercentageRepository partTimePercentageRepository,
 		IContractScheduleRepository contractScheduleRepository,
 		IStardustJobFeedback stardustJobFeedback,
@@ -74,7 +76,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		ICheckingPersonalAccountDaysProvider checkingPersonalAccountDaysProvider,
 		IScheduleDayChangeCallback scheduleDayChangeCallback,
 		IBusinessRulesForPersonalAccountUpdate personalAccountUpdate,
-		ICurrentBusinessUnit currentBusinessUnit	)
+		ICurrentBusinessUnit currentBusinessUnit,
+		IAbsenceRequestValidatorProvider absenceRequestValidatorProvider)
 		{
 			_skillCombinationResourceRepository = skillCombinationResourceRepository;
 			_scheduleStorage = scheduleStorage;
@@ -98,8 +101,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 			_personalAccountUpdate = personalAccountUpdate;
 			_currentBusinessUnit = currentBusinessUnit;
+			_absenceRequestValidatorProvider = absenceRequestValidatorProvider;
 		}
-		
+
 		public WaitlistDataHolder PreloadData()
 		{
 			var dataHolder = new WaitlistDataHolder();
@@ -109,10 +113,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_contractScheduleRepository.LoadAllAggregate();
 			_activityRepository.LoadAll();
 			dataHolder.Skills = _skillRepository.LoadAllSkills().ToList();
-		
+			dataHolder.AllRequests = new List<IPersonRequest>();
 			_stardustJobFeedback.SendProgress("Done preloading the data");
 
-			
+
 			var validPeriod = new DateTimePeriod(_now.UtcDateTime().AddDays(-1), _now.UtcDateTime().AddHours(_absenceRequestSetting.ImmediatePeriodInHours));
 			dataHolder.LoadSchedulesPeriodToCoverForMidnightShifts = validPeriod;
 			var waitlistedRequestsIds = _personRequestRepository.GetWaitlistRequests(dataHolder.LoadSchedulesPeriodToCoverForMidnightShifts).ToList();
@@ -125,17 +129,23 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 						x.Request.Period.StartDateTime >= validPeriod.StartDateTime &&
 						x.Request.Period.EndDateTime <= validPeriod.EndDateTime).ToList();
 
-			dataHolder.AllRequests = waitlistedRequests.ToList();
+			_personRepository.FindPeople(waitlistedRequests.Select(x => x.Person.Id.GetValueOrDefault()).ToList());
+			foreach (var pRequest in waitlistedRequests)
+			{
+				if (isRequestUsingStaffingValidation(pRequest))
+					dataHolder.AllRequests.Add(pRequest);
+			}
+
 			if (!dataHolder.AllRequests.Any())
 			{
 				dataHolder.InitSuccess = false;
 				var mesg =
-					$"No waitlisted request found within the period from {dataHolder.LoadSchedulesPeriodToCoverForMidnightShifts.StartDateTime} to {dataHolder.LoadSchedulesPeriodToCoverForMidnightShifts.EndDateTime}";
+					$"No waitlisted request found with staffing check within the period from {dataHolder.LoadSchedulesPeriodToCoverForMidnightShifts.StartDateTime} to {dataHolder.LoadSchedulesPeriodToCoverForMidnightShifts.EndDateTime}";
 				logger.Info(mesg);
 				_stardustJobFeedback.SendProgress(mesg);
 				return dataHolder;
 			}
-			
+
 			if (!_skillCombinationResourceReadModelValidator.Validate())
 			{
 				logger.Error($"Read model is not up to date on Business Unit {_currentBusinessUnit.Current().Name}.");
@@ -143,10 +153,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				dataHolder.InitSuccess = false;
 				return dataHolder;
 			}
-			
-			_personRepository.FindPeople(dataHolder.AllRequests.Select(x => x.Person.Id.GetValueOrDefault()).ToList());
 
-			var inflatedPeriod = new DateTimePeriod(dataHolder.AllRequests.Min(x => x.Request.Period.StartDateTime), 
+
+
+			var inflatedPeriod = new DateTimePeriod(dataHolder.AllRequests.Min(x => x.Request.Period.StartDateTime),
 				dataHolder.AllRequests.Max(x => x.Request.Period.EndDateTime));
 
 			dataHolder.CombinationResources = _skillCombinationResourceRepository.LoadSkillCombinationResources(inflatedPeriod).ToList();
@@ -177,12 +187,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					persons, new ScheduleDictionaryLoadOptions(false, false), dataHolder.LoadSchedulesPeriodToCoverForMidnightShifts, persons, true);
 			dataHolder.PersonAbsenceAccounts = _personAbsenceAccountRepository.FindByUsers(persons);
 			dataHolder.BusinessRules = _personalAccountUpdate.FromScheduleDictionary(dataHolder.PersonAbsenceAccounts, dataHolder.PersonsSchedules);
-			
+
 			dataHolder.RequestApprovalService = new AbsenceRequestApprovalService(_currentScenario.Current(), dataHolder.PersonsSchedules,
 				dataHolder.BusinessRules, _scheduleDayChangeCallback, _globalSettingDataRepository, _checkingPersonalAccountDaysProvider);
 			dataHolder.InitSuccess = true;
 
 			return dataHolder;
+		}
+
+		private bool isRequestUsingStaffingValidation(IPersonRequest pRequest)
+		{
+			var mergedPeriod = pRequest.Request.Person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod((IAbsenceRequest)pRequest.Request);
+			var validators = _absenceRequestValidatorProvider.GetValidatorList(mergedPeriod);
+			var useStaffing = validators.OfType<StaffingThresholdValidator>().Any();
+
+			return useStaffing;
 		}
 	}
 }

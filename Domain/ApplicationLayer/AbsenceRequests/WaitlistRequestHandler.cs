@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using log4net;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Aop;
@@ -22,7 +21,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 {
 	public class WaitlistRequestHandler : IHandleEvent<ProcessWaitlistedRequestsEvent>, IRunOnStardust
 	{
-		private static readonly ILog logger = LogManager.GetLogger(typeof(WaitlistRequestHandler));
 		private readonly ICurrentScenario _currentScenario;
 		private readonly IAbsenceRequestValidatorProvider _absenceRequestValidatorProvider;
 		private readonly ArrangeRequestsByProcessOrder _arrangeRequestsByProcessOrder;
@@ -84,8 +82,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 				foreach (var pRequest in requestsNotHandled)
 				{
-					if(!isRequestUsingStaffingValidation(pRequest))
-						continue;
 					var absenceRequest = pRequest.Request as IAbsenceRequest;
 					var personAbsenceAccount = dataHolder.PersonAbsenceAccounts[pRequest.Person].Find(absenceRequest.Absence);
 					var result = _absenceRequestSynchronousValidator.Validate(pRequest, dataHolder.PersonsSchedules[pRequest.Person], personAbsenceAccount);
@@ -139,15 +135,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				
 				_stardustJobFeedback.SendProgress($"Finished processing {dataHolder.AllRequests.Count} waitlisted requests.");
 			}
-		}
-
-		private bool isRequestUsingStaffingValidation(IPersonRequest pRequest)
-		{
-			var mergedPeriod = pRequest.Request.Person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod((IAbsenceRequest)pRequest.Request);
-			var validators = _absenceRequestValidatorProvider.GetValidatorList(mergedPeriod);
-			var useStaffing = validators.OfType<StaffingThresholdValidator>().Any();
-			
-			return useStaffing;
 		}
 
 		private void processRequests(WaitlistDataHolder dataHolder, List<IPersonRequest> requests)
