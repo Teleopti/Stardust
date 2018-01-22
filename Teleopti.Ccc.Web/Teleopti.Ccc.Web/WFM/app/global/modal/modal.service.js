@@ -34,6 +34,8 @@
 
                     var compiledConfirmModal = $compile(template)(scope);
                     parent.append(compiledConfirmModal);
+					var focusTarget = parent[0].querySelector('.mini-confirm .dialog-mini .focus-default');
+					angular.element(focusTarget).focus();
                 }
             });
         }
