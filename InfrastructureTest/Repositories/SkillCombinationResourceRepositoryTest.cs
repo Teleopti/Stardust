@@ -43,11 +43,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			system.UseTestDouble<CurrentBusinessUnit>().For<ICurrentBusinessUnit>();
 		}
-		private Guid persistSkill(IBusinessUnit businessUnit=null)
+		private Guid persistSkill(IBusinessUnit businessUnit=null, string skillname = "skill")
 		{
 			var activity = new Activity("act");
 			var skillType = SkillTypeFactory.CreateSkillType();
-			var skill = new Skill("skill", "skill", Color.Blue, 15, skillType)
+			var skill = new Skill(skillname, skillname, Color.Blue, 15, skillType)
 			{
 				TimeZone = TimeZoneInfo.Utc,
 				Activity = activity
@@ -967,7 +967,50 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var loadedBpoCombinationResources = Target.LoadSkillCombinationResources(new DateTimePeriod(2016, 12, 20, 2016, 12, 21)).ToList();
 			loadedBpoCombinationResources.Count.Should().Be.EqualTo(2);
+		}
+		
+		[Test]
+		public void ShouldNotOverwriteSkillCombination()
+		{
+			Now.Is("2016-12-19 08:00");
+			var startDate = new DateTime(2016, 12, 20, 0, 0, 0);
+			var endDate = new DateTime(2016, 12, 20, 0, 15, 0);
+
+			var skill = persistSkill(null, "skill");
+			var skill2 = persistSkill(null, "skill2");
+			
+			var combinationResource2 = new List<ImportSkillCombinationResourceBpo>
+			{
+				new ImportSkillCombinationResourceBpo
+				{
+					StartDateTime = startDate,
+					EndDateTime = endDate,
+					Resources = 1,
+					SkillIds = new List<Guid>{skill, skill2},
+					Source = "TPBrazil"
+				}
+			};
+			
+			Target.PersistSkillCombinationResourceBpo(combinationResource2);
 			CurrentUnitOfWork.Current().PersistAll();
+			
+			var combinationResource1 = new List<ImportSkillCombinationResourceBpo>
+			{
+				new ImportSkillCombinationResourceBpo
+				{
+					StartDateTime = startDate,
+					EndDateTime = endDate,
+					Resources = 1,
+					SkillIds = new List<Guid>{skill},
+					Source = "TPBrazil"
+				}
+			};
+
+			Target.PersistSkillCombinationResourceBpo(combinationResource1);
+			CurrentUnitOfWork.Current().PersistAll();
+
+			var loadedBpoCombinationResources = Target.LoadSkillCombinationResources(new DateTimePeriod(2016, 12, 20, 2016, 12, 21)).ToList();
+			loadedBpoCombinationResources.Count.Should().Be.EqualTo(2);
 		}
 	}
 }
