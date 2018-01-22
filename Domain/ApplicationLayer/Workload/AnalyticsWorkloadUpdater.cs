@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.Analytics;
@@ -22,7 +23,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Workload
 		private readonly IAnalyticsBusinessUnitRepository _analyticsBusinessUnitRepository;
 		private readonly IAnalyticsWorkloadRepository _analyticsWorkloadRepository;
 
-		public AnalyticsWorkloadUpdater(IWorkloadRepository workloadRepository, IAnalyticsSkillRepository analyticsSkillRepository, IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository, IAnalyticsWorkloadRepository analyticsWorkloadRepository)
+		public AnalyticsWorkloadUpdater(IWorkloadRepository workloadRepository,
+			IAnalyticsSkillRepository analyticsSkillRepository, IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository,
+			IAnalyticsWorkloadRepository analyticsWorkloadRepository)
 		{
 			_workloadRepository = workloadRepository;
 			_analyticsSkillRepository = analyticsSkillRepository;
@@ -42,11 +45,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Workload
 				logger.Warn("Workload missing from Application database, aborting.");
 				return;
 			}
+
 			var businessUnit = getAnalyticsBusinessUnit(@event.LogOnBusinessUnitId);
 			var analyticsSkill = getAnalyticsSkill(businessUnit, workload);
 			var skill = workload.Skill;
 			var queueAdjustments = workload.QueueAdjustments;
-			var workloadDeleteCheck = workload as IDeleteTag;
+			var workloadIsDeleted = (workload as IDeleteTag)?.IsDeleted ?? false;
 
 			var datasourceUpdateDate = workload.UpdatedOn.GetValueOrDefault(AnalyticsDate.Eternity.DateDate);
 			var analyticsWorkload = new AnalyticsWorkload
@@ -68,13 +72,29 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Workload
 				PercentageAbandonedAfterServiceLevel = queueAdjustments.AbandonedAfterServiceLevel.Value,
 				BusinessUnitId = businessUnit.BusinessUnitId,
 				DatasourceUpdateDate = datasourceUpdateDate,
-				IsDeleted = workloadDeleteCheck?.IsDeleted ?? false
+				IsDeleted = workloadIsDeleted
 			};
 			var workloadId = _analyticsWorkloadRepository.AddOrUpdate(analyticsWorkload);
 
 			var existingBridgeQueueWorkloads = _analyticsWorkloadRepository.GetBridgeQueueWorkloads(workloadId);
-			var toBeAdded = workload.QueueSourceCollection.Where(queue => existingBridgeQueueWorkloads.All(x => x.QueueId != queue.QueueMartId));
-			var toBeDeleted = existingBridgeQueueWorkloads.Where(bridge => workload.QueueSourceCollection.All(x => x.QueueMartId != bridge.QueueId));
+
+			IEnumerable<IQueueSource> toBeAdded;
+			IEnumerable<AnalyticsBridgeQueueWorkload> toBeDeleted;
+			if (workloadIsDeleted)
+			{
+				toBeAdded = new List<IQueueSource>();
+				// Delete all bridge_queue_workload connected to this workload if already deleted
+				toBeDeleted = existingBridgeQueueWorkloads;
+			}
+			else
+			{
+				toBeAdded =
+					workload.QueueSourceCollection.Where(
+						queue => existingBridgeQueueWorkloads.All(x => x.QueueId != queue.QueueMartId));
+				toBeDeleted = existingBridgeQueueWorkloads.Where(bridge =>
+					workload.QueueSourceCollection.All(x => x.QueueMartId != bridge.QueueId));
+			}
+
 			foreach (var queue in toBeAdded)
 			{
 				var bridgeQueueWorkload = new AnalyticsBridgeQueueWorkload

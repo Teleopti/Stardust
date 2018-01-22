@@ -55,7 +55,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Workload
 			WorkloadRepository.Add(workload);
 			AnalyticsBusinessUnitRepository.ReturnNull = true;
 
-			Assert.Throws<BusinessUnitMissingInAnalyticsException>(() => Target.Handle(new WorkloadChangedEvent { WorkloadId = workloadId, LogOnBusinessUnitId = businessUnitId }));
+			Assert.Throws<BusinessUnitMissingInAnalyticsException>(() =>
+				Target.Handle(new WorkloadChangedEvent {WorkloadId = workloadId, LogOnBusinessUnitId = businessUnitId}));
 		}
 
 		[Test]
@@ -67,23 +68,35 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Workload
 			workload.SetId(workloadId);
 			WorkloadRepository.Add(workload);
 
-			Assert.Throws<SkillMissingInAnalyticsException>(() => Target.Handle(new WorkloadChangedEvent { WorkloadId = workloadId, LogOnBusinessUnitId = businessUnitId }));
+			Assert.Throws<SkillMissingInAnalyticsException>(() =>
+				Target.Handle(new WorkloadChangedEvent {WorkloadId = workloadId, LogOnBusinessUnitId = businessUnitId}));
 		}
 
 		[Test]
 		public void ShouldAddWorkloadAndBridge()
 		{
+			const int queueMartId = 3;
+			const int skillId = 123;
+
 			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(businessUnitId));
 			var skill = SkillFactory.CreateSkill("TestSkill").WithId();
 			var workload = WorkloadFactory.CreateWorkload(skill).WithId(workloadId);
 			workload.QueueAdjustments = new QueueAdjustment();
-			var queueMartId = 3;
 			workload.AddQueueSource(new QueueSource("TestQueue", "Something", 1, 2, queueMartId, 4));
 			WorkloadRepository.Add(workload);
-			var skillId = 123;
-			var analyticsSkill = new AnalyticsSkill {SkillCode = skill.Id.GetValueOrDefault(), SkillId = skillId, SkillName = skill.Name, TimeZoneId = 12};
+			var analyticsSkill = new AnalyticsSkill
+			{
+				SkillCode = skill.Id.GetValueOrDefault(),
+				SkillId = skillId,
+				SkillName = skill.Name,
+				TimeZoneId = 12
+			};
 			AnalyticsSkillRepository.AddOrUpdateSkill(analyticsSkill);
-			Target.Handle(new WorkloadChangedEvent { WorkloadId = workloadId, LogOnBusinessUnitId = businessUnitId });
+			Target.Handle(new WorkloadChangedEvent
+			{
+				WorkloadId = workloadId,
+				LogOnBusinessUnitId = businessUnitId
+			});
 
 			AnalyticsWorkloadRepository.Workloads.Should().Not.Be.Empty();
 			var analyticsWorkload = AnalyticsWorkloadRepository.Workloads.Single();
@@ -98,7 +111,46 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Workload
 			bridgeQueueWorkload.QueueId.Should().Be.EqualTo(queueMartId);
 			bridgeQueueWorkload.SkillId.Should().Be.EqualTo(skillId);
 			bridgeQueueWorkload.WorkloadId.Should().Be.EqualTo(analyticsWorkload.WorkloadId);
-			
+		}
+
+		[Test]
+		public void ShouldDeleteWorkloadAndConnectedBridge()
+		{
+			const int queueMartId = 3;
+			const int skillId = 123;
+
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(businessUnitId));
+			var skill = SkillFactory.CreateSkill("TestSkill").WithId();
+			var workload = WorkloadFactory.CreateWorkload(skill).WithId(workloadId);
+			workload.QueueAdjustments = new QueueAdjustment();
+			workload.AddQueueSource(new QueueSource("TestQueue", "Something", 1, 2, queueMartId, 4));
+			((Domain.Forecasting.Workload) workload).SetDeleted();
+			WorkloadRepository.Add(workload);
+
+			var analyticsSkill = new AnalyticsSkill
+			{
+				SkillCode = skill.Id.GetValueOrDefault(),
+				SkillId = skillId,
+				SkillName = skill.Name,
+				TimeZoneId = 12
+			};
+			AnalyticsSkillRepository.AddOrUpdateSkill(analyticsSkill);
+			Target.Handle(new WorkloadChangedEvent
+			{
+				WorkloadId = workloadId,
+				LogOnBusinessUnitId = businessUnitId
+			});
+
+			AnalyticsWorkloadRepository.Workloads.Should().Not.Be.Empty();
+			var analyticsWorkload = AnalyticsWorkloadRepository.Workloads.Single();
+			analyticsWorkload.SkillCode.Should().Be.EqualTo(skill.Id.GetValueOrDefault());
+			analyticsWorkload.SkillName.Should().Be.EqualTo(skill.Name);
+			analyticsWorkload.SkillId.Should().Be.EqualTo(analyticsSkill.SkillId);
+			analyticsWorkload.TimeZoneId.Should().Be.EqualTo(analyticsSkill.TimeZoneId);
+			analyticsWorkload.IsDeleted.Should().Be.True();
+
+			var bridgeQueueWorkloads = AnalyticsWorkloadRepository.GetBridgeQueueWorkloads(analyticsWorkload.WorkloadId);
+			bridgeQueueWorkloads.Should().Be.Empty();
 		}
 	}
 }

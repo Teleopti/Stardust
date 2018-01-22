@@ -85,6 +85,7 @@ LEFT JOIN
 	mart.dim_workload dw
 ON 
 	qw.workload_code = dw.workload_code
+	AND dw.is_deleted = 0
 INNER JOIN 
 	mart.dim_business_unit bu ON bu.business_unit_id=dw.business_unit_id
 
