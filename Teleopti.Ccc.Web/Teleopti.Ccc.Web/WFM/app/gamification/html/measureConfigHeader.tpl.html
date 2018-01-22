@@ -2,14 +2,17 @@
 	<i class="mdi mdi-chevron-right"></i>
 </span>
 
-<div ng-if="::$ctrl.allowRename" ng-show="!$ctrl.renameMode" ng-click="$ctrl.rename();$event.stopPropagation()" tabindex="0" class="context-menu card-context rename">
+<div ng-if="::$ctrl.allowRename" ng-show="!$ctrl.renameMode" ng-click="$ctrl.rename();$event.stopPropagation()" tabindex="0"
+ class="context-menu card-context rename">
 	<i class="mdi mdi-lead-pencil edit-icon"></i>
 	<md-tooltip>{{'Rename'|translate}}</md-tooltip>
 </div>
 
 <div class="enable" ng-click="$event.stopPropagation()">
 	<md-checkbox aria-label="Enable measure" ng-checked="$ctrl.checked" ng-click="$ctrl.onCheckboxClick()">
-		<b ng-show="!$ctrl.renameMode">{{$ctrl.name}}</b>
+		<b ng-show="!$ctrl.renameMode">{{$ctrl.name}}
+			<span ng-show="$ctrl.valueDataType===1">(%)</span>
+		</b>
 	</md-checkbox>
 </div>
 

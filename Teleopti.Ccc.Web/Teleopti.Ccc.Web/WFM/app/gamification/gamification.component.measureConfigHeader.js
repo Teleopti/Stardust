@@ -1,4 +1,5 @@
-;(function (angular) { 'use strict';
+; (function (angular) {
+	'use strict';
 	angular.module('wfm.gamification')
 		.component('measureConfigHeader', {
 			templateUrl: 'app/gamification/html/measureConfigHeader.tpl.html',
@@ -7,7 +8,8 @@
 				allowRename: '<',
 				checked: '<',
 				onNameUpdate: '&',
-				onEnable: '&'
+				onEnable: '&',
+				valueDataType: '<'
 			},
 			controller: [function MeasureConfigHeaderCtrl() {
 				var ctrl = this;
