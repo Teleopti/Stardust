@@ -15,24 +15,25 @@
 
 		ctrl.tabSelected = function (tab) {
 			$state.go('gamification.' + tab);
-		}
+		};
 
 		ctrl.$onInit = function () {
+			ctrl.selectedTab = 0;
+
 			var currentState = $state.current.name;
+
 			if (currentState.indexOf('targets') > -1) {
 				ctrl.selectedTab = 1;
-			} else
-				if (currentState.indexOf('import') > -1) {
-					ctrl.selectedTab = 2;
-				}
-				else {
-					ctrl.selectedTab = 0;
-				}
-		}
+			} else if (currentState.indexOf('import') > -1) {
+				ctrl.selectedTab = 2;
+			}
+		};
 
 		ctrl.setElementHeightToCoverRestOfViewport = function () {
 
 			var top = element.getBoundingClientRect().top || element.getBoundingClientRect().y;
+
+			if (top > 500) top = 150;
 
 			var bottomMargin = 18;
 
