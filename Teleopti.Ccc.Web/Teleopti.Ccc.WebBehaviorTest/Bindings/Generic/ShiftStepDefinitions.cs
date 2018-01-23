@@ -24,11 +24,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Given(@"'?(.*)'? has a '(.*)' shift between '(.*)' and '(.*)'")]
 		public void GivenIHaveAShiftBetween(string person, string activity, string from, string to)
 		{
+			var startTime = DateTime.Parse(from);
+			var endTime = startTime.Date.Add(TimeSpan.Parse(to));
 			DataMaker.Person(person).Apply(new ShiftConfigurable
 			{
 				Activity = activity,
-				StartTime = CurrentTime.MagicParse(from),
-				EndTime = CurrentTime.MagicParse(to)
+				StartTime = startTime,
+				EndTime = endTime
 			});
 		}
 

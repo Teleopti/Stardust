@@ -24,23 +24,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			LocalSystem.Now.Reset();
 		}
 
-		public static void Set(string timeOrDate)
+		public static void Set(string time)
 		{
-			_currentTime = MagicParse(timeOrDate);
+			_currentTime = time.Utc();
 			LocalSystem.Now.Is(_currentTime);
 			TestControllerMethods.SetCurrentTime(Value());
 			Navigation.Navigation.ReapplyFakeTime();
-		}
-
-		public static DateTime MagicParse(string timeOrDate)
-		{
-			if (timeOrDate.Contains(" ")) // full date time detected
-				return timeOrDate.Utc();
-			if (timeOrDate.Contains("-")) // probably only a date
-				return timeOrDate.Utc();
-			if (timeOrDate.Contains(":")) // possibly just a time
-				return $"{Value().ToShortDateString()} {timeOrDate}".Utc();
-			return timeOrDate.Utc(); // ah wth...
 		}
 	}
 }

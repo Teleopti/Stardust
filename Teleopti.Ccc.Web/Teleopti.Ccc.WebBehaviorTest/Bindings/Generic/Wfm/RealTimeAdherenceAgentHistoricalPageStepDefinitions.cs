@@ -30,14 +30,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			Navigation.GoToAgentHistoricalAdherence(personId, DateTime.Parse(date));
 		}
 
-		[When(@"I approve adherence as in adherence between '(.*)' and '(.*)'")]
-		public void WhenIApproveAdherenceAsInAdherenceBetween(string from, string to)
-		{
-			Browser.Interactions.FillWith(".approve-adherence-from", from);
-			Browser.Interactions.FillWith(".approve-adherence-to", from);
-			Browser.Interactions.Click(".approve-adherence-submit");
-		}
-
 		[Then(@"I should see out of adherences")]
 		public void ThenIShouldSeeOutOfAdherences(Table table)
 		{
@@ -45,37 +37,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			outOfAdherences.ForEach(x => { Browser.Interactions.AssertExists(".out-of-adherence[data-starttime='{0}'][data-endtime='{1}']", x.StartTime, x.EndTime); });
 		}
 
-		[Then(@"I should see recorded out of adherence between '(.*)' and '(.*)'")]
-		public void ThenIShouldSeeRecordedOutOfAdherenceBetween(string from, string to)
-		{
-			Browser.Interactions.AssertAnyContains(".recorded-out-of-adherence", from);
-			Browser.Interactions.AssertAnyContains(".recorded-out-of-adherence", to);
-		}
-
-		[Then(@"I should see approved adherence between '(.*)' and '(.*)'")]
-		public void ThenIShouldSeeApprovedAdherenceBetween(string from, string to)
-		{
-			Browser.Interactions.AssertAnyContains(".approved-adherence", from);
-			Browser.Interactions.AssertAnyContains(".approved-adherence", to);
-		}
-
-		[Then(@" I should not see any out of adherences")]
-		public void ThenIShouldNotSeeAnyOutOfAdherences()
-		{
-			Browser.Interactions.AssertNotExists(".rta-view", ".out-of-adherence");
-		}
-
 		[Then(@"I should see activities")]
 		public void ThenIShouldSeeActivities(Table table)
 		{
 			var activities = table.CreateSet<StartEndTimePair>();
 			activities.ForEach(x => { Browser.Interactions.AssertExists(".activity[data-starttime='{0}'][data-endtime='{1}']", x.StartTime, x.EndTime); });
-		}
-
-		[Then(@"I should see adherence percentage of (.*)%")]
-		public void ThenIShouldSeeHistoricalAdherenceForWithAdherenceOf(string adherence)
-		{
-			Browser.Interactions.AssertFirstContains(".adherence-percent", adherence);
 		}
 
 		[Then(@"I should rule and state changes")]
