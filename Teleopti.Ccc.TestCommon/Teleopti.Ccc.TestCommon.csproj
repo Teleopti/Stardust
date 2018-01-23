@@ -210,6 +210,8 @@
     <Compile Include="FakeLicenseActivator.cs" />
     <Compile Include="FakeLicenseActivatorProvider.cs" />
     <Compile Include="FakeOvertimeRequestUnderStaffingSkillProvider.cs" />
+    <Compile Include="FakeRepositories\FakeAgentBadgeRepository.cs" />
+    <Compile Include="FakeRepositories\FakeAgentBadgeWithRankRepository.cs" />
     <Compile Include="FakeRepositories\FakeAnalyticsSiteRepository.cs" />
     <Compile Include="FakeRepositories\FakeASMScheduleChangeTimeRepository.cs" />
     <Compile Include="FakeRepositories\FakeExternalPerformanceDataRepository.cs" />

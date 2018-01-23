@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -15,9 +14,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.BadgeLeaderBoardReport;
-using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
@@ -25,8 +22,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 	[TestFixture]
 	public class LeaderboardSettingBasedBadgeProviderTest
 	{
-		private IAgentBadgeRepository agentBadgeRepository;
-		private IAgentBadgeWithRankRepository agentBadgeWithRankRepository;
+		private FakeAgentBadgeRepository agentBadgeRepository;
+		private FakeAgentBadgeWithRankRepository agentBadgeWithRankRepository;
 		private LeaderboardSettingBasedBadgeProvider target;
 		private IPermissionProvider permissionProvider;
 		private ISiteRepository siteRepository;
@@ -73,7 +70,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		private Team team1;
 		private IGroupingReadOnlyRepository groupingRepository;
 		private ITeamGamificationSettingRepository teamSettingRepository;
-		private IPersonRepository personRepository;
+		private FakePersonRepository personRepository;
+		private FakeGlobalSettingDataRepository settingDataRepository;
 
 		[SetUp]
 		public void SetUp()
@@ -116,20 +114,20 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 					new TeamGamificationSetting {Team = team1, GamificationSetting = setting2}
 				});
 
-			person1 = MockRepository.GenerateMock<IPerson>();
-			person1.Stub(x => x.Id.GetValueOrDefault()).Return(personDetail1.PersonId);
-			person1.Stub(x => x.Name).Return(new Name("first1", "last1"));
-			person2 = MockRepository.GenerateMock<IPerson>();
-			person2.Stub(x => x.Id.GetValueOrDefault()).Return(personDetail2.PersonId);
-			person2.Stub(x => x.Name).Return(new Name("first2", "last2"));
+			person1 = PersonFactory.CreatePersonWithPersonPeriodFromTeam(date, team0);
+			person1.WithId(personDetail1.PersonId);
+			person1.WithName(new Name("first1", "last1"));
+			person1.SetEmploymentNumber("1");
+			person2 = PersonFactory.CreatePersonWithPersonPeriodFromTeam(date, team1);
+			person2.WithId(personDetail2.PersonId);
+			person2.WithName(new Name("first2", "last2"));
+			person2.SetEmploymentNumber("2");
+			personRepository = new FakePersonRepository(null);
+			personRepository.Has(new List<IPerson> { person1, person2 });
 
-			personRepository = MockRepository.GenerateMock<IPersonRepository>();
-			personRepository.Stub(x => x.FindPeopleBelongTeam(team0, new DateOnlyPeriod(date.AddDays(-1), date)))
-				.Return(new List<IPerson> {person1});
-			personRepository.Stub(x => x.FindPeopleBelongTeam(team1, new DateOnlyPeriod(date.AddDays(-1), date)))
-				.Return(new List<IPerson> {person2});
+			agentBadgeRepository = new FakeAgentBadgeRepository();
+			agentBadgeRepository.Add(agentBadges);
 
-			agentBadgeRepository = MockRepository.GenerateMock<IAgentBadgeRepository>();
 			agentsWithRankedBadge = new IAgentBadgeWithRank[]
 			{
 				new AgentBadgeWithRank
@@ -157,8 +155,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 					BronzeBadgeAmount = 9
 				}
 			};
-			agentBadgeWithRankRepository = MockRepository.GenerateMock<IAgentBadgeWithRankRepository>();
-
+			agentBadgeWithRankRepository = new FakeAgentBadgeWithRankRepository();
+			agentBadgeWithRankRepository.Add(agentsWithRankedBadge);
 
 			permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 			siteRepository = MockRepository.GenerateMock<ISiteRepository>();
@@ -169,11 +167,25 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 
 			var personalSettingDataRepository = new FakePersonalSettingDataRepository();
 			personalSettingDataRepository.PersistSettingValue(NameFormatSettings.Key, new NameFormatSettings {NameFormatId = 0});
-			var nameFormatSettingsPersisterAndProvider = new NameFormatSettingsPersisterAndProvider(personalSettingDataRepository);
-			var nameProvider = new PersonNameProvider(nameFormatSettingsPersisterAndProvider);
+			settingDataRepository = new FakeGlobalSettingDataRepository();
+			settingDataRepository.PersistSettingValue("CommonNameDescription", new CommonNameDescriptionSetting());
+
+
 			target = new LeaderboardSettingBasedBadgeProvider(agentBadgeRepository, agentBadgeWithRankRepository,
-				permissionProvider, nameProvider, siteRepository, teamRepository, groupingRepository,
-				teamSettingRepository, personRepository, nameFormatSettingsPersisterAndProvider,agentBadgeTransactionRepository,agentBadgeWithRankTransactionRepository);
+				permissionProvider, siteRepository, teamRepository, groupingRepository,
+				teamSettingRepository, personRepository, agentBadgeTransactionRepository,agentBadgeWithRankTransactionRepository,
+				settingDataRepository);
+		}
+
+		[Test]
+		public void ShouldGenerateAgentNameBySetting()
+		{
+			var commonNameDescriptionSetting = settingDataRepository.FindValueByKey("CommonNameDescription", new CommonNameDescriptionSetting());
+			commonNameDescriptionSetting.AliasFormat = "{EmployeeNumber} {FirstName} {LastName}";
+
+			var result = target.GetAgentBadgeOverviewsForPeople(new[] { person1.Id.Value, person2.Id.Value }, DateOnly.Today);
+
+			result.First().AgentName.Should().Be("1 "+personName1);
 		}
 
 		[Test]
@@ -183,11 +195,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 				.IgnoreArguments()
 				.Return(new[] {new ReadOnlyGroupDetail()});
 			groupingRepository.Stub(x => x.DetailsForGroup(Guid.Empty, date)).Return(new[] {personDetail1});
-
-			agentBadgeRepository.Stub(x => x.Find(new[] {personDetail1.PersonId}))
-				.Return(agentBadges.Where(b => b.Person == personDetail1.PersonId).ToArray());
-			agentBadgeWithRankRepository.Stub(x => x.Find(new[] {personDetail1.PersonId}))
-				.Return(new Collection<IAgentBadgeWithRank>());
+			
 			permissionProvider.Stub(
 				x =>
 					x.HasOrganisationDetailPermission(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard, date, personDetail1))
@@ -202,18 +210,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			target.PermittedAgentBadgeOverviewsForEveryoneOrMyOwn(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard,
 				option);
 
-			agentBadgeRepository.AssertWasCalled(x => x.Find(new[] {personDetail1.PersonId}));
+			Assert.IsTrue(agentBadgeRepository.FindByPersonListCalledTimes() > 0);
 		}
+
 		[Test]
 		public void ShouldGetBadgesForPeople()
 		{
-			agentBadgeRepository.Stub(x => x.Find(new[] { personDetail1.PersonId }))
-				.Return(agentBadges.Where(b => b.Person == personDetail1.PersonId).ToArray());
-			agentBadgeWithRankRepository.Stub(x => x.Find(new[] { personDetail1.PersonId, personDetail2.PersonId }))
-				.Return(new Collection<IAgentBadgeWithRank>());			
-
-			personRepository.Stub(x => x.FindPeople(new[] {person1.Id.Value, person2.Id.Value})).Return(new[] {person1, person2});
-
 			var result = target.GetAgentBadgeOverviewsForPeople(new[] {person1.Id.Value, person2.Id.Value},DateOnly.Today);
 
 			result.First().AgentName.Should().Be(personName1);
@@ -222,7 +224,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		[Test]
 		public void ShouldReturnBadgesForEveryoneAndMyOwn()
 		{
-
 			var persons = new[]
 			{
 				personDetail1, personDetail2
@@ -235,14 +236,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 				Type = LeadboardQueryType.Everyone
 			};
 
-			groupingRepository.Stub(x => x.AvailableGroups((ReadOnlyGroupPage)null, date))
+			groupingRepository.Stub(x => x.AvailableGroups(null, date))
 				.IgnoreArguments()
 				.Return(new[] {new ReadOnlyGroupDetail()});
 			groupingRepository.Stub(x => x.DetailsForGroup(Guid.Empty, date)).Return(persons);
-			agentBadgeRepository.Stub(x => x.Find(new[] {personDetail2.PersonId}))
-				.Return(agentBadges.Where(b => b.Person == personDetail2.PersonId).ToArray());
-			agentBadgeWithRankRepository.Stub(x => x.Find(new[] {personDetail2.PersonId}))
-				.Return(agentsWithRankedBadge.Where(b => b.Person == personDetail2.PersonId).ToArray());
 
 			permissionProvider.Stub(
 				x =>
@@ -272,15 +269,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 				SelectedId = site.Id.GetValueOrDefault(),
 				Type = LeadboardQueryType.Site
 			};
-			agentBadgeRepository.Stub(x => x.Find(new[] {personDetail1.PersonId}))
-				.Return(agentBadges.Where(b => b.Person == personDetail1.PersonId).ToArray());
-			agentBadgeRepository.Stub(x => x.Find(new[] {personDetail2.PersonId}))
-				.Return(agentBadges.Where(b => b.Person == personDetail2.PersonId).ToArray());
-			agentBadgeWithRankRepository.Stub(x => x.Find(new[] {personDetail1.PersonId, personDetail2.PersonId}))
-				.Return(agentsWithRankedBadge);
 			groupingRepository.Stub(x => x.DetailsForGroup(team0.Id.GetValueOrDefault(), date)).Return(new[] {personDetail1});
 			groupingRepository.Stub(x => x.DetailsForGroup(team1.Id.GetValueOrDefault(), date)).Return(new[] {personDetail2});
-
 
 			permissionProvider.Stub(
 				x =>
@@ -308,10 +298,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 				SelectedId = team0.Id.GetValueOrDefault(),
 				Type = LeadboardQueryType.Team
 			};
-			agentBadgeRepository.Stub(x => x.Find(new[] {personDetail1.PersonId}))
-				.Return(agentBadges.Where(b => b.Person == personDetail1.PersonId).ToArray());
-			agentBadgeWithRankRepository.Stub(x => x.Find(new[] { personDetail1.PersonId,personDetail2.PersonId }))
-				.Return(new Collection<IAgentBadgeWithRank>());
+			agentBadgeRepository.Remove(agentBadges[1]);
+			agentBadgeWithRankRepository.Remove(agentsWithRankedBadge[2]);
 			teamRepository.Stub(x => x.Get(team0.Id.GetValueOrDefault())).Return(team0);
 			groupingRepository.Stub(x => x.DetailsForGroup(team0.Id.GetValueOrDefault(), date))
 				.Return(new[] {personDetail1, personDetail2});
@@ -366,7 +354,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 					Person = personDetail1.PersonId
 				}
 			};
-			agentBadgeRepository.Stub(x => x.Find(new[] {personDetail1.PersonId})).Return(agentBadges);
+			agentBadgeRepository.ClearAll();
+			agentBadgeRepository.Add(agentBadges);
 
 			agentsWithRankedBadge = new IAgentBadgeWithRank[]
 			{
@@ -395,7 +384,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 					BronzeBadgeAmount = 9
 				}
 			};
-			agentBadgeWithRankRepository.Stub(x => x.Find(new[] {personDetail1.PersonId})).Return(agentsWithRankedBadge);
+			agentBadgeWithRankRepository.ClearAll();
+			agentBadgeWithRankRepository.Add(agentsWithRankedBadge);
 
 			var teamGroupDetail = new ReadOnlyGroupDetail {GroupId = Guid.NewGuid()};
 			groupingRepository.Stub(x => x.AvailableGroups(new ReadOnlyGroupPage(), date))
@@ -422,8 +412,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			var person1 = PersonFactory.CreatePerson("a");
 			person1.WithId(personDetail1.PersonId);
 		
-
-
 			var option = new LeaderboardQuery
 			{
 				Date = DateOnly.Today,
@@ -515,6 +503,5 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			result.Single().Silver.Should().Be(4);
 			result.Single().Bronze.Should().Be(6);
 		}
-
 	}
 }

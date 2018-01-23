@@ -7,9 +7,7 @@ using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.BadgeLeaderBoardReport;
-using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
@@ -27,11 +25,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		private readonly IAgentBadgeRepository _agentBadgeRepository;
 		private readonly IAgentBadgeWithRankRepository _agentBadgeWithRankRepository;
 		private readonly IPermissionProvider _permissionProvider;
-		private readonly IPersonNameProvider _personNameProvider;
 		private readonly ISiteRepository _siteRepository;
 		private readonly ITeamRepository _teamRepository;
 		private readonly IGroupingReadOnlyRepository _groupingRepository;
-		private readonly ISettingsPersisterAndProvider<NameFormatSettings> _nameFormatSettings;
+		private readonly ISettingDataRepository _settingDataRepository;
 
 		private ReadOnlyGroupDetail[] permittedPersonList;
 		private readonly ITeamGamificationSettingRepository _teamSettingRepository;
@@ -43,24 +40,23 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		public LeaderboardSettingBasedBadgeProvider(IAgentBadgeRepository agentBadgeRepository,
 			IAgentBadgeWithRankRepository agentBadgeWithRankRepository,
 			IPermissionProvider permissionProvider,
-			IPersonNameProvider personNameProvider,
 			ISiteRepository siteRepository, ITeamRepository teamRepository,
 			IGroupingReadOnlyRepository groupingRepository,
 			ITeamGamificationSettingRepository teamSettingRepository, IPersonRepository personRepo, 
-			ISettingsPersisterAndProvider<NameFormatSettings> nameFormatSettings, IAgentBadgeTransactionRepository agentBadgeTransactionRepository, IAgentBadgeWithRankTransactionRepository agentBadgeWithRankTransactionRepository)
+			IAgentBadgeTransactionRepository agentBadgeTransactionRepository, 
+			IAgentBadgeWithRankTransactionRepository agentBadgeWithRankTransactionRepository, ISettingDataRepository settingDataRepository)
 		{
 			_agentBadgeRepository = agentBadgeRepository;
 			_agentBadgeWithRankRepository = agentBadgeWithRankRepository;
 			_permissionProvider = permissionProvider;
-			_personNameProvider = personNameProvider;
 			_siteRepository = siteRepository;
 			_teamRepository = teamRepository;
 			_groupingRepository = groupingRepository;
 			_teamSettingRepository = teamSettingRepository;
 			_personRepo = personRepo;
-			_nameFormatSettings = nameFormatSettings;
 			_agentBadgeTransactionRepository = agentBadgeTransactionRepository;
 			_agentBadgeWithRankTransactionRepository = agentBadgeWithRankTransactionRepository;
+			_settingDataRepository = settingDataRepository;
 		}
 
 		public IEnumerable<AgentBadgeOverview> PermittedAgentBadgeOverviewsForEveryoneOrMyOwn(string functionPath,
@@ -222,9 +218,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 
 		private IEnumerable<AgentBadgeOverview> getPermittedAgentOverviews(IEnumerable<agentWithBadge> permittedAgentBadgeList)
 		{
-			var permittedPersons = permittedPersonList.ToLookup(p => p.PersonId);
+			var permittedPersons = _personRepo.FindPeople(permittedPersonList.Select(p => p.PersonId));
 			var dic = new Dictionary<Guid, AgentBadgeOverview>();
-			var nameSetting = _nameFormatSettings.Get();
+			var commonNameDescription =  _settingDataRepository.FindValueByKey("CommonNameDescription", new CommonNameDescriptionSetting());
 
 			foreach (var agentBadge in permittedAgentBadgeList)
 			{
@@ -233,10 +229,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 				AgentBadgeOverview overview;
 				if (!dic.TryGetValue(personId, out overview))
 				{
-					var detail = permittedPersons[personId].First();
+					var person = permittedPersons.First(p => p.Id == personId);
 					overview = new AgentBadgeOverview
 					{
-						AgentName = _personNameProvider.BuildNameFromSetting(detail.FirstName, detail.LastName, nameSetting)
+						AgentName = commonNameDescription.BuildFor(person)
 					};
 					dic.Add(personId, overview);
 				}
@@ -250,7 +246,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		private IEnumerable<AgentBadgeOverview> getPermittedAgentOverviews(IEnumerable<agentWithBadge> permittedAgentBadgeList, IEnumerable<IPerson> permittedPeople )
 		{
 			var dic = new Dictionary<Guid, AgentBadgeOverview>();
-			var nameSetting = _nameFormatSettings.Get();
+			var commonNameDescription = _settingDataRepository.FindValueByKey("CommonNameDescription", new CommonNameDescriptionSetting());
 
 			foreach (var agentBadge in permittedAgentBadgeList)
 			{
@@ -262,7 +258,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 					var person = permittedPeople.First(p => p.Id.GetValueOrDefault() == personId);
 					overview = new AgentBadgeOverview
 					{
-						AgentName = _personNameProvider.BuildNameFromSetting(person.Name.FirstName, person.Name.LastName, nameSetting)
+						AgentName = commonNameDescription.BuildFor(person)
 					};
 					dic.Add(personId, overview);
 				}
