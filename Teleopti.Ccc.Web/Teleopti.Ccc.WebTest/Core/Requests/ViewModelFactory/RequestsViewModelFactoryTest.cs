@@ -15,6 +15,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -44,6 +45,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		public FakeMultiplicatorDefinitionSetRepository FakeMultiplicatorDefinitionSetRepository;
 		public FakePermissionProvider FakePermissionProvider;
 		public FakePersonRequestRepository FakePersonRequestRepository;
+		public ICurrentDataSource CurrentDataSource;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -318,6 +320,27 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 
 			var result = RequestsViewModelFactory.CreateShiftTradeRequestSwapDetails(personRequest.Id.Value);
 			result.First().To.IsMySchedule.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldRetrieveRequestLicenseForRequestsViewModel()
+		{
+			var result = RequestsViewModelFactory.CreatePageViewModel();
+
+			result.RequestLicense.IsOvertimeAvailabilityEnabled.Should().Be(true);
+			result.RequestLicense.IsOvertimeRequestEnabled.Should().Be(true);
+		}
+
+		[Test]
+		public void ShouldRetrieveRequestLicenseWithOvertimeAvailabilityDisabled()
+		{
+			var licenseActivator = LicenseProvider.GetLicenseActivator(new OvertimeFakeLicenseService(false, true));
+			DefinedLicenseDataFactory.SetLicenseActivator(CurrentDataSource.CurrentName(), licenseActivator);
+
+			var result = RequestsViewModelFactory.CreatePageViewModel();
+
+			result.RequestLicense.IsOvertimeAvailabilityEnabled.Should().Be(false);
+			result.RequestLicense.IsOvertimeRequestEnabled.Should().Be(true);
 		}
 
 		private void setUpWorkFlowControlSet()

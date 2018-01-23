@@ -461,6 +461,7 @@
     <Compile Include="Areas\Intraday\IntradayController.cs" />
     <Compile Include="Areas\MyTime\Controllers\OvertimeRequestsController.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\SingleOwnedPerson.cs" />
+    <Compile Include="Areas\MyTime\Models\WeekSchedule\RequestLicense.cs" />
     <Compile Include="Areas\Rta\Controllers\ConfigurationController.cs" />
     <Compile Include="Areas\Rta\Controllers\HistoricalAdherenceController.cs" />
     <Compile Include="Areas\Rta\Controllers\AgentStateController.cs" />

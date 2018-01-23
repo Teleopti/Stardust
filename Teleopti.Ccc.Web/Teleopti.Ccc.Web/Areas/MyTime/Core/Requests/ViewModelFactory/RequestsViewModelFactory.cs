@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -34,6 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 		private readonly PersonAccountViewModelMapper _personAccountViewModelMapper;
 		private readonly IMultiplicatorDefinitionSetProvider _multiplicatorDefinitionSetProvider;
 		private readonly ISettingsPersisterAndProvider<NameFormatSettings> _nameFormatSettings;
+		private readonly ILicenseAvailability _licenseAvailability;
 
 		public RequestsViewModelFactory(
 			IPersonRequestProvider personRequestProvider,
@@ -50,7 +52,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 			RequestsViewModelMapper mapper,
 			ShiftTradeSwapDetailViewModelMapper shiftTradeSwapDetailViewModelMapper,
 			PersonAccountViewModelMapper personAccountViewModelMapper,
-			IMultiplicatorDefinitionSetProvider multiplicatorDefinitionSetProvider, ISettingsPersisterAndProvider<NameFormatSettings> nameFormatSettings)
+			IMultiplicatorDefinitionSetProvider multiplicatorDefinitionSetProvider, 
+			ISettingsPersisterAndProvider<NameFormatSettings> nameFormatSettings,
+			ILicenseAvailability licenseAvailability)
 		{
 			_personRequestProvider = personRequestProvider;
 			_absenceTypesProvider = absenceTypesProvider;
@@ -68,24 +72,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 			_personAccountViewModelMapper = personAccountViewModelMapper;
 			_multiplicatorDefinitionSetProvider = multiplicatorDefinitionSetProvider;
 			_nameFormatSettings = nameFormatSettings;
+			_licenseAvailability = licenseAvailability;
 		}
 
 		public RequestsViewModel CreatePageViewModel()
 		{
-			var permission = new RequestPermission
-			{
-				TextRequestPermission = _permissionProvider.HasApplicationFunctionPermission(
-						DefinedRaptorApplicationFunctionPaths.TextRequests),
-				AbsenceRequestPermission = _permissionProvider.HasApplicationFunctionPermission(
-						DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb),
-				ShiftTradeRequestPermission = _permissionProvider.HasApplicationFunctionPermission(
-						DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb),
-				AbsenceReportPermission = _permissionProvider.HasApplicationFunctionPermission(
-						DefinedRaptorApplicationFunctionPaths.AbsenceReport),
-				ShiftTradeBulletinBoardPermission = _permissionProvider.HasApplicationFunctionPermission(
-						DefinedRaptorApplicationFunctionPaths.ShiftTradeBulletinBoard),
-				OvertimeRequestPermission = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.OvertimeRequestWeb)
-			};
 			var dateFormat = _loggedOnUser.CurrentUser().PermissionInformation.Culture().DateTimeFormat.ShortDatePattern;
 			return new RequestsViewModel
 			{
@@ -101,7 +92,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 						Id = x.Id,
 						Name = x.Description.Name
 					}).ToList(),
-				RequestPermission = permission,
+				RequestPermission = loadRequestPermission(),
+				RequestLicense = loadRequestLicense(),
 				DatePickerFormat = dateFormat,
 				OvertimeTypes = _multiplicatorDefinitionSetProvider.GetDefinitionSetsForCurrentUser().Select(definitionSet => new OvertimeTypeViewModel
 				{
@@ -220,6 +212,38 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 
 			var test = mySite.HasValue ? mySite.ToString() : "";
 			return test;
+		}
+
+		private RequestPermission loadRequestPermission()
+		{
+			var permission = new RequestPermission
+			{
+				TextRequestPermission = _permissionProvider.HasApplicationFunctionPermission(
+					DefinedRaptorApplicationFunctionPaths.TextRequests),
+				AbsenceRequestPermission = _permissionProvider.HasApplicationFunctionPermission(
+					DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb),
+				ShiftTradeRequestPermission = _permissionProvider.HasApplicationFunctionPermission(
+					DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb),
+				AbsenceReportPermission = _permissionProvider.HasApplicationFunctionPermission(
+					DefinedRaptorApplicationFunctionPaths.AbsenceReport),
+				ShiftTradeBulletinBoardPermission = _permissionProvider.HasApplicationFunctionPermission(
+					DefinedRaptorApplicationFunctionPaths.ShiftTradeBulletinBoard),
+				OvertimeRequestPermission =
+					_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.OvertimeRequestWeb)
+			};
+			return permission;
+		}
+
+		private RequestLicense loadRequestLicense()
+		{
+			var requestLicense = new RequestLicense
+			{
+				IsOvertimeAvailabilityEnabled =
+					_licenseAvailability.IsLicenseEnabled(DefinedLicenseOptionPaths.TeleoptiCccOvertimeAvailability),
+				IsOvertimeRequestEnabled =
+					_licenseAvailability.IsLicenseEnabled(DefinedLicenseOptionPaths.TeleoptiWfmOvertimeRequests)
+			};
+			return requestLicense;
 		}
 	}
 }
