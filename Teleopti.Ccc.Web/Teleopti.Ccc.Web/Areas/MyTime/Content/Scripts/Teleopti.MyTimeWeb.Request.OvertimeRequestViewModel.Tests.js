@@ -505,6 +505,30 @@ $(document).ready(function() {
 		equal(requestVm.StartTime(), tomorrow.format('HH:mm'));
 	});
 
+	test('should re-calculate start time when changing duration', function() {
+		enabledTogglesList = ['OvertimeRequestPeriodSetting_46417', 'MyTimeWeb_OvertimeRequestDefaultStartTime_47513'];
+
+		var tomorrow = moment().add(1, 'days').hours(7).minutes(0);
+		fakeDefaultStartTimeFromBackend.DefaultStartTime = "/Date(" + tomorrow.unix() * 1000 + ")/";
+		fakeDefaultStartTimeFromBackend.IsShiftStartTime = true;
+		fakeDefaultStartTimeFromBackend.IsShiftEndTime = false;
+
+		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
+		var requestVm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, function(){}, fakeRequestDetailViewModel, null, false);
+
+		requestVm.DateFrom(moment());
+		requestVm.UseDefaultStartTime(false);
+		requestVm.UseDefaultStartTime(true);
+		requestVm.RequestDuration('03:00');
+
+		equal(requestVm.DateFrom().format('YYYY-MM-DD'), tomorrow.format('YYYY-MM-DD'));
+
+		var expectedStartTime = tomorrow.add(-requestVm.RequestDuration().split(':')[0], 'hours')
+								.add(-requestVm.RequestDuration().split(':')[1], 'minutes').format('HH:mm');
+
+		equal(requestVm.StartTime(), expectedStartTime);
+	});
+
 	test('should set overtime request duration to one hour by default', function() {
 		equal(vm.RequestDuration(), '01:00');
 	});

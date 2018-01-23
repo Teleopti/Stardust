@@ -6,7 +6,8 @@
 		timeFormat = Teleopti.MyTimeWeb.Common.TimeFormat,
 		dateTimeFormats = Teleopti.MyTimeWeb.Common.Constants.serviceDateTimeFormat,
 		dateOnlyFormat = Teleopti.MyTimeWeb.Common.Constants.serviceDateTimeFormat.dateOnly,
-		defaultStartTimeSubscription, useDefaultStartTimeToggleSubscription;
+		defaultStartTimeSubscription, useDefaultStartTimeToggleSubscription, requestDurationSubscription,
+		defaultStartDateTime, isShiftStartTime;
 
 	self.Id = ko.observable();
 	self.Template = "add-overtime-request-template";
@@ -174,27 +175,37 @@
 		});
 	}
 
+	function calculateStartTime(){
+		if (defaultStartDateTime.isSame(self.DateFrom(), 'days') && moment(currentUserDateTime).add(overtimeRequestsGapInMinutes, 'minutes').isBefore(defaultStartDateTime) && isShiftStartTime) {
+			var amendedStartDateTime = moment(defaultStartDateTime).add(-self.RequestDuration().split(':')[0], 'hours').add(-self.RequestDuration().split(':')[1], 'minutes');
+
+			self.StartTime(amendedStartDateTime.format(timeFormat));
+		} else {
+			self.StartTime(defaultStartDateTime.format(timeFormat));
+		}
+	}
+
 	function updateDateFromAndStartTime(startDateTimeData) {
 		if(!startDateTimeData || !startDateTimeData.DefaultStartTime)
 			return;
 
 		var datetime = new Date(parseInt(startDateTimeData.DefaultStartTime.replace(/\/Date\((-?\d+)\)\//, '$1')));
-		var defaultStartDateTime = moment(datetime);
+		defaultStartDateTime = moment(datetime);
+		isShiftStartTime = startDateTimeData.IsShiftStartTime;
 
 		if (defaultStartDateTime.format('YYYY-MM-DD') !== self.DateFrom().format('YYYY-MM-DD')) {
 			disposeDateFromSubscription();
 			self.DateFrom(defaultStartDateTime);
 		}
 
-		if (defaultStartDateTime.isSame(self.DateFrom(), 'days') && moment(currentUserDateTime).add(overtimeRequestsGapInMinutes, 'minutes').isBefore(defaultStartDateTime) && startDateTimeData.IsShiftStartTime) {
-			var amendedStartDateTime = defaultStartDateTime.add(-self.RequestDuration().split(':')[0], 'hours').add(-self.RequestDuration().split(':')[1], 'minutes');
-
-			self.StartTime(amendedStartDateTime.format(timeFormat));
-		} else {
-			self.StartTime(defaultStartDateTime.format(timeFormat));
-		}
+		calculateStartTime();
 
 		setDateFromSubscription();
+
+		if(isShiftStartTime)
+			setRequestDurationSubscription();
+		else
+			disposeRequestDurationSubscription();
 	}
 
 	function setDateFromSubscription() {
@@ -222,6 +233,23 @@
 				disposeDateFromSubscription();
 			}
 		});
+	}
+
+	function setRequestDurationSubscription() {
+		disposeRequestDurationSubscription();
+		requestDurationSubscription = self.RequestDuration.subscribe(function (newValue) {
+			if(isShiftStartTime) {
+				var amendedStartDateTime = moment(defaultStartDateTime).add(-self.RequestDuration().split(':')[0], 'hours').add(-self.RequestDuration().split(':')[1], 'minutes');
+				
+				self.StartTime(amendedStartDateTime.format(timeFormat));
+			}
+		});
+	}
+	
+	function disposeRequestDurationSubscription() {
+		if (requestDurationSubscription && requestDurationSubscription.dispose) {
+			requestDurationSubscription.dispose();
+		}
 	}
 
 	function _ajaxErrorFn(response, textStatus) {
