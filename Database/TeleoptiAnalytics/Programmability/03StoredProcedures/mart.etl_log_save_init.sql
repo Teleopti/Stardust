@@ -4,12 +4,18 @@ GO
 
 
 CREATE PROCEDURE [mart].[etl_log_save_init]
- 
-  
+@schedule_id int  
 AS
 BEGIN
 
 	SET NOCOUNT ON;
+
+	IF NOT EXISTS(SELECT 1 FROM mart.etl_job_schedule WHERE schedule_id = @schedule_id)
+	BEGIN
+		SELECT -99
+		RETURN
+	END
+
     INSERT INTO Mart.etl_job_execution (insert_date)
     VALUES (default)
 

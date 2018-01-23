@@ -64,7 +64,11 @@ namespace Teleopti.Analytics.Etl.Common
 			foreach (var jobResult in jobResultCollection)
 			{
 				IEtlJobLog etlJobLogItem = new EtlJobLog(jobLogRepository);
-				etlJobLogItem.Init(jobScheduleId, jobResult.StartTime, jobResult.EndTime);
+				if (!etlJobLogItem.Init(jobScheduleId, jobResult.StartTime, jobResult.EndTime))
+				{
+					// ScheduleId is not avaliable due to deletion
+					continue;
+				}
 
 				foreach (var jobStepResult in jobResult.JobStepResultCollection)
 					etlJobLogItem.PersistJobStep(jobStepResult);

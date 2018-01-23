@@ -10,7 +10,7 @@ namespace Teleopti.Analytics.Etl.Common.Interfaces.Common
         DateTime EndTime { get; }
         int ScopeIdentity { get; }
 
-        void Init(int scheduleId, DateTime startTime, DateTime endTime);
+        bool Init(int scheduleId, DateTime startTime, DateTime endTime);
         void Persist(IJobResult jobResult);
         void PersistJobStep(IJobStepResult jobStepResult);
         

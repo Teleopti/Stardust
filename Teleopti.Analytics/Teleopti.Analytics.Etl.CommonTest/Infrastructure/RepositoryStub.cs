@@ -75,7 +75,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Infrastructure
 			return _logTable;
 		}
 
-		public int SaveLogPre()
+		public int SaveLogPre(int scheduleId)
 		{
 			throw new NotImplementedException();
 		}

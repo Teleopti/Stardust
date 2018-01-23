@@ -26,9 +26,13 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			return ds.Tables[0];
 		}
 
-		public int SaveLogPre()
+		public int SaveLogPre(int scheduleId)
 		{
-			var id = (int)HelperFunctions.ExecuteScalar(CommandType.StoredProcedure, "mart.etl_log_save_init", _connectionString);
+			var parameterList = new[]
+			{
+				new SqlParameter("schedule_id", scheduleId)
+			};
+			var id = (int)HelperFunctions.ExecuteScalar(CommandType.StoredProcedure, "mart.etl_log_save_init", parameterList, _connectionString);
 			return id;
 		}
 

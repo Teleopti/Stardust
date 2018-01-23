@@ -6,7 +6,7 @@ namespace Teleopti.Analytics.Etl.Common.Interfaces.Common
 	public interface IJobLogRepository
 	{
 		DataTable GetLog();
-		int SaveLogPre();
+		int SaveLogPre(int scheduleId);
 		void SaveLogPost(IEtlJobLog etlJobLogItem, IJobResult jobResult);
 		void SaveLogStepPost(IEtlJobLog etlJobLogItem, IJobStepResult jobStepResult);
 	}

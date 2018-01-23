@@ -21,13 +21,14 @@ namespace Teleopti.Analytics.Etl.Common.JobLog
             EndTime = endTime;
         }
 
-        public void Init(int scheduleId, DateTime startTime, DateTime endTime)
+        public bool Init(int scheduleId, DateTime startTime, DateTime endTime)
         {
             ScheduleId = scheduleId;
             StartTime = startTime;
             EndTime = endTime;
-            ScopeIdentity = _repository.SaveLogPre();
-        }
+			ScopeIdentity = _repository.SaveLogPre(scheduleId);
+			return ScopeIdentity != -99;
+		}
 
         public int ScopeIdentity { get; private set; }
 

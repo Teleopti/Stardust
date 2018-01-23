@@ -93,7 +93,7 @@ namespace Teleopti.Analytics.Etl.CommonTest
 			jobResult.JobStepResultCollection.Add(jobStepResult);
 			jobResultCollection.Add(jobResult);
 
-			repository.Expect(x => x.SaveLogPre()).Return(99);
+			repository.Expect(x => x.SaveLogPre(-1)).Return(99);
 			repository.Expect(x => x.SaveLogStepPost(Arg<EtlJobLog>.Is.Anything, Arg<JobStepResult>.Matches(arg=> arg == jobStepResult)));
 			repository.Expect(x => x.SaveLogPost(Arg<EtlJobLog>.Is.Anything, Arg<JobResult>.Matches(arg=> arg == jobResult)));
 			
@@ -101,6 +101,28 @@ namespace Teleopti.Analytics.Etl.CommonTest
 			_target.SaveResult(jobResultCollection, repository, -1);
 
 			repository.VerifyAllExpectations();
+		}
+
+		[Test]
+		public void ShouldNotSaveJobResultIfInvalidScheduleId()
+		{
+			var scheduleId = 3;
+			var repository = MockRepository.GenerateMock<IJobLogRepository>();
+			IBusinessUnit businessUnit1 = new BusinessUnit("myBU 1");
+			IList<IJobResult> jobResultCollection = new List<IJobResult>();
+			IJobResult jobResult = new JobResult(businessUnit1, jobResultCollection);
+			IJobStepResult jobStepResult = new JobStepResult("step1", 10d, null, businessUnit1, jobResultCollection);
+			jobResult.JobStepResultCollection.Add(jobStepResult);
+			jobResultCollection.Add(jobResult);
+
+			
+			repository.Stub(x => x.SaveLogPre(scheduleId)).Return(-99);
+			
+			_target = new JobRunner();
+			_target.SaveResult(jobResultCollection, repository, scheduleId);
+
+			repository.AssertWasNotCalled(x => x.SaveLogStepPost(Arg<EtlJobLog>.Is.Anything, Arg<JobStepResult>.Is.Anything));
+			repository.AssertWasNotCalled(x => x.SaveLogPost(Arg<EtlJobLog>.Is.Anything, Arg<JobResult>.Is.Anything));
 		}
 
 		[Test]
@@ -120,10 +142,10 @@ namespace Teleopti.Analytics.Etl.CommonTest
 			jobResultCollection.Add(jobResult1);
 			jobResultCollection.Add(jobResult2);
 
-			repository.Expect(x => x.SaveLogPre()).Return(99).Repeat.Once();
+			repository.Expect(x => x.SaveLogPre(-1)).Return(99).Repeat.Once();
 			repository.Expect(x => x.SaveLogStepPost(Arg<EtlJobLog>.Is.Anything, Arg<JobStepResult>.Matches(arg => arg == jobStepResult1))).Repeat.Once();
 			repository.Expect(x => x.SaveLogPost(Arg<EtlJobLog>.Is.Anything, Arg<JobResult>.Matches(arg => arg == jobResult1))).Repeat.Once();
-			repository.Expect(x => x.SaveLogPre()).Return(100).Repeat.Once();
+			repository.Expect(x => x.SaveLogPre(-1)).Return(100).Repeat.Once();
 			repository.Expect(x => x.SaveLogStepPost(Arg<EtlJobLog>.Is.Anything, Arg<JobStepResult>.Matches(arg => arg == jobStepResult2))).Repeat.Once();
 			repository.Expect(x => x.SaveLogPost(Arg<EtlJobLog>.Is.Anything, Arg<JobResult>.Matches(arg => arg == jobResult2))).Repeat.Once();
 
