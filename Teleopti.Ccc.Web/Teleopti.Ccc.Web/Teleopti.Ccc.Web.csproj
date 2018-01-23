@@ -1613,7 +1613,6 @@
     <Content Include="WFM\app\rta\rta\agents\rta.agents.configurationValidation.spec.js" />
     <Content Include="WFM\app\rta\rta\agents\rta-agents.RTA_MobileFriendlyCheckboxes_46758.html" />
     <Content Include="WFM\app\rta\rta\agents\rta-agents.RTA_MonitorAgentsWithLongTimeInState_46475.html" />
-    <Content Include="WFM\app\rta\rta\agents\rta-agents.RTA_UnifiedSkillGroupManagement_45417.html" />
     <Content Include="WFM\app\rta\rta\agents\rta-agents.RTA_ViewHistoricalAhderenceForRecentShifts_46786.html" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.RTA_ConfigurationValidationNotification_46933.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.RTA_MobileFriendlyCheckboxes_46758.js" />
@@ -1662,7 +1661,6 @@
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.byOrganizationAndSkills.spec.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.excludeStates.spec.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.inalarm.spec.js" />
-    <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.monitorBySkills.spec.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.multipleOrganizationSelection.spec.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.pauseButton.spec.js" />

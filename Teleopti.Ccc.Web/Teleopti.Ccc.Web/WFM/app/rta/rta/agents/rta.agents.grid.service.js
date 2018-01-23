@@ -47,7 +47,7 @@
 				+ 'ng-click="toggleMenu($event)" ng-class=" {\'ui-grid-column-menu-button-last-col\': isLastCol}" ui-grid-one-bind-aria-label="i18n.headerCell.aria.columnMenuButtonLabel" aria-haspopup="true">'
 				+ '<i class="ui-grid-icon-angle-down" aria-hidden="true">&nbsp;</i></div><div ui-grid-filter></div></div></div>';
 
-			if (toggleService.RTA_MonitorAgentsWithLongTimeInState_46475 && !alarmOnly)
+			if (!alarmOnly)
 				cellHeaderTemplate_htmlTemplatesHaveTimingIssues = '<div role="columnheader">'
 					+ '<div ng-click="grid.appScope.vm.sort(col.colDef.field)" role="button" tabindex="0" class="ui-grid-cell-contents ui-grid-header-cell-primary-focus" col-index="renderIndex" title="TOOLTIP" style="width: 84%">'
 					+ '<span class="ui-grid-header-cell-label" ui-grid-one-bind-id-grid="col.uid + \'-header-text\'">{{ col.colDef.displayName }}</span>'
@@ -64,11 +64,6 @@
 				headerCellTemplate: cellHeaderTemplate_htmlTemplatesHaveTimingIssues,
 				cellTemplate: coloredCellTemplate,
 				sortingAlgorithm: localeLanguageSortingService.sort
-			};
-
-			if (!toggleService.RTA_MonitorAgentsWithLongTimeInState_46475)
-				name.sort = alarmOnly ? null : {
-					direction: 'asc'
 			};
 
 			var siteAndTeam = {
@@ -145,8 +140,7 @@
 			columnDefs.push(rule);
 			columnDefs.push(timeOutOfAdherence);
 			columnDefs.push(timeInAlarm);
-			if (toggleService.RTA_MonitorAgentsWithLongTimeInState_46475)
-				columnDefs.push(timeInState);
+			columnDefs.push(timeInState);
 			columnDefs.push(state);
 			return {
 				rowTemplate: rowTemplate,
@@ -155,54 +149,8 @@
 				enableVerticalScrollbar: uiGridConstants.scrollbars.NEVER,
 				enableGridMenu: true,
 				enableColumnMenus: true,
-				enableColumnResizing: true,
-				enableSorting: !alarmOnly && !toggleService.RTA_MonitorAgentsWithLongTimeInState_46475,
-				onRegisterApi: function (gridApi) {
-					if (toggleService.RTA_MonitorAgentsWithLongTimeInState_46475)
-						return;
-					if (!alarmOnly)
-						gridApi.core.on.sortChanged(null, function (grid, sortColumns) {
-							var sortColumnsFilteredByPriority = sortColumns.filter(function (col) {
-								return angular.isDefined(col.sort) && angular.isDefined(col.sort.priority);
-							})
-							updateSortPriority(sortColumnsFilteredByPriority, false);
-							var priority = findMinPriorityForRereprioritize(sortColumnsFilteredByPriority);
-							if (priority > 0)
-								updateSortPriority(sortColumnsFilteredByPriority, true, priority);
-						});
-				}
+				enableColumnResizing: true
 			};
-		};
-
-		function updateSortPriority(columns, setIfExceedsMinPriority, minPriority) {
-			var priorityArray = columns.map(function (col) {
-				return col.sort.priority;
-			});
-			minPriority = minPriority || Math.min.apply(Math, priorityArray);
-
-			columns.forEach(function (col) {
-				if (setIfExceedsMinPriority) {
-					if (col.sort.priority > minPriority)
-						col.sort.priority = col.sort.priority - 1;
-				}
-				else
-					col.sort.priority = col.sort.priority - minPriority;
-			});
 		}
-
-		function findMinPriorityForRereprioritize(columns) {
-			if (columns.length < 2)
-				return 0;
-			var i = 0;
-			var priorityArray = columns.map(function (col) {
-				return col.sort.priority;
-			}).sort();
-			while (i <= priorityArray.length - 0) {
-				if (priorityArray[i + 1] - priorityArray[i] > 1)
-					return i + 1;
-				i++;
-			}
-			return 0;
-		}
-	};
+	}
 })();
