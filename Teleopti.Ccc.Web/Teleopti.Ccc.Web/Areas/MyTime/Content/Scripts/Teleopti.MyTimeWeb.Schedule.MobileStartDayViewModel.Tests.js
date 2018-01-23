@@ -26,14 +26,6 @@ $(document).ready(function() {
 		return result;
 	}
 
-	function fakeOvertimeRequestsLicenseAvailability(available) {
-		Teleopti.MyTimeWeb.OvertimeRequestsLicense = {
-			GetLicenseAvailability: function(done) {
-				done && done(available);
-			}
-		};
-	}
-
 	test("should get current date", function () {
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 
@@ -478,34 +470,6 @@ $(document).ready(function() {
 		};
 		viewModel.readData(rawData);
 		equal(viewModel.showPostShiftTradeMenu(), false);
-	});
-
-	test('should not show overtime request menu when has no license availability', function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			if (x === "MyTimeWeb_OvertimeRequest_44558") return true;
-			return false;
-		};
-
-		fakeOvertimeLicenseAvailabilityBool = false;
-		fakeOvertimeRequestsLicenseAvailability(fakeOvertimeLicenseAvailabilityBool);
-
-		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel(null, null, null, fakeOvertimeLicenseAvailabilityBool);
-
-		equal(viewModel.overtimeRequestsLicenseAvailable, false);
-	});
-
-	test('should show overtime request menu when has license availability and permission', function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			if (x === "MyTimeWeb_OvertimeRequest_44558") return true;
-			return false;
-		};
-
-		fakeOvertimeLicenseAvailabilityBool = true;
-		fakeOvertimeRequestsLicenseAvailability(fakeOvertimeLicenseAvailabilityBool);
-
-		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel(null, null, null, fakeOvertimeLicenseAvailabilityBool);
-
-		equal(viewModel.overtimeRequestsLicenseAvailable, true);
 	});
 
 	test("should not show add overtime request command when toggle is off", function () {

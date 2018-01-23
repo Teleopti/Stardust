@@ -17,14 +17,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 	{
 		private readonly IOvertimeRequestPersister _overtimeRequestPersister;
 		private readonly IToggleManager _toggleManager;
-		private readonly IOvertimeRequestAvailability _overtimeRequestLicense;
 		private readonly IOvertimeRequestDefaultStartTimeProvider _overtimeRequestDefaultStartTimeProvider;
 
 		public OvertimeRequestsController(IOvertimeRequestPersister overtimeRequestPersister, IToggleManager toggleManager, IOvertimeRequestAvailability overtimeRequestLicense, IOvertimeRequestDefaultStartTimeProvider overtimeRequestDefaultStartTimeProvider)
 		{
 			_overtimeRequestPersister = overtimeRequestPersister;
 			_toggleManager = toggleManager;
-			_overtimeRequestLicense = overtimeRequestLicense;
 			_overtimeRequestDefaultStartTimeProvider = overtimeRequestDefaultStartTimeProvider;
 		}
 
@@ -53,12 +51,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		public virtual JsonResult GetAvailableDays()
 		{
 			return Json(StaffingInfoAvailableDaysProvider.GetDays(_toggleManager), JsonRequestBehavior.AllowGet);
-		}
-
-		[UnitOfWork, HttpGet]
-		public virtual JsonResult GetLicenseAvailability()
-		{
-			return Json(_overtimeRequestLicense.IsEnabled(), JsonRequestBehavior.AllowGet);
 		}
 
 		[UnitOfWork, HttpGet]

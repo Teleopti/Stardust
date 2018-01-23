@@ -152,7 +152,6 @@ $(document).ready(function () {
 	});
 
 	test("should increase request count after creating an overtime request", function () {
-		fakeOvertimeRequestsLicenseAvailability(true);
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
 			if (x === "MyTimeWeb_OvertimeRequest_44558") return true;
 			return false;
@@ -206,30 +205,4 @@ $(document).ready(function () {
 
 		equal(scheduleDayViewModel.requestsCount(), 1);
 	});
-
-	test('should not show overtime request tab when has no license availability', function () {
-		fakeOvertimeLicenseAvailabilityBool = false;
-		fakeOvertimeRequestsLicenseAvailability(fakeOvertimeLicenseAvailabilityBool);
-
-		var vm = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null, fakeOvertimeLicenseAvailabilityBool);
-
-		equal(vm.overtimeRequestsLicenseAvailable, false);
-	});
-
-	test('should show overtime request tab when has license availability', function () {
-		fakeOvertimeLicenseAvailabilityBool = true;
-		fakeOvertimeRequestsLicenseAvailability(fakeOvertimeLicenseAvailabilityBool);
-
-		var vm = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null, fakeOvertimeLicenseAvailabilityBool);
-
-		equal(vm.overtimeRequestsLicenseAvailable, true);
-	});
-
-	function fakeOvertimeRequestsLicenseAvailability(available) {
-		Teleopti.MyTimeWeb.OvertimeRequestsLicense = {
-			GetLicenseAvailability: function(done) {
-				done && done(available);
-			}
-		};
-	}
 });

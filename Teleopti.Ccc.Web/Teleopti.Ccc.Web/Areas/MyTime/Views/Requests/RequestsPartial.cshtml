@@ -80,9 +80,9 @@
 					</li>
 				}
 
-				@if (Model.RequestPermission.OvertimeRequestPermission)
+				@if (Model.RequestPermission.OvertimeRequestPermission && Model.RequestLicense.IsOvertimeRequestEnabled)
 				{
-					<li class="col-xs-12 col-sm-4" data-bind="css: {active: addOvertimeRequestActive }, visible: overtimeRequestsLicenseAvailable && addOvertimeRequestEnabled ">
+					<li class="col-xs-12 col-sm-4" data-bind="css: {active: addOvertimeRequestActive }, visible: addOvertimeRequestEnabled ">
 						<a id="addOvertimeRequest" href="#" class="" data-bind="click: addOvertimeRequest">
 							<i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.OvertimeRequest
 						</a>
@@ -125,9 +125,9 @@
 						</li>
 					}
 					
-					@if (Model.RequestPermission.OvertimeRequestPermission)
+					@if (Model.RequestPermission.OvertimeRequestPermission && Model.RequestLicense.IsOvertimeRequestEnabled)
 					{
-						<li class="col-xs-12 col-sm-4" data-bind="css: {active: addOvertimeRequestActive }, visible: overtimeRequestsLicenseAvailable && addOvertimeRequestEnabled">
+						<li class="col-xs-12 col-sm-4" data-bind="css: {active: addOvertimeRequestActive }, visible: addOvertimeRequestEnabled">
 							<a id="addOvertimeRequest" href="#" class="" data-bind="click: addOvertimeRequest">
 								<i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.OvertimeRequest
 							</a>

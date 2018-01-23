@@ -117,7 +117,7 @@
 			</li>
 			@if (Model.RequestLicense.IsOvertimeRequestEnabled)
 			{
-			<li data-bind="visible: isOvertimeRequestAvailable() && overtimeRequestsLicenseAvailable , css: { active: requestViewModel()!=undefined && requestViewModel().type() == requestViewModelTypes.overtimeRequest }">
+			<li data-bind="visible: isOvertimeRequestAvailable(), css: { active: requestViewModel()!=undefined && requestViewModel().type() == requestViewModelTypes.overtimeRequest }">
 				<a id="addOvertimeRequest" href="#" data-bind="click: showAddOvertimeRequestForm"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.OvertimeRequest</a>
 			</li>
 			}

@@ -75,19 +75,17 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) {
 
 	function registerUserInfoLoadedCallback(initialMomentDate) {
 		Teleopti.MyTimeWeb.UserInfo.WhenLoaded(function (data) {
-			Teleopti.MyTimeWeb.OvertimeRequestsLicense.GetLicenseAvailability(function(overtimeLicAvailable){
-				$(".moment-datepicker").attr("data-bind",
-					"datepicker: selectedDate, datepickerOptions: { calendarPlacement: 'center', autoHide: true, weekStart: " + data.WeekStart + "}");
+			$(".moment-datepicker").attr("data-bind",
+				"datepicker: selectedDate, datepickerOptions: { calendarPlacement: 'center', autoHide: true, weekStart: " + data.WeekStart + "}");
 
-				initViewModel(data.WeekStart, overtimeLicAvailable);
+			initViewModel(data.WeekStart);
 
-				fetchData(initialMomentDate);
-			});
+			fetchData(initialMomentDate);
 		});
 	}
 
-	function initViewModel(weekStart, overtimeLicAvailable) {
-		vm = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel(weekStart, Teleopti.MyTimeWeb.Schedule.MobileStartDay, dataService, overtimeLicAvailable);
+	function initViewModel(weekStart) {
+		vm = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel(weekStart, Teleopti.MyTimeWeb.Schedule.MobileStartDay, dataService);
 		applyBindings();
 	}
 

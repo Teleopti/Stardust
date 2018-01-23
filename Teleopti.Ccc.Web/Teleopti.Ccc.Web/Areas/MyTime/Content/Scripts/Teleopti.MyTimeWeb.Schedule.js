@@ -181,7 +181,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.absenceProbabilityEnabled = ko.observable();
 		self.overtimeProbabilityEnabled = ko.observable();
 		self.isOvertimeRequestAvailable = ko.observable();
-		self.overtimeRequestsLicenseAvailable = overtimeLicAvailable;
 		self.showProbabilityToggle = ko.observable();
 		self.loadingProbabilityData = ko.observable(false);
 
@@ -500,7 +499,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		};
 
 		self.showAddOvertimeRequestForm = function (data) {
-			if (!self.isOvertimeRequestAvailable() || !self.overtimeRequestsLicenseAvailable) {
+			if (!self.isOvertimeRequestAvailable()) {
 				return;
 			}
 			var addOvertimeRequestModel = {
@@ -793,19 +792,17 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		},
 		SetupViewModel: function (defaultDateTimes, callback) {
 			Teleopti.MyTimeWeb.UserInfo.WhenLoaded(function (data) {
-				Teleopti.MyTimeWeb.OvertimeRequestsLicense.GetLicenseAvailability(function(overtimeLicAvailable){
-					var addRequestViewModel = function () {
-						var model = new Teleopti.MyTimeWeb.Request.RequestViewModel(Teleopti.MyTimeWeb.Request.RequestDetail.AddTextOrAbsenceRequest, _displayRequest, data.WeekStart, defaultDateTimes);
-						
-						return model;
-					};
-					
-					vm = new WeekScheduleViewModel(addRequestViewModel, _navigateToRequests, defaultDateTimes, data.WeekStart, overtimeLicAvailable);
-					
-					callback();
-					$(".moment-datepicker").attr("data-bind", "datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart: " + data.WeekStart + " }");
-					ko.applyBindings(vm, $("#page")[0]);
-				});
+				var addRequestViewModel = function () {
+					var model = new Teleopti.MyTimeWeb.Request.RequestViewModel(Teleopti.MyTimeWeb.Request.RequestDetail.AddTextOrAbsenceRequest, _displayRequest, data.WeekStart, defaultDateTimes);
+
+					return model;
+				};
+
+				vm = new WeekScheduleViewModel(addRequestViewModel, _navigateToRequests, defaultDateTimes, data.WeekStart);
+
+				callback();
+				$(".moment-datepicker").attr("data-bind", "datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart: " + data.WeekStart + " }");
+				ko.applyBindings(vm, $("#page")[0]);
 			});
 		},
 		TimelineViewModel: TimelineViewModel,

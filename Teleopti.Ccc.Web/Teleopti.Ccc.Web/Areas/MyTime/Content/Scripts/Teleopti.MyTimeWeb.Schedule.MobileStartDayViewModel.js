@@ -8,7 +8,7 @@
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.AbsenceReportViewModel.js" />
 
 
-Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, parent, dataService, overtimeLicAvailable) {
+Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, parent, dataService) {
 	var self = this;
 
 	var constants = Teleopti.MyTimeWeb.Common.Constants;
@@ -46,7 +46,6 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 	self.showAbsenceReportingCommandItem = ko.observable();
 	self.showPostShiftTradeMenu = ko.observable(false);
 	self.showAddOvertimeRequestMenu = ko.observable(false);
-	self.overtimeRequestsLicenseAvailable = overtimeLicAvailable;
 	self.baseUtcOffsetInMinutes = 0;
 
 	self.overtimeAvailabililty = null;

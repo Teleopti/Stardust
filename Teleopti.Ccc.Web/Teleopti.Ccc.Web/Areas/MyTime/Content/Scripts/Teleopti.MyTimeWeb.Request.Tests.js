@@ -10,32 +10,11 @@ $(document).ready(function () {
 		}
 	});
 
-	var overtimeRequestsToggle = false,
-		fakeOvertimeLicenseAvailabilityBool = false;
+	var overtimeRequestsToggle = false;
 
 	var tempToggleFn,
 		tempList,
 		tempAddShiftTradeRequest;
-
-	test('should not show overtime request tab when has no license availability', function () {
-		fakeOvertimeLicenseAvailabilityBool = false;
-		fakeOvertimeRequestsLicenseAvailability(fakeOvertimeLicenseAvailabilityBool);
-		Teleopti.MyTimeWeb.Request.RequestPartialInit(null, null);
-
-		var target = Teleopti.MyTimeWeb.Request.RequestNavigationViewModel();
-
-		equal(target.overtimeRequestsLicenseAvailable, false);
-	});
-
-	test('should show overtime request tab when has license availability and permission', function () {
-		fakeOvertimeLicenseAvailabilityBool = true;
-		fakeOvertimeRequestsLicenseAvailability(fakeOvertimeLicenseAvailabilityBool);
-
-		Teleopti.MyTimeWeb.Request.RequestPartialInit(null, null);
-		var target = Teleopti.MyTimeWeb.Request.RequestNavigationViewModel();
-
-		equal(target.overtimeRequestsLicenseAvailable, true);
-	});
 
 	function setUpFunctionsBeforeRun() {
 		tempToggleFn = Teleopti.MyTimeWeb.Common.IsToggleEnabled;
@@ -60,13 +39,5 @@ $(document).ready(function () {
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = tempToggleFn;
 		Teleopti.MyTimeWeb.Request.List = tempList;
 		Teleopti.MyTimeWeb.Request.tempAddShiftTradeRequest = tempAddShiftTradeRequest;
-	}
-
-	function fakeOvertimeRequestsLicenseAvailability(available) {
-		Teleopti.MyTimeWeb.OvertimeRequestsLicense = {
-			GetLicenseAvailability: function(done) {
-				done && done(available);
-			}
-		};
 	}
 });
