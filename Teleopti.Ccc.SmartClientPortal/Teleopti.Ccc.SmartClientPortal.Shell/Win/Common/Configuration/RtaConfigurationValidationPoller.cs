@@ -46,9 +46,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 		public IDisposable Poll(Action<IEnumerable<string>> callback)
 		{
-			_callbacks.Add(callback);
+			lock (_lock)
+				_callbacks.Add(callback);
 			_timer.Change(10000, 10000);
-			return new GenericDisposable(() => { _callbacks.Remove(callback); });
+			return new GenericDisposable(() =>
+			{
+				lock(_lock)
+					_callbacks.Remove(callback);
+			});
 		}
 
 		private IEnumerable<string> getTexts()
