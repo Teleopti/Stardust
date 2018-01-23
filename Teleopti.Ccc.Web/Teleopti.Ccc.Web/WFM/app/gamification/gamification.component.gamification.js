@@ -24,7 +24,8 @@
 
 			if (currentState.indexOf('targets') > -1) {
 				ctrl.selectedTab = 1;
-			} else if (currentState.indexOf('import') > -1) {
+			}
+			else if (currentState.indexOf('import') > -1) {
 				ctrl.selectedTab = 2;
 			}
 		};
@@ -32,8 +33,6 @@
 		ctrl.setElementHeightToCoverRestOfViewport = function () {
 
 			var top = element.getBoundingClientRect().top || element.getBoundingClientRect().y;
-
-			if (top > 500) top = 150;
 
 			var bottomMargin = 18;
 
