@@ -1145,6 +1145,10 @@ Schedule</value>
     <value>Text</value>
     <comment>Text Request</comment>
   </data>
+  <data name="ResRequestTypeOvertime" xml:space="preserve">
+    <value>Overtime</value>
+    <comment>Overtime Request</comment>
+  </data>
   <data name="ResReportRequestsPerAgent" xml:space="preserve">
     <value>Requests Per Agent</value>
     <comment>Requests Per Agent</comment>

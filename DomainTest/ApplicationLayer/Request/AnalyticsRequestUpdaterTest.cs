@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Exceptions;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -239,6 +240,39 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Request
 
 			AnalyticsRequestRepository.AnalyticsRequestedDays.Should().Be.Empty();
 			AnalyticsRequestRepository.AnalyticsRequests.Should().Be.Empty();
+		}
+
+		[Test]
+		public void ShouldAddOvertimeRequestAndSaveRequestTypeId()
+		{
+			BusinessUnitRepository.Has(BusinessUnitFactory.BusinessUnitUsedInTest);
+			AnalyticsDateRepository.HasDatesBetween(DateTime.Today - TimeSpan.FromDays(30),
+				DateTime.Today + TimeSpan.FromDays(30));
+
+			var person = PersonFactory.CreatePerson("Test").WithId();
+			var multiplicatorDefinitionSet = new MultiplicatorDefinitionSet("overtimepaid", MultiplicatorType.Overtime).WithId();
+			var request = new OvertimeRequest(multiplicatorDefinitionSet,
+				new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow + TimeSpan.FromDays(1))).WithId();
+			var personRequest = new PersonRequest(person, request).WithId();
+			personRequest.SetBusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest);
+			PersonRequestRepository.Add(personRequest);
+
+			PersonPeriodRepository.AddOrUpdatePersonPeriod(new AnalyticsPersonPeriod
+			{
+				PersonCode = person.Id.GetValueOrDefault(),
+				PersonId = 1,
+				ValidFromDate = DateTime.UtcNow - TimeSpan.FromDays(10),
+				ValidToDate = DateTime.UtcNow + TimeSpan.FromDays(10)
+			});
+
+			Target.Handle(new PersonRequestDeletedEvent
+			{
+				PersonRequestId = personRequest.Id.GetValueOrDefault(),
+				LogOnBusinessUnitId = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
+			});
+
+			AnalyticsRequestRepository.AnalyticsRequests.Should().Not.Be.Empty();
+			AnalyticsRequestRepository.AnalyticsRequests[0].RequestTypeId.Should().Be((int) RequestType.OvertimeRequest);
 		}
 	}
 }

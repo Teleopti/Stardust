@@ -180,11 +180,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Request
 		private static int getRequestType(IPersonRequest personRequest)
 		{
 			if (personRequest.Request is IAbsenceRequest)
-				return 1;
+				return (int)RequestType.AbsenceRequest;
 			if (personRequest.Request is IShiftTradeRequest)
-				return 2;
+				return (int)RequestType.ShiftTradeRequest;
+			if (personRequest.Request is IOvertimeRequest)
+				return (int)RequestType.OvertimeRequest;
 
-			return 0; // TextRequest
+			return (int)RequestType.TextRequest;
 		}
 
 		private static int getRequestStatus(IPersonRequest personRequest)

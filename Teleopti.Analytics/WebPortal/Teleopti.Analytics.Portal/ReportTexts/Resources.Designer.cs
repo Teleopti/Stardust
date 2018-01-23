@@ -2483,6 +2483,15 @@ namespace Teleopti.Analytics.ReportTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Overtime.
+        /// </summary>
+        public static string ResRequestTypeOvertime {
+            get {
+                return ResourceManager.GetString("ResRequestTypeOvertime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Shift Trade.
         /// </summary>
         public static string ResRequestTypeShiftTrade {
