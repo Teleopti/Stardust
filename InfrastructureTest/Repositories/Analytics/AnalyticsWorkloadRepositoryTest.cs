@@ -34,6 +34,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 
 			analyticsDataFactory.Setup(threeSkills);
 			analyticsDataFactory.Setup(queue);
+
+			// Add "Not Defined" data
+			analyticsDataFactory.Setup(new NotDefinedBusinessUnit());
+			analyticsDataFactory.Setup(new NotDefinedSkill());
+			analyticsDataFactory.Setup(new NotDefinedWorkload());
+
 			analyticsDataFactory.Persist();
 		}
 
@@ -97,7 +103,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			result.WorkloadId.Should().Be.EqualTo(workloadId);
 		}
 
-		[Ignore("Ignored to fix build. It's failed since missing mock data for \"Not Defined\" skill, workload and bu")]
 		[Test]
 		public void CanAddAndRemoveBridgeQueueWorkloads()
 		{
@@ -147,7 +152,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 
 			bridges = WithAnalyticsUnitOfWork.Get(() => Target.GetBridgeQueueWorkloads(workloadId));
 			bridges.Should().Be.Empty();
-
 		}
 	}
 }

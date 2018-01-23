@@ -5,11 +5,10 @@ using System.Data.SqlClient;
 using System.Globalization;
 using Teleopti.Ccc.TestCommon.TestData.Analytics.Sql;
 using Teleopti.Ccc.TestCommon.TestData.Analytics.Tables;
-using Teleopti.Ccc.TestCommon.TestData.Core;
 
 namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 {
-	public class ThreeSkills : IAnalyticsDataSetup, ISkillData
+	public class ThreeSkills : ISkillData
 	{
 		private readonly ITimeZoneData _timeZones;
 		private readonly IBusinessUnitData _businessUnits;
@@ -46,15 +45,17 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 
 			using (var table = dim_skill.CreateTable())
 			{
-				table.AddSkill(FirstSkillId, FirstSkillCode, FirstSkillName, time_zone_id, Guid.NewGuid(), "Forecast method", business_unit_id, _datasource.RaptorDefaultDatasourceId);
-				table.AddSkill(Skill2Id, Skill2Code, Skill2Name, time_zone_id, Guid.NewGuid(), "Forecast method", business_unit_id, _datasource.RaptorDefaultDatasourceId);
-				table.AddSkill(Skill3Id, Skill3Code, Skill3Name, time_zone_id, Guid.NewGuid(), "Forecast method", business_unit_id, _datasource.RaptorDefaultDatasourceId);
+				table.AddSkill(FirstSkillId, FirstSkillCode, FirstSkillName, time_zone_id, Guid.NewGuid(), "Forecast method",
+					business_unit_id, _datasource.RaptorDefaultDatasourceId);
+				table.AddSkill(Skill2Id, Skill2Code, Skill2Name, time_zone_id, Guid.NewGuid(), "Forecast method", business_unit_id,
+					_datasource.RaptorDefaultDatasourceId);
+				table.AddSkill(Skill3Id, Skill3Code, Skill3Name, time_zone_id, Guid.NewGuid(), "Forecast method", business_unit_id,
+					_datasource.RaptorDefaultDatasourceId);
 
 				Bulk.Insert(connection, table);
 
 				Rows = table.AsEnumerable();
 			}
 		}
-
 	}
 }

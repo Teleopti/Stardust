@@ -5,11 +5,10 @@ using System.Data.SqlClient;
 using System.Globalization;
 using Teleopti.Ccc.TestCommon.TestData.Analytics.Sql;
 using Teleopti.Ccc.TestCommon.TestData.Analytics.Tables;
-using Teleopti.Ccc.TestCommon.TestData.Core;
 
 namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 {
-	public class AWorkload : IAnalyticsDataSetup, IWorkloadData
+	public class AWorkload : IWorkloadData
 	{
 		private readonly ISkillData _skills;
 		private readonly ITimeZoneData _timezones;
@@ -41,6 +40,5 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 				Rows = table.AsEnumerable();
 			}
 		}
-
 	}
 }

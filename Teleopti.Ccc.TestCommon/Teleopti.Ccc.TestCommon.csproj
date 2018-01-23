@@ -457,6 +457,9 @@
     <Compile Include="TestData\Analytics\Absence.cs" />
     <Compile Include="TestData\Analytics\DimOvertime.cs" />
     <Compile Include="TestData\Analytics\FillFactForecastWorkload.cs" />
+    <Compile Include="TestData\Analytics\NotDefinedBusinessUnit.cs" />
+    <Compile Include="TestData\Analytics\NotDefinedSkill.cs" />
+    <Compile Include="TestData\Analytics\NotDefinedWorkload.cs" />
     <Compile Include="TestData\Analytics\QueueStatisticsForSkill.cs" />
     <Compile Include="TestData\Analytics\ShiftCategory.cs" />
     <Compile Include="TestData\Analytics\Activity.cs" />
