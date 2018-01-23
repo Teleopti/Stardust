@@ -177,7 +177,6 @@ Scenario: See existing overtime availability over midnight
 	| Start time | 00:00      |
 	| End time   | 03:15      |
 
-@ignore
 Scenario: Click overtime availability bar
 	Given I have the role 'Access to overtime availability'
 	And I have an overtime availability with
@@ -196,7 +195,6 @@ Scenario: Click overtime availability bar
 	| End time          | 03:15      |
 	| End time next day | true       |
 
-@ignore
 Scenario: Click overtime availability bar span to next day
 	Given I have the role 'Access to overtime availability'
 	And I have an overtime availability with

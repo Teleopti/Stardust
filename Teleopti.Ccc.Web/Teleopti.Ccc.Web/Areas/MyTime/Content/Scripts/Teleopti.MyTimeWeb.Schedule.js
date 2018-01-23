@@ -533,7 +533,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		};
 
 		function defaultRequestFunction() {
-			if ($("#" + Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel.Template).length > 0 && self.overtimeAvailabilityPermission())
+			if ($(".overtime-availability-add").length > 0 && self.overtimeAvailabilityPermission())
 				return self.showAddOvertimeAvailabilityForm;
 			if (self.absenceRequestPermission())
 				return self.showAddAbsenceRequestForm;
