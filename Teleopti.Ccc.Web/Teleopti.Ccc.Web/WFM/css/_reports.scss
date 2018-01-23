@@ -1,46 +1,11 @@
-.wfm-reports {
-	.people-search-input {
-		display: inline-block;
-		padding-top: 10px;
-	}
-	.leader-board {
-		padding: 10px 10px 80px 10px;
-		background: $white;
-		max-height: 83vh;
-		min-height: 500px;
-		overflow-y: auto;
+.badge-table th{
+	background: $white!important;
+}
 
-		.leader-board-header {
-			padding: .8em .5em .2em .5em;
-			min-height: 60px;
-			border-bottom: 1px solid $gray026;
-			display: -ms-flexbox;
-			display: flex;
-			flex-direction: row;
-			-ms-flex-wrap: wrap;
-			flex-wrap: wrap;
-		}
-		.wfm-btn-sm {
-			padding: 5px;
-		}
-		table {
-			width: 100%;
-		}
-		table thead tr {
-			height: 42px;
-			font-weight: bold;
-		}
-		table tr {
-			height: 30px;
-		}
-		table td.agent-badge-num {
-			width: 10%;
-			text-align: center;
-		}
+.badge-table tr:nth-child(odd) td{
+   background-color: $hover;
+}
 
-		.background-gray {
-			background: $gray-300 !important;
-			-webkit-print-color-adjust: exact;
-		}
-	}
+.badge-table .badge-cell{
+	text-align: center!important;
 }

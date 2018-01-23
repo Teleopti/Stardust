@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Reports
 		[Then(@"I should see all report items")]
 		public void ThenIShouldSeeAllReportItems()
 		{
-			Browser.Interactions.AssertExists(".report-list");
+			Browser.Interactions.AssertExists(".test-report-list");
 		}
 
 		[Then(@"I should see leader board report table")]

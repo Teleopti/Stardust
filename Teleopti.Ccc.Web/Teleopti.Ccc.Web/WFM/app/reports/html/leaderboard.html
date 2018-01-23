@@ -1,77 +1,82 @@
+<div ng-if="vm.isLeaderBoardEnabled">
+
+	<div class="view-header">
+		<div class="view-title">
+			<h1>
+				<i class="mdi mdi-chart-bar"></i>
+				<span translate>{{'BadgeLeaderBoardReport' | translate}}</span>
+			</h1>
+		</div>
+	</div>
+
+	<div class="con-row">
+		<div class="con-flex">
+			<div class="panel material-depth-1">
+				<div class="con-row align-row-baseline" id="gamification-form-row">
+					<div>
+						<wfm-multiple-search-input search-options="vm.searchOptions" search-title="'Search'" search-callback="vm.onKeyWordInSearchInputChanged"></wfm-multiple-search-input>
+					</div>
+					<div>
+						<div class="inline-flex baseline pointer" ng-click="toggleRange =!toggleRange">
+							<div tabindex=0 class="context-menu card-context">
+								<i class="mdi mdi-calendar"></i>
+							</div>
+							<div ng-if="vm.selectedPeriod.startDate">{{'From'| translate}}: {{vm.selectedPeriod.startDate | amDateFormat:"L"}}</div>
+							&nbsp;
+							&nbsp;
+							&nbsp;
+							<div ng-if="vm.selectedPeriod.endDate">{{'To'|translate}}: {{vm.selectedPeriod.endDate | amDateFormat:"L"}}</div>
+							<div ng-if="!vm.selectedPeriod.endDate && !vm.selectedPeriod.startDate" class="text-warning"> No selected date</div>
+						</div>
+						<wfm-popup show="toggleRange" class="datepicker-popup">
+							<wfm-calendar-picker ng-model="vm.selectedPeriod" ng-change="vm.afterSelectedDateChange()" ng-change="vm.getOrgData()"></wfm-calendar-picker>
+						</wfm-popup>
+					</div>
+				</div>
+				<div class="con-row">
+					<div class="con-flex">
+						<md-progress-linear class="animate-show" ng-show="vm.isLoading" md-mode="indeterminate"></md-progress-linear>
+						<table class="wfm-table badge-table animate-show" ng-show="!vm.isLoading">
+							<thead>
+								<tr>
+									<th>{{'Rank' | translate}}</th>
+									<th>{{'AgentName' | translate}}</th>
+									<th class="badge-cell"><i tabindex="0" class="mdi mdi-star agent-star gold"></i></th>
+									<th class="badge-cell"><i tabindex="0" class="mdi mdi-star agent-star silver"></i></i></th>
+									<th class="badge-cell"><i tabindex="0" class="mdi mdi-star agent-star bronze"></i></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="agent in vm.leaderBoardTableList">
+									<td>{{agent.rank}}</td>
+									<td>{{agent.name}}</td>
+									<td class="badge-cell">{{agent.gold}}</td>
+									<td class="badge-cell">{{agent.silver}}</td>
+									<td class="badge-cell">{{agent.bronze}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- Print -->
 <style type="text/css">
-#materialcontainer.container.content {
-	overflow: visible;
-}
-
-.wfm-reports.wfm-reports {
-	max-width: none;
-}
-
-#leftsidenav {
-	display: none;
-}
-
 @media print {
 	.layout-container, #materialcontainer {
 		display: block !important;
 	}
 
-	#leftsidenav, #lefttoogle, span.people-search-input {
+	#gamification-form-row{
+		opacity: 0;
+	}
+
+	.main-menu-link-wrapper, #nav, .main-menu-ctrls{
 		display: none !important;
 	}
 }
 </style>
-
-<div class="leaderboard-container" ng-click="vm.toggleOffDateRangePickerFn()">
-	<div class="wfm-reports" ng-if="vm.isLeaderBoardEnabled">
-		<div class="view-header">
-			<div class="view-title">
-				<h1>
-					<i class="mdi mdi-chart-bar"></i>
-					<span translate>{{'BadgeLeaderBoardReport' | translate}}</span>
-				</h1>
-			</div>
-		</div>
-
-		<div class="leader-board material-depth-1 wfm-block">
-			<div class="leader-board-header">
-				<span class="people-search-input">
-					<wfm-multiple-search-input search-options="vm.searchOptions" search-title="'Search'" search-callback="vm.onKeyWordInSearchInputChanged"></wfm-multiple-search-input>
-				</span>
-				<date-range-picker ng-model="vm.selectedPeriod" template-type="vm.dateRangePickerTemplateType"></date-range-picker>
-			</div>
-
-			<div class="leader-board-body">
-				<md-progress-linear ng-if="vm.isLoading" md-mode="indeterminate"></md-progress-linear>
-
-				<table>
-					<thead>
-						<tr>
-							<td class="agent-badge-header">{{'Rank' | translate}}</td>
-							<td class="agent-badge-header">{{'AgentName' | translate}} </td>
-							<td class="agent-badge-num">
-								<i tabindex="0" class="mdi mdi-star agent-star gold"></i>
-							</td>
-							<td class="agent-badge-num">
-								<i tabindex="0" class="mdi mdi-star agent-star silver"></i>
-							</td>
-							<td class="agent-badge-num">
-								<i tabindex="0" class="mdi mdi-star agent-star bronze"></i>
-							</td>
-						</tr>
-					</thead>
-
-					<tbody>
-						<tr class="agent-badge" ng-repeat="agent in vm.leaderBoardTableList" ng-class="[$index % 2== 0 ? 'background-gray':'']">
-							<td class="agent-rank">{{agent.rank}}</td>
-							<td class="agent-name">{{agent.name}}</td>
-							<td class="agent-badge-num">{{agent.gold}}</td>
-							<td class="agent-badge-num">{{agent.silver}}</td>
-							<td class="agent-badge-num">{{agent.bronze}}</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-	</div>
-</div>

@@ -9,6 +9,7 @@
 		vm.isLoading = true;
 		vm.selectedDate = new Date();
 		vm.showInputTimeErrorMessage = false;
+		vm.isLeaderBoardEnabled = false;
 		vm.isLeaderBoardEnabled = ToggleSvc.WfmReportPortal_LeaderBoard_39440;
 
 		vm.searchOptions = {
@@ -52,16 +53,7 @@
 			}
 
 		};
+		vm.loadLeaderBoardData();
 
-		vm.init = function() {
-			$scope.$watch(function() {
-				return vm.selectedPeriod;
-			}, function(newValue, oldValue) {
-				if (newValue)
-					vm.afterSelectedDateChange();
-			});
-		};
-
-		vm.isLeaderBoardEnabled && vm.init();
 	}
 })();
