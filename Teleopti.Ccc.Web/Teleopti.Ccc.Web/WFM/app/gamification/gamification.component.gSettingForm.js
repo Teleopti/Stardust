@@ -195,7 +195,7 @@
 		};
 
 		ctrl.onNameChange = function () {
-			var newNameIsValid = ctrl.name.length > 0;
+			var newNameIsValid = ctrl.name && ctrl.name.length;
 			if (!newNameIsValid) return;
 
 			dataService.saveData('ModifyDescription', {
