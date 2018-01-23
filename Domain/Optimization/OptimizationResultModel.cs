@@ -15,7 +15,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public int ScheduledAgentsCount { get; set; }
 		public IEnumerable<SchedulingHintError> BusinessRulesValidationResults { get; set; }
 
-		public IEnumerable<OptimizationResultSkill> SkillResultList => _skillResultList;
+		public IEnumerable<OptimizationResultSkill> SkillResultList
+		{
+			get { return _skillResultList; }
+		}
 
 		public void Map(IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, DateOnlyPeriod period)
 		{
@@ -31,8 +34,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 				var skillDaysDic = keyValuePair.Value.ToDictionary(k => k.CurrentDate);
 				foreach (var dateOnly in period.DayCollection())
 				{
-					var found = skillDaysDic.TryGetValue(dateOnly, out var skillDay);
-					var relativeDifference = !found
+					ISkillDay skillDay;
+					var found = skillDaysDic.TryGetValue(dateOnly, out skillDay);
+					double relativeDifference = !found
 						? 0
 						: SkillStaffPeriodHelper.RelativeDifference(skillDay.SkillStaffPeriodCollection).GetValueOrDefault(0);
 					var detail = new OptimizationResultSkillDetail
@@ -66,7 +70,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 			private readonly IList<OptimizationResultSkillDetail> _skillDetails = new List<OptimizationResultSkillDetail>();
 			public string SkillName { get; set; }
 
-			public IEnumerable<OptimizationResultSkillDetail> SkillDetails => _skillDetails;
+			public IEnumerable<OptimizationResultSkillDetail> SkillDetails
+			{
+				get { return _skillDetails; }
+			}
 
 			public void AddDetail(OptimizationResultSkillDetail detail)
 			{

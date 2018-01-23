@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
@@ -9,22 +8,9 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
-	public class FakeSkillDayRepository_DoNotUse : FakeSkillDayRepository
-	{
-		public override ICollection<ISkillDay> FindReadOnlyRange(DateOnlyPeriod period, IEnumerable<ISkill> skills, IScenario scenario)
-		{
-			return _skillDays
-				.Where(skillDayInDb =>
-					skillDayInDb.Scenario.Equals(scenario) &&
-					period.Contains(skillDayInDb.CurrentDate) &&
-					skills.Contains(skillDayInDb.Skill))
-				.ToList();
-		}
-	}
-
 	public class FakeSkillDayRepository : ISkillDayRepository
 	{
-		protected readonly List<ISkillDay> _skillDays = new List<ISkillDay>();
+		private readonly List<ISkillDay> _skillDays = new List<ISkillDay>();
 
 		public void Add(ISkillDay root)
 		{
@@ -93,30 +79,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public virtual ICollection<ISkillDay> FindReadOnlyRange(DateOnlyPeriod period, IEnumerable<ISkill> skills, IScenario scenario)
+		public ICollection<ISkillDay> FindReadOnlyRange(DateOnlyPeriod period, IEnumerable<ISkill> skills, IScenario scenario)
 		{
-			var days = _skillDays.Where(skillDayInDb => skillDayInDb.Scenario.Equals(scenario) &&
-														period.Contains(skillDayInDb.CurrentDate) && skills.Contains(skillDayInDb.Skill))
-				.Select(skillDay =>
-					{
-						var ret = new SkillDay(skillDay.CurrentDate, skillDay.Skill, skillDay.Scenario, skillDay.WorkloadDayCollection,
-							skillDay.SkillDataPeriodCollection);
-						ret.SkillDataPeriodCollection.ForEach(x => x.Shrinkage = skillDay.SkillDataPeriodCollection.First().Shrinkage);
-						return ret;
-					}
-				).Cast<ISkillDay>().ToList();
-
-			var grouped = days.GroupBy(d => d.Skill);
-			foreach (var group in grouped)
-			{
-				var calculator = new SkillDayCalculator(group.Key, group, period);
-				foreach (var skillDay in group)
-				{
-					skillDay.SetupSkillDay();
-					skillDay.SkillDayCalculator = calculator;
-				}
-			}
-			return days.ToList();
+			return _skillDays.Where(skillDayInDb => skillDayInDb.Scenario.Equals(scenario) && period.Contains(skillDayInDb.CurrentDate) && skills.Contains(skillDayInDb.Skill))
+				.Select(skillDay => new SkillDay(skillDay.CurrentDate, skillDay.Skill, skillDay.Scenario, skillDay.WorkloadDayCollection, skillDay.SkillDataPeriodCollection))
+				.Cast<ISkillDay>().ToList();
 		}
 	}
 }

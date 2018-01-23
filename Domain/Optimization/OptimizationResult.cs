@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourcePlanner.Hints;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -24,22 +23,17 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly ICurrentScenario _currentScenario;
 		private readonly BlockPreferenceProviderUsingFiltersFactory _blockPreferenceProviderUsingFiltersFactory;
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
-		private readonly IResourceCalculation _resourceCalculation;
-		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 
 		public OptimizationResult(Func<ISchedulerStateHolder> schedulerStateHolder, IFindSchedulesForPersons findSchedulesForPersons, 
 			IUserTimeZone userTimeZone, ICurrentScenario currentScenario,  
 			CheckScheduleHints checkScheduleHints, SuccessfulScheduledAgents successfulScheduledAgents, 
 			BlockPreferenceProviderUsingFiltersFactory blockPreferenceProviderUsingFiltersFactory, 
-			ICurrentUnitOfWork currentUnitOfWork, IResourceCalculation resourceCalculation, 
-			CascadingResourceCalculationContextFactory resourceCalculationContextFactory)
+			ICurrentUnitOfWork currentUnitOfWork)
 		{
 			_checkScheduleHints = checkScheduleHints;
 			_successfulScheduledAgents = successfulScheduledAgents;
 			_blockPreferenceProviderUsingFiltersFactory = blockPreferenceProviderUsingFiltersFactory;
 			_currentUnitOfWork = currentUnitOfWork;
-			_resourceCalculation = resourceCalculation;
-			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 			_schedulerStateHolder = schedulerStateHolder;
 			_findSchedulesForPersons = findSchedulesForPersons;
 			_userTimeZone = userTimeZone;
@@ -51,10 +45,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public virtual OptimizationResultModel Create(DateOnlyPeriod period, IEnumerable<IPerson> fixedStaffPeople, IPlanningGroup planningGroup, bool usePreferences)
 		{
 			var resultStateHolder = _schedulerStateHolder().SchedulingResultState;
-			using (_resourceCalculationContextFactory.Create(resultStateHolder, true, period.Inflate(1)))
-			{
-				_resourceCalculation.ResourceCalculate(period.Inflate(1), new ResourceCalculationData(resultStateHolder, false, false));
-			}
 			_currentUnitOfWork.Current().Reassociate(fixedStaffPeople);
 			var allSkillsForAgentGroup = getAllSkillsForPlanningGroup(period, fixedStaffPeople, resultStateHolder);
 

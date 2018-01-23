@@ -11,7 +11,6 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests;
@@ -31,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		public IStaffingViewModelCreator Target;
 		public FakeScenarioRepository ScenarioRepository;
 		public FakeSkillRepository SkillRepository;
-		public FakeSkillDayRepository_DoNotUse SkillDayRepository;
+		public FakeSkillDayRepository SkillDayRepository;
 		public FakeIntervalLengthFetcher IntervalLengthFetcher;
 		public FakeIntradayQueueStatisticsLoader IntradayQueueStatisticsLoader;
 		public FakeSkillCombinationResourceRepository SkillCombinationResourceRepository;
@@ -44,7 +43,6 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
-			system.UseTestDouble<FakeSkillDayRepository_DoNotUse>().For<ISkillDayRepository>();
 		}
 
 		[Test]
