@@ -17077,4 +17077,8 @@ Do you want to participate?</value>
     <value>The text is too long</value>
     <comment>A generic message for length validation in forms</comment>
   </data>
+  <data name="InvalidHoursRange" xml:space="preserve">
+    <value>The period cannot exceed {0} hour(s).</value>
+    <comment>The period cannot exceed {0} hour(s). Parameter 0: the hours that configed in UI.</comment>
+  </data>
 </root>
