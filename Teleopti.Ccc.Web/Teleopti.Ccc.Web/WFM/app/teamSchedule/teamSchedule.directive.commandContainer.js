@@ -31,14 +31,24 @@
 		};
 	}
 
-	teamscheduleCommandContainerCtrl.$inject = ['$q', '$filter', '$scope', 'guidgenerator', 'teamsToggles',  'teamsPermissions',  'CommandCheckService', 'ScheduleManagement', 'PersonSelection', 'TeamSchedule'];
+	teamscheduleCommandContainerCtrl.$inject = ['$q', '$filter', '$element', '$scope', 'guidgenerator', 'teamsToggles',  'teamsPermissions',  'CommandCheckService', 'ScheduleManagement', 'PersonSelection', 'TeamSchedule'];
 
-	function teamscheduleCommandContainerCtrl($q, $filter, $scope, guidgenerator, teamsToggles, teamsPermissions, CommandCheckService, scheduleManagementSvc, personSelectionSvc, teamScheduleSvc) {
+	function teamscheduleCommandContainerCtrl($q, $filter, $element, $scope, guidgenerator, teamsToggles, teamsPermissions, CommandCheckService, scheduleManagementSvc, personSelectionSvc, teamScheduleSvc) {
 		var vm = this;
 
 		vm.scheduleManagementSvc = scheduleManagementSvc.newService();
 
 		vm.ready = false;
+
+		var wrapperEl = $element[0].querySelector('.teamschedule-command-container');
+		wrapperEl.addEventListener('keydown', function (event) {
+			var isEscape = (event.keyCode === 27);
+			if (isEscape && vm.activeCmd) {
+				vm.resetActiveCmd();
+				event.stopPropagation();
+				$scope.$emit('teamSchedule.sidenav.hide');
+			}
+		});
 
 		vm.initCmd = function(cmd) {
 			if (vm.isSelectAll) {

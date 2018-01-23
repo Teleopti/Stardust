@@ -171,6 +171,10 @@
 			}
 		});
 
+		$scope.$on('teamSchedule.sidenav.hide', function () {
+			$scope.$evalAsync($mdSidenav(commandContainerId).close);
+		});
+
 		$scope.$on('angular-resizable.resizeEnd', function (e, d) {
 			var container = $document[0].querySelector('#materialcontainer');
 			var viewHeader = $document[0].querySelector('.view-header');
