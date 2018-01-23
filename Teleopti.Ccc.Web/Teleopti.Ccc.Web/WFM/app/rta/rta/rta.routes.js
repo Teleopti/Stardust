@@ -45,26 +45,17 @@ angular.module('wfm.rta').config(function ($stateProvider, ToggleProvider) {
 				es: {array: true}
 			},
 			templateUrl: function () {
-				if (toggles.RTA_ViewHistoricalAhderenceForRecentShifts_46786)
-					return 'app/rta/rta/agents/rta-agents.RTA_ViewHistoricalAhderenceForRecentShifts_46786.html';
-				return 'app/rta/rta/agents/rta-agents.RTA_MobileFriendlyCheckboxes_46758.html';
+				return 'app/rta/rta/agents/rta-agents.RTA_ViewHistoricalAhderenceForRecentShifts_46786.html';
 			},
 			controllerProvider: function () {
 				if (toggles.RTA_ConfigurationValidationNotification_46933)
 					return 'RtaAgentsController46933 as vm';
-				if (toggles.RTA_ViewHistoricalAhderenceForRecentShifts_46786)
-					return 'RtaAgentsController46786 as vm';
-				return 'RtaAgentsController46758 as vm';
+				return 'RtaAgentsController46786 as vm';
 			}
 		})
 		.state('rta-historical-without-date', {
 			url: '/rta/agent-historical/:personId?open',
 			controller: function ($http, $state, $stateParams) {
-				if (!toggles.RTA_ViewHistoricalAhderenceForRecentShifts_46786) {
-					$state.go('rta-historical', $stateParams);
-					return;
-				}
-
 				$http.get('../api/HistoricalAdherence/MostRecentShiftDate',
 					{params: {personId: $stateParams.personId}}
 				).then(function (response) {

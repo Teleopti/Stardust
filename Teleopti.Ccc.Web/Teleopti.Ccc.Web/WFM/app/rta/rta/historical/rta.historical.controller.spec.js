@@ -35,21 +35,6 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 		expect(t.backend.lastHistoricalAdherenceForPersonRequestParams.date).toBe('20171213');
 	});
 
-	it('should display current date', function (tester) {
-		tester.stateParams.personId = '1';
-		tester.backend
-			.withHistoricalAdherence({
-				Now: '2016-10-10T15:00:00',
-				PersonId: '1',
-				Schedules: [],
-				OutOfAdherences: []
-			});
-
-		var controller = tester.createController();
-
-		expect(controller.date).toBe(moment('2016-10-10').format('L'));
-	});
-
 	it('should display date', function (tester) {
 		tester.stateParams.date = '20171214';
 		tester.backend

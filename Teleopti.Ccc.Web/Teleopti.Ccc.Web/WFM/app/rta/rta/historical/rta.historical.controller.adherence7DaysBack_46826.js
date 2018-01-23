@@ -63,8 +63,7 @@
 
 			vm.personId = data.PersonId;
 			vm.agentName = data.AgentName;
-			// remove the use of now when removing RTA_ViewHistoricalAhderenceForRecentShifts_46786
-			vm.date = moment($stateParams.date || data.Now).format('L');
+			vm.date = moment($stateParams.date).format('L');
 			vm.adherencePercentage = data.AdherencePercentage;
 			vm.showAdherencePercentage = data.AdherencePercentage !== null;
 
