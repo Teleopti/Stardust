@@ -353,11 +353,9 @@
     <Compile Include="Rta\Service\DataSourceReaderTest.cs" />
     <Compile Include="Rta\ReadModels\Mappings\MappingReadModelReaderTest.cs" />
     <Compile Include="Rta\Service\PerformanceMeasurement\PerformanceMeasurementTestAttribute.cs" />
-    <Compile Include="Rta\ReadModels\AdherencePercentage\AdherencePercentageReadModelReaderTest.cs" />
     <Compile Include="Rta\Service\Persisters\AgentStatePersisterDataVersionsTest.cs" />
     <Compile Include="Rta\Service\Persisters\AgentStatePersisterConcurrencyTest.cs" />
     <Compile Include="RetryingQueueSimulator.cs" />
-    <Compile Include="Rta\ReadModels\AdherencePercentage\AdherencePercentageReadModelPersisterConcurrencyTest.cs" />
     <Compile Include="Rta\Service\Persisters\AgentStatePersisterExtensions.cs" />
     <Compile Include="Rta\Service\Persisters\AgentStatePersisterFindForSnapshotTest.cs" />
     <Compile Include="Rta\Service\Persisters\AgentStatePersisterFindForCheckTest.cs" />
@@ -425,7 +423,6 @@
     <Compile Include="Config\XmlDefaultsTest.cs" />
     <Compile Include="Foundation\AssemblyInfoTest.cs" />
     <Compile Include="ReadModelUnitOfWork\ReadModelUnitOfWorkTest.cs" />
-    <Compile Include="Rta\ReadModels\AdherencePercentage\AdherencePercentageReadModelPersisterTest.cs" />
     <Compile Include="Repositories\AgentBadgeTransactionRepositoryTest .cs" />
     <Compile Include="Repositories\AgentBadgeWithRankTransactionRepositoryTest.cs" />
     <Compile Include="Repositories\EtlJobStatusRepositoryTest.cs" />

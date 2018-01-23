@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			_displayPastDays = HistoricalAdherenceMaintainer.DisplayPastDays(config);
 		}
 
-		public HistoricalAdherenceViewModel Build(Guid personId, DateOnly? date)
+		public HistoricalAdherenceViewModel Build(Guid personId, DateOnly date)
 		{
 			var data = new data
 			{
@@ -58,12 +58,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			};
 
 			loadCommonInto(data);
-
-			if (date.HasValue)
-				data.Date = date.Value;
-			else
-				loadDateTheSillyWay(data);
-
+			data.Date = date;
 			loadScheduleInto(data);
 			loadDisplayInto(data);
 			loadAdherencesInto(data);
@@ -107,47 +102,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			public DateTime? ShiftEndTime;
 
 			public IEnumerable<HistoricalAdherenceReadModel> Adherences;
-		}
-
-		[RemoveMeWithToggle(Toggles.RTA_ViewHistoricalAhderenceForRecentShifts_46786)]
-		private void loadDateTheSillyWay(data data)
-		{
-			var date = new DateOnly(data.AgentNow);
-			IScheduleDay day = null;
-
-			var scenario = _scenario.Current();
-			if (scenario != null && data.Person != null)
-			{
-				var period = new DateOnlyPeriod(date.AddDays(-2), date.AddDays(2));
-
-				var schedules = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(
-					new[] {data.Person},
-					new ScheduleDictionaryLoadOptions(false, false),
-					period,
-					scenario);
-
-				var possibleShifts = (
-						from scheduleDay in schedules[data.Person].ScheduledDayCollection(period)
-						where scheduleDay.DateOnlyAsPeriod.DateOnly == date.AddDays(-1)
-							  || scheduleDay.DateOnlyAsPeriod.DateOnly == date
-						let projection = scheduleDay.ProjectionService().CreateProjection()
-						select new
-						{
-							scheduleDay,
-							projection,
-						})
-					.ToArray();
-
-				var shift = possibleShifts.SingleOrDefault(s => s.projection.Any(l => l.Period.Contains(data.Now))) ??
-							possibleShifts.SingleOrDefault(s => s.scheduleDay.DateOnlyAsPeriod.DateOnly == date);
-
-				day = shift.scheduleDay;
-			}
-
-			if (day != null)
-				date = day.DateOnlyAsPeriod.DateOnly;
-
-			data.Date = date;
 		}
 
 		private void loadCommonInto(data data)
@@ -322,15 +276,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 	{
 		int? CalculatePercentage(DateTime? shiftStartTime, DateTime? shiftEndTime,
 			IEnumerable<HistoricalAdherenceReadModel> data);
-	}
-
-	public class NoAdherencePercentageCalculator : IAdherencePercentageCalculator
-	{
-		public int? CalculatePercentage(DateTime? shiftStartTime, DateTime? shiftEndTime,
-			IEnumerable<HistoricalAdherenceReadModel> data)
-		{
-			return null;
-		}
 	}
 
 	public class AdherencePercentageCalculator : IAdherencePercentageCalculator

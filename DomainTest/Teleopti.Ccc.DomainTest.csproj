@@ -223,7 +223,6 @@
     <Compile Include="ApplicationLayer\Rta\Configuration\DefaultStateGroupMissingInConfigurationTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Configuration\LoggedOutStateGroupMissingInConfigurationTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Configuration\LoggedOutStateGroupMissingInRtaServiceTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherencePercentage\PackageTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AgentState\UnorderedEventsTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AgentState\SiteNameChangedTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AgentState\TeamNameChangedTest.cs" />
@@ -368,7 +367,6 @@
     <Compile Include="ApplicationLayer\ReplyRequestCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\Request\AnalyticsRequestUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Maintainer\AgentStateMaintainerTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherencePercentage\ShiftStartEndTimeTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AgentState\PersonAssociationChangedTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\HistoricalAdherence\HistoricalAdherenceUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\Mappings\MappingsTest.cs" />
@@ -574,7 +572,6 @@
     <Compile Include="Common\TimeLogger\LogTimeTest.cs" />
     <Compile Include="Common\TimeLogger\LogTimeTester.cs" />
     <Compile Include="Forecasting\OverrideTaskTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherencePercentage\DeletedTest.cs" />
     <Compile Include="Forecasting\StaffingCalculatorServiceFacadeTest.cs" />
     <Compile Include="SkillGroups\CreateSkillGroupTest.cs" />
     <Compile Include="Intraday\IncomingTrafficViewModelCreatorTest.cs" />
@@ -640,17 +637,10 @@
     <Compile Include="ApplicationLayer\RemoveAbsenceCommandHandlerTest.cs" />
     <Compile Include="Logon\DataSourceAspectTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Cache\CacheTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherencePercentage\ShiftTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherencePercentage\NeutralAdherenceTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherencePercentage\AdherenceTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherencePercentage\BelongsToDateTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherencePercentage\UnorderedEventsTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\FullTests\InconsistentPercentage32862.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\AuthenticationKeyTenantTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\CheckForActivityChangesTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IncorrectOutOfAdherenceCount35829.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\PersonActivityActualStartEventTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\ViewModels\AdherencePercentageViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\RuleMappingTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\BelongsToDateTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\EventsOrderTest.cs" />

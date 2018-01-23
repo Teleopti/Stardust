@@ -29,33 +29,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		}
 
 		[Test]
-		public void ShouldOnlyBuildForAskedStateGroup()
-		{
-			var phoneId = Guid.NewGuid();
-			Database
-				.WithStateGroup(phoneId, "phone")
-				.WithStateGroup(Guid.NewGuid(), "someOtherStateGroup");
-
-			var result = Target.Build().Single();
-
-			result.Id.Should().Be(phoneId);
-			result.Name.Should().Be("phone");
-		}
-
-		[Test]
-		public void ShouldReturnEmptyIfStateGroupNotFound()
-		{
-			var phoneId = Guid.NewGuid();
-			Database
-				.WithStateGroup(phoneId, "phone")
-				.WithStateGroup(Guid.NewGuid(), "someOtherStateGroup");
-
-			var result = Target.Build();
-
-			result.Should().Be.Empty();
-		}
-
-		[Test]
 		public void ShouldReturnAll()
 		{
 			var phoneId = Guid.NewGuid();

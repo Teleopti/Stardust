@@ -1,5 +1,4 @@
 ﻿@RTA
-@OnlyRunIfEnabled('RTA_ViewHistoricalAhderenceForRecentShifts_46786')
 Feature: Neutral adherence policy
 	In order to improve adherence with neutral alarm occured
 	As a real time analyst

@@ -44,7 +44,6 @@ Wfm_Outbound_IgnoreScheduleForReplan_43752 = true
 
 # LevelUp #
 RTA_RtaTracer_45597 = true
-RTA_ViewHistoricalAhderenceForRecentShifts_46786 = true
 RTA_ViewHistoricalAhderence7DaysBack_46826 = true
 RTA_ConfigurationValidationNotification_46933 = true
 RTA_ApprovePreviousOOA_47230 = false

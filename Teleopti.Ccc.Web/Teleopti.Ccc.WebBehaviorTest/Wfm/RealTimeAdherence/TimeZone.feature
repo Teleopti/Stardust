@@ -1,5 +1,4 @@
 ﻿@RTA
-@OnlyRunIfEnabled('RTA_ViewHistoricalAhderenceForRecentShifts_46786')
 Feature: Time zone
 	In order to improve hawaii agents adherence 
 	As a real time analyst

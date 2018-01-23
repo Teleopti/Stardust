@@ -72,13 +72,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SiteCardViewModelBuilder>().SingleInstance();
 			builder.RegisterType<RtaTracerViewModelBuilder>().SingleInstance();
 
-			builder.RegisterType<AdherencePercentageViewModelBuilder>().SingleInstance();
 			builder.RegisterType<HistoricalAdherenceViewModelBuilder>().SingleInstance();
 			builder.RegisterType<HistoricalAdherenceDate>().SingleInstance();
-			if (_config.Toggle(Toggles.RTA_ViewHistoricalAhderenceForRecentShifts_46786))
-				builder.RegisterType<AdherencePercentageCalculator>().As<IAdherencePercentageCalculator>();
-			else
-				builder.RegisterType<NoAdherencePercentageCalculator>().As<IAdherencePercentageCalculator>();
+			builder.RegisterType<AdherencePercentageCalculator>().As<IAdherencePercentageCalculator>();
 
 			builder.RegisterType<HistoricalAdherenceReadModelReader>().As<IHistoricalAdherenceReadModelReader>();
 			builder.RegisterType<HistoricalAdherenceReadModelPersister>().As<IHistoricalAdherenceReadModelPersister>();

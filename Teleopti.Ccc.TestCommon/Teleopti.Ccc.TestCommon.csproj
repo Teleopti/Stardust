@@ -413,7 +413,6 @@
     <Compile Include="MessageBrokerCompositeDummy.cs" />
     <Compile Include="MultisiteDayExtensions.cs" />
     <Compile Include="ObjectCopyExtension.cs" />
-    <Compile Include="FakeRepositories\Rta\FakeAdherencePercentageReadModelPersister.cs" />
     <Compile Include="FakeRepositories\Rta\FakeRtaRuleRepository.cs" />
     <Compile Include="FakeRepositories\Rta\FakeDatabase.cs" />
     <Compile Include="FakeRepositories\Rta\FakeRtaStateGroupRepository.cs" />

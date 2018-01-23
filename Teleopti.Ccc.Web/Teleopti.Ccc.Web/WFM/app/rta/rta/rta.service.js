@@ -12,12 +12,11 @@
         var service = {
             getSkills: getSkills,
             getSkillAreas: getSkillAreas,
+			getSkillArea: getSkillArea,
             getOrganization: getOrganization,
             getOrganizationForSkills: getOrganizationForSkills,
             agentStatesFor: agentStatesFor,
             getOverviewModelFor: getOverviewModelFor,
-            getSkillArea: getSkillArea,
-            forToday: forToday
         }
 
         return service;
@@ -84,16 +83,5 @@
                 }
             }).query(data).$promise
         }
-
-        function forToday(data) {
-            return $resource('../api/HistoricalAdherence/PercentForToday', {}, {
-                query: {
-                    method: 'GET',
-                    isArray: false
-                }
-            }).query({
-                personId: data.personId
-            }).$promise;
-        };
     };
 })();

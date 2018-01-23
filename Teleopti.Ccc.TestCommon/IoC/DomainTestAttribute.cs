@@ -46,7 +46,6 @@ using Teleopti.Ccc.TestCommon.Services;
 
 namespace Teleopti.Ccc.TestCommon.IoC
 {
-	[Toggle(Domain.FeatureFlags.Toggles.RTA_ViewHistoricalAhderenceForRecentShifts_46786)]
 	public class DomainTestAttribute : IoCTestAttribute
 	{
 		public static string DefaultTenantName = "default";
@@ -110,7 +109,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<FakeAgentStateReadModelPersister>().For<IAgentStateReadModelPersister, IAgentStateReadModelReader>();
 			system.UseTestDouble<FakeHistoricalAdherenceReadModelPersister>().For<IHistoricalAdherenceReadModelReader, IHistoricalAdherenceReadModelPersister>();
 			system.UseTestDouble<FakeHistoricalChangeReadModelPersister>().For<IHistoricalChangeReadModelPersister, IHistoricalChangeReadModelReader>();
-			system.UseTestDouble<FakeAdherencePercentageReadModelPersister>().For<IAdherencePercentageReadModelPersister, IAdherencePercentageReadModelReader>();
 			system.UseTestDouble<FakeAllLicenseActivatorProvider>().For<ILicenseActivatorProvider>();
 			system.UseTestDouble<FakeTeamCardReader>().For<ITeamCardReader>();
 			system.UseTestDouble<FakeOrganizationReader>().For<IOrganizationReader>();

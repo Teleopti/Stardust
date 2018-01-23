@@ -1814,7 +1814,6 @@
     <Compile Include="ApplicationLayer\Events\PersonStateChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonTeamChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonTerminalDateChangedEvent.cs" />
-    <Compile Include="ApplicationLayer\AdherencePercentageReadModelUpdatedMessage.cs" />
     <Compile Include="ApplicationLayer\Events\ScheduledResourcesChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Forecast\IImportForecastsRepository.cs" />
     <Compile Include="ApplicationLayer\Events\ImportForecastsFileToSkillEvent.cs" />
@@ -1880,13 +1879,10 @@
     <Compile Include="ApplicationLayer\Rta\Service\DataSourceMapper.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\StateRuleInfo.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\TenantLoader.cs" />
-    <Compile Include="ApplicationLayer\Rta\ViewModels\AdherencePercentageViewModel.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ActivityEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ActualAgentStateExtension.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\AdherenceEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\AdherenceInfo.cs" />
-    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherencePercentageReadModel.cs" />
-    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherencePercentageReadModelUpdater.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\AgentState.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\AgentStateReadModelUpdater.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\Mapping.cs" />
@@ -1903,11 +1899,9 @@
     <Compile Include="ApplicationLayer\Rta\Service\AgentStateProcessor.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ScheduleInfo.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ShiftEventPublisher.cs" />
-    <Compile Include="ApplicationLayer\Rta\ViewModels\AdherencePercentageViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\Rta\StateInputModel.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\StateEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\ExternalUserStateWebModel.cs" />
-    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\IAdherencePercentageReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\Context.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\StateMapper.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\TeamCardModel.cs" />

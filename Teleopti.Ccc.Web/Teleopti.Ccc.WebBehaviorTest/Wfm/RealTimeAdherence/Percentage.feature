@@ -1,5 +1,4 @@
 ﻿@RTA
-@OnlyRunIfEnabled('RTA_ViewHistoricalAhderenceForRecentShifts_46786')
 Feature: Adherence percentage
 	In order to ...
 	As a real time analyst
