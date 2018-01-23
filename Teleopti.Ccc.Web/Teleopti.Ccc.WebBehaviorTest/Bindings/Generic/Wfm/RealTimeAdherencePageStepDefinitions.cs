@@ -55,12 +55,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		{
 			Browser.Interactions.AssertExists($".change-schedule");
 		}
-		
-		[Then(@"I should see adherence percentage of (.*)%")]
-		public void ThenIShouldSeeHistoricalAdherenceForWithAdherenceOf(string adherence)
-		{
-			Browser.Interactions.AssertFirstContains(".adherence-percent", adherence);
-		}
 
 		[When(@"I click the toggle to see all agents")]
 		public void WhenIClickTheToggleToSeeAllAgents()
