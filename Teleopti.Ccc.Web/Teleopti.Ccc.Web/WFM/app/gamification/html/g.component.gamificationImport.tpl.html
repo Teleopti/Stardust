@@ -20,7 +20,7 @@
 				<button class="wfm-btn wfm-btn-primary" ng-disabled="$ctrl.fileIsInvalid()" ng-click="$ctrl.upload();$event.stopPropagation()">{{'UploadAndStart'|translate}}</button>
 			</div>
 			<div ng-click="$event.stopPropagation()">
-				<a class="detail_link" target="_blank" ng-href="{{$ctrl.fileFormatWikiLink}}">{{'GamificationViewImportFileFormat'|translate}}</a>
+				<a target="_blank" ng-href="{{$ctrl.fileFormatWikiLink}}">{{'GamificationViewImportFileFormat'|translate}}</a>
 			</div>
 		</div>
 		<div ng-if="$ctrl.uploading" class="loading-mask">
