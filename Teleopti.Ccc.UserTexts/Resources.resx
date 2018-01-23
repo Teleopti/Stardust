@@ -17085,4 +17085,32 @@ Do you want to participate?</value>
     <value>The period cannot exceed {0} hour(s).</value>
     <comment>The period cannot exceed {0} hour(s). Parameter 0: the hours that configed in UI.</comment>
   </data>
+  <data name="AgentsAnalyzed" xml:space="preserve">
+    <value>Analyzing restrictions</value>
+    <comment>Analyzing restrictions</comment>
+  </data>
+  <data name="AgentsThatFailedInspection" xml:space="preserve">
+    <value>Agents that failed inspection</value>
+    <comment>Agents that failed inspction</comment>
+  </data>
+  <data name="ManyAgentsAlert" xml:space="preserve">
+    <value>Agents selected, click Refresh to start analyzing</value>
+    <comment>Agents selected, click Refresh to start analyzing</comment>
+  </data>
+  <data name="RestrictionNotAbleToBeScheduledReasonNightlyRestMightBeBroken" xml:space="preserve">
+    <value>Nightly rest will be broken</value>
+    <comment>Nightly rest will be broken</comment>
+  </data>
+  <data name="PrimaryReason" xml:space="preserve">
+    <value>Primary reason</value>
+    <comment>Primary reason</comment>
+  </data>
+  <data name="RestrictionNotAbleToBeScheduledReasonTooLittleWorkTimeInPeriod" xml:space="preserve">
+    <value>The period results in to little work time</value>
+    <comment>The period results in to little work time</comment>
+  </data>
+  <data name="RestrictionNotAbleToBeScheduledReasonTooMuchWorkTimeInPeriod" xml:space="preserve">
+    <value>The period results in to much work time</value>
+    <comment>The period results in to much work time</comment>
+  </data>
 </root>

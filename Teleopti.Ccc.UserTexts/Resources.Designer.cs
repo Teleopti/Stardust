@@ -1934,6 +1934,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Analyzing restrictions.
+        /// </summary>
+        public static string AgentsAnalyzed {
+            get {
+                return ResourceManager.GetString("AgentsAnalyzed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Teleopti WFM Agent Schedule Messenger.
         /// </summary>
         public static string AgentScheduleMessenger {
@@ -2038,6 +2047,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string AgentState {
             get {
                 return ResourceManager.GetString("AgentState", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Agents that failed inspection.
+        /// </summary>
+        public static string AgentsThatFailedInspection {
+            get {
+                return ResourceManager.GetString("AgentsThatFailedInspection", resourceCulture);
             }
         }
         
@@ -17213,6 +17231,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Agents selected, click Refresh to start analyzing.
+        /// </summary>
+        public static string ManyAgentsAlert {
+            get {
+                return ResourceManager.GetString("ManyAgentsAlert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Map Destination.
         /// </summary>
         public static string MapDestination {
@@ -25187,6 +25214,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Primary reason.
+        /// </summary>
+        public static string PrimaryReason {
+            get {
+                return ResourceManager.GetString("PrimaryReason", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Print.
         /// </summary>
         public static string Print {
@@ -27809,6 +27845,33 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Restricted {
             get {
                 return ResourceManager.GetString("Restricted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nightly rest will be broken.
+        /// </summary>
+        public static string RestrictionNotAbleToBeScheduledReasonNightlyRestMightBeBroken {
+            get {
+                return ResourceManager.GetString("RestrictionNotAbleToBeScheduledReasonNightlyRestMightBeBroken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The period results in to little work time.
+        /// </summary>
+        public static string RestrictionNotAbleToBeScheduledReasonTooLittleWorkTimeInPeriod {
+            get {
+                return ResourceManager.GetString("RestrictionNotAbleToBeScheduledReasonTooLittleWorkTimeInPeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The period results in to much work time.
+        /// </summary>
+        public static string RestrictionNotAbleToBeScheduledReasonTooMuchWorkTimeInPeriod {
+            get {
+                return ResourceManager.GetString("RestrictionNotAbleToBeScheduledReasonTooMuchWorkTimeInPeriod", resourceCulture);
             }
         }
         

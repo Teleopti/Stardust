@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 {
-	public partial class AgentsNotPossibleToSchedule : UserControl
+	public partial class AgentsNotPossibleToSchedule : BaseUserControl
 	{
 		private RestrictionNotAbleToBeScheduledReport _restrictionNotAbleToBeScheduledReport;
 		private IEnumerable<IPerson> _selectedAgents;
@@ -18,10 +21,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 		private SchedulerSplitters _parent;
 		private AgentRestrictionsDetailView _detailView;
 		private IRestrictionExtractor _restrictionExtractor;
+		private readonly BlinkingToolStripButtonRenderer _blinker;
+		private IDictionary<RestrictionNotAbleToBeScheduledReason, string> _translatedEnums;
 
 		public AgentsNotPossibleToSchedule()
 		{
 			InitializeComponent();
+			_blinker = new BlinkingToolStripButtonRenderer(toolStrip1);
+			if(!DesignMode)
+				SetTexts();
 		}
 
 		public void InitAgentsNotPossibleToSchedule(RestrictionNotAbleToBeScheduledReport restrictionNotAbleToBeScheduledReport, SchedulerSplitters parent)
@@ -30,10 +38,23 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 			_parent = parent;
 			_restrictionExtractor = new RestrictionExtractor(new RestrictionCombiner(),
 				new RestrictionRetrievalOperation());
+			_translatedEnums = new Dictionary<RestrictionNotAbleToBeScheduledReason, string>();
+			foreach (var keyValuePair in LanguageResourceHelper.TranslateEnumToList<RestrictionNotAbleToBeScheduledReason>())
+			{
+				_translatedEnums.Add(keyValuePair);
+			}
 		}
 
 		private void toolStripButtonRefreshClick(object sender, EventArgs e)
 		{
+			_blinker.BlinkButton(toolStripButtonRefresh, false);
+			toolStripLabelManySelected.Visible = false;
+			doCreate();
+		}
+
+		private void doCreate()
+		{
+			Cursor = Cursors.WaitCursor;
 			toolStripButtonRefresh.Enabled = false;
 			listViewResult.SuspendLayout();
 			listViewResult.Items.Clear();
@@ -46,11 +67,33 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 			_selectedAgents = selectedAgents;
 			_selectedDate = selectedDate;
 			_detailView = detailView;
+			_detailView.ViewPasteCompleted += detailViewViewPasteCompleted;
+			autoCreateIfNotToManyAgents();
+		}
+
+		private void autoCreateIfNotToManyAgents()
+		{
+			if (_selectedAgents.Count() <= 300)
+			{
+				toolStripLabelManySelected.Visible = false;
+				doCreate();
+			}
+			else
+			{
+				_blinker.BlinkButton(toolStripButtonRefresh, true);
+				toolStripLabelManySelected.Text = _selectedAgents.Count() + @" " + toolStripLabelManySelected.Text;
+				toolStripLabelManySelected.Visible = true;
+			}
+		}
+
+		private void detailViewViewPasteCompleted(object sender, EventArgs e)
+		{
+			ReselectSelected();
 		}
 
 		public void ReselectSelected()
 		{
-			if (listViewResult.Items.Count == 0 && listViewResult.SelectedItems.Count == 0)
+			if (listViewResult.Items.Count == 0 || listViewResult.SelectedItems.Count == 0)
 				return;
 
 			var selected = listViewResult.SelectedItems[0];
@@ -60,7 +103,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 			_detailView.InitializeGrid();
 			_detailView.SelectDateIfExists(matrix.SchedulePeriod.DateOnlyPeriod.StartDate);
 			_detailView.TheGrid.Enabled = true;
-			_detailView.TheGrid.Cursor = Cursors.Arrow;
+			_detailView.TheGrid.Cursor = Cursors.Default;
 		}
 
 		private void backgroundWorker1DoWork(object sender, DoWorkEventArgs e)
@@ -87,7 +130,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 				{
 					Tag = restrictionsAbleToBeScheduledResult
 				};
-				item.SubItems.Add(restrictionsAbleToBeScheduledResult.Reason.ToString());
+				if (!_translatedEnums.TryGetValue(restrictionsAbleToBeScheduledResult.Reason, out var translated))
+				{
+					translated = restrictionsAbleToBeScheduledResult.Reason.ToString();
+				}
+				item.SubItems.Add(translated);
 				item.SubItems.Add(restrictionsAbleToBeScheduledResult.Period.ToShortDateString(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture));
 				listViewResult.Items.Add(item);
 			}
@@ -97,9 +144,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 				listViewResult.Items[0].Selected = true;
 
 			toolStripButtonRefresh.Enabled = true;
+			_detailView.TheGrid.Enabled = true;
+			_detailView.TheGrid.Cursor = Cursors.Default;
+			Cursor = Cursors.Default;
 		}
 
-		private void listViewResult_SelectedIndexChanged(object sender, EventArgs e)
+		private void listViewResultSelectedIndexChanged(object sender, EventArgs e)
 		{
 			ReselectSelected();
 		}

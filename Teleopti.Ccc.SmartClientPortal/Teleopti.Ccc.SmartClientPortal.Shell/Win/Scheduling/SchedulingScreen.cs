@@ -4482,8 +4482,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			var schedulingOptions = schedulerSplitters1.SchedulingOptions;
 			var view = (AgentRestrictionsDetailView) detailView;
 			_splitContainerLessIntellegentRestriction.SplitterDistance = 300;
+			view.Toggle47013 = true;
 			if (!_container.Resolve<IToggleManager>().IsEnabled(Toggles.Scheduler_RestrictionReport_47013))
 			{
+				view.Toggle47013 = false;
 				schedulerSplitters1.AgentRestrictionGrid.MergeHeaders();
 				schedulerSplitters1.AgentRestrictionGrid.LoadData(SchedulerState, persons, schedulingOptions, selectedPerson, view, schedulePart, _container);
 			}

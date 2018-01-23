@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -30,6 +31,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 		private readonly AgentRestrictionGrid _agentRestrictionGrid;
 		private readonly IWorkShiftWorkTime _workShiftWorkTime;
 		private bool _useScheduling;
+		private IScheduleMatrixPro _currentMatrix;
 
 		public AgentRestrictionsDetailView(AgentRestrictionGrid agentRestrictionGrid, GridControl grid, ISchedulerStateHolder schedulerState, IGridlockManager lockManager,
 			SchedulePartFilter schedulePartFilter, ClipHandler<IScheduleDay> clipHandler, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder,
@@ -118,6 +120,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 
 		public void LoadDetails(IScheduleMatrixPro scheduleMatrixPro, IRestrictionExtractor restrictionExtractor)
 		{
+			_currentMatrix = scheduleMatrixPro;
 			var restrictionCombiner = new RestrictionCombiner();
 			var personalShiftRestrictionCombiner = new PersonalShiftRestrictionCombiner(restrictionCombiner);
 			var meetingRestrictionCombinder = new MeetingRestrictionCombiner(restrictionCombiner);
@@ -134,9 +137,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 					schedulingOptions, personalShiftRestrictionCombiner, meetingRestrictionCombinder);
 			var preferenceNightRestChecker = new PreferenceNightRestChecker();
 
-			_model.LoadDetails(scheduleMatrixPro, schedulingOptions, effectiveRestrictionExtractor, TimeSpan.FromHours(150), preferenceNightRestChecker);
+			_model.LoadDetails(scheduleMatrixPro, schedulingOptions, effectiveRestrictionExtractor, TimeSpan.Zero, preferenceNightRestChecker);
 			_useScheduling = schedulingOptions.UseScheduling;
 		}
+
+		[RemoveMeWithToggle(Toggles.Scheduler_RestrictionReport_47013)]
+		public bool Toggle47013 { get; set; }
 
 		public override void AddSelectedSchedulesInColumnToList(GridRangeInfo range, int colIndex, List<IScheduleDay> selectedSchedules)
 		{
@@ -250,9 +256,18 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 
 		public void DeleteSelectedRestrictions(IUndoRedoContainer undoRedo, IScheduleTag defaultScheduleTag, IScheduleDayChangeCallback scheduleDayChangeCallback)
 		{
-			if (_agentRestrictionGrid.CurrentDisplayRow == null)
-				return;
-			IScheduleMatrixPro matrix = _agentRestrictionGrid.CurrentDisplayRow.Matrix;
+			IScheduleMatrixPro matrix;
+			if (Toggle47013)
+			{
+				matrix = _currentMatrix;
+			}
+			else
+			{
+				if (_agentRestrictionGrid.CurrentDisplayRow == null)
+					return;
+				matrix = _agentRestrictionGrid.CurrentDisplayRow.Matrix;
+			}
+
 			var clipHandler = new ClipHandler<IScheduleDay>();
 			GridHelper.GridCopySelection(ViewGrid, clipHandler, true);
 			var list = DeleteList(clipHandler);
@@ -291,7 +306,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 			IList<IScheduleDay> pasteList =
 							   GridHelper.HandlePasteScheduleGridFrozenColumn(ViewGrid, Presenter.ClipHandlerSchedule, pasteAction);
 
-			IScheduleMatrixPro matrix = _agentRestrictionGrid.CurrentDisplayRow.Matrix;
+			IScheduleMatrixPro matrix;
+			if (Toggle47013)
+			{
+				matrix = _currentMatrix;
+			}
+			else
+			{
+				matrix = _agentRestrictionGrid.CurrentDisplayRow.Matrix;
+			}
 
 			IList<IScheduleDay> strippedList = pasteList.Where(s => matrix.UnlockedDays.Any(m => m.Day == s.DateOnlyAsPeriod.DateOnly)).ToList();
 

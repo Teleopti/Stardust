@@ -15374,4 +15374,32 @@ Vill du registrera dig?</value>
   <data name="ImportBpoStartDateTimeMustBeInTheFuture" xml:space="preserve">
     <value>Starttiden på intervallet måste vara en tidpunkt i framtiden.</value>
   </data>
+  <data name="AgentsAnalyzed" xml:space="preserve">
+    <value>Analyserar restriktioner</value>
+    <comment>Analyzing restrictions</comment>
+  </data>
+  <data name="AgentsThatFailedInspection" xml:space="preserve">
+    <value>Agenter som inte klarade analysen</value>
+    <comment>Agents that failed inspction</comment>
+  </data>
+  <data name="ManyAgentsAlert" xml:space="preserve">
+    <value>Agenter valda, tryck på refresh-knappen för att starta analysen</value>
+    <comment>Agents selected, click Refresh to start analyzing</comment>
+  </data>
+  <data name="RestrictionNotAbleToBeScheduledReasonNightlyRestMightBeBroken" xml:space="preserve">
+    <value>Nattvilan kommer att brytas</value>
+    <comment>Nightly rest will be broken</comment>
+  </data>
+  <data name="PrimaryReason" xml:space="preserve">
+    <value>Primär anledning</value>
+    <comment>Primary reason</comment>
+  </data>
+  <data name="RestrictionNotAbleToBeScheduledReasonTooLittleWorkTimeInPeriod" xml:space="preserve">
+    <value>Perioden kommer att ge för lite arbetstid</value>
+    <comment>The period results in to little work time</comment>
+  </data>
+  <data name="RestrictionNotAbleToBeScheduledReasonTooMuchWorkTimeInPeriod" xml:space="preserve">
+    <value>Perioden kommer att ge för mycket arbetstid</value>
+    <comment>The period results in to much work time</comment>
+  </data>
 </root>

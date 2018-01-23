@@ -28,9 +28,9 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AgentsNotPossibleToSchedule));
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
 			this.toolStripButtonRefresh = new System.Windows.Forms.ToolStripButton();
+			this.toolStripLabelManySelected = new System.Windows.Forms.ToolStripLabel();
 			this.listViewResult = new System.Windows.Forms.ListView();
 			this.columnHeaderAgent = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeaderReason = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -42,7 +42,8 @@
 			// toolStrip1
 			// 
 			this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButtonRefresh});
+            this.toolStripButtonRefresh,
+            this.toolStripLabelManySelected});
 			this.toolStrip1.Location = new System.Drawing.Point(0, 0);
 			this.toolStrip1.Name = "toolStrip1";
 			this.toolStrip1.Size = new System.Drawing.Size(1050, 25);
@@ -51,13 +52,18 @@
 			// 
 			// toolStripButtonRefresh
 			// 
-			this.toolStripButtonRefresh.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.toolStripButtonRefresh.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonRefresh.Image")));
+			this.toolStripButtonRefresh.Image = global::Teleopti.Ccc.SmartClientPortal.Shell.Properties.Resources.ccc_Refresh_16x16;
 			this.toolStripButtonRefresh.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonRefresh.Name = "toolStripButtonRefresh";
-			this.toolStripButtonRefresh.Size = new System.Drawing.Size(23, 22);
+			this.toolStripButtonRefresh.Size = new System.Drawing.Size(76, 22);
 			this.toolStripButtonRefresh.Text = "xxRefresh";
 			this.toolStripButtonRefresh.Click += new System.EventHandler(this.toolStripButtonRefreshClick);
+			// 
+			// toolStripLabelManySelected
+			// 
+			this.toolStripLabelManySelected.Name = "toolStripLabelManySelected";
+			this.toolStripLabelManySelected.Size = new System.Drawing.Size(109, 22);
+			this.toolStripLabelManySelected.Text = "xxManyAgentsAlert";
 			// 
 			// listViewResult
 			// 
@@ -74,16 +80,16 @@
 			this.listViewResult.TabIndex = 1;
 			this.listViewResult.UseCompatibleStateImageBehavior = false;
 			this.listViewResult.View = System.Windows.Forms.View.Details;
-			this.listViewResult.SelectedIndexChanged += new System.EventHandler(this.listViewResult_SelectedIndexChanged);
+			this.listViewResult.SelectedIndexChanged += new System.EventHandler(this.listViewResultSelectedIndexChanged);
 			// 
 			// columnHeaderAgent
 			// 
-			this.columnHeaderAgent.Text = "xxAgent";
+			this.columnHeaderAgent.Text = "xxAgentsThatFailedInspection";
 			this.columnHeaderAgent.Width = 300;
 			// 
 			// columnHeaderReason
 			// 
-			this.columnHeaderReason.Text = "xxReason";
+			this.columnHeaderReason.Text = "xxPrimaryReason";
 			this.columnHeaderReason.Width = 300;
 			// 
 			// columnHeaderPeriod
@@ -123,5 +129,6 @@
 		private System.Windows.Forms.ColumnHeader columnHeaderReason;
 		private System.Windows.Forms.ColumnHeader columnHeaderPeriod;
 		private System.ComponentModel.BackgroundWorker backgroundWorker1;
+		private System.Windows.Forms.ToolStripLabel toolStripLabelManySelected;
 	}
 }

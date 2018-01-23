@@ -1376,6 +1376,7 @@
     <Compile Include="Win\Common\BaseUserControlWithMessageBrokerHandler.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Win\Common\BlinkingToolStripButtonRenderer.cs" />
     <Compile Include="Win\Common\ClipboardOperationsForText.cs" />
     <Compile Include="Win\Common\Configuration\AbsenceControl.cs">
       <SubType>UserControl</SubType>
