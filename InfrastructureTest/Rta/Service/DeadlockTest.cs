@@ -241,7 +241,22 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Service
 		}
 
 		[Test]
-		public void ShouldNotDeadlockThisMess([Range(1, 5)] int times)
+		public void ShouldNotDeadlockThisMess1() =>
+			shouldNotDeadlockThisMess();
+		[Test]
+		public void ShouldNotDeadlockThisMess2() =>
+			shouldNotDeadlockThisMess();
+		[Test]
+		public void ShouldNotDeadlockThisMess3() =>
+			shouldNotDeadlockThisMess();
+		[Test]
+		public void ShouldNotDeadlockThisMess4() =>
+			shouldNotDeadlockThisMess();
+		[Test]
+		public void ShouldNotDeadlockThisMess5() =>
+			shouldNotDeadlockThisMess();
+
+		private void shouldNotDeadlockThisMess()
 		{
 			setup();
 			var stateCodes = createStateCodes();
@@ -278,6 +293,5 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Service
 
 			Run.Wait();
 		}
-		
 	}
 }
