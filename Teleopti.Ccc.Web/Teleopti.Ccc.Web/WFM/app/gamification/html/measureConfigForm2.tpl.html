@@ -2,7 +2,7 @@
 	<div class="text-danger validation">{{$ctrl.errorMsg|translate}}</div>
 	<div class="con-row">
 		<div class="con-flex">
-			<label>
+			<label ng-class="{locked: $ctrl.disabled}">
 				Gold badge threshold
 				<input name="goldBadgeThreshold" ng-model-options="{allowInvalid:true}" ng-disabled="$ctrl.disabled" type="text" ng-model="$ctrl._goldBadgeThreshold"
 				 ng-blur="$ctrl.updateGoldThreshold(form2.goldBadgeThreshold.$invalid)" ng-keyup="$ctrl.keyUp($event, form2.goldBadgeThreshold.$invalid)"
@@ -13,8 +13,7 @@
 			</div>
 		</div>
 		<div class="con-flex">
-
-			<label>
+			<label ng-class="{locked: $ctrl.disabled}">
 				Silver badge threshold
 				<input name="silverBadgeThreshold" ng-model-options="{allowInvalid:true}" ng-disabled="$ctrl.disabled" type="text" ng-model="$ctrl._silverBadgeThreshold"
 				 ng-blur="$ctrl.updateSilverThreshold(form2.silverBadgeThreshold.$invalid)" ng-keyup="$ctrl.keyUp($event, form2.silverBadgeThreshold.$invalid)"
@@ -25,7 +24,7 @@
 			</div>
 		</div>
 		<div class="con-flex">
-			<label>
+			<label ng-class="{locked: $ctrl.disabled}">
 				Bronze badge threshold
 				<input type="text" ng-model-options="{allowInvalid:true}" name="bronzeBadgeThreshold" ng-disabled="$ctrl.disabled" ng-model="$ctrl._bronzeBadgeThreshold"
 				 ng-blur="$ctrl.updateBronzeThreshold(form2.bronzeBadgeThreshold.$invalid)" ng-keyup="$ctrl.keyUp($event, form2.bronzeBadgeThreshold.$invalid)"
