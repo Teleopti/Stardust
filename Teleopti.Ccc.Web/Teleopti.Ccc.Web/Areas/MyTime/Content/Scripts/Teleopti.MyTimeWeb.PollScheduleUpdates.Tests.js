@@ -92,7 +92,12 @@
 							options.success(1000);
 							break;
 						case 'UserData/FetchUserData':
-							options.success({});
+							options.success({
+								'BusinessUnitId': '928dd0bc-bf40-412e-b970-9b5e015aadea',
+								'DataSourceName': 'Teleopti WFM',
+								'Url': 'http://localhost:52858/TeleoptiWFM/Web/',
+								'AgentId': '11610fe4-0130-4568-97de-9b5e015b2564'
+							});
 							break;
 					}
 				}
