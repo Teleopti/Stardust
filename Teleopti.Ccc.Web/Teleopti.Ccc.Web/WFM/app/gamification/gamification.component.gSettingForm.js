@@ -7,10 +7,10 @@
 				onNameUpdate: '&',
 				setting: '<'
 			},
-			controller: ['gamificationSettingService', '$log', '$scope', gSettingFormCtrl]
+			controller: ['gamificationSettingService', '$log', '$scope', '$translate', gSettingFormCtrl]
 		});
 
-	function gSettingFormCtrl(dataService, $log, $scope) {
+	function gSettingFormCtrl(dataService, $log, $scope, $translate) {
 		var ctrl = this;
 		var enabled = [];
 		var numOfEnabledMeasures = 0;
@@ -227,6 +227,8 @@
 			this.valueFormat = valueFormat;
 			this.max = max;
 			this.valueOrder = valueOrder;
+
+			if (this.builtin) this.translatedName = $translate.instant(this.name);
 		}
 
 		MeasureConfig.prototype.setName = function (name) {
