@@ -47,18 +47,14 @@ angular.module('wfm.rta').config(function ($stateProvider, ToggleProvider) {
 			templateUrl: function () {
 				if (toggles.RTA_ViewHistoricalAhderenceForRecentShifts_46786)
 					return 'app/rta/rta/agents/rta-agents.RTA_ViewHistoricalAhderenceForRecentShifts_46786.html';
-				if (toggles.RTA_MobileFriendlyCheckboxes_46758)
-					return 'app/rta/rta/agents/rta-agents.RTA_MobileFriendlyCheckboxes_46758.html';
-				return 'app/rta/rta/agents/rta-agents.RTA_MonitorAgentsWithLongTimeInState_46475.html';
+				return 'app/rta/rta/agents/rta-agents.RTA_MobileFriendlyCheckboxes_46758.html';
 			},
 			controllerProvider: function () {
 				if (toggles.RTA_ConfigurationValidationNotification_46933)
 					return 'RtaAgentsController46933 as vm';
 				if (toggles.RTA_ViewHistoricalAhderenceForRecentShifts_46786)
 					return 'RtaAgentsController46786 as vm';
-				if (toggles.RTA_MobileFriendlyCheckboxes_46758)
-					return 'RtaAgentsController46758 as vm';
-				return 'RtaAgentsController46475 as vm';
+				return 'RtaAgentsController46758 as vm';
 			}
 		})
 		.state('rta-historical-without-date', {
