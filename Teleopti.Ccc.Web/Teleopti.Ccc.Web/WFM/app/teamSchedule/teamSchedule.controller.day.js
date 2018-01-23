@@ -74,6 +74,16 @@
 
 		}
 
+		function getTotalTableRowHeight() {
+			var rows = $document[0].querySelectorAll('.big-table-wrapper table tr');
+			var sum = 0;
+			angular.forEach(rows,
+				function(r) {
+					sum += r.offsetHeight;
+				});
+			return sum;
+		}
+
 		function initTeamSize() {
 			var container = $document[0].querySelector('#materialcontainer');
 			if (!container) return;
@@ -81,10 +91,13 @@
 			var header = $document[0].querySelector('.team-schedule .teamschedule-header');
 			var tHeader = $document[0].querySelector('.teamschedule-body .big-table-wrapper table thead');
 			var footer = $document[0].querySelector('.teamschedule-footer');
-			var skillsRow = $document[0].querySelector('.skills-row');
 			var tHeaderHeight = tHeader ? tHeader.offsetHeight : 0;
-			var defaultHeight = container.offsetHeight - viewHeader.offsetHeight - header.offsetHeight - footer.offsetHeight;
-			var defaultTableBodyHeight = container.offsetHeight - viewHeader.offsetHeight - header.offsetHeight - tHeaderHeight - footer.offsetHeight;
+			
+			var maxDefaultHeight = container.offsetHeight - viewHeader.offsetHeight - header.offsetHeight - footer.offsetHeight;
+			var totalRowHeight = getTotalTableRowHeight();
+
+			var defaultHeight = totalRowHeight > maxDefaultHeight ? maxDefaultHeight:totalRowHeight;
+			var defaultTableBodyHeight = defaultHeight - tHeaderHeight;
 
 			var storageSize = StaffingConfigStorageService.getConfig();
 			var size = storageSize || {
@@ -92,7 +105,6 @@
 				tableBodyHeight: defaultTableBodyHeight * 0.62,
 				chartHeight: defaultHeight * 0.3 - 40
 			};
-
 			if (vm.staffingEnabled) {
 				vm.scheduleTableWrapperStyle = {
 					'height': size.tableHeight + 'px',
