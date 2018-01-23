@@ -19,16 +19,19 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 			_insertDateTime = insertDateTime;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
+			 MessageId = "1"),
+		 System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
+			 MessageId = "0")]
 		public void Transform(IList<IWorkload> rootList, DataTable workloadTable, DataTable workloadQueueTable)
 		{
 			InParameter.NotNull("rootList", rootList);
 			InParameter.NotNull("workloadTable", workloadTable);
 			InParameter.NotNull("workloadQueueTable", workloadQueueTable);
 
-			foreach (IWorkload workload in rootList)
+			foreach (var workload in rootList)
 			{
-				DataRow dataRow = workloadTable.NewRow();
+				var dataRow = workloadTable.NewRow();
 
 				dataRow["workload_code"] = workload.Id;
 				dataRow["workload_name"] = workload.Name;
@@ -40,31 +43,30 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 				dataRow["business_unit_code"] = workload.BusinessUnit.Id;
 				dataRow["business_unit_name"] = workload.BusinessUnit.Name;
 
-				dataRow["percentage_offered"] = workload.QueueAdjustments.OfferedTasks.Value;
-				dataRow["percentage_overflow_in"] = workload.QueueAdjustments.OverflowIn.Value;
-				dataRow["percentage_overflow_out"] = workload.QueueAdjustments.OverflowOut.Value;
-				dataRow["percentage_abandoned"] = workload.QueueAdjustments.Abandoned.Value;
-				dataRow["percentage_abandoned_short"] = workload.QueueAdjustments.AbandonedShort.Value;
-				dataRow["percentage_abandoned_within_service_level"] =
-					 workload.QueueAdjustments.AbandonedWithinServiceLevel.Value;
-				dataRow["percentage_abandoned_after_service_level"] =
-					 workload.QueueAdjustments.AbandonedAfterServiceLevel.Value;
+				var adjustments = workload.QueueAdjustments;
+				dataRow["percentage_offered"] = adjustments.OfferedTasks.Value;
+				dataRow["percentage_overflow_in"] = adjustments.OverflowIn.Value;
+				dataRow["percentage_overflow_out"] = adjustments.OverflowOut.Value;
+				dataRow["percentage_abandoned"] = adjustments.Abandoned.Value;
+				dataRow["percentage_abandoned_short"] = adjustments.AbandonedShort.Value;
+				dataRow["percentage_abandoned_within_service_level"] = adjustments.AbandonedWithinServiceLevel.Value;
+				dataRow["percentage_abandoned_after_service_level"] = adjustments.AbandonedAfterServiceLevel.Value;
 
 				dataRow["datasource_id"] = 1; //The Matrix internal id. Raptor = 1.
 				dataRow["insert_date"] = _insertDateTime;
 				dataRow["update_date"] = _insertDateTime;
 				dataRow["datasource_update_date"] = RaptorTransformerHelper.GetUpdatedDate(workload);
 
-				QueueSource(workload, workloadQueueTable);
+				var workloadIsDeleted = workload is IDeleteTag workloadDeleteCheck && workloadDeleteCheck.IsDeleted;
+				dataRow["is_deleted"] = workloadIsDeleted;
 
-				IDeleteTag workloadDeleteCheck = workload as IDeleteTag;
-				if (workloadDeleteCheck != null)
+				// Create stage bridge only if workload is not deleted (Refer to bug #46863)
+				if (!workloadIsDeleted)
 				{
-					dataRow["is_deleted"] = workloadDeleteCheck.IsDeleted;
+					queueSource(workload, workloadQueueTable);
 				}
 
-				IDeleteTag skillDeleteCheck = workload.Skill as IDeleteTag;
-				if (skillDeleteCheck != null)
+				if (workload.Skill is IDeleteTag skillDeleteCheck)
 				{
 					dataRow["skill_is_deleted"] = skillDeleteCheck.IsDeleted;
 				}
@@ -73,7 +75,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 			}
 		}
 
-		private static void QueueSource(IWorkload workload, DataTable workloadQueueTable)
+		private static void queueSource(IWorkload workload, DataTable workloadQueueTable)
 		{
 			foreach (var queueSource in workload.QueueSourceCollection)
 			{
@@ -82,14 +84,13 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 				dataRow2["queue_code"] = queueSource.QueueOriginalId;
 				dataRow2["workload_code"] = workload.Id;
 				dataRow2["log_object_data_source_id"] = queueSource.DataSourceId;
-                dataRow2["log_object_name"] = queueSource.LogObjectName;
+				dataRow2["log_object_name"] = queueSource.LogObjectName;
 
 				dataRow2["business_unit_code"] = workload.BusinessUnit.Id;
 				dataRow2["business_unit_name"] = workload.BusinessUnit.Name;
 				dataRow2["datasource_id"] = 1;
 
 				workloadQueueTable.Rows.Add(dataRow2);
-
 			}
 		}
 	}
