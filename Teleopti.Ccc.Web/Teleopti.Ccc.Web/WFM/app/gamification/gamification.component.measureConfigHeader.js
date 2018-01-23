@@ -18,11 +18,12 @@
 					ctrl.renameMode = true;
 				};
 				ctrl.finishRename = function () {
+					if (!ctrl._name || !ctrl._name.length) ctrl._name = ctrl.name;
 					ctrl.renameMode = false;
 				};
 				ctrl.onNameChange = function () {
 					ctrl.finishRename();
-					ctrl.onNameUpdate({ name: ctrl._name });
+					if (ctrl.onNameUpdate && ctrl._name !== ctrl.name) ctrl.onNameUpdate({ name: ctrl._name });
 				};
 				ctrl.onCheckboxClick = function () {
 					ctrl.onEnable({ enable: !ctrl.checked });
