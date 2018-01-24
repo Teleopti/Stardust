@@ -629,6 +629,7 @@
     <Compile Include="UnitOfWork\KeepScheduleEvents.cs" />
     <Compile Include="UnitOfWork\LowThreadPriorityScope.cs" />
     <Compile Include="UnitOfWork\MessageBrokerSender.cs" />
+    <Compile Include="UnitOfWork\NestedUnitOfWorkException.cs" />
     <Compile Include="UnitOfWork\NoPreCommitHooks.cs" />
     <Compile Include="UnitOfWork\OptionalColumnCollectionChangedEventPublisher.cs" />
     <Compile Include="UnitOfWork\ScheduleChangedMessageSender.cs" />

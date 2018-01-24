@@ -20,10 +20,6 @@ using TransactionException = NHibernate.TransactionException;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-	public class NestedUnitOfWorkException : Exception
-	{
-	}
-
 	public class NHibernateUnitOfWork : IUnitOfWork
 	{
 		private readonly ILog _logger = LogManager.GetLogger(typeof(NHibernateUnitOfWork));
