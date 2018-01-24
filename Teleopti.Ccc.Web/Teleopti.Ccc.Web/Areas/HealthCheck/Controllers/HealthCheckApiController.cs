@@ -39,14 +39,14 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 		private readonly IncomingTrafficViewModelCreator _incomingTrafficViewModelCreator;
 
 		public HealthCheckApiController(IEtlJobStatusRepository etlJobStatusRepository, IEtlLogObjectRepository etlLogObjectRepository,
-												  IStardustSender stardustSender, IToggleManager toggleManager, HangfireUtilities hangfireUtilities, IReadModelValidator readModelValidator, 
+												  IStardustSender stardustSender, IToggleManager toggleManager, HangfireUtilities hangfireUtilities, IReadModelValidator readModelValidator,
 												  IStardustRepository stardustRepository, IncomingTrafficViewModelCreator incomingTrafficViewModelCreator)
 		{
 			_etlJobStatusRepository = etlJobStatusRepository;
 			_etlLogObjectRepository = etlLogObjectRepository;
 			_stardustSender = stardustSender;
 			_toggleManager = toggleManager;
-		    _hangfireUtilities = hangfireUtilities;
+			_hangfireUtilities = hangfireUtilities;
 			_readModelValidator = readModelValidator;
 			_stardustRepository = stardustRepository;
 			_incomingTrafficViewModelCreator = incomingTrafficViewModelCreator;
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 		[HttpGet, UnitOfWork, Route("api/HealthCheck/IncomingTrafficToday/{skillId}")]
 		public virtual IHttpActionResult IncomingTrafficToday(Guid skillId)
 		{
-			var incomingTrafficDataSeries = _incomingTrafficViewModelCreator.Load(new[] {skillId}, 0).DataSeries;
+			var incomingTrafficDataSeries = _incomingTrafficViewModelCreator.Load(new[] { skillId }, 0).DataSeries;
 			var output = incomingTrafficDataSeries.Time.Select((t, i) => new IncomingTrafficModel
 			{
 				IntervalStartTime = t,
@@ -142,15 +142,15 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 				catch (InvalidOperationException ioe) when (ioe.InnerException is Win32Exception &&
 															ioe.InnerException.Message.Contains("Access is denied"))
 				{
-					servicesResult.Add(new {DisplayName = host + " Access is denied", Status = 1});
+					servicesResult.Add(new { DisplayName = host + " Access is denied", Status = 1 });
 				}
 				catch (Exception e)
 				{
-					servicesResult.Add(new {DisplayName = host + " Error: " + e.Message, Status = 1});
+					servicesResult.Add(new { DisplayName = host + " Error: " + e.Message, Status = 1 });
 				}
 			}
-			
-			return Ok(new 
+
+			return Ok(new
 			{
 				Data =
 					new
@@ -166,19 +166,20 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 						TimeZoneInfo.Local.Id,
 						UrlsReachable = new
 						{
-							UrlResults = pingAllUrlsFromSettings().Select(s => new {Url = s.Item1,Reachable = s.Item2,Message = s.Item3})
+							UrlResults = pingAllUrlsFromSettings().Select(s => new { Url = s.Item1, Reachable = s.Item2, Message = s.Item3 })
 						},
 						RunningServices = new
 						{
 							Services = servicesResult.ToArray()
 						}
-					}});
+					}
+			});
 		}
 
 		[HttpGet, UnitOfWork, Route("HealthCheck/CheckStardust")]
 		public virtual IHttpActionResult CheckStardust()
 		{
-			var id = _stardustSender.Send(new StardustHealthCheckEvent {JobName = "Stardust healthcheck", UserName = "Health Check"});
+			var id = _stardustSender.Send(new StardustHealthCheckEvent { JobName = "Stardust healthcheck", UserName = "Health Check" });
 			return Ok(id);
 		}
 
@@ -194,15 +195,12 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 		public virtual IHttpActionResult CheckReadModels(DateTime start, DateTime end)
 		{
 			var targets = ValidateReadModelType.ScheduleProjectionReadOnly;
-			if (_toggleManager.IsEnabled(Toggles.HealthCheck_ValidateReadModelPersonScheduleDay_39421))
-			{
-				targets |= ValidateReadModelType.PersonScheduleDay;
-			}
+			targets |= ValidateReadModelType.PersonScheduleDay;
 
 			if (_toggleManager.IsEnabled(Toggles.HealthCheck_ValidateReadModelScheduleDay_39423))
 			{
 				targets |= ValidateReadModelType.ScheduleDay;
-			} 
+			}
 
 			var jobId = _stardustSender.Send(new ValidateReadModelsEvent
 			{
@@ -217,15 +215,12 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 		public virtual IHttpActionResult CheckAndFixReadModels(DateTime start, DateTime end)
 		{
 			var targets = ValidateReadModelType.ScheduleProjectionReadOnly;
-			if (_toggleManager.IsEnabled(Toggles.HealthCheck_ValidateReadModelPersonScheduleDay_39421))
-			{
-				targets |= ValidateReadModelType.PersonScheduleDay;
-			}
+			targets |= ValidateReadModelType.PersonScheduleDay;
 
 			if (_toggleManager.IsEnabled(Toggles.HealthCheck_ValidateReadModelScheduleDay_39423))
 			{
 				targets |= ValidateReadModelType.ScheduleDay;
-			} 
+			}
 
 			var jobId = _stardustSender.Send(new ValidateReadModelsEvent
 			{
@@ -238,15 +233,12 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 		}
 
 		[HttpGet, Route("HealthCheck/ReinitializeReadModels")]
-		public virtual IHttpActionResult ReinitializeReadModels(DateTime start,DateTime end)
+		public virtual IHttpActionResult ReinitializeReadModels(DateTime start, DateTime end)
 		{
 			var targets = ValidateReadModelType.ScheduleProjectionReadOnly;
-			if(_toggleManager.IsEnabled(Toggles.HealthCheck_ValidateReadModelPersonScheduleDay_39421))
-			{
-				targets |= ValidateReadModelType.PersonScheduleDay;
-			}
+			targets |= ValidateReadModelType.PersonScheduleDay;
 
-			if(_toggleManager.IsEnabled(Toggles.HealthCheck_ValidateReadModelScheduleDay_39423))
+			if (_toggleManager.IsEnabled(Toggles.HealthCheck_ValidateReadModelScheduleDay_39423))
 			{
 				targets |= ValidateReadModelType.ScheduleDay;
 			}
@@ -266,12 +258,9 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 		public virtual IHttpActionResult ClearCheckReadModelResult()
 		{
 			var targets = ValidateReadModelType.ScheduleProjectionReadOnly;
-			if(_toggleManager.IsEnabled(Toggles.HealthCheck_ValidateReadModelPersonScheduleDay_39421))
-			{
-				targets |= ValidateReadModelType.PersonScheduleDay;
-			}
+			targets |= ValidateReadModelType.PersonScheduleDay;
 
-			if(_toggleManager.IsEnabled(Toggles.HealthCheck_ValidateReadModelScheduleDay_39423))
+			if (_toggleManager.IsEnabled(Toggles.HealthCheck_ValidateReadModelScheduleDay_39423))
 			{
 				targets |= ValidateReadModelType.ScheduleDay;
 			}
@@ -285,12 +274,9 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 		public virtual IHttpActionResult FixScheduleProjectionReadOnly()
 		{
 			var targets = ValidateReadModelType.ScheduleProjectionReadOnly;
-			if(_toggleManager.IsEnabled(Toggles.HealthCheck_ValidateReadModelPersonScheduleDay_39421))
-			{
-				targets |= ValidateReadModelType.PersonScheduleDay;
-			}
+			targets |= ValidateReadModelType.PersonScheduleDay;
 
-			if(_toggleManager.IsEnabled(Toggles.HealthCheck_ValidateReadModelScheduleDay_39423))
+			if (_toggleManager.IsEnabled(Toggles.HealthCheck_ValidateReadModelScheduleDay_39423))
 			{
 				targets |= ValidateReadModelType.ScheduleDay;
 			}

@@ -178,7 +178,6 @@ WFM_Unified_Skill_Group_Management_45417 = true
 WFM_Modify_Skill_Groups_45727 = RC
 
 # China, can any of these be removed? #
-HealthCheck_ValidateReadModelPersonScheduleDay_39421 = true
 HealthCheck_ValidateReadModelScheduleDay_39423 = true
 HealthCheck_EasyValidateAndFixReadModels_39696 = true
 HealthCheck_ReinitializeReadModels_39697 = true
