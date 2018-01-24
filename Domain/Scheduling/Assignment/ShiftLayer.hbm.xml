@@ -34,7 +34,7 @@
 						 not-null ="true"
 						 foreign-key="PersonAssignment"/>
 		<property name="OrderIndex"
-					 access="readonly"
+					 access="property"
 					 not-null ="true" />
 	</class>
 </hibernate-mapping>
