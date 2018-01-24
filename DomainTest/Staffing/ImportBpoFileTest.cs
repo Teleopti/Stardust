@@ -610,5 +610,21 @@ TPBRZIL,Channel Sales|Direct Sales,2017-07-24 10:00,2017-07-24 10:15,10.5";
 			var skillCombResources = SkillCombinationResourceRepository.LoadSkillCombinationResourcesBpo();
 			skillCombResources.Should().Not.Be.Empty();
 		}
+		
+		[Test]
+		public void ShouldHandleSkillNameDifferentCases()
+		{
+			Now.Is("2017-07-24 10:00");
+			var fileContents = @"source, skillcombination, startdatetime, enddatetime, agents
+								TPBRZIL, DIRECTSALES, 2017-07-24 10:30, 2017-07-24 10:45, 6.0";
+
+			SkillRepository.Has("Directsales", new Activity());
+			
+			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
+			result.Success.Should().Be.True();
+			
+			var skillCombResources = SkillCombinationResourceRepository.LoadSkillCombinationResourcesBpo();
+			skillCombResources.Should().Not.Be.Empty();
+		}
 	}
 }

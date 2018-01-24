@@ -243,10 +243,10 @@ namespace Teleopti.Ccc.Domain.Staffing
 		{
 			var skillIds = new List<Guid>();
 			var skillStringList = skillGroupString.Split(skillSeparator);
-			var skillLookup = allSkills.ToLookup(s => s.Name);
+			var skillLookup = allSkills.ToLookup(s => s.Name.ToLower());
 			foreach (var skillString in skillStringList)
 			{
-				var skillStringTrimmed = skillString.Trim();
+				var skillStringTrimmed = skillString.Trim().ToLower();
 				var skills = skillLookup[skillStringTrimmed].ToArray();
 				if (skills.IsEmpty())
 				{
