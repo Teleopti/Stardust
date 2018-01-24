@@ -428,21 +428,6 @@ update PersonRequest
 if datediff(second,@start,getdate()) > @timeout 
 	return
 
---New Adherence read models. Purge for now since we have not yet built or tested with lots of historical data.
---Smaller chunks, it may time out on cloud otherwise.
-select @TheDate = isnull(min(BelongsToDate),'20000101') from ReadModel.AdherencePercentage
-
-while @TheDate < dateadd(day,-3,getdate())
-begin
-	delete ReadModel.AdherencePercentage
-	where BelongsToDate <= @TheDate
-
-	select @TheDate = dateadd(day,1,@TheDate)
-
-	if datediff(second,@start,getdate()) > @timeout 
-		return
-end
-
 --schedule related read models
 select @KeepUntil = DATEADD(day, -1*(select isnull(Value, 30) from PurgeSetting where [Key] = 'DaysToKeepReadmodels'), GETDATE())
 
