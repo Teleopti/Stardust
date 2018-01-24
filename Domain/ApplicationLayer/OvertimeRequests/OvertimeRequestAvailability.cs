@@ -1,5 +1,4 @@
-﻿using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
+﻿using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
@@ -15,9 +14,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			_authorization = authorization;
 		}
 
-		public bool IsEnabled()
+		public bool IsEnabledInWebRequest()
 		{
-			var hasPermission = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.OvertimeRequestWeb);
+			var hasPermission = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.WebOvertimeRequest);
 			return isLicenseEnabled() && hasPermission;
 		}
 

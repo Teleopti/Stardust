@@ -1,12 +1,9 @@
-﻿using System;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Licensing;
-using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -24,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		[Test]
 		public void ShouldGetOvertimeRequestAvailability()
 		{
-			var result = Target.IsEnabled();
+			var result = Target.IsEnabledInWebRequest();
 
 			result.Should().Be.True();
 		}
@@ -36,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			DefinedLicenseDataFactory.SetLicenseActivator(CurrentDataSource.CurrentName(), licenseActivator);
 
-			var result = Target.IsEnabled();
+			var result = Target.IsEnabledInWebRequest();
 
 			result.Should().Be.False();
 		}
@@ -44,9 +41,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		[Test]
 		public void ShouldDisabledOvertimeRequestWhenNoPermission()
 		{
-			Authorization.AddToBlackList(DefinedRaptorApplicationFunctionPaths.OvertimeRequestWeb);
+			Authorization.AddToBlackList(DefinedRaptorApplicationFunctionPaths.WebOvertimeRequest);
 
-			var result = Target.IsEnabled();
+			var result = Target.IsEnabledInWebRequest();
 
 			result.Should().Be.False();
 		}

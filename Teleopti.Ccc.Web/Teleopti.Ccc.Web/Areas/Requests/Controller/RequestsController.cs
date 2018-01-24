@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 		[UnitOfWork, HttpGet, Route("api/Requests/GetOvertimeRequestsLicenseAvailability")]
 		public virtual bool GetLicenseAvailability(IOvertimeRequestAvailability overtimeRequestLicense)
 		{
-			return _overtimeRequestLicense.IsEnabled();
+			return _overtimeRequestLicense.IsEnabledInWebRequest();
 		}
 	}
 }

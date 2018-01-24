@@ -2,6 +2,6 @@
 {
 	public interface IOvertimeRequestAvailability
 	{
-		bool IsEnabled();
+		bool IsEnabledInWebRequest();
 	}
 }

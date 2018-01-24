@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly IToggleManager _toggleManager;
 		private readonly IOvertimeRequestDefaultStartTimeProvider _overtimeRequestDefaultStartTimeProvider;
 
-		public OvertimeRequestsController(IOvertimeRequestPersister overtimeRequestPersister, IToggleManager toggleManager, IOvertimeRequestAvailability overtimeRequestLicense, IOvertimeRequestDefaultStartTimeProvider overtimeRequestDefaultStartTimeProvider)
+		public OvertimeRequestsController(IOvertimeRequestPersister overtimeRequestPersister, IToggleManager toggleManager, IOvertimeRequestDefaultStartTimeProvider overtimeRequestDefaultStartTimeProvider)
 		{
 			_overtimeRequestPersister = overtimeRequestPersister;
 			_toggleManager = toggleManager;
