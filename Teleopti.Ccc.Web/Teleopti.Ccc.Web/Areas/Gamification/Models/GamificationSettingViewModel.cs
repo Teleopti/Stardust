@@ -130,4 +130,11 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Models
 		public int QualityId { get; set; }
 		public bool Value { get; set; }
 	}
+
+	public class ExternalMeasureModel
+	{
+		public int MeasureId { get; set; }
+		public  int DataType { get; set; }
+		public string Name { get; set; }
+	}
 }

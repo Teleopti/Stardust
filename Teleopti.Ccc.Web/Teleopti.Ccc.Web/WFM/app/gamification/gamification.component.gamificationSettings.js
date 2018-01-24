@@ -57,6 +57,20 @@
 			settingDescriptor.Value.Name = settingName;
 		};
 
+		ctrl.asynMeasureName = function (measure) {
+			if (measure && ctrl.allSettings.length > 0) {
+				ctrl.allSettings.forEach(setting => {
+					if (setting.ExternalBadgeSettings && setting.ExternalBadgeSettings.length > 0) {
+						setting.ExternalBadgeSettings.forEach(item => {
+							if (item.QualityId === measure.externalId && item.DataType === measure.dataType) {
+								item.Name = measure.name;
+							}
+						});
+					}
+				});
+			}
+		}
+
 		ctrl.addNewSetting = function () {
 			gamificationSettingService.createNewSetting().then(function (data) {
 				if (data) {
@@ -128,7 +142,7 @@
 				.cancel($translate.instant('Cancel'));
 
 			$mdDialog.show(confirm).then(function () {
-				gamificationSettingService.resetBadge().then(function(response) {});
+				gamificationSettingService.resetBadge().then(function (response) { });
 			});
 		}
 	}

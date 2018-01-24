@@ -49,5 +49,22 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return externalPerformances;
 		}
-	}
+
+		public void UpdateExternalPerformanceName(Guid id, string name)
+		{
+			var performance = externalPerformances.FirstOrDefault(x => x.Id == id);
+			if (performance != null)
+			{
+				performance.Name = name;
+			}
+		}
+
+		public void UpdateExternalPerformanceName(int qualityId, int dataType, string name)
+		{
+			var performance = externalPerformances.FirstOrDefault(x => x.ExternalId == qualityId && (int)x.DataType == dataType);
+			if (performance != null)
+			{
+				performance.Name = name;
+			}
+		}
 }

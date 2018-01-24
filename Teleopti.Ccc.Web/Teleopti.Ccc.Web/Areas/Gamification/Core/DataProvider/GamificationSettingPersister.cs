@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 	{
 		private readonly IGamificationSettingRepository _gamificationSettingRepository;
 		private readonly IGamificationSettingMapper _mapper;
-		private readonly IExternalPerformanceRepository _externalPerformanceRepository;
+		private readonly IExternalPerformanceRepository _externalPerformanceRepository;		
 		private readonly BadgeSettingDataConverter _converter = new BadgeSettingDataConverter();
 
 		public GamificationSettingPersister(IGamificationSettingRepository gamificationSettingRepository, IGamificationSettingMapper mapper, IExternalPerformanceRepository externalPerformanceRepository)
@@ -416,6 +416,11 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 		{
 			var currentCount = _gamificationSettingRepository.LoadAll().Count;
 			return currentCount > 0 ? string.Format(Resources.NewGamificationSetting + "{0}", currentCount) : Resources.NewGamificationSetting;
+		}
+
+		public void PersistExternalMeasureName(ExternalMeasureModel input)
+		{
+			_externalPerformanceRepository.UpdateExternalPerformanceName(input.MeasureId, input.DataType, input.Name);
 		}
 	}
 }

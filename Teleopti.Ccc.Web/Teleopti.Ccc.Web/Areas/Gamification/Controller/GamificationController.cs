@@ -299,5 +299,11 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
 		{
 			return _gamificationSettingPersister.PersistExternalBadgeLargerIsBetter(input);
 		}
+
+		[HttpPost, Route("api/Gamification/externalPerformance"), UnitOfWork]
+		public virtual void UpdateMeasureName([FromBody] ExternalMeasureModel input)
+		{
+			_gamificationSettingPersister.PersistExternalMeasureName(input);
+		}
 	}
 }

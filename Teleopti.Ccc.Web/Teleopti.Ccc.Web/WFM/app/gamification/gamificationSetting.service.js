@@ -107,7 +107,12 @@
 		id: 'ExternalBadgeSettingEnabled',
 		url: '../api/Gamification/Update/ExternalBadgeSettingEnabled',
 		method: 'post'
-	}];
+	}, {
+		id: 'UpdateExternalMeasureName',
+		url: '../api/Gamification/externalPerformance',
+		method: 'post'
+	}
+	];
 
 
 	function GamificationSettingService($http, $q) {

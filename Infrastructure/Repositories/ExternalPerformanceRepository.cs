@@ -38,5 +38,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			return Session.QueryOver<ExternalPerformance>().RowCount();
 		}
+
+		public void UpdateExternalPerformanceName(Guid id, string name)
+		{
+			var sql = string.Format("UPDATE [dbo].[ExternalPerformance] SET [Name] = :name WHERE [Id] =:id");
+			Session.CreateSQLQuery(sql).SetParameter("name", name).SetParameter("id", id.ToString()).ExecuteUpdate();
+		}
+
+		public void UpdateExternalPerformanceName(int externalId, int dataType, string name)
+		{
+			var sql = string.Format("UPDATE [dbo].[ExternalPerformance] SET [Name]=:name WHERE [ExternalId] =:externalId AND [DataType]=:dataType");
+			Session.CreateSQLQuery(sql).SetParameter("name", name).SetParameter("externalId", externalId).SetParameter("dataType", dataType).ExecuteUpdate();
+		}
 	}
 }
