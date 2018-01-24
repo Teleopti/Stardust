@@ -69,16 +69,14 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		public StaffingCalculatorServiceFacadeErlangA()
 		{
 			_agentsNeeded = new NumberOfAgentsNeeded();
-			//_secretService = new StaffingCalculatorService();
-			//_serviceLevelAchivedOcc = new ServiceLevelAchivedOcc(new TeleoptiCallCapacity(_secretService), _secretService);
 		}
 
-		//public override double AgentsUseOccupancy(double serviceLevel, int serviceTime, double tasks, double aht, TimeSpan periodLength,
-		//	double minOcc, double maxOcc, int maxParallelTasks)
-		//{
-		//	var result = _agentsNeeded.CalculateNumberOfAgentsNeeded(tasks, aht, 100000, serviceTime, serviceLevel,
-		//		(int) periodLength.TotalSeconds, minOcc, maxOcc);
-		//	return result.NumberOfAgentsNeeded;
-		//}
+		public override double AgentsUseOccupancy(double serviceLevel, int serviceTime, double tasks, double aht, TimeSpan periodLength,
+			double minOcc, double maxOcc, int maxParallelTasks)
+		{
+			var result = _agentsNeeded.CalculateNumberOfAgentsNeeded(tasks/maxParallelTasks, aht, 100000, serviceTime, serviceLevel,
+				(int)periodLength.TotalSeconds, minOcc, maxOcc);
+			return result.NumberOfAgentsNeeded;
+		}
 	}
 }

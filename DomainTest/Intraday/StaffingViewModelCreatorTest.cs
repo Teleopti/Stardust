@@ -291,7 +291,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var vm = Target.Load(new[] { skill.Id.Value });
 
 			vm.DataSeries.ActualStaffing.Length.Should().Be.EqualTo(2);
-			vm.DataSeries.ActualStaffing.First().Should().Be.EqualTo(staffing);
+			Math.Round(vm.DataSeries.ActualStaffing.First().Value, 1).Should().Be.EqualTo(Math.Round(staffing, 1));
 			vm.DataSeries.ActualStaffing.Last().Should().Be.EqualTo(null);
 		}
 
@@ -1255,7 +1255,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var forecastedAgents = skillDay.SkillStaffPeriodCollection.First().FStaff;
 			var vm = Target.Load(new[] { skill.Id.Value });
 
-			vm.DataSeries.ForecastedStaffing.First().Should().Be.EqualTo(forecastedAgents);
+			Math.Round(vm.DataSeries.ForecastedStaffing.First().Value, 2).Should().Be.EqualTo(Math.Round(forecastedAgents, 2));
 			Math.Round((double)vm.DataSeries.ActualStaffing.First(), 3)
 				.Should().Not.Be.EqualTo(Math.Round((double)vm.DataSeries.ForecastedStaffing.First(), 3));
 			vm.DataSeries.ActualStaffing.Last().Should().Be.EqualTo(null);
