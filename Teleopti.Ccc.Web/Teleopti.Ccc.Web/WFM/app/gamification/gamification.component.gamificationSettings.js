@@ -57,7 +57,7 @@
 			settingDescriptor.Value.Name = settingName;
 		};
 
-		ctrl.asynMeasureName = function (measure) {
+		ctrl.syncMeasureName = function (measure) {
 			if (measure && ctrl.allSettings.length > 0) {
 				ctrl.allSettings.forEach(function (setting) {
 					if (setting.ExternalBadgeSettings && setting.ExternalBadgeSettings.length > 0) {
