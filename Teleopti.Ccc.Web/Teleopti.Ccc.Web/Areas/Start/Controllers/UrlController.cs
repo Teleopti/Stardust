@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 				var response = _currentHttpContext.Current().Response;
 				response.TrySkipIisCustomErrors = true;
 				response.StatusCode = 401;
-				return Json("");
+				return Json("", JsonRequestBehavior.AllowGet);
 			}
 			return Json(new {PersonId = loggedOnPerson.Id}, JsonRequestBehavior.AllowGet);
 		}
