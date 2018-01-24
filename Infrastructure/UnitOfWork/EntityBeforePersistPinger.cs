@@ -3,7 +3,7 @@ using Teleopti.Ccc.Domain.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-	public class EntityPinger
+	public class EntityBeforePersistPinger
 	{
 		public void Execute(IEnumerable<object> entities)
 		{

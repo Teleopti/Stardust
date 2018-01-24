@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private ITransaction _transaction;
 		private IInitiatorIdentifier _initiator;
 		private TransactionSynchronization _transactionSynchronization;
-		private readonly EntityPinger _entityPinger = new EntityPinger(); //inject and/or merge with other callback interfaces?
+		private readonly EntityBeforePersistPinger _entityBeforePersistPinger = new EntityBeforePersistPinger(); //inject and/or merge with other callback interfaces?
 
 		protected internal NHibernateUnitOfWork(
 			ApplicationUnitOfWorkContext context, 
@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			IEnumerable<IRootChangeInfo> modifiedRoots;
 			try
 			{
-				_entityPinger.Execute(((ISessionImplementor) Session).PersistenceContext.EntitiesByKey.Values);
+				_entityBeforePersistPinger.Execute(((ISessionImplementor) Session).PersistenceContext.EntitiesByKey.Values);
 				Flush();
 				modifiedRoots = Interceptor.Value.ModifiedRoots.ToList();
 				transactionCommit();
