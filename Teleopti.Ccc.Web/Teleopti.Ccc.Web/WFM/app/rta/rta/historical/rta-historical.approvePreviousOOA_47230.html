@@ -1,5 +1,5 @@
 <div class="rta-view historical prototype">
-	
+
 	<div class="view-header with-fab with-desc">
 		<div class="view-title">
 			<h1>
@@ -134,7 +134,7 @@
 					Out of Adherence
 				</rta-card-panel-header>
 				<rta-card-panel-content>
-					<div class="panel" style="max-height: 300px; overflow-y: scroll">
+					<div style="max-height: 300px; overflow-y: scroll">
 						<table class="wfm-table">
 							<th style="width: 20%">Start</th>
 							<th style="width: 20%">End</th>
@@ -177,7 +177,7 @@
 					</button>
 				</div>
 			</div>
-			
+
 			<div class="con-row">
 				<div class="con-flex">
 
@@ -186,23 +186,22 @@
 							Approved as In Adherence
 						</rta-card-panel-header>
 						<rta-card-panel-content>
-							<div class="panel">
-								<table class="wfm-table">
-									<th style="width: 20%">Start</th>
-									<th style="width: 20%">End</th>
-									<th></th>
-									<tr ng-repeat="approved in vm.approvedAdherences" ng-class="{'highlight': approved.highlight}"
-										ng-click="approved.highlight = !approved.highlight">
-										<td>
-											{{approved.StartTime}}
-										</td>
-										<td>
-											{{approved.EndTime}}
-										</td>
-										<td>In Adherence</td>
-									</tr>
-								</table>
-							</div>
+							<table class="wfm-table">
+								<th style="width: 20%">Start</th>
+								<th style="width: 20%">End</th>
+								<th></th>
+								<tr ng-repeat="approved in vm.approvedAdherences"
+									ng-class="{'highlight': approved.highlight}"
+									ng-click="approved.highlight = !approved.highlight">
+									<td>
+										{{approved.StartTime}}
+									</td>
+									<td>
+										{{approved.EndTime}}
+									</td>
+									<td>In Adherence</td>
+								</tr>
+							</table>
 						</rta-card-panel-content>
 					</rta-card-panel>
 
@@ -212,61 +211,43 @@
 
 		</div>
 	</div>
-	
+
 	<rta-card-panel ng-repeat="card in vm.cards" open="card.isOpen" left-border-color="card.Color">
 		<rta-card-panel-header>{{card.Header}}</rta-card-panel-header>
 		<rta-card-panel-content>
-			<div class="con-row">
-				<div class="con-flex">
-					<ul class="wfm-simple-list rta-list">
-						<li>
-							<div class="con-row rta-change-row hidden-sm">
-								<div class="con-flex">
-									<b>{{'Time' | translate}}</b>
-								</div>
-								<div class="con-flex">
-									<b>{{'Activity' | translate}}</b>
-								</div>
-								<div class="con-flex">
-									<b>{{'State' | translate}}</b>
-								</div>
-								<div class="con-flex">
-									<b>{{'Rule' | translate}}</b>
-								</div>
-								<div class="con-flex">
-									<b>{{'Adherence' | translate}}</b>
-								</div>
-							</div>
-						</li>
-						<li ng-repeat="item in card.Items" class="change" ng-class="{'highlight': item.highlight}"
-							data-time="{{item.Time | amDateFormat: 'HH:mm:ss'}}"
-							ng-click="item.click()">
-							<div class="con-row rta-change-row">
-								<div class="con-flex time">{{item.Time | amDateFormat: 'HH:mm:ss' }}</div>
-								<div class="con-flex">
-									<span ng-if="item.Activity" class="historical-label"
-										  ng-attr-style="border: 1px solid {{item.ActivityColor}}; border-left: 10px solid {{item.ActivityColor}};">
-										{{item.Activity}}
-									</span>
-								</div>
-								<div class="con-flex">{{item.State}}</div>
-								<div class="con-flex">
-									<span ng-if="item.Rule" class="historical-label"
-										  ng-attr-style="border: 1px solid {{item.RuleColor}}; border-left: 10px solid {{item.RuleColor}};">
-										{{item.Rule}}
-									</span>
-								</div>
-								<div class="con-flex">
-									<span ng-if="item.Adherence" class="historical-label"
-										  ng-attr-style="border: 1px solid {{item.AdherenceColor}}; border-left: 10px solid {{item.AdherenceColor}};">
-										{{item.Adherence}}
-									</span>
-								</div>
-							</div>
-						</li>
-					</ul>
-				</div>
-			</div>
+
+			<table class="wfm-table">
+				<th>{{'Time' | translate}}</th>
+				<th>{{'Activity' | translate}}</th>
+				<th>{{'State' | translate}}</th>
+				<th>{{'Rule' | translate}}</th>
+				<th>{{'Adherence' | translate}}</th>
+				<tr ng-repeat="item in card.Items" class="change" ng-class="{'highlight': item.highlight}"
+					data-time="{{item.Time | amDateFormat: 'HH:mm:ss'}}"
+					ng-click="item.click()">
+					<td class="time">{{item.Time | amDateFormat: 'HH:mm:ss' }}</td>
+					<td>
+						<span ng-if="item.Activity" class="historical-label"
+							  ng-attr-style="border: 1px solid {{item.ActivityColor}}; border-left: 10px solid {{item.ActivityColor}};">
+							{{item.Activity}}
+						</span>
+					</td>
+					<td>{{item.State}}</td>
+					<td>
+						<span ng-if="item.Rule" class="historical-label"
+							  ng-attr-style="border: 1px solid {{item.RuleColor}}; border-left: 10px solid {{item.RuleColor}};">
+							{{item.Rule}}
+						</span>
+					</td>
+					<td>
+						<span ng-if="item.Adherence" class="historical-label"
+							  ng-attr-style="border: 1px solid {{item.AdherenceColor}}; border-left: 10px solid {{item.AdherenceColor}};">
+							{{item.Adherence}}
+						</span>
+					</td>
+				</tr>
+			</table>
+
 		</rta-card-panel-content>
 	</rta-card-panel>
 
