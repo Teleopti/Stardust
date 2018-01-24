@@ -140,9 +140,6 @@
 	});
 
 	it('should view move activity menu when move overtime is permitted', function () {
-		toggles.set({
-			WfmTeamSchedule_MoveOvertimeActivity_44888: true
-		});
 		var html = '<teamschedule-command-menu></teamschedule-command-menu>';
 		var scope = $rootScope.$new();
 		scope.vm = {

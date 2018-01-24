@@ -407,8 +407,7 @@
 			expect(result).toEqual(true);
 		});
 
-		it('should return true when overtime is selected and WfmTeamSchedule_MoveOvertimeActivity_44888 is on', function () {
-			fakeTeamsToggles.set({ WfmTeamSchedule_MoveOvertimeActivity_44888: true });
+		it('should return true when overtime is selected', function () {
 			schedule = {
 				"PersonId": "221B-Baker-SomeoneElse",
 				"Name": "SomeoneElse",
@@ -447,48 +446,6 @@
 			var result = target.validateMoveToTime(scheduleMgmt, newStartMoment, "Asia/Hong_Kong");
 
 			expect(result).toEqual(true);
-		});
-		it('should return false when overtime is selected and WfmTeamSchedule_MoveOvertimeActivity_44888 is off', function () {
-			fakeTeamsToggles.set({ WfmTeamSchedule_MoveOvertimeActivity_44888: false });
-			schedule = {
-				"PersonId": "221B-Baker-SomeoneElse",
-				"Name": "SomeoneElse",
-				"Date": scheduleDate,
-				"Timezone": {
-					IanaId: "Asia/Hong_Kong"
-				},
-				"Projection": [
-					{
-						"ShiftLayerIds": ["layer1"],
-						"ParentPersonAbsences": null,
-						"Color": "#80FF80",
-						"Description": "Email",
-						"Start": scheduleDate + " 06:00",
-						"Minutes": 120,
-						"IsOvertime": true
-					},
-					{
-						"ShiftLayerIds": ["layer2"],
-						"ParentPersonAbsences": null,
-						"Color": "#80FF80",
-						"Description": "Phone",
-						"Start": scheduleDate + " 10:00",
-						"Minutes": 480
-					}
-				],
-				"IsFullDayAbsence": false,
-				"DayOff": null
-			}
-			scheduleMgmt.resetSchedules([schedule], moment(scheduleDate));
-			var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
-			personSchedule.Shifts[0].Projections[0].Selected = true;
-			personSelection.updatePersonProjectionSelection(personSchedule.Shifts[0].Projections[0]);
-			var newStartMoment = moment(scheduleDate + " 07:00");
-
-			var result = target.validateMoveToTime(scheduleMgmt, newStartMoment, "Asia/Hong_Kong");
-
-			expect(result).toEqual(false);
-
 		});
 
 		it('should validate move to time when moving shift to time in current date', function () {

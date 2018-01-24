@@ -63,7 +63,6 @@
 		Wfm_GroupPages_45057,
 		Wfm_FetchBusinessHierarchyFromReadModel_45275,
 
-		WfmTeamSchedule_MoveOvertimeActivity_44888,
 		WfmTeamSchedule_ShowStaffingInfo_45206,
 		WfmTeamSchedule_ExportSchedulesToExcel_45795,
 		WfmTeamSchedule_ShowSkillsForSelectedSkillGroupInStaffingInfo_47202,

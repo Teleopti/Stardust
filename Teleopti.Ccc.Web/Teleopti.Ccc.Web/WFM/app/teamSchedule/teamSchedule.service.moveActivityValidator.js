@@ -136,12 +136,6 @@
 			for (var i = 0; i < selectedPersonIds.length; i++) {
 				var personId = selectedPersonIds[i];
 				var personSchedule = ScheduleMgmt.findPersonScheduleVmForPersonId(personId);
-				if (!teamsToggles.all().WfmTeamSchedule_MoveOvertimeActivity_44888) {
-					if (hasOvertimeSelected(personSchedule)) {
-						invalidPeople.push(personSchedule);
-						continue;
-					}
-				}
 				var shiftDate = getShiftDate(personSchedule);
 
 				var newStartInAgentTimezone = $filter('timezone')(newStartMoment.format('YYYY-MM-DD HH:mm'),
