@@ -55,6 +55,8 @@ if not exists (select 1 from PurgeSetting where [Key] = 'DaysToKeepReadmodels')
 	insert into PurgeSetting ([Key], [Value]) values('DaysToKeepReadmodels', 30)
 if not exists (select 1 from PurgeSetting where [Key] = 'DaysToKeepJobResultArtifacts')
 	insert into PurgeSetting ([Key], [Value]) values('DaysToKeepJobResultArtifacts', 30)
+if not exists (select 1 from PurgeSetting where [Key] = 'DaysToKeepExternalPerformanceData')
+	insert into PurgeSetting ([Key], [Value]) values('DaysToKeepExternalPerformanceData', 30)
 
 --Persons who has left, i.e. with a since long past leaving date
 select @KeepUntil = dateadd(year,-1*(select isnull(Value,100) from PurgeSetting where [Key] = 'YearsToKeepPersons'),getdate())
@@ -565,6 +567,24 @@ begin
 	delete from dbo.JobResultDetail where Parent in (select distinct Parent from #ExpiredArtifacts)
 	delete from dbo.JobResult where id in (select distinct Parent from #ExpiredArtifacts)
 	truncate table #ExpiredArtifacts
+
+	select @RowCount = @@rowcount
+	if datediff(second,@start,getdate()) > @timeout 
+		return
+end
+
+--delete external performance data according to purge setting
+select @KeepUntil = DATEADD(day, -1*(select isnull(Value, 30) from PurgeSetting where [Key] = 'DaysToKeepExternalPerformanceData'), GETDATE())
+CREATE TABLE #ExpiredData (Id uniqueidentifier NOT NULL, DateFrom datetime NOT NULL)
+
+set @RowCount = 1
+while @RowCount > 0
+begin
+
+	Insert Into #ExpiredData select  top 1000 Id, DateFrom from dbo.ExternalPerformanceData
+		where DateFrom < @KeepUntil
+	delete from dbo.ExternalPerformanceData where Id in (select Id from #ExpiredData)
+	truncate table #ExpiredData
 
 	select @RowCount = @@rowcount
 	if datediff(second,@start,getdate()) > @timeout 
