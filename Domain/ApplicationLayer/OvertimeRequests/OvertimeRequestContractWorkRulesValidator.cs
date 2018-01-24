@@ -69,7 +69,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 					InvalidReasons = repsonses.Select(x => x.Message).Distinct().ToArray(),
 					IsValid = false,
 					ShouldDenyIfInValid = overtimeRequestOpenPeriod.WorkRuleValidationHandleType ==
-						OvertimeValidationHandleType.Deny
+						OvertimeValidationHandleType.Deny,
+					BrokenBusinessRules = NewBusinessRuleCollection.GetFlagFromRules(repsonses.Select(x=>x.TypeOfRule))
 				};
 			}
 

@@ -178,6 +178,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			{
 				denyRequest(personRequest, overtimeRequestValidationResult.InvalidReasons.First());
 			}
+			personRequest.TrySetBrokenBusinessRule(overtimeRequestValidationResult.BrokenBusinessRules);
 			personRequest.TrySetMessage(string.Join(Environment.NewLine,overtimeRequestValidationResult.InvalidReasons));
 		}
 

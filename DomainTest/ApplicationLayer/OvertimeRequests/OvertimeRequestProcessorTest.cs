@@ -936,6 +936,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			personRequest.IsDenied.Should().Be.True();
 			personRequest.DenyReason.Trim().Should().Be("The week contains too much work time (10:00). Max is 09:00.");
+			personRequest.BrokenBusinessRules.Should().Be(BusinessRuleFlags.NewMaxWeekWorkTimeRule);
 		}
 
 		[Test]
@@ -999,6 +1000,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			getTarget().Process(personRequest);
 
 			personRequest.IsPending.Should().Be.True();
+			personRequest.BrokenBusinessRules.Should().Be(BusinessRuleFlags.NewMaxWeekWorkTimeRule);
 		}
 
 		[Test]
@@ -1032,6 +1034,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			personRequest.IsPending.Should().Be.True();
 			personRequest.GetMessage(new NoFormatting()).Trim().Should().Be("The week contains too much work time (10:00). Max is 09:00.");
+			personRequest.BrokenBusinessRules.Should().Be(BusinessRuleFlags.NewMaxWeekWorkTimeRule);
 		}
 
 		[Test]
@@ -1103,6 +1106,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			personRequest.IsDenied.Should().Be.True();
 			personRequest.DenyReason.Trim().Should().Be("There must be a daily rest of at least 6:00 hours between 2 shifts. Between 7/13/2017 and 7/14/2017 there are only 5:00 hours.");
+			personRequest.BrokenBusinessRules.Should().Be(BusinessRuleFlags.NewNightlyRestRule);
 		}
 
 		[Test]
@@ -1136,6 +1140,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			personRequest.IsDenied.Should().Be.True();
 			personRequest.DenyReason.Trim().Should().Be("There must be a daily rest of at least 20:00 hours between 2 shifts. Between 7/15/2017 and 7/16/2017 there are only -16:00 hours.");
+			personRequest.BrokenBusinessRules.Should().Be(BusinessRuleFlags.NewNightlyRestRule);
 		}
 
 		[Test]
@@ -1246,6 +1251,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			personRequest.IsDenied.Should().Be.True();
 			personRequest.DenyReason.Trim().Should().Be("The week does not have the stipulated (30:00) weekly rest.");
+			personRequest.BrokenBusinessRules.Should().Be(BusinessRuleFlags.MinWeeklyRestRule);
 		}
 
 		[Test]
@@ -1284,6 +1290,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var requestMessageFrom = personRequest.GetMessage(new NoFormatting()).Trim();
 			var requestMessageTo = "The week contains too much work time (27:00). Max is 10:00.\r\nThere must be a daily rest of at least 6:00 hours between 2 shifts. Between 7/13/2017 and 7/14/2017 there are only 5:00 hours.";
 			requestMessageFrom.Should().Be(requestMessageTo);
+			personRequest.BrokenBusinessRules.Should().Be(BusinessRuleFlags.NewNightlyRestRule | BusinessRuleFlags.NewMaxWeekWorkTimeRule);
 		}
 
 		[Test]
