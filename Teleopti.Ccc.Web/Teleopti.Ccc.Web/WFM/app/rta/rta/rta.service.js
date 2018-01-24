@@ -40,6 +40,16 @@
             }).query().$promise;
         };
 
+		function getSkillArea(data) {
+			return $resource('../api/SkillArea/For', {}, {
+				query: {
+					method: 'GET'
+				}
+			}).query({
+				skillAreaId: data
+			}).$promise;
+		};
+
         function getOrganization() {
             return $resource('../api/Sites/Organization', {}, {
                 query: {
@@ -74,16 +84,6 @@
                 }
             }).query(data).$promise
         }
-
-        function getSkillArea(data) {
-            return $resource('../api/SkillArea/For', {}, {
-                query: {
-                    method: 'GET'
-                }
-            }).query({
-                skillAreaId: data
-            }).$promise;
-        };
 
         function forToday(data) {
             return $resource('../api/HistoricalAdherence/PercentForToday', {}, {
