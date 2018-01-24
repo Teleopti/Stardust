@@ -10,7 +10,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules.Performance
 {
 	[Ignore("Fix #47649")]
-	public class NoUnnecessaryUpdatesWhenAddingNewAssignment : ScheduleRangeConflictTest
+	public class NoUnnecessaryUpdatesWhenAddingNewAssignmentTest : ScheduleRangeConflictTest
 	{
 		private readonly DateOnly date = new DateOnly(2001, 1, 1);
 
