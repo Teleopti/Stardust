@@ -15383,7 +15383,7 @@ Vill du registrera dig?</value>
     <comment>Agents that failed inspction</comment>
   </data>
   <data name="ManyAgentsAlert" xml:space="preserve">
-    <value>Agenter valda, tryck på refresh-knappen för att starta analysen</value>
+    <value>{0} Agenter valda, tryck på refresh-knappen för att starta analysen</value>
     <comment>Agents selected, click Refresh to start analyzing</comment>
   </data>
   <data name="RestrictionNotAbleToBeScheduledReasonNightlyRestMightBeBroken" xml:space="preserve">

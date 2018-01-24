@@ -17094,8 +17094,8 @@ Do you want to participate?</value>
     <comment>Agents that failed inspction</comment>
   </data>
   <data name="ManyAgentsAlert" xml:space="preserve">
-    <value>Agents selected, click Refresh to start analyzing</value>
-    <comment>Agents selected, click Refresh to start analyzing</comment>
+    <value>{0} Agents selected, click Refresh to start analyzing</value>
+    <comment>999 Agents selected, click Refresh to start analyzing</comment>
   </data>
   <data name="RestrictionNotAbleToBeScheduledReasonNightlyRestMightBeBroken" xml:space="preserve">
     <value>Nightly rest will be broken</value>

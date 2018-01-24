@@ -17231,7 +17231,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Agents selected, click Refresh to start analyzing.
+        ///   Looks up a localized string similar to {0} Agents selected, click Refresh to start analyzing.
         /// </summary>
         public static string ManyAgentsAlert {
             get {
