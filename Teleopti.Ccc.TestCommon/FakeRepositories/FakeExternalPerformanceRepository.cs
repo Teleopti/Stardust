@@ -67,4 +67,5 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				performance.Name = name;
 			}
 		}
+	}
 }
