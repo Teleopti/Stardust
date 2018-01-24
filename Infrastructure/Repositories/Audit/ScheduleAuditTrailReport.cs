@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using NHibernate.Envers;
 using NHibernate.Envers.Query;
-//using NHibernate.Envers;
-//using NHibernate.Envers.Query;
 using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -12,6 +10,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -21,29 +20,39 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 	{
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 		private readonly IUserTimeZone _timeZone;
+		private readonly IGlobalSettingDataRepository _globalSettingDataRepository;
+		
+		private CommonNameDescriptionSetting _commonNameDescription;
 
-		public ScheduleAuditTrailReport(ICurrentUnitOfWork currentUnitOfWork, IUserTimeZone timeZone)
+		public ScheduleAuditTrailReport(ICurrentUnitOfWork currentUnitOfWork, IUserTimeZone timeZone,
+			IGlobalSettingDataRepository globalSettingDataRepository)
 		{
 			_currentUnitOfWork = currentUnitOfWork;
 			_timeZone = timeZone;
+			_globalSettingDataRepository = globalSettingDataRepository;
 		}
+
 		public IEnumerable<IPerson> RevisionPeople()
 		{
 			return _currentUnitOfWork.Current().Session().GetNamedQuery("RevisionPeople").List<IPerson>();
 		}
 
-	
-		public IList<ScheduleAuditingReportData> Report(IPerson changedByPerson, DateOnlyPeriod changedPeriod, DateOnlyPeriod scheduledPeriod, int maximumResults, IList<IPerson> scheduledAgents)
+		public IList<ScheduleAuditingReportData> Report(IPerson changedByPerson, DateOnlyPeriod changedPeriod,
+			DateOnlyPeriod scheduledPeriod, int maximumResults, IList<IPerson> scheduledAgents)
 		{
+			_commonNameDescription = _globalSettingDataRepository.FindValueByKey("CommonNameDescription",
+				new CommonNameDescriptionSetting());
+			
 			var auditSession = _currentUnitOfWork.Current().Session().Auditer();
 			var ret = new List<ScheduleAuditingReportData>();
 			var changedPeriodAgentTimeZone = changedPeriod.ToDateTimePeriod(_timeZone.TimeZone());
 			var scheduledPeriodAgentTimeZone = scheduledPeriod.ToDateTimePeriod(_timeZone.TimeZone());
 
 			var retTemp = new List<ScheduleAuditingReportData>();
-			
+
 			auditSession.CreateQuery().ForHistoryOf<PersonAssignment, Revision>()
-				.Add(AuditEntity.RevisionProperty("ModifiedAt").Between(changedPeriodAgentTimeZone.StartDateTime, changedPeriodAgentTimeZone.EndDateTime))
+				.Add(AuditEntity.RevisionProperty("ModifiedAt")
+					.Between(changedPeriodAgentTimeZone.StartDateTime, changedPeriodAgentTimeZone.EndDateTime))
 				.AddModifiedByIfNotNull(changedByPerson)
 				.Add(AuditEntity.Property("Date").Between(scheduledPeriod.StartDate, scheduledPeriod.EndDate))
 				.Add(AuditEntity.Property("Person").In(scheduledAgents))
@@ -53,7 +62,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 				.ForEach(assRev => retTemp.Add(createAssignmentAuditingData(assRev)));
 
 			auditSession.CreateQuery().ForHistoryOf<PersonAbsence, Revision>()
-				.Add(AuditEntity.RevisionProperty("ModifiedAt").Between(changedPeriodAgentTimeZone.StartDateTime, changedPeriodAgentTimeZone.EndDateTime))
+				.Add(AuditEntity.RevisionProperty("ModifiedAt")
+					.Between(changedPeriodAgentTimeZone.StartDateTime, changedPeriodAgentTimeZone.EndDateTime))
 				.AddModifiedByIfNotNull(changedByPerson)
 				.Add(AuditEntity.Property("Layer.Period.period.Minimum").Lt(scheduledPeriodAgentTimeZone.EndDateTime))
 				.Add(AuditEntity.Property("Layer.Period.period.Maximum").Gt(scheduledPeriodAgentTimeZone.StartDateTime))
@@ -66,7 +76,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 			ret.AddRange(retTemp
 				.OrderByDescending(o => o.ModifiedAt)
 				.Take(maximumResults));
-			
+
 			return ret;
 		}
 
@@ -74,7 +84,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 		{
 			var ret = new ScheduleAuditingReportData { ShiftType = Resources.AuditingReportShift };
 			addCommonScheduleData(ret, auditedAssignment.Entity, auditedAssignment.RevisionEntity, auditedAssignment.Operation);
-
 
 			ret.Detail = string.Empty;
 			var personAssignment = auditedAssignment.Entity;
@@ -92,7 +101,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 
 				if (personAssignment.PersonalActivities().IsEmpty() && !personAssignment.OvertimeActivities().IsEmpty())
 					ret.Detail = Resources.Overtime;
-
 			}
 
 			var period = auditedAssignment.Entity.Period;
@@ -122,8 +130,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 			RevisionType revisionType)
 		{
 			scheduleAuditingReportData.ModifiedAt = TimeZoneInfo.ConvertTimeFromUtc(revision.ModifiedAt, _timeZone.TimeZone());
-			scheduleAuditingReportData.ModifiedBy = revision.ModifiedBy.Name.ToString(NameOrderOption.FirstNameLastName);
-			scheduleAuditingReportData.ScheduledAgent = auditedEntity.Person.Name.ToString(NameOrderOption.FirstNameLastName);
+			scheduleAuditingReportData.ModifiedBy = _commonNameDescription.BuildFor(revision.ModifiedBy);
+			scheduleAuditingReportData.ScheduledAgent = _commonNameDescription.BuildFor(auditedEntity.Person);
 			addRevisionType(scheduleAuditingReportData, revisionType);
 		}
 
