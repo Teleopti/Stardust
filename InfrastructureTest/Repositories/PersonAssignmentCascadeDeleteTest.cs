@@ -15,7 +15,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
-	[InfrastructureTest]
+	[DatabaseTest]
 	public class PersonAssignmentCascadeDeleteTest
 	{
 		/// PersonAssignment
