@@ -17113,4 +17113,12 @@ Do you want to participate?</value>
     <value>The period results in to much work time</value>
     <comment>The period results in to much work time</comment>
   </data>
+  <data name="RequestStartDate" xml:space="preserve">
+    <value>Start Date</value>
+    <comment>Start Date of request</comment>
+  </data>
+  <data name="RequestEndDate" xml:space="preserve">
+    <value>End Date</value>
+    <comment>End Date of request</comment>
+  </data>
 </root>

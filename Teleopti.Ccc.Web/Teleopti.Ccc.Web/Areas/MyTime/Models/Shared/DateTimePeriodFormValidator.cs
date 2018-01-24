@@ -17,10 +17,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Shared
 				yield return new ValidationResult(string.Format(Resources.InvalidTimeValue, Resources.Period));
 
 			if (!isValidDateRange(startDate))
-				yield return new ValidationResult(string.Format(Resources.InvalidTimeValue, Resources.StartDate));
+				yield return new ValidationResult(string.Format(Resources.InvalidTimeValue, Resources.RequestStartDate));
 
 			if (!isValidDateRange(endDate))
-				yield return new ValidationResult(string.Format(Resources.InvalidTimeValue, Resources.EndDate));
+				yield return new ValidationResult(string.Format(Resources.InvalidTimeValue, Resources.RequestEndDate));
 		}
 
 		private static bool isValidDateRange(DateTime date)

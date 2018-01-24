@@ -83,8 +83,8 @@ namespace Teleopti.Ccc.WebTest.Core
 
 			var result = target.Validate(form).ToArray();
 
-			result[0].ErrorMessage.Should().Be(string.Format(Resources.InvalidTimeValue, Resources.StartDate));
-			result[1].ErrorMessage.Should().Be(string.Format(Resources.InvalidTimeValue, Resources.EndDate));
+			result[0].ErrorMessage.Should().Be(string.Format(Resources.InvalidTimeValue, Resources.RequestStartDate));
+			result[1].ErrorMessage.Should().Be(string.Format(Resources.InvalidTimeValue, Resources.RequestEndDate));
 		}
 	}
 }
