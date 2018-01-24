@@ -662,6 +662,41 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			return schedulerStateHolderFrom.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment().ShiftLayers.Any(x => x.Period.StartDateTime.Hour == 11);
 		}
 
+		[TestCase(true, ExpectedResult = false)]
+		[TestCase(false, ExpectedResult = true)]
+		[Ignore("47645 to be fixed")]
+		public bool ShouldNotPlaceShiftOutsideOpenHours(bool isClosedOnWeekends)
+		{
+			var scenario = new Scenario("_");
+			var dateOnly = new DateOnly(2018, 1, 5);
+			var phone = new Activity{RequiresSkill = true};
+			var other = new Activity{RequiresSkill = true}; 
+			var phoneSkill = new Skill("_").For(phone).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
+			var otherActivity = new Skill("_").For(other).InTimeZone(TimeZoneInfo.Utc).WithId();
+			if (isClosedOnWeekends)
+			{
+				otherActivity.IsClosedDuringWeekends(); 
+			}
+			else
+			{
+				otherActivity.IsOpen();
+			}
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phone, new TimePeriodWithSegment(21, 15, 21, 15, 15), new TimePeriodWithSegment(30, 15, 30, 15, 15), new ShiftCategory("_").WithId()));
+			ruleSet.AddExtender(new ActivityAbsoluteStartExtender(other, new TimePeriodWithSegment(0, 15, 0, 15, 15), new TimePeriodWithSegment(30, 0, 30, 0, 15)));
+			var skillDayPhone1 = phoneSkill.CreateSkillDayWithDemand(scenario, dateOnly, 10);
+			var skillDayPhone2 = phoneSkill.CreateSkillDayWithDemand(scenario, dateOnly.AddDays(1), 100);
+			var skillDayOther1 = otherActivity.CreateSkillDayWithDemand(scenario, dateOnly.AddDays(-1), 0.1);
+			var skillDayOther2 = otherActivity.CreateSkillDayWithDemand(scenario, dateOnly, 0.1);
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, new ContractWithMaximumTolerance(), phoneSkill, otherActivity).WithSchedulePeriodOneWeek(dateOnly);
+			var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(new ShiftCategory("_").WithId()).WithLayer(phone, new TimePeriod(13, 22));
+			var schedulerStateHolderFrom = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly.AddDays(-1), dateOnly.AddDays(1)), new[] { agent }, new[] { ass }, new[] { skillDayPhone1, skillDayPhone2, skillDayOther1, skillDayOther2 });
+			var optimizationPreferences = new OptimizationPreferences { General = { ScheduleTag = new ScheduleTag(), OptimizationStepShiftsWithinDay = true } };
+
+			Target.Execute(new NoSchedulingProgress(), schedulerStateHolderFrom, new[] { agent }, new DateOnlyPeriod(dateOnly, dateOnly), optimizationPreferences, null);
+
+			return schedulerStateHolderFrom.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.Minute.Equals(15);
+		}
+
 		public IntradayOptimizationIslandDesktopTest(BreakPreferenceStartTimeByMax resourcePlannerBreakPreferenceStartTimeByMax46002) : base(resourcePlannerBreakPreferenceStartTimeByMax46002)
 		{
 		}
