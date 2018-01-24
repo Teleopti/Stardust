@@ -197,10 +197,7 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 			var targets = ValidateReadModelType.ScheduleProjectionReadOnly;
 			targets |= ValidateReadModelType.PersonScheduleDay;
 
-			if (_toggleManager.IsEnabled(Toggles.HealthCheck_ValidateReadModelScheduleDay_39423))
-			{
-				targets |= ValidateReadModelType.ScheduleDay;
-			}
+			targets |= ValidateReadModelType.ScheduleDay;
 
 			var jobId = _stardustSender.Send(new ValidateReadModelsEvent
 			{
@@ -216,11 +213,7 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 		{
 			var targets = ValidateReadModelType.ScheduleProjectionReadOnly;
 			targets |= ValidateReadModelType.PersonScheduleDay;
-
-			if (_toggleManager.IsEnabled(Toggles.HealthCheck_ValidateReadModelScheduleDay_39423))
-			{
-				targets |= ValidateReadModelType.ScheduleDay;
-			}
+			targets |= ValidateReadModelType.ScheduleDay;
 
 			var jobId = _stardustSender.Send(new ValidateReadModelsEvent
 			{
@@ -237,11 +230,7 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 		{
 			var targets = ValidateReadModelType.ScheduleProjectionReadOnly;
 			targets |= ValidateReadModelType.PersonScheduleDay;
-
-			if (_toggleManager.IsEnabled(Toggles.HealthCheck_ValidateReadModelScheduleDay_39423))
-			{
-				targets |= ValidateReadModelType.ScheduleDay;
-			}
+			targets |= ValidateReadModelType.ScheduleDay;
 
 			var jobId = _stardustSender.Send(new ValidateReadModelsEvent
 			{
@@ -259,11 +248,7 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 		{
 			var targets = ValidateReadModelType.ScheduleProjectionReadOnly;
 			targets |= ValidateReadModelType.PersonScheduleDay;
-
-			if (_toggleManager.IsEnabled(Toggles.HealthCheck_ValidateReadModelScheduleDay_39423))
-			{
-				targets |= ValidateReadModelType.ScheduleDay;
-			}
+			targets |= ValidateReadModelType.ScheduleDay;
 			_readModelValidator.ClearResult(targets);
 			return Ok();
 		}
@@ -275,11 +260,7 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 		{
 			var targets = ValidateReadModelType.ScheduleProjectionReadOnly;
 			targets |= ValidateReadModelType.PersonScheduleDay;
-
-			if (_toggleManager.IsEnabled(Toggles.HealthCheck_ValidateReadModelScheduleDay_39423))
-			{
-				targets |= ValidateReadModelType.ScheduleDay;
-			}
+			targets |= ValidateReadModelType.ScheduleDay;
 
 			var jobId = _stardustSender.Send(new FixReadModelsEvent
 			{

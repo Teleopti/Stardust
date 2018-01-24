@@ -127,7 +127,6 @@
 		ETL_SpeedUpGroupPagePersonNightly_37623,
 		ETL_SpeedUpNightlyWorkload_38928,
 		ETL_SpeedUpNightlyForecastWorkload_38929,
-		HealthCheck_ValidateReadModelScheduleDay_39423,
 		HealthCheck_EasyValidateAndFixReadModels_39696,
 		HealthCheck_ReinitializeReadModels_39697,
 
