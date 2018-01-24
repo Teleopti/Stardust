@@ -690,7 +690,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var skillDayOther3 = otherActivity.CreateSkillDayWithDemand(scenario, dateOnly.AddDays(1), 0.1);
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, new ContractWithMaximumTolerance(), phoneSkill, otherActivity).WithSchedulePeriodOneWeek(dateOnly);
 			var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(new ShiftCategory("_").WithId()).WithLayer(phone, new TimePeriod(13, 22));
-			var schedulerStateHolderFrom = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly.AddDays(-1), dateOnly.AddDays(1)), new[] { agent }, new[] { ass }, new[] { skillDayPhone1, skillDayPhone2, skillDayOther1, skillDayOther2, skillDayOther3 });
+			var schedulerStateHolderFrom = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly.AddDays(-1), dateOnly.AddDays(1)), agent, ass, new[] { skillDayPhone1, skillDayPhone2, skillDayOther1, skillDayOther2, skillDayOther3 });
 			var optimizationPreferences = new OptimizationPreferences { General = { ScheduleTag = new ScheduleTag(), OptimizationStepShiftsWithinDay = true } };
 
 			Target.Execute(new NoSchedulingProgress(), schedulerStateHolderFrom, new[] { agent }, new DateOnlyPeriod(dateOnly, dateOnly), optimizationPreferences, null);
