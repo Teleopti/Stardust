@@ -167,17 +167,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		{
 			var errorMessage = Resources.BusinessRuleOverlappingErrorMessage3;
 			var currentUiCulture = Thread.CurrentThread.CurrentUICulture;
-			var loggedOnTimezone = person.PermissionInformation.DefaultTimeZone();
+			var currentCulture = Thread.CurrentThread.CurrentCulture;
+			var agentTimezone = person.PermissionInformation.DefaultTimeZone();
 
-			var layerBelowTimePeriod = overlappingLayers.LayerBelowPeriod.TimePeriod(loggedOnTimezone);
-			var layerAboveTimePeriod = overlappingLayers.LayerAbovePeriod.TimePeriod(loggedOnTimezone);
+			var layerBelowTimePeriod = overlappingLayers.LayerBelowPeriod.TimePeriod(agentTimezone);
+			var layerAboveTimePeriod = overlappingLayers.LayerAbovePeriod.TimePeriod(agentTimezone);
 
 			var ret = string.Format(currentUiCulture,
 				errorMessage,
 				overlappingLayers.LayerBelowName,
-				layerBelowTimePeriod.ToShortTimeString(currentUiCulture),
+				layerBelowTimePeriod.ToShortTimeString(currentCulture),
 				overlappingLayers.LayerAboveName,
-				layerAboveTimePeriod.ToShortTimeString(currentUiCulture));
+				layerAboveTimePeriod.ToShortTimeString(currentCulture));
 			return ret;
 		}
 

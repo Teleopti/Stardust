@@ -1166,6 +1166,66 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 					normalActivityTimePeriod.ToShortTimeString(loggedOnCulture)));
 		}
 
+		[Test, SetCulture("en-US"), SetUICulture("zh-CN")]
+		public void ShouldGetResultForNotOverwriteLayerRuleCheckBasedOnLogonUserDateFormatWhenStickyActivityIsOverlappedByPersonalActivity()
+		{
+			var scenario = ScenarioRepository.Has("Default");
+			var team = TeamFactory.CreateSimpleTeam();
+
+			var contract = PersonContractFactory.CreatePersonContract();
+			contract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(0),TimeSpan.FromHours(40),TimeSpan.FromHours(8),TimeSpan.FromHours(40));
+
+			var person = PersonFactory.CreatePersonWithGuid("Peter","peter");
+			person.AddPersonPeriod(new PersonPeriod(new DateOnly(2015,12,30),contract,team));
+			PersonRepository.Has(person);
+
+			var dateTimePeriodToday = new DateTimePeriod(2016,1,2,8,2016,1,2,17);
+			var stickyActivity = ActivityFactory.CreateActivity("Short Break");
+			stickyActivity.AllowOverwrite = false;
+			var normalActivity = ActivityFactory.CreateActivity("Phone");
+			normalActivity.AllowOverwrite = true;
+
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,scenario, normalActivity, dateTimePeriodToday, shiftCategory);
+
+			var stickyActivityPeriod = new DateTimePeriod(2016,1,2,11,2016,1,2,13);
+			var normalActivityPeriod = new DateTimePeriod(2016,1,2,12,2016,1,2,14);
+
+			personAssignment.AddActivity(stickyActivity,stickyActivityPeriod);
+			personAssignment.AddPersonalActivity(normalActivity,normalActivityPeriod);
+
+			var loggedOnCulture = Thread.CurrentThread.CurrentCulture;
+			var loggedOnTimezone = person.PermissionInformation.DefaultTimeZone();
+
+
+			var stickyActvityTimePeriod = stickyActivityPeriod.TimePeriod(loggedOnTimezone);
+			var normalActivityTimePeriod = normalActivityPeriod.TimePeriod(loggedOnTimezone);
+
+			ScheduleStorage.Add(personAssignment);
+
+
+			var results = Target.GetBusinessRuleValidationResults(new FetchRuleValidationResultFormData
+			{
+				Date = new DateTime(2016,1,2),
+				PersonIds = new[]
+				{
+					person.Id.GetValueOrDefault()
+				}
+			},BusinessRuleFlags.NotOverwriteLayerRule);
+
+			results.First().PersonId.Should().Be.EqualTo(person.Id.GetValueOrDefault());
+
+			var warning = results.First().Warnings.Single();
+
+			warning.RuleType.Should().Be.EqualTo("NotOverwriteLayerRuleName");
+			warning.Content.Should()
+				.Be.EqualTo(string.Format(Resources.BusinessRuleOverlappingErrorMessage3,
+					"Short Break",
+					stickyActvityTimePeriod.ToShortTimeString(loggedOnCulture),
+					"Phone",
+					normalActivityTimePeriod.ToShortTimeString(loggedOnCulture)));
+		}
+
 		[Test]
 		public void ShouldGetAllAvailableValidationRuleTypes()
 		{
