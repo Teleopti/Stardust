@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Manager.Integration.Test.Database;
 using Manager.Integration.Test.Helpers;
 using Manager.Integration.Test.Initializers;
+using Manager.Integration.Test.Models;
 using Manager.Integration.Test.Timers;
 using NUnit.Framework;
 
@@ -78,16 +79,15 @@ namespace Manager.Integration.Test.Tests.RecoveryTests
 											  endedTest);
 		}
 		
-		[Test, Ignore("WIP")]
-		public void ShouldHandleMultipleJobsUsingAllNodesAvailable2()
+		[Test]
+		public void ShouldHandleNodeDisapperingTemporarily()
 		{
 			var startedTest = DateTime.UtcNow;
-			var numberOfJobs = 15;
+			var numberOfJobs = 20;
 			var waitForJobToFinishEvent = new ManualResetEventSlim();
 			var waitForNodeToStartEvent = new ManualResetEventSlim();
 			var waitForAllNodesToFinishAJob = new ManualResetEventSlim();
-			//var waitForQueueEmptyEvent = new ManualResetEventSlim();
-
+			
 			var checkTablesInManagerDbTimer =
 				new CheckTablesInManagerDbTimer(ManagerDbConnectionString, 300);
 			checkTablesInManagerDbTimer.GetJobItems += (sender, items) =>
@@ -97,7 +97,7 @@ namespace Manager.Integration.Test.Tests.RecoveryTests
 					waitForJobToFinishEvent.Set();
 				}
 
-				if (items.Select(job => job.SentToWorkerNodeUri).Distinct().Count() == 2)
+				if (items.Where(job => job.Ended != null).GroupBy(job => job.SentToWorkerNodeUri).Count() == 2)
 				{
 					waitForAllNodesToFinishAJob.Set();
 				}
@@ -110,18 +110,6 @@ namespace Manager.Integration.Test.Tests.RecoveryTests
 				}
 			};
 
-//			checkTablesInManagerDbTimer.GetJobQueueItems += (sender, jobItems) =>
-//			{
-//				if (jobItems.Count == 0)
-//				{
-//					waitForQueueEmptyEvent.Set();
-//				}
-//				else
-//				{
-//					Debug.WriteLine("Queue not empty: {0}", jobItems.Count);
-//				}
-//			};
-			
 			checkTablesInManagerDbTimer.JobTimer.Start();
 			checkTablesInManagerDbTimer.WorkerNodeTimer.Start();
 
@@ -134,15 +122,6 @@ namespace Manager.Integration.Test.Tests.RecoveryTests
 
 			taskStartNewNode.Start();
 			waitForNodeToStartEvent.Wait();
-	
-			//kill second node
-//			Task<string> taskShutDownNode = new Task<string>(() =>
-//			{
-//				string res = IntegrationControllerApiHelper.ShutDownNode(HttpSender,"Node1.config").Result;
-//				return res;
-//			});
-//			taskShutDownNode.Start(); // async shutdown
-			
 			var jobQueueItemsBatch1 = JobHelper.GenerateTestJobRequests(numberOfJobs, 1);
 			jobQueueItemsBatch1.ForEach(jobQueueItem => HttpRequestManager.AddJob(jobQueueItem));
 
@@ -156,11 +135,20 @@ namespace Manager.Integration.Test.Tests.RecoveryTests
 				return res;
 			});
 			taskShutDownNode2.RunSynchronously();
-			var jobsFinishedWithoutTimeout = waitForJobToFinishEvent.Wait(TimeSpan.FromSeconds(100));
+			
+			//restart second node
+			Task<string> taskStartNewNodeRestarted = new Task<string>(() =>
+			{
+				string res = IntegrationControllerApiHelper.StartNewNode(HttpSender).Result;
+				return res;
+			});
+			taskStartNewNodeRestarted.RunSynchronously();
+			
+			var jobsFinishedWithoutTimeout = waitForJobToFinishEvent.Wait(TimeSpan.FromSeconds(200));
 			Assert.IsTrue(jobsFinishedWithoutTimeout, "Timeout on Finishing jobs");
 			
 			//
-			Assert.IsTrue(checkTablesInManagerDbTimer.ManagerDbRepository.WorkerNodes.Count == 2, "There should be two nodes registered");
+			Assert.IsTrue(checkTablesInManagerDbTimer.ManagerDbRepository.WorkerNodes.Count == 3, "There should be two nodes registered");
 			Assert.IsFalse(checkTablesInManagerDbTimer.ManagerDbRepository.JobQueueItems.Any(), "Job queue should be empty.");
 			Assert.IsTrue(checkTablesInManagerDbTimer.ManagerDbRepository.Jobs.Any(), "Job should not be empty.");
 			Assert.AreEqual(checkTablesInManagerDbTimer.ManagerDbRepository.WorkerNodes.Count,
@@ -172,9 +160,9 @@ namespace Manager.Integration.Test.Tests.RecoveryTests
 			
 			var description =
 				string.Format("Creates {0} Test Timer jobs with {1} manager and {2} nodes.",
-							  1,
+							  numberOfJobs,
 							  NumberOfManagers,
-							  NumberOfNodes);
+							  NumberOfNodes+2);
 
 			DatabaseHelper.AddPerformanceData(ManagerDbConnectionString,
 											  description,
