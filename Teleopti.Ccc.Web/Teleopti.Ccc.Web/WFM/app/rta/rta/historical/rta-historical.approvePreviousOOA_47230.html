@@ -126,12 +126,12 @@
 	</div>
 
 
-	<div class="con-row" style="margin-bottom: -8px">
+	<div class="con-row">
 		<div class="con-flex" style="margin-right: 5px">
 
 			<rta-card-panel open="openCard">
 				<rta-card-panel-header>
-					<b>Out of Adherence</b>
+					Out of Adherence
 				</rta-card-panel-header>
 				<rta-card-panel-content>
 					<div class="panel" style="max-height: 300px; overflow-y: scroll">
@@ -183,7 +183,7 @@
 
 					<rta-card-panel>
 						<rta-card-panel-header>
-							<b>Approved as In Adherence</b>
+							Approved as In Adherence
 						</rta-card-panel-header>
 						<rta-card-panel-content>
 							<div class="panel">
@@ -212,11 +212,10 @@
 
 		</div>
 	</div>
-
-
-	<rta-card ng-repeat="card in vm.cards" ng-open="card.isOpen">
-		<rta-card-header ng-attr-styles="border-left-color: {{card.Color}}">{{card.Header}}</rta-card-header>
-		<rta-card-body>
+	
+	<rta-card-panel ng-repeat="card in vm.cards" ng-open="card.isOpen">
+		<rta-card-panel-header ng-attr-styles="border-left-color: {{card.Color}}">{{card.Header}}</rta-card-panel-header>
+		<rta-card-panel-content>
 			<div class="con-row">
 				<div class="con-flex">
 					<ul class="wfm-simple-list rta-list">
@@ -268,7 +267,7 @@
 					</ul>
 				</div>
 			</div>
-		</rta-card-body>
-	</rta-card>
+		</rta-card-panel-content>
+	</rta-card-panel>
 
 </div>
