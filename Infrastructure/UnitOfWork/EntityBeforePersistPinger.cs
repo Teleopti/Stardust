@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
@@ -7,7 +8,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 	{
 		public void Execute(IEnumerable<object> entities)
 		{
-			foreach (var entity in entities)
+			foreach (var entity in entities.ToArray())
 			{
 				if (entity is IBeforePersist persist)
 				{
