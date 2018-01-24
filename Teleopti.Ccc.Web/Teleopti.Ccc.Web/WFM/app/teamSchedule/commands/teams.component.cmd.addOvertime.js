@@ -21,17 +21,18 @@
 			ctrl.timeRangeIsValid = validateTimeRange(ctrl.fromTime, ctrl.toTime);
 			ctrl.validateInput();
 		};
+
 		ctrl.updateToTime = function(newTime) {
 			ctrl.toTime = newTime;
 			ctrl.timeRangeIsValid = validateTimeRange(ctrl.fromTime, ctrl.toTime);
 			ctrl.validateInput();
-		}
+		};
 
 		ctrl.$onInit = function() {
 			ctrl.selectedAgents = personSelectionSvc.getSelectedPersonInfoList();
 			ctrl.trackId = ctrl.containerCtrl.getTrackId();
-			ctrl.fromTime = moment(ctrl.containerCtrl.getDate()).toDate();
-			ctrl.toTime = moment(ctrl.containerCtrl.getDate()).add(1, 'hour').toDate();
+			ctrl.fromTime = moment(ctrl.selectedAgents[0].ScheduleEndTime).toDate();
+			ctrl.toTime = moment(ctrl.fromTime).add(1, 'hour').toDate();
 			ctrl.timeRangeIsValid = true;
 		};
 
