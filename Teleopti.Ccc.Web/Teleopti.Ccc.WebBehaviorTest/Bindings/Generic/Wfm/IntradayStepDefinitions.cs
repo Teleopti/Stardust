@@ -227,7 +227,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			try
 			{
 				var n = 10;
-				while (Browser.Interactions.IsVisible("#exit_sgm"))
+				while (Browser.Interactions.IsVisible("#exit_sgm") && !Browser.Interactions.IsVisible("#confirmExitButton"))
 				{
 					Browser.Interactions.Click("#exit_sgm");
 					n--;
