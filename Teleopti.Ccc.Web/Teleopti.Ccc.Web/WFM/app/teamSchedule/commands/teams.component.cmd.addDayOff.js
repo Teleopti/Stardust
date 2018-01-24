@@ -25,6 +25,7 @@
 			};
 			dayOffService.getAllDayOffTemplates().then(function (templates) {
 				ctrl.availableTemplates = templates;
+				ctrl.selectedTemplateId = templates[0].Id
 			});
 		}
 

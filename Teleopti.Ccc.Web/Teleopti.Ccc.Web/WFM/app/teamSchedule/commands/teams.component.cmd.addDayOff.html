@@ -6,7 +6,9 @@
 			<h3>{{'DayOff'|translate}}: </h3>
 			<div class="con-row">
 				<md-select class="dayoff-selector" ng-model="$ctrl.selectedTemplateId" required placeholder="{{'PickATemplate'|translate}}" md-autofocus="::$ctrl.containerCtrl.onReady()">
-					<md-option ng-repeat="template in $ctrl.availableTemplates | orderBy: 'Name'" ng-value="template.Id">{{template.Name}}</md-option>
+					<md-option ng-repeat="template in $ctrl.availableTemplates | orderBy: 'Name'" 
+							   ng-value="template.Id" 
+							   ng-selected="template.Id == $ctrl.selectedTemplateId">{{template.Name}}</md-option>
 				</md-select>
 			</div>
 

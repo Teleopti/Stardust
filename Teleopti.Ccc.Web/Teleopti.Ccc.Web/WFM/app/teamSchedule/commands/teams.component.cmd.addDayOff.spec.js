@@ -62,6 +62,13 @@
 			expect(templates[1].innerText.trim()).toEqual('template2');
 		});
 
+		it("should set default day off type from the available template", function () {
+			var panel = setUp("2018-01-09");
+			var templatesDropdown = panel[0].querySelector(".dayoff-selector");
+			var selectedTemplate = templatesDropdown.querySelector("md-select-value");
+			expect(selectedTemplate.innerText.trim()).toEqual("template1");
+		});
+
 		it("should set default date range", function () {
 			var date = "2018-01-09";
 			var panel = setUp(date);
@@ -79,12 +86,12 @@
 			fakePersonSelectionService.setFakeCheckedPersonInfoList();
 			scope.$apply();
 
-			expectApplyButtonStatus(true, panel);
+			expectApplyButtonStatus(false, panel);
 
-			ctrl.selectedTemplateId = "template1";
+			ctrl.selectedTemplateId = "";
 			scope.$apply();
 
-			expectApplyButtonStatus(false, panel);
+			expectApplyButtonStatus(true, panel);
 		});
 
 		it("should disable apply button unless without start date", function () {
