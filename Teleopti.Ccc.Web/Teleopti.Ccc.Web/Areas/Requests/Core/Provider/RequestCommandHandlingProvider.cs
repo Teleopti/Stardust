@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
@@ -126,16 +127,22 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 					PersonRequestId = personRequestId,
 					ReplyMessage = replyMessage
 				};
-				try
-				{
-					_commandDispatcher.Execute(command);
-				}
-				catch (Exception ex)
-				{
-					if (!(ex.InnerException is OptimisticLockException)) throw;
-					logOptimisticLockException(ex, personRequestId);
-					_commandDispatcher.Execute(command);
-				}
+
+				Retry.Handle<OptimisticLockException>()
+					.WaitAndRetry(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(2))
+					.Do(() =>
+					{
+						try
+						{
+							_commandDispatcher.Execute(command);
+						}
+						catch (Exception ex) when (ex.InnerException is OptimisticLockException)
+						{
+							var innerException = ex.InnerException;
+							logOptimisticLockException(innerException, personRequestId);
+							throw innerException;
+						}
+					});
 
 				if (command.AffectedRequestId.HasValue) affectedRequestIds.Add(command.AffectedRequestId.Value);
 
@@ -217,7 +224,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 
 		private static void logOptimisticLockException(Exception ex, Guid personRequestId)
 		{
-			var optimisticLockException = (OptimisticLockException)ex.InnerException;
+			var optimisticLockException = (OptimisticLockException)ex;
 			if (optimisticLockException != null)
 				_logger.Warn(
 					$"Optimistic lock when cancelling request ({personRequestId}),details:{optimisticLockException.EntityName},{optimisticLockException.RootId}");
