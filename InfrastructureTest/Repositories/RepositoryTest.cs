@@ -13,6 +13,7 @@ using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -93,6 +94,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         public void CanLoadAndPropertiesAreSet()
         {
             Guid id = Guid.NewGuid();
+			new EntityBeforePersistPinger().Execute(new object[]{simpleEntity}); //hack to simulate real persist - doesn't really care, this method could be deleted I think
             Session.Save(simpleEntity, id);
             Session.Flush();
             Session.Evict(simpleEntity); //ändrat!
@@ -108,6 +110,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         public void CanGetAndPropertiesAreSet()
         {
             Guid id = Guid.NewGuid();
+			new EntityBeforePersistPinger().Execute(new object[]{simpleEntity}); //hack to simulate real persist - doesn't really care, this method could be deleted I think
             Session.Save(simpleEntity, id);
             Session.Flush();
             Session.Evict(simpleEntity); //ändrat!
