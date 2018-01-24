@@ -52,7 +52,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 				{
 					IsValid = false,
 					ShouldDenyIfInValid = workflowControlSet.OvertimeRequestMaximumTimeHandleType == OvertimeValidationHandleType.Deny,
-					InvalidReasons = invalidReasons.ToArray()
+					InvalidReasons = invalidReasons.ToArray(),
+					BrokenBusinessRules = BusinessRuleFlags.MaximumOvertimeRule
 				};
 			}
 

@@ -1337,6 +1337,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			personRequest.IsApproved.Should().Be.False();
 			personRequest.IsDenied.Should().Be.True();
 			personRequest.DenyReason.Should().Be(string.Format(Resources.OvertimeRequestMaximumTimeDenyReason, "July", "03:00", "00:00"));
+			personRequest.BrokenBusinessRules.Should().Be(BusinessRuleFlags.MaximumOvertimeRule);
 		}
 
 		[Test]
@@ -1408,6 +1409,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			personRequest.IsApproved.Should().Be.False();
 			personRequest.IsDenied.Should().Be.True();
 			personRequest.DenyReason.Should().Be(string.Format(Resources.OvertimeRequestMaximumTimeDenyReason, "July", "03:00", "02:00"));
+			personRequest.BrokenBusinessRules.Should().Be(BusinessRuleFlags.MaximumOvertimeRule);
 		}
 
 		[Test]
@@ -1434,6 +1436,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			personRequest.IsPending.Should().Be.True();
 			personRequest.GetMessage(new NoFormatting()).Trim().Should()
 				.Be(string.Format(Resources.OvertimeRequestMaximumTimeDenyReason, "July", "03:00", "02:00"));
+			personRequest.BrokenBusinessRules.Should().Be(BusinessRuleFlags.MaximumOvertimeRule);
 		}
 
 		[Test]
@@ -1466,6 +1469,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			personRequest.IsApproved.Should().Be.False();
 			personRequest.IsDenied.Should().Be.True();
 			personRequest.DenyReason.Should().Be(string.Format(Resources.OvertimeRequestMaximumTimeDenyReason, "July", "13:00", "10:00"));
+			personRequest.BrokenBusinessRules.Should().Be(BusinessRuleFlags.MaximumOvertimeRule);
 		}
 
 		[Test]
@@ -1531,6 +1535,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			personRequest.IsDenied.Should().Be.True();
 			personRequest.DenyReason.Should()
 				.Be(string.Format(Resources.OvertimeRequestMaximumTimeDenyReason, "August", "14:00", "13:00"));
+			personRequest.BrokenBusinessRules.Should().Be(BusinessRuleFlags.MaximumOvertimeRule);
 		}
 
 		[Test]
@@ -1567,6 +1572,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 				.Contain(string.Format(Resources.OvertimeRequestMaximumTimeDenyReason, "July", "12:00", "11:00"));
 			personRequest.GetMessage(new NoFormatting()).Trim().Should()
 				.Contain(string.Format(Resources.OvertimeRequestMaximumTimeDenyReason, "August", "14:00", "11:00"));
+			personRequest.BrokenBusinessRules.Should().Be(BusinessRuleFlags.MaximumOvertimeRule);
 		}
 
 		[Test]
@@ -1601,6 +1607,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			nextMonthPersonRequest.IsDenied.Should().Be.True();
 			nextMonthPersonRequest.DenyReason.Should().Be(string.Format(Resources.OvertimeRequestMaximumTimeDenyReason, "January", "02:00", "01:00"));
+			nextMonthPersonRequest.BrokenBusinessRules.Should().Be(BusinessRuleFlags.MaximumOvertimeRule);
 		}
 
 		[Test]

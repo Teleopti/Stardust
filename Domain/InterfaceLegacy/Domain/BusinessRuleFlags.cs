@@ -20,5 +20,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		SiteOpenHoursRule = 1 << 11,
 		NotOverwriteLayerRule = 1 << 12,
 		ShiftTradeTargetTimeRule = 1 << 13,
+		MaximumOvertimeRule = 1 << 14
 	}
 }
