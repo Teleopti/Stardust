@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using NHibernate;
@@ -49,6 +50,14 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		public InterceptorIteration Iteration { get; set; }
 		
 		public IEnumerable<IRootChangeInfo> ModifiedRoots => modifiedRoots;
+
+		public override void PreFlush(ICollection entitites)
+		{
+			if (Iteration == InterceptorIteration.Normal)
+			{
+				new EntityBeforePersistPinger().Execute(entitites.Cast<object>()); //inject as singleinstance somewhere		
+			}
+		}
 
 		public override int[] FindDirty(object entity, object id, object[] currentState, object[] previousState,
 												  string[] propertyNames, IType[] types)
