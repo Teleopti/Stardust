@@ -1660,8 +1660,6 @@
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.recentOutOfAdherences.spec.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.spec.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.totalOutOfAdherenceTime.spec.js" />
-    <Content Include="WFM\app\rta\rta\agents\rta.agents.filters.js" />
-    <Content Include="WFM\app\rta\rta\agents\rta.agents.filters.spec.js" />
     <Content Include="WFM\app\rta\rta\filter\rta.filter.controller.agents.QuicklyChangeAgentsSelection.spec.js" />
     <Content Include="WFM\app\rta\rta\filter\rta.filter.controller.overview.skillSelection.spec.js" />
     <Content Include="WFM\app\rta\rta\filter\rta.filter.controller.overview.spec.js" />
