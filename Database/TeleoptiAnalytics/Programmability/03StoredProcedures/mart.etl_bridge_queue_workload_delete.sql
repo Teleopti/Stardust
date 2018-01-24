@@ -18,7 +18,7 @@ SELECT @queueBridgeCount = COUNT(*)
 IF @queueBridgeCount = 1
   -- If this is the only one record to be deleted, then connect the queue to "Not Defined"
   UPDATE mart.bridge_queue_workload
-     SET workload_id = -1, skill_id = -1, business_unit_id = -1, datasource_id = -1, update_date = GETDATE()
+     SET workload_id = -1, skill_id = -1, business_unit_id = -1, datasource_id = -1, insert_date = GETDATE(), update_date = GETDATE()
    WHERE queue_id = @queue_id
 ELSE IF @queueBridgeCount > 1
   DELETE FROM mart.bridge_queue_workload
