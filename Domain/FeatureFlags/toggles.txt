@@ -51,7 +51,6 @@ RTA_ApprovePreviousOOA_47230 = false
 
 # Dumplings, can any of these be removed? #
 WfmTeamSchedule_MoveOvertimeActivity_44888 = true
-WfmTeamSchedule_SortRows_45056 = true
 WfmTeamSchedule_ShowStaffingInfo_45206 = true
 WfmTeamSchedule_ExportSchedulesToExcel_45795 = true
 WfmTeamSchedule_ShowSkillsForSelectedSkillGroupInStaffingInfo_47202 = true
