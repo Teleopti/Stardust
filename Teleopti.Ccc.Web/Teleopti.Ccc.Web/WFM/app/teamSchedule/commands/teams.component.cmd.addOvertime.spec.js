@@ -44,6 +44,30 @@
 		$httpBackend.expectGET('../ToggleHandler/AllToggles').respond(200, 'mock');
 	}));
 
+	it('should use 1 hour for default overtime activity length', function () {
+		var personInfoList = [{
+			PersonId: '7c25f4ae-96ea-409e-b959-2c02587c649e',
+			Name: 'Bill',
+			Checked: true,
+			AllowSwap: false,
+			ScheduleStartTime: '2018-01-23T08:00:00',
+			ScheduleEndTime: '2018-01-23T17:00:00',
+			SelectedAbsences: [],
+			SelectedActivities: ['472e02c8-1a84-4064-9a3b-9b5e015ab3c6'],
+			Timezone: {
+				IanaId: "Asia/Shanghai",
+				DisplayName: "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi"
+			},
+			SelectedDayOffs: []
+		}];
+
+		fakePersonSelectionService.setFakeCheckedPersonInfoList(personInfoList);
+		var result = setUp();
+
+		expect(moment(result.commandControl.fromTime).format('YYYY-MM-DD HH:mm')).toEqual(moment('2018-01-23 17:00:00').format('YYYY-MM-DD HH:mm'));
+		expect(moment(result.commandControl.toTime).format('YYYY-MM-DD HH:mm')).toEqual(moment('2018-01-23 18:00:00').format('YYYY-MM-DD HH:mm'));
+	});
+
 	it('should get default start time for one agent', function () {
 		var personInfoList = [{
 			PersonId: '7c25f4ae-96ea-409e-b959-2c02587c649e',
@@ -67,7 +91,7 @@
 		expect(moment(result.commandControl.fromTime).format('YYYY-MM-DD HH:mm')).toEqual(moment('2018-01-23 17:00:00').format('YYYY-MM-DD HH:mm'));
 	});
 
-	it('should first selected agent\'s shift end time as default start time', function () {
+	it('should use first selected agent\'s shift end time as default start time', function () {
 		var personInfoList = [{
 			PersonId: '7c25f4ae-96ea-409e-b959-2c02587c649e',
 			Name: 'Bill',
