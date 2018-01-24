@@ -178,6 +178,7 @@
 		WFM_AuditTrail_44006,
 		Report_Show_Utc_In_Report_Selection_When_In_Use_45079,
 		WFM_Gamification_Setting_With_External_Quality_Values_45003,
+		WFM_Gamification_Setting_Calculate_Badges_47250,
 		Report_Remove_Realtime_AuditTrail_44006,
 		ETL_Show_Web_Based_ETL_Tool_46880
 		// ReSharper restore InconsistentNaming

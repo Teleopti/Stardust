@@ -204,3 +204,4 @@ WFM_AuditTrail_44006 = true
 
 # Dragonfly #
 WFM_Gamification_Setting_With_External_Quality_Values_45003 = RC
+WFM_Gamification_Setting_Calculate_Badges_47250 = DEV
