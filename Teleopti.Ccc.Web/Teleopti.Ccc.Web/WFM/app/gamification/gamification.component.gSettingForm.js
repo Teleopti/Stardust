@@ -63,7 +63,7 @@
 				data.AHTBadgeEnabled,
 				null,
 				null,
-				'AHT',
+				'AverageHandlingTime',
 				2,
 				true,
 				data.AHTThreshold,
@@ -307,7 +307,7 @@
 					});
 					break;
 
-				case 'AHT':
+				case 'AverageHandlingTime':
 					promise = dataService.saveData('UseBadgeForAHT', {
 						GamificationSettingId: ctrl.id,
 						Value: enable
@@ -377,10 +377,10 @@
 					});
 					break;
 
-				case 'AHT':
+				case 'AverageHandlingTime':
 					dataService.saveData('AHTThreshold', {
 						GamificationSettingId: ctrl.id,
-						Value: this.badgeThresholds
+						Value: this.badgeThreshold
 					}).then(function () {
 						$log.info(self.name + ': updated badge threshold')
 					}, function () {
@@ -441,7 +441,7 @@
 					});
 					break;
 
-				case 'AHT':
+				case 'AverageHandlingTime':
 					dataService.saveData('AHTBronzeThreshold', {
 						GamificationSettingId: ctrl.id,
 						Value: this.bronzeBadgeThreshold
@@ -506,7 +506,7 @@
 					});
 					break;
 
-				case 'AHT':
+				case 'AverageHandlingTime':
 					dataService.saveData('AHTSilverThreshold', {
 						GamificationSettingId: ctrl.id,
 						Value: this.silverBadgeThreshold
@@ -571,7 +571,7 @@
 					});
 					break;
 
-				case 'AHT':
+				case 'AverageHandlingTime':
 					dataService.saveData('AHTGoldThreshold', {
 						GamificationSettingId: ctrl.id,
 						Value: this.goldBadgeThreshold
