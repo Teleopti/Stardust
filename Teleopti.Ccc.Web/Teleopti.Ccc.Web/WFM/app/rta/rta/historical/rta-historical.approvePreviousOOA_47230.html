@@ -129,7 +129,7 @@
 	<div class="con-row">
 		<div class="con-flex" style="margin-right: 5px">
 
-			<rta-card-panel open="openCard">
+			<rta-card-panel open="openRecordedCard" left-border-color="'#66c2ff'">
 				<rta-card-panel-header>
 					Out of Adherence
 				</rta-card-panel-header>
@@ -181,7 +181,7 @@
 			<div class="con-row">
 				<div class="con-flex">
 
-					<rta-card-panel>
+					<rta-card-panel open="openApprovedCard" left-border-color="'#66c2ff'">
 						<rta-card-panel-header>
 							Approved as In Adherence
 						</rta-card-panel-header>
@@ -213,8 +213,8 @@
 		</div>
 	</div>
 	
-	<rta-card-panel ng-repeat="card in vm.cards" ng-open="card.isOpen">
-		<rta-card-panel-header ng-attr-styles="border-left-color: {{card.Color}}">{{card.Header}}</rta-card-panel-header>
+	<rta-card-panel ng-repeat="card in vm.cards" open="card.isOpen" left-border-color="card.Color">
+		<rta-card-panel-header>{{card.Header}}</rta-card-panel-header>
 		<rta-card-panel-content>
 			<div class="con-row">
 				<div class="con-flex">
