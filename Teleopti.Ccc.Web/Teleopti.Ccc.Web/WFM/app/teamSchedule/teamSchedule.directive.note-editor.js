@@ -50,13 +50,12 @@
 		};
 	}
 
-	noteEditorCtrl.$inject = ['$scope', 'ScheduleNoteManagementService', 'NoticeService', 'teamsToggles'];
+	noteEditorCtrl.$inject = ['$scope', 'ScheduleNoteManagementService', 'NoticeService'];
 
-	function noteEditorCtrl($scope, ScheduleNoteMgmt, NoticeService, teamsToggles) {
+	function noteEditorCtrl($scope, ScheduleNoteMgmt, NoticeService) {
 		var vm = this;
 		vm.internalNoteTab = 'InternalNote';
 		vm.publicNoteTab = 'PublicNote';
-		vm.WfmTeamSchedule_DisplayAndEditPublicNote_44783 = teamsToggles.all().WfmTeamSchedule_DisplayAndEditPublicNote_44783;
 		vm.submit = function () {
 			var note = {
 				internalNotes: vm.internalNotes,

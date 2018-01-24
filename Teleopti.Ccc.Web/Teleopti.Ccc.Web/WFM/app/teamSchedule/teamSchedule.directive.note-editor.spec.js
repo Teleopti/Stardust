@@ -11,16 +11,6 @@ describe('teamschedule note editor directive tests', function () {
 				fakeNoticeService = new FakeNoticeService();
 				return fakeNoticeService;
 			});
-			$provide.service('teamsToggles',
-				function() {
-					return {
-						all: function() {
-							return {
-								WfmTeamSchedule_DisplayAndEditPublicNote_44783: true
-							}
-						}
-					}
-				});
 		});
 	});
 

@@ -1,5 +1,5 @@
 ﻿<modal-dialog show="vm.noteInputOption.showEditor" ng-cloak>
-	<div ng-if="vm.WfmTeamSchedule_DisplayAndEditPublicNote_44783">
+	<div>
 		<h1 class="modal-title" translate>{{'EditNote'}}</h1>
 		<md-tabs md-dynamic-height md-border-bottom>
 			<md-tab label="{{vm.internalNoteTab | translate}}">
@@ -17,12 +17,6 @@
 				</md-content>
 			</md-tab>
 		</md-tabs>
-	</div>
-	<div ng-if="!vm.WfmTeamSchedule_DisplayAndEditPublicNote_44783">
-		<h1 class="modal-title" translate>{{vm.internalNoteTab}}</h1>
-		<div class="modal-inner-content internal-note">
-			<textarea ng-model="vm.internalNotes" maxlength="255"></textarea>
-		</div>
 	</div>
 
 	<div class="modal-actions">

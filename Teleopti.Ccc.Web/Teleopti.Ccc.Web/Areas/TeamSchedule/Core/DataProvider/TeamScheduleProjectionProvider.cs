@@ -63,10 +63,10 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 			if (scheduleDay != null)
 			{
-				var isPublished = isSchedulePublished(scheduleDay.DateOnlyAsPeriod.DateOnly,person);
+				var isPublished = isSchedulePublished(scheduleDay.DateOnlyAsPeriod.DateOnly, person);
 				if (isPublished || canViewUnpublished)
 				{
-					vm = Projection(scheduleDay, canViewConfidential,agentNameSetting);
+					vm = Projection(scheduleDay, canViewConfidential, agentNameSetting);
 				}
 
 				if (includeNote)
@@ -75,11 +75,10 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 					vm.InternalNotes = note != null
 						? note.GetScheduleNote(new NormalizeText())
 						: string.Empty;
-					if (_toggleManager.IsEnabled(Toggles.WfmTeamSchedule_DisplayAndEditPublicNote_44783))
-					{
-						var publicNotes = scheduleDay.PublicNoteCollection().FirstOrDefault();
-						vm.PublicNotes = publicNotes != null ? publicNotes.GetScheduleNote(new NormalizeText()) : String.Empty;
-					}
+
+					var publicNotes = scheduleDay.PublicNoteCollection().FirstOrDefault();
+					vm.PublicNotes = publicNotes != null ? publicNotes.GetScheduleNote(new NormalizeText()) : String.Empty;
+
 				}
 			}
 
@@ -135,8 +134,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				{
 					DayOffName = dayOff != null ? dayOff.Description.Name : "",
 					Start = TimeZoneInfo.ConvertTimeFromUtc(dayOffStart, userTimeZone).ToGregorianDateTimeString().Replace("T", " ").Remove(16),
-					End = TimeZoneInfo.ConvertTimeFromUtc(dayOffEnd,userTimeZone).ToGregorianDateTimeString().Replace("T", " ").Remove(16),
-					Minutes = (int) dayOffEnd.Subtract(dayOffStart).TotalMinutes
+					End = TimeZoneInfo.ConvertTimeFromUtc(dayOffEnd, userTimeZone).ToGregorianDateTimeString().Replace("T", " ").Remove(16),
+					Minutes = (int)dayOffEnd.Subtract(dayOffStart).TotalMinutes
 				};
 			}
 
@@ -155,7 +154,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 					var description = isPayloadAbsence
 						? (isAbsenceConfidential && !canViewConfidential
 							? ConfidentialPayloadValues.TranslatedDescription(_userTextTranslator)
-							: ((IAbsence) layer.Payload).Description)
+							: ((IAbsence)layer.Payload).Description)
 						: layer.DisplayDescription();
 					var matchedPersonalLayers = _projectionHelper.GetMatchedPersonalShiftLayers(scheduleDay, layer);
 					if (_projectionHelper.GetMatchedShiftLayerIds(scheduleDay, layer).Count > 1
@@ -234,14 +233,14 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 					var isPayloadAbsence = layer.Payload is IAbsence;
 					var isOvertime = person.Id == _loggedOnUser.CurrentUser().Id &&
 									 (layer.DefinitionSet != null && layer.DefinitionSet.MultiplicatorType == MultiplicatorType.Overtime);
-					var isAbsenceConfidential = isPayloadAbsence && ((IAbsence) layer.Payload).Confidential;
+					var isAbsenceConfidential = isPayloadAbsence && ((IAbsence)layer.Payload).Confidential;
 					var startDateTimeInUserTimeZone = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.StartDateTime, userTimeZone);
 					var endDateTimeInUserTimeZone = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.EndDateTime, userTimeZone);
 
 					var description = isPayloadAbsence
 						? (isAbsenceConfidential && !isPermittedToViewConfidential
 							? ConfidentialPayloadValues.TranslatedDescription(_userTextTranslator)
-							: ((IAbsence) layer.Payload).Description)
+							: ((IAbsence)layer.Payload).Description)
 						: layer.DisplayDescription();
 					var expectedTime = string.Format(CultureInfo.CurrentCulture, "{0} - {1}",
 						startDateTimeInUserTimeZone.ToShortTimeString(), endDateTimeInUserTimeZone.ToShortTimeString());
@@ -256,7 +255,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 							: layer.DisplayColor().ToHtml(),
 						Start = startDateTimeInUserTimeZone,
 						End = endDateTimeInUserTimeZone,
-						LengthInMinutes = (int) endDateTimeInUserTimeZone.Subtract(startDateTimeInUserTimeZone).TotalMinutes,
+						LengthInMinutes = (int)endDateTimeInUserTimeZone.Subtract(startDateTimeInUserTimeZone).TotalMinutes,
 						IsAbsenceConfidential = isAbsenceConfidential,
 						TitleTime = expectedTime,
 						IsOvertime = isOvertime
@@ -321,10 +320,10 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			return null;
 		}
 
-		private static bool isSchedulePublished(DateOnly date,IPerson person)
+		private static bool isSchedulePublished(DateOnly date, IPerson person)
 		{
 			var workflowControlSet = person.WorkflowControlSet;
-			if(workflowControlSet == null)
+			if (workflowControlSet == null)
 				return false;
 			return workflowControlSet.SchedulePublishedToDate.HasValue &&
 				   workflowControlSet.SchedulePublishedToDate.Value >= date.Date;

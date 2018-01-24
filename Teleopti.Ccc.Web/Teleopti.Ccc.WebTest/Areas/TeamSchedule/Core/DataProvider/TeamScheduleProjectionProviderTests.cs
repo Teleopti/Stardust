@@ -159,7 +159,6 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 		[Test]
 		public void ShouldFetchPublicNote()
 		{
-			_toggleManager.Enable(Toggles.WfmTeamSchedule_DisplayAndEditPublicNote_44783);
 			var date = new DateOnly(2015, 01, 01);
 			var timezoneChina = TimeZoneInfoFactory.ChinaTimeZoneInfo();
 
