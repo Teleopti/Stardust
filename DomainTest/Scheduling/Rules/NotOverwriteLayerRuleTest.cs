@@ -18,7 +18,6 @@ using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.IocCommon;
 using System.Threading;
-using Teleopti.Ccc.Domain.Security.Principal;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 {
@@ -271,7 +270,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
 			var result = _target.Validate(ranges, scheduleDays);
 
-			var currentUiCulture = Thread.CurrentThread.CurrentUICulture;
+			var currentUiCulture = Thread.CurrentThread.CurrentCulture;
 
 			result.Single().Message.Should().Contain(overlapPeriod.TimePeriod(timezone).ToShortTimeString(currentUiCulture));
 		}

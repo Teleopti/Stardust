@@ -1075,7 +1075,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			personAssignment.AddActivity(stickyActivity, stickyActivityPeriod);
 			personAssignment.AddActivity(normalActivity,normalActivityPeriod);
 			
-			var loggedOnCulture = Thread.CurrentThread.CurrentUICulture;
+			var loggedOnCulture = Thread.CurrentThread.CurrentCulture;
 			var loggedOnTimezone = person.PermissionInformation.DefaultTimeZone();
 
 			var stickyActvityTimePeriod = stickyActivityPeriod.TimePeriod(loggedOnTimezone);
@@ -1134,7 +1134,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			personAssignment.AddActivity(stickyActivity,stickyActivityPeriod);
 			personAssignment.AddPersonalActivity(normalActivity,normalActivityPeriod);
 
-			var loggedOnCulture = Thread.CurrentThread.CurrentUICulture;
+			var loggedOnCulture = Thread.CurrentThread.CurrentCulture;
 			var loggedOnTimezone = person.PermissionInformation.DefaultTimeZone();
 
 
