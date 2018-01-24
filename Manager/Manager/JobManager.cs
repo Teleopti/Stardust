@@ -18,18 +18,23 @@ namespace Stardust.Manager
 		private readonly ManagerConfiguration _managerConfiguration;
 		private readonly IWorkerNodeRepository _workerNodeRepository;
 		private readonly NodeManager _nodeManager;
-		private static readonly ILog ManagerLogger = LogManager.GetLogger("Stardust.ManagerLog");
+
+		private readonly ILog ManagerLogger;
+		//private static readonly ILog ManagerLogger = LogManager.GetLogger("Stardust.ManagerLog");
 
 		public JobManager(IJobRepository jobRepository,
 		                  IWorkerNodeRepository workerNodeRepository,
 		                  ManagerConfiguration managerConfiguration,
 						  JobPurgeTimer jobPurgeTimer,
-						  NodePurgeTimer nodePurgeTimer, NodeManager nodeManager)
+						  NodePurgeTimer nodePurgeTimer, 
+						  NodeManager nodeManager,
+						  ILog logger)
 		{
 			_jobRepository = jobRepository;
 			_workerNodeRepository = workerNodeRepository;
 			_managerConfiguration = managerConfiguration;
 			_nodeManager = nodeManager;
+			ManagerLogger = logger;
 
 			_checkAndAssignJob.Elapsed += AssignJobToWorkerNodes_Elapsed;
 			_checkAndAssignJob.Interval = _managerConfiguration.CheckNewJobIntervalSeconds*1000;

@@ -1,5 +1,6 @@
 using System.Configuration;
 using Autofac;
+using log4net;
 using ManagerTest.Fakes;
 using Stardust.Manager;
 using Stardust.Manager.Helpers;
@@ -31,6 +32,7 @@ namespace ManagerTest.Attributes
 			builder.RegisterType<FakeHttpSender>().As<IHttpSender>().SingleInstance();
 			builder.RegisterType<JobPurgeTimerFake>().As<JobPurgeTimer>().SingleInstance();
 			builder.RegisterType<NodePurgeTimerFake>().As<NodePurgeTimer>().SingleInstance();
+			builder.Register(c => new FakeLogger()).As<FakeLogger>().As<ILog>().SingleInstance();
 		}
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Autofac.Integration.WebApi;
+using log4net;
 using Stardust.Manager.Helpers;
 using Stardust.Manager.Interfaces;
 using Stardust.Manager.Policies;
@@ -33,6 +34,9 @@ namespace Stardust.Manager
 			builder.RegisterType<WorkerNodeRepository>().As<IWorkerNodeRepository>().SingleInstance();
 
 			builder.RegisterApiControllers(typeof(ManagerController).Assembly);
+			//			ILog ManagerLogger = LogManager.GetLogger("Stardust.ManagerLog");
+//			builder.RegisterInstance(ManagerLogger).SingleInstance();
+			builder.Register(c => LogManager.GetLogger("Stardust.ManagerLog"));
 		}
 	}
 }

@@ -100,6 +100,7 @@
     <Compile Include="Database\SchemaVersionInformation.cs" />
     <Compile Include="Fakes\FakeHttpSender.cs" />
     <Compile Include="Fakes\FakeJobRepository.cs" />
+    <Compile Include="Fakes\FakeLogger.cs" />
     <Compile Include="Fakes\FakeWorkerNodeRepository.cs" />
     <Compile Include="Fakes\JobPurgeTimerFake.cs">
       <SubType>Component</SubType>

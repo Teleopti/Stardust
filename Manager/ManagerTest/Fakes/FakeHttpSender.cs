@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Runtime.Remoting.Messaging;
 using System.Threading.Tasks;
 using Stardust.Manager.Interfaces;
 
@@ -10,8 +11,11 @@ namespace ManagerTest.Fakes
 {
 	public class FakeHttpSender : IHttpSender
 	{
+		public bool FailPostAsync;
+
 		public FakeHttpSender()
 		{
+			FailPostAsync = false;
 			BusyNodesUrl = new List<string>();
 			CallToWorkerNodes = new List<string>();
 		}
@@ -23,6 +27,11 @@ namespace ManagerTest.Fakes
 		public Task<HttpResponseMessage> PostAsync(Uri url,
 		                                           object data)
 		{
+			if (FailPostAsync)
+			{
+				throw new AggregateException(new HttpRequestException("",  new WebException("The remote name could not be resolved: 'x'")));
+			}
+				
 			return ReturnOkOrConflict(url, true);
 		}
 

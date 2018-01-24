@@ -1,5 +1,6 @@
 using System.Configuration;
 using Autofac;
+using log4net;
 using ManagerTest.Fakes;
 using Stardust.Manager;
 using Stardust.Manager.Helpers;
@@ -28,7 +29,7 @@ namespace ManagerTest.Attributes
 			builder.RegisterType<WorkerNodeRepository>().As<IWorkerNodeRepository>().SingleInstance();
 
 			builder.RegisterType<ManagerController>();
-
+			builder.RegisterType<FakeLogger>().As<ILog>().SingleInstance();
 			builder.RegisterType<JobManager>().SingleInstance();
 			builder.RegisterType<NodeManager>().SingleInstance();
 			builder.RegisterType<JobPurgeTimerFake>().As<JobPurgeTimer>().SingleInstance();

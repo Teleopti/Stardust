@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Threading;
 using log4net;
 using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
@@ -19,14 +21,16 @@ namespace Stardust.Manager
 		private readonly RetryPolicy _retryPolicy;
 		private readonly IHttpSender _httpSender;
 		private readonly JobRepositoryCommandExecuter _jobRepositoryCommandExecuter;
+		private readonly ILog ManagerLogger;
 		private readonly object _requeueJobLock = new object();
 		private readonly object _assigningJob = new object();
-		private static readonly ILog ManagerLogger = LogManager.GetLogger("Stardust.ManagerLog");
+		//private static readonly ILog ManagerLogger = LogManager.GetLogger("Stardust.ManagerLog");
 
 		public JobRepository(ManagerConfiguration managerConfiguration,
 		                     RetryPolicyProvider retryPolicyProvider,
 		                     IHttpSender httpSender, 
-							 JobRepositoryCommandExecuter jobRepositoryCommandExecuter)
+							 JobRepositoryCommandExecuter jobRepositoryCommandExecuter,
+							ILog managerLogger)
 		{
 			if (retryPolicyProvider == null)
 			{
@@ -41,6 +45,7 @@ namespace Stardust.Manager
 			_connectionString = managerConfiguration.ConnectionString;
 			_httpSender = httpSender;
 			_jobRepositoryCommandExecuter = jobRepositoryCommandExecuter;
+			ManagerLogger = managerLogger;
 
 			_retryPolicy = retryPolicyProvider.GetPolicy();
 		}
@@ -373,32 +378,50 @@ namespace Stardust.Manager
 			}
 		}
 
-
-
 		private void AssignJobToWorkerNodeWorker(Uri availableNode)
 		{
 			ManagerLogger.Info("starting the assignment process");
 			lock (_assigningJob)
 			{
-				try
+				using (var sqlConnection = new SqlConnection(_connectionString))
 				{
-					using (var sqlConnection = new SqlConnection(_connectionString))
+					var responseCodeOk = false;
+					JobQueueItem jobQueueItem = null;
+					try
 					{
 						sqlConnection.OpenWithRetry(_retryPolicy);
-						var jobQueueItem = _jobRepositoryCommandExecuter.AcquireJobQueueItem(sqlConnection);
+						jobQueueItem = _jobRepositoryCommandExecuter.AcquireJobQueueItem(sqlConnection);
 						if (jobQueueItem == null)
 						{
 							sqlConnection.Close();
 							ManagerLogger.Info("no job acquired for node " + availableNode);
 							return;
 						}
+
 						ManagerLogger.Info("acquired job with id  " + jobQueueItem.JobId + " for node " + availableNode);
 						var builderHelper = new NodeUriBuilderHelper(availableNode);
 						var urijob = builderHelper.GetJobTemplateUri();
 						ManagerLogger.Info("posting the job to the node");
-						var response = _httpSender.PostAsync(urijob, jobQueueItem).Result;
-						ManagerLogger.Info( response?.ReasonPhrase +  " response from the node");
-						if (response != null && (response.IsSuccessStatusCode || response.StatusCode.Equals(HttpStatusCode.BadRequest)))
+						HttpResponseMessage response = null;
+						try
+						{
+							response = _httpSender.PostAsync(urijob, jobQueueItem).Result;
+						}
+						catch (AggregateException aggregateException)
+						{
+							var nodeNotFound =
+								aggregateException.InnerExceptions.FirstOrDefault(e => e is HttpRequestException)?.InnerException is
+									WebException;
+
+							if (!nodeNotFound) throw;
+							ManagerLogger.Info($"Send job to node:{availableNode} failed. {aggregateException.Message}", aggregateException);
+							return;
+						}
+						
+						ManagerLogger.Info(response?.ReasonPhrase + " response from the node");
+						responseCodeOk = response != null &&
+						                 (response.IsSuccessStatusCode || response.StatusCode.Equals(HttpStatusCode.BadRequest));
+						if (responseCodeOk)
 						{
 							var sentToWorkerNodeUri = availableNode.ToString();
 							ManagerLogger.Info("node is ok fix the db now");
@@ -420,6 +443,17 @@ namespace Stardust.Manager
 						else
 						{
 							ManagerLogger.Info("response from the node was not ok " + response?.ReasonPhrase);
+						}
+					}
+					catch (Exception ex)
+					{
+						this.Log().Info($"Failed for node {availableNode} {ex.Message}");
+						throw;
+					}
+					finally
+					{
+						if (!responseCodeOk && jobQueueItem != null)
+						{
 							using (var sqlTransaction = sqlConnection.BeginTransaction())
 							{
 								_jobRepositoryCommandExecuter.TagQueueItem(jobQueueItem.JobId, sqlConnection, sqlTransaction);
@@ -427,11 +461,6 @@ namespace Stardust.Manager
 							}
 						}
 					}
-				}
-				catch 
-				{
-					this.Log().Info($"Failed for node {availableNode}");
-					throw;
 				}
 			}
 		}

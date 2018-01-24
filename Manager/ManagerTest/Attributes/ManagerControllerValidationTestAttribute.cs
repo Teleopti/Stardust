@@ -1,5 +1,7 @@
 ﻿using Autofac;
 using Autofac.Integration.WebApi;
+using log4net;
+using log4net.Core;
 using ManagerTest.Fakes;
 using Stardust.Manager;
 using Stardust.Manager.Interfaces;
@@ -24,6 +26,7 @@ namespace ManagerTest.Attributes
 			builder.RegisterType<RetryPolicyProvider>().SingleInstance();
 			builder.RegisterType<JobPurgeTimerFake>().As<JobPurgeTimer>().SingleInstance();
 			builder.RegisterType<NodePurgeTimerFake>().As<NodePurgeTimer>().SingleInstance();
+			builder.RegisterType<FakeLogger>().As<ILog>().SingleInstance();
 		}
 	}
 } 

@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Net.Sockets;
+using log4net;
 using log4net.Config;
 using ManagerTest.Attributes;
 using ManagerTest.Fakes;
@@ -34,6 +35,7 @@ namespace ManagerTest
 		public JobRepositoryCommandExecuter JobRepositoryCommandExecuter;
 		public ManagerConfiguration ManagerConfiguration;
 		public TestHelper TestHelper;
+		public FakeLogger Logger;
 
 		private WorkerNode _workerNode;
 		private WorkerNode _workerNode2;
@@ -369,6 +371,60 @@ namespace ManagerTest
 					ret.Should().Be.EqualTo(1);
 				}
 			}
+		}
+		
+		[Test]
+		public void ShouldNotLogErrorWhenNodeDownOnPostAsync()
+		{
+			var jobQueueItem = new JobQueueItem
+			{
+				JobId = Guid.NewGuid(),
+				Name = "Name Test",
+				CreatedBy = "Created By Test",
+				Serialized = "Serialized Test",
+				Type = "Type Test"
+			};
+
+			WorkerNodeRepository.AddWorkerNode(_workerNode);
+
+			JobManager.AddItemToJobQueue(jobQueueItem);
+
+			FakeHttpSender.FailPostAsync = true;
+			JobManager.AssignJobToWorkerNodes();
+			JobRepository.GetAllItemsInJobQueue().Count.Should().Be(1);
+			JobRepository.GetAllJobs().Count.Should().Be(0);
+			Logger.InfoMessages.Any(l => l.Contains("The remote name could not be resolved")).Should().Be.True();
+			Logger.ErrorMessages.Should().Be.Empty();
+		}
+		
+		[Test]
+		public void ShouldHandleNodeDownTemporarilyOnPostAsync()
+		{
+			var jobQueueItem = new JobQueueItem
+			{
+				JobId = Guid.NewGuid(),
+				Name = "Name Test",
+				CreatedBy = "Created By Test",
+				Serialized = "Serialized Test",
+				Type = "Type Test"
+			};
+
+			WorkerNodeRepository.AddWorkerNode(_workerNode);
+			JobManager.AddItemToJobQueue(jobQueueItem);
+			FakeHttpSender.FailPostAsync = true;
+			
+			JobManager.AssignJobToWorkerNodes();
+			JobRepository.GetAllItemsInJobQueue().Count.Should().Be(1);
+			JobRepository.GetAllJobs().Count.Should().Be(0);
+			Logger.InfoMessages.Any(l => l.Contains("The remote name could not be resolved")).Should().Be.True();
+			Logger.ErrorMessages.Should().Be.Empty();
+			Logger.InfoMessages.Clear();
+			Logger.ErrorMessages.Clear();
+			FakeHttpSender.FailPostAsync = false;
+			
+			JobManager.AssignJobToWorkerNodes();
+			JobRepository.GetAllItemsInJobQueue().Count.Should().Be(0);
+			JobRepository.GetAllJobs().Count.Should().Be(1);
 		}
 	}
 }
