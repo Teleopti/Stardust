@@ -372,6 +372,7 @@
     <Compile Include="Helper\CellExtensions.cs" />
     <Compile Include="Infrastructure\Events\PublishInitializeReadModelEvent.cs" />
     <Compile Include="Infrastructure\Events\RequeueHangfireEvent.cs" />
+    <Compile Include="Infrastructure\IBeforePersist.cs" />
     <Compile Include="Infrastructure\PublishInitializeReadModelEventHandler.cs" />
     <Compile Include="Infrastructure\RequeueHangfireEventHandler.cs" />
     <Compile Include="InterfaceLegacy\Domain\IBadgeSetting.cs" />

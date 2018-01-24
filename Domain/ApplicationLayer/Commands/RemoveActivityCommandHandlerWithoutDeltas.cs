@@ -54,20 +54,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				return;
 			}
 
-			var mainShiftLayer = shiftLayer as MainShiftLayer;
-
-			var minOrderIndex = personAssignment.ShiftLayers.Min(layer =>
-			{
-				var layerAsMain = layer as MainShiftLayer;
-				return layerAsMain?.OrderIndex ?? int.MaxValue;
-			});
-
-			if (mainShiftLayer != null && mainShiftLayer.OrderIndex == minOrderIndex)
+			if (personAssignment.ShiftLayers.Count()==1)
 			{
 				command.ErrorMessages.Add(Resources.CannotDeleteBaseActivity);
 				return;
 			}
-			//scheduleDay.RemoveActivity(shiftLayer, false, command.TrackedCommandInfo);
+			
 			personAssignment.RemoveActivity(shiftLayer, false, command.TrackedCommandInfo);
 			dic.Modify(scheduleDay, NewBusinessRuleCollection.Minimum());
 			_scheduleDifferenceSaver.SaveChanges(scheduleRange.DifferenceSinceSnapshot(new DifferenceEntityCollectionService<IPersistableScheduleData>()), (ScheduleRange)scheduleRange);

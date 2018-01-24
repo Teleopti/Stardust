@@ -10,7 +10,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules.Performance
 {
-	[Ignore("#47649 Make sure no updates occur when adding new PA layers")]
 	public class NoUnnecessaryUpdatesWhenAddingLayerTest : ScheduleRangeConflictTest
 	{
 		private readonly DateOnly date = new DateOnly(2001, 1, 1);

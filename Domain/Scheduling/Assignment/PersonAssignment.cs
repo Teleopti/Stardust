@@ -8,13 +8,15 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Interfaces.Domain;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
+using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
 	public class PersonAssignment : VersionedAggregateRoot,
 									IPersonAssignment,
-									IExportToAnotherScenario
+									IExportToAnotherScenario,
+									IBeforePersist
 	{
 		private IList<ShiftLayer> _shiftLayers;
 		private IPerson _person;
@@ -745,6 +747,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			foreach (var overtimeLayer in personAssignmentSource.OvertimeActivities())
 			{
 				AddOvertimeActivity(overtimeLayer.Payload, overtimeLayer.Period, overtimeLayer.DefinitionSet, muteEvent);
+			}
+		}
+		
+		public virtual void Ping()
+		{
+			for (var orderIndex = 0; orderIndex < _shiftLayers.Count; orderIndex++)
+			{
+				_shiftLayers[orderIndex].OrderIndex = orderIndex;
 			}
 		}
 

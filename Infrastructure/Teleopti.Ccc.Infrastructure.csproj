@@ -623,6 +623,7 @@
     <Compile Include="UnitOfWork\CurrentAnalyticsUnitOfWorkFactory.cs" />
     <Compile Include="UnitOfWork\CurrentSchedulingSource.cs" />
     <Compile Include="UnitOfWork\DisableBusinessUnitFilter.cs" />
+    <Compile Include="UnitOfWork\EntityPinger.cs" />
     <Compile Include="UnitOfWork\ICurrentPreCommitHooks.cs" />
     <Compile Include="UnitOfWork\IPreCommitHook.cs" />
     <Compile Include="UnitOfWork\INHibernateConfigurationCache.cs" />

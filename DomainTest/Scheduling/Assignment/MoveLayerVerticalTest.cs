@@ -187,26 +187,5 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			scheduleDay.PersonAssignment().MainActivities().Last().Payload.Description.Name.Should().Be.EqualTo("first");
 		}
-
-		[Test]
-		public void ShouldNotReusePassedInLayer()
-		{
-			//setup an ass with two layers
-			var assignment = new PersonAssignment(new Person(), new Scenario("_"), DateOnly.Today).WithId();
-			assignment.AddActivity(new Activity("_"), new TimePeriod(10, 0, 11, 0));
-			assignment.AddActivity(new Activity("_"), new TimePeriod(10, 0, 11, 0));
-			assignment.ShiftLayers.ForEach(x => x.SetId(Guid.NewGuid()));
-
-			//clone the assignment....
-			var assignmentClone = assignment.EntityClone();
-			var layerToMove = assignmentClone.ShiftLayers.Last();
-
-			//....and use its layer when moving layer
-			assignment.MoveLayerUp(layerToMove);
-
-
-			assignment.ShiftLayers.Select(x => ((ShiftLayer) x).OrderIndex)
-				.Should().Have.SameSequenceAs(0, 1);
-		}
 	}
 }
