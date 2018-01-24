@@ -1,6 +1,34 @@
 ##===========
 ## Functions
 ##===========
+function Update-ToggleByDelta {
+    param(
+    [string]$DeltaToggleFile,
+    [string]$ToggleFile
+    )
+
+    $DeltaToggles = Get-Content -Path "$DeltaToggleFile" |
+    Where-Object { !$_.StartsWith("#") } |
+    ConvertFrom-Csv -Header ToggleName, Value -Delimiter "="
+
+    $Toggles = Get-Content -Path "$ToggleFile" |
+    Where-Object { !$_.StartsWith("#") } |
+    ConvertFrom-Csv -Header ToggleName, Value -Delimiter "="
+
+
+    foreach ($toggleDelta in $DeltaToggles){
+        foreach ($toggleRunTime in $Toggles){
+            if ($toggleDelta.ToggleName.Trim() -eq $toggleRunTime.ToggleName.Trim()) {
+                if ($toggleDelta.Value.Trim() -ne $toggleRunTime.Value.Trim()) {
+                    $newValue = $toggleDelta.ToggleName.trim() + " = " + $toggleDelta.Value.trim()
+                    $regex = "^" + $toggleRunTime.ToggleName.trim() + ".+"
+                    (Get-Content ($ToggleFile)) | Foreach-Object {$_ -replace $regex, $newValue} | Set-Content  ($ToggleFile)
+                }
+            }
+        }
+    }
+}
+
 function Get-ScriptDirectory
 {
     $Invocation = (Get-Variable MyInvocation -Scope 1).Value;
@@ -309,6 +337,8 @@ Try
     $fullPathsettingsFile =  $SupportToolFolder + "\" + $settingsFile
 	
 	$togglesFile = "toggles.txt"
+    $deltaToggleFile = "DeltaToggle.txt"
+
 	$fullPathTogglesFileForWeb =  "$directory\..\..\sitesroot\3\bin\FeatureFlags\" + $togglesFile
 	$fullPathTogglesFileForRta =  "$directory\..\..\sitesroot\5\bin\FeatureFlags\" + $togglesFile
 	
@@ -335,6 +365,7 @@ Try
 	
 	CopyFileFromBlobStorage -destinationFolder "$directory" -filename "$togglesFile"
     CopyFileFromBlobStorage -destinationFolder "$directory" -filename "$customStartupScript"
+    CopyFileFromBlobStorage -destinationFolder "$directory" -filename "$deltaToggleFile"
 
 	$tempTogglesFile = "$directory\" + $togglesFile
 	if (Test-Path "$tempTogglesFile") {
@@ -350,6 +381,11 @@ Try
 		CopyFileFromBlobStorage -destinationFolder "$directory\..\..\sitesroot\5\bin\FeatureFlags" -filename "$togglesFile"
 		Remove-Item "$tempTogglesFile"
 	}
+
+    if (Test-Path "$directory\$deltaToggleFile"){
+    Update-ToggleByDelta -DeltaToggleFile "$directory\$deltaToggleFile" -ToggleFile "$fullPathTogglesFileForWeb"
+    Update-ToggleByDelta -DeltaToggleFile "$directory\$deltaToggleFile" -ToggleFile "$fullPathTogglesFileForRta"
+    }
 	
 	SetDefaultSettings -fullPathsettingsFile "$fullPathsettingsFile" -DataSourceName "$DataSourceName"
 	
