@@ -1202,6 +1202,24 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		}
 
 		[Test]
+		public void ShouldReturnEmptyProjectionForPeopleWithWrongDate() {
+			var scheduleDate = new DateTime(2015, 01, 01, 00, 00, 00, DateTimeKind.Utc);
+			var scheduleDateOnly = new DateOnly(scheduleDate);
+			setUpPersonAndCulture(true);
+
+			var scenario = CurrentScenario.Has("Default");
+
+			var personAssignment1 = new PersonAssignment(personInUtc, scenario, scheduleDateOnly);
+			personAssignment1.AddActivity(new Activity("activity1"), new DateTimePeriod(scheduleDate.AddHours(7), scheduleDate.AddHours(18)));
+			ScheduleStorage.Add(personAssignment1);
+
+			var result = Target.CreateViewModelForPeople(
+				new[] { personInUtc.Id.Value }, new DateOnly());
+
+			result.Total.Should().Be(0);
+		}
+
+		[Test]
 		public void ShouldReturnCorrectDayScheduleSummaryForWorkingDay()
 		{
 			var scheduleDate = new DateOnly(2019, 12, 30);

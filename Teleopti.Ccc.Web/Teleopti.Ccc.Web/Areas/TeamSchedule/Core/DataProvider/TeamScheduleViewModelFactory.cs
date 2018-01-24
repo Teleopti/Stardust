@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 		public GroupScheduleViewModel CreateViewModelForPeople(Guid[] personIds, DateOnly scheduleDate)
 		{
-			if (personIds == null || !personIds.Any())
+			if (personIds == null || !personIds.Any() || scheduleDate.Date.Date == DateTime.MinValue)
 			{
 				return new GroupScheduleViewModel
 				{

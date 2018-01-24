@@ -31,7 +31,7 @@
 		};
 	}
 
-	teamscheduleCommandContainerCtrl.$inject = ['$q', '$filter', '$element', '$scope', 'guidgenerator', 'teamsToggles',  'teamsPermissions',  'CommandCheckService', 'ScheduleManagement', 'PersonSelection', 'TeamSchedule'];
+	teamscheduleCommandContainerCtrl.$inject = ['$q', '$filter', '$element', '$scope', 'guidgenerator', 'teamsToggles', 'teamsPermissions', 'CommandCheckService', 'ScheduleManagement', 'PersonSelection', 'TeamSchedule'];
 
 	function teamscheduleCommandContainerCtrl($q, $filter, $element, $scope, guidgenerator, teamsToggles, teamsPermissions, CommandCheckService, scheduleManagementSvc, personSelectionSvc, teamScheduleSvc) {
 		var vm = this;
@@ -50,31 +50,34 @@
 			}
 		});
 
-		vm.initCmd = function(cmd) {
-			if (vm.isSelectAll) {
-				teamScheduleSvc.searchSchedules(vm.getLoadAllParams()).then(function(result) {
-					vm.scheduleManagementSvc.resetSchedules(result.data.Schedules, moment(vm.date), vm.timezone);
-					personSelectionSvc.selectAllPerson(vm.scheduleManagementSvc.groupScheduleVm.Schedules);
-					personSelectionSvc.updatePersonInfo(vm.scheduleManagementSvc.groupScheduleVm.Schedules);
-					vm.setReady(true);
-				});
+		vm.initCmd = function (cmd) {
+			if (!vm.date) {
+				vm.setReady(true);
 			} else {
-				var selectedPersonIds = personSelectionSvc.getSelectedPersonIdList();
-				if (selectedPersonIds.length === 0) {
-					vm.setReady(true);
-				} else {
-					teamScheduleSvc.getSchedules(vm.date, selectedPersonIds).then(function(data) {
-						vm.scheduleManagementSvc.resetSchedules(data.Schedules, moment(vm.date), vm.timezone);
-						personSelectionSvc.syncProjectionSelection(vm.scheduleManagementSvc.schedules());
+				if (vm.isSelectAll) {
+					teamScheduleSvc.searchSchedules(vm.getLoadAllParams()).then(function (result) {
+						vm.scheduleManagementSvc.resetSchedules(result.data.Schedules, moment(vm.date), vm.timezone);
+						personSelectionSvc.selectAllPerson(vm.scheduleManagementSvc.groupScheduleVm.Schedules);
+						personSelectionSvc.updatePersonInfo(vm.scheduleManagementSvc.groupScheduleVm.Schedules);
 						vm.setReady(true);
 					});
+				} else {
+					var selectedPersonIds = personSelectionSvc.getSelectedPersonIdList();
+					if (selectedPersonIds.length === 0) {
+						vm.setReady(true);
+					} else {
+						teamScheduleSvc.getSchedules(vm.date, selectedPersonIds).then(function (data) {
+							vm.scheduleManagementSvc.resetSchedules(data.Schedules, moment(vm.date), vm.timezone);
+							personSelectionSvc.syncProjectionSelection(vm.scheduleManagementSvc.schedules());
+							vm.setReady(true);
+						});
+					}
 				}
 			}
-
 			vm.setActiveCmd(cmd);
 		};
 
-		vm.setReady = function(value) {
+		vm.setReady = function (value) {
 			vm.ready = value;
 		};
 
@@ -84,7 +87,7 @@
 
 		vm.getCurrentTimezone = function () { return vm.timezone; };
 
-		vm.convertTimeToCurrentUserTimezone = function(time) {
+		vm.convertTimeToCurrentUserTimezone = function (time) {
 			return $filter('timezone')(time, null, vm.timezone);
 		};
 
@@ -126,7 +129,7 @@
 			return teamsToggles.all()[toggle];
 		};
 
-		vm.activeCommandCheck = function(){
+		vm.activeCommandCheck = function () {
 			return CommandCheckService.getCommandCheckStatus();
 		};
 	}

@@ -4,7 +4,8 @@
 	var $compile,
 		$rootScope,
 		$httpBackend,
-		fakeCommandCheckService;
+		fakeCommandCheckService,
+		fakeTeamScheduleService;
 
 	beforeEach(module('wfm.templates'));
 	beforeEach(module('wfm.teamSchedule'));
@@ -19,6 +20,11 @@
 		$provide.service('CommandCheckService', function() {
 			return fakeCommandCheckService;
 		});
+
+		$provide.service('TeamSchedule', function () {
+			fakeTeamScheduleService = new FakeTeamScheduleService();
+		});
+		
 	}));
 
 	beforeEach(inject(function(_$rootScope_, _$compile_,  _$httpBackend_) {
@@ -81,6 +87,22 @@
 		expect(result).not.toBeNull();
 	});
 
+	it('should not invoke getSchedule when the selected date is null', function () {
+		var html = '<teamschedule-command-container date="curDate"></teamschedule-command-container>';
+		var scope = $rootScope.$new();
+		scope.curDate = null;
+		var target = $compile(html)(scope);
+		scope.$apply();
+
+		var innerScope = angular.element(target[0].querySelector('.teamschedule-command-container')).scope();
+
+		scope.$broadcast('teamSchedule.init.command', {
+			activeCmd: 'testCmd'
+		});
+		expect(innerScope.vm.activeCmd).toEqual('testCmd');
+		expect(fakeTeamScheduleService.getCurrentDate()).toEqual(null);
+	});
+
 	function FakeCommandCheckService() {
 		var fakeResponse = {
 			data: []
@@ -122,5 +144,18 @@
 		this.getCheckConfig = function() {
 			return fakeCheckConfig;
 		};
+	}
+	function FakeTeamScheduleService() {
+		var currentDate = null;
+		this.getSchedules = function (date, agents) {
+			currentDate = date;
+			return {
+				then: function (cb) {
+				}
+			}
+		}
+		this.getCurrentDate = function () {
+			return currentDate;
+		}
 	}
 });
