@@ -20,18 +20,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		[UnitOfWork, HttpGet, Route("api/PhoneStates")]
 		public virtual IHttpActionResult InfoFor()
 		{
-			return Ok(_build.Build(null));
-		}
-
-		[UnitOfWork, HttpGet, Route("api/PhoneState/InfoFor")]
-		public virtual IHttpActionResult InfoFor([FromUri] Params @params)
-		{
-			return Ok(_build.Build(@params.Ids));
-		}
-
-		public class Params
-		{
-			public Guid[] Ids { get; set; }
+			return Ok(_build.Build());
 		}
 	}
 }

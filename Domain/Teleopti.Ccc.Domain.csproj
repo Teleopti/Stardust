@@ -336,6 +336,7 @@
     <Compile Include="ApplicationLayer\Rta\ViewModels\HistoricalAdherenceDate.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\OrganizationViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\RtaTracerViewModelBuilder.cs" />
+    <Compile Include="ApplicationLayer\Rta\ViewModels\TeamCardViewModel.cs" />
     <Compile Include="ApplicationLayer\RunIntervalAttribute.cs" />
     <Compile Include="ApplicationLayer\SiteOpenHours\ISiteWithOpenHourProvider.cs" />
     <Compile Include="ApplicationLayer\SiteOpenHours\SiteOpenHourViewModels.cs" />
@@ -1417,9 +1418,7 @@
     <Compile Include="ApplicationLayer\Request\AnalyticsRequestUpdater.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStatesViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\SiteCardViewModelBuilder.cs" />
-    <Compile Include="ApplicationLayer\Rta\ViewModels\TeamCardViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\SiteCardViewModel.cs" />
-    <Compile Include="ApplicationLayer\Rta\ViewModels\TeamCardViewModel.cs" />
     <Compile Include="ApplicationLayer\ShiftCategory\AnalyticsShiftCategoryUpdater.cs" />
     <Compile Include="ApplicationLayer\Commands\AddPersonalActivityCommand.cs" />
     <Compile Include="ApplicationLayer\Activity\AnalyticsActivityUpdater.cs" />

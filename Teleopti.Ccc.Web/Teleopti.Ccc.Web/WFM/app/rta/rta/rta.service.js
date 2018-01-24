@@ -5,9 +5,9 @@
         .module('wfm.rta')
         .factory('rtaService', rtaService);
 
-    rtaService.$inject = ['rtaResourceFactory', '$q', 'Toggle'];
+    rtaService.$inject = ['rtaResourceFactory'];
 
-    function rtaService($resource, $q, toggles) {
+    function rtaService($resource) {
 
         var service = {
             getSkills: getSkills,
@@ -16,9 +16,7 @@
             getOrganizationForSkills: getOrganizationForSkills,
             agentStatesFor: agentStatesFor,
             getOverviewModelFor: getOverviewModelFor,
-            getTeamCardsFor: getTeamCardsFor,
             getSkillArea: getSkillArea,
-            getPhoneStates: getPhoneStates,
             forToday: forToday
         }
 
@@ -69,18 +67,6 @@
             return $resource('../api/AgentStates/Poll', {}, { query: { method: 'POST' } }).query(data).$promise;
         };
 
-        function getTeamCardsFor(data) {
-            return $resource('../api/Overview/TeamCards', {}, {
-                query: {
-                    method: 'POST',
-                    isArray: true
-                }
-            }).query({
-                skillIds: data.skillIds,
-                siteId: data.siteIds
-            }).$promise;
-        };
-
         function getOverviewModelFor(data) {
             return $resource('../api/Overview/SiteCards', {}, {
                 query: {
@@ -96,17 +82,6 @@
                 }
             }).query({
                 skillAreaId: data
-            }).$promise;
-        };
-
-        function getPhoneStates(data) {
-            return $resource('../api/PhoneState/InfoFor', {}, {
-                query: {
-                    method: 'GET',
-					isArray: true
-                }
-            }).query({
-                ids: data
             }).$promise;
         };
 

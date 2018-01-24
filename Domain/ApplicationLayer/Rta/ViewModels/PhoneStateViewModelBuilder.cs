@@ -20,10 +20,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			_stateGroups = stateGroups;
 		}
 
-		public IEnumerable<PhoneStateViewModel> Build(IEnumerable<Guid> ids)
+		public IEnumerable<PhoneStateViewModel> Build()
 		{
 			return _stateGroups.LoadAll()
-				.Where(s => ids == null || ids.Contains(s.Id.Value))
 				.Select(x => new PhoneStateViewModel
 				{
 					Id = x.Id.GetValueOrDefault(),

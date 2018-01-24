@@ -13,12 +13,10 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 	public class OverviewController : ApiController
 	{
 		private readonly SiteCardViewModelBuilder _sites;
-		private readonly TeamCardViewModelBuilder _teams;
 
-		public OverviewController(SiteCardViewModelBuilder sites, TeamCardViewModelBuilder teams)
+		public OverviewController(SiteCardViewModelBuilder sites)
 		{
 			_sites = sites;
-			_teams = teams;
 		}
 
 		public class SiteCardsParams
@@ -31,18 +29,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		public virtual IHttpActionResult SiteCards([FromBody] SiteCardsParams p)
 		{
 			return Ok(_sites.Build(p.skillIds, p.siteIds));
-		}
-
-		public class TeamCardsParams
-		{
-			public Guid[] skillIds;
-			public Guid siteId;
-		}
-
-		[ReadModelUnitOfWork, UnitOfWork, HttpPost, Route("api/Overview/TeamCards")]
-		public virtual IHttpActionResult TeamCards([FromBody] TeamCardsParams p)
-		{
-			return Ok(p.skillIds.EmptyIfNull().Any() ? _teams.Build(p.siteId, p.skillIds) : _teams.Build(p.siteId));
 		}
 	}
 }

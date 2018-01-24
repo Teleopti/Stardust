@@ -377,7 +377,6 @@
     <Compile Include="ApplicationLayer\Rta\Service\ExternalLogonPersonMappingTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\EmptyExistingStateTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\SiteCardViewModelBuilderTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\ViewModels\TeamCardViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\HistoricalAdherenceViewModelBuilder\BuildTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\HistoricalAdherenceViewModelBuilder\UserTimeZoneTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\PhoneStateViewModelBuilderTest.cs" />

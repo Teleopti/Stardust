@@ -70,7 +70,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<PhoneStateViewModelBuilder>().SingleInstance();
 			builder.RegisterType<SkillViewModelBuilder>().SingleInstance();
 			builder.RegisterType<SiteCardViewModelBuilder>().SingleInstance();
-			builder.RegisterType<TeamCardViewModelBuilder>().SingleInstance();
 			builder.RegisterType<RtaTracerViewModelBuilder>().SingleInstance();
 
 			builder.RegisterType<AdherencePercentageViewModelBuilder>().SingleInstance();
