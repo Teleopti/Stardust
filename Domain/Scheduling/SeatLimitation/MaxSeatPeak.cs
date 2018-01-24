@@ -19,28 +19,22 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 		public MaxSeatPeakData Fetch(ITeamBlockInfo teamBlockInfo, IEnumerable<ISkillDay> maxSeatSkillDaysToLookAt)
 		{
 			var period = teamBlockInfo.BlockInfo.BlockPeriod.Inflate(1);
-			var datePeak = new Dictionary<DateOnly, double>();
-			foreach (var date in period.DayCollection())
-			{
-				datePeak[date] = fetchForDate(date, maxSeatSkillDaysToLookAt);
-			}
+			var lookup = maxSeatSkillDaysToLookAt.ToLookup(s => s.CurrentDate);
+			var datePeak = period.DayCollection().ToDictionary(d => d, v => fetchForDate(v, lookup));
 			return new MaxSeatPeakData(datePeak);
 		}
 
 		public MaxSeatPeakData Fetch(IEnumerable<DateOnly> datesToConsider, IEnumerable<ISkillDay> maxSeatSkillDaysToLookAt)
 		{
-			var datePeak = new Dictionary<DateOnly, double>();
-			foreach (var date in datesToConsider)
-			{
-				datePeak[date] = fetchForDate(date, maxSeatSkillDaysToLookAt);
-			}
+			var lookup = maxSeatSkillDaysToLookAt.ToLookup(s => s.CurrentDate);
+			var datePeak = datesToConsider.ToDictionary(d => d, v => fetchForDate(v, lookup));
 			return new MaxSeatPeakData(datePeak);
 		}
 
-		private double fetchForDate(DateOnly dateOnly, IEnumerable<ISkillDay> maxSeatSkillDaysToLookAt)
+		private double fetchForDate(DateOnly dateOnly, ILookup<DateOnly, ISkillDay> maxSeatSkillDaysToLookAt)
 		{
 			var retValue = 0d;
-			foreach (var skillDay in maxSeatSkillDaysToLookAt.Where(x => x.CurrentDate == dateOnly))
+			foreach (var skillDay in maxSeatSkillDaysToLookAt[dateOnly])
 			{
 				var maxSeats = ((MaxSeatSkill)skillDay.Skill).MaxSeats;
 
