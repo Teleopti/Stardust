@@ -1,5 +1,4 @@
 ﻿@RTA
-@OnlyRunIfEnabled('RTA_RtaTracer_45597')
 Feature: Rta tracer
 	In order to manually verify the rta works
 	As a troubleshooter

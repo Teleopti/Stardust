@@ -101,27 +101,22 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<RtaToolViewModelBuilderFromAgentState>().SingleInstance();
 
-			if (_config.Toggle(Toggles.RTA_RtaTracer_45597))
+			if (_config.Args().ConfigReader.ReadValue("UseSafeRtaTracer", true))
 			{
-				if (_config.Args().ConfigReader.ReadValue("UseSafeRtaTracer", true))
-				{
-					builder.RegisterType<RtaTracer>().SingleInstance().ApplyAspects();
-					builder.RegisterType<SafeRtaTracer>().As<IRtaTracer>().SingleInstance();
-				}
-				else
-				{
-					builder.RegisterType<RtaTracer>().As<IRtaTracer>().SingleInstance().ApplyAspects();
-				}
+				builder.RegisterType<RtaTracer>().SingleInstance().ApplyAspects();
+				builder.RegisterType<SafeRtaTracer>().As<IRtaTracer>().SingleInstance();
 			}
 			else
-				builder.RegisterType<NoRtaTracer>().As<IRtaTracer>().SingleInstance();
+			{
+				builder.RegisterType<RtaTracer>().As<IRtaTracer>().SingleInstance().ApplyAspects();
+			}
 
 			builder.RegisterType<RtaTracerRefresher>().SingleInstance().ApplyAspects();
 			builder.RegisterType<RtaTracerReader>().As<IRtaTracerReader>().SingleInstance();
 			builder.RegisterType<RtaTracerWriter>().As<IRtaTracerWriter>().SingleInstance();
 			builder.RegisterType<RtaTracerConfigPersister>().As<IRtaTracerConfigPersister>().SingleInstance();
 			builder.RegisterType<RtaTracerSessionFactory>().SingleInstance();
-			
+
 			if (_config.Toggle(Toggles.RTA_ConfigurationValidationNotification_46933))
 				builder.RegisterType<ConfigurationValidator>().As<IConfigurationValidator>().SingleInstance();
 			else

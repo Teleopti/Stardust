@@ -328,7 +328,6 @@
     <Compile Include="ApplicationLayer\Rta\Tracer\IRtaTracerConfigPersister.cs" />
     <Compile Include="ApplicationLayer\Rta\Tracer\IRtaTracerReader.cs" />
     <Compile Include="ApplicationLayer\Rta\Tracer\IRtaTracerWriter.cs" />
-    <Compile Include="ApplicationLayer\Rta\Tracer\NoRtaTracer.cs" />
     <Compile Include="ApplicationLayer\Rta\Tracer\RtaTracer.cs" />
     <Compile Include="ApplicationLayer\Rta\Tracer\RtaTracerConfig.cs" />
     <Compile Include="ApplicationLayer\Rta\Tracer\RtaTracerLog.cs" />

@@ -14,7 +14,6 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.InfrastructureTest.Rta.Service
 {
 	[TestFixture]
-	[Toggle(Toggles.RTA_RtaTracer_45597)]
 	[PrincipalAndStateTest]
 	[Setting("RtaTracerBufferSize", 0)]
 	public class TracingTest : ISetup

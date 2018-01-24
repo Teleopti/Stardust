@@ -18,7 +18,6 @@
 		Request_RecalculatePersonAccountBalanceOnRequestConsumer_36850,
 		Settings_SetAgentDescription_23257,
 
-		RTA_RtaTracer_45597,
 		RTA_ViewHistoricalAhderence7DaysBack_46826,
 		RTA_ConfigurationValidationNotification_46933,
 		RTA_ApprovePreviousOOA_47230,

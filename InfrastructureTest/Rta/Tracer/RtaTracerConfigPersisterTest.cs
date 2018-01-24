@@ -12,7 +12,6 @@ using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta.Tracer
 {
-	[Toggle(Toggles.RTA_RtaTracer_45597)]
 	[AnalyticsDatabaseTest]
 	[Setting("RtaTracerBufferSize", 0)]
 	[Setting("UseSafeRtaTracer", false)]
