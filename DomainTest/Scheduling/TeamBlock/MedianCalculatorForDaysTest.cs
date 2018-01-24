@@ -159,7 +159,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             days.Add(today.AddDays(2), intervalData);
 
             var result = _target.CalculateMedian(days, 60, today);
-            Assert.AreEqual(result.Count, 7);
 			Assert.AreEqual(result[skillIntervalData0.Period.StartDateTime].ForecastedDemand, 2);
 			Assert.AreEqual(result[skillIntervalData1.Period.StartDateTime].ForecastedDemand, 5);
             Assert.AreEqual(result[skillIntervalData2.Period.StartDateTime].ForecastedDemand, 4.5);

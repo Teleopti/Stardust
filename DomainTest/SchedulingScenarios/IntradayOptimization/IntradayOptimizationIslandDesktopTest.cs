@@ -664,7 +664,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 		[TestCase(true, ExpectedResult = false)]
 		[TestCase(false, ExpectedResult = true)]
-		[Ignore("47645 to be fixed")]
 		public bool ShouldNotPlaceShiftOutsideOpenHours(bool isClosedOnWeekends)
 		{
 			var scenario = new Scenario();

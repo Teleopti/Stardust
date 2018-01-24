@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
 using Teleopti.Interfaces.Domain;
 
@@ -30,7 +31,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 						timeSpanKey = timeSpanKey.Add(TimeSpan.FromDays(-1));
 
 					if (intervalDateOnly == baseDate.AddDays(1))
+					{
+						var startTime = DateTime.SpecifyKind(returnListDateOnly.Date.Add(timeSpanKey.Add(TimeSpan.FromDays(1))), DateTimeKind.Utc);
+						var found = days.Values.Any(daysValue => daysValue.Values.Any(daysValueValue => startTime.Equals(daysValueValue.Period.StartDateTime)));
+						if (!found) continue;
 						timeSpanKey = timeSpanKey.Add(TimeSpan.FromDays(1));
+					}
 
 					if (!temp.TryGetValue(timeSpanKey, out var value))
 					{
