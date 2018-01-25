@@ -84,7 +84,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void VerifyLoadGraphById()
 		{
 			IPersonAssignment ass = CreateAggregateWithCorrectBusinessUnit();
-			PersistAndRemoveFromUnitOfWork(ass);
+			TestRepository(CurrUnitOfWork).Add(ass);
+			Session.Flush();
 
 			IPersonAssignment loaded = new PersonAssignmentRepository(UnitOfWork).LoadAggregate(ass.Id.Value);
 			Assert.AreEqual(ass.Id, loaded.Id);
@@ -95,8 +96,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldLoadGraphByKey()
 		{
 			IPersonAssignment ass = CreateAggregateWithCorrectBusinessUnit();
-			PersistAndRemoveFromUnitOfWork(ass);
-
+			new PersonAssignmentRepository(UnitOfWork).Add(ass);
+			Session.Flush();
+	
 			IPersonAssignment loaded = new PersonAssignmentRepository(UnitOfWork).LoadAggregate(new PersonAssignmentKey
 			{
 				Date = ass.Date,
@@ -157,8 +159,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				notToFindScenario, _dummyActivity, new DateTimePeriod(2006, 12, 31, 2007, 1, 1));
 
 			PersistAndRemoveFromUnitOfWork(notToFindScenario);
-			PersistAndRemoveFromUnitOfWork(agAssValid);
-			PersistAndRemoveFromUnitOfWork(agAssInvalid);
+			TestRepository(CurrUnitOfWork).Add(agAssValid);
+			TestRepository(CurrUnitOfWork).Add(agAssInvalid);
+			Session.Flush();
+			Session.Clear();
 			/////////////////////////////////////////////////////////////////////////////////
 
 			var retList = _rep.Find(searchPeriod, _dummyScenario).ToArray();
@@ -174,7 +178,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			IPersonAssignment agAssValid = PersonAssignmentFactory.CreateAssignmentWithMainShift(_dummyAgent,
 				_dummyScenario, _dummyActivity, new DateTimePeriod(new DateTime(2007, 1, 1, 0, 0, 0, DateTimeKind.Utc),
 					new DateTime(2007, 1, 2, 0, 0, 0, DateTimeKind.Utc)), _dummyCategory);
-			PersistAndRemoveFromUnitOfWork(agAssValid);
+			TestRepository(CurrUnitOfWork).Add(agAssValid);
+			Session.Flush();
 			new PersonRepository(new ThisUnitOfWork(UnitOfWork)).Remove(_dummyAgent);
 			PersistAndRemoveFromUnitOfWork(_dummyAgent);
 
@@ -213,9 +218,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					new DateTime(2007, 1, 2, 4, 0, 0, DateTimeKind.Utc)), _dummyCategory);
 
 			PersistAndRemoveFromUnitOfWork(notToFindScenario);
-			PersistAndRemoveFromUnitOfWork(agAssValid);
-			PersistAndRemoveFromUnitOfWork(agAssInvalid);
-			PersistAndRemoveFromUnitOfWork(agAssInvalid4);
+			TestRepository(CurrUnitOfWork).Add(agAssValid);
+			TestRepository(CurrUnitOfWork).Add(agAssInvalid);
+			TestRepository(CurrUnitOfWork).Add(agAssInvalid4);
+			Session.Flush();
+			Session.Clear();
+			
 
 			#endregion
 
@@ -254,9 +262,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					new DateTime(2007, 1, 2, 4, 0, 0, DateTimeKind.Utc)), _dummyCategory);
 
 			PersistAndRemoveFromUnitOfWork(notToFindScenario);
-			PersistAndRemoveFromUnitOfWork(agAssValid);
-			PersistAndRemoveFromUnitOfWork(agAssInvalid);
-			PersistAndRemoveFromUnitOfWork(agAssInvalid4);
+			TestRepository(CurrUnitOfWork).Add(agAssValid);
+			TestRepository(CurrUnitOfWork).Add(agAssInvalid);
+			TestRepository(CurrUnitOfWork).Add(agAssInvalid4);
+			Session.Flush();
+			Session.Clear();
 
 			#endregion
 
