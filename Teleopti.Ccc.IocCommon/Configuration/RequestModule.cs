@@ -71,11 +71,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SkillCombinationResourceReadModelValidator>().SingleInstance();
 			builder.RegisterType<ShiftTradePendingReasonsService>().As<IShiftTradePendingReasonsService>();
 			builder.RegisterType<ExpiredRequestValidator>().As<IExpiredRequestValidator>().SingleInstance();
-			
-			registerType
-				<IAbsenceRequestSynchronousValidator, AbsenceRequestSynchronousValidator,
-					AbsenceRequestSynchronousValidator40747ToggleOff>(builder,
-						Toggles.MyTimeWeb_ValidateAbsenceRequestsSynchronously_40747);
+
+			builder.RegisterType<AbsenceRequestSynchronousValidator>().As<IAbsenceRequestSynchronousValidator>()
+				.SingleInstance();
 			registerType
 				<IBusinessRuleConfigProvider, BusinessRuleConfigProvider, BusinessRuleConfigProvider25635ToggleOff>(builder,
 						Toggles.Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635);

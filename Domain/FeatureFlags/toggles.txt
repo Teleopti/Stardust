@@ -81,7 +81,6 @@ MyTimeWeb_ShiftTradeBoardNoReadModel_36662 = true
 MyTimeWeb_ShiftTradeOptimization_40792 = true
 MyTimeWeb_PreferenceForMobile_40265 = true
 MyTimeWeb_StudentAvailabilityForMobile_42498 = true
-MyTimeWeb_ValidateAbsenceRequestsSynchronously_40747 = true
 MyTimeWeb_ShowContractTime_41462 = true
 MyTimeWeb_ViewIntradayStaffingProbability_41608 = true
 MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913 = true

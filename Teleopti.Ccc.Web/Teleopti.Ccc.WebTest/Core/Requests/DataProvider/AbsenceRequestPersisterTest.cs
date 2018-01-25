@@ -36,7 +36,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 {
-	[TestFixture, RequestsTest, Toggle(Toggles.MyTimeWeb_ValidateAbsenceRequestsSynchronously_40747), Toggle(Toggles.Wfm_Requests_DenyRequestWhenAllSkillsClosed_46384)]
+	[TestFixture, RequestsTest, Toggle(Toggles.Wfm_Requests_DenyRequestWhenAllSkillsClosed_46384)]
 	public class AbsenceRequestPersisterTest : ISetup
 	{
 		public IPersonRequestRepository PersonRequestRepository;

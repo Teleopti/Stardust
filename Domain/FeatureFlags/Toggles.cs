@@ -27,7 +27,6 @@
 		MyTimeWeb_ShiftTradeOptimization_40792,
 		MyTimeWeb_PreferenceForMobile_40265,
 		MyTimeWeb_StudentAvailabilityForMobile_42498,
-		MyTimeWeb_ValidateAbsenceRequestsSynchronously_40747,
 		MyTimeWeb_ShowContractTime_41462,
 		MyTimeWeb_SortRequestList_40711,
 		MyTimeWeb_ViewIntradayStaffingProbability_41608,
