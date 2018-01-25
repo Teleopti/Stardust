@@ -37,6 +37,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		public FakeActivityRepository ActivityRepository;
 		public MutableNow Now;
 		public FakeUserTimeZone TimeZone;
+		public IStaffingCalculatorServiceFacade StaffingCalculatorServiceFacade;
 
 		private const int minutesPerInterval = 15;
 
@@ -956,7 +957,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var deviationWithReforecast = calculateAverageDeviation(actualPhoneStats, skillDayPhone);
 
-			vm.DataSeries.ActualStaffing.First().Should().Be.EqualTo(Math.Round(actualStaffingSkill1, 3));
+			Math.Round(vm.DataSeries.ActualStaffing.First().Value, 2).Should().Be.EqualTo(Math.Round(actualStaffingSkill1, 3));
 			vm.DataSeries.ActualStaffing.Last().Should().Be.EqualTo(null);
 			vm.DataSeries.ForecastedStaffing.First().Should().Be.EqualTo(skillDayPhone.SkillStaffPeriodCollection.First().FStaff);
 			vm.DataSeries.UpdatedForecastedStaffing.Last().Should().Be.EqualTo(vm.DataSeries.ForecastedStaffing.Last() * deviationWithReforecast);
@@ -1474,7 +1475,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 		private double getActualStaffing(ISkillDay skillDay, IList<SkillIntervalStatistics> actualCalls, int resolution)
 		{
-			var calculatorService = new StaffingCalculatorServiceFacade();
+			var calculatorService = StaffingCalculatorServiceFacade;
 			var skillData = skillDay.SkillDataPeriodCollection.First().ServiceAgreement;
 			var actualStaffingSkill1 = calculatorService.AgentsUseOccupancy(
 				skillData.ServiceLevel.Percent.Value,
