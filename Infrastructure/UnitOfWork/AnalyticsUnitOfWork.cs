@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		private readonly AnalyticsUnitOfWorkContext _context;
 		private readonly ISession _session;
-		private readonly NHibernateFilterManager _filterManager;
 		private ITransaction _transaction;
 		private IInitiatorIdentifier _initiator;
 
@@ -36,7 +35,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_context.Set(this);
 			_session = session;
 			_session.FlushMode = FlushMode.Manual;
-			_filterManager = new NHibernateFilterManager(session);
 		}
 
 		protected internal virtual ISession Session
@@ -50,7 +48,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public IDisposable DisableFilter(IQueryFilter filter)
 		{
-			return _filterManager.Disable(filter);
+			throw new NotImplementedException();
 		}
 
 		public IInitiatorIdentifier Initiator()
