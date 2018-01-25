@@ -4,10 +4,10 @@ using System.Linq;
 using Teleopti.Ccc.Domain;
 using log4net;
 using NHibernate;
+using NHibernate.Engine;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Common.Messaging;
-using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -81,8 +81,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				throw new DataSourceException($"Cannot merge transient root (of type {root.GetType()})");
 			try
 			{
-				if(root is IBeforePersistProcess uowHook)
-					uowHook.BeforePersist();
 				var merge = Session.Merge(root);
 				(root as IEventsRoot)?.CloneEventsAfterMerge(merge as AggregateRoot);
 				return merge;

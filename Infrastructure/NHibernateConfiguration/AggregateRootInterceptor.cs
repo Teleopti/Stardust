@@ -6,7 +6,6 @@ using NHibernate;
 using NHibernate.Collection;
 using NHibernate.Type;
 using NHibernate.Util;
-using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -46,16 +45,6 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		public override void AfterTransactionCompletion(ITransaction tx)
 		{
 			_entityStateRollbackInterceptor.AfterTransactionCompletion(tx);
-		}
-
-		public override void PreFlush(ICollection entities)
-		{
-			if (Iteration != InterceptorIteration.Normal)
-				return;
-			foreach (var uowHook in entities.OfType<IBeforePersistProcess>().ToArray())
-			{
-				uowHook.BeforePersist();
-			}
 		}
 
 		public InterceptorIteration Iteration { get; set; }
