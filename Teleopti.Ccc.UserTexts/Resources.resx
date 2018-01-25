@@ -17006,8 +17006,8 @@ Do you want to participate?</value>
     <comment>The peirod given has a start date that already occured.</comment>
   </data>
   <data name="ImportBpoSkillNotFound" xml:space="preserve">
-    <value>Skill with skill id:{0} not found.</value>
-    <comment>The skill is not found in the system</comment>
+    <value>Could not match imported skill to existing skill.</value>
+    <comment>The skill with specific skill id (given previously by the system) was no longer found in the system</comment>
   </data>
   <data name="ImportBpoNoDefaultResolutionForSkill" xml:space="preserve">
     <value>No default resolution found for skill: {0}.</value>
