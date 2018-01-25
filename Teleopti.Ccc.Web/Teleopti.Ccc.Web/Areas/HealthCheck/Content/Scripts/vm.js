@@ -19,12 +19,8 @@ define([
 		self.etlJobHistory = ko.observableArray();
 		self.readModelCheckStartDate = ko.observable();
 		self.readModelCheckEndDate = ko.observable();
-		self.readmodelCheckIsRunning = ko.observable(false);
-		self.readModelsFixIsRunning = ko.observable(false);
 		self.readModelCheckAndFixJobIsRunning = ko.observable(false);
 		self.reinitReadModelsJobIsRunning = ko.observable(false);
-		self.readModelCheckJobPollingResult = ko.observable('anything');
-		self.readModelFixJobPollingResult = ko.observable('anything');
 		self.readModelCheckAndFixJobPollingResult = ko.observable('anything');
 		self.reinitReadModelsJobPollingResult = ko.observable('anything');
 		self.logObjects = ko.observable();
@@ -37,29 +33,13 @@ define([
 
 		if (localStorageIsSupported) {
 			self.trackReadModelCheckId = ko.observable(localStorage.trackReadModelCheckId);
-			self.trackReadModelFixId = ko.observable(localStorage.trackReadModelFixId);
 			self.readModelCheckAndFixJobId = ko.observable(localStorage.readModelCheckAndFixJobId);
 			self.reinitReadModelsJobId = ko.observable(localStorage.reinitReadModelsJobId);
 		} else {
 			self.trackReadModelCheckId = ko.observable();
-			self.trackReadModelFixId = ko.observable();
 			self.readModelCheckAndFixJobId = ko.observable();
 			self.reinitReadModelsJobId = ko.observable();
 		}
-
-		self.getReadmodelCheckUrl = function (jobId) {
-			if (typeof jobId !== 'string') {
-				jobId = self.trackReadModelCheckId();
-			}
-			return self.getJobUrl(jobId);
-		};
-
-		self.getReadmodelFixUrl = function (jobId) {
-			if (typeof jobId !== 'string') {
-				jobId = self.trackReadModelFixId();
-			}
-			return self.getJobUrl(jobId);
-		};
 
 		self.getCheckAndFixJobUrl = function(jobId) {
 			if (typeof jobId !== 'string') {
@@ -99,25 +79,12 @@ define([
 		}
 
 		function pollCheckJob(jobId) {
-			self.readmodelCheckIsRunning(true);
-			self.readModelCheckJobPollingResult('anything');
 			pollJobStatus(jobId, function checkJobPollingDone(data) {
-				self.readModelCheckJobPollingResult(data);
 				if (data && data.Result) {
 					var job = JSON.parse(data.Serialized);
 					self.readModelCheckStartDate(job.StartDate.substr(0, 10));
 					self.readModelCheckEndDate(job.EndDate.substr(0, 10));
 				}
-				self.readmodelCheckIsRunning(false);
-			});
-		}
-
-		function pollFixJob(jobId) {
-			self.readModelsFixIsRunning(true);
-			self.readModelFixJobPollingResult('anything');
-			pollJobStatus(jobId, function fixJobPollingDone(data) {
-				self.readModelFixJobPollingResult(data);
-				self.readModelsFixIsRunning(false);
 			});
 		}
 
@@ -141,10 +108,6 @@ define([
 
 		if (self.trackReadModelCheckId()) {
 			pollCheckJob(self.trackReadModelCheckId());
-		}
-
-		if (self.trackReadModelFixId()) {
-			pollFixJob(self.trackReadModelFixId());
 		}
 
 		if (self.readModelCheckAndFixJobId()) {
@@ -182,30 +145,6 @@ define([
 			return subscription;
 		};
 
-		var checkReadModelFunc;
-		self.checkReadModel = function () {
-			var cb = function(id) {
-				self.trackReadModelCheckId(id);
-				if (localStorageIsSupported) {
-					localStorage.trackReadModelCheckId = id;
-				}
-				pollCheckJob(id);
-			};
-			checkReadModelFunc(cb);
-		};
-
-		var fixReadModelFunc;
-		self.fixReadModel = function () {
-			var cb = function(id) {
-				self.trackReadModelFixId(id);
-				if (localStorageIsSupported) {
-					localStorage.trackReadModelFixId = id;
-				}
-				pollFixJob(id);
-			};
-			fixReadModelFunc(cb);
-		};
-
 		var checkAndFixReadModelsFunc;
 		self.checkAndFixReadModels = function() {
 			var cb = function(id) {
@@ -218,8 +157,6 @@ define([
 			checkAndFixReadModelsFunc(cb);
 		};
 
-		var toggleIsEnabled;
-		self.HealthCheck_EasyValidateAndFixReadModels_39696 = ko.observable(false);
 
 		var reinitReadModelsFunc;
 		self.reinitReadModels = function () {
@@ -241,22 +178,14 @@ define([
 					domainType: 'ITeleoptiDiagnosticsInformation', businessUnitId: Teleopti.BusinessUnitId, datasource: Teleopti.DataSource
 				});
 				loadEtlHistory = options.loadEtlHistory;
-				checkReadModelFunc = options.requestReadModelCheck;
-				fixReadModelFunc = options.requestReadModelFix;
 				checkAndFixReadModelsFunc = options.checkAndFixReadModels;
-				toggleIsEnabled = options.toggleIsEnabled;
 				reinitReadModelsFunc = options.requestReinitReadModels;
 			}
 
 			if (loadEtlHistory) {
 				loadEtlHistory(true);
 			}
-			if (toggleIsEnabled) {
-				var toggleNameFor39696 = 'HealthCheck_EasyValidateAndFixReadModels_39696';
-				toggleIsEnabled(toggleNameFor39696, function(toggleData) {
-					self.HealthCheck_EasyValidateAndFixReadModels_39696(toggleData.IsEnabled);
-				});
-			}
+			
 		}
 
 		self.loadAllEtlJobHistory = function () {

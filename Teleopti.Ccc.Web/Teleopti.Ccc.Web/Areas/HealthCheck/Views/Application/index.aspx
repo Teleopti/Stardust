@@ -89,7 +89,6 @@ var identity = (ITeleoptiIdentity) CurrentTeleoptiPrincipal.Make().Current().Ide
 						</li>
 					</ul>
 					<button class="btn btn-default" data-bind="click: loadAllEtlJobHistory">Load all ETL job history from current week</button>
-					<!-- ko if: HealthCheck_EasyValidateAndFixReadModels_39696 -->
 					<h3>Validate &amp; fix readmodels</h3>
 					<div>
 						<!-- ko if: readModelCheckAndFixJobId() && !readModelCheckAndFixJobPollingResult() -->
@@ -117,56 +116,6 @@ var identity = (ITeleoptiIdentity) CurrentTeleoptiPrincipal.Make().Current().Ide
 						</div>
 						<!-- /ko -->
 					</div>
-					<!-- /ko -->
-					<!-- ko ifnot: HealthCheck_EasyValidateAndFixReadModels_39696 -->
-					<h3>Check read model</h3>
-					<div>
-						<!-- ko if: trackReadModelCheckId() && !readModelCheckJobPollingResult() -->
-						<p>Could not retrieve status of last check. See <a target="_blank" data-bind="attr: { href: getReadmodelCheckUrl() }">details</a> or start a new check below. </p>
-						<!-- /ko -->
-						<!-- ko if: trackReadModelCheckId() && readModelCheckJobPollingResult() && readmodelCheckIsRunning() -->
-						<p>Last check is <b>running</b>. See <a target="_blank" data-bind="attr: { href: getReadmodelCheckUrl() }">details</a>.</p>
-						<!-- /ko -->
-						<!-- ko if: trackReadModelCheckId() && readModelCheckJobPollingResult() && !readmodelCheckIsRunning() -->
-						<p>Last check has <b>finished</b>. See <a target="_blank" data-bind="attr: { href: getReadmodelCheckUrl() }">details</a>.</p>
-						<!-- /ko -->
-						<!-- ko if: !trackReadModelCheckId() || ( !readmodelCheckIsRunning() || !readModelCheckJobPollingResult() ) -->
-						<form class="form-inline">
-							<div class="form-group">
-								<label for="readmodelCheckStartDate">Start date</label>
-								<input id="readmodelCheckStartDate" class="datepicker" type="date" data-bind="value: readModelCheckStartDate"/>
-							</div>
-							<div class="form-group">
-								<label for="readmodelCheckEndDate">End date</label>
-								<input id="readmodelCheckEndDate" class="datepicker" type="date" data-bind="value: readModelCheckEndDate"/>
-							</div>
-							<button class="btn btn-primary" data-bind="click: checkReadModel">Start check</button>
-						</form>
-						<!-- /ko -->
-					</div>
-					<hr/>
-					<h4>Fix read model</h4>
-					<div>
-						<p>Fix invalid records in following tables: </p>
-						<ul>
-							<li>ReadModel.ScheduleProjectionReadOnly_check</li>
-							<li>ReadModel.PersonScheduleDay_check</li>
-							<li>ReadModel.ScheduleDay_check</li>
-						</ul>
-						<!-- ko if: trackReadModelFixId() && !readModelFixJobPollingResult() -->
-						<p>Could not retrieve status of last fix. See <a target="_blank" data-bind="attr: { href: getReadmodelFixUrl() }">details</a> or start a new fix below. </p>
-						<!-- /ko -->
-						<!-- ko if: trackReadModelFixId() && readModelFixJobPollingResult() && readModelsFixIsRunning() -->
-						<p>Fixing is <b>under way</b>. See <a target="_blank" data-bind="attr: { href: getReadmodelFixUrl() }">details</a>.</p>
-						<!-- /ko -->
-						<!-- ko if: trackReadModelFixId() && readModelFixJobPollingResult() && !readModelsFixIsRunning() -->
-						<p>Fixing has <b>finished</b>. See <a target="_blank" data-bind="attr: { href: getReadmodelFixUrl() }">details</a>.</p>
-						<!-- /ko -->
-						<!-- ko if: !trackReadModelFixId() || ( !readModelsFixIsRunning() || !readModelFixJobPollingResult() ) -->
-						<button class="btn btn-default" data-bind="click: fixReadModel">Fix</button>
-						<!-- /ko -->
-					</div>
-					<!-- /ko -->
 					
 					<details>
 						<summary>Re-initialize readmodels</summary>
