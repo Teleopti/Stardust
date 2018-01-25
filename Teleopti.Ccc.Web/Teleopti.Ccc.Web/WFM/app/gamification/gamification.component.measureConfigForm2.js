@@ -80,7 +80,7 @@
 				}
 
 				function checkValueOrder() {
-					if (!ctrl.valueDataType || !ctrl.valueOrder) {
+					if (angular.isUndefined(ctrl.valueDataType) || !ctrl.valueOrder) {
 						return;
 					}
 
