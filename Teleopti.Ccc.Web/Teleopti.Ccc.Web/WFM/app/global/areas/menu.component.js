@@ -57,7 +57,7 @@ function MenuController($state) {
 			name: 'reports'
 		},
 		{
-			i: 'mdi mdi-rotate-3d',
+			i: 'mdi mdi-account-switch',
 			name: 'staffingModule'
 		},
 		{
