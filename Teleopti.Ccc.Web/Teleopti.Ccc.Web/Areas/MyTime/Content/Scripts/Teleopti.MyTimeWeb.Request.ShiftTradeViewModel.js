@@ -55,7 +55,6 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 	self.isDayoffFiltered = ko.observable(false);
 	self.searchNameText = ko.observable();
 	self.refocusToNameSearch = null;
-	self.isShiftTradeScheduleNoReadModelEnabled = ko.observable(false);
 	self.showContractTime = Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ShowContractTime_41462');
 	self.allTeamsId = "allTeams";
 	self.allSitesId = "allSites";
@@ -963,10 +962,6 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
     self.previousDate = function () {
         self.IsLoadingWhenChangingDate(true);
 		self.changeRequestedDate(-1);
-	};
-
-	self.featureCheck = function () {
-		self.isShiftTradeScheduleNoReadModelEnabled(Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_ShiftTradePossibleTradedSchedulesNoReadModel_36211"));
 	};
 
 	self.setTimeFilters = function (hourTexts) {

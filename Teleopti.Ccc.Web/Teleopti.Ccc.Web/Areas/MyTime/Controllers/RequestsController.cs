@@ -223,8 +223,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				TimeSortOrder = filter.TimeSortOrder
 			};
 
-			var loadScheduleWithoutReadModel = data.TimeFilter == null && data.TimeSortOrder == null
-				&& _toggleManager.IsEnabled(Toggles.MyTimeWeb_ShiftTradePossibleTradedSchedulesNoReadModel_36211);
+			var loadScheduleWithoutReadModel = data.TimeFilter == null && data.TimeSortOrder == null;
 
 			return Json(loadScheduleWithoutReadModel
 				? _shiftTradeScheduleViewModelFactory.CreateViewModel(data)

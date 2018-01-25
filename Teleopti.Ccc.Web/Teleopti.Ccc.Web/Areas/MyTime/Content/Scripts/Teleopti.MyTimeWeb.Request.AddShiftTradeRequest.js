@@ -29,7 +29,6 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function($) {
 			if ((vm || '') == '') {
 				var ajax = new Teleopti.MyTimeWeb.Ajax();
 				vm = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel(ajax);
-				vm.featureCheck();
 				ko.cleanNode(elementToBind);
 				ko.applyBindings(vm, elementToBind);
 			}

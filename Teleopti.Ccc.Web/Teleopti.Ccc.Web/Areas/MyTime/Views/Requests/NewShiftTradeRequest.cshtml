@@ -165,7 +165,6 @@
 							<div class="hidden-md hidden-lg shift-trade-contract-time-mobile" data-bind="text: mySchedule().contractTime"></div>
 							<!--/ko-->
 						</td>
-						<!--ko if: isShiftTradeScheduleNoReadModelEnabled()-->
 						<td class="shift-trade-my-schedule">
 							<!--ko if:mySchedule().isFullDayAbsence-->
 							<div data-bind="foreach: mySchedule().layers">
@@ -194,21 +193,6 @@
 							<!--/ko-->
 							<!--/ko-->
 						</td>
-						<!--/ko-->
-						<!--ko if: !isShiftTradeScheduleNoReadModelEnabled()-->
-						<td class="shift-trade-my-schedule">
-							<div data-bind="foreach: mySchedule().layers">
-								<div class="shift-trade-layer-container floatleft">
-									<div class="shift-trade-layer add" data-bind="style: styleJson, tooltip: { title: tooltipText, html: true }, attr: { 'scheduleinfo': tooltipText() }"></div>
-								</div>
-							</div>
-							<!--ko if:mySchedule().isDayOff -->
-							<div class="shift-trade-layer-container floatleft shift-trade-dayoff">
-								<div class="dayoff" data-bind="text: mySchedule().dayOffName"></div>
-							</div>
-							<!--/ko-->
-						</td>
-						<!--/ko-->
 						<!--ko if:$data.showContractTime-->
 						<td class="hidden-xs hidden-sm shift-trade-contract-time">
 							<div data-bind="text: mySchedule().contractTime"></div>
@@ -316,7 +300,6 @@
 							<div class="hidden-md hidden-lg shift-trade-contract-time-mobile" data-bind="text: $data.mySchedule().contractTime"></div>
 							<!--/ko-->
 						</td>
-						<!--ko if: $root.isShiftTradeScheduleNoReadModelEnabled()-->
 						<td class="shift-trade-my-schedule">
 							<!--ko if:$data.mySchedule().isFullDayAbsence-->
 							<div data-bind="foreach: $data.mySchedule().layers">
@@ -345,21 +328,6 @@
 							<!--/ko-->
 							<!--/ko-->
 						</td>
-						<!--/ko-->
-						<!--ko if: !$root.isShiftTradeScheduleNoReadModelEnabled()-->
-						<td class="shift-trade-my-schedule">
-							<div data-bind="foreach: $data.mySchedule().layers">
-								<div class="shift-trade-layer-container floatleft">
-									<div class="shift-trade-layer add" data-bind="style: styleJson, tooltip: { title: tooltipText, html: true }, attr: { 'scheduleinfo': tooltipText() }"></div>
-								</div>
-							</div>
-							<!--ko if:$data.mySchedule().isDayOff -->
-							<div class="shift-trade-layer-container floatleft shift-trade-dayoff">
-								<div class="dayoff" data-bind="text: $data.mySchedule().dayOffName"></div>
-							</div>
-							<!--/ko-->
-						</td>
-						<!--/ko-->
 						<!--ko if:$root.showContractTime-->
 						<td class="hidden-xs hidden-sm shift-trade-contract-time">
 							<div data-bind="text: $data.mySchedule().contractTime"></div>
