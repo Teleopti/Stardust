@@ -138,9 +138,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 						}
 						catch (Exception ex) when (ex.InnerException is OptimisticLockException)
 						{
-							var innerException = ex.InnerException;
-							logOptimisticLockException(innerException, personRequestId);
-							throw innerException;
+							throw ex.InnerException;
 						}
 					});
 
@@ -220,14 +218,6 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 				TrackId = Guid.NewGuid(),
 				OperatedPersonId = _loggedOnUser.CurrentUser().Id.GetValueOrDefault()
 			};
-		}
-
-		private static void logOptimisticLockException(Exception ex, Guid personRequestId)
-		{
-			var optimisticLockException = (OptimisticLockException)ex;
-			if (optimisticLockException != null)
-				_logger.Warn(
-					$"Optimistic lock when cancelling request ({personRequestId}),details:{optimisticLockException.EntityName},{optimisticLockException.RootId}");
 		}
 	}
 }
