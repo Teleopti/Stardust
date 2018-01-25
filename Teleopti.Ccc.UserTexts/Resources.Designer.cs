@@ -340,7 +340,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An absence request has been denied from {0} to {1}..
+        ///   Looks up a localized string similar to An absence request {0} - {1} has been denied..
         /// </summary>
         public static string AbsenceRequestHasBeenDeniedDot {
             get {
@@ -31541,7 +31541,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A shift trade request {0} must be accepted again due to a schedule change from..
+        ///   Looks up a localized string similar to A shift trade request {0} must be accepted again due to a schedule change..
         /// </summary>
         public static string ShiftTradeRequestForOneDayHasBeenReferredDot {
             get {
@@ -31577,7 +31577,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A shift trade request {0} - {1} must be accepted again due to a schedule change from..
+        ///   Looks up a localized string similar to A shift trade request {0} - {1} must be accepted again due to a schedule change..
         /// </summary>
         public static string ShiftTradeRequestHasBeenReferredDot {
             get {

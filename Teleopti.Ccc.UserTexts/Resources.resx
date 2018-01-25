@@ -7855,7 +7855,7 @@ Weekday</value>
     <comment>Auto message from requests</comment>
   </data>
   <data name="AbsenceRequestHasBeenDeniedDot" xml:space="preserve">
-    <value>An absence request has been denied from {0} to {1}.</value>
+    <value>An absence request {0} - {1} has been denied.</value>
     <comment>Auto message from requests</comment>
   </data>
   <data name="Details" xml:space="preserve">
@@ -7875,7 +7875,7 @@ Weekday</value>
     <comment>Auto message from requests</comment>
   </data>
   <data name="ShiftTradeRequestHasBeenReferredDot" xml:space="preserve">
-    <value>A shift trade request {0} - {1} must be accepted again due to a schedule change from.</value>
+    <value>A shift trade request {0} - {1} must be accepted again due to a schedule change.</value>
     <comment>Auto message from requests</comment>
   </data>
   <data name="TextRequestHasBeenApprovedDot" xml:space="preserve">
@@ -10766,7 +10766,7 @@ These options are activated:
     <comment>A shift trade request for one day.</comment>
   </data>
   <data name="ShiftTradeRequestForOneDayHasBeenReferredDot" xml:space="preserve">
-    <value>A shift trade request {0} must be accepted again due to a schedule change from.</value>
+    <value>A shift trade request {0} must be accepted again due to a schedule change.</value>
     <comment>A shift trade request for one day must be accepted again.</comment>
   </data>
   <data name="ExternalResourceInUse" xml:space="preserve">
