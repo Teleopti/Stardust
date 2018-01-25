@@ -394,6 +394,8 @@
 		};
 
 		MeasureConfig.prototype.setBronzeBadgeThreshold = function (bronzeBadgeThreshold) {
+			if (angular.isUndefined(bronzeBadgeThreshold) || bronzeBadgeThreshold == this.bronzeBadgeThreshold) return;
+
 			$log.log(this.name + ': set bronze badge threshold to ' + bronzeBadgeThreshold);
 
 			var previous = this.bronzeBadgeThreshold;
@@ -459,6 +461,8 @@
 		};
 
 		MeasureConfig.prototype.setSilverBadgeThreshold = function (silverBadgeThreshold) {
+			if (angular.isUndefined(silverBadgeThreshold) || silverBadgeThreshold == this.silverBadgeThreshold) return;
+
 			$log.log(this.name + ': set silver badge threshold to ' + silverBadgeThreshold);
 
 			var previous = this.silverBadgeThreshold;
@@ -524,6 +528,8 @@
 		};
 
 		MeasureConfig.prototype.setGoldBadgeThreshold = function (goldBadgeThreshold) {
+			if (angular.isUndefined(goldBadgeThreshold) || goldBadgeThreshold == this.goldBadgeThreshold) return;
+
 			$log.log(this.name + ': set gold badge threshold to ' + goldBadgeThreshold);
 
 			var previous = this.goldBadgeThreshold;
