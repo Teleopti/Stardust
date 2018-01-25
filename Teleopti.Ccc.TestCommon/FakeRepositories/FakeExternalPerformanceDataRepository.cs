@@ -52,5 +52,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return _performanceDataList.Where(externalPerformanceData => period.Contains(externalPerformanceData.DateFrom)).ToList();
 		}
+
+		public ICollection<IExternalPerformanceData> Find(DateTime date, List<Guid> personIds, int performanceId)
+		{
+			return _performanceDataList.Where(x =>
+				x.DateFrom == date && personIds.Contains(x.PersonId) && x.ExternalPerformance.ExternalId == performanceId).ToList();
+		}
 	}
 }

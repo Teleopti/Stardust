@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -83,6 +84,22 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			result.Count.Should().Be.EqualTo(1);
 			result.ToList()[0].DateFrom.Should().Be.EqualTo(date2);
+		}
+
+		[Test]
+		public void ShouldFindExternalPerformanceData()
+		{
+			var date = new DateTime(2018, 01, 25, 0, 0, 0, DateTimeKind.Utc);
+			prepareRelatedData();
+			persistExternalPerformanceData(date);
+
+			var result = WithUnitOfWork.Get(() =>
+			{
+				var data = Target.Find(date, new List<Guid>{_person.Id.Value}, 1);
+				return data;
+			});
+
+			result.First().OriginalPersonId.Should().Be.EqualTo(_person.EmploymentNumber);
 		}
 
 		private void prepareRelatedData()
