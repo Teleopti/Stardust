@@ -93,7 +93,7 @@
 			<div class="con-flex" style="flex-basis: 80%!important">
 				<div style="height: 20px; position: relative">
 					<span ng-click="outOfAdherence.highlight = !outOfAdherence.highlight; openCard = !openCard"
-						  ng-repeat="outOfAdherence in vm.outOfAdherences2"
+						  ng-repeat="outOfAdherence in vm.recordedOutOfAdherences"
 						  ng-class="{'highlight': outOfAdherence.highlight}"
 						  class="rta-alarmline"
 						  ng-attr-style="height: 20px; background-color: #B22222; opacity: 1; left: {{outOfAdherence.Offset}}; width: {{outOfAdherence.Width}}; bottom: 0;"
@@ -112,13 +112,14 @@
 				Approved as In Adherence
 			</div>
 			<div class="con-flex" style="flex-basis: 80%!important">
+				
 				<div style="height: 20px; position: relative">
-						<span ng-repeat="foo in vm.foos"
-							  ng-click="foo.highlight = !foo.highlight"
+						<span ng-repeat="approved in vm.approvedAdherences"
+							  ng-click="approved.highlight = !approved.highlight"
 							  class="rta-approvedline"
-							  ng-class="{'highlight': foo.highlight}"
-							  ng-attr-style="height: 20px; background-color: #556B2F; opacity: 1; left: {{foo.Offset}}; width: {{foo.Width}}; bottom: 0;"
-							  data-starttime="{{foo.StartTime}}" data-endtime="{{foo.EndTime}}" role="button">
+							  ng-class="{'highlight': approved.highlight}"
+							  ng-attr-style="height: 20px; background-color: #556B2F; opacity: 1; left: {{approved.Offset}}; width: {{approved.Width}}; bottom: 0;"
+							  data-starttime="{{approved.StartTime}}" data-endtime="{{approved.EndTime}}" role="button">
 						</span>
 				</div>
 			</div>
@@ -128,7 +129,6 @@
 
 	<div class="con-row">
 		<div class="con-flex" style="margin-right: 5px">
-
 			<rta-card-panel open="openRecordedCard" left-border-color="'#66c2ff'">
 				<rta-card-panel-header>
 					Out of Adherence
@@ -152,8 +152,8 @@
 					</div>
 				</rta-card-panel-content>
 			</rta-card-panel>
-
 		</div>
+
 		<div class="con-flex x3">
 			<div class="con-row" ng-show="vm.showApprovePanel()" style="margin-bottom: 8px;">
 				<div class="con-flex panel material-depth-1" style="padding: 10px">

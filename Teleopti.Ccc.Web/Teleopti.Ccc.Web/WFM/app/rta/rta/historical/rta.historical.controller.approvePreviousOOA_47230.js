@@ -5,7 +5,7 @@
 
 	function RtaHistoricalController($http, $state, $stateParams, rtaService, $translate) {
 		var vm = this;
-
+		
 		vm.highlighted = {};
 		vm.diamonds = [];
 		vm.cards = [];
@@ -62,10 +62,10 @@
 			calculateOffset = makeOffsetCalculator(shiftInfo.timeWindowStart, shiftInfo.timeWindowSeconds);
 
 
-			vm.foos = [
+			vm.approvedAdherences = [
 				{
-					Width: calculateWidth(moment('2018-01-17 13:00'), moment('2018-01-17 15:00')),
-					Offset: calculateOffset(moment('2018-01-17 13:00')),
+					Width: calculateWidth(moment('2018-01-24 13:00'), moment('2018-01-24 15:00')),
+					Offset: calculateOffset(moment('2018-01-24 13:00')),
 					StartTime: '13:00:00',
 					EndTime: '15:00:00'
 				}];
@@ -89,7 +89,7 @@
 						return true;
 					return false;
 				});
-			vm.outOfAdherences2 = buildAgentOutOfAdherences(data);
+			vm.recordedOutOfAdherences = buildAgentOutOfAdherences(data);
 
 			vm.fullTimeline = buildTimeline(data.Timeline);
 
