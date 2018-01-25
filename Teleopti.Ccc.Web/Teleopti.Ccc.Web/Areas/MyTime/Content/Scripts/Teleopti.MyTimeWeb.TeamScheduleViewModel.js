@@ -5,7 +5,6 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 
 	self.showFabButton = Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_MobileResponsive_43826') && Teleopti.MyTimeWeb.Common.IsHostAMobile();
 
-	self.isTeamScheduleNoReadModelEnable = ko.observable(false);
 	self.hideFab = ko.observable(false);
 	self.menuIsVisible = ko.observable(false);
 
@@ -23,10 +22,6 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 
 	self.hasError = ko.observable(false);
 	self.errorMessage = ko.observable();
-
-	self.featureCheck = function () {
-		self.isTeamScheduleNoReadModelEnable(Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_TeamScheduleNoReadModel_36210"));
-	};
 
 	self.initializeShiftTrade = function () {
 		self.menuIsVisible(false);
@@ -150,7 +145,6 @@ Teleopti.MyTimeWeb.TeamScheduleViewModelFactory = {
 		Teleopti.MyTimeWeb.TeamScheduleDrawerMixin.call(vm);
 		Teleopti.MyTimeWeb.TeamScheduleViewModel.call(vm);
 		vm.initCurrentDate(Teleopti.MyTimeWeb.Portal.ParseHash().dateHash);
-		vm.featureCheck();
 
 		return vm;
 	}

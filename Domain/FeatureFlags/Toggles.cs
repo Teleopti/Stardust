@@ -22,7 +22,6 @@
 		RTA_ConfigurationValidationNotification_46933,
 		RTA_ApprovePreviousOOA_47230,
 		
-		MyTimeWeb_TeamScheduleNoReadModel_36210,
 		MyTimeWeb_ShiftTradePossibleTradedSchedulesNoReadModel_36211,
 		MyTimeWeb_ShiftTradeBoardNoReadModel_36662,
 		MyTimeWeb_ShiftTradeOptimization_40792,

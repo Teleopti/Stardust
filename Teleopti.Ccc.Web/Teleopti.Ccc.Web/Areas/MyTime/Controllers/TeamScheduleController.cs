@@ -53,26 +53,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[UnitOfWork]
 		public virtual ViewResult Index(DateOnly? date, Guid? id)
 		{
-			if (_toggleManager.IsEnabled(Toggles.MyTimeWeb_TeamScheduleNoReadModel_36210))
-			{
-				return View("TeamSchedulePartial", _teamScheduleViewModelFactory.CreateViewModel());
-			}
-
-			if (!date.HasValue)
-				date = _now.ServerDate_DontUse();
-
-			if (!id.HasValue)
-			{
-				var defaultTeam = _defaultTeamProvider.DefaultTeam(date.Value);
-				if (defaultTeam?.Id == null)
-				{
-					return View("NoTeamsPartial", model: date.Value.Date.ToString("yyyyMMdd"));
-				}
-
-				id = defaultTeam.Id;
-			}
-
-			return View("TeamSchedulePartialOriginal", _teamScheduleViewModelFactory.CreateViewModel(date.Value, id.Value));
+			return View("TeamSchedulePartial", _teamScheduleViewModelFactory.CreateViewModel());
 		}
 
 		[UnitOfWork]
@@ -108,9 +89,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				SearchNameText = filter.SearchNameText,
 				TimeSortOrder = filter.TimeSortOrder
 			};
-			var result = _toggleManager.IsEnabled(Toggles.MyTimeWeb_TeamScheduleNoReadModel_36210)
-				? _teamScheduleViewModelReworkedFactory.GetViewModelNoReadModel(data)
-				: _teamScheduleViewModelReworkedFactory.GetViewModel(data);
+			var result = _teamScheduleViewModelReworkedFactory.GetViewModelNoReadModel(data);
 			return Json(result);
 		}
 
@@ -124,11 +103,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 			if (defaultTeam?.Id != null)
 			{
-				return Json(new {DefaultTeam = defaultTeam.Id.Value}, JsonRequestBehavior.AllowGet);
+				return Json(new { DefaultTeam = defaultTeam.Id.Value }, JsonRequestBehavior.AllowGet);
 			}
 
-			Response.StatusCode = (int) HttpStatusCode.BadRequest;
-			return Json(new {Message = UserTexts.Resources.NoTeamsAvailable}, JsonRequestBehavior.AllowGet);
+			Response.StatusCode = (int)HttpStatusCode.BadRequest;
+			return Json(new { Message = UserTexts.Resources.NoTeamsAvailable }, JsonRequestBehavior.AllowGet);
 		}
 	}
 }

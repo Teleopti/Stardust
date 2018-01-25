@@ -63,11 +63,8 @@
                 </text>
             }
 
-            if (Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_TeamScheduleNoReadModel_36210")) {
-                Teleopti.MyTimeWeb.TeamScheduleNew.Init();
-            } else {
-                Teleopti.MyTimeWeb.TeamScheduleOld.Init();
-            }
+			Teleopti.MyTimeWeb.TeamScheduleNew.Init();
+
         });
 
         StoreDeviceInstanceToken = function(token) {
