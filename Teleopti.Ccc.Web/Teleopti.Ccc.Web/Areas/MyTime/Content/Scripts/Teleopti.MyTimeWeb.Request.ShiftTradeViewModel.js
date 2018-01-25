@@ -56,7 +56,6 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 	self.searchNameText = ko.observable();
 	self.refocusToNameSearch = null;
 	self.isShiftTradeScheduleNoReadModelEnabled = ko.observable(false);
-	self.isSiteFilterEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ShiftTradeFilterSite_40374');
 	self.showContractTime = Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ShowContractTime_41462');
 	self.allTeamsId = "allTeams";
 	self.allSitesId = "allSites";
@@ -409,12 +408,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 			self.dateChanged(true);
 			self.prepareLoad();
 			self.requestedDateInternal(value);
-
-			if (self.isSiteFilterEnabled) {
-				self.loadMySiteId(self.getFormattedDateForServiceCall());
-			} else {
-				self.loadMyTeamId(self.getFormattedDateForServiceCall());
-			}
+			self.loadMySiteId(self.getFormattedDateForServiceCall());
 		}
 	});
 
@@ -676,12 +670,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 	};
 
 	self.tryLoadAllAvialableTeams = function (date) {
-		if (self.isSiteFilterEnabled) {
-			self.loadTeamsUnderSite(self.selectedSite(), date);
-		}
-		else {
-			self.loadTeams(date);
-		}
+		self.loadTeamsUnderSite(self.selectedSite(), date);
 	}
 
 	self.loadMyTeamId = function (date) {

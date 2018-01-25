@@ -60,6 +60,7 @@ Background:
 	And there is a dayoff with
 	| Field | Value  |
 	| Name  | DayOff |
+	And I am englishspeaking swede
 
 Scenario: No access to make shift trade reuquests
 	Given there is a role with
@@ -340,7 +341,6 @@ Scenario: Show my full day absence
 	| Start time	| 08:00 |
 	| End time		| 16:00 |
 
-@OnlyRunIfDisabled('MyTimeWeb_ShiftTradeFilterSite_40374')
 Scenario: Default to my team
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -363,11 +363,10 @@ Scenario: Default to my team
 	| Shift category		| Day	           |
 	And the time is '2030-01-01'
 	When I view Add Shift Trade Request
-	Then the option 'The site/My team' should be selected
+	Then the option 'My team' should be selected
 	And I should see a possible schedule trade with 'OtherAgent'
 	And I should not see a possible schedule trade with 'OtherAgentNotInMyTeam'
 
-@OnlyRunIfEnabled('MyTimeWeb_ShiftTradeFilterSite_40374')
 Scenario: Change site
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -389,7 +388,6 @@ Scenario: Change site
 	Then the option for site filter 'Other site' should be selected
 	And I should see a possible schedule trade with 'OtherAgentNotInMySite'
 
-@OnlyRunIfDisabled('MyTimeWeb_ShiftTradeFilterSite_40374')
 Scenario: Change team
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -408,10 +406,9 @@ Scenario: Change team
 	And I view Add Shift Trade Request for date '2030-01-01'
 	And I should see a message text saying that no possible shift trades could be found
 	When I select the 'Other team'
-	Then the option 'The site/Other team' should be selected
+	Then the option 'Other team' should be selected
 	And I should see a possible schedule trade with 'OtherAgentNotInMyTeam'
 
-@OnlyRunIfDisabled('MyTimeWeb_ShiftTradeFilterSite_40374')
 Scenario: Change date and keep selected team
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -419,7 +416,7 @@ Scenario: Change date and keep selected team
 	And I view Add Shift Trade Request for date '2030-01-01'
 	When I select the 'Other team'
 	And I click on the next date
-	Then the option 'The site/Other team' should be selected
+	Then the option 'Other team' should be selected
 
 Scenario: Cannot trade shifts when teamless
 	Given I have the role 'Full access to mytime'

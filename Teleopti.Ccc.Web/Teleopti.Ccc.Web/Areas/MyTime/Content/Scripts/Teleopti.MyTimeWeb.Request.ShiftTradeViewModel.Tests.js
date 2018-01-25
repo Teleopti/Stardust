@@ -173,26 +173,6 @@
 		equal(result, true);
 	});
 
-	test("should go to the requeted date and load team id", function() {
-		var ajax = {
-			Ajax: function(options) {
-				if (options.url === "Requests/ShiftTradeRequestMyTeam") {
-					options.success(
-						"myTeamId"
-					);
-				}
-			}
-		};
-		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel(ajax);
-		viewModel.isSiteFilterEnabled = false;
-		var date = moment("12-25-1995", "MM-DD-YYYY");
-
-		viewModel.requestedDate(date);
-
-		equal(viewModel.requestedDateInternal().format("MM-DD-YYYY"), "12-25-1995");
-		equal(viewModel.myTeamId(), "myTeamId");
-	});
-
 	test("should go to next date", function () {
 		var ajax = {
 			Ajax: function(options) {

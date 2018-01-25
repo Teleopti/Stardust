@@ -40,7 +40,6 @@
 			</div>
 		</div>
 
-		<!-- ko if: isSiteFilterEnabled -->
 		<div class="col-sm-3 col-md-3 col-lg-2" data-bind="if: !noAnySiteToShow()">
 			<div class="schedule-filter-component">
 				<select id="Site-Picker" data-bind="foreach: availableSites, select2: { value: selectedSite } ">
@@ -48,9 +47,8 @@
 				</select>
 			</div>
 		</div>
-		<!-- /ko -->
 
-		<div class="col-sm-6 col-md-6 col-lg-3" data-bind="if: !noAnyTeamToShow(), css:{'col-sm-3 col-md-3 col-lg-2': isSiteFilterEnabled}">
+		<div class="col-sm-3 col-md-3 col-lg-2" data-bind="if: !noAnyTeamToShow()">
 			<div class="schedule-filter-component">
 				<select id="Team-Picker" data-bind="foreach: availableTeams, select2: { value: selectedTeam } ">
 					<option data-bind="text: text, value: id"></option>
@@ -58,7 +56,7 @@
 			</div>
 		</div>
 
-		<div class="col-sm-7 col-md-6 col-lg-4" data-bind="css:{'col-lg-3': isSiteFilterEnabled}">
+		<div class="col-sm-7 col-md-6 col-lg-3">
 			<div class="row">
 				<div class="col-xs-6" data-bind="visible: !isDetailVisible()">
 					<div class="dropdown filter-time-dropdown-button schedule-filter-component" data-bind="click: filterStartEndTimeClick, css:{'filteractived':isStartTimeFilterActived()}">

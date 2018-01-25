@@ -25,7 +25,6 @@
 		MyTimeWeb_TeamScheduleNoReadModel_36210,
 		MyTimeWeb_ShiftTradePossibleTradedSchedulesNoReadModel_36211,
 		MyTimeWeb_ShiftTradeBoardNoReadModel_36662,
-		MyTimeWeb_ShiftTradeFilterSite_40374,
 		MyTimeWeb_ShiftTradeOptimization_40792,
 		MyTimeWeb_PreferenceForMobile_40265,
 		MyTimeWeb_StudentAvailabilityForMobile_42498,
