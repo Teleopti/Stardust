@@ -2421,7 +2421,6 @@
     <Content Include="Areas\MyTime\Content\Images\arrow-right.png" />
     <Content Include="Areas\MyTime\Content\Images\ui-bg_glass_55_fbf9ee_1x400.png" />
     <Content Include="Areas\MyTime\Content\Images\ui-bg_glass_65_ffffff_1x400.png" />
-    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.TeamScheduleViewOld.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.RequestDetail.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.List.js" />
     <Content Include="Areas\Start\Content\Css\Site.css" />
@@ -2429,7 +2428,6 @@
     <Content Include="Areas\MyTime\Content\Images\main_content_bottom_bg.jpg" />
     <Content Include="Areas\Start\Content\Scripts\jquery.extensions.js" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Common.js" />
-    <Content Include="Areas\MyTime\Views\TeamSchedule\NoTeamsPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\TeamSchedule\NoPersonPeriodPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Preference\NoPersonPeriodPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Asm\Index.cshtml" />
@@ -2822,9 +2820,6 @@
     <Folder Include="Areas\Start\Views\Config\" />
     <Folder Include="Areas\TeamSchedule\Views\TeamScheduleData\" />
     <Folder Include="Core\Aop\Aspects\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Areas\MyTime\Views\TeamSchedule\TeamSchedulePartialOriginal.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\MyTime\Views\Settings\RegionalSettingsPartial.cshtml" />
