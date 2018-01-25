@@ -3367,15 +3367,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to delete the skill group.
-        /// </summary>
-        public static string AreYouSureYouWantToDeleteTheSkillGroup {
-            get {
-                return ResourceManager.GetString("AreYouSureYouWantToDeleteTheSkillGroup", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to delete this campaign?.
         /// </summary>
         public static string AreYouSureYouWantToDeleteThisCampaign {
@@ -3385,7 +3376,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to exit the skill group manager?.
+        ///   Looks up a localized string similar to You have unsaved skill groups. Are you sure you want to exit the skill group manager?.
         /// </summary>
         public static string AreYouSureYouWantToExitSGM {
             get {
