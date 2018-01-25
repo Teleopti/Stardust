@@ -120,7 +120,7 @@ ResourcePlanner_BreakPreferenceStartTimeByMax_46002 = RC
 ResourcePlanner_DayOffOptimizationIslands_47208 = true
 ResourcePlanner_XXL_47258 = RC
 ResourcePlanner_NoPytteIslands_47500 = RC
-ResourcePlanner_PrepareToRemoveExportSchedule_46576 = RC
+ResourcePlanner_PrepareToRemoveExportSchedule_46576 = true
 
 # From old Kittens team... #
 ETL_SpeedUpPersonPeriodNightly_38097 = true
