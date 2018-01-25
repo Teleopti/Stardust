@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using NHibernate;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Security;
@@ -71,6 +72,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				throw new PermissionException("Business unit is required");
 			if (root is IChangeInfo && ServiceLocatorForEntity.UpdatedBy.Person() == null)
 				throw new PermissionException("Identity is required");
+			if(root is IBeforePersistProcess uowHook)
+				uowHook.BeforePersist();
 			Session.SaveOrUpdate(root);
 		}
 

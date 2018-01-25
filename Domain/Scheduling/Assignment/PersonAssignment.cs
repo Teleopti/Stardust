@@ -15,7 +15,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
 	public class PersonAssignment : VersionedAggregateRoot,
 									IPersonAssignment,
-									IExportToAnotherScenario
+									IExportToAnotherScenario,
+									IBeforePersistProcess
 	{
 		private IList<ShiftLayer> _shiftLayers;
 		private IPerson _person;
@@ -748,8 +749,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				AddOvertimeActivity(overtimeLayer.Payload, overtimeLayer.Period, overtimeLayer.DefinitionSet, muteEvent);
 			}
 		}
-		
 
+		//DONT CALL THIS METHOD EXPLICITLY
+		public virtual void BeforePersist()
+		{
+			for (var i = 0; i < _shiftLayers.Count; i++)
+			{
+				_shiftLayers[i].OrderIndex = i;
+			}
+		}
+		
 		#region Equals
 
 		public override bool Equals(object obj)
