@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 		private readonly IPayrollPeopleLoader _payrollPeopleLoader;
 		private readonly IDomainAssemblyResolver _domainAssemblyResolver;
 		private readonly ITenantPeopleLoader _tenantPeopleLoader;
-		private readonly IStardustJobFeedback _stardustJobFeedback;
+		private readonly IStardustJobFeedback _stardustJobFeedback;		
 
 		public PayrollExportHandler(ICurrentUnitOfWork currentUnitOfWork,
 			IPayrollExportRepository payrollExportRepository, IPayrollResultRepository payrollResultRepository,
@@ -40,6 +40,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 			_domainAssemblyResolver = domainAssemblyResolver;
 			_tenantPeopleLoader = tenantPeopleLoader;
 			_stardustJobFeedback = stardustJobFeedback;
+			
 		}
 
 		public void Handle(RunPayrollExportEvent @event)
@@ -62,20 +63,24 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 			var personDtos = _personBusAssembler.CreatePersonDto(people, _tenantPeopleLoader);
 			try
 			{
-				payrollResult.XmlResult.SetResult(_payrollDataExtractor.Extract(payrollExport, @event, personDtos,
-					_serviceBusPayrollExportFeedback));
+				var result = _payrollDataExtractor.Extract(payrollExport, @event, personDtos, _serviceBusPayrollExportFeedback);
+				if(result != null)
+					payrollResult.XmlResult.SetResult(result);
 			}
 			catch (Exception exception)
 			{
 				_serviceBusPayrollExportFeedback.Error(@"An error occurred while running the payroll export.", exception);
 				throw;
 			}
-
-			_serviceBusPayrollExportFeedback.ReportProgress(100, "Payroll export finished.");
-			_serviceBusPayrollExportFeedback.Dispose();
-			_serviceBusPayrollExportFeedback = null;
-
-			AppDomain.CurrentDomain.AssemblyResolve -= _domainAssemblyResolver.Resolve;
+			finally
+			{
+				payrollResult.FinishedOk = true;
+				
+				_serviceBusPayrollExportFeedback.Dispose();
+				_serviceBusPayrollExportFeedback = null;
+	
+				AppDomain.CurrentDomain.AssemblyResolve -= _domainAssemblyResolver.Resolve;
+			}
 		}
 	}
 }

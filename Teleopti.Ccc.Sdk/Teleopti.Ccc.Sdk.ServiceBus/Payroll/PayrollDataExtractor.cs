@@ -33,8 +33,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 
 			if (selectedProcessor == null)
 			{
-				Logger.ErrorFormat("The selected payroll export processor was not found in the bus. (PayrollFormatId = {0})",
-					payrollExport.PayrollFormatId);
+				var processorNotFoundMessage = $"The selected payroll export processor was not found. (PayrollFormatId = {payrollExport.PayrollFormatId})";
+				Logger.ErrorFormat(processorNotFoundMessage);
+				var userErrorMessage = "Payroll export failed. The selected payroll export processor was not found.";
+				serviceBusPayrollExportFeedback.Error(userErrorMessage);
 				return null;
 			}
 
