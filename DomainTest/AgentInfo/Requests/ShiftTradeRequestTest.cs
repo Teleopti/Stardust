@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.Services;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
@@ -310,7 +311,8 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             _target.Refer(_authorization);
             Assert.AreEqual(ShiftTradeStatus.Referred, _target.GetShiftTradeStatus(new ShiftTradeRequestStatusCheckerForTestDoesNothing()));
             Assert.IsTrue(_personRequest.IsPending);
-			var notificationString = "A shift trade request 16-07-2008 - 16-07-2008 must be accepted again due to a schedule change from.";
+			var notificationString =
+				string.Format(Resources.ShiftTradeRequestForOneDayHasBeenReferredDot, "16-07-2008 - 16-07-2008");
             Assert.AreEqual(notificationString, _target.TextForNotification);
         }
 
