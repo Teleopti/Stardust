@@ -15,8 +15,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
 	public class PersonAssignment : VersionedAggregateRoot,
 									IPersonAssignment,
-									IExportToAnotherScenario,
-									IBeforePersist
+									IExportToAnotherScenario
 	{
 		private IList<ShiftLayer> _shiftLayers;
 		private IPerson _person;
@@ -750,13 +749,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			}
 		}
 		
-		public virtual void Ping()
-		{
-			for (var orderIndex = 0; orderIndex < _shiftLayers.Count; orderIndex++)
-			{
-				_shiftLayers[orderIndex].OrderIndex = orderIndex;
-			}
-		}
 
 		#region Equals
 

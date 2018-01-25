@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using NHibernate.Stat;
-using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -9,7 +8,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules.Performance
 {
-	[Ignore("Fix #47649")]
 	public class NoUnnecessaryUpdatesWhenAddingNewAssignmentTest : ScheduleRangeConflictTest
 	{
 		private readonly DateOnly date = new DateOnly(2001, 1, 1);

@@ -51,14 +51,6 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		
 		public IEnumerable<IRootChangeInfo> ModifiedRoots => modifiedRoots;
 
-		public override void PreFlush(ICollection entitites)
-		{
-			if (Iteration == InterceptorIteration.Normal)
-			{
-				new EntityBeforePersistPinger().Execute(entitites.Cast<object>()); //inject as singleinstance somewhere		
-			}
-		}
-
 		public override int[] FindDirty(object entity, object id, object[] currentState, object[] previousState,
 												  string[] propertyNames, IType[] types)
 		{
