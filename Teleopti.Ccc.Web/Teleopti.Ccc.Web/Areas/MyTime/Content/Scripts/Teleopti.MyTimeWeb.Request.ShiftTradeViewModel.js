@@ -55,7 +55,6 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 	self.isDayoffFiltered = ko.observable(false);
 	self.searchNameText = ko.observable();
 	self.refocusToNameSearch = null;
-	self.showContractTime = Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ShowContractTime_41462');
 	self.allTeamsId = "allTeams";
 	self.allSitesId = "allSites";
 

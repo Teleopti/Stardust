@@ -151,19 +151,15 @@
 					<tr>
 						<td>&nbsp;</td>
 						<td></td>
-						<!--ko if:showContractTime-->
 						<td class="hidden-xs hidden-sm">
 							<strong>@Resources.ContractTime</strong>
 						</td>
-						<!--/ko-->
 						<td></td>
 					</tr>
 					<tr class="shift-trade-my-schedule-row">
 						<td class="shift-trade-agent-name">
-							<div data-bind="style:showContractTime && {'font-weight': 'bold'}">@Resources.MySchedule</div>
-							<!--ko if:showContractTime-->
+							<div data-bind="style: {'font-weight': 'bold'}">@Resources.MySchedule</div>
 							<div class="hidden-md hidden-lg shift-trade-contract-time-mobile" data-bind="text: mySchedule().contractTime"></div>
-							<!--/ko-->
 						</td>
 						<td class="shift-trade-my-schedule">
 							<!--ko if:mySchedule().isFullDayAbsence-->
@@ -193,21 +189,17 @@
 							<!--/ko-->
 							<!--/ko-->
 						</td>
-						<!--ko if:$data.showContractTime-->
 						<td class="hidden-xs hidden-sm shift-trade-contract-time">
 							<div data-bind="text: mySchedule().contractTime"></div>
 						</td>
-						<!--/ko-->
 						<td class="shift-trade-button-cell"></td>
 					</tr>
 				</thead>
 				<tbody data-bind="foreach: possibleTradeSchedules">
 					<tr class="shift-trade-person-schedule-row agent" data-bind="visible: isVisible, click: $parent.chooseAgent, hoverToggle: 'hoverBorder', hoverIf: !$parent.isDetailVisible()">
 						<td class="shift-trade-agent-name">
-							<div data-bind="style:$root.showContractTime && {'font-weight': 'bold'}, text: $data.agentName, tooltip: { title: $data.agentName, html: true}">@Resources.MySchedule</div>
-							<!--ko if:$root.showContractTime-->
+							<div data-bind="style: {'font-weight': 'bold'}, text: $data.agentName, tooltip: { title: $data.agentName, html: true}">@Resources.MySchedule</div>
 							<div class="hidden-md hidden-lg shift-trade-contract-time-mobile" data-bind="text: contractTime"></div>
-							<!--/ko-->
 						</td>
 						<td class="shift-trade-possible-trade-schedule">
 							<div data-bind="foreach: $data.layers">
@@ -230,11 +222,9 @@
 							<!--/ko-->
 						</td>
 
-						<!--ko if:$root.showContractTime-->
 						<td class="hidden-xs hidden-sm shift-trade-contract-time">
 							<div data-bind="text: contractTime"></div>
 						</td>
-						<!--/ko-->
 
 						<td class="shift-trade-button-cell">
 							<!-- ko if: $root.isAddVisible-->
@@ -286,19 +276,15 @@
 					<tr>
 						<td>&nbsp;</td>
 						<td></td>
-						<!--ko if:$root.showContractTime-->
 						<td class="hidden-xs hidden-sm"><strong>@Resources.ContractTime</strong></td>
-						<!--/ko-->
 						<td></td>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
 						<td class="shift-trade-agent-name">
-							<div data-bind="style:$root.showContractTime && {'font-weight': 'bold'}">@Resources.MySchedule</div>
-							<!--ko if:$root.showContractTime-->
+							<div data-bind="style: {'font-weight': 'bold'}">@Resources.MySchedule</div>
 							<div class="hidden-md hidden-lg shift-trade-contract-time-mobile" data-bind="text: $data.mySchedule().contractTime"></div>
-							<!--/ko-->
 						</td>
 						<td class="shift-trade-my-schedule">
 							<!--ko if:$data.mySchedule().isFullDayAbsence-->
@@ -328,19 +314,15 @@
 							<!--/ko-->
 							<!--/ko-->
 						</td>
-						<!--ko if:$root.showContractTime-->
 						<td class="hidden-xs hidden-sm shift-trade-contract-time">
 							<div data-bind="text: $data.mySchedule().contractTime"></div>
 						</td>
-						<!--/ko-->
 						<td></td>
 					</tr>
 					<tr data-bind="hoverToggle: 'hoverBorder', hoverIf: !$parent.isDetailVisible()">
 						<td class="shift-trade-agent-name">
-							<div data-bind="style:$root.showContractTime && {'font-weight': 'bold'}, text: $data.agentName, tooltip: { title: $data.agentName, html: true}"></div>
-							<!--ko if:$root.showContractTime-->
+							<div data-bind="style: {'font-weight': 'bold'}, text: $data.agentName, tooltip: { title: $data.agentName, html: true}"></div>
 							<div class="hidden-md hidden-lg shift-trade-contract-time-mobile" data-bind="text: $data.selectedSchedule().contractTime"></div>
-							<!--/ko-->
 						</td>
 						<td class="the-other-agent-schedule">
 							<div data-bind="foreach: $data.selectedSchedule().layers">
@@ -362,11 +344,9 @@
 							</div>
 							<!--/ko-->
 						</td>
-						<!--ko if:$root.showContractTime-->
 						<td class="hidden-xs hidden-sm shift-trade-contract-time">
 							<div data-bind="text: $data.selectedSchedule().contractTime"></div>
 						</td>
-						<!--/ko-->
 						<td class="shift-trade-button-cell">
 							<button type="button" id="shift-trade-remove" class="btn btn-primary btn-xs" data-bind="visible: $root.isDetailVisible, click: $root.remove">
 								<i class="glyphicon glyphicon-minus"></i>

@@ -46,7 +46,6 @@ Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel = function (ajax) {
 	self.filteredEndTimesText = ko.observableArray();
 	self.preloadTimeFilterFinished = true;
 	self.isAnonymousTrading = ko.observable(false);
-	self.showContractTime = Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ShowContractTime_41462');
 
 	self.isDetailVisible = ko.computed(function () {
 		if (self.agentChoosed() === null) {
