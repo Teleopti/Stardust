@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 			_analyticsOvertimeRepository = analyticsOvertimeRepository;
 		}
 
-		public IAnalyticsFactScheduleTime Handle(ProjectionChangedEventLayer layer, int shiftCategoryId, int scenarioId, int shiftLength, TimeSpan plannedOvertime)
+		public IAnalyticsFactScheduleTime Handle(ProjectionChangedEventLayer layer, int shiftCategoryId, int scenarioId, int shiftLengthId, TimeSpan plannedOvertime)
 		{
 			
 			var ret = new AnalyticsFactScheduleTime
@@ -40,9 +40,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 				ContractTimeMinutes = (int) layer.ContractTime.TotalMinutes,
 				WorkTimeMinutes = (int) layer.WorkTime.TotalMinutes,
 				OverTimeMinutes = (int) layer.Overtime.TotalMinutes,
-				OverTimeId = MapOvertimeId(layer.MultiplicatorDefinitionSetId),
+				OverTimeId = layer.MultiplicatorDefinitionSetId == Guid.Empty ? -1 : MapOvertimeId(layer.MultiplicatorDefinitionSetId),
 				ScenarioId = scenarioId,
-				ShiftLengthId = MapShiftLengthId(shiftLength),
+				ShiftLengthId = shiftLengthId,
 				PlannedOvertimeMinutes = (int)plannedOvertime.TotalMinutes
 			};
 			var layerMinutes = (int)(layer.EndDateTime - layer.StartDateTime).TotalMinutes;
@@ -82,9 +82,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 
 		public int MapShiftLengthId(int shiftLength)
 		{
-			var shiftLengths = _analyticsScheduleRepository.ShiftLengths();
-			var sl = shiftLengths.FirstOrDefault(a => a.ShiftLength.Equals(shiftLength));
-			return sl?.Id ?? _analyticsScheduleRepository.ShiftLengthId(shiftLength);
+			return _analyticsScheduleRepository.ShiftLengthId(shiftLength);
 		}
 
 		private AnalyticsActivity mapActivityId(Guid activityCode)

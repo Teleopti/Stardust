@@ -44,6 +44,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 			var projectionService = scheduleDay.ProjectionService();
 			var projection = projectionService.CreateProjection();
 
+			var shiftLengthId = _timeMapper.MapShiftLengthId(shiftLength);
+
 			while (intervalStart < shiftEnd)
 			{
                 var minutesToAdd = intervalLength - intervalStart.Minute % intervalLength;
@@ -70,7 +72,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 					{
 						PersonPart = personPart,
 						DatePart = datePart,
-						TimePart = _timeMapper.Handle(layer, shiftCategoryId, scenarioId, shiftLength, plannedOvertime)
+						TimePart = _timeMapper.Handle(layer, shiftCategoryId, scenarioId, shiftLengthId, plannedOvertime)
 					};
 					scheduleRows.Add(factScheduleRow);
 				}

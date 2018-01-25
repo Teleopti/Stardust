@@ -49,19 +49,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			var acts = WithAnalyticsUnitOfWork.Get(() => TargetActivityRepository.Activities());
 			acts.Count.Should().Be.EqualTo(1);
 		}
-
-		[Test]
-		public void ShouldLoadShiftLengths()
-		{
-			var sl = new ShiftLength(33, 240, _datasource);
-
-			analyticsDataFactory.Setup(sl);
-			analyticsDataFactory.Persist();
-
-			var shiftLengths = WithAnalyticsUnitOfWork.Get(() => Target.ShiftLengths());
-			shiftLengths.Count.Should().Be.EqualTo(1);
-		}
-
+		
 		[Test]
 		public void ShouldInsertFactSchedule()
 		{

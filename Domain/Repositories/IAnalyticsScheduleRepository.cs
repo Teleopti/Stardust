@@ -10,9 +10,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 		void PersistFactScheduleBatch(IList<IFactScheduleRow> factScheduleRows);
 		void PersistFactScheduleDayCountRow(IAnalyticsFactScheduleDayCount dayCount);
 		void DeleteFactSchedule(int dateId, Guid personCode, int scenarioId);
-
-		IList<IAnalyticsShiftLength> ShiftLengths();
-
+		
 		int ShiftLengthId(int shiftLength);
 
 		void InsertStageScheduleChangedServicebus(DateOnly date, Guid personId, Guid scenarioId, Guid businessUnitId,DateTime datasourceUpdateDate);

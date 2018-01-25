@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 				StartDateTime = start,
 				EndDateTime = start.AddMinutes(10)
 			};
-			var result = Target.Handle(layer, 12, 22, _shiftLengths.First().ShiftLength, TimeSpan.Zero);
+			var result = Target.Handle(layer, 12, 22, _shiftLengths.First().Id, TimeSpan.Zero);
 
 			result.AbsenceId.Should().Be.EqualTo(-1);
 			result.ActivityId.Should().Be.EqualTo(1);

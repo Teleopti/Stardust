@@ -259,19 +259,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				.SetInt32(nameof(personId), personId)
 				.UniqueResult<int>();
 		}
-
-		public IList<IAnalyticsShiftLength> ShiftLengths()
-		{
-			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				$@"SELECT 
-						shift_length_id {nameof(AnalyticsShiftLength.Id)}, 
-						shift_length_m {nameof(AnalyticsShiftLength.ShiftLength)} 
-					FROM mart.dim_shift_length WITH (NOLOCK)")
-				.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsShiftLength)))
-				.SetReadOnly(true)
-				.List<IAnalyticsShiftLength>();
-		}
-
+		
 		public int ShiftLengthId(int shiftLength)
 		{
 			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery($@"mart.etl_dim_shift_length_id_get @shift_length_m=:{nameof(shiftLength)}")
