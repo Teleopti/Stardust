@@ -31,7 +31,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			ICurrentTransactionHooks transactionHooks, 
 			IDataSourceConfigurationSetter dataSourceConfigurationSetter, 
 			ICurrentHttpContext httpContext, 
-			INHibernateConfigurationCache nhibernateConfigurationCache, ICurrentPreCommitHooks currentPreCommitHooks)
+			INHibernateConfigurationCache nhibernateConfigurationCache, 
+			ICurrentPreCommitHooks currentPreCommitHooks)
 		{
 			_enversConfiguration = enversConfiguration;
 			_transactionHooks = transactionHooks;
@@ -104,8 +105,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				statFactory = new AnalyticsUnitOfWorkFactory(
 					buildSessionFactory(statConfiguration),
 					statConfiguration.Properties[Environment.ConnectionString], 
-					tenant, 
-					_transactionHooks
+					tenant
 					);
 			}
 

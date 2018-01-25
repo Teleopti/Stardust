@@ -13,8 +13,7 @@ namespace Teleopti.Ccc.Infrastructure.Analytics
 		protected internal AnalyticsUnitOfWorkFactory(
 			ISessionFactory sessionFactory,
 			string connectionString,
-			string tenant,
-			ICurrentTransactionHooks transactionHooks
+			string tenant
 			)
 		{
 			ConnectionString = connectionString;
