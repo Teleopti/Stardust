@@ -17025,14 +17025,6 @@ Do you want to participate?</value>
     <value>The skill: {0} is listed more than once on the same line.</value>
     <comment>The same skill name is listed more than once on the same row in the text file.</comment>
   </data>
-  <data name="GoldThresholdValueShouldLargerThenRest" xml:space="preserve">
-    <value>Value of gold threshold should be larger than the rest.</value>
-    <comment>Value of gold threshold should be larger than the rest.</comment>
-  </data>
-  <data name="GoldThresholdValueShouldSmallerThenRest" xml:space="preserve">
-    <value>Value of gold threshold should be smaller than the rest.</value>
-    <comment>Value of gold threshold should be smaller than the rest.</comment>
-  </data>
   <data name="NoEndToDisplay" xml:space="preserve">
     <value>No end date to display</value>
     <comment>No end date to display on date range picker</comment>
@@ -17073,12 +17065,12 @@ Do you want to participate?</value>
     <value>Measures</value>
     <comment>As in Gamification, e.g. Answered Calls</comment>
   </data>
-  <data name="ValuesShouldBeInAscendingOrder" xml:space="preserve">
-    <value>Values should be in ascending order</value>
+  <data name="ValuesShouldBeInAscendingOrderFromGoldToBronze" xml:space="preserve">
+    <value>Values should be in ascending order from Gold to Bronze</value>
     <comment>Message shown when the gold, silver and bronze thresholds are not in ascending order</comment>
   </data>
-  <data name="ValuesShouldBeInDescendingOrder" xml:space="preserve">
-    <value>Values should be in descending order</value>
+  <data name="ValuesShouldBeInDescendingOrderFromGoldToBronze" xml:space="preserve">
+    <value>Values should be in descending order from Gold to Bronze</value>
     <comment>Message shown when the gold, silver and bronze thresholds are not in descending order</comment>
   </data>
   <data name="TextIsTooLong" xml:space="preserve">

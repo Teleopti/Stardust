@@ -13620,24 +13620,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Value of gold threshold should be larger than the rest..
-        /// </summary>
-        public static string GoldThresholdValueShouldLargerThenRest {
-            get {
-                return ResourceManager.GetString("GoldThresholdValueShouldLargerThenRest", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Value of gold threshold should be smaller than the rest..
-        /// </summary>
-        public static string GoldThresholdValueShouldSmallerThenRest {
-            get {
-                return ResourceManager.GetString("GoldThresholdValueShouldSmallerThenRest", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Good.
         /// </summary>
         public static string Good {
@@ -37123,20 +37105,20 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Values should be in ascending order.
+        ///   Looks up a localized string similar to Values should be in ascending order from Gold to Bronze.
         /// </summary>
-        public static string ValuesShouldBeInAscendingOrder {
+        public static string ValuesShouldBeInAscendingOrderFromGoldToBronze {
             get {
-                return ResourceManager.GetString("ValuesShouldBeInAscendingOrder", resourceCulture);
+                return ResourceManager.GetString("ValuesShouldBeInAscendingOrderFromGoldToBronze", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Values should be in descending order.
+        ///   Looks up a localized string similar to Values should be in descending order from Gold to Bronze.
         /// </summary>
-        public static string ValuesShouldBeInDescendingOrder {
+        public static string ValuesShouldBeInDescendingOrderFromGoldToBronze {
             get {
-                return ResourceManager.GetString("ValuesShouldBeInDescendingOrder", resourceCulture);
+                return ResourceManager.GetString("ValuesShouldBeInDescendingOrderFromGoldToBronze", resourceCulture);
             }
         }
         

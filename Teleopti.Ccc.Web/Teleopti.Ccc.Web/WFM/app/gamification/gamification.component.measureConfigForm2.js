@@ -47,7 +47,7 @@
 						if (!ctrl.updateBronze) return;
 						ctrl.updateBronze({ bronzeBadgeThreshold: ctrl._bronzeBadgeThreshold });
 					}
-				}
+				};
 
 				ctrl.$onChanges = function (changesObj) {
 					if (changesObj.goldBadgeThreshold) {
@@ -61,7 +61,7 @@
 					if (changesObj.bronzeBadgeThreshold) {
 						ctrl._bronzeBadgeThreshold = changesObj.bronzeBadgeThreshold.currentValue;
 					}
-				}
+				};
 
 				ctrl.keyUp = function (event) {
 					if (event && event.which === 13) {
@@ -69,114 +69,80 @@
 					}
 
 					checkValueOrder();
-				}
+				};
 
-				function silverIsGreaterThanBronzeAndLessThanGold(gold, silver, bronze) {
-					return (silver <  gold && silver > bronze);
-				}
-
-				function silverIsGreaterThanGoldAndLessThanBronze(gold, silver, bronze) {
-					return (silver >  gold && silver < bronze);
-				}
+				ctrl.$onInit = function () {
+					checkValueOrder();
+				};
 
 				function checkValueOrder() {
-					if (angular.isUndefined(ctrl.valueDataType) || !ctrl.valueOrder) {
-						return;
+					if (angular.isUndefined(ctrl.valueDataType) || !ctrl.valueOrder) return;
+
+					var gold, silver, bronze;
+
+					ctrl.errorMsg = '';
+
+					switch (ctrl.valueDataType) {
+						case 2:
+							gold = convertValueForTime(ctrl._goldBadgeThreshold);
+							silver = convertValueForTime(ctrl._silverBadgeThreshold);
+							bronze = convertValueForTime(ctrl._bronzeBadgeThreshold);
+							break;
+
+						default:
+							gold = parseFloat(ctrl._goldBadgeThreshold);
+							silver = parseFloat(ctrl._silverBadgeThreshold);
+							bronze = parseFloat(ctrl._bronzeBadgeThreshold);
+							break;
 					}
 
-					var goldValue, silverValue, bronzeValue;
+					switch (ctrl.valueOrder) {
+						case 'asc':
+							if (!valuesAreInAscendingOrder(gold, silver, bronze))
+								ctrl.errorMsg = 'ValuesShouldBeInAscendingOrderFromGoldToBronze';
+							break;
 
-					var valueOrder = ctrl.valueOrder;
-					if (valueOrder == 'asc') {
-						if (ctrl.valueDataType == '0' || ctrl.valueDataType == '1') {
-							goldValue = parseFloat(ctrl._goldBadgeThreshold);
-							silverValue = parseFloat(ctrl._silverBadgeThreshold);
-							bronzeValue = parseFloat(ctrl._bronzeBadgeThreshold);
-
-							if (goldValue > silverValue || goldValue > bronzeValue) {
-								ctrl.errorMsg = 'GoldThresholdValueShouldSmallerThenRest';
-							}
-							else if (!silverIsGreaterThanGoldAndLessThanBronze(goldValue, silverValue, bronzeValue)) {
-								ctrl.errorMsg = 'ValuesShouldBeInAscendingOrder';
-							}
-							else {
-								ctrl.errorMsg = '';
-							}
-						}
-						else {
-							goldValue = convertValueForTime(ctrl._goldBadgeThreshold);
-							silverValue = convertValueForTime(ctrl._silverBadgeThreshold);
-							bronzeValue = convertValueForTime(ctrl._bronzeBadgeThreshold);
-
-							if (goldValue > silverValue || goldValue > bronzeValue) {
-								ctrl.errorMsg = 'GoldThresholdValueShouldSmallerThenRest';
-							}
-							else if (!silverIsGreaterThanGoldAndLessThanBronze(goldValue, silverValue, bronzeValue)) {
-								ctrl.errorMsg = 'ValuesShouldBeInAscendingOrder';
-							}
-							else {
-								ctrl.errorMsg = '';
-							}
-						}
+						default:
+							if (!valuesAreInDescendingOrder(gold, silver, bronze))
+								ctrl.errorMsg = 'ValuesShouldBeInDescendingOrderFromGoldToBronze';
+							break;
 					}
-					else if (valueOrder == 'desc') {
-						if (ctrl.valueDataType == '0' || ctrl.valueDataType == '1') {
-							goldValue = parseFloat(ctrl._goldBadgeThreshold);
-							silverValue = parseFloat(ctrl._silverBadgeThreshold);
-							bronzeValue = parseFloat(ctrl._bronzeBadgeThreshold);
 
-							if (goldValue < silverValue || goldValue < bronzeValue) {
-								ctrl.errorMsg = 'GoldThresholdValueShouldLargerThenRest';
-							}
-							else if (!silverIsGreaterThanBronzeAndLessThanGold(goldValue, silverValue, bronzeValue)) {
-								ctrl.errorMsg = 'ValuesShouldBeInDescendingOrder';
-							}
-							else {
-								ctrl.errorMsg = '';
-							}
-						}
-						else {
-							goldValue = convertValueForTime(ctrl._goldBadgeThreshold);
-							silverValue = convertValueForTime(ctrl._silverBadgeThreshold);
-							bronzeValue = convertValueForTime(ctrl._bronzeBadgeThreshold);
 
-							if (goldValue < silverValue || goldValue < bronzeValue) {
-								ctrl.errorMsg = 'GoldThresholdValueShouldLargerThenRest';
-							}
-							else if (!silverIsGreaterThanBronzeAndLessThanGold(goldValue, silverValue, bronzeValue)) {
-								ctrl.errorMsg = 'ValuesShouldBeInDescendingOrder';
-							}
-							else {
-								ctrl.errorMsg = '';
-							}
-						}
+
+					function valuesAreInAscendingOrder(gold, silver, bronze) {
+						return gold < silver && gold < bronze && silver < bronze;
 					}
-				}
 
-				function convertValueForTime(value) {
-					var subValues = value.split(':');
-					var hourValue = convertTimeToNumber(subValues[0], 100);
-					var minuteValue = convertTimeToNumber(subValues[1], 10);
-					var secondValue = convertTimeToNumber(subValues[2], 1);
-					return hourValue + minuteValue + secondValue;
-				}
+					function valuesAreInDescendingOrder(gold, silver, bronze) {
+						return gold > silver && gold > bronze && silver > bronze;
+					}
 
+					function convertValueForTime(value) {
+						var subValues = value.split(':');
+						var hourValue = convertTimeToNumber(subValues[0], 100);
+						var minuteValue = convertTimeToNumber(subValues[1], 10);
+						var secondValue = convertTimeToNumber(subValues[2], 1);
+						return hourValue + minuteValue + secondValue;
+					}
 
-				function convertTimeToNumber(time, scale) {
-					var result = 0;
+					function convertTimeToNumber(time, scale) {
+						var result = 0;
 
-					if (time == '00') {
-						result = 0;
-					} else {
-						if (time.indexOf('0') == 0) {
-							result = parseInt(time.substr(1)) * scale
+						if (time == '00') {
+							result = 0;
 						} else {
-							result = parseInt(time) * scale;
+							if (time.indexOf('0') == 0) {
+								result = parseInt(time.substr(1)) * scale
+							} else {
+								result = parseInt(time) * scale;
+							}
 						}
-					}
 
-					return result;
+						return result;
+					}
 				}
+
 			}]
 		});
 })(angular);
