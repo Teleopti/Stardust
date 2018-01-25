@@ -165,7 +165,6 @@ WFM_Modify_Skill_Groups_45727 = RC
 
 # China, can any of these be removed? #
 HealthCheck_EasyValidateAndFixReadModels_39696 = true
-HealthCheck_ReinitializeReadModels_39697 = true
 
 # Ziggy #
 Wfm_Staffing_45411 = true #Enables the entire Staffing page!
