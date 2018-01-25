@@ -43,9 +43,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				Paging = paging
 			};
 			return
-				Json(_toggleManager.IsEnabled(Toggles.MyTimeWeb_ShiftTradeBoardNoReadModel_36662)
-					? _requestsShiftTradeBulletinViewModelFactory.CreateShiftTradeBulletinViewModelFromRawData(data)
-					: _requestsShiftTradeBulletinViewModelFactory.CreateShiftTradeBulletinViewModel(data));
+				Json(_requestsShiftTradeBulletinViewModelFactory.CreateShiftTradeBulletinViewModelFromRawData(data));
 		}
 
 		[UnitOfWork]
