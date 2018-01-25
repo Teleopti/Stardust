@@ -50,10 +50,11 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 
 		public override void PreFlush(ICollection entities)
 		{
-			foreach (var entity in entities)
+			if (Iteration != InterceptorIteration.Normal)
+				return;
+			foreach (var uowHook in entities.OfType<IBeforePersistProcess>().ToArray())
 			{
-				if (entity is IBeforePersistProcess uowHook)
-					uowHook.BeforePersist();
+				uowHook.BeforePersist();
 			}
 		}
 
