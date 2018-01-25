@@ -1,17 +1,5 @@
 .rta-view.prototype {
 
-  .con-row {
-	padding: 0;
-	margin: 0;
-  }
-  .con-flex {
-	padding: 0;
-	margin: 0;
-	&.con-padding {
-	  padding: 5px;
-	}
-  }
-  
   card-panel .card-panel-header-wrapper {
 	border-left: 10px solid #66c2ff;
   }

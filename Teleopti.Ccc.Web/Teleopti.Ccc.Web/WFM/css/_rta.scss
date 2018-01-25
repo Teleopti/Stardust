@@ -4,6 +4,19 @@
 }
 
 .rta-view {
+
+  // con padding/margin reset
+  .con-row {
+	padding: 0;
+	margin: 0;
+  }
+  .con-flex {
+	padding: 0;
+	margin: 0;
+  }
+  .con-padding .con-flex {
+	padding: 5px;
+  }
   
   .historical {
 	overflow-x: hidden;
@@ -100,4 +113,5 @@
 	margin-top: 8px;
 	margin-bottom: 0px;
   }
+  
 }

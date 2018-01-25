@@ -25,12 +25,12 @@
 		</div>
 	</div>
 
-	<div class="panel material-depth-1">
+	<div class="panel material-depth-1 con-padding">
 		<div class="con-row">
-			<div class="con-flex con-padding">
+			<div class="con-flex">
 				{{'Adherence' | translate}} 60%
 			</div>
-			<div class="con-flex con-padding" style="flex-basis: 80%!important">
+			<div class="con-flex" style="flex-basis: 80%!important">
 				<div class="rta-historical-adherence-row-wrapper">
 					<div ng-repeat="row in vm.fullTimeline" class="label label-info"
 						 ng-attr-style="position: absolute; left: {{row.Offset}}; top: 10%; width: 36px; margin-left: -18px;">
@@ -69,10 +69,10 @@
 		</div>
 	</div>
 
-	<div class="panel material-depth-1">
+	<div class="panel material-depth-1 con-padding">
 
 		<div class="con-row">
-			<div class="con-flex con-padding">
+			<div class="con-flex">
 				Changes
 			</div>
 			<div class="con-flex" style="flex-basis: 80%!important">
@@ -87,7 +87,7 @@
 		</div>
 
 		<div class="con-row">
-			<div class="con-flex con-padding">
+			<div class="con-flex">
 				Out of Adherence
 			</div>
 			<div class="con-flex" style="flex-basis: 80%!important">
@@ -108,19 +108,19 @@
 		</div>
 
 		<div class="con-row">
-			<div class="con-flex con-padding">
+			<div class="con-flex">
 				Approved as In Adherence
 			</div>
 			<div class="con-flex" style="flex-basis: 80%!important">
 				
 				<div style="height: 20px; position: relative">
-						<span ng-repeat="approved in vm.approvedAdherences"
-							  ng-click="approved.highlight = !approved.highlight"
-							  class="rta-approvedline"
-							  ng-class="{'highlight': approved.highlight}"
-							  ng-attr-style="height: 20px; background-color: #556B2F; opacity: 1; left: {{approved.Offset}}; width: {{approved.Width}}; bottom: 0;"
-							  data-starttime="{{approved.StartTime}}" data-endtime="{{approved.EndTime}}" role="button">
-						</span>
+					<span ng-repeat="approved in vm.approvedAdherences"
+						  ng-click="approved.highlight = !approved.highlight"
+						  class="rta-approvedline"
+						  ng-class="{'highlight': approved.highlight}"
+						  ng-attr-style="height: 20px; background-color: #556B2F; opacity: 1; left: {{approved.Offset}}; width: {{approved.Width}}; bottom: 0;"
+						  data-starttime="{{approved.StartTime}}" data-endtime="{{approved.EndTime}}" role="button">
+					</span>
 				</div>
 			</div>
 		</div>
