@@ -342,7 +342,7 @@ TPBRZIL,ChannelSales,2017-07-24 10:00,2017-07-24 10:15,10.5€";
 
 			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
 			result.Success.Should().Be.False();
-			result.ErrorInformation.SingleOrDefault(e => e.Contains("resources")).Should().Not.Be.Null();
+			result.ErrorInformation.SingleOrDefault(e => e.Contains("parameter 5")).Should().Not.Be.Null();
 		}
 
 		[Test]
@@ -467,7 +467,7 @@ TPBRZIL,Channel Sales|Direct Sales,2017-07-24 10:00,2017-07-24 10:15,10.5";
 			
 			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
 			result.Success.Should().Be.False();
-			result.ErrorInformation.SingleOrDefault(e => e.Contains("before")).Should().Not.Be.Null();
+			result.ErrorInformation.SingleOrDefault(e => e.Contains("earlier")).Should().Not.Be.Null();
 			
 			var skillCombResources = SkillCombinationResourceRepository.LoadSkillCombinationResourcesBpo();
 			skillCombResources.Should().Be.Empty();
@@ -484,7 +484,7 @@ TPBRZIL,Channel Sales|Direct Sales,2017-07-24 10:00,2017-07-24 10:15,10.5";
 			
 			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
 			result.Success.Should().Be.False();
-			result.ErrorInformation.SingleOrDefault(e => e.Contains("future")).Should().Not.Be.Null();
+			result.ErrorInformation.SingleOrDefault(e => e.Contains("after today")).Should().Not.Be.Null();
 			
 			var skillCombResources = SkillCombinationResourceRepository.LoadSkillCombinationResourcesBpo();
 			skillCombResources.Should().Be.Empty();
@@ -503,7 +503,7 @@ TPBRZIL,Channel Sales|Direct Sales,2017-07-24 10:00,2017-07-24 10:15,10.5";
 
 			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
 			result.Success.Should().Be.False();
-			result.ErrorInformation.SingleOrDefault(e => e.Contains("The imported resource interval length: 15 minutes differs from the skill: Channelsales default resolution: 16 minutes")).Should().Not.Be.Null();
+			result.ErrorInformation.SingleOrDefault(e => e.Contains("does not match the interval length")).Should().Not.Be.Null();
 			
 			var skillCombResources = SkillCombinationResourceRepository.LoadSkillCombinationResourcesBpo();
 			skillCombResources.Should().Be.Empty();
@@ -521,7 +521,7 @@ TPBRZIL,Channel Sales|Direct Sales,2017-07-24 10:00,2017-07-24 10:15,10.5";
 			
 			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
 			result.Success.Should().Be.False();
-			result.ErrorInformation.SingleOrDefault(e => e.Contains("The imported resource interval length: 16 minutes differs from the skill: Directsales default resolution: 15 minutes")).Should().Not.Be.Null();
+			result.ErrorInformation.SingleOrDefault(e => e.Contains("does not match the interval length")).Should().Not.Be.Null();
 			
 			var skillCombResources = SkillCombinationResourceRepository.LoadSkillCombinationResourcesBpo();
 			skillCombResources.Should().Be.Empty();
@@ -538,7 +538,7 @@ TPBRZIL,Channel Sales|Direct Sales,2017-07-24 10:00,2017-07-24 10:15,10.5";
 			
 			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
 			result.Success.Should().Be.False();
-			result.ErrorInformation.SingleOrDefault(e => e.Contains("The skill: Directsales is listed more than once on the same line.")).Should().Not.Be.Null();
+			result.ErrorInformation.SingleOrDefault(e => e.Contains("The skill Directsales is listed more than once on the same line.")).Should().Not.Be.Null();
 			
 			var skillCombResources = SkillCombinationResourceRepository.LoadSkillCombinationResourcesBpo();
 			skillCombResources.Should().Be.Empty();
@@ -555,7 +555,7 @@ TPBRZIL,Channel Sales|Direct Sales,2017-07-24 10:00,2017-07-24 10:15,10.5";
 			
 			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
 			result.Success.Should().Be.False();
-			result.ErrorInformation.SingleOrDefault(e => e.Contains("Source name is too long. Max 100 characters is allowed.")).Should().Not.Be.Null();
+			result.ErrorInformation.SingleOrDefault(e => e.Contains("Max 100 characters is allowed.")).Should().Not.Be.Null();
 			
 			var skillCombResources = SkillCombinationResourceRepository.LoadSkillCombinationResourcesBpo();
 			skillCombResources.Should().Be.Empty();
