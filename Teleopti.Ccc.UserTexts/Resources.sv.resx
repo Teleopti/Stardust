@@ -7740,25 +7740,25 @@ veckodag</value>
     <value>Är du säker på att du vill ta bort sekvensen?</value>
   </data>
   <data name="AbsenceRequestHasBeenApprovedDot" xml:space="preserve">
-    <value>En ledighetsansökan har godkänts.</value>
+    <value>En ledighetsansökan {0} - {1} har godkänts.</value>
   </data>
   <data name="AbsenceRequestHasBeenDeniedDot" xml:space="preserve">
-    <value>En ledighetsansökan har avslagits.</value>
+    <value>En ledighetsansökan {0} - {1} har avslagits.</value>
   </data>
   <data name="Details" xml:space="preserve">
     <value>Detaljer</value>
   </data>
   <data name="ShiftTradeRequestHasBeenAcceptedDot" xml:space="preserve">
-    <value>En förfrågan om skiftbyte har godkänts av motparten.</value>
+    <value>En förfrågan om skiftbyte {0} - {1} har godkänts av motparten.</value>
   </data>
   <data name="ShiftTradeRequestHasBeenApprovedDot" xml:space="preserve">
-    <value>En förfrågan om skiftbyte har godkänts.</value>
+    <value>En förfrågan om skiftbyte {0} - {1} har godkänts.</value>
   </data>
   <data name="ShiftTradeRequestHasBeenDeniedDot" xml:space="preserve">
-    <value>En förfrågan om skiftbyte har avslagits.</value>
+    <value>En förfrågan om skiftbyte {0} - {1} har avslagits.</value>
   </data>
   <data name="ShiftTradeRequestHasBeenReferredDot" xml:space="preserve">
-    <value>En schemaändring har gjort att en förfrågan om skiftbyte måste accepteras igen.</value>
+    <value>En schemaändring har gjort att en förfrågan om skiftbyte {0} - {1} måste accepteras igen.</value>
   </data>
   <data name="TextRequestHasBeenApprovedDot" xml:space="preserve">
     <value>En enkel förfrågan har godkänts.</value>
@@ -7776,7 +7776,7 @@ veckodag</value>
     <value>Är du säker på att du vill ta bort mötet {0}?</value>
   </data>
   <data name="ANewShiftTradeHasBeenCreatedDot" xml:space="preserve">
-    <value>Ny skiftbytesförfrågan, godkänn eller avslå i din lista.</value>
+    <value>Ny skiftbytesförfrågan {0} - {1}, godkänn eller avslå i din lista.</value>
   </data>
   <data name="SubskillDistributionMustSumToHundredPercent" xml:space="preserve">
     <value>Summan av fördelningarna måste vara 100%</value>
@@ -11658,16 +11658,16 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Aktivera agentmedaljer</value>
   </data>
   <data name="YouGotANewBronzeBadgeForAdherence" xml:space="preserve">
-    <value>Du har en ny bronsmedalj! Din följsamhet är över {0}% för en dag. </value>
+    <value>Du har en ny bronsmedalj! Din följsamhet {1:yyyy-MM-dd} är över {0}. </value>
   </data>
   <data name="YouGotANewBronzeBadgeForAHT" xml:space="preserve">
-    <value>Du har en ny bronsmedalj! Din genomsnittliga behandlingstid är under {0} sekunder för en dag.</value>
+    <value>Du har en ny bronsmedalj! Din genomsnittliga behandlingstid {1:yyyy-MM-dd} är under {0} sekunder.</value>
   </data>
   <data name="YouGotANewBronzeBadgeForAnsweredCalls" xml:space="preserve">
-    <value>Du har en ny bronsmedalj! Du har besvarat {0} eller fler samtal på en dag.</value>
+    <value>Du har en ny bronsmedalj! Du har besvarat mer än {0} samtal {1:yyyy-MM-dd}.</value>
   </data>
   <data name="YouGotANewGoldBadgeForAdherence" xml:space="preserve">
-    <value>Du har en ny guldmedalj! Din följsamhet är över {0}% på {1} olika dagar.  </value>
+    <value>Du har en ny guldmedalj! Din följsamhet är över {0} på {1} olika dagar.  </value>
   </data>
   <data name="YouGotANewGoldBadgeForAHT" xml:space="preserve">
     <value>Du har en ny guldmedalj! Din genomsnittliga behandlingstid är under {0} sekunder {1} olika dagar. </value>
@@ -11676,7 +11676,7 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Du har en ny guldmedalj! Du har besvarat {0} eller fler samtal {1} olika dagar.</value>
   </data>
   <data name="YouGotANewSilverBadgeForAdherence" xml:space="preserve">
-    <value>Du har en ny silvermedalj! Din följsamhet är över {0}% på {1} olika dagar.</value>
+    <value>Du har en ny silvermedalj! Din följsamhet är över {0} på {1} olika dagar.</value>
   </data>
   <data name="YouGotANewSilverBadgeForAHT" xml:space="preserve">
     <value>Du har en ny silvermedalj! Din genomsnittliga behandlingstid är under {0} sekunder {1} olika dagar.</value>
@@ -11936,16 +11936,16 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Skiftbytespost</value>
   </data>
   <data name="AreYouSureYouWantToDeleteGamificationSetting" xml:space="preserve">
-    <value>Är du säker på att du vill ta bort spelifieringsinställningen '{0}'?</value>
+    <value>Är du säker på att du vill ta bort gamificationinställningen '{0}'?</value>
   </data>
   <data name="DeleteAgentBadgeSetting" xml:space="preserve">
     <value>Ta bort agentmedaljsinställningen</value>
   </data>
   <data name="Gamification" xml:space="preserve">
-    <value>Spelifiering</value>
+    <value>Gamification</value>
   </data>
   <data name="NewGamificationSetting" xml:space="preserve">
-    <value>Ny spelifieringsinställning</value>
+    <value>Ny gamificationinställning</value>
   </data>
   <data name="NewBadgeSetting" xml:space="preserve">
     <value>Ny medaljinställning</value>
@@ -11957,19 +11957,19 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Skiftbytespost</value>
   </data>
   <data name="ChooseGamificationSettingToChange" xml:space="preserve">
-    <value>Välj spelifieringsinställning att ändra</value>
+    <value>Välj gamificationinställning att ändra</value>
   </data>
   <data name="EnterGamificationSettingDetails" xml:space="preserve">
-    <value>Ange detaljer i spelifieringsinställningarna</value>
+    <value>Ange detaljer i gamificationinställningarna</value>
   </data>
   <data name="GamificationSettingColon" xml:space="preserve">
-    <value>Spelifieringsinställning:</value>
+    <value>Gamificationinställning:</value>
   </data>
   <data name="GamificationSettingRuleSetsColon" xml:space="preserve">
-    <value>Regeluppsättningar för spelifiering:</value>
+    <value>Regeluppsättningar för gamification:</value>
   </data>
   <data name="ManageGamificationSettings" xml:space="preserve">
-    <value>Hantera spelifieringsinställningar</value>
+    <value>Hantera gamificationinställningar</value>
   </data>
   <data name="Completed" xml:space="preserve">
     <value>Avslutad</value>
@@ -11990,7 +11990,7 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Arbetsdag</value>
   </data>
   <data name="DeleteGamificationSetting" xml:space="preserve">
-    <value>Ta bort spelifieringsinställning</value>
+    <value>Ta bort gamificationinställning</value>
   </data>
   <data name="RuleWithDifferentThreshold" xml:space="preserve">
     <value>Använd olika tröskelvärden</value>
@@ -12189,7 +12189,7 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Aktiverade objekt</value>
   </data>
   <data name="NoGamificationSetting" xml:space="preserve">
-    <value>Ingen spelifieringsinställning</value>
+    <value>Ingen gamificationinställning</value>
   </data>
   <data name="Duplicate" xml:space="preserve">
     <value>Skapa kopia</value>
@@ -12878,7 +12878,7 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Rensa ersättningsvärde</value>
   </data>
   <data name="AddAbsenceSuccessedResult" xml:space="preserve">
-    <value>Lade till frånvaro för {0} valda agent(er)!</value>
+    <value>Lade till frånvaro för valda agent(er)</value>
   </data>
   <data name="AddAbsenceTotalResult" xml:space="preserve">
     <value>Lade till frånvaro för {0} valda agent(er), {1} gick bra, {2} misslyckades!</value>
@@ -13069,7 +13069,7 @@ Hjälp oss förbättra upplevelsen genom att skicka in en felrapport.</value>
     <value>Välj team</value>
   </data>
   <data name="AreYouSureToRemoveSelectedAbsence" xml:space="preserve">
-    <value>Är du säker på att du vill ta bort all markerad frånvaro?</value>
+    <value>Är du säker på att du vill ta bort {0} frånvarotillfällen för {1} agenter?</value>
   </data>
   <data name="FailedToRemoveAbsence" xml:space="preserve">
     <value>Misslyckades med att ta bort markerad frånvaro.</value>
@@ -13150,10 +13150,10 @@ Hjälp oss förbättra upplevelsen genom att skicka in en felrapport.</value>
     <value>Två agenter måste markeras för skiftbyte.</value>
   </data>
   <data name="NoPermissionAddAgentActivity" xml:space="preserve">
-    <value>Rättigheter saknas för att lägga till aktivitet för agent {0}.</value>
+    <value>Rättigheter saknas för att lägga till aktivitet för agent(er).</value>
   </data>
   <data name="NoPermissionRemoveAgentActivity" xml:space="preserve">
-    <value>Rättigheter saknas fär att ta bort aktiviteter för agent {0}.</value>
+    <value>Rättigheter saknas för att ta bort aktiviteter för agent(er).</value>
   </data>
   <data name="IncomingTraffic" xml:space="preserve">
     <value>Inkommande trafik</value>
@@ -13204,7 +13204,7 @@ Hjälp oss förbättra upplevelsen genom att skicka in en felrapport.</value>
     <value>Frånvaroförfrågan för {0} {1} kunde inte avbrytas eftersom ingen frånvaro med anknytning till förfrågan kunde hittas. </value>
   </data>
   <data name="PartialSuccessMessageForRemovingActivity" xml:space="preserve">
-    <value>Tar bort aktiviteter för {0} agent(er), {1} lyckades och {2} misslyckades.</value>
+    <value>Tog bort aktiviteter för {0} agent(er), {1} lyckades och {2} misslyckades.</value>
   </data>
   <data name="CouldNotCancelRequestNoAbsenceMultiDay" xml:space="preserve">
     <value>Frånvaroförfrågan för {0} från {1} till {2} kunde inte avbrytas eftersom ingen frånvaro med anknytning till förfrågan kunde hittas. </value>
@@ -13216,7 +13216,7 @@ Hjälp oss förbättra upplevelsen genom att skicka in en felrapport.</value>
     <value>{0} förfrågning(ar) har avbrutits</value>
   </data>
   <data name="PartialSuccessMessageForAddingActivity" xml:space="preserve">
-    <value>Lägger till aktiviteter för {0} agent(er), {1} lyckades och {2} misslyckades.</value>
+    <value>Lade till aktiviteter för {0} agent(er), {1} lyckades och {2} misslyckades.</value>
   </data>
   <data name="RequestsHaveNotBeenCancelled" xml:space="preserve">
     <value>{0} förfrågning(ar) har inte kunnat avbrytas</value>
@@ -13278,7 +13278,7 @@ Dessa val är aktiverade:
     <value>Inkluderade kompetenser</value>
   </data>
   <data name="PartialSuccessMessageForRemovingAbsence" xml:space="preserve">
-    <value>Tar bort frånvaro för {0} agent(er): {1} lyckades, {2} misslyckades.</value>
+    <value>Tog bort frånvaro för {0} agent(er): {1} lyckades, {2} misslyckades.</value>
   </data>
   <data name="WFMReleaseNotification" xml:space="preserve">
     <value>{0} har förbättrats! Vi uppskattar er {1}feedback. {2} Gamla versionen av {3} kan nås en begränsad tid. </value>
@@ -13299,7 +13299,7 @@ Dessa val är aktiverade:
     <value>Antal dagar innan frånvarodatumet som förfrågningar kan avbrytas:</value>
   </data>
   <data name="NoPermissionMoveAgentActivity" xml:space="preserve">
-    <value>Inga rättigheter att flytta aktivitet för agent {0}.</value>
+    <value>Rättigheter saknas för att flytta aktivitet för agent(er)</value>
   </data>
   <data name="SelectedAgentsColon" xml:space="preserve">
     <value>Valda agenter:</value>
@@ -13315,7 +13315,7 @@ Dessa val är aktiverade:
     <value>Huvudaktiviteten kan inte tas bort</value>
   </data>
   <data name="PartialSuccessMessageForMovingActivity" xml:space="preserve">
-    <value>Flyttar aktiviteter för {0} agent(er), {1} lyckades och {2} misslyckades. </value>
+    <value>Flyttade aktiviteter för {0} agent(er), {1} lyckades och {2} misslyckades. </value>
   </data>
   <data name="SuccessfulMessageForMovingActivity" xml:space="preserve">
     <value>Flyttade aktiviteter för valda agenter</value>
@@ -13348,7 +13348,7 @@ Dessa val är aktiverade:
     <value>Rättigheter för att lägga till personlig aktivitet för agent {0} saknas.</value>
   </data>
   <data name="CanNotAddPersonalActivityToAgentWithoutShift" xml:space="preserve">
-    <value>Du kan inte lägga till en personlig aktivitet för {0} utan ett skift</value>
+    <value>Du kan inte lägga till en personlig aktivitet när det inte finns något skift</value>
   </data>
   <data name="HelpLabel" xml:space="preserve">
     <value>Hjälp</value>
@@ -13463,7 +13463,7 @@ Dessa val är aktiverade:
     <value>Misslyckades att ångra schemaändring för valda agenter</value>
   </data>
   <data name="PartialSuccessMessageForUndoSchedule" xml:space="preserve">
-    <value>Ångrar schemaändring för {0} agent(er), {1} lyckades och {2} misslyckades</value>
+    <value>Ångrade schemaändring för {0} agent(er), {1} lyckades och {2} misslyckades</value>
   </data>
   <data name="SuccessfulMessageForUndoSchedule" xml:space="preserve">
     <value>Ångrat senaste schemaändring för valda agenter</value>
@@ -13514,7 +13514,7 @@ Dessa val är aktiverade:
     <value>Genomgången av förfrågningarna baserat på affärsreglerna har avslutats. </value>
   </data>
   <data name="PartialSuccessMessageForEditingShiftCategory" xml:space="preserve">
-    <value>Ändra skiftkategorier för {0} agent(er), {1} lyckades och {2} misslyckades. </value>
+    <value>Ändrade skiftkategorier för {0} agent(er), {1} lyckades och {2} misslyckades. </value>
   </data>
   <data name="SuccessfulMessageForEditingShiftCategory" xml:space="preserve">
     <value>Ändrade skiftkategorier för valda agenter</value>
@@ -13848,7 +13848,7 @@ Dessa val är aktiverade:
     <value>Otillåtet överlappade aktiviteter för valda agenter har flyttats. </value>
   </data>
   <data name="MoveInvalidOverlappedActivityWarning" xml:space="preserve">
-    <value>Flyttar otillåtet överlappade aktiviteter för {0} agent(er), {1} lyckades och {2} misslyckades. </value>
+    <value>Flyttade otillåtet överlappade aktiviteter för {0} agent(er), {1} lyckades och {2} misslyckades. </value>
   </data>
   <data name="SortByStartDate" xml:space="preserve">
     <value>Startdatum</value>
@@ -13905,7 +13905,7 @@ Dessa val är aktiverade:
     <value>Laddar förfrågningar...</value>
   </data>
   <data name="PartialSuccessMessageForMovingShift" xml:space="preserve">
-    <value>Flyttar skift för {0} agent(er), {1} lyckades och {2} misslyckades.</value>
+    <value>Flyttade skift för {0} agent(er), {1} lyckades och {2} misslyckades.</value>
   </data>
   <data name="SuccessfulMessageForMovingShift" xml:space="preserve">
     <value>Flyttade skift för valda agenter</value>
@@ -13914,7 +13914,7 @@ Dessa val är aktiverade:
     <value>Inga enheter hittades för de valda kompetenserna</value>
   </data>
   <data name="PartialSuccessMessageForAddingOvertime" xml:space="preserve">
-    <value>Lägger till en övertidsaktivitet för {0} agenter, {1} lyckades och {2} misslyckades. </value>
+    <value>Lade till en övertidsaktivitet för {0} agenter, {1} lyckades och {2} misslyckades. </value>
   </data>
   <data name="SelectAMultiplicatorDefinitionSet" xml:space="preserve">
     <value>Välj en definitionsgrupp för multiplikatorer</value>
@@ -14314,10 +14314,10 @@ Vill du registrera dig?</value>
     <value>Misslyckades att ladda fridagsregler.</value>
   </data>
   <data name="FailedToOptimizeDayoffForSelectedPlanningPeriodDueToTechnicalError" xml:space="preserve">
-    <value>Misslyckades att optimera fridagar för vald planeringsperiod pga. tekniskt fel.</value>
+    <value>Misslyckades att optimera fridagar för planeringsperioden {0} - {1} pga. tekniskt fel. Var god försök igen. </value>
   </data>
   <data name="FailedToScheduleForSelectedPlanningPeriodDueToTechnicalError" xml:space="preserve">
-    <value>Misslyckades att schemalägga vald planeringsperiod pga. tekniskt fel. </value>
+    <value>Misslyckades att schemalägga planeringsperioden {0} - {1} pga. tekniskt fel. Var god försök igen.</value>
   </data>
   <data name="DescriptionOfDataPartOfAgentDay" xml:space="preserve">
     <value>Flyttar ett skift till en annan dag</value>
@@ -14329,7 +14329,7 @@ Vill du registrera dig?</value>
     <value>Ange standardvärden för att ersätta ogiltiga värden</value>
   </data>
   <data name="ImportAgentsColumnFixedWithFallbackValue" xml:space="preserve">
-    <value>{0} ersattes med standardvärdet</value>
+    <value>{0} ersattes med '{1}'</value>
   </data>
   <data name="RequireXCellFormat" xml:space="preserve">
     <value>Cellen kan inte analyseras, värdet måste formateras som {0}</value>
@@ -14803,7 +14803,7 @@ Vill du registrera dig?</value>
     <value>Flytta övertid</value>
   </data>
   <data name="NoPermissionMoveAgentOvertime" xml:space="preserve">
-    <value>Rättigheter för att flytta övertid för agent {0} saknas</value>
+    <value>Rättigheter för att flytta övertid för agenter saknas</value>
   </data>
   <data name="ETOTRequests" xml:space="preserve">
     <value>Övertidsförfrågningar</value>
@@ -14978,7 +14978,7 @@ Vill du registrera dig?</value>
     <value>Öppna enhet</value>
   </data>
   <data name="ImportBpoWrongResourceFormat" xml:space="preserve">
-    <value>Parametern Resources (parameter nummer {0} med värde: {1}) är ogiltig. Parametern måste anges som ett decimaltal, t ex 14.2. </value>
+    <value>Parametern Agenter (parameter {0} med värde: {1}) är ogiltig. Parametern måste anges som ett decimaltal, t ex 14.2. </value>
   </data>
   <data name="OnlyAbsenceRequestCanBeCancelled" xml:space="preserve">
     <value>Endast frånvaroförfrågningar kan avbrytas</value>
@@ -15233,10 +15233,10 @@ Vill du registrera dig?</value>
     <value>När valideringen fallerar:</value>
   </data>
   <data name="GamificationSettings" xml:space="preserve">
-    <value>Spelifieringsinställningar</value>
+    <value>Gamificationinställningar</value>
   </data>
   <data name="SetGamificationTargets" xml:space="preserve">
-    <value>Ange mål för spelifiering</value>
+    <value>Ange mål för gamification</value>
   </data>
   <data name="AppliedSetting" xml:space="preserve">
     <value>Använd inställning</value>
@@ -15314,10 +15314,10 @@ Vill du registrera dig?</value>
     <value>En kompetens måste väljas.</value>
   </data>
   <data name="BpoExportPeriodStartDateBeforeEndDate" xml:space="preserve">
-    <value>Exportperiodens startdatum måste vara mindre än slutdatum</value>
+    <value>Exportperiodens startdatum måste vara tidigare än slutdatumet.</value>
   </data>
   <data name="BpoOnlyExportPeriodBetweenDates" xml:space="preserve">
-    <value>Endast exportperioder mellan datumen: {0} kan väljas.</value>
+    <value>Exportperioden måste vara mellan datumen {0}.</value>
   </data>
   <data name="OvertimeRequestMaximumTimeDenyReason" xml:space="preserve">
     <value>{0} innehåller för mycket övertid ({1}). Max är {2}.</value>
@@ -15351,16 +15351,16 @@ Vill du registrera dig?</value>
     <comment>Failed BPO import</comment>
   </data>
   <data name="ImportBpoNoDefaultResolutionForSkill" xml:space="preserve">
-    <value>Hittade ingen intervallupplösning på kompetensen: {0}.</value>
+    <value>Hittade ingen intervallängd för kompetensen {0}.</value>
   </data>
   <data name="ImportBpoResourceIntervalLengthDiffersFromTheSkill" xml:space="preserve">
-    <value>Intervallupplösningen på de importerande resurserna: {0} minuter stämmer inte överens med kompetensen {1} intervallupplösning {2} minuter.</value>
+    <value>Intervallängden för de importerade agenterna ({0} minuter) stämmer inte överens med intervallängden för kompetensen {1} ({2} minuter).</value>
   </data>
   <data name="ImportBpoResourcesCannotBeLessThanZero" xml:space="preserve">
-    <value>Importerade resurser kan inte vara mindre än 0.</value>
+    <value>Antalet agenter kan inte vara mindre än 0.</value>
   </data>
   <data name="ImportBpoSkillListedMoreThanOnce" xml:space="preserve">
-    <value>Komptensen: {0} är listad mer än en gång på samma rad.</value>
+    <value>Kompetensen {0} är listad mer än en gång på samma rad.</value>
   </data>
   <data name="ImportBpoSkillNotFound" xml:space="preserve">
     <value>Kompetensen med id: {0} finns inte i systemet.</value>
@@ -15369,10 +15369,10 @@ Vill du registrera dig?</value>
     <value>Namnet på underleverantören (Source) är för långt. Max 100 tecken är tillåtet.</value>
   </data>
   <data name="ImportBpoStartDateTimeMustBeBeforeEndDateTime" xml:space="preserve">
-    <value>Starttiden på intervallet måste vara en tidpunkt innan sluttiden.</value>
+    <value>Startdatum för perioden måste vara tidigare än slutdatumet.</value>
   </data>
   <data name="ImportBpoStartDateTimeMustBeInTheFuture" xml:space="preserve">
-    <value>Starttiden på intervallet måste vara en tidpunkt i framtiden.</value>
+    <value>Startdatum för perioden måste vara senare än idag.</value>
   </data>
   <data name="AgentsAnalyzed" xml:space="preserve">
     <value>Analyserar restriktioner</value>
@@ -15401,5 +15401,161 @@ Vill du registrera dig?</value>
   <data name="RestrictionNotAbleToBeScheduledReasonTooMuchWorkTimeInPeriod" xml:space="preserve">
     <value>Perioden kommer att ge för mycket arbetstid</value>
     <comment>The period results in to much work time</comment>
+  </data>
+  <data name="OvertimeRequestDenyReasonInvalidPeriod" xml:space="preserve">
+    <value>Din övertidsförfrågan har avslagits automatiskt. Den öppna perioden för förfrågningar är {0}.</value>
+  </data>
+  <data name="BadgeWithRank_YouGotANewBronzeBadgeForAdherence" xml:space="preserve">
+    <value>Du har en ny bronsmedalj! Din följsamhet {1:yyyy-MM-dd} är över {0}. </value>
+  </data>
+  <data name="BadgeWithRank_YouGotANewBronzeBadgeForAHT" xml:space="preserve">
+    <value>Du har en ny bronsmedalj! Din genomsnittliga behandlingstid {1:yyyy-MM-dd} är under {0} sekunder.</value>
+  </data>
+  <data name="BadgeWithRank_YouGotANewBronzeBadgeForAnsweredCalls" xml:space="preserve">
+    <value>Du har en ny bronsmedalj! Du har besvarat mer än {0} samtal {1:yyyy-MM-dd}.</value>
+  </data>
+  <data name="BadgeWithRank_YouGotANewGoldBadgeForAdherence" xml:space="preserve">
+    <value>Du har en ny guldmedalj! Din följsamhet {1:yyyy-MM-dd} är över {0}. </value>
+  </data>
+  <data name="BadgeWithRank_YouGotANewGoldBadgeForAHT" xml:space="preserve">
+    <value>Du har en ny guldmedalj! Din genomsnittliga behandlingstid {1:yyyy-MM-dd} är under {0} sekunder.</value>
+  </data>
+  <data name="BadgeWithRank_YouGotANewGoldBadgeForAnsweredCalls" xml:space="preserve">
+    <value>Du har en ny guldmedalj! Du har besvarat mer än {0} samtal {1:yyyy-MM-dd}.</value>
+  </data>
+  <data name="BadgeWithRank_YouGotANewSilverBadgeForAdherence" xml:space="preserve">
+    <value>Du har en ny silvermedalj! Din följsamhet {1:yyyy-MM-dd} är över {0}. </value>
+  </data>
+  <data name="BadgeWithRank_YouGotANewSilverBadgeForAHT" xml:space="preserve">
+    <value>Du har en ny silvermedalj! Din genomsnittliga behandlingstid {1:yyyy-MM-dd} är under {0} sekunder.</value>
+  </data>
+  <data name="BadgeWithRank_YouGotANewSilverBadgeForAnsweredCalls" xml:space="preserve">
+    <value>Du har en ny silvermedalj! Du har besvarat mer än {0} samtal {1:yyyy-MM-dd}.</value>
+  </data>
+  <data name="OvertimeRequests" xml:space="preserve">
+    <value>Övertidsförfrågningar</value>
+  </data>
+  <data name="PartialSuccessMessageForAddingDayOff" xml:space="preserve">
+    <value>Lade till en fridag för {0} agent(er), {1} lyckades, {2} misslyckades. </value>
+  </data>
+  <data name="PartialSuccessMessageForRemovingDayOff" xml:space="preserve">
+    <value>Tog bort en fridag för {0} agent(er), {1} lyckades, {2} misslyckades. </value>
+  </data>
+  <data name="MaximumOvertimeRuleName" xml:space="preserve">
+    <value>Maximal övertid</value>
+  </data>
+  <data name="MeasureNameIsTooLong" xml:space="preserve">
+    <value>Mätvärdets namn är för långt</value>
+  </data>
+  <data name="AgentIdIsTooLong" xml:space="preserve">
+    <value>Agent-ID är för långt</value>
+  </data>
+  <data name="MeasureTypeMustBeEitherNumericOrPercent" xml:space="preserve">
+    <value>Mätvärdestypen måste vara antingen "Numerisk" eller "Procent"</value>
+  </data>
+  <data name="MeasureTypeNotMatchExistingDefinition" xml:space="preserve">
+    <value>Mätvärdestypen matchar inte den befintliga definitionen</value>
+  </data>
+  <data name="MeasureIdMustContainAnInteger" xml:space="preserve">
+    <value>Mätvärdets ID måste innehålla en siffra</value>
+  </data>
+  <data name="RowExceedsLimitOfGamificationMeasures" xml:space="preserve">
+    <value>Det finns en begränsning på {0} mätvärden för gamification. Den här raden kan inte importeras eftersom det skulle överskrida begränsningen.</value>
+  </data>
+  <data name="InvalidScore" xml:space="preserve">
+    <value>Ogiltigt värde</value>
+  </data>
+  <data name="AgentIdCouldNotBeMatchedToAnyAgent" xml:space="preserve">
+    <value>Agent-ID kunde inte matchas till någon agent</value>
+  </data>
+  <data name="GamificationMeasureNameAlreadyExist" xml:space="preserve">
+    <value>Ett mätvärde för gamification (ID {0}) med det här namnet finns redan. </value>
+  </data>
+  <data name="AgentIdIsMandatory" xml:space="preserve">
+    <value>Agent-ID är obligatoriskt.</value>
+  </data>
+  <data name="MeasureNameIsMandatory" xml:space="preserve">
+    <value>Namn på mätvärdet är obligatoriskt.</value>
+  </data>
+  <data name="RtaConfigurationIssuesFound" xml:space="preserve">
+    <value>Konfigurationsproblem identifierade</value>
+  </data>
+  <data name="LoggedOutStateGroupMissingInConfiguration" xml:space="preserve">
+    <value>Affärsenhet '{0}' har ingen statusgrupp angiven för utloggade agenter. Funktionen för statussnapshots kommer inte att fungera förrän detta är angivet. Konfigurera detta i Inställningar i Windowsklienten.</value>
+  </data>
+  <data name="LoggedOutStateGroupMissingInRtaService" xml:space="preserve">
+    <value>Tjänsten för Real-time adherence har ingen statusgrupp angiven för utloggade agenter. Funktionen för statussnapshots kommer inte att fungera förrän detta är angivet och tjänstens cache har uppdaterats. Konfigurera detta i Inställningar i Windowsklienten och vänta på att tjänstens cache ska uppdateras.</value>
+  </data>
+  <data name="DefaultStateGroupMissingInConfiguration" xml:space="preserve">
+    <value>Affärsenheten '{0}' har ingen statusgrupp angiven som standardgrupp för agenter. Okända statusar kommer inte att fungera förrän detta är angivet. Konfigurera detta i Inställningar i Windowsklienten.</value>
+  </data>
+  <data name="PickATemplate" xml:space="preserve">
+    <value>Välj en mall</value>
+  </data>
+  <data name="RemoveDayOff" xml:space="preserve">
+    <value>Ta bort fridag</value>
+  </data>
+  <data name="ExportAvailableLimitedTime" xml:space="preserve">
+    <value>Notera att Exportera till endast är tillgängligt en begränsad tid. </value>
+  </data>
+  <data name="AreYouSureToRemoveSelectedDayOff" xml:space="preserve">
+    <value>Är du säker på att du vill ta bort {0} fridagar från {1} agenter?</value>
+  </data>
+  <data name="FinishedRemoveDayOff" xml:space="preserve">
+    <value>Fridag borttagen.</value>
+  </data>
+  <data name="SuccessfulMessageForAddingDayOff" xml:space="preserve">
+    <value>Fridagar tillagda för valda agenter. </value>
+  </data>
+  <data name="YouCanEnable3MeasuresAtMaximum" xml:space="preserve">
+    <value>Du kan maximalt aktivera 3 mätvärden.</value>
+  </data>
+  <data name="NoEndToDisplay" xml:space="preserve">
+    <value>Inget slutdatum att visa</value>
+  </data>
+  <data name="NoStartAndEndDateToDisplay" xml:space="preserve">
+    <value>Inget start- och slutdatum att visa</value>
+  </data>
+  <data name="NoStartDateToDisplay" xml:space="preserve">
+    <value>Inget startdatum att visa</value>
+  </data>
+  <data name="SetupIntervalLength" xml:space="preserve">
+    <value>Var god ange intervallängd</value>
+  </data>
+  <data name="GamificationSettingsMovedToWeb" xml:space="preserve">
+    <value>Gamificationinställningar är nu tillgängliga visa Teleopti WFMs webbsida</value>
+  </data>
+  <data name="GamificationSettingsRedirectWebManualMessage" xml:space="preserve">
+    <value>Klicka här för att manuellt öppna inställningssidan för gamification.</value>
+  </data>
+  <data name="GamificationSettingsRedirectWebMessage" xml:space="preserve">
+    <value>Inställningssidan för gamification skulle ha laddats automatiskt när du öppnade den här sidan. </value>
+  </data>
+  <data name="SkillType" xml:space="preserve">
+    <value>Kompetenstyp</value>
+  </data>
+  <data name="UseDefaultStartTime" xml:space="preserve">
+    <value>Använd standard-starttiden</value>
+  </data>
+  <data name="Measures" xml:space="preserve">
+    <value>Mätvärden</value>
+  </data>
+  <data name="ValuesShouldBeInAscendingOrderFromGoldToBronze" xml:space="preserve">
+    <value>Värdena ska vara i stigande ordning från guld till brons</value>
+  </data>
+  <data name="ValuesShouldBeInDescendingOrderFromGoldToBronze" xml:space="preserve">
+    <value>Värdena ska vara i fallande ordning från guld till brons</value>
+  </data>
+  <data name="TextIsTooLong" xml:space="preserve">
+    <value>Texten är för lång</value>
+  </data>
+  <data name="InvalidHoursRange" xml:space="preserve">
+    <value>Perioden kan inte överskrida {0} timmar.</value>
+  </data>
+  <data name="RequestStartDate" xml:space="preserve">
+    <value>Startdatum</value>
+  </data>
+  <data name="RequestEndDate" xml:space="preserve">
+    <value>Slutdatum</value>
   </data>
 </root>
