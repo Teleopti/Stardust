@@ -957,7 +957,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var deviationWithReforecast = calculateAverageDeviation(actualPhoneStats, skillDayPhone);
 
-			Math.Round(vm.DataSeries.ActualStaffing.First().Value, 2).Should().Be.EqualTo(Math.Round(actualStaffingSkill1, 3));
+			Math.Round(vm.DataSeries.ActualStaffing.First().Value, 2).Should().Be.EqualTo(Math.Round(actualStaffingSkill1, 2));
 			vm.DataSeries.ActualStaffing.Last().Should().Be.EqualTo(null);
 			vm.DataSeries.ForecastedStaffing.First().Should().Be.EqualTo(skillDayPhone.SkillStaffPeriodCollection.First().FStaff);
 			vm.DataSeries.UpdatedForecastedStaffing.Last().Should().Be.EqualTo(vm.DataSeries.ForecastedStaffing.Last() * deviationWithReforecast);
