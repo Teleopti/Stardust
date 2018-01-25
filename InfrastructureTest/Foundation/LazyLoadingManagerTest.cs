@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -59,7 +60,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             IPersonAssignment pAss =
                 PersonAssignmentFactory.CreateAssignmentWithMainShift(per, scen, act, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), shiftCat);
 
-            PersistAndRemoveFromUnitOfWork(pAss);
+            new PersonAssignmentRepository(CurrUnitOfWork).Add(pAss);
+			Session.Flush();
+			Session.Clear();
 
             pAss = Session.Load<PersonAssignment>(pAss.Id.Value);
 						Assert.IsFalse(LazyLoadingManager.IsInitialized(pAss.ShiftLayers));

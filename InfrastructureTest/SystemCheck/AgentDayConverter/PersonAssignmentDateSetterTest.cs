@@ -108,7 +108,9 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 			PersistAndRemoveFromUnitOfWork(pa.MainActivities().First().Payload);
 			PersistAndRemoveFromUnitOfWork(pa.ShiftCategory);
 			PersistAndRemoveFromUnitOfWork(pa.Scenario);
-			PersistAndRemoveFromUnitOfWork(pa);
+			new PersonAssignmentRepository(UnitOfWork).Add(pa);
+			Session.Flush();
+			Session.Clear();
 			return pa;
 		}
 
