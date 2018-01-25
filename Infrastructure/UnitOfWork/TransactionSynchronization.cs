@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 			try
 			{
-				var modifiedRoots = _interceptor.Value.ModifiedRoots.ToArray();
+				var modifiedRoots = _interceptor.Value?.ModifiedRoots.ToArray();
 				_hooks.Current().ForEach(d => d.AfterCompletion(modifiedRoots));
 				_afterCompletion.ForEach(f => f.Invoke());
 			}

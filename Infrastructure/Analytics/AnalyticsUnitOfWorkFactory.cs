@@ -8,7 +8,6 @@ namespace Teleopti.Ccc.Infrastructure.Analytics
 	public class AnalyticsUnitOfWorkFactory : IAnalyticsUnitOfWorkFactory
 	{
 		private readonly ISessionFactory _factory;
-		private readonly ICurrentTransactionHooks _transactionHooks;
 		private readonly AnalyticsUnitOfWorkContext _context;
 
 		protected internal AnalyticsUnitOfWorkFactory(
@@ -20,7 +19,6 @@ namespace Teleopti.Ccc.Infrastructure.Analytics
 		{
 			ConnectionString = connectionString;
 			_factory = sessionFactory;
-			_transactionHooks = transactionHooks;
 			_context = new AnalyticsUnitOfWorkContext(tenant);
 		}
 		
@@ -41,8 +39,7 @@ namespace Teleopti.Ccc.Infrastructure.Analytics
 		{
 			new AnalyticsUnitOfWork(
 				_context,
-				_factory.WithOptions().Interceptor(new AggregateRootInterceptor(ServiceLocatorForLegacy.UpdatedBy, new NoPreCommitHooks())).OpenSession(),
-				_transactionHooks
+				_factory.OpenSession()
 				);
 
 			return CurrentUnitOfWork();

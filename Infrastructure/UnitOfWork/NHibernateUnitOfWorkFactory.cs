@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		}
 	}
 
+	
 	public class NHibernateUnitOfWorkFactory : IUnitOfWorkFactory
 	{
 		private readonly ISessionFactory _factory;

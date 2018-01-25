@@ -118,9 +118,9 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 		}
 
-		public void AfterSuccessfulTx(Action func)
+		public void AfterSuccessfulTx(Action action)
 		{
-			func();
+			action();
 		}
 	}
 }

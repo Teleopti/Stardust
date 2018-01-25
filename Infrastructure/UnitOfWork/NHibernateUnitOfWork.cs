@@ -123,10 +123,10 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 						));
 		}
 
-		public void AfterSuccessfulTx(Action func)
+		public void AfterSuccessfulTx(Action action)
 		{
 			transactionEnsure();
-			_transactionSynchronization.RegisterForAfterCompletion(func);
+			_transactionSynchronization.RegisterForAfterCompletion(action);
 		}
 
 		public IEnumerable<IRootChangeInfo> PersistAll()
