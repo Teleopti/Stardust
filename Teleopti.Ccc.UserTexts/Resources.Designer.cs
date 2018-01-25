@@ -17483,6 +17483,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Maximum overtime.
+        /// </summary>
+        public static string MaximumOvertimeRuleName {
+            get {
+                return ResourceManager.GetString("MaximumOvertimeRuleName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Maximum seats.
         /// </summary>
         public static string MaximumSeats {

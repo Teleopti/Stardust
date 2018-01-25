@@ -5,6 +5,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.UserTexts;
@@ -54,6 +55,8 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			mapRequestViewModel(requestViewModel, request, nameFormatSettings);
 
 			requestViewModel.OvertimeTypeDescription = (request.Request as IOvertimeRequest)?.MultiplicatorDefinitionSet.Name;
+
+			requestViewModel.BrokenRules = NewBusinessRuleCollection.GetRuleDescriptionsFromFlag(request.BrokenBusinessRules.GetValueOrDefault(0));
 
 			return requestViewModel;
 		}

@@ -529,6 +529,26 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			result.Requests.ElementAt(0).OvertimeTypeDescription.Should().Be("test");
 		}
 
+		[Test]
+		public void ShouldGetOvertimeBrokenRulesFromOvertimeRequest()
+		{
+			var requests = setUpRequests();
+
+			var input = new AllRequestsFormData
+			{
+				StartDate = new DateOnly(2015, 10, 1),
+				EndDate = new DateOnly(2015, 10, 9),
+				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
+				SelectedGroupIds = new[] { team.Id.Value.ToString() }
+			};
+			var overtimeRequest = requests[3];
+			overtimeRequest.TrySetBrokenBusinessRule(BusinessRuleFlags.MaximumOvertimeRule);
+			var result = Target.CreateOvertimeRequestListViewModel(input);
+			var brokenRules = result.Requests.FirstOrDefault()?.BrokenRules;
+			brokenRules.Count().Should().Be(1);
+			brokenRules.Contains("MaximumOvertimeRuleName").Should().Be(true);
+		}
+
 		private AbsenceAndTextRequestViewModel doPersonalAccountSummaryTest(params AccountDay[] accountDays)
 		{
 			setupStateHolderProxy();

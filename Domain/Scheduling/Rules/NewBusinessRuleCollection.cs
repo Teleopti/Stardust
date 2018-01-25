@@ -102,6 +102,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				},
 				{
 					BusinessRuleFlags.ShiftTradeTargetTimeRule, "ShiftTradeTargetTimeRuleName"
+				},
+				{
+					BusinessRuleFlags.MaximumOvertimeRule, "MaximumOvertimeRuleName"
 				}
 			};
 
