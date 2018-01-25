@@ -8,7 +8,7 @@
 
 <div class="navbar navbar-teleopti subnavbar">
 	<div class="container">
-		<ul class="nav navbar-nav navbar-teleopti row submenu" data-bind="css:{'phone-navbar':IsStudentAvailabilityForMobileEnabled && IsHostAMobile}">
+		<ul class="nav navbar-nav navbar-teleopti row submenu" data-bind="css:{'phone-navbar': IsHostAMobile}">
 			<li class="col-xs-12 col-sm-4 phone-navbar-top">
 				<span class="input-group" style="max-width: 329px;">
 					<span class="input-group-btn">
@@ -42,13 +42,13 @@
 
 
 <div class="container pagebody student-availability-container">
-	<div id="Student-availability-edit-form" data-bind="visible: AddAvailabilityFormVisible,css:{'phone-form-availability':IsStudentAvailabilityForMobileEnabled && IsHostAMobile}">
+	<div id="Student-availability-edit-form" data-bind="visible: AddAvailabilityFormVisible,css:{'phone-form-availability': IsHostAMobile}">
 		<div  class="well well-sm clearfix form-student-availability" >
 			@Html.Partial("AddStudentAvailabilityPartial")
 		</div>
 		<div class="phone-background"></div>
 	</div>
-	<div id="StudentAvailability-period" class="m-b-10" data-bind="css:{'phone-warning-indicator':IsStudentAvailabilityForMobileEnabled && IsHostAMobile}" data-mytime-studentavailabilityperiod="@Model.StudentAvailabilityPeriod">
+	<div id="StudentAvailability-period" class="m-b-10" data-bind="css:{'phone-warning-indicator': IsHostAMobile}" data-mytime-studentavailabilityperiod="@Model.StudentAvailabilityPeriod">
 		<div class="warning-indicator" data-bind="click: toggleWarningDetail"><span data-bind="css: StudentAvailabilityFeedbackClass,text:WarningCount" class="warning-count">!</span></div>
 		<div data-bind="css:{warningDetail:shouldShowWarningDetail()}">
 			<div class="alert alert-student-availability" data-bind="css : StudentAvailabilityFeedbackClass()">

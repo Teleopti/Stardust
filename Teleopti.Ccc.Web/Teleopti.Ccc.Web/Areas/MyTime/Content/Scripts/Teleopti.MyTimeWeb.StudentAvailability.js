@@ -27,7 +27,6 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
         self.minDate = ko.observable(moment());
         self.maxDate = ko.observable(moment());
         self.IsHostAMobile = ko.observable(Teleopti.MyTimeWeb.Common.IsHostAMobile());
-        self.IsStudentAvailabilityForMobileEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_StudentAvailabilityForMobile_42498');
         self.displayDate = ko.observable();
         self.nextPeriodDate = ko.observable(moment());
         self.previousPeriodDate = ko.observable(moment());

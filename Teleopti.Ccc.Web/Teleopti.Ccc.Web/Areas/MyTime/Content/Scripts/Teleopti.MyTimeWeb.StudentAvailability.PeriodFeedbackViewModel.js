@@ -81,8 +81,6 @@ Teleopti.MyTimeWeb.StudentAvailability.PeriodFeedbackViewModel = function (ajax,
 
 	this.IsHostAMobile = ko.observable(Teleopti.MyTimeWeb.Common.IsHostAMobile());
 
-	this.IsStudentAvailabilityForMobileEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_StudentAvailabilityForMobile_42498');
-
 	this.WarningCount = ko.computed(function() {
 		var studentAvailabilityPeriod = $("#StudentAvailability-period").data("mytime-studentavailabilityperiod");
 		if (studentAvailabilityPeriod == null) return 1;
