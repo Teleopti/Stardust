@@ -16853,8 +16853,8 @@ Do you want to participate?</value>
     <value>Measure name is too long</value>
     <comment>Error message used in importing an external performance csv file</comment>
   </data>
-  <data name="PersonIdIsTooLong" xml:space="preserve">
-    <value>Person ID is too long</value>
+  <data name="AgentIdIsTooLong" xml:space="preserve">
+    <value>Agent ID is too long</value>
     <comment>Error message used in importing an external performance csv file.</comment>
   </data>
   <data name="MeasureTypeMustBeEitherNumericOrPercent" xml:space="preserve">
@@ -16877,8 +16877,8 @@ Do you want to participate?</value>
     <value>Invalid score</value>
     <comment>use for gamification error info when import external performance csv file.</comment>
   </data>
-  <data name="PersonIdCouldNotBeMatchedToAnyAgent" xml:space="preserve">
-    <value>The person ID could not be matched to any agent</value>
+  <data name="AgentIdCouldNotBeMatchedToAnyAgent" xml:space="preserve">
+    <value>The agent ID could not be matched to any agent</value>
     <comment>Error message used in parsing Gamification external performance data file</comment>
   </data>
   <data name="BusinessHierarchy" xml:space="preserve">

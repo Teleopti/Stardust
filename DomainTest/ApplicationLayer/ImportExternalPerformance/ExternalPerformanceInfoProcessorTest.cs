@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 				"20170820,"+ agentId + ",Kalle,Pettersson,Sales result,2,Numeric,2000";
 			var fileData = createFileData(invalidRecord);
 
-			var errorMsg = Resources.PersonIdIsTooLong;
+			var errorMsg = Resources.AgentIdIsTooLong;
 			var expectedErrorRecord = $"{invalidRecord},{errorMsg}";
 			var result = Target.Process(fileData);
 
@@ -335,7 +335,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			var agentNotExistRecord = "20171120,1,Kalle,Pettersson,Quality Score,1,Numeric,87";
 			var fileData = createFileData(agentNotExistRecord);
 
-			var expectedErrorRecord = $"{agentNotExistRecord},{Resources.PersonIdCouldNotBeMatchedToAnyAgent}";
+			var expectedErrorRecord = $"{agentNotExistRecord},{Resources.AgentIdCouldNotBeMatchedToAnyAgent}";
 			var result = Target.Process(fileData);
 
 			result.InvalidRecords.Count.Should().Be.EqualTo(1);

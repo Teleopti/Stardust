@@ -1835,11 +1835,29 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The agent ID could not be matched to any agent.
+        /// </summary>
+        public static string AgentIdCouldNotBeMatchedToAnyAgent {
+            get {
+                return ResourceManager.GetString("AgentIdCouldNotBeMatchedToAnyAgent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Agent ID is mandatory..
         /// </summary>
         public static string AgentIdIsMandatory {
             get {
                 return ResourceManager.GetString("AgentIdIsMandatory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Agent ID is too long.
+        /// </summary>
+        public static string AgentIdIsTooLong {
+            get {
+                return ResourceManager.GetString("AgentIdIsTooLong", resourceCulture);
             }
         }
         
@@ -24344,24 +24362,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string PersonFromGroupingDeletionQuestion {
             get {
                 return ResourceManager.GetString("PersonFromGroupingDeletionQuestion", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The person ID could not be matched to any agent.
-        /// </summary>
-        public static string PersonIdCouldNotBeMatchedToAnyAgent {
-            get {
-                return ResourceManager.GetString("PersonIdCouldNotBeMatchedToAnyAgent", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Person ID is too long.
-        /// </summary>
-        public static string PersonIdIsTooLong {
-            get {
-                return ResourceManager.GetString("PersonIdIsTooLong", resourceCulture);
             }
         }
         

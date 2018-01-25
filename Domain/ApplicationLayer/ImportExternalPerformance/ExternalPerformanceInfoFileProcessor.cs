@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 
 				if (!personIds.Any())
 				{
-					processResult.InvalidRecords.Add($"{extractionResult.RawLine},{Resources.PersonIdCouldNotBeMatchedToAnyAgent}");
+					processResult.InvalidRecords.Add($"{extractionResult.RawLine},{Resources.AgentIdCouldNotBeMatchedToAnyAgent}");
 					continue;
 				}
 

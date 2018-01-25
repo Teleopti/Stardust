@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			}
 			if (!personIdLengthIsValid(personId))
 			{
-				result.Error = $"{line},{Resources.PersonIdIsTooLong}";
+				result.Error = $"{line},{Resources.AgentIdIsTooLong}";
 				return result;
 			}
 			result.AgentId = personId;
