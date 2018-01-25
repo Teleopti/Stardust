@@ -94,24 +94,13 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 	}
 
 	function _onSuccessDeletePeriod(data, dates, successCb) {
-		if (Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_PreferencePerformanceForMultipleUsers_43322")) {
 			data.forEach(function(d){
 				preferencesAndScheduleViewModel.DayViewModels[d.Date].ClearPreference(successCb);
 			});
 			periodFeedbackViewModel.LoadFeedback();
-			updateSelectedDatesAndNeighbors(dates);
-			periodFeedbackViewModel.PossibleNightRestViolations();
-		} else {
-			dates.forEach(function(date) {
-				var dayViewModel = preferencesAndScheduleViewModel.DayViewModels[date];
-				dayViewModel.ClearPreference(successCb);
-				dayViewModel.LoadFeedback();
-			});
+			updateSelectedDatesAndNeighbors(dates); 
 
-			periodFeedbackViewModel.LoadFeedback();
-			loadNeighborFeedback();
 			periodFeedbackViewModel.PossibleNightRestViolations();
-		}
 	}
 
 	function _deletePreferenceTemplate(templateId) {
@@ -159,7 +148,6 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 	}
 
 	function _setPreference(preference,cb) {
-		var promises = [];
 		addExtendedPreferenceFormViewModel.ValidationError('');
 
 		var validationErrorCallback = function (data) {
@@ -179,28 +167,11 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		delete preference.SelectedTemplate;
 		delete preference.NewTemplateName;
 
-		if (Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_PreferencePerformanceForMultipleUsers_43322")) {
 			var postDates = [];
 			$('#Preference-body-inner .ui-selected').each(function(index, cell) {
 				postDates.push($(cell).data('mytime-date'));
 			});
-			setSelectedDatesPreferences(postDates, preference, validationErrorCallback, cb);
-		} else {
-			$('#Preference-body-inner .ui-selected').each(function(index, cell) {
-				var date = $(cell).data('mytime-date');
-				updateMustHaveInMenu(date);
-				var promise = preferencesAndScheduleViewModel.DayViewModels[date].SetPreference(preference, validationErrorCallback);
-				promises.push(promise);
-			});
-			if (promises.length !== 0) {
-				$.when.apply(null, promises).done(function() {
-					periodFeedbackViewModel.LoadFeedback();
-					loadNeighborFeedback();
-					periodFeedbackViewModel.PossibleNightRestViolations();
-					if (cb) cb();
-				});
-			}
-		}
+			setSelectedDatesPreferences(postDates, preference, validationErrorCallback, cb);		
 	}
 
 	function setSelectedDatesPreferences(postDates, preference, validationErrorCallback, cb) {
@@ -282,32 +253,32 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		});
 	}
 
-	function loadNeighborFeedback() {
-		var dates = [];
-		$("#Preference-body-inner").find('li[data-mytime-date]').each(function (i, e) {
-			dates.push($(e).data('mytime-date'));
-		});
+	//function loadNeighborFeedback() {
+	//	var dates = [];
+	//	$("#Preference-body-inner").find('li[data-mytime-date]').each(function (i, e) {
+	//		dates.push($(e).data('mytime-date'));
+	//	});
 
-		$('#Preference-body-inner .ui-selected').each(function (index, ele) {
-			var date = $(ele).data('mytime-date');
-			var curDateIndex = dates.indexOf(date);
+	//	$('#Preference-body-inner .ui-selected').each(function (index, ele) {
+	//		var date = $(ele).data('mytime-date');
+	//		var curDateIndex = dates.indexOf(date);
 
-			var previousDayIndex = curDateIndex - 1;
-			var nextDayIndex = curDateIndex + 1;
+	//		var previousDayIndex = curDateIndex - 1;
+	//		var nextDayIndex = curDateIndex + 1;
 
-			if (nextDayIndex < dates.length) {
-				date = dates[nextDayIndex];
-				if (preferencesAndScheduleViewModel.DayViewModels[date])
-					preferencesAndScheduleViewModel.DayViewModels[date].LoadFeedback();
-			}
+	//		if (nextDayIndex < dates.length) {
+	//			date = dates[nextDayIndex];
+	//			if (preferencesAndScheduleViewModel.DayViewModels[date])
+	//				preferencesAndScheduleViewModel.DayViewModels[date].LoadFeedback();
+	//		}
 
-			if (previousDayIndex >= 0) {
-				date = dates[previousDayIndex];
-				if (preferencesAndScheduleViewModel.DayViewModels[date])
-					preferencesAndScheduleViewModel.DayViewModels[date].LoadFeedback();
-			}
-		});
-	}
+	//		if (previousDayIndex >= 0) {
+	//			date = dates[previousDayIndex];
+	//			if (preferencesAndScheduleViewModel.DayViewModels[date])
+	//				preferencesAndScheduleViewModel.DayViewModels[date].LoadFeedback();
+	//		}
+	//	});
+	//}
 
 	function _setMustHave(mustHave, successCb) {
 		$('#Preference-body-inner .ui-selected')
@@ -446,12 +417,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			}
 		}
 
-		if (Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_PreferencePerformanceForMultipleUsers_43322")) {
-			_loadPreferenceFeedbackDataByPeriod();
-		} else {
-			_assignPreferenceFeedbackDataToDateCell();
-			callback && callback();
-		}
+		_loadPreferenceFeedbackDataByPeriod();
 
 		function _loadPreferenceFeedbackDataByPeriod() {
 			var startDate = $('li[data-mytime-date]')[0].attributes['data-mytime-date'].value;
@@ -551,16 +517,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 							runLoader(function() {
 								periodFeedbackViewModel.LoadFeedback();
 
-								if (Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_PreferencePerformanceForMultipleUsers_43322")) {
-									loadWeeklyWorkTimeSettings();
-								} else {
-									if ($('li[data-mytime-week]').length > 0) {
-										$.each(weekViewModels,
-											function (index, week) {
-												week.LoadWeeklyWorkTimeSettings();
-											});
-									}
-								}
+								loadWeeklyWorkTimeSettings();
 
 								$.each(preferencesAndScheduleViewModel.DayViewModels,
 									function(index, day) {

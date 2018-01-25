@@ -166,53 +166,6 @@ Scenario: View available activity list when adding extended preference
 	| Value |
 	| Lunch |
 
-@OnlyRunIfDisabled('MyTimeWeb_PreferencePerformanceForMultipleUsers_43322')
-Scenario: Replace extended preference
-	Given I have the role 'Access to extended preferences'
-	And I have an extended preference with
-	| Field          | Value      |
-	| Date           | 2012-09-05 |
-	| IsExtended     | true       |
-	| Shift Category | Early      |
-	And I am viewing preferences for date '2012-09-05'
-	When I select day '2012-09-05'
-	And I click the add extended preference button
-	And I input extended preference fields with
-	| Field                       | Value |
-	| Preference                  | Late  |
-	| Start time minimum          | 10:30 |
-	| Start time maximum          | 11:00 |
-	| End time minimum            | 19:00 |
-	| End time maximum            | 20:30 |
-	| Work time minimum           | 8:00  |
-	| Work time maximum           | 8:30  |
-	| Activity                    | Lunch |
-	| Activity Start time minimum | 12:00 |
-	| Activity Start time maximum | 12:15 |
-	| Activity End time minimum   | 12:30 |
-	| Activity End time maximum   | 12:45 |
-	| Activity time minimum       | 0:30  |
-	| Activity time maximum       | 1:00  |
-	And I click the apply extended preferences button
-	Then I should see the preference Late on '2012-09-05'
-	When I click the extended preference indication on '2012-09-05'
-	Then I should see extended preference with
-	| Field                       | Value      |
-	| Date                        | 2012-09-05 |
-	| Preference                  | Late       |
-	| Start time minimum          | 10:30      |
-	| Start time maximum          | 11:00      |
-	| End time minimum            | 19:00      |
-	| End time maximum            | 20:30      |
-	| Work time minimum           | 8:00       |
-	| Work time maximum           | 8:30       |
-	| Activity                    | Lunch      |
-	| Activity Start time minimum | 12:00      |
-	| Activity Start time maximum | 12:15      |
-	| Activity End time minimum   | 12:30      |
-	| Activity End time maximum   | 12:45      |
-	| Activity time minimum       | 0:30       |
-	| Activity time maximum       | 1:00       |
 
 Scenario: Validate preference times
 	Given I have the role 'Access to extended preferences'

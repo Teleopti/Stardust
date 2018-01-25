@@ -191,36 +191,6 @@ Scenario: Period feedback of schedules
 	When I view preferences for date '2014-05-02'
 	Then I should see a message that my preferences can result in 40 hours
 
-@OnlyRunIfDisabled('MyTimeWeb_PreferencePerformanceForMultipleUsers_43322')
-Scenario: Period feedback of schedules and preferences
-	Given I am an agent
-	And I have a scheduling period of 1 week
-	And there is a shift category named 'Day'
-	And I have a shift bag with category 'Day' and start times 7 to 9 and end times 15 to 17
-	And I have a scheduled shift of 8 hours on '2014-04-28'
-	And I have a scheduled shift of 8 hours on '2014-04-29'
-	And I have existing shift category preference with
-	| Field          | Value      |
-	| Date           | 2014-04-30 |
-	| Shift category | Day        |
-	And I have existing shift category preference with
-	| Field          | Value      |
-	| Date           | 2014-05-01 |
-	| Shift category | Day        |
-	And I have existing shift category preference with
-	| Field          | Value      |
-	| Date           | 2014-05-02 |
-	| Shift category | Day        |
-	And I have an assigned dayoff with
-	| Field          | Value      |
-	| Date           | 2014-05-03 |
-	| Shift category | Day        |
-	And I have existing day off preference with
-  | Field | Value      |
-  | Date  | 2014-05-04 |
-	When I view preferences for date '2014-05-02'
-	Then I should see a message that my preferences can result in 34 to 46 hours
-
 Scenario: Period feedback of contract time absence
 	Given I am an agent
 	And I have a scheduling period of 1 week

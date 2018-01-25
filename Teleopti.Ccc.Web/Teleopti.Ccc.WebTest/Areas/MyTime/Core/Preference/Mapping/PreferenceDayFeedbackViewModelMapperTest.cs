@@ -5,7 +5,6 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
@@ -33,9 +32,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 				};
 			preferenceFeedbackProvider.Stub(x => x.CheckNightRestViolation(new DateOnlyPeriod(today, today)))
 				.Return(perriodNightRestCheckResult);
-			var toggleManager = new TrueToggleManager();
 
-			target = new PreferenceDayFeedbackViewModelMapper(preferenceFeedbackProvider, toggleManager);
+			target = new PreferenceDayFeedbackViewModelMapper(preferenceFeedbackProvider);
 		}
 
 		private IPreferenceFeedbackProvider preferenceFeedbackProvider;

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
@@ -10,40 +8,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 	public class PreferenceNightRestChecker : IPreferenceNightRestChecker
 	{
 		private readonly IPersonPreferenceDayOccupationFactory _occupationFactory;
-		private readonly IToggleManager _toggleManager;
 
-		public PreferenceNightRestChecker(IPersonPreferenceDayOccupationFactory occupationFactory,
-			IToggleManager toggleManager)
+		public PreferenceNightRestChecker(IPersonPreferenceDayOccupationFactory occupationFactory)
 		{
 			_occupationFactory = occupationFactory;
-			_toggleManager = toggleManager;
 		}
 
 		public PreferenceNightRestCheckResult CheckNightRestViolation(IPerson person, DateOnly date)
 		{
-			if (_toggleManager.IsEnabled(Toggles.MyTimeWeb_PreferencePerformanceForMultipleUsers_43322))
-			{
-				return CheckNightRestViolation(person, date.ToDateOnlyPeriod())[date];
-			}
-
-			var personPeriod = person.Period(date);
-			var result = initCheckResult(personPeriod);
-
-			var currentDayOccupation = _occupationFactory.GetPreferenceDayOccupation(person, date);
-			if (!currentDayOccupation.HasPreference)
-			{
-				return result;
-			}
-
-			var previousDay = date.AddDays(-1);
-			var nextDay = date.AddDays(1);
-			var previousDayOccupation = _occupationFactory.GetPreferenceDayOccupation(person, previousDay);
-			var nextDayOccupation = _occupationFactory.GetPreferenceDayOccupation(person, nextDay);
-
-			checkRestViolationForPreviousDay(previousDayOccupation, currentDayOccupation, date, result);
-			checkRestViolationForNextDay(currentDayOccupation, nextDayOccupation, date, result);
-
-			return result;
+			return CheckNightRestViolation(person, date.ToDateOnlyPeriod())[date];
 		}
 
 		public IDictionary<DateOnly, PreferenceNightRestCheckResult> CheckNightRestViolation(IPerson person,

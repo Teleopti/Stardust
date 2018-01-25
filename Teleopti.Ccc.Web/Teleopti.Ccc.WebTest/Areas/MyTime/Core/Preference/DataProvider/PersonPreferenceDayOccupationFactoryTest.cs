@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
-using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
@@ -98,10 +97,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 
 			mmc.Stub(x => x.WorkTimeMinMax(date3, bag, schedule3)).Return(workTimeMinMaxResult);
 
-			var trueToggleManager = new TrueToggleManager();
-
 			target = new PersonPreferenceDayOccupationFactory(scheduleProvider, personPreferenceProvider, provider,
-				userTimeZone, mmc, trueToggleManager);
+				userTimeZone, mmc);
 		}
 
 		private PersonPreferenceDayOccupationFactory target;

@@ -26,7 +26,6 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate, feedBackData
 
 	self.DayString = ko.observable();
 	self.MonthString = ko.observable();
-	self.PreferencePerformanceForMultipleUsersEnabled = ko.observable(Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_PreferencePerformanceForMultipleUsers_43322"));
 
 	self.HasPreference = true;
 	self.IsLoading = ko.observable(true);

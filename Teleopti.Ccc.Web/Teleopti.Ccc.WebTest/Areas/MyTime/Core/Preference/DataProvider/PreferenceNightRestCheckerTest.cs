@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Interfaces.Domain;
@@ -16,7 +14,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 	{
 		private IPerson person;
 		private IPersonPreferenceDayOccupationFactory occupationFactory;
-		private FakeToggleManager toggleManager;
 		private PreferenceNightRestChecker target;
 
 		[SetUp]
@@ -26,67 +23,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 			// ExpectedNightRest in the fake person period is 11:00
 			person = PersonFactory.CreatePersonWithPersonPeriod(periodStart);
 
-			toggleManager = new FakeToggleManager();
 			occupationFactory = MockRepository.GenerateMock<IPersonPreferenceDayOccupationFactory>();
-			target = new PreferenceNightRestChecker(occupationFactory, toggleManager);
-		}
-
-		[Test]
-		public void ShouldHaveNoRestViolationForDateWithToggle43322Disabled()
-		{
-			toggleManager.Disable(Toggles.MyTimeWeb_PreferencePerformanceForMultipleUsers_43322);
-
-			var currentDate = new DateOnly(DateTime.Now);
-			var previousDate = currentDate.AddDays(-1);
-			
-			occupationFactory.Stub(f => f.GetPreferenceDayOccupation(person, currentDate)).IgnoreArguments()
-				.Return(createNormalDayOccupation());
-
-			var result = target.CheckNightRestViolation(person, previousDate);
-			Assert.NotNull(result);
-			Assert.IsFalse(result.HasViolationToPreviousDay);
-			Assert.IsFalse(result.HasViolationToNextDay);
-
-			result = target.CheckNightRestViolation(person, currentDate);
-			Assert.NotNull(result);
-			Assert.IsFalse(result.HasViolationToPreviousDay);
-			Assert.IsFalse(result.HasViolationToNextDay);
-		}
-
-		[Test]
-		public void ShouldHaveRestViolationForDateWithToggle43322Disabled()
-		{
-			toggleManager.Disable(Toggles.MyTimeWeb_PreferencePerformanceForMultipleUsers_43322);
-
-			var currentDate = new DateOnly(DateTime.Now);
-			var previousDate = currentDate.AddDays(-1);
-			var nextDate = currentDate.AddDays(1);
-
-			occupationFactory.Stub(f => f.GetPreferenceDayOccupation(person, previousDate.AddDays(-1)))
-				.Return(createNightDayOccupation());
-			occupationFactory.Stub(f => f.GetPreferenceDayOccupation(person, previousDate))
-				.Return(createNightDayOccupation());
-			occupationFactory.Stub(f => f.GetPreferenceDayOccupation(person, currentDate))
-				.Return(createNormalDayOccupation());
-			occupationFactory.Stub(f => f.GetPreferenceDayOccupation(person, nextDate))
-				.Return(createNormalDayOccupation());
-
-			var result = target.CheckNightRestViolation(person, previousDate);
-			Assert.NotNull(result);
-			Assert.IsFalse(result.HasViolationToPreviousDay);
-			Assert.IsTrue(result.HasViolationToNextDay);
-
-			result = target.CheckNightRestViolation(person, currentDate);
-			Assert.NotNull(result);
-			Assert.IsTrue(result.HasViolationToPreviousDay);
-			Assert.IsFalse(result.HasViolationToNextDay);
+			target = new PreferenceNightRestChecker(occupationFactory);
 		}
 
 		[Test]
 		public void ShouldHaveNoRestViolationForDate()
 		{
-			toggleManager.Enable(Toggles.MyTimeWeb_PreferencePerformanceForMultipleUsers_43322);
-
 			var currentDate = new DateOnly(DateTime.Now);
 			var previousDate = currentDate.AddDays(-1);
 			var nextDate = currentDate.AddDays(1);
@@ -116,8 +59,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 		[Test]
 		public void ShouldHaveRestViolationForDate()
 		{
-			toggleManager.Enable(Toggles.MyTimeWeb_PreferencePerformanceForMultipleUsers_43322);
-
 			var currentDate = new DateOnly(DateTime.Now);
 			var previousDate = currentDate.AddDays(-1);
 			var nextDate = currentDate.AddDays(1);

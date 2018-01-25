@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Interfaces.Domain;
 
@@ -18,88 +16,23 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 		private readonly IScheduleProvider _scheduleProvider;
 		private readonly IUserTimeZone _userTimezone;
 		private readonly IWorkTimeMinMaxCalculator _workTimeMinMaxCalculator;
-		private readonly IToggleManager _toggleManager;
 
 		public PersonPreferenceDayOccupationFactory(IScheduleProvider scheduleProvider,
 			IPreferenceProvider preferenceProvider,
-			IPersonRuleSetBagProvider personRuleSetBagProvider, IUserTimeZone userTimezone,
-			IWorkTimeMinMaxCalculator workTimeMinMaxCalculator,
-			IToggleManager toggleManager)
+			IPersonRuleSetBagProvider personRuleSetBagProvider, 
+			IUserTimeZone userTimezone,
+			IWorkTimeMinMaxCalculator workTimeMinMaxCalculator)
 		{
 			_scheduleProvider = scheduleProvider;
 			_preferenceProvider = preferenceProvider;
 			_personRuleSetBagProvider = personRuleSetBagProvider;
 			_userTimezone = userTimezone;
 			_workTimeMinMaxCalculator = workTimeMinMaxCalculator;
-			_toggleManager = toggleManager;
 		}
 
 		public PersonPreferenceDayOccupation GetPreferenceDayOccupation(IPerson person, DateOnly date)
 		{
-			if (_toggleManager.IsEnabled(Toggles.MyTimeWeb_PreferencePerformanceForMultipleUsers_43322))
-			{
-				return GetPreferencePeriodOccupation(person, date.ToDateOnlyPeriod())[date];
-			}
-
-			var loadOptions = new ScheduleDictionaryLoadOptions(true, false);
-			var schedule = _scheduleProvider.GetScheduleForPersonsWithOptions(date, new List<IPerson> {person}, loadOptions)
-				.FirstOrDefault();
-
-			var personPreferenceDayOccupation = new PersonPreferenceDayOccupation();
-			var personAssignment = schedule?.PersonAssignment();
-			if (personAssignment != null)
-			{
-				personPreferenceDayOccupation.HasDayOff = personAssignment.DayOff() != null;
-
-				if (!personPreferenceDayOccupation.HasDayOff && personAssignment.MainActivities().Any())
-				{
-					personPreferenceDayOccupation.HasShift = true;
-
-					var timeZone = _userTimezone.TimeZone();
-					var localPeriod = personAssignment.Period.TimePeriod(timeZone);
-					
-					personPreferenceDayOccupation.StartTimeLimitation = new StartTimeLimitation(localPeriod.StartTime, localPeriod.StartTime);
-					personPreferenceDayOccupation.EndTimeLimitation = new EndTimeLimitation(localPeriod.EndTime, localPeriod.EndTime);
-
-					var personAbsence = schedule.PersonAbsenceCollection()
-						.FirstOrDefault(pa => pa.Period.Contains(personAssignment.Period));
-					personPreferenceDayOccupation.HasFullDayAbsence = personAbsence != null;
-				}
-			}
-
-			if (personPreferenceDayOccupation.HasDayOff || personPreferenceDayOccupation.HasShift)
-			{
-				return personPreferenceDayOccupation;
-			}
-
-			var preference = _preferenceProvider.GetPreferencesForDate(date);
-			if (preference == null)
-			{
-				return personPreferenceDayOccupation;
-			}
-
-			var restriction = preference.Restriction;
-			WorkTimeMinMaxCalculationResult minMax = null;
-			if (schedule != null)
-			{
-				minMax = _workTimeMinMaxCalculator.WorkTimeMinMax(date, _personRuleSetBagProvider.ForDate(person, date), schedule);
-			}
-
-			personPreferenceDayOccupation.HasPreference = true;
-
-			var noStartTimeRestriction = restriction.StartTimeLimitation == new StartTimeLimitation(null, null) &&
-										 minMax?.WorkTimeMinMax != null;
-			personPreferenceDayOccupation.StartTimeLimitation = noStartTimeRestriction
-				? minMax.WorkTimeMinMax.StartTimeLimitation
-				: restriction.StartTimeLimitation;
-
-			var noEndTimeRestriction = restriction.EndTimeLimitation == new EndTimeLimitation(null, null) &&
-									   minMax?.WorkTimeMinMax != null;
-			personPreferenceDayOccupation.EndTimeLimitation = noEndTimeRestriction
-				? minMax.WorkTimeMinMax.EndTimeLimitation
-				: restriction.EndTimeLimitation;
-
-			return personPreferenceDayOccupation;
+			return GetPreferencePeriodOccupation(person, date.ToDateOnlyPeriod())[date];
 		}
 
 		public Dictionary<DateOnly, PersonPreferenceDayOccupation> GetPreferencePeriodOccupation(IPerson person,
