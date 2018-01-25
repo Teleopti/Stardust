@@ -405,6 +405,81 @@
 		expect(menuListItem[0].disabled).toBe(false);
 	});
 
+	it('should not view active Move Shift command menu when no shift is selected', function () {
+		var html = '<teamschedule-command-menu  selected-date="vm.selectedDate"></teamschedule-command-menu>';
+		var scope = $rootScope.$new();
+		var date = "2018-01-16";
+		scope.vm = {
+			toggleCurrentSidenav: function () { },
+			selectedDate: new Date(date)
+		};
+		permissions.set({
+			HasMoveActivityPermission: true
+		});
+
+		personSelectionSvc.hasAgentSelected(true);
+		personSelectionSvc.setSelectedPersonAndProjectionCount({
+			CheckedPersonCount: 1,
+			SelectedActivityInfo: {
+				PersonCount: 0,
+				ActivityCount: 0
+			},
+			SelectedAbsenceInfo: {
+				PersonCount: 0,
+				AbsenceCount: 0
+			}
+		});
+
+		var element = $compile(html)(scope);
+
+		scope.$apply();
+
+		var menu = angular.element(element[0].querySelector('#scheduleContextMenuButton'));
+		var menuListItem = angular.element(element[0].querySelector('.wfm-list #menuItemMoveShift'));
+
+		expect(menu.length).toBe(1);
+		expect(menuListItem.length).toBe(1);
+		expect(menuListItem[0].disabled).toBe(true);
+	});
+
+
+	it('should not view active Edit Shift Category command menu when no shift is selected', function () {
+		var html = '<teamschedule-command-menu  selected-date="vm.selectedDate"></teamschedule-command-menu>';
+		var scope = $rootScope.$new();
+		var date = "2018-01-16";
+		scope.vm = {
+			toggleCurrentSidenav: function () { },
+			selectedDate: new Date(date)
+		};
+		permissions.set({
+			HasEditShiftCategoryPermission: true
+		});
+
+		personSelectionSvc.hasAgentSelected(true);
+		personSelectionSvc.setSelectedPersonAndProjectionCount({
+			CheckedPersonCount: 1,
+			SelectedActivityInfo: {
+				PersonCount: 0,
+				ActivityCount: 0
+			},
+			SelectedAbsenceInfo: {
+				PersonCount: 0,
+				AbsenceCount: 0
+			}
+		});
+
+		var element = $compile(html)(scope);
+
+		scope.$apply();
+
+		var menu = angular.element(element[0].querySelector('#scheduleContextMenuButton'));
+		var menuListItem = angular.element(element[0].querySelector('.wfm-list #menuItemEditShiftCategory'));
+
+		expect(menu.length).toBe(1);
+		expect(menuListItem.length).toBe(1);
+		expect(menuListItem[0].disabled).toBe(true);
+	});
+
 	// Don't check this, as it performs badly when select all agents on every page is set.
 	xit('should make Move Invalid Overlapped Activity command menu clickable when there is none overlap warning', function () {
 		var html = '<teamschedule-command-menu></teamschedule-command-menu>';
@@ -433,24 +508,28 @@
 		var personIds = [];
 		var hasSelected = false;
 		var fakePersonList = [];
+		var totalSelectedPersonAndProjectionCount = {
+			CheckedPersonCount: 0,
+			SelectedActivityInfo: {
+				PersonCount: 0,
+				ActivityCount: 0
+			},
+			SelectedAbsenceInfo: {
+				PersonCount: 0,
+				AbsenceCount: 0
+			}
+		};
 		this.hasAgentSelected = function (value) {
 			hasSelected = value;
 		}
 		this.anyAgentChecked = function () {
 			return hasSelected;
 		}
+		this.setSelectedPersonAndProjectionCount = function(input) {
+			totalSelectedPersonAndProjectionCount = input;
+		}
 		this.getTotalSelectedPersonAndProjectionCount = function () {
-			return {
-				CheckedPersonCount: 0,
-				SelectedActivityInfo: {
-					PersonCount: 0,
-					ActivityCount: 0
-				},
-				SelectedAbsenceInfo: {
-					PersonCount: 0,
-					AbsenceCount: 0
-				}
-			};
+			return totalSelectedPersonAndProjectionCount;
 		};
 		this.isAnyAgentSelected = function () {
 			return false;

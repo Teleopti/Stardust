@@ -21,7 +21,7 @@
 		ctrl.agentsInDifferentTimeZone = [];
 
 		ctrl.$onInit = function () {
-			ctrl.selectedAgents = personSelectionSvc.getSelectedPersonInfoList();
+			ctrl.selectedAgents = personSelectionSvc.getCheckedPersonInfoList();
 			ctrl.moveToTime = getDefaultMoveToTime();
 			ctrl.trackId = ctrl.containerCtrl.getTrackId();
 			findAgentsInDifferentTimezone();
@@ -139,19 +139,21 @@
 			validator.validateMoveToTimeForShift(ctrl.containerCtrl.scheduleManagementSvc, moment(getMoveToStartTimeStr()), currentTimezone);
 			var invalidAgents = validator.getInvalidPeople();
 			if (ctrl.agentsInDifferentTimeZone.length > 0) {
-				ctrl.invalidAgents = filterAgentArray(invalidAgents.concat(ctrl.agentsInDifferentTimeZone));
+				invalidAgents = invalidAgents.concat(ctrl.agentsInDifferentTimeZone);
 			}
+			ctrl.invalidAgents = filterAgentArray(invalidAgents);
 		}
 
 		function filterAgentArray(arr) {
 			var map = {};
-			return arr.filter(function(agent) {
-				if (map[agent.PersonId])
-					return false;
-				else {
-					return map[agent.PersonId] = true;
-				}
+			arr.forEach(function(agent) {
+				map[agent.PersonId] = {
+					PersonId:agent.PersonId,
+					Name:agent.Name
+				};
 			});
+			var personIds = Object.keys(map);
+			return personIds.map(function(key) { return map[key]; });
 		}
 
 		function findAgentsInDifferentTimezone() {

@@ -10,7 +10,7 @@
 			<i class="mdi mdi-alert-octagon"></i>
 			<span>{{'CannotApplyThisToAgentsInADifferentTimeZone'|translate}}{{'Colon'|translate}}<b>{{$ctrl.agentsInDifferentTimeZone | names }}</b></span>
 		</div>
-		<div ng-if="!$ctrl.anyAgentsInDifferentTimeZone() && $ctrl.anyInvalidAgent()" class="text-danger">
+		<div ng-if="!$ctrl.anyAgentsInDifferentTimeZone() && $ctrl.anyInvalidAgent()" class="text-danger invalid-agent">
 			<i class="mdi mdi-alert-octagon"></i>
 			<span>{{'TheNewTimeIsNotAllowedFor'|translate}} <strong>{{$ctrl.invalidAgents | names }}</strong>.</span>
 		</div>

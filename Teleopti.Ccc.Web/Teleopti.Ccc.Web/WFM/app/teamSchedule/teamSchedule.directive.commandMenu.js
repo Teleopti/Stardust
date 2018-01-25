@@ -207,7 +207,8 @@
 		};
 
 		vm.canMoveShift = function() {
-			return personSelectionSvc.anyAgentChecked();
+			return personSelectionSvc.anyAgentChecked() &&
+				personSelectionSvc.getTotalSelectedPersonAndProjectionCount().SelectedActivityInfo.ActivityCount > 0;
 		};
 
 		vm.canAddOvertime = function() {
@@ -222,8 +223,10 @@
 			return personSelectionSvc.getTotalSelectedPersonAndProjectionCount().SelectedActivityInfo.ActivityCount > 0;
 		};
 
-		vm.canModifyShiftCategory = function (){
-			return vm.permissions.HasEditShiftCategoryPermission && personSelectionSvc.anyAgentChecked();
+		vm.canModifyShiftCategory = function() {
+			return vm.permissions.HasEditShiftCategoryPermission &&
+					personSelectionSvc.anyAgentChecked() &&
+					personSelectionSvc.getTotalSelectedPersonAndProjectionCount().SelectedActivityInfo.ActivityCount > 0;
 		};
 
 		vm.canUndoSchedule = function () {

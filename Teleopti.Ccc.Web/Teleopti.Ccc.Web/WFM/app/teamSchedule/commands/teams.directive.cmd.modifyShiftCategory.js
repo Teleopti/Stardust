@@ -12,8 +12,7 @@
 			templateUrl: 'app/teamSchedule/commands/teams.directive.cmd.modifyShiftCategory.html',
 			require: ['^teamscheduleCommandContainer', 'modifyShiftCategory'],
 			link: function linkFn(scope, elem, attrs, ctrls) {
-				var containerCtrl = ctrls[0],
-					selfCtrl = ctrls[1];
+				var containerCtrl = ctrls[0];
 
 				scope.vm.containerCtrl = containerCtrl;
 
@@ -27,9 +26,9 @@
 		};
 	}
 
-	modifyShiftCategoryCtrl.$inject = ['ShiftCategoryService', 'PersonSelection', 'teamScheduleNotificationService'];
+	modifyShiftCategoryCtrl.$inject = ['ScheduleManagement','ShiftCategoryService', 'PersonSelection', 'teamScheduleNotificationService'];
 
-	function modifyShiftCategoryCtrl(shiftCategorySvc, personSelectionSvc, teamScheduleNotificationService){
+	function modifyShiftCategoryCtrl(scheduleMgmtSvc, shiftCategorySvc, personSelectionSvc, teamScheduleNotificationService){
 		var vm = this;
 
 		vm.label = 'EditShiftCategory';
@@ -41,10 +40,34 @@
 		vm.anyValidAgent = anyValidAgent;
 
 		function init() {
+			vm.invalidAgents = getInvalidAgents();
+		}
+
+		function getInvalidAgents() {
+			var invalidAgents = {};
 			vm.selectedAgents = personSelectionSvc.getCheckedPersonInfoList();
-			vm.invalidAgents = vm.selectedAgents.filter(function(agent) {
-				return agent.Timezone.IanaId !== vm.getCurrentTimezone();
-			});
+
+			for(var i = 0; i < vm.selectedAgents.length; i++) {
+				var agent = vm.selectedAgents[i];
+				if (agent.Timezone.IanaId !== vm.getCurrentTimezone()) {
+					invalidAgents[agent.PersonId] = {
+						PersonId: agent.PersonId,
+						Name: agent.Name
+					}
+					continue;
+				}
+				var agentSchedule = scheduleMgmtSvc.findPersonScheduleVmForPersonId(agent.PersonId);
+				var hasDayOffSelected = agentSchedule.DayOffs.filter(function(d) {
+						return d.Date === moment(vm.selectedDate()).format('YYYY-MM-DD');
+					}).length > 0;
+				if (agentSchedule.IsFullDayAbsence || hasDayOffSelected) {
+					invalidAgents[agent.PersonId] = {
+						PersonId: agent.PersonId,
+						Name: agent.Name
+					}
+				}
+			}
+			return Object.keys(invalidAgents).map(function(key) { return invalidAgents[key] });
 		}
 
 		function anyValidAgent() {

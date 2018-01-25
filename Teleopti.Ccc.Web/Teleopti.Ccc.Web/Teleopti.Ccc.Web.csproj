@@ -1705,6 +1705,7 @@
     <Content Include="WFM\app\teamSchedule\commands\teams.component.cmd.addOvertime.spec.js" />
     <Content Include="WFM\app\teamSchedule\commands\teams.component.cmd.removeDayOff.spec.js" />
     <Content Include="WFM\app\teamSchedule\commands\teams.component.cmd.removeDayOff.js" />
+    <Content Include="WFM\app\teamSchedule\commands\teams.directive.cmd.modifyShiftCategory.spec.js" />
     <Content Include="WFM\app\teamSchedule\html\exportSchedule.html" />
     <Content Include="WFM\app\teamSchedule\html\exportScheduleView.html" />
     <Content Include="WFM\app\teamSchedule\html\staffingInfo.html" />
