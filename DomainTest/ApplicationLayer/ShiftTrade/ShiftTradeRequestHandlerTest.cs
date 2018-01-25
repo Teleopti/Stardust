@@ -289,7 +289,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			requestFactory.AssertWasNotCalled(x => x.GetShiftTradeRequestStatusChecker(schedulingResultState));
 		}
 
-		[EnabledBy(Toggles.Wfm_Requests_Configurable_BusinessRules_For_ShiftTrade_40770)]
 		[Test]
 		public void ShouldKeepAsPendingWhenBusinessRulesFailButNotSetToAutoDeny()
 		{
@@ -315,7 +314,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 									 + ruleMessage1 + "\r\n" + ruleMessage2 + "\r\n");
 		}
 
-		[EnabledBy(Toggles.Wfm_Requests_Configurable_BusinessRules_For_ShiftTrade_40770)]
 		[Test]
 		public void ShouldDenyWhenBusinessRulesFail()
 		{

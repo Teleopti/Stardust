@@ -176,12 +176,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 		private void configBusinessRuleSettingGrid()
 		{
-			if (!_toggleManager.IsEnabled(Toggles.Wfm_Requests_Configurable_BusinessRules_For_ShiftTrade_40770))
-			{
-				shiftTradeBusinessRuleSettingPanel.Visible = false;
-				return;
-			}
-
 			var handleOptionColumn =
 				new SFGridDropDownColumn<ShiftTradeBusinessRuleConfigView, ShiftTradeRequestHandleOptionView>("HandleOptionOnFailed",
 					Resources.WhenValidationFails, _shiftTradeRequestHandleOptionViews.Values.ToList(), "Description", typeof(ShiftTradeRequestHandleOptionView));
