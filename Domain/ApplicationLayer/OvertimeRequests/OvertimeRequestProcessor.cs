@@ -176,10 +176,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			if (overtimeRequestValidationResult.IsValid) return;
 			if (overtimeRequestValidationResult.ShouldDenyIfInValid)
 			{
-				denyRequest(personRequest, overtimeRequestValidationResult.InvalidReasons.First());
+				denyRequest(personRequest, string.Join(Environment.NewLine, overtimeRequestValidationResult.InvalidReasons));
+			}
+			else
+			{
+				personRequest.TrySetMessage(string.Join(Environment.NewLine, overtimeRequestValidationResult.InvalidReasons));
 			}
 			personRequest.TrySetBrokenBusinessRule(overtimeRequestValidationResult.BrokenBusinessRules);
-			personRequest.TrySetMessage(string.Join(Environment.NewLine,overtimeRequestValidationResult.InvalidReasons));
 		}
 
 		private IOvertimeRequestOpenPeriod getOvertimeRequestOpenPeriod(IPersonRequest personRequest)

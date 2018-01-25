@@ -1286,10 +1286,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			getTarget().Process(personRequest);
 
 			personRequest.IsDenied.Should().Be.True();
-			personRequest.DenyReason.Should().Be("The week contains too much work time (27:00). Max is 10:00.");
-			var requestMessageFrom = personRequest.GetMessage(new NoFormatting()).Trim();
-			var requestMessageTo = "The week contains too much work time (27:00). Max is 10:00.\r\nThere must be a daily rest of at least 6:00 hours between 2 shifts. Between 7/13/2017 and 7/14/2017 there are only 5:00 hours.";
-			requestMessageFrom.Should().Be(requestMessageTo);
+			personRequest.DenyReason.Should().Be("The week contains too much work time (27:00). Max is 10:00.\r\nThere must be a daily rest of at least 6:00 hours between 2 shifts. Between 7/13/2017 and 7/14/2017 there are only 5:00 hours.");
 			personRequest.BrokenBusinessRules.Should().Be(BusinessRuleFlags.NewNightlyRestRule | BusinessRuleFlags.NewMaxWeekWorkTimeRule);
 		}
 
@@ -1568,9 +1565,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			personRequest.IsApproved.Should().Be.False();
 			personRequest.IsDenied.Should().Be.True();
-			personRequest.GetMessage(new NoFormatting()).Trim().Should()
+			personRequest.DenyReason.Trim().Should()
 				.Contain(string.Format(Resources.OvertimeRequestMaximumTimeDenyReason, "July", "12:00", "11:00"));
-			personRequest.GetMessage(new NoFormatting()).Trim().Should()
+			personRequest.DenyReason.Trim().Should()
 				.Contain(string.Format(Resources.OvertimeRequestMaximumTimeDenyReason, "August", "14:00", "11:00"));
 			personRequest.BrokenBusinessRules.Should().Be(BusinessRuleFlags.MaximumOvertimeRule);
 		}
@@ -1664,7 +1661,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			personRequest.IsApproved.Should().Be.False();
 			personRequest.IsDenied.Should().Be.True();
-			personRequest.GetMessage(new NoFormatting()).Trim().Should().Contain("Agent has no available skill for overtime");
+			personRequest.DenyReason.Trim().Should().Contain("Agent has no available skill for overtime");
 		}
 
 		[Test]

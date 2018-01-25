@@ -1,0 +1,1 @@
+ALTER TABLE [dbo].[PersonRequest] ALTER COLUMN DenyReason NVARCHAR(2000)
