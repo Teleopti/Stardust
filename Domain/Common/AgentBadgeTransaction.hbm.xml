@@ -38,5 +38,9 @@
 	<property name="InsertedOn"
               type="UtcDateTime"
               not-null="true"/>
+
+	<property name="IsExternal"
+				type="bool"
+				not-null="true"/>
   </class>
 </hibernate-mapping>

@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			_currentUnitOfWork = currentUnitOfWork;
 		}
 
-		public ICollection<AgentBadge> Find(IEnumerable<Guid> personIdList, BadgeType badgeType)
+		public ICollection<AgentBadge> Find(IEnumerable<Guid> personIdList, int badgeType)
 		{
 			const string query = @"select Person, BadgeType, TotalAmount, LastCalculatedDate "
 				+ "from AgentBadge where BadgeType=:badgeType and Person in (:personIdList)";
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			{
 				result.AddRange(_currentUnitOfWork.Current().Session().CreateSQLQuery(query)
 					.SetParameterList("personIdList", batchOfPeopleId.ToArray())
-					.SetEnum("badgeType", badgeType)
+					.SetInt32("badgeType", badgeType)
 					.SetResultTransformer(Transformers.AliasToBean(typeof (AgentBadge)))
 					.SetReadOnly(true)
 					.List<AgentBadge>());
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return result;
 		}
 		
-		public AgentBadge Find(IPerson person, BadgeType badgeType)
+		public AgentBadge Find(IPerson person, int badgeType)
 		{
 			InParameter.NotNull(nameof(person), person);
 			InParameter.NotNull(nameof(badgeType), badgeType);
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				+ "from AgentBadge where Person = :person and BadgeType=:badgeType";
 			var result = _currentUnitOfWork.Current().Session().CreateSQLQuery(query)
 					.SetGuid("person", person.Id.GetValueOrDefault())
-					.SetEnum("badgeType", badgeType)
+					.SetInt32("badgeType", badgeType)
 					.SetResultTransformer(Transformers.AliasToBean(typeof(AgentBadge)))
 					.SetReadOnly(true)
 					.UniqueResult<AgentBadge>();

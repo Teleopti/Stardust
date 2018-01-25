@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 		}
 		
-		public IAgentBadgeWithRankTransaction Find(IPerson person, BadgeType badgeType, DateOnly calculateDate)
+		public IAgentBadgeWithRankTransaction Find(IPerson person, int badgeType, DateOnly calculateDate)
 		{
 			InParameter.NotNull(nameof(person), person);
 

@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 		}
 
 		protected IList<IAgentBadgeWithRankTransaction> AddBadge<T>(HashSet<IPerson> allPersons,
-			IDictionary<Guid, T> agentsListShouldGetBadge, BadgeType badgeType,
+			IDictionary<Guid, T> agentsListShouldGetBadge, int badgeType,
 			T bronzeBadgeThreshold, T silverBadgeThreshold, T goldBadgeThreshold,
 			bool largerIsBetter, DateOnly date) where T : IComparable
 		{

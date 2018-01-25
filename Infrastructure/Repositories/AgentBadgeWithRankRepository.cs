@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 		}
 
-		public ICollection<IAgentBadgeWithRank> Find(IEnumerable<Guid> personIdList, BadgeType badgeType)
+		public ICollection<IAgentBadgeWithRank> Find(IEnumerable<Guid> personIdList, int badgeType)
 		{
 			var idList = personIdList.ToArray();
 			if (!idList.Any())
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			{
 				result.AddRange(Session.CreateSQLQuery(query)
 					.SetParameterList("personIdList", batchOfPeopleId.ToArray())
-					.SetInt16("badgeType", (Int16) badgeType)
+					.SetInt32("badgeType", badgeType)
 					.SetResultTransformer(Transformers.AliasToBean(typeof (AgentBadgeWithRank)))
 					.SetReadOnly(true)
 					.List<IAgentBadgeWithRank>());
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return result;
 		}
 
-		public IAgentBadgeWithRank Find(IPerson person, BadgeType badgeType)
+		public IAgentBadgeWithRank Find(IPerson person, int badgeType)
 		{
 			InParameter.NotNull(nameof(person), person);
 			InParameter.NotNull(nameof(badgeType), badgeType);
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				+ "from AgentBadgeWithRank where Person = :person and BadgeType=:badgeType";
 			var result = Session.CreateSQLQuery(query)
 					.SetGuid("person", (Guid)person.Id)
-					.SetInt16("badgeType", (Int16)badgeType)
+					.SetInt32("badgeType", badgeType)
 					.SetResultTransformer(Transformers.AliasToBean(typeof(AgentBadgeWithRank)))
 					.SetReadOnly(true)
 					.UniqueResult<IAgentBadgeWithRank>();

@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.TestCommon
 		}
 
 		public IUnitOfWork UnitOfWork { get; }
-		public IAgentBadgeWithRankTransaction Find(IPerson person, BadgeType badgeType, DateOnly calculateDate)
+		public IAgentBadgeWithRankTransaction Find(IPerson person, int badgeType, DateOnly calculateDate)
 		{
 			throw new NotImplementedException();
 		}

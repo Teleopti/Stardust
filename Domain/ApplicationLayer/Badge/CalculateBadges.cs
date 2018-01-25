@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 		}
 
 		private void sendMessagesToPeopleGotABadge(IEnumerable<IAgentBadgeTransaction> newAwardedBadges,
-			IGamificationSetting setting, DateOnly calculateDate, BadgeType badgeType)
+			IGamificationSetting setting, DateOnly calculateDate, int badgeType)
 		{
 			var agentBadgeTransactions = newAwardedBadges as IList<IAgentBadgeTransaction> ?? newAwardedBadges.ToList();
 
@@ -251,7 +251,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 		}
 
 		private void sendMessagesToPeopleGotABadge(IEnumerable<IAgentBadgeWithRankTransaction> newAwardedBadges,
-			IGamificationSetting setting, DateOnly calculateDate, BadgeType badgeType)
+			IGamificationSetting setting, DateOnly calculateDate, int badgeType)
 		{
 			var agentBadgeWithRankTransactions = newAwardedBadges as IList<IAgentBadgeWithRankTransaction> ??
 												 newAwardedBadges.ToList();
@@ -262,7 +262,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 			{
 				var person = badgeTransaction.Person;
 
-				var existedBadge = existedBadges[person.Id.Value].SingleOrDefault() ?? new Common.AgentBadgeWithRank
+				var existedBadge = existedBadges[person.Id.Value].SingleOrDefault() ?? new AgentBadgeWithRank
 				{
 					Person = person.Id.GetValueOrDefault(),
 					BronzeBadgeAmount = 0,
@@ -344,7 +344,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 			}
 		}
 
-		private MessageType getMessageType(BadgeType badgeType, BadgeRank badgeRank)
+		private MessageType getMessageType(int badgeType, BadgeRank badgeRank)
 		{
 			var messageType = MessageType.Information;
 			switch (badgeRank)
@@ -404,7 +404,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 			return messageType;
 		}
 
-		private void sendBadgeMessage(IPerson person, BadgeType badgeType, BadgeRank badgeRank, string message)
+		private void sendBadgeMessage(IPerson person, int badgeType, BadgeRank badgeRank, string message)
 		{
 			if (logger.IsDebugEnabled)
 			{

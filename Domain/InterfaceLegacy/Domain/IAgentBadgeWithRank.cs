@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// <summary>
 		/// Badge type
 		/// </summary>
-		BadgeType BadgeType { get; set; }
+		int BadgeType { get; set; }
 
 		/// <summary>
 		/// Amount of bronze badges

@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// <param name="personIdList"></param>
 		/// <param name="badgeType"></param>
 		/// <returns></returns>
-		ICollection<IAgentBadgeWithRank> Find(IEnumerable<Guid> personIdList, BadgeType badgeType);
+		ICollection<IAgentBadgeWithRank> Find(IEnumerable<Guid> personIdList, int badgeType);
 
 		/// <summary>
 		/// Find badge of specific persons
@@ -33,6 +33,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// <param name="person">The agent to get badge.</param>
 		/// <param name="badgeType">Badge type.</param>
 		/// <returns></returns>
-		IAgentBadgeWithRank Find(IPerson person, BadgeType badgeType);
+		IAgentBadgeWithRank Find(IPerson person, int badgeType);
 	}
 }

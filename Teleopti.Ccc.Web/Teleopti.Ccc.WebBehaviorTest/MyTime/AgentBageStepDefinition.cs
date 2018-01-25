@@ -38,11 +38,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		}
 
 		[Then(@"I should see I have (.*) bronze badges, (.*) silver badge and (.*) gold badge for (.*)")]
-		public void ThenIShouldSeeIHaveBronzeBadgesSilverBadgeAndGoldBadgeForAnsweredCalls(int bronzeBadgeCount, int silverBadgeCount, int goldBadgeCount, BadgeType badgeType)
+		public void ThenIShouldSeeIHaveBronzeBadgesSilverBadgeAndGoldBadgeForAnsweredCalls(int bronzeBadgeCount, int silverBadgeCount, int goldBadgeCount, string badgeType)
 		{
 			const string selectorTemplate = ".badge-detail:first-child:contains('{0}') .{1}:contains('{2}')";
 			string badgeTypeName;
-			switch (badgeType)
+			switch (BadgeType.GetBadgeType(badgeType))
 			{
 				case BadgeType.Adherence:
 					badgeTypeName = Resources.Adherence;

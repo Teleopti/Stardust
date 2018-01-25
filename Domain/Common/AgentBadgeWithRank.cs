@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Common
 		private int _previousGoldBadgeAmount;
 
 		private Guid _person;
-		private BadgeType _badgeType;
+		private int _badgeType;
 		private int _bronzeBadgeAmount;
 		private int _silverBadgeAmount;
 		private int _goldBadgeAmount;
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Common
 			set => _person = value;
 		}
 
-		public virtual BadgeType BadgeType
+		public virtual int BadgeType
 		{
 			get => _badgeType;
 			set => _badgeType = value;
@@ -119,5 +119,6 @@ namespace Teleopti.Ccc.Domain.Common
 
 		public virtual bool IsGoldBadgeAdded =>
 			_goldBadgeInitialized && (_goldBadgeAmount > _previousGoldBadgeAmount);
+
 	}
 }

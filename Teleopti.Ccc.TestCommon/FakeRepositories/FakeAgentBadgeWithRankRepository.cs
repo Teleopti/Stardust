@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
@@ -47,7 +46,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _agentBadgeWithRanks;
 		}
 
-		public ICollection<IAgentBadgeWithRank> Find(IEnumerable<Guid> personIdList, BadgeType badgeType)
+		public ICollection<IAgentBadgeWithRank> Find(IEnumerable<Guid> personIdList, int badgeType)
 		{
 			return (from agentBadgeWithRank in _agentBadgeWithRanks
 				from personId in personIdList
@@ -69,7 +68,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _agentBadgeWithRanks.Where(agentBadgeWithRank => agentBadgeWithRank.Person == person.Id.Value).ToList();
 		}
 
-		public IAgentBadgeWithRank Find(IPerson person, BadgeType badgeType)
+		public IAgentBadgeWithRank Find(IPerson person, int badgeType)
 		{
 			return _agentBadgeWithRanks.FirstOrDefault(x => x.Person == person.Id.Value && x.BadgeType == badgeType);
 		}

@@ -23,11 +23,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
-			BadgeType badgeType;
-			if (!Enum.TryParse(BadgeType, true, out badgeType))
-			{
-				throw new ArgumentException(@"BadgeType", string.Format("\"{0}\" is not a valid badge type.", BadgeType));
-			}
+			var badgeType = Domain.InterfaceLegacy.Domain.BadgeType.GetBadgeType(BadgeType);
+
 			var setting = new GamificationSettingRepository(uow).FindAllGamificationSettingsSortedByDescription().First();
 			var goldToSilverBadgeRate = setting.GoldToSilverBadgeRate;
 			var silverToBronzeBadgeRate = setting.SilverToBronzeBadgeRate;

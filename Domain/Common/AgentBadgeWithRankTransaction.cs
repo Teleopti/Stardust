@@ -8,13 +8,14 @@ namespace Teleopti.Ccc.Domain.Common
 	public class AgentBadgeWithRankTransaction : SimpleAggregateRoot, IAgentBadgeWithRankTransaction
 	{
 		private IPerson _person;
-		private BadgeType _badgeType;
+		private int _badgeType;
 		private int _bronzeBadgeAmount;
 		private int _silverBadgeAmount;
 		private int _goldBadgeAmount;
 		private DateOnly _calculatedDate;
 		private string _description;
 		private DateTime _insertedOn;
+		private bool _isExternal;
 
 		public virtual IPerson Person
 		{
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Common
 			set => _person = value;
 		}
 
-		public virtual BadgeType BadgeType
+		public virtual int BadgeType
 		{
 			get => _badgeType;
 			set => _badgeType = value;
@@ -62,6 +63,11 @@ namespace Teleopti.Ccc.Domain.Common
 		{
 			get => _insertedOn;
 			set => _insertedOn = value;
+		}
+
+		public virtual bool IsExternal {
+			get =>_isExternal;
+			set => _isExternal = value;
 		}
 	}
 }

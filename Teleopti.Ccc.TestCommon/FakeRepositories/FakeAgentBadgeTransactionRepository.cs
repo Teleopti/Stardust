@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		}
 
 		public IUnitOfWork UnitOfWork { get; }
-		public IAgentBadgeTransaction Find(IPerson person, BadgeType badgeType, DateOnly calculateDate)
+		public IAgentBadgeTransaction Find(IPerson person, int badgeType, DateOnly calculateDate)
 		{
 			throw new NotImplementedException();
 		}

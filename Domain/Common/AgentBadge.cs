@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Common
 
 		public Guid Person { get; set; }
 
-		public BadgeType BadgeType { get; set; }
+		public int BadgeType { get; set; }
 
 		public int TotalAmount
 		{

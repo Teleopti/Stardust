@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// <param name="badgeType">Badge type.</param>
 		/// <param name="calculateDate">The calculated date</param>
 		/// <returns></returns>
-		IAgentBadgeTransaction Find(IPerson person, BadgeType badgeType, DateOnly calculateDate);
+		IAgentBadgeTransaction Find(IPerson person, int badgeType, DateOnly calculateDate);
 
 		IList<IAgentBadgeTransaction> Find(IEnumerable<IPerson> personCollection, DateOnlyPeriod period);
 		/// <summary>

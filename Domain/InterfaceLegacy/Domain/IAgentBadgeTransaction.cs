@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// <summary>
 		/// Badge type
 		/// </summary>
-		BadgeType BadgeType { get; set; }
+		int BadgeType { get; set; }
 
 		/// <summary>
 		/// Amount in this transaction
@@ -34,5 +34,10 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// Transaction created
 		/// </summary>
 		DateTime InsertedOn { get; set; }
+
+		/// <summary>
+		/// Whether the performance type is imported from external
+		/// </summary>
+		bool IsExternal { get; set; }
 	}
 }

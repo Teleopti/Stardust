@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_agentBadges.Clear();
 		}
 
-		public ICollection<AgentBadge> Find(IEnumerable<Guid> personIdList, BadgeType badgeType)
+		public ICollection<AgentBadge> Find(IEnumerable<Guid> personIdList, int badgeType)
 		{
 			return (from agentBadge in _agentBadges
 				from personId in personIdList
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				select agentBadge).ToList();
 		}
 
-		public AgentBadge Find(IPerson person, BadgeType badgeType)
+		public AgentBadge Find(IPerson person, int badgeType)
 		{
 			return _agentBadges.FirstOrDefault(x => x.Person == person.Id.Value && x.BadgeType == badgeType);
 		}
