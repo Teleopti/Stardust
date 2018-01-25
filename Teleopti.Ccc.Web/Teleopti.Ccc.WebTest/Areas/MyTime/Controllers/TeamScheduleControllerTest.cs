@@ -32,10 +32,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				MockRepository.GenerateMock<ILoggedOnUser>(),
 				MockRepository.GenerateMock<ITeamScheduleViewModelReworkedFactory>());
 
-			viewModelFactory.Stub(x => x.CreateViewModel(date, id)).Return(new TeamScheduleViewModel());
+			viewModelFactory.Stub(x => x.CreateViewModel()).Return(new TeamScheduleViewModel());
 			var result = target.Index(date, id);
 
-			result.ViewName.Should().Be.EqualTo("TeamSchedulePartialOriginal");
+			result.ViewName.Should().Be.EqualTo("TeamSchedulePartial");
 			result.Model.Should().Not.Be.Null();
 		}
 
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			target.Index(null, Guid.Empty);
 
-			viewModelFactory.AssertWasCalled(x => x.CreateViewModel(DateOnly.Today, Guid.Empty));
+			viewModelFactory.AssertWasCalled(x => x.CreateViewModel());
 		}
 
 		[SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			target.Index(DateOnly.Today, null);
 
-			viewModelFactory.AssertWasCalled(x => x.CreateViewModel(DateOnly.Today, team.Id.Value));
+			viewModelFactory.AssertWasCalled(x => x.CreateViewModel());
 		}
 	}
 }
