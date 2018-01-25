@@ -24,7 +24,6 @@
 		
 		MyTimeWeb_ShiftTradePossibleTradedSchedulesNoReadModel_36211,
 		MyTimeWeb_ShiftTradeOptimization_40792,
-		MyTimeWeb_PreferenceForMobile_40265,
 		MyTimeWeb_StudentAvailabilityForMobile_42498,
 		MyTimeWeb_ShowContractTime_41462,
 		MyTimeWeb_SortRequestList_40711,
