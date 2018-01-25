@@ -328,7 +328,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			Assert.AreEqual(ShiftTradeStatus.Referred, _target.GetShiftTradeStatus(new ShiftTradeRequestStatusCheckerForTestDoesNothing()));
 			Assert.IsTrue(_personRequest.IsPending);
 			
-			var notificationString = "En schemaändring har gjort att en förfrågan om skiftbyte måste accepteras igen.";
+			var notificationString = "En schemaändring har gjort att en förfrågan om skiftbyte 2008-07-16 - 2008-07-16 måste accepteras igen.";
 			
 			Assert.AreEqual(notificationString, _target.TextForNotification);
 		}
@@ -530,7 +530,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 
 			personRequest.Pending();
 
-			var notificationString = "Ny skiftbytesförfrågan, godkänn eller avslå i din lista.";
+			var notificationString = "Ny skiftbytesförfrågan 2008-07-16 - 2008-07-17, godkänn eller avslå i din lista.";
 
 			Assert.AreEqual(notificationString, target.TextForNotification, "Pending message should be in the receiver's language");
 
