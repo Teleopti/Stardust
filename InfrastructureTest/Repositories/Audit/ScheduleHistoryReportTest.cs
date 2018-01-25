@@ -196,9 +196,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				uow.Reassociate(PersonAssignment);
 				PersonAssignment.AddPersonalActivity(PersonAssignment.MainActivities().First().Payload, PersonAssignment.MainActivities().First().Period);
 				PersonAssignment.ClearMainActivities();
+				uow.Merge(PersonAssignment);
 				uow.PersistAll();
 			}
 
@@ -443,9 +443,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 		{
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				uow.Reassociate(PersonAssignment);
 				PersonAssignment.AddPersonalActivity(PersonAssignment.MainActivities().First().Payload, PersonAssignment.MainActivities().First().Period);
 				PersonAssignment.ClearMainActivities();
+				uow.Merge(PersonAssignment);
 				uow.PersistAll();
 			}
 
@@ -463,9 +463,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 		{
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				uow.Reassociate(PersonAssignment);
 				PersonAssignment.AddOvertimeActivity(PersonAssignment.MainActivities().First().Payload, PersonAssignment.MainActivities().First().Period, MultiplicatorDefinitionSet);
 				PersonAssignment.ClearMainActivities();
+				uow.Merge(PersonAssignment);
 				uow.PersistAll();
 			}
 
