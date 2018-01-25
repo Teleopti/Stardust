@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Repositories;
@@ -14,9 +15,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			fakeActivities = new List<AnalyticsActivity>();
 		}
 
-		public IList<AnalyticsActivity> Activities()
+		public AnalyticsActivity Activity(Guid code)
 		{
-			return fakeActivities;
+			return fakeActivities.Find(x => x.ActivityCode == code);
 		}
 
 		public void AddActivity(AnalyticsActivity activity)

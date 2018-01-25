@@ -40,14 +40,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		[Test]
 		public void ShouldLoadActivities()
 		{
-			var act = new Activity(22, Guid.NewGuid(), "Phone", Color.LightGreen, _datasource, businessUnitId);
+			var code = Guid.NewGuid();
+			var act = new Activity(22, code, "Phone", Color.LightGreen, _datasource, businessUnitId);
 
 			analyticsDataFactory.Setup(act);
 			analyticsDataFactory.Persist();
 
 
-			var acts = WithAnalyticsUnitOfWork.Get(() => TargetActivityRepository.Activities());
-			acts.Count.Should().Be.EqualTo(1);
+			var acts = WithAnalyticsUnitOfWork.Get(() => TargetActivityRepository.Activity(code));
+			acts.ActivityId.Should().Be.EqualTo(22);
 		}
 		
 		[Test]

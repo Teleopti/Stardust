@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Aop;
@@ -40,7 +39,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Activity
 			if (@event.ActivityId == Guid.Empty)
 				return;
 			var analyticsActivity =
-				_analyticsActivityRepository.Activities().FirstOrDefault(a => a.ActivityCode == @event.ActivityId);
+				_analyticsActivityRepository.Activity(@event.ActivityId);
 
 			var applicationActivity = _activityRepository.Get(@event.ActivityId);
 			if (applicationActivity == null)

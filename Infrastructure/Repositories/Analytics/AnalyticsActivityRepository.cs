@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -14,34 +14,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 		{
 			_analyticsUnitOfWork = analyticsUnitOfWork;
 		}
-
-		public IList<AnalyticsActivity> Activities()
-		{
-			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				$@"select 
-					 [activity_id] {nameof(AnalyticsActivity.ActivityId)}
-					,[activity_code] {nameof(AnalyticsActivity.ActivityCode)}
-					,[activity_name] {nameof(AnalyticsActivity.ActivityName)}
-					,[display_color] {nameof(AnalyticsActivity.DisplayColor)}
-					,[in_ready_time] {nameof(AnalyticsActivity.InReadyTime)}
-					,[in_ready_time_name] {nameof(AnalyticsActivity.InReadyTimeName)}
-					,[in_contract_time] {nameof(AnalyticsActivity.InContractTime)}
-					,[in_contract_time_name] {nameof(AnalyticsActivity.InContractTimeName)}
-					,[in_paid_time] {nameof(AnalyticsActivity.InPaidTime)}
-					,[in_paid_time_name] {nameof(AnalyticsActivity.InPaidTimeName)}
-					,[in_work_time] {nameof(AnalyticsActivity.InWorkTime)}
-					,[in_work_time_name] {nameof(AnalyticsActivity.InWorkTimeName)}
-					,[business_unit_id] {nameof(AnalyticsActivity.BusinessUnitId)}
-					,[datasource_id] {nameof(AnalyticsActivity.DatasourceId)}
-					,[datasource_update_date] {nameof(AnalyticsActivity.DatasourceUpdateDate)}
-					,[is_deleted] {nameof(AnalyticsActivity.IsDeleted)}
-					,[display_color_html] {nameof(AnalyticsActivity.DisplayColorHtml)}
-					from mart.dim_activity WITH (NOLOCK)")
-				.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsActivity)))
-				.SetReadOnly(true)
-				.List<AnalyticsActivity>();
-		}
-
+		
 		public void AddActivity(AnalyticsActivity activity)
 		{
 			var query = _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
@@ -120,6 +93,34 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			query.ExecuteUpdate();
 		}
 
+		public AnalyticsActivity Activity(Guid code)
+		{
+			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
+					$@"select 
+					 [activity_id] {nameof(AnalyticsActivity.ActivityId)}
+					,[activity_code] {nameof(AnalyticsActivity.ActivityCode)}
+					,[activity_name] {nameof(AnalyticsActivity.ActivityName)}
+					,[display_color] {nameof(AnalyticsActivity.DisplayColor)}
+					,[in_ready_time] {nameof(AnalyticsActivity.InReadyTime)}
+					,[in_ready_time_name] {nameof(AnalyticsActivity.InReadyTimeName)}
+					,[in_contract_time] {nameof(AnalyticsActivity.InContractTime)}
+					,[in_contract_time_name] {nameof(AnalyticsActivity.InContractTimeName)}
+					,[in_paid_time] {nameof(AnalyticsActivity.InPaidTime)}
+					,[in_paid_time_name] {nameof(AnalyticsActivity.InPaidTimeName)}
+					,[in_work_time] {nameof(AnalyticsActivity.InWorkTime)}
+					,[in_work_time_name] {nameof(AnalyticsActivity.InWorkTimeName)}
+					,[business_unit_id] {nameof(AnalyticsActivity.BusinessUnitId)}
+					,[datasource_id] {nameof(AnalyticsActivity.DatasourceId)}
+					,[datasource_update_date] {nameof(AnalyticsActivity.DatasourceUpdateDate)}
+					,[is_deleted] {nameof(AnalyticsActivity.IsDeleted)}
+					,[display_color_html] {nameof(AnalyticsActivity.DisplayColorHtml)}
+					from mart.dim_activity WITH (NOLOCK) WHERE activity_code = :{nameof(AnalyticsActivity.ActivityCode)}")
+				.SetGuid(nameof(AnalyticsActivity.ActivityCode),code)
+				.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsActivity)))
+				.SetReadOnly(true)
+				.UniqueResult<AnalyticsActivity>();
+		}
+
 		private string mapInReadyTimeText(bool inReadyTime)
 		{
 			return inReadyTime ? "In Ready Time" : "Not In Ready Time";
@@ -139,6 +140,5 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 		{
 			return inWorkTime ? "In Work Time" : "Not In Work Time";
 		}
-
 	}
 }

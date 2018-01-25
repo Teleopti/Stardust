@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Analytics;
@@ -38,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Activities
 
 			var activity = ActivityFactory.CreateActivity("Test activity").WithId();
 			ActivityRepository.Add(activity);
-			AnalyticsActivityRepository.Activities().Should().Be.Empty();
+			AnalyticsActivityRepository.Activity(activity.Id.GetValueOrDefault()).Should().Be.Null();
 
 			Target.Handle(new ActivityChangedEvent
 			{
@@ -46,8 +45,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Activities
 				LogOnBusinessUnitId = businessUnitId
 			});
 
-			AnalyticsActivityRepository.Activities().Count.Should().Be.EqualTo(1);
-			var analyticsActivity = AnalyticsActivityRepository.Activities().First();
+			var analyticsActivity = AnalyticsActivityRepository.Activity(activity.Id.GetValueOrDefault());
 			assertMapping(activity, analyticsActivity);
 		}
 
@@ -66,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Activities
 				ActivityName = "Old name"
 			};
 			AnalyticsActivityRepository.AddActivity(analyticsActivity);
-			AnalyticsActivityRepository.Activities().Should().Not.Be.Empty();
+			AnalyticsActivityRepository.Activity(activity.Id.GetValueOrDefault()).Should().Not.Be.Null();
 
 			Target.Handle(new ActivityChangedEvent
 			{
@@ -74,8 +72,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Activities
 				LogOnBusinessUnitId = businessUnitId
 			});
 
-			AnalyticsActivityRepository.Activities().Count.Should().Be.EqualTo(1);
-			var updatedAnalyticsActivity = AnalyticsActivityRepository.Activities().First();
+			var updatedAnalyticsActivity = AnalyticsActivityRepository.Activity(activity.Id.GetValueOrDefault());
 			assertMapping(activity, updatedAnalyticsActivity);
 		}
 
@@ -95,7 +92,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Activities
 				ActivityName = "Old name"
 			};
 			AnalyticsActivityRepository.AddActivity(analyticsActivity);
-			AnalyticsActivityRepository.Activities().Should().Not.Be.Empty();
+			AnalyticsActivityRepository.Activity(activity.Id.GetValueOrDefault()).Should().Not.Be.Null();
 
 			Target.Handle(new ActivityChangedEvent
 			{
@@ -103,8 +100,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Activities
 				LogOnBusinessUnitId = businessUnitId
 			});
 
-			AnalyticsActivityRepository.Activities().Count.Should().Be.EqualTo(1);
-			var updatedAnalyticsActivity = AnalyticsActivityRepository.Activities().First();
+			var updatedAnalyticsActivity = AnalyticsActivityRepository.Activity(activity.Id.GetValueOrDefault());
 			assertMapping(activity, updatedAnalyticsActivity);
 		}
 

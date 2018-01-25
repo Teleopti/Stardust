@@ -87,9 +87,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 
 		private AnalyticsActivity mapActivityId(Guid activityCode)
 		{
-			var activities = _analyticsActivityRepository.Activities();
-			var act = activities.FirstOrDefault(a => a.ActivityCode.Equals(activityCode));
-			return act;
+			return _analyticsActivityRepository.Activity(activityCode);
 		}
 
 		public AnalyticsAbsence MapAbsenceId(Guid absenceCode)

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Analytics;
@@ -25,29 +24,33 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		{
 			analyticsDataFactory = new AnalyticsDataFactory();
 		}
-
+		
 		[Test]
-		public void ShouldLoadActivities()
+		public void ShouldFindActivityId()
 		{
-			analyticsDataFactory.Setup(new Activity(10, Guid.NewGuid(), "Activity name", Color.AliceBlue, new ExistingDatasources(new UtcAndCetTimeZones()), 4));
+			var code = Guid.NewGuid();
+			var activity = new Activity(10, code, "Activity name", Color.AliceBlue, new ExistingDatasources(new UtcAndCetTimeZones()), 4);
+			analyticsDataFactory.Setup(activity);
 			analyticsDataFactory.Persist();
 
-			var activites = WithAnalyticsUnitOfWork.Get(() => Target.Activities());
-			activites.Count.Should().Be.EqualTo(1);
+			var act = WithAnalyticsUnitOfWork.Get(() => Target.Activity(code));
+			act.ActivityId.Should().Be.EqualTo(10);
+		}
 
-			var analyticsActivity = activites.First();
-			analyticsActivity.ActivityName.Should().Be.EqualTo("Activity name");
-			analyticsActivity.ActivityId.Should().Be.EqualTo(10);
-			analyticsActivity.DisplayColor.Should().Be.EqualTo(Color.AliceBlue.ToArgb());
-			analyticsActivity.BusinessUnitId.Should().Be.EqualTo(4);
+		[Test]
+		public void ShouldHandleActivityCodeNotFound()
+		{
+			var act = WithAnalyticsUnitOfWork.Get(() => Target.Activity(Guid.Empty));
+			act.Should().Be.Null();
 		}
 
 		[Test]
 		public void AddActivity1()
 		{
+			var code = Guid.NewGuid();
 			var analyticsActivity = new AnalyticsActivity
 			{
-				ActivityCode = Guid.NewGuid(),
+				ActivityCode = code,
 				ActivityName = "Activityname 123",
 				BusinessUnitId = 321,
 				DisplayColor = 1234,
@@ -61,7 +64,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				DatasourceUpdateDate = new DateTime(2010, 1, 1, 12, 0, 0)
 			};
 			WithAnalyticsUnitOfWork.Do(() => Target.AddActivity(analyticsActivity));
-			var addedAnalyticsActivity = WithAnalyticsUnitOfWork.Get(() => Target.Activities().First());
+			var addedAnalyticsActivity = WithAnalyticsUnitOfWork.Get(() => Target.Activity(code));
 
 			assertActivity(analyticsActivity, addedAnalyticsActivity);
 		}
@@ -69,9 +72,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		[Test]
 		public void AddActivity2()
 		{
+			var code = Guid.NewGuid();
 			var analyticsActivity = new AnalyticsActivity
 			{
-				ActivityCode = Guid.NewGuid(),
+				ActivityCode = code,
 				ActivityName = "Activityname 123",
 				BusinessUnitId = 321,
 				DisplayColor = 1234,
@@ -85,7 +89,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				DatasourceUpdateDate = new DateTime(2012, 1, 1, 12, 0, 0)
 			};
 			WithAnalyticsUnitOfWork.Do(() => Target.AddActivity(analyticsActivity));
-			var addedAnalyticsActivity = WithAnalyticsUnitOfWork.Get(() => Target.Activities().First());
+			var addedAnalyticsActivity = WithAnalyticsUnitOfWork.Get(() => Target.Activity(code));
 
 			assertActivity(analyticsActivity, addedAnalyticsActivity);
 		}
@@ -93,9 +97,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		[Test]
 		public void UpdateActivity()
 		{
+			var code = Guid.NewGuid();
 			var analyticsActivity = new AnalyticsActivity
 			{
-				ActivityCode = Guid.NewGuid(),
+				ActivityCode = code,
 				ActivityName = "Activityname 123",
 				BusinessUnitId = 321,
 				DisplayColor = 1234,
@@ -111,18 +116,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 
 			// Add
 			WithAnalyticsUnitOfWork.Do(() => Target.AddActivity(analyticsActivity));
-			//var addedAnalyticsActivity = WithAnalyticsUnitOfWork.Get(() => Target.Activities().First());
-
+			
 			// Update
 			analyticsActivity.ActivityName = "New activity name";
 			WithAnalyticsUnitOfWork.Do(() => Target.UpdateActivity(analyticsActivity));
 
 			// Assert
-			var activities = WithAnalyticsUnitOfWork.Get(() => Target.Activities());
-			activities.Count.Should().Be.EqualTo(1);
-
-			var updatedAnalyticsActivity = activities.First();
-
+			var updatedAnalyticsActivity = WithAnalyticsUnitOfWork.Get(() => Target.Activity(code));
 			assertActivity(analyticsActivity, updatedAnalyticsActivity);
 		}
 
@@ -141,10 +141,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			addedAnalyticsActivity.DatasourceId.Should().Be.EqualTo(analyticsActivity.DatasourceId);
 			addedAnalyticsActivity.DatasourceUpdateDate.Should().Be.EqualTo(analyticsActivity.DatasourceUpdateDate);
 
-			addedAnalyticsActivity.InContractTimeName.Should().Be.EqualTo((analyticsActivity.InContractTime ? "" : "Not ") + "In Contract Time");
-			addedAnalyticsActivity.InPaidTimeName.Should().Be.EqualTo((analyticsActivity.InPaidTime ? "" : "Not ") + "In Paid Time");
-			addedAnalyticsActivity.InReadyTimeName.Should().Be.EqualTo((analyticsActivity.InReadyTime ? "" : "Not ") + "In Ready Time");
-			addedAnalyticsActivity.InWorkTimeName.Should().Be.EqualTo((analyticsActivity.InWorkTime ? "" : "Not ") + "In Work Time");
+			addedAnalyticsActivity.InContractTimeName.Should().Be
+				.EqualTo((analyticsActivity.InContractTime ? "" : "Not ") + "In Contract Time");
+			addedAnalyticsActivity.InPaidTimeName.Should().Be
+				.EqualTo((analyticsActivity.InPaidTime ? "" : "Not ") + "In Paid Time");
+			addedAnalyticsActivity.InReadyTimeName.Should().Be
+				.EqualTo((analyticsActivity.InReadyTime ? "" : "Not ") + "In Ready Time");
+			addedAnalyticsActivity.InWorkTimeName.Should().Be
+				.EqualTo((analyticsActivity.InWorkTime ? "" : "Not ") + "In Work Time");
 		}
 	}
 }
