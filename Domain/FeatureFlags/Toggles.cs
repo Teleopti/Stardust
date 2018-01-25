@@ -45,8 +45,6 @@
 
 		Gamification_NewBadgeCalculation_31185,
 
-		MyTimeWeb_ShowSeatBookingMonthView_39068,
-
 		Wfm_MinimumScaffolding_32659,
 		Wfm_WebPlan_Pilot_46815,
 		WfmIntraday_MonitorActualvsForecasted_35176,

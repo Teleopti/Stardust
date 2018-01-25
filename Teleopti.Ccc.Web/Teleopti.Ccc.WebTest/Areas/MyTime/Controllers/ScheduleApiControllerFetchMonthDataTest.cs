@@ -233,7 +233,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 		[Test]
 		[SetCulture("en-US")]
-		[Toggle(Domain.FeatureFlags.Toggles.MyTimeWeb_ShowSeatBookingMonthView_39068)]
 		public void ShouldNotLoadSeatBookingForMobileMonthView()
 		{
 			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2014, 12, 1));

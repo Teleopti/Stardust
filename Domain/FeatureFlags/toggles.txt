@@ -102,7 +102,6 @@ QRCodeForMobileApps_42695 = true
 ConfigQRCodeURLForMobileApps_43224 = true
 MobileApps_EnableMobileNotifications_44476 = true
 MyTimeWeb_MobileResponsive_43826 = true
-MyTimeWeb_ShowSeatBookingMonthView_39068 = true
 Staffing_Info_Configuration_44687 = true
 
 # Kittens, Bugs&Roses and Micke #
