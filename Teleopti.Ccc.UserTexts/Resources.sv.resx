@@ -15317,7 +15317,7 @@ Vill du registrera dig?</value>
     <value>Exportperiodens startdatum måste vara tidigare än slutdatumet.</value>
   </data>
   <data name="BpoOnlyExportPeriodBetweenDates" xml:space="preserve">
-    <value>Exportperioden måste vara mellan datumen {0}.</value>
+    <value>Exportperioden måste vara inom datumintervallet {0}.</value>
   </data>
   <data name="OvertimeRequestMaximumTimeDenyReason" xml:space="preserve">
     <value>{0} innehåller för mycket övertid ({1}). Max är {2}.</value>
@@ -15363,7 +15363,7 @@ Vill du registrera dig?</value>
     <value>Kompetensen {0} är listad mer än en gång på samma rad.</value>
   </data>
   <data name="ImportBpoSkillNotFound" xml:space="preserve">
-    <value>Kompetensen med id: {0} finns inte i systemet.</value>
+    <value>Kunde inte matcha den importerade kompetensen till någon befintlig kompetens.</value>
   </data>
   <data name="ImportBpoSourceNameTooLong" xml:space="preserve">
     <value>Namnet på underleverantören (Source) är för långt. Max 100 tecken är tillåtet.</value>
