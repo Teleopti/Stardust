@@ -106,7 +106,7 @@
 		vm.createSkillGroup = function (ev) {
 			vm.newGroup = {
 				Name: '',
-				Id: getRandom(),
+				Id: 'New' + getRandom(),
 				Skills: []
 			};
 			isNew = true;
@@ -115,8 +115,10 @@
 		};
 
 		vm.deleteSkillGroup = function () {
-			if (vm.selectedSkillGroup.Id.indexOf('Copy') === 0) {
+			if (vm.selectedSkillGroup.Id.indexOf('Copy') === 0 || vm.selectedSkillGroup.Id.indexOf('New') === 0) {
 				_.remove(vm.skillGroups, vm.selectedSkillGroup);
+				unselectAllSkills();
+				vm.selectedSkillGroup = null;
 				setSaveableState();
 			} else {
 				SkillGroupSvc.deleteSkillGroup(vm.selectedSkillGroup).then(function () {
