@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 		private readonly IGamificationSettingRepository _gamificationSettingRepository;
 		private readonly ISiteProvider _siteProvider;
 
-		public TeamGamificationSettingProviderAndPersister(ITeamGamificationSettingRepository teamGamificationSettingRepository, 
+		public TeamGamificationSettingProviderAndPersister(ITeamGamificationSettingRepository teamGamificationSettingRepository,
 			ITeamRepository teamRepository, IGamificationSettingRepository gamificationSettingRepository, ISiteProvider siteProvider)
 		{
 			_teamGamificationSettingRepository = teamGamificationSettingRepository;
@@ -30,29 +30,25 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 		public IList<TeamGamificationSettingViewModel> GetTeamGamificationSettingViewModels(List<Guid> siteIds)
 		{
 			var teamIds = getTeamIds(siteIds);
-
-			var VMList = new List<TeamGamificationSettingViewModel>();
 			var teams = _teamRepository.FindTeams(teamIds);
 
-			foreach (var team in teams)
+			var vmList = teams.Select(team =>
 			{
-				var teamGamificationSetting = _teamGamificationSettingRepository.FindTeamGamificationSettingsByTeam(team);
-
-				var gamificationSettingId = Guid.Empty;
-				if (teamGamificationSetting != null) gamificationSettingId = teamGamificationSetting.GamificationSetting.Id.Value;
-
-				VMList.Add(new TeamGamificationSettingViewModel
+				var tgs = _teamGamificationSettingRepository.FindTeamGamificationSettingsByTeam(team);
+				return new TeamGamificationSettingViewModel
 				{
 					Team = new SelectOptionItem
 					{
 						id = team.Id.Value.ToString(),
-						text = team.Description.Name
+						text = team.SiteAndTeam
 					},
-					GamificationSettingId = gamificationSettingId
-				});
-			}
+					GamificationSettingId = tgs?.GamificationSetting.Id.Value ?? Guid.Empty
+				};
+			})
+			.OrderBy(vm => vm.Team.text)
+			.ToList();
 
-			return VMList;
+			return vmList;
 		}
 
 		public List<TeamGamificationSettingViewModel> SetTeamsGamificationSetting(TeamsGamificationSettingForm input)
@@ -63,7 +59,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 		public TeamGamificationSettingViewModel SetTeamGamificationSetting(Guid teamId, Guid inputGamificationSettingId)
 		{
 			var team = _teamRepository.Get(teamId);
-			if (team == null ) return null;
+			if (team == null) return null;
 
 			var gamificationSettingId = Guid.Empty;
 			var teamGamificationSetting = _teamGamificationSettingRepository.FindTeamGamificationSettingsByTeam(team);
@@ -78,7 +74,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 			{
 				var gamificationSetting = _gamificationSettingRepository.Get(inputGamificationSettingId);
 				if (gamificationSetting == null) return null;
-				
+
 				if (teamGamificationSetting == null)
 				{
 					teamGamificationSetting = new TeamGamificationSetting
@@ -99,7 +95,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 			return new TeamGamificationSettingViewModel
 			{
 				GamificationSettingId = gamificationSettingId,
-				Team = new SelectOptionItem { id = team.Id.ToString(), text =  team.Site.Description.Name + "/" + team.Description.Name }
+				Team = new SelectOptionItem { id = team.Id.ToString(), text = team.Site.Description.Name + "/" + team.Description.Name }
 			};
 		}
 
