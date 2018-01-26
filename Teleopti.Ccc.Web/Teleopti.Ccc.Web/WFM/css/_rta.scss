@@ -1,9 +1,7 @@
-
-.notice-item ul {
-  list-style-type: disc;
-}
-
 .rta-view {
+
+  $out-of-adherence-color: darkred;
+  $in-adherence-color: darkgreen;
 
   // con padding/margin reset
   .con-row {
@@ -15,84 +13,19 @@
 	margin: 0;
   }
   .con-padding .con-flex {
-	padding: 5px;
+	padding: $full-padding;
   }
-  
-  .historical {
-	overflow-x: hidden;
-  }
-  
-  .wfm-table {
-	border-collapse: separate;
-
-	th.blank-header {
-	  background-color: $white;
+  @media screen and (min-width: 768px) {
+	.con-columns > .con-flex:not(:last-child) {
+	  margin-right: $full-padding;
 	}
-
-	th {
-	  border-right-width: 0px;
-	}
-
-	td {
-	  overflow: hidden;
-	  white-space: nowrap;
-	  text-overflow: ellipsis;
-	  border-top-width: 0px;
-	  border-right-width: 0px;
-	}
-
-	a.mdi {
-	  text-decoration: none;
-	}
-	a.mdi:before {
-	  font-size: 14px !important;
-	}
-
   }
 
-  .timeline-container {
+  @mixin container {
 	position: relative;
-	padding: 0;
-	margin: 0;
-
-	.time {
-	  position: absolute;
-	  margin-left: -18px;
-	}
   }
-
-  .schedule-container {
-	position: relative;
-	padding: 0;
-	margin: 0;
-
-	.alarmline {
-	  background-color: darkred;
-	  z-index: 6;
-	  position: absolute;
-	  right: 75%;
-	  height: $full-padding;
-	  margin-top: 0;
-	  bottom: 44%;
-	  opacity: 0.6;
-	  min-width: 1px;
-	}
-
-	.current-time {
-	  z-index: 5;
-	  position: absolute;
-	  left: 25%;
-	  width: 2px;
-	  height: 100%;
-	  margin-top: 0;
-	  background-color: red;
-	}
-
-	.layer {
-	  height: 70%;
-	  position: absolute;
-	}
-
+  @mixin positioned {
+	position: absolute;
   }
 
   .wfm-table td .label {
@@ -101,17 +34,112 @@
 	padding: 5px;
   }
 
-  wfm-right-panel {
-	background-color: inherit;
+  .highlight > td {
+	background-color: $green-100;
   }
 
-  wfm-right-panel .panel-menu {
-	top: 15px;
-  }
+  &.historical {
+	overflow-x: hidden;
 
-  .grid-tools {
-	margin-top: 8px;
-	margin-bottom: 0px;
+	.twocolumns {
+	  display: flex;
+	  .left {
+		width: 200px;
+		padding: $full-padding;
+	  }
+	  .right {
+		flex-grow: 1;
+		padding: $full-padding;
+	  }
+	}
+
+	$shift-height: 40px;
+	$out-of-adherence-height: 4px;
+	$layer-row-height: 20px;
+	$diamond-size: 8px;
+
+	.timeline {
+	  @include container;
+	}
+
+	.shift {
+	  @include container;
+	  height: $shift-height;
+	}
+
+	.changes,
+	.recorded-out-of-adherences,
+	.approved-adherences {
+	  @include container;
+	  height: $layer-row-height;
+	}
+
+	.current-time {
+	  @include positioned;
+	  z-index: 5;
+	  width: 2px;
+	  height: 100%;
+	  background-color: red;
+	}
+
+	.out-of-adherence {
+	  @include positioned;
+	  z-index: 5;
+	  background-color: $out-of-adherence-color;
+	  height: $out-of-adherence-height;
+	  opacity: 0.6;
+	  min-width: 1px;
+	  top: ($shift-height - $out-of-adherence-height) / 2;
+	}
+
+	.activity {
+	  @include positioned;
+	  height: 100%;
+	}
+
+	@mixin adherence-layer($color) {
+	  @include positioned;
+	  background-color: $color;
+	  height: $layer-row-height;
+	  &.highlight {
+		outline: 1px solid $color;
+		outline-offset: 2px;
+	  }
+	}
+
+	.recorded-out-of-adherence {
+	  @include adherence-layer($out-of-adherence-color);
+	}
+
+	.approved-adherence {
+	  @include adherence-layer($in-adherence-color);
+	}
+
+	.diamond {
+	  @include positioned;
+	  top: ($layer-row-height - $diamond-size) / 2;
+	  margin-left: ($diamond-size / 2) * -1;
+	  transform: rotate(45deg);
+	  cursor: pointer;
+	  height: $diamond-size;
+	  width: $diamond-size;
+	  &.highlight {
+		height: $diamond-size + 2;
+		width: $diamond-size + 2;
+		border-radius: 50%;
+	  }
+	  &.highlight:after {
+		content: '';
+		width: $diamond-size + 8;
+		height: $diamond-size + 8;
+		display: block;
+		margin-top: -3px;
+		margin-left: -3px;
+		border-radius: 50%;
+		border: 1px solid;
+		border-color: inherit;
+	  }
+	}
+
   }
-  
 }

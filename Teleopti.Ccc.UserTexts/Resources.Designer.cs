@@ -3097,6 +3097,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Approved as in adherence.
+        /// </summary>
+        public static string ApprovedAsInAdherence {
+            get {
+                return ResourceManager.GetString("ApprovedAsInAdherence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Archive schedule.
         /// </summary>
         public static string ArchiveSchedule {
@@ -6006,6 +6015,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ChangePlanningPeriodTo {
             get {
                 return ResourceManager.GetString("ChangePlanningPeriodTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Changes.
+        /// </summary>
+        public static string Changes {
+            get {
+                return ResourceManager.GetString("Changes", resourceCulture);
             }
         }
         
@@ -25943,6 +25961,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string RecipientHasNoShiftTradePermission {
             get {
                 return ResourceManager.GetString("RecipientHasNoShiftTradePermission", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Recorded out of adherence.
+        /// </summary>
+        public static string RecordedOutOfAdherence {
+            get {
+                return ResourceManager.GetString("RecordedOutOfAdherence", resourceCulture);
             }
         }
         

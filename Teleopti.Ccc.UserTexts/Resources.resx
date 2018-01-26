@@ -17114,4 +17114,16 @@ Do you want to participate?</value>
     <value>End Date</value>
     <comment>End Date of request</comment>
   </data>
+  <data name="Changes" xml:space="preserve">
+    <value>Changes</value>
+    <comment>Adherence changes</comment>
+  </data>
+  <data name="RecordedOutOfAdherence" xml:space="preserve">
+    <value>Recorded out of adherence</value>
+    <comment>Recorded out of adherences</comment>
+  </data>
+  <data name="ApprovedAsInAdherence" xml:space="preserve">
+    <value>Approved as in adherence</value>
+    <comment>Approved adherence</comment>
+  </data>
 </root>
