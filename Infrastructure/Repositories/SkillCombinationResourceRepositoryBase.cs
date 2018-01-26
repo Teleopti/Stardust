@@ -1,5 +1,4 @@
-﻿using log4net;
-using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
+﻿using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
 using NHibernate.SqlAzure;
 using NHibernate.Transform;
 using System;
@@ -7,7 +6,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -15,7 +13,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
@@ -26,7 +23,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 		private readonly ICurrentBusinessUnit _currentBusinessUnit;
 		private readonly RetryPolicy _retryPolicy;
-		private readonly object skillCombinationLock = new object();
 		private readonly IStardustJobFeedback _stardustJobFeedback;
 
 		protected SkillCombinationResourceRepositoryBase(INow now, ICurrentUnitOfWork currentUnitOfWork,
@@ -270,8 +266,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			var bu = _currentBusinessUnit.Current().Id.GetValueOrDefault();
 			_stardustJobFeedback.SendProgress(
 				$"Start persist {skillCombinationResources.Count()} skillCombinationResources for bu {bu}.");
-			lock (skillCombinationLock)
-			{
+
 				var connectionString = _currentUnitOfWork.Current().Session().Connection.ConnectionString;
 				using (var connection = new SqlConnection(connectionString))
 				{
@@ -345,8 +340,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 						}
 						transaction.Commit();
 					}
-					
-				}
 			}
 		}
 
@@ -382,11 +375,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			return mergedResult.ToList();
 		}
-
-//		public virtual IEnumerable<SkillCombinationResource> LoadSkillCombinationResources(DateTimePeriod period, bool useBpoExchange = true)
-//		{
-//		}
-
+		
 		protected IEnumerable<SkillCombinationResource> skillCombinationResourcesWithBpo(DateTimePeriod period)
 		{
 			var combinationResources = skillCombinationResourcesWithoutBpo(period).ToList();
@@ -507,18 +496,11 @@ AND d.StartDateTime < :endDateTime AND d.EndDateTime > :startDateTime)
 
 			return mergedResult;
 		}
-		private static readonly object lockObject = new object();
-
+		
 		public void PersistChanges(IEnumerable<SkillCombinationResource> deltas)
 		{
 			if (!deltas.Any()) return;
-			_retryPolicy.ExecuteAction(() =>
-			{
-				lock (lockObject)
-				{
-					tryPersistChanges(deltas);
-				}
-			});
+			_retryPolicy.ExecuteAction(() => { tryPersistChanges(deltas); });
 		}
 
 	    private void tryPersistChanges(IEnumerable<SkillCombinationResource> deltas)
