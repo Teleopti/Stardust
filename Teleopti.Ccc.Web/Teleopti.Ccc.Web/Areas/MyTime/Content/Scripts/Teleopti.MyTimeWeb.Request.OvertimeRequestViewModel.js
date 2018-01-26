@@ -1,9 +1,12 @@
 ﻿Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel = function (ajax, doneCallback, parentViewModel, weekStart, isViewingDetail) {
 	var self = this,
+		requestDateStr,
+		currentUserDateTime,
+		overtimeRequestsGapInMinutes = 20,
 		timeFormat = Teleopti.MyTimeWeb.Common.TimeFormat,
 		dateTimeFormats = Teleopti.MyTimeWeb.Common.Constants.serviceDateTimeFormat,
-		dateOnlyFormat =Teleopti.MyTimeWeb.Common.Constants.serviceDateTimeFormat.dateOnly,
-		defaultStartTimeSubscription;
+		dateOnlyFormat = Teleopti.MyTimeWeb.Common.Constants.serviceDateTimeFormat.dateOnly,
+		defaultStartTimeSubscription, useDefaultStartTimeToggleSubscription;
 
 	self.Id = ko.observable();
 	self.Template = "add-overtime-request-template";
@@ -18,10 +21,11 @@
 	self.PeriodEndDate = ko.observable(null);
 
 	self.DateFrom = ko.observable();
-	self.getDefaultStartTime = ko.computed(self.DateFrom).extend({throttle: 50});
+	self.getDefaultStartTime = ko.computed(self.DateFrom).extend({ throttle: 50 });
 
 	self.StartTime = ko.observable();
 	self.DateFormat = ko.observable(Teleopti.MyTimeWeb.Common.DateFormat);
+	self.UseDefaultStartTime = ko.observable(true);
 
 	self.weekStart = weekStart;
 	self.ShowMeridian = $('div[data-culture-show-meridian]').attr('data-culture-show-meridian') === 'true';
@@ -34,6 +38,7 @@
 	self.IsTimeListOpened = ko.observable(false);
 
 	self.IsMobile = Teleopti.MyTimeWeb.Portal.IsMobile();
+	self.isDefaultStartTimeToggleEnabled = false;
 
 	self.checkMessageLength = function (data, event) {
 		var text = $(event.target)[0].value;
@@ -98,7 +103,7 @@
 		self.IsTimeListOpened(!self.IsTimeListOpened());
 	};
 
-	self.CloseDropdownTimeList = function() {
+	self.CloseDropdownTimeList = function () {
 		self.IsTimeListOpened(false);
 	};
 
@@ -145,29 +150,22 @@
 	}
 
 	function setDefaultStartTime() {
-		var requestDate = self.DateFrom()._isAMomentObject ? self.DateFrom().format('YYYY/MM/DD') : moment(self.DateFrom(), dateOnlyFormat).format('YYYY/MM/DD');
+		requestDateStr = (self.DateFrom() && self.DateFrom()._isAMomentObject) ? self.DateFrom().format('YYYY/MM/DD') : moment(self.DateFrom(), dateOnlyFormat).format('YYYY/MM/DD');
 
-		if(moment(requestDate).isBefore(self.PeriodStartDate().format('YYYY-MM-DD')) || moment(requestDate).isAfter(self.PeriodEndDate().format('YYYY-MM-DD'))) {
+		if (moment(requestDateStr).isBefore(self.PeriodStartDate().format('YYYY-MM-DD')) || moment(requestDateStr).isAfter(self.PeriodEndDate().format('YYYY-MM-DD'))) {
 			return;
 		}
-			
+
 		self.IsLoading(true);
 		ajax.Ajax({
 			url: 'OvertimeRequests/GetDefaultStartTime',
 			dataType: 'json',
 			data: {
-				date: requestDate
+				date: requestDateStr
 			},
 			type: 'GET',
-			success: function (startDate) {
-				if(moment(startDate).format('YYYY-MM-DD') !== self.DateFrom().format('YYYY-MM-DD')){
-					disposeDefaultStartTimeSubscription();
-					self.DateFrom(moment(startDate));
-				}
-				
-				self.StartTime(moment(startDate).format(timeFormat));
-				setDefaultStartTimeSubscription();
-
+			success: function (response) {
+				updateDateFromAndStartTime(response);
 				self.IsLoading(false);
 			},
 			error: function (response, textStatus) {
@@ -176,17 +174,54 @@
 		});
 	}
 
-	function setDefaultStartTimeSubscription() {
-		disposeDefaultStartTimeSubscription();
-		defaultStartTimeSubscription = self.getDefaultStartTime.subscribe(function() {
+	function updateDateFromAndStartTime(startDateTimeData) {
+		if(!startDateTimeData || !startDateTimeData.DefaultStartTime)
+			return;
+
+		var datetime = new Date(parseInt(startDateTimeData.DefaultStartTime.replace(/\/Date\((-?\d+)\)\//, '$1')));
+		var defaultStartDateTime = moment(datetime);
+
+		if (defaultStartDateTime.format('YYYY-MM-DD') !== self.DateFrom().format('YYYY-MM-DD')) {
+			disposeDateFromSubscription();
+			self.DateFrom(defaultStartDateTime);
+		}
+
+		if (defaultStartDateTime.isSame(self.DateFrom(), 'days') && moment(currentUserDateTime).add(overtimeRequestsGapInMinutes, 'minutes').isBefore(defaultStartDateTime) && startDateTimeData.IsShiftStartTime) {
+			var amendedStartDateTime = defaultStartDateTime.add(-self.RequestDuration().split(':')[0], 'hours').add(-self.RequestDuration().split(':')[1], 'minutes');
+
+			self.StartTime(amendedStartDateTime.format(timeFormat));
+		} else {
+			self.StartTime(defaultStartDateTime.format(timeFormat));
+		}
+
+		setDateFromSubscription();
+	}
+
+	function setDateFromSubscription() {
+		disposeDateFromSubscription();
+		defaultStartTimeSubscription = self.getDefaultStartTime.subscribe(function () {
 			setDefaultStartTime();
 		});
 	}
 
-	function disposeDefaultStartTimeSubscription() {
-		if(defaultStartTimeSubscription && defaultStartTimeSubscription.dispose) {
+	function disposeDateFromSubscription() {
+		if (defaultStartTimeSubscription && defaultStartTimeSubscription.dispose) {
 			defaultStartTimeSubscription.dispose();
 		}
+	}
+
+	function setUseDefaultStartTimeToggleSubscription() {
+		if (useDefaultStartTimeToggleSubscription && useDefaultStartTimeToggleSubscription.dispose) {
+			useDefaultStartTimeToggleSubscription.dispose();
+		}
+
+		useDefaultStartTimeToggleSubscription = self.UseDefaultStartTime.subscribe(function (newValue) {
+			if (newValue) {
+				setDefaultStartTime();
+			} else {
+				disposeDateFromSubscription();
+			}
+		});
 	}
 
 	function _ajaxErrorFn(response, textStatus) {
@@ -219,7 +254,7 @@
 			self.ErrorMessage(requestsMessagesUserTexts.MISSING_SUBJECT);
 		} else if (_isOvertimeTypeEmpty()) {
 			self.ErrorMessage(requestsMessagesUserTexts.MISSING_OVERTIME_TYPE);
-		}  else if (_isStarttimeEmpty()) {
+		} else if (_isStarttimeEmpty()) {
 			self.ErrorMessage(requestsMessagesUserTexts.MISSING_STARTTIME);
 		} else if (_isDurationEmpty()) {
 			self.ErrorMessage(requestsMessagesUserTexts.MISSING_DURATION);
@@ -251,7 +286,7 @@
 	function _isDurationEmpty() {
 		return !self.RequestDuration() || self.RequestDuration().length != 5 || self.RequestDuration() === '00:00';
 	}
-	
+
 	function _isDateFromPast() {
 		var dateFromMoment = self.DateFrom();
 		if (!moment.isMoment(dateFromMoment))
@@ -283,22 +318,26 @@
 		};
 	}
 
-	function _initializeViewModel(){
+	function _initializeViewModel() {
 		self.ShowError(false);
 		self.ShowCancelButton(true);
-		var currentUserDateTime = parentViewModel.baseUtcOffsetInMinutes
+		currentUserDateTime = (parentViewModel && parentViewModel.baseUtcOffsetInMinutes)
 			? Teleopti.MyTimeWeb.Common.GetCurrentUserDateTime(parentViewModel.baseUtcOffsetInMinutes, parentViewModel.daylightSavingAdjustment)
 			: moment();
-		var defaultStartTime = currentUserDateTime.add(20, 'minutes');
-		self.StartTime(defaultStartTime.format(timeFormat));
+
+		self.StartTime(currentUserDateTime.add(overtimeRequestsGapInMinutes, 'minutes').format(timeFormat));
 		self.TimeList = _createTimeList();
 		self.RequestDuration(self.TimeList[0]);
 		self.CancelAddRequest = parentViewModel.CancelAddingNewRequest;
+
+		self.isDefaultStartTimeToggleEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_OvertimeRequestDefaultStartTime_47513');
+
 		if (Teleopti.MyTimeWeb.Common.IsToggleEnabled('OvertimeRequestPeriodSetting_46417')) {
 			setAvailableDays();
 		}
-		if (Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_OvertimeRequestDefaultStartTime_47513')) {
-			setDefaultStartTimeSubscription();
+		if (self.isDefaultStartTimeToggleEnabled) {
+			setDateFromSubscription();
+			setUseDefaultStartTimeToggleSubscription();
 		}
 	}
 

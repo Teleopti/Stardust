@@ -36367,6 +36367,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use default start time.
+        /// </summary>
+        public static string UseDefaultStartTime {
+            get {
+                return ResourceManager.GetString("UseDefaultStartTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Used Seats.
         /// </summary>
         public static string UsedSeats {

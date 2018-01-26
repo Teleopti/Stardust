@@ -37,6 +37,13 @@
 		}
 
 		<div class="row form-group">
+			<div class="col-xs-12 col-sm-12 col-md-12" data-bind="if: isDefaultStartTimeToggleEnabled">
+				<label class="cursorpointer inline-block checkbox">
+					<input class="use-default-startTime" type="checkbox" data-bind="checked: UseDefaultStartTime">
+					@Resources.UseDefaultStartTime
+				</label>
+			</div>
+
 			<div class="col-xs-4 col-sm-4 col-md-4 overtime-request-date">
 				<label>
 					@Resources.Date

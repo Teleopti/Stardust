@@ -14,6 +14,11 @@ $(document).ready(function() {
 			}
 		},
 		fakeAvailableDays = 13,
+		fakeDefaultStartTimeFromBackend = {
+			"IsShiftStartTime": false,
+			"IsShiftEndTime": false,
+			"DefaultStartTime":"\/Date(1516870800000)\/"
+		},
 		dateOnlyFormat = Teleopti.MyTimeWeb.Common.Constants.serviceDateTimeFormat.dateOnly,
 		requestDate = moment().format(dateOnlyFormat),
 		toggleFnTemp, enabledTogglesList = [];
@@ -66,6 +71,10 @@ $(document).ready(function() {
 
 				if( options.url === 'OvertimeRequests/GetAvailableDays') {
 					options.success(fakeAvailableDays);
+				}
+
+				if( options.url === 'OvertimeRequests/GetDefaultStartTime') {
+					options.success(fakeDefaultStartTimeFromBackend);
 				}
 			}
 		};
@@ -406,6 +415,94 @@ $(document).ready(function() {
 		var requestVm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, function(){}, fakeRequestDetailViewModel, null, false);
 
 		equal(requestVm.StartTime(), moment().add(20, 'minutes').format('HH:mm'));
+	});
+
+	test('should use default start time by default', function() {
+		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
+		var requestVm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, function(){}, fakeRequestDetailViewModel, null, false);
+
+		equal(requestVm.UseDefaultStartTime(), true);
+	});
+
+	test('should use default start time from backend as default start date when UseDefaultStartTime toggle is toggled on', function() {
+		enabledTogglesList = ['OvertimeRequestPeriodSetting_46417', 'MyTimeWeb_OvertimeRequestDefaultStartTime_47513'];
+
+		var tomorrow = moment().add(1, 'days').hours(17).minutes(0);
+
+		fakeDefaultStartTimeFromBackend.DefaultStartTime = "/Date(" + tomorrow.unix() * 1000 + ")/";
+
+		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
+		var requestVm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, function(){}, fakeRequestDetailViewModel, null, false);
+
+		requestVm.DateFrom(moment());
+		requestVm.UseDefaultStartTime(false);
+		requestVm.UseDefaultStartTime(true);
+
+		equal(requestVm.UseDefaultStartTime(), true);
+		equal(requestVm.DateFrom().format('YYYY-MM-DD'), tomorrow.format('YYYY-MM-DD'));
+	});
+
+	test('should use selected day as default start time when UseDefaultStartTime toggle is toggled off', function() {
+		enabledTogglesList = ['OvertimeRequestPeriodSetting_46417', 'MyTimeWeb_OvertimeRequestDefaultStartTime_47513'];
+
+		var tomorrow = moment().add(1, 'days').hours(17).minutes(0);
+		fakeDefaultStartTimeFromBackend.DefaultStartTime = "/Date(" + tomorrow.unix() * 1000 + ")/";
+
+
+		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
+		var requestVm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, function(){}, fakeRequestDetailViewModel, null, false);
+
+		requestVm.DateFrom(moment());
+		requestVm.UseDefaultStartTime(false);
+
+		equal(requestVm.UseDefaultStartTime(), false);
+		equal(requestVm.DateFrom().format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'));
+	});
+
+	test('should use shift start time subtracting duration for default start time', function() {
+		enabledTogglesList = ['OvertimeRequestPeriodSetting_46417', 'MyTimeWeb_OvertimeRequestDefaultStartTime_47513'];
+
+		var tomorrow = moment().add(1, 'days').hours(17).minutes(0);
+		fakeDefaultStartTimeFromBackend.DefaultStartTime = "/Date(" + tomorrow.unix() * 1000 + ")/";
+		fakeDefaultStartTimeFromBackend.IsShiftStartTime = true;
+		fakeDefaultStartTimeFromBackend.IsShiftEndTime = false;
+
+		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
+		var requestVm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, function(){}, fakeRequestDetailViewModel, null, false);
+
+		requestVm.DateFrom(moment());
+		requestVm.UseDefaultStartTime(false);
+		requestVm.UseDefaultStartTime(true);
+		requestVm.RequestDuration('01:00');
+
+		equal(requestVm.UseDefaultStartTime(), true);
+		equal(requestVm.DateFrom().format('YYYY-MM-DD'), tomorrow.format('YYYY-MM-DD'));
+
+		var expectedStartTime = tomorrow.add(-requestVm.RequestDuration().split(':')[0], 'hours')
+								.add(-requestVm.RequestDuration().split(':')[1], 'minutes').format('HH:mm');
+
+		equal(requestVm.StartTime(), expectedStartTime);
+	});
+
+	test('should not subtract duration from shift end time when setting default start time', function() {
+		enabledTogglesList = ['OvertimeRequestPeriodSetting_46417', 'MyTimeWeb_OvertimeRequestDefaultStartTime_47513'];
+
+		var tomorrow = moment().add(1, 'days').hours(7).minutes(0);
+		fakeDefaultStartTimeFromBackend.DefaultStartTime = "/Date(" + tomorrow.unix() * 1000 + ")/";
+		fakeDefaultStartTimeFromBackend.IsShiftStartTime = false;
+		fakeDefaultStartTimeFromBackend.IsShiftEndTime = true;
+
+		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
+		var requestVm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, function(){}, fakeRequestDetailViewModel, null, false);
+
+		requestVm.DateFrom(moment());
+		requestVm.UseDefaultStartTime(false);
+		requestVm.UseDefaultStartTime(true);
+		requestVm.RequestDuration('01:00');
+
+		equal(requestVm.UseDefaultStartTime(), true);
+		equal(requestVm.DateFrom().format('YYYY-MM-DD'), tomorrow.format('YYYY-MM-DD'));
+		equal(requestVm.StartTime(), tomorrow.format('HH:mm'));
 	});
 
 	test('should set overtime request duration to one hour by default', function() {

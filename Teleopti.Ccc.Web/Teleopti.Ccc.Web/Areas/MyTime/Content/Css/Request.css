@@ -752,7 +752,10 @@ input[type=search]::-ms-clear {
 	padding-left: 23px;
 }
 
-.full-day-label input, input.overtime-availability-next-day, input.shift-exchange-offer-next-day {
+.full-day-label input, 
+input.overtime-availability-next-day, 
+input.shift-exchange-offer-next-day,
+input.use-default-startTime {
 	cursor: pointer;
 	transform: scale(1.3);
 	margin: 5px 10px;

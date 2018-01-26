@@ -17061,6 +17061,10 @@ Do you want to participate?</value>
     <value>Skill type</value>
     <comment>column name for skill type in overtime request open period</comment>
   </data>
+  <data name="UseDefaultStartTime" xml:space="preserve">
+    <value>Use default start time</value>
+    <comment>Checkbox text used in adding new Overtime Request form</comment>
+  </data>
   <data name="Measures" xml:space="preserve">
     <value>Measures</value>
     <comment>As in Gamification, e.g. Answered Calls</comment>
