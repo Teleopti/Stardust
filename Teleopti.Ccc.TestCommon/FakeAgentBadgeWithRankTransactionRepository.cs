@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.TestCommon
 
 		public IList<IAgentBadgeWithRankTransaction> LoadAll()
 		{
-			throw new NotImplementedException();
+			return _agentBadgeWithRankTransactions;
 		}
 
 		public IAgentBadgeWithRankTransaction Load(Guid id)
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.TestCommon
 
 		public void ResetAgentBadges()
 		{
-			throw new NotImplementedException();
+			_agentBadgeWithRankTransactions.Clear();
 		}
 	}
 }

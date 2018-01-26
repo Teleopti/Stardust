@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<IAgentBadgeTransaction> LoadAll()
 		{
-			throw new NotImplementedException();
+			return _agentBadgeTransactions;
 		}
 
 		public IAgentBadgeTransaction Load(Guid id)
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void ResetAgentBadges()
 		{
-			throw new NotImplementedException();
+			_agentBadgeTransactions.Clear();
 		}
 	}
 }

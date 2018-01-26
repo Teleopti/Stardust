@@ -18,12 +18,16 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 		private readonly IGamificationSettingMapper _mapper;
 		private readonly IExternalPerformanceRepository _externalPerformanceRepository;		
 		private readonly BadgeSettingDataConverter _converter = new BadgeSettingDataConverter();
+		private readonly IAgentBadgeTransactionRepository _agentBadgeTransactionRepository;
+		private readonly IAgentBadgeWithRankTransactionRepository _agentBadgeWithRankTransactionRepository;
 
-		public GamificationSettingPersister(IGamificationSettingRepository gamificationSettingRepository, IGamificationSettingMapper mapper, IExternalPerformanceRepository externalPerformanceRepository)
+		public GamificationSettingPersister(IGamificationSettingRepository gamificationSettingRepository, IGamificationSettingMapper mapper, IExternalPerformanceRepository externalPerformanceRepository, IAgentBadgeTransactionRepository agentBadgeTransactionRepository, IAgentBadgeWithRankTransactionRepository agentBadgeWithRankTransactionRepository)
 		{
 			_gamificationSettingRepository = gamificationSettingRepository;
 			_mapper = mapper;
 			_externalPerformanceRepository = externalPerformanceRepository;
+			_agentBadgeTransactionRepository = agentBadgeTransactionRepository;
+			_agentBadgeWithRankTransactionRepository = agentBadgeWithRankTransactionRepository;
 		}
 
 		public GamificationSettingViewModel Persist()
@@ -50,14 +54,8 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 		{
 			try
 			{
-				using (var myUow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-				{
-					var agentBadgeTransactionRepository = new AgentBadgeTransactionRepository(myUow);
-					var agentBadgeWithRankTransactionRepository = new AgentBadgeWithRankTransactionRepository(myUow);
-					agentBadgeTransactionRepository.ResetAgentBadges();
-					agentBadgeWithRankTransactionRepository.ResetAgentBadges();
-					myUow.PersistAll();
-				}
+				_agentBadgeTransactionRepository.ResetAgentBadges();
+				_agentBadgeWithRankTransactionRepository.ResetAgentBadges();
 			}
 			catch (Exception)
 			{

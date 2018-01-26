@@ -22,6 +22,20 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification
 		public GamificationController Target;
 		public FakeGamificationSettingRepository GamificationSettingRepository;
 		public FakeExternalPerformanceRepository ExternalPerformanceRepository;
+		public FakeAgentBadgeWithRankTransactionRepository AgentBadgeWithRankTransactionRepository;
+		public FakeAgentBadgeTransactionRepository AgentBadgeTransactionRepository;
+
+		[Test]
+		public void ShouldResetAgentBadges()
+		{
+			AgentBadgeTransactionRepository.Add(new AgentBadgeTransaction());
+			AgentBadgeWithRankTransactionRepository.Add(new AgentBadgeWithRankTransaction());
+
+			Target.ResetBadge();
+
+			AgentBadgeTransactionRepository.LoadAll().Any().Should().Be.False();
+			AgentBadgeWithRankTransactionRepository.LoadAll().Any().Should().Be.False();
+		}
 
 		[Test]
 		public void ShouldPersistNewGamification()
