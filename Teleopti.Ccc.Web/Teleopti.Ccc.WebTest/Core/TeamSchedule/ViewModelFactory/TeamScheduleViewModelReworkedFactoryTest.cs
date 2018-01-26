@@ -159,23 +159,6 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		}
 
 		[Test]
-		public void TeamScheduleControllerShouldReturnCorrectTimeLine()
-		{
-			SetUp();
-
-			var result = Target.GetViewModel(new TeamScheduleViewModelData
-			{
-				ScheduleDate = new DateOnly(2015, 5, 19),
-				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
-				Paging = new Paging { Take = 20, Skip = 0 },
-				SearchNameText = ""
-			});
-
-			result.TimeLine.Max(t => t.EndTime).Should().Be.EqualTo(new DateTime(2015, 5, 19, 20, 15, 0));
-			result.TimeLine.Min(t => t.StartTime).Should().Be.EqualTo(new DateTime(2015, 5, 19, 7, 45, 0));
-		}
-
-		[Test]
 		public void TeamScheduleControllerShouldReturnCorrectTimeLineNoReadModel()
 		{
 			SetUp();
@@ -192,41 +175,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			result.TimeLine.Min(t => t.StartTime).Should().Be.EqualTo(new DateTime(2015, 5, 21, 5, 45, 0));
 		}
 
-		[Test]
-		public void ShouldReturnCorrectAgentSchedulesWithNameSearch()
-		{
-			SetUp();
-
-			var result = Target.GetViewModel(new TeamScheduleViewModelData
-			{
-				ScheduleDate = new DateOnly(2015, 5, 19),
-				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
-				Paging = new Paging { Take = 20, Skip = 0 },
-				SearchNameText = "1"
-			});
-
-			result.AgentSchedules.Should().Have.Count.EqualTo(1);
-		}
-
-		[Test]
-		public void ShouldReturnCorrectAgentSchedulesWithDate()
-		{
-			SetUp();
-
-			var person1 = PersonRepository.LoadAll().First(p => p.Name.LastName == "1");
-
-			var result = Target.GetViewModel(new TeamScheduleViewModelData
-			{
-				ScheduleDate = new DateOnly(2015, 5, 21),
-				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
-				Paging = new Paging { Take = 20, Skip = 0 },
-				SearchNameText = ""
-			});
-
-			var agentSchedule = result.AgentSchedules.Single(s => s.PersonId == person1.Id.Value);
-			agentSchedule.MinStart.Should().Be.EqualTo(new DateTime(2015, 5, 21, 10, 0, 0));
-		}
-
+		
 		[Test]
 		public void ShouldReturnMyScheduleWithDateNoReadModel()
 		{
@@ -892,61 +841,6 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		}
 
 		[Test]
-		public void ShouldReturnCorrectAgentSchedulesWithTimeFilter()
-		{
-			SetUp();
-			var result = Target.GetViewModel(new TeamScheduleViewModelData
-			{
-				ScheduleDate = new DateOnly(2015, 5, 19),
-				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
-				Paging = new Paging { Take = 20, Skip = 0 },
-				TimeFilter = new TimeFilterInfo
-				{
-					StartTimes = new List<DateTimePeriod> { new DateTimePeriod(2015, 5, 19, 7, 2015, 5, 19, 9) },
-					EndTimes = new List<DateTimePeriod> { new DateTimePeriod(2015, 5, 19, 13, 2015, 5, 19, 15) },
-					IsDayOff = false,
-					IsWorkingDay = true,
-					IsEmptyDay = false
-				},
-				SearchNameText = ""
-			});
-
-			result.AgentSchedules.Should().Have.Count.EqualTo(1);
-		}
-
-		[Test]
-		public void ShouldReturnAllAgentsOfTeamWhenNoTimeFilter()
-		{
-			SetUp();
-
-			var result = Target.GetViewModel(new TeamScheduleViewModelData
-			{
-				ScheduleDate = new DateOnly(2015, 5, 20),
-				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
-				Paging = new Paging { Take = 20, Skip = 0 },
-				SearchNameText = ""
-			});
-
-			result.AgentSchedules.Should().Have.Count.EqualTo(3);
-		}
-
-		[Test]
-		public void ShouldNotSeeScheduleOfUnpublishedAgent()
-		{
-			SetUp();
-
-			var result = Target.GetViewModel(new TeamScheduleViewModelData
-			{
-				ScheduleDate = new DateOnly(2015, 5, 19),
-				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
-				Paging = new Paging { Take = 20, Skip = 0 },
-				SearchNameText = ""
-			});
-
-			result.AgentSchedules.First(x => x.Name.Contains("Unpublish")).ScheduleLayers.Should().Be.Null();
-		}
-
-		[Test]
 		public void ShouldNotSeeScheduleOfUnpublishedAgentNoReadModel()
 		{
 			SetUp();
@@ -960,80 +854,6 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			});
 
 			result.AgentSchedules.First(x => x.Name.Contains("Unpublish")).ScheduleLayers.Should().Be.Null();
-		}
-
-
-		[Test]
-		public void ShouldSeeDayOffAgentScheduleWhenDayOffFilterEnabled()
-		{
-			SetUp();
-
-			var result = Target.GetViewModel(new TeamScheduleViewModelData
-			{
-				ScheduleDate = new DateOnly(2015, 5, 23),
-				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
-				Paging = new Paging { Take = 20, Skip = 0 },
-				TimeFilter = new TimeFilterInfo
-				{
-					StartTimes = new List<DateTimePeriod>(),
-					EndTimes = new List<DateTimePeriod>(),
-					IsDayOff = true,
-					IsWorkingDay = false,
-					IsEmptyDay = false
-				},
-				SearchNameText = ""
-			});
-
-			result.AgentSchedules.Should().Have.Count.EqualTo(1);
-		}
-
-		[Test]
-		[Ignore("Ideally this should be included. But with the current implementation the permission check in application is incompatible with the pagingation from repository. So ignored. Discussion welcomed!")]
-		public void ShouldSeeEmptyDayAgentButNotUnpulishedAgentWhenEmptyDayFilterEnabled()
-		{
-			SetUp();
-
-			var result = Target.GetViewModel(new TeamScheduleViewModelData
-			{
-				ScheduleDate = new DateOnly(2015, 5, 23),
-				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
-				Paging = new Paging { Take = 20, Skip = 0 },
-				TimeFilter = new TimeFilterInfo
-				{
-					StartTimes = new List<DateTimePeriod>(),
-					EndTimes = new List<DateTimePeriod>(),
-					IsDayOff = false,
-					IsWorkingDay = false,
-					IsEmptyDay = true
-				},
-				SearchNameText = ""
-			});
-
-			result.AgentSchedules.Should().Have.Count.EqualTo(1);
-		}
-
-		[Test]
-		public void ShouldSeeCorrectAgentSchedulesWhenBothDayOffAndEmptyDayFilterEnabled()
-		{
-			SetUp();
-
-			var result = Target.GetViewModel(new TeamScheduleViewModelData
-			{
-				ScheduleDate = new DateOnly(2015, 5, 23),
-				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
-				Paging = new Paging { Take = 20, Skip = 0 },
-				TimeFilter = new TimeFilterInfo
-				{
-					StartTimes = new List<DateTimePeriod>(),
-					EndTimes = new List<DateTimePeriod>(),
-					IsDayOff = true,
-					IsWorkingDay = false,
-					IsEmptyDay = true
-				},
-				SearchNameText = ""
-			});
-
-			result.AgentSchedules.Should().Have.Count.EqualTo(3);
 		}
 
 	}

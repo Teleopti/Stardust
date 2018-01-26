@@ -42,24 +42,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 			_permissionProvider = permissionProvider;
 			_logonUser = logonUser;
 		}
-
-		public TeamScheduleViewModelReworked GetViewModel(TeamScheduleViewModelData data)
-		{
-			if (data.Paging.Equals(Paging.Empty)|| data.Paging.Take <= 0)
-			{
-				return new TeamScheduleViewModelReworked();
-			}
-			int pageCount;
-			var agentSchedules = constructAgentSchedulesFromReadModel(data, true, out pageCount).ToArray();
-			var timeLineHours = _timeLineViewModelReworkedMapper.Map(agentSchedules, data.ScheduleDate);
-		
-			return new TeamScheduleViewModelReworked
-			{
-				AgentSchedules = agentSchedules,
-				TimeLine = timeLineHours,
-				PageCount = pageCount
-			};
-		}
 		
 		public TeamScheduleViewModelReworked GetViewModelNoReadModel(TeamScheduleViewModelData data)
 		{
