@@ -101,12 +101,14 @@
 
 				if (config.dataType == 0) {
 					config.valueFormat = '^\\d+$';
+					config.max = 10000;
 				} else {
 					config.valueFormat = '\\d+(\.\d+)?$';
 					config.badgeThreshold = config.badgeThreshold * 100;
 					config.goldBadgeThreshold = config.goldBadgeThreshold * 100;
 					config.silverBadgeThreshold = config.silverBadgeThreshold * 100;
 					config.bronzeBadgeThreshold = config.bronzeBadgeThreshold * 100;
+					config.max = 100.0;
 				}
 
 				measureConfigs.push(config);
