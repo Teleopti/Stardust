@@ -19,6 +19,10 @@
 				if (ctrl.settingDescriptors && ctrl.settingDescriptors.length > 0) {
 					ctrl.getSettingById(ctrl.settingDescriptors[0].GamificationSettingId);
 				}
+				else {
+					// Create a new setting if there is no setting in database.
+					ctrl.addNewSetting();
+				}
 			});
 		};
 
@@ -36,17 +40,20 @@
 		}
 
 		ctrl.settingSelectionChanged = function () {
-			if (ctrl.currentSettingId) {
-				var setting = ctrl.allSettings.find(function (item) {
-					return item.Id == ctrl.currentSettingId;
-				});
+			// Common these codes to fetch setting when selection changed.
+			// if (ctrl.currentSettingId) {
+			// 	var setting = ctrl.allSettings.find(function (item) {
+			// 		return item.Id == ctrl.currentSettingId;
+			// 	});
 
-				if (!setting) {
-					ctrl.getSettingById(ctrl.currentSettingId);
-				} else {
-					ctrl.settingData = setting;
-				}
-			}
+			// 	if (!setting) {
+			// 		ctrl.getSettingById(ctrl.currentSettingId);
+			// 	} else {
+			// 		ctrl.settingData = setting;
+			// 	}
+			// }
+
+			ctrl.getSettingById(ctrl.currentSettingId);
 		};
 
 		ctrl.updateCurrentSettingNameInList = function (settingName) {
