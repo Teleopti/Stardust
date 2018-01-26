@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
@@ -16,6 +17,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private IPersonRepository _personRepository;
 		private bool _isInitilized;
 		private readonly IPersonAssignmentRepository _personAssignmentRepository;
+		private readonly IPersonRequestRepository _personRequestRepository;
+
+		public FakePersonScheduleDayReadModelFinder(IPersonAssignmentRepository personAssignmentRepository,
+			IPersonRepository personRepository, IPersonRequestRepository personRequestRepository)
+			: this(personAssignmentRepository, personRepository)
+		{
+			_personRequestRepository = personRequestRepository;
+		}
 
 		public FakePersonScheduleDayReadModelFinder(IPersonAssignmentRepository personAssignmentRepository, IPersonRepository personRepository)
 		{
@@ -76,9 +85,16 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public IEnumerable<PersonScheduleDayReadModel> ForBulletinPersons(IEnumerable<string> shiftExchangeOfferIdList, Paging paging)
+		public IEnumerable<PersonScheduleDayReadModel> ForBulletinPersons(IEnumerable<string> shiftExchangeOfferIdList,
+			Paging paging)
 		{
-			throw new NotImplementedException();
+			var personRequests = _personRequestRepository.LoadAll();
+			var shiftExchangeOffers = personRequests.Select(x => x.Request).OfType<ShiftExchangeOffer>()
+				.Where(x => shiftExchangeOfferIdList.Contains(x.ShiftExchangeOfferId));
+			return shiftExchangeOffers.Select(x => new PersonScheduleDayReadModel
+			{
+				PersonId = x.Person.Id.Value
+			});
 		}
 
 		public IEnumerable<PersonScheduleDayReadModel> ForPersons(DateOnly date, IEnumerable<Guid> personIdList, Paging paging, TimeFilterInfo filterInfo = null,
