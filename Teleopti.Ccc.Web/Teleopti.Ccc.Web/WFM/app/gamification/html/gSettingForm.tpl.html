@@ -2,7 +2,7 @@
 	<div class="form-input-wrap">
 		<label>{{'Description'|translate}}</label>
 		<input type="text" name="settingname" required ng-model="$ctrl.name" ng-change="$ctrl.onNameChange()" ng-model-options="{allowInvalid: false, updateOn: 'default blur change', debounce: {default: 1000, blur: 0, change: 0}}"
-		 ng-maxlength="50" />
+			ng-maxlength="50" autocomplete="off" />
 		<div class="text-danger validation">
 			<div ng-if="form.settingname.$error.required">{{'Required'|translate}}</div>
 			<div ng-if="form.settingname.$error.maxlength">{{'TextIsTooLong'|translate}}</div>
