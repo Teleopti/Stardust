@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ExportSchedule
 			var optionalColumnValue1 = new OptionalColumnValue("value1").WithId();
 			var optionalColumnValue2 = new OptionalColumnValue("value2").WithId();
 			
-			person.AddOptionalColumnValue(optionalColumnValue1, optionalColumn);
+			person.SetOptionalColumnValue(optionalColumnValue1, optionalColumn);
 			OptionalColumnRepository.Add(optionalColumn);
 			OptionalColumnRepository.AddPersonValues(optionalColumnValue1);
 			OptionalColumnRepository.AddPersonValues(optionalColumnValue2);
@@ -206,7 +206,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ExportSchedule
 			var optionalColumnValue1 = new OptionalColumnValue("value1").WithId();
 			var optionalColumnValue2 = new OptionalColumnValue("value2").WithId();
 			
-			person.AddOptionalColumnValue(optionalColumnValue1, optionalColumn);
+			person.SetOptionalColumnValue(optionalColumnValue1, optionalColumn);
 			OptionalColumnRepository.Add(optionalColumn);
 			OptionalColumnRepository.AddPersonValues(optionalColumnValue1);
 			OptionalColumnRepository.AddPersonValues(optionalColumnValue2);
@@ -255,11 +255,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ExportSchedule
 			var optionalColumnAnother = new OptionalColumn("opt2").WithId();
 			var optionalColumnAnotherValue1 = new OptionalColumnValue("opt2 value1").WithId();
 
-			person.AddOptionalColumnValue(optionalColumnValue1, optionalColumn);
+			person.SetOptionalColumnValue(optionalColumnValue1, optionalColumn);
 			OptionalColumnRepository.Add(optionalColumn);
 			OptionalColumnRepository.AddPersonValues(optionalColumnValue1);
 
-			person.AddOptionalColumnValue(optionalColumnAnotherValue1, optionalColumnAnother);
+			person.SetOptionalColumnValue(optionalColumnAnotherValue1, optionalColumnAnother);
 			OptionalColumnRepository.Add(optionalColumnAnother);
 			OptionalColumnRepository.AddPersonValues(optionalColumnAnotherValue1);
 
@@ -560,7 +560,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ExportSchedule
 			}.WithId();
 			var groupValue = new OptionalColumnValue("my value");
 			var person = PersonFactory.CreatePerson("ashley", "andeen").WithId();
-			person.AddOptionalColumnValue(groupValue, dynamicGroupPage);
+			person.SetOptionalColumnValue(groupValue, dynamicGroupPage);
 			OptionalColumnRepository.Add(dynamicGroupPage);
 			OptionalColumnRepository.AddPersonValues(groupValue);
 

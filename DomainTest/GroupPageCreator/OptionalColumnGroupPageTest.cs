@@ -26,9 +26,9 @@ namespace Teleopti.Ccc.DomainTest.GroupPageCreator
 		public void ShouldCreateGroupPageForGivenOptionalColumn()
 		{
 			var person1 = new Person().WithId();
-			person1.AddOptionalColumnValue(new OptionalColumnValue("group 1"), _optionalColumn);
+			person1.SetOptionalColumnValue(new OptionalColumnValue("group 1"), _optionalColumn);
 			var person2 = new Person().WithId();
-			person2.AddOptionalColumnValue(new OptionalColumnValue("group 2"), _optionalColumn);
+			person2.SetOptionalColumnValue(new OptionalColumnValue("group 2"), _optionalColumn);
 			var persons = new[] { person1, person2 };
 
 			var options = new GroupPageOptions(persons) { CurrentGroupPageName = _optionalColumn.Name };
@@ -53,9 +53,9 @@ namespace Teleopti.Ccc.DomainTest.GroupPageCreator
 		{
 			var optionalColumn2 = new OptionalColumn("Optional Column 2").WithId();
 			var person1 = new Person().WithId();
-			person1.AddOptionalColumnValue(new OptionalColumnValue("group 1"), _optionalColumn);
+			person1.SetOptionalColumnValue(new OptionalColumnValue("group 1"), _optionalColumn);
 			var person2 = new Person().WithId();
-			person2.AddOptionalColumnValue(new OptionalColumnValue("group 2"), optionalColumn2);
+			person2.SetOptionalColumnValue(new OptionalColumnValue("group 2"), optionalColumn2);
 			var persons = new[] { person1, person2 };
 
 			var options = new GroupPageOptions(persons) { CurrentGroupPageName = _optionalColumn.Name };
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.DomainTest.GroupPageCreator
 		public void ShouldNotCreateGroupPageForEmptyvaluesOnOptionalColumn()
 		{
 			var person1 = new Person().WithId();
-			person1.AddOptionalColumnValue(new OptionalColumnValue(string.Empty), _optionalColumn);
+			person1.SetOptionalColumnValue(new OptionalColumnValue(string.Empty), _optionalColumn);
 			var persons = new[] { person1 };
 
 			var options = new GroupPageOptions(persons) { CurrentGroupPageName = _optionalColumn.Name };

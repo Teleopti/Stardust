@@ -49,13 +49,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var col = CreateAggregateWithCorrectBusinessUnit();
 			IPerson person1 = PersonFactory.CreatePerson("sdgf");
-			person1.AddOptionalColumnValue(new OptionalColumnValue("VAL1"), col);
+			person1.SetOptionalColumnValue(new OptionalColumnValue("VAL1"), col);
 			var person2 = PersonFactory.CreatePerson("s");
-			person2.AddOptionalColumnValue(new OptionalColumnValue("VAL1"), col);
+			person2.SetOptionalColumnValue(new OptionalColumnValue("VAL1"), col);
 			var person3 = PersonFactory.CreatePerson("gg");
-			person3.AddOptionalColumnValue(new OptionalColumnValue("VAL2"), col);
+			person3.SetOptionalColumnValue(new OptionalColumnValue("VAL2"), col);
 			var person4 = PersonFactory.CreatePerson("hgyj");
-			person4.AddOptionalColumnValue(new OptionalColumnValue("VAL3"), col);
+			person4.SetOptionalColumnValue(new OptionalColumnValue("VAL3"), col);
 
 			PersistAndRemoveFromUnitOfWork(col);
 			PersistAndRemoveFromUnitOfWork(person1);
@@ -83,14 +83,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var col = CreateAggregateWithCorrectBusinessUnit();
 			IPerson person1 = PersonFactory.CreatePerson("sdgf");
-			person1.AddOptionalColumnValue(new OptionalColumnValue("VAL1"), col);
+			person1.SetOptionalColumnValue(new OptionalColumnValue("VAL1"), col);
 			var person2 = PersonFactory.CreatePerson("s");
-			person2.AddOptionalColumnValue(new OptionalColumnValue("VAL1"), col);
+			person2.SetOptionalColumnValue(new OptionalColumnValue("VAL1"), col);
 			var person3 = PersonFactory.CreatePerson("gg");
-			person3.AddOptionalColumnValue(new OptionalColumnValue("VAL2"), col);
+			person3.SetOptionalColumnValue(new OptionalColumnValue("VAL2"), col);
 			var person4 = PersonFactory.CreatePerson("hgyj");
 			(person4 as Person).SetDeleted();
-			person4.AddOptionalColumnValue(new OptionalColumnValue("VAL3"), col);
+			person4.SetOptionalColumnValue(new OptionalColumnValue("VAL3"), col);
 
 			PersistAndRemoveFromUnitOfWork(col);
 			PersistAndRemoveFromUnitOfWork(person1);
@@ -133,11 +133,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var optionalColumn1 = CreateAggregateWithCorrectBusinessUnit();
 			var optionalColumn2 = CreateAggregateWithCorrectBusinessUnit();
 			IPerson person1 = PersonFactory.CreatePerson("1");
-			person1.AddOptionalColumnValue(new OptionalColumnValue("VAL1"), optionalColumn1);
+			person1.SetOptionalColumnValue(new OptionalColumnValue("VAL1"), optionalColumn1);
 			var person2 = PersonFactory.CreatePerson("2");
-			person2.AddOptionalColumnValue(new OptionalColumnValue("VAL2"), optionalColumn1);
+			person2.SetOptionalColumnValue(new OptionalColumnValue("VAL2"), optionalColumn1);
 			var person3 = PersonFactory.CreatePerson("3");
-			person3.AddOptionalColumnValue(new OptionalColumnValue("VAL3"), optionalColumn2);
+			person3.SetOptionalColumnValue(new OptionalColumnValue("VAL3"), optionalColumn2);
 
 			PersistAndRemoveFromUnitOfWork(optionalColumn1);
 			PersistAndRemoveFromUnitOfWork(optionalColumn2);
@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var optionalColumn1 = CreateAggregateWithCorrectBusinessUnit();
 			IPerson person1 = PersonFactory.CreatePerson("1");
-			person1.AddOptionalColumnValue(new OptionalColumnValue(string.Empty), optionalColumn1);
+			person1.SetOptionalColumnValue(new OptionalColumnValue(string.Empty), optionalColumn1);
 
 			PersistAndRemoveFromUnitOfWork(optionalColumn1);
 			PersistAndRemoveFromUnitOfWork(person1);

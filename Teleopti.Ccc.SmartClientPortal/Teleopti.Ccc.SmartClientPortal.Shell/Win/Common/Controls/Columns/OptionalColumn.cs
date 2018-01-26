@@ -73,13 +73,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Columns
 				var column = dataItem.OptionalColumns.FirstOrDefault(c => c.Name == _bindingProperty);
 				if (column != null)
 				{
-					var value = dataItem.ContainedEntity.GetColumnValue(column);
-					if (value == null)
-					{
-						value = new OptionalColumnValue(cellValue);
-						dataItem.ContainedEntity.AddOptionalColumnValue(value, column);
-					}
-					value.Description = cellValue;
+					var value = new OptionalColumnValue(cellValue);
+					dataItem.ContainedEntity.SetOptionalColumnValue(value, column);
 				}
                 OnCellChanged(dataItem, e);
                 e.Handled = true;

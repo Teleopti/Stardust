@@ -13,6 +13,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		void DeleteBridgeGroupPagePersonForPersonPeriod(int personId, ICollection<Guid> groupIds, Guid businessUnitId);
 		void AddBridgeGroupPagePersonForPersonPeriod(int personId, ICollection<Guid> groupIds, Guid businessUnitId);
 		void DeleteBridgeGroupPagePersonExcludingPersonPeriods(Guid personCode, ICollection<int> personPeriodIds);
-		void DeleteAllForPersons(Guid groupPageId, ICollection<Guid> personIds, Guid businessUnitId);
+		void DeleteAllForPerson(Guid groupPageId, Guid personId, Guid businessUnitId);
 	}
 }

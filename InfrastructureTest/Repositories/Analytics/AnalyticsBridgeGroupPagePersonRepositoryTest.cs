@@ -140,15 +140,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		}
 
 		[Test]
-		public void ShouldDeleteForGivenPersonsAndGroupPage()
+		public void ShouldDeleteForGivenPersonAndGroupPage()
 		{
 			createData();
 
 			Target.AddBridgeGroupPagePerson(new[] { personId }, groupPage1.GroupCode, businessUnitId);
-			Target.AddBridgeGroupPagePerson(new[] { personId2 }, groupPage1.GroupCode, businessUnitId);
 			Target.AddBridgeGroupPagePerson(new[] { personId }, groupPage2.GroupCode, businessUnitId);
 
-			Target.DeleteAllForPersons(groupPage1.GroupPageCode, new[] { personId, personId2 }, businessUnitId);
+			Target.DeleteAllForPerson(groupPage1.GroupPageCode, personId, businessUnitId);
 
 			var result = Target.GetBridgeGroupPagePerson(groupPage1.GroupCode, businessUnitId);
 			result.Any().Should().Be.False();

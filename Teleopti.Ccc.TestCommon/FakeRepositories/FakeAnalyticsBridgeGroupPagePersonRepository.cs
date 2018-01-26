@@ -94,9 +94,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				x => x.PersonCode == personCode && !personPeriodIds.Contains(x.PersonId));
 		}
 
-		public void DeleteAllForPersons(Guid groupPageId, ICollection<Guid> personIds, Guid businessUnitId)
+		public void DeleteAllForPerson(Guid groupPageId, Guid personId, Guid businessUnitId)
 		{
-			Bridges.RemoveAll(x => x.BusinessUnitCode == businessUnitId && x.GroupPageCode == groupPageId && personIds.Contains(x.PersonCode));
+			Bridges.RemoveAll(x => x.BusinessUnitCode == businessUnitId && x.GroupPageCode == groupPageId && x.PersonCode == personId);
 		}
 	}
 }

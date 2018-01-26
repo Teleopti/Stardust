@@ -285,6 +285,7 @@
     <Compile Include="ApplicationLayer\SiteTeamChangedHandlers\AnalyticsSiteUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\SiteTeamChangedHandlers\AnalyticsTeamUpdaterTest.cs" />
     <Compile Include="Common\EnumExtensionsTest.cs" />
+    <Compile Include="Common\OptionalColumnValueChangedEventTest.cs" />
     <Compile Include="Common\OrganizationSelectionProviderTest.cs" />
     <Compile Include="Common\PersonLeavingTest.cs" />
     <Compile Include="ApplicationLayer\RemoveSelectedPersonAbsenceComandHandlerTest.cs" />

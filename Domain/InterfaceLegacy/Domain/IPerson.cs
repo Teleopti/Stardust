@@ -216,7 +216,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
     	/// </summary>
     	/// <param name="value"></param>
     	/// <param name="column"></param>
-    	void AddOptionalColumnValue(IOptionalColumnValue value, IOptionalColumn column);
+    	void SetOptionalColumnValue(IOptionalColumnValue value, IOptionalColumn column);
 
     	/// <summary>
     	/// 

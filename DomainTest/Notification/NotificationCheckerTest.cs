@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			var wrongOptionalColumn = new OptionalColumn("Shoe size");
 			wrongOptionalColumn.SetId(Guid.NewGuid());
 
-			_person.AddOptionalColumnValue(new OptionalColumnValue("46"), wrongOptionalColumn);
+			_person.SetOptionalColumnValue(new OptionalColumnValue("46"), wrongOptionalColumn);
 
 			var settings = new SmsSettings { OptionalColumnId = _optionalColumn.Id.GetValueOrDefault() };
 			_settingRepository.PersistSettingValue("SmsSettings", settings);
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 		[Test]
 		public void ShouldReturnValueWhenColumnMatchesForSms()
 		{
-			_person.AddOptionalColumnValue(new OptionalColumnValue("+461234657"), _optionalColumn);
+			_person.SetOptionalColumnValue(new OptionalColumnValue("+461234657"), _optionalColumn);
 			var settings = new SmsSettings { OptionalColumnId = _optionalColumn.Id.GetValueOrDefault() };
 			_settingRepository.PersistSettingValue("SmsSettings", settings);
 
@@ -109,8 +109,8 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			var newOptionalColumn = new OptionalColumn("Mobile Phone");
 			newOptionalColumn.SetId(Guid.NewGuid());
 
-			_person.AddOptionalColumnValue(new OptionalColumnValue("+461234657"), _optionalColumn);
-			_person.AddOptionalColumnValue(new OptionalColumnValue("+461234658"), newOptionalColumn);
+			_person.SetOptionalColumnValue(new OptionalColumnValue("+461234657"), _optionalColumn);
+			_person.SetOptionalColumnValue(new OptionalColumnValue("+461234658"), newOptionalColumn);
 
 			var settings = new SmsSettings { OptionalColumnId = _optionalColumn.Id.GetValueOrDefault() };
 			_settingRepository.PersistSettingValue("SmsSettings", settings);

@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 {
 	public class AnalyticsOptionalColumnGroupPageHandler : 
 		IHandleEvent<OptionalColumnCollectionChangedEvent>,
-		IHandleEvent<PersonCollectionChangedEvent>,
+		IHandleEvent<OptionalColumnValueChangedEvent>,
 		IRunOnHangfire
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(AnalyticsOptionalColumnGroupPageHandler));
@@ -65,27 +65,27 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		[ImpersonateSystem]
 		[UnitOfWork, AnalyticsUnitOfWork]
 		[Attempts(10)]
-		public virtual void Handle(PersonCollectionChangedEvent @event)
+		public virtual void Handle(OptionalColumnValueChangedEvent @event)
 		{
 			var optionalColumns = _optionalColumnRepository.GetOptionalColumns<Person>()
 				.Where(x => x.AvailableAsGroupPage)
 				.ToList();
-			var persons = _personRepository.FindPeopleSimplify(@event.PersonIdCollection);
+			var thePerson = _personRepository.FindPeopleSimplify(new[] {@event.PersonId}).FirstOrDefault();
+
+			if (thePerson == null)
+				return;
 
 			foreach (var column in optionalColumns)
 			{
 				var personColumnValues = new List<IOptionalColumnValue>();
-				foreach (var person in persons)
-				{
-					var personColumnValue = person.OptionalColumnValueCollection
-						.SingleOrDefault(x => ((IOptionalColumn)x.Parent).Id.GetValueOrDefault() == column.Id.GetValueOrDefault());
-					if (string.IsNullOrWhiteSpace(personColumnValue?.Description))
-						continue;
-					personColumnValues.Add(personColumnValue);
-				}
-				_analyticsBridgeGroupPagePersonRepository.DeleteAllForPersons(
+				var personColumnValue = thePerson.OptionalColumnValueCollection
+					.SingleOrDefault(x => ((IOptionalColumn)x.Parent).Id.GetValueOrDefault() == column.Id.GetValueOrDefault());
+				if (string.IsNullOrWhiteSpace(personColumnValue?.Description))
+					continue;
+				personColumnValues.Add(personColumnValue);
+				_analyticsBridgeGroupPagePersonRepository.DeleteAllForPerson(
 					column.Id.GetValueOrDefault(),
-					persons.Select(x => x.Id.GetValueOrDefault()).ToList(), 
+					thePerson.Id.GetValueOrDefault(),
 					@event.LogOnBusinessUnitId);
 
 				IList<AnalyticsGroup> newDimGroupPages = createNewDimGroupPages(column, personColumnValues, @event.LogOnBusinessUnitId);

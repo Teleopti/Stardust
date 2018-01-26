@@ -55,8 +55,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 
 			var valueForTest = new OptionalColumnValue("my value").WithId();
 			var valueForNoGroup = new OptionalColumnValue("another").WithId();
-			person.AddOptionalColumnValue(valueForTest, optionalColumnWithGroup);
-			person.AddOptionalColumnValue(valueForNoGroup, optionalColumnNoGroup);
+			person.SetOptionalColumnValue(valueForTest, optionalColumnWithGroup);
+			person.SetOptionalColumnValue(valueForNoGroup, optionalColumnNoGroup);
 
 			PersonRepository.Add(person);
 			OptionalColumnRepository.AddPersonValues(valueForTest);
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 			OptionalColumnRepository.Add(optionalColumnWithValue);
 
 			var valueForAnother = new OptionalColumnValue("another").WithId();
-			person.AddOptionalColumnValue(valueForAnother, optionalColumnWithValue);
+			person.SetOptionalColumnValue(valueForAnother, optionalColumnWithValue);
 			OptionalColumnRepository.AddPersonValues(valueForAnother);
 
 			PersonRepository.Add(person);
@@ -109,8 +109,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 
 			var valueForAnother = new OptionalColumnValue("another").WithId();
 			var valueDeletedForAnother = new OptionalColumnValue("deleted for another").WithId();
-			person.AddOptionalColumnValue(valueForAnother, optionalColumnWithValue);
-			personDeleted.AddOptionalColumnValue(valueDeletedForAnother, optionalColumnWithValue);
+			person.SetOptionalColumnValue(valueForAnother, optionalColumnWithValue);
+			personDeleted.SetOptionalColumnValue(valueDeletedForAnother, optionalColumnWithValue);
 			OptionalColumnRepository.AddPersonValues(valueForAnother);
 			OptionalColumnRepository.AddPersonValues(valueDeletedForAnother);
 

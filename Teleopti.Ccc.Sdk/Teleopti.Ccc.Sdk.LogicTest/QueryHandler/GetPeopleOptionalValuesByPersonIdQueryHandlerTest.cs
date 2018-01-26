@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		[Test]
 		public void ShouldGetOptionalColumnsValuesByPersonId()
 		{
-			person.AddOptionalColumnValue(new OptionalColumnValue("42"), optionalColumn);
+			person.SetOptionalColumnValue(new OptionalColumnValue("42"), optionalColumn);
 
 			var query = new GetPeopleOptionalValuesByPersonIdQueryDto();
 			query.PersonIdCollection.Add(person.Id.GetValueOrDefault());

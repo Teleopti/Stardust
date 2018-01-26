@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 			});
 
 			var optionalColumnValue = new OptionalColumnValue("123456");
-			person.AddOptionalColumnValue(optionalColumnValue, optionalColumn);
+			person.SetOptionalColumnValue(optionalColumnValue, optionalColumn);
 
 			var searchCriteria = new Dictionary<PersonFinderField, string>
 			{

@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
 			IOptionalColumn optionalColumn = new OptionalColumn("FirstColumn");
 
 			IOptionalColumnValue value = new OptionalColumnValue("FirstNull");
-			_person.AddOptionalColumnValue(value, optionalColumn);
+			_person.SetOptionalColumnValue(value, optionalColumn);
 			_optionalColumns.Add(optionalColumn);
 
 			_target.SetOptionalColumns(_optionalColumns);
@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
 
 			var value = new OptionalColumnValue("FirstNull");
 
-			_person.AddOptionalColumnValue(value, optionalColumn);
+			_person.SetOptionalColumnValue(value, optionalColumn);
 			_optionalColumns.Add(optionalColumn);
 
 			_target.SetOptionalColumns(_optionalColumns);
@@ -181,12 +181,12 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
 			var optionalColumn = new OptionalColumn("FirstColumn");
 
 			var value = new OptionalColumnValue("FirstNull A");
-			person.AddOptionalColumnValue(value, optionalColumn);
+			person.SetOptionalColumnValue(value, optionalColumn);
 			_optionalColumns.Add(optionalColumn);
 
 			var value1 = new OptionalColumnValue("FirstNull B");
 
-			_person1.AddOptionalColumnValue(value1, optionalColumn);
+			_person1.SetOptionalColumnValue(value1, optionalColumn);
 			_optionalColumns.Add(optionalColumn);
 
 			_target.SetOptionalColumns(_optionalColumns);
@@ -216,11 +216,11 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
 			var optionalColumn = new OptionalColumn("FirstColumn");
 
 			var value = new OptionalColumnValue("FirstNull B");
-			_person.AddOptionalColumnValue(value, optionalColumn);
+			_person.SetOptionalColumnValue(value, optionalColumn);
 			_optionalColumns.Add(optionalColumn);
 
 			var value1 = new OptionalColumnValue("FirstNull A");
-			_person1.AddOptionalColumnValue(value1, optionalColumn);
+			_person1.SetOptionalColumnValue(value1, optionalColumn);
 			_optionalColumns.Add(optionalColumn);
 
 			_target.SetOptionalColumns(_optionalColumns);
@@ -249,11 +249,11 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
 			var optionalColumn = new OptionalColumn("FirstColumn");
 
 			var value = new OptionalColumnValue("FirstNull A");
-			_person.AddOptionalColumnValue(value, optionalColumn);
+			_person.SetOptionalColumnValue(value, optionalColumn);
 			_optionalColumns.Add(optionalColumn);
 
 			var value1 = new OptionalColumnValue("FirstNull A");
-			_person1.AddOptionalColumnValue(value1, optionalColumn);
+			_person1.SetOptionalColumnValue(value1, optionalColumn);
 			_optionalColumns.Add(optionalColumn);
 
 			_target.SetOptionalColumns(_optionalColumns);

@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
+﻿using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Common
@@ -34,6 +35,14 @@ namespace Teleopti.Ccc.Domain.Common
 		{
 			get { return _tableName; }
 			set { _tableName = value; }
+		}
+
+		public virtual void TriggerValueChangeForPerson(IPerson person)
+		{
+			ReplaceEvent(nameof(OptionalColumnValueChangedEvent) + person.Id, () => new OptionalColumnValueChangedEvent()
+			{
+				PersonId = person.Id.GetValueOrDefault()
+			});
 		}
 	}
 }

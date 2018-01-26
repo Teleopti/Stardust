@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			};
 
 			var personToTest = PersonFactory.CreatePerson(new Name("dummyAgent1", "dummy"));
-			personToTest.AddOptionalColumnValue(new OptionalColumnValue("test value"), optionColumn);
+			personToTest.SetOptionalColumnValue(new OptionalColumnValue("test value"), optionColumn);
 
 			var team = TeamFactory.CreateTeam("Dummy Site", "Dummy Team");
 

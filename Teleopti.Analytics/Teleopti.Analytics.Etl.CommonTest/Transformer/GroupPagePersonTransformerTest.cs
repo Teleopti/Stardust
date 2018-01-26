@@ -318,7 +318,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 					IPersonPeriod pp1 = PersonPeriodFactory.CreatePersonPeriod(periodStartDate, personContract1, team1);
 					pp1.RuleSetBag = RuleSetBagCollection.First();
 					person1.AddPersonPeriod(pp1);
-					person1.AddOptionalColumnValue(new OptionalColumnValue("group1"), OptionalColumnCollectionAvailableAsGroupPage.First());
+					person1.SetOptionalColumnValue(new OptionalColumnValue("group1"), OptionalColumnCollectionAvailableAsGroupPage.First());
 
 					//Person 2
 					IPerson person2 = PersonFactory.CreatePerson("Billy", "Hamill");

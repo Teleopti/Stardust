@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                     }
                     else
                     {
-                        person.AddOptionalColumnValue(new OptionalColumnValue(optionalValueDto.Value), column);
+                        person.SetOptionalColumnValue(new OptionalColumnValue(optionalValueDto.Value), column);
                     }
                 }
 

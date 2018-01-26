@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             person.SetId(Guid.NewGuid());
            
             var optionalColumn = new OptionalColumn("Shoe size");
-            person.AddOptionalColumnValue(new OptionalColumnValue("42"), optionalColumn);
+            person.SetOptionalColumnValue(new OptionalColumnValue("42"), optionalColumn);
 
             using (mock.Record())
             {

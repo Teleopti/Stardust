@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			var optionalColumn = new OptionalColumn("Cell Phone");
 			var optionalColumnValue = new OptionalColumnValue("123456");
 
-			person.AddOptionalColumnValue(optionalColumnValue, optionalColumn);
+			person.SetOptionalColumnValue(optionalColumnValue, optionalColumn);
 
 			target = new PeopleSearchController(new FakePeopleSearchProvider(new[] {person}, new[] {optionalColumn}), loggonUser);
 

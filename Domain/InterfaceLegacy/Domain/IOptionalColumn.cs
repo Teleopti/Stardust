@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
+﻿using Teleopti.Ccc.Domain.Common;
+
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
 	/// <summary>
 	/// Interface for holding optional column.
@@ -68,5 +70,6 @@
 		///// <param name="id"></param>
 		///// <returns></returns>
 		//IOptionalColumnValue GetColumnValueById(Guid? id);
+		void TriggerValueChangeForPerson(IPerson person);
 	}
 }

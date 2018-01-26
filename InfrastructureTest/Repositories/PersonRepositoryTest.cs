@@ -1790,7 +1790,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var column = new OptionalColumn("COL1") { TableName = "Person" };
 			PersistAndRemoveFromUnitOfWork(column);
 			IPerson per1 = PersonFactory.CreatePerson("roger", "kratz");
-			per1.AddOptionalColumnValue(new OptionalColumnValue("A VALUE"), column);
+			per1.SetOptionalColumnValue(new OptionalColumnValue("A VALUE"), column);
 			PersistAndRemoveFromUnitOfWork(per1);
 
 			IList<IPerson> testList = new List<IPerson>(

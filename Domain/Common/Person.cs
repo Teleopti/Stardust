@@ -695,7 +695,7 @@ namespace Teleopti.Ccc.Domain.Common
 
 	    public virtual ReadOnlyCollection<IOptionalColumnValue> OptionalColumnValueCollection => new ReadOnlyCollection<IOptionalColumnValue>(_optionalColumnValueCollection);
 
-	    public virtual void AddOptionalColumnValue(IOptionalColumnValue value, IOptionalColumn column)
+	    public virtual void SetOptionalColumnValue(IOptionalColumnValue value, IOptionalColumn column)
 		{
 			InParameter.NotNull(nameof(value), value);
 			InParameter.NotNull(nameof(column), column);
@@ -711,6 +711,7 @@ namespace Teleopti.Ccc.Domain.Common
 			{
 				colValue.Description = value.Description;
 			}
+			column.TriggerValueChangeForPerson(this);
 		}
 
 		public virtual void RemoveOptionalColumnValue(IOptionalColumnValue value)
@@ -718,6 +719,8 @@ namespace Teleopti.Ccc.Domain.Common
 			InParameter.NotNull(nameof(value), value);
 
 			_optionalColumnValueCollection.Remove(value);
+			var column = value.Parent as IOptionalColumn;
+			column?.TriggerValueChangeForPerson(this);
 		}
 
 		public virtual IOptionalColumnValue GetColumnValue(IOptionalColumn column)

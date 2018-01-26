@@ -130,22 +130,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			query.ExecuteUpdate();
 		}
 
-		public void DeleteAllForPersons(Guid groupPageId, ICollection<Guid> personIds, Guid businessUnitId)
+		public void DeleteAllForPerson(Guid groupPageId, Guid personId, Guid businessUnitId)
 		{
-			if (!personIds.Any())
-				return;
-			foreach (var batch in personIds.Batch(100))
-			{
-				var query = _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-						$@"exec mart.[etl_bridge_group_page_person_delete_for_persons]
+			var query = _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
+					$@"exec mart.etl_bridge_group_page_person_delete_for_person
 					 @group_page_code=:{nameof(groupPageId)}
-					,@person_codes=:{nameof(personIds)}
+					,@person_code=:{nameof(personId)}
 					,@business_unit_code=:{nameof(businessUnitId)}")
-					.SetParameter(nameof(groupPageId), groupPageId)
-					.SetParameter(nameof(personIds), string.Join(",", batch))
-					.SetParameter(nameof(businessUnitId), businessUnitId);
-				query.ExecuteUpdate();
-			}
+				.SetParameter(nameof(groupPageId), groupPageId)
+				.SetParameter(nameof(personId), personId)
+				.SetParameter(nameof(businessUnitId), businessUnitId);
+			query.ExecuteUpdate();
 		}
 
 		public void AddBridgeGroupPagePerson(ICollection<Guid> personIds, Guid groupId, Guid businessUnitId)
