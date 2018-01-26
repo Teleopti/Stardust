@@ -3,6 +3,7 @@ using Rhino.Mocks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Badge;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -13,6 +14,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
@@ -42,6 +44,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		private IPerson lastPerson;
 		private IScenario defaultScenario;
 		private DateTime now;
+		private FakeExternalPerformanceDataRepository _externalPerformanceDataRepository;
 
 		[SetUp]
 		public void Setup()
@@ -121,9 +124,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 						new DateOnlyPeriod(_calculateDateOnly, _calculateDateOnly), defaultScenario))
 				.IgnoreArguments()
 				.Return(new ScheduleDictionaryForTest(defaultScenario, now));
-
+			_externalPerformanceDataRepository = new FakeExternalPerformanceDataRepository();
 			_calculator = new AgentBadgeCalculator(_badgeCalculationRepository, _badgeTransactionRepository, appFunctionFactory,
-				personRepository, scheduleStorage, scenarioRepository, _now);
+				personRepository, scheduleStorage, scenarioRepository, _now, _externalPerformanceDataRepository);
 		}
 
 		[Test]
@@ -137,6 +140,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			Assert.AreEqual(badge.Person.Id, _lastPersonId);
 			Assert.AreEqual(badge.Amount, 1);
 			Assert.AreEqual(badge.CalculatedDate, _calculateDateOnly);
+			Assert.AreEqual(badge.IsExternal, false);
 		}
 
 		[Test]
@@ -149,6 +153,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			Assert.AreEqual(badge.Person.Id, _lastPersonId);
 			Assert.AreEqual(badge.Amount, 1);
 			Assert.AreEqual(badge.CalculatedDate, _calculateDateOnly);
+			Assert.AreEqual(badge.IsExternal, false);
 		}
 
 		[Test]
@@ -161,6 +166,52 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			Assert.AreEqual(badge.Person.Id, _lastPersonId);
 			Assert.AreEqual(badge.Amount, 1);
 			Assert.AreEqual(badge.CalculatedDate, _calculateDateOnly);
+			Assert.AreEqual(badge.IsExternal, false);
+		}
+
+		[Test]
+		public void ShouldGetBadgeWhenScoreBiggerThanThreshold()
+		{
+			var badgeSetting = new BadgeSetting()
+			{
+				Threshold = 85,
+				QualityId = 1
+			};
+			_gamificationSetting.AddBadgeSetting(badgeSetting);
+			_externalPerformanceDataRepository.Add(new ExternalPerformanceData()
+			{
+				DateFrom = new DateTime(_calculateDateOnly.Year, _calculateDateOnly.Month, _calculateDateOnly.Day, 0, 0, 0, DateTimeKind.Utc),
+				ExternalPerformance = new ExternalPerformance() { ExternalId = 1 },
+				PersonId = _allPersons.First().Id.Value,
+				Score = 91
+			});
+
+			var result = _calculator.CalculateBadges(_allPersons, _calculateDateOnly, badgeSetting);
+
+			result.First().Amount.Should().Be.EqualTo(1);
+			result.First().IsExternal.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldNotGetBadgeWhenScoreSmallerThanThreshold()
+		{
+			var badgeSetting = new BadgeSetting()
+			{
+				Threshold = 85,
+				QualityId = 1
+			};
+			_gamificationSetting.AddBadgeSetting(badgeSetting);
+			_externalPerformanceDataRepository.Add(new ExternalPerformanceData()
+			{
+				DateFrom = new DateTime(_calculateDateOnly.Year, _calculateDateOnly.Month, _calculateDateOnly.Day, 0, 0, 0, DateTimeKind.Utc),
+				ExternalPerformance = new ExternalPerformance() { ExternalId = 1 },
+				PersonId = _allPersons.First().Id.Value,
+				Score = 80
+			});
+
+			var result = _calculator.CalculateBadges(_allPersons, _calculateDateOnly, badgeSetting);
+
+			result.Count().Should().Be.EqualTo(0);
 		}
 
 		[Test]
@@ -228,7 +279,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				.Return(scheduleDict);
 
 			_calculator = new AgentBadgeCalculator(_badgeCalculationRepository, _badgeTransactionRepository, appFunctionFactory,
-				personRepository, scheduleStorage, scenarioRepository, _now);
+				personRepository, scheduleStorage, scenarioRepository, _now, _externalPerformanceDataRepository);
 
 			var result = _calculator.CalculateAdherenceBadges(_allPersons, timezoneCode, _calculateDateOnly,
 				AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime,

@@ -10,5 +10,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 	{
 		ICollection<IExternalPerformanceData> FindByPeriod(DateTimePeriod period);
 		ICollection<IExternalPerformanceData> Find(DateTime date, List<Guid> personIds, int performanceId);
+		ICollection<Guid> FindPersonsCouldGetBadge(DateTime date, List<Guid> personIds, int performanceId, double badgeThreshold);
 	}
 }

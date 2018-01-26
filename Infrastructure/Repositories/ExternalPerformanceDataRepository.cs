@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -37,6 +38,25 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.Add(Restrictions.Eq("ExternalPerformance", performance))
 				)
 				.List<IExternalPerformanceData>();
+		}
+
+		public ICollection<Guid> FindPersonsCouldGetBadge(DateTime date, List<Guid> personIds, int performanceId, double badgeThreshold)
+		{
+			var performance = Session.CreateCriteria<ExternalPerformance>()
+				.Add(Restrictions.Conjunction()
+					.Add(Restrictions.Eq("ExternalId", performanceId)))
+				.UniqueResult<IExternalPerformance>();
+
+			var performanceData = Session.CreateCriteria<ExternalPerformanceData>()
+				.Add(Restrictions.Conjunction()
+					.Add(Restrictions.Eq("DateFrom", date))
+					.Add(Restrictions.In("PersonId", personIds))
+					.Add(Restrictions.Eq("ExternalPerformance", performance))
+					.Add(Restrictions.Ge("Score", badgeThreshold))
+				)
+				.List<IExternalPerformanceData>();
+
+			return performanceData.Select(x => x.PersonId).ToList();
 		}
 	}
 }

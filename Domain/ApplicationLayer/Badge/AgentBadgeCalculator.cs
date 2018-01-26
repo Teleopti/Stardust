@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IPersonRepository _personRepository;
 		private readonly INow _now;
+		private readonly IExternalPerformanceDataRepository _externalPerformanceDataRepository;
 
 		public AgentBadgeCalculator(IBadgeCalculationRepository badgeCalculationRepository,
 			IAgentBadgeTransactionRepository transactionRepository,
@@ -28,7 +29,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 			IPersonRepository personRepository,
 			IScheduleStorage scheduleStorage,
 			IScenarioRepository scenarioRepository,
-			INow now)
+			INow now, IExternalPerformanceDataRepository externalPerformanceDataRepository)
 		{
 			_badgeCalculationRepository = badgeCalculationRepository;
 			_transactionRepository = transactionRepository;
@@ -37,10 +38,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 			_scenarioRepository = scenarioRepository;
 			_personRepository = personRepository;
 			_now = now;
+			_externalPerformanceDataRepository = externalPerformanceDataRepository;
 		}
 
 		protected IList<IAgentBadgeTransaction> AddBadge(IEnumerable<IPerson> allPersons, IEnumerable<Guid> agentIdsThatShouldGetBadge,
-			int badgeType, int silverToBronzeBadgeRate, int goldToSilverBadgeRate, DateOnly date)
+			int badgeType, int silverToBronzeBadgeRate, int goldToSilverBadgeRate, DateOnly date, bool isExternal = false)
 		{
 			var newAwardedBadges = new List<IAgentBadgeTransaction>();
 
@@ -92,7 +94,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 						BadgeType = badgeType,
 						CalculatedDate = date,
 						Description = "",
-						InsertedOn = _now.UtcDateTime()
+						InsertedOn = _now.UtcDateTime(),
+						IsExternal = isExternal
 					};
 
 					_transactionRepository.Add(newBadge);
@@ -110,6 +113,23 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 			}
 
 			return newAwardedBadges;
+		}
+
+		public IEnumerable<IAgentBadgeTransaction> CalculateBadges(IEnumerable<IPerson> allPersons, DateOnly date, IBadgeSetting badgeSetting)
+		{
+			var newBadges = new List<IAgentBadgeTransaction>();
+			var personList = new HashSet<IPerson>(allPersons);
+
+			var personIdList = allPersons.Select(x => x.Id.Value).ToList();
+			var agentsWithBadge = _externalPerformanceDataRepository.FindPersonsCouldGetBadge(
+				new DateTime(date.Year, date.Month, date.Day, 0, 0, 0, DateTimeKind.Utc), personIdList, badgeSetting.QualityId, badgeSetting.Threshold);
+
+			var gamificationSetting = (IGamificationSetting) badgeSetting.Parent;
+			var newAwardedBadges = AddBadge(personList, agentsWithBadge, badgeSetting.QualityId,
+				gamificationSetting.SilverToBronzeBadgeRate, gamificationSetting.GoldToSilverBadgeRate, date, true);
+			newBadges.AddRange(newAwardedBadges);
+
+			return newBadges;
 		}
 
 		public IEnumerable<IAgentBadgeTransaction> CalculateAdherenceBadges(IEnumerable<IPerson> allPersons, string timezoneCode, DateOnly date,

@@ -17,5 +17,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 
 		IEnumerable<IAgentBadgeTransaction> CalculateAnsweredCallsBadges(IEnumerable<IPerson> allPersons, string timezoneCode,
 			DateOnly date, IGamificationSetting setting, Guid businessUnitId);
+
+		IEnumerable<IAgentBadgeTransaction> CalculateBadges(IEnumerable<IPerson> allPersons, DateOnly date,
+			IBadgeSetting badgeSetting);
 	}
 }

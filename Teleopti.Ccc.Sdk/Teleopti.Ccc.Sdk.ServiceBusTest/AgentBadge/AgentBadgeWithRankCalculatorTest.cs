@@ -397,7 +397,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		[Test]
 		public void ShouldCalculateBadges()
 		{
-			var externalPerformance = _gamificationSetting.BadgeSettings.First();
+			var badgeSetting = _gamificationSetting.BadgeSettings.First();
 			_externalPerformanceDataRepository.Add(new ExternalPerformanceData()
 			{
 				DateFrom = new DateTime(_calculateDateOnly.Year, _calculateDateOnly.Month, _calculateDateOnly.Day, 0,0,0, DateTimeKind.Utc),
@@ -406,7 +406,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				Score = 91
 			});
 
-			var result = _calculator.CalculateBadges(_allPersons, _calculateDateOnly, externalPerformance);
+			var result = _calculator.CalculateBadges(_allPersons, _calculateDateOnly, badgeSetting);
 
 			result.First().BronzeBadgeAmount.Should().Be.EqualTo(0);
 			result.First().SilverBadgeAmount.Should().Be.EqualTo(1);

@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 
 		public IEnumerable<IAgentBadgeWithRankTransaction> CalculateBadges(IEnumerable<IPerson> allPersons, DateOnly date, IBadgeSetting badgeSetting)
 		{
-			var newPercentBadges = new List<IAgentBadgeWithRankTransaction>();
+			var newBadges = new List<IAgentBadgeWithRankTransaction>();
 			var personList = new HashSet<IPerson>(allPersons);
 			var agentsWithPercentBadgeValue = new Dictionary<Guid, double>();
 
@@ -182,11 +182,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 				agentsWithPercentBadgeValue[performanceData.PersonId] = performanceData.Score;
 			}
 
-			var newAwardedPercentBadge = AddBadge(personList, agentsWithPercentBadgeValue, badgeSetting.QualityId,
+			var newAwardedBadges = AddBadge(personList, agentsWithPercentBadgeValue, badgeSetting.QualityId,
 				badgeSetting.BronzeThreshold, badgeSetting.SilverThreshold, badgeSetting.GoldThreshold, true, date, true);
-			newPercentBadges.AddRange(newAwardedPercentBadge);
+			newBadges.AddRange(newAwardedBadges);
 
-			return newPercentBadges;
+			return newBadges;
 		}
 
 		public IEnumerable<IAgentBadgeWithRankTransaction> CalculateAdherenceBadges(IEnumerable<IPerson> allPersons,
