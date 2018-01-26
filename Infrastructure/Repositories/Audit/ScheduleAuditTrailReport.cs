@@ -92,7 +92,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 				ret.Detail = personAssignment.ShiftCategory.Description.Name;
 
 			if (personAssignment.DayOff() != null)
-				ret.Detail = personAssignment.DayOff().Description.Name;
+			{
+				ret.Detail = isOvertimeAddedOnDayOff(personAssignment)
+					? Resources.Overtime
+					: personAssignment.DayOff().Description.Name;
+			}
 
 			if (personAssignment.ShiftCategory == null && personAssignment.DayOff() == null)
 			{
@@ -149,6 +153,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 					scheduleAuditingReportData.AuditType = Resources.AuditingReportModified;
 					break;
 			}
+		}
+
+		private static bool isOvertimeAddedOnDayOff(IPersonAssignment personAssignment)
+		{
+			var isOvertimeAdded = !personAssignment.OvertimeActivities().IsEmpty();
+			return isOvertimeAdded;
 		}
 	}
 }

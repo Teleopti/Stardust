@@ -492,7 +492,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 					new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
 					PersonAssignment.Period.ToDateOnlyPeriod(timeZone.TimeZone()), 100, new List<IPerson> {PersonAssignment.Person});
 
-				res.Select(x => x.Detail).Contains(DayOffTemplate.Description.Name).Should().Be.EqualTo(true);
+				res.Select(x => x.Detail).Contains(Resources.Overtime).Should().Be.EqualTo(true);
 			}
 		}
 
@@ -582,6 +582,28 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 					PersonAssignment.Period.ToDateOnlyPeriod(timeZone.TimeZone()), 100, new List<IPerson> {PersonAssignment.Person});
 
 				res.Select(x => x.Detail).Contains(string.Empty).Should().Be.EqualTo(true);
+			}
+		}
+		[Test]
+		public void ShouldHaveDetailOvertimeShiftWhenOvertimeAddedOnEmptyPersonAssignment()
+		{
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				uow.Reassociate(PersonAssignment);
+				PersonAssignment.AddOvertimeActivity(PersonAssignment.MainActivities().First().Payload,
+					PersonAssignment.MainActivities().First().Period, MultiplicatorDefinitionSet);
+				PersonAssignment.ClearMainActivities();
+				uow.Merge(PersonAssignment);
+				uow.PersistAll();
+			}
+
+			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var res = target.Report(personProvider.CurrentUser(),
+					new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
+					PersonAssignment.Period.ToDateOnlyPeriod(timeZone.TimeZone()), 100, new List<IPerson> { PersonAssignment.Person });
+
+				res.Select(x => x.Detail).Contains(Resources.Overtime).Should().Be.EqualTo(true);
 			}
 		}
 
