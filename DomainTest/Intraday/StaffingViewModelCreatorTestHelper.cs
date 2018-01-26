@@ -14,8 +14,15 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Intraday
 {
-	public static class StaffingViewModelCreatorTestHelper
+	public class StaffingViewModelCreatorTestHelper
 	{
+		private readonly IStaffingCalculatorServiceFacade _staffingCalculatorServiceFacade;
+
+		public StaffingViewModelCreatorTestHelper(IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade)
+		{
+			_staffingCalculatorServiceFacade = staffingCalculatorServiceFacade;
+		}
+
 		public static Scenario FakeScenarioAndIntervalLength(FakeIntervalLengthFetcher intervalLengthFetcher, FakeScenarioRepository scenarioRepository, int minutesPerInterval)
 		{
 			intervalLengthFetcher.Has(minutesPerInterval);
@@ -66,9 +73,11 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			return skill;
 		}
 
-		public static ISkillDay CreateSkillDay(ISkill skill, IScenario scenario, DateTime userNow, TimePeriod openHours, 
+		public ISkillDay CreateSkillDay(ISkill skill, IScenario scenario, DateTime userNow, TimePeriod openHours, 
 			bool addSkillDataPeriodDuplicate, ServiceAgreement serviceAgreement, bool giveDemand = true)
 		{
+			skill.SkillType.StaffingCalculatorService = _staffingCalculatorServiceFacade;
+
 			var demand = 3;
 			if (!giveDemand)
 				demand = -1;
@@ -192,7 +201,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			};
 		}
 
-		public static MultisiteSkill CreateMultisiteSkillPhone(int intervalLength, string skillName, TimePeriod openHours, IActivity activity)
+		public MultisiteSkill CreateMultisiteSkillPhone(int intervalLength, string skillName, TimePeriod openHours, IActivity activity)
 		{
 			var skill = new MultisiteSkill(skillName, skillName, Color.Empty, intervalLength, 
 				new SkillTypePhone(new Description("SkillTypeInboundTelephony"), ForecastSource.InboundTelephony))
@@ -200,6 +209,8 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				TimeZone = TimeZoneInfo.Utc,
 				Activity = activity
 			}.WithId();
+
+			skill.SkillType.StaffingCalculatorService = _staffingCalculatorServiceFacade;
 
 			var childSkill1 = new ChildSkill(skillName + 1, skillName + 1, Color.Empty,
 				skill).WithId();

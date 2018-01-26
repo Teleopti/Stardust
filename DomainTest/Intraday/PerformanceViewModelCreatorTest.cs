@@ -35,7 +35,8 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		public FakeIntervalLengthFetcher IntervalLengthFetcher;
 		const int minutesPerInterval = 15;
 		public FakeIntradayMonitorDataLoader IntradayMonitorDataLoader;
-		private StaffingCalculatorServiceFacade _staffingCalculatorService;
+		public IStaffingCalculatorServiceFacade StaffingCalculatorService;
+		private StaffingViewModelCreatorTestHelper _staffingViewModelCreatorTestHelper;
 
 		private readonly ServiceAgreement _slaTwoHours =
 			new ServiceAgreement(new ServiceLevel(new Percent(1), 7200), new Percent(0), new Percent(1));
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
-			_staffingCalculatorService = new StaffingCalculatorServiceFacade();
+			_staffingViewModelCreatorTestHelper = new StaffingViewModelCreatorTestHelper(StaffingCalculatorService);
 		}
 
 		[Test]
@@ -84,7 +85,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var scenario = StaffingViewModelCreatorTestHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository, minutesPerInterval);
 			var skill = StaffingViewModelCreatorTestHelper.CreateEmailSkill(15, "skill", new TimePeriod(8, 0, 9, 0));
 
-			var skillDay = StaffingViewModelCreatorTestHelper.CreateSkillDay(skill, scenario, userNow, new TimePeriod(8, 0, 9, 0), false, _slaTwoHours, false);
+			var skillDay = _staffingViewModelCreatorTestHelper.CreateSkillDay(skill, scenario, userNow, new TimePeriod(8, 0, 9, 0), false, _slaTwoHours, false);
 
 			var scheduledStaffingList = createScheduledStaffing(skillDay);
 
@@ -211,7 +212,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var forecastedCallsSkill1 = skillDay1.WorkloadDayCollection.First().TaskPeriodList.First().Tasks;
 			var forecastedCallsSkill2 = skillDay2.WorkloadDayCollection.First().TaskPeriodList[1].Tasks;
 
-			var eslSkill1First = _staffingCalculatorService.ServiceLevelAchievedOcc(
+			var eslSkill1First = StaffingCalculatorService.ServiceLevelAchievedOcc(
 				scheduledStaffingList[0].Resource,
 				skillDay1.SkillDataPeriodCollection.First().ServiceAgreement.ServiceLevel.Seconds,
 				forecastedCallsSkill1,
@@ -221,7 +222,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				skillDay1.SkillDataPeriodCollection.First().ServiceAgreement.ServiceLevel.Percent.Value,
 				skillDay1.SkillStaffPeriodCollection[0].FStaff,
 				1);
-			var eslSkill2Second = _staffingCalculatorService.ServiceLevelAchievedOcc(
+			var eslSkill2Second = StaffingCalculatorService.ServiceLevelAchievedOcc(
 				scheduledStaffingList[3].Resource,
 				skillDay2.SkillDataPeriodCollection.First().ServiceAgreement.ServiceLevel.Seconds,
 				forecastedCallsSkill2,
@@ -858,7 +859,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 		private double calculateEsl(IList<SkillCombinationResource> scheduledStaffingList, ISkillDay skillDay, double forecastedCallsSkill, int intervalPosition)
 		{
-			return _staffingCalculatorService.ServiceLevelAchievedOcc(
+			return StaffingCalculatorService.ServiceLevelAchievedOcc(
 				scheduledStaffingList[intervalPosition].Resource,
 				skillDay.SkillDataPeriodCollection.First().ServiceAgreement.ServiceLevel.Seconds,
 				forecastedCallsSkill,

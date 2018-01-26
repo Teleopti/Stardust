@@ -30,6 +30,8 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		public FakeIntervalLengthFetcher IntervalLengthFetcher;
 		public FakeSkillCombinationResourceRepository SkillCombinationResourceRepository;
 		public FakeIntradayQueueStatisticsLoader IntradayQueueStatisticsLoader;
+		private StaffingViewModelCreatorTestHelper _staffingViewModelCreatorTestHelper;
+		public IStaffingCalculatorServiceFacade StaffingCalculatorServiceFacade;
 
 		private int _skillResolution = 60;
 
@@ -41,6 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
+			_staffingViewModelCreatorTestHelper = new StaffingViewModelCreatorTestHelper(StaffingCalculatorServiceFacade);
 		}
 
 		[Test]
@@ -54,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var scenario = StaffingViewModelCreatorTestHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository, minutesPerInterval);
 			var skill = StaffingViewModelCreatorTestHelper.CreateEmailSkill(15, "skill", new TimePeriod(8, 0, 9, 0));
 			
-			var skillDay = StaffingViewModelCreatorTestHelper.CreateSkillDay(skill, scenario, userNow, new TimePeriod(8, 0, 9, 0), false, _slaTwoHours,false);
+			var skillDay = _staffingViewModelCreatorTestHelper.CreateSkillDay(skill, scenario, userNow, new TimePeriod(8, 0, 9, 0), false, _slaTwoHours,false);
 			var skillStats =
 				StaffingViewModelCreatorTestHelper.CreateStatisticsBasedOnForecastedTasks(skillDay, latestStatsTime,
 					minutesPerInterval, TimeZone.TimeZone());
@@ -125,8 +128,8 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var scenario = StaffingViewModelCreatorTestHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository, minutesPerInterval);
 			var skill = StaffingViewModelCreatorTestHelper.CreateEmailSkill(15, "skill", new TimePeriod(8, 0, 9, 0));
 
-			var skillDayToday = StaffingViewModelCreatorTestHelper.CreateSkillDay(skill, scenario, userNow, new TimePeriod(8, 0, 9, 0), false, _slaTwoHours, false);
-			var skillDayYesterday = StaffingViewModelCreatorTestHelper.CreateSkillDay(skill, scenario, userNow.AddDays(-1), new TimePeriod(8, 0, 9, 0), false, _slaTwoHours, false);
+			var skillDayToday = _staffingViewModelCreatorTestHelper.CreateSkillDay(skill, scenario, userNow, new TimePeriod(8, 0, 9, 0), false, _slaTwoHours, false);
+			var skillDayYesterday = _staffingViewModelCreatorTestHelper.CreateSkillDay(skill, scenario, userNow.AddDays(-1), new TimePeriod(8, 0, 9, 0), false, _slaTwoHours, false);
 			var skillStats =
 				StaffingViewModelCreatorTestHelper.CreateStatisticsBasedOnForecastedTasks(skillDayToday, latestStatsTime,
 					minutesPerInterval, TimeZone.TimeZone());
@@ -157,9 +160,9 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			
 			var skillEmail = StaffingViewModelCreatorTestHelper.CreateEmailSkill(_skillResolution, "skill", new TimePeriod(8, 0, 10, 0));
 			SkillRepository.Has(skillEmail);
-			var skillDayYesterday = StaffingViewModelCreatorTestHelper.CreateSkillDay(skillEmail, scenario, userNow.AddDays(-1), new TimePeriod(8, 0, 10, 0), false, _slaTwoHours);
-			var skillDayToday = StaffingViewModelCreatorTestHelper.CreateSkillDay(skillEmail, scenario, userNow, new TimePeriod(8, 0, 10, 0), false, _slaTwoHours);
-			var skillDayTomorrow = StaffingViewModelCreatorTestHelper.CreateSkillDay(skillEmail, scenario, userNow.AddDays(1), new TimePeriod(8, 0, 10, 0), false, _slaTwoHours);
+			var skillDayYesterday = _staffingViewModelCreatorTestHelper.CreateSkillDay(skillEmail, scenario, userNow.AddDays(-1), new TimePeriod(8, 0, 10, 0), false, _slaTwoHours);
+			var skillDayToday = _staffingViewModelCreatorTestHelper.CreateSkillDay(skillEmail, scenario, userNow, new TimePeriod(8, 0, 10, 0), false, _slaTwoHours);
+			var skillDayTomorrow = _staffingViewModelCreatorTestHelper.CreateSkillDay(skillEmail, scenario, userNow.AddDays(1), new TimePeriod(8, 0, 10, 0), false, _slaTwoHours);
 			var skillDayCalculator = new SkillDayCalculator(skillEmail,
 				new List<ISkillDay>() { skillDayYesterday, skillDayToday, skillDayTomorrow },
 				new DateOnlyPeriod(new DateOnly(userNow.AddDays(-1)), new DateOnly(userNow.AddDays(1))));
@@ -212,9 +215,9 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				new ServiceAgreement(new ServiceLevel(new Percent(1), 14400), new Percent(0), new Percent(1));
 			var skillEmail = StaffingViewModelCreatorTestHelper.CreateEmailSkill(_skillResolution, "skill", new TimePeriod(8, 0, 10, 0));
 			SkillRepository.Has(skillEmail);
-			var skillDayYesterday = StaffingViewModelCreatorTestHelper.CreateSkillDay(skillEmail, scenario, userNow.AddDays(-1), new TimePeriod(8, 0, 10, 0), false, _slaFourHours);
-			var skillDayToday = StaffingViewModelCreatorTestHelper.CreateSkillDay(skillEmail, scenario, userNow, new TimePeriod(8, 0, 10, 0), false, _slaFourHours);
-			var skillDayTomorrow = StaffingViewModelCreatorTestHelper.CreateSkillDay(skillEmail, scenario, userNow.AddDays(1), new TimePeriod(8, 0, 10, 0), false, _slaFourHours);
+			var skillDayYesterday = _staffingViewModelCreatorTestHelper.CreateSkillDay(skillEmail, scenario, userNow.AddDays(-1), new TimePeriod(8, 0, 10, 0), false, _slaFourHours);
+			var skillDayToday = _staffingViewModelCreatorTestHelper.CreateSkillDay(skillEmail, scenario, userNow, new TimePeriod(8, 0, 10, 0), false, _slaFourHours);
+			var skillDayTomorrow = _staffingViewModelCreatorTestHelper.CreateSkillDay(skillEmail, scenario, userNow.AddDays(1), new TimePeriod(8, 0, 10, 0), false, _slaFourHours);
 			var skillDayCalculator = new SkillDayCalculator(skillEmail,
 				new List<ISkillDay>() { skillDayYesterday, skillDayToday, skillDayTomorrow },
 				new DateOnlyPeriod(new DateOnly(userNow.AddDays(-1)), new DateOnly(userNow.AddDays(1))));
@@ -269,7 +272,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var skillEmail = StaffingViewModelCreatorTestHelper.CreateEmailSkill(_skillResolution, "skill", openHours);
 			SkillRepository.Has(skillEmail);
 
-			var skillDay = StaffingViewModelCreatorTestHelper.CreateSkillDay(skillEmail, scenario, userNow, openHours, false, _slaTwoHours, false);
+			var skillDay = _staffingViewModelCreatorTestHelper.CreateSkillDay(skillEmail, scenario, userNow, openHours, false, _slaTwoHours, false);
 			var skillDayCalculator = new SkillDayCalculator(skillEmail,
 				new List<ISkillDay>() { skillDay },
 				new DateOnlyPeriod(new DateOnly(userNow), new DateOnly(userNow)));
@@ -308,7 +311,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var skillBackOffice = StaffingViewModelCreatorTestHelper.CreateBackOfficeSkill(_skillResolution, "skill", openHours);
 			SkillRepository.Has(skillBackOffice);
 
-			var skillDay = StaffingViewModelCreatorTestHelper.CreateSkillDay(skillBackOffice, scenario, userNow, openHours, false, _slaTwoHours, false);
+			var skillDay = _staffingViewModelCreatorTestHelper.CreateSkillDay(skillBackOffice, scenario, userNow, openHours, false, _slaTwoHours, false);
 			var skillDayCalculator = new SkillDayCalculator(skillBackOffice,
 				new List<ISkillDay>() { skillDay },
 				new DateOnlyPeriod(new DateOnly(userNow), new DateOnly(userNow)));
@@ -345,9 +348,9 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				new ServiceAgreement(new ServiceLevel(new Percent(1), 14400), new Percent(0), new Percent(1));
 			var skillBackoffice = StaffingViewModelCreatorTestHelper.CreateBackOfficeSkill(_skillResolution, "skill", new TimePeriod(8, 0, 10, 0));
 			SkillRepository.Has(skillBackoffice);
-			var skillDayYesterday = StaffingViewModelCreatorTestHelper.CreateSkillDay(skillBackoffice, scenario, userNow.AddDays(-1), new TimePeriod(8, 0, 10, 0), false, _slaFourHours);
-			var skillDayToday = StaffingViewModelCreatorTestHelper.CreateSkillDay(skillBackoffice, scenario, userNow, new TimePeriod(8, 0, 10, 0), false, _slaFourHours);
-			var skillDayTomorrow = StaffingViewModelCreatorTestHelper.CreateSkillDay(skillBackoffice, scenario, userNow.AddDays(1), new TimePeriod(8, 0, 10, 0), false, _slaFourHours);
+			var skillDayYesterday = _staffingViewModelCreatorTestHelper.CreateSkillDay(skillBackoffice, scenario, userNow.AddDays(-1), new TimePeriod(8, 0, 10, 0), false, _slaFourHours);
+			var skillDayToday = _staffingViewModelCreatorTestHelper.CreateSkillDay(skillBackoffice, scenario, userNow, new TimePeriod(8, 0, 10, 0), false, _slaFourHours);
+			var skillDayTomorrow = _staffingViewModelCreatorTestHelper.CreateSkillDay(skillBackoffice, scenario, userNow.AddDays(1), new TimePeriod(8, 0, 10, 0), false, _slaFourHours);
 			var skillDayCalculator = new SkillDayCalculator(skillBackoffice,
 				new List<ISkillDay>() { skillDayYesterday, skillDayToday, skillDayTomorrow },
 				new DateOnlyPeriod(new DateOnly(userNow.AddDays(-1)), new DateOnly(userNow.AddDays(1))));
@@ -401,7 +404,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var skillBackOffice = StaffingViewModelCreatorTestHelper.CreateBackOfficeSkill(_skillResolution, "skill", openHours);
 			SkillRepository.Has(skillBackOffice);
 
-			var skillDay = StaffingViewModelCreatorTestHelper.CreateSkillDay(skillBackOffice, scenario, userNow, openHours, false, _slaTwoHours, false);
+			var skillDay = _staffingViewModelCreatorTestHelper.CreateSkillDay(skillBackOffice, scenario, userNow, openHours, false, _slaTwoHours, false);
 			var skillDayCalculator = new SkillDayCalculator(skillBackOffice,
 				new List<ISkillDay>() { skillDay },
 				new DateOnlyPeriod(new DateOnly(userNow), new DateOnly(userNow)));
