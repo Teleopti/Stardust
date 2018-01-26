@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
 				Expect.Call(payrollResultRepository.Get(resultId)).Return(payrollResult);
 				Expect.Call(() => serviceBusReportProgress.SetPayrollResult(null)).IgnoreArguments();
 				Expect.Call(() => serviceBusReportProgress.ReportProgress(0, string.Empty)).IgnoreArguments().Repeat.
-					 Twice();
+					 Once();
 				Expect.Call(serviceBusReportProgress.Dispose);
 			}
 			using (mock.Playback())
