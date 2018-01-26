@@ -14,7 +14,8 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 
 namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 {
-	public class AggregateRootInterceptor : EmptyInterceptor
+	// Dont ever use for analytics!
+	public class NHibernateUnitOfWorkInterceptor : EmptyInterceptor
 	{
 		private readonly IUpdatedBy _updatedBy;
 		private const string createdByPropertyName = "CREATEDBY";
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 
 		private readonly VersionStateRollbackInterceptor _entityStateRollbackInterceptor = new VersionStateRollbackInterceptor();
 
-		public AggregateRootInterceptor(IUpdatedBy updatedBy, ICurrentPreCommitHooks currentPreCommitHooks)
+		public NHibernateUnitOfWorkInterceptor(IUpdatedBy updatedBy, ICurrentPreCommitHooks currentPreCommitHooks)
 		{
 			_updatedBy = updatedBy;
 			_currentPreCommitHooks = currentPreCommitHooks;

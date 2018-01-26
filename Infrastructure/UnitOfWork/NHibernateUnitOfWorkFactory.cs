@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		}
 	}
 
-	
+
 	public class NHibernateUnitOfWorkFactory : IUnitOfWorkFactory
 	{
 		private readonly ISessionFactory _factory;
@@ -103,19 +103,25 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			ServiceLocatorForLegacy.NestedUnitOfWorkStrategy.Strategize(_context);
 
-			var session = _factory.WithOptions().Interceptor(new AggregateRootInterceptor(ServiceLocatorForLegacy.UpdatedBy, _currentPreCommitHooks)).OpenSession();
+			var interceptor = new NHibernateUnitOfWorkInterceptor(ServiceLocatorForLegacy.UpdatedBy, _currentPreCommitHooks);
+			var session = _factory
+				.WithOptions()
+				.Interceptor(interceptor)
+				.OpenSession();
 
 			businessUnitFilter.Enable(session, ServiceLocatorForEntity.CurrentBusinessUnit.CurrentId().GetValueOrDefault());
 			QueryFilter.Deleted.Enable(session, null);
 			QueryFilter.DeletedPeople.Enable(session, null);
 
-			new NHibernateUnitOfWork(
-				_context,
+			var unitOfWork = new NHibernateUnitOfWork(
+				_context.Clear,
 				session,
 				isolationLevel,
+				interceptor,
 				_transactionHooks);
+			_context.Set(unitOfWork);
 
-			return CurrentUnitOfWork();
+			return unitOfWork;
 		}
 
 		public void Dispose()

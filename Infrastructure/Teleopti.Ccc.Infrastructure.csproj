@@ -547,7 +547,7 @@
     <Compile Include="Licensing\ILicenseVerifierFactory.cs" />
     <Compile Include="Licensing\LicenseVerifierFactory.cs" />
     <Compile Include="Licensing\LicenseVerifier.cs" />
-    <Compile Include="NHibernateConfiguration\AggregateRootInterceptor.cs">
+    <Compile Include="NHibernateConfiguration\NHibernateUnitOfWorkInterceptor.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Foundation\ApplicationData.cs" />

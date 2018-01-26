@@ -10,12 +10,12 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 	public class TransactionSynchronization : ISynchronization
 	{
 		private readonly ICurrentTransactionHooks _hooks;
-		private readonly Lazy<AggregateRootInterceptor> _interceptor;
+		private readonly NHibernateUnitOfWorkInterceptor _interceptor;
 		private readonly List<Action> _afterCompletion = new List<Action>();
 
 		public Exception Exception;
 
-		public TransactionSynchronization(ICurrentTransactionHooks hooks, Lazy<AggregateRootInterceptor> interceptor)
+		public TransactionSynchronization(ICurrentTransactionHooks hooks, NHibernateUnitOfWorkInterceptor interceptor)
 		{
 			_hooks = hooks;
 			_interceptor = interceptor;
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 			try
 			{
-				var modifiedRoots = _interceptor.Value?.ModifiedRoots.ToArray();
+				var modifiedRoots = _interceptor.ModifiedRoots.ToArray();
 				_hooks.Current().ForEach(d => d.AfterCompletion(modifiedRoots));
 				_afterCompletion.ForEach(f => f.Invoke());
 			}

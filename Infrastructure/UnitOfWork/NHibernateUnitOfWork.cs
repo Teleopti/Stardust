@@ -24,33 +24,32 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 	{
 		private readonly ILog _logger = LogManager.GetLogger(typeof(NHibernateUnitOfWork));
 
-		private readonly ApplicationUnitOfWorkContext _context;
+		private readonly Action _clearContext;
 		private readonly ISession _session;
 		private readonly TransactionIsolationLevel _isolationLevel;
 		private readonly ICurrentTransactionHooks _transactionHooks;
 		private readonly NHibernateFilterManager _filterManager;
-		protected readonly Lazy<AggregateRootInterceptor> Interceptor;
+		private readonly NHibernateUnitOfWorkInterceptor _interceptor;
 		private ITransaction _transaction;
 		private IInitiatorIdentifier _initiator;
 		private TransactionSynchronization _transactionSynchronization;
 
 		protected internal NHibernateUnitOfWork(
-			ApplicationUnitOfWorkContext context, 
-			ISession session, 
-			TransactionIsolationLevel isolationLevel, 
+			Action clearContext,
+			ISession session,
+			TransactionIsolationLevel isolationLevel,
+			NHibernateUnitOfWorkInterceptor interceptor,
 			ICurrentTransactionHooks transactionHooks)
 		{
-			InParameter.NotNull(nameof(session), session);
-			_context = context;
-			_context.Set(this);
+			_clearContext = clearContext;
 			_session = session;
 			_session.FlushMode = FlushMode.Manual;
 			_isolationLevel = isolationLevel;
+			_interceptor = interceptor;
 			_transactionHooks = transactionHooks ?? new NoTransactionHooks();
 			_filterManager = new NHibernateFilterManager(session);
-			Interceptor = new Lazy<AggregateRootInterceptor>(() => (AggregateRootInterceptor) _session.GetSessionImplementation().Interceptor);
 		}
-		
+
 		protected internal virtual ISession Session
 		{
 			get
@@ -95,10 +94,10 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			try
 			{
-				Interceptor.Value.Iteration = InterceptorIteration.Normal;
+				_interceptor.Iteration = InterceptorIteration.Normal;
 				Session.Flush();
-				Interceptor.Value.Iteration = InterceptorIteration.UpdateRoots;
-				BlackSheep();  // <----
+				_interceptor.Iteration = InterceptorIteration.UpdateRoots;
+				BlackSheep(); // <----
 				Session.Flush();
 			}
 			catch (StaleStateException ex)
@@ -115,12 +114,12 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			// ---> this behavior belongs in the domain!
 			new SendPushMessageWhenRootAlteredService()
 				.SendPushMessages(
-					Interceptor.Value.ModifiedRoots,
+					_interceptor.ModifiedRoots,
 					new PushMessagePersister(
 						new PushMessageRepository(this),
 						new PushMessageDialogueRepository(this),
 						new CreatePushMessageDialoguesService()
-						));
+					));
 		}
 
 		public void AfterSuccessfulTx(Action action)
@@ -142,7 +141,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			try
 			{
 				Flush();
-				modifiedRoots = Interceptor.Value.ModifiedRoots.ToList();
+				modifiedRoots = _interceptor.ModifiedRoots.ToList();
 				transactionCommit();
 			}
 			catch (TooManyActiveAgentsException exception)
@@ -163,8 +162,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			}
 			finally
 			{
-				Interceptor.Value.Clear();
+				_interceptor.Clear();
 			}
+
 			return modifiedRoots;
 		}
 
@@ -182,16 +182,16 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 			try
 			{
-				_transaction = _isolationLevel == TransactionIsolationLevel.Default ?
-					_session.BeginTransaction() :
-					_session.BeginTransaction(IsolationLevel.Serializable);
+				_transaction = _isolationLevel == TransactionIsolationLevel.Default
+					? _session.BeginTransaction()
+					: _session.BeginTransaction(IsolationLevel.Serializable);
 			}
 			catch (TransactionException transactionException)
 			{
 				throw new CouldNotCreateTransactionException("Cannot start transaction", transactionException);
 			}
 
-			_transactionSynchronization = new TransactionSynchronization(_transactionHooks, Interceptor);
+			_transactionSynchronization = new TransactionSynchronization(_transactionHooks, _interceptor);
 			_transaction.RegisterSynchronization(_transactionSynchronization);
 		}
 
@@ -257,7 +257,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public void Dispose()
 		{
-			_context?.Clear();
+			_clearContext?.Invoke();
 
 			if (_session != null)
 			{
@@ -265,10 +265,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				_session.Dispose();
 			}
 
-			if (Interceptor.IsValueCreated)
-				Interceptor.Value.Clear();
+			_interceptor?.Clear();
 		}
-		
+
 		public override bool Equals(object obj)
 		{
 			var uow = obj as NHibernateUnitOfWork;
