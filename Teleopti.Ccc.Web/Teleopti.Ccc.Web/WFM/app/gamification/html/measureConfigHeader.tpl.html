@@ -1,22 +1,28 @@
-<span class="chevron">
-	<i class="mdi mdi-chevron-right"></i>
-</span>
+<form name="formHead" autocomplete="off">
+	<span class="chevron">
+		<i class="mdi mdi-chevron-right"></i>
+	</span>
 
-<div ng-if="::$ctrl.allowRename" ng-show="!$ctrl.renameMode" ng-click="$ctrl.rename();$event.stopPropagation()" tabindex="0"
- class="context-menu card-context rename">
-	<i class="mdi mdi-lead-pencil edit-icon"></i>
-	<md-tooltip>{{'Rename'|translate}}</md-tooltip>
-</div>
+	<div ng-if="::$ctrl.allowRename" ng-show="!$ctrl.renameMode" ng-click="$ctrl.rename();$event.stopPropagation()" tabindex="0"
+	 class="context-menu card-context rename">
+		<i class="mdi mdi-lead-pencil edit-icon"></i>
+		<md-tooltip>{{'Rename'|translate}}</md-tooltip>
+	</div>
 
-<div class="enable" ng-click="$event.stopPropagation()">
-	<md-checkbox aria-label="Enable measure" ng-checked="$ctrl.checked" ng-click="$ctrl.onCheckboxClick()">
-		<b ng-show="!$ctrl.renameMode">{{$ctrl.name}}
-			<span ng-show="$ctrl.valueDataType===1">(%)</span>
-		</b>
-	</md-checkbox>
-</div>
+	<div class="enable" ng-click="$event.stopPropagation()">
+		<md-checkbox aria-label="Enable measure" ng-checked="$ctrl.checked" ng-click="$ctrl.onCheckboxClick()">
+			<b ng-show="!$ctrl.renameMode">{{$ctrl.name}}
+				<span ng-show="$ctrl.valueDataType===1">(%)</span>
+			</b>
+		</md-checkbox>
+	</div>
 
-<div ng-if="$ctrl.allowRename && $ctrl.renameMode" class="name-textbox" ng-click="$event.stopPropagation()">
-	<input type="text" ng-model="$ctrl._name" ng-model-options="{ updateOn: 'change blur', allowInvalid: false }" ng-change="$ctrl.onNameChange()" ng-blur="$ctrl.finishRename()" autofocus
-		ng-minlength="1" ng-maxlength="50" />
-</div>
+	<div ng-if="$ctrl.allowRename && $ctrl.renameMode" class="name-textbox" ng-click="$event.stopPropagation()">
+		<input name="nameBox" type="text" ng-model="$ctrl._name" ng-model-options="{allowInvalid:true}" ng-keyup="$ctrl.keyUp($event, formHead.nameBox.$invalid)"
+		 ng-blur="$ctrl.onNameChange(formHead.nameBox.$invalid)" autofocus required ng-maxlength="50" />
+	</div>
+	<div class="name-textbox">
+		<span class="text-danger" ng-if="formHead.nameBox.$error.maxlength">{{'TextIsTooLong'|translate}}</span>
+		<span class="text-danger" ng-if="formHead.nameBox.$error.required">{{'Required'|translate}}</span>
+	</div>
+</form>

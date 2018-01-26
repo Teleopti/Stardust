@@ -18,12 +18,18 @@
 					ctrl.renameMode = true;
 				};
 				ctrl.finishRename = function () {
-					if (!ctrl._name || !ctrl._name.length) ctrl._name = ctrl.name;
+					// if (!ctrl._name || !ctrl._name.length) ctrl._name = ctrl.name;
 					ctrl.renameMode = false;
 				};
-				ctrl.onNameChange = function () {
+				ctrl.onNameChange = function (invalid) {
 					ctrl.finishRename();
-					if (ctrl.onNameUpdate && ctrl._name !== ctrl.name) ctrl.onNameUpdate({ name: ctrl._name });
+					if (!invalid) {
+						if (ctrl.onNameUpdate)
+							ctrl.onNameUpdate({ name: ctrl._name });
+					}
+					else {
+						ctrl._name = ctrl.name;
+					}
 				};
 				ctrl.onCheckboxClick = function () {
 					ctrl.onEnable({ enable: !ctrl.checked });
@@ -38,6 +44,14 @@
 				ctrl.preventExpanding = function (configIsEnabled, event) {
 					if (!configIsEnabled) event.stopPropagation();
 				};
+
+				ctrl.keyUp = function (event, invalid) {
+					ctrl.keyUp = function (event) {
+						if (event && event.which === 13) {
+							event.target.blur();
+						}
+					};
+				}
 			}]
 		});
 })(angular);
