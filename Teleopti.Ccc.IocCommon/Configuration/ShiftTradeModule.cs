@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
@@ -11,20 +10,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	internal class ShiftTradeModule : Module
 	{
-		private readonly IIocConfiguration _configuration;
-
-		public ShiftTradeModule(IIocConfiguration configuration)
-		{
-			_configuration = configuration;
-		}
-
 		protected override void Load(ContainerBuilder builder)
 		{
-			if (!_configuration.Toggle (Toggles.MyTimeWeb_ShiftTradeOptimization_40792))
-			{
-				builder.RegisterType<ShiftTradeSkillSpecification>().As<IShiftTradeLightSpecification>();
-			}
-
 			builder.RegisterType<OpenShiftTradePeriodSpecification>().As<IShiftTradeLightSpecification>();
 			builder.RegisterType<ShiftTradeDateSpecification>().As<IShiftTradeSpecification>();
 			builder.RegisterType<ShiftTradeTargetTimeSpecification>().As<IShiftTradeSpecification>();

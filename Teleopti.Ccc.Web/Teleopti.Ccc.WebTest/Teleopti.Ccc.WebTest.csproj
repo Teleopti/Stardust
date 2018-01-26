@@ -296,6 +296,7 @@
     <Compile Include="Core\Requests\DataProvider\FakeLinkProvider.cs" />
     <Compile Include="Core\Requests\DataProvider\ShiftTradeRequestPersonToPermissionValidatorTest.cs" />
     <Compile Include="Core\Requests\Mapping\OvertimeRequestFormMappingTest.cs" />
+    <Compile Include="Core\Requests\ViewModelFactory\FakePeopleForShiftTradeFinder.cs" />
     <Compile Include="Core\Startup\PublishStartupJobsTaskTest.cs" />
     <Compile Include="Core\TeamSchedule\FavoriteSearchProviderTest.cs" />
     <Compile Include="Core\TeamSchedule\ScheduleValidationProviderTest.cs" />

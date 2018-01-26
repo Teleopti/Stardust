@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -37,27 +36,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			system.UseTestDouble<FakePersonAbsenceRepository>().For<IPersonAbsenceRepository>();
 			system.UseTestDouble<FakePersonRequestRepository>().For<IPersonRequestRepository>();
 			system.UseTestDouble<FakePeopleForShiftTradeFinder>().For<IPeopleForShiftTradeFinder>();
-		}
-	}
-
-	public class FakePeopleForShiftTradeFinder : IPeopleForShiftTradeFinder
-	{
-		private IList<IPersonAuthorization> storage = new List<IPersonAuthorization>();
-
-		public void Has(IPersonAuthorization authorization)
-		{
-			storage.Add(authorization);
-		}
-
-		public IList<IPersonAuthorization> GetPeople(IPerson personFrom, DateOnly shiftTradeDate, IList<Guid> teamIdList, string name,
-			NameFormatSetting nameFormat = NameFormatSetting.FirstNameThenLastName)
-		{
-			return storage;
-		}
-
-		public IList<IPersonAuthorization> GetPeople(IPerson personFrom, DateOnly shiftTradeDate, IList<Guid> peopleIdList)
-		{
-			return storage;
 		}
 	}
 

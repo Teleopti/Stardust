@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			system.UseTestDouble<FakeScheduleStorage_DoNotUse>().For<IScheduleStorage>();
 			system.UseTestDouble<Areas.Global.FakePermissionProvider>().For<IPermissionProvider>();
 			system.UseTestDouble<FakePersonAbsenceRepository>().For<IPersonAbsenceRepository>();
+			system.UseTestDouble<FakePeopleForShiftTradeFinder>().For<IPeopleForShiftTradeFinder>();
 		}
 	}
 
@@ -51,6 +52,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		public IPersonAssignmentRepository PersonAssignmentRepository;
 		public FakePersonAbsenceRepository PersonAbsenceRepository;
 		public ISettingsPersisterAndProvider<NameFormatSettings> Settings;
+		public FakePeopleForShiftTradeFinder PeopleForShiftTradeFinder;
 
 		[Test]
 		public void ShouldRetrieveMyScheduleFromRawScheduleDataWhenPublished()
@@ -177,8 +179,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2096, 1, 13), team);
 			agent.AddPersonPeriod(personPeriod);
 			me.AddPersonPeriod(personPeriod);
-			PersonRepository.Add(agent);
-			PersonRepository.Add(me);
+			addPerson(agent, team);
+			addPerson(me, team);
 
 			LoggedOnUser.SetFakeLoggedOnUser(me);
 
@@ -244,7 +246,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2096, 1, 13), team);
 			personPublished.AddPersonPeriod(personPeriod);
 
-			PersonRepository.Add(personPublished);
+			addPerson(personPublished, team);
 
 			var startTime = DateTime.SpecifyKind(new DateTime(2096, 1, 13, 8, 0, 0), DateTimeKind.Utc);
 			var period = new DateTimePeriod(startTime, startTime.AddHours(2));
@@ -284,7 +286,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2096, 1, 13), team);
 			personPublished.AddPersonPeriod(personPeriod);
 
-			PersonRepository.Add(personPublished);
+			addPerson(personPublished, team);
 
 			var startTime = DateTime.SpecifyKind(new DateTime(2096, 1, 13, 8, 0, 0), DateTimeKind.Utc);
 			var period = new DateTimePeriod(startTime, startTime.AddHours(3));
@@ -338,7 +340,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2096, 1, 13), team);
 			personPublished.AddPersonPeriod(personPeriod);
 
-			PersonRepository.Add(personPublished);
+			addPerson(personPublished, team);
 
 			var startTime = DateTime.SpecifyKind(new DateTime(2096, 1, 13, 8, 0, 0), DateTimeKind.Utc);
 			var period = new DateTimePeriod(startTime, startTime.AddHours(3));
@@ -526,8 +528,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			personWithAbsenceOnContractDayOff.AddPersonPeriod(personPeriod);
 			personPublished.AddPersonPeriod(personPeriod);
 
-			PersonRepository.Add(personWithAbsenceOnContractDayOff);
-			PersonRepository.Add(personPublished);
+			addPerson(personWithAbsenceOnContractDayOff, team);
+			addPerson(personPublished, team);
 
 			var startTime = DateTime.SpecifyKind(new DateTime(2096, 1, 16, 8, 0, 0), DateTimeKind.Utc);
 			var period = new DateTimePeriod(startTime, startTime.AddHours(9));
@@ -571,8 +573,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			personWithEmptySchedule.AddPersonPeriod(personPeriod);
 			personPublished.AddPersonPeriod(personPeriod);
 
-			PersonRepository.Add(personWithEmptySchedule);
-			PersonRepository.Add(personPublished);
+			addPerson(personWithEmptySchedule, team);
+			addPerson(personPublished, team);
 
 			var startTime = DateTime.SpecifyKind(new DateTime(2096, 1, 16, 8, 0, 0), DateTimeKind.Utc);
 			var period = new DateTimePeriod(startTime, startTime.AddHours(9));
@@ -634,13 +636,13 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			person2WithEmptySchedule.AddPersonPeriod(personPeriod);
 			personWithOvertimeShift.AddPersonPeriod(personPeriod);
 
-			PersonRepository.Add(personWithAbsenceOnContractDayOff);
-			PersonRepository.Add(personWithMainShift1);
-			PersonRepository.Add(personWithMainShift2);
-			PersonRepository.Add(personWithDayoff);
-			PersonRepository.Add(personWithEmptySchedule);
-			PersonRepository.Add(person2WithEmptySchedule);
-			PersonRepository.Add(personWithOvertimeShift);
+			addPerson(personWithAbsenceOnContractDayOff, team);
+			addPerson(personWithMainShift1, team);
+			addPerson(personWithMainShift2, team);
+			addPerson(personWithDayoff, team);
+			addPerson(personWithEmptySchedule, team);
+			addPerson(person2WithEmptySchedule, team);
+			addPerson(personWithOvertimeShift, team);
 
 			var startTime1 = DateTime.SpecifyKind(new DateTime(2096, 1, 16, 8, 0, 0), DateTimeKind.Utc);
 			var period1 = new DateTimePeriod(startTime1, startTime1.AddHours(9));
@@ -732,13 +734,13 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			person2WithEmptySchedule.AddPersonPeriod(personPeriod);
 			personWithOvertimeShift.AddPersonPeriod(personPeriod);
 
-			PersonRepository.Add(personWithAbsenceOnContractDayOff);
-			PersonRepository.Add(personWithMainShift1);
-			PersonRepository.Add(personWithMainShift2);
-			PersonRepository.Add(personWithDayoff);
-			PersonRepository.Add(personWithEmptySchedule);
-			PersonRepository.Add(person2WithEmptySchedule);
-			PersonRepository.Add(personWithOvertimeShift);
+			addPerson(personWithAbsenceOnContractDayOff, team);
+			addPerson(personWithMainShift1, team);
+			addPerson(personWithMainShift2, team);
+			addPerson(personWithDayoff, team);
+			addPerson(personWithEmptySchedule, team);
+			addPerson(person2WithEmptySchedule, team);
+			addPerson(personWithOvertimeShift, team);
 
 			var personWithEmptyAss = PersonAssignmentFactory.CreatePersonAssignment(personWithEmptySchedule, scenario,
 				new DateOnly(2016, 1, 16));
@@ -809,8 +811,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			personPublished.AddPersonPeriod(personPeriod);
 			me.AddPersonPeriod(personPeriod);
 
-			PersonRepository.Add(personPublished);
-			PersonRepository.Add(me);
+			addPerson(personPublished, team);
+			addPerson(me, team);
 			LoggedOnUser.SetFakeLoggedOnUser(me);
 
 			var startTime = DateTime.SpecifyKind(new DateTime(2096, 1, 16, 8, 0, 0), DateTimeKind.Utc);
@@ -874,11 +876,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			personWithDayoff.AddPersonPeriod(personPeriod);
 			personWithEmptySchedule.AddPersonPeriod(personPeriod);
 
-			PersonRepository.Add(personWithAbsenceOnContractDayOff);
-			PersonRepository.Add(personWithMainShift1);
-			PersonRepository.Add(personWithMainShift2);
-			PersonRepository.Add(personWithDayoff);
-			PersonRepository.Add(personWithEmptySchedule);
+			addPerson(personWithAbsenceOnContractDayOff, team);
+			addPerson(personWithMainShift1, team);
+			addPerson(personWithMainShift2, team);
+			addPerson(personWithDayoff, team);
+			addPerson(personWithEmptySchedule, team);
 
 			var startTime1 = DateTime.SpecifyKind(new DateTime(2096, 1, 16, 8, 0, 0), DateTimeKind.Utc);
 			var period1 = new DateTimePeriod(startTime1, startTime1.AddHours(9));
@@ -1083,6 +1085,16 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			result.MySchedule.IsFullDayAbsence.Should().Be.False();
 			result.MySchedule.ScheduleLayers.First().IsOvertime.Should().Be.True();
 			result.MySchedule.IsDayOff.Should().Be.True();
+		}
+
+		private void addPerson(IPerson personWithAbsenceOnContractDayOff, ITeam team)
+		{
+			PersonRepository.Add(personWithAbsenceOnContractDayOff);
+			PeopleForShiftTradeFinder.Has(new PersonAuthorization
+			{
+				PersonId = personWithAbsenceOnContractDayOff.Id.Value,
+				TeamId = team.Id.Value
+			});
 		}
 	}
 }

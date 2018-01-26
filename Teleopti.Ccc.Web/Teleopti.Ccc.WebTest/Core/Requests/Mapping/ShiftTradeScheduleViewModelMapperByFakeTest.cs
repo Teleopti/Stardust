@@ -7,18 +7,22 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.WebTest.Core.IoC;
+using Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 {
 	[TestFixture, MyTimeWebTest]
-	public class ShiftTradeScheduleViewModelMapperByFakeTest
+	public class ShiftTradeScheduleViewModelMapperByFakeTest : ISetup
 	{
 		public IShiftTradeScheduleViewModelMapper Mapper;
 		public IPersonRepository PersonRepository;
@@ -26,8 +30,14 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		public ITeamRepository TeamRepository;
 		public IPersonAssignmentRepository PersonAssignmentRepository;
 		public FakeLoggedOnUser LoggedOnUser;
+		public FakePeopleForShiftTradeFinder PeopleForShiftTradeFinder;
 
-		protected void SetUp()
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.UseTestDouble<FakePeopleForShiftTradeFinder>().For<IPeopleForShiftTradeFinder>();
+		}
+
+		protected void setUpData()
 		{
 			var businessUnit = BusinessUnitFactory.CreateWithId("Teleopti");
 			BusinessUnitRepository.Add(businessUnit);
@@ -59,14 +69,14 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			person3.AddPersonPeriod(new PersonPeriod(new DateOnly(2091, 1, 1), PersonContractFactory.CreatePersonContract(), team));
 			person4.AddPersonPeriod(new PersonPeriod(new DateOnly(2091, 1, 1), PersonContractFactory.CreatePersonContract(), team));
 
-			PersonRepository.Add(person1);
-			PersonRepository.Add(person2);
-			PersonRepository.Add(person3);
-			PersonRepository.Add(person4);
+			addPerson(person1, team);
+			addPerson(person2, team);
+			addPerson(person3, team);
+			addPerson(person4, team);
 
 			var currentUser = LoggedOnUser.CurrentUser();
 			currentUser.AddPersonPeriod(new PersonPeriod(new DateOnly(2091, 1, 1), PersonContractFactory.CreatePersonContract(), team));
-			PersonRepository.Add(currentUser);
+			addPerson(currentUser, team);
 
 
 			var person1Assignment_1 = PersonAssignmentFactory.CreatePersonAssignmentWithId(person1, new DateOnly(2095, 5, 19));
@@ -106,7 +116,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void ShouldNotSeeNoShiftTradeAgentsAndUnpublishedSchedules()
 		{
-			SetUp();
+			setUpData();
 			var data = new ShiftTradeScheduleViewModelData
 			{
 				Paging = new Paging { Skip = 0, Take = 10,},
@@ -125,7 +135,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void ShouldReturnCorrectAgentSchedulesWithNameSearch()
 		{
-			SetUp();
+			setUpData();
 
 			var result = Mapper.Map(new ShiftTradeScheduleViewModelData
 			{
@@ -141,7 +151,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void ShouldReturnCorrectAgentSchedulesWithDate()
 		{
-			SetUp();
+			setUpData();
 
 			var currentUserAssignment = PersonAssignmentFactory.CreatePersonAssignmentWithId(LoggedOnUser.CurrentUser(), new DateOnly(2095, 5, 21));
 			currentUserAssignment.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2095, 5, 21, 10, 2095, 5, 21, 16));
@@ -164,7 +174,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void TeamScheduleControllerShouldReturnCorrectTimeLine()
 		{
-			SetUp();
+			setUpData();
 
 			var result = Mapper.Map(new ShiftTradeScheduleViewModelData
 			{
@@ -183,7 +193,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void ShouldReturnCorrectAgentSchedulesWithTimeFilter()
 		{
-			SetUp();
+			setUpData();
 			var result = Mapper.Map(new ShiftTradeScheduleViewModelData
 			{
 				ShiftTradeDate = new DateOnly(2095, 5, 19),
@@ -207,7 +217,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void ShouldSeeDayOffAgentScheduleWhenDayOffFilterEnabled()
 		{
-			SetUp();
+			setUpData();
 
 			var currentUserAssignment = PersonAssignmentFactory.CreatePersonAssignmentWithId(LoggedOnUser.CurrentUser(), new DateOnly(2095, 5, 23));
 			currentUserAssignment.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2095, 5, 23, 10, 2095, 5, 23, 16));
@@ -236,7 +246,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void ShouldSeeCorrectAgentSchedulesWhenBothDayOffAndEmptyDayFilterEnabled()
 		{
-			SetUp();
+			setUpData();
 
 			var currentUserAssignment = PersonAssignmentFactory.CreatePersonAssignmentWithId(LoggedOnUser.CurrentUser(), new DateOnly(2095, 5, 23));
 			currentUserAssignment.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2095, 5, 23, 10, 2095, 5, 23, 16));
@@ -261,6 +271,14 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			result.PossibleTradeSchedules.Should().Have.Count.EqualTo(2);
 		}
 
-
+		private void addPerson(IPerson personWithAbsenceOnContractDayOff, ITeam team)
+		{
+			PersonRepository.Add(personWithAbsenceOnContractDayOff);
+			PeopleForShiftTradeFinder.Has(new PersonAuthorization
+			{
+				PersonId = personWithAbsenceOnContractDayOff.Id.Value,
+				TeamId = team.Id.Value
+			});
+		}
 	}
 }
