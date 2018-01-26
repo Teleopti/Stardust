@@ -43,6 +43,17 @@
 		expect(moment(new Date(dateStringInput.val())).format('YYYY-MM-DD')).toBe('2016-06-02');
 	});
 
+	it('should remember preselected the date when selected day is changed with incorrect date', function () {
+		var result = setUp(moment('2016-06-01').toDate());
+		var vm = result.commandControl;
+
+		expect(moment(vm.selectedDate).format('YYYY-MM-DD')).toBe('2016-06-01');
+
+		vm.selectedDate = "";
+		vm.onDateInputChange();
+		expect(moment(vm.selectedDate).format("YYYY-MM-DD")).toBe('2016-06-01');
+	});
+
 	function setUp(inputDate) {
 		var date;
 		var html = '<team-schedule-datepicker selected-date="curDate" on-date-change="onScheduleDateChanged()" />';

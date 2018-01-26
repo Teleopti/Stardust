@@ -23,11 +23,14 @@
 		var vm = this;
 		vm.dateFormat = $locale.DATETIME_FORMATS.shortDate;
 		vm.step = parseInt(vm.step) || 1;
+		var date = vm.selectedDate;
 
 		vm.onDateInputChange = function () {
 			if (!vm.selectedDate || !moment(vm.selectedDate).isValid()) {
+				vm.selectedDate = date;
 				return;
 			}
+			date = vm.selectedDate;
 			vm.onDateChange && $timeout(function () { vm.onDateChange({ date: vm.selectedDate }); });
 		};
 
