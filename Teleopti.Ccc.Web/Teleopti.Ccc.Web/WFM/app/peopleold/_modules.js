@@ -1,6 +1,6 @@
 ﻿(function () {
 	'use strict';
-	angular.module('wfm.people', [
+	angular.module('wfm.peopleold', [
 		'wfm.notice',
 		'wfm.utilities',
 		'toggleService',

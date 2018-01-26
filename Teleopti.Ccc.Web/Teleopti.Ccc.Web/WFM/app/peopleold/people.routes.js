@@ -2,33 +2,33 @@
 	'use strict';
 
 	angular
-	.module('wfm.people')
+		.module('wfm.peopleold')
 	.config(stateConfig);
 
 	function stateConfig($stateProvider) {
-		$stateProvider.state('people', {
-			url: '/people',
+		$stateProvider.state('peopleold', {
+			url: '/peopleold',
 			params: {
 				selectedPeopleIds: [],
 				currentKeyword: '',
 				paginationOptions: {}
 			},
-			templateUrl: 'app/people/html/people.html',
+			templateUrl: 'app/peopleold/html/people.html',
 			controller: 'PeopleDefaultCtrl'
-		}).state('people.start', {
-			templateUrl: 'app/people/html/people-list.html',
+		}).state('peopleold.start', {
+			templateUrl: 'app/peopleold/html/people-list.html',
 			controller: 'PeopleStartCtrl'
-		}).state('people.selection', {
+		}).state('peopleold.selection', {
 			params: {
 				selectedPeopleIds: [],
 				commandTag: {},
 				currentKeyword: '',
 				paginationOptions: {}
 			},
-			templateUrl: 'app/people/html/people-selection-cart.html',
+			templateUrl: 'app/peopleold/html/people-selection-cart.html',
 			controller: 'PeopleCartCtrl as vm'
 		})
-		.state('people.importagents', {
+		.state('peopleold.importagents', {
 			url: '/importagents',
 			template: '<wfm-import-agents></wfm-import-agents>'
 		})

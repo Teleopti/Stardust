@@ -7,7 +7,7 @@
 		$state;
 
 	beforeEach(function () {
-		module('wfm.people');
+		module('wfm.peopleold');
 	});
 
 	beforeEach(inject(function (_$httpBackend_, _$q_, _$rootScope_, _$controller_, _$state_) {

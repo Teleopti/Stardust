@@ -27,5 +27,5 @@
 		}
 	}
 
-	angular.module('wfm.people').directive("peopleSelectionList", ['uiGridConstants', peopleSelectionList]);
+	angular.module('wfm.peopleold').directive("peopleSelectionList", ['uiGridConstants', peopleSelectionList]);
 })();

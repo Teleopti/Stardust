@@ -124,7 +124,7 @@
 			})));
 	};
 
-	angular.module('wfm.people')
+	angular.module('wfm.peopleold')
 		.component('wfmImportAgents',
 		{
 			templateUrl: 'app/people/html/wfm-import-agents.tpl.html',

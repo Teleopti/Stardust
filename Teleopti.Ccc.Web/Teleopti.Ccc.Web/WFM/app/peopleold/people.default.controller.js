@@ -1,10 +1,10 @@
 (function() {
 	'use strict';
-	angular.module('wfm.people')
+	angular.module('wfm.peopleold')
 		.controller('PeopleDefaultCtrl', [
 		'$state', '$location', function ($state, $location) {		
 			if ($location.url() == $state.current.url )			
-				$state.go('people.start');
+				$state.go('peopleold.start');
 		}
 	]);
 })();

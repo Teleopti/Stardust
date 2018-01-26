@@ -1,7 +1,7 @@
 ﻿(function (angular) {
 	'use strict';
 
-	angular.module('wfm.people').service('PeopleService', [
+	angular.module('wfm.peopleold').service('PeopleService', [
 		'$resource', '$http', function($resource, $http) {
 			var newImportJobUrl = '../api/People/NewImportAgentJob';
 			var uploadAgentUrl = '../api/People/UploadAgent';

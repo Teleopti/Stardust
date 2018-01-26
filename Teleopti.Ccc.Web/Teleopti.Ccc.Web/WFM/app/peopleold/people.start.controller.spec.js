@@ -13,7 +13,7 @@
 	};
 
 	beforeEach(function(){
-		module('wfm.people');
+		module('wfm.peopleold');
 		module('externalModules');
 	});
 
@@ -87,7 +87,7 @@
 		var state = {
 			current: {}
 		};
-		state.current.name = "people.start";
+		state.current.name = "peopleold.start";
 		$controller("PeopleStartCtrl", { $state: state, $scope: scope, $stateParams: stateParams, Toggle: mockToggleService, People: mockPeopleService, NoticeService: mockNoticeService });
 
 		var message = $translate.instant('WFMReleaseNotificationWithoutOldModuleLink')

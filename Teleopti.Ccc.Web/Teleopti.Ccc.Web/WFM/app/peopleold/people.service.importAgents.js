@@ -35,6 +35,6 @@
 		});
 	};
 
-	angular.module('wfm.people')
+	angular.module('wfm.peopleold')
 		.service('importAgentsService', ['$q', '$http', ImportAgentsService]);
 })(angular);

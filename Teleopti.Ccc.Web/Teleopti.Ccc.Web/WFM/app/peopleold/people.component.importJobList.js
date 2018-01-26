@@ -94,6 +94,6 @@
 		controller: ['NoticeService', 'importAgentsService', '$translate', Ctrl]
 	};
 
-	angular.module('wfm.people')
+	angular.module('wfm.peopleold')
 		.component('importJobList', component);
 })(angular);

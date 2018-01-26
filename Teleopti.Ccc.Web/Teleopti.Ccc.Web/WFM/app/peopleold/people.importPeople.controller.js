@@ -1,7 +1,7 @@
 ﻿(function() {
 	'use strict';
 
-	angular.module('wfm.people')
+	angular.module('wfm.peopleold')
 		.directive('importPeople', ImportPeopleDirective)
 		.controller('ImportPeopleCtrl', ['$timeout', 'PeopleService', 'Toggle', '$translate',  ImportPeopleController]);
 

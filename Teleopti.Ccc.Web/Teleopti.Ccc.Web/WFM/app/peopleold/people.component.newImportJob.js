@@ -62,6 +62,6 @@
 		controller: ['PeopleService', '$translate', Ctrl]
 	};
 
-	angular.module('wfm.people')
+	angular.module('wfm.peopleold')
 		.component('newImportJob', component);
 })(angular);

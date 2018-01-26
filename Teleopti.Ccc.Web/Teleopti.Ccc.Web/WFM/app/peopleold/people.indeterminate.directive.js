@@ -13,7 +13,7 @@
 	 *
 	 * @example <input type="checkbox" ui-indeterminate="isUnkown">
 	 */
-	angular.module('wfm.people').directive('peopleIndeterminate', ['$timeout', function ($timeout) {
+	angular.module('wfm.peopleold').directive('peopleIndeterminate', ['$timeout', function ($timeout) {
 		return {
 			compile: function (tElm, tAttrs) {
 				if (!tAttrs.type || tAttrs.type.toLowerCase() !== 'checkbox') {

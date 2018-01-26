@@ -1,7 +1,7 @@
 ﻿
 (function () {
 	'use strict';
-	angular.module('wfm.people')
+	angular.module('wfm.peopleold')
 		.controller('PeopleCartCtrl', [
 			'$scope', '$q', '$translate', '$stateParams', 'uiGridConstants', 'PeopleService', '$mdSidenav',
 			'$mdUtil', '$state', '$interval', '$mdComponentRegistry', '$locale', PeopleCartController
@@ -97,12 +97,12 @@
 		];
 
 		vm.back = function () {
-			$state.go('people.start', $stateParams);
+			$state.go('peopleold.start', $stateParams);
 		};
 
 		vm.clearCart = function () {
 			vm.selectedPeopleIds = [];
-			$state.go('people.start', { selectedPeopleIds: [], currentKeyword: $stateParams.currentKeyword, paginationOptions: $stateParams.paginationOptions });
+			$state.go('peopleold.start', { selectedPeopleIds: [], currentKeyword: $stateParams.currentKeyword, paginationOptions: $stateParams.paginationOptions });
 		};
 
 		function buildToggler(navID) {

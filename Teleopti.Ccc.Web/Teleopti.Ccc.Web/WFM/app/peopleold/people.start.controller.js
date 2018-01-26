@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-angular.module('wfm.people')
+angular.module('wfm.peopleold')
 	.constant('chunkSize', 50)
 	.controller('PeopleStartCtrl', [
 		'$scope', '$filter', '$state', '$stateParams', '$translate', 'i18nService', 'uiGridConstants',
@@ -202,7 +202,7 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 	};
 
 	$scope.gotoCartView = function (commandTag) {
-		$state.go("people.selection", {
+		$state.go("peopleold.selection", {
 			selectedPeopleIds: getSelectedPeople(),
 			commandTag: commandTag,
 			currentKeyword: $scope.searchOptions.keyword,
@@ -385,7 +385,7 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 	$scope.dataInitialized = true;
 	$scope.searchKeyword();
 
-	if ($state.current.name === "people.start" && toggleSvc.Wfm_People_PrepareForRelease_39040) {
+	if ($state.current.name === "peopleold.start" && toggleSvc.Wfm_People_PrepareForRelease_39040) {
 		var message = $translate.instant('WFMReleaseNotificationWithoutOldModuleLink')
 				.replace('{0}', $translate.instant('People'))
 				.replace('{1}', "<a href=' http://www.teleopti.com/wfm/customer-feedback.aspx' target='_blank' target='_blank'>")
