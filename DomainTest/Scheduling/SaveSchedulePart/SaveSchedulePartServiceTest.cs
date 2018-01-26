@@ -12,9 +12,13 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Staffing;
+using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
+using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -111,11 +115,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SaveSchedulePart
 		public FakeSkillCombinationResourceRepository SkillCombinationResourceRepository;
 		public MutableNow Now;
 		public IScheduleStorage ScheduleStorage;
+		public ICurrentUnitOfWorkFactory CurrentUnitOfWorkFactory;
+		public FakeRepositoryFactory RepositoryFactory;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<SaveSchedulePartService>().For<ISaveSchedulePartService>();
 			system.UseTestDouble<ScheduleDayDifferenceSaver>().For<IScheduleDayDifferenceSaver>();
+			system.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
 		}
 
 		[Test]
@@ -239,6 +246,23 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SaveSchedulePart
 						new NullScheduleTag());
 			var resources = SkillCombinationResourceRepository.LoadSkillCombinationResources(new DateTimePeriod(2017, 5, 20, 8, 2017, 5, 20, 10)).ToList();
 			resources.Count.Should().Be.EqualTo(0);
+		}
+		[Test]
+		public void ShouldNotInvokeScheduleDifferenceSaverWhenSavingFromPlans()
+		{
+			var saver = new FakeScheduleDayDifferenceSaver();
+			var target =
+				new ScheduleDifferenceSaver(
+				new ScheduleStorage(new CurrentUnitOfWork(CurrentUnitOfWorkFactory), RepositoryFactory,
+				new PersistableScheduleDataPermissionChecker(),
+				new ScheduleStorageRepositoryWrapper(RepositoryFactory, new CurrentUnitOfWork(CurrentUnitOfWorkFactory))),
+				new CurrentUnitOfWork(CurrentUnitOfWorkFactory), saver);
+		
+			target.SaveChanges(new DifferenceCollection<IPersistableScheduleData>(),
+				new ScheduleRange(new FakeScheduleDictionary(),
+					new ScheduleParameters(new Scenario("_"), new Person(), new DateTimePeriod()),
+					new PersistableScheduleDataPermissionChecker()),true);
+			saver.InvokeSave.Should().Be.EqualTo(false);
 		}
 	}
 

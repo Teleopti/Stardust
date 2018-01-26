@@ -10,17 +10,23 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 		private readonly IScheduleDayDifferenceSaver _scheduleDayDifferenceSaver;
 
-		public ScheduleDifferenceSaver(IScheduleStorage scheduleStorage, ICurrentUnitOfWork currentUnitOfWork, IScheduleDayDifferenceSaver scheduleDayDifferenceSaver)
+		public ScheduleDifferenceSaver(IScheduleStorage scheduleStorage, ICurrentUnitOfWork currentUnitOfWork,
+			IScheduleDayDifferenceSaver scheduleDayDifferenceSaver)
 		{
 			_scheduleStorage = scheduleStorage;
 			_currentUnitOfWork = currentUnitOfWork;
 			_scheduleDayDifferenceSaver = scheduleDayDifferenceSaver;
 		}
 
-		public void SaveChanges(IDifferenceCollection<IPersistableScheduleData> scheduleChanges, IUnvalidatedScheduleRangeUpdate stateInMemoryUpdater)
+		public void SaveChanges(IDifferenceCollection<IPersistableScheduleData> scheduleChanges,
+			IUnvalidatedScheduleRangeUpdate stateInMemoryUpdater, bool fromPlans = false)
 		{
-			var scheduleRange = stateInMemoryUpdater as IScheduleRange;
-			_scheduleDayDifferenceSaver.SaveDifferences(scheduleRange);
+			if (!fromPlans)
+			{
+				var scheduleRange = stateInMemoryUpdater as IScheduleRange;
+				_scheduleDayDifferenceSaver.SaveDifferences(scheduleRange);
+			}
+
 			foreach (var scheduleChange in scheduleChanges)
 			{
 				switch (scheduleChange.Status)
@@ -43,7 +49,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 						break;
 				}
 			}
+
 		}
 	}
-	
 }

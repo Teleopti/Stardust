@@ -4,6 +4,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure
 {
 	public interface IScheduleDifferenceSaver
 	{
-		void SaveChanges(IDifferenceCollection<IPersistableScheduleData> scheduleChanges, IUnvalidatedScheduleRangeUpdate stateInMemoryUpdater);
+		void SaveChanges(IDifferenceCollection<IPersistableScheduleData> scheduleChanges,IUnvalidatedScheduleRangeUpdate stateInMemoryUpdater, bool fromPlans = false);
 	}
 }

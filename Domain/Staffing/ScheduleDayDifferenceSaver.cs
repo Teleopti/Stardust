@@ -14,6 +14,8 @@ namespace Teleopti.Ccc.Domain.Staffing
 		IEnumerable<SkillCombinationResource> GetDifferences(IScheduleRange scheduleRange);
 	}
 
+	
+
 	public class ScheduleDayDifferenceSaver : IScheduleDayDifferenceSaver
 	{
 		private readonly ISkillCombinationResourceRepository _skillCombinationResourceRepository;
@@ -49,6 +51,22 @@ namespace Teleopti.Ccc.Domain.Staffing
 				skillCombinationResourceDeltas.AddRange(_compareProjection.Compare(snapShotDay, scheduleRange.ScheduledDay(snapShotDay.DateOnlyAsPeriod.DateOnly)));
 			}
 			return skillCombinationResourceDeltas;
+		}
+	}
+
+	public class FakeScheduleDayDifferenceSaver : IScheduleDayDifferenceSaver
+	{
+		public bool InvokeSave;
+
+		public IEnumerable<SkillCombinationResource> SaveDifferences(IScheduleRange scheduleRange)
+		{
+			InvokeSave = true;
+			return new List<SkillCombinationResource>();
+		}
+
+		public IEnumerable<SkillCombinationResource> GetDifferences(IScheduleRange scheduleRange)
+		{
+			throw new System.NotImplementedException();
 		}
 	}
 

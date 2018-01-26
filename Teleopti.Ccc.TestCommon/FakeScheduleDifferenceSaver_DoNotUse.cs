@@ -26,10 +26,14 @@ namespace Teleopti.Ccc.TestCommon
 			_scheduleStorage = scheduleStorage;
 		}
 
-		public void SaveChanges(IDifferenceCollection<IPersistableScheduleData> scheduleChanges, IUnvalidatedScheduleRangeUpdate stateInMemoryUpdater)
+		public void SaveChanges(IDifferenceCollection<IPersistableScheduleData> scheduleChanges, IUnvalidatedScheduleRangeUpdate stateInMemoryUpdater, bool fromPlans = false)
 		{
-			var scheduleRange = stateInMemoryUpdater as IScheduleRange;
-			_scheduleDayDifferenceSaver.SaveDifferences(scheduleRange);
+			if (!fromPlans)
+			{
+				var scheduleRange = stateInMemoryUpdater as IScheduleRange;
+				_scheduleDayDifferenceSaver.SaveDifferences(scheduleRange);
+			}
+			
 
 			foreach (var scheduleChange in scheduleChanges)
 			{
