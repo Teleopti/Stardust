@@ -17,124 +17,6 @@
 		var numOfEnabledMeasures = 0;
 		var originalName = '';
 
-		var makeBuiltinMeasureConfigs = function (data) {
-			var measureConfigs = [];
-
-			var answeredCalls = new MeasureConfig(
-				true,
-				data.AnsweredCallsBadgeEnabled,
-				null,
-				null,
-				'AnsweredCalls',
-				0,
-				true,
-				data.AnsweredCallsThreshold,
-				data.AnsweredCallsBronzeThreshold,
-				data.AnsweredCallsSilverThreshold,
-				data.AnsweredCallsGoldThreshold,
-				'^\\d+$',
-				10000,
-				'desc'
-			);
-			measureConfigs.push(answeredCalls);
-			if (answeredCalls.enabled) enabled.push(answeredCalls);
-
-			var adherence = new MeasureConfig(
-				true,
-				data.AdherenceBadgeEnabled,
-				null,
-				null,
-				'Adherence',
-				1,
-				true,
-				data.AdherenceThreshold.Value * 100,
-				data.AdherenceBronzeThreshold.Value * 100,
-				data.AdherenceSilverThreshold.Value * 100,
-				data.AdherenceGoldThreshold.Value * 100,
-				'\\d+(\.\d+)?$',
-				100.0,
-				'desc'
-			);
-			measureConfigs.push(adherence);
-			if (adherence.enabled) enabled.push(adherence);
-
-			var aht = new MeasureConfig(
-				true,
-				data.AHTBadgeEnabled,
-				null,
-				null,
-				'AverageHandlingTime',
-				2,
-				true,
-				data.AHTThreshold,
-				data.AHTBronzeThreshold,
-				data.AHTSilverThreshold,
-				data.AHTGoldThreshold,
-				'^(0[0-1]):([0-5][0-9]):([0-5][0-9])$',
-				'01:00:00',
-				'asc'
-			);
-			measureConfigs.push(aht);
-			if (aht.enabled) enabled.push(aht);
-
-			return measureConfigs;
-		};
-
-		var makeExternalMeasureConfigs = function (data) {
-			var measureConfigs = [];
-
-			data.ExternalBadgeSettings.forEach(function (x) {
-				var config = new MeasureConfig(
-					false,
-					x.Enabled,
-					x.Id,
-					x.QualityId,
-					x.Name,
-					x.DataType,
-					x.LargerIsBetter,
-					x.Threshold,
-					x.BronzeThreshold,
-					x.SilverThreshold,
-					x.GoldThreshold,
-					'\\d+(\.\d+)?$'
-				);
-
-				if (config.dataType == 0) {
-					config.valueFormat = '^\\d+$';
-					config.max = 10000;
-				} else {
-					config.valueFormat = '\\d+(\.\d+)?$';
-					config.badgeThreshold = config.badgeThreshold * 100;
-					config.goldBadgeThreshold = config.goldBadgeThreshold * 100;
-					config.silverBadgeThreshold = config.silverBadgeThreshold * 100;
-					config.bronzeBadgeThreshold = config.bronzeBadgeThreshold * 100;
-					config.max = 100.0;
-				}
-
-				measureConfigs.push(config);
-				if (config.enabled) enabled.push(config);
-			});
-
-			return measureConfigs;
-		};
-
-		var updateSettingForm = function (data) {
-			enabled = [];
-
-			ctrl.id = data.Id;
-			ctrl.name = data.Name;
-			originalName = ctrl.name;
-			// ctrl.changeInfo = data.UpdatedBy + ' ' + data.UpdatedOn;
-			ctrl.ruleSet = data.GamificationSettingRuleSet;
-			ctrl.silverRate = data.SilverToBronzeBadgeRate;
-			ctrl.goldRate = data.GoldToSilverBadgeRate;
-			ctrl.builtinMeasureConfigs = makeBuiltinMeasureConfigs(data);
-			ctrl.externalMeasureConfigs = makeExternalMeasureConfigs(data);
-
-			//if (enabled.length > 3) $log.error('more than 3 measures are enabled!');
-			numOfEnabledMeasures = enabled.length;
-		};
-
 		ctrl.$onInit = function () {
 			ctrl.errors = {};
 		};
@@ -142,6 +24,129 @@
 		ctrl.$onChanges = function (changesObj) {
 			if (changesObj.setting && changesObj.setting.currentValue) {
 				updateSettingForm(changesObj.setting.currentValue);
+				clearErrorMessage();
+			}
+
+			function updateSettingForm(data) {
+				enabled = [];
+
+				ctrl.id = data.Id;
+				ctrl.name = data.Name;
+				originalName = ctrl.name;
+				// ctrl.changeInfo = data.UpdatedBy + ' ' + data.UpdatedOn;
+				ctrl.ruleSet = data.GamificationSettingRuleSet;
+				ctrl.silverRate = data.SilverToBronzeBadgeRate;
+				ctrl.goldRate = data.GoldToSilverBadgeRate;
+				ctrl.builtinMeasureConfigs = makeBuiltinMeasureConfigs(data);
+				ctrl.externalMeasureConfigs = makeExternalMeasureConfigs(data);
+
+				//if (enabled.length > 3) $log.error('more than 3 measures are enabled!');
+				numOfEnabledMeasures = enabled.length;
+			}
+
+			function clearErrorMessage() {
+				ctrl.errors = {};
+			}
+
+			function makeBuiltinMeasureConfigs(data) {
+				var measureConfigs = [];
+
+				var answeredCalls = new MeasureConfig(
+					true,
+					data.AnsweredCallsBadgeEnabled,
+					null,
+					null,
+					'AnsweredCalls',
+					0,
+					true,
+					data.AnsweredCallsThreshold,
+					data.AnsweredCallsBronzeThreshold,
+					data.AnsweredCallsSilverThreshold,
+					data.AnsweredCallsGoldThreshold,
+					'^\\d+$',
+					10000,
+					'desc'
+				);
+				measureConfigs.push(answeredCalls);
+				if (answeredCalls.enabled) enabled.push(answeredCalls);
+
+				var adherence = new MeasureConfig(
+					true,
+					data.AdherenceBadgeEnabled,
+					null,
+					null,
+					'Adherence',
+					1,
+					true,
+					data.AdherenceThreshold.Value * 100,
+					data.AdherenceBronzeThreshold.Value * 100,
+					data.AdherenceSilverThreshold.Value * 100,
+					data.AdherenceGoldThreshold.Value * 100,
+					'\\d+(\.\d+)?$',
+					100.0,
+					'desc'
+				);
+				measureConfigs.push(adherence);
+				if (adherence.enabled) enabled.push(adherence);
+
+				var aht = new MeasureConfig(
+					true,
+					data.AHTBadgeEnabled,
+					null,
+					null,
+					'AverageHandlingTime',
+					2,
+					true,
+					data.AHTThreshold,
+					data.AHTBronzeThreshold,
+					data.AHTSilverThreshold,
+					data.AHTGoldThreshold,
+					'^(0[0-1]):([0-5][0-9]):([0-5][0-9])$',
+					'01:00:00',
+					'asc'
+				);
+				measureConfigs.push(aht);
+				if (aht.enabled) enabled.push(aht);
+
+				return measureConfigs;
+			}
+
+			function makeExternalMeasureConfigs(data) {
+				var measureConfigs = [];
+
+				data.ExternalBadgeSettings.forEach(function (x) {
+					var config = new MeasureConfig(
+						false,
+						x.Enabled,
+						x.Id,
+						x.QualityId,
+						x.Name,
+						x.DataType,
+						x.LargerIsBetter,
+						x.Threshold,
+						x.BronzeThreshold,
+						x.SilverThreshold,
+						x.GoldThreshold,
+						'\\d+(\.\d+)?$'
+					);
+
+					if (config.dataType == 0) {
+						config.valueFormat = '^\\d+$';
+						config.max = 10000;
+					} else {
+						config.valueFormat = '\\d+(\.\d+)?$';
+						config.badgeThreshold = config.badgeThreshold * 100;
+						config.goldBadgeThreshold = config.goldBadgeThreshold * 100;
+						config.silverBadgeThreshold = config.silverBadgeThreshold * 100;
+						config.bronzeBadgeThreshold = config.bronzeBadgeThreshold * 100;
+						config.max = 100.0;
+					}
+
+					measureConfigs.push(config);
+					if (config.enabled) enabled.push(config);
+				});
+
+				return measureConfigs;
 			}
 		};
 
@@ -160,7 +165,7 @@
 			config.setEnabled(true).then(function () {
 				numOfEnabledMeasures++;
 			});
-		}
+		};
 
 		ctrl.updateRuleSet = function () {
 			dataService.saveData('ModifyChangeRule', {
