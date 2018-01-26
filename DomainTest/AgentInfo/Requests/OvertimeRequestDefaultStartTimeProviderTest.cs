@@ -152,6 +152,29 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		}
 
 		[Test]
+		public void ShouldGetTodayNormalShiftEndTimeAsDefaultStartTimeWhenYesterdayShiftEndsAt12AmToday()
+		{
+			Now.Is(new DateTime(2018, 1, 8, 02, 09, 00, DateTimeKind.Utc));
+			var date = new DateOnly(2018, 1, 9);
+			var agent = PersonFactory.CreatePersonWithGuid("agent", "one");
+			FakeLoggedOnUser.SetFakeLoggedOnUser(agent);
+			var phone = ActivityFactory.CreateActivity("phone activity");
+			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(agent, CurrentScenario.Current(), date);
+			personAssignment.AddActivity(phone, new DateTimePeriod(2018, 1, 9, 18, 2018, 1, 10, 00));
+			FakeAssignmentRepository.Has(personAssignment);
+
+			var personAssignment2 = PersonAssignmentFactory.CreatePersonAssignment(agent, CurrentScenario.Current(), date.AddDays(1));
+			personAssignment2.AddActivity(phone, new DateTimePeriod(2018, 1, 10, 11, 2018, 1, 10, 20));
+			FakeAssignmentRepository.Has(personAssignment2);
+
+			var result = OvertimeRequestDefaultStartTimeProvider.GetDefaultStartTime(date.AddDays(1));
+
+			result.DefaultStartTime.Date.Should().Be(date.AddDays(1).Date);
+			result.DefaultStartTime.Hour.Should().Be(20);
+			result.DefaultStartTime.Minute.Should().Be(0);
+		}
+
+		[Test]
 		public void ShouldGetYesterdayOvernightShiftEndTimeWhenCurrentTimeIsEarlierThanThatTimeThoughThereIsOvernightShfitEndsAtTomorrow()
 		{
 			Now.Is(new DateTime(2018, 1, 8, 02, 09, 00, DateTimeKind.Utc));
@@ -209,6 +232,27 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 
 			result.DefaultStartTime.Date.Should().Be(date.Date);
 			result.DefaultStartTime.Hour.Should().Be(17);
+			result.DefaultStartTime.Minute.Should().Be(0);
+		}
+
+		[Test]
+		public void ShouldGetTodayOvernightShiftStartTimeAsDefaultStartTimeWhenShiftEndsAt12AmTomorrowConsideringTimezone()
+		{
+			Now.Is(new DateTime(2018, 1, 8, 02, 09, 00, DateTimeKind.Utc));
+			var date = new DateOnly(2018, 1, 9);
+			var agent = PersonFactory.CreatePersonWithGuid("agent", "one");
+			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+
+			FakeLoggedOnUser.SetFakeLoggedOnUser(agent);
+			var phone = ActivityFactory.CreateActivity("phone activity");
+			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(agent, CurrentScenario.Current(), date);
+			personAssignment.AddActivity(phone, new DateTimePeriod(2018, 1, 9, 18, 2018, 1, 9, 23));
+			FakeAssignmentRepository.Has(personAssignment);
+
+			var result = OvertimeRequestDefaultStartTimeProvider.GetDefaultStartTime(date);
+
+			result.DefaultStartTime.Date.Should().Be(date.Date);
+			result.DefaultStartTime.Hour.Should().Be(19);
 			result.DefaultStartTime.Minute.Should().Be(0);
 		}
 

@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 			OvertimeDefaultStartTimeResult shiftEndTimeResult = null;
 			var validEndTimeList = yesterdayAndTodaysPossibleShiftEndTimes
-				.Where(e => _now.UtcDateTime().CompareTo(e) < 0 && e.CompareTo(requestDate) >= 0).ToList();
+				.Where(e => _now.UtcDateTime().CompareTo(e) < 0 && e.CompareTo(requestDate) > 0).ToList();
 
 			if (validEndTimeList.Any(e => utcNowPlusGap.CompareTo(e) <= 0))
 			{
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 			OvertimeDefaultStartTimeResult shiftStartTimeResult = null;
 			if (todayShiftStartTime.HasValue && utcNowPlusGap.CompareTo(todayShiftStartTime) <= 0 &&
-				yesterdayAndTodaysPossibleShiftEndTimes.Last().Date == date.AddDays(1).Date)
+				yesterdayAndTodaysPossibleShiftEndTimes.Last().CompareTo(requestDate.AddDays(1).Subtract(new TimeSpan(0, 0, 0, 1))) > 0)
 			{
 				shiftStartTimeResult = buildDefaultStartTimeResult(TimeZoneHelper.ConvertFromUtc(todayShiftStartTime.GetValueOrDefault(), currentUserTimeZone), true, false);
 			}
