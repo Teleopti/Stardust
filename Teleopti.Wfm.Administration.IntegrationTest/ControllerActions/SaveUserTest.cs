@@ -19,7 +19,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 		public void ShouldUpdate()
 		{
 			//new fresh
-			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
 			int id;
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
@@ -45,7 +45,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 		public void ShouldNotAllowEmptyEmail()
 		{
 			//new fresh
-			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
 			int id;
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
@@ -68,7 +68,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 		public void ShouldNotAllowEmptyName()
 		{
 			//new fresh
-			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
 			int id;
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
@@ -90,7 +90,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 		[Test]
 		public void ShouldNotAllowSameEmail()
 		{
-			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var user = new TenantAdminUser { AccessToken = "dummy", Email = "ola@teleopti.com", Name = "Ola", Password = "vadsomhelst" };
@@ -108,7 +108,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 		[Test]
 		public void ShouldAllowSameEmailOnSameUser()
 		{
-			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
 			int id;
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
@@ -128,7 +128,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 		[Test]
 		public void ShouldNotAllowOldDefaultEmail()
 		{
-			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
 			int id;
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{

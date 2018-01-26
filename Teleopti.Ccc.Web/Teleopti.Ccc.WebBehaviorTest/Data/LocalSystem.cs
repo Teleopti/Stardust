@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 	public static class LocalSystem
 	{
 		public static IToggleManager Toggles;
-		public static ICurrentTransactionHooks TransactionHooks;
 		public static ICurrentUnitOfWorkFactory UnitOfWorkFactory;
 		public static ICurrentUnitOfWork UnitOfWork;
 		public static DefaultDataCreator DefaultDataCreator;
@@ -36,7 +35,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 			Toggles = IntegrationIoCTest.Container.Resolve<IToggleManager>();
 			Now = IntegrationIoCTest.Container.Resolve<INow>() as MutableNow;
-			TransactionHooks = IntegrationIoCTest.Container.Resolve<ICurrentTransactionHooks>();
 			UnitOfWorkFactory = IntegrationIoCTest.Container.Resolve<ICurrentUnitOfWorkFactory>();
 			UnitOfWork = IntegrationIoCTest.Container.Resolve<ICurrentUnitOfWork>();
 			EventPublisher = IntegrationIoCTest.Container.Resolve<IEventPublisher>();

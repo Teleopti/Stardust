@@ -15,7 +15,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 		public void ShouldNotBeNull()
 		{
 			//create database
-			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
 
 			Target.GetAllTenants().Should().Not.Be.Null();
 		}

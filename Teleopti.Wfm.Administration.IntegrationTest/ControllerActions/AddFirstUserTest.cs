@@ -22,7 +22,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 		[Test]
 		public void ShouldBlockAddFirstUserOnceOneUserExists()
 		{
-			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
 			var tenant = new Tenant("Tenn");
 
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())

@@ -15,31 +15,85 @@ using Environment = NHibernate.Cfg.Environment;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
+	public class UnitOfWorkFactoryNewerUper
+	{
+		private readonly ICurrentPreCommitHooks _currentPreCommitHooks;
+		private readonly IEnversConfiguration _enversConfiguration;
+		private readonly ICurrentTransactionHooks _transactionHooks;
+		private readonly ICurrentHttpContext _httpContext;
+
+		public UnitOfWorkFactoryNewerUper(
+			ICurrentPreCommitHooks currentPreCommitHooks,
+			IEnversConfiguration enversConfiguration,
+			ICurrentTransactionHooks transactionHooks,
+			ICurrentHttpContext httpContext)
+		{
+			_currentPreCommitHooks = currentPreCommitHooks;
+			_enversConfiguration = enversConfiguration;
+			_transactionHooks = transactionHooks;
+			_httpContext = httpContext;
+		}
+
+		public NHibernateUnitOfWorkInterceptor MakeInterceptor()
+		{
+			return new NHibernateUnitOfWorkInterceptor(ServiceLocatorForLegacy.UpdatedBy, _currentPreCommitHooks);
+		}
+
+		public NHibernateUnitOfWorkFactory MakeAppFactory(
+			ISessionFactory sessionFactory,
+			string connectionString,
+			string tenant)
+		{
+			return new NHibernateUnitOfWorkFactory(
+				sessionFactory,
+				_enversConfiguration.AuditSettingProvider,
+				connectionString,
+				_transactionHooks,
+				tenant,
+				this);
+		}
+
+		public AnalyticsUnitOfWorkFactory MakeAnalyticsFactory(
+			ISessionFactory sessionFactory,
+			string connectionString,
+			string tenant)
+		{
+			return new AnalyticsUnitOfWorkFactory(
+				sessionFactory,
+				connectionString,
+				tenant
+			);
+		}
+
+		public ReadModelUnitOfWorkFactory MakeReadModelFactory(
+			string applicationConnectionString
+		)
+		{
+			var factory = new ReadModelUnitOfWorkFactory(_httpContext, applicationConnectionString);
+			factory.Configure();
+			return factory;
+		}
+	}
+
 	public class DataSourcesFactory : IDataSourcesFactory
 	{
 		private readonly IEnversConfiguration _enversConfiguration;
-		private readonly ICurrentTransactionHooks _transactionHooks;
-		private readonly ICurrentPreCommitHooks _currentPreCommitHooks;
+		private readonly UnitOfWorkFactoryNewerUper _unitOfWorkFactoryNewerUper;
 		private readonly IDataSourceConfigurationSetter _dataSourceConfigurationSetter;
-		private readonly ICurrentHttpContext _httpContext;
 		private readonly INHibernateConfigurationCache _nhibernateConfigurationCache;
 
 		public const string AnalyticsDataSourceName = "AnalyticsDatasource";
 
 		public DataSourcesFactory(
-			IEnversConfiguration enversConfiguration, 
-			ICurrentTransactionHooks transactionHooks, 
-			IDataSourceConfigurationSetter dataSourceConfigurationSetter, 
-			ICurrentHttpContext httpContext, 
-			INHibernateConfigurationCache nhibernateConfigurationCache, 
-			ICurrentPreCommitHooks currentPreCommitHooks)
+			IEnversConfiguration enversConfiguration,
+			IDataSourceConfigurationSetter dataSourceConfigurationSetter,
+			INHibernateConfigurationCache nhibernateConfigurationCache,
+			UnitOfWorkFactoryNewerUper unitOfWorkFactoryNewerUper)
 		{
 			_enversConfiguration = enversConfiguration;
-			_transactionHooks = transactionHooks;
 			_dataSourceConfigurationSetter = dataSourceConfigurationSetter;
-			_httpContext = httpContext;
 			_nhibernateConfigurationCache = nhibernateConfigurationCache;
-			_currentPreCommitHooks = currentPreCommitHooks;
+			_unitOfWorkFactoryNewerUper = unitOfWorkFactoryNewerUper;
 		}
 
 		public IDataSource Create(IDictionary<string, string> applicationNhibConfiguration, string statisticConnectionString)
@@ -57,7 +111,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			return createDataSource(applicationNhibConfiguration, statisticConnectionString);
 		}
 
-		public IDataSource Create(string tenantName, string applicationConnectionString, string statisticConnectionString, IDictionary<string, string> applicationNhibConfiguration)
+		public IDataSource Create(string tenantName, string applicationConnectionString, string statisticConnectionString,
+			IDictionary<string, string> applicationNhibConfiguration)
 		{
 			if (applicationNhibConfiguration == null)
 				applicationNhibConfiguration = new Dictionary<string, string>();
@@ -66,7 +121,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			return createDataSource(applicationNhibConfiguration, statisticConnectionString);
 		}
 
-		private IDataSource createDataSource(IDictionary<string, string> applicationConfiguration, string statisticConnectionString)
+		private IDataSource createDataSource(IDictionary<string, string> applicationConfiguration,
+			string statisticConnectionString)
 		{
 			if (applicationConfiguration == null)
 				applicationConfiguration = new Dictionary<string, string>();
@@ -76,15 +132,10 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			NHibernateUnitOfWorkFactory appFactory;
 			try
 			{
-				var sessionFactory = buildSessionFactory(configuration);
-				appFactory = new NHibernateUnitOfWorkFactory(
-					sessionFactory,
-					_enversConfiguration.AuditSettingProvider,
+				appFactory = _unitOfWorkFactoryNewerUper.MakeAppFactory(
+					buildSessionFactory(configuration),
 					applicationConnectionString,
-					_transactionHooks,
-					_currentPreCommitHooks,
-					tenant
-				);
+					tenant);
 			}
 			catch (Exception)
 			{
@@ -96,21 +147,19 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			if (!string.IsNullOrEmpty(statisticConnectionString))
 			{
 				var statConfiguration = createStatisticConfiguration(statisticConnectionString, tenant);
-				statConfiguration.AddResources(new []
+				statConfiguration.AddResources(new[]
 				{
 					"Teleopti.Ccc.Domain.Analytics.AnalyticsPermission.analytics.xml",
 					"Teleopti.Ccc.Domain.Analytics.AnalyticsBridgeTimeZone.analytics.xml",
 					"Teleopti.Ccc.Domain.Analytics.AnalyticsDate.analytics.xml"
 				}, typeof(AnalyticsPermission).Assembly);
-				statFactory = new AnalyticsUnitOfWorkFactory(
+				statFactory = _unitOfWorkFactoryNewerUper.MakeAnalyticsFactory(
 					buildSessionFactory(statConfiguration),
-					statConfiguration.Properties[Environment.ConnectionString], 
-					tenant
-					);
+					statConfiguration.Properties[Environment.ConnectionString],
+					tenant);
 			}
 
-			var readModel = new ReadModelUnitOfWorkFactory(_httpContext, applicationConnectionString);
-			readModel.Configure();
+			var readModel = _unitOfWorkFactoryNewerUper.MakeReadModelFactory(applicationConnectionString);
 
 			return new DataSource(appFactory, statFactory, readModel);
 		}
@@ -120,7 +169,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			var cachedSessionFactory = _nhibernateConfigurationCache.GetSessionFactory(configuration);
 			if (cachedSessionFactory != null)
 				return cachedSessionFactory;
-			using (PerformanceOutput.ForOperation($"Building sessionfactory for {configuration.Properties[Environment.SessionFactoryName]}"))
+			using (PerformanceOutput.ForOperation(
+				$"Building sessionfactory for {configuration.Properties[Environment.SessionFactoryName]}"))
 			{
 				var sessionFactory = configuration.BuildSessionFactory();
 				sessionFactory.Statistics.IsStatisticsEnabled = true;
@@ -151,13 +201,15 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			// ^^ how much later are we talking?
 			// 2016-03-07
 			// Maybe for David's bday?
+			// 2018-01-26
+			// Putting down a one beer bet that this will be here on 2020-01-01 // LevelUp
 			var statCfg = new Configuration()
-				.SetProperty(Environment.ConnectionString, connectionString)
-				.SetProperty(Environment.ConnectionProvider, "NHibernate.Connection.DriverConnectionProvider")
-				.SetProperty(Environment.ConnectionDriver, "NHibernate.Driver.SqlClientDriver")
-				.SetProperty(Environment.Dialect, typeof(MsSql2008Dialect).AssemblyQualifiedName)
-				.SetProperty(Environment.SessionFactoryName, tenant + "_" + AnalyticsDataSourceName)
-				.SetProperty(Environment.SqlExceptionConverter, typeof(SqlServerExceptionConverter).AssemblyQualifiedName)
+					.SetProperty(Environment.ConnectionString, connectionString)
+					.SetProperty(Environment.ConnectionProvider, "NHibernate.Connection.DriverConnectionProvider")
+					.SetProperty(Environment.ConnectionDriver, "NHibernate.Driver.SqlClientDriver")
+					.SetProperty(Environment.Dialect, typeof(MsSql2008Dialect).AssemblyQualifiedName)
+					.SetProperty(Environment.SessionFactoryName, tenant + "_" + AnalyticsDataSourceName)
+					.SetProperty(Environment.SqlExceptionConverter, typeof(SqlServerExceptionConverter).AssemblyQualifiedName)
 				;
 			_dataSourceConfigurationSetter.AddApplicationNameToConnectionString(statCfg);
 			return statCfg;

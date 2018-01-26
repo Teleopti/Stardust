@@ -21,7 +21,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 		[Test]
 		public void ShouldUgradeToLatestVersion()
 		{
-			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
 
 			var builder = TestPollutionCleaner.TestTenantConnection();
 			builder.IntegratedSecurity = false;

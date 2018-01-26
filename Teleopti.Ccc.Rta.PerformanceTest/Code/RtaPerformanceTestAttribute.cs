@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using Autofac;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
@@ -17,7 +18,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 {
 	public class RtaPerformanceTestAttribute : IntegrationIoCTestAttribute
 	{
-		public ICurrentTransactionHooks TransactionHooks;
+		public IComponentContext Container;
 		public DefaultDataCreator DefaultDataCreator;
 		public DataCreator DataCreator;
 		public DefaultAnalyticsDataCreator DefaultAnalyticsDataCreator;
@@ -45,7 +46,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 			if (!haveDatabases)
 			{
 				StateHolderProxyHelper.SetupFakeState(
-					DataSourceHelper.CreateDataSource(TransactionHooks),
+					DataSourceHelper.CreateDataSource(Container),
 					DefaultPersonThatCreatesData.PersonThatCreatesDbData,
 					DefaultBusinessUnit.BusinessUnit
 				);

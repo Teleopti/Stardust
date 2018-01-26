@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Threading;
 using Autofac;
@@ -71,17 +72,17 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 				DataSourceHelper.TryRestoreApplicationDatabaseBySql(path, dataHash) &&
 				DataSourceHelper.TryRestoreAnalyticsDatabaseBySql(path, dataHash);
 			if (!haveDatabases)
-				createDatabase(path, dataHash, container.Resolve<ICurrentTransactionHooks>());
+				createDatabase(path, dataHash, container);
 
 			TestSiteConfigurationSetup.StartApplicationSync();
 		}
 
-		private void createDatabase(string path, int dataHash, ICurrentTransactionHooks currentTransactionHooks)
+		private void createDatabase(string path, int dataHash, IComponentContext componentContext)
 		{
 			DataSourceHelper.CreateDatabases();
 
 			StateHolderProxyHelper.SetupFakeState(
-				DataSourceHelper.CreateDataSource(currentTransactionHooks),
+				DataSourceHelper.CreateDataSource(componentContext),
 				DefaultPersonThatCreatesData.PersonThatCreatesDbData,
 				DefaultBusinessUnit.BusinessUnit
 				);

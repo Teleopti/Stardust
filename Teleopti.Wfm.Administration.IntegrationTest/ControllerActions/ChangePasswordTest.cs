@@ -17,7 +17,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 		[Test]
 		public void ShouldNotWorkWithUnknownId()
 		{
-			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
 			var changeModel = new ChangePasswordModel { Id = 65656565 };
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
@@ -31,7 +31,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 		public void ShouldNotWorkWithWrongPassword()
 		{
 			//new fresh
-			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
 			int id;
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
@@ -57,7 +57,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 		public void ShouldNotWorkWithWrongConfirmPassword()
 		{
 			//new fresh
-			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
 			int id;
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
@@ -83,7 +83,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 		public void ShouldWorkWithCorrectPasswords()
 		{
 			//new fresh
-			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
 			int id;
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{

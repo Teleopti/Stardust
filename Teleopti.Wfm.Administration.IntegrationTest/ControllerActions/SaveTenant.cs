@@ -25,7 +25,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 		public void ShouldReturnFalseIfNameAlreadyExists()
 		{
 			//new fresh
-			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var tenant = new Tenant("Old One");
@@ -39,7 +39,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 		public void ShouldReturnTrueIdIfFreeName()
 		{
 			//new fresh
-			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var tenant = new Tenant("Old One");
@@ -165,7 +165,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 
 		protected void SetupTenant()
 		{
-			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var tenant = new Tenant("Old One");

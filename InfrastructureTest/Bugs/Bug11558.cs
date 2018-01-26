@@ -13,8 +13,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Bugs
     {
         [Test]
         public void CanSetTimeoutValueOnConfig()
-        {
-			var dsFactory = new DataSourcesFactory(new EnversConfiguration(), new NoTransactionHooks(), DataSourceConfigurationSetter.ForTest(), new CurrentHttpContext(), new NoNHibernateConfigurationCache(), new NoPreCommitHooks());
+		{
+			var dsFactory = DataSourceHelper.MakeLegacyWay(null).Make();
 	        using (
 		        var dataSource =
 			        dsFactory.Create(SetupFixtureForAssembly.Sql2005conf(InfraTestConfigReader.ConnectionString, 1),

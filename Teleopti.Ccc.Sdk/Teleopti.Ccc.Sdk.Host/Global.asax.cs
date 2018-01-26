@@ -158,14 +158,6 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 
 		private static void registerDataSourcesFactory(ContainerBuilder builder)
 		{
-			builder.Register(c => new DataSourcesFactory(
-				new EnversConfiguration(),
-				c.Resolve<ICurrentTransactionHooks>(),
-				DataSourceConfigurationSetter.ForSdk(),
-				new CurrentHttpContext(),
-				new MemoryNHibernateConfigurationCache(),
-				c.Resolve<ICurrentPreCommitHooks>()
-				)).As<IDataSourcesFactory>().SingleInstance();
 			builder.RegisterType<SetNoLicenseActivator>().As<ISetLicenseActivator>().SingleInstance();
 		}
 

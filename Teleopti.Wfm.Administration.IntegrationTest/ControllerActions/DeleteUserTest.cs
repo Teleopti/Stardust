@@ -20,7 +20,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 		public void ShouldDelete()
 		{
 			//new fresh
-			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
 			int id;
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{

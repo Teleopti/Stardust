@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 				 name => appSettings.Add(name, ConfigurationManager.AppSettings[name]));
 
 			Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
-			DataSource = DataSourceHelper.CreateDatabasesAndDataSource(container.Resolve<ICurrentTransactionHooks>(), DataSourceHelper.TestTenantName);
+			DataSource = DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeFromContainer(container));
 
 			loggedOnPerson = PersonFactory.CreatePerson("logged on person");
 

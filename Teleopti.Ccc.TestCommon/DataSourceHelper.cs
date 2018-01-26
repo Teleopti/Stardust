@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using Autofac;
 using Newtonsoft.Json;
 using NHibernate.Dialect;
 using Teleopti.Ccc.DBManager.Library;
@@ -17,39 +18,82 @@ namespace Teleopti.Ccc.TestCommon
 	{
 		public const string TestTenantName = "TestData";
 
-		public static IDataSource CreateDatabasesAndDataSource(ICurrentTransactionHooks transactionHooks)
+		public static DataSourceFactoryFactory MakeFromContainer(IComponentContext container)
 		{
-			return CreateDatabasesAndDataSource(transactionHooks, TestTenantName);
+			return new DataSourceFactoryFactory(container.Resolve<IDataSourcesFactory>);
 		}
 
-		public static IDataSource CreateDatabasesAndDataSource(ICurrentTransactionHooks transactionHooks, string name)
+		public static DataSourceFactoryFactory MakeLegacyWay(
+			ICurrentTransactionHooks hooks = null,
+			IEnversConfiguration enversConfiguration = null,
+			IDataSourceConfigurationSetter configurationSetter = null,
+			INHibernateConfigurationCache nHibernateConfigurationCache = null)
+		{
+			return new DataSourceFactoryFactory(() =>
+			{
+				enversConfiguration = enversConfiguration ?? new EnversConfiguration();
+				configurationSetter = configurationSetter ?? DataSourceConfigurationSetter.ForTest();
+				nHibernateConfigurationCache = nHibernateConfigurationCache ?? new MemoryNHibernateConfigurationCache();
+				return new DataSourcesFactory(
+					enversConfiguration,
+					configurationSetter,
+					nHibernateConfigurationCache,
+					new UnitOfWorkFactoryNewerUper(
+						new NoPreCommitHooks(),
+						enversConfiguration,
+						hooks,
+						new CurrentHttpContext()
+					));
+			});
+		}
+
+		public class DataSourceFactoryFactory
+		{
+			private readonly Func<IDataSourcesFactory> _maker;
+
+			public DataSourceFactoryFactory(Func<IDataSourcesFactory> maker)
+			{
+				_maker = maker;
+			}
+
+			public IDataSourcesFactory Make()
+			{
+				return _maker.Invoke();
+			}
+		}
+
+		public static IDataSource CreateDatabasesAndDataSource(IComponentContext container, string name = TestTenantName)
+		{
+			return CreateDatabasesAndDataSource(MakeFromContainer(container), name);
+		}
+
+		public static IDataSource CreateDatabasesAndDataSource(DataSourceFactoryFactory factory, string name = TestTenantName)
 		{
 			CreateDatabases(name);
-			return makeDataSource(transactionHooks, name);
-		}
-		
-		public static void CreateDatabases()
-		{
-			CreateDatabases(TestTenantName);
+			return makeDataSource(factory, name);
 		}
 
-		public static void CreateDatabases(string name)
+		public static void CreateDatabases(string name = TestTenantName)
 		{
 			createOrRestoreApplication(name);
 			createOrRestoreAnalytics();
 			createOrRestoreAgg();
 		}
 
-		public static IDataSource CreateDataSource(ICurrentTransactionHooks transactionHooks)
+		public static IDataSource CreateDataSource(IComponentContext container) =>
+			CreateDataSource(MakeFromContainer(container));
+
+		public static IDataSource CreateDataSource(DataSourceFactoryFactory factory)
 		{
-			return makeDataSource(transactionHooks, TestTenantName);
+			return makeDataSource(factory, TestTenantName);
 		}
 
-		public static IDataSource CreateDataSource(ICurrentTransactionHooks transactionHooks, string name)
+		private static IDataSource makeDataSource(DataSourceFactoryFactory factory, string name)
 		{
-			return makeDataSource(transactionHooks, name);
+			var dataSourceFactory = factory.Make();
+			var dataSourceSettings = CreateDataSourceSettings(InfraTestConfigReader.ConnectionString, null, name);
+			return dataSourceFactory.Create(dataSourceSettings, InfraTestConfigReader.AnalyticsConnectionString);
 		}
-
 
 
 		public static void BackupApplicationDatabase(int dataHash)
@@ -73,7 +117,6 @@ namespace Teleopti.Ccc.TestCommon
 			var database = application();
 			return database.BackupBySql().TryRestore(path, database.BackupNameForRestore(dataHash));
 		}
-
 
 
 		public static void BackupAnalyticsDatabase(int dataHash)
@@ -104,14 +147,13 @@ namespace Teleopti.Ccc.TestCommon
 		}
 
 
-
 		private static DatabaseHelper application()
 		{
 			return new DatabaseHelper(
 				InfraTestConfigReader.ConnectionString,
 				DatabaseType.TeleoptiCCC7,
 				new DbManagerLog4Net("DbManager.Application")
-				);
+			);
 		}
 
 		private static DatabaseHelper agg()
@@ -120,7 +162,7 @@ namespace Teleopti.Ccc.TestCommon
 				InfraTestConfigReader.AggConnectionString,
 				DatabaseType.TeleoptiCCCAgg,
 				new DbManagerLog4Net("DbManager.Agg")
-				);
+			);
 		}
 
 		private static DatabaseHelper analytics()
@@ -129,7 +171,7 @@ namespace Teleopti.Ccc.TestCommon
 				InfraTestConfigReader.AnalyticsConnectionString,
 				DatabaseType.TeleoptiAnalytics,
 				new DbManagerLog4Net("DbManager.Analytics")
-				);
+			);
 		}
 
 		private static void createOrRestoreApplication(string name)
@@ -142,7 +184,7 @@ namespace Teleopti.Ccc.TestCommon
 			}
 
 			createDatabase(database);
-			
+
 			//would be better if dbmanager was called, but don't have the time right now....
 			// eh, that thing that is called IS the db manager!
 			application().ConfigureSystem().MergePersonAssignments();
@@ -204,21 +246,10 @@ namespace Teleopti.Ccc.TestCommon
 			if (!result)
 				throw new Exception("Restore failed!");
 		}
-		
-
-		
 
 
-
-
-		private static IDataSource makeDataSource(ICurrentTransactionHooks transactionHooks, string name)
-		{
-			var dataSourceFactory = new DataSourcesFactory(new EnversConfiguration(), transactionHooks, DataSourceConfigurationSetter.ForTest(), new CurrentHttpContext(), new MemoryNHibernateConfigurationCache(), new NoPreCommitHooks());
-			var dataSourceSettings = CreateDataSourceSettings(InfraTestConfigReader.ConnectionString, null, name);
-			return dataSourceFactory.Create(dataSourceSettings, InfraTestConfigReader.AnalyticsConnectionString);
-		}
-
-		public static IDictionary<string, string> CreateDataSourceSettings(string connectionString, int? timeout, string sessionFactoryName)
+		public static IDictionary<string, string> CreateDataSourceSettings(string connectionString, int? timeout,
+			string sessionFactoryName)
 		{
 			var dictionary = new Dictionary<string, string>();
 			if (sessionFactoryName != null)

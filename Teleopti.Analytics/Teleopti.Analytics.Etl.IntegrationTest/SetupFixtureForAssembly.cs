@@ -22,7 +22,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		public void Setup()
 		{
 			Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
-			DataSource = DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks());
+			DataSource = DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
 			ServiceLocatorForLegacy.NestedUnitOfWorkStrategy = new SirLeakAlot();
 
 			var personThatCreatesTestData = PersonFactory.CreatePerson("UserThatCreatesTestData", "password");

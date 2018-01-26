@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Web.IntegrationTest
 				 name => appSettings.Add(name, ConfigurationManager.AppSettings[name]));
 
 			Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
-			DataSource = DataSourceHelper.CreateDatabasesAndDataSource(container.Resolve<ICurrentTransactionHooks>(), DataSourceHelper.TestTenantName);
+			DataSource = DataSourceHelper.CreateDatabasesAndDataSource(container);
 
 			container.Resolve<HangfireClientStarter>().Start();
 

@@ -75,7 +75,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 		[Test]
 		public void ShouldImportExistingDatabases()
 		{
-			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
 			TestPollutionCleaner.Clean("tenant", "appuser");
 			var builder = TestPollutionCleaner.TestTenantConnection();
 			builder.IntegratedSecurity = false;
@@ -125,7 +125,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 		[Test]
 		public void ShouldReturnFalseIfImportingSameDatabaseAgain()
 		{
-			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
 			var builder = TestPollutionCleaner.TestTenantConnection();
 			builder.IntegratedSecurity = false;
 			builder.UserID = "dbcreatorperson";

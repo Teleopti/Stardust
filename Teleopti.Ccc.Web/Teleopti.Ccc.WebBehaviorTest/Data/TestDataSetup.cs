@@ -2,6 +2,7 @@
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
@@ -21,7 +22,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 			LocalSystem.Setup();
 
-			datasource = DataSourceHelper.CreateDataSource(LocalSystem.TransactionHooks);
+			datasource = DataSourceHelper.CreateDataSource(IntegrationIoCTest.Container);
 
 			StateHolderProxyHelper.SetupFakeState(
 				datasource,

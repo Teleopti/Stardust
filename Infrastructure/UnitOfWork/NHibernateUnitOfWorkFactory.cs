@@ -29,14 +29,13 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		}
 	}
 
-
 	public class NHibernateUnitOfWorkFactory : IUnitOfWorkFactory
 	{
 		private readonly ISessionFactory _factory;
 		private readonly ApplicationUnitOfWorkContext _context;
 		private readonly IAuditSetter _auditSettingProvider;
 		private readonly ICurrentTransactionHooks _transactionHooks;
-		private readonly ICurrentPreCommitHooks _currentPreCommitHooks;
+		private readonly UnitOfWorkFactoryNewerUper _unitOfWorkFactoryNewerUper;
 
 		// can not inject here because the lifetime of the factory
 		// is longer than the container when running unit tests
@@ -45,15 +44,15 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			IAuditSetter auditSettingProvider,
 			string connectionString,
 			ICurrentTransactionHooks transactionHooks,
-			ICurrentPreCommitHooks currentPreCommitHooks,
-			string tenant)
+			string tenant,
+			UnitOfWorkFactoryNewerUper unitOfWorkFactoryNewerUper)
 		{
 			ConnectionString = connectionString;
 			_factory = sessionFactory;
 			_context = new ApplicationUnitOfWorkContext(tenant);
 			_auditSettingProvider = auditSettingProvider;
 			_transactionHooks = transactionHooks;
-			_currentPreCommitHooks = currentPreCommitHooks;
+			_unitOfWorkFactoryNewerUper = unitOfWorkFactoryNewerUper;
 		}
 
 		public string Name => ((ISessionFactoryImplementor) _factory).Settings.SessionFactoryName;
@@ -103,7 +102,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			ServiceLocatorForLegacy.NestedUnitOfWorkStrategy.Strategize(_context);
 
-			var interceptor = new NHibernateUnitOfWorkInterceptor(ServiceLocatorForLegacy.UpdatedBy, _currentPreCommitHooks);
+			var interceptor = _unitOfWorkFactoryNewerUper.MakeInterceptor();
 			var session = _factory
 				.WithOptions()
 				.Interceptor(interceptor)
