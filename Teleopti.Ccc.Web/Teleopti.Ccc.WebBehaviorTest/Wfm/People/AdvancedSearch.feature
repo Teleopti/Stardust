@@ -27,6 +27,7 @@ Feature: AdvancedSearch
 	 | Team       | Team Red      |
 	 | Start Date | 2015-01-21 |
 
+@ignore
 Scenario: match all search terms by default
 	When I view people
 	And I search people with keyword 'Red Ashley'
@@ -41,6 +42,7 @@ Scenario: match any search term
 	Then I should see 'Andeen' in people list
 	And I should see 'Smith' in people list
 
+@ignore
 Scenario: match any search terms in a field
 	When I view people
 	And I search with
@@ -49,6 +51,7 @@ Scenario: match any search terms in a field
 	Then I should see 'Andeen' in people list
 	And I should see 'Smith' in people list
 
+@ignore
 Scenario: match all search terms in different fields
 	When I view people
 	And I search with
@@ -64,7 +67,7 @@ Scenario: match entire quoted search term
 	Then I should see 'Smith' in people list
 	And I should not see 'Andeen' in people list
 
-
+@ignore
 Scenario: match entire quoted search term in different fields
 	When I view people
 	And I search with

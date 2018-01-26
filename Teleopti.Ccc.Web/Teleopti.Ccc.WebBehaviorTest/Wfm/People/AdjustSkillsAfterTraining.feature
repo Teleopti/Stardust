@@ -47,7 +47,7 @@ Given there is a site named 'London'
 	| Field      | Value      |
 	| Start date | 2012-06-18 |
 
-
+@ignore
 Scenario: can select people
 	When I view people
 	And I select John in people list

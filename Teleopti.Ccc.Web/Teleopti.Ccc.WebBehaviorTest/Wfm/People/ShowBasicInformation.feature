@@ -27,11 +27,13 @@ Background:
 	 | Team       | Team2      |
 	 | Start Date | 2015-01-21 |
 
+@ignore
 Scenario: Show my team members by default
 	When I view people
 	Then I should see 'John' in people list
 	And I should not see 'Ashley' in people list
 
+@ignore
 Scenario: Should search people by keyword
 	When I view people
 	Then I should see 'John' in people list
