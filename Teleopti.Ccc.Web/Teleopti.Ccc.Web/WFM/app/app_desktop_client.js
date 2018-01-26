@@ -25,6 +25,7 @@ var wfm = angular.module('wfm', [
 	'wfm.exceptionHandler',
 	'wfm.permissions',
 	'wfm.peopleold',
+	'wfm.people',
 	'wfm.outbound',
 	'wfm.forecasting',
 	'wfm.resourceplanner',

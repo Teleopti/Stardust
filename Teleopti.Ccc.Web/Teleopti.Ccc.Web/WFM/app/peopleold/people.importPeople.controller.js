@@ -13,7 +13,7 @@
 			scope: {
 				importOptions: '=?'
 			},
-			templateUrl: 'app/people/html/importPeople.html'
+			templateUrl: 'app/peopleold/html/importPeople.html'
 		};
 	};
 

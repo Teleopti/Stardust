@@ -1482,6 +1482,10 @@
     <Content Include="WFM\app\global\tree-picker\tree.component.typeTwo.spec.js" />
     <Content Include="WFM\app\global\tree-picker\tree_data.tpl.html" />
     <Content Include="WFM\app\global\tree-picker\_modules.js" />
+    <Content Include="WFM\app\people\html\people.html" />
+    <Content Include="WFM\app\people\people.routes.js" />
+    <Content Include="WFM\app\people\people.start.controller.js" />
+    <Content Include="WFM\app\people\_modules.js" />
     <Content Include="WFM\app\reports\audit.controller.spec.js" />
     <Content Include="WFM\app\forecasting\refact\forecast-chart.component.js" />
     <Content Include="WFM\app\forecasting\refact\forecast-chart.html" />
