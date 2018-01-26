@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
@@ -28,7 +29,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 
 			system.UseTestDouble<FakePreferenceProvider>().For<IPreferenceProvider>();
 			system.UseTestDouble<FakeScheduleProvider>().For<IScheduleProvider>();
-			system.UseTestDouble<FakePersonRuleSetBagProvider>().For<IPersonRuleSetBagProvider>();
 
 			var person = PersonFactory.CreatePersonWithGuid("a", "a");
 			system.AddService(person);
@@ -57,6 +57,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		public FakePersonContractProvider PersonContractProvider;
 		public Person Person;
 		public PreferenceDayFeedbackViewModelMapper Mapper;
+		public FakeRuleSetBagRepository RuleSetBagRepository;
 
 		private IScheduleDay buildPersonSchedule(DateOnly date, TimeSpan startTime, TimeSpan endTime)
 		{
