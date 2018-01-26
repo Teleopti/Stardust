@@ -32,27 +32,36 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			var yesterdayAndTodaysPossibleShiftEndTimes = getPossibleShiftEndTimes(date);
 			var requestDate = TimeZoneHelper.ConvertToUtc(date.Date, currentUserTimeZone);
 
-			var shiftStartTime = _shiftStartTimeProvider.GetShiftStartTimeForPerson(currentUser, date);
-			var validEndTimeList = yesterdayAndTodaysPossibleShiftEndTimes
-				.Where(e => _now.UtcDateTime().CompareTo(e) < 0 && e.CompareTo(requestDate) >= 0).ToList();
-
+			var todayShiftStartTime = _shiftStartTimeProvider.GetShiftStartTimeForPerson(currentUser, date);
 			var utcNowPlusGap = _now.UtcDateTime().AddMinutes(OvertimeMinimumApprovalThresholdInMinutes.MinimumApprovalThresholdTimeInMinutes +
 														   _overtimeRequestStartTimeFlexibilityInMinutes);
 
-			if (shiftStartTime.HasValue && utcNowPlusGap.CompareTo(shiftStartTime) <= 0 &&
-				yesterdayAndTodaysPossibleShiftEndTimes.Last().Date == date.AddDays(1).Date)
-			{
-				return buildDefaultStartTimeResult(TimeZoneHelper.ConvertFromUtc(shiftStartTime.GetValueOrDefault(), currentUserTimeZone), true, false);
-			}
+			OvertimeDefaultStartTimeResult shiftEndTimeResult = null;
+			var validEndTimeList = yesterdayAndTodaysPossibleShiftEndTimes
+				.Where(e => _now.UtcDateTime().CompareTo(e) < 0 && e.CompareTo(requestDate) >= 0).ToList();
 
 			if (validEndTimeList.Any(e => utcNowPlusGap.CompareTo(e) <= 0))
 			{
 				if (utcNowPlusGap.CompareTo(validEndTimeList.Min()) <= 0)
 				{
-					return buildDefaultStartTimeResult(TimeZoneHelper.ConvertFromUtc(validEndTimeList.Min(), currentUserTimeZone), false, true);
+					shiftEndTimeResult = buildDefaultStartTimeResult(TimeZoneHelper.ConvertFromUtc(validEndTimeList.Min(), currentUserTimeZone), false, true);
 				}
-				return buildDefaultStartTimeResult(getLocalRoundUpHour(utcNowPlusGap), false, false);
 			}
+
+			OvertimeDefaultStartTimeResult shiftStartTimeResult = null;
+			if (todayShiftStartTime.HasValue && utcNowPlusGap.CompareTo(todayShiftStartTime) <= 0 &&
+				yesterdayAndTodaysPossibleShiftEndTimes.Last().Date == date.AddDays(1).Date)
+			{
+				shiftStartTimeResult = buildDefaultStartTimeResult(TimeZoneHelper.ConvertFromUtc(todayShiftStartTime.GetValueOrDefault(), currentUserTimeZone), true, false);
+			}
+
+			if (shiftEndTimeResult != null && (shiftStartTimeResult == null ||
+											 shiftEndTimeResult.DefaultStartTime.CompareTo(shiftStartTimeResult.DefaultStartTime) < 0))
+				return shiftEndTimeResult;
+
+			if (shiftStartTimeResult != null && (shiftEndTimeResult == null ||
+												 shiftStartTimeResult.DefaultStartTime.CompareTo(shiftEndTimeResult.DefaultStartTime) < 0))
+				return shiftStartTimeResult;
 
 			return buildDefaultStartTimeResult(getLocalRoundUpHour(_now.UtcDateTime()), false, false);
 		}

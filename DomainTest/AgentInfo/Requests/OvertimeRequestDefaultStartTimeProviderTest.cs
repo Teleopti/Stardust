@@ -135,14 +135,37 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		[Test]
 		public void ShouldGetYesterdayOvernightShiftEndTimeAsDefaultStartTimeWhenCurrentTimeIsEarlierThanThatTime()
 		{
-			Now.Is(new DateTime(2018, 1, 8, 2, 09, 00, DateTimeKind.Utc));
+			Now.Is(new DateTime(2018, 1, 8, 02, 09, 00, DateTimeKind.Utc));
 			var date = new DateOnly(2018, 1, 8);
 			var agent = PersonFactory.CreatePersonWithGuid("agent", "one");
 			FakeLoggedOnUser.SetFakeLoggedOnUser(agent);
 			var phone = ActivityFactory.CreateActivity("phone activity");
 			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(agent, CurrentScenario.Current(), date.AddDays(-1));
-			personAssignment.AddActivity(phone, new DateTimePeriod(2018, 1, 7, 08, 2018, 1, 8, 3));
+			personAssignment.AddActivity(phone, new DateTimePeriod(2018, 1, 7, 18, 2018, 1, 8, 03));
 			FakeAssignmentRepository.Has(personAssignment);
+
+			var result = OvertimeRequestDefaultStartTimeProvider.GetDefaultStartTime(date);
+
+			result.DefaultStartTime.Date.Should().Be(date.Date);
+			result.DefaultStartTime.Hour.Should().Be(3);
+			result.DefaultStartTime.Minute.Should().Be(0);
+		}
+
+		[Test]
+		public void ShouldGetYesterdayOvernightShiftEndTimeWhenCurrentTimeIsEarlierThanThatTimeThoughThereIsOvernightShfitEndsAtTomorrow()
+		{
+			Now.Is(new DateTime(2018, 1, 8, 02, 09, 00, DateTimeKind.Utc));
+			var date = new DateOnly(2018, 1, 8);
+			var agent = PersonFactory.CreatePersonWithGuid("agent", "one");
+			FakeLoggedOnUser.SetFakeLoggedOnUser(agent);
+			var phone = ActivityFactory.CreateActivity("phone activity");
+			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(agent, CurrentScenario.Current(), date.AddDays(-1));
+			personAssignment.AddActivity(phone, new DateTimePeriod(2018, 1, 7, 18, 2018, 1, 8, 03));
+
+			var personAssignment2 = PersonAssignmentFactory.CreatePersonAssignment(agent, CurrentScenario.Current(), date);
+			personAssignment2.AddActivity(phone, new DateTimePeriod(2018, 1, 8, 18, 2018, 1, 9, 03));
+			FakeAssignmentRepository.Has(personAssignment);
+			FakeAssignmentRepository.Has(personAssignment2);
 
 			var result = OvertimeRequestDefaultStartTimeProvider.GetDefaultStartTime(date);
 
