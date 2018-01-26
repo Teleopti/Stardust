@@ -7,12 +7,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
     public class NightRestWhiteSpotSolverService : INightRestWhiteSpotSolverService
     {
-        private readonly INightRestWhiteSpotSolver _solver;
+        private readonly NightRestWhiteSpotSolver _solver;
     	private readonly IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
         private readonly IScheduleService _scheduleService;
     	private readonly IResourceCalculateDelayer _resourceCalculateDelayer;
 
-    	public NightRestWhiteSpotSolverService(INightRestWhiteSpotSolver solver, IDeleteAndResourceCalculateService deleteAndResourceCalculateService, 
+    	public NightRestWhiteSpotSolverService(NightRestWhiteSpotSolver solver, IDeleteAndResourceCalculateService deleteAndResourceCalculateService, 
 			IScheduleService scheduleService, IResourceCalculateDelayer resourceCalculateDelayer)
         {
             _solver = solver;

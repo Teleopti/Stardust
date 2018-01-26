@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
     [TestFixture]
     public class NightRestWhiteSpotSolverTest
     {
-		private INightRestWhiteSpotSolver _target;
+		private NightRestWhiteSpotSolver _target;
         private MockRepository _mocks;
         private IScheduleMatrixPro _matrix;
         private IScheduleDayPro _scheduleDayPro1;

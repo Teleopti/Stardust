@@ -6,12 +6,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-    public interface INightRestWhiteSpotSolver
-    {
-        NightRestWhiteSpotSolverResult Resolve(IScheduleMatrixPro matrix, SchedulingOptions schedulingOptions);
-    }
-
-    public class NightRestWhiteSpotSolver : INightRestWhiteSpotSolver
+    public class NightRestWhiteSpotSolver
     {
 		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 
