@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IDayOffOptimizationCommandHandler _dayOffOptimizationCommandHandler;
 		private readonly FillSchedulerStateHolder _fillSchedulerStateHolder;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_DayOffOptimizationIslands_47208)]
 		private readonly IScheduleDictionaryPersister _persister;
 		private readonly IPlanningPeriodRepository _planningPeriodRepository;
 		private readonly IOptimizationPreferencesProvider _optimizationPreferencesProvider;
@@ -57,7 +58,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 				}, 
 				null);
 			optiData.PlanningPeriod.Scheduled();
-			_persister.Persist(_schedulerStateHolder().Schedules);
 			return _optimizationResult.Create(optiData.Period, optiData.Agents, 
 				optiData.PlanningPeriod.PlanningGroup, _optimizationPreferencesProvider.Fetch().General.UsePreferences);
 		}
