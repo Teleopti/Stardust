@@ -29,7 +29,7 @@ namespace ManagerTest
 		{
 			InsertJobRecords(1, 2); //add a two hours old job
 			JobPurgeTimer jobPurgeTimer = new JobPurgeTimer(new RetryPolicyProvider(), new ManagerConfiguration(_managerConnectionString, "Route", 10, 10, 1, 1, 1, 1));
-
+			jobPurgeTimer.Purge();
 			NumberOfJobsInDatabase().Should().Be.EqualTo(1);
 			jobPurgeTimer.Dispose();
 		}
@@ -39,7 +39,7 @@ namespace ManagerTest
 		{
 			InsertJobRecords(1, 2); //add a two hours old job
 			JobPurgeTimer jobPurgeTimer = new JobPurgeTimer(new RetryPolicyProvider(), new ManagerConfiguration(_managerConnectionString, "Route", 10, 10, 1, 1, 1, 1));
-
+			jobPurgeTimer.Purge();
 			NumberOfDetailsInDatabase().Should().Be.EqualTo(1);
 			jobPurgeTimer.Dispose();
 		}
@@ -49,7 +49,7 @@ namespace ManagerTest
 		{
 			InsertJobRecords(2, 2); //add a two hours old job
 			JobPurgeTimer jobPurgeTimer = new JobPurgeTimer(new RetryPolicyProvider(), new ManagerConfiguration(_managerConnectionString, "Route", 10, 10, 1, 1, 1, 1));
-
+			jobPurgeTimer.Purge();
 			NumberOfJobsInDatabase().Should().Be.EqualTo(2);
 			NumberOfDetailsInDatabase().Should().Be.EqualTo(2);
 			jobPurgeTimer.Dispose();
