@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -105,23 +104,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				GamificationSettingRuleSet = GamificationSettingRuleSet.RuleWithRatioConvertor
 			};
 
-			var team = TeamFactory.CreateSimpleTeam("team").WithId();
-
-			var teamGamificationSetting = new TeamGamificationSetting
-			{
-				Team = team,
-				GamificationSetting = newSetting
-			};
-
+			var teamGamificationSetting = createTeamGamificationSetting(newSetting);
 			var calculationDate = TimeZoneInfo.ConvertTime(now.ServerDateTime_DontUse().AddDays(-1), TimeZoneInfo.Local, timezone);
-			var calculationDateOnly = new DateOnly(calculationDate);
-
-			var persons = new List<IPerson> {new Person()};
-			var period = new DateOnlyPeriod(calculationDateOnly.AddDays(-1), calculationDateOnly.AddDays(1));
-			personRepository.Stub(x =>x.FindPeopleBelongTeam(team, period)).Return(persons);
-
-			teamSettingsRepository.Stub(x => x.FindAllTeamGamificationSettingsSortedByTeam()).Return(new[] {teamGamificationSetting});
-
+			prepareStub(calculationDate, teamGamificationSetting);
 			var message = new CalculateBadgeMessage
 			{
 				TimeZoneCode = timezone.Id,
@@ -172,26 +157,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				AnsweredCallsBadgeEnabled = true,
 				GamificationSettingRuleSet = GamificationSettingRuleSet.RuleWithDifferentThreshold
 			};
-
-			var team = TeamFactory.CreateSimpleTeam("team");
-			team.SetId(Guid.NewGuid());
-
-			var teamGamificationSetting = new TeamGamificationSetting
-			{
-				Team = team,
-				GamificationSetting = newSetting
-			};
-
+			var teamGamificationSetting = createTeamGamificationSetting(newSetting);
 			var calculationDate = TimeZoneInfo.ConvertTime(now.ServerDateTime_DontUse().AddDays(-1), TimeZoneInfo.Local, timezone);
-			var calculationDateOnly = new DateOnly(calculationDate);
-
-			var persons = new List<IPerson> { new Person() };
-			var period = new DateOnlyPeriod(calculationDateOnly.AddDays(-1), calculationDateOnly.AddDays(1));
-			personRepository.Stub(x => x.FindPeopleBelongTeam(team, period)).Return(persons);
-
-			teamSettingsRepository.Stub(x => x.FindAllTeamGamificationSettingsSortedByTeam())
-				.Return(new[] { teamGamificationSetting });
-
+			prepareStub(calculationDate, teamGamificationSetting);
 			var message = new CalculateBadgeMessage
 			{
 				TimeZoneCode = timezone.Id,
@@ -229,11 +197,48 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		}
 
 		[Test]
+		public void ShouldCalculateExternalBadge()
+		{
+			var timezone = TimeZoneInfo.Utc;
+			var today = new DateTime(2014, 8, 8);
+			now.Stub(x => x.UtcDateTime()).Return(today);
+			var badgeSetting = new BadgeSetting()
+			{
+				BronzeThreshold = 80,
+				SilverThreshold = 85,
+				GoldThreshold = 90,
+				QualityId = 1,
+				Enabled = true
+			};
+			var newSetting = new GamificationSetting(settingNameForTest)
+			{
+				AdherenceBadgeEnabled = false,
+				AHTBadgeEnabled = false,
+				AnsweredCallsBadgeEnabled = false
+			};
+			newSetting.AddBadgeSetting(badgeSetting);
+			var teamGamificationSetting = createTeamGamificationSetting(newSetting);
+			var calculationDate = TimeZoneInfo.ConvertTime(now.ServerDateTime_DontUse().AddDays(-1), TimeZoneInfo.Local, timezone);
+			var persons = prepareStub(calculationDate, teamGamificationSetting);
+			var message = new CalculateBadgeMessage
+			{
+				TimeZoneCode = timezone.Id,
+				CalculationDate = calculationDate
+			};
+
+			target.Calculate(message);
+
+			badgeWithRankCalculator.AssertWasCalled(
+				x => x.CalculateBadges(Arg<IList<IPerson>>.Is.Equal(persons),
+					Arg<DateOnly>.Is.Anything,
+					Arg<IBadgeSetting>.Is.Equal(badgeSetting)));
+		}
+
+		[Test]
 		public void ShouldSendCalculateBadgeMessageAtRightTime()
 		{
 			var timezone = TimeZoneInfo.Utc;
 			var today = new DateTime(2014, 8, 8);
-
 			now.Stub(x => x.UtcDateTime()).Return(today);
 
 			var newSetting = new GamificationSetting(settingNameForTest)
@@ -242,20 +247,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				AHTBadgeEnabled = false,
 				AnsweredCallsBadgeEnabled = true
 			};
-
-			var team = TeamFactory.CreateSimpleTeam("team");
-			team.SetId(Guid.NewGuid());
-
+			
+			var teamGamificationSetting = createTeamGamificationSetting(newSetting);
 			var calculationDate = TimeZoneInfo.ConvertTime(now.ServerDateTime_DontUse().AddDays(-1), TimeZoneInfo.Local, timezone);
-			var calculationDateOnly = new DateOnly(calculationDate);
-
-			var persons = new List<IPerson> {new Person()};
-			var period = new DateOnlyPeriod(calculationDateOnly.AddDays(-1), calculationDateOnly.AddDays(1));
-			personRepository.Stub(x =>x.FindPeopleBelongTeam(team, period)).Return(persons);
-
-			teamSettingsRepository.Stub(x => x.FindAllTeamGamificationSettingsSortedByTeam())
-				.Return(new[] {new TeamGamificationSetting {Team = team, GamificationSetting = newSetting}});
-
+			var persons =  prepareStub(calculationDate, teamGamificationSetting);
 			var message = new CalculateBadgeMessage
 			{
 				TimeZoneCode = timezone.Id,
@@ -296,25 +291,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			};
 			deletedSetting.SetDeleted();
 
-			var team = TeamFactory.CreateSimpleTeam("team");
-			team.SetId(Guid.NewGuid());
-
-			var teamGamificationSetting = new TeamGamificationSetting
-			{
-				Team = team,
-				GamificationSetting = deletedSetting
-			};
+			var teamGamificationSetting = createTeamGamificationSetting(deletedSetting);
 
 			var calculationDate = TimeZoneInfo.ConvertTime(now.ServerDateTime_DontUse().AddDays(-1), TimeZoneInfo.Local, timezone);
-			var calculationDateOnly = new DateOnly(calculationDate);
-
-			var persons = new List<IPerson> {new Person()};
-			var period = new DateOnlyPeriod(calculationDateOnly.AddDays(-1), calculationDateOnly.AddDays(1));
-			personRepository.Stub(x => x.FindPeopleBelongTeam(team, period)).Return(persons);
-
-			teamSettingsRepository.Stub(x => x.FindAllTeamGamificationSettingsSortedByTeam())
-				.Return(new[] {teamGamificationSetting});
-
+			prepareStub(calculationDate, teamGamificationSetting);
 			var message = new CalculateBadgeMessage
 			{
 				TimeZoneCode = timezone.Id,
@@ -365,19 +345,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				GamificationSettingRuleSet = GamificationSettingRuleSet.RuleWithRatioConvertor
 			};
 
-			var team = TeamFactory.CreateSimpleTeam("team");
-			team.SetId(Guid.NewGuid());
-
-			var teamGamificationSetting = new TeamGamificationSetting
-			{
-				Team = team,
-				GamificationSetting = newSetting
-			};
-
-			teamSettingsRepository.Stub(x => x.FindAllTeamGamificationSettingsSortedByTeam())
-				.Return(new[] { teamGamificationSetting });
-
+			var teamGamificationSetting = createTeamGamificationSetting(newSetting);
 			var calculationDate = TimeZoneInfo.ConvertTime(now.ServerDateTime_DontUse().AddDays(-1), TimeZoneInfo.Local, timezone);
+			prepareStub(calculationDate, teamGamificationSetting);
 			var message = new CalculateBadgeMessage
 			{
 				TimeZoneCode = timezone.Id,
@@ -388,6 +358,32 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 
 			badgeCalculatorShouldNotBeCalledAtAll();
 			badgeWithRankCalculatorShouldNotBeCalledAtAll();
+		}
+
+		private IList<IPerson> prepareStub(DateTime calculationDate, ITeamGamificationSetting teamGamificationSetting)
+		{
+			var calculationDateOnly = new DateOnly(calculationDate);
+
+			var persons = new List<IPerson> { new Person() };
+			var period = new DateOnlyPeriod(calculationDateOnly.AddDays(-1), calculationDateOnly.AddDays(1));
+			personRepository.Stub(x => x.FindPeopleBelongTeam(teamGamificationSetting.Team, period)).Return(persons);
+
+			teamSettingsRepository.Stub(x => x.FindAllTeamGamificationSettingsSortedByTeam())
+				.Return(new[] { teamGamificationSetting });
+
+			return persons;
+		}
+
+		private TeamGamificationSetting createTeamGamificationSetting(IGamificationSetting gamificationSetting)
+		{
+			var team = TeamFactory.CreateSimpleTeam("team");
+			team.SetId(Guid.NewGuid());
+
+			return new TeamGamificationSetting
+			{
+				Team = team,
+				GamificationSetting = gamificationSetting
+			};
 		}
 
 		private void badgeCalculatorShouldNotBeCalledAtAll()

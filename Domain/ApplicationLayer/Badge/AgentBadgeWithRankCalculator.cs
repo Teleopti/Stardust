@@ -172,18 +172,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 		{
 			var newBadges = new List<IAgentBadgeWithRankTransaction>();
 			var personList = new HashSet<IPerson>(allPersons);
-			var agentsWithPercentBadgeValue = new Dictionary<Guid, double>();
 
 			var personIdList = allPersons.Select(x => x.Id.Value).ToList();
-			var data = _externalPerformanceDataRepository.Find(
+			var performanceDatas = _externalPerformanceDataRepository.Find(
 				new DateTime(date.Year, date.Month, date.Day, 0, 0, 0, DateTimeKind.Utc), personIdList, badgeSetting.QualityId);
-			foreach (var performanceData in data)
-			{
-				agentsWithPercentBadgeValue[performanceData.PersonId] = performanceData.Score;
-			}
 
-			var newAwardedBadges = AddBadge(personList, agentsWithPercentBadgeValue, badgeSetting.QualityId,
-				badgeSetting.BronzeThreshold, badgeSetting.SilverThreshold, badgeSetting.GoldThreshold, true, date, true);
+			var agentsWithBadgeValue = performanceDatas.ToDictionary(k => k.PersonId, v => v.Score);
+			var newAwardedBadges = AddBadge(personList, agentsWithBadgeValue, badgeSetting.QualityId,
+				badgeSetting.BronzeThreshold, badgeSetting.SilverThreshold, badgeSetting.GoldThreshold, badgeSetting.LargerIsBetter, date, true);
 			newBadges.AddRange(newAwardedBadges);
 
 			return newBadges;

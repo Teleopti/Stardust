@@ -33,8 +33,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 			IAgentBadgeRepository badgeRepository,
 			IAgentBadgeWithRankRepository badgeWithRankRepository,
 			IGlobalSettingDataRepository globalSettingRep,
-			IPersonRepository personRepository
-			)
+			IPersonRepository personRepository)
 		{
 			_teamSettingsRepository = teamSettingsRepository;
 			_msgPersister = msgRepository;
@@ -54,8 +53,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 
 			foreach (var setting in settings)
 			{
-				if (setting.IsDeleted ||
-					!setting.AHTBadgeEnabled && !setting.AdherenceBadgeEnabled && !setting.AnsweredCallsBadgeEnabled)
+				if (setting.IsDeleted)
 				{
 					continue;
 				}
@@ -73,6 +71,25 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 				calculateAdherenceBadge(message, setting, isRuleWithDifferentThreshold, agentsWithSetting, calculateDate);
 				calculateAhtBadge(message, setting, isRuleWithDifferentThreshold, agentsWithSetting, calculateDate);
 				calculateAnsweredCallsBadge(message, setting, isRuleWithDifferentThreshold, agentsWithSetting, calculateDate);
+
+				calculateBadges(setting, isRuleWithDifferentThreshold, agentsWithSetting, calculateDate);
+			}
+		}
+		
+		private void calculateBadges(IGamificationSetting setting,
+			bool isRuleWithDifferentThreshold, IList<IPerson> agentsWithSetting, DateOnly calculateDate)
+		{
+			foreach (var badgeSetting in setting.BadgeSettings)
+			{
+				if (!badgeSetting.Enabled) continue;
+				if (isRuleWithDifferentThreshold)
+				{
+					_badgeWithRankCalculator.CalculateBadges(agentsWithSetting, calculateDate, badgeSetting);
+				}
+				else
+				{
+					_calculator.CalculateBadges(agentsWithSetting, calculateDate, badgeSetting);
+				}
 			}
 		}
 
