@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				x.DateFrom == date && personIds.Contains(x.PersonId) && x.ExternalPerformance.ExternalId == performanceId).ToList();
 		}
 
-		public ICollection<Guid> FindPersonsCouldGetBadge(DateTime date, List<Guid> personIds, int performanceId, double badgeThreshold)
+		public ICollection<Guid> FindPersonsCouldGetBadgeOverThreshold(DateTime date, List<Guid> personIds, int performanceId, double badgeThreshold)
 		{
 			var performanceData = _performanceDataList.Where(x =>
 				x.DateFrom == date && personIds.Contains(x.PersonId) && x.ExternalPerformance.ExternalId == performanceId &&

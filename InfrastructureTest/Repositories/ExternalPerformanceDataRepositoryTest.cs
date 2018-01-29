@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var result = WithUnitOfWork.Get(() =>
 			{
-				var data = Target.FindPersonsCouldGetBadge(date, new List<Guid> { _person.Id.Value, person2.Id.Value }, 1, 70);
+				var data = Target.FindPersonsCouldGetBadgeOverThreshold(date, new List<Guid> { _person.Id.Value, person2.Id.Value }, 1, 70);
 				return data;
 			});
 

@@ -84,12 +84,88 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 				if (!badgeSetting.Enabled) continue;
 				if (isRuleWithDifferentThreshold)
 				{
-					_badgeWithRankCalculator.CalculateBadges(agentsWithSetting, calculateDate, badgeSetting);
+					var agentBadgeWithRank = _badgeWithRankCalculator.CalculateBadges(agentsWithSetting, calculateDate, badgeSetting);
+					sendMessage(agentBadgeWithRank, badgeSetting.Name, calculateDate);
 				}
 				else
 				{
-					_calculator.CalculateBadges(agentsWithSetting, calculateDate, badgeSetting);
+					var agentBadge = _calculator.CalculateBadges(agentsWithSetting, calculateDate, badgeSetting);
+					sendMessage(agentBadge, badgeSetting, calculateDate, setting);
 				}
+			}
+		}
+
+		private void sendMessage(IEnumerable<IAgentBadgeWithRankTransaction> agentBadgeWithRankTransactions, string badgeName, DateOnly calculateDate)
+		{
+			foreach (var agentBadgeWithRankTransaction in agentBadgeWithRankTransactions)
+			{
+				var person = agentBadgeWithRankTransaction.Person;
+				string message;
+				MessageType messageType;
+				if (agentBadgeWithRankTransaction.BronzeBadgeAmount > 0)
+				{
+					message = string.Format(Resources.YouGotANewBronzeBadge, badgeName, calculateDate.Date);
+					messageType = MessageType.ExternalBronzeBadge;
+				}
+				else if (agentBadgeWithRankTransaction.SilverBadgeAmount > 0)
+				{
+					message = string.Format(Resources.YouGotANewSilverBadge, badgeName, calculateDate.Date);
+					messageType = MessageType.ExternalSilverBadge;
+				}
+				else
+				{
+					message = string.Format(Resources.YouGotANewGoldBadge, badgeName, calculateDate.Date);
+					messageType = MessageType.ExternalGoldBadge;
+				}
+
+				SendPushMessageService
+					.CreateConversation(Resources.Congratulations, message, false, messageType)
+					.To(person)
+					.SendConversation(_msgPersister);
+			}
+		}
+
+		private void sendMessage(IEnumerable<IAgentBadgeTransaction> agentBadgeTransactions, IBadgeSetting badgeSetting, DateOnly calculateDate, IGamificationSetting setting)
+		{
+			var existedBadges = (_badgeRepository.Find(agentBadgeTransactions.Select(x => x.Person.Id.GetValueOrDefault()),
+									 badgeSetting.QualityId) ?? new AgentBadge[0]).ToLookup(b => b.Person);
+
+			foreach (var agentBadgeTransaction in agentBadgeTransactions)
+			{
+				var person = agentBadgeTransaction.Person;
+				var existedBadge = existedBadges[person.Id.Value].SingleOrDefault() ?? new AgentBadge
+				{
+					Person = person.Id.GetValueOrDefault(),
+					TotalAmount = 0,
+					BadgeType = badgeSetting.QualityId
+				};
+
+				existedBadge.TotalAmount += agentBadgeTransaction.Amount;
+
+				var message = "";
+				var messageType = MessageType.Information;
+				if (existedBadge.IsBronzeBadgeAdded(setting.SilverToBronzeBadgeRate, setting.GoldToSilverBadgeRate))
+				{
+					message = string.Format(Resources.YouGotANewBronzeBadge, badgeSetting.Name, calculateDate);
+					messageType = MessageType.ExternalBronzeBadge;
+				}
+
+				if (existedBadge.IsSilverBadgeAdded(setting.SilverToBronzeBadgeRate, setting.GoldToSilverBadgeRate))
+				{
+					message = string.Format(Resources.YouGotANewSilverBadge, badgeSetting.Name, calculateDate);
+					messageType = MessageType.ExternalSilverBadge;
+				}
+
+				if (existedBadge.IsGoldBadgeAdded(setting.SilverToBronzeBadgeRate, setting.GoldToSilverBadgeRate))
+				{
+					message = string.Format(Resources.YouGotANewGoldBadge, badgeSetting.Name, calculateDate);
+					messageType = MessageType.ExternalGoldBadge;
+				}
+
+				SendPushMessageService
+				.CreateConversation(Resources.Congratulations, message, false, messageType)
+				.To(person)
+				.SendConversation(_msgPersister);
 			}
 		}
 

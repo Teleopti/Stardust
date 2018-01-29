@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.List<IExternalPerformanceData>();
 		}
 
-		public ICollection<Guid> FindPersonsCouldGetBadge(DateTime date, List<Guid> personIds, int performanceId, double badgeThreshold)
+		public ICollection<Guid> FindPersonsCouldGetBadgeOverThreshold(DateTime date, List<Guid> personIds, int performanceId, double badgeThreshold)
 		{
 			var performance = Session.CreateCriteria<ExternalPerformance>()
 				.Add(Restrictions.Conjunction()

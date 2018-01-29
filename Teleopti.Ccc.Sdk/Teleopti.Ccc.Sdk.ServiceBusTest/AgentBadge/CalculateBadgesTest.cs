@@ -84,6 +84,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			badgeWithRankCalculator.Stub(x => x.CalculateAnsweredCallsBadges(new List<IPerson>(), "", DateOnly.Today,
 				new GamificationSetting(settingNameForTest), _businessUnitId))
 				.IgnoreArguments().Return(new List<IAgentBadgeWithRankTransaction>());
+			badgeWithRankCalculator.Stub(x => x.CalculateBadges(new List<IPerson>(), DateOnly.Today, new BadgeSetting()))
+				.IgnoreArguments().Return(new List<IAgentBadgeWithRankTransaction>());
 
 			target = new CalculateBadges(teamSettingsRepository, msgRepository, badgeCalculator, badgeWithRankCalculator,
 				badgeRepository, badgeWithRankRepository, globalSettingRep, personRepository);
@@ -208,13 +210,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				SilverThreshold = 85,
 				GoldThreshold = 90,
 				QualityId = 1,
-				Enabled = true
+				Enabled = true,
+				Name = "ExternalMeasure1"
 			};
 			var newSetting = new GamificationSetting(settingNameForTest)
 			{
 				AdherenceBadgeEnabled = false,
 				AHTBadgeEnabled = false,
-				AnsweredCallsBadgeEnabled = false
+				AnsweredCallsBadgeEnabled = false,
+				GamificationSettingRuleSet = GamificationSettingRuleSet.RuleWithDifferentThreshold
 			};
 			newSetting.AddBadgeSetting(badgeSetting);
 			var teamGamificationSetting = createTeamGamificationSetting(newSetting);

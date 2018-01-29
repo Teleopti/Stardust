@@ -15,6 +15,9 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		AnsweredCallsBronzeBadge,
 		AnsweredCallsSilverBadge,
 		AnsweredCallsGoldBadge,
-		ShiftTradeFromOffer
+		ShiftTradeFromOffer,
+		ExternalBronzeBadge,
+		ExternalSilverBadge,
+		ExternalGoldBadge
 	}
 }

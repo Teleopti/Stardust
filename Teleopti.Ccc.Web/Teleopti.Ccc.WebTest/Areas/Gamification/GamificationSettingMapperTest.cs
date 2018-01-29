@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification
 			{
 				Name = "ExternalBadge 2",
 				QualityId = 8,
-				LargerIsBetter = false,
+				LargerIsBetter = true,
 				Enabled = false,
 				Threshold = 9000,
 				BronzeThreshold = 9000,
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification
 			{
 				Name = "ExternalBadge 2",
 				QualityId = 8,
-				LargerIsBetter = false,
+				LargerIsBetter = true,
 				Enabled = false,
 				Threshold = 9000,
 				BronzeThreshold = 9000,

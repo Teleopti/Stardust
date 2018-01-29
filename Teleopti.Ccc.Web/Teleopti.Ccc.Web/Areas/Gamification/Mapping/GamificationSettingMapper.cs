@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Mapping
 					Id = x.Id ?? Guid.Empty,
 					Name = x.Name,
 					QualityId = x.QualityId,
-					LargerIsBetter = x.LargerIsBetter,
+					LargerIsBetter = true,
 
 					Enabled = x.Enabled,
 

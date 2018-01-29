@@ -38575,6 +38575,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You got a new bronze badge for {0} in {1:yyyy-MM-dd}..
+        /// </summary>
+        public static string YouGotANewBronzeBadge {
+            get {
+                return ResourceManager.GetString("YouGotANewBronzeBadge", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You got a new bronze badge! Your adherence in {1:yyyy-MM-dd} is above {0}..
         /// </summary>
         public static string YouGotANewBronzeBadgeForAdherence {
@@ -38602,6 +38611,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You got a new gold badge for {0} in {1:yyyy-MM-dd}..
+        /// </summary>
+        public static string YouGotANewGoldBadge {
+            get {
+                return ResourceManager.GetString("YouGotANewGoldBadge", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You got a new gold badge! Your adherence is above {0} on {1} different days..
         /// </summary>
         public static string YouGotANewGoldBadgeForAdherence {
@@ -38625,6 +38643,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string YouGotANewGoldBadgeForAnsweredCalls {
             get {
                 return ResourceManager.GetString("YouGotANewGoldBadgeForAnsweredCalls", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You got a new silver badge for {0} in {1:yyyy-MM-dd}..
+        /// </summary>
+        public static string YouGotANewSilverBadge {
+            get {
+                return ResourceManager.GetString("YouGotANewSilverBadge", resourceCulture);
             }
         }
         
