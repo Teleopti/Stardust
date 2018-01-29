@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
-		public void ShouldUpdateTimestampTo1MinuteFromNow()
+		public void ShouldUpdateTimestampTo5MinuteFromNow()
 		{
 			var businessUnitId = CurrentBusinessUnit.Current().Id.GetValueOrDefault();
 			Now.Is("2016-03-01 09:40");
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var result = CurrentUnitOfWork.Current().FetchSession().CreateSQLQuery("select LockTimestamp from JobStartTime where BusinessUnit = :bu")
 				.SetGuid("bu", businessUnitId)
 				.List<DateTime?>();
-			result.First().Should().Be.EqualTo(Now.UtcDateTime().AddMinutes(1));
+			result.First().Should().Be.EqualTo(Now.UtcDateTime().AddMinutes(5));
 		}
 
 		[Test]

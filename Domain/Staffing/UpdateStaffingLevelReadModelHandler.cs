@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 		[UnitOfWork]
 		public virtual void Handle(UpdateStaffingLevelReadModelEvent @event)
 		{
-			var jobLockTimer = new Timer(30000) {AutoReset = true};
+			var jobLockTimer = new Timer(60000) {AutoReset = true};
 			jobLockTimer.Elapsed += updateJobLock;
 
 			try

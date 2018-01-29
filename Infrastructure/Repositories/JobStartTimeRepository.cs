@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				using (var updateCommand = new SqlCommand(@"UPDATE [dbo].[JobStartTime] set LockTimestamp = @timestamp WHERE BusinessUnit = @bu", connection))
 				{
 					updateCommand.Parameters.AddWithValue("@bu", bu);
-					updateCommand.Parameters.AddWithValue("@timestamp", _now.UtcDateTime().AddMinutes(1));
+					updateCommand.Parameters.AddWithValue("@timestamp", _now.UtcDateTime().AddMinutes(5));
 					updateCommand.ExecuteNonQuery();
 				}
 			}
