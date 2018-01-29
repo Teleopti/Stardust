@@ -367,6 +367,45 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
+		[Toggle(Toggles.OvertimeRequestPeriodSetting_46417)]
+		[Toggle(Toggles.OvertimeRequestPeriodSkillTypeSetting_47290)]
+		public void ShouldGetPossibilitiesForOvertimeBasedOnSkillTypeSetInOpenPeriod()
+		{
+			var emailSkillType = new SkillTypeEmail(new Description(SkillTypeIdentifier.Email), ForecastSource.Email).WithId();
+
+			var person = User.CurrentUser();
+			var activity1 = createActivity();
+			var skill1 = createSkill("skill1");
+			skill1.SkillType = emailSkillType;
+			var personSkill1 = createPersonSkill(activity1, skill1);
+			setupIntradayStaffingForSkill(skill1, new double?[] { 10d, 10d }, new double?[] { 15d, 15d });
+
+			var activity2 = createActivity();
+			var skill2 = createSkill("skill2");
+			var personSkill2 = createPersonSkill(activity2, skill2);
+			setupIntradayStaffingForSkill(skill2, new double?[] { 10d, 10d }, new double?[] { 5d, 5d });
+
+			addPersonSkillsToPersonPeriod(personSkill1, personSkill2);
+
+			createAssignment(person, activity1, activity2);
+
+			var workflowControlSet = new WorkflowControlSet();
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
+				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(13))),
+				SkillType = emailSkillType
+			});
+			User.CurrentUser().WorkflowControlSet = workflowControlSet;
+
+			var possibilities = getPossibilityViewModels(null, StaffingPossiblityType.Overtime)
+				.Where(d => d.Date == Now.ServerDate_DontUse().ToFixedClientDateOnlyFormat()).ToList();
+			Assert.AreEqual(2, possibilities.Count);
+			Assert.AreEqual(0, possibilities.ElementAt(0).Possibility);
+			Assert.AreEqual(0, possibilities.ElementAt(1).Possibility);
+		}
+
+		[Test]
 		public void ShouldGetGoodPossibilitiesForOvertimeWhenNotOverstaffing()
 		{
 			setupSiteOpenHour();

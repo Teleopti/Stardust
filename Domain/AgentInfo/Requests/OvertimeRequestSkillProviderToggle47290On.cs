@@ -29,27 +29,24 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			return _primaryPersonSkillFilter.Filter(getSupportedPersonSkills(person, period,overtimeRequestOpenPeriod)).Select(s => s.Skill).ToList();
 		}
 
-		private IEnumerable<IPersonSkill> getSupportedPersonSkills(IPerson person, DateOnlyPeriod period, IOvertimeRequestOpenPeriod overtimeRequestOpenPeriod)
+		private IEnumerable<IPersonSkill> getSupportedPersonSkills(IPerson person, DateOnlyPeriod period,
+			IOvertimeRequestOpenPeriod overtimeRequestOpenPeriod)
 		{
 			var personPeriod = person.PersonPeriods(period).ToArray();
 			if (!personPeriod.Any())
 				return new IPersonSkill[] { };
 
 			var personSkills = personPeriod.SelectMany(p => _personalSkills.PersonSkills(p))
-				.Where(p => _supportedSkillsInIntradayProvider.CheckSupportedSkill(p.Skill));
-
-			personSkills = filterBySkillTypeInOpenPeriod(personSkills, overtimeRequestOpenPeriod);
+				.Where(p => isSkillTypeMatchedInOpenPeriod(p, overtimeRequestOpenPeriod));
 
 			return !personSkills.Any() ? new IPersonSkill[] { } : personSkills.Distinct();
 		}
 
-		private IEnumerable<IPersonSkill> filterBySkillTypeInOpenPeriod(IEnumerable<IPersonSkill> personSkills, IOvertimeRequestOpenPeriod overtimeRequestOpenPeriod)
+		private bool isSkillTypeMatchedInOpenPeriod(IPersonSkill personSkill, IOvertimeRequestOpenPeriod overtimeRequestOpenPeriod)
 		{
 			var skillTypeInOvertimeRequestOpenPeriod = overtimeRequestOpenPeriod.SkillType ??
 													   _skillTypeRepository.LoadAll().First(s => s.Description.Name.Equals(SkillTypeIdentifier.Phone));
-			personSkills = personSkills.Where(a =>
-				a.Skill.SkillType.Description.Name.Equals(skillTypeInOvertimeRequestOpenPeriod.Description.Name)).ToArray();
-			return personSkills;
+			return personSkill.Skill.SkillType.Description.Name.Equals(skillTypeInOvertimeRequestOpenPeriod.Description.Name);
 		}
 	}
 }
