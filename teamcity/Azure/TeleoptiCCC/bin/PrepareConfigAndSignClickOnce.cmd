@@ -11,4 +11,4 @@ set /A customError=%ERRORLEVEL%
 if exist "%DIRECTORY%\CustomStartup.ps1" (
 powershell -file "%DIRECTORY%\CustomStartup.ps1" >"%DIRECTORY%\CustomStartup.log"
 )
-exit %customError%
+exit /b 0
