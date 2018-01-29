@@ -1186,9 +1186,11 @@ note-editor {
 			overflow: hidden;
 			white-space: nowrap;
 		}
+
 		.wrap-all {
 			white-space: normal !important;
 		}
+
 		.wfm-chip-wrap {
 			min-width: 60px !important;
 
@@ -1196,6 +1198,7 @@ note-editor {
 				cursor: auto;
 			}
 		}
+
 		.skills-tools {
 			width: 40px;
 			padding: 5px;
@@ -1203,6 +1206,7 @@ note-editor {
 			.wfm-chip {
 				cursor: pointer !important;
 			}
+
 			.wfm-chip-wrap {
 				.chip-handle {
 					background: rgba(0,0,0,.06) !important;
@@ -1213,18 +1217,17 @@ note-editor {
 }
 
 .export-schedule {
-	.form-table {
+	.wfm-form {
 		width: 100%;
 		text-align: left;
 
-		& > tbody > tr > td {
-			border: none;
-			line-height: 2em;
+		& > div > div {
+			line-height: 40px;
 			padding: 5px;
 		}
 
-		.td-margin {
-			margin-right: 20px;
+		.vcenter {
+			margin-top: 25px;
 		}
 
 		.tips .mdi-information-outline:before {
@@ -1238,9 +1241,5 @@ note-editor {
 		md-select .md-select-value.md-select-placeholder {
 			color: inherit;
 		}
-	}
-
-	.footer .right {
-		text-align: right;
 	}
 }
