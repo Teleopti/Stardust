@@ -205,10 +205,6 @@
     <value>Добавить персональную активность</value>
     <comment>Add personal activity menu item</comment>
   </data>
-  <data name="AddQueuesThreeDots" xml:space="preserve">
-    <value>Добавить очереди...</value>
-    <comment>Add queues...</comment>
-  </data>
   <data name="AddToQuickAccessToolBar" xml:space="preserve">
     <value>&amp;Добавить на панель быстрого доступа</value>
     <comment>&amp;Add to Quick Access ToolBar</comment>
@@ -2498,18 +2494,6 @@ Periods</comment>
     <value>Вставить смену</value>
     <comment>Paste Shift</comment>
   </data>
-  <data name="toolStripPanelItem3" xml:space="preserve">
-    <value>инструмент Вырезать элемент панели 3</value>
-    <comment>tool Strip Panel Item3</comment>
-  </data>
-  <data name="toolStripSplitButton1" xml:space="preserve">
-    <value>инструмент Вырезать кнопку разделения 1</value>
-    <comment>tool Strip Split Button1</comment>
-  </data>
-  <data name="toolStripPanelItem1" xml:space="preserve">
-    <value>инструмент Вырезать элемент панели 1</value>
-    <comment>tool Strip Panel Item1</comment>
-  </data>
   <data name="Shifts" xml:space="preserve">
     <value>Смены</value>
     <comment>Shifts</comment>
@@ -2561,14 +2545,6 @@ Periods</comment>
   <data name="ShowOvertime" xml:space="preserve">
     <value>Отобразить сверхурочное время</value>
     <comment>Show  Overtime</comment>
-  </data>
-  <data name="splitContainerAdv2" xml:space="preserve">
-    <value>разделить контейнер Adv2</value>
-    <comment>split Container Adv2</comment>
-  </data>
-  <data name="splitContainerAdv3" xml:space="preserve">
-    <value>разделить контейнер Adv3</value>
-    <comment>split Container Adv3</comment>
   </data>
   <data name="GridInChart" xml:space="preserve">
     <value>Сетка в таблице</value>
@@ -3228,10 +3204,6 @@ Periods</comment>
     <value>Готово...</value>
     <comment>Ready... </comment>
   </data>
-  <data name="ChooseGroupingToChange" xml:space="preserve">
-    <value>Выбрать изменяемое группирование</value>
-    <comment>Choose grouping to change</comment>
-  </data>
   <data name="PersonAssignmentIsNotValidDot" xml:space="preserve">
     <value>Недопустимое назначение сотрудника. {0}</value>
     <comment>Person assignment is not valid.</comment>
@@ -3874,10 +3846,6 @@ Periods</comment>
   <data name="ModifyAssignment" xml:space="preserve">
     <value>Изменить назначение</value>
     <comment>Modify assignment</comment>
-  </data>
-  <data name="ModifyDayOff" xml:space="preserve">
-    <value>Изменить выходной день</value>
-    <comment>Modify day off</comment>
   </data>
   <data name="ModifyMainShift" xml:space="preserve">
     <value>Изменить главную смену</value>
@@ -4861,9 +4829,6 @@ Periods</comment>
     <value>Новая категория смен</value>
     <comment>New Shift Category text to be placed in the Shift Category settings page</comment>
   </data>
-  <data name="AddNewShiftCategory" xml:space="preserve">
-    <value>Добавить новую категорию смен</value>
-  </data>
   <data name="ChooseShiftCategoryToChange" xml:space="preserve">
     <value>Выберите категорию смен для изменения</value>
     <comment>ChooseSShiftCategoryToChange text in shift categories setting page</comment>
@@ -4900,10 +4865,6 @@ Periods</comment>
     <value>Время готовности к работе</value>
     <comment>AP: Information grid columns (My Report)</comment>
   </data>
-  <data name="IdleTime" xml:space="preserve">
-    <value>Время неготовности</value>
-    <comment>AP: Information grid columns (My Report)</comment>
-  </data>
   <data name="LoggedInTime" xml:space="preserve">
     <value>Время входа в систему</value>
     <comment>AP: Information grid columns (My Report)</comment>
@@ -4931,10 +4892,6 @@ Periods</comment>
   <data name="AddActivityThreeDots" xml:space="preserve">
     <value>Добавить активность...</value>
     <comment>Add Activity...</comment>
-  </data>
-  <data name="AddOverTimeThreeDots" xml:space="preserve">
-    <value>Добавить сверхурочное время...</value>
-    <comment>Add Overtime...</comment>
   </data>
   <data name="AddPersonalActivityThreeDots" xml:space="preserve">
     <value>Добавить персональную активность...</value>
@@ -5850,10 +5807,6 @@ Periods</comment>
     <value>Управление справедливостью</value>
     <comment>ManageFairnessValues</comment>
   </data>
-  <data name="PreferenceDate" xml:space="preserve">
-    <value>Дата предпочтения</value>
-    <comment>Preference Date: grid column header </comment>
-  </data>
   <data name="Budgets" xml:space="preserve">
     <value>Бюджеты</value>
     <comment>Panel text</comment>
@@ -5957,10 +5910,6 @@ Periods</comment>
   <data name="label7" xml:space="preserve">
     <value>ярлык7</value>
     <comment>label7</comment>
-  </data>
-  <data name="ribbonControlAdv1" xml:space="preserve">
-    <value>лента Контроль Adv1</value>
-    <comment>ribbon Control Adv1</comment>
   </data>
   <data name="UserDefinedOptions" xml:space="preserve">
     <value>Опции пользователя</value>
@@ -6169,10 +6118,6 @@ Periods</comment>
   <data name="ResReportAgentQueueStatistics" xml:space="preserve">
     <value>Статистика очередей оператора</value>
     <comment>Agent Queue Statistics</comment>
-  </data>
-  <data name="ResReportAgentScheduleAdherence" xml:space="preserve">
-    <value>Соблюдение графика оператором</value>
-    <comment>Agent - Schedule Adherence</comment>
   </data>
   <data name="ResReportAgentScheduleResult" xml:space="preserve">
     <value>Метрика оператора</value>
@@ -7009,9 +6954,6 @@ Periods</comment>
   <data name="NoExistingShiftSelected" xml:space="preserve">
     <value>Существующие смены не выбраны </value>
   </data>
-  <data name="BetweenDayOff" xml:space="preserve">
-    <value>Между выходными днями</value>
-  </data>
   <data name="BlockScheduling" xml:space="preserve">
     <value>Планирование блоками</value>
   </data>
@@ -7198,9 +7140,6 @@ Periods</comment>
   <data name="PayrollExportGeneralInformation" xml:space="preserve">
     <value>Экспорт данных заработной платы, общая информация</value>
   </data>
-  <data name="MaximumHoursPerWeekCannotBeMoreThan168Hours" xml:space="preserve">
-    <value>Максимальное количество часов в неделю не может быть больше, чем 168 часов</value>
-  </data>
   <data name="CopyrightColon" xml:space="preserve">
     <value>Права:</value>
   </data>
@@ -7334,9 +7273,6 @@ Periods</comment>
   </data>
   <data name="UndoRedoScheduling" xml:space="preserve">
     <value>Планирование</value>
-  </data>
-  <data name="UndoRedoModifySchedule" xml:space="preserve">
-    <value>Изменение расписания для {0}, дата {1}</value>
   </data>
   <data name="ExportToPDF" xml:space="preserve">
     <value>Экспорт в PDF</value>
@@ -7852,9 +7788,6 @@ Teleopti R&amp;D</value>
   </data>
   <data name="MeetingLastAttendeeQuestionRemoveOneParameter" xml:space="preserve">
     <value>Это последний участник мероприятия. Вы хотите удалить мероприятие "{0}"?</value>
-  </data>
-  <data name="UndoRedoModifyPersonRequest" xml:space="preserve">
-    <value>Изменение индивидуального запроса для {0}</value>
   </data>
   <data name="FilterAgents" xml:space="preserve">
     <value>Фильтр операторов</value>
@@ -8672,9 +8605,6 @@ Teleopti R&amp;D</value>
   <data name="UseMaxSeats" xml:space="preserve">
     <value>Использовать макс. кол-во раб. мест</value>
   </data>
-  <data name="CannotDeleteSelectedActivities" xml:space="preserve">
-    <value>Невозможно удалить выбранные активности </value>
-  </data>
   <data name="SelectedActivitiesCannotBeDeletedColon" xml:space="preserve">
     <value>Невозможно удалить выбранные активности, т.к. используются навыками:</value>
   </data>
@@ -8759,9 +8689,6 @@ Teleopti R&amp;D</value>
   </data>
   <data name="resReportScheduledOvertimePerAgent" xml:space="preserve">
     <value>Запланированное сверхурочное время по графику на оператора</value>
-  </data>
-  <data name="Illegal" xml:space="preserve">
-    <value>Неверно</value>
   </data>
   <data name="TheEnteredIsIllegal" xml:space="preserve">
     <value>Введенное {0} неверно</value>
@@ -8882,9 +8809,6 @@ Teleopti R&amp;D</value>
   </data>
   <data name="AllAbsences" xml:space="preserve">
     <value>Все отсутствия</value>
-  </data>
-  <data name="YourEmailAddressShouldBeConfiguredInThePeopleModuleToUseThisServiceDot" xml:space="preserve">
-    <value>Чтобы использовать этот сервис, Ваш Email адрес должен быть указан в модуле Сотрудники.</value>
   </data>
   <data name="Error" xml:space="preserve">
     <value>Ошибка</value>
@@ -9558,9 +9482,6 @@ Teleopti R&amp;D</value>
   <data name="TheInputTextCanNotBeEmptyDot" xml:space="preserve">
     <value>Вводимый текст не может быть пустым.</value>
   </data>
-  <data name="TotalAllowance" xml:space="preserve">
-    <value>Общее допущение</value>
-  </data>
   <data name="AllowPersonModifications" xml:space="preserve">
     <value>Может изменять и сохранять</value>
   </data>
@@ -9993,9 +9914,6 @@ Teleopti R&amp;D</value>
   <data name="ManageSmsSettings" xml:space="preserve">
     <value>Управление настройками SMS</value>
   </data>
-  <data name="SetWhichColumnToGetSmsPhoneNumberFrom" xml:space="preserve">
-    <value>Установите столбец для выбора номера телефона SMS из</value>
-  </data>
   <data name="SmsSettings" xml:space="preserve">
     <value>Настройки SMS</value>
   </data>
@@ -10061,9 +9979,6 @@ Teleopti R&amp;D</value>
   </data>
   <data name="ScheduleOnlyPreferenceMustHave" xml:space="preserve">
     <value>Планировать только обязательные предпочтения</value>
-  </data>
-  <data name="AllowMeetings" xml:space="preserve">
-    <value>Разрешить мероприятия</value>
   </data>
   <data name="ShiftCategories" xml:space="preserve">
     <value>Категории смен</value>
@@ -11132,15 +11047,6 @@ Teleopti R&amp;D</value>
   <data name="OpenProductActivationKeyFile" xml:space="preserve">
     <value>Выберите файл ключа активации продукта</value>
   </data>
-  <data name="ProductActivationKey" xml:space="preserve">
-    <value>Система лицензирована "{0}" в соответствии с правилами и условиями лицензионного соглашения и ключ активации продукта истекает {1}.
-
-Ключ активации продукта рассчитан на максимум {2} активных операторов.
-
-Схема ключа - {3}.
-Активированы следующие опции:
-{4}</value>
-  </data>
   <data name="YouHaveAlmostTooManyActiveAgents" xml:space="preserve">
     <value>У вас {0} активных операторов, но лицензия рассчитана только на {1}. Пожалуйста, обновите ключ активации продукта</value>
   </data>
@@ -11161,15 +11067,6 @@ Teleopti R&amp;D</value>
   </data>
   <data name="NewProductActivationKeyDoesNotCoverEnoughSeats" xml:space="preserve">
     <value>Ключ активации продукта рассчитан на {0} рабочих мест. Вам необходимо получить ключ активации продукта, рассчитанный на достаточное количество рабочих мест.</value>
-  </data>
-  <data name="SeatProductActivationKey" xml:space="preserve">
-    <value>Система лицензирована "{0}" в соответствии с правилами и условиями лицензионного соглашения и ключ активации продукта истекает {1}.
-
-Ключ активации продукта рассчитан на максимум {2} рабочих мест.
-
-Схема ключа - {3}.
-Активированы следующие опции:
-{4}</value>
   </data>
   <data name="YouHaveAlmostTooManySeats" xml:space="preserve">
     <value>Вы почти достигли лимита {0} рабочих мест. Пожалуйста, обновите ключ активации продукта.</value>
@@ -11218,9 +11115,6 @@ Teleopti R&amp;D</value>
   </data>
   <data name="ShiftBackToLegal" xml:space="preserve">
     <value>Скорректировать смены, чтобы соответствовать контейнеру смен</value>
-  </data>
-  <data name="BadgeTypeEnabled" xml:space="preserve">
-    <value>Использовать</value>
   </data>
   <data name="CouldNotFindAnyValidShiftInShiftBag" xml:space="preserve">
     <value>Невозможно найти правильные смены в контейнере смен</value>
@@ -11446,9 +11340,6 @@ Teleopti R&amp;D</value>
   </data>
   <data name="AreYouSureYouWantToDeleteGamificationSetting" xml:space="preserve">
     <value>Удалить настройку геймификации '{0}'?</value>
-  </data>
-  <data name="DeleteAgentBadgeSetting" xml:space="preserve">
-    <value>Удалить настройку уровня оператора</value>
   </data>
   <data name="Gamification" xml:space="preserve">
     <value>Геймификация</value>
@@ -12107,12 +11998,6 @@ Teleopti R&amp;D</value>
   <data name="SeatHasNoBookings" xml:space="preserve">
     <value>Нет распределения</value>
   </data>
-  <data name="ConfirmRemoveCampaign" xml:space="preserve">
-    <value>Уверены, что хотите удалить эту кампанию?</value>
-  </data>
-  <data name="RemoveCampaign" xml:space="preserve">
-    <value>Удалить кампанию</value>
-  </data>
   <data name="CampaignFailedRemove" xml:space="preserve">
     <value>Не удалось удалить кампанию: {0}.</value>
   </data>
@@ -12136,9 +12021,6 @@ Teleopti R&amp;D</value>
   </data>
   <data name="FailedImportedCountColon" xml:space="preserve">
     <value>Импорт не удался:</value>
-  </data>
-  <data name="InternalErrorXMsg" xml:space="preserve">
-    <value>произошли внутренние ошибки: {0};</value>
   </data>
   <data name="PleaseFindTheDownloadedExcelSheetToCheckTheError" xml:space="preserve">
     <value>Просмотрите, загруженный файл excel с деталями ошибки.</value>
@@ -12229,9 +12111,6 @@ Teleopti R&amp;D</value>
   </data>
   <data name="SendToBack" xml:space="preserve">
     <value>На задний план</value>
-  </data>
-  <data name="UndoChangesAndRevertToLastSave" xml:space="preserve">
-    <value>Отменить изменения и вернуться к последнему сохраненному</value>
   </data>
   <data name="UngroupItems" xml:space="preserve">
     <value>Разгруппировать объекты </value>
@@ -12412,9 +12291,6 @@ Teleopti R&amp;D</value>
   </data>
   <data name="NoPermissionAddFullDayAbsenceForAgent" xml:space="preserve">
     <value>У вас нет прав доступа для добавления отсутствия на полный день для {0}</value>
-  </data>
-  <data name="NoPermissionToModifyPersonAbsence" xml:space="preserve">
-    <value>У вас нет прав доступа для изменения отсутствий. </value>
   </data>
   <data name="ConnectionErrorMessage" xml:space="preserve">
     <value>Сервер недоступен!
@@ -12652,9 +12528,6 @@ Teleopti R&amp;D</value>
   </data>
   <data name="DenyReason" xml:space="preserve">
     <value>Причина отказа</value>
-  </data>
-  <data name="ChangeWillAffectAgents" xml:space="preserve">
-    <value>Изменение затронет {0} операторов.</value>
   </data>
   <data name="RemoveActivity" xml:space="preserve">
     <value>Удалить активность</value>
@@ -13239,9 +13112,6 @@ Teleopti R&amp;D</value>
   <data name="NoPermissionToViewErrorMessage" xml:space="preserve">
     <value>У вас не хватает прав для просмотра этой страницы.</value>
   </data>
-  <data name="TheOtherAgentHasNoPermissionToShiftTrade" xml:space="preserve">
-    <value>Другой оператор не имеет прав доступа на обмен с вами.</value>
-  </data>
   <data name="IntradayWithShrinkage" xml:space="preserve">
     <value>Мониторинг с сокращением</value>
   </data>
@@ -13777,9 +13647,6 @@ Email: &lt;br&gt;{0}&lt;/b&gt;&lt;br&gt;
   <data name="SuccessfullyImportedAgents" xml:space="preserve">
     <value>Успешно импортировано {0} операторов</value>
   </data>
-  <data name="AvailableAsGroupPage" xml:space="preserve">
-    <value>Доступно как группирование:*</value>
-  </data>
   <data name="Maximum5OptionalColumns" xml:space="preserve">
     <value>*Максимум 5 дополнительных столбцов могут быть использованы для группирований</value>
   </data>
@@ -13870,33 +13737,6 @@ Email: &lt;br&gt;{0}&lt;/b&gt;&lt;br&gt;
   <data name="Purged" xml:space="preserve">
     <value>Очищено</value>
   </data>
-  <data name="DeletedContractAssignedForPlanningPeriod" xml:space="preserve">
-    <value>Контракт {0}, присвоенный этому оператору, был удален</value>
-  </data>
-  <data name="DeletedContractScheduleAssignedForPlanningPeriod" xml:space="preserve">
-    <value>Расписание по контракту {0}, присвоенное этому оператору, было удалено</value>
-  </data>
-  <data name="DeletedPartTimePercentageAssignedForPlanningPeriod" xml:space="preserve">
-    <value>Процент неполной занятости {0}, присвоенный этому оператору, был удален</value>
-  </data>
-  <data name="DeletedShiftBagAssignedForPlanningPeriod" xml:space="preserve">
-    <value>Контейнер смен {0}, присвоенный этому оператору, был удален</value>
-  </data>
-  <data name="MissingPersonPeriodForPlanningPeriod" xml:space="preserve">
-    <value>Этот оператор не имеет персонального периода на часть или полный период планирования</value>
-  </data>
-  <data name="MissingSchedulePeriodForPlanningPeriod" xml:space="preserve">
-    <value>Этот оператор не имеет периода планирования</value>
-  </data>
-  <data name="MissingShiftBagForPlanningPeriod" xml:space="preserve">
-    <value>Этот оператор не имеет контейнера смен на часть или весь планируемый период</value>
-  </data>
-  <data name="MissingSkillsForPlanningPeriod" xml:space="preserve">
-    <value>Этот оператор не имеет навыков на часть или весь планируемый период</value>
-  </data>
-  <data name="NoFullSchedulePeriod" xml:space="preserve">
-    <value>Период планирования не соответствует текущему</value>
-  </data>
   <data name="AgentHasDaysWithoutAnySchedule" xml:space="preserve">
     <value>Оператор имеет {0} дня(-дней) без расписания.</value>
   </data>
@@ -13909,9 +13749,6 @@ Email: &lt;br&gt;{0}&lt;/b&gt;&lt;br&gt;
   <data name="AgentsHaveScheduled" xml:space="preserve">
     <value>операторы запланированы</value>
   </data>
-  <data name="AreYouSureYouWantToDeleteTheAgentGroup" xml:space="preserve">
-    <value>Удалить группирование '{0}' и все его настройки?</value>
-  </data>
   <data name="AreYouSureYouWantToDeleteTheDayOffRule" xml:space="preserve">
     <value>Удалить правило выходных дней {0} и все его настройки?</value>
   </data>
@@ -13920,9 +13757,6 @@ Email: &lt;br&gt;{0}&lt;/b&gt;&lt;br&gt;
   </data>
   <data name="ChangePlanningDuration" xml:space="preserve">
     <value>Изменить продолжительность периода</value>
-  </data>
-  <data name="CreateAgentGroup" xml:space="preserve">
-    <value>Создать группу операторов</value>
   </data>
   <data name="CreateFirstPlanningPeriod" xml:space="preserve">
     <value>Создать первый планируемый период</value>
@@ -13933,14 +13767,8 @@ Email: &lt;br&gt;{0}&lt;/b&gt;&lt;br&gt;
   <data name="DayOffRule" xml:space="preserve">
     <value>Правило выходных дней</value>
   </data>
-  <data name="DayOffRuleAppliedFilters" xml:space="preserve">
-    <value>Следующие настройки применены к группе операторов {0}</value>
-  </data>
   <data name="DayOffRuleSetting" xml:space="preserve">
     <value>Настройки правил выходных дней</value>
-  </data>
-  <data name="DeleteAgentGroup" xml:space="preserve">
-    <value>Удалить группу операторов</value>
   </data>
   <data name="DeleteDayOffRule" xml:space="preserve">
     <value>Удалить правило выходных дней</value>
@@ -13948,29 +13776,14 @@ Email: &lt;br&gt;{0}&lt;/b&gt;&lt;br&gt;
   <data name="DeletePlanningPeriod" xml:space="preserve">
     <value>Удалить планируемый период</value>
   </data>
-  <data name="EditAgentGroup" xml:space="preserve">
-    <value>Изменить группу операторов</value>
-  </data>
   <data name="FilterValidationIssues" xml:space="preserve">
     <value>Фильтр ошибок проверки</value>
-  </data>
-  <data name="HelpCreateAgentGroup" xml:space="preserve">
-    <value>Требуется группа операторов для планирования. Создать?</value>
   </data>
   <data name="HelpDayOffForPlanningPeriod" xml:space="preserve">
     <value>Правила выходных дней будут применены ко всем планируемым периодам</value>
   </data>
   <data name="Issue" xml:space="preserve">
     <value>Ошибка</value>
-  </data>
-  <data name="ManageDayOffForAgentGroup" xml:space="preserve">
-    <value>Управление правилами выходных дней для группы операторов {0}</value>
-  </data>
-  <data name="NewAgentGroup" xml:space="preserve">
-    <value>Новая группа операторов</value>
-  </data>
-  <data name="NoAgentsWithinAgentGroup" xml:space="preserve">
-    <value>В этой группе нет операторов, которые могут быть запланированы</value>
   </data>
   <data name="NoPreviousScheduleResult" xml:space="preserve">
     <value>Этот планируемый период не имеет предыдущего результата</value>
@@ -13981,9 +13794,6 @@ Email: &lt;br&gt;{0}&lt;/b&gt;&lt;br&gt;
   <data name="NoValidScheduleResult" xml:space="preserve">
     <value>Этот планируемый период не имеет правильного расписания</value>
   </data>
-  <data name="ScheduleAgentGroup" xml:space="preserve">
-    <value>Запланировать группу операторов</value>
-  </data>
   <data name="SchedulingFailed" xml:space="preserve">
     <value>Планирование не удалось</value>
   </data>
@@ -13993,20 +13803,11 @@ Email: &lt;br&gt;{0}&lt;/b&gt;&lt;br&gt;
   <data name="SchedulingSucceeded" xml:space="preserve">
     <value>Планирование успешно выполнено</value>
   </data>
-  <data name="SchedulePageSelectAg" xml:space="preserve">
-    <value>Выберите группу операторов для работы</value>
-  </data>
-  <data name="SearchForAgentGroup" xml:space="preserve">
-    <value>Поиск сайта / группы / навыка / контракта</value>
-  </data>
   <data name="SearchForDayOff" xml:space="preserve">
     <value>Поиск сайта / группы / контракта</value>
   </data>
   <data name="SelectedPlanningPeriod" xml:space="preserve">
     <value>Выбранный планируемый период</value>
-  </data>
-  <data name="SelectPpWorkWith" xml:space="preserve">
-    <value>Выберите планируемый период для работы</value>
   </data>
   <data name="UpdatedValidation" xml:space="preserve">
     <value>Ошибки проверки обновлены</value>
@@ -14352,9 +14153,6 @@ Email: &lt;br&gt;{0}&lt;/b&gt;&lt;br&gt;
   </data>
   <data name="UnderstaffingAfterOT" xml:space="preserve">
     <value>Нехватка ресурсов после запроса сверхурочных</value>
-  </data>
-  <data name="TotalAgentsInAlarmInBusinessUnit" xml:space="preserve">
-    <value>Всего операторов БЮ  в статусе Предупреждение </value>
   </data>
   <data name="InAlarmInSite" xml:space="preserve">
     <value>В статусе Предупреждение на сайте</value>

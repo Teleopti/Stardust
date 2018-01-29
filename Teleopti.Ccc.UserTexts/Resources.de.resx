@@ -340,9 +340,6 @@
     <value>Scorecard hinzufügen</value>
     <comment>New scorecard</comment>
   </data>
-  <data name="AddNewShiftCategory" xml:space="preserve">
-    <value>Neue Schichtkategorie hinzufügen</value>
-  </data>
   <data name="AddNewSite" xml:space="preserve">
     <value>Neue Einheit hinzufügen</value>
     <comment>Setting forms: Organization Hierarchy</comment>
@@ -370,10 +367,6 @@
   <data name="AddOvertime" xml:space="preserve">
     <value>Überstunden hinzufügen</value>
     <comment>Add Overtime</comment>
-  </data>
-  <data name="AddOverTimeThreeDots" xml:space="preserve">
-    <value>Überstunden hinzufügen…</value>
-    <comment>Add Overtime...</comment>
   </data>
   <data name="AddPartTimePercentage" xml:space="preserve">
     <value>Teilzeitprozentwert definieren</value>
@@ -406,10 +399,6 @@
   <data name="AddPreferenceRestriction" xml:space="preserve">
     <value>Präferenzbegrenzung hinzufügen</value>
     <comment>Add Preference Restriction</comment>
-  </data>
-  <data name="AddQueuesThreeDots" xml:space="preserve">
-    <value>Queues hinzufügen…</value>
-    <comment>Add queues...</comment>
   </data>
   <data name="AddressBook" xml:space="preserve">
     <value>Adressbuch</value>
@@ -1168,10 +1157,6 @@
     <value>Wählen Sie Freier Tag zur Änderung </value>
     <comment>Choos day off to change title in day off setting page</comment>
   </data>
-  <data name="ChooseGroupingToChange" xml:space="preserve">
-    <value>Wählen Sie Gruppierung zur Änderung </value>
-    <comment>Choose grouping to change</comment>
-  </data>
   <data name="ChooseOptionalColumnToChange" xml:space="preserve">
     <value>Wählen Sie eine optionale Spalte zur Änderung</value>
     <comment>Choose Optional Column To Change</comment>
@@ -1644,10 +1629,6 @@ Ausnahme</value>
   <data name="DefaultStateGroup" xml:space="preserve">
     <value>Standard Statusgruppe</value>
     <comment>Default state group</comment>
-  </data>
-  <data name="DefaultTracker" xml:space="preserve">
-    <value>Wählen Sie eine Protokollierungsart.</value>
-    <comment>Description for the deafult tracker</comment>
   </data>
   <data name="DefineOrganization" xml:space="preserve">
     <value>Definiere Organisation</value>
@@ -2650,10 +2631,6 @@ Ausnahme</value>
     <value>Stunden pro Tag</value>
     <comment>Hours per day</comment>
   </data>
-  <data name="IdleTime" xml:space="preserve">
-    <value>Idle time</value>
-    <comment>AP: Information grid columns (My Report)</comment>
-  </data>
   <data name="Impact" xml:space="preserve">
     <value>Auswirkung</value>
     <comment>Impact</comment>
@@ -3337,10 +3314,6 @@ Ausschließlich</value>
     <value>Belegung ändern</value>
     <comment>Modify assignment</comment>
   </data>
-  <data name="ModifyDayOff" xml:space="preserve">
-    <value>Freien Tag ändern</value>
-    <comment>Modify day off</comment>
-  </data>
   <data name="ModifyGroupPage" xml:space="preserve">
     <value>Gruppierungen ändern</value>
     <comment>Modify group page</comment>
@@ -3906,10 +3879,6 @@ Ausschließlich</value>
   <data name="NoWorkShiftsWereAvailable" xml:space="preserve">
     <value>Es sind keine Arbeitsschichten verfügbar</value>
     <comment>Scheduler message</comment>
-  </data>
-  <data name="NullDayOffDescription" xml:space="preserve">
-    <value>Arbeitstag</value>
-    <comment>Null DayOff Description</comment>
   </data>
   <data name="Number" xml:space="preserve">
     <value>Anzahl</value>
@@ -4545,10 +4514,6 @@ Periods</comment>
     <value>Präferenz</value>
     <comment>Preference</comment>
   </data>
-  <data name="PreferenceDate" xml:space="preserve">
-    <value>Präferenzdatum</value>
-    <comment>Preference Date: grid column header </comment>
-  </data>
   <data name="Preferences" xml:space="preserve">
     <value>Präferenzen</value>
     <comment>Common text for Agent Preferences</comment>
@@ -4867,10 +4832,6 @@ Periods</comment>
     <value>Mitarbeiter Queue Statistik</value>
     <comment>Agent Queue Statistics</comment>
   </data>
-  <data name="ResReportAgentScheduleAdherence" xml:space="preserve">
-    <value>Agent - Planeinhaltung </value>
-    <comment>Agent - Schedule Adherence</comment>
-  </data>
   <data name="ResReportAgentScheduleResult" xml:space="preserve">
     <value>Mitarbeiter Kennzahlen</value>
     <comment>Agent Schedule Result</comment>
@@ -4942,10 +4903,6 @@ Periods</comment>
   <data name="ResultView" xml:space="preserve">
     <value>Ergebnissicht</value>
     <comment>Result view</comment>
-  </data>
-  <data name="ribbonControlAdv1" xml:space="preserve">
-    <value>ribbon Control Adv1</value>
-    <comment>ribbon Control Adv1</comment>
   </data>
   <data name="RightAxis" xml:space="preserve">
     <value>Rechte Achse</value>
@@ -5704,14 +5661,6 @@ Periods</comment>
     <value>Aufteilung</value>
     <comment>Split</comment>
   </data>
-  <data name="splitContainerAdv2" xml:space="preserve">
-    <value>Container Adv2 teilen</value>
-    <comment>split Container Adv2</comment>
-  </data>
-  <data name="splitContainerAdv3" xml:space="preserve">
-    <value>Container Adv3 teilen</value>
-    <comment>split Container Adv3</comment>
-  </data>
   <data name="StaffingEffect" xml:space="preserve">
     <value>Auswirkung auf Besetzung</value>
     <comment>used in alarmtypes</comment>
@@ -5993,12 +5942,6 @@ Periods</comment>
     <value>The</value>
     <comment>recurrence meeting text</comment>
   </data>
-  <data name="The license covers a maximum of {2} active agents." xml:space="preserve">
-    <value>Die Lizenz übersteigt an Maximum an zulässigen Agenten von {2}.</value>
-  </data>
-  <data name="The license schema is &quot;{3}&quot;." xml:space="preserve">
-    <value>Das Lizenzschema ist "{3}".</value>
-  </data>
   <data name="TheDayIsNotAvailableForScheduling" xml:space="preserve">
     <value>Der Tag ist für die Planung nicht verfügbar</value>
     <comment>Scheduling message</comment>
@@ -6042,9 +5985,6 @@ Periods</comment>
   <data name="ThereIsAlreadyAnAssignment" xml:space="preserve">
     <value>Es existiert bereits eine Belegung</value>
     <comment>Scheduler message</comment>
-  </data>
-  <data name="These options are activated:" xml:space="preserve">
-    <value>Diese Optionen sind aktiviert:</value>
   </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 Minuten</value>
@@ -6148,18 +6088,6 @@ Periods</comment>
   <data name="Tools" xml:space="preserve">
     <value>Tools</value>
     <comment>Tools</comment>
-  </data>
-  <data name="toolStripPanelItem1" xml:space="preserve">
-    <value>tool Strip Panel Item1</value>
-    <comment>tool Strip Panel Item1</comment>
-  </data>
-  <data name="toolStripPanelItem3" xml:space="preserve">
-    <value>tool Strip Panel Item3</value>
-    <comment>tool Strip Panel Item3</comment>
-  </data>
-  <data name="toolStripSplitButton1" xml:space="preserve">
-    <value>tool Strip Split Button1</value>
-    <comment>tool Strip Split Button1</comment>
   </data>
   <data name="Total" xml:space="preserve">
     <value>Gesamt</value>
@@ -6765,15 +6693,6 @@ Periods</comment>
     <value>Z bis A</value>
     <comment>sorting in Z to A order</comment>
   </data>
-  <data name="{1}&quot;" xml:space="preserve">
-    <value>IOException for license file in LogOnScreen</value>
-  </data>
-  <data name="{1}&quot;1" xml:space="preserve">
-    <value>Xml exception when parcing xml file in LogOnScreen</value>
-  </data>
-  <data name="{4}&quot;" xml:space="preserve">
-    <value>{4}"</value>
-  </data>
   <data name="CampaignEmailsHandlingtimePercent" xml:space="preserve">
     <value>Kampagnen E-Mails Bearbeitungszeit</value>
   </data>
@@ -7141,9 +7060,6 @@ Datum</value>
   <data name="MaxColon" xml:space="preserve">
     <value>Max:</value>
   </data>
-  <data name="MaximumHoursPerWeekCannotBeMoreThan168Hours" xml:space="preserve">
-    <value>Maximale Anzahl Stunden pro Woche kann nicht 168 übersteigen.</value>
-  </data>
   <data name="MessageColon" xml:space="preserve">
     <value>Mitteilung:</value>
   </data>
@@ -7173,9 +7089,6 @@ Datum</value>
   </data>
   <data name="xxx" xml:space="preserve">
     <value>Ändere schreibgeschützten Plan</value>
-  </data>
-  <data name="UndoRedoModifySchedule" xml:space="preserve">
-    <value>Ändere Plan für {0}, Datum {1}</value>
   </data>
   <data name="MonthsParenthesisS" xml:space="preserve">
     <value>Monat(e)</value>
@@ -7317,9 +7230,6 @@ Datum</value>
   </data>
   <data name="UndoRedoScheduling" xml:space="preserve">
     <value>Planung</value>
-  </data>
-  <data name="UndoRedoModifyPersonRequest" xml:space="preserve">
-    <value>Ändere Personenantrag für {0}</value>
   </data>
   <data name="ExportToPDF" xml:space="preserve">
     <value>Exportieren zu PDF (grafisch)</value>
@@ -7902,9 +7812,6 @@ Teleopti R&amp;D</value>
   <data name="NoExistingShiftSelected" xml:space="preserve">
     <value>Keine vorhandene Schicht gewählt</value>
   </data>
-  <data name="BetweenDayOff" xml:space="preserve">
-    <value>Zwischen freien Tagen</value>
-  </data>
   <data name="RequestStatusDtoNew" xml:space="preserve">
     <value>Neu</value>
   </data>
@@ -8401,9 +8308,6 @@ Fehlermeldung: {0}</value>
   <data name="OptimizeActivities" xml:space="preserve">
     <value>Aktivitäten optimieren</value>
   </data>
-  <data name="UseImprovedCalculating" xml:space="preserve">
-    <value>Erweiterte Berechnung verwenden</value>
-  </data>
   <data name="Abandoned" xml:space="preserve">
     <value>Abgebrochen </value>
   </data>
@@ -8586,9 +8490,6 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
   </data>
   <data name="NewMasterActivity" xml:space="preserve">
     <value>Neue Hauptaktivität</value>
-  </data>
-  <data name="AddedSkillsColon" xml:space="preserve">
-    <value>Hinzugefügte Skill: </value>
   </data>
   <data name="ScheduleAuditTrailIsNotRunning" xml:space="preserve">
     <value>Planungsprotokoll ist nicht eingeschaltet</value>
@@ -8884,9 +8785,6 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
   <data name="LowestPossibleWorkTimeIsTooHigh" xml:space="preserve">
     <value>Die geringst mögliche Arbeitszeit ist zu hoch!</value>
   </data>
-  <data name="CannotDeleteSelectedActivities" xml:space="preserve">
-    <value>Kann die ausgewählten Aktivitäten nicht löschen.</value>
-  </data>
   <data name="SelectedActivitiesCannotBeDeletedColon" xml:space="preserve">
     <value>Die ausgewählte Aktivität kann nicht gelöscht werden, da folgende Skills sie noch nutzen:</value>
   </data>
@@ -8982,9 +8880,6 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
   </data>
   <data name="resReportScheduledOvertimePerAgent" xml:space="preserve">
     <value>Geplante Überstunden pro Mitarbeiter</value>
-  </data>
-  <data name="Illegal" xml:space="preserve">
-    <value>Ungültig</value>
   </data>
   <data name="TheEnteredIsIllegal" xml:space="preserve">
     <value>Die eingegebene {0} ist ungültig.</value>
@@ -9141,9 +9036,6 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
   </data>
   <data name="MissingWorkflowControlSet" xml:space="preserve">
     <value>Fehlendes Workflow Control Set</value>
-  </data>
-  <data name="YourEmailAddressShouldBeConfiguredInThePeopleModuleToUseThisServiceDot" xml:space="preserve">
-    <value>Ihre Emailadresse muss im Modul Personen eingetragen sein, um diesen Service zu nutzen.</value>
   </data>
   <data name="SignCustomerWeb" xml:space="preserve">
     <value>Kunden-Web</value>
@@ -9363,9 +9255,6 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
   </data>
   <data name="TheInputTextCanNotBeEmptyDot" xml:space="preserve">
     <value>Der Eingabetext kann nicht leer sein</value>
-  </data>
-  <data name="TotalAllowance" xml:space="preserve">
-    <value>Vorgabe total</value>
   </data>
   <data name="AllowPersonModifications" xml:space="preserve">
     <value>Kann ändern und speichern</value>
@@ -9985,9 +9874,6 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
   <data name="ManageSmsSettings" xml:space="preserve">
     <value>SMS Einstellungen verwalten</value>
   </data>
-  <data name="SetWhichColumnToGetSmsPhoneNumberFrom" xml:space="preserve">
-    <value>Gültige Spalte für die Telefonnummer</value>
-  </data>
   <data name="SmsSettings" xml:space="preserve">
     <value>SMS Einstellungen</value>
   </data>
@@ -10050,9 +9936,6 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
   </data>
   <data name="ScheduleOnlyPreferenceMustHave" xml:space="preserve">
     <value>nur Notwendigkeiten (aus Präferenzen) planen</value>
-  </data>
-  <data name="AllowMeetings" xml:space="preserve">
-    <value>Meetings erlauben</value>
   </data>
   <data name="ShiftCategories" xml:space="preserve">
     <value>Schichtkategorien</value>
@@ -10125,9 +10008,6 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
   </data>
   <data name="AfterCheckingAgainstKeepActivity" xml:space="preserve">
     <value>Nach Gegenprüfen beibehalten der Aktivität</value>
-  </data>
-  <data name="InvalidPassword" xml:space="preserve">
-    <value>Password-Richtlinien verlangen ein sichereres Password</value>
   </data>
   <data name="WindowsLogonWithBrackets" xml:space="preserve">
     <value>(Windows)</value>
@@ -11083,9 +10963,6 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
   <data name="ResetBadgesConfirm" xml:space="preserve">
     <value>Es werden alle Badges aller Mitarbeiter gelöscht! Wollen Sie fortfahren? </value>
   </data>
-  <data name="BadgeTypeChecked" xml:space="preserve">
-    <value>benutze</value>
-  </data>
   <data name="CouldNotFindAnyValidShiftInShiftBag" xml:space="preserve">
     <value>Keine gültigen Schichten in der Schichtsammlung</value>
   </data>
@@ -11100,9 +10977,6 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
   </data>
   <data name="FullDayAbsenceReqStartTime" xml:space="preserve">
     <value>Beginn der Ganztagsabwesenheit</value>
-  </data>
-  <data name="HiddenSystemSettings" xml:space="preserve">
-    <value>Verborgene Systemeinstellungen</value>
   </data>
   <data name="UnSupportedOptimizationBlockAndTimeBetweendays" xml:space="preserve">
     <value>Option "Zeit zwischen den Tagen" wird nicht ausgeführt, wenn bei der Blockplanung "Gleiche Schichten" ausgewählt wurde, </value>
@@ -11228,15 +11102,6 @@ Details:
   <data name="OpenProductActivationKeyFile" xml:space="preserve">
     <value>Wählen Sie einen Product Activation Key</value>
   </data>
-  <data name="ProductActivationKey" xml:space="preserve">
-    <value>Das System ist lizensiert von "{0}" entsprechend den AGB's und Lizenzvereinbarungen. Der Product Activation Key ist bis {1} gültig.
-
-Der Product Activation Key lizensiert maximal {2} aktive Agenten.
-
-Das Product Activation Key Schema ist: "{3}".
-Folgende Optionen und Module sind aktiviert:
-{4}</value>
-  </data>
   <data name="YouHaveAlmostTooManyActiveAgents" xml:space="preserve">
     <value>Sie haben {0} aktive Mitarbeiter, jedoch eine Lizenz für nur {1} Mitarbeiter. Bitte erweitern Sie ihre Lizenz rechtzeitig.</value>
   </data>
@@ -11251,15 +11116,6 @@ Folgende Optionen und Module sind aktiviert:
   </data>
   <data name="NewProductActivationKeyDoesNotCoverEnoughSeats" xml:space="preserve">
     <value>Ihr Lizenzschlüssel hat ein Limit von {0} Sitzplätze. Bitte nutzen Sie eine Lizenzschlüssel, der ausreichend Plätze ermöglicht.</value>
-  </data>
-  <data name="SeatProductActivationKey" xml:space="preserve">
-    <value>Das System ist lizensiert von "{0}" entsprechend den AGB's und Lizenzvereinbarungen. Der Product Activation Key ist bis {1} gültig.
-
-Der Product Activation Key lizensiert maximal {2} Plätze.
-
-Das Product Activation Key Schema ist: "{3}".
-Folgende Optionen und Module sind aktiviert:
-{4}</value>
   </data>
   <data name="YouHaveAlmostTooManySeats" xml:space="preserve">
     <value>Sie haben Ihr lizensiertes Limit von {0} Plätzen erreicht. Bitte erweitern Sie ihre Lizenz rechtzeitig.</value>
@@ -13259,9 +13115,6 @@ Folgende Optionen und Module sind aktiviert:
   <data name="UseShiftsFromColon" xml:space="preserve">
     <value>Schichten von ( ) benutzen</value>
   </data>
-  <data name="InternalErrorXMsg" xml:space="preserve">
-    <value>Ein Fehler ist aufgetreten:{0}</value>
-  </data>
   <data name="NonWorkingDays" xml:space="preserve">
     <value>Nicht verplante Tage</value>
   </data>
@@ -13588,9 +13441,6 @@ Folgende Funktionen sind aktiv:
   <data name="SearchForDayOff" xml:space="preserve">
     <value>Standort/Team/Vertrag suchen</value>
   </data>
-  <data name="SearchForAgentGroup" xml:space="preserve">
-    <value>Standort/Team/Skill/Vertrag suchen</value>
-  </data>
   <data name="CommandFailed" xml:space="preserve">
     <value>Der angeforderte Prozess hat fehlgeschlagen. {0}</value>
   </data>
@@ -13609,26 +13459,14 @@ Folgende Funktionen sind aktiv:
   <data name="NoPreviousScheduleResult" xml:space="preserve">
     <value>Diese Planungsperiode hat keine vorherigen Planungsergebnisse</value>
   </data>
-  <data name="NoAgentsWithinAgentGroup" xml:space="preserve">
-    <value>Keine Mitarbeiter können in diese Mitarbeitergruppe verplant werden</value>
-  </data>
-  <data name="NewAgentGroup" xml:space="preserve">
-    <value>Neue Mitarbeitergruppe</value>
-  </data>
   <data name="InternalErrorMsg" xml:space="preserve">
     <value>Ein internes Problem ist aufgetreten</value>
   </data>
   <data name="Issue" xml:space="preserve">
     <value>Problem</value>
   </data>
-  <data name="HelpCreateAgentGroup" xml:space="preserve">
-    <value>Eine Mitarbeitergruppe wird benötigt um diese verplanen zu können. Möchten Sie eine Mitarbeitergruppe erstellen?</value>
-  </data>
   <data name="FilterValidationIssues" xml:space="preserve">
     <value>Validierungsprobleme filtern</value>
-  </data>
-  <data name="EditAgentGroup" xml:space="preserve">
-    <value>Mitarbeitergruppe bearbeiten</value>
   </data>
   <data name="FilterRoles" xml:space="preserve">
     <value>Nach Rollen filtern</value>
@@ -13642,17 +13480,11 @@ Folgende Funktionen sind aktiv:
   <data name="StartDateMustBeEqualToOrEarlierThanEndDate" xml:space="preserve">
     <value>Startzeit muss früher und gleich der Endzeit sein</value>
   </data>
-  <data name="DeleteAgentGroup" xml:space="preserve">
-    <value>Mitarbeitergruppe löschen</value>
-  </data>
   <data name="AbsenceRequestHasBeenWaitlisted" xml:space="preserve">
     <value>Die Abwesenheitsanfrage von {0} bis {1} konnte zur Zeit nicht genehmigt werden und wurde auf die Warteliste gesetzt.</value>
   </data>
   <data name="DayOffRuleSetting" xml:space="preserve">
     <value>Einstellungen für Regeln für freie Tage</value>
-  </data>
-  <data name="DayOffRuleAppliedFilters" xml:space="preserve">
-    <value>Diese Einstellungen gehören zu Mitarbeitergruppe {0}</value>
   </data>
   <data name="DayOffRule" xml:space="preserve">
     <value>Regel für freie Tage</value>
@@ -13662,9 +13494,6 @@ Folgende Funktionen sind aktiv:
   </data>
   <data name="CreateFirstPlanningPeriod" xml:space="preserve">
     <value>Eine erste Planungsperiode erstellen</value>
-  </data>
-  <data name="CreateAgentGroup" xml:space="preserve">
-    <value>Mitarbeitergruppe erstellen</value>
   </data>
   <data name="AgentsHaveScheduled" xml:space="preserve">
     <value>Die Mitarbeiter wurden verplant</value>
@@ -13915,9 +13744,6 @@ Folgende Funktionen sind aktiv:
   <data name="ChangePlanningDuration" xml:space="preserve">
     <value>Planungszeitraum ändern</value>
   </data>
-  <data name="ScheduleAgentGroup" xml:space="preserve">
-    <value>Mitarbeitergruppe verplanen</value>
-  </data>
   <data name="AreYouSureYouWantToClearPlanningPeriodData" xml:space="preserve">
     <value>Sind Sie sicher, dass Sie die freien Tage und die Verplanten Schichten für die Periode {0} - {1} löschen möchten?</value>
   </data>
@@ -13935,9 +13761,6 @@ Folgende Funktionen sind aktiv:
   </data>
   <data name="FilterRtaFull" xml:space="preserve">
     <value>Mitarbeiter Namen / Standorte /Teams / Regeln / Stati / momentane Aktivitäten filtern</value>
-  </data>
-  <data name="ManageDayOffForAgentGroup" xml:space="preserve">
-    <value>Regeln der freien Tage für Mitarbeitergruppe {0} verwalten</value>
   </data>
   <data name="YouNeedAPlanningPeriodToScheduleYourAgentsDoYouWantToCreateAPlanningPeriodQuestion" xml:space="preserve">
     <value>Sie brauchen eine Planungsperiode, um Ihre Mitarbeiter verplanen zu können. Möchten Sie eine Planungsperiode erstellen?</value>

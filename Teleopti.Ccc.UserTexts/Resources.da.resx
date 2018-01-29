@@ -217,10 +217,6 @@
     <value>Tilføj Personlig Aktivitet</value>
     <comment>Add personal activity menu item</comment>
   </data>
-  <data name="AddQueuesThreeDots" xml:space="preserve">
-    <value>Tilføj køer...</value>
-    <comment>Add queues...</comment>
-  </data>
   <data name="AddToQuickAccessToolBar" xml:space="preserve">
     <value>&amp;Tilføj til Værktøjslinjen Hurtig Adgang</value>
     <comment>&amp;Add to Quick Access ToolBar</comment>
@@ -3851,10 +3847,6 @@ Kolonner</value>
     <value>Ændr tildeling</value>
     <comment>Modify assignment</comment>
   </data>
-  <data name="ModifyDayOff" xml:space="preserve">
-    <value>Ændr fridag</value>
-    <comment>Modify day off</comment>
-  </data>
   <data name="ModifyMainShift" xml:space="preserve">
     <value>Ændr hovedvagt</value>
     <comment>Modify main shift</comment>
@@ -4820,9 +4812,6 @@ Arbejdsbelastning</value>
     <value>Ny Vagtkategori</value>
     <comment>New Shift Category text to be placed in the Shift Category settings page</comment>
   </data>
-  <data name="AddNewShiftCategory" xml:space="preserve">
-    <value>Tilføj ny vagtkategori</value>
-  </data>
   <data name="ChooseShiftCategoryToChange" xml:space="preserve">
     <value>Vælg vagtkategori, der skal ændres</value>
     <comment>ChooseSShiftCategoryToChange text in shift categories setting page</comment>
@@ -4859,10 +4848,6 @@ Arbejdsbelastning</value>
     <value>Tilgængelig tid</value>
     <comment>AP: Information grid columns (My Report)</comment>
   </data>
-  <data name="IdleTime" xml:space="preserve">
-    <value>Inaktiv tid</value>
-    <comment>AP: Information grid columns (My Report)</comment>
-  </data>
   <data name="LoggedInTime" xml:space="preserve">
     <value>Tid logget ind</value>
     <comment>AP: Information grid columns (My Report)</comment>
@@ -4890,10 +4875,6 @@ Arbejdsbelastning</value>
   <data name="AddActivityThreeDots" xml:space="preserve">
     <value>Tilføj Aktivitet...</value>
     <comment>Add Activity...</comment>
-  </data>
-  <data name="AddOverTimeThreeDots" xml:space="preserve">
-    <value>Tilføj Overtid...</value>
-    <comment>Add Overtime...</comment>
   </data>
   <data name="AddPersonalActivityThreeDots" xml:space="preserve">
     <value>Tilføj Personlig Aktivitet...</value>
@@ -5769,10 +5750,6 @@ Tilgængelighed</value>
     <value>Administrer værdier for retfærdig fordeling</value>
     <comment>ManageFairnessValues</comment>
   </data>
-  <data name="PreferenceDate" xml:space="preserve">
-    <value>Præference Dato</value>
-    <comment>Preference Date: grid column header </comment>
-  </data>
   <data name="Budgets" xml:space="preserve">
     <value>Budgetter</value>
     <comment>Panel text</comment>
@@ -6083,10 +6060,6 @@ Tilgængelighed</value>
   <data name="ResReportAgentQueueStatistics" xml:space="preserve">
     <value>Køstatistik for Medarbejder</value>
     <comment>Agent Queue Statistics</comment>
-  </data>
-  <data name="ResReportAgentScheduleAdherence" xml:space="preserve">
-    <value>Medarbejder - Overholdelse af Plan</value>
-    <comment>Agent - Schedule Adherence</comment>
   </data>
   <data name="ResReportAgentScheduleResult" xml:space="preserve">
     <value>Medarbejderparametre</value>
@@ -6860,10 +6833,6 @@ Opdateret den: {1}</value>
     <value>Generel Information om Eksport til Lønsystem</value>
     <comment>PayrollExportGeneralInformation</comment>
   </data>
-  <data name="MaximumHoursPerWeekCannotBeMoreThan168Hours" xml:space="preserve">
-    <value>Maksimalt antal timer pr. uge kan ikke være mere end 168 Timer</value>
-    <comment>Contract</comment>
-  </data>
   <data name="RunExport" xml:space="preserve">
     <value>Kør valgte eksport</value>
     <comment>used in portal on payrollexportnavigator</comment>
@@ -6974,14 +6943,6 @@ Opdateret den: {1}</value>
   <data name="UndoRedoScheduling" xml:space="preserve">
     <value>Planlægning</value>
     <comment>Scheduling (undo/redo info)</comment>
-  </data>
-  <data name="UndoRedoModifyPersonRequest" xml:space="preserve">
-    <value>Ændre medarbejer forespørgsel om {0}</value>
-    <comment>Modifying person request (undo/redo info)</comment>
-  </data>
-  <data name="UndoRedoModifySchedule" xml:space="preserve">
-    <value>Ændre plan for {0}, dato {1}</value>
-    <comment>Modifying schedule (undo/redo info)</comment>
   </data>
   <data name="ExportToPDF" xml:space="preserve">
     <value>Eksport til PDF</value>
@@ -8197,9 +8158,6 @@ Ugedag</value>
   <data name="NoPersonPeriodFoundForUser" xml:space="preserve">
     <value>Ingen gyldig ansættelsesperiode fundet for denne medarbejder</value>
   </data>
-  <data name="YourEmailAddressShouldBeConfiguredInThePeopleModuleToUseThisServiceDot" xml:space="preserve">
-    <value>Din E-mail adresse skal konfigureres i Personale modulet</value>
-  </data>
   <data name="UpdateEfficiencyShrinkageRow" xml:space="preserve">
     <value>Rediger Svind for effektivitet</value>
   </data>
@@ -8241,9 +8199,6 @@ Ugedag</value>
   </data>
   <data name="NoExistingShiftSelected" xml:space="preserve">
     <value>Den valgte vagt eksistere ikke </value>
-  </data>
-  <data name="BetweenDayOff" xml:space="preserve">
-    <value>Mellem fridage </value>
   </data>
   <data name="BlockScheduling" xml:space="preserve">
     <value>Blok planlægning</value>
@@ -8334,9 +8289,6 @@ Ugedag</value>
   </data>
   <data name="Optimisation" xml:space="preserve">
     <value>Optimere</value>
-  </data>
-  <data name="OverStaff" xml:space="preserve">
-    <value>Overbemandet</value>
   </data>
   <data name="PriorityColon" xml:space="preserve">
     <value>Prioritering:</value>
@@ -9361,9 +9313,6 @@ For indstruktioner til de mest almindelige kalender Apps. se  </value>
   <data name="LowestPossibleWorkTimeIsTooHigh" xml:space="preserve">
     <value>Den lavest mulige arbejdstid er for høj!</value>
   </data>
-  <data name="CannotDeleteSelectedActivities" xml:space="preserve">
-    <value>Kan ikke slette de valgte aktiviteter</value>
-  </data>
   <data name="SelectedActivitiesCannotBeDeletedColon" xml:space="preserve">
     <value>De valgte aktiviteter kan ikke slettes fordi følgende kompetencer bruger dem:</value>
   </data>
@@ -9465,9 +9414,6 @@ For indstruktioner til de mest almindelige kalender Apps. se  </value>
   </data>
   <data name="Include" xml:space="preserve">
     <value>Inkludere</value>
-  </data>
-  <data name="Illegal" xml:space="preserve">
-    <value>Ugyldig</value>
   </data>
   <data name="TheEnteredIsIllegal" xml:space="preserve">
     <value>Det indtastede {0} er ugyldig</value>
@@ -9907,9 +9853,6 @@ Check venligst i egenskaber for Kompetancer for flere lokationer, Prognose modul
   </data>
   <data name="TheInputTextCanNotBeEmptyDot" xml:space="preserve">
     <value>Tekst boksen kan ikke være tom.</value>
-  </data>
-  <data name="TotalAllowance" xml:space="preserve">
-    <value>Total kvote</value>
   </data>
   <data name="AllowPersonModifications" xml:space="preserve">
     <value>Kan redigre og gemme</value>
@@ -10422,9 +10365,6 @@ Der er ikke nok budgetteret kvote til denne forespørgelse.</value>
   <data name="ManageSmsSettings" xml:space="preserve">
     <value>Administrer SMS indstillinger</value>
   </data>
-  <data name="SetWhichColumnToGetSmsPhoneNumberFrom" xml:space="preserve">
-    <value>Angiv den kolonne som SMS telefonnummeret skal hentes fra</value>
-  </data>
   <data name="SmsSettings" xml:space="preserve">
     <value>SMS Indstillinger</value>
   </data>
@@ -10472,9 +10412,6 @@ Der er ikke nok budgetteret kvote til denne forespørgelse.</value>
   </data>
   <data name="PleaseChooseSkillSet" xml:space="preserve">
     <value>Vælg venligst kompetence</value>
-  </data>
-  <data name="AllowMeetings" xml:space="preserve">
-    <value>Tillad møder</value>
   </data>
   <data name="ShiftCategories" xml:space="preserve">
     <value>Vagtkategorier</value>
@@ -12423,9 +12360,6 @@ Der er ikke nok budgetteret kvote til denne forespørgelse.</value>
   <data name="FailedImportedCountColon" xml:space="preserve">
     <value>Import mislykkedes:</value>
   </data>
-  <data name="InternalErrorXMsg" xml:space="preserve">
-    <value>Der er sket interne fejl: {0}</value>
-  </data>
   <data name="PleaseFindTheDownloadedExcelSheetToCheckTheError" xml:space="preserve">
     <value>Vär venlig at gennemse det downloadede excel ark for at kontrollere den detaljerede fejl.</value>
   </data>
@@ -13997,9 +13931,6 @@ Der er ikke nok budgetteret kvote til denne forespørgelse.</value>
   </data>
   <data name="SuccessfullyImportedAgents" xml:space="preserve">
     <value>Det er lykkedes at importere {0} medarbejder(e)</value>
-  </data>
-  <data name="AvailableAsGroupPage" xml:space="preserve">
-    <value>Tilgängelig Som Gruppeside</value>
   </data>
   <data name="Maximum5OptionalColumns" xml:space="preserve">
     <value>Maximalt 5 valgfrie kolonner kan väre tilgängelige som gruppesider</value>

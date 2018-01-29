@@ -192,9 +192,6 @@
   <data name="AddPersonalActivity" xml:space="preserve">
     <value>Legg til personlig aktivitet</value>
   </data>
-  <data name="AddQueuesThreeDots" xml:space="preserve">
-    <value>Legg til kø...</value>
-  </data>
   <data name="AddToQuickAccessToolBar" xml:space="preserve">
     <value>&amp;Legg til Quick Access verktøylinje</value>
   </data>
@@ -2926,9 +2923,6 @@ Dato</value>
   <data name="ModifyAssignment" xml:space="preserve">
     <value>Modifiser oppdrag</value>
   </data>
-  <data name="ModifyDayOff" xml:space="preserve">
-    <value>Modifiser fridag</value>
-  </data>
   <data name="ModifyMainShift" xml:space="preserve">
     <value>Modifiser hovedskift</value>
   </data>
@@ -3656,9 +3650,6 @@ standard</value>
   <data name="NewShiftCategory" xml:space="preserve">
     <value>Ny skiftkategori</value>
   </data>
-  <data name="AddNewShiftCategory" xml:space="preserve">
-    <value>Legg til ny skiftkategori</value>
-  </data>
   <data name="ChooseShiftCategoryToChange" xml:space="preserve">
     <value>Velg skiftkategori som skal endres</value>
   </data>
@@ -3686,9 +3677,6 @@ standard</value>
   <data name="AvailableTime" xml:space="preserve">
     <value>Tilgjengelig tid</value>
   </data>
-  <data name="IdleTime" xml:space="preserve">
-    <value>Pausetid</value>
-  </data>
   <data name="LoggedInTime" xml:space="preserve">
     <value>Tid innlogget</value>
   </data>
@@ -3709,9 +3697,6 @@ standard</value>
   </data>
   <data name="AddActivityThreeDots" xml:space="preserve">
     <value>Legg til aktivitet...</value>
-  </data>
-  <data name="AddOverTimeThreeDots" xml:space="preserve">
-    <value>Legg til overtid...</value>
   </data>
   <data name="AddPersonalActivityThreeDots" xml:space="preserve">
     <value>Legg til personlig aktivitet...</value>
@@ -4613,9 +4598,6 @@ standard</value>
   <data name="ResReportAgentQueueStatistics" xml:space="preserve">
     <value>Agent Køstatistikk</value>
   </data>
-  <data name="ResReportAgentScheduleAdherence" xml:space="preserve">
-    <value>Agent - Vagtplanuppføljning</value>
-  </data>
   <data name="ResReportAgentScheduleResult" xml:space="preserve">
     <value>Agentmåling</value>
   </data>
@@ -5200,9 +5182,6 @@ Oppdatert den: {1}</value>
   <data name="PayrollExportGeneralInformation" xml:space="preserve">
     <value>Lønnseksport generell informasjon</value>
   </data>
-  <data name="MaximumHoursPerWeekCannotBeMoreThan168Hours" xml:space="preserve">
-    <value>Maksimum timer per uke kan ikke være mer enn 168 timer</value>
-  </data>
   <data name="RunExport" xml:space="preserve">
     <value>Kjør valgt eksport</value>
   </data>
@@ -5286,12 +5265,6 @@ Oppdatert den: {1}</value>
   </data>
   <data name="UndoRedoScheduling" xml:space="preserve">
     <value>Planlegging</value>
-  </data>
-  <data name="UndoRedoModifyPersonRequest" xml:space="preserve">
-    <value>Modifiser personforespørsel for {0}</value>
-  </data>
-  <data name="UndoRedoModifySchedule" xml:space="preserve">
-    <value>Modifiser skjema for {0}, dato {1}</value>
   </data>
   <data name="ExportToPDF" xml:space="preserve">
     <value>Eksport til PDF</value>
@@ -6205,9 +6178,6 @@ Ukedag</value>
   <data name="NoExistingShiftSelected" xml:space="preserve">
     <value>Ingen eksisterende skift er valgt</value>
   </data>
-  <data name="BetweenDayOff" xml:space="preserve">
-    <value>Mellom fridager</value>
-  </data>
   <data name="BlockScheduling" xml:space="preserve">
     <value>Blokkplanlegging</value>
   </data>
@@ -6652,9 +6622,6 @@ Periode: {3}</value>
   <data name="OptimizeActivities" xml:space="preserve">
     <value>Optimaliser aktiviteter</value>
   </data>
-  <data name="UseImprovedCalculating" xml:space="preserve">
-    <value>Bruk forsterket kalkulering</value>
-  </data>
   <data name="Abandoned" xml:space="preserve">
     <value>Bortfall</value>
   </data>
@@ -6785,9 +6752,6 @@ Hvis denne feilen oppstår fortsatt må du kontrollere at passordet følger regl
   </data>
   <data name="ShiftTradeRequestCouldNotBeAcceptedParameter0" xml:space="preserve">
     <value>Forespørsel om bytte av skift kunna ikke aksepteres nytt pga. en feil. Feilmelding: {0}</value>
-  </data>
-  <data name="AddedSkillsColon" xml:space="preserve">
-    <value>Tillagde ferdigheter:</value>
   </data>
   <data name="AddEfficiencyShrinkageRow" xml:space="preserve">
     <value>Legg til effektivitet</value>
@@ -7119,9 +7083,6 @@ ukedag</value>
   <data name="Sites" xml:space="preserve">
     <value>Enheter</value>
   </data>
-  <data name="CannotDeleteSelectedActivities" xml:space="preserve">
-    <value>Kan ikke slette valgte aktiviteter</value>
-  </data>
   <data name="SelectedActivitiesCannotBeDeletedColon" xml:space="preserve">
     <value>Valgte aktiviteter kan ikke slettes fordi følgende skills bruker dem:</value>
   </data>
@@ -7290,9 +7251,6 @@ ukedag</value>
   <data name="resReportScheduledOvertimePerAgent" xml:space="preserve">
     <value>Planlagt overtid per agent</value>
   </data>
-  <data name="Illegal" xml:space="preserve">
-    <value>Ugyldig</value>
-  </data>
   <data name="IllegalInput" xml:space="preserve">
     <value>Ugyldig input</value>
   </data>
@@ -7415,9 +7373,6 @@ ukedag</value>
   </data>
   <data name="ExportWorkloadAndStaffing" xml:space="preserve">
     <value>Eksporter arbeidsbyrde og bemanning</value>
-  </data>
-  <data name="AllowMeetings" xml:space="preserve">
-    <value>Tillat møter</value>
   </data>
   <data name="MyTime" xml:space="preserve">
     <value>Min Tid</value>
@@ -7589,9 +7544,6 @@ ukedag</value>
   </data>
   <data name="MissingWorkflowControlSet" xml:space="preserve">
     <value>Manglende regelsett for arbeidsflyt</value>
-  </data>
-  <data name="YourEmailAddressShouldBeConfiguredInThePeopleModuleToUseThisServiceDot" xml:space="preserve">
-    <value>Din e-post adresse må være konfigurert i modul for personer for å bruke denne tjenesten.</value>
   </data>
   <data name="SignCustomerWeb" xml:space="preserve">
     <value>Innlogg Kunde Web</value>
@@ -8364,9 +8316,6 @@ ukedag</value>
   <data name="ManageSmsSettings" xml:space="preserve">
     <value>Administrer SMS innstillinger</value>
   </data>
-  <data name="SetWhichColumnToGetSmsPhoneNumberFrom" xml:space="preserve">
-    <value>Sett hvilken kolonne telefon nummer til SMS skal hentes fra</value>
-  </data>
   <data name="SmsSettings" xml:space="preserve">
     <value>SMS innstillinger</value>
   </data>
@@ -8435,9 +8384,6 @@ ukedag</value>
   </data>
   <data name="IncludedInRequestAllowance" xml:space="preserve">
     <value>Inkluder i forespørsel kvote</value>
-  </data>
-  <data name="TotalAllowance" xml:space="preserve">
-    <value>Total kvote</value>
   </data>
   <data name="ViewAllowance" xml:space="preserve">
     <value>Vis kvote</value>
@@ -10486,9 +10432,6 @@ Reduser kompleksiteten til å bruke disse skiftene.</value>
   </data>
   <data name="FailedImportedCountColon" xml:space="preserve">
     <value>Import mislyktes:</value>
-  </data>
-  <data name="InternalErrorXMsg" xml:space="preserve">
-    <value>noen intern feil skjedde:{0};</value>
   </data>
   <data name="PleaseFindTheDownloadedExcelSheetToCheckTheError" xml:space="preserve">
     <value>Vennligst finn det nedlastede excel arket for å kontrollere den detaljerte feilen.</value>

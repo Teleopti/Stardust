@@ -192,9 +192,6 @@
   <data name="AddPersonalActivity" xml:space="preserve">
     <value>Personel Aktivitesi Ekle</value>
   </data>
-  <data name="AddQueuesThreeDots" xml:space="preserve">
-    <value>Kuyruk ekle...</value>
-  </data>
   <data name="AddToQuickAccessToolBar" xml:space="preserve">
     <value>&amp;Hızlı Erişim Araç Çubuğuna ekle</value>
   </data>
@@ -2862,9 +2859,6 @@
   <data name="ModifyAssignment" xml:space="preserve">
     <value>Atamaları modifiye et</value>
   </data>
-  <data name="ModifyDayOff" xml:space="preserve">
-    <value>Tatilleri modifiye et</value>
-  </data>
   <data name="ModifyMainShift" xml:space="preserve">
     <value>Ana vardiyayı modifiye et</value>
   </data>
@@ -3573,9 +3567,6 @@
   <data name="NewShiftCategory" xml:space="preserve">
     <value>Yeni vardiya kategorisi</value>
   </data>
-  <data name="AddNewShiftCategory" xml:space="preserve">
-    <value>Yeni vardiya kategorisi ekle</value>
-  </data>
   <data name="ChooseShiftCategoryToChange" xml:space="preserve">
     <value>Değiştirmek için vardiya kategorisi seç</value>
   </data>
@@ -3603,9 +3594,6 @@
   <data name="AvailableTime" xml:space="preserve">
     <value>Uygun zaman</value>
   </data>
-  <data name="IdleTime" xml:space="preserve">
-    <value>Boş zaman</value>
-  </data>
   <data name="LoggedInTime" xml:space="preserve">
     <value>Zamanında yapılmış giriş</value>
   </data>
@@ -3626,9 +3614,6 @@
   </data>
   <data name="AddActivityThreeDots" xml:space="preserve">
     <value>Aktivite Ekle...</value>
-  </data>
-  <data name="AddOverTimeThreeDots" xml:space="preserve">
-    <value>Fazla Zaman Ekle...</value>
   </data>
   <data name="AddPersonalActivityThreeDots" xml:space="preserve">
     <value>Kişisel Aktivite Ekle...</value>
@@ -4563,9 +4548,6 @@
   <data name="ResReportAgentQueueStatistics" xml:space="preserve">
     <value>Müşteri Temsilcisi Kuyruk İstatistikleri</value>
   </data>
-  <data name="ResReportAgentScheduleAdherence" xml:space="preserve">
-    <value>Müşteri Temsilcisi - Vardiya Planı Uyumu</value>
-  </data>
   <data name="ResReportAgentScheduleResult" xml:space="preserve">
     <value>Müşteri Temsilcisi Metrikleri</value>
   </data>
@@ -5054,9 +5036,6 @@
   </data>
   <data name="PayrollExportGeneralInformation" xml:space="preserve">
     <value>Bordro Eksport Genel Bilgi</value>
-  </data>
-  <data name="MaximumHoursPerWeekCannotBeMoreThan168Hours" xml:space="preserve">
-    <value>Haftalık çalışma saati 168 saatden az olamaz</value>
   </data>
   <data name="RunExport" xml:space="preserve">
     <value>Seçili raporu çalıştır</value>
@@ -5604,12 +5583,6 @@
   <data name="UndoRedoPersonRequest" xml:space="preserve">
     <value>{0} için talebi işliyor</value>
   </data>
-  <data name="UndoRedoModifyPersonRequest" xml:space="preserve">
-    <value>{0} için kişi isteğini modifiye ediyor</value>
-  </data>
-  <data name="UndoRedoModifySchedule" xml:space="preserve">
-    <value>{0} için {1} tarihli vardya planını modifiye ediyor</value>
-  </data>
   <data name="PageOf" xml:space="preserve">
     <value>Sayfa {0} veya {1}</value>
   </data>
@@ -6071,9 +6044,6 @@
   </data>
   <data name="NoExistingShiftSelected" xml:space="preserve">
     <value>Vardiya seçilmedi.</value>
-  </data>
-  <data name="BetweenDayOff" xml:space="preserve">
-    <value>Tatiller arası</value>
   </data>
   <data name="BlockScheduling" xml:space="preserve">
     <value>Blok vardiyalama</value>
@@ -6894,9 +6864,6 @@
   <data name="LowestPossibleWorkTimeIsTooHigh" xml:space="preserve">
     <value>Olası en düşük çalıima süresi çok fazla</value>
   </data>
-  <data name="CannotDeleteSelectedActivities" xml:space="preserve">
-    <value>Seçili aktiviteler silinemiyor</value>
-  </data>
   <data name="SelectedActivitiesCannotBeDeletedColon" xml:space="preserve">
     <value>Seçili aktiviteler silinemiyor çünkü aşağıda belirtilen yetenekler bu aktiviteleri kullanıyor</value>
   </data>
@@ -7013,9 +6980,6 @@
   </data>
   <data name="resReportScheduledOvertimePerAgent" xml:space="preserve">
     <value>Müşteri temsilcisi bazında vardiyalanan fazla mesai</value>
-  </data>
-  <data name="Illegal" xml:space="preserve">
-    <value>Geçersiz</value>
   </data>
   <data name="TheEnteredIsIllegal" xml:space="preserve">
     <value>{0} geçerli değil</value>
@@ -7391,9 +7355,6 @@
   </data>
   <data name="TheInputTextCanNotBeEmptyDot" xml:space="preserve">
     <value>Giriş metni boş olamaz</value>
-  </data>
-  <data name="TotalAllowance" xml:space="preserve">
-    <value>Toplam ödenek</value>
   </data>
   <data name="AllowPersonModifications" xml:space="preserve">
     <value>Değiştirilip kaydedilebilir</value>
@@ -7944,9 +7905,6 @@
   <data name="YourPasswordHasAlreadyExpired" xml:space="preserve">
     <value>Şifrenizin geçerliliği sona ermiştir.</value>
   </data>
-  <data name="YourEmailAddressShouldBeConfiguredInThePeopleModuleToUseThisServiceDot" xml:space="preserve">
-    <value>Bu hizmeti kullanmak için e-posta adresinizin "Çalışanlar" modülünde tanımlı olması gerekir.</value>
-  </data>
   <data name="YouHaveToSelectAtLeastOneWorkload" xml:space="preserve">
     <value>En az bir işyükü seçmek zorundasınız.</value>
   </data>
@@ -8224,15 +8182,6 @@ Uygulama az sonra kapanacak.
 Önemli:
 Bütün Teleopti modüllerinin, ağ bazlı Teleopti uygulamalarının ve yeni lisansınız ile erişim kazanmış olduğunuz yeni modüllerin düzgün çalışabilmesi için sistem yöneticinizden ana sunucudan Başlat komutu ile ulaşabileceği "Restart Teleopti WFM (Teleopti WFM'i yeniden başlat)" isimli .bat dosyasını çalıştırmasını rica edin.</value>
   </data>
-  <data name="ProductActivationKey" xml:space="preserve">
-    <value>İmzalamış olduğunuz lisans anlaşmasına göre sistem "{0}" aktif kullanıcı göz önünde bulundurularak tanımlanmış. Lisansınız {1} tarihinde kadar geçerlidir.
-
-Lisansınız maksimum {2} aktif müşteri temsilcisini kapsamaktadır.
-
-Lisansın geçerli olduğu ürün: "{3}".
-Lisansın kapsadığı modüller:
-{4}</value>
-  </data>
   <data name="YouHaveAlmostTooManyActiveAgents" xml:space="preserve">
     <value>{0} aktif müşteri temsilciniz var fakat lisansınız gereği en fazla {1} müşteri temsilcisine anyı anda lisans kullandırabilirsiniz. Lütfen en kısa zamanda lisansınızı yenileyin.</value>
   </data>
@@ -8429,15 +8378,6 @@ Bu hatayı sıklıkla almaktaysanız şifrenizi güvenlik kuralları ışığın
   <data name="NewProductActivationKeyDoesNotCoverEnoughSeats" xml:space="preserve">
     <value>Mevcut lisans yalnızca {0} yeri kapsıyor. Yeterli sayıda yeri kapsayacak yeni bir lisans edinmeniz gerek.</value>
   </data>
-  <data name="SeatProductActivationKey" xml:space="preserve">
-    <value>Lisans anlaşmanıza göre mevcut sistem "{0}" yeri kapsayacak şekilde tanımlı. Lisansınız {1} tarihine kadar geçerli.
-
-Lisansınız en fazla {2} yeri kapsayabilir.
-
-Ürün kapsamı "{3}".
-Aktif modüller:
-{4}</value>
-  </data>
   <data name="MyTeam" xml:space="preserve">
     <value>MyTeam</value>
   </data>
@@ -8590,9 +8530,6 @@ Aktif modüller:
   </data>
   <data name="ScheduleOnlyPreferenceMustHave" xml:space="preserve">
     <value>Sadece vazgeçilmez tercihleri vardiyala</value>
-  </data>
-  <data name="AllowMeetings" xml:space="preserve">
-    <value>Toplantı konulmasına izin ver</value>
   </data>
   <data name="ShiftCategories" xml:space="preserve">
     <value>Vardiya türleri</value>
@@ -10256,12 +10193,6 @@ Aktif opsiyonlar: {4}</value>
   <data name="SeatHasNoBookings" xml:space="preserve">
     <value>Rezervasyon yok</value>
   </data>
-  <data name="ConfirmRemoveCampaign" xml:space="preserve">
-    <value>Bu kampanyayı silmek istediğinizden emin misiniz?</value>
-  </data>
-  <data name="RemoveCampaign" xml:space="preserve">
-    <value>Kampanyayı Kaldır</value>
-  </data>
   <data name="CampaignFailedRemove" xml:space="preserve">
     <value>Kampanya Kaldırılamadı: {0}</value>
   </data>
@@ -10285,9 +10216,6 @@ Aktif opsiyonlar: {4}</value>
   </data>
   <data name="FailedImportedCountColon" xml:space="preserve">
     <value>Yükleme işlemi başarısız oldu:</value>
-  </data>
-  <data name="InternalErrorXMsg" xml:space="preserve">
-    <value>Sistem hatası: {0}</value>
   </data>
   <data name="SuccessfullyImportedCountColon" xml:space="preserve">
     <value>Yükleme başarılı:</value>
@@ -11153,9 +11081,6 @@ Lütfen İnternet bağlantınızı kontrol edip tekrar deneyin.</value>
   </data>
   <data name="CancelAbsenceRequestDescription" xml:space="preserve">
     <value>İptal ettiğiniz takdirde bu istek tarafından tetiklenen bütün devamsızlıklar çalışanın vardiya planından silinecektir. </value>
-  </data>
-  <data name="TryOutTheNewImprovedMyTeam" xml:space="preserve">
-    <value>Yeni MyTeam'i dene</value>
   </data>
   <data name="WFMReleaseNotification" xml:space="preserve">
     <value>{0} yenilendi. {1} geribildirminizi {2} bekliyoruz. Eski {3} sınırlı bir süre daha kullanıma açık olacak.</value>

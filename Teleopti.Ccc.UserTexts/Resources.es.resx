@@ -195,9 +195,6 @@
   <data name="AddPersonalActivity" xml:space="preserve">
     <value>Añadir Actividad Personal</value>
   </data>
-  <data name="AddQueuesThreeDots" xml:space="preserve">
-    <value>Añadir Colas</value>
-  </data>
   <data name="AddToQuickAccessToolBar" xml:space="preserve">
     <value>&amp;Añadir a la barra de herramientas de acceso rápido</value>
   </data>
@@ -2887,9 +2884,6 @@ Opcionales</value>
   <data name="ModifyAssignment" xml:space="preserve">
     <value>Modificar asignación</value>
   </data>
-  <data name="ModifyDayOff" xml:space="preserve">
-    <value>Modificar día libre</value>
-  </data>
   <data name="ModifyMainShift" xml:space="preserve">
     <value>Modificar turno principal</value>
   </data>
@@ -3608,9 +3602,6 @@ Estándar</value>
   <data name="NewShiftCategory" xml:space="preserve">
     <value>Nueva Categoría de Turno</value>
   </data>
-  <data name="AddNewShiftCategory" xml:space="preserve">
-    <value>Añadir nueva categoría de turno</value>
-  </data>
   <data name="ChooseShiftCategoryToChange" xml:space="preserve">
     <value>Elegir categoría de turno a modificar</value>
   </data>
@@ -3638,9 +3629,6 @@ Estándar</value>
   <data name="AvailableTime" xml:space="preserve">
     <value>Tiempo Disponible</value>
   </data>
-  <data name="IdleTime" xml:space="preserve">
-    <value>Tiempo No Disponible</value>
-  </data>
   <data name="LoggedInTime" xml:space="preserve">
     <value>Tiempo de sesión</value>
   </data>
@@ -3661,9 +3649,6 @@ Estándar</value>
   </data>
   <data name="AddActivityThreeDots" xml:space="preserve">
     <value>Añadir Actividad...</value>
-  </data>
-  <data name="AddOverTimeThreeDots" xml:space="preserve">
-    <value>Añadir Horas Extra...</value>
   </data>
   <data name="AddPersonalActivityThreeDots" xml:space="preserve">
     <value>Añadir Actividad Personal...</value>
@@ -4539,9 +4524,6 @@ Recargando...</value>
   <data name="ResReportAgentQueueStatistics" xml:space="preserve">
     <value>Estadísticas de las Colas de Agente</value>
   </data>
-  <data name="ResReportAgentScheduleAdherence" xml:space="preserve">
-    <value>Agente - Adherencia a Planificación</value>
-  </data>
   <data name="ResReportAgentScheduleResult" xml:space="preserve">
     <value>Métricas de Agente</value>
   </data>
@@ -5114,9 +5096,6 @@ Actualizado en: {1}</value>
   <data name="PayrollExportGeneralInformation" xml:space="preserve">
     <value>Información General de Exportación Payroll</value>
   </data>
-  <data name="MaximumHoursPerWeekCannotBeMoreThan168Hours" xml:space="preserve">
-    <value>Máximas horas por semana no debe superar las 168 horas</value>
-  </data>
   <data name="RunExport" xml:space="preserve">
     <value>Ejecutar Export seleccionado</value>
   </data>
@@ -5200,12 +5179,6 @@ Actualizado en: {1}</value>
   </data>
   <data name="UndoRedoScheduling" xml:space="preserve">
     <value>Planificando</value>
-  </data>
-  <data name="UndoRedoModifyPersonRequest" xml:space="preserve">
-    <value>Modificando petición personal para {0}</value>
-  </data>
-  <data name="UndoRedoModifySchedule" xml:space="preserve">
-    <value>Modificando planificación para {0}, fecha {1}</value>
   </data>
   <data name="ExportToPDF" xml:space="preserve">
     <value>Exportar a PDF</value>
@@ -6208,9 +6181,6 @@ de Preferencias</value>
   <data name="NoExistingShiftSelected" xml:space="preserve">
     <value>No hay turno seleccionado</value>
   </data>
-  <data name="BetweenDayOff" xml:space="preserve">
-    <value>Entre días libres</value>
-  </data>
   <data name="BlockScheduling" xml:space="preserve">
     <value>Planificación por bloques</value>
   </data>
@@ -6640,9 +6610,6 @@ Período: {3}</value>
   <data name="OptimizeActivities" xml:space="preserve">
     <value>Optimizar Actividades</value>
   </data>
-  <data name="UseImprovedCalculating" xml:space="preserve">
-    <value>Usar Cálculos Mayores</value>
-  </data>
   <data name="Abandoned" xml:space="preserve">
     <value>Abandonadas</value>
   </data>
@@ -6862,9 +6829,6 @@ Largo Plazo</value>
   </data>
   <data name="OpenBudgetGroupThreeDots" xml:space="preserve">
     <value>Abrir Presupuesto...</value>
-  </data>
-  <data name="AddedSkillsColon" xml:space="preserve">
-    <value>Añadir Skills:</value>
   </data>
   <data name="AttritionRate" xml:space="preserve">
     <value>Tasa de rotación</value>
@@ -7128,9 +7092,6 @@ Fechas</value>
   <data name="LowestPossibleWorkTimeIsTooHigh" xml:space="preserve">
     <value>El mín. de horas de trabajo es demasiado alto!</value>
   </data>
-  <data name="CannotDeleteSelectedActivities" xml:space="preserve">
-    <value>No ha sido posible borrar las Actividades Seleccionadas</value>
-  </data>
   <data name="SelectedActivitiesCannotBeDeletedColon" xml:space="preserve">
     <value>Las actividades seleccionadas no han sido borradas debido a que son usadas por los siguientes skills:</value>
   </data>
@@ -7253,9 +7214,6 @@ Fechas</value>
   </data>
   <data name="resReportScheduledOvertimePerAgent" xml:space="preserve">
     <value>Horas Extra planificadas por Agente</value>
-  </data>
-  <data name="Illegal" xml:space="preserve">
-    <value>Ilegal</value>
   </data>
   <data name="TheEnteredIsIllegal" xml:space="preserve">
     <value>El {0} insertado is ilegal</value>
@@ -7470,9 +7428,6 @@ La longitud actual de la asignación es {1} hrs.</value>
   </data>
   <data name="MissingWorkflowControlSet" xml:space="preserve">
     <value>Workflow Control Set no disponible</value>
-  </data>
-  <data name="YourEmailAddressShouldBeConfiguredInThePeopleModuleToUseThisServiceDot" xml:space="preserve">
-    <value>Su correo electrónico debe ser configurado en el módulo People para poder usar este servicio.</value>
   </data>
   <data name="SignCustomerWeb" xml:space="preserve">
     <value>Entrada en la web de Clientes</value>
@@ -7713,9 +7668,6 @@ La longitud actual de la asignación es {1} hrs.</value>
   </data>
   <data name="TheInputTextCanNotBeEmptyDot" xml:space="preserve">
     <value>El texto de entrada no puede estar vacío.</value>
-  </data>
-  <data name="TotalAllowance" xml:space="preserve">
-    <value>Autorización completa</value>
   </data>
   <data name="AllowPersonModifications" xml:space="preserve">
     <value>Puede cambiar y guardar</value>
@@ -8194,9 +8146,6 @@ La longitud actual de la asignación es {1} hrs.</value>
   <data name="ServedCustomers" xml:space="preserve">
     <value>Clientes Atendidos</value>
   </data>
-  <data name="SetWhichColumnToGetSmsPhoneNumberFrom" xml:space="preserve">
-    <value>Difinir columna con el número de teléfono para SMS</value>
-  </data>
   <data name="SmsSettings" xml:space="preserve">
     <value>Configuración de SMS</value>
   </data>
@@ -8304,9 +8253,6 @@ La longitud actual de la asignación es {1} hrs.</value>
   </data>
   <data name="ScheduleOnlyPreferenceMustHave" xml:space="preserve">
     <value>Planificar sólo Preferencias Imprescindibles</value>
-  </data>
-  <data name="AllowOverwrite" xml:space="preserve">
-    <value>Permitir sobrescritura</value>
   </data>
   <data name="LongtermForecast" xml:space="preserve">
     <value>Previsión a largo plazo</value>
@@ -8568,9 +8514,6 @@ La longitud actual de la asignación es {1} hrs.</value>
   </data>
   <data name="StudentAvailabilityFulfillment" xml:space="preserve">
     <value>Cumplimiento de disponibilidades por hora</value>
-  </data>
-  <data name="AllowMeetings" xml:space="preserve">
-    <value>Permitir reuniones</value>
   </data>
   <data name="NotReadyTime" xml:space="preserve">
     <value>Tiempo no disponible</value>
@@ -9401,9 +9344,6 @@ Los turnos generados por esta regla no estarán disponibles para planificación 
   <data name="Rank" xml:space="preserve">
     <value>Rango</value>
   </data>
-  <data name="RemoveCampaign" xml:space="preserve">
-    <value>Quitar Campaña</value>
-  </data>
   <data name="ClosedDay" xml:space="preserve">
     <value>Día Cerrado</value>
   </data>
@@ -9652,9 +9592,6 @@ Los turnos generados por esta regla no estarán disponibles para planificación 
   </data>
   <data name="ViewReport" xml:space="preserve">
     <value>Ver Reporte</value>
-  </data>
-  <data name="ConfirmRemoveCampaign" xml:space="preserve">
-    <value>Está seguro que quiere borrar esta campaña?</value>
   </data>
   <data name="ApplyProductActivationKey" xml:space="preserve">
     <value>Aplicar Clave de Activación de Producto</value>
@@ -10206,9 +10143,6 @@ Detalles del error:
   <data name="ViewChartTip" xml:space="preserve">
     <value>Ver el gráfico de método</value>
   </data>
-  <data name="ForecastChartIntro" xml:space="preserve">
-    <value>Basándose en los volúmenes anteriores a los datos históricos, los métodos de predicción se han creado y aplicado en el año anterior. El método más exacto está se muestra actualmente en el gráfico y se utilizará para su próxima previsión.</value>
-  </data>
   <data name="AddSpecificAuthorizationLabel" xml:space="preserve">
     <value>Añada una autorización específica a la siguiente lista:</value>
   </data>
@@ -10311,9 +10245,6 @@ Detalles del error:
   <data name="NarrowToSeeAll" xml:space="preserve">
     <value>Acote las normas para poder ver todos los datos</value>
   </data>
-  <data name="InternalErrorXMsg" xml:space="preserve">
-    <value>un error interno ha ocurrido:{0};</value>
-  </data>
   <data name="MaximumNumberOfReportRowsReached" xml:space="preserve">
     <value>Se alcanzó el número máximo de filas</value>
   </data>
@@ -10359,15 +10290,6 @@ Detalles del error:
   <data name="DragAndDropExcelFilesHereOrClickToUpload" xml:space="preserve">
     <value>Arrastre y suelte archivos .xls o .xls aquí o haga click en upload</value>
   </data>
-  <data name="ProductActivationKey" xml:space="preserve">
-    <value>El sistema tiene licencia hasta el "{0}" de acuerdo a los términos y condiciones del acuerdo de licencia, y su clave de activación de producto expirará {1}.
-
-La clave de activación de producto cubre un máximo de {2} agentes activos.
-
-La clave de activación de producto es {3}.
-Estas opciones están activadas:
-{4}</value>
-  </data>
   <data name="YouHaveAlmostTooManyActiveAgents" xml:space="preserve">
     <value>Tienes {0} agentes activos pero tienes licencia para tener sólo {1}. Por favor, actualice su clave de activación de producto en breve.</value>
   </data>
@@ -10388,15 +10310,6 @@ Estas opciones están activadas:
   </data>
   <data name="BackToWorkTextPrompt" xml:space="preserve">
     <value>regreso de ausencia temprano :</value>
-  </data>
-  <data name="SeatProductActivationKey" xml:space="preserve">
-    <value>El sistema tiene licencia hasta el "{0}" de acuerdo a los términos y condiciones del acuerdo de licencia, y su clave de activación de producto expirará {1}.
-
-La clave de activación de producto cubre un máximo de {2} asientos.
-
-La clave de activación de producto es {3}.
-Estas opciones están activadas:
-{4}</value>
   </data>
   <data name="CannotFindDataSourceWithName" xml:space="preserve">
     <value>No se puede encontrar fuente de datos con nombre: {0}</value>

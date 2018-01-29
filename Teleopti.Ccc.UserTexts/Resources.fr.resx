@@ -207,9 +207,6 @@
   <data name="AddPersonalActivity" xml:space="preserve">
     <value>Ajouter activité personnelle</value>
   </data>
-  <data name="AddQueuesThreeDots" xml:space="preserve">
-    <value>Ajouter files...</value>
-  </data>
   <data name="AddToQuickAccessToolBar" xml:space="preserve">
     <value>&amp;Ajouter à la barre d'outils accès rapide</value>
   </data>
@@ -1923,9 +1920,6 @@
   <data name="NewShiftCategory" xml:space="preserve">
     <value>Nouvelle catégorie Horaire</value>
   </data>
-  <data name="AddNewShiftCategory" xml:space="preserve">
-    <value>Ajouter nouvelle catégorie d'Horaire</value>
-  </data>
   <data name="ChooseShiftCategoryToChange" xml:space="preserve">
     <value>Choisir catégorie d'horaires à modifier</value>
   </data>
@@ -1955,9 +1949,6 @@
   </data>
   <data name="AddActivityThreeDots" xml:space="preserve">
     <value>Ajouter activité...</value>
-  </data>
-  <data name="AddOverTimeThreeDots" xml:space="preserve">
-    <value>Ajouter Overtime...</value>
   </data>
   <data name="AddPersonalActivityThreeDots" xml:space="preserve">
     <value>Ajouter activité personnelle...</value>
@@ -2835,9 +2826,6 @@
   <data name="ModifyAssignment" xml:space="preserve">
     <value>Modifier assignation</value>
   </data>
-  <data name="ModifyDayOff" xml:space="preserve">
-    <value>Modifier Jour Libre</value>
-  </data>
   <data name="OpenPermissionPage" xml:space="preserve">
     <value>Permissions</value>
   </data>
@@ -3173,9 +3161,6 @@
   </data>
   <data name="AvailableTime" xml:space="preserve">
     <value>Temps ready</value>
-  </data>
-  <data name="IdleTime" xml:space="preserve">
-    <value>Temps Non Ready</value>
   </data>
   <data name="LoggedInTime" xml:space="preserve">
     <value>Temps connecté</value>
@@ -3677,9 +3662,6 @@
   </data>
   <data name="ResReportAgentQueueStatistics" xml:space="preserve">
     <value>Statistiques file agent</value>
-  </data>
-  <data name="ResReportAgentScheduleAdherence" xml:space="preserve">
-    <value>Adhérence au planning Agent</value>
   </data>
   <data name="ResReportAgentScheduleResult" xml:space="preserve">
     <value>Métriques agent</value>
@@ -4515,9 +4497,6 @@
   <data name="NoExistingShiftSelected" xml:space="preserve">
     <value>Aucun horaire existant n'était sélectionné</value>
   </data>
-  <data name="BetweenDayOff" xml:space="preserve">
-    <value>Entre Jours libres</value>
-  </data>
   <data name="BlockScheduling" xml:space="preserve">
     <value>Planification par blocs</value>
   </data>
@@ -4890,9 +4869,6 @@
   <data name="AllAbsences" xml:space="preserve">
     <value>Toutes Absences</value>
   </data>
-  <data name="YourEmailAddressShouldBeConfiguredInThePeopleModuleToUseThisServiceDot" xml:space="preserve">
-    <value>Votre adresse e-mail ne devrait pas être configurée dans le module personnes afin d'utiliser ce service. </value>
-  </data>
   <data name="SignCustomerWeb" xml:space="preserve">
     <value>Connexion web client</value>
   </data>
@@ -5069,9 +5045,6 @@
   </data>
   <data name="resReportScheduledOvertimePerAgent" xml:space="preserve">
     <value>Heures supplémentaires planifiées par agent</value>
-  </data>
-  <data name="Illegal" xml:space="preserve">
-    <value>Non valable</value>
   </data>
   <data name="TheEnteredIsIllegal" xml:space="preserve">
     <value>Le {0} entré est non valable</value>
@@ -6288,9 +6261,6 @@
   <data name="OpenBudgetGroupThreeDots" xml:space="preserve">
     <value>Ouvrir budget...</value>
   </data>
-  <data name="AddedSkillsColon" xml:space="preserve">
-    <value>Ajouter compétences:</value>
-  </data>
   <data name="AttritionRate" xml:space="preserve">
     <value>Taux d'attrition</value>
   </data>
@@ -6599,12 +6569,6 @@
   </data>
   <data name="Encoding" xml:space="preserve">
     <value>Codage</value>
-  </data>
-  <data name="UndoRedoModifyPersonRequest" xml:space="preserve">
-    <value>Modification demande de la personne pour {0}</value>
-  </data>
-  <data name="UndoRedoModifySchedule" xml:space="preserve">
-    <value>Modification horaire pour {0}, date {1}</value>
   </data>
   <data name="SingleFile" xml:space="preserve">
     <value>Utiliser un fichier pour tous sélectionnés</value>
@@ -7095,26 +7059,6 @@
   <data name="RtaStateGroupsMustBeConfigured" xml:space="preserve">
     <value>Les groupes de statuts RTA doivent être configurés d'abord.</value>
   </data>
-  <data name="ApplyLicense" xml:space="preserve">
-    <value>Appliquer licence</value>
-  </data>
-  <data name="ApplyLicenseInstructions" xml:space="preserve">
-    <value>Instructions:
-* Achetez une licence (contact info sur www.teleopti.com)
-* Recevez le fichier licence (e.g par mail)
-* Enregistrez la licence sur le disque
-* Si vous avez du travail en cours dans l'application, sauvegardez avant d'appliquer la licence
-* Recherchez le fichier de licence en utilisant le bouton parcourir ci-dessous
-* Appliquez la licence
-* L'application va se fermer
-* Redémarrez MyTime pour avoir les nouvelles options sous licence
-* Redémarrez l'application</value>
-  </data>
-  <data name="CannotReadLicenseFile" xml:space="preserve">
-    <value>Le fichier de licence "{0}" n'a pas pu être accédé.
-Détails d'erreur:
-{1}</value>
-  </data>
   <data name="DatabaseProblem" xml:space="preserve">
     <value>Il y a eu un problème pendant le stockage de la licence dans la base de données:
 détails d'erreur:
@@ -7123,41 +7067,8 @@ détails d'erreur:
   <data name="EnterValidFile" xml:space="preserve">
     <value>Entrez un nom de fichier valide, incluant le chemin</value>
   </data>
-  <data name="LicenseApplicationSuccess" xml:space="preserve">
-    <value>Licence appliquée avec succès.
-Félicitations! Vous êtes un utilisateur licencié de cette solution récompensée de gestion de ressources humaines.
-L'application va maintenant se fermer.
-Vous pourrez ensuite la redémarrer.
-Vous devrez peut-être aussi redémarrer Mytime pour avoir accès aux nouvelles options sous licence.</value>
-  </data>
-  <data name="LicenseHasExpiredPleaseApplyANewOne" xml:space="preserve">
-    <value>Votre clé de licence a expiré, merci d'en appliquer une nouvelle.</value>
-  </data>
-  <data name="LicenseIsInvalidPerhapsForgedPleaseApplyANewOne" xml:space="preserve">
-    <value>Votre clé de licence est invalide, peut-être modifiée, merci d'en appliquer une nouvelle.</value>
-  </data>
-  <data name="NewLicenseAlreadyExpired" xml:space="preserve">
-    <value>La licence "{0}" que vous tentez d'utiliser est ancienne et a expiré.</value>
-  </data>
-  <data name="NewLicenseCorrupted" xml:space="preserve">
-    <value>Le fichier de licence "{0}" est invalide, il a peut-être été altéré.</value>
-  </data>
-  <data name="NewLicenseNotValidFile" xml:space="preserve">
-    <value>Le fichier licence "{0}" n'a pas un format (xml) valide.
-Détails d'erreur:
-{1}</value>
-  </data>
-  <data name="NoLicensePleaseApplyANewOne" xml:space="preserve">
-    <value>Vous n'avez pas encore appliqué de licence. Merci de le faire.</value>
-  </data>
   <data name="NoSuchFile" xml:space="preserve">
     <value>Pas de tel fichier</value>
-  </data>
-  <data name="UploadingNewLicenseFailed" xml:space="preserve">
-    <value>Echec d'application de la licence</value>
-  </data>
-  <data name="YourLicensWillExpireDoNotForgetToRenewItInTime" xml:space="preserve">
-    <value>Votre clé de licence est uniquement valide jusqu'au {0}, n'oubliez pas de la renouveler à temps</value>
   </data>
   <data name="Browse" xml:space="preserve">
     <value>&amp;Parcourir</value>
@@ -7171,9 +7082,6 @@ Détails d'erreur:
   <data name="About" xml:space="preserve">
     <value>A Propos</value>
   </data>
-  <data name="OpenLicenseFile" xml:space="preserve">
-    <value>Choisir le fichier de licence</value>
-  </data>
   <data name="WeeklyRestTimeCannotBeMoreThan168Hours" xml:space="preserve">
     <value>Le temps de repos hebdomadaire ne peut excéder 168 heures</value>
   </data>
@@ -7183,15 +7091,6 @@ Détails d'erreur:
   <data name="SomeoneChangedTheSameDataBeforeYouDot" xml:space="preserve">
     <value>Quelqu'un a changé les même données avant vous</value>
   </data>
-  <data name="License" xml:space="preserve">
-    <value>Le système est licencié pour "{0}" d'après les termes et conditions de l'accord de licence et la clé de licence va expirer le {1}.
-
-La licence couvre un maximum de {2} agents actifs.
-
-Le schéma de licence est "{3}".
-Ces options sont activées:
-{4}</value>
-  </data>
   <data name="YouHaveAlmostTooManyActiveAgents" xml:space="preserve">
     <value>Vous avez {0} agents actifs mais vous êtes uniquement licencié pour {1}.
 Merci de mettre à niveau votre clé de licence</value>
@@ -7199,10 +7098,6 @@ Merci de mettre à niveau votre clé de licence</value>
   <data name="YouHaveTooManyActiveAgents" xml:space="preserve">
     <value>Vous avez {0} agents actifs mais vous êtes uniquement licencié pour {1}.
 Vous devez augmenter votre licence avant de pouvoir continuer</value>
-  </data>
-  <data name="NewLicenseDoesNotCoverEnoughActiveAgents" xml:space="preserve">
-    <value>Cette licence couvre seulement {0} agents actifs mais vous en avez {1}.
-Vous devez obtenir une licence qui couvre suffisamment d'agents.</value>
   </data>
   <data name="MeetingCanNotCreate" xml:space="preserve">
     <value>Impossible de créer une réunion. Le système ne contient peut-ëtre pas d'activités.</value>
@@ -7268,9 +7163,6 @@ Message d'erreur: {0}</value>
   <data name="RequestHasBeenDeleted" xml:space="preserve">
     <value>La demande a été supprimée par la personne émettrice et ne peut plus être changée.</value>
   </data>
-  <data name="CannotDeleteSelectedActivities" xml:space="preserve">
-    <value>Ne peut pas supprimer les activités sélectionnées</value>
-  </data>
   <data name="SelectedActivitiesCannotBeDeletedColon" xml:space="preserve">
     <value>Les activités sélectionnées ne peuvent pas être supprimées car les compétences suivantes les utilisent:</value>
   </data>
@@ -7297,18 +7189,6 @@ Message d'erreur: {0}</value>
   </data>
   <data name="InterruptedShutDown" xml:space="preserve">
     <value>{0} a empêché l'application de se fermer. Voulez-vous forcer la fermeture de l'application?</value>
-  </data>
-  <data name="NewLicenseDoesNotCoverEnoughSeats" xml:space="preserve">
-    <value>La licence couvre uniquement {0} sièges. Vous devez obtenir une licence qui couvre assez de sièges.</value>
-  </data>
-  <data name="SeatLicense" xml:space="preserve">
-    <value>Le système est licencié pour "{0}" d'après les termes et conditions de l'accord de licence et la clé de licence va expirer {1}.
-
-La licence couvre un maximum de {2} sièges.
-
-Le schéma de licence est "{3}".
-Ces options sont activés:
-{4}</value>
   </data>
   <data name="YouHaveAlmostTooManySeats" xml:space="preserve">
     <value>Vous avez presque atteint votre limite de licences de {0} postes. Merci d'augmenter votre licence prochainement.</value>
@@ -7445,9 +7325,6 @@ Ces options sont activés:
   <data name="HighestStdev" xml:space="preserve">
     <value>Plus grand écart type</value>
   </data>
-  <data name="TeleoptiLicenseException" xml:space="preserve">
-    <value>Exception de licence Teleopti</value>
-  </data>
   <data name="MultiplicatorDefinitionSets" xml:space="preserve">
     <value>Sets de définition multiplicateurs</value>
   </data>
@@ -7498,9 +7375,6 @@ Ces options sont activés:
   </data>
   <data name="ThisRoleCannotBeDeleted" xml:space="preserve">
     <value>Ce rôle ne peut pas être supprimé</value>
-  </data>
-  <data name="MaximumHoursPerWeekCannotBeMoreThan168Hours" xml:space="preserve">
-    <value>Le nombre maximum d'heures par semaine ne peut pas être plus de 168h.</value>
   </data>
   <data name="RunExport" xml:space="preserve">
     <value>Exécuter l'export sélectionné</value>
@@ -7845,9 +7719,6 @@ Si cette erreur de validation persiste vous devez vérifier que votre mot de pas
   </data>
   <data name="TheInputTextCanNotBeEmptyDot" xml:space="preserve">
     <value>L'entrée ne peut être vide.</value>
-  </data>
-  <data name="TotalAllowance" xml:space="preserve">
-    <value>Permission totale</value>
   </data>
   <data name="AllowPersonModifications" xml:space="preserve">
     <value>Peut modifier et sauvegarder</value>
@@ -8446,9 +8317,6 @@ Si cette erreur de validation persiste vous devez vérifier que votre mot de pas
   <data name="ManageSmsSettings" xml:space="preserve">
     <value>Gérer les paramètres de SMS</value>
   </data>
-  <data name="SetWhichColumnToGetSmsPhoneNumberFrom" xml:space="preserve">
-    <value>Sélectionner depuis quelle colonne obtenir le numéro de tel SMS</value>
-  </data>
   <data name="SmsSettings" xml:space="preserve">
     <value>Paramètres SMS</value>
   </data>
@@ -8511,9 +8379,6 @@ Si cette erreur de validation persiste vous devez vérifier que votre mot de pas
   </data>
   <data name="ScheduleOnlyPreferenceMustHave" xml:space="preserve">
     <value>Planifier uniquement préférences doit avoir</value>
-  </data>
-  <data name="AllowMeetings" xml:space="preserve">
-    <value>Autoriser réunions</value>
   </data>
   <data name="ShiftCategories" xml:space="preserve">
     <value>Catégories d'horaires</value>
@@ -8744,9 +8609,6 @@ Réduisez la complexité pour utiliser ces horaires.</value>
   </data>
   <data name="GenerateForecastFor" xml:space="preserve">
     <value>Génère prévisions pour</value>
-  </data>
-  <data name="InProcess" xml:space="preserve">
-    <value>En cours...</value>
   </data>
   <data name="SelectedAbsences" xml:space="preserve">
     <value>Absences sélectionnées</value>
@@ -9219,9 +9081,6 @@ Réduisez la complexité pour utiliser ces horaires.</value>
   <data name="CompareWithTeamsFrom" xml:space="preserve">
     <value>Comparer avec groupes de</value>
   </data>
-  <data name="ReadyTimePerScheduledReadyTimePercent" xml:space="preserve">
-    <value>Temps Ready / Temps Ready Planifié (%)</value>
-  </data>
   <data name="ScheduleMustBeReloaded" xml:space="preserve">
     <value>Le planning doit être rechargé</value>
   </data>
@@ -9423,9 +9282,6 @@ Réduisez la complexité pour utiliser ces horaires.</value>
   <data name="Congratulations" xml:space="preserve">
     <value>Félicitations</value>
   </data>
-  <data name="YouGotNewBadges" xml:space="preserve">
-    <value>Vous avez obtenu de nouveaux badges!</value>
-  </data>
   <data name="FileProperCase" xml:space="preserve">
     <value>Fichier</value>
   </data>
@@ -9546,9 +9402,6 @@ Réduisez la complexité pour utiliser ces horaires.</value>
   <data name="ShiftBackToLegal" xml:space="preserve">
     <value>Corriger horaires selon banques horaires</value>
   </data>
-  <data name="BadgeTypeChecked" xml:space="preserve">
-    <value>Utiliser</value>
-  </data>
   <data name="CouldNotFindAnyValidShiftInShiftBag" xml:space="preserve">
     <value>Impossible de trouver un horaire valide dans la banque d'horaires</value>
   </data>
@@ -9557,9 +9410,6 @@ Réduisez la complexité pour utiliser ces horaires.</value>
   </data>
   <data name="ViewBadgeLeaderBoard" xml:space="preserve">
     <value>Voir le classement des badges</value>
-  </data>
-  <data name="BadgeTypeEnabled" xml:space="preserve">
-    <value>Utiliser</value>
   </data>
   <data name="CannotBeBeforeTime" xml:space="preserve">
     <value>{0} ne peut pas être plus tôt que {1}</value>
@@ -9712,15 +9562,6 @@ Détails de l'erreur:
   <data name="OpenProductActivationKeyFile" xml:space="preserve">
     <value>Choisissez un fichier de clé d'activation produit</value>
   </data>
-  <data name="ProductActivationKey" xml:space="preserve">
-    <value>Ce système est licencié pour "{0}" selon les termes et conditions de l'accord de licence et la clé d'activation produit va expirer au {1}.
-
-La clé d'activation produit couvre un maximum de {2} agents actifs.
-
-Le schéma de clé d'activation produit est "{3}".
-Ces options sont actives:
-{4}</value>
-  </data>
   <data name="NewProductActivationKeyDoesNotCoverEnoughActiveAgents" xml:space="preserve">
     <value>Cette clé d'activation produit couvre seulement {0} agents actifs, mais vous en avez {1}. Vous devez obtenir une clé d'activation produit qui couvre assez d'agents actifs</value>
   </data>
@@ -9732,15 +9573,6 @@ Ces options sont actives:
   </data>
   <data name="NewProductActivationKeyDoesNotCoverEnoughSeats" xml:space="preserve">
     <value>La clé d'activation produit couvre uniquement {0} positions. Vous devez obtenir une clé d'activation produit qui couvre suffisamment de positions.</value>
-  </data>
-  <data name="SeatProductActivationKey" xml:space="preserve">
-    <value>Ce système est licencié pour "{0}" selon les termes et conditions de l'accord de licence et la clé d'activation produit va expirer au {1}.
-
-La clé d'activation produit couvre un maximum de {2} positions.
-
-Le schéma de clé d'activation produit est "{3}".
-Ces options sont actives:
-{4}</value>
   </data>
   <data name="SetWhichColumnToGetSmsPhoneNumberFromColon" xml:space="preserve">
     <value>Définissez quelle colonne doit servir de source pour obtenir le numéro de téléphone pour SMS</value>
@@ -10144,9 +9976,6 @@ Ces options sont actives:
   <data name="Outbound" xml:space="preserve">
     <value>Appels sortants</value>
   </data>
-  <data name="ForecastChartIntro" xml:space="preserve">
-    <value>Basées sur les volumes précédant les données historiques, des méthodes de prévisions ont été créées et appliquées à l'année précédente. La méthode la plus précise est actuellement affichée sur le graphe et sera utilisée pour vos prochaines prévisions.</value>
-  </data>
   <data name="GenerateForecastTip" xml:space="preserve">
     <value>Génerer Prévisions</value>
   </data>
@@ -10402,12 +10231,6 @@ Ces options sont actives:
   <data name="ProcessFailedErrorColon" xml:space="preserve">
     <value>Le processus a échoué! Erreur:</value>
   </data>
-  <data name="ConfirmRemoveCampaign" xml:space="preserve">
-    <value>Est-ce que vous êtes sûr de supprimer cette campagne?</value>
-  </data>
-  <data name="RemoveCampaign" xml:space="preserve">
-    <value>Retirer campagne </value>
-  </data>
   <data name="CampaignFailedResetManual" xml:space="preserve">
     <value>Vous devrez choisir minimum un jour!</value>
   </data>
@@ -10476,9 +10299,6 @@ Ces options sont actives:
   </data>
   <data name="FailedImportedCountColon" xml:space="preserve">
     <value>Import échoué:</value>
-  </data>
-  <data name="InternalErrorXMsg" xml:space="preserve">
-    <value>Une erreur interne est survenue:{0};</value>
   </data>
   <data name="PleaseFindTheDownloadedExcelSheetToCheckTheError" xml:space="preserve">
     <value>Merci de vous reporter au tableur Excel téléchargé pour voir le détail de l'erreur.</value>
@@ -10597,9 +10417,6 @@ Ces options sont actives:
   <data name="SpaceVertically" xml:space="preserve">
     <value>Espacer verticalement les objets sélectionnés</value>
   </data>
-  <data name="UndoChangesAndRevertToLastSave" xml:space="preserve">
-    <value>Annuler les changements et revenir au statut sauvegardé</value>
-  </data>
   <data name="UngroupItems" xml:space="preserve">
     <value>Dégrouper les objets</value>
   </data>
@@ -10642,9 +10459,6 @@ Ces options sont actives:
   <data name="UnselectedItems" xml:space="preserve">
     <value>Objets désélectionnés</value>
   </data>
-  <data name="TeamScheduleSearchExcessiveResults" xml:space="preserve">
-    <value>Cette recherche va retourner un nombre de résultats excessifs. Merci de raffiner votre recherche.</value>
-  </data>
   <data name="ValidationforFilter" xml:space="preserve">
     <value>Merci d'ajouter un filtre</value>
   </data>
@@ -10662,9 +10476,6 @@ Ces options sont actives:
   </data>
   <data name="TotalTalkTimeCaret" xml:space="preserve">
     <value>Temps de communication total &gt;</value>
-  </data>
-  <data name="AmountOfFilters" xml:space="preserve">
-    <value>Quantité de filtres</value>
   </data>
   <data name="ChangePlanningPeriod" xml:space="preserve">
     <value>Changer période planning</value>
@@ -10783,9 +10594,6 @@ Ces options sont actives:
   <data name="NoPermissionAddFullDayAbsenceForAgent" xml:space="preserve">
     <value>Vous n'avez pas la permission d'ajouter des absences journée entière pour {0}</value>
   </data>
-  <data name="HasNoModifyPersonAbsencePermission" xml:space="preserve">
-    <value>Vous n'avez pas la permission de modifier l'absence individuelle!</value>
-  </data>
   <data name="ConnectionErrorMessage" xml:space="preserve">
     <value>Le serveur est inaccessible! Vérifiez votre connexion internet ou contactez votre adminstrateur.</value>
   </data>
@@ -10883,9 +10691,6 @@ Aidez-nous à améliorer votre expérience en envoyant un rapport d'erreur.</val
   <data name="ShowRightPanel" xml:space="preserve">
     <value>Montrer le panneau de droite</value>
   </data>
-  <data name="OnlySupportSeatRolesSetting" xml:space="preserve">
-    <value>Supporte seulement les règles de poste</value>
-  </data>
   <data name="ShowOnlyAbsence" xml:space="preserve">
     <value>Montrer seulement les absences</value>
   </data>
@@ -10982,9 +10787,6 @@ Aidez-nous à améliorer votre expérience en envoyant un rapport d'erreur.</val
   <data name="DenyReason" xml:space="preserve">
     <value>Raison de refus</value>
   </data>
-  <data name="ChangeWillAffectAgents" xml:space="preserve">
-    <value>Le changement va affecter {0} agents.</value>
-  </data>
   <data name="RemoveActivity" xml:space="preserve">
     <value>Supprimer l'activité</value>
   </data>
@@ -11029,9 +10831,6 @@ Aidez-nous à améliorer votre expérience en envoyant un rapport d'erreur.</val
   </data>
   <data name="SelectSkillArea" xml:space="preserve">
     <value>Sélectionner groupe de compétence</value>
-  </data>
-  <data name="ToggleIncludedSkills" xml:space="preserve">
-    <value>Activer les compétences incluses</value>
   </data>
   <data name="AreYouSureToRemoveSelectedActivity" xml:space="preserve">
     <value>Êtes-vous sûr de vouloir supprimer {0} activités de {1} agents?</value>
@@ -11591,9 +11390,6 @@ Ces options sont activées:
   </data>
   <data name="NoPermissionToViewErrorMessage" xml:space="preserve">
     <value>Vous n'avez pas la permission de consulter cette page.</value>
-  </data>
-  <data name="TheOtherAgentHasNoPermissionToShiftTrade" xml:space="preserve">
-    <value>L'autre agent n'a pas la permission d'échanger avec vous.</value>
   </data>
   <data name="IntradayWithShrinkage" xml:space="preserve">
     <value>Intra-journalier avec réduction</value>
@@ -12223,9 +12019,6 @@ Souhaitez-vous participer?</value>
   <data name="SuccessfullyImportedAgents" xml:space="preserve">
     <value>Succès d'import de {0} agents</value>
   </data>
-  <data name="AvailableAsGroupPage" xml:space="preserve">
-    <value>Disponibles comme pages de groupe:*</value>
-  </data>
   <data name="Maximum5OptionalColumns" xml:space="preserve">
     <value>*Maximum 5 colonnes optionnelles peuvent être disponible comme pages de groupe.</value>
   </data>
@@ -12316,33 +12109,6 @@ Souhaitez-vous participer?</value>
   <data name="Purged" xml:space="preserve">
     <value>Purgé</value>
   </data>
-  <data name="DeletedContractAssignedForPlanningPeriod" xml:space="preserve">
-    <value>Le contrat {0} assigné à cet agent a été supprimé</value>
-  </data>
-  <data name="DeletedContractScheduleAssignedForPlanningPeriod" xml:space="preserve">
-    <value>Le planning contrat {0} assigné à cet agent a été supprimé</value>
-  </data>
-  <data name="DeletedPartTimePercentageAssignedForPlanningPeriod" xml:space="preserve">
-    <value>Le pourcentage de temps partiel {0} assigné à cet agent a été supprimé</value>
-  </data>
-  <data name="DeletedShiftBagAssignedForPlanningPeriod" xml:space="preserve">
-    <value>La banque de quarts {0} assignée à cet agent a été supprimée</value>
-  </data>
-  <data name="MissingPersonPeriodForPlanningPeriod" xml:space="preserve">
-    <value>L'agent n'a pas de période de planification pour toute ou une partie de la période planifiée</value>
-  </data>
-  <data name="MissingSchedulePeriodForPlanningPeriod" xml:space="preserve">
-    <value>L'agent n'a aucune période de planification pour la période planifiée</value>
-  </data>
-  <data name="MissingShiftBagForPlanningPeriod" xml:space="preserve">
-    <value>L'agent n'a pas de banque d'horaires pour toute ou une partie de la période planifiée</value>
-  </data>
-  <data name="MissingSkillsForPlanningPeriod" xml:space="preserve">
-    <value>L'agent n'a pas de compétence pour toute ou une partie de la période planifiée</value>
-  </data>
-  <data name="NoFullSchedulePeriod" xml:space="preserve">
-    <value>La période de planification ne correspond pas avec la période planifiée</value>
-  </data>
   <data name="AgentHasDaysWithoutAnySchedule" xml:space="preserve">
     <value>L'agent a {0} jours sans aucun planning.</value>
   </data>
@@ -12355,9 +12121,6 @@ Souhaitez-vous participer?</value>
   <data name="AgentsHaveScheduled" xml:space="preserve">
     <value>agents ont été planifiés</value>
   </data>
-  <data name="AreYouSureYouWantToDeleteTheAgentGroup" xml:space="preserve">
-    <value>Êtes-vous sûr de vouloir supprimer le groupe d'agents '{0}' et ses paramètres relatifs?</value>
-  </data>
   <data name="AreYouSureYouWantToDeleteTheDayOffRule" xml:space="preserve">
     <value>Êtes-vous sûr de vouloir supprimer la règle de jours libres {0} et ses paramètres relatifs?</value>
   </data>
@@ -12366,9 +12129,6 @@ Souhaitez-vous participer?</value>
   </data>
   <data name="ChangePlanningDuration" xml:space="preserve">
     <value>Changer la durée de planification</value>
-  </data>
-  <data name="CreateAgentGroup" xml:space="preserve">
-    <value>Créer groupe d'agents</value>
   </data>
   <data name="CreateFirstPlanningPeriod" xml:space="preserve">
     <value>Créer la première période de planification</value>
@@ -12379,14 +12139,8 @@ Souhaitez-vous participer?</value>
   <data name="DayOffRule" xml:space="preserve">
     <value>Règle de jour libre</value>
   </data>
-  <data name="DayOffRuleAppliedFilters" xml:space="preserve">
-    <value>Les paramètres suivants sont appliqués au groupe d'agents {0}</value>
-  </data>
   <data name="DayOffRuleSetting" xml:space="preserve">
     <value>Paramètres de règles de jours libres</value>
-  </data>
-  <data name="DeleteAgentGroup" xml:space="preserve">
-    <value>Supprimer groupe d'agents</value>
   </data>
   <data name="DeleteDayOffRule" xml:space="preserve">
     <value>Supprimer règle de jours libres</value>
@@ -12394,29 +12148,14 @@ Souhaitez-vous participer?</value>
   <data name="DeletePlanningPeriod" xml:space="preserve">
     <value>Supprimer période de planification</value>
   </data>
-  <data name="EditAgentGroup" xml:space="preserve">
-    <value>Editer groupe d'agents</value>
-  </data>
   <data name="FilterValidationIssues" xml:space="preserve">
     <value>Filtrer les problèmes de validation</value>
-  </data>
-  <data name="HelpCreateAgentGroup" xml:space="preserve">
-    <value>Un groupe d'agent est nécessaire pour pouvoir planifier. Voulez-vous créer un groupe d'agents?</value>
   </data>
   <data name="HelpDayOffForPlanningPeriod" xml:space="preserve">
     <value>Les règles de jours libres vont être appliquées pour toutes les périodes de planification</value>
   </data>
   <data name="Issue" xml:space="preserve">
     <value>Problème</value>
-  </data>
-  <data name="ManageDayOffForAgentGroup" xml:space="preserve">
-    <value>Gérer les règles de jours libres pour le groupe d'agents {0}</value>
-  </data>
-  <data name="NewAgentGroup" xml:space="preserve">
-    <value>Nouveau groupe d'agents</value>
-  </data>
-  <data name="NoAgentsWithinAgentGroup" xml:space="preserve">
-    <value>Il n'y a pas d'agents pouvant être planifiés dans ce groupe d'agents</value>
   </data>
   <data name="NoPreviousScheduleResult" xml:space="preserve">
     <value>La période de planification n'a pas de résultat de planification précédent</value>
@@ -12433,9 +12172,6 @@ Souhaitez-vous participer?</value>
   <data name="RefreshPreSchedulingValidationIssues" xml:space="preserve">
     <value>Rafraîchir les problèmes de pre-planification</value>
   </data>
-  <data name="ScheduleAgentGroup" xml:space="preserve">
-    <value>Planifier groupe d'agents</value>
-  </data>
   <data name="SchedulingFailed" xml:space="preserve">
     <value>Echec de planification</value>
   </data>
@@ -12445,20 +12181,11 @@ Souhaitez-vous participer?</value>
   <data name="SchedulingSucceeded" xml:space="preserve">
     <value>Planification réussie</value>
   </data>
-  <data name="SchedulePageSelectAg" xml:space="preserve">
-    <value>Sélectionner un groupe d'agents avec lequel travailler</value>
-  </data>
-  <data name="SearchForAgentGroup" xml:space="preserve">
-    <value>Rechercher Site / Equipe / Compétence / Contrat</value>
-  </data>
   <data name="SearchForDayOff" xml:space="preserve">
     <value>Rechercher Site / Equipe / Contrat</value>
   </data>
   <data name="SelectedPlanningPeriod" xml:space="preserve">
     <value>Sélectionner période de planification</value>
-  </data>
-  <data name="SelectPpWorkWith" xml:space="preserve">
-    <value>Sélectionner période à planifier</value>
   </data>
   <data name="UpdatedValidation" xml:space="preserve">
     <value>Les problèmes de validation ont été mis à jour</value>

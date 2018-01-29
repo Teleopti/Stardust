@@ -13514,9 +13514,6 @@ Teleopti R&amp;D</value>
   <data name="DayOffRule" xml:space="preserve">
     <value>休息日規則</value>
   </data>
-  <data name="DayOffRuleAppliedFilters" xml:space="preserve">
-    <value>以下設置被應用于以下座席分組 {0}</value>
-  </data>
   <data name="DayOffRuleSetting" xml:space="preserve">
     <value>休息日規則設置</value>
   </data>
@@ -14143,9 +14140,6 @@ Teleopti R&amp;D</value>
   <data name="OvertimeShortName" xml:space="preserve">
     <value>加班</value>
   </data>
-  <data name="PreviousShiftNotMatchStartTime" xml:space="preserve">
-    <value>之前在日期 {0} 的班次與班次開始時間 {1} 不匹配</value>
-  </data>
   <data name="NoSkillGroupsFound" xml:space="preserve">
     <value>沒有找到技能組</value>
   </data>
@@ -14173,14 +14167,8 @@ Teleopti R&amp;D</value>
   <data name="OvertimeRequestDenyReasonClosedPeriod" xml:space="preserve">
     <value>您的加班申請無法被滿足. 當前某些日期沒有開放申請.</value>
   </data>
-  <data name="PreviousShiftNotMatchShift" xml:space="preserve">
-    <value>之前在日期 {0} 的班次與日期 {1} 的班次不匹配</value>
-  </data>
   <data name="ShiftStartsDayBeforeOrAfter" xml:space="preserve">
     <value>{0}: 一個班次不允許開始於前一天或後一天. 該問題可能是由於在人員模組中變更了座席代表的時區. 請選擇正確的時區或刪除此日期以修正問題.</value>
-  </data>
-  <data name="PreviousShiftNotMatchShiftCategory" xml:space="preserve">
-    <value>之前在日期 {0} 的班次與日期 {1} 的班次類別不匹配</value>
   </data>
   <data name="NotShowingAbandonRate" xml:space="preserve">
     <value>當前選項無法顯示放棄率</value>

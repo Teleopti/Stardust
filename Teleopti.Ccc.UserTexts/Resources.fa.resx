@@ -4044,9 +4044,6 @@
   <data name="PayrollExportGeneralInformation" xml:space="preserve">
     <value>اطلاعات کلی صدور لیست حقوقی</value>
   </data>
-  <data name="MaximumHoursPerWeekCannotBeMoreThan168Hours" xml:space="preserve">
-    <value>حداکثر ساعات در هر هفته نمی تواند بیش از 168 ساعت باشد</value>
-  </data>
   <data name="RunExport" xml:space="preserve">
     <value>اجرای صدور انتخاب شده</value>
   </data>
@@ -5487,9 +5484,6 @@
   <data name="LowestPossibleWorkTimeIsTooHigh" xml:space="preserve">
     <value>کمترین زمان کار ممکن بسیار بالا است!</value>
   </data>
-  <data name="CannotDeleteSelectedActivities" xml:space="preserve">
-    <value>فعالیتهای انتخاب شده نمی تواند پاک شود</value>
-  </data>
   <data name="SelectedActivitiesCannotBeDeletedColon" xml:space="preserve">
     <value>فعالیتهای انتخاب شده نمی تواند پاک شود زیرا مهارتهای زیر در حال استفاده از آنها هستند:</value>
   </data>
@@ -5591,9 +5585,6 @@
   </data>
   <data name="resReportScheduledOvertimePerAgent" xml:space="preserve">
     <value>اضافه کار زمانبندی شده برای هر پاسخو</value>
-  </data>
-  <data name="Illegal" xml:space="preserve">
-    <value>نامعتبر</value>
   </data>
   <data name="TheEnteredIsIllegal" xml:space="preserve">
     <value>{0} وارد شده نامعتبر می باشد</value>
@@ -5984,9 +5975,6 @@
   </data>
   <data name="TheInputTextCanNotBeEmptyDot" xml:space="preserve">
     <value>متن ورودی نمی تواند خالی باشد.</value>
-  </data>
-  <data name="TotalAllowance" xml:space="preserve">
-    <value>مجموع مجوزها</value>
   </data>
   <data name="AllowPersonModifications" xml:space="preserve">
     <value>می تواند تغییر دهد و ذخیره کند</value>
@@ -6521,9 +6509,6 @@
   </data>
   <data name="PleaseChooseSkillSet" xml:space="preserve">
     <value>لطفا مجموعه مهارت را انتخاب کنید.</value>
-  </data>
-  <data name="AllowMeetings" xml:space="preserve">
-    <value>مجوز جلسات</value>
   </data>
   <data name="ShiftCategories" xml:space="preserve">
     <value>دسته بندی های شیفت</value>
@@ -9104,9 +9089,6 @@ Teleopti R&amp;D</value>
   <data name="AllowDesktopNotifications" xml:space="preserve">
     <value>نمایش اخطارها روی دسکتاپ</value>
   </data>
-  <data name="SetWhichColumnToGetSmsPhoneNumberFrom" xml:space="preserve">
-    <value>تنظیم اینکه کدام ستون شماره تلفن SMS را  کسب کند</value>
-  </data>
   <data name="AddNewMultiplicator" xml:space="preserve">
     <value>افزودن افزایشگر جدید</value>
   </data>
@@ -9172,9 +9154,6 @@ Teleopti R&amp;D</value>
   </data>
   <data name="InfoTextConflict" xml:space="preserve">
     <value>کاربر دیگری این رکوردها را تغییر داده است . شما باید تصمیم بگیرید قبل از ادامه چه کاری باید انجام دهید . دکمه "تایید" را جهت تایید تغییرات کاربر دیگر بفشارید . لطفا توجه کنید که تغییرات متناظر شما از بین               می رود.کلید " نوشتن بر روی " را جهت ذخیره تغییرات خودتان و حذف تغییرات ایجاد شده توسط دیگران  بفشارید.</value>
-  </data>
-  <data name="YourEmailAddressShouldBeConfiguredInThePeopleModuleToUseThisServiceDot" xml:space="preserve">
-    <value>برای استفاده از این سرویس ،آدرس ایمیل شما باید  در ماژول جمعیت پیکر بندی شود .</value>
   </data>
   <data name="WorkloadDayTemplates" xml:space="preserve">
     <value>نمونه روز با تراکم  کاری</value>
@@ -9746,14 +9725,8 @@ Teleopti R&amp;D</value>
   <data name="ProductActivationKeyApplicationSuccess" xml:space="preserve">
     <value>کلید فعالسازی محصول با موفقیت اعمال شد. تبریک! شما اکنون یک کاربر مجاز برای این راهکار برتر مدیریت نیروی کار هستید. مهم: به منظور دسترسی به کلیه کاربردهای وب و خدمات و برای دسترسی به گزینه های جدید مجاز، لطفا از آی تی خود بخواهید تا "Restart Teleopti WFM" را از پوشه Teleopti در منوی شروع در سرور اجرا کند.</value>
   </data>
-  <data name="ProductActivationKey" xml:space="preserve">
-    <value>این سیستم بر اساس لایسنس "{0}"  است و بر اساس قواعد و شرایط این لایسنس کلید فعالسازی محصول در {1} منقضی می شود. کلید فعالسازی محصول تعداد {2} کاربر فعال را پوشش می دهد. الگوی این کلید فعالسازی محصول "{3}" است. این گزینه ها فعال هستند {4}.</value>
-  </data>
   <data name="Invalid" xml:space="preserve">
     <value>نامعتبر</value>
-  </data>
-  <data name="SeatProductActivationKey" xml:space="preserve">
-    <value>این سیستم بر اساس لایسنس "{0}"  است و بر اساس قواعد و شرایط این لایسنس کلید فعالسازی محصول در {1} منقضی می شود. کلید فعالسازی محصول تعداد {2} صندلی را پوشش می دهد. الگوی این کلید فعالسازی محصول "{3}" است. این گزینه ها فعال هستند {4}.</value>
   </data>
   <data name="SetWhichColumnToGetSmsPhoneNumberFromColon" xml:space="preserve">
     <value>تنظیم کنید که کدام ستون شماره تلفن SMSرا از : بگیرد</value>
@@ -10271,12 +10244,6 @@ Teleopti R&amp;D</value>
   <data name="SeatHasNoBookings" xml:space="preserve">
     <value>رزروی وجود ندارد</value>
   </data>
-  <data name="ConfirmRemoveCampaign" xml:space="preserve">
-    <value>مطمئن هستید مه میخواهید کمپین را حذف کنید</value>
-  </data>
-  <data name="RemoveCampaign" xml:space="preserve">
-    <value>حذف کمپین</value>
-  </data>
   <data name="CampaignFailedRemove" xml:space="preserve">
     <value>حذف کمپین با مشکل مواجه شد: {0}</value>
   </data>
@@ -10300,9 +10267,6 @@ Teleopti R&amp;D</value>
   </data>
   <data name="FailedImportedCountColon" xml:space="preserve">
     <value>عملیات وارد کردن با مشکل مواجه شد:</value>
-  </data>
-  <data name="InternalErrorXMsg" xml:space="preserve">
-    <value>خطای داخلی رخ داده است: {0}</value>
   </data>
   <data name="PleaseFindTheDownloadedExcelSheetToCheckTheError" xml:space="preserve">
     <value>لطفاً برای جزئیات بیشتر خطا به فایل اکسل بارگذاری شده مراجعه کنید</value>
@@ -10656,9 +10620,6 @@ Teleopti R&amp;D</value>
   <data name="ForecastOverrideMsg" xml:space="preserve">
     <value>تغییر و بازنویسی مقادیر پیش بینی شده</value>
   </data>
-  <data name="With campaign" xml:space="preserve">
-    <value>همراه با کمپین</value>
-  </data>
   <data name="SuccessTip" xml:space="preserve">
     <value>موفق</value>
   </data>
@@ -10715,9 +10676,6 @@ Teleopti R&amp;D</value>
   </data>
   <data name="NoPermissionAddFullDayAbsenceForAgent" xml:space="preserve">
     <value>شما مجوز لازم برای اضافه کردن مرخصی روزانه برای {0} را ندارید</value>
-  </data>
-  <data name="NoPermissionToModifyPersonAbsence" xml:space="preserve">
-    <value>شما مجوز بازم برای تغییر مرخصی را ندارید</value>
   </data>
   <data name="ConnectionErrorMessage" xml:space="preserve">
     <value>سرور قابل دسترس نیست. ارتباط اینترنت را چک کنید یا با مسئول فنی تماس بگیرید</value>
@@ -10908,9 +10866,6 @@ Teleopti R&amp;D</value>
   <data name="DenyReason" xml:space="preserve">
     <value>علت رد درخواست</value>
   </data>
-  <data name="ChangeWillAffectAgents" xml:space="preserve">
-    <value>این تغییر بر {0} اثر میگذارد</value>
-  </data>
   <data name="RemoveActivity" xml:space="preserve">
     <value>حذف فعالیت</value>
   </data>
@@ -10955,9 +10910,6 @@ Teleopti R&amp;D</value>
   </data>
   <data name="SelectSkillArea" xml:space="preserve">
     <value>انتخاب دسته مهارت</value>
-  </data>
-  <data name="ToggleIncludedSkills" xml:space="preserve">
-    <value>مهارتهای موجود را فعال کنید</value>
   </data>
   <data name="AreYouSureToRemoveSelectedActivity" xml:space="preserve">
     <value>مطمئن هستید که میخواهید {0} فعالیت را از  {1} پاسخگو حذف کنید؟</value>
@@ -12744,15 +12696,6 @@ Teleopti R&amp;D</value>
   <data name="ExistingShiftNotMatchStartTime" xml:space="preserve">
     <value>زمان شروع {0} در {1:d} با زمان شروع {2} در {3:d} سازگار نیست</value>
   </data>
-  <data name="PreviousShiftNotMatchShift" xml:space="preserve">
-    <value>شیفت {0:d} با شیفت {1:d} سازگار نیست</value>
-  </data>
-  <data name="PreviousShiftNotMatchShiftCategory" xml:space="preserve">
-    <value>شیفت {0:d} دسته شیفت {1} سازگار نیست</value>
-  </data>
-  <data name="PreviousShiftNotMatchStartTime" xml:space="preserve">
-    <value>شیفت {0:d} زمان شروع {1} سازگار نیست</value>
-  </data>
   <data name="OvertimeRequestDenyReasonNoPeriod" xml:space="preserve">
     <value>درخواست اضافه کاری رد شد. بعضی از روزها برای ثبت درخواست باز نیست. شما میتوانید درخواست خود را برای دوره {0} ارسال کنید</value>
   </data>
@@ -12783,9 +12726,6 @@ Teleopti R&amp;D</value>
   <data name="AllSkillGroups" xml:space="preserve">
     <value>همه گروههای مهارت</value>
   </data>
-  <data name="AreYouSureYouWantToDeleteTheSkillGroup" xml:space="preserve">
-    <value>مطمئن هستید که میخواهید گروه مهارت را حذف کنید؟</value>
-  </data>
   <data name="AreYouSureYouWantToExitSGM" xml:space="preserve">
     <value>مطمئن هستید که میخواهید از پنل مدیریت گروه مهارت خارج شوید؟</value>
   </data>
@@ -12800,12 +12740,6 @@ Teleopti R&amp;D</value>
   </data>
   <data name="ManageSkillGroups" xml:space="preserve">
     <value>مدیریت گروههای مهارتی</value>
-  </data>
-  <data name="MoveFromGroup" xml:space="preserve">
-    <value>جابجایی از گروه مهارتی</value>
-  </data>
-  <data name="MoveToGroup" xml:space="preserve">
-    <value>جابجایی به گروه مهارتی</value>
   </data>
   <data name="SelectSite" xml:space="preserve">
     <value>انتخاب سایت</value>
@@ -12852,29 +12786,11 @@ Teleopti R&amp;D</value>
   <data name="InvalidNumberOfFields" xml:space="preserve">
     <value>هر ردیفی باید {0} محل داده داشته باشد. این ردیف {1} تا دارد</value>
   </data>
-  <data name="GameNameIsTooLong" xml:space="preserve">
-    <value>نام بازی بسیار طولانی است</value>
-  </data>
   <data name="AgentIdIsTooLong" xml:space="preserve">
     <value>شناسه پاسخگو بسیار طولانی است</value>
   </data>
-  <data name="InvalidGameType" xml:space="preserve">
-    <value>نوع بازی باید عدد یا درصد باشد</value>
-  </data>
-  <data name="GameTypeChanged" xml:space="preserve">
-    <value>نوع بازی مثل گذشته نیست</value>
-  </data>
-  <data name="InvalidGameId" xml:space="preserve">
-    <value>شناسه نامعتبر بازی</value>
-  </data>
-  <data name="OutOfMaximumLimit" xml:space="preserve">
-    <value>تنها {0} معیار برای سرگرمی میتوان گذاشت، این ردیف بخاطرعدم رعایت این محدودیت اضافه نمیشود</value>
-  </data>
   <data name="InvalidScore" xml:space="preserve">
     <value>امتیاز نامعتبر</value>
-  </data>
-  <data name="AgentDoNotExist" xml:space="preserve">
-    <value>این پاسخگو وجود ندارد</value>
   </data>
   <data name="BusinessHierarchy" xml:space="preserve">
     <value>چارت سازمانی</value>

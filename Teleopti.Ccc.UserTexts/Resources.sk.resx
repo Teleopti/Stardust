@@ -205,10 +205,6 @@
     <value>Přidat osobní činnost</value>
     <comment>Add personal activity menu item</comment>
   </data>
-  <data name="AddQueuesThreeDots" xml:space="preserve">
-    <value>Přidat fronty...</value>
-    <comment>Add queues...</comment>
-  </data>
   <data name="AddToQuickAccessToolBar" xml:space="preserve">
     <value>&amp;Přidat do panelu nástrojů pro rychlý přístup</value>
     <comment>&amp;Add to Quick Access ToolBar</comment>
@@ -2503,18 +2499,6 @@ Vyloučení</value>
     <value>Vložit směnu</value>
     <comment>Paste Shift</comment>
   </data>
-  <data name="toolStripPanelItem3" xml:space="preserve">
-    <value>nástroj Strip Panel položka3</value>
-    <comment>tool Strip Panel Item3</comment>
-  </data>
-  <data name="toolStripSplitButton1" xml:space="preserve">
-    <value>nástroj Strip Split tlačítko1</value>
-    <comment>tool Strip Split Button1</comment>
-  </data>
-  <data name="toolStripPanelItem1" xml:space="preserve">
-    <value>nástroj Strip Panel položka1</value>
-    <comment>tool Strip Panel Item1</comment>
-  </data>
   <data name="Shifts" xml:space="preserve">
     <value>Směny</value>
     <comment>Shifts</comment>
@@ -2566,14 +2550,6 @@ Vyloučení</value>
   <data name="ShowOvertime" xml:space="preserve">
     <value>Zobrazit přesčas</value>
     <comment>Show  Overtime</comment>
-  </data>
-  <data name="splitContainerAdv2" xml:space="preserve">
-    <value>rozdělit Schránku Adv2</value>
-    <comment>split Container Adv2</comment>
-  </data>
-  <data name="splitContainerAdv3" xml:space="preserve">
-    <value>rozdělit Schránku Adv3</value>
-    <comment>split Container Adv3</comment>
   </data>
   <data name="GridInChart" xml:space="preserve">
     <value>Mřížka v diagramu</value>
@@ -3233,10 +3209,6 @@ Nahradit</value>
     <value>Připraven...</value>
     <comment>Ready... </comment>
   </data>
-  <data name="ChooseGroupingToChange" xml:space="preserve">
-    <value>Zvolit seskupování pro editaci</value>
-    <comment>Choose grouping to change</comment>
-  </data>
   <data name="PersonAssignmentIsNotValidDot" xml:space="preserve">
     <value>Přiřazení osoby není platné. {0}</value>
     <comment>Person assignment is not valid.</comment>
@@ -3879,10 +3851,6 @@ Sloupce</value>
   <data name="ModifyAssignment" xml:space="preserve">
     <value>Upravit přiřazení</value>
     <comment>Modify assignment</comment>
-  </data>
-  <data name="ModifyDayOff" xml:space="preserve">
-    <value>Upravit den volna</value>
-    <comment>Modify day off</comment>
   </data>
   <data name="ModifyMainShift" xml:space="preserve">
     <value>Upravit hlavní směnu</value>
@@ -4857,9 +4825,6 @@ Pracovní náplň</value>
     <value>Nová kategorie směny</value>
     <comment>New Shift Category text to be placed in the Shift Category settings page</comment>
   </data>
-  <data name="AddNewShiftCategory" xml:space="preserve">
-    <value>Přidat novou kategorii směny</value>
-  </data>
   <data name="ChooseShiftCategoryToChange" xml:space="preserve">
     <value>Zvolit kategorii směny pro změnu</value>
     <comment>ChooseSShiftCategoryToChange text in shift categories setting page</comment>
@@ -4896,10 +4861,6 @@ Pracovní náplň</value>
     <value>Dostupný čas</value>
     <comment>AP: Information grid columns (My Report)</comment>
   </data>
-  <data name="IdleTime" xml:space="preserve">
-    <value>Doba čekání</value>
-    <comment>AP: Information grid columns (My Report)</comment>
-  </data>
   <data name="LoggedInTime" xml:space="preserve">
     <value>Doba přihlášení</value>
     <comment>AP: Information grid columns (My Report)</comment>
@@ -4927,10 +4888,6 @@ Pracovní náplň</value>
   <data name="AddActivityThreeDots" xml:space="preserve">
     <value>Přidat činnost...</value>
     <comment>Add Activity...</comment>
-  </data>
-  <data name="AddOverTimeThreeDots" xml:space="preserve">
-    <value>Přidat přesčas...</value>
-    <comment>Add Overtime...</comment>
   </data>
   <data name="AddPersonalActivityThreeDots" xml:space="preserve">
     <value>Přidat osobní činnost...</value>
@@ -5846,10 +5803,6 @@ osoby</value>
     <value>Spravovat regulérní hodnoty</value>
     <comment>ManageFairnessValues</comment>
   </data>
-  <data name="PreferenceDate" xml:space="preserve">
-    <value>Prioritní datum</value>
-    <comment>Preference Date: grid column header </comment>
-  </data>
   <data name="Budgets" xml:space="preserve">
     <value>Rozpočty</value>
     <comment>Panel text</comment>
@@ -5953,10 +5906,6 @@ osoby</value>
   <data name="label7" xml:space="preserve">
     <value>návěští7</value>
     <comment>label7</comment>
-  </data>
-  <data name="ribbonControlAdv1" xml:space="preserve">
-    <value>lišta Řízení Adv1</value>
-    <comment>ribbon Control Adv1</comment>
   </data>
   <data name="UserDefinedOptions" xml:space="preserve">
     <value>Uživatelem definované možnosti</value>
@@ -6164,10 +6113,6 @@ osoby</value>
   <data name="ResReportAgentQueueStatistics" xml:space="preserve">
     <value>Statistika fronty agenta</value>
     <comment>Agent Queue Statistics</comment>
-  </data>
-  <data name="ResReportAgentScheduleAdherence" xml:space="preserve">
-    <value>Agent - Dodržování plánu</value>
-    <comment>Agent - Schedule Adherence</comment>
   </data>
   <data name="ResReportAgentScheduleResult" xml:space="preserve">
     <value>Metrika agenta</value>
@@ -6928,9 +6873,6 @@ Aktualizováno: {1}</value>
   <data name="QuestionDelete" xml:space="preserve">
     <value>Skutečne vymazat {0}{1}{0}?</value>
   </data>
-  <data name="MaximumHoursPerWeekCannotBeMoreThan168Hours" xml:space="preserve">
-    <value>Maximální počet hodin v týdnu nesmí přesáhnout 168</value>
-  </data>
   <data name="RunExport" xml:space="preserve">
     <value>Spusti zvolený export</value>
   </data>
@@ -7002,12 +6944,6 @@ Aktualizováno: {1}</value>
   </data>
   <data name="UndoRedoScheduling" xml:space="preserve">
     <value>Plánování</value>
-  </data>
-  <data name="UndoRedoModifyPersonRequest" xml:space="preserve">
-    <value>Změn osobní požadavku {0}</value>
-  </data>
-  <data name="UndoRedoModifySchedule" xml:space="preserve">
-    <value>Změn plan z  {0}, na {1}</value>
   </data>
   <data name="ExportToPDF" xml:space="preserve">
     <value>Exportuj do PDF</value>

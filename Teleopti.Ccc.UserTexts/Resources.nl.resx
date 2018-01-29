@@ -698,18 +698,6 @@ Verminder de complexiteit om deze diensten gebruiken.</value>
   <data name="CompareWithTeamsFrom" xml:space="preserve">
     <value>Vergelijk met teams van</value>
   </data>
-  <data name="xxDayOffPoints" xml:space="preserve">
-    <value>Vrije Dag Punten:</value>
-  </data>
-  <data name="xxSeniority" xml:space="preserve">
-    <value>Diensttijd</value>
-  </data>
-  <data name="xxSeniorityPoints" xml:space="preserve">
-    <value>Diensttijd Punten:</value>
-  </data>
-  <data name="xxShiftCategoryPoints" xml:space="preserve">
-    <value>Dienst Categorie Punten:</value>
-  </data>
   <data name="MaskedEditTextBox" xml:space="preserve">
     <value>Gemaskerde Bewerk Tekstvak</value>
   </data>
@@ -1626,9 +1614,6 @@ Error bericht: {0}</value>
   </data>
   <data name="ShiftTradeDifferentDateDenyReason" xml:space="preserve">
     <value>Dienst handle is geweigerd omdat de diensten op verschillende datums zijn.</value>
-  </data>
-  <data name="ReadyTimePerScheduledReadyTimePercent" xml:space="preserve">
-    <value>Ready Tijd / Ingeroosterd Ready Tijd (%)</value>
   </data>
   <data name="MonthSchedule" xml:space="preserve">
     <value>Maand Rooster</value>
@@ -6230,9 +6215,6 @@ Export payroll data</value>
   <data name="PayrollExportGeneralInformation" xml:space="preserve">
     <value>Payroll Export Algemene Informatie</value>
   </data>
-  <data name="MaximumHoursPerWeekCannotBeMoreThan168Hours" xml:space="preserve">
-    <value>Maximaal aantal uur per week kan niet meer dan 168 uur zijn</value>
-  </data>
   <data name="RunExport" xml:space="preserve">
     <value>Run geselecteerde export</value>
   </data>
@@ -6655,9 +6637,6 @@ Weekdag</value>
   </data>
   <data name="LockStudentAvailability" xml:space="preserve">
     <value>Lock Uurlijkse Beschikbaarheid</value>
-  </data>
-  <data name="YourEmailAddressShouldBeConfiguredInThePeopleModuleToUseThisServiceDot" xml:space="preserve">
-    <value>Uw Email adres moet in de People Module geconfigureerd worden om deze service gebruiken.</value>
   </data>
   <data name="AbsencesAvailableForExtendedPreference" xml:space="preserve">
     <value>Afwezigheden Beschikbaar voor Voorkeuren</value>
@@ -7109,9 +7088,6 @@ Teleopti R &amp; D</value>
   <data name="NoExistingShiftSelected" xml:space="preserve">
     <value>Geen bestaande dienst werd geselecteerd</value>
   </data>
-  <data name="BetweenDayOff" xml:space="preserve">
-    <value>Tussen vrije dagen</value>
-  </data>
   <data name="UsePreferencesMustHavesOnly" xml:space="preserve">
     <value>Gebruik Must Have Voorkeur Alleen</value>
   </data>
@@ -7186,9 +7162,6 @@ Teleopti R &amp; D</value>
   </data>
   <data name="Optimisation" xml:space="preserve">
     <value>Optimalisatie</value>
-  </data>
-  <data name="OverStaff" xml:space="preserve">
-    <value>Over personeel</value>
   </data>
   <data name="PriorityColon" xml:space="preserve">
     <value>Prioriteit:</value>
@@ -7773,9 +7746,6 @@ uitsluiting</value>
   <data name="LowestPossibleWorkTimeIsTooHigh" xml:space="preserve">
     <value>De laagst mogelijke werktijd is te hoog!</value>
   </data>
-  <data name="CannotDeleteSelectedActivities" xml:space="preserve">
-    <value>Kan niet Geselecteerde Activiteiten Verwijderen.</value>
-  </data>
   <data name="SelectedActivitiesCannotBeDeletedColon" xml:space="preserve">
     <value>Geselecteerde activiteiten kunnen niet verwijderd worden omdat de volgende skills gebruiken ze:</value>
   </data>
@@ -7863,9 +7833,6 @@ Periode</value>
   </data>
   <data name="Include" xml:space="preserve">
     <value>Omvatten</value>
-  </data>
-  <data name="Illegal" xml:space="preserve">
-    <value>Ongeldig</value>
   </data>
   <data name="TheEnteredIsIllegal" xml:space="preserve">
     <value>De ingevoerde {0} is ongeldig </value>
@@ -8241,9 +8208,6 @@ Periode</value>
   </data>
   <data name="TheInputTextCanNotBeEmptyDot" xml:space="preserve">
     <value>De tekstinvoer kan niet leeg zijn.</value>
-  </data>
-  <data name="TotalAllowance" xml:space="preserve">
-    <value>Totale Toelage</value>
   </data>
   <data name="AllowPersonModifications" xml:space="preserve">
     <value>Kan wijzigen en opslaan</value>
@@ -8653,9 +8617,6 @@ Periode</value>
   <data name="ManageSmsSettings" xml:space="preserve">
     <value>Beheer SMS Instellingen</value>
   </data>
-  <data name="SetWhichColumnToGetSmsPhoneNumberFrom" xml:space="preserve">
-    <value>Stel van welke kolom om SMS nummer te krijgen</value>
-  </data>
   <data name="SmsSettings" xml:space="preserve">
     <value>SMS Instellingen</value>
   </data>
@@ -8715,9 +8676,6 @@ Periode</value>
   </data>
   <data name="ScheduleOnlyPreferenceMustHave" xml:space="preserve">
     <value>Rooster Allen Voorkeur Must Have</value>
-  </data>
-  <data name="AllowMeetings" xml:space="preserve">
-    <value>Toestaan Meetings</value>
   </data>
   <data name="ShiftCategories" xml:space="preserve">
     <value>Dienst categorieën</value>

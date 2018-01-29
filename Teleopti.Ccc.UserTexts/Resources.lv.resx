@@ -7335,9 +7335,6 @@ izslēgšana</value>
   <data name="LowestPossibleWorkTimeIsTooHigh" xml:space="preserve">
     <value>Mazākais iespējamais darba laiks ir pārāk liels!</value>
   </data>
-  <data name="CannotDeleteSelectedActivities" xml:space="preserve">
-    <value>Izvēlētās Aktivitātes Nav Iespējams Dzēst </value>
-  </data>
   <data name="SelectedActivitiesCannotBeDeletedColon" xml:space="preserve">
     <value>Izvēlētās darbības nevar izdzēst, jo šādas prasmes ir tos izmantot:</value>
   </data>
@@ -7978,9 +7975,6 @@ These options are activated:
   </data>
   <data name="TheInputTextCanNotBeEmptyDot" xml:space="preserve">
     <value>Ievades teksts nevar būt tukšs</value>
-  </data>
-  <data name="TotalAllowance" xml:space="preserve">
-    <value>Absolūtā pielaide</value>
   </data>
   <data name="AllowPersonModifications" xml:space="preserve">
     <value>Var Mainīt un Saglabāt</value>
@@ -10461,9 +10455,6 @@ Reduce the complexity to use these shifts.</value>
   </data>
   <data name="FailedImportedCountColon" xml:space="preserve">
     <value>Importēšana neizdevās:</value>
-  </data>
-  <data name="InternalErrorXMsg" xml:space="preserve">
-    <value>Notikušas dažas iekšējās kļūdas: {0};</value>
   </data>
   <data name="PleaseFindTheDownloadedExcelSheetToCheckTheError" xml:space="preserve">
     <value>Lūdzu atrast lejupielādēto Excel lapu, lai pārbaudītu kļūdas detalizētu aprakstu.</value>

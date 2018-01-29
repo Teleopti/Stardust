@@ -217,10 +217,6 @@
     <value>Lägg till personlig aktivitet</value>
     <comment>Add personal activity menu item</comment>
   </data>
-  <data name="AddQueuesThreeDots" xml:space="preserve">
-    <value>Lägg till köer...</value>
-    <comment>Add queues...</comment>
-  </data>
   <data name="AddToQuickAccessToolBar" xml:space="preserve">
     <value>&amp;Lägg till i verktygsfältet snabbåtkomst</value>
     <comment>&amp;Add to Quick Access ToolBar</comment>
@@ -3704,10 +3700,6 @@ Ersätt</value>
     <value>Ändra skift</value>
     <comment>Modify assignment</comment>
   </data>
-  <data name="ModifyDayOff" xml:space="preserve">
-    <value>Ändra fridag</value>
-    <comment>Modify day off</comment>
-  </data>
   <data name="ModifyMainShift" xml:space="preserve">
     <value>Ändra huvudskift</value>
     <comment>Modify main shift</comment>
@@ -4632,10 +4624,6 @@ standard</value>
     <value>Redotid</value>
     <comment>AP: Information grid columns (My Report)</comment>
   </data>
-  <data name="IdleTime" xml:space="preserve">
-    <value>Paustid</value>
-    <comment>AP: Information grid columns (My Report)</comment>
-  </data>
   <data name="LoggedInTime" xml:space="preserve">
     <value>Inloggad tid</value>
     <comment>AP: Information grid columns (My Report)</comment>
@@ -4663,10 +4651,6 @@ standard</value>
   <data name="AddActivityThreeDots" xml:space="preserve">
     <value>Lägg till aktivitet...</value>
     <comment>Add Activity...</comment>
-  </data>
-  <data name="AddOverTimeThreeDots" xml:space="preserve">
-    <value>Lägg till övertid...</value>
-    <comment>Add Overtime...</comment>
   </data>
   <data name="AddPersonalActivityThreeDots" xml:space="preserve">
     <value>Lägg till personlig aktivitet...</value>
@@ -5441,15 +5425,6 @@ Feldetaljer:
     <value>Någon har ändrat samma data före dig.</value>
     <comment>Error message</comment>
   </data>
-  <data name="ProductActivationKey" xml:space="preserve">
-    <value>Detta system är licensierat till "{0}" enligt villkoren i licensavtalet och produktaktiveringsnyckeln upphör att gälla {1}.
-
-Produktaktiveringsnyckeln täcker maximalt {2} aktiva agenter.
-
-Produktaktiveringsnyckeln heter "{3}" och har dessa tillval aktiverade:
-{4}</value>
-    <comment>license text shown in about box</comment>
-  </data>
   <data name="UndoAll" xml:space="preserve">
     <value>Ångra Allt</value>
     <comment>Undo All</comment>
@@ -5799,10 +5774,6 @@ Produktaktiveringsnyckeln heter "{3}" och har dessa tillval aktiverade:
     <value>Varning</value>
     <comment>Warning</comment>
   </data>
-  <data name="AddNewShiftCategory" xml:space="preserve">
-    <value>Lägg till ny skiftkategori</value>
-    <comment>Add new shift category</comment>
-  </data>
   <data name="ChooseShiftCategoryToChange" xml:space="preserve">
     <value>Välj skiftkategori att ändra</value>
     <comment>Choose shift category to change</comment>
@@ -6145,10 +6116,6 @@ Produktaktiveringsnyckeln heter "{3}" och har dessa tillval aktiverade:
   <data name="ResReportAgentQueueStatistics" xml:space="preserve">
     <value>Agent - Köstatistik</value>
     <comment>Agent kö statistik</comment>
-  </data>
-  <data name="ResReportAgentScheduleAdherence" xml:space="preserve">
-    <value>Agent - Schemauppföljning</value>
-    <comment>Agent - Schemaföljsamhet</comment>
   </data>
   <data name="ResReportAgentScheduleResult" xml:space="preserve">
     <value>Agent - Schemaresultat</value>
@@ -6836,10 +6803,6 @@ Uppdaterad den: {1}</value>
     <value>Lönelistexport generell information</value>
     <comment>PayrollExportGeneralInformation</comment>
   </data>
-  <data name="MaximumHoursPerWeekCannotBeMoreThan168Hours" xml:space="preserve">
-    <value>Maximalt antal timmar per vecka får inte överstiga 168</value>
-    <comment>Contract</comment>
-  </data>
   <data name="RunExport" xml:space="preserve">
     <value>Kör vald export</value>
     <comment>used in portal on payrollexportnavigator</comment>
@@ -6971,14 +6934,6 @@ Uppdaterad den: {1}</value>
   <data name="UndoRedoScheduling" xml:space="preserve">
     <value>Schemaläggning</value>
     <comment>Scheduling (undo/redo info)</comment>
-  </data>
-  <data name="UndoRedoModifyPersonRequest" xml:space="preserve">
-    <value>Personförfrågan ändrad för {0}</value>
-    <comment>Modifying person request (undo/redo info)</comment>
-  </data>
-  <data name="UndoRedoModifySchedule" xml:space="preserve">
-    <value>Schema ändrat för {0}, datum {1}</value>
-    <comment>Modifying schedule (undo/redo info)</comment>
   </data>
   <data name="ExportToPDF" xml:space="preserve">
     <value>Exportera till PDF</value>
@@ -8078,10 +8033,6 @@ period</value>
     <value>Inget existerande skift är valt</value>
     <comment>No existing shift was selected</comment>
   </data>
-  <data name="BetweenDayOff" xml:space="preserve">
-    <value>Mellan fridagar</value>
-    <comment>Between days off</comment>
-  </data>
   <data name="BlockScheduling" xml:space="preserve">
     <value>Blockschemaläggning</value>
     <comment>Block Scheduling</comment>
@@ -8618,10 +8569,6 @@ Period: {3}</value>
     <value>Optimera aktiviteter</value>
     <comment>Optimize Activities</comment>
   </data>
-  <data name="UseImprovedCalculating" xml:space="preserve">
-    <value>Använd utökade beräkningar</value>
-    <comment>Use Refined Calculations</comment>
-  </data>
   <data name="Abandoned" xml:space="preserve">
     <value>Tappade</value>
     <comment>Abandoned</comment>
@@ -8901,10 +8848,6 @@ Error message: {0}</comment>
     <value>Öppna budget</value>
     <comment>Opens a budget group</comment>
   </data>
-  <data name="AddedSkillsColon" xml:space="preserve">
-    <value>Tillagda kompetenser:</value>
-    <comment>Added Skills</comment>
-  </data>
   <data name="AttritionRate" xml:space="preserve">
     <value>Personalomsättning</value>
     <comment>Attrition rate</comment>
@@ -9160,10 +9103,6 @@ långtid</value>
     <value>Minsta möjliga arbetstid är för stor!</value>
     <comment>The lowest possible work time is too high!</comment>
   </data>
-  <data name="CannotDeleteSelectedActivities" xml:space="preserve">
-    <value>Kan inte radera markerade aktiviteter</value>
-    <comment>Cannot Delete Selected Activities</comment>
-  </data>
   <data name="SelectedActivitiesCannotBeDeletedColon" xml:space="preserve">
     <value>Dessa aktiviteter kan inte raderas eftersom följande kompetenser använder sig av dem:</value>
     <comment>Selected activities cannot be deleted because the following skills are using them:</comment>
@@ -9319,10 +9258,6 @@ period</comment>
   <data name="resReportScheduledOvertimePerAgent" xml:space="preserve">
     <value>Schemalagd övertid per agent</value>
     <comment>Schemalagd övertid per agent</comment>
-  </data>
-  <data name="Illegal" xml:space="preserve">
-    <value>Felaktigt </value>
-    <comment>Felaktigt</comment>
   </data>
   <data name="TheEnteredIsIllegal" xml:space="preserve">
     <value>Det angivna värdet för {0} är felaktigt</value>
@@ -9609,14 +9544,6 @@ period</comment>
   <data name="NewProductActivationKeyDoesNotCoverEnoughSeats" xml:space="preserve">
     <value>Den här produktaktiveringsnyckeln täcker endast {0} arbetsplatser. Du måste skaffa en produktaktiveringsnyckel som täcker tillräckligt många arbetsplatser.</value>
   </data>
-  <data name="SeatProductActivationKey" xml:space="preserve">
-    <value>Detta system är licensierat till "{0}" enligt villkoren i licensavtalet och produktaktiveringsnyckeln upphör att gälla {1}.
-
-Produktaktiveringsnyckeln täcker maximalt {2} arbetsplatser.
-
-Produktaktiveringsnyckeln heter "{3}" och har dessa tillval aktiverade:
-{4}</value>
-  </data>
   <data name="YouHaveAlmostTooManySeats" xml:space="preserve">
     <value>Ni har nästan nått er gräns på {0} arbetsplatser. Du bör snarast skaffa en utökad produktaktiveringsnyckel.</value>
   </data>
@@ -9630,9 +9557,6 @@ Produktaktiveringsnyckeln heter "{3}" och har dessa tillval aktiverade:
   <data name="AllFulFilledAbsences" xml:space="preserve">
     <value>All uppfylld frånvaro</value>
     <comment>All uppfylld frånvaro</comment>
-  </data>
-  <data name="YourEmailAddressShouldBeConfiguredInThePeopleModuleToUseThisServiceDot" xml:space="preserve">
-    <value>Din e-postadress måste vara angiven i Person-modulen för att kunna använda denna funktion.</value>
   </data>
   <data name="JobCategory" xml:space="preserve">
     <value>Jobbkategori</value>
@@ -9926,10 +9850,6 @@ Produktaktiveringsnyckeln heter "{3}" och har dessa tillval aktiverade:
   </data>
   <data name="TheInputTextCanNotBeEmptyDot" xml:space="preserve">
     <value>Ange ett namn!</value>
-  </data>
-  <data name="TotalAllowance" xml:space="preserve">
-    <value>Total tilldelning</value>
-    <comment>total allowance</comment>
   </data>
   <data name="AllowPersonModifications" xml:space="preserve">
     <value>Kan ändra och spara</value>
@@ -10538,9 +10458,6 @@ Produktaktiveringsnyckeln heter "{3}" och har dessa tillval aktiverade:
   <data name="ManageSmsSettings" xml:space="preserve">
     <value>Hantera SMS-inställningar</value>
   </data>
-  <data name="SetWhichColumnToGetSmsPhoneNumberFrom" xml:space="preserve">
-    <value>Ange vilken kolumn telefonnummer för SMS ska hämtas från</value>
-  </data>
   <data name="SmsSettings" xml:space="preserve">
     <value>SMS-inställningar</value>
   </data>
@@ -10653,9 +10570,6 @@ Produktaktiveringsnyckeln heter "{3}" och har dessa tillval aktiverade:
   <data name="ScheduleOnlyPreferenceMustHave" xml:space="preserve">
     <value>Schemalägg bara vetoönskemål</value>
   </data>
-  <data name="AllowOverwrite" xml:space="preserve">
-    <value>Tillåt överskrivning</value>
-  </data>
   <data name="ShiftCategories" xml:space="preserve">
     <value>Skiftkategorier</value>
   </data>
@@ -10694,9 +10608,6 @@ Produktaktiveringsnyckeln heter "{3}" och har dessa tillval aktiverade:
   </data>
   <data name="ResTotals" xml:space="preserve">
     <value>Totalt</value>
-  </data>
-  <data name="AllowMeetings" xml:space="preserve">
-    <value>Tillåt möten</value>
   </data>
   <data name="Others" xml:space="preserve">
     <value>Övriga</value>
@@ -10897,9 +10808,6 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   </data>
   <data name="SeriousUnderStaffingHours" xml:space="preserve">
     <value>Kritisk underbemanning {0} vid </value>
-  </data>
-  <data name="SkillUnderStaffingValidationError" xml:space="preserve">
-    <value>Förfrågan klarade inte kontrollen av underbemanning på kompetensen {0} eftersom den skulle göra att antalet resurser hamnade under det angivna tröskelvärdet.  </value>
   </data>
   <data name="GenerateForecastFor" xml:space="preserve">
     <value>Generera prognos för</value>
@@ -11349,9 +11257,6 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   <data name="MyReportWeb" xml:space="preserve">
     <value>Min rapport</value>
   </data>
-  <data name="NoSchedulePeriodPresent" xml:space="preserve">
-    <value>Ingen aktuell schemaperiod</value>
-  </data>
   <data name="InvalidEndTime" xml:space="preserve">
     <value>Ogiltig sluttid.</value>
   </data>
@@ -11484,10 +11389,6 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   </data>
   <data name="ResolvingWeeklyRestFor" xml:space="preserve">
     <value>Löser veckovila för {0} {1}</value>
-  </data>
-  <data name="NoBlock" xml:space="preserve">
-    <value>&lt;Inga block&gt;</value>
-    <comment>No Block</comment>
   </data>
   <data name="NoTeam" xml:space="preserve">
     <value>&lt;Inga team&gt;</value>
@@ -11737,9 +11638,6 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   <data name="ResetBadgesConfirm" xml:space="preserve">
     <value>Detta kommer att ta bort alla medaljer för alla agenter! Om du klickar OK tas medaljerna bort och kan inte återställas. Vill du fortsätta?</value>
   </data>
-  <data name="BadgeTypeChecked" xml:space="preserve">
-    <value>Använd</value>
-  </data>
   <data name="PleaseConfigureYourEmailAddress" xml:space="preserve">
     <value>Var god ange e-postadress för åtkomst till Teleopti-resurser. </value>
   </data>
@@ -11766,9 +11664,6 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   </data>
   <data name="FullDayAbsenceReqStartTime" xml:space="preserve">
     <value>Starttid</value>
-  </data>
-  <data name="HiddenSystemSettings" xml:space="preserve">
-    <value>Dolda systeminställningar</value>
   </data>
   <data name="UnSupportedOptimizationBlockAndTimeBetweendays" xml:space="preserve">
     <value>Optimeringssteget "Tid mellan dagar" utförs inte när blockschemaläggning och samma skift är valt. </value>
@@ -11937,9 +11832,6 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   </data>
   <data name="AreYouSureYouWantToDeleteGamificationSetting" xml:space="preserve">
     <value>Är du säker på att du vill ta bort gamificationinställningen '{0}'?</value>
-  </data>
-  <data name="DeleteAgentBadgeSetting" xml:space="preserve">
-    <value>Ta bort agentmedaljsinställningen</value>
   </data>
   <data name="Gamification" xml:space="preserve">
     <value>Gamification</value>
@@ -12491,12 +12383,6 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   <data name="SeatHasNoBookings" xml:space="preserve">
     <value>Den valda sittplatsen har inga bokningar för detta datum</value>
   </data>
-  <data name="ConfirmRemoveCampaign" xml:space="preserve">
-    <value>Är du säker på att du vill ta bort den här kampanjen?</value>
-  </data>
-  <data name="RemoveCampaign" xml:space="preserve">
-    <value>Ta bort kampanj</value>
-  </data>
   <data name="CampaignFailedRemove" xml:space="preserve">
     <value>Misslyckades att ta bort kampanj: {0}.</value>
   </data>
@@ -12634,9 +12520,6 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   <data name="SpaceVertically" xml:space="preserve">
     <value>Distribuera valda objekt lodrätt</value>
   </data>
-  <data name="UndoChangesAndRevertToLastSave" xml:space="preserve">
-    <value>Ångra ändringar och återgå till senaste sparade version</value>
-  </data>
   <data name="UngroupItems" xml:space="preserve">
     <value>Dela upp objekt</value>
   </data>
@@ -12726,9 +12609,6 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   </data>
   <data name="ForecastValueOverride" xml:space="preserve">
     <value>Prognostiserat värde ersatt</value>
-  </data>
-  <data name="PartOfCampaign" xml:space="preserve">
-    <value>Del av en kampanj</value>
   </data>
   <data name="RunningForecast" xml:space="preserve">
     <value>Prognostisering pågår</value>
@@ -12918,9 +12798,6 @@ Hjälp oss förbättra upplevelsen genom att skicka in en felrapport.</value>
   <data name="NoPermissionAddFullDayAbsenceForAgent" xml:space="preserve">
     <value>Du har inte rättigheter för att lägga till heldagsfrånvaro för {0}</value>
   </data>
-  <data name="NoPermissionToModifyPersonAbsence" xml:space="preserve">
-    <value>Du har inte rättigheter för att lägga på frånvaro!</value>
-  </data>
   <data name="LogonUserTimeZone" xml:space="preserve">
     <value>Aktuell användares tidszon</value>
   </data>
@@ -13035,9 +12912,6 @@ Hjälp oss förbättra upplevelsen genom att skicka in en felrapport.</value>
   <data name="DoubleClickHereToEditText" xml:space="preserve">
     <value>Dubbelklicka här för att ändra texten</value>
   </data>
-  <data name="OnlySupportSeatRolesSetting" xml:space="preserve">
-    <value>Stöder endast inställning av roll för sittplatser</value>
-  </data>
   <data name="EnableWaitlisting" xml:space="preserve">
     <value>Aktivera väntelista</value>
   </data>
@@ -13119,9 +12993,6 @@ Hjälp oss förbättra upplevelsen genom att skicka in en felrapport.</value>
   <data name="SelectAnActivity" xml:space="preserve">
     <value>Välj en aktivitet</value>
   </data>
-  <data name="ChangeWillAffectAgents" xml:space="preserve">
-    <value>Ändringen påverkar {0} agenter.</value>
-  </data>
   <data name="RemoveActivity" xml:space="preserve">
     <value>Ta bort aktivitet</value>
   </data>
@@ -13158,9 +13029,6 @@ Hjälp oss förbättra upplevelsen genom att skicka in en felrapport.</value>
   <data name="IncomingTraffic" xml:space="preserve">
     <value>Inkommande trafik</value>
   </data>
-  <data name="ToggleIncludedSkills" xml:space="preserve">
-    <value>Visa inkluderade kompetenser</value>
-  </data>
   <data name="AbsenceRequestForOneDayWasCancelled" xml:space="preserve">
     <value>Frånvaroförfrågan för {0} avbröts och frånvaron har tagits bort från ditt schema. </value>
   </data>
@@ -13175,9 +13043,6 @@ Hjälp oss förbättra upplevelsen genom att skicka in en felrapport.</value>
   </data>
   <data name="ModifySkillGroup" xml:space="preserve">
     <value>Ändra kompetensgrupp</value>
-  </data>
-  <data name="q" xml:space="preserve">
-    <value>Skapa kompetensarea</value>
   </data>
   <data name="CreateSkillGroup" xml:space="preserve">
     <value>Skapa kompetensgrupp</value>
@@ -13238,9 +13103,6 @@ Hjälp oss förbättra upplevelsen genom att skicka in en felrapport.</value>
   </data>
   <data name="CancelAbsenceRequestDescription" xml:space="preserve">
     <value>Om du avbryter den här frånvaroförfrågan kommer eventuell frånvaro som skapats genom denna förfrågan att tas bort från agentens schema. </value>
-  </data>
-  <data name="TryOutTheNewImprovedMyTeam" xml:space="preserve">
-    <value>Prova nya och förbättrade MyTeam!</value>
   </data>
   <data name="PreviewTheNewIntradayTool" xml:space="preserve">
     <value>Ta en förhandstitt på nya Inom dag-verktyget!</value>
@@ -13585,9 +13447,6 @@ Dessa val är aktiverade:
   <data name="BackToList" xml:space="preserve">
     <value>Tillbaka till översikten</value>
   </data>
-  <data name="OverrideForSelectedAgents" xml:space="preserve">
-    <value>Ignorera för valda agenter</value>
-  </data>
   <data name="OverrideForTheseAgents" xml:space="preserve">
     <value>Ignorera för dessa agenter</value>
   </data>
@@ -13744,9 +13603,6 @@ Dessa val är aktiverade:
   </data>
   <data name="NoPermissionToViewErrorMessage" xml:space="preserve">
     <value>Du har inte rättigheter för att visa denna sida. </value>
-  </data>
-  <data name="TheOtherAgentHasNoPermissionToShiftTrade" xml:space="preserve">
-    <value>Den andra agenten har inte rättigheter för att byta med dig.</value>
   </data>
   <data name="StaffingInformationMissing" xml:space="preserve">
     <value>Bemanningsinformation saknas för kompetens {0}</value>
@@ -14174,9 +14030,6 @@ Dessa val är aktiverade:
   <data name="NoApplicationLogonAccountErrorMsgSemicolon" xml:space="preserve">
     <value>applikationsanvändar-ID saknas;</value>
   </data>
-  <data name="InternalErrorXMsg" xml:space="preserve">
-    <value>internt fel har inträffat:{0};</value>
-  </data>
   <data name="ApplicationUserIdShouldBeAValidEmailAddressErrorMsg" xml:space="preserve">
     <value>ApplicationUserId måste vara en giltig e-postadress;</value>
   </data>
@@ -14298,9 +14151,6 @@ Vill du registrera dig?</value>
   <data name="DownloadTemplate" xml:space="preserve">
     <value>Ladda ner mall</value>
   </data>
-  <data name="ImportAgentsDoneOpenTheDownloadedFileForMoreDetails" xml:space="preserve">
-    <value>Klart. Öppna den nedladdade filen för mer detaljer.</value>
-  </data>
   <data name="NewImport" xml:space="preserve">
     <value>Ny import</value>
   </data>
@@ -14349,9 +14199,6 @@ Vill du registrera dig?</value>
   <data name="SuccessfullyImportedAgents" xml:space="preserve">
     <value>Import av {0} agent(er) klar</value>
   </data>
-  <data name="AvailableAsGroupPage" xml:space="preserve">
-    <value>Tillgänglig som gruppering:*</value>
-  </data>
   <data name="Maximum5OptionalColumns" xml:space="preserve">
     <value>* Maximalt 5 tilläggskolumner kan vara tillgängliga som grupperingar. </value>
   </data>
@@ -14385,9 +14232,6 @@ Vill du registrera dig?</value>
   <data name="NoInput" xml:space="preserve">
     <value>Input saknas</value>
   </data>
-  <data name="AvailableAsGroupPageColon" xml:space="preserve">
-    <value>Tillgänglig som gruppering:*</value>
-  </data>
   <data name="ColumnCanNotBeEmpty" xml:space="preserve">
     <value>Kolumnen {0} får inte vara tom</value>
   </data>
@@ -14420,9 +14264,6 @@ Vill du registrera dig?</value>
   </data>
   <data name="Volume" xml:space="preserve">
     <value>Volym</value>
-  </data>
-  <data name="MaximumNumberOfAgentRowsReach" xml:space="preserve">
-    <value>Max antal agentrader ({0}) nått. </value>
   </data>
   <data name="FilterTeams" xml:space="preserve">
     <value>Filtrera team</value>
@@ -14481,41 +14322,11 @@ Vill du registrera dig?</value>
   <data name="FilterSkills" xml:space="preserve">
     <value>Filtrera kompetenser</value>
   </data>
-  <data name="DeletedContractAssignedForPlanningPeriod" xml:space="preserve">
-    <value>Kontraktet {0} som angetts för denna agent har tagits bort</value>
-  </data>
-  <data name="DeletedContractScheduleAssignedForPlanningPeriod" xml:space="preserve">
-    <value>Kontraktsschemat {0} som angetts för denna agent har tagits bort</value>
-  </data>
-  <data name="DeletedPartTimePercentageAssignedForPlanningPeriod" xml:space="preserve">
-    <value>Deltidsprocenten {0} som angetts för denna agent har tagits bort</value>
-  </data>
-  <data name="DeletedShiftBagAssignedForPlanningPeriod" xml:space="preserve">
-    <value>Skiftpåsen {0} som angetts för denna agent har tagits bort</value>
-  </data>
-  <data name="MissingPersonPeriodForPlanningPeriod" xml:space="preserve">
-    <value>Agenten har inte någon personperiod för hela eller delar av planeringsperioden</value>
-  </data>
-  <data name="MissingSchedulePeriodForPlanningPeriod" xml:space="preserve">
-    <value>Agenten har inte någon schemaperiod för planeringsperioden</value>
-  </data>
-  <data name="MissingShiftBagForPlanningPeriod" xml:space="preserve">
-    <value>Agenten har inte någon skiftpåse för hela eller delar av planeringsperioden</value>
-  </data>
-  <data name="MissingSkillsForPlanningPeriod" xml:space="preserve">
-    <value>Agenten har inga kompetenser för hela eller delar av planeringsperioden</value>
-  </data>
-  <data name="NoFullSchedulePeriod" xml:space="preserve">
-    <value>Schemaperioden matchar inte planeringsperioden</value>
-  </data>
   <data name="AgentHasDaysWithoutAnySchedule" xml:space="preserve">
     <value>Agenten har {0} dagar utan schema.</value>
   </data>
   <data name="AgentsHaveScheduled" xml:space="preserve">
     <value>agenter har schemalagts</value>
-  </data>
-  <data name="AreYouSureYouWantToDeleteTheAgentGroup" xml:space="preserve">
-    <value>Är du säker på att du vill ta bort agentgruppen '{0}' och de tillhörande inställningarna?</value>
   </data>
   <data name="AreYouSureYouWantToDeleteTheDayOffRule" xml:space="preserve">
     <value>Är du säker på att du vill ta bort fridagsregeln {0} och de tillhörande inställningarna?</value>
@@ -14526,9 +14337,6 @@ Vill du registrera dig?</value>
   <data name="ChangePlanningDuration" xml:space="preserve">
     <value>Ändra längden på planeringen</value>
   </data>
-  <data name="CreateAgentGroup" xml:space="preserve">
-    <value>Skapa agentgrupp</value>
-  </data>
   <data name="CreateFirstPlanningPeriod" xml:space="preserve">
     <value>Skapa den första planeringsperioden</value>
   </data>
@@ -14538,14 +14346,8 @@ Vill du registrera dig?</value>
   <data name="DayOffRule" xml:space="preserve">
     <value>Fridagsregel</value>
   </data>
-  <data name="DayOffRuleAppliedFilters" xml:space="preserve">
-    <value>Följande inställningar gäller för agentgruppen {0}</value>
-  </data>
   <data name="DayOffRuleSetting" xml:space="preserve">
     <value>Inställningar för fridagsregler</value>
-  </data>
-  <data name="DeleteAgentGroup" xml:space="preserve">
-    <value>Ta bort agentgrupp</value>
   </data>
   <data name="DeleteDayOffRule" xml:space="preserve">
     <value>Ta bort fridagsregel</value>
@@ -14553,38 +14355,17 @@ Vill du registrera dig?</value>
   <data name="DeletePlanningPeriod" xml:space="preserve">
     <value>Ta bort planeringsperiod</value>
   </data>
-  <data name="EditAgentGroup" xml:space="preserve">
-    <value>Ändra agentgrupp</value>
-  </data>
-  <data name="NewAgentGroup" xml:space="preserve">
-    <value>Ny agentgrupp</value>
-  </data>
-  <data name="NoAgentsWithinAgentGroup" xml:space="preserve">
-    <value>Det finns inga agenter i den här agentgruppen som kan schemaläggas</value>
-  </data>
   <data name="NoPreviousScheduleResult" xml:space="preserve">
     <value>Planeringsperioden har inga tidigare schemaläggningsresultat</value>
   </data>
   <data name="NoValidScheduleResult" xml:space="preserve">
     <value>Den här planeringsperioden har inget giltigt schemaläggningsresultat</value>
   </data>
-  <data name="ScheduleAgentGroup" xml:space="preserve">
-    <value>Schemalägg agentgrupp</value>
-  </data>
-  <data name="SchedulePageSelectAg" xml:space="preserve">
-    <value>Välj agentgrupp att arbeta med</value>
-  </data>
-  <data name="SearchForAgentGroup" xml:space="preserve">
-    <value>Sök enhet / team / kompetens / kontrakt</value>
-  </data>
   <data name="SearchForDayOff" xml:space="preserve">
     <value>Sök enhet / team / kontrakt</value>
   </data>
   <data name="SelectedPlanningPeriod" xml:space="preserve">
     <value>Vald planeringsperiod</value>
-  </data>
-  <data name="SelectPpWorkWith" xml:space="preserve">
-    <value>Välj planeringsperiod att arbeta med</value>
   </data>
   <data name="ConfirmToggleAllData" xml:space="preserve">
     <value>Detta ändrar inställningen för det här objektet och alla objekt under det. Är du säker på att du vill fortsätta?</value>
@@ -14639,12 +14420,6 @@ Vill du registrera dig?</value>
   </data>
   <data name="HelpDayOffForPlanningPeriod" xml:space="preserve">
     <value>Fridagsreglerna kommer att användas för alla planeringsperioder</value>
-  </data>
-  <data name="HelpCreateAgentGroup" xml:space="preserve">
-    <value>En agentgrupp krävs för att kunna schemalägga. Vill du skapa en agentgrupp?</value>
-  </data>
-  <data name="ManageDayOffForAgentGroup" xml:space="preserve">
-    <value>Hantera fridagsregler för agentgruppen {0}</value>
   </data>
   <data name="SchedulingFailed" xml:space="preserve">
     <value>Schemaläggningen misslyckades</value>
@@ -15327,12 +15102,6 @@ Vill du registrera dig?</value>
   </data>
   <data name="InvalidNumberOfFields" xml:space="preserve">
     <value>Varje rad måste ha {0} fält. Den här raden har {1}.</value>
-  </data>
-  <data name="PersonIdIsTooLong" xml:space="preserve">
-    <value>Person-ID är för långt</value>
-  </data>
-  <data name="PersonIdCouldNotBeMatchedToAnyAgent" xml:space="preserve">
-    <value>Detta person-ID kunde inte matchas till någon agent</value>
   </data>
   <data name="BusinessHierarchy" xml:space="preserve">
     <value>Organisationsstruktur</value>

@@ -2578,9 +2578,6 @@
   <data name="ModifyAbsence" xml:space="preserve">
     <value>欠勤の変更</value>
   </data>
-  <data name="ModifyDayOff" xml:space="preserve">
-    <value>休暇の変更</value>
-  </data>
   <data name="ModifyMainShift" xml:space="preserve">
     <value>メインシフトの変更</value>
   </data>
@@ -4024,9 +4021,6 @@
   </data>
   <data name="FilterData" xml:space="preserve">
     <value>データのフィルター</value>
-  </data>
-  <data name="Illegal" xml:space="preserve">
-    <value>無効</value>
   </data>
   <data name="IllegalInput" xml:space="preserve">
     <value>無効な入力</value>
@@ -5666,9 +5660,6 @@
   <data name="AreYouSureYouWantToDeleteContract" xml:space="preserve">
     <value>契約 '{0}' を削除しますか?</value>
   </data>
-  <data name="NewStudentAvailability" xml:space="preserve">
-    <value>新規の学生空き状況</value>
-  </data>
   <data name="AbsoluteStart" xml:space="preserve">
     <value>絶対開始時刻</value>
   </data>
@@ -6049,9 +6040,6 @@
   <data name="ThisRoleCannotBeDeleted" xml:space="preserve">
     <value>この役割は削除できません</value>
   </data>
-  <data name="MaximumHoursPerWeekCannotBeMoreThan168Hours" xml:space="preserve">
-    <value>1週間の時間は168時間以内でなければなりません</value>
-  </data>
   <data name="CopyrightColon" xml:space="preserve">
     <value>著作権:</value>
   </data>
@@ -6123,12 +6111,6 @@
   </data>
   <data name="UndoRedoScheduling" xml:space="preserve">
     <value>スケジュール作成</value>
-  </data>
-  <data name="UndoRedoModifyPersonRequest" xml:space="preserve">
-    <value>{0} に対する要員要求を変更</value>
-  </data>
-  <data name="UndoRedoModifySchedule" xml:space="preserve">
-    <value>{1} 日の {0} に対するスケジュールを変更</value>
   </data>
   <data name="ExportToPDF" xml:space="preserve">
     <value>PDFにエクスポート</value>
@@ -7012,9 +6994,6 @@
   <data name="NoExistingShiftSelected" xml:space="preserve">
     <value>既存のシフトが選択されていません</value>
   </data>
-  <data name="BetweenDayOff" xml:space="preserve">
-    <value>休暇の間</value>
-  </data>
   <data name="BlockScheduling" xml:space="preserve">
     <value>ブロックスケジューリング</value>
   </data>
@@ -7111,9 +7090,6 @@
   </data>
   <data name="Optimisation" xml:space="preserve">
     <value>最適化</value>
-  </data>
-  <data name="OverStaff" xml:space="preserve">
-    <value>要員過剰</value>
   </data>
   <data name="PriorityColon" xml:space="preserve">
     <value>優先順位:</value>
@@ -7561,9 +7537,6 @@
   <data name="UsePreferenceMustHavesOnly1" xml:space="preserve">
     <value>必須プリファレンスのみ使用</value>
   </data>
-  <data name="CannotDeleteSelectedActivities" xml:space="preserve">
-    <value>選択した活動を削除できません</value>
-  </data>
   <data name="RenameEfficiencyShrinkageRow" xml:space="preserve">
     <value>効率シュリンケージの名前を変更</value>
   </data>
@@ -7635,9 +7608,6 @@
   </data>
   <data name="UpdateShrinkageRow" xml:space="preserve">
     <value>シュリンケージを編集</value>
-  </data>
-  <data name="TotalAllowance" xml:space="preserve">
-    <value>トータルの割り当て</value>
   </data>
   <data name="ViewAllowance" xml:space="preserve">
     <value>割り当ての表示</value>
@@ -8116,9 +8086,6 @@
   <data name="MissingWorkflowControlSet" xml:space="preserve">
     <value>存在しないワークフローコントロールセット</value>
   </data>
-  <data name="YourEmailAddressShouldBeConfiguredInThePeopleModuleToUseThisServiceDot" xml:space="preserve">
-    <value>このサービスを使用するには、要員モジュールにてEメールアドレスを設定する必要があります。</value>
-  </data>
   <data name="RestrictionViolatesNightRest" xml:space="preserve">
     <value>制限が夜間の休憩時間に違反しています</value>
   </data>
@@ -8566,9 +8533,6 @@ Teleopti研究開発グループ</value>
   <data name="SelectAtleastOneSchedulingOption" xml:space="preserve">
     <value>[チームスケジューリング]にて、[シフトカテゴリ]、[開始時刻]、[終了時刻]のいずれか1つ以上のオプションを選択してください。</value>
   </data>
-  <data name="SetWhichColumnToGetSmsPhoneNumberFrom" xml:space="preserve">
-    <value>SMSの電話番号を取得する列を設定</value>
-  </data>
   <data name="GraphLOC" xml:space="preserve">
     <value>グラフ（loc）</value>
   </data>
@@ -8604,9 +8568,6 @@ Teleopti研究開発グループ</value>
   </data>
   <data name="ResReportAdherencePerDay" xml:space="preserve">
     <value>1日の遵守率</value>
-  </data>
-  <data name="AllowMeetings" xml:space="preserve">
-    <value>会議の許可</value>
   </data>
   <data name="AfterCheckingAgainstActivities" xml:space="preserve">
     <value>活動のチェック後</value>

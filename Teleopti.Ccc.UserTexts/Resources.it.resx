@@ -159,9 +159,6 @@
   <data name="ScheduleOnlyPreferenceMustHave" xml:space="preserve">
     <value>Pianificare solo le preferenze indispensabili</value>
   </data>
-  <data name="AllowOverwrite" xml:space="preserve">
-    <value>Permetti sovrascrittura</value>
-  </data>
   <data name="ShiftCategories" xml:space="preserve">
     <value>Categoria turni</value>
   </data>
@@ -2699,9 +2696,6 @@ Teleopti R&amp;D</value>
   <data name="ManageSmsSettings" xml:space="preserve">
     <value>Gestione impostazioni SMS</value>
   </data>
-  <data name="SetWhichColumnToGetSmsPhoneNumberFrom" xml:space="preserve">
-    <value>Imposta da quale colonna prendere il numero di telefono per SMS</value>
-  </data>
   <data name="SmsSettings" xml:space="preserve">
     <value>Impostazioni SMS</value>
   </data>
@@ -4208,9 +4202,6 @@ Se questo errore di validazione continua a verificarsi, controllare che la nuova
   <data name="MissingWorkflowControlSet" xml:space="preserve">
     <value>Insieme di regole di Workflow mancante</value>
   </data>
-  <data name="YourEmailAddressShouldBeConfiguredInThePeopleModuleToUseThisServiceDot" xml:space="preserve">
-    <value>Per usare questo servizio il tuo indirizzo e-mail dovrebbe essere configurato nel modulo People.</value>
-  </data>
   <data name="SignCustomerWeb" xml:space="preserve">
     <value>Login Customer Web</value>
   </data>
@@ -5063,9 +5054,6 @@ Se questo errore di validazione continua a verificarsi, controllare che la nuova
   <data name="MeetingLastAttendeeQuestionRemoveOneParameter" xml:space="preserve">
     <value>Questo è l'ultimo partecipante al Meeting. Vuoi cancellare l'evento "{0}"?</value>
   </data>
-  <data name="OverStaff" xml:space="preserve">
-    <value>Sovracopertura</value>
-  </data>
   <data name="UnderStaff" xml:space="preserve">
     <value>Sottocopertura</value>
   </data>
@@ -5549,9 +5537,6 @@ Se questo errore di validazione continua a verificarsi, controllare che la nuova
   <data name="ModifyAssignment" xml:space="preserve">
     <value>Modifica assegnamento</value>
   </data>
-  <data name="ModifyDayOff" xml:space="preserve">
-    <value>Modifica riposo</value>
-  </data>
   <data name="ModifyMainShift" xml:space="preserve">
     <value>Modifica turno principale</value>
   </data>
@@ -5611,9 +5596,6 @@ Se questo errore di validazione continua a verificarsi, controllare che la nuova
   </data>
   <data name="AvailableTime" xml:space="preserve">
     <value>Tempo Ready</value>
-  </data>
-  <data name="IdleTime" xml:space="preserve">
-    <value>Tempo non Ready </value>
   </data>
   <data name="LoggedInTime" xml:space="preserve">
     <value>Autenticato in tempo</value>
@@ -5854,9 +5836,6 @@ Se questo errore di validazione continua a verificarsi, controllare che la nuova
   </data>
   <data name="resReportScheduledOvertimePerAgent" xml:space="preserve">
     <value>Straordinario pianificato per agente</value>
-  </data>
-  <data name="Illegal" xml:space="preserve">
-    <value>Non valido</value>
   </data>
   <data name="IllegalInput" xml:space="preserve">
     <value>Input non valido</value>
@@ -6479,9 +6458,6 @@ Messaggio errore: {0}</value>
   </data>
   <data name="LowestPossibleWorkTimeIsTooHigh" xml:space="preserve">
     <value>Il minimo numero di ore di lavoro possibili è troppo alto!</value>
-  </data>
-  <data name="CannotDeleteSelectedActivities" xml:space="preserve">
-    <value>Impossibile eliminare le attività selezionate</value>
   </data>
   <data name="SelectedActivitiesCannotBeDeletedColon" xml:space="preserve">
     <value>Le attività selezionate non possono essere eliminate poiché i seguenti Skill li stanno usando:</value>
@@ -7741,9 +7717,6 @@ Aggiornato il: {1}</value>
   <data name="PayrollExportGeneralInformation" xml:space="preserve">
     <value>Informazioni generali Esportazione Payroll</value>
   </data>
-  <data name="MaximumHoursPerWeekCannotBeMoreThan168Hours" xml:space="preserve">
-    <value>Il numero massimo di ore settimanali non può essere superiore a 168 ore</value>
-  </data>
   <data name="RunExport" xml:space="preserve">
     <value>Esegui esportazione selezionata</value>
   </data>
@@ -7761,12 +7734,6 @@ Aggiornato il: {1}</value>
   </data>
   <data name="UndoRedoPersonRequest" xml:space="preserve">
     <value>Approvazione richiesta per {0}</value>
-  </data>
-  <data name="UndoRedoModifyPersonRequest" xml:space="preserve">
-    <value>Modifica richiesta dipendente per {0}</value>
-  </data>
-  <data name="UndoRedoModifySchedule" xml:space="preserve">
-    <value>Modifica piano per {0}, data {1}</value>
   </data>
   <data name="Display" xml:space="preserve">
     <value>Visualizza</value>
@@ -8001,9 +7968,6 @@ Aggiornato il: {1}</value>
   </data>
   <data name="NoExistingShiftSelected" xml:space="preserve">
     <value>Nessun turno esistente selezionato</value>
-  </data>
-  <data name="BetweenDayOff" xml:space="preserve">
-    <value>Tra riposi</value>
   </data>
   <data name="Left" xml:space="preserve">
     <value>Rimanenti</value>
@@ -8352,9 +8316,6 @@ Aggiornato il: {1}</value>
   </data>
   <data name="Tags" xml:space="preserve">
     <value>Etichetta</value>
-  </data>
-  <data name="TotalAllowance" xml:space="preserve">
-    <value>Totale consentito</value>
   </data>
   <data name="PersonFinderFieldContractSchedule" xml:space="preserve">
     <value>Giorni da contratto</value>

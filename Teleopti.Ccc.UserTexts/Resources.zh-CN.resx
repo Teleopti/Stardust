@@ -13511,9 +13511,6 @@ Teleopti R&amp;D</value>
   <data name="DayOffRule" xml:space="preserve">
     <value>休息日规则</value>
   </data>
-  <data name="DayOffRuleAppliedFilters" xml:space="preserve">
-    <value>以下设置被应用于以下座席分组 {0}</value>
-  </data>
   <data name="DayOffRuleSetting" xml:space="preserve">
     <value>休息日规则设置</value>
   </data>

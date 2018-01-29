@@ -272,10 +272,6 @@
     <value>إضافة تجميع نشاط</value>
     <comment>تجميع نشاط جديد</comment>
   </data>
-  <data name="AddGroupPage" xml:space="preserve">
-    <value>إضافة تجميع</value>
-    <comment>صفحة إضافة مجموعة</comment>
-  </data>
   <data name="AddMainLayer" xml:space="preserve">
     <value>إضافة طبقة أساسية</value>
     <comment>إضافة طبقة أساسية</comment>
@@ -299,9 +295,6 @@
   <data name="AddNewScorecard" xml:space="preserve">
     <value>إضافة بطاقة أداء</value>
     <comment>بطاقة أداء جديدة</comment>
-  </data>
-  <data name="AddNewShiftCategory" xml:space="preserve">
-    <value>إضافة فئة نوبة عمل جديدة</value>
   </data>
   <data name="AddNewSite" xml:space="preserve">
     <value>إضافة موقع جديد</value>
@@ -331,10 +324,6 @@
     <value>إضافة عمل إضافي</value>
     <comment>إضافة عمل إضافي</comment>
   </data>
-  <data name="AddOverTimeThreeDots" xml:space="preserve">
-    <value>إضافة عمل إضافي...</value>
-    <comment>إضافة عمل إضافي...</comment>
-  </data>
   <data name="AddPartTimePercentage" xml:space="preserve">
     <value>إضافة تعريف لنسبة الموظفين غير المتفرغين</value>
     <comment>نسبة جديدة للموظفين غير المتفرغين</comment>
@@ -358,10 +347,6 @@
   <data name="AddPersonToRole" xml:space="preserve">
     <value>إضافة شخص إلى دور</value>
     <comment>إضافة شخص إلى دور</comment>
-  </data>
-  <data name="AddQueuesThreeDots" xml:space="preserve">
-    <value>إضافة قوائم انتظار...</value>
-    <comment>إضافة قوائم انتظار...</comment>
   </data>
   <data name="AddressBook" xml:space="preserve">
     <value>دفتر العناوين</value>
@@ -960,10 +945,6 @@
   <data name="ChooseContractToChange" xml:space="preserve">
     <value>اختيار عقد للتحرير</value>
     <comment>اختيار عقد لإدارته</comment>
-  </data>
-  <data name="ChooseGroupingToChange" xml:space="preserve">
-    <value>اختيار تجميع لتغييره</value>
-    <comment>اختيار تجميع لتغييره</comment>
   </data>
   <data name="ChooseOptionalColumnToChange" xml:space="preserve">
     <value>اختيار عمود اختياري لتغييره</value>
@@ -2065,10 +2046,6 @@
     <value>ساعات يوميا</value>
     <comment>ساعات يوميا</comment>
   </data>
-  <data name="IdleTime" xml:space="preserve">
-    <value>وقت الخمول</value>
-    <comment>AP: أعمدة شبكة المعلومات (تقريري)</comment>
-  </data>
   <data name="IncludeExclude" xml:space="preserve">
     <value>تضمين
 استبعاد</value>
@@ -2386,10 +2363,6 @@
     <value>تسجيل الدخول</value>
     <comment>تسجيل الدخول</comment>
   </data>
-  <data name="LogOnFailed" xml:space="preserve">
-    <value>فشل تسجيل الدخول!</value>
-    <comment>فشل تسجيل الدخول!</comment>
-  </data>
   <data name="Main" xml:space="preserve">
     <value>التسلسل الهرمي للعمل</value>
     <comment>صفحة علامة التبويب الأساسية لصفحة المجموعة</comment>
@@ -2518,9 +2491,6 @@
   <data name="Meeting" xml:space="preserve">
     <value>الاجتماع</value>
   </data>
-  <data name="MeetingComposer" xml:space="preserve">
-    <value>مُنشئ الاجتماع</value>
-  </data>
   <data name="MeetingLocationRequired" xml:space="preserve">
     <value>أدخل الموقع!</value>
     <comment>رسالة التحقق من صحة موقع الاجتماع</comment>
@@ -2594,10 +2564,6 @@
   <data name="ModifyAssignment" xml:space="preserve">
     <value>تعديل مهمة</value>
     <comment>تعديل مهمة</comment>
-  </data>
-  <data name="ModifyDayOff" xml:space="preserve">
-    <value>تعديل عطلة</value>
-    <comment>تعديل عطلة</comment>
   </data>
   <data name="ModifyMainShift" xml:space="preserve">
     <value>تعديل نوبة العمل الأساسية</value>
@@ -2726,14 +2692,6 @@
   <data name="NameColon" xml:space="preserve">
     <value>الاسم:</value>
     <comment>الاسم:</comment>
-  </data>
-  <data name="NameView" xml:space="preserve">
-    <value>قم بتسمية طريقة العرض</value>
-    <comment>عنوان مربع_تحرير_العرض</comment>
-  </data>
-  <data name="NameYourViewColon" xml:space="preserve">
-    <value>ضع اسمًا لطريقة العرض:</value>
-    <comment>يطالبك بتسمية طريقة العرض المحفوظة</comment>
   </data>
   <data name="New" xml:space="preserve">
     <value>جديد</value>
@@ -3887,9 +3845,6 @@
     <value>خيارات جدولة جلسة عمل</value>
     <comment>خيارات جدولة جلسة عمل</comment>
   </data>
-  <data name="Scheduling_SchedulingScreen_Text" xml:space="preserve">
-    <value>هي إحدى أهم واكبر</value>
-  </data>
   <data name="ScoreCard" xml:space="preserve">
     <value>بطاقة أداء</value>
     <comment>بطاقة أداء</comment>
@@ -4330,14 +4285,6 @@
     <value>منقسم</value>
     <comment>منقسم</comment>
   </data>
-  <data name="splitContainerAdv2" xml:space="preserve">
-    <value>split Container Adv2</value>
-    <comment>split Container Adv2</comment>
-  </data>
-  <data name="splitContainerAdv3" xml:space="preserve">
-    <value>split Container Adv3</value>
-    <comment>split Container Adv3</comment>
-  </data>
   <data name="Standard" xml:space="preserve">
     <value>قياسي</value>
     <comment>قياسي</comment>
@@ -4629,18 +4576,6 @@
   <data name="Tools" xml:space="preserve">
     <value>أدوات</value>
     <comment>أدوات</comment>
-  </data>
-  <data name="toolStripPanelItem1" xml:space="preserve">
-    <value>tool Strip Panel Item1</value>
-    <comment>tool Strip Panel Item1</comment>
-  </data>
-  <data name="toolStripPanelItem3" xml:space="preserve">
-    <value>tool Strip Panel Item3</value>
-    <comment>tool Strip Panel Item3</comment>
-  </data>
-  <data name="toolStripSplitButton1" xml:space="preserve">
-    <value>tool Strip Split Button1</value>
-    <comment>tool Strip Split Button1</comment>
   </data>
   <data name="Total" xml:space="preserve">
     <value>إجمالي</value>
@@ -5105,10 +5040,6 @@
     <value>إحصائيات قائمة انتظار الوكلاء</value>
     <comment>إحصائيات قائمة انتظار الوكلاء</comment>
   </data>
-  <data name="ResReportAgentScheduleAdherence" xml:space="preserve">
-    <value>الوكيل - الالتزام بالجدولة</value>
-    <comment>الوكيل - الالتزام بالجدولة</comment>
-  </data>
   <data name="ResReportAgentScheduleResult" xml:space="preserve">
     <value>نتيجة جدولة الوكيل</value>
     <comment>نتيجة جدولة الوكيل</comment>
@@ -5132,10 +5063,6 @@
   <data name="ResReportScheduledTimePerAgent" xml:space="preserve">
     <value>الوقت المجدول لكل وكيل</value>
     <comment>الوقت المجدول لكل وكيل</comment>
-  </data>
-  <data name="ResReportScheuduledTimePerAbsenceActivity" xml:space="preserve">
-    <value>الوقت المجدول لكل حالة غياب/نشاط</value>
-    <comment>الوقت المجدول لكل حالة غياب/نشاط</comment>
   </data>
   <data name="ResReportServiceLevelAndAgentsReady" xml:space="preserve">
     <value>مستوى الخدمة واستعداد الوكلاء</value>
@@ -5719,9 +5646,6 @@
   </data>
   <data name="ManageJusticeValues" xml:space="preserve">
     <value>ادارة قيمة الانصاف</value>
-  </data>
-  <data name="PreferenceDate" xml:space="preserve">
-    <value>تاريخ التفضيل</value>
   </data>
   <data name="Budgets" xml:space="preserve">
     <value>ميزانيات</value>
@@ -7025,9 +6949,6 @@
   <data name="QuestionDelete" xml:space="preserve">
     <value>هل أنت متأكد من حذف {0}{1}{0} ؟</value>
   </data>
-  <data name="MaximumHoursPerWeekCannotBeMoreThan168Hours" xml:space="preserve">
-    <value>لا يجوز لأقصى حد للساعات في الأسبوع تجاوز 168 ساعة</value>
-  </data>
   <data name="CopyrightColon" xml:space="preserve">
     <value>حقوق النسخ:</value>
   </data>
@@ -7090,12 +7011,6 @@
   </data>
   <data name="UndoRedoScheduling" xml:space="preserve">
     <value>جدولة</value>
-  </data>
-  <data name="UndoRedoModifyPersonRequest" xml:space="preserve">
-    <value>تعديل طلب الشخص ل {0}</value>
-  </data>
-  <data name="UndoRedoModifySchedule" xml:space="preserve">
-    <value>تعديل الجدول ل {0}, تاريخ {1}</value>
   </data>
   <data name="ExportToPDF" xml:space="preserve">
     <value>تصدير ل df</value>
@@ -7468,9 +7383,6 @@
   </data>
   <data name="NoExistingShiftSelected" xml:space="preserve">
     <value>لم يتم اختيار نوبة عمل </value>
-  </data>
-  <data name="BetweenDayOff" xml:space="preserve">
-    <value>بين العطلات</value>
   </data>
   <data name="BlockScheduling" xml:space="preserve">
     <value>جدولة كتله </value>
@@ -8146,9 +8058,6 @@
   <data name="BudgetGroup" xml:space="preserve">
     <value>المجموعه المدرجة في الميزانية</value>
   </data>
-  <data name="Illegal" xml:space="preserve">
-    <value>غير مقبول</value>
-  </data>
   <data name="IllegalInput" xml:space="preserve">
     <value>ادخال غير مقبول</value>
   </data>
@@ -8449,9 +8358,6 @@
   <data name="LowestPossibleWorkTimeIsTooHigh" xml:space="preserve">
     <value>وقت العمل الاقل عالى !</value>
   </data>
-  <data name="CannotDeleteSelectedActivities" xml:space="preserve">
-    <value>لا يمكن حذف النشاطات المختارة</value>
-  </data>
   <data name="SelectedActivitiesCannotBeDeletedColon" xml:space="preserve">
     <value>النشاطات المختارة لا يمكن حذففها لانها تتبع مهارات تستخدمها</value>
   </data>
@@ -8701,9 +8607,6 @@
   <data name="AllFulFilledAbsences" xml:space="preserve">
     <value>كل الغيبات المحققه</value>
   </data>
-  <data name="YourEmailAddressShouldBeConfiguredInThePeopleModuleToUseThisServiceDot" xml:space="preserve">
-    <value>بريدك الالكتروبى يجب ان يكون مدخل فى وحده الاشخاص لاستخدام هذه الخدمه </value>
-  </data>
   <data name="SignCustomerWeb" xml:space="preserve">
     <value>تسجيل دخول شبكه العميل </value>
   </data>
@@ -8919,9 +8822,6 @@
   </data>
   <data name="TheInputTextCanNotBeEmptyDot" xml:space="preserve">
     <value>نص الادخال لا يمكن ان يكون فارغ </value>
-  </data>
-  <data name="TotalAllowance" xml:space="preserve">
-    <value>المسموح الاجمالى </value>
   </data>
   <data name="AllowPersonModifications" xml:space="preserve">
     <value>يمكن الغيير و الحفظ </value>
@@ -9640,9 +9540,6 @@
   <data name="ManageSmsSettings" xml:space="preserve">
     <value>إدارة إعدادات SMS</value>
   </data>
-  <data name="SetWhichColumnToGetSmsPhoneNumberFrom" xml:space="preserve">
-    <value>اضبط أى عمود ستحصل من خلاله على رقم الهاتف من SMS</value>
-  </data>
   <data name="SmsSettings" xml:space="preserve">
     <value>إعدادات SMS</value>
   </data>
@@ -9702,9 +9599,6 @@
   </data>
   <data name="PleaseChooseSkillSet" xml:space="preserve">
     <value>من فضلك اختر حزمة المهارات</value>
-  </data>
-  <data name="AllowMeetings" xml:space="preserve">
-    <value>السماح بالاجتماعات</value>
   </data>
   <data name="ShiftCategories" xml:space="preserve">
     <value>فئات الوردية</value>
@@ -10668,9 +10562,6 @@
     <value>[ الاسم الاول]
 [الاسم الاخير]</value>
   </data>
-  <data name="ShiftTradeEmptyScheduleDenyReason" xml:space="preserve">
-    <value>تم رفض مبادلة الوردية لأن الجدول خالى</value>
-  </data>
   <data name="AgentDescription" xml:space="preserve">
     <value>وصف الممثل</value>
   </data>
@@ -10720,11 +10611,6 @@
   <data name="OpenProductActivationKeyFile" xml:space="preserve">
     <value>اختر ملف مفتاح التنشيط</value>
   </data>
-  <data name="ProductActivationKey" xml:space="preserve">
-    <value>هذا النظام مرخص {0} وفقا للشروط واللوائح الخاصة برخصة الاتفاقية، مفتاح التنشيط ستنتهى صلاحيته {1}
-مفتاح التنشيط يغطى بحد أقصى {2} ممثلين نشطاء
-خطة مفتاح التنشيط {3} هذه الصفات تم تنشيطها {4}</value>
-  </data>
   <data name="YouHaveAlmostTooManyActiveAgents" xml:space="preserve">
     <value>لديك {0}  ممثلين نشطاء ولكنك مرخص للحصول على {1}  فقط. فضلا قم بترقية مفتاح التنشيط</value>
   </data>
@@ -10739,11 +10625,6 @@
   </data>
   <data name="NewProductActivationKeyDoesNotCoverEnoughSeats" xml:space="preserve">
     <value>مفتاح التنشيط يغطى فقط {0} مقاعد، عليك الحصول على مفتاح تنشيط يسمح بتغطية عدد كاف من المقاعد</value>
-  </data>
-  <data name="SeatProductActivationKey" xml:space="preserve">
-    <value>هذا النظام مرخص {0} وفقا للشروط واللوائح الخاصة برخصة الاتفاقية، مفتاح التنشيط ستنتهى صلاحيته {1}
-مفتاح التنشيط يغطى بحد أقصى {2} مقاعد. 
-خطة مفتاح التنشيط {3} هذه الصفات تم تنشيطها {4}</value>
   </data>
   <data name="YouHaveAlmostTooManySeats" xml:space="preserve">
     <value>لقد وصلت إلى الحد المسموح به من المقاعد المرخصة. فضلا قم بترقية مفتاح التنشيط فى القريب.</value>
@@ -10774,9 +10655,6 @@
   </data>
   <data name="ShiftBackToLegal" xml:space="preserve">
     <value>تعديل الورديات للتوافق مع حقيبة الوردية</value>
-  </data>
-  <data name="BadgeTypeEnabled" xml:space="preserve">
-    <value>استخدم</value>
   </data>
   <data name="CouldNotFindAnyValidShiftInShiftBag" xml:space="preserve">
     <value>لا يمكن إيجاد أى وردية صالحة فى حقيبة الورديات</value>
@@ -11723,9 +11601,6 @@
   </data>
   <data name="FailedImportedCountColon" xml:space="preserve">
     <value>استيراد فاشل</value>
-  </data>
-  <data name="InternalErrorXMsg" xml:space="preserve">
-    <value>حدثت بعض الأخطاء الداخلية </value>
   </data>
   <data name="PleaseFindTheDownloadedExcelSheetToCheckTheError" xml:space="preserve">
     <value>فضلا اعثر على ملف الاكسيل المحمل من الانترنت للتأكد من تفاصيل الخطأ</value>

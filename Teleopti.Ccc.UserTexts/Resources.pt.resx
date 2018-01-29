@@ -195,9 +195,6 @@
   <data name="AddPersonalActivity" xml:space="preserve">
     <value>Adicionar Atividade Pessoal</value>
   </data>
-  <data name="AddQueuesThreeDots" xml:space="preserve">
-    <value>Adicionar filas...</value>
-  </data>
   <data name="AddToQuickAccessToolBar" xml:space="preserve">
     <value>&amp;Adicionar para Menu de Acesso Rápido </value>
   </data>
@@ -2310,9 +2307,6 @@
   <data name="NewShiftCategory" xml:space="preserve">
     <value>Nova Categoria de Turno</value>
   </data>
-  <data name="AddNewShiftCategory" xml:space="preserve">
-    <value>Adicionar nova categoria de turno</value>
-  </data>
   <data name="ChooseShiftCategoryToChange" xml:space="preserve">
     <value>Escolher categoria de turno para mudar</value>
   </data>
@@ -2669,9 +2663,6 @@
   </data>
   <data name="ShiftTradeRequestCouldNotBeAcceptedParameter0" xml:space="preserve">
     <value>A solicitação de troca de turno não pode ser aceita devido a um erro. Mensagem de Erro: {0}</value>
-  </data>
-  <data name="AddedSkillsColon" xml:space="preserve">
-    <value>Grupos Adiocionados:</value>
   </data>
   <data name="ForecastedStaff" xml:space="preserve">
     <value>Staff previsto</value>
@@ -3303,9 +3294,6 @@
   <data name="ModifyAssignment" xml:space="preserve">
     <value>Modificar atribuição</value>
   </data>
-  <data name="ModifyDayOff" xml:space="preserve">
-    <value>Modificar Folga</value>
-  </data>
   <data name="ModifyPersonNameAndPassword" xml:space="preserve">
     <value>Modificar nome e senha</value>
   </data>
@@ -3690,9 +3678,6 @@
   <data name="AvailableTime" xml:space="preserve">
     <value>Tempo Disponível</value>
   </data>
-  <data name="IdleTime" xml:space="preserve">
-    <value>Tempo Indisponível</value>
-  </data>
   <data name="LoggedInTime" xml:space="preserve">
     <value>Tempo Logado</value>
   </data>
@@ -3713,9 +3698,6 @@
   </data>
   <data name="AddActivityThreeDots" xml:space="preserve">
     <value>Adicionar Atividade...</value>
-  </data>
-  <data name="AddOverTimeThreeDots" xml:space="preserve">
-    <value>Adicionar Horas Extras</value>
   </data>
   <data name="AddPersonalActivityThreeDots" xml:space="preserve">
     <value>Adicionar Atividade Pessoal</value>
@@ -4265,9 +4247,6 @@
   </data>
   <data name="RecurrentMeeting" xml:space="preserve">
     <value>Reunião Recorrente</value>
-  </data>
-  <data name="ResReportAgentScheduleAdherence" xml:space="preserve">
-    <value>Aderência a escala do Agente</value>
   </data>
   <data name="RecurrenceColon" xml:space="preserve">
     <value>Recorrência:</value>
@@ -5319,9 +5298,6 @@
   <data name="AllowPersonModifications" xml:space="preserve">
     <value>É possível alterar e salvar</value>
   </data>
-  <data name="TotalAllowance" xml:space="preserve">
-    <value>Concessão total</value>
-  </data>
   <data name="TheInputTextCanNotBeEmptyDot" xml:space="preserve">
     <value>O campo de texto não pode ser vazio.</value>
   </data>
@@ -5601,9 +5577,6 @@
   <data name="SignCustomerWeb" xml:space="preserve">
     <value>Login customer web</value>
   </data>
-  <data name="YourEmailAddressShouldBeConfiguredInThePeopleModuleToUseThisServiceDot" xml:space="preserve">
-    <value>O seu endereço de e-mail deve estar configurado no Módulo Pessoas para que este serviço possa ser utilizado.</value>
-  </data>
   <data name="MissingWorkflowControlSet" xml:space="preserve">
     <value>Falta uma configuração de workflow</value>
   </data>
@@ -5744,9 +5717,6 @@
   </data>
   <data name="IllegalInput" xml:space="preserve">
     <value>Entrada inválida</value>
-  </data>
-  <data name="Illegal" xml:space="preserve">
-    <value>Inválido</value>
   </data>
   <data name="Include" xml:space="preserve">
     <value>Incluir</value>
@@ -6451,9 +6421,6 @@ Atualizado em: {1}</value>
   <data name="PayrollExportGeneralInformation" xml:space="preserve">
     <value>Info. Gerais Sobre a Exp. para a Folha de Pagamento</value>
   </data>
-  <data name="MaximumHoursPerWeekCannotBeMoreThan168Hours" xml:space="preserve">
-    <value>O máximo de horas por semana não pode ultrapassar mais de 168 horas</value>
-  </data>
   <data name="RunExport" xml:space="preserve">
     <value>Executar a exportação selecionada</value>
   </data>
@@ -6525,12 +6492,6 @@ Atualizado em: {1}</value>
   </data>
   <data name="UndoRedoScheduling" xml:space="preserve">
     <value>Agendamento</value>
-  </data>
-  <data name="UndoRedoModifyPersonRequest" xml:space="preserve">
-    <value>Modificar solicitação de pessoa para {0}</value>
-  </data>
-  <data name="UndoRedoModifySchedule" xml:space="preserve">
-    <value>Modificar agenda para {0}, data {1}</value>
   </data>
   <data name="ExportToPDF" xml:space="preserve">
     <value>Exportar para PDF</value>
@@ -6857,9 +6818,6 @@ Teleopti P&amp;D</value>
   </data>
   <data name="RequestDenyReasonSupervisor" xml:space="preserve">
     <value>A sua solicitação foi negada pelo administrador.</value>
-  </data>
-  <data name="BetweenDayOff" xml:space="preserve">
-    <value>Entre dias de folga</value>
   </data>
   <data name="BlockScheduling" xml:space="preserve">
     <value>Agendamento de Bloco</value>
@@ -7691,9 +7649,6 @@ Teleopti P&amp;D
   <data name="ModifyRequest" xml:space="preserve">
     <value>Modificar solicitação</value>
   </data>
-  <data name="OverStaff" xml:space="preserve">
-    <value>Overstaff</value>
-  </data>
   <data name="UnderStaff" xml:space="preserve">
     <value>Understaff</value>
   </data>
@@ -8018,9 +7973,6 @@ Teleopti P&amp;D
   <data name="LowestPossibleWorkTimeIsTooHigh" xml:space="preserve">
     <value>O mínimo tempo de trabalho possível está muito grande!</value>
   </data>
-  <data name="CannotDeleteSelectedActivities" xml:space="preserve">
-    <value>Não foi Possível Excluir as Atividades Selecionadas</value>
-  </data>
   <data name="RequestDetails" xml:space="preserve">
     <value>Visualização dos Detalhes da Solicitação</value>
   </data>
@@ -8306,9 +8258,6 @@ Teleopti P&amp;D
   <data name="ManageSmsSettings" xml:space="preserve">
     <value>Gerenciar Opções de SMS</value>
   </data>
-  <data name="SetWhichColumnToGetSmsPhoneNumberFrom" xml:space="preserve">
-    <value>Definir de qual coluna se deve obter o número de telefone do SMS</value>
-  </data>
   <data name="SmsSettings" xml:space="preserve">
     <value>Configurações de SMS</value>
   </data>
@@ -8374,9 +8323,6 @@ Teleopti P&amp;D
   </data>
   <data name="ScheduleOnlyPreferenceMustHave" xml:space="preserve">
     <value>Agendar Apenas Dias com Preferências Prioritárias</value>
-  </data>
-  <data name="AllowMeetings" xml:space="preserve">
-    <value>Permitir Reuniões</value>
   </data>
   <data name="ShiftCategories" xml:space="preserve">
     <value>Categorias de turno</value>
@@ -9456,15 +9402,6 @@ Detalhes do erro:
   <data name="OpenProductActivationKeyFile" xml:space="preserve">
     <value>Selecione o arquivo com a chave de ativação do produto</value>
   </data>
-  <data name="ProductActivationKey" xml:space="preserve">
-    <value>Esse sistema está licençado para "{0}" de acordo com os termos e condições do acordo de licença e a chave de ativação do produto irá expirar em {1}.
-
-A chave de ativação do produto aceita no máximo {2} agentes ativos.
-
-O tipo dessa chave de ativação do produto é: "{3}"
-As opções ativadas são:
-{4}</value>
-  </data>
   <data name="YouHaveAlmostTooManyActiveAgents" xml:space="preserve">
     <value>Você tem {0} agentes ativos, no entanto você está licenciado para ter somente {1}. Por favor atualize a sua chave de ativação do produto logo</value>
   </data>
@@ -9476,15 +9413,6 @@ As opções ativadas são:
   </data>
   <data name="NewProductActivationKeyDoesNotCoverEnoughSeats" xml:space="preserve">
     <value>Essa chave de ativação do produto aceita no máximo {0} PAs. Você precisa obter uma chave de ativação do produto que aceite um número suficiente de PAs.</value>
-  </data>
-  <data name="SeatProductActivationKey" xml:space="preserve">
-    <value>Esse sistema está licençado para "{0}" de acordo com os termos e condições do acordo de licença e a chave de ativação do produto irá expirar em {1}.
-
-A chave de ativação do produto aceita no máximo {2} PAs.
-
-O tipo dessa chave de ativação do produto é: "{3}"
-As opções ativadas são:
-{4}</value>
   </data>
   <data name="YouHaveAlmostTooManySeats" xml:space="preserve">
     <value>Você está próximo do limite de {0} PAs para o qual você está licenciado. Por favor atualize a sua chave de ativação do produto logo.</value>
@@ -9527,9 +9455,6 @@ As opções ativadas são:
   </data>
   <data name="ShiftBackToLegal" xml:space="preserve">
     <value>Ajustar turnos de acordo com a cesta de turnos</value>
-  </data>
-  <data name="BadgeTypeEnabled" xml:space="preserve">
-    <value>Utilizar</value>
   </data>
   <data name="CouldNotFindAnyValidShiftInShiftBag" xml:space="preserve">
     <value>Não foram achados turnos válidos na cesta de turnos</value>

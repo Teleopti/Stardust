@@ -165,9 +165,6 @@
   <data name="AddPersonalActivity" xml:space="preserve">
     <value>Tambah Aktivitas Personal</value>
   </data>
-  <data name="AddQueuesThreeDots" xml:space="preserve">
-    <value>Tambah antrian...</value>
-  </data>
   <data name="Administration" xml:space="preserve">
     <value>Administrasi</value>
   </data>
@@ -2484,9 +2481,6 @@
   <data name="OpenBudgetGroupThreeDots" xml:space="preserve">
     <value>Buka Budget...</value>
   </data>
-  <data name="AddedSkillsColon" xml:space="preserve">
-    <value>Skill Ditambahkan:</value>
-  </data>
   <data name="DifferencePercent" xml:space="preserve">
     <value>Perbedaan (%)</value>
   </data>
@@ -2535,9 +2529,6 @@
   <data name="PickBestMeetingSlot" xml:space="preserve">
     <value>Ambil waktu pertemuan terbaik</value>
   </data>
-  <data name="CannotDeleteSelectedActivities" xml:space="preserve">
-    <value>Tidak Bisa Menghapus Aktivitas Terpilih</value>
-  </data>
   <data name="SelectedActivitiesCannotBeDeletedColon" xml:space="preserve">
     <value>Aktivitas yang dipilih tidak bisa dihapus karena skill berikut menggunakannya:</value>
   </data>
@@ -2567,9 +2558,6 @@
   </data>
   <data name="FilterDaysForTemplate" xml:space="preserve">
     <value>Penyaringan Hari untuk Template</value>
-  </data>
-  <data name="Illegal" xml:space="preserve">
-    <value>Tidak valid</value>
   </data>
   <data name="TheEnteredIsIllegal" xml:space="preserve">
     <value>{0} yang dimasukkan tidak valid</value>
@@ -2657,9 +2645,6 @@
   </data>
   <data name="MissingWorkflowControlSet" xml:space="preserve">
     <value>Set kendali workflow hilang</value>
-  </data>
-  <data name="YourEmailAddressShouldBeConfiguredInThePeopleModuleToUseThisServiceDot" xml:space="preserve">
-    <value>Alamat Email anda harus dikonfigurasi di dalam Modul Orang supaya bisa menggunakan layanan ini.</value>
   </data>
   <data name="Error" xml:space="preserve">
     <value>Salah</value>
@@ -3655,9 +3640,6 @@ Tidak Termasuk</value>
   <data name="ModifyAbsence" xml:space="preserve">
     <value>Modifikasi Absen</value>
   </data>
-  <data name="ModifyDayOff" xml:space="preserve">
-    <value>Modifikasi hari libur</value>
-  </data>
   <data name="ModifyPersonalShift" xml:space="preserve">
     <value>Modifikasi shift pribadi</value>
   </data>
@@ -4015,9 +3997,6 @@ Tidak Termasuk</value>
   <data name="Warning" xml:space="preserve">
     <value>Peringatan</value>
   </data>
-  <data name="AddNewShiftCategory" xml:space="preserve">
-    <value>Tambah kategori shift baru</value>
-  </data>
   <data name="Information" xml:space="preserve">
     <value>Informasi</value>
   </data>
@@ -4044,9 +4023,6 @@ Tidak Termasuk</value>
   </data>
   <data name="AddAbsenceThreeDots" xml:space="preserve">
     <value>Tambah Absen...</value>
-  </data>
-  <data name="AddOverTimeThreeDots" xml:space="preserve">
-    <value>Tambah Lembur...</value>
   </data>
   <data name="LogOn" xml:space="preserve">
     <value>Login</value>
@@ -5228,9 +5204,6 @@ R&amp;D Teleopti</value>
   <data name="NoExistingShiftSelected" xml:space="preserve">
     <value>Tidak ada shift yang dipilih</value>
   </data>
-  <data name="BetweenDayOff" xml:space="preserve">
-    <value>Antara hari libur</value>
-  </data>
   <data name="Left" xml:space="preserve">
     <value>Tersisa</value>
   </data>
@@ -5263,9 +5236,6 @@ R&amp;D Teleopti</value>
   </data>
   <data name="Low" xml:space="preserve">
     <value>Rendah</value>
-  </data>
-  <data name="OverStaff" xml:space="preserve">
-    <value>Kelebihan staf</value>
   </data>
   <data name="PriorityColon" xml:space="preserve">
     <value>Prioritas:</value>
@@ -5975,9 +5945,6 @@ R&amp;D Teleopti</value>
   <data name="AvailableTime" xml:space="preserve">
     <value>Waktu Siap</value>
   </data>
-  <data name="IdleTime" xml:space="preserve">
-    <value>Waktu Tidak Siap</value>
-  </data>
   <data name="ScheduleWorkCtiTime" xml:space="preserve">
     <value>Waktu Siap Terjadwal</value>
   </data>
@@ -6430,9 +6397,6 @@ R&amp;D Teleopti</value>
   </data>
   <data name="TotalOutOfAdherenceColon" xml:space="preserve">
     <value>Total ketidaktaatan:</value>
-  </data>
-  <data name="ResReportAgentScheduleAdherence" xml:space="preserve">
-    <value>Ketaatan Jadwal Agent</value>
   </data>
   <data name="ResReportAgentScheduleResult" xml:space="preserve">
     <value>Metrik Agent</value>
@@ -7139,9 +7103,6 @@ R&amp;D Teleopti</value>
   <data name="TheInputTextCanNotBeEmptyDot" xml:space="preserve">
     <value>Teks input tidak boleh kosong.</value>
   </data>
-  <data name="TotalAllowance" xml:space="preserve">
-    <value>Total tunjangan</value>
-  </data>
   <data name="AllowPersonModifications" xml:space="preserve">
     <value>Bisa mengubah dan menyimpan</value>
   </data>
@@ -7358,9 +7319,6 @@ R&amp;D Teleopti</value>
   <data name="QuestionDelete" xml:space="preserve">
     <value>Apakah anda akan menghapus {0}{1}{0} ?</value>
   </data>
-  <data name="MaximumHoursPerWeekCannotBeMoreThan168Hours" xml:space="preserve">
-    <value>Jam maksimal per minggu tidak boleh lebih dari 168 jam</value>
-  </data>
   <data name="RunExport" xml:space="preserve">
     <value>Jalankan ekspor terpilih</value>
   </data>
@@ -7414,12 +7372,6 @@ R&amp;D Teleopti</value>
   </data>
   <data name="UndoRedoScheduling" xml:space="preserve">
     <value>Penjadwalan</value>
-  </data>
-  <data name="UndoRedoModifyPersonRequest" xml:space="preserve">
-    <value>Modifikasi permintaan orang untuk {0}</value>
-  </data>
-  <data name="UndoRedoModifySchedule" xml:space="preserve">
-    <value>Modifikasi jadwal untuk {0}, tanggal {1}</value>
   </data>
   <data name="ExportToPDF" xml:space="preserve">
     <value>Eskpor ke PDF</value>

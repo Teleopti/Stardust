@@ -5213,9 +5213,6 @@ Aktualizowane: {1}</value>
   <data name="PayrollExportGeneralInformation" xml:space="preserve">
     <value>Informacja ogólna eksportu płac</value>
   </data>
-  <data name="MaximumHoursPerWeekCannotBeMoreThan168Hours" xml:space="preserve">
-    <value>Maksimum godzin w tygodniu nie może przekraczać 168</value>
-  </data>
   <data name="RunExport" xml:space="preserve">
     <value>Wykonaj wybrany eksport</value>
   </data>
@@ -6184,9 +6181,6 @@ Okres</value>
   <data name="NoExistingShiftSelected" xml:space="preserve">
     <value>Nie wybrano istniejącego dyżuru</value>
   </data>
-  <data name="BetweenDayOff" xml:space="preserve">
-    <value>Między dniami wolnymi</value>
-  </data>
   <data name="BlockScheduling" xml:space="preserve">
     <value>Planowanie blokowe</value>
   </data>
@@ -7074,9 +7068,6 @@ Długoterminowy</value>
   <data name="LowestPossibleWorkTimeIsTooHigh" xml:space="preserve">
     <value>Najmniejszy możliwy czas pracy jest za wysoki!</value>
   </data>
-  <data name="CannotDeleteSelectedActivities" xml:space="preserve">
-    <value>Nie można skasować wybranych aktywności</value>
-  </data>
   <data name="SelectedActivitiesCannotBeDeletedColon" xml:space="preserve">
     <value>Wybrane aktywności nie pogą być skasowane ponieważ używają ich następujące umiejętności:</value>
   </data>
@@ -7202,9 +7193,6 @@ Długoterminowy</value>
   </data>
   <data name="resReportScheduledOvertimePerAgent" xml:space="preserve">
     <value>Planowane nadgodziny na agenta</value>
-  </data>
-  <data name="Illegal" xml:space="preserve">
-    <value>Niedopuszczalne</value>
   </data>
   <data name="TheEnteredIsIllegal" xml:space="preserve">
     <value>Wprowadzone {0} jest niedopuszczalne</value>
@@ -7421,9 +7409,6 @@ Długoterminowy</value>
   </data>
   <data name="MissingWorkflowControlSet" xml:space="preserve">
     <value>Brak zestawu kontroli przebiegu pracy</value>
-  </data>
-  <data name="YourEmailAddressShouldBeConfiguredInThePeopleModuleToUseThisServiceDot" xml:space="preserve">
-    <value>Twój adres email powinien być ustawiony w module Ludzie</value>
   </data>
   <data name="SignCustomerWeb" xml:space="preserve">
     <value>Zaloguj łeb klienta</value>
@@ -7658,9 +7643,6 @@ Długoterminowy</value>
   </data>
   <data name="TheInputTextCanNotBeEmptyDot" xml:space="preserve">
     <value>Tekst nie może być pusty</value>
-  </data>
-  <data name="TotalAllowance" xml:space="preserve">
-    <value>Przydział łącznie</value>
   </data>
   <data name="AllowPersonModifications" xml:space="preserve">
     <value>Edycja i zapis</value>
@@ -8223,9 +8205,6 @@ Długoterminowy</value>
   <data name="ManageSmsSettings" xml:space="preserve">
     <value>Zarządzaj ustawieniami SMS</value>
   </data>
-  <data name="SetWhichColumnToGetSmsPhoneNumberFrom" xml:space="preserve">
-    <value>Wybierz kolumnę, z której można pobrać numer do wysyłki SMS</value>
-  </data>
   <data name="SmsSettings" xml:space="preserve">
     <value>Ustawienia SMS</value>
   </data>
@@ -8294,9 +8273,6 @@ Długoterminowy</value>
   </data>
   <data name="ScheduleOnlyPreferenceMustHave" xml:space="preserve">
     <value>Planuj tylko preferencje Konieczne</value>
-  </data>
-  <data name="AllowMeetings" xml:space="preserve">
-    <value>Zezwól na spotkania</value>
   </data>
   <data name="ShiftCategories" xml:space="preserve">
     <value>Kategorie dyżurów</value>
@@ -9433,15 +9409,6 @@ Szczegóły błędu:
   <data name="OpenProductActivationKeyFile" xml:space="preserve">
     <value>Wybierz klucz aktywacji produktu.</value>
   </data>
-  <data name="ProductActivationKey" xml:space="preserve">
-    <value>Ten system jest licencjonowane "{0}", zgodnie z warunkami umowy licencyjnej i klucz aktywacji produktu wygasa {1}.
-
-Klucz aktywacyjny produktu obejmuje maksymalnie {2} aktywnych agentów.
-
-Schemat klucza aktywacji produkt jest "{3}".
-Te opcje są aktywowane:
-{4}</value>
-  </data>
   <data name="YouHaveAlmostTooManyActiveAgents" xml:space="preserve">
     <value>Masz {0} aktywnych agentów, ale udzielane są licencje na posiadanie jedynie {1}. Szybko, prosimy o zaktualizowanie klucza aktywacji produktu</value>
   </data>
@@ -9459,15 +9426,6 @@ Te opcje są aktywowane:
   </data>
   <data name="NewProductActivationKeyDoesNotCoverEnoughSeats" xml:space="preserve">
     <value>Ten klucz aktywacji produktu obejmuje tylko {0} miejsc. Musisz dostać klucz aktywacyjny produktu, który obejmuje wystarczającą ilość miejsc.</value>
-  </data>
-  <data name="SeatProductActivationKey" xml:space="preserve">
-    <value>Ten system jest licencjonowane "{0}", zgodnie z warunkami umowy licencyjnej i klucz aktywacji produktu wygasa {1}.
-
-Klucz aktywacyjny produktu obejmuje maksymalnie {2} miejsc.
-
-Schemat klucza aktywacji produktu jest "{3}".
-Te opcje są aktywowane:
-{4}</value>
   </data>
   <data name="YouHaveAlmostTooManySeats" xml:space="preserve">
     <value>Zostały prawie osiągnęty limit licencjonowania {0} miejsc. Szybko, prosimy o zaktualizowanie klucza aktywacji produktu.</value>
@@ -9727,9 +9685,6 @@ Te opcje są aktywowane:
   <data name="Outbound" xml:space="preserve">
     <value>Połaczenia Wychodzące</value>
   </data>
-  <data name="AGREE" xml:space="preserve">
-    <value>ZGODA</value>
-  </data>
   <data name="Campaign" xml:space="preserve">
     <value>Kampania</value>
   </data>
@@ -9807,12 +9762,6 @@ Te opcje są aktywowane:
   </data>
   <data name="NoApplicationLogonAccountErrorMsgSemicolon" xml:space="preserve">
     <value>brak identyfikatora użytkownika aplikacji;</value>
-  </data>
-  <data name="OutboundOverstaffRule" xml:space="preserve">
-    <value>Wczesny</value>
-  </data>
-  <data name="OutboundUnderSLARule" xml:space="preserve">
-    <value>Późny</value>
   </data>
   <data name="ImportUsers" xml:space="preserve">
     <value>Importuj użytkowników</value>
@@ -10129,9 +10078,6 @@ Te opcje są aktywowane:
   <data name="AddSpecificAuthorizationLabel" xml:space="preserve">
     <value>Dodaj poszczególne uprawnieniana liście poniżej:</value>
   </data>
-  <data name="ForecastChartIntro" xml:space="preserve">
-    <value>Na podstawie wielkości poprzedzających dane historyczne, zostały stworzone metod prognozy i zastosowane do roku poprzedniego. Najbardziej dokładna metoda jest aktualnie wyświetlana na wykresie i będzie wykorzystywana na następne prognozy.</value>
-  </data>
   <data name="GenerateForecastTip" xml:space="preserve">
     <value>Generowanie prognozy</value>
   </data>
@@ -10167,9 +10113,6 @@ Te opcje są aktywowane:
   </data>
   <data name="OutboundCampaigns" xml:space="preserve">
     <value>Kampanie Wychodzące</value>
-  </data>
-  <data name="OutboundIntroduction" xml:space="preserve">
-    <value>Aby wyświetlić istniejące kampanie i utworzyć nową kampanię</value>
   </data>
   <data name="Progress" xml:space="preserve">
     <value>Postęp</value>
@@ -10281,15 +10224,6 @@ Te opcje są aktywowane:
   </data>
   <data name="Backlog" xml:space="preserve">
     <value>Zaległość</value>
-  </data>
-  <data name="Overscheduled" xml:space="preserve">
-    <value>Ponadplanowane</value>
-  </data>
-  <data name="Underscheduled" xml:space="preserve">
-    <value>Niedoplanowane</value>
-  </data>
-  <data name="DragAndDropCsvFilesHereOrClickToUpload" xml:space="preserve">
-    <value>Przeciągnij i upuść pliki .csv tutaj lub kliknij aby przesłać</value>
   </data>
   <data name="ReferToFileTemplate" xml:space="preserve">
     <value>Proszę zapoznać się z szablonem pliku</value>
@@ -10409,9 +10343,6 @@ Opcje aktywowane:
   <data name="ForecastOverrideMsg" xml:space="preserve">
     <value>Nadpisanie prognozowanych wartości.</value>
   </data>
-  <data name="With campaign" xml:space="preserve">
-    <value>W kampanii</value>
-  </data>
   <data name="SuccessTip" xml:space="preserve">
     <value>Sukces</value>
   </data>
@@ -10487,12 +10418,6 @@ Opcje aktywowane:
   <data name="SeatHasNoBookings" xml:space="preserve">
     <value>Brak rezerwacji</value>
   </data>
-  <data name="ConfirmRemoveCampaign" xml:space="preserve">
-    <value>Czy na pewno chcesz usunąć tę kampanię?</value>
-  </data>
-  <data name="RemoveCampaign" xml:space="preserve">
-    <value>Usuń Kampanię</value>
-  </data>
   <data name="CampaignFailedRemove" xml:space="preserve">
     <value>Nie udało się usunąć kampanii: {0}.</value>
   </data>
@@ -10516,9 +10441,6 @@ Opcje aktywowane:
   </data>
   <data name="FailedImportedCountColon" xml:space="preserve">
     <value>Importowanie nie powiodło się:</value>
-  </data>
-  <data name="InternalErrorXMsg" xml:space="preserve">
-    <value>wewnętrzny błąd: {0};</value>
   </data>
   <data name="PleaseFindTheDownloadedExcelSheetToCheckTheError" xml:space="preserve">
     <value>Proszę znaleźć pobrany arkusz Excel w celu szczegółowego zapoznania się z błędem.</value>
@@ -10796,9 +10718,6 @@ Opcje aktywowane:
   <data name="NoPermissionAddFullDayAbsenceForAgent" xml:space="preserve">
     <value>Nie masz uprawnień do dodawania pełnych nieobecności dziennych dla {0}</value>
   </data>
-  <data name="NoPermissionToModifyPersonAbsence" xml:space="preserve">
-    <value>Nie masz uprawnień do modyfikowania nieobecności.</value>
-  </data>
   <data name="ConnectionErrorMessage" xml:space="preserve">
     <value>Serwer jest nieosiągalny!
 Sprawdź swoje połączenie internetowe lub skontaktuj się z administratorem.</value>
@@ -10990,9 +10909,6 @@ Pomóż nam ulepszyć swoje doświadczenie poprzez wysłanie raportu o błędzie
   <data name="DenyReason" xml:space="preserve">
     <value>Powód Odrzucenia</value>
   </data>
-  <data name="ChangeWillAffectAgents" xml:space="preserve">
-    <value>Zmiana wpłynie na {0} agentów.</value>
-  </data>
   <data name="RemoveActivity" xml:space="preserve">
     <value>Usuń Aktywność</value>
   </data>
@@ -11037,9 +10953,6 @@ Pomóż nam ulepszyć swoje doświadczenie poprzez wysłanie raportu o błędzie
   </data>
   <data name="SelectSkillArea" xml:space="preserve">
     <value>Wybierz obszar umiejętności</value>
-  </data>
-  <data name="ToggleIncludedSkills" xml:space="preserve">
-    <value>Włącz zawarte umiejętności</value>
   </data>
   <data name="AreYouSureToRemoveSelectedActivity" xml:space="preserve">
     <value>Czy na pewno chcesz usunąć {0} działań dla {1} agentów?</value>

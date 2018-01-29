@@ -217,10 +217,6 @@
     <value>Add Personal Activity</value>
     <comment>Add personal activity menu item</comment>
   </data>
-  <data name="AddQueuesThreeDots" xml:space="preserve">
-    <value>Add queues...</value>
-    <comment>Add queues...</comment>
-  </data>
   <data name="AddToQuickAccessToolBar" xml:space="preserve">
     <value>&amp;Add to Quick Access Toolbar</value>
     <comment>&amp;Add to Quick Access ToolBar</comment>
@@ -3852,10 +3848,6 @@ Columns</value>
     <value>Modify assignment</value>
     <comment>Modify assignment</comment>
   </data>
-  <data name="ModifyDayOff" xml:space="preserve">
-    <value>Modify day off</value>
-    <comment>Modify day off</comment>
-  </data>
   <data name="ModifyMainShift" xml:space="preserve">
     <value>Modify main shift</value>
     <comment>Modify main shift</comment>
@@ -4809,9 +4801,6 @@ Workload</value>
     <value>New Shift Category</value>
     <comment>New Shift Category text to be placed in the Shift Category settings page</comment>
   </data>
-  <data name="AddNewShiftCategory" xml:space="preserve">
-    <value>Add new shift category</value>
-  </data>
   <data name="ChooseShiftCategoryToChange" xml:space="preserve">
     <value>Choose shift category to change</value>
     <comment>ChooseSShiftCategoryToChange text in shift categories setting page</comment>
@@ -4848,10 +4837,6 @@ Workload</value>
     <value>Available time</value>
     <comment>AP: Information grid columns (My Report)</comment>
   </data>
-  <data name="IdleTime" xml:space="preserve">
-    <value>Idle time</value>
-    <comment>AP: Information grid columns (My Report)</comment>
-  </data>
   <data name="LoggedInTime" xml:space="preserve">
     <value>Logged in time</value>
     <comment>AP: Information grid columns (My Report)</comment>
@@ -4879,10 +4864,6 @@ Workload</value>
   <data name="AddActivityThreeDots" xml:space="preserve">
     <value>Add Activity...</value>
     <comment>Add Activity...</comment>
-  </data>
-  <data name="AddOverTimeThreeDots" xml:space="preserve">
-    <value>Add Overtime...</value>
-    <comment>Add Overtime...</comment>
   </data>
   <data name="AddPersonalActivityThreeDots" xml:space="preserve">
     <value>Add Personal Activity...</value>
@@ -5758,10 +5739,6 @@ Availability</value>
     <value>Manage fairness values</value>
     <comment>ManageFairnessValues</comment>
   </data>
-  <data name="PreferenceDate" xml:space="preserve">
-    <value>Preference Date</value>
-    <comment>Preference Date: grid column header </comment>
-  </data>
   <data name="Budgets" xml:space="preserve">
     <value>Budgets</value>
     <comment>Panel text</comment>
@@ -6076,10 +6053,6 @@ Availability</value>
   <data name="ResReportAgentQueueStatistics" xml:space="preserve">
     <value>Employee Queue Statistics</value>
     <comment>Agent Queue Statistics</comment>
-  </data>
-  <data name="ResReportAgentScheduleAdherence" xml:space="preserve">
-    <value>Employee - Schedule Adherence</value>
-    <comment>Agent - Schedule Adherence</comment>
   </data>
   <data name="ResReportAgentScheduleResult" xml:space="preserve">
     <value>Employee Metrics</value>
@@ -6853,10 +6826,6 @@ Updated on: {1}</value>
     <value>Payroll Export General Information</value>
     <comment>PayrollExportGeneralInformation</comment>
   </data>
-  <data name="MaximumHoursPerWeekCannotBeMoreThan168Hours" xml:space="preserve">
-    <value>Maximum hours per week cannot be more than 168 hours</value>
-    <comment>Contract</comment>
-  </data>
   <data name="RunExport" xml:space="preserve">
     <value>Run selected export</value>
     <comment>used in portal on payrollexportnavigator</comment>
@@ -6967,14 +6936,6 @@ Updated on: {1}</value>
   <data name="UndoRedoScheduling" xml:space="preserve">
     <value>Scheduling</value>
     <comment>Scheduling (undo/redo info)</comment>
-  </data>
-  <data name="UndoRedoModifyPersonRequest" xml:space="preserve">
-    <value>Modifying person request for {0}</value>
-    <comment>Modifying person request (undo/redo info)</comment>
-  </data>
-  <data name="UndoRedoModifySchedule" xml:space="preserve">
-    <value>Modifying schedule for {0}, date {1}</value>
-    <comment>Modifying schedule (undo/redo info)</comment>
   </data>
   <data name="ExportToPDF" xml:space="preserve">
     <value>Export to PDF</value>

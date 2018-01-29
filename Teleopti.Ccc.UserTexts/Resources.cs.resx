@@ -205,10 +205,6 @@
     <value>Přidat osobní činnost</value>
     <comment>Add personal activity menu item</comment>
   </data>
-  <data name="AddQueuesThreeDots" xml:space="preserve">
-    <value>Přidat fronty...</value>
-    <comment>Add queues...</comment>
-  </data>
   <data name="AddToQuickAccessToolBar" xml:space="preserve">
     <value>&amp;Přidat do panelu nástrojů pro rychlý přístup</value>
     <comment>&amp;Add to Quick Access ToolBar</comment>
@@ -2503,18 +2499,6 @@ Vyloučení</value>
     <value>Vložit směnu</value>
     <comment>Paste Shift</comment>
   </data>
-  <data name="toolStripPanelItem3" xml:space="preserve">
-    <value>nástroj Strip Panel položka3</value>
-    <comment>tool Strip Panel Item3</comment>
-  </data>
-  <data name="toolStripSplitButton1" xml:space="preserve">
-    <value>nástroj Strip Split tlačítko1</value>
-    <comment>tool Strip Split Button1</comment>
-  </data>
-  <data name="toolStripPanelItem1" xml:space="preserve">
-    <value>nástroj Strip Panel položka1</value>
-    <comment>tool Strip Panel Item1</comment>
-  </data>
   <data name="Shifts" xml:space="preserve">
     <value>Směny</value>
     <comment>Shifts</comment>
@@ -2566,14 +2550,6 @@ Vyloučení</value>
   <data name="ShowOvertime" xml:space="preserve">
     <value>Zobrazit přesčas</value>
     <comment>Show  Overtime</comment>
-  </data>
-  <data name="splitContainerAdv2" xml:space="preserve">
-    <value>rozdělit Schránku Adv2</value>
-    <comment>split Container Adv2</comment>
-  </data>
-  <data name="splitContainerAdv3" xml:space="preserve">
-    <value>rozdělit Schránku Adv3</value>
-    <comment>split Container Adv3</comment>
   </data>
   <data name="GridInChart" xml:space="preserve">
     <value>Mřížka v diagramu</value>
@@ -3233,10 +3209,6 @@ Nahradit</value>
     <value>Připraven...</value>
     <comment>Ready... </comment>
   </data>
-  <data name="ChooseGroupingToChange" xml:space="preserve">
-    <value>Zvolit seskupování pro editaci</value>
-    <comment>Choose grouping to change</comment>
-  </data>
   <data name="PersonAssignmentIsNotValidDot" xml:space="preserve">
     <value>Přiřazení osoby není platné. {0}</value>
     <comment>Person assignment is not valid.</comment>
@@ -3879,10 +3851,6 @@ Sloupce</value>
   <data name="ModifyAssignment" xml:space="preserve">
     <value>Upravit přiřazení</value>
     <comment>Modify assignment</comment>
-  </data>
-  <data name="ModifyDayOff" xml:space="preserve">
-    <value>Upravit den volna</value>
-    <comment>Modify day off</comment>
   </data>
   <data name="ModifyMainShift" xml:space="preserve">
     <value>Upravit hlavní směnu</value>
@@ -4857,9 +4825,6 @@ Pracovní náplň</value>
     <value>Nová kategorie směny</value>
     <comment>New Shift Category text to be placed in the Shift Category settings page</comment>
   </data>
-  <data name="AddNewShiftCategory" xml:space="preserve">
-    <value>Přidat novou kategorii směny</value>
-  </data>
   <data name="ChooseShiftCategoryToChange" xml:space="preserve">
     <value>Zvolit kategorii směny pro změnu</value>
     <comment>ChooseSShiftCategoryToChange text in shift categories setting page</comment>
@@ -4896,10 +4861,6 @@ Pracovní náplň</value>
     <value>Doba připr.</value>
     <comment>AP: Information grid columns (My Report)</comment>
   </data>
-  <data name="IdleTime" xml:space="preserve">
-    <value>Doba čekání</value>
-    <comment>AP: Information grid columns (My Report)</comment>
-  </data>
   <data name="LoggedInTime" xml:space="preserve">
     <value>Doba přihlášení</value>
     <comment>AP: Information grid columns (My Report)</comment>
@@ -4927,10 +4888,6 @@ Pracovní náplň</value>
   <data name="AddActivityThreeDots" xml:space="preserve">
     <value>Přidat činnost...</value>
     <comment>Add Activity...</comment>
-  </data>
-  <data name="AddOverTimeThreeDots" xml:space="preserve">
-    <value>Přidat přesčas...</value>
-    <comment>Add Overtime...</comment>
   </data>
   <data name="AddPersonalActivityThreeDots" xml:space="preserve">
     <value>Přidat osobní činnost...</value>
@@ -5846,10 +5803,6 @@ osoby</value>
     <value>Spravovat hodnoty spravedlnosti</value>
     <comment>ManageFairnessValues</comment>
   </data>
-  <data name="PreferenceDate" xml:space="preserve">
-    <value>Prioritní datum</value>
-    <comment>Preference Date: grid column header </comment>
-  </data>
   <data name="Budgets" xml:space="preserve">
     <value>Rozpočty</value>
     <comment>Panel text</comment>
@@ -5953,10 +5906,6 @@ osoby</value>
   <data name="label7" xml:space="preserve">
     <value>návěští7</value>
     <comment>label7</comment>
-  </data>
-  <data name="ribbonControlAdv1" xml:space="preserve">
-    <value>lišta Řízení Adv1</value>
-    <comment>ribbon Control Adv1</comment>
   </data>
   <data name="UserDefinedOptions" xml:space="preserve">
     <value>Uživatelem definované možnosti</value>
@@ -6164,10 +6113,6 @@ osoby</value>
   <data name="ResReportAgentQueueStatistics" xml:space="preserve">
     <value>Statistika fronty agenta</value>
     <comment>Agent Queue Statistics</comment>
-  </data>
-  <data name="ResReportAgentScheduleAdherence" xml:space="preserve">
-    <value>Agent - Dodržování plánu</value>
-    <comment>Agent - Schedule Adherence</comment>
   </data>
   <data name="ResReportAgentScheduleResult" xml:space="preserve">
     <value>Metrika agenta</value>
@@ -6928,9 +6873,6 @@ Aktualizováno: {1}</value>
   <data name="QuestionDelete" xml:space="preserve">
     <value>Skutečne vymazat {0}{1}{0}?</value>
   </data>
-  <data name="MaximumHoursPerWeekCannotBeMoreThan168Hours" xml:space="preserve">
-    <value>Maximální počet hodin v týdnu nesmí přesáhnout 168</value>
-  </data>
   <data name="RunExport" xml:space="preserve">
     <value>Spusti zvolený export</value>
   </data>
@@ -7002,12 +6944,6 @@ Aktualizováno: {1}</value>
   </data>
   <data name="UndoRedoScheduling" xml:space="preserve">
     <value>Plánování</value>
-  </data>
-  <data name="UndoRedoModifyPersonRequest" xml:space="preserve">
-    <value>Změn osobní požadavku {0}</value>
-  </data>
-  <data name="UndoRedoModifySchedule" xml:space="preserve">
-    <value>Změn plan z  {0}, na {1}</value>
   </data>
   <data name="ExportToPDF" xml:space="preserve">
     <value>Exportuj do PDF</value>
@@ -7506,9 +7442,6 @@ Abychom Vám mohli dát relevantní informace o této chybě, žádáme Vás, ab
   </data>
   <data name="MatchingSkills" xml:space="preserve">
     <value>Porovnávání kvalifikace</value>
-  </data>
-  <data name="AddedSkillsColon" xml:space="preserve">
-    <value>Přidaná kvalifikace:</value>
   </data>
   <data name="PayrollCodeColon" xml:space="preserve">
     <value>Kód mezd:</value>
@@ -8095,9 +8028,6 @@ Abychom Vám mohli dát relevantní informace o této chybě, žádáme Vás, ab
   <data name="NoExistingShiftSelected" xml:space="preserve">
     <value>Nní vybrána žádná existující směna</value>
   </data>
-  <data name="BetweenDayOff" xml:space="preserve">
-    <value>Mezi volnýmidny</value>
-  </data>
   <data name="BlockScheduling" xml:space="preserve">
     <value>Blokové plánování</value>
   </data>
@@ -8509,9 +8439,6 @@ Období: {3}</value>
   <data name="OptimizeActivities" xml:space="preserve">
     <value>Optimalizace činností</value>
   </data>
-  <data name="UseImprovedCalculating" xml:space="preserve">
-    <value>Použít pokročilé kalkulace</value>
-  </data>
   <data name="Abandoned" xml:space="preserve">
     <value>Zahozená</value>
   </data>
@@ -8882,9 +8809,6 @@ Chybová zpráva: {0}</value>
   <data name="LowestPossibleWorkTimeIsTooHigh" xml:space="preserve">
     <value>Nejnižší možná pracovní doba je příliš vysoká!</value>
   </data>
-  <data name="CannotDeleteSelectedActivities" xml:space="preserve">
-    <value>Není možné smazat vybrané činnosti</value>
-  </data>
   <data name="DoNotBreakMaxStaffing" xml:space="preserve">
     <value>Nepřekručjte maximální personální obsazení</value>
   </data>
@@ -9007,9 +8931,6 @@ Chybová zpráva: {0}</value>
   </data>
   <data name="resReportScheduledOvertimePerAgent" xml:space="preserve">
     <value>Naplánované přesčasy dle agenta</value>
-  </data>
-  <data name="Illegal" xml:space="preserve">
-    <value>Chybný</value>
   </data>
   <data name="TheEnteredIsIllegal" xml:space="preserve">
     <value>Zadaný {0} není platný</value>
@@ -9362,17 +9283,11 @@ Chybová zpráva: {0}</value>
   <data name="ScheduleOnlyPreferenceMustHave" xml:space="preserve">
     <value>Naplánovat pouze preference "Musím mít"</value>
   </data>
-  <data name="AllowOverwrite" xml:space="preserve">
-    <value>Povolit přepsání</value>
-  </data>
   <data name="ShiftCategories" xml:space="preserve">
     <value>Kategorie směn</value>
   </data>
   <data name="ResReportScheduledAndActualAgents" xml:space="preserve">
     <value>Plánovaní a aktuální agenti</value>
-  </data>
-  <data name="YourEmailAddressShouldBeConfiguredInThePeopleModuleToUseThisServiceDot" xml:space="preserve">
-    <value>Vaše emailová adresa musí být nastavena v modulu Lidé, aby bylo možné používat tuto službu.</value>
   </data>
   <data name="LoadMoreHistory" xml:space="preserve">
     <value>Načíst více historie</value>
@@ -9637,9 +9552,6 @@ Chybová zpráva: {0}</value>
   </data>
   <data name="TheInputTextCanNotBeEmptyDot" xml:space="preserve">
     <value>Zadaný text nemůže být prázdný</value>
-  </data>
-  <data name="TotalAllowance" xml:space="preserve">
-    <value>Volné kapacity celkem</value>
   </data>
   <data name="AllowPersonModifications" xml:space="preserve">
     <value>Můžete změnit a uložit</value>
@@ -10032,9 +9944,6 @@ zkrácených úvazků</value>
   <data name="ManageSmsSettings" xml:space="preserve">
     <value>Organizace SMS nastavení</value>
   </data>
-  <data name="SetWhichColumnToGetSmsPhoneNumberFrom" xml:space="preserve">
-    <value>Nastavte ze kterého sloupce čerpat tel. číslo pro SMS</value>
-  </data>
   <data name="SmsSettings" xml:space="preserve">
     <value>Nastavení SMS</value>
   </data>
@@ -10079,9 +9988,6 @@ zkrácených úvazků</value>
   </data>
   <data name="StudentAvailabilityFulfillment" xml:space="preserve">
     <value>Splnění hodinové dostupnosti</value>
-  </data>
-  <data name="AllowMeetings" xml:space="preserve">
-    <value>Povolit schůzky</value>
   </data>
   <data name="AddExtendedPreference" xml:space="preserve">
     <value>Přidat rozšířené preference</value>
@@ -11511,9 +11417,6 @@ Detaily chyby:
   <data name="Outbound" xml:space="preserve">
     <value>Odchozí</value>
   </data>
-  <data name="ForecastChartIntro" xml:space="preserve">
-    <value>Na základě objemů před  historickými daty, byly vytvořeny a použity s předchozím rokem metody prognózy.Nejpřesnější metoda je právě zobrazena v grafu, a bude použita pro další prognózu.</value>
-  </data>
   <data name="PersonFinderFieldFirstName" xml:space="preserve">
     <value>Jméno</value>
   </data>
@@ -11526,29 +11429,8 @@ Detaily chyby:
   <data name="AgentCountTitle" xml:space="preserve">
     <value>agenti</value>
   </data>
-  <data name="FridayShort" xml:space="preserve">
-    <value>Pá</value>
-  </data>
-  <data name="MondayShort" xml:space="preserve">
-    <value>Po</value>
-  </data>
-  <data name="SaturdayShort" xml:space="preserve">
-    <value>So</value>
-  </data>
-  <data name="SundayShort" xml:space="preserve">
-    <value>Ne</value>
-  </data>
-  <data name="ThursdayShort" xml:space="preserve">
-    <value>Čt</value>
-  </data>
-  <data name="TuesdayShort" xml:space="preserve">
-    <value>Út</value>
-  </data>
   <data name="DeleteSkill" xml:space="preserve">
     <value>Smazat kvalifikaci</value>
-  </data>
-  <data name="WednesdayShort" xml:space="preserve">
-    <value>St</value>
   </data>
   <data name="CreateCampaign" xml:space="preserve">
     <value>Vytvořit kampaň</value>
@@ -11628,9 +11510,6 @@ Detaily chyby:
   <data name="HavingRangeOf" xml:space="preserve">
     <value>mající rozsah k</value>
   </data>
-  <data name="AGREE" xml:space="preserve">
-    <value>SOUHLASÍM</value>
-  </data>
   <data name="AreYouSureYouWantToDeleteThisCampaign" xml:space="preserve">
     <value>Opravdu chete smazat tuto kampaň?</value>
   </data>
@@ -11657,9 +11536,6 @@ Detaily chyby:
   </data>
   <data name="OutboundCampaigns" xml:space="preserve">
     <value>Odchozí kampaň</value>
-  </data>
-  <data name="OutboundIntroduction" xml:space="preserve">
-    <value>Zobrazit existující kampaně a vytvořit novou kampaň</value>
   </data>
   <data name="Progress" xml:space="preserve">
     <value>Vývoj</value>
@@ -11817,15 +11693,6 @@ Detaily chyby:
   <data name="AddingIntradayAbsenceFor" xml:space="preserve">
     <value>Přidávám intraday absenci pro</value>
   </data>
-  <data name="ProductActivationKey" xml:space="preserve">
-    <value>Tento systém je licencován "{0}" v souladu s podmínkami licenční smlouvy a aktivace vyprší {1}.
-
-Aktivační klíč pokrývá maximálně {2} aktivních agentů.
-
-Schéma aktivačního klíče je "{3}".
-Tyto možnosti jsou aktivovány:
-{4}</value>
-  </data>
   <data name="DayOffValueColon" xml:space="preserve">
     <value>Hodnota volného dne:</value>
   </data>
@@ -11846,15 +11713,6 @@ Tyto možnosti jsou aktivovány:
   </data>
   <data name="SetWhichColumnToGetSmsPhoneNumberFromColon" xml:space="preserve">
     <value>Nastavte který sloupec slouží pro SMS číslo odesílatele:</value>
-  </data>
-  <data name="SeatProductActivationKey" xml:space="preserve">
-    <value>Tento systém je licencován "{0}" v souladu s podmínkami licenční smlouvy a aktivace vyprší {1}.
-
-Aktivační klíč pokrývá maximálně {2} míst.
-
-Schéma aktivačního klíče je "{3}".
-Tyto možnosti jsou aktivovány:
-{4}</value>
   </data>
   <data name="ManagePermissionsIntro" xml:space="preserve">
     <value>Zde můžete nastavit oprávnění ke specifickým čáastem aplikace.</value>
@@ -12027,9 +11885,6 @@ Jsou aktivovány tyto volby:
   </data>
   <data name="ForecastOverrideMsg" xml:space="preserve">
     <value>Přepíše předpovězené hodnoty.</value>
-  </data>
-  <data name="With campaign" xml:space="preserve">
-    <value>S kampaní</value>
   </data>
   <data name="SuccessTip" xml:space="preserve">
     <value>Úspěch</value>
@@ -12247,12 +12102,6 @@ Jsou aktivovány tyto volby:
   <data name="SeatHasNoBookings" xml:space="preserve">
     <value>Žádné rezervace</value>
   </data>
-  <data name="ConfirmRemoveCampaign" xml:space="preserve">
-    <value>Opravdu chcete tuto kampaň smazat?</value>
-  </data>
-  <data name="RemoveCampaign" xml:space="preserve">
-    <value>Odstranit kampaň</value>
-  </data>
   <data name="CampaignFailedRemove" xml:space="preserve">
     <value>Nepodařilo se odstranit kampaň: {0} .</value>
   </data>
@@ -12276,9 +12125,6 @@ Jsou aktivovány tyto volby:
   </data>
   <data name="FailedImportedCountColon" xml:space="preserve">
     <value>Import selhal:</value>
-  </data>
-  <data name="InternalErrorXMsg" xml:space="preserve">
-    <value>Došlo k interní chybě: {0};</value>
   </data>
   <data name="PleaseFindTheDownloadedExcelSheetToCheckTheError" xml:space="preserve">
     <value>Podrobný popis chyby najdete ve stažené tabulce Excelu.</value>
@@ -12802,9 +12648,6 @@ Zkontrolujte připojení k internetu nebo se obraťte na správce.</value>
   </data>
   <data name="CancelAbsenceRequestDescription" xml:space="preserve">
     <value>Pokud zrušíte tuto schválenou žádost o absenci, z plánu agenta budou smazány všechny absence vytvořené z této žádosti.</value>
-  </data>
-  <data name="TryOutTheNewImprovedMyTeam" xml:space="preserve">
-    <value>Vyzkoušejte nově vylepšený Můj tým!</value>
   </data>
   <data name="WFMReleaseNotification" xml:space="preserve">
     <value>Modul {0} zdokonalen! Vážíme si vaší {1}zpětné vazby.{2} Starý modul {3} bude ještě omezenou dobu přístupný.</value>
