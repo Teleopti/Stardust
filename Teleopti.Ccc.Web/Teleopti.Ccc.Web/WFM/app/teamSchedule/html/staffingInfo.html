@@ -4,13 +4,9 @@
 			<skill-picker skills="vm.skills" skill-areas="vm.skillGroups" item-to-return="vm.setSkill" preselected-item="vm.preselectedSkills"></skill-picker>
 		</div>
 		<div class="con-flex">
-			<div class="wfm-checkbox">
-				<input type="checkbox" id="check2" ng-checked="vm.useShrinkage" ng-click="vm.useShrinkageForStaffing()" />
-				<label for="check2">
-					<span class="wfm-checkbox-toggle"></span>
-					<span class="wfm-checkbox-label">{{'UseShrinkage'| translate}}</span>
-				</label>
-			</div>
+			<md-checkbox ng-checked="vm.useShrinkage" ng-click="vm.useShrinkageForStaffing()">
+				{{'UseShrinkage'| translate}}
+			</md-checkbox>
 		</div>
 	</div>
 
