@@ -103,14 +103,7 @@
 			position: relative;
 		}
 
-		.wfm-checkbox-toggle:after {
-			width: 15px;
-			height: 15px;
-			font-size: 11px;
-			top: 1px;
-		}
-
-		.wfm-checkbox {
+		md-checkbox {
 			display: inline-block;
 			padding: 0;
 			width: auto;
@@ -694,16 +687,20 @@ team-schedule-datepicker {
 			border-bottom: none;
 		}
 
-		th.person-name-column, td.person-name-column {
+		.person-name-column {
 			width: 25%;
 			white-space: nowrap;
 			padding-right: 5px;
 			padding-left: 5px;
 			min-width: 150px;
+			font-weight: normal;
 
 			span.person-name-text {
 				word-break: break-word;
 				white-space: normal;
+			}
+			.sort-agent{
+				margin: 5px 0;
 			}
 		}
 
@@ -1171,7 +1168,7 @@ note-editor {
 .staffing-panel {
 	border-top: 1px solid rgba(0, 0, 0, 0.26);
 
-	.con-flex .wfm-checkbox {
+	.con-flex md-checkbox {
 		margin-top: 10px;
 	}
 
