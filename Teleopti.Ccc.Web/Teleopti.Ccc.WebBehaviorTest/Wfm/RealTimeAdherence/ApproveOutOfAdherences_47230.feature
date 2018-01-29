@@ -38,9 +38,9 @@ Feature: Approve out of adherences
   Scenario: See approved periods
 	Given Mikkey Dee has a 'Phone' shift between '2018-01-22 09:00' and '17:00'
 	And time is '2018-01-22 17:00'
-	And Mikkey Dee has an approved adherence between '09:00' and '10:00'
+	And Mikkey Dee has an approved period between '09:00' and '10:00'
 	When I view historical adherence for 'Mikkey Dee' on '2018-01-22'
-	Then I should see approved adherence between '09:00:00' and '10:00:00'
+	Then I should see approved period between '09:00:00' and '10:00:00'
 
   @ignore
   Scenario: Approve as in adherence
@@ -50,7 +50,7 @@ Feature: Approve out of adherences
 	And at '11:00' 'Mikkey Dee' sets his phone state to 'Ready'
 	When I view historical adherence for 'Mikkey Dee' on '2018-01-22'
 	And I approve adherence as in adherence between '10:00:00' and '11:00:00'
-	Then I should see approved adherence between '10:00:00' and '11:00:00'
+	Then I should see approved period between '10:00:00' and '11:00:00'
 	And I should not see any out of adherences
 	And I should see adherence percentage of 100%
 	And I should see recorded out of adherence between '09:00:00' and '10:00:00'

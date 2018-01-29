@@ -52,11 +52,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			Browser.Interactions.AssertAnyContains(".recorded-out-of-adherence", to);
 		}
 
-		[Then(@"I should see approved adherence between '(.*)' and '(.*)'")]
-		public void ThenIShouldSeeApprovedAdherenceBetween(string from, string to)
+		[Then(@"I should see approved period between '(.*)' and '(.*)'")]
+		public void ThenIShouldSeeApprovedPeriodBetween(string from, string to)
 		{
-			Browser.Interactions.AssertAnyContains(".approved-adherence", from);
-			Browser.Interactions.AssertAnyContains(".approved-adherence", to);
+			Browser.Interactions.AssertAnyContains(".approved-period", from);
+			Browser.Interactions.AssertAnyContains(".approved-period", to);
 		}
 
 		[Then(@" I should not see any out of adherences")]

@@ -114,10 +114,10 @@
 				{{'ApprovedAsInAdherence' | translate}}
 			</div>
 			<div class="right">
-				<div class="approved-adherences">
-					<div ng-repeat="approved in vm.approvedAdherences"
+				<div class="approved-periods">
+					<div ng-repeat="approved in vm.approvedPeriods"
 						 ng-click="approved.highlight = !approved.highlight"
-						 class="approved-adherence"
+						 class="approved-period"
 						 ng-class="{'highlight': approved.highlight}"
 						 ng-attr-style="left: {{approved.Offset}}; width: {{approved.Width}}"
 						 data-starttime="{{approved.StartTime}}" data-endtime="{{approved.EndTime}}">
@@ -181,7 +181,7 @@
 
 			<div class="con-row">
 				<div class="con-flex">
-					<rta-card-panel open="vm.openApprovedAsInAdherence" left-border-color="'#66c2ff'">
+					<rta-card-panel open="vm.openApprovedPeriods" left-border-color="'#66c2ff'">
 						<rta-card-panel-header>
 							{{'ApprovedAsInAdherence' | translate}}
 						</rta-card-panel-header>
@@ -190,7 +190,7 @@
 								<th style="width: 20%">Start</th>
 								<th style="width: 20%">End</th>
 								<th></th>
-								<tr ng-repeat="approved in vm.approvedAdherences"
+								<tr ng-repeat="approved in vm.approvedPeriods"
 									ng-class="{'highlight': approved.highlight}"
 									ng-click="approved.highlight = !approved.highlight">
 									<td>
@@ -199,7 +199,7 @@
 									<td>
 										{{approved.EndTime}}
 									</td>
-									<td>In Adherence</td>
+									<td>{{'InAdherence' | translate}}</td>
 								</tr>
 							</table>
 						</rta-card-panel-content>

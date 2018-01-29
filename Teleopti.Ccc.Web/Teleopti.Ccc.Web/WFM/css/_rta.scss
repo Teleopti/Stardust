@@ -146,10 +146,10 @@
 	  }
 	}
 
-	.approved-adherences {
+	.approved-periods {
 	  @include container;
 	  height: $layer-row-height;
-	  .approved-adherence {
+	  .approved-period {
 		@include adherence-layer($in-adherence-color);
 	  }
 	}

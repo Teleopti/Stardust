@@ -14,7 +14,7 @@
 
 		$stateParams.open = $stateParams.open === "true";
 		vm.openRecordedOutOfAdherences = $stateParams.open;
-		vm.openApprovedAsInAdherence = $stateParams.open;
+		vm.openApprovedPeriods = $stateParams.open;
 
 		vm.ooaTooltipTime = function (time) {
 			if (time == null)
@@ -55,6 +55,7 @@
 			data.Schedules = data.Schedules || [];
 			data.OutOfAdherences = data.OutOfAdherences || [];
 			data.RecordedOutOfAdherences = data.RecordedOutOfAdherences || [];
+			data.ApprovedPeriods = data.ApprovedPeriods || [];
 			data.Changes = data.Changes || [];
 			data.Timeline = data.Timeline || {};
 			data.Navigation = data.Navigation || {};
@@ -76,6 +77,7 @@
 
 			vm.outOfAdherences = buildAgentOutOfAdherences(data.Now, data.OutOfAdherences);
 			vm.recordedOutOfAdherences = buildAgentOutOfAdherences(data.Now, data.RecordedOutOfAdherences);
+			vm.approvedPeriods = buildAgentOutOfAdherences(data.Now, data.ApprovedPeriods);
 
 			vm.fullTimeline = buildTimeline(data.Timeline);
 
