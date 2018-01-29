@@ -16771,7 +16771,10 @@ Do you want to participate?</value>
   <data name="AllSkillGroups" xml:space="preserve">
     <value>All skill groups</value>
   </data>
-  <data name="AreYouSureYouWantToExitSGM" xml:space="preserve">
+  <data name="ExitSGM" xml:space="preserve">
+    <value>Exit skill group manager</value>
+  </data>
+	<data name="AreYouSureYouWantToExitSGM" xml:space="preserve">
     <value>You have unsaved skill groups. Are you sure you want to exit the skill group manager?</value>
   </data>
   <data name="AvailableSkills" xml:space="preserve">

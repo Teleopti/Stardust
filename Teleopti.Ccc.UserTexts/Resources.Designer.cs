@@ -11441,6 +11441,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Exit skill group manager.
+        /// </summary>
+        public static string ExitSGM {
+            get {
+                return ResourceManager.GetString("ExitSGM", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exit Teleopti WFM.
         /// </summary>
         public static string ExitTELEOPTICCC {

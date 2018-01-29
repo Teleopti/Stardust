@@ -46,7 +46,7 @@
 								<span ng-cloak ng-show="vm.skillGroups[vm.selectedGroupIndex].Id === skillGroup.Id" class="list-dot">
 									<b class="mdi mdi-check list-mark"></b>
 								</span>
-								<div class="wfm-leave-behind wfm-leave-behind-3" style="top:3px; background-color:#ccc;">
+								<div class="wfm-leave-behind wfm-leave-behind-3" style="top:3px; opacity:1;">
 									<span>
 										<i class="mdi mdi-content-copy" aria-label="Copy" id="copySkillGroupButton" ng-click="vm.copyGroupClicked(skillGroup, $event)">
 											<md-tooltip>
@@ -170,7 +170,8 @@
 			<div class="dialog-mini material-depth-1" style="width: 30%">
 				<div class="modal-inner-content">
 					<i class="mdi mdi-alert"></i>
-					<h3 style="display: inline">{{'AreYouSureYouWantToExitSGM'|translate}}</h3>
+					<h3 style="display: inline">{{'ExitSGM'|translate}}</h3>
+					<br/>{{'AreYouSureYouWantToExitSGM'|translate}}
 				</div>
 				<div class="modal-actions">
 					<aside>
