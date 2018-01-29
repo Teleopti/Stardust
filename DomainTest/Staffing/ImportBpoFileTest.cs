@@ -55,6 +55,17 @@ TPBRZIL,ChannelSales|Directsales,2017-07-24 10:00,2017-07-24 10:15,12.5";
 			result.ErrorInformation.SingleOrDefault(e => e.Contains("sourceWrong")).Should().Not.Be.Null();
 			result.ErrorInformation.SingleOrDefault(e => e.Contains("teleopti")).Should().Not.Be.Null();
 		}
+		
+		[Test, Ignore("WIP")]
+		public void ShouldHandleFieldNamesAsCaseInsensitive()
+		{
+			var fileContents = @"SourcE,skilLcombination,staRtdatetime,enDdatEtime,AgeNts
+TPBRZIL,ChannelSales|Directsales,2017-07-24 10:00,2017-07-24 10:15,12.5";
+
+			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
+			result.Success.Should().Be.False();
+			result.ErrorInformation.Single().Should().Contain("sourceWrong");
+		}
 
 		[Test]
 		public void ShouldReturnInformationOnEmptyFile()

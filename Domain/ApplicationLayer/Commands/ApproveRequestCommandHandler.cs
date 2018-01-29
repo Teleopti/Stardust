@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			var personRequest = _personRequestRepository.Get(command.PersonRequestId);
 
-			if (personRequest == null)
+			if (personRequest == null || personRequest.IsApproved)
 			{
 				return;
 			}

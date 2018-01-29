@@ -208,25 +208,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		}
 
 		[Test]
-		public void ShouldNotBeAbleToApproveApprovedRequest()
-		{
-			var person = PersonFactory.CreatePersonWithId();
-			var absence = AbsenceFactory.CreateAbsenceWithId();
-
-			var absenceDateTimePeriod = new DateTimePeriod(2016, 01, 01, 00, 2016, 01, 01, 23);
-			addAssignment(person, absenceDateTimePeriod);
-
-			var personRequest = createAbsenceRequest(person, absence, absenceDateTimePeriod);
-			var personRequestCheckAuthorization = new PersonRequestAuthorizationCheckerConfigurable();
-			personRequest.Approve(new ApprovalServiceForTest(), personRequestCheckAuthorization);
-
-			var command = new ApproveRequestCommand { PersonRequestId = personRequest.Id.Value };
-			_approveRequestCommandHandler.Handle(command);
-			Assert.IsTrue(command.ErrorMessages.Contains("A request that is Approved cannot be Approved."));
-			Assert.IsTrue(personRequest.IsApproved);
-		}
-
-		[Test]
 		public void ApproveApprovedRequestShouldNotUpdatePersonalAccount()
 		{
 			var person = PersonFactory.CreatePersonWithId();
@@ -245,7 +226,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var command = new ApproveRequestCommand() { PersonRequestId = personRequest.Id.Value };
 			_approveRequestCommandHandler.Handle(command);
 
-			Assert.IsTrue(command.ErrorMessages.Contains("A request that is Approved cannot be Approved."));
 			Assert.IsTrue(personRequest.IsApproved);
 			Assert.IsTrue(accountDay.LatestCalculatedBalance.Equals(balance));
 		}
@@ -264,6 +244,30 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			_approveRequestCommandHandler.Handle(command);
 
 			Assert.IsTrue(personRequest.IsApproved);
+		}
+		
+		[Test]
+		public void ShouldSkipAlreadyApprovedRequest()
+		{
+			var person = PersonFactory.CreatePersonWithId();
+			var absence = AbsenceFactory.CreateAbsenceWithId();
+
+			var balance = TimeSpan.FromDays(7);
+			var accountDay = createAccountDay(person, absence, new DateOnly(2015, 12, 1), balance);
+
+			var absenceDateTimePeriod = new DateTimePeriod(2016, 01, 01, 00, 2016, 01, 01, 23);
+			addAssignment(person, absenceDateTimePeriod);
+
+			var personRequest = createAbsenceRequest(person, absence, absenceDateTimePeriod);
+			var personRequestCheckAuthorization = new PersonRequestAuthorizationCheckerConfigurable();
+			personRequest.Approve(new ApprovalServiceForTest(), personRequestCheckAuthorization);
+
+			var command = new ApproveRequestCommand() { PersonRequestId = personRequest.Id.Value };
+			_approveRequestCommandHandler.Handle(command);
+
+			Assert.IsTrue(command.ErrorMessages.IsEmpty());
+			Assert.IsTrue(personRequest.IsApproved);
+			Assert.IsTrue(accountDay.LatestCalculatedBalance.Equals(balance));
 		}
 
 		[Test]
