@@ -292,8 +292,9 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			vm.DataSeries.UpdatedForecastedStaffing.Last().Should().Be.GreaterThan(vm.DataSeries.ForecastedStaffing.Last());
 		}
 
-		[Test]
-		public void ShouldReturnRequiredStaffingWithOutCampaign()
+		[TestCase(5)]
+		[TestCase(50)]
+		public void ShouldReturnRequiredStaffingWithOutCampaign(int tasks)
 		{
 			var userNow = new DateTime(2016, 8, 26, 8, 15, 0, DateTimeKind.Utc);
 			var latestStatsTime = new DateTime(2016, 8, 26, 8, 15, 0, DateTimeKind.Utc);
@@ -301,7 +302,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var scenario = StaffingViewModelCreatorTestHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository, minutesPerInterval);
 			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 30), false, 0);
-			var skillDay = ViewModelCreatorTestHelper.CreateSkillDay(skill, scenario, userNow, new TimePeriod(8, 0, 8, 30), false, ServiceAgreement.DefaultValues(), false);
+			var skillDay = ViewModelCreatorTestHelper.CreateSkillDay(skill, scenario, userNow, new TimePeriod(8, 0, 8, 30), false, ServiceAgreement.DefaultValues(), tasks, false);
 			var staffing = skillDay.SkillStaffPeriodCollection.First().FStaff;
 			var actualCalls = StaffingViewModelCreatorTestHelper.CreateStatisticsBasedOnForecastedTasks(skillDay, latestStatsTime, minutesPerInterval, TimeZone.TimeZone());
 
@@ -947,8 +948,9 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			vm.DataSeries.ActualStaffing.Last().Should().Be.EqualTo(null);
 		}
 
-		[Test]
-		public void ShouldExcludeUnsupportedSkillsForStaffingCalculation()
+		[TestCase(5)]
+		[TestCase(50)]
+		public void ShouldExcludeUnsupportedSkillsForStaffingCalculation(int tasks)
 		{
 			var userNow = new DateTime(2016, 8, 26, 8, 15, 0, DateTimeKind.Utc);
 			var latestStatsTime = new DateTime(2016, 8, 26, 8, 0, 0, DateTimeKind.Utc);
@@ -958,8 +960,8 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var phoneSkill = createSkill(minutesPerInterval, "skill1", new TimePeriod(8, 0, 8, 30), false, 0);
 			var outboundSkill = StaffingViewModelCreatorTestHelper.CreateOutboundSkill(minutesPerInterval, "skill2", new TimePeriod(8, 0, 8, 30));
 
-			var skillDayPhone = ViewModelCreatorTestHelper.CreateSkillDay(phoneSkill, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30), false, ServiceAgreement.DefaultValues(), false);
-			var skillDayEmail = ViewModelCreatorTestHelper.CreateSkillDay(outboundSkill, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30), false, ServiceAgreement.DefaultValues());
+			var skillDayPhone = ViewModelCreatorTestHelper.CreateSkillDay(phoneSkill, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30), false, ServiceAgreement.DefaultValues(), tasks, false);
+			var skillDayEmail = ViewModelCreatorTestHelper.CreateSkillDay(outboundSkill, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30), false, ServiceAgreement.DefaultValues(), tasks);
 
 			var actualPhoneStats = StaffingViewModelCreatorTestHelper.CreateStatistics(skillDayPhone, latestStatsTime, minutesPerInterval, TimeZone.TimeZone());
 			var actualBackofficeStats = StaffingViewModelCreatorTestHelper.CreateStatistics(skillDayEmail, latestStatsTime, minutesPerInterval, TimeZone.TimeZone());

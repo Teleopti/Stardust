@@ -111,6 +111,44 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			return skillDay;
 		}
 
+		public ISkillDay CreateSkillDay(ISkill skill, IScenario scenario, DateTime userNow, TimePeriod openHours,
+			bool addSkillDataPeriodDuplicate, ServiceAgreement serviceAgreement, int tasks, bool giveDemand = true)
+		{
+			skill.SkillType.StaffingCalculatorService = _staffingCalculatorServiceFacade;
+
+			var demand = 3;
+			if (!giveDemand)
+				demand = -1;
+
+			var random = new Random();
+			ISkillDay skillDay;
+			if (addSkillDataPeriodDuplicate)
+				skillDay =
+					skill.CreateSkillDayWithDemandOnIntervalWithSkillDataPeriodDuplicate(scenario, new DateOnly(userNow),
+							demand, new Tuple<TimePeriod, double>(openHours, demand))
+						.WithId();
+			else
+				skillDay =
+					skill.CreateSkillDayWithDemandOnInterval(scenario, new DateOnly(userNow),
+							demand, serviceAgreement, new Tuple<TimePeriod, double>(openHours, demand))
+						.WithId();
+
+			var workloadDay = skillDay.WorkloadDayCollection.First();
+			workloadDay.Lock();
+			for (TimeSpan intervalStart = openHours.StartTime; intervalStart < openHours.EndTime; intervalStart = intervalStart.Add(TimeSpan.FromMinutes(skill.DefaultResolution)))
+			{
+				var workloadDayTaskPeriod = workloadDay.TaskPeriodList.FirstOrDefault(x => x.Period.StartDateTime.TimeOfDay == intervalStart);
+				if (workloadDayTaskPeriod == null)
+					continue;
+				workloadDayTaskPeriod.Tasks = tasks;
+				workloadDayTaskPeriod.AverageTaskTime = TimeSpan.FromSeconds(120);
+				workloadDayTaskPeriod.AverageAfterTaskTime = TimeSpan.FromSeconds(200);
+			}
+			workloadDay.Release();
+
+			return skillDay;
+		}
+
 		public static IList<SkillIntervalStatistics> CreateStatistics(ISkillDay skillDay, DateTime latestStatsTime, int minutesPerInterval, TimeZoneInfo timezone)
 		{
 			var skillStats = new List<SkillIntervalStatistics>();
