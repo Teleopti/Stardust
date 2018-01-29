@@ -17117,6 +17117,9 @@ Do you want to participate?</value>
   <data name="Changes" xml:space="preserve">
     <value>Changes</value>
     <comment>Adherence changes</comment>
+  <data name="RestrictionNotAbleToBeScheduledReasonTooManyDaysOff" xml:space="preserve">
+    <value>Too many days off in period</value>
+    <comment>Too many days off in period</comment>
   </data>
   <data name="RecordedOutOfAdherence" xml:space="preserve">
     <value>Recorded out of adherence</value>

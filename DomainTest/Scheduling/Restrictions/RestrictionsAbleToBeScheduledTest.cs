@@ -205,6 +205,30 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		}
 
 		[Test]
+		public void ShouldReportIfToManyDaysOff()
+		{
+			var period = createStandardSetup(out var scenario, out var agent, out var skillDays);
+			var preferenceDays = new List<IPreferenceDay>();
+			foreach (var dateOnly in period.DayCollection())
+			{
+				if (dateOnly.DayOfWeek == DayOfWeek.Saturday || dateOnly.DayOfWeek == DayOfWeek.Sunday || dateOnly == new DateOnly(2017, 12, 1))
+				{
+					preferenceDays.Add(new PreferenceDay(agent, dateOnly,
+						new PreferenceRestriction { DayOffTemplate = new DayOffTemplate() }));
+				}
+			}
+
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, preferenceDays, skillDays);
+
+			var result = Target.Execute(agent.VirtualSchedulePeriod(period.StartDate));
+			result.Reason.Should().Be.EqualTo(RestrictionNotAbleToBeScheduledReason.TooManyDaysOff);
+
+			Target2.Execute(new NoSchedulingCallback(), new SchedulingOptions(), new NoSchedulingProgress(), new[] { agent }, period);
+			stateHolder.Schedules[agent].CalculatedContractTimeHolderOnPeriod(period).Should().Be
+				.EqualTo(TimeSpan.Zero);
+		}
+
+		[Test]
 		public void ShouldHandleMoreDaysOffIfFlexibleDaysOff()
 		{
 			var period = createStandardSetupWithFlexibleContract(out var scenario, out var agent, out var skillDays);

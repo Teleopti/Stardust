@@ -67,7 +67,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			var minMaxTime = _workShiftMinMaxCalculator.PossibleMinMaxTimeForPeriod(matrixList.First(), schedulingOptions);
 			var targetTimePeriod = _schedulePeriodTargetTimeCalculator.TargetWithTolerance(matrixList.First());
 
-			//ToDo TooManyDaysOff?
+			if (toManyDaysOff(matrixList.First()))
+			{
+				schedulePartModifyAndRollbackServiceForContractDaysOff.RollbackMinimumChecks();
+				return new RestrictionsNotAbleToBeScheduledResult
+				{
+					Agent = schedulePeriod.Person,
+					Reason = RestrictionNotAbleToBeScheduledReason.TooManyDaysOff,
+					Period = selectedPeriod,
+					Matrix = matrixList.First()
+				};
+			}
+
 			if (minMaxTime.Minimum > targetTimePeriod.EndTime)
 			{
 				schedulePartModifyAndRollbackServiceForContractDaysOff.RollbackMinimumChecks();
@@ -121,6 +132,22 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
 			schedulePartModifyAndRollbackServiceForContractDaysOff.RollbackMinimumChecks();
 			return null;
+		}
+
+		private bool toManyDaysOff(IScheduleMatrixPro matrix)
+		{
+			var currentDaysOff = 0;
+			foreach (var matrixEffectivePeriodDay in matrix.EffectivePeriodDays)
+			{
+				if (matrixEffectivePeriodDay.DaySchedulePart().HasDayOff())
+					currentDaysOff++;
+			}
+
+			var targetDaysOff = matrix.SchedulePeriod.DaysOff();
+			var positiveTolerance = matrix.Person.Period(matrix.EffectivePeriodDays[0].Day).PersonContract.Contract
+				.PositiveDayOffTolerance;
+
+			return currentDaysOff > targetDaysOff + positiveTolerance;
 		}
 
 		//TODO simplify this code

@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
 	public enum RestrictionNotAbleToBeScheduledReason
 	{
-		//TooManyDaysOff,
+		TooManyDaysOff,
 		TooMuchWorkTimeInPeriod,
 		TooLittleWorkTimeInPeriod,
 		NightlyRestMightBeBroken
