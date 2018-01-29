@@ -1,6 +1,6 @@
 ﻿@RTA
 @OnlyRunIfEnabled('RTA_ApprovePreviousOOA_47230')
-#@ignore
+
 Feature: Approve out of adherences
   As a Manager I need to approve hours of Out of Adherence for a certain day and agent,
   so that the daily percentage adherence number is increased.
@@ -25,7 +25,7 @@ Feature: Approve out of adherences
 	  | Activity    | Phone     |
 	  | Phone state | LoggedOff |
 	  | Adherence   | Out       |
-
+ @ignore
   Scenario: See recorded out of adherence
 	Given Mikkey Dee has a 'Phone' shift between '2018-01-22 09:00' and '17:00'
 	And today is '2018-01-22'
