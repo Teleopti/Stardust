@@ -44,8 +44,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			dt.Columns.Add("InsertedOn", typeof(DateTime));
 
 			var insertedOn = _now.UtcDateTime();
-
-
+			
 			foreach (var skill in skillCombination)
 			{
 				var row = dt.NewRow();
@@ -54,8 +53,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				row["InsertedOn"] = insertedOn;
 				dt.Rows.Add(row);
 			}
-
-
+			
 			using (var sqlBulkCopy = new SqlBulkCopy(connection, SqlBulkCopyOptions.CheckConstraints, transaction))
 			{
 				sqlBulkCopy.DestinationTableName = "[ReadModel].[SkillCombination]";
@@ -90,16 +88,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					}
 				}
 			}
-			var groups = result.GroupBy(x => x.Id);
-			foreach (var group in groups)
-			{
-				var key = keyFor(group.Select(x => x.SkillId));
-				if (skillCombinations.ContainsKey(key))
-					continue;
-				skillCombinations.Add(key, group.Key);
-			}
 
-			return skillCombinations;
+			return result.GroupBy(x => x.Id).GroupBy(x => keyFor(x.Select(y => y.SkillId)))
+				.ToDictionary(k => k.Key, v => v.Select(y => y.Key).First());
 		}
 
 		private static GuidCombinationKey keyFor(IEnumerable<Guid> skillIds)
@@ -149,7 +140,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			var bu = _currentBusinessUnit.Current().Id.GetValueOrDefault();
 			using (var connection = new SqlConnection(connectionString))
 			{
-				//connection.OpenWithRetry(_retryPolicy);
 				connection.Open();
 				var bpoList = LoadSourceBpo(connection);
 
@@ -370,92 +360,35 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 								EndDateTime = x.Key.EndDateTime.Utc(),
 								Resource = x.Key.Resource,
 								SkillCombinationId = x.Key.SkillCombinationId,
-								SkillCombination = x.Select(s => s.SkillId).OrderBy(s => s).ToList()
+								SkillCombination = x.Select(s => s.SkillId).OrderBy(s => s).ToArray()
 							});
 
-			return mergedResult.ToList();
+			return mergedResult.ToArray();
 		}
 		
 		protected IEnumerable<SkillCombinationResource> skillCombinationResourcesWithBpo(DateTimePeriod period)
 		{
-			var combinationResources = skillCombinationResourcesWithoutBpo(period).ToList();
+			var combinationResources = skillCombinationResourcesWithoutBpo(period).ToArray();
 			
-			var bpoResources = Execute(period).ToList();
+			var bpoResources = Execute(period).ToArray();
 			if (!bpoResources.Any())
 			{
 				return combinationResources;
 			}
 
-			combinationResources.AddRange(bpoResources);
-		
-			var newList = new List<SkillCombinationResourceWithCombinationId>();
-			newList.AddRange(combinationResources.Select(x=> new SkillCombinationResourceWithCombinationId
-			{
-				StartDateTime = x.StartDateTime.Utc(),
-				EndDateTime = x.EndDateTime.Utc(),
-				Resource = x.Resource,
-				SkillCombinationId = ((SkillCombinationResourceWithCombinationId)x).SkillCombinationId,
-				SkillCombination = x.SkillCombination
-			}));
-
-			var result = new List<SkillCombinationResource>();
-
-			newList.ForEach(item =>
-			{
-				if (result.Contains(item))
-				{
-					var foundItem =
-						result.FirstOrDefault(
-							x =>
-								x.StartDateTime == item.StartDateTime && x.EndDateTime == item.EndDateTime &&
-								!x.SkillCombination.Except(item.SkillCombination).Any());
-					foundItem.Resource = foundItem.Resource+ item.Resource;
-
-				}else
-					result.Add(item);
-					
-			});
-			
-			return result;
+			return combinationResources.Concat(bpoResources)
+				.GroupBy(g => new {g.StartDateTime, g.EndDateTime, c = keyFor(g.SkillCombination)}).Select(x =>
+					new SkillCombinationResource
+					{
+						StartDateTime = x.Key.StartDateTime.Utc(),
+						EndDateTime = x.Key.EndDateTime.Utc(),
+						Resource = x.Sum(y => y.Resource),
+						SkillCombination = x.Key.c.First
+					}).ToArray();
 		}
-
-
-		//		protected IEnumerable<SkillCombinationResource> skillCombinationResourcesWithoutBpo(DateTimePeriod period)
-		//		{
-		//			var bu = _currentBusinessUnit.Current().Id.GetValueOrDefault();
-		//			var result = _currentUnitOfWork.Current().Session()
-		//				.CreateSQLQuery(
-		//					@"SELECT r.SkillCombinationId, r.StartDateTime, r.EndDateTime, 
-		//(CASE WHEN (r.Resource + ISNULL(SUM(d.DeltaResource), 0)) <= 0 THEN 0 ELSE r.Resource + ISNULL(SUM(d.DeltaResource), 0) END) as Resource, c.SkillId from 
-		//[ReadModel].[SkillCombinationResource] r INNER JOIN [ReadModel].[SkillCombination] c ON c.Id = r.SkillCombinationId 
-		//LEFT JOIN [ReadModel].[SkillCombinationResourceDelta] d ON d.SkillCombinationId = r.SkillCombinationId AND d.StartDateTime = r.StartDateTime
-		// WHERE r.StartDateTime < :endDateTime AND r.EndDateTime > :startDateTime AND r.BusinessUnit = :bu GROUP BY r.SkillCombinationId, r.StartDateTime, r.EndDateTime, r.Resource, c.SkillId Order By r.SkillCombinationId, c.SkillId")
-		//				.SetDateTime("startDateTime", period.StartDateTime)
-		//				.SetDateTime("endDateTime", period.EndDateTime)
-		//				.SetParameter("bu", bu)
-		//				.SetResultTransformer(new AliasToBeanResultTransformer(typeof(RawSkillCombinationResource)))
-		//				.List<RawSkillCombinationResource>();
-
-		//			var mergedResult =
-		//				result.GroupBy(x => new {x.SkillCombinationId, x.StartDateTime, x.EndDateTime, x.Resource})
-		//					.Select(
-		//						x =>
-		//							new SkillCombinationResourceWithCombinationId
-		//							{
-		//								StartDateTime = x.Key.StartDateTime.Utc(),
-		//								EndDateTime = x.Key.EndDateTime.Utc(),
-		//								Resource = x.Key.Resource,
-		//								SkillCombinationId = x.Key.SkillCombinationId,
-		//								SkillCombination = x.Select(s => s.SkillId).OrderBy(s => s).ToList()
-		//							});
-
-		//			return mergedResult;
-		//		}
-
+		
 		protected IEnumerable<SkillCombinationResource> skillCombinationResourcesWithoutBpo(DateTimePeriod period)
 		{
-			// INNER JOIN[ReadModel].[SkillCombination] c ON c.Id = r.SkillCombinationId
-			// Order By tmp.SkillCombinationId, c.SkillId
 			var bu = _currentBusinessUnit.Current().Id.GetValueOrDefault();
 			var result = _currentUnitOfWork.Current().Session()
 				.CreateSQLQuery(
@@ -491,7 +424,7 @@ AND d.StartDateTime < :endDateTime AND d.EndDateTime > :startDateTime)
 								EndDateTime = x.Key.EndDateTime.Utc(),
 								Resource = x.Key.Resource,
 								SkillCombinationId = x.Key.SkillCombinationId,
-								SkillCombination = x.Select(s => s.SkillId).OrderBy(s => s).ToList()
+								SkillCombination = x.Select(s => s.SkillId).OrderBy(s => s).ToArray()
 							});
 
 			return mergedResult;
