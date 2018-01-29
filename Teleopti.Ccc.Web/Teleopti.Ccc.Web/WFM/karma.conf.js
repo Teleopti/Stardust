@@ -27,10 +27,10 @@ module.exports = function (config) {
 
 
 			{ pattern: 'dist/resources/modules.js', watched: false },
-			{ pattern: 'dist/templates.js', watched: false },
+			{ pattern: 'dist/templates.js', watched: false, nocache: true },
 			{ pattern: 'node_modules/angular-material/angular-material-mocks.js', watched: false },
 			{ pattern: 'node_modules/angular-mocks/angular-mocks.js', watched: false },
-			{ pattern: 'app/**/!(*.spec|app_desktop_client).js', watched: false },
+			{ pattern: 'app/**/!(*.spec|app_desktop_client).js', watched: false, nocache: true },
 			'app/**/*.spec.js',
 
 			//served seat image file at browser because addSeat function need to create seat object from image in seatManagement test.
