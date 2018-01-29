@@ -40,7 +40,7 @@ TPBRZIL,ChannelSales|Directsales,2017-07-24 10:00,2017-07-24 10:15,12.5";
 
 			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
 			result.Success.Should().Be.False();
-			result.ErrorInformation.Single().Should().Contain("sourceWrong");
+			result.ErrorInformation.Single().Should().Contain("sourcewrong");
 		}
 
 		[Test]
@@ -52,19 +52,22 @@ TPBRZIL,ChannelSales|Directsales,2017-07-24 10:00,2017-07-24 10:15,12.5";
 			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
 			result.Success.Should().Be.False();
 			result.ErrorInformation.Count.Should().Be.EqualTo(2);
-			result.ErrorInformation.SingleOrDefault(e => e.Contains("sourceWrong")).Should().Not.Be.Null();
+			result.ErrorInformation.SingleOrDefault(e => e.Contains("sourcewrong")).Should().Not.Be.Null();
 			result.ErrorInformation.SingleOrDefault(e => e.Contains("teleopti")).Should().Not.Be.Null();
 		}
 		
-		[Test, Ignore("WIP")]
+		[Test]
 		public void ShouldHandleFieldNamesAsCaseInsensitive()
 		{
 			var fileContents = @"SourcE,skilLcombination,staRtdatetime,enDdatEtime,AgeNts
-TPBRZIL,ChannelSales|Directsales,2017-07-24 10:00,2017-07-24 10:15,12.5";
+TPBRZIL,ChannelSales|DirectSales,2017-07-24 10:00,2017-07-24 10:15,12.5";
 
+			SkillRepository.Has("ChannelSales", new Activity());
+			SkillRepository.Has("DirectSales", new Activity());
+			
 			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
-			result.Success.Should().Be.False();
-			result.ErrorInformation.Single().Should().Contain("sourceWrong");
+			result.Success.Should().Be.True();
+			result.ErrorInformation.Should().Be.Empty();
 		}
 
 		[Test]

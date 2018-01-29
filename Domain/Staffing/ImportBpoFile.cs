@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 			var lines = fileContents.Split(new[] { lineSeparator }, StringSplitOptions.None);
 			var lineNumber = 1;
 			var linesWithNumbers = lines.Select(line => new LineWithNumber{LineContent = line, LineNumber = lineNumber++}).ToList();
-			var headerWithFieldNames = linesWithNumbers[0].LineContent.Split(tokenSeparator);
+			var headerWithFieldNames = linesWithNumbers[0].LineContent.ToLower().Split(tokenSeparator);
 			if (headerWithFieldNames.IsNullOrEmpty() || (headerWithFieldNames.Length==1 && headerWithFieldNames.FirstOrDefault().IsNullOrEmpty()))
 			{
 				result.Success = false;
