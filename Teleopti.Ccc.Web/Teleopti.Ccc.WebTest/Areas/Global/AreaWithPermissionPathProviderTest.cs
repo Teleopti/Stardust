@@ -255,7 +255,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 
 			PermissionProvider.Enable();
 			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.WebPeople);
-			ToggleManager.Disable(Toggles.Wfm_People_PrepareForRelease_39040);
+			ToggleManager.Disable(Toggles.Wfm_PeopleWeb_PrepareForRelease_47766);
 
 			var areas = Target.GetWfmAreasWithPermissions();
 
@@ -271,7 +271,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 
 			PermissionProvider.Enable();
 			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.WebPeople);
-			ToggleManager.Enable(Toggles.Wfm_People_PrepareForRelease_39040);
+			ToggleManager.Enable(Toggles.Wfm_PeopleWeb_PrepareForRelease_47766);
 
 			var areas = Target.GetWfmAreasWithPermissions();
 

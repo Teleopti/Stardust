@@ -1,5 +1,5 @@
 ﻿@WFM
-@OnlyRunIfEnabled('Wfm_People_PrepareForRelease_39040')
+@OnlyRunIfEnabled('Wfm_PeopleWeb_PrepareForRelease_47766')
 Feature: ShowBasicInformation
 	In order to have an overview about the group
 	As a team leader

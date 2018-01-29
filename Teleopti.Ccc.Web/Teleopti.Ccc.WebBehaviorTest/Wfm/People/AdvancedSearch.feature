@@ -1,5 +1,5 @@
 ﻿@WFM
-@OnlyRunIfEnabled('Wfm_People_PrepareForRelease_39040')
+@OnlyRunIfEnabled('Wfm_PeopleWeb_PrepareForRelease_47766')
 Feature: AdvancedSearch
 	In order to find the exact group of people I want
 	As a team leader

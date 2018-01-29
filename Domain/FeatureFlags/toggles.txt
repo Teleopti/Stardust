@@ -70,10 +70,10 @@ OvertimeRequestPeriodWorkRuleSetting_46638 = true
 OvertimeRequestPeriodSkillTypeSetting_47290 = RC
 OvertimeRequestCheckCalendarMonthMaximumOvertime_47024 = true
 
-Wfm_People_PrepareForRelease_39040 = RC #Was not ready enough
 Wfm_People_ImportAndCreateAgentFromFile_42528 = true
 Wfm_People_SetFallbackValuesForImporting_43289 = true
 Wfm_People_MoveImportJobToBackgroundService_43582 = true
+Wfm_PeopleWeb_PrepareForRelease_47766 = DEV
 
 # China, can any of these be removed? #
 MyTimeWeb_ViewIntradayStaffingProbability_41608 = true

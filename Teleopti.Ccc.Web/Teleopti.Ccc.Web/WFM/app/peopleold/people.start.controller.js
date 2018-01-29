@@ -385,7 +385,7 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 	$scope.dataInitialized = true;
 	$scope.searchKeyword();
 
-	if ($state.current.name === "peopleold.start" && toggleSvc.Wfm_People_PrepareForRelease_39040) {
+	if ($state.current.name === "peopleold.start" && toggleSvc.Wfm_PeopleWeb_PrepareForRelease_47766) {
 		var message = $translate.instant('WFMReleaseNotificationWithoutOldModuleLink')
 				.replace('{0}', $translate.instant('People'))
 				.replace('{1}', "<a href=' http://www.teleopti.com/wfm/customer-feedback.aspx' target='_blank' target='_blank'>")

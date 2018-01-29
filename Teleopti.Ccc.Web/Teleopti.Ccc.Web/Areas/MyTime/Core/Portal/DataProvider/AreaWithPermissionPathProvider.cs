@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			}
 			if (path.Equals(DefinedRaptorApplicationFunctionPaths.WebPeople))
 			{
-				return _toggleManager.IsEnabled(Toggles.Wfm_People_PrepareForRelease_39040);
+				return _toggleManager.IsEnabled(Toggles.Wfm_PeopleWeb_PrepareForRelease_47766);
 			}
 			if (path.Equals(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage))
 			{

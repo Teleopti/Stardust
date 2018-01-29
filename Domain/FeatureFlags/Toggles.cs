@@ -73,11 +73,11 @@
 
 		Wfm_Outbound_IgnoreScheduleForReplan_43752,
 
-		Wfm_People_PrepareForRelease_39040,
 		Wfm_People_ImportAndCreateAgentFromFile_42528,
 		Wfm_People_SetFallbackValuesForImporting_43289,
 		Wfm_People_MoveImportJobToBackgroundService_43582,
-		
+		Wfm_PeopleWeb_PrepareForRelease_47766,
+
 		Scheduler_IntradayOptimization_36617,
 		Scheduler_RestrictionReport_47013,
 
