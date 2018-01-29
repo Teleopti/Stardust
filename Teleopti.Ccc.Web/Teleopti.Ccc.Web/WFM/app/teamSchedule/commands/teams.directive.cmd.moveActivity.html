@@ -5,13 +5,9 @@
 			<md-progress-linear ng-if="vm.checkingCommand" md-mode="indeterminate"></md-progress-linear>
 			<h3>{{'StartTime' | translate}}:</h3>
 			<div uib-timepicker class="focus-default" ng-model="vm.moveToTime" required show-meridian="vm.showMeridian" meridians="vm.meridians" md-autofocus="::vm.containerCtrl.onReady()"></div>
-			<div class="wfm-switch">
-				<input type="checkbox" id="mvActNextDay" ng-model="vm.nextDay"/>
-				<label for="mvActNextDay">
-					<span class="wfm-switch-label">{{"NextDay" | translate}}</span>
-					<span class="wfm-switch-toggle"></span>
-				</label>
-			</div>
+			<md-switch ng-model="vm.nextDay">
+				<span>{{"NextDay" | translate}}</span>
+			</md-switch>
 		</form>
 		<div ng-if="vm.anyInvalidAgent()">
 			<i class="mdi mdi-alert-octagon"></i>
