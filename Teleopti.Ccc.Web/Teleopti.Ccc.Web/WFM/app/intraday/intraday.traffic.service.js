@@ -39,7 +39,7 @@
 	  var max;
 
 	  var roundSeries = function (data, decimals) {
-		  return data.map(x => {
+		  return data.map(function(x) {
 			  if (x) {
 				  return +x.toFixed(decimals);
 			  }
