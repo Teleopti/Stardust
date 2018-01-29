@@ -22,13 +22,12 @@
 		</div>
 		<div class="configure-validation">
 			<h3>{{'ConfigureValidationWarnings' | translate}}</h3>
-			<div class="wfm-checkbox" ng-repeat="rule in vm.availableValidationRules" test-attr="{{rule.type}}">
-				<label>
-					<input type="checkbox" ng-model="rule.checked" ng-change="vm.updateValidateRulesToggleState(rule.type, rule.checked)" value="true" />
-					<span class="wfm-checkbox-toggle"></span>
-					<span class="wfm-checkbox-label">{{rule.type | translate}}</span>
-				</label>
-			</div>
+			<md-checkbox ng-repeat="rule in vm.availableValidationRules" 
+						 test-attr="{{rule.type}}"
+						 ng-model="rule.checked" 
+						 ng-change="vm.updateValidateRulesToggleState(rule.type, rule.checked)" value="true">
+				{{rule.type | translate}}
+			</md-checkbox>
 		</div>
 
 	</md-content>
