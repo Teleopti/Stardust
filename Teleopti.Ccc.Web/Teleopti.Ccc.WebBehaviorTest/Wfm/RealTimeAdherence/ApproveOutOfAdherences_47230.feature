@@ -1,6 +1,6 @@
 ﻿@RTA
 @OnlyRunIfEnabled('RTA_ApprovePreviousOOA_47230')
-@ignore
+#@ignore
 Feature: Approve out of adherences
   As a Manager I need to approve hours of Out of Adherence for a certain day and agent,
   so that the daily percentage adherence number is increased.
@@ -34,13 +34,14 @@ Feature: Approve out of adherences
 	When I view historical adherence for 'Mikkey Dee' on '2018-01-22'
 	Then I should see recorded out of adherence between '09:00:00' and '10:00:00'
 
+@ignore
   Scenario: See approved periods
 	Given Mikkey Dee has a 'Phone' shift between '2018-01-22 09:00' and '17:00'
 	And time is '2018-01-22 17:00'
 	And Mikkey Dee has an approved adherence between '09:00' and '10:00'
 	When I view historical adherence for 'Mikkey Dee' on '2018-01-22'
 	Then I should see approved adherence between '09:00:00' and '10:00:00'
-
+@ignore
   Scenario: Approve as in adherence
 	Given Mikkey Dee has a 'Phone' shift between '2018-01-22 09:00' and '17:00'
 	And today is '2018-01-22'

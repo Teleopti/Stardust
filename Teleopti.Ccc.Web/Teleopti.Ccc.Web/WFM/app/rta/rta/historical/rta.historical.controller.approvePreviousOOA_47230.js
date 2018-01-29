@@ -52,6 +52,7 @@
 
 			data.Schedules = data.Schedules || [];
 			data.OutOfAdherences = data.OutOfAdherences || [];
+			data.RecordedOutOfAdherences = data.RecordedOutOfAdherences || [];
 			data.Changes = data.Changes || [];
 			data.Timeline = data.Timeline || {};
 			data.Navigation = data.Navigation || {};
@@ -60,16 +61,6 @@
 
 			calculateWidth = makeWidthCalculator(shiftInfo.timeWindowSeconds);
 			calculateOffset = makeOffsetCalculator(shiftInfo.timeWindowStart, shiftInfo.timeWindowSeconds);
-
-
-			vm.approvedAdherences = [
-				{
-					Width: calculateWidth(moment('2018-01-24 13:00'), moment('2018-01-24 15:00')),
-					Offset: calculateOffset(moment('2018-01-24 13:00')),
-					StartTime: '13:00:00',
-					EndTime: '15:00:00'
-				}];
-
 
 			vm.personId = data.PersonId;
 			vm.agentName = data.AgentName;
@@ -81,15 +72,8 @@
 
 			vm.agentsFullSchedule = buildAgentsFullSchedule(data.Schedules);
 
-			vm.outOfAdherences = buildAgentOutOfAdherences(data)
-				.filter(function (ooa) {
-					if (ooa.StartTime > '15:00:00')
-						return true;
-					if (ooa.EndTime < '13:00:00')
-						return true;
-					return false;
-				});
-			vm.recordedOutOfAdherences = buildAgentOutOfAdherences(data);
+			vm.outOfAdherences = buildAgentOutOfAdherences(data.Now, data.OutOfAdherences);
+			vm.recordedOutOfAdherences = buildAgentOutOfAdherences(data.Now, data.RecordedOutOfAdherences);
 
 			vm.fullTimeline = buildTimeline(data.Timeline);
 
@@ -109,35 +93,23 @@
 				vm.nextTooltip = nextDay.format('L');
 			}
 		});
-
-		function buildAgentOutOfAdherences(data) {
-			return data.OutOfAdherences
+		
+		function buildAgentOutOfAdherences(now, outOfAdherences) {
+			return outOfAdherences
 				.map(function (ooa) {
 					var startTime = moment(ooa.StartTime);
 					var startTimeFormatted = shiftInfo.timeWindowStart > startTime ?
 						startTime.format('LLL') :
 						startTime.format('LTS');
-					var endTime = ooa.EndTime != null ? ooa.EndTime : data.Now;
+					var endTime = ooa.EndTime != null ? ooa.EndTime : now;
 					var endTimeFormatted = ooa.EndTime != null ? moment(ooa.EndTime).format('LTS') : '';
 
-					var o = {
+					return {
 						Width: calculateWidth(startTime, endTime),
 						Offset: calculateOffset(startTime),
 						StartTime: startTimeFormatted,
 						EndTime: endTimeFormatted
 					};
-					o.approve = function () {
-						o.ShowApprovePanel = true;
-					};
-					o.ShowApprovePanel = false;
-					return o;
-				})
-				.filter(function (ooa) {
-					if (ooa.Offset.indexOf('-') === 0)
-						return false;
-					if (ooa.StartTime >= '18:00:00')
-						return false;
-					return ooa.StartTime < '09:00:00' || ooa.StartTime > '10:10:00';
 				});
 		}
 
@@ -254,14 +226,6 @@
 			}
 
 			return timeline;
-		}
-		
-		vm.showApprovePanel = function (ooa) {
-			if (ooa) {
-				vm.approveStartTime = ooa.StartTime;
-				vm.approveEndTime = ooa.EndTime;
-			}
-			return !!vm.approveStartTime;
 		}
 	}
 })();
