@@ -71,6 +71,20 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		}
 
 		[Test]
+		public void ShouldAllowRecordsWithSemicolon()
+		{
+			var personId = Guid.NewGuid();
+			setPerson(personId);
+			var validRecord = "20171120;1;Kalle;Pettersson;Quality Score;1;Percent;87";
+			var fileData = createFileData(validRecord);
+
+			var result = Target.Process(fileData);
+
+			result.HasError.Should().Be.False();
+			result.ValidRecords.Count.Should().Be.EqualTo(1);
+		}
+
+		[Test]
 		public void ShouldRejectRecordIfAgentIdIsEmpty()
 		{
 			var invalidRecord = "20170820,,Kalle,Pettersson,measureA,2,Numeric,2000";

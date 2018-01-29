@@ -61,9 +61,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			var allMeasures = existMeasures.ToList();
 
 			var extractResultCollection = new List<PerformanceInfoExtractionResult>();
+			var splitor = ",";
 			foreach (var line in allLines)
 			{
 				var extractionResult = _lineExtractorValidator.ExtractAndValidate(line);
+				if (line.IndexOf(';') > -1)
+				{
+					splitor = ";";
+				}
 
 				if (extractionResult.HasError())
 				{
@@ -71,7 +76,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 					continue;
 				}
 
-				createOrValidatePerformanceType(extractionResult, allMeasures);
+				createOrValidatePerformanceType(extractionResult, allMeasures, splitor);
 
 				if (extractionResult.HasError())
 				{
@@ -84,7 +89,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 
 			if (extractResultCollection.Any())
 			{
-				convertToRecordsByMatchingPersonId(extractResultCollection, processResult);
+				convertToRecordsByMatchingPersonId(extractResultCollection, processResult, splitor);
 			}
 
 			processResult.ValidRecords = processResult.ValidRecords.GroupBy(r => new {r.PersonId, r.DateFrom, r.MeasureId})
@@ -94,7 +99,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 		}
 
 		private void convertToRecordsByMatchingPersonId(IList<PerformanceInfoExtractionResult> allExtractionResults,
-			ExternalPerformanceInfoProcessResult processResult)
+			ExternalPerformanceInfoProcessResult processResult, string splitor)
 		{
 			var allPersonIds = allExtractionResults.Select(x => x.AgentId).ToArray();
 			var allEmploymentNumberAndExternalLogonMatches = _personRepository.FindPersonByIdentities(allPersonIds).ToLookup(x => x.LogonName);
@@ -120,7 +125,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 
 				if (!personIds.Any())
 				{
-					processResult.InvalidRecords.Add($"{extractionResult.RawLine},{Resources.AgentIdCouldNotBeMatchedToAnyAgent}");
+					processResult.InvalidRecords.Add($"{extractionResult.RawLine}{splitor}{Resources.AgentIdCouldNotBeMatchedToAnyAgent}");
 					continue;
 				}
 
@@ -140,14 +145,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			}
 		}
 
-		private void createOrValidatePerformanceType(PerformanceInfoExtractionResult extractionResult, IList<IExternalPerformance> existingTypes)
+		private void createOrValidatePerformanceType(PerformanceInfoExtractionResult extractionResult, IList<IExternalPerformance> existingTypes, string splitor)
 		{
 			var type = existingTypes.FirstOrDefault(g => g.ExternalId == extractionResult.MeasureId);
 			if (type != null)
 			{
 				if (type.DataType != extractionResult.MeasureType)
 				{
-					extractionResult.Error = $"{extractionResult.RawLine},{Resources.MeasureTypeNotMatchExistingDefinition}";
+					extractionResult.Error = $"{extractionResult.RawLine}{splitor}{Resources.MeasureTypeNotMatchExistingDefinition}";
 				}
 			}
 			else
@@ -155,13 +160,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 				if (existingTypes.Count == maxMeasureCount)
 				{
 					extractionResult.Error =
-						$"{extractionResult.RawLine},{string.Format(Resources.RowExceedsLimitOfGamificationMeasures, maxMeasureCount)}";
+						$"{extractionResult.RawLine}{splitor}{string.Format(Resources.RowExceedsLimitOfGamificationMeasures, maxMeasureCount)}";
 					return;
 				}
 				var findByName = existingTypes.FirstOrDefault(s => s.Name == extractionResult.MeasureName);
 				if (findByName != null)
 				{
-					extractionResult.Error = $"{extractionResult.RawLine},{string.Format(Resources.GamificationMeasureNameAlreadyExist, findByName.ExternalId)}";
+					extractionResult.Error = $"{extractionResult.RawLine}{splitor}{string.Format(Resources.GamificationMeasureNameAlreadyExist, findByName.ExternalId)}";
 					return;
 				}
 				existingTypes.Add(new ExternalPerformance

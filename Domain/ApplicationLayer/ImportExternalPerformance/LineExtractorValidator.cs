@@ -21,25 +21,33 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 		private const int measureIdColumnIndex = 5;
 		private const int measureTypeColumnIndex = 6;
 		private const int measureScoreColumnIndex = 7;
+		private const char comma = ',';
+		private const char semicolon = ';';
 
 		private const string dateFormat = "yyyyMMdd";
 
 		public PerformanceInfoExtractionResult ExtractAndValidate(string line)
 		{
 			var result = new PerformanceInfoExtractionResult { RawLine = line };
+			var splitor = comma;
 
-			var columns = line.Split(',').Select(x => x.TrimStart('"').TrimEnd('"')).ToArray();
+			if (line.Any(c => c == semicolon))
+			{
+				splitor = semicolon;
+			}
+
+			var columns = line.Split(splitor).Select(x => x.TrimStart('"').TrimEnd('"')).ToArray();
 
 			if (!lineHasEnoughColumns(columns.Length, numColumn))
 			{
 				var errorMessage = string.Format(Resources.InvalidNumberOfFields, numColumn, columns.Length);
-				result.Error = $"{line},{errorMessage}";
+				result.Error = $"{line}{splitor}{errorMessage}";
 				return result;
 			}
 
 			if (!dateFieldIsValid(columns[dateColumnIndex], dateFormat, out var dateTime))
 			{
-				result.Error = $"{line},{Resources.ImportBpoWrongDateFormat}";
+				result.Error = $"{line}{splitor}{Resources.ImportBpoWrongDateFormat}";
 				return result;
 			}
 			result.DateFrom = new DateTime(dateTime.Ticks, DateTimeKind.Utc);
@@ -47,12 +55,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			var measureName = columns[measureNameColumnIndex].Trim();
 			if (measureName.IsEmpty())
 			{
-				result.Error = $"{line},{Resources.MeasureNameIsMandatory}";
+				result.Error = $"{line}{splitor}{Resources.MeasureNameIsMandatory}";
 				return result;
 			}
 			if (!measureNameLengthIsValid(measureName))
 			{
-				result.Error = $"{line},{Resources.MeasureNameIsTooLong}";
+				result.Error = $"{line}{splitor}{Resources.MeasureNameIsTooLong}";
 				return result;
 			}
 			result.MeasureName = measureName;
@@ -60,7 +68,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			var measureType = columns[measureTypeColumnIndex].ToLower();
 			if (!measureTypeIsEitherNumericOrPercent(measureType, out var mtype))
 			{
-				result.Error = $"{line},{Resources.MeasureTypeMustBeEitherNumericOrPercent}";
+				result.Error = $"{line}{splitor}{Resources.MeasureTypeMustBeEitherNumericOrPercent}";
 				return result;
 			}
 			result.MeasureType = mtype;
@@ -73,7 +81,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 				}
 				else
 				{
-					result.Error = $"{line},{Resources.InvalidScore}";
+					result.Error = $"{line}{splitor}{Resources.InvalidScore}";
 					return result;
 				}
 			}
@@ -85,7 +93,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 				}
 				else
 				{
-					result.Error = $"{line},{Resources.InvalidScore}";
+					result.Error = $"{line}{splitor}{Resources.InvalidScore}";
 					return result;
 				}
 			}
@@ -93,19 +101,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			var personId = columns[personIdColumnIndex].Trim();
 			if (personId.IsEmpty())
 			{
-				result.Error = $"{line},{Resources.AgentIdIsMandatory}";
+				result.Error = $"{line}{splitor}{Resources.AgentIdIsMandatory}";
 				return result;
 			}
 			if (!personIdLengthIsValid(personId))
 			{
-				result.Error = $"{line},{Resources.AgentIdIsTooLong}";
+				result.Error = $"{line}{splitor}{Resources.AgentIdIsTooLong}";
 				return result;
 			}
 			result.AgentId = personId;
 
 			if (!measureIdContainsInteger(columns[measureIdColumnIndex], out var gameId))
 			{
-				result.Error = $"{line},{Resources.MeasureIdMustContainAnInteger}";
+				result.Error = $"{line}{splitor}{Resources.MeasureIdMustContainAnInteger}";
 				return result;
 			}
 			result.MeasureId = gameId;
