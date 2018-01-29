@@ -120,7 +120,6 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			if (!giveDemand)
 				demand = -1;
 
-			var random = new Random();
 			ISkillDay skillDay;
 			if (addSkillDataPeriodDuplicate)
 				skillDay =
@@ -165,6 +164,36 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				intervalTime = intervalTime.AddMinutes(minutesPerInterval))
 			{
 				var calls = random.Next(5, 50);
+				var answeredCalls = (int)(calls * 0.8);
+				skillStats.Add(new SkillIntervalStatistics
+				{
+					SkillId = skillDay.Skill.Id.Value,
+					WorkloadId = skillDay.WorkloadDayCollection.First().Workload.Id.Value,
+					StartTime = TimeZoneHelper.ConvertFromUtc(intervalTime, timezone),
+					Calls = calls,
+					AnsweredCalls = answeredCalls,
+					HandleTime = 120,
+					AverageHandleTime = 120d / answeredCalls
+				});
+			}
+			return skillStats;
+		}
+
+		public static IList<SkillIntervalStatistics> CreateStatistics(ISkillDay skillDay, DateTime latestStatsTime, int minutesPerInterval, TimeZoneInfo timezone, int tasks)
+		{
+			var skillStats = new List<SkillIntervalStatistics>();
+			var shiftStartTime = skillDay.SkillStaffPeriodCollection.First().Period.StartDateTime;
+			var shiftEndTime = skillDay.SkillStaffPeriodCollection.Last().Period.EndDateTime;
+			if (shiftStartTime > latestStatsTime || shiftEndTime < latestStatsTime)
+			{
+				return skillStats;
+			}
+
+			for (DateTime intervalTime = shiftStartTime;
+				intervalTime <= latestStatsTime;
+				intervalTime = intervalTime.AddMinutes(minutesPerInterval))
+			{
+				var calls = tasks;
 				var answeredCalls = (int)(calls * 0.8);
 				skillStats.Add(new SkillIntervalStatistics
 				{

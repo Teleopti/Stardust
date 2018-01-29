@@ -948,9 +948,11 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			vm.DataSeries.ActualStaffing.Last().Should().Be.EqualTo(null);
 		}
 
-		[TestCase(5)]
-		[TestCase(50)]
-		public void ShouldExcludeUnsupportedSkillsForStaffingCalculation(int tasks)
+		[TestCase(5, 4)]
+		[TestCase(5, 7)]
+		[TestCase(50, 35)]
+		[TestCase(50, 65)]
+		public void ShouldExcludeUnsupportedSkillsForStaffingCalculation(int tasks, int statTasks)
 		{
 			var userNow = new DateTime(2016, 8, 26, 8, 15, 0, DateTimeKind.Utc);
 			var latestStatsTime = new DateTime(2016, 8, 26, 8, 0, 0, DateTimeKind.Utc);
@@ -963,8 +965,8 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var skillDayPhone = ViewModelCreatorTestHelper.CreateSkillDay(phoneSkill, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30), false, ServiceAgreement.DefaultValues(), tasks, false);
 			var skillDayEmail = ViewModelCreatorTestHelper.CreateSkillDay(outboundSkill, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30), false, ServiceAgreement.DefaultValues(), tasks);
 
-			var actualPhoneStats = StaffingViewModelCreatorTestHelper.CreateStatistics(skillDayPhone, latestStatsTime, minutesPerInterval, TimeZone.TimeZone());
-			var actualBackofficeStats = StaffingViewModelCreatorTestHelper.CreateStatistics(skillDayEmail, latestStatsTime, minutesPerInterval, TimeZone.TimeZone());
+			var actualPhoneStats = StaffingViewModelCreatorTestHelper.CreateStatistics(skillDayPhone, latestStatsTime, minutesPerInterval, TimeZone.TimeZone(), statTasks);
+			var actualBackofficeStats = StaffingViewModelCreatorTestHelper.CreateStatistics(skillDayEmail, latestStatsTime, minutesPerInterval, TimeZone.TimeZone(), statTasks);
 
 			var actualStatsTotal = new List<SkillIntervalStatistics>();
 			actualStatsTotal.AddRange(actualPhoneStats);
