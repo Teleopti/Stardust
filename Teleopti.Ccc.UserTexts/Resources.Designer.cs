@@ -4476,7 +4476,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Export period start date must be a date before Export period end date..
+        ///   Looks up a localized string similar to Export period start date must be earlier than the end date..
         /// </summary>
         public static string BpoExportPeriodStartDateBeforeEndDate {
             get {
@@ -4494,7 +4494,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Line has {0} parameters but expected {1} parameters..
+        ///   Looks up a localized string similar to Line has {0} parameters, but {1} parameters were expected..
         /// </summary>
         public static string BpoLineHasIncorrectParameterCount {
             get {
@@ -4503,7 +4503,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Only export periods within dates: {0} can be selected..
+        ///   Looks up a localized string similar to The export period must be within the date interval {0}..
         /// </summary>
         public static string BpoOnlyExportPeriodBetweenDates {
             get {
@@ -10118,6 +10118,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Duplicate name.
+        /// </summary>
+        public static string DuplicateName {
+            get {
+                return ResourceManager.GetString("DuplicateName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No duplicate dates are allowed in Person Rotations For.
         /// </summary>
         public static string DuplicatePersonAccountMessage {
@@ -14394,7 +14403,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Duplicate record found. The same information is entered on more than one line in the import file and this is not allowed..
+        ///   Looks up a localized string similar to Duplicate found. The same information is entered on more than one line in the import file, which is not allowed..
         /// </summary>
         public static string ImportBpoDuplicateRecord {
             get {
@@ -14403,7 +14412,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No default resolution found for skill: {0}..
+        ///   Looks up a localized string similar to No interval length found for skill {0}..
         /// </summary>
         public static string ImportBpoNoDefaultResolutionForSkill {
             get {
@@ -14412,7 +14421,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The imported resource interval length: {0} minutes differs from the skill: {1} default resolution: {2} minutes.
+        ///   Looks up a localized string similar to The imported agents&apos; interval length ({0} minutes) does not match the interval length of the skill {1} ({2} minutes)..
         /// </summary>
         public static string ImportBpoResourceIntervalLengthDiffersFromTheSkill {
             get {
@@ -14421,7 +14430,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Resources of imported staffing cannot be less than 0..
+        ///   Looks up a localized string similar to Number of agents cannot be less than 0..
         /// </summary>
         public static string ImportBpoResourcesCannotBeLessThanZero {
             get {
@@ -14430,7 +14439,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The skill: {0} is listed more than once on the same line..
+        ///   Looks up a localized string similar to The skill {0} is listed more than once on the same line..
         /// </summary>
         public static string ImportBpoSkillListedMoreThanOnce {
             get {
@@ -14448,7 +14457,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Source name is too long. Max 100 characters is allowed..
+        ///   Looks up a localized string similar to The source name is too long. Max 100 characters is allowed..
         /// </summary>
         public static string ImportBpoSourceNameTooLong {
             get {
@@ -14457,7 +14466,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start time for the period must be a time before end time..
+        ///   Looks up a localized string similar to The start date of the period must be earlier than the end date..
         /// </summary>
         public static string ImportBpoStartDateTimeMustBeBeforeEndDateTime {
             get {
@@ -14466,7 +14475,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Start time for the period must be a time in the future..
+        ///   Looks up a localized string similar to The start date of the period must be a date after today..
         /// </summary>
         public static string ImportBpoStartDateTimeMustBeInTheFuture {
             get {
@@ -14484,7 +14493,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The resources parameter (parameter number {0} with value: {1} ) is invalid. Parameter must be given as decimal number, for example 14.2..
+        ///   Looks up a localized string similar to The Agents parameter (parameter {0} with value: {1}) is invalid. The parameter must be stated as a decimal number, for example 14.2..
         /// </summary>
         public static string ImportBpoWrongResourceFormat {
             get {

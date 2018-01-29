@@ -24,5 +24,6 @@
 	<div class="name-textbox">
 		<span class="text-danger" ng-if="formHead.nameBox.$error.maxlength">{{'TextIsTooLong'|translate}}</span>
 		<span class="text-danger" ng-if="formHead.nameBox.$error.required">{{'Required'|translate}}</span>
+		<span class="text-danger" ng-if="$ctrl.duplicatedName">{{'DuplicateName'|translate}}</span>
 	</div>
 </form>

@@ -202,23 +202,49 @@
 			});
 		};
 
-		ctrl.onNameChange = function () {
-			var newNameIsValid = ctrl.name && ctrl.name.length;
-			if (!newNameIsValid) return;
-
-			dataService.saveData('ModifyDescription', {
-				Name: ctrl.name,
-				GamificationSettingId: ctrl.id
-			}).then(function () {
-				$log.log('updated setting name successfully');
-				originalName = ctrl.name;
-				if (ctrl.onNameUpdate)
-					ctrl.onNameUpdate({ name: ctrl.name });
-			}, function () {
-				$log.error('failed to update setting name');
+		ctrl.onNameChange = function (invalid) {
+			if (!invalid) {
+				dataService.saveData('ModifyDescription', {
+					Name: ctrl.name,
+					GamificationSettingId: ctrl.id
+				}).then(function () {
+					$log.log('updated setting name successfully');
+					originalName = ctrl.name;
+					if (ctrl.onNameUpdate)
+						ctrl.onNameUpdate({ name: ctrl.name });
+				}, function () {
+					$log.error('failed to update setting name');
+					ctrl.name = originalName;
+				});
+			} else {
 				ctrl.name = originalName;
-			});
+			}
 		};
+
+
+		ctrl.keyUp = function (event) {
+			if (event && event.which === 13) {
+				event.target.blur();
+			}
+		}
+
+		ctrl.checkDuplicateName = function (name) {
+			var result = false;
+
+			ctrl.builtinMeasureConfigs.forEach(function (cfg) {
+				if (cfg.name === name) {
+					result = true;
+				}
+			});
+
+			ctrl.externalMeasureConfigs.forEach(function (cfg) {
+				if (cfg.name === name) {
+					result = true;
+				}
+			});
+
+			return result;
+		}
 
 		function MeasureConfig(builtin, enabled, id, externalId, name, dataType, largerIsBetter, threshold, bronzeThreshold, silverThreshold, goldThreshold, valueFormat, max, valueOrder) {
 			this.builtin = builtin;

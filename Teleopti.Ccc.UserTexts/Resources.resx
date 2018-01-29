@@ -17126,4 +17126,9 @@ Do you want to participate?</value>
     <value>Approved as in adherence</value>
     <comment>Approved adherence</comment>
   </data>
+  <data name="DuplicateName" xml:space="preserve">
+    <value>Duplicate name</value>
+    <comment>Duplicate name</comment>
+  </data>
+
 </root>
