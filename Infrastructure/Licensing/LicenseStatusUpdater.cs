@@ -52,8 +52,8 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
                     if (status.StatusOk)
                     {
                         status.CheckDate = DateTime.Today.Date;
-                        status.LastValidDate = DateTime.Today.AddDays(30).Date;
-                        status.DaysLeft = 30;
+                        status.LastValidDate = DateTime.Today.AddDays(15).Date;
+                        status.DaysLeft = 15;
                         status.StatusOk = false;
                         status.AlmostTooMany = false;
                         status.NumberOfActiveAgents = numberOfActiveAgents;
