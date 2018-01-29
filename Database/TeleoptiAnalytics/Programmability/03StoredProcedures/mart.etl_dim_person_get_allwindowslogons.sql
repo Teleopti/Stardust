@@ -5,12 +5,13 @@ GO
 CREATE PROCEDURE [mart].[etl_dim_person_get_allwindowslogons]
 AS
 BEGIN
-	
+
 SET NOCOUNT ON
-	
+
 SELECT DISTINCT person_code, windows_domain, windows_username
-  FROM [mart].[dim_person] WITH (NOLOCK) 
-  where windows_domain <> '' and windows_username <> ''
+  FROM [mart].[dim_person] WITH (NOLOCK)
+ WHERE windows_domain <> '' and windows_username <> ''
+   AND to_be_deleted <> 1
 
 END
 

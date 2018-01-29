@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 			IAnalyticsPersonPeriodMapNotDefined analyticsPersonPeriodMapNotDefined,
 			IAnalyticsTimeZoneRepository analyticsTimeZoneRepository,
 			IAnalyticsIntervalRepository analyticsIntervalRepository,
-			IGlobalSettingDataRepository globalSettingDataRepository, 
+			IGlobalSettingDataRepository globalSettingDataRepository,
 			IAnalyticsPersonPeriodDateFixer analyticsPersonPeriodDateFixer)
 		{
 			_analyticsPersonPeriodRepository = analyticsPersonPeriodRepository;
@@ -45,8 +45,11 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 			_analyticsPersonPeriodDateFixer = analyticsPersonPeriodDateFixer;
 		}
 
-		public AnalyticsPersonPeriod Transform(IPerson person, IPersonPeriod personPeriod, out List<AnalyticsSkill> analyticsSkills)
+		public AnalyticsPersonPeriod Transform(IPerson person, IPersonPeriod personPeriod,
+			out List<AnalyticsSkill> analyticsSkills)
 		{
+			const string notDefined = "Not Defined";
+
 			var businessUnitId =
 				MapBusinessId(personPeriod.Team.BusinessUnitExplicit.Id.GetValueOrDefault());
 			var siteId = MapSiteId(businessUnitId, personPeriod.Team.Site.Id.GetValueOrDefault(),
@@ -88,8 +91,10 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 				DatasourceId = 1,
 				DatasourceUpdateDate = person.UpdatedOn.GetValueOrDefault(),
 				ToBeDeleted = false,
-				WindowsDomain = "",
-				WindowsUsername = "" // WindowsDomain and WindowsUsername are filled in by nightly step.
+				// Could not get logon info within hangfire (It's in Tenant side), so just leave it as "Not Defined".
+				// They will be filled in by nightly job (Refer to DimPersonWindowsLoginJobStep).
+				WindowsDomain = notDefined,
+				WindowsUsername = notDefined
 			};
 
 			analyticsPersonPeriod = FixDatesAndInterval(
@@ -103,7 +108,8 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 
 		public string GetPersonName(IPerson person)
 		{
-			return _globalSettingDataRepository.FindValueByKey(CommonNameDescriptionSetting.Key, new CommonNameDescriptionSetting())
+			return _globalSettingDataRepository
+				.FindValueByKey(CommonNameDescriptionSetting.Key, new CommonNameDescriptionSetting())
 				.BuildFor(person);
 		}
 
@@ -121,14 +127,16 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 			var validToDateLocal = _analyticsPersonPeriodDateFixer.ValidToDateLocal(personPeriodEndDate);
 
 			var validFromDateIdLocal = _analyticsPersonPeriodDateFixer.MapDateId(validFromDateLocal);
-			var validToDateIdLocal = _analyticsPersonPeriodDateFixer.ValidToDateIdLocal(_analyticsPersonPeriodDateFixer.MapDateId(validToDateLocal));
+			var validToDateIdLocal =
+				_analyticsPersonPeriodDateFixer.ValidToDateIdLocal(_analyticsPersonPeriodDateFixer.MapDateId(validToDateLocal));
 
 			var intervalsPerDay = _analyticsIntervalRepository.IntervalsPerDay();
 			var validFromIntervalId = _analyticsPersonPeriodDateFixer.ValidFromIntervalId(validFromDate, intervalsPerDay);
 			var validToIntervalId = _analyticsPersonPeriodDateFixer.ValidToIntervalId(validToDate, intervalsPerDay);
 
-			var validToIntervalIdMaxDate = _analyticsPersonPeriodDateFixer.GetValidToIntervalIdMaxDate(validToIntervalId, validToDateId);
-			
+			var validToIntervalIdMaxDate =
+				_analyticsPersonPeriodDateFixer.GetValidToIntervalIdMaxDate(validToIntervalId, validToDateId);
+
 			analyticsPersonPeriod.TimeZoneId = _analyticsTimeZoneRepository.Get(timeZoneInfo.Id)?.TimeZoneId;
 
 			analyticsPersonPeriod.ValidFromDate = validFromDate; // UTC tid
@@ -185,14 +193,16 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 			return newSkillSet;
 		}
 
-		public int MapSkillsetId(List<Guid> applicationSkillCodes, int businessUnitId, IAnalyticsPersonPeriodMapNotDefined analyticsPersonPeriodMapNotDefined)
+		public int MapSkillsetId(List<Guid> applicationSkillCodes, int businessUnitId,
+			IAnalyticsPersonPeriodMapNotDefined analyticsPersonPeriodMapNotDefined)
 		{
-			List<AnalyticsSkill> listOfSkills;
-			return MapSkillsetId(applicationSkillCodes, businessUnitId, analyticsPersonPeriodMapNotDefined, out listOfSkills);
+			return MapSkillsetId(applicationSkillCodes, businessUnitId, analyticsPersonPeriodMapNotDefined, out _);
 		}
 
 		// Map skills to skillset. If not exists it will create it.
-		public int MapSkillsetId(List<Guid> applicationSkillCodes, int businessUnitId, IAnalyticsPersonPeriodMapNotDefined analyticsPersonPeriodMapNotDefined, out List<AnalyticsSkill> mappedAnalyticsSkills)
+		public int MapSkillsetId(List<Guid> applicationSkillCodes, int businessUnitId,
+			IAnalyticsPersonPeriodMapNotDefined analyticsPersonPeriodMapNotDefined,
+			out List<AnalyticsSkill> mappedAnalyticsSkills)
 		{
 			mappedAnalyticsSkills = null;
 			if (applicationSkillCodes.IsEmpty())
@@ -226,10 +236,12 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 			{
 				_analyticsSkillRepository.AddBridgeSkillsetSkill(bridgeSkillSetSkill);
 			}
+
 			return newSkillSetId.Value;
 		}
 
-		public static IEnumerable<AnalyticsBridgeSkillsetSkill> NewBridgeSkillSetSkillsFromSkills(List<AnalyticsSkill> listOfSkills, int newSkillSetId)
+		public static IEnumerable<AnalyticsBridgeSkillsetSkill> NewBridgeSkillSetSkillsFromSkills(
+			List<AnalyticsSkill> listOfSkills, int newSkillSetId)
 		{
 			return listOfSkills.Select(skill => new AnalyticsBridgeSkillsetSkill
 			{

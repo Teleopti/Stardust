@@ -33,14 +33,19 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 
 		protected override int RunStep(IList<IJobResult> jobResultCollection, bool isLastBusinessUnit)
 		{
-			var windowsLogonInfosInAnalytics = _jobParameters.Helper.Repository.GetWindowsLogonInfos().ToDictionary(k => k.PersonCode);
-			var logonInfos = JobParameters.TenantLogonInfoLoader.GetLogonInfoModelsForGuids(windowsLogonInfosInAnalytics.Select(x => x.Key));
+			var windowsLogonInfosInAnalytics = _jobParameters.Helper.Repository.GetWindowsLogonInfos().ToList();
+
+			var personIdInAnalytics = windowsLogonInfosInAnalytics.Select(x => x.PersonCode).Distinct().ToList();
+			var logonInfos = JobParameters.TenantLogonInfoLoader.GetLogonInfoModelsForGuids(personIdInAnalytics);
 			var windowsLogonInfosInApp = PersonTransformer.TransformWindowsLogonInfo(logonInfos);
 
 			var toBeUpdated = new List<WindowsLogonInfo>();
 			foreach (var windowsLogonInfoInApp in windowsLogonInfosInApp)
 			{
-				if (!windowsLogonInfosInAnalytics.TryGetValue(windowsLogonInfoInApp.PersonCode, out var windowsLogonInfoInAnalytics))
+				// A person may have different windows login information in dim_person (Bug #47602)
+				var windowsLogonInfoInAnalytics = windowsLogonInfosInAnalytics
+					.Where(x => x.PersonCode == windowsLogonInfoInApp.PersonCode).ToList();
+				if (!windowsLogonInfoInAnalytics.Any())
 				{
 					continue;
 				}
@@ -48,8 +53,8 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 				// DomainName or WindowsUserName may longer than column length (Bug #47274)
 				var truncatedDomainName = truncateString(windowsLogonInfoInApp.WindowsDomain, windowsDomainColumnLength);
 				var truncatedWinUserName = truncateString(windowsLogonInfoInApp.WindowsUsername, windowsUserNameColumnLength);
-				if (windowsLogonInfoInAnalytics.WindowsDomain == truncatedDomainName &&
-					windowsLogonInfoInAnalytics.WindowsUsername == truncatedWinUserName)
+				if (windowsLogonInfoInAnalytics.All(x => x.WindowsDomain == truncatedDomainName &&
+														 x.WindowsUsername == truncatedWinUserName))
 				{
 					continue;
 				}
