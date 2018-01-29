@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
@@ -149,9 +150,46 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 			Cursor = Cursors.Default;
 		}
 
+		private void copyListBox()
+		{
+			StringBuilder sb = new StringBuilder();
+			foreach (var item in listViewResult.SelectedItems)
+			{
+				if (item is ListViewItem l)
+					foreach (ListViewItem.ListViewSubItem sub in l.SubItems)
+						sb.Append(sub.Text + "\t");
+				sb.AppendLine();
+			}
+			Clipboard.SetDataObject(sb.ToString());
+
+		}
+
+		private void selectAll()
+		{
+			listViewResult.SuspendLayout();
+			foreach (ListViewItem item in listViewResult.Items)
+			{
+				item.Selected = true;
+			}
+			listViewResult.ResumeLayout(true);
+		}
+
 		private void listViewResultSelectedIndexChanged(object sender, EventArgs e)
 		{
 			ReselectSelected();
+		}
+
+		private void listViewResultKeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.Control && e.KeyCode == Keys.C)
+			{
+				copyListBox();
+			}
+
+			if (e.Control && e.KeyCode == Keys.A)
+			{
+				selectAll();
+			}
 		}
 	}
 }

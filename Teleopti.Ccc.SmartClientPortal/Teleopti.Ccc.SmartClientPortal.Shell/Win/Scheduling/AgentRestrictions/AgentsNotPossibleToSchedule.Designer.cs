@@ -81,6 +81,7 @@
 			this.listViewResult.UseCompatibleStateImageBehavior = false;
 			this.listViewResult.View = System.Windows.Forms.View.Details;
 			this.listViewResult.SelectedIndexChanged += new System.EventHandler(this.listViewResultSelectedIndexChanged);
+			this.listViewResult.KeyDown += new System.Windows.Forms.KeyEventHandler(this.listViewResultKeyDown);
 			// 
 			// columnHeaderAgent
 			// 
