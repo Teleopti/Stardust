@@ -71,6 +71,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 				Schedules = buildSchedules(data.Schedule),
 				Changes = buildChanges(personId, data.DisplayStartTime, data.DisplayEndTime),
 				OutOfAdherences = buildOutOfAdherences(data.Adherences),
+				RecordedOutOfAdherences = buildOutOfAdherences(data.Adherences),
 				Timeline = new ScheduleTimeline
 				{
 					StartTime = formatForUser(data.DisplayStartTime),

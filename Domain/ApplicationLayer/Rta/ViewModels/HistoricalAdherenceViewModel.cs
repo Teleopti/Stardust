@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		public string AgentName { get; set; }
 		public IEnumerable<HistoricalAdherenceActivityViewModel> Schedules { get; set; }
 		public IEnumerable<AgentOutOfAdherenceViewModel> OutOfAdherences { get; set; }
+		public IEnumerable<AgentOutOfAdherenceViewModel> RecordedOutOfAdherences { get; set; }
 		public IEnumerable<HistoricalChangeViewModel> Changes { get; set; }
 		public string Now { get; set; }
 		public ScheduleTimeline Timeline { get; set; }
