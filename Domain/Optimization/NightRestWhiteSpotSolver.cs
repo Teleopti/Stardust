@@ -48,17 +48,23 @@ namespace Teleopti.Ccc.Domain.Optimization
 				var effectiveRestrictions =_effectiveRestrictionCreator.GetEffectiveRestriction(previousScheduleDay, schedulingOptions);
 				var removePreviousDay = previousScheduleDay.IsScheduled();
 
-				if (schedulingOptions.UsePreferences && effectiveRestrictions.Absence != null && effectiveRestrictions.IsPreferenceDay)
-					removePreviousDay = false;
-
-				if ((schedulingOptions.PreferencesDaysOnly || schedulingOptions.UsePreferencesMustHaveOnly) && schedulingOptions.UsePreferences && !effectiveRestrictions.IsPreferenceDay)
+				if (effectiveRestrictions != null)
+				{
+					if (schedulingOptions.UsePreferences && effectiveRestrictions.Absence != null &&
+						effectiveRestrictions.IsPreferenceDay)
 						removePreviousDay = false;
-						
-				if (schedulingOptions.AvailabilityDaysOnly && schedulingOptions.UseAvailability && !effectiveRestrictions.IsAvailabilityDay)
-					removePreviousDay = false;
 
-				if (schedulingOptions.RotationDaysOnly && schedulingOptions.UseRotations && !effectiveRestrictions.IsRotationDay)
-					removePreviousDay = false;
+					if ((schedulingOptions.PreferencesDaysOnly || schedulingOptions.UsePreferencesMustHaveOnly) &&
+						schedulingOptions.UsePreferences && !effectiveRestrictions.IsPreferenceDay)
+						removePreviousDay = false;
+
+					if (schedulingOptions.AvailabilityDaysOnly && schedulingOptions.UseAvailability &&
+						!effectiveRestrictions.IsAvailabilityDay)
+						removePreviousDay = false;
+
+					if (schedulingOptions.RotationDaysOnly && schedulingOptions.UseRotations && !effectiveRestrictions.IsRotationDay)
+						removePreviousDay = false;
+				}
 
 				if (removePreviousDay) result.AddDayToDelete(matrixEffectivePeriodDay.Day.AddDays(-1));
                 result.AddDayToReschedule(matrixEffectivePeriodDay.Day.AddDays(-1));
