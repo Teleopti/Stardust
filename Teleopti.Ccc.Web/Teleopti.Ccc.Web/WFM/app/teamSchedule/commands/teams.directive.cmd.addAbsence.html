@@ -30,13 +30,12 @@
 				</span>
 			</div>
 
-			<div class="wfm-checkbox" ng-if="vm.isAddFullDayAbsenceAvailable()">
-				<input type="checkbox" id="is-full-day" ng-model="vm.isFullDayAbsence" ng-disabled="vm.isAddFullDayAbsenceAvailable() && !vm.isAddIntradayAbsenceAvailable()"/>
-				<label for="is-full-day">
-					<span class="wfm-checkbox-toggle"></span>
-					<span class="wfm-checkbox-label">{{'FullDayAbsence'|translate}}</span>
-				</label>
-			</div>
+			<md-checkbox ng-if="vm.isAddFullDayAbsenceAvailable()"
+						 ng-model="vm.isFullDayAbsence" 
+						 ng-disabled="vm.isAddFullDayAbsenceAvailable() && !vm.isAddIntradayAbsenceAvailable()"
+						 aria-label="Checkbox">
+				{{'FullDayAbsence'|translate}}
+			</md-checkbox>
 			<p class="text-danger" ng-if="!vm.isFullDayAbsence && !vm.isTimeRangeValid()">{{'EndTimeMustBeGreaterThanStartTime'|translate}}</p>
 			<p class="text-danger" ng-if="vm.isFullDayAbsence && !vm.isAbsenceDateValid()">{{'EndTimeMustBeGreaterOrEqualToStartTime'|translate}}</p>
 			<div class="text-danger" ng-if="vm.invalidAgentNameListString && vm.invalidAgentNameListString.length > 0">

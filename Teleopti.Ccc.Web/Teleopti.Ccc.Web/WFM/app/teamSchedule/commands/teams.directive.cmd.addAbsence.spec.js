@@ -1,4 +1,4 @@
-﻿describe('teamschedule add absence diretive test', function () {
+﻿fdescribe('teamschedule add absence diretive test', function () {
 	'use strict';
 
 	var fakeAbsenceService,
@@ -80,8 +80,8 @@
 		fakePermissions.setPermissions({ IsAddIntradayAbsenceAvailable: false, IsAddFullDayAbsenceAvailable: true });
 
 		var result = setUp(new Date('2015-01-01 10:00:00'));
-		var checkBoxInput = result.container[0].querySelectorAll('.wfm-checkbox input#is-full-day');
-		expect(checkBoxInput[0].value).toBe('on');
+		var checkBoxInput = result.container[0].querySelectorAll('md-checkbox');
+		expect(angular.element(checkBoxInput[0]).hasClass("md-checked")).toBe(true);
 		expect(checkBoxInput[0].disabled).toBe(true);
 	});
 
@@ -89,7 +89,7 @@
 		fakePermissions.setPermissions({ IsAddIntradayAbsenceAvailable: true, IsAddFullDayAbsenceAvailable: false });
 
 		var result = setUp(new Date('2015-01-01 10:00:00'));
-		var checkBoxInput = result.container[0].querySelectorAll('.wfm-checkbox input#is-full-day');
+		var checkBoxInput = result.container[0].querySelectorAll('md-checkbox');
 		expect(checkBoxInput.length).toBe(0);
 	});
 
