@@ -90,8 +90,6 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Mapping
 				});
 			}
 
-			vm.ExternalBadgeSettings = vm.ExternalBadgeSettings.OrderBy(s => s.Name).ToList();
-
 			return vm;
 		}
 	}
