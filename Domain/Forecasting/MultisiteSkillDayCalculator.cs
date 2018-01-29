@@ -24,14 +24,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
         public IMultisiteSkill MultisiteSkill => _multisiteSkill;
 
-	    public ReadOnlyCollection<IMultisiteDay> MultisiteDays => new ReadOnlyCollection<IMultisiteDay>(_multisiteDays);
+	    public IMultisiteDay[] MultisiteDays => _multisiteDays.ToArray();
 
-	    public ReadOnlyCollection<IMultisiteDay> VisibleMultisiteDays
-        {
-            get { return new ReadOnlyCollection<IMultisiteDay>(_multisiteDays.Where(m => VisiblePeriod.Contains(m.MultisiteDayDate)).ToList()); }
-        }
+	    public IMultisiteDay[] VisibleMultisiteDays => _multisiteDays.Where(m => VisiblePeriod.Contains(m.MultisiteDayDate)).ToArray();
 
-        public IDictionary<IChildSkill, IDictionary<DateTime, ISkillStaffPeriod>> ChildSkillStaffPeriods => new ReadOnlyDictionary<IChildSkill, IDictionary<DateTime, ISkillStaffPeriod>>(_childSkillStaffPeriods);
+		public IDictionary<IChildSkill, IDictionary<DateTime, ISkillStaffPeriod>> ChildSkillStaffPeriods => new ReadOnlyDictionary<IChildSkill, IDictionary<DateTime, ISkillStaffPeriod>>(_childSkillStaffPeriods);
 
 	    public void SetChildSkillDays(IChildSkill childSkill, IList<ISkillDay> childSkillDays)
         {
@@ -170,7 +167,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                                               select childSkillDay)
                 {
                     for (var childIndex = 0;
-                         childIndex < childSkillDay.CompleteSkillStaffPeriodCollection.Count;
+                         childIndex < childSkillDay.CompleteSkillStaffPeriodCollection.Length;
                          childIndex++)
                     {
                         StaffingResource staffingResource;

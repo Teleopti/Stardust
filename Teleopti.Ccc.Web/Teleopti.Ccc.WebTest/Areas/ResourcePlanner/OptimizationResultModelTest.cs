@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
@@ -66,8 +65,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			typeof(SkillStaff).GetField("_forecastedIncomingDemand", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(skillStaffPeriod.Payload, 10);
 			_skillDays.Add(_skill1, new List<ISkillDay> { skillDay });
 			
-			skillDay.Stub(x => x.SkillStaffPeriodCollection)
-				.Return(new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod> { skillStaffPeriod }));
+			skillDay.Stub(x => x.SkillStaffPeriodCollection).Return(new [] { skillStaffPeriod });
 			skillDay.Stub(x => x.CurrentDate).Return(_period.StartDate);
 
 			_target.Map(_skillDays, _period);
@@ -83,8 +81,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			typeof(SkillStaff).GetField("_forecastedIncomingDemand", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(skillStaffPeriod.Payload, 10);
 			_skillDays.Add(_skill1, new List<ISkillDay> { skillDay });
 
-			skillDay.Stub(x => x.SkillStaffPeriodCollection)
-				.Return(new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod> { skillStaffPeriod }));
+			skillDay.Stub(x => x.SkillStaffPeriodCollection).Return(new [] { skillStaffPeriod });
 			skillDay.Stub(x => x.CurrentDate).Return(_period.StartDate);
 			skillDay.Stub(x => x.OpenForWork).Return(new OpenForWork(true, true));
 
@@ -101,8 +98,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			typeof(SkillStaff).GetField("_forecastedIncomingDemand", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(skillStaffPeriod.Payload, 10);
 			_skillDays.Add(_skill1, new List<ISkillDay> { skillDay });
 
-			skillDay.Stub(x => x.SkillStaffPeriodCollection)
-				.Return(new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod> { skillStaffPeriod }));
+			skillDay.Stub(x => x.SkillStaffPeriodCollection).Return(new [] { skillStaffPeriod });
 			skillDay.Stub(x => x.CurrentDate).Return(_period.StartDate);
 			skillDay.Stub(x => x.OpenForWork).Return(new OpenForWork(true, true));
 
@@ -119,8 +115,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			typeof(SkillStaff).GetField("_forecastedIncomingDemand", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(skillStaffPeriod.Payload, 10);
 			_skillDays.Add(_skill1, new List<ISkillDay> { skillDay });
 
-			skillDay.Stub(x => x.SkillStaffPeriodCollection)
-				.Return(new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod> { skillStaffPeriod }));
+			skillDay.Stub(x => x.SkillStaffPeriodCollection).Return(new [] { skillStaffPeriod });
 			skillDay.Stub(x => x.CurrentDate).Return(_period.StartDate);
 			skillDay.Stub(x => x.OpenForWork).Return(new OpenForWork(true, true));
 
@@ -137,8 +132,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			typeof(SkillStaff).GetField("_forecastedIncomingDemand", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(skillStaffPeriod.Payload, 10);
 			_skillDays.Add(_skill1, new List<ISkillDay> { skillDay });
 
-			skillDay.Stub(x => x.SkillStaffPeriodCollection)
-				.Return(new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod> { skillStaffPeriod }));
+			skillDay.Stub(x => x.SkillStaffPeriodCollection).Return(new [] { skillStaffPeriod });
 			skillDay.Stub(x => x.CurrentDate).Return(_period.StartDate);
 			skillDay.Stub(x => x.OpenForWork).Return(new OpenForWork(true, true));
 
@@ -173,8 +167,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			typeof(SkillStaff).GetField("_forecastedIncomingDemand", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(skillStaffPeriod.Payload, 10);
 			_skillDays.Add(_skill1, new List<ISkillDay> { skillDay });
 
-			skillDay.Stub(x => x.SkillStaffPeriodCollection)
-				.Return(new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod> { skillStaffPeriod }));
+			skillDay.Stub(x => x.SkillStaffPeriodCollection).Return(new [] { skillStaffPeriod });
 			skillDay.Stub(x => x.CurrentDate).Return(_period.StartDate);
 			skillDay.Stub(x => x.OpenForWork).Return(new OpenForWork(false, false));
 			_target.Map(_skillDays, _period);

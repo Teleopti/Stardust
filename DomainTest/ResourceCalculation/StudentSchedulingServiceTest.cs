@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -87,8 +86,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var skillStaffPeriod = _mocks.StrictMock<ISkillStaffPeriod>();
 			var payload = _mocks.StrictMock<ISkillStaff>();
 
-			IList<ISkillStaffPeriod> periods = new List<ISkillStaffPeriod> { skillStaffPeriod };
-			var readonlyPeriods = new ReadOnlyCollection<ISkillStaffPeriod>(periods);
+			var periods = new [] { skillStaffPeriod };
 			var period = new DateTimePeriod(start.AddHours(2), start.AddHours(2).AddMinutes(5));
 
 			var personSkill = _mocks.StrictMock<IPersonSkill>();
@@ -133,8 +131,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Expect.Call(skillDay2.CurrentDate).Return(date12).Repeat.AtLeastOnce();
 				Expect.Call(skillDay1.Skill).Return(_skill1).Repeat.AtLeastOnce();
 				Expect.Call(skillDay2.Skill).Return(_skill2).Repeat.AtLeastOnce();
-				Expect.Call(skillDay1.SkillStaffPeriodCollection).Return(readonlyPeriods).Repeat.AtLeastOnce();
-				Expect.Call(skillDay2.SkillStaffPeriodCollection).Return(readonlyPeriods).Repeat.AtLeastOnce();
+				Expect.Call(skillDay1.SkillStaffPeriodCollection).Return(periods).Repeat.AtLeastOnce();
+				Expect.Call(skillDay2.SkillStaffPeriodCollection).Return(periods).Repeat.AtLeastOnce();
 
 				Expect.Call(skillStaffPeriod.Payload).Return(payload).Repeat.AtLeastOnce();
 				Expect.Call(payload.CalculatedResource).Return(10).Repeat.AtLeastOnce();
@@ -265,8 +263,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var person = _mocks.StrictMock<IPerson>();
 			var skillStaffPeriod = _mocks.StrictMock<ISkillStaffPeriod>();
 			var payload = _mocks.StrictMock<ISkillStaff>();
-			IList<ISkillStaffPeriod> periods = new List<ISkillStaffPeriod> { skillStaffPeriod };
-			var readonlyPeriods = new ReadOnlyCollection<ISkillStaffPeriod>(periods);
+			var periods = new [] { skillStaffPeriod };
 			var period = new DateTimePeriod(start.AddHours(2), start.AddHours(2).AddMinutes(5));
 			var personSkill = _mocks.StrictMock<IPersonSkill>();
 			var personSkill2 = _mocks.StrictMock<IPersonSkill>();
@@ -292,8 +289,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Expect.Call(person.Equals(person)).Return(true).Repeat.AtLeastOnce();
 				Expect.Call(skillDay2.CurrentDate).Return(date12).Repeat.AtLeastOnce();
 				Expect.Call(skillDay2.Skill).Return(_skill2).Repeat.AtLeastOnce();
-				Expect.Call(skillDay1.SkillStaffPeriodCollection).Return(readonlyPeriods).Repeat.AtLeastOnce();
-				Expect.Call(skillDay2.SkillStaffPeriodCollection).Return(readonlyPeriods).Repeat.AtLeastOnce();
+				Expect.Call(skillDay1.SkillStaffPeriodCollection).Return(periods).Repeat.AtLeastOnce();
+				Expect.Call(skillDay2.SkillStaffPeriodCollection).Return(periods).Repeat.AtLeastOnce();
 				Expect.Call(skillStaffPeriod.Payload).Return(payload).Repeat.AtLeastOnce();
 				Expect.Call(payload.CalculatedResource).Return(10).Repeat.AtLeastOnce();
 				Expect.Call(skillStaffPeriod.Period).Return(period).Repeat.AtLeastOnce();
@@ -406,15 +403,14 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var skillStaffPeriod = _mocks.StrictMock<ISkillStaffPeriod>();
 			var payload = _mocks.StrictMock<ISkillStaff>();
 
-			IList<ISkillStaffPeriod> periods = new List<ISkillStaffPeriod> { skillStaffPeriod };
-			var readonlyPeriods = new ReadOnlyCollection<ISkillStaffPeriod>(periods);
-
+			var periods = new [] { skillStaffPeriod };
+			
 			using (_mocks.Record())
 			{
 				Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(dates)).Return(lst).Repeat.Twice().IgnoreArguments();
 
-				Expect.Call(skillDay1.SkillStaffPeriodCollection).Return(readonlyPeriods).Repeat.AtLeastOnce();
-				Expect.Call(skillDay2.SkillStaffPeriodCollection).Return(readonlyPeriods).Repeat.AtLeastOnce();
+				Expect.Call(skillDay1.SkillStaffPeriodCollection).Return(periods).Repeat.AtLeastOnce();
+				Expect.Call(skillDay2.SkillStaffPeriodCollection).Return(periods).Repeat.AtLeastOnce();
 
 				Expect.Call(skillStaffPeriod.Payload).Return(payload).Repeat.Times(4);
 				Expect.Call(payload.CalculatedResource).Return(10).Repeat.Times(4);

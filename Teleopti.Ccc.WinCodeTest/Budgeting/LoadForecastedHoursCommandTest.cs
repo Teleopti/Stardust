@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -105,10 +104,8 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
 				var expectedPeriodToLoad = new DateOnlyPeriod(2010, 10, 20, 2010, 10, 22);
 				Expect.Call(skillDayLoader.LoadBudgetSkillDays(expectedPeriodToLoad, budgetGroup.SkillCollection, scenario)).Return(
 																	skillDayDictionary);
-				Expect.Call(skillDay1.SkillStaffPeriodCollection).Return(
-					new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod> { skillStaffPeriod1 })).Repeat.AtLeastOnce();
-				Expect.Call(skillDay2.SkillStaffPeriodCollection).Return(
-					new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod> { skillStaffPeriod2 })).Repeat.AtLeastOnce();
+				Expect.Call(skillDay1.SkillStaffPeriodCollection).Return(new [] { skillStaffPeriod1 }).Repeat.AtLeastOnce();
+				Expect.Call(skillDay2.SkillStaffPeriodCollection).Return(new [] { skillStaffPeriod2 }).Repeat.AtLeastOnce();
 				Expect.Call(skillStaffPeriod1.Period).Return(
 					DateTimeFactory.CreateDateTimePeriod(new DateTime(2010, 10, 19, 22, 0, 0, DateTimeKind.Utc), 0)).Repeat.AtLeastOnce();
 				Expect.Call(skillStaffPeriod2.Period).Return(
@@ -151,8 +148,7 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
 
 				Expect.Call(skillDayLoader.LoadBudgetSkillDays(expectedPeriodToLoad, budgetGroup.SkillCollection, scenario)).Return(
 																	skillDayDictionary);
-				Expect.Call(skillDay2.SkillStaffPeriodCollection).Return(
-					new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod> { skillStaffPeriod2 })).Repeat.AtLeastOnce();
+				Expect.Call(skillDay2.SkillStaffPeriodCollection).Return(new [] { skillStaffPeriod2 }).Repeat.AtLeastOnce();
 				Expect.Call(skillStaffPeriod2.Period).Return(
 					DateTimeFactory.CreateDateTimePeriod(new DateTime(2010, 10, 21, 22, 0, 0, DateTimeKind.Utc), 0)).Repeat.AtLeastOnce();
 

@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// Created by: micke
         /// Created date: 2008-01-22
         /// </remarks>
-        ReadOnlyCollection<ISkillStaffPeriod> SkillStaffPeriodCollection { get; }
+        ISkillStaffPeriod[] SkillStaffPeriodCollection { get; }
 
         /// <summary>
         /// Gets or sets the skill day calculator.
@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// Created by: robink
         /// Created date: 2008-09-08
         /// </remarks>
-        ReadOnlyCollection<ISkillStaffPeriod> CompleteSkillStaffPeriodCollection { get; }
+        ISkillStaffPeriod[] CompleteSkillStaffPeriodCollection { get; }
 
         /// <summary>
         /// Adds the workload day.
@@ -313,7 +313,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 	    ///  Created by: Ola
 	    ///  Created date: 2009-07-06    
 	    /// /// </remarks>
-	    ReadOnlyCollection<ISkillStaffPeriodView> SkillStaffPeriodViewCollection(TimeSpan periodLength, bool useShrinkage = false);
+	    ISkillStaffPeriodView[] SkillStaffPeriodViewCollection(TimeSpan periodLength, bool useShrinkage = false);
 
 	    void OpenAllSkillStaffPeriods(int maxSeats);
     }

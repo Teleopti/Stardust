@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
         {
             IList<double?> values = _dataExtractor.Values(period);
 
-            ReadOnlyCollection<double?> normalizedValues = 
+            var normalizedValues = 
                 raise ? _dayIndexCalculator.CalculateIndexForRaising(values) 
                       : _dayIndexCalculator.CalculateIndexForReducing(values);
 

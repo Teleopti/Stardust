@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 			foreach (var skillDay in skillDaysForPersonalSkill)
 			{
 				var skillStaffPeriods = skillDay.SkillStaffPeriodCollection;
-				if(skillStaffPeriods.Count == 0)
+				if(skillStaffPeriods.Length == 0)
 					continue;
 
 				var skill = skillDay.Skill;

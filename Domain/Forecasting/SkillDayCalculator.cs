@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         {
 
             return _skillDays.FirstOrDefault(
-                s => s.CurrentDate > skillDay.CurrentDate && s.SkillStaffPeriodCollection.Count > 0);
+                s => s.CurrentDate > skillDay.CurrentDate && s.SkillStaffPeriodCollection.Length > 0);
         }
 
         private IEnumerable<ITemplateTaskPeriod> GetClosedTaskPeriodsBeforeDateTime(IWorkload workload,DateOnly dateLimit,DateTime timeLimit)

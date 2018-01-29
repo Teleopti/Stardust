@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         public void VerifyOpenForWorkProperty()
         {
             _skillDay.RecalculateDailyTasks();
-            Assert.IsTrue(_skillDay.SkillStaffPeriodCollection.Count > 0);
+            Assert.IsTrue(_skillDay.SkillStaffPeriodCollection.Length > 0);
             Assert.IsTrue(_skillDay.OpenForWork.IsOpen);
             Assert.IsTrue(_skillDay.OpenForWork.IsOpenForIncomingWork);
         }
@@ -68,8 +68,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         public void VerifyHasInitialCollectionOfSkillStaffPeriods()
         {
             _skillDay.RecalculateDailyTasks(); //Makes sure the class is initialized
-            Assert.AreEqual(60, _skillDay.SkillStaffPeriodCollection.Count); //The open task periods
-            Assert.AreEqual(96, _skillDay.CompleteSkillStaffPeriodCollection.Count);
+            Assert.AreEqual(60, _skillDay.SkillStaffPeriodCollection.Length); //The open task periods
+            Assert.AreEqual(96, _skillDay.CompleteSkillStaffPeriodCollection.Length);
         }
 
         [Test]
@@ -309,7 +309,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         {
             _skillDay.SkillDataPeriodCollection[0].Shrinkage = new Percent(0.1);
             _skillDay.RecalculateDailyTasks();
-            Assert.AreEqual(60, _skillDay.SkillStaffPeriodCollection.Count);
+            Assert.AreEqual(60, _skillDay.SkillStaffPeriodCollection.Length);
             Assert.AreEqual(new Percent(0.1), _skillDay.SkillStaffPeriodCollection[0].Payload.Shrinkage);
             Assert.AreEqual(_skillDay.SkillStaffPeriodCollection[0].Payload.ForecastedIncomingDemand * 0.9, _skillDay.SkillStaffPeriodCollection[0].Payload.CalculatedTrafficIntensityWithShrinkage);
         }
@@ -984,7 +984,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifySetSkillStaffPeriodsWorks()
         {
-            Assert.AreEqual(60, _skillDay.SkillStaffPeriodCollection.Count);
+            Assert.AreEqual(60, _skillDay.SkillStaffPeriodCollection.Length);
 
             ISkillStaffPeriod skillStaffPeriod = SkillStaffPeriodFactory.CreateSkillStaffPeriod(
                 new DateTimePeriod(DateTime.SpecifyKind(_dt.Date, DateTimeKind.Utc), DateTime.SpecifyKind(_dt.Date.AddHours(6),DateTimeKind.Utc)),
@@ -995,7 +995,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             _skillDay.SetCalculatedStaffCollection(newSkillStaffPeriods);
             newSkillStaffPeriods.BatchCompleted();
 
-            Assert.AreEqual(1, _skillDay.SkillStaffPeriodCollection.Count);
+            Assert.AreEqual(1, _skillDay.SkillStaffPeriodCollection.Length);
             Assert.AreEqual(skillStaffPeriod.Payload.TaskData, _skillDay.SkillStaffPeriodCollection[0].Payload.TaskData);
             Assert.AreEqual(skillStaffPeriod.Payload.ServiceAgreementData, _skillDay.SkillStaffPeriodCollection[0].Payload.ServiceAgreementData);
             Assert.AreEqual(skillStaffPeriod.Payload.SkillPersonData, _skillDay.SkillStaffPeriodCollection[0].Payload.SkillPersonData);
@@ -1341,7 +1341,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             _skillDay.SetCalculatedStaffCollection(newSkillStaffPeriods);
             newSkillStaffPeriods.BatchCompleted();
             _skillDay.RecalculateStaff();
-            Assert.AreEqual(1, _skillDay.SkillStaffPeriodCollection.Count);
+            Assert.AreEqual(1, _skillDay.SkillStaffPeriodCollection.Length);
         }
 
         [Test]
@@ -1537,7 +1537,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         {
             // we have 60 15 minutes periods , we want 180 5 minutes periods
             var views = _skillDay.SkillStaffPeriodViewCollection(new TimeSpan(0, 5, 0));
-            Assert.AreEqual(180,views.Count);
+            Assert.AreEqual(180,views.Length);
             Assert.AreEqual(5, views[0].Period.ElapsedTime().TotalMinutes);
         }
     }

@@ -64,8 +64,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export
 																		  new Dictionary<ISkill, IEnumerable<ISkillDay>> { { childSkill, new[] { childSkillDay } } });
 				var forecastcastRow = new[] {new ForecastsRow()};
 				Expect.Call(() => _splitImportForecastMessage.Process(forecastcastRow, targetSkill, selection.Period)).IgnoreArguments();
-				Expect.Call(childSkillDay.SkillStaffPeriodCollection).Return(
-					new ReadOnlyCollection<ISkillStaffPeriod>(new[] { skillStaffPeriod }));
+				Expect.Call(childSkillDay.SkillStaffPeriodCollection).Return(new[] { skillStaffPeriod });
 			}
 			using (mocks.Playback())
 			{
@@ -92,8 +91,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export
 																	  sourceScenario)).Return(
 																		  new Dictionary<ISkill, IEnumerable<ISkillDay>> { { childSkill, new[] { childSkillDay } } });
 
-				Expect.Call(childSkillDay.SkillStaffPeriodCollection).Return(
-					new ReadOnlyCollection<ISkillStaffPeriod>(new ISkillStaffPeriod[] { })).Repeat.Any();
+				Expect.Call(childSkillDay.SkillStaffPeriodCollection).Return(new ISkillStaffPeriod[] { }).Repeat.Any();
 				Expect.Call(() => jobResultFeedback.Warning("")).IgnoreArguments();
 			}
 			using (mocks.Playback())

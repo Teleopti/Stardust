@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.DayOffPlanning;
 
@@ -21,8 +20,8 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
         public void VerifyReduceIndex()
         {
             ReadOnlyCollection<double> expected = createExpectedReduceIndexList();
-            ReadOnlyCollection<double?> result = _target.CalculateIndexForReducing(createInputValueList());
-            for (int i = 0; i < result.Count(); i++)
+            var result = _target.CalculateIndexForReducing(createInputValueList());
+            for (int i = 0; i < result.Length; i++)
             {
                 Assert.AreEqual(expected[i], result[i]);
             }
@@ -32,8 +31,8 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
         public void VerifyReduceIndexNullInputValues()
         {
             ReadOnlyCollection<double?> expected = createExpectedIndexNullList();
-            ReadOnlyCollection<double?> result = _target.CalculateIndexForReducing(createInputValueNullList());
-            for (int i = 0; i < result.Count(); i++)
+            var result = _target.CalculateIndexForReducing(createInputValueNullList());
+            for (int i = 0; i < result.Length; i++)
             {
                 Assert.AreEqual(expected[i], result[i]);
             }
@@ -43,8 +42,8 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
         public void VerifyRaiseIndex()
         {
             ReadOnlyCollection<double?> expected = createExpectedRaiseIndexList();
-            ReadOnlyCollection<double?> result = _target.CalculateIndexForRaising(createInputValueList());
-            for (int i = 0; i < result.Count(); i++)
+            var result = _target.CalculateIndexForRaising(createInputValueList());
+            for (int i = 0; i < result.Length; i++)
             {
                 Assert.AreEqual(expected[i], result[i]);
             }
@@ -54,8 +53,8 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
         public void VerifyRaiseIndexNullInputValues()
         {
             ReadOnlyCollection<double?> expected = createExpectedIndexNullList();
-            ReadOnlyCollection<double?> result = _target.CalculateIndexForRaising(createInputValueNullList());
-            for (int i = 0; i < result.Count(); i++)
+            var result = _target.CalculateIndexForRaising(createInputValueNullList());
+            for (int i = 0; i < result.Length; i++)
             {
                 Assert.AreEqual(expected[i], result[i]);
             }

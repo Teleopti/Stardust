@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             get
             {
                 if (!_initialized) initialize();
-                if (SkillStaffPeriodCollection.Count == 0) return TimeSpan.Zero;
+                if (SkillStaffPeriodCollection.Length == 0) return TimeSpan.Zero;
 
                 return TimeSpan.FromMinutes(SkillStaffPeriodCollection.Sum(s => s.ForecastedIncomingDemand().TotalMinutes));
             }
@@ -370,7 +370,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                                                                          _skillDataPeriodCollection,
                                                                          _skillStaffPeriodCollection);
 
-            if (SkillStaffPeriodCollection.Count==0)
+            if (SkillStaffPeriodCollection.Length==0)
             {
                 if (_skill.SkillType.ForecastSource != ForecastSource.InboundTelephony &&
 					_skill.SkillType.ForecastSource != ForecastSource.Retail)
@@ -710,7 +710,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                     (SkillStaffPeriodCollection.Sum(s =>
                         s.Payload.TaskData.AverageAfterTaskTime.Ticks * s.Payload.TaskData.Tasks) / _totalTasks));
             }
-            else if (SkillStaffPeriodCollection.Count > 0)
+            else if (SkillStaffPeriodCollection.Length > 0)
             {
                 _totalAverageTaskTime = TimeSpan.FromTicks((long)
                     (SkillStaffPeriodCollection.Average(s => s.Payload.TaskData.AverageTaskTime.Ticks)));
@@ -779,12 +779,12 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: micke
         /// Created date: 2008-01-22
         /// </remarks>
-        public virtual ReadOnlyCollection<ISkillStaffPeriod> SkillStaffPeriodCollection
+        public virtual ISkillStaffPeriod[] SkillStaffPeriodCollection
         {
             get
             {
                 if (!_initialized) initialize();
-                return new ReadOnlyCollection<ISkillStaffPeriod>(createAvailableSkillStaffPeriodCollection().ToArray());
+                return createAvailableSkillStaffPeriodCollection().ToArray();
             }
         }
 
@@ -820,7 +820,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                     _totalAverageAfterTaskTime = TimeSpan.FromTicks((long)
                         (SkillStaffPeriodCollection.Sum(t => t.Payload.TaskData.AverageAfterTaskTime.Ticks * t.Payload.TaskData.Tasks) / _totalTasks));
                 }
-                else if (SkillStaffPeriodCollection.Count > 0)
+                else if (SkillStaffPeriodCollection.Length > 0)
                 {
                     _totalAverageTaskTime = TimeSpan.FromTicks((long)
                         (SkillStaffPeriodCollection.Average(t => t.Payload.TaskData.AverageTaskTime.Ticks)));
@@ -1092,7 +1092,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         {
             get
             {
-                var isOpen = SkillStaffPeriodCollection.Count > 0;
+                var isOpen = SkillStaffPeriodCollection.Length > 0;
 	            return new OpenForWork(isOpen, isOpen);
             }
         }
@@ -1367,15 +1367,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: robink
         /// Created date: 2008-09-08
         /// </remarks>
-        public virtual ReadOnlyCollection<ISkillStaffPeriod> CompleteSkillStaffPeriodCollection
-        {
-            get
-            {
-                return new ReadOnlyCollection<ISkillStaffPeriod>(_skillStaffPeriodCollection.ToArray());
-            }
-        }
+        public virtual ISkillStaffPeriod[] CompleteSkillStaffPeriodCollection => _skillStaffPeriodCollection.ToArray();
 
-        #endregion
+		#endregion
 
         public virtual void SetupSkillDay()
         {
@@ -1505,22 +1499,19 @@ namespace Teleopti.Ccc.Domain.Forecasting
             return newSkillDay;
         }
 
-        public virtual ReadOnlyCollection<ISkillStaffPeriodView> SkillStaffPeriodViewCollection(TimeSpan periodLength, bool useShrinkage = false)
+        public virtual ISkillStaffPeriodView[] SkillStaffPeriodViewCollection(TimeSpan periodLength, bool useShrinkage = false)
         {
-            var views = new List<ISkillStaffPeriodView>();
             TimeSpan myPeriodLength = TimeSpan.Zero;
-            if(SkillStaffPeriodCollection.Count > 0)
+            if(SkillStaffPeriodCollection.Length > 0)
             {
                 myPeriodLength = SkillStaffPeriodCollection[0].Period.ElapsedTime();
             }
-	        if (myPeriodLength < periodLength) return new ReadOnlyCollection<ISkillStaffPeriodView>(views);
+	        if (myPeriodLength < periodLength) return new ISkillStaffPeriodView[0];
 	        foreach (var skillStaffPeriod in SkillStaffPeriodCollection)
 	        {
 		        skillStaffPeriod.Payload.UseShrinkage = useShrinkage;
 	        }
-	        views.AddRange(SkillStaffPeriodCollection.SelectMany(period => period.Split(periodLength)).ToArray());
-
-	        return new ReadOnlyCollection<ISkillStaffPeriodView>(views);
+	        return SkillStaffPeriodCollection.SelectMany(period => period.Split(periodLength)).ToArray();
         }
 
 		public virtual void OpenAllSkillStaffPeriods(int maxSeats)

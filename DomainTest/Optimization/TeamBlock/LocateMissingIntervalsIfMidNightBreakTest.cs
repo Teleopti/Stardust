@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -50,8 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
         {
             DateOnly today = new DateOnly(2014, 03, 27);
             IList<ISkillDay> skillDayList = new ISkillDay[] { _skillDay1, _skillDay2 };
-            IList<ISkillStaffPeriod> skillStaffPeriodList = new ISkillStaffPeriod[] { _skillStaffPeriod1, _skillStaffPeriod2, _skillStaffPeriod3, _skillStaffPeriod4 };
-            var skillSatffPeriodOnTwoDays = new ReadOnlyCollection<ISkillStaffPeriod>(skillStaffPeriodList);
+            var skillStaffPeriodList = new ISkillStaffPeriod[] { _skillStaffPeriod1, _skillStaffPeriod2, _skillStaffPeriod3, _skillStaffPeriod4 };
             using (_mock.Record())
             {
                 Expect.Call(_skill2.MidnightBreakOffset).Return(TimeSpan.FromHours(2));
@@ -59,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
                     .Return(skillDayList);
                 Expect.Call(_skillDay1.Skill).Return(_skill1);
                 Expect.Call(_skillDay2.Skill).Return(_skill2);
-                Expect.Call(_skillDay2.SkillStaffPeriodCollection).Return(skillSatffPeriodOnTwoDays);
+                Expect.Call(_skillDay2.SkillStaffPeriodCollection).Return(skillStaffPeriodList);
                 Expect.Call(_skillStaffPeriod1.Period).Return(new DateTimePeriod(
                     _timeZoneInfo.SafeConvertTimeToUtc(new DateTime(2014, 03, 26, 10, 0, 0, DateTimeKind.Utc)),
                     _timeZoneInfo.SafeConvertTimeToUtc(new DateTime(2014, 03, 26, 11, 0, 0, DateTimeKind.Utc))));
@@ -85,8 +83,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
         {
             DateOnly today = new DateOnly(2014, 03, 27);
             IList<ISkillDay> skillDayList = new ISkillDay[] { _skillDay1, _skillDay2 };
-            IList<ISkillStaffPeriod> skillStaffPeriodList = new ISkillStaffPeriod[] { _skillStaffPeriod1, _skillStaffPeriod2, _skillStaffPeriod3, _skillStaffPeriod4 };
-            var skillSatffPeriodOnTwoDays = new ReadOnlyCollection<ISkillStaffPeriod>(skillStaffPeriodList);
+            var skillStaffPeriodList = new ISkillStaffPeriod[] { _skillStaffPeriod1, _skillStaffPeriod2, _skillStaffPeriod3, _skillStaffPeriod4 };
+            
             using (_mock.Record())
             {
                 Expect.Call(_skill2.MidnightBreakOffset).Return(TimeSpan.FromHours(2));
@@ -94,7 +92,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
                     .Return(skillDayList);
                 Expect.Call(_skillDay1.Skill).Return(_skill1);
                 Expect.Call(_skillDay2.Skill).Return(_skill2);
-                Expect.Call(_skillDay2.SkillStaffPeriodCollection).Return(skillSatffPeriodOnTwoDays);
+                Expect.Call(_skillDay2.SkillStaffPeriodCollection).Return(skillStaffPeriodList);
                 Expect.Call(_skillStaffPeriod1.Period).Return(new DateTimePeriod(
                     _timeZoneInfo.SafeConvertTimeToUtc(new DateTime(2014, 03, 26, 10, 0, 0, DateTimeKind.Utc)),
                     _timeZoneInfo.SafeConvertTimeToUtc(new DateTime(2014, 03, 26, 11, 0, 0, DateTimeKind.Utc))));

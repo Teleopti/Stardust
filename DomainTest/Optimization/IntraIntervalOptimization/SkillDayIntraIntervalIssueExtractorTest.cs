@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -42,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 			{
 				Expect.Call(_skillDay1.Skill).Return(_skill1);
 				Expect.Call(_skillDay2.Skill).Return(_skill2);
-				Expect.Call(_skillDay2.SkillStaffPeriodCollection).Return(new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod> {_skillStaffPeriod1, _skillStaffPeriod2}));
+				Expect.Call(_skillDay2.SkillStaffPeriodCollection).Return(new [] {_skillStaffPeriod1, _skillStaffPeriod2});
 				Expect.Call(_skillStaffPeriod1.HasIntraIntervalIssue).Return(false);
 				Expect.Call(_skillStaffPeriod2.HasIntraIntervalIssue).Return(true);
 				Expect.Call(_skillStaffPeriod2.NoneEntityClone()).Return(_skillStaffPeriod2);
@@ -63,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 			{
 				Expect.Call(_skillDay1.Skill).Return(_skill1);
 				Expect.Call(_skillDay2.Skill).Return(_skill2);
-				Expect.Call(_skillDay2.SkillStaffPeriodCollection).Return(new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod> { _skillStaffPeriod1, _skillStaffPeriod2 }));
+				Expect.Call(_skillDay2.SkillStaffPeriodCollection).Return(new [] { _skillStaffPeriod1, _skillStaffPeriod2 });
 				Expect.Call(_skillStaffPeriod1.NoneEntityClone()).Return(_skillStaffPeriod1);
 				Expect.Call(_skillStaffPeriod2.NoneEntityClone()).Return(_skillStaffPeriod2);
 			}

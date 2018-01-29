@@ -46,8 +46,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var period2 = mocks.StrictMock<ISkillStaffPeriod>();
             var period3 = mocks.StrictMock<ISkillStaffPeriod>();
 
-            IList<ISkillStaffPeriod> skillStaffPeriods = new List<ISkillStaffPeriod> { period1, period2, period3};
-            ReadOnlyCollection<ISkillStaffPeriod> readOnlySkillStaffPeriods = new ReadOnlyCollection<ISkillStaffPeriod>(skillStaffPeriods);
+            var skillStaffPeriods = new [] { period1, period2, period3};
 
             DateTime dateTime = new DateTime(2009,2,1,23,0,0,DateTimeKind.Utc);
 
@@ -60,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using (mocks.Record())
             {
-                Expect.Call(skillDay.SkillStaffPeriodCollection).Return(readOnlySkillStaffPeriods);
+                Expect.Call(skillDay.SkillStaffPeriodCollection).Return(skillStaffPeriods);
                 Expect.Call(period1.Period).Return(dateTimePeriod1).Repeat.AtLeastOnce();
                 Expect.Call(period2.Period).Return(dateTimePeriod2).Repeat.AtLeastOnce();
                 Expect.Call(period3.Period).Return(dateTimePeriod3).Repeat.AtLeastOnce();
@@ -90,10 +89,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var period2 = mocks.StrictMock<ISkillStaffPeriod>();
             var period3 = mocks.StrictMock<ISkillStaffPeriod>();
 
-            IList<ISkillStaffPeriod> skillStaffPeriods1 = new List<ISkillStaffPeriod> { period1, period2, period3 };
-            IList<ISkillStaffPeriod> skillStaffPeriods2 = new List<ISkillStaffPeriod> { period3 };
-            var readOnlySkillStaffPeriods1 = new ReadOnlyCollection<ISkillStaffPeriod>(skillStaffPeriods1);
-            var readOnlySkillStaffPeriods2 = new ReadOnlyCollection<ISkillStaffPeriod>(skillStaffPeriods2);
+            var skillStaffPeriods1 = new [] { period1, period2, period3 };
+            var skillStaffPeriods2 = new [] { period3 };
 
             var dateTime = new DateTime(2009, 2, 1, 23, 0, 0, DateTimeKind.Utc);
 
@@ -105,8 +102,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using (mocks.Record())
             {
-                Expect.Call(skillDay1.SkillStaffPeriodCollection).Return(readOnlySkillStaffPeriods1).Repeat.AtLeastOnce();
-                Expect.Call(skillDay2.SkillStaffPeriodCollection).Return(readOnlySkillStaffPeriods2).Repeat.AtLeastOnce();
+                Expect.Call(skillDay1.SkillStaffPeriodCollection).Return(skillStaffPeriods1).Repeat.AtLeastOnce();
+                Expect.Call(skillDay2.SkillStaffPeriodCollection).Return(skillStaffPeriods2).Repeat.AtLeastOnce();
                 Expect.Call(period1.Period).Return(dateTimePeriod1).Repeat.AtLeastOnce();
                 Expect.Call(period2.Period).Return(dateTimePeriod2).Repeat.AtLeastOnce();
                 Expect.Call(period3.Period).Return(dateTimePeriod3).Repeat.AtLeastOnce();
@@ -153,10 +150,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var period2 = mocks.StrictMock<ISkillStaffPeriod>();
 			var period3 = mocks.StrictMock<ISkillStaffPeriod>();
 
-			IList<ISkillStaffPeriod> skillStaffPeriods1 = new List<ISkillStaffPeriod> { period1, period2, period3 };
-			IList<ISkillStaffPeriod> skillStaffPeriods2 = new List<ISkillStaffPeriod> { period3 };
-			var readOnlySkillStaffPeriods1 = new ReadOnlyCollection<ISkillStaffPeriod>(skillStaffPeriods1);
-			var readOnlySkillStaffPeriods2 = new ReadOnlyCollection<ISkillStaffPeriod>(skillStaffPeriods2);
+			var skillStaffPeriods1 = new [] { period1, period2, period3 };
+			var skillStaffPeriods2 = new [] { period3 };
 
 			var dateTime = new DateTime(2009, 2, 1, 23, 0, 0, DateTimeKind.Utc);
 
@@ -169,8 +164,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			using (mocks.Record())
 			{
-				Expect.Call(skillDay1.SkillStaffPeriodCollection).Return(readOnlySkillStaffPeriods1).Repeat.AtLeastOnce();
-				Expect.Call(skillDay2.SkillStaffPeriodCollection).Return(readOnlySkillStaffPeriods2).Repeat.AtLeastOnce();
+				Expect.Call(skillDay1.SkillStaffPeriodCollection).Return(skillStaffPeriods1).Repeat.AtLeastOnce();
+				Expect.Call(skillDay2.SkillStaffPeriodCollection).Return(skillStaffPeriods2).Repeat.AtLeastOnce();
 				Expect.Call(period1.Period).Return(dateTimePeriodoutside).Repeat.AtLeastOnce();
 				Expect.Call(period2.Period).Return(dateTimePeriod2).Repeat.AtLeastOnce();
 				Expect.Call(period3.Period).Return(dateTimePeriod3).Repeat.AtLeastOnce();
@@ -235,17 +230,15 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             ISkillStaffPeriod period4 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(dateTimePeriod4, new Task(5, averageTaskTime, averageAfterTaskTime), ServiceAgreement.DefaultValues(), skillDay1);
             ISkillStaffPeriod period5 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(dateTimePeriod5, new Task(4, averageTaskTime, averageAfterTaskTime), ServiceAgreement.DefaultValues(), skillDay2);
 
-            IList<ISkillStaffPeriod> skillStaffPeriods1 = new List<ISkillStaffPeriod> { period1, period2, period3, period4 };
-            IList<ISkillStaffPeriod> skillStaffPeriods2 = new List<ISkillStaffPeriod> { period5 };
-            ReadOnlyCollection<ISkillStaffPeriod> readOnlySkillStaffPeriods1 = new ReadOnlyCollection<ISkillStaffPeriod>(skillStaffPeriods1);
-            ReadOnlyCollection<ISkillStaffPeriod> readOnlySkillStaffPeriods2 = new ReadOnlyCollection<ISkillStaffPeriod>(skillStaffPeriods2);
+            var skillStaffPeriods1 = new [] { period1, period2, period3, period4 };
+            var skillStaffPeriods2 = new [] { period5 };
 
             IDictionary<ISkill, IEnumerable<ISkillDay>> skillDaysDictionary = new Dictionary<ISkill, IEnumerable<ISkillDay>> { { skill1, skillDays1 }, { skill2, skillDays2 } };
 
             using (mocks.Record())
             {
-                Expect.Call(skillDay1.SkillStaffPeriodCollection).Return(readOnlySkillStaffPeriods1).Repeat.AtLeastOnce();
-                Expect.Call(skillDay2.SkillStaffPeriodCollection).Return(readOnlySkillStaffPeriods2).Repeat.AtLeastOnce();
+                Expect.Call(skillDay1.SkillStaffPeriodCollection).Return(skillStaffPeriods1).Repeat.AtLeastOnce();
+                Expect.Call(skillDay2.SkillStaffPeriodCollection).Return(skillStaffPeriods2).Repeat.AtLeastOnce();
                 Expect.Call(skillDay1.Skill).Return(skill1).Repeat.AtLeastOnce();
                 Expect.Call(aggregateSkillSkill.AggregateSkills).Return(aggregatedSkills).Repeat.AtLeastOnce();
 
@@ -312,17 +305,15 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			((IAggregateSkillStaffPeriod) period5).AggregatedFStaff = 5d;
 			((IAggregateSkillStaffPeriod) period5).IsAggregate = true;
 			
-			IList<ISkillStaffPeriod> skillStaffPeriods1 = new List<ISkillStaffPeriod> { period1, period2, period3, period4 };
-			IList<ISkillStaffPeriod> skillStaffPeriods2 = new List<ISkillStaffPeriod> { period5 };
-			var readOnlySkillStaffPeriods1 = new ReadOnlyCollection<ISkillStaffPeriod>(skillStaffPeriods1);
-			var readOnlySkillStaffPeriods2 = new ReadOnlyCollection<ISkillStaffPeriod>(skillStaffPeriods2);
+			var skillStaffPeriods1 = new [] { period1, period2, period3, period4 };
+			var skillStaffPeriods2 = new [] { period5 };
 
 			IDictionary<ISkill, IEnumerable<ISkillDay>> skillDaysDictionary = new Dictionary<ISkill, IEnumerable<ISkillDay>> { { skill1, skillDays1 }, { skill2, skillDays2 } };
 
 			using (mocks.Record())
 			{
-				Expect.Call(skillDay1.SkillStaffPeriodCollection).Return(readOnlySkillStaffPeriods1).Repeat.AtLeastOnce();
-				Expect.Call(skillDay2.SkillStaffPeriodCollection).Return(readOnlySkillStaffPeriods2).Repeat.AtLeastOnce();
+				Expect.Call(skillDay1.SkillStaffPeriodCollection).Return(skillStaffPeriods1).Repeat.AtLeastOnce();
+				Expect.Call(skillDay2.SkillStaffPeriodCollection).Return(skillStaffPeriods2).Repeat.AtLeastOnce();
 				Expect.Call(skillDay1.Skill).Return(skill1).Repeat.AtLeastOnce();
 				Expect.Call(aggregateSkillSkill.AggregateSkills).Return(aggregatedSkills).Repeat.AtLeastOnce();
 			}
@@ -374,14 +365,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             SkillStaffPeriodFactory.InjectForecastedIncomingDemand(period1, 99);
             SkillStaffPeriodFactory.InjectCalculatedResource(period1, 88);
 
-            IList<ISkillStaffPeriod> skillStaffPeriods1 = new List<ISkillStaffPeriod> { period1 };
-            ReadOnlyCollection<ISkillStaffPeriod> readOnlySkillStaffPeriods1 = new ReadOnlyCollection<ISkillStaffPeriod>(skillStaffPeriods1);
+            var skillStaffPeriods1 = new [] { period1 };
 
             IDictionary<ISkill, IEnumerable<ISkillDay>> skillDaysDictionary = new Dictionary<ISkill, IEnumerable<ISkillDay>> { { skill1, skillDays1 } };
             
             using (mocks.Record())
             {
-                Expect.Call(skillDay1.SkillStaffPeriodCollection).Return(readOnlySkillStaffPeriods1).Repeat.AtLeastOnce();
+                Expect.Call(skillDay1.SkillStaffPeriodCollection).Return(skillStaffPeriods1).Repeat.AtLeastOnce();
                 Expect.Call(aggregateSkillSkill.AggregateSkills).Return(aggregatedSkills).Repeat.AtLeastOnce();
                 Expect.Call(skillDay1.Skill).Return(skill1).Repeat.AtLeastOnce();
             }
@@ -432,17 +422,15 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			ISkillStaffPeriod period4 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(dateTimePeriod4, new Task(5, averageTaskTime, averageAfterTaskTime), ServiceAgreement.DefaultValues(), skillDay1);
 			ISkillStaffPeriod period5 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(dateTimePeriod5, new Task(4, averageTaskTime, averageAfterTaskTime), ServiceAgreement.DefaultValues(), skillDay2);
 
-			IList<ISkillStaffPeriod> skillStaffPeriods1 = new List<ISkillStaffPeriod> { period1, period2, period3, period4 };
-			IList<ISkillStaffPeriod> skillStaffPeriods2 = new List<ISkillStaffPeriod> { period5 };
-			ReadOnlyCollection<ISkillStaffPeriod> readOnlySkillStaffPeriods1 = new ReadOnlyCollection<ISkillStaffPeriod>(skillStaffPeriods1);
-			ReadOnlyCollection<ISkillStaffPeriod> readOnlySkillStaffPeriods2 = new ReadOnlyCollection<ISkillStaffPeriod>(skillStaffPeriods2);
+			var skillStaffPeriods1 = new [] { period1, period2, period3, period4 };
+			var skillStaffPeriods2 = new [] { period5 };
 
 			IDictionary<ISkill, IEnumerable<ISkillDay>> skillDaysDictionary = new Dictionary<ISkill, IEnumerable<ISkillDay>> { { skill1, skillDays1 }, { skill2, skillDays2 } };
 
 			using (mocks.Record())
 			{
-				Expect.Call(skillDay1.SkillStaffPeriodCollection).Return(readOnlySkillStaffPeriods1).Repeat.AtLeastOnce();
-				Expect.Call(skillDay2.SkillStaffPeriodCollection).Return(readOnlySkillStaffPeriods2).Repeat.AtLeastOnce();
+				Expect.Call(skillDay1.SkillStaffPeriodCollection).Return(skillStaffPeriods1).Repeat.AtLeastOnce();
+				Expect.Call(skillDay2.SkillStaffPeriodCollection).Return(skillStaffPeriods2).Repeat.AtLeastOnce();
 				Expect.Call(skillDay1.Skill).Return(skill1).Repeat.AtLeastOnce();
 				Expect.Call(aggregateSkillSkill.AggregateSkills).Return(aggregatedSkills).Repeat.AtLeastOnce();
 			}
@@ -496,17 +484,15 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             ISkillStaffPeriod period4 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(dateTimePeriod4, new Task(5, averageTaskTime, averageAfterTaskTime), ServiceAgreement.DefaultValues(), skillDay1);
             ISkillStaffPeriod period5 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(dateTimePeriod5, new Task(4, averageTaskTime, averageAfterTaskTime), ServiceAgreement.DefaultValues(), skillDay2);
 
-            IList<ISkillStaffPeriod> skillStaffPeriods1 = new List<ISkillStaffPeriod> { period1, period2, period3, period4 };
-            IList<ISkillStaffPeriod> skillStaffPeriods2 = new List<ISkillStaffPeriod> { period5 };
-            ReadOnlyCollection<ISkillStaffPeriod> readOnlySkillStaffPeriods1 = new ReadOnlyCollection<ISkillStaffPeriod>(skillStaffPeriods1);
-            ReadOnlyCollection<ISkillStaffPeriod> readOnlySkillStaffPeriods2 = new ReadOnlyCollection<ISkillStaffPeriod>(skillStaffPeriods2);
+            var skillStaffPeriods1 = new [] { period1, period2, period3, period4 };
+            var skillStaffPeriods2 = new [] { period5 };
 
             IDictionary<ISkill, IEnumerable<ISkillDay>> skillDaysDictionary = new Dictionary<ISkill, IEnumerable<ISkillDay>> { { skill1, skillDays1 }, { skill2, skillDays2 } };
 
             using (mocks.Record())
             {
-                Expect.Call(skillDay1.SkillStaffPeriodCollection).Return(readOnlySkillStaffPeriods1).Repeat.AtLeastOnce();
-                Expect.Call(skillDay2.SkillStaffPeriodCollection).Return(readOnlySkillStaffPeriods2).Repeat.AtLeastOnce();
+                Expect.Call(skillDay1.SkillStaffPeriodCollection).Return(skillStaffPeriods1).Repeat.AtLeastOnce();
+                Expect.Call(skillDay2.SkillStaffPeriodCollection).Return(skillStaffPeriods2).Repeat.AtLeastOnce();
                 Expect.Call(aggregateSkillSkill.AggregateSkills).Return(aggregatedSkills).Repeat.AtLeastOnce();
             }
 
@@ -542,14 +528,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             period1.Payload.SkillPersonData = new SkillPersonData(0, 0);
             period1.Payload.CalculatedLoggedOn = 0;
 
-            var skillStaffPeriods1 = new List<ISkillStaffPeriod> { period1};
-            var readOnlySkillStaffPeriods1 = new ReadOnlyCollection<ISkillStaffPeriod>(skillStaffPeriods1);
+            var skillStaffPeriods1 = new [] { period1};
             var skillDaysDictionary = new Dictionary<ISkill, IEnumerable<ISkillDay>> { { skill1, skillDays1 } };
 
             using (mocks.Record())
             {
 	            Expect.Call(skillDay1.Skill).Return(skill1).Repeat.AtLeastOnce();
-                Expect.Call(skillDay1.SkillStaffPeriodCollection).Return(readOnlySkillStaffPeriods1).Repeat.AtLeastOnce();
+                Expect.Call(skillDay1.SkillStaffPeriodCollection).Return(skillStaffPeriods1).Repeat.AtLeastOnce();
                 Expect.Call(aggregateSkillSkill.AggregateSkills).Return(aggregatedSkills).Repeat.AtLeastOnce();
             }
 
@@ -578,14 +563,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             ISkillStaffPeriod period3 = mocks.StrictMock<ISkillStaffPeriod>();
             ISkillStaffPeriod period4 = mocks.StrictMock<ISkillStaffPeriod>();
 
-            IList<ISkillStaffPeriod> skillStaffPeriods = new List<ISkillStaffPeriod> {period1, period2};
-            IList<ISkillStaffPeriod> skillStaffPeriods2 = new List<ISkillStaffPeriod> {period3, period4};
-
-            ReadOnlyCollection<ISkillStaffPeriod> readOnlySkillStaffPeriods =
-                new ReadOnlyCollection<ISkillStaffPeriod>(skillStaffPeriods);
-            ReadOnlyCollection<ISkillStaffPeriod> readOnlySkillStaffPeriods2 =
-                new ReadOnlyCollection<ISkillStaffPeriod>(skillStaffPeriods2);
-
+            var skillStaffPeriods = new [] {period1, period2};
+            var skillStaffPeriods2 = new [] {period3, period4};
+			
             DateTime dateTime = new DateTime(2009, 2, 1, 23, 0, 0, DateTimeKind.Utc);
 
             DateTimePeriod dateTimePeriod1 = new DateTimePeriod(dateTime, dateTime.AddMinutes(15));
@@ -620,8 +600,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using (mocks.Record())
             {
-                Expect.Call(skillDay.SkillStaffPeriodCollection).Return(readOnlySkillStaffPeriods);
-                Expect.Call(skillDay2.SkillStaffPeriodCollection).Return(readOnlySkillStaffPeriods2);
+                Expect.Call(skillDay.SkillStaffPeriodCollection).Return(skillStaffPeriods);
+                Expect.Call(skillDay2.SkillStaffPeriodCollection).Return(skillStaffPeriods2);
 
                 Expect.Call(period1.Period).Return(dateTimePeriod1).Repeat.AtLeastOnce();
                 Expect.Call(period2.Period).Return(dateTimePeriod2).Repeat.AtLeastOnce();

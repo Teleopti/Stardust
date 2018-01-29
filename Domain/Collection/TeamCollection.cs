@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -23,30 +22,19 @@ namespace Teleopti.Ccc.Domain.Collection
         public IEnumerable<ITeam> AllPermittedTeams
         {
             get
-            {
-                HashSet<ITeam> tempList = new HashSet<ITeam>();
-                foreach (var team in _allTeams)
-                {
-                    if (PrincipalAuthorization.Current().IsPermitted(_functionPath, _queryDate, team))
-                        tempList.Add(team);
-                }
-
-                return new ReadOnlyCollection<ITeam>(tempList.ToList());
-            }
+			{
+				var authorization = PrincipalAuthorization.Current();
+				return _allTeams.Distinct().Where(t => authorization.IsPermitted(_functionPath, _queryDate, t)).ToArray();
+			}
         }
 
         public IEnumerable<ISite> AllPermittedSites
         {
             get
             {
-                HashSet<ISite> ret = new HashSet<ISite>();
-                foreach (var site in _allTeams.Select(t=>t.Site).Distinct())
-                {
-                    if (PrincipalAuthorization.Current().IsPermitted(_functionPath, _queryDate, site))
-                        ret.Add(site);
-                }
-
-                return new ReadOnlyCollection<ISite>(ret.ToList());
+				var authorization = PrincipalAuthorization.Current();
+				return _allTeams.Select(t => t.Site).Distinct().Where(s => authorization.IsPermitted(_functionPath, _queryDate, s))
+					.ToArray();
             }
         }
     }

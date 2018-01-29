@@ -221,7 +221,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             var templateTaskPeriods = target.CalculateTaskPeriods(newSkillDay2, false);
 
             Assert.AreEqual(9,templateTaskPeriods.Count());
-            Assert.AreEqual(9, newSkillDay3.SkillStaffPeriodCollection.Count);
+            Assert.AreEqual(9, newSkillDay3.SkillStaffPeriodCollection.Length);
             Assert.AreEqual(0, newSkillDay3.SkillStaffPeriodCollection[0].ForecastedDistributedDemand);
         }
 
@@ -258,12 +258,12 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
             workloadDay1.Tasks = 500d;
 
-            Assert.AreEqual(9, newSkillDay1.SkillStaffPeriodCollection.Count);
+            Assert.AreEqual(9, newSkillDay1.SkillStaffPeriodCollection.Length);
             Assert.AreEqual(281.25d, Math.Round(newSkillDay1.TotalTasks,2));
 
             workloadDay1.Tasks = 1000d;
 
-            Assert.AreEqual(9, newSkillDay1.SkillStaffPeriodCollection.Count);
+            Assert.AreEqual(9, newSkillDay1.SkillStaffPeriodCollection.Length);
             Assert.AreEqual(562.5d, Math.Round(newSkillDay1.TotalTasks,2));
         }
 

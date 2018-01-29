@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.Domain.Outbound
 			if (skillDay == null)
 				return;
 
-			var periodCount = skillDay.SkillStaffPeriodCollection.Count;
+			var periodCount = skillDay.SkillStaffPeriodCollection.Length;
 			var timeOnEachPeriod = TimeSpan.FromTicks(time.Ticks/periodCount);
 			foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
 			{

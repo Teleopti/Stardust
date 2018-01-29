@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -21,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.IntraIntervalAnalyze
 		private ISkillStaffPeriod _skillStaffPeriod2;
 		private ISkill _skill;
 		private ISkillActivityCountCollector _countCollector;
-		private IList<ISkillStaffPeriod> _skillStaffPeriods;
+		private ISkillStaffPeriod[] _skillStaffPeriods;
 		private IList<DateTimePeriod> _dateTimePeriods;
 		private IFullIntervalFinder _fullIntervalFinder;
 		
@@ -38,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.IntraIntervalAnalyze
 			_skillStaffPeriod1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod();
 			_skillStaffPeriod2 = SkillStaffPeriodFactory.CreateSkillStaffPeriod();
 			_skill = SkillFactory.CreateSkill("skill");
-			_skillStaffPeriods = new List<ISkillStaffPeriod>{_skillStaffPeriod1, _skillStaffPeriod2};
+			_skillStaffPeriods = new []{_skillStaffPeriod1, _skillStaffPeriod2};
 			_dateTimePeriods = new List<DateTimePeriod> {new DateTimePeriod()};
 		}
 
@@ -50,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.IntraIntervalAnalyze
 
 			using (_mock.Record())
 			{
-				Expect.Call(_skillDay.SkillStaffPeriodCollection).Return(new ReadOnlyCollection<ISkillStaffPeriod>(_skillStaffPeriods));
+				Expect.Call(_skillDay.SkillStaffPeriodCollection).Return(_skillStaffPeriods);
 				Expect.Call(_skillDay.Skill).Return(_skill);
 				Expect.Call(_intraIntervalFinder.FindForInterval(_skillStaffPeriod1.Period, _resourceCalculationDataContainer, _skill)).Return(_dateTimePeriods);
 				Expect.Call(_intraIntervalFinder.FindForInterval(_skillStaffPeriod2.Period, _resourceCalculationDataContainer, _skill)).Return(_dateTimePeriods);
@@ -75,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.IntraIntervalAnalyze
 		{
 			using (_mock.Record())
 			{
-				Expect.Call(_skillDay.SkillStaffPeriodCollection).Return(new ReadOnlyCollection<ISkillStaffPeriod>(_skillStaffPeriods));
+				Expect.Call(_skillDay.SkillStaffPeriodCollection).Return(_skillStaffPeriods);
 				Expect.Call(_skillDay.Skill).Return(_skill);
 				Expect.Call(_intraIntervalFinder.FindForInterval(_skillStaffPeriod1.Period, _resourceCalculationDataContainer, _skill)).Return(new List<DateTimePeriod>());
 				Expect.Call(_intraIntervalFinder.FindForInterval(_skillStaffPeriod2.Period, _resourceCalculationDataContainer, _skill)).Return(new List<DateTimePeriod>());
@@ -100,7 +99,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.IntraIntervalAnalyze
 		{
 			using (_mock.Record())
 			{
-				Expect.Call(_skillDay.SkillStaffPeriodCollection).Return(new ReadOnlyCollection<ISkillStaffPeriod>(_skillStaffPeriods));
+				Expect.Call(_skillDay.SkillStaffPeriodCollection).Return(_skillStaffPeriods);
 				Expect.Call(_skillDay.Skill).Return(_skill);
 				Expect.Call(_intraIntervalFinder.FindForInterval(_skillStaffPeriod1.Period, _resourceCalculationDataContainer, _skill)).Return(_dateTimePeriods);
 				Expect.Call(_intraIntervalFinder.FindForInterval(_skillStaffPeriod2.Period, _resourceCalculationDataContainer, _skill)).Return(_dateTimePeriods);

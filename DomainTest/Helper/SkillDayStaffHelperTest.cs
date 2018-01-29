@@ -179,7 +179,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
             IList<ISkillStaffPeriod> outList = new List<ISkillStaffPeriod>(skillDayCalculator.SkillDays.First().CompleteSkillStaffPeriodCollection);
             SkillDayStaffHelper.CombineTaskPeriodsAndServiceLevelPeriods(taskPeriods, saPeriods, outList);
 
-            Assert.AreEqual(44, skillDayCalculator.SkillDays.First().SkillStaffPeriodCollection.Count);
+            Assert.AreEqual(44, skillDayCalculator.SkillDays.First().SkillStaffPeriodCollection.Length);
             Assert.AreEqual(2, outList[5].Payload.SkillPersonData.MinimumPersons);
             Assert.AreEqual(10, outList[5].Payload.SkillPersonData.MaximumPersons);
         }
@@ -210,7 +210,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
             IList<ISkillStaffPeriod> outList = new List<ISkillStaffPeriod>(skillDayCalculator.SkillDays.First().CompleteSkillStaffPeriodCollection);
             SkillDayStaffHelper.CombineTaskPeriodsAndServiceLevelPeriods(taskPeriods, saPeriods, outList);
 
-            Assert.AreEqual(16, skillDayCalculator.SkillDays.First().SkillStaffPeriodCollection.Count);
+            Assert.AreEqual(16, skillDayCalculator.SkillDays.First().SkillStaffPeriodCollection.Length);
         }
 
         [Test]
@@ -348,7 +348,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
 
             var result = skillDayCalculator.SkillDays.First().SkillStaffPeriodCollection;
 
-            Assert.AreEqual(12, result.Count);
+            Assert.AreEqual(12, result.Length);
             Assert.AreEqual(new Percent(0.3), result[0].Payload.Shrinkage);
         }
 

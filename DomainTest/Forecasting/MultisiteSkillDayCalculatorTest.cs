@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifyProperties()
         {
-            Assert.AreEqual(multisiteDays.Count,target.MultisiteDays.Count);
+            Assert.AreEqual(multisiteDays.Count,target.MultisiteDays.Length);
             Assert.AreEqual(multisiteDays[0], target.MultisiteDays[0]);
             Assert.AreEqual(skill,target.MultisiteSkill);
         }
@@ -85,10 +85,10 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifyVisibleSkillDaysWorks()
         {
-            Assert.AreEqual(3, target.VisibleMultisiteDays.Count);
+            Assert.AreEqual(3, target.VisibleMultisiteDays.Length);
             var visiblePeriod = new DateOnlyPeriod(multisiteDays[0].MultisiteDayDate, multisiteDays[0].MultisiteDayDate);
             target.VisiblePeriod = visiblePeriod;
-            Assert.AreEqual(1, target.VisibleMultisiteDays.Count);
+            Assert.AreEqual(1, target.VisibleMultisiteDays.Length);
             Assert.AreEqual(multisiteDays[0], target.VisibleMultisiteDays[0]);
         }
 
