@@ -16783,6 +16783,9 @@ Do you want to participate?</value>
   <data name="DoYouWantToDeleteSkillGroup" xml:space="preserve">
     <value>Delete skill group</value>
   </data>
+	<data name="AreYouSureYouWantToDeleteTheSkillGroup" xml:space="preserve">
+		<value>Are you sure you want to delete the skill group </value>
+	</data>
   <data name="ManageSkillGroups" xml:space="preserve">
     <value>Manage skill groups</value>
   </data>

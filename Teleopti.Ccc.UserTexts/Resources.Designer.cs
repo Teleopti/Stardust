@@ -3376,6 +3376,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete the skill group .
+        /// </summary>
+        public static string AreYouSureYouWantToDeleteTheSkillGroup {
+            get {
+                return ResourceManager.GetString("AreYouSureYouWantToDeleteTheSkillGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to delete this campaign?.
         /// </summary>
         public static string AreYouSureYouWantToDeleteThisCampaign {
