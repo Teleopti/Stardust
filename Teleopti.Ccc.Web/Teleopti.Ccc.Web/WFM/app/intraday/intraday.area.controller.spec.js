@@ -111,7 +111,7 @@ describe('IntradayAreaController', function () {
 			IncomingTrafficHasData: true,
 			DataSeries: {
 				AbandonedRate: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
-				AverageHandleTime: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
+				AverageHandleTime: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 170.8660714285, 170.9112252],
 				AverageSpeedOfAnswer: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
 				ForecastedAverageHandleTime: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 199.8660714285, 201.3520471464],
 				ForecastedCalls: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.0112, 0.3224, 0.5169, 0.7337, 0.9672],
@@ -869,5 +869,17 @@ describe('IntradayAreaController', function () {
 		var currentDateDenver = moment('2018-01-01T00:00:00').format('dddd, LL').toLowerCase();
 		expect(vm.getLocalDate(0).toLowerCase()).toEqual(currentDateDenver);
 		jasmine.clock().uninstall();
+	});
+
+	it('should round AHT data series for incomming traffic chart', function() {
+		createController(false);
+		vm.activeTab = 0;
+		vm.selectedSkillChange(vm.skills[0]);
+		$httpBackend.flush();
+
+		var ahtSeries = vm.viewObj.actualAverageHandleTimeObj.series;
+		var forcastedAhtSeries = vm.viewObj.forecastedAverageHandleTimeObj.series;
+		expect(ahtSeries[ahtSeries.length - 1]).toEqual(170.9); 
+		expect(forcastedAhtSeries[forcastedAhtSeries.length - 1]).toEqual(201.4);
 	});
 });

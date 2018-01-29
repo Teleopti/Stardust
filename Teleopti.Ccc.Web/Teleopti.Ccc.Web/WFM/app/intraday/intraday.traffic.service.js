@@ -36,17 +36,23 @@
 
       var hiddenArray = [];
       var intervalStart;
-      var max;
+	  var max;
 
+	  var roundSeries = function (data, decimals) {
+		  return data.map(x => {
+			  if (x) {
+				  return +x.toFixed(decimals);
+			  }
+			  return x;
+		  });
+	  }
+	
       service.setTrafficData = function(result, isToday) {
-        clearData();
-        trafficData.forecastedCallsObj.series =
-          result.DataSeries.ForecastedCalls;
-        trafficData.actualCallsObj.series = result.DataSeries.CalculatedCalls;
-        trafficData.forecastedAverageHandleTimeObj.series =
-          result.DataSeries.ForecastedAverageHandleTime;
-        trafficData.actualAverageHandleTimeObj.series =
-          result.DataSeries.AverageHandleTime;
+		clearData();
+		trafficData.forecastedCallsObj.series = result.DataSeries.ForecastedCalls;
+		trafficData.actualCallsObj.series = result.DataSeries.CalculatedCalls;
+		trafficData.forecastedAverageHandleTimeObj.series = roundSeries(result.DataSeries.ForecastedAverageHandleTime, 1);
+		trafficData.actualAverageHandleTimeObj.series = roundSeries(result.DataSeries.AverageHandleTime, 1);
 
         trafficData.latestActualInterval =
           $filter("date")(result.LatestActualIntervalStart, "shortTime") +
