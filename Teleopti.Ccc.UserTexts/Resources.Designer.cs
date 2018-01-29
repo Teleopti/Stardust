@@ -27903,7 +27903,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To many days off in period.
+        ///   Looks up a localized string similar to Too many days off in period.
         /// </summary>
         public static string RestrictionNotAbleToBeScheduledReasonTooManyDaysOff {
             get {
