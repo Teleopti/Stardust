@@ -102,6 +102,7 @@ var wfm = angular.module('wfm', [
 		'CurrentUserInfo',
 		'Toggle',
 		'areasService',
+		'tabService',
 		'NoticeService',
 		function(
 			$rootScope,
@@ -112,7 +113,8 @@ var wfm = angular.module('wfm', [
 			currentUserInfo,
 			toggleService,
 			areasService,
-			noticeService
+			noticeService,
+			tabService
 		) {
 			$rootScope.isAuthenticated = false;
 
