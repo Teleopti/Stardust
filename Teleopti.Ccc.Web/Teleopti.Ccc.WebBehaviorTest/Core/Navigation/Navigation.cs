@@ -552,12 +552,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 
 		public static void GoToAgentHistoricalAdherence(Guid personId)
 		{
-			GoToPage($"wfm/#/rta/agent-historical/{personId}?open");
+			GoToPage($"wfm/#/rta/agent-historical/{personId}?open=true");
 		}
 
 		public static void GoToAgentHistoricalAdherence(Guid personId, DateTime date)
 		{
-			GoToPage($"wfm/#/rta/agent-historical/{personId}/{date:yyyyMMdd}?open");
+			GoToPage($"wfm/#/rta/agent-historical/{personId}/{date:yyyyMMdd}?open=true");
 		}
 
 		public static void GotoPageCiscoFinesse()

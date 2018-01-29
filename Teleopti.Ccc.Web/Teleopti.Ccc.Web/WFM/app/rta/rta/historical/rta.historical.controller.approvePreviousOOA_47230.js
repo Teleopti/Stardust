@@ -5,14 +5,16 @@
 
 	function RtaHistoricalController($http, $state, $stateParams, rtaService, $translate) {
 		var vm = this;
-		
+
 		vm.highlighted = {};
 		vm.diamonds = [];
 		vm.cards = [];
 		vm.previousHref;
 		vm.nextHref;
 
-		$stateParams.open = ($stateParams.open || "false");
+		$stateParams.open = $stateParams.open === "true";
+		vm.openRecordedOutOfAdherences = $stateParams.open;
+		vm.openApprovedAsInAdherence = $stateParams.open;
 
 		vm.ooaTooltipTime = function (time) {
 			if (time == null)
@@ -93,7 +95,7 @@
 				vm.nextTooltip = nextDay.format('L');
 			}
 		});
-		
+
 		function buildAgentOutOfAdherences(now, outOfAdherences) {
 			return outOfAdherences
 				.map(function (ooa) {
@@ -175,7 +177,7 @@
 					Header: header,
 					Items: [],
 					Color: color,
-					isOpen: $stateParams.open != "false",
+					isOpen: $stateParams.open,
 					StartTime: startTime,
 					EndTime: endTime
 				}

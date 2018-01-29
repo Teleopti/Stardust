@@ -60,41 +60,72 @@
 
 	.timeline {
 	  @include container;
+	  .time {
+		@include positioned;
+		top: 10%;
+		width: 36px;
+		margin-left: -18px;
+	  }
 	}
 
 	.shift {
 	  @include container;
 	  height: $shift-height;
+
+	  .current-time {
+		@include positioned;
+		z-index: 5;
+		width: 2px;
+		height: 100%;
+		background-color: red;
+	  }
+
+	  .out-of-adherence {
+		@include positioned;
+		z-index: 5;
+		background-color: $out-of-adherence-color;
+		height: $out-of-adherence-height;
+		opacity: 0.6;
+		min-width: 1px;
+		top: ($shift-height - $out-of-adherence-height) / 2;
+	  }
+
+	  .activity {
+		@include positioned;
+		height: 100%;
+	  }
+
 	}
 
-	.changes,
-	.recorded-out-of-adherences,
-	.approved-adherences {
+	.changes {
 	  @include container;
 	  height: $layer-row-height;
-	}
 
-	.current-time {
-	  @include positioned;
-	  z-index: 5;
-	  width: 2px;
-	  height: 100%;
-	  background-color: red;
-	}
-
-	.out-of-adherence {
-	  @include positioned;
-	  z-index: 5;
-	  background-color: $out-of-adherence-color;
-	  height: $out-of-adherence-height;
-	  opacity: 0.6;
-	  min-width: 1px;
-	  top: ($shift-height - $out-of-adherence-height) / 2;
-	}
-
-	.activity {
-	  @include positioned;
-	  height: 100%;
+	  .diamond {
+		@include positioned;
+		top: ($layer-row-height - $diamond-size) / 2;
+		margin-left: ($diamond-size / 2) * -1;
+		transform: rotate(45deg);
+		cursor: pointer;
+		height: $diamond-size;
+		width: $diamond-size;
+		&.highlight {
+		  height: $diamond-size + 2;
+		  width: $diamond-size + 2;
+		  border-radius: 50%;
+		}
+		&.highlight:after {
+		  content: '';
+		  width: $diamond-size + 8;
+		  height: $diamond-size + 8;
+		  display: block;
+		  margin-top: -3px;
+		  margin-left: -3px;
+		  border-radius: 50%;
+		  border: 1px solid;
+		  border-color: inherit;
+		}
+	  }
 	}
 
 	@mixin adherence-layer($color) {
@@ -107,37 +138,19 @@
 	  }
 	}
 
-	.recorded-out-of-adherence {
-	  @include adherence-layer($out-of-adherence-color);
-	}
-
-	.approved-adherence {
-	  @include adherence-layer($in-adherence-color);
-	}
-
-	.diamond {
-	  @include positioned;
-	  top: ($layer-row-height - $diamond-size) / 2;
-	  margin-left: ($diamond-size / 2) * -1;
-	  transform: rotate(45deg);
-	  cursor: pointer;
-	  height: $diamond-size;
-	  width: $diamond-size;
-	  &.highlight {
-		height: $diamond-size + 2;
-		width: $diamond-size + 2;
-		border-radius: 50%;
+	.recorded-out-of-adherences {
+	  @include container;
+	  height: $layer-row-height;
+	  .recorded-out-of-adherence {
+		@include adherence-layer($out-of-adherence-color);
 	  }
-	  &.highlight:after {
-		content: '';
-		width: $diamond-size + 8;
-		height: $diamond-size + 8;
-		display: block;
-		margin-top: -3px;
-		margin-left: -3px;
-		border-radius: 50%;
-		border: 1px solid;
-		border-color: inherit;
+	}
+
+	.approved-adherences {
+	  @include container;
+	  height: $layer-row-height;
+	  .approved-adherence {
+		@include adherence-layer($in-adherence-color);
 	  }
 	}
 
