@@ -15,18 +15,15 @@ namespace Teleopti.Ccc.Infrastructure.Forecasting.Angel
 		public ITaskOwnerPeriod RemoveOutliers(ITaskOwnerPeriod historicalData, IForecastMethod forecastMethod)
 		{
 			var seasonalVariationPossiblyWithTrend = forecastMethod.SeasonalVariation(historicalData);
+			var historicalLookup = historicalData.TaskOwnerDayCollection.ToLookup(k => k.CurrentDate);
 
 			var normalDistribution = new Dictionary<DateOnly, double>();
 			foreach (var day in seasonalVariationPossiblyWithTrend)
 			{
-				foreach (var historicalDay in historicalData.TaskOwnerDayCollection)
+				foreach (var historicalDay in historicalLookup[day.Date])
 				{
-					if (day.Date == historicalDay.CurrentDate)
-					{
 						if (Math.Abs(historicalDay.TotalStatisticCalculatedTasks) > 0.001d)
 							normalDistribution.Add(day.Date, historicalDay.TotalStatisticCalculatedTasks - day.Tasks);
-						break;
-					}
 				}
 			}
 			
@@ -40,12 +37,12 @@ namespace Teleopti.Ccc.Infrastructure.Forecasting.Angel
 			{
 				if (day.Value > upper)
 				{
-					var taskOwner = historicalData.TaskOwnerDayCollection.Single(x => x.CurrentDate == day.Key);
+					var taskOwner = historicalLookup[day.Key].Single();
 					((ValidatedVolumeDay)taskOwner).ValidatedTasks = upper + seasonalVariationPossiblyWithTrend.Single(x => x.Date == day.Key).Tasks;
 				}
 				else if (day.Value < lower)
 				{
-					var taskOwner = historicalData.TaskOwnerDayCollection.Single(x => x.CurrentDate == day.Key);
+					var taskOwner = historicalLookup[day.Key].Single();
 					((ValidatedVolumeDay)taskOwner).ValidatedTasks = lower + seasonalVariationPossiblyWithTrend.Single(x => x.Date == day.Key).Tasks;
 				}
 			}

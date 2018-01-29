@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -179,7 +178,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             return FStaffTime().TotalHours;
         }
 
-        public IList<ISkillStaffSegmentPeriod> SortedSegmentCollection => new ReadOnlyCollection<ISkillStaffSegmentPeriod>(_sortedSegmentCollection.Values);
+        public IList<ISkillStaffSegmentPeriod> SortedSegmentCollection => _sortedSegmentCollection.Values;
 
 		public IList<ISkillStaffSegmentPeriod> SegmentInThisCollection => _segmentInThisCollection;
 

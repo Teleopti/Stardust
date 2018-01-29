@@ -65,8 +65,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		private Dictionary<GuidCombinationKey, Guid> loadSkillCombination(SqlConnection connection, SqlTransaction transaction)
 		{
-		    
-			var skillCombinations = new Dictionary<GuidCombinationKey, Guid>();
 			var result = new List<internalSkillCombination>();
 			using (var command = new SqlCommand("select Id, SkillId from [ReadModel].[SkillCombination]", connection, transaction))
 			{
@@ -76,7 +74,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				
 				using (var reader = command.ExecuteReader())
 				{
-					if (!reader.HasRows) return skillCombinations;
+					if (!reader.HasRows) return new Dictionary<GuidCombinationKey, Guid>();
 					while (reader.Read())
 					{
 						var internalSkillCombination = new internalSkillCombination
