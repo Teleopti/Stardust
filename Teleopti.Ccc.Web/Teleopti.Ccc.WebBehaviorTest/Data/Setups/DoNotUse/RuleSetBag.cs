@@ -31,25 +31,25 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			_latestEnd = latestEnd;
 		}
 
-		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
+		public void Apply(ICurrentUnitOfWork unitOfWork, IPerson person, CultureInfo cultureInfo)
 		{
 			var start = new TimePeriodWithSegment(new TimePeriod(_earliestStart, 0, _latestStart, 0), new TimeSpan(0, 15, 0));
 			var end = new TimePeriodWithSegment(new TimePeriod(_earliestEnd, 0, _latestEnd, 0), new TimeSpan(0, 15, 0));
 			TheRuleSetBag = new Domain.Scheduling.ShiftCreator.RuleSetBag();
 
 			var activity = new Activity(RandomName.Make()) { DisplayColor = Color.FromKnownColor(KnownColor.Green) };
-			var activityRepository = new ActivityRepository(currentUnitOfWork);
+			var activityRepository = new ActivityRepository(unitOfWork);
 			activityRepository.Add(activity);
 
 			IShiftCategory shiftCategory;
 			if (ShiftCategory != null)
 			{
-				shiftCategory = new ShiftCategoryRepository(currentUnitOfWork).LoadAll().Single(sCat => sCat.Description.Name.Equals(ShiftCategory));
+				shiftCategory = new ShiftCategoryRepository(unitOfWork).LoadAll().Single(sCat => sCat.Description.Name.Equals(ShiftCategory));
 			}
 			else
 			{
 				shiftCategory = ShiftCategoryFactory.CreateShiftCategory(RandomName.Make(), "Purple");
-				var shiftCategoryRepository= new ShiftCategoryRepository(currentUnitOfWork);
+				var shiftCategoryRepository= new ShiftCategoryRepository(unitOfWork);
 				shiftCategoryRepository.Add(shiftCategory);
 			}
 
@@ -60,11 +60,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			TheRuleSetBag.Description = new Description("Påsen");
 			TheRuleSetBag.AddRuleSet(ruleSet);
 
-			new WorkShiftRuleSetRepository(currentUnitOfWork).Add(ruleSet);
-			new RuleSetBagRepository(currentUnitOfWork).Add(TheRuleSetBag);
+			new WorkShiftRuleSetRepository(unitOfWork).Add(ruleSet);
+			new RuleSetBagRepository(unitOfWork).Add(TheRuleSetBag);
 
-			currentUnitOfWork.Current().Reassociate(user);
-			user.Period(new DateOnly(2014, 1, 1)).RuleSetBag = TheRuleSetBag;
+			unitOfWork.Current().Reassociate(person);
+			person.Period(new DateOnly(2014, 1, 1)).RuleSetBag = TheRuleSetBag;
 		}
 	}
 

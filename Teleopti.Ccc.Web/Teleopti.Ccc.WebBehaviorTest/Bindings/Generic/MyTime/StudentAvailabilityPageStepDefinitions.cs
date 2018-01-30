@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		public string EndTime { get; set; }
 		public bool NextDay { get; set; }
 
-		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
+		public void Apply(ICurrentUnitOfWork unitOfWork, IPerson person, CultureInfo cultureInfo)
 		{
 			var studentAvailabilityRestriction = new StudentAvailabilityRestriction
 			{
@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 				EndTimeLimitation = new EndTimeLimitation(null, Transform.ToNullableTimeSpan(EndTime))
 			};
 			var studentAvailabilityDay = new StudentAvailabilityDay(
-				user,
+				person,
 				new DateOnly(Date),
 				new List<IStudentAvailabilityRestriction>(
 					new[]
@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 							studentAvailabilityRestriction
 						}));
 
-			var studentAvailabilityRepository = new StudentAvailabilityDayRepository(currentUnitOfWork);
+			var studentAvailabilityRepository = new StudentAvailabilityDayRepository(unitOfWork);
 			studentAvailabilityRepository.Add(studentAvailabilityDay);
 		}
 	}

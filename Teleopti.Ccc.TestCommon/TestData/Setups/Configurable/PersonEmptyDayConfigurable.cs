@@ -15,13 +15,13 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public string Scenario { get; set; }
 		public DateTime Date { get; set; }
 
-		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
+		public void Apply(ICurrentUnitOfWork unitOfWork, IPerson person, CultureInfo cultureInfo)
 		{
-			var scenario = new ScenarioRepository(currentUnitOfWork).LoadAll().Single(abs => abs.Description.Name.Equals(Scenario));
-			var emptyPersonAssignment = new PersonAssignment(user, scenario, new DateOnly(Date));
+			var scenario = new ScenarioRepository(unitOfWork).LoadAll().Single(abs => abs.Description.Name.Equals(Scenario));
+			var emptyPersonAssignment = new PersonAssignment(person, scenario, new DateOnly(Date));
 			emptyPersonAssignment.Clear();
 
-			var repository = new PersonAssignmentRepository(currentUnitOfWork);
+			var repository = new PersonAssignmentRepository(unitOfWork);
 			
 			repository.Add(emptyPersonAssignment);
 		}

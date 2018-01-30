@@ -26,24 +26,24 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public string Name { get; set; }
 		public DateTime Date { get; set; }
 
-		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
+		public void Apply(ICurrentUnitOfWork unitOfWork, IPerson person, CultureInfo cultureInfo)
 		{
-			var scenario = new ScenarioRepository(currentUnitOfWork).LoadAll().Single(abs => abs.Description.Name.Equals(Scenario));
-			var absence = new AbsenceRepository(currentUnitOfWork).LoadAll().Single(abs => abs.Description.Name.Equals(Name));
+			var scenario = new ScenarioRepository(unitOfWork).LoadAll().Single(abs => abs.Description.Name.Equals(Scenario));
+			var absence = new AbsenceRepository(unitOfWork).LoadAll().Single(abs => abs.Description.Name.Equals(Name));
 			var repositoryFactory = new RepositoryFactory();
-			var scheduleRepository = new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork));
+			var scheduleRepository = new ScheduleStorage(unitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new ScheduleStorageRepositoryWrapper(repositoryFactory, unitOfWork));
 			var personAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
 			var scheduleDifferenceSaver = new SaveSchedulePartService(new ScheduleDifferenceSaver(scheduleRepository, CurrentUnitOfWork.Make(), new EmptyScheduleDayDifferenceSaver()), personAbsenceAccountRepository, new DoNothingScheduleDayChangeCallBack());
 			var businessRulesForAccountUpdate = new BusinessRulesForPersonalAccountUpdate(personAbsenceAccountRepository, new SchedulingResultStateHolder());
 			var personAbsenceCreator = new PersonAbsenceCreator (scheduleDifferenceSaver, businessRulesForAccountUpdate);
-			var commandConverter = new AbsenceCommandConverter(new ThisCurrentScenario(scenario), new PersonRepository(currentUnitOfWork), new AbsenceRepository(currentUnitOfWork), scheduleRepository, UserTimeZone.Make());
+			var commandConverter = new AbsenceCommandConverter(new ThisCurrentScenario(scenario), new PersonRepository(unitOfWork), new AbsenceRepository(unitOfWork), scheduleRepository, UserTimeZone.Make());
 			var handler = new AddFullDayAbsenceCommandHandler(personAbsenceCreator, commandConverter);
 			handler.Handle(new AddFullDayAbsenceCommand
 				{
 					AbsenceId = absence.Id.Value,
 					StartDate = Date,
 					EndDate = Date,
-					PersonId = user.Id.Value
+					PersonId = person.Id.Value
 				});
 		}
 	}

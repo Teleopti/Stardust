@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			_tracker = requestableAbsenceFields.TrackerType;
 		}
 
-		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
+		public void Apply(ICurrentUnitOfWork unitOfWork, IPerson person, CultureInfo cultureInfo)
 		{
 			ITracker tracker = null;
 			if (!string.IsNullOrEmpty(_tracker))
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 				}
 			}
 
-			new AbsenceRepository(currentUnitOfWork).Add(new Absence
+			new AbsenceRepository(unitOfWork).Add(new Absence
 			                               	{
 			                               		Description = new Description(_name),
 			                               		Requestable = true,

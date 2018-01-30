@@ -40,20 +40,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 
 		public IScenario Scenario = DefaultScenario.Scenario;
 
-		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
+		public void Apply(ICurrentUnitOfWork unitOfWork, IPerson person, CultureInfo cultureInfo)
 		{
 			var date = ApplyDate(cultureInfo);
-		    var timeZone = user.PermissionInformation.DefaultTimeZone();
+		    var timeZone = person.PermissionInformation.DefaultTimeZone();
 		    var shiftStartUtc = timeZone.SafeConvertTimeToUtc(date.Add(TimeSpan.Parse(StartTime,SwedishCultureInfo)));
 		    var shiftEndUtc = timeZone.SafeConvertTimeToUtc(date.Add(TimeSpan.Parse(EndTime,SwedishCultureInfo)));
 
-			var assignmentRepository = new PersonAssignmentRepository(currentUnitOfWork);
+			var assignmentRepository = new PersonAssignmentRepository(unitOfWork);
 
 			IActivity activity;
-			var activityRepository = new ActivityRepository(currentUnitOfWork);
+			var activityRepository = new ActivityRepository(unitOfWork);
 			if (Activity != null)
 			{
-				activity = new ActivityRepository(currentUnitOfWork).LoadAll().Single(sCat => sCat.Description.Name.Equals(Activity));
+				activity = new ActivityRepository(unitOfWork).LoadAll().Single(sCat => sCat.Description.Name.Equals(Activity));
 			}
 			else
 			{
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 
 			// create main shift
             _assignmentPeriod = new DateTimePeriod(shiftStartUtc, shiftEndUtc);
-			var assignment = PersonAssignmentFactory.CreatePersonAssignment(user, Scenario, new DateOnly(date));
+			var assignment = PersonAssignmentFactory.CreatePersonAssignment(person, Scenario, new DateOnly(date));
 			assignment.AddActivity(activity, _assignmentPeriod);
 
 			// add lunch
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			}
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory(RandomName.Make(), "Purple");
-			new ShiftCategoryRepository(currentUnitOfWork).Add(shiftCategory);
+			new ShiftCategoryRepository(unitOfWork).Add(shiftCategory);
 			ShiftCategory = shiftCategory;
 
 			assignment.SetShiftCategory(shiftCategory);

@@ -5,6 +5,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay
 {
 	public interface IApprovedPeriodsReader
 	{
-		IEnumerable<ApprovedPeriodModel> Read(Guid personId, DateTime startTime, DateTime endTime);
+		IEnumerable<ApprovedPeriod> Read(Guid personId, DateTime startTime, DateTime endTime);
 	}
 }

@@ -18,10 +18,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public int Allowance { get; set; }
 		public int FulltimeEquivalentHours { get; set; }
 
-		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
+		public void Apply(ICurrentUnitOfWork unitOfWork, IPerson person, CultureInfo cultureInfo)
 		{
-			var budgetDayRepository = new BudgetDayRepository(currentUnitOfWork);
-			var budgetGroupRepository = new BudgetGroupRepository(currentUnitOfWork);
+			var budgetDayRepository = new BudgetDayRepository(unitOfWork);
+			var budgetGroupRepository = new BudgetGroupRepository(unitOfWork);
 			IBudgetGroup budgetGroup = new BudgetGroup() { Name = BudgetGroup };
 			var existingBudgetGroups = budgetGroupRepository.LoadAll();
 			bool budgetGroupAlreadyExists = existingBudgetGroups.Any(b => b.Name == BudgetGroup);
@@ -31,10 +31,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			}
 			else
 			{
-				budgetGroup = new BudgetGroup() { Name = BudgetGroup, TimeZone = user.PermissionInformation.DefaultTimeZone() };
+				budgetGroup = new BudgetGroup() { Name = BudgetGroup, TimeZone = person.PermissionInformation.DefaultTimeZone() };
 				budgetGroupRepository.Add(budgetGroup);
 			}
-			user.PersonPeriodCollection.First().BudgetGroup = budgetGroup;
+			person.PersonPeriodCollection.First().BudgetGroup = budgetGroup;
 			var scenario = DefaultScenario.Scenario;
 			var budgetDay = new BudgetDay(budgetGroup, scenario, new DateOnly(Date)) { ShrinkedAllowance = Allowance, FulltimeEquivalentHours = FulltimeEquivalentHours };
 			budgetDayRepository.Add(budgetDay);

@@ -15,13 +15,13 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public DateTime StartDate { get; set; }
 		public string Rotation { get; set; }
 
-		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
+		public void Apply(ICurrentUnitOfWork unitOfWork, IPerson person, CultureInfo cultureInfo)
 		{
-			var availabilityRotation = new AvailabilityRepository(currentUnitOfWork.Current())
+			var availabilityRotation = new AvailabilityRepository(unitOfWork.Current())
 				.LoadAll()
 				.Single(r => r.Name == Rotation);
-			var personAvailability = new PersonAvailability(user, availabilityRotation, new DateOnly(StartDate));
-			new PersonAvailabilityRepository(currentUnitOfWork.Current()).Add(personAvailability);
+			var personAvailability = new PersonAvailability(person, availabilityRotation, new DateOnly(StartDate));
+			new PersonAvailabilityRepository(unitOfWork.Current()).Add(personAvailability);
 		}
 	}
 }

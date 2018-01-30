@@ -16,12 +16,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public string Status { get; set; }
 		public string Subject { get; set; }
 
-		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
+		public void Apply(ICurrentUnitOfWork unitOfWork, IPerson person, CultureInfo cultureInfo)
 		{
 			StartTime = DateTime.SpecifyKind(StartTime, DateTimeKind.Utc);
 			EndTime = DateTime.SpecifyKind(EndTime, DateTimeKind.Utc);
 			var textRequest = new TextRequest(new DateTimePeriod(StartTime, EndTime));
-			var personRequest = new PersonRequest(user, textRequest) { Subject = string.IsNullOrEmpty(Subject) ? "I need some cake" : Subject };
+			var personRequest = new PersonRequest(person, textRequest) { Subject = string.IsNullOrEmpty(Subject) ? "I need some cake" : Subject };
 			personRequest.TrySetMessage("This is some text that is just here to fill a space and demonstrate how this will behave when we have lots and lots of character is a long long text that doesnt really mean anything at all.");
 
 			if (Status == "Pending")
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 				personRequest.ForcePending();
 			}
 
-			var requestRepository = new PersonRequestRepository(currentUnitOfWork);
+			var requestRepository = new PersonRequestRepository(unitOfWork);
 
 			requestRepository.Add(personRequest);
 		}

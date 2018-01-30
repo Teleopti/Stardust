@@ -34,7 +34,6 @@ Feature: Approve out of adherences
 	When I view historical adherence for 'Mikkey Dee' on '2018-01-22'
 	Then I should see recorded out of adherence between '09:00:00' and '10:00:00'
 
-  @ignore
   Scenario: See approved periods
 	Given Mikkey Dee has a 'Phone' shift between '2018-01-22 09:00' and '17:00'
 	And time is '2018-01-22 17:00'

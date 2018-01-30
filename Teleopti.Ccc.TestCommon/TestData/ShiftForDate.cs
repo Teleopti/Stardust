@@ -48,11 +48,11 @@ namespace Teleopti.Ccc.TestCommon.TestData
 			MultiplicatorDefinitionSet = multiplicatorDefinitionSet;
 		}
 
-		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson person, CultureInfo cultureInfo)
+		public void Apply(ICurrentUnitOfWork unitOfWork, IPerson person, CultureInfo cultureInfo)
 		{
 			var dateUtc = person.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(Date);
 
-			var assignmentRepository = new PersonAssignmentRepository(currentUnitOfWork);
+			var assignmentRepository = new PersonAssignmentRepository(unitOfWork);
 
 			// create main shift
 			_assignmentPeriod = new DateTimePeriod(dateUtc.Add(StartTime), dateUtc.Add(EndTime));

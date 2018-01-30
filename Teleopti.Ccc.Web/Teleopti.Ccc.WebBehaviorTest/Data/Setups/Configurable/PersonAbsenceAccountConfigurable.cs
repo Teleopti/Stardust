@@ -39,11 +39,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			Extra = !string.IsNullOrEmpty(config.Extra) ? config.Extra : "0";
 		}
 
-		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
+		public void Apply(ICurrentUnitOfWork unitOfWork, IPerson person, CultureInfo cultureInfo)
 		{
-			var absence = new AbsenceRepository(currentUnitOfWork).LoadAll().Single(x => x.Description.Name == Absence);
-			var repository = new PersonAbsenceAccountRepository(currentUnitOfWork);
-			var result = repository.Find(user);
+			var absence = new AbsenceRepository(unitOfWork).LoadAll().Single(x => x.Description.Name == Absence);
+			var repository = new PersonAbsenceAccountRepository(unitOfWork);
+			var result = repository.Find(person);
 			IPersonAbsenceAccount personAbsenceAccount = null;
 			if (result.Any())
 			{
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			}
 			if (personAbsenceAccount == null)
 			{
-				personAbsenceAccount = new PersonAbsenceAccount(user, absence);
+				personAbsenceAccount = new PersonAbsenceAccount(person, absence);
 				repository.Add(personAbsenceAccount);
 			}
 

@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			ReplyOption1 = "OK";
 		}
 
-		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
+		public void Apply(ICurrentUnitOfWork unitOfWork, IPerson person, CultureInfo cultureInfo)
 		{
 			var replyOptions = new List<string>() {ReplyOption1, ReplyOption2, ReplyOption3};
 			var addOptions = new List<string>();
@@ -42,16 +42,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 					addOptions.Add(replyOption);
 			}
 			var conversation =
-			SendPushMessageService.CreateConversation(Title, Message, TextReplyAllowed).To(user).From(user).AddReplyOption(addOptions);
-			conversation.SendConversation(new PushMessageRepository(currentUnitOfWork), new PushMessageDialogueRepository(currentUnitOfWork));
+			SendPushMessageService.CreateConversation(Title, Message, TextReplyAllowed).To(person).From(person).AddReplyOption(addOptions);
+			conversation.SendConversation(new PushMessageRepository(unitOfWork), new PushMessageDialogueRepository(unitOfWork));
 
 			if(MyReply!=string.Empty)
 			{
-				currentUnitOfWork.Current().PersistAll();
-				var repository = new PushMessageDialogueRepository(currentUnitOfWork);
+				unitOfWork.Current().PersistAll();
+				var repository = new PushMessageDialogueRepository(unitOfWork);
 				var messageDialogue = repository.LoadAll().First(t => t.PushMessage.GetTitle(new NoFormatting()).Equals(Title));
-				messageDialogue.DialogueReply(MyReply,user);
-				if (SendersReply != string.Empty) messageDialogue.DialogueReply(SendersReply, user);
+				messageDialogue.DialogueReply(MyReply,person);
+				if (SendersReply != string.Empty) messageDialogue.DialogueReply(SendersReply, person);
 			}
 		}
 	}

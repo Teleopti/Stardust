@@ -17,18 +17,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public DateTime StartTime { get; set; }
 		public DateTime EndTime { get; set; }
 
-		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
+		public void Apply(ICurrentUnitOfWork unitOfWork, IPerson person, CultureInfo cultureInfo)
 		{
 			var scenario = DefaultScenario.Scenario;
 
-			var activity = new ActivityRepository(currentUnitOfWork).LoadAll().Single(a => a.Name == Activity);
+			var activity = new ActivityRepository(unitOfWork).LoadAll().Single(a => a.Name == Activity);
 
-			var startTimeUtc = user.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(StartTime);
-			var endTimeUtc = user.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(EndTime);
+			var startTimeUtc = person.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(StartTime);
+			var endTimeUtc = person.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(EndTime);
 
-			var assignment = PersonAssignmentFactory.CreateAssignmentWithPersonalShift(user,
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithPersonalShift(person,
 				scenario, activity, new DateTimePeriod(startTimeUtc, endTimeUtc));
-			var repository = new PersonAssignmentRepository(currentUnitOfWork);
+			var repository = new PersonAssignmentRepository(unitOfWork);
 			repository.Add(assignment);
 		}
 	}

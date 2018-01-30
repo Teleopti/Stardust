@@ -15,14 +15,14 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 	{
 		public ICurrentScenario CurrentScenario { get; set; }
 
-		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
+		public void Apply(ICurrentUnitOfWork unitOfWork, IPerson person, CultureInfo cultureInfo)
 		{
-			var repository = new PersonAbsenceAccountRepository(currentUnitOfWork);
+			var repository = new PersonAbsenceAccountRepository(unitOfWork);
 			var repositoryFactory = new RepositoryFactory();
-			var scheduleRepository = new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork));
+			var scheduleRepository = new ScheduleStorage(unitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new ScheduleStorageRepositoryWrapper(repositoryFactory, unitOfWork));
 			var traceableService = new TraceableRefreshService(CurrentScenario, scheduleRepository);
 			var updater = new PersonAccountUpdater(repository, traceableService);
-			updater.Update(user);
+			updater.Update(person);
 		}
 	}
 }

@@ -12,11 +12,11 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public string Page { get; set; }
 		public string Group { get; set; }
 
-		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
+		public void Apply(ICurrentUnitOfWork unitOfWork, IPerson person, CultureInfo cultureInfo)
 		{
-			var page = new GroupPageRepository(currentUnitOfWork.Current()).LoadAll().Single(p => p.Description.Name == Page);
+			var page = new GroupPageRepository(unitOfWork.Current()).LoadAll().Single(p => p.Description.Name == Page);
 			var group = page.RootGroupCollection.Single(g => g.Name == Group);
-			group.AddPerson(user);
+			group.AddPerson(person);
 		}
 	}
 }

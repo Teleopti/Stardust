@@ -79,36 +79,36 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			return this;
 		}
 
-		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
+		public void Apply(ICurrentUnitOfWork unitOfWork, IPerson person, CultureInfo cultureInfo)
 		{
 			IShiftCategory shiftCategory = null;
 			if (ShiftCategory != null)
 			{
-				shiftCategory = new ShiftCategoryRepository(currentUnitOfWork).LoadAll().Single(sCat => sCat.Description.Name.Equals(ShiftCategory));
+				shiftCategory = new ShiftCategoryRepository(unitOfWork).LoadAll().Single(sCat => sCat.Description.Name.Equals(ShiftCategory));
 				if (ShiftColor != null && shiftCategory != null)
 					shiftCategory.DisplayColor = Color.FromName(ShiftColor);
 			}
 
-			var assignmentRepository = new PersonAssignmentRepository(currentUnitOfWork);
-			var scenario = new ScenarioRepository(currentUnitOfWork).LoadAll().Single(x => x.Description.Name == Scenario);
-			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(user, scenario, new DateOnly(StartTime));
+			var assignmentRepository = new PersonAssignmentRepository(unitOfWork);
+			var scenario = new ScenarioRepository(unitOfWork).LoadAll().Single(x => x.Description.Name == Scenario);
+			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, scenario, new DateOnly(StartTime));
 			personAssignment.SetShiftCategory(shiftCategory);
 
 			_activities.ForEach(a =>
 			{
-				var timeZone = user.PermissionInformation.DefaultTimeZone();
+				var timeZone = person.PermissionInformation.DefaultTimeZone();
 				var startTimeUtc = timeZone.SafeConvertTimeToUtc(a.StartTime);
 				var endTimeUtc = timeZone.SafeConvertTimeToUtc(a.EndTime);
 				var period = new DateTimePeriod(startTimeUtc, endTimeUtc);
 				IActivity activity;
 				if (a.Activity != null)
 				{
-					activity = new ActivityRepository(currentUnitOfWork).LoadAll().Single(sCat => sCat.Description.Name.Equals(a.Activity));
+					activity = new ActivityRepository(unitOfWork).LoadAll().Single(sCat => sCat.Description.Name.Equals(a.Activity));
 				}
 				else
 				{
 					activity = new Activity(RandomName.Make()) { DisplayColor = Color.FromKnownColor(KnownColor.Green) };
-					var activityRepository = new ActivityRepository(currentUnitOfWork);
+					var activityRepository = new ActivityRepository(unitOfWork);
 					activityRepository.Add(activity);
 				}
 				if (a.IsPersonal)

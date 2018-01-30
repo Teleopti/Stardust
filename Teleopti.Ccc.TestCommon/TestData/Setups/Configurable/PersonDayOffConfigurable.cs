@@ -16,15 +16,15 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public string Name { get; set; }
 		public DateTime Date { get; set; }
 
-		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
+		public void Apply(ICurrentUnitOfWork unitOfWork, IPerson person, CultureInfo cultureInfo)
 		{
-			var scenario = new ScenarioRepository(currentUnitOfWork).LoadAll().Single(abs => abs.Description.Name.Equals(Scenario));
-			var dayOff = new DayOffTemplateRepository(currentUnitOfWork).LoadAll().Single(dayOffTemplate => dayOffTemplate.Description.Name.Equals(Name));
+			var scenario = new ScenarioRepository(unitOfWork).LoadAll().Single(abs => abs.Description.Name.Equals(Scenario));
+			var dayOff = new DayOffTemplateRepository(unitOfWork).LoadAll().Single(dayOffTemplate => dayOffTemplate.Description.Name.Equals(Name));
 
-			var personDayOff = new PersonAssignment(user, scenario, new DateOnly(Date));
+			var personDayOff = new PersonAssignment(person, scenario, new DateOnly(Date));
 			personDayOff.SetDayOff(dayOff);
 
-			var repository = new PersonAssignmentRepository(currentUnitOfWork);
+			var repository = new PersonAssignmentRepository(unitOfWork);
 			
 			repository.Add(personDayOff);
 		}

@@ -13,9 +13,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 
 		protected abstract string CategoryName();
 
-		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
+		public void Apply(ICurrentUnitOfWork unitOfWork, IPerson person, CultureInfo cultureInfo)
 		{
-			new ShiftCategoryRepository(currentUnitOfWork).Add(ShiftCategory);
+			new ShiftCategoryRepository(unitOfWork).Add(ShiftCategory);
 		}
 	}
 }

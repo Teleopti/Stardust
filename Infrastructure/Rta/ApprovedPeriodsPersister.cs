@@ -13,9 +13,10 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			_unitOfWork = unitOfWork;
 		}
 
-		public void Persist(ApprovedPeriodModel model)
+		public void Persist(ApprovedPeriod model)
 		{
-			_unitOfWork.Current().Session().CreateSQLQuery(@"
+			_unitOfWork.Current().Session()
+				.CreateSQLQuery(@"
 INSERT INTO [rta].[ApprovedPeriods]
 (
 	PersonId,

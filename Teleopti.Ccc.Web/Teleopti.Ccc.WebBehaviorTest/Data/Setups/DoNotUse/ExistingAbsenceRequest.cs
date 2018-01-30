@@ -18,20 +18,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 		public PersonRequest PersonRequest;
 		public AbsenceRequest AbsenceRequest;
 
-		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
+		public void Apply(ICurrentUnitOfWork unitOfWork, IPerson person, CultureInfo cultureInfo)
 		{
 			
 			var today = DateTime.UtcNow.Date;
 
-			var absenceRepository = new AbsenceRepository(currentUnitOfWork);
+			var absenceRepository = new AbsenceRepository(unitOfWork);
 			var absence = AbsenceFactory.CreateAbsence(RandomName.Make(), RandomName.Make(), Color.FromArgb(210, 150, 150));
 			absenceRepository.Add(absence);
 
 			AbsenceRequest = new AbsenceRequest(absence, new DateTimePeriod(today, today.AddHours(5)));
-			PersonRequest = new PersonRequest(user, AbsenceRequest) {Subject = "I need some vacation"};
+			PersonRequest = new PersonRequest(person, AbsenceRequest) {Subject = "I need some vacation"};
 			PersonRequest.TrySetMessage("This is just a short text that doesn't say anything, except explaining that it doesn't say anything");
 
-			var requestRepository = new PersonRequestRepository(currentUnitOfWork);
+			var requestRepository = new PersonRequestRepository(unitOfWork);
 
 			requestRepository.Add(PersonRequest);
 		}
@@ -42,21 +42,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 		public PersonRequest PersonRequest;
 		public AbsenceRequest AbsenceRequest;
 
-		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
+		public void Apply(ICurrentUnitOfWork unitOfWork, IPerson person, CultureInfo cultureInfo)
 		{
 			var today = DateTime.UtcNow.Date;
 
-			var absenceRepository = new AbsenceRepository(currentUnitOfWork);
+			var absenceRepository = new AbsenceRepository(unitOfWork);
 			var absence = AbsenceFactory.CreateAbsence(RandomName.Make(), RandomName.Make(), Color.FromArgb(210, 150, 150));
 			absenceRepository.Add(absence);
 			
 			AbsenceRequest = new AbsenceRequest(absence, new DateTimePeriod(today, today.AddHours(5)));
-			PersonRequest = new PersonRequest(user, AbsenceRequest) { Subject = "I need some vacation" };
+			PersonRequest = new PersonRequest(person, AbsenceRequest) { Subject = "I need some vacation" };
 			PersonRequest.TrySetMessage("This is just a short text that doesn't say anything, except explaining that it doesn't say anything");
 			PersonRequest.Pending();
 			PersonRequest.Approve(new ApprovalServiceForTest(), new PersonRequestAuthorizationCheckerForTest());
 
-			var requestRepository = new PersonRequestRepository(currentUnitOfWork);
+			var requestRepository = new PersonRequestRepository(unitOfWork);
 
 			requestRepository.Add(PersonRequest);
 		}
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			_denyReason = denyReason;
 		}
 
-		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
+		public void Apply(ICurrentUnitOfWork unitOfWork, IPerson person, CultureInfo cultureInfo)
 		{
 			var today = DateTime.UtcNow.Date;
 			IAbsence absence;
@@ -91,13 +91,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			}
 			else
 			{
-				var absenceRepository = new AbsenceRepository(currentUnitOfWork);
+				var absenceRepository = new AbsenceRepository(unitOfWork);
 				absence = AbsenceFactory.CreateAbsence(RandomName.Make(), RandomName.Make(), Color.FromArgb(210, 150, 150));
 				absenceRepository.Add(absence);
 			}
 
 			AbsenceRequest = new AbsenceRequest(absence, new DateTimePeriod(today, today.AddHours(5)));
-			PersonRequest = new PersonRequest(user, AbsenceRequest) { Subject = "I need some vacation" };
+			PersonRequest = new PersonRequest(person, AbsenceRequest) { Subject = "I need some vacation" };
 			PersonRequest.TrySetMessage("This is just a short text that doesn't say anything, except explaining that it doesn't say anything");
 			PersonRequestDenyOption denyOption = PersonRequestDenyOption.AutoDeny;
 			if (!_isAutoDenied)
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			}
 			PersonRequest.Deny(_denyReason, new PersonRequestAuthorizationCheckerForTest(), null, denyOption);
 
-			var requestRepository = new PersonRequestRepository(currentUnitOfWork);
+			var requestRepository = new PersonRequestRepository(unitOfWork);
 
 			requestRepository.Add(PersonRequest);
 		}

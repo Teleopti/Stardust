@@ -19,16 +19,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 
 		public string SharingUrl { get; set; }
 
-		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
+		public void Apply(ICurrentUnitOfWork unitOfWork, IPerson person, CultureInfo cultureInfo)
 		{
-			var personalSettingDataRepository = new PersonalSettingDataRepository(currentUnitOfWork);
+			var personalSettingDataRepository = new PersonalSettingDataRepository(unitOfWork);
 			var setting = personalSettingDataRepository.FindValueByKey("CalendarLinkSettings", new CalendarLinkSettings());
 			setting.IsActive = IsActive;
 			SharingUrl = TestSiteConfigurationSetup.URL + "MyTime/Share?id=" +
 								  HttpServerUtility.UrlTokenEncode(
-									  Encryption.EncryptStringToBytes("TestData" + "/" + user.Id.Value, EncryptionConstants.Image1, EncryptionConstants.Image2)) + "&type=text/plain";
+									  Encryption.EncryptStringToBytes("TestData" + "/" + person.Id.Value, EncryptionConstants.Image1, EncryptionConstants.Image2)) + "&type=text/plain";
 
-			var personalSettingData = new PersonalSettingData("CalendarLinkSettings", user);
+			var personalSettingData = new PersonalSettingData("CalendarLinkSettings", person);
 			personalSettingData.SetValue(setting);
 			var setOwnerMethod = typeof(CalendarLinkSettings).GetMethod("SetOwner", BindingFlags.Instance | BindingFlags.NonPublic,
 			                                        Type.DefaultBinder, new[] {typeof (ISettingData)}, null);

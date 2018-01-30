@@ -8,6 +8,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 	public class TimeStepDefinitions
 	{
 		[Given(@"the time is '(.*)'")]
+		[Given(@"time is '(.*)'")]
 		[Given(@"the utc time is '(.*)'")]
 		[When(@"the time is '(.*)'")]
 		[When(@"the utc time is '(.*)'")]
@@ -16,7 +17,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		{
 			CurrentTime.Set(time);
 		}
-
+		
 		[Given(@"today is '(.*)'")]
 		public void GivenTodayIs(string date)
 		{

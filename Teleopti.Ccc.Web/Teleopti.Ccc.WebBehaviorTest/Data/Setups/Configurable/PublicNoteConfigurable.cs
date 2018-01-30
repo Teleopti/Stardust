@@ -15,11 +15,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public DateTime Date { get; set; }
 		public string NoteText { get; set; }
 
-		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
+		public void Apply(ICurrentUnitOfWork unitOfWork, IPerson person, CultureInfo cultureInfo)
 		{
 			var scenario = DefaultScenario.Scenario;
-			var publicNoteRepository = new PublicNoteRepository(currentUnitOfWork);
-			publicNoteRepository.Add(new PublicNote(user, new DateOnly(Date), scenario, NoteText));
+			var publicNoteRepository = new PublicNoteRepository(unitOfWork);
+			publicNoteRepository.Add(new PublicNote(person, new DateOnly(Date), scenario, NoteText));
 		}
 	}
 }

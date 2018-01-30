@@ -7,14 +7,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeApprovedPeriodsStorage : IApprovedPeriodsReader
 	{
-		private readonly IList<ApprovedPeriodModel> _data = new List<ApprovedPeriodModel>();
+		private readonly IList<ApprovedPeriod> _data = new List<ApprovedPeriod>();
 
-		public void Has(ApprovedPeriodModel approvedPeriodModel)
+		public void Has(ApprovedPeriod approvedPeriod)
 		{
-			_data.Add(approvedPeriodModel);
+			_data.Add(approvedPeriod);
 		}
 
-		public IEnumerable<ApprovedPeriodModel> Read(Guid personId, DateTime startTime, DateTime endTime)
+		public IEnumerable<ApprovedPeriod> Read(Guid personId, DateTime startTime, DateTime endTime)
 		{
 			return _data
 				.Where(x => x.PersonId == personId && x.StartTime >= startTime && x.EndTime <= endTime)

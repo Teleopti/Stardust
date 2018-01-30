@@ -1071,7 +1071,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		[UnitOfWork]
 		public virtual FakeDatabase WithApprovedPeriods(string startTime, string endTime)
 		{
-			_approvedPeriods.Has(new ApprovedPeriodModel
+			_approvedPeriods.Has(new ApprovedPeriod
 			{
 				PersonId = _person.Id.Value,
 				StartTime = startTime.Utc(),

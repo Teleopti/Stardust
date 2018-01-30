@@ -19,22 +19,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 		public int Hours { get; set; }
 		public string Absence { get; set; }
 		
-		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
+		public void Apply(ICurrentUnitOfWork unitOfWork, IPerson person, CultureInfo cultureInfo)
 		{
 			var scenario = DefaultScenario.Scenario;
 			var scenarioId = scenario.Id.GetValueOrDefault();
 
-			var absenceRepository = new AbsenceRepository(currentUnitOfWork);
+			var absenceRepository = new AbsenceRepository(unitOfWork);
 			var absence = absenceRepository.LoadAll().Single(a=>a.Name==Absence);
 
-			var scheduleProjectionReadOnlyRepository = new ScheduleProjectionReadOnlyPersister(currentUnitOfWork);
+			var scheduleProjectionReadOnlyRepository = new ScheduleProjectionReadOnlyPersister(unitOfWork);
 
 			var period =
-				new DateOnlyPeriod(new DateOnly(Date), new DateOnly(Date)).ToDateTimePeriod(user.PermissionInformation.DefaultTimeZone());
+				new DateOnlyPeriod(new DateOnly(Date), new DateOnly(Date)).ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
 			
 			var model = new ScheduleProjectionReadOnlyModel
 			{
-				PersonId = user.Id.GetValueOrDefault(),
+				PersonId = person.Id.GetValueOrDefault(),
 				ScenarioId = scenarioId,
 				BelongsToDate = new DateOnly(Date),
 				PayloadId = absence.Id.GetValueOrDefault(),

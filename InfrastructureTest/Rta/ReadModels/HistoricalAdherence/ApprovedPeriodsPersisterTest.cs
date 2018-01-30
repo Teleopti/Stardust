@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.HistoricalAdherence
 		{
 			var personId = Guid.NewGuid();
 
-			Target.Persist(new ApprovedPeriodModel
+			Target.Persist(new ApprovedPeriod
 			{
 				PersonId = personId,
 				StartTime = "2018-01-30 15:00".Utc(),

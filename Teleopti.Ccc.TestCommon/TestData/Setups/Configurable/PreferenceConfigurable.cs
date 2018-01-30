@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public string WorkTimeMinimum { get; set; }
 		public string WorkTimeMaximum { get; set; }
 
-		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
+		public void Apply(ICurrentUnitOfWork unitOfWork, IPerson person, CultureInfo cultureInfo)
 		{
 			if (Preference != null)
 				ShiftCategory = Preference;
@@ -38,21 +38,21 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			}
 			if (ShiftCategory != null)
 			{
-				var shiftCategoryRepository = new ShiftCategoryRepository(currentUnitOfWork);
+				var shiftCategoryRepository = new ShiftCategoryRepository(unitOfWork);
 				var shiftCategory = shiftCategoryRepository.LoadAll().Single(b => b.Description.Name == ShiftCategory);
 				restriction.ShiftCategory = shiftCategory;
 			}
 
 			if (Dayoff != null)
 			{
-				var dayOffRepository = new DayOffTemplateRepository(currentUnitOfWork);
+				var dayOffRepository = new DayOffTemplateRepository(unitOfWork);
 				var dayOffTemplate = dayOffRepository.LoadAll().Single(b => b.Description.Name == Dayoff);
 				restriction.DayOffTemplate = dayOffTemplate;
 			}
 
 			if (Absence != null)
 			{
-				var absenceRepository = new AbsenceRepository(currentUnitOfWork);
+				var absenceRepository = new AbsenceRepository(unitOfWork);
 				var absence = absenceRepository.LoadAll().Single(b => b.Description.Name == Absence);
 				restriction.Absence = absence;
 			}
@@ -62,9 +62,9 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			if (WorkTimeMinimum != null || WorkTimeMaximum != null)
 				restriction.WorkTimeLimitation = new WorkTimeLimitation(toNullableTimeSpan(WorkTimeMinimum), toNullableTimeSpan(WorkTimeMaximum));
 
-			var preferenceDay = new PreferenceDay(user, new DateOnly(Date), restriction);
+			var preferenceDay = new PreferenceDay(person, new DateOnly(Date), restriction);
 
-			var preferenceDayRepository = new PreferenceDayRepository(currentUnitOfWork);
+			var preferenceDayRepository = new PreferenceDayRepository(unitOfWork);
 			preferenceDayRepository.Add(preferenceDay);
 		}
 

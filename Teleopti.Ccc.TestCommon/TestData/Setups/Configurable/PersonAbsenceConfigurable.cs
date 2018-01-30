@@ -16,15 +16,15 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public DateTime StartTime { get; set; }
 		public DateTime EndTime { get; set; }
 
-		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
+		public void Apply(ICurrentUnitOfWork unitOfWork, IPerson person, CultureInfo cultureInfo)
 		{
-			var scenario = new ScenarioRepository(currentUnitOfWork).LoadAll().Single(abs => abs.Description.Name.Equals(Scenario));
-			var absence = new AbsenceRepository(currentUnitOfWork).LoadAll().Single(abs => abs.Description.Name.Equals(Name));
+			var scenario = new ScenarioRepository(unitOfWork).LoadAll().Single(abs => abs.Description.Name.Equals(Scenario));
+			var absence = new AbsenceRepository(unitOfWork).LoadAll().Single(abs => abs.Description.Name.Equals(Name));
 
 			var personAbsence = new PersonAbsence(scenario);
-			personAbsence.AddExplicitAbsence(user, absence, StartTime, EndTime);
+			personAbsence.AddExplicitAbsence(person, absence, StartTime, EndTime);
 
-			var repository = new PersonAbsenceRepository(currentUnitOfWork);
+			var repository = new PersonAbsenceRepository(unitOfWork);
 			repository.Add(personAbsence);
 		}
 	}

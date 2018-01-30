@@ -2,6 +2,6 @@
 {
 	public interface IApprovedPeriodsPersister
 	{
-		void Persist(ApprovedPeriodModel model);
+		void Persist(ApprovedPeriod model);
 	}
 }

@@ -22,18 +22,18 @@ namespace Teleopti.Ccc.TestCommon.TestData
 		public DateTime EndTime { get; set; }
 
 
-		public void Apply(ICurrentUnitOfWork currentUnitOfWork, IPerson user, CultureInfo cultureInfo)
+		public void Apply(ICurrentUnitOfWork unitOfWork, IPerson person, CultureInfo cultureInfo)
 		{
 			var activity = new Activity(RandomName.Make()) { DisplayColor = Color.FromKnownColor(KnownColor.Purple) };
-			var activityRepository = new ActivityRepository(currentUnitOfWork);
+			var activityRepository = new ActivityRepository(unitOfWork);
 			activityRepository.Add(activity);
 			
 			if (Scenario == null)
 				Scenario = DefaultScenario.Scenario;
 			
 
-			var meeting = new Meeting(user,
-									  new[] { new MeetingPerson(user, false) },
+			var meeting = new Meeting(person,
+									  new[] { new MeetingPerson(person, false) },
 									  Subject, Location, Description ?? String.Empty,
 									  activity, Scenario)
 			{
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.TestCommon.TestData
 				StartTime = StartTime.TimeOfDay,
 				EndTime = EndTime.TimeOfDay
 			};
-			var repository = new MeetingRepository(currentUnitOfWork);
+			var repository = new MeetingRepository(unitOfWork);
 			repository.Add(meeting);
 		}
 	}

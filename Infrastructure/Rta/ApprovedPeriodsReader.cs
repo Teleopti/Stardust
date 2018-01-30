@@ -17,12 +17,12 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			_unitOfWork = unitOfWork;
 		}
 
-		public IEnumerable<ApprovedPeriodModel> Read(Guid personId, DateTime startTime, DateTime endTime)
+		public IEnumerable<ApprovedPeriod> Read(Guid personId, DateTime startTime, DateTime endTime)
 		{
 			return _unitOfWork.Current().Session()
 				.CreateSQLQuery(@"SELECT * FROM [rta].[ApprovedPeriods]")
-				.SetResultTransformer(Transformers.AliasToBean<ApprovedPeriodModel>())
-				.List<ApprovedPeriodModel>();
+				.SetResultTransformer(Transformers.AliasToBean<ApprovedPeriod>())
+				.List<ApprovedPeriod>();
 		}
 	}
 }
