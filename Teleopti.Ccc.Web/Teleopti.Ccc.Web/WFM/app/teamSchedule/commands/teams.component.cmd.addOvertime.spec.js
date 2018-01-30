@@ -49,7 +49,11 @@
 			PersonId: '7c25f4ae-96ea-409e-b959-2c02587c649e',
 			Name: 'Bill',
 			Checked: true,
+			OrderIndex: 0,
 			AllowSwap: false,
+			IsDayOff: false,
+			IsEmptyDay: false,
+			IsFullDayAbsence: false,
 			ScheduleStartTime: '2018-01-23T08:00:00',
 			ScheduleEndTime: '2018-01-23T17:00:00',
 			SelectedAbsences: [],
@@ -73,7 +77,11 @@
 			PersonId: '7c25f4ae-96ea-409e-b959-2c02587c649e',
 			Name: 'Bill',
 			Checked: true,
+			OrderIndex: 0,
 			AllowSwap: false,
+			IsDayOff: false,
+			IsEmptyDay: false,
+			IsFullDayAbsence: false,
 			ScheduleStartTime: '2018-01-23T08:00:00',
 			ScheduleEndTime: '2018-01-23T17:00:00',
 			SelectedAbsences: [],
@@ -96,6 +104,7 @@
 			PersonId: '7c25f4ae-96ea-409e-b959-2c02587c649e',
 			Name: 'Bill',
 			Checked: true,
+			OrderIndex: 0,
 			AllowSwap: false,
 			IsDayOff: true,
 			IsEmptyDay: false,
@@ -129,6 +138,7 @@
 			PersonId: '7c25f4ae-96ea-409e-b959-2c02587c649e',
 			Name: 'Bill',
 			Checked: true,
+			OrderIndex: 0,
 			AllowSwap: false,
 			IsDayOff: false,
 			IsEmptyDay: true,
@@ -156,6 +166,7 @@
 			PersonId: '7c25f4ae-96ea-409e-b959-2c02587c649e',
 			Name: 'Bill',
 			Checked: true,
+			OrderIndex: 0,
 			AllowSwap: false,
 			IsDayOff: false,
 			IsEmptyDay: false,
@@ -178,26 +189,34 @@
 		expect(moment(result.commandControl.toTime).format('YYYY-MM-DD HH:mm')).toEqual(moment('2018-01-23 17:00:00').format('YYYY-MM-DD HH:mm'));
 	});
 
-	it('should use first selected agent\'s shift end time as default start time', function () {
+	it('should get default overtime period based on the person schedule of top most agent', function () {
 		var personInfoList = [{
 			PersonId: '7c25f4ae-96ea-409e-b959-2c02587c649e',
 			Name: 'Bill',
 			Checked: true,
+			OrderIndex: 1,
 			AllowSwap: false,
-			ScheduleStartTime: '2018-01-23T08:00:00',
-			ScheduleEndTime: '2018-01-23T16:00:00',
+			IsDayOff: false,
+			IsEmptyDay: true,
+			IsFullDayAbsence: false,
+			ScheduleStartTime: '2018-01-23T00:00:00',
+			ScheduleEndTime: '2018-01-23T23:59:00',
 			SelectedAbsences: [],
-			SelectedActivities: ['472e02c8-1a84-4064-9a3b-9b5e015ab3c6'],
+			SelectedActivities: [],
 			Timezone: {
 				IanaId: "Asia/Shanghai",
 				DisplayName: "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi"
 			},
 			SelectedDayOffs: []
 		}, {
-			PersonId: '56a1fbbc-61f1-4dd8-9a5b-45b98d9aa72f',
-			Name: 'John',
+			PersonId: 'c1a6918a-94ea-415d-9e34-26d96e469bd9',
+			Name: 'Ashely',
 			Checked: true,
+			OrderIndex: 0,
 			AllowSwap: false,
+			IsDayOff: false,
+			IsEmptyDay: false,
+			IsFullDayAbsence: false,
 			ScheduleStartTime: '2018-01-23T08:00:00',
 			ScheduleEndTime: '2018-01-23T17:00:00',
 			SelectedAbsences: [],
@@ -212,7 +231,8 @@
 		fakePersonSelectionService.setFakeCheckedPersonInfoList(personInfoList);
 		var result = setUp();
 
-		expect(moment(result.commandControl.fromTime).format('YYYY-MM-DD HH:mm')).toEqual(moment('2018-01-23 16:00:00').format('YYYY-MM-DD HH:mm'));
+		expect(moment(result.commandControl.fromTime).format('YYYY-MM-DD HH:mm')).toEqual(moment('2018-01-23 17:00:00').format('YYYY-MM-DD HH:mm'));
+		expect(moment(result.commandControl.toTime).format('YYYY-MM-DD HH:mm')).toEqual(moment('2018-01-23 18:00:00').format('YYYY-MM-DD HH:mm'));
 	});
 
 	function setUp(inputDate) {

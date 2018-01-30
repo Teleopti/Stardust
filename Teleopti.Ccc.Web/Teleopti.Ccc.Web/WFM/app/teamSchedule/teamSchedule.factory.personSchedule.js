@@ -49,10 +49,10 @@
 			};
 		}
 
-		function create(schedule, timeLine) {
+		function create(schedule, timeLine, index) {
 			if (!schedule) schedule = {};
 
-			var personSchedule = new PersonSchedule(schedule, timeLine);
+			var personSchedule = new PersonSchedule(schedule, timeLine, index);
 
 			var shiftVm = new ShiftViewModel(schedule, personSchedule, timeLine);
 			var projectionVms = createProjections(schedule.Projection, timeLine, shiftVm);
@@ -225,7 +225,8 @@
 			return Math.floor(minutes / 60) + ':' + (minutes % 60 === 0 ? '00':minutes%60);
 		}
 
-		function PersonSchedule(schedule, timeLine) {
+		function PersonSchedule(schedule, timeLine, index) {
+			this.Index = index;
 			this.ContractTime = formatContractTimeMinutes(schedule.ContractTimeMinutes);
 			this.Date = schedule.Date;
 			this.DayOffs = [];

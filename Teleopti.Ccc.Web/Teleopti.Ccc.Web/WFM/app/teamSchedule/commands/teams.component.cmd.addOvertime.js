@@ -110,19 +110,25 @@
 		};
 
 		function getDefaultStartTime() {
-			var firstSelectedAgent = ctrl.selectedAgents[0];
-			if (firstSelectedAgent.IsDayOff || firstSelectedAgent.IsEmptyDay || firstSelectedAgent.IsFullDayAbsence) {
-				return moment(firstSelectedAgent.ScheduleStartTime.split('T')[0]).hour(defaultWorkStartInHour).toDate();
+			var basedOnAgentInfo = getAgentInfoOnTheTop();
+			if (basedOnAgentInfo.IsDayOff || basedOnAgentInfo.IsEmptyDay || basedOnAgentInfo.IsFullDayAbsence) {
+				return moment(basedOnAgentInfo.ScheduleStartTime.split('T')[0]).hour(defaultWorkStartInHour).toDate();
 			}
-			return moment(firstSelectedAgent.ScheduleEndTime).toDate();
+			return moment(basedOnAgentInfo.ScheduleEndTime).toDate();
 		}
 
 		function getEndTime() {
-			var firstSelectedAgent = ctrl.selectedAgents[0];
-			if (firstSelectedAgent.IsDayOff || firstSelectedAgent.IsEmptyDay || firstSelectedAgent.IsFullDayAbsence) {
-				return moment(firstSelectedAgent.ScheduleStartTime.split('T')[0]).hour(defaultWorkEndInHour).toDate();
+			var basedOnAgentInfo = getAgentInfoOnTheTop();
+			if (basedOnAgentInfo.IsDayOff || basedOnAgentInfo.IsEmptyDay || basedOnAgentInfo.IsFullDayAbsence) {
+				return moment(basedOnAgentInfo.ScheduleStartTime.split('T')[0]).hour(defaultWorkEndInHour).toDate();
 			}
-			return moment(firstSelectedAgent.ScheduleEndTime).add(1, 'hours').toDate();
+			return moment(basedOnAgentInfo.ScheduleEndTime).add(1, 'hours').toDate();
+		}
+
+		function getAgentInfoOnTheTop() {
+			return angular.copy(ctrl.selectedAgents).sort(function (a1, a2) {
+				return a1.OrderIndex - a2.OrderIndex;
+			})[0];
 		}
 
 		function prepareRequestData(validAgents) {

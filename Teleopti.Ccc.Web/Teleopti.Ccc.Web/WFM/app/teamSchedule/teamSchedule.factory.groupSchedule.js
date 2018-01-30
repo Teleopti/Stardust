@@ -33,10 +33,10 @@ function GroupScheduleFactoryFn(timeLineFactory, personSchedule) {
 		var existedSchedulesDictionary = {};
 		var schedules = [];
 
-		groupSchedules.forEach(function(schedule) {
+		groupSchedules.forEach(function(schedule, index) {
 			var existedPersonSchedule = existedSchedulesDictionary[schedule.PersonId];
 			if (existedPersonSchedule == null) {
-				var personScheduleVm = personSchedule.Create(schedule, timeLine);
+				var personScheduleVm = personSchedule.Create(schedule, timeLine, index);
 				existedSchedulesDictionary[schedule.PersonId] = personScheduleVm;
 				schedules.push(personScheduleVm);
 			} else {

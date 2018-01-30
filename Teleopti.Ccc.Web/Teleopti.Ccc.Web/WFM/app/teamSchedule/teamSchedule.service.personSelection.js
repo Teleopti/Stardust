@@ -70,6 +70,7 @@
 					personSchedule.IsSelected = false;
 
 				if (svc.personInfo[personId]) {
+					svc.personInfo[personId].OrderIndex = personSchedule.Index;
 					svc.personInfo[personId].Timezone = personSchedule.Timezone;
 					svc.personInfo[personId].ScheduleEndTime = personSchedule.ScheduleEndTime();
 					svc.personInfo[personId].AllowSwap = personSchedule.AllowSwap();
@@ -312,6 +313,7 @@
 			PersonId: personSchedule.PersonId,
 			Name: personSchedule.Name,
 			Checked: true,
+			OrderIndex: personSchedule.Index,
 			AllowSwap: personSchedule.AllowSwap(),
 			IsDayOff: personSchedule.DayOffs && personSchedule.DayOffs.length > 0,
 			IsEmptyDay: (!absences || absences.length == 0) && (!activities || activities.length == 0) && (!personSchedule.DayOffs || personSchedule.DayOffs.length == 0),
