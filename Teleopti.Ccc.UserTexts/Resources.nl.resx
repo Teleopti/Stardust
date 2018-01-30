@@ -355,7 +355,7 @@
     <value>Dag</value>
   </data>
   <data name="TeleoptiRaptorColonIntraday" xml:space="preserve">
-    <value>Intraday - Teleopti CCC</value>
+    <value>Intraday - Teleopti WFM</value>
   </data>
   <data name="OptimizeDayOffs" xml:space="preserve">
     <value>Optimaliseer Vrije Dagen</value>
@@ -837,7 +837,7 @@ Verminder de complexiteit om deze diensten gebruiken.</value>
     <value>Team View</value>
   </data>
   <data name="TeleoptiRaptorColonScheduler" xml:space="preserve">
-    <value>Schedules - Teleopti CCC</value>
+    <value>Schedules - Teleopti WFM</value>
   </data>
   <data name="Unlock" xml:space="preserve">
     <value>Ontblokken</value>
@@ -867,7 +867,7 @@ Verminder de complexiteit om deze diensten gebruiken.</value>
     <value>Scorekaart Voorbeeld</value>
   </data>
   <data name="AgentScheduleMessenger" xml:space="preserve">
-    <value>Teleopti CCC Agent Schedule Messenger</value>
+    <value>Teleopti WFM Agent Schedule Messenger</value>
   </data>
   <data name="WeekView" xml:space="preserve">
     <value>Weekweergave</value>
@@ -1691,7 +1691,7 @@ Error bericht: {0}</value>
     <value>Agent info...</value>
   </data>
   <data name="AgentPortal" xml:space="preserve">
-    <value>Teleopti CCC My Time</value>
+    <value>Teleopti WFM My Time</value>
   </data>
   <data name="Agents" xml:space="preserve">
     <value>Agenten</value>
@@ -2967,10 +2967,10 @@ Datum</value>
     <value>Teamleden</value>
   </data>
   <data name="TeleoptiRaptorColonForecaster" xml:space="preserve">
-    <value>Forecasts - Teleopti CCC</value>
+    <value>Forecasts - Teleopti WFM</value>
   </data>
   <data name="TeleoptiRaptorColonMainNavigation" xml:space="preserve">
-    <value>Teleopti CCC: Hoofdportal</value>
+    <value>Teleopti WFM: Hoofdportal</value>
   </data>
   <data name="Template" xml:space="preserve">
     <value>Template</value>
@@ -4069,7 +4069,7 @@ Kolommen</value>
     <value>Auto Positie</value>
   </data>
   <data name="ExitTELEOPTICCC" xml:space="preserve">
-    <value>Exit Teleopti CCC</value>
+    <value>Exit Teleopti WFM</value>
   </data>
   <data name="Find" xml:space="preserve">
     <value>Zoeken</value>
@@ -4285,7 +4285,7 @@ Kolommen</value>
     <value>Rapporten</value>
   </data>
   <data name="OpenTeleoptiCCC" xml:space="preserve">
-    <value>Teleopti CCC</value>
+    <value>Teleopti WFM</value>
   </data>
   <data name="PartTimePercentageLower" xml:space="preserve">
     <value>Deeltijd percentage</value>
@@ -4336,7 +4336,7 @@ Kolommen</value>
     <value>Windows logon</value>
   </data>
   <data name="TeleoptiRaptorColonPeople" xml:space="preserve">
-    <value>People - Teleopti CCC</value>
+    <value>People - Teleopti WFM</value>
   </data>
   <data name="DecreaseDecimals" xml:space="preserve">
     <value>Verlaag decimalen</value>
@@ -4372,10 +4372,10 @@ Kolommen</value>
     <value>Permissies</value>
   </data>
   <data name="OpenRaptorApplication" xml:space="preserve">
-    <value>Open Teleopti CCC</value>
+    <value>Open Teleopti WFM</value>
   </data>
   <data name="TeleoptiRaptorColonPermissions" xml:space="preserve">
-    <value>Permissies - Teleopti CCC</value>
+    <value>Permissies - Teleopti WFM</value>
   </data>
   <data name="GapExists" xml:space="preserve">
     <value>Gap bestaat bij {0}. Alle lagen moeten grenzend zijn aan, of kruisende, andere laag</value>
@@ -4390,7 +4390,7 @@ Kolommen</value>
     <value>Nieuwe Regelset</value>
   </data>
   <data name="TeleoptiRaptorColonShifts" xml:space="preserve">
-    <value>Diensten - Teleopti CCC</value>
+    <value>Diensten - Teleopti WFM</value>
   </data>
   <data name="LessThanRuleSetNameGreaterThan" xml:space="preserve">
     <value>&lt; Regelset naam &gt;</value>
@@ -6291,7 +6291,7 @@ Export payroll data</value>
     <value>Pagina {0} van {1}</value>
   </data>
   <data name="PoweredByTeleoptCCC" xml:space="preserve">
-    <value>Powered by TeleoptiCCC</value>
+    <value>Powered by Teleopti WFM</value>
   </data>
   <data name="ReportLevelDetailLunch" xml:space="preserve">
     <value>Lunch</value>
@@ -6540,13 +6540,13 @@ Export payroll data</value>
     <value>Support email adres</value>
   </data>
   <data name="UnhandledExceptionMessage" xml:space="preserve">
-    <value>Teleopti CCC heeft een probleem gevonden en moet sluiten. Onze excuses voor het ongemak. Als u ergens mee bezig was, er is een kans dat de gegevens waaraan U in werkte verloren zijn.
+    <value>Teleopti WFM heeft een probleem gevonden en moet sluiten. Onze excuses voor het ongemak. Als u ergens mee bezig was, er is een kans dat de gegevens waaraan U in werkte verloren zijn.
 
 In orde om ons waardevolle informatie over deze fout geven, vragen wij U dit door te melden door op de "Stuur een e-mail rapport" te klikken, een toets hieronder. Dit zal Uw standaard e-mail programma openen. Vermeld ook het volgende:
 
 1. Stap voor stap op hoe de error te reproduceren
 2. Informatie over welke data U werkte
-3. Screenshot van de error met Teleopti CCC op de achtergrond
+3. Screenshot van de error met Teleopti WFM op de achtergrond
 
 U kunt ook de tekst van de foutbericht kopiëren naar het klembord en in het e-mail lichaam plakken.
 
@@ -6707,7 +6707,7 @@ Weekdag</value>
 2. Informatie over welke data u werkte:
 
 
-3. Screenshot van de error met Teleopti CCC op de achtergrond:
+3. Screenshot van de error met Teleopti WFM op de achtergrond:
 
 
 Dank U
@@ -6921,7 +6921,7 @@ Teleopti R &amp; D</value>
     <value>Business behoeften</value>
   </data>
   <data name="TeleoptiCCCColonModuleColonFromToDateScenarioColon" xml:space="preserve">
-    <value>{0} – Teleopti CCC: {1} – {2} Scenario: {3} </value>
+    <value>{0} – Teleopti WFM: {1} – {2} Scenario: {3} </value>
   </data>
   <data name="OpenFile" xml:space="preserve">
     <value>Open bestand</value>
@@ -6972,10 +6972,10 @@ Teleopti R &amp; D</value>
     <value>Geen verbinding met broker bericht</value>
   </data>
   <data name="CheckSystemOk" xml:space="preserve">
-    <value>Teleopti CCC - Systeem ok</value>
+    <value>Teleopti WFM - Systeem ok</value>
   </data>
   <data name="CheckSystemWarning" xml:space="preserve">
-    <value>Teleopti CCC - Systeem waarschuwing</value>
+    <value>Teleopti WFM - Systeem waarschuwing</value>
   </data>
   <data name="DayOfWeekCapital" xml:space="preserve">
     <value>Dag Van de Week </value>

@@ -16774,7 +16774,7 @@ Do you want to participate?</value>
   <data name="ExitSGM" xml:space="preserve">
     <value>Exit skill group manager</value>
   </data>
-	<data name="AreYouSureYouWantToExitSGM" xml:space="preserve">
+  <data name="AreYouSureYouWantToExitSGM" xml:space="preserve">
     <value>You have unsaved skill groups. Are you sure you want to exit the skill group manager?</value>
   </data>
   <data name="AvailableSkills" xml:space="preserve">
@@ -16786,7 +16786,7 @@ Do you want to participate?</value>
   <data name="DoYouWantToDeleteSkillGroup" xml:space="preserve">
     <value>Delete skill group</value>
   </data>
-	<data name="AreYouSureYouWantToDeleteTheSkillGroup" xml:space="preserve">
+  <data name="AreYouSureYouWantToDeleteTheSkillGroup" xml:space="preserve">
 		<value>Are you sure you want to delete the skill group </value>
 	</data>
   <data name="ManageSkillGroups" xml:space="preserve">
@@ -17105,11 +17105,11 @@ Do you want to participate?</value>
     <comment>Primary reason</comment>
   </data>
   <data name="RestrictionNotAbleToBeScheduledReasonTooLittleWorkTimeInPeriod" xml:space="preserve">
-    <value>The period results in to little work time</value>
+    <value>The period results in too little work time</value>
     <comment>The period results in to little work time</comment>
   </data>
   <data name="RestrictionNotAbleToBeScheduledReasonTooMuchWorkTimeInPeriod" xml:space="preserve">
-    <value>The period results in to much work time</value>
+    <value>The period results in too much work time</value>
     <comment>The period results in to much work time</comment>
   </data>
   <data name="RequestStartDate" xml:space="preserve">
@@ -17152,5 +17152,4 @@ Do you want to participate?</value>
     <value>You got a new silver badge for {0} in {1:yyyy-MM-dd}.</value>
     <comment>use to inform agent when he/she get a new silver badge for an external performance type</comment>
   </data>
-
 </root>
