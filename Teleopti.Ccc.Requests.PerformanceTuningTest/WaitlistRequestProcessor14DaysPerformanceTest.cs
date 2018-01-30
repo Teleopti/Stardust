@@ -103,14 +103,11 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 						new DateTime(2016, 04, 06, 17, 0, 0).Utc()));
 				requests = PersonRequestRepository.Find(reqIds);
 				_personList = PersonRepository.FindPeople(requests.Select(x => x.Person.Id.GetValueOrDefault()));
-				
-				_personList.ForEach(person =>
-				{
-					if(!(_wfcs.Any(x=>x.Id.GetValueOrDefault()==person.WorkflowControlSet.Id.GetValueOrDefault())))
-						_wfcs.Add(person.WorkflowControlSet);
-					person.WorkflowControlSet.AbsenceRequestWaitlistEnabled = true;
 
-				});
+				var wfcs = _personList.Select(p => p.WorkflowControlSet).Distinct();
+				_wfcs.AddRange(wfcs);
+
+				_wfcs.ForEach(w => w.AbsenceRequestWaitlistEnabled = true);
 			});
 		}
 		
