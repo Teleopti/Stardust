@@ -201,5 +201,31 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 				Target.Optimize(new NoSchedulingProgress(),  dateOnly.AddDays(1).ToDateOnlyPeriod(), new[] { agentData1.Agent, agentData2.Agent }, schedules, Enumerable.Empty<ISkillDay>(), DefaultMaxSeatOptimizationPreferences.Create(TeamBlockType.Team), null);
 			});
 		}
+		
+		[Test]
+		[Ignore("#47955")]
+		public void ShouldHandleMixOfTerminatedAndNonTerminatedAgentsInSameTeam()
+		{
+			var site = new Site("_") { MaxSeats = 2 }.WithId();
+			var team = new Team { Site = site }.WithDescription(new Description("_"));
+			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
+			var activity = new Activity { RequiresSeat = true }.WithId();
+			var date = new DateOnly(2016, 10, 25);
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1);
+			var scenario = new Scenario();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(9, 0, 9, 0, 60), new TimePeriodWithSegment(17, 0, 17, 0, 60), new ShiftCategory("_").WithId()));
+			var agentScheduledForAnHourData = MaxSeatDataFactory.CreateAgentWithAssignment(date, new Team { Site = site }, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(8, 0, 9, 0));
+			var agentTerminatedData = MaxSeatDataFactory.CreateAgentWithAssignment(date, team, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(8, 0, 16, 0));
+			var agentNonTerminatedDatas = MaxSeatDataFactory.CreateAgentWithAssignments(new DateOnlyPeriod(date, date.AddDays(1)), team, new RuleSetBag(ruleSet), scenario, activity, new TimePeriod(8, 0, 16, 0));
+			var asses = agentNonTerminatedDatas.Select(x => x.Assignment).Union(new[] {agentTerminatedData.Assignment, agentScheduledForAnHourData.Assignment});
+			agentTerminatedData.Agent.TerminatePerson(date, new PersonAccountUpdaterDummy(), new DummyPersonLeavingUpdater());
+			var nonTerminatedAgent = agentNonTerminatedDatas.First().Agent;
+			var schedules = ScheduleDictionaryCreator.WithData(scenario, period, asses);
+
+			Target.Optimize(new NoSchedulingProgress(), period, new[] { agentTerminatedData.Agent, nonTerminatedAgent }, schedules, Enumerable.Empty<ISkillDay>(), DefaultMaxSeatOptimizationPreferences.Create(TeamBlockType.Team), null);
+
+			schedules[nonTerminatedAgent].ScheduledDay(date).PersonAssignment().Period.StartDateTime.TimeOfDay.Hours
+				.Should().Be.EqualTo(9);
+		}
 	}
 }
