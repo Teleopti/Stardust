@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
@@ -101,88 +100,63 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return Owner[Person].ReFetch(this);
 		}
 
-		public ReadOnlyCollection<IPersonAbsence> PersonAbsenceCollection()
+		public IPersonAbsence[] PersonAbsenceCollection()
 		{
 			return PersonAbsenceCollection(false);
 		}
 
-		public ReadOnlyCollection<IPersonAbsence> PersonAbsenceCollection(bool includeOutsideActualDay)
+		public IPersonAbsence[] PersonAbsenceCollection(bool includeOutsideActualDay)
 		{
 			var sorter = new PersonAbsenceSorter();
-			var org = new List<IPersonAbsence>(ScheduleDataInternalCollection().OfType<IPersonAbsence>());
-			org.Sort(sorter);
+			var org = ScheduleDataInternalCollection().OfType<IPersonAbsence>().ToArray();
+			Array.Sort(org, sorter);
 			if (includeOutsideActualDay || org.IsEmpty())
-				return new ReadOnlyCollection<IPersonAbsence>(org);
+				return org;
 			return excludeDataOutsideDayOrShift(org, sorter);
 		}
 
-		private ReadOnlyCollection<T> excludeDataOutsideDayOrShift<T>(IEnumerable<T> org, IComparer<T> sorter) where T : IScheduleData
+		private T[] excludeDataOutsideDayOrShift<T>(IEnumerable<T> org, IComparer<T> sorter) where T : IScheduleData
 		{
-			var ret = new List<T>();
 			var period = DateOnlyAsPeriod.Period();
 			var projPeriod = ProjectionService().CreateProjection().Period();
 
-			foreach (var personAbsence in org)
-			{
-				if (period.Intersect(personAbsence.Period) || projPeriod.HasValue && personAbsence.Period.Intersect(projPeriod.Value))
-					ret.Add(personAbsence);
-			}
-			ret.Sort(sorter);
-			return new ReadOnlyCollection<T>(ret);
+			var ret = org.Where(o =>
+					(period.Intersect(o.Period) ||
+					 projPeriod.HasValue && o.Period.Intersect(projPeriod.Value)))
+				.ToArray();
+			Array.Sort(ret, sorter);
+			return ret;
 		}
 
-		public ReadOnlyCollection<IPersonMeeting> PersonMeetingCollection()
+		public IPersonMeeting[] PersonMeetingCollection()
 		{
 			return PersonMeetingCollection(false);
 		}
 
-		public ReadOnlyCollection<IOvertimeAvailability> OvertimeAvailablityCollection()
+		public IOvertimeAvailability[] OvertimeAvailablityCollection()
 		{
-			var scheduleDataInternalCollection = ScheduleDataInternalCollection().ToList();
-
-			var overtimeRestrictions = scheduleDataInternalCollection.OfType<IOvertimeAvailability>();
-			var ret = new List<IOvertimeAvailability>();
-
-			foreach (var overtimeRestriction in overtimeRestrictions)
-			{
-				ret.Add(overtimeRestriction);
-			}
-			return ret.AsReadOnly();
+			return ScheduleDataInternalCollection().OfType<IOvertimeAvailability>().ToArray();
 		}
 
-		public ReadOnlyCollection<IPersonMeeting> PersonMeetingCollection(bool includeOutsideActualDay)
+		public IPersonMeeting[] PersonMeetingCollection(bool includeOutsideActualDay)
 		{
 			var sorter = new PersonMeetingByDateSorter();
-			var org = new List<IPersonMeeting>(ScheduleDataInternalCollection().OfType<IPersonMeeting>());
-			org.Sort(sorter);
+			var org = ScheduleDataInternalCollection().OfType<IPersonMeeting>().ToArray();
+			Array.Sort(org,sorter);
 			if (includeOutsideActualDay || org.IsEmpty())
-				return new ReadOnlyCollection<IPersonMeeting>(org);
+				return org;
 			return excludeDataOutsideDayOrShift(org, sorter);
 		}
 
-		public ReadOnlyCollection<IScheduleData> PersonRestrictionCollection()
+		public IScheduleData[] PersonRestrictionCollection()
 		{
 			// temporärt så länge båda finns
-			var scheduleDataInternalCollection = ScheduleDataInternalCollection().ToList();
+			var scheduleDataInternalCollection = ScheduleDataInternalCollection().ToArray();
 			var dataRestrictions = scheduleDataInternalCollection.OfType<IScheduleDataRestriction>();
 
 			var persistRestrictions = scheduleDataInternalCollection.OfType<PreferenceDay>();
 			var studentRestrictions = scheduleDataInternalCollection.OfType<StudentAvailabilityDay>();
-			var ret = new List<IScheduleData>();
-
-			foreach (var dataRestriction in dataRestrictions)
-			{
-				ret.Add(dataRestriction);
-			}
-			foreach (var dataRestriction in persistRestrictions)
-			{
-				ret.Add(dataRestriction);
-			}
-			foreach (var studRestriction in studentRestrictions)
-			{
-				ret.Add(studRestriction);
-			}
-			return ret.AsReadOnly();
+			return dataRestrictions.Cast<IScheduleData>().Concat(persistRestrictions).Concat(studentRestrictions).ToArray();
 		}
 
 		public IEnumerable<IRestrictionBase> RestrictionCollection()
@@ -193,18 +167,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return retList;
 		}
 
-		public ReadOnlyCollection<INote> NoteCollection()
+		public INote[] NoteCollection()
 		{
-			var retList = new List<INote>(ScheduleDataInternalCollection().OfType<INote>());
-			retList.Sort(new NoteByDateSorter());
-			return new ReadOnlyCollection<INote>(retList);
+			var retList = ScheduleDataInternalCollection().OfType<INote>().ToArray();
+			Array.Sort(retList, new NoteByDateSorter());
+			return retList;
 		}
 
-		public ReadOnlyCollection<IPublicNote> PublicNoteCollection()
+		public IPublicNote[] PublicNoteCollection()
 		{
-			var retList = new List<IPublicNote>(ScheduleDataInternalCollection().OfType<IPublicNote>());
-			retList.Sort(new PublicNoteByDateSorter());
-			return new ReadOnlyCollection<IPublicNote>(retList);
+			var retList = ScheduleDataInternalCollection().OfType<IPublicNote>().ToArray();
+			Array.Sort(retList, new PublicNoteByDateSorter());
+			return retList;
 		} 
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter")] //rk fixar snart

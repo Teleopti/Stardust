@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         private IProjectionService _projectionService;
         private IPersonAssignment _personAssignment;
         private IPersonAbsence _personAbsence;
-        private ReadOnlyCollection<IPersonAbsence> _personAbsenceCollection;
+        private IPersonAbsence[] _personAbsenceCollection;
         private IList<IVisualLayer> _visualLayers;
         private IVisualLayer _visualLayer;
         private IVisualLayerCollection _visualLayerCollection;
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             _personAssignment = CreatePersonAssignment();
             _personAbsence = CreatePersonAbsence();
-            _personAbsenceCollection = new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence> { _personAbsence });
+            _personAbsenceCollection = new [] { _personAbsence };
             _visualLayers = new List<IVisualLayer>();
 			var actLayer = _layerFactory.CreateShiftSetupLayer(ActivityFactory.CreateActivity("activity"),
 				_personAbsence.Period, _agent);
@@ -263,7 +263,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             var layer = new AbsenceLayer(_absence, period);
             IPersonAbsence personAbsence = new PersonAbsence(_agent, _scenario, layer);
-            var absCollection = new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence> { personAbsence });
+            var absCollection = new [] { personAbsence };
             var part = _mockRep.StrictMock<IScheduleDay>();
 			string expectedStart = "Tjänsteresa: " + TimeZoneHelper.ConvertFromUtc(startTime, TimeZoneGuard.Instance.TimeZone).ToShortTimeString() + 
                                             " - " + partStartperiod.EndDateTimeLocal(TimeZoneGuard.Instance.TimeZone).ToShortTimeString();

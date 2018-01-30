@@ -285,10 +285,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			Target.Execute(new NoSchedulingProgress(), stateHolder, new[] { agent }, new DateOnlyPeriod(dateOnly, dateOnly), optimizationPreferences, null);
 
-			stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAbsenceCollection().Count.Should().Be.EqualTo(1);
-			stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonRestrictionCollection().Count.Should().Be.EqualTo(1);
-			stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonMeetingCollection().Count.Should().Be.EqualTo(1);
-			stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersistableScheduleDataCollection().OfType<IPreferenceDay>().Count().Should().Be.EqualTo(1);
+			var scheduledDay = stateHolder.Schedules[agent].ScheduledDay(dateOnly);
+			scheduledDay.PersonAbsenceCollection().Length.Should().Be.EqualTo(1);
+			scheduledDay.PersonRestrictionCollection().Length.Should().Be.EqualTo(1);
+			scheduledDay.PersonMeetingCollection().Length.Should().Be.EqualTo(1);
+			scheduledDay.PersistableScheduleDataCollection().OfType<IPreferenceDay>().Count().Should().Be.EqualTo(1);
 		}
 
 		[Test]

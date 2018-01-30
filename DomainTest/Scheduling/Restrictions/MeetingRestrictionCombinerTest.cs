@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
@@ -46,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		{
 
 			_scheduleDay.Stub(x=>x.PersonMeetingCollection())
-				.Return(new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>()));
+				.Return(new IPersonMeeting[0]);
 
 			using(_mocks.Record()) {}
 			using (_mocks.Playback())
@@ -78,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
 
 				_scheduleDay.Stub(x=>x.PersonMeetingCollection())
-					.Return(new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>{personMeeting}));
+					.Return(new [] {personMeeting});
 				_scheduleDay.Stub(x=>x.Person)
 					.Return(person);
 				personMeeting.Stub(x=>x.Period)

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -41,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			var resultPeriod = new DateTimePeriod(new DateTime(2009, 2, 2, 10, 0, 0, DateTimeKind.Utc),
 								new DateTime(2009, 2, 2, 14, 30, 0, DateTimeKind.Utc));
 
-			ReadOnlyCollection<IPersonMeeting> meetings = getMeetings();
+			var meetings = getMeetings();
 
 			using (_mocks.Record())
 			{
@@ -69,8 +67,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			var period2 = new DateTimePeriod(new DateTime(2009, 2, 2, 12, 0, 0, DateTimeKind.Utc),
 											 new DateTime(2009, 2, 2, 14, 0, 0, DateTimeKind.Utc));
 			
-			var retList = new List<IPersonMeeting>();
-			var meetings = new ReadOnlyCollection<IPersonMeeting>(retList);
+			var meetings = new IPersonMeeting[0];
 
 			using (_mocks.Record())
 			{
@@ -131,8 +128,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		public void GetMaximumPeriodForPersonalShiftsAndMeetingsReturnsNullWhenEmpty()
 		{
 			setup();
-			var retList = new List<IPersonMeeting>();
-			var meetings = new ReadOnlyCollection<IPersonMeeting>(retList);
+			var meetings = new IPersonMeeting[0];
 
 			using (_mocks.Record())
 			{
@@ -158,7 +154,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 
 			var origMeeting = _mocks.DynamicMock<IMeeting>();
 			var meeting = _mocks.StrictMock<IPersonMeeting>();
-			var meetings = new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting> { meeting });
+			var meetings = new [] { meeting };
 			_personAssignment = _mocks.StrictMock<IPersonAssignment>();
 			
 			var phone = ActivityFactory.CreateActivity("phone");
@@ -205,7 +201,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 											 new DateTime(2009, 2, 2, 17, 15, 0, DateTimeKind.Utc));
 
 			var meeting = _mocks.StrictMock<IPersonMeeting>();
-			var meetings = new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting> { meeting });
+			var meetings = new []{ meeting };
 			_personAssignment = _mocks.StrictMock<IPersonAssignment>();
 			
 			var phone = ActivityFactory.CreateActivity("phone");
@@ -238,21 +234,18 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			}
 		}
 
-		private ReadOnlyCollection<IPersonMeeting> getMeetings()
+		private IPersonMeeting[] getMeetings()
 		{
 			var period = new DateTimePeriod(new DateTime(2009, 2, 2, 10, 0, 0, DateTimeKind.Utc),
 											new DateTime(2009, 2, 2, 10, 30, 0, DateTimeKind.Utc));
 			var period2 = new DateTimePeriod(new DateTime(2009, 2, 2, 14, 0, 0, DateTimeKind.Utc),
 											 new DateTime(2009, 2, 2, 14, 30, 0, DateTimeKind.Utc));
 
-			var retList = new List<IPersonMeeting>();
 			var meetingPerson = _mocks.StrictMock<IMeetingPerson>();
 			var meeting = _mocks.StrictMock<IMeeting>();
 			var personMeeting = new PersonMeeting(meeting, meetingPerson, period);
 			var personMeeting2 = new PersonMeeting(meeting, meetingPerson, period2);
-			retList.Add(personMeeting);
-			retList.Add(personMeeting2);
-			return new ReadOnlyCollection<IPersonMeeting>(retList);
+			return new []{personMeeting,personMeeting2};
 		}
 
 	}

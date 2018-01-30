@@ -23,12 +23,12 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 
 				var personMeetingsFrom = partFrom.PersonMeetingCollection();
 				var shiftFrom = partFrom.GetEditorShift();
-				if (shiftFrom == null && personMeetingsFrom.Count == 0)
+				if (shiftFrom == null && personMeetingsFrom.Length == 0)
 					continue;
 
 				var personMeetingsTo = shiftTradeSwapDetail.SchedulePartTo.PersonMeetingCollection();
 				var shiftTo = partTo.GetEditorShift();
-				if (shiftTo == null && personMeetingsTo.Count == 0)
+				if (shiftTo == null && personMeetingsTo.Length == 0)
 					continue;
 
 				if (shiftFrom != null)

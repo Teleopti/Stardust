@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             return result;
         }
 
-        public ReadOnlyCollection<ForecastScheduleValuePair> CalculateIntradayForecastAndScheduleDataForSkill(ISkill skill, DateOnly scheduleDay)
+        public ForecastScheduleValuePair[] CalculateIntradayForecastAndScheduleDataForSkill(ISkill skill, DateOnly scheduleDay)
         {
             IList<ForecastScheduleValuePair> result = new List<ForecastScheduleValuePair>();
 
@@ -42,14 +42,10 @@ namespace Teleopti.Ccc.Domain.Optimization
             IList<ISkillStaffPeriod> skillStaffPeriods =
                 _schedulingStateHolder().SkillStaffPeriodHolder.SkillStaffPeriodList(new List<ISkill> { skill }, dateTimePeriod);
             if (skillStaffPeriods == null || skillStaffPeriods.Count == 0)
-                return new ReadOnlyCollection<ForecastScheduleValuePair>(result);
+                return new ForecastScheduleValuePair[0];
 
-            foreach (ISkillStaffPeriod skillStaffPeriod in skillStaffPeriods)
-            {
-                ForecastScheduleValuePair forecastScheduleValuePair = CalculateSkillStaffPeriodForecastAndScheduledValue(skill, skillStaffPeriod);
-                result.Add(forecastScheduleValuePair);
-            }
-            return new ReadOnlyCollection<ForecastScheduleValuePair>(result);
+			return skillStaffPeriods
+				.Select(skillStaffPeriod => CalculateSkillStaffPeriodForecastAndScheduledValue(skill, skillStaffPeriod)).ToArray();
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]

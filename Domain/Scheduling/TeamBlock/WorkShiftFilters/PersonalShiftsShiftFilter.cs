@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -38,9 +37,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 				.Select(t => t.t.shiftProjectionCache).ToList();
 		}
 
-		private static TimePeriod? getMaximumPeriodForPersonalShiftsAndMeetings(IPersonAssignment ass, ReadOnlyCollection<IPersonMeeting> meetings)
+		private static TimePeriod? getMaximumPeriodForPersonalShiftsAndMeetings(IPersonAssignment ass, IPersonMeeting[] meetings)
 		{
-			if (meetings.Count == 0 && ass==null)
+			if (meetings.Length == 0 && ass==null)
 			{
 				return null;
 			}

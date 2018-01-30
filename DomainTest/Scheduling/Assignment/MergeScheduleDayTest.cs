@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			destination.Merge(source, false);
 
 			Assert.IsTrue(destination.HasDayOff());
-			Assert.AreEqual(1, destination.PersonAbsenceCollection().Count);
+			Assert.AreEqual(1, destination.PersonAbsenceCollection().Length);
 			Assert.IsNotNull(destination.PersonAssignment());
 		}
 
@@ -98,13 +98,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			{
 				destination.Merge(source, false);
 				Assert.IsTrue(destination.HasDayOff());
-				Assert.AreEqual(1, destination.PersonAbsenceCollection().Count);
+				Assert.AreEqual(1, destination.PersonAbsenceCollection().Length);
 				Assert.IsNotNull(destination.PersonAssignment());
 
 				//verify that day off is pasted, absencense is splitted and assignment is removed
 				destination.Merge(source, false);
 				Assert.IsTrue(destination.HasDayOff());
-				Assert.AreEqual(2, destination.PersonAbsenceCollection(true).Count);
+				Assert.AreEqual(2, destination.PersonAbsenceCollection(true).Length);
 				Assert.IsNotNull(destination.PersonAssignment());
 			}
 		}
@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			using (CurrentAuthorization.ThreadlyUse(authorization))
 			{
 				destination.Merge(source, false);
-				Assert.AreEqual(1, destination.PersonAbsenceCollection().Count);
+				Assert.AreEqual(1, destination.PersonAbsenceCollection().Length);
 			}
 		}
 
@@ -253,7 +253,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			IShiftCategory shiftCategory = ShiftCategoryFactory.CreateShiftCategory("shiftCategory");
 
 			destination.CreateAndAddActivity(ActivityFactory.CreateActivity("activity"), destination.Period, shiftCategory);
-			Assert.AreEqual(0, destination.PersonAbsenceCollection().Count);
+			Assert.AreEqual(0, destination.PersonAbsenceCollection().Length);
 		}
 
 		[Test]
@@ -423,7 +423,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			source.DeleteOvertimeAvailability();
 
-			Assert.IsTrue(source.OvertimeAvailablityCollection().Count == 0);
+			Assert.IsTrue(source.OvertimeAvailablityCollection().Length == 0);
 		}
 
 		[Test]
@@ -458,26 +458,26 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			//without assignment
 			source.Add(personAbsence1);
 			source.Add(personAbsence2);
-			Assert.IsTrue(source.PersonAbsenceCollection().Count == 2);
+			Assert.IsTrue(source.PersonAbsenceCollection().Length == 2);
 			source.DeleteAbsence(true); //special delete
-			Assert.IsTrue(source.PersonAbsenceCollection().Count == 0);
+			Assert.IsTrue(source.PersonAbsenceCollection().Length == 0);
 
 			source.Add(personAbsence1);
 			source.Add(personAbsence2);
-			Assert.IsTrue(source.PersonAbsenceCollection().Count == 2);
+			Assert.IsTrue(source.PersonAbsenceCollection().Length == 2);
 			source.DeleteAbsence(false);
-			Assert.IsTrue(source.PersonAbsenceCollection().Count == 1);
+			Assert.IsTrue(source.PersonAbsenceCollection().Length == 1);
 
 			source.DeleteAbsence(false);
-			Assert.IsTrue(source.PersonAbsenceCollection().Count == 0);
+			Assert.IsTrue(source.PersonAbsenceCollection().Length == 0);
 
 			//with assignment
 			source.Add(ass);
 			source.Add(personAbsence1);
 			source.Add(personAbsence2);
-			Assert.IsTrue(source.PersonAbsenceCollection().Count == 2);
+			Assert.IsTrue(source.PersonAbsenceCollection().Length == 2);
 			source.DeleteAbsence(false);
-			Assert.IsTrue(source.PersonAbsenceCollection().Count == 1);
+			Assert.IsTrue(source.PersonAbsenceCollection().Length == 1);
 		}
 
 		[Test]
@@ -593,7 +593,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			((ExtractedSchedule)destination).MergeAbsences(source, true);
 
 			Assert.IsTrue(destination.HasDayOff());
-			Assert.AreEqual(3, destination.PersonAbsenceCollection().Count);
+			Assert.AreEqual(3, destination.PersonAbsenceCollection().Length);
 			Assert.IsNotNull(destination.PersonAssignment());
 		}
 
@@ -665,9 +665,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			((ExtractedSchedule)source).ServiceForSignificantPart = absenceService; //Setup for returning Absence;
 
-			Assert.AreEqual(1, destination.PersonAbsenceCollection().Count);
+			Assert.AreEqual(1, destination.PersonAbsenceCollection().Length);
 			destination.Merge(source, false);
-			Assert.AreEqual(2, destination.PersonAbsenceCollection().Count);
+			Assert.AreEqual(2, destination.PersonAbsenceCollection().Length);
 		}
 
 		[Test]
@@ -711,7 +711,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			destination.Merge(source, false);
 
 			Assert.IsTrue(destination.HasDayOff());
-			Assert.AreEqual(2, destination.PersonAbsenceCollection().Count);
+			Assert.AreEqual(2, destination.PersonAbsenceCollection().Length);
 			Assert.IsNotNull(destination.PersonAssignment());
 		}
 
@@ -850,7 +850,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			using (CurrentAuthorization.ThreadlyUse(authorization))
 			{
 				destination.Merge(source, false);
-				Assert.AreEqual(1, destination.PersonAbsenceCollection().Count);
+				Assert.AreEqual(1, destination.PersonAbsenceCollection().Length);
 				Assert.IsNotNull(destination.PersonAssignment());
 
 				destination.PersonAssignment().SetDayOff(DayOffFactory.CreateDayOff());
@@ -858,7 +858,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				//assert dayoff is still there - NOPE! changed
 				Assert.IsFalse(destination.HasDayOff());
 				//assert absence is splitted
-				Assert.AreEqual(2, destination.PersonAbsenceCollection(true).Count);
+				Assert.AreEqual(2, destination.PersonAbsenceCollection(true).Length);
 				//assert we still have 1 assignment
 				Assert.IsNotNull(destination.PersonAssignment());
 				//assert destination have got the source period(Time)

@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.Linq;
+﻿using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 
@@ -7,13 +6,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
 	public interface IPersonalShiftMeetingTimeChecker
 	{
-		bool CheckTimeMeeting(IEditableShift mainShift, ReadOnlyCollection<IPersonMeeting> meetings);
+		bool CheckTimeMeeting(IEditableShift mainShift, IPersonMeeting[] meetings);
 		bool CheckTimePersonAssignment(IEditableShift mainShift, IPersonAssignment personAssignment);
 	}
 
 	public class PersonalShiftMeetingTimeChecker : IPersonalShiftMeetingTimeChecker
 	{
-		public bool CheckTimeMeeting(IEditableShift mainShift, ReadOnlyCollection<IPersonMeeting> meetings)
+		public bool CheckTimeMeeting(IEditableShift mainShift, IPersonMeeting[] meetings)
 		{
 			var mainShiftProjection = mainShift.ProjectionService().CreateProjection();
 			var worktime = mainShiftProjection.WorkTime();

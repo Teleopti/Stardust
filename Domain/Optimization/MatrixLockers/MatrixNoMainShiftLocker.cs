@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Optimization.MatrixLockers
                     {
 						scheduleMatrix.LockDay(dateOnly);
                     }
-					if (scheduleDay.PersonAbsenceCollection().Count > 0)
+					if (scheduleDay.PersonAbsenceCollection().Length > 0)
                     {
 						scheduleMatrix.LockDay(dateOnly);
                     }

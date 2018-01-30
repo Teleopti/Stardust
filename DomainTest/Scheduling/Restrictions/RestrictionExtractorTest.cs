@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -33,8 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         [Test]
         public void VerifyCanGetRestrictionLists()
         {
-            var personRestrictionCollection = new ReadOnlyCollection<IScheduleData>(new List<IScheduleData>());
-            var result = extract(new List<IRestrictionBase>(), personRestrictionCollection);
+            var result = extract(new List<IRestrictionBase>(), new IScheduleData[0]);
             Assert.AreEqual(0, result.AvailabilityList.Count());
             Assert.AreEqual(0, result.StudentAvailabilityList.Count());
             Assert.AreEqual(0, result.PreferenceList.Count());
@@ -44,8 +42,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         [Test]
         public void VerifyCombinedRestriction()
         {
-            var personRestrictionCollection = new ReadOnlyCollection<IScheduleData>(new List<IScheduleData>());
-            var result = extract(new List<IRestrictionBase>(), personRestrictionCollection);
+            var result = extract(new List<IRestrictionBase>(), new IScheduleData[0]);
             var combined = result.CombinedRestriction(new SchedulingOptions { UseRotations = true, UsePreferences = true, UseAvailability = true, UseStudentAvailability = true, UsePreferencesMustHaveOnly = false });
             Assert.IsNotNull(combined);
         }
@@ -55,8 +52,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         {
             var sr = new PreferenceRestriction {ShiftCategory = ShiftCategoryFactory.CreateShiftCategory("Hej")};
 	        var pd = new PreferenceDay(_person, new DateOnly(2009, 1, 1), sr);
-            var personRestrictionCollection = new ReadOnlyCollection<IScheduleData>(new List<IScheduleData> { pd });
-            var result = extract(new List<IRestrictionBase>{sr}, personRestrictionCollection);
+            var result = extract(new List<IRestrictionBase>{sr}, new []{pd});
 
 	        var combined =
 		        result.CombinedRestriction(new SchedulingOptions
@@ -76,8 +72,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         {
             var sr = new PreferenceRestriction {ShiftCategory = ShiftCategoryFactory.CreateShiftCategory("Hej")};
 	        var pd = new PreferenceDay(_person, new DateOnly(2009, 1, 1), sr);
-            var personRestrictionCollection = new ReadOnlyCollection<IScheduleData>(new List<IScheduleData> { pd });
-            var result = extract(new List<IRestrictionBase> { sr }, personRestrictionCollection);
+            var result = extract(new List<IRestrictionBase> { sr }, new []{pd});
 
 	        var combined =
 		        result.CombinedRestriction(new SchedulingOptions
@@ -101,8 +96,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 	            ShiftCategory = ShiftCategoryFactory.CreateShiftCategory("Hej")
             };
 	        var pd = new PreferenceDay(_person, new DateOnly(2009, 1, 1), sr);
-            var personRestrictionCollection = new ReadOnlyCollection<IScheduleData>(new List<IScheduleData> { pd });
-            var result = extract(new List<IRestrictionBase> { sr }, personRestrictionCollection);
+            var result = extract(new List<IRestrictionBase> { sr }, new []{pd});
 
 	        var combined =
 		        result.CombinedRestriction(new SchedulingOptions
@@ -125,8 +119,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             {
 	            NotAvailable = false
             };
-	        var personRestrictionCollection = new ReadOnlyCollection<IScheduleData>(new List<IScheduleData> { pr });
-            var result = extract(new List<IRestrictionBase>(), personRestrictionCollection);
+            var result = extract(new List<IRestrictionBase>(), new [] { pr });
             var combined = result.CombinedRestriction(new SchedulingOptions { UseRotations = true, UsePreferences = true, UseAvailability = true, UseStudentAvailability = true, UsePreferencesMustHaveOnly = false });
             Assert.IsNotNull(combined);
             Assert.IsFalse(combined.NotAvailable);
@@ -136,8 +129,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		[Test]
 		public void VerifyCombinedRestrictionStudentAvailabilityNotDefined()
 		{
-			var personRestrictionCollection = new ReadOnlyCollection<IScheduleData>(new List<IScheduleData> ());
-			var result = extract(new List<IRestrictionBase>(), personRestrictionCollection);
+			var result = extract(new List<IRestrictionBase>(), new IScheduleData[0]);
 			var combined = result.CombinedRestriction(new SchedulingOptions { UseRotations = true, UsePreferences = true, UseAvailability = true, UseStudentAvailability = true, UsePreferencesMustHaveOnly = false });
 			Assert.IsNotNull(combined);
 			Assert.IsTrue(combined.NotAvailable);
@@ -148,7 +140,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         {
             IRestrictionBase sr = new AvailabilityRestriction();
             sr.StartTimeLimitation = new StartTimeLimitation(new TimeSpan(8,0,0),null );
-            var result = extract(new List<IRestrictionBase> { sr }, new ReadOnlyCollection<IScheduleData>(new List<IScheduleData>()));
+            var result = extract(new List<IRestrictionBase> { sr }, new IScheduleData[0]);
             var combined = result.CombinedRestriction(new SchedulingOptions { UseRotations = true, UsePreferences = true, UseAvailability = true, UseStudentAvailability = true, UsePreferencesMustHaveOnly = false });
             Assert.IsNotNull(combined);
         }
@@ -157,7 +149,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         {
             IAvailabilityRestriction availabilityRestriction = new AvailabilityRestriction();
             availabilityRestriction.NotAvailable = true;
-            var result = extract(new List<IRestrictionBase> { availabilityRestriction }, new ReadOnlyCollection<IScheduleData>(new List<IScheduleData>()));
+            var result = extract(new List<IRestrictionBase> { availabilityRestriction }, new IScheduleData[0]);
             var combined = result.CombinedRestriction(new SchedulingOptions { UseRotations = true, UsePreferences = true, UseAvailability = false, UseStudentAvailability = true, UsePreferencesMustHaveOnly = false });
             Assert.IsNotNull(combined);
             Assert.IsTrue(combined.NotAvailable);
@@ -168,7 +160,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         {
             IAvailabilityRestriction availabilityRestriction = new AvailabilityRestriction();
             availabilityRestriction.NotAvailable = true;
-            var result = extract(new List<IRestrictionBase> { availabilityRestriction }, new ReadOnlyCollection<IScheduleData>(new List<IScheduleData>()));
+            var result = extract(new List<IRestrictionBase> { availabilityRestriction }, new IScheduleData[0]);
             var combined = result.CombinedRestriction(new SchedulingOptions { UseRotations = true, UsePreferences = true, UseAvailability = true, UseStudentAvailability = false, UsePreferencesMustHaveOnly = false });
             Assert.IsNotNull(combined);
             Assert.IsTrue(combined.NotAvailable);
@@ -179,7 +171,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         {
             IRestrictionBase sr = new RotationRestriction();
             sr.StartTimeLimitation = new StartTimeLimitation(new TimeSpan(8, 0, 0), null);
-            var result = extract(new List<IRestrictionBase> { sr }, new ReadOnlyCollection<IScheduleData>(new List<IScheduleData>()));
+            var result = extract(new List<IRestrictionBase> { sr }, new IScheduleData[0]);
             var combined = result.CombinedRestriction(new SchedulingOptions{UseRotations = true, UsePreferences = true, UseAvailability = true,UseStudentAvailability = true, UsePreferencesMustHaveOnly = false});
             Assert.IsNotNull(combined);
 			Assert.IsTrue(combined.IsRotationDay);
@@ -205,7 +197,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			  Assert.IsFalse(pr.Equals(null));
 		  }
 
-        private IExtractedRestrictionResult extract(IEnumerable<IRestrictionBase> restrictions, ReadOnlyCollection<IScheduleData> studentRestriction)
+        private IExtractedRestrictionResult extract(IEnumerable<IRestrictionBase> restrictions, IScheduleData[] studentRestriction)
         {
             using(_mocks.Record())
             {

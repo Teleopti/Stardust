@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -50,9 +49,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_scheduleDayPro2.Day)
                     .Return(new DateOnly());
                 Expect.Call(_scheduleDay1.PersonAbsenceCollection())
-                    .Return(new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence>()));
+                    .Return(new IPersonAbsence[0]);
                 Expect.Call(_scheduleDay2.PersonAbsenceCollection())
-                    .Return(new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence>()));
+                    .Return(new IPersonAbsence[0]);
                 _scheduleMatrix.LockDay(new DateOnly());
             }
             using(_mockRepository.Playback())
@@ -80,9 +79,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             	Expect.Call(_scheduleDayPro2.Day)
             		.Return(new DateOnly());
                 Expect.Call(_scheduleDay1.PersonAbsenceCollection())
-                    .Return(new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence>()));
+                    .Return(new IPersonAbsence[0]);
                 Expect.Call(_scheduleDay2.PersonAbsenceCollection())
-                    .Return(new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence>{ personAbsence }));
+                    .Return(new IPersonAbsence[]{ personAbsence });
                 _scheduleMatrix.LockDay(new DateOnly());
             }
             using (_mockRepository.Playback())
@@ -106,9 +105,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(_scheduleDay2.IsScheduled()).Return(true);
 				Expect.Call(_scheduleDayPro2.Day).Return(new DateOnly(2010, 1, 2));
 				Expect.Call(_scheduleDay1.PersonAbsenceCollection())
-					.Return(new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence>()));
+					.Return(new IPersonAbsence[0]);
 				Expect.Call(_scheduleDay2.PersonAbsenceCollection())
-					.Return(new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence> { personAbsence }));
+					.Return(new [] { personAbsence });
 				_scheduleMatrix.LockDay(new DateOnly(2010, 1, 2));
 			}
 			using (_mockRepository.Playback())

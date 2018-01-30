@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 		private IList<MeetingViewModel> meetings(IScheduleDay s)
 		{
 			var meetings = s?.PersonMeetingCollection();
-			if (meetings?.Count > 0)
+			if (meetings?.Length > 0)
 			{
 				return meetings.Select(personMeeting => new MeetingViewModel
 				{

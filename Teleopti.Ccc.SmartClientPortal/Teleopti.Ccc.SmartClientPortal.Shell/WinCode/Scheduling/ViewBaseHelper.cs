@@ -570,7 +570,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 				{
 					//we have no underlaying activity = is on top of day off
 					var absenceCollection = schedulePart.PersonAbsenceCollection();
-					IPersonAbsence personAbsence = absenceCollection[absenceCollection.Count - 1];
+					IPersonAbsence personAbsence = absenceCollection[absenceCollection.Length - 1];
 					infoText = personAbsence.Layer.Payload.Description.Name;
 				}
 				periodText = "-";

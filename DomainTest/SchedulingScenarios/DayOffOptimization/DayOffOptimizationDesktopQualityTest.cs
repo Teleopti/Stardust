@@ -100,19 +100,25 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var firstDay = new DateOnly(2017, 09, 04); //mon
 			period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 4);
 			var activity = new Activity("_");
-			var skill = new Skill().WithId().For(activity).InTimeZone(UserTimeZone.TimeZone()).IsOpen();
+			var timeZone = UserTimeZone.TimeZone();
+			var skill = new Skill().WithId().For(activity).InTimeZone(timeZone).IsOpen();
 			var scenario = new Scenario("_");
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15),
 				new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
-			agentList = new List<IPerson>();
-			var assesList = new List<IPersonAssignment>();
+			
 			var dayOffTemplate = new DayOffTemplate();
-			for (var n = 0; n < 30; n++)
+
+			agentList = Enumerable.Repeat(0, 30).Select(i =>
 			{
-				var agent = new Person().WithId().InTimeZone(UserTimeZone.TimeZone()).WithPersonPeriod(ruleSet, skill);
+				var agent = new Person().WithId().InTimeZone(timeZone).WithPersonPeriod(ruleSet, skill);
 				agent.AddSchedulePeriod(new SchedulePeriod(firstDay, SchedulePeriodType.Week, 4));
 				agent.SchedulePeriod(firstDay).SetDaysOff(8);
+				return (IPerson)agent;
+			}).ToList();
+
+			var assesList = agentList.SelectMany(agent =>
+			{
 				var asses = Enumerable.Range(0, 28).Select(i =>
 					new PersonAssignment(agent, scenario, firstDay.AddDays(i)).ShiftCategory(shiftCategory)
 						.WithLayer(activity, new TimePeriod(8, 16))).ToArray();
@@ -124,9 +130,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				asses[20].SetDayOff(dayOffTemplate);
 				asses[26].SetDayOff(dayOffTemplate);
 				asses[27].SetDayOff(dayOffTemplate);
-				agentList.Add(agent);
-				assesList.AddRange(asses);
-			}
+
+				return asses;
+			}).ToArray();
+
 			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
 				10, 7, 7, 7, 6, 5, 5,
 				10, 7, 7, 7, 6, 5, 5,

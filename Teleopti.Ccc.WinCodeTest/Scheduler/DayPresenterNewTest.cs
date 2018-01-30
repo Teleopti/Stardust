@@ -1,5 +1,4 @@
 using System;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Syncfusion.Windows.Forms.Grid;
@@ -115,9 +114,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 Expect.Call(scheduleDay1.Person).Return(person).Repeat.AtLeastOnce();
                 Expect.Call(scheduleDay1.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2011, 1, 1), person.PermissionInformation.DefaultTimeZone())).Repeat.AtLeastOnce();
                 Expect.Call(scheduleDay1.PersonAssignment()).Return(ass2).Repeat.AtLeastOnce();
-                Expect.Call(scheduleDay1.PersonAbsenceCollection()).Return(new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence>()));
+                Expect.Call(scheduleDay1.PersonAbsenceCollection()).Return(new IPersonAbsence[0]);
                 Expect.Call(scheduleDay1.BusinessRuleResponseCollection).Return(new List<IBusinessRuleResponse>());
-                Expect.Call(scheduleDay1.PersonMeetingCollection()).Return(new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>()));
+                Expect.Call(scheduleDay1.PersonMeetingCollection()).Return(new IPersonMeeting[0]);
 	            Expect.Call(scheduleDay1.ProjectionService()).Return(projectionService);
 	            Expect.Call(projectionService.CreateProjection()).Return(visualLayerCollection);
             }

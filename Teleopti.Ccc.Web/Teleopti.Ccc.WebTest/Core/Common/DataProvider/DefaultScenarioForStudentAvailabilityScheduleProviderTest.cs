@@ -39,8 +39,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 				.Return(new DateOnlyAsDateTimePeriod(date, TimeZoneInfoFactory.StockholmTimeZoneInfo()));
 			scheduleDays[1].Stub(x => x.DateOnlyAsPeriod)
 				.Return(new DateOnlyAsDateTimePeriod(date.AddDays(1), TimeZoneInfoFactory.StockholmTimeZoneInfo()));
-			scheduleDays[0].Stub(x => x.PersonRestrictionCollection())
-				.Return(new ReadOnlyCollection<IScheduleData>(new List<IScheduleData>(personRestrictions)));
+			scheduleDays[0].Stub(x => x.PersonRestrictionCollection()).Return(personRestrictions);
 			studentAvailabilityDay.Stub(x => x.RestrictionCollection)
 				.Return(
 					new ReadOnlyCollection<IStudentAvailabilityRestriction>(
@@ -70,8 +69,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 
 			scheduleDays[0].Stub(x => x.DateOnlyAsPeriod)
 				.Return(new DateOnlyAsDateTimePeriod(date, TimeZoneInfoFactory.StockholmTimeZoneInfo()));
-			scheduleDays[0].Stub(x => x.PersonRestrictionCollection())
-				.Return(new ReadOnlyCollection<IScheduleData>(new List<IScheduleData>(personRestrictions)));
+			scheduleDays[0].Stub(x => x.PersonRestrictionCollection()).Return(personRestrictions);
 			studentAvailabilityDay.Stub(x => x.RestrictionCollection)
 				.Return(
 					new ReadOnlyCollection<IStudentAvailabilityRestriction>(
@@ -93,7 +91,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			scheduleDay.Stub(x => x.DateOnlyAsPeriod)
 				.Return(new DateOnlyAsDateTimePeriod(date, TimeZoneInfoFactory.StockholmTimeZoneInfo()));
 			scheduleDay.Stub(x => x.PersonRestrictionCollection())
-				.Return(new ReadOnlyCollection<IScheduleData>(new List<IScheduleData>()));
+				.Return(new IScheduleData[0]);
 
 			var result = _target.GetStudentAvailabilityForDate(new[] {scheduleDay}, date);
 
@@ -112,11 +110,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			scheduleDay.Stub(x => x.DateOnlyAsPeriod)
 				.Return(new DateOnlyAsDateTimePeriod(date, TimeZoneInfoFactory.StockholmTimeZoneInfo()));
 			scheduleDay.Stub(x => x.PersonRestrictionCollection())
-				.Return(
-					new ReadOnlyCollection<IScheduleData>(new List<IScheduleData>
-					{
-						new StudentAvailabilityDay(null, date, new List<IStudentAvailabilityRestriction>())
-					}));
+				.Return(new [] { new StudentAvailabilityDay(null, date, new List<IStudentAvailabilityRestriction>()) });
 
 			var result = _target.GetStudentAvailabilityForDate(new[] {scheduleDay}, date);
 
@@ -145,10 +139,8 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 				.Return(new DateOnlyAsDateTimePeriod(date, TimeZoneInfoFactory.StockholmTimeZoneInfo()));
 			scheduleDays[1].Stub(x => x.DateOnlyAsPeriod)
 				.Return(new DateOnlyAsDateTimePeriod(date, TimeZoneInfoFactory.StockholmTimeZoneInfo()));
-			scheduleDays[0].Stub(x => x.PersonRestrictionCollection())
-				.Return(new ReadOnlyCollection<IScheduleData>(new List<IScheduleData>(personRestrictions)));
-			scheduleDays[1].Stub(x => x.PersonRestrictionCollection())
-				.Return(new ReadOnlyCollection<IScheduleData>(new List<IScheduleData>(new IScheduleData[] {})));
+			scheduleDays[0].Stub(x => x.PersonRestrictionCollection()).Return(personRestrictions);
+			scheduleDays[1].Stub(x => x.PersonRestrictionCollection()).Return(new IScheduleData[0]);
 			studentAvailabilityDay.Stub(x => x.RestrictionCollection)
 				.Return(
 					new ReadOnlyCollection<IStudentAvailabilityRestriction>(
@@ -179,10 +171,8 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 				.Return(new DateOnlyAsDateTimePeriod(date, TimeZoneInfoFactory.StockholmTimeZoneInfo()));
 			scheduleDays[1].Stub(x => x.DateOnlyAsPeriod)
 				.Return(new DateOnlyAsDateTimePeriod(date, TimeZoneInfoFactory.StockholmTimeZoneInfo()));
-			scheduleDays[0].Stub(x => x.PersonRestrictionCollection())
-				.Return(new ReadOnlyCollection<IScheduleData>(new List<IScheduleData>(personRestrictions)));
-			scheduleDays[1].Stub(x => x.PersonRestrictionCollection())
-				.Return(new ReadOnlyCollection<IScheduleData>(new List<IScheduleData>(personRestrictions)));
+			scheduleDays[0].Stub(x => x.PersonRestrictionCollection()).Return(personRestrictions);
+			scheduleDays[1].Stub(x => x.PersonRestrictionCollection()).Return(personRestrictions);
 			studentAvailabilityDay.Stub(x => x.RestrictionCollection)
 				.Return(
 					new ReadOnlyCollection<IStudentAvailabilityRestriction>(
@@ -216,7 +206,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			scheduleDay.Stub(x => x.DateOnlyAsPeriod)
 				.Return(new DateOnlyAsDateTimePeriod(date, TimeZoneInfoFactory.StockholmTimeZoneInfo()));
 			scheduleDay.Stub(x => x.PersonRestrictionCollection())
-				.Return(new ReadOnlyCollection<IScheduleData>(new List<IScheduleData>(personRestrictions)));
+				.Return(personRestrictions);
 
 			var result = _target.GetStudentAvailabilityDayForDate(date);
 

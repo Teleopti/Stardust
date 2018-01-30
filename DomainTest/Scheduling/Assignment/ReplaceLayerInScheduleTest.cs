@@ -190,7 +190,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var orgAbsence = scheduleDay.PersonAbsenceCollection().Single();
 			target.Replace(scheduleDay, orgAbsence.Layer, new Absence(), orgAbsence.Layer.Period);
 			scheduleDay.PersonAbsenceCollection().Single().Should().Be.SameInstanceAs(orgAbsence);
-			scheduleDay.PersonAbsenceCollection().Count.Should().Be.EqualTo(1);
+			scheduleDay.PersonAbsenceCollection().Length.Should().Be.EqualTo(1);
 		}
 
 		[Test]

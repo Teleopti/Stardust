@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 		    var timeZoneInfo = scheduleDay.Person.PermissionInformation.DefaultTimeZone();
 		    var dateOnly = scheduleDay.DateOnlyAsPeriod.DateOnly;
 			var overtimeAvailablityCollection = scheduleDay.OvertimeAvailablityCollection();
-		    if (overtimeAvailablityCollection.Count == 0) return null;
+		    if (overtimeAvailablityCollection.Length == 0) return null;
 		    var overtimePeriod =
 			    TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
 				    dateOnly.Date.Add(overtimeAvailablityCollection[0].StartTime.GetValueOrDefault()),

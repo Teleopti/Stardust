@@ -1064,9 +1064,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
                 IPersonMeeting selectedPersonMeeting = null;
 
                 var personMeetingsFromClip = clip.ClipValue.PersonMeetingCollection();
-                if (personMeetingsFromClip.Count > 0)
+                if (personMeetingsFromClip.Length > 0)
                 {
-                    if (personMeetingsFromClip.Count > 1)
+                    if (personMeetingsFromClip.Length > 1)
                     {
                         IMeeting selectedMeeting;
                         using (MeetingPicker meetingPicker = new MeetingPicker(clip.ClipValue.Person.Name + " " +

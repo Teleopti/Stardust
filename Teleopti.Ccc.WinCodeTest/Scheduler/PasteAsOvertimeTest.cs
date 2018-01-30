@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			Assert.AreEqual(_activity2, shiftLayers[1].Payload);
 			Assert.AreEqual(_multiplicatorDefinitionSet, ((OvertimeShiftLayer)shiftLayers[0]).DefinitionSet);
 			Assert.AreEqual(_multiplicatorDefinitionSet, ((OvertimeShiftLayer)shiftLayers[1]).DefinitionSet);
-			Assert.AreEqual(1, _destination.PersonAbsenceCollection().Count);
+			Assert.AreEqual(1, _destination.PersonAbsenceCollection().Length);
 		}
 
 		[Test]

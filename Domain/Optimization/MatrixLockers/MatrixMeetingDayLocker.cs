@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Optimization.MatrixLockers
             {
                 foreach (var scheduleDayPro in scheduleMatrix.UnlockedDays)
                 {
-                        if (scheduleDayPro.DaySchedulePart().PersonMeetingCollection().Count > 0)
+                        if (scheduleDayPro.DaySchedulePart().PersonMeetingCollection().Length > 0)
                         {
                             scheduleMatrix.LockDay(scheduleDayPro.Day);
                         }

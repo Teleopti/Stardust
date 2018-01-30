@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
@@ -61,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 				Expect.Call(_scheduleDay.PersonAssignment(true)).Return(_personAssignment);
 				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleDay.PersonMeetingCollection())
-					.Return(new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>()));
+					.Return(new IPersonMeeting[0]);
 			}
 			using (_mocks.Playback())
 			{
@@ -89,7 +88,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 				Expect.Call(_scheduleDay.PersonAssignment(true)).Return(_personAssignment);
 				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleDay.PersonMeetingCollection())
-					.Return(new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>()));
+					.Return(new IPersonMeeting[0]);
 			}
 			using (_mocks.Playback())
 			{

@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		protected override void Then(IScheduleRange myScheduleRange)
 		{
 			var day = myScheduleRange.ScheduledDay(date);
-			day.OvertimeAvailablityCollection().Count.Should().Be.EqualTo(2);
+			day.OvertimeAvailablityCollection().Length.Should().Be.EqualTo(2);
 		}
 	}
 }

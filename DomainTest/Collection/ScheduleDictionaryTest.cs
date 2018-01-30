@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -493,10 +492,10 @@ namespace Teleopti.Ccc.DomainTest.Collection
 				target.TakeSnapshot();
 
 				var part2 = target[dummyPerson].ScheduledDay(date);
-				Assert.AreEqual(1, part2.PersonMeetingCollection().Count);
+				Assert.AreEqual(1, part2.PersonMeetingCollection().Length);
 				target.DeleteMeetingFromBroker(meetingId);
 				var partNew = target[dummyPerson].ScheduledDay(date);
-				Assert.AreEqual(0, partNew.PersonMeetingCollection().Count);
+				Assert.AreEqual(0, partNew.PersonMeetingCollection().Length);
 				var diff = target.DifferenceSinceSnapshot();
 				Assert.AreEqual(0, diff.Count());
 
@@ -550,7 +549,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			{
 				SetAuthorizationServiceExpectations();
 				Expect.Call(part.Person).Return(dummyPerson).Repeat.AtLeastOnce();
-				Expect.Call(part.PersonAbsenceCollection()).Return(new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence>())).Repeat.AtLeastOnce();
+				Expect.Call(part.PersonAbsenceCollection()).Return(new IPersonAbsence[0]).Repeat.AtLeastOnce();
 				Expect.Call(part.PersistableScheduleDataCollection()).Return(new List<IPersistableScheduleData>()).Repeat.AtLeastOnce();
 				Expect.Call(part.PersonAssignment()).Return(null);
 				Expect.Call(part.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2000, 1, 1), dummyPerson.PermissionInformation.DefaultTimeZone()));
@@ -821,7 +820,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 					var res = target[dummyPerson].ScheduledDay(new DateOnly(2000, 1, 1));
 
 					res.PersonAssignment().Should().Be.Null();
-					Assert.AreEqual(1, res.PersonAbsenceCollection().Count);
+					Assert.AreEqual(1, res.PersonAbsenceCollection().Length);
 					Assert.AreEqual(new DateTimePeriod(2000, 1, 1, 2001, 1, 1),
 							res.PersonAbsenceCollection()[0].Layer.Period);
 				}
@@ -964,7 +963,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 				{
 					Assert.AreSame(preferenceDay, target.UpdateFromBroker(rep, newId));
 					var part = target[dummyPerson].ScheduledDay(new DateOnly(2000, 1, 3));
-					Assert.AreEqual(1, part.PersonRestrictionCollection().Count);
+					Assert.AreEqual(1, part.PersonRestrictionCollection().Length);
 					Assert.AreEqual(preferenceDay.Id, ((IPreferenceDay)part.PersonRestrictionCollection()[0]).Id);
 					Assert.AreEqual(0, target.DifferenceSinceSnapshot().Count());
 					Assert.IsTrue(eventFired);
@@ -1155,8 +1154,8 @@ namespace Teleopti.Ccc.DomainTest.Collection
 					target.MeetingUpdateFromBroker(rep, newId);
 					var part = target[meetingPerson.Person].ScheduledDay(new DateOnly(2000, 1, 1));
 					var part2 = target[meetingPerson.Person].ScheduledDay(new DateOnly(2000, 1, 2));
-					Assert.AreEqual(1, part.PersonMeetingCollection().Count);
-					Assert.AreEqual(1, part2.PersonMeetingCollection().Count);
+					Assert.AreEqual(1, part.PersonMeetingCollection().Length);
+					Assert.AreEqual(1, part2.PersonMeetingCollection().Length);
 					Assert.IsTrue(eventFired);
 				}
 			}
@@ -1195,8 +1194,8 @@ namespace Teleopti.Ccc.DomainTest.Collection
 					target.MeetingUpdateFromBroker(rep, newId);
 					var part = target[meetingPerson.Person].ScheduledDay(new DateOnly(2000, 1, 1));
 					var part2 = target[meetingPerson.Person].ScheduledDay(new DateOnly(2000, 1, 2));
-					Assert.AreEqual(0, part.PersonMeetingCollection().Count);
-					Assert.AreEqual(0, part2.PersonMeetingCollection().Count);
+					Assert.AreEqual(0, part.PersonMeetingCollection().Length);
+					Assert.AreEqual(0, part2.PersonMeetingCollection().Length);
 					Assert.IsFalse(eventFired);
 				}
 			}
@@ -1230,7 +1229,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 				{
 					target.MeetingUpdateFromBroker(rep, newId);
 					var part = target[meetingPerson.Person].ScheduledDay(new DateOnly(2000, 1, 1));
-					Assert.AreEqual(0, part.PersonMeetingCollection().Count);
+					Assert.AreEqual(0, part.PersonMeetingCollection().Length);
 					Assert.IsFalse(eventFired);
 				}
 			}
@@ -1266,7 +1265,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 				{
 					target.MeetingUpdateFromBroker(rep, newId);
 					var part = target[meetingPerson.Person].ScheduledDay(new DateOnly(2000, 1, 1));
-					Assert.AreEqual(0, part.PersonMeetingCollection().Count);
+					Assert.AreEqual(0, part.PersonMeetingCollection().Length);
 					Assert.IsFalse(eventFired);
 				}
 			}

@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 
 		protected override void Then(IScheduleRange myScheduleRange)
 		{
-			myScheduleRange.ScheduledDay(date).PersonRestrictionCollection().Count
+			myScheduleRange.ScheduledDay(date).PersonRestrictionCollection().Length
 				.Should().Be.EqualTo(1);
 		}
 	}

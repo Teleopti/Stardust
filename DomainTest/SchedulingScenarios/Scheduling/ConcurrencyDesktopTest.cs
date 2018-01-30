@@ -41,12 +41,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				var skill = new Skill().For(activity).WithId().IsOpen();
 				var skillDay = skill.CreateSkillDayWithDemand(scenario, date, 10);
 				skillDays.Add(skillDay);
-				for (var j = 0; j < agentsInEachIsland; j++)
-				{
-					agents.Add(new Person().WithId()
-						.WithPersonPeriod(skill)
-						.WithSchedulePeriodOneWeek(date));					
-				}
+
+				agents.AddRange(Enumerable.Repeat(0,agentsInEachIsland).Select(j => new Person().WithId()
+					.WithPersonPeriod(skill)
+					.WithSchedulePeriodOneWeek(date)));
 			}
 			SchedulerStateHolderFrom.Fill(scenario, new DateOnly(2017, 1, 10), agents, skillDays);
 
@@ -77,12 +75,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			{
 				var skill = new Skill().For(activity).WithId().IsOpen();
 				skillDays.AddRange(skill.CreateSkillDayWithDemand(scenario, period, TimeSpan.FromDays(10000)));
-				for (var j = 0; j < numberOfAgentsInEachIsland; j++)
-				{
-					agents.Add(new Person().WithId()
-						.WithPersonPeriod(ruleSet, skill)
-						.WithSchedulePeriodOneWeek(date));	
-				}			
+
+				agents.AddRange(Enumerable.Repeat(0, numberOfAgentsInEachIsland).Select(j => new Person().WithId()
+					.WithPersonPeriod(ruleSet, skill)
+					.WithSchedulePeriodOneWeek(date)));
 			}
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, period, agents, skillDays);
 

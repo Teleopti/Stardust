@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
@@ -23,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         /// <param name="skill">The skill.</param>
         /// <param name="scheduleDay">The schedule day.</param>
         /// <returns></returns>
-        ReadOnlyCollection<ForecastScheduleValuePair> CalculateIntradayForecastAndScheduleDataForSkill(ISkill skill,DateOnly scheduleDay);
+        ForecastScheduleValuePair[] CalculateIntradayForecastAndScheduleDataForSkill(ISkill skill,DateOnly scheduleDay);
 
         /// <summary>
         /// Calculates the skill staff period.

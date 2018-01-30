@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Refresh
 			var scheduleDay = scheduleDictionary[person].ScheduledDay(new DateOnly(2013, 9, 4));
 			var personAbsences = scheduleDay.PersonAbsenceCollection();
 			
-			personAbsences.Count.Should().Be(2);
+			personAbsences.Length.Should().Be(2);
 			personAbsences.Contains(personAbsence).Should().Be.True();
 			personAbsences.Contains(newPersonAbsence).Should().Be.True();
 		}

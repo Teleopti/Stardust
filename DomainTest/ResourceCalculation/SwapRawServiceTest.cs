@@ -197,8 +197,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 				_scheduleDayOnePersonOne.PersonAssignment().Should().Not.Be.Null();
 				_scheduleDayTwoPersonOne.PersonAssignment().Should().Not.Be.Null();
-				Assert.AreEqual(1, _scheduleDayOnePersonOne.PersonAbsenceCollection().Count);
-				Assert.AreEqual(0, _scheduleDayTwoPersonOne.PersonAbsenceCollection().Count);
+				Assert.AreEqual(1, _scheduleDayOnePersonOne.PersonAbsenceCollection().Length);
+				Assert.AreEqual(0, _scheduleDayTwoPersonOne.PersonAbsenceCollection().Length);
 			}
 		}
 

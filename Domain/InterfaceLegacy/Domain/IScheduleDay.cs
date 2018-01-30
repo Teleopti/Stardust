@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
@@ -56,7 +55,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// Created by: rogerkr
 		/// Created date: 2010-06-21
 		/// </remarks>
-		ReadOnlyCollection<IPersonMeeting> PersonMeetingCollection(bool includeOutsideActualDay);
+		IPersonMeeting[] PersonMeetingCollection(bool includeOutsideActualDay);
 
 		/// <summary>
 		/// Gets a list of cloned person absences.
@@ -67,7 +66,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// Created by: rogerkr
 		/// Created date: 2010-06-21
 		/// </remarks>
-		ReadOnlyCollection<IPersonAbsence> PersonAbsenceCollection(bool includeOutsideActualDay);
+		IPersonAbsence[] PersonAbsenceCollection(bool includeOutsideActualDay);
 
 		/// <summary>
 		/// Gets a list of cloned person absences.
@@ -77,7 +76,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// Created by: rogerkr
 		/// Created date: 2008-05-23
 		/// </remarks>
-		ReadOnlyCollection<IPersonAbsence> PersonAbsenceCollection();
+		IPersonAbsence[] PersonAbsenceCollection();
 
 		///<summary>
 		/// What part of this schedule is most significant for display.
@@ -141,12 +140,12 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// <summary>
 		/// Get a list of cloned personMeetings
 		/// </summary>
-		ReadOnlyCollection<IPersonMeeting> PersonMeetingCollection();
+		IPersonMeeting[] PersonMeetingCollection();
 
 		/// <summary>
 		/// Get a list of cloned overtime availabilities
 		/// </summary>
-		ReadOnlyCollection<IOvertimeAvailability> OvertimeAvailablityCollection();
+		IOvertimeAvailability[] OvertimeAvailablityCollection();
 
 		/// <summary>
 		/// Gets a list of cloned person restrictions.
@@ -162,7 +161,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// Created by: rogerkr
 		/// Created date: 2008-12-10
 		/// </remarks>
-		ReadOnlyCollection<IScheduleData> PersonRestrictionCollection();
+		IScheduleData[] PersonRestrictionCollection();
 
 		/// <summary>
 		/// Gets a list of restrictions
@@ -178,7 +177,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// Gets a list of notes.
 		/// </summary>
 		/// <returns></returns>
-		ReadOnlyCollection<INote> NoteCollection();
+		INote[] NoteCollection();
 
 
 		/// <summary>
@@ -189,7 +188,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// Created by: HenryG and JonasN
 		/// Created date: 2010-12-02
 		/// </remarks>
-		ReadOnlyCollection<IPublicNote> PublicNoteCollection();
+		IPublicNote[] PublicNoteCollection();
 
 		/// <summary>
 		/// Gets the business rule response collection.

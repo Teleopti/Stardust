@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
@@ -46,8 +45,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			IPersonAbsence absenceCrossMidNight = new PersonAbsence(_person, _scenario, absenceLayer);
 			using (_mocks.Record())
 			{
-				Expect.Call(_scheduleDay.PersonAbsenceCollection()).Return(
-					new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence> {absenceCrossMidNight}));
+				Expect.Call(_scheduleDay.PersonAbsenceCollection()).Return(new [] {absenceCrossMidNight});
 				Expect.Call(_scheduleDay.Period).Return(shiftPeriod);
 			}
 

@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -31,8 +29,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		[Test]
 		public void ShouldReturnTrueIfNoDayOffOrAbsenceOrMainShiftOrMeeting()
 		{
-			var meetingCollection = new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>());
-			var absenceCollection = new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence>());
+			var meetingCollection = new IPersonMeeting[0];
+			var absenceCollection = new IPersonAbsence[0];
 
 			Expect.Call(_part.IsScheduled()).Return(false).Repeat.AtLeastOnce();
 			Expect.Call(_part.PersonMeetingCollection()).Return(meetingCollection).Repeat.AtLeastOnce();

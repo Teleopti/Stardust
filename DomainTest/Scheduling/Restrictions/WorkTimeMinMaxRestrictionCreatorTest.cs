@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -19,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			var effectiveRestriction = MockRepository.GenerateMock<IEffectiveRestriction>();
 			var target = new WorkTimeMinMaxRestrictionCreator(effectiveRestrictionForDisplayCreator);
 
-			scheduleDay.Stub(x => x.PersonMeetingCollection()).Return(new ReadOnlyCollection<IPersonMeeting>(new IPersonMeeting[] {}));
+			scheduleDay.Stub(x => x.PersonMeetingCollection()).Return(new IPersonMeeting[0]);
 			effectiveRestrictionForDisplayCreator.Stub(x => x.MakeEffectiveRestriction(scheduleDay, EffectiveRestrictionOptions.UseAll())).Return(effectiveRestriction);
 
 			var result = target.MakeWorkTimeMinMaxRestriction(scheduleDay, EffectiveRestrictionOptions.UseAll());

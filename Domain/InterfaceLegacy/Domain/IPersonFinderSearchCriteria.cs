@@ -112,7 +112,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 	/// </summary>
 	public interface IPersonFinderSearchCriteria
 	{
-
 		/// <summary>
 		/// Page size
 		/// </summary>
@@ -124,7 +123,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// <summary>
 		/// Row to fill with result
 		/// </summary>
-		ReadOnlyCollection<IPersonFinderDisplayRow> DisplayRows { get; }
+		IPersonFinderDisplayRow[] DisplayRows { get; }
 		/// <summary>
 		/// Total pages
 		/// </summary>

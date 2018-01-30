@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
@@ -53,8 +52,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var preferenceRestriction = new PreferenceRestriction();
 			preferenceRestriction.DayOffTemplate = new DayOffTemplate(new Description("DO"));
 			var preferenceDay = new PreferenceDay(new Person(), DateOnly.Today, preferenceRestriction);
-			var personRestrictionCollection =
-				new ReadOnlyObservableCollection<IScheduleData>(new ObservableCollection<IScheduleData>(new[] {preferenceDay}));
+			var personRestrictionCollection = new[] {preferenceDay};
 
 			scheduleDay.Stub(x => x.PersonRestrictionCollection()).Return(personRestrictionCollection);
 
@@ -265,7 +263,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var meeting = MockRepository.GenerateMock<IPersonMeeting>();
 			var belongsToMeeting = MockRepository.GenerateMock<IMeeting>();
 			belongsToMeeting.Stub(x => x.GetSubject(new NoFormatting())).IgnoreArguments().Return("subject");
-			var meetings = new ReadOnlyCollection<IPersonMeeting>(new[] {meeting});
+			var meetings = new[] {meeting};
 			meeting.Stub(x => x.BelongsToMeeting).Return(belongsToMeeting);
 			meeting.Stub(x => x.Period).Return(new DateTimePeriod(now.ToUniversalTime(), now.ToUniversalTime().AddHours(1)));
 			meeting.Stub(x => x.Optional).Return(true);

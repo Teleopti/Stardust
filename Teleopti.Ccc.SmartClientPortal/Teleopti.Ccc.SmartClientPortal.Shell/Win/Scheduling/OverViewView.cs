@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		            }
 
 		            var absenceCollection = scheduleDay.PersonAbsenceCollection();
-		            if (absenceCollection.Count > 0)
+		            if (absenceCollection.Length > 0)
 		            {
 			            if (significantPart == SchedulePartView.FullDayAbsence ||
 			                significantPart == SchedulePartView.ContractDayOff)

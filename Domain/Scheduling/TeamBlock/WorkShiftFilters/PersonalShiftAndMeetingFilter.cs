@@ -38,14 +38,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 		public DateTimePeriod? GetMaximumPeriodForPersonalShiftsAndMeetings(IScheduleDay schedulePart)
 		{
 			var ass = schedulePart.PersonAssignment();
-			if (schedulePart.PersonMeetingCollection().Count == 0 && ass == null)
+			var meetings = schedulePart.PersonMeetingCollection();
+			if (meetings.Length == 0 && ass == null)
 			{
 				return null;
 			}
 
 			DateTimePeriod? period = null;
 
-			foreach (IPersonMeeting personMeeting in schedulePart.PersonMeetingCollection())
+			foreach (IPersonMeeting personMeeting in meetings)
 			{
 				if (!period.HasValue)
 					period = personMeeting.Period;

@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			Assert.AreEqual(_pageSize, _target.PageSize);
 			Assert.AreEqual(_currentPage, _target.CurrentPage);
-			Assert.AreEqual(_pageSize, _target.DisplayRows.Count);
+			Assert.AreEqual(_pageSize, _target.DisplayRows.Length);
 			Assert.AreEqual(_totalRows, _target.TotalRows);
 			Assert.AreEqual(_terminalDate, _target.TerminalDate);
 		}

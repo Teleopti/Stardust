@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -288,12 +286,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			Expect.Call(lateAssignment.ShiftCategory).Return(late).Repeat.Any();
 			Expect.Call(_matrix.Person).Return(person).Repeat.Any();
 
-			Expect.Call(_schedulePartEmpty.PersonAbsenceCollection()).Return(new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence>())).Repeat.Any();
-			Expect.Call(_schedulePartDo.PersonAbsenceCollection()).Return(new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence>())).Repeat.Any();
-			Expect.Call(_schedulePartCoff.PersonAbsenceCollection()).Return(new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence>())).Repeat.Any();
-			Expect.Call(_schedulePartAbsence.PersonAbsenceCollection()).Return(new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence>(){new PersonAbsence(new Scenario())})).Repeat.Any();
-			Expect.Call(_schedulePartEarly.PersonAbsenceCollection()).Return(new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence>())).Repeat.Any();
-			Expect.Call(_schedulePartLate.PersonAbsenceCollection()).Return(new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence>())).Repeat.Any();
+			Expect.Call(_schedulePartEmpty.PersonAbsenceCollection()).Return(new IPersonAbsence[0]).Repeat.Any();
+			Expect.Call(_schedulePartDo.PersonAbsenceCollection()).Return(new IPersonAbsence[0]).Repeat.Any();
+			Expect.Call(_schedulePartCoff.PersonAbsenceCollection()).Return(new IPersonAbsence[0]).Repeat.Any();
+			Expect.Call(_schedulePartAbsence.PersonAbsenceCollection()).Return(new [] {new PersonAbsence(new Scenario())}).Repeat.Any();
+			Expect.Call(_schedulePartEarly.PersonAbsenceCollection()).Return(new IPersonAbsence[0]).Repeat.Any();
+			Expect.Call(_schedulePartLate.PersonAbsenceCollection()).Return(new IPersonAbsence[0]).Repeat.Any();
 		}
 
 		private void scheduleExpectations()

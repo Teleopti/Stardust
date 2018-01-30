@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new[] {agent}, date.ToDateOnlyPeriod());
 
-			schedulerStateHolder.Schedules[agent].ScheduledDay(date).PersonAbsenceCollection().Count
+			schedulerStateHolder.Schedules[agent].ScheduledDay(date).PersonAbsenceCollection().Length
 				.Should().Be.EqualTo(1);
 		}
 		
@@ -233,7 +233,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new[] { agent }, period);
 
-			schedulerStateHolder.Schedules[agent].ScheduledDay(date.AddDays(4)).PersonAbsenceCollection().Count.Should().Be.EqualTo(1);
+			schedulerStateHolder.Schedules[agent].ScheduledDay(date.AddDays(4)).PersonAbsenceCollection().Length.Should().Be.EqualTo(1);
 		}
 
 		[Test]

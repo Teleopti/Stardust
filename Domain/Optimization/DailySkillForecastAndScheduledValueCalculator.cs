@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
@@ -31,25 +31,20 @@ namespace Teleopti.Ccc.Domain.Optimization
             return result;
         }
 
-        public ReadOnlyCollection<ForecastScheduleValuePair> CalculateIntradayForecastAndScheduleDataForSkill(ISkill skill, DateOnly scheduleDay)
+        public ForecastScheduleValuePair[] CalculateIntradayForecastAndScheduleDataForSkill(ISkill skill, DateOnly scheduleDay)
         {
-            IList<ForecastScheduleValuePair> result = new List<ForecastScheduleValuePair>();
+            var dateTimePeriod = createDateTimePeriodFromScheduleDay(scheduleDay);
 
-            DateTimePeriod dateTimePeriod = CreateDateTimePeriodFromScheduleDay(scheduleDay);
-
-            IList<ISkillStaffPeriod> skillStaffPeriods =
-                _schedulingStateHolder().SkillStaffPeriodHolder.SkillStaffPeriodList(new List<ISkill> { skill }, dateTimePeriod);
+			var skillStaffPeriods = _schedulingStateHolder().SkillStaffPeriodHolder
+				.SkillStaffPeriodList(new [] {skill}, dateTimePeriod);
             if (skillStaffPeriods == null || skillStaffPeriods.Count == 0)
-                return new ReadOnlyCollection<ForecastScheduleValuePair>(result);
+                return new ForecastScheduleValuePair[0];
 
-            foreach (ISkillStaffPeriod skillStaffPeriod in skillStaffPeriods)
-            {
-                double forecastedMinutes = ForecastValue(skillStaffPeriod);
-                double scheduledMinutes = ScheduledValue(skillStaffPeriod);
-                result.Add(new ForecastScheduleValuePair{ForecastValue = forecastedMinutes, ScheduleValue = scheduledMinutes});
-            }
-
-            return new ReadOnlyCollection<ForecastScheduleValuePair>(result);
+			return skillStaffPeriods.Select(skillStaffPeriod => new ForecastScheduleValuePair
+			{
+				ForecastValue = forecastValue(skillStaffPeriod),
+				ScheduleValue = scheduledValue(skillStaffPeriod)
+			}).ToArray();
         }
 
         public double CalculateSkillStaffPeriod(ISkill skill, ISkillStaffPeriod skillStaffPeriod)
@@ -57,20 +52,20 @@ namespace Teleopti.Ccc.Domain.Optimization
             throw new NotImplementedException();
         }
 
-        private DateTimePeriod CreateDateTimePeriodFromScheduleDay(DateOnly scheduleDay)
+        private DateTimePeriod createDateTimePeriodFromScheduleDay(DateOnly scheduleDay)
         {
             return TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
                 scheduleDay.Date, scheduleDay.Date.AddDays(1),
 								_userTimeZone.TimeZone());
         }
 
-        private static double ForecastValue(ISkillStaffPeriod skillStaffPeriod)
+        private static double forecastValue(ISkillStaffPeriod skillStaffPeriod)
         {
             TimeSpan forecastTime = skillStaffPeriod.FStaffTime();
             return forecastTime.TotalMinutes;
         }
 
-        private static double ScheduledValue(ISkillStaffPeriod skillStaffPeriod)
+        private static double scheduledValue(ISkillStaffPeriod skillStaffPeriod)
         {
               TimeSpan scheduledTime =
                     TimeSpan.FromMinutes(skillStaffPeriod.CalculatedResource *

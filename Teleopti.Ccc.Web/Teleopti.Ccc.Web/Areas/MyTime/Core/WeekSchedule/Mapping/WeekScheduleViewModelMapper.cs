@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
@@ -204,7 +203,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			return dayViewModel;
 		}
 
-		private NoteViewModel map(ReadOnlyCollection<IPublicNote> s)
+		private NoteViewModel map(IPublicNote[] s)
 		{
 			var publicNote = s.FirstOrDefault();
 			return new NoteViewModel

@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 
             foreach (IScheduleDay schedule in schedules)
             {
-                if (schedule.PersonAbsenceCollection().Count > 0)
+                if (schedule.PersonAbsenceCollection().Length > 0)
                     schedulesWithAbsence.Add(schedule);
             }
 

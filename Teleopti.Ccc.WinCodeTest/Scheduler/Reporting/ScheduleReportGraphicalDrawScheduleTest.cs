@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Globalization;
 using NUnit.Framework;
@@ -105,7 +104,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
                 Expect.Call(_person.Period(new DateOnly(2011, 1, 1))).Return(_personPeriod);
                 Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(dateOnlyAsPeriod).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleDay.PublicNoteCollection()).Return(new ReadOnlyCollection<IPublicNote>(new List<IPublicNote> {_publicNote}));
+                Expect.Call(_scheduleDay.PublicNoteCollection()).Return(new [] {_publicNote});
                 Expect.Call(_publicNote.GetScheduleNote(new NoFormatting())).IgnoreArguments().Return("publicNote");
             }
 

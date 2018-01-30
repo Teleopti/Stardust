@@ -239,10 +239,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			((ScheduleRange)_dictionary[_person2]).AddRange(p2assignments);
 
 			Assert.AreEqual(0, _p1D1.PersonAssignment().MainActivities().Count());
-			Assert.AreEqual(1, _p1D1.PersonAbsenceCollection().Count);
+			Assert.AreEqual(1, _p1D1.PersonAbsenceCollection().Length);
 			// NOTE that the followith case is not right from the edition 388 as there is no null PersonAssignment() any longer
 			//Assert.IsNull(_p2D1.PersonAssignment());
-			Assert.AreEqual(0, _p2D1.PersonAbsenceCollection().Count);
+			Assert.AreEqual(0, _p2D1.PersonAbsenceCollection().Length);
 
 			var service = new SwapServiceNew();
 
@@ -294,9 +294,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			((ScheduleRange)_dictionary[_person2]).AddRange(personAssignments);
 
 			Assert.IsNull(_p1D1.PersonAssignment());
-			Assert.AreEqual(1, _p1D1.PersonAbsenceCollection().Count);
+			Assert.AreEqual(1, _p1D1.PersonAbsenceCollection().Length);
 			Assert.IsNull(_p2D1.PersonAssignment());
-			Assert.AreEqual(0, _p2D1.PersonAbsenceCollection().Count);
+			Assert.AreEqual(0, _p2D1.PersonAbsenceCollection().Length);
 
 			var service = new SwapServiceNew();
 
@@ -345,9 +345,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			((ScheduleRange)_dictionary[_person2]).AddRange(p2assignments);
 
 			Assert.IsNotNull(_p1D1.PersonAssignment());
-			Assert.AreEqual(1, _p1D1.PersonAbsenceCollection().Count);
+			Assert.AreEqual(1, _p1D1.PersonAbsenceCollection().Length);
 			Assert.IsNotNull(_p2D1.PersonAssignment());
-			Assert.AreEqual(0, _p2D1.PersonAbsenceCollection().Count);
+			Assert.AreEqual(0, _p2D1.PersonAbsenceCollection().Length);
 
 			var service = new SwapServiceNew();
 

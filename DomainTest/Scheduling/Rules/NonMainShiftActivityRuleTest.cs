@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
@@ -99,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		public void ShouldReturnCorrectResponseWhenHasMeeting()
 		{
 			var personMeeting = MockRepository.GenerateMock<IPersonMeeting>();
-			var personMeetings = new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>{personMeeting});
+			var personMeetings = new [] {personMeeting};
 			var scheduleDataWithMeeting = MockRepository.GenerateMock<IScheduleDay>();
 			var dateOnly = new DateOnly(2000, 1, 1);
 			var period = new DateOnlyPeriod(dateOnly, dateOnly);
@@ -185,7 +184,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		{
 			var personMeeting = MockRepository.GenerateMock<IPersonMeeting>();
 			personMeeting.Stub(x => x.Period).Return(new DateTimePeriod(2001, 1, 1, 11, 2001, 1, 1, 12));
-			var personMeetings = new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting> { personMeeting });
+			var personMeetings = new [] { personMeeting };
 			var scheduleDataWithMeeting = MockRepository.GenerateMock<IScheduleDay>();
 			var pa = MockRepository.GenerateMock<IPersonAssignment>();
 			var dateOnly = new DateOnly(2000, 1, 1);
@@ -218,7 +217,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		{
 			var personMeeting = MockRepository.GenerateMock<IPersonMeeting>();
 			personMeeting.Stub(x => x.Period).Return(new DateTimePeriod(2001, 1, 1, 11, 2001, 1, 1, 12));
-			var personMeetings = new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting> { personMeeting });
+			var personMeetings = new [] { personMeeting };
 			var scheduleDataWithMeeting = MockRepository.GenerateMock<IScheduleDay>();
 			var pa = MockRepository.GenerateMock<IPersonAssignment>();
 			var dateOnly = new DateOnly(2000, 1, 1);
@@ -239,7 +238,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			var shiftLayer =   new MainShiftLayer(new Activity("lunch"), new DateTimePeriod(2001, 1,1,11, 2001,1,1,12));
 			pa.Stub(x => x.ShiftLayers).Return(new List<ShiftLayer> { shiftLayer });
 			scheduleBeTrade.Stub(s => s.PersonAssignment()).Return(pa);
-			scheduleBeTrade.Stub(s => s.PersonMeetingCollection()).Return(new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>()));
+			scheduleBeTrade.Stub(s => s.PersonMeetingCollection()).Return(new IPersonMeeting[0]);
 
 			string message = string.Format(CultureInfo.CurrentCulture,
 												 Resources.HasNonMainShiftActivityErrorMessage, scheduleDataWithMeeting.Person.Name,
@@ -258,7 +257,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		{
 			var personMeeting = MockRepository.GenerateMock<IPersonMeeting>();
 			personMeeting.Stub(x => x.Period).Return(new DateTimePeriod(2001, 1, 1, 11, 2001, 1, 1, 12));
-			var personMeetings = new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting> { personMeeting });
+			var personMeetings = new [] { personMeeting };
 			var scheduleDataWithMeeting = MockRepository.GenerateMock<IScheduleDay>();
 			var pa = MockRepository.GenerateMock<IPersonAssignment>();
 			var dateOnly = new DateOnly(2000, 1, 1);
@@ -278,7 +277,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			scheduleBeTrade.Stub(s => s.Person).Return(person2);
 			pa.Stub(x => x.ShiftLayers).Return(new List<ShiftLayer> ());
 			scheduleBeTrade.Stub(s => s.PersonAssignment()).Return(pa);
-			scheduleBeTrade.Stub(s => s.PersonMeetingCollection()).Return(new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>()));
+			scheduleBeTrade.Stub(s => s.PersonMeetingCollection()).Return(new IPersonMeeting[0]);
 
 			string message = string.Format(CultureInfo.CurrentCulture,
 												 Resources.HasNonMainShiftActivityErrorMessage, scheduleDataWithMeeting.Person.Name,

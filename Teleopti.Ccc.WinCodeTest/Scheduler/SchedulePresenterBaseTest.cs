@@ -315,9 +315,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             Expect.Call(schedulePart.PersonAssignment()).Return(null).Repeat.AtLeastOnce();
             Expect.Call(schedulePart.PersonAbsenceCollection()).Return(
-                new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence>())).Repeat.AtLeastOnce();
+                new IPersonAbsence[0]).Repeat.AtLeastOnce();
             Expect.Call(schedulePart.PersonMeetingCollection()).Return(
-                new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>())).Repeat.AtLeastOnce();
+                new IPersonMeeting[0]).Repeat.AtLeastOnce();
             Expect.Call(schedulePart.BusinessRuleResponseCollection).Return(
                 new List<IBusinessRuleResponse>()).Repeat.AtLeastOnce();
             Expect.Call(schedulePart.ProjectionService()).Return(new VisualLayerProjectionService(person1)).Repeat.Any();

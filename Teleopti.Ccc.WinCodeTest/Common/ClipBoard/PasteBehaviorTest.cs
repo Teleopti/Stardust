@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Syncfusion.Windows.Forms.Grid;
@@ -150,8 +149,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
                 using (mockRep.Record())
                 {
                     Expect.Call(part.SignificantPart()).Return(SchedulePartView.FullDayAbsence).Repeat.AtLeastOnce();
-                    Expect.Call(part.PersonAbsenceCollection()).Return(
-                        new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence>())).Repeat.AtLeastOnce();
+                    Expect.Call(part.PersonAbsenceCollection()).Return(new IPersonAbsence[0]).Repeat.AtLeastOnce();
                     Expect.Call(pasteAction.PasteBehavior).Return(normalBehavior);
                     Expect.Call(pasteAction.Paste(gridControl, clip, 1, 1)).Return(null);
                     Expect.Call(pasteAction.Paste(gridControl, clip, 1, 2)).Return(part);

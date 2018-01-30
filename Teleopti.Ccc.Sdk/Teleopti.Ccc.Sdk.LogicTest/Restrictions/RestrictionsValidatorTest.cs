@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Globalization;
 using NUnit.Framework;
@@ -97,8 +96,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
                 Expect.Call(_part.PersistableScheduleDataCollection()).Return(data).Repeat.AtLeastOnce();
                 Expect.Call(_part.PersonAssignment()).Return(null).Repeat.AtLeastOnce();
                 Expect.Call(_part.RestrictionCollection()).Return(new List<IRestrictionBase>()).Repeat.AtLeastOnce();
-                Expect.Call(_part.PersonRestrictionCollection()).Return(new ReadOnlyCollection<IScheduleData>(new List<IScheduleData>())).Repeat.AtLeastOnce();
-                Expect.Call(_part.PersonMeetingCollection()).Return(new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>())).Repeat.AtLeastOnce();
+                Expect.Call(_part.PersonRestrictionCollection()).Return(new IScheduleData[0]).Repeat.AtLeastOnce();
+                Expect.Call(_part.PersonMeetingCollection()).Return(new IPersonMeeting[0]).Repeat.AtLeastOnce();
                 Expect.Call(_part.SignificantPartForDisplay()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
                 Expect.Call(_minMaxChecker.MinMaxWorkTime(_part, ruleSetBag, effectiveRestriction, false)).Repeat.AtLeastOnce().IgnoreArguments();
 
@@ -141,10 +140,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
                Expect.Call(partWithDayOff.PersonAssignment()).Return(personDayOff).Repeat.AtLeastOnce();
                Expect.Call(partWithDayOff.RestrictionCollection()).Return(new List<IRestrictionBase>()).Repeat.
                    AtLeastOnce();
-               Expect.Call(partWithDayOff.PersonRestrictionCollection()).Return(
-                   new ReadOnlyCollection<IScheduleData>(new List<IScheduleData>())).Repeat.AtLeastOnce();
-               Expect.Call(partWithDayOff.PersonMeetingCollection()).Return(
-                   new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>())).Repeat.AtLeastOnce();
+               Expect.Call(partWithDayOff.PersonRestrictionCollection()).Return(new IScheduleData[0]).Repeat.AtLeastOnce();
+               Expect.Call(partWithDayOff.PersonMeetingCollection()).Return(new IPersonMeeting[0]).Repeat.AtLeastOnce();
                Expect.Call(partWithDayOff.SignificantPartForDisplay()).Return(SchedulePartView.DayOff).Repeat.AtLeastOnce();
                Expect.Call(_minMaxChecker.MinMaxWorkTime(_part, ruleSetBag, effectiveRestriction, false)).Repeat.AtLeastOnce().IgnoreArguments();
 			  Expect.Call(() => _preferenceNightRestChecker.CheckNightlyRest(new List<ValidatedSchedulePartDto>())).
@@ -182,8 +179,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
                 Expect.Call(partWithFullDayAbcence.PersistableScheduleDataCollection()).Return(data).Repeat.AtLeastOnce();
                 Expect.Call(partWithFullDayAbcence.PersonAssignment()).Return(null).Repeat.AtLeastOnce();
                 Expect.Call(partWithFullDayAbcence.RestrictionCollection()).Return(new List<IRestrictionBase>()).Repeat.AtLeastOnce();
-                Expect.Call(partWithFullDayAbcence.PersonRestrictionCollection()).Return(new ReadOnlyCollection<IScheduleData>(new List<IScheduleData>())).Repeat.AtLeastOnce();
-                Expect.Call(partWithFullDayAbcence.PersonMeetingCollection()).Return(new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>())).Repeat.AtLeastOnce();
+                Expect.Call(partWithFullDayAbcence.PersonRestrictionCollection()).Return(new IScheduleData[0]).Repeat.AtLeastOnce();
+                Expect.Call(partWithFullDayAbcence.PersonMeetingCollection()).Return(new IPersonMeeting[0]).Repeat.AtLeastOnce();
                 Expect.Call(partWithFullDayAbcence.SignificantPartForDisplay()).Return(SchedulePartView.FullDayAbsence).Repeat.AtLeastOnce();
                 Expect.Call(partWithFullDayAbcence.ProjectionService()).Return(projService).Repeat.AtLeastOnce();
                 Expect.Call(projService.CreateProjection()).Return(visualLayerCollection).Repeat.AtLeastOnce();
@@ -216,7 +213,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
             var period = new DateTimePeriod(new DateTime(2009, 2, 2, 6, 0, 0, DateTimeKind.Utc), new DateTime(2009, 2, 2, 7, 0, 0, DateTimeKind.Utc));
             var largePeriod = new DateOnlyPeriod(2009, 1, 26, 2009, 2, 10);
             IPersonMeeting personMeeting = new PersonMeeting(meeting, meetingPerson, period);
-            IList<IPersonMeeting> meetings = new List<IPersonMeeting> { personMeeting };
+            var meetings = new [] { personMeeting };
             IPersonAssignment personAssignment = PersonAssignmentFactory.CreateAssignmentWithPersonalShift(_person,
                                                                                                            scenario, activity, period);
             var ruleSetBag = _mocks.StrictMock<IRuleSetBag>();
@@ -234,8 +231,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
                 Expect.Call(_part.PersistableScheduleDataCollection()).Return(data).Repeat.AtLeastOnce();
                 Expect.Call(_part.PersonAssignment()).Return(personAssignment).Repeat.AtLeastOnce();
                 Expect.Call(_part.RestrictionCollection()).Return(new List<IRestrictionBase>()).Repeat.AtLeastOnce();
-                Expect.Call(_part.PersonRestrictionCollection()).Return(new ReadOnlyCollection<IScheduleData>(new List<IScheduleData>())).Repeat.AtLeastOnce();
-                Expect.Call(_part.PersonMeetingCollection()).Return(new ReadOnlyCollection<IPersonMeeting>(meetings)).Repeat.AtLeastOnce();
+                Expect.Call(_part.PersonRestrictionCollection()).Return(new IScheduleData[0]).Repeat.AtLeastOnce();
+                Expect.Call(_part.PersonMeetingCollection()).Return(meetings).Repeat.AtLeastOnce();
                 Expect.Call(_part.SignificantPartForDisplay()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
                 Expect.Call(_minMaxChecker.MinMaxWorkTime(_part, ruleSetBag, effectiveRestriction, false)).Repeat.AtLeastOnce().IgnoreArguments();
                 Expect.Call(_preferenceDayAssembler.DomainEntityToDto(preferenceDay)).Return(
@@ -281,7 +278,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
             var period = new DateTimePeriod(new DateTime(2009, 2, 2, 6, 0, 0, DateTimeKind.Utc), new DateTime(2009, 2, 2, 7, 0, 0, DateTimeKind.Utc));
             var largePeriod = new DateOnlyPeriod(2009, 1, 26, 2009, 2, 10);
             IPersonMeeting personMeeting = new PersonMeeting(meeting, meetingPerson, period);
-            IList<IPersonMeeting> meetings = new List<IPersonMeeting> { personMeeting };
+            var meetings = new [] { personMeeting };
             IShiftCategory category = ShiftCategoryFactory.CreateShiftCategory("day");
             IPersonAssignment personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(_person, scenario, activity, period, category);
 
@@ -295,8 +292,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
                 Expect.Call(_part.PersistableScheduleDataCollection()).Return(data).Repeat.AtLeastOnce();
                 Expect.Call(_part.PersonAssignment()).Return(personAssignment).Repeat.AtLeastOnce();
                 Expect.Call(_part.RestrictionCollection()).Return(new List<IRestrictionBase>()).Repeat.AtLeastOnce();
-                Expect.Call(_part.PersonRestrictionCollection()).Return(new ReadOnlyCollection<IScheduleData>(new List<IScheduleData>())).Repeat.AtLeastOnce();
-                Expect.Call(_part.PersonMeetingCollection()).Return(new ReadOnlyCollection<IPersonMeeting>(meetings)).Repeat.AtLeastOnce();
+                Expect.Call(_part.PersonRestrictionCollection()).Return(new IScheduleData[0]).Repeat.AtLeastOnce();
+                Expect.Call(_part.PersonMeetingCollection()).Return(meetings).Repeat.AtLeastOnce();
                 
                 Expect.Call(_minMaxChecker.MinMaxWorkTime(_part, ruleSetBag, effectiveRestriction, false)).Return(minMax).
                     Repeat.AtLeastOnce().IgnoreArguments();

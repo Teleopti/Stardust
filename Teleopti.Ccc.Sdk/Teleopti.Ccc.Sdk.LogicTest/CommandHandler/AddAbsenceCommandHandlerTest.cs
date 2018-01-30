@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false),
 				_dateOnlyPeriod, scenario)[person].ScheduledDay(new DateOnly(2012, 1, 1))
 				.PersonAbsenceCollection()
-				.Count.Should()
+				.Length.Should()
 				.Be.EqualTo(1);
 		}
 		
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false),
 				_dateOnlyPeriod, otherScenario)[person].ScheduledDay(new DateOnly(2012, 1, 1))
 				.PersonAbsenceCollection()
-				.Count.Should()
+				.Length.Should()
 				.Be.EqualTo(1);
 		}
 

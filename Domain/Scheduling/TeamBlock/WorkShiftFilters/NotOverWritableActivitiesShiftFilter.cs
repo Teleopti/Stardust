@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			var meetings = part.PersonMeetingCollection();
 			var personAssignment = part.PersonAssignment(true);
 
-			if (meetings.Count == 0 && !personAssignment.PersonalActivities().Any())
+			if (meetings.Length == 0 && !personAssignment.PersonalActivities().Any())
 				return shiftList;
 
 			var filteredList =

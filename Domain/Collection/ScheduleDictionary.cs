@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
@@ -396,24 +395,12 @@ namespace Teleopti.Ccc.Domain.Collection
         /// </remarks>
         public IEnumerable<IScheduleDay> SchedulesForDay(DateOnly dateOnly)
         {
-            List<IScheduleDay> retList = new List<IScheduleDay>();
-            foreach (KeyValuePair<IPerson, IScheduleRange> pair in _dictionary)
-            {
-                IScheduleDay scheduleRange = pair.Value.ScheduledDay(dateOnly);
-                retList.Add(scheduleRange);
-            }
-
-            return new ReadOnlyCollection<IScheduleDay>(retList);
+            return _dictionary.Select(pair => pair.Value.ScheduledDay(dateOnly)).ToArray();
         }
 
 	    public IEnumerable<IScheduleDay> SchedulesForPeriod(DateOnlyPeriod period, params IPerson[] agents)
 	    {
-			var schedules = new List<IScheduleDay>();
-			foreach (var person in agents)
-			{
-				schedules.AddRange(this[person].ScheduledDayCollection(period));
-			}
-		    return schedules;
+			return agents.SelectMany(a => this[a].ScheduledDayCollection(period)).ToArray();
 	    }
 
 	    /// <summary>

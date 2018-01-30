@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
@@ -28,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 		private List<IEditableShiftLayer> _layerCollectionTo;
 		private DateTimePeriod _periodFrom;
 		private DateTimePeriod _periodTo;
-		private ReadOnlyCollection<IPersonMeeting> _personMeetings;
+		private IPersonMeeting[] _personMeetings;
 		private IPersonMeeting _personMeeting;
 			
 		[SetUp]
@@ -49,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 			var endFrom = new DateTime(2011, 1, 1, 17, 0, 0, DateTimeKind.Utc);
 			_periodFrom = new DateTimePeriod(startFrom, endFrom);
 			_personMeeting = _mock.StrictMock<IPersonMeeting>();
-			_personMeetings = new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>{_personMeeting});
+			_personMeetings = new[]{_personMeeting};
 		}
 
 		[Test]
@@ -74,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 
 			using(_mock.Record())
 			{
-				Expect.Call(_scheduleDayFrom.PersonMeetingCollection()).Return(new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>()));
+				Expect.Call(_scheduleDayFrom.PersonMeetingCollection()).Return(new IPersonMeeting[0]);
 				Expect.Call(_scheduleDayFrom.GetEditorShift()).Return(_mainShift);
 				Expect.Call(_mainShift.LayerCollection).Return(_layerCollectionFrom);
 
@@ -102,7 +101,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 
 			using (_mock.Record())
 			{
-				Expect.Call(_scheduleDayTo.PersonMeetingCollection()).Return(new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>()));
+				Expect.Call(_scheduleDayTo.PersonMeetingCollection()).Return(new IPersonMeeting[0]);
 				Expect.Call(_scheduleDayTo.GetEditorShift()).Return(_mainShift);
 				Expect.Call(_mainShift.LayerCollection).Return(_layerCollectionTo);
 
@@ -128,7 +127,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 
 			using (_mock.Record())
 			{
-				Expect.Call(_scheduleDayTo.PersonMeetingCollection()).Return(new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>()));
+				Expect.Call(_scheduleDayTo.PersonMeetingCollection()).Return(new IPersonMeeting[0]);
 				Expect.Call(_scheduleDayTo.GetEditorShift()).Return(_mainShift);
 				Expect.Call(_mainShift.LayerCollection).Return(_layerCollectionTo);
 

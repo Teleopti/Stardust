@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
@@ -167,7 +166,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			var scheduleDay = new StubFactory().ScheduleDayStub(date.Date);
 			var overtimeAvailability = new OvertimeAvailability(new Person(), date, new TimeSpan(1, 0, 0), new TimeSpan(2, 0, 0));
 			scheduleDay.Stub(x => x.OvertimeAvailablityCollection())
-							 .Return(new ReadOnlyCollection<IOvertimeAvailability>(new List<IOvertimeAvailability> { overtimeAvailability }));
+							 .Return(new [] { overtimeAvailability });
 			var projection = new StubFactory().ProjectionStub();
 			scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything, Arg<ScheduleDictionaryLoadOptions>.Is.Anything)).Return(new[] { scheduleDay });
 			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
@@ -188,7 +187,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			var scheduleYesterday = new StubFactory().ScheduleDayStub(yesterdayDate.Date);
 			var overtimeAvailabilityYesterday = new OvertimeAvailability(new Person(), date, new TimeSpan(1, 0, 0), new TimeSpan(2, 0, 0));
 			scheduleYesterday.Stub(x => x.OvertimeAvailablityCollection())
-							 .Return(new ReadOnlyCollection<IOvertimeAvailability>(new List<IOvertimeAvailability> { overtimeAvailabilityYesterday }));
+							 .Return(new [] { overtimeAvailabilityYesterday });
 			var projectionYesterday = new StubFactory().ProjectionStub();
 
 			scheduleProvider.Stub(x => x.GetScheduleForPeriod(period)).Return(new[] { scheduleDay, scheduleYesterday });
@@ -511,10 +510,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			var date = new DateOnly(2013, 09, 11);
 			var scheduleDay = new StubFactory().ScheduleDayStub(date.Date);
 			scheduleDay.Stub(x => x.OvertimeAvailablityCollection())
-					   .Return(new ReadOnlyCollection<IOvertimeAvailability>(new List<IOvertimeAvailability>
-			{
-				new OvertimeAvailability(new Person(), date, new TimeSpan(1, 0, 0), new TimeSpan(2, 0, 0))
-			}));
+					   .Return(new [] { new OvertimeAvailability(new Person(), date, new TimeSpan(1, 0, 0), new TimeSpan(2, 0, 0)) });
 
 			var projection = MockRepository.GenerateMock<IVisualLayerCollection>();
 			projection.Stub(x => x.Period()).Return(null);
@@ -537,10 +533,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			var date = new DateOnly(2013, 09, 11);
 			var scheduleDay = new StubFactory().ScheduleDayStub(date.Date);
 			scheduleDay.Stub(x => x.OvertimeAvailablityCollection())
-					   .Return(new ReadOnlyCollection<IOvertimeAvailability>(new List<IOvertimeAvailability>
-			{
-				new OvertimeAvailability(new Person(), date, new TimeSpan(20, 0, 0), new TimeSpan(28, 0, 0))
-			}));
+					   .Return(new [] { new OvertimeAvailability(new Person(), date, new TimeSpan(20, 0, 0), new TimeSpan(28, 0, 0)) });
 
 			var projection = MockRepository.GenerateMock<IVisualLayerCollection>();
 			projection.Stub(x => x.Period()).Return(null);
@@ -567,10 +560,7 @@ namespace Teleopti.Ccc.WebTest.Core
 
 			var scheduleDay = new StubFactory().ScheduleDayStub(firstDayOfWeek.AddDays(-1).Date);
 			scheduleDay.Stub(x => x.OvertimeAvailablityCollection())
-					   .Return(new ReadOnlyCollection<IOvertimeAvailability>(new List<IOvertimeAvailability>
-			{
-				new OvertimeAvailability(new Person(), date, new TimeSpan(20, 0, 0), new TimeSpan(28, 0, 0))
-			}));
+					   .Return(new [] { new OvertimeAvailability(new Person(), date, new TimeSpan(20, 0, 0), new TimeSpan(28, 0, 0)) });
 
 			var projection = MockRepository.GenerateMock<IVisualLayerCollection>();
 			projection.Stub(x => x.Period()).Return(null);
@@ -598,10 +588,7 @@ namespace Teleopti.Ccc.WebTest.Core
 
 			var scheduleDay = new StubFactory().ScheduleDayStub(lastDayOfWeek.Date);
 			scheduleDay.Stub(x => x.OvertimeAvailablityCollection())
-					   .Return(new ReadOnlyCollection<IOvertimeAvailability>(new List<IOvertimeAvailability>
-			{
-				new OvertimeAvailability(new Person(), date, new TimeSpan(20, 0, 0), new TimeSpan(28, 0, 0))
-			}));
+					   .Return(new [] { new OvertimeAvailability(new Person(), date, new TimeSpan(20, 0, 0), new TimeSpan(28, 0, 0)) });
 
 			var projection = MockRepository.GenerateMock<IVisualLayerCollection>();
 			projection.Stub(x => x.Period()).Return(null);
@@ -834,7 +821,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			var overtimeAvailability = new OvertimeAvailability(new Person(), date, new TimeSpan(1, 0, 0),
 				new TimeSpan(2, 0, 0));
 			scheduleDay.Stub(x => x.OvertimeAvailablityCollection())
-				.Return(new ReadOnlyCollection<IOvertimeAvailability>(new List<IOvertimeAvailability> { overtimeAvailability }));
+				.Return(new [] { overtimeAvailability });
 			var projection = new StubFactory().ProjectionStub();
 			scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything,
 					Arg<ScheduleDictionaryLoadOptions>.Is.Anything))
@@ -856,9 +843,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			var scheduleYesterday = new StubFactory().ScheduleDayStub(yesterdayDate.Date);
 			var overtimeAvailabilityYesterday =
 				new OvertimeAvailability(new Person(), date, new TimeSpan(1, 0, 0), new TimeSpan(2, 0, 0));
-			scheduleYesterday.Stub(x => x.OvertimeAvailablityCollection())
-				.Return(new ReadOnlyCollection<IOvertimeAvailability>(
-					new List<IOvertimeAvailability> { overtimeAvailabilityYesterday }));
+			scheduleYesterday.Stub(x => x.OvertimeAvailablityCollection()).Return(new [] { overtimeAvailabilityYesterday });
 			var projectionYesterday = new StubFactory().ProjectionStub();
 
 			scheduleProvider.Stub(x => x.GetScheduleForPeriod(period)).Return(new[] { scheduleDay, scheduleYesterday });
@@ -1207,11 +1192,7 @@ namespace Teleopti.Ccc.WebTest.Core
 		{
 			var date = new DateOnly(2013, 09, 11);
 			var scheduleDay = new StubFactory().ScheduleDayStub(date.Date);
-			scheduleDay.Stub(x => x.OvertimeAvailablityCollection())
-				.Return(new ReadOnlyCollection<IOvertimeAvailability>(new List<IOvertimeAvailability>
-			{
-				new OvertimeAvailability(new Person(), date, new TimeSpan(1, 0, 0), new TimeSpan(2, 0, 0))
-			}));
+			scheduleDay.Stub(x => x.OvertimeAvailablityCollection()).Return(new [] { new OvertimeAvailability(new Person(), date, new TimeSpan(1, 0, 0), new TimeSpan(2, 0, 0)) });
 
 			var projection = MockRepository.GenerateMock<IVisualLayerCollection>();
 			projection.Stub(x => x.Period()).Return(null);
@@ -1236,10 +1217,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			var date = new DateOnly(2013, 09, 11);
 			var scheduleDay = new StubFactory().ScheduleDayStub(date.Date);
 			scheduleDay.Stub(x => x.OvertimeAvailablityCollection())
-				.Return(new ReadOnlyCollection<IOvertimeAvailability>(new List<IOvertimeAvailability>
-			{
-				new OvertimeAvailability(new Person(), date, new TimeSpan(20, 0, 0), new TimeSpan(28, 0, 0))
-			}));
+				.Return(new IOvertimeAvailability[] { new OvertimeAvailability(new Person(), date, new TimeSpan(20, 0, 0), new TimeSpan(28, 0, 0))});
 
 			var projection = MockRepository.GenerateMock<IVisualLayerCollection>();
 			projection.Stub(x => x.Period()).Return(null);
@@ -1266,10 +1244,7 @@ namespace Teleopti.Ccc.WebTest.Core
 
 			var scheduleDay = new StubFactory().ScheduleDayStub(date.AddDays(-1).Date);
 			scheduleDay.Stub(x => x.OvertimeAvailablityCollection())
-				.Return(new ReadOnlyCollection<IOvertimeAvailability>(new List<IOvertimeAvailability>
-			{
-				new OvertimeAvailability(new Person(), date, new TimeSpan(20, 0, 0), new TimeSpan(28, 0, 0))
-			}));
+				.Return(new [] { new OvertimeAvailability(new Person(), date, new TimeSpan(20, 0, 0), new TimeSpan(28, 0, 0)) });
 
 			var projection = MockRepository.GenerateMock<IVisualLayerCollection>();
 			projection.Stub(x => x.Period()).Return(null);
@@ -1296,10 +1271,7 @@ namespace Teleopti.Ccc.WebTest.Core
 
 			var scheduleDay = new StubFactory().ScheduleDayStub(date.Date);
 			scheduleDay.Stub(x => x.OvertimeAvailablityCollection())
-				.Return(new ReadOnlyCollection<IOvertimeAvailability>(new List<IOvertimeAvailability>
-			{
-				new OvertimeAvailability(new Person(), date, new TimeSpan(20, 0, 0), new TimeSpan(28, 0, 0))
-			}));
+				.Return(new [] { new OvertimeAvailability(new Person(), date, new TimeSpan(20, 0, 0), new TimeSpan(28, 0, 0)) });
 
 			var projection = MockRepository.GenerateMock<IVisualLayerCollection>();
 			projection.Stub(x => x.Period()).Return(null);

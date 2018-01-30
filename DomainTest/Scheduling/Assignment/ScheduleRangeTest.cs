@@ -295,8 +295,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 										Assert.AreEqual(ass1.MainActivities().First().Period,
 																		day1.PersonAssignment().MainActivities().First().Period);
-                    Assert.AreEqual(2, day1.PersonAbsenceCollection().Count);
-                    Assert.AreEqual(2, day2.PersonAbsenceCollection().Count);
+                    Assert.AreEqual(2, day1.PersonAbsenceCollection().Length);
+                    Assert.AreEqual(2, day2.PersonAbsenceCollection().Length);
                     Assert.AreEqual(personMeeting.Period, day1.PersonMeetingCollection()[0].Period);
                     Assert.IsInstanceOf<ScheduleProjectionService>(day1.ProjectionService());
 
@@ -815,7 +815,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
                 Assert.AreEqual(1, part.PersistableScheduleDataCollection().OfType<IPersonAbsence>().Count());
                 part.PersonAssignment().Should().Not.Be.Null();
-                Assert.AreEqual(1, part.PersonMeetingCollection().Count);
+                Assert.AreEqual(1, part.PersonMeetingCollection().Length);
             }
 		}
 		#endregion

@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AuditHistory
 					new PersonAbsence(scheduleDay.Person, scheduleDay.Scenario, new AbsenceLayer(new Absence(), new DateTimePeriod(2000,1,1,2000,1,2)))
 				};
 			target.Apply(scheduleDay, newAbsences);
-			scheduleDay.PersonAbsenceCollection().Count.Should().Be.EqualTo(2);
+			scheduleDay.PersonAbsenceCollection().Length.Should().Be.EqualTo(2);
 		}
 
 		[Test]

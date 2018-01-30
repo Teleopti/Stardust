@@ -445,15 +445,15 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                                                                             new PersonRequestAuthorizationCheckerForTest
 																				(), newBusinessRuleCollection, new OverriddenBusinessRulesHolder(), new DoNothingScheduleDayChangeCallBack(), _globalSettingRepo, _personAbsenceAccountRepository), string.Empty);
             Assert.IsTrue(req.IsApproved);
-            Assert.AreEqual(1, sched[_person1].ScheduledDay(new DateOnly(2000, 1, 1)).PersonAbsenceCollection().Count);
+            Assert.AreEqual(1, sched[_person1].ScheduledDay(new DateOnly(2000, 1, 1)).PersonAbsenceCollection().Length);
 
             undo.Undo();
             Assert.IsTrue(req.IsPending);
-            Assert.AreEqual(0, sched[_person1].ScheduledDay(new DateOnly(2000, 1, 1)).PersonAbsenceCollection().Count);
+            Assert.AreEqual(0, sched[_person1].ScheduledDay(new DateOnly(2000, 1, 1)).PersonAbsenceCollection().Length);
 
             undo.Redo();
             Assert.IsTrue(req.IsApproved);
-            Assert.AreEqual(1, sched[_person1].ScheduledDay(new DateOnly(2000, 1, 1)).PersonAbsenceCollection().Count);
+            Assert.AreEqual(1, sched[_person1].ScheduledDay(new DateOnly(2000, 1, 1)).PersonAbsenceCollection().Length);
         }
 
         [Test]
@@ -483,7 +483,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 																				(), newBusinessRuleCollection, new OverriddenBusinessRulesHolder(), new DoNothingScheduleDayChangeCallBack(), _globalSettingRepo, _personAbsenceAccountRepository), string.Empty);
 
             Assert.IsTrue(req.IsPending);
-            Assert.AreEqual(0, sched[person].ScheduledDay(new DateOnly(2000, 1, 1)).PersonAbsenceCollection().Count);
+            Assert.AreEqual(0, sched[person].ScheduledDay(new DateOnly(2000, 1, 1)).PersonAbsenceCollection().Length);
             Assert.IsFalse(undo.CanUndo());
 
 			_view.AssertWasCalled(x => x.ShowErrorMessage("MandatoryError", "Dont break this rule"),o => o.IgnoreArguments());

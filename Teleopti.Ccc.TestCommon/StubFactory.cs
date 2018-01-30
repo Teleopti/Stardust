@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Linq;
 using Rhino.Mocks;
@@ -88,12 +87,12 @@ namespace Teleopti.Ccc.TestCommon
 				scheduleDay.Stub(x => x.Person).Return(person);
 			if (publicNote != null)
 			{
-				var publicNotes = new ReadOnlyCollection<IPublicNote>(new List<IPublicNote>(new[] {publicNote}));
+				var publicNotes = new[] {publicNote};
 				scheduleDay.Stub(x => x.PublicNoteCollection()).Return(publicNotes);
 			}
 			else
 			{
-				var publicNotes = new ReadOnlyCollection<IPublicNote>(new List<IPublicNote>());
+				var publicNotes = new IPublicNote[0];
 				scheduleDay.Stub(x => x.PublicNoteCollection()).Return(publicNotes);
 			}
 			if (personAssignment != null)
@@ -107,17 +106,17 @@ namespace Teleopti.Ccc.TestCommon
 
 			if (personAbsences != null)
 			{
-				var personAbsencesCollection = new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence>(personAbsences));
+				var personAbsencesCollection = personAbsences.ToArray();
 				scheduleDay.Stub(x => x.PersonAbsenceCollection()).Return(personAbsencesCollection);
 			}
 			else
 			{
-			    scheduleDay.Stub(x => x.PersonAbsenceCollection()).Return(new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence>())) ;
+			    scheduleDay.Stub(x => x.PersonAbsenceCollection()).Return(new IPersonAbsence[0]) ;
 			}
 
 			if (meetings != null)
 			{
-				var personMeetingCollection = new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>(meetings));
+				var personMeetingCollection = meetings.ToArray();
 				scheduleDay.Stub(x => x.PersonMeetingCollection()).Return(personMeetingCollection);
 			}
 			return scheduleDay;

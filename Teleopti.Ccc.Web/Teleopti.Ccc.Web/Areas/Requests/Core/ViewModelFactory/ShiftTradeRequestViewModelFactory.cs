@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 		private static void mapFullDayAbsenceFields (IScheduleDay scheduleDay, ShiftTradeScheduleDayDetailViewModel shiftTradeScheduleDayDetailViewModel)
 		{
 			var absenceCollection = scheduleDay.PersonAbsenceCollection();
-			if (absenceCollection.Count > 0)
+			if (absenceCollection.Length > 0)
 			{
 				var absence = absenceCollection[0].Layer.Payload;
 

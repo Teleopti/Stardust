@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
@@ -82,8 +80,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		[Test]
 		public void WhenEmptyPersonalShiftsAndMeetingsAreInWorkTimeReturnsTrue()
 		{
-			var meetings = new List<IPersonMeeting>();
-			var readMeetings = new ReadOnlyCollection<IPersonMeeting>(meetings);
+			var readMeetings = new IPersonMeeting[0];
 
 			Assert.IsTrue(target.PersonalShiftsAndMeetingsAreInWorkTime(readMeetings, null));
 		}
@@ -92,7 +89,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		public void ShouldReturnFalseIfMeetingTimeNotOk()
 		{
 			var personMeeting = _mocks.StrictMock<IPersonMeeting>();
-			var meetings = new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>{personMeeting});
+			var meetings = new []{personMeeting};
 
 			using(_mocks.Record())
 			{
@@ -118,7 +115,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			using(_mocks.Playback())
 			{
-				var result = target.PersonalShiftsAndMeetingsAreInWorkTime(new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>()), personAssignment);
+				var result = target.PersonalShiftsAndMeetingsAreInWorkTime(new IPersonMeeting[0], personAssignment);
 				Assert.IsFalse(result);
 			}	
 		}
@@ -128,7 +125,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		{
 			var personAssignment = _mocks.StrictMock<IPersonAssignment>();
 			var personMeeting = _mocks.StrictMock<IPersonMeeting>();
-			var meetings = new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting> { personMeeting });
+			var meetings = new [] { personMeeting };
 
 			using (_mocks.Record())
 			{
@@ -163,18 +160,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var period2 = new DateTimePeriod(new DateTime(2009, 2, 2, 14, 0, 0, DateTimeKind.Utc),
 			                                 new DateTime(2009, 2, 2, 14, 30, 0, DateTimeKind.Utc));
 
-			var meetings = new List<IPersonMeeting>();
 			var meetingPerson = _mocks.StrictMock<IMeetingPerson>();
 			var meeting = _mocks.StrictMock<IMeeting>();
 			var personMeeting = new PersonMeeting(meeting, meetingPerson, period);
 			var personMeeting2 = new PersonMeeting(meeting, meetingPerson, period2);
-			meetings.Add(personMeeting);
-			meetings.Add(personMeeting2);
-
-
-			var readMeetings = new ReadOnlyCollection<IPersonMeeting>(meetings);
-
-			Assert.IsFalse(target.PersonalShiftsAndMeetingsAreInWorkTime(readMeetings, null));
+			
+			Assert.IsFalse(target.PersonalShiftsAndMeetingsAreInWorkTime(new []{personMeeting,personMeeting2}, null));
 		}
 
 		[Test]

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
@@ -38,7 +37,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch
 
 		public int CurrentPage { get; set; }
 
-		public ReadOnlyCollection<IPersonFinderDisplayRow> DisplayRows => new ReadOnlyCollection<IPersonFinderDisplayRow>(_displayRows);
+		public IPersonFinderDisplayRow[] DisplayRows => _displayRows.ToArray();
 
 		public DateOnly TerminalDate { get; set; }
 

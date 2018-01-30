@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping
 			{
 				var personAbsences =
 					absenceCollection.OrderBy(a => a.Layer.Payload.Priority)
-						.ThenByDescending(a => s.ScheduleDay.PersonAbsenceCollection().IndexOf(a));
+						.ThenByDescending(a => Array.IndexOf(absenceCollection,a));
 				return personAbsences.Select(personAbsence =>
 				{
 					var payload = personAbsence.Layer.Payload;

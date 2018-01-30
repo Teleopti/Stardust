@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -67,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		{
 			_meeting = new Meeting(_person, new List<IMeetingPerson>(), "subject", "location", "description", _personalActivity,_scenario);
 			_personMeeting = new PersonMeeting(_meeting, _meetingPerson, _mainDateTimePeriodNotInWorkTime);
-			var meetings = new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>{_personMeeting});
+			var meetings = new [] {_personMeeting};
 			var result = _target.CheckTimeMeeting(_mainShift, meetings);
 
 			Assert.IsTrue(result);		
@@ -90,7 +89,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var periodOutside = new DateTimePeriod(_mainDateTimePeriod.StartDateTime.AddDays(-1), _mainDateTimePeriod.EndDateTime.AddDays(-1));
 			_meeting = new Meeting(_person, new List<IMeetingPerson>(), "subject", "location", "description", _personalActivity, _scenario);
 			_personMeeting = new PersonMeeting(_meeting, _meetingPerson, periodOutside);
-			var meetings = new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting> { _personMeeting });
+			var meetings = new [] { _personMeeting };
 			var result = _target.CheckTimeMeeting(_mainShift, meetings);
 
 			Assert.IsFalse(result);	
@@ -113,7 +112,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_personalActivity.InWorkTime = true;
 			_meeting = new Meeting(_person, new List<IMeetingPerson>(), "subject", "location", "description", _personalActivity, _scenario);
 			_personMeeting = new PersonMeeting(_meeting, _meetingPerson, _mainDateTimePeriodNotInWorkTime);
-			var meetings = new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting> { _personMeeting });
+			var meetings = new [] { _personMeeting };
 			var result = _target.CheckTimeMeeting(_mainShift, meetings);
 
 			Assert.IsFalse(result);			
@@ -137,7 +136,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_personalActivity.InContractTime = false;
 			_meeting = new Meeting(_person, new List<IMeetingPerson>(), "subject", "location", "description", _personalActivity, _scenario);
 			_personMeeting = new PersonMeeting(_meeting, _meetingPerson, _mainDateTimePeriodNotInWorkTime);
-			var meetings = new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting> { _personMeeting });
+			var meetings = new [] { _personMeeting };
 			var result = _target.CheckTimeMeeting(_mainShift, meetings);
 
 			Assert.IsFalse(result);	
@@ -160,7 +159,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		{
 			_meeting = new Meeting(_person, new List<IMeetingPerson>(), "subject", "location", "description", _personalActivity, _scenario);
 			_personMeeting = new PersonMeeting(_meeting, _meetingPerson, _mainDateTimePeriodNoOverwrite);
-			var meetings = new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting> { _personMeeting });
+			var meetings = new [] { _personMeeting };
 			var result = _target.CheckTimeMeeting(_mainShift, meetings);
 
 			Assert.IsFalse(result);
@@ -202,7 +201,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		{
 			_mainShift.LayerCollection.Clear();
 
-			var meetings = new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting> { _personMeeting });
+			var meetings = new [] { _personMeeting };
 
 			var result1 = _target.CheckTimeMeeting(_mainShift, meetings);
 			Assert.IsFalse(result1);
@@ -217,7 +216,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var mock = new MockRepository();
 			var mainShift = mock.StrictMock<IEditableShift>();
 			var meeting = mock.StrictMock<IPersonMeeting>();
-			var meetings = new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting> { meeting });
+			var meetings = new [] { meeting };
 			var projectionService = mock.StrictMock<IProjectionService>();
 			var period = new DateTimePeriod(2014, 1, 1, 2014, 1, 2);
 			var meetingPeriod = new DateTimePeriod(2014, 1, 1, 10, 2014, 1, 1, 11);

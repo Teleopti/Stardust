@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -66,14 +65,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var dayRuleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(10, 0, 10, 0, 15), new TimePeriodWithSegment(18, 0, 18, 0, 15), new ShiftCategory("_").WithId()));
 			var nightRuleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(17, 0, 17, 0, 15), new TimePeriodWithSegment(25, 0, 25, 0, 15), new ShiftCategory("_").WithId()));
 			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, date.AddDays(-1), 10, 10, 10);
-			var agents = new List<IPerson>();
-			for (var i = 0; i < numberOfAgents; i++)
-			{
-				agents.Add(new Person().WithId().InTimeZone(timeZone)
+			var agents = Enumerable.Repeat(0, numberOfAgents).Select(i =>
+				new Person().WithId().InTimeZone(timeZone)
 					.WithPersonPeriod(new RuleSetBag(dayRuleSet, nightRuleSet), skill)
 					.WithSchedulePeriodOneDay(date)
-					.InTimeZone(timeZone));
-			}
+					.InTimeZone(timeZone)).ToList();
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(date, date.AddDays(1)), agents, skillDays);
 
 			Target.Execute(new NoSchedulingCallback(), new SchedulingOptions(), new NoSchedulingProgress(), agents, date.ToDateOnlyPeriod());

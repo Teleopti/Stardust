@@ -68,13 +68,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			target.Add(note);
 
 			var clone = (IScheduleDay)target.Clone();
-			Assert.AreEqual(target.PersonAbsenceCollection().Count, clone.PersonAbsenceCollection().Count);
+			Assert.AreEqual(target.PersonAbsenceCollection().Length, clone.PersonAbsenceCollection().Length);
 			clone.PersonAssignment().Should().Not.Be.Null();
-			Assert.AreEqual(target.PersonMeetingCollection().Count, clone.PersonMeetingCollection().Count);
-			Assert.AreEqual(target.NoteCollection().Count, clone.NoteCollection().Count);
+			Assert.AreEqual(target.PersonMeetingCollection().Length, clone.PersonMeetingCollection().Length);
+			Assert.AreEqual(target.NoteCollection().Length, clone.NoteCollection().Length);
 			Assert.IsFalse(clone.FullAccess);
 			Assert.IsFalse(clone.IsFullyPublished);
-			Assert.AreEqual(target.OvertimeAvailablityCollection().Count, clone.OvertimeAvailablityCollection().Count);
+			Assert.AreEqual(target.OvertimeAvailablityCollection().Length, clone.OvertimeAvailablityCollection().Length);
 		}
 
 		[Test]
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			target.Add(
 				PersonAbsenceFactory.CreatePersonAbsence(parameters.Person, parameters.Scenario,
 														 new DateTimePeriod(2000, 1, 1, 2000, 1, 2)));
-			Assert.AreEqual(1, target.PersonAbsenceCollection().Count);
+			Assert.AreEqual(1, target.PersonAbsenceCollection().Length);
 		}
 
 		[Test]
@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var absLayer = new AbsenceLayer(absence, period);
 			target.Clear<IPersonAbsence>();
 			target.CreateAndAddAbsence(absLayer);
-			Assert.AreEqual(1, target.PersonAbsenceCollection().Count);
+			Assert.AreEqual(1, target.PersonAbsenceCollection().Length);
 			Assert.AreEqual(period, target.PersonAbsenceCollection()[0].Period);
 		}
 
@@ -215,9 +215,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			target.Add(new Note(parameters.Person, new DateOnly(2000, 1, 1), scenario, "The agent is very cute"));
 
 			const string text = "Green haired agent was sent home";
-			Assert.IsTrue(target.NoteCollection().Count == 1);
+			Assert.IsTrue(target.NoteCollection().Length == 1);
 			target.CreateAndAddNote(text);
-			Assert.IsTrue(target.NoteCollection().Count == 1);
+			Assert.IsTrue(target.NoteCollection().Length == 1);
 			Assert.AreEqual(text, target.NoteCollection()[0].GetScheduleNote(new NoFormatting()));
 		}
 
@@ -693,7 +693,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			scheduleDay.Add(personAbsence);
 
 			scheduleDay.DeleteFullDayAbsence(scheduleDay);
-			Assert.AreEqual(0, scheduleDay.PersonAbsenceCollection().Count);
+			Assert.AreEqual(0, scheduleDay.PersonAbsenceCollection().Length);
 		}
 		
 		[Test]
@@ -721,7 +721,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			scheduleDay.Add(personAbsence2);
 
 			scheduleDay.DeleteFullDayAbsence(scheduleDay);
-			Assert.AreEqual(0, scheduleDay.PersonAbsenceCollection().Count);
+			Assert.AreEqual(0, scheduleDay.PersonAbsenceCollection().Length);
 		}
 		
 		[Test]

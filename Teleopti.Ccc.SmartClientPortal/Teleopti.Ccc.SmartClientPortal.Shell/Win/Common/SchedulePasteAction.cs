@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
                     tempPart.Clear<IPreferenceDay>();
                     tempPart.Clear<IStudentAvailabilityDay>();
 
-                    if (tempPart.PersonAbsenceCollection().Count > 0)
+                    if (tempPart.PersonAbsenceCollection().Length > 0)
                         destination.MergeAbsences(tempPart, true);
                 }
 
