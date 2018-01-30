@@ -93,6 +93,10 @@ namespace Teleopti.Ccc.Domain.Forecasting.Import
 			return false;
 		}
 
+		public void PresetTokenSeparator(string templateRow)
+		{
+		}
+
 		public string HeaderRow => "";
     }
 }

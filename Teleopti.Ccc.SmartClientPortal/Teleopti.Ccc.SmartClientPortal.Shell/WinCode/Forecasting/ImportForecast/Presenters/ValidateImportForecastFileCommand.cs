@@ -1,4 +1,5 @@
 using System.IO;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting.Import;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.ImportForecast.Models;
@@ -38,6 +39,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.ImportForecas
                         if (rowNumber > 100) break;
 
                         var line = streamReader.ReadLine();
+						if(rowNumber == 1 && !line.IsEmpty())
+							_rowExtractor.PresetTokenSeparator(line);
+						
 						if (rowNumber == 1 && _rowExtractor.IsValidHeaderRow(line))
 							continue;
 						

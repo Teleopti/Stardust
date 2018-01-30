@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Import
     {
         IForecastsRow Extract(string value, TimeZoneInfo timeZone);
 		bool IsValidHeaderRow(string content);
+		void PresetTokenSeparator(string templateRow);
 		string HeaderRow { get; }
 	}
 
@@ -20,15 +21,20 @@ namespace Teleopti.Ccc.Domain.Forecasting.Import
         private readonly ISpecification<string[]> _columnsInRowValidSpecification = new IsColumnCountInRowValid();
         private readonly ForecastsFileSkillNameValidator _skillNameValidator = new ForecastsFileSkillNameValidator();
         private readonly ForecastsFileDateTimeUnifiedValidator _dateTimeValidator = new ForecastsFileDateTimeUnifiedValidator();
-        private readonly ForecastsFileIntegerValueValidator _integerValidator = new ForecastsFileIntegerValueValidator();
         private readonly ForecastsFileDoubleValueValidator _doubleValidator = new ForecastsFileDoubleValueValidator();
-			
+		private char _tokenSeparator = ',';
+		
+		public void PresetTokenSeparator(string templateRow)
+		{
+			_tokenSeparator = templateRow.Contains(";") ? ';' : ',';
+		}
+		
         public IForecastsRow Extract(string value, TimeZoneInfo timeZone)
         {
-            var content = value.Split(',');
+            var content = value.Split(_tokenSeparator);
             if (!_columnsInRowValidSpecification.IsSatisfiedBy(content))
             {
-                throw new ValidationException("There are more or less columns than expected.");
+                throw new ValidationException($"There are more or less columns than expected when using '{_tokenSeparator}' as column separator.");
             }
             var newRow = new ForecastsRow();
 
@@ -61,11 +67,11 @@ namespace Teleopti.Ccc.Domain.Forecasting.Import
             newRow.UtcDateTimeFrom = timeZone.SafeConvertTimeToUtc(newRow.LocalDateTimeFrom);
             newRow.UtcDateTimeTo = timeZone.SafeConvertTimeToUtc(newRow.LocalDateTimeTo);
 
-			if (!_integerValidator.TryParse(content[3], out var integerResult))
+			if (!_doubleValidator.TryParse(content[3], out var tasksResult))
             {
-                throw new ValidationException(integerResult.ErrorMessage);
+                throw new ValidationException(tasksResult.ErrorMessage);
             }
-            newRow.Tasks = integerResult.Value;
+            newRow.Tasks = tasksResult.Value;
 
 			if (!_doubleValidator.TryParse(content[4], out var doubleResult))
             {
@@ -93,7 +99,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Import
 		
 		public bool IsValidHeaderRow(string content)
 		{
-			return content.Equals(HeaderRow);
+			return content.Equals(HeaderRow) || content.Equals(HeaderRow.Replace(",",";"));
 		}
 
 		public string HeaderRow => "skillname,startdatetime,enddatetime,tasks,tasktime,aftertasktime,agents";

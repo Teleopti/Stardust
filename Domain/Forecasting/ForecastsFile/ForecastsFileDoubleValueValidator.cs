@@ -10,13 +10,23 @@ namespace Teleopti.Ccc.Domain.Forecasting.ForecastsFile
         public bool TryParse(string value, out ForecastParseResult<double> result)
         {
             result = new ForecastParseResult<double>();
-            double parseResult;
-            if (double.TryParse(value, NumberStyles.AllowDecimalPoint, CultureInfo, out parseResult))
+
+			var numberFormat = (NumberFormatInfo)CultureInfo.NumberFormat.Clone();
+			if (double.TryParse(value,NumberStyles.AllowDecimalPoint, numberFormat, out var parseResult))
             {
                 result.Success = true;
                 result.Value = parseResult;
                 return true;
             }
+
+			numberFormat.NumberDecimalSeparator = ",";
+			if (double.TryParse(value,NumberStyles.AllowDecimalPoint, numberFormat, out parseResult))
+			{
+				result.Success = true;
+				result.Value = parseResult;
+				return true;
+			}
+			
             result.ErrorMessage = string.Format(CultureInfo.InvariantCulture, "{0} should be a double value.", value);
             return false;
         }

@@ -23,9 +23,17 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Import
 			_timeZone = (TimeZoneInfo.Utc);
 			_target = new ForecastsFileContentProvider(new ForecastsRowExtractor());
 		}
+		
+		[Test]
+		public void ShouldThrowOnEmptyForecastFile()
+		{
+			_fileContent = Encoding.UTF8.GetBytes("");
+
+			Assert.Throws<ValidationException>(() => _target.LoadContent(_fileContent, _timeZone), "empty");
+		}
 
 		[Test]
-		public void ShouldHandleWrongFileStream()
+		public void ShouldThrowOnWrongFileStream()
 		{
 			_fileContent = Encoding.UTF8.GetBytes("Insurance,20120301 12:45,20120301 13:00,17,179,0,");
 
@@ -35,11 +43,11 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Import
 		[Test]
 		public void ShouldLoadContentFromFileStream()
 		{
-			_fileContent = Encoding.UTF8.GetBytes("Insurance,20120301 12:45,20120301 13:00,17,179,0,4.05");
+			_fileContent = Encoding.UTF8.GetBytes("Insurance,20120301 12:45,20120301 13:00,17,179,2,4.05");
 			var forecastRow = _target.LoadContent(_fileContent, _timeZone).First();
 
 			Assert.That(forecastRow.TaskTime, Is.EqualTo(179));
-			Assert.That(forecastRow.AfterTaskTime, Is.EqualTo(0));
+			Assert.That(forecastRow.AfterTaskTime, Is.EqualTo(2));
 			Assert.That(forecastRow.Agents, Is.EqualTo(4.05));
 			Assert.That(forecastRow.LocalDateTimeFrom, Is.EqualTo(new DateTime(2012, 3, 1, 12, 45, 0)));
 			Assert.That(forecastRow.LocalDateTimeTo, Is.EqualTo(new DateTime(2012, 3, 1, 13, 0, 0)));
@@ -164,6 +172,50 @@ Insurance,20121028 02:45,20121028 03:00,17,179,0,4.05");
 			var forecastRows = _target.LoadContent(_fileContent, timeZone).ToArray();
 			forecastRows.First().UtcDateTimeFrom.Should().Be.EqualTo(new DateTime(2012,10,28,0,0,0));
 			forecastRows.First().UtcDateTimeTo.Should().Be.EqualTo(new DateTime(2012,10,28,0,15,0));
+		}
+		
+		[Test]
+		public void ShouldHandleSemicolonAsSeparator()
+		{
+			_fileContent = Encoding.UTF8.GetBytes(@"skillname;startdatetime;enddatetime;tasks;tasktime;aftertasktime;agents
+Insurance;20121027 02:00;20121027 02:15;17;179;0;4.05
+Insurance;20121027 02:45;20121027 03:00;17;179;0;4.05");
+			var timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+			var forecastRows = _target.LoadContent(_fileContent, timeZone).ToArray();
+			forecastRows.Count().Should().Be.EqualTo(2);	
+			forecastRows[0].UtcDateTimeFrom.Should().Be.EqualTo(new DateTime(2012,10,27,0,0,0));
+			forecastRows[0].UtcDateTimeTo.Should().Be.EqualTo(new DateTime(2012,10,27,0,15,0));
+			forecastRows[1].UtcDateTimeFrom.Should().Be.EqualTo(new DateTime(2012,10,27,0,45,0));
+			forecastRows[1].UtcDateTimeTo.Should().Be.EqualTo(new DateTime(2012,10,27,1,0,0));
+		}
+		
+		[Test]
+		public void ShouldThrowWhenMixingTokenSeparator()
+		{
+			_fileContent = Encoding.UTF8.GetBytes(@"skillname;startdatetime;enddatetime;tasks;tasktime;aftertasktime;agents
+Insurance;20121027 02:00;20121027 02:15;17;179;0;4.05
+Insurance,20121027 02:45,20121027 03:00,17,179,0,4.05");
+			var timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+			Assert.Throws<ValidationException>(() => _target.LoadContent(_fileContent, _timeZone),
+				"There are more or less columns than expected");
+		}
+		
+		[Test]
+		public void ShouldHandleDoubleValuesForAll()
+		{
+			_fileContent = Encoding.UTF8.GetBytes("Insurance,20120301 12:45,20120301 13:00,17.1,179.1,2.1,4.05");
+			var forecastRow = _target.LoadContent(_fileContent, _timeZone).First();
+
+			Assert.That(forecastRow.SkillName, Is.EqualTo("Insurance"));
+			Assert.That(forecastRow.LocalDateTimeFrom, Is.EqualTo(new DateTime(2012, 3, 1, 12, 45, 0)));
+			Assert.That(forecastRow.LocalDateTimeTo, Is.EqualTo(new DateTime(2012, 3, 1, 13, 0, 0)));
+			Assert.That(forecastRow.UtcDateTimeFrom, Is.EqualTo(new DateTime(2012, 3, 1, 12, 45, 0, DateTimeKind.Utc)));
+			Assert.That(forecastRow.UtcDateTimeTo, Is.EqualTo(new DateTime(2012, 3, 1, 13, 0, 0, DateTimeKind.Utc)));
+			Assert.That(forecastRow.Tasks, Is.EqualTo(17.1));
+			Assert.That(forecastRow.TaskTime, Is.EqualTo(179.1));
+			Assert.That(forecastRow.AfterTaskTime, Is.EqualTo(2.1));
+			Assert.That(forecastRow.Agents, Is.EqualTo(4.05));
+			
 		}
 	}
 }

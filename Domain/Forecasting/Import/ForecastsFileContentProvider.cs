@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -23,11 +24,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Import
 			_rowExtractor = rowExtractor;
 		}
 
-		private bool isValidHeaderRow(string content)
-		{
-			return content.Equals(_rowExtractor.HeaderRow);
-		}
-
 		public ICollection<IForecastsRow> LoadContent(byte[] fileContent, TimeZoneInfo timeZone)
 		{
 			var rowNumber = 1;
@@ -38,7 +34,12 @@ namespace Teleopti.Ccc.Domain.Forecasting.Import
 				var fileRows = fileContentString.Split(new[] {Environment.NewLine},
 					StringSplitOptions.RemoveEmptyEntries).ToList();
 
-				if (isValidHeaderRow(fileRows[0]))
+				var firstRow = fileRows.FirstOrDefault();
+				if (firstRow == null) throw new ValidationException("Imported forecast file is empty.");
+
+				_rowExtractor.PresetTokenSeparator(firstRow);
+				
+				if (_rowExtractor.IsValidHeaderRow(fileRows[0]))
 					fileRows = fileRows.Skip(1).ToList();
 				
 				foreach (var line in fileRows)
