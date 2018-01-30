@@ -189,7 +189,7 @@
 		expect(moment(result.commandControl.toTime).format('YYYY-MM-DD HH:mm')).toEqual(moment('2018-01-23 17:00:00').format('YYYY-MM-DD HH:mm'));
 	});
 
-	it('should get default overtime period based on the person schedule of top most agent', function () {
+	it('should get default overtime period based on the upper most agent\'s schedule', function () {
 		var personInfoList = [{
 			PersonId: '7c25f4ae-96ea-409e-b959-2c02587c649e',
 			Name: 'Bill',
