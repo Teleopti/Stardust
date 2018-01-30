@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using NHibernate.Dialect;
 using Teleopti.Ccc.DBManager.Library;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Infrastructure;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -42,7 +43,8 @@ namespace Teleopti.Ccc.TestCommon
 						new NoPreCommitHooks(),
 						enversConfiguration,
 						hooks,
-						new CurrentHttpContext()
+						new CurrentHttpContext(),
+						ServiceLocatorForLegacy.UpdatedBy
 					));
 			});
 		}
