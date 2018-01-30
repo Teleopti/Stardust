@@ -7,7 +7,8 @@
 			<span translate>ShowOnlyAbsence</span>
 		</md-switch>
 		<md-divider ng-if="vm.toggles.WfmTeamSchedule_ShowStaffingInfo_45206"></md-divider>
-		<md-switch ng-if="vm.toggles.WfmTeamSchedule_ShowStaffingInfo_45206"
+		<md-switch id="show-warnings"
+				   ng-if="vm.toggles.WfmTeamSchedule_ShowStaffingInfo_45206"
 				   ng-model="vm.settings.validateWarningEnabled"
 				   ng-change="vm.onSettingsUpdated('validateWarningEnabled')">
 			<span translate>ShowWarnings</span>

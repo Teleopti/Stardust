@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		public void ThenIShouldSeeScheduleForDisplayed(string absence, string agentName)
 		{
 			Browser.Interactions.AssertScopeValue(".team-schedule", "vm.scheduleFullyLoaded", true);
-			Browser.Interactions.AssertAnyContains(".person-name-text", agentName);
+			Browser.Interactions.AssertAnyContains(".md-label", agentName);
 			Browser.Interactions.AssertExists($".schedule .layer.personAbsence[projection-name='{absence}']");
 		}
 
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 				{
 					Browser.Interactions.AssertScopeValue(".team-schedule", "vm.scheduleFullyLoaded", true);
 					Browser.Interactions.AssertScopeValue(".team-schedule", "vm.isLoading", false);
-					Browser.Interactions.ClickContaining(".person-name-text", agentName);
+					Browser.Interactions.ClickContaining(".md-label", agentName);
 				});
 		}
 
@@ -460,9 +460,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		[When(@"I choose not to view '(.*)' validation result")]
 		public void WhenIChooseNotToViewValidationResult(string ruleType)
 		{
-			Browser.Interactions.AssertExists($"div[test-attr={ruleType}] input[type=checkbox]:checked");
-			Browser.Interactions.Javascript($"document.querySelector('div[test-attr={ruleType}] input[type=checkbox]').click();");
-			Browser.Interactions.AssertExists($"div[test-attr={ruleType}] input[type=checkbox]:not(:checked)");
+			//Browser.Interactions.AssertExistsUsingJQuery();
+			Browser.Interactions.AssertExists($"md-checkbox[test-attr={ruleType}][aria-checked=true]");
+			Browser.Interactions.Javascript($"document.querySelector('md-checkbox[test-attr={ruleType}][aria-checked=true]').click();");
+			Browser.Interactions.AssertExists($"md-checkbox[test-attr={ruleType}][aria-checked=false]");
 		}
 
 		[Then(@"I should not see business rule warning")]
@@ -474,7 +475,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		[When(@"I choose to view '(.*)' validation result")]
 		public void WhenIChooseToViewValidationResult(string ruleType)
 		{
-			Browser.Interactions.AssertExists($"div[test-attr={ ruleType}] input:checked");
+			Browser.Interactions.AssertExists($"md-checkbox[test-attr={ ruleType}][aria-checked=true]");
 		}
 
 		[Given(@"'(.*)' is in Hawaii time zone")]
