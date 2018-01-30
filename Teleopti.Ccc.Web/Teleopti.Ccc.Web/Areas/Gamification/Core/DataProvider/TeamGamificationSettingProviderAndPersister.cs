@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.Gamification.Models;
@@ -16,15 +17,16 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 		private readonly ITeamGamificationSettingRepository _teamGamificationSettingRepository;
 		private readonly ITeamRepository _teamRepository;
 		private readonly IGamificationSettingRepository _gamificationSettingRepository;
-		private readonly ISiteProvider _siteProvider;
+		private readonly IPermissionProvider _permissionProvider;
+		const string functionPath = DefinedRaptorApplicationFunctionPaths.OpenOptionsPage;
 
 		public TeamGamificationSettingProviderAndPersister(ITeamGamificationSettingRepository teamGamificationSettingRepository,
-			ITeamRepository teamRepository, IGamificationSettingRepository gamificationSettingRepository, ISiteProvider siteProvider)
+			ITeamRepository teamRepository, IGamificationSettingRepository gamificationSettingRepository, IPermissionProvider permissionProvider)
 		{
 			_teamGamificationSettingRepository = teamGamificationSettingRepository;
 			_teamRepository = teamRepository;
 			_gamificationSettingRepository = gamificationSettingRepository;
-			_siteProvider = siteProvider;
+			_permissionProvider = permissionProvider;
 		}
 
 		public IList<TeamGamificationSettingViewModel> GetTeamGamificationSettingViewModels(List<Guid> siteIds)
@@ -99,12 +101,14 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 			};
 		}
 
-		private IList<Guid> getTeamIds(IEnumerable<Guid> siteIds)
+		private IEnumerable<Guid> getTeamIds(IEnumerable<Guid> siteIds)
 		{
 			return siteIds
-				.SelectMany(siteId =>
-					_siteProvider.GetPermittedTeamsUnderSite(siteId, DateOnly.Today,
-						DefinedRaptorApplicationFunctionPaths.OpenOptionsPage)).Select(team => team.Id.Value).ToArray();
+				.SelectMany(id => _teamRepository
+						.FindTeamsForSite(id)
+						.Where(t => _permissionProvider.HasTeamPermission(functionPath, DateOnly.Today, t))
+				)
+				.Select(t => t.Id.Value);
 		}
 	}
 }

@@ -223,6 +223,7 @@
     <Compile Include="Areas\Gamification\GamificationTestAttribute.cs" />
     <Compile Include="Areas\Gamification\GamificationControllerTeamTest.cs" />
     <Compile Include="Areas\Gamification\GamificationSettingMapperTest.cs" />
+    <Compile Include="Areas\Gamification\TeamGamificationSettingProviderAndPersisterTest.cs" />
     <Compile Include="Areas\Global\Core\GroupPageViewModelFactoryTest.cs" />
     <Compile Include="Areas\Global\GroupPageControllerTest.cs" />
     <Compile Include="Areas\Anywhere\ReportsControllerTest.cs" />
