@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private readonly ApplicationUnitOfWorkContext _context;
 		private readonly IAuditSetter _auditSettingProvider;
 		private readonly ICurrentTransactionHooks _transactionHooks;
+		private readonly ICurrentBusinessUnit _businessUnit;
 		private readonly UnitOfWorkFactoryNewerUper _unitOfWorkFactoryNewerUper;
 
 		// can not inject here because the lifetime of the factory
@@ -45,6 +46,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			string connectionString,
 			ICurrentTransactionHooks transactionHooks,
 			string tenant,
+			ICurrentBusinessUnit businessUnit,
 			UnitOfWorkFactoryNewerUper unitOfWorkFactoryNewerUper)
 		{
 			ConnectionString = connectionString;
@@ -52,6 +54,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_context = new ApplicationUnitOfWorkContext(tenant);
 			_auditSettingProvider = auditSettingProvider;
 			_transactionHooks = transactionHooks;
+			_businessUnit = businessUnit;
 			_unitOfWorkFactoryNewerUper = unitOfWorkFactoryNewerUper;
 		}
 
@@ -108,7 +111,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				.Interceptor(interceptor)
 				.OpenSession();
 
-			businessUnitFilter.Enable(session, ServiceLocatorForEntity.CurrentBusinessUnit.CurrentId().GetValueOrDefault());
+			businessUnitFilter.Enable(session, _businessUnit.CurrentId().GetValueOrDefault());
 			QueryFilter.Deleted.Enable(session, null);
 			QueryFilter.DeletedPeople.Enable(session, null);
 
