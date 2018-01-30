@@ -21,16 +21,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory
 		{
 			var sites = _siteProvider.GetShowListSites(date, applicationFunctionPath).ToList();
 
-			var options = new List<SelectOptionItem>();
-			sites.ForEach(s =>
-			{
-				var siteOptions = new SelectOptionItem
+			var options = sites
+				.Select(s => new SelectOptionItem
 				{
 					id = s.Id.ToString(),
 					text = s.Description.Name
-				};
-				options.Add(siteOptions);
-			});
+				})
+				.OrderBy(s => s.text);
 
 			return options;
 		}

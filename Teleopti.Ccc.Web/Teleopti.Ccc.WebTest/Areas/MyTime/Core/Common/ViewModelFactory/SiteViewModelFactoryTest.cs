@@ -42,6 +42,27 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.ViewModelFactory
 		}
 
 		[Test]
+		public void ShouldSortSitesByName()
+		{
+			var s1 = new Site("london");
+			var s2 = new Site("amsterdam");
+			var s3 = new Site("berlin");
+			var bu = new BusinessUnit("BU");
+			var sites = new[] { s1, s2, s3 };
+			s1.SetId(Guid.NewGuid());
+			s2.SetId(Guid.NewGuid());
+			s3.SetId(Guid.NewGuid());
+			const string fp = DefinedRaptorApplicationFunctionPaths.OpenOptionsPage;
+			_siteProvider.Stub(x => x.GetShowListSites(DateOnly.Today, fp)).Return(sites);
+
+			var target = new SiteViewModelFactory(_siteProvider);
+			var result = target.CreateSiteOptionsViewModel(DateOnly.Today, fp);
+
+			result.ToList()[0].text.Should().Be.EqualTo(s2.Description.Name);
+			result.ToList()[1].text.Should().Be.EqualTo(s3.Description.Name);
+		}
+
+		[Test]
 		public void ShouldGetTeamsUnderGivenSites()
 		{
 			var siteId1 = Guid.NewGuid();
