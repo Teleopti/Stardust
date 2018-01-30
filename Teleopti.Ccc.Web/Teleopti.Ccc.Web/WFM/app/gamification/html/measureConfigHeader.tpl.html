@@ -3,10 +3,15 @@
 		<i class="mdi mdi-chevron-right"></i>
 	</span>
 
+
 	<div ng-if="::$ctrl.allowRename" ng-show="!$ctrl.renameMode" ng-click="$ctrl.rename();$event.stopPropagation()" tabindex="0"
 	 class="context-menu card-context rename">
 		<i class="mdi mdi-lead-pencil edit-icon"></i>
 		<md-tooltip>{{'Rename'|translate}}</md-tooltip>
+	</div>
+	<div class="measure-text" ng-if="::$ctrl.allowRename">
+		<span>{{'Id'|translate}}: </span>
+		<span>{{$ctrl.measureId}}</span>
 	</div>
 
 	<div class="enable" ng-click="$event.stopPropagation()">

@@ -72,7 +72,8 @@
 			<card-header tabindex="-1">
 				<div tabindex="0">
 					<measure-config-header name="config.name" name-check="$ctrl.checkDuplicateName(name)" allow-rename="!config.builtin" checked="config.enabled"
-					 on-name-update="config.setName(name)" on-enable="$ctrl.enableConfig(config, enable)" max="config.max" value-data-type="config.dataType">
+					 on-name-update="config.setName(name)" measure-id="config.externalId" on-enable="$ctrl.enableConfig(config, enable)"
+					 max="config.max" value-data-type="config.dataType">
 					</measure-config-header>
 				</div>
 			</card-header>

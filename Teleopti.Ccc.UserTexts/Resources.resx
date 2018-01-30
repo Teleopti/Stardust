@@ -16787,8 +16787,8 @@ Do you want to participate?</value>
     <value>Delete skill group</value>
   </data>
   <data name="AreYouSureYouWantToDeleteTheSkillGroup" xml:space="preserve">
-		<value>Are you sure you want to delete the skill group </value>
-	</data>
+    <value>Are you sure you want to delete the skill group </value>
+  </data>
   <data name="ManageSkillGroups" xml:space="preserve">
     <value>Manage skill groups</value>
   </data>
@@ -16932,10 +16932,6 @@ Do you want to participate?</value>
   <data name="DragAndDropYourCsvFileOrClickToSelect" xml:space="preserve">
     <value>Drag and drop your CSV file here or click to select</value>
     <comment>Prompt used in an upload panel</comment>
-  </data>
-  <data name="GamificationMeasureNameAlreadyExist" xml:space="preserve">
-    <value>A gamification measure (Id {0}) already exists with this name.</value>
-    <comment>Error message used in importing an external performance csv file.</comment>
   </data>
   <data name="AgentIdIsMandatory" xml:space="preserve">
     <value>Agent ID is mandatory.</value>
@@ -17123,7 +17119,7 @@ Do you want to participate?</value>
   <data name="Changes" xml:space="preserve">
     <value>Changes</value>
     <comment>Adherence changes</comment>
-	</data>
+  </data>
   <data name="RestrictionNotAbleToBeScheduledReasonTooManyDaysOff" xml:space="preserve">
     <value>Too many days off in period</value>
     <comment>Too many days off in period</comment>

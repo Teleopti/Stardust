@@ -10,7 +10,8 @@
 				onNameUpdate: '&',
 				onEnable: '&',
 				valueDataType: '<',
-				nameCheck: '&'
+				nameCheck: '&',
+				measureId: '<'
 			},
 			controller: [function MeasureConfigHeaderCtrl() {
 				var ctrl = this;
