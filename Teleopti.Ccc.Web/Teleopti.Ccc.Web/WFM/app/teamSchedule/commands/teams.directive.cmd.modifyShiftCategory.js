@@ -94,9 +94,9 @@
 		});
 
 		vm.modifyShiftCategory = function () {
-
+			var invalidAgentIds = vm.invalidAgents.map(function(a) { return a.PersonId; });
 			var validAgents = vm.selectedAgents.filter(function(agent) {
-				return vm.invalidAgents.indexOf(agent) < 0;
+				return invalidAgentIds.indexOf(agent.PersonId) < 0;
 			});
 
 			var requestData = {

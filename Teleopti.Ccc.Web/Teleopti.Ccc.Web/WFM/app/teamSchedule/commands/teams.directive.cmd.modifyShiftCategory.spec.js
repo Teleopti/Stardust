@@ -112,6 +112,14 @@
 				}
 			}
 		}
+		this.modifyShiftCategories = function(requestData) {
+			lastRequestData = requestData;
+			return {
+				then:function(cb) {
+					cb({data:[]});
+				}
+			}
+		}
 	}
 
 	describe('edit shift category component test',
@@ -288,6 +296,105 @@
 					var errorMessage = element[0].querySelector(".edit-shift-category .text-danger");
 					expect(errorMessage).toBeTruthy();
 					expect(applyButton.attr('disabled')).toBe('disabled');
+				});
+		});
+
+	describe('edit shift category component test',
+		function () {
+			beforeEach(module('wfm.templates'));
+			beforeEach(module('wfm.teamSchedule'));
+
+			var timezone1 = {
+				IanaId: 'Etc/UTC',
+				DisplayName: 'UTC'
+			};
+
+			var selectedAgents = [
+				{
+					PersonId: 'agent1',
+					Checked: true,
+					Name: 'agent1',
+					Timezone: timezone1,
+					ScheduleStartTime: '2016-06-15T08:00:00Z',
+					ScheduleEndTime: '2016-06-15T17:00:00Z',
+					SelectedActivities: ['activity1'],
+					SelectedDayOffs: []
+				},
+				{
+					PersonId: 'agent2',
+					Checked: true,
+					Name: 'agent2',
+					Timezone: timezone1,
+					ScheduleStartTime: '2016-06-15T08:00:00Z',
+					ScheduleEndTime: '2016-06-15T17:00:00Z',
+					SelectedActivities: ['activity1'],
+					SelectedDayOffs: []
+				}
+			];
+			personSelectionService.setFakeSelectedPersonInfoList(selectedAgents);
+			scheduleManagementSvc.setPersonScheduleVm('agent1',
+				{
+					Date: '2016-06-15',
+					PersonId: 'agent1',
+					IsFullDayAbsence: true,
+					Timezone: timezone1,
+					DayOffs: [],
+					Shifts: [],
+					ExtraShifts: []
+				});
+
+			scheduleManagementSvc.setPersonScheduleVm('agent2',
+				{
+					Date: '2016-06-15',
+					PersonId: 'agent2',
+					IsFullDayAbsence: false,
+					Timezone: timezone1,
+					DayOffs: [],
+					Shifts: [],
+					ExtraShifts: []
+				});
+
+			beforeEach(module(function ($provide) {
+				$provide.service('PersonSelection',
+					function () {
+						return personSelectionService;
+					});
+				$provide.service('ScheduleManagement',
+					function () {
+						return scheduleManagementSvc;
+					});
+				$provide.service('teamsToggles',
+					function () {
+						return { all: function () { } };
+					});
+				$provide.service('Toggle',
+					function () {
+						return {};
+					});
+				$provide.service('ShiftCategoryService', function () { return shiftCategorySvc; });
+			}));
+
+			beforeEach(inject(function (_$rootScope_, _$compile_) {
+				$rootScope = _$rootScope_;
+				$compile = _$compile_;
+			}));
+
+
+			it('should display the error message and disable the button for one agent with day off',
+				function () {
+					var currentTimezone = 'Etc/UTC';
+					var compiledResult = setUp(moment.tz('2016-06-15', currentTimezone).toDate(), currentTimezone);
+					var element = compiledResult.element;
+					var scope = compiledResult.scope;
+					var ctrl = element.scope().vm;
+					ctrl.selectedShiftCategoryId = 'ct1';
+					scope.$apply();
+
+					var applyButton = angular.element(element[0].querySelector(".edit-shift-category .form-submit"));
+					applyButton[0].click();
+					var requestedData = shiftCategorySvc.lastRequestedData();
+					expect(requestedData.PersonIds.length).toBe(1);
+					expect(requestedData.PersonIds[0]).toBe('agent2');
 				});
 		});
 })();
