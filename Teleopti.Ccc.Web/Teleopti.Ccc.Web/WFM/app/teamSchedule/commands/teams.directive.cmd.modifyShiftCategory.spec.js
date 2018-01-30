@@ -143,33 +143,36 @@
 					SelectedActivities: '472e02c8-1a84-4064-9a3b-9b5e015ab3c6'
 				}
 			];
-			personSelectionService.setFakeSelectedPersonInfoList(selectedAgents);
+			beforeEach(function() {
+				personSelectionService.setFakeSelectedPersonInfoList(selectedAgents);
 
-			scheduleManagementSvc.setPersonScheduleVm('agent1',
-				{
-					Date: '2016-06-15',
-					PersonId: 'agent1',
-					IsFullDayAbsence: true,
-					Timezone: timezone1,
-					DayOffs:[],
-					Shifts: [
-						{
-							Date: '2016-06-15',
-							Projections: [
-								{
+				scheduleManagementSvc.setPersonScheduleVm('agent1',
+					{
+						Date: '2016-06-15',
+						PersonId: 'agent1',
+						IsFullDayAbsence: true,
+						Timezone: timezone1,
+						DayOffs: [],
+						Shifts: [
+							{
+								Date: '2016-06-15',
+								Projections: [
+									{
+										Start: '2016-06-15 08:00',
+										End: '2016-06-15 17:00',
+										Minutes: 540
+									}
+								],
+								ProjectionTimeRange: {
 									Start: '2016-06-15 08:00',
-									End: '2016-06-15 17:00',
-									Minutes: 540
+									End: '2016-06-15 17:00'
 								}
-							],
-							ProjectionTimeRange: {
-								Start: '2016-06-15 08:00',
-								End: '2016-06-15 17:00'
 							}
-						}
-					],
-					ExtraShifts: []
-				});
+						],
+						ExtraShifts: []
+					});
+			});
+			
 
 			beforeEach(module(function($provide) {
 				$provide.service('PersonSelection',
@@ -195,6 +198,9 @@
 				$rootScope = _$rootScope_;
 				$compile = _$compile_;
 			}));
+			afterEach(function() {
+				personSelectionService.setFakeSelectedPersonInfoList([]);
+			});
 
 
 			it('should display the error message and disable the button for one agent with full day absence',
@@ -210,6 +216,7 @@
 					var applyButton = angular.element(element[0].querySelector(".edit-shift-category .form-submit"));
 					var errorMessage = element[0].querySelector(".edit-shift-category .text-danger");
 					expect(errorMessage).toBeTruthy();
+					expect(applyButton.hasClass('wfm-btn-primary-disabled')).toBeTruthy();
 					expect(applyButton.attr('disabled')).toBe('disabled');
 				});
 		});
@@ -241,20 +248,25 @@
 					]
 				}
 			];
-			personSelectionService.setFakeSelectedPersonInfoList(selectedAgents);
-			scheduleManagementSvc.setPersonScheduleVm('agent1',
-				{
-					Date: '2016-06-15',
-					PersonId: 'agent1',
-					IsFullDayAbsence: true,
-					Timezone: timezone1,
-					DayOffs:[{
+			beforeEach(function() {
+				personSelectionService.setFakeSelectedPersonInfoList(selectedAgents);
+				scheduleManagementSvc.setPersonScheduleVm('agent1',
+					{
 						Date: '2016-06-15',
-						DayOffName: 'Day Off'
-					}],
-					Shifts: [],
-					ExtraShifts: []
-				});
+						PersonId: 'agent1',
+						IsFullDayAbsence: true,
+						Timezone: timezone1,
+						DayOffs: [
+							{
+								Date: '2016-06-15',
+								DayOffName: 'Day Off'
+							}
+						],
+						Shifts: [],
+						ExtraShifts: []
+					});
+			});
+			
 
 			beforeEach(module(function($provide) {
 				$provide.service('PersonSelection',
@@ -280,7 +292,9 @@
 				$rootScope = _$rootScope_;
 				$compile = _$compile_;
 			}));
-
+			afterEach(function () {
+				personSelectionService.setFakeSelectedPersonInfoList([]);
+			});
 
 			it('should display the error message and disable the button for one agent with day off',
 				function() {
@@ -331,28 +345,30 @@
 					SelectedDayOffs: []
 				}
 			];
-			personSelectionService.setFakeSelectedPersonInfoList(selectedAgents);
-			scheduleManagementSvc.setPersonScheduleVm('agent1',
-				{
-					Date: '2016-06-15',
-					PersonId: 'agent1',
-					IsFullDayAbsence: true,
-					Timezone: timezone1,
-					DayOffs: [],
-					Shifts: [],
-					ExtraShifts: []
-				});
+			beforeEach(function() {
+				personSelectionService.setFakeSelectedPersonInfoList(selectedAgents);
+				scheduleManagementSvc.setPersonScheduleVm('agent1',
+					{
+						Date: '2016-06-15',
+						PersonId: 'agent1',
+						IsFullDayAbsence: true,
+						Timezone: timezone1,
+						DayOffs: [],
+						Shifts: [],
+						ExtraShifts: []
+					});
 
-			scheduleManagementSvc.setPersonScheduleVm('agent2',
-				{
-					Date: '2016-06-15',
-					PersonId: 'agent2',
-					IsFullDayAbsence: false,
-					Timezone: timezone1,
-					DayOffs: [],
-					Shifts: [],
-					ExtraShifts: []
-				});
+				scheduleManagementSvc.setPersonScheduleVm('agent2',
+					{
+						Date: '2016-06-15',
+						PersonId: 'agent2',
+						IsFullDayAbsence: false,
+						Timezone: timezone1,
+						DayOffs: [],
+						Shifts: [],
+						ExtraShifts: []
+					});
+			});
 
 			beforeEach(module(function ($provide) {
 				$provide.service('PersonSelection',
@@ -378,9 +394,11 @@
 				$rootScope = _$rootScope_;
 				$compile = _$compile_;
 			}));
+			afterEach(function () {
+				personSelectionService.setFakeSelectedPersonInfoList([]);
+			});
 
-
-			it('should display the error message and disable the button for one agent with day off',
+			it('should apply command to valid agents only',
 				function () {
 					var currentTimezone = 'Etc/UTC';
 					var compiledResult = setUp(moment.tz('2016-06-15', currentTimezone).toDate(), currentTimezone);
