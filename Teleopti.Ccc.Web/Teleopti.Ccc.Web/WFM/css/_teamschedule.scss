@@ -694,8 +694,14 @@ team-schedule-datepicker {
 				word-break: break-word;
 				white-space: normal;
 			}
-			.sort-agent{
+
+			.sort-agent {
 				margin: 5px 0;
+			}
+
+			md-checkbox {
+				margin-top: 0px;
+				margin-bottom: 0px;
 			}
 		}
 
