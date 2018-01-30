@@ -6,13 +6,12 @@ using Autofac;
 using Newtonsoft.Json;
 using NHibernate.Dialect;
 using Teleopti.Ccc.DBManager.Library;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Infrastructure;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Environment = NHibernate.Cfg.Environment;
-using ServiceLocatorForLegacy = Teleopti.Ccc.Infrastructure.ServiceLocatorForLegacy;
 
 namespace Teleopti.Ccc.TestCommon
 {
@@ -45,8 +44,7 @@ namespace Teleopti.Ccc.TestCommon
 						enversConfiguration,
 						hooks,
 						new CurrentHttpContext(),
-						ServiceLocatorForLegacy.UpdatedBy,
-						ServiceLocatorForEntity.CurrentBusinessUnit
+						ServiceLocatorForLegacy.UpdatedBy
 					));
 			});
 		}
