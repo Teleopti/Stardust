@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 
 			var personIdList = allPersons.Select(x => x.Id.Value).ToList();
 			var agentsWithBadge = _externalPerformanceDataRepository.FindPersonsCouldGetBadgeOverThreshold(
-				new DateTime(date.Year, date.Month, date.Day, 0, 0, 0, DateTimeKind.Utc), personIdList, badgeSetting.QualityId, badgeSetting.Threshold);
+				date, personIdList, badgeSetting.QualityId, badgeSetting.Threshold);
 
 			var gamificationSetting = (IGamificationSetting) badgeSetting.Parent;
 			var newAwardedBadges = AddBadge(personList, agentsWithBadge, badgeSetting.QualityId,

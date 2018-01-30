@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 				result.Error = $"{line}{splitor}{Resources.ImportBpoWrongDateFormat}";
 				return result;
 			}
-			result.DateFrom = new DateTime(dateTime.Ticks, DateTimeKind.Utc);
+			result.DateFrom = new DateOnly(dateTime);
 
 			var measureName = columns[measureNameColumnIndex].Trim();
 			if (measureName.IsEmpty())

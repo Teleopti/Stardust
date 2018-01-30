@@ -400,7 +400,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			var badgeSetting = _gamificationSetting.BadgeSettings.First();
 			_externalPerformanceDataRepository.Add(new ExternalPerformanceData()
 			{
-				DateFrom = new DateTime(_calculateDateOnly.Year, _calculateDateOnly.Month, _calculateDateOnly.Day, 0,0,0, DateTimeKind.Utc),
+				DateFrom = _calculateDateOnly,
 				ExternalPerformance = new ExternalPerformance(){ ExternalId = 1},
 				PersonId = _allPersons.First().Id.Value,
 				Score = 91

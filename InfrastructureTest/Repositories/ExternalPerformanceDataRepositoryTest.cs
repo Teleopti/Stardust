@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			prepareRelatedData();
 
-			var externalPerformanceData = persistExternalPerformanceData(new DateTime(2017, 12, 13, 0, 0, 0, DateTimeKind.Utc), _person);
+			var externalPerformanceData = persistExternalPerformanceData(new DateOnly(2017, 12, 13), _person);
 
 			var externalPerformanceId = 0;
 			var result = WithUnitOfWork.Get(() =>
@@ -48,16 +48,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			prepareRelatedData();
 
-			var date1 = new DateTime(2018, 1, 12, 0, 0, 0, DateTimeKind.Utc);
-			var date2 = new DateTime(2018, 1, 13, 0, 0, 0, DateTimeKind.Utc);
-			var date3 = new DateTime(2018, 1, 14, 0, 0, 0, DateTimeKind.Utc);
+			var date1 = new DateOnly(2018, 1, 12);
+			var date2 = new DateOnly(2018, 1, 13);
+			var date3 = new DateOnly(2018, 1, 14);
 			
 			persistExternalPerformanceData(date1, _person);
 			persistExternalPerformanceData(date2, _person);
 			persistExternalPerformanceData(date3, _person);
 			var result = WithUnitOfWork.Get(() =>
 			{
-				var data = Target.FindByPeriod(new DateTimePeriod(date1, date3));
+				var data = Target.FindByPeriod(new DateOnlyPeriod(date1, date3));
 				return data;
 			});
 
@@ -69,16 +69,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			prepareRelatedData();
 
-			var date1 = new DateTime(2018, 1, 12, 0, 0, 0, DateTimeKind.Utc);
-			var date2 = new DateTime(2018, 1, 13, 0, 0, 0, DateTimeKind.Utc);
-			var date3 = new DateTime(2018, 1, 14, 0, 0, 0, DateTimeKind.Utc);
+			var date1 = new DateOnly(2018, 1, 12);
+			var date2 = new DateOnly(2018, 1, 13);
+			var date3 = new DateOnly(2018, 1, 14);
 			
 			persistExternalPerformanceData(date1, _person);
 			persistExternalPerformanceData(date2, _person);
 			persistExternalPerformanceData(date3, _person);
 			var result = WithUnitOfWork.Get(() =>
 			{
-				var data = Target.FindByPeriod(new DateTimePeriod(date2, date2));
+				var data = Target.FindByPeriod(new DateOnlyPeriod(date2, date2));
 				return data;
 			});
 
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldFindExternalPerformanceData()
 		{
-			var date = new DateTime(2018, 01, 25, 0, 0, 0, DateTimeKind.Utc);
+			var date = new DateOnly(2018, 01, 25);
 			prepareRelatedData();
 			persistExternalPerformanceData(date, _person);
 
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldFindPersonWhoShouldGetBadge()
 		{
-			var date = new DateTime(2018, 01, 25, 0, 0, 0, DateTimeKind.Utc);
+			var date = new DateOnly(2018, 01, 25);
 			var person2 = createPerson();
 			prepareRelatedData();
 			persistExternalPerformanceData(date, _person, 60);
@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			});
 		}
 
-		private IExternalPerformanceData persistExternalPerformanceData(DateTime date, IPerson person, double score = 0)
+		private IExternalPerformanceData persistExternalPerformanceData(DateOnly date, IPerson person, double score = 0)
 		{
 			var externalPerformanceData = new ExternalPerformanceData
 			{

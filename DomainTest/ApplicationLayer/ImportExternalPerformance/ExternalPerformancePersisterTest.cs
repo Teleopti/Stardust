@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 
 			var extractionInfo = new PerformanceInfoExtractionResult {
 				AgentId = "1",
-				DateFrom = DateTime.UtcNow,
+				DateFrom = DateOnly.Today,
 				MeasureId = perfExtId,
 				MeasureName = perfName,
 				MeasureNumberScore = 100.02,
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			var extractionInfo = new PerformanceInfoExtractionResult
 			{
 				AgentId = "1",
-				DateFrom = DateTime.UtcNow,
+				DateFrom = DateOnly.Today,
 				MeasureId = perfExtId,
 				MeasureName = perfName,
 				MeasurePercentScore = new Percent(0.8735),
@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			var record1 = new PerformanceInfoExtractionResult
 			{
 				AgentId = "Whatever",
-				DateFrom = DateTime.UtcNow,
+				DateFrom = DateOnly.Today,
 				MeasureId = perfExtId1,
 				MeasureName = perfName,
 				MeasureNumberScore = 100,
@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			var record2 = new PerformanceInfoExtractionResult
 			{
 				AgentId = "Whatever",
-				DateFrom = DateTime.UtcNow,
+				DateFrom = DateOnly.Today,
 				MeasureId = perfExtId2,
 				MeasureName = perfName,
 				MeasureNumberScore = 1,

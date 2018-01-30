@@ -1,13 +1,14 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common
 {
 	public interface IExternalPerformanceData : IAggregateRoot
 	{
 		IExternalPerformance ExternalPerformance { get; set; }
-		DateTime DateFrom { get; set; }
+		DateOnly DateFrom { get; set; }
 		Guid PersonId { get; set; }
 		string OriginalPersonId { get; set; }
 		double Score { get; set; }
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Common
 		private IExternalPerformance _externalPerformance;
 
 		private Guid _personId;
-		private DateTime _dateFrom;
+		private DateOnly _dateFrom;
 		private string _originalPersonId;
 		private double _score;
 
@@ -30,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Common
 				_externalPerformance = value;
 			}
 		}
-		public virtual DateTime DateFrom
+		public virtual DateOnly DateFrom
 		{
 			get
 			{

@@ -8,8 +8,8 @@ namespace Teleopti.Ccc.Domain.Repositories
 {
 	public interface IExternalPerformanceDataRepository : IRepository<IExternalPerformanceData>
 	{
-		ICollection<IExternalPerformanceData> FindByPeriod(DateTimePeriod period);
-		ICollection<IExternalPerformanceData> Find(DateTime date, List<Guid> personIds, int performanceId);
-		ICollection<Guid> FindPersonsCouldGetBadgeOverThreshold(DateTime date, List<Guid> personIds, int performanceId, double badgeThreshold);
+		ICollection<IExternalPerformanceData> FindByPeriod(DateOnlyPeriod period);
+		ICollection<IExternalPerformanceData> Find(DateOnly date, List<Guid> personIds, int performanceId);
+		ICollection<Guid> FindPersonsCouldGetBadgeOverThreshold(DateOnly date, List<Guid> personIds, int performanceId, double badgeThreshold);
 	}
 }

@@ -368,7 +368,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 
 			result.HasError.Should().Be.False();
 			result.ValidRecords.Count.Should().Be.EqualTo(1);
-			result.ValidRecords[0].DateFrom.Should().Be.EqualTo(new DateTime(2017, 11, 20));
+			result.ValidRecords[0].DateFrom.Should().Be.EqualTo(new DateOnly(2017, 11, 20));
 			result.ValidRecords[0].MeasureName.Should().Be.EqualTo("Quality Score");
 			result.ValidRecords[0].MeasureType.Should().Be.EqualTo(ExternalPerformanceDataType.Percent);
 			result.ValidRecords[0].AgentId.Should().Be.EqualTo("1");
@@ -391,7 +391,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 
 			result.HasError.Should().Be.False();
 			result.ValidRecords.Count.Should().Be.EqualTo(1);
-			result.ValidRecords[0].DateFrom.Should().Be.EqualTo(new DateTime(2017, 11, 20));
+			result.ValidRecords[0].DateFrom.Should().Be.EqualTo(new DateOnly(2017, 11, 20));
 			result.ValidRecords[0].MeasureName.Should().Be.EqualTo("Quality Score");
 			result.ValidRecords[0].MeasureType.Should().Be.EqualTo(ExternalPerformanceDataType.Percent);
 			result.ValidRecords[0].AgentId.Should().Be.EqualTo(tenantLogonName);

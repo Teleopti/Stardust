@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			if (!externalPerformances.Any()) return;
 
 			var dates = result.ValidRecords.Select(x => x.DateFrom).ToList();
-			var existingDataWithinPeriod = _externalDataRepository.FindByPeriod(new DateTimePeriod(dates.Min(), dates.Max()));
+			var existingDataWithinPeriod = _externalDataRepository.FindByPeriod(new DateOnlyPeriod(dates.Min(), dates.Max()));
 			foreach (var record in result.ValidRecords)
 			{
 				var score = record.MeasureNumberScore;

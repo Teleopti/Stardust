@@ -16,15 +16,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 		}
 
-		public ICollection<IExternalPerformanceData> FindByPeriod(DateTimePeriod period)
+		public ICollection<IExternalPerformanceData> FindByPeriod(DateOnlyPeriod period)
 		{
 			return Session.CreateCriteria<ExternalPerformanceData>()
 				.Add(Restrictions.Conjunction()
-					.Add(Restrictions.Between("DateFrom", period.StartDateTime, period.EndDateTime)))
+					.Add(Restrictions.Between("DateFrom", period.StartDate, period.EndDate)))
 				.List<IExternalPerformanceData>();
 		}
 
-		public ICollection<IExternalPerformanceData> Find(DateTime date, List<Guid> personIds, int performanceId)
+		public ICollection<IExternalPerformanceData> Find(DateOnly date, List<Guid> personIds, int performanceId)
 		{
 			var performance = Session.CreateCriteria<ExternalPerformance>()
 				.Add(Restrictions.Conjunction()
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.List<IExternalPerformanceData>();
 		}
 
-		public ICollection<Guid> FindPersonsCouldGetBadgeOverThreshold(DateTime date, List<Guid> personIds, int performanceId, double badgeThreshold)
+		public ICollection<Guid> FindPersonsCouldGetBadgeOverThreshold(DateOnly date, List<Guid> personIds, int performanceId, double badgeThreshold)
 		{
 			var performance = Session.CreateCriteria<ExternalPerformance>()
 				.Add(Restrictions.Conjunction()

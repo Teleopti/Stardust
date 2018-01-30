@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 	{
 		public string RawLine { get; set; }
 		public string Error { get; set; }
-		public DateTime DateFrom { get; set; }
+		public DateOnly DateFrom { get; set; }
 		public ExternalPerformanceDataType MeasureType { get; set; }
 		public string MeasureName { get; set; }
 		public int MeasureId { get; set; }

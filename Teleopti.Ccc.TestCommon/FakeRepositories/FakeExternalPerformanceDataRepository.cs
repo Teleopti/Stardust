@@ -48,18 +48,18 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _performanceDataList;
 		}
 
-		public ICollection<IExternalPerformanceData> FindByPeriod(DateTimePeriod period)
+		public ICollection<IExternalPerformanceData> FindByPeriod(DateOnlyPeriod period)
 		{
 			return _performanceDataList.Where(externalPerformanceData => period.Contains(externalPerformanceData.DateFrom)).ToList();
 		}
 
-		public ICollection<IExternalPerformanceData> Find(DateTime date, List<Guid> personIds, int performanceId)
+		public ICollection<IExternalPerformanceData> Find(DateOnly date, List<Guid> personIds, int performanceId)
 		{
 			return _performanceDataList.Where(x =>
 				x.DateFrom == date && personIds.Contains(x.PersonId) && x.ExternalPerformance.ExternalId == performanceId).ToList();
 		}
 
-		public ICollection<Guid> FindPersonsCouldGetBadgeOverThreshold(DateTime date, List<Guid> personIds, int performanceId, double badgeThreshold)
+		public ICollection<Guid> FindPersonsCouldGetBadgeOverThreshold(DateOnly date, List<Guid> personIds, int performanceId, double badgeThreshold)
 		{
 			var performanceData = _performanceDataList.Where(x =>
 				x.DateFrom == date && personIds.Contains(x.PersonId) && x.ExternalPerformance.ExternalId == performanceId &&
