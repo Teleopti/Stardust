@@ -37,7 +37,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 
 		public IEnumerable<ISkillDay> SkillDaysFor(ITeamBlockInfo teamBlockInfo, DateOnly personPeriodDate)
 		{
-			var sites = teamBlockInfo.TeamInfo.GroupMembers.Select(agent => agent.Period(personPeriodDate).Team.Site).Distinct();
+			var sites = new HashSet<ISite>();
+			foreach (var agent in teamBlockInfo.TeamInfo.GroupMembers)
+			{
+				var personPeriod = agent.Period(personPeriodDate);
+				if (personPeriod != null)
+				{
+					sites.Add(personPeriod.Team.Site);
+				}
+			}
 			return sites.SelectMany(site => _maxSeatSkillDataPerSkills.SingleOrDefault(x => x.Site.Equals(site))?.SkillDays ?? new ISkillDay[0])
 				.ToArray();
 		}

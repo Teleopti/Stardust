@@ -203,7 +203,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 		}
 		
 		[Test]
-		[Ignore("#47955")]
 		public void ShouldHandleMixOfTerminatedAndNonTerminatedAgentsInSameTeam()
 		{
 			var site = new Site("_") { MaxSeats = 2 }.WithId();
