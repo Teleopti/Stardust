@@ -212,6 +212,7 @@
     <Compile Include="FakeRepositories\FakeAgentBadgeRepository.cs" />
     <Compile Include="FakeRepositories\FakeAgentBadgeWithRankRepository.cs" />
     <Compile Include="FakeRepositories\FakeAnalyticsSiteRepository.cs" />
+    <Compile Include="FakeRepositories\FakeApprovedPeriodsStorage.cs" />
     <Compile Include="FakeRepositories\FakeASMScheduleChangeTimeRepository.cs" />
     <Compile Include="FakeRepositories\FakeExternalPerformanceDataRepository.cs" />
     <Compile Include="FakeRepositories\FakeExternalPerformanceRepository.cs" />

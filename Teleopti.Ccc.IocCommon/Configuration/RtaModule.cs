@@ -1,5 +1,8 @@
-﻿using Autofac;
+﻿using System;
+using System.Collections.Generic;
+using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Configuration;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.RtaTool;
@@ -73,15 +76,16 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<TeamCardReader>().As<ITeamCardReader>().SingleInstance();
 			builder.RegisterType<RtaTracerViewModelBuilder>().SingleInstance();
 
-			builder.RegisterType<HistoricalAdherenceViewModelBuilder>().SingleInstance();
 			builder.RegisterType<HistoricalAdherenceDate>().SingleInstance();
+			
+			builder.RegisterType<HistoricalAdherenceViewModelBuilder>().SingleInstance();
 			builder.RegisterType<AdherencePercentageCalculator>().As<IAdherencePercentageCalculator>();
 
 			builder.RegisterType<HistoricalAdherenceReadModelReader>().As<IHistoricalAdherenceReadModelReader>();
 			builder.RegisterType<HistoricalAdherenceReadModelPersister>().As<IHistoricalAdherenceReadModelPersister>();
-
 			builder.RegisterType<HistoricalChangeReadModelReader>().As<IHistoricalChangeReadModelReader>();
 			builder.RegisterType<HistoricalChangeReadModelPersister>().As<IHistoricalChangeReadModelPersister>();
+			builder.RegisterType<ApprovedPeriodsReader>().As<IApprovedPeriodsReader>();
 
 			builder.RegisterType<ShiftEventPublisher>().SingleInstance();
 			builder.RegisterType<AdherenceEventPublisher>().SingleInstance();
@@ -124,4 +128,5 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<NoConfigurationValidator>().As<IConfigurationValidator>().SingleInstance();
 		}
 	}
+
 }

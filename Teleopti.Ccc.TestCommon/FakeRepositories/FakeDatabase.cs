@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
@@ -257,6 +260,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return database.WithPerson(null, name, null, null, null, null, null);
 		}
+
+		public static FakeDatabase WithPerson(this FakeDatabase database, Guid id)
+		{
+			return database.WithPerson(id, null, null, null, null, null, null);
+		}
 	}
 
 	public static class FakeDatabaseScheduleExtensions
@@ -345,6 +353,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private readonly FakeAgentStateReadModelPersister _agentStateReadModels;
 		private readonly HardcodedSkillGroupingPageId _hardcodedSkillGroupingPageId;
 		private readonly FakeMultiplicatorDefinitionSetRepository _multiplicatorDefinitionSets;
+		private readonly FakeApprovedPeriodsStorage _approvedPeriods;
 
 		private BusinessUnit _businessUnit;
 		private Site _site;
@@ -396,7 +405,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			FakeMeetingRepository meetings,
 			FakeAgentStatePersister agentStates,
 			FakeAgentStateReadModelPersister agentStateReadModels,
-			HardcodedSkillGroupingPageId hardcodedSkillGroupingPageId, FakeMultiplicatorDefinitionSetRepository multiplicatorDefinitionSets)
+			HardcodedSkillGroupingPageId hardcodedSkillGroupingPageId,
+			FakeMultiplicatorDefinitionSetRepository multiplicatorDefinitionSets,
+			FakeApprovedPeriodsStorage approvedPeriods)
 		{
 			_tenants = tenants;
 			_persons = persons;
@@ -429,6 +440,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_agentStateReadModels = agentStateReadModels;
 			_hardcodedSkillGroupingPageId = hardcodedSkillGroupingPageId;
 			_multiplicatorDefinitionSets = multiplicatorDefinitionSets;
+			_approvedPeriods = approvedPeriods;
 		}
 
 		public void CreateDefaultData()
@@ -534,7 +546,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_dataSources.Add(sourceId, datasourceId);
 			return this;
 		}
-		
+
 		public FakeDatabase WithBusinessUnit(Guid? id)
 		{
 			return WithBusinessUnit(id, null);
@@ -616,6 +628,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			}
 
 			Name setName;
+			name = name ?? RandomName.Make();
 			if (name.Contains(" "))
 			{
 				var fullName = name.Split(" ");
@@ -1054,6 +1067,19 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return WithAlarm(threshold, null);
 		}
+
+		[UnitOfWork]
+		public virtual FakeDatabase WithApprovedPeriods(string startTime, string endTime)
+		{
+			_approvedPeriods.Has(new ApprovedPeriodModel
+			{
+				PersonId = _person.Id.Value,
+				StartTime = startTime.Utc(),
+				EndTime = endTime.Utc()
+			});
+			return this;
+		}
+
 
 		[UnitOfWork]
 		public virtual FakeDatabase ClearAssignments(Guid? personId)

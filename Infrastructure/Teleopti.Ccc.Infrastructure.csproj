@@ -275,6 +275,7 @@
     <Compile Include="Repositories\UserDeviceRepository.cs" />
     <Compile Include="Repositories\RequeueHangfireRepository.cs" />
     <Compile Include="Requests\StaffingInfoAvailableDaysProvider.cs" />
+    <Compile Include="Rta\ApprovedPeriodsReader.cs" />
     <Compile Include="Rta\Persisters\OrganizationReader.cs" />
     <Compile Include="Rta\Persisters\RtaTracerConfigPersister.cs" />
     <Compile Include="Rta\RtaTracerReader.cs" />

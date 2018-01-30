@@ -10,11 +10,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		public IEnumerable<HistoricalAdherenceActivityViewModel> Schedules { get; set; }
 		public IEnumerable<AgentOutOfAdherenceViewModel> OutOfAdherences { get; set; }
 		public IEnumerable<AgentOutOfAdherenceViewModel> RecordedOutOfAdherences { get; set; }
+		public IEnumerable<ApprovedPeriodViewModel> ApprovedPeriods { get; set; }
 		public IEnumerable<HistoricalChangeViewModel> Changes { get; set; }
 		public string Now { get; set; }
 		public ScheduleTimeline Timeline { get; set; }
 		public int? AdherencePercentage { get; set; }
 		public HistoricalAdherenceNavigationViewModel Navigation { get; set; }
+	}
+
+	public class ApprovedPeriodViewModel
+	{
+		public string StartTime { get; set; }
+		public string EndTime { get; set; }
 	}
 
 	public class HistoricalAdherenceNavigationViewModel
