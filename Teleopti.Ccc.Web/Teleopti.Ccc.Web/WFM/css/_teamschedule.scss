@@ -334,22 +334,17 @@
 	}
 
 	timezone-picker {
-		margin: 0 10px;
+		margin: 4px 10px;
 
 		.md-select-value {
 			min-height: initial;
 		}
 	}
 
-	.wfm-switch {
+	md-switch {
 		margin: 10px;
 		padding: 0 60px 0 0;
 		text-align: right;
-
-		.wfm-switch-toggle {
-			right: 0;
-			top: 0;
-		}
 	}
 
 	.icon-container {

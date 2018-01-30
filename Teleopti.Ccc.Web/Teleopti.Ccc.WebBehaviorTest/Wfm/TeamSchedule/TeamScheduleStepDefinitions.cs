@@ -352,7 +352,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		[When(@"I switch on show warnings toggle")]
 		public void WhenISwitchOnShowWarningsToggle()
 		{
-			Browser.Interactions.ClickUsingJQuery("#show-warnings .wfm-switch-toggle");
+			Browser.Interactions.ClickUsingJQuery("#show-warnings");
 		}
 
 		[Then(@"I should see business rule warning")]
