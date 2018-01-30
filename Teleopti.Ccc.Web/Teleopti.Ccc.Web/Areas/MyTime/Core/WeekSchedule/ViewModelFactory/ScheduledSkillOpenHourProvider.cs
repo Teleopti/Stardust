@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -63,15 +62,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			return new TimePeriod(startTime.Value, endTime.Value);
 		}
 
-		private IPersonSkill[] getPersonSkills(DateOnlyPeriod period)
+		private  IPersonSkill[] getPersonSkills(DateOnlyPeriod period)
 		{
 			var person = _loggedOnUser.CurrentUser();
 			var personPeriod = person.PersonPeriods(period).ToArray();
 			if (!personPeriod.Any())
 				return null;
 
-			var personSkills = personPeriod.SelectMany(p => new PersonalSkills().PersonSkills(p))
-				.Where(p => _supportedSkillsInIntradayProvider.CheckSupportedSkill(p.Skill)).ToArray();
+			var personSkills = filterPersonSkills(personPeriod.SelectMany(p => new PersonalSkills().PersonSkills(p)),period);
 
 			if (!personSkills.Any())
 				return null;
@@ -79,6 +77,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			return personSkills;
 		}
 
+		protected virtual IPersonSkill[] filterPersonSkills(IEnumerable<IPersonSkill> personSkills, DateOnlyPeriod period)
+		{
+			return personSkills.Where(p => _supportedSkillsInIntradayProvider.CheckSupportedSkill(p.Skill)).ToArray();
+		}
+
+		
 		public TimePeriod? GetSkillOpenHourPeriodByDate(IPersonSkill[] personSkills, IScheduleDay scheduleDay)
 		{
 			if (personSkills == null || !personSkills.Any())

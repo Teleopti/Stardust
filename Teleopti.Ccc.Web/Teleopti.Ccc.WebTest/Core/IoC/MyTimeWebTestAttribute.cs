@@ -104,7 +104,6 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			system.UseTestDouble<FakeActivityRepository>().For<IActivityRepository>();
 			system.UseTestDouble<ScheduleMinMaxTimeCalculator>().For<IScheduleMinMaxTimeCalculator>();
 			system.UseTestDouble<SiteOpenHourProvider>().For<ISiteOpenHourProvider>();
-			system.UseTestDouble<ScheduledSkillOpenHourProvider>().For<IScheduledSkillOpenHourProvider>();
 			system.UseTestDouble<StaffingDataAvailablePeriodProvider>().For<IStaffingDataAvailablePeriodProvider>();
 
 			// Tenant (and datasource) stuff

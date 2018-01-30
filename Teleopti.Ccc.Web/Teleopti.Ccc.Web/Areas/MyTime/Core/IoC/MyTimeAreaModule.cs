@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -237,7 +238,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 				.As<IStudentAvailabilityPeriodFeedbackViewModelFactory>();
 		}
 
-		private static void registerScheduleTypes(ContainerBuilder builder)
+		private void registerScheduleTypes(ContainerBuilder builder)
 		{
 			builder.RegisterType<ScheduleViewModelFactory>().As<IScheduleViewModelFactory>();
 			builder.RegisterType<HeaderViewModelFactory>().As<IHeaderViewModelFactory>();
@@ -251,8 +252,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<MonthScheduleDomainDataProvider>().As<IMonthScheduleDomainDataProvider>().SingleInstance();
 			builder.RegisterType<StaffingPossibilityViewModelFactory>().As<IStaffingPossibilityViewModelFactory>().SingleInstance();
 			builder.RegisterType<ScheduleMinMaxTimeCalculator>().As<IScheduleMinMaxTimeCalculator>().SingleInstance();
-			builder.RegisterType<SiteOpenHourProvider>().As<ISiteOpenHourProvider>().SingleInstance(); ;
-			builder.RegisterType<ScheduledSkillOpenHourProvider>().As<IScheduledSkillOpenHourProvider>().SingleInstance();
+			builder.RegisterType<SiteOpenHourProvider>().As<ISiteOpenHourProvider>().SingleInstance();
+			if (_config.Toggle(Toggles.OvertimeRequestPeriodSkillTypeSetting_47290))
+			{
+				builder.RegisterType<ScheduledSkillOpenHourProviderToggle47290On>().As<IScheduledSkillOpenHourProvider>().SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<ScheduledSkillOpenHourProvider>().As<IScheduledSkillOpenHourProvider>().SingleInstance();
+			}
+
 			builder.RegisterType<StaffingDataAvailablePeriodProvider>().As<IStaffingDataAvailablePeriodProvider>().SingleInstance();
 			builder.RegisterType<IntradayScheduleEdgeTimeCalculator>().As<IIntradayScheduleEdgeTimeCalculator>();
 		}

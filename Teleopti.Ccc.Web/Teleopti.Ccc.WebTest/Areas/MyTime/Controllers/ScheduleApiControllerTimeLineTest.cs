@@ -10,12 +10,15 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
+using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -113,6 +116,70 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var result = Target.FetchWeekData(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime);
 
 			AssertTimeLine(result.TimeLine.ToList(),6,45,18,15);
+		}
+
+		[Test]
+		[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
+		[Toggle(Toggles.OvertimeRequestPeriodSkillTypeSetting_47290)]
+		public void ShouldAdjustTimelineAccordingOpenPeriodSkillTypeOpenHourDaySchedule()
+		{
+			var skillType = new SkillTypeEmail(new Description(SkillTypeIdentifier.Email), ForecastSource.Email).WithId();
+			var workflowControlSet = new WorkflowControlSet();
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
+				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(13))),
+				SkillType = skillType
+			});
+			User.CurrentUser().WorkflowControlSet = workflowControlSet;
+
+			var skill1 = addSkill(TimeSpan.FromHours(7), TimeSpan.FromHours(15));
+			var skill2 = addSkill(TimeSpan.Zero, TimeSpan.FromDays(1));
+			skill2.SkillType = skillType;
+
+			var period1 = new DateTimePeriod(new DateTime(2014, 12, 31, 9, 15, 0, DateTimeKind.Utc),
+				new DateTime(2014, 12, 31, 9, 45, 0, DateTimeKind.Utc));
+			addAssignment(new DateOnly(2014, 12, 31), new activityDto { Activity = skill1.Activity, Period = period1 });
+
+			var result = Target.FetchDayData(new DateOnly(2014,12,31), StaffingPossiblityType.Overtime);
+
+			AssertTimeLine(result.TimeLine.ToList(), 0, 0, 23, 59);
+		}
+
+		[Test]
+		[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
+		[Toggle(Toggles.OvertimeRequestPeriodSkillTypeSetting_47290)]
+		public void ShouldAdjustTimelineAccordingOpenPeriodSkillTypeOpenHourWeekSchedule()
+		{
+			var skillType = new SkillTypeEmail(new Description(SkillTypeIdentifier.Email), ForecastSource.Email).WithId();
+			var workflowControlSet = new WorkflowControlSet();
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
+				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime().AddDays(-10)), new DateOnly(Now.UtcDateTime().AddDays(13))),
+				SkillType = skillType
+			});
+			User.CurrentUser().WorkflowControlSet = workflowControlSet;
+
+			var skill1 = addSkill(TimeSpan.FromHours(7), TimeSpan.FromHours(15));
+			var skill2 = addSkill(TimeSpan.Zero, TimeSpan.FromDays(1));
+			skill2.SkillType = skillType;
+
+			var day = DateHelper.GetFirstDateInWeek(Now.UtcDateTime().Date, CultureInfo.CurrentCulture);
+			for (var i = 0; i < 7; i++)
+			{
+				day = day.AddDays(i);
+				var period1 = new DateTimePeriod(day.AddHours(6).AddMinutes(15),
+					day.AddHours(9).AddMinutes(45));
+				var period2 = new DateTimePeriod(day.AddHours(10).AddMinutes(15),
+					day.AddHours(10).AddMinutes(45));
+				addAssignment(period1, skill1.Activity);
+				addAssignment(period2, skill2.Activity);
+			}
+
+			var result = Target.FetchWeekData(null, StaffingPossiblityType.Overtime);
+
+			AssertTimeLine(result.TimeLine.ToList(), 0, 0, 23, 59);
 		}
 
 		[Test]
