@@ -139,11 +139,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<PersonScheduleDayReadModelFinder>().As<IPersonScheduleDayReadModelFinder>().SingleInstance();
 			builder.RegisterType<CommonAgentNameProvider>().As<ICommonAgentNameProvider>().SingleInstance();
 			builder.RegisterType<TrackingMessageSender>().As<ITrackingMessageSender>().SingleInstance();
-
-			builder.RegisterType<TeamCardReader>()
-				.As<ITeamCardReader>()
-				.SingleInstance();
-
 			builder.RegisterType<IntervalLengthFetcher>().As<IIntervalLengthFetcher>().SingleInstance();
 			builder.RegisterType<AnalyticsFactScheduleTimeMapper>().As<IAnalyticsFactScheduleTimeMapper>().SingleInstance();
 			builder.RegisterType<AnalyticsFactScheduleDateMapper>().As<IAnalyticsFactScheduleDateMapper>().SingleInstance();

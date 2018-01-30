@@ -393,7 +393,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			FakeRtaRuleRepository rules,
 			FakeExternalLogOnRepository externalLogOns,
 			FakeDataSources dataSources,
-			FakeTeamCardReader teamCardReader,
 			FakeMeetingRepository meetings,
 			FakeAgentStatePersister agentStates,
 			FakeAgentStateReadModelPersister agentStateReadModels,
