@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay;
@@ -85,7 +84,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<HistoricalAdherenceReadModelPersister>().As<IHistoricalAdherenceReadModelPersister>();
 			builder.RegisterType<HistoricalChangeReadModelReader>().As<IHistoricalChangeReadModelReader>();
 			builder.RegisterType<HistoricalChangeReadModelPersister>().As<IHistoricalChangeReadModelPersister>();
-			builder.RegisterType<ApprovedPeriodsReader>().As<IApprovedPeriodsReader>();
+			builder.RegisterType<ApprovedPeriodsReader>().As<IApprovedPeriodsReader>().SingleInstance();
+			builder.RegisterType<ApprovedPeriodsPersister>().As<IApprovedPeriodsPersister>().SingleInstance();
 
 			builder.RegisterType<ShiftEventPublisher>().SingleInstance();
 			builder.RegisterType<AdherenceEventPublisher>().SingleInstance();
@@ -128,5 +128,4 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<NoConfigurationValidator>().As<IConfigurationValidator>().SingleInstance();
 		}
 	}
-
 }

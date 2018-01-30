@@ -315,6 +315,7 @@
     <Compile Include="ApplicationLayer\Rta\AgentAdherenceDay\AdherencePercentageCalculator.cs" />
     <Compile Include="ApplicationLayer\Rta\AgentAdherenceDay\ApprovedPeriodModel.cs" />
     <Compile Include="ApplicationLayer\Rta\AgentAdherenceDay\IAdherencePercentageCalculator.cs" />
+    <Compile Include="ApplicationLayer\Rta\AgentAdherenceDay\IApprovedPeriodsPersister.cs" />
     <Compile Include="ApplicationLayer\Rta\AgentAdherenceDay\IApprovedPeriodsReader.cs" />
     <Compile Include="ApplicationLayer\Rta\Configuration\ConfigurationValidationViewModel.cs" />
     <Compile Include="ApplicationLayer\Rta\Configuration\ConfigurationValidator.cs" />

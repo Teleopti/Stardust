@@ -335,6 +335,7 @@
     <Compile Include="Rta\ReadModels\AgentState\TeamCardReaderSitesTest.cs" />
     <Compile Include="Rta\ReadModels\AgentState\TeamCardReaderSitesSkillsTest.cs" />
     <Compile Include="Rta\ReadModels\AgentState\TeamCardReaderBusinessUnitTest.cs" />
+    <Compile Include="Rta\ReadModels\HistoricalAdherence\ApprovedPeriodsPersisterTest.cs" />
     <Compile Include="Rta\ReadModels\HistoricalAdherence\HistoricalAdherenceConcurrencyTest.cs" />
     <Compile Include="Rta\Service\CyrillicCharactersTest.cs" />
     <Compile Include="Rta\Service\Persisters\AgentStateForUpsert.cs" />
