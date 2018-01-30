@@ -460,7 +460,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		[When(@"I choose not to view '(.*)' validation result")]
 		public void WhenIChooseNotToViewValidationResult(string ruleType)
 		{
-			//Browser.Interactions.AssertExistsUsingJQuery();
 			Browser.Interactions.AssertExists($"md-checkbox[test-attr={ruleType}][aria-checked=true]");
 			Browser.Interactions.Javascript($"document.querySelector('md-checkbox[test-attr={ruleType}][aria-checked=true]').click();");
 			Browser.Interactions.AssertExists($"md-checkbox[test-attr={ruleType}][aria-checked=false]");
