@@ -408,7 +408,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			var result = Target.FetchWeekData(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime);
 
-			AssertTimeLine(result.TimeLine.ToList(),9,0,10,0);
+			AssertTimeLine(result.TimeLine.ToList(),6,45,15,15);
 		}
 
 		[Test]
@@ -527,7 +527,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			var result = Target.FetchWeekData(new DateOnly(2014, 12, 31), StaffingPossiblityType.Overtime);
 
-			AssertTimeLine(result.TimeLine.ToList(), 6, 45, 15, 15);
+			AssertTimeLine(result.TimeLine.ToList(), 0, 0, 23, 59);
 		}
 
 		[Test]
