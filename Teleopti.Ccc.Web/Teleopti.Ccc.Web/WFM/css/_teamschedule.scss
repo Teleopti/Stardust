@@ -956,22 +956,6 @@ teamschedule-command-container {
 		overflow: auto;
 		flex-grow: 1;
 
-		.wfm-checkbox-toggle:after {
-			width: 16px;
-			height: 16px;
-			font-size: 12px;
-			top: 50%;
-			transform: translateY(-50%);
-		}
-
-		.wfm-checkbox input[type=checkbox]:checked ~ .wfm-checkbox-toggle:after {
-			background-color: $orange-500;
-		}
-
-		.wfm-checkbox label {
-			position: relative;
-		}
-
 		ul {
 			margin-left: 20px;
 			list-style-type: disc;
