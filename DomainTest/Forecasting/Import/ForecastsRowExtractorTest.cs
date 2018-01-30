@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Import
 			var timeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
 			const string rowString =  @"Insurance,20120326 02:00,20120326 02:00,17,0.5,0,4.05";
 			
-			_target.PresetTokenSeparator(rowString);
+			_target.PresetTokenSeparator(";");
 			Assert.Throws<ValidationException>(() => _target.Extract(rowString, timeZone),
 				"There are more or less columns than expected");
 		}

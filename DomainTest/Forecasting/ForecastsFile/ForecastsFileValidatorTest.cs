@@ -1,5 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting.ForecastsFile;
 using Teleopti.Ccc.Domain.Forecasting.Import;
 
@@ -122,8 +123,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.ForecastsFile
             ForecastParseResult<double> parseResult;
             var result = target.TryParse("100,1", out parseResult);
 
-            Assert.That(result, Is.False);
-            Assert.That(parseResult.ErrorMessage, Is.Not.Null);
+            Assert.That(result, Is.True);
+	        parseResult.Value.Should().Be.EqualTo(100.1);
+            Assert.That(parseResult.ErrorMessage, Is.Null);
         }
 
     }
