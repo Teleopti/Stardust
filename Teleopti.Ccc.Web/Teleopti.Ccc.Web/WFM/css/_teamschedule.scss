@@ -694,7 +694,8 @@ team-schedule-datepicker {
 				word-break: break-word;
 				white-space: normal;
 			}
-			.sort-agent{
+
+			.sort-agent {
 				margin: 5px 0;
 			}
 		}
@@ -710,6 +711,7 @@ team-schedule-datepicker {
 			font-weight: 400;
 			text-align: center;
 			white-space: nowrap;
+			vertical-align: inherit;
 		}
 
 		td.contract-time-column {
@@ -720,10 +722,14 @@ team-schedule-datepicker {
 			width: 2%;
 		}
 
+		.schedule-column {
+			padding-top: 10px;
+		}
 		td.schedule-note-column {
 			width: 2%;
 			cursor: pointer;
 			text-align: center;
+			vertical-align: inherit;
 
 			.mdi:before {
 				font-size: 14px !important;
@@ -741,6 +747,7 @@ team-schedule-datepicker {
 		td.shift-category-cell {
 			text-align: center;
 			border-left: 1px solid $gray012;
+			vertical-align: inherit;
 
 			& > span {
 				width: 20px;
