@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Common.Logging;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Analytics;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
@@ -22,25 +21,22 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private readonly IEnversConfiguration _enversConfiguration;
 		private readonly ICurrentTransactionHooks _transactionHooks;
 		private readonly ICurrentHttpContext _httpContext;
-		private readonly IUpdatedBy _updatedBy;
 
 		public UnitOfWorkFactoryNewerUper(
 			ICurrentPreCommitHooks currentPreCommitHooks,
 			IEnversConfiguration enversConfiguration,
 			ICurrentTransactionHooks transactionHooks,
-			ICurrentHttpContext httpContext,
-			IUpdatedBy updatedBy)
+			ICurrentHttpContext httpContext)
 		{
 			_currentPreCommitHooks = currentPreCommitHooks;
 			_enversConfiguration = enversConfiguration;
 			_transactionHooks = transactionHooks;
 			_httpContext = httpContext;
-			_updatedBy = updatedBy;
 		}
 
 		public NHibernateUnitOfWorkInterceptor MakeInterceptor()
 		{
-			return new NHibernateUnitOfWorkInterceptor(_updatedBy, _currentPreCommitHooks);
+			return new NHibernateUnitOfWorkInterceptor(ServiceLocatorForLegacy.UpdatedBy, _currentPreCommitHooks);
 		}
 
 		public NHibernateUnitOfWorkFactory MakeAppFactory(
