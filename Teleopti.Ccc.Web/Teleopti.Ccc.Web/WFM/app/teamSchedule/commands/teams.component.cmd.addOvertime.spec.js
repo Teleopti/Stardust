@@ -68,7 +68,7 @@
 		expect(moment(result.commandControl.toTime).format('YYYY-MM-DD HH:mm')).toEqual(moment('2018-01-23 18:00:00').format('YYYY-MM-DD HH:mm'));
 	});
 
-	it('should get default start time for one agent', function () {
+	it('should get normal shift end time as default start time for one agent', function () {
 		var personInfoList = [{
 			PersonId: '7c25f4ae-96ea-409e-b959-2c02587c649e',
 			Name: 'Bill',
@@ -89,6 +89,93 @@
 		var result = setUp();
 
 		expect(moment(result.commandControl.fromTime).format('YYYY-MM-DD HH:mm')).toEqual(moment('2018-01-23 17:00:00').format('YYYY-MM-DD HH:mm'));
+	});
+
+	it('should get default work time period when adding overtime activity on day offs', function () {
+		var personInfoList = [{
+			PersonId: '7c25f4ae-96ea-409e-b959-2c02587c649e',
+			Name: 'Bill',
+			Checked: true,
+			AllowSwap: false,
+			IsDayOff: true,
+			IsEmptyDay: false,
+			IsFullDayAbsence: false,
+			ScheduleStartTime: '2018-01-23T00:00:00',
+			ScheduleEndTime: '2018-01-23T23:59:00',
+			SelectedAbsences: [],
+			SelectedActivities: [],
+			Timezone: {
+				IanaId: "Asia/Shanghai",
+				DisplayName: "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi"
+			},
+			SelectedDayOffs: [{
+				Date: '2018-01-23',
+				DayOffName: 'Day off',
+				Length: 100,
+				Parent: null,
+				StartPosition: 0
+			}]
+		}];
+
+		fakePersonSelectionService.setFakeCheckedPersonInfoList(personInfoList);
+		var result = setUp();
+
+		expect(moment(result.commandControl.fromTime).format('YYYY-MM-DD HH:mm')).toEqual(moment('2018-01-23 08:00:00').format('YYYY-MM-DD HH:mm'));
+		expect(moment(result.commandControl.toTime).format('YYYY-MM-DD HH:mm')).toEqual(moment('2018-01-23 17:00:00').format('YYYY-MM-DD HH:mm'));
+	});
+
+	it('should get default work time period when adding overtime activity on empty days', function () {
+		var personInfoList = [{
+			PersonId: '7c25f4ae-96ea-409e-b959-2c02587c649e',
+			Name: 'Bill',
+			Checked: true,
+			AllowSwap: false,
+			IsDayOff: false,
+			IsEmptyDay: true,
+			IsFullDayAbsence: false,
+			ScheduleStartTime: '2018-01-23T00:00:00',
+			ScheduleEndTime: '2018-01-23T23:59:00',
+			SelectedAbsences: [],
+			SelectedActivities: [],
+			Timezone: {
+				IanaId: "Asia/Shanghai",
+				DisplayName: "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi"
+			},
+			SelectedDayOffs: []
+		}];
+
+		fakePersonSelectionService.setFakeCheckedPersonInfoList(personInfoList);
+		var result = setUp();
+
+		expect(moment(result.commandControl.fromTime).format('YYYY-MM-DD HH:mm')).toEqual(moment('2018-01-23 08:00:00').format('YYYY-MM-DD HH:mm'));
+		expect(moment(result.commandControl.toTime).format('YYYY-MM-DD HH:mm')).toEqual(moment('2018-01-23 17:00:00').format('YYYY-MM-DD HH:mm'));
+	});
+
+	it('should get default work time period when adding overtime activity on full day absence day', function () {
+		var personInfoList = [{
+			PersonId: '7c25f4ae-96ea-409e-b959-2c02587c649e',
+			Name: 'Bill',
+			Checked: true,
+			AllowSwap: false,
+			IsDayOff: false,
+			IsEmptyDay: false,
+			IsFullDayAbsence: true,
+			ScheduleStartTime: '2018-01-23T00:00:00',
+			ScheduleEndTime: '2018-01-23T23:59:00',
+			SelectedAbsences: ['8d97a1d1-45be-4447-96c6-9976e18c1664'],
+			SelectedActivities: [],
+			Timezone: {
+				IanaId: "Asia/Shanghai",
+				DisplayName: "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi"
+			},
+			SelectedDayOffs: []
+		}];
+
+		fakePersonSelectionService.setFakeCheckedPersonInfoList(personInfoList);
+		var result = setUp();
+
+		expect(moment(result.commandControl.fromTime).format('YYYY-MM-DD HH:mm')).toEqual(moment('2018-01-23 08:00:00').format('YYYY-MM-DD HH:mm'));
+		expect(moment(result.commandControl.toTime).format('YYYY-MM-DD HH:mm')).toEqual(moment('2018-01-23 17:00:00').format('YYYY-MM-DD HH:mm'));
 	});
 
 	it('should use first selected agent\'s shift end time as default start time', function () {

@@ -13,6 +13,9 @@
 
 	function AddOvertimeCtrl(personSelectionSvc, activityService, activityValidator, belongsToDateDecider, teamScheduleNotificationService) {
 		var ctrl = this;
+		var defaultWorkStartInHour = 8,
+			defaultWorkEndInHour = 17;
+
 		ctrl.label = 'AddOvertimeActivity';
 		ctrl.processingCommand = false;
 		ctrl.invalidAgents = [];
@@ -31,8 +34,8 @@
 		ctrl.$onInit = function() {
 			ctrl.selectedAgents = personSelectionSvc.getSelectedPersonInfoList();
 			ctrl.trackId = ctrl.containerCtrl.getTrackId();
-			ctrl.fromTime = moment(ctrl.selectedAgents[0].ScheduleEndTime).toDate();
-			ctrl.toTime = moment(ctrl.fromTime).add(1, 'hour').toDate();
+			ctrl.fromTime = getDefaultStartTime();
+			ctrl.toTime = getEndTime();
 			ctrl.timeRangeIsValid = true;
 		};
 
@@ -105,6 +108,22 @@
 				}
 			}
 		};
+
+		function getDefaultStartTime() {
+			var firstSelectedAgent = ctrl.selectedAgents[0];
+			if (firstSelectedAgent.IsDayOff || firstSelectedAgent.IsEmptyDay || firstSelectedAgent.IsFullDayAbsence) {
+				return moment(firstSelectedAgent.ScheduleStartTime.split('T')[0]).hour(defaultWorkStartInHour).toDate();
+			}
+			return moment(firstSelectedAgent.ScheduleEndTime).toDate();
+		}
+
+		function getEndTime() {
+			var firstSelectedAgent = ctrl.selectedAgents[0];
+			if (firstSelectedAgent.IsDayOff || firstSelectedAgent.IsEmptyDay || firstSelectedAgent.IsFullDayAbsence) {
+				return moment(firstSelectedAgent.ScheduleStartTime.split('T')[0]).hour(defaultWorkEndInHour).toDate();
+			}
+			return moment(firstSelectedAgent.ScheduleEndTime).add(1, 'hours').toDate();
+		}
 
 		function prepareRequestData(validAgents) {
 			var timezone = ctrl.containerCtrl.getCurrentTimezone();
