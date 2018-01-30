@@ -163,12 +163,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 						$"{extractionResult.RawLine}{splitor}{string.Format(Resources.RowExceedsLimitOfGamificationMeasures, maxMeasureCount)}";
 					return;
 				}
-				var findByName = existingTypes.FirstOrDefault(s => s.Name == extractionResult.MeasureName);
-				if (findByName != null)
-				{
-					extractionResult.Error = $"{extractionResult.RawLine}{splitor}{string.Format(Resources.GamificationMeasureNameAlreadyExist, findByName.ExternalId)}";
-					return;
-				}
+
 				existingTypes.Add(new ExternalPerformance
 				{
 					DataType = extractionResult.MeasureType,
