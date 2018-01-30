@@ -1,4 +1,4 @@
-﻿fdescribe('teamschedule add absence diretive test', function () {
+﻿describe('teamschedule add absence diretive test', function () {
 	'use strict';
 
 	var fakeAbsenceService,

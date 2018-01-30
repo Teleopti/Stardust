@@ -2,22 +2,18 @@
 	<h3>{{'Time'|translate}}: </h3>
 	<div class="con-row">
 		<div class="wfm-timepicker-wrap">
-			<div uib-timepicker  ng-model="startTime" minute-step="minuteStep" show-meridian="showMeridian" meridians="meridians"></div>
+			<div uib-timepicker ng-model="startTime" minute-step="minuteStep" show-meridian="showMeridian" meridians="meridians"></div>
 		</div>
 		<div>—</div>
 		<div class="wfm-timepicker-wrap">
-			<div uib-timepicker  ng-model="endTime" minute-step="minuteStep" show-meridian="showMeridian" meridians="meridians"></div>
+			<div uib-timepicker ng-model="endTime" minute-step="minuteStep" show-meridian="showMeridian" meridians="meridians"></div>
 		</div>
 	</div>
 
 	<div class="con-row">
-		<div class="wfm-switch">
-			<input type="checkbox" id="addActNextDay" ng-model="isNextDay" ng-disabled="disableNextDay" />
-			<label for="addActNextDay">
-				<span class="wfm-switch-label">{{"NextDay" | translate}}</span>
-				<span class="wfm-switch-toggle"></span>
-			</label>
-		</div>
+		<md-switch ng-model="isNextDay" ng-disabled="disableNextDay">
+			<span>{{"NextDay" | translate}}</span>
+		</md-switch>
 	</div>
 </div>
 <div class="error-msg-container ng-invalid-parse alert-error notice-spacer">
