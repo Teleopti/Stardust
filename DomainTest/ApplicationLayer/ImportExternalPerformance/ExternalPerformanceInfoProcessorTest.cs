@@ -275,22 +275,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		}
 
 		[Test]
-		public void ShouldNotAllowSameMeasureName()
-		{
-			var existMeasureName = "measure1";
-			var existPerformance = new ExternalPerformance {ExternalId = 1, Name = existMeasureName, DataType = ExternalPerformanceDataType.Percent};
-			PerformanceRepository.Add(existPerformance);
-
-			var invalidRecord = "20171120,1,Kalle,Pettersson,measure1,2,Numeric,87";
-			var fileData = createFileData(invalidRecord);
-			var expectedErrorRecord = $"{invalidRecord},{string.Format(Resources.GamificationMeasureNameAlreadyExist, existPerformance.ExternalId)}";
-
-			var result = Target.Process(fileData);
-
-			result.InvalidRecords[0].Should().Be.EqualTo(expectedErrorRecord);
-		}
-
-		[Test]
 		public void ShouldFindAgentsByExternalLogon()
 		{
 			var per1 = Guid.NewGuid();
