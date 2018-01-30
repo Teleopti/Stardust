@@ -1,35 +1,25 @@
 <div class="settings-panel">
 	<div class="sidenav-header">{{'Settings'|translate}}</div>
 	<md-content class="command-panel-content" ng-class="{'toggle-control': vm.toggles.WfmTeamSchedule_ShowStaffingInfo_45206}" layout-padding>
-		
-		
-		<div class="wfm-switch" ng-if="vm.searchEnabled && vm.toggles.WfmTeamSchedule_ShowStaffingInfo_45206">
-			<input type="checkbox" id="switchAbsence" ng-model="vm.settings.onlyLoadScheduleWithAbsence" ng-change="vm.onSettingsUpdated('onlyLoadScheduleWithAbsence')" />
-			<label for="switchAbsence">
-				<span class="wfm-switch-label" translate>ShowOnlyAbsence</span>
-				<span class="wfm-switch-toggle"></span>
-			</label>
-			
-		</div>
+		<md-switch ng-if="vm.searchEnabled && vm.toggles.WfmTeamSchedule_ShowStaffingInfo_45206"
+				   ng-model="vm.settings.onlyLoadScheduleWithAbsence"
+				   ng-change="vm.onSettingsUpdated('onlyLoadScheduleWithAbsence')">
+			<span translate>ShowOnlyAbsence</span>
+		</md-switch>
 		<md-divider ng-if="vm.toggles.WfmTeamSchedule_ShowStaffingInfo_45206"></md-divider>
-		<div id="show-warnings" class="wfm-switch inline-block" ng-if="vm.toggles.WfmTeamSchedule_ShowStaffingInfo_45206">
-			<input type="checkbox" id="validateWarning" ng-model="vm.settings.validateWarningEnabled" ng-change="vm.onSettingsUpdated('validateWarningEnabled')"/>
-			<label for="validateWarning">
-				<span class="wfm-switch-label" translate>ShowWarnings</span>
-				<span class="wfm-switch-toggle"></span>
-			</label>
-			
-		</div>
+		<md-switch ng-if="vm.toggles.WfmTeamSchedule_ShowStaffingInfo_45206"
+				   ng-model="vm.settings.validateWarningEnabled"
+				   ng-change="vm.onSettingsUpdated('validateWarningEnabled')">
+			<span translate>ShowWarnings</span>
+		</md-switch>
 		<div class="configure-validation">
 			<h3>{{'ConfigureValidationWarnings' | translate}}</h3>
-			<md-checkbox ng-repeat="rule in vm.availableValidationRules" 
+			<md-checkbox ng-repeat="rule in vm.availableValidationRules"
 						 test-attr="{{rule.type}}"
-						 ng-model="rule.checked" 
+						 ng-model="rule.checked"
 						 ng-change="vm.updateValidateRulesToggleState(rule.type, rule.checked)" value="true">
 				{{rule.type | translate}}
 			</md-checkbox>
 		</div>
-
 	</md-content>
-
 </div>
