@@ -216,8 +216,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 				.Read(data.PersonId, data.DisplayStartTime, data.DisplayEndTime)
 				.Select(a => new ApprovedPeriodViewModel
 				{
-					StartTime = a.StartTime.ToString("yyyy-MM-ddTHH:mm:ss"),
-					EndTime = a.EndTime.ToString("yyyy-MM-ddTHH:mm:ss")
+					StartTime = formatForUser(a.StartTime),
+					EndTime = formatForUser(a.EndTime)
 				})
 				.ToArray();
 		}
