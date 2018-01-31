@@ -82,7 +82,7 @@
 					data.AdherenceBronzeThreshold.Value * 100,
 					data.AdherenceSilverThreshold.Value * 100,
 					data.AdherenceGoldThreshold.Value * 100,
-					'\\d+(\.\d+)?$',
+					'^\\d+(\.{0,1}\\d+){0,1}$',
 					100.0,
 					'desc'
 				);
@@ -134,7 +134,7 @@
 						config.valueFormat = '^\\d+$';
 						config.max = 10000;
 					} else {
-						config.valueFormat = '\\d+(\.\d+)?$';
+						config.valueFormat = '^\\d+(\.{0,1}\\d+){0,1}$';
 						config.badgeThreshold = config.badgeThreshold * 100;
 						config.goldBadgeThreshold = config.goldBadgeThreshold * 100;
 						config.silverBadgeThreshold = config.silverBadgeThreshold * 100;
