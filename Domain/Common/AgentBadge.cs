@@ -12,16 +12,19 @@ namespace Teleopti.Ccc.Domain.Common
 			return agentBadgeTransaction.GroupBy(x => new
 			{
 				PersonId = x.Person.Id.GetValueOrDefault(),
-				x.BadgeType
+				x.BadgeType,
+				x.IsExternal
 			}).Select(g => new AgentBadge
 			{
 				Person = g.Key.PersonId,
 				BadgeType = g.Key.BadgeType,
+				IsExternal = g.Key.IsExternal,
 				TotalAmount = g.Sum(x => x.Amount)
 			}).ToList();
 		}
 
 		private bool _initialized;
+		private bool _isExternal;
 		private int _lastAmount;
 		private bool _bronzeBadgeAdded;
 		private bool _silverBadgeAdded;
@@ -32,6 +35,11 @@ namespace Teleopti.Ccc.Domain.Common
 		public Guid Person { get; set; }
 
 		public int BadgeType { get; set; }
+		public virtual bool IsExternal
+		{
+			get => _isExternal;
+			set => _isExternal = value;
+		}
 
 		public int TotalAmount
 		{

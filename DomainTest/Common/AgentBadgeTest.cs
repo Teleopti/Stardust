@@ -1,7 +1,11 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.TestCommon.FakeData;
 
 namespace Teleopti.Ccc.DomainTest.Common
 {
@@ -10,7 +14,15 @@ namespace Teleopti.Ccc.DomainTest.Common
 	{
 		private const int silverToBronzeRate = 5;
 		private const int goldToSilverRate = 2;
-		
+
+		[Test]
+		public void ShouldGetIsExternalInfo()
+		{
+			var result = AgentBadge.FromAgentBadgeTransaction(
+				new List<IAgentBadgeTransaction> {new AgentBadgeTransaction {IsExternal = true, Person = PersonFactory.CreatePerson(), BadgeType = 8}});
+			result.First().IsExternal.Should().Be.EqualTo(true);
+		}
+
 	    [Test]
 	    public void ShouldAwardSilverBadgeWhenBronzeBadgeMatchesSettingRate()
 	    {

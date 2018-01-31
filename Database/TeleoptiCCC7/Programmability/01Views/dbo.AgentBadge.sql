@@ -6,8 +6,9 @@ CREATE VIEW [dbo].[AgentBadge]
 AS
 SELECT Person,
        BadgeType,
+	   IsExternal,
        sum(Amount) AS 'TotalAmount',
        max(CalculatedDate) AS 'LastCalculatedDate'
   FROM dbo.AgentBadgeTransaction
-GROUP BY person, BadgeType
+GROUP BY person, BadgeType, IsExternal
 GO

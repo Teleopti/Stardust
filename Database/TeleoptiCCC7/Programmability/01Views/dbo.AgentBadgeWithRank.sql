@@ -11,10 +11,11 @@ CREATE VIEW [dbo].[AgentBadgeWithRank]
 AS
 SELECT Person,
        BadgeType,
+	   IsExternal,
        sum(BronzeBadgeAmount) AS 'BronzeBadgeAmount',
        sum(SilverBadgeAmount) AS 'SilverBadgeAmount',
        sum(GoldBadgeAmount) AS 'GoldBadgeAmount',
        max(CalculatedDate) AS 'LastCalculatedDate'
   FROM dbo.AgentBadgeWithRankTransaction
-GROUP BY person, BadgeType
+GROUP BY person, BadgeType, IsExternal
 GO
