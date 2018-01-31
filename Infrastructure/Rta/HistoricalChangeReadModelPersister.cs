@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork;
 
@@ -13,7 +14,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			_unitOfWork = unitOfWork;
 		}
 
-		public void Persist(HistoricalChangeReadModel model)
+		public void Persist(HistoricalChange model)
 		{
 			_unitOfWork.Current().CreateSqlQuery(@"
 INSERT INTO [ReadModel].[HistoricalChange] (

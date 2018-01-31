@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
@@ -40,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.HistoricalAdhe
 			var name = RandomName.Make();
 			Database.WithAgent(person, name);
 
-			ReadModel.Persist(new HistoricalChangeReadModel
+			ReadModel.Persist(new HistoricalChange
 			{
 				PersonId = person,
 				BelongsToDate = "2017-03-07".Date(),
@@ -51,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.HistoricalAdhe
 				ActivityColor = Color.Crimson.ToArgb(),
 				RuleName = "in",
 				RuleColor = Color.DarkKhaki.ToArgb(),
-				Adherence = HistoricalChangeInternalAdherence.In
+				Adherence = HistoricalChangeAdherence.In
 			});
 
 			var result = Target.Build(person).Changes.Single();
@@ -73,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.HistoricalAdhe
 			var name = RandomName.Make();
 			Database.WithAgent(person, name);
 
-			ReadModel.Persist(new HistoricalChangeReadModel
+			ReadModel.Persist(new HistoricalChange
 			{
 				PersonId = person,
 				Timestamp = "2017-03-07 14:00".Utc()
@@ -100,12 +101,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.HistoricalAdhe
 				.WithAgent(person, "name");
 
 			ReadModel
-				.Persist(new HistoricalChangeReadModel
+				.Persist(new HistoricalChange
 				{
 					PersonId = person,
 					Timestamp = "2017-03-06 14:00".Utc()
 				});
-			ReadModel.Persist(new HistoricalChangeReadModel
+			ReadModel.Persist(new HistoricalChange
 			{
 				PersonId = person,
 				Timestamp = "2017-03-07 14:00".Utc()
@@ -124,12 +125,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.HistoricalAdhe
 				.WithAgent(person, "nicklas")
 				.WithSchedule(person, "2017-03-14 09:00", "2017-03-14 17:00");
 			ReadModel
-				.Persist(new HistoricalChangeReadModel
+				.Persist(new HistoricalChange
 				{
 					PersonId = person,
 					Timestamp = "2017-03-14 07:59".Utc()
 				});
-			ReadModel.Persist(new HistoricalChangeReadModel
+			ReadModel.Persist(new HistoricalChange
 			{
 				PersonId = person,
 				Timestamp = "2017-03-14 08:00".Utc()
@@ -149,12 +150,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.HistoricalAdhe
 				.WithAgent(person, "nicklas")
 				.WithSchedule(person, "2017-03-14 09:00", "2017-03-14 17:00");
 			ReadModel
-				.Persist(new HistoricalChangeReadModel
+				.Persist(new HistoricalChange
 				{
 					PersonId = person,
 					Timestamp = "2017-03-14 18:00".Utc()
 				});
-			ReadModel.Persist(new HistoricalChangeReadModel
+			ReadModel.Persist(new HistoricalChange
 			{
 				PersonId = person,
 				Timestamp = "2017-03-14 18:01".Utc()
@@ -177,7 +178,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.HistoricalAdhe
 			var name = RandomName.Make();
 			Database.WithAgent(person, name);
 
-			ReadModel.Persist(new HistoricalChangeReadModel
+			ReadModel.Persist(new HistoricalChange
 			{
 				PersonId = person,
 				BelongsToDate = "2017-03-07".Date(),
@@ -188,10 +189,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.HistoricalAdhe
 				ActivityColor = Color.Crimson.ToArgb(),
 				RuleName = "in",
 				RuleColor = Color.DarkKhaki.ToArgb(),
-				Adherence = HistoricalChangeInternalAdherence.In
+				Adherence = HistoricalChangeAdherence.In
 			});
 
-			ReadModel.Persist(new HistoricalChangeReadModel
+			ReadModel.Persist(new HistoricalChange
 			{
 				PersonId = person,
 				BelongsToDate = "2017-03-07".Date(),
@@ -202,7 +203,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.HistoricalAdhe
 				ActivityColor = Color.Crimson.ToArgb(),
 				RuleName = "in",
 				RuleColor = Color.DarkKhaki.ToArgb(),
-				Adherence = HistoricalChangeInternalAdherence.In
+				Adherence = HistoricalChangeAdherence.In
 			});
 
 			var result = Target.Build(person).Changes.Single();

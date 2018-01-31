@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NHibernate.Transform;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork;
 using Teleopti.Interfaces.Domain;
@@ -17,7 +18,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			_unitOfWork = unitOfWork;
 		}
 
-		public IEnumerable<HistoricalChangeReadModel> Read(Guid personId, DateTime startTime, DateTime endTime)
+		public IEnumerable<HistoricalChange> Read(Guid personId, DateTime startTime, DateTime endTime)
 		{
 			var result = _unitOfWork.Current()
 				.CreateSqlQuery(@"
@@ -35,13 +36,13 @@ ORDER BY [Timestamp] ASC")
 			return result;
 		}
 
-		private class internalModel : HistoricalChangeReadModel
+		private class internalModel : HistoricalChange
 		{
 			public new DateTime? BelongsToDate { set
 			{
 				base.BelongsToDate = value.HasValue ? new DateOnly(value.Value) : (DateOnly?) null;
 			} }
-			public new int Adherence { set { base.Adherence = (HistoricalChangeInternalAdherence) value; } }
+			public new int Adherence { set { base.Adherence = (HistoricalChangeAdherence) value; } }
 		}
 	}
 }

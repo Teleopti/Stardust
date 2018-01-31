@@ -15,6 +15,44 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 {
+	public class AgentAdherenceDay
+	{
+		private readonly Guid _personId;
+		private readonly DateOnly _date;
+		private readonly DateTime _startTime;
+		private readonly DateTime _endTime;
+
+		public AgentAdherenceDay(
+			Guid personId,
+			DateOnly date,
+			DateTime startTime,
+			DateTime endTime
+		)
+		{
+			_personId = personId;
+			_date = date;
+			_startTime = startTime;
+			_endTime = endTime;
+		}
+
+		public IEnumerable<HistoricalChange> Changes(IHistoricalChangeReadModelReader changes)
+		{
+			return changes.Read(_personId, _startTime, _endTime)
+				.GroupBy(y => new
+				{
+					y.Timestamp,
+					y.ActivityName,
+					y.ActivityColor,
+					y.StateName,
+					y.RuleColor,
+					y.RuleName,
+					y.Adherence
+				})
+				.Select(x => x.First())
+				.ToArray();
+		}
+	}
+
 	public class HistoricalAdherenceViewModelBuilder
 	{
 		private readonly IHistoricalAdherenceReadModelReader _adherences;
@@ -66,6 +104,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			data.Date = date;
 			loadScheduleInto(data);
 			loadDisplayInto(data);
+			data.AdherenceDay = new AgentAdherenceDay(
+				data.PersonId, 
+				data.Date, 
+				data.DisplayStartTime, 
+				data.DisplayEndTime);
 			loadAdherencesInto(data);
 
 			return new HistoricalAdherenceViewModel
@@ -74,7 +117,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 				PersonId = personId,
 				AgentName = data.Person?.Name.ToString(),
 				Schedules = buildSchedules(data.Schedule),
-				Changes = buildChanges(personId, data.DisplayStartTime, data.DisplayEndTime),
+				Changes = buildChanges(data),
 				OutOfAdherences = buildOutOfAdherences(data.Adherences),
 				RecordedOutOfAdherences = buildOutOfAdherences(data.Adherences),
 				ApprovedPeriods = buildApprovedPeriods(data),
@@ -83,7 +126,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 					StartTime = formatForUser(data.DisplayStartTime),
 					EndTime = formatForUser(data.DisplayEndTime)
 				},
-				AdherencePercentage = _calculator.CalculatePercentage(data.ShiftStartTime, data.ShiftEndTime, data.Adherences),
+				AdherencePercentage = _calculator.Calculate(data.ShiftStartTime, data.ShiftEndTime, data.Adherences),
 				Navigation = new HistoricalAdherenceNavigationViewModel
 				{
 					First = data.AgentNow.AddDays(_displayPastDays * -1).ToString("yyyyMMdd"),
@@ -94,6 +137,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 
 		private class data
 		{
+			public AgentAdherenceDay AdherenceDay;
+
 			public DateTime Now;
 			public DateTime AgentNow;
 			public DateOnly Date;
@@ -221,25 +266,25 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 				.ToArray();
 		}
 
-		private IEnumerable<HistoricalChangeViewModel> buildChanges(Guid personId, DateTime startTime, DateTime endTime)
+		private IEnumerable<HistoricalChangeViewModel> buildChanges(data data)
 		{
-			var changes = _changes.Read(personId, startTime, endTime)
-				.GroupBy(y => new {y.Timestamp, y.ActivityName, y.ActivityColor, y.StateName, y.RuleColor, y.RuleName, y.Adherence})
+			return data
+				.AdherenceDay
+				.Changes(_changes)
 				.Select(x => new HistoricalChangeViewModel
 				{
-					Time = formatForUser(x.Key.Timestamp),
-					Activity = x.Key.ActivityName,
-					ActivityColor = x.Key.ActivityColor.HasValue
-						? ColorTranslator.ToHtml(Color.FromArgb(x.Key.ActivityColor.Value))
+					Time = formatForUser(x.Timestamp),
+					Activity = x.ActivityName,
+					ActivityColor = x.ActivityColor.HasValue
+						? ColorTranslator.ToHtml(Color.FromArgb(x.ActivityColor.Value))
 						: null,
-					State = x.Key.StateName,
-					Rule = x.Key.RuleName,
-					RuleColor = x.Key.RuleColor.HasValue ? ColorTranslator.ToHtml(Color.FromArgb(x.Key.RuleColor.Value)) : null,
-					Adherence = nameForAdherence(x.Key.Adherence),
-					AdherenceColor = colorForAdherence(x.Key.Adherence)
+					State = x.StateName,
+					Rule = x.RuleName,
+					RuleColor = x.RuleColor.HasValue ? ColorTranslator.ToHtml(Color.FromArgb(x.RuleColor.Value)) : null,
+					Adherence = nameForAdherence(x.Adherence),
+					AdherenceColor = colorForAdherence(x.Adherence)
 				})
 				.ToArray();
-			return changes;
 		}
 
 		private class internalHistoricalAdherenceActivityViewModel : HistoricalAdherenceActivityViewModel
@@ -248,36 +293,36 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			public DateTime EndDateTime { get; set; }
 		}
 
-		private string nameForAdherence(HistoricalChangeInternalAdherence? adherence)
+		private string nameForAdherence(HistoricalChangeAdherence? adherence)
 		{
 			if (!adherence.HasValue)
 				return null;
 
 			switch (adherence.Value)
 			{
-				case HistoricalChangeInternalAdherence.In:
+				case HistoricalChangeAdherence.In:
 					return UserTexts.Resources.InAdherence;
-				case HistoricalChangeInternalAdherence.Neutral:
+				case HistoricalChangeAdherence.Neutral:
 					return UserTexts.Resources.NeutralAdherence;
-				case HistoricalChangeInternalAdherence.Out:
+				case HistoricalChangeAdherence.Out:
 					return UserTexts.Resources.OutOfAdherence;
 				default:
 					throw new ArgumentOutOfRangeException(nameof(adherence), adherence, null);
 			}
 		}
 
-		private static string colorForAdherence(HistoricalChangeInternalAdherence? adherence)
+		private static string colorForAdherence(HistoricalChangeAdherence? adherence)
 		{
 			if (!adherence.HasValue)
 				return null;
 
 			switch (adherence.Value)
 			{
-				case HistoricalChangeInternalAdherence.In:
+				case HistoricalChangeAdherence.In:
 					return ColorTranslator.ToHtml(Color.FromArgb(Color.DarkOliveGreen.ToArgb()));
-				case HistoricalChangeInternalAdherence.Neutral:
+				case HistoricalChangeAdherence.Neutral:
 					return ColorTranslator.ToHtml(Color.FromArgb(Color.LightSalmon.ToArgb()));
-				case HistoricalChangeInternalAdherence.Out:
+				case HistoricalChangeAdherence.Out:
 					return ColorTranslator.ToHtml(Color.FromArgb(Color.Firebrick.ToArgb()));
 				default:
 					throw new ArgumentOutOfRangeException(nameof(adherence), adherence, null);

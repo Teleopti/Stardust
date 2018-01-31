@@ -15,7 +15,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay
 			_now = now;
 		}
 
-		public int? CalculatePercentage(DateTime? shiftStartTime, DateTime? shiftEndTime,
+		public int? Calculate(
+			DateTime? shiftStartTime,
+			DateTime? shiftEndTime,
 			IEnumerable<HistoricalAdherence> data)
 		{
 			if (!shiftStartTime.HasValue)
@@ -47,7 +49,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay
 			return Convert.ToInt32((timeInAdherence.TotalSeconds / timeToAdhere.TotalSeconds) * 100);
 		}
 
-		private static TimeSpan timeIn(HistoricalAdherenceAdherence adherenceType,
+		private static TimeSpan timeIn(
+			HistoricalAdherenceAdherence adherenceType,
 			IEnumerable<adherenceMoment> data) =>
 			data.Aggregate(new timeAccumulated(), (t, m) =>
 			{

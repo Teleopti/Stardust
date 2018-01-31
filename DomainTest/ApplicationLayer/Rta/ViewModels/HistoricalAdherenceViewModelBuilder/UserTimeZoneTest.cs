@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common.Time;
@@ -120,7 +121,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.HistoricalAdhe
 				.WithAssignment(person, "2017-04-18")
 				.WithActivity(null, ColorTranslator.FromHtml("#80FF80"))
 				.WithAssignedActivity("2017-04-18 08:00", "2017-04-18 09:00"); ;
-			Changes.Persist( new HistoricalChangeReadModel
+			Changes.Persist( new HistoricalChange
 			{
 				PersonId = person,
 				BelongsToDate = "2017-04-18".Date(),

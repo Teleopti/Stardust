@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -74,7 +75,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		private void handle(PersonStateChangedEvent @event)
 		{
-			_historicalChangePersister.Persist(new HistoricalChangeReadModel
+			_historicalChangePersister.Persist(new HistoricalChange
 			{
 				PersonId = @event.PersonId,
 				BelongsToDate = @event.BelongsToDate,
@@ -91,7 +92,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		private void handle(PersonRuleChangedEvent @event)
 		{
-			_historicalChangePersister.Persist(new HistoricalChangeReadModel
+			_historicalChangePersister.Persist(new HistoricalChange
 			{
 				PersonId = @event.PersonId,
 				BelongsToDate = @event.BelongsToDate,
@@ -106,7 +107,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			});
 		}
 
-		private static HistoricalChangeInternalAdherence? adherenceFor(EventAdherence? eventAdherence)
+		private static HistoricalChangeAdherence? adherenceFor(EventAdherence? eventAdherence)
 		{
 			if (!eventAdherence.HasValue)
 				return null;
@@ -114,11 +115,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			switch (eventAdherence.Value)
 			{
 				case EventAdherence.In:
-					return HistoricalChangeInternalAdherence.In;
+					return HistoricalChangeAdherence.In;
 				case EventAdherence.Out:
-					return HistoricalChangeInternalAdherence.Out;
+					return HistoricalChangeAdherence.Out;
 				case EventAdherence.Neutral:
-					return HistoricalChangeInternalAdherence.Neutral;
+					return HistoricalChangeAdherence.Neutral;
 				default:
 					throw new ArgumentOutOfRangeException();
 			}

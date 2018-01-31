@@ -5,6 +5,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Helper;
@@ -84,7 +85,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Histori
 			change.ActivityColor.Should().Be(Color.DarkGoldenrod.ToArgb());
 			change.RuleName.Should().Be("in");
 			change.RuleColor.Should().Be(Color.Azure.ToArgb());
-			change.Adherence.Should().Be(HistoricalChangeInternalAdherence.In);
+			change.Adherence.Should().Be(HistoricalChangeAdherence.In);
 		}
 	}
 }

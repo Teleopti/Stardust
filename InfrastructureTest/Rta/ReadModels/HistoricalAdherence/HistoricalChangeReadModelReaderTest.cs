@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon;
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.HistoricalAdherence
 			var personId = Guid.NewGuid();
 			var state = Guid.NewGuid();
 
-			Persister.Persist(new HistoricalChangeReadModel
+			Persister.Persist(new HistoricalChange
 			{
 				PersonId = personId,
 				BelongsToDate = "2017-03-07".Date(),
@@ -33,7 +34,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.HistoricalAdherence
 				ActivityColor = Color.DarkGoldenrod.ToArgb(),
 				RuleName = "in",
 				RuleColor = Color.Azure.ToArgb(),
-				Adherence = HistoricalChangeInternalAdherence.In
+				Adherence = HistoricalChangeAdherence.In
 			});
 
 			var change = Target.Read(personId, "2017-03-07 00:00".Utc(), "2017-03-08 00:00".Utc()).Single();
@@ -46,7 +47,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.HistoricalAdherence
 			change.ActivityColor.Should().Be(Color.DarkGoldenrod.ToArgb());
 			change.RuleName.Should().Be("in");
 			change.RuleColor.Should().Be(Color.Azure.ToArgb());
-			change.Adherence.Should().Be(HistoricalChangeInternalAdherence.In);
+			change.Adherence.Should().Be(HistoricalChangeAdherence.In);
 		}
 	}
 }
