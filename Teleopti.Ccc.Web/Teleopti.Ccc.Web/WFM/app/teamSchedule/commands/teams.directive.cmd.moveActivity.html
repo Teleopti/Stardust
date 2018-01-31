@@ -9,7 +9,7 @@
 				<span>{{"NextDay" | translate}}</span>
 			</md-switch>
 		</form>
-		<div ng-if="vm.anyInvalidAgent()">
+		<div class="text-danger" ng-if="vm.anyInvalidAgent()">
 			<i class="mdi mdi-alert-octagon"></i>
 			<span>{{'TheNewTimeIsNotAllowedFor'|translate}} {{vm.invalidPeople()}}.</span>
 		</div>
