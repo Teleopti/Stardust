@@ -151,8 +151,6 @@
 		};
 
 		vm.exitConfigMode = function() {
-			vm.closeConfirmation = false;
-			vm.canSave = false;
 			if (vm.stateName.length > 0) {
 				$state.go(vm.stateName);
 			} else {
@@ -206,12 +204,12 @@
 			vm.skillGroups[vm.selectedGroupIndex].Saved = false;
 			setSaveableState();
 			unselectAllSkills();
-			console.log('removeSkills vm.skillGroups', vm.skillGroups);
 		};
 
 		vm.saveAll = function() {
 			SkillGroupSvc.modifySkillGroups(vm.skillGroups).then(function(result) {
 				getAllSkillGroups();
+				setSaveableState();
 				vm.canSave = false;
 			});
 		};
@@ -221,7 +219,6 @@
 				if (vm.newGroupName && vm.newGroupName.length > 0) {
 					vm.newGroup.Name = vm.newGroupName;
 					vm.skills = vm.allSkills.slice();
-					vm.canSave = false;
 					vm.skillGroups.push(vm.newGroup);
 					vm.skillGroups[vm.selectedGroupIndex] = vm.newGroup;
 					vm.newGroup = null;

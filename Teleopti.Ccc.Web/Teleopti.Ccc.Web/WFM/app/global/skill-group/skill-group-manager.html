@@ -9,7 +9,7 @@
 			<i class="mdi mdi-content-save"></i>
 			<md-tooltip>{{'Save'|translate}}</md-tooltip>
 		</button>
-		<button class="wfm-fab material-depth-1 grow-out pull-right" id="exit_sgm" ng-click="vm.hasChanges() || vm.hasEmptySkillList() ? vm.closeConfirmation=true : vm.exitConfigMode();">
+		<button class="wfm-fab material-depth-1 grow-out pull-right" id="exit_sgm" ng-click="vm.exitConfigMode();">
 			<i class="mdi mdi-close"></i>
 			<md-tooltip>{{'Close'|translate}}</md-tooltip>
 		</button>
@@ -176,7 +176,7 @@
 				<div class="modal-actions">
 					<aside>
 						<button type="button" id="cancelExitButton" ng-click="vm.stateName=''; vm.closeConfirmation=false; $event.stopPropagation();" class="wfm-btn wfm-btn-invis-default">{{'No'|translate}}</button>
-						<button type="button" focus-me="vm.closeConfirmation" id="confirmExitButton" ng-click="vm.closeConfirmation=false; vm.exitConfigMode(); $event.stopPropagation();"
+						<button type="button" focus-me="vm.closeConfirmation" id="confirmExitButton" ng-click="vm.canSave=false; vm.exitConfigMode(); $event.stopPropagation();"
 						 class="wfm-btn wfm-btn-invis-primary">{{'Yes'|translate}}</button>
 					</aside>
 				</div>
