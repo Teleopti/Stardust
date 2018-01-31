@@ -71,8 +71,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Comparers
             {
                 // Gets the optional column value of object X and Y
             	IOptionalColumnValue valueX =
-            		x.ContainedEntity.OptionalColumnValueCollection.FirstOrDefault(p => ((OptionalColumn)p.Parent).Name == _bindingProperty);
-				IOptionalColumnValue valueY = y.ContainedEntity.OptionalColumnValueCollection.FirstOrDefault(p => ((OptionalColumn)p.Parent).Name == _bindingProperty);
+            		x.ContainedEntity.OptionalColumnValueCollection.FirstOrDefault(p => ((OptionalColumn)p.ReferenceObject).Name == _bindingProperty);
+				IOptionalColumnValue valueY = y.ContainedEntity.OptionalColumnValueCollection.FirstOrDefault(p => ((OptionalColumn)p.ReferenceObject).Name == _bindingProperty);
 
                 if ((valueX == null) && (valueY == null))
                 {

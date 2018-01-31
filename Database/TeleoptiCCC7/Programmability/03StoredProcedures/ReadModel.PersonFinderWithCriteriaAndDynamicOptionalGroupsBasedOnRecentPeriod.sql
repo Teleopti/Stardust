@@ -138,13 +138,13 @@ INSERT INTO #AllDynamicOptionalValues
 SELECT * FROM dbo.SplitStringString(@dynamic_values)
 
 INSERT INTO #IntermediatePersonId
-SELECT DISTINCT ReferenceId
+SELECT DISTINCT Parent
 FROM dbo.OptionalColumnValue AS ocv
 WHERE
  EXISTS
 	(SELECT Value 
 		FROM #AllDynamicOptionalValues 
-		WHERE ocv.Parent = @group_page_id
+		WHERE ocv.ReferenceId = @group_page_id
 		AND ocv.[Description] = Value COLLATE DATABASE_DEFAULT)
 
 IF @criteriaCount = 0 AND @dynamic_values <> ''
