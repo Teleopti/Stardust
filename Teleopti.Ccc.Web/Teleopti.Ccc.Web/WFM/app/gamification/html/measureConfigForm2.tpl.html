@@ -6,7 +6,8 @@
 				Gold badge threshold
 				<input name="goldBadgeThreshold" ng-model-options="{allowInvalid:true}" ng-disabled="$ctrl.disabled" type="text" ng-model="$ctrl._goldBadgeThreshold"
 				 ng-blur="$ctrl.updateGoldThreshold(form2.goldBadgeThreshold.$invalid)" ng-keyup="$ctrl.keyUp($event, form2.goldBadgeThreshold.$invalid)"
-				 threshold-validator="{{::$ctrl.valueFormat}};{{$ctrl.max}};{{$ctrl.valueDataType}}" />
+				 threshold-validator="{{::$ctrl.valueFormat}};{{$ctrl.max}};{{$ctrl.valueDataType}}" ng-model-options="{allowInvalid:true}"
+				/>
 			</label>
 			<div class="text-danger validation">
 				<div ng-show="form2.goldBadgeThreshold.$invalid">{{'Invalid'|translate}}</div>
@@ -17,7 +18,8 @@
 				Silver badge threshold
 				<input name="silverBadgeThreshold" ng-model-options="{allowInvalid:true}" ng-disabled="$ctrl.disabled" type="text" ng-model="$ctrl._silverBadgeThreshold"
 				 ng-blur="$ctrl.updateSilverThreshold(form2.silverBadgeThreshold.$invalid)" ng-keyup="$ctrl.keyUp($event, form2.silverBadgeThreshold.$invalid)"
-				 threshold-validator="{{::$ctrl.valueFormat}};{{$ctrl.max}};{{$ctrl.valueDataType}}" />
+				 threshold-validator="{{::$ctrl.valueFormat}};{{$ctrl.max}};{{$ctrl.valueDataType}}" ng-model-options="{allowInvalid:true}"
+				/>
 			</label>
 			<div class="text-danger validation">
 				<div ng-show="form2.silverBadgeThreshold.$invalid">{{'Invalid'|translate}}</div>
@@ -27,8 +29,9 @@
 			<label ng-class="{locked: $ctrl.disabled}">
 				Bronze badge threshold
 				<input type="text" ng-model-options="{allowInvalid:true}" name="bronzeBadgeThreshold" ng-disabled="$ctrl.disabled" ng-model="$ctrl._bronzeBadgeThreshold"
-				 ng-blur="$ctrl.updateBronzeThreshold(form2.bronzeBadgeThreshold.$invalid)" ng-keyup="$ctrl.keyUp($event, form2.bronzeBadgeThreshold.$invalid)"
-				 threshold-validator="{{::$ctrl.valueFormat}};{{$ctrl.max}};{{$ctrl.valueDataType}}" />
+				 ng-blur="$ctrl.updateBronzeThreshold(form2.bronzeBadgeThreshold.$invalid)" ng-model-options="{allowInvalid:true}" ng-keyup="$ctrl.keyUp($event, form2.bronzeBadgeThreshold.$invalid)"
+				 threshold-validator="{{::$ctrl.valueFormat}};{{$ctrl.max}};{{$ctrl.valueDataType}}" ng-model-options="{allowInvalid:true}"
+				/>
 			</label>
 			<div class="text-danger validation">
 				<div ng-show="form2.bronzeBadgeThreshold.$invalid">{{'Invalid'|translate}}</div>

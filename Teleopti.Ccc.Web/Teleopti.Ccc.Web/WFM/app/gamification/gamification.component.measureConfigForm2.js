@@ -120,8 +120,8 @@
 
 					function convertValueForTime(value) {
 						var subValues = value.split(':');
-						var hourValue = convertTimeToNumber(subValues[0], 100);
-						var minuteValue = convertTimeToNumber(subValues[1], 10);
+						var hourValue = convertTimeToNumber(subValues[0], 10000);
+						var minuteValue = convertTimeToNumber(subValues[1], 100);
 						var secondValue = convertTimeToNumber(subValues[2], 1);
 						return hourValue + minuteValue + secondValue;
 					}
