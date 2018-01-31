@@ -309,14 +309,17 @@
 	}
 
 	function createDefaultPersonInfo(personSchedule, absences, activities) {
+		var isDayOff = personSchedule.DayOffs && personSchedule.DayOffs.filter(function(d){return d.Date == personSchedule.Date;}).length > 0;
+		var isEmptyDay = !isDayOff && (!absences || absences.length == 0) && (!activities || activities.length == 0);
+
 		return {
 			PersonId: personSchedule.PersonId,
 			Name: personSchedule.Name,
 			Checked: true,
 			OrderIndex: personSchedule.Index,
 			AllowSwap: personSchedule.AllowSwap(),
-			IsDayOff: personSchedule.DayOffs && personSchedule.DayOffs.length > 0,
-			IsEmptyDay: (!absences || absences.length == 0) && (!activities || activities.length == 0) && (!personSchedule.DayOffs || personSchedule.DayOffs.length == 0),
+			IsDayOff: isDayOff,
+			IsEmptyDay: isEmptyDay,
 			IsFullDayAbsence: personSchedule.IsFullDayAbsence,
 			ScheduleStartTime: personSchedule.ScheduleStartTime(),
 			ScheduleEndTime: personSchedule.ScheduleEndTime(),

@@ -157,4 +157,86 @@ describe("teamschedule person selection tests", function() {
 		expect(person.AllowSwap).toEqual(newSchedule1.AllowSwap());
 		expect(person.SelectedAbsences.length).toEqual(0);
 	}));
+
+	it('should build person info correctly when there is a day off on tomorrow in view', function () {
+		var fakePersonScheduleVm = {
+			'Index': 0,
+			'ContractTime': '13:00',
+			'Date': '2018-02-03',
+			'DayOffs': [
+				{
+					'DayOffName': 'Day off',
+					'StartPosition': 77.27272727272728,
+					'Length': 22.727272727272727,
+					'Date': '2018-02-04'
+				}
+			],
+			'ExtraShifts': [],
+			'IsFullDayAbsence': false,
+			'MultiplicatorDefinitionSetIds': [
+				'29f7ece8-d340-408f-be40-9bb900b8a4cb',
+				'9019d62f-0086-44b1-a977-9bb900b8c361'
+			],
+			'Name': 'Pierre Baldi',
+			'PersonId': 'b0e35119-4661-4a1b-8772-9b5e015b2564',
+			'ShiftCategory': {
+				'Name': 'Day',
+				'ShortName': 'DY',
+				'DisplayColor': '#FFC080',
+				'ContrastColor': 'black'
+			},
+			'Shifts': [
+				{
+					'Date': '2018-02-03',
+					'Projections': [
+						{
+							'Selected': false,
+							'SameTypeAsLast': false,
+							'Color': '#8080FF',
+							'Description': 'E-mail',
+							'IsOvertime': false,
+							'Length': 59.09090909090909,
+							'Minutes': 780,
+							'ParentPersonAbsences': null,
+							'ShiftLayerIds': [
+								'811a8c6a-61c2-4cee-bda8-a87900712360'
+							],
+							'Start': '2018-02-03 08:00',
+							'StartPosition': 4.545454545454546,
+							'UseLighterBorder': false,
+							'SameTypeAsLast': false,
+							'Selectable': function () { return true },
+							'ToggleSelection': function () { }
+						}
+					],
+					'ProjectionTimeRange': {
+						'Start': '2018-02-03 08:00',
+						'End': '2018-02-03 21:00'
+					},
+					'AbsenceCount': function () { return 0; },
+					'ActivityCount': function () { return 1; }
+				}
+			],
+			'Timezone': {
+				'IanaId': 'Europe/Berlin',
+				'DisplayName': '(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna'
+			},
+			'ViewRange': {
+				'startMoment': '2018-02-02T16:00:00.000Z',
+				'endMoment': '2018-02-03T22:00:00.000Z'
+			},
+			'IsSelected': true,
+			'AllowSwap': function () { return true },
+			'ScheduleStartTime': function () { return '2018-02-03T08:00:00' },
+			'ScheduleEndTime': function () { return '2018-02-03T21:00:00' },
+			'AbsenceCount': function () { return 0; },
+			'ActivityCount': function() { return 1; },
+			'MergeExtra': function () { },
+			'Merge': function () { }
+		};
+
+		target.updatePersonSelection(fakePersonScheduleVm);
+
+		expect(target.personInfo[fakePersonScheduleVm.PersonId].IsDayOff).toEqual(false);
+	});
 });
