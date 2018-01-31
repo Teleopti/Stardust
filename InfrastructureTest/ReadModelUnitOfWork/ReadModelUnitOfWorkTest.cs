@@ -31,7 +31,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 			system.AddService<NestedService1>();
 			system.AddService<NestedService2>();
 
-			system.UseTestDouble(new MutableFakeCurrentHttpContext()).For<ICurrentHttpContext>();
 			system.UseTestDouble<FakeCurrentTeleoptiPrincipal>().For<ICurrentTeleoptiPrincipal>();
 		}
 	}
@@ -43,7 +42,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 		public TheService TheService;
 		public NestedService1 NestedService1;
 		public NestedService2 NestedService2;
-		public MutableFakeCurrentHttpContext HttpContext;
+		public CurrentHttpContext HttpContext;
 		public ICurrentReadModelUnitOfWork UnitOfWork;
 		public FakeCurrentTeleoptiPrincipal Principal;
 		public IDataSourcesFactory DataSourcesFactory;
@@ -146,14 +145,14 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 		[TestTable("TestTable")]
 		public void ShouldProduceUnitOfWorkForWebRequestSpanning2Threads()
 		{
-			HttpContext.SetContext(new FakeHttpContext());
-			TheService.Does(uow =>
-			{
-				onAnotherThread(() =>
+			using(HttpContext.GloballyUse(new FakeHttpContext()))
+				TheService.Does(uow =>
 				{
-					UnitOfWork.Current().CreateSqlQuery("INSERT INTO TestTable (Value) VALUES (0)").ExecuteUpdate();
-				}).Join();
-			});
+					onAnotherThread(() =>
+					{
+						UnitOfWork.Current().CreateSqlQuery("INSERT INTO TestTable (Value) VALUES (0)").ExecuteUpdate();
+					}).Join();
+				});
 
 			TestTable.Values("TestTable").Count().Should().Be(1);
 		}
@@ -165,17 +164,19 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 		{
 			var thread1 = onAnotherThread(() =>
 			{
-				HttpContext.SetContextOnThread(new FakeHttpContext());
-				TheService.Does(uow => 1000.Times(i => uow.CreateSqlQuery("INSERT INTO TestTable1 (Value) VALUES (0)").ExecuteUpdate()));
+				using (HttpContext.OnThisThreadUse(new FakeHttpContext()))
+					TheService.Does(uow => 1000.Times(i => uow.CreateSqlQuery("INSERT INTO TestTable1 (Value) VALUES (0)").ExecuteUpdate()));
 			});
 			var thread2 = onAnotherThread(() =>
 			{
-				HttpContext.SetContextOnThread(new FakeHttpContext());
-				TheService.Does(uow =>
+				using (HttpContext.OnThisThreadUse(new FakeHttpContext()))
 				{
-					1000.Times(i => uow.CreateSqlQuery("INSERT INTO TestTable2 (Value) VALUES (0)").ExecuteUpdate());
-					throw new TestException();
-				});
+					TheService.Does(uow =>
+					{
+						1000.Times(i => uow.CreateSqlQuery("INSERT INTO TestTable2 (Value) VALUES (0)").ExecuteUpdate());
+						throw new TestException();
+					});
+				}
 			});
 			thread1.Join();
 			thread2.Join();

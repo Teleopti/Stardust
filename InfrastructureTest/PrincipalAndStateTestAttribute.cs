@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 		{
 			base.AfterTest();
 
-			_login.Dispose();
+			_login?.Dispose();
 			_login = null;
 		}
 

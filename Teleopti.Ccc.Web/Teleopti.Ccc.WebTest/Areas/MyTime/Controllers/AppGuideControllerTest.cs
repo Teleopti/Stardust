@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.Infrastructure.Security;
+using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -16,19 +17,11 @@ using Teleopti.Ccc.WebTest.Core.IoC;
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 {
 	[TestFixture, MyTimeWebTest]
-	public class AppGuideControllerTest : ISetup
+	public class AppGuideControllerTest
 	{
 		public AppGuideController Target;
-		public FakeLoggedOnUser User;
-		public FindPersonInfoFake FindPerson;
-		public IHashFunction Hash;
-		public FakePersonalSettingDataRepository PersonalSettings;
-		public MutableFakeCurrentHttpContext HttpContext;
 		public CurrentTenantFake CurrentTenant;
-		public void Setup(ISystem system, IIocConfiguration configuration)
-		{
-		}
-
+		
 		[Test]
 		public void ShouldCreateViewModel()
 		{
@@ -44,7 +37,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				.EqualTo(CurrentTenant.Current()
 				.GetApplicationConfig(TenantApplicationConfigKey.MobileQRCodeUrl));
 		}
-
 
 	}
 }

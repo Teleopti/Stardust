@@ -100,7 +100,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.AddService<DatabaseLegacy>();
 			system.AddService<AnalyticsDatabase>();
 			system.UseTestDouble<FakeTransactionHook>().For<ITransactionHook>(); // just adds one hook to the list
-			system.UseTestDouble<MutableFakeCurrentHttpContext>().For<ICurrentHttpContext>();
 
 			// fake for now. if real repo needs to be included in the scope....
 			system.UseTestDouble<FakeLicenseRepository>().For<ILicenseRepository, ILicenseRepositoryForLicenseVerifier>();

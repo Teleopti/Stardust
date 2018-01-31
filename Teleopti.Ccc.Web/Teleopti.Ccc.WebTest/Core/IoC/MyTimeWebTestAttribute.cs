@@ -97,7 +97,6 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			system.UseTestDouble<TenantUnitOfWorkFake>().For<ITenantUnitOfWork>();
 			system.UseTestDouble<PasswordPolicyFake>().For<IPasswordPolicy>();
 			system.UseTestDouble<CurrentTenantFake>().For<ICurrentTenant>();
-			system.UseTestDouble<MutableFakeCurrentHttpContext>().For<ICurrentHttpContext>();
 			system.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
 			system.UseTestDouble(new FakeUserCulture(CultureInfoFactory.CreateEnglishCulture())).For<IUserCulture>();
 			system.UseTestDouble<FakePushMessageDialogueRepository>().For<IPushMessageDialogueRepository>(); 

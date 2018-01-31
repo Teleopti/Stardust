@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<CurrentHttpContext>().As<ICurrentHttpContext>().SingleInstance();
+			builder.RegisterType<CurrentHttpContext>().AsSelf().As<ICurrentHttpContext>().SingleInstance();
 			builder.RegisterType<ScheduleDayProvider>().As<IScheduleDayProvider>().SingleInstance();
 			builder.RegisterType<NonoverwritableLayerChecker>().As<INonoverwritableLayerChecker>().SingleInstance();
 			builder.RegisterType<NonoverwritableLayerMovabilityChecker>().As<INonoverwritableLayerMovabilityChecker>().SingleInstance();

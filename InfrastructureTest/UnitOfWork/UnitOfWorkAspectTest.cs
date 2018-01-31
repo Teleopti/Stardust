@@ -27,14 +27,15 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 	{
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<MutableFakeCurrentHttpContext>().For<ICurrentHttpContext>();
+			//system.UseTestDouble<MutableFakeCurrentHttpContext>().For<ICurrentHttpContext>();
 			system.AddService<TheServiceImpl>();
 		}
 
 		public TheServiceImpl TheService;
-		public MutableFakeCurrentHttpContext HttpContext;
+
+		//public MutableFakeCurrentHttpContext HttpContext;
+		public CurrentHttpContext HttpContext;
 		public ICurrentUnitOfWork UnitOfWork;
-		public ICurrentIdentity Identity;
 		public IPersonRepository PersonRepository;
 		public IBusinessUnitRepository BusinessUnitRepository;
 		public ISiteRepository SiteRepository;
@@ -53,18 +54,15 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			{
 				action(_uow.Current());
 			}
-
 		}
+
 
 		[Test]
 		public void ShouldQuery()
 		{
 			IEnumerable<IPerson> persons = null;
 
-			TheService.Does(uow =>
-			{
-				persons = PersonRepository.LoadAll();
-			});
+			TheService.Does(uow => { persons = PersonRepository.LoadAll(); });
 
 			persons.Should().Not.Be.Null();
 		}
@@ -75,14 +73,8 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			IEnumerable<IPerson> persons = null;
 			var person = PersonFactory.CreatePerson();
 
-			TheService.Does(uow =>
-			{
-				PersonRepository.Add(person);
-			});
-			TheService.Does(uow =>
-			{
-				persons = PersonRepository.LoadAll();
-			});
+			TheService.Does(uow => { PersonRepository.Add(person); });
+			TheService.Does(uow => { persons = PersonRepository.LoadAll(); });
 
 			persons.Where(x => x.Id.Equals(person.Id.Value)).Should().Not.Be.Empty();
 		}
@@ -104,10 +96,8 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			catch (Exception)
 			{
 			}
-			TheService.Does(uow =>
-			{
-				persons = PersonRepository.LoadAll();
-			});
+
+			TheService.Does(uow => { persons = PersonRepository.LoadAll(); });
 
 			persons.Where(x => x.Id.Equals(person.Id.Value)).Should().Be.Empty();
 		}
@@ -131,11 +121,11 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
 			IEnumerable<ISite> sites = null;
 			var queryStringParams = new NameValueCollection {{"BusinessUnitId", businessUnit2.Id.Value.ToString()}};
-			HttpContext.SetContext(new FakeHttpContext(null, null, null, queryStringParams, null, null));
-			TheService.Does(uow =>
+			//HttpContext.SetContext(new FakeHttpContext(null, null, null, queryStringParams, null, null));
+			using (HttpContext.OnThisThreadUse(new FakeHttpContext(null, null, null, queryStringParams, null, null)))
 			{
-				sites = SiteRepository.LoadAll();
-			});
+				TheService.Does(uow => { sites = SiteRepository.LoadAll(); });
+			}
 
 			sites.Single().Id.Should().Be(site2.Id.Value);
 		}
@@ -159,11 +149,11 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
 			IEnumerable<ISite> sites = null;
 			var headers = new NameValueCollection {{"X-Business-Unit-Filter", businessUnit2.Id.Value.ToString()}};
-			HttpContext.SetContext(new FakeHttpContext(null, null, null, null, null, null, null, headers));
-			TheService.Does(uow =>
+			//HttpContext.SetContext(new FakeHttpContext(null, null, null, null, null, null, null, headers));
+			using (HttpContext.OnThisThreadUse(new FakeHttpContext(null, null, null, null, null, null, null, headers)))
 			{
-				sites = SiteRepository.LoadAll();
-			});
+				TheService.Does(uow => { sites = SiteRepository.LoadAll(); });
+			}
 
 			sites.Single().Id.Should().Be(site2.Id.Value);
 		}
@@ -179,14 +169,15 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		public void ShouldNotLeakUnitOfWorkAndConnectionOnInvalidBusinessUnit()
 		{
 			var headers = new NameValueCollection {{"X-Business-Unit-Filter", "invalid value"}};
-			HttpContext.SetContext(new FakeHttpContext(null, null, null, null, null, null, null, headers));
+			//HttpContext.SetContext(new FakeHttpContext(null, null, null, null, null, null, null, headers));
 
-			Assert.Throws<FormatException>(() =>
+			using (HttpContext.OnThisThreadUse(new FakeHttpContext(null, null, null, null, null, null, null, headers)))
 			{
-				TheService.Does(x =>
+				Assert.Throws<FormatException>(() =>
 				{
+					TheService.Does(x => { });
 				});
-			});
+			}
 
 			UnitOfWork.HasCurrent().Should().Be.False();
 		}
@@ -200,10 +191,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			{
 				TheService.Does(a =>
 				{
-					TheService.Does(b =>
-					{
-						wasHere = true;
-					});
+					TheService.Does(b => { wasHere = true; });
 					wasHere = true;
 				});
 				wasHere = true;
@@ -212,8 +200,5 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			wasHere.Should().Be.False();
 			UnitOfWork.HasCurrent().Should().Be.False();
 		}
-
-
 	}
-
 }

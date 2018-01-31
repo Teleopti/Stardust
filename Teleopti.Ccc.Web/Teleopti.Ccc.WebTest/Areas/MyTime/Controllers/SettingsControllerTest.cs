@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.Infrastructure.Security;
+using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public FindPersonInfoFake FindPerson;
 		public IHashFunction Hash;
 		public FakePersonalSettingDataRepository PersonalSettings;
-		public MutableFakeCurrentHttpContext HttpContext;
+		public CurrentHttpContext HttpContext;
 		public CurrentTenantFake CurrentTenant;
 
 		[Test]
@@ -95,16 +96,17 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var currentContext = new FakeHttpContext("/ChangePassword");
 			currentContext.SetRequest(new FakeHttpRequest("/ChangePassword", new Uri("http://localhost/Settings/ChangePassword"), new Uri("http://localhost/schedule/")));
-			HttpContext.SetContext(currentContext);
+			using(HttpContext.OnThisThreadUse(currentContext))
+			{
+				var personInfo = new PersonInfo(new Tenant("Test"), User.CurrentUser().Id.Value);
+				personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), "test", "old", Hash);
+				FindPerson.Add(personInfo);
+				var result =
+					Target.ChangePassword(new ChangePasswordViewModel { NewPassword = null, OldPassword = "old" })
+						.Data as ChangePasswordResultInfo;
 
-			var personInfo = new PersonInfo(new Tenant("Test"), User.CurrentUser().Id.Value);
-			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), "test", "old", Hash);
-			FindPerson.Add(personInfo);
-			var result =
-				Target.ChangePassword(new ChangePasswordViewModel { NewPassword = null, OldPassword = "old" })
-					.Data as ChangePasswordResultInfo;
-
-			Assert.IsFalse(result.IsSuccessful);
+				Assert.IsFalse(result.IsSuccessful);
+			}
 		}
 		
 		[Test]
@@ -112,10 +114,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var currentContext = new FakeHttpContext("/calendarlink");
 			currentContext.SetRequest(new FakeHttpRequest("/calendarlink", new Uri("http://localhost/Settings/CalendarLinkStatus"), new Uri("http://localhost/schedule/")));
-			HttpContext.SetContext(currentContext);
-			PersonalSettings.PersistSettingValue("CalendarLinkSettings", new CalendarLinkSettings { IsActive = true });
-			var result = Target.CalendarLinkStatus().Data as CalendarLinkViewModel;
-			result.Should().Not.Be.Null();
+			using (HttpContext.OnThisThreadUse(currentContext))
+			{
+				PersonalSettings.PersistSettingValue("CalendarLinkSettings", new CalendarLinkSettings { IsActive = true });
+				var result = Target.CalendarLinkStatus().Data as CalendarLinkViewModel;
+				result.Should().Not.Be.Null();
+			}
 		}
 
 		[Test]
@@ -132,16 +136,16 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var currentContext = new FakeHttpContext("/calendarlink");
 			currentContext.SetRequest(new FakeHttpRequest("/calendarlink", new Uri("http://localhost/Settings/CalendarLinkStatus"), new Uri("http://localhost/schedule/")));
-
-			HttpContext.SetContext(currentContext);
-
-			var personInfo = new PersonInfo(new Tenant("Test"), User.CurrentUser().Id.Value);
-			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), "test", "old", Hash);
-			FindPerson.Add(personInfo);
-			var result =
-				Target.ChangePassword(new ChangePasswordViewModel { NewPassword = "new", OldPassword = "wrong" })
-					.Data as ChangePasswordResultInfo;
-			result.IsSuccessful.Should().Be.False();
+			using (HttpContext.OnThisThreadUse(currentContext))
+			{
+				var personInfo = new PersonInfo(new Tenant("Test"), User.CurrentUser().Id.Value);
+				personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), "test", "old", Hash);
+				FindPerson.Add(personInfo);
+				var result =
+					Target.ChangePassword(new ChangePasswordViewModel { NewPassword = "new", OldPassword = "wrong" })
+						.Data as ChangePasswordResultInfo;
+				result.IsSuccessful.Should().Be.False();
+			}
 		}
 
 		[Test]
@@ -149,16 +153,16 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var currentContext = new FakeHttpContext("/calendarlink");
 			currentContext.SetRequest(new FakeHttpRequest("/calendarlink", new Uri("http://localhost/Settings/CalendarLinkStatus"), new Uri("http://localhost/schedule/")));
-
-			HttpContext.SetContext(currentContext);
-
-			var personInfo = new PersonInfo(new Tenant("Test"), User.CurrentUser().Id.Value);
-			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), "test", "old", Hash);
-			FindPerson.Add(personInfo);
-			var result =
-				Target.ChangePassword(new ChangePasswordViewModel { NewPassword = "new" })
-					.Data as ChangePasswordResultInfo;
-			result.IsSuccessful.Should().Be.False();
+			using (HttpContext.OnThisThreadUse(currentContext))
+			{
+				var personInfo = new PersonInfo(new Tenant("Test"), User.CurrentUser().Id.Value);
+				personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), "test", "old", Hash);
+				FindPerson.Add(personInfo);
+				var result =
+					Target.ChangePassword(new ChangePasswordViewModel { NewPassword = "new" })
+						.Data as ChangePasswordResultInfo;
+				result.IsSuccessful.Should().Be.False();
+			}
 		}
 
 		[Test]
@@ -180,25 +184,23 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public SettingsController Target;
 		public FindPersonInfoFake FindPerson;
 		public IHashFunction Hash;
-		public FakePersonalSettingDataRepository PersonalSettings;
-		public MutableFakeCurrentHttpContext HttpContext;
-		public CurrentTenantFake CurrentTenant;
+		public CurrentHttpContext HttpContext;
 
 		[Test]
 		public void ShouldHandleEmptyOldPassword()
 		{
 			var currentContext = new FakeHttpContext("/calendarlink");
 			currentContext.SetRequest(new FakeHttpRequest("/calendarlink", new Uri("http://localhost/Settings/CalendarLinkStatus"), new Uri("http://localhost/schedule/")));
-
-			HttpContext.SetContext(currentContext);
-
-			var personInfo = new PersonInfo(new Tenant("Test"), User.CurrentUser().Id.Value);
-			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), "test", "old", Hash);
-			FindPerson.Add(personInfo);
-			var result =
-				Target.ChangePassword(new ChangePasswordViewModel { NewPassword = "new" })
-					.Data as ChangePasswordResultInfo;
-			result.IsSuccessful.Should().Be.False();
+			using (HttpContext.OnThisThreadUse(currentContext))
+			{
+				var personInfo = new PersonInfo(new Tenant("Test"), User.CurrentUser().Id.Value);
+				personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), "test", "old", Hash);
+				FindPerson.Add(personInfo);
+				var result =
+					Target.ChangePassword(new ChangePasswordViewModel { NewPassword = "new" })
+						.Data as ChangePasswordResultInfo;
+				result.IsSuccessful.Should().Be.False();
+			}
 		}
 	}
 }
