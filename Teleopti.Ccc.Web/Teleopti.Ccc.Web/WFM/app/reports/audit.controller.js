@@ -11,6 +11,8 @@
 		var vm = this;
 
 		var local = CurrentUserInfo.CurrentUserInfo().DateFormatLocale;
+		vm.gridLang = CurrentUserInfo.CurrentUserInfo().Language.substring(0, 2);
+		console.log(vm.gridLang);
 
 		vm.changedBy = [];
 		vm.searchData = null;
