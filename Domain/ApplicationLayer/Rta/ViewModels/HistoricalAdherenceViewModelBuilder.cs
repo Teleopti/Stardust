@@ -15,29 +15,40 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 {
-	public class AgentAdherenceDay
+	public class AgentAdherenceDayLoader
 	{
-		private readonly Guid _personId;
-		private readonly DateOnly _date;
-		private readonly DateTime _startTime;
-		private readonly DateTime _endTime;
+		private readonly IHistoricalChangeReadModelReader _changes;
 
-		public AgentAdherenceDay(
+		public AgentAdherenceDayLoader(IHistoricalChangeReadModelReader changes)
+		{
+			_changes = changes;
+		}
+
+		public AgentAdherenceDay Load(
 			Guid personId,
 			DateOnly date,
 			DateTime startTime,
-			DateTime endTime
-		)
+			DateTime endTime)
 		{
-			_personId = personId;
-			_date = date;
-			_startTime = startTime;
-			_endTime = endTime;
+			var changes = _changes.Read(personId, startTime, endTime);
+			var obj = new AgentAdherenceDay();
+			obj.Load(changes);
+			return obj;
+		}
+	}
+
+	public class AgentAdherenceDay
+	{
+		private IEnumerable<HistoricalChange> _changes;
+
+		public void Load(IEnumerable<HistoricalChange> changes)
+		{
+			_changes = changes;
 		}
 
 		public IEnumerable<HistoricalChange> Changes(IHistoricalChangeReadModelReader changes)
 		{
-			return changes.Read(_personId, _startTime, _endTime)
+			return _changes
 				.GroupBy(y => new
 				{
 					y.Timestamp,
@@ -64,6 +75,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		private readonly IHistoricalChangeReadModelReader _changes;
 		private readonly AdherencePercentageCalculator _calculator;
 		private readonly IApprovedPeriodsReader _approvedPeriods;
+		private readonly AgentAdherenceDayLoader _agentAdherenceDayLoader;
 		private readonly int _displayPastDays;
 
 		public HistoricalAdherenceViewModelBuilder(
@@ -76,7 +88,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			IHistoricalChangeReadModelReader changes,
 			AdherencePercentageCalculator calculator,
 			IConfigReader config,
-			IApprovedPeriodsReader approvedPeriods
+			IApprovedPeriodsReader approvedPeriods,
+			AgentAdherenceDayLoader agentAdherenceDayLoader
 		)
 		{
 			_adherences = adherences;
@@ -88,6 +101,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			_changes = changes;
 			_calculator = calculator;
 			_approvedPeriods = approvedPeriods;
+			_agentAdherenceDayLoader = agentAdherenceDayLoader;
 			_displayPastDays = HistoricalAdherenceMaintainer.DisplayPastDays(config);
 		}
 
@@ -104,10 +118,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			data.Date = date;
 			loadScheduleInto(data);
 			loadDisplayInto(data);
-			data.AdherenceDay = new AgentAdherenceDay(
-				data.PersonId, 
-				data.Date, 
-				data.DisplayStartTime, 
+			data.AdherenceDay = _agentAdherenceDayLoader.Load(
+				data.PersonId,
+				data.Date,
+				data.DisplayStartTime,
 				data.DisplayEndTime);
 			loadAdherencesInto(data);
 
