@@ -166,7 +166,6 @@
 							displayName: 'BrokenRules',
 							field: 'GetBrokenRules()',
 							headerCellFilter: 'translate',
-							cellClass: 'request-broken-rules',
 							cellTooltip: true,
 							visible: true,
 							minWidth: 111
