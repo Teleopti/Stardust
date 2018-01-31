@@ -39,7 +39,8 @@
 	self.IsTimeListOpened = ko.observable(false);
 
 	self.IsMobile = Teleopti.MyTimeWeb.Portal.IsMobile();
-	self.isDefaultStartTimeToggleEnabled = false;
+	self.isDefaultStartTimeToggleEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_OvertimeRequestDefaultStartTime_47513');
+	self.showUseDefaultStartTimeToggle = ko.observable(false);
 
 	self.checkMessageLength = function (data, event) {
 		var text = $(event.target)[0].value;
@@ -130,6 +131,7 @@
 			self.RequestDuration(hours.substr(-2, 2) + ":" + minutes.substr(-2, 2));
 			self.MultiplicatorDefinitionSetId(data.MultiplicatorDefinitionSet);
 			self.ShowCancelButton(false);
+			self.showUseDefaultStartTimeToggle(self.IsEditable());
 		}
 	};
 
@@ -357,8 +359,7 @@
 		self.TimeList = _createTimeList();
 		self.RequestDuration(self.TimeList[0]);
 		self.CancelAddRequest = parentViewModel.CancelAddingNewRequest;
-
-		self.isDefaultStartTimeToggleEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_OvertimeRequestDefaultStartTime_47513');
+		self.showUseDefaultStartTimeToggle(self.isDefaultStartTimeToggleEnabled);
 
 		if (Teleopti.MyTimeWeb.Common.IsToggleEnabled('OvertimeRequestPeriodSetting_46417')) {
 			setAvailableDays();

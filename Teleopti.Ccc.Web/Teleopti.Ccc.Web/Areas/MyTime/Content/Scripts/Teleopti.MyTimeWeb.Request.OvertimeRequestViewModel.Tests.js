@@ -38,16 +38,16 @@ $(document).ready(function() {
 		requestFormClosed = false;
 		addedOvertimeRequest = undefined;
 
-		vm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, function(data) {
-			addedOvertimeRequest = data;
-		}, fakeRequestDetailViewModel);
-		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
-
 		toggleFnTemp = Teleopti.MyTimeWeb.Common.IsToggleEnabled;
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(toggle) {
 			if (enabledTogglesList.indexOf(toggle) > -1)
 				return true;
 		};
+
+		vm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, function(data) {
+			addedOvertimeRequest = data;
+		}, fakeRequestDetailViewModel, null, false);
+		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
 	}
 
 	function restoreToggleFn() {
@@ -527,6 +527,64 @@ $(document).ready(function() {
 								.add(-requestVm.RequestDuration().split(':')[1], 'minutes').format('HH:mm');
 
 		equal(requestVm.StartTime(), expectedStartTime);
+	});
+
+	test('should not show UseDefaultStartTime toggle when viewing an overtime request', function () {
+		enabledTogglesList = ['OvertimeRequestPeriodSetting_46417', 'MyTimeWeb_OvertimeRequestDefaultStartTime_47513'];
+
+		var tomorrow = moment('2018-01-31').add(1, 'days').hours(7).minutes(0);
+		fakeDefaultStartTimeFromBackend.DefaultStartTime = "/Date(" + tomorrow.unix() * 1000 + ")/";
+		fakeDefaultStartTimeFromBackend.IsShiftStartTime = true;
+		fakeDefaultStartTimeFromBackend.IsShiftEndTime = false;
+
+		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
+		var requestVm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, function () { }, fakeRequestDetailViewModel, null, true);
+
+		requestVm.DateFrom(moment('2018-01-31'));
+		requestVm.UseDefaultStartTime(false);
+		requestVm.UseDefaultStartTime(true);
+		requestVm.RequestDuration('03:00');
+
+		var fakeData = {
+			DateFromDayOfMonth: 31,
+			DateFromMonth: 1,
+			DateFromYear: 2018,
+			DateTimeFrom: "2018-01-31T17:00:00.0000000",
+			DateTimeTo: "2018-01-31T20:00:00.0000000",
+			DateToDayOfMonth: 31,
+			DateToMonth: 1,
+			DateToYear: 2018,
+			DenyReason: "January contains too much overtime (04:00). Max is 03:00.",
+			ExchangeOffer: null,
+			From: "",
+			Id: "2f4a7e4d-7b34-4005-a1d0-a87900125281",
+			IsApproved: false,
+			IsCreatedByUser: false,
+			IsDenied: true,
+			IsFullDay: false,
+			IsNew: false,
+			IsNextDay: false,
+			IsPending: false,
+			IsReferred: false,
+			Link: {
+				rel: "self",
+				href: "/TeleoptiWFM/Web/MyTime/Requests/RequestDetail/2f4a7e4d-7b34-4005-a1d0-a87900125281", Methods: "GET",
+			},
+			MultiplicatorDefinitionSet: "29f7ece8-d340-408f-be40-9bb900b8a4cb",
+			Payload: "Overtime paid",
+			PayloadId: null,
+			Status: "Denied",
+			Subject: "31",
+			Text: "31",
+			To: "",
+			Type: "Overtime",
+			TypeEnum: 4,
+			UpdatedOnDateTime: "2018-01-31T02:06:42.6270000",
+		};
+		requestVm.IsEditable(false);
+		requestVm.Initialize(fakeData);
+
+		equal(requestVm.showUseDefaultStartTimeToggle(), false);
 	});
 
 	test('should set overtime request duration to one hour by default', function() {

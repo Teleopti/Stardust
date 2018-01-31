@@ -218,8 +218,10 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 		if(data.TypeEnum == 4) {
 			if (data.Link.Methods.indexOf("PUT") == -1) {
 				overtimeRequestDetailViewModel.IsEditable(false);
+				overtimeRequestDetailViewModel.showUseDefaultStartTimeToggle(false);
 			} else {
 				overtimeRequestDetailViewModel.IsEditable(true);
+				overtimeRequestDetailViewModel.showUseDefaultStartTimeToggle(true);
 			}
 		} else {
 			if (data.Link.Methods.indexOf("PUT") == -1) {
