@@ -19,11 +19,6 @@ namespace Teleopti.Ccc.Domain.Helper
 			return dateTime.ToString(culture.DateTimeFormat.ShortDatePattern);
 		}
 
-		public static string ToShortDateString(this DateTime dateTime, IUserCulture culture)
-		{
-			return dateTime.ToShortDateString(culture.GetCulture());
-		}
-
 		public static string ToShortTimeString(this DateTime dateTime, CultureInfo culture)
 		{
 			return dateTime.ToString(culture.DateTimeFormat.ShortTimePattern);

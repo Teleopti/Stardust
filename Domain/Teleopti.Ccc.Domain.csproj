@@ -1416,7 +1416,6 @@
     <Compile Include="Exceptions\WorkloadMissingInAnalyticsException.cs" />
     <Compile Include="Forecasting\SkillDayExtensions.cs" />
     <Compile Include="Forecasting\SkillPriorityProvider.cs" />
-    <Compile Include="Helper\MeasureTime.cs" />
     <Compile Include="Infrastructure\DatabaseEnum.cs" />
     <Compile Include="Infrastructure\Events\IndexMaintenanceEvent.cs" />
     <Compile Include="ApplicationLayer\Events\WorkloadChangedEvent.cs" />
