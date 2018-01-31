@@ -3,102 +3,44 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 {
-	public class AgentAdherenceDayLoader
-	{
-		private readonly IHistoricalChangeReadModelReader _changes;
-
-		public AgentAdherenceDayLoader(IHistoricalChangeReadModelReader changes)
-		{
-			_changes = changes;
-		}
-
-		public AgentAdherenceDay Load(
-			Guid personId,
-			DateOnly date,
-			DateTime startTime,
-			DateTime endTime)
-		{
-			var changes = _changes.Read(personId, startTime, endTime);
-			var obj = new AgentAdherenceDay();
-			obj.Load(changes);
-			return obj;
-		}
-	}
-
-	public class AgentAdherenceDay
-	{
-		private IEnumerable<HistoricalChange> _changes;
-
-		public void Load(IEnumerable<HistoricalChange> changes)
-		{
-			_changes = changes;
-		}
-
-		public IEnumerable<HistoricalChange> Changes(IHistoricalChangeReadModelReader changes)
-		{
-			return _changes
-				.GroupBy(y => new
-				{
-					y.Timestamp,
-					y.ActivityName,
-					y.ActivityColor,
-					y.StateName,
-					y.RuleColor,
-					y.RuleName,
-					y.Adherence
-				})
-				.Select(x => x.First())
-				.ToArray();
-		}
-	}
-
 	public class HistoricalAdherenceViewModelBuilder
 	{
-		private readonly IHistoricalAdherenceReadModelReader _adherences;
 		private readonly ICurrentScenario _scenario;
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IPersonRepository _persons;
 		private readonly INow _now;
 		private readonly IUserTimeZone _timeZone;
-		private readonly IHistoricalChangeReadModelReader _changes;
 		private readonly AdherencePercentageCalculator _calculator;
 		private readonly IApprovedPeriodsReader _approvedPeriods;
 		private readonly AgentAdherenceDayLoader _agentAdherenceDayLoader;
 		private readonly int _displayPastDays;
 
 		public HistoricalAdherenceViewModelBuilder(
-			IHistoricalAdherenceReadModelReader adherences,
 			ICurrentScenario scenario,
 			IScheduleStorage scheduleStorage,
 			IPersonRepository persons,
 			INow now,
 			IUserTimeZone timeZone,
-			IHistoricalChangeReadModelReader changes,
 			AdherencePercentageCalculator calculator,
 			IConfigReader config,
 			IApprovedPeriodsReader approvedPeriods,
 			AgentAdherenceDayLoader agentAdherenceDayLoader
 		)
 		{
-			_adherences = adherences;
 			_scenario = scenario;
 			_scheduleStorage = scheduleStorage;
 			_persons = persons;
 			_now = now;
 			_timeZone = timeZone;
-			_changes = changes;
 			_calculator = calculator;
 			_approvedPeriods = approvedPeriods;
 			_agentAdherenceDayLoader = agentAdherenceDayLoader;
@@ -123,7 +65,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 				data.Date,
 				data.DisplayStartTime,
 				data.DisplayEndTime);
-			loadAdherencesInto(data);
 
 			return new HistoricalAdherenceViewModel
 			{
@@ -132,15 +73,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 				AgentName = data.Person?.Name.ToString(),
 				Schedules = buildSchedules(data.Schedule),
 				Changes = buildChanges(data),
-				OutOfAdherences = buildOutOfAdherences(data.Adherences),
-				RecordedOutOfAdherences = buildOutOfAdherences(data.Adherences),
+				OutOfAdherences = buildOutOfAdherences(data.AdherenceDay.OutOfAdherences()),
+				RecordedOutOfAdherences = buildOutOfAdherences(data.AdherenceDay.OutOfAdherences()),
 				ApprovedPeriods = buildApprovedPeriods(data),
 				Timeline = new ScheduleTimeline
 				{
 					StartTime = formatForUser(data.DisplayStartTime),
 					EndTime = formatForUser(data.DisplayEndTime)
 				},
-				AdherencePercentage = _calculator.Calculate(data.ShiftStartTime, data.ShiftEndTime, data.Adherences),
+				AdherencePercentage = _calculator.Calculate(data.ShiftStartTime, data.ShiftEndTime, data.AdherenceDay.Adherences()),
 				Navigation = new HistoricalAdherenceNavigationViewModel
 				{
 					First = data.AgentNow.AddDays(_displayPastDays * -1).ToString("yyyyMMdd"),
@@ -151,7 +92,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 
 		private class data
 		{
-			public AgentAdherenceDay AdherenceDay;
+			public AgentAdherenceDay.AgentAdherenceDay AdherenceDay;
 
 			public DateTime Now;
 			public DateTime AgentNow;
@@ -166,8 +107,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			public IEnumerable<IVisualLayer> Schedule;
 			public DateTime? ShiftStartTime;
 			public DateTime? ShiftEndTime;
-
-			public IEnumerable<HistoricalAdherence> Adherences;
 		}
 
 		private void loadCommonInto(data data)
@@ -217,12 +156,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			}
 		}
 
-		private void loadAdherencesInto(data data) =>
-			data.Adherences =
-				new[] {_adherences.ReadLastBefore(data.PersonId, data.DisplayStartTime)}
-					.Concat(_adherences.Read(data.PersonId, data.DisplayStartTime, data.DisplayEndTime))
-					.Where(x => x != null);
-
 		private IEnumerable<internalHistoricalAdherenceActivityViewModel> buildSchedules(IEnumerable<IVisualLayer> layers)
 		{
 			return (
@@ -241,30 +174,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 				.ToArray();
 		}
 
-		private IEnumerable<AgentOutOfAdherenceViewModel> buildOutOfAdherences(IEnumerable<HistoricalAdherence> data)
+		private IEnumerable<AgentOutOfAdherenceViewModel> buildOutOfAdherences(IEnumerable<OutOfAdherencePeriod> data)
 		{
-			var seed = Enumerable.Empty<AgentOutOfAdherenceViewModel>();
-			return data.Aggregate(seed, (x, model) =>
-				{
-					if (model.Adherence == HistoricalAdherenceAdherence.Out)
+			return data
+				.Select(x =>
+					new AgentOutOfAdherenceViewModel
 					{
-						if (x.IsEmpty(y => y.EndTime == null))
-							x = x
-								.Append(new AgentOutOfAdherenceViewModel
-								{
-									StartTime = formatForUser(model.Timestamp)
-								})
-								.ToArray();
+						StartTime = formatForUser(x.StartTime),
+						EndTime = formatForUser(x.EndTime)
 					}
-					else
-					{
-						var existing = x.FirstOrDefault(y => y.EndTime == null);
-						if (existing != null)
-							existing.EndTime = formatForUser(model.Timestamp);
-					}
-
-					return x;
-				})
+				)
 				.ToArray();
 		}
 
@@ -284,7 +203,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		{
 			return data
 				.AdherenceDay
-				.Changes(_changes)
+				.Changes()
 				.Select(x => new HistoricalChangeViewModel
 				{
 					Time = formatForUser(x.Timestamp),
@@ -343,10 +262,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			}
 		}
 
-
-		private string formatForUser(DateTime time)
-		{
-			return TimeZoneInfo.ConvertTimeFromUtc(time, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss");
-		}
+		private string formatForUser(DateTime? time) =>
+			time.HasValue ? TimeZoneInfo.ConvertTimeFromUtc(time.Value, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss") : null;
 	}
 }

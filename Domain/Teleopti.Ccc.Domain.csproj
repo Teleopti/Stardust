@@ -315,6 +315,8 @@
     <Compile Include="ApplicationLayer\ResourcePlanner\CrossAgentsAndSkills.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\IIslandInfo.cs" />
     <Compile Include="ApplicationLayer\Rta\AgentAdherenceDay\AdherencePercentageCalculator.cs" />
+    <Compile Include="ApplicationLayer\Rta\AgentAdherenceDay\AgentAdherenceDay.cs" />
+    <Compile Include="ApplicationLayer\Rta\AgentAdherenceDay\AgentAdherenceDayLoader.cs" />
     <Compile Include="ApplicationLayer\Rta\AgentAdherenceDay\ApprovedPeriod.cs" />
     <Compile Include="ApplicationLayer\Rta\AgentAdherenceDay\HistoricalAdherence.cs" />
     <Compile Include="ApplicationLayer\Rta\AgentAdherenceDay\HistoricalAdherenceAdherence.cs" />
@@ -324,6 +326,7 @@
     <Compile Include="ApplicationLayer\Rta\AgentAdherenceDay\IApprovedPeriodsReader.cs" />
     <Compile Include="ApplicationLayer\Rta\AgentAdherenceDay\IHistoricalChangeReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\Rta\AgentAdherenceDay\IHistoricalChangeReadModelReader.cs" />
+    <Compile Include="ApplicationLayer\Rta\AgentAdherenceDay\OutOfAdherencePeriod.cs" />
     <Compile Include="ApplicationLayer\Rta\Configuration\ConfigurationValidationViewModel.cs" />
     <Compile Include="ApplicationLayer\Rta\Configuration\ConfigurationValidator.cs" />
     <Compile Include="ApplicationLayer\Rta\Configuration\IConfigurationValidator.cs" />
