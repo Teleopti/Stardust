@@ -122,53 +122,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			var result = WithAnalyticsUnitOfWork.Get(() => Target.AddOrGetGroupPage(newGroupPage));
 			result.Should().Be.Null();
 		}
-
-		[Test]
-		public void ShouldDeleteUnusedGroupPage()
-		{
-			var groupPageToKeep = new AnalyticsGroup
-			{
-				GroupPageCode = Guid.NewGuid(),
-				GroupPageName = "GroupPageName1",
-				GroupPageNameResourceKey = "GroupPageNameResourceKey1",
-				GroupCode = Guid.NewGuid(),
-				GroupName = "GroupName1",
-				GroupIsCustom = true,
-				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
-			};
-			WithAnalyticsUnitOfWork.Do(() => Target.AddOrGetGroupPage(groupPageToKeep));
-
-			var person = CreateAndPersistPerson();
-			WithAnalyticsUnitOfWork.Do(() => BridgeGroupPagePersonRepository.AddBridgeGroupPagePerson(
-				new List<Guid> { person.PersonCode },
-				groupPageToKeep.GroupCode,
-				groupPageToKeep.BusinessUnitCode
-			));
-
-			var groupPageToDelete = new AnalyticsGroup
-			{
-				GroupPageCode = Guid.NewGuid(),
-				GroupPageName = "GroupPageName1",
-				GroupPageNameResourceKey = "GroupPageNameResourceKey1",
-				GroupCode = Guid.NewGuid(),
-				GroupName = "GroupName2",
-				GroupIsCustom = true,
-				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
-			};
-
-			WithAnalyticsUnitOfWork.Do(() => Target.AddOrGetGroupPage(groupPageToDelete));
-
-			WithAnalyticsUnitOfWork.Do(() => Target.DeleteUnusedGroupPages(groupPageToDelete.BusinessUnitCode));
-
-			var deletedGroupPage = WithAnalyticsUnitOfWork.Get(() =>
-				Target.GetGroupPageByGroupCode(groupPageToDelete.GroupCode, groupPageToDelete.BusinessUnitCode));
-			deletedGroupPage.Should().Be.Null();
-
-			var keptGroupPage = WithAnalyticsUnitOfWork.Get(() =>
-				Target.GetGroupPageByGroupCode(groupPageToKeep.GroupCode, groupPageToKeep.BusinessUnitCode));
-			keptGroupPage.Should().Not.Be.Null();
-		}
-
+		
 		[Test]
 		public void ShouldGetGroupPageByGroupCode()
 		{
