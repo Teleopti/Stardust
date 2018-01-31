@@ -14302,13 +14302,13 @@ Seuraavat ominaisuudet ovat aktivoitu:
   <data name="SeveralGroupsSelected" xml:space="preserve">
     <value>{0} ryhmää valittu</value>
   </data>
-  <data name="ParameterCannotBeEmpty" xml:space="preserve">
+  <data name="ImportBpoParameterCannotBeEmpty" xml:space="preserve">
     <value>Parametri {0} ei voi olla tyhjä</value>
   </data>
-  <data name="TheImportFileCannotBeEmpty" xml:space="preserve">
+  <data name="ImportBpoTheImportFileCannotBeEmpty" xml:space="preserve">
     <value>Tuotava tiedosto ei voi olla tyhjä.</value>
   </data>
-  <data name="FirstLineInFileHeaderLineCannotBeEmpty" xml:space="preserve">
+  <data name="ImportBpoFirstLineInFileHeaderLineCannotBeEmpty" xml:space="preserve">
     <value>Ensimmäinen rivi tiedostossa (otsikko rivi) ei saa olla tyhjä.</value>
   </data>
   <data name="OpenSite" xml:space="preserve">
@@ -14378,19 +14378,19 @@ Haluatko rekisteröityä?</value>
   <data name="PageWillBeRedirected" xml:space="preserve">
     <value>Tämä sivu {0}</value>
   </data>
-  <data name="TheSkillWithNameIsNotDefinedInTheSystem" xml:space="preserve">
+  <data name="ImportBpoTheSkillWithNameIsNotDefinedInTheSystem" xml:space="preserve">
     <value>Taito nimeltä {0} ei ole määritelty järjestelmässä. </value>
   </data>
-  <data name="SkillDefinedMultipleTimesInTheSystem" xml:space="preserve">
+  <data name="ImportBpoSkillDefinedMultipleTimesInTheSystem" xml:space="preserve">
     <value>Taito nimeltä {0} on määritelty {1} kertaa järjestelmässä. Se on määriteltävä vain kerran, kun käytyt tätä toimintoa. </value>
   </data>
-  <data name="BpoLineHasIncorrectParameterCount" xml:space="preserve">
+  <data name="ImportBpoLineHasIncorrectParameterCount" xml:space="preserve">
     <value>Rivillä on {0} parametriä mutta oletettu arvo on oltava {1}. </value>
   </data>
-  <data name="ErrorFoundOnLineNumberXWithContentsY" xml:space="preserve">
+  <data name="ImportBpoErrorFoundOnLineNumberXWithContentsY" xml:space="preserve">
     <value>Virhe rivillä {0}, joka sisältää {1} {2}</value>
   </data>
-  <data name="InvalidFieldNameInHeader" xml:space="preserve">
+  <data name="ImportBpoInvalidFieldNameInHeader" xml:space="preserve">
     <value>Kelpaamaton arvo otsikossa; {0}. Käytettävissä olevat arvot ovat ({1})</value>
   </data>
   <data name="NoSuggestionsFound" xml:space="preserve">

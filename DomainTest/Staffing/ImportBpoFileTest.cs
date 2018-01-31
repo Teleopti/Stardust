@@ -264,6 +264,8 @@ TPBRZIL,ChannelSales,2017-07-24 10:00,2017-07-24 10:15,8.75";
 			SkillRepository.Has("Directsales", new Activity());
 			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
 			result.Success.Should().Be.False();
+			Console.WriteLine(string.Join(",",result.ErrorInformation));
+			result.ErrorInformation.SingleOrDefault(e => e.Contains("parameters were expected")).Should().Not.Be.Null();
 		}
 
 		[Test]
@@ -639,6 +641,107 @@ TPBRZIL,Channel Sales|Direct Sales,2017-07-24 10:00,2017-07-24 10:15,10.5";
 			
 			var skillCombResources = SkillCombinationResourceRepository.LoadSkillCombinationResourcesBpo();
 			skillCombResources.Should().Not.Be.Empty();
+		}
+		
+		[Test]
+		public void ShouldHandleSemicolonAsSeparator()
+		{
+			Now.Is("2017-07-24 10:00");
+			var fileContents = @"source; skillcombination; startdatetime; enddatetime; agents
+								TPBRZIL; DIRECTSALES; 2017-07-24 10:30; 2017-07-24 10:45; 6.0";
+
+			SkillRepository.Has("Directsales", new Activity());
+			
+			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
+			result.Success.Should().Be.True();
+			
+			var skillCombResources = SkillCombinationResourceRepository.LoadSkillCombinationResourcesBpo();
+			skillCombResources.Should().Not.Be.Empty();
+		}
+		
+		[Test]
+		public void ShouldHandleSemicolonAsTokenSeparatorAndCommaAsDecimalSeparator()
+		{
+			Now.Is("2017-07-24 10:00");
+			var fileContents = @"source; skillcombination; startdatetime; enddatetime; agents
+								TPBRZIL; DIRECTSALES; 2017-07-24 10:30; 2017-07-24 10:45; 6,25";
+
+			SkillRepository.Has("Directsales", new Activity());
+			
+			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
+			result.Success.Should().Be.True();
+			
+			var skillCombResources = SkillCombinationResourceRepository.LoadSkillCombinationResourcesBpo();
+			skillCombResources.Should().Not.Be.Empty();
+			skillCombResources[0].Resources.Should().Be(6.25);
+		}
+		
+		[Test]
+		public void ShouldHandleSemicolonAsTokenSeparatorAndPointAsDecimalSeparator()
+		{
+			Now.Is("2017-07-24 10:00");
+			var fileContents = @"source; skillcombination; startdatetime; enddatetime; agents
+								TPBRZIL; DIRECTSALES; 2017-07-24 10:30; 2017-07-24 10:45; 6.25";
+
+			SkillRepository.Has("Directsales", new Activity());
+			
+			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
+			result.Success.Should().Be.True();
+			
+			var skillCombResources = SkillCombinationResourceRepository.LoadSkillCombinationResourcesBpo();
+			skillCombResources.Should().Not.Be.Empty();
+			skillCombResources[0].Resources.Should().Be(6.25);
+		}
+		
+		[Test]
+		public void ShouldReturnErrorWhenMixingTokenSeparator()
+		{
+			Now.Is("2017-07-24 10:00");
+			var fileContents = @"source; skillcombination; startdatetime; enddatetime; agents
+								TPBRZIL, DIRECTSALES, 2017-07-24 10:30, 2017-07-24 10:45, 6.0";
+
+			SkillRepository.Has("Directsales", new Activity());
+			
+			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
+			result.Success.Should().Be.False();;
+			
+			var skillCombResources = SkillCombinationResourceRepository.LoadSkillCombinationResourcesBpo();
+			skillCombResources.Should().Be.Empty();
+		}
+		
+		[Test]
+		public void ShouldReturnErrorIfResourcesLessThanZero()
+		{
+			Now.Is("2017-07-24 10:00");
+			var fileContents = @"source, skillcombination, startdatetime, enddatetime, agents
+								TPBRZIL, Directsales, 2017-07-24 10:30, 2017-07-24 10:45, -6.0";
+
+			SkillRepository.Has("Directsales", new Activity());
+			
+			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
+			result.Success.Should().Be.False();
+			
+			var skillCombResources = SkillCombinationResourceRepository.LoadSkillCombinationResourcesBpo();
+			skillCombResources.Should().Be.Empty();
+			result.ErrorInformation.SingleOrDefault(e => e.Contains("Number of agents cannot be less than 0")).Should().Not.Be.Null();
+		}
+		[Test]
+		public void ShouldLimitErrorMessagesToMax20()
+		{
+			Now.Is("2017-07-24 10:00");
+			var fileContents = 
+				"source, skillcombination, startdatetime, enddatetime, agents\r\n\a\r\n\a\r\n\a\r\n\a\r\n\a\r\n\a\r\n\a\r\n\a\r\n\a\r\n\a\r\n\a\r\n\a\r\n\a\r\n\a\r\n\a\r\n\a\r\n\a\r\n\a\r\n\a\r\n\a\r\n\a\r\n\a\r\n\a\r\n\a\r\n\a";
+
+			SkillRepository.Has("Directsales", new Activity());
+			
+			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
+			result.Success.Should().Be.False();
+			
+			var skillCombResources = SkillCombinationResourceRepository.LoadSkillCombinationResourcesBpo();
+			skillCombResources.Should().Be.Empty();
+			
+			result.ErrorInformation.Count.Should().Be(21);
+			result.ErrorInformation.Last().Should().Contain("Showing the first ");
 		}
 	}
 }

@@ -12429,28 +12429,28 @@ Teleopti R&amp;D</value>
   <data name="SeveralGroupsSelected" xml:space="preserve">
     <value>تعداد {0} گروه انتخاب شد است</value>
   </data>
-  <data name="TheSkillWithNameIsNotDefinedInTheSystem" xml:space="preserve">
+  <data name="ImportBpoTheSkillWithNameIsNotDefinedInTheSystem" xml:space="preserve">
     <value>مهارتی با نام {0} در سیستم وجود ندارد</value>
   </data>
-  <data name="SkillDefinedMultipleTimesInTheSystem" xml:space="preserve">
+  <data name="ImportBpoSkillDefinedMultipleTimesInTheSystem" xml:space="preserve">
     <value>مهارتی با نام {0} {1} بار در سیستم ایجاد شده. تنها یک بار مجاز است</value>
   </data>
-  <data name="BpoLineHasIncorrectParameterCount" xml:space="preserve">
+  <data name="ImportBpoLineHasIncorrectParameterCount" xml:space="preserve">
     <value>خط دارای {0} پارامتر است درحالیکه باید {1} تا باشد</value>
   </data>
-  <data name="ErrorFoundOnLineNumberXWithContentsY" xml:space="preserve">
-    <value>خطایی در خط {0} پیدا شده مه شامل اینها میشود: {1} و {2}</value>
+  <data name="ImportBpoErrorFoundOnLineNumberXWithContentsY" xml:space="preserve">
+    <value>خطایی در خط {0} پیدا شده مه شامل اینها میشود: "{1}" و {2}</value>
   </data>
-  <data name="ParameterCannotBeEmpty" xml:space="preserve">
+  <data name="ImportBpoParameterCannotBeEmpty" xml:space="preserve">
     <value>پارارمتر {0} نمیتواند خالی باشد</value>
   </data>
-  <data name="InvalidFieldNameInHeader" xml:space="preserve">
+  <data name="ImportBpoInvalidFieldNameInHeader" xml:space="preserve">
     <value>نام موجود در سربرگ نامعتبر است.{0}. نامهای معتبر اینها هستند {1}</value>
   </data>
-  <data name="TheImportFileCannotBeEmpty" xml:space="preserve">
+  <data name="ImportBpoTheImportFileCannotBeEmpty" xml:space="preserve">
     <value>فایلی که قرار است وارد شود نمیتواند خالی باشد</value>
   </data>
-  <data name="FirstLineInFileHeaderLineCannotBeEmpty" xml:space="preserve">
+  <data name="ImportBpoFirstLineInFileHeaderLineCannotBeEmpty" xml:space="preserve">
     <value>اولین خط در فایل نمیتواند خالی باشد</value>
   </data>
   <data name="OpenSite" xml:space="preserve">

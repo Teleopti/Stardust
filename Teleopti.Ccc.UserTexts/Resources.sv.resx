@@ -14655,28 +14655,28 @@ Vill du registrera dig?</value>
   <data name="SeveralGroupsSelected" xml:space="preserve">
     <value>{0} valda grupper</value>
   </data>
-  <data name="TheSkillWithNameIsNotDefinedInTheSystem" xml:space="preserve">
+  <data name="ImportBpoTheSkillWithNameIsNotDefinedInTheSystem" xml:space="preserve">
     <value>Kompetensen med namnet {0} är inte definierad i systemet.</value>
   </data>
-  <data name="SkillDefinedMultipleTimesInTheSystem" xml:space="preserve">
+  <data name="ImportBpoSkillDefinedMultipleTimesInTheSystem" xml:space="preserve">
     <value>Kompetensen med namnet {0} är definierad {1} gånger i systemet. Endast en gång är tillåtet vid användning av denna funktion. </value>
   </data>
-  <data name="BpoLineHasIncorrectParameterCount" xml:space="preserve">
+  <data name="ImportBpoLineHasIncorrectParameterCount" xml:space="preserve">
     <value>Raden har {0} parametrar, men {1} parametrar förväntades.</value>
   </data>
-  <data name="ErrorFoundOnLineNumberXWithContentsY" xml:space="preserve">
-    <value>Fel på rad nummer {0} med innehåll: {1} {2}</value>
+  <data name="ImportBpoErrorFoundOnLineNumberXWithContentsY" xml:space="preserve">
+    <value>Fel på rad nummer {0} med innehåll: "{1}" {2}</value>
   </data>
-  <data name="ParameterCannotBeEmpty" xml:space="preserve">
+  <data name="ImportBpoParameterCannotBeEmpty" xml:space="preserve">
     <value>Parameter {0} kan inte vara tom</value>
   </data>
-  <data name="InvalidFieldNameInHeader" xml:space="preserve">
+  <data name="ImportBpoInvalidFieldNameInHeader" xml:space="preserve">
     <value>Ogiltigt namn i rubrikraden: '{0}'. Giltiga namn är: ({1})</value>
   </data>
-  <data name="TheImportFileCannotBeEmpty" xml:space="preserve">
+  <data name="ImportBpoTheImportFileCannotBeEmpty" xml:space="preserve">
     <value>Importfilen kan inte vara tom.</value>
   </data>
-  <data name="FirstLineInFileHeaderLineCannotBeEmpty" xml:space="preserve">
+  <data name="ImportBpoFirstLineInFileHeaderLineCannotBeEmpty" xml:space="preserve">
     <value>Första raden i filen (rubrikraden) kan inte vara tom. </value>
   </data>
   <data name="RequestTypeOvertime" xml:space="preserve">

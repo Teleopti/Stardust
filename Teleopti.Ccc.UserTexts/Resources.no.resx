@@ -12243,7 +12243,7 @@ Denne informasjonen vil sikre at du atomatisk vil være pålogget til Teleopti C
   <data name="FilterRtaFull" xml:space="preserve">
     <value>Filter agent navn / lokasjon / team / regler / tilstand / nåværende aktiviteter</value>
   </data>
-  <data name="InvalidFieldNameInHeader" xml:space="preserve">
+  <data name="ImportBpoInvalidFieldNameInHeader" xml:space="preserve">
     <value>Ugyldig feltnavn i overskrift: '{0}'. Gyldige feltnavn er: ({1})</value>
   </data>
   <data name="OverstaffingAfterOT" xml:space="preserve">
@@ -12471,7 +12471,7 @@ Denne informasjonen vil sikre at du atomatisk vil være pålogget til Teleopti C
   <data name="NoValidScheduleResult" xml:space="preserve">
     <value>Denne planperioden har ingen gyldig tidsplan</value>
   </data>
-  <data name="ParameterCannotBeEmpty" xml:space="preserve">
+  <data name="ImportBpoParameterCannotBeEmpty" xml:space="preserve">
     <value>Parameter {0} kan ikke være tomt</value>
   </data>
   <data name="ScheduledIssues" xml:space="preserve">
@@ -12516,7 +12516,7 @@ Denne informasjonen vil sikre at du atomatisk vil være pålogget til Teleopti C
   <data name="AreYouSureYouWantToClearPlanningPeriodData" xml:space="preserve">
     <value>Er du sikker på at du vil slette planlagte skift og fridager for perioden {0} - {1}?</value>
   </data>
-  <data name="ErrorFoundOnLineNumberXWithContentsY" xml:space="preserve">
+  <data name="ImportBpoErrorFoundOnLineNumberXWithContentsY" xml:space="preserve">
     <value>Feil funnet på linjenummer {0} med innhold: {1} {2}</value>
   </data>
   <data name="CreatePlanGroupSchedulingSetting" xml:space="preserve">
@@ -12540,7 +12540,7 @@ Denne informasjonen vil sikre at du atomatisk vil være pålogget til Teleopti C
   <data name="AnErrorOccurredPleaseTryAgain" xml:space="preserve">
     <value>En feil oppstod. Vær så snill, prøv på nytt.</value>
   </data>
-  <data name="BpoLineHasIncorrectParameterCount" xml:space="preserve">
+  <data name="ImportBpoLineHasIncorrectParameterCount" xml:space="preserve">
     <value>Linjen har {0} parametere, men forventet {1} parametere.</value>
   </data>
   <data name="ChangePlanningPeriodDurationColon" xml:space="preserve">
@@ -12564,7 +12564,7 @@ Denne informasjonen vil sikre at du atomatisk vil være pålogget til Teleopti C
   <data name="SkillGroupColon" xml:space="preserve">
     <value>Ferdighets gruppe:</value>
   </data>
-  <data name="SkillDefinedMultipleTimesInTheSystem" xml:space="preserve">
+  <data name="ImportBpoSkillDefinedMultipleTimesInTheSystem" xml:space="preserve">
     <value>Ferdigheten med navn {0} er definert {1} ganger i systemet. Bare en gang er tillatt når du bruker denne funksjonen.</value>
   </data>
   <data name="YouAreGoingToChangeThisPlanningPeriodFrom" xml:space="preserve">
@@ -12573,7 +12573,7 @@ Denne informasjonen vil sikre at du atomatisk vil være pålogget til Teleopti C
   <data name="YouAreGoingToCreateAPlanningPeriodFrom" xml:space="preserve">
     <value>Du er i ferd med å opprette en planperiode fra {0} til {1}.</value>
   </data>
-  <data name="TheSkillWithNameIsNotDefinedInTheSystem" xml:space="preserve">
+  <data name="ImportBpoTheSkillWithNameIsNotDefinedInTheSystem" xml:space="preserve">
     <value>Ferdigheten med navn {0} er ikke definert i systemet.</value>
   </data>
   <data name="Plans" xml:space="preserve">
@@ -12627,7 +12627,7 @@ Denne informasjonen vil sikre at du atomatisk vil være pålogget til Teleopti C
   <data name="BlockSameShift" xml:space="preserve">
     <value>Like skift</value>
   </data>
-  <data name="TheImportFileCannotBeEmpty" xml:space="preserve">
+  <data name="ImportBpoTheImportFileCannotBeEmpty" xml:space="preserve">
     <value>Importfilen kan ikke være tom.</value>
   </data>
   <data name="ImportBpoWrongDateFormat" xml:space="preserve">
@@ -12792,7 +12792,7 @@ Denne informasjonen vil sikre at du atomatisk vil være pålogget til Teleopti C
   <data name="SkillAreaNoSkillSelected" xml:space="preserve">
     <value>Du må velge minst én ferdighet.</value>
   </data>
-  <data name="FirstLineInFileHeaderLineCannotBeEmpty" xml:space="preserve">
+  <data name="ImportBpoFirstLineInFileHeaderLineCannotBeEmpty" xml:space="preserve">
     <value>Første linje i fil (overskriftsraden) kan ikke være tom.</value>
   </data>
   <data name="ExportToExcel" xml:space="preserve">

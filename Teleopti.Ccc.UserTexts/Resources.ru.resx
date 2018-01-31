@@ -14253,28 +14253,28 @@ Email: &lt;br&gt;{0}&lt;/b&gt;&lt;br&gt;
   <data name="SeveralGroupsSelected" xml:space="preserve">
     <value>{0} групп выбрано</value>
   </data>
-  <data name="TheSkillWithNameIsNotDefinedInTheSystem" xml:space="preserve">
+  <data name="ImportBpoTheSkillWithNameIsNotDefinedInTheSystem" xml:space="preserve">
     <value>Навык с именем {0} не определен в системе</value>
   </data>
-  <data name="SkillDefinedMultipleTimesInTheSystem" xml:space="preserve">
+  <data name="ImportBpoSkillDefinedMultipleTimesInTheSystem" xml:space="preserve">
     <value>Навык {0} определен в системе {1} раз. Разрешено только однократное опрееление для использования этой функции</value>
   </data>
-  <data name="BpoLineHasIncorrectParameterCount" xml:space="preserve">
+  <data name="ImportBpoLineHasIncorrectParameterCount" xml:space="preserve">
     <value>В строке {0} параметров при разрешенных {1} параметрах</value>
   </data>
-  <data name="ErrorFoundOnLineNumberXWithContentsY" xml:space="preserve">
-    <value>Ошибка в строке {0}, содержащей {1} {2}</value>
+  <data name="ImportBpoErrorFoundOnLineNumberXWithContentsY" xml:space="preserve">
+    <value>Ошибка в строке {0}, содержащей "{1}" {2}</value>
   </data>
-  <data name="ParameterCannotBeEmpty" xml:space="preserve">
+  <data name="ImportBpoParameterCannotBeEmpty" xml:space="preserve">
     <value>Параметр {0} не может быть пустым</value>
   </data>
-  <data name="InvalidFieldNameInHeader" xml:space="preserve">
+  <data name="ImportBpoInvalidFieldNameInHeader" xml:space="preserve">
     <value>Недействительное имя поля в заголовке: '{0}'. Верные названия поля: ({1})</value>
   </data>
-  <data name="TheImportFileCannotBeEmpty" xml:space="preserve">
+  <data name="ImportBpoTheImportFileCannotBeEmpty" xml:space="preserve">
     <value>Файл импорта не может быть пустым</value>
   </data>
-  <data name="FirstLineInFileHeaderLineCannotBeEmpty" xml:space="preserve">
+  <data name="ImportBpoFirstLineInFileHeaderLineCannotBeEmpty" xml:space="preserve">
     <value>Первая строка файла (заголовок) не может быть пустой</value>
   </data>
   <data name="OpenSite" xml:space="preserve">

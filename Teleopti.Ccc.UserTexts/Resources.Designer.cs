@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.UserTexts {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -4499,15 +4499,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string BpoExportYouMustSelectASkill {
             get {
                 return ResourceManager.GetString("BpoExportYouMustSelectASkill", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Line has {0} parameters, but {1} parameters were expected..
-        /// </summary>
-        public static string BpoLineHasIncorrectParameterCount {
-            get {
-                return ResourceManager.GetString("BpoLineHasIncorrectParameterCount", resourceCulture);
             }
         }
         
@@ -11171,15 +11162,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error found on line number {0} with contents:{1} {2}.
-        /// </summary>
-        public static string ErrorFoundOnLineNumberXWithContentsY {
-            get {
-                return ResourceManager.GetString("ErrorFoundOnLineNumberXWithContentsY", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Error Message.
         /// </summary>
         public static string ErrorMessage {
@@ -12662,15 +12644,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string FirstComeFirstServed {
             get {
                 return ResourceManager.GetString("FirstComeFirstServed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to First line in file (header line) cannot be empty..
-        /// </summary>
-        public static string FirstLineInFileHeaderLineCannotBeEmpty {
-            get {
-                return ResourceManager.GetString("FirstLineInFileHeaderLineCannotBeEmpty", resourceCulture);
             }
         }
         
@@ -14421,11 +14394,56 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error found on line number {0} with content: &quot;{1}&quot; {2}.
+        /// </summary>
+        public static string ImportBpoErrorFoundOnLineNumberXWithContentsY {
+            get {
+                return ResourceManager.GetString("ImportBpoErrorFoundOnLineNumberXWithContentsY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to First line in file (header line) cannot be empty..
+        /// </summary>
+        public static string ImportBpoFirstLineInFileHeaderLineCannotBeEmpty {
+            get {
+                return ResourceManager.GetString("ImportBpoFirstLineInFileHeaderLineCannotBeEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid field name in header: &apos;{0}&apos;. Valid field names are: ({1}).
+        /// </summary>
+        public static string ImportBpoInvalidFieldNameInHeader {
+            get {
+                return ResourceManager.GetString("ImportBpoInvalidFieldNameInHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Line has {0} parameters, but {1} parameters were expected..
+        /// </summary>
+        public static string ImportBpoLineHasIncorrectParameterCount {
+            get {
+                return ResourceManager.GetString("ImportBpoLineHasIncorrectParameterCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No interval length found for skill {0}..
         /// </summary>
         public static string ImportBpoNoDefaultResolutionForSkill {
             get {
                 return ResourceManager.GetString("ImportBpoNoDefaultResolutionForSkill", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parameter {0} cannot be empty.
+        /// </summary>
+        public static string ImportBpoParameterCannotBeEmpty {
+            get {
+                return ResourceManager.GetString("ImportBpoParameterCannotBeEmpty", resourceCulture);
             }
         }
         
@@ -14444,6 +14462,24 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ImportBpoResourcesCannotBeLessThanZero {
             get {
                 return ResourceManager.GetString("ImportBpoResourcesCannotBeLessThanZero", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Showing the first {0} error messages of {1}..
+        /// </summary>
+        public static string ImportBpoShowingTheFirstXErrorMessagesOfY {
+            get {
+                return ResourceManager.GetString("ImportBpoShowingTheFirstXErrorMessagesOfY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The skill with name {0} is defined {1} times in the system. Only once is allowed when using this function..
+        /// </summary>
+        public static string ImportBpoSkillDefinedMultipleTimesInTheSystem {
+            get {
+                return ResourceManager.GetString("ImportBpoSkillDefinedMultipleTimesInTheSystem", resourceCulture);
             }
         }
         
@@ -14489,6 +14525,24 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ImportBpoStartDateTimeMustBeInTheFuture {
             get {
                 return ResourceManager.GetString("ImportBpoStartDateTimeMustBeInTheFuture", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The import file cannot be empty..
+        /// </summary>
+        public static string ImportBpoTheImportFileCannotBeEmpty {
+            get {
+                return ResourceManager.GetString("ImportBpoTheImportFileCannotBeEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The skill with name {0} is not defined in the system..
+        /// </summary>
+        public static string ImportBpoTheSkillWithNameIsNotDefinedInTheSystem {
+            get {
+                return ResourceManager.GetString("ImportBpoTheSkillWithNameIsNotDefinedInTheSystem", resourceCulture);
             }
         }
         
@@ -15408,15 +15462,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string InvalidEndTime {
             get {
                 return ResourceManager.GetString("InvalidEndTime", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Invalid field name in header: &apos;{0}&apos;. Valid field names are: ({1}).
-        /// </summary>
-        public static string InvalidFieldNameInHeader {
-            get {
-                return ResourceManager.GetString("InvalidFieldNameInHeader", resourceCulture);
             }
         }
         
@@ -23301,15 +23346,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Parameter {0} cannot be empty.
-        /// </summary>
-        public static string ParameterCannotBeEmpty {
-            get {
-                return ResourceManager.GetString("ParameterCannotBeEmpty", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Adding activities for {0} agent(s), {1} succeeded and {2} failed..
         /// </summary>
         public static string PartialSuccessMessageForAddingActivity {
@@ -27903,7 +27939,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The period results in to little work time.
+        ///   Looks up a localized string similar to The period results in too little work time.
         /// </summary>
         public static string RestrictionNotAbleToBeScheduledReasonTooLittleWorkTimeInPeriod {
             get {
@@ -27921,7 +27957,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The period results in to much work time.
+        ///   Looks up a localized string similar to The period results in too much work time.
         /// </summary>
         public static string RestrictionNotAbleToBeScheduledReasonTooMuchWorkTimeInPeriod {
             get {
@@ -32477,15 +32513,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The skill with name {0} is defined {1} times in the system. Only once is allowed when using this function..
-        /// </summary>
-        public static string SkillDefinedMultipleTimesInTheSystem {
-            get {
-                return ResourceManager.GetString("SkillDefinedMultipleTimesInTheSystem", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Skill group:.
         /// </summary>
         public static string SkillGroupColon {
@@ -34710,15 +34737,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The import file cannot be empty..
-        /// </summary>
-        public static string TheImportFileCannotBeEmpty {
-            get {
-                return ResourceManager.GetString("TheImportFileCannotBeEmpty", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The input text can not be empty..
         /// </summary>
         public static string TheInputTextCanNotBeEmptyDot {
@@ -34887,15 +34905,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string TheServiceLevelForSpecifiedIntervalLengthIsTooLongDot {
             get {
                 return ResourceManager.GetString("TheServiceLevelForSpecifiedIntervalLengthIsTooLongDot", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The skill with name {0} is not defined in the system..
-        /// </summary>
-        public static string TheSkillWithNameIsNotDefinedInTheSystem {
-            get {
-                return ResourceManager.GetString("TheSkillWithNameIsNotDefinedInTheSystem", resourceCulture);
             }
         }
         

@@ -5,8 +5,8 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.Domain.Staffing
 {
@@ -16,8 +16,10 @@ namespace Teleopti.Ccc.Domain.Staffing
 		private readonly ISkillCombinationResourceRepository _skillCombinationResourceRepository;
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly INow _now;
-
+		private char _tokenSeparator = ',';
+		
 		private const string lineSeparator = "\r\n";
+		private const int maxErrors = 20;
 	
 		// valid field names
 		private const string source = "source";
@@ -39,26 +41,32 @@ namespace Teleopti.Ccc.Domain.Staffing
 			_now = now;
 		}
 
-		public ImportBpoFileResult ImportFile(string fileContents, IFormatProvider importFormatProvider,char tokenSeparator = ',', char skillSeparator = '|')
+		public ImportBpoFileResult ImportFile(string fileContents, IFormatProvider importFormatProvider, char skillSeparator = '|')
 		{
 			var result = new ImportBpoFileResult();
 
 			if (fileContents.IsNullOrEmpty())
 			{
 				result.Success = false;
-				result.ErrorInformation.Add(formatGeneralLineErrorMessage(new LineWithNumber{ LineContent = "", LineNumber = 1 }, Resources.TheImportFileCannotBeEmpty));
+				result.ErrorInformation.Add(
+					formatGeneralLineErrorMessage(new LineWithNumber{ LineContent = "", LineNumber = 1 }, 
+						Resources.ImportBpoTheImportFileCannotBeEmpty));
 				return result;
 			}
 
 			var lines = fileContents.Split(new[] { lineSeparator }, StringSplitOptions.None);
 			var lineNumber = 1;
+			
 			var linesWithNumbers = lines.Select(line => new LineWithNumber{LineContent = line, LineNumber = lineNumber++}).ToList();
-			var headerWithFieldNames = linesWithNumbers[0].LineContent.ToLower().Split(tokenSeparator);
+
+			presetTokenSeparator(linesWithNumbers[0].LineContent);
+			
+			var headerWithFieldNames = linesWithNumbers[0].LineContent.ToLower().Split(_tokenSeparator);
 			if (headerWithFieldNames.IsNullOrEmpty() || (headerWithFieldNames.Length==1 && headerWithFieldNames.FirstOrDefault().IsNullOrEmpty()))
 			{
 				result.Success = false;
 				result.ErrorInformation.Add(formatGeneralLineErrorMessage(linesWithNumbers[0],
-					Resources.FirstLineInFileHeaderLineCannotBeEmpty));
+					Resources.ImportBpoFirstLineInFileHeaderLineCannotBeEmpty));
 				return result;
 			}
 			assertFieldNames(headerWithFieldNames, result);
@@ -73,7 +81,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 				if (line.LineContent.IsNullOrEmpty())
 					continue;
 
-				line.Tokens = tokenizeSkillCombinationResourceBpo(line, headerWithFieldNames, tokenSeparator, result);
+				line.Tokens = tokenizeSkillCombinationResourceBpo(line, headerWithFieldNames, _tokenSeparator, result);
 				var resourceBpo = createSkillCombinationResourceBpo(line, importFormatProvider, skillSeparator, _allSkills, result);
 
 				if (resourceBpo == null)
@@ -101,8 +109,25 @@ namespace Teleopti.Ccc.Domain.Staffing
 			}
 			if(result.Success)
 				_skillCombinationResourceRepository.PersistSkillCombinationResourceBpo(bpoResourceList);
+
+
+			if (result.ErrorInformation.Count > maxErrors)
+			{
+				var originalErrorCount = result.ErrorInformation.Count; 
+				var temp = result.ErrorInformation.Take(maxErrors).ToList();
+				result.ErrorInformation.Clear();
+				temp.ForEach(e => result.ErrorInformation.Add(e));
+
+				result.ErrorInformation.Add(string.Format(Resources.ImportBpoShowingTheFirstXErrorMessagesOfY, maxErrors, originalErrorCount));
+			}
+			
 			return result;
 		}
+
+		private void presetTokenSeparator(string templateRow)
+        {
+			_tokenSeparator = templateRow.Contains(";") ? ';' : ',';
+        }
 
 		private ImportBpoFileResult validateBpoRow(ImportSkillCombinationResourceBpo resourceBpo)
 		{
@@ -129,17 +154,16 @@ namespace Teleopti.Ccc.Domain.Staffing
 			var resourceBpoIntervalLength = (int)resourceBpo.EndDateTime.Subtract(resourceBpo.StartDateTime).TotalMinutes;
 
 			var resolutionsResult = validateAllDefaultResolutions(resourceBpo.SkillIds, resourceBpoIntervalLength);
-			if (!resolutionsResult.Success)
-			{
-				result.Success = false;
-				foreach (var errorMsg in resolutionsResult.ErrorInformation)
-					result.ErrorInformation.Add(errorMsg);
-			}
+			if (resolutionsResult.Success) return result;
+			
+			result.Success = false;
+			foreach (var errorMsg in resolutionsResult.ErrorInformation)
+				result.ErrorInformation.Add(errorMsg);
 
 			return result;
 		}
 
-		private ImportBpoFileResult validateAllDefaultResolutions(IList<Guid> skillIds, int resourceBpoIntervalLength)
+		private ImportBpoFileResult validateAllDefaultResolutions(IEnumerable<Guid> skillIds, int resourceBpoIntervalLength)
 		{
 			var result = new ImportBpoFileResult();
 			foreach (var skillId in skillIds)
@@ -158,12 +182,11 @@ namespace Teleopti.Ccc.Domain.Staffing
 					result.ErrorInformation.Add(string.Format(Resources.ImportBpoNoDefaultResolutionForSkill, skill.Name));
 				}
 
-				if(skillResolution != resourceBpoIntervalLength)
-				{
-					result.Success = false;
-					result.ErrorInformation.Add(string.Format(Resources.ImportBpoResourceIntervalLengthDiffersFromTheSkill, 
-						resourceBpoIntervalLength, skill.Name, skillResolution));
-				}
+				if (skillResolution == resourceBpoIntervalLength) continue;
+				
+				result.Success = false;
+				result.ErrorInformation.Add(string.Format(Resources.ImportBpoResourceIntervalLengthDiffersFromTheSkill, 
+					resourceBpoIntervalLength, skill.Name, skillResolution));
 			}
 
 			return result;
@@ -173,12 +196,11 @@ namespace Teleopti.Ccc.Domain.Staffing
 		{
 			foreach (var fieldName in fieldNames)
 			{
-				if (!validFieldNames.Contains(fieldName.Trim()))
-				{
-					result.Success = false;
-					result.ErrorInformation.Add(string.Format(Resources.InvalidFieldNameInHeader,
-						fieldName, string.Join(",", validFieldNames)));
-				}
+				if (validFieldNames.Contains(fieldName.Trim())) continue;
+				
+				result.Success = false;
+				result.ErrorInformation.Add(string.Format(Resources.ImportBpoInvalidFieldNameInHeader,
+					fieldName, string.Join(",", validFieldNames)));
 			}
 		}
 
@@ -216,30 +238,59 @@ namespace Teleopti.Ccc.Domain.Staffing
 					result.Success = false;
 					result.ErrorInformation.Add(formatGeneralLineErrorMessage(lineWithNumber, Resources.ImportBpoWrongDateFormat));
 				}
-				if (!double.TryParse(bpoLineTokens[resources],NumberStyles.Float,importFormatProvider,out var resourceValue))
+				
+				var parsedDouble = parseDouble(bpoLineTokens[resources]);
+				
+				if(parsedDouble.Result == false)
 				{
 					result.Success = false;
 					result.ErrorInformation.Add(formatGeneralLineErrorMessage(lineWithNumber,
 						string.Format(Resources.ImportBpoWrongResourceFormat,validFieldNames.IndexOf(resources) + 1, bpoLineTokens[resources])));
 				}
-				if (result.Success)
+
+				if (!result.Success) return null;
+				
+				var startDateTimeUtc = TimeZoneHelper.ConvertToUtc(startDateTime, _userTimeZone.TimeZone());
+				var endDateTimeUtc = TimeZoneHelper.ConvertToUtc(endDateTime, _userTimeZone.TimeZone());
+				resourceBpo = new ImportSkillCombinationResourceBpo
 				{
-					var startDateTimeUtc = TimeZoneHelper.ConvertToUtc(startDateTime, _userTimeZone.TimeZone());
-					var endDateTimeUtc = TimeZoneHelper.ConvertToUtc(endDateTime, _userTimeZone.TimeZone());
-					resourceBpo = new ImportSkillCombinationResourceBpo
-					{
-						Source = bpoLineTokens[source],
-						StartDateTime = startDateTimeUtc,
-						EndDateTime = endDateTimeUtc,
-						Resources = resourceValue,
-						SkillIds = lookupSkillIds(lineWithNumber, bpoLineTokens[skillgroup], skillSeparator, allSkills, result)
-					};
-				}
+					Source = bpoLineTokens[source],
+					StartDateTime = startDateTimeUtc,
+					EndDateTime = endDateTimeUtc,
+					Resources = parsedDouble.Value,
+					SkillIds = lookupSkillIds(lineWithNumber, bpoLineTokens[skillgroup], skillSeparator, allSkills, result)
+				};
 			}
 			return resourceBpo;
 		}
 
-		private List<Guid> lookupSkillIds(LineWithNumber lineWithNumber, string skillGroupString, char skillSeparator, IList<ISkill> allSkills, ImportBpoFileResult result)
+		private class validatedDouble
+		{
+			public double Value;
+			public bool Result;
+		}
+		
+		private static validatedDouble parseDouble(string text)
+		{
+			var validatedDouble = new validatedDouble();
+			var cultureInfo = new CultureInfo("en-US");
+			
+			var numberFormat = (NumberFormatInfo)cultureInfo.NumberFormat.Clone();
+			const NumberStyles numberStyles = NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingWhite |
+											  NumberStyles.AllowTrailingWhite | NumberStyles.AllowLeadingSign;
+			validatedDouble.Result = double.TryParse(text, numberStyles, numberFormat, out validatedDouble.Value);
+			if (validatedDouble.Result)
+				return validatedDouble;
+			
+			numberFormat.NumberDecimalSeparator = ",";
+			validatedDouble.Result = double.TryParse(text, numberStyles, numberFormat, out validatedDouble.Value);
+			if (validatedDouble.Result == false)
+				validatedDouble.Value = 0;
+
+			return validatedDouble;
+		}
+
+		private List<Guid> lookupSkillIds(LineWithNumber lineWithNumber, string skillGroupString, char skillSeparator, IEnumerable<ISkill> allSkills, ImportBpoFileResult result)
 		{
 			var skillIds = new List<Guid>();
 			var skillStringList = skillGroupString.Split(skillSeparator);
@@ -252,7 +303,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 				{
 					result.Success = false;
 					result.ErrorInformation.Add(formatGeneralLineErrorMessage(lineWithNumber,
-						string.Format(Resources.TheSkillWithNameIsNotDefinedInTheSystem, skillStringTrimmed)));
+						string.Format(Resources.ImportBpoTheSkillWithNameIsNotDefinedInTheSystem, skillStringTrimmed)));
 				}
 				if (skills.Length == 1)
 				{
@@ -271,26 +322,26 @@ namespace Teleopti.Ccc.Domain.Staffing
 					result.Success = false;
 					result.ErrorInformation.Add(formatGeneralLineErrorMessage(lineWithNumber,
 						string.Format(
-							Resources.SkillDefinedMultipleTimesInTheSystem,
+							Resources.ImportBpoSkillDefinedMultipleTimesInTheSystem,
 							skillStringTrimmed, skills.Length)));
 				}
 			}
 			return skillIds; // replace with real guid
 		}
 
-		private Dictionary<string, string> tokenizeSkillCombinationResourceBpo(LineWithNumber lineWithNumber, string[] fieldNames, char tokenSeparator, ImportBpoFileResult bpoResult)
+		private Dictionary<string, string> tokenizeSkillCombinationResourceBpo(LineWithNumber lineWithNumber, IReadOnlyList<string> fieldNames, char tokenSeparator, ImportBpoFileResult bpoResult)
 		{
 			var parameters = lineWithNumber.LineContent.Split(tokenSeparator);
 			var result = new Dictionary<string, string>();
-			if (parameters.Length != fieldNames.Length)
+			if (parameters.Length != fieldNames.Count)
 			{
 			bpoResult.Success = false;
 				bpoResult.ErrorInformation.Add(formatGeneralLineErrorMessage(lineWithNumber,
-					string.Format(Resources.BpoLineHasIncorrectParameterCount, parameters.Length, fieldNames.Length)));
+					string.Format(Resources.ImportBpoLineHasIncorrectParameterCount, parameters.Length, fieldNames.Count)));
 			}
 			else
 			{
-				for (int i = 0; i < parameters.Length; i++)
+				for (var i = 0; i < parameters.Length; i++)
 					result.Add(fieldNames[i].Trim(), parameters[i].Trim());
 			}
 			return result;
@@ -299,12 +350,12 @@ namespace Teleopti.Ccc.Domain.Staffing
 		private string formatParameterEmptyErrorMessage(LineWithNumber lineWithNumber, string emptyParameterName)
 		{
 			return formatGeneralLineErrorMessage(lineWithNumber,
-				string.Format(Resources.ParameterCannotBeEmpty, emptyParameterName));
+				string.Format(Resources.ImportBpoParameterCannotBeEmpty, emptyParameterName));
 		}
 
 		private string formatGeneralLineErrorMessage(LineWithNumber lineWithNumber, string specificMessage)
 		{
-			var lineMessage = string.Format(Resources.ErrorFoundOnLineNumberXWithContentsY, lineWithNumber.LineNumber,
+			var lineMessage = string.Format(Resources.ImportBpoErrorFoundOnLineNumberXWithContentsY, lineWithNumber.LineNumber,
 				lineWithNumber.LineContent, specificMessage);
 			return lineMessage;
 		}
