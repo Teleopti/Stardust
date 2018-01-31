@@ -61,7 +61,8 @@ describe('AuditTrailCtrl', function () {
   function FakeCurrentUserInfo() {
       this.CurrentUserInfo = function () {
           return {
-              DateFormatLocale: "en-US"
+              DateFormatLocale: "en-US",
+              Language: 'en-US'
           };
       };
   }
