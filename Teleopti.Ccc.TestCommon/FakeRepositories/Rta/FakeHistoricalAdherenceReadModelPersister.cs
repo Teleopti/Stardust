@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
@@ -13,9 +14,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		IHistoricalAdherenceReadModelReader
 
 	{
-		private IList<HistoricalAdherenceReadModel> _data = new List<HistoricalAdherenceReadModel>();
+		private IList<HistoricalAdherence> _data = new List<HistoricalAdherence>();
 
-		public FakeHistoricalAdherenceReadModelPersister Has(IEnumerable<HistoricalAdherenceReadModel> data)
+		public FakeHistoricalAdherenceReadModelPersister Has(IEnumerable<HistoricalAdherence> data)
 		{
 			_data = _data.Concat(data).ToArray();
 			return this;
@@ -35,17 +36,17 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public void AddIn(Guid personId, DateTime timestamp)
 		{
-			add(personId, timestamp, HistoricalAdherenceReadModelAdherence.In);
+			add(personId, timestamp, HistoricalAdherenceAdherence.In);
 		}
 
 		public void AddNeutral(Guid personId, DateTime timestamp)
 		{
-			add(personId, timestamp, HistoricalAdherenceReadModelAdherence.Neutral);
+			add(personId, timestamp, HistoricalAdherenceAdherence.Neutral);
 		}
 
 		public void AddOut(Guid personId, DateTime timestamp)
 		{
-			add(personId, timestamp, HistoricalAdherenceReadModelAdherence.Out);
+			add(personId, timestamp, HistoricalAdherenceAdherence.Out);
 		}
 
 		public void Remove(DateTime until)
@@ -53,9 +54,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			_data = _data.Where(x => x.Timestamp >= until).ToArray();
 		}
 
-		private void add(Guid personId, DateTime timestamp, HistoricalAdherenceReadModelAdherence adherence)
+		private void add(Guid personId, DateTime timestamp, HistoricalAdherenceAdherence adherence)
 		{
-			_data.Add(new HistoricalAdherenceReadModel
+			_data.Add(new HistoricalAdherence
 			{
 				PersonId = personId,
 				Timestamp = timestamp,
@@ -63,13 +64,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			});
 		}
 
-		public IEnumerable<HistoricalAdherenceReadModel> Read(Guid personId, DateOnly date)
+		public IEnumerable<HistoricalAdherence> Read(Guid personId, DateOnly date)
 		{
 			var d = DateTime.SpecifyKind(date.Date, DateTimeKind.Utc);
 			return Read(personId, d, d.AddDays(1));
 		}
 
-		public IEnumerable<HistoricalAdherenceReadModel> Read(Guid personId, DateTime startTime, DateTime endTime)
+		public IEnumerable<HistoricalAdherence> Read(Guid personId, DateTime startTime, DateTime endTime)
 		{
 			var period = new DateTimePeriod(startTime, endTime);
 			return _data
@@ -78,14 +79,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				.ToArray();
 		}
 
-		public HistoricalAdherenceReadModel ReadLastBefore(Guid personId, DateTime timestamp)
+		public HistoricalAdherence ReadLastBefore(Guid personId, DateTime timestamp)
 		{
 			return _data
 				.OrderBy(x => x.Timestamp)
 				.LastOrDefault(x => x.PersonId == personId && x.Timestamp < timestamp);
 		}
 
-		public IEnumerable<HistoricalAdherenceReadModel> Read(Guid personId)
+		public IEnumerable<HistoricalAdherence> Read(Guid personId)
 		{
 			return _data.Where(x => x.PersonId == personId).ToArray();
 		}

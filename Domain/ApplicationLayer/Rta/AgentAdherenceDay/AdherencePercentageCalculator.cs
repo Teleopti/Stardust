@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay
 {
-	public class AdherencePercentageCalculator : IAdherencePercentageCalculator
+	public class AdherencePercentageCalculator
 	{
 		private readonly INow _now;
 
@@ -18,14 +16,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay
 		}
 
 		public int? CalculatePercentage(DateTime? shiftStartTime, DateTime? shiftEndTime,
-			IEnumerable<HistoricalAdherenceReadModel> data)
+			IEnumerable<HistoricalAdherence> data)
 		{
 			if (!shiftStartTime.HasValue)
 				return null;
 
 			var onGoingShift = _now.UtcDateTime() < shiftEndTime.Value;
 			var calculateUntil = onGoingShift ? _now.UtcDateTime() : shiftEndTime.Value;
-			var adherenceAtStart = data.LastOrDefault(x => x.Timestamp <= shiftStartTime)?.Adherence ?? HistoricalAdherenceReadModelAdherence.Neutral;
+			var adherenceAtStart = data.LastOrDefault(x => x.Timestamp <= shiftStartTime)?.Adherence ?? HistoricalAdherenceAdherence.Neutral;
 
 			var adherenceReadModels = data
 				.Select(a => new adherenceMoment {Time = a.Timestamp, Adherence = a.Adherence})
@@ -39,8 +37,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay
 				.OrderBy(x => x.Time)
 				.ToArray();
 
-			var timeInAdherence = timeIn(HistoricalAdherenceReadModelAdherence.In, adherenceReadModels);
-			var timeInNeutral = timeIn(HistoricalAdherenceReadModelAdherence.Neutral, adherenceReadModels);
+			var timeInAdherence = timeIn(HistoricalAdherenceAdherence.In, adherenceReadModels);
+			var timeInNeutral = timeIn(HistoricalAdherenceAdherence.Neutral, adherenceReadModels);
 			var shiftTime = shiftEndTime.Value - shiftStartTime.Value;
 			var timeToAdhere = shiftTime - timeInNeutral;
 
@@ -49,7 +47,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay
 			return Convert.ToInt32((timeInAdherence.TotalSeconds / timeToAdhere.TotalSeconds) * 100);
 		}
 
-		private static TimeSpan timeIn(HistoricalAdherenceReadModelAdherence adherenceType,
+		private static TimeSpan timeIn(HistoricalAdherenceAdherence adherenceType,
 			IEnumerable<adherenceMoment> data) =>
 			data.Aggregate(new timeAccumulated(), (t, m) =>
 			{
@@ -67,7 +65,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay
 
 		private class adherenceMoment
 		{
-			public HistoricalAdherenceReadModelAdherence? Adherence { get; set; }
+			public HistoricalAdherenceAdherence? Adherence { get; set; }
 			public DateTime Time { get; set; }
 		}
 	}

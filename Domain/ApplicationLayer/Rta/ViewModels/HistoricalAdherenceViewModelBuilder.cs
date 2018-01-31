@@ -24,10 +24,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		private readonly INow _now;
 		private readonly IUserTimeZone _timeZone;
 		private readonly IHistoricalChangeReadModelReader _changes;
-		private readonly IAdherencePercentageCalculator _calculator;
+		private readonly AdherencePercentageCalculator _calculator;
 		private readonly IApprovedPeriodsReader _approvedPeriods;
 		private readonly int _displayPastDays;
-
 
 		public HistoricalAdherenceViewModelBuilder(
 			IHistoricalAdherenceReadModelReader adherences,
@@ -37,7 +36,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			INow now,
 			IUserTimeZone timeZone,
 			IHistoricalChangeReadModelReader changes,
-			IAdherencePercentageCalculator calculator,
+			AdherencePercentageCalculator calculator,
 			IConfigReader config,
 			IApprovedPeriodsReader approvedPeriods
 		)
@@ -109,7 +108,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			public DateTime? ShiftStartTime;
 			public DateTime? ShiftEndTime;
 
-			public IEnumerable<HistoricalAdherenceReadModel> Adherences;
+			public IEnumerable<HistoricalAdherence> Adherences;
 		}
 
 		private void loadCommonInto(data data)
@@ -183,12 +182,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 				.ToArray();
 		}
 
-		private IEnumerable<AgentOutOfAdherenceViewModel> buildOutOfAdherences(IEnumerable<HistoricalAdherenceReadModel> data)
+		private IEnumerable<AgentOutOfAdherenceViewModel> buildOutOfAdherences(IEnumerable<HistoricalAdherence> data)
 		{
 			var seed = Enumerable.Empty<AgentOutOfAdherenceViewModel>();
 			return data.Aggregate(seed, (x, model) =>
 				{
-					if (model.Adherence == HistoricalAdherenceReadModelAdherence.Out)
+					if (model.Adherence == HistoricalAdherenceAdherence.Out)
 					{
 						if (x.IsEmpty(y => y.EndTime == null))
 							x = x

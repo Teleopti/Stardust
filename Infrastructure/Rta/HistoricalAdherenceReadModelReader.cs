@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NHibernate.Transform;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork;
 
@@ -16,7 +17,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			_unitOfWork = unitOfWork;
 		}
 
-		public IEnumerable<HistoricalAdherenceReadModel> Read(Guid personId, DateTime startTime, DateTime endTime)
+		public IEnumerable<HistoricalAdherence> Read(Guid personId, DateTime startTime, DateTime endTime)
 		{
 			return _unitOfWork.Current()
 				.CreateSqlQuery(@"
@@ -28,11 +29,11 @@ ORDER BY [Timestamp] ASC")
 				.SetParameter("PersonId", personId)
 				.SetParameter("StartTime", startTime)
 				.SetParameter("EndTime", endTime)
-				.SetResultTransformer(Transformers.AliasToBean<HistoricalAdherenceReadModel>())
-				.List<HistoricalAdherenceReadModel>();
+				.SetResultTransformer(Transformers.AliasToBean<HistoricalAdherence>())
+				.List<HistoricalAdherence>();
 		}
 
-		public HistoricalAdherenceReadModel ReadLastBefore(Guid personId, DateTime timestamp)
+		public HistoricalAdherence ReadLastBefore(Guid personId, DateTime timestamp)
 		{
 			return _unitOfWork.Current()
 				.CreateSqlQuery(@"
@@ -44,8 +45,8 @@ ORDER BY [Timestamp] DESC")
 				.SetParameter("PersonId", personId)
 				.SetParameter("Timestamp", timestamp)
 				
-				.SetResultTransformer(Transformers.AliasToBean<HistoricalAdherenceReadModel>())
-				.UniqueResult<HistoricalAdherenceReadModel>();
+				.SetResultTransformer(Transformers.AliasToBean<HistoricalAdherence>())
+				.UniqueResult<HistoricalAdherence>();
 		}
 	}
 }

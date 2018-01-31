@@ -76,14 +76,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<RtaTracerViewModelBuilder>().SingleInstance();
 
 			builder.RegisterType<HistoricalAdherenceDate>().SingleInstance();
-			
-			builder.RegisterType<HistoricalAdherenceViewModelBuilder>().SingleInstance();
-			builder.RegisterType<AdherencePercentageCalculator>().As<IAdherencePercentageCalculator>();
 
-			builder.RegisterType<HistoricalAdherenceReadModelReader>().As<IHistoricalAdherenceReadModelReader>();
-			builder.RegisterType<HistoricalAdherenceReadModelPersister>().As<IHistoricalAdherenceReadModelPersister>();
-			builder.RegisterType<HistoricalChangeReadModelReader>().As<IHistoricalChangeReadModelReader>();
-			builder.RegisterType<HistoricalChangeReadModelPersister>().As<IHistoricalChangeReadModelPersister>();
+			builder.RegisterType<HistoricalAdherenceViewModelBuilder>().SingleInstance();
+			builder.RegisterType<AdherencePercentageCalculator>().SingleInstance();
+
+			builder.RegisterType<HistoricalAdherenceReadModelReader>().As<IHistoricalAdherenceReadModelReader>().SingleInstance();
+			builder.RegisterType<HistoricalAdherenceReadModelPersister>().As<IHistoricalAdherenceReadModelPersister>().SingleInstance();
+			builder.RegisterType<HistoricalChangeReadModelReader>().As<IHistoricalChangeReadModelReader>().SingleInstance();
+			builder.RegisterType<HistoricalChangeReadModelPersister>().As<IHistoricalChangeReadModelPersister>().SingleInstance();
 			builder.RegisterType<ApprovedPeriodsReader>().As<IApprovedPeriodsReader>().SingleInstance();
 			builder.RegisterType<ApprovedPeriodsPersister>().As<IApprovedPeriodsPersister>().SingleInstance();
 

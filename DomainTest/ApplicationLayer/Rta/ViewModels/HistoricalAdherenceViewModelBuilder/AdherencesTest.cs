@@ -2,6 +2,7 @@
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common.Time;
@@ -97,16 +98,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.HistoricalAdhe
 			Database.WithAgent(person, "nicklas");
 			ReadModel.Has(new[]
 			{
-				new HistoricalAdherenceReadModel
+				new HistoricalAdherence
 				{
 					PersonId = person,
-					Adherence = HistoricalAdherenceReadModelAdherence.Out,
+					Adherence = HistoricalAdherenceAdherence.Out,
 					Timestamp = "2016-10-11 09:00".Utc()
 				},
-				new HistoricalAdherenceReadModel
+				new HistoricalAdherence
 				{
 					PersonId = person,
-					Adherence = HistoricalAdherenceReadModelAdherence.In,
+					Adherence = HistoricalAdherenceAdherence.In,
 					Timestamp = "2016-10-12 11:00".Utc()
 				}
 			});

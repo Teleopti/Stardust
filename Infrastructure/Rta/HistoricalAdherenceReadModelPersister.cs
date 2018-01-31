@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork;
 
@@ -17,17 +18,17 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 
 		public void AddIn(Guid personId, DateTime timestamp)
 		{
-			add(personId, timestamp, HistoricalAdherenceReadModelAdherence.In);
+			add(personId, timestamp, HistoricalAdherenceAdherence.In);
 		}
 
 		public void AddNeutral(Guid personId, DateTime timestamp)
 		{
-			add(personId, timestamp, HistoricalAdherenceReadModelAdherence.Neutral);
+			add(personId, timestamp, HistoricalAdherenceAdherence.Neutral);
 		}
 
 		public void AddOut(Guid personId, DateTime timestamp)
 		{
-			add(personId, timestamp, HistoricalAdherenceReadModelAdherence.Out);
+			add(personId, timestamp, HistoricalAdherenceAdherence.Out);
 		}
 
 		public void Remove(DateTime until)
@@ -39,7 +40,7 @@ DELETE FROM [ReadModel].[HistoricalAdherence] WHERE Timestamp < :ts")
 				.ExecuteUpdate();
 		}
 
-		private void add(Guid personId, DateTime timestamp, HistoricalAdherenceReadModelAdherence adherence)
+		private void add(Guid personId, DateTime timestamp, HistoricalAdherenceAdherence adherence)
 		{
 			_unitOfWork.Current()
 				.CreateSqlQuery(@"
