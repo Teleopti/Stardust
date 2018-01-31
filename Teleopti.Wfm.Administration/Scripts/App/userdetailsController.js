@@ -6,7 +6,7 @@
 		.module('adminApp')
 		.controller('userdetailsController', userdetailsController, ['tokenHeaderService']);
 
-	function userdetailsController($http, $routeParams, tokenHeaderService) {
+	function userdetailsController($http, $routeParams, $cookies, tokenHeaderService) {
 		var vm = this;
 
 		vm.UserId = $routeParams.id;
@@ -95,8 +95,9 @@
 
 		vm.LoadUser();
 		vm.save = function() {
+			var cookie = $cookies.getObject('WfmAdminAuth');
 
-			var loggedOnId = parseInt(sessionStorage.getItem(idKey));
+			var loggedOnId = cookie ? cookie.id : 0;
 
 			$http.post('./SaveUser',
 					{
@@ -111,8 +112,12 @@
 						return;
 					}
 					if (vm.UserId === loggedOnId) {
-						sessionStorage.setItem(userKey, vm.Name);
-						window.location = "#";
+						cookie.user = vm.Name;
+						var today = new Date();
+						var newExpireDate = new Date(today.getTime() + 30 * 60000);
+						$cookies.putObject('WfmAdminAuth', cookie, { 'expires': newExpireDate });
+						window.location = "/#";
+						window.location.reload();
 						return;
 					}
 					window.location = "#users";

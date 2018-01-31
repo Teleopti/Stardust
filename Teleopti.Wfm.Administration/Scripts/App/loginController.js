@@ -31,25 +31,19 @@
 		});
 
     function loginController($scope, $http, $cookies, $rootScope, tokenHeaderService) {
-		var tokenKey = 'accessToken';
-		var userKey = 'userToken';
-		var emailKey = 'lastEmail';
-		var idKey = 'idToken';
 		var firstUser = false;
-
+	    var vm = this;
 		//checked if has cookie
 		var cookie = $cookies.getObject('WfmAdminAuth');
-        var token = cookie ? cookie.tokenKey : null;
-		
+		var token = cookie ? cookie.tokenKey : null;
 
-        var vm = this;
+	    vm.user = cookie ? cookie.user : null;
 		vm.shouldShowEtl = false;
-		vm.loginEmail = sessionStorage.getItem(emailKey);
 		vm.loginPassword = "";
 		vm.Message = '';
 		vm.ErrorMessage = '';
-		vm.user = sessionStorage.getItem(userKey);
-		vm.Id = sessionStorage.getItem(idKey);
+		
+		vm.Id = cookie ? cookie.id : null;
 
 		$http.get("./Etl/ShouldEtlToolBeVisible", tokenHeaderService.getHeaders())
 			.success(function (data) {
@@ -113,18 +107,16 @@
         }
 
 		function createCookies(data) {
-			vm.user = data.userName;
+			vm.user = data.UserName;
 			vm.Id = data.Id;
 			vm.Message = 'Successful log in...';
 			// Cache the username token in session storage.
-			sessionStorage.setItem(emailKey, vm.loginEmail);
 			vm.UserName = data.UserName;
-			sessionStorage.setItem(userKey, vm.UserName);
-			sessionStorage.setItem(idKey, vm.Id);
+			
 			//lets do authentication in cookie
 			var today = new Date();
 			var expireDate = new Date(today.getTime() + 30 * 60000);
-			$cookies.putObject('WfmAdminAuth', { 'tokenKey': data.AccessToken}, { 'expires': expireDate });
+			$cookies.putObject('WfmAdminAuth', { 'tokenKey': data.AccessToken, 'user': data.UserName , 'id': data.Id }, { 'expires': expireDate });
 		}
 
 		updateCookies();
