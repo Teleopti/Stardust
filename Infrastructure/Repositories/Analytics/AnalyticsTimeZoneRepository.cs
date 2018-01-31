@@ -24,7 +24,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 
 		public void SetUtcInUse(bool isUtcInUse)
 		{
-			var query = $@"UPDATE mart.dim_time_zone SET utc_in_use=:{nameof(isUtcInUse)} where time_zone_code = 'UTC'";
+			var query = $@"SELECT CONVERT(BIT, count(1)) FROM mart.dim_time_zone WITH (NOLOCK) WHERE time_zone_code = 'UTC' AND utc_in_use =:{nameof(isUtcInUse)}";
+			var dontUpdate = AnalyticsUnitOfWork.Current().Session().CreateSQLQuery(query)
+				.SetBoolean(nameof(isUtcInUse), isUtcInUse)
+				.UniqueResult<bool>();
+
+			if (dontUpdate)
+				return;
+
+			query = $@"UPDATE mart.dim_time_zone SET utc_in_use=:{nameof(isUtcInUse)} WHERE time_zone_code = 'UTC'";
 			AnalyticsUnitOfWork.Current().Session().CreateSQLQuery(query)
 				.SetBoolean(nameof(isUtcInUse), isUtcInUse)
 				.ExecuteUpdate();
@@ -32,7 +40,16 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 
 		public void SetToBeDeleted(string timeZoneCode, bool tobeDeleted)
 		{
-			var query = $@"UPDATE mart.dim_time_zone SET to_be_deleted=:{nameof(tobeDeleted)} where time_zone_code=:{nameof(timeZoneCode)}";
+			var query = $@"SELECT CONVERT(BIT, count(1)) FROM mart.dim_time_zone WITH (NOLOCK) WHERE time_zone_code=:{nameof(timeZoneCode)} AND to_be_deleted=:{nameof(tobeDeleted)}";
+			var dontUpdate = AnalyticsUnitOfWork.Current().Session().CreateSQLQuery(query)
+				.SetString(nameof(timeZoneCode), timeZoneCode)
+				.SetBoolean(nameof(tobeDeleted), tobeDeleted)
+				.UniqueResult<bool>();
+
+			if (dontUpdate)
+				return;
+
+			query = $@"UPDATE mart.dim_time_zone SET to_be_deleted=:{nameof(tobeDeleted)} WHERE time_zone_code=:{nameof(timeZoneCode)}";
 			AnalyticsUnitOfWork.Current().Session().CreateSQLQuery(query)
 				.SetString(nameof(timeZoneCode), timeZoneCode)
 				.SetBoolean(nameof(tobeDeleted), tobeDeleted)

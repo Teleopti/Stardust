@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenStatelessUnitOfWork())
 			{
 				return ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(
-					"select distinct Description FROM OptionalColumnValue WHERE Parent =:columnId AND ltrim(description) <> '' ORDER BY description")
+					"select distinct Description FROM OptionalColumnValue WHERE ReferenceId =:columnId AND ltrim(description) <> '' ORDER BY description")
 					.SetGuid("columnId", column)
 					.SetResultTransformer(Transformers.AliasToBean<ColumnUniqueValues>())
 					.SetReadOnly(true).List<IColumnUniqueValues>();
@@ -60,8 +60,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			{
 				return ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(
 					"SELECT DISTINCT Description FROM OptionalColumnValue ocv " +
-					"INNER JOIN Person WITH (NOLOCK) ON Person.Id = ocv.ReferenceId  AND Person.IsDeleted = 0 " +
-					"WHERE ocv.Parent =:columnId AND ltrim(ocv.Description) <> '' " +
+					"INNER JOIN Person WITH (NOLOCK) ON Person.Id = ocv.Parent  AND Person.IsDeleted = 0 " +
+					"WHERE ocv.ReferenceId =:columnId AND ltrim(ocv.Description) <> '' " +
 					"ORDER BY ocv.Description")
 					.SetGuid("columnId", column)
 					.SetResultTransformer(Transformers.AliasToBean<ColumnUniqueValues>())
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	    public IList<IOptionalColumnValue> OptionalColumnValues(IOptionalColumn optionalColumn)
 	    {
 			ICollection<IOptionalColumnValue> retList = Session.CreateCriteria(typeof(OptionalColumnValue))
-				.Add(Restrictions.Eq("Parent", optionalColumn))
+				.Add(Restrictions.Eq("ReferenceObject", optionalColumn))
 				.Add(Restrictions.Not(Restrictions.Eq("Description", string.Empty)))
 				.AddOrder(Order.Asc("Description"))
 				.List<IOptionalColumnValue>();

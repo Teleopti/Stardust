@@ -36,8 +36,8 @@ BEGIN
 		group_name,
 		group_is_custom,
 		gp.business_unit_code
-	FROM [mart].[dim_group_page] gp
-	INNER JOIN mart.dim_business_unit bu on gp.business_unit_code = bu.business_unit_code
+	FROM [mart].[dim_group_page] gp WITH (NOLOCK)
+	INNER JOIN mart.dim_business_unit bu WITH (NOLOCK) on gp.business_unit_code = bu.business_unit_code
 	WHERE group_page_code = @group_page_code and group_name = @group_name and gp.business_unit_id = bu.business_unit_id
 
 	IF EXISTS(SELECT 1 FROM #existing_group_page)
@@ -51,30 +51,38 @@ BEGIN
 			group_is_custom AS GroupIsCustom,
 			business_unit_code AS BusinessUnitCode
 		FROM #existing_group_page
-		RETURN
 	END
-
-
-	DECLARE @counter int  
-	SELECT @counter = ISNULL((SELECT TOP 1 group_id from [mart].[dim_group_page] ORDER BY group_id DESC),0)+1
- 
-	INSERT INTO [mart].[dim_group_page]
-	SELECT 
-		@group_page_code
-		,@group_page_name
-		,@group_page_name_resource_key
-		,@counter
-		,@group_code
-		,@group_name
-		,@group_is_custom
-		,bu.business_unit_id
-		,@business_unit_code
-		,bu.business_unit_name
-		,bu.datasource_id
-		,GETUTCDATE()
-		,GETUTCDATE()
-	FROM [mart].[dim_business_unit] bu
-	WHERE business_unit_code = @business_unit_code
+	ELSE
+	BEGIN
+		INSERT INTO [mart].[dim_group_page] (
+			[group_page_code], 
+			[group_page_name], 
+			[group_page_name_resource_key], 
+			[group_code], 
+			[group_name], 
+			[group_is_custom], 
+			[business_unit_id], 
+			[business_unit_code], 
+			[business_unit_name], 
+			[datasource_id], 
+			[insert_date], 
+			[datasource_update_date])
+		SELECT 
+			@group_page_code
+			,@group_page_name
+			,@group_page_name_resource_key
+			,@group_code
+			,@group_name
+			,@group_is_custom
+			,bu.business_unit_id
+			,@business_unit_code
+			,bu.business_unit_name
+			,bu.datasource_id
+			,GETUTCDATE()
+			,GETUTCDATE()
+		FROM [mart].[dim_business_unit] bu WITH (NOLOCK)
+		WHERE business_unit_code = @business_unit_code
+	END
 END
 
 GO

@@ -36,13 +36,5 @@ namespace Teleopti.Ccc.Domain.Common
 			get { return _tableName; }
 			set { _tableName = value; }
 		}
-
-		public virtual void TriggerValueChangeForPerson(IPerson person)
-		{
-			ReplaceEvent(nameof(OptionalColumnValueChangedEvent) + person.Id, () => new OptionalColumnValueChangedEvent()
-			{
-				PersonId = person.Id.GetValueOrDefault()
-			});
-		}
 	}
 }

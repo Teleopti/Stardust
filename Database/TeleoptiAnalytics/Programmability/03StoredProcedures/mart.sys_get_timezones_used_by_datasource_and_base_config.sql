@@ -16,8 +16,8 @@ BEGIN
 		t.utc_in_use AS IsUtcInUse, 
 		t.to_be_deleted AS ToBeDeleted  
 	FROM 
-		mart.dim_time_zone t
-		INNER JOIN mart.sys_datasource d 
+		mart.dim_time_zone t WITH (NOLOCK)
+		INNER JOIN mart.sys_datasource d  WITH (NOLOCK)
 			ON d.time_zone_id = t.time_zone_id
 	WHERE
 		d.time_zone_id IS NOT NULL
@@ -33,8 +33,8 @@ BEGIN
 		t.utc_in_use AS IsUtcInUse, 
 		t.to_be_deleted AS ToBeDeleted   
 	FROM 
-		mart.dim_time_zone t
-		INNER JOIN mart.sys_configuration c 
+		mart.dim_time_zone t WITH (NOLOCK)
+		INNER JOIN mart.sys_configuration c WITH (NOLOCK)
 			ON t.time_zone_code = c.[value]
 	WHERE 
 		c.[key] = 'TimeZoneCode'

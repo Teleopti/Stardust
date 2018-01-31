@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ExportSchedule
 
 			selectedOptionalColumns.ForEach(o =>
 			{
-				var matchedOptionalColumValue = p.OptionalColumnValueCollection.SingleOrDefault(x => x.Parent.Id == o.Id);
+				var matchedOptionalColumValue = p.OptionalColumnValueCollection.SingleOrDefault(x => x.ReferenceObject.Id == o.Id);
 				optionalColumns.Add(matchedOptionalColumValue != null ? matchedOptionalColumValue.Description : string.Empty);
 
 			});

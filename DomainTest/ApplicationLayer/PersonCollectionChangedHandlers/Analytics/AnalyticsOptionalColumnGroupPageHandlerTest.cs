@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			_bridgePersonGroupPage = new AnalyticsBridgeGroupPagePerson
 			{
 				GroupPageCode = _analyticsGroupPage.GroupPageCode,
-				GroupCode = Guid.NewGuid(),
+				GroupCode = _analyticsGroupPage.GroupCode,
 				PersonCode = Guid.NewGuid(),
 				PersonId = 5,
 				BusinessUnitCode = _businessUnitId
@@ -250,9 +250,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			var groupCode1 = analyticsGroups.Single(x => x.GroupName == "My new group").GroupCode;
 
 			analyticsGroups.Count()
-				.Should().Be.EqualTo(1);
+				.Should().Be.EqualTo(2);
 			analyticsGroups.SingleOrDefault(x => x.GroupPageCode == _entityId && x.GroupPageName == "opt1" && x.GroupName == "My new group" && x.GroupIsCustom == false)
 				.Should().Not.Be.Null();
+			analyticsGroups.SingleOrDefault(x => x.GroupPageCode == _entityId && x.GroupPageName == "opt1" && x.GroupName == _analyticsGroupPage.GroupName && x.GroupIsCustom == false)
+				.Should().Not.Be.Null(); // Should be deleted by ETL Nightly/Maintenance step
 			AnalyticsBridgeGroupPagePersonRepository.Bridges.Count
 				.Should().Be.EqualTo(1);
 			AnalyticsBridgeGroupPagePersonRepository.Bridges.SingleOrDefault(x => x.PersonCode == person1.Id.GetValueOrDefault() && x.GroupCode == groupCode1)
@@ -260,11 +262,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		}
 
 		[Test]
-		public void ShouldRemoveUnusedGroupPage()
+		public void ShouldRemovePersonValueWhenClearedValue()
 		{
 			var person1 = new Person();
 			person1.SetId(_bridgePersonGroupPage.PersonCode);
-
 			AnalyticsGroupPageRepository.AddGroupPageIfNotExisting(_analyticsGroupPage);
 			AnalyticsBridgeGroupPagePersonRepository
 				.Has(_bridgePersonGroupPage)
@@ -276,8 +277,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 				AvailableAsGroupPage = true
 			};
 			optionalColumn.SetId(_entityId);
+			person1.SetOptionalColumnValue(new OptionalColumnValue(string.Empty), optionalColumn);
 
 			OptionalColumnRepository.Add(optionalColumn);
+			OptionalColumnRepository.AddPersonValues(person1.OptionalColumnValueCollection.First());
 			PersonRepository.Add(person1);
 			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(_businessUnitId));
 
@@ -289,8 +292,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 			Target.Handle(@event);
 
-			var analyticsGroups = AnalyticsGroupPageRepository.GetGroupPage(optionalColumn.Id.GetValueOrDefault(), _businessUnitId).ToList();
-			analyticsGroups.Any().Should().Be.False();
+			IEnumerable<AnalyticsGroup> analyticsGroups = AnalyticsGroupPageRepository.GetGroupPage(optionalColumn.Id.GetValueOrDefault(), _businessUnitId).ToList();
+			analyticsGroups.Count().Should().Be(1); // Should be deleted by ETL Nightly/Maintenance step
+			AnalyticsBridgeGroupPagePersonRepository.Bridges.Should().Be.Empty();
 		}
 
 		[Test]
@@ -338,7 +342,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		}
 
 		[Test]
-		public void ShouldTreatEmptyPersonValueAsNoValueWhenCreatingGroupPage()
+		public void ShouldNotCreateGroupPageWhenEmptyPersonValue()
 		{
 			IOptionalColumn optionalColumn = new OptionalColumn("opt1")
 			{
@@ -366,6 +370,48 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 			IEnumerable<AnalyticsGroup> analyticsGroups = AnalyticsGroupPageRepository.GetGroupPage(optionalColumn.Id.GetValueOrDefault(), _businessUnitId).ToList();
 			analyticsGroups.Any().Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldRemovePersonFromGroupPageWhenPersonDeleted()
+		{
+			var person = new Person();
+			person.SetId(_bridgePersonGroupPage.PersonCode);
+			AnalyticsGroupPageRepository.AddGroupPageIfNotExisting(_analyticsGroupPage);
+			AnalyticsBridgeGroupPagePersonRepository
+				.Has(_bridgePersonGroupPage)
+				.WithPersonMapping(_bridgePersonGroupPage.PersonCode, _bridgePersonGroupPage.PersonId);
+			AnalyticsGroupPageRepository.AnalyticsBridgeGroupPagePersonRepository = AnalyticsBridgeGroupPagePersonRepository;
+
+			IOptionalColumn optionalColumn = new OptionalColumn(_analyticsGroupPage.GroupPageName)
+			{
+				AvailableAsGroupPage = true
+			};
+			optionalColumn.SetId(_entityId);
+			person.SetOptionalColumnValue(new OptionalColumnValue(_analyticsGroupPage.GroupName), optionalColumn);
+			person.SetDeleted();
+
+			OptionalColumnRepository.Add(optionalColumn);
+			OptionalColumnRepository.AddPersonValues(person.OptionalColumnValueCollection.First());
+			PersonRepository.Add(person);
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(_businessUnitId));
+
+			var @event = new PersonDeletedEvent()
+			{
+				LogOnBusinessUnitId = _businessUnitId,
+				PersonId = person.Id.GetValueOrDefault()
+			};
+
+			Target.Handle(@event);
+
+			IEnumerable<AnalyticsGroup> analyticsGroups = AnalyticsGroupPageRepository.GetGroupPage(optionalColumn.Id.GetValueOrDefault(), _businessUnitId).ToList();
+
+			analyticsGroups.Count()
+				.Should().Be.EqualTo(1);
+			analyticsGroups.SingleOrDefault(x => x.GroupPageCode == _entityId && x.GroupPageName == "opt1" && x.GroupName == _analyticsGroupPage.GroupName && x.GroupIsCustom == false)
+				.Should().Not.Be.Null(); // Should be deleted by ETL Nightly/Maintenance step
+			AnalyticsBridgeGroupPagePersonRepository.Bridges
+				.Should().Be.Empty();
 		}
 	}
 }

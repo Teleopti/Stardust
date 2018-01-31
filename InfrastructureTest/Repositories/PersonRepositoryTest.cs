@@ -9,7 +9,6 @@ using NHibernate;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
@@ -31,7 +30,6 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Infrastructure.Security;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
@@ -1797,6 +1795,31 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					new PersonRepository(new ThisUnitOfWork(UnitOfWork)).FindAllSortByName());
 			Assert.AreEqual(testList[0], per1);
 			Assert.That(testList[0].OptionalColumnValueCollection.Count, Is.EqualTo(1));
+		}
+
+		[Test]
+		public void ShouldHaveNewVersionAfterSettingOptionalColumnValueForPerson()
+		{
+			var column = new OptionalColumn("COL1") { TableName = "Person" };
+
+			PersistAndRemoveFromUnitOfWork(column);
+			var person = PersonFactory.CreatePerson("roger", "kratz");
+			PersistAndRemoveFromUnitOfWork(person);
+
+			UnitOfWork.PersistAll();
+			CleanUpAfterTest();
+
+			var optionalColumnRepository = new OptionalColumnRepository(new ThisUnitOfWork(UnitOfWork));
+			var personRepository = new PersonRepository(new ThisUnitOfWork(UnitOfWork));
+			var samePerson = personRepository.Get(person.Id.Value);
+			samePerson.SetOptionalColumnValue(new OptionalColumnValue("A VALUE"), column);
+			UnitOfWork.PersistAll();
+
+			((IVersioned)samePerson).Version.Should().Be.GreaterThan(1);
+
+			personRepository.Remove(samePerson);
+			optionalColumnRepository.Remove(column);
+			UnitOfWork.PersistAll();
 		}
 
 		[Test]

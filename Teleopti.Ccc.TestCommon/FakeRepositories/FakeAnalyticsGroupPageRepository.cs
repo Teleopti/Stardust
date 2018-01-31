@@ -64,22 +64,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return groups.Where(x => x.GroupPageNameResourceKey != null && x.BusinessUnitCode == businessUnitCode).ToList();
 		}
-
-		public void DeleteUnusedGroupPages(Guid businessUnitCode)
-		{ 
-			if (AnalyticsBridgeGroupPagePersonRepository == null)
-				throw new ArgumentException($"You must set a value for property '{nameof(AnalyticsBridgeGroupPagePersonRepository)}'");
-
-			var usedGroups = AnalyticsBridgeGroupPagePersonRepository.Bridges;
-			var groupsToRemove = groups
-				.Where(x => x.BusinessUnitCode == businessUnitCode && usedGroups.All(y => y.GroupCode != x.GroupCode && y.BusinessUnitCode == businessUnitCode))
-				.ToList();
-			foreach (var group in groupsToRemove)
-			{
-				groups.Remove(group);
-			}
-		}
-
+		
 		public FakeAnalyticsBridgeGroupPagePersonRepository AnalyticsBridgeGroupPagePersonRepository { get; set; }
 	}
 }

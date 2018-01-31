@@ -15,17 +15,24 @@ CREATE PROCEDURE [mart].[etl_dim_group_page_insert]
 @business_unit_code uniqueidentifier
 
 AS
-BEGIN
-
-  DECLARE @counter int  
-  SELECT @counter = ISNULL((SELECT TOP 1 group_id from [mart].[dim_group_page] ORDER BY group_id DESC),0)+1
- 
-  INSERT INTO [mart].[dim_group_page]
+BEGIN 
+  INSERT INTO [mart].[dim_group_page] (
+			[group_page_code], 
+			[group_page_name], 
+			[group_page_name_resource_key], 
+			[group_code], 
+			[group_name], 
+			[group_is_custom], 
+			[business_unit_id], 
+			[business_unit_code], 
+			[business_unit_name], 
+			[datasource_id], 
+			[insert_date], 
+			[datasource_update_date])
   SELECT 
             @group_page_code
             ,@group_page_name
             ,@group_page_name_resource_key
-            ,@counter
             ,@group_code
             ,@group_name
             ,@group_is_custom
@@ -38,7 +45,7 @@ BEGIN
   FROM [mart].[dim_business_unit] bu
   WHERE business_unit_code = @business_unit_code
   AND NOT EXISTS (SELECT 1 
-                     FROM [mart].[dim_group_page]
+                     FROM [mart].[dim_group_page] WITH (NOLOCK)
                     WHERE group_code = @group_code and business_unit_id = bu.business_unit_id)
 
 END

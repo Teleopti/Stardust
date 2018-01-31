@@ -33,43 +33,5 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// Created date: 1/13/2009
 		/// </remarks>
 		string TableName { get; set; }
-
-		///// <summary>
-		///// Gets the column value collection.
-		///// </summary>
-		///// <value>The column value collection.</value>
-		///// <remarks>
-		///// Created by: Viraj Siriwardana
-		///// Created date: 2008-07-24
-		///// </remarks>
-		//ReadOnlyCollection<IOptionalColumnValue> ValueCollection { get; }
-
-		///// <summary>
-		///// Adds the value.
-		///// </summary>
-		///// <param name="value">The value.</param>
-		///// <remarks>
-		///// Created by: Viraj Siriwardana
-		///// Created date: 2008-07-24
-		///// </remarks>
-		//void AddOptionalColumnValue(IOptionalColumnValue value);
-
-		///// <summary>
-		///// Removes the value.
-		///// </summary>
-		///// <param name="value">The value.</param>
-		///// <remarks>
-		///// Created by: Viraj Siriwardana
-		///// Created date: 2008-07-24
-		///// </remarks>
-		//void RemoveOptionalColumnValue(IOptionalColumnValue value);
-
-		///// <summary>
-		///// Get Optional Column Value by Id
-		///// </summary>
-		///// <param name="id"></param>
-		///// <returns></returns>
-		//IOptionalColumnValue GetColumnValueById(Guid? id);
-		void TriggerValueChangeForPerson(IPerson person);
 	}
 }

@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Domain.Notification
 
 			var result =
 				person.OptionalColumnValueCollection.FirstOrDefault(
-					optionalColumnValue => optionalColumnValue.Parent.Id.Equals(_settings.OptionalColumnId)) ?? new OptionalColumnValue(string.Empty);
+					optionalColumnValue => optionalColumnValue.ReferenceObject.Id.Equals(_settings.OptionalColumnId)) ?? new OptionalColumnValue(string.Empty);
 			
 			return result.Description;
 		}

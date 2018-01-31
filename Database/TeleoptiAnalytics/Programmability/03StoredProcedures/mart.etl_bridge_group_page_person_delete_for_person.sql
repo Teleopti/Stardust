@@ -13,7 +13,7 @@ AS
 BEGIN
 	delete bgpp from [mart].[bridge_group_page_person] bgpp
 	join (select group_page_id 
-			from [mart].[dim_group_page] 
+			from [mart].[dim_group_page] WITH (NOLOCK)
 			where group_page_code = @group_page_code and business_unit_code = @business_unit_code) groups
 		on groups.group_page_id = bgpp.group_page_id
 	join (select person_id 

@@ -22,9 +22,9 @@ BEGIN
 	SELECT
 		t.time_zone_code
 	FROM 
-		mart.sys_datasource d
+		mart.sys_datasource d WITH (NOLOCK)
 	INNER JOIN
-		mart.dim_time_zone t
+		mart.dim_time_zone t WITH (NOLOCK)
 	ON
 		d.time_zone_id = t.time_zone_id
 	WHERE

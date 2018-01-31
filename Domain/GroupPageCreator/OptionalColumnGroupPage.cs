@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.GroupPageCreator
 			foreach (var person in groupPageOptions.Persons)
 			{
 				var columnValue = person.OptionalColumnValueCollection
-					.FirstOrDefault(y => y.Parent.Id.Value == optionalColumn.Id.Value && !string.IsNullOrEmpty(y.Description.Trim()));
+					.FirstOrDefault(y => y.ReferenceObject.Id.Value == optionalColumn.Id.Value && !string.IsNullOrEmpty(y.Description.Trim()));
 				if(columnValue == null)
 					continue;
 

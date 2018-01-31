@@ -15,6 +15,5 @@ namespace Teleopti.Ccc.Domain.Repositories
 		void UpdateGroupPage(AnalyticsGroup analyticsGroup);
 		void DeleteGroupPagesByGroupCodes(IEnumerable<Guid> groupCodes, Guid businessUnitCode);
 		IEnumerable<AnalyticsGroupPage> GetBuildInGroupPageBase(Guid businessUnitCode);
-		void DeleteUnusedGroupPages(Guid businessUnitCode);
 	}
 }

@@ -10,8 +10,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeOptionalColumnRepository : IOptionalColumnRepository
 	{
-		IList<IOptionalColumn> _optionalColumnList = new List<IOptionalColumn>();
-		IList<IOptionalColumnValue> _personValueList = new List<IOptionalColumnValue>();
+		readonly IList<IOptionalColumn> _optionalColumnList = new List<IOptionalColumn>();
+		readonly IList<IOptionalColumnValue> _personValueList = new List<IOptionalColumnValue>();
 
 		public void Add(IOptionalColumn root)
 		{
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<IColumnUniqueValues> UniqueValuesOnColumn(Guid column)
 		{
-			return _personValueList.Where(x => x.Parent.Id.Value == column).Distinct()
+			return _personValueList.Where(x => x.ReferenceObject.Id.Value == column).Distinct()
 				.Select(v => new ColumnUniqueValues
 				{
 					Description = v.Description
@@ -56,9 +56,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public IList<IColumnUniqueValues> UniqueValuesOnColumnWithValidPerson(Guid column)
 		{
 			return _personValueList
-				.Where(x => x.Parent.Id.Value == column 
-						&& x.ReferenceObject is Person 
-						&& !(x.ReferenceObject as Person).IsDeleted)
+				.Where(x => x.ReferenceObject.Id.Value == column 
+						&& x.Parent is Person 
+						&& !(x.Parent as Person).IsDeleted)
 				.Distinct()
 				.Select(v => new ColumnUniqueValues
 				{
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<IOptionalColumnValue> OptionalColumnValues(IOptionalColumn optionalColumn)
 		{
-			return _personValueList.Where(x => x.Parent.Id.Value == optionalColumn.Id.Value).ToList();
+			return _personValueList.Where(x => x.ReferenceObject.Id.Value == optionalColumn.Id.Value).ToList();
 		}
 	}
 }

@@ -246,6 +246,9 @@ BEGIN
 	delete from mart.permission_report
 	where datasource_update_date < @permissionReportMinDate
 
+	-- Delete group pages without persons
+	DELETE from [mart].[dim_group_page]
+	WHERE group_page_id NOT IN (SELECT group_page_id FROM mart.bridge_group_page_person)
 END
 
 GO

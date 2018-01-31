@@ -117,16 +117,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				.SetReadOnly(true)
 				.List<AnalyticsGroupPage>();
 		}
-
-		public void DeleteUnusedGroupPages(Guid businessUnitCode)
-		{
-			var query = _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-					$@"exec mart.[etl_dim_group_page_delete_unused]
-                     @business_unit_code=:{nameof(businessUnitCode)}")
-				.SetParameter(nameof(businessUnitCode), businessUnitCode);
-			query.ExecuteUpdate();
-		}
-
+		
 		public void AddGroupPageIfNotExisting(AnalyticsGroup analyticsGroup)
 		{
 			var query = _analyticsUnitOfWork.Current().Session().CreateSQLQuery(

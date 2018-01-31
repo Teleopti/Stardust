@@ -703,15 +703,19 @@ namespace Teleopti.Ccc.Domain.Common
 			var colValue = GetColumnValue(column);
 			if (colValue == null)
 			{
-				value.SetParent(column);
-				value.ReferenceObject = this;
+				value.SetParent(this);
+				value.ReferenceObject = column;
 				_optionalColumnValueCollection.Add(value);
 			}
 			else
 			{
 				colValue.Description = value.Description;
 			}
-			column.TriggerValueChangeForPerson(this);
+
+			ReplaceEvent(nameof(OptionalColumnValueChangedEvent) + this.Id, () => new OptionalColumnValueChangedEvent()
+			{
+				PersonId = this.Id.GetValueOrDefault()
+			});
 		}
 
 		public virtual void RemoveOptionalColumnValue(IOptionalColumnValue value)
@@ -719,13 +723,16 @@ namespace Teleopti.Ccc.Domain.Common
 			InParameter.NotNull(nameof(value), value);
 
 			_optionalColumnValueCollection.Remove(value);
-			var column = value.Parent as IOptionalColumn;
-			column?.TriggerValueChangeForPerson(this);
+
+			ReplaceEvent(nameof(OptionalColumnValueChangedEvent) + this.Id, () => new OptionalColumnValueChangedEvent()
+			{
+				PersonId = this.Id.GetValueOrDefault()
+			});
 		}
 
 		public virtual IOptionalColumnValue GetColumnValue(IOptionalColumn column)
 		{
-			IOptionalColumnValue result = _optionalColumnValueCollection.FirstOrDefault(v => v.Parent.Equals(column));
+			IOptionalColumnValue result = _optionalColumnValueCollection.FirstOrDefault(v => v.ReferenceObject.Equals(column));
 			return result;
 		}
 

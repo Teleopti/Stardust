@@ -131,7 +131,7 @@
 		  not-null="true"/>
 
 	<bag name="OptionalColumnValueCollection" cascade="all-delete-orphan" inverse="true">
-      <key column="ReferenceId" />
+      <key column="Parent" />
       <one-to-many class="OptionalColumnValue"/>
     </bag>
 

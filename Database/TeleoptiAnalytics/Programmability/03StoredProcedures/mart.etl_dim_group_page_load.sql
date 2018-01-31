@@ -24,7 +24,6 @@ CREATE PROCEDURE [mart].[etl_dim_group_page_load]
 AS
 ---------------------------------------------------------------------------
 
-DECLARE @counter int
 DECLARE @group_page_code uniqueidentifier
 DECLARE @group_page_name nvarchar(100)
 DECLARE @group_page_name_resource_key nvarchar(100)
@@ -192,16 +191,24 @@ OPEN NoneCustomCursorExcludingNote
 FETCH NEXT FROM NoneCustomCursorExcludingNote INTO @group_page_code,@group_page_name,@group_page_name_resource_key,@group_code,@group_name,@datasource_id
 WHILE @@FETCH_STATUS = 0
 BEGIN
-	SELECT @counter = ISNULL(MAX(group_id), 0) FROM mart.dim_group_page
-	SET @counter = @counter + 1
-	
 	-- Insert row where the group page already exists
-	INSERT INTO mart.dim_group_page
+	INSERT INTO [mart].[dim_group_page] (
+			[group_page_code], 
+			[group_page_name], 
+			[group_page_name_resource_key], 
+			[group_code], 
+			[group_name], 
+			[group_is_custom], 
+			[business_unit_id], 
+			[business_unit_code], 
+			[business_unit_name], 
+			[datasource_id], 
+			[insert_date], 
+			[datasource_update_date])
 	SELECT DISTINCT
 		dgp.group_page_code,
 		@group_page_name,
 		@group_page_name_resource_key,
-		@counter,
 		@group_code,
 		@group_name,
 		0,
@@ -225,12 +232,23 @@ BEGIN
 	IF @@ROWCOUNT = 0
 	BEGIN
 		-- Insert row where the group page NOT already exists
-		INSERT INTO mart.dim_group_page
+		INSERT INTO [mart].[dim_group_page] (
+			[group_page_code], 
+			[group_page_name], 
+			[group_page_name_resource_key], 
+			[group_code], 
+			[group_name], 
+			[group_is_custom], 
+			[business_unit_id], 
+			[business_unit_code], 
+			[business_unit_name], 
+			[datasource_id], 
+			[insert_date], 
+			[datasource_update_date])
 		SELECT
 			@group_page_code,
 			@group_page_name,
 			@group_page_name_resource_key,
-			@counter,
 			@group_code,
 			@group_name,
 			0,
@@ -274,16 +292,24 @@ OPEN NoteCursor
 FETCH NEXT FROM NoteCursor INTO @group_page_code,@group_page_name,@group_page_name_resource_key,@group_code,@group_name,@datasource_id
 WHILE @@FETCH_STATUS = 0
 BEGIN
-	SELECT @counter = ISNULL(MAX(group_id), 0) FROM mart.dim_group_page
-	SET @counter = @counter + 1
-	
 	-- Insert row where the group page already exists
-	INSERT INTO mart.dim_group_page
+	INSERT INTO [mart].[dim_group_page] (
+			[group_page_code], 
+			[group_page_name], 
+			[group_page_name_resource_key], 
+			[group_code], 
+			[group_name], 
+			[group_is_custom], 
+			[business_unit_id], 
+			[business_unit_code], 
+			[business_unit_name], 
+			[datasource_id], 
+			[insert_date], 
+			[datasource_update_date])
 	SELECT DISTINCT
 		dgp.group_page_code,
 		@group_page_name,
 		@group_page_name_resource_key,
-		@counter,
 		@group_code,
 		@group_name,
 		0,
@@ -307,12 +333,23 @@ BEGIN
 	IF @@ROWCOUNT = 0
 	BEGIN
 		-- Insert row where the group page NOT already exists
-		INSERT INTO mart.dim_group_page
+		INSERT INTO [mart].[dim_group_page] (
+			[group_page_code], 
+			[group_page_name], 
+			[group_page_name_resource_key], 
+			[group_code], 
+			[group_name], 
+			[group_is_custom], 
+			[business_unit_id], 
+			[business_unit_code], 
+			[business_unit_name], 
+			[datasource_id], 
+			[insert_date], 
+			[datasource_update_date])
 		SELECT
 			@group_page_code,
 			@group_page_name,
 			@group_page_name_resource_key,
-			@counter,
 			@group_code,
 			@group_name,
 			0,
@@ -357,15 +394,23 @@ OPEN CustomCursor
 FETCH NEXT FROM CustomCursor INTO @group_page_code,@group_page_name,@group_page_name_resource_key,@group_code,@group_name,@datasource_id
 WHILE @@FETCH_STATUS = 0
 BEGIN
-	SELECT @counter = ISNULL(MAX(group_id), 0) FROM mart.dim_group_page
-	SET @counter = @counter + 1
-	
-	INSERT INTO mart.dim_group_page
+	INSERT INTO [mart].[dim_group_page] (
+			[group_page_code], 
+			[group_page_name], 
+			[group_page_name_resource_key], 
+			[group_code], 
+			[group_name], 
+			[group_is_custom], 
+			[business_unit_id], 
+			[business_unit_code], 
+			[business_unit_name], 
+			[datasource_id], 
+			[insert_date], 
+			[datasource_update_date])
 	SELECT
 		@group_page_code,
 		@group_page_name,
 		@group_page_name_resource_key,
-		@counter,
 		@group_code,
 		@group_name,
 		1,
@@ -408,16 +453,24 @@ OPEN OptionalColumnCursor
 FETCH NEXT FROM OptionalColumnCursor INTO @group_page_code,@group_page_name,@group_page_name_resource_key,@group_code,@group_name,@datasource_id
 WHILE @@FETCH_STATUS = 0
 BEGIN
-	SELECT @counter = ISNULL(MAX(group_id), 0) FROM mart.dim_group_page
-	SET @counter = @counter + 1
-	
 	-- Insert row where the group page NOT already exists
-	INSERT INTO mart.dim_group_page
+	INSERT INTO [mart].[dim_group_page] (
+			[group_page_code], 
+			[group_page_name], 
+			[group_page_name_resource_key], 
+			[group_code], 
+			[group_name], 
+			[group_is_custom], 
+			[business_unit_id], 
+			[business_unit_code], 
+			[business_unit_name], 
+			[datasource_id], 
+			[insert_date], 
+			[datasource_update_date])
 	SELECT
 		@group_page_code,
 		@group_page_name,
 		@group_page_name_resource_key,
-		@counter,
 		@group_code,
 		@group_name,
 		0,

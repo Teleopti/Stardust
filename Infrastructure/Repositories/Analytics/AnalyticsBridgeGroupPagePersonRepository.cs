@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				var query = _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
 				$@"exec mart.[etl_bridge_group_page_person_insert]
 					 @person_codes=:{nameof(personIds)}
-					,@group_page_code=:{nameof(groupId)}
+					,@group_code=:{nameof(groupId)}
 					,@business_unit_code=:{nameof(businessUnitId)}")
 				.SetParameter(nameof(personIds), string.Join(",", batch))
 				.SetParameter(nameof(groupId), groupId)

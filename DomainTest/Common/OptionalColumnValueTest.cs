@@ -35,11 +35,11 @@ namespace Teleopti.Ccc.DomainTest.Common
         public void VerifyReferenceIdCanSet()
         {
             const string columnValue = "Value";
-        	var person = new Person();
+        	var column = new OptionalColumn("mammakolumn");
 
-        	_value = new OptionalColumnValue(columnValue) {ReferenceObject = person};
+        	_value = new OptionalColumnValue(columnValue) {ReferenceObject = column};
 
-        	Assert.That(_value.ReferenceObject, Is.EqualTo(person));
+        	Assert.That(_value.ReferenceObject, Is.EqualTo(column));
         }
     }
 }
