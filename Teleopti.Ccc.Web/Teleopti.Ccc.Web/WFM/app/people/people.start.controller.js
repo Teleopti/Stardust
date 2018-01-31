@@ -84,8 +84,33 @@ angular.module('wfm.people')
 				role: 'Agent',
 				phone: '123456123'
 			},
-
 		];
+
+		$scope.disabledOptions = true;
+
+		$scope.existingRoles = [
+			{name: 'Agent', checked: true},
+			{name: 'Team leader', checked: true}
+		];
+
+		$scope.roles = [
+			{name: 'Agent', checked: true},
+			{name: 'Team leader', checked: true},
+			{name: 'London, site admin', checked: false},
+			{name: 'Partner Web', checked: false},
+			{name: 'Store staff', checked: false},
+			{name: 'Super Administrator Role', checked: false}
+		];
+
+		$scope.checkExistingRoles = function(role){
+			var exists = false;
+			angular.forEach($scope.existingRoles, function(value, key){
+				if(value.name === role.name){
+					exists = true;
+				}
+			});
+			return exists;
+		}
 
 		$scope.paginationOptions = { pageNumber: 1, totalPages: 7 };
 		$scope.getPageData = function (pageIndex) {
@@ -95,14 +120,23 @@ angular.module('wfm.people')
 		$scope.multi = false;
 		$scope.itemArr = [];
 		$scope.assertMulti = function (item) {
-			if ($scope.itemArr.length > 0) {
-				$scope.multi = true;
-				$scope.itemArr.push(item);
-			} else {
-				$scope.multi = true;
+			var indexOfItem = $scope.itemArr.indexOf(item);
+
+			if(indexOfItem !== -1) {
+				$scope.itemArr.splice(indexOfItem, 1); 
+			}else{
 				$scope.itemArr.push(item);
 			}
 		}
+
+		$scope.modalShownGrant = false;
+		$scope.modalShownRevoke = false;
+
+		$scope.close = function(){
+			$scope.modalShownGrant = false;
+			$scope.modalShownRevoke = false;
+		}
+
 		$scope.resetMulti = function () {
 			$scope.itemArr = [];
 			$scope.multi = false;

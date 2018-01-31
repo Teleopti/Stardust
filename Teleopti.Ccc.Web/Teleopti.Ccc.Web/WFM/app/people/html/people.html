@@ -1,14 +1,13 @@
 ﻿<style>
-
 	.agent-row {
-		border-bottom: 1px solid rgba(0,0,0,0.12);
+		border-bottom: 1px solid rgba(0, 0, 0, 0.12);
 		border-left: 3px solid transparent;
 	}
 
-		.agent-row:hover {
-			background: rgba(0,0,0,0.12);
-			border-left: 3px solid #888;
-		}
+	.agent-row:hover {
+		background: rgba(0, 0, 0, 0.12);
+		border-left: 3px solid #888;
+	}
 
 	.person-header {
 		background: dodgerblue;
@@ -31,7 +30,8 @@
 		margin-top: 15px;
 	}
 
-	.mm, .front {
+	.mm,
+	.front {
 		display: inline-grid;
 	}
 
@@ -60,14 +60,9 @@
 
 	<div class="view-header with-fab with-desc">
 		<div class="view-title">
-			<h1><i class="mdi mdi-account"></i> People</h1>
+			<h1>
+				<i class="mdi mdi-account"></i> People</h1>
 			<p>Optional description of the view goes here.</p>
-		</div>
-		<div class="fab-wrapper">
-			<button class="wfm-fab material-depth-1">
-				<i class="mdi mdi-plus"></i>
-				<md-tooltip>Add something</md-tooltip>
-			</button>
 		</div>
 	</div>
 
@@ -75,42 +70,33 @@
 		<div class="con-flex">
 			<div class="panel material-depth-1">
 				<div class="sub-header">
-					<label for="filter" class="input-icon">
-						<i class="mdi mdi-filter-outline">
-							<input type="text" id="filter" placeholder="filter roles..." style="width:200px;" ng-model="filterInput">
-							<md-tooltip>Filter</md-tooltip>
-						</i>
-					</label>
-					<div class="head-actions panel-menu">
-						<div tabindex=0 class="context-menu card-context">
-							<i class="mdi mdi-dots-vertical"></i>
-							<span class="context-menu-left">
-								<ul class="wfm-list">
-									<li>Menu item 1</li>
-									<li>Menu item 2</li>
-									<li>Menu item 3</li>
-								</ul>
-							</span>
+					<div class="con-row">
+						<div class="con-flex">
+							<label for="filter" class="input-icon">
+								<i class="mdi mdi-filter-outline">
+									<input type="text" id="filter" placeholder="filter roles..." ng-model="filterInput">
+									<md-tooltip>Filter</md-tooltip>
+								</i>
+							</label>
 						</div>
-					</div>
-				</div>
-				<div class="con-row animate-show" ng-show="multi">
-					<div class="con-flex">
-						<button type="button" class="wfm-btn wfm-btn-default" name="button" ng-click="multiModalShown = !multiModalShown">multi edit</button>
-						<button type="button" class="wfm-btn wfm-btn-default" name="button" ng-click="resetMulti()">clear</button>
+						<div class="con-flex x3">
+							<button class="wfm-btn wfm-btn-primary" ng-disabled="itemArr.length === 0" ng-class="{'wfm-btn-invis-disabled': itemArr.length === 0}" ng-click="modalShownGrant = !modalShownGrant">Grant Role</button>
+							<button class="wfm-btn wfm-btn-primary" ng-disabled="itemArr.length === 0" ng-class="{'wfm-btn-invis-disabled': itemArr.length === 0}" ng-click="modalShownRevoke = !modalShownRevoke">Revoke Role</button>
+						</div>
 					</div>
 				</div>
 				<div class="con-row">
 					<div class="con-flex">
 
 						<ul>
-							<li ng-repeat="person in people | filter: filterInput" class="con-row align-row-baseline agent-row" ng-click="modalShown = !modalShown">
+							<li ng-repeat="person in people | filter: filterInput" class="con-row align-row-baseline agent-row">
 								<div class="con-flex">
-									<div tabindex=0 class="context-menu card-context" ng-click="person.marked = !person.marked; assertMulti(person); $event.stopPropagation();" ng-class="{'notice-success':person.marked, 'notice-info':!person.marked}">
+									<div tabindex=0 class="context-menu card-context" ng-click="person.marked = !person.marked; assertMulti(person); $event.stopPropagation();"
+									 ng-class="{'notice-success':person.marked, 'notice-info':!person.marked}">
 										<i class="mdi mdi-account" ng-class="{'mdi-check':person.marked}"></i>
 										<md-tooltip>Select person</md-tooltip>
 									</div>
-									{{person.firstName}}   {{person.lastName}}
+									{{person.firstName}} {{person.lastName}}
 								</div>
 								<div class="con-flex">
 									{{person.phone}}
@@ -124,7 +110,7 @@
 										<div class="avatar">
 											<i class="mdi mdi-account"></i>
 										</div>
-										<h1>{{person.firstName}}   {{person.lastName}}</h1>
+										<h1>{{person.firstName}} {{person.lastName}}</h1>
 									</div>
 									<div class="con-row">
 										<div class="con-flex">
@@ -152,7 +138,6 @@
 
 							</li>
 						</ul>
-
 						<modal-dialog show='multiModalShown' ng-cloak>
 							<div class="person-header relative">
 								<div class="avatar mm x1">
@@ -172,14 +157,15 @@
 										<h3>Personal information</h3>
 										<div class="form-input-wrap">
 											<label for="nameId">Role:</label>
-											<input type="text" ng-model="form.input0" placeholder="Leave blank to not change" name="Name" required="" id="nameId" autofocus />
+											<input type="text" ng-model="form.input0" placeholder="Leave blank to not change" name="Name" required="" id="nameId1" autofocus
+											/>
 											<div ng-cloak class="animate-show" ng-show="form.$submitted || form.Name.$touched">
 												<div class="form-input-message" ng-class="{formInvalidInput:form.Name.$error.required}">Requered</div>
 											</div>
 										</div>
 										<div class="form-input-wrap">
 											<label for="nameId">Something:</label>
-											<input type="number" ng-model="form.input1" placeholder="Leave blank to not change" name="Age" required="" id="nameId" />
+											<input type="number" ng-model="form.input1" placeholder="Leave blank to not change" name="Age" required="" id="nameId2" />
 											<div ng-cloak class="animate-show" ng-show="form.$submitted || form.Age.$touched">
 												<div class="form-input-message" ng-class="{formInvalidInput:form.Age.$error.required}">Leave blank to not change</div>
 											</div>
@@ -187,7 +173,8 @@
 										<h3>Skills</h3>
 										<div class="form-input-wrap">
 											<label for="nameId">Something else:</label>
-											<input type="password" ng-model="form.input2" placeholder="Leave blank to not change" name="Password" required="" id="nameId" />
+											<input type="password" ng-model="form.input2" placeholder="Leave blank to not change" name="Password" required="" id="nameId3"
+											/>
 											<div ng-cloak class="animate-show" ng-show="form.$submitted || form.Password.$touched">
 												<div class="form-input-message" ng-class="{formInvalidInput:form.Password.$error.required}">Leave blank to not change</div>
 											</div>
@@ -202,7 +189,56 @@
 								</aside>
 							</div>
 						</modal-dialog>
-
+						<modal-dialog show='modalShownGrant' ng-cloak>
+							<div class="person-header relative">
+								<div class="avatar">
+									<i class="mdi mdi-account"></i>
+								</div>
+								<h1>{{person.firstName}} {{person.lastName}}</h1>
+							</div>
+							<div class="con-fluid-row">
+								<div class="con-fluid-flex" ng-repeat="existingRole in existingRoles">
+									<div>
+										<md-checkbox ng-model="existingRole.checked" ng-checked="true" ng-disabled="true" aria-label="Checkbox">{{existingRole.name}} <span ng-bind="item.id"></span></md-checkbox>
+									</div>
+								</div>
+							</div>
+							<hr/>
+							<div class="con-fluid-row">
+								<div class="con-fluid-flex" ng-repeat="role in roles">
+									<div ng-if="checkExistingRoles(role) === false">
+										<md-checkbox ng-model="role.checked" aria-label="Checkbox">{{role.name}} <span ng-bind="item.id"></span></md-checkbox>
+									</div>
+								</div>
+							</div>
+							<div class="modal-actions">
+								<aside>
+									<button class="wfm-btn wfm-btn-invis" ng-click="close()">Edit</button>
+									<button class="wfm-btn wfm-btn-invis-primary" ng-click="close()">Close</button>
+								</aside>
+							</div>
+						</modal-dialog>
+						<modal-dialog show='modalShownRevoke' ng-cloak>
+							<div class="person-header relative">
+								<div class="avatar">
+									<i class="mdi mdi-account"></i>
+								</div>
+								<h1>{{person.firstName}} {{person.lastName}}</h1>
+							</div>
+							<div class="con-fluid-row">
+								<div class="con-fluid-flex" ng-repeat="existingRole in existingRoles">
+									<div>
+										<md-checkbox ng-model="existingRole.checked" ng-checked="true" aria-label="Checkbox">{{existingRole.name}} <span ng-bind="item.id"></span></md-checkbox>
+									</div>
+								</div>
+							</div>
+							<div class="modal-actions">
+								<aside>
+									<button class="wfm-btn wfm-btn-invis" ng-click="close()">Edit</button>
+									<button class="wfm-btn wfm-btn-invis-primary" ng-click="close()">Close</button>
+								</aside>
+							</div>
+						</modal-dialog>
 					</div>
 				</div>
 				<div class="con-footer">
@@ -211,5 +247,4 @@
 			</div>
 		</div>
 	</div>
-
 </div>
