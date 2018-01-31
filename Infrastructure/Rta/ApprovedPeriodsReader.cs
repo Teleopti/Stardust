@@ -20,7 +20,15 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		public IEnumerable<ApprovedPeriod> Read(Guid personId, DateTime startTime, DateTime endTime)
 		{
 			return _unitOfWork.Current().Session()
-				.CreateSQLQuery(@"SELECT * FROM [rta].[ApprovedPeriods]")
+				.CreateSQLQuery(@"
+SELECT * FROM [rta].[ApprovedPeriods] 
+WHERE PersonId = :PersonId
+AND StartTime <= :EndTime
+AND EndTime >= :StartTime
+")
+				.SetParameter("PersonId", personId)
+				.SetParameter("StartTime", startTime)
+				.SetParameter("EndTime", endTime)
 				.SetResultTransformer(Transformers.AliasToBean<ApprovedPeriod>())
 				.List<ApprovedPeriod>();
 		}
