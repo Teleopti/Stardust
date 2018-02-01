@@ -16,6 +16,7 @@
 			<command-check ng-if="vm.activeCommandCheck()"></command-check>
 			<add-day-off ng-if="!vm.activeCommandCheck() && vm.activeCmd == 'AddDayOff'"></add-day-off>
 			<remove-day-off ng-if="!vm.activeCommandCheck() && vm.activeCmd == 'RemoveDayOff'"></remove-day-off>
+			<remove-shift ng-if="!vm.activeCommandCheck() && vm.activeCmd == 'RemoveShift'"></remove-shift>
 		</div>
 	</div>
 </md-sidenav>

@@ -120,7 +120,7 @@
 			expect(fakeNoticeService.warningMessage).toEqual("warning : agent1");
 			expect(!!result.ctrl.containerCtrl.activeCmd).toEqual(false);
 		});
-		it('should show error notification and reset active command when remove day off apply with remove', function () {
+		it('should show error notification and reset active command when remove day off apply with error', function () {
 			var result = setUpAndApplyRemoveDayOff("2018-01-12", {
 				data: [{
 					PersonId: 'agent1', ErrorMessages: ['error']
