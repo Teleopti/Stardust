@@ -1,13 +1,6 @@
 @charset "UTF-8";
 
 .outbound {
-	.outbound-summary {
-		padding: 10px;
-	}
-	.wrong-sign, .right-sign {
-		//need to do this in date-range-picker, ng-valid and ng-invalid cant be together
-		display: none !important;
-	}
 	.ng-valid-required {
 		.invalidWorkingHours {
 			display: block;
@@ -17,14 +10,6 @@
 		.invalidWorkingHours {
 			display: none;
 		}
-	}
-	.threshold-slider {
-		width: 250px;
-	}
-	.threshold-slider>div {
-		position: absolute;
-		top: 0;
-		left: 3px;
 	}
 	//Move this to styleguide and refactor
 	campaign-commands-pane input.ng-invalid.ng-dirty {
@@ -71,12 +56,9 @@
 	.gantt-datepicker {
 		position: absolute;
 		top: 5rem;
-		// left: 50%;
 		z-index: 1000;
-		// margin-left: -130px;
 	}
 	.gantt-datepicker-container {
-		//one line
 		.wfm-datepicker-wrap {
 			min-height: auto;
 			padding: 5px;
@@ -87,7 +69,6 @@
 	}
 	.outbound-gantt-chart {
 		position: relative;
-		// border: 1px solid $gray012;
 
 		.gantt-alert-message {
 			position: absolute;
