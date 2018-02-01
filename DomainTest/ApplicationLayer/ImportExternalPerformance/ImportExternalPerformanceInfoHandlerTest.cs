@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
@@ -30,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		public FakeJobResultRepository JobResultRepository;
 		public FakeExternalPerformanceRepository ExternalPerformanceTypeRepository;
 		public FakeExternalPerformanceDataRepository ExternalPerformanceDataRepository;
-		public FakePersonRepository PersonRepository;
+		public FakePersonFinderReadOnlyRepository PersonFinderReadOnlyRepository;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -42,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			system.UseTestDouble<FakeTenantLogonDataManager>().For<ITenantLogonDataManager>();
 			system.UseTestDouble<FakeExternalPerformanceRepository>().For<IExternalPerformanceRepository>();
 			system.UseTestDouble<FakeExternalPerformanceDataRepository>().For<IExternalPerformanceDataRepository>();
-			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
+			system.UseTestDouble<FakePersonFinderReadOnlyRepository>().For<IPersonFinderReadOnlyRepository>();
 		}
 
 		[Test]
@@ -107,7 +106,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			IPerson person = PersonFactory.CreatePerson("Kalle").WithId();
 			const string employmentNum = "1";
 			person.SetEmploymentNumber(employmentNum);
-			PersonRepository.Add(person);
+			PersonFinderReadOnlyRepository.Has(person);
 
 			var jobResult = NewJobResult();
 			string stringContent = "20171120,1,Kalle,Pettersson,Quality Score,1,Percent,87\n" + "20171120,1,Kalle,Pettersson,Sales Result,2,Numeric,2000";
@@ -130,7 +129,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			IPerson person = PersonFactory.CreatePerson("Kalle").WithId();
 			const string employmentNum = "1";
 			person.SetEmploymentNumber(employmentNum);
-			PersonRepository.Add(person);
+			PersonFinderReadOnlyRepository.Has(person);
 
 			var jobResult = NewJobResult();
 			string stringContent = "20171120,1,Kalle,Pettersson,Quality Score,1,Percent,87\n" + "20171120,137727,Kalle,Pettersson,Sales Result,2,aa,2000";
@@ -173,7 +172,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			IPerson person = PersonFactory.CreatePerson("Kalle").WithId();
 			const string employmentNum = "1";
 			person.SetEmploymentNumber(employmentNum);
-			PersonRepository.Add(person);
+			PersonFinderReadOnlyRepository.Has(person);
 
 			var jobResult = NewJobResult();
 			var fileContent = Encoding.UTF8.GetBytes("20171120,1,Kalle,Pettersson,Quality Score,1,Percent,87");
