@@ -327,6 +327,7 @@
     <Compile Include="ApplicationLayer\Rta\AgentAdherenceDay\IHistoricalChangeReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\Rta\AgentAdherenceDay\IHistoricalChangeReadModelReader.cs" />
     <Compile Include="ApplicationLayer\Rta\AgentAdherenceDay\OutOfAdherencePeriod.cs" />
+    <Compile Include="ApplicationLayer\Rta\AgentAdherenceDay\ScheduleLoader.cs" />
     <Compile Include="ApplicationLayer\Rta\Configuration\ConfigurationValidationViewModel.cs" />
     <Compile Include="ApplicationLayer\Rta\Configuration\ConfigurationValidator.cs" />
     <Compile Include="ApplicationLayer\Rta\Configuration\IConfigurationValidator.cs" />

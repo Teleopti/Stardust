@@ -14,27 +14,24 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 {
 	public class HistoricalAdherenceViewModelBuilder
 	{
-		private readonly ICurrentScenario _scenario;
-		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IPersonRepository _persons;
+		private readonly ScheduleLoader _schedule;
 		private readonly INow _now;
 		private readonly IUserTimeZone _timeZone;
 		private readonly AgentAdherenceDayLoader _agentAdherenceDayLoader;
 		private readonly int _displayPastDays;
 
 		public HistoricalAdherenceViewModelBuilder(
-			ICurrentScenario scenario,
-			IScheduleStorage scheduleStorage,
 			IPersonRepository persons,
+			ScheduleLoader schedule,
 			INow now,
 			IUserTimeZone timeZone,
 			IConfigReader config,
 			AgentAdherenceDayLoader agentAdherenceDayLoader
 		)
 		{
-			_scenario = scenario;
-			_scheduleStorage = scheduleStorage;
 			_persons = persons;
+			_schedule = schedule;
 			_now = now;
 			_timeZone = timeZone;
 			_agentAdherenceDayLoader = agentAdherenceDayLoader;
@@ -49,17 +46,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 				Person = _persons.Load(personId),
 			};
 
-			loadCommonInto(data);
+			loadAgentTimeInto(data);
 			data.Date = date;
+			loadDefaultDisplayInto(data);
 			loadScheduleInto(data);
-			loadDisplayInto(data);
-			data.AdherenceDay = _agentAdherenceDayLoader.Load(
-				data.PersonId,
-				data.Date,
-				data.DisplayStartTime,
-				data.DisplayEndTime,
-				data.ShiftStartTime,
-				data.ShiftEndTime);
+
+			data.AdherenceDay = _agentAdherenceDayLoader
+				.Load(
+					data.PersonId,
+					data.TimeZone,
+					data.Date
+				);
 
 			return new HistoricalAdherenceViewModel
 			{
@@ -103,51 +100,28 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			public DateTime? ShiftEndTime;
 		}
 
-		private void loadCommonInto(data data)
+		private void loadAgentTimeInto(data data)
 		{
 			data.TimeZone = data.Person?.PermissionInformation.DefaultTimeZone() ?? TimeZoneInfo.Utc;
 			data.AgentNow = TimeZoneInfo.ConvertTimeFromUtc(_now.UtcDateTime(), data.TimeZone);
 		}
 
-		private void loadDisplayInto(data data)
+		private void loadDefaultDisplayInto(data data)
 		{
 			var startTime = TimeZoneInfo.ConvertTimeToUtc(data.Date.Date, data.TimeZone);
 			data.DisplayStartTime = startTime;
 			data.DisplayEndTime = startTime.AddDays(1);
-
-			if (data.Schedule.Any())
-			{
-				data.DisplayStartTime = data.ShiftStartTime.Value.AddHours(-1);
-				data.DisplayEndTime = data.ShiftEndTime.Value.AddHours(1);
-			}
 		}
 
 		private void loadScheduleInto(data data)
 		{
-			data.Schedule = Enumerable.Empty<IVisualLayer>();
-
-			var scenario = _scenario.Current();
-			if (scenario != null && data.Person != null)
-			{
-				var period = new DateOnlyPeriod(data.Date, data.Date);
-
-				var schedules = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(
-					new[] {data.Person},
-					new ScheduleDictionaryLoadOptions(false, false),
-					period,
-					scenario);
-
-				data.Schedule = schedules[data.Person]
-					.ScheduledDay(data.Date)
-					.ProjectionService()
-					.CreateProjection();
-			}
-
-			if (data.Schedule.Any())
-			{
-				data.ShiftStartTime = data.Schedule.Min(x => x.Period.StartDateTime);
-				data.ShiftEndTime = data.Schedule.Max(x => x.Period.EndDateTime);
-			}
+			data.Schedule = _schedule.Load(data.PersonId, data.Date);
+			if (!data.Schedule.Any())
+				return;
+			data.ShiftStartTime = data.Schedule.Min(x => x.Period.StartDateTime);
+			data.ShiftEndTime = data.Schedule.Max(x => x.Period.EndDateTime);
+			data.DisplayStartTime = data.ShiftStartTime.Value.AddHours(-1);
+			data.DisplayEndTime = data.ShiftEndTime.Value.AddHours(1);
 		}
 
 		private IEnumerable<HistoricalAdherenceActivityViewModel> buildSchedules(IEnumerable<IVisualLayer> layers)
