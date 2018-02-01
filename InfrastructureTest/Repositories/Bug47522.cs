@@ -90,5 +90,46 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				Assert.DoesNotThrow(() => { uow.PersistAll(); }); //Here an optimistic lock is thrown
 			}
 		}
+		
+		[Test]
+		[Ignore("This also fails")]
+		public void SameProblemNotUsingPersonRequestAtAll()
+		{
+			var activity = new Activity(".");
+			var person = PersonFactory.CreatePerson("test");
+			var scenario = ScenarioFactory.CreateScenario("testScenario", true, false);
+			var date = new DateOnly(2018, 1, 31);
+			using (var uowSetup1 = UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			{
+				ScenarioRepository.Add(scenario);
+				ActivityRepository.Add(activity);
+				PersonRepository.Add(person);
+				PersonAssignmentRepository.Add(new PersonAssignment(person, scenario, date));
+				uowSetup1.PersistAll();
+			}
+			
+			using (var uow = UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			{
+				PersonAssignmentRepository.Find(new[]{person}, date.ToDateOnlyPeriod(), scenario);
+				var other = new Thread(() =>
+				{
+					//client 2
+					using (var uow2 = UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+					{
+						var personAss = PersonAssignmentRepository.Find(new[]{person}, date.ToDateOnlyPeriod(), scenario).Single();
+						personAss.AddActivity(activity, new DateTimePeriod(2018, 1, 31, 11, 2018, 1, 31, 17));
+						uow2.Merge(personAss);
+						uow2.PersistAll();
+					}
+				});
+				other.Start();
+				other.Join();
+
+				PersonAssignmentRepository.Find(new[]{person}, date.ToDateOnlyPeriod(), scenario);
+
+
+				Assert.DoesNotThrow(() => { uow.PersistAll(); });
+			}
+		}
 	}
 }
