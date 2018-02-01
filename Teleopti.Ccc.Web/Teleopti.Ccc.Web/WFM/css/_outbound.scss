@@ -295,19 +295,21 @@
 		position: relative;
 		white-space: nowrap;
 	}
+
+	.wfm-form label {
+		width: 100%;
+	}
+
 	activity-picker {
 		display: block;
 
 		.polymorphic-input-body {
-			width: 50%;
-			display: inline-block;
+			width: 100%;
 
-			select {
-				padding: 0;
+			md-select-value span{
+				max-width: 200px;
+				white-space: nowrap;
 			}
-		}
-		.divider {
-			display: none;
 		}
 	}
 	.loading {
