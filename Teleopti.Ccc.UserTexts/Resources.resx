@@ -17156,4 +17156,8 @@ Do you want to participate?</value>
     <value>Showing the first {0} error messages of {1}.</value>
     <comment>There where more than 20 rows with errors and we only show the first 20</comment>
   </data>
+  <data name="RemoveShift" xml:space="preserve">
+    <value>Remove Shift</value>
+    <comment>command item for remove shift</comment>
+  </data>
 </root>

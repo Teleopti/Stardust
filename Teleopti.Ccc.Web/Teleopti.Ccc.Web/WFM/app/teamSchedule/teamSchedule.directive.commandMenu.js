@@ -129,6 +129,14 @@
 				visible: function () { return vm.canActiveDayOff(); }
 			},
 			{
+				label: "RemoveShift",
+				shortcut: "Alt+V",
+				keys: [[keyCodes.V], [keyCodes.ALT]],
+				action: buildAction("RemoveShift", true),
+				clickable: function () { return vm.canRemoveShift(); },
+				visible: function () { return vm.canActiveRemoveShift(); }
+			},
+			{
 				label: "EditShiftCategory",
 				shortcut: "Alt+C",
 				keys: [[keyCodes.C], [keyCodes.ALT]],
@@ -165,6 +173,10 @@
 
 		vm.canActiveDayOff = function () {
 			return vm.toggles.WfmTeamSchedule_AddNDeleteDayOff_40555;
+		};
+
+		vm.canActiveRemoveShift = function () {
+			return vm.toggles.WfmTeamSchedule_RemoveShift_46322 && vm.permissions.HasRemoveShiftPermission;
 		};
 
 		vm.canActiveMoveActivity = function () {
@@ -232,6 +244,7 @@
 		vm.canUndoSchedule = function () {
 			return personSelectionSvc.anyAgentChecked();
 		};
+
 		vm.canRemoveDayOff = function() {
 			var selectedPersonInfoList = personSelectionSvc.getCheckedPersonInfoList();
 			if (selectedPersonInfoList.length === 0) return false;
@@ -243,6 +256,15 @@
 			});
 			return selectedDayOffs.length > 0;
 		}
+
+		vm.canRemoveShift = function () {
+			var selectedPersonInfoList = personSelectionSvc.getCheckedPersonInfoList();
+		
+			return !!selectedPersonInfoList.length && !!selectedPersonInfoList.filter(function (p) {
+				return p.Checked && p.SelectedActivities && p.SelectedActivities.filter(function (a) { return !a.isOvertime;}).length > 0;
+			}).length;
+		}
+
 		vm.activateCommandMenu = function(){
 			return vm.canRemoveActivity() || vm.canRemoveAbsence() || personSelectionSvc.anyAgentChecked();
 		};

@@ -261,7 +261,6 @@
 		expect(menuListItemForRemovingDayOff[0].innerText).toBe('RemoveDayOff');
 	});
 
-
 	it('should add day off menu item unclickable unless at least one person is selected', function () {
 		var date = "2018-01-16";
 		var html = '<teamschedule-command-menu selected-date="vm.selectedDate"></teamschedule-command-menu>';
@@ -277,7 +276,15 @@
 		var menuListItemForAddingDayOff = angular.element(element[0].querySelector('.wfm-list #menuItemAddDayOff'));
 		expect(menuListItemForAddingDayOff[0].disabled).toEqual(true);
 
-		personSelectionSvc.hasAgentSelected(true);
+		var selectedAgents = [
+			{
+				PersonId: 'agent1',
+				Name: 'agent1',
+				Checked: true,
+				SelectedDayOffs: [],
+				SelectedAbsences: []
+			}];
+		personSelectionSvc.setFakeCheckedPersonInfoList(selectedAgents);
 		scope.$apply();
 
 		menuListItemForAddingDayOff = angular.element(element[0].querySelector('.wfm-list #menuItemAddDayOff'));
@@ -325,7 +332,286 @@
 
 		menuListItemForRemovingDayOff = angular.element(element[0].querySelector('.wfm-list #menuItemRemoveDayOff'));
 		expect(menuListItemForRemovingDayOff[0].disabled).toEqual(false);
+
+
 	});
+
+	it('should not view remove shift menu unless toggle is on', function () {
+		var html = '<teamschedule-command-menu></teamschedule-command-menu>';
+		var scope = $rootScope.$new();
+		scope.vm = {
+			toggleCurrentSidenav: function () { }
+		};
+
+		var element = $compile(html)(scope);
+		scope.$apply();
+
+		var menu = angular.element(element[0].querySelector('#scheduleContextMenuButton'));
+		var menuListItemForRemoveShift = angular.element(element[0].querySelector('.wfm-list #menuItemRemoveShift span'));
+		expect(menu.length).toBe(1);
+		expect(menuListItemForRemoveShift[0].innerText).toBe('RemoveShift');
+
+		element.isolateScope().vm.toggles.WfmTeamSchedule_RemoveShift_46322 = false;
+		scope.$apply();
+		menuListItemForRemoveShift = angular.element(element[0].querySelector('.wfm-list #menuItemRemoveShift span'));
+		expect(menuListItemForRemoveShift.length).toBe(0);
+	});
+
+	it('should not view removing shift menu when user does not have permission and toggle is on', function () {
+		var html = '<teamschedule-command-menu></teamschedule-command-menu>';
+		var scope = $rootScope.$new();
+		scope.vm = {
+			toggleCurrentSidenav: function () { }
+		};
+		permissions.set({
+			HasRemoveShiftPermission: false
+		});
+
+		var element = $compile(html)(scope);
+		scope.$apply();
+
+		var menuListItemForRemoveShift = angular.element(element[0].querySelector('.wfm-list #menuItemRemoveShift'));
+		expect(menuListItemForRemoveShift.length).toEqual(0);
+	});
+
+	it('should remove shift menu item inactive when only full day absence is selected', function () {
+		var date = "2018-02-01";
+		var html = '<teamschedule-command-menu selected-date="vm.selectedDate"></teamschedule-command-menu>';
+		var scope = $rootScope.$new();
+		scope.vm = {
+			toggleCurrentSidenav: function () { },
+			selectedDate: date
+		};
+
+		var element = $compile(html)(scope);
+		scope.$apply();
+
+		var selectedAgents = [
+			{
+				PersonId: 'agent1',
+				Name: 'agent1',
+				Checked: true,
+				IsFullDayAbsence: true,
+				SelectedDayOffs: [],
+				SelectedAbsences: ['absence']
+			}];
+		personSelectionSvc.setFakeCheckedPersonInfoList(selectedAgents);
+		scope.$apply();
+
+		var menuListItemForRemoveShift = angular.element(element[0].querySelector('.wfm-list #menuItemRemoveShift'));
+		expect(menuListItemForRemoveShift[0].disabled).toEqual(true);
+	});
+
+	it("should remove shift menu item unclickable when only one person with day off is selected", function () {
+		var date = "2018-01-16";
+		var html = '<teamschedule-command-menu selected-date="vm.selectedDate"></teamschedule-command-menu>';
+		var scope = $rootScope.$new();
+		scope.vm = {
+			toggleCurrentSidenav: function () { },
+			selectedDate: date
+		};
+		var element = $compile(html)(scope);
+		scope.$apply();
+
+		var selectedAgents = [
+			{
+				PersonId: 'agent1',
+				Name: 'agent1',
+				Checked: true,
+				SelectedDayOffs: [{ Date: date }]
+			}];
+		personSelectionSvc.setFakeCheckedPersonInfoList(selectedAgents);
+		scope.$apply();
+
+		menuListItemForRemoveShift = angular.element(element[0].querySelector('.wfm-list #menuItemRemoveShift'));
+		expect(menuListItemForRemoveShift[0].disabled).toEqual(true);
+	});
+
+	it("should remove shift menu item unclickable when having day off and partial shift being selected", function () {
+		var date = "2018-01-16";
+		var html = '<teamschedule-command-menu selected-date="vm.selectedDate"></teamschedule-command-menu>';
+		var scope = $rootScope.$new();
+		scope.vm = {
+			toggleCurrentSidenav: function () { },
+			selectedDate: date
+		};
+		var element = $compile(html)(scope);
+		scope.$apply();
+
+		var selectedAgents = [
+			{
+				PersonId: 'agent1',
+				Name: 'agent1',
+				Checked: true,
+				SelectedDayOffs: [{ Date: date }]
+			},
+			{
+				PersonId: 'agent1',
+				Name: 'agent1',
+				Checked: false,
+				SelectedActivities: ['activity1'],
+				SelectedDayOffs:[]
+			}
+		];
+		personSelectionSvc.setFakeCheckedPersonInfoList(selectedAgents);
+		scope.$apply();
+		
+		menuListItemForRemoveShift = angular.element(element[0].querySelector('.wfm-list #menuItemRemoveShift'));
+		expect(menuListItemForRemoveShift[0].disabled).toEqual(true);
+	});
+
+	it("should remove shift menu item unclickable when having full day absence and partial shift being selected", function () {
+		var date = "2018-01-16";
+		var html = '<teamschedule-command-menu selected-date="vm.selectedDate"></teamschedule-command-menu>';
+		var scope = $rootScope.$new();
+		scope.vm = {
+			toggleCurrentSidenav: function () { },
+			selectedDate: date
+		};
+		var element = $compile(html)(scope);
+		scope.$apply();
+
+		var selectedAgents = [
+			{
+				PersonId: 'agent1',
+				Name: 'agent1',
+				Checked: true,
+				IsFullDayAbsence: true,
+				SelectedAbsences: ["absence"],
+				SelectedDayOffs: []
+			},
+			{
+				PersonId: 'agent1',
+				Name: 'agent1',
+				Checked: false,
+				SelectedActivities: ['activity1'],
+				SelectedDayOffs: []
+			}
+		];
+		personSelectionSvc.setFakeCheckedPersonInfoList(selectedAgents);
+		scope.$apply();
+
+		menuListItemForRemoveShift = angular.element(element[0].querySelector('.wfm-list #menuItemRemoveShift'));
+		expect(menuListItemForRemoveShift[0].disabled).toEqual(true);
+	});
+
+	it("should remove shift menu item unclickable when checked person has empty schedule", function () {
+		var date = "2018-01-16";
+		var html = '<teamschedule-command-menu selected-date="vm.selectedDate"></teamschedule-command-menu>';
+		var scope = $rootScope.$new();
+		scope.vm = {
+			toggleCurrentSidenav: function () { },
+			selectedDate: date
+		};
+		var element = $compile(html)(scope);
+		scope.$apply();
+
+		var selectedAgents = [
+			{
+				PersonId: 'agent1',
+				Name: 'agent1',
+				Checked: true,
+				IsFullDayAbsence: false,
+				SelectedAbsences: [],
+				SelectedDayOffs: [],
+				SelectedActivities: []
+			}
+		];
+
+		personSelectionSvc.setFakeCheckedPersonInfoList(selectedAgents);
+		scope.$apply();
+
+		menuListItemForRemoveShift = angular.element(element[0].querySelector('.wfm-list #menuItemRemoveShift'));
+		expect(menuListItemForRemoveShift[0].disabled).toEqual(true);
+	});
+
+	it("should remove shift menu item unclickable when checked person only has overtime activity", function () {
+		var date = "2018-01-16";
+		var html = '<teamschedule-command-menu selected-date="vm.selectedDate"></teamschedule-command-menu>';
+		var scope = $rootScope.$new();
+		scope.vm = {
+			toggleCurrentSidenav: function () { },
+			selectedDate: date
+		};
+		var element = $compile(html)(scope);
+		scope.$apply();
+
+		var selectedAgents = [
+			{
+				PersonId: 'agent1',
+				Name: 'agent1',
+				Checked: true,
+				IsFullDayAbsence: false,
+				SelectedAbsences: [],
+				SelectedDayOffs: [],
+				SelectedActivities: [{ isOvertime: true}]
+			}
+		];
+		personSelectionSvc.setFakeCheckedPersonInfoList(selectedAgents);
+		scope.$apply();
+
+		menuListItemForRemoveShift = angular.element(element[0].querySelector('.wfm-list #menuItemRemoveShift'));
+		expect(menuListItemForRemoveShift[0].disabled).toEqual(true);
+
+	});
+
+	it('should remove shift menu item clickable when one person with shift is checked', function () {
+		var date = "2018-02-01";
+		var html = '<teamschedule-command-menu selected-date="vm.selectedDate"></teamschedule-command-menu>';
+		var scope = $rootScope.$new();
+		scope.vm = {
+			toggleCurrentSidenav: function () { },
+			selectedDate: date
+		};
+		var element = $compile(html)(scope);
+		scope.$apply();
+
+		var selectedAgents = [
+			{
+				PersonId: 'agent1',
+				Name: 'agent1',
+				Checked: true,
+				SelectedDayOffs: [],
+				SelectedActivities: ['activites']
+			}
+		];
+		personSelectionSvc.setFakeCheckedPersonInfoList(selectedAgents);
+		scope.$apply();
+
+		var menuListItemForRemoveShift = angular.element(element[0].querySelector('.wfm-list #menuItemRemoveShift'));
+		expect(menuListItemForRemoveShift[0].disabled).toEqual(false);
+	});
+
+	it("should remove shift menu item clickable when having shift with intraday absence", function () {
+		var date = "2018-01-16";
+		var html = '<teamschedule-command-menu selected-date="vm.selectedDate"></teamschedule-command-menu>';
+		var scope = $rootScope.$new();
+		scope.vm = {
+			toggleCurrentSidenav: function () { },
+			selectedDate: date
+		};
+		var element = $compile(html)(scope);
+		scope.$apply();
+
+		var selectedAgents = [
+			{
+				PersonId: 'agent1',
+				Name: 'agent1',
+				Checked: true,
+				IsFullDayAbsence: false,
+				SelectedAbsences: ["absence"],
+				SelectedDayOffs: [],
+				SelectedActivities: ['activity1']
+			}
+		];
+		personSelectionSvc.setFakeCheckedPersonInfoList(selectedAgents);
+		scope.$apply();
+
+		menuListItemForRemoveShift = angular.element(element[0].querySelector('.wfm-list #menuItemRemoveShift'));
+		expect(menuListItemForRemoveShift[0].disabled).toEqual(false);
+	});
+
+
 
 	it('should view menu when move invalid overlapped activity is permitted', function () {
 		var html = '<teamschedule-command-menu></teamschedule-command-menu>';
@@ -362,7 +648,16 @@
 
 		scope.validateWarningEnabled = true;
 
-		personSelectionSvc.hasAgentSelected(true);
+		var selectedAgents = [
+			{
+				PersonId: 'agent1',
+				Name: 'agent1',
+				Checked: true,
+				SelectedDayOffs: [],
+				SelectedActivities: ['activites']
+			}
+		];
+		personSelectionSvc.setFakeCheckedPersonInfoList(selectedAgents);
 		personSelectionSvc.fakeSetCheckedPersonIds(overlappedWarningPersonId);
 
 		var element = $compile(html)(scope);
@@ -390,7 +685,16 @@
 
 		scope.validateWarningEnabled = true;
 
-		personSelectionSvc.hasAgentSelected(true);
+		var selectedAgents = [
+			{
+				PersonId: 'agent1',
+				Name: 'agent1',
+				Checked: true,
+				SelectedDayOffs: [],
+				SelectedActivities: ['activites']
+			}
+		];
+		personSelectionSvc.setFakeCheckedPersonInfoList(selectedAgents);
 		personSelectionSvc.fakeSetCheckedPersonIds(overlappedWarningPersonId);
 
 		var element = $compile(html)(scope);
@@ -417,7 +721,16 @@
 			HasMoveActivityPermission: true
 		});
 
-		personSelectionSvc.hasAgentSelected(true);
+		var selectedAgents = [
+			{
+				PersonId: 'agent1',
+				Name: 'agent1',
+				Checked: true,
+				SelectedDayOffs: [],
+				SelectedActivities: ['activites']
+			}
+		];
+		personSelectionSvc.setFakeCheckedPersonInfoList(selectedAgents);
 		personSelectionSvc.setSelectedPersonAndProjectionCount({
 			CheckedPersonCount: 1,
 			SelectedActivityInfo: {
@@ -442,7 +755,6 @@
 		expect(menuListItem[0].disabled).toBe(true);
 	});
 
-
 	it('should not view active Edit Shift Category command menu when no shift is selected', function () {
 		var html = '<teamschedule-command-menu  selected-date="vm.selectedDate"></teamschedule-command-menu>';
 		var scope = $rootScope.$new();
@@ -455,7 +767,16 @@
 			HasEditShiftCategoryPermission: true
 		});
 
-		personSelectionSvc.hasAgentSelected(true);
+		var selectedAgents = [
+			{
+				PersonId: 'agent1',
+				Name: 'agent1',
+				Checked: true,
+				SelectedDayOffs: [],
+				SelectedActivities: ['activites']
+			}
+		];
+		personSelectionSvc.setFakeCheckedPersonInfoList(selectedAgents);
 		personSelectionSvc.setSelectedPersonAndProjectionCount({
 			CheckedPersonCount: 1,
 			SelectedActivityInfo: {
@@ -519,13 +840,12 @@
 				AbsenceCount: 0
 			}
 		};
-		this.hasAgentSelected = function (value) {
-			hasSelected = value;
-		}
 		this.anyAgentChecked = function () {
-			return hasSelected;
+			return fakePersonList.filter(function (p) {
+				return p.Checked;
+			}).length > 0;
 		}
-		this.setSelectedPersonAndProjectionCount = function(input) {
+		this.setSelectedPersonAndProjectionCount = function (input) {
 			totalSelectedPersonAndProjectionCount = input;
 		}
 		this.getTotalSelectedPersonAndProjectionCount = function () {
@@ -553,7 +873,10 @@
 	}
 
 	function FakeToggles() {
-		var _toggles = { WfmTeamSchedule_AddNDeleteDayOff_40555: true };
+		var _toggles = {
+			WfmTeamSchedule_AddNDeleteDayOff_40555: true,
+			WfmTeamSchedule_RemoveShift_46322: true
+		};
 		this.set = function (toggles) {
 			_toggles = toggles;
 		}
@@ -563,7 +886,9 @@
 	}
 
 	function FakePermissions() {
-		var _permissions = {};
+		var _permissions = {
+			HasRemoveShiftPermission: true
+			};
 		this.set = function (permissions) {
 			_permissions = permissions;
 		}

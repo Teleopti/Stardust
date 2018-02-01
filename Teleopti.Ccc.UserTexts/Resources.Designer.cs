@@ -26371,6 +26371,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove Shift.
+        /// </summary>
+        public static string RemoveShift {
+            get {
+                return ResourceManager.GetString("RemoveShift", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove Write Protection.
         /// </summary>
         public static string RemoveWriteProtection {
