@@ -8,7 +8,7 @@ angular.module('wfm.people')
 
 		$scope.people = [
 			{
-				firstName: 'Jhon',
+				firstName: 'John',
 				id: '1',
 				lastName: 'Doe',
 				role: 'Agent',

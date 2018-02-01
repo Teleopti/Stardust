@@ -1,68 +1,11 @@
-﻿<style>
-	.agent-row {
-		border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-		border-left: 3px solid transparent;
-	}
-
-	.agent-row:hover {
-		background: rgba(0, 0, 0, 0.12);
-		border-left: 3px solid #888;
-	}
-
-	.person-header {
-		background: dodgerblue;
-		height: 50%;
-		padding: 5px;
-		text-align: center;
-		color: white;
-	}
-
-	.avatar {
-		height: 50px;
-		width: 50px;
-		background: dodgerblue;
-		border: 4px solid white;
-		color: white;
-		line-height: 42px;
-		border-radius: 50%;
-		text-align: center;
-		margin: 0 auto;
-		margin-top: 15px;
-	}
-
-	.mm,
-	.front {
-		display: inline-grid;
-	}
-
-	.mm {
-		z-index: 2;
-		opacity: 0.6;
-	}
-
-	.front {
-		position: relative;
-		z-index: 3;
-	}
-
-	.x1 {
-		transform: translateX(15px) scale(0.8);
-		transform-origin: center;
-	}
-
-	.x2 {
-		transform: translateX(-15px) scale(0.8);
-		transform-origin: center;
-	}
-</style>
-
+﻿
 <div ng-controller="PeopleStart">
 
 	<div class="view-header with-fab with-desc">
 		<div class="view-title">
 			<h1>
 				<i class="mdi mdi-account"></i> People</h1>
-			<p>Optional description of the view goes here.</p>
+			<p>Search for one or many persons to manage their roles</p>
 		</div>
 	</div>
 
@@ -74,14 +17,21 @@
 						<div class="con-flex">
 							<label for="filter" class="input-icon">
 								<i class="mdi mdi-filter-outline">
-									<input type="text" id="filter" placeholder="filter roles..." ng-model="filterInput">
+									<input type="text" id="filter" placeholder="Search person" ng-model="filterInput">
 									<md-tooltip>Filter</md-tooltip>
 								</i>
 							</label>
 						</div>
+					<!--
+						<div class="con-flex">
+								<md-select class"mdi" ng-model="model" placeholder="Choose action">
+									<md-option ng-repeat="item in demos" ng-value="item.id"><span ng-bind="item.id"></span></md-option>
+								</md-select>								
+						</div>
+					-->
 						<div class="con-flex x3">
-							<button class="wfm-btn wfm-btn-primary" ng-disabled="itemArr.length === 0" ng-class="{'wfm-btn-invis-disabled': itemArr.length === 0}" ng-click="modalShownGrant = !modalShownGrant">Grant Role</button>
-							<button class="wfm-btn wfm-btn-primary" ng-disabled="itemArr.length === 0" ng-class="{'wfm-btn-invis-disabled': itemArr.length === 0}" ng-click="modalShownRevoke = !modalShownRevoke">Revoke Role</button>
+							<button class="wfm-btn wfm-btn-primary mdi mdi-check" ng-disabled="itemArr.length === 0" ng-class="{'wfm-btn-invis-disabled': itemArr.length === 0}" ng-click="modalShownGrant = !modalShownGrant">Grant Role</button>
+							<button class="wfm-btn wfm-btn-primary mdi mdi-close" ng-disabled="itemArr.length === 0" ng-class="{'wfm-btn-invis-disabled': itemArr.length === 0}" ng-click="modalShownRevoke = !modalShownRevoke">Revoke Role</button>
 						</div>
 					</div>
 				</div>
@@ -105,97 +55,20 @@
 									{{person.role}}
 								</div>
 
-								<modal-dialog show='modalShown' ng-cloak>
-									<div class="person-header relative">
-										<div class="avatar">
-											<i class="mdi mdi-account"></i>
-										</div>
-										<h1>{{person.firstName}} {{person.lastName}}</h1>
-									</div>
-									<div class="con-row">
-										<div class="con-flex">
-											<table class="wfm-table">
-												<tbody>
-													<tr>
-														<td>Phone:</td>
-														<td>{{person.phone}}</td>
-													</tr>
-													<tr>
-														<td>Role:</td>
-														<td>{{person.role}}</td>
-													</tr>
-												</tbody>
-											</table>
-										</div>
-									</div>
-									<div class="modal-actions">
-										<aside>
-											<button class="wfm-btn wfm-btn-invis" ng-click="modalShown = !modalShown">Edit</button>
-											<button class="wfm-btn wfm-btn-invis-primary" ng-click="modalShown = !modalShown">Close</button>
-										</aside>
-									</div>
-								</modal-dialog>
-
 							</li>
 						</ul>
-						<modal-dialog show='multiModalShown' ng-cloak>
-							<div class="person-header relative">
-								<div class="avatar mm x1">
-									<i class="mdi mdi-account"></i>
-								</div>
-								<div class="avatar front">
-									<i class="mdi mdi-account"></i>
-								</div>
-								<div class="avatar mm x2">
-									<i class="mdi mdi-account"></i>
-								</div>
-								<h1>Editing {{itemArr.length}} people</h1>
-							</div>
-							<form name="form" class="wfm-form" novalidate>
-								<div class="con-row">
-									<div class="con-flex">
-										<h3>Personal information</h3>
-										<div class="form-input-wrap">
-											<label for="nameId">Role:</label>
-											<input type="text" ng-model="form.input0" placeholder="Leave blank to not change" name="Name" required="" id="nameId1" autofocus
-											/>
-											<div ng-cloak class="animate-show" ng-show="form.$submitted || form.Name.$touched">
-												<div class="form-input-message" ng-class="{formInvalidInput:form.Name.$error.required}">Requered</div>
-											</div>
-										</div>
-										<div class="form-input-wrap">
-											<label for="nameId">Something:</label>
-											<input type="number" ng-model="form.input1" placeholder="Leave blank to not change" name="Age" required="" id="nameId2" />
-											<div ng-cloak class="animate-show" ng-show="form.$submitted || form.Age.$touched">
-												<div class="form-input-message" ng-class="{formInvalidInput:form.Age.$error.required}">Leave blank to not change</div>
-											</div>
-										</div>
-										<h3>Skills</h3>
-										<div class="form-input-wrap">
-											<label for="nameId">Something else:</label>
-											<input type="password" ng-model="form.input2" placeholder="Leave blank to not change" name="Password" required="" id="nameId3"
-											/>
-											<div ng-cloak class="animate-show" ng-show="form.$submitted || form.Password.$touched">
-												<div class="form-input-message" ng-class="{formInvalidInput:form.Password.$error.required}">Leave blank to not change</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</form>
-							<div class="modal-actions">
-								<aside>
-									<button class="wfm-btn wfm-btn-invis" ng-click="multiModalShown = !multiModalShown">Edit</button>
-									<button class="wfm-btn wfm-btn-invis-primary" ng-click="multiModalShown = !multiModalShown">Close</button>
-								</aside>
-							</div>
-						</modal-dialog>
+
+
 						<modal-dialog show='modalShownGrant' ng-cloak>
 							<div class="person-header relative">
 								<div class="avatar">
 									<i class="mdi mdi-account"></i>
 								</div>
-								<h1>{{person.firstName}} {{person.lastName}}</h1>
+								<h1 ng-if="itemArr.length == 1">Grant role on {{itemArr[0].firstName}} {{itemArr[0].lastName}}</h1>									
+								<h1 ng-if="itemArr.length > 1">Grant role on multiple persons</h1>									
+								<h3>{{itemArr.length}} person(s) selected</h3>
 							</div>
+							<h2><strong>Current roles</strong></h2>
 							<div class="con-fluid-row">
 								<div class="con-fluid-flex" ng-repeat="existingRole in existingRoles">
 									<div>
@@ -204,6 +77,7 @@
 								</div>
 							</div>
 							<hr/>
+							<h2><strong>Available roles</strong></h2>
 							<div class="con-fluid-row">
 								<div class="con-fluid-flex" ng-repeat="role in roles">
 									<div ng-if="checkExistingRoles(role) === false">
@@ -213,18 +87,23 @@
 							</div>
 							<div class="modal-actions">
 								<aside>
-									<button class="wfm-btn wfm-btn-invis" ng-click="close()">Edit</button>
-									<button class="wfm-btn wfm-btn-invis-primary" ng-click="close()">Close</button>
+									<button class="wfm-btn wfm-btn-invis" ng-click="close()">Cancel</button>
+									<button class="wfm-btn wfm-btn-invis-primary" ng-click="close()">Save</button>
 								</aside>
 							</div>
 						</modal-dialog>
+
+
 						<modal-dialog show='modalShownRevoke' ng-cloak>
 							<div class="person-header relative">
 								<div class="avatar">
 									<i class="mdi mdi-account"></i>
 								</div>
-								<h1>{{person.firstName}} {{person.lastName}}</h1>
+								<h1 ng-if="itemArr.length == 1">Revoke role on {{itemArr[0].firstName}} {{itemArr[0].lastName}}</h1>									
+								<h1 ng-if="itemArr.length > 1">Revoke role on multiple persons</h1>									
+								<h3>{{itemArr.length}} person(s) selected</h3>
 							</div>
+							<h2><strong>Current roles</strong></h2>
 							<div class="con-fluid-row">
 								<div class="con-fluid-flex" ng-repeat="existingRole in existingRoles">
 									<div>
@@ -234,8 +113,8 @@
 							</div>
 							<div class="modal-actions">
 								<aside>
-									<button class="wfm-btn wfm-btn-invis" ng-click="close()">Edit</button>
-									<button class="wfm-btn wfm-btn-invis-primary" ng-click="close()">Close</button>
+									<button class="wfm-btn wfm-btn-invis" ng-click="close()">Cancel</button>
+									<button class="wfm-btn wfm-btn-invis-primary" ng-click="close()">Save</button>
 								</aside>
 							</div>
 						</modal-dialog>
