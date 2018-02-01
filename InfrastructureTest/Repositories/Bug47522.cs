@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test, Ignore("fail with the right reason")]
-		public void TryWritingTestReflectingHongliOpinion()
+		public void ShouldNotThrownExceptionWhenCheckingShiftTradeStatusEvenThoughOtherThreadMakingChangeToSamePersonAssignment()
 		{
 			var activity = new Activity(".");
 			var person = PersonFactory.CreatePerson("test");
