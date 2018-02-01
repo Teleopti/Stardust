@@ -318,6 +318,7 @@ function global:CreateDatabaseWithSQLAdmin () {
 		if ($lastexitcode -ne 0) {
 			Log "Something went wrong during creation of: '$MartDB'"
 			Log "lastexitcode: $lastexitcode" 
+			exit 1
 		}
 
     $Params = "$global:DBManagerString -C -D$AppDB -OTeleoptiCCC7 -F$DatabasePath"
@@ -327,6 +328,7 @@ function global:CreateDatabaseWithSQLAdmin () {
 		if ($lastexitcode -ne 0) {
 			Log "Something went wrong during creation of: '$AppDB'"
 			Log "lastexitcode: $lastexitcode" 
+			exit 1
 		}
 
     if (!($SQLEdition -eq $SQLAzure)) {
@@ -338,6 +340,7 @@ function global:CreateDatabaseWithSQLAdmin () {
 			if ($lastexitcode -ne 0) {
 				Log "Something went wrong during creation of: '$global:AggDB'"
 				Log "lastexitcode: $lastexitcode"
+				exit 1
 			}
     }
 }
@@ -365,6 +368,7 @@ function global:PatchDatabaseWithDboOnly () {
 			if ($lastexitcode -ne 0) {
 				Log "Something went wrong during creation of: '$MartDB'"
 				Log "lastexitcode: $lastexitcode" 
+				exit 1
 	       	}
        
 		$Params = "$global:DBManagerString -D$AppDB -OTeleoptiCCC7 -F$DatabasePath"
@@ -374,6 +378,7 @@ function global:PatchDatabaseWithDboOnly () {
 			if ($lastexitcode -ne 0) {
 				Log "Something went wrong during creation of: '$AppDB'"
 	       		Log "lastexitcode: $lastexitcode" 
+				exit 1
 			}
 
 		$Params = "$global:DBManagerString -D$global:AggDB -OTeleoptiCCCAgg -F$DatabasePath"
@@ -383,6 +388,7 @@ function global:PatchDatabaseWithDboOnly () {
 			if ($lastexitcode -ne 0) {
 				Log "Something went wrong during creation of: '$global:AggDB'"
 				Log "lastexitcode: $lastexitcode" 
+				exit 1
 			}		
     }
 }
@@ -396,6 +402,7 @@ function global:DataModifications () {
 		if ($lastexitcode -ne 0) {
 			Log "Something went wrong during the running of security EXE..."
 			Log "lastexitcode: $lastexitcode"
+			exit 1
     	}
 }
 
