@@ -650,7 +650,6 @@
     <Compile Include="ApplicationLayer\Events\AnalyticsDatesChangedEvent.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\IAnalyticsPersonPeriodMapNotDefined.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ContextLoader.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\HistoricalAdherenceReadModel.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\IHistoricalAdherenceReadModelReader.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\IHistoricalAdherenceReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ICurrentScheduleReadModelPersister.cs" />

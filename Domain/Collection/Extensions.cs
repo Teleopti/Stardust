@@ -36,6 +36,7 @@ namespace Teleopti.Ccc.Domain.Collection
 			{
 				act(item);
 			}
+
 			return source;
 		}
 
@@ -67,6 +68,7 @@ namespace Teleopti.Ccc.Domain.Collection
 						break;
 					partitions[i].Add(wrappedSource[j]);
 				}
+
 				k += batchSize;
 			}
 
@@ -83,6 +85,7 @@ namespace Teleopti.Ccc.Domain.Collection
 				if (specification.IsSatisfiedBy(item))
 					list.Add(item);
 			}
+
 			return list;
 		}
 
@@ -179,6 +182,7 @@ namespace Teleopti.Ccc.Domain.Collection
 					cnt.Add(s, 1);
 				}
 			}
+
 			foreach (T s in other)
 			{
 				if (cnt.ContainsKey(s))
@@ -190,6 +194,7 @@ namespace Teleopti.Ccc.Domain.Collection
 					return false;
 				}
 			}
+
 			return cnt.Values.All(c => c == 0);
 		}
 
@@ -206,6 +211,7 @@ namespace Teleopti.Ccc.Domain.Collection
 						Previous = previous
 					};
 				}
+
 				previous = @this;
 			}
 		}
@@ -218,14 +224,19 @@ namespace Teleopti.Ccc.Domain.Collection
 
 		public static IEnumerable<T> TransitionsOf<T, T2>(this IEnumerable<T> source, Func<T, T2> value)
 		{
-			return source
-				.Take(1)
-				.Concat(
-					source
-						.WithPrevious()
-						.Where(x => !value(x.This).Equals(value(x.Previous)))
-						.Select(x => x.This)
-				);
+			if (!source.Any())
+				yield break;
+
+			yield return source.First();
+			T previousItem = source.First();
+			foreach (var item in source.Skip(1))
+			{
+				if (!EqualityComparer<T2>.Default.Equals(value(previousItem), value(item)))
+				{
+					yield return item;
+					previousItem = item;
+				}
+			}
 		}
 
 		public static IEnumerable<T> ExceptLast<T>(this IEnumerable<T> source)

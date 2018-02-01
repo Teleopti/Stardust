@@ -14,14 +14,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay
 
 		public void Load(
 			DateTime now,
-			IEnumerable<HistoricalChange> changes, 
+			IEnumerable<HistoricalChange> changes,
 			IEnumerable<HistoricalAdherence> adherences,
 			IEnumerable<ApprovedPeriod> approvedPeriods,
 			DateTime? shiftStartTime,
 			DateTime? shiftEndTime)
 		{
 			_changes = loadChanges(changes);
-			_outOfAdherences = loadOutOfAdherencePeriods(adherences);
+			_outOfAdherences = loadOutOfAdherencePeriods(adherences, now);
 			_percentage = new AdherencePercentageCalculator().Calculate(shiftStartTime, shiftEndTime, adherences, now);
 			_approvedPeriods = approvedPeriods;
 		}
@@ -43,28 +43,29 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay
 				.ToArray();
 		}
 
-		private static IEnumerable<OutOfAdherencePeriod> loadOutOfAdherencePeriods(IEnumerable<HistoricalAdherence> adherences)
+		private static IEnumerable<OutOfAdherencePeriod> loadOutOfAdherencePeriods(IEnumerable<HistoricalAdherence> adherences, DateTime now)
 		{
 			var seed = Enumerable.Empty<OutOfAdherencePeriod>();
-			return adherences.Aggregate(seed, (x, model) =>
+			return adherences
+				.TransitionsOf(x => x.Adherence)
+				.Aggregate(seed, (result, model) =>
 				{
 					if (model.Adherence == HistoricalAdherenceAdherence.Out)
 					{
-						if (x.IsEmpty(y => y.EndTime == null))
-							x = x.Append(new OutOfAdherencePeriod
-								{
-									StartTime = model.Timestamp
-								})
-								.ToArray();
+						result = result.Append(new OutOfAdherencePeriod
+							{
+								StartTime = model.Timestamp,
+								EndTime = now
+							})
+							.ToArray();
 					}
 					else
 					{
-						var existing = x.FirstOrDefault(y => y.EndTime == null);
-						if (existing != null)
-							existing.EndTime = model.Timestamp;
+						if (result.Any())
+							result.Last().EndTime = model.Timestamp;
 					}
 
-					return x;
+					return result;
 				})
 				.ToArray();
 		}

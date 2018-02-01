@@ -117,5 +117,27 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.HistoricalAdhe
 			viewModel.OutOfAdherences.Single().StartTime.Should().Be("2016-10-11T09:00:00");
 			viewModel.OutOfAdherences.Single().EndTime.Should().Be("2016-10-12T11:00:00");
 		}
+
+		[Test]
+		public void ShouldEndOpenOutOfAdherenceAtCurrentTime()
+		{
+			Now.Is("2018-02-01 10:00");
+			var person = Guid.NewGuid();
+
+			Database.WithAgent(person, "nicklas");
+			ReadModel.Has(new[]
+			{
+				new HistoricalAdherence
+				{
+					PersonId = person,
+					Adherence = HistoricalAdherenceAdherence.Out,
+					Timestamp = "2018-02-01 09:00".Utc()
+				}
+			});
+
+			var viewModel = Target.Build(person);
+
+			viewModel.OutOfAdherences.Single().EndTime.Should().Be("2018-02-01T10:00:00");
+		}
 	}
 }

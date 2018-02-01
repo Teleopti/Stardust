@@ -168,11 +168,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 				.ToArray();
 		}
 
-		private IEnumerable<AgentOutOfAdherenceViewModel> buildOutOfAdherences(IEnumerable<OutOfAdherencePeriod> data)
+		private IEnumerable<OutOfAdherenceViewModel> buildOutOfAdherences(IEnumerable<OutOfAdherencePeriod> data)
 		{
 			return data
 				.Select(x =>
-					new AgentOutOfAdherenceViewModel
+					new OutOfAdherenceViewModel
 					{
 						StartTime = formatForUser(x.StartTime),
 						EndTime = formatForUser(x.EndTime)

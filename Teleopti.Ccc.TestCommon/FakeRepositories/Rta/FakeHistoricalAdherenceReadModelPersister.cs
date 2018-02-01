@@ -9,6 +9,12 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 {
+	public class HistoricalOutOfAdherenceReadModel
+	{
+		public DateTime StartTime { get; set; }
+		public DateTime? EndTime { get; set; }
+	}
+
 	public class FakeHistoricalAdherenceReadModelPersister:
 		IHistoricalAdherenceReadModelPersister,
 		IHistoricalAdherenceReadModelReader
