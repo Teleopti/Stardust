@@ -78,11 +78,11 @@
 					'Adherence',
 					1,
 					true,
-					data.AdherenceThreshold.Value * 100,
-					data.AdherenceBronzeThreshold.Value * 100,
-					data.AdherenceSilverThreshold.Value * 100,
-					data.AdherenceGoldThreshold.Value * 100,
-					'^\\d+(\.{0,1}\\d+){0,1}$',
+					floatMul(data.AdherenceThreshold.Value),
+					floatMul(data.AdherenceBronzeThreshold.Value),
+					floatMul(data.AdherenceSilverThreshold.Value),
+					floatMul(data.AdherenceGoldThreshold.Value),
+					'^[0-9]+([.]{1}[0-9]{1,2})?$',
 					100.0,
 					'desc'
 				);
@@ -134,11 +134,11 @@
 						config.valueFormat = '^\\d+$';
 						config.max = 10000;
 					} else {
-						config.valueFormat = '^\\d+(\.{0,1}\\d+){0,1}$';
-						config.badgeThreshold = config.badgeThreshold * 100;
-						config.goldBadgeThreshold = config.goldBadgeThreshold * 100;
-						config.silverBadgeThreshold = config.silverBadgeThreshold * 100;
-						config.bronzeBadgeThreshold = config.bronzeBadgeThreshold * 100;
+						config.valueFormat = '^[0-9]+([.]{1}[0-9]{1,2})?$';
+						config.badgeThreshold = floatMul(config.badgeThreshold);
+						config.goldBadgeThreshold = floatMul(config.goldBadgeThreshold);
+						config.silverBadgeThreshold = floatMul(config.silverBadgeThreshold);
+						config.bronzeBadgeThreshold = floatMul(config.bronzeBadgeThreshold);
 						config.max = 100.0;
 					}
 
@@ -244,6 +244,14 @@
 			});
 
 			return result;
+		}
+
+		function floatDiv(arg) {
+			return arg * 100 / 10000;
+		}
+
+		function floatMul(arg1) {
+			return parseInt(arg1 * 10000) / 100;
 		}
 
 		function MeasureConfig(builtin, enabled, id, externalId, name, dataType, largerIsBetter, threshold, bronzeThreshold, silverThreshold, goldThreshold, valueFormat, max, valueOrder) {
@@ -374,7 +382,7 @@
 					GamificationSettingId: ctrl.id,
 					QualityId: this.externalId,
 					DataType: this.dataType,
-					ThresholdValue: this.dataType === 1 ? this.badgeThreshold / 100 : this.badgeThreshold
+					ThresholdValue: this.dataType === 1 ? floatDiv(this.badgeThreshold) : this.badgeThreshold
 				}).then(function () {
 					$log.log('updated badge threshold')
 				}, function () {
@@ -401,7 +409,7 @@
 				case 'Adherence':
 					dataService.saveData('AdherenceThreshold', {
 						GamificationSettingId: ctrl.id,
-						Value: this.badgeThreshold / 100
+						Value: floatDiv(this.badgeThreshold)
 					}).then(function () {
 						$log.info(self.name + ': updated badge threshold')
 					}, function () {
@@ -441,7 +449,7 @@
 					GamificationSettingId: ctrl.id,
 					QualityId: this.externalId,
 					DataType: this.dataType,
-					ThresholdValue: this.dataType === 1 ? this.bronzeBadgeThreshold / 100 : this.bronzeBadgeThreshold
+					ThresholdValue: this.dataType === 1 ? floatDiv(this.bronzeBadgeThreshold) : this.bronzeBadgeThreshold
 				}).then(function () {
 					$log.log('updated bronze badge threshold')
 				}, function () {
@@ -467,7 +475,7 @@
 				case 'Adherence':
 					dataService.saveData('AdherenceBronzeThreshold', {
 						GamificationSettingId: ctrl.id,
-						Value: this.bronzeBadgeThreshold / 100
+						Value: floatDiv(this.bronzeBadgeThreshold)
 					}).then(function () {
 						$log.log('updated bronze badge threshold')
 					}, function () {
@@ -508,7 +516,7 @@
 					GamificationSettingId: ctrl.id,
 					QualityId: this.externalId,
 					DataType: this.dataType,
-					ThresholdValue: this.dataType === 1 ? this.silverBadgeThreshold / 100 : this.silverBadgeThreshold
+					ThresholdValue: this.dataType === 1 ? floatDiv(this.silverBadgeThreshold) : this.silverBadgeThreshold
 				}).then(function () {
 					$log.log('updated silver badge threshold')
 				}, function () {
@@ -534,7 +542,7 @@
 				case 'Adherence':
 					dataService.saveData('AdherenceSilverThreshold', {
 						GamificationSettingId: ctrl.id,
-						Value: this.silverBadgeThreshold / 100
+						Value: floatDiv(this.silverBadgeThreshold)
 					}).then(function () {
 						$log.log('updated silver badge threshold')
 					}, function () {
@@ -575,7 +583,7 @@
 					GamificationSettingId: ctrl.id,
 					QualityId: this.externalId,
 					DataType: this.dataType,
-					ThresholdValue: this.dataType === 1 ? this.goldBadgeThreshold / 100 : this.goldBadgeThreshold
+					ThresholdValue: this.dataType === 1 ? floatDiv(this.goldBadgeThreshold) : this.goldBadgeThreshold
 				}).then(function () {
 					$log.log('updated gold badge threshold')
 				}, function () {
@@ -601,7 +609,7 @@
 				case 'Adherence':
 					dataService.saveData('AdherenceGoldThreshold', {
 						GamificationSettingId: ctrl.id,
-						Value: this.goldBadgeThreshold / 100
+						Value: floatDiv(this.goldBadgeThreshold)
 					}).then(function () {
 						$log.log('updated gold badge threshold')
 					}, function () {
