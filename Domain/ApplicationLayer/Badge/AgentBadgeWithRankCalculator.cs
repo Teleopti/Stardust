@@ -168,13 +168,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 			return newAwardedBadges;
 		}
 
-		public IEnumerable<IAgentBadgeWithRankTransaction> CalculateBadges(IEnumerable<IPerson> allPersons, DateOnly date, IBadgeSetting badgeSetting)
+		public IEnumerable<IAgentBadgeWithRankTransaction> CalculateBadges(IEnumerable<IPerson> allPersons, DateOnly date, IBadgeSetting badgeSetting, Guid businessId)
 		{
 			var newBadges = new List<IAgentBadgeWithRankTransaction>();
 			var personList = new HashSet<IPerson>(allPersons);
 
 			var personIdList = allPersons.Select(x => x.Id.Value).ToList();
-			var performanceDatas = _externalPerformanceDataRepository.Find(date, personIdList, badgeSetting.QualityId);
+			var performanceDatas = _externalPerformanceDataRepository.Find(date, personIdList, badgeSetting.QualityId, businessId);
 
 			var agentsWithBadgeValue = performanceDatas.ToDictionary(k => k.PersonId, v => v.Score);
 			var newAwardedBadges = AddBadge(personList, agentsWithBadgeValue, badgeSetting.QualityId,

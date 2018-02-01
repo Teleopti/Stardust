@@ -16,19 +16,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 		private const int maxMeasureCount = 10;
 
 		private readonly IExternalPerformanceRepository _externalPerformanceRepository;
-		private readonly IPersonRepository _personRepository;
 		private readonly ILineExtractorValidator _lineExtractorValidator;
 		private readonly ITenantLogonPersonProvider _tenantLogonPersonProvider;
+		private readonly IPersonFinderReadOnlyRepository _finderReadOnlyRepository;
 
 		public ExternalPerformanceInfoFileProcessor(IExternalPerformanceRepository externalPerformanceRepository,
-			IPersonRepository personRepository, 
+			IPersonFinderReadOnlyRepository finderReadOnlyRepository, 
 			ILineExtractorValidator lineExtractorValidator,
 			ITenantLogonPersonProvider tenantLogonPersonProvider)
 		{
 			_externalPerformanceRepository = externalPerformanceRepository;
-			_personRepository = personRepository;
 			_lineExtractorValidator = lineExtractorValidator;
 			_tenantLogonPersonProvider = tenantLogonPersonProvider;
+			_finderReadOnlyRepository = finderReadOnlyRepository;
 		}
 
 		public ExternalPerformanceInfoProcessResult Process(ImportFileData importFileData)
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			ExternalPerformanceInfoProcessResult processResult, string splitor)
 		{
 			var allPersonIds = allExtractionResults.Select(x => x.AgentId).ToArray();
-			var allEmploymentNumberAndExternalLogonMatches = _personRepository.FindPersonByIdentities(allPersonIds).ToLookup(x => x.LogonName);
+			var allEmploymentNumberAndExternalLogonMatches = _finderReadOnlyRepository.FindPersonByIdentities(allPersonIds).ToLookup(x => x.LogonName);
 			var allApplicationLogonNameMatches = new Lazy<IPersonInfoModel[]>(() => _tenantLogonPersonProvider.GetByLogonNames(allPersonIds).ToArray());
 			foreach (var extractionResult in allExtractionResults)
 			{

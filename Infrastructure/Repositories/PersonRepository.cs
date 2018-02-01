@@ -759,54 +759,5 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			return results;
 		}
-
-		/// <summary>
-		/// Find person with EmplopymentNumber or ExternalLogon match identities
-		/// Since ApplicationLogonName exists in Tenant database on Azure environment, this method will not match ApplicationLogonName
-		/// </summary>
-		/// <param name="identities"></param>
-		/// <returns></returns>
-		public IList<PersonIdentityMatchResult> FindPersonByIdentities(IEnumerable<string> identities)
-		{
-			const int batchSize = 100;
-
-			var result = new List<PersonIdentityMatchResult>();
-			if (identities == null) return result;
-
-			var identityList = identities.ToList();
-			if (!identityList.Any()) return result;
-
-			var paraName = nameof(identities);
-			foreach (var identitiesInBatch in identityList.Batch(batchSize))
-			{
-				//TODO: Try get EmploymentNumber from ReadModel.FindPerson and apply BusinessUnit filter
-				var sql = $@"Select EmploymentNumber as [Identity], Id as PersonId, {(int) IdentityMatchField.EmploymentNumber} as MatchField -- Match EmployeementNumber
-							     From Person
-							    Where IsDeleted = 0
-							      And EmploymentNumber in (:{paraName})
-							   Union
-							   Select Distinct UserCode, PersonId, {(int) IdentityMatchField.ExternalLogon} -- Match ExternalLogon
-							     From ReadModel.ExternalLogon
-							    Where Deleted = 0
-							      And UserCode in (:{paraName})";
-				var batchResult = Session.CreateSQLQuery(sql)
-					.AddScalar("Identity", NHibernateUtil.String)
-					.AddScalar("PersonId", NHibernateUtil.Guid)
-					.AddScalar("MatchField", NHibernateUtil.Int32)
-					.SetParameterList(paraName, identitiesInBatch.ToArray())
-					.SetReadOnly(true)
-					.List<object[]>()
-					.Select(x => new PersonIdentityMatchResult
-					{
-						LogonName = (string) x[0],
-						PersonId = (Guid) x[1],
-						MatchField = (IdentityMatchField) (int) x[2]
-					}).ToList();
-
-				result.AddRange(batchResult);
-			}
-
-			return result;
-		}
 	}
 }

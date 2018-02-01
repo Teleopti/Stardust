@@ -115,14 +115,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 			return newAwardedBadges;
 		}
 
-		public IEnumerable<IAgentBadgeTransaction> CalculateBadges(IEnumerable<IPerson> allPersons, DateOnly date, IBadgeSetting badgeSetting)
+		public IEnumerable<IAgentBadgeTransaction> CalculateBadges(IEnumerable<IPerson> allPersons, DateOnly date, IBadgeSetting badgeSetting, Guid businessId)
 		{
 			var newBadges = new List<IAgentBadgeTransaction>();
 			var personList = new HashSet<IPerson>(allPersons);
 
 			var personIdList = allPersons.Select(x => x.Id.Value).ToList();
 			var agentsWithBadge = _externalPerformanceDataRepository.FindPersonsCouldGetBadgeOverThreshold(
-				date, personIdList, badgeSetting.QualityId, badgeSetting.Threshold);
+				date, personIdList, badgeSetting.QualityId, badgeSetting.Threshold, businessId);
 
 			var gamificationSetting = (IGamificationSetting) badgeSetting.Parent;
 			var newAwardedBadges = AddBadge(personList, agentsWithBadge, badgeSetting.QualityId,

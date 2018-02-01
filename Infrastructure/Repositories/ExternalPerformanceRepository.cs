@@ -10,33 +10,32 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 {
 	public class ExternalPerformanceRepository : Repository<IExternalPerformance>, IExternalPerformanceRepository
 	{
-#pragma warning disable 618
-		public ExternalPerformanceRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
-#pragma warning restore 618
-		{
-		}
-
 		public ExternalPerformanceRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
 		{
 		}
 
 		public IEnumerable<IExternalPerformance> FindAllExternalPerformances()
 		{
+			var businessUnit = ServiceLocatorForEntity.CurrentBusinessUnit.Current();
 			return Session.CreateCriteria(typeof(ExternalPerformance))
+				.Add(Restrictions.Eq("BusinessUnit", businessUnit))
 				.AddOrder(Order.Asc("Name"))
 				.List<IExternalPerformance>();
 		}
 
 		public IExternalPerformance FindExternalPerformanceByExternalId(int externalId)
 		{
+			var businessUnit = ServiceLocatorForEntity.CurrentBusinessUnit.Current();
 			return Session.CreateCriteria<ExternalPerformance>()
+				.Add(Restrictions.Eq("BusinessUnit", businessUnit))
 				.Add(Restrictions.Eq("ExternalId", externalId))
 				.UniqueResult<IExternalPerformance>();
 		}
 
 		public int GetExernalPerformanceCount()
 		{
-			return Session.QueryOver<ExternalPerformance>().RowCount();
+			var businessUnit = ServiceLocatorForEntity.CurrentBusinessUnit.Current();
+			return Session.QueryOver<ExternalPerformance>().Where(x=>x.BusinessUnit == businessUnit).RowCount();
 		}
 
 		public void UpdateExternalPerformanceName(Guid id, string name)

@@ -406,7 +406,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				Score = 91
 			});
 
-			var result = _calculator.CalculateBadges(_allPersons, _calculateDateOnly, badgeSetting);
+			var result = _calculator.CalculateBadges(_allPersons, _calculateDateOnly, badgeSetting, Guid.NewGuid());
 
 			result.First().BronzeBadgeAmount.Should().Be.EqualTo(0);
 			result.First().SilverBadgeAmount.Should().Be.EqualTo(1);

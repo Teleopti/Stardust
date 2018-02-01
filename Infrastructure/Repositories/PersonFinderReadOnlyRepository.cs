@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using NHibernate;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch;
 using Teleopti.Ccc.Domain.Collection;
@@ -61,6 +62,50 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			}
 
 			return builder.ToString();
+		}
+
+		public IList<PersonIdentityMatchResult> FindPersonByIdentities(IEnumerable<string> identities)
+		{
+			const int batchSize = 100;
+
+			var result = new List<PersonIdentityMatchResult>();
+			if (identities == null) return result;
+
+			var identityList = identities.ToList();
+			if (!identityList.Any()) return result;
+
+			var uow = _currentUnitOfWork.Current();
+			var businessUnit = ServiceLocatorForEntity.CurrentBusinessUnit.Current();
+
+			foreach (var identitiesInBatch in identityList.Batch(batchSize))
+			{
+				var sql = $@"Select EmploymentNumber as [Identity], PersonId as PersonId, {(int)IdentityMatchField.EmploymentNumber} as MatchField
+							     From ReadModel.FindPerson
+							    Where BusinessUnitId = '{businessUnit.Id}'
+							      And EmploymentNumber in (:identities)
+							   Union
+							   Select Distinct UserCode, PersonId, {(int)IdentityMatchField.ExternalLogon}
+							     From ReadModel.ExternalLogon
+							    Where Deleted = 0
+							      And UserCode in (:identities)";
+				var batchResult = ((NHibernateUnitOfWork)uow).Session.CreateSQLQuery(sql)
+					.AddScalar("Identity", NHibernateUtil.String)
+					.AddScalar("PersonId", NHibernateUtil.Guid)
+					.AddScalar("MatchField", NHibernateUtil.Int32)
+					.SetParameterList("identities", identitiesInBatch.ToArray())
+					.SetReadOnly(true)
+					.List<object[]>()
+					.Select(x => new PersonIdentityMatchResult
+					{
+						LogonName = (string)x[0],
+						PersonId = (Guid)x[1],
+						MatchField = (IdentityMatchField)(int)x[2]
+					}).ToList();
+
+				result.AddRange(batchResult);
+			}
+
+			return result;
 		}
 
 		public void Find(IPersonFinderSearchCriteria personFinderSearchCriteria)

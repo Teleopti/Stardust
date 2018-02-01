@@ -18,13 +18,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	public class FakePersonRepository : IPersonRepository, IEnumerable<IPerson>, IWriteSideRepository<IPerson>, IProxyForId<IPerson>, IPersonLoadAllWithPeriodAndExternalLogOn
 	{
 		private readonly IFakeStorage _storage;
-		private readonly IList<PersonExternalLogonInfo> _externalLogonInfos;
 		private readonly IDictionary<Guid, string> _appLogonNames;
 
 		public FakePersonRepository(IFakeStorage storage)
 		{
 			_storage = storage ?? new FakeStorageSimple();
-			_externalLogonInfos = new List<PersonExternalLogonInfo>();
 			_appLogonNames = new Dictionary<Guid, string>();
 		}
 
@@ -331,33 +329,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 					}).ToList();
 		}
 
-		public IList<PersonIdentityMatchResult> FindPersonByIdentities(IEnumerable<string> identities)
-		{
-			var identityList = identities.ToList();
-			var allPerson = _storage.LoadAll<IPerson>();
-
-			var result = new List<PersonIdentityMatchResult>();
-			result = allPerson.Where(p => identityList.Contains(p.EmploymentNumber)).Select(x =>
-				new PersonIdentityMatchResult
-				{
-					LogonName = x.EmploymentNumber,
-					PersonId = x.Id.Value,
-					MatchField = IdentityMatchField.EmploymentNumber
-				}).ToList();
-
-			result.AddRange(from externalLogon in _externalLogonInfos
-				from acdLogonName in externalLogon.ExternalLogonName
-				where identityList.Contains(acdLogonName)
-				select new PersonIdentityMatchResult
-				{
-					LogonName = acdLogonName,
-					PersonId = externalLogon.PersonId,
-					MatchField = IdentityMatchField.ExternalLogon
-				});
-
-			return result;
-		}
-
 		public void ReversedOrder()
 		{
 			var allAgents = _storage.LoadAll<IPerson>();
@@ -368,11 +339,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public IPerson LoadAggregate(Guid id)
 		{
 			return Get(id);
-		}
-
-		public void SetPersonExternalLogonInfo(PersonExternalLogonInfo info)
-		{
-			_externalLogonInfos.Add(info);
 		}
 
 		IEnumerable<IPerson> IPersonLoadAllWithPeriodAndExternalLogOn.LoadAll()

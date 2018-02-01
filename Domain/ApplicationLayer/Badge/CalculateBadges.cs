@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using log4net;
@@ -72,24 +73,24 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 				calculateAhtBadge(message, setting, isRuleWithDifferentThreshold, agentsWithSetting, calculateDate);
 				calculateAnsweredCallsBadge(message, setting, isRuleWithDifferentThreshold, agentsWithSetting, calculateDate);
 
-				calculateBadges(setting, isRuleWithDifferentThreshold, agentsWithSetting, calculateDate);
+				calculateBadges(setting, isRuleWithDifferentThreshold, agentsWithSetting, calculateDate, message.LogOnBusinessUnitId);
 			}
 		}
 		
 		private void calculateBadges(IGamificationSetting setting,
-			bool isRuleWithDifferentThreshold, IList<IPerson> agentsWithSetting, DateOnly calculateDate)
+			bool isRuleWithDifferentThreshold, IList<IPerson> agentsWithSetting, DateOnly calculateDate, Guid businessId)
 		{
 			foreach (var badgeSetting in setting.BadgeSettings)
 			{
 				if (!badgeSetting.Enabled) continue;
 				if (isRuleWithDifferentThreshold)
 				{
-					var agentBadgeWithRank = _badgeWithRankCalculator.CalculateBadges(agentsWithSetting, calculateDate, badgeSetting);
+					var agentBadgeWithRank = _badgeWithRankCalculator.CalculateBadges(agentsWithSetting, calculateDate, badgeSetting, businessId);
 					sendMessage(agentBadgeWithRank, badgeSetting.Name, calculateDate);
 				}
 				else
 				{
-					var agentBadge = _calculator.CalculateBadges(agentsWithSetting, calculateDate, badgeSetting);
+					var agentBadge = _calculator.CalculateBadges(agentsWithSetting, calculateDate, badgeSetting, businessId);
 					sendMessage(agentBadge, badgeSetting, calculateDate, setting);
 				}
 			}

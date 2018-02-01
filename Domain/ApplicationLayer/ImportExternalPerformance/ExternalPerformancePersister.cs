@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 
 				if (existingData == null)
 				{
-					_externalDataRepository.Add(new ExternalPerformanceData()
+					_externalDataRepository.Add(new ExternalPerformanceData
 					{
 						ExternalPerformance = externalPerformances.FirstOrDefault(x => x.ExternalId == record.MeasureId),
 						DateFrom = record.DateFrom,

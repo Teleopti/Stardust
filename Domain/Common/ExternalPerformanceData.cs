@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Common
 		double Score { get; set; }
 	}
 
-	public class ExternalPerformanceData : SimpleAggregateRoot, IExternalPerformanceData
+	public class ExternalPerformanceData : NonversionedAggregateRootWithBusinessUnit, IExternalPerformanceData
 	{
 		private IExternalPerformance _externalPerformance;
 

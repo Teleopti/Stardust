@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public IExternalPerformanceRepository ExternalPerfRepo;
 
 		private IPerson _person;
-		private IExternalPerformance _externalPerformance;
+		private ExternalPerformance _externalPerformance;
 
 		[Test]
 		public void ShouldPersistExternalPerformanceData()
@@ -87,6 +87,22 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
+		public void ShouldNotFindDataWhenNotInSameBusinessUnit()
+		{
+			var date = new DateOnly(2018, 01, 25);
+			prepareRelatedData();
+			persistExternalPerformanceData(date, _person);
+
+			var result = WithUnitOfWork.Get(() =>
+			{
+				var data = Target.Find(date, new List<Guid> { _person.Id.Value }, 1, Guid.NewGuid());
+				return data;
+			});
+
+			result.Count.Should().Be.EqualTo(0);
+		}
+
+		[Test]
 		public void ShouldFindExternalPerformanceData()
 		{
 			var date = new DateOnly(2018, 01, 25);
@@ -95,11 +111,29 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var result = WithUnitOfWork.Get(() =>
 			{
-				var data = Target.Find(date, new List<Guid>{_person.Id.Value}, 1);
+				var data = Target.Find(date, new List<Guid>{_person.Id.Value}, 1, _externalPerformance.BusinessUnit.Id.Value);
 				return data;
 			});
 
 			result.First().OriginalPersonId.Should().Be.EqualTo(_person.EmploymentNumber);
+		}
+
+		[Test]
+		public void SholdNotFindPersonWhenNotInSameBusinessUnit()
+		{
+			var date = new DateOnly(2018, 01, 25);
+			var person2 = createPerson();
+			prepareRelatedData();
+			persistExternalPerformanceData(date, _person, 60);
+			persistExternalPerformanceData(date, person2, 80);
+
+			var result = WithUnitOfWork.Get(() =>
+			{
+				var data = Target.FindPersonsCouldGetBadgeOverThreshold(date, new List<Guid> { _person.Id.Value, person2.Id.Value }, 1, 70, Guid.NewGuid());
+				return data;
+			});
+
+			result.Count.Should().Be.EqualTo(0);
 		}
 
 		[Test]
@@ -113,7 +147,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var result = WithUnitOfWork.Get(() =>
 			{
-				var data = Target.FindPersonsCouldGetBadgeOverThreshold(date, new List<Guid> { _person.Id.Value, person2.Id.Value }, 1, 70);
+				var data = Target.FindPersonsCouldGetBadgeOverThreshold(date, new List<Guid> { _person.Id.Value, person2.Id.Value }, 1, 70, _externalPerformance.BusinessUnit.Id.Value);
 				return data;
 			});
 
@@ -141,6 +175,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				Name = "test",
 				DataType = ExternalPerformanceDataType.Numeric
 			};
+
 			WithUnitOfWork.Do(() =>
 			{
 				PersonRepo.Add(_person);

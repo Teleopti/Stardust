@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch;
@@ -22,6 +23,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		private IPersonFinderReadOnlyRepository _target;
 		private Guid team1Id;
 		private Guid team2Id;
+		private readonly Guid personIdForFindByIdentities = Guid.NewGuid();
+		private readonly Guid personIdForExternalLogon = Guid.NewGuid();
+		private readonly string employmentNumber = "98765";
+		private readonly string employmentNumberInOtherBu = "56789";
+		private readonly string userCode = "0019";
 
 		[SetUp]
 		public void SetUp()
@@ -517,6 +523,33 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			personIds.Count.Should().Be(1);
 		}
 
+		[Test]
+		public void ShouldFindPersonFromFindPersonModel()
+		{
+			var result = _target.FindPersonByIdentities(new[] { employmentNumber });
+			result.First().PersonId.Should().Be.EqualTo(personIdForFindByIdentities);
+			result.First().LogonName.Should().Be.EqualTo(employmentNumber);
+			result.First().MatchField.Should().Be.EqualTo(IdentityMatchField.EmploymentNumber);
+		}
+
+		[Test]
+		public void ShouldFindPersonFromExternalLogonModel()
+		{
+			var result = _target.FindPersonByIdentities(new[] { userCode });
+			result.First().PersonId.Should().Be.EqualTo(personIdForExternalLogon);
+			result.First().LogonName.Should().Be.EqualTo(userCode);
+			result.First().MatchField.Should().Be.EqualTo(IdentityMatchField.ExternalLogon);
+		}
+
+		[Test]
+		public void ShouldNotFindPersonFromFindPersonModelWhenNotInSameBusinessUnit()
+		{
+			var result = _target.FindPersonByIdentities(new[] { employmentNumberInOtherBu, userCode });
+			result.First().PersonId.Should().Be.EqualTo(personIdForExternalLogon);
+			result.First().LogonName.Should().Be.EqualTo(userCode);
+			result.First().MatchField.Should().Be.EqualTo(IdentityMatchField.ExternalLogon);
+		}
+
 		private ISkill[] createAndPersistSkills()
 		{
 			var type = SkillTypeFactory.CreateSkillType();
@@ -691,6 +724,39 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				.SetGuid("teamId", Guid.NewGuid())
 				.SetGuid("siteId", siteId)
 				.SetGuid("personPeriodTeamId", Guid.NewGuid())
+				.ExecuteUpdate();
+
+
+			Session.CreateSQLQuery(
+					"Insert into [ReadModel].[FindPerson] (PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue, SearchValueId,SearchType, TeamId, SiteId,BusinessUnitId, StartDateTime, EndDateTime, PersonPeriodTeamId)" +
+					" Values (:personId,'Ashley','Andeen',:employmentNumber,'',NULL,'Team Preferences London','11610FE4-0130-4568-97DE-9B5E015B2564','Organization',:teamId, :siteId,:businessUnitId, :startDateTime, :endDateTime, :personPeriodTeamId)")
+				.SetGuid("personId", personIdForFindByIdentities)
+				.SetString("employmentNumber", employmentNumber)
+				.SetDateTime("startDateTime", new DateTime(2017, 1, 1))
+				.SetDateTime("endDateTime", new DateTime(2045, 1, 1))
+				.SetGuid("businessUnitId", buid)
+				.SetGuid("teamId", Guid.NewGuid())
+				.SetGuid("siteId", Guid.NewGuid())
+				.SetGuid("personPeriodTeamId", Guid.NewGuid())
+				.ExecuteUpdate();
+			Session.CreateSQLQuery(
+					"Insert into [ReadModel].[FindPerson] (PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue, SearchValueId,SearchType, TeamId, SiteId,BusinessUnitId, StartDateTime, EndDateTime, PersonPeriodTeamId)" +
+					" Values (:personId,'Ashley','Andeen',:employmentNumber,'',NULL,'Team Preferences London','11610FE4-0130-4568-97DE-9B5E015B2564','Organization',:teamId, :siteId,:businessUnitId, :startDateTime, :endDateTime, :personPeriodTeamId)")
+				.SetGuid("personId", Guid.NewGuid())
+				.SetString("employmentNumber", employmentNumberInOtherBu)
+				.SetDateTime("startDateTime", new DateTime(2017, 1, 1))
+				.SetDateTime("endDateTime", new DateTime(2045, 1, 1))
+				.SetGuid("businessUnitId", Guid.NewGuid())
+				.SetGuid("teamId", Guid.NewGuid())
+				.SetGuid("siteId", Guid.NewGuid())
+				.SetGuid("personPeriodTeamId", Guid.NewGuid())
+				.ExecuteUpdate();
+
+			Session.CreateSQLQuery(
+					"Insert into [ReadModel].[ExternalLogon](PersonId,DataSourceId,UserCode,Deleted,Added)" +
+					"Values(:personId,'1',:userCode,0,0)")
+				.SetGuid("personId", personIdForExternalLogon)
+				.SetString("userCode", userCode)
 				.ExecuteUpdate();
 		}
 	}

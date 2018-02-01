@@ -19,6 +19,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 			DateOnly date, IGamificationSetting setting, Guid businessUnitId);
 
 		IEnumerable<IAgentBadgeTransaction> CalculateBadges(IEnumerable<IPerson> allPersons, DateOnly date,
-			IBadgeSetting badgeSetting);
+			IBadgeSetting badgeSetting, Guid businessId);
 	}
 }

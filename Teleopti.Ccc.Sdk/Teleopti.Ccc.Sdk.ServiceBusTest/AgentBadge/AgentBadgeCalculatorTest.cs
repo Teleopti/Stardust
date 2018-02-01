@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				Score = 91
 			});
 
-			var result = _calculator.CalculateBadges(_allPersons, _calculateDateOnly, badgeSetting);
+			var result = _calculator.CalculateBadges(_allPersons, _calculateDateOnly, badgeSetting, Guid.NewGuid());
 
 			result.First().Amount.Should().Be.EqualTo(1);
 			result.First().IsExternal.Should().Be.True();
@@ -209,7 +209,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				Score = 80
 			});
 
-			var result = _calculator.CalculateBadges(_allPersons, _calculateDateOnly, badgeSetting);
+			var result = _calculator.CalculateBadges(_allPersons, _calculateDateOnly, badgeSetting, Guid.NewGuid());
 
 			result.Count().Should().Be.EqualTo(0);
 		}

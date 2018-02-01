@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 	{
 		public IExternalPerformanceInfoFileProcessor Target;
 		public FakeExternalPerformanceRepository PerformanceRepository;
-		public FakePersonRepository PersonRepository;
+		public FakePersonFinderReadOnlyRepository PersonFinderReadOnlyRepository;
 		public FakeTenantPersonLogonQuerier TenantPersonLogonQuerier;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
@@ -279,12 +279,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		{
 			var per1 = Guid.NewGuid();
 			var per2 = Guid.NewGuid();
-			PersonRepository.SetPersonExternalLogonInfo(new PersonExternalLogonInfo
+			PersonFinderReadOnlyRepository.SetPersonExternalLogonInfo(new PersonExternalLogonInfo
 			{
 				PersonId = per1,
 				ExternalLogonName = new List<string> { "externalLogon"}
 			});
-			PersonRepository.SetPersonExternalLogonInfo(new PersonExternalLogonInfo
+			PersonFinderReadOnlyRepository.SetPersonExternalLogonInfo(new PersonExternalLogonInfo
 			{
 				PersonId = per2,
 				ExternalLogonName = new List<string> { "externalLogon"}
@@ -311,9 +311,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			var person2 = new Person();
 			person2.SetEmploymentNumber("2");
 			person2.WithId(personId2);
-			PersonRepository.Add(person1);
-			PersonRepository.Add(person2);
-			PersonRepository.SetPersonExternalLogonInfo(new PersonExternalLogonInfo
+			PersonFinderReadOnlyRepository.Has(person1);
+			PersonFinderReadOnlyRepository.Has(person2);
+			PersonFinderReadOnlyRepository.SetPersonExternalLogonInfo(new PersonExternalLogonInfo
 			{
 				ExternalLogonName = new List<string> {"1"},
 				PersonId = personId2
@@ -404,16 +404,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			person3.WithId(personid3);
 
 			person1.SetEmploymentNumber(personid);
-			PersonRepository.Add(person1);
+			PersonFinderReadOnlyRepository.Has(person1);
 
-			PersonRepository.Add(person2);
-			PersonRepository.SetPersonExternalLogonInfo(new PersonExternalLogonInfo
+			PersonFinderReadOnlyRepository.Has(person2);
+			PersonFinderReadOnlyRepository.SetPersonExternalLogonInfo(new PersonExternalLogonInfo
 			{
 				ExternalLogonName = new List<string> {personid},
 				PersonId = personid2
 			});
 
-			PersonRepository.Add(person3);
+			PersonFinderReadOnlyRepository.Has(person3);
 			TenantPersonLogonQuerier.Add(new PersonInfoModel
 			{
 				ApplicationLogonName = personid,
@@ -443,10 +443,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			person2.WithId(personid2);
 
 			person1.SetEmploymentNumber(personid + "x");
-			PersonRepository.Add(person1);
+			PersonFinderReadOnlyRepository.Has(person1);
 
-			PersonRepository.Add(person2);
-			PersonRepository.SetPersonExternalLogonInfo(new PersonExternalLogonInfo
+			PersonFinderReadOnlyRepository.Has(person2);
+			PersonFinderReadOnlyRepository.SetPersonExternalLogonInfo(new PersonExternalLogonInfo
 			{
 				ExternalLogonName = new List<string> { personid },
 				PersonId = personid2
@@ -474,14 +474,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			person1.WithId(personid1);
 			person2.WithId(personid2);
 
-			PersonRepository.Add(person1);
-			PersonRepository.SetPersonExternalLogonInfo(new PersonExternalLogonInfo
+			PersonFinderReadOnlyRepository.Has(person1);
+			PersonFinderReadOnlyRepository.SetPersonExternalLogonInfo(new PersonExternalLogonInfo
 			{
 				ExternalLogonName = new List<string> { personid },
 				PersonId = personid1
 			});
 
-			PersonRepository.Add(person2);
+			PersonFinderReadOnlyRepository.Has(person2);
 			TenantPersonLogonQuerier.Add(new PersonInfoModel
 			{
 				ApplicationLogonName = personid,
@@ -502,7 +502,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 
 			var rey = new Person().WithId(new Guid());
 			rey.SetEmploymentNumber("7");
-			PersonRepository.Add(rey);
+			PersonFinderReadOnlyRepository.Has(rey);
 
 			var rows = "20180109,7,Rey,Kenobi,Measure 1,1,Percent,50\r\n" +
 					  "20180109,7,Rey,Kenobi,Measure 2,2,Numeric,50";
@@ -519,7 +519,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			var person = new Person();
 			person.SetEmploymentNumber("1");
 			person.WithId(personId);
-			PersonRepository.Add(person);
+			PersonFinderReadOnlyRepository.Has(person);
 		}
 
 		private ImportFileData createFileData(string record)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -10,6 +11,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	public class FakePersonFinderReadOnlyRepository : IPersonFinderReadOnlyRepository
 	{
 		private readonly IList<IPerson> _personList = new List<IPerson>();
+		private readonly IList<PersonExternalLogonInfo> _externalLogonInfos = new List<PersonExternalLogonInfo>();
+
 		public void Has(IPerson person)
 		{
 			_personList.Add(person);
@@ -58,6 +61,37 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			IDictionary<PersonFinderField, string> searchCriteria)
 		{
 			return _personList.Select(p => p.Id.GetValueOrDefault()).ToList();
+		}
+
+		public void SetPersonExternalLogonInfo(PersonExternalLogonInfo info)
+		{
+			_externalLogonInfos.Add(info);
+		}
+
+		public IList<PersonIdentityMatchResult> FindPersonByIdentities(IEnumerable<string> identities)
+		{
+			var identityList = identities.ToList();
+
+			var result = new List<PersonIdentityMatchResult>();
+			result = _personList.Where(p => identityList.Contains(p.EmploymentNumber)).Select(x =>
+				new PersonIdentityMatchResult
+				{
+					LogonName = x.EmploymentNumber,
+					PersonId = x.Id.Value,
+					MatchField = IdentityMatchField.EmploymentNumber
+				}).ToList();
+
+			result.AddRange(from externalLogon in _externalLogonInfos
+							from acdLogonName in externalLogon.ExternalLogonName
+							where identityList.Contains(acdLogonName)
+							select new PersonIdentityMatchResult
+							{
+								LogonName = acdLogonName,
+								PersonId = externalLogon.PersonId,
+								MatchField = IdentityMatchField.ExternalLogon
+							});
+
+			return result;
 		}
 	}
 }

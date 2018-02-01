@@ -26,11 +26,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.Security;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.TestCommon;
@@ -1822,23 +1818,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			UnitOfWork.PersistAll();
 		}
 
-		[Test]
-		public void ShouldFindPersonMatchIdentity()
-		{
-			createPersonWithAppLogonData(out var _, out var personIdJohn);
-
-			var result = target.FindPersonByIdentities(new[] {"employmentNumber-js"});
-
-			result.Count.Should().Be.EqualTo(1);
-			var personIdentity = result.First();
-			personIdentity.PersonId.Should().Be.EqualTo(personIdJohn);
-			personIdentity.LogonName.Should().Be.EqualTo("employmentNumber-js");
-			personIdentity.MatchField.Should().Be.EqualTo(IdentityMatchField.EmploymentNumber);
-
-			// Should verify match external logon here
-			// But I did not find how to create external logon data.
-		}
-
 		[Test, TestCaseSource(nameof(planningGroupFilterTestCases))]
 		public void ShouldBeAbleToGetPeopleBasedOnPlanningGroupFilter(PlanningGroupTestCase testCase)
 		{
@@ -2140,40 +2119,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		protected override Repository<IPerson> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
 		{
 			return new PersonRepository(currentUnitOfWork);
-		}
-
-		private void createPersonWithAppLogonData(out Guid personId1, out Guid personId2)
-		{
-			const string employmentNumber = "employmentNumber";
-			const string appLogonName = "appLogon";
-
-			var per1 = PersonFactory.CreatePerson("Ashley", "Andeen");
-			per1.SetEmploymentNumber(employmentNumber + "-aa");
-			PersistAndRemoveFromUnitOfWork(per1);
-			personId1 = per1.Id.Value;
-
-			var per2 = PersonFactory.CreatePerson("John", "Smith");
-			per2.SetEmploymentNumber(employmentNumber + "-js");
-			PersistAndRemoveFromUnitOfWork(per2);
-			personId2 = per2.Id.Value;
-
-			var tenant = new Tenant(RandomName.Make("bla"));
-
-			var tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(InfraTestConfigReader.ConnectionString);
-			tenantUnitOfWorkManager.EnsureUnitOfWorkIsStarted();
-			tenantUnitOfWorkManager.CurrentSession().Save(tenant);
-
-			var personInfoPersister = new PersistPersonInfo(tenantUnitOfWorkManager);
-
-			var personInfo1 = new PersonInfo(tenant, per1.Id.Value);
-			personInfo1.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), appLogonName + "-aa", RandomName.Make(), new OneWayEncryption());
-			personInfoPersister.Persist(personInfo1);
-
-			var personInfo2 = new PersonInfo(tenant, per2.Id.Value);
-			personInfo2.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), appLogonName + "-js", RandomName.Make(), new OneWayEncryption());
-			personInfoPersister.Persist(personInfo2);
-
-			tenantUnitOfWorkManager.CommitAndDisposeCurrent();
 		}
 	}
 }

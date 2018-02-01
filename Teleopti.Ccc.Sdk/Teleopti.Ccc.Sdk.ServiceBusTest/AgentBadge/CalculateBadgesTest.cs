@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			badgeWithRankCalculator.Stub(x => x.CalculateAnsweredCallsBadges(new List<IPerson>(), "", DateOnly.Today,
 				new GamificationSetting(settingNameForTest), _businessUnitId))
 				.IgnoreArguments().Return(new List<IAgentBadgeWithRankTransaction>());
-			badgeWithRankCalculator.Stub(x => x.CalculateBadges(new List<IPerson>(), DateOnly.Today, new BadgeSetting()))
+			badgeWithRankCalculator.Stub(x => x.CalculateBadges(new List<IPerson>(), DateOnly.Today, new BadgeSetting(), Guid.NewGuid()))
 				.IgnoreArguments().Return(new List<IAgentBadgeWithRankTransaction>());
 
 			target = new CalculateBadges(teamSettingsRepository, msgRepository, badgeCalculator, badgeWithRankCalculator,
@@ -235,7 +235,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			badgeWithRankCalculator.AssertWasCalled(
 				x => x.CalculateBadges(Arg<IList<IPerson>>.Is.Equal(persons),
 					Arg<DateOnly>.Is.Anything,
-					Arg<IBadgeSetting>.Is.Equal(badgeSetting)));
+					Arg<IBadgeSetting>.Is.Equal(badgeSetting),
+					Arg<Guid>.Is.Anything));
 		}
 
 		[Test]
