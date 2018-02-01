@@ -3,6 +3,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
 using Teleopti.Interfaces.Domain;
 
@@ -34,106 +35,94 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			_teamGamificationSetting =
 				_teamGamificationSettingRepo.FindTeamGamificationSettingsByTeam(currentUser.MyTeam(DateOnly.Today));
 
-			var allBadges = getBadgesWithoutRank(currentUser);
-			var allBadgesWithRank = getBadgesWithRank(currentUser);
+			var enabledBadgeTypes = _teamGamificationSetting.GamificationSetting.EnabledBadgeTypes();
+
+			var allBadges = getBadgesWithoutRank(currentUser, enabledBadgeTypes);
+			var allBadgesWithRank = getBadgesWithRank(currentUser, enabledBadgeTypes);
 
 			return mergeBadges(allBadges, allBadgesWithRank);
 		}
 
-		private IEnumerable<BadgeViewModel> getBadgesWithRank(IPerson person)
+		private IList<BadgeViewModel> getBadgesWithRank(IPerson p, IEnumerable<BadgeTypeInfo> badgeTypes)
 		{
-			if (person == null)
-			{
+			if (_teamGamificationSetting == null || p == null)
 				return new List<BadgeViewModel>();
-			}
 
-			var personId = person.Id.GetValueOrDefault();
-			var badges = new List<IAgentBadgeWithRank>
-			{
-				_badgeWithRankRepository.Find(person, BadgeType.Adherence) ??
-				new AgentBadgeWithRank
+			return badgeTypes
+				.Select(bt => findBadgesWithRank(p, bt.Id, bt.IsExternal) ?? new AgentBadgeWithRank
 				{
-					BadgeType = BadgeType.Adherence,
-					Person = personId,
-					BronzeBadgeAmount = 0,
+					BadgeType = bt.Id,
+					IsExternal = bt.IsExternal,
+					GoldBadgeAmount = 0,
 					SilverBadgeAmount = 0,
-					GoldBadgeAmount = 0
-				},
-				_badgeWithRankRepository.Find(person, BadgeType.AverageHandlingTime) ??
-				new AgentBadgeWithRank
+					BronzeBadgeAmount = 0
+				})
+				.Select(b => new BadgeViewModel
 				{
-					BadgeType = BadgeType.Adherence,
-					Person = personId,
-					BronzeBadgeAmount = 0,
-					SilverBadgeAmount = 0,
-					GoldBadgeAmount = 0
-				},
-				_badgeWithRankRepository.Find(person, BadgeType.AnsweredCalls) ??
-				new AgentBadgeWithRank
-				{
-					BadgeType = BadgeType.Adherence,
-					Person = personId,
-					BronzeBadgeAmount = 0,
-					SilverBadgeAmount = 0,
-					GoldBadgeAmount = 0
-				}
-			};
-
-			var badgeVmList = badges.Select(x => new BadgeViewModel
-			{
-				BadgeType = x.BadgeType,
-				BronzeBadge = x.BronzeBadgeAmount,
-				SilverBadge = x.SilverBadgeAmount,
-				GoldBadge = x.GoldBadgeAmount
-			});
-
-			return badgeVmList;
+					BadgeType = b.BadgeType,
+					IsExternal = b.IsExternal,
+					Name = findBadgeTypeName(b.BadgeType, b.IsExternal),
+					GoldBadge = b.GoldBadgeAmount,
+					SilverBadge = b.SilverBadgeAmount,
+					BronzeBadge = b.BronzeBadgeAmount
+				})
+				.ToList();
 		}
 
-		private IEnumerable<BadgeViewModel> getBadgesWithoutRank(IPerson person)
+		private IList<BadgeViewModel> getBadgesWithoutRank(IPerson p, IEnumerable<BadgeTypeInfo> badgeTypes)
 		{
-			if (person == null || _teamGamificationSetting == null)
-			{
+			if (_teamGamificationSetting == null || p == null)
 				return new List<BadgeViewModel>();
-			}
-
-			var personId = person.Id.GetValueOrDefault();
-			var badges = new List<AgentBadge>
-			{
-				_badgeRepository.Find(person, BadgeType.Adherence) ??
-				new AgentBadge
-				{
-					BadgeType = BadgeType.Adherence,
-					Person = personId,
-					TotalAmount = 0
-				},
-				_badgeRepository.Find(person, BadgeType.AverageHandlingTime) ??
-				new AgentBadge
-				{
-					BadgeType = BadgeType.AverageHandlingTime,
-					Person = personId,
-					TotalAmount = 0
-				},
-				_badgeRepository.Find(person, BadgeType.AnsweredCalls) ??
-				new AgentBadge
-				{
-					BadgeType = BadgeType.AnsweredCalls,
-					Person = personId,
-					TotalAmount = 0
-				}
-			};
 
 			var setting = _teamGamificationSetting.GamificationSetting;
 			var silverToBronzeBadgeRate = setting.SilverToBronzeBadgeRate;
 			var goldToSilverBadgeRate = setting.GoldToSilverBadgeRate;
-			var badgeVmList = badges.Select(x => new BadgeViewModel
+
+			return badgeTypes
+				.Select(bt => findBadgesWithoutRank(p, bt.Id, bt.IsExternal) ?? new AgentBadge
+				{
+					BadgeType = bt.Id,
+					IsExternal = bt.IsExternal,
+					TotalAmount = 0
+				})
+				.Select(b => new BadgeViewModel
+				{
+					BadgeType = b.BadgeType,
+					IsExternal = b.IsExternal,
+					Name = findBadgeTypeName(b.BadgeType, b.IsExternal),
+					GoldBadge = b.GetGoldBadge(silverToBronzeBadgeRate, goldToSilverBadgeRate),
+					SilverBadge = b.GetSilverBadge(silverToBronzeBadgeRate, goldToSilverBadgeRate),
+					BronzeBadge = b.GetBronzeBadge(silverToBronzeBadgeRate, goldToSilverBadgeRate)
+				})
+				.ToList();
+		}
+
+		private IAgentBadgeWithRank findBadgesWithRank(IPerson p, int badgeType, bool isExternal) => _badgeWithRankRepository.Find(p, badgeType, isExternal);
+		private AgentBadge findBadgesWithoutRank(IPerson p, int badgeType, bool isExternal) => _badgeRepository.Find(p, badgeType, isExternal);
+
+		private string findBadgeTypeName(int badgeType, bool isExternal)
+		{
+			string name = "";
+			if (isExternal)
 			{
-				BadgeType = x.BadgeType,
-				BronzeBadge = x.GetBronzeBadge(silverToBronzeBadgeRate, goldToSilverBadgeRate),
-				SilverBadge = x.GetSilverBadge(silverToBronzeBadgeRate, goldToSilverBadgeRate),
-				GoldBadge = x.GetGoldBadge(silverToBronzeBadgeRate, goldToSilverBadgeRate)
-			});
-			return badgeVmList;
+				name = _teamGamificationSetting.GamificationSetting.GetExternalBadgeTypeName(badgeType);
+				return name;
+			}
+			switch (badgeType)
+			{
+				case BadgeType.AnsweredCalls:
+					name = Resources.AnsweredCalls;
+					break;
+				case BadgeType.Adherence:
+					name = Resources.Adherence;
+					break;
+				case BadgeType.AverageHandlingTime:
+					name = Resources.AverageHandlingTime;
+					break;
+				default:
+					break;
+			}
+			return name;
 		}
 
 		/// <summary>
@@ -143,18 +132,21 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 		/// <param name="badgeVmList1"></param>
 		/// <param name="badgeVmList2"></param>
 		/// <returns></returns>
-		private IEnumerable<BadgeViewModel> mergeBadges(IEnumerable<BadgeViewModel> badgeVmList1,
+		private IList<BadgeViewModel> mergeBadges(IEnumerable<BadgeViewModel> badgeVmList1,
 			IEnumerable<BadgeViewModel> badgeVmList2)
 		{
 			var totalBadgeVm = badgeVmList1.Concat(badgeVmList2)
-				.GroupBy(x => x.BadgeType)
+				.GroupBy(x => new { x.IsExternal, x.BadgeType })
 				.Select(group => new BadgeViewModel
 				{
-					BadgeType = group.Key,
+					BadgeType = group.Key.BadgeType,
+					IsExternal = group.Key.IsExternal,
+					Name = group.First().Name,
 					BronzeBadge = group.Sum(x => x.BronzeBadge),
 					SilverBadge = group.Sum(x => x.SilverBadge),
 					GoldBadge = group.Sum(x => x.GoldBadge)
-				});
+				})
+				.ToList();
 
 			return totalBadgeVm;
 		}

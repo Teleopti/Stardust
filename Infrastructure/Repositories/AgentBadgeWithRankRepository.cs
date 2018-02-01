@@ -82,15 +82,16 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return result;
 		}
 
-		public IAgentBadgeWithRank Find(IPerson person, int badgeType)
+		public IAgentBadgeWithRank Find(IPerson person, int badgeType, bool isExternal)
 		{
 			InParameter.NotNull(nameof(person), person);
 			InParameter.NotNull(nameof(badgeType), badgeType);
 			const string query = @"select Person, BadgeType, BronzeBadgeAmount, SilverBadgeAmount, GoldBadgeAmount, LastCalculatedDate "
-				+ "from AgentBadgeWithRank where Person = :person and BadgeType=:badgeType";
+				+ "from AgentBadgeWithRank where Person = :person and BadgeType=:badgeType and IsExternal=:isExternal";
 			var result = Session.CreateSQLQuery(query)
 					.SetGuid("person", (Guid)person.Id)
 					.SetInt32("badgeType", badgeType)
+					.SetBoolean("isExternal", isExternal)
 					.SetResultTransformer(Transformers.AliasToBean(typeof(AgentBadgeWithRank)))
 					.SetReadOnly(true)
 					.UniqueResult<IAgentBadgeWithRank>();

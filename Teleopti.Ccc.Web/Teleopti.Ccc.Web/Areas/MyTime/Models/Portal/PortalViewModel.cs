@@ -108,6 +108,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 	public class BadgeViewModel
 	{
 		public int BadgeType { get; set; }
+		public bool IsExternal { get; set; }
+		public string Name { get; set; }
 		public int BronzeBadge { get; set; }
 		public int SilverBadge { get; set; }
 		public int GoldBadge { get; set; }

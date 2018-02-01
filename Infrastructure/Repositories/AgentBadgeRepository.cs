@@ -71,15 +71,16 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return result;
 		}
 		
-		public AgentBadge Find(IPerson person, int badgeType)
+		public AgentBadge Find(IPerson person, int badgeType, bool isExternal)
 		{
 			InParameter.NotNull(nameof(person), person);
 			InParameter.NotNull(nameof(badgeType), badgeType);
 			const string query = @"select Person, BadgeType, TotalAmount, LastCalculatedDate "
-				+ "from AgentBadge where Person = :person and BadgeType=:badgeType";
+				+ "from AgentBadge where Person = :person and BadgeType=:badgeType and IsExternal=:isExternal";
 			var result = _currentUnitOfWork.Current().Session().CreateSQLQuery(query)
 					.SetGuid("person", person.Id.GetValueOrDefault())
 					.SetInt32("badgeType", badgeType)
+					.SetBoolean("isExternal", isExternal)
 					.SetResultTransformer(Transformers.AliasToBean(typeof(AgentBadge)))
 					.SetReadOnly(true)
 					.UniqueResult<AgentBadge>();

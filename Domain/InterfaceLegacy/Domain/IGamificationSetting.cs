@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
@@ -35,5 +36,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		int GoldToSilverBadgeRate { get; set; }
 
 		void AddBadgeSetting(IBadgeSetting newBadgeSetting);
+		IEnumerable<BadgeTypeInfo> EnabledBadgeTypes();
+		string GetExternalBadgeTypeName(int badgeType);
 	}
 }

@@ -68,9 +68,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _agentBadgeWithRanks.Where(agentBadgeWithRank => agentBadgeWithRank.Person == person.Id.Value).ToList();
 		}
 
-		public IAgentBadgeWithRank Find(IPerson person, int badgeType)
+		public IAgentBadgeWithRank Find(IPerson person, int badgeType, bool isExternal)
 		{
-			return _agentBadgeWithRanks.FirstOrDefault(x => x.Person == person.Id.Value && x.BadgeType == badgeType);
+			return _agentBadgeWithRanks.FirstOrDefault(x => x.Person == person.Id.Value 
+			                                                && x.BadgeType == badgeType 
+			                                                && x.IsExternal == isExternal);
 		}
 	}
 }

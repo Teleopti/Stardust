@@ -32,7 +32,8 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// </summary>
 		/// <param name="person">The agent to get badge.</param>
 		/// <param name="badgeType">Badge type.</param>
+		/// <param name="isExternal">Indicates whether the badge type is external.</param>
 		/// <returns></returns>
-		IAgentBadgeWithRank Find(IPerson person, int badgeType);
+		IAgentBadgeWithRank Find(IPerson person, int badgeType, bool isExternal);
 	}
 }

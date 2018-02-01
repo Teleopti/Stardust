@@ -21,13 +21,14 @@ namespace Teleopti.Ccc.Domain.Repositories
 		/// <param name="personIdList"></param>
 		/// <returns></returns>
 		ICollection<AgentBadge> Find(IEnumerable<Guid> personIdList);
-		
+
 		/// <summary>
 		/// Find badge for the agent and specific badge type.
 		/// </summary>
 		/// <param name="person">The agent to get badge.</param>
 		/// <param name="badgeType">Badge type.</param>
+		/// <param name="IsExternal">Indicates whether the badge type is external.</param>
 		/// <returns></returns>
-		AgentBadge Find(IPerson person, int badgeType);
+		AgentBadge Find(IPerson person, int badgeType, bool IsExternal);
 	}
 }

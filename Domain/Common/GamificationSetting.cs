@@ -8,6 +8,12 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common
 {
+	public class BadgeTypeInfo
+	{
+		public bool IsExternal { get; set; }
+		public int Id { get; set; }
+	}
+
 	[Serializable]
 	public class GamificationSetting : NonversionedAggregateRootWithBusinessUnit, IGamificationSetting, IDeleteTag
 	{
@@ -201,5 +207,29 @@ namespace Teleopti.Ccc.Domain.Common
 			clone._badgeSettings = _badgeSettings.ToList();
 			return clone;
 		}
+
+		public virtual IEnumerable<BadgeTypeInfo> EnabledBadgeTypes()
+		{
+			var enabledBadgeTypes = new List<BadgeTypeInfo>();
+
+			if (AnsweredCallsBadgeEnabled)
+				enabledBadgeTypes.Add(new BadgeTypeInfo { IsExternal = false, Id = BadgeType.AnsweredCalls });
+
+			if (AdherenceBadgeEnabled)
+				enabledBadgeTypes.Add(new BadgeTypeInfo { IsExternal = false, Id = BadgeType.Adherence });
+
+			if (AHTBadgeEnabled)
+				enabledBadgeTypes.Add(new BadgeTypeInfo { IsExternal = false, Id = BadgeType.AverageHandlingTime });
+
+			enabledBadgeTypes.AddRange(BadgeSettings
+				.Where(bs => bs.Enabled)
+				.Select(bs => new BadgeTypeInfo { IsExternal = true, Id = bs.QualityId })
+			);
+
+			return enabledBadgeTypes;
+		}
+
+		public virtual string GetExternalBadgeTypeName(int badgeType) => BadgeSettings.Where(bs => bs.QualityId == badgeType).FirstOrDefault()?.Name;
+
 	}
 }

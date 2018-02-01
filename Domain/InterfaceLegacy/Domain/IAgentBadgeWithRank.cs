@@ -15,6 +15,11 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		int BadgeType { get; set; }
 
 		/// <summary>
+		/// Indicates whether the badge type is external
+		/// </summary>
+		bool IsExternal { get; set; }
+
+		/// <summary>
 		/// Amount of bronze badges
 		/// </summary>
 		int BronzeBadgeAmount { get; set; }

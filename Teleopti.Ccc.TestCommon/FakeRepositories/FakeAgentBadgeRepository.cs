@@ -53,9 +53,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				select agentBadge).ToList();
 		}
 
-		public AgentBadge Find(IPerson person, int badgeType)
+		public AgentBadge Find(IPerson person, int badgeType, bool isExternal)
 		{
-			return _agentBadges.FirstOrDefault(x => x.Person == person.Id.Value && x.BadgeType == badgeType);
+			return _agentBadges.FirstOrDefault(x => x.Person == person.Id.Value 
+			                                        && x.BadgeType == badgeType
+			                                        && x.IsExternal == isExternal);
 		}
 
 		public int FindByPersonListCalledTimes()
