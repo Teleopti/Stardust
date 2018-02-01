@@ -339,6 +339,48 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 				.EqualTo(TimeSpan.FromHours(147));
 		}
 
+		[Test]
+		public void ShouldReportConflictingRestrictions()
+		{
+			var period = createStandardSetup(out var scenario, out var agent, out var skillDays);
+			var shiftCategory = new ShiftCategory().WithId();
+			var preferenceRestriction = new PreferenceRestriction { ShiftCategory = new ShiftCategory().WithId() };
+			var preferenceDay = new PreferenceDay(agent, period.StartDate.AddDays(3), preferenceRestriction).WithId();
+			var rotationRestriction = new RotationRestriction { ShiftCategory = shiftCategory };
+			var rotationDay = new ScheduleDataRestriction(agent, rotationRestriction, period.StartDate.AddDays(3));
+
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, new IScheduleData[] { rotationDay, preferenceDay }, skillDays);
+
+			var result = Target.Execute(agent.VirtualSchedulePeriod(period.StartDate));
+			result.Reason.Should().Be.EqualTo(RestrictionNotAbleToBeScheduledReason.ConflictingRestrictions);
+			result.Period.Should().Be.EqualTo(new DateOnlyPeriod(period.StartDate.AddDays(3), period.StartDate.AddDays(3)));
+
+			Target2.Execute(new NoSchedulingCallback(), new SchedulingOptions(), new NoSchedulingProgress(), new[] { agent }, period);
+			stateHolder.Schedules[agent].ScheduledDay(period.StartDate.AddDays(3)).IsScheduled().Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldNotReportConflictingRestrictionsOnScheduledDay()
+		{
+			var period = createStandardSetup(out var scenario, out var agent, out var skillDays);
+			var shiftCategory = new ShiftCategory().WithId();
+			var preferenceRestriction = new PreferenceRestriction { ShiftCategory = new ShiftCategory().WithId() };
+			var preferenceDay = new PreferenceDay(agent, period.StartDate.AddDays(3), preferenceRestriction).WithId();
+			var rotationRestriction = new RotationRestriction { ShiftCategory = shiftCategory };
+			var rotationDay = new ScheduleDataRestriction(agent, rotationRestriction, period.StartDate.AddDays(3));
+			var activity = new Activity().WithId();
+			var ass = new PersonAssignment(agent, scenario, period.StartDate.AddDays(3)).WithLayer(activity, new TimePeriod(8, 16)).ShiftCategory(shiftCategory);
+
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, new IScheduleData[] { rotationDay, preferenceDay, ass }, skillDays);
+
+			var result = Target.Execute(agent.VirtualSchedulePeriod(period.StartDate));
+			result.Should().Be.EqualTo(null);
+
+			Target2.Execute(new NoSchedulingCallback(), new SchedulingOptions(), new NoSchedulingProgress(), new[] { agent }, period);
+			stateHolder.Schedules[agent].CalculatedContractTimeHolderOnPeriod(period).Should().Be
+				.EqualTo(TimeSpan.FromHours(168));
+		}
+
 		private static DateOnlyPeriod createStandardSetupWithFlexibleContract(out Scenario scenario, out Person agent, out IList<ISkillDay> skillDays)
 		{
 			var period = new DateOnlyPeriod(2017, 12, 01, 2017, 12, 31);

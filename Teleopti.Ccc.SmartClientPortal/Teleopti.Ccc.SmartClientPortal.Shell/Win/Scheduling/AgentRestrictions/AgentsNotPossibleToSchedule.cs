@@ -104,6 +104,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 			_detailView.InitializeGrid();
 			_detailView.SelectDateIfExists(matrix.SchedulePeriod.DateOnlyPeriod.StartDate);
 			_detailView.TheGrid.Enabled = true;
+			_detailView.UpdateShiftEditor();
 			_detailView.TheGrid.Cursor = Cursors.Default;
 		}
 
@@ -121,6 +122,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 
 		private void backgroundWorker1RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
+			if(e.Error != null)
+			{
+				var ex = new Exception("Background thread exception", e.Error);
+				throw ex;
+			}
 			_parent.OnRestrictionsNotAbleToBeScheduledProgress(new ProgressChangedEventArgs(100, ""));
 			listViewResult.SuspendLayout();
 			listViewResult.Items.Clear();

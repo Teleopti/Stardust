@@ -27930,6 +27930,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Conflicting restrictions.
+        /// </summary>
+        public static string RestrictionNotAbleToBeScheduledReasonConflictingRestrictions {
+            get {
+                return ResourceManager.GetString("RestrictionNotAbleToBeScheduledReasonConflictingRestrictions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nightly rest will be broken.
         /// </summary>
         public static string RestrictionNotAbleToBeScheduledReasonNightlyRestMightBeBroken {

@@ -79,6 +79,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 				};
 			}
 
+			var failingPeriod = checkConflictingRestrictions(matrixList.First());
+			if (failingPeriod.HasValue)
+			{
+				schedulePartModifyAndRollbackServiceForContractDaysOff.RollbackMinimumChecks();
+				return new RestrictionsNotAbleToBeScheduledResult
+				{
+					Agent = schedulePeriod.Person,
+					Reason = RestrictionNotAbleToBeScheduledReason.ConflictingRestrictions,
+					Period = failingPeriod.Value,
+					Matrix = matrixList.First()
+				};
+			}
+
 			if (minMaxTime.Minimum > targetTimePeriod.EndTime)
 			{
 				schedulePartModifyAndRollbackServiceForContractDaysOff.RollbackMinimumChecks();
@@ -104,7 +117,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
 			IDictionary<DateOnly, MinMax<TimeSpan>> possibleMinMaxWorkShiftLengths =
 				_workShiftMinMaxCalculator.PossibleMinMaxWorkShiftLengths(matrixList.First(), new SchedulingOptions());
-			var failingPeriod = checkWeeks(matrixList.First(), schedulePeriod, possibleMinMaxWorkShiftLengths);
+			failingPeriod = checkWeeks(matrixList.First(), schedulePeriod, possibleMinMaxWorkShiftLengths);
 			if (failingPeriod.HasValue)
 			{
 				schedulePartModifyAndRollbackServiceForContractDaysOff.RollbackMinimumChecks();
@@ -196,6 +209,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 				else
 				{
 					var effectiveRestriction = _restrictionExtractor.Extract(scheduleDay1).CombinedRestriction(new SchedulingOptions());
+					if (effectiveRestriction == null)
+						return null;
+
 					if (effectiveRestriction.EndTimeLimitation.StartTime.HasValue)
 					{
 						earliestEnd = dateOnly.Date.Add(effectiveRestriction.EndTimeLimitation.StartTime.Value);
@@ -215,6 +231,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 				else
 				{
 					var effectiveRestriction = _restrictionExtractor.Extract(scheduleDay2).CombinedRestriction(new SchedulingOptions());
+					if (effectiveRestriction == null)
+						return null;
+
 					latestStart = dateOnly.AddDays(1).Date.Add(effectiveRestriction.StartTimeLimitation.EndTime.HasValue
 						? effectiveRestriction.StartTimeLimitation.EndTime.Value
 						: workShiftLatestStart);
@@ -222,6 +241,22 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
 				if (latestStart.Subtract(earliestEnd).TotalHours < nightlyRest.TotalHours)
 					return new DateOnlyPeriod(dateOnly, dateOnly.AddDays(1));
+			}
+
+			return null;
+		}
+
+		private DateOnlyPeriod? checkConflictingRestrictions(IScheduleMatrixPro matrix)
+		{
+			foreach (var dateOnly in matrix.SchedulePeriod.DateOnlyPeriod.DayCollection())
+			{
+				var scheduleDay = matrix.GetScheduleDayByKey(dateOnly).DaySchedulePart();
+				if (scheduleDay.IsScheduled())
+					continue;
+
+				var effectiveRestriction = _restrictionExtractor.Extract(scheduleDay).CombinedRestriction(new SchedulingOptions());
+				if(effectiveRestriction == null)
+					return new DateOnlyPeriod(dateOnly, dateOnly);
 			}
 
 			return null;

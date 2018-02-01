@@ -49,6 +49,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 		TooManyDaysOff,
 		TooMuchWorkTimeInPeriod,
 		TooLittleWorkTimeInPeriod,
-		NightlyRestMightBeBroken
+		NightlyRestMightBeBroken,
+		ConflictingRestrictions
 	}
 }
