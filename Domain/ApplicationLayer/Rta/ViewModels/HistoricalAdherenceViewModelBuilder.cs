@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 				}
 			};
 		}
-		
+
 		private class data
 		{
 			public AgentAdherenceDay.AgentAdherenceDay AdherenceDay;
@@ -150,20 +150,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			}
 		}
 
-		private IEnumerable<internalHistoricalAdherenceActivityViewModel> buildSchedules(IEnumerable<IVisualLayer> layers)
+		private IEnumerable<HistoricalAdherenceActivityViewModel> buildSchedules(IEnumerable<IVisualLayer> layers)
 		{
 			return (
 					from layer in layers
-					select new internalHistoricalAdherenceActivityViewModel
+					select new HistoricalAdherenceActivityViewModel
 					{
 						Name = layer.DisplayDescription().Name,
 						Color = ColorTranslator.ToHtml(layer.DisplayColor()),
-						StartTime = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.StartDateTime, _timeZone.TimeZone())
-							.ToString("yyyy-MM-ddTHH:mm:ss"),
-						EndTime = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.EndDateTime, _timeZone.TimeZone())
-							.ToString("yyyy-MM-ddTHH:mm:ss"),
-						StartDateTime = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.StartDateTime, _timeZone.TimeZone()),
-						EndDateTime = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.EndDateTime, _timeZone.TimeZone())
+						StartTime = formatForUser(layer.Period.StartDateTime),
+						EndTime = formatForUser(layer.Period.EndDateTime),
 					})
 				.ToArray();
 		}
@@ -201,9 +197,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 				{
 					Time = formatForUser(x.Timestamp),
 					Activity = x.ActivityName,
-					ActivityColor = x.ActivityColor.HasValue
-						? ColorTranslator.ToHtml(Color.FromArgb(x.ActivityColor.Value))
-						: null,
+					ActivityColor = x.ActivityColor.HasValue ? ColorTranslator.ToHtml(Color.FromArgb(x.ActivityColor.Value)) : null,
 					State = x.StateName,
 					Rule = x.RuleName,
 					RuleColor = x.RuleColor.HasValue ? ColorTranslator.ToHtml(Color.FromArgb(x.RuleColor.Value)) : null,
@@ -211,12 +205,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 					AdherenceColor = colorForAdherence(x.Adherence)
 				})
 				.ToArray();
-		}
-
-		private class internalHistoricalAdherenceActivityViewModel : HistoricalAdherenceActivityViewModel
-		{
-			public DateTime StartDateTime { get; set; }
-			public DateTime EndDateTime { get; set; }
 		}
 
 		private string nameForAdherence(HistoricalChangeAdherence? adherence)
