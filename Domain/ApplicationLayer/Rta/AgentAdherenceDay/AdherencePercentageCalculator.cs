@@ -8,23 +8,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay
 {
 	public class AdherencePercentageCalculator
 	{
-		private readonly INow _now;
-
-		public AdherencePercentageCalculator(INow now)
-		{
-			_now = now;
-		}
-
 		public int? Calculate(
 			DateTime? shiftStartTime,
 			DateTime? shiftEndTime,
-			IEnumerable<HistoricalAdherence> data)
+			IEnumerable<HistoricalAdherence> data,
+			DateTime now)
 		{
 			if (!shiftStartTime.HasValue)
 				return null;
 
-			var onGoingShift = _now.UtcDateTime() < shiftEndTime.Value;
-			var calculateUntil = onGoingShift ? _now.UtcDateTime() : shiftEndTime.Value;
+			var onGoingShift = now < shiftEndTime.Value;
+			var calculateUntil = onGoingShift ? now : shiftEndTime.Value;
 			var adherenceAtStart = data.LastOrDefault(x => x.Timestamp <= shiftStartTime)?.Adherence ?? HistoricalAdherenceAdherence.Neutral;
 
 			var adherenceReadModels = data

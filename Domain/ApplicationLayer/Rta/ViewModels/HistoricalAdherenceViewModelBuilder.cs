@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		private readonly IPersonRepository _persons;
 		private readonly INow _now;
 		private readonly IUserTimeZone _timeZone;
-		private readonly AdherencePercentageCalculator _calculator;
 		private readonly IApprovedPeriodsReader _approvedPeriods;
 		private readonly AgentAdherenceDayLoader _agentAdherenceDayLoader;
 		private readonly int _displayPastDays;
@@ -30,7 +29,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			IPersonRepository persons,
 			INow now,
 			IUserTimeZone timeZone,
-			AdherencePercentageCalculator calculator,
 			IConfigReader config,
 			IApprovedPeriodsReader approvedPeriods,
 			AgentAdherenceDayLoader agentAdherenceDayLoader
@@ -41,7 +39,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			_persons = persons;
 			_now = now;
 			_timeZone = timeZone;
-			_calculator = calculator;
 			_approvedPeriods = approvedPeriods;
 			_agentAdherenceDayLoader = agentAdherenceDayLoader;
 			_displayPastDays = HistoricalAdherenceMaintainer.DisplayPastDays(config);
@@ -51,7 +48,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		{
 			var data = new data
 			{
-				Now = _now.UtcDateTime(),
 				PersonId = personId,
 				Person = _persons.Load(personId),
 			};
@@ -64,11 +60,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 				data.PersonId,
 				data.Date,
 				data.DisplayStartTime,
-				data.DisplayEndTime);
+				data.DisplayEndTime,
+				data.ShiftStartTime,
+				data.ShiftEndTime);
 
 			return new HistoricalAdherenceViewModel
 			{
-				Now = formatForUser(data.Now),
+				Now = formatForUser(_now.UtcDateTime()),
 				PersonId = personId,
 				AgentName = data.Person?.Name.ToString(),
 				Schedules = buildSchedules(data.Schedule),
@@ -81,7 +79,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 					StartTime = formatForUser(data.DisplayStartTime),
 					EndTime = formatForUser(data.DisplayEndTime)
 				},
-				AdherencePercentage = _calculator.Calculate(data.ShiftStartTime, data.ShiftEndTime, data.AdherenceDay.Adherences()),
+				AdherencePercentage = data.AdherenceDay.Percentage(),
 				Navigation = new HistoricalAdherenceNavigationViewModel
 				{
 					First = data.AgentNow.AddDays(_displayPastDays * -1).ToString("yyyyMMdd"),
@@ -94,7 +92,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		{
 			public AgentAdherenceDay.AgentAdherenceDay AdherenceDay;
 
-			public DateTime Now;
 			public DateTime AgentNow;
 			public DateOnly Date;
 			public Guid PersonId;
@@ -112,7 +109,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		private void loadCommonInto(data data)
 		{
 			data.TimeZone = data.Person?.PermissionInformation.DefaultTimeZone() ?? TimeZoneInfo.Utc;
-			data.AgentNow = TimeZoneInfo.ConvertTimeFromUtc(data.Now, data.TimeZone);
+			data.AgentNow = TimeZoneInfo.ConvertTimeFromUtc(_now.UtcDateTime(), data.TimeZone);
 		}
 
 		private void loadDisplayInto(data data)
