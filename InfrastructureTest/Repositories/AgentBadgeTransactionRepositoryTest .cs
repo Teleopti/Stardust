@@ -2,6 +2,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -36,6 +37,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			};
 		}
 
+		
+
 		protected override void VerifyAggregateGraphProperties(IAgentBadgeTransaction loadedAggregateFromDatabase)
 		{
 			var newBadgeTran = CreateAggregateWithCorrectBusinessUnit();
@@ -46,6 +49,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.AreEqual(newBadgeTran.CalculatedDate, loadedAggregateFromDatabase.CalculatedDate);
 			Assert.AreEqual(newBadgeTran.Description, loadedAggregateFromDatabase.Description);
 			Assert.AreEqual(newBadgeTran.InsertedOn, loadedAggregateFromDatabase.InsertedOn);
+			Assert.AreEqual(newBadgeTran.IsExternal, loadedAggregateFromDatabase.IsExternal);
 		}
 
 		protected override Repository<IAgentBadgeTransaction> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
@@ -64,6 +68,31 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var result = target.Find(badge.Person, badge.BadgeType, badge.CalculatedDate);
 			result.Should().Be.Null();
+		}
+
+		[Test]
+		public void ShouldAbleToPersistExternalBadgeTransaction()
+		{
+			IAgentBadgeTransaction agentBadgeTransaction = new AgentBadgeTransaction
+			{
+				Amount = 1,
+				BadgeType = 8,
+				CalculatedDate = new DateOnly(2018, 2, 1),
+				Description = "test",
+				InsertedOn = DateTime.SpecifyKind(new DateTime(2018, 2, 1), DateTimeKind.Utc),
+				Person = person,
+				IsExternal = true
+			};
+
+			Session.SaveOrUpdate(agentBadgeTransaction);
+			Session.Flush();
+			Session.Evict(agentBadgeTransaction);
+
+			var target = new AgentBadgeTransactionRepository(UnitOfWork);
+			var result = target.Find(new List<IPerson> { agentBadgeTransaction.Person }, new DateOnlyPeriod(new DateOnly(new DateTime(2018, 1, 31)), new DateOnly(new DateTime(2018, 2, 2)))).FirstOrDefault();
+			result.Should().Not.Be.Null();
+			result.IsExternal.Should().Be.EqualTo(true);
+			result.BadgeType.Should().Be.EqualTo(8);
 		}
 
 		[Test]
