@@ -49,20 +49,23 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var person = PersonFactory.CreatePerson("test");
 			var personTo = PersonFactory.CreatePerson("to");
 			var scenario = ScenarioFactory.CreateScenario("testScenario", true, false);
-			var personAssignment = new PersonAssignment(person, scenario, new DateOnly(2018, 1, 31));
-			using (var uowSetup = UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			using (var uowSetup1 = UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				ScenarioRepository.Add(scenario);
 				ActivityRepository.Add(activity);
 				PersonRepository.Add(person);
 				PersonRepository.Add(personTo);
-				PersonAssignmentRepository.Add(personAssignment);
+				PersonAssignmentRepository.Add(new PersonAssignment(person, scenario, new DateOnly(2018, 1, 31)));
+				uowSetup1.PersistAll();
+			}
+			using (var uowSetup2 = UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			{
 				var scheduleDictionary = ScheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] {person, personTo},
 					new ScheduleDictionaryLoadOptions(false, false),
 					new DateOnlyPeriod(new DateOnly(2018, 1, 31), new DateOnly(2018, 1, 31)), scenario);
 				var personRequest = createPersonShiftTradeRequest(scheduleDictionary, person, personTo, new DateOnly(2018, 1, 31));
 				PersonRequestRepository.Add(personRequest);
-				uowSetup.PersistAll();
+				uowSetup2.PersistAll();
 			}
 
 			using (var uow = UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
@@ -81,6 +84,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 						var scheduleRange = dic[person];
 						var scheduleDay = scheduleRange.ScheduledDay(new DateOnly(2018, 1, 31));
 						var personAss = scheduleDay.PersonAssignment();
+						//personAss = PersonAssignmentRepository.Get(personAss.Id.Value); don't understand why this makes test green?
 						personAss.AddActivity(activity, new DateTimePeriod(2018, 1, 31, 11, 2018, 1, 31, 17));
 						dic.Modify(scheduleDay, NewBusinessRuleCollection.Minimum());
 						Saver.SaveChanges(
