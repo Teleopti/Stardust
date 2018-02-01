@@ -10,17 +10,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay
 		private IEnumerable<HistoricalChange> _changes;
 		private IEnumerable<OutOfAdherencePeriod> _outOfAdherences;
 		private int? _percentage;
+		private IEnumerable<ApprovedPeriod> _approvedPeriods;
 
 		public void Load(
 			DateTime now,
 			IEnumerable<HistoricalChange> changes, 
 			IEnumerable<HistoricalAdherence> adherences,
+			IEnumerable<ApprovedPeriod> approvedPeriods,
 			DateTime? shiftStartTime,
 			DateTime? shiftEndTime)
 		{
 			_changes = loadChanges(changes);
 			_outOfAdherences = loadOutOfAdherencePeriods(adherences);
 			_percentage = new AdherencePercentageCalculator().Calculate(shiftStartTime, shiftEndTime, adherences, now);
+			_approvedPeriods = approvedPeriods;
 		}
 
 		private static IEnumerable<HistoricalChange> loadChanges(IEnumerable<HistoricalChange> changes)
@@ -69,5 +72,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay
 		public IEnumerable<HistoricalChange> Changes() => _changes;
 		public IEnumerable<OutOfAdherencePeriod> OutOfAdherences() => _outOfAdherences;
 		public int? Percentage() => _percentage;
+		public IEnumerable<ApprovedPeriod> ApprovedPeriods() => _approvedPeriods;
 	}
 }

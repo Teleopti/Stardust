@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		private readonly IPersonRepository _persons;
 		private readonly INow _now;
 		private readonly IUserTimeZone _timeZone;
-		private readonly IApprovedPeriodsReader _approvedPeriods;
 		private readonly AgentAdherenceDayLoader _agentAdherenceDayLoader;
 		private readonly int _displayPastDays;
 
@@ -30,7 +29,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			INow now,
 			IUserTimeZone timeZone,
 			IConfigReader config,
-			IApprovedPeriodsReader approvedPeriods,
 			AgentAdherenceDayLoader agentAdherenceDayLoader
 		)
 		{
@@ -39,7 +37,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			_persons = persons;
 			_now = now;
 			_timeZone = timeZone;
-			_approvedPeriods = approvedPeriods;
 			_agentAdherenceDayLoader = agentAdherenceDayLoader;
 			_displayPastDays = HistoricalAdherenceMaintainer.DisplayPastDays(config);
 		}
@@ -73,7 +70,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 				Changes = buildChanges(data),
 				OutOfAdherences = buildOutOfAdherences(data.AdherenceDay.OutOfAdherences()),
 				RecordedOutOfAdherences = buildOutOfAdherences(data.AdherenceDay.OutOfAdherences()),
-				ApprovedPeriods = buildApprovedPeriods(data),
+				ApprovedPeriods = buildApprovedPeriods(data.AdherenceDay.ApprovedPeriods()),
 				Timeline = new ScheduleTimeline
 				{
 					StartTime = formatForUser(data.DisplayStartTime),
@@ -87,7 +84,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 				}
 			};
 		}
-
+		
 		private class data
 		{
 			public AgentAdherenceDay.AgentAdherenceDay AdherenceDay;
@@ -184,10 +181,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 				.ToArray();
 		}
 
-		private IEnumerable<ApprovedPeriodViewModel> buildApprovedPeriods(data data)
+		private IEnumerable<ApprovedPeriodViewModel> buildApprovedPeriods(IEnumerable<ApprovedPeriod> data)
 		{
-			return _approvedPeriods
-				.Read(data.PersonId, data.DisplayStartTime, data.DisplayEndTime)
+			return data
 				.Select(a => new ApprovedPeriodViewModel
 				{
 					StartTime = formatForUser(a.StartTime),
