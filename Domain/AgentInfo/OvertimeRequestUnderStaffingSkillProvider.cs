@@ -3,7 +3,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.AgentInfo
@@ -50,12 +49,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 		private bool hasSeriousUnderstaffing(ISkill skill, SkillStaffingData skillStaffingData)
 		{
-			var staffingInterval = new SkillStaffingInterval
-			{
-				CalculatedResource = skillStaffingData.ScheduledStaffing.Value,
-				FStaff = skillStaffingData.ForecastedStaffing.Value
-			};
-			return new IntervalHasSeriousUnderstaffing(skill).IsSatisfiedBy(staffingInterval);
+			return new IntervalHasSeriousUnderstaffing(skill).IsSatisfiedBy(skillStaffingData.SkillStaffingInterval);
 		}
 
 	}

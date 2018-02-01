@@ -2,6 +2,7 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Intraday;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.AgentInfo
@@ -41,7 +42,12 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 					ScheduledStaffing = skillStaffingInterval.StaffingLevel,
 					Time = skillStaffingInterval.StartDateTime,
 					Date = new DateOnly(skillStaffingInterval.StartDateTime),
-					Resolution = resolution
+					Resolution = resolution,
+					SkillStaffingInterval = new SkillStaffingInterval
+											{
+												CalculatedResource = skillStaffingInterval.StaffingLevel,
+												FStaff = skillStaffingInterval.FStaff
+											}
 				}));
 			}
 

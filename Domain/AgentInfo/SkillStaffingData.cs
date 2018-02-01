@@ -1,5 +1,6 @@
 using System;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.AgentInfo
@@ -12,5 +13,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		public double? ForecastedStaffing { get; set; }
 		public double? ScheduledStaffing { get; set; }
 		public int Resolution { get; set; }
+		public SkillStaffingInterval SkillStaffingInterval { get; set; }
 	}
 }
