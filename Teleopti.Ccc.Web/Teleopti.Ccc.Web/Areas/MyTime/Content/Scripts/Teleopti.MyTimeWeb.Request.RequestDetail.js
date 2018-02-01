@@ -186,7 +186,8 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 
 	function createOvertimeRequestViewModel(data, parentViewModel, callback) {
 		var isViewingDetail = true;
-		overtimeRequestDetailViewModel = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, callback, parentViewModel, weekStart, isViewingDetail);
+		var disableGetDefaultStartTime = true;
+		overtimeRequestDetailViewModel = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, callback, parentViewModel, weekStart, isViewingDetail, disableGetDefaultStartTime);
 		overtimeRequestDetailViewModel.Initialize(data);
 	};
 

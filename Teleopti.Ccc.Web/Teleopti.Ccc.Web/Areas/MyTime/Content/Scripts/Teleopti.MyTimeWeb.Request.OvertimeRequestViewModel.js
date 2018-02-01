@@ -1,4 +1,4 @@
-﻿Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel = function (ajax, doneCallback, parentViewModel, weekStart, isViewingDetail) {
+﻿Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel = function (ajax, doneCallback, parentViewModel, weekStart, isViewingDetail, disableGetDefaultStartTime) {
 	var self = this,
 		requestDateStr,
 		currentUserDateTime,
@@ -364,7 +364,7 @@
 		if (Teleopti.MyTimeWeb.Common.IsToggleEnabled('OvertimeRequestPeriodSetting_46417')) {
 			setAvailableDays();
 		}
-		if (self.isDefaultStartTimeToggleEnabled) {
+		if (self.isDefaultStartTimeToggleEnabled && !disableGetDefaultStartTime) {
 			setDateFromSubscription();
 			setUseDefaultStartTimeToggleSubscription();
 		}
