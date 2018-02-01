@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			return request;
 		}
 
-		[Test, Ignore("for hongli...")]
+		[Test, Ignore("fail with the right reason")]
 		public void TryWritingTestReflectingHongliOpinion()
 		{
 			var activity = new Activity(".");
@@ -75,15 +75,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 
 			var uow = UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork();
-			
+			var currentUowClient1 = new ThisUnitOfWork(uow);
 
 			var repositoryFactoryClient1 = new RepositoryFactory();
-			var scheduleRepClient1 = new ScheduleStorage(new ThisUnitOfWork(uow), repositoryFactoryClient1, new PersistableScheduleDataPermissionChecker(), new ScheduleStorageRepositoryWrapper(repositoryFactoryClient1, new ThisUnitOfWork(uow)));
-			var dicClient1 = scheduleRepClient1.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { person }, new ScheduleDictionaryLoadOptions(false, false), new DateOnlyPeriod(new DateOnly(2018, 1, 31), new DateOnly(2018, 1, 31)), scenario);
+			var scheduleRepClient1 = new ScheduleStorage(currentUowClient1, repositoryFactoryClient1, new PersistableScheduleDataPermissionChecker(), new ScheduleStorageRepositoryWrapper(repositoryFactoryClient1, currentUowClient1));
 
-			var personRequestClient1 = new PersonRequestRepository(new ThisUnitOfWork(uow)).LoadAll().Single();
+			var personRequestClient1 = new PersonRequestRepository(currentUowClient1).LoadAll().Single();
 
-			var checker = new ShiftTradeRequestStatusCheckerWithSchedule(dicClient1, new PersonRequestCheckAuthorization());
+			var checker = new ShiftTradeRequestStatusChecker(new ThisCurrentScenario(scenario), scheduleRepClient1, new PersonRequestCheckAuthorization());
 
 			var checkResult = (personRequestClient1.Request as IShiftTradeRequest).GetShiftTradeStatus(checker);
 
@@ -91,8 +90,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			{
 				//client 2
 				var uow2 = UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork();
+				var currentUowClient2 = new ThisUnitOfWork(uow2);
 				var repositoryFactory = new RepositoryFactory();
-				var scheduleRep = new ScheduleStorage(new ThisUnitOfWork(uow2), repositoryFactory, new PersistableScheduleDataPermissionChecker(), new ScheduleStorageRepositoryWrapper(repositoryFactory, new ThisUnitOfWork(uow2)));
+				var scheduleRep = new ScheduleStorage(currentUowClient2, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUowClient2));
 				var dic = scheduleRep.FindSchedulesForPersons(scenario, new[] { person }, new ScheduleDictionaryLoadOptions(false, false), new DateOnlyPeriod(new DateOnly(2018, 1, 31), new DateOnly(2018, 1, 31)).ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone()), new[] { person }, false);
 				var scheduleRange = dic[person];
 				var scheduleDay = scheduleRange.ScheduledDay(new DateOnly(2018, 1, 31));
@@ -106,6 +106,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			});
 			other.Start();
 			other.Join();
+
+			(personRequestClient1.Request as IShiftTradeRequest).GetShiftTradeStatus(checker);
+
 
 			Assert.DoesNotThrow(() => { uow.PersistAll(); }); //Here an optimistic lock is thrown
 			uow.Dispose();
