@@ -95,7 +95,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				<IAbsenceRequestSetting, AbsenceRequestFourteenDaySetting, AbsenceRequestOneDaySetting>(builder,
 					Toggles.Wfm_Requests_HandleFourteenDaysFast_43390);
 
-			builder.RegisterType<OvertimeRequestUnderStaffingSkillProvider>().As<IOvertimeRequestUnderStaffingSkillProvider>();
+			registerType<IOvertimeRequestUnderStaffingSkillProvider, OvertimeRequestUnderStaffingSkillProviderToggle47853On,
+				OvertimeRequestUnderStaffingSkillProvider>(builder, Toggles.OvertimeRequestUseMostUnderStaffedSkill_47853);
+
 			builder.RegisterType<SkillStaffingReadModelDataLoader>().As<ISkillStaffingReadModelDataLoader>();
 			registerType
 				<IOvertimeRequestSkillProvider, OvertimeRequestSkillProviderToggle47290On, OvertimeRequestSkillProvider>(builder,

@@ -8,12 +8,12 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.AgentInfo
 {
-	[DisabledBy(Toggles.OvertimeRequestUseMostUnderStaffedSkill_47853)]
-	public class OvertimeRequestUnderStaffingSkillProvider : IOvertimeRequestUnderStaffingSkillProvider
+	[EnabledBy(Toggles.OvertimeRequestUseMostUnderStaffedSkill_47853)]
+	public class OvertimeRequestUnderStaffingSkillProviderToggle47853On : IOvertimeRequestUnderStaffingSkillProvider
 	{
 		private readonly ISkillStaffingReadModelDataLoader _skillStaffingReadModelDataLoader;
 
-		public OvertimeRequestUnderStaffingSkillProvider(ISkillStaffingReadModelDataLoader skillStaffingReadModelDataLoader)
+		public OvertimeRequestUnderStaffingSkillProviderToggle47853On(ISkillStaffingReadModelDataLoader skillStaffingReadModelDataLoader)
 		{
 			_skillStaffingReadModelDataLoader = skillStaffingReadModelDataLoader;
 		}
@@ -22,10 +22,12 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		{
 			var skillStaffingDatas = _skillStaffingReadModelDataLoader.Load(skills.ToList(), dateTimePeriod);
 			if (!skillStaffingDatas.Any())
-				return new ISkill[]{};
+				return new ISkill[] { };
 
 			var skillStaffingDataGroups = skillStaffingDatas.GroupBy(s => s.Skill).ToList();
 			var seriousUnderstaffingSkills = new List<ISkill>();
+			var minmumUnderStaffedLevel = double.MaxValue;
+			ISkill mostUnderStaffedSkill = null;
 			foreach (var skillStaffingDataGroup in skillStaffingDataGroups)
 			{
 				var skillStaffingDataInPeriod = skillStaffingDataGroup.Where(s => s.Time >= dateTimePeriod.StartDateTime
@@ -37,15 +39,32 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 				if (skillStaffingDataInPeriod.Any(s => !hasSeriousUnderstaffing(skillStaffingDataGroup.Key, s)))
 					continue;
 
+				var skillUnderStaffedLevel = skillStaffingDataGroup.Select(x => new SkillStaffingInterval
+				{
+					CalculatedResource = x.ScheduledStaffing.Value,
+					FStaff = x.ForecastedStaffing.Value
+				}).Sum(y => y.RelativeDifference);
+
+				if (skillUnderStaffedLevel < minmumUnderStaffedLevel)
+				{
+					minmumUnderStaffedLevel = skillUnderStaffedLevel;
+					mostUnderStaffedSkill = skillStaffingDataGroup.Key;
+				}
+
 				seriousUnderstaffingSkills.Add(skillStaffingDataGroup.Key);
 			}
 
-			if (seriousUnderstaffingSkills.Count == skillStaffingDataGroups.Count)
+			if (isAllSkillsCriticalUnderStaffed(seriousUnderstaffingSkills, skillStaffingDataGroups))
 			{
-				return seriousUnderstaffingSkills;
+				return new [] { mostUnderStaffedSkill };
 			}
 
-			return new ISkill[] { };
+			return new ISkill [] { };
+		}
+
+		private static bool isAllSkillsCriticalUnderStaffed(List<ISkill> seriousUnderstaffingSkills, List<IGrouping<ISkill, SkillStaffingData>> skillStaffingDataGroups)
+		{
+			return seriousUnderstaffingSkills.Count == skillStaffingDataGroups.Count;
 		}
 
 		private bool hasSeriousUnderstaffing(ISkill skill, SkillStaffingData skillStaffingData)
@@ -57,6 +76,5 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			};
 			return new IntervalHasSeriousUnderstaffing(skill).IsSatisfiedBy(staffingInterval);
 		}
-
 	}
 }
