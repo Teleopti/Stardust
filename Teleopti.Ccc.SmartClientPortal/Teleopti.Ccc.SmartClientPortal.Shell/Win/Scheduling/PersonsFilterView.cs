@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using Autofac;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping;
@@ -94,7 +95,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_getTheGuidsFromAdvanceFilter = false;
 			using (_filterMultiplePersons = new FilterMultiplePersons())
 			{
-				_filterMultiplePersons.SetSearchablePersons(_selectedPersons, _componentContext.Resolve<ITenantLogonDataManager>());
+				_filterMultiplePersons.SetSearchablePersons(_selectedPersons, _componentContext.Resolve<ITenantLogonDataManager>(), _componentContext.Resolve<AdvancedAgentsFilter>());
 				_filterMultiplePersons.ShowDialog(this);
 
 				if (_filterMultiplePersons.DialogResult == DialogResult.OK)

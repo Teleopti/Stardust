@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
@@ -23,6 +24,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private readonly List<String> _duplicateInputText;
 		private bool _textChangedRunning;
 		private IEnumerable<LogonInfoModel> _logonInfos;
+		private AdvancedAgentsFilter _advancedAgentsFilter;
 
 		public ArrayList UserSelectedPerson
 		{
@@ -32,6 +34,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		public FilterMultiplePersons()
 		{
+			_advancedAgentsFilter = new AdvancedAgentsFilter();
 			InitializeComponent();
 			if (!DesignMode)
 				SetTexts();
@@ -61,7 +64,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void fillGridListControlDefaultSearch()
 		{
-			IEnumerable<IPerson> found = Search(textBox1.Text);
+			IEnumerable<IPerson> found = _advancedAgentsFilter.Filter(textBox1.Text, _searchablePersons, _logonInfos);
 
 			gridListControlDefaultSearch.BeginUpdate();
 			_persons.Clear();
@@ -214,10 +217,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			return null;
 		}
 
-		public void SetSearchablePersons(IEnumerable<IPerson> searchablePersons, ITenantLogonDataManager tenantLogonDataManager)
+		public void SetSearchablePersons(IEnumerable<IPerson> searchablePersons, ITenantLogonDataManager tenantLogonDataManager, AdvancedAgentsFilter advancedAgentsFilter)
 		{
 			_tenantLogonDataManager = tenantLogonDataManager;
 			_searchablePersons = searchablePersons.ToList();
+			_advancedAgentsFilter = advancedAgentsFilter;
 			loadLogonInfo();
 			textBox1.Select();
 		}
@@ -231,30 +235,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private void textBox1TextChanged(object sender, EventArgs e)
 		{
 			fillGridListControlDefaultSearch();
-		}
-
-		public ICollection<IPerson> Search(string searchText)
-		{
-			CultureInfo cultureInfo = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
-			string lowerSearchText = searchText.ToLower(cultureInfo);
-	
-			var guids = (from logonInfoModel in _logonInfos where logonContains(logonInfoModel, lowerSearchText, cultureInfo) select logonInfoModel.PersonId).ToList();
-			
-			ICollection<IPerson> personQuery =
-					(from
-						person in _searchablePersons
-					 where
-						person.Name.ToString(NameOrderOption.LastNameFirstName).ToLower(cultureInfo).Contains(lowerSearchText) ||
-						person.Name.ToString(NameOrderOption.LastNameFirstName).ToLower(cultureInfo).Replace(",", "").Contains(lowerSearchText) ||
-						person.Name.ToString(NameOrderOption.FirstNameLastName).ToLower(cultureInfo).Contains(lowerSearchText) ||
-						person.EmploymentNumber.ToLower(cultureInfo).Contains(lowerSearchText) ||
-						person.Email.ToLower(cultureInfo).Contains(lowerSearchText) ||
-						guids.Contains(person.Id.GetValueOrDefault())
-
-					 select person).ToList();
-
-			return personQuery;
-
 		}
 
 		private bool logonContains(LogonInfoModel model, string lowerSearchText, CultureInfo cultureInfo)
@@ -315,7 +295,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			foreach (var expected in inputTextArray)
 			{
 				string lowerSearchText = expected.ToLower(cultureInfo);
-				var personQuery = Search(lowerSearchText);
+				var personQuery = _advancedAgentsFilter.Filter(lowerSearchText, _searchablePersons, _logonInfos);
 				if (personQuery.Count == 1)
 				{
 					var gridColumnPerson = new FilterMultiplePersonGridControlItem(personQuery.First(), getLogonInfoModelForPerson(personQuery.First().Id.GetValueOrDefault()));
@@ -531,6 +511,5 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		{
 			return Person.Id.GetHashCode();
 		}
-	}
-
+	}	
 }
