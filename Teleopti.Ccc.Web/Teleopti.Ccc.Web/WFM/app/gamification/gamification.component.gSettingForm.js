@@ -126,13 +126,10 @@
 						x.BronzeThreshold,
 						x.SilverThreshold,
 						x.GoldThreshold,
-						'\\d+(\.\d+)?$'
+						'^[0-9]+([.]{1}[0-9]{1,6})?$'
 					);
 
-					if (config.dataType == 0) {
-						config.valueFormat = '^\\d+$';
-						config.max = 10000;
-					} else {
+					if (config.dataType == 1) {
 						config.valueFormat = '^[0-9]+([.]{1}[0-9]{1,2})?$';
 						config.badgeThreshold = floatMul(config.badgeThreshold);
 						config.goldBadgeThreshold = floatMul(config.goldBadgeThreshold);
