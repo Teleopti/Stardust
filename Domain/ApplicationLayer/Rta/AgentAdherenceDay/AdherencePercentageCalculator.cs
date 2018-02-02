@@ -2,32 +2,34 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay
 {
 	public class AdherencePercentageCalculator
 	{
 		public int? Calculate(
-			DateTime? shiftStartTime,
-			DateTime? shiftEndTime,
+			DateTimePeriod? period,
 			IEnumerable<HistoricalAdherence> data,
 			DateTime now)
 		{
-			if (!shiftStartTime.HasValue)
+			if (!period.HasValue)
 				return null;
 
-			var onGoingShift = now < shiftEndTime.Value;
-			var calculateUntil = onGoingShift ? now : shiftEndTime.Value;
+			var shiftStartTime = period.Value.StartDateTime;
+			var shiftEndTime = period.Value.EndDateTime;
+			
+			var onGoingShift = now < shiftEndTime;
+			var calculateUntil = onGoingShift ? now : shiftEndTime;
 			var adherenceAtStart = data.LastOrDefault(x => x.Timestamp <= shiftStartTime)?.Adherence ?? HistoricalAdherenceAdherence.Neutral;
 
 			var adherenceReadModels = data
 				.Select(a => new adherenceMoment {Time = a.Timestamp, Adherence = a.Adherence})
-				.Append(new adherenceMoment {Time = shiftStartTime.Value, Adherence = adherenceAtStart})
+				.Append(new adherenceMoment {Time = shiftStartTime, Adherence = adherenceAtStart})
 				.Append(new adherenceMoment {Time = calculateUntil})
 				.Where(a =>
 				{
-					var isOnShift = a.Time >= shiftStartTime.Value && a.Time <= shiftEndTime.Value;
+					var isOnShift = a.Time >= shiftStartTime && a.Time <= shiftEndTime;
 					return isOnShift;
 				})
 				.OrderBy(x => x.Time)
@@ -35,7 +37,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay
 
 			var timeInAdherence = timeIn(HistoricalAdherenceAdherence.In, adherenceReadModels);
 			var timeInNeutral = timeIn(HistoricalAdherenceAdherence.Neutral, adherenceReadModels);
-			var shiftTime = shiftEndTime.Value - shiftStartTime.Value;
+			var shiftTime = shiftEndTime - shiftStartTime;
 			var timeToAdhere = shiftTime - timeInNeutral;
 
 			if (timeToAdhere == TimeSpan.Zero)

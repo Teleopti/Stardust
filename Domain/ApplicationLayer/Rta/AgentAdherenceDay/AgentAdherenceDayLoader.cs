@@ -40,45 +40,36 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay
 		)
 		{
 			var now = _now.UtcDateTime();
-			
+
 			var person = _persons.Load(personId);
+
+			var time = TimeZoneInfo.ConvertTimeToUtc(date.Date, person?.PermissionInformation.DefaultTimeZone() ?? TimeZoneInfo.Utc);
+			var period = new DateTimePeriod(
+				time,
+				time.AddDays(1)
+			);
+
 			var schedule = _scheduleLoader.Load(personId, date);
-
-			var shiftStartTime = default(DateTime?);
-			var shiftEndTime = default(DateTime?);
-
+			var shift = default(DateTimePeriod?);
 			if (schedule.Any())
 			{
-				shiftStartTime = schedule.Min(x => x.Period.StartDateTime);
-				shiftEndTime = schedule.Max(x => x.Period.EndDateTime);
+				shift = new DateTimePeriod(schedule.Min(x => x.Period.StartDateTime), schedule.Max(x => x.Period.EndDateTime));
+				period = new DateTimePeriod(shift.Value.StartDateTime.AddHours(-1), shift.Value.EndDateTime.AddHours(1));
 			}
 
-			var timeZone = person?.PermissionInformation.DefaultTimeZone() ?? TimeZoneInfo.Utc;
-			var startOfDay = TimeZoneInfo.ConvertTimeToUtc(date.Date, timeZone);
-			var startTime = startOfDay;
-			var endTime = startOfDay.AddDays(1);
+			var changes = _changes.Read(personId, period.StartDateTime, period.EndDateTime);
 
-			if (schedule.Any())
-			{
-				startTime = shiftStartTime.Value.AddHours(-1);
-				endTime = shiftEndTime.Value.AddHours(1);
-			}
-
-			var changes = _changes.Read(personId, startTime, endTime);
-
-			var adherences = new[] {_adherences.ReadLastBefore(personId, startTime)}
-				.Concat(_adherences.Read(personId, startTime, endTime))
+			var adherences = new[] {_adherences.ReadLastBefore(personId, period.StartDateTime)}
+				.Concat(_adherences.Read(personId, period.StartDateTime, period.EndDateTime))
 				.Where(x => x != null);
 
-			var approvedPeriods = _approvedPeriods.Read(personId, startTime, endTime);
+			var approvedPeriods = _approvedPeriods.Read(personId, period.StartDateTime, period.EndDateTime);
 
 			var obj = new AgentAdherenceDay();
 			obj.Load(
 				now,
-				startTime,
-				endTime,
-				shiftStartTime,
-				shiftEndTime,
+				period,
+				shift,
 				changes,
 				adherences,
 				approvedPeriods
