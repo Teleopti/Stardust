@@ -1,9 +1,11 @@
 ﻿(function () {
 	'use strict';
+	
 	angular.module('wfm.rta').controller('RtaHistoricalController47230', RtaHistoricalController);
-	RtaHistoricalController.$inject = ['$http', '$state', '$stateParams', 'rtaService', '$translate'];
+	
+	RtaHistoricalController.$inject = ['$http', '$state', '$stateParams', 'rtaService', '$translate', 'RtaTimeline'];
 
-	function RtaHistoricalController($http, $state, $stateParams, rtaService, $translate) {
+	function RtaHistoricalController($http, $state, $stateParams, rtaService, $translate, rtaTimeline) {
 		var vm = this;
 
 		vm.highlighted = {};
@@ -23,26 +25,7 @@
 		};
 
 		var shiftInfo;
-
-		function positionForTime(offsetTime, time, totalSeconds) {
-			var diff = moment(time).diff(moment(offsetTime), 'seconds');
-			return (diff / totalSeconds) * 100 + '%';
-		}
-
-		function makeOffsetCalculator(offsetTime, totalSeconds) {
-			return function (time) {
-				return positionForTime(offsetTime, time, totalSeconds);
-			}
-		}
-
-		function makeWidthCalculator(totalSeconds) {
-			return function (offsetTime, time) {
-				return positionForTime(offsetTime, time, totalSeconds);
-			}
-		}
-
-		var calculateWidth;
-		var calculateOffset;
+		var calculate;
 
 		$http.get('../api/HistoricalAdherence/ForPerson', {
 			params: {
@@ -62,8 +45,7 @@
 
 			shiftInfo = buildShiftInfo(data);
 
-			calculateWidth = makeWidthCalculator(shiftInfo.timeWindowSeconds);
-			calculateOffset = makeOffsetCalculator(shiftInfo.timeWindowStart, shiftInfo.timeWindowSeconds);
+			calculate = rtaTimeline.makeCalculator(shiftInfo.timeWindowStart, shiftInfo.timeWindowEnd);
 
 			vm.personId = data.PersonId;
 			vm.agentName = data.AgentName;
@@ -71,7 +53,7 @@
 			vm.adherencePercentage = data.AdherencePercentage;
 			vm.showAdherencePercentage = data.AdherencePercentage !== null;
 
-			vm.currentTimeOffset = calculateOffset(data.Now);
+			vm.currentTimeOffset = calculate.Offset(data.Now);
 
 			vm.agentsFullSchedule = buildAgentsFullSchedule(data.Schedules);
 
@@ -98,37 +80,6 @@
 			}
 		});
 
-		function buildAgentOutOfAdherences(now, outOfAdherences) {
-			return outOfAdherences
-				.map(function (ooa) {
-					var startTime = moment(ooa.StartTime);
-					var startTimeFormatted = shiftInfo.timeWindowStart > startTime ?
-						startTime.format('LLL') :
-						startTime.format('LTS');
-					var endTime = ooa.EndTime != null ? ooa.EndTime : now;
-					var endTimeFormatted = ooa.EndTime != null ? moment(ooa.EndTime).format('LTS') : '';
-
-					return {
-						Width: calculateWidth(startTime, endTime),
-						Offset: calculateOffset(startTime),
-						StartTime: startTimeFormatted,
-						EndTime: endTimeFormatted
-					};
-				});
-		}
-
-		function buildAgentsFullSchedule(schedules) {
-			return schedules.map(function (layer) {
-				return {
-					Width: calculateWidth(layer.StartTime, layer.EndTime),
-					Offset: calculateOffset(layer.StartTime),
-					StartTime: moment(layer.StartTime),
-					EndTime: moment(layer.EndTime),
-					Color: layer.Color
-				};
-			});
-		}
-
 		function buildShiftInfo(data) {
 			var start = moment(data.Timeline.StartTime);
 			var end = moment(data.Timeline.EndTime);
@@ -148,15 +99,71 @@
 				shiftInfo.totalSeconds = shiftEndTime.diff(shiftStartTime, 'seconds');
 			}
 
-			shiftInfo.timeWindowSeconds = shiftInfo.totalSeconds % 3600 == 0 ? shiftInfo.totalSeconds + 7200 : shiftInfo.totalSeconds + (3600 - (shiftInfo.totalSeconds % 3600)) + 7200;
+			shiftInfo.timeWindowSeconds =
+				shiftInfo.totalSeconds % 3600 == 0 ?
+					shiftInfo.totalSeconds + 7200 :
+					shiftInfo.totalSeconds + (3600 - (shiftInfo.totalSeconds % 3600)) + 7200;
 			shiftInfo.timeWindowStart = start.clone().add(-1, 'hour');
-
+			shiftInfo.timeWindowEnd = shiftInfo.timeWindowStart.clone().add(shiftInfo.timeWindowSeconds, 'seconds');
 			return shiftInfo;
+		}
+		
+		function buildTimeline(times) {
+			var timeline = [];
+			var currentMoment = moment(times.StartTime);
+			var endTime = moment(times.EndTime);
+			var totalHours = (endTime.diff(currentMoment, 'minutes') % 60 == 0) ? 
+				endTime.diff(currentMoment, 'hours') : 
+				endTime.diff(currentMoment, 'hours') + 1;
+			var hourPercent = 100 / totalHours;
+
+			for (var i = 1; i < totalHours; i++) {
+				currentMoment.add(1, 'hour');
+				var percent = hourPercent * i;
+				timeline.push({
+					//Offset: calculate.Offset(currentMoment),
+					Offset: percent + '%',
+					Time: currentMoment.clone()
+				});
+			}
+
+			return timeline;
+		}
+
+		function buildAgentOutOfAdherences(now, outOfAdherences) {
+			return outOfAdherences
+				.map(function (ooa) {
+					var startTime = moment(ooa.StartTime);
+					var startTimeFormatted = shiftInfo.timeWindowStart > startTime ?
+						startTime.format('LLL') :
+						startTime.format('LTS');
+					var endTime = ooa.EndTime != null ? ooa.EndTime : now;
+					var endTimeFormatted = ooa.EndTime != null ? moment(ooa.EndTime).format('LTS') : '';
+
+					return {
+						Width: calculate.Width(startTime, endTime),
+						Offset: calculate.Offset(startTime),
+						StartTime: startTimeFormatted,
+						EndTime: endTimeFormatted
+					};
+				});
+		}
+
+		function buildAgentsFullSchedule(schedules) {
+			return schedules.map(function (layer) {
+				return {
+					Width: calculate.Width(layer.StartTime, layer.EndTime),
+					Offset: calculate.Offset(layer.StartTime),
+					StartTime: moment(layer.StartTime),
+					EndTime: moment(layer.EndTime),
+					Color: layer.Color
+				};
+			});
 		}
 
 		function buildDiamonds(data) {
 			return data.Changes.map(function (change, i) {
-				change.Offset = calculateOffset(change.Time);
+				change.Offset = calculate.Offset(change.Time);
 				change.RuleColor = !change.RuleColor ? "rgba(0,0,0,0.54)" : change.RuleColor;
 				change.Color = change.RuleColor;
 				change.click = function () {
@@ -213,23 +220,5 @@
 
 		}
 
-		function buildTimeline(times) {
-			var timeline = [];
-			var currentMoment = moment(times.StartTime);
-			var endTime = moment(times.EndTime);
-			var totalHours = (endTime.diff(currentMoment, 'minutes') % 60 == 0) ? endTime.diff(currentMoment, 'hours') : endTime.diff(currentMoment, 'hours') + 1;
-			var hourPercent = 100 / totalHours;
-
-			for (var i = 1; i < totalHours; i++) {
-				currentMoment.add(1, 'hour');
-				var percent = hourPercent * i;
-				timeline.push({
-					Offset: percent + '%',
-					Time: currentMoment.clone()
-				});
-			}
-
-			return timeline;
-		}
 	}
 })();

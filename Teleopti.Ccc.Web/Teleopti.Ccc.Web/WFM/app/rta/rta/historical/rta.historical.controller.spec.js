@@ -35,142 +35,21 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 		expect(t.backend.lastHistoricalAdherenceForPersonRequestParams.date).toBe('20171213');
 	});
 
-	it('should display date', function (tester) {
-		tester.stateParams.date = '20171214';
-		tester.backend
+	it('should display date', function (t) {
+		t.stateParams.date = '20171214';
+		t.backend
 			.withHistoricalAdherence({
 				Now: '2017-12-15T15:00:00',
 			});
 
-		var controller = tester.createController();
+		var vm = t.createController();
 
-		expect(controller.date).toBe(moment('2017-12-14').format('L'));
+		expect(vm.date).toBe(moment('2017-12-14').format('L'));
 	});
 	
-	it('should display out of adherence', function (t) {
+	it('should display diamonds', function (t) {
 		t.stateParams.personId = '1';
-		t.backend.withHistoricalAdherence({
-			PersonId: '1',
-			AgentName: 'Mikkey Dee',
-			Schedules: [{
-				StartTime: '2016-10-10T08:00:00',
-				EndTime: '2016-10-10T18:00:00'
-			}],
-			OutOfAdherences: [{
-				StartTime: '2016-10-10T08:00:00',
-				EndTime: '2016-10-10T08:15:00'
-			}]
-		});
-
-		var controller = t.createController();
-
-		expect(controller.outOfAdherences[0].StartTime).toEqual(moment('2016-10-10T08:00:00').format('LTS'));
-		expect(controller.outOfAdherences[0].EndTime).toEqual(moment('2016-10-10T08:15:00').format('LTS'));
-		expect(controller.outOfAdherences[0].Width).toEqual((15 * 60) / (12 * 3600) * 100 + '%');
-		expect(controller.outOfAdherences[0].Offset).toEqual(1 / 12 * 100 + '%');
-	});
-
-	it('should display out of adherence', function (tester) {
-		tester.stateParams.personId = '1';
-		tester.backend.withHistoricalAdherence({
-			PersonId: '1',
-			AgentName: 'Mikkey Dee',
-			Schedules: [{
-				StartTime: '2016-10-10T08:00:00',
-				EndTime: '2016-10-10T18:00:00'
-			}],
-			OutOfAdherences: [{
-				StartTime: '2016-10-10T08:00:00',
-				EndTime: '2016-10-10T08:15:00'
-			}, {
-				StartTime: '2016-10-10T09:15:00',
-				EndTime: '2016-10-10T10:00:00'
-			}]
-		});
-
-		var controller = tester.createController();
-
-		expect(controller.outOfAdherences[0].Offset).toEqual(1 / 12 * 100 + '%');
-		expect(controller.outOfAdherences[1].Width).toEqual((45 * 60) / (12 * 3600) * 100 + '%');
-		expect(controller.outOfAdherences[0].Width).toEqual((15 * 60) / (12 * 3600) * 100 + '%');
-		expect(controller.outOfAdherences[1].Offset).toEqual((15 * 60 + 7200) / (12 * 3600) * 100 + '%');
-	});
-
-	it('should display out of adherence start date when started a long time ago', function (tester) {
-		tester.stateParams.personId = '1';
-		tester.backend.withHistoricalAdherence({
-			PersonId: '1',
-			AgentName: 'Mikkey Dee',
-			Schedules: [{
-				StartTime: '2016-10-10T08:00:00',
-				EndTime: '2016-10-10T18:00:00'
-			}],
-			OutOfAdherences: [{
-				StartTime: '2016-10-09T17:00:00'
-			}]
-		});
-
-		var controller = tester.createController();
-
-		expect(controller.outOfAdherences[0].StartTime).toEqual(moment('2016-10-09 17:00:00').format('LLL'));
-	});
-
-	it('should display full timeline', function (tester) {
-		tester.stateParams.personId = '1';
-		tester.backend
-			.withHistoricalAdherence({
-				PersonId: '1',
-				AgentName: 'Mikkey Dee',
-				Schedules: [{
-					StartTime: '2016-10-10T08:00:00',
-					EndTime: '2016-10-10T09:00:00'
-				}, {
-					StartTime: '2016-10-10T15:00:00',
-					EndTime: '2016-10-10T17:00:00'
-				}],
-				OutOfAdherences: [],
-				Timeline: {
-					StartTime: '2016-10-10T07:00:00',
-					EndTime: '2016-10-10T18:00:00'
-				}
-			});
-
-		var controller = tester.createController();
-
-		expect(controller.fullTimeline[0].Time.format('HH:mm')).toEqual('08:00');
-		expect(controller.fullTimeline[controller.fullTimeline.length - 1].Time.format('HH:mm')).toEqual('17:00');
-	});
-
-	it('should handle out of adherence without end time', function (tester) {
-		tester.stateParams.personId = '1';
-		tester.backend
-			.withHistoricalAdherence({
-				Now: '2016-10-10T15:00:00',
-				PersonId: '1',
-				AgentName: 'Mikkey Dee',
-				Schedules: [{
-					StartTime: '2016-10-10T08:00:00',
-					EndTime: '2016-10-10T09:00:00'
-				}, {
-					StartTime: '2016-10-10T15:00:00',
-					EndTime: '2016-10-10T17:00:00'
-				}],
-				OutOfAdherences: [{
-					StartTime: '2016-10-10T07:00:00',
-					EndTime: null
-				}]
-			});
-
-		var controller = tester.createController();
-
-		expect(controller.outOfAdherences.length).toEqual(1);
-		expect(controller.outOfAdherences[0].Offset).toEqual('0%');
-		expect(controller.outOfAdherences[0].Width).toEqual(8 / 11 * 100 + '%');
-	});
-
-	it('should display diamonds', function (tester) {
-		tester.stateParams.personId = '1';
-		tester.backend
+		t.backend
 			.withHistoricalAdherence({
 				Now: '2016-10-10T15:00:00',
 				PersonId: '1',
@@ -182,14 +61,14 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 				}]
 			});
 
-		var controller = tester.createController();
+		var vm = t.createController();
 
-		expect(controller.diamonds[0].Color).toEqual('green');
+		expect(vm.diamonds[0].Color).toEqual('green');
 	});
 
-	it('should display diamonds at offset', function (tester) {
-		tester.stateParams.personId = '1';
-		tester.backend
+	it('should display diamonds at offset', function (t) {
+		t.stateParams.personId = '1';
+		t.backend
 			.withHistoricalAdherence({
 				Now: '2016-10-10T15:00:00',
 				PersonId: '1',
@@ -208,14 +87,14 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 				}
 			});
 
-		var controller = tester.createController();
+		var vm = t.createController();
 
-		expect(controller.diamonds[0].Offset).toEqual(1 / 11 * 100 + '%')
+		expect(vm.diamonds[0].Offset).toEqual(1 / 11 * 100 + '%')
 	});
 
-	it('should display cards with changes', function (tester) {
-		tester.stateParams.personId = '1';
-		tester.backend
+	it('should display cards with changes', function (t) {
+		t.stateParams.personId = '1';
+		t.backend
 			.withHistoricalAdherence({
 				Now: '2016-10-10T15:00:00',
 				PersonId: '1',
@@ -274,58 +153,58 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 				}]
 			});
 
-		var controller = tester.createController();
+		var vm = t.createController();
 
-		expect(controller.cards.length).toEqual(3);
-		expect(controller.cards[0].Header).toEqual('phone 08:00 - 11:00');
-		expect(controller.cards[0].Color).toEqual('lightgreen');
-		expect(controller.cards[1].Header).toEqual('break 11:00 - 11:10');
-		expect(controller.cards[1].Color).toEqual('red');
-		expect(controller.cards[2].Header).toEqual('phone 11:10 - 14:00');
-		expect(controller.cards[2].Color).toEqual('lightgreen');
+		expect(vm.cards.length).toEqual(3);
+		expect(vm.cards[0].Header).toEqual('phone 08:00 - 11:00');
+		expect(vm.cards[0].Color).toEqual('lightgreen');
+		expect(vm.cards[1].Header).toEqual('break 11:00 - 11:10');
+		expect(vm.cards[1].Color).toEqual('red');
+		expect(vm.cards[2].Header).toEqual('phone 11:10 - 14:00');
+		expect(vm.cards[2].Color).toEqual('lightgreen');
 
-		expect(controller.cards[0].Items.length).toEqual(2);
-		expect(controller.cards[0].Items[0].Time).toEqual('2016-10-10T08:00:00');
-		expect(controller.cards[0].Items[0].Activity).toEqual('phone');
-		expect(controller.cards[0].Items[0].ActivityColor).toEqual('lightgreen');
-		expect(controller.cards[0].Items[0].Rule).toEqual('In Call');
-		expect(controller.cards[0].Items[0].RuleColor).toEqual('darkgreen');
-		expect(controller.cards[0].Items[0].State).toEqual('Ready');
-		expect(controller.cards[0].Items[0].Adherence).toEqual('In adherence');
-		expect(controller.cards[0].Items[0].AdherenceColor).toEqual('green');
-		expect(controller.cards[0].Items[1].Time).toEqual('2016-10-10T08:15:00');
-		expect(controller.cards[0].Items[1].Activity).toEqual('phone');
-		expect(controller.cards[0].Items[1].ActivityColor).toEqual('lightgreen');
-		expect(controller.cards[0].Items[1].Rule).toEqual('ACW');
-		expect(controller.cards[0].Items[1].RuleColor).toEqual('darkgreen');
-		expect(controller.cards[0].Items[1].State).toEqual('Ready');
-		expect(controller.cards[0].Items[1].Adherence).toEqual('In adherence');
-		expect(controller.cards[0].Items[1].AdherenceColor).toEqual('green');
+		expect(vm.cards[0].Items.length).toEqual(2);
+		expect(vm.cards[0].Items[0].Time).toEqual('2016-10-10T08:00:00');
+		expect(vm.cards[0].Items[0].Activity).toEqual('phone');
+		expect(vm.cards[0].Items[0].ActivityColor).toEqual('lightgreen');
+		expect(vm.cards[0].Items[0].Rule).toEqual('In Call');
+		expect(vm.cards[0].Items[0].RuleColor).toEqual('darkgreen');
+		expect(vm.cards[0].Items[0].State).toEqual('Ready');
+		expect(vm.cards[0].Items[0].Adherence).toEqual('In adherence');
+		expect(vm.cards[0].Items[0].AdherenceColor).toEqual('green');
+		expect(vm.cards[0].Items[1].Time).toEqual('2016-10-10T08:15:00');
+		expect(vm.cards[0].Items[1].Activity).toEqual('phone');
+		expect(vm.cards[0].Items[1].ActivityColor).toEqual('lightgreen');
+		expect(vm.cards[0].Items[1].Rule).toEqual('ACW');
+		expect(vm.cards[0].Items[1].RuleColor).toEqual('darkgreen');
+		expect(vm.cards[0].Items[1].State).toEqual('Ready');
+		expect(vm.cards[0].Items[1].Adherence).toEqual('In adherence');
+		expect(vm.cards[0].Items[1].AdherenceColor).toEqual('green');
 
-		expect(controller.cards[1].Items.length).toEqual(1);
-		expect(controller.cards[1].Items[0].Time).toEqual('2016-10-10T11:02:00');
-		expect(controller.cards[1].Items[0].Activity).toEqual('break');
-		expect(controller.cards[1].Items[0].ActivityColor).toEqual('red');
-		expect(controller.cards[1].Items[0].Rule).toEqual('Short Break');
-		expect(controller.cards[1].Items[0].RuleColor).toEqual('darkred');
-		expect(controller.cards[1].Items[0].State).toEqual('Logged off');
-		expect(controller.cards[1].Items[0].Adherence).toEqual('In adherence');
-		expect(controller.cards[1].Items[0].AdherenceColor).toEqual('green');
+		expect(vm.cards[1].Items.length).toEqual(1);
+		expect(vm.cards[1].Items[0].Time).toEqual('2016-10-10T11:02:00');
+		expect(vm.cards[1].Items[0].Activity).toEqual('break');
+		expect(vm.cards[1].Items[0].ActivityColor).toEqual('red');
+		expect(vm.cards[1].Items[0].Rule).toEqual('Short Break');
+		expect(vm.cards[1].Items[0].RuleColor).toEqual('darkred');
+		expect(vm.cards[1].Items[0].State).toEqual('Logged off');
+		expect(vm.cards[1].Items[0].Adherence).toEqual('In adherence');
+		expect(vm.cards[1].Items[0].AdherenceColor).toEqual('green');
 
-		expect(controller.cards[2].Items.length).toEqual(1);
-		expect(controller.cards[2].Items[0].Time).toEqual('2016-10-10T11:10:00');
-		expect(controller.cards[2].Items[0].Activity).toEqual('phone');
-		expect(controller.cards[2].Items[0].ActivityColor).toEqual('lightgreen');
-		expect(controller.cards[2].Items[0].Rule).toEqual('In Call');
-		expect(controller.cards[2].Items[0].RuleColor).toEqual('darkgreen');
-		expect(controller.cards[2].Items[0].State).toEqual('Ready');
-		expect(controller.cards[2].Items[0].Adherence).toEqual('In adherence');
-		expect(controller.cards[2].Items[0].AdherenceColor).toEqual('green');
+		expect(vm.cards[2].Items.length).toEqual(1);
+		expect(vm.cards[2].Items[0].Time).toEqual('2016-10-10T11:10:00');
+		expect(vm.cards[2].Items[0].Activity).toEqual('phone');
+		expect(vm.cards[2].Items[0].ActivityColor).toEqual('lightgreen');
+		expect(vm.cards[2].Items[0].Rule).toEqual('In Call');
+		expect(vm.cards[2].Items[0].RuleColor).toEqual('darkgreen');
+		expect(vm.cards[2].Items[0].State).toEqual('Ready');
+		expect(vm.cards[2].Items[0].Adherence).toEqual('In adherence');
+		expect(vm.cards[2].Items[0].AdherenceColor).toEqual('green');
 	});
 
-	it('should display changes before shift start in its own card', function (tester) {
-		tester.stateParams.personId = '1';
-		tester.backend
+	it('should display changes before shift start in its own card', function (t) {
+		t.stateParams.personId = '1';
+		t.backend
 			.withHistoricalAdherence({
 				Now: '2016-10-10T15:00:00',
 				PersonId: '1',
@@ -347,23 +226,23 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 				}]
 			});
 
-		var controller = tester.createController();
+		var vm = t.createController();
 
-		expect(controller.cards[0].Header).toEqual('BeforeShiftStart');
-		expect(controller.cards[0].Color).toEqual('black');
-		expect(controller.cards[0].Items[0].Time).toEqual('2016-10-10T07:54:00');
-		expect(controller.cards[0].Items[0].Activity).toEqual(null);
-		expect(controller.cards[0].Items[0].ActivityColor).toEqual(null);
-		expect(controller.cards[0].Items[0].Rule).toEqual('Positive');
-		expect(controller.cards[0].Items[0].RuleColor).toEqual('orange');
-		expect(controller.cards[0].Items[0].State).toEqual('Ready');
-		expect(controller.cards[0].Items[0].Adherence).toEqual('Out adherence');
-		expect(controller.cards[0].Items[0].AdherenceColor).toEqual('red');
+		expect(vm.cards[0].Header).toEqual('BeforeShiftStart');
+		expect(vm.cards[0].Color).toEqual('black');
+		expect(vm.cards[0].Items[0].Time).toEqual('2016-10-10T07:54:00');
+		expect(vm.cards[0].Items[0].Activity).toEqual(null);
+		expect(vm.cards[0].Items[0].ActivityColor).toEqual(null);
+		expect(vm.cards[0].Items[0].Rule).toEqual('Positive');
+		expect(vm.cards[0].Items[0].RuleColor).toEqual('orange');
+		expect(vm.cards[0].Items[0].State).toEqual('Ready');
+		expect(vm.cards[0].Items[0].Adherence).toEqual('Out adherence');
+		expect(vm.cards[0].Items[0].AdherenceColor).toEqual('red');
 	});
 
-	it('should display changes after shift end in its own card', function (tester) {
-		tester.stateParams.personId = '1';
-		tester.backend
+	it('should display changes after shift end in its own card', function (t) {
+		t.stateParams.personId = '1';
+		t.backend
 			.withHistoricalAdherence({
 				Now: '2016-10-10T15:00:00',
 				PersonId: '1',
@@ -385,23 +264,23 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 				}]
 			});
 
-		var controller = tester.createController();
+		var vm = t.createController();
 
-		expect(controller.cards[0].Header).toEqual('AfterShiftEnd');
-		expect(controller.cards[0].Color).toEqual('black');
-		expect(controller.cards[0].Items[0].Time).toEqual('2016-10-10T11:54:00');
-		expect(controller.cards[0].Items[0].Activity).toEqual(null);
-		expect(controller.cards[0].Items[0].ActivityColor).toEqual(null);
-		expect(controller.cards[0].Items[0].Rule).toEqual('Positive');
-		expect(controller.cards[0].Items[0].RuleColor).toEqual('orange');
-		expect(controller.cards[0].Items[0].State).toEqual('Ready');
-		expect(controller.cards[0].Items[0].Adherence).toEqual('Out adherence');
-		expect(controller.cards[0].Items[0].AdherenceColor).toEqual('red');
+		expect(vm.cards[0].Header).toEqual('AfterShiftEnd');
+		expect(vm.cards[0].Color).toEqual('black');
+		expect(vm.cards[0].Items[0].Time).toEqual('2016-10-10T11:54:00');
+		expect(vm.cards[0].Items[0].Activity).toEqual(null);
+		expect(vm.cards[0].Items[0].ActivityColor).toEqual(null);
+		expect(vm.cards[0].Items[0].Rule).toEqual('Positive');
+		expect(vm.cards[0].Items[0].RuleColor).toEqual('orange');
+		expect(vm.cards[0].Items[0].State).toEqual('Ready');
+		expect(vm.cards[0].Items[0].Adherence).toEqual('Out adherence');
+		expect(vm.cards[0].Items[0].AdherenceColor).toEqual('red');
 	});
 
-	it('should display changes on shift end in the after card', function (tester) {
-		tester.stateParams.personId = '1';
-		tester.backend
+	it('should display changes on shift end in the after card', function (t) {
+		t.stateParams.personId = '1';
+		t.backend
 			.withHistoricalAdherence({
 				Now: '2017-12-07T17:10:00',
 				PersonId: '1',
@@ -414,15 +293,15 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 				}]
 			});
 
-		var controller = tester.createController();
+		var vm = t.createController();
 
-		expect(controller.cards[0].Header).toEqual('AfterShiftEnd');
-		expect(controller.cards[0].Items[0].Time).toEqual('2017-12-07T17:00:00');
+		expect(vm.cards[0].Header).toEqual('AfterShiftEnd');
+		expect(vm.cards[0].Items[0].Time).toEqual('2017-12-07T17:00:00');
 	});
 
-	it('should display closed cards by default', function (tester) {
-		tester.stateParams.personId = '1';
-		tester.backend
+	it('should display closed cards by default', function (t) {
+		t.stateParams.personId = '1';
+		t.backend
 			.withHistoricalAdherence({
 				Now: '2016-10-10T15:00:00',
 				PersonId: '1',
@@ -435,14 +314,14 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 				}]
 			});
 
-		var controller = tester.createController();
+		var vm = t.createController();
 
-		expect(controller.cards[0].isOpen).toEqual(false);
+		expect(vm.cards[0].isOpen).toEqual(false);
 	});
 
-	it('should highlight diamond and card item on click', function (tester) {
-		tester.stateParams.personId = '1';
-		tester.backend
+	it('should highlight diamond and card item on click', function (t) {
+		t.stateParams.personId = '1';
+		t.backend
 			.withHistoricalAdherence({
 				Now: '2016-10-10T15:00:00',
 				PersonId: '1',
@@ -454,19 +333,18 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 					Time: '2016-10-10T08:00:00'
 				}]
 			});
+		var vm = t.createController();
 
-		var controller = tester.createController();
+		vm.diamonds[0].click();
 
-		controller.diamonds[0].click();
-
-		expect(controller.diamonds[0].highlight).toEqual(true);
-		expect(controller.cards[0].isOpen).toEqual(true);
-		expect(controller.cards[0].Items[0].highlight).toEqual(true);
+		expect(vm.diamonds[0].highlight).toEqual(true);
+		expect(vm.cards[0].isOpen).toEqual(true);
+		expect(vm.cards[0].Items[0].highlight).toEqual(true);
 	});
 
-	it('should remove highlight from other diamond and card item on click', function (tester) {
-		tester.stateParams.personId = '1';
-		tester.backend
+	it('should remove highlight from other diamond and card item on click', function (t) {
+		t.stateParams.personId = '1';
+		t.backend
 			.withHistoricalAdherence({
 				Now: '2016-10-10T15:00:00',
 				PersonId: '1',
@@ -483,23 +361,22 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 					Time: '2016-10-10T09:00:00'
 				}]
 			});
+		var vm = t.createController();
 
-		var controller = tester.createController();
+		vm.diamonds[0].click();
+		vm.diamonds[1].click();
 
-		controller.diamonds[0].click();
-		controller.diamonds[1].click();
-
-		expect(controller.diamonds[0].highlight).toEqual(false);
-		expect(controller.cards[0].isOpen).toEqual(true);
-		expect(controller.cards[0].Items[0].highlight).toEqual(false);
-		expect(controller.diamonds[1].highlight).toEqual(true);
-		expect(controller.cards[1].isOpen).toEqual(true);
-		expect(controller.cards[1].Items[0].highlight).toEqual(true);
+		expect(vm.diamonds[0].highlight).toEqual(false);
+		expect(vm.cards[0].isOpen).toEqual(true);
+		expect(vm.cards[0].Items[0].highlight).toEqual(false);
+		expect(vm.diamonds[1].highlight).toEqual(true);
+		expect(vm.cards[1].isOpen).toEqual(true);
+		expect(vm.cards[1].Items[0].highlight).toEqual(true);
 	});
 
-	it('should highlight diamond and card item on click', function (tester) {
-		tester.stateParams.personId = '1';
-		tester.backend
+	it('should highlight diamond and card item on click', function (t) {
+		t.stateParams.personId = '1';
+		t.backend
 			.withHistoricalAdherence({
 				Now: '2016-10-10T15:00:00',
 				PersonId: '1',
@@ -511,30 +388,12 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 					Time: '2016-10-10T08:00:00'
 				}]
 			});
+		var vm = t.createController();
 
-		var controller = tester.createController();
+		vm.cards[0].Items[0].click();
 
-		controller.cards[0].Items[0].click();
-
-		expect(controller.diamonds[0].highlight).toEqual(true);
-		expect(controller.cards[0].Items[0].highlight).toEqual(true);
+		expect(vm.diamonds[0].highlight).toEqual(true);
+		expect(vm.cards[0].Items[0].highlight).toEqual(true);
 	});
 
-	it('should generate timeline from server times', function (tester) {
-		tester.stateParams.personId = '1';
-		tester.backend
-			.withHistoricalAdherence({
-				Now: '2016-10-10T15:00:00',
-				PersonId: '1',
-				Timeline: {
-					StartTime: '2016-10-10T00:00:00',
-					EndTime: '2016-10-11T00:00:00'
-				}
-			});
-
-		var controller = tester.createController();
-
-		expect(controller.fullTimeline[0].Time.format('HH:mm')).toBe('01:00');
-		expect(controller.fullTimeline[22].Time.format('HH:mm')).toBe('23:00');
-	});
 });
