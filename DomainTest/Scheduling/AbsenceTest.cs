@@ -2,6 +2,7 @@ using System;
 using System.Drawing;
 using System.IdentityModel.Claims;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -199,6 +200,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				Assert.AreEqual(target.Description, target.ConfidentialDescription(targetPerson));
 				Assert.AreEqual(target.DisplayColor, target.ConfidentialDisplayColor(targetPerson));
 			}		
+		}
+
+		[Test]
+		public void ShouldHaveDeletedInDescription()
+		{
+			target.SetDeleted();
+			target.Description.Name.Should().Contain(UserTexts.Resources.Deleted);
 		}
     }
 }

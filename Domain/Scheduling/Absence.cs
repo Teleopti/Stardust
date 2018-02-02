@@ -1,3 +1,4 @@
+using System;
 using System.Drawing;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -20,16 +21,19 @@ namespace Teleopti.Ccc.Domain.Scheduling
         private Color _displayColor;
         private bool _confidential;
 
+		[NonSerialized]
+		private readonly DeletedDescription _deletedDescription = new DeletedDescription();
+
 		/// <summary>
-        /// Gets or sets the priority.
-        /// Used if a person has multiple PersonAbsences
-        /// </summary>
-        /// <value>The priority.</value>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2008-02-05
-        /// </remarks>
-        public virtual byte Priority
+		/// Gets or sets the priority.
+		/// Used if a person has multiple PersonAbsences
+		/// </summary>
+		/// <value>The priority.</value>
+		/// <remarks>
+		/// Created by: rogerkr
+		/// Created date: 2008-02-05
+		/// </remarks>
+		public virtual byte Priority
         {
             get { return _priority; }
             set { _priority = value; }
@@ -85,8 +89,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
         /// </remarks>
         public virtual Description Description
         {
-            get { return _description; }
-            set { _description = value; }
+			get { return IsDeleted ? _deletedDescription.AppendDeleted(_description) : _description; }
+			set { _description = value; }
         }
 
         /// <summary>
