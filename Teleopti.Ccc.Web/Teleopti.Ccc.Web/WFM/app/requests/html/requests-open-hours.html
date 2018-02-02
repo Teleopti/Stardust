@@ -1,14 +1,14 @@
 ﻿<modal-dialog show="requestsSiteOpenHours.showSite" ng-cloak>
 	<h1 class="modal-title">{{'ManageOpenHours' | translate}}</h1>
-	<div class="modal-inner-content no-scroll">
-		<div class="con-row m-h-400">
+	<div class="modal-inner-content site-open-hours-container">
+		<div class="con-row">
 			<div class="con-flex">
 				<label for="siteName" class="input-prepend">
 					<i class="mdi mdi-filter-outline"></i>
 					<input type="text" id="siteNameFilter" placeholder="{{'FilterSites' | translate}}" ng-model="siteFilter.Name" />
 					<md-tooltip>{{'FilterSites' | translate}}</md-tooltip>
 				</label>
-				<div class="m-h-400 auto">
+				<div class="">
 					<div ng-repeat="site in requestsSiteOpenHours.sites | filter:siteFilter">
 						<div class="wfm-radio">
 							<label class="relative">
@@ -20,7 +20,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="con-flex split-3-1 m-h-400 auto">
+			<div class="con-flex split-3-1">
 				<div ng-repeat="site in requestsSiteOpenHours.sites">
 					<working-hours-picker ng-if="requestsSiteOpenHours.selectedSite == site.Id" working-hours="site.OpenHours"></working-hours-picker>
 				</div>

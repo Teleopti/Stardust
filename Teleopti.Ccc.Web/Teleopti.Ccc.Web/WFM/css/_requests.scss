@@ -1,8 +1,4 @@
-﻿.account-tooltip .md-content {
-	height: auto;
-}
-
-//Move to styleguide later.
+﻿//Move to styleguide later.
 wfm-multiple-search-input {
 	margin: 5px;
 }
@@ -14,8 +10,6 @@ wfm-multiple-search-input {
 		min-height: 40px;
 
 		.time-zone-switch {
-			padding: 5px 0;
-
 			md-radio-button{
 				float: left;
 				margin-right: 10px;
@@ -40,38 +34,9 @@ wfm-multiple-search-input {
 		height: 60vh;
 	}
 
-	.show-replay {
-		display: block !important;
-	}
-
-	.inline-block {
-		display: inline-block;
-	}
-
-	.relative {
-		position: relative;
-	}
-
-	.absolute {
-		position: absolute;
-	}
-
-	.auto {
-		overflow: auto;
-	}
-
-	.m-h-400 {
-		max-height: 400px;
-	}
-
-	.no-scroll {
-		overflow-y: inherit !important;
-	}
-
 	.message-reply-container-first textarea {
 		min-height: 150px;
 		width: 50%;
-		margin-bottom: 10px;
 	}
 
 	.message-reply-container-last textarea {
@@ -84,9 +49,8 @@ wfm-multiple-search-input {
 	}
 
 	.schedule-container {
-		border: 1px solid #A3A3A3;
-		background-color: #fff;
-		padding: 5px;
+		border: 1px solid $gray054;
+		background-color: $white;
 		width: 710px;
 		height: 145px;
 		z-index: 1000;
@@ -146,10 +110,9 @@ wfm-multiple-search-input {
 	}
 
 	.filter-switch {
-		display: inline-block;
 		margin: 0 10px;
 
-		md-switch{
+		md-switch {
 			margin: 10px 0;
 		}
 	}
@@ -180,6 +143,15 @@ wfm-multiple-search-input {
 			.right-part {
 				min-width: 150px;
 			}
+		}
+	}
+
+	.site-open-hours-container {
+		overflow-y: visible;
+
+		& > .con-row > .con-flex {
+			max-height: 400px;
+			overflow-y: auto;
 		}
 	}
 
@@ -410,7 +382,7 @@ wfm-multiple-search-input {
 			border-right-style: hidden;
 		}
 
-		.isWeekend {
+		.is-weekend {
 			width: 40px;
 			height: calc(100% - 1px);
 			position: absolute;
@@ -473,11 +445,7 @@ wfm-multiple-search-input {
 			overflow: visible;
 		}
 	}
-
-	.ng-cloak {
-		display: none !important;
-	}
-
+	
 	.pagination li.disabled a {
 		cursor: not-allowed;
 	}

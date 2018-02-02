@@ -1,4 +1,4 @@
-﻿<div ng-cloak style="display: none;" ng-class="{'show-replay':requestsReplyMessage.showReplyDialog}">
+﻿<div ng-cloak ng-if="requestsReplyMessage.showReplyDialog">
 	<modal-dialog show="requestsReplyMessage.showReplyDialog" ng-cloak class="request-reply-dialog">
 		<form name="replyDialogForm" class="wfm-form" novalidate>
 			<div class="modal-inner-content">
