@@ -17,9 +17,9 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 		}
 
 		[HttpPost, Route("api/PeopleCommand/updateSkill")]
-		public virtual JsonResult<ResultModel> UpdatePersonSkills(PeopleSkillCommandInput model)
+		public virtual JsonResult<ResultViewModel> UpdatePersonSkills(PeopleSkillCommandInput model)
 		{
-			var result = new ResultModel();
+			var result = new ResultViewModel();
 			try
 			{
 				result.SuccessCount = InternalUpdatePersonSkill(model);
@@ -35,9 +35,9 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			return Json(result);
 		}
 		[HttpPost, Route("api/PeopleCommand/updateShiftBag")]
-		public virtual JsonResult<ResultModel> UpdatePersonShiftBag(PeopleShiftBagCommandInput model)
+		public virtual JsonResult<ResultViewModel> UpdatePersonShiftBag(PeopleShiftBagCommandInput model)
 		{
-			var result = new ResultModel();
+			var result = new ResultViewModel();
 			try
 			{
 				result.SuccessCount = InternalUpdatePersonShiftBag(model);

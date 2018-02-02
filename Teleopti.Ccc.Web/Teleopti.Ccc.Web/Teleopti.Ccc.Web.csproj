@@ -463,6 +463,13 @@
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\SingleOwnedPerson.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\ViewModelFactory\ScheduledSkillOpenHourProviderToggle47290On.cs" />
     <Compile Include="Areas\MyTime\Models\WeekSchedule\RequestLicense.cs" />
+    <Compile Include="Areas\People\Models\GrantRolesInputModel.cs" />
+    <Compile Include="Areas\People\Models\RevokeRolesInputModel.cs" />
+    <Compile Include="Areas\People\Models\PersonRoleInputModel.cs" />
+    <Compile Include="Areas\People\Controllers\RoleController.cs" />
+    <Compile Include="Areas\People\Models\FecthPersonsInputModel.cs" />
+    <Compile Include="Areas\People\Models\PersonViewModel.cs" />
+    <Compile Include="Areas\People\Models\RoleViewModel.cs" />
     <Compile Include="Areas\Rta\Controllers\ConfigurationController.cs" />
     <Compile Include="Areas\Rta\Controllers\HistoricalAdherenceController.cs" />
     <Compile Include="Areas\Rta\Controllers\AgentStateController.cs" />
@@ -642,7 +649,7 @@
     <Compile Include="Areas\People\Core\Models\PeopleSkillCommandInput.cs" />
     <Compile Include="Areas\People\Controllers\PeopleDataController.cs" />
     <Compile Include="Areas\People\Controllers\PersonCommandInputModel.cs" />
-    <Compile Include="Areas\People\Controllers\ResultModel.cs" />
+    <Compile Include="Areas\People\Controllers\ResultViewModel.cs" />
     <Compile Include="Areas\People\Core\Providers\IPersonInfoUpdater.cs" />
     <Compile Include="Areas\People\Core\Providers\IPersonDataProvider.cs" />
     <Compile Include="Areas\People\Core\Providers\PersonInfoUpdater.cs" />
@@ -2821,7 +2828,6 @@
     <Folder Include="Areas\Mart\Views\Shared\" />
     <Folder Include="Areas\MyTime\Core\BadgeLeaderBoardReport\DataProvider\" />
     <Folder Include="Areas\MyTime\Core\Mapping\" />
-    <Folder Include="Areas\People\Views\PeopleData\" />
     <Folder Include="Areas\SSO\Views\Authentication\" />
     <Folder Include="Areas\Staffing\Core\" />
     <Folder Include="Areas\Start\Views\Config\" />
