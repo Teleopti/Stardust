@@ -15237,9 +15237,6 @@ Vill du registrera dig?</value>
   <data name="AgentIdCouldNotBeMatchedToAnyAgent" xml:space="preserve">
     <value>Agent-ID kunde inte matchas till någon agent</value>
   </data>
-  <data name="GamificationMeasureNameAlreadyExist" xml:space="preserve">
-    <value>Ett mätvärde för gamification (ID {0}) med det här namnet finns redan. </value>
-  </data>
   <data name="AgentIdIsMandatory" xml:space="preserve">
     <value>Agent-ID är obligatoriskt.</value>
   </data>
@@ -15326,5 +15323,35 @@ Vill du registrera dig?</value>
   </data>
   <data name="RequestEndDate" xml:space="preserve">
     <value>Slutdatum</value>
+  </data>
+  <data name="Changes" xml:space="preserve">
+    <value>Ändringar</value>
+  </data>
+  <data name="RestrictionNotAbleToBeScheduledReasonTooManyDaysOff" xml:space="preserve">
+    <value>För många fridagar i perioden</value>
+  </data>
+  <data name="YouGotANewBronzeBadge" xml:space="preserve">
+    <value>Du fick en ny bronsmedalj för {0} {1:yyyy-MM-dd}.</value>
+  </data>
+  <data name="YouGotANewGoldBadge" xml:space="preserve">
+    <value>Du fick en ny guldmedalj för {0} {1:yyyy-MM-dd}.</value>
+  </data>
+  <data name="YouGotANewSilverBadge" xml:space="preserve">
+    <value>Du fick en ny silvermedalj för {0} {1:yyyy-MM-dd}.</value>
+  </data>
+  <data name="RestrictionNotAbleToBeScheduledReasonConflictingRestrictions" xml:space="preserve">
+    <value>Konflikt mellan begränsningar</value>
+  </data>
+  <data name="ImportBpoShowingTheFirstXErrorMessagesOfY" xml:space="preserve">
+    <value>Visar de första {0} felmeddelandena av {1}.</value>
+  </data>
+  <data name="RemoveShift" xml:space="preserve">
+    <value>Ta bort skift</value>
+  </data>
+  <data name="AreYouSureToRemoveSelectedShift" xml:space="preserve">
+    <value>Är du säker på att du vill ta bort {0} skift från {1} agenter?</value>
+  </data>
+  <data name="DuplicateName" xml:space="preserve">
+    <value>Namnet är en dubblett</value>
   </data>
 </root>
