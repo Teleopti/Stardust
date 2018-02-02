@@ -64,20 +64,6 @@
 			settingDescriptor.Value.Name = settingName;
 		};
 
-		ctrl.syncMeasureName = function (measure) {
-			if (measure && ctrl.allSettings.length > 0) {
-				ctrl.allSettings.forEach(function (setting) {
-					if (setting.ExternalBadgeSettings && setting.ExternalBadgeSettings.length > 0) {
-						setting.ExternalBadgeSettings.forEach(function (item) {
-							if (item.QualityId === measure.externalId && item.DataType === measure.dataType) {
-								item.Name = measure.name;
-							}
-						});
-					}
-				});
-			}
-		}
-
 		ctrl.addNewSetting = function () {
 			gamificationSettingService.createNewSetting().then(function (data) {
 				if (data) {

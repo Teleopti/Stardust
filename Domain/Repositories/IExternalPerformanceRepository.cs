@@ -9,7 +9,5 @@ namespace Teleopti.Ccc.Domain.Repositories
 		IEnumerable<IExternalPerformance> FindAllExternalPerformances();
 		IExternalPerformance FindExternalPerformanceByExternalId(int externalId);
 		int GetExernalPerformanceCount();
-		void UpdateExternalPerformanceName(Guid id, string name);
-		void UpdateExternalPerformanceName(int qualityId, int dataType, string name);
 	}
 }

@@ -25,23 +25,14 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 			var setting = _gamificationSettingRepository.Get(id);
 
 			if (setting == null)
-				return default(GamificationSettingViewModel);
-
-			var externalMeasures = _externalPerformanceRepository.FindAllExternalPerformances();
-
-			var result = _mapper.Map(setting);
-
-			foreach (var externalSetting in result.ExternalBadgeSettings)
 			{
-				var aMeasure = externalMeasures.FirstOrDefault(x => x.ExternalId == externalSetting.QualityId && x.DataType == externalSetting.DataType);
-				if (aMeasure != null)
-				{
-					externalSetting.Name = aMeasure.Name;
-				}
+				return default(GamificationSettingViewModel);
 			}
-
-			result.ExternalBadgeSettings = result.ExternalBadgeSettings.OrderBy(ebs => ebs.Name).ToList();
-			return result;
+			else {
+				var result = _mapper.Map(setting);
+				result.ExternalBadgeSettings = result.ExternalBadgeSettings.OrderBy(ebs => ebs.QualityId).ToList();
+				return result;
+			}
 		}
 
 		public IList<GamificationDescriptionViewModel> GetGamificationList()

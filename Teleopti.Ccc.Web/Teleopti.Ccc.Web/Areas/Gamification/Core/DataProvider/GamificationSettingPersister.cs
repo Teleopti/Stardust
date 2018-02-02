@@ -38,7 +38,9 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 				_gamificationSettingRepository.Add(gamificationSetting);
 			}
 
-			return _mapper.Map(gamificationSetting);
+			var result = _mapper.Map(gamificationSetting);
+			result.ExternalBadgeSettings = result.ExternalBadgeSettings.OrderBy(ebs => ebs.QualityId).ToList();
+			return result;
 		}
 
 		public bool RemoveGamificationSetting(Guid id)
@@ -414,11 +416,6 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 		{
 			var currentCount = _gamificationSettingRepository.LoadAll().Count;
 			return currentCount > 0 ? string.Format(Resources.NewGamificationSetting + "{0}", currentCount) : Resources.NewGamificationSetting;
-		}
-
-		public void PersistExternalMeasureName(ExternalMeasureModel input)
-		{
-			_externalPerformanceRepository.UpdateExternalPerformanceName(input.MeasureId, input.DataType, input.Name);
 		}
 	}
 }

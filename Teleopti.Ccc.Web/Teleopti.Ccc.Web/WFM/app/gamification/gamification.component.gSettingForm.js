@@ -5,8 +5,7 @@
 			templateUrl: 'app/gamification/html/gSettingForm.tpl.html',
 			bindings: {
 				onNameUpdate: '&',
-				setting: '<',
-				measureNameUpdateCallback: '&'
+				setting: '<'
 			},
 			controller: ['gamificationSettingService', '$log', '$scope', '$translate', gSettingFormCtrl]
 		});
@@ -284,16 +283,12 @@
 
 			var self = this;
 
-			dataService.saveData('UpdateExternalMeasureName', {
-				MeasureId: self.externalId,
-				DataType: this.dataType,
+			dataService.saveData('ExternalBadgeSettingDescription', {
+				GamificationSettingId: ctrl.id,
+				QualityId: this.externalId,
 				Name: name
 			}).then(function () {
 				$log.log('updated name');
-				if (ctrl.measureNameUpdateCallback) {
-					$log.log('async name to other settings');
-					ctrl.measureNameUpdateCallback({ measure: { externalId: self.externalId, dataType: self.dataType, name: name } });
-				}
 			}, function () {
 				$log.error('failed to save name. restoring: ' + previous);
 				self.name = previous;
