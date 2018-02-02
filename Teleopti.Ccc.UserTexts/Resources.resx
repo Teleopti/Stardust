@@ -17160,4 +17160,8 @@ Do you want to participate?</value>
     <value>Remove Shift</value>
     <comment>command item for remove shift</comment>
   </data>
+  <data name="AreYouSureToRemoveSelectedShift" xml:space="preserve">
+    <value>Are you sure you wish to remove {0} shifts from {1} agents?</value>
+    <comment>Message to confirm person shift removing</comment>
+  </data>
 </root>

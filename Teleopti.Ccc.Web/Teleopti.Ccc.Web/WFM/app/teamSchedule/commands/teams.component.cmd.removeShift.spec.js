@@ -44,9 +44,11 @@
 	it("should show confirm dialog", function () {
 		var dialog = setUp("2018-02-01").dialog;
 		var title = dialog.querySelector('.modal-inner-content h3');
+		var contentMessage = dialog.querySelector('.modal-inner-content').innerHTML;
 		var button = dialog.querySelectorAll("button");
 
 		expect(title.innerHTML.trim()).toEqual("RemoveShift");
+		expect(contentMessage.indexOf("AreYouSureToRemoveSelectedShift") > -1).toEqual(true);
 		expect(button.length).toEqual(2);
 		expect(button[0].innerHTML).toEqual("Cancel");
 		expect(button[1].innerHTML).toEqual("Apply");

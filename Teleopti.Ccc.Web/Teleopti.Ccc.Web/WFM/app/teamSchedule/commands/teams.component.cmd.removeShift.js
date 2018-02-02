@@ -22,10 +22,18 @@
 		}
 
 		ctrl.popDialog = function () {
+			var personInfos = getCheckedPersonInfoListWithShift();
 			var title = ctrl.label;
-			var message = "";
+			var message = teamScheduleNotificationService.buildConfirmationMessage(
+				'AreYouSureToRemoveSelectedShift',
+				personInfos.length,
+				personInfos.length,
+				true
+			);
 			$wfmModal.confirm(message, title).then(function (result) {
+				ctrl.resetActiveCmd();
 				if (result) {
+					$scope.$emit('teamSchedule.show.loading');
 					ctrl.removeShift();
 				}
 			});

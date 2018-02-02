@@ -54,7 +54,7 @@
 
 		function removeShift(input) {
 			return $q(function (resolve, reject) {
-				$http.post(moveShiftUrl, input).then(function (data) {
+				$http.post(removeShiftUrl, input).then(function (data) {
 					resolve(data);
 				}, function (err) {
 					reject(err);

@@ -3169,6 +3169,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you wish to remove {0} shifts from {1} agents?.
+        /// </summary>
+        public static string AreYouSureToRemoveSelectedShift {
+            get {
+                return ResourceManager.GetString("AreYouSureToRemoveSelectedShift", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you wish to undo last schedule change for selected agents?.
         /// </summary>
         public static string AreYouSureToUndoSelectedSchedule {
