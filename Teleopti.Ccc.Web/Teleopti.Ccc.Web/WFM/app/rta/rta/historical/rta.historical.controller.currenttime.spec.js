@@ -2,8 +2,8 @@
 
 rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 
-	it('should display current time', function (tester) {
-		tester.backend.withHistoricalAdherence({
+	it('should display current time', function (t) {
+		t.backend.withHistoricalAdherence({
 			Now: '2017-12-14T15:00:00',
 			Timeline: {
 				StartTime: '2017-12-14T10:00:00',
@@ -11,13 +11,13 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 			}
 		});
 
-		var controller = tester.createController();
+		var vm = t.createController();
 
-		expect(controller.currentTimeOffset).toEqual('50%');
+		expect(vm.currentTimeOffset).toEqual('50%');
 	});
 
-	it('should display off screen far to the right when looking at yesterdays date ;)', function (tester) {
-		tester.backend.withHistoricalAdherence({
+	it('should display off screen far to the right when looking at yesterdays date ;)', function (t) {
+		t.backend.withHistoricalAdherence({
 			Now: '2017-12-14T15:00:00',
 			Timeline: {
 				StartTime: '2017-12-13T10:00:00',
@@ -25,9 +25,9 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 			}
 		});
 
-		var controller = tester.createController();
+		var vm = t.createController();
 
-		expect(controller.currentTimeOffset).toBeGreaterThan('100%');
+		expect(vm.currentTimeOffset).toBeGreaterThan('100%');
 	});
 	
 });

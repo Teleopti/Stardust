@@ -67,15 +67,10 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 	});
 
 	it('should display diamonds at offset', function (t) {
-		t.stateParams.personId = '1';
 		t.backend
 			.withHistoricalAdherence({
-				Now: '2016-10-10T15:00:00',
-				PersonId: '1',
-				Schedules: [],
-				OutOfAdherences: [],
 				Changes: [{
-					Time: '2016-10-10T08:00:00',
+					Time: '2016-10-10T09:00:00',
 					Activity: 'phone',
 					Rule: 'In Call',
 					State: 'Ready',
@@ -89,7 +84,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 
 		var vm = t.createController();
 
-		expect(vm.diamonds[0].Offset).toEqual(1 / 11 * 100 + '%')
+		expect(vm.diamonds[0].Offset).toEqual(1 / 9 * 100 + '%')
 	});
 
 	it('should display cards with changes', function (t) {

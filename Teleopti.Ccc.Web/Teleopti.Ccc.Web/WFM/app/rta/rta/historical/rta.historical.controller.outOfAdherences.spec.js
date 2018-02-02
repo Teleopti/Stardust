@@ -7,10 +7,10 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 		t.backend.withHistoricalAdherence({
 			PersonId: '1',
 			AgentName: 'Mikkey Dee',
-			Schedules: [{
-				StartTime: '2016-10-10T08:00:00',
-				EndTime: '2016-10-10T18:00:00'
-			}],
+			Timeline: {
+				StartTime: '2016-10-10T07:00:00',
+				EndTime: '2016-10-10T19:00:00'
+			},
 			OutOfAdherences: [{
 				StartTime: '2016-10-10T08:00:00',
 				EndTime: '2016-10-10T08:15:00'
@@ -30,10 +30,10 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 		tester.backend.withHistoricalAdherence({
 			PersonId: '1',
 			AgentName: 'Mikkey Dee',
-			Schedules: [{
-				StartTime: '2016-10-10T08:00:00',
-				EndTime: '2016-10-10T18:00:00'
-			}],
+			Timeline: {
+				StartTime: '2016-10-10T07:00:00',
+				EndTime: '2016-10-10T19:00:00'
+			},
 			OutOfAdherences: [{
 				StartTime: '2016-10-10T08:00:00',
 				EndTime: '2016-10-10T08:15:00'
@@ -56,10 +56,10 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 		tester.backend.withHistoricalAdherence({
 			PersonId: '1',
 			AgentName: 'Mikkey Dee',
-			Schedules: [{
-				StartTime: '2016-10-10T08:00:00',
-				EndTime: '2016-10-10T18:00:00'
-			}],
+			Timeline: {
+				StartTime: '2016-10-10T07:00:00',
+				EndTime: '2016-10-10T19:00:00'
+			},
 			OutOfAdherences: [{
 				StartTime: '2016-10-09T17:00:00'
 			}]
@@ -68,33 +68,6 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 		var controller = tester.createController();
 
 		expect(controller.outOfAdherences[0].StartTime).toEqual(moment('2016-10-09 17:00:00').format('LLL'));
-	});
-
-	it('should display out of adherence without end time', function (t) {
-		t.stateParams.personId = '1';
-		t.backend
-			.withHistoricalAdherence({
-				Now: '2016-10-10T15:00:00',
-				PersonId: '1',
-				AgentName: 'Mikkey Dee',
-				Schedules: [{
-					StartTime: '2016-10-10T08:00:00',
-					EndTime: '2016-10-10T09:00:00'
-				}, {
-					StartTime: '2016-10-10T15:00:00',
-					EndTime: '2016-10-10T17:00:00'
-				}],
-				OutOfAdherences: [{
-					StartTime: '2016-10-10T07:00:00',
-					EndTime: null
-				}]
-			});
-
-		var vm = t.createController();
-
-		expect(vm.outOfAdherences.length).toEqual(1);
-		expect(vm.outOfAdherences[0].Offset).toEqual('0%');
-		expect(vm.outOfAdherences[0].Width).toEqual(8 / 11 * 100 + '%');
 	});
 
 	it('should display out of adherence started a long time ago within timeline ', function (t) {

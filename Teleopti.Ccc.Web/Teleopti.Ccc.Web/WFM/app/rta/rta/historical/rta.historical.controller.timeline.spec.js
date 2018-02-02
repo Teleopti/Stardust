@@ -8,14 +8,6 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 			.withHistoricalAdherence({
 				PersonId: '1',
 				AgentName: 'Mikkey Dee',
-				Schedules: [{
-					StartTime: '2016-10-10T11:00:00',
-					EndTime: '2016-10-10T15:00:00'
-				}, {
-					StartTime: '2016-10-10T15:00:00',
-					EndTime: '2016-10-10T19:00:00'
-				}],
-				OutOfAdherences: [],
 				Timeline: {
 					StartTime: '2016-10-10T10:00:00',
 					EndTime: '2016-10-10T20:00:00'
@@ -51,8 +43,8 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 		var space = 100 / 24; // 4.166
 		expect(vm.fullTimeline[first].Time.format('HH:mm')).toBe('01:00');
 		expect(vm.fullTimeline[last].Time.format('HH:mm')).toBe('23:00');
-		expect(vm.fullTimeline[first].Offset).toEqual((100 / 24) + '%');
-		expect(vm.fullTimeline[last].Offset).toEqual((100 / 24 * 23) + '%');
+		expect(vm.fullTimeline[first].Offset.substr(0, 5)).toEqual((100 / 24).toString().substr(0, 5));
+		expect(vm.fullTimeline[last].Offset.substr(0, 5)).toEqual((100 / 24 * 23).toString().substr(0, 5));
 	});
 	
 });

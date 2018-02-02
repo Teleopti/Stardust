@@ -1,8 +1,8 @@
 ﻿(function () {
 	'use strict';
-	
+
 	angular.module('wfm.rta').controller('RtaHistoricalController47230', RtaHistoricalController);
-	
+
 	RtaHistoricalController.$inject = ['$http', '$state', '$stateParams', 'rtaService', '$translate', 'RtaTimeline'];
 
 	function RtaHistoricalController($http, $state, $stateParams, rtaService, $translate, rtaTimeline) {
@@ -24,7 +24,6 @@
 			return time.format('HH:mm:ss');
 		};
 
-		var shiftInfo;
 		var calculate;
 
 		$http.get('../api/HistoricalAdherence/ForPerson', {
@@ -43,9 +42,7 @@
 			data.Timeline = data.Timeline || {};
 			data.Navigation = data.Navigation || {};
 
-			shiftInfo = buildShiftInfo(data);
-
-			calculate = rtaTimeline.makeCalculator(shiftInfo.timeWindowStart, shiftInfo.timeWindowEnd);
+			calculate = rtaTimeline.makeCalculator(data.Timeline.StartTime, data.Timeline.EndTime);
 
 			vm.personId = data.PersonId;
 			vm.agentName = data.AgentName;
@@ -57,11 +54,11 @@
 
 			vm.agentsFullSchedule = buildAgentsFullSchedule(data.Schedules);
 
-			vm.outOfAdherences = buildAgentOutOfAdherences(data.Now, data.OutOfAdherences);
-			vm.recordedOutOfAdherences = buildAgentOutOfAdherences(data.Now, data.RecordedOutOfAdherences);
-			vm.approvedPeriods = buildAgentOutOfAdherences(data.Now, data.ApprovedPeriods);
+			vm.outOfAdherences = buildIntervals(data.Timeline, data.OutOfAdherences);
+			vm.recordedOutOfAdherences = buildIntervals(data.Timeline, data.RecordedOutOfAdherences);
+			vm.approvedPeriods = buildIntervals(data.Timeline, data.ApprovedPeriods);
 
-			vm.fullTimeline = buildTimeline(data.Timeline);
+			vm.fullTimeline = buildTimeline(data);
 
 			vm.cards = mapChanges(data.Changes, data.Schedules);
 
@@ -79,72 +76,36 @@
 				vm.nextTooltip = nextDay.format('L');
 			}
 		});
-
-		function buildShiftInfo(data) {
-			var start = moment(data.Timeline.StartTime);
-			var end = moment(data.Timeline.EndTime);
-			var shiftInfo = {
-				totalSeconds: end.diff(start, 'seconds')
-			};
-
-			var schedule = data.Schedules;
-			if (schedule.length > 0) {
-				var shiftStartTime = moment(schedule[0].StartTime);
-				var shiftEndTime = moment(schedule[schedule.length - 1].EndTime);
-				start = shiftStartTime.clone();
-				start.startOf('minute');
-				end = shiftEndTime.clone();
-				end.endOf('minute');
-
-				shiftInfo.totalSeconds = shiftEndTime.diff(shiftStartTime, 'seconds');
-			}
-
-			shiftInfo.timeWindowSeconds =
-				shiftInfo.totalSeconds % 3600 == 0 ?
-					shiftInfo.totalSeconds + 7200 :
-					shiftInfo.totalSeconds + (3600 - (shiftInfo.totalSeconds % 3600)) + 7200;
-			shiftInfo.timeWindowStart = start.clone().add(-1, 'hour');
-			shiftInfo.timeWindowEnd = shiftInfo.timeWindowStart.clone().add(shiftInfo.timeWindowSeconds, 'seconds');
-			return shiftInfo;
-		}
 		
-		function buildTimeline(times) {
+		function buildTimeline(data) {
 			var timeline = [];
-			var currentMoment = moment(times.StartTime);
-			var endTime = moment(times.EndTime);
-			var totalHours = (endTime.diff(currentMoment, 'minutes') % 60 == 0) ? 
-				endTime.diff(currentMoment, 'hours') : 
-				endTime.diff(currentMoment, 'hours') + 1;
-			var hourPercent = 100 / totalHours;
-
-			for (var i = 1; i < totalHours; i++) {
-				currentMoment.add(1, 'hour');
-				var percent = hourPercent * i;
+			var time = moment(data.Timeline.StartTime);
+			var endTime = moment(data.Timeline.EndTime);
+			while (true) {
+				time.add(1, 'hour');
+				if (time.isSameOrAfter(endTime))
+					break;
 				timeline.push({
-					//Offset: calculate.Offset(currentMoment),
-					Offset: percent + '%',
-					Time: currentMoment.clone()
+					Offset: calculate.Offset(time),
+					Time: time.clone()
 				});
 			}
-
 			return timeline;
 		}
 
-		function buildAgentOutOfAdherences(now, outOfAdherences) {
-			return outOfAdherences
-				.map(function (ooa) {
-					var startTime = moment(ooa.StartTime);
-					var startTimeFormatted = shiftInfo.timeWindowStart > startTime ?
-						startTime.format('LLL') :
-						startTime.format('LTS');
-					var endTime = ooa.EndTime != null ? ooa.EndTime : now;
-					var endTimeFormatted = ooa.EndTime != null ? moment(ooa.EndTime).format('LTS') : '';
+		function buildIntervals(timeline, intervals) {
+			return intervals
+				.map(function (interval) {
+					var startTime = moment(interval.StartTime);
+					var endTime = moment(interval.EndTime);
 
 					return {
 						Width: calculate.Width(startTime, endTime),
 						Offset: calculate.Offset(startTime),
-						StartTime: startTimeFormatted,
-						EndTime: endTimeFormatted
+						StartTime: startTime.isBefore(timeline.StartTime) ?
+							startTime.format('LLL') :
+							startTime.format('LTS'),
+						EndTime: endTime.format('LTS')
 					};
 				});
 		}

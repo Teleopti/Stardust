@@ -30,7 +30,6 @@
 					timelineStart = moment(timelineStart);
 					timelineEnd = moment(timelineEnd);
 					var totalSeconds = timelineEnd.diff(timelineStart, 'seconds');
-
 					return {
 						Offset: makeOffsetCalculator(timelineStart, totalSeconds),
 						Width: makeWidthCalculator(timelineStart, totalSeconds),

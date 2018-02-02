@@ -12,7 +12,10 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 				StartTime: '2016-10-10T08:00:00',
 				EndTime: '2016-10-10T17:00:00'
 			}],
-			OutOfAdherences: []
+			Timeline: {
+				StartTime: '2016-10-10T07:00:00',
+				EndTime: '2016-10-10T18:00:00'
+			}
 		});
 
 		var controller = tester.createController();
@@ -30,15 +33,16 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 			PersonId: '1',
 			AgentName: 'Mikkey Dee',
 			Schedules: [{
-				Color: 'lightgreen',
 				StartTime: '2016-10-10T08:00:00',
 				EndTime: '2016-10-10T12:00:00'
 			}, {
-				Color: 'lightgreen',
 				StartTime: '2016-10-10T12:00:00',
 				EndTime: '2016-10-10T18:00:00'
 			}],
-			OutOfAdherences: []
+			Timeline: {
+				StartTime: '2016-10-10T07:00:00',
+				EndTime: '2016-10-10T19:00:00'
+			}
 		});
 
 		var controller = tester.createController();
@@ -55,23 +59,24 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 			PersonId: '1',
 			AgentName: 'Mikkey Dee',
 			Schedules: [{
-				Color: 'lightgreen',
 				StartTime: '2016-10-10T08:00:00',
 				EndTime: '2016-10-10T12:30:00'
 			}, {
-				Color: 'lightgreen',
 				StartTime: '2016-10-10T12:30:00',
 				EndTime: '2016-10-10T18:30:00'
 			}],
-			OutOfAdherences: []
+			Timeline: {
+				StartTime: '2016-10-10T07:00:00',
+				EndTime: '2016-10-10T19:30:00'
+			}
 		});
 
 		var controller = tester.createController();
 
-		expect(controller.agentsFullSchedule[0].Width).toEqual(4.5 / 13 * 100 + '%');
-		expect(controller.agentsFullSchedule[0].Offset).toEqual(1 / 13 * 100 + '%');
-		expect(controller.agentsFullSchedule[1].Width).toEqual(6 / 13 * 100 + '%');
-		expect(controller.agentsFullSchedule[1].Offset).toEqual(5.5 / 13 * 100 + '%');
+		expect(controller.agentsFullSchedule[0].Width).toEqual(4.5 / 12.5 * 100 + '%');
+		expect(controller.agentsFullSchedule[0].Offset).toEqual(1 / 12.5 * 100 + '%');
+		expect(controller.agentsFullSchedule[1].Width).toEqual(6 / 12.5 * 100 + '%');
+		expect(controller.agentsFullSchedule[1].Offset).toEqual(5.5 / 12.5 * 100 + '%');
 	});
 
 });
