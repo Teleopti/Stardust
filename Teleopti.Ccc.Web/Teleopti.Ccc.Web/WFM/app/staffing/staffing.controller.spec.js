@@ -5,22 +5,19 @@ describe('StaffingController', function () {
   scope,
   UtilService,
   fakeBackend,
+  $window,
   vm;
 
   beforeEach(function () {
     module('wfm.staffing');
   });
 
-  beforeEach(inject(function (_$rootScope_, _$httpBackend_, _$controller_, _UtilService_ ) {
+  beforeEach(inject(function (_$rootScope_, _$httpBackend_, _$controller_, _UtilService_, _$window_) {
     $httpBackend = _$httpBackend_;
     $controller = _$controller_;
     UtilService = _UtilService_;
+    $window = _$window_;
     scope = _$rootScope_.$new();
-
-    // $httpBackend.whenGET('../api/').respond(function (method, url, data, headers) {
-    //   return [200, fakeChanges]
-    // });
-
   }));
 
   it('should return mdi-alert if do display data is false', function () {
@@ -80,22 +77,6 @@ describe('StaffingController', function () {
     vm.selectedSkillChange(skill2);
 
     expect(vm.selectedSkill.Id).toBe('321');
-  });
-
-
-  it('should be able to use shrinkage', function () {
-    var skill = { DoDisplayData: true, IsMultisiteSkill: false, SkillType: 'SkillTypeChat', Id:'123'  }
-
-    var vm = $controller('StaffingController', {
-      $scope: scope
-    });
-    var a = vm.dynamicIcon(skill)
-
-    vm.selectedSkill = skill;
-    vm.useShrinkageForStaffing();
-
-    expect(vm.useShrinkage).toBe(true);
-    expect(vm.hasSuggestionData).toBe(false);
   });
 
   it('should be able to view staffing for selected date ', function () {
@@ -163,5 +144,52 @@ describe('StaffingController', function () {
     vm.suggestOvertime(vm.overtimeForm);
     // expect query to have been called without error
   });
+
+  it('should use skill from session storage', function () {
+    var vm = $controller('StaffingController', {
+      $scope: scope
+    });
+    $window.sessionStorage.staffingSelectedSkill = '{"Id":"111","Name":"Demo","DoDisplayData":true,"SkillType":"SkillTypeInboundTelephony","IsMultisiteSkill":false,"ShowAbandonRate":true,"ShowReforecastedAgents":true}'
+
+    vm.testSessionStorage(1);
+
+    expect(vm.selectedSkill.Name).toBe('Demo');
+  });
+
+  it('should use skill area from session storage', function () {
+    var vm = $controller('StaffingController', {
+      $scope: scope
+    });
+    $window.sessionStorage.staffingSelectedArea = '{"Name":"Demo2","Id":"123","Skills":[{"Name":"Skill1","Id":"abc","IsDeleted":false,"SkillType":"SkillTypeEmail","DoDisplayData":true,"IsMultisiteSkill":false,"ShowAbandonRate":false,"ShowReforecastedAgents":false},{"Name":"Skill2","Id":"xyz","IsDeleted":false,"SkillType":"SkillTypeInboundTelephony","DoDisplayData":true,"IsMultisiteSkill":true,"ShowAbandonRate":true,"ShowReforecastedAgents":true}]}'
+
+    vm.testSessionStorage(2);
+
+    expect(vm.selectedSkill).toBe(null);
+    expect(vm.selectedArea.Name).toBe('Demo2');
+  });
+
+  it('should use shrinkage from session storage ', function () {
+    var vm = $controller('StaffingController', {
+      $scope: scope
+    });
+    $window.sessionStorage.staffingUseShrinkage = 'true';
+
+    vm.testSessionStorage(3);
+
+    expect(vm.useShrinkage).toBe(true);
+  });
+
+  it('should use date from session storage ', function () {
+    var vm = $controller('StaffingController', {
+      $scope: scope
+    });
+    vm.selectedDate = undefined;
+    $window.sessionStorage.staffingSelectedDate = 'Tue Jan 30 2018 14:56:27 GMT+0100 (Central Europe Standard Time)';
+
+    vm.testSessionStorage(4);
+
+    expect(vm.selectedDate).not.toBe(undefined);
+  });
+
 
 });

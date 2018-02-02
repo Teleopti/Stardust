@@ -35,7 +35,6 @@
               <md-tooltip>{{'Clear'|translate}}</md-tooltip>
             </i>
           </div>
-
           <div class="con-flex">
             <md-autocomplete id="area-id" class="autocomplete-skill" md-selected-item="vm.selectedArea" md-search-text="searchSkillAreaText" md-selected-item-change="vm.selectedAreaChange(area)" md-items="area in vm.querySearchAreas(searchSkillAreaText)" md-item-text="area.Name" md-min-length="0" placeholder="{{'SelectSkillGroup'|translate}}">
               <md-item-template>
@@ -59,7 +58,7 @@
           </div>
 
 			<div class="con-flex">
-				<md-checkbox ng-click="vm.useShrinkageForStaffing()" aria-label="Checkbox">{{'UseShrinkage'| translate}}</md-checkbox>
+				<md-checkbox ng-change="vm.useShrinkageForStaffing()" ng-model="vm.useShrinkage" aria-label="Checkbox">{{'UseShrinkage'| translate}}</md-checkbox>
 			</div>
         </div>
       </div>

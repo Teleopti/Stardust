@@ -5,8 +5,8 @@
 	.module('wfm.staffing')
 	.controller('StaffingController', StaffingController);
 
-	StaffingController.$inject = ['staffingService', '$state', 'Toggle', 'UtilService', 'ChartService', '$filter', 'NoticeService', '$translate', '$scope'];
-	function StaffingController(staffingService, $state, toggleService, utilService, chartService, $filter, NoticeService, $translate, $scope) {
+	StaffingController.$inject = ['staffingService', '$state', 'Toggle', 'UtilService', 'ChartService', '$filter', 'NoticeService', '$translate', '$scope', '$window'];
+	function StaffingController(staffingService, $state, toggleService, utilService, chartService, $filter, NoticeService, $translate, $scope, $window) {
 		var vm = this;
 
 		vm.skills;
@@ -28,6 +28,7 @@
 		vm.isRunning = isRunning;
 		vm.isNoSuggestion = isNoSuggestion;
 		vm.goToImportExports = goToImportView;
+		vm.testSessionStorage = testSessionStorage;
 
 		vm.showOverstaffSettings = false;
 		vm.openImportData = false;
@@ -145,7 +146,7 @@
 		}
 
 		function useShrinkageForStaffing() {
-			vm.useShrinkage = !vm.useShrinkage;
+			sessionStorage.staffingUseShrinkage = JSON.stringify(vm.useShrinkage);
 			return generateChart(vm.selectedSkill, vm.selectedArea);
 		}
 
@@ -180,6 +181,7 @@
 		}
 
 		function navigateToNewDay() {
+			$window.sessionStorage.staffingSelectedDate = vm.selectedDate;
 			if (vm.hasSuggestionData) {
 				if (confirm($translate.instant('DiscardSuggestionData'))) {
 					clearSuggestions();
@@ -195,6 +197,8 @@
 		function extracted(area) {
 			currentSkills = area;
 			vm.selectedArea = area;
+			$window.sessionStorage.staffingSelectedArea = JSON.stringify(area);
+			delete $window.sessionStorage.staffingSelectedSkill;
 			vm.selectedSkill = null;
 		}
 
@@ -205,6 +209,8 @@
 			} else {
 				currentSkills = skill;
 				vm.selectedSkill = currentSkills;
+				$window.sessionStorage.staffingSelectedSkill = JSON.stringify(skill);
+				delete $window.sessionStorage.staffingSelectedArea;
 				vm.selectedArea = null;
 			}
 		}
@@ -212,7 +218,13 @@
 		function getSkills() {
 			var query = staffingService.getSkills.query();
 			query.$promise.then(function (skills) {
-				selectSkillOrArea(skills[0]);
+				if ($window.sessionStorage.staffingSelectedSkill){
+					manageSkillSessionStorage();
+					manageDateSessionStorage();
+					manageShrinkageSessionStorage();
+				}else if (!$window.sessionStorage.staffingSelectedArea){
+					selectSkillOrArea(skills[0]);
+				}
 				allSkills = skills;
 				vm.allSkills = skills;
 			})
@@ -222,6 +234,11 @@
 			var query = staffingService.getSkillAreas.get();
 			query.$promise.then(function (response) {
 				vm.HasPermissionToModifySkillArea = response.HasPermissionToModifySkillArea;
+				if($window.sessionStorage.staffingSelectedArea){
+					manageAreaSessionStorage();
+					manageDateSessionStorage();
+					manageShrinkageSessionStorage();
+				}
 				allSkillAreas = response.SkillAreas;
 				vm.allSkillAreas = response.SkillAreas;
 			})
@@ -264,17 +281,17 @@
 			}
 			switch (skill.SkillType) {
 				case 'SkillTypeChat':
-					return 'mdi mdi-message-text-outline';
+				return 'mdi mdi-message-text-outline';
 				case 'SkillTypeEmail':
-					return 'mdi mdi-email-outline';
+				return 'mdi mdi-email-outline';
 				case 'SkillTypeInboundTelephony':
-					return 'mdi mdi-phone';
+				return 'mdi mdi-phone';
 				case 'SkillTypeRetail':
-					return 'mdi mdi-credit-card';
+				return 'mdi mdi-credit-card';
 				case 'SkillTypeBackoffice':
-					return 'mdi mdi-archive';
+				return 'mdi mdi-archive';
 				default:
-					return 'mdi mdi-creation'
+				return 'mdi mdi-creation'
 			}
 		}
 
@@ -357,5 +374,41 @@
 		function generateChartForView(data, isSuggestedData) {
 			c3.generate(chartService.staffingChartConfig(data, isSuggestedData));
 		}
+
+		function manageAreaSessionStorage() {
+			if ($window.sessionStorage.staffingSelectedArea) {
+				vm.selectedArea = null;
+				selectedAreaChange(JSON.parse($window.sessionStorage.staffingSelectedArea));
+			}
+		}
+
+		function manageSkillSessionStorage() {
+			if ($window.sessionStorage.staffingSelectedSkill) {
+				vm.selectedSkill = null;
+				selectedSkillChange(JSON.parse($window.sessionStorage.staffingSelectedSkill));
+			}
+		}
+
+		function manageShrinkageSessionStorage() {
+			if ($window.sessionStorage.staffingUseShrinkage) {
+				vm.useShrinkage = JSON.parse($window.sessionStorage.staffingUseShrinkage);
+				vm.useShrinkageForStaffing()
+			}
+		}
+
+		function manageDateSessionStorage() {
+			if ($window.sessionStorage.staffingSelectedDate) {
+				vm.selectedDate = new Date($window.sessionStorage.staffingSelectedDate);
+				vm.navigateToNewDay();
+			}
+		}
+
+		function testSessionStorage(test) {
+			if (test = 1) manageAreaSessionStorage();
+			if (test = 2)	manageSkillSessionStorage();
+			if (test = 3)	manageShrinkageSessionStorage();
+			if (test = 4)	manageDateSessionStorage();
+		}
+
 	}
 })();
