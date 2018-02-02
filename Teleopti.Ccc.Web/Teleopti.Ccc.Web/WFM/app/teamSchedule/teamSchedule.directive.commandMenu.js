@@ -130,8 +130,8 @@
 			},
 			{
 				label: "RemoveShift",
-				shortcut: "Alt+V",
-				keys: [[keyCodes.V], [keyCodes.ALT]],
+				shortcut: "Alt+K",
+				keys: [[keyCodes.K], [keyCodes.ALT]],
 				action: buildAction("RemoveShift", true),
 				clickable: function () { return vm.canRemoveShift(); },
 				visible: function () { return vm.canActiveRemoveShift(); }
