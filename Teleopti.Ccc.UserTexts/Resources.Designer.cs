@@ -5819,6 +5819,33 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Can not remove shift for agent with day off.
+        /// </summary>
+        public static string CanNotRemoveShiftForAgentWithDayOff {
+            get {
+                return ResourceManager.GetString("CanNotRemoveShiftForAgentWithDayOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Can not remove shift for agent with empty schedule.
+        /// </summary>
+        public static string CanNotRemoveShiftForAgentWithEmptySchedule {
+            get {
+                return ResourceManager.GetString("CanNotRemoveShiftForAgentWithEmptySchedule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Can not remove shift for agent with full day absence.
+        /// </summary>
+        public static string CanNotRemoveShiftForAgentWithFullDayAbsence {
+            get {
+                return ResourceManager.GetString("CanNotRemoveShiftForAgentWithFullDayAbsence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot undo schedule change.
         /// </summary>
         public static string CannotUndoScheduleChange {
@@ -21010,6 +21037,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NoPermissionRemoveOvertimeActivity {
             get {
                 return ResourceManager.GetString("NoPermissionRemoveOvertimeActivity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No permission to remove shift for agent(s).
+        /// </summary>
+        public static string NoPermissionRemovingShift {
+            get {
+                return ResourceManager.GetString("NoPermissionRemovingShift", resourceCulture);
             }
         }
         

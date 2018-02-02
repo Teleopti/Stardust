@@ -166,6 +166,8 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\WaitlistProcessPublisher.cs" />
     <Compile Include="ApplicationLayer\Badge\PerformAllBadgeCalculation.cs" />
     <Compile Include="ApplicationLayer\Commands\RemoveDayOffCommandHandler.cs" />
+    <Compile Include="ApplicationLayer\Commands\RemoveShiftCommand.cs" />
+    <Compile Include="ApplicationLayer\Commands\RemoveShiftCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Events\OptionalColumnValueChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Commands\AddDayOffCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\AddDayOffCommand.cs" />

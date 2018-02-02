@@ -224,6 +224,7 @@
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsRequestMatchingPersonTest.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsTimeZoneUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\RemoveActivityCommandHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\RemoveShiftCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\ClearPlanningPeriodSchedulingCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Configuration\DefaultStateGroupMissingInConfigurationTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Configuration\LoggedOutStateGroupMissingInConfigurationTest.cs" />

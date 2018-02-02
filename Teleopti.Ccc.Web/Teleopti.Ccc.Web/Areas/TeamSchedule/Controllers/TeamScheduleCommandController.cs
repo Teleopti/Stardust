@@ -65,6 +65,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			return _commandHandlingProvider.RemoveDayOff(input);
 		}
 
+		[UnitOfWork, HttpPost, Route("api/TeamScheduleCommand/RemoveShift")]
+		public virtual IList<ActionResult> RemoveShift([FromBody] RemoveShiftFormData input)
+		{
+			return _commandHandlingProvider.RemoveShift(input);
+		}
+
 	}
 
 

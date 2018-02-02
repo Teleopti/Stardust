@@ -753,6 +753,7 @@
     <Compile Include="Areas\TeamSchedule\Models\PersonWeekScheduleViewModel.cs" />
     <Compile Include="Areas\TeamSchedule\Models\RemoveActivityFormData.cs" />
     <Compile Include="Areas\TeamSchedule\Models\RemoveDayOffFormData.cs" />
+    <Compile Include="Areas\TeamSchedule\Models\RemoveShiftFormData.cs" />
     <Compile Include="Areas\TeamSchedule\Models\SearchDaySchedulesFormData.cs" />
     <Compile Include="Areas\TeamSchedule\Models\SearchSchedulesFormData.cs" />
     <Compile Include="Core\Data\IMultiplicatorDefinitionSetProvider.cs" />

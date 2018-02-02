@@ -17164,4 +17164,20 @@ Do you want to participate?</value>
     <value>Are you sure you wish to remove {0} shifts from {1} agents?</value>
     <comment>Message to confirm person shift removing</comment>
   </data>
+  <data name="NoPermissionRemovingShift" xml:space="preserve">
+    <value>No permission to remove shift for agent(s)</value>
+    <comment>Error message to nofiy missing permission to remove shift</comment>
+  </data>
+  <data name="CanNotRemoveShiftForAgentWithFullDayAbsence" xml:space="preserve">
+    <value>Can not remove shift for agent with full day absence</value>
+    <comment>Can not remove shift for agent with full day absence</comment>
+  </data>
+  <data name="CanNotRemoveShiftForAgentWithDayOff" xml:space="preserve">
+    <value>Can not remove shift for agent with day off</value>
+    <comment>Error message for removing shift when selected schedule is day off</comment>
+  </data>
+  <data name="CanNotRemoveShiftForAgentWithEmptySchedule" xml:space="preserve">
+    <value>Can not remove shift for agent with empty schedule</value>
+    <comment>Error message for removing shift when selected schedule is empty schedule</comment>
+  </data>
 </root>

@@ -435,7 +435,6 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			results.Count.Should().Be.EqualTo(0);
 		}
 
-
 		[Test]
 		public void ShouldReturnErrorWhenRemoveDayOffWithoutDate()
 		{
@@ -448,10 +447,11 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 		}
 
 		[Test]
-		public void ShouldReturnErrorWhenRemoveDayOffWithoutPerson() {
+		public void ShouldReturnErrorWhenRemoveDayOffWithoutPerson()
+		{
 			var results = Target.RemoveDayOff(new RemoveDayOffFormData
 			{
-				Date = new DateOnly(2018,1,12)
+				Date = new DateOnly(2018, 1, 12)
 			});
 			results.Single().ErrorMessages.Single().Should().Be.EqualTo(Resources.InvalidInput);
 		}
@@ -476,7 +476,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			var results = Target.RemoveDayOff(new RemoveDayOffFormData
 			{
 				Date = new DateOnly(2018, 1, 12),
-				PersonIds = new [] { person.Id.GetValueOrDefault() }
+				PersonIds = new[] { person.Id.GetValueOrDefault() }
 			});
 			results.Single().ErrorMessages.Single().Should().Be.EqualTo(Resources.YouDoNotHavePermissionsToViewTeamSchedules);
 		}
@@ -520,6 +520,70 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			results.Single().ErrorMessages.Single().Should().Be.EqualTo("Execute command failed.");
 		}
 
+		[Test]
+		public void ShouldReturnErrorWhenRemoveShiftWithoutDate()
+		{
+			var results = Target.RemoveShift(new RemoveShiftFormData
+			{
+				PersonIds = new Guid[] { Guid.NewGuid() }
+			});
+			results.Single().ErrorMessages.Single().Should().Be.EqualTo(Resources.InvalidInput);
+		}
 
+		[Test]
+		public void ShouldReturnErrorWhenRemoveShiftWithoutPerson()
+		{
+			var results = Target.RemoveShift(new RemoveShiftFormData
+			{
+				Date = new DateOnly(2018, 2, 2)
+			});
+			results.Single().ErrorMessages.Single().Should().Be.EqualTo(Resources.InvalidInput);
+		}
+
+		[Test]
+		public void ShouldReturnErrorWhenRemoveShiftWithEmptyPersonList()
+		{
+			var results = Target.RemoveShift(new RemoveShiftFormData
+			{
+				Date = new DateOnly(2018, 2, 2),
+				PersonIds = new Guid[] { }
+			});
+			results.Single().ErrorMessages.Single().Should().Be.EqualTo(Resources.InvalidInput);
+		}
+
+		[Test]
+		public void ShouldReturnErrorWhenRemovingShiftWithoutPermission()
+		{
+			var person = PersonFactory.CreatePerson("test").WithId();
+			PersonRepository.Has(person);
+			PermissionProvider.Enable();
+
+			var results = Target.RemoveShift(new RemoveShiftFormData
+			{
+				Date = new DateOnly(2018, 2, 2),
+				PersonIds = new[] {person.Id.GetValueOrDefault()},
+				TrackedCommandInfo = new TrackedCommandInfo {TrackId = Guid.NewGuid()}
+			});
+
+			results.Single().ErrorMessages.Single().Should().Be.EqualTo(Resources.NoPermissionRemovingShift);
+		}
+
+		[Test]
+		public void ShouldInvokeRemoveShiftCommandWithValidInput()
+		{
+			var person = PersonFactory.CreatePerson("test").WithId();
+			PersonRepository.Has(person);
+			var trackId = Guid.NewGuid();
+
+			var results = Target.RemoveShift(new RemoveShiftFormData
+			{
+				Date = new DateOnly(2018, 2, 2),
+				PersonIds = new[] { person.Id.GetValueOrDefault() },
+				TrackedCommandInfo = new TrackedCommandInfo { TrackId = trackId }
+			});
+			CommandHandler.CalledCount.Should().Be.EqualTo(1);
+			CommandHandler.CalledCommands.Single().TrackedCommandInfo.TrackId.Should().Be.EqualTo(trackId);
+			results.Count.Should().Be.EqualTo(0);
+		}
 	}
 }

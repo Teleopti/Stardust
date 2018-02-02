@@ -760,4 +760,24 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return PersistableScheduleDataCollection().OfType<IPreferenceDay>().SingleOrDefault();
 		}
 	}
+
+	public static class ScheduleDayExtension
+	{
+	
+		public static bool IsFullDayAbsence(this IScheduleDay scheduleDay)
+		{
+			if (scheduleDay == null)
+			{
+				return false;
+			}
+
+			var projection = scheduleDay.ProjectionService().CreateProjection(); 
+			var significantPart = scheduleDay.SignificantPart();
+			if (significantPart == SchedulePartView.ContractDayOff || significantPart == SchedulePartView.DayOff)
+			{
+				return projection.HasLayers && projection.All(l => l.Payload is IAbsence);
+			}
+			return significantPart == SchedulePartView.FullDayAbsence;
+		}
+	}
 }

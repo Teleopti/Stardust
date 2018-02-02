@@ -26,7 +26,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			{DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, Resources.YouDoNotHavePermissionsToViewTeamSchedules},
 			{DefinedRaptorApplicationFunctionPaths.RemoveAbsence, Resources.NoPermissionRemoveAgentAbsence},
 			{ DefinedRaptorApplicationFunctionPaths.EditShiftCategory, Resources.NoPermissionToEditShiftCategory },
-			{ DefinedRaptorApplicationFunctionPaths.MoveInvalidOverlappedActivity, Resources.NoPermissionToMoveInvalidOverlappedActivity }
+			{ DefinedRaptorApplicationFunctionPaths.MoveInvalidOverlappedActivity, Resources.NoPermissionToMoveInvalidOverlappedActivity },
+			{ DefinedRaptorApplicationFunctionPaths.RemoveShift, Resources.NoPermissionRemovingShift }
 		};
 
 		public TeamScheduleCommandHandlingProvider(
@@ -296,7 +297,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 					{
 						Date = input.Date,
 						Person = person,
-						TrackedCommandInfo = new TrackedCommandInfo {TrackId = input.TrackedCommandInfo.TrackId}
+						TrackedCommandInfo = new TrackedCommandInfo { TrackId = input.TrackedCommandInfo.TrackId }
 					};
 					_commandDispatcher.Execute(command);
 
@@ -310,6 +311,53 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			}
 
 			return result;
+		}
+
+		public IList<ActionResult> RemoveShift(RemoveShiftFormData input)
+		{
+			var result = new List<ActionResult>();
+			if (!validateRemoveShiftInput(input))
+			{
+				result.Add(new ActionResult
+				{
+					ErrorMessages = new List<string> { Resources.InvalidInput }
+				});
+				return result;
+			}
+
+			var people = _personRepository.FindPeople(input.PersonIds);
+			foreach (var person in people)
+			{
+				var actionResult = new ActionResult(person.Id.GetValueOrDefault());
+				if (!checkFunctionPermission(DefinedRaptorApplicationFunctionPaths.RemoveShift, input.Date, person,
+					actionResult.ErrorMessages))
+				{
+					result.Add(actionResult);
+					continue;
+				}
+				var command = new RemoveShiftCommand
+				{
+					Date = input.Date,
+					Person = person,
+					TrackedCommandInfo = new TrackedCommandInfo { TrackId = input.TrackedCommandInfo.TrackId }
+				};
+				_commandDispatcher.Execute(command);
+
+				if (command.ErrorMessages != null && command.ErrorMessages.Any())
+				{
+					actionResult.ErrorMessages.AddRange(command.ErrorMessages);
+				}
+			}
+			return result;
+		}
+
+		private bool validateRemoveShiftInput(RemoveShiftFormData input)
+		{
+			if (input.Date.Date == DateTime.MinValue || input.PersonIds == null || !input.PersonIds.Any() )
+			{
+				return false;
+			}
+			return true;
 		}
 
 		private bool agentScheduleIsWriteProtected(DateOnly date, IPerson agent)
