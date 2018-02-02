@@ -130,6 +130,7 @@
 		public const string AddOvertimeActivity = "Raptor/Anywhere/Schedules/AddOvertimeActivity";
 		public const string MoveActivity = "Raptor/Anywhere/Schedules/MoveActivity";
 		public const string RemoveActivity = "Raptor/Anywhere/Schedules/RemoveActivity";
+		public const string RemoveShift = "Raptor/Anywhere/Schedules/RemoveShift";
 		public const string SwapShifts = "Raptor/Anywhere/Schedules/SwapShifts";
 		public const string RealTimeAdherenceOverview = "Raptor/Anywhere/RealTimeAdherenceOverview";
 		public const string EditShiftCategory = "Raptor/Anywhere/Schedules/EditShiftCategory";
