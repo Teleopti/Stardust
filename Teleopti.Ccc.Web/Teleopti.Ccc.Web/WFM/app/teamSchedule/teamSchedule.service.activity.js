@@ -13,7 +13,7 @@
 		var removeActivityUrl = '../api/TeamScheduleCommand/RemoveActivity';
 		var moveActivityUrl = '../api/TeamScheduleCommand/MoveActivity';
 		var moveShiftUrl = '../api/TeamSchedule/MoveShift';
-		var removeShiftUrl = '../api/TeamSchedule/RemoveShift';
+		var removeShiftUrl = '../api/TeamScheduleCommand/RemoveShift';
 		var undoScheduleChangeUrl = '../api/TeamScheduleCommand/BackoutScheduleChange';
 		var moveInvalidOverlappedActivityUrl = '../api/TeamScheduleCommand/MoveNonoverwritableLayers';
 		var getAllMultiplicatorDefinitionSetsUrl = '../api/MultiplicatorDefinitionSet/Overtime';
