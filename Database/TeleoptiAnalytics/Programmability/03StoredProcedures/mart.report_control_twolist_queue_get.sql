@@ -57,7 +57,7 @@ BEGIN
 	WHERE queue_id NOT in (select queue_id from mart.bridge_queue_workload)
 END
 
-SELECT
+SELECT DISTINCT
 	id		= dq.queue_id,
 	name	= dq.queue_name
 FROM
