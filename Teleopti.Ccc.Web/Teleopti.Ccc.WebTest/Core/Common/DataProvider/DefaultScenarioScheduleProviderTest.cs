@@ -97,7 +97,8 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 				Arg<IEnumerable<IPerson>>.Matches(o => o.Single() == user),
 				Arg<ScheduleDictionaryLoadOptions>.Is.Anything,
 				Arg<DateOnlyPeriod>.Is.Equal(period),
-				Arg<IScenario>.Is.Equal(scenario)))
+				Arg<IScenario>.Is.Equal(scenario),
+				Arg<bool>.Is.Equal(false)))
 				.Return(scheduleDictionary);
 			scheduleDictionary.Stub(x => x[user]).Return(scheduleRange);
 			scheduleRange.Stub(x => x.ScheduledDay(date)).Return(scheduleDay);
