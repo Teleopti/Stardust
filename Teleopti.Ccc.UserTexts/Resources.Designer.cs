@@ -12666,6 +12666,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove shifts finished successfully..
+        /// </summary>
+        public static string FinishedRemoveShift {
+            get {
+                return ResourceManager.GetString("FinishedRemoveShift", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Swap shifts finished successfully..
         /// </summary>
         public static string FinishedSwapShifts {
@@ -23468,6 +23477,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string PartialSuccessMessageForRemovingDayOff {
             get {
                 return ResourceManager.GetString("PartialSuccessMessageForRemovingDayOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove shifts for {0} agent(s), {1} succeeded and {2} failed.
+        /// </summary>
+        public static string PartialSuccessMessageForRemovingShift {
+            get {
+                return ResourceManager.GetString("PartialSuccessMessageForRemovingShift", resourceCulture);
             }
         }
         

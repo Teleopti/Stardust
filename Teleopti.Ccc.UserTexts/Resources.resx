@@ -17180,4 +17180,12 @@ Do you want to participate?</value>
     <value>Can not remove shift for agent with empty schedule</value>
     <comment>Error message for removing shift when selected schedule is empty schedule</comment>
   </data>
+  <data name="FinishedRemoveShift" xml:space="preserve">
+    <value>Remove shifts finished successfully.</value>
+    <comment>message for finished remove shift</comment>
+  </data>
+  <data name="PartialSuccessMessageForRemovingShift" xml:space="preserve">
+    <value>Remove shifts for {0} agent(s), {1} succeeded and {2} failed</value>
+    <comment>message for remove shifts partially success.</comment>
+  </data>
 </root>
