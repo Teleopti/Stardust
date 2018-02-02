@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -7,6 +8,7 @@ using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ClipBoard;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {
@@ -97,9 +99,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 			drawRestrictionIcon.DrawPreference(permissionState, mustHavePreference);
 
-            permissionState = restrictionChecker.CheckStudentAvailability(schedulePart);
-            drawRestrictionIcon.DrawStudentAvailability(permissionState);
-        }
+			var personPeriod = schedulePart.Person.Period(schedulePart.DateOnlyAsPeriod.DateOnly);
+			if (personPeriod?.PersonContract.Contract.EmploymentType == EmploymentType.HourlyStaff)
+			{
+				permissionState = restrictionChecker.CheckStudentAvailability(schedulePart);
+				drawRestrictionIcon.DrawStudentAvailability(permissionState);
+			}
+		}
 		
 		private static PermissionState checkPreferenceForDisplay(IScheduleDay schedulePart, RestrictionChecker restrictionChecker)
 		{
