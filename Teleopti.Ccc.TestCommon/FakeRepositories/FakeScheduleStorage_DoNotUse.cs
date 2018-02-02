@@ -27,12 +27,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 			foreach (var visiblePerson in visiblePersons)
 			{
-				var range = new ScheduleRange(schedules, new ScheduleParameters(scenario, visiblePerson, dateTimePeriod),new ByPassPersistableScheduleDataPermissionChecker());
+				var range = new ScheduleRange(schedules, new ScheduleParameters(scenario, visiblePerson, dateTimePeriod), new ByPassPersistableScheduleDataPermissionChecker());
 				foreach (var scheduleData in storage._data)
 				{
 					if (scheduleData.Person == null || !scheduleData.Person.Equals(range.Person))
 						continue;
-					if(scheduleData.Period.Intersect(dateTimePeriod))
+					if (scheduleData.Period.Intersect(dateTimePeriod))
 						range.Add(scheduleData);
 				}
 				//var updatedRange = range.UpdateCalcValues(0, new TimeSpan());
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return schedules;
 		}
 	}
-	
+
 	//Don't fake IScheduleStorage - use the real one instead
 	public class FakeScheduleStorage_DoNotUse : IScheduleStorage
 	{
@@ -52,12 +52,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void Add(IPersistableScheduleData entity)
 		{
-			_data.Add (entity);
+			_data.Add(entity);
 		}
 
 		public void Remove(IPersistableScheduleData entity)
 		{
-			_data.Remove (entity);
+			_data.Remove(entity);
 		}
 
 		public IPersistableScheduleData Get(Type concreteType, Guid id)
@@ -70,9 +70,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _data;
 		}
 
-	public IScheduleDictionary FindSchedulesForPersonOnlyInGivenPeriod(IPerson person,
-			ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
-			DateTimePeriod dateTimePeriod, IScenario scenario)
+		public IScheduleDictionary FindSchedulesForPersonOnlyInGivenPeriod(IPerson person,
+				ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
+				DateTimePeriod dateTimePeriod, IScenario scenario)
 		{
 			ThePeriodThatWasUsedForFindingSchedules = dateTimePeriod;
 
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 					}
 
 					return true;
-				})				
+				})
 				.ToArray();
 
 			if (scheduleData.IsEmpty())
@@ -109,14 +109,15 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public IScheduleDictionary FindSchedulesForPersonOnlyInGivenPeriod(IPerson person,
 			ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, DateOnlyPeriod period, IScenario scenario)
 		{
-			return FindSchedulesForPersonOnlyInGivenPeriod (person, scheduleDictionaryLoadOptions, period.ToDateTimePeriod (TimeZoneInfo.Utc), scenario);
+			return FindSchedulesForPersonOnlyInGivenPeriod(person, scheduleDictionaryLoadOptions, period.ToDateTimePeriod(TimeZoneInfo.Utc), scenario);
 		}
 
 		public IScheduleDictionary FindSchedulesForPersonsOnlyInGivenPeriod(IEnumerable<IPerson> persons,
-			ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, DateOnlyPeriod period, IScenario scenario)
+			ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, DateOnlyPeriod period, IScenario scenario,
+			bool noTrachForPerssonAssignment = false)
 		{
 			var thePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDate(period.StartDate, period.EndDate.AddDays(1), TimeZoneInfo.Utc);
-			return ScheduleDictionaryForTest.WithScheduleDataForManyPeople(scenario, thePeriod, _data.Where(d => d.BelongsToScenario(scenario)&& persons.Contains(d.Person)).ToArray());
+			return ScheduleDictionaryForTest.WithScheduleDataForManyPeople(scenario, thePeriod, _data.Where(d => d.BelongsToScenario(scenario) && persons.Contains(d.Person)).ToArray());
 		}
 
 		public IScheduleRange ScheduleRangeBasedOnAbsence(DateTimePeriod period, IScenario scenario, IPerson person, IAbsence absence = null)
@@ -144,5 +145,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			throw new NotImplementedException();
 		}
+
 	}
 }

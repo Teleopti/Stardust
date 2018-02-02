@@ -28,7 +28,9 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 			IEnumerable<IPerson> persons,
 			ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
 			DateOnlyPeriod period,
-			IScenario scenario);
+			IScenario scenario,
+			bool noTrackForPersonAssignment = false);
+		
 
 		IScheduleRange ScheduleRangeBasedOnAbsence(DateTimePeriod period, IScenario scenario, IPerson person, IAbsence absence = null);
 
