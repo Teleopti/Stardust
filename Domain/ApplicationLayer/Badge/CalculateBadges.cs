@@ -6,6 +6,7 @@ using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Messaging;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
@@ -47,6 +48,36 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 		}
 
 		public void Calculate(CalculateBadgeMessage message)
+		{
+			var teamSettings = _teamSettingsRepository.FindAllTeamGamificationSettingsSortedByTeam().Where(t => t.GamificationSetting!=null).ToLookup(t => t.GamificationSetting);
+			var settings = teamSettings.Select(t => t.Key);
+			var calculateDate = new DateOnly(message.CalculationDate);
+
+			foreach (var setting in settings)
+			{
+				if (setting.IsDeleted)
+				{
+					continue;
+				}
+
+				var agentsWithSetting = new List<IPerson>();
+				foreach (var teamSetting in teamSettings[setting])
+				{
+					agentsWithSetting.AddRange(_personRepository.FindPeopleBelongTeam(teamSetting.Team, calculateDate.ToDateOnlyPeriod().Inflate(1)));
+				}
+				agentsWithSetting = agentsWithSetting.Distinct().ToList();
+
+				var isRuleWithDifferentThreshold =
+					setting.GamificationSettingRuleSet == GamificationSettingRuleSet.RuleWithDifferentThreshold;
+
+				calculateAdherenceBadge(message, setting, isRuleWithDifferentThreshold, agentsWithSetting, calculateDate);
+				calculateAhtBadge(message, setting, isRuleWithDifferentThreshold, agentsWithSetting, calculateDate);
+				calculateAnsweredCallsBadge(message, setting, isRuleWithDifferentThreshold, agentsWithSetting, calculateDate);
+			}
+		}
+
+		[EnabledBy(Toggles.WFM_Gamification_Calculate_Badges_47250)]
+		public void CalculateAll(CalculateBadgeMessage message)
 		{
 			var teamSettings = _teamSettingsRepository.FindAllTeamGamificationSettingsSortedByTeam().Where(t => t.GamificationSetting!=null).ToLookup(t => t.GamificationSetting);
 			var settings = teamSettings.Select(t => t.Key);

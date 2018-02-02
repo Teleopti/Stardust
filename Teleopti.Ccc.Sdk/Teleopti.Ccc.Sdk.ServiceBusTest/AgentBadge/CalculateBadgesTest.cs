@@ -230,7 +230,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				CalculationDate = calculationDate
 			};
 
-			target.Calculate(message);
+			target.CalculateAll(message);
 
 			badgeWithRankCalculator.AssertWasCalled(
 				x => x.CalculateBadges(Arg<IList<IPerson>>.Is.Equal(persons),

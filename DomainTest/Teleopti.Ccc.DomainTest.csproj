@@ -289,6 +289,7 @@
     <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradeTargetTimeSpecificationTests.cs" />
     <Compile Include="ApplicationLayer\SiteTeamChangedHandlers\AnalyticsSiteUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\SiteTeamChangedHandlers\AnalyticsTeamUpdaterTest.cs" />
+    <Compile Include="Common\AgentBadgeWithRankTest.cs" />
     <Compile Include="Common\EnumExtensionsTest.cs" />
     <Compile Include="Common\OptionalColumnValueChangedEventTest.cs" />
     <Compile Include="Common\OrganizationSelectionProviderTest.cs" />
