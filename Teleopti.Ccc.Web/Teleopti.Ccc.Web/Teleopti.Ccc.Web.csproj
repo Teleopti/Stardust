@@ -2725,7 +2725,6 @@
     <Content Include="WFM\css\_rta.scss" />
     <Content Include="WFM\app\outbound\outbound.service.misc.js" />
     <Content Include="WFM\css\_teamschedule.scss" />
-    <Content Include="WFM\css\_wfmrightpanel.scss" />
     <Content Include="WFM\css\_requests.scss" />
     <Content Include="WFM\css\_start.scss" />
     <Content Include="WFM\css\_reports.scss" />
