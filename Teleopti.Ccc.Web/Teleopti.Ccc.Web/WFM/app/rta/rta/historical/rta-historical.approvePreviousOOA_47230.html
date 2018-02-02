@@ -32,8 +32,8 @@
 			</div>
 			<div class="right">
 				<div class="timeline">
-					<div ng-repeat="row in vm.fullTimeline" class="label label-info"
-						 ng-class="time"
+					<div ng-repeat="row in vm.fullTimeline" 
+						 class="label label-info time"
 						 ng-attr-style="left: {{row.Offset}}">
 						{{row.Time | amDateFormat: 'HH.mm'}}
 					</div>
