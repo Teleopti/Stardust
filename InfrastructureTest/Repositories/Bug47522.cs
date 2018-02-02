@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			return request;
 		}
 
-		[Test, Ignore("fail with the right reason")]
+		[Test]
 		public void ShouldNotThrownExceptionWhenCheckingShiftTradeStatusEvenThoughOtherThreadMakingChangeToSamePersonAssignment()
 		{
 			var activity = new Activity(".");
