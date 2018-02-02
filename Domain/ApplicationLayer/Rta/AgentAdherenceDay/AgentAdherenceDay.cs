@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay
 {
@@ -11,15 +12,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay
 		private IEnumerable<OutOfAdherencePeriod> _outOfAdherences;
 		private int? _percentage;
 		private IEnumerable<ApprovedPeriod> _approvedPeriods;
+		private DateTime _startTime;
+		private DateTime _endTime;
 
 		public void Load(
 			DateTime now,
+			DateTime startTime,
+			DateTime endTime,
+			DateTime? shiftStartTime,
+			DateTime? shiftEndTime,
 			IEnumerable<HistoricalChange> changes,
 			IEnumerable<HistoricalAdherence> adherences,
-			IEnumerable<ApprovedPeriod> approvedPeriods,
-			DateTime? shiftStartTime,
-			DateTime? shiftEndTime)
+			IEnumerable<ApprovedPeriod> approvedPeriods)
 		{
+			_startTime = startTime;
+			_endTime = endTime;
 			_changes = loadChanges(changes);
 			_outOfAdherences = loadOutOfAdherencePeriods(adherences, now);
 			_percentage = new AdherencePercentageCalculator().Calculate(shiftStartTime, shiftEndTime, adherences, now);
@@ -70,6 +77,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay
 				.ToArray();
 		}
 
+		public DateTimePeriod Period() => new DateTimePeriod(_startTime, _endTime);
 		public IEnumerable<HistoricalChange> Changes() => _changes;
 		public IEnumerable<OutOfAdherencePeriod> OutOfAdherences() => _outOfAdherences;
 		public int? Percentage() => _percentage;

@@ -4,7 +4,6 @@ using System.Drawing;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
@@ -40,88 +39,43 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 
 		public HistoricalAdherenceViewModel Build(Guid personId, DateOnly date)
 		{
-			var data = new data
-			{
-				PersonId = personId,
-				Person = _persons.Load(personId),
-			};
+			var person = _persons.Load(personId);
 
-			loadAgentTimeInto(data);
-			data.Date = date;
-			loadDefaultDisplayInto(data);
-			loadScheduleInto(data);
-
-			data.AdherenceDay = _agentAdherenceDayLoader
+			var adherenceDay = _agentAdherenceDayLoader
 				.Load(
-					data.PersonId,
-					data.TimeZone,
-					data.Date
+					personId,
+					date
 				);
 
 			return new HistoricalAdherenceViewModel
 			{
 				Now = formatForUser(_now.UtcDateTime()),
 				PersonId = personId,
-				AgentName = data.Person?.Name.ToString(),
-				Schedules = buildSchedules(data.Schedule),
-				Changes = buildChanges(data),
-				OutOfAdherences = buildOutOfAdherences(data.AdherenceDay.OutOfAdherences()),
-				RecordedOutOfAdherences = buildOutOfAdherences(data.AdherenceDay.OutOfAdherences()),
-				ApprovedPeriods = buildApprovedPeriods(data.AdherenceDay.ApprovedPeriods()),
+				AgentName = person?.Name.ToString(),
+				Schedules = buildSchedules(_schedule.Load(personId, date)),
+				Changes = buildChanges(adherenceDay.Changes()),
+				OutOfAdherences = buildOutOfAdherences(adherenceDay.OutOfAdherences()),
+				RecordedOutOfAdherences = buildOutOfAdherences(adherenceDay.OutOfAdherences()),
+				ApprovedPeriods = buildApprovedPeriods(adherenceDay.ApprovedPeriods()),
 				Timeline = new ScheduleTimeline
 				{
-					StartTime = formatForUser(data.DisplayStartTime),
-					EndTime = formatForUser(data.DisplayEndTime)
+					StartTime = formatForUser(adherenceDay.Period().StartDateTime),
+					EndTime = formatForUser(adherenceDay.Period().EndDateTime)
 				},
-				AdherencePercentage = data.AdherenceDay.Percentage(),
-				Navigation = new HistoricalAdherenceNavigationViewModel
-				{
-					First = data.AgentNow.AddDays(_displayPastDays * -1).ToString("yyyyMMdd"),
-					Last = data.AgentNow.ToString("yyyyMMdd")
-				}
+				AdherencePercentage = adherenceDay.Percentage(),
+				Navigation = buildNavigation(person)
 			};
 		}
 
-		private class data
+		private HistoricalAdherenceNavigationViewModel buildNavigation(IPerson person)
 		{
-			public AgentAdherenceDay.AgentAdherenceDay AdherenceDay;
-
-			public DateTime AgentNow;
-			public DateOnly Date;
-			public Guid PersonId;
-			public IPerson Person;
-			public TimeZoneInfo TimeZone;
-
-			public DateTime DisplayStartTime;
-			public DateTime DisplayEndTime;
-
-			public IEnumerable<IVisualLayer> Schedule;
-			public DateTime? ShiftStartTime;
-			public DateTime? ShiftEndTime;
-		}
-
-		private void loadAgentTimeInto(data data)
-		{
-			data.TimeZone = data.Person?.PermissionInformation.DefaultTimeZone() ?? TimeZoneInfo.Utc;
-			data.AgentNow = TimeZoneInfo.ConvertTimeFromUtc(_now.UtcDateTime(), data.TimeZone);
-		}
-
-		private void loadDefaultDisplayInto(data data)
-		{
-			var startTime = TimeZoneInfo.ConvertTimeToUtc(data.Date.Date, data.TimeZone);
-			data.DisplayStartTime = startTime;
-			data.DisplayEndTime = startTime.AddDays(1);
-		}
-
-		private void loadScheduleInto(data data)
-		{
-			data.Schedule = _schedule.Load(data.PersonId, data.Date);
-			if (!data.Schedule.Any())
-				return;
-			data.ShiftStartTime = data.Schedule.Min(x => x.Period.StartDateTime);
-			data.ShiftEndTime = data.Schedule.Max(x => x.Period.EndDateTime);
-			data.DisplayStartTime = data.ShiftStartTime.Value.AddHours(-1);
-			data.DisplayEndTime = data.ShiftEndTime.Value.AddHours(1);
+			var timeZone = person?.PermissionInformation.DefaultTimeZone() ?? TimeZoneInfo.Utc;
+			var agentNow = TimeZoneInfo.ConvertTimeFromUtc(_now.UtcDateTime(), timeZone);
+			return new HistoricalAdherenceNavigationViewModel
+			{
+				First = agentNow.AddDays(_displayPastDays * -1).ToString("yyyyMMdd"),
+				Last = agentNow.ToString("yyyyMMdd")
+			};
 		}
 
 		private IEnumerable<HistoricalAdherenceActivityViewModel> buildSchedules(IEnumerable<IVisualLayer> layers)
@@ -138,9 +92,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 				.ToArray();
 		}
 
-		private IEnumerable<OutOfAdherenceViewModel> buildOutOfAdherences(IEnumerable<OutOfAdherencePeriod> data)
+		private IEnumerable<OutOfAdherenceViewModel> buildOutOfAdherences(IEnumerable<OutOfAdherencePeriod> periods)
 		{
-			return data
+			return periods
 				.Select(x =>
 					new OutOfAdherenceViewModel
 					{
@@ -151,9 +105,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 				.ToArray();
 		}
 
-		private IEnumerable<ApprovedPeriodViewModel> buildApprovedPeriods(IEnumerable<ApprovedPeriod> data)
+		private IEnumerable<ApprovedPeriodViewModel> buildApprovedPeriods(IEnumerable<ApprovedPeriod> periods)
 		{
-			return data
+			return periods
 				.Select(a => new ApprovedPeriodViewModel
 				{
 					StartTime = formatForUser(a.StartTime),
@@ -162,11 +116,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 				.ToArray();
 		}
 
-		private IEnumerable<HistoricalChangeViewModel> buildChanges(data data)
+		private IEnumerable<HistoricalChangeViewModel> buildChanges(IEnumerable<HistoricalChange> changes)
 		{
-			return data
-				.AdherenceDay
-				.Changes()
+			return changes
 				.Select(x => new HistoricalChangeViewModel
 				{
 					Time = formatForUser(x.Timestamp),

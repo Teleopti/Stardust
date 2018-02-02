@@ -3,6 +3,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay
@@ -14,13 +15,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay
 		private readonly IHistoricalAdherenceReadModelReader _adherences;
 		private readonly IApprovedPeriodsReader _approvedPeriods;
 		private readonly ScheduleLoader _scheduleLoader;
+		private readonly IPersonRepository _persons;
 
 		public AgentAdherenceDayLoader(
 			INow now,
 			IHistoricalChangeReadModelReader changes,
 			IHistoricalAdherenceReadModelReader adherences,
 			IApprovedPeriodsReader approvedPeriods,
-			ScheduleLoader scheduleLoader
+			ScheduleLoader scheduleLoader,
+			IPersonRepository persons
 		)
 		{
 			_now = now;
@@ -28,16 +31,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay
 			_adherences = adherences;
 			_approvedPeriods = approvedPeriods;
 			_scheduleLoader = scheduleLoader;
+			_persons = persons;
 		}
 
 		public AgentAdherenceDay Load(
 			Guid personId,
-			TimeZoneInfo agentTimeZone,
 			DateOnly date
 		)
 		{
 			var now = _now.UtcDateTime();
-
+			
+			var person = _persons.Load(personId);
 			var schedule = _scheduleLoader.Load(personId, date);
 
 			var shiftStartTime = default(DateTime?);
@@ -49,7 +53,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay
 				shiftEndTime = schedule.Max(x => x.Period.EndDateTime);
 			}
 
-			var startOfDay = TimeZoneInfo.ConvertTimeToUtc(date.Date, agentTimeZone);
+			var timeZone = person?.PermissionInformation.DefaultTimeZone() ?? TimeZoneInfo.Utc;
+			var startOfDay = TimeZoneInfo.ConvertTimeToUtc(date.Date, timeZone);
 			var startTime = startOfDay;
 			var endTime = startOfDay.AddDays(1);
 
@@ -70,11 +75,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay
 			var obj = new AgentAdherenceDay();
 			obj.Load(
 				now,
+				startTime,
+				endTime,
+				shiftStartTime,
+				shiftEndTime,
 				changes,
 				adherences,
-				approvedPeriods,
-				shiftStartTime,
-				shiftEndTime
+				approvedPeriods
 			);
 
 			return obj;
