@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 			}
 
 			Assert.AreEqual("This license is stolen!", _licenseService.CustomerName);
-			Assert.AreEqual(new DateTime(2018, 02, 02, 12, 0, 0), _licenseService.ExpirationDate);
+			Assert.AreEqual(new DateTime(2025, 02, 02, 12, 0, 0), _licenseService.ExpirationDate);
 			Assert.AreEqual(new TimeSpan(30, 0, 0, 0), _licenseService.ExpirationGracePeriod);
 			Assert.AreEqual(10000, _licenseService.MaxActiveAgents);
 			Assert.AreEqual(new Percent(0.1).Value, _licenseService.MaxActiveAgentsGrace);
@@ -473,7 +473,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 			}
 
 			Assert.AreEqual("This license is stolen!", _licenseService.CustomerName);
-			Assert.AreEqual(new DateTime(2018, 02, 02, 12, 0, 0), _licenseService.ExpirationDate);
+			Assert.AreEqual(new DateTime(2025, 02, 02, 12, 0, 0), _licenseService.ExpirationDate);
 			Assert.AreEqual(new TimeSpan(30, 0, 0, 0), _licenseService.ExpirationGracePeriod);
 			Assert.AreEqual(new Percent(0.1).Value, _licenseService.MaxActiveAgentsGrace);
 

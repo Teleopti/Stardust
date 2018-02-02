@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <License>
   <CustomerName>This license is stolen!</CustomerName>
-  <ExpirationDate>2018-02-02T12:00:00</ExpirationDate>
+  <ExpirationDate>2025-02-02T12:00:00</ExpirationDate>
   <ExpirationGracePeriod>P30D</ExpirationGracePeriod>
   <MaxActiveAgents>10000</MaxActiveAgents>
   <MaxActiveAgentsGrace>10</MaxActiveAgentsGrace>
