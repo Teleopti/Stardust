@@ -149,29 +149,31 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
 		[Toggle(Toggles.OvertimeRequestPeriodSkillTypeSetting_47290)]
-		public void ShouldAdjustTimelineAccordingOpenPeriodSkillTypeOpenHourDayScheduleWhenMultipleMatched()
+		public void ShouldAdjustTimelineForDayScheduleWithMultipleSkillTypesMatched()
 		{
-			var skillType = new SkillTypeEmail(new Description(SkillTypeIdentifier.Email), ForecastSource.Email).WithId();
+			var phoneSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony).WithId();
+			var emailSkillType = new SkillTypeEmail(new Description(SkillTypeIdentifier.Email), ForecastSource.Email).WithId();
 			var workflowControlSet = new WorkflowControlSet();
 			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
 				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(13))),
-				SkillType = skillType,
+				SkillType = emailSkillType,
 				OrderIndex = 1
 			});
 			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
 				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(13))),
-				SkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony).WithId(),
+				SkillType = phoneSkillType,
 				OrderIndex = 2
 			});
 			User.CurrentUser().WorkflowControlSet = workflowControlSet;
 
 			var skill1 = addSkill(TimeSpan.FromHours(7), TimeSpan.FromHours(15));
 			var skill2 = addSkill(TimeSpan.Zero, TimeSpan.FromDays(1));
-			skill2.SkillType = skillType;
+			skill1.SkillType = phoneSkillType;
+			skill2.SkillType = emailSkillType;
 
 			var period1 = new DateTimePeriod(new DateTime(2014, 12, 31, 9, 15, 0, DateTimeKind.Utc),
 				new DateTime(2014, 12, 31, 9, 45, 0, DateTimeKind.Utc));
@@ -180,6 +182,56 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var result = Target.FetchDayData(new DateOnly(2014, 12, 31), StaffingPossiblityType.Overtime);
 
 			AssertTimeLine(result.TimeLine.ToList(), 6, 45, 15, 15);
+		}
+
+		[Test]
+		[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
+		[Toggle(Toggles.OvertimeRequestPeriodSkillTypeSetting_47290)]
+		public void ShouldAdjustTimelineForWeekScheduleWithMultipleSkillTypesMatched()
+		{
+			Now.Is(new DateTime(2018, 2, 1, 8, 0, 0, DateTimeKind.Utc));
+
+			var phoneSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony)
+				.WithId();
+			var chatSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Chat), ForecastSource.Chat).WithId();
+
+			var workflowControlSet = new WorkflowControlSet();
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
+				BetweenDays = new MinMax<int>(0, 48),
+				SkillType = phoneSkillType,
+				OrderIndex = 1
+			});
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
+				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(5))),
+				SkillType = chatSkillType,
+				OrderIndex = 2
+			});
+			User.CurrentUser().WorkflowControlSet = workflowControlSet;
+
+			var skill1 = addSkill(TimeSpan.FromHours(7), TimeSpan.FromHours(15));
+			var skill2 = addSkill(TimeSpan.Zero, TimeSpan.FromDays(1));
+			skill1.SkillType = phoneSkillType;
+			skill2.SkillType = chatSkillType;
+
+			var day = DateHelper.GetFirstDateInWeek(Now.UtcDateTime().Date, CultureInfo.CurrentCulture);
+			for (var i = 0; i < 14; i++)
+			{
+				day = day.AddDays(i);
+				var period1 = new DateTimePeriod(day.AddHours(6).AddMinutes(15),
+					day.AddHours(9).AddMinutes(45));
+				var period2 = new DateTimePeriod(day.AddHours(10).AddMinutes(15),
+					day.AddHours(10).AddMinutes(45));
+				addAssignment(new DateOnly(day), period1, skill1.Activity);
+				addAssignment(new DateOnly(day), period2, skill2.Activity);
+			}
+
+			var result = Target.FetchWeekData(new DateOnly(2018, 2, 5), StaffingPossiblityType.Overtime);
+
+			AssertTimeLine(result.TimeLine.ToList(), 0, 0, 23, 59);
 		}
 
 		[Test]
@@ -760,6 +812,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		private void addAssignment(DateTimePeriod period, IActivity activity)
 		{
 			addAssignment(null, new activityDto { Period = period, Activity = activity });
+		}
+
+		private void addAssignment(DateOnly belongsToDate, DateTimePeriod period, IActivity activity)
+		{
+			addAssignment(belongsToDate, new activityDto {Period = period, Activity = activity});
 		}
 
 		private class activityDto
