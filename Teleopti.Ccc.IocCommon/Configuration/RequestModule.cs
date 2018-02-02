@@ -99,8 +99,13 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				OvertimeRequestUnderStaffingSkillProvider>(builder, Toggles.OvertimeRequestUseMostUnderStaffedSkill_47853);
 
 			builder.RegisterType<SkillStaffingReadModelDataLoader>().As<ISkillStaffingReadModelDataLoader>();
+
 			registerType
 				<IOvertimeRequestSkillProvider, OvertimeRequestSkillProviderToggle47290On, OvertimeRequestSkillProvider>(builder,
+					Toggles.OvertimeRequestPeriodSkillTypeSetting_47290);
+
+			registerType
+				<ISkillStaffingDataSkillTypeFilter, SkillStaffingDataSkillTypeFilter, SkillStaffingDataSkillTypeFilterToggle47290Off>(builder,
 					Toggles.OvertimeRequestPeriodSkillTypeSetting_47290);
 
 			builder.RegisterType<SkillOpenHourFilter>().As<ISkillOpenHourFilter>();

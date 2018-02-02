@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Interfaces.Domain;
@@ -26,14 +25,15 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		private readonly PersonalSkills _personalSkills = new PersonalSkills();
 		private readonly ISupportedSkillsInIntradayProvider _supportedSkillsInIntradayProvider;
 		private readonly IOvertimeRequestSkillProvider _overtimeRequestSkillProvider;
+		private readonly ISkillStaffingDataSkillTypeFilter _skillStaffingDataSkillTypeFilter;
 
-		public ScheduleStaffingPossibilityCalculator(ILoggedOnUser loggedOnUser, 
+		public ScheduleStaffingPossibilityCalculator(ILoggedOnUser loggedOnUser,
 			IScheduleStorage scheduleStorage,
-			ICurrentScenario scenarioRepository, 
+			ICurrentScenario scenarioRepository,
 			ISkillStaffingDataLoader skillStaffingDataLoader,
-			INow now, 
-			ISupportedSkillsInIntradayProvider supportedSkillsInIntradayProvider, 
-			IOvertimeRequestSkillProvider overtimeRequestSkillProvider)
+			INow now,
+			ISupportedSkillsInIntradayProvider supportedSkillsInIntradayProvider,
+			IOvertimeRequestSkillProvider overtimeRequestSkillProvider, ISkillStaffingDataSkillTypeFilter skillStaffingDataSkillTypeFilter)
 		{
 			_loggedOnUser = loggedOnUser;
 			_scheduleStorage = scheduleStorage;
@@ -42,6 +42,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			_now = now;
 			_supportedSkillsInIntradayProvider = supportedSkillsInIntradayProvider;
 			_overtimeRequestSkillProvider = overtimeRequestSkillProvider;
+			_skillStaffingDataSkillTypeFilter = skillStaffingDataSkillTypeFilter;
 		}
 
 		public IList<CalculatedPossibilityModel> CalculateIntradayAbsenceIntervalPossibilities(DateOnlyPeriod period)
@@ -60,20 +61,20 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			var scheduleDictionary = loadScheduleDictionary(period);
 
 			var person = _loggedOnUser.CurrentUser();
-			var wfcs = person.WorkflowControlSet;
 			var defaultTimeZone = person.PermissionInformation.DefaultTimeZone();
 			var dateTimePeriod = period.ToDateTimePeriod(defaultTimeZone);
-			var overtimeRequestOpenPeriod = wfcs?.GetMergedOvertimeRequestOpenPeriod(dateTimePeriod,
-				new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), defaultTimeZone)), person.PermissionInformation);
 
-			var skills = _overtimeRequestSkillProvider.GetAvailableSkills(person, dateTimePeriod, overtimeRequestOpenPeriod).ToList();
-			
+			var skills = _overtimeRequestSkillProvider.GetAvailableSkillsBySkillType(person, dateTimePeriod).ToList();
+
 			var useShrinkage = true;
 
 			var skillStaffingDatas = _skillStaffingDataLoader.Load(skills, period, useShrinkage, isSiteOpened);
+
+			var filteredSkillStaffingDatas = _skillStaffingDataSkillTypeFilter.Filter(skillStaffingDatas);
+
 			Func<ISkill, IValidatePeriod, bool> isSatisfied =
-				(skill, validatePeriod) => !new IntervalHasSeriousUnderstaffing(skill).IsSatisfiedBy(validatePeriod);
-			return calculatePossibilities(skillStaffingDatas, isSatisfied, scheduleDictionary);
+			(skill, validatePeriod) => !new IntervalHasSeriousUnderstaffing(skill).IsSatisfiedBy(validatePeriod);
+			return calculatePossibilities(filteredSkillStaffingDatas, isSatisfied, scheduleDictionary);
 		}
 
 		private bool isShrinkageValidatorEnabled()
@@ -89,7 +90,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		private bool isSiteOpened(DateOnly date)
 		{
 			var siteOpenHour = _loggedOnUser.CurrentUser().SiteOpenHour(date);
-			if (siteOpenHour==null) return true;
+			if (siteOpenHour == null) return true;
 			return !siteOpenHour.IsClosed;
 		}
 
@@ -108,7 +109,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		{
 			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(
 				new[] { _loggedOnUser.CurrentUser() },
-				new ScheduleDictionaryLoadOptions(false, false){LoadAgentDayScheduleTags = false},
+				new ScheduleDictionaryLoadOptions(false, false) { LoadAgentDayScheduleTags = false },
 				period,
 				_scenarioRepository.Current());
 			return scheduleDictionary;

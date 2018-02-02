@@ -4,6 +4,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 {
 	public interface IOvertimeRequestAvailableSkillsValidator
 	{
-		OvertimeRequestAvailableSkillsValidationResult Validate(IPersonRequest personRequest, IOvertimeRequestOpenPeriod overtimeRequestOpenPeriod);
+		OvertimeRequestAvailableSkillsValidationResult Validate(IPersonRequest personRequest);
 	}
 }

@@ -15,7 +15,6 @@ using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -372,6 +371,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldGetPossibilitiesForOvertimeBasedOnSkillTypeSetInOpenPeriod()
 		{
 			var emailSkillType = new SkillTypeEmail(new Description(SkillTypeIdentifier.Email), ForecastSource.Email).WithId();
+			var phoneSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony).WithId();
 
 			var person = User.CurrentUser();
 			var activity1 = createActivity();
@@ -382,6 +382,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			var activity2 = createActivity();
 			var skill2 = createSkill("skill2");
+			skill2.SkillType = phoneSkillType;
 			var personSkill2 = createPersonSkill(activity2, skill2);
 			setupIntradayStaffingForSkill(skill2, new double?[] { 10d, 10d }, new double?[] { 5d, 5d });
 
@@ -403,6 +404,61 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			Assert.AreEqual(2, possibilities.Count);
 			Assert.AreEqual(0, possibilities.ElementAt(0).Possibility);
 			Assert.AreEqual(0, possibilities.ElementAt(1).Possibility);
+		}
+
+		[Test]
+		[Toggle(Toggles.OvertimeRequestPeriodSetting_46417)]
+		[Toggle(Toggles.OvertimeRequestPeriodSkillTypeSetting_47290)]
+		public void ShouldGetPossibilitiesForOvertimeBasedOnSkillTypeOfEachDaySetInOpenPeriod()
+		{
+			Now.Is(new DateTime(2018, 2, 1, 8, 0, 0, DateTimeKind.Utc));
+
+			var phoneSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony).WithId();
+			var chatSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Chat), ForecastSource.Chat).WithId();
+
+			var person = User.CurrentUser();
+			var activity1 = createActivity();
+			var phoneSkill = createSkill("phoneSkill");
+			phoneSkill.SkillType = phoneSkillType;
+			var personPhoneSkill = createPersonSkill(activity1, phoneSkill);
+			setupIntradayStaffingForSkill(phoneSkill, new double?[] { 10d, 10d }, new double?[] { 15d, 15d });
+
+			var activity2 = createActivity();
+			var chatSkill = createSkill("chatSkill");
+			chatSkill.SkillType = chatSkillType;
+			var personChatSkill = createPersonSkill(activity2, chatSkill);
+			setupIntradayStaffingForSkill(chatSkill, new double?[] { 10d, 10d }, new double?[] { 5d, 5d });
+
+			addPersonSkillsToPersonPeriod(personPhoneSkill, personChatSkill);
+
+			createAssignment(person, activity1, activity2);
+
+			var workflowControlSet = new WorkflowControlSet();
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
+				BetweenDays = new MinMax<int>(0, 48),
+				SkillType = phoneSkillType,
+				OrderIndex = 1
+			});
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
+				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(5))),
+				SkillType = chatSkillType,
+				OrderIndex = 2
+			});
+			User.CurrentUser().WorkflowControlSet = workflowControlSet;
+
+			var possibilities = getPossibilityViewModels(new DateOnly(2018, 2, 5), StaffingPossiblityType.Overtime);
+
+			var goodPossibilities = possibilities.Where(d => d.Date == new DateOnly(2018, 2, 5).ToFixedClientDateOnlyFormat()).ToList();
+			Assert.AreEqual(1, goodPossibilities.ElementAt(0).Possibility);
+			Assert.AreEqual(1, goodPossibilities.ElementAt(1).Possibility);
+
+			var weakPossibilities = possibilities.Where(d => d.Date == new DateOnly(2018, 2, 7).ToFixedClientDateOnlyFormat()).ToList();
+			Assert.AreEqual(0, weakPossibilities.ElementAt(0).Possibility);
+			Assert.AreEqual(0, weakPossibilities.ElementAt(1).Possibility);
 		}
 
 		[Test]

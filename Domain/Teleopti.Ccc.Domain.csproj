@@ -127,6 +127,7 @@
     <Compile Include="AgentInfo\IOvertimeRequestUnderStaffingSkillProvider.cs" />
     <Compile Include="AgentInfo\IPrimaryPersonSkillFilter.cs" />
     <Compile Include="AgentInfo\ISkillStaffingDataLoader.cs" />
+    <Compile Include="AgentInfo\ISkillStaffingDataSkillTypeFilter.cs" />
     <Compile Include="AgentInfo\ISkillStaffingReadModelDataLoader.cs" />
     <Compile Include="AgentInfo\OvertimeRequestUnderStaffingSkillProvider.cs" />
     <Compile Include="AgentInfo\OvertimeRequestUnderStaffingSkillProviderToggle47853On.cs" />
@@ -159,6 +160,7 @@
     <Compile Include="AgentInfo\ScheduleStaffingPossibilityConsts.cs" />
     <Compile Include="AgentInfo\SkillStaffingData.cs" />
     <Compile Include="AgentInfo\SkillStaffingDataLoader.cs" />
+    <Compile Include="AgentInfo\SkillStaffingDataSkillTypeFilter.cs" />
     <Compile Include="AgentInfo\SkillStaffingReadModelDataLoader.cs" />
     <Compile Include="Analytics\AnalyticsSite.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\FilterRequestsByToggle.cs" />

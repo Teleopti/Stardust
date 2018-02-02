@@ -53,8 +53,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 				return;
 			}
 
-			var overtimeRequestOpenPeriod = getOvertimeRequestOpenPeriod(personRequest);
-			var validateSkillsResult = validateSkills(personRequest, overtimeRequestOpenPeriod);
+			var validateSkillsResult = validateSkills(personRequest);
 			if (!validateSkillsResult.IsValid)
 			{
 				handleOvertimeRequestValidationResult(personRequest, validateSkillsResult);
@@ -70,7 +69,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 				return;
 			}
 
-			var validateSkillsResult = validateSkills(personRequest, null);
+			var validateSkillsResult = validateSkills(personRequest);
 			if (!validateSkillsResult.IsValid)
 			{
 				handleOvertimeRequestValidationResult(personRequest, validateSkillsResult);
@@ -103,7 +102,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 				return;
 			}
 
-			var validateSkillsResult = validateSkills(personRequest, overtimeOpenPeriod);
+			var validateSkillsResult = validateSkills(personRequest);
 			if (!validateSkillsResult.IsValid)
 			{
 				handleOvertimeRequestValidationResult(personRequest, validateSkillsResult);
@@ -165,9 +164,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			return new OvertimeRequestValidationResult { IsValid = true };
 		}
 
-		private OvertimeRequestAvailableSkillsValidationResult validateSkills(IPersonRequest personRequest,IOvertimeRequestOpenPeriod overtimeRequestOpenPeriod)
+		private OvertimeRequestAvailableSkillsValidationResult validateSkills(IPersonRequest personRequest)
 		{
-			return _overtimeRequestAvailableSkillsValidator.Validate(personRequest, overtimeRequestOpenPeriod);
+			return _overtimeRequestAvailableSkillsValidator.Validate(personRequest);
 		}
 
 		private void handleOvertimeRequestValidationResult(IPersonRequest personRequest,

@@ -43,11 +43,9 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 				return new List<IBusinessRuleResponse>();
 			}
-
-			var overtimeRequestOpenPeriod = getOvertimeRequestOpenPeriod(request.Parent as IPersonRequest);
 			var period = overtimeRequest.Period;
 			var person = overtimeRequest.Person;
-			var skills = _overtimeRequestSkillProvider.GetAvailableSkills(request.Person, period, overtimeRequestOpenPeriod).ToList();
+			var skills = _overtimeRequestSkillProvider.GetAvailableSkills(request.Person, period).ToList();
 			if (!skills.Any())
 			{
 				return getBusinessRuleResponses(Resources.NoAvailableSkillForOvertime, period, person);
