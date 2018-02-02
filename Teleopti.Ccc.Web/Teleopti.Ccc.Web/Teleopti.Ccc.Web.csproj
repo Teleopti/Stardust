@@ -1749,7 +1749,6 @@
     <Content Include="WFM\css\_gamification.scss" />
     <Content Include="WFM\css\_cascade.scss" />
     <Content Include="WFM\css\_cardpanel.scss" />
-    <None Include="WFM\css\_wfmmultiplesearchinput.scss" />
     <Content Include="WFM\app\permissions\functionsrefact\permissions-function-tree.html" />
     <Content Include="WFM\app\permissions\functionsrefact\permissions-tree.html" />
     <Content Include="WFM\app\permissions\functionsrefact\permissions.controller-functions.spec.js" />
