@@ -340,6 +340,7 @@
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingDesktopBlockTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingDesktopPermissionTest.cs" />
     <Compile Include="SchedulingScenarios\SeperateWebRequest.cs" />
+    <Compile Include="Scheduling\AdvancedAgentsFilterTest.cs" />
     <Compile Include="Scheduling\DayOffBusinessRuleValidationTest.cs" />
     <Compile Include="Scheduling\Restrictions\RestrictionCheckerTest.cs" />
     <Compile Include="Scheduling\Restrictions\RestrictionNotAbleToBeScheduledReportTest.cs" />

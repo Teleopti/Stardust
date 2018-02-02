@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void fillGridListControlDefaultSearch()
 		{
-			IEnumerable<IPerson> found = _advancedAgentsFilter.Filter(textBox1.Text, _searchablePersons, _logonInfos);
+			IEnumerable<IPerson> found = _advancedAgentsFilter.Filter(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture, textBox1.Text, _searchablePersons, _logonInfos, false);
 
 			gridListControlDefaultSearch.BeginUpdate();
 			_persons.Clear();
@@ -295,7 +295,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			foreach (var expected in inputTextArray)
 			{
 				string lowerSearchText = expected.ToLower(cultureInfo);
-				var personQuery = _advancedAgentsFilter.Filter(lowerSearchText, _searchablePersons, _logonInfos);
+				var personQuery = _advancedAgentsFilter.Filter(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture, lowerSearchText, _searchablePersons, _logonInfos, true);
 				if (personQuery.Count == 1)
 				{
 					var gridColumnPerson = new FilterMultiplePersonGridControlItem(personQuery.First(), getLogonInfoModelForPerson(personQuery.First().Id.GetValueOrDefault()));
