@@ -9,8 +9,8 @@
 	</div>
 
 	<div class="pull-right">
-		<wfm-pagination pagination-options="requestsFooter.paging" get-data-for-page-callback="requestsFooter.onPageNumberChange"></wfm-pagination>
-		<div class="total-requests-count pull-left">
+		<wfm-pagination class="pull-pagination" pagination-options="requestsFooter.paging" get-data-for-page-callback="requestsFooter.onPageNumberChange"></wfm-pagination>
+		<div class="total-requests-count pull-left full-padding">
 			<span>{{requestsFooter.showSelectedRequestsInfo()}}</span>
 		</div>
 		<md-select aria-label="page size" ng-if="requestsFooter.paging.totalRequestsCount > 0"

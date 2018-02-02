@@ -242,20 +242,10 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-
-		.pagination {
-			margin: 0;
-		}
 	}
 
 	.page-size-selector {
 		text-align: left;
-	}
-
-	@media(max-width:768px) {
-		.pagination li {
-			padding: 8px;
-		}
 	}
 
 	.modal-box .wfm-simple-list {

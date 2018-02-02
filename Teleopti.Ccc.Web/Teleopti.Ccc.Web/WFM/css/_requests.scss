@@ -15,15 +15,10 @@ wfm-multiple-search-input {
 				margin-right: 10px;
 			}
 		}
-
-		.pagination {
-			margin: 0 5px;
-		}
 	}
 
 	.total-requests-count {
-		margin-right: 40px;
-		margin-top: 5px;
+		margin-right: 20px;
 	}
 
 	.request-body {
@@ -444,10 +439,6 @@ wfm-multiple-search-input {
 		.ui-grid-pinned-container-right .ui-grid-header-viewport {
 			overflow: visible;
 		}
-	}
-	
-	.pagination li.disabled a {
-		cursor: not-allowed;
 	}
 
 	input:-ms-input-placeholder {

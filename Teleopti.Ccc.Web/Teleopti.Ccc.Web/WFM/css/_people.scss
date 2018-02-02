@@ -21,29 +21,6 @@
 		white-space: nowrap;
 	}
 
-	.pagination-item {
-		display: inline-block;
-	}
-
-	.pagination li {
-		&.disabled {
-			a {
-				pointer-events: none;
-				color: rgba(0, 0, 0, 0.26);
-			}
-
-			cursor: not-allowed;
-		}
-
-		&.active {
-			background-color: rgba(0, 0, 0, 0.06);
-		}
-
-		padding: 10px;
-		cursor: pointer;
-		background-color: $white;
-	}
-
 	.wfm-list, .ui-grid-menu-items {
 		overflow-y: auto;
 		max-height: 800px;
@@ -195,10 +172,6 @@
 				border: 1px solid #ccc;
 			}
 		}
-	}
-	
-	.pagination li.disabled a{
-		cursor:not-allowed;
 	}
 }
 
