@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 			else
 			{
 				_blinker.BlinkButton(toolStripButtonRefresh, true);
-				toolStripLabelManySelected.Text = _selectedAgents.Count() + @" " + toolStripLabelManySelected.Text;
+				toolStripLabelManySelected.Text = string.Format(toolStripLabelManySelected.Text, _selectedAgents.Count());
 				toolStripLabelManySelected.Visible = true;
 			}
 		}
