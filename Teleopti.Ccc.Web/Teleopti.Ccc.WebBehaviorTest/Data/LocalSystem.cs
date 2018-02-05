@@ -1,4 +1,7 @@
+using System;
+using System.Linq;
 using Autofac;
+using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -8,10 +11,10 @@ using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Infrastructure.Toggle;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
+using Teleopti.Ccc.WebBehaviorTest.SpecFlowPlugin;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data
 {
@@ -31,7 +34,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		public static void Setup()
 		{
-			IntegrationIoCTest.Setup();
+			IntegrationIoCTest.Setup(builder =>
+			{
+				builder.RegisterTypes(typeof(LocalSystem).Assembly
+					.GetTypes()
+					.Where(t => Attribute.IsDefined(t, typeof(BindingAttribute)))
+					.ToArray()
+				).SingleInstance();
+			}, null);
+			ContainerPlugin.UseContainer(IntegrationIoCTest.Container);
 
 			Toggles = IntegrationIoCTest.Container.Resolve<IToggleManager>();
 			Now = IntegrationIoCTest.Container.Resolve<INow>() as MutableNow;
