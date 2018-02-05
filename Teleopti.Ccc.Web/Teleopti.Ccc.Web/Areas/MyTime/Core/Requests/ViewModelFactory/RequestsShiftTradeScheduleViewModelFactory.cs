@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
@@ -54,7 +55,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 					allPossibleTradedPersonList);
 				var allPossiblePersonSchedules = allPossibleTradedPersonList.Select(
 						p => new Tuple<IPerson, IScheduleDay>(p, allPossibleTradeSchedules.SingleOrDefault(s => s.Person.Id == p.Id)))
-					.Where(ps => !_projectionProvider.IsFullDayAbsence(ps.Item2)
+					.Where(ps => !ps.Item2.IsFullDayAbsence()
 								 && !_projectionProvider.IsOvertimeOnDayOff(ps.Item2)
 								 && _shiftTradeSiteOpenHourFilter.FilterSchedule(ps.Item2, mySchedule))
 					.ToArray();

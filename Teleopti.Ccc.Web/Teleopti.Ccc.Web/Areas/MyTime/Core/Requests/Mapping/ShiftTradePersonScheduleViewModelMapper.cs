@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
@@ -76,7 +77,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 					}
 					var scheduleDay =
 						_personScheduleProvider.GetScheduleForPersons(inputData.ShiftTradeDate, new[] { person }).SingleOrDefault();
-					if (_teamScheduleProjectionProjectionProvider.IsFullDayAbsence(scheduleDay) ||
+					if (scheduleDay.IsFullDayAbsence() ||
 						_teamScheduleProjectionProjectionProvider.IsOvertimeOnDayOff(scheduleDay))
 					{
 						return null;

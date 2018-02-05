@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
@@ -102,7 +103,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				PersonId = scheduleDay.Person.Id.GetValueOrDefault().ToString(),
 				Name = agentNameSetting.BuildFor(scheduleDay.Person),
 				Date = scheduleDay.DateOnlyAsPeriod.DateOnly.Date.ToGregorianDateTimeString().Remove(10),
-				IsFullDayAbsence = IsFullDayAbsence(scheduleDay),
+				IsFullDayAbsence = scheduleDay.IsFullDayAbsence(),
 				ShiftCategory = getShiftCategoryDescription(scheduleDay),
 				Timezone = new TimeZoneViewModel
 				{
@@ -195,7 +196,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			{
 				PersonId = person.Id.GetValueOrDefault(),
 				Name = _personNameProvider.BuildNameFromSetting(person.Name),
-				IsFullDayAbsence = IsFullDayAbsence(scheduleDay)
+				IsFullDayAbsence = scheduleDay.IsFullDayAbsence()
 			};
 
 			if (scheduleDay == null)
@@ -268,23 +269,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			var visualLayers = _projectionProvider.Projection(scheduleDay);
 			ret.ContractTimeInMinute = visualLayers.ContractTime().TotalMinutes;
 			return ret;
-		}
-
-		public bool IsFullDayAbsence(IScheduleDay scheduleDay)
-		{
-			if (scheduleDay == null)
-			{
-				return false;
-			}
-
-			var projection = _projectionProvider.Projection(scheduleDay);
-			var significantPart = scheduleDay.SignificantPart();
-			if (significantPart == SchedulePartView.ContractDayOff || significantPart == SchedulePartView.DayOff)
-			{
-				return projection.HasLayers && projection.All(l => l.Payload is IAbsence);
-			}
-
-			return significantPart == SchedulePartView.FullDayAbsence;
 		}
 
 		public bool IsOvertimeOnDayOff(IScheduleDay scheduleDay)
