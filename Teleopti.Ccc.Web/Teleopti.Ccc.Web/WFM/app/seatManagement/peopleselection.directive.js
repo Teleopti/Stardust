@@ -8,7 +8,7 @@
 				selectedPeopleList: '=selectedPeople',
 				clearSelectedPeople : '='
 			},
-			templateUrl: 'app/people/html/people-list.html',
+			templateUrl: 'app/peopleold/html/people-list.html',
 			link: function (scope, element, attrs) {
 				scope.gridOptions.enableGridMenu = false;
 				scope.gridOptions.enableColumnMenus = false;
