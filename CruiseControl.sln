@@ -222,6 +222,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.WinCode", "Tel
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Wfm.AdministrationTest", "Teleopti.Wfm.AdministrationTest\Teleopti.Wfm.AdministrationTest.csproj", "{164DFD25-24EE-47E2-B5A6-B7AA7B122731}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.WebBehaviorTest.SpecFlowPlugin", "Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest.SpecFlowPlugin\Teleopti.Ccc.WebBehaviorTest.SpecFlowPlugin.csproj", "{D164065C-2F33-431B-80A4-A4F59CE77486}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|.NET = Debug|.NET
@@ -1230,6 +1232,22 @@ Global
 		{164DFD25-24EE-47E2-B5A6-B7AA7B122731}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{164DFD25-24EE-47E2-B5A6-B7AA7B122731}.Release|x86.ActiveCfg = Release|Any CPU
 		{164DFD25-24EE-47E2-B5A6-B7AA7B122731}.Release|x86.Build.0 = Release|Any CPU
+		{D164065C-2F33-431B-80A4-A4F59CE77486}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{D164065C-2F33-431B-80A4-A4F59CE77486}.Debug|.NET.Build.0 = Debug|Any CPU
+		{D164065C-2F33-431B-80A4-A4F59CE77486}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D164065C-2F33-431B-80A4-A4F59CE77486}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D164065C-2F33-431B-80A4-A4F59CE77486}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{D164065C-2F33-431B-80A4-A4F59CE77486}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{D164065C-2F33-431B-80A4-A4F59CE77486}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D164065C-2F33-431B-80A4-A4F59CE77486}.Debug|x86.Build.0 = Debug|Any CPU
+		{D164065C-2F33-431B-80A4-A4F59CE77486}.Release|.NET.ActiveCfg = Release|Any CPU
+		{D164065C-2F33-431B-80A4-A4F59CE77486}.Release|.NET.Build.0 = Release|Any CPU
+		{D164065C-2F33-431B-80A4-A4F59CE77486}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D164065C-2F33-431B-80A4-A4F59CE77486}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D164065C-2F33-431B-80A4-A4F59CE77486}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{D164065C-2F33-431B-80A4-A4F59CE77486}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{D164065C-2F33-431B-80A4-A4F59CE77486}.Release|x86.ActiveCfg = Release|Any CPU
+		{D164065C-2F33-431B-80A4-A4F59CE77486}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1272,6 +1290,7 @@ Global
 		{FBBAF5F6-5079-4CAD-BD96-7C07737238AA} = {60EAE402-FE16-440F-897D-6222012A77F0}
 		{096E69DA-1F3B-4E43-848D-FA5D92281394} = {FEFF4A24-4851-4A21-BF0F-68A36655E0E7}
 		{164DFD25-24EE-47E2-B5A6-B7AA7B122731} = {5AC253DA-DE38-4EB4-8ECB-4E5E332D6011}
+		{D164065C-2F33-431B-80A4-A4F59CE77486} = {DF7B23CB-0FDA-4C03-93EA-3A136C6D7A7B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		RESX_CodeReferences = {"Items":[{"Expression":"\\W($File.$Key)\\W","Extensions":".xaml,.cshtml","IsCaseSensitive":true,"SingleLineComment":"\/\/"},{"Expression":"ResourceManager.GetString\\(\"$Key\"(,.*)?\\)|\\\"xx(x)?($Key)\\\"|StringResourceKey\\.($Key)","Extensions":".cs","IsCaseSensitive":true,"SingleLineComment":"\/\/"},{"Expression":"typeof\\((\\w+\\.)*($File)\\).+\"($Key)\"|\"($Key)\".+typeof\\((\\w+\\.)*($File)\\)","Extensions":".cs12","IsCaseSensitive":true,"SingleLineComment":"\/\/"},{"Expression":"\\W($Key)\\W","Extensions":".vb","IsCaseSensitive":false,"SingleLineComment":"'"},{"Expression":"\\W($File::$Key)\\W","Extensions":".cpp,.c,.hxx,.h","IsCaseSensitive":true,"SingleLineComment":"\/\/"},{"Expression":"&lt;%\\$\\s+Resources:\\s*($File)\\s*,\\s*($Key)\\s*%&gt;","Extensions":".aspx,.ascx,.master","IsCaseSensitive":true,"SingleLineComment":null},{"Expression":"{{'$Key'[\\s]*\\|[\\s]*translate}}","Extensions":".html","IsCaseSensitive":false,"SingleLineComment":null}]}
