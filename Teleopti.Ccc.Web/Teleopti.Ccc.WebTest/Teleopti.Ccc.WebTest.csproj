@@ -292,6 +292,7 @@
     <Compile Include="Areas\TeamSchedule\Core\TeamScheduleActivityCommandServiceTest.cs" />
     <Compile Include="Core\BlockOtherOriginFilterTests.cs" />
     <Compile Include="Core\Common\DataProvider\MultiplicatorDefinitionSetProviderTest.cs" />
+    <Compile Include="Core\Gamification\GamificationSettingProviderTest.cs" />
     <Compile Include="Core\Requests\DataProvider\OvertimeRequestPersisterTest.cs" />
     <Compile Include="Core\Requests\DataProvider\AbsenceRequestPersisterTest.cs" />
     <Compile Include="Core\Requests\DataProvider\FakeLinkProvider.cs" />
