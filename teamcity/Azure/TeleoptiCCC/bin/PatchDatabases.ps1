@@ -642,5 +642,5 @@ Catch [Exception]
 }
 Finally
 {
-    log-info "Done!"
+    log-info "End of Script."
 }

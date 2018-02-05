@@ -225,17 +225,18 @@ Try
 		log-info "Starting service bus..."
         StartWindowsService -ServiceName $TeleoptiServiceBus
 	}
+	Write-EventLog -LogName Application -Source $JOB -EventID 0 -EntryType Information -Message "$newFiles files synced from: $BlobSource to: $FILEWATCH"
 }
 Catch [Exception]
 {
     $ErrorMessage = $_.Exception.Message
     Write-EventLog -LogName Application -Source $JOB -EventID 1 -EntryType Error -Message "$ErrorMessage"
 	log-error "Script failed, Check Windows event log for details!"
+	log-info "Script failed, Check Windows event log for details!"
 	Throw "Script failed, Check Windows event log for details"
 }
 Finally
 {
-	log-info "Done."
-	Write-EventLog -LogName Application -Source $JOB -EventID 0 -EntryType Information -Message "$newFiles files synced from: $BlobSource to: $FILEWATCH"
+	log-info "End of Script."
 
 }

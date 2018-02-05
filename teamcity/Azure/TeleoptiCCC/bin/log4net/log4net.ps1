@@ -1,6 +1,8 @@
 function configure-logging($configFile, $serviceName)
 {
 	write-host "Load log4net ..."
+	$timestamp = get-date -Format "yyyymmdd-HHmmss"
+	$configFile = $configFile + "_" + $timestamp
     Set-log4netConfig($configFile)
     Unblock-File -Path "$log4netPath\log4net.dll"
 	Add-Type -Path "$log4netPath\log4net.dll"
