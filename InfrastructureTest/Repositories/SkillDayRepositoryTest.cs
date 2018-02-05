@@ -468,7 +468,34 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			skilldays = skillDayRepository.GetAllSkillDays(period, skilldays, _skill, _scenario, _ => { });
 			skilldays.First().WorkloadDayCollection.Count.Should().Be.EqualTo(1);
 		}
-		
+
+		[Test]
+		public void ShouldReturnFalseIfNoSkillDays()
+		{
+			var skillDayRepository = new SkillDayRepository(UnitOfWork);
+			var businessUnitRepository = new BusinessUnitRepository(UnitOfWork);
+			var bu = businessUnitRepository.LoadAll().First();
+			skillDayRepository.HasSkillDaysWithinPeriod(DateOnly.MinValue, DateOnly.MaxValue, bu, _scenario).Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldReturnTrueIfSkillDays()
+		{
+			var skillDayRepository = new SkillDayRepository(UnitOfWork);
+			var businessUnitRepository = new BusinessUnitRepository(UnitOfWork);
+
+			ISkillDay skillDay = CreateAggregateWithCorrectBusinessUnit();
+			ISkillDay skillDay2 = CreateAggregateWithCorrectBusinessUnit();
+			SkillDayCalculator calc = new SkillDayCalculator(skillDay2.Skill, new List<ISkillDay> { skillDay },
+				new DateOnlyPeriod(2009, 1, 1, 2009, 12, 31));
+			skillDay2.SkillDayCalculator = calc;
+			PersistAndRemoveFromUnitOfWork(skillDay);
+			PersistAndRemoveFromUnitOfWork(skillDay2);
+
+			var bu = businessUnitRepository.LoadAll().First();
+			skillDayRepository.HasSkillDaysWithinPeriod(DateOnly.MinValue, DateOnly.MaxValue, bu, _scenario).Should().Be.True();
+		}
+
 		protected override Repository<ISkillDay> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
 		{
 			return new SkillDayRepository(currentUnitOfWork);

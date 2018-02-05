@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Globalization;
+using System.Linq;
 using System.Threading;
 using log4net;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
@@ -27,14 +28,14 @@ namespace Teleopti.Analytics.Etl.Common.Service
 		private readonly JobExtractor _jobExtractor;
 		private readonly JobHelper _jobHelper;
 
-		private readonly Tenants _tenants;
+		private readonly ITenants _tenants;
 		private DateTime _serviceStartTime;
 		private Action _stopService;
 
 		public EtlJobStarter(
 			JobHelper jobHelper,
 			JobExtractor jobExtractor,
-			Tenants tenants,
+			ITenants tenants,
 			IBaseConfigurationRepository baseConfigurationRepository,
 			PmInfoProvider pmInfoProvider)
 		{
@@ -105,7 +106,7 @@ namespace Teleopti.Analytics.Etl.Common.Service
 				 scheduleToRun,
 				 _jobHelper,
 				 configHandler.BaseConfiguration.TimeZoneCode,
-				 configHandler.BaseConfiguration.IntervalLength.Value,
+				 configHandler.BaseConfiguration.IntervalLength.GetValueOrDefault(),
 				 cube,
 				 pmInstallation,
 				 configHandler.BaseConfiguration.RunIndexMaintenance,
@@ -126,7 +127,7 @@ namespace Teleopti.Analytics.Etl.Common.Service
 			{
 				try
 				{
-					log.Debug("Trying to aquire lock");
+					log.Debug("Trying to acquire lock");
 					using (new EtlJobLock(_connectionString, jobToRun.Name, true))
 					{
 						log.InfoFormat(CultureInfo.InvariantCulture, "Scheduled job '{0}' ready to start.", jobToRun.Name);
@@ -141,14 +142,11 @@ namespace Teleopti.Analytics.Etl.Common.Service
 
 							var jobRunner = new JobRunner();
 							var jobResults = jobRunner.Run(jobToRun, jobResultCollection, jobStepsNotToRun);
-							if (jobResults == null)
+							if (jobResults != null && jobResults.Any())
 							{
-								// No license applied - stop service
-								logInvalidLicense(tenant.Name);
-								//we can't stop service now beacuse one tenant don't have a License, just try next
-								//NeedToStopService(this, null);
-								//return false;
-								continue;
+								var exception = jobResults.First().JobStepResultCollection.First().JobStepException;
+								if (exception != null && exception.Message.Contains("license"))
+									logInvalidLicense(tenant.Name);
 							}
 							jobRunner.SaveResult(jobResults, repository, scheduleJob.ScheduleId);
 						}
@@ -166,7 +164,7 @@ namespace Teleopti.Analytics.Etl.Common.Service
 					}
 					else
 					{
-						log.InfoFormat("Distributed lock could not created. Job '{0}' could not be started.");
+						log.InfoFormat("Distributed lock could not created. Job '{0}' could not be started.", jobToRun.Name);
 					}
 				}
 			}
@@ -192,8 +190,8 @@ namespace Teleopti.Analytics.Etl.Common.Service
 		private static void logInvalidLicense(string tenant)
 		{
 			log.WarnFormat(
-				 "ETL Service could not run for tenant {0}. Please log on to that tenant and apply a license in the main client.",
-				 tenant);
+				"ETL Service could not run for tenant {0}. Please log on to that tenant and apply a license in the main client.",
+				tenant);
 		}
 
 		private static void logInvalidConfiguration(ConfigurationHandler configHandler)

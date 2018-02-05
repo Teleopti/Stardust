@@ -12,6 +12,7 @@ using Teleopti.Analytics.Etl.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.ConfigTool.Transformer;
+using Teleopti.Ccc.Domain.MultiTenancy;
 
 namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 {
@@ -53,7 +54,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 
 		private void logonWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
-			_tenantCollection = App.Container.Resolve<Tenants>().LoadedTenants();
+			_tenantCollection = App.Container.Resolve<ITenants>().LoadedTenants();
 			
 			InitialJobNowAvailable(sender, new AlarmEventArgs(_jobCollection[0]));
 			SetEnableStateForJobCollection();

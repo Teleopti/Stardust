@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Configuration;
 using System.Diagnostics;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
@@ -89,13 +90,13 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Transformer
 					{
 						IJobRunner jobRunner = new JobRunner();
 						IList<IJobResult> jobResults = jobRunner.Run(job, jobResultCollection, jobStepsNotToRun);
-						if (jobResults == null)
+						if (jobResults != null && jobResults.Any())
 						{
-							MessageBox.Show("Please apply a license from the main client before ETL job is run.", "Warning",
-								MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, 0);
-						}
-						else
-						{
+							var exception = jobResults.First().JobStepResultCollection.First().JobStepException;
+							if(exception != null && exception.Message.Contains("license"))
+								MessageBox.Show("Please apply a license from the main client before ETL job is run.", "Warning",
+									MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, 0);
+
 							jobRunner.SaveResult(jobResults, repository, -1);
 						}
 					}

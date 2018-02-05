@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Autofac;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
+using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Service;
 using Teleopti.Analytics.Etl.Common.Transformer.Job;
@@ -37,7 +38,12 @@ namespace Teleopti.Analytics.Etl.Common
 			builder.RegisterType<PmInfoProvider>().SingleInstance();
 			builder.RegisterType<JobExtractor>().SingleInstance();
 			builder.RegisterType<JobHelper>().SingleInstance();
-			builder.RegisterType<Tenants>().SingleInstance();
+			
+			if(_configuration.Toggle(Toggles.AddOrRemoveTenantsWithoutRestart_43635))
+				builder.RegisterType<Tenants>().As<ITenants>().SingleInstance();
+			else
+				builder.RegisterType<TenantsOld>().As<ITenants>().SingleInstance();
+			
 			builder.RegisterType<TenantsLoadedInEtl>().As<IAllTenantNames>().SingleInstance();
 			builder.RegisterType<AllTenantEtlSettings>().As<IAllTenantEtlSettings>().SingleInstance();
 			builder.RegisterType<BaseConfigurationRepository>().As<IBaseConfigurationRepository>().SingleInstance();

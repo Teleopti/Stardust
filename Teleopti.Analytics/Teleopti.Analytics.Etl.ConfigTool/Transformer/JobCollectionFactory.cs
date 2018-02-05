@@ -42,7 +42,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Transformer
 
 				_baseConfiguration.JobHelper = new JobHelper(
 					App.Container.Resolve<IAvailableBusinessUnitsProvider>(),
-					App.Container.Resolve<Tenants>(), 
+					App.Container.Resolve<ITenants>(), 
 					App.Container.Resolve<IIndexMaintenanceRepository>(),
 					App.Container.Resolve<IMessageSender>(),
 					App.Container.Resolve<IAnalyticsPersonPeriodDateFixer>());

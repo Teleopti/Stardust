@@ -754,6 +754,7 @@
     </Content>
     <Content Include="Licensing\TeleoptiCCCUnsignedSeatLicense.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="PasswordPolicy.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

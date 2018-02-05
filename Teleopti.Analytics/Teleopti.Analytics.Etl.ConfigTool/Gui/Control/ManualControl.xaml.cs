@@ -13,6 +13,7 @@ using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.MultipleDate;
 using Teleopti.Analytics.Etl.ConfigTool.Transformer;
+using Teleopti.Ccc.Domain.MultiTenancy;
 using Color = System.Drawing.Color;
 
 namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
@@ -216,7 +217,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 		internal void ReloadDataSourceComboBox()
 		{
 
-			var dataSource = App.Container.Resolve<Tenants>().DataSourceForTenant(((TenantInfo) ComboBoxDataSource.SelectedItem).Name);
+			var dataSource = App.Container.Resolve<ITenants>().DataSourceForTenant(((TenantInfo) ComboBoxDataSource.SelectedItem).Name);
 			ComboBoxLogDataSource.DataContext = _dataSourceCollection = new DataSourceValidCollection(true, dataSource.Analytics.ConnectionString);
 		}
 

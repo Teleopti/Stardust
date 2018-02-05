@@ -25486,14 +25486,11 @@ namespace Teleopti.Ccc.UserTexts {
         /// <summary>
         ///   Looks up a localized string similar to Product activation key successfully applied.
         ///Congratulations! You are now a licensed user of this award winning workforce management solution.
-        ///The application will now exit.
-        ///
-        ///Important:
-        ///In order to get all services and web applications to fully function and to get access to newly licensed options, please ask your IT to run &quot;Restart Teleopti WFM&quot; from the Teleopti folder in the Start Menu on the server..
+        ///The application will now exit..
         /// </summary>
-        public static string ProductActivationKeyApplicationSuccess {
+        public static string ProductActivationKeyApplicationSuccessNoRestart {
             get {
-                return ResourceManager.GetString("ProductActivationKeyApplicationSuccess", resourceCulture);
+                return ResourceManager.GetString("ProductActivationKeyApplicationSuccessNoRestart", resourceCulture);
             }
         }
         

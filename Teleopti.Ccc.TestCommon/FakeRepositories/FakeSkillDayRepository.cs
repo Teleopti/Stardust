@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	public class FakeSkillDayRepository : ISkillDayRepository
 	{
 		private readonly List<ISkillDay> _skillDays = new List<ISkillDay>();
+		public bool HasSkillDays;
 
 		public void Add(ISkillDay root)
 		{
@@ -86,6 +87,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 						period.Contains(skillDayInDb.CurrentDate) && 
 						skills.Contains(skillDayInDb.Skill))
 				.ToList();
+		}
+
+		public bool HasSkillDaysWithinPeriod(DateOnly startDate, DateOnly endDate, IBusinessUnit businessUnit, IScenario scenario)
+		{
+			return HasSkillDays;
 		}
 	}
 }

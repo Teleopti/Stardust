@@ -12,8 +12,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 {
 	public class JobBase : IJob
 	{
-		internal string _name = string.Empty;
-		private readonly IList<IJobStep> _steplist = new List<IJobStep>();
+		private string _name;
 		private IJobResult _jobResult;
 		private bool _enabled;
 
@@ -26,11 +25,11 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 
 		private JobBase() { }
 
-		public JobBase(IJobParameters jobParameters, IList<IJobStep> jobStep, String jobName, bool needsParameterDatePeriod, bool needsParameterDataSource)
+		public JobBase(IJobParameters jobParameters, IList<IJobStep> jobStep, string jobName, bool needsParameterDatePeriod, bool needsParameterDataSource)
 			: this()
 		{
 			_name = jobName;
-			_steplist = jobStep;
+			StepList = jobStep;
 			JobParameters = jobParameters;
 			NeedsParameterDatePeriod = needsParameterDatePeriod;
 			NeedsParameterDataSource = needsParameterDataSource;
@@ -42,19 +41,12 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 			set
 			{
 				_name = value;
-				FirePropertyChanged(nameof(Name));
+				firePropertyChanged(nameof(Name));
 			}
-			get { return _name; }
+			get => _name;
 		}
 
-		public IList<IJobStep> StepList
-		{
-			get
-			{
-				return _steplist;
-			}
-
-		}
+		public IList<IJobStep> StepList { get; }
 
 		public IJobResult Run(IBusinessUnit businessUnit, IList<IJobStep> jobStepsNotToRun, IList<IJobResult> jobResultCollection, bool isFirstBusinessUnitRun, bool isLastBusinessUnitRun)
 		{
@@ -73,18 +65,21 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 				//Log onto Raptor domain
 				if (!JobParameters.Helper.SetBusinessUnit(businessUnit))
 				{
-					Result.Status = string.Empty;
-					Result.Success = true;
+					Result.Status = "";
+					Result.Success = false;
+					Result.JobStepResultCollection.Add(
+						new JobStepResult("",0,
+							new Exception(getInvalidLicenseErrorMessage(JobParameters.Helper.SelectedDataSource.DataSourceName)),businessUnit,jobResultCollection));
 					update();
-					return null;
+					return Result;
 				}
 
 				JobParameters.StateHolder = new CommonStateHolder(JobParameters);
 			}
 
-			foreach (IJobStep step in StepList)
+			foreach (var step in StepList)
 			{
-				IJobStepResult jobStepResult = step.Run(jobStepsNotToRun, businessUnit, jobResultCollection, isLastBusinessUnitRun);
+				var jobStepResult = step.Run(jobStepsNotToRun, businessUnit, jobResultCollection, isLastBusinessUnitRun);
 
 				Result.JobStepResultCollection.Add(jobStepResult);
 				update();
@@ -98,21 +93,26 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 				}
 			}
 
-			if (JobParameters != null) JobParameters.Helper.LogOffTeleoptiCccDomain();
+			JobParameters?.Helper.LogOffTeleoptiCccDomain();
 			Result.Status = Result.Success ? "Done" : "Not completed due to error!";
 
 			return Result;
+		}
+		
+		private static string getInvalidLicenseErrorMessage(string tenant)
+		{
+			return $"ETL Service could not run for tenant {tenant}. Please log on to that tenant and apply a license in the main client.";
 		}
 
 		private void update()
 		{
 			Result.Update();
-			FirePropertyChanged(nameof(Result));
+			firePropertyChanged(nameof(Result));
 		}
 
 		private void clearJobStepResults(bool firstRun)
 		{
-			foreach (IJobStep jobStep in StepList)
+			foreach (var jobStep in StepList)
 			{
 				if (firstRun)
 				{
@@ -123,7 +123,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 					if (jobStep.Result != null)
 					{
 						jobStep.Result.ClearResult();
-						FirePropertyChanged(nameof(Result));
+						firePropertyChanged(nameof(Result));
 					}
 				}
 			}
@@ -138,14 +138,11 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 
 		public IJobResult Result
 		{
-			get
-			{
-				return _jobResult;
-			}
+			get => _jobResult;
 			private set
 			{
 				_jobResult = value;
-				FirePropertyChanged(nameof(Result));
+				firePropertyChanged(nameof(Result));
 			}
 		}
 
@@ -156,7 +153,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 				IList<JobCategoryType> jobCategoryTypeCollection = new List<JobCategoryType>();
 
 				// Get a distinct list of which job categorys that is included in the selected job
-				foreach (IJobStep jobStep in StepList)
+				foreach (var jobStep in StepList)
 				{
 					if (!jobCategoryTypeCollection.Contains(jobStep.JobCategory))
 					{
@@ -170,11 +167,11 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 
 		public bool Enabled
 		{
-			get { return _enabled; }
+			get => _enabled;
 			set
 			{
 				_enabled = value;
-				FirePropertyChanged(nameof(Enabled));
+				firePropertyChanged(nameof(Enabled));
 			}
 		}
 
@@ -184,7 +181,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate")]
-		protected void FirePropertyChanged(string propertyName)
+		private void firePropertyChanged(string propertyName)
 		{
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}

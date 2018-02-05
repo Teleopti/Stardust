@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.MultipleDate;
@@ -205,7 +207,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job
 		}
 
 		[Test]
-		public void ShouldReturnNullResultWhenLogOntoRaptorFails()
+		public void ShouldReturnResultWithExceptionWhenLogOntoRaptorFails()
 		{
 			IBusinessUnit bu = BusinessUnitFactory.CreateSimpleBusinessUnit("myBu");
 			var jobParameters = _mocks.StrictMock<IJobParameters>();
@@ -214,12 +216,14 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job
 
 			using (_mocks.Record())
 			{
-				Expect.Call(job.JobParameters.Helper).Return(jobHelper);
+				Expect.Call(job.JobParameters.Helper).Return(jobHelper).Repeat.Twice();
 				Expect.Call(jobHelper.SetBusinessUnit(bu)).Return(false);
+				Expect.Call(jobHelper.SelectedDataSource);
 			}
 			using (_mocks.Playback())
 			{
-				Assert.IsNull(job.Run(bu, null, null, true, true));
+				var result = job.Run(bu, null, null, true, true).JobStepResultCollection.First();
+				result.JobStepException.Message.Should().Contain("license");
 			}
 		}
 	}

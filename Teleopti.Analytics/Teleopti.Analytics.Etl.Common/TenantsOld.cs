@@ -4,20 +4,23 @@ using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 
 namespace Teleopti.Analytics.Etl.Common
 {
-	public class Tenants : ITenants
+	public class TenantsOld : ITenants
 	{
 		private readonly ITenantUnitOfWork _tenantUnitOfWork;
 		private readonly ILoadAllTenants _loadAllTenants;
 		private readonly IDataSourcesFactory _dataSourcesFactory;
 		private readonly IBaseConfigurationRepository _baseConfigurationRepository;
+		private IEnumerable<TenantInfo> _tenants = Enumerable.Empty<TenantInfo>();
+		private bool _tenantsLoaded;
 
-		public Tenants(
+		public TenantsOld(
 			ITenantUnitOfWork tenantUnitOfWork, 
 			ILoadAllTenants loadAllTenants, 
 			IDataSourcesFactory dataSourcesFactory,
@@ -25,12 +28,19 @@ namespace Teleopti.Analytics.Etl.Common
 		{
 			_tenantUnitOfWork = tenantUnitOfWork;
 			_loadAllTenants = loadAllTenants;
-			_dataSourcesFactory = dataSourcesFactory;
-			_baseConfigurationRepository = baseConfigurationRepository;
-		}
+         			_dataSourcesFactory = dataSourcesFactory;
+         			_baseConfigurationRepository = baseConfigurationRepository;
+         		}
+         
+         		public IEnumerable<TenantInfo> LoadedTenants()
+         		{
+         			ensureTenantsLoaded();
+         			return _tenants.ToList();
+         		}
 
 		public IEnumerable<TenantInfo> CurrentTenants()
 		{
+			refresh();
 			return LoadedTenants();
 		}
 
@@ -43,7 +53,7 @@ namespace Teleopti.Analytics.Etl.Common
 
 		public TenantInfo Tenant(string name)
 		{
-			return LoadedTenants().FirstOrDefault(x => x.Tenant.Name.Equals(name));
+			return _tenants.FirstOrDefault(x => x.Tenant.Name.Equals(name));
 		}
 
 		public IDataSource DataSourceForTenant(string name)
@@ -52,15 +62,25 @@ namespace Teleopti.Analytics.Etl.Common
 			return tenant?.DataSource;
 		}
 
-		public IEnumerable<TenantInfo> LoadedTenants()
+		private void ensureTenantsLoaded()
 		{
-			var loadedTenants = new List<TenantInfo>();
+			if (_tenantsLoaded) return;
+			_tenantsLoaded = true;
+			refresh();
+		}
+
+		private void refresh()
+		{
+			var refreshed = _tenants.ToList();
 
 			using (_tenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var loaded = _loadAllTenants.Tenants().ToList();
 				foreach (var tenant in loaded)
 				{
+					var existing = _tenants.FirstOrDefault(x => x.Name.Equals(tenant.Name));
+					if (existing != null) continue;
+
 					var configurationHandler = new ConfigurationHandler(new GeneralFunctions(new GeneralInfrastructure(_baseConfigurationRepository)));
 					configurationHandler.SetConnectionString(tenant.DataSourceConfiguration.AnalyticsConnectionString);
 					IBaseConfiguration baseConfiguration = null;
@@ -72,16 +92,24 @@ namespace Teleopti.Analytics.Etl.Common
 						tenant.DataSourceConfiguration.ApplicationConnectionString,
 						tenant.DataSourceConfiguration.AnalyticsConnectionString);
 
-					loadedTenants.Add(new TenantInfo
+					refreshed.Add(new TenantInfo
 					{
 						Tenant = tenant,
 						EtlConfiguration = baseConfiguration,
 						DataSource = dataSource
 					});
 				}
-			}
 
-			return loadedTenants;
+				var toRemove = (from t in _tenants
+								where loaded.FirstOrDefault(x => x.Name.Equals(t.Name)) == null
+								select t).ToList();
+				foreach (var t in toRemove)
+				{
+					refreshed.Remove(t);
+				}
+
+				_tenants = refreshed;
+			}
 		}
 	}
 }

@@ -114,12 +114,16 @@
     <Compile Include="..\..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="AllTenantEtlSettings.cs" />
     <Compile Include="Entity\BusinessUnitItem.cs" />
     <Compile Include="EtlAppModule.cs" />
     <Compile Include="Infrastructure\BaseConfigurationRepository.cs" />
     <Compile Include="Infrastructure\JobScheduleRepository.cs" />
+    <Compile Include="ITenants.cs" />
     <Compile Include="Service\PmInfoProvider.cs" />
+    <Compile Include="TenantInfo.cs" />
     <Compile Include="Tenants.cs" />
+    <Compile Include="TenantsOld.cs" />
     <Compile Include="Service\EtlJobStarter.cs" />
     <Compile Include="Service\EtlService.cs" />
     <Compile Include="Infrastructure\CubeRepository.cs" />
@@ -229,6 +233,7 @@
     <Compile Include="JobRunner.cs" />
     <Compile Include="RunController.cs" />
     <Compile Include="Service\SchedulePriority.cs" />
+    <Compile Include="TenantsLoadedInEtl.cs" />
     <Compile Include="Transformer\AbsenceTransformer.cs" />
     <Compile Include="Transformer\ActivityTransformer.cs" />
     <Compile Include="Transformer\AgentSkillTransform.cs" />

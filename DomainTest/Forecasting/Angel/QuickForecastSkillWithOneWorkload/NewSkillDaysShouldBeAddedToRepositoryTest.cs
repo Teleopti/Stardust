@@ -90,6 +90,11 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWor
 			{
 				throw new NotImplementedException();
 			}
+
+			public bool HasSkillDaysWithinPeriod(DateOnly startDate, DateOnly endDate, IBusinessUnit businessUnit,  IScenario scenario)
+			{
+				throw new NotImplementedException();
+			}
 		}
 	}
 }

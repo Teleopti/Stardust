@@ -7,11 +7,10 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 {
 	public class JobHelperForTest : JobHelper
 	{
-		public JobHelperForTest(IRaptorRepository repository, IMessageSender messageSender, Tenants tenants = null)
+		public JobHelperForTest(IRaptorRepository repository, IMessageSender messageSender, ITenants tenants = null)
 			: base(repository, messageSender, tenants, null, null)
 		{
-			if (tenants != null)
-				tenants.LoadedTenants();
+			tenants?.LoadedTenants();
 		}
 	}
 }

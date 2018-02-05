@@ -34,7 +34,7 @@ BEGIN
 			je.schedule_id,
 			sch.schedule_name,
 			jse.jobstep_execution_id,
-			js.jobstep_name,
+			isnull (js.jobstep_name,'Logon') as jobstep_name,
 			jse.duration_s AS jobstep_duration_s,
 			jse.rows_affected AS jobstep_affected_rows,
 			er.error_exception_message AS exception_msg,
@@ -55,7 +55,7 @@ BEGIN
 			mart.etl_job j
 		ON
 			je.job_id = j.job_id
-		INNER JOIN
+		LEFT JOIN
 			mart.etl_jobstep js
 		ON
 			jse.jobstep_id = js.jobstep_id
@@ -103,7 +103,7 @@ BEGIN
 			je.schedule_id,
 			sch.schedule_name,
 			jse.jobstep_execution_id,
-			js.jobstep_name,
+			isnull (js.jobstep_name,'Logon') as jobstep_name,
 			jse.duration_s AS jobstep_duration_s,
 			jse.rows_affected AS jobstep_affected_rows,
 			er.error_exception_message AS exception_msg,
@@ -124,7 +124,7 @@ BEGIN
 			mart.etl_job j
 		ON
 			je.job_id = j.job_id
-		INNER JOIN
+		LEFT JOIN
 			mart.etl_jobstep js
 		ON
 			jse.jobstep_id = js.jobstep_id

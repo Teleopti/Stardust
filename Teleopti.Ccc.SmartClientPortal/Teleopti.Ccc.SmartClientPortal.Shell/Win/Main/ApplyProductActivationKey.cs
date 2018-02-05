@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main
 					licenseStatusUpdater.RunCheck();
 
 					System.Windows.MessageBox.Show(
-						 Resources.ProductActivationKeyApplicationSuccess,
+						 Resources.ProductActivationKeyApplicationSuccessNoRestart,
 						 Resources.Success,
 						 System.Windows.MessageBoxButton.OK,
 						 System.Windows.MessageBoxImage.Information,

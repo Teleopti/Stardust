@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
@@ -69,6 +70,24 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 																	 new DateOnlyPeriod());
 			}
 			return skillDays;
+		}
+
+		public bool HasSkillDaysWithinPeriod(DateOnly startDate, DateOnly endDate, IBusinessUnit businessUnit, IScenario scenario)
+		{
+			var result = Session.CreateSQLQuery(
+					@"
+IF EXISTS (SELECT * FROM SkillDay
+WHERE Scenario = :scenario AND BusinessUnit = :buId AND SkillDayDate BETWEEN :startDate AND :endDate)
+SELECT 1
+ELSE
+SELECT 0
+")
+				.SetGuid("scenario", scenario.Id.GetValueOrDefault())
+				.SetGuid("buId", businessUnit.Id.GetValueOrDefault())
+				.SetDateTime("startDate", startDate.Date)
+				.SetDateTime("endDate", endDate.Date).UniqueResult<int>();
+				
+			return result > 0;
 		}
 
         public ICollection<ISkillDay> FindReadOnlyRange(DateOnlyPeriod period, IEnumerable<ISkill> skills, IScenario scenario)

@@ -20,7 +20,9 @@ namespace Teleopti.Ccc.Domain.Repositories
         ISkillDay FindLatestUpdated(ISkill skill, IScenario scenario, bool withLongterm);
 
         ICollection<ISkillDay> FindReadOnlyRange(DateOnlyPeriod period, IEnumerable<ISkill> skills, IScenario scenario);
-    }
+
+		bool HasSkillDaysWithinPeriod(DateOnly startDate, DateOnly endDate, IBusinessUnit businessUnit, IScenario scenario);
+	}
 
 	//refactor this PBI 35176
 	public class SkillTaskDetailsModel

@@ -7,7 +7,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job
 {
 	public class JobHelperForTest : JobHelper
 	{
-		public JobHelperForTest(IRaptorRepository repository, IMessageSender messageSender, Tenants tenants = null) 
+		public JobHelperForTest(IRaptorRepository repository, IMessageSender messageSender, ITenants tenants = null) 
 			: base(repository, messageSender, tenants, null, null)
 		{
 		}

@@ -5718,15 +5718,6 @@ Error details:
     <value>Enter a valid file name, including path</value>
     <comment>file not found in product activation window</comment>
   </data>
-  <data name="ProductActivationKeyApplicationSuccess" xml:space="preserve">
-    <value>Product activation key successfully applied.
-Congratulations! You are now a licensed user of this award winning workforce management solution.
-The application will now exit.
-
-Important:
-In order to get all services and web applications to fully function and to get access to newly licensed options, please ask your IT to run "Restart Teleopti WFM" from the Teleopti folder in the Start Menu on the server.</value>
-    <comment>product activation key upload success message</comment>
-  </data>
   <data name="ProductActivationKeyHasExpiredPleaseApplyANewOne" xml:space="preserve">
     <value>Your product activation key has expired, please apply a new one</value>
     <comment>explanation for product activation key failure in product activation window</comment>
@@ -17227,5 +17218,11 @@ Do you want to participate?</value>
   <data name="UIGridSortDescending" xml:space="preserve">
     <value>Sort descending</value>
     <comment>Used in combination with i18nService in the ui-grid</comment>
+  </data>
+  <data name="ProductActivationKeyApplicationSuccessNoRestart" xml:space="preserve">
+    <value>Product activation key successfully applied.
+Congratulations! You are now a licensed user of this award winning workforce management solution.
+The application will now exit.</value>
+    <comment>product activation key upload success message without stating that a restart is necessary</comment>
   </data>
 </root>

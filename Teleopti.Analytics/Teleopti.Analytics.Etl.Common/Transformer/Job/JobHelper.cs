@@ -24,7 +24,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 		private IRaptorRepository _repository;
 		private readonly IMessageSender _messageSender;
 		private readonly IAvailableBusinessUnitsProvider _availableBusinessUnitsProvider;
-		private readonly Tenants _tenants;
+		private readonly ITenants _tenants;
 		private readonly IIndexMaintenanceRepository _indexMaintenanceRepository;
 		private readonly IAnalyticsPersonPeriodDateFixer _analyticsPersonPeriodDateFixer;
 
@@ -32,7 +32,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 		private List<IBusinessUnit> _buList;
 		private DataSourceContainer _choosenDb;
 
-		public JobHelper(IAvailableBusinessUnitsProvider availableBusinessUnitsProvider, Tenants tenants, IIndexMaintenanceRepository indexMaintenanceRepository,IMessageSender messageSender, IAnalyticsPersonPeriodDateFixer analyticsPersonPeriodDateFixer)
+		public JobHelper(IAvailableBusinessUnitsProvider availableBusinessUnitsProvider, ITenants tenants, IIndexMaintenanceRepository indexMaintenanceRepository,IMessageSender messageSender, IAnalyticsPersonPeriodDateFixer analyticsPersonPeriodDateFixer)
 		{
 			_availableBusinessUnitsProvider = availableBusinessUnitsProvider;
 			_tenants = tenants;
@@ -47,7 +47,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 			_logonService = new LogOnService(logOnOff, new AvailableBusinessUnitsProvider(new RepositoryFactory()));
 		}
 
-		protected JobHelper(IRaptorRepository repository, IMessageSender messageSender, Tenants tenants, IIndexMaintenanceRepository indexMaintenanceRepository, IAnalyticsPersonPeriodDateFixer analyticsPersonPeriodDateFixer)
+		protected JobHelper(IRaptorRepository repository, IMessageSender messageSender, ITenants tenants, IIndexMaintenanceRepository indexMaintenanceRepository, IAnalyticsPersonPeriodDateFixer analyticsPersonPeriodDateFixer)
 		{
 			_repository = repository;
 			_messageSender = messageSender;
