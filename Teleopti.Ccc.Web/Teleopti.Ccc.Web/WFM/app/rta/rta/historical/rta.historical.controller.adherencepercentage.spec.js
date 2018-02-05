@@ -4,7 +4,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 
 	it('should display adherence percentage', function (t) {
 		t.stateParams.personId = '1';
-		t.backend.withHistoricalAdherence({
+		t.backend.with.historicalAdherence({
 			PersonId: '1',
 			AdherencePercentage: '90'
 		});
@@ -16,7 +16,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 
 	it('should display adherence percentage 0', function (t) {
 		t.stateParams.personId = '1';
-		t.backend.withHistoricalAdherence({
+		t.backend.with.historicalAdherence({
 			PersonId: '1',
 			AdherencePercentage: '0'
 		});
@@ -28,7 +28,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 
 	it('should not display adherence percentage when null', function (t) {
 		t.stateParams.personId = '1';
-		t.backend.withHistoricalAdherence({
+		t.backend.with.historicalAdherence({
 			PersonId: '1',
 			AdherencePercentage: null
 		});

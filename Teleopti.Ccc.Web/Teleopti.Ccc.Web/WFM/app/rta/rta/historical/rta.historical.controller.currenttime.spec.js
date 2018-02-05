@@ -3,7 +3,7 @@
 rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 
 	it('should display current time', function (t) {
-		t.backend.withHistoricalAdherence({
+		t.backend.with.historicalAdherence({
 			Now: '2017-12-14T15:00:00',
 			Timeline: {
 				StartTime: '2017-12-14T10:00:00',
@@ -17,7 +17,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 	});
 
 	it('should display off screen far to the right when looking at yesterdays date ;)', function (t) {
-		t.backend.withHistoricalAdherence({
+		t.backend.with.historicalAdherence({
 			Now: '2017-12-14T15:00:00',
 			Timeline: {
 				StartTime: '2017-12-13T10:00:00',

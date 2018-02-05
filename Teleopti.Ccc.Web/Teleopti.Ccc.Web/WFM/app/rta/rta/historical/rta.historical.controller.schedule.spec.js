@@ -4,7 +4,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 	
 	it('should display schedule', function (tester) {
 		tester.stateParams.personId = '1';
-		tester.backend.withHistoricalAdherence({
+		tester.backend.with.historicalAdherence({
 			PersonId: '1',
 			AgentName: 'Mikkey Dee',
 			Schedules: [{
@@ -29,7 +29,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 
 	it('should display schedule', function (tester) {
 		tester.stateParams.personId = '1';
-		tester.backend.withHistoricalAdherence({
+		tester.backend.with.historicalAdherence({
 			PersonId: '1',
 			AgentName: 'Mikkey Dee',
 			Schedules: [{
@@ -55,7 +55,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 
 	it('should display schedule', function (tester) {
 		tester.stateParams.personId = '1';
-		tester.backend.withHistoricalAdherence({
+		tester.backend.with.historicalAdherence({
 			PersonId: '1',
 			AgentName: 'Mikkey Dee',
 			Schedules: [{

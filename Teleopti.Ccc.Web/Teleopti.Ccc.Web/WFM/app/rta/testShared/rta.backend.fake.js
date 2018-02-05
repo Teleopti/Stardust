@@ -35,8 +35,6 @@
 		service.withOrganization = withOrganization;
 		service.withOrganizationOnSkills = withOrganizationOnSkills;
 
-		service.withHistoricalAdherence = withHistoricalAdherence;
-
 		Object.defineProperty(service, 'skills', {
 			get: function () {
 				return skills;
@@ -56,7 +54,6 @@
 			teamAdherences = [];
 			skillAreas = [];
 			phoneStates = [];
-			historicalAdherence = {};
 
 			service.traceCalledForUserCode = null;
 			service.stopCalled = false;
@@ -70,6 +67,22 @@
 		service.fake({
 			name: 'configurationValidation',
 			url: /\.\.\/Rta\/Configuration\/Validate/
+		});
+
+		service.fake({
+			name: 'approvePeriod',
+			url: /\.\.\/api\/HistoricalAdherence\/ApprovePeriod/
+		});
+
+		service.fake({
+			name: 'historicalAdherence',
+			url: /\.\.\/api\/HistoricalAdherence\/ForPerson(.*)/,
+			clear: function () {
+				return {}
+			},
+			add: function (data, item) {
+				return item;
+			}
 		});
 
 		service.fake(/\.\.\/api\/AgentStates\/Poll/,
@@ -218,18 +231,6 @@
 				return [200, result];
 			});
 
-		var historicalAdherence = {};
-
-		function withHistoricalAdherence(data) {
-			historicalAdherence = data;
-		}
-
-		service.fake(/\.\.\/api\/HistoricalAdherence\/ForPerson(.*)/,
-			function (params) {
-				service.lastHistoricalAdherenceForPersonRequestParams = params;
-				return [200, historicalAdherence];
-			});
-
 
 		function withTime(time) {
 			serverTime = time;
@@ -360,7 +361,7 @@
 				service.clearCalled = true;
 				return [200];
 			});
-		
+
 
 		return service;
 	}

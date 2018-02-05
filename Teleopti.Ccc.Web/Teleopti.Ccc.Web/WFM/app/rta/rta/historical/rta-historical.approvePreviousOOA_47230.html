@@ -32,7 +32,7 @@
 			</div>
 			<div class="right">
 				<div class="timeline">
-					<div ng-repeat="row in vm.fullTimeline" 
+					<div ng-repeat="row in vm.fullTimeline"
 						 class="label label-info time"
 						 ng-attr-style="left: {{row.Offset}}">
 						{{row.Time | amDateFormat: 'HH.mm'}}
@@ -41,7 +41,7 @@
 
 			</div>
 		</div>
-		
+
 		<div class="twocolumns">
 			<div class="left">
 			</div>
@@ -96,7 +96,7 @@
 			</div>
 			<div class="right">
 				<div class="recorded-out-of-adherences">
-					<div ng-click="outOfAdherence.highlight = !outOfAdherence.highlight"
+					<div ng-click="outOfAdherence.click()"
 						 ng-repeat="outOfAdherence in vm.recordedOutOfAdherences"
 						 ng-class="{'highlight': outOfAdherence.highlight}"
 						 class="recorded-out-of-adherence"
@@ -116,7 +116,7 @@
 			<div class="right">
 				<div class="approved-periods">
 					<div ng-repeat="approved in vm.approvedPeriods"
-						 ng-click="approved.highlight = !approved.highlight"
+						 ng-click="approved.click()"
 						 class="approved-period"
 						 ng-class="{'highlight': approved.highlight}"
 						 ng-attr-style="left: {{approved.Offset}}; width: {{approved.Width}}"
@@ -141,7 +141,7 @@
 							<tr ng-repeat="outOfAdherence in vm.recordedOutOfAdherences"
 								ng-class="{'highlight': outOfAdherence.highlight}"
 								class="recorded-out-of-adherence"
-								ng-click="outOfAdherence.highlight = !outOfAdherence.highlight; vm.showApprovePanel(outOfAdherence);">
+								ng-click="outOfAdherence.click()">
 								<td>
 									{{outOfAdherence.StartTime}}
 								</td>
@@ -156,24 +156,24 @@
 		</div>
 
 		<div class="con-flex x3">
-			<div class="con-row" ng-show="vm.showApprovePanel()" style="margin-bottom: 8px;">
+			<div class="con-row" ng-show="vm.openApproveForm" style="margin-bottom: 8px;">
 				<div class="con-flex panel material-depth-1" style="padding: 10px">
 					<label style="margin-left: 12px">
 						Start:
-						<input type="time" value="{{vm.approveStartTime}}"
+						<input type="time" ng-model="vm.approveStartTime"
 							   style="margin-left: 10px; margin-right: 30px; width: 90px; border:none; border-bottom: 1px solid lightgrey; line-height: 20px"
-							   step="2"/>
+							   step="1"/>
 					</label>
 					<label>
 						End:
-						<input type="time" value="{{vm.approveEndTime}}"
+						<input type="time" ng-model="vm.approveEndTime"
 							   style="margin-left: 10px; width: 90px; border:none; border-bottom: 1px solid lightgrey; line-height: 20px"
-							   step="2"/>
+							   step="1"/>
 					</label>
-					<button type="button" class="wfm-btn wfm-btn-invis-default">
+					<button type="button" class="wfm-btn wfm-btn-invis-default" ng-click="vm.cancelApprove()">
 						Cancel
 					</button>
-					<button type="submit" class="wfm-btn wfm-btn-invis-primary">
+					<button type="submit" class="wfm-btn wfm-btn-invis-primary" ng-click="vm.submitApprove()">
 						Approve as in adherence
 					</button>
 				</div>
@@ -192,7 +192,7 @@
 								<th></th>
 								<tr ng-repeat="approved in vm.approvedPeriods"
 									ng-class="{'highlight': approved.highlight}"
-									class= "approved-period"
+									class="approved-period"
 									ng-click="approved.highlight = !approved.highlight">
 									<td>
 										{{approved.StartTime}}
@@ -230,7 +230,7 @@
 						{{item.Time | amDateFormat: 'HH:mm:ss' }}
 					</td>
 					<td>
-						<span ng-if="item.Activity" class="label" 
+						<span ng-if="item.Activity" class="label"
 							  ng-attr-style="background-color: {{item.ActivityColor}};">
 							{{item.Activity}}
 						</span>

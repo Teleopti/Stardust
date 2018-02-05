@@ -5,7 +5,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 	it('should display timeline', function (t) {
 		t.stateParams.personId = '1';
 		t.backend
-			.withHistoricalAdherence({
+			.with.historicalAdherence({
 				PersonId: '1',
 				AgentName: 'Mikkey Dee',
 				Timeline: {
@@ -27,7 +27,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 	it('should display timeline from... timeline', function (t) {
 		t.stateParams.personId = '1';
 		t.backend
-			.withHistoricalAdherence({
+			.with.historicalAdherence({
 				Now: '2016-10-10T15:00:00',
 				PersonId: '1',
 				Timeline: {

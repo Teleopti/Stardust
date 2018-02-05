@@ -13,10 +13,10 @@
 		vm.cards = [];
 		vm.previousHref;
 		vm.nextHref;
-
 		$stateParams.open = $stateParams.open === "true";
 		vm.openRecordedOutOfAdherences = $stateParams.open;
 		vm.openApprovedPeriods = $stateParams.open;
+		vm.openApproveForm = $stateParams.open;
 
 		vm.ooaTooltipTime = function (time) {
 			if (time == null)
@@ -26,57 +26,63 @@
 
 		var calculate;
 
-		$http.get('../api/HistoricalAdherence/ForPerson', {
-			params: {
-				personId: $stateParams.personId,
-				date: $stateParams.date
-			}
-		}).then(function (response) {
-			var data = response.data;
+		loadData();
 
-			data.Schedules = data.Schedules || [];
-			data.OutOfAdherences = data.OutOfAdherences || [];
-			data.RecordedOutOfAdherences = data.RecordedOutOfAdherences || [];
-			data.ApprovedPeriods = data.ApprovedPeriods || [];
-			data.Changes = data.Changes || [];
-			data.Timeline = data.Timeline || {};
-			data.Navigation = data.Navigation || {};
+		function loadData() {
 
-			calculate = rtaTimeline.makeCalculator(data.Timeline.StartTime, data.Timeline.EndTime);
+			$http.get('../api/HistoricalAdherence/ForPerson', {
+				params: {
+					personId: $stateParams.personId,
+					date: $stateParams.date
+				}
+			}).then(function (response) {
+				var data = response.data;
 
-			vm.personId = data.PersonId;
-			vm.agentName = data.AgentName;
-			vm.date = moment($stateParams.date).format('L');
-			vm.adherencePercentage = data.AdherencePercentage;
-			vm.showAdherencePercentage = data.AdherencePercentage !== null;
+				data.Schedules = data.Schedules || [];
+				data.OutOfAdherences = data.OutOfAdherences || [];
+				data.RecordedOutOfAdherences = data.RecordedOutOfAdherences || [];
+				data.ApprovedPeriods = data.ApprovedPeriods || [];
+				data.Changes = data.Changes || [];
+				data.Timeline = data.Timeline || {};
+				data.Navigation = data.Navigation || {};
 
-			vm.currentTimeOffset = calculate.Offset(data.Now);
+				calculate = rtaTimeline.makeCalculator(data.Timeline.StartTime, data.Timeline.EndTime);
 
-			vm.agentsFullSchedule = buildAgentsFullSchedule(data.Schedules);
+				vm.personId = data.PersonId;
+				vm.agentName = data.AgentName;
+				vm.date = moment($stateParams.date).format('L');
+				vm.adherencePercentage = data.AdherencePercentage;
+				vm.showAdherencePercentage = data.AdherencePercentage !== null;
 
-			vm.outOfAdherences = buildIntervals(data.Timeline, data.OutOfAdherences);
-			vm.recordedOutOfAdherences = buildIntervals(data.Timeline, data.RecordedOutOfAdherences);
-			vm.approvedPeriods = buildIntervals(data.Timeline, data.ApprovedPeriods);
+				vm.currentTimeOffset = calculate.Offset(data.Now);
 
-			vm.fullTimeline = buildTimeline(data);
+				vm.agentsFullSchedule = buildAgentsFullSchedule(data.Schedules);
 
-			vm.cards = mapChanges(data.Changes, data.Schedules);
+				vm.outOfAdherences = buildOutOfAdherence(data.Timeline, data.OutOfAdherences);
+				vm.recordedOutOfAdherences = buildRecordedOutOfAdherences(data.Timeline, data.RecordedOutOfAdherences);
+				vm.approvedPeriods = buildApprovedPeriods(data.Timeline, data.ApprovedPeriods);
 
-			vm.diamonds = buildDiamonds(data);
+				vm.fullTimeline = buildTimeline(data);
 
-			if ($stateParams.date > data.Navigation.First) {
-				var previousDay = moment($stateParams.date).subtract(1, 'day');
-				vm.previousHref = $state.href($state.current.name, {personId: vm.personId, date: previousDay.format('YYYYMMDD')});
-				vm.previousTooltip = previousDay.format('L');
-			}
+				vm.cards = mapChanges(data.Changes, data.Schedules);
 
-			if ($stateParams.date < data.Navigation.Last) {
-				var nextDay = moment($stateParams.date).add(1, 'day');
-				vm.nextHref = $state.href($state.current.name, {personId: vm.personId, date: nextDay.format('YYYYMMDD')});
-				vm.nextTooltip = nextDay.format('L');
-			}
-		});
-		
+				vm.diamonds = buildDiamonds(data);
+
+				if ($stateParams.date > data.Navigation.First) {
+					var previousDay = moment($stateParams.date).subtract(1, 'day');
+					vm.previousHref = $state.href($state.current.name, {personId: vm.personId, date: previousDay.format('YYYYMMDD')});
+					vm.previousTooltip = previousDay.format('L');
+				}
+
+				if ($stateParams.date < data.Navigation.Last) {
+					var nextDay = moment($stateParams.date).add(1, 'day');
+					vm.nextHref = $state.href($state.current.name, {personId: vm.personId, date: nextDay.format('YYYYMMDD')});
+					vm.nextTooltip = nextDay.format('L');
+				}
+			});
+
+		}
+
 		function buildTimeline(data) {
 			var timeline = [];
 			var time = moment(data.Timeline.StartTime);
@@ -93,21 +99,74 @@
 			return timeline;
 		}
 
-		function buildIntervals(timeline, intervals) {
+		function buildOutOfAdherence(timeline, intervals) {
+			return intervals.map(function (i) {
+				return buildInterval(timeline, i)
+			});
+		}
+
+		function buildRecordedOutOfAdherences(timeline, intervals) {
 			return intervals
 				.map(function (interval) {
-					var startTime = moment(interval.StartTime);
-					var endTime = moment(interval.EndTime);
+					var o = buildInterval(timeline, interval);
 
-					return {
-						Width: calculate.Width(startTime, endTime),
-						Offset: calculate.Offset(startTime),
-						StartTime: startTime.isBefore(timeline.StartTime) ?
-							startTime.format('LLL') :
-							startTime.format('LTS'),
-						EndTime: endTime.format('LTS')
+					o.click = function () {
+						vm.recordedOutOfAdherences.forEach(function (r) {
+							r.highlight = false;
+						});
+						o.highlight = true;
+						vm.openRecordedOutOfAdherences = true;
+						vm.openApprovedPeriods = true;
+						vm.openApproveForm = true;
+						vm.approveStartTime = moment(interval.StartTime).toDate();
+						vm.approveEndTime = moment(interval.EndTime).toDate();
 					};
+
+					return o
 				});
+		}
+
+		vm.cancelApprove = function () {
+			vm.openApproveForm = false;
+		};
+
+		vm.submitApprove = function () {
+			$http.post('../api/HistoricalAdherence/ApprovePeriod',
+				{
+					personId: $stateParams.personId,
+					startTime: moment(vm.approveStartTime).format("hh:mm:ss"),
+					endTime: moment(vm.approveEndTime).format("hh:mm:ss")
+				}
+			).then(loadData);
+		};
+
+		function buildApprovedPeriods(timeline, intervals) {
+			return intervals
+				.map(function (interval) {
+					var o = buildInterval(timeline, interval);
+					o.click = function () {
+						vm.approvedPeriods.forEach(function (a) {
+							a.highlight = false;
+						});
+						o.highlight = true;
+						vm.openApprovedPeriods = true;
+					};
+					return o;
+				});
+		}
+
+		function buildInterval(timeline, interval) {
+			var startTime = moment(interval.StartTime);
+			var endTime = moment(interval.EndTime);
+
+			return {
+				Width: calculate.Width(startTime, endTime),
+				Offset: calculate.Offset(startTime),
+				StartTime: startTime.isBefore(timeline.StartTime) ?
+					startTime.format('LLL') :
+					startTime.format('LTS'),
+				EndTime: endTime.format('LTS')
+			};
 		}
 
 		function buildAgentsFullSchedule(schedules) {
@@ -123,7 +182,7 @@
 		}
 
 		function buildDiamonds(data) {
-			return data.Changes.map(function (change, i) {
+			return data.Changes.map(function (change) {
 				change.Offset = calculate.Offset(change.Time);
 				change.RuleColor = !change.RuleColor ? "rgba(0,0,0,0.54)" : change.RuleColor;
 				change.Color = change.RuleColor;

@@ -4,7 +4,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 
 	it('should display out of adherence', function (t) {
 		t.stateParams.personId = '1';
-		t.backend.withHistoricalAdherence({
+		t.backend.with.historicalAdherence({
 			PersonId: '1',
 			AgentName: 'Mikkey Dee',
 			Timeline: {
@@ -27,7 +27,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 
 	it('should display out of adherence', function (tester) {
 		tester.stateParams.personId = '1';
-		tester.backend.withHistoricalAdherence({
+		tester.backend.with.historicalAdherence({
 			PersonId: '1',
 			AgentName: 'Mikkey Dee',
 			Timeline: {
@@ -53,7 +53,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 
 	it('should display out of adherence start date when started a long time ago', function (tester) {
 		tester.stateParams.personId = '1';
-		tester.backend.withHistoricalAdherence({
+		tester.backend.with.historicalAdherence({
 			PersonId: '1',
 			AgentName: 'Mikkey Dee',
 			Timeline: {
@@ -72,7 +72,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 
 	it('should display out of adherence started a long time ago within timeline ', function (t) {
 		t.backend
-			.withHistoricalAdherence({
+			.with.historicalAdherence({
 				Timeline: {
 					StartTime: '2018-02-02T10:00:00',
 					EndTime: '2018-02-02T20:00:00'

@@ -4,7 +4,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 	it('should link to previous day', function (t) {
 		t.stateParams.personId = '1';
 		t.stateParams.date = '20180103';
-		t.backend.withHistoricalAdherence({
+		t.backend.with.historicalAdherence({
 			PersonId: '1',
 			Navigation: {First: '20180101'}
 		});
@@ -17,7 +17,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 	it('should link to next day', function (t) {
 		t.stateParams.personId = '1';
 		t.stateParams.date = '20180103';
-		t.backend.withHistoricalAdherence({
+		t.backend.with.historicalAdherence({
 			PersonId: '1',
 			Navigation: {Last: '20180104'}
 		});
@@ -30,7 +30,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 	it('should not link too far in the past', function (t) {
 		t.stateParams.personId = '1';
 		t.stateParams.date = '20180103';
-		t.backend.withHistoricalAdherence({
+		t.backend.with.historicalAdherence({
 			PersonId: '1',
 			Navigation: {First: '20180103'}
 		});
@@ -43,7 +43,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 	it('should not link to the future', function (t) {
 		t.stateParams.personId = '1';
 		t.stateParams.date = '20180103';
-		t.backend.withHistoricalAdherence({
+		t.backend.with.historicalAdherence({
 			PersonId: '1',
 			Navigation: {Last: '20180103'}
 		});
@@ -56,7 +56,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 	it('should display next day in tooltip', function (t) {
 		t.stateParams.personId = '1';
 		t.stateParams.date = '20171220';
-		t.backend.withHistoricalAdherence({
+		t.backend.with.historicalAdherence({
 			PersonId: '1',
 			Navigation: {First: '20171215', Last: '20171221'}
 		});
@@ -69,7 +69,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 	it('should display previous day in tooltip', function (t) {
 		t.stateParams.personId = '1';
 		t.stateParams.date = '20171220';
-		t.backend.withHistoricalAdherence({
+		t.backend.with.historicalAdherence({
 			PersonId: '1',
 			Navigation: {First: '20171215', Last: '20171221'}
 		});
