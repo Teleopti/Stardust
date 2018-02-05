@@ -243,6 +243,29 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.That(result[0].OvertimeRequestOpenPeriods[0].SkillType, Is.EqualTo(skillType));
 		}
 
+		[Test]
+		public void ShouldSaveOvertimeRequestMaximumContinuousWorkTimeSettings()
+		{
+			var skillType = SkillTypeFactory.CreateSkillType();
+			PersistAndRemoveFromUnitOfWork(skillType);
+
+			var org = CreateAggregateWithCorrectBusinessUnit();
+			org.OvertimeRequestMaximumContinuousWorkTimeEnabled = true;
+			org.OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Pending;
+			org.OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(10);
+			org.OvertimeRequestMinimumRestTimeThreshold = TimeSpan.FromMinutes(30);
+			PersistAndRemoveFromUnitOfWork(org);
+
+			IWorkflowControlSetRepository repository = new WorkflowControlSetRepository(UnitOfWork);
+			var result = repository.LoadAllSortByName();
+
+			Assert.That(result.Count, Is.EqualTo(1));
+			Assert.That(result[0].OvertimeRequestMaximumContinuousWorkTime, Is.EqualTo(TimeSpan.FromHours(10)));
+			Assert.That(result[0].OvertimeRequestMaximumContinuousWorkTimeEnabled, Is.EqualTo(true));
+			Assert.That(result[0].OvertimeRequestMaximumContinuousWorkTimeHandleType, Is.EqualTo(OvertimeValidationHandleType.Pending));
+			Assert.That(result[0].OvertimeRequestMinimumRestTimeThreshold, Is.EqualTo(TimeSpan.FromMinutes(30)));
+		}
+
 		protected override Repository<IWorkflowControlSet> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
             return new WorkflowControlSetRepository(currentUnitOfWork);

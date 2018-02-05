@@ -50,6 +50,10 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		private TimeSpan? _overtimeRequestMaximumTime;
 		private OvertimeValidationHandleType? _overtimeRequestMaximumTimeHandleType;
 		private bool _overtimeRequestMaximumTimeEnabled;
+		private TimeSpan? _overtimeRequestMaximumContinuousWorkTime;
+		private TimeSpan? _overtimeRequestMinimumRestTimeThreshold;
+		private OvertimeValidationHandleType? _overtimeRequestMaximumContinuousWorkTimeHandleType;
+		private bool _overtimeRequestMaximumContinuousWorkTimeEnabled;
 
 		public WorkflowControlSet()
 		{
@@ -441,7 +445,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			get { return _overtimeRequestMaximumTimeEnabled; }
 			set { _overtimeRequestMaximumTimeEnabled = value; }
 		}
-
+		
 		public virtual TimeSpan? OvertimeRequestMaximumTime
 		{
 			get { return _overtimeRequestMaximumTime; }
@@ -453,6 +457,11 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			get { return _overtimeRequestMaximumTimeHandleType; }
 			set { _overtimeRequestMaximumTimeHandleType = value; }
 		}
+
+		public virtual TimeSpan? OvertimeRequestMaximumContinuousWorkTime { get => _overtimeRequestMaximumContinuousWorkTime; set => _overtimeRequestMaximumContinuousWorkTime = value; }
+		public virtual TimeSpan? OvertimeRequestMinimumRestTimeThreshold { get => _overtimeRequestMinimumRestTimeThreshold; set => _overtimeRequestMinimumRestTimeThreshold = value; }
+		public virtual OvertimeValidationHandleType? OvertimeRequestMaximumContinuousWorkTimeHandleType { get => _overtimeRequestMaximumContinuousWorkTimeHandleType; set => _overtimeRequestMaximumContinuousWorkTimeHandleType = value; }
+		public virtual bool OvertimeRequestMaximumContinuousWorkTimeEnabled { get => _overtimeRequestMaximumContinuousWorkTimeEnabled; set => _overtimeRequestMaximumContinuousWorkTimeEnabled = value; }
 
 		public virtual void AddAllowedAbsenceForReport(IAbsence absence)
 		{

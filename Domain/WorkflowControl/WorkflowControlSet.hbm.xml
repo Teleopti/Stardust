@@ -163,7 +163,15 @@
 
         <property name="OvertimeRequestMaximumTime" type="TimeSpan"/>
 
-        <filter name="businessUnitFilter"
+		<property name="OvertimeRequestMaximumContinuousWorkTimeHandleType"/>
+
+		<property name="OvertimeRequestMaximumContinuousWorkTime" type="TimeSpan"/>
+
+		<property name="OvertimeRequestMinimumRestTimeThreshold" type="TimeSpan"/>
+		
+		<property name="OvertimeRequestMaximumContinuousWorkTimeEnabled" type="bool" not-null="true" />
+
+		<filter name="businessUnitFilter"
                 condition=":businessUnitParameter = BusinessUnit" />
         <filter name="deletedFlagFilter"
                 condition="IsDeleted = 0" />

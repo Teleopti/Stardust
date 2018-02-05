@@ -319,6 +319,10 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 
 		ReadOnlyCollection<IOvertimeRequestOpenPeriod> OvertimeRequestOpenPeriods { get; }
 		bool OvertimeRequestMaximumTimeEnabled { get; set; }
+		bool OvertimeRequestMaximumContinuousWorkTimeEnabled { get; set; }
+		OvertimeValidationHandleType? OvertimeRequestMaximumContinuousWorkTimeHandleType { get; set; }
+		TimeSpan? OvertimeRequestMaximumContinuousWorkTime { get; set; }
+		TimeSpan? OvertimeRequestMinimumRestTimeThreshold { get; set; }
 		void InsertOvertimePeriod(IOvertimeRequestOpenPeriod newOvertimeRequestOpenPeriod, int currentIndex);
 		IOvertimeRequestOpenPeriod GetMergedOvertimeRequestOpenPeriod(IOvertimeRequest overtimeRequest, DateOnly viewpointDate);
 		IOvertimeRequestOpenPeriod GetMergedOvertimeRequestOpenPeriod(DateTimePeriod period, DateOnly viewpointDate, IPermissionInformation permissionInformation);
