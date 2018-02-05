@@ -269,6 +269,36 @@ describe("teamschedule controller tests", function () {
 			expect(!!controller.preselectedSkills.skillAreaId).toEqual(false);
 		});
 
+	it("should remember use shrinkage status when change the use shrinkage status", function () {
+		controller.scheduleDate = new Date("2015-10-26");
+		controller.staffingEnabled = true;
+
+		controller.onUseShrinkageChanged(true);
+		var config = staffingConfigStorageService.getConfig();
+		expect(!!config).toEqual(true);
+		expect(config.useShrinkage).toEqual(true);
+
+	});
+
+	it("should read prechecked status for use shrinkage when show staffing is enabled and there is valid config", function () {
+		controller.scheduleDate = new Date("2015-10-26");
+		controller.staffingEnabled = true;
+
+		controller.onUseShrinkageChanged(true);
+
+		controller.showStaffing();
+		expect(!!controller.useShrinkage).toEqual(true);
+	});
+
+	it("should read prechecked status for use shrinkage when show staffing is enabled and there is invalid config", function () {
+		staffingConfigStorageService.clearConfig();
+		controller.scheduleDate = new Date("2015-10-26");
+		controller.staffingEnabled = true;
+
+		controller.showStaffing();
+		expect(!!controller.useShrinkage).toEqual(false);
+	});
+
 	function setUpController($controller) {
 		return $controller("TeamScheduleController", {
 			$scope: rootScope,

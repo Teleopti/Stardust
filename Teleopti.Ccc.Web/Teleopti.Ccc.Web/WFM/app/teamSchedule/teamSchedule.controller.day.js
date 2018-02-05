@@ -68,6 +68,7 @@
 				if (preference) {
 					vm.preselectedSkills.skillIds = !!preference.skillId ? [preference.skillId] : undefined;
 					vm.preselectedSkills.skillAreaId = preference.skillGroupId;
+					vm.useShrinkage = preference.useShrinkage;
 				}
 
 			}
@@ -503,6 +504,9 @@
 		vm.validateWarningEnabled = false;
 
 		vm.scheduleTableSelectMode = true;
+		vm.onUseShrinkageChanged = function (useShrinkage) {
+			StaffingConfigStorageService.setShrinkage(useShrinkage);
+		};
 
 		vm.searchEnabled = $state.current.name !== 'teams.for';
 		vm.onSelectedSkillChanged = function (skill, skillGroup) {

@@ -7,8 +7,10 @@
 		bindings: {
 			selectedDate: '<',
 			preselectedSkills: '<',
+			useShrinkage: '<',
 			chartHeight: '<',
-			onSelectedSkillChanged: '&'
+			onSelectedSkillChanged: '&',
+			onUseShrinkageChanged: '&'
 		}
 	});
 
@@ -23,7 +25,6 @@
 		vm.isLoading = false;
 		var staffingDataAvailable = false;
 
-		vm.useShrinkage = false;
 		vm.selectedSkillGroup = null;
 		vm.toggleShowSkillsForSelectedSkillGroup = teamsToggles.all().WfmTeamSchedule_ShowSkillsForSelectedSkillGroupInStaffingInfo_47202;
 		var selectedSkill = null;
@@ -32,6 +33,7 @@
 		var chart = null;
 		vm.$onInit = function () {
 			vm.preselectedSkills = vm.preselectedSkills || {};
+			vm.useShrinkage = vm.useShrinkage || false;
 			SkillService.getAllSkills().then(function (data) {
 				vm.skills = data;
 			});
@@ -50,6 +52,8 @@
 
 		vm.useShrinkageForStaffing = function () {
 			vm.useShrinkage = !vm.useShrinkage;
+			var useShrinkageChanged;
+			vm.onUseShrinkageChanged && (useShrinkageChanged = vm.onUseShrinkageChanged()) && useShrinkageChanged(vm.useShrinkage);
 			return generateChart();
 		}
 		vm.showStaffingInfo = function () {

@@ -9,6 +9,7 @@
 		this.getConfig = getData;
 		this.setSkill = setSkill;
 		this.setSize = setSize;
+		this.setShrinkage = setShrinkage;
 		this.clearConfig = clearConfig;
 
 
@@ -24,6 +25,12 @@
 			var data = getData() || {};
 			data.skillId = skillId;
 			data.skillGroupId = skillGroupId;
+			localStorage.setItem(key, angular.toJson(data));
+		}
+
+		function setShrinkage(useShrinkage) {
+			var data = getData() || {};
+			data.useShrinkage = useShrinkage;
 			localStorage.setItem(key, angular.toJson(data));
 		}
 
