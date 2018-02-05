@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 		public string MessageBrokerLongPolling { get; set; }
 		public string RtaPollingInterval { get; set; }
 		public string PasswordPolicy { get; set; }
+		public string InstrumentationKey { get; set; }
 		public int NumberOfDaysToShowNonPendingRequests { get; set; }
 		public int MessageBrokerMailboxPollingIntervalInSeconds { get; set; }
 		public int MessageBrokerMailboxExpirationInSeconds { get; set; }
@@ -40,6 +41,9 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 				},
 				{
 					"MessageBrokerMailboxExpirationInSeconds", MessageBrokerMailboxExpirationInSeconds.ToString()
+				},
+				{
+					"InstrumentationKey", InstrumentationKey
 				}
 			};
 			foreach (var key in appSettings.Keys)

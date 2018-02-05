@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Config
 		public SharedSettings Create()
 		{
 			var hangfireConnection = _configReader.ConnectionString("Hangfire");
+			var instrumentationKey = Guid.Empty.ToString();
 			return new SharedSettings
 			{
 				MessageBroker = _configReader.AppConfig("MessageBroker"),
@@ -30,7 +31,8 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Config
 				PasswordPolicy = _passwordPolicyService.DocumentAsString,
 				NumberOfDaysToShowNonPendingRequests = Convert.ToInt32(_configReader.AppConfig("NumberOfDaysToShowNonPendingRequests")),
 				MessageBrokerMailboxPollingIntervalInSeconds = Convert.ToInt32(_configReader.AppConfig("MessageBrokerMailboxPollingIntervalInSeconds")),
-				MessageBrokerMailboxExpirationInSeconds = Convert.ToInt32(_configReader.AppConfig("MessageBrokerMailboxExpirationInSeconds"))
+				MessageBrokerMailboxExpirationInSeconds = Convert.ToInt32(_configReader.AppConfig("MessageBrokerMailboxExpirationInSeconds")),
+				InstrumentationKey = Encryption.EncryptStringToBase64(instrumentationKey, EncryptionConstants.Image1, EncryptionConstants.Image2)
 			};
 		}
 	}
