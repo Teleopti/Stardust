@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
 			DateOnlyPeriod period,
 			IScenario scenario,
-			bool noTrackForPersonAssignment = false)
+			bool dontTrackChangesForPersonAssignment = false)
 		{
 
 			DateTimePeriod scheduleDictionaryPeriod;
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				scheduleDictionaryPeriod = period.ToDateTimePeriod(TimeZoneInfo.Utc);
 			}
 
-			return findSchedulesOnlyInGivenPeriod(persons, scheduleDictionaryLoadOptions, period, scheduleDictionaryPeriod, scenario, noTrackForPersonAssignment);
+			return findSchedulesOnlyInGivenPeriod(persons, scheduleDictionaryLoadOptions, period, scheduleDictionaryPeriod, scenario, dontTrackChangesForPersonAssignment);
 		}
 
 
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		DateOnlyPeriod period,
 		DateTimePeriod dictionaryPeriod,
 		IScenario scenario,
-		bool noTrackForPersonAssignment = false)
+		bool dontTrackChangesForPersonAssignment = false)
 		{
 			if (scheduleDictionaryLoadOptions == null)
 				throw new ArgumentNullException(nameof(scheduleDictionaryLoadOptions));
@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 													.Find(people, longDateTimePeriod, scenario));
 				var personAssignmentRepository = _repositoryFactory.CreatePersonAssignmentRepository(uow);
 				var personsAss = personAssignmentRepository.Find(people, period, scenario);
-				if (noTrackForPersonAssignment)
+				if (dontTrackChangesForPersonAssignment)
 				{
 					personsAss.ForEach(ass => uow.Remove(ass));
 				}

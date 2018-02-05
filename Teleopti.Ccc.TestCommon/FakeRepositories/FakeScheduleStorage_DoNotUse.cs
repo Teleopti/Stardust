@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IScheduleDictionary FindSchedulesForPersonsOnlyInGivenPeriod(IEnumerable<IPerson> persons,
 			ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, DateOnlyPeriod period, IScenario scenario,
-			bool noTrachForPerssonAssignment = false)
+			bool dontTrackChangesForPersonAssignment = false)
 		{
 			var thePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDate(period.StartDate, period.EndDate.AddDays(1), TimeZoneInfo.Utc);
 			return ScheduleDictionaryForTest.WithScheduleDataForManyPeople(scenario, thePeriod, _data.Where(d => d.BelongsToScenario(scenario) && persons.Contains(d.Person)).ToArray());
