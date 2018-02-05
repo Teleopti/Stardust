@@ -1,9 +1,12 @@
 .hierarchy-tree-container {
 	min-height: 700px;
+	.tree {
+		max-height: unset;
+	}
 }
 
 .hierarchy-teams {
-    margin-left: 35px;
+	margin-left: 35px;
 }
 
 .non-selectable-list-item:hover{

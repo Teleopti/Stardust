@@ -1,81 +1,86 @@
-﻿<div ui-view>
-	<div ng-show="vm.showProgress">
-		<md-progress-linear md-mode="determinate" ng-value="vm.tracking.progress"></md-progress-linear>
-		<p> {{vm.tracking.progress | number:0}}%</p>
+﻿<div ng-show="vm.showProgress">
+	<md-progress-linear md-mode="determinate" ng-value="vm.tracking.progress"></md-progress-linear>
+	<p> {{vm.tracking.progress | number:0}}%</p>
+</div>
+<div class="view-header with-fab with-desc">
+	<div class="view-title">
+		<h1>
+			<i class="mdi mdi-calendar"></i> {{ vm.ArchiveScheduleOrImportSchedule | translate}}
+		</h1>
+		<p> {{ vm.ArchiveScheduleOrImportSchedule + 'Description' | translate}}</p>
 	</div>
-	<div class="view-header with-fab with-desc">
-		<div class="view-title">
-			<h1>
-				<i class="mdi mdi-calendar"></i> {{ vm.ArchiveScheduleOrImportSchedule | translate}}
-			</h1>
-			<p> {{ vm.ArchiveScheduleOrImportSchedule + 'Description' | translate}}</p>
-		</div>
-		<div class="fab-wrapper">
-			<button id="manage-btn" class="wfm-fab material-depth-1" ng-click="vm.validateAndShowModal(vm.selection.fromScenario, vm.selection.toScenario, vm.selection.period, vm.selection.teams)" ng-disabled="!vm.canRunManaging()">
-				<i class="mdi mdi-file-document"></i>
-				<md-tooltip>{{ 'Run' + vm.ArchivingOrImporting | translate}}</md-tooltip>
-			</button>
-		</div>
+	<div class="fab-wrapper">
+		<button id="manage-btn" class="wfm-fab material-depth-1" ng-click="vm.validateAndShowModal(vm.selection.fromScenario, vm.selection.toScenario, vm.selection.period, vm.selection.teams)"
+		 ng-disabled="!vm.canRunManaging()">
+			<i class="mdi mdi-file-document"></i>
+			<md-tooltip>{{ 'Run' + vm.ArchivingOrImporting | translate}}</md-tooltip>
+		</button>
 	</div>
-	<div class="con-row">
-		<div class="con-flex">
-			<div class="panel material-depth-1" style="height: 100%;">
-				<div class="con-row">
-					<div class="con-flex inline-flex manage-schedule-period-picker">
-						<date-range-picker ng-model="vm.selection.period" template-type="vm.dateRangeTemplateType"></date-range-picker>
+</div>
+<div class="con-row">
+	<div class="con-flex">
+		<div class="panel material-depth-1" style="height: 100%;">
+			<div class="con-row">
+				<div class="con-flex inline-flex manage-schedule-period-picker">
+					<date-range-picker ng-model="vm.selection.period" template-type="vm.dateRangeTemplateType"></date-range-picker>
+				</div>
+				<div class="con-flex inline-flex manage-schedule-scenario-picker">
+					<div layout="row" layout-align="space-between center" class="pull-right full-padding" ng-if="!vm.isImportSchedule">
+						<span style="margin-right: 20px">{{'FromScenarioColon' | translate}}
+							<b>{{vm.selection.fromScenario.Name}}</b>
+						</span>
+						<span>{{'ToScenarioColon' | translate}}</span>
+						<md-select class="inline-select to-scenario-selector pull-right" ng-model="vm.selection.toScenario" placeholder="{{'Scenario' | translate}}">
+							<md-option ng-repeat="scenario in vm.scenarios | defaultScenario:false" ng-value="scenario">{{scenario.Name}}</md-option>
+						</md-select>
 					</div>
-					<div class="con-flex inline-flex manage-schedule-scenario-picker">
-						<div layout="row" layout-align="space-between center" class="pull-right full-padding" ng-if="!vm.isImportSchedule">
-							<span style="margin-right: 20px">{{'FromScenarioColon' | translate}} <b>{{vm.selection.fromScenario.Name}}</b></span>
-							<span>{{'ToScenarioColon' | translate}}</span>
-							<md-select class="inline-select to-scenario-selector pull-right" ng-model="vm.selection.toScenario" placeholder="{{'Scenario' | translate}}">
-								<md-option ng-repeat="scenario in vm.scenarios | defaultScenario:false" ng-value="scenario">{{scenario.Name}}</md-option>
-							</md-select>
-						</div>
-						<div layout="row" layout-align="space-between center" class="pull-right full-padding" ng-if="vm.isImportSchedule">
-							<span>{{'FromScenarioColon' | translate}}</span>
-							<md-select class="inline-select from-scenario-selector pull-right" ng-model="vm.selection.fromScenario" placeholder="{{'Scenario' | translate}}">
-								<md-option ng-repeat="scenario in vm.scenarios | defaultScenario:false" ng-value="scenario">{{scenario.Name}}</md-option>
-							</md-select>
-							<span style="margin-left: 20px">{{'ToScenarioColon' | translate}} <b>{{vm.selection.toScenario.Name}}</b> </span>
-						</div>
+					<div layout="row" layout-align="space-between center" class="pull-right full-padding" ng-if="vm.isImportSchedule">
+						<span>{{'FromScenarioColon' | translate}}</span>
+						<md-select class="inline-select from-scenario-selector pull-right" ng-model="vm.selection.fromScenario" placeholder="{{'Scenario' | translate}}">
+							<md-option ng-repeat="scenario in vm.scenarios | defaultScenario:false" ng-value="scenario">{{scenario.Name}}</md-option>
+						</md-select>
+						<span style="margin-left: 20px">{{'ToScenarioColon' | translate}}
+							<b>{{vm.selection.toScenario.Name}}</b>
+						</span>
 					</div>
 				</div>
-				<div class="con-row" ng-controller="HierarchyController">
-					<div class="data-container full-padding flex-element-fill flex-column">
-						<div class="con-row">
-							<label for="HierarchyDataFilter" class="input-prepend">
-								<i class="mdi mdi-filter-outline"></i>
-								<input type="text" id="HierarchyDataFilter" name="filterDetails" ng-model="searchData" placeholder="{{'DataFilterThreeDots' | translate}}" />
-								<md-tooltip>{{'DataFilterThreeDots' | translate}}</md-tooltip>
-							</label>
-						</div>
-						<div class="flex-relative-element hierarchy-tree-container">
-							<div class="tree hierarchy-tree flex-absolute-child" style="overflow-y:unset !important">
-								<div ui-tree data-drag-enabled="false">
-									<ol ui-tree-nodes="" ng-model="organization.BusinessUnit" id="tree-root">
-										<li ng-repeat="node in organization.BusinessUnit | nameFilter: searchData" ui-tree-node ng-include="'app/resourceplanner/manageschedule/organization-tree-node.html'"></li>
-									</ol>
-								</div>
+			</div>
+			<div class="con-row" ng-controller="HierarchyController">
+				<div class="data-container full-padding flex-element-fill flex-column">
+					<div class="con-row">
+						<label for="HierarchyDataFilter" class="input-prepend">
+							<i class="mdi mdi-filter-outline"></i>
+							<input type="text" id="HierarchyDataFilter" name="filterDetails" ng-model="searchData.Name" placeholder="{{'DataFilterThreeDots' | translate}}"
+							/>
+							<md-tooltip>{{'DataFilterThreeDots' | translate}}</md-tooltip>
+						</label>
+					</div>
+					<div class="flex-relative-element hierarchy-tree-container">
+						<div class="tree hierarchy-tree flex-absolute-child" style="overflow-y:unset !important">
+							<div ui-tree data-drag-enabled="false">
+								<ol ui-tree-nodes="" ng-model="organization.BusinessUnit" id="tree-root">
+									<li ng-repeat="node in organization.BusinessUnit | filter: searchData.Name" ui-tree-node ng-include="'app/resourceplanner/manageschedule/organization-tree-node.html'"></li>
+								</ol>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-			<div ng-cloak class="modal-box">
-				<div ng-cloak ng-show="vm.showConfirmModal">
-					<div class="modalbg">
-						<div class="dialog">
-							<div class="modal-inner-content">
-								<h3>{{'AreYouSure' | translate}}</h3>
-								{{vm.confirmationText}}
-							</div>
-							<div class="modal-actions">
-								<aside>
-									<button id="cancel-managing" ng-click="vm.showConfirmModal=false" class="wfm-btn wfm-btn-invis-default">{{'Cancel'|translate}}</button>
-									<button id="confirm-managing" ng-click="vm.runManaging(vm.selection.fromScenario, vm.selection.toScenario, vm.selection.period, vm.selection.teams)" class="wfm-btn wfm-btn-invis-primary">{{'Run'|translate}}</button>
-								</aside>
-							</div>
+		</div>
+		<div ng-cloak class="modal-box">
+			<div ng-cloak ng-show="vm.showConfirmModal">
+				<div class="modalbg">
+					<div class="dialog">
+						<div class="modal-inner-content">
+							<h3>{{'AreYouSure' | translate}}</h3>
+							{{vm.confirmationText}}
+						</div>
+						<div class="modal-actions">
+							<aside>
+								<button id="cancel-managing" ng-click="vm.showConfirmModal=false" class="wfm-btn wfm-btn-invis-default">{{'Cancel'|translate}}</button>
+								<button id="confirm-managing" ng-click="vm.runManaging(vm.selection.fromScenario, vm.selection.toScenario, vm.selection.period, vm.selection.teams)"
+								 class="wfm-btn wfm-btn-invis-primary">{{'Run'|translate}}</button>
+							</aside>
 						</div>
 					</div>
 				</div>

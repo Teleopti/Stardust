@@ -3,14 +3,6 @@
 
 	angular
 		.module('wfm.resourceplanner')
-		.filter('nameFilter', [
-			function () {
-				return function (nodes, name) {
-					if (!name) return nodes;
-					return filterNodes(nodes, name, 'nameFilter');
-				};
-			}
-		])
 		.controller('HierarchyController', [
 		'$scope', 'HierarchyService',
 			function ($scope, HierarchyService) {
