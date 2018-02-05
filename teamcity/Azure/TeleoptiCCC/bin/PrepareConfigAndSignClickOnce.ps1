@@ -149,6 +149,11 @@ function CopyFileFromBlobStorage {
 	$OPTIONS = @("/XO","/Y","/sourceKey:$AccountKey")
 
     $BlobSource = $BlobPath + $ContainerName + "/" + $DataSourceName
+	
+	#Support AzCopy 6.3 version
+	#$BlobSourceArgs = "/Source:" + $BlobPath + $ContainerName + "/" + $DataSourceName
+	#$destinationFolderArgs = "/Dest:" + $destinationFolder
+	#$filenameArgs = "/Pattern:" + $filename
 
 	## Wrap all above arguments
 	$cmdArgs = @("$BlobSource","$destinationFolder","$filename", $OPTIONS)
@@ -182,6 +187,11 @@ function CopyFileToBlobStorage {
 	$OPTIONS = @("/XO","/Y","/destKey:$AccountKey")
 
     $BlobDestination = $BlobPath + $ContainerName + "/" + $DataSourceName
+	
+	#Support AzCopy 6.3 version
+    #$BlobDestinationArgs = "/Dest:" + $BlobPath + $ContainerName + "/" + $DataSourceName
+    #$sourceFolderArgs = "/Source:" + $sourceFolder
+	#$patternArgs = "/Pattern:" + $pattern
 
 	## Wrap all above arguments
 	$cmdArgs = @("$sourceFolder","$BlobDestination","$pattern", $OPTIONS)
@@ -215,6 +225,11 @@ function CopyReportsFromBlobStorage{
 	$OPTIONS = @("/S","/XO","/Y","/sourceKey:$AccountKey")
 
     $BlobSource = $BlobPath + $ContainerName + "/" + $DataSourceName
+	
+	#Support AzCopy 6.3 version
+	#$BlobSourceArgs = "/Source:" + $BlobPath + $ContainerName + "/" + $DataSourceName
+	#$fullPathCustomReportsnewArgs = "/Dest:" + $fullPathCustomReports
+	
 	## Wrap all above arguments
 	$cmdArgs = @("$BlobSource","$fullPathCustomReports",$OPTIONS)
 
@@ -444,10 +459,11 @@ Catch [Exception]
 {
     $ErrorMessage = $_.Exception.Message
 	log-error "$ErrorMessage"
+	log-info "$ErrorMessage"
     Write-EventLog -LogName Application -Source $JOB -EventID 1 -EntryType Error -Message "$ErrorMessage"
 	Throw "Script failed, Check Windows event log for details"
 }
 Finally
 {
-    log-info "done"
+    log-info "End of Script."
 }
