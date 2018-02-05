@@ -100,30 +100,30 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			return ds.Tables[0];
 		}
 
-		
+
 
 
 		public bool IsAnotherEtlRunningAJob(out IEtlRunningInformation etlRunningInformation)
 		{
 			etlRunningInformation = null;
-			var ds = HelperFunctions.ExecuteDataSet(CommandType.StoredProcedure, "mart.sys_etl_job_running_info_get", null, _connectionString);
+			var ds = HelperFunctions.ExecuteDataSet(CommandType.StoredProcedure, "mart.sys_etl_job_running_info_get", null,
+				_connectionString);
 
 			if (ds != null && ds.Tables.Count > 0)
 			{
-				if (ds.Tables[0].Rows.Count == 1)
+				if (ds.Tables[0].Rows.Count >= 1)  //Shouldn't be greater than 1 but until we know what's going on with #47243..
 				{
 					var row = ds.Tables[0].Rows[0];
 					etlRunningInformation = new EtlRunningInformation
-											{
-												ComputerName = (string)row["computer_name"],
-												StartTime = (DateTime)row["start_time"],
-												JobName = (string)row["job_name"],
-												IsStartedByService = (bool)row["is_started_by_service"]
-											};
+					{
+						ComputerName = (string) row["computer_name"],
+						StartTime = (DateTime) row["start_time"],
+						JobName = (string) row["job_name"],
+						IsStartedByService = (bool) row["is_started_by_service"]
+					};
 					return true;
 				}
 			}
-
 			return false;
 		}
 
