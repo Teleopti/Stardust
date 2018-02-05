@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
+using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse;
+using AbsenceRequestConfigurable = Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable.AbsenceRequestConfigurable;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Requests
 {
@@ -36,6 +39,29 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Requests
 			var absenceRequest = table.CreateInstance<AbsenceRequestConfigurable>();
 			DataMaker.Person(userName).Apply(absenceRequest);
 		}
+
+		[Given(@"'(.*)' has an overtime request with")]
+		public void GivenHasAnOvertimeRequestWith(string agentName, Table table)
+		{
+			var overtimeRequest = table.CreateInstance<OvertimeRequestConfigurable>();
+			DataMaker.Person(agentName).Apply(overtimeRequest);
+		}
+
+		[Given(@"'(.*)' has a workflow control set with overtime request open periods")]
+		public void GivenHasAWorkflowControlSetWithOvertimeRequestOpenPeriods(string agentName)
+		{
+			DataMaker.Data()
+				.Apply(new WorkflowControlSetConfigurable
+				{
+					Name = "Published 100 days, SA open",
+					SchedulePublishedToDate = "2030-12-01",
+					StudentAvailabilityPeriodIsClosed = false,
+					OvertimeRequestOpenPeriodRollingStart = 0,
+					OvertimeRequestOpenPeriodRollingEnd = 13
+				});
+			DataMaker.Person(agentName).Apply(new WorkflowControlSetForUser { Name = "Published 100 days, SA open" });
+		}
+
 
 		[When(@"I select to go to shift trade requests view")]
 		public void WhenISelectToGoToShiftTradeRequestsView()
@@ -83,13 +109,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Requests
 			});
 		}
 
-		[When(@"I select all requests in the first page")]
-		public void WhenISelectAllRequestsInTheFirstPage()
+		[Then(@"I select first request in the first page")]
+		public void ThenISelectFirstRequestInTheFirstPage()
 		{
 			Browser.Interactions.WaitScopeCondition(".ui-grid", "vm.isLoading", false,
 				() =>
 				{
-					Browser.Interactions.ClickUsingJQuery(".ui-grid-icon-ok:first");
+					Browser.Interactions.ClickUsingJQuery(".ui-grid-icon-ok:first-child");
 				});
 		}
 
@@ -171,19 +197,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Requests
 		}
 
 		[When(@"I approve all requests that I see")]
+		[Then(@"I approve all requests that I see")]
 		public void WhenIApproveAllRequestsThatISee()
 		{
-			Browser.Interactions.AssertScopeValue("requests-table-container", "requestsOverview.loaded", true);
-			Browser.Interactions.ClickUsingJQuery(".ui-grid-row .ui-grid-selection-row-header-buttons");
-			Browser.Interactions.ClickUsingJQuery("requests-commands-pane .approve-requests");
+			Browser.Interactions.ClickUsingJQuery(".wfm-requests .ui-grid-header .ui-grid-selection-row-header-buttons");
+			Browser.Interactions.ClickUsingJQuery(".wfm-requests requests-commands-pane .approve-requests");
 		}
 
 		[When(@"I deny all requests that I see")]
+		[Then(@"I deny all requests that I see")]
 		public void WhenIDenyAllRequestsThatISee()
 		{
-			Browser.Interactions.AssertScopeValue("requests-table-container", "requestsOverview.loaded", true);
-			Browser.Interactions.ClickUsingJQuery(".ui-grid-row .ui-grid-selection-row-header-buttons");
-			Browser.Interactions.ClickUsingJQuery("requests-commands-pane .deny-requests");
+			Browser.Interactions.ClickUsingJQuery(".wfm-requests .ui-grid-header .ui-grid-selection-row-header-buttons");
+			Browser.Interactions.ClickUsingJQuery(".wfm-requests requests-commands-pane .deny-requests");
 		}
 
 		[Then(@"I should see request for '(.*)' approved")]
@@ -266,6 +292,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Requests
 			Browser.Interactions.ClickUsingJQuery(".ui-grid-menu-button button:contains('Message'):first");
 			Browser.Interactions.AssertExistsUsingJQuery($".request-message:contains('{message}')");
 			Browser.Interactions.ClickUsingJQuery(".ui-grid-icon-menu");
+		}
+
+		[Then(@"I should see a success message")]
+		public void ThenIShouldSeeASuccessMessage()
+		{
+			Browser.Interactions.AssertExists(".notice-container .notice-success");
 		}
 
 		private void fillMessage(string message)

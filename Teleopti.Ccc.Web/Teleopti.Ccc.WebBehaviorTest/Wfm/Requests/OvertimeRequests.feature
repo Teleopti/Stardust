@@ -17,34 +17,46 @@ Background:
 	| Name                   | Resource Planner |
 	| Access to wfm requests | true             |
 	| Access to everyone     | true             |
+	And there is an activity named 'Phone'
+	And there is a skill named 'Phone' with activity 'Phone'
 	And 'Ashley Andeen' has a person period with 
 	| Field      | Value      |
-	| Start date | 2015-06-18 |
+	| Start date | 2018-02-01 |
 	| Team       | Red Team   |
-	And 'Ashley Andeen' has '22' overtime requests with
-	| Field        | Value                                 |
-	| StartTime    | 2015-10-03 10:00                      |
-	| End Time     | 2015-10-03 14:00                      |
-	| Status       | Pending                               |
-	| Subject      | Subject - Illness request from Ashley |
+	| Skill      | Phone      |
+	And 'Ashley Andeen' has a workflow control set with overtime request open periods
+	And 'Ashley Andeen' has an overtime request with
+	| Field     | Value                                          |
+	| StartTime | 2018-02-03 10:00                               |
+	| End Time  | 2018-02-03 14:00                               |
+	| Status    | Pending                                        |
+	| Subject   | Subject - Overtime request subject from Ashley |
+	| Messsage  | Message - Overtime request message from Ashley |
 
-@ignore
 Scenario: Should view overtime requests 
 	When I view wfm requests
 	And I select to go to overtime view
-	And I select date range from '2015-10-01' to '2015-10-20'
+	And I select date range from '2018-02-01' to '2018-02-06'
 	And I select all the team
 	And I click button for search requests
 	Then I should see a overtime request from 'Ashley Andeen' in the list
 
-@ignore
-Scenario: Should keep selected requests when navigating to different page
+Scenario: Should approve overtime request
 	When I view wfm requests
 	And I select to go to overtime view
-	And I select date range from '2015-10-01' to '2015-10-20'
+	And I select date range from '2018-02-01' to '2018-02-06'
 	And I select all the team
 	And I click button for search requests
-	And I select all requests in the first page
-	And I change to the second page
-	And I change to the first page
-	Then I should see all requests should be selected
+	Then I should see a overtime request from 'Ashley Andeen' in the list
+	And I approve all requests that I see
+	Then I should see a success message
+
+Scenario: Should deny overtime request
+	When I view wfm requests
+	And I select to go to overtime view
+	And I select date range from '2018-02-01' to '2018-02-06'
+	And I select all the team
+	And I click button for search requests
+	Then I should see a overtime request from 'Ashley Andeen' in the list
+	And I deny all requests that I see
+	Then I should see a success message

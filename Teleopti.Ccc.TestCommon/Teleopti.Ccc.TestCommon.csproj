@@ -488,6 +488,7 @@
     <Compile Include="FakeRepositories\FakeJobStartTimeRepository.cs" />
     <Compile Include="TestData\GlobalPrincipalState.cs" />
     <Compile Include="TestData\MeetingConfigurable.cs" />
+    <Compile Include="TestData\Setups\Configurable\OvertimeRequestConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\ApprovedPeriodConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\PlanningGroupConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\ForecastConfigurable.cs" />
