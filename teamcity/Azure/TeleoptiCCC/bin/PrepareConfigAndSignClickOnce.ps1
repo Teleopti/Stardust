@@ -148,15 +148,15 @@ function CopyFileFromBlobStorage {
 	## Options to be added to AzCopy
 	$OPTIONS = @("/XO","/Y","/sourceKey:$AccountKey")
 
-    $BlobSource = $BlobPath + $ContainerName + "/" + $DataSourceName
+    #$BlobSource = $BlobPath + $ContainerName + "/" + $DataSourceName
 	
 	#Support AzCopy 6.3 version
-	#$BlobSourceArgs = "/Source:" + $BlobPath + $ContainerName + "/" + $DataSourceName
-	#$destinationFolderArgs = "/Dest:" + $destinationFolder
-	#$filenameArgs = "/Pattern:" + $filename
+	$BlobSourceArgs = "/Source:" + $BlobPath + $ContainerName + "/" + $DataSourceName
+	$destinationFolderArgs = "/Dest:" + $destinationFolder
+	$filenameArgs = "/Pattern:" + $filename
 
 	## Wrap all above arguments
-	$cmdArgs = @("$BlobSource","$destinationFolder","$filename", $OPTIONS)
+	$cmdArgs = @("$BlobSourceArgs","$destinationFolderArgs","$filenameArgs", $OPTIONS)
 
 	$AzCopyExe = $directory + "\ccc7_azure\AzCopy\AzCopy.exe"
 	$AzCopyExe
@@ -166,8 +166,9 @@ function CopyFileFromBlobStorage {
     $AzExitCode = $LastExitCode
     
     if ($LastExitCode -ne 0) {
-		log-error "AsCopy generated an error!"
-        throw "AsCopy generated an error!"
+		log-error "AzCopy generated an error!"
+		log-info "AzCopy generated an error!"
+        throw "AzCopy generated an error!"
     }
 }
 
@@ -186,15 +187,15 @@ function CopyFileToBlobStorage {
 	## Options to be added to AzCopy
 	$OPTIONS = @("/XO","/Y","/destKey:$AccountKey")
 
-    $BlobDestination = $BlobPath + $ContainerName + "/" + $DataSourceName
+    #$BlobDestination = $BlobPath + $ContainerName + "/" + $DataSourceName
 	
 	#Support AzCopy 6.3 version
-    #$BlobDestinationArgs = "/Dest:" + $BlobPath + $ContainerName + "/" + $DataSourceName
-    #$sourceFolderArgs = "/Source:" + $sourceFolder
-	#$patternArgs = "/Pattern:" + $pattern
+    $BlobDestinationArgs = "/Dest:" + $BlobPath + $ContainerName + "/" + $DataSourceName
+    $sourceFolderArgs = "/Source:" + $sourceFolder
+	$patternArgs = "/Pattern:" + $pattern
 
 	## Wrap all above arguments
-	$cmdArgs = @("$sourceFolder","$BlobDestination","$pattern", $OPTIONS)
+	$cmdArgs = @("$sourceFolderArgs","$BlobDestinationArgs","$patternArgs", $OPTIONS)
 
 	$AzCopyExe = $directory + "\ccc7_azure\AzCopy\AzCopy.exe"
 	$AzCopyExe
@@ -204,8 +205,9 @@ function CopyFileToBlobStorage {
     $AzExitCode = $LastExitCode
     
     if ($LastExitCode -ne 0) {
-		log-error "AsCopy generated an error!"
-        throw "AsCopy generated an error!"
+		log-error "AzCopy generated an error!"
+		log-info "AzCopy generated an error!" 
+        throw "AzCopy generated an error!"
     }
 }
 function CopyReportsFromBlobStorage{
@@ -224,14 +226,14 @@ function CopyReportsFromBlobStorage{
 	## Options to be added to AzCopy
 	$OPTIONS = @("/S","/XO","/Y","/sourceKey:$AccountKey")
 
-    $BlobSource = $BlobPath + $ContainerName + "/" + $DataSourceName
+    #$BlobSource = $BlobPath + $ContainerName + "/" + $DataSourceName
 	
 	#Support AzCopy 6.3 version
-	#$BlobSourceArgs = "/Source:" + $BlobPath + $ContainerName + "/" + $DataSourceName
-	#$fullPathCustomReportsnewArgs = "/Dest:" + $fullPathCustomReports
+	$BlobSourceArgs = "/Source:" + $BlobPath + $ContainerName + "/" + $DataSourceName
+	$fullPathCustomReportsnewArgs = "/Dest:" + $fullPathCustomReports
 	
 	## Wrap all above arguments
-	$cmdArgs = @("$BlobSource","$fullPathCustomReports",$OPTIONS)
+	$cmdArgs = @("$BlobSourceArgs","$fullPathCustomReportsnewArgs",$OPTIONS)
 
 	$AzCopyExe = $directory + "\ccc7_azure\AzCopy\AzCopy.exe"
 	$AzCopyExe
@@ -241,8 +243,9 @@ function CopyReportsFromBlobStorage{
     $AzExitCode = $LastExitCode
     
     if ($LastExitCode -ne 0) {
-		log-error "AsCopy generated an error!"
-        throw "AsCopy generated an error!"
+		log-error "AzCopy generated an error!"
+		log-info "AzCopy generated an error!"
+        throw "AzCopy generated an error!"
     }
 	Remove-Item $fullPathCustomReports\* -exclude *.rdlc
 }

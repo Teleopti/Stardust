@@ -185,7 +185,7 @@ Try
 	$DataSourceName = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("TeleoptiDriveMap.DataSourceName")
     }
    
-    $BlobSource = $BlobPath + $ContainerName + "/" + $DataSourceName
+    #$BlobSource = $BlobPath + $ContainerName + "/" + $DataSourceName
 
 	## Destination directory. Files in this directory will mirror the source directory. Extra files will be deleted!
 	$DESTINATION = "c:\temp\PayrollInbox"
@@ -199,9 +199,13 @@ Try
 
 	## Options to be added to AzCopy
 	$OPTIONS = @("/S","/XO","/Y","/sourceKey:$AccountKey")
+	
+	#Support AzCopy 6.3 version
+	$BlobSourceArgs = "/Source:" + $BlobPath + $ContainerName + "/" + $DataSourceName
+	$DESTINATIONArgs = "/Dest:" + $DESTINATION
 
 	## Wrap all above arguments
-	$cmdArgs = @("$BlobSource","$DESTINATION",$OPTIONS)
+	$cmdArgs = @("$BlobSourceArgs","$DESTINATIONArgs",$OPTIONS)
 
 	$AzCopyExe = $directory + "\ccc7_azure\AzCopy\AzCopy.exe"
 	$AzCopyExe
@@ -212,8 +216,9 @@ Try
     $AzExitCode = $LastExitCode
     
     if ($LastExitCode -ne 0) {
-		log-error "AsCopy generated an error!"
-        throw "AsCopy generated an error!"
+		log-error "AzCopy generated an error!"
+		log-info "AzCopy generated an error!"
+        throw "AzCopy generated an error!"
     }
 
     $newFiles = Sync-NewFilesOnly $DESTINATION $FILEWATCH
