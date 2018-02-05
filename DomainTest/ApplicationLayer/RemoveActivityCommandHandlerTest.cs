@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		}
 
 		[Test]
-		public void ShouldReportErrorWhenRemoveBaseShiftLayer()
+		public void ShouldReportErrorWhenRemoveBaseShiftLayerAndShiftHasOneLayer()
 		{
 			var person = PersonFactory.CreatePersonWithId();
 			PersonRepository.Add(person);
@@ -122,6 +122,42 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			personAssignment = scheduleDay.PersonAssignment();
 
 			personAssignment.ShiftLayers.Count().Should().Be.EqualTo(1);
+			command.ErrorMessages.Single().Should().Be.EqualTo(Resources.CannotDeleteBaseActivity);
+		}
+		[Test]
+		public void ShouldReportErrorWhenRemoveBaseShiftLayerAndShiftHasMultipleLayers()
+		{
+			var person = PersonFactory.CreatePersonWithId();
+			PersonRepository.Add(person);
+			ActivityRepository.Add(_mainActivity);
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, _mainActivity, new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16));
+
+			personAssignment.AddActivity(ActivityFactory.CreateActivity("anotherLayer"), new DateTimePeriod(2013, 11, 14, 10, 2013, 11, 14, 11));
+			personAssignment.ShiftLayers.ForEach(sl => sl.WithId());
+			var shiftLayer = personAssignment.ShiftLayers.First(sl => sl.Payload == _mainActivity);
+			var command = new RemoveActivityCommand
+			{
+				PersonId = person.Id.GetValueOrDefault(),
+				ShiftLayerId = shiftLayer.Id.GetValueOrDefault(),
+				Date = new DateOnly(2013, 11, 14),
+				TrackedCommandInfo = new TrackedCommandInfo
+				{
+					OperatedPersonId = Guid.NewGuid(),
+					TrackId = Guid.NewGuid()
+				}
+			};
+
+			ScenarioRepository.Has(personAssignment.Scenario);
+			ScheduleStorage.Add(personAssignment);
+
+			Target.Handle(command);
+
+			var dic = ScheduleStorage.FindSchedulesForPersons(personAssignment.Scenario, new[] { person }, new ScheduleDictionaryLoadOptions(false, false), new DateTimePeriod(command.Date.Date.Utc(), command.Date.Date.Utc()), new[] { person }, false);
+			var scheduleRange = dic[person];
+			var scheduleDay = scheduleRange.ScheduledDay(command.Date);
+			personAssignment = scheduleDay.PersonAssignment();
+
+			personAssignment.ShiftLayers.Count().Should().Be.EqualTo(2);
 			command.ErrorMessages.Single().Should().Be.EqualTo(Resources.CannotDeleteBaseActivity);
 		}
 

@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -46,8 +44,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				command.ErrorMessages.Add(Resources.CanNotRemoveShiftForAgentWithDayOff);
 				return;
 			}
-			
-			personAssignment.ClearMainActivities(false,command.TrackedCommandInfo);
+
+			personAssignment.ClearMainActivities(false, command.TrackedCommandInfo);
 			((ReadOnlyScheduleDictionary)scheduleDic).MakeEditable();
 			scheduleDic.Modify(scheduleDay, NewBusinessRuleCollection.Minimum());
 			_scheduleDifferenceSaver.SaveChanges(scheduleRange.DifferenceSinceSnapshot(new DifferenceEntityCollectionService<IPersistableScheduleData>()), (ScheduleRange)scheduleRange);

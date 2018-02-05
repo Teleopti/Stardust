@@ -54,7 +54,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				return;
 			}
 
-			if (personAssignment.ShiftLayers.Count()==1)
+			var mainShiftLayer = shiftLayer as MainShiftLayer;
+
+
+			if (mainShiftLayer != null && mainShiftLayer.OrderIndex == 0)
 			{
 				command.ErrorMessages.Add(Resources.CannotDeleteBaseActivity);
 				return;
