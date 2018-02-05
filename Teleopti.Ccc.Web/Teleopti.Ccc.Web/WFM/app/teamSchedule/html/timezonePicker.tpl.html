@@ -1,3 +1,3 @@
 ﻿<md-select ng-show="$ctrl.timezoneList && $ctrl.timezoneList.length > 1" ng-model="$ctrl.selectedTimezone" placeholder = "select a time zone" md-selected-text="$ctrl.shortDisplayNameOfTheSelected()" ng-change="$ctrl.onSelectionChanged()" >
-	<md-option ng-repeat="tz in $ctrl.timezoneList" ng-value="tz.ianaId" ng-disabled="!$ctrl.isSelectedEnabled(tz.ianaId)">{{::tz.displayName}}</md-option>
+	<md-option ng-repeat="tz in $ctrl.timezoneList | orderBy: 'displayName'" ng-value="tz.ianaId" ng-disabled="!$ctrl.isSelectedEnabled(tz.ianaId)">{{::tz.displayName}}</md-option>
 </md-select>
