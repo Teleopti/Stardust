@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -17,6 +18,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public string PositiveTargetTolerance { get; set; }
 		public string NegativeTargetTolerance { get; set; }
 		public string AverageWorkTimePerDay { get; set; }
+		public string MultiplicatorDefinitionSet { get; set; }
 
 		public IContract Contract;
 
@@ -43,6 +45,12 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				Contract.PositivePeriodWorkTimeTolerance = TimeSpan.Parse(PositiveTargetTolerance);
 			if (NegativeTargetTolerance != null)
 				Contract.NegativePeriodWorkTimeTolerance = TimeSpan.Parse(NegativeTargetTolerance);
+			if (MultiplicatorDefinitionSet != null)
+			{
+				var multiplicatorDefinitionSet = new MultiplicatorDefinitionSetRepository(currentUnitOfWork).LoadAll().FirstOrDefault(m => m.Name == MultiplicatorDefinitionSet);
+				Contract.AddMultiplicatorDefinitionSetCollection(multiplicatorDefinitionSet);
+			}
+
 			new ContractRepository(currentUnitOfWork).Add(Contract);
 		}
 	}

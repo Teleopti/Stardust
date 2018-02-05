@@ -110,6 +110,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
             Navigation.GotoMobileWeekSchedulePage(date);
         }
 
+		[Given(@"I view my next week schedule")]
+		public void GivenIViewMyNextWeekSchedule()
+		{
+			TestControllerMethods.Logon();
+			Navigation.GotoWeekSchedulePage(DateTime.Now.AddDays(7));
+		}
 
 		[When(@"I view my week schedule")]
 		[When(@"I am viewing week schedule")]

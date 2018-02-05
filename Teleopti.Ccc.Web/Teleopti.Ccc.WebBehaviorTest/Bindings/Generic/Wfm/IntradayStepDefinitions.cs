@@ -104,6 +104,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			DataMaker.Data().Apply(new ForecastConfigurable(skillName, theDate));
 		}
 
+		[Given(@"there is forecast data for skill '(.*)' for next two weeks")]
+		public void GivenThereIsForecastDataForSkillForNextTwoWeeks(string skillName)
+		{
+			var startDate = DateTime.Now.Date;
+			var endDate = startDate.AddDays(13);
+			for (var date = startDate; date.CompareTo(endDate) <= 0; date = date.AddDays(1))
+			{
+				DataMaker.Data().Apply(new ForecastConfigurable(skillName, date));
+			}
+		}
+
 		[Given(@"I select to create a new Skill Area")]
 		public void GivenISelectToCreateANewSkillArea()
 		{

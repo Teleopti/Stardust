@@ -43,6 +43,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public bool AccessToAsm { get; set; }
 		public bool AccessToTextRequests { get; set; }
 		public bool AccessToAbsenceRequests { get; set; }
+		public bool AccessToOvertimeRequests { get; set; }
 		public bool AccessToAbsenceReport { get; set; }
 		public bool AccessToShiftTradeRequests { get; set; }
 		public bool AccessToShiftTradeBulletinBoard { get; set; }
@@ -98,6 +99,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			AccessToAsm = true;
 			AccessToTextRequests = true;
 			AccessToAbsenceRequests = true;
+			AccessToOvertimeRequests = true;
 			AccessToAbsenceReport = true;
 			AccessToShiftTradeRequests = true;
 			AccessToShiftTradeBulletinBoard = true;
@@ -215,6 +217,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.TextRequests);
 			if (!AccessToAbsenceRequests)
 				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb);
+			if (!AccessToOvertimeRequests)
+				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.OvertimeRequestWeb);
 			if (!AccessToAbsenceReport)
 				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.AbsenceReport);
 			if (!AccessToAnywhere)

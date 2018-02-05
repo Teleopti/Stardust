@@ -29,6 +29,8 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public int ShiftTradeSlidingPeriodEnd { get; set; }
 		public string AbsenceRequestOpenPeriodStart { get; set; }
 		public string AbsenceRequestOpenPeriodEnd { get; set; }
+		public int OvertimeRequestOpenPeriodRollingStart { get; set; }
+		public int OvertimeRequestOpenPeriodRollingEnd { get; set; }
 		public string AbsenceRequestPreferencePeriodStart { get; set; }
 		public string AbsenceRequestPreferencePeriodEnd { get; set; }
 		public string StaffingCheck { get; set; }
@@ -198,6 +200,11 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				workflowControlSet.SetBusinessUnit(new BusinessUnitRepository(currentUnitOfWork).LoadAll().Single(b => b.Name == BusinessUnit));
 
 			workflowControlSet.AnonymousTrading = AnonymousTrading;
+
+			if (OvertimeRequestOpenPeriodRollingEnd > 0 && OvertimeRequestOpenPeriodRollingEnd >= OvertimeRequestOpenPeriodRollingStart)
+			{
+				workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod {AutoGrantType = OvertimeRequestAutoGrantType.No,BetweenDays = new MinMax<int>(OvertimeRequestOpenPeriodRollingStart,OvertimeRequestOpenPeriodRollingEnd)});
+			}
 
 			var repository = new WorkflowControlSetRepository(currentUnitOfWork);
 			repository.Add(workflowControlSet);

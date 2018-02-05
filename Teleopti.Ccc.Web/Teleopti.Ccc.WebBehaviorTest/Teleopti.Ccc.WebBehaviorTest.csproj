@@ -158,6 +158,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DayScheduleProbabilityForStartPage.feature</DependentUpon>
     </Compile>
+    <Compile Include="MyTime\OvertimeRequests.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OvertimeRequests.feature</DependentUpon>
+    </Compile>
+    <Compile Include="MyTime\OvertimeRequestsStepDefinitions.cs" />
     <Compile Include="MyTime\WeekScheduleStaffingProbability.feature.cs">
       <DependentUpon>WeekScheduleStaffingProbability.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -1003,6 +1009,10 @@
     <None Include="MyTime\DayScheduleProbabilityForStartPage.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>DayScheduleProbabilityForStartPage.feature.cs</LastGenOutput>
+    </None>
+    <None Include="MyTime\OvertimeRequests.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>OvertimeRequests.feature.cs</LastGenOutput>
     </None>
     <None Include="MyTime\WeekScheduleStaffingProbability.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
