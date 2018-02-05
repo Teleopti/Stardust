@@ -5,9 +5,9 @@
 	.module('wfm.reports')
 	.controller('AuditTrailController', AuditTrailController);
 
-	AuditTrailController.$inject = ['$filter', 'Toggle', 'uiGridConstants', 'ReportsService', 'NoticeService', '$translate', 'localeLanguageSortingService', 'CurrentUserInfo'];
+	AuditTrailController.$inject = ['$filter', 'Toggle', 'uiGridConstants', 'ReportsService', 'NoticeService', '$translate', 'localeLanguageSortingService', 'CurrentUserInfo', 'i18nService'];
 
-	function AuditTrailController($filter, ToggleSvc, uiGridConstants, ReportsService, NoticeService, $translate, localeLanguageSortingService, CurrentUserInfo) {
+	function AuditTrailController($filter, ToggleSvc, uiGridConstants, ReportsService, NoticeService, $translate, localeLanguageSortingService, CurrentUserInfo, i18nService) {
 		var vm = this;
 
 		var local = CurrentUserInfo.CurrentUserInfo().DateFormatLocale;
@@ -155,6 +155,16 @@
 						{field: 'ScheduleEnd', displayName: $translate.instant('FullDayAbsenceReqEndTime'), type: 'date', cellFilter: 'date:"dd-MM-yyyy HH:mm"' }
 					]
 				};
+				var defaultGridMenu = i18nService.get('en');
+				defaultGridMenu.gridMenu.exporterAllAsCsv = $translate.instant('UIGridExportAllCSV');
+				defaultGridMenu.gridMenu.columns = $translate.instant('UIGridColumnsColon');
+				defaultGridMenu.gridMenu.exporterVisibleAsCsv = $translate.instant('UIGridExportVisibleCSV');
+				defaultGridMenu.gridMenu.exporterSelectedAsCsv = $translate.instant('UIGridExportSelectedCSV');
+				defaultGridMenu.sort.ascending = $translate.instant('UIGridSortAscending');
+				defaultGridMenu.sort.descending = $translate.instant('UIGridSortDescending');
+				defaultGridMenu.sort.remove = $translate.instant('UIGridNoSort');
+				defaultGridMenu.column.hide = $translate.instant('UIGridNoSort');
+
 				vm.chartLoaded = true;
 			}
 

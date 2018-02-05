@@ -35926,6 +35926,78 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Columns:.
+        /// </summary>
+        public static string UIGridColumnsColon {
+            get {
+                return ResourceManager.GetString("UIGridColumnsColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export all data as CSV.
+        /// </summary>
+        public static string UIGridExportAllCSV {
+            get {
+                return ResourceManager.GetString("UIGridExportAllCSV", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export selected data as CSV.
+        /// </summary>
+        public static string UIGridExportSelectedCSV {
+            get {
+                return ResourceManager.GetString("UIGridExportSelectedCSV", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export visible data as CSV.
+        /// </summary>
+        public static string UIGridExportVisibleCSV {
+            get {
+                return ResourceManager.GetString("UIGridExportVisibleCSV", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hide column.
+        /// </summary>
+        public static string UIGridHideCol {
+            get {
+                return ResourceManager.GetString("UIGridHideCol", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove sort.
+        /// </summary>
+        public static string UIGridNoSort {
+            get {
+                return ResourceManager.GetString("UIGridNoSort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sort ascending.
+        /// </summary>
+        public static string UIGridSortAscending {
+            get {
+                return ResourceManager.GetString("UIGridSortAscending", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sort descending.
+        /// </summary>
+        public static string UIGridSortDescending {
+            get {
+                return ResourceManager.GetString("UIGridSortDescending", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unable to connect the the remote service.
         /// </summary>
         public static string UnableToConnectRemoteService {

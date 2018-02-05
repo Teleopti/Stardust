@@ -17188,4 +17188,36 @@ Do you want to participate?</value>
     <value>Remove shifts for {0} agent(s), {1} succeeded and {2} failed</value>
     <comment>message for remove shifts partially success.</comment>
   </data>
+  <data name="UIGridColumnsColon" xml:space="preserve">
+    <value>Columns:</value>
+    <comment>Used in combination with i18nService in the ui-grid</comment>
+  </data>
+  <data name="UIGridExportAllCSV" xml:space="preserve">
+    <value>Export all data as CSV</value>
+    <comment>Used in combination with i18nService in the ui-grid</comment>
+  </data>
+  <data name="UIGridExportSelectedCSV" xml:space="preserve">
+    <value>Export selected data as CSV</value>
+    <comment>Used in combination with i18nService in the ui-grid</comment>
+  </data>
+  <data name="UIGridExportVisibleCSV" xml:space="preserve">
+    <value>Export visible data as CSV</value>
+    <comment>Used in combination with i18nService in the ui-grid</comment>
+  </data>
+  <data name="UIGridHideCol" xml:space="preserve">
+    <value>Hide column</value>
+    <comment>Used in combination with i18nService in the ui-grid</comment>
+  </data>
+  <data name="UIGridNoSort" xml:space="preserve">
+    <value>Remove sort</value>
+    <comment>Used in combination with i18nService in the ui-grid</comment>
+  </data>
+  <data name="UIGridSortAscending" xml:space="preserve">
+    <value>Sort ascending</value>
+    <comment>Used in combination with i18nService in the ui-grid</comment>
+  </data>
+  <data name="UIGridSortDescending" xml:space="preserve">
+    <value>Sort descending</value>
+    <comment>Used in combination with i18nService in the ui-grid</comment>
+  </data>
 </root>
