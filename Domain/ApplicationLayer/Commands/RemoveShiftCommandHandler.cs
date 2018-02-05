@@ -30,12 +30,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			var scheduleRange = scheduleDic[command.Person];
 			var scheduleDay = scheduleRange.ScheduledDay(command.Date);
 			var personAssignment = scheduleDay.PersonAssignment();
-			if (personAssignment != null && personAssignment.DayOff() != null )
-			{
-				command.ErrorMessages.Add(Resources.CanNotRemoveShiftForAgentWithDayOff);
-				return;
-			}
-			if (personAssignment == null || !personAssignment.MainActivities().Any())
+			if (!scheduleDay.IsScheduled())
 			{
 				command.ErrorMessages.Add(Resources.CanNotRemoveShiftForAgentWithEmptySchedule);
 				return;
@@ -46,7 +41,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				command.ErrorMessages.Add(Resources.CanNotRemoveShiftForAgentWithFullDayAbsence);
 				return;
 			}
-			if (personAssignment.DayOff() != null)
+			if (personAssignment?.DayOff() != null )
 			{
 				command.ErrorMessages.Add(Resources.CanNotRemoveShiftForAgentWithDayOff);
 				return;
