@@ -60,7 +60,8 @@ Scenario: Should see the absence probability
 	And I click show probability toggle
 	And I click show absence probability
 	Then I should see the probability in schedule
-	
+
+@OnlyRunIfDisabled('OvertimeRequestPeriodSkillTypeSetting_47290')
 @OnlyRunIfEnabled('MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913')
 Scenario: Should see the overtime probability
 	When I am viewing mobile view for today
