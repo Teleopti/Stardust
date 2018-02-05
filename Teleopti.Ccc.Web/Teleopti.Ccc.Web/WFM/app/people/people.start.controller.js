@@ -1,15 +1,16 @@
 ﻿(function () {
 	'use strict';
 
-angular.module('wfm.people')
-	.controller('PeopleStart', [ '$scope', PeopleStartController ]);
+	angular.module('wfm.people')
+
+		.controller('PeopleStart', ['$scope', PeopleStartController]);
 
 	function PeopleStartController($scope) {
 
-		$scope.getNumberOfCheckedRoles = function(roles){
+		$scope.getNumberOfCheckedRoles = function (roles) {
 			var checkedRoles = 0;
-			angular.forEach(roles, function(value, key){
-				if(value.checked){
+			angular.forEach(roles, function (value, key) {
+				if (value.checked) {
 					checkedRoles++;
 				}
 			});
@@ -18,12 +19,12 @@ angular.module('wfm.people')
 		};
 
 		$scope.roles = [
-			{name: 'Agent'},
-			{name: 'Team leader'},
-			{name: 'London, site admin'},
-			{name: 'Partner Web'},
-			{name: 'Store staff'},
-			{name: 'Super Administrator Role'}
+			{ name: 'Agent' },
+			{ name: 'Team leader' },
+			{ name: 'London, site admin' },
+			{ name: 'Partner Web' },
+			{ name: 'Store staff' },
+			{ name: 'Super Administrator Role' }
 		];
 
 		$scope.currentRoles = [];
@@ -36,12 +37,12 @@ angular.module('wfm.people')
 				lastName: 'Doe',
 				phone: '123456123',
 				roles: [
-					{name: 'Agent', checked: true},
-					{name: 'Team leader', checked: true},
-					{name: 'London, site admin', checked: false},
-					{name: 'Partner Web', checked: false},
-					{name: 'Store staff', checked: false},
-					{name: 'Super Administrator Role', checked: false}
+					{ name: 'Agent', checked: true },
+					{ name: 'Team leader', checked: true },
+					{ name: 'London, site admin', checked: false },
+					{ name: 'Partner Web', checked: false },
+					{ name: 'Store staff', checked: false },
+					{ name: 'Super Administrator Role', checked: false }
 				]
 			},
 			{
@@ -51,12 +52,12 @@ angular.module('wfm.people')
 				role: 'Agent',
 				phone: '123456123',
 				roles: [
-					{name: 'Agent', checked: true},
-					{name: 'Team leader', checked: false},
-					{name: 'London, site admin', checked: false},
-					{name: 'Partner Web', checked: false},
-					{name: 'Store staff', checked: false},
-					{name: 'Super Administrator Role', checked: false}
+					{ name: 'Agent', checked: true },
+					{ name: 'Team leader', checked: false },
+					{ name: 'London, site admin', checked: false },
+					{ name: 'Partner Web', checked: false },
+					{ name: 'Store staff', checked: false },
+					{ name: 'Super Administrator Role', checked: true }
 				]
 			},
 			{
@@ -66,12 +67,12 @@ angular.module('wfm.people')
 				role: 'Agent',
 				phone: '123456123',
 				roles: [
-					{name: 'Agent', checked: true},
-					{name: 'Team leader', checked: false},
-					{name: 'London, site admin', checked: false},
-					{name: 'Partner Web', checked: false},
-					{name: 'Store staff', checked: false},
-					{name: 'Super Administrator Role', checked: false}
+					{ name: 'Agent', checked: true },
+					{ name: 'Team leader', checked: false },
+					{ name: 'London, site admin', checked: false },
+					{ name: 'Partner Web', checked: false },
+					{ name: 'Store staff', checked: false },
+					{ name: 'Super Administrator Role', checked: false }
 				]
 			},
 			{
@@ -81,12 +82,12 @@ angular.module('wfm.people')
 				role: 'Agent',
 				phone: '123456123',
 				roles: [
-					{name: 'Agent', checked: true},
-					{name: 'Team leader', checked: false},
-					{name: 'London, site admin', checked: false},
-					{name: 'Partner Web', checked: false},
-					{name: 'Store staff', checked: false},
-					{name: 'Super Administrator Role', checked: false}
+					{ name: 'Agent', checked: true },
+					{ name: 'Team leader', checked: false },
+					{ name: 'London, site admin', checked: false },
+					{ name: 'Partner Web', checked: false },
+					{ name: 'Store staff', checked: false },
+					{ name: 'Super Administrator Role', checked: false }
 				]
 			},
 			{
@@ -96,12 +97,12 @@ angular.module('wfm.people')
 				role: 'Agent',
 				phone: '123456123',
 				roles: [
-					{name: 'Agent', checked: true},
-					{name: 'Team leader', checked: false},
-					{name: 'London, site admin', checked: false},
-					{name: 'Partner Web', checked: false},
-					{name: 'Store staff', checked: false},
-					{name: 'Super Administrator Role', checked: false}
+					{ name: 'Agent', checked: true },
+					{ name: 'Team leader', checked: false },
+					{ name: 'London, site admin', checked: false },
+					{ name: 'Partner Web', checked: false },
+					{ name: 'Store staff', checked: false },
+					{ name: 'Super Administrator Role', checked: false }
 				]
 			},
 			{
@@ -111,12 +112,12 @@ angular.module('wfm.people')
 				role: 'Agent',
 				phone: '123456123',
 				roles: [
-					{name: 'Agent', checked: true},
-					{name: 'Team leader', checked: false},
-					{name: 'London, site admin', checked: false},
-					{name: 'Partner Web', checked: false},
-					{name: 'Store staff', checked: false},
-					{name: 'Super Administrator Role', checked: false}
+					{ name: 'Agent', checked: true },
+					{ name: 'Team leader', checked: false },
+					{ name: 'London, site admin', checked: false },
+					{ name: 'Partner Web', checked: false },
+					{ name: 'Store staff', checked: false },
+					{ name: 'Super Administrator Role', checked: false }
 				]
 			},
 			{
@@ -126,12 +127,12 @@ angular.module('wfm.people')
 				role: 'Agent',
 				phone: '123456123',
 				roles: [
-					{name: 'Agent', checked: true},
-					{name: 'Team leader', checked: false},
-					{name: 'London, site admin', checked: false},
-					{name: 'Partner Web', checked: false},
-					{name: 'Store staff', checked: false},
-					{name: 'Super Administrator Role', checked: false}
+					{ name: 'Agent', checked: true },
+					{ name: 'Team leader', checked: false },
+					{ name: 'London, site admin', checked: false },
+					{ name: 'Partner Web', checked: false },
+					{ name: 'Store staff', checked: false },
+					{ name: 'Super Administrator Role', checked: false }
 				]
 			},
 			{
@@ -141,12 +142,12 @@ angular.module('wfm.people')
 				role: 'Agent',
 				phone: '123456123',
 				roles: [
-					{name: 'Agent', checked: true},
-					{name: 'Team leader', checked: false},
-					{name: 'London, site admin', checked: false},
-					{name: 'Partner Web', checked: false},
-					{name: 'Store staff', checked: false},
-					{name: 'Super Administrator Role', checked: false}
+					{ name: 'Agent', checked: true },
+					{ name: 'Team leader', checked: false },
+					{ name: 'London, site admin', checked: false },
+					{ name: 'Partner Web', checked: false },
+					{ name: 'Store staff', checked: false },
+					{ name: 'Super Administrator Role', checked: false }
 				]
 			},
 			{
@@ -156,12 +157,12 @@ angular.module('wfm.people')
 				role: 'Agent',
 				phone: '123456123',
 				roles: [
-					{name: 'Agent', checked: true},
-					{name: 'Team leader', checked: false},
-					{name: 'London, site admin', checked: false},
-					{name: 'Partner Web', checked: false},
-					{name: 'Store staff', checked: false},
-					{name: 'Super Administrator Role', checked: false}
+					{ name: 'Agent', checked: true },
+					{ name: 'Team leader', checked: false },
+					{ name: 'London, site admin', checked: false },
+					{ name: 'Partner Web', checked: false },
+					{ name: 'Store staff', checked: false },
+					{ name: 'Super Administrator Role', checked: false }
 				]
 			},
 			{
@@ -171,12 +172,12 @@ angular.module('wfm.people')
 				role: 'Agent',
 				phone: '123456123',
 				roles: [
-					{name: 'Agent', checked: true},
-					{name: 'Team leader', checked: false},
-					{name: 'London, site admin', checked: false},
-					{name: 'Partner Web', checked: false},
-					{name: 'Store staff', checked: false},
-					{name: 'Super Administrator Role', checked: false}
+					{ name: 'Agent', checked: true },
+					{ name: 'Team leader', checked: false },
+					{ name: 'London, site admin', checked: false },
+					{ name: 'Partner Web', checked: false },
+					{ name: 'Store staff', checked: false },
+					{ name: 'Super Administrator Role', checked: false }
 				]
 			},
 			{
@@ -186,21 +187,32 @@ angular.module('wfm.people')
 				role: 'Agent',
 				phone: '123456123',
 				roles: [
-					{name: 'Agent', checked: true},
-					{name: 'Team leader', checked: false},
-					{name: 'London, site admin', checked: false},
-					{name: 'Partner Web', checked: false},
-					{name: 'Store staff', checked: false},
-					{name: 'Super Administrator Role', checked: false}
+					{ name: 'Agent', checked: true },
+					{ name: 'Team leader', checked: false },
+					{ name: 'London, site admin', checked: false },
+					{ name: 'Partner Web', checked: false },
+					{ name: 'Store staff', checked: false },
+					{ name: 'Super Administrator Role', checked: false }
 				]
 			},
 		];
 		$scope.disabledOptions = true;
 
-		$scope.checkExistingRoles = function(role){
+		$scope.checkExistingRoles = function (role) {
 			var exists = false;
-			angular.forEach($scope.currentRoles, function(value, key){
-				if(value.name === role.name){
+			angular.forEach($scope.currentRoles, function (value, key) {
+				if (value.name === role.name) {
+					exists = true;
+				}
+			});
+			return exists;
+		}
+
+
+		$scope.checkRolesNotOnAll = function (role) {
+			var exists = false;
+			angular.forEach($scope.currentRoles, function (value, key) {
+				if (value.name === role.name && value.usedBy === $scope.itemArr.length) {
 					exists = true;
 				}
 			});
@@ -215,50 +227,57 @@ angular.module('wfm.people')
 		$scope.multi = false;
 		$scope.itemArr = [];
 		$scope.assertMulti = function (item) {
+
 			$scope.currentRoles.length = 0;
 			var indexOfItem = $scope.itemArr.indexOf(item);
 
-			if(indexOfItem !== -1) {
-				$scope.itemArr.splice(indexOfItem, 1); 
-			}else{
+			if (indexOfItem !== -1) {
+				$scope.itemArr.splice(indexOfItem, 1);
+			} else {
 				$scope.itemArr.push(item);
 			}
 
-			angular.forEach($scope.itemArr, function(person, key){
-				angular.forEach(person.roles, function(role, key){
-					if(!role.checked){
-						return;
-					}
-					if($scope.checkIfRoleExistInCurrentRoles(role) === false){
-						role.usedBy = 1;
-						$scope.currentRoles.push(role);
-					}else{
-						$scope.incrementUsedBy(role);
+			$scope.temp = [];
+
+			angular.forEach($scope.itemArr, function (person, key) {
+				angular.forEach(person.roles, function (role, key) {
+					if (role.checked) {
+						if ($scope.checkIfRoleExistInCurrentRoles(role) === false) {
+							role.usedBy = 1;
+							$scope.temp = angular.copy(role);
+							$scope.currentRoles.push($scope.temp);
+						} else {
+							$scope.incrementUsedBy(role);
+						}
 					}
 				});
 			});
 		};
 
-		$scope.isIndeterminate = function(role){
+		$scope.isIndeterminate = function (role) {
 			return role.usedBy !== $scope.itemArr.length;
 		};
 
-		$scope.isChecked = function(role){
+		$scope.isChecked = function (role) {
 			return role.usedBy === $scope.itemArr.length;
 		};
 
-		$scope.incrementUsedBy = function(role){
-			angular.forEach($scope.currentRoles, function(currentRole, key){
-				if(role.name === currentRole.name){
+		$scope.incrementUsedBy = function (role) {
+			angular.forEach($scope.currentRoles, function (currentRole, key) {
+				if (role.name === currentRole.name) {
 					currentRole.usedBy++;
 				}
 			});
 		};
 
-		$scope.checkIfRoleExistInCurrentRoles = function(role){
+		$scope.test = function () {
+			console.log("clicked indeterminate");
+		}
+
+		$scope.checkIfRoleExistInCurrentRoles = function (role) {
 			var returnValue = false;
-			angular.forEach($scope.currentRoles, function(currentRole, key){
-				if(role.name === currentRole.name){
+			angular.forEach($scope.currentRoles, function (currentRole, key) {
+				if (role.name === currentRole.name) {
 					returnValue = true;
 				}
 			});
@@ -269,9 +288,17 @@ angular.module('wfm.people')
 		$scope.modalShownGrant = false;
 		$scope.modalShownRevoke = false;
 
-		$scope.close = function(){
+		$scope.close = function () {
 			$scope.modalShownGrant = false;
 			$scope.modalShownRevoke = false;
+		}
+
+		$scope.save = function() {
+			$scope.modalShownGrant = false;
+			$scope.modalShownRevoke = false;
+			$scope.resetMulti();
+
+
 		}
 
 		$scope.resetMulti = function () {
@@ -281,6 +308,5 @@ angular.module('wfm.people')
 				$scope.people[i].marked = false;
 			}
 		}
-
 	}
 })();
