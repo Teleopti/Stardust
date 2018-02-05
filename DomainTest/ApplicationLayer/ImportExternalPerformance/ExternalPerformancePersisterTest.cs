@@ -67,6 +67,64 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		}
 
 		[Test]
+		public void ShouldOnlyPersistPerfrmanceWhenThereIsNoExternalPerformanceData()
+		{
+			const string perfName = "xxx";
+			const int perfExtId = 1;
+			const ExternalPerformanceDataType numeric = ExternalPerformanceDataType.Numeric;
+			var performance = new ExternalPerformance
+			{
+				ExternalId = perfExtId,
+				Name = perfName,
+				DataType = numeric
+			};
+
+			var result = new ExternalPerformanceInfoProcessResult();
+			result.ExternalPerformances.Add(performance);
+
+			Target.Persist(result);
+
+			var performanceData = ExternalPerformanceDataRepository.LoadAll();
+			performanceData.Count.Should().Be.EqualTo(0);
+
+			var performanceType = ExternalPerformanceRepository.LoadAll();
+			performanceType.Count.Should().Be.EqualTo(1);
+			performanceType.First().Name.Should().Be.EqualTo(perfName);
+			performanceType.First().ExternalId.Should().Be.EqualTo(perfExtId);
+			performanceType.First().DataType.Should().Be.EqualTo(numeric);
+		}
+
+		[Test]
+		public void ShouldNotPersistWhenThereIsNoExternalPerformance()
+		{
+			const string perfName = "xxx";
+			const int perfExtId = 1;
+			const ExternalPerformanceDataType numeric = ExternalPerformanceDataType.Numeric;
+
+			var extractionInfo = new PerformanceInfoExtractionResult
+			{
+				AgentId = "1",
+				DateFrom = DateOnly.Today,
+				MeasureId = perfExtId,
+				MeasureName = perfName,
+				MeasureNumberScore = 100.02,
+				MeasureType = numeric,
+				PersonId = Guid.NewGuid()
+			};
+
+			var result = new ExternalPerformanceInfoProcessResult();
+			result.ValidRecords.Add(extractionInfo);
+
+			Target.Persist(result);
+
+			var performanceData = ExternalPerformanceDataRepository.LoadAll();
+			performanceData.Count.Should().Be.EqualTo(0);
+
+			var performanceType = ExternalPerformanceRepository.LoadAll();
+			performanceType.Count.Should().Be.EqualTo(0);
+		}
+
+		[Test]
 		public void ShouldUpdateExistingExternalPerformanceData()
 		{
 			const string perfName = "xxx";

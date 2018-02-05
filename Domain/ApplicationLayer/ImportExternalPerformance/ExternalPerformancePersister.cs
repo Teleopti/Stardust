@@ -25,9 +25,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 
 			var externalPerformances = result.ExternalPerformances;
 			externalPerformances.AddRange(_externalPerformanceRepository.FindAllExternalPerformances());
-			if (!externalPerformances.Any()) return;
+			if (!externalPerformances.Any() || !result.ValidRecords.Any()) return;
 
 			var dates = result.ValidRecords.Select(x => x.DateFrom).ToList();
+			
 			var existingDataWithinPeriod = _externalDataRepository.FindByPeriod(new DateOnlyPeriod(dates.Min(), dates.Max()));
 			foreach (var record in result.ValidRecords)
 			{
