@@ -142,6 +142,7 @@
 		OvertimeRequestPeriodSkillTypeSetting_47290,
 		OvertimeRequestCheckCalendarMonthMaximumOvertime_47024,
 		OvertimeRequestUseMostUnderStaffedSkill_47853,
+		OvertimeRequestMaxContinuousWorkTime_47964,
 		ETL_SpeedUpNightlyDayOff_38213,
 		MyTimeWeb_MobileResponsive_43826,
 		Wfm_Intraday_SupportSkillTypeEmail_44002,

@@ -71,6 +71,7 @@ OvertimeRequestPeriodWorkRuleSetting_46638 = true
 OvertimeRequestPeriodSkillTypeSetting_47290 = RC
 OvertimeRequestCheckCalendarMonthMaximumOvertime_47024 = true
 OvertimeRequestUseMostUnderStaffedSkill_47853 = RC
+OvertimeRequestMaxContinuousWorkTime_47964 = DEV
 
 Wfm_People_ImportAndCreateAgentFromFile_42528 = true
 Wfm_People_SetFallbackValuesForImporting_43289 = true
