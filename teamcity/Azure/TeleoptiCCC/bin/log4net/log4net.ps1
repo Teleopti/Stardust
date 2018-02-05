@@ -1,8 +1,6 @@
 function configure-logging($configFile, $serviceName)
 {
 	write-host "Load log4net ..."
-	$timestamp = get-date -Format "yyyymmdd-HHmmss"
-	$configFile = $configFile + "_" + $timestamp
     Set-log4netConfig($configFile)
     Unblock-File -Path "$log4netPath\log4net.dll"
 	Add-Type -Path "$log4netPath\log4net.dll"
@@ -42,12 +40,16 @@ function log-error ([string] $message)
 
 function Set-log4netConfig($configFile)
 {
+
+$timestamp = get-date -Format "yyyymmdd-HHmmss"
+$ScriptFileNameLog = $ScriptFileName + "_" + $timestamp + ".log"
+
 $NewConfigFileText = @"
 <?xml version="1.0"?>
 <configuration>
     <log4net>
         <appender name="PowerShellRollingFileAppender" type="log4net.Appender.RollingFileAppender" >
-            <param name="File" value="$scriptPath\$ScriptFileName.log" />
+            <param name="File" value="$scriptPath\$ScriptFileNameLog" />
             <param name="AppendToFile" value="true" />
             <param name="RollingStyle" value="Size" />
             <param name="MaxSizeRollBackups" value="100" />
