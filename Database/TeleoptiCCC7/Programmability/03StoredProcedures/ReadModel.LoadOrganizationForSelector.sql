@@ -215,8 +215,8 @@ BEGIN
 		INNER JOIN Person p with (nolock) on pp.Parent = p.Id
 		INNER JOIN Team with (nolock) ON Team.Id = pp.Team
 		INNER JOIN Site with (nolock) ON Site.id = Site and Site.BusinessUnit = @bu
-		INNER JOIN OptionalColumnValue ocv with (nolock) ON p.Id = ocv.ReferenceId 
-			AND ocv.Parent = @optionalColumnId
+		INNER JOIN OptionalColumnValue ocv with (nolock) ON p.Id = ocv.Parent 
+			AND ocv.ReferenceId = @optionalColumnId
 			AND ocv.Description <> ''
 	END
 
