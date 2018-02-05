@@ -266,8 +266,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.AssertAnyContains(".request-text", message);
 		}
 
+		[Given(@"I have created an overtime request with subject '(.*)'")]
+		public void GivenIHaveCreatedAnOvertimeRequestWithSubject(string subject)
+		{
+			DataMaker.Data().Apply(new ExistingOvertimeRequest { Subject = subject } );
+		}
 
-		
+		[Then(@"I should see my existing overtime request with subject '(.*)'")]
+		public void ThenIShouldSeeMyExistingOvertimeRequestWithSubject(string subject)
+		{
+			Browser.Interactions.AssertExists(".request");
+			Browser.Interactions.AssertFirstContains(".request-data-subject", subject);
+		}
 
 
 	}

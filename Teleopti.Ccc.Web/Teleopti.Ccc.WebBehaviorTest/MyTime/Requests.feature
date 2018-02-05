@@ -29,6 +29,11 @@ Scenario: Show created shift trade request
 	When I view requests
 	Then I should see my existing shift trade request with subject 'swap with me'
 
+Scenario: Show created overtime request
+	Given I am an agent
+	And I have created an overtime request with subject 'test overtime request'
+	When I am viewing requests
+	Then I should see my existing overtime request with subject 'test overtime request'
 
 Scenario: Show status of a created shift trade request
 	Given I am an agent
