@@ -8,7 +8,8 @@ describe("teamschedule controller tests", function () {
 		personSelection,
 		scheduleMgmt,
 		teamScheduleService,
-		staffingConfigStorageService;
+		staffingConfigStorageService,
+		fakeStateParams;
 
 	beforeEach(function () {
 		module('externalModules');
@@ -17,8 +18,10 @@ describe("teamschedule controller tests", function () {
 		module('wfm.teamSchedule');
 
 		module(function ($provide) {
+			fakeStateParams = setupMockStateParams();
 			$provide.service('CurrentUserInfo', setupMockCurrentUserInfoService);
 			$provide.service('$locale', setupMockLocale);
+			$provide.service('$stateParams', function () { return fakeStateParams });
 			$provide.service('Toggle', setupMockAllTrueToggleService);
 			$provide.service('groupPageService', setUpMockGroupPagesService);
 		});
@@ -285,10 +288,25 @@ describe("teamschedule controller tests", function () {
 		controller.staffingEnabled = true;
 
 		controller.onUseShrinkageChanged(true);
-
 		controller.showStaffing();
 		expect(!!controller.useShrinkage).toEqual(true);
 	});
+	
+	it("should init all settings state as same as the route state", function () {
+		expect(controller.searchOptions.keyword).toEqual(fakeStateParams.keyword);
+		expect(controller.scheduleDate).toEqual(fakeStateParams.selectedDate);
+		expect(controller.teamNameMap).toEqual(fakeStateParams.teamNameMap);
+		expect(controller.sortOption).toEqual(fakeStateParams.selectedSortOption);
+		if (fakeStateParams.selectedTeamIds) {
+			expect(controller.selectedGroups.groupIds).toEqual(fakeStateParams.selectedTeamIds);
+		} else {
+			expect(controller.selectedGroups.groupPageId).toEqual(fakeStateParams.selectedGroupPage.pageId);
+			expect(controller.selectedGroups.groupIds).toEqual(fakeStateParams.selectedGroupPage.groupIds);
+		}
+		expect(controller.staffingEnabled).toEqual(fakeStateParams.staffingEnabled);
+	});
+
+
 
 	it("should read prechecked status for use shrinkage when show staffing is enabled and there is invalid config", function () {
 		staffingConfigStorageService.clearConfig();
@@ -442,6 +460,18 @@ describe("teamschedule controller tests", function () {
 			DATETIME_FORMATS: {
 				shortTime: "h:mm a"
 			}
+		};
+	}
+
+	function setupMockStateParams() {
+		return {
+			selectedDate: new Date('2018-02-02'),
+			keyword: 'search',
+			teamNameMap: '1 team selected',
+			selectedSortOption: '',
+			selectedTeamIds: [],
+			selectedGroupPage: { pageId: '', groupIds: [] },
+			staffingEnabled: true
 		};
 	}
 

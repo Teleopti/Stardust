@@ -15,7 +15,8 @@
 				selectedGroups: '=?',
 				teamNameMap: '=?',
 				selectedFavorite: '=?',
-				selectedSortOption: '=?'
+				selectedSortOption: '=?',
+				staffingEnabled: '=?'
 			},
 			bindToController: true,
 			controller: viewChangerController
@@ -52,6 +53,8 @@
 					};
 				}
 			}
+			if (angular.isDefined(vc.selectedSortOption)) params.selectedSortOption = vc.selectedSortOption;
+			if (angular.isDefined(vc.staffingEnabled)) params.staffingEnabled = vc.staffingEnabled;
 			$state.go(viewState, params);
 		};
 	}

@@ -28,7 +28,7 @@
 		vm.enableClickableCell = true;
 		vm.onCellClick = openSelectedAgentDayInNewWindow;
 		vm.sortOption = $stateParams.selectedSortOption;
-
+		vm.staffingEnabled = $stateParams.staffingEnabled;
 		vm.selectedGroups = {
 			mode: 'BusinessHierarchy',
 			groupIds: [],

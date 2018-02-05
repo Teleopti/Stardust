@@ -34,8 +34,7 @@
 		};
 		vm.availableTimezones = [];
 		vm.sitesAndTeams = undefined;
-		vm.staffingEnabled = false;
-
+		vm.staffingEnabled = $stateParams.staffingEnabled;
 		vm.selectedGroups = {
 			mode: 'BusinessHierarchy',
 			groupIds: [],

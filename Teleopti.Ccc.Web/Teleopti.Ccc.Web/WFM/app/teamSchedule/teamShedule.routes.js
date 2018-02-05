@@ -1,4 +1,4 @@
-(function() {
+(function () {
 	'use strict';
 
 	angular.module('wfm.teamSchedule').config(stateConfig);
@@ -17,10 +17,11 @@
 					keyword: undefined,
 					selectedDate: undefined,
 					selectedTeamIds: undefined,
-					selectedGroupPage:undefined,
+					selectedGroupPage: undefined,
 					selectedFavorite: undefined,
 					selectedSortOption: undefined,
 					teamNameMap: undefined,
+					staffingEnabled: false,
 					do: false
 				}
 			}).state('teams.for',
@@ -43,6 +44,7 @@
 					selectedFavorite: undefined,
 					selectedSortOption: undefined,
 					teamNameMap: undefined,
+					staffingEnabled: false,
 					do: false
 				},
 				templateUrl: 'app/teamSchedule/html/weekViewSchedule.html',
