@@ -320,8 +320,6 @@ seatmap-occupancy-detail {
 		.input-prepend input[type=text] {
 			width: 90% !important;
 		}
-		.people-search-input {
-		}
 	}
 }
 .seatbooking-operations-add, .seatbooking-operations-cancel {
@@ -349,21 +347,6 @@ people-selection-list {
 	right: 0;
 	left: 0;
 	overflow: hidden;
-
-	wfm-multiple-search-input {
-		.advanced-input-dropdown {
-			width: 321px;
-		}
-		.advanced-input {
-			width: 316px;
-		}
-		.expand-advanced-input {
-			max-width: 100%;
-		}
-		.panel {
-			position: relative;
-		}
-	}
 }
 people-selection-list > div.view-header {
 	display: none;
