@@ -16,7 +16,7 @@
 
 		ctrl.fileSizeLimit = 2097152;
 		ctrl.dateTimeFormat = locale.DATETIME_FORMATS.medium;
-		ctrl.fileFormatWikiLink = 'https://wiki.teleopti.com/TeleoptiWFM/' + state.current.name;
+		ctrl.fileFormatWikiLink = 'https://wiki.teleopti.com/TeleoptiWFM/Gamification.import';
 
 		ctrl.$onInit = function () {
 			fetchJobs();
