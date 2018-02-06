@@ -227,15 +227,28 @@ function StartTeleoptiServer
 		Invoke-Expression -Command:"iisreset /START"
         AppPools-Start $isAzure
 	}
-	
-	TeleoptiWindowsServices-Start
-	if ([int]$psversiontable.psversion.major -gt 2)
+
+    #Make sure W3SVC is started before starting ServiceBus and ETL
+    if ([int]$psversiontable.psversion.major -gt 2)
     {
         $BaseUrl = BaseUrl-get $isAzure
         Write-Host "Waiting for web services to start..."
+        $Url = $BaseURL + "web/"
+        $cred = GetCredentials
+        WaitForUrl $Url $cred
+    }
+	
+    #Starting ServiceBus and ETL 
+    TeleoptiWindowsServices-Start
+	
+    if ([int]$psversiontable.psversion.major -gt 2)
+    {
+        $BaseUrl = BaseUrl-get $isAzure
+        Write-Host "Waiting for Teleopti Services to start..."
         $Url = $BaseURL + "web/StardustDashboard/ping"
         $cred = GetCredentials
         WaitForUrl $Url $cred
     }
 }
+
 
