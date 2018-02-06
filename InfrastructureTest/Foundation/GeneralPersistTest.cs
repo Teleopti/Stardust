@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             Color blue = Color.FromArgb(0, 0, 255);
             Assert.AreEqual(blue, act.DisplayColor);
             Assert.AreEqual(act.DisplayColor.GetHashCode(), new ColorNumber().GetHashCode(blue));
-            act = (IActivity)Session.Merge(act);
+            act = Session.Merge(act);
             Assert.AreEqual(blue, act.DisplayColor); //verify replace
             //verify assemble/disambele (used when caching, not used at the moment)
             Assert.AreEqual(blue, new ColorNumber().Assemble(act.DisplayColor, null));
@@ -66,15 +66,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
                             new List<TimePeriod> {new TimePeriod(TimeSpan.FromHours(10), TimeSpan.FromHours(11))});
             workload.AddTemplate(template);
 
-            IWorkload secondWorkload = null;
-            try
+			try
             {
                 IWorkloadRepository rep1 = new WorkloadRepository(UnitOfWork);
                 rep1.Add(workload);
                 UnitOfWork.PersistAll();
 
                 IWorkloadRepository rep2 = new WorkloadRepository(UnitOfWork2);
-                secondWorkload = rep2.Get(workload.Id.Value);
+                var secondWorkload = rep2.Get(workload.Id.Value);
                 LazyLoadingManager.Initialize(secondWorkload.TemplateWeekCollection);
 
                 workload.RemoveTemplate(TemplateTarget.Workload, template.Name);

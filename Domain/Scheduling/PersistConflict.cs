@@ -14,8 +14,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			DatabaseVersion = databaseVersion;
 		}
 
-		public DifferenceCollectionItem<IPersistableScheduleData> ClientVersion { get; private set; }
-		public IPersistableScheduleData DatabaseVersion { get; private set; }
+		public DifferenceCollectionItem<IPersistableScheduleData> ClientVersion { get; }
+		public IPersistableScheduleData DatabaseVersion { get; }
 
 		public Guid InvolvedId()
 		{

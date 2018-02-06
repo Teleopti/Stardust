@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Analytics;
-using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers;
 
 namespace Teleopti.Ccc.Domain.Repositories
 {

@@ -277,7 +277,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 			if (intradayDifferences.Any())
             {
-                result = Domain.Calculation.Variances.RMS(intradayDifferences);
+                result = Calculation.Variances.RMS(intradayDifferences);
                 result += highestIntraIntervalDeviation;
             }
             return result;
@@ -310,7 +310,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			if (relativeDifferences.Count == 0)
 				return null;
 
-			return Domain.Calculation.Variances.StandardDeviation(relativeDifferences);
+			return Calculation.Variances.StandardDeviation(relativeDifferences);
 		}
 
         public static TimeSpan? AbsoluteDifferenceIncoming(IEnumerable<ISkillStaffPeriod> skillStaffPeriods)

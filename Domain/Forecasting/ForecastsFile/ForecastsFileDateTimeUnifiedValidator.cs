@@ -1,7 +1,5 @@
 using System;
 using System.Globalization;
-using System.Linq;
-using NPOI.SS.Formula.Functions;
 using Teleopti.Ccc.Domain.Forecasting.Import;
 
 namespace Teleopti.Ccc.Domain.Forecasting.ForecastsFile

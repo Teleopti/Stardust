@@ -4,7 +4,7 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 
 namespace Teleopti.Ccc.Domain
 {
-	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false)]
+	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
 	public sealed class DisabledBy : Attribute
 	{
 		public DisabledBy(params Toggles[] toggles)

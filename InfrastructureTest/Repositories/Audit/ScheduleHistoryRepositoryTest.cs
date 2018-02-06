@@ -173,7 +173,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
         [Test]
         public void ShouldShiftCategoryAlsoBeLoadedInFoundPersonAssingments()
         {
-            PersonAssignment assignment = null;
+            PersonAssignment assignment;
 
             using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {

@@ -5,7 +5,6 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.InfrastructureTest.Rta.Service.PerformanceMeasurement;
-using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.PersonAssociationChanged
 {

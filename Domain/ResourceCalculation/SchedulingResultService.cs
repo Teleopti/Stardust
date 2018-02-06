@@ -145,8 +145,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public bool IsOpen(ISkill skill, DateTimePeriod periodToCalculate)
 		{
-			IResourceCalculationPeriodDictionary thisDic;
-			if (!_wrappedDictionary.TryGetValue(skill, out thisDic))
+			if (!_wrappedDictionary.TryGetValue(skill, out var thisDic))
 				return false;
 
 			IResourceCalculationPeriod items;

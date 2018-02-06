@@ -203,7 +203,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 		public void ShouldNotAddScheduleChangeTimeForPersonAssignmentIfNotInASMNotifyPeriod()
 		{
 			var person = PersonFactory.CreatePerson().WithId();
-			var scenario = ScenarioFactory.CreateScenarioWithId("default", true);
 
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.ChinaTimeZoneInfo());
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
@@ -357,7 +356,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 		public void ShouldNotAddScheduleChangeTimeIfTheTypeIsNotAbsenceOrAssignmentOrMeeting()
 		{
 			var person = PersonFactory.CreatePerson().WithId();
-			var scenario = ScenarioFactory.CreateScenarioWithId("default", true);
 
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
 
@@ -525,7 +523,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 		public void ShouldNotUpdateScheduleChangeTimeIfTheTypeIsNotAbsenceOrAssignmentOrPersonMeeting()
 		{
 			var person = PersonFactory.CreatePerson().WithId();
-			var scenario = ScenarioFactory.CreateScenarioWithId("default", true);
 
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
 

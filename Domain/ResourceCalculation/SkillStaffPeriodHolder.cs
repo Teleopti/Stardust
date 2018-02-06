@@ -121,8 +121,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 				lastKey = holder.Key;
 
-				ISkillStaffPeriodDataHolder nextHolder;
-				if (!sortedDataHolders.TryGetValue(lastKey.Value.Add(holder.Value.Period.ElapsedTime()), out nextHolder))
+				if (!sortedDataHolders.TryGetValue(lastKey.Value.Add(holder.Value.Period.ElapsedTime()), out _))
 				{
 					//last
 					holder.Value.Boost = true;

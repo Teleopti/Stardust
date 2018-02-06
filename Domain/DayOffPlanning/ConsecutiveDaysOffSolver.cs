@@ -74,9 +74,8 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
                     return false;
                 int indexToMoveFrom = _functions.FindFirstUnlockedIndex(block.X, block.Y);
 
-                int indexToMoveTo;
-                //find next free
-                indexToMoveTo = _functions.FindNextIndexWithNoDayOff(indexToMoveFrom + 1, true);
+				//find next free
+                var indexToMoveTo = _functions.FindNextIndexWithNoDayOff(indexToMoveFrom + 1, true);
 
                 if (!SwapBits(indexToMoveFrom, indexToMoveTo))
                     return false;

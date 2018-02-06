@@ -1,5 +1,4 @@
 using System;
-using System.Data.SqlTypes;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -11,7 +10,6 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.UnitOfWork;
-using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 {

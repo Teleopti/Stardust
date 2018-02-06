@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.UndoRedo
 			Description = description;
 		}
 
-		public string Description { get; private set; }
+		public string Description { get; }
 
 		public void AddMemento(IMemento memento)
 		{

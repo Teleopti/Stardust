@@ -1,6 +1,4 @@
-﻿using Teleopti.Ccc.Domain.Common;
-
-namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
+﻿namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
 	/// <summary>
 	/// Interface for holding optional column.

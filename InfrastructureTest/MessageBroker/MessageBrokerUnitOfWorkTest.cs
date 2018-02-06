@@ -11,7 +11,6 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.MessageBrokerUnitOfWork;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -49,7 +48,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 
 			TheService.DoesUpdate(string.Format("INSERT INTO TestTable (Value) VALUES ({0})", value));
 
-			Enumerable.Single<int>(TestTable.Values("TestTable")).Should().Be(value);
+			Enumerable.Single(TestTable.Values("TestTable")).Should().Be(value);
 		}
 
 		[Test]
@@ -72,7 +71,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 		public void ShouldProduceUnitOfWorkToNestedServices()
 		{
 			string result = null;
-			NestedService1.Action = uow => { result = Enumerable.Single<string>(uow.CreateSqlQuery("SELECT @@VERSION").List<string>()); };
+			NestedService1.Action = uow => { result = Enumerable.Single(uow.CreateSqlQuery("SELECT @@VERSION").List<string>()); };
 
 			TheService.CallNestedServices();
 
@@ -129,8 +128,8 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 			thread1.Join();
 			thread2.Join();
 
-			Enumerable.Count<int>(TestTable.Values("TestTable1")).Should().Be(1000);
-			Enumerable.Count<int>(TestTable.Values("TestTable2")).Should().Be(0);
+			Enumerable.Count(TestTable.Values("TestTable1")).Should().Be(1000);
+			Enumerable.Count(TestTable.Values("TestTable2")).Should().Be(0);
 		}
 
 		[Test]
@@ -146,7 +145,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 					}).Join();
 				});
 
-			Enumerable.Count<int>(TestTable.Values("TestTable")).Should().Be(1);
+			Enumerable.Count(TestTable.Values("TestTable")).Should().Be(1);
 		}
 
 		[Test]
@@ -173,8 +172,8 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 			thread1.Join();
 			thread2.Join();
 
-			Enumerable.Count<int>(TestTable.Values("TestTable1")).Should().Be(1000);
-			Enumerable.Count<int>(TestTable.Values("TestTable2")).Should().Be(0);
+			Enumerable.Count(TestTable.Values("TestTable1")).Should().Be(1000);
+			Enumerable.Count(TestTable.Values("TestTable2")).Should().Be(0);
 		}
 
 		[Test]

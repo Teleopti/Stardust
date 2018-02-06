@@ -926,7 +926,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			Target.PersistSkillCombinationResourceBpo(combinationResources);
 
-			var bpoList = new Dictionary<Guid, string>();
+			Dictionary<Guid, string> bpoList;
 			using (var connection = new SqlConnection(InfraTestConfigReader.ConnectionString))
 			{
 				connection.Open();

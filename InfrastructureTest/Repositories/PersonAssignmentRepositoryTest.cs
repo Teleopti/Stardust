@@ -284,7 +284,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void VerifyVersionWorksWithNoReloading()
 		{
-			IPersonAssignment loaded = null;
 			try
 			{
 				CleanUpAfterTest();
@@ -297,7 +296,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				Assert.AreEqual(1, casted.Version);
 
 				//Do change
-				loaded = _rep.Load(org.Id.Value);
+				var loaded = _rep.Load(org.Id.Value);
 				loaded.AddPersonalActivity(_dummyActivity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
 				UnitOfWork.PersistAll();
 				loaded = _rep.Load(org.Id.Value);
@@ -322,7 +321,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void VerifyVersionWorksWhenAggregateReloaded()
 		{
-			IPersonAssignment loaded = null;
 			try
 			{
 				CleanUpAfterTest();
@@ -335,7 +333,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				Assert.AreEqual(1, (org).Version);
 
 				//Do change
-				loaded = _rep.LoadAggregate(org.Id.Value);
+				var loaded = _rep.LoadAggregate(org.Id.Value);
 				loaded.AddPersonalActivity(_dummyActivity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
 				UnitOfWork.PersistAll();
 				UnitOfWork.Remove(loaded);

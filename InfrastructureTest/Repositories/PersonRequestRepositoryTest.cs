@@ -1307,7 +1307,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			requestPeriods.Count().Should().Be(0);
 		}
 
-		private PersonRequest createShiftTradeRequest(DateOnly dateFrom, DateOnly dateTo, IPerson personFrom, IPerson personTo)
+		private void createShiftTradeRequest(DateOnly dateFrom, DateOnly dateTo, IPerson personFrom, IPerson personTo)
 		{
 			var shiftTradeSwapDetailList = new List<IShiftTradeSwapDetail>();
 
@@ -1323,8 +1323,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var personRequest = new PersonRequest(personFrom, shiftTradeRequest);
 
 			PersistAndRemoveFromUnitOfWork(personRequest);
-
-			return personRequest;
 		}
 
 		[Test]
