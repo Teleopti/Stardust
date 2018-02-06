@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			.ExecuteUpdate();
 		}
 
-		public IList<AnalyticsForcastWorkload> GetForecastWorkloads(int workloadId, int dateId, int scenarioId)
+		public IList<AnalyticsForcastWorkload> GetForecastWorkloads(int workloadId, int scenarioId, int startDateId, int endDateId, int startIntervalId, int endIntervalId)
 		{
 			return _analyticsUnitOfWork.Current()
 					.Session()
@@ -69,7 +69,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 					FROM [mart].[fact_forecast_workload] 
 					WHERE [workload_id]=:{nameof(workloadId)}
 					AND [scenario_id]=:{nameof(scenarioId)}
-					AND [date_id]=:{nameof(dateId)}
+					AND (
+							([date_id]=:{nameof(startDateId)} AND [interval_id] >=:{nameof(startIntervalId)}) 
+							OR 
+							([date_id]=:{nameof(endDateId)} AND [interval_id] <=:{nameof(endIntervalId)})
+						)
 					")
 					.AddScalar(nameof(AnalyticsForcastWorkload.DateId), NHibernateUtil.Int32)
 					.AddScalar(nameof(AnalyticsForcastWorkload.IntervalId), NHibernateUtil.Int32)
@@ -100,7 +104,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 					.AddScalar(nameof(AnalyticsForcastWorkload.DatasourceUpdateDate), NHibernateUtil.DateTime)
 					.SetParameter(nameof(workloadId), workloadId)
 					.SetParameter(nameof(scenarioId), scenarioId)
-					.SetParameter(nameof(dateId), dateId)
+					.SetParameter(nameof(startDateId), startDateId)
+					.SetParameter(nameof(endDateId), endDateId)
+					.SetParameter(nameof(startIntervalId), startIntervalId)
+					.SetParameter(nameof(endIntervalId), endIntervalId)
 					.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsForcastWorkload)))
 					.SetReadOnly(true)
 					.List<AnalyticsForcastWorkload>();

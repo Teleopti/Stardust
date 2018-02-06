@@ -32,11 +32,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 					 && x.StartTime == workload.StartTime);
 		}
 
-		public IList<AnalyticsForcastWorkload> GetForecastWorkloads(int workloadId, int dateId, int scenarioId)
+		public IList<AnalyticsForcastWorkload> GetForecastWorkloads(int workloadId, int scenarioId, int startDateId, int endDateId, int startIntervalId, int endIntervalId)
 		{
-			return AnalyticsForcastWorkloads.Where(x => x.WorkloadId == workloadId && x.DateId == dateId && x.ScenarioId == scenarioId).ToList();
+			return AnalyticsForcastWorkloads
+				.Where(x => x.WorkloadId == workloadId 
+							&& x.ScenarioId == scenarioId 
+							&& ((x.DateId == startDateId && x.IntervalId >= startIntervalId) | (x.DateId == endDateId && x.IntervalId <= endIntervalId)))
+				.ToList();
 		}
-
-
 	}
 }

@@ -7,6 +7,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 	{
 		void AddOrUpdate(AnalyticsForcastWorkload analyticsForcastWorkload);
 		void Delete(AnalyticsForcastWorkload workloads);
-		IList<AnalyticsForcastWorkload> GetForecastWorkloads(int workloadId, int dateId, int scenarioId);
+		IList<AnalyticsForcastWorkload> GetForecastWorkloads(int workloadId, int scenarioId, int startDateId, int endDateId, int startIntervalId, int endIntervalId);
 	}
 }

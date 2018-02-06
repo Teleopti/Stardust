@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure.Analytics;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.SkillDay
 {
@@ -81,14 +82,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SkillDay
 
 		private IEnumerable<AnalyticsForcastWorkload> getCurrentForecastWorkloads(ISkillDay skillDay)
 		{
-			var dateId = getAnalyticsDate(skillDay.CurrentDate.Date).DateId;
+			var intervalsPerDay = _analyticsIntervalRepository.IntervalsPerDay();
+			var minutesPerInterval = minutesPerDay / intervalsPerDay;
+			var startDateUtc = TimeZoneHelper.ConvertToUtc(skillDay.CurrentDate.Date, skillDay.Skill.TimeZone);
+			var endDateUtc = TimeZoneHelper.ConvertToUtc(skillDay.CurrentDate.Date.AddDays(1).AddMinutes(-minutesPerInterval), skillDay.Skill.TimeZone);
+			var startIntervalId = new IntervalBase(startDateUtc, intervalsPerDay).Id;
+			var endIntervalId = new IntervalBase(endDateUtc, intervalsPerDay).Id;
+			var startDateId = getAnalyticsDate(startDateUtc.Date).DateId;
+			var endDateId = getAnalyticsDate(endDateUtc.Date).DateId;
 			var analyticsScenario = getAnalyticsScenario(skillDay);
 			var currentForecastWorkloads = new List<AnalyticsForcastWorkload>();
 
 			foreach (var workloadDay in skillDay.WorkloadDayCollection)
 			{
 				var analyticsWorkload = getAnalyticsWorkload(workloadDay);
-				var workloads = _analyticsForecastWorkloadRepository.GetForecastWorkloads(analyticsWorkload.WorkloadId, dateId, analyticsScenario.ScenarioId);
+				var workloads = _analyticsForecastWorkloadRepository.GetForecastWorkloads(analyticsWorkload.WorkloadId, analyticsScenario.ScenarioId, startDateId, endDateId, startIntervalId, endIntervalId);
 				currentForecastWorkloads.AddRange(workloads);
 			}
 

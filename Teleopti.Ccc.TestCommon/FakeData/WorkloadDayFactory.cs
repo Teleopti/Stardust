@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 				taskPeriods.Add(templateTaskPeriod);
 
 				WorkloadDay workloadDay = new WorkloadDay();
-				workloadDay.Create(new DateOnly(TimeZoneHelper.ConvertFromUtc(dt, skill.TimeZone)), workload1, new List<TimePeriod>());
+				workloadDay.Create(new DateOnly(dt), workload1, new List<TimePeriod>());
 				workloadDay.Lock();
 				workloadDay.MakeOpen24Hours();
 
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 																			 skill.TimeZone));
 				taskPeriods.Add(templateTaskPeriod);
 				workloadDay = new WorkloadDay();
-				workloadDay.Create(new DateOnly(TimeZoneHelper.ConvertFromUtc(dt, skill.TimeZone)), workload2, new List<TimePeriod>());
+				workloadDay.Create(new DateOnly(dt), workload2, new List<TimePeriod>());
 				workloadDay.Lock();
 				workloadDay.MakeOpen24Hours();
 				foreach (ITemplateTaskPeriod taskPeriod in workloadDay.SortedTaskPeriodList)
