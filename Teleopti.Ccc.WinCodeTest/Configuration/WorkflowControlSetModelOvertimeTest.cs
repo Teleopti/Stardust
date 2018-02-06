@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			_target.DomainEntity.OvertimeRequestMaximumTimeEnabled = true;
 
 			Assert.AreEqual(_target.OvertimeRequestMaximumTime, TimeSpan.FromHours(10));
-			Assert.AreEqual(_target.OvertimeRequestValidationHandleOptionView.WorkRuleValidationHandleType, OvertimeValidationHandleType.Deny);
+			Assert.AreEqual(_target.OvertimeRequestMaximumOvertimeValidationHandleOptionView.WorkRuleValidationHandleType, OvertimeValidationHandleType.Deny);
 			Assert.AreEqual(_target.OvertimeRequestMaximumTimeEnabled, true);
 		}
 	}

@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		IEnumerable<ISkill> MustMatchSkills { get; }
 		bool AutoGrantShiftTradeRequest { get; set; }
 		TimeSpan? OvertimeRequestMaximumTime { get; set; }
-		OvertimeRequestValidationHandleOptionView OvertimeRequestValidationHandleOptionView { get; set; }
+		OvertimeRequestValidationHandleOptionView OvertimeRequestMaximumOvertimeValidationHandleOptionView { get; set; }
 
 		void AddAllowedPreferenceDayOff(IDayOffTemplate dayOff);
 		void RemoveAllowedPreferenceDayOff(IDayOffTemplate dayOff);
@@ -63,5 +63,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		bool AutoGrantOvertimeRequest { get; set; }
 
 		bool OvertimeRequestMaximumTimeEnabled { get; set; }
+		bool OvertimeRequestMaximumContinuousWorkTimeEnabled { get; set; }
+		TimeSpan? OvertimeRequestMinimumRestTimeThreshold { get; set; }
+		TimeSpan? OvertimeRequestMaximumContinuousWorkTime { get; set; }
+		OvertimeRequestValidationHandleOptionView OvertimeRequestMaximumContinuousWorkTimeValidationHandleOptionView { get; set; }
 	}
 }

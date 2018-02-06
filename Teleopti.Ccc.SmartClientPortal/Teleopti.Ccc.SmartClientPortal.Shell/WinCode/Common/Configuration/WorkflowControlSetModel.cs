@@ -243,7 +243,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 
 		public IEnumerable<ISkill> MustMatchSkills => DomainEntity.MustMatchSkills;
 
-		public OvertimeRequestValidationHandleOptionView OvertimeRequestValidationHandleOptionView
+		public OvertimeRequestValidationHandleOptionView OvertimeRequestMaximumOvertimeValidationHandleOptionView
 		{
 			get => DomainEntity.OvertimeRequestMaximumTimeHandleType != null ? OvertimeRequestWorkRuleValidationHandleOptionViews[DomainEntity.OvertimeRequestMaximumTimeHandleType.Value] : null;
 			set
@@ -536,6 +536,50 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			{
 				if (DomainEntity.OvertimeRequestMaximumTimeEnabled == value) return;
 				DomainEntity.OvertimeRequestMaximumTimeEnabled = value;
+				IsDirty = true;
+			}
+		}
+
+		public bool OvertimeRequestMaximumContinuousWorkTimeEnabled
+		{
+			get => DomainEntity.OvertimeRequestMaximumContinuousWorkTimeEnabled;
+			set
+			{
+				if (DomainEntity.OvertimeRequestMaximumContinuousWorkTimeEnabled == value) return;
+				DomainEntity.OvertimeRequestMaximumContinuousWorkTimeEnabled = value;
+				IsDirty = true;
+			}
+		}
+
+		public TimeSpan? OvertimeRequestMinimumRestTimeThreshold
+		{
+			get => DomainEntity.OvertimeRequestMinimumRestTimeThreshold;
+			set
+			{
+				if (DomainEntity.OvertimeRequestMinimumRestTimeThreshold == value) return;
+				DomainEntity.OvertimeRequestMinimumRestTimeThreshold = value;
+				IsDirty = true;
+			}
+		}
+
+		public TimeSpan? OvertimeRequestMaximumContinuousWorkTime
+		{
+			get => DomainEntity.OvertimeRequestMaximumContinuousWorkTime;
+			set
+			{
+				if (DomainEntity.OvertimeRequestMaximumContinuousWorkTime == value) return;
+				DomainEntity.OvertimeRequestMaximumContinuousWorkTime = value;
+				IsDirty = true;
+			}
+		}
+
+		public OvertimeRequestValidationHandleOptionView OvertimeRequestMaximumContinuousWorkTimeValidationHandleOptionView
+		{
+			get => DomainEntity.OvertimeRequestMaximumContinuousWorkTimeHandleType != null ? OvertimeRequestWorkRuleValidationHandleOptionViews[DomainEntity.OvertimeRequestMaximumContinuousWorkTimeHandleType.Value] : null;
+			set
+			{
+				if (DomainEntity.OvertimeRequestMaximumContinuousWorkTimeHandleType == value?.WorkRuleValidationHandleType) return;
+				DomainEntity.OvertimeRequestMaximumContinuousWorkTimeHandleType = value?.WorkRuleValidationHandleType;
 				IsDirty = true;
 			}
 		}

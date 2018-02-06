@@ -514,6 +514,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			configureOvertimeRequestPeriodGrid();
 			configureProjectionGrid();
 			initOvertimeRequestMaximumTimeHandleType();
+			initOvertimeRequestMaximumContinuousWorkTimeHandleType();
 		}
 
 		private void configureProjectionGrid()

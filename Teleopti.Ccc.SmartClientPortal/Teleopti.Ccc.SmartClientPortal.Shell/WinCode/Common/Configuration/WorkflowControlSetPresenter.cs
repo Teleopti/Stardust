@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			_view.SetAbsenceProbability(_selectedModel.AbsenceProbabilityEnabled);
 			_view.SetOvertimeProbability(_selectedModel.IsOvertimeProbabilityEnabled);
 			_view.SetAutoGrantOvertimeRequest(_selectedModel.AutoGrantOvertimeRequest);
-			_view.SetOverTimeRequestMaximumTimeHandleType(_selectedModel.OvertimeRequestValidationHandleOptionView);
+			_view.SetOverTimeRequestMaximumTimeHandleType(_selectedModel.OvertimeRequestMaximumOvertimeValidationHandleOptionView);
 			_view.SetOverTimeRequestMaximumTime(_selectedModel.OvertimeRequestMaximumTime);
 			_view.SetOvertimeRequestMaximumTimeEnabled(_selectedModel.OvertimeRequestMaximumTimeEnabled);
 		}
@@ -752,7 +752,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		{
 			if (_selectedModel != null)
 			{
-				_selectedModel.OvertimeRequestValidationHandleOptionView = overtimeRequestValidationHandleOption;
+				_selectedModel.OvertimeRequestMaximumOvertimeValidationHandleOptionView = overtimeRequestValidationHandleOption;
 			}
 		}
 

@@ -137,6 +137,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			comboBoxOvertimeRequestMaximumTimeHandleType.DisplayMember = "Description";
 		}
 
+		private void initOvertimeRequestMaximumContinuousWorkTimeHandleType()
+		{
+			comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType.DataSource =
+				WorkflowControlSetModel.OvertimeRequestWorkRuleValidationHandleOptionViews.Select(s => s.Value).ToList();
+			comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType.DisplayMember = "Description";
+		}
+
 		private void timeSpanTextBoxOvertimeRequestMaximumTime_Leave(object sender, EventArgs e)
 		{
 			_presenter.SetOvertimeRequestMaximumTime(timeSpanTextBoxOvertimeRequestMaximumTime.Value);
