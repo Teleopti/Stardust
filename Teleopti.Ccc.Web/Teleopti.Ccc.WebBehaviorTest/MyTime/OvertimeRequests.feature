@@ -58,6 +58,7 @@ Scenario: Add a pending overtime request from schedule
 	And I fill overtime request form with subject 'my test overtime'
 	And I save overtime request
 	And I navigate to the requests page
+	And I click on the existing request in the list
 	Then I should see my existing overtime request with subject 'my test overtime'	
 	Then I should see my existing overtime request with status 'Pending'
 
@@ -68,5 +69,6 @@ Scenario: Add a pending overtime request from requests
 	And I open add new overtime request form
 	And I fill overtime request form with subject 'my test overtime'
 	And I save overtime request
+	And I click on the existing request in the list
 	Then I should see my existing overtime request with subject 'my test overtime'	
 	Then I should see my existing overtime request with status 'Pending'
