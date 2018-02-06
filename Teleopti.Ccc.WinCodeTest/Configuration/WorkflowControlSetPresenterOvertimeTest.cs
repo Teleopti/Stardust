@@ -209,7 +209,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		public void VerifyCanSetOvertimeRequestMaximumTimeHandleType()
 		{
 			initializeWithDefaultWorkflowControlSet();
-			_target.SelectedModel.OvertimeRequestMaximumOvertimeValidationHandleOptionView = new OvertimeRequestValidationHandleOptionView(OvertimeValidationHandleType.Deny,"deny");
+			_target.SetOvertimeRequestMaximumTimeHandleType(new OvertimeRequestValidationHandleOptionView(OvertimeValidationHandleType.Deny,"deny"));
 
 			Assert.AreEqual(_target.SelectedModel.DomainEntity.OvertimeRequestMaximumTimeHandleType,_target.SelectedModel.OvertimeRequestMaximumOvertimeValidationHandleOptionView.WorkRuleValidationHandleType);
 		}
@@ -218,7 +218,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		public void VerifyCanSetOvertimeRequestMaximumTime()
 		{
 			initializeWithDefaultWorkflowControlSet();
-			_target.SelectedModel.OvertimeRequestMaximumTime = TimeSpan.MaxValue;
+			_target.SetOvertimeRequestMaximumTime(TimeSpan.MaxValue);
 
 			Assert.AreEqual(_target.SelectedModel.DomainEntity.OvertimeRequestMaximumTime, _target.SelectedModel.OvertimeRequestMaximumTime);
 		}
@@ -227,7 +227,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		public void VerifyCanSetOvertimeRequestMaximumContinuousWorkTimeEnabled()
 		{
 			initializeWithDefaultWorkflowControlSet();
-			_target.SelectedModel.OvertimeRequestMaximumContinuousWorkTimeEnabled = true;
+			_target.SetOvertimeRequestMaximumContinuousWorkTimeEnabled(true);
 
 			Assert.AreEqual(_target.SelectedModel.DomainEntity.OvertimeRequestMaximumContinuousWorkTimeEnabled, _target.SelectedModel.OvertimeRequestMaximumContinuousWorkTimeEnabled);
 		}
@@ -236,8 +236,8 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		public void VerifyCanSetOvertimeRequestMaximumContinuousWorkTimeAndMinimumRestTimeThreshold()
 		{
 			initializeWithDefaultWorkflowControlSet();
-			_target.SelectedModel.OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(4);
-			_target.SelectedModel.OvertimeRequestMinimumRestTimeThreshold = TimeSpan.FromMinutes(20);
+			_target.SetOvertimeRequestMaximumContinuousWorkTime(TimeSpan.FromHours(4));
+			_target.SetOvertimeRequestMinimumRestTimeThreshold(TimeSpan.FromMinutes(20));
 
 			Assert.AreEqual(_target.SelectedModel.DomainEntity.OvertimeRequestMaximumContinuousWorkTime, _target.SelectedModel.OvertimeRequestMaximumContinuousWorkTime);
 			Assert.AreEqual(_target.SelectedModel.DomainEntity.OvertimeRequestMinimumRestTimeThreshold, _target.SelectedModel.OvertimeRequestMinimumRestTimeThreshold);
@@ -247,7 +247,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		public void VerifyCanSetOvertimeRequestMaximumContinuousWorkTimeHandleType()
 		{
 			initializeWithDefaultWorkflowControlSet();
-			_target.SelectedModel.OvertimeRequestMaximumContinuousWorkTimeValidationHandleOptionView = new OvertimeRequestValidationHandleOptionView(OvertimeValidationHandleType.Deny, "deny");
+			_target.SetOvertimeRequestMaximumContinuousWorkTimeHandleType(new OvertimeRequestValidationHandleOptionView(OvertimeValidationHandleType.Deny, "deny"));
 
 			Assert.AreEqual(_target.SelectedModel.DomainEntity.OvertimeRequestMaximumContinuousWorkTimeHandleType
 				, _target.SelectedModel.OvertimeRequestMaximumContinuousWorkTimeValidationHandleOptionView.WorkRuleValidationHandleType);

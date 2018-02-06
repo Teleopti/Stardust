@@ -100,6 +100,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			_view.SetOverTimeRequestMaximumTimeHandleType(_selectedModel.OvertimeRequestMaximumOvertimeValidationHandleOptionView);
 			_view.SetOverTimeRequestMaximumTime(_selectedModel.OvertimeRequestMaximumTime);
 			_view.SetOvertimeRequestMaximumTimeEnabled(_selectedModel.OvertimeRequestMaximumTimeEnabled);
+
+			_view.SetOverTimeRequestMaximumContinuousWorkTimeHandleType(_selectedModel.OvertimeRequestMaximumContinuousWorkTimeValidationHandleOptionView);
+			_view.SetOverTimeRequestMaximumContinuousWorkTime(_selectedModel.OvertimeRequestMaximumContinuousWorkTime);
+			_view.SetOverTimeRequestMinimumRestTimeThreshold(_selectedModel.OvertimeRequestMinimumRestTimeThreshold);
+			_view.SetOvertimeRequestMaximumContinuousWorkTimeEnabled(_selectedModel.OvertimeRequestMaximumContinuousWorkTimeEnabled);
 		}
 
 		public IWorkflowControlSetModel SelectedModel
@@ -747,6 +752,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			_selectedModel.OvertimeRequestMaximumTime = overtimeRequestMaximumTime;
 		}
 
+		public void SetOvertimeRequestMinimumRestTimeThreshold(TimeSpan overtimeRequestMinimumRestTimeThreshold)
+		{
+			_selectedModel.OvertimeRequestMinimumRestTimeThreshold = overtimeRequestMinimumRestTimeThreshold;
+		}
+
+		public void SetOvertimeRequestMaximumContinuousWorkTime(TimeSpan overtimeRequestMaximumContinuousWorkTime)
+		{
+			_selectedModel.OvertimeRequestMaximumContinuousWorkTime = overtimeRequestMaximumContinuousWorkTime;
+		}
+
 		public void SetOvertimeRequestMaximumTimeHandleType(
 			OvertimeRequestValidationHandleOptionView overtimeRequestValidationHandleOption)
 		{
@@ -756,9 +771,22 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			}
 		}
 
+		public void SetOvertimeRequestMaximumContinuousWorkTimeHandleType(
+			OvertimeRequestValidationHandleOptionView overtimeRequestValidationHandleOption)
+		{
+			if (_selectedModel != null)
+			{
+				_selectedModel.OvertimeRequestMaximumContinuousWorkTimeValidationHandleOptionView = overtimeRequestValidationHandleOption;
+			}
+		}
+
 		public void SetOvertimeRequestMaximumEnabled(bool overtimeRequestMaximumTimeEnabled)
 		{
 			_selectedModel.OvertimeRequestMaximumTimeEnabled = overtimeRequestMaximumTimeEnabled;
+		}
+		public void SetOvertimeRequestMaximumContinuousWorkTimeEnabled(bool overtimeRequestMaximumContinuousWorkTimeEnabled)
+		{
+			_selectedModel.OvertimeRequestMaximumContinuousWorkTimeEnabled = overtimeRequestMaximumContinuousWorkTimeEnabled;
 		}
 
 		private void initializeSupportedSkillTypes(IUnitOfWork uow)

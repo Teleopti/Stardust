@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Settings;
 using Teleopti.Interfaces.Domain;
 
@@ -211,5 +210,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		void SetOverTimeRequestMaximumTimeHandleType(OvertimeRequestValidationHandleOptionView overtimeRequestValidationHandleOptionView);
 		void SetOverTimeRequestMaximumTime(TimeSpan? selectedModelOvertimeRequestMaximumTime);
 		void SetOvertimeRequestMaximumTimeEnabled(bool selectedModelOvertimeRequestMaximumTimeEnabled);
+		void SetOverTimeRequestMaximumContinuousWorkTimeHandleType(OvertimeRequestValidationHandleOptionView selectedModelOvertimeRequestMaximumContinuousWorkTimeValidationHandleOptionView);
+		void SetOverTimeRequestMaximumContinuousWorkTime(TimeSpan? selectedModelOvertimeRequestMaximumContinuousWorkTime);
+		void SetOverTimeRequestMinimumRestTimeThreshold(TimeSpan? selectedModelOvertimeRequestMinimumRestTimeThreshold);
+		void SetOvertimeRequestMaximumContinuousWorkTimeEnabled(bool selectedModelOvertimeRequestMaximumContinuousWorkTimeEnabled);
 	}
 }

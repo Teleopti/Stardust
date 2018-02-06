@@ -49,6 +49,44 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			checkBoxAdvOvertimeMaximumEnabled.CheckStateChanged -= CheckBoxAdvOvertimeMaximumEnabled_CheckStateChanged;
 			checkBoxAdvOvertimeMaximumEnabled.Checked = overtimeRequestMaximumTimeEnabled;
 			checkBoxAdvOvertimeMaximumEnabled.CheckStateChanged += CheckBoxAdvOvertimeMaximumEnabled_CheckStateChanged;
+			CheckBoxAdvOvertimeMaximumEnabled_CheckStateChanged(this, EventArgs.Empty);
+		}
+
+		public void SetOverTimeRequestMaximumContinuousWorkTimeHandleType(
+			OvertimeRequestValidationHandleOptionView
+				selectedModelOvertimeRequestMaximumContinuousWorkTimeValidationHandleOptionView)
+		{
+			comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType.SelectedItem = selectedModelOvertimeRequestMaximumContinuousWorkTimeValidationHandleOptionView;
+			if (comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType.SelectedItem == null)
+				comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType.SelectedIndex = 0;
+		}
+
+		public void SetOverTimeRequestMaximumContinuousWorkTime(TimeSpan? selectedModelOvertimeRequestMaximumContinuousWorkTime)
+		{
+			if (selectedModelOvertimeRequestMaximumContinuousWorkTime.HasValue && selectedModelOvertimeRequestMaximumContinuousWorkTime.Value != TimeSpan.Zero)
+			{
+				timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.SetInitialResolution(selectedModelOvertimeRequestMaximumContinuousWorkTime.Value);
+			}
+		}
+
+		public void SetOverTimeRequestMinimumRestTimeThreshold(TimeSpan? selectedModelOvertimeRequestMinimumRestTimeThreshold)
+		{
+			if (selectedModelOvertimeRequestMinimumRestTimeThreshold.HasValue && selectedModelOvertimeRequestMinimumRestTimeThreshold.Value != TimeSpan.Zero)
+			{
+				timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.SetInitialResolution(selectedModelOvertimeRequestMinimumRestTimeThreshold.Value);
+			}
+		}
+
+		public void SetOvertimeRequestMaximumContinuousWorkTimeEnabled(
+			bool selectedModelOvertimeRequestMaximumContinuousWorkTimeEnabled)
+		{
+			checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled.CheckStateChanged -=
+				checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled_CheckStateChanged;
+			checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled.Checked =
+				selectedModelOvertimeRequestMaximumContinuousWorkTimeEnabled;
+			checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled.CheckStateChanged +=
+				checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled_CheckStateChanged;
+			checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled_CheckStateChanged(this, EventArgs.Empty);
 		}
 
 		public void SetAutoGrantOvertimeRequest(bool autoGrantOvertimeRequest)
@@ -455,6 +493,30 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			gridControlOvertimeRequestOpenPeriods.CurrentCell.Deactivate(false);
 			gridControlOvertimeRequestOpenPeriods.Selections.SelectRange(
 				gridControlOvertimeRequestOpenPeriods.PointToRangeInfo(_gridPoint), true);
+		}
+
+		private void checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled_CheckStateChanged(object sender, EventArgs e)
+		{
+			timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.Enabled = checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled.Checked;
+			comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType.Enabled = checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled.Checked;
+			timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.Enabled = checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled.Checked;
+			_presenter.SetOvertimeRequestMaximumContinuousWorkTimeEnabled(checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled.Checked);
+		}
+
+		private void timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold_Leave(object sender, EventArgs e)
+		{
+			_presenter.SetOvertimeRequestMinimumRestTimeThreshold(timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.Value);
+		}
+
+		private void timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime_Leave(object sender, EventArgs e)
+		{
+			_presenter.SetOvertimeRequestMaximumContinuousWorkTime(timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.Value);
+		}
+
+		private void ComboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			_presenter.SetOvertimeRequestMaximumContinuousWorkTimeHandleType(
+				(OvertimeRequestValidationHandleOptionView)comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType.SelectedItem);
 		}
 	}
 }
