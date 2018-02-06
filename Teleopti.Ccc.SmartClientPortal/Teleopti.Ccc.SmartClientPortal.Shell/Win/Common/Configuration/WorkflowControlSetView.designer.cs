@@ -65,6 +65,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.autoLabel1 = new Syncfusion.Windows.Forms.Tools.AutoLabel();
 			this.comboBoxAdvWorkflowControlSet = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
 			this.comboBoxOvertimeRequestMaximumTimeHandleType = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
+			this.comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
 			this.textBoxDescription = new Syncfusion.Windows.Forms.Tools.TextBoxExt();
 			this.autoLabelInfoAboutChanges = new Syncfusion.Windows.Forms.Tools.AutoLabel();
 			this.tabControlAdvArea = new Syncfusion.Windows.Forms.Tools.TabControlAdv();
@@ -136,6 +137,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.tableLayoutPanelAbsenceRequestCancellation = new System.Windows.Forms.TableLayoutPanel();
 			this.txtAbsenceRequestCancellationThreshold = new Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.NullableIntegerTextBox();
 			this.timeSpanTextBoxOvertimeRequestMaximumTime = new TimeSpanTextBox();
+			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime = new TimeSpanTextBox();
+			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold = new TimeSpanTextBox();
 			this.labelAbsenceRequestCancellationThreshold = new System.Windows.Forms.Label();
 			this.tableLayoutPanelAbsenceRequestExpiration = new System.Windows.Forms.TableLayoutPanel();
 			this.txtAbsenceRequestExpiredThreshold = new Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.NullableIntegerTextBox();
@@ -143,9 +146,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.tableLayoutPanelOpenForAbsenceRequests = new System.Windows.Forms.TableLayoutPanel();
 			this.tableLayoutPanelOpenForOvertimeRequests = new System.Windows.Forms.TableLayoutPanel();
 			this.tableLayoutPanelOvertimeMaximumSetting = new System.Windows.Forms.TableLayoutPanel();
+			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting = new System.Windows.Forms.TableLayoutPanel();
 			this.labelOpenForAbsenceRequests = new System.Windows.Forms.Label();
 			this.labelOpenForOvertimeRequests = new System.Windows.Forms.Label();
 			this.lblOvertimeRequestMaximumTimeHandleType = new System.Windows.Forms.Label();
+			this.lblOvertimeRequestMinimumRestTimeThreshold = new System.Windows.Forms.Label();
+			this.lblOvertimeRequestMaximumContinuousWorkTimeHandleType = new System.Windows.Forms.Label();
 			this.buttonDeleteAbsenceRequestPeriod = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.buttonDeleteOvertimeRequestPeriod = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.buttonAddAbsenceRequestPeriod = new Syncfusion.Windows.Forms.ButtonAdv();
@@ -192,6 +198,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.checkBoxAdvOvertimeProbability = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.checkBoxAdvAutoGrantOvertimeRequest = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.checkBoxAdvOvertimeMaximumEnabled = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
+			this.checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
 			this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
@@ -204,6 +211,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvWorkflowControlSet)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.comboBoxOvertimeRequestMaximumTimeHandleType)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.textBoxDescription)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.tabControlAdvArea)).BeginInit();
 			this.tabControlAdvArea.SuspendLayout();
@@ -244,7 +252,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.tableLayoutPanelOpenForAbsenceRequests.SuspendLayout();
 			this.tableLayoutPanelOpenForOvertimeRequests.SuspendLayout();
 			this.tableLayoutPanelOvertimeMaximumSetting.ResumeLayout(false);
+			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.ResumeLayout(false);
 			this.tableLayoutPanelOvertimeMaximumSetting.PerformLayout();
+			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.gridControlAbsenceRequestOpenPeriods)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.gridControlOvertimeRequestOpenPeriods)).BeginInit();
 			this.contextMenuStripOpenPeriodsGrid.SuspendLayout();
@@ -265,6 +275,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvOvertimeProbability)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvAutoGrantOvertimeRequest)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvOvertimeMaximumEnabled)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -1916,6 +1927,28 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.tableLayoutPanelOvertimeMaximumSetting.Size = new System.Drawing.Size(959, 34);
 			this.tableLayoutPanelOvertimeMaximumSetting.TabIndex = 0;
 			// 
+			// tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting
+			// 
+			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.ColumnCount = 7;
+			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(){ SizeType = SizeType.AutoSize});
+			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.Controls.Add(this.checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled, 0, 0);
+			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.Controls.Add(this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime, 1, 0);
+			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.Controls.Add(this.lblOvertimeRequestMinimumRestTimeThreshold, 2, 0);
+			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.Controls.Add(this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold, 3, 0);
+			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.Controls.Add(this.lblOvertimeRequestMaximumContinuousWorkTimeHandleType, 4, 0);
+			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.Controls.Add(this.comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType, 5, 0);
+			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.Location = new System.Drawing.Point(3, 103);
+			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.Name = "tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting";
+			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.RowCount = 1;
+			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.Size = new System.Drawing.Size(959, 34);
+			//this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.TabIndex = 0;
+			// 
 			// timeSpanTextBoxOvertimeRequestMaximumTime
 			// 
 			this.timeSpanTextBoxOvertimeRequestMaximumTime.AlignTextBoxText = System.Windows.Forms.HorizontalAlignment.Center;
@@ -1932,6 +1965,38 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.timeSpanTextBoxOvertimeRequestMaximumTime.TimeSpanBoxWidth = 60;
 			this.timeSpanTextBoxOvertimeRequestMaximumTime.Leave += timeSpanTextBoxOvertimeRequestMaximumTime_Leave;
 			// 
+			// timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime
+			// 
+			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.AlignTextBoxText = System.Windows.Forms.HorizontalAlignment.Center;
+			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.AllowNegativeValues = false;
+			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.DefaultInterpretAsMinutes = false;
+			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.Location = new System.Drawing.Point(183, 4);
+			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.Margin = new System.Windows.Forms.Padding(0, 4, 0, 0);
+			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.MaximumValue = System.TimeSpan.Parse("10.00:00:00");
+			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.Name = "timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime";
+			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.Size = new System.Drawing.Size(80, 25);
+			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.TabIndex = 0;
+			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
+			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.TimeSpanBoxHeight = 23;
+			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.TimeSpanBoxWidth = 60;
+			//this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.Leave += timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime_Leave;
+			// 
+			// timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold
+			// 
+			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.AlignTextBoxText = System.Windows.Forms.HorizontalAlignment.Center;
+			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.AllowNegativeValues = false;
+			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.DefaultInterpretAsMinutes = false;
+			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.Location = new System.Drawing.Point(183, 4);
+			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.Margin = new System.Windows.Forms.Padding(0, 4, 0, 0);
+			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.MaximumValue = System.TimeSpan.Parse("10.00:00:00");
+			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.Name = "timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold";
+			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.Size = new System.Drawing.Size(80, 25);
+			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.TabIndex = 0;
+			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
+			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.TimeSpanBoxHeight = 23;
+			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.TimeSpanBoxWidth = 60;
+			//this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.Leave += timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold_Leave;
+			// 
 			// lblOvertimeRequestMaximumTimeHandleType
 			// 
 			this.lblOvertimeRequestMaximumTimeHandleType.Anchor = System.Windows.Forms.AnchorStyles.Left;
@@ -1947,6 +2012,36 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.lblOvertimeRequestMaximumTimeHandleType.Text = "xxOvertimeRequestMaximumTimeHandleType";
 			this.lblOvertimeRequestMaximumTimeHandleType.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
+			// lblOvertimeRequestMinimumRestTimeThreshold
+			// 
+			this.lblOvertimeRequestMinimumRestTimeThreshold.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblOvertimeRequestMinimumRestTimeThreshold.AutoSize = true;
+			this.lblOvertimeRequestMinimumRestTimeThreshold.BackColor = System.Drawing.Color.Transparent;
+			this.lblOvertimeRequestMinimumRestTimeThreshold.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.lblOvertimeRequestMinimumRestTimeThreshold.ForeColor = System.Drawing.Color.Black;
+			this.lblOvertimeRequestMinimumRestTimeThreshold.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.lblOvertimeRequestMinimumRestTimeThreshold.Location = new System.Drawing.Point(266, 8);
+			this.lblOvertimeRequestMinimumRestTimeThreshold.Name = "lblOvertimeRequestMinimumRestTimeThreshold";
+			this.lblOvertimeRequestMinimumRestTimeThreshold.Size = new System.Drawing.Size(273, 17);
+			this.lblOvertimeRequestMinimumRestTimeThreshold.TabIndex = 0;
+			this.lblOvertimeRequestMinimumRestTimeThreshold.Text = "xxOvertimeRequestMinimumRestTimeThreshold";
+			this.lblOvertimeRequestMinimumRestTimeThreshold.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// lblOvertimeRequestMaximumContinuousWorkTimeHandleType
+			// 
+			this.lblOvertimeRequestMaximumContinuousWorkTimeHandleType.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblOvertimeRequestMaximumContinuousWorkTimeHandleType.AutoSize = true;
+			this.lblOvertimeRequestMaximumContinuousWorkTimeHandleType.BackColor = System.Drawing.Color.Transparent;
+			this.lblOvertimeRequestMaximumContinuousWorkTimeHandleType.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.lblOvertimeRequestMaximumContinuousWorkTimeHandleType.ForeColor = System.Drawing.Color.Black;
+			this.lblOvertimeRequestMaximumContinuousWorkTimeHandleType.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.lblOvertimeRequestMaximumContinuousWorkTimeHandleType.Location = new System.Drawing.Point(266, 8);
+			this.lblOvertimeRequestMaximumContinuousWorkTimeHandleType.Name = "lblOvertimeRequestMaximumContinuousWorkTimeHandleType";
+			this.lblOvertimeRequestMaximumContinuousWorkTimeHandleType.Size = new System.Drawing.Size(273, 17);
+			this.lblOvertimeRequestMaximumContinuousWorkTimeHandleType.TabIndex = 0;
+			this.lblOvertimeRequestMaximumContinuousWorkTimeHandleType.Text = "xxOvertimeRequestMaximumTimeHandleType";
+			this.lblOvertimeRequestMaximumContinuousWorkTimeHandleType.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
 			// comboBoxOvertimeRequestMaximumTimeHandleType
 			// 
 			this.comboBoxOvertimeRequestMaximumTimeHandleType.Anchor = System.Windows.Forms.AnchorStyles.Left;
@@ -1958,7 +2053,20 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.comboBoxOvertimeRequestMaximumTimeHandleType.Size = new System.Drawing.Size(150, 23);
 			this.comboBoxOvertimeRequestMaximumTimeHandleType.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.comboBoxOvertimeRequestMaximumTimeHandleType.TabIndex = 1;
-			this.comboBoxOvertimeRequestMaximumTimeHandleType.SelectedIndexChanged += ComboBoxOvertimeRequestMaximumTimeHandleType_SelectedIndexChanged;	
+			this.comboBoxOvertimeRequestMaximumTimeHandleType.SelectedIndexChanged += ComboBoxOvertimeRequestMaximumTimeHandleType_SelectedIndexChanged;
+			// 
+			// comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType
+			// 
+			this.comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType.BackColor = System.Drawing.Color.White;
+			this.comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType.BeforeTouchSize = new System.Drawing.Size(150, 23);
+			this.comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType.Location = new System.Drawing.Point(545, 6);
+			this.comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType.Name = "comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType";
+			this.comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType.Size = new System.Drawing.Size(150, 23);
+			this.comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
+			//this.comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType.TabIndex = 1;
+			//this.comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType.SelectedIndexChanged += ComboBoxOvertimeRequestMaximumTimeHandleType_SelectedIndexChanged;	
 			// 
 			// buttonDeleteOvertimeRequestPeriod
 			// 
@@ -2517,16 +2625,18 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.tableLayoutPanelETOTRequest.Controls.Add(this.checkBoxAdvOvertimeProbability, 0, 1);
 			this.tableLayoutPanelETOTRequest.Controls.Add(this.checkBoxAdvAutoGrantOvertimeRequest, 0, 2);
 			this.tableLayoutPanelETOTRequest.Controls.Add(this.tableLayoutPanelOvertimeMaximumSetting, 0, 3);
-			this.tableLayoutPanelETOTRequest.Controls.Add(this.tableLayoutPanelOpenForOvertimeRequests, 0, 4);
-			this.tableLayoutPanelETOTRequest.Controls.Add(this.gridControlOvertimeRequestOpenPeriods, 0, 5);
+			this.tableLayoutPanelETOTRequest.Controls.Add(this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting, 0, 4);
+			this.tableLayoutPanelETOTRequest.Controls.Add(this.tableLayoutPanelOpenForOvertimeRequests, 0, 5);
+			this.tableLayoutPanelETOTRequest.Controls.Add(this.gridControlOvertimeRequestOpenPeriods, 0, 6);
 			this.tableLayoutPanelETOTRequest.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanelETOTRequest.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanelETOTRequest.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanelETOTRequest.Name = "tableLayoutPanelETOTRequest";
-			this.tableLayoutPanelETOTRequest.RowCount = 7;
+			this.tableLayoutPanelETOTRequest.RowCount = 8;
 			this.tableLayoutPanelETOTRequest.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanelETOTRequest.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
 			this.tableLayoutPanelETOTRequest.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+			this.tableLayoutPanelETOTRequest.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanelETOTRequest.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanelETOTRequest.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanelETOTRequest.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -2601,6 +2711,21 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			//this.checkBoxAdvOvertimeMaximumEnabled.TabIndex = 17;
 			this.checkBoxAdvOvertimeMaximumEnabled.ThemesEnabled = false;
 			this.checkBoxAdvOvertimeMaximumEnabled.CheckStateChanged += new System.EventHandler(this.CheckBoxAdvOvertimeMaximumEnabled_CheckStateChanged);
+			// 
+			// checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled
+			// 
+			this.checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled.BeforeTouchSize = new System.Drawing.Size(250, 24);
+			this.checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled.ImageCheckBoxSize = new System.Drawing.Size(26, 26);
+			this.checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled.Location = new System.Drawing.Point(3, 73);
+			this.checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
+			this.checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
+			this.checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled.Name = "checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled";
+			this.checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled.Size = new System.Drawing.Size(250, 24);
+			this.checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled.Text = "xxOvertimeRequestMaximumContinuousWorkTime";
+			//this.checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled.TabIndex = 17;
+			this.checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled.ThemesEnabled = false;
+			//this.checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled.CheckStateChanged += new System.EventHandler(this.checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled_CheckStateChanged);
 			// 
 			// toolStripSeparator1
 			// 
@@ -2721,6 +2846,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvOvertimeProbability)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvAutoGrantOvertimeRequest)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvOvertimeMaximumEnabled)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
 			this.ResumeLayout(false);
 
@@ -2742,6 +2868,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabelChangeInfo;
 		private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdvWorkflowControlSet;
 		private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxOvertimeRequestMaximumTimeHandleType;
+		private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType;
 		private Syncfusion.Windows.Forms.Tools.TextBoxExt textBoxDescription;
 		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabelInfoAboutChanges;
 		private ToolTip toolTip1;
@@ -2757,9 +2884,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		private TableLayoutPanel tableLayoutPanelOpenForAbsenceRequests;
 		private TableLayoutPanel tableLayoutPanelOpenForOvertimeRequests;
 		private TableLayoutPanel tableLayoutPanelOvertimeMaximumSetting;
+		private TableLayoutPanel tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting;
 		private Label labelOpenForAbsenceRequests;
 		private Label labelOpenForOvertimeRequests;
 		private Label lblOvertimeRequestMaximumTimeHandleType;
+		private Label lblOvertimeRequestMinimumRestTimeThreshold;
+		private Label lblOvertimeRequestMaximumContinuousWorkTimeHandleType;
 		private Syncfusion.Windows.Forms.ButtonAdv buttonDeleteAbsenceRequestPeriod;
 		private Syncfusion.Windows.Forms.ButtonAdv buttonDeleteOvertimeRequestPeriod;
 		private Syncfusion.Windows.Forms.ButtonAdv buttonAddAbsenceRequestPeriod;
@@ -2857,6 +2987,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		private TableLayoutPanel tableLayoutPanelAbsenceRequestCancellation;
 		private NullableIntegerTextBox txtAbsenceRequestCancellationThreshold;
 		private TimeSpanTextBox timeSpanTextBoxOvertimeRequestMaximumTime;
+		private TimeSpanTextBox timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime;
+		private TimeSpanTextBox timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold;
 		private Label labelAbsenceRequestCancellationThreshold;
 		private RadioButton radioButtonWaitlistFirstComeFirstServed;
 		private RadioButton radioButtonWaitlistBySeniority;
@@ -2870,6 +3002,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdvOvertimeProbability;
 		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdvAutoGrantOvertimeRequest;
 		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdvOvertimeMaximumEnabled;
+		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled;
 		private Panel panelOvertimeRequestHeaderBasic;
 		private Label labelOvertimeRequestBasic;
 	}

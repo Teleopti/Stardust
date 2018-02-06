@@ -23238,6 +23238,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Maximum continuous work time:.
+        /// </summary>
+        public static string OvertimeRequestMaximumContinuousWorkTime {
+            get {
+                return ResourceManager.GetString("OvertimeRequestMaximumContinuousWorkTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} contains too much overtime ({1}). Max is {2}..
         /// </summary>
         public static string OvertimeRequestMaximumTimeDenyReason {
@@ -23252,6 +23261,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string OvertimeRequestMaximumTimeHandleType {
             get {
                 return ResourceManager.GetString("OvertimeRequestMaximumTimeHandleType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Minimum rest time:.
+        /// </summary>
+        public static string OvertimeRequestMinimumRestTimeThreshold {
+            get {
+                return ResourceManager.GetString("OvertimeRequestMinimumRestTimeThreshold", resourceCulture);
             }
         }
         

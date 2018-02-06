@@ -16720,6 +16720,14 @@ Do you want to participate?</value>
     <value>{0} contains too much overtime ({1}). Max is {2}.</value>
     <comment>error message for maximum overtime validation</comment>
   </data>
+  <data name="OvertimeRequestMaximumContinuousWorkTime" xml:space="preserve">
+    <value>Maximum continuous work time:</value>
+    <comment>Label name of maximum continuous work time setting</comment>
+  </data>
+  <data name="OvertimeRequestMinimumRestTimeThreshold" xml:space="preserve">
+    <value>Minimum rest time:</value>
+    <comment>Label name of minimum rest time setting</comment>
+  </data>
   <data name="ExistingShiftNotMatchShift" xml:space="preserve">
     <value>The shift on {0:d} does not match the shift on {1:d}.</value>
     <comment>Scheduleing validation message in web scheduling and client. Both {0} and {1} are dates</comment>
