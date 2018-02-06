@@ -1959,7 +1959,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.timeSpanTextBoxOvertimeRequestMaximumTime.MaximumValue = System.TimeSpan.Parse("10.00:00:00");
 			this.timeSpanTextBoxOvertimeRequestMaximumTime.Name = "timeSpanTextBoxOvertimeRequestMaximumTime";
 			this.timeSpanTextBoxOvertimeRequestMaximumTime.Size = new System.Drawing.Size(80, 25);
-			this.timeSpanTextBoxOvertimeRequestMaximumTime.TabIndex = 0;
+			this.timeSpanTextBoxOvertimeRequestMaximumTime.TabIndex = 2;
 			this.timeSpanTextBoxOvertimeRequestMaximumTime.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
 			this.timeSpanTextBoxOvertimeRequestMaximumTime.TimeSpanBoxHeight = 23;
 			this.timeSpanTextBoxOvertimeRequestMaximumTime.TimeSpanBoxWidth = 60;
@@ -1975,7 +1975,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.MaximumValue = System.TimeSpan.Parse("10.00:00:00");
 			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.Name = "timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime";
 			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.Size = new System.Drawing.Size(80, 25);
-			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.TabIndex = 0;
+			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.TabIndex = 5;
 			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
 			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.TimeSpanBoxHeight = 23;
 			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.TimeSpanBoxWidth = 60;
@@ -1991,7 +1991,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.MaximumValue = System.TimeSpan.Parse("10.00:00:00");
 			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.Name = "timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold";
 			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.Size = new System.Drawing.Size(80, 25);
-			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.TabIndex = 0;
+			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.TabIndex = 6;
 			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
 			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.TimeSpanBoxHeight = 23;
 			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.TimeSpanBoxWidth = 60;
@@ -2052,7 +2052,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.comboBoxOvertimeRequestMaximumTimeHandleType.Name = "comboBoxOvertimeRequestMaximumTimeHandleType";
 			this.comboBoxOvertimeRequestMaximumTimeHandleType.Size = new System.Drawing.Size(150, 23);
 			this.comboBoxOvertimeRequestMaximumTimeHandleType.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
-			this.comboBoxOvertimeRequestMaximumTimeHandleType.TabIndex = 1;
+			this.comboBoxOvertimeRequestMaximumTimeHandleType.TabIndex = 3;
 			this.comboBoxOvertimeRequestMaximumTimeHandleType.SelectedIndexChanged += ComboBoxOvertimeRequestMaximumTimeHandleType_SelectedIndexChanged;
 			// 
 			// comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType
@@ -2065,7 +2065,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType.Name = "comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType";
 			this.comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType.Size = new System.Drawing.Size(150, 23);
 			this.comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
-			//this.comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType.TabIndex = 1;
+			this.comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType.TabIndex = 7;
 			//this.comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType.SelectedIndexChanged += ComboBoxOvertimeRequestMaximumTimeHandleType_SelectedIndexChanged;	
 			// 
 			// buttonDeleteOvertimeRequestPeriod
@@ -2679,7 +2679,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.checkBoxAdvOvertimeProbability.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxAdvOvertimeProbability.Name = "checkBoxAdvOvertimeProbability";
 			this.checkBoxAdvOvertimeProbability.Size = new System.Drawing.Size(460, 24);
-			this.checkBoxAdvOvertimeProbability.TabIndex = 15;
+			this.checkBoxAdvOvertimeProbability.TabIndex = 0;
 			this.checkBoxAdvOvertimeProbability.Text = "xxEnableOvertimeProbability";
 			this.checkBoxAdvOvertimeProbability.ThemesEnabled = false;
 			// 
@@ -2708,7 +2708,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.checkBoxAdvOvertimeMaximumEnabled.Name = "checkBoxAdvOvertimeMaximumEnabled";
 			this.checkBoxAdvOvertimeMaximumEnabled.Size = new System.Drawing.Size(250, 24);
 			this.checkBoxAdvOvertimeMaximumEnabled.Text = "xxOvertimeRequestMaximum";
-			//this.checkBoxAdvOvertimeMaximumEnabled.TabIndex = 17;
+			this.checkBoxAdvOvertimeMaximumEnabled.TabIndex = 1;
 			this.checkBoxAdvOvertimeMaximumEnabled.ThemesEnabled = false;
 			this.checkBoxAdvOvertimeMaximumEnabled.CheckStateChanged += new System.EventHandler(this.CheckBoxAdvOvertimeMaximumEnabled_CheckStateChanged);
 			// 
@@ -2723,7 +2723,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled.Name = "checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled";
 			this.checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled.Size = new System.Drawing.Size(250, 24);
 			this.checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled.Text = "xxOvertimeRequestMaximumContinuousWorkTime";
-			//this.checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled.TabIndex = 17;
+			this.checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled.TabIndex = 4;
 			this.checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled.ThemesEnabled = false;
 			//this.checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled.CheckStateChanged += new System.EventHandler(this.checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled_CheckStateChanged);
 			// 
