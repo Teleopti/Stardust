@@ -49,6 +49,7 @@ Scenario: Edit a pending overtime request
 	And I save overtime request
 	Then I should see my existing overtime request with subject 'my new overtime request'
 
+@ignore
 Scenario: Add a pending overtime request from schedule
 	Given I have the role 'Full access to mytime'
 	And I have a workflow control set with overtime request open periods
@@ -62,6 +63,7 @@ Scenario: Add a pending overtime request from schedule
 	Then I should see my existing overtime request with subject 'my test overtime'	
 	Then I should see my existing overtime request with status 'Pending'
 
+@ignore
 Scenario: Add a pending overtime request from requests
 	Given I have the role 'Full access to mytime'
 	And I have a workflow control set with overtime request open periods
