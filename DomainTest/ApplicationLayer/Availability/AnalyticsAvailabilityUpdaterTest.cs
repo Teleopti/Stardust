@@ -188,13 +188,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Availability
 			personPeriod.SetId(personPeroidId);
 			var scenario = new Scenario("Asd");
 			scenario.SetId(scenarioCode);
+			scenario.EnableReporting = true;
 
 			PersonRepository.Add(person);
+			AvailabilityDayRepository.Add(new StudentAvailabilityDay(person, today, new IStudentAvailabilityRestriction[] { new StudentAvailabilityRestriction() }));
 			AnalyticsPersonPeriodRepository.AddOrUpdatePersonPeriod(new AnalyticsPersonPeriod { PersonId = personId, PersonCode = personCode, PersonPeriodCode = personPeroidId });
 			AnalyticsScenarioRepository.AddScenario(AnalyticsScenarioFactory.CreateAnalyticsScenario(scenario, businessUnitId));
 			ScenarioRepository.Add(scenario);
 
-			PersonAssignmentRepository.Has(person, scenario, new Activity("act"), new DateOnlyPeriod(today, today), new TimePeriod(0, 1));
+			IActivity phoneActivity = new Activity("act");
+			phoneActivity.InWorkTime = true;
+			PersonAssignmentRepository.Has(person, scenario, phoneActivity, new DateOnlyPeriod(today, today), new TimePeriod(0, 1));
 
 			Target.Handle(new ScheduleChangedEvent
 			{
@@ -206,12 +210,59 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Availability
 			});
 
 			AnalyticsHourlyAvailabilityRepository.AnalyticsHourlyAvailabilities.Should().Not.Be.Empty();
-			var result = AnalyticsHourlyAvailabilityRepository.AnalyticsHourlyAvailabilities.Single();
-			result.PersonId.Should().Be.EqualTo(personId);
-			result.BusinessUnitId.Should().Be.EqualTo(businessUnitId);
-			result.ScenarioId.Should().Be.GreaterThan(0);
-			result.DateId.Should().Be.GreaterThan(0);
-			result.ScheduledTimeMinutes.Should().Be(60);
+			var result = AnalyticsHourlyAvailabilityRepository.AnalyticsHourlyAvailabilities;
+			result.Count.Should().Be(1);
+			result.First().PersonId.Should().Be.EqualTo(personId);
+			result.First().BusinessUnitId.Should().Be.EqualTo(businessUnitId);
+			result.First().ScenarioId.Should().Be.GreaterThan(0);
+			result.First().DateId.Should().Be.GreaterThan(0);
+			result.First().ScheduledTimeMinutes.Should().Be(60);
+		}
+
+		[Test]
+		public void ShouldAddAvailabilityForAllScheduledDates()
+		{
+			var businessUnitCode = Guid.NewGuid();
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(businessUnitCode));
+
+			var personCode = Guid.NewGuid();
+			var scenarioCode = Guid.NewGuid();
+			var personPeroidId = Guid.NewGuid();
+			var today = DateOnly.Today;
+			var tomorrow = DateOnly.Today.AddDays(1);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(today.AddDays(-1)).WithId(personCode);
+			var personPeriod = person.PersonPeriodCollection.First();
+			personPeriod.SetId(personPeroidId);
+			var scenario = new Scenario("Asd");
+			scenario.SetId(scenarioCode);
+			scenario.EnableReporting = true;
+
+			PersonRepository.Add(person);
+			AvailabilityDayRepository.Add(new StudentAvailabilityDay(person, today, new IStudentAvailabilityRestriction[] { new StudentAvailabilityRestriction() }));
+			AvailabilityDayRepository.Add(new StudentAvailabilityDay(person, tomorrow, new IStudentAvailabilityRestriction[] { new StudentAvailabilityRestriction() }));
+			AnalyticsPersonPeriodRepository.AddOrUpdatePersonPeriod(new AnalyticsPersonPeriod { PersonId = personId, PersonCode = personCode, PersonPeriodCode = personPeroidId });
+			AnalyticsScenarioRepository.AddScenario(AnalyticsScenarioFactory.CreateAnalyticsScenario(scenario, businessUnitId));
+			ScenarioRepository.Add(scenario);
+
+			IActivity phoneActivity = new Activity("act");
+			phoneActivity.InWorkTime = true;
+			PersonAssignmentRepository.Has(person, scenario, phoneActivity, new DateOnlyPeriod(today, today), new TimePeriod(0, 1));
+			PersonAssignmentRepository.Has(person, scenario, phoneActivity, new DateOnlyPeriod(tomorrow, tomorrow), new TimePeriod(0, 2));
+
+			Target.Handle(new ScheduleChangedEvent
+			{
+				PersonId = personCode,
+				ScenarioId = scenarioCode,
+				StartDateTime = today.Date,
+				EndDateTime = tomorrow.Date,
+				LogOnBusinessUnitId = businessUnitCode
+			});
+
+			AnalyticsHourlyAvailabilityRepository.AnalyticsHourlyAvailabilities.Should().Not.Be.Empty();
+			var result = AnalyticsHourlyAvailabilityRepository.AnalyticsHourlyAvailabilities;
+			result.Count.Should().Be(2);
+			result.First().ScheduledTimeMinutes.Should().Be(60);
+			result.Last().ScheduledTimeMinutes.Should().Be(120);
 		}
 	}
 }
