@@ -463,6 +463,8 @@
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\SingleOwnedPerson.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\ViewModelFactory\ScheduledSkillOpenHourProviderToggle47290On.cs" />
     <Compile Include="Areas\MyTime\Models\WeekSchedule\RequestLicense.cs" />
+    <Compile Include="Areas\People\Controllers\RoleManager.cs" />
+    <Compile Include="Areas\People\Core\ActionFilters.cs" />
     <Compile Include="Areas\People\Models\GrantRolesInputModel.cs" />
     <Compile Include="Areas\People\Models\RevokeRolesInputModel.cs" />
     <Compile Include="Areas\People\Models\PersonRoleInputModel.cs" />

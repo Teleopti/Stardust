@@ -5,6 +5,7 @@ using System.Web.Http;
 using System.Web.Http.Results;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Web.Areas.People.Core;
 using Teleopti.Ccc.Web.Areas.People.Models;
 
 namespace Teleopti.Ccc.Web.Areas.People.Controllers
@@ -13,14 +14,17 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 	{
 		private readonly IPersonRepository _personRepository;
 		private readonly IApplicationRoleRepository _roleRepository;
+		private readonly IRoleManager _roleManager;
 
-		public RoleController(IPersonRepository personRepository, IApplicationRoleRepository roleRepository)
+		public RoleController(IPersonRepository personRepository, IApplicationRoleRepository roleRepository,
+			IRoleManager roleManager)
 		{
 			_roleRepository = roleRepository;
 			_personRepository = personRepository;
+			_roleManager = roleManager;
 		}
 
-		[UnitOfWork, HttpGet, Route("api/PeopleData/fetchRoles")]
+		[UnitOfWork, HttpGet, Route("api/PeopleData/fetchRoles")] 
 		public virtual JsonResult<IEnumerable<RoleViewModel>> FetchRoles()
 		{
 			var roles = _roleRepository.LoadAllApplicationRolesSortedByName();
@@ -35,7 +39,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			return Json(res);
 		}
 
-		[UnitOfWork, HttpPost, Route("api/PeopleData/fetchPersons")]
+		[UnitOfWork, HttpPost, Route("api/PeopleData/fetchPersons"), RequireArguments]
 		public virtual JsonResult<IEnumerable<PersonViewModel>> FetchPersons(FecthPersonsInputModel users)
 		{
 			var persons = _personRepository.FindPeople(users.PersonIdList);
@@ -56,40 +60,32 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			return Json(result);
 		}
 
-		[UnitOfWork, HttpPost, Route("api/PeopleCommand/grantRoles")]
-		public virtual JsonResult<ResultViewModel> GrantRoles(GrantRolesInputModel inputmodel)
+		[UnitOfWork, HttpPost, Route("api/PeopleCommand/grantRoles"), RequireArguments]
+		public virtual IHttpActionResult GrantRoles(GrantRolesInputModel inputmodel)
 		{
-			var result = new ResultViewModel();
 			try
 			{
-				result.SuccessCount = 1; 
-				result.Success = true;
+				_roleManager.GrantRoles(inputmodel);
+				return Ok();
 			}
 			catch (Exception e)
 			{
-				result.Success = false;
-				result.ErrorMsg = e.Message;
+				return BadRequest(e.Message); // TODO: Log.Exception(e)
 			}
-
-			return Json(result);
 		}
 
-		[UnitOfWork, HttpPost, Route("api/PeopleCommand/revokeRoles")]
-		public virtual JsonResult<ResultViewModel> RevokeRoles(RevokeRolesInputModel inputmodel)
-		{ 
-			var result = new ResultViewModel();
+		[UnitOfWork, HttpPost, Route("api/PeopleCommand/revokeRoles"), RequireArguments]
+		public virtual IHttpActionResult RevokeRoles(RevokeRolesInputModel inputmodel)
+		{
 			try
 			{
-				result.SuccessCount = 1;
-				result.Success = true;
+				_roleManager.RevokeRoles(inputmodel);
+				return Ok();
 			}
 			catch (Exception e)
 			{
-				result.Success = false;
-				result.ErrorMsg = e.Message;
+				return BadRequest(e.Message); // TODO: Log.Exception(e)
 			}
-
-			return Json(result);
 		}
 	}
 }
