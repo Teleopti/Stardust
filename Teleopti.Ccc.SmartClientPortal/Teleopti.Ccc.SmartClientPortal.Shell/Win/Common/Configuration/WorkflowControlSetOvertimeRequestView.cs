@@ -122,6 +122,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 				tableLayoutPanelOvertimeMaximumSetting.Visible = false;
 				tableLayoutPanelETOTRequest.RowStyles[tableLayoutPanelETOTRequest.Controls.IndexOf(tableLayoutPanelOvertimeMaximumSetting)].Height = 0;
 			}
+
+			if (!_toggleManager.IsEnabled(Toggles.OvertimeRequestMaxContinuousWorkTime_47964))
+			{
+				tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.Visible = false;
+				tableLayoutPanelETOTRequest.RowStyles[tableLayoutPanelETOTRequest.Controls.IndexOf(tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting)].Height = 0;
+			}
 		}
 
 		private void initOvertimeRequestMaximumTimeHandleType()
