@@ -1,4 +1,4 @@
-(function (angular) {
+(function (angular, moment) {
 	'use strict';
 	angular.module('wfm.gamification')
 		.component('gamificationImport', {
@@ -7,11 +7,13 @@
 				'GamificationDataService',
 				'$locale',
 				'$state',
+				'CurrentUserInfo',
 				GamificationImportController
 			]
 		});
 
-	function GamificationImportController(dataService, locale, state) {
+	function GamificationImportController(dataService, locale, state, CurrentUserInfo) {
+		var currentTimezone = CurrentUserInfo.CurrentUserInfo().DefaultTimeZone;
 		var ctrl = this;
 
 		ctrl.fileSizeLimit = 2097152;
@@ -77,8 +79,19 @@
 			dataService.fetchJobs().then(function (jobs) {
 				if (!ctrl.jobs) {
 					ctrl.jobs = jobs;
+					ctrl.jobs.forEach(convertStartingTimeToCurrentTimezone);
 				} else {
 					insertNewJobsFrom(jobs);
+				}
+
+				function convertStartingTimeToCurrentTimezone(job) {
+					job.startingTime = utcToTimezone(job.startingTime, currentTimezone);
+
+					function utcToTimezone(dateStr, timezone) {
+						var f = 'YYYY-MM-DDTHH:mm:ss';
+						var adjusted = moment.tz(dateStr, 'UTC').tz(timezone).format(f);
+						return adjusted;
+					}
 				}
 			});
 		}
@@ -91,4 +104,4 @@
 		}
 	}
 
-})(angular);
+})(angular, moment);
