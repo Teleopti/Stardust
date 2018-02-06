@@ -237,15 +237,13 @@
 				$scope.itemArr.push(item);
 			}
 
-			$scope.temp = [];
 
 			angular.forEach($scope.itemArr, function (person, key) {
 				angular.forEach(person.roles, function (role, key) {
 					if (role.checked) {
 						if ($scope.checkIfRoleExistInCurrentRoles(role) === false) {
 							role.usedBy = 1;
-							$scope.temp = angular.copy(role);
-							$scope.currentRoles.push($scope.temp);
+							$scope.currentRoles.push(angular.copy(role));
 						} else {
 							$scope.incrementUsedBy(role);
 						}
@@ -270,10 +268,6 @@
 			});
 		};
 
-		$scope.test = function () {
-			console.log("clicked indeterminate");
-		}
-
 		$scope.checkIfRoleExistInCurrentRoles = function (role) {
 			var returnValue = false;
 			angular.forEach($scope.currentRoles, function (currentRole, key) {
@@ -287,18 +281,24 @@
 
 		$scope.modalShownGrant = false;
 		$scope.modalShownRevoke = false;
+		$scope.showSelected = true;
+
+		$scope.peopleToShow = $scope.people;
+
+		$scope.showAll = function () {
+			if (!$scope.showSelected) {
+				$scope.showSelected = true;
+				$scope.peopleToShow = $scope.people;
+			} else {
+				$scope.showSelected = false;
+				$scope.peopleToShow = $scope.itemArr;
+			}
+		}
 
 		$scope.close = function () {
 			$scope.modalShownGrant = false;
 			$scope.modalShownRevoke = false;
-		}
-
-		$scope.save = function() {
-			$scope.modalShownGrant = false;
-			$scope.modalShownRevoke = false;
-			$scope.resetMulti();
-
-
+			$scope.newRoles.length = 0;
 		}
 
 		$scope.resetMulti = function () {
@@ -307,6 +307,48 @@
 			for (var i = 0; i < $scope.people.length; i++) {
 				$scope.people[i].marked = false;
 			}
+		}
+
+		$scope.buttonText = function () {
+			if ($scope.showSelected) {
+				return "Show selected (" + $scope.itemArr.length + ")";
+			} else {
+				return "Show all";
+			}
+		}
+
+		$scope.newRoles = [];
+
+		$scope.addRole = function (role, shouldCheck) {
+			var indexOfRole = $scope.newRoles.indexOf(role);
+			if (role.checked === shouldCheck) {
+				if (indexOfRole === -1) {
+					$scope.newRoles.push(role);
+				}
+			} else {
+				if (indexOfRole !== -1) {
+					$scope.newRoles.splice(indexOfRole, 1);
+				}
+			}
+		}
+
+		$scope.save = function (shouldGrant) {
+			angular.forEach($scope.itemArr, function (person, key) {
+				angular.forEach(person.roles, function (role, key) {
+					angular.forEach($scope.newRoles, function (newRole, key) {
+						if(role.name === newRole.name) {
+							console.log(shouldGrant);
+							role.checked = shouldGrant;
+						}
+					});
+				});
+			});
+
+			$scope.newRoles.length = 0;
+			$scope.resetMulti();
+
+			$scope.modalShownGrant = false;
+			$scope.modalShownRevoke = false;
 		}
 	}
 })();

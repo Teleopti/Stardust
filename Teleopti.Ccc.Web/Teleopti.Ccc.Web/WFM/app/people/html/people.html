@@ -59,12 +59,13 @@
 		border: none;
 	}
 </style>
+
 <div ng-controller="PeopleStart">
 
 	<div class="view-header with-fab with-desc">
 		<div class="view-title">
 			<h1>
-				<i class="mdi mdi-account-multiple"></i> People</h1>
+				<i class="mdi mdi-account-group"></i> People</h1>
 			<p>Search for one or many persons to manage their roles</p>
 		</div>
 	</div>
@@ -98,6 +99,11 @@
 				</div>
 				<div class="con-row">
 					<div class="con-flex">
+						<div class="con-row">
+							<button class="wfm-btn wfm-btn-primary" ng-disabled="itemArr.length === 0" ng-class="{'wfm-btn-invis-disabled': itemArr.length === 0}"
+							 ng-click="resetMulti()">Clear</button>
+							<button class="wfm-btn wfm-btn-primary" ng-click="showAll()">{{buttonText()}}</button>
+						</div>
 						<table class="wfm-table">
 							<thead>
 								<tr>
@@ -107,7 +113,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr ng-repeat="person in people | filter: filterInput">
+								<tr ng-repeat="person in peopleToShow | filter: filterInput">
 									<td>
 										<div tabindex=0 class="context-menu card-context" ng-click="person.marked = !person.marked; assertMulti(person); $event.stopPropagation();"
 										 ng-class="{'notice-success':person.marked, 'notice-info':!person.marked}">
@@ -131,7 +137,7 @@
 						<modal-dialog show='modalShownGrant' ng-cloak>
 							<div class="person-header relative">
 								<div class="avatar">
-									<i class="mdi" ng-class="itemArr.length > 1 ? 'mdi-account-multiple' : 'mdi-account'"></i>
+									<i class="mdi" ng-class="itemArr.length > 1 ? 'mdi-account-group' : 'mdi-account'"></i>
 								</div>
 								<h1 ng-if="itemArr.length == 1">Grant role on {{itemArr[0].firstName}} {{itemArr[0].lastName}}</h1>
 								<h1 ng-if="itemArr.length > 1">Grant role on multiple persons</h1>
@@ -140,27 +146,12 @@
 							<div style="margin: 15px;">
 								<div>
 									<h2>
-										<strong>Current roles for all</strong>
+										<strong>Current roles</strong>
 									</h2>
 									<div class="con-fluid-row">
-										<div class="con-fluid-flex" ng-repeat="role in currentRoles" ng-if="isChecked(role) === true">
+										<div class="con-fluid-flex" ng-repeat="role in currentRoles" ng-if="checkExistingRoles(role) === true">
 											<div>
-												<h2 class="mdi mdi-check">{{role.name}}
-													<span ng-bind="item.id"></span>
-												</h2>
-											</div>
-										</div>
-									</div>
-									<hr/>
-								</div>
-								<div ng-if="itemArr.length > 1">
-									<h2>
-										<strong>Current roles for some</strong>
-									</h2>
-									<div class="con-fluid-row">
-										<div class="con-fluid-flex" ng-repeat="role in currentRoles" ng-if="isIndeterminate(role) === true">
-											<div>
-												<h2 class="mdi mdi-check">{{role.name}}
+												<h2 class="mdi" ng-class="isChecked(role) === true ? 'mdi-check' : 'mdi-minus'">{{role.name}}
 													<span ng-bind="item.id"></span>
 												</h2>
 											</div>
@@ -174,7 +165,7 @@
 									</h2>
 									<div class="con-fluid-row">
 										<div class="con-fluid-flex" ng-repeat="role in roles" ng-if="checkRolesNotOnAll(role) === false">
-											<md-checkbox ng-model="role.checked" aria-label="Checkbox">{{role.name}}
+											<md-checkbox ng-model="role.checked" ng-change="addRole(role, true)" aria-label="Checkbox">{{role.name}}
 												<span ng-bind="item.id"></span>
 											</md-checkbox>
 										</div>
@@ -183,7 +174,7 @@
 								<div class="modal-actions">
 									<aside>
 										<button class="wfm-btn wfm-btn-invis" ng-click="close()">Cancel</button>
-										<button class="wfm-btn wfm-btn-invis-primary" ng-click="save()">Save</button>
+										<button class="wfm-btn wfm-btn-invis-primary" ng-click="save(true)">Save</button>
 									</aside>
 								</div>
 							</div>
@@ -193,7 +184,7 @@
 						<modal-dialog show='modalShownRevoke' ng-cloak>
 							<div class="person-header relative">
 								<div class="avatar">
-									<i class="mdi" ng-class="itemArr.length > 1 ? 'mdi-account-multiple' : 'mdi-account'"></i>
+									<i class="mdi" ng-class="itemArr.length > 1 ? 'mdi-account-group' : 'mdi-account'"></i>
 								</div>
 								<h1 ng-if="itemArr.length == 1">Revoke role on {{itemArr[0].firstName}} {{itemArr[0].lastName}}</h1>
 								<h1 ng-if="itemArr.length > 1">Revoke role on multiple persons</h1>
@@ -212,7 +203,7 @@
 									<div class="con-fluid-row">
 										<div class="con-fluid-flex" ng-repeat="role in currentRoles" ng-if="isChecked(role) === true">
 											<div>
-												<md-checkbox ng-model="role.checked" ng-checked="isChecked(role)" aria-label="Checkbox">{{role.name}}
+												<md-checkbox ng-model="role.checked" ng-checked="isChecked(role)" ng-change="addRole(role, false)" aria-label="Checkbox">{{role.name}}
 													<span ng-bind="item.id"></span>
 												</md-checkbox>
 											</div>
@@ -227,7 +218,7 @@
 									<div class="con-fluid-row">
 										<div class="con-fluid-flex" ng-repeat="role in currentRoles" ng-if="isIndeterminate(role) === true">
 											<div>
-												<md-checkbox ng-model="role.checked" ng-checked="isIndeterminate(role)" aria-label="Checkbox">{{role.name}}
+												<md-checkbox ng-model="role.checked" ng-checked="isIndeterminate(role)" ng-change="addRole(role, false)" aria-label="Checkbox">{{role.name}}
 													<span ng-bind="item.id"></span>
 												</md-checkbox>
 											</div>
@@ -237,7 +228,7 @@
 								<div class="modal-actions">
 									<aside>
 										<button class="wfm-btn wfm-btn-invis" ng-click="close()">Cancel</button>
-										<button class="wfm-btn wfm-btn-invis-primary" ng-click="save()">Save</button>
+										<button class="wfm-btn wfm-btn-invis-primary" ng-click="save(false)">Save</button>
 									</aside>
 								</div>
 							</div>
