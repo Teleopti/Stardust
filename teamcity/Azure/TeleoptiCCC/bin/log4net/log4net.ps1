@@ -41,7 +41,7 @@ function log-error ([string] $message)
 function Set-log4netConfig($configFile)
 {
 
-$timestamp = get-date -Format "yyyymmdd-HHmmss"
+$timestamp = get-date -Format "yyyyMMdd-HHmmss"
 $ScriptFileNameLog = $ScriptFileName + "_" + $timestamp + ".log"
 
 $NewConfigFileText = @"

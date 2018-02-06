@@ -23,7 +23,8 @@ function ReinstallService
 		$Servicio = Get-Service | Where-Object {$_.name -eq $nombreDeServicio}
 		if ($Servicio -ne $null)
 		{
-			log-error "Could not delete TeleoptiEtlService"
+			log-error "Could not delete $nombreDeServicio"
+			log-info "Could not delete $nombreDeServicio"
 			# Felhantering
 		}
 	}

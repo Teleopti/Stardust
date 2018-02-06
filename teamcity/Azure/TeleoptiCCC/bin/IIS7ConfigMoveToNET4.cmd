@@ -14,6 +14,7 @@ Call :ChangeAppPoolVersion Administration v4.0
 ECHO ..\Tools\SupportTools\FixServerConfiguration.bat >> %FILE%.log
 ..\Tools\SupportTools\FixServerConfiguration.bat
 goto :eof
+exit /b 0
 
 :ChangeAppPoolVersion
 ECHO Setting ManagedRuntimeVersion: %2 for %1 >> %FILE%.log

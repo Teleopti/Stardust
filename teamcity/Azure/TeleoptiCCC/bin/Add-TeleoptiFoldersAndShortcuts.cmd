@@ -14,4 +14,4 @@ COPY "%srcFile%" "%targetFile%" /Y
 if exist "%targetFile%" (
 powershell . .\Add-TeleoptiFoldersAndShortcuts.ps1 >nul
 )
-exit %ERRORLEVEL%
+exit /b 0
