@@ -17,16 +17,18 @@ Given there is a role with
 	| Color       | Red      |
 	| Requestable | true     |
 	And there is a workflow control set with
-	| Field                        | Value              |
-	| Name                         | Published schedule |
-	| Schedule published to date   | 2059-02-01         |
-	| ReportableAbsence            | Vacation           |
-	| ShiftTradeSlidingPeriodStart | 1                  |
-	| ShiftTradeSlidingPeriodEnd   | 99                 |
-	| AvailableAbsence             | Vacation           |
-	| StaffingCheck                | intraday           |
-	| AbsenceProbabilityEnabled    | True               |
-	| OvertimeProbabilityEnabled   | True               |
+	| Field                                 | Value              |
+	| Name                                  | Published schedule |
+	| Schedule published to date            | 2059-02-01         |
+	| ReportableAbsence                     | Vacation           |
+	| ShiftTradeSlidingPeriodStart          | 1                  |
+	| ShiftTradeSlidingPeriodEnd            | 99                 |
+	| AvailableAbsence                      | Vacation           |
+	| StaffingCheck                         | intraday           |
+	| AbsenceProbabilityEnabled             | True               |
+	| OvertimeProbabilityEnabled            | True               |
+	| OvertimeRequestOpenPeriodRollingStart | 0                  |
+	| OvertimeRequestOpenPeriodRollingEnd   | 13                 |
 
 	And I have a schedule period with 
 	| Field      | Value      |
@@ -61,7 +63,6 @@ Scenario: Should see the absence probability
 	And I click show absence probability
 	Then I should see the probability in schedule
 
-@OnlyRunIfDisabled('OvertimeRequestPeriodSkillTypeSetting_47290')
 @OnlyRunIfEnabled('MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913')
 Scenario: Should see the overtime probability
 	When I am viewing mobile view for today
