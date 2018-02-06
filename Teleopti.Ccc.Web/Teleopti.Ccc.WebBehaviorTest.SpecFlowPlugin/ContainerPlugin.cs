@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.SpecFlowPlugin
 		private static IComponentContext _container;
 		private static bool _initialized = false;
 
+		
 		public void Initialize(RuntimePluginEvents runtimePluginEvents, RuntimePluginParameters runtimePluginParameters)
 		{
 			runtimePluginEvents.CustomizeGlobalDependencies += (sender, args) =>
