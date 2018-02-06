@@ -9,7 +9,8 @@ describe("teamschedule controller tests", function () {
 		scheduleMgmt,
 		teamScheduleService,
 		staffingConfigStorageService,
-		fakeStateParams;
+		fakeStateParams,
+		$controller;
 
 	beforeEach(function () {
 		module('externalModules');
@@ -35,8 +36,11 @@ describe("teamschedule controller tests", function () {
 		scheduleMgmt = _ScheduleManagement_;
 		setupMockTeamScheduleService(_TeamSchedule_);
 		teamScheduleService = _TeamSchedule_;
-		controller = setUpController(_$controller_);
+		$controller = _$controller_;
+		
 		staffingConfigStorageService = _TeamsStaffingConfigurationStorageService_;
+		staffingConfigStorageService.clearConfig();
+		controller = setUpController(_$controller_);
 	}));
 
 	it("can display person selection status correctly when turning pages", inject(function () {
@@ -263,7 +267,6 @@ describe("teamschedule controller tests", function () {
 
 	it("should read preselect skill group when show staffing is enabled and there is invalid config",
 		function () {
-			staffingConfigStorageService.clearConfig();
 			controller.scheduleDate = new Date("2015-10-26");
 			controller.staffingEnabled = true;
 			controller.showStaffing();
@@ -284,15 +287,24 @@ describe("teamschedule controller tests", function () {
 	});
 
 	it("should read prechecked status for use shrinkage when show staffing is enabled and there is valid config", function () {
+		staffingConfigStorageService.setShrinkage(true);
+		controller = setUpController($controller);
+		controller.scheduleDate = new Date("2015-10-26");
+		expect(controller.useShrinkage).toEqual(true);
+	});
+
+	it("should read prechecked status for use shrinkage when show staffing is enabled and there is invalid config", function () {
 		controller.scheduleDate = new Date("2015-10-26");
 		controller.staffingEnabled = true;
 
-		controller.onUseShrinkageChanged(true);
 		controller.showStaffing();
-		expect(!!controller.useShrinkage).toEqual(true);
+		expect(!!controller.useShrinkage).toEqual(false);
 	});
-	
+
 	it("should init all settings state as same as the route state", function () {
+		staffingConfigStorageService.setSkill(null, 'groupPage');
+		controller = setUpController($controller);
+
 		expect(controller.searchOptions.keyword).toEqual(fakeStateParams.keyword);
 		expect(controller.scheduleDate).toEqual(fakeStateParams.selectedDate);
 		expect(controller.teamNameMap).toEqual(fakeStateParams.teamNameMap);
@@ -304,18 +316,11 @@ describe("teamschedule controller tests", function () {
 			expect(controller.selectedGroups.groupIds).toEqual(fakeStateParams.selectedGroupPage.groupIds);
 		}
 		expect(controller.staffingEnabled).toEqual(fakeStateParams.staffingEnabled);
+		
+		expect(!!controller.preselectedSkills.skillIds).toEqual(false);
+		expect(controller.preselectedSkills.skillAreaId).toEqual('groupPage');
 	});
 
-
-
-	it("should read prechecked status for use shrinkage when show staffing is enabled and there is invalid config", function () {
-		staffingConfigStorageService.clearConfig();
-		controller.scheduleDate = new Date("2015-10-26");
-		controller.staffingEnabled = true;
-
-		controller.showStaffing();
-		expect(!!controller.useShrinkage).toEqual(false);
-	});
 
 	function setUpController($controller) {
 		return $controller("TeamScheduleController", {
