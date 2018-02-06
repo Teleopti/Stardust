@@ -204,13 +204,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		[When(@"I apply my new activity")]
 		public void WhenIApplyMyNewActivity()
 		{
-			Browser.Interactions.Click("#applyActivity");
+			Browser.Interactions.ClickUsingJQuery("#applyActivity");
 		}
 
 		[When(@"I apply add personal activity")]
 		public void WhenIApplyAddPersonalActivity()
 		{
-			Browser.Interactions.Click("#applyPersonalActivity");
+			Browser.Interactions.ClickUsingJQuery("#applyPersonalActivity");
 		}
 
 		[Then(@"I should see agent '(.*)' in the table")]
@@ -308,7 +308,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		[When(@"I click apply button")]
 		public void WhenIClickApplyButton()
 		{
-			Browser.Interactions.Click(".team-schedule-command-confirm-dialog .wfm-btn-primary:not([disabled])");
+			Browser.Interactions.ClickUsingJQuery(".team-schedule-command-confirm-dialog .wfm-btn-primary:not([disabled])");
 		}
 
 		[When(@"I selected activity '(.*)'")]
@@ -384,7 +384,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		[When(@"I apply the new shift category")]
 		public void WhenIApplyTheNewShiftCategory()
 		{
-			Browser.Interactions.Click("#applyShiftCategory");
+			Browser.Interactions.ClickUsingJQuery("#applyShiftCategory");
 		}
 
 		[Then(@"I should see a shift category named '(.*)'")]
@@ -493,7 +493,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		[When(@"I apply the new absence")]
 		public void WhenIApplyTheNewAbsence()
 		{
-			Browser.Interactions.Click("#applyAbsence");
+			Browser.Interactions.ClickUsingJQuery("#applyAbsence");
 		}
 
 		[Then(@"I should see the start time to move to is '(.*)'")]
