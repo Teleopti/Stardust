@@ -35,7 +35,6 @@
 				firstName: 'John',
 				id: '1',
 				lastName: 'Doe',
-				phone: '123456123',
 				roles: [
 					{ name: 'Agent', checked: true },
 					{ name: 'Team leader', checked: true },
@@ -50,7 +49,6 @@
 				id: '2',
 				lastName: 'Flowers',
 				role: 'Agent',
-				phone: '123456123',
 				roles: [
 					{ name: 'Agent', checked: true },
 					{ name: 'Team leader', checked: false },
@@ -65,7 +63,6 @@
 				id: '3',
 				lastName: 'Erickson',
 				role: 'Agent',
-				phone: '123456123',
 				roles: [
 					{ name: 'Agent', checked: true },
 					{ name: 'Team leader', checked: false },
@@ -80,7 +77,6 @@
 				id: '4',
 				lastName: 'Garrett',
 				role: 'Agent',
-				phone: '123456123',
 				roles: [
 					{ name: 'Agent', checked: true },
 					{ name: 'Team leader', checked: false },
@@ -95,7 +91,6 @@
 				id: '5',
 				lastName: 'Reeves',
 				role: 'Agent',
-				phone: '123456123',
 				roles: [
 					{ name: 'Agent', checked: true },
 					{ name: 'Team leader', checked: false },
@@ -110,7 +105,6 @@
 				id: '6',
 				lastName: 'Evans',
 				role: 'Agent',
-				phone: '123456123',
 				roles: [
 					{ name: 'Agent', checked: true },
 					{ name: 'Team leader', checked: false },
@@ -125,7 +119,6 @@
 				id: '7',
 				lastName: 'Morrison',
 				role: 'Agent',
-				phone: '123456123',
 				roles: [
 					{ name: 'Agent', checked: true },
 					{ name: 'Team leader', checked: false },
@@ -140,7 +133,6 @@
 				id: '8',
 				lastName: 'Vaughn',
 				role: 'Agent',
-				phone: '123456123',
 				roles: [
 					{ name: 'Agent', checked: true },
 					{ name: 'Team leader', checked: false },
@@ -155,7 +147,6 @@
 				id: '9',
 				lastName: 'Norris',
 				role: 'Agent',
-				phone: '123456123',
 				roles: [
 					{ name: 'Agent', checked: true },
 					{ name: 'Team leader', checked: false },
@@ -170,7 +161,6 @@
 				id: '10',
 				lastName: 'Harrington',
 				role: 'Agent',
-				phone: '123456123',
 				roles: [
 					{ name: 'Agent', checked: true },
 					{ name: 'Team leader', checked: false },
@@ -185,7 +175,6 @@
 				id: '11',
 				lastName: 'Wilkins',
 				role: 'Agent',
-				phone: '123456123',
 				roles: [
 					{ name: 'Agent', checked: true },
 					{ name: 'Team leader', checked: false },
