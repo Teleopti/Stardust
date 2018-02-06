@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			InParameter.NotNull(nameof(person), person);
 			InParameter.NotNull(nameof(badgeType), badgeType);
-			const string query = @"select Person, BadgeType, BronzeBadgeAmount, SilverBadgeAmount, GoldBadgeAmount, LastCalculatedDate "
+			const string query = @"select Person, BadgeType, IsExternal, BronzeBadgeAmount, SilverBadgeAmount, GoldBadgeAmount, LastCalculatedDate "
 				+ "from AgentBadgeWithRank where Person = :person and BadgeType=:badgeType and IsExternal=:isExternal";
 			var result = Session.CreateSQLQuery(query)
 					.SetGuid("person", (Guid)person.Id)
