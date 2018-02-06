@@ -74,13 +74,8 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		{
 			ToggleManager.Enable(toggles);
 
-			var workflowControlSet = new WorkflowControlSet("My Workflow Control Set").WithId();
-			WorkflowControlSetRepository.Add(workflowControlSet);
-
+			initializeWithDefaultWorkflowControlSet();
 			SkillTypeRepository.AddRange(_skillTypes);
-
-			initialize();
-			_target.SetSelectedWorkflowControlSetModel(_target.WorkflowControlSetModelCollection.First());
 
 			Assert.AreEqual(0, _target.SelectedModel.OvertimeRequestPeriodModels.Count);
 			_target.AddOvertimeRequestOpenDatePeriod();
@@ -101,12 +96,8 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		{
 			ToggleManager.Enable(toggles);
 
-			var workflowControlSet = new WorkflowControlSet("My Workflow Control Set").WithId();
-			WorkflowControlSetRepository.Add(workflowControlSet);
-
-			initialize();
+			initializeWithDefaultWorkflowControlSet();
 			_view.RefreshOvertimeOpenPeriodsGrid();
-			_target.SetSelectedWorkflowControlSetModel(_target.WorkflowControlSetModelCollection.First());
 
 			Assert.AreEqual(0, _target.SelectedModel.OvertimeRequestPeriodModels.Count);
 			_target.AddOvertimeRequestOpenRollingPeriod();
@@ -207,10 +198,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		[Test]
 		public void VerifyDeleteOvertimeRequestPeriodNothingToDelete()
 		{
-			var workflowControlSet = new WorkflowControlSet("My Workflow Control Set").WithId();
-			WorkflowControlSetRepository.Add(workflowControlSet);
-			initialize();
-			_target.SetSelectedWorkflowControlSetModel(_target.WorkflowControlSetModelCollection.First());
+			initializeWithDefaultWorkflowControlSet();
 
 			Assert.AreEqual(0, _target.SelectedModel.OvertimeRequestPeriodModels.Count);
 			_target.DeleteOvertimeRequestPeriod(_target.SelectedModel.OvertimeRequestPeriodModels);
@@ -220,11 +208,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		[Test]
 		public void VerifyCanSetOvertimeRequestMaximumTimeHandleType()
 		{
-			var workflowControlSet = new WorkflowControlSet("My Workflow Control Set").WithId();
-			WorkflowControlSetRepository.Add(workflowControlSet);
-
-			initialize();
-			_target.SetSelectedWorkflowControlSetModel(_target.WorkflowControlSetModelCollection.First());
+			initializeWithDefaultWorkflowControlSet();
 			_target.SelectedModel.OvertimeRequestMaximumOvertimeValidationHandleOptionView = new OvertimeRequestValidationHandleOptionView(OvertimeValidationHandleType.Deny,"deny");
 
 			Assert.AreEqual(_target.SelectedModel.DomainEntity.OvertimeRequestMaximumTimeHandleType,_target.SelectedModel.OvertimeRequestMaximumOvertimeValidationHandleOptionView.WorkRuleValidationHandleType);
@@ -233,11 +217,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		[Test]
 		public void VerifyCanSetOvertimeRequestMaximumTime()
 		{
-			var workflowControlSet = new WorkflowControlSet("My Workflow Control Set").WithId();
-			WorkflowControlSetRepository.Add(workflowControlSet);
-
-			initialize();
-			_target.SetSelectedWorkflowControlSetModel(_target.WorkflowControlSetModelCollection.First());
+			initializeWithDefaultWorkflowControlSet();
 			_target.SelectedModel.OvertimeRequestMaximumTime = TimeSpan.MaxValue;
 
 			Assert.AreEqual(_target.SelectedModel.DomainEntity.OvertimeRequestMaximumTime, _target.SelectedModel.OvertimeRequestMaximumTime);
@@ -246,11 +226,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		[Test]
 		public void VerifyCanSetOvertimeRequestMaximumContinuousWorkTimeEnabled()
 		{
-			var workflowControlSet = new WorkflowControlSet("My Workflow Control Set").WithId();
-			WorkflowControlSetRepository.Add(workflowControlSet);
-
-			initialize();
-			_target.SetSelectedWorkflowControlSetModel(_target.WorkflowControlSetModelCollection.First());
+			initializeWithDefaultWorkflowControlSet();
 			_target.SelectedModel.OvertimeRequestMaximumContinuousWorkTimeEnabled = true;
 
 			Assert.AreEqual(_target.SelectedModel.DomainEntity.OvertimeRequestMaximumContinuousWorkTimeEnabled, _target.SelectedModel.OvertimeRequestMaximumContinuousWorkTimeEnabled);
@@ -259,11 +235,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		[Test]
 		public void VerifyCanSetOvertimeRequestMaximumContinuousWorkTimeAndMinimumRestTimeThreshold()
 		{
-			var workflowControlSet = new WorkflowControlSet("My Workflow Control Set").WithId();
-			WorkflowControlSetRepository.Add(workflowControlSet);
-
-			initialize();
-			_target.SetSelectedWorkflowControlSetModel(_target.WorkflowControlSetModelCollection.First());
+			initializeWithDefaultWorkflowControlSet();
 			_target.SelectedModel.OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(4);
 			_target.SelectedModel.OvertimeRequestMinimumRestTimeThreshold = TimeSpan.FromMinutes(20);
 
@@ -274,11 +246,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		[Test]
 		public void VerifyCanSetOvertimeRequestMaximumContinuousWorkTimeHandleType()
 		{
-			var workflowControlSet = new WorkflowControlSet("My Workflow Control Set").WithId();
-			WorkflowControlSetRepository.Add(workflowControlSet);
-
-			initialize();
-			_target.SetSelectedWorkflowControlSetModel(_target.WorkflowControlSetModelCollection.First());
+			initializeWithDefaultWorkflowControlSet();
 			_target.SelectedModel.OvertimeRequestMaximumContinuousWorkTimeValidationHandleOptionView = new OvertimeRequestValidationHandleOptionView(OvertimeValidationHandleType.Deny, "deny");
 
 			Assert.AreEqual(_target.SelectedModel.DomainEntity.OvertimeRequestMaximumContinuousWorkTimeHandleType
@@ -313,13 +281,8 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		{
 			ToggleManager.Enable(Toggles.OvertimeRequestPeriodSetting_46417);
 
-			var workflowControlSet = new WorkflowControlSet("My Workflow Control Set").WithId();
-			WorkflowControlSetRepository.Add(workflowControlSet);
-
+			initializeWithDefaultWorkflowControlSet();
 			SkillTypeRepository.AddRange(_skillTypes);
-
-			initialize();
-			_target.SetSelectedWorkflowControlSetModel(_target.WorkflowControlSetModelCollection.First());
 
 			Assert.AreEqual(0, _target.SelectedModel.OvertimeRequestPeriodModels.Count);
 			_target.AddOvertimeRequestOpenDatePeriod();
@@ -338,6 +301,15 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			_target = new WorkflowControlSetPresenter(null, UnitOfWorkFactory, RepositoryFactory, ToggleManager);
 			_view = new WorkflowControlSetView(ToggleManager, _target);
 			_target.Initialize();
+		}
+
+		private void initializeWithDefaultWorkflowControlSet()
+		{
+			var workflowControlSet = new WorkflowControlSet("My Workflow Control Set").WithId();
+			WorkflowControlSetRepository.Add(workflowControlSet);
+
+			initialize();
+			_target.SetSelectedWorkflowControlSetModel(_target.WorkflowControlSetModelCollection.First());
 		}
 	}
 }

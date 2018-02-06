@@ -795,6 +795,39 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			Assert.AreEqual(true, workflowControlSetModel.AutoGrantOvertimeRequest);
 		}
 
+		[Test]
+		public void ShouldAddSkillToMatchList()
+		{
+			var workflowControlSet = new WorkflowControlSet("My Workflow Control Set").WithId();
+			WorkflowControlSetRepository.Add(workflowControlSet);
+
+			initialize();
+
+			var workflowControlSetModel = _target.WorkflowControlSetModelCollection.ElementAt(0);
+			_target.SetSelectedWorkflowControlSetModel(workflowControlSetModel);
+
+			var skill = SkillFactory.CreateSkill("5 finger death punch").WithId();
+			_target.AddSkillToMatchList(skill);
+			Assert.IsTrue(workflowControlSetModel.MustMatchSkills.Contains(skill));
+		}
+
+		[Test]
+		public void ShouldRemoveSkillFromMatchList()
+		{
+			var skill = SkillFactory.CreateSkill("5 finger death punch").WithId();
+			var workflowControlSet = new WorkflowControlSet("My Workflow Control Set").WithId();
+			workflowControlSet.AddSkillToMatchList(skill);
+			WorkflowControlSetRepository.Add(workflowControlSet);
+
+			initialize();
+
+			var workflowControlSetModel = _target.WorkflowControlSetModelCollection.ElementAt(0);
+			_target.SetSelectedWorkflowControlSetModel(workflowControlSetModel);
+
+			_target.RemoveSkillFromMatchList(skill);
+			Assert.IsFalse(workflowControlSetModel.MustMatchSkills.Contains(skill));
+		}
+
 		private void initialize()
 		{
 			_target = new WorkflowControlSetPresenter(null, UnitOfWorkFactory, RepositoryFactory, ToggleManager);
