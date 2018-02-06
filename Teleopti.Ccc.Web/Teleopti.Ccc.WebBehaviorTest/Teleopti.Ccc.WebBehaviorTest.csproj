@@ -1585,10 +1585,6 @@
       <Project>{4F4DF171-4A56-4E0D-90CB-CB2AFDEA4411}</Project>
       <Name>Teleopti.Messaging</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Teleopti.Ccc.WebBehaviorTest.SpecFlowPlugin\Teleopti.Ccc.WebBehaviorTest.SpecFlowPlugin.csproj">
-      <Project>{d164065c-2f33-431b-80a4-a4f59ce77486}</Project>
-      <Name>Teleopti.Ccc.WebBehaviorTest.SpecFlowPlugin</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.Web\Teleopti.Ccc.Web.csproj">
       <Project>{0a5ebaa1-bdc2-4997-873f-4fa43e3bc275}</Project>
       <Name>Teleopti.Ccc.Web</Name>
