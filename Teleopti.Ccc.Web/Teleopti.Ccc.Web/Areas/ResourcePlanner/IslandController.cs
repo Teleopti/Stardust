@@ -10,13 +10,11 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 	{
 		private readonly IslandModelFactory _islandModelFactory;
 		private readonly ISkillRepository _skillRepository;
-		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 
 		public IslandController(IslandModelFactory islandModelFactory, ISkillRepository skillRepository, ICurrentUnitOfWork currentUnitOfWork)
 		{
 			_islandModelFactory = islandModelFactory;
 			_skillRepository = skillRepository;
-			_currentUnitOfWork = currentUnitOfWork;
 		}
 
 		[UnitOfWork(DoCommit.No)]
