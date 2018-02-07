@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<DisableBusinessUnitFilter>().As<IDisableBusinessUnitFilter>().SingleInstance();
 			builder.RegisterType<DatabaseVersion>().AsSelf().SingleInstance();
 			builder.RegisterType<AllBusinessUnitsUnitOfWorkAspect>().As<IAspect>().As<IAllBusinessUnitsUnitOfWorkAspect>().SingleInstance();
-			builder.RegisterType<UnitOfWorkAspect>().As<IAspect>().As<IUnitOfWorkAspect>().InstancePerDependency();
+			builder.RegisterType<UnitOfWorkAspect>().As<IAspect>().As<IUnitOfWorkAspect>().SingleInstance();
 			builder.RegisterType<UnitOfWorkNoCommitAspect>().As<IAspect>().SingleInstance();
 
 			builder.RegisterType<ConnectionStrings>().As<IConnectionStrings>();
