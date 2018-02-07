@@ -64,9 +64,8 @@
 
 	<div class="view-header with-fab with-desc">
 		<div class="view-title">
-			<h1>
-				<i class="mdi mdi-account-group"></i> People</h1>
-			<p>Search for one or many persons to manage their roles</p>
+			<h1><i class="mdi mdi-account-multiple"></i> People</h1>
+			<p>Search for one or many persons to manage their roles.</p>
 		</div>
 	</div>
 	<div class="con-row">
@@ -123,8 +122,7 @@
 									</td>
 									<td>
 										<span ng-repeat="role in person.roles" ng-if="role.checked">
-											{{role.name}}
-											<span ng-if="$index < getNumberOfCheckedRoles(person.roles) - 1">,</span>
+											{{role.name}}<span ng-if="$index < getNumberOfCheckedRoles(person.roles) - 1">,</span>
 										</span>
 									</td>
 								</tr>
@@ -135,7 +133,7 @@
 						<modal-dialog show='modalShownGrant' ng-cloak>
 							<div class="person-header relative">
 								<div class="avatar">
-									<i class="mdi" ng-class="itemArr.length > 1 ? 'mdi-account-group' : 'mdi-account'"></i>
+									<i class="mdi" ng-class="itemArr.length > 1 ? 'mdi-account-multiple' : 'mdi-account'"></i>
 								</div>
 								<h1 ng-if="itemArr.length == 1">Grant role on {{itemArr[0].firstName}} {{itemArr[0].lastName}}</h1>
 								<h1 ng-if="itemArr.length > 1">Grant role on multiple persons</h1>
@@ -182,7 +180,7 @@
 						<modal-dialog show='modalShownRevoke' ng-cloak>
 							<div class="person-header relative">
 								<div class="avatar">
-									<i class="mdi" ng-class="itemArr.length > 1 ? 'mdi-account-group' : 'mdi-account'"></i>
+									<i class="mdi" ng-class="itemArr.length > 1 ? 'mdi-account-multiple' : 'mdi-account'"></i>
 								</div>
 								<h1 ng-if="itemArr.length == 1">Revoke role on {{itemArr[0].firstName}} {{itemArr[0].lastName}}</h1>
 								<h1 ng-if="itemArr.length > 1">Revoke role on multiple persons</h1>
