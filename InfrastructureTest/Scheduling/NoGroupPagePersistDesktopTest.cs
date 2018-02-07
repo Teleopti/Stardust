@@ -32,8 +32,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 		public ISkillRepository SkillRepository;
 		public ISkillTypeRepository SkillTypeRepository;
 		public IActivityRepository ActivityRepository;
-
-
 		public ICurrentUnitOfWorkFactory CurrentUnitOfWorkFactory;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 		public DesktopScheduling Target;
@@ -44,25 +42,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 		{
 			var date = new DateOnly(2016, 10, 24);
 			var period = new DateOnlyPeriod(date, date);
-			var contract = new Contract("_");
-			var site = new Site("_");
-			var team = new Team(){Site = site};
-			team.SetDescription(new Description("_"));
-			var partTimePercentage = new PartTimePercentage("_");
-			var contractSchedule = new ContractSchedule("_");
 			var skillType = new SkillTypePhone(new Description("_"), ForecastSource.InboundTelephony);
 			var activity = new Activity("_");
 			var skill1 = new Skill("_") {SkillType = skillType, Activity = activity}.InTimeZone(TimeZoneInfo.Utc);
 			var skill2 = new Skill("_"){SkillType = skillType, Activity = activity}.InTimeZone(TimeZoneInfo.Utc);
-			var personContract = new PersonContract(contract, partTimePercentage, contractSchedule);
-			var personPeriod1 = new PersonPeriod(date, personContract, team);
-			var personPeriod2 = new PersonPeriod(date, personContract, team);
-			personPeriod1.AddPersonSkill(new PersonSkill(skill1, new Percent()));
-			personPeriod2.AddPersonSkill(new PersonSkill(skill2, new Percent()));
-			var agent1 = new Person().InTimeZone(TimeZoneInfo.Utc);
-			agent1.AddPersonPeriod(personPeriod1);
-			var agent2 = new Person().InTimeZone(TimeZoneInfo.Utc);
-			agent2.AddPersonPeriod(personPeriod2);
+			var agent1 = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skill1);
+			var agent2 = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skill2);
 			var rootPersonGroup1 = new RootPersonGroup("_");
 			var rootPersonGroup2 = new RootPersonGroup("_");
 			rootPersonGroup1.AddPerson(agent1);
@@ -71,31 +56,33 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 			var groupPage2 = new GroupPage("_");
 			groupPage1.AddRootPersonGroup(rootPersonGroup1);
 			groupPage2.AddRootPersonGroup(rootPersonGroup2);
-
+			var agents = new[] {agent1, agent2};
 			using (var uow = CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				ActivityRepository.Add(activity);
 				SkillTypeRepository.Add(skillType);
 				SkillRepository.Add(skill1);
 				SkillRepository.Add(skill2);
-				ContractRepository.Add(contract);
-				ContractScheduleRepository.Add(contractSchedule);
-				PartTimePercentageRepository.Add(partTimePercentage);
-				SiteRepository.Add(site);
-				TeamRepository.Add(team);
-				PersonRepository.Add(agent1);
-				PersonRepository.Add(agent2);
+				foreach (var agent in agents)
+				{
+					var personPeriod = agent.Period(date);
+					ContractRepository.Add(personPeriod.PersonContract.Contract);
+					ContractScheduleRepository.Add(personPeriod.PersonContract.ContractSchedule);
+					PartTimePercentageRepository.Add(personPeriod.PersonContract.PartTimePercentage);
+					SiteRepository.Add(personPeriod.Team.Site);
+					TeamRepository.Add(personPeriod.Team);
+					PersonRepository.Add(agent);
+				}
 				GroupPageRepository.Add(groupPage1);
 				GroupPageRepository.Add(groupPage2);
 				uow.PersistAll();
 			}
-
 			var schedulingOptions = new SchedulingOptions
 			{
 				GroupOnGroupPageForTeamBlockPer = new GroupPageLight("_", GroupPageType.UserDefined, groupPage1.IdOrDescriptionKey),
 				UseTeam = true
 			};
-			SchedulerStateHolderFrom.Fill(new Scenario(), period, new[] {agent1, agent2}, Enumerable.Empty<IPersonAssignment>(), Enumerable.Empty<ISkillDay>());
+			SchedulerStateHolderFrom.Fill(new Scenario(), period, agents, Enumerable.Empty<IPersonAssignment>(), Enumerable.Empty<ISkillDay>());
 
 			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new[] {agent1}, period);
 
