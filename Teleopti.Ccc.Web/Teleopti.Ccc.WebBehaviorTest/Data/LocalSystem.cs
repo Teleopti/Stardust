@@ -12,6 +12,7 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 using Teleopti.Ccc.WebBehaviorTest.SpecFlowPlugin;
@@ -23,6 +24,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public static IToggleManager Toggles;
 		public static ICurrentUnitOfWorkFactory UnitOfWorkFactory;
 		public static ICurrentUnitOfWork UnitOfWork;
+		public static SetupResolver SetupResolver;
 		public static DefaultDataCreator DefaultDataCreator;
 		public static DefaultAnalyticsDataCreator DefaultAnalyticsDataCreator;
 		public static HangfireUtilities Hangfire;
@@ -52,10 +54,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			TenantUnitOfWork = IntegrationIoCTest.Container.Resolve<ITenantUnitOfWork>();
 			CurrentTenantSession = IntegrationIoCTest.Container.Resolve<ICurrentTenantSession>();
 
+			SetupResolver = IntegrationIoCTest.Container.Resolve<SetupResolver>();
 			DefaultDataCreator = IntegrationIoCTest.Container.Resolve<DefaultDataCreator>();
 			DefaultAnalyticsDataCreator = IntegrationIoCTest.Container.Resolve<DefaultAnalyticsDataCreator>();
 
 			StateQueue = IntegrationIoCTest.Container.Resolve<StateQueueUtilities>();
+			
 		}
 
 		public static void Start()

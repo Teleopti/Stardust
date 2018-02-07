@@ -26,7 +26,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public ScenarioDataFactory() : base(
 			LocalSystem.UnitOfWork, 
 			LocalSystem.CurrentTenantSession, 
-			LocalSystem.TenantUnitOfWork)
+			LocalSystem.TenantUnitOfWork,
+			LocalSystem.SetupResolver)
 		{
 			LocalSystem.UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork(QueryFilter.NoFilter);
 

@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void GivenIHaveAnApprovedPeriodBetween(string person, string from, string to)
 		{
 			var period = CurrentTime.MagicParse(from, to);
-			DataMaker.Person(person).Apply(new ApprovedPeriodConfigurable
+			DataMaker.Person(person).Apply(new ApprovedPeriodSpec
 			{
 				StartTime = period.StartDateTime,
 				EndTime = period.EndDateTime
