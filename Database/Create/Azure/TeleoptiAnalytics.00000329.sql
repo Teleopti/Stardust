@@ -1309,7 +1309,13 @@ CREATE TABLE [mart].[etl_maintenance_configuration](
 )
 )
 GO
-
+INSERT [mart].[etl_maintenance_configuration] ([configuration_id], [configuration_name], [configuration_value]) VALUES (1, N'daysToKeepETLError', N'60')
+INSERT [mart].[etl_maintenance_configuration] ([configuration_id], [configuration_name], [configuration_value]) VALUES (2, N'daysToKeepETLExecution', N'45')
+INSERT [mart].[etl_maintenance_configuration] ([configuration_id], [configuration_name], [configuration_value]) VALUES (3, N'daysToKeepRTAEvents', N'2')
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE TABLE [msg].[Subscriber](
 	[SubscriberId] [uniqueidentifier] NOT NULL,
 	[UserId] [int] NOT NULL,

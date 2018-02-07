@@ -19,6 +19,11 @@ BEGIN
 END
 GO
 
+IF NOT EXISTS (SELECT 1 FROM [dbo].[PurgeSetting] WHERE [Key] ='Forecast')
+	INSERT INTO [dbo].[PurgeSetting] ([Key], [KeepYears]) VALUES('Forecast',10)
+IF NOT EXISTS (SELECT 1 FROM [dbo].[PurgeSetting] WHERE [Key] ='Schedule')
+	INSERT INTO [dbo].[PurgeSetting] ([Key], [KeepYears]) VALUES('Schedule',10)
+GO
 ----------------  
 --Name: Peter W
 --Date: 2012-02-02

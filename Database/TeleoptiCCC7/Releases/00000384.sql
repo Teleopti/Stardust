@@ -94,6 +94,15 @@ CREATE TABLE [dbo].[PurgeSetting](
 )
 GO
 
+--Save old data
+INSERT INTO dbo.PurgeSetting ([Key],Value)
+SELECT 'YearsToKeep'+[Key],KeepYears
+FROM dbo.PurgeSetting_old
+
+--new setting
+INSERT INTO dbo.PurgeSetting ([Key],Value)
+VALUES('DaysToKeepSecurityAudit',30)
+GO
 
 ----------------  
 --Name: Ola & David
