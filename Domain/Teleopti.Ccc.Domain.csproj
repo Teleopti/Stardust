@@ -327,6 +327,8 @@
     <Compile Include="ApplicationLayer\Rta\AgentAdherenceDay\AgentAdherenceDay.cs" />
     <Compile Include="ApplicationLayer\Rta\AgentAdherenceDay\AgentAdherenceDayLoader.cs" />
     <Compile Include="ApplicationLayer\Rta\AgentAdherenceDay\ApprovedPeriod.cs" />
+    <Compile Include="ApplicationLayer\Rta\AgentAdherenceDay\ApprovePeriodCommand.cs" />
+    <Compile Include="ApplicationLayer\Rta\AgentAdherenceDay\ApprovePeriodCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Rta\AgentAdherenceDay\HistoricalAdherence.cs" />
     <Compile Include="ApplicationLayer\Rta\AgentAdherenceDay\HistoricalAdherenceAdherence.cs" />
     <Compile Include="ApplicationLayer\Rta\AgentAdherenceDay\HistoricalChange.cs" />

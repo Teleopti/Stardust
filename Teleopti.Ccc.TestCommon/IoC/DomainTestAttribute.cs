@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<FakeAgentStateReadModelPersister>().For<IAgentStateReadModelPersister, IAgentStateReadModelReader>();
 			system.UseTestDouble<FakeHistoricalAdherenceReadModelPersister>().For<IHistoricalAdherenceReadModelReader, IHistoricalAdherenceReadModelPersister>();
 			system.UseTestDouble<FakeHistoricalChangeReadModelPersister>().For<IHistoricalChangeReadModelPersister, IHistoricalChangeReadModelReader>();
-			system.UseTestDouble<FakeApprovedPeriodsStorage>().For<IApprovedPeriodsReader>();;
+			system.UseTestDouble<FakeApprovedPeriodsStorage>().For<IApprovedPeriodsReader, IApprovedPeriodsPersister>();;
 			
 			system.UseTestDouble<FakeAllLicenseActivatorProvider>().For<ILicenseActivatorProvider>();
 			system.UseTestDouble<FakeTeamCardReader>().For<ITeamCardReader>();

@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -14,13 +15,16 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 	public class HistoricalAdherenceController : ApiController
 	{
 		private readonly HistoricalAdherenceViewModelBuilder _historicalAdherenceViewModelBuilder;
+		private readonly ApprovePeriodCommandHandler _approvePeriodCommandHandler;
 		private readonly HistoricalAdherenceDate _historicalAdherenceDate;
 
 		public HistoricalAdherenceController(
 			HistoricalAdherenceViewModelBuilder historicalAdherenceViewModelBuilder,
+			ApprovePeriodCommandHandler approvePeriodCommandHandler,
 			HistoricalAdherenceDate historicalAdherenceDate)
 		{
 			_historicalAdherenceViewModelBuilder = historicalAdherenceViewModelBuilder;
+			_approvePeriodCommandHandler = approvePeriodCommandHandler;
 			_historicalAdherenceDate = historicalAdherenceDate;
 		}
 
@@ -31,10 +35,19 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 			var dateTime = DateTime.ParseExact(date, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None);
 			return Ok(_historicalAdherenceViewModelBuilder.Build(personId, new DateOnly(dateTime)));
 		}
-
+		
+		[UnitOfWork]
+		[HttpGet, Route("api/HistoricalAdherence/ApprovePeriod")]
+		public virtual IHttpActionResult ApprovePeriod(ApprovePeriodCommand command)
+		{
+			_approvePeriodCommandHandler.Handle(command);
+			return Ok();
+		}
+		
 		[UnitOfWork]
 		[HttpGet, Route("api/HistoricalAdherence/MostRecentShiftDate")]
 		public virtual IHttpActionResult MostRecentShiftDate(Guid personId) =>
 			Ok(_historicalAdherenceDate.MostRecentShiftDate(personId).Date.ToString("yyyyMMdd"));
 	}
+
 }

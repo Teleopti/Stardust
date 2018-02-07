@@ -1,0 +1,72 @@
+﻿using System;
+using System.Linq;
+using NUnit.Framework;
+using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay;
+using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
+
+namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AgentAdherenceDay
+{
+	[DomainTest]
+	[TestFixture]
+	public class ApprovePeriodCommandHandlerTest
+	{
+		public ApprovePeriodCommandHandler Target;
+		public FakeApprovedPeriodsStorage Storage;
+		public FakeUserTimeZone TimeZone;
+
+		[Test]
+		public void ShouldApprove()
+		{
+			var person = Guid.NewGuid();
+
+			Target.Handle(new ApprovePeriodCommand
+			{
+				PersonId = person,
+				StartDateTime = "2018-01-29 08:05:00",
+				EndDateTime = "2018-01-29 08:15:00"
+			});
+
+			Storage.Data.Single().PersonId.Should().Be(person);
+			Storage.Data.Single().StartTime.Should().Be("2018-01-29 08:05:00".Utc());
+			Storage.Data.Single().EndTime.Should().Be("2018-01-29 08:15:00".Utc());
+		}
+
+		[Test]
+		public void ShouldApproveFromUsersTimeZone()
+		{
+			var person = Guid.NewGuid();
+			TimeZone.IsSweden();
+
+			Target.Handle(new ApprovePeriodCommand
+			{
+				PersonId = person,
+				StartDateTime = "2018-01-29 08:00:00",
+				EndDateTime = "2018-01-29 09:00:00"
+			});
+
+			Storage.Data.Single().StartTime.Should().Be("2018-01-29 07:00:00".Utc());
+			Storage.Data.Single().EndTime.Should().Be("2018-01-29 08:00:00".Utc());
+		}
+
+		[Test]
+		public void ShouldApproveFromUsersTimeZone24Hours()
+		{
+			var person = Guid.NewGuid();
+			TimeZone.IsSweden();
+
+			Target.Handle(new ApprovePeriodCommand
+			{
+				PersonId = person,
+				StartDateTime = "2018-01-29 15:00:00",
+				EndDateTime = "2018-01-29 16:00:00"
+			});
+
+			Storage.Data.Single().StartTime.Should().Be("2018-01-29 14:00:00".Utc());
+			Storage.Data.Single().EndTime.Should().Be("2018-01-29 15:00:00".Utc());
+		}
+	}
+}
