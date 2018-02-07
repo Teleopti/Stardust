@@ -3,7 +3,7 @@ using Teleopti.Ccc.Domain.Calculation;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Secrets.Calculation;
-using Teleopti.Ccc.Secrets.ErlangA;
+using Teleopti.Ccc.Domain.Forecasting.ErlangA;
 
 namespace Teleopti.Ccc.Domain.Forecasting
 {
