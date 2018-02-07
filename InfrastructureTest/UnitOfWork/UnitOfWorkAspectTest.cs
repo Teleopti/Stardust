@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -51,14 +50,8 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 				action(_uow.Current());
 			}
 			
-			[UnitOfWork(DoCommit.No)]
+			[ReadonlyUnitOfWork]
 			public virtual void DoesWithNoCommit(Action<IUnitOfWork> action)
-			{
-				action(_uow.Current());
-			}
-			
-			[UnitOfWork(DoCommit.WhenNoExceptionOccurs)]
-			public virtual void DoesWithCommit(Action<IUnitOfWork> action)
 			{
 				action(_uow.Current());
 			}
@@ -68,10 +61,10 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		public void ShouldNotPersist()
 		{
 			var person = PersonFactory.CreatePerson("1");
-			TheService.DoesWithCommit(uow => { PersonRepository.Add(person); });
+			TheService.Does(uow => { PersonRepository.Add(person); });
 			person.SetName(new Name("2", "2"));
 			TheService.DoesWithNoCommit(uow => { uow.Merge(person); });
-			TheService.DoesWithCommit(uow =>
+			TheService.Does(uow =>
 			{
 				PersonRepository.LoadAll().Single(x => x.Id.Value == person.Id.Value).Name.FirstName
 					.Should().Be.EqualTo("1");
