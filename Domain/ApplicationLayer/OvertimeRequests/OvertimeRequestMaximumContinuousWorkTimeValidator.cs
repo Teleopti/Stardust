@@ -30,32 +30,71 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 
 			var maximumContinuousWorkTime = person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTime;
 			var timezone = person.PermissionInformation.DefaultTimeZone();
-			var schedulePeriod = context.PersonRequest.Request.Period.ToDateOnlyPeriod(timezone).Inflate(1);
-
-			var dic = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
-				new ScheduleDictionaryLoadOptions(false, false),
-				schedulePeriod, _currentScenario.Current());
+			var dic = getScheduleDictionary(context.PersonRequest.Request.Period.ToDateOnlyPeriod(timezone), person);
 
 			var requestPeriod = context.PersonRequest.Request.Period;
-			var scheduleDay = dic[person].ScheduledDay(new DateOnly(requestPeriod.StartDateTimeLocal(timezone)));
-			var personAssignment = scheduleDay.PersonAssignment();
+			var personAssignment = dic[person].ScheduledDay(new DateOnly(requestPeriod.StartDateTimeLocal(timezone))).PersonAssignment();
 
-			var lastShiftLayer = personAssignment.ShiftLayers
-				.FirstOrDefault(shift => shift.Period.EndDateTime.CompareTo(requestPeriod.StartDateTime) <= 0);
+			if (personAssignment == null)
+			{
+				personAssignment = dic[person].ScheduledDay(new DateOnly(requestPeriod.StartDateTimeLocal(timezone)).AddDays(-1))
+					.PersonAssignment();
+			}
+
 			var continuousWorkTimePeriod = string.Empty;
 			var continuousWorkTime = TimeSpan.Zero;
-			if (lastShiftLayer != null)
+
+			if (personAssignment != null)
 			{
-				continuousWorkTime = lastShiftLayer.Period.ElapsedTime() + requestPeriod.ElapsedTime();
-				continuousWorkTimePeriod =
-					$"{lastShiftLayer.Period.StartDateTimeLocal(timezone)} - {requestPeriod.EndDateTimeLocal(timezone)}";
+				var previousShiftLayer = personAssignment.ShiftLayers.FirstOrDefault(shift =>
+					shift.Period.EndDateTime.CompareTo(requestPeriod.StartDateTime) <= 0);
+				var nextShiftLayer = personAssignment.ShiftLayers.FirstOrDefault(shift =>
+					shift.Period.StartDateTime.CompareTo(requestPeriod.EndDateTime) >= 0);
+
+				if (previousShiftLayer != null)
+				{
+					continuousWorkTime = previousShiftLayer.Period.ElapsedTime() + requestPeriod.ElapsedTime();
+					continuousWorkTimePeriod =
+						$"{previousShiftLayer.Period.StartDateTimeLocal(timezone)} - {requestPeriod.EndDateTimeLocal(timezone)}";
+				}
+
+				if (nextShiftLayer != null)
+				{
+					continuousWorkTime = nextShiftLayer.Period.ElapsedTime() + requestPeriod.ElapsedTime();
+					continuousWorkTimePeriod =
+						$"{requestPeriod.StartDateTimeLocal(timezone)} - {nextShiftLayer.Period.EndDateTimeLocal(timezone)}";
+				}
+
+				if (previousShiftLayer == null && nextShiftLayer == null)
+				{
+					continuousWorkTime = requestPeriod.ElapsedTime();
+					continuousWorkTimePeriod =
+						$"{requestPeriod.StartDateTimeLocal(timezone)} - {requestPeriod.EndDateTimeLocal(timezone)}";
+				}
 			}
 			else
 			{
 				continuousWorkTime = requestPeriod.ElapsedTime();
 				continuousWorkTimePeriod =
 					$"{requestPeriod.StartDateTimeLocal(timezone)} - {requestPeriod.EndDateTimeLocal(timezone)}";
+
+				if (requestPeriod.EndDateTimeLocal(timezone).Date.CompareTo(requestPeriod.StartDateTimeLocal(timezone).Date) > 0)
+				{
+					personAssignment = dic[person].ScheduledDay(new DateOnly(requestPeriod.StartDateTimeLocal(timezone)).AddDays(1))
+						.PersonAssignment();
+
+					var nextShiftLayer = personAssignment.ShiftLayers.FirstOrDefault(shift =>
+						shift.Period.StartDateTime.CompareTo(requestPeriod.EndDateTime) >= 0);
+
+					if (nextShiftLayer != null)
+					{
+						continuousWorkTime = nextShiftLayer.Period.ElapsedTime() + requestPeriod.ElapsedTime();
+						continuousWorkTimePeriod =
+							$"{requestPeriod.StartDateTimeLocal(timezone)} - {nextShiftLayer.Period.EndDateTimeLocal(timezone)}";
+					}
+				}
 			}
+
 
 			if (continuousWorkTime.CompareTo(maximumContinuousWorkTime) <= 0)
 			{
@@ -72,6 +111,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 						DateHelper.HourMinutesString(maximumContinuousWorkTime.Value.TotalMinutes))
 				}
 			};
+		}
+
+		private IScheduleDictionary getScheduleDictionary(DateOnlyPeriod period, IPerson person)
+		{
+			var schedulePeriod = period.Inflate(1);
+
+			var dic = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
+				new ScheduleDictionaryLoadOptions(false, false),
+				schedulePeriod, _currentScenario.Current());
+
+			return dic;
 		}
 
 		private static OvertimeRequestValidationResult validResult()
