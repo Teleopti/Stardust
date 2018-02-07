@@ -23121,6 +23121,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} contains too much continuous worktime ({1}). Max is {2}..
+        /// </summary>
+        public static string OvertimeRequestContinuousWorkTimeDenyReason {
+            get {
+                return ResourceManager.GetString("OvertimeRequestContinuousWorkTimeDenyReason", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The request date is more than 14 days from now..
         /// </summary>
         public static string OvertimeRequestDateExceeds14Days {

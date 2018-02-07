@@ -186,6 +186,7 @@
     <Compile Include="ApplicationLayer\OvertimeRequests\LicenseAvailability.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeMinimumApprovalThresholdInMinutes.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestAvailability.cs" />
+    <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestMaximumContinuousWorkTimeValidator.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestMaximumtimeValidator.cs" />
     <Compile Include="ApplicationLayer\ImportExternalPerformance\ImportExternalPerformanceJobStatus.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsTimeZoneUpdater.cs" />

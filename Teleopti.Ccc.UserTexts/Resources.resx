@@ -16711,6 +16711,10 @@ Do you want to participate?</value>
     <value>{0} contains too much overtime ({1}). Max is {2}.</value>
     <comment>error message for maximum overtime validation</comment>
   </data>
+  <data name="OvertimeRequestContinuousWorkTimeDenyReason" xml:space="preserve">
+    <value>{0} contains too much continuous worktime ({1}). Max is {2}.</value>
+    <comment>error message for maximum continuous overtime validation</comment>
+  </data>
   <data name="OvertimeRequestMaximumContinuousWorkTime" xml:space="preserve">
     <value>Maximum continuous work time:</value>
     <comment>Label name of maximum continuous work time setting</comment>
