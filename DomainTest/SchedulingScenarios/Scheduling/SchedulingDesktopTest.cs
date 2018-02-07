@@ -241,33 +241,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			schedulerStateHolder.Schedules[agent].BusinessRuleResponseInternalCollection.Should().Be.Empty();
 		}
 
-		[Test]
-		[Ignore("#48053 - to be fixed")]
-		public void ShouldNotRemoveAgentFromUserDefinedGroupPage()
-		{
-			var date = new DateOnly(2016, 10, 24);
-			var period = new DateOnlyPeriod(date, date);
-			var agent1 = new Person().WithId().WithPersonPeriod(new ContractWithMaximumTolerance(), new Skill().For(new Activity()).WithId());
-			var agent2 = new Person().WithId().WithPersonPeriod(new ContractWithMaximumTolerance(), new Skill().For(new Activity()).WithId());
-			var rootPersonGroup1 = new RootPersonGroup("_");
-			var rootPersonGroup2 = new RootPersonGroup("_");
-			rootPersonGroup1.AddPerson(agent1);
-			rootPersonGroup2.AddPerson(agent2);
-			var groupPage1 = new GroupPage("_") { DescriptionKey = "UserDefined1" };
-			var groupPage2 = new GroupPage("_") { DescriptionKey = "UserDefined2" };
-			groupPage1.AddRootPersonGroup(rootPersonGroup1);
-			groupPage2.AddRootPersonGroup(rootPersonGroup2);
-			GroupPageRepository.Has(groupPage1);
-			GroupPageRepository.Has(groupPage2);
-			var schedulingOptions = new SchedulingOptions{GroupOnGroupPageForTeamBlockPer = new GroupPageLight("_", GroupPageType.UserDefined, "UserDefined1"), UseTeam = true};
-			SchedulerStateHolderFrom.Fill( new Scenario(), period, new[] { agent1, agent2 }, Enumerable.Empty<IPersonAssignment>(), Enumerable.Empty<ISkillDay>());
-
-			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new[] { agent1 }, period);
-
-			rootPersonGroup1.PersonCollection.Should().Not.Be.Empty();
-			rootPersonGroup2.PersonCollection.Should().Not.Be.Empty();
-		}
-
 		public SchedulingDesktopTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerNoPytteIslands47500, bool resourcePlannerXxl47258) : base(seperateWebRequest, resourcePlannerNoPytteIslands47500, resourcePlannerXxl47258)
 		{
 		}
