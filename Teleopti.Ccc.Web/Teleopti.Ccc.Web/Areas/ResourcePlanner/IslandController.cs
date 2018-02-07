@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			_skillRepository = skillRepository;
 		}
 
-		[UnitOfWork(DoCommit.No)]
+		[ReadonlyUnitOfWork]
 		[HttpGet, Route("api/ResourcePlanner/Islands")]
 		public virtual IHttpActionResult Islands()
 		{
