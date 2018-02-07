@@ -392,6 +392,7 @@
     <Compile Include="Scheduling\DayOffOptimizationWebUowTest.cs" />
     <Compile Include="Scheduling\FullSchedulingUowTest.cs" />
     <Compile Include="Scheduling\MoveAgentToNewTimeZoneTest.cs" />
+    <Compile Include="Scheduling\NoGroupPagePersistDesktopTest.cs" />
     <Compile Include="Scheduling\ScheduleRangePersisterWithConflictSolve\ShouldOverwriteExternalDelete.cs" />
     <Compile Include="Scheduling\ScheduleRangePersisterWithConflictSolve\ShouldDeleteExternalModification.cs" />
     <Compile Include="Scheduling\ScheduleRangePersisterWithConflictSolve\ShouldOverwriteExternalModification.cs" />
