@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public IEnumerable<ITeamGamificationSetting> FindAllTeamGamificationSettingsSortedByTeam()
 		{
-			throw new NotImplementedException();
+			return _teamGamificationSettings.OrderByDescending(x => x.Team.Description.Name);
 		}
 
 		public ITeamGamificationSetting FindTeamGamificationSettingsByTeam(ITeam team)

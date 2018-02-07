@@ -214,6 +214,7 @@
     <Compile Include="FakeRepositories\FakeAnalyticsSiteRepository.cs" />
     <Compile Include="FakeRepositories\FakeApprovedPeriodsStorage.cs" />
     <Compile Include="FakeRepositories\FakeASMScheduleChangeTimeRepository.cs" />
+    <Compile Include="FakeRepositories\FakeBadgeCalculationRepository.cs" />
     <Compile Include="FakeRepositories\FakeExternalPerformanceDataRepository.cs" />
     <Compile Include="FakeRepositories\FakeExternalPerformanceRepository.cs" />
     <Compile Include="FakeRepositories\FakePersonFinderReadOnlyRepository.cs" />
@@ -264,6 +265,7 @@
     <Compile Include="FakeRepositories\FakePersonAssignmentWriteSideRepository.cs" />
     <Compile Include="FakeRepositories\FakePersonAssociationPublisherCheckSumPersister.cs" />
     <Compile Include="FakeRepositories\FakePersonSelectorReadOnlyRepository.cs" />
+    <Compile Include="FakeRepositories\FakePushMessagePersister.cs" />
     <Compile Include="FakeRepositories\FakeQueuedAbsenceRequestRepository.cs" />
     <Compile Include="FakeRepositories\FakePersonScheduleDayReadModelFinder.cs" />
     <Compile Include="FakeRepositories\FakeProjectionVersionPersister.cs" />
@@ -400,6 +402,7 @@
     <Compile Include="IoC\ITestInterceptor.cs" />
     <Compile Include="IoC\RealPermissionsAttribute.cs" />
     <Compile Include="IoC\RepositoriesMustNotBeUsedException.cs" />
+    <Compile Include="IoC\ServiceBusTestAttribute.cs" />
     <Compile Include="IoC\SetupThrowingTestDoublesForRepositories.cs" />
     <Compile Include="IoC\SystemImpl.cs" />
     <Compile Include="IoC\TestDoubles.cs" />

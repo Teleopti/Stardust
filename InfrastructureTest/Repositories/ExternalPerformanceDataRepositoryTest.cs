@@ -87,38 +87,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
-		public void ShouldNotFindDataWhenNotInSameBusinessUnit()
-		{
-			var date = new DateOnly(2018, 01, 25);
-			prepareRelatedData();
-			persistExternalPerformanceData(date, _person);
-
-			var result = WithUnitOfWork.Get(() =>
-			{
-				var data = Target.Find(date, new List<Guid> { _person.Id.Value }, 1, Guid.NewGuid());
-				return data;
-			});
-
-			result.Count.Should().Be.EqualTo(0);
-		}
-
-		[Test]
-		public void ShouldFindExternalPerformanceData()
-		{
-			var date = new DateOnly(2018, 01, 25);
-			prepareRelatedData();
-			persistExternalPerformanceData(date, _person);
-
-			var result = WithUnitOfWork.Get(() =>
-			{
-				var data = Target.Find(date, new List<Guid>{_person.Id.Value}, 1, _externalPerformance.BusinessUnit.Id.Value);
-				return data;
-			});
-
-			result.First().OriginalPersonId.Should().Be.EqualTo(_person.EmploymentNumber);
-		}
-
-		[Test]
 		public void SholdNotFindPersonWhenNotInSameBusinessUnit()
 		{
 			var date = new DateOnly(2018, 01, 25);
@@ -152,7 +120,25 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			});
 
 			result.Count.Should().Be.EqualTo(1);
-			result.First().Should().Be.EqualTo(person2.Id);
+			result.First().PersonId.Should().Be.EqualTo(person2.Id);
+			result.First().Score.Should().Be.EqualTo(80);
+			result.First().DateFrom.Should().Be.EqualTo(date);
+		}
+
+		[Test]
+		public void ShouldNotFindPersonWhenHeCannotGetBadge()
+		{
+			var date = new DateOnly(2018, 01, 25);
+			prepareRelatedData();
+			persistExternalPerformanceData(date, _person, 60);
+
+			var result = WithUnitOfWork.Get(() =>
+			{
+				var data = Target.FindPersonsCouldGetBadgeOverThreshold(date, new List<Guid> { _person.Id.Value}, 1, 70, _externalPerformance.BusinessUnit.Id.Value);
+				return data;
+			});
+
+			result.Count.Should().Be.EqualTo(0);
 		}
 
 		private IPerson createPerson()

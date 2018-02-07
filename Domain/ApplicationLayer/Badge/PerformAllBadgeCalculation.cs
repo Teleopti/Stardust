@@ -35,11 +35,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 
 			foreach (var timeZoneInfo in timeZoneList)
 			{
-				calculateBadges(businessUnitId, timeZoneInfo.Id);
+				calculateSystemBadges(businessUnitId, timeZoneInfo.Id);
 			}
+
+			_calculateBadges.CalculateExternalBadge(new CalculateBadgeMessage
+			{
+				LogOnBusinessUnitId = businessUnitId,
+				CalculationDate = DateTime.Today.AddDays(-2)
+			});
 		}
 
-		private void calculateBadges(Guid businessUnitId, string timeZoneInfoId)
+		private void calculateSystemBadges(Guid businessUnitId, string timeZoneInfoId)
 		{
 			const int badgeCalculationDelayDays = -2;
 			var today = _now.UtcDateTime();
@@ -59,7 +65,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 							+ $"comes late than latest interval of \"{calculationDateForGivenTimeZone:yyyy-MM-dd}\"");
 			}
 
-			_calculateBadges.CalculateAll(new CalculateBadgeMessage
+			_calculateBadges.Calculate(new CalculateBadgeMessage
 			{
 				LogOnBusinessUnitId = businessUnitId,
 				CalculationDate = calculationDateForGivenTimeZone,

@@ -174,7 +174,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 			var personList = new HashSet<IPerson>(allPersons);
 
 			var personIdList = allPersons.Select(x => x.Id.Value).ToList();
-			var performanceDatas = _externalPerformanceDataRepository.Find(date, personIdList, badgeSetting.QualityId, businessId);
+			var performanceDatas = _externalPerformanceDataRepository.FindPersonsCouldGetBadgeOverThreshold(date, personIdList, badgeSetting.QualityId, badgeSetting.BronzeThreshold, businessId);
 
 			var agentsWithBadgeValue = performanceDatas.ToDictionary(k => k.PersonId, v => v.Score);
 			var newAwardedBadges = AddBadge(personList, agentsWithBadgeValue, badgeSetting.QualityId,

@@ -111,10 +111,10 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AgentBadge\LogObjectDateCheckerTest.cs" />
+    <Compile Include="AgentBadge\PerformAllBadgeCalculationTest.cs" />
     <Compile Include="ContainerTest.cs" />
     <Compile Include="AgentBadge\AgentBadgeWithRankCalculatorTest.cs" />
     <Compile Include="AgentBadge\AgentBadgeCalculatorTest.cs" />
-    <Compile Include="AgentBadge\CalculateBadgesTest.cs" />
     <Compile Include="BudgetGroupAllowanceSpecificationTest.cs" />
     <Compile Include="BudgetGroupHeadCountSpecificationTest.cs" />
     <Compile Include="Container\ContainerConfigurationTest.cs" />

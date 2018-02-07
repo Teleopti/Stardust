@@ -28,11 +28,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.List<IExternalPerformanceData>();
 		}
 
-		public ICollection<IExternalPerformanceData> Find(DateOnly date, List<Guid> personIds, int performanceId, Guid businessId)
+		public ICollection<IExternalPerformanceData> FindPersonsCouldGetBadgeOverThreshold(DateOnly date, List<Guid> personIds, int performanceId, double badgeThreshold, Guid businessId)
 		{
 			var businessUnit = _businessUnitRepository.Get(businessId);
 			if (businessUnit == null) return new List<IExternalPerformanceData>();
-
+			
 			var performance = Session.CreateCriteria<ExternalPerformance>()
 				.Add(Restrictions.Conjunction()
 					.Add(Restrictions.Eq("BusinessUnit", businessUnit))
@@ -45,32 +45,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.Add(Restrictions.Eq("DateFrom", date))
 					.Add(Restrictions.In("PersonId", personIds))
 					.Add(Restrictions.Eq("ExternalPerformance", performance))
-				)
-				.List<IExternalPerformanceData>();
-		}
-
-		public ICollection<Guid> FindPersonsCouldGetBadgeOverThreshold(DateOnly date, List<Guid> personIds, int performanceId, double badgeThreshold, Guid businessId)
-		{
-			var businessUnit = _businessUnitRepository.Get(businessId);
-			if (businessUnit == null) return new List<Guid>();
-			
-			var performance = Session.CreateCriteria<ExternalPerformance>()
-				.Add(Restrictions.Conjunction()
-					.Add(Restrictions.Eq("BusinessUnit", businessUnit))
-					.Add(Restrictions.Eq("ExternalId", performanceId)))
-				.UniqueResult<IExternalPerformance>();
-
-			var performanceData = Session.CreateCriteria<ExternalPerformanceData>()
-				.Add(Restrictions.Conjunction()
-					.Add(Restrictions.Eq("BusinessUnit", businessUnit))
-					.Add(Restrictions.Eq("DateFrom", date))
-					.Add(Restrictions.In("PersonId", personIds))
-					.Add(Restrictions.Eq("ExternalPerformance", performance))
 					.Add(Restrictions.Ge("Score", badgeThreshold))
 				)
 				.List<IExternalPerformanceData>();
-
-			return performanceData.Select(x => x.PersonId).ToList();
 		}
 	}
 }

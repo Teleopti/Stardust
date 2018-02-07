@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IEnumerable<HistoricalDataDetail> GetLogObjectDetails()
 		{
-			throw new NotImplementedException();
+			return new List<HistoricalDataDetail>();
 		}
 
 		public ICollection<IStatisticTask> LoadDailyStatisticForSpecificDates(ICollection<IQueueSource> sources,

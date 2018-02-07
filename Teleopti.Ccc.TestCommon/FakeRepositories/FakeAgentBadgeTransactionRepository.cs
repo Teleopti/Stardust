@@ -18,12 +18,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void Remove(IAgentBadgeTransaction root)
 		{
-			throw new NotImplementedException();
+			_agentBadgeTransactions.Remove(root);
 		}
 
 		public IAgentBadgeTransaction Get(Guid id)
 		{
-			throw new NotImplementedException();
+			return Load(id);
 		}
 
 		public IList<IAgentBadgeTransaction> LoadAll()
@@ -33,13 +33,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IAgentBadgeTransaction Load(Guid id)
 		{
-			throw new NotImplementedException();
+			return _agentBadgeTransactions.FirstOrDefault(x => x.Id == id);
 		}
 
 		public IUnitOfWork UnitOfWork { get; }
 		public IAgentBadgeTransaction Find(IPerson person, int badgeType, DateOnly calculateDate)
 		{
-			throw new NotImplementedException();
+			return _agentBadgeTransactions.FirstOrDefault(x =>
+				x.Person.Id == person.Id && x.BadgeType == badgeType && x.CalculatedDate == calculateDate);
 		}
 
 		public IList<IAgentBadgeTransaction> Find(IEnumerable<IPerson> personCollection, DateOnlyPeriod period)

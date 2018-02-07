@@ -11,6 +11,15 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 	[TestFixture]
 	public class BadgeCalculationModelTest
 	{
+		private ContainerBuilder _builder;
+
+		[SetUp]
+		public void Setup()
+		{
+			_builder = new ContainerBuilder();
+			_builder.RegisterModule(CommonModule.ForTest());
+		}
+
 		[Test]
 		public void ShouldResolvePerformAllBadgeCalculationWhenToggleOn()
 		{
@@ -21,22 +30,26 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			using (var container = builder.Build())
 			{
 				var result = container.Resolve<IPerformBadgeCalculation>();
-
-				result.GetType().Should().Be.EqualTo(new PerformAllBadgeCalculation(null,null,null,null).GetType());
+				result.Should().Be.InstanceOf<PerformAllBadgeCalculation>();
 			}
 		}
 
 		[Test]
 		public void ShouldResolvePerformBadgeCalculationWhenToggleOff()
 		{
-			var builder = new ContainerBuilder();
-			builder.RegisterModule(CommonModule.ForTest());
-
-			using (var container = builder.Build())
+			using (var container = _builder.Build())
 			{
 				var result = container.Resolve<IPerformBadgeCalculation>();
+				result.Should().Be.InstanceOf<PerformBadgeCalculation>();
+			}
+		}
 
-				result.GetType().Should().Be.EqualTo(new PerformBadgeCalculation(null, null, null, null).GetType());
+		[Test]
+		public void ShouldResolvePushMessageSender()
+		{
+			using (var container = _builder.Build())
+			{
+				container.Resolve<IPushMessageSender>().Should().Be.InstanceOf<PushMessageSender>();
 			}
 		}
 

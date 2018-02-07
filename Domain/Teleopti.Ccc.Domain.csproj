@@ -166,7 +166,9 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\FilterRequestsByToggle.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\WaitlistPreloadService.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\WaitlistProcessPublisher.cs" />
+    <Compile Include="ApplicationLayer\Badge\IPushMessageSender.cs" />
     <Compile Include="ApplicationLayer\Badge\PerformAllBadgeCalculation.cs" />
+    <Compile Include="ApplicationLayer\Badge\PushMessageSender.cs" />
     <Compile Include="ApplicationLayer\Commands\RemoveDayOffCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\RemoveShiftCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\RemoveShiftCommandHandler.cs" />

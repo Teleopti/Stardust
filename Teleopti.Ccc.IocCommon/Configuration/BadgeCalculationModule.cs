@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			}
 			builder.RegisterType<CalculateBadges>();
 			builder.RegisterType<IsTeamGamificationSettingsAvailable>().As<IIsTeamGamificationSettingsAvailable>();
+			builder.RegisterType<PushMessageSender>().As<IPushMessageSender>();
 		}
 	}
 }
