@@ -7,6 +7,7 @@ using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ApprovePeriodAsInAdherence;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.Domain.Collection;
@@ -353,7 +354,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private readonly FakeAgentStateReadModelPersister _agentStateReadModels;
 		private readonly HardcodedSkillGroupingPageId _hardcodedSkillGroupingPageId;
 		private readonly FakeMultiplicatorDefinitionSetRepository _multiplicatorDefinitionSets;
-		private readonly FakeApprovedPeriodsStorage _approvedPeriods;
+		private readonly ApprovePeriodAsInAdherence _approvePeriod;
 
 		private BusinessUnit _businessUnit;
 		private Site _site;
@@ -407,7 +408,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			FakeAgentStateReadModelPersister agentStateReadModels,
 			HardcodedSkillGroupingPageId hardcodedSkillGroupingPageId,
 			FakeMultiplicatorDefinitionSetRepository multiplicatorDefinitionSets,
-			FakeApprovedPeriodsStorage approvedPeriods)
+			ApprovePeriodAsInAdherence approvePeriod)
 		{
 			_tenants = tenants;
 			_persons = persons;
@@ -440,7 +441,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_agentStateReadModels = agentStateReadModels;
 			_hardcodedSkillGroupingPageId = hardcodedSkillGroupingPageId;
 			_multiplicatorDefinitionSets = multiplicatorDefinitionSets;
-			_approvedPeriods = approvedPeriods;
+			_approvePeriod = approvePeriod;
 		}
 
 		public void CreateDefaultData()
@@ -1071,7 +1072,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		[UnitOfWork]
 		public virtual FakeDatabase WithApprovedPeriods(string startTime, string endTime)
 		{
-			_approvedPeriods.Has(new ApprovedPeriod
+			_approvePeriod.Approve(new ApprovedPeriod
 			{
 				PersonId = _person.Id.Value,
 				StartTime = startTime.Utc(),

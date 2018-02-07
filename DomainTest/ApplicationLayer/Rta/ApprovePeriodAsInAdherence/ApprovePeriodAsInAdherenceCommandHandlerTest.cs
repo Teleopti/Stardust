@@ -2,19 +2,19 @@
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ApprovePeriodAsInAdherence;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AgentAdherenceDay
+namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ApprovePeriodAsInAdherence
 {
 	[DomainTest]
 	[TestFixture]
-	public class ApprovePeriodCommandHandlerTest
+	public class ApprovePeriodAsInAdherenceCommandHandlerTest
 	{
-		public ApprovePeriodCommandHandler Target;
+		public ApprovePeriodAsInAdherenceCommandHandler Target;
 		public FakeApprovedPeriodsStorage Storage;
 		public FakeUserTimeZone TimeZone;
 
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AgentAdherenceDay
 		{
 			var person = Guid.NewGuid();
 
-			Target.Handle(new ApprovePeriodCommand
+			Target.Handle(new ApprovePeriodAsInAdherenceCommand
 			{
 				PersonId = person,
 				StartDateTime = "2018-01-29 08:05:00",
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AgentAdherenceDay
 			var person = Guid.NewGuid();
 			TimeZone.IsSweden();
 
-			Target.Handle(new ApprovePeriodCommand
+			Target.Handle(new ApprovePeriodAsInAdherenceCommand
 			{
 				PersonId = person,
 				StartDateTime = "2018-01-29 08:00:00",
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AgentAdherenceDay
 			var person = Guid.NewGuid();
 			TimeZone.IsSweden();
 
-			Target.Handle(new ApprovePeriodCommand
+			Target.Handle(new ApprovePeriodAsInAdherenceCommand
 			{
 				PersonId = person,
 				StartDateTime = "2018-01-29 15:00:00",
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AgentAdherenceDay
 		public void ShouldNotAllowEndTimeBeforeStartTime()
 		{
 			var person = Guid.NewGuid();
-			var command = new ApprovePeriodCommand
+			var command = new ApprovePeriodAsInAdherenceCommand
 			{
 				PersonId = person,
 				StartDateTime = "2018-01-29 17:00:00",

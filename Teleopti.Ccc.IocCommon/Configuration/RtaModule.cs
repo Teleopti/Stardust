@@ -2,6 +2,7 @@
 using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ApprovePeriodAsInAdherence;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Configuration;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.RtaTool;
@@ -78,7 +79,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<HistoricalAdherenceDate>().SingleInstance();
 
 			builder.RegisterType<HistoricalAdherenceViewModelBuilder>().SingleInstance();
-			builder.RegisterType<ApprovePeriodCommandHandler>().SingleInstance();
+			builder.RegisterType<ApprovePeriodAsInAdherenceCommandHandler>().SingleInstance();
+			builder.RegisterType<ApprovePeriodAsInAdherence>().SingleInstance();
 			builder.RegisterType<ScheduleLoader>().SingleInstance();
 			builder.RegisterType<AgentAdherenceDayLoader>().SingleInstance();
 			builder.RegisterType<AdherencePercentageCalculator>().SingleInstance();

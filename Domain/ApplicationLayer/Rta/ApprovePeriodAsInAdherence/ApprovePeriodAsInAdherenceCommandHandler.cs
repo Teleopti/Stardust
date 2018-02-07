@@ -1,31 +1,29 @@
 ﻿using System;
 using System.Globalization;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ApprovePeriodAsInAdherence
 {
-	public class ApprovePeriodCommandHandler
+	public class ApprovePeriodAsInAdherenceCommandHandler
 	{
-		private readonly IApprovedPeriodsPersister _persister;
+		private readonly Rta.ApprovePeriodAsInAdherence.ApprovePeriodAsInAdherence _approve;
 		private readonly IUserTimeZone _timeZone;
 
-		public ApprovePeriodCommandHandler(IApprovedPeriodsPersister persister, IUserTimeZone timeZone)
+		public ApprovePeriodAsInAdherenceCommandHandler(Rta.ApprovePeriodAsInAdherence.ApprovePeriodAsInAdherence approve, IUserTimeZone timeZone)
 		{
-			_persister = persister;
+			_approve = approve;
 			_timeZone = timeZone;
 		}
 
-		public void Handle(ApprovePeriodCommand command)
+		public void Handle(ApprovePeriodAsInAdherenceCommand command)
 		{
 			var startDateTime = TimeZoneInfo.ConvertTimeToUtc(DateTime.ParseExact(command.StartDateTime, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture), _timeZone.TimeZone());
 			var endDateTime = TimeZoneInfo.ConvertTimeToUtc(DateTime.ParseExact(command.EndDateTime, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture), _timeZone.TimeZone());
-			var dateTimePeriod = new DateTimePeriod(startDateTime, endDateTime);
-			_persister.Persist(new ApprovedPeriod
+			_approve.Approve(new ApprovedPeriod
 			{
 				PersonId = command.PersonId,
-				StartTime = dateTimePeriod.StartDateTime,
-				EndTime = dateTimePeriod.EndDateTime
+				StartTime = startDateTime,
+				EndTime = endDateTime
 			});
 		}
 	}
