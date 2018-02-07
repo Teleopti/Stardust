@@ -419,7 +419,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.DoNotUse
 		[Given(@"I am swedish")]
 		public void GivenIAmSwedish()
 		{
-			DataMaker.Data().Me().Apply(new SwedishCultureSpec());
+			DataMaker.Data().Apply(new SwedishCulture());
 		}
 
 		[Given(@"I am american")]

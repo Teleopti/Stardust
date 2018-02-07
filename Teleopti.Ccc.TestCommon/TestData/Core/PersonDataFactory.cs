@@ -14,50 +14,24 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 		private readonly ICurrentUnitOfWork _unitOfWork;
 		private readonly ICurrentTenantSession _tenantSession;
 		private readonly ITenantUnitOfWork _tenantUnitOfWork;
-		private readonly SetupResolver _resolver;
-		private readonly IList<object> _applied = new List<object>();
+		private readonly IList<IUserSetup> _userSetups = new List<IUserSetup>();
+		private readonly IList<IUserDataSetup> _userDataSetups = new List<IUserDataSetup>();
 
 		public PersonDataFactory(
-			IPerson person,
-			ICurrentUnitOfWork unitOfWork,
+			IPerson person, 
+			ICurrentUnitOfWork unitOfWork, 
 			ICurrentTenantSession tenantSession,
-			ITenantUnitOfWork tenantUnitOfWork,
-			SetupResolver resolver)
+			ITenantUnitOfWork tenantUnitOfWork)
 		{
 			_person = person;
 			_unitOfWork = unitOfWork;
 			_tenantSession = tenantSession;
 			_tenantUnitOfWork = tenantUnitOfWork;
-			_resolver = resolver;
-			apply(new SwedishCultureSpec());
-			apply(new UtcTimeZoneSpec());
+			Apply(new Setups.Specific.SwedishCulture());
+			Apply(new UtcTimeZone());
 		}
 
-		public void Apply<T>(T specOrSetup)
-		{
-			switch (specOrSetup)
-			{
-				case IUserSetup setup:
-					apply(setup);
-					break;
-				case IUserDataSetup setup:
-					apply(setup);
-					break;
-				default:
-					apply(specOrSetup);
-					break;
-			}
-		}
-
-		private void apply<T>(T spec)
-		{
-			var setup = _resolver.ResolveUserDataSetupFor<T>();
-			setup.Apply(spec, _person, _person.PermissionInformation.Culture());
-			_unitOfWork.Current().PersistAll();
-			_applied.Add(spec);
-		}
-
-		private void apply(IUserSetup setup)
+		public void Apply(IUserSetup setup)
 		{
 			setup.Apply(_unitOfWork.Current(), _person, _person.PermissionInformation.Culture());
 			_unitOfWork.Current().PersistAll();
@@ -67,25 +41,24 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 				using (_tenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 					setupTenant.Apply(_tenantSession, Person, this);
 
-			_applied.Add(setup);
+			_userSetups.Add(setup);
 		}
 
-		private void apply(IUserDataSetup setup)
+		public void Apply(IUserDataSetup setup)
 		{
 			setup.Apply(_unitOfWork, _person, _person.PermissionInformation.Culture());
 			_unitOfWork.Current().PersistAll();
-			_applied.Add(setup);
+
+			_userDataSetups.Add(setup);
 		}
 
-		public IEnumerable<object> Applied => _applied;
+		public IEnumerable<object> Applied => _userSetups.Cast<object>().Union(_userDataSetups);
 
 		public string LogOnName { get; private set; }
-
 		public void Set(string logonName)
 		{
 			LogOnName = logonName;
 		}
-
 		public IPerson Person => _person;
 		public CultureInfo Culture => Person.PermissionInformation.Culture();
 	}

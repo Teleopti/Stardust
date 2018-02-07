@@ -8,29 +8,19 @@ using Teleopti.Ccc.TestCommon.TestData.Core;
 
 namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 {
-	public class ApprovedPeriodSpec
+	public class ApprovedPeriodConfigurable : IUserDataSetup
 	{
 		public DateTime StartTime { get; set; }
 		public DateTime EndTime { get; set; }
-	}
 
-	public class ApprovedPeriodSetup : IUserDataSetup<ApprovedPeriodSpec>
-	{
-		private readonly IApprovedPeriodsPersister _persister;
-
-		public ApprovedPeriodSetup(IApprovedPeriodsPersister persister)
+		public void Apply(ICurrentUnitOfWork unitOfWork, IPerson person, CultureInfo cultureInfo)
 		{
-			_persister = persister;
-		}
-
-		public void Apply(ApprovedPeriodSpec spec, IPerson person, CultureInfo cultureInfo)
-		{
-			_persister
+			new ApprovedPeriodsPersister(unitOfWork)
 				.Persist(new ApprovedPeriod
 				{
 					PersonId = person.Id.Value,
-					StartTime = spec.StartTime,
-					EndTime = spec.EndTime
+					StartTime = StartTime,
+					EndTime = EndTime
 				});
 		}
 	}

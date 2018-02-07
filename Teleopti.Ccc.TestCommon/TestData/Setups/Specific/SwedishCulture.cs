@@ -6,20 +6,22 @@ using Teleopti.Ccc.TestCommon.TestData.Core;
 
 namespace Teleopti.Ccc.TestCommon.TestData.Setups.Specific
 {
-	public class SwedishCultureSpec
+	public class SwedishCulture : IUserSetup
 	{
-		public CultureInfo CultureInfo = CultureInfo.GetCultureInfo("sv-SE");
-	}
+		public CultureInfo CultureInfo;
 
-	public class SwedishCultureSetup : IUserSetup<SwedishCultureSpec>
-	{
-		public void Apply(SwedishCultureSpec spec, IPerson user, CultureInfo cultureInfo)
+		public SwedishCulture()
 		{
-			user.PermissionInformation.SetCulture(spec.CultureInfo);
-			user.PermissionInformation.SetUICulture(spec.CultureInfo);
+			CultureInfo = CultureInfo.GetCultureInfo("sv-SE");
+		}
+
+		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
+		{
+			user.PermissionInformation.SetCulture(CultureInfo);
+			user.PermissionInformation.SetUICulture(CultureInfo);
 			//strange - needs to be set if language pack installed
-			Thread.CurrentThread.CurrentUICulture = spec.CultureInfo;
-			Thread.CurrentThread.CurrentCulture = spec.CultureInfo;
+			Thread.CurrentThread.CurrentUICulture = CultureInfo;
+			Thread.CurrentThread.CurrentCulture = CultureInfo;
 		}
 	}
 }
