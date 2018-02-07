@@ -47,6 +47,15 @@
 									<span data-bind="visible: isAnsweredCallsGoldBadgeMessage">
 										<img src="~/Areas/MyTime/Content/Images/answeredCallsGoldBadge.png" />
 									</span>
+									<span data-bind="visible: isGoldBadgeMessageOfExternalType">
+										<img src="~/Areas/MyTime/Content/Images/gold.png" width="22" height="30" />
+									</span>
+									<span data-bind="visible: isSilverBadgeMessageOfExternalType">
+										<img src="~/Areas/MyTime/Content/Images/silver.png" width="22" height="30" />
+									</span>
+									<span data-bind="visible: isBronzeBadgeMessageOfExternalType">
+										<img src="~/Areas/MyTime/Content/Images/bronze.png" width="22" height="30" />
+									</span>
 									<span>@Resources.Sender: </span>
 									<span class="sender" data-bind="text: sender, visible: !isNotShowSenderName()"></span>
 									<span>@Resources.Sent: </span>

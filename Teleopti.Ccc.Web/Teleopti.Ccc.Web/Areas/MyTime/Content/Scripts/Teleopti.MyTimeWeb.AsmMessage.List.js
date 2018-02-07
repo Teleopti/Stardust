@@ -67,6 +67,9 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 		self.isAnsweredCallsBronzeBadgeMessage = ko.observable(self.messageType() === 7);
 		self.isAnsweredCallsSilverBadgeMessage = ko.observable(self.messageType() === 8);
 		self.isAnsweredCallsGoldBadgeMessage = ko.observable(self.messageType() === 9);
+		self.isBronzeBadgeMessageOfExternalType = ko.observable(self.messageType() === 11);
+		self.isSilverBadgeMessageOfExternalType = ko.observable(self.messageType() === 12);
+		self.isGoldBadgeMessageOfExternalType = ko.observable(self.messageType() === 13);
 		self.title = ko.observable(item.Title);
 		self.message = ko.observable(item.Message);
 		self.errorMessage = ko.observable();
