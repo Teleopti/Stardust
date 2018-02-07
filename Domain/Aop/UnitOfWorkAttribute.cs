@@ -4,8 +4,12 @@ namespace Teleopti.Ccc.Domain.Aop
 {
 	public sealed class UnitOfWorkAttribute : AspectAttribute
 	{
-		public UnitOfWorkAttribute() : base(typeof(IUnitOfWorkAspect))
+		public UnitOfWorkAttribute(DoCommit doCommit = DoCommit.Yes) : base(typeof(IUnitOfWorkAspect))
 		{
+			if (doCommit == DoCommit.No)
+			{
+				AspectType = typeof(IUnitOfWorkNoCommitAspect);				
+			}
 		}
 	}
 }

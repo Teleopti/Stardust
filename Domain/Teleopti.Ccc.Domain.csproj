@@ -163,6 +163,8 @@
     <Compile Include="AgentInfo\SkillStaffingDataSkillTypeFilter.cs" />
     <Compile Include="AgentInfo\SkillStaffingReadModelDataLoader.cs" />
     <Compile Include="Analytics\AnalyticsSite.cs" />
+    <Compile Include="Aop\DoCommit.cs" />
+    <Compile Include="Aop\IUnitOfWorkNoCommitAspect.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\FilterRequestsByToggle.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\WaitlistPreloadService.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\WaitlistProcessPublisher.cs" />

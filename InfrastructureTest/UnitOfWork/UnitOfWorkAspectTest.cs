@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using NUnit.Framework;
+using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -24,13 +25,11 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 	{
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			//system.UseTestDouble<MutableFakeCurrentHttpContext>().For<ICurrentHttpContext>();
 			system.AddService<TheServiceImpl>();
 		}
 
 		public TheServiceImpl TheService;
 
-		//public MutableFakeCurrentHttpContext HttpContext;
 		public CurrentHttpContext HttpContext;
 		public ICurrentUnitOfWork UnitOfWork;
 		public IPersonRepository PersonRepository;
@@ -51,8 +50,34 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			{
 				action(_uow.Current());
 			}
+			
+			[UnitOfWork(DoCommit.No)]
+			public virtual void DoesWithNoCommit(Action<IUnitOfWork> action)
+			{
+				action(_uow.Current());
+			}
+			
+			[UnitOfWork(DoCommit.Yes)]
+			public virtual void DoesWithCommit(Action<IUnitOfWork> action)
+			{
+				action(_uow.Current());
+			}
 		}
 
+		[Test]
+		public void ShouldNotPersist()
+		{
+			IEnumerable<IPerson> persons = null;
+			var person = PersonFactory.CreatePerson("1");
+			TheService.DoesWithCommit(uow => { PersonRepository.Add(person); });
+			person.SetName(new Name("2", "2"));
+			TheService.DoesWithNoCommit(uow => { uow.Merge(person); });
+			TheService.DoesWithCommit(uow =>
+			{
+				PersonRepository.LoadAll().Single(x => x.Id.Value == person.Id.Value).Name.FirstName
+					.Should().Be.EqualTo("1");
+			});
+		}
 
 		[Test]
 		public void ShouldQuery()
