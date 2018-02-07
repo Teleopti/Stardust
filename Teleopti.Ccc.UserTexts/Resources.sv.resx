@@ -12782,7 +12782,7 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Skiftbyte misslyckades.</value>
   </data>
   <data name="FinishedSwapShifts" xml:space="preserve">
-    <value>Skiftbyte kunde genomföras. </value>
+    <value>Skiftbyte genomfört. </value>
   </data>
   <data name="ConnectionErrorMessage" xml:space="preserve">
     <value>Servern kan inte nås! 
@@ -15331,7 +15331,7 @@ Vill du registrera dig?</value>
     <value>För många fridagar i perioden</value>
   </data>
   <data name="YouGotANewBronzeBadge" xml:space="preserve">
-    <value>Du fick en ny bronsmedalj för {0} {1:yyyy-MM-dd}.</value>
+    <value>Du fick en ny bronsmedalj för {0} {1:yyyy-MM-dd}. </value>
   </data>
   <data name="YouGotANewGoldBadge" xml:space="preserve">
     <value>Du fick en ny guldmedalj för {0} {1:yyyy-MM-dd}.</value>
@@ -15353,5 +15353,47 @@ Vill du registrera dig?</value>
   </data>
   <data name="DuplicateName" xml:space="preserve">
     <value>Namnet är en dubblett</value>
+  </data>
+  <data name="NoPermissionRemovingShift" xml:space="preserve">
+    <value>Inga rättigheter att ta bort skift för agenter</value>
+  </data>
+  <data name="CanNotRemoveShiftForAgentWithFullDayAbsence" xml:space="preserve">
+    <value>Kan inte ta bort skift för agenter med heldagsfrånvaro</value>
+  </data>
+  <data name="CanNotRemoveShiftForAgentWithDayOff" xml:space="preserve">
+    <value>Kan inte ta bort skift för agenter med fridag</value>
+  </data>
+  <data name="CanNotRemoveShiftForAgentWithEmptySchedule" xml:space="preserve">
+    <value>Kan inte ta bort skift för agenter utan schema</value>
+  </data>
+  <data name="FinishedRemoveShift" xml:space="preserve">
+    <value>Borttagning av skift genomfört.</value>
+  </data>
+  <data name="PartialSuccessMessageForRemovingShift" xml:space="preserve">
+    <value>Borttagning av skift för {0} agent(er), {1} lyckades och {2} misslyckades</value>
+  </data>
+  <data name="UIGridColumnsColon" xml:space="preserve">
+    <value>Kolumner:</value>
+  </data>
+  <data name="UIGridExportAllCSV" xml:space="preserve">
+    <value>Exportera all data som CSV</value>
+  </data>
+  <data name="UIGridExportSelectedCSV" xml:space="preserve">
+    <value>Exportera vald data som CSV</value>
+  </data>
+  <data name="UIGridExportVisibleCSV" xml:space="preserve">
+    <value>Exportera synlig data som CSV</value>
+  </data>
+  <data name="UIGridHideCol" xml:space="preserve">
+    <value>Dölj kolumn</value>
+  </data>
+  <data name="UIGridNoSort" xml:space="preserve">
+    <value>Ta bort sortering</value>
+  </data>
+  <data name="UIGridSortAscending" xml:space="preserve">
+    <value>Sortera stigande</value>
+  </data>
+  <data name="UIGridSortDescending" xml:space="preserve">
+    <value>Sortera fallande</value>
   </data>
 </root>
