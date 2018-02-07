@@ -1,6 +1,5 @@
 ﻿using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Islands.ClientModel;
 using Teleopti.Ccc.Domain.Repositories;
 
@@ -11,7 +10,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		private readonly IslandModelFactory _islandModelFactory;
 		private readonly ISkillRepository _skillRepository;
 
-		public IslandController(IslandModelFactory islandModelFactory, ISkillRepository skillRepository, ICurrentUnitOfWork currentUnitOfWork)
+		public IslandController(IslandModelFactory islandModelFactory, ISkillRepository skillRepository)
 		{
 			_islandModelFactory = islandModelFactory;
 			_skillRepository = skillRepository;
