@@ -67,7 +67,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		[Test]
 		public void ShouldNotPersist()
 		{
-			IEnumerable<IPerson> persons = null;
 			var person = PersonFactory.CreatePerson("1");
 			TheService.DoesWithCommit(uow => { PersonRepository.Add(person); });
 			person.SetName(new Name("2", "2"));
