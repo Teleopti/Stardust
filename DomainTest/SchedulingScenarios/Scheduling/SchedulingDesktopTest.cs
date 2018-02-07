@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -16,6 +15,7 @@ using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Scheduling;
 using Teleopti.Interfaces.Domain;
@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public DesktopScheduling Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 		public Func<IGridlockManager> LockManager;
+		public FakeGroupPageRepository GroupPageRepository;
 
 		[Test]
 		public void ShouldNotScheduleHourlyEmployeesWhenSchedulingFixedStaff()
@@ -238,6 +239,33 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			Target.Execute(new NoSchedulingCallback(), new SchedulingOptions(), new NoSchedulingProgress(), new[] { agent }, schedulePeriod);
 
 			schedulerStateHolder.Schedules[agent].BusinessRuleResponseInternalCollection.Should().Be.Empty();
+		}
+
+		[Test]
+		[Ignore("#48053 - to be fixed")]
+		public void ShouldNotRemoveAgentFromUserDefinedGroupPage()
+		{
+			var date = new DateOnly(2016, 10, 24);
+			var period = new DateOnlyPeriod(date, date);
+			var agent2Id = Guid.NewGuid();
+			var agent1 = new Person().WithId().WithPersonPeriod(new ContractWithMaximumTolerance(), new Skill().For(new Activity()).WithId());
+			var agent2 = new Person().WithId(agent2Id).WithPersonPeriod(new ContractWithMaximumTolerance(), new Skill().For(new Activity()).WithId());
+			var rootPersonGroup1 = new RootPersonGroup("_");
+			var rootPersonGroup2 = new RootPersonGroup("_");
+			rootPersonGroup1.AddPerson(agent1);
+			rootPersonGroup2.AddPerson(agent2);
+			var groupPage1 = new GroupPage("_") { DescriptionKey = "UserDefined1" };
+			var groupPage2 = new GroupPage("_") { DescriptionKey = "UserDefined2" };
+			groupPage1.AddRootPersonGroup(rootPersonGroup1);
+			groupPage2.AddRootPersonGroup(rootPersonGroup2);
+			GroupPageRepository.Has(groupPage1);
+			GroupPageRepository.Has(groupPage2);
+			var schedulingOptions = new SchedulingOptions{GroupOnGroupPageForTeamBlockPer = new GroupPageLight("_", GroupPageType.UserDefined, "UserDefined1"),UseTeam = true};
+			SchedulerStateHolderFrom.Fill( new Scenario(), period, new[] { agent1, agent2 }, Enumerable.Empty<IPersonAssignment>(), Enumerable.Empty<ISkillDay>());
+
+			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new[] { agent1 }, period);
+
+			GroupPageRepository.GetGroupPagesForPerson(agent2Id).Should().Not.Be.Empty();
 		}
 
 		public SchedulingDesktopTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerNoPytteIslands47500, bool resourcePlannerXxl47258) : base(seperateWebRequest, resourcePlannerNoPytteIslands47500, resourcePlannerXxl47258)
