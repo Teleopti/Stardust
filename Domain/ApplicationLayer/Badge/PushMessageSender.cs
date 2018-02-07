@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 			_badgeWithRankRepository = badgeWithRankRepository;
 		}
 
-		public void SendMessage(IEnumerable<IAgentBadgeWithRankTransaction> agentBadgeWithRankTransactions, string badgeName, DateOnly calculateDate)
+		public void SendMessage(IEnumerable<IAgentBadgeWithRankTransaction> agentBadgeWithRankTransactions, IBadgeSetting badgeSetting, DateOnly calculateDate)
 		{
 			foreach (var agentBadgeWithRankTransaction in agentBadgeWithRankTransactions)
 			{
@@ -32,17 +32,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 				MessageType messageType;
 				if (agentBadgeWithRankTransaction.BronzeBadgeAmount > 0)
 				{
-					message = string.Format(Resources.YouGotANewBronzeBadge, badgeName, calculateDate);
+					message = string.Format(Resources.YouGotANewBronzeBadge, badgeSetting.Name, calculateDate.Date, badgeSetting.BronzeThreshold);
 					messageType = MessageType.ExternalBronzeBadge;
 				}
 				else if (agentBadgeWithRankTransaction.SilverBadgeAmount > 0)
 				{
-					message = string.Format(Resources.YouGotANewSilverBadge, badgeName, calculateDate);
+					message = string.Format(Resources.YouGotANewSilverBadge, badgeSetting.Name, calculateDate.Date, badgeSetting.SilverThreshold);
 					messageType = MessageType.ExternalSilverBadge;
 				}
 				else
 				{
-					message = string.Format(Resources.YouGotANewGoldBadge, badgeName, calculateDate);
+					message = string.Format(Resources.YouGotANewGoldBadge, badgeSetting.Name, calculateDate.Date, badgeSetting.GoldThreshold);
 					messageType = MessageType.ExternalGoldBadge;
 				}
 
@@ -74,19 +74,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 				var messageType = MessageType.Information;
 				if (existedBadge.IsBronzeBadgeAdded(setting.SilverToBronzeBadgeRate, setting.GoldToSilverBadgeRate))
 				{
-					message = string.Format(Resources.YouGotANewBronzeBadge, badgeSetting.Name, calculateDate);
+					message = string.Format(Resources.YouGotANewBronzeBadge, badgeSetting.Name, calculateDate.Date, badgeSetting.Threshold);
 					messageType = MessageType.ExternalBronzeBadge;
 				}
 
 				if (existedBadge.IsSilverBadgeAdded(setting.SilverToBronzeBadgeRate, setting.GoldToSilverBadgeRate))
 				{
-					message = string.Format(Resources.YouGotANewSilverBadge, badgeSetting.Name, calculateDate);
+					message = string.Format(Resources.YouGotANewSilverBadge, badgeSetting.Name, calculateDate.Date, badgeSetting.Threshold);
 					messageType = MessageType.ExternalSilverBadge;
 				}
 
 				if (existedBadge.IsGoldBadgeAdded(setting.SilverToBronzeBadgeRate, setting.GoldToSilverBadgeRate))
 				{
-					message = string.Format(Resources.YouGotANewGoldBadge, badgeSetting.Name, calculateDate);
+					message = string.Format(Resources.YouGotANewGoldBadge, badgeSetting.Name, calculateDate.Date, badgeSetting.Threshold);
 					messageType = MessageType.ExternalGoldBadge;
 				}
 

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
@@ -6,7 +7,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 {
 	public interface IPushMessageSender
 	{
-		void SendMessage(IEnumerable<IAgentBadgeWithRankTransaction> agentBadgeWithRankTransactions, string badgeName,
+		void SendMessage(IEnumerable<IAgentBadgeWithRankTransaction> agentBadgeWithRankTransactions, IBadgeSetting badgeSetting,
 			DateOnly calculateDate);
 
 		void SendMessage(IEnumerable<IAgentBadgeTransaction> agentBadgeTransactions, IBadgeSetting badgeSetting,

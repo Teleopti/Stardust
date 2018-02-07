@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 				if (isRuleWithDifferentThreshold)
 				{
 					var agentBadgeWithRank = _badgeWithRankCalculator.CalculateBadges(agentsWithSetting, calculateDate, badgeSetting, businessId);
-					_pushMessageSender.SendMessage(agentBadgeWithRank, badgeSetting.Name, calculateDate);
+					_pushMessageSender.SendMessage(agentBadgeWithRank, badgeSetting, calculateDate);
 				}
 				else
 				{
