@@ -68,5 +68,20 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AgentAdherenceDay
 			Storage.Data.Single().StartTime.Should().Be("2018-01-29 14:00:00".Utc());
 			Storage.Data.Single().EndTime.Should().Be("2018-01-29 15:00:00".Utc());
 		}
+
+		[Test]
+		public void ShouldNotAllowEndTimeBeforeStartTime()
+		{
+			var person = Guid.NewGuid();
+			var command = new ApprovePeriodCommand
+			{
+				PersonId = person,
+				StartDateTime = "2018-01-29 17:00:00",
+				EndDateTime = "2018-01-29 16:00:00"
+			};
+
+			Assert.Throws<ArgumentOutOfRangeException>(() => Target.Handle(command));
+			Storage.Data.Should().Be.Empty();
+		}
 	}
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay
 {
@@ -17,11 +18,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay
 
 		public void Handle(ApprovePeriodCommand command)
 		{
+			var startDateTime = TimeZoneInfo.ConvertTimeToUtc(DateTime.ParseExact(command.StartDateTime, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture), _timeZone.TimeZone());
+			var endDateTime = TimeZoneInfo.ConvertTimeToUtc(DateTime.ParseExact(command.EndDateTime, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture), _timeZone.TimeZone());
+			var dateTimePeriod = new DateTimePeriod(startDateTime, endDateTime);
 			_persister.Persist(new ApprovedPeriod
 			{
 				PersonId = command.PersonId,
-				StartTime = TimeZoneInfo.ConvertTimeToUtc(DateTime.ParseExact(command.StartDateTime, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture), _timeZone.TimeZone()),
-				EndTime = TimeZoneInfo.ConvertTimeToUtc(DateTime.ParseExact(command.EndDateTime, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture), _timeZone.TimeZone())
+				StartTime = dateTimePeriod.StartDateTime,
+				EndTime = dateTimePeriod.EndDateTime
 			});
 		}
 	}
