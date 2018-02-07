@@ -21,8 +21,8 @@ Background:
 	And I am an agent
 	And I am englishspeaking swede
 	And There is a skill to monitor called 'Phone' with queue id '9' and queue name 'queue1' and activity 'activity1'
-	And there is queue statistics for the skill 'Phone' up until '19:00'
-	And there is forecast data for skill 'Phone' for next two weeks
+	And there is queue statistics for the skill 'Phone' up until '23:59'
+	And there is forecast data for skill 'Phone' opened whole day for next two weeks
 	And I have a person period with
 	| Field      | Value           |
 	| Start date | 2018-02-01      |
@@ -49,7 +49,6 @@ Scenario: Edit a pending overtime request
 	And I save overtime request
 	Then I should see my existing overtime request with subject 'my new overtime request'
 
-@ignore
 Scenario: Add a pending overtime request from schedule
 	Given I have the role 'Full access to mytime'
 	And I have a workflow control set with overtime request open periods
@@ -63,7 +62,6 @@ Scenario: Add a pending overtime request from schedule
 	Then I should see my existing overtime request with subject 'my test overtime'	
 	Then I should see my existing overtime request with status 'Pending'
 
-@ignore
 Scenario: Add a pending overtime request from requests
 	Given I have the role 'Full access to mytime'
 	And I have a workflow control set with overtime request open periods

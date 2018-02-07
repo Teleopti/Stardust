@@ -12,15 +12,17 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 	{
 		private readonly string _skillName;
 		private readonly DateTime _date;
+		private readonly bool _opened24Hours;
 
-		public ForecastConfigurable(string skillName, DateTime date)
+		public ForecastConfigurable(string skillName, DateTime date, bool opened24Hours = false)
 		{
 			_skillName = skillName;
 			_date = date;
+			_opened24Hours = opened24Hours;
 		}
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			var openHours = new TimePeriod(8, 17);
+			var openHours = _opened24Hours ? new TimePeriod(0, 0, 23, 59) : new TimePeriod(8, 17);
 			var hours = openHours.SpanningTime().Hours;
 			var skillRepository = new SkillRepository(currentUnitOfWork);
 			var skill = skillRepository.LoadAll().Single(x => x.Name == _skillName);
@@ -35,7 +37,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			skillDayRepository.Add(skillDay);
 			var workloadDay = skillDay.WorkloadDayCollection[0];
 
-			workloadDay.ChangeOpenHours(new List<TimePeriod> {openHours});
+			workloadDay.ChangeOpenHours(new List<TimePeriod> { openHours });
 			workloadDay.Tasks = hours*50;
 			workloadDay.AverageTaskTime = TimeSpan.FromSeconds(90);
 		}
