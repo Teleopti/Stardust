@@ -19,14 +19,12 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			_currentUnitOfWork = currentUnitOfWork;
 		}
 
-		[UnitOfWork]
+		[UnitOfWork(DoCommit.No)]
 		[HttpGet, Route("api/ResourcePlanner/Islands")]
 		public virtual IHttpActionResult Islands()
 		{
 			_skillRepository.LoadAllSkills();//hack! perf - avoid billions of proxy calls on skills. Leave it for now until we use this "for real"
-			var res =  Json(_islandModelFactory.Create());
-			_currentUnitOfWork.Current().Clear(); //hack! perf - avoid finding dirty entities. Maybe new UnitOfWork-attr instead? Leave it for now until we use this "for real"
-			return res;
+			return Json(_islandModelFactory.Create());
 		}
 	}
 }
