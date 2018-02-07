@@ -109,6 +109,7 @@
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
       <HintPath>..\packages\Teleopti.Secrets.8.0.0.167\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
     </Reference>
@@ -390,6 +391,7 @@
     <Compile Include="Common\Time\IUserNow.cs" />
     <Compile Include="Common\Time\TimePassingSimulator.cs" />
     <Compile Include="Common\Time\UserNow.cs" />
+    <Compile Include="Config\ApplicationInsightsConfigurationReader.cs" />
     <Compile Include="Exceptions\NoDefaultScenarioException.cs" />
     <Compile Include="Forecasting\Export\Web\ForecastExportDailyModel.cs" />
     <Compile Include="Forecasting\Export\Web\ForecastExportHeaderModel.cs" />

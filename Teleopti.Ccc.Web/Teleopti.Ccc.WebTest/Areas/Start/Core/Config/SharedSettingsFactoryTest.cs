@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Security;
@@ -16,7 +17,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Core.Config
 			var expected = RandomName.Make();
 			var appConfig = new FakeConfigReader();
 			appConfig.FakeSetting("MessageBroker", expected);
-			var target = new SharedSettingsFactory(appConfig, new FakeLoadPasswordPolicyService());
+			var target = new SharedSettingsFactory(appConfig, new FakeLoadPasswordPolicyService(),
+				new FakeApplicationInsightsConfigReader());
 
 			var result = target.Create();
 
@@ -29,7 +31,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Core.Config
 			const int expected = 123;
 			var appConfig = new FakeConfigReader();
 			appConfig.FakeSetting("NumberOfDaysToShowNonPendingRequests", expected.ToString());
-			var target = new SharedSettingsFactory(appConfig, new FakeLoadPasswordPolicyService());
+			var target = new SharedSettingsFactory(appConfig, new FakeLoadPasswordPolicyService(),
+				new FakeApplicationInsightsConfigReader());
 
 			var result = target.Create();
 
@@ -42,7 +45,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Core.Config
 			var expected = RandomName.Make();
 			var appConfig = new FakeConfigReader();
 			appConfig.FakeSetting("MessageBrokerLongPolling", expected);
-			var target = new SharedSettingsFactory(appConfig, new FakeLoadPasswordPolicyService());
+			var target = new SharedSettingsFactory(appConfig, new FakeLoadPasswordPolicyService(),
+				new FakeApplicationInsightsConfigReader());
 
 			var result = target.Create();
 
@@ -55,7 +59,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Core.Config
 			var expected = RandomName.Make();
 			var appConfig = new FakeConfigReader();
 			appConfig.FakeSetting("RtaPollingInterval", expected);
-			var target = new SharedSettingsFactory(appConfig, new FakeLoadPasswordPolicyService());
+			var target = new SharedSettingsFactory(appConfig, new FakeLoadPasswordPolicyService(),
+				new FakeApplicationInsightsConfigReader());
 
 			var result = target.Create();
 
@@ -68,11 +73,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Core.Config
 			var expected = RandomName.Make();
 			var appConfig = new FakeConfigReader();
 			appConfig.FakeConnectionString("Hangfire", expected);
-			var target = new SharedSettingsFactory(appConfig, new FakeLoadPasswordPolicyService());
+			var target = new SharedSettingsFactory(appConfig, new FakeLoadPasswordPolicyService(),
+				new FakeApplicationInsightsConfigReader());
 
 			var result = target.Create();
 
-			var decryptedResult = Encryption.DecryptStringFromBase64(result.Hangfire, EncryptionConstants.Image1, EncryptionConstants.Image2);
+			var decryptedResult =
+				Encryption.DecryptStringFromBase64(result.Hangfire, EncryptionConstants.Image1, EncryptionConstants.Image2);
 			decryptedResult.Should().Be.EqualTo(expected);
 		}
 
@@ -84,11 +91,31 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Core.Config
 			{
 				DocumentAsString = expected
 			};
-			var target = new SharedSettingsFactory(new FakeConfigReader(), passwordPolicyService);
+			var target = new SharedSettingsFactory(new FakeConfigReader(), passwordPolicyService,
+				new FakeApplicationInsightsConfigReader());
 
 			var result = target.Create();
 
 			result.PasswordPolicy.Should().Be.EqualTo(expected);
+		}
+
+		[Test]
+		public void ShouldGetInstrumentationKey()
+		{
+			var iKey = Guid.NewGuid().ToString(); 
+			var appInsightConfigReader = new FakeApplicationInsightsConfigReader();
+			appInsightConfigReader.SetInstrumentationKey(iKey);
+
+			var passwordPolicyService = new FakeLoadPasswordPolicyService
+			{
+				DocumentAsString = RandomName.Make()
+			};
+			var target = new SharedSettingsFactory(new FakeConfigReader(), passwordPolicyService, appInsightConfigReader);
+
+			var result = target.Create();
+			var decryptedResult = Encryption.DecryptStringFromBase64(result.InstrumentationKey, EncryptionConstants.Image1,
+				EncryptionConstants.Image2);
+			decryptedResult.Should().Be.EqualTo(iKey);
 		}
 	}
 }
