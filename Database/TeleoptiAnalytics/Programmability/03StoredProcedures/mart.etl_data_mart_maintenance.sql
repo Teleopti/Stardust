@@ -25,10 +25,52 @@ BEGIN
 	DECLARE @daysToKeepRTAEvents INT
 	DECLARE @permissionReportMinDate smalldatetime
 	
-	--Add new things to purge here instead of from db migration scripts
-	 if not exists (select 1 from mart.etl_maintenance_configuration where configuration_id = 16)
-		  insert into mart.etl_maintenance_configuration values(16,'DaysToKeepMessagesPurged',60)
-	  
+	--Set up (i.e. skip migration scripts just for the purpose of populating the config table)
+	--All set up has now also been removed from migration scripts to have this list as one source of truth
+	--Default purge values have been changed to reflect the new Teleopti Data Retention Policy
+	/* Part of Teleopti Data Retention Policy */
+	/* Talk to Anders before changing anything in this section */
+	IF NOT EXISTS (SELECT 1 FROM [mart].[etl_maintenance_configuration] WHERE configuration_id = 4)
+		INSERT INTO [mart].[etl_maintenance_configuration] VALUES(4,'YearsToKeepFactAgent',2)
+	IF NOT EXISTS (SELECT 1 FROM [mart].[etl_maintenance_configuration] WHERE configuration_id = 5)
+		INSERT INTO [mart].[etl_maintenance_configuration] VALUES(5,'YearsToKeepFactAgentQueue',1)
+	IF NOT EXISTS (SELECT 1 FROM [mart].[etl_maintenance_configuration] WHERE configuration_id = 6)
+		INSERT INTO [mart].[etl_maintenance_configuration] VALUES(6,'YearsToKeepFactForecastWorkload',3)
+	IF NOT EXISTS (SELECT 1 FROM [mart].[etl_maintenance_configuration] WHERE configuration_id = 7)
+		INSERT INTO [mart].[etl_maintenance_configuration] VALUES(7,'YearsToKeepFactQueue',10)
+	IF NOT EXISTS (SELECT 1 FROM [mart].[etl_maintenance_configuration] WHERE configuration_id = 8)
+		INSERT INTO [mart].[etl_maintenance_configuration] VALUES(8,'YearsToKeepFactRequest',2)
+	IF NOT EXISTS (SELECT 1 FROM [mart].[etl_maintenance_configuration] WHERE configuration_id = 9)
+		INSERT INTO [mart].[etl_maintenance_configuration] VALUES(9,'YearsToKeepFactSchedule',3)
+	IF NOT EXISTS (SELECT 1 FROM [mart].[etl_maintenance_configuration] WHERE configuration_id = 10)
+		INSERT INTO [mart].[etl_maintenance_configuration] VALUES(10,'YearsToKeepFactScheduleDayCount',3)
+	IF NOT EXISTS (SELECT 1 FROM [mart].[etl_maintenance_configuration] WHERE configuration_id = 11)
+		INSERT INTO [mart].[etl_maintenance_configuration] VALUES(11,'YearsToKeepFactScheduleDeviation',2)
+	IF NOT EXISTS (SELECT 1 FROM [mart].[etl_maintenance_configuration] WHERE configuration_id = 12)
+		INSERT INTO [mart].[etl_maintenance_configuration] VALUES(12,'YearsToKeepFactScheduleForecastSkill',3)
+	IF NOT EXISTS (SELECT 1 FROM [mart].[etl_maintenance_configuration] WHERE configuration_id = 13)
+		INSERT INTO [mart].[etl_maintenance_configuration] VALUES(13,'YearsToKeepFactSchedulePreferences',2)
+
+
+
+	/* Not part of Teleopti Data Retention Policy */
+	if not exists (select 1 from mart.etl_maintenance_configuration where configuration_id = 1)
+		insert into mart.etl_maintenance_configuration VALUES (1, N'daysToKeepETLError', 60)
+	if not exists (select 1 from mart.etl_maintenance_configuration where configuration_id = 2)
+		insert into mart.etl_maintenance_configuration VALUES (2, N'daysToKeepETLExecution', 45)
+	if not exists (select 1 from mart.etl_maintenance_configuration where configuration_id = 3)
+		insert into mart.etl_maintenance_configuration VALUES (3, N'daysToKeepRTAEvents', 2)
+	if not exists(select 1 from [mart].[etl_maintenance_configuration] where configuration_id = 14)
+		insert into [mart].[etl_maintenance_configuration] values(14,'YearsToKeepAggQueueStats',50)
+	if not exists(select 1 from [mart].[etl_maintenance_configuration] where configuration_id = 15)
+		insert into [mart].[etl_maintenance_configuration] values(15,'YearsToKeepAggAgentStats',50)
+	if not exists (select 1 from mart.etl_maintenance_configuration where configuration_id = 16)
+		insert into mart.etl_maintenance_configuration values(16,'DaysToKeepMessagesPurged',60)
+	IF NOT EXISTS (SELECT 1 FROM [mart].[etl_maintenance_configuration] WHERE configuration_id = 17)
+		insert into mart.etl_maintenance_configuration VALUES(17,'DaysToKeepUnchangedPermissionReport',90)
+
+
+
 	SELECT @daysToKeepETLExecution = configuration_value
 	FROM mart.etl_maintenance_configuration
 	WHERE configuration_name = 'daysToKeepETLExecution'
