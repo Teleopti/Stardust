@@ -5,14 +5,15 @@
 			templateUrl: 'app/gamification/html/g.component.gamificationTargets.tpl.html',
 			controller: [
 				'$log',
-				'$translate',
+				'$scope',
 				'$timeout',
+				'$translate',
 				'GamificationDataService',
 				GamificationTargetsController
 			]
 		});
 
-	function GamificationTargetsController($log, $translate, $timeout, dataService) {
+	function GamificationTargetsController($log, $scope, $timeout, $translate, dataService) {
 		var ctrl = this;
 
 		var selectedText = '';
@@ -93,9 +94,18 @@
 			ctrl.sites = sites;
 		});
 
-		dataService.fetchSettingList().then(function (list) {
-			ctrl.settings = list;
+		fetchSettingList();
+
+		$scope.$on('gamification.selectTargetsTab', function (event, args) {
+			fetchSettingList();
 		});
+
+		function fetchSettingList() {
+			return dataService.fetchSettingList().then(function (list) {
+				if (!angular.isArray(list)) return;
+				ctrl.settings = list;
+			});
+		}
 	}
 
 })(angular);

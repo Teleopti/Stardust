@@ -5,17 +5,14 @@
 
 			templateUrl: 'app/gamification/html/g.component.gamificationTargetRow.tpl.html',
 
-			require: {
-				rootController: '^gamificationTargets'
-			},
-
 			bindings: {
+				appliedSettingId: '<',
 				id: '<',
 				name: '<',
-				appliedSettingId: '<',
-				selected: '<',
 				onSelect: '&',
-				onSettingChange: '&'
+				onSettingChange: '&',
+				selected: '<',
+				settingOptions: '<',
 			},
 
 			controller: [
@@ -48,7 +45,6 @@
 		}
 
 		ctrl.$onInit = function () {
-			ctrl.settingOptions = ctrl.rootController.settings;
 		};
 
 		ctrl.isSelected = function () {

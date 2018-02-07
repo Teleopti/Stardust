@@ -9,7 +9,7 @@
 	</div>
 </div>
 <div class="table-wrapper">
-	<gamification-targets-table teams="$ctrl.teamsResult.current" available-settings="" on-setting-change="$ctrl.onAppliedSettingChange(teamIds, newValue)"></gamification-targets-table>
+	<gamification-targets-table teams="$ctrl.teamsResult.current" available-settings="$ctrl.settings" on-setting-change="$ctrl.onAppliedSettingChange(teamIds, newValue)"></gamification-targets-table>
 	<div ng-if="$ctrl.isBusy" class="mask">
 			<md-progress-circular md-mode="indeterminate"></md-progress-circular>
 	</div>
