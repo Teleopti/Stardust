@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 			var hangfireQueueLogCancellationToken = new CancellationTokenSource();
 			Task.Run(() =>
 			{
-				NUnitSetup.LogHangfireQueues(TestLog, Hangfire);
+				HangfireLogger.LogHangfireQueues(TestLog, Hangfire);
 			}, hangfireQueueLogCancellationToken.Token);
 
 			using (var browserActivator = new CoypuChromeActivator())
