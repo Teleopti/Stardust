@@ -224,24 +224,33 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 		expect(c.openApproveForm).toBe(false);
 	});
 
-	it('should submit the approve form on submit click', function (t) {
+	it('should submit approve form on submit click', function (t) {
 		t.stateParams.personId = '1';
+		t.backend.with.historicalAdherence({
+			Timeline: {
+				StartTime: '2018-01-29T07:00:00',
+				EndTime: '2018-01-29T17:00:00'
+			},
+			RecordedOutOfAdherences: [{
+				StartTime: '2018-01-29T08:00:00',
+				EndTime: '2018-01-29T09:00:00'
+			}]
+		});
 		var c = t.createController();
 
 		t.apply(function () {
-			c.approveStartTime = moment('2018-01-29T08:00:00').toDate();
-			c.approveEndTime = moment('2018-01-29T09:00:00').toDate();
+			c.recordedOutOfAdherences[0].click();
 			c.submitApprove();
 		});
 
 		expect(t.backend.lastParams.approvePeriod()).toEqual({
 			personId: '1',
-			startTime: '08:00:00',
-			endTime: '09:00:00'
+			startTime: '2018-01-29 08:00:00',
+			endTime: '2018-01-29 09:00:00'
 		});
 	});
 
-	it('should refresh the view after submit of approval', function (t) {
+	it('should refresh view after submit of approval', function (t) {
 		t.stateParams.personId = '1';
 		t.backend.with.historicalAdherence({
 			Timeline: {
@@ -269,6 +278,6 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 
 		expect(vm.approvedPeriods[0].StartTime).toEqual(moment('2018-01-29T08:00:00').format('LTS'));
 		expect(vm.approvedPeriods[0].EndTime).toEqual(moment('2018-01-29T09:00:00').format('LTS'));
-	})
+	});
 
 });

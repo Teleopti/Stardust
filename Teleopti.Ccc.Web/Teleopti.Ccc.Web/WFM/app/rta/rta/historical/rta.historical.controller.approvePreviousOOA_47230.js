@@ -3,9 +3,9 @@
 
 	angular.module('wfm.rta').controller('RtaHistoricalController47230', RtaHistoricalController);
 
-	RtaHistoricalController.$inject = ['$http', '$state', '$stateParams', 'rtaService', '$translate', 'RtaTimeline'];
+	RtaHistoricalController.$inject = ['$http', '$state', '$stateParams', 'rtaService', '$translate', 'RtaTimeline', '$scope'];
 
-	function RtaHistoricalController($http, $state, $stateParams, rtaService, $translate, rtaTimeline) {
+	function RtaHistoricalController($http, $state, $stateParams, rtaService, $translate, rtaTimeline, $scope) {
 		var vm = this;
 
 		vm.highlighted = {};
@@ -25,6 +25,7 @@
 		};
 
 		var calculate;
+		var timelineStart;
 
 		loadData();
 
@@ -63,6 +64,7 @@
 				vm.approvedPeriods = buildApprovedPeriods(data.Timeline, data.ApprovedPeriods);
 
 				vm.fullTimeline = buildTimeline(data);
+				timelineStart = data.Timeline.StartTime;
 
 				vm.cards = mapChanges(data.Changes, data.Schedules);
 
@@ -118,12 +120,51 @@
 						vm.openRecordedOutOfAdherences = true;
 						vm.openApprovedPeriods = true;
 						vm.openApproveForm = true;
+
 						vm.approveStartTime = moment(interval.StartTime).toDate();
 						vm.approveEndTime = moment(interval.EndTime).toDate();
+
+						if (moment(vm.approveStartTime).isBefore(timelineStart))
+							vm.approveStartTime = moment(timelineStart).toDate();
 					};
 
 					return o
 				});
+		}
+
+		$scope.$watch(function () {
+				return vm.approveStartTime
+			},
+			function (newValue, oldValue) {
+				if (timelineStart)
+					vm.approveStartTime = putTimeAfter(newValue, oldValue, timelineStart);
+			}
+		);
+
+		$scope.$watch(function () {
+				return vm.approveEndTime
+			},
+			function (newValue, oldValue) {
+				vm.approveEndTime = putTimeAfter(newValue, oldValue, vm.approveStartTime);
+			}
+		);
+
+		function putTimeAfter(time, oldTime, putAfter) {
+			var oldTimestamp = oldTime ? oldTime.getTime() : null;
+			var newTimestamp = time ? time.getTime() : null;
+			if (oldTimestamp != newTimestamp) {
+				time = intoTimeline(time);
+				if (time.isBefore(putAfter))
+					time = time.add(1, "days");
+				return time.toDate();
+			}
+			return time;
+		}
+
+		function intoTimeline(time) {
+			var time = moment(time);
+			var daysToTimeline = moment(timelineStart).diff(time, "days");
+			return time.add(daysToTimeline, "days");
 		}
 
 		vm.cancelApprove = function () {
@@ -134,8 +175,8 @@
 			$http.post('../api/HistoricalAdherence/ApprovePeriod',
 				{
 					personId: $stateParams.personId,
-					startTime: moment(vm.approveStartTime).format("hh:mm:ss"),
-					endTime: moment(vm.approveEndTime).format("hh:mm:ss")
+					startTime: moment(vm.approveStartTime).format("YYYY-MM-DD HH:mm:ss"),
+					endTime: moment(vm.approveEndTime).format("YYYY-MM-DD HH:mm:ss")
 				}
 			).then(loadData);
 		};
