@@ -44,6 +44,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		private ITeam _team;
 		private BadgeSetting _badgeSetting;
 		private readonly DateOnly _calculatedDate = DateOnly.Today.AddDays(-2);
+		private readonly DateTime _systemCalculateDate = DateTime.UtcNow.AddDays(-2);
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -106,6 +107,20 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			createAgentAndTeam();
 			createGamificationSetting(GamificationSettingRuleSet.RuleWithDifferentThreshold, 90, 85, 80);
 			addExternalPerformanceData(79);
+
+			Target.Calculate(Guid.NewGuid());
+
+			var result = AgentBadgeWithRankTransactionRepository.LoadAll();
+			result.Count.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldNotCalcuateExternalBadgeWithRankWhenBadgeSettingNotEnabled()
+		{
+			createAgentAndTeam();
+			createGamificationSetting(GamificationSettingRuleSet.RuleWithDifferentThreshold, 90, 85, 80);
+			_badgeSetting.Enabled = false;
+			addExternalPerformanceData(81);
 
 			Target.Calculate(Guid.NewGuid());
 
@@ -189,6 +204,20 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			var result = AgentBadgeTransactionRepository.LoadAll();
 			result.First().IsExternal.Should().Be.True();
 			result.First().Amount.Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldNotCalculateExternalBadgeWhenBadgeSettingNotEnabled()
+		{
+			createAgentAndTeam();
+			createGamificationSetting(GamificationSettingRuleSet.RuleWithRatioConvertor, 90, 85, 80, 80);
+			_badgeSetting.Enabled = false;
+			addExternalPerformanceData(87);
+
+			Target.Calculate(Guid.NewGuid());
+
+			var result = AgentBadgeTransactionRepository.LoadAll();
+			result.Count.Should().Be.EqualTo(0);
 		}
 
 		[Test]
@@ -350,7 +379,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			};
 			setTeamGamificationSetting();
 			BusinessUnitRepository.AddTimeZone(TimeZoneInfo.FindSystemTimeZoneById("UTC"));
-			BadgeCalculationRepository.AddAht(_calculatedDate.Date, new TimeSpan(0, 4, 0), _agent.Id.GetValueOrDefault());
+			BadgeCalculationRepository.AddAht(_systemCalculateDate, new TimeSpan(0, 4, 0), _agent.Id.GetValueOrDefault());
 
 			Target.Calculate(Guid.NewGuid());
 
@@ -370,7 +399,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			};
 			setTeamGamificationSetting();
 			BusinessUnitRepository.AddTimeZone(TimeZoneInfo.FindSystemTimeZoneById("UTC"));
-			BadgeCalculationRepository.AddAnsweredCalls(_calculatedDate.Date, 100, _agent.Id.GetValueOrDefault());
+			BadgeCalculationRepository.AddAnsweredCalls(_systemCalculateDate, 100, _agent.Id.GetValueOrDefault());
 
 			Target.Calculate(Guid.NewGuid());
 
@@ -392,7 +421,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			};
 			setTeamGamificationSetting();
 			BusinessUnitRepository.AddTimeZone(TimeZoneInfo.FindSystemTimeZoneById("UTC"));
-			BadgeCalculationRepository.AddAnsweredCalls(_calculatedDate.Date, 100, _agent.Id.GetValueOrDefault());
+			BadgeCalculationRepository.AddAnsweredCalls(_systemCalculateDate, 100, _agent.Id.GetValueOrDefault());
 
 			Target.Calculate(Guid.NewGuid());
 
@@ -414,7 +443,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			};
 			setTeamGamificationSetting();
 			BusinessUnitRepository.AddTimeZone(TimeZoneInfo.FindSystemTimeZoneById("UTC"));
-			BadgeCalculationRepository.AddAht(_calculatedDate.Date, new TimeSpan(0,4,0), _agent.Id.GetValueOrDefault());
+			BadgeCalculationRepository.AddAht(_systemCalculateDate, new TimeSpan(0,4,0), _agent.Id.GetValueOrDefault());
 
 			Target.Calculate(Guid.NewGuid());
 
@@ -434,7 +463,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			};
 			setTeamGamificationSetting();
 			BusinessUnitRepository.AddTimeZone(TimeZoneInfo.FindSystemTimeZoneById("UTC"));
-			BadgeCalculationRepository.AddAht(_calculatedDate.Date, new TimeSpan(0,4,0), _agent.Id.GetValueOrDefault());
+			BadgeCalculationRepository.AddAht(_systemCalculateDate, new TimeSpan(0,4,0), _agent.Id.GetValueOrDefault());
 
 			Target.Calculate(Guid.NewGuid());
 
@@ -445,8 +474,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			resultMessage.GetTitle(formmater).Should().Be.EqualTo(Resources.Congratulations);
 			resultMessage.GetMessage(formmater).Should().Be.EqualTo(
 				string.Format(Resources.BadgeWithRank_YouGotANewSilverBadgeForAHT, 
-					_gamificationSetting.AHTSilverThreshold.TotalSeconds.ToString(CultureInfo.InvariantCulture), 
-					_calculatedDate.Date));
+					_gamificationSetting.AHTSilverThreshold.TotalSeconds.ToString(CultureInfo.InvariantCulture),
+					_systemCalculateDate));
 		}
 
 		[Test]
@@ -460,7 +489,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			};
 			setTeamGamificationSetting();
 			BusinessUnitRepository.AddTimeZone(TimeZoneInfo.FindSystemTimeZoneById("UTC"));
-			BadgeCalculationRepository.AddAnsweredCalls(_calculatedDate.Date, 160, _agent.Id.GetValueOrDefault());
+			BadgeCalculationRepository.AddAnsweredCalls(_systemCalculateDate, 160, _agent.Id.GetValueOrDefault());
 
 			Target.Calculate(Guid.NewGuid());
 
@@ -471,8 +500,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			resultMessage.GetTitle(formmater).Should().Be.EqualTo(Resources.Congratulations);
 			resultMessage.GetMessage(formmater).Should().Be.EqualTo(
 				string.Format(Resources.BadgeWithRank_YouGotANewGoldBadgeForAnsweredCalls, 
-					_gamificationSetting.AnsweredCallsGoldThreshold.ToString(CultureInfo.InvariantCulture), 
-					_calculatedDate.Date));
+					_gamificationSetting.AnsweredCallsGoldThreshold.ToString(CultureInfo.InvariantCulture),
+					_systemCalculateDate));
 		}
 
 		private void setTeamGamificationSetting()

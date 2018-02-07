@@ -52,21 +52,21 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public Dictionary<Guid, int> LoadAgentsOverThresholdForAnsweredCalls(string timezoneCode, DateTime date, int answeredCallsThreshold,
 			Guid businessUnitId)
 		{
-			var result = _answeredCallsTable.Where(x => x.Date == date && x.Value >= answeredCallsThreshold);
+			var result = _answeredCallsTable.Where(x => new DateOnly(x.Date) == new DateOnly(date) && x.Value >= answeredCallsThreshold);
 			return result.ToDictionary(key => key.PersonId, value => value.Value);
 		}
 
 		public Dictionary<Guid, double> LoadAgentsOverThresholdForAdherence(AdherenceReportSettingCalculationMethod adherenceCalculationMethod,
 			string timezoneCode, DateTime date, Percent adherenceThreshold, Guid businessUnitId)
 		{
-			var result = _adherenceTable.Where(x => x.Date == date && x.Value >= adherenceThreshold.Value);
+			var result = _adherenceTable.Where(x => new DateOnly(x.Date) == new DateOnly(date) && x.Value >= adherenceThreshold.Value);
 			return result.ToDictionary(key => key.PersonId, value => value.Value);
 		}
 
 		public Dictionary<Guid, double> LoadAgentsUnderThresholdForAht(string timezoneCode, DateTime date, TimeSpan ahtThreshold,
 			Guid businessUnitId)
 		{
-			var result = _ahtTable.Where(x => x.Date == date && x.Value <= ahtThreshold);
+			var result = _ahtTable.Where(x => new DateOnly(x.Date) == new DateOnly(date) && x.Value <= ahtThreshold);
 			return result.ToDictionary(key => key.PersonId, value => value.Value.TotalSeconds);
 		}
 	}
