@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 				action(_uow.Current());
 			}
 			
-			[UnitOfWork(DoCommit.Yes)]
+			[UnitOfWork(DoCommit.WhenNoExceptionOccurs)]
 			public virtual void DoesWithCommit(Action<IUnitOfWork> action)
 			{
 				action(_uow.Current());
