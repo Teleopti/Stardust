@@ -247,9 +247,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		{
 			var date = new DateOnly(2016, 10, 24);
 			var period = new DateOnlyPeriod(date, date);
-			var agent2Id = Guid.NewGuid();
 			var agent1 = new Person().WithId().WithPersonPeriod(new ContractWithMaximumTolerance(), new Skill().For(new Activity()).WithId());
-			var agent2 = new Person().WithId(agent2Id).WithPersonPeriod(new ContractWithMaximumTolerance(), new Skill().For(new Activity()).WithId());
+			var agent2 = new Person().WithId().WithPersonPeriod(new ContractWithMaximumTolerance(), new Skill().For(new Activity()).WithId());
 			var rootPersonGroup1 = new RootPersonGroup("_");
 			var rootPersonGroup2 = new RootPersonGroup("_");
 			rootPersonGroup1.AddPerson(agent1);
@@ -260,12 +259,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			groupPage2.AddRootPersonGroup(rootPersonGroup2);
 			GroupPageRepository.Has(groupPage1);
 			GroupPageRepository.Has(groupPage2);
-			var schedulingOptions = new SchedulingOptions{GroupOnGroupPageForTeamBlockPer = new GroupPageLight("_", GroupPageType.UserDefined, "UserDefined1"),UseTeam = true};
+			var schedulingOptions = new SchedulingOptions{GroupOnGroupPageForTeamBlockPer = new GroupPageLight("_", GroupPageType.UserDefined, "UserDefined1"), UseTeam = true};
 			SchedulerStateHolderFrom.Fill( new Scenario(), period, new[] { agent1, agent2 }, Enumerable.Empty<IPersonAssignment>(), Enumerable.Empty<ISkillDay>());
 
 			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new[] { agent1 }, period);
 
-			GroupPageRepository.GetGroupPagesForPerson(agent2Id).Should().Not.Be.Empty();
+			rootPersonGroup1.PersonCollection.Should().Not.Be.Empty();
+			rootPersonGroup2.PersonCollection.Should().Not.Be.Empty();
 		}
 
 		public SchedulingDesktopTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerNoPytteIslands47500, bool resourcePlannerXxl47258) : base(seperateWebRequest, resourcePlannerNoPytteIslands47500, resourcePlannerXxl47258)
