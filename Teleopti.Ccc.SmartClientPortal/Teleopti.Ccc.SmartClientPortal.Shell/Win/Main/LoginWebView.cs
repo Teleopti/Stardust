@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main
             Application.Exit();
 		}
 
-		public ILogonPresenter Presenter { get; set; }
+		public LogonPresenter Presenter { get; set; }
 		public bool StartLogon()
 		{
 			logInfo("EO Browser: Starting the login process by loading the URL: " + ServerUrl + "start/Url/RedirectToWebLogin");
@@ -137,27 +137,20 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main
 
 		private void WebView_JSFatClientWebLogin(object sender, JSExtInvokeArgs e)
 		{
-			if(!_isLoggingIn)
+			if (_isLoggingIn) return;
+			try
 			{
-				try
-				{
-					_isLoggingIn = true;
-					logInfo("EO Browser: Called from the JS to start the login process for fat client");
-					var personId = Guid.Parse(e.Arguments[1].ToString());
-					var businessUnitId = Guid.Parse(e.Arguments[0].ToString());
-					_model.PersonId = personId;
-					Presenter.webLogin(businessUnitId);
-				}
-				finally
-				{
-					_isLoggingIn = false;
-				}
+				_isLoggingIn = true;
+				logInfo("EO Browser: Called from the JS to start the login process for fat client");
+				var personId = Guid.Parse(e.Arguments[1].ToString());
+				var businessUnitId = Guid.Parse(e.Arguments[0].ToString());
+				_model.PersonId = personId;
+				Presenter.WebLogin(businessUnitId);
 			}
-		}
-
-		public void ShowStep(bool showBackButton)
-		{
-			throw new NotImplementedException();
+			finally
+			{
+				_isLoggingIn = false;
+			}
 		}
 
 		public void ClearForm(string labelText)
@@ -180,21 +173,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main
 		public DialogResult ShowYesNoMessage(string text, string caption, MessageBoxDefaultButton defaultButton)
 		{
 			return ViewBase.ShowYesNoMessage(this, text, caption, defaultButton);
-		}
-
-		public void HandleKeyPress(Message msg, Keys keyData, bool b)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void ButtonLogOnOkClick(object sender, EventArgs e)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void BtnBackClick(object sender, EventArgs e)
-		{
-			throw new NotImplementedException();
 		}
 
 		public void InitStateHolderWithoutDataSource(IMessageBrokerComposite messageBroker, SharedSettings settings)

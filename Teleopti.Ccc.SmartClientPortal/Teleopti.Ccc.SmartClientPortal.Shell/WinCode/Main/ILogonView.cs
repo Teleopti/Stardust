@@ -8,16 +8,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Main
 {
 	public interface ILogonView : ILicenseFeedback
 	{
-		ILogonPresenter Presenter { get; set; }
+		LogonPresenter Presenter { get; set; }
 		bool StartLogon();
-		void ShowStep(bool showBackButton);
+
 		void ClearForm(string labelText);
 		void Exit(DialogResult result);
 		void ShowErrorMessage(string message, string caption);
 		DialogResult ShowYesNoMessage(string text, string caption, MessageBoxDefaultButton defaultButton);
-		void HandleKeyPress(Message msg, Keys keyData, bool b);
-		void ButtonLogOnOkClick(object sender, EventArgs e);
-		void BtnBackClick(object sender, EventArgs e);
+
+
 		void InitStateHolderWithoutDataSource(IMessageBrokerComposite messageBroker, SharedSettings settings);
 		string ServerUrl { get; set; }
 	}

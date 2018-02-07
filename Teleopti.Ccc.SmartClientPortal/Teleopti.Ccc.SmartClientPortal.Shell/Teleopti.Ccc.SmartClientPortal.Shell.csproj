@@ -718,7 +718,6 @@
     <Compile Include="WinCode\Intraday\ReforecastModel.cs" />
     <Compile Include="WinCode\Intraday\ReforecastWizardPages.cs" />
     <Compile Include="WinCode\Intraday\StaffingEffectViewAdapter.cs" />
-    <Compile Include="WinCode\Main\ILogonPresenter.cs" />
     <Compile Include="WinCode\Main\ILogonView.cs" />
     <Compile Include="WinCode\Main\LicenseStatusLoader.cs" />
     <Compile Include="WinCode\Main\LoginInitializer.cs" />
@@ -2626,31 +2625,6 @@
     </Compile>
     <Compile Include="Win\Main\LoginWebView.Designer.cs">
       <DependentUpon>LoginWebView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Win\Main\LogonScreens\ILogonStep.cs" />
-    <Compile Include="Win\Main\LogonScreens\LoginScreen.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Win\Main\LogonScreens\LoginScreen.Designer.cs">
-      <DependentUpon>LoginScreen.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Win\Main\LogonScreens\SelectBuScreen.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Win\Main\LogonScreens\SelectBuScreen.Designer.cs">
-      <DependentUpon>SelectBuScreen.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Win\Main\LogonScreens\SelectDatasourceScreen.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Win\Main\LogonScreens\SelectDatasourceScreen.Designer.cs">
-      <DependentUpon>SelectDatasourceScreen.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Win\Main\LogonView.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Win\Main\LogonView.Designer.cs">
-      <DependentUpon>LogonView.cs</DependentUpon>
     </Compile>
     <Compile Include="Win\Main\MainModule.cs" />
     <Compile Include="Win\Main\NavigationModule.cs" />
@@ -4661,18 +4635,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Win\Main\LoginWebView.resx">
       <DependentUpon>LoginWebView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Win\Main\LogonScreens\LoginScreen.resx">
-      <DependentUpon>LoginScreen.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Win\Main\LogonScreens\SelectBuScreen.resx">
-      <DependentUpon>SelectBuScreen.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Win\Main\LogonScreens\SelectDatasourceScreen.resx">
-      <DependentUpon>SelectDatasourceScreen.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Win\Main\LogonView.resx">
-      <DependentUpon>LogonView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Win\Main\PreLogonScreen.resx">
       <DependentUpon>PreLogonScreen.cs</DependentUpon>

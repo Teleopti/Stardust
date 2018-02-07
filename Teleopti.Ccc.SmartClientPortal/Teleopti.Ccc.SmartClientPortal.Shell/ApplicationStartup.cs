@@ -6,10 +6,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 	public class ApplicationStartup
 	{
 		private readonly IComponentContext _componentContext;
-		private readonly ILogonPresenter _logonPresenter;
+		private readonly LogonPresenter _logonPresenter;
 		private readonly WebUrlHolder _webUrlHolder;
 
-		public ApplicationStartup(IComponentContext componentContext, ILogonPresenter logonPresenter, WebUrlHolder webUrlHolder)
+		public ApplicationStartup(IComponentContext componentContext, LogonPresenter logonPresenter, WebUrlHolder webUrlHolder)
 		{
 			_componentContext = componentContext;
 			_logonPresenter = logonPresenter;

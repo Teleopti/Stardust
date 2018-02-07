@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				.SingleInstance();
 			builder.RegisterType<OutlookPanelContentWorker>();
 			builder.Register(c => new WebUrlHolder(_configuration.Args().ReportServer)).SingleInstance();
-			builder.RegisterType<LogonPresenter>().As<ILogonPresenter>().SingleInstance();
+			builder.RegisterType<LogonPresenter>().SingleInstance();
 
 			builder.RegisterType<LogonModel>().SingleInstance();
 
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			builder.RegisterType<LoginWebView>()
 				.As<ILicenseFeedback>()
 				.As<ILogonView>()
-				.OnActivated(e => e.Instance.Presenter = e.Context.Resolve<ILogonPresenter>())
+				.OnActivated(e => e.Instance.Presenter = e.Context.Resolve<LogonPresenter>())
 				.SingleInstance();
 		}
 	}
