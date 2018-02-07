@@ -383,9 +383,6 @@
     <Compile Include="Common\Time\TimePassingSimulator.cs" />
     <Compile Include="Common\Time\UserNow.cs" />
     <Compile Include="Exceptions\NoDefaultScenarioException.cs" />
-    <Compile Include="Forecasting\ErlangA\ErlangAModel.cs" />
-    <Compile Include="Forecasting\ErlangA\MathFormulas.cs" />
-    <Compile Include="Forecasting\ErlangA\NumberOfAgentsNeeded.cs" />
     <Compile Include="Forecasting\Export\Web\ForecastExportDailyModel.cs" />
     <Compile Include="Forecasting\Export\Web\ForecastExportHeaderModel.cs" />
     <Compile Include="Forecasting\Export\Web\ForecastExportHeaderModelCreator.cs" />
