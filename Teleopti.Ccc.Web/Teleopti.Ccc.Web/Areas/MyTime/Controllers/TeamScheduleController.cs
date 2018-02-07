@@ -5,7 +5,6 @@ using System.Net;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -28,7 +27,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly IDefaultTeamProvider _defaultTeamProvider;
 		private readonly ITeamScheduleViewModelReworkedFactory _teamScheduleViewModelReworkedFactory;
 		private readonly ITimeFilterHelper _timeFilterHelper;
-		private readonly IToggleManager _toggleManager;
 		private readonly ILoggedOnUser _loggedOnUser;
 
 		public TeamScheduleController(
@@ -44,7 +42,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			_teamScheduleViewModelFactory = teamScheduleViewModelFactory;
 			_defaultTeamProvider = defaultTeamProvider;
 			_timeFilterHelper = timeFilterHelper;
-			_toggleManager = toggleManager;
 			_loggedOnUser = loggedOnUser;
 			_teamScheduleViewModelReworkedFactory = teamScheduleViewModelReworkedFactory;
 		}
@@ -97,7 +94,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[HttpGet]
 		public virtual JsonResult DefaultTeam(DateOnly? date)
 		{
-			if (!date.HasValue)
+			if (!date.HasValue)   
 				date = _now.ServerDate_DontUse();
 			var defaultTeam = _defaultTeamProvider.DefaultTeam(date.Value);
 
@@ -106,7 +103,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				return Json(new { DefaultTeam = defaultTeam.Id.Value }, JsonRequestBehavior.AllowGet);
 			}
 
-			Response.StatusCode = (int)HttpStatusCode.BadRequest;
 			return Json(new { Message = UserTexts.Resources.NoTeamsAvailable }, JsonRequestBehavior.AllowGet);
 		}
 	}

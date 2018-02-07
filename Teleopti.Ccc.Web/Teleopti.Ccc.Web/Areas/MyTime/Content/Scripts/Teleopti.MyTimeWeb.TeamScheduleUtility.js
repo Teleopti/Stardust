@@ -735,7 +735,7 @@ Teleopti.MyTimeWeb.TeamScheduleDataProviderMixin = function (ajax, endpoints) {
 				date: date
 			},
 			success: function (data) {
-				if (success != null) success(data.DefaultTeam);
+				if (success != null) success(data);
 			},
 			error: function (xhr) {
 				if (error != null) {

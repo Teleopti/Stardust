@@ -235,4 +235,30 @@ $(document).ready(function () {
 		equal(viewModel.mySchedule().layers.length, 8);
 	});
 
+	test("should show error message when there is no default team", function () {
+
+		Teleopti.MyTimeWeb.TeamScheduleViewModel.loadSchedule = function () { };
+
+		var ajax = {
+			Ajax: function (options) {
+				if (options.url == endpoints.loadTeams) {
+					options.success({
+						teams: [],
+						allTeam: 'All Teams'
+					});
+				} else if (options.url == endpoints.loadDefaultTeam) {
+					options.success({ "Message": "There are no teams available" });
+				}
+			}
+		};
+
+		Teleopti.MyTimeWeb.TeamScheduleViewModel.initCurrentDate = function () { };
+		var viewModel = Teleopti.MyTimeWeb.TeamScheduleViewModelFactory.createViewModel(endpoints, ajax);
+
+
+		viewModel.requestedDate(moment().startOf('day'));
+		equal(viewModel.hasError(), true);
+		equal(viewModel.errorMessage(), "There are no teams available");
+
+	});
 });

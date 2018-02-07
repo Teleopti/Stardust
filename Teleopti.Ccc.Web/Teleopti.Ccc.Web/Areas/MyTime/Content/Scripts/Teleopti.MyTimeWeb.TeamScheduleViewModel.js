@@ -96,7 +96,13 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 		self.errorMessage(null);
 		self.loadDefaultTeam(
 			newDate,
-			function (myTeam) {
+			function (data) {
+				if (!!data.Message && data.Message !== '') {
+					self.hasError(true);
+					self.errorMessage(data.Message);
+					return;
+				}
+				var myTeam = data.DefaultTeam;
 				self.loadTeams(
 					newDate,
 					function (allTeams) {
