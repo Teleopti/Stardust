@@ -650,7 +650,7 @@
     <Compile Include="UnitOfWork\AllBusinessUnitsUnitOfWorkAspect.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkNoCommitAspect.cs" />
     <Compile Include="Util\ApplicationInsightsFilterOutSignalR.cs" />
-    <Compile Include="Util\ApplicationsInsigths.cs" />
+    <Compile Include="Util\ApplicationInsights.cs" />
     <Compile Include="Util\AppVersionTelemetryInitializer.cs" />
     <Compile Include="Util\CloudSafeSqlExecute.cs" />
     <Compile Include="Util\CompressionExtensions.cs" />
@@ -776,7 +776,7 @@
     <Compile Include="UnitOfWork\UnitOfWorkFactory.cs" />
     <Compile Include="UnitOfWork\CurrentUnitOfWorkFactory.cs" />
     <Compile Include="Util\DeployedHostTelemetryInitializer.cs" />
-    <Compile Include="Util\IApplicationsInsights.cs" />
+    <Compile Include="Util\IApplicationInsights.cs" />
     <Compile Include="Util\IRetryHandle.cs" />
     <Compile Include="Util\MemoryCounter.cs" />
     <Compile Include="Util\Retry.cs" />

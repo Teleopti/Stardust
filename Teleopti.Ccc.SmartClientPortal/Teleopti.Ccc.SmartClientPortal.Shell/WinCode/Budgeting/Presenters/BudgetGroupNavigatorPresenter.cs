@@ -1,4 +1,5 @@
 ﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Models;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Views;
 
@@ -8,11 +9,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Presenters
 	{
 		private readonly IBudgetGroupNavigatorView _view;
 		private readonly BudgetGroupNavigatorModel _model;
+		private readonly IApplicationInsights _applicationInsights;
 
-		public BudgetGroupNavigatorPresenter(IBudgetGroupNavigatorView view, BudgetGroupNavigatorModel model)
+		public BudgetGroupNavigatorPresenter(IBudgetGroupNavigatorView view, BudgetGroupNavigatorModel model, IApplicationInsights applicationInsights)
 		{
 			_view = view;
 			_model = model;
+			_applicationInsights = applicationInsights;
 		}
 
 		public void Initialize()
@@ -39,6 +42,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Presenters
 
 		public IBudgetGroup LoadBudgetGroup()
 		{
+			_applicationInsights.TrackEvent("Opened budget group in Budget Module.");
 			return _model.DataService.LoadBudgetGroup((IBudgetGroup)_view.SelectedModel.ContainedEntity);
 		}
 	}

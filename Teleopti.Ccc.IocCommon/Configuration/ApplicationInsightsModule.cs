@@ -9,9 +9,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<ApplicationsInsigths>()
+			builder.RegisterType<ApplicationInsights>()
 				.SingleInstance()
-				.As<IApplicationsInsights>();
+				.As<IApplicationInsights>();
 			builder.RegisterType<TelemetryClient>()
 				.SingleInstance()
 				.AsSelf();

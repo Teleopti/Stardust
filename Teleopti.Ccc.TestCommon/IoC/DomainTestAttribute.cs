@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 
 			// AppInsights
-			system.UseTestDouble<FakeApplicationsInsights>().For<IApplicationsInsights>();
+			system.UseTestDouble<FakeApplicationInsights>().For<IApplicationInsights>();
 			system.UseTestDouble<FakeApplicationInsightsConfigReader>().For<IApplicationInsightsConfigurationReader>();
 
 			// licensing

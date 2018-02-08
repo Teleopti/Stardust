@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			_sharedSettingsQuerier = MockRepository.GenerateMock<ISharedSettingsQuerier>();
 			_availableBusinessUnitsProvider = MockRepository.GenerateMock<IAvailableBusinessUnitsProvider>();
 			_target = new LogonPresenter(_view, _model, _initializer,  _logOnOff,
-				_mBroker, _sharedSettingsQuerier, _authenticationQuerier, new EnvironmentWindowsUserProvider(), _availableBusinessUnitsProvider, new FakeApplicationsInsights());
+				_mBroker, _sharedSettingsQuerier, _authenticationQuerier, new EnvironmentWindowsUserProvider(), _availableBusinessUnitsProvider, new FakeApplicationInsights());
 			_model.AuthenticationType = AuthenticationTypeOption.Application;
 		}
 

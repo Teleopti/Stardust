@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Reports;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Budgeting;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms;
@@ -54,12 +55,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main
 				 builder.RegisterType<StaffingCalculatorServiceFacade>().As<IStaffingCalculatorServiceFacade>().SingleInstance();
 			 }
 
-			 builder.RegisterType<IntradayNavigator>();
+			builder.RegisterType<IntradayNavigator>();
             builder.RegisterType<IntradayWebNavigator>();
             builder.RegisterType<PortalSettingsProvider>().SingleInstance();
             builder.RegisterType<BudgetGroupGroupNavigatorView>();
             builder.RegisterType<BudgetGroupNavigatorModel>();
-            builder.Register(c => new PerformanceManagerNavigator(_config.Args().MatrixWebSiteUrl));
+            builder.Register(c => new PerformanceManagerNavigator(_config.Args().MatrixWebSiteUrl, c.Resolve<IApplicationInsights>()));
             builder.RegisterType<PayrollExportNavigator>();
             builder.RegisterType<ShiftsNavigationPanel>();
             builder.RegisterType<PeopleNavigator>();

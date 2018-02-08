@@ -23,6 +23,7 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.PropertyPageAndWizard;
@@ -70,6 +71,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 		private readonly IConfigReader _configReader;
 		private readonly IStatisticHelper _statisticHelper;
 		private bool _hidePriorityToggle;
+		private readonly IApplicationInsights _applicationInsights;
 
 		protected ForecasterNavigator(IStatisticHelper statisticHelper, IBusinessRuleConfigProvider businessRuleConfigProvider)
 		{
@@ -115,7 +117,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 			IStatisticHelper statisticHelper, 
 			IBusinessRuleConfigProvider businessRuleConfigProvider,
 			IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade,
-			IConfigReader configReader)
+			IConfigReader configReader, IApplicationInsights applicationInsights)
 			: this(statisticHelper, businessRuleConfigProvider)
 		{
 			_jobHistoryViewFactory = jobHistoryViewFactory;
@@ -127,7 +129,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 			_eventInfrastructureInfoPopulator = eventInfrastructureInfoPopulator;
 			_staffingCalculatorServiceFacade = staffingCalculatorServiceFacade;
 			_configReader = configReader;
-			
+			_applicationInsights = applicationInsights;
 
 			setVisibility();
 		}
@@ -1068,6 +1070,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 			var forecaster = new Forecaster(skill, selectedPeriod, scenario, true, _toggleManager, _mainWindow, _statisticHelper, _businessRuleConfigProvider, _staffingCalculatorServiceFacade, _configReader);
 			forecaster.Show();
 			Cursor = Cursors.Default;
+			_applicationInsights.TrackEvent("Opened forecast for a skill in Forecast Module.");
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"

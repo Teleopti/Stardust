@@ -2,7 +2,7 @@
 
 namespace Teleopti.Ccc.TestCommon
 {
-	public class FakeApplicationsInsights : IApplicationsInsights
+	public class FakeApplicationInsights : IApplicationInsights
 	{
 		public void Init()
 		{
