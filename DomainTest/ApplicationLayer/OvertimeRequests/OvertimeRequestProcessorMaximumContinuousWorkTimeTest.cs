@@ -3,6 +3,8 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -100,6 +102,61 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var person = LoggedOnUser.CurrentUser();
 			var period = new DateTimePeriod(2017, 7, 17, 9, 2017, 7, 17, 16);
 			var pa = createMainPersonAssignment(person, period);
+			ScheduleStorage.Add(pa);
+
+			var workflowControlSet =
+				new WorkflowControlSet
+				{
+					OvertimeRequestMaximumContinuousWorkTimeEnabled = true,
+					OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(10),
+					OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny
+				};
+			person.WorkflowControlSet = workflowControlSet;
+
+			var personRequest = createOvertimeRequest(16, 3);
+			getTarget().Process(personRequest, true);
+
+			personRequest.IsApproved.Should().Be.True();
+		}
+
+		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestMaxContinuousWorkTime_47964)]
+		public void ShouldApproveWhenContinuousWorkTimeLessThenMaximumContinuousWorkTimeOnDayOff()
+		{
+			setupPerson(8, 21);
+			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 8d);
+
+			var person = LoggedOnUser.CurrentUser();
+			var pa = PersonAssignmentFactory.CreateAssignmentWithDayOff(person, Scenario.Current(), new DateOnly(2017, 7, 17),
+				new DayOffTemplate(new Description("for", "test")));
+			ScheduleStorage.Add(pa);
+
+			var workflowControlSet =
+				new WorkflowControlSet
+				{
+					OvertimeRequestMaximumContinuousWorkTimeEnabled = true,
+					OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(10),
+					OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny
+				};
+			person.WorkflowControlSet = workflowControlSet;
+
+			var personRequest = createOvertimeRequest(16, 3);
+			getTarget().Process(personRequest, true);
+
+			personRequest.IsApproved.Should().Be.True();
+		}
+
+		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestMaxContinuousWorkTime_47964)]
+		public void ShouldApproveWhenContinuousWorkTimeLessThenMaximumContinuousWorkTimeWithOvertimeBeforeOnDayOff()
+		{
+			setupPerson(8, 21);
+			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 8d);
+			var overtimePeriod = new DateTimePeriod(2017, 7, 17, 9, 2017, 7, 17, 16);
+			var person = LoggedOnUser.CurrentUser();
+			var pa = PersonAssignmentFactory.CreateAssignmentWithDayOff(person, Scenario.Current(), new DateOnly(2017, 7, 17),
+				new DayOffTemplate(new Description("for", "test")));
+			pa.AddOvertimeActivity(new Activity(), overtimePeriod, new MultiplicatorDefinitionSet("test", MultiplicatorType.Overtime));
 			ScheduleStorage.Add(pa);
 
 			var workflowControlSet =
