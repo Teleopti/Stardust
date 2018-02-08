@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			var activity = new Activity("_");
 			var agent = new Person().InTimeZone(TimeZoneInfo.Utc);
 			var scenario = new Scenario("_");
-			using (var setup1 = CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			using (var setup = CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{					
 				ScenarioRepository.Add(scenario);
 				ActivityRepository.Add(activity);
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 					PersonAssignmentRepository.Add(new PersonAssignment(agent, scenario, assDate).WithLayer(activity, new TimePeriod(8, 17)));
 				}
 
-				setup1.PersistAll();
+				setup.PersistAll();
 			}
 
 			var tasks = new List<Task>();
@@ -61,8 +61,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			{
 				readAgentSchedule(agent, period, scenario, ct);
 			}, ct));
-
-			
 			Thread.Sleep(1000);
 			ts.Cancel();
 			Task.WaitAll(tasks.ToArray());
