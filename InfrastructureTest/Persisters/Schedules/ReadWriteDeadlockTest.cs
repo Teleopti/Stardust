@@ -32,7 +32,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		[TestCase(1)]
 		[TestCase(2)]
 		[TestCase(10)]
-		[Ignore("#47954")]
 		public void ShouldHandleConcurrentReadsAndUpdates(int numberOfDays)
 		{
 			var date = new DateOnly(2000, 1, 1);

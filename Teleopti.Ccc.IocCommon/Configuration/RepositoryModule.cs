@@ -5,6 +5,7 @@ using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Messaging;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
@@ -18,7 +19,13 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	internal class RepositoryModule : Module
 	{
+		private readonly IIocConfiguration _configuration;
 		private readonly Type repositoryConstructorType = typeof (ICurrentUnitOfWork);
+
+		public RepositoryModule(IIocConfiguration configuration)
+		{
+			_configuration = configuration;
+		}
 
 		protected override void Load(ContainerBuilder builder)
 		{
@@ -37,6 +44,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 						.AsImplementedInterfaces()
 						.SingleInstance();
 				}
+			}
+
+			if (_configuration.Toggle(Toggles.ResourcePlanner_ScheduleDeadlock_48170))
+			{
+				builder.RegisterType<PersonAssignmentRepository48170>()						
+					.UsingConstructor(repositoryConstructorType)
+					.AsImplementedInterfaces()
+					.SingleInstance();
 			}
 
 			builder.RegisterType<PersonLoadAllWithPeriodAndExternalLogOn>().As<IPersonLoadAllWithPeriodAndExternalLogOn>().SingleInstance();

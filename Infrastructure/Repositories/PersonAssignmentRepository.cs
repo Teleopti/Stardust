@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		}
 
 		[RemoveMeWithToggle(Toggles.ResourcePlanner_ScheduleDeadlock_48170)]
-		protected string NamedQueryForFetchDatabaseVersions { get; } = "fetchIdAndVersionPersonAssignmentOLD";
+		protected virtual string NamedQueryForFetchDatabaseVersions { get; } = "fetchIdAndVersionPersonAssignmentOLD";
 		public IEnumerable<DateScenarioPersonId> FetchDatabaseVersions(DateOnlyPeriod period, IScenario scenario, IPerson person)
 		{
 			return Session.GetNamedQuery(NamedQueryForFetchDatabaseVersions)
@@ -147,5 +147,19 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			return retList;
 		}
+	}
+
+	[RemoveMeWithToggle("merge this with old repo", Toggles.ResourcePlanner_ScheduleDeadlock_48170)]
+	public class PersonAssignmentRepository48170 : PersonAssignmentRepository
+	{
+		public PersonAssignmentRepository48170(IUnitOfWork unitOfWork) : base(unitOfWork)
+		{
+		}
+
+		public PersonAssignmentRepository48170(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
+		{
+		}
+
+		protected override string NamedQueryForFetchDatabaseVersions { get; } = "fetchIdAndVersionPersonAssignment";
 	}
 }

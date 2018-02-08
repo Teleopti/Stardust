@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.IocCommon
 				builder.RegisterType<PersistableScheduleDataPermissionChecker>().As<IPersistableScheduleDataPermissionChecker>().SingleInstance();
 			}
 			
-			builder.RegisterModule<RepositoryModule>();
+			builder.RegisterModule(new RepositoryModule(_configuration));
 			builder.RegisterModule(new AnalyticsUnitOfWorkModule(_configuration));
 			builder.RegisterModule(new DataSourceModule(_configuration));
 			builder.RegisterModule(new UnitOfWorkModule(_configuration));
