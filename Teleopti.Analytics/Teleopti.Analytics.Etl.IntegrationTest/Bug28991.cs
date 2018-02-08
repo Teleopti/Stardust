@@ -35,7 +35,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		[Test]
 		public void ShouldWorkForBrazilTimeZone()
 		{
-			var testDate = new DateTime(2013, 06, 15);
+			DateTime testDate = DateTime.Today.AddDays(-30);
 
 			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>(), testDate);
 
@@ -104,7 +104,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		[Test]
 		public void ShouldWorkForAustralianTimeZone()
 		{
-			var testDate = new DateTime(2013, 06, 15);
+			DateTime testDate = DateTime.Today.AddDays(-30);
 
 			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>(), testDate);
 

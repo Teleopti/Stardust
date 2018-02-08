@@ -33,7 +33,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		[Test]
 		public void ShouldWorkForStockholm()
 		{
-			DateTime testDate = new DateTime(2013, 06, 15);
+			DateTime testDate = DateTime.Today.AddDays(-30);
 
 			// run this to get a date and time in mart.LastUpdatedPerStep
 			var etlUpdateDate = new EtlReadModelSetup { BusinessUnit = TestState.BusinessUnit, StepName = "Schedules" };
