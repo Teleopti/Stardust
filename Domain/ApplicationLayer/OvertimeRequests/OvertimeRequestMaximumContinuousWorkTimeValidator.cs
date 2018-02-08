@@ -107,15 +107,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			TimeSpan continuousWorkTime;
 			var previousShiftLayerPeriod = getPreviouContinuousShiftPeriod(shiftLayers, requestPeriod, minimumRestTime);
 
-			var nextShiftLayer = shiftLayers.FirstOrDefault(shift =>
-				shift.Period.StartDateTime.CompareTo(requestPeriod.EndDateTime) >= 0);
+			var nextShiftLayerPeriod = getNextContinuousShiftPeriod(shiftLayers, requestPeriod, minimumRestTime);
 
-			if (previousShiftLayerPeriod != null && nextShiftLayer != null)
+			if (previousShiftLayerPeriod != null && nextShiftLayerPeriod != null)
 			{
 				continuousWorkTime = previousShiftLayerPeriod.Value.ElapsedTime() + requestPeriod.ElapsedTime() +
-									 nextShiftLayer.Period.ElapsedTime();
+									 nextShiftLayerPeriod.Value.ElapsedTime();
 				continuousWorkTimePeriod =
-					$"{previousShiftLayerPeriod.Value.StartDateTimeLocal(timezone)} - {nextShiftLayer.Period.EndDateTimeLocal(timezone)}";
+					$"{previousShiftLayerPeriod.Value.StartDateTimeLocal(timezone)} - {nextShiftLayerPeriod.Value.EndDateTimeLocal(timezone)}";
 			}
 			else if (previousShiftLayerPeriod != null)
 			{
@@ -123,11 +122,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 				continuousWorkTimePeriod =
 					$"{previousShiftLayerPeriod.Value.StartDateTimeLocal(timezone)} - {requestPeriod.EndDateTimeLocal(timezone)}";
 			}
-			else if (nextShiftLayer != null)
+			else if (nextShiftLayerPeriod != null)
 			{
-				continuousWorkTime = nextShiftLayer.Period.ElapsedTime() + requestPeriod.ElapsedTime();
+				continuousWorkTime = nextShiftLayerPeriod.Value.ElapsedTime() + requestPeriod.ElapsedTime();
 				continuousWorkTimePeriod =
-					$"{requestPeriod.StartDateTimeLocal(timezone)} - {nextShiftLayer.Period.EndDateTimeLocal(timezone)}";
+					$"{requestPeriod.StartDateTimeLocal(timezone)} - {nextShiftLayerPeriod.Value.EndDateTimeLocal(timezone)}";
 			}
 			else
 			{
@@ -181,6 +180,50 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			var isContinuous = requestPeriod.StartDateTime.CompareTo(continuousShiftPeriod.EndDateTime) == 0;
 			var isSatisfiedMinimumRestTime =
 				requestPeriod.StartDateTime - continuousShiftPeriod.EndDateTime < minimumRestTime;
+
+			if (isContinuous || isSatisfiedMinimumRestTime)
+				return continuousShiftPeriod;
+
+			return null;
+		}
+
+		private DateTimePeriod? getNextContinuousShiftPeriod(List<ShiftLayer> shiftLayers, DateTimePeriod requestPeriod,
+			TimeSpan minimumRestTime)
+		{
+			var afterShiftLayers = shiftLayers.Where(shift =>
+			{
+				var isShiftAfterRequest = shift.Period.StartDateTime.CompareTo(requestPeriod.EndDateTime) >= 0;
+				var isLunchOrShortBreak = shift.Payload.ReportLevelDetail == ReportLevelDetail.Lunch ||
+										  shift.Payload.ReportLevelDetail == ReportLevelDetail.ShortBreak;
+				return isShiftAfterRequest && !isLunchOrShortBreak;
+			}).OrderBy(shift => shift.Period.StartDateTime).ToList();
+
+			if (!afterShiftLayers.Any())
+				return null;
+
+			var lastShiftLayerEndTime = default(DateTime);
+			for (var i = 0; i < afterShiftLayers.Count; i++)
+			{
+				var currentStart = afterShiftLayers[i].Period.StartDateTime;
+				var currentEnd = afterShiftLayers[i].Period.EndDateTime;
+
+				if (lastShiftLayerEndTime.CompareTo(default(DateTime)) == 0)
+				{
+					lastShiftLayerEndTime = currentEnd;
+				}
+				else if (currentStart.CompareTo(lastShiftLayerEndTime) == 0)
+				{
+					lastShiftLayerEndTime = currentEnd;
+				}
+				else
+				{
+					break;
+				}
+			}
+
+			var continuousShiftPeriod = new DateTimePeriod(afterShiftLayers.First().Period.StartDateTime, lastShiftLayerEndTime);
+			var isContinuous = requestPeriod.EndDateTime.CompareTo(continuousShiftPeriod.StartDateTime) == 0;
+			var isSatisfiedMinimumRestTime = continuousShiftPeriod.StartDateTime - requestPeriod.EndDateTime < minimumRestTime;
 
 			if (isContinuous || isSatisfiedMinimumRestTime)
 				return continuousShiftPeriod;

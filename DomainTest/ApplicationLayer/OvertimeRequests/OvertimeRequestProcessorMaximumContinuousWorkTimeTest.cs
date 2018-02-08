@@ -502,6 +502,167 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			personRequest.DenyReason.Should().Be.EqualTo(expectedDenyReason);
 		}
 
+		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestMaxContinuousWorkTime_47964)]
+		public void ShouldApproveWhenRestTimeSatisfysMinimumRestTimeWithShiftAfter()
+		{
+			setupPerson(8, 21);
+			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 8d);
+
+			var person = LoggedOnUser.CurrentUser();
+			var period = new DateTimePeriod(2017, 7, 17, 10, 2017, 7, 17, 20);
+			var pa = createMainPersonAssignment(person, period);
+			ScheduleStorage.Add(pa);
+
+			var workflowControlSet =
+				new WorkflowControlSet
+				{
+					OvertimeRequestMaximumContinuousWorkTimeEnabled = true,
+					OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(10),
+					OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny,
+					OvertimeRequestMinimumRestTimeThreshold = TimeSpan.FromHours(1)
+				};
+			person.WorkflowControlSet = workflowControlSet;
+
+			var personRequest = createOvertimeRequest(8, 1);
+			getTarget().Process(personRequest, true);
+
+			personRequest.IsApproved.Should().Be.True();
+		}
+
+		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestMaxContinuousWorkTime_47964)]
+		public void ShouldApproveWhenRestTimeSatisfysMinimumRestTimeWithShiftAndLunchAfter()
+		{
+			setupPerson(8, 21);
+			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 8d);
+
+			var person = LoggedOnUser.CurrentUser();
+			var period = new DateTimePeriod(2017, 7, 17, 10, 2017, 7, 17, 20);
+			var pa = createMainPersonAssignment(person, period);
+			var lunch = ActivityFactory.CreateActivity("lunch");
+			lunch.ReportLevelDetail = ReportLevelDetail.Lunch;
+			pa.AddActivity(lunch, new DateTimePeriod(2017, 7, 17, 9, 2017, 7, 17, 10));
+			ScheduleStorage.Add(pa);
+
+			var workflowControlSet =
+				new WorkflowControlSet
+				{
+					OvertimeRequestMaximumContinuousWorkTimeEnabled = true,
+					OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(10),
+					OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny,
+					OvertimeRequestMinimumRestTimeThreshold = TimeSpan.FromHours(1)
+				};
+			person.WorkflowControlSet = workflowControlSet;
+
+			var personRequest = createOvertimeRequest(8, 1);
+			getTarget().Process(personRequest, true);
+
+			personRequest.IsApproved.Should().Be.True();
+		}
+
+		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestMaxContinuousWorkTime_47964)]
+		public void ShouldApproveWhenRestTimeSatisfysMinimumRestTimeWithShiftAndShortBreakAfter()
+		{
+			setupPerson(8, 21);
+			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 8d);
+
+			var person = LoggedOnUser.CurrentUser();
+			var period = new DateTimePeriod(2017, 7, 17, 10, 2017, 7, 17, 20);
+			var pa = createMainPersonAssignment(person, period);
+			var shortBreak = ActivityFactory.CreateActivity("short break");
+			shortBreak.ReportLevelDetail = ReportLevelDetail.ShortBreak;
+			pa.AddActivity(shortBreak, new DateTimePeriod(2017, 7, 17, 9, 2017, 7, 17, 10));
+			ScheduleStorage.Add(pa);
+
+			var workflowControlSet =
+				new WorkflowControlSet
+				{
+					OvertimeRequestMaximumContinuousWorkTimeEnabled = true,
+					OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(10),
+					OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny,
+					OvertimeRequestMinimumRestTimeThreshold = TimeSpan.FromHours(1)
+				};
+			person.WorkflowControlSet = workflowControlSet;
+
+			var personRequest = createOvertimeRequest(8, 1);
+			getTarget().Process(personRequest, true);
+
+			personRequest.IsApproved.Should().Be.True();
+		}
+
+		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestMaxContinuousWorkTime_47964)]
+		public void ShouldDenyWhenRestTimeIsLessThanMinimumRestTimeWithShiftAfter()
+		{
+			setupPerson(8, 21);
+			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 8d);
+
+			var person = LoggedOnUser.CurrentUser();
+			var period = new DateTimePeriod(2017, 7, 17, 10, 2017, 7, 17, 20);
+			var pa = createMainPersonAssignment(person, period);
+			ScheduleStorage.Add(pa);
+
+			var workflowControlSet =
+				new WorkflowControlSet
+				{
+					OvertimeRequestMaximumContinuousWorkTimeEnabled = true,
+					OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(10),
+					OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny,
+					OvertimeRequestMinimumRestTimeThreshold = TimeSpan.FromHours(2)
+				};
+			person.WorkflowControlSet = workflowControlSet;
+
+			var personRequest = createOvertimeRequest(8, 1);
+			getTarget().Process(personRequest, true);
+
+			var expectedDenyReason = buildDenyReason("7/17/2017 8:00:00 AM - 7/17/2017 8:00:00 PM", TimeSpan.FromHours(11),
+				TimeSpan.FromHours(10));
+
+			personRequest.IsDenied.Should().Be.True();
+			personRequest.DenyReason.Should().Be.EqualTo(expectedDenyReason);
+		}
+
+		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestMaxContinuousWorkTime_47964)]
+		public void ShouldDenyWhenRestTimeIsLessThanMinimumRestTimeWithOverNightShiftAfter()
+		{
+			setupPerson(8, 21);
+			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 8d);
+
+			var person = LoggedOnUser.CurrentUser();
+			var period = new DateTimePeriod(2017, 7, 17, 23, 2017, 7, 18, 7);
+			var pa = createMainPersonAssignment(person, period);
+
+			var phone = ActivityFactory.CreateActivity("phone");
+			pa.AddActivity(phone, new DateTimePeriod(2017, 7, 17, 21, 2017, 7, 17, 23));
+
+			var shortBreak = ActivityFactory.CreateActivity("short break");
+			shortBreak.ReportLevelDetail = ReportLevelDetail.ShortBreak;
+			pa.AddActivity(shortBreak, new DateTimePeriod(2017, 7, 17, 20, 2017, 7, 17, 21));
+			ScheduleStorage.Add(pa);
+
+			var workflowControlSet =
+				new WorkflowControlSet
+				{
+					OvertimeRequestMaximumContinuousWorkTimeEnabled = true,
+					OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(10),
+					OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny,
+					OvertimeRequestMinimumRestTimeThreshold = TimeSpan.FromHours(2)
+				};
+			person.WorkflowControlSet = workflowControlSet;
+
+			var personRequest = createOvertimeRequest(19, 1);
+			getTarget().Process(personRequest, true);
+
+			var expectedDenyReason = buildDenyReason("7/17/2017 7:00:00 PM - 7/18/2017 7:00:00 AM", TimeSpan.FromHours(11),
+				TimeSpan.FromHours(10));
+
+			personRequest.IsDenied.Should().Be.True();
+			personRequest.DenyReason.Should().Be.EqualTo(expectedDenyReason);
+		}
+
 		private string buildDenyReason(string continuousWorkPeriod, TimeSpan continuousWorkTime, TimeSpan maximumContinuousWorkTime)
 		{
 			return string.Format(Resources.OvertimeRequestContinuousWorkTimeDenyReason,
