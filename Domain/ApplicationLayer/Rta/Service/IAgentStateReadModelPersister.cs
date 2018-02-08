@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {

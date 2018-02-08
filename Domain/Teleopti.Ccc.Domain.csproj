@@ -345,9 +345,15 @@
     <Compile Include="ApplicationLayer\Rta\Configuration\ConfigurationValidator.cs" />
     <Compile Include="ApplicationLayer\Rta\Configuration\IConfigurationValidator.cs" />
     <Compile Include="ApplicationLayer\Rta\Configuration\NoConfigurationValidator.cs" />
+    <Compile Include="ApplicationLayer\Rta\AdherenceChange\AdherenceChange.cs" />
+    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AgentStateReadModelMaintainer.cs" />
+    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AgentStateReadModelUpdater.cs" />
+    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\CurrentScheduleReadModelUpdater.cs" />
+    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\ExternalLogonReadModelUpdater.cs" />
+    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\HistoricalAdherenceMaintainer.cs" />
+    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\HistoricalAdherenceUpdater.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\IOrganizationReader.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\OrganizationSiteModel.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\HistoricalAdherenceMaintainer.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IRtaExceptionHandler.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IStateQueueReader.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IStateQueueWriter.cs" />
@@ -650,9 +656,7 @@
     <Compile Include="ApplicationLayer\Rta\Service\AgentStateMaintainer.cs" />
     <Compile Include="ApplicationLayer\Events\InitialLoadScheduleProjectionEvent.cs" />
     <Compile Include="ApplicationLayer\ReadModelInitializeHandler.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\CurrentScheduleReadModelUpdater.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ExternalLogonMapper.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\ExternalLogonReadModelUpdater.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IExternalLogonReader.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IContextLoadingStrategy.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\InvalidStateCodeException.cs" />
@@ -660,7 +664,6 @@
     <Compile Include="ApplicationLayer\Rta\Service\PerTenant.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\RuleEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ScheduleChangeProcessor.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\HistoricalAdherenceUpdater.cs" />
     <Compile Include="ApplicationLayer\Events\AnalyticsDatesChangedEvent.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\IAnalyticsPersonPeriodMapNotDefined.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ContextLoader.cs" />
@@ -1381,7 +1384,6 @@
     <Compile Include="ApplicationLayer\Events\PersonRequestChangedEvent.cs" />
     <Compile Include="ApplicationLayer\IKeyValueStorePersister.cs" />
     <Compile Include="ApplicationLayer\KeyValueStorePersisterExtensions.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\AgentStateReadModelMaintainer.cs" />
     <Compile Include="ApplicationLayer\SiteOpenHours\ISiteOpenHoursPersister.cs" />
     <Compile Include="ApplicationLayer\SiteOpenHours\ISiteOpenHoursSpecification.cs" />
     <Compile Include="ApplicationLayer\SiteOpenHours\SiteOpenHoursCheckItem.cs" />
@@ -1909,7 +1911,6 @@
     <Compile Include="ApplicationLayer\Rta\Service\AdherenceEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\AdherenceInfo.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\AgentState.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\AgentStateReadModelUpdater.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\Mapping.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\CheckForActivityChangeInputModel.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\CurrentBelongsToDate.cs" />

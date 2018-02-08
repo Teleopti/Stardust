@@ -1,4 +1,5 @@
 ﻿using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.DistributedLock;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Messages;
 

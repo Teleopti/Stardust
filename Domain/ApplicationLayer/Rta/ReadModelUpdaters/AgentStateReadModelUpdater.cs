@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 {
 	// special event never ment to be used in a queue
 	public class AgentStateChangedEvent : IEvent

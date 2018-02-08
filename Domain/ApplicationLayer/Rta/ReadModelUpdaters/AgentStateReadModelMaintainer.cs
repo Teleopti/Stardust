@@ -2,10 +2,11 @@ using System;
 using log4net;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 {
 	public class AgentStateReadModelMaintainer :
 		IHandleEvent<PersonDeletedEvent>,

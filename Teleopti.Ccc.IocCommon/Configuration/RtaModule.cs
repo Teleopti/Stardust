@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.AdherenceChange;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ApprovePeriodAsInAdherence;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Configuration;
@@ -75,14 +76,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SiteCardViewModelBuilder>().SingleInstance();
 			builder.RegisterType<TeamCardReader>().As<ITeamCardReader>().SingleInstance();
 			builder.RegisterType<RtaTracerViewModelBuilder>().SingleInstance();
-
+			builder.RegisterType<HistoricalAdherenceViewModelBuilder>().SingleInstance();
 			builder.RegisterType<HistoricalAdherenceDate>().SingleInstance();
 
-			builder.RegisterType<HistoricalAdherenceViewModelBuilder>().SingleInstance();
+			builder.RegisterType<AdherenceChange>().SingleInstance();
 			builder.RegisterType<ApprovePeriodAsInAdherenceCommandHandler>().SingleInstance();
 			builder.RegisterType<ApprovePeriodAsInAdherence>().SingleInstance();
-			builder.RegisterType<ScheduleLoader>().SingleInstance();
 			builder.RegisterType<AgentAdherenceDayLoader>().SingleInstance();
+			builder.RegisterType<ScheduleLoader>().SingleInstance();
 			builder.RegisterType<AdherencePercentageCalculator>().SingleInstance();
 
 			builder.RegisterType<HistoricalAdherenceReadModelReader>().As<IHistoricalAdherenceReadModelReader>().SingleInstance();

@@ -6,6 +6,7 @@ using System.Linq;
 using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.AdherenceChange;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ApprovePeriodAsInAdherence;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
@@ -355,6 +356,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private readonly HardcodedSkillGroupingPageId _hardcodedSkillGroupingPageId;
 		private readonly FakeMultiplicatorDefinitionSetRepository _multiplicatorDefinitionSets;
 		private readonly ApprovePeriodAsInAdherence _approvePeriod;
+		private readonly AdherenceChange _adherenceChange;
 
 		private BusinessUnit _businessUnit;
 		private Site _site;
@@ -408,7 +410,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			FakeAgentStateReadModelPersister agentStateReadModels,
 			HardcodedSkillGroupingPageId hardcodedSkillGroupingPageId,
 			FakeMultiplicatorDefinitionSetRepository multiplicatorDefinitionSets,
-			ApprovePeriodAsInAdherence approvePeriod)
+			ApprovePeriodAsInAdherence approvePeriod,
+			AdherenceChange adherenceChange)
 		{
 			_tenants = tenants;
 			_persons = persons;
@@ -442,6 +445,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_hardcodedSkillGroupingPageId = hardcodedSkillGroupingPageId;
 			_multiplicatorDefinitionSets = multiplicatorDefinitionSets;
 			_approvePeriod = approvePeriod;
+			_adherenceChange = adherenceChange;
 		}
 
 		public void CreateDefaultData()
@@ -1069,8 +1073,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return WithAlarm(threshold, null);
 		}
 
-		[UnitOfWork]
-		public virtual FakeDatabase WithApprovedPeriods(string startTime, string endTime)
+		public FakeDatabase WithApprovedPeriods(string startTime, string endTime)
 		{
 			_approvePeriod.Approve(new ApprovedPeriod
 			{
@@ -1081,7 +1084,25 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return this;
 		}
 
+		
+		public FakeDatabase WithAdherenceIn(DateTime time)
+		{
+			_adherenceChange.In(_person.Id.Value, time);
+			return this;
+		}
 
+		public FakeDatabase WithAdherenceOut(DateTime time)
+		{
+			_adherenceChange.Out(_person.Id.Value, time);
+			return this;
+		}
+
+		public FakeDatabase WithAdherenceNeutral(DateTime time)
+		{
+			_adherenceChange.Neutral(_person.Id.Value, time);
+			return this;
+		}
+		
 		[UnitOfWork]
 		public virtual FakeDatabase ClearAssignments(Guid? personId)
 		{
@@ -1130,5 +1151,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			if (all.IsEmpty())
 				createAction();
 		}
+
 	}
 }

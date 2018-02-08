@@ -78,6 +78,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay
 		public IEnumerable<HistoricalChange> Changes() => _changes;
 		public IEnumerable<OutOfAdherencePeriod> OutOfAdherences() => _outOfAdherences;
 		public int? Percentage() => _percentage;
+
 		public IEnumerable<ApprovedPeriod> ApprovedPeriods() => _approvedPeriods;
 	}
 }
