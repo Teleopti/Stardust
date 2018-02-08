@@ -121,6 +121,64 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 		[Test]
 		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestMaxContinuousWorkTime_47964)]
+		public void ShouldApproveWhenContinuousWorkTimeLessThenMaximumContinuousWorkTimeOnFullDayAbsence()
+		{
+			setupPerson(8, 21);
+			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 8d);
+
+			var person = LoggedOnUser.CurrentUser();
+			var period = new DateTimePeriod(2017, 7, 17, 0, 2017, 7, 18, 0);
+			var fullDayAbsence = new PersonAbsence(person, Scenario.Current(), new AbsenceLayer(new Absence(), period));
+			ScheduleStorage.Add(fullDayAbsence);
+
+			var workflowControlSet =
+				new WorkflowControlSet
+				{
+					OvertimeRequestMaximumContinuousWorkTimeEnabled = true,
+					OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(10),
+					OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny
+				};
+			person.WorkflowControlSet = workflowControlSet;
+
+			var personRequest = createOvertimeRequest(16, 3);
+			getTarget().Process(personRequest, true);
+
+			personRequest.IsApproved.Should().Be.True();
+		}
+
+		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestMaxContinuousWorkTime_47964)]
+		public void ShouldApproveWhenContinuousWorkTimeLessThenMaximumContinuousWorkTimeWithShiftContainingAbsenceBefore()
+		{
+			setupPerson(8, 21);
+			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 8d);
+
+			var person = LoggedOnUser.CurrentUser();
+			var period = new DateTimePeriod(2017, 7, 17, 8, 2017, 7, 17, 17);
+			var pa = createMainPersonAssignment(person, period);
+			ScheduleStorage.Add(pa);
+
+			var absencePeriod = new DateTimePeriod(2017, 7, 17, 16, 2017, 7, 17, 17);
+			var absence = new PersonAbsence(person, Scenario.Current(), new AbsenceLayer(new Absence(), absencePeriod));
+			ScheduleStorage.Add(absence);
+
+			var workflowControlSet =
+				new WorkflowControlSet
+				{
+					OvertimeRequestMaximumContinuousWorkTimeEnabled = true,
+					OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(10),
+					OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny
+				};
+			person.WorkflowControlSet = workflowControlSet;
+
+			var personRequest = createOvertimeRequest(17, 2);
+			getTarget().Process(personRequest, true);
+
+			personRequest.IsApproved.Should().Be.True();
+		}
+
+		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestMaxContinuousWorkTime_47964)]
 		public void ShouldApproveWhenContinuousWorkTimeLessThenMaximumContinuousWorkTimeOnDayOff()
 		{
 			setupPerson(8, 21);

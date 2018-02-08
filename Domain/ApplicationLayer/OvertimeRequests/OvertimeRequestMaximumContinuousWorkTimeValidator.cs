@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			var scheduleRange = dic[person];
 			var requestPeriod = context.PersonRequest.Request.Period;
 
-			var shiftLayers = loadShiftLayers(scheduleRange, requestPeriod, timezone);
+			var shiftLayers = loadVisualLayers(scheduleRange, requestPeriod, timezone);
 
 			var continuousWorkTimeInfo = getContinuousWorkTime(shiftLayers, requestPeriod, timezone, minimumRestTime);
 
@@ -63,37 +63,29 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			return validResult();
 		}
 
-		private List<ShiftLayer> loadShiftLayers(IScheduleRange scheduleRange, DateTimePeriod requestPeriod,
+		private List<IVisualLayer> loadVisualLayers(IScheduleRange scheduleRange, DateTimePeriod requestPeriod,
 			TimeZoneInfo timezone)
 		{
-			var shiftLayers = new List<ShiftLayer>();
+			var visualLayers = new List<IVisualLayer>();
 			var today = new DateOnly(requestPeriod.StartDateTimeLocal(timezone));
 
-			var yesterDayPersonAssignment = scheduleRange.ScheduledDay(today.AddDays(-1)).PersonAssignment();
-			if (yesterDayPersonAssignment != null)
-				shiftLayers.AddRange(yesterDayPersonAssignment.ShiftLayers);
+			visualLayers.AddRange(scheduleRange.ScheduledDay(today.AddDays(-1)).ProjectionService().CreateProjection());
+			visualLayers.AddRange(scheduleRange.ScheduledDay(today).ProjectionService().CreateProjection());
+			visualLayers.AddRange(scheduleRange.ScheduledDay(today.AddDays(1)).ProjectionService().CreateProjection());
 
-			var todayDayPersonAssignment = scheduleRange.ScheduledDay(today).PersonAssignment();
-			if (todayDayPersonAssignment != null)
-				shiftLayers.AddRange(todayDayPersonAssignment.ShiftLayers);
-
-			var tomorrowPersonAssignment = scheduleRange.ScheduledDay(today.AddDays(1)).PersonAssignment();
-			if (tomorrowPersonAssignment != null)
-				shiftLayers.AddRange(tomorrowPersonAssignment.ShiftLayers);
-
-			return shiftLayers.OrderBy(shift => shift.Period.StartDateTime).ToList();
+			return visualLayers.OrderBy(shift => shift.Period.StartDateTime).ToList();
 		}
 
-		private ContinuousWorkTimeInfo getContinuousWorkTime(List<ShiftLayer> shiftLayers,
+		private ContinuousWorkTimeInfo getContinuousWorkTime(List<IVisualLayer> visualLayers,
 			DateTimePeriod requestPeriod, TimeZoneInfo timezone, TimeSpan minimumRestTime)
 		{
-			if (!shiftLayers.Any())
+			if (!visualLayers.Any())
 			{
 				return buildContinuousWorkTimeInfoBasedOnRequest(requestPeriod, timezone);
 			}
 
-			var previousShiftLayerPeriod = getPreviousContinuousShiftPeriod(shiftLayers, requestPeriod, minimumRestTime);
-			var nextShiftLayerPeriod = getNextContinuousShiftPeriod(shiftLayers, requestPeriod, minimumRestTime);
+			var previousShiftLayerPeriod = getPreviousContinuousShiftPeriod(visualLayers, requestPeriod, minimumRestTime);
+			var nextShiftLayerPeriod = getNextContinuousShiftPeriod(visualLayers, requestPeriod, minimumRestTime);
 
 			return buildContinuousWorkTimeInfo(requestPeriod, timezone, previousShiftLayerPeriod, nextShiftLayerPeriod);
 		}
@@ -148,14 +140,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			};
 		}
 
-		private DateTimePeriod? getPreviousContinuousShiftPeriod(List<ShiftLayer> shiftLayers, DateTimePeriod requestPeriod,
+		private DateTimePeriod? getPreviousContinuousShiftPeriod(List<IVisualLayer> visualLayers, DateTimePeriod requestPeriod,
 			TimeSpan minimumRestTime)
 		{
-			var beforeShiftLayers = shiftLayers.Where(shift =>
+			var beforeShiftLayers = visualLayers.Where(visualLayer =>
 			{
-				var isShiftBeforeRequest = shift.Period.EndDateTime.CompareTo(requestPeriod.StartDateTime) <= 0;
-				var isLunchOrShortBreak = isLunchOrShortBreakActivity(shift);
-				return isShiftBeforeRequest && !isLunchOrShortBreak;
+				var isShiftBeforeRequest = visualLayer.Period.EndDateTime.CompareTo(requestPeriod.StartDateTime) <= 0;
+				var isLunchOrShortBreak = isLunchOrShortBreakActivity(visualLayer);
+				var isAbsence = isAbsenceLayer(visualLayer);
+				return isShiftBeforeRequest && !isLunchOrShortBreak && !isAbsence;
 			}).OrderBy(shift => shift.Period.StartDateTime).ToList();
 
 			if (!beforeShiftLayers.Any())
@@ -192,14 +185,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			return null;
 		}
 
-		private DateTimePeriod? getNextContinuousShiftPeriod(List<ShiftLayer> shiftLayers, DateTimePeriod requestPeriod,
+		private DateTimePeriod? getNextContinuousShiftPeriod(List<IVisualLayer> visualLayers, DateTimePeriod requestPeriod,
 			TimeSpan minimumRestTime)
 		{
-			var afterShiftLayers = shiftLayers.Where(shift =>
+			var afterShiftLayers = visualLayers.Where(visualLayer =>
 			{
-				var isShiftAfterRequest = shift.Period.StartDateTime.CompareTo(requestPeriod.EndDateTime) >= 0;
-				var isLunchOrShortBreak = isLunchOrShortBreakActivity(shift);
-				return isShiftAfterRequest && !isLunchOrShortBreak;
+				var isShiftAfterRequest = visualLayer.Period.StartDateTime.CompareTo(requestPeriod.EndDateTime) >= 0;
+				var isLunchOrShortBreak = isLunchOrShortBreakActivity(visualLayer);
+				var isAbsence = isAbsenceLayer(visualLayer);
+				return isShiftAfterRequest && !isLunchOrShortBreak && !isAbsence;
 			}).OrderBy(shift => shift.Period.StartDateTime).ToList();
 
 			if (!afterShiftLayers.Any())
@@ -252,10 +246,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			return dic;
 		}
 
-		private bool isLunchOrShortBreakActivity(ShiftLayer shift)
+		private bool isLunchOrShortBreakActivity(IVisualLayer visualLayer)
 		{
-			return shift.Payload.ReportLevelDetail == ReportLevelDetail.Lunch ||
-				   shift.Payload.ReportLevelDetail == ReportLevelDetail.ShortBreak;
+			if (visualLayer.Payload is IActivity)
+			{
+				var activity = (IActivity) visualLayer.Payload;
+				return activity.ReportLevelDetail == ReportLevelDetail.Lunch ||
+					   activity.ReportLevelDetail == ReportLevelDetail.ShortBreak;
+			}
+
+			return false;
+		}
+
+		private bool isAbsenceLayer(IVisualLayer visualLayer)
+		{
+			return visualLayer.Payload is IAbsence;
 		}
 
 		private static OvertimeRequestValidationResult invalidResult(string continuousWorkTimePeriod,
