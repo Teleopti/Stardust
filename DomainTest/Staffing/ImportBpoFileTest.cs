@@ -191,7 +191,7 @@ TPBRZIL,Directsales,2017-07-24 10:15,2017-07-24 10:30,6.0";
 			SkillRepository.Has("ChannelSales", new Activity());
 			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
 			result.Success.Should().Be.False();
-			result.ErrorInformation.SingleOrDefault(e => e.Contains("Directsales")).Should().Not.Be.Null();
+			result.ErrorInformation.SingleOrDefault(e => e.Contains("line number 7")).Should().Not.Be.Null();
 		}
 
 		[Test]
@@ -300,14 +300,18 @@ TPBRZIL,ChannelSales,2017-07-24 10:00,2017-07-24 10:15,8.75";
 		public void ShouldReturnFalseIfSkillIsMissing()
 		{
 			var fileContents = @"source, skillcombination, startdatetime, enddatetime, agents
-								TPBRZIL, Directsales, 2017-07-24 10:15, 2017-07-24 10:30, 6.0
-								TPBRZIL, KLINGON, 2017-07-24 10:15, 2017-07-24 10:30, 6.0";
+TPBRZIL, Directsales, 2017-07-24 10:15, 2017-07-24 10:30, 6.0
+TPBRZIL, KLINGON, 2017-07-24 10:15, 2017-07-24 10:30, 6.0
+TPBRZIL, KLINGON, 2017-07-24 10:30, 2017-07-24 10:45, 6.0
+TPBRZIL, Directsales|KLINGON, 2017-07-24 10:30, 2017-07-24 10:45, 6.0";
 
 			SkillRepository.Has("Directsales", new Activity());
 			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
 
 			result.Success.Should().Be.False();
-			result.ErrorInformation.SingleOrDefault(e => e.Contains("KLINGON")).Should().Not.Be.Null();
+			result.ErrorInformation.Count.Should().Be.EqualTo(3);
+			var err = result.ErrorInformation.SingleOrDefault(e => e.Contains("line number 3"));
+			err.Should().Contain("KLINGON");
 			SkillCombinationResourceRepository.LoadSkillCombinationResourcesBpo().Count.Should().Be.EqualTo(0);
 		}
 
@@ -319,7 +323,7 @@ TPBRZIL,ChannelSales,2017-07-24 1000,2017-07-24 10:15,10.5";
 
 			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
 			result.Success.Should().Be.False();
-			result.ErrorInformation.SingleOrDefault(e => e.Contains("date")).Should().Not.Be.Null();
+			result.ErrorInformation.SingleOrDefault(e => e.Contains("date format")).Should().Not.Be.Null();
 		}
 
 		[Test]
@@ -347,7 +351,7 @@ TPBRZIL,ChannelSales,2017-07-24 10:00,2017-07-24 1015,10.5";
 
 			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
 			result.Success.Should().Be.False();
-			result.ErrorInformation.SingleOrDefault(e => e.Contains("date")).Should().Not.Be.Null();
+			result.ErrorInformation.SingleOrDefault(e => e.Contains("date format")).Should().Not.Be.Null();
 		}
 
 		[Test]
@@ -511,7 +515,9 @@ TPBRZIL,Channel Sales|Direct Sales,2017-07-24 10:00,2017-07-24 10:15,10.5";
 		{
 			Now.Is("2017-07-24 10:30");
 			var fileContents = @"source,skillcombination,startdatetime,enddatetime,agents
-								TPBRZIL, Directsales|Channelsales, 2017-07-24 10:30, 2017-07-24 10:45, 6.0";
+TPBRZIL, Directsales|Channelsales, 2017-07-24 10:30, 2017-07-24 10:45, 6.0
+TPBRZIL, Directsales|Channelsales, 2017-07-24 10:45, 2017-07-24 11:00, 6.0
+TPBRZIL, Directsales|Channelsales, 2017-07-24 11:00, 2017-07-24 11:15, 6.0";
 
 			var channelSales = SkillFactory.CreateSkillWithId("Channelsales", 16);
 			SkillRepository.Has("Directsales", new Activity());
@@ -519,7 +525,8 @@ TPBRZIL,Channel Sales|Direct Sales,2017-07-24 10:00,2017-07-24 10:15,10.5";
 
 			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
 			result.Success.Should().Be.False();
-			result.ErrorInformation.SingleOrDefault(e => e.Contains("does not match the interval length")).Should().Not.Be.Null();
+			var err = result.ErrorInformation.SingleOrDefault(e => e.Contains("line number 4"));
+			err.Should().Contain("does not match the interval length");
 			
 			var skillCombResources = SkillCombinationResourceRepository.LoadSkillCombinationResourcesBpo();
 			skillCombResources.Should().Be.Empty();
@@ -742,6 +749,50 @@ TPBRZIL,Channel Sales|Direct Sales,2017-07-24 10:00,2017-07-24 10:15,10.5";
 			
 			result.ErrorInformation.Count.Should().Be(21);
 			result.ErrorInformation.Last().Should().Contain("Showing the first ");
+		}
+
+		[Test]
+		public void ShouldShowAllErrorsWhenWrongInterval()
+		{
+			Now.Is("2017-07-24 10:00");
+			var fileContents =
+				@"source,skillcombination,startdatetime,enddatetime,agents
+Generic,Email,2/9/2018 10:00,2/9/2018  10:15:00 AM,500
+Generic,Email,2/9/2018 11:00,2/9/2018  18:15:00 PM,500
+Generic,Email,2/9/2018 11:00,2/9/2018  18:15:00 PM,500
+Generic,Email,2/9/2018 11:00,2/9/2018  18:15:00 PM,500
+Generic,Email,2/9/2018 11:00,2/9/2018  18:15:00 PM,500
+Generic,Email,2/9/2018 11:00,2/9/2018  18:15:00 PM,500
+Generic,Email,2/9/2018 11:00,2/9/2018  18:15:00 PM,500
+Generic,Email,2/9/2018 11:00,2/9/2018  18:15:00 PM,500
+Generic,Email,2/9/2018 11:00,2/9/2018  18:15:00 PM,500";
+
+			SkillRepository.Has("Generic", new Activity());
+			var skill = SkillRepository.Has("Email", new Activity());
+			skill.DefaultResolution = 60;
+
+			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
+			result.Success.Should().Be.False();
+
+			var skillCombResources = SkillCombinationResourceRepository.LoadSkillCombinationResourcesBpo();
+			skillCombResources.Should().Be.Empty();
+
+			result.ErrorInformation.Count.Should().Be(9);
+			
+		}
+
+		[Test]
+		public void ShouldHandleSemicolonFileSavedInExcel()
+		{
+			var fileContents = @"""source, skillcombination, startdatetime, enddatetime, agents""
+""TPBRZIL, Directsales, 2017 - 07 - 24 10:15, 2017 - 07 - 24 10:30, 6.0""";
+
+
+			SkillRepository.Has("Directsales", new Activity());
+			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
+			result.Success.Should().Be.True();
+
+			SkillCombinationResourceRepository.LoadSkillCombinationResourcesBpo().Count.Should().Be.EqualTo(1);
 		}
 	}
 }

@@ -55,6 +55,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 			}
 
 			var lines = fileContents.Split(new[] { lineSeparator }, StringSplitOptions.None);
+			lines = removeDoubleQuotesIfNecessary(lines);
 			var lineNumber = 1;
 			
 			var linesWithNumbers = lines.Select(line => new LineWithNumber{LineContent = line, LineNumber = lineNumber++}).ToList();
@@ -122,6 +123,21 @@ namespace Teleopti.Ccc.Domain.Staffing
 			}
 			
 			return result;
+		}
+
+		private string[] removeDoubleQuotesIfNecessary(string[] lines)
+		{
+			var temp = new List<string>();
+			foreach (var line in lines)
+			{
+				var current = line;
+				if (current.StartsWith("\""))
+					current = current.Remove(0, 1);
+				if(current.EndsWith("\""))
+					current = current.Remove(current.Length - 1, 1);
+				temp.Add(current);
+			}
+			return temp.ToArray();
 		}
 
 		private void presetTokenSeparator(string templateRow)
@@ -247,9 +263,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 					result.ErrorInformation.Add(formatGeneralLineErrorMessage(lineWithNumber,
 						string.Format(Resources.ImportBpoWrongResourceFormat,validFieldNames.IndexOf(resources) + 1, bpoLineTokens[resources])));
 				}
-
-				if (!result.Success) return null;
-				
+			
 				var startDateTimeUtc = TimeZoneHelper.ConvertToUtc(startDateTime, _userTimeZone.TimeZone());
 				var endDateTimeUtc = TimeZoneHelper.ConvertToUtc(endDateTime, _userTimeZone.TimeZone());
 				resourceBpo = new ImportSkillCombinationResourceBpo
@@ -399,3 +413,4 @@ namespace Teleopti.Ccc.Domain.Staffing
 		public readonly HashSet<string> ErrorInformation = new HashSet<string>();
 	}
 }
+
