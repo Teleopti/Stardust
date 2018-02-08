@@ -9,32 +9,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 {
 	public static class DataMaker
 	{
-		public static ScenarioDataFactory Data() =>
-			LocalSystem.DataMaker.Data();
-
-		public static void EndSetupPhase() =>
-			LocalSystem.DataMaker.EndSetupPhase();
-
-		public static void AfterScenario() =>
-			LocalSystem.DataMaker.AfterScenario();
-
-		public static PersonDataFactory Me() =>
-			LocalSystem.DataMaker.Data().Me();
-
-		public static PersonDataFactory Person(string name) =>
-			LocalSystem.DataMaker.Data().Person(name);
-
-		public static bool PersonExists(string name) =>
-			LocalSystem.DataMaker.Data().HasPerson(name);
-
-		public static AnalyticsDataFactory Analytics() =>
-			LocalSystem.DataMaker.Data().Analytics();
-
-		public static void ApplyFromTable<T>(Table table) =>
-			LocalSystem.DataMaker.ApplyFromTable<T>(table);
-
-		public static void ApplyFromTable<T>(string name, Table table) =>
-			LocalSystem.DataMaker.ApplyFromTable<T>(name, table);
+		public static ScenarioDataFactory Data() => LocalSystem.DataMaker.Data();
+		public static void EndSetupPhase() => LocalSystem.DataMaker.EndSetupPhase();
+		public static void AfterScenario() => LocalSystem.DataMaker.AfterScenario();
+		public static PersonDataFactory Me() => LocalSystem.DataMaker.Data().Me();
+		public static PersonDataFactory Person(string name) => LocalSystem.DataMaker.Data().Person(name);
+		public static bool PersonExists(string name) => LocalSystem.DataMaker.Data().HasPerson(name);
+		public static AnalyticsDataFactory Analytics() => LocalSystem.DataMaker.Data().Analytics();
+		public static void ApplyFromTable<T>(Table table) => LocalSystem.DataMaker.ApplyFromTable<T>(table);
+		public static void ApplyFromTable<T>(string name, Table table) => LocalSystem.DataMaker.ApplyFromTable<T>(name, table);
 	}
 
 	public class DataMakerImpl

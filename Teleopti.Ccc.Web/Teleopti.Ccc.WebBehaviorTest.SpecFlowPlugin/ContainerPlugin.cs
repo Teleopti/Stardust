@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.SpecFlowPlugin
 {
 	public class ContainerPlugin : IRuntimePlugin
 	{
-		public static void UseContainer(IContainer container)
+		public static void UseContainer(IComponentContext container)
 		{
 			_container = container;
 		}
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.SpecFlowPlugin
 
 			runtimePluginEvents.CustomizeScenarioDependencies += (sender, args) =>
 			{
-				args.ObjectContainer.RegisterFactoryAs(() => _container);
+				args.ObjectContainer.RegisterFactoryAs<IComponentContext>(() => _container);
 			};
 		}
 	}
