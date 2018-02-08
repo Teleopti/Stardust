@@ -283,7 +283,7 @@
     <value>Tasa de Respuesta (%)</value>
   </data>
   <data name="ResAverageSpeedOfAnswerSec" xml:space="preserve">
-    <value>Promedio de Velocidad de Respuesta (%)</value>
+    <value>Velocidad de respuesta promedio</value>
   </data>
   <data name="ResAverageTimeToAbandonSec" xml:space="preserve">
     <value>Tiempo Promedio de Abandono (s)</value>
@@ -853,7 +853,8 @@
     <value>Contratos</value>
   </data>
   <data name="ContractSchedule" xml:space="preserve">
-    <value>Planificación por Contrato</value>
+    <value>Planificación
+por Contrato</value>
   </data>
   <data name="Note" xml:space="preserve">
     <value>Nota</value>
@@ -1072,10 +1073,10 @@
     <value>Solo agentes activos</value>
   </data>
   <data name="ResReportAgentSkills" xml:space="preserve">
-    <value>Skilles de los agentes</value>
+    <value>Skills de los agentes</value>
   </data>
   <data name="ResOnlyActiveSkillColon" xml:space="preserve">
-    <value>Solo skilles activos:</value>
+    <value>Solo skills activas:</value>
   </data>
   <data name="ResReportTimeInStatePerAgent" xml:space="preserve">
     <value>Tiempo en el estado por Agente</value>
@@ -1100,5 +1101,29 @@
   </data>
   <data name="RepViewerZoom" xml:space="preserve">
     <value>Zoom</value>
+  </data>
+  <data name="ResPlannedOvertimeH" xml:space="preserve">
+    <value>Tiempo Extra planificado (hh:mm)</value>
+  </data>
+  <data name="ResRequestTypeOvertime" xml:space="preserve">
+    <value>Tiempo extra</value>
+  </data>
+  <data name="ResESLInclShrinkagePercent" xml:space="preserve">
+    <value>ESL incl. Absentismo (%)</value>
+  </data>
+  <data name="ResESLPercent" xml:space="preserve">
+    <value>ESL (%)</value>
+  </data>
+  <data name="ResRequestStatusWaitlisted" xml:space="preserve">
+    <value>En lista de espera</value>
+  </data>
+  <data name="ResRequestStatusCancelled" xml:space="preserve">
+    <value>Cancelada</value>
+  </data>
+  <data name="ResIncludeDetails" xml:space="preserve">
+    <value>Incluir detalles:</value>
+  </data>
+  <data name="MultipleActivitiesOrAbsences" xml:space="preserve">
+    <value>Actividades/ausencias múltiples</value>
   </data>
 </root>
