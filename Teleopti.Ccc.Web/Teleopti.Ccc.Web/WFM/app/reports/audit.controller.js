@@ -136,7 +136,7 @@
 					exporterOlderExcelCompatibility: true,
 					exporterMenuPdf: false,
 					enableSelectAll: false,
-					enableFullRowSelection: true,
+					enableFullRowSelection: false,
 					enableRowHeaderSelection: false,
 					enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
 					selectionRowHeaderWidth: 35,
@@ -161,7 +161,7 @@
 				defaultGridMenu.sort.ascending = $translate.instant('UIGridSortAscending');
 				defaultGridMenu.sort.descending = $translate.instant('UIGridSortDescending');
 				defaultGridMenu.sort.remove = $translate.instant('UIGridNoSort');
-				defaultGridMenu.column.hide = $translate.instant('UIGridNoSort');
+				defaultGridMenu.column.hide = $translate.instant('UIGridHideCol');
 
 				vm.chartLoaded = true;
 			}
