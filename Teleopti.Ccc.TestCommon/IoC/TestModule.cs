@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				.SingleInstance();
 
 			builder.RegisterType<TestDataFactory>().SingleInstance();
-			builder.RegisterType<AutofacSetupResolver>().SingleInstance();
+			builder.RegisterType<AutofacSetupResolver>().As<ISetupResolver>().SingleInstance();
 
 			builder.RegisterType<PerformanceTest.PerformanceTest>().SingleInstance();
 			builder.RegisterType<MutableNow>().AsSelf().As<INow>().SingleInstance();

@@ -24,7 +24,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public static IToggleManager Toggles;
 		public static ICurrentUnitOfWorkFactory UnitOfWorkFactory;
 		public static ICurrentUnitOfWork UnitOfWork;
-		public static AutofacSetupResolver AutofacSetupResolver;
+		public static ISetupResolver SetupResolver;
+		public static DataMakerImpl DataMaker;
 		public static DefaultDataCreator DefaultDataCreator;
 		public static DefaultAnalyticsDataCreator DefaultAnalyticsDataCreator;
 		public static HangfireUtilities Hangfire;
@@ -43,6 +44,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 					.Where(t => Attribute.IsDefined(t, typeof(BindingAttribute)))
 					.ToArray()
 				).SingleInstance();
+				builder.RegisterType<DataMakerImpl>().SingleInstance();
+				builder.RegisterType<ScenarioDataFactory>().InstancePerDependency();
 			}, null);
 			ContainerPlugin.UseContainer(IntegrationIoCTest.Container);
 
@@ -54,12 +57,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			TenantUnitOfWork = IntegrationIoCTest.Container.Resolve<ITenantUnitOfWork>();
 			CurrentTenantSession = IntegrationIoCTest.Container.Resolve<ICurrentTenantSession>();
 
-			AutofacSetupResolver = IntegrationIoCTest.Container.Resolve<AutofacSetupResolver>();
+			SetupResolver = IntegrationIoCTest.Container.Resolve<ISetupResolver>();
+			DataMaker = IntegrationIoCTest.Container.Resolve<DataMakerImpl>();
 			DefaultDataCreator = IntegrationIoCTest.Container.Resolve<DefaultDataCreator>();
 			DefaultAnalyticsDataCreator = IntegrationIoCTest.Container.Resolve<DefaultAnalyticsDataCreator>();
 
 			StateQueue = IntegrationIoCTest.Container.Resolve<StateQueueUtilities>();
-			
 		}
 
 		public static void Start()

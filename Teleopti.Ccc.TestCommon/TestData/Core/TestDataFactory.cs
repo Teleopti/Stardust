@@ -8,22 +8,22 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 {
 	public class TestDataFactory
 	{
-		private readonly ICurrentUnitOfWork _unitOfWorkAction;
+		protected readonly ICurrentUnitOfWork _unitOfWork;
 		private readonly ICurrentTenantSession _tenantSession;
 		private readonly ITenantUnitOfWork _tenantUnitOfWork;
 		private readonly ISetupResolver _resolver;
 
 		public TestDataFactory(
-			ICurrentUnitOfWork unitOfWorkAction,
+			ICurrentUnitOfWork unitOfWork,
 			ICurrentTenantSession tenantSession,
 			ITenantUnitOfWork tenantUnitOfWork,
 			ISetupResolver resolver)
 		{
-			_unitOfWorkAction = unitOfWorkAction;
+			_unitOfWork = unitOfWork;
 			_tenantSession = tenantSession;
 			_tenantUnitOfWork = tenantUnitOfWork;
 			_resolver = resolver;
-			DataFactory = new DataFactory(_unitOfWorkAction);
+			DataFactory = new DataFactory(_unitOfWork);
 		}
 
 		protected readonly DataFactory DataFactory;
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 				DataFactory.Apply(person);
 				foundPerson = new PersonDataFactory(
 					person.Person,
-					_unitOfWorkAction,
+					_unitOfWork,
 					_tenantSession,
 					_tenantUnitOfWork,
 					_resolver
