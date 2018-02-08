@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 
@@ -9,19 +10,31 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 	public class TestDataFactory
 	{
 		protected readonly ICurrentUnitOfWork _unitOfWork;
-		private readonly ICurrentTenantSession _tenantSession;
-		private readonly ITenantUnitOfWork _tenantUnitOfWork;
-		private readonly ISetupResolver _resolver;
+		private readonly IResolver _resolver;
+
+		public static TestDataFactory Make(IUnitOfWork uow, TenantUnitOfWorkManager tenantUnitOfWorkManager) =>
+			Make(uow, tenantUnitOfWorkManager, tenantUnitOfWorkManager);
+
+		public static TestDataFactory Make(
+			IUnitOfWork uow,
+			ICurrentTenantSession currentTenantSession,
+			ITenantUnitOfWork tenantUnitOfWork)
+		{
+			var unitOfWork = new ThisUnitOfWork(uow);
+			return new TestDataFactory(
+				unitOfWork,
+				new LegacyResolver(
+					unitOfWork,
+					currentTenantSession,
+					tenantUnitOfWork
+				));
+		}
 
 		public TestDataFactory(
 			ICurrentUnitOfWork unitOfWork,
-			ICurrentTenantSession tenantSession,
-			ITenantUnitOfWork tenantUnitOfWork,
-			ISetupResolver resolver)
+			IResolver resolver)
 		{
 			_unitOfWork = unitOfWork;
-			_tenantSession = tenantSession;
-			_tenantUnitOfWork = tenantUnitOfWork;
 			_resolver = resolver;
 			DataFactory = new DataFactory(_unitOfWork);
 		}
@@ -63,13 +76,8 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 			{
 				var person = new PersonConfigurable {Name = name};
 				DataFactory.Apply(person);
-				foundPerson = new PersonDataFactory(
-					person.Person,
-					_unitOfWork,
-					_tenantSession,
-					_tenantUnitOfWork,
-					_resolver
-				);
+				foundPerson = _resolver.MakePersonDataFactory();
+				foundPerson.Setup(person.Person);
 				_persons.Add(name, foundPerson);
 			}
 

@@ -24,13 +24,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public ScenarioDataFactory(
 			ICurrentUnitOfWork unitOfWork,
 			ICurrentUnitOfWorkFactory unitOfWorks,
-			ICurrentTenantSession tenantSession,
-			ITenantUnitOfWork tenantUnitOfWork,
-			ISetupResolver resolver, 
+			IResolver resolver,
 			IEventPublisher eventPublisher) : base(
 			unitOfWork,
-			tenantSession,
-			tenantUnitOfWork,
 			resolver)
 		{
 			_eventPublisher = eventPublisher;
@@ -73,7 +69,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			.Union(_delayedSetups)
 			.Union(DataFactory.Applied);
 
-		public IEnumerable<T> UserDatasOfType<T>() => from s in applied where typeof(T).IsAssignableFrom(s.GetType()) select (T) s;
+		public IEnumerable<T> UserDatasOfType<T>() =>
+			from s in applied where typeof(T).IsAssignableFrom(s.GetType()) select (T) s;
+
 		public bool HasSetup<T>() => UserDatasOfType<T>().Any();
 		public T UserData<T>() => UserDatasOfType<T>().Last();
 	}

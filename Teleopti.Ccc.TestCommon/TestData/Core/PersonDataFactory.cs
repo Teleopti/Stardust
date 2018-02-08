@@ -9,29 +9,32 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 {
 	public class PersonDataFactory : ILogonName
 	{
-		private readonly IPerson _person;
+		private IPerson _person;
 		private readonly ICurrentUnitOfWork _unitOfWork;
 		private readonly ICurrentTenantSession _tenantSession;
 		private readonly ITenantUnitOfWork _tenantUnitOfWork;
-		private readonly ISetupResolver _resolver;
+		private readonly IResolver _resolver;
 		private readonly IList<object> _applied = new List<object>();
 
 		public PersonDataFactory(
-			IPerson person,
 			ICurrentUnitOfWork unitOfWork,
 			ICurrentTenantSession tenantSession,
 			ITenantUnitOfWork tenantUnitOfWork,
-			ISetupResolver resolver)
+			IResolver resolver)
 		{
-			_person = person;
 			_unitOfWork = unitOfWork;
 			_tenantSession = tenantSession;
 			_tenantUnitOfWork = tenantUnitOfWork;
 			_resolver = resolver;
+		}
+
+		public void Setup(IPerson person)
+		{
+			_person = person;
 			apply(new SwedishCultureSpec());
 			apply(new UtcTimeZoneSpec());
 		}
-
+		
 		public void Apply<T>(T specOrSetup)
 		{
 			switch (specOrSetup)

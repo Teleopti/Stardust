@@ -22,15 +22,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 	public static class LocalSystem
 	{
 		public static IToggleManager Toggles;
-		public static ICurrentUnitOfWorkFactory UnitOfWorkFactory;
 		public static ICurrentUnitOfWork UnitOfWork;
-		public static ISetupResolver SetupResolver;
 		public static DataMakerImpl DataMaker;
 		public static DefaultDataCreator DefaultDataCreator;
 		public static DefaultAnalyticsDataCreator DefaultAnalyticsDataCreator;
 		public static HangfireUtilities Hangfire;
 		public static MutableNow Now;
-		public static IEventPublisher EventPublisher;
 		public static ITenantUnitOfWork TenantUnitOfWork;
 		public static ICurrentTenantSession CurrentTenantSession;
 		public static StateQueueUtilities StateQueue;
@@ -51,13 +48,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 			Toggles = IntegrationIoCTest.Container.Resolve<IToggleManager>();
 			Now = IntegrationIoCTest.Container.Resolve<INow>() as MutableNow;
-			UnitOfWorkFactory = IntegrationIoCTest.Container.Resolve<ICurrentUnitOfWorkFactory>();
 			UnitOfWork = IntegrationIoCTest.Container.Resolve<ICurrentUnitOfWork>();
-			EventPublisher = IntegrationIoCTest.Container.Resolve<IEventPublisher>();
 			TenantUnitOfWork = IntegrationIoCTest.Container.Resolve<ITenantUnitOfWork>();
 			CurrentTenantSession = IntegrationIoCTest.Container.Resolve<ICurrentTenantSession>();
 
-			SetupResolver = IntegrationIoCTest.Container.Resolve<ISetupResolver>();
 			DataMaker = IntegrationIoCTest.Container.Resolve<DataMakerImpl>();
 			DefaultDataCreator = IntegrationIoCTest.Container.Resolve<DefaultDataCreator>();
 			DefaultAnalyticsDataCreator = IntegrationIoCTest.Container.Resolve<DefaultAnalyticsDataCreator>();

@@ -36,10 +36,10 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 			StateHolderProxyHelper.SetupFakeState(DataSource, personThatCreatesTestData, TestState.BusinessUnit);
 			var tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(UnitOfWorkFactory.Current.ConnectionString);
-			
+
 			using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().Current().CreateAndOpenUnitOfWork())
 			{
-				var testDataFactory = new TestDataFactory(new ThisUnitOfWork(uow), tenantUnitOfWorkManager, tenantUnitOfWorkManager, new LegacySetupResolver());
+				var testDataFactory = TestDataFactory.Make(uow, tenantUnitOfWorkManager);
 				testDataFactory.Apply(new PersonThatCreatesTestData(personThatCreatesTestData));
 				testDataFactory.Apply(new DefaultLicense());
 				testDataFactory.Apply(new BusinessUnitFromFakeState(TestState.BusinessUnit));
@@ -66,7 +66,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 			openUnitOfWork();
 			var tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(UnitOfWorkFactory.Current.ConnectionString);
-			TestState.TestDataFactory = new TestDataFactory(new ThisUnitOfWork(TestState.UnitOfWork), tenantUnitOfWorkManager, tenantUnitOfWorkManager, new LegacySetupResolver());
+			TestState.TestDataFactory = TestDataFactory.Make(TestState.UnitOfWork, tenantUnitOfWorkManager);
 			ServiceLocatorForLegacy.NestedUnitOfWorkStrategy = new SirLeakAlot();
 		}
 

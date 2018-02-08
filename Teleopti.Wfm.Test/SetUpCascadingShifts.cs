@@ -242,8 +242,8 @@ namespace Teleopti.Wfm.Test
 		{
 			var uow = CurrentUnitOfWorkFactory.Current().CurrentUnitOfWork();
 			TestState.UnitOfWork = uow;
-			TestState.TestDataFactory = new TestDataFactory(new ThisUnitOfWork(uow), CurrentTenantSession, TenantUnitOfWork, new LegacySetupResolver());
-
+			TestState.TestDataFactory = TestDataFactory.Make(uow, CurrentTenantSession, TenantUnitOfWork);
+			
 			var site = new SiteConfigurable { BusinessUnit = TestState.BusinessUnit.Name, Name = "Västerhaninge" };
 			var team = new TeamConfigurable { Name = "Yellow", Site = "Västerhaninge" };
 			var contract = new ContractConfigurable { Name = "Kontrakt" };
