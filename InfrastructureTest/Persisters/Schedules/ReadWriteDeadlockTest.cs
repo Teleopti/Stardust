@@ -26,11 +26,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		public IFindSchedulesForPersons FindSchedulesForPersons;
 		public IScheduleDictionaryPersister ScheduleDictionaryPersister;
 		
-		[Test]
+		[TestCase(1)]
+		[TestCase(2)]
+		[TestCase(10)]
 		[Ignore("#47954")]
-		public void ShouldHandleConcurrentReadsAndWrites()
+		public void ShouldHandleConcurrentReadsAndWrites(int numberOfDays)
 		{
 			var date = new DateOnly(2000, 1, 1);
+			var period = new DateOnlyPeriod(date, date.AddDays(numberOfDays));
 			var activity = new Activity("_");
 			var agent = new Person().InTimeZone(TimeZoneInfo.Utc);
 			var scenario = new Scenario("_");
@@ -39,7 +42,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 				ScenarioRepository.Add(scenario);
 				ActivityRepository.Add(activity);
 				PersonRepository.Add(agent);
-				PersonAssignmentRepository.Add(new PersonAssignment(agent, scenario, date).WithLayer(activity, new TimePeriod(8, 17)));
+				foreach (var assDate in period.DayCollection())
+				{
+					PersonAssignmentRepository.Add(new PersonAssignment(agent, scenario, assDate).WithLayer(activity, new TimePeriod(8, 17)));
+				}
+
 				setup1.PersistAll();
 			}
 
@@ -48,11 +55,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			var ct = ts.Token;
 			tasks.Add(Task.Factory.StartNew(() =>
 			{
-				updateAgentSchedule(scenario, agent, date, activity, ct);
+				updateAgentSchedule(scenario, agent, period, activity, ct);
 			}, ct));
 			tasks.Add(Task.Factory.StartNew(() =>
 			{
-				readAgentSchedule(agent, date, scenario, ct);
+				readAgentSchedule(agent, period, scenario, ct);
 			}, ct));
 
 			
@@ -61,7 +68,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			Task.WaitAll(tasks.ToArray());
 		}
 
-		private void readAgentSchedule(IPerson agent1, DateOnly date, IScenario scenario, CancellationToken ct)
+		private void readAgentSchedule(IPerson agent1, DateOnlyPeriod period, IScenario scenario, CancellationToken ct)
 		{
 			while (true)
 			{
@@ -69,18 +76,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 					return;
 				using (CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 				{
-					PersonAssignmentRepository.Find(new[] {agent1}, date.ToDateOnlyPeriod(), scenario);
+					PersonAssignmentRepository.Find(new[] {agent1}, period, scenario);
 				}				
 			}
 		}
 
-		private void updateAgentSchedule(IScenario scenario, Person agent1, DateOnly date, IActivity activity, CancellationToken ct)
+		private void updateAgentSchedule(IScenario scenario, Person agent1, DateOnlyPeriod period, IActivity activity, CancellationToken ct)
 		{
 			IScheduleDictionary dic;
 			using (CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				dic = FindSchedulesForPersons.FindSchedulesForPersons(scenario, new[] {agent1},
-					new ScheduleDictionaryLoadOptions(false, false), date.ToDateTimePeriod(TimeZoneInfo.Utc), new[] {agent1},
+					new ScheduleDictionaryLoadOptions(false, false), period.ToDateTimePeriod(TimeZoneInfo.Utc), new[] {agent1},
 					false);
 			}
 
@@ -89,10 +96,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 				if (ct.IsCancellationRequested)
 					return;
 
-				var day = dic[agent1].ScheduledDay(date);
-				day.PersonAssignment().ClearMainActivities();
-				day.PersonAssignment().AddActivity(activity, new TimePeriod(1, 2));
-				dic.Modify(day, NewBusinessRuleCollection.Minimum());
+				foreach (var scheduleDate in period.DayCollection())
+				{
+					var day = dic[agent1].ScheduledDay(scheduleDate);
+					day.PersonAssignment().ClearMainActivities();
+					day.PersonAssignment().AddActivity(activity, new TimePeriod(1, 2));
+					dic.Modify(day, NewBusinessRuleCollection.Minimum());					
+				}
 				ScheduleDictionaryPersister.Persist(dic);
 			}
 		}
