@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NHibernate;
 using NHibernate.Envers;
 using NHibernate.Envers.Query;
 using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Reports;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -32,16 +34,31 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 			_globalSettingDataRepository = globalSettingDataRepository;
 		}
 
-		public IEnumerable<IPerson> RevisionPeople()
+		public IEnumerable<SimplestPersonInfo> GetRevisionPeople()
 		{
-			return _currentUnitOfWork.Current().Session().GetNamedQuery("RevisionPeople").List<IPerson>();
+			const string sql = "SELECT DISTINCT p.Id, p.FirstName, p.LastName, p.EmploymentNumber "
+							   + "FROM Auditing.Revision r INNER JOIN dbo.Person p ON r.ModifiedBy = p.Id";
+			
+			getNameDescriptionSetting();
+			return _currentUnitOfWork.Current().Session().CreateSQLQuery(sql)
+				.AddScalar("Id", NHibernateUtil.Guid)
+				.AddScalar("FirstName", NHibernateUtil.String)
+				.AddScalar("LastName", NHibernateUtil.String)
+				.AddScalar("EmploymentNumber", NHibernateUtil.String)
+				.SetReadOnly(true)
+				.List<object[]>()
+				.Select(x => new SimplestPersonInfo
+					{
+						Id = (Guid) x[0],
+						Name = _commonNameDescription.BuildFor((string) x[1], (string) x[2], (string) x[3])
+					}
+				);
 		}
 
 		public IList<ScheduleAuditingReportData> Report(IPerson changedByPerson, DateOnlyPeriod changedPeriod,
 			DateOnlyPeriod scheduledPeriod, int maximumResults, IList<IPerson> scheduledAgents)
 		{
-			_commonNameDescription = _globalSettingDataRepository.FindValueByKey("CommonNameDescription",
-				new CommonNameDescriptionSetting());
+			getNameDescriptionSetting();
 			
 			var auditSession = _currentUnitOfWork.Current().Session().Auditer();
 			var ret = new List<ScheduleAuditingReportData>();
@@ -82,6 +99,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 				.Take(maximumResults));
 
 			return ret;
+		}
+
+		private void getNameDescriptionSetting()
+		{
+			_commonNameDescription = _globalSettingDataRepository.FindValueByKey("CommonNameDescription",
+				new CommonNameDescriptionSetting());
 		}
 
 		private ScheduleAuditingReportData createAssignmentAuditingData(IRevisionEntityInfo<PersonAssignment, Revision> auditedAssignment)
@@ -133,9 +156,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 		}
 
 		private void addCommonScheduleData(ScheduleAuditingReportData scheduleAuditingReportData,
-			IPersistableScheduleData auditedEntity,
-			Revision revision,
-			RevisionType revisionType)
+			IPersistableScheduleData auditedEntity, Revision revision, RevisionType revisionType)
 		{
 			scheduleAuditingReportData.ModifiedAt = TimeZoneInfo.ConvertTimeFromUtc(revision.ModifiedAt, _timeZone.TimeZone());
 			scheduleAuditingReportData.ModifiedBy = _commonNameDescription.BuildFor(revision.ModifiedBy);

@@ -5,6 +5,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Reports;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
@@ -48,13 +49,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 		[Test]
 		public void ShouldFindRevisionPeople()
 		{
-			IEnumerable<IPerson> revPeople;
+			IEnumerable<SimplestPersonInfo> revPeople;
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				revPeople = target.RevisionPeople();
+				revPeople = target.GetRevisionPeople();
 			}
 
-			revPeople.Should().Contain(PersonAssignment.UpdatedBy);
+			var expectedPerson = PersonAssignment.UpdatedBy;
+			var person = revPeople.SingleOrDefault(x => x.Id == expectedPerson.Id.Value);
+			person.Name.Should().Be.EqualTo(getExpectedName(expectedPerson));
 		}
 
 		[Test]
@@ -136,7 +139,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 				res.Count.Should().Be.EqualTo(1);
 			}
 		}
-
 
 		[Test]
 		public void ShouldFindDeletedPersonAbsenceWithCorrectParameters()
@@ -584,6 +586,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 				res.Select(x => x.Detail).Contains(string.Empty).Should().Be.EqualTo(true);
 			}
 		}
+
 		[Test]
 		public void ShouldHaveDetailOvertimeShiftWhenOvertimeAddedOnEmptyPersonAssignment()
 		{
@@ -601,7 +604,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			{
 				var res = target.Report(personProvider.CurrentUser(),
 					new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
-					PersonAssignment.Period.ToDateOnlyPeriod(timeZone.TimeZone()), 100, new List<IPerson> { PersonAssignment.Person });
+					PersonAssignment.Period.ToDateOnlyPeriod(timeZone.TimeZone()), 100, new List<IPerson> {PersonAssignment.Person});
 
 				res.Select(x => x.Detail).Contains(Resources.Overtime).Should().Be.EqualTo(true);
 			}

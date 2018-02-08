@@ -67,6 +67,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 			return Report(null, changedPeriod, scheduledPeriod, agents, maximumRows);
 		}
 
+		// WARNING: This query caused extra query to load PersonWriteProtection, it may cause performance problem for large customer.
+		// Refer to bug #47923: Loading Business hierarchy and changed by in Schedule Audit report for large installations is slow
 		public IEnumerable<IPerson> RevisionPeople()
 		{
 			return session().GetNamedQuery("RevisionPeople").List<IPerson>();

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Reports;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
@@ -12,7 +13,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	{
 		private readonly IUserTimeZone _timeZone;
 		private readonly IList<IPerson> modifiedByList = new List<IPerson>();
-		private readonly IList<ScheduleAuditingReportDataForTest> auditingReportList = new List<ScheduleAuditingReportDataForTest>();
+
+		private readonly IList<ScheduleAuditingReportDataForTest> auditingReportList =
+			new List<ScheduleAuditingReportDataForTest>();
 
 		public FakeScheduleAuditTrailReport(IUserTimeZone timeZone)
 		{
@@ -23,16 +26,26 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			modifiedByList.Add(personThatModified);
 		}
-		
+
+		public IEnumerable<SimplestPersonInfo> GetRevisionPeople()
+		{
+			return modifiedByList.Select(x => new SimplestPersonInfo
+			{
+				Id = x.Id.GetValueOrDefault(),
+				Name = x.Name.ToString()
+			});
+		}
+
 		public IEnumerable<IPerson> RevisionPeople()
 		{
 			return modifiedByList;
 		}
 
-		public IList<ScheduleAuditingReportData> Report(IPerson changedByPerson, DateOnlyPeriod changedPeriod, DateOnlyPeriod scheduledPeriod, int maximumResults, IList<IPerson> scheduledAgents)
+		public IList<ScheduleAuditingReportData> Report(IPerson changedByPerson, DateOnlyPeriod changedPeriod,
+			DateOnlyPeriod scheduledPeriod, int maximumResults, IList<IPerson> scheduledAgents)
 		{
 			IList<ScheduleAuditingReportDataForTest> hits;
-			
+
 			if (changedByPerson == null)
 			{
 				hits = auditingReportList
@@ -52,7 +65,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 					.Take(maximumResults)
 					.ToList();
 			}
-			
 
 			foreach (var auditItem in hits)
 			{
@@ -60,8 +72,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				auditItem.ScheduleStart = TimeZoneHelper.ConvertFromUtc(auditItem.ScheduleStart, _timeZone.TimeZone());
 				auditItem.ScheduleEnd = TimeZoneHelper.ConvertFromUtc(auditItem.ScheduleEnd, _timeZone.TimeZone());
 			}
-			
-			var ret =  hits.Select(y => y as ScheduleAuditingReportData).ToList();
+
+			var ret = hits.Select(y => y as ScheduleAuditingReportData).ToList();
 			return ret;
 		}
 
