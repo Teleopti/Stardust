@@ -105,6 +105,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				},
 				{
 					BusinessRuleFlags.MaximumOvertimeRule, "MaximumOvertimeRuleName"
+				},
+				{
+					BusinessRuleFlags.MaximumContinuousWorkTimeRule, "MaximumContinuousWorkTimeRuleName"
 				}
 			};
 

@@ -14929,6 +14929,10 @@ These options are activated:
     <value>Overwriting of activity</value>
     <comment>Displayed name for schedule validation rule "NotOverwriteLayerRule"</comment>
   </data>
+  <data name="MaximumContinuousWorkTimeRuleName" xml:space="preserve">
+    <value>Maximum continuous work time</value>
+    <comment>Displayed name for maximum continuous work time "MaximumContinuousWorkTimeRule"</comment>
+  </data>
   <data name="MoveNonoverwritableActivityForTheseAgents" xml:space="preserve">
     <value>Move non-overwritable activities for these agents</value>
     <comment>select option for pre-check panel in adding activity -team schedule.</comment>

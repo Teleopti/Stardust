@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -42,11 +43,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			var shiftLayers = loadShiftLayers(scheduleRange, requestPeriod, timezone);
 
 			var continuousWorkTimeInfo = getContinuousWorkTime(shiftLayers, requestPeriod, timezone, minimumRestTime);
+
 			if (!isSatisfiedMaximumContinuousWorkTime(continuousWorkTimeInfo, maximumContinuousWorkTime))
 			{
-				return invalidResult(continuousWorkTimeInfo.ContinuousWorkTimePeriod,
+				var result = invalidResult(continuousWorkTimeInfo.ContinuousWorkTimePeriod,
 					continuousWorkTimeInfo.ContinuousWorkTime,
 					maximumContinuousWorkTime);
+
+				var maximumContinuousWorkTimeHandleType =
+					person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeHandleType;
+
+				if (maximumContinuousWorkTimeHandleType == OvertimeValidationHandleType.Pending)
+				{
+					result.ShouldDenyIfInValid = false;
+				}
+				return result;
 			}
 
 			return validResult();
@@ -258,7 +269,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 						continuousWorkTimePeriod,
 						DateHelper.HourMinutesString(continuousWorkTime.TotalMinutes),
 						DateHelper.HourMinutesString(maximumContinuousWorkTime.TotalMinutes))
-				}
+				},
+				BrokenBusinessRules = BusinessRuleFlags.MaximumContinuousWorkTimeRule
 			};
 		}
 
