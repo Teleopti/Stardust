@@ -66,7 +66,7 @@
 
 	</class>
   <!-- use hql query here when SetLockMode works on non entities. Seems to be a problem currently.-->
-	<sql-query name="fetchIdAndVersionPersonAssignment">
+	<sql-query name="fetchIdAndVersionPersonAssignmentOLD">
     select pa.Id as paId, pa.Date, s.Id as sId, p.Id as pId, pa.Version from PersonAssignment pa with (updlock, holdlock)
     inner join Scenario s on s.Id=pa.Scenario
     inner join Person p on p.Id=pa.Person

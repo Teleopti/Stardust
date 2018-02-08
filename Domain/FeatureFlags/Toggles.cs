@@ -95,6 +95,7 @@
 		ResourcePlanner_XXL_47258,
 		ResourcePlanner_NoPytteIslands_47500,
 		ResourcePlanner_PrepareToRemoveExportSchedule_46576,
+		ResourcePlanner_ScheduleDeadlock_48170,
 
 		Wfm_DisplayOnlineHelp_39402,
 

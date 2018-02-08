@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -62,9 +63,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return retList;
 		}
 
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_ScheduleDeadlock_48170)]
+		protected string NamedQueryForFetchDatabaseVersions { get; } = "fetchIdAndVersionPersonAssignmentOLD";
 		public IEnumerable<DateScenarioPersonId> FetchDatabaseVersions(DateOnlyPeriod period, IScenario scenario, IPerson person)
 		{
-			return Session.GetNamedQuery("fetchIdAndVersionPersonAssignment")
+			return Session.GetNamedQuery(NamedQueryForFetchDatabaseVersions)
 			              .SetEntity("scenario", scenario)
 						  .SetDateOnly("start", period.StartDate)
 						  .SetDateOnly("end", period.EndDate)
