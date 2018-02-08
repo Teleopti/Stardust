@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 		private readonly ISkillDayRepository _skillDayRepository;
 	    private readonly IScenarioRepository _scenarioRepository;
 
-	    public SendUpdateStaffingReadModelHandler(IBusinessUnitRepository businessUnitRepository, 
+		public SendUpdateStaffingReadModelHandler(IBusinessUnitRepository businessUnitRepository, 
 			IRequestStrategySettingsReader requestStrategySettingsReader, IJobStartTimeRepository jobStartTimeRepository, 
 			IUpdatedBySystemUser updatedBySystemUser, IEventPublisher publisher, IStaffingSettingsReader staffingSettingsReader,
 			ISkillDayRepository skillDayRepository, IScenarioRepository scenarioRepository)
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 			_staffingSettingsReader = staffingSettingsReader;
 			_skillDayRepository = skillDayRepository;
 	        _scenarioRepository = scenarioRepository;
-        }
+		}
 
 		[UnitOfWork]
 		public virtual void Handle(TenantMinuteTickEvent @event)
@@ -50,17 +50,22 @@ namespace Teleopti.Ccc.Domain.Staffing
 				{	
 					var businessUnitId = businessUnit.Id.GetValueOrDefault();
 
-					if (_skillDayRepository.HasSkillDaysWithinPeriod(DateOnly.Today, DateOnly.Today.AddDays(numberOfDays),
-						businessUnit, _scenarioRepository.LoadDefaultScenario()))
+					var scenario = _scenarioRepository.LoadDefaultScenario(businessUnit);
+					if (scenario != null)
 					{
-						if (!_jobStartTimeRepository.CheckAndUpdate(updateResourceReadModelIntervalMinutes, businessUnitId)) return;
-
-						_publisher.Publish(new UpdateStaffingLevelReadModelEvent
+						if (_skillDayRepository.HasSkillDaysWithinPeriod(DateOnly.Today, DateOnly.Today.AddDays(numberOfDays),
+							businessUnit, scenario))
 						{
-							Days = numberOfDays,
-							LogOnBusinessUnitId = businessUnitId
-						});
-					}	
+							if (!_jobStartTimeRepository.CheckAndUpdate(updateResourceReadModelIntervalMinutes, businessUnitId)) return;
+
+							_publisher.Publish(new UpdateStaffingLevelReadModelEvent
+							{
+								Days = numberOfDays,
+								LogOnBusinessUnitId = businessUnitId
+							});
+						}
+					}
+						
 				});
 			}
 		}
