@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 			apply(new SwedishCultureSpec());
 			apply(new UtcTimeZoneSpec());
 		}
-		
+
 		public void Apply<T>(T specOrSetup)
 		{
 			switch (specOrSetup)
@@ -93,11 +93,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 		public IEnumerable<object> Applied => _applied;
 
 		public string LogOnName { get; private set; }
-
-		public void Set(string logonName)
-		{
-			LogOnName = logonName;
-		}
+		public void Set(string logonName) => LogOnName = logonName;
 
 		public IPerson Person => _person;
 		public CultureInfo Culture => Person.PermissionInformation.Culture();

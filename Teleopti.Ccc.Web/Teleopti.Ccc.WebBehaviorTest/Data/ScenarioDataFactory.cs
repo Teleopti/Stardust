@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			_eventPublisher = eventPublisher;
 			unitOfWorks.Current().CreateAndOpenUnitOfWork(QueryFilter.NoFilter);
 
-			AddPerson("I").Apply(new PersonUserConfigurable
+			Person("I").Apply(new PersonUserConfigurable
 			{
 				UserName = "1",
 				Password = DefaultPassword.ThePassword
@@ -64,10 +64,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			_eventPublisher.Publish(new TenantMinuteTickEvent(), new TenantHourTickEvent());
 		}
 
-		private IEnumerable<object> applied => Me().Applied
-			.Union(_analyticsDataFactory.Setups)
-			.Union(_delayedSetups)
-			.Union(DataFactory.Applied);
+		private IEnumerable<object> applied =>
+			Applied
+				.Union(Me().Applied)
+				.Union(_analyticsDataFactory.Setups)
+				.Union(_delayedSetups);
 
 		public IEnumerable<T> UserDatasOfType<T>() =>
 			from s in applied where typeof(T).IsAssignableFrom(s.GetType()) select (T) s;

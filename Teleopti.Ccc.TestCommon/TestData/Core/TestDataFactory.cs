@@ -9,9 +9,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 {
 	public class TestDataFactory
 	{
-		protected readonly ICurrentUnitOfWork _unitOfWork;
-		private readonly IResolver _resolver;
-
 		public static TestDataFactory Make(IUnitOfWork uow, TenantUnitOfWorkManager tenantUnitOfWorkManager) =>
 			Make(uow, tenantUnitOfWorkManager, tenantUnitOfWorkManager);
 
@@ -30,73 +27,46 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 				));
 		}
 
+
+		protected readonly ICurrentUnitOfWork _unitOfWork;
+		private readonly IResolver _resolver;
+		private readonly DataFactory _dataFactory;
+		private readonly IDictionary<string, PersonDataFactory> _persons = new Dictionary<string, PersonDataFactory>();
+
 		public TestDataFactory(
 			ICurrentUnitOfWork unitOfWork,
 			IResolver resolver)
 		{
 			_unitOfWork = unitOfWork;
 			_resolver = resolver;
-			DataFactory = new DataFactory(_unitOfWork);
+			_dataFactory = new DataFactory(_unitOfWork);
 		}
 
-		protected readonly DataFactory DataFactory;
-		private readonly IDictionary<string, PersonDataFactory> _persons = new Dictionary<string, PersonDataFactory>();
+		public PersonDataFactory Me() => _persons.First().Value;
+		public PersonDataFactory Person(string name) => addPerson(name);
+		public void Apply(IDataSetup setup) => _dataFactory.Apply(setup);
 
-		public bool HasPerson(string name)
-		{
-			return _persons.ContainsKey(trimName(name));
-		}
-
-		private static string trimName(string name)
-		{
-			return name.Trim('\'');
-		}
-
-		public PersonDataFactory Person(string name)
-		{
-			return AddPerson(name);
-		}
-
-		public IEnumerable<PersonDataFactory> AllPersons()
-		{
-			return _persons.Values;
-		}
-
-		public void RemoveLastPerson()
-		{
-			_persons.Remove(_persons.Keys.Last());
-		}
-
-		protected PersonDataFactory AddPerson(string name)
+		private PersonDataFactory addPerson(string name)
 		{
 			name = trimName(name);
 
-			PersonDataFactory foundPerson;
-			if (!_persons.TryGetValue(name, out foundPerson))
-			{
-				var person = new PersonConfigurable {Name = name};
-				DataFactory.Apply(person);
-				foundPerson = _resolver.MakePersonDataFactory();
-				foundPerson.Setup(person.Person);
-				_persons.Add(name, foundPerson);
-			}
+			if (_persons.TryGetValue(name, out var foundPerson)) 
+				return foundPerson;
+			
+			var person = new PersonConfigurable {Name = name};
+			_dataFactory.Apply(person);
+			foundPerson = _resolver.MakePersonDataFactory();
+			foundPerson.Setup(person.Person);
+			_persons.Add(name, foundPerson);
 
 			return foundPerson;
 		}
 
-		public PersonDataFactory Me()
-		{
-			return _persons.First().Value;
-		}
+		protected IEnumerable<object> Applied => _dataFactory.Applied;
 
-		public void Apply(IDataSetup setup)
-		{
-			DataFactory.Apply(setup);
-		}
+		private static string trimName(string name) => name.Trim('\'');
 
-		public DataFactory Data()
-		{
-			return DataFactory;
-		}
+		public bool HasPerson(string name) => _persons.ContainsKey(trimName(name));
+		public void RemoveLastPerson() => _persons.Remove(_persons.Keys.Last());
 	}
 }

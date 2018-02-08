@@ -3,14 +3,11 @@ using System.Data.SqlClient;
 using System.Globalization;
 using System.Threading;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.TestData.Core
 {
 	public class AnalyticsDataFactory
 	{
-		public ICurrentAnalyticsUnitOfWork CurrentAnalyticsUnitOfWork;
-		private readonly IList<IAnalyticsDataSetup> _analyticsSetups = new List<IAnalyticsDataSetup>();
 		private static readonly CultureInfo swedishCulture = CultureInfo.GetCultureInfo("sv-SE");
 		
 		public void Apply(IAnalyticsDataSetup analyticsDataSetup)
@@ -22,23 +19,23 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 				analyticsDataSetup.Apply(connection, culture, swedishCulture);
 			}
 		}
+		
+		
+		
+		
 
-		public void Setup(IAnalyticsDataSetup analyticsDataSetup)
-		{
-			_analyticsSetups.Add(analyticsDataSetup);
-		}
-
+		private readonly IList<IAnalyticsDataSetup> _setups = new List<IAnalyticsDataSetup>();
+		public void Setup(IAnalyticsDataSetup setup) => _setups.Add(setup);
 		public void Persist() { Persist(Thread.CurrentThread.CurrentCulture); }
-
 		public void Persist(CultureInfo culture)
 		{
 			using (var connection = new SqlConnection(InfraTestConfigReader.AnalyticsConnectionString))
 			{
 				connection.Open();
-				_analyticsSetups.ForEach(s => s.Apply(connection, culture, swedishCulture));
+				_setups.ForEach(s => s.Apply(connection, culture, swedishCulture));
 			}
 		}
 
-		public IEnumerable<IAnalyticsDataSetup> Setups => _analyticsSetups;
+		public IEnumerable<IAnalyticsDataSetup> Setups => _setups;
 	}
 }

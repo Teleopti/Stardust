@@ -40,7 +40,8 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				)
 				.SingleInstance();
 
-			builder.RegisterType<TestDataFactory>().SingleInstance();
+			// data factories keep state...
+			builder.RegisterType<TestDataFactory>().InstancePerDependency();
 			builder.RegisterType<PersonDataFactory>().InstancePerDependency();
 			builder.RegisterType<AutofacResolver>().As<IResolver>().SingleInstance();
 

@@ -98,7 +98,6 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 		[TestLog]
 		protected virtual void CreateCommonData()
 		{
-			//var data = new TestDataFactory(_unitOfWork, _currentTenantSession, _tenantUnitOfWork);
 			var data = _data;
 
 			var businessUnit = DefaultBusinessUnit.BusinessUnit;
