@@ -1,6 +1,6 @@
 <div class="con-fluid-row setting-list">
     <div class="con-fluid-flex">
-        <md-select aria-label="Settings" ng-model="$ctrl.currentSettingId" ng-change="$ctrl.settingSelectionChanged()" placeholder="{{'SelectAGamificationSetting'|translate}}">
+        <md-select aria-label="Settings" ng-model="$ctrl.currentSettingId" ng-change="$ctrl.settingSelectionChanged()" placeholder="{{'Select'|translate}}">
             <md-option ng-repeat="setting in $ctrl.settingDescriptors" value="{{setting.GamificationSettingId}}">
                 <span ng-bind="setting.Value.Name"></span>
             </md-option>
@@ -23,5 +23,5 @@
     </div>
 </div>
 
-<g-setting-form class="setting-propterties wfm-form" setting="$ctrl.settingData" on-name-update="$ctrl.updateCurrentSettingNameInList(name)">
+<g-setting-form ng-if="$ctrl.settingData" setting="$ctrl.settingData" on-name-update="$ctrl.updateCurrentSettingNameInList(name)">
 </g-setting-form>
