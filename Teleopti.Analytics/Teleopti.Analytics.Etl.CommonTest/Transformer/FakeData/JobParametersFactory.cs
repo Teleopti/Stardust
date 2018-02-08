@@ -30,6 +30,22 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.FakeData
 			return jobParameters;
 		}
 
+		public static IJobParameters SimpleParameters(IJobHelper jobHelper, int intervalLength)
+		{
+			var jobParameters = new JobParameters(
+				JobMultipleDateFactory.CreateJobMultipleDate(), 1, "W. Europe Standard Time", intervalLength,
+				"Data Source=SSAS_Server;Initial Catalog=SSAS_DB",
+				"False",
+				CultureInfo.CurrentCulture,
+				new FakeContainerHolder(),
+				false
+			);
+
+			jobParameters.Helper = jobHelper;
+
+			return jobParameters;
+		}
+
 		public class FakeContainerHolder : IContainerHolder
 		{
 			public FakeContainerHolder()

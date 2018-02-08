@@ -399,8 +399,6 @@
     <Compile Include="Transformer\SchedulePreferenceTransformer.cs" />
     <Compile Include="Transformer\ScheduleProjection.cs" />
     <Compile Include="Transformer\ScheduleThreading\DayAbsenceDataRowFactory.cs" />
-    <Compile Include="Transformer\ScheduleThreading\IScheduleDataRowCollectionFactory.cs" />
-    <Compile Include="Transformer\ScheduleThreading\IScheduleDataRowFactory.cs" />
     <Compile Include="Transformer\ScheduleThreading\IScheduleTransformer.cs" />
     <Compile Include="Transformer\ScheduleThreading\ProjectionsForAllAgentSchedulesFactory.cs" />
     <Compile Include="Transformer\ScheduleThreading\ScheduleDataRowCollectionFactory.cs" />

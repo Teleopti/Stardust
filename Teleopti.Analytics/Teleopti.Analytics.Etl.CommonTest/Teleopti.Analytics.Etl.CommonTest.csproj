@@ -189,10 +189,9 @@
     <Compile Include="Transformer\SchedulePreferenceTransformerHelperTest.cs" />
     <Compile Include="Transformer\SchedulePreferenceTransformerTest.cs" />
     <Compile Include="Transformer\ScheduleThreading\DayAbsenceDataRowFactoryTest.cs" />
-    <Compile Include="Transformer\ScheduleThreading\ScheduleDataRowCollectionFactoryTest.cs" />
-    <Compile Include="Transformer\ScheduleThreading\ScheduleDataRowCollectionTest.cs" />
+    <Compile Include="Transformer\ScheduleThreading\JobHelperForScenarioTests.cs" />
+    <Compile Include="Transformer\ScheduleThreading\ScheduleScenarioTest.cs" />
     <Compile Include="Transformer\ScheduleThreading\ScheduleTransformerTest.cs" />
-    <Compile Include="Transformer\ScheduleThreading\WorkTreadTest.cs" />
     <Compile Include="Transformer\ScorecardKpiTransformerTest.cs" />
     <Compile Include="Transformer\ScorecardTransformerTest.cs" />
     <Compile Include="Transformer\SetupForTestFixtures.cs" />

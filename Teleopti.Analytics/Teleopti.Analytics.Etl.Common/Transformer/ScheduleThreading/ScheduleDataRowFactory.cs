@@ -1,35 +1,33 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.Common.Transformer.ScheduleThreading
 {
-	public class ScheduleDataRowFactory : IScheduleDataRowFactory
+	public class ScheduleDataRowFactory
 	{
 		public DataRow CreateScheduleDataRow(DataTable dataTable
-										 , IVisualLayer layer
-										 , IScheduleProjection scheduleProjection
-										 , IntervalBase interval
-										 , DateTime insertDateTime
-										 , int intervalsPerDay
-										 , IVisualLayerCollection layerCollection)
+			,IVisualLayer layer
+			,IScheduleProjection scheduleProjection
+			,IntervalBase interval
+			,DateTime insertDateTime
+			,int intervalsPerDay
+			,IVisualLayerCollection layerCollection
+			,DateTime shiftStart
+			,DateTime shiftEnd)
 		{
 			var nullGuid = Guid.Empty;
 
-			DateTimePeriod personPayloadPeriod = GetShiftPeriod(scheduleProjection.SchedulePartProjectionMerged, layer);
 			IPayload payload = layer.Payload;
 			DataRow row = dataTable.NewRow();
 
 			row["schedule_date_local"] = scheduleProjection.SchedulePart.DateOnlyAsPeriod.DateOnly.Date;
 			row["schedule_date_utc"] = layer.Period.StartDateTime.Date;
-			row["person_code"] = scheduleProjection.SchedulePart.Person.Id; // person_code
-			row["interval_id"] = interval.Id; // interval_id
-			row["activity_start"] = layer.Period.StartDateTime; // activity_start
-			row["scenario_code"] = scheduleProjection.SchedulePart.Scenario.Id; // scenario_code
+			row["person_code"] = scheduleProjection.SchedulePart.Person.Id;
+			row["interval_id"] = interval.Id;
+			row["activity_start"] = layer.Period.StartDateTime;
+			row["scenario_code"] = scheduleProjection.SchedulePart.Scenario.Id;
 
 			row["activity_code"] = nullGuid;
 			row["absence_code"] = nullGuid;
@@ -52,19 +50,19 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.ScheduleThreading
 				IPersonAssignment personAssignment =
 					 ScheduleTransformer.GetPersonAssignmentForLayer(scheduleProjection.SchedulePart, layer);
 				row["activity_code"] = activity.Id;
-				if (personAssignment.ShiftCategory != null && personAssignment.ShiftCategory.Id != null)
+				if (personAssignment.ShiftCategory?.Id != null)
 					row["shift_category_code"] = personAssignment.ShiftCategory.Id;
 				else
 					row["shift_category_code"] = nullGuid;
 			}
 
 			row["activity_end"] = layer.Period.EndDateTime;
-			row["shift_start"] = personPayloadPeriod.StartDateTime;
-			row["shift_end"] = personPayloadPeriod.EndDateTime;
-			row["shift_startinterval_id"] = new IntervalBase(personPayloadPeriod.StartDateTime, intervalsPerDay).Id;
-			row["shift_endinterval_id"] = new IntervalBase(personPayloadPeriod.EndDateTime.AddSeconds(-1), intervalsPerDay).Id; //remove one seconds to get EndDateTime on correct mart interval
+			row["shift_start"] = shiftStart;
+			row["shift_end"] = shiftEnd;
+			row["shift_startinterval_id"] = new IntervalBase(shiftStart, intervalsPerDay).Id;
+			row["shift_endinterval_id"] = new IntervalBase(shiftEnd.AddSeconds(-1), intervalsPerDay).Id; //remove one seconds to get EndDateTime on correct mart interval
 
-			row["shift_length_m"] = personPayloadPeriod.EndDateTime.Subtract(personPayloadPeriod.StartDateTime).TotalMinutes;
+			row["shift_length_m"] = shiftEnd.Subtract(shiftEnd).TotalMinutes;
 
 			var timeInfo = new TimeInfo(payload, layer, layerCollection);
 
@@ -80,10 +78,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.ScheduleThreading
 			row["scheduled_work_time_activity_m"] = timeInfo.WorkTime.ActivityTime;
 			row["scheduled_work_time_absence_m"] = timeInfo.WorkTime.AbsenceTime;
 
-			//TimeSpan v =scheduleProjection.SchedulePartProjection.ProjectedLayerCollection.FilterLayers(layer.Period).Overtime();
-			//int overtime = 0;
-			//if (layer.DefinitionSet != null)
-			//    overtime = layer.Period.ElapsedTime().Minutes;
 			row["scheduled_over_time_m"] = timeInfo.OverTime.Time;
 
 			row["scheduled_ready_time_m"] = 0;
@@ -126,24 +120,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.ScheduleThreading
 			row["planned_overtime_m"] = (int)layerCollection.PlannedOvertime(layer.Period).TotalMinutes;
 
 			return row;
-		}
-
-		public DateTimePeriod GetShiftPeriod(IVisualLayerCollection layerCollection, ILayer<IPayload> layer)
-		{
-			//would be nice not doing this for every interval, if it becomes a perf problem - I need to talk with Jonas
-			var periods = new List<DateTimePeriod>();
-			layerCollection.ForEach(mergedLayer => periods.Add(mergedLayer.Period));
-
-			if (periods.Count == 0)
-				throw new ArgumentException("No periods available in layerCollection.");
-
-			if (periods.Count > 1)
-			{
-				foreach (DateTimePeriod period in periods)
-					if (period.Intersect(layer.Period)) return period;
-			}
-
-			return (DateTimePeriod)layerCollection.Period();
 		}
 	}
 }

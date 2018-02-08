@@ -91,7 +91,9 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.ScheduleThreading
 																									 intervalPeriod,
 																									 insertDateTime,
 																									 jobParameters.IntervalsPerDay,
-																									 new ScheduleDataRowFactory());
+																									 new ScheduleDataRowFactory(),
+																									 shiftStart,
+																									 shiftEnd);
 
 								//Fill the bulk insert table - for schedule
 								foreach (DataRow dataRow in rows)
@@ -103,6 +105,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.ScheduleThreading
 
 					}
 
+					threadObj.ScheduleTable = scheduleDataTable;
 					affectedRows = jobParameters.Helper.Repository.PersistSchedule(scheduleDataTable, absenceDayCountDataTable);
 				}
 			}

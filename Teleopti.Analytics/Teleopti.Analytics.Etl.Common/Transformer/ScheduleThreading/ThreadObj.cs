@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 
 namespace Teleopti.Analytics.Etl.Common.Transformer.ScheduleThreading
@@ -17,7 +18,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.ScheduleThreading
 		public IList<ScheduleProjection> ScheduleProjectionServiceList { private set; get; }
 		public DateTime InsertDateTime { private set; get; }
 		public IJobParameters JobParameters { private set; get; }
-		public IScheduleDataRowCollectionFactory ScheduleDataRowFactory { set; get; }
-
+		public ScheduleDataRowCollectionFactory ScheduleDataRowFactory { set; get; }
+		public DataTable ScheduleTable { get; set; }
 	}
 }

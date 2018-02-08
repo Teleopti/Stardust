@@ -8,16 +8,18 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.Common.Transformer.ScheduleThreading
 {
-	public class ScheduleDataRowCollectionFactory : IScheduleDataRowCollectionFactory
+	public class ScheduleDataRowCollectionFactory
 	{
 		public ICollection<DataRow> CreateScheduleDataRowCollection(DataTable dataTable
-												  , IScheduleProjection scheduleProjection
-												  , IntervalBase interval
-												  , DateTimePeriod intervalPeriod
-												  , DateTime insertDateTime
-												  , int intervalsPerDay
-									 , IScheduleDataRowFactory scheduleDataRowFactory)
-		{
+			, IScheduleProjection scheduleProjection
+			, IntervalBase interval
+			, DateTimePeriod intervalPeriod
+			, DateTime insertDateTime
+			, int intervalsPerDay
+			, ScheduleDataRowFactory scheduleDataRowFactory
+			, DateTime shiftStart
+			, DateTime shiftEnd)
+		{ 
 
 			var list = new List<DataRow>();
 
@@ -30,9 +32,15 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.ScheduleThreading
 												? intervalLayerCollection
 												: scheduleProjection.SchedulePartProjection.FilterLayers(layer.Period);
 
-				DataRow dataRow = scheduleDataRowFactory.CreateScheduleDataRow(dataTable, layer, scheduleProjection,
-																									interval, insertDateTime, intervalsPerDay,
-																									layerCollection);
+				DataRow dataRow = scheduleDataRowFactory.CreateScheduleDataRow(dataTable, 
+					layer, 
+					scheduleProjection,
+					interval, 
+					insertDateTime, 
+					intervalsPerDay,
+					layerCollection,
+					shiftStart,
+					shiftEnd);
 				list.Add(dataRow);
 			}
 			return list;
