@@ -86,20 +86,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 				}
 				agentsWithSetting = agentsWithSetting.Distinct().ToList();
 
-				var isRuleWithDifferentThreshold =
-					setting.GamificationSettingRuleSet == GamificationSettingRuleSet.RuleWithDifferentThreshold;
-
-				calculateBadges(setting, isRuleWithDifferentThreshold, agentsWithSetting, calculateDate, message.LogOnBusinessUnitId);
+				calculateBadges(setting, agentsWithSetting, calculateDate, message.LogOnBusinessUnitId);
 			}
 		}
 
-		private void calculateBadges(IGamificationSetting setting,
-			bool isRuleWithDifferentThreshold, IList<IPerson> agentsWithSetting, DateOnly calculateDate, Guid businessId)
+		private void calculateBadges(IGamificationSetting setting, IList<IPerson> agentsWithSetting, DateOnly calculateDate, Guid businessId)
 		{
 			foreach (var badgeSetting in setting.BadgeSettings)
 			{
 				if (!badgeSetting.Enabled) continue;
-				if (isRuleWithDifferentThreshold)
+				if (setting.GamificationSettingRuleSet == GamificationSettingRuleSet.RuleWithDifferentThreshold)
 				{
 					var agentBadgeWithRank = _badgeWithRankCalculator.CalculateBadges(agentsWithSetting, calculateDate, badgeSetting, businessId);
 					_pushMessageSender.SendMessage(agentBadgeWithRank, badgeSetting, calculateDate);
