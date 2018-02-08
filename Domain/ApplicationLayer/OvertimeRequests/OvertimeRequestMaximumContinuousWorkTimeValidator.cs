@@ -42,8 +42,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			var shiftLayers = loadShiftLayers(scheduleRange, requestPeriod, timezone);
 
 			var continuousWorkTimeInfo = getContinuousWorkTime(shiftLayers, requestPeriod, timezone, minimumRestTime);
-
-
 			if (!isSatisfiedMaximumContinuousWorkTime(continuousWorkTimeInfo, maximumContinuousWorkTime))
 			{
 				return invalidResult(continuousWorkTimeInfo.ContinuousWorkTimePeriod,
@@ -52,21 +50,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			}
 
 			return validResult();
-		}
-
-		private static OvertimeRequestValidationResult invalidResult(string continuousWorkTimePeriod,
-			TimeSpan continuousWorkTime, TimeSpan maximumContinuousWorkTime)
-		{
-			return new OvertimeRequestValidationResult
-			{
-				InvalidReasons = new[]
-				{
-					string.Format(Resources.OvertimeRequestContinuousWorkTimeDenyReason,
-						continuousWorkTimePeriod,
-						DateHelper.HourMinutesString(continuousWorkTime.TotalMinutes),
-						DateHelper.HourMinutesString(maximumContinuousWorkTime.TotalMinutes))
-				}
-			};
 		}
 
 		private List<ShiftLayer> loadShiftLayers(IScheduleRange scheduleRange, DateTimePeriod requestPeriod,
@@ -95,19 +78,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 		{
 			if (!shiftLayers.Any())
 			{
-				return new ContinuousWorkTimeInfo
-				{
-					ContinuousWorkTime = requestPeriod.ElapsedTime(),
-					ContinuousWorkTimePeriod =
-						$"{requestPeriod.StartDateTimeLocal(timezone)} - {requestPeriod.EndDateTimeLocal(timezone)}"
-				};
+				return buildContinuousWorkTimeInfoBasedOnRequest(requestPeriod, timezone);
 			}
 
+			var previousShiftLayerPeriod = getPreviousContinuousShiftPeriod(shiftLayers, requestPeriod, minimumRestTime);
+			var nextShiftLayerPeriod = getNextContinuousShiftPeriod(shiftLayers, requestPeriod, minimumRestTime);
+
+			return buildContinuousWorkTimeInfo(requestPeriod, timezone, previousShiftLayerPeriod, nextShiftLayerPeriod);
+		}
+
+		private static ContinuousWorkTimeInfo buildContinuousWorkTimeInfo(DateTimePeriod requestPeriod, TimeZoneInfo timezone,
+			DateTimePeriod? previousShiftLayerPeriod, DateTimePeriod? nextShiftLayerPeriod)
+		{
 			string continuousWorkTimePeriod;
 			TimeSpan continuousWorkTime;
-			var previousShiftLayerPeriod = getPreviouContinuousShiftPeriod(shiftLayers, requestPeriod, minimumRestTime);
-
-			var nextShiftLayerPeriod = getNextContinuousShiftPeriod(shiftLayers, requestPeriod, minimumRestTime);
 
 			if (previousShiftLayerPeriod != null && nextShiftLayerPeriod != null)
 			{
@@ -130,9 +114,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			}
 			else
 			{
-				continuousWorkTime = requestPeriod.ElapsedTime();
-				continuousWorkTimePeriod =
-					$"{requestPeriod.StartDateTimeLocal(timezone)} - {requestPeriod.EndDateTimeLocal(timezone)}";
+				return buildContinuousWorkTimeInfoBasedOnRequest(requestPeriod, timezone);
 			}
 
 			return new ContinuousWorkTimeInfo
@@ -142,14 +124,26 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			};
 		}
 
-		private DateTimePeriod? getPreviouContinuousShiftPeriod(List<ShiftLayer> shiftLayers, DateTimePeriod requestPeriod,
+		private static ContinuousWorkTimeInfo buildContinuousWorkTimeInfoBasedOnRequest(DateTimePeriod requestPeriod,
+			TimeZoneInfo timezone)
+		{
+			var continuousWorkTime = requestPeriod.ElapsedTime();
+			var continuousWorkTimePeriod =
+				$"{requestPeriod.StartDateTimeLocal(timezone)} - {requestPeriod.EndDateTimeLocal(timezone)}";
+			return new ContinuousWorkTimeInfo
+			{
+				ContinuousWorkTime = continuousWorkTime,
+				ContinuousWorkTimePeriod = continuousWorkTimePeriod
+			};
+		}
+
+		private DateTimePeriod? getPreviousContinuousShiftPeriod(List<ShiftLayer> shiftLayers, DateTimePeriod requestPeriod,
 			TimeSpan minimumRestTime)
 		{
 			var beforeShiftLayers = shiftLayers.Where(shift =>
 			{
 				var isShiftBeforeRequest = shift.Period.EndDateTime.CompareTo(requestPeriod.StartDateTime) <= 0;
-				var isLunchOrShortBreak = shift.Payload.ReportLevelDetail == ReportLevelDetail.Lunch ||
-										  shift.Payload.ReportLevelDetail == ReportLevelDetail.ShortBreak;
+				var isLunchOrShortBreak = isLunchOrShortBreakActivity(shift);
 				return isShiftBeforeRequest && !isLunchOrShortBreak;
 			}).OrderBy(shift => shift.Period.StartDateTime).ToList();
 
@@ -193,8 +187,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			var afterShiftLayers = shiftLayers.Where(shift =>
 			{
 				var isShiftAfterRequest = shift.Period.StartDateTime.CompareTo(requestPeriod.EndDateTime) >= 0;
-				var isLunchOrShortBreak = shift.Payload.ReportLevelDetail == ReportLevelDetail.Lunch ||
-										  shift.Payload.ReportLevelDetail == ReportLevelDetail.ShortBreak;
+				var isLunchOrShortBreak = isLunchOrShortBreakActivity(shift);
 				return isShiftAfterRequest && !isLunchOrShortBreak;
 			}).OrderBy(shift => shift.Period.StartDateTime).ToList();
 
@@ -246,6 +239,27 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 				schedulePeriod, _currentScenario.Current());
 
 			return dic;
+		}
+
+		private bool isLunchOrShortBreakActivity(ShiftLayer shift)
+		{
+			return shift.Payload.ReportLevelDetail == ReportLevelDetail.Lunch ||
+				   shift.Payload.ReportLevelDetail == ReportLevelDetail.ShortBreak;
+		}
+
+		private static OvertimeRequestValidationResult invalidResult(string continuousWorkTimePeriod,
+			TimeSpan continuousWorkTime, TimeSpan maximumContinuousWorkTime)
+		{
+			return new OvertimeRequestValidationResult
+			{
+				InvalidReasons = new[]
+				{
+					string.Format(Resources.OvertimeRequestContinuousWorkTimeDenyReason,
+						continuousWorkTimePeriod,
+						DateHelper.HourMinutesString(continuousWorkTime.TotalMinutes),
+						DateHelper.HourMinutesString(maximumContinuousWorkTime.TotalMinutes))
+				}
+			};
 		}
 
 		private static OvertimeRequestValidationResult validResult()
