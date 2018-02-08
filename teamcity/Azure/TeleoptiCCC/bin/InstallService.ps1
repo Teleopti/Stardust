@@ -77,6 +77,7 @@ Try
 	& $PSScriptRoot\RegisterEventLogSource.exe "TeleoptiServiceBus"
 	& $PSScriptRoot\RegisterEventLogSource.exe "TeleoptiWebApps"
 	& $PSScriptRoot\RegisterEventLogSource.exe "TeleoptiWebBroker"
+	& $PSScriptRoot\RegisterEventLogSource.exe "TeleoptiWebAuthApps"
 	log-info "Register all service and application names in Event Log. Done!"
 	
 }
