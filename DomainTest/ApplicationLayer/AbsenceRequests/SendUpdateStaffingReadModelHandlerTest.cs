@@ -43,10 +43,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void ShouldRunResourceCalculation()
 		{
-			ScenarioRepository.Has("default");
+			var s = ScenarioRepository.Has("default");
 			SkillDayRepository.HasSkillDays = true;
 			Now.Is("2016-03-01 10:00");
 			var bu = BusinessUnitFactory.CreateWithId("bu");
+			s.SetBusinessUnit(bu);
 			BusinessUnitRepository.Add(bu);
 			Target.Handle(new TenantMinuteTickEvent());
 			Publisher.PublishedEvents.Count().Should().Be.EqualTo(1);
@@ -57,10 +58,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void ShouldExecuteJobOnlyFor1Bu()
 		{
-			ScenarioRepository.Has("default");
+			var s = ScenarioRepository.Has("default");
 			SkillDayRepository.HasSkillDays = true;
 			Now.Is("2016-03-01 06:10");
 			var bu = BusinessUnitFactory.CreateWithId("bu");
+			s.SetBusinessUnit(bu);
 			var bu2 = BusinessUnitFactory.CreateWithId("B2");
 			BusinessUnitRepository.Add(bu);
 			BusinessUnitRepository.Add(bu2);
