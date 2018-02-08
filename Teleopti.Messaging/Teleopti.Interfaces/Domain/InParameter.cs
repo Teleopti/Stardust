@@ -73,7 +73,7 @@ namespace Teleopti.Interfaces.Domain
         {
             if (parameterValue == null)
             {
-                string errMess = string.Format(CultureInfo.CurrentCulture,
+                var errMess = string.Format(CultureInfo.CurrentCulture,
                                                "Parameter '{0}' must not be null.",
                                                parameterName);
                 throw new ArgumentNullException(parameterName, errMess);
@@ -90,7 +90,7 @@ namespace Teleopti.Interfaces.Domain
         {
             if (string.IsNullOrEmpty(value))
             {
-                string errMess = string.Format(CultureInfo.CurrentCulture,
+                var errMess = string.Format(CultureInfo.CurrentCulture,
                                                "Parameter '{0}' must not be empty.",
                                                parameterName);
                 throw new ArgumentException(parameterName, errMess);
@@ -106,7 +106,7 @@ namespace Teleopti.Interfaces.Domain
 				{
 					if (string.IsNullOrWhiteSpace(value))
 					{
-						string errMess = string.Format(CultureInfo.CurrentCulture,
+						var errMess = string.Format(CultureInfo.CurrentCulture,
 																					 "Parameter '{0}' must not be empty or contain only whitespaces.",
 																					 parameterName);
 						throw new ArgumentException(parameterName, errMess);
@@ -153,7 +153,7 @@ namespace Teleopti.Interfaces.Domain
         {
             if (value.Value <= 0 || value.Value > 1)
             {
-                string errMess = string.Format(CultureInfo.CurrentCulture,
+                var errMess = string.Format(CultureInfo.CurrentCulture,
                                                "Parameter '{0}'' must have a value between one and hundred.",
                                                parameterName);
                 throw new ArgumentOutOfRangeException(parameterName, errMess);
@@ -173,7 +173,7 @@ namespace Teleopti.Interfaces.Domain
         {
             if (value.Value < 0 || value.Value > 1)
             {
-                string errMess = string.Format(CultureInfo.CurrentCulture,
+                var errMess = string.Format(CultureInfo.CurrentCulture,
                                                "Parameter '{0}' must have a value between one and hundred.",
                                                parameterName);
                 throw new ArgumentOutOfRangeException(parameterName, errMess);
@@ -194,7 +194,7 @@ namespace Teleopti.Interfaces.Domain
         {
             if (valueToCheck.Length > maxLength)
             {
-                string errMess = string.Format(CultureInfo.CurrentCulture,
+                var errMess = string.Format(CultureInfo.CurrentCulture,
                                                "String parameter {0} may not be longer than {1} characters.",
                                                parameterName, maxLength);
                 throw new ArgumentException(parameterName, errMess);
@@ -214,7 +214,7 @@ namespace Teleopti.Interfaces.Domain
         /// /// </remarks>
         public static void TimeSpanCannotBeNegative(string parameterName, TimeSpan value)
         {
-            string errMess = string.Format(CultureInfo.CurrentCulture,
+            var errMess = string.Format(CultureInfo.CurrentCulture,
                                                "Parameter '{0}' must not have a negativ value.",
                                                parameterName);
             if (value < TimeSpan.Zero)
@@ -226,7 +226,7 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         public static void MustBeTrue(string parameterName, bool value)
         {
-            string errMess = string.Format(CultureInfo.CurrentCulture,
+            var errMess = string.Format(CultureInfo.CurrentCulture,
                                                "Parameter '{0}' must be valid.",
                                                parameterName);
             if (!value)

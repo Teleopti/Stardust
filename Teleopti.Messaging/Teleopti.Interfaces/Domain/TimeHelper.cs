@@ -85,7 +85,7 @@ namespace Teleopti.Interfaces.Domain
             }
 
             // Try to find a + sign, if one exists we want to add the number of DAYS behind the sign
-            int pos = timeAsText.IndexOf('+');
+            var pos = timeAsText.IndexOf('+');
             if (pos > -1)
             {
                 int days;
@@ -126,14 +126,14 @@ namespace Teleopti.Interfaces.Domain
             }
 
             //Try to find "PM" occurencies
-            bool pmDesignatorExists = false;
+            var pmDesignatorExists = false;
             timeAsText = timeAsText.ToLower(CultureInfo.CurrentCulture);
-            string[] pmSigns = new[]
+            var pmSigns = new[]
                                    {
                                        CultureInfo.CurrentCulture.DateTimeFormat.PMDesignator,
                                        "pm"
                                    };
-            for (int i = 0; i < pmSigns.Length; i++)
+            for (var i = 0; i < pmSigns.Length; i++)
             {
                 if (!string.IsNullOrEmpty(pmSigns[i]) && timeAsText.Contains(pmSigns[i]))
                 {
@@ -143,7 +143,7 @@ namespace Teleopti.Interfaces.Domain
             }
 
             //Strip everything but numbers and do a recursive call
-            string strippedTime = Regex.Replace(timeAsText, @"[^0-9]+", string.Empty);
+            var strippedTime = Regex.Replace(timeAsText, @"[^0-9]+", string.Empty);
             if (strippedTime != timeAsText)
             {
                 if (TryParse(strippedTime, out timeValue))
@@ -176,9 +176,8 @@ namespace Teleopti.Interfaces.Domain
         public static TimeSpan FitToDefaultResolution(TimeSpan timeAsTimeSpan, int defaultResolution)
         {
             //Skip seconds, and milliseconds, and additional tics
-            TimeSpan cleanedTime = TimeSpan.FromMinutes((int)timeAsTimeSpan.TotalMinutes);
-            int remainder;
-            int numberOfIntervals = Math.DivRem(Convert.ToInt32(cleanedTime.TotalMinutes), defaultResolution, out remainder);
+            var cleanedTime = TimeSpan.FromMinutes((int)timeAsTimeSpan.TotalMinutes);
+			var numberOfIntervals = Math.DivRem(Convert.ToInt32(cleanedTime.TotalMinutes), defaultResolution, out var remainder);
             if (remainder == 0) return cleanedTime;
 
             if (remainder >= defaultResolution / 2)
@@ -199,11 +198,11 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         public static bool TryParseTimePeriods(string timePeriods, out IList<TimePeriod> result)
         {
-            bool dayAfter = false;
-            string[] timePeriodCollection = timePeriods.Split(
+            var dayAfter = false;
+            var timePeriodCollection = timePeriods.Split(
                 new[] { ';' },
                 StringSplitOptions.RemoveEmptyEntries);
-            for (int i = 0; i < timePeriodCollection.Length; i++)
+            for (var i = 0; i < timePeriodCollection.Length; i++)
             {
                 if (timePeriodCollection[i].Contains("+"))
                 {
@@ -213,7 +212,7 @@ namespace Teleopti.Interfaces.Domain
             }
 
             result = new List<TimePeriod>();
-            foreach (string timePeriodItem in timePeriodCollection)
+            foreach (var timePeriodItem in timePeriodCollection)
             {
 
                 if (timePeriodItem.Trim().Length < 1) continue;
@@ -249,10 +248,10 @@ namespace Teleopti.Interfaces.Domain
         public static bool TryParseLongHourString(string text, out TimeSpan timeValue, TimeFormatsType timeFormatsType)
         {
             timeValue = new TimeSpan();
-            CultureInfo ci = CultureInfo.CurrentCulture;
+            var ci = CultureInfo.CurrentCulture;
 
-            char separator = Char.Parse(ci.DateTimeFormat.TimeSeparator);
-            String[] ret = text.Split(separator);
+            var separator = Char.Parse(ci.DateTimeFormat.TimeSeparator);
+            var ret = text.Split(separator);
 
             if (ret.Length > 3)
                 return false;
@@ -326,18 +325,18 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         public static string GetLongHourMinuteSecondTimeString(TimeSpan timeSpan, CultureInfo cultureInfo)
         {
-            string separator = cultureInfo.DateTimeFormat.TimeSeparator;
+            var separator = cultureInfo.DateTimeFormat.TimeSeparator;
 
-            string signChar = string.Empty;
+            var signChar = string.Empty;
             if (timeSpan < TimeSpan.Zero)
             {
                 signChar = "-";
                 timeSpan = timeSpan.Negate();
             }
 
-            int hour = (int)timeSpan.TotalHours;
-            int minutes = timeSpan.Minutes;
-            int seconds = timeSpan.Seconds;
+            var hour = (int)timeSpan.TotalHours;
+            var minutes = timeSpan.Minutes;
+            var seconds = timeSpan.Seconds;
 
             if (timeSpan.Milliseconds >= 500)
                 seconds += 1;
@@ -352,9 +351,9 @@ namespace Teleopti.Interfaces.Domain
                 minutes = 0;
             }
 
-            string hours = Convert.ToString(hour, CultureInfo.CurrentCulture);
-            string min = Convert.ToString(minutes, CultureInfo.CurrentCulture);
-            string sec = Convert.ToString(seconds, CultureInfo.CurrentCulture);
+            var hours = Convert.ToString(hour, CultureInfo.CurrentCulture);
+            var min = Convert.ToString(minutes, CultureInfo.CurrentCulture);
+            var sec = Convert.ToString(seconds, CultureInfo.CurrentCulture);
 
             if (min.Length == 1)
                 min = "0" + min;
@@ -471,10 +470,10 @@ namespace Teleopti.Interfaces.Domain
         {
             if (timeAsText == null) throw new ArgumentNullException(nameof(timeAsText));
 
-            CultureInfo ci = CultureInfo.CurrentCulture;
+            var ci = CultureInfo.CurrentCulture;
 
-            char separator = Char.Parse(ci.DateTimeFormat.TimeSeparator);
-            String[] ret = timeAsText.Split(separator);
+            var separator = Char.Parse(ci.DateTimeFormat.TimeSeparator);
+            var ret = timeAsText.Split(separator);
 
             if (defaultInterpretAsMinutes)
             {
@@ -533,9 +532,9 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         public static TimeSpan FitToDefaultResolutionRoundDown(TimeSpan value, int resolution)
         {
-            TimeSpan cleanedTime = TimeSpan.FromMinutes((int)value.TotalMinutes);
+            var cleanedTime = TimeSpan.FromMinutes((int)value.TotalMinutes);
             int remainder;
-            int numberOfIntervals = Math.DivRem(Convert.ToInt32(cleanedTime.TotalMinutes), resolution, out remainder);
+            var numberOfIntervals = Math.DivRem(Convert.ToInt32(cleanedTime.TotalMinutes), resolution, out remainder);
             if (remainder == 0) return cleanedTime;
 
             return TimeSpan.FromMinutes(numberOfIntervals * resolution);

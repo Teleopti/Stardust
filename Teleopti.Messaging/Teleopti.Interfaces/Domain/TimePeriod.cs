@@ -86,18 +86,16 @@ namespace Teleopti.Interfaces.Domain
             // Check if string contains a - separator.
             if (!value.Contains("-")) { return false; }
 
-            string[] sae = value.Split(new[] {"-"}, StringSplitOptions.None);
+            var sae = value.Split(new[] {"-"}, StringSplitOptions.None);
             // Check if string contains two items.
             if (sae.Length != 2) { return false; }
 
-            TimeSpan start;
-            if (!TimeHelper.TryParse(sae[0], out start))
+			if (!TimeHelper.TryParse(sae[0], out TimeSpan start))
             {
                 return false;
             }
 
-            TimeSpan end;
-            if (!TimeHelper.TryParse(sae[1], out end))
+			if (!TimeHelper.TryParse(sae[1], out TimeSpan end))
             {
                 return false;
             }
@@ -136,13 +134,9 @@ namespace Teleopti.Interfaces.Domain
         /// true if obj and this instance are the same type and represent the same value; otherwise, false.
         /// </returns>
         public override bool Equals(object obj)
-        {
-            if (obj == null || !(obj is TimePeriod))
-            {
-                return false;
-            }
-            return Equals((TimePeriod) obj);
-        }
+		{
+			return obj is TimePeriod timePeriod && Equals(timePeriod);
+		}
 
         /// <summary>
         /// Operator ==.
@@ -230,7 +224,7 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         public int CompareTo(object obj)
         {
-            TimePeriod timePeriod = (TimePeriod) obj;
+            var timePeriod = (TimePeriod) obj;
             if (timePeriod.StartTime > StartTime)
             {
                 return -1;
@@ -249,9 +243,9 @@ namespace Teleopti.Interfaces.Domain
         /// <returns></returns>
         public override string ToString()
         {
-            DateTime dtStart = DateTime.MinValue.Add(StartTime);
-            DateTime dtEnd = DateTime.MinValue.Add(EndTime);
-            String periodString = dtStart.ToLongTimeString() + "-" + dtEnd.ToLongTimeString();
+            var dtStart = DateTime.MinValue.Add(StartTime);
+            var dtEnd = DateTime.MinValue.Add(EndTime);
+            var periodString = dtStart.ToLongTimeString() + "-" + dtEnd.ToLongTimeString();
             return periodString;
         }
         /// <summary>
@@ -336,10 +330,8 @@ namespace Teleopti.Interfaces.Domain
         {
             if (Contains(intersectPeriod.StartTime)||Contains(intersectPeriod.EndTime.Subtract(new TimeSpan(1))))
                 return true;
-            if (intersectPeriod.Contains(this))
-                return true;
-            return false;
-        }
+            return intersectPeriod.Contains(this);
+		}
 
         /// <summary>
         /// Returns a TimePeriod representing the spanning time of this TimePeriod.
@@ -365,10 +357,10 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         public static IList<TimePeriod> Combine(IList<TimePeriod> periods)
         {
-            List<TimePeriod> retList = new List<TimePeriod>();
-            List<TimePeriod> orderedList = (List<TimePeriod>)periods;
+            var retList = new List<TimePeriod>();
+            var orderedList = (List<TimePeriod>)periods;
             orderedList.Sort();
-            foreach (TimePeriod period in orderedList)
+            foreach (var period in orderedList)
             {
                 if (retList.Count != 0)
                 {
@@ -379,7 +371,7 @@ namespace Teleopti.Interfaces.Domain
 
                         if (earlierPeriod.EndTime < period.EndTime) 
                         {
-                            TimePeriod newTimePeriod = new TimePeriod(retList[retList.Count - 1].StartTime, period.EndTime);
+                            var newTimePeriod = new TimePeriod(retList[retList.Count - 1].StartTime, period.EndTime);
                             retList.Remove(retList[retList.Count - 1]);
                             retList.Add(newTimePeriod);
                         }

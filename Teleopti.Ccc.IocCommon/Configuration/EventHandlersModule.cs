@@ -7,10 +7,8 @@ using Teleopti.Ccc.Domain.Analytics.Transformer;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
@@ -31,7 +29,6 @@ using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnly;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
-using Teleopti.Ccc.Infrastructure.Rta.Persisters;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Module = Autofac.Module;
 

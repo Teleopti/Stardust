@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Autofac;
+﻿using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.AdherenceChange;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay;

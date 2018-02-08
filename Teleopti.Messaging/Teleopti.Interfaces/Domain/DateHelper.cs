@@ -71,7 +71,7 @@ namespace Teleopti.Interfaces.Domain
 			{
 				calendarWeekRule = CalendarWeekRule.FirstFourDayWeek;
 			}
-            int weekNo = cult.Calendar.GetWeekOfYear(date, calendarWeekRule, cult.DateTimeFormat.FirstDayOfWeek);
+            var weekNo = cult.Calendar.GetWeekOfYear(date, calendarWeekRule, cult.DateTimeFormat.FirstDayOfWeek);
 
             if (weekNo == 53 && cult.DateTimeFormat.Calendar.GetType() == typeof(GregorianCalendar)
                 && calendarWeekRule == CalendarWeekRule.FirstFourDayWeek)
@@ -167,9 +167,9 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         public static DateTime GetLastDateInMonth(DateTime theDate, Calendar calendar)
         {
-            int year = calendar.GetYear(theDate);
-            int month = calendar.GetMonth(theDate);
-            int era = calendar.GetEra(theDate);
+            var year = calendar.GetYear(theDate);
+            var month = calendar.GetMonth(theDate);
+            var era = calendar.GetEra(theDate);
 
             return calendar.ToDateTime(
                 year,
@@ -232,10 +232,10 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         public static DateTime GetFirstDateInWeek(DateTime theDate, CultureInfo culture)
         {
-            int firstDayOfWeek = (int)culture.DateTimeFormat.FirstDayOfWeek;
-            int currentDayOfWeek = (int)theDate.DayOfWeek;
+            var firstDayOfWeek = (int)culture.DateTimeFormat.FirstDayOfWeek;
+            var currentDayOfWeek = (int)theDate.DayOfWeek;
 
-            int differenceAsDays = currentDayOfWeek - firstDayOfWeek;
+            var differenceAsDays = currentDayOfWeek - firstDayOfWeek;
             if (differenceAsDays < 0) differenceAsDays += 7;
 
             return theDate.AddDays(-differenceAsDays);
@@ -251,7 +251,7 @@ namespace Teleopti.Interfaces.Domain
         {
             var currentDayOfWeek = (int)theDate.DayOfWeek;
 
-            int differenceAsDays = currentDayOfWeek - (int)workweekStartsAt;
+            var differenceAsDays = currentDayOfWeek - (int)workweekStartsAt;
             if (differenceAsDays < 0) differenceAsDays += 7;
 
             return theDate.AddDays(-differenceAsDays);
@@ -261,7 +261,7 @@ namespace Teleopti.Interfaces.Domain
 		{
 			var currentDayOfWeek = (int)theDate.DayOfWeek;
 
-			int differenceAsDays = currentDayOfWeek - (int)workweekStartsAt;
+			var differenceAsDays = currentDayOfWeek - (int)workweekStartsAt;
 			if (differenceAsDays < 0) differenceAsDays += 7;
 
 			return theDate.AddDays(-differenceAsDays);
@@ -310,8 +310,8 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         public static DateOnlyPeriod GetWeekPeriod(DateOnly theDate, CultureInfo culture)
         {
-            DateTime localStartDate = GetFirstDateInWeek(theDate.Date, culture);
-            DateTime localEndDate = localStartDate.AddDays(6);
+            var localStartDate = GetFirstDateInWeek(theDate.Date, culture);
+            var localEndDate = localStartDate.AddDays(6);
 
             return new DateOnlyPeriod(new DateOnly(localStartDate), new DateOnly(localEndDate));
         }
@@ -324,8 +324,8 @@ namespace Teleopti.Interfaces.Domain
         ///<returns></returns>
         public static DateOnlyPeriod GetWeekPeriod(DateOnly theDate, DayOfWeek workweekStartsAt)
         {
-            DateTime localStartDate = GetFirstDateInWeek(theDate.Date, workweekStartsAt);
-            DateTime localEndDate = localStartDate.AddDays(6);
+            var localStartDate = GetFirstDateInWeek(theDate.Date, workweekStartsAt);
+            var localEndDate = localStartDate.AddDays(6);
 
             return new DateOnlyPeriod(new DateOnly(localStartDate), new DateOnly(localEndDate));
         }
@@ -343,8 +343,8 @@ namespace Teleopti.Interfaces.Domain
         {
             IList<DayOfWeek> daysToReturn = new List<DayOfWeek>();
 
-            int current = (int)culture.DateTimeFormat.FirstDayOfWeek;
-            for (int i = 0; i < 7; i++)
+            var current = (int)culture.DateTimeFormat.FirstDayOfWeek;
+            for (var i = 0; i < 7; i++)
             {
                 daysToReturn.Add((DayOfWeek)current);
                 current++;
@@ -386,7 +386,7 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         public  static string GetMonthName(DateTime theDate, CultureInfo culture)
         {
-            DateTimeFormatInfo dateTimeFormatInfo = culture.DateTimeFormat;
+            var dateTimeFormatInfo = culture.DateTimeFormat;
             return dateTimeFormatInfo.GetMonthName(CultureInfo.CurrentCulture.Calendar.GetMonth(theDate));
         }
 
@@ -400,13 +400,13 @@ namespace Teleopti.Interfaces.Domain
             if (totalMinutes < 1)
                 return "00:00";
 
-            long totMinutes = (long)totalMinutes;
+            var totMinutes = (long)totalMinutes;
 
-            long hours = totMinutes / 60;
-            int minutes = (int)(totMinutes - hours * 60);
+            var hours = totMinutes / 60;
+            var minutes = (int)(totMinutes - hours * 60);
             string hourString;
             string minutesString;
-            NumberFormatInfo numberInfo = CultureInfo.CurrentCulture.NumberFormat;
+            var numberInfo = CultureInfo.CurrentCulture.NumberFormat;
 
             if (hours < 10)
                 hourString = "0" + hours.ToString(numberInfo);

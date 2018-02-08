@@ -123,8 +123,8 @@ namespace Teleopti.Interfaces.Domain
 	                          int endHour
 		    )
 	    {
-		    DateTime startDateTimeTemp = new DateTime(startYear, startMonth, startDay, startHour, 0, 0, DateTimeKind.Utc);
-		    DateTime endDateTimeTemp = new DateTime(endYear, endMonth, endDay, endHour, 0, 0, DateTimeKind.Utc);
+		    var startDateTimeTemp = new DateTime(startYear, startMonth, startDay, startHour, 0, 0, DateTimeKind.Utc);
+		    var endDateTimeTemp = new DateTime(endYear, endMonth, endDay, endHour, 0, 0, DateTimeKind.Utc);
 			
 		    period = new MinMax<DateTime>(startDateTimeTemp, endDateTimeTemp);
 	    }
@@ -250,8 +250,8 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         public IList<DateTimePeriod> AffectedHourCollection()
         {
-            DateTime endDateTime = EndDateTime.Date.AddHours(EndDateTime.Hour).AddHours(1);
-            DateTime startDateTime = StartDateTime.Date.AddHours(StartDateTime.Hour);
+            var endDateTime = EndDateTime.Date.AddHours(EndDateTime.Hour).AddHours(1);
+            var startDateTime = StartDateTime.Date.AddHours(StartDateTime.Hour);
 
             IList<DateTimePeriod> retList = new List<DateTimePeriod>();
             for (; startDateTime < endDateTime; startDateTime=startDateTime.AddHours(1))
@@ -274,11 +274,11 @@ namespace Teleopti.Interfaces.Domain
         public IList<DateTimePeriod> WholeDayCollection(TimeZoneInfo timeZoneInfo )
         {
             IList<DateTimePeriod> collectionToReturn = new List<DateTimePeriod>();
-            DateTime currentDateTime = StartDateTimeLocal(timeZoneInfo );
-            DateTime endDateTime = EndDateTimeLocal(timeZoneInfo );
+            var currentDateTime = StartDateTimeLocal(timeZoneInfo );
+            var endDateTime = EndDateTimeLocal(timeZoneInfo );
             while (currentDateTime < endDateTime)
             {
-                DateTime currentEndDateTime = currentDateTime.AddDays(1);
+                var currentEndDateTime = currentDateTime.AddDays(1);
                 if (currentEndDateTime > endDateTime) currentEndDateTime = endDateTime;
                 if (endDateTime == currentDateTime) break;
 
@@ -482,12 +482,12 @@ namespace Teleopti.Interfaces.Domain
             if (!Intersect(intersectPeriod))
                 return null;
 
-            DateTime intersectStart = intersectPeriod.StartDateTime;
-            DateTime intersectEnd = intersectPeriod.EndDateTime;
-            DateTime start = period.Minimum;
+            var intersectStart = intersectPeriod.StartDateTime;
+            var intersectEnd = intersectPeriod.EndDateTime;
+            var start = period.Minimum;
             if (intersectStart > start)
                 start = intersectStart;
-            DateTime end = period.Maximum;
+            var end = period.Maximum;
             if (intersectEnd < end)
                 end = intersectEnd;
             return new DateTimePeriod(start, end, false);
@@ -546,7 +546,7 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
 		public TimePeriod TimePeriod(TimeZoneInfo timeZone)
         {
-        	TimeSpan startTimeOfDay = StartDateTimeLocal(timeZone).TimeOfDay;
+        	var startTimeOfDay = StartDateTimeLocal(timeZone).TimeOfDay;
 
 			return new TimePeriod(startTimeOfDay, startTimeOfDay.Add(LocalElapsedTime(timeZone)));
         }
@@ -564,8 +564,8 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         public DateTimePeriod MaximumPeriod(DateTimePeriod dateTimePeriod)
         {
-            DateTime lowDate = StartDateTime;
-            DateTime highDate = EndDateTime;
+            var lowDate = StartDateTime;
+            var highDate = EndDateTime;
             if (dateTimePeriod.StartDateTime < lowDate)
                 lowDate = dateTimePeriod.StartDateTime;
             if (dateTimePeriod.EndDateTime > highDate)
@@ -607,11 +607,11 @@ namespace Teleopti.Interfaces.Domain
         public IList<DateTimePeriod> Intervals(TimeSpan interval)
         {
             IList<DateTimePeriod> retList = new List<DateTimePeriod>();
-            DateTime intervalStart= StartDateTime;
+            var intervalStart= StartDateTime;
             
             while (intervalStart<EndDateTime)
             {
-                DateTime intervalEnd = intervalStart.Add(interval);
+                var intervalEnd = intervalStart.Add(interval);
                 retList.Add(new DateTimePeriod(intervalStart,intervalEnd,false));
                 intervalStart = intervalEnd;
             }
@@ -638,7 +638,7 @@ namespace Teleopti.Interfaces.Domain
 
 			var sortedCount = sortedPeriods.Length;
 			var ret = new List<DateTimePeriod>(sortedCount);
-	        for (int i = 0; i < sortedCount; i++)
+	        for (var i = 0; i < sortedCount; i++)
 	        {
 		        var startTime = sortedPeriods[i].StartDateTime;
 		        var endTime = sortedPeriods[i].EndDateTime;

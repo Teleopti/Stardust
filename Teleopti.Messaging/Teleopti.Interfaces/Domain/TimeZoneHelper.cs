@@ -69,8 +69,8 @@ namespace Teleopti.Interfaces.Domain
 		{
 			InParameter.NotNull(nameof(timeZone), timeZone);
 
-			DateTime utcStartDateTime = timeZone.SafeConvertTimeToUtc(localStartDateTime);
-			DateTime utcEndDateTime = timeZone.SafeConvertTimeToUtc(localEndDateTime);
+			var utcStartDateTime = timeZone.SafeConvertTimeToUtc(localStartDateTime);
+			var utcEndDateTime = timeZone.SafeConvertTimeToUtc(localEndDateTime);
 
 			return new DateTimePeriod(utcStartDateTime, utcEndDateTime);
 		}
@@ -99,7 +99,7 @@ namespace Teleopti.Interfaces.Domain
 
 		private static bool adjustmentIsApplicable(int inYear, TimeZoneInfo.AdjustmentRule adjust)
 		{
-			return (adjust.DateStart.Year <= inYear && inYear <= adjust.DateEnd.Year);
+			return adjust.DateStart.Year <= inYear && inYear <= adjust.DateEnd.Year;
 		}
 
 		private static DateTime getTransitionDate(TimeZoneInfo timeZoneInfo, TimeZoneInfo.TransitionTime transitionTime, int year)

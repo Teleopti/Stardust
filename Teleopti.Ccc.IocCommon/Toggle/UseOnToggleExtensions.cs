@@ -26,8 +26,8 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 
 			if (attributesOn == null && attributesOff == null) return true;
 
-			bool resultOn = true;
-			bool resultOff = true;
+			var resultOn = true;
+			var resultOff = true;
 
 			if (attributesOn != null)
 			{

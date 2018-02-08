@@ -120,8 +120,8 @@ namespace Teleopti.Interfaces.Domain
         public IList<DateOnly> DayCollection()
         {
             IList<DateOnly> collectionToReturn = new List<DateOnly>();
-            DateOnly currentDate = StartDate;
-            DateOnly endDate = EndDate;
+            var currentDate = StartDate;
+            var endDate = EndDate;
             while (currentDate <= endDate)
             {
                 collectionToReturn.Add(currentDate);
@@ -166,8 +166,8 @@ namespace Teleopti.Interfaces.Domain
         /// <returns></returns>
         public string ArabicSafeDateString()
         {
-            DateTime start = DateTime.SpecifyKind(StartDate.Date, DateTimeKind.Utc);
-            DateTime end = DateTime.SpecifyKind(EndDate.Date, DateTimeKind.Utc);
+            var start = DateTime.SpecifyKind(StartDate.Date, DateTimeKind.Utc);
+            var end = DateTime.SpecifyKind(EndDate.Date, DateTimeKind.Utc);
             return
                 start.ToShortDateString() + DATETIME_SEPARATOR + end.ToShortDateString();
         }
@@ -210,18 +210,18 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         public DateOnlyPeriod? Intersection(DateOnlyPeriod intersectPeriod)
         {
-            DateOnly intersectStart = intersectPeriod.StartDate;
-            DateOnly intersectEnd = intersectPeriod.EndDate;
-            bool intersect = !(period.Maximum < intersectStart) && !(period.Minimum > intersectEnd);
+            var intersectStart = intersectPeriod.StartDate;
+            var intersectEnd = intersectPeriod.EndDate;
+            var intersect = !(period.Maximum < intersectStart) && !(period.Minimum > intersectEnd);
 
             if (!intersect)
                 return null;
 
 
-            DateOnly start = period.Minimum;
+            var start = period.Minimum;
             if (intersectStart > start)
                 start = intersectStart;
-            DateOnly end = period.Maximum;
+            var end = period.Maximum;
             if (intersectEnd < end)
                 end = intersectEnd;
             return new DateOnlyPeriod(start, end);
@@ -235,8 +235,8 @@ namespace Teleopti.Interfaces.Domain
         public int CalendarWeeksAffected(DayOfWeek workweekStartsAt)
         {
             var start = StartDate.Date;
-            DateTime firstDateInWeek = DateHelper.GetFirstDateInWeek(start, workweekStartsAt);
-            double dateDiff = start.Date.Subtract(firstDateInWeek.Date).TotalDays;
+            var firstDateInWeek = DateHelper.GetFirstDateInWeek(start, workweekStartsAt);
+            var dateDiff = start.Date.Subtract(firstDateInWeek.Date).TotalDays;
             if (dateDiff == 0)
                 return (int) Math.Ceiling(DayCount()/7d);
             return (int)Math.Ceiling(DayCount() / 7d) + 1;
