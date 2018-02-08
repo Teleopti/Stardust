@@ -2,7 +2,6 @@
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -37,7 +36,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 		public DesktopScheduling Target;
 
 		[Test]
-		[Ignore("48053 - to be fixed")]
 		public void ShouldNotRemoveAgentFromUserDefinedGroupPage()
 		{
 			var date = new DateOnly(2016, 10, 24);

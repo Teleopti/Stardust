@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			}
 		}
 
-		[UnitOfWork]
+		[ReadonlyUnitOfWork]
 		protected virtual void DoScheduling(SchedulingWasOrdered @event, ISchedulerStateHolder schedulerStateHolder, DateOnlyPeriod selectedPeriod)
 		{
 			_fillSchedulerStateHolder.Fill(schedulerStateHolder, @event.AgentsInIsland, new LockInfoForStateHolder(_gridlockManager, @event.UserLocks), selectedPeriod, @event.Skills);
