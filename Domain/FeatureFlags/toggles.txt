@@ -122,6 +122,7 @@ ResourcePlanner_DayOffOptimizationIslands_47208 = true
 ResourcePlanner_XXL_47258 = RC
 ResourcePlanner_NoPytteIslands_47500 = RC
 ResourcePlanner_PrepareToRemoveExportSchedule_46576 = true
+ResourcePlanner_ScheduleDeadlock_48170 = RC # Anders! Dont put to true until we verified some green Intraday/Booking/Perftests
 
 # From old Kittens team... #
 ETL_SpeedUpPersonPeriodNightly_38097 = true
