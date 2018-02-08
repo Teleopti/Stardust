@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
@@ -14,24 +13,61 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 		private readonly ICurrentUnitOfWork _unitOfWork;
 		private readonly ICurrentTenantSession _tenantSession;
 		private readonly ITenantUnitOfWork _tenantUnitOfWork;
-		private readonly IList<IUserSetup> _userSetups = new List<IUserSetup>();
-		private readonly IList<IUserDataSetup> _userDataSetups = new List<IUserDataSetup>();
+		private readonly ISetupResolver _resolver;
+		private readonly IList<object> _applied = new List<object>();
 
 		public PersonDataFactory(
-			IPerson person, 
-			ICurrentUnitOfWork unitOfWork, 
+			IPerson person,
+			ICurrentUnitOfWork unitOfWork,
 			ICurrentTenantSession tenantSession,
-			ITenantUnitOfWork tenantUnitOfWork)
+			ITenantUnitOfWork tenantUnitOfWork,
+			ISetupResolver resolver)
 		{
 			_person = person;
 			_unitOfWork = unitOfWork;
 			_tenantSession = tenantSession;
 			_tenantUnitOfWork = tenantUnitOfWork;
-			Apply(new Setups.Specific.SwedishCulture());
-			Apply(new UtcTimeZone());
+			_resolver = resolver;
+			apply(new SwedishCultureSpec());
+			apply(new UtcTimeZoneSpec());
 		}
 
-		public void Apply(IUserSetup setup)
+		public void Apply<T>(T specOrSetup)
+		{
+			switch (specOrSetup)
+			{
+				case IUserSetup setup:
+					apply(setup);
+					break;
+				case IUserDataSetup setup:
+					apply(setup);
+					break;
+				default:
+					apply(specOrSetup);
+					break;
+			}
+		}
+
+		private void apply<T>(T spec)
+		{
+			var userDataSetup = _resolver.ResolveUserDataSetupFor<T>();
+			if (userDataSetup != null)
+			{
+				userDataSetup.Apply(spec, _person, _person.PermissionInformation.Culture());
+				_unitOfWork.Current().PersistAll();
+			}
+
+			var userSetup = _resolver.ResolveUserSetupFor<T>();
+			if (userSetup != null)
+			{
+				userSetup.Apply(spec, _person, _person.PermissionInformation.Culture());
+				_unitOfWork.Current().PersistAll();
+			}
+
+			_applied.Add(spec);
+		}
+
+		private void apply(IUserSetup setup)
 		{
 			setup.Apply(_unitOfWork.Current(), _person, _person.PermissionInformation.Culture());
 			_unitOfWork.Current().PersistAll();
@@ -41,24 +77,25 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 				using (_tenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 					setupTenant.Apply(_tenantSession, Person, this);
 
-			_userSetups.Add(setup);
+			_applied.Add(setup);
 		}
 
-		public void Apply(IUserDataSetup setup)
+		private void apply(IUserDataSetup setup)
 		{
 			setup.Apply(_unitOfWork, _person, _person.PermissionInformation.Culture());
 			_unitOfWork.Current().PersistAll();
-
-			_userDataSetups.Add(setup);
+			_applied.Add(setup);
 		}
 
-		public IEnumerable<object> Applied => _userSetups.Cast<object>().Union(_userDataSetups);
+		public IEnumerable<object> Applied => _applied;
 
 		public string LogOnName { get; private set; }
+
 		public void Set(string logonName)
 		{
 			LogOnName = logonName;
 		}
+
 		public IPerson Person => _person;
 		public CultureInfo Culture => Person.PermissionInformation.Culture();
 	}

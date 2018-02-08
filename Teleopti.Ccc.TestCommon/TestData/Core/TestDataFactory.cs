@@ -11,22 +11,25 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 		private readonly ICurrentUnitOfWork _unitOfWorkAction;
 		private readonly ICurrentTenantSession _tenantSession;
 		private readonly ITenantUnitOfWork _tenantUnitOfWork;
+		private readonly ISetupResolver _resolver;
 
 		public TestDataFactory(
-			ICurrentUnitOfWork unitOfWorkAction, 
+			ICurrentUnitOfWork unitOfWorkAction,
 			ICurrentTenantSession tenantSession,
-			ITenantUnitOfWork tenantUnitOfWork)
+			ITenantUnitOfWork tenantUnitOfWork,
+			ISetupResolver resolver)
 		{
 			_unitOfWorkAction = unitOfWorkAction;
 			_tenantSession = tenantSession;
 			_tenantUnitOfWork = tenantUnitOfWork;
+			_resolver = resolver;
 			DataFactory = new DataFactory(_unitOfWorkAction);
 		}
 
 		protected readonly DataFactory DataFactory;
 		private readonly IDictionary<string, PersonDataFactory> _persons = new Dictionary<string, PersonDataFactory>();
 
-	    public bool HasPerson(string name)
+		public bool HasPerson(string name)
 		{
 			return _persons.ContainsKey(trimName(name));
 		}
@@ -64,10 +67,12 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 					person.Person,
 					_unitOfWorkAction,
 					_tenantSession,
-					_tenantUnitOfWork
-					);
+					_tenantUnitOfWork,
+					_resolver
+				);
 				_persons.Add(name, foundPerson);
 			}
+
 			return foundPerson;
 		}
 

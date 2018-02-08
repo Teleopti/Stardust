@@ -32,10 +32,11 @@ namespace Teleopti.Wfm.Test
 
 			StateHolderProxyHelper.SetupFakeState(DataSource, personThatCreatesTestData, TestState.BusinessUnit);
 			var tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(UnitOfWorkFactory.Current.ConnectionString);
-			
+
 			using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().Current().CreateAndOpenUnitOfWork())
 			{
-				var testDataFactory = new TestDataFactory(new ThisUnitOfWork(uow), tenantUnitOfWorkManager, tenantUnitOfWorkManager);
+				var testDataFactory = new TestDataFactory(new ThisUnitOfWork(uow), tenantUnitOfWorkManager, tenantUnitOfWorkManager,
+					new LegacySetupResolver());
 				testDataFactory.Apply(new PersonThatCreatesTestData(personThatCreatesTestData));
 				testDataFactory.Apply(new DefaultLicense());
 				testDataFactory.Apply(new BusinessUnitFromFakeState(TestState.BusinessUnit));
@@ -43,14 +44,14 @@ namespace Teleopti.Wfm.Test
 
 			DataSourceHelper.BackupApplicationDatabase(123);
 		}
-		
+
 
 		private static void disposeUnitOfWork()
 		{
 			TestState.UnitOfWork.Dispose();
 			TestState.UnitOfWork = null;
 		}
-		
+
 
 		public static void BeginTest()
 		{

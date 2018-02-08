@@ -26,10 +26,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 	{
 		private readonly MutableNow _now;
 		private readonly TestConfiguration _testConfiguration;
-		private readonly ICurrentUnitOfWork _unitOfWork;
 		private readonly IEventPublisher _eventPublisher;
-		private readonly ITenantUnitOfWork _tenantUnitOfWork;
-		private readonly ICurrentTenantSession _currentTenantSession;
 		private readonly AnalyticsDatabase _analytics;
 		private readonly WithUnitOfWork _withUnitOfWork;
 		private readonly ITeamRepository _teams;
@@ -41,14 +38,12 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 		private readonly ICurrentScenario _scenario;
 		private readonly IPersonAssignmentRepository _assignments;
 		private readonly IActivityRepository _activities;
+		private readonly TestDataFactory _data;
 
 		public DataCreator(
 			MutableNow now,
 			TestConfiguration testConfiguration,
-			ICurrentUnitOfWork unitOfWork,
 			IEventPublisher eventPublisher,
-			ITenantUnitOfWork tenantUnitOfWork,
-			ICurrentTenantSession currentTenantSession,
 			AnalyticsDatabase analytics,
 			WithUnitOfWork withUnitOfWork,
 			ITeamRepository teams,
@@ -59,15 +54,13 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 			IContractScheduleRepository contractSchedules,
 			ICurrentScenario scenario,
 			IPersonAssignmentRepository assignments,
-			IActivityRepository activities
-			)
+			IActivityRepository activities,
+			TestDataFactory data
+		)
 		{
 			_now = now;
 			_testConfiguration = testConfiguration;
-			_unitOfWork = unitOfWork;
 			_eventPublisher = eventPublisher;
-			_tenantUnitOfWork = tenantUnitOfWork;
-			_currentTenantSession = currentTenantSession;
 			_analytics = analytics;
 			_withUnitOfWork = withUnitOfWork;
 			_teams = teams;
@@ -79,6 +72,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 			_scenario = scenario;
 			_assignments = assignments;
 			_activities = activities;
+			_data = data;
 		}
 
 		[TestLog]
@@ -104,42 +98,67 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 		[TestLog]
 		protected virtual void CreateCommonData()
 		{
-			var data = new TestDataFactory(_unitOfWork, _currentTenantSession, _tenantUnitOfWork);
+			//var data = new TestDataFactory(_unitOfWork, _currentTenantSession, _tenantUnitOfWork);
+			var data = _data;
 
 			var businessUnit = DefaultBusinessUnit.BusinessUnit;
 
-			data.Apply(new ScenarioConfigurable { Name = "Default", BusinessUnit = businessUnit.Name });
-			data.Apply(new ActivityConfigurable { Name = "Phone" });
-			data.Apply(new ActivityConfigurable { Name = "Lunch" });
-			data.Apply(new ActivityConfigurable { Name = "Break" });
+			data.Apply(new ScenarioConfigurable {Name = "Default", BusinessUnit = businessUnit.Name});
+			data.Apply(new ActivityConfigurable {Name = "Phone"});
+			data.Apply(new ActivityConfigurable {Name = "Lunch"});
+			data.Apply(new ActivityConfigurable {Name = "Break"});
 
-			data.Apply(new ContractConfigurable { Name = "contract" });
-			data.Apply(new PartTimePercentageConfigurable { Name = "partTimePercentage" });
-			data.Apply(new ContractScheduleConfigurable { Name = "contractSchedule" });
+			data.Apply(new ContractConfigurable {Name = "contract"});
+			data.Apply(new PartTimePercentageConfigurable {Name = "partTimePercentage"});
+			data.Apply(new ContractScheduleConfigurable {Name = "contractSchedule"});
 
 			PhoneStates().ForEach(s =>
 			{
-				data.Apply(new RtaMapConfigurable { Activity = "Phone", PhoneState = s, Adherence = "In", Name = "InAdherence" });
-				data.Apply(new RtaMapConfigurable { Activity = "Break", PhoneState = s, Adherence = "Out", Name = "InAlarmCount" });
-				data.Apply(new RtaMapConfigurable { Activity = "Lunch", PhoneState = s, Adherence = "Out", Name = "InAlarmCount" });
+				data.Apply(new RtaMapConfigurable {Activity = "Phone", PhoneState = s, Adherence = "In", Name = "InAdherence"});
+				data.Apply(new RtaMapConfigurable {Activity = "Break", PhoneState = s, Adherence = "Out", Name = "InAlarmCount"});
+				data.Apply(new RtaMapConfigurable {Activity = "Lunch", PhoneState = s, Adherence = "Out", Name = "InAlarmCount"});
 			});
 
 			LoggedOffStates().ForEach(s =>
 			{
-				data.Apply(new RtaMapConfigurable { Activity = "Phone", PhoneState = s, Adherence = "Out", Name = "InAlarmCount" });
-				data.Apply(new RtaMapConfigurable { Activity = "Break", PhoneState = s, Adherence = "In", Name = "InAdherence" });
-				data.Apply(new RtaMapConfigurable { Activity = "Lunch", PhoneState = s, Adherence = "In", Name = "InAdherence" });
-				data.Apply(new RtaMapConfigurable { Activity = null, PhoneState = s, Adherence = "In", Name = "InAdherence" });
+				data.Apply(new RtaMapConfigurable {Activity = "Phone", PhoneState = s, Adherence = "Out", Name = "InAlarmCount"});
+				data.Apply(new RtaMapConfigurable {Activity = "Break", PhoneState = s, Adherence = "In", Name = "InAdherence"});
+				data.Apply(new RtaMapConfigurable {Activity = "Lunch", PhoneState = s, Adherence = "In", Name = "InAdherence"});
+				data.Apply(new RtaMapConfigurable {Activity = null, PhoneState = s, Adherence = "In", Name = "InAdherence"});
 			});
 
 			Enumerable.Range(0, (_testConfiguration.NumberOfMappings / 4))
 				.ForEach(code =>
 				{
 					var phoneState = $"Misc{code}";
-					data.Apply(new RtaMapConfigurable { Activity = null, PhoneState = phoneState, Adherence = "Neutral", Name = "NeutralAdherence" });
-					data.Apply(new RtaMapConfigurable { Activity = "Phone", PhoneState = phoneState, Adherence = "In", Name = "InAdherence" });
-					data.Apply(new RtaMapConfigurable { Activity = "Break", PhoneState = phoneState, Adherence = "Out", Name = "InAlarmCount" });
-					data.Apply(new RtaMapConfigurable { Activity = "Lunch", PhoneState = phoneState, Adherence = "Out", Name = "InAlarmCount" });
+					data.Apply(new RtaMapConfigurable
+					{
+						Activity = null,
+						PhoneState = phoneState,
+						Adherence = "Neutral",
+						Name = "NeutralAdherence"
+					});
+					data.Apply(new RtaMapConfigurable
+					{
+						Activity = "Phone",
+						PhoneState = phoneState,
+						Adherence = "In",
+						Name = "InAdherence"
+					});
+					data.Apply(new RtaMapConfigurable
+					{
+						Activity = "Break",
+						PhoneState = phoneState,
+						Adherence = "Out",
+						Name = "InAlarmCount"
+					});
+					data.Apply(new RtaMapConfigurable
+					{
+						Activity = "Lunch",
+						PhoneState = phoneState,
+						Adherence = "Out",
+						Name = "InAlarmCount"
+					});
 				});
 
 			Enumerable.Range(0, (_testConfiguration.NumberOfAgentsInSystem / 100) + 1)
@@ -161,7 +180,6 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 						Site = "site" + (team / 10)
 					});
 				});
-
 		}
 
 		[UnitOfWork]
@@ -176,7 +194,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 			var teams = _teams.LoadAll();
 
 			Logons()
-				.Select((logon, index) => new { logon, index })
+				.Select((logon, index) => new {logon, index})
 				.ForEach(l =>
 				{
 					var index = l.index;
@@ -285,6 +303,5 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 					UserCode = $"roger{roger}"
 				});
 		}
-
 	}
 }

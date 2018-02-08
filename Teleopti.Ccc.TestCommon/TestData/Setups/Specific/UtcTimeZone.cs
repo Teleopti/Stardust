@@ -6,9 +6,13 @@ using Teleopti.Ccc.TestCommon.TestData.Core;
 
 namespace Teleopti.Ccc.TestCommon.TestData.Setups.Specific
 {
-	public class UtcTimeZone : IUserSetup
+	public class UtcTimeZoneSpec
 	{
-		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
+	}
+
+	public class UtcTimeZoneSetup : IUserSetup<UtcTimeZoneSpec>
+	{
+		public void Apply(UtcTimeZoneSpec spec, IPerson user, CultureInfo cultureInfo)
 		{
 			user.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
 		}
