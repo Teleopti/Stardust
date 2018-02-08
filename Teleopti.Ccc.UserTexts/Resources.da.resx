@@ -11118,9 +11118,6 @@ Der er ikke nok budgetteret kvote til denne forespørgelse.</value>
   <data name="EnterValidFile" xml:space="preserve">
     <value>Indtast et gyldigt filnavn, inklusiv sti</value>
   </data>
-  <data name="ProductActivationKeyApplicationSuccess" xml:space="preserve">
-    <value>Produkt aktiveringsnöglen er anvendt med succes. Tillykke! Du er nu licenseret bruger af dette prisvindende workforce management system. Applikationen lukker nu. Vigtigt: For at få alle tjenester og webapplikationer til at fungere optimalt og for at få adgang til de nyligt licenseret muligheder, bed venligst din IT afdeling om at köre "Restart Teleopti WFM" fra Teleopti mappen i startmenuen på serveren</value>
-  </data>
   <data name="ProductActivationKeyHasExpiredPleaseApplyANewOne" xml:space="preserve">
     <value>Din produktaktiveringsnögle er udlöbet. venligst indtast en ny</value>
   </data>
@@ -13949,5 +13946,10 @@ Der er ikke nok budgetteret kvote til denne forespørgelse.</value>
   </data>
   <data name="StaffingInfo" xml:space="preserve">
     <value>Bemandingsinformation</value>
+  </data>
+  <data name="ProductActivationKeyApplicationSuccessNoRestart" xml:space="preserve">
+    <value>Produkt aktiveringsnöglen er anvendt med succes. 
+Tillykke! Du er nu licenseret bruger af dette prisvindende workforce management system. 
+Applikationen lukker nu. </value>
   </data>
 </root>

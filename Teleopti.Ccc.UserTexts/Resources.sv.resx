@@ -5320,14 +5320,6 @@ Detaljerad information om felet:
     <value>Ange korrekt filnamn, inklusive sökväg</value>
     <comment>file not found in license window</comment>
   </data>
-  <data name="ProductActivationKeyApplicationSuccess" xml:space="preserve">
-    <value>Produktaktiveringsnyckeln har nu lagts på.
-Applikationen kommer att stängas. 
-
-Viktigt:
-För att alla tjänster och webbapplikationer ska fungera normalt och för att aktivera nylicensierade tillval, var god be IT-avdelningen köra "Restart Teleopti WFM" som finns i Teleopti-mappen i Startmenyn på servern.</value>
-    <comment>license upload success message</comment>
-  </data>
   <data name="ProductActivationKeyHasExpiredPleaseApplyANewOne" xml:space="preserve">
     <value>Din produktaktiveringsnyckel har gått ut, var god installera en ny</value>
     <comment>explanation for license failure in license window</comment>
@@ -15395,5 +15387,10 @@ Vill du registrera dig?</value>
   </data>
   <data name="UIGridSortDescending" xml:space="preserve">
     <value>Sortera fallande</value>
+  </data>
+  <data name="ProductActivationKeyApplicationSuccessNoRestart" xml:space="preserve">
+    <value>Produktaktiveringsnyckeln har nu lagts på.
+Grattis! Du är nu en licensierad användare av den här prisbelönta WFM-lösningen. 
+Applikationen kommer nu att stängas. </value>
   </data>
 </root>

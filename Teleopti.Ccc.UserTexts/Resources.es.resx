@@ -10206,14 +10206,6 @@ Detalles del error:
   <data name="EnterValidFile" xml:space="preserve">
     <value>Introduzca un nombre de archivo válido, incluyendo destino</value>
   </data>
-  <data name="ProductActivationKeyApplicationSuccess" xml:space="preserve">
-    <value>La aplicación de su clave de activación de producto fue exitosa.
-Felicitaciones! Ahora tienes licencia para usar esta galardonada solución para workforce management.
-La aplicación se cerrará ahora.
-
-Importante:
-Para lograr el pleno funcionamiento de todos los servicios y aplicaciones web y tener acceso a las opciones recién activadas, solicite a su IT que ejecute "Restart Teleopti WFM" en la carpeta Teleopti en el menú Inicio en el servidor.</value>
-  </data>
   <data name="ReportAbsenceFor" xml:space="preserve">
     <value>Reportar ausencia para</value>
   </data>
@@ -11469,9 +11461,6 @@ Detalles del error:
   </data>
   <data name="AbandonedRate" xml:space="preserve">
     <value>Tasa de abandono</value>
-  </data>
-  <data name="Tasa" xml:space="preserve">
-    <value>Tasa de abandono (%)</value>
   </data>
   <data name="NotShowingAbandonRate" xml:space="preserve">
     <value>La tasa de abandono no se puede mostrar para la selección actual</value>
@@ -13267,5 +13256,10 @@ Verifique su conexión a internet o contacte a su administrador.</value>
   </data>
   <data name="ManyAgentsAlert" xml:space="preserve">
     <value>{0} Agentes seleccionados, haga clic en Actualizar para comenzar a analizar</value>
+  </data>
+  <data name="ProductActivationKeyApplicationSuccessNoRestart" xml:space="preserve">
+    <value>La aplicación de su clave de activación de producto fue exitosa.
+Felicitaciones! Ahora tienes licencia para usar esta galardonada solución para workforce management.
+La aplicación se cerrará ahora.</value>
   </data>
 </root>

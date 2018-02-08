@@ -4307,14 +4307,6 @@ Error details:
   <data name="EnterValidFile" xml:space="preserve">
     <value>Ievadiet derīgu faila nosaukumu, tai skaitā ceļu</value>
   </data>
-  <data name="ProductActivationKeyApplicationSuccess" xml:space="preserve">
-    <value>Product activation key successfully applied.
-Congratulations! You are now a licensed user of this award winning workforce management solution.
-The application will now exit.
-
-Important:
-In order to get all services and web applications to fully function and to get access to newly licensed options, please ask your IT to run "Restart Teleopti WFM" from the Teleopti folder in the Start Menu on the server.</value>
-  </data>
   <data name="ProductActivationKeyHasExpiredPleaseApplyANewOne" xml:space="preserve">
     <value>Your product activation key has expired, please apply a new one</value>
   </data>

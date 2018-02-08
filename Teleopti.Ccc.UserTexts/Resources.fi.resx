@@ -12229,13 +12229,6 @@ Maksimi viikkotuntimäärä on pienempi kuin</value>
   <data name="ApplyProductActivationKey" xml:space="preserve">
     <value>Liitä tuoteavain</value>
   </data>
-  <data name="ProductActivationKeyApplicationSuccess" xml:space="preserve">
-    <value>Tuoteavain on liitetty. 
-Onnea! Sinulla on nyt lisenssi käyttää palkittua resurssienhallintaratkaisua. Applikaatio sulkeutuu. 
-
-Huom: 
-Pyydä IT-osastoltasi apua, että he käynnistävät Teleopti WFM uudelleen Teleopti tiedostosta palvelimen Käynnistä valikosta, jotta saatte kaikki palvelut ja web-applikaatiot toimimaan sekä käyttömahdollisuuden uusille lisensseille. </value>
-  </data>
   <data name="ProductActivationKeyHasExpiredPleaseApplyANewOne" xml:space="preserve">
     <value>Tuoteavain on mennyt umpeen, liitä uusi tuoteavain. </value>
   </data>
@@ -14410,5 +14403,10 @@ Haluatko rekisteröityä?</value>
   </data>
   <data name="UnderstaffingAfterOT" xml:space="preserve">
     <value>Alimiehitys ylityöehdotuksen jälkeen</value>
+  </data>
+  <data name="ProductActivationKeyApplicationSuccessNoRestart" xml:space="preserve">
+    <value>Tuoteavain on liitetty. 
+Onnea! Sinulla on nyt lisenssi käyttää palkittua resurssienhallintaratkaisua. 
+Applikaatio sulkeutuu. </value>
   </data>
 </root>

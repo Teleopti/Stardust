@@ -10580,10 +10580,6 @@
   <data name="EnterValidFile" xml:space="preserve">
     <value>ادخل اسم ملف صحيح متضمنا مسار صحيح</value>
   </data>
-  <data name="ProductActivationKeyApplicationSuccess" xml:space="preserve">
-    <value>تم تطبيق مفتاح تنشيط المنتج بنجاح. مبروك! أنت الآن مستخدم مصرح به لاستخدام حلول إدارة القوى العاملة. هذا التطبيق سيتم اغلاقه الآن
-ملحوظة مهمة: للحصول على كافة الخدمات وتطبيقات الويب وكذلك للحصول على تصريح دخول لكافة خيارات الترخيص، فضلا اطلب من مهندس الدعم الفنى إعادة تشغيل برنامج Teleopti من مجلد Teleopti من قائمة ابدا بالخادم </value>
-  </data>
   <data name="ProductActivationKeyHasExpiredPleaseApplyANewOne" xml:space="preserve">
     <value>مفتاح التنشيط الخاص بك انتهت صلاحيته. فضلا اطلب مفتاح جديد</value>
   </data>

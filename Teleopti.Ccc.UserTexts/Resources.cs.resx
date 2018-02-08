@@ -11359,14 +11359,6 @@ Detail chyby:
   <data name="EnterValidFile" xml:space="preserve">
     <value>Vložte korektní název souboru včetně cesty</value>
   </data>
-  <data name="ProductActivationKeyApplicationSuccess" xml:space="preserve">
-    <value>Aktivace produktu byla úspěšná.
-Gratulujeme! Nyní jste licencovaný uživatel ocěneného produktu pro plánování pracovních směn.
-Aplikace se nyní ukončí.
-
-Důležité:
-Požádejte prosím správce o restart služeb Teleopti WFM, aby bylo možné využívat veěkeré nově licencované funkce v rámci webových aplikací.</value>
-  </data>
   <data name="ProductActivationKeyHasExpiredPleaseApplyANewOne" xml:space="preserve">
     <value>Váš licenční klíč vypršel, použijte prosím jiný.</value>
   </data>
@@ -12741,5 +12733,10 @@ Zkontrolujte připojení k internetu nebo se obraťte na správce.</value>
   </data>
   <data name="CanNotMoveMultipleActivitiesForSelectedAgents" xml:space="preserve">
     <value>Pro vybrané agenty nelze přesunout několik aktivit.</value>
+  </data>
+  <data name="ProductActivationKeyApplicationSuccessNoRestart" xml:space="preserve">
+    <value>Aktivace produktu byla úspěšná.
+Gratulujeme! Nyní jste licencovaný uživatel ocěneného produktu pro plánování pracovních směn.
+Aplikace se nyní ukončí.</value>
   </data>
 </root>

@@ -10835,13 +10835,6 @@ Teleopti R&amp;D</value>
   <data name="Planned" xml:space="preserve">
     <value>已計畫的</value>
   </data>
-  <data name="ProductActivationKeyApplicationSuccess" xml:space="preserve">
-    <value>恭喜您！產品啟用金鑰已被應用．您現在是這個屢獲殊榮的WFM解決方案的授權使用者。
-當前應用程式將被關閉。
-
-重要：
-為了獲得全部的服務及Web應用程式功能，請讓您的IT部門在伺服器上執行“Restart Teleopti WFM” （開始功能表--&gt;Teleopti資料夾）</value>
-  </data>
   <data name="ProductActivationKeyHasExpiredPleaseApplyANewOne" xml:space="preserve">
     <value>您的產品啟用金鑰已經過期，請申請新的</value>
   </data>
@@ -14181,5 +14174,9 @@ Teleopti R&amp;D</value>
   </data>
   <data name="ExportSchedulesMaximumDays" xml:space="preserve">
     <value>最多可選擇31天</value>
+  </data>
+  <data name="ProductActivationKeyApplicationSuccessNoRestart" xml:space="preserve">
+    <value>恭喜您！產品啟用金鑰已被應用．您現在是這個屢獲殊榮的WFM解決方案的授權使用者。
+當前應用程式將被關閉。</value>
   </data>
 </root>

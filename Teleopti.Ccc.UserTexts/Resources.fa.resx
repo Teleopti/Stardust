@@ -9722,9 +9722,6 @@ Teleopti R&amp;D</value>
   <data name="Miscellaneous" xml:space="preserve">
     <value>متفرقه</value>
   </data>
-  <data name="ProductActivationKeyApplicationSuccess" xml:space="preserve">
-    <value>کلید فعالسازی محصول با موفقیت اعمال شد. تبریک! شما اکنون یک کاربر مجاز برای این راهکار برتر مدیریت نیروی کار هستید. مهم: به منظور دسترسی به کلیه کاربردهای وب و خدمات و برای دسترسی به گزینه های جدید مجاز، لطفا از آی تی خود بخواهید تا "Restart Teleopti WFM" را از پوشه Teleopti در منوی شروع در سرور اجرا کند.</value>
-  </data>
   <data name="Invalid" xml:space="preserve">
     <value>نامعتبر</value>
   </data>
@@ -12901,5 +12898,8 @@ Teleopti R&amp;D</value>
 شرکت: &lt;b&gt;{4}&lt;/b&gt;&lt;br&gt;
 با ثبت این اطلاعات شما بطور خودکار وارد پورتل شده و از امکانات بهره میبرید.&lt;br&gt;&lt;br&gt;
 تمایل به مشارکت دارید؟</value>
+  </data>
+  <data name="ProductActivationKeyApplicationSuccessNoRestart" xml:space="preserve">
+    <value>کلید فعالسازی محصول با موفقیت اعمال شد. تبریک! شما اکنون یک کاربر مجاز برای این راهکار برتر مدیریت نیروی کار هستید. </value>
   </data>
 </root>

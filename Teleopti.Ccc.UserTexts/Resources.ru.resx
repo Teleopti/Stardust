@@ -11010,14 +11010,6 @@ Teleopti R&amp;D</value>
   <data name="EnterValidFile" xml:space="preserve">
     <value>Укажите правильное имя файла, включая путь к нему</value>
   </data>
-  <data name="ProductActivationKeyApplicationSuccess" xml:space="preserve">
-    <value>Ключ активации продукта успешно применен.
-Поздравляем! Теперь вы являетесь лицензированным пользователем этого WFM решения.
-Сейчас приложение закроется.
-
-Важно:
-Для корректной работы всех сервисов и приложений, пожалуйста, обратитесь в IT, чтобы запустить "Restart Teleopti WFM" из папки телеопти в меню пуск на сервере.</value>
-  </data>
   <data name="ProductActivationKeyHasExpiredPleaseApplyANewOne" xml:space="preserve">
     <value>Ваш ключ активации продукта истек, пожалуйста, примените новый</value>
   </data>
@@ -14282,5 +14274,10 @@ Email: &lt;br&gt;{0}&lt;/b&gt;&lt;br&gt;
   </data>
   <data name="NoSuggestionsFound" xml:space="preserve">
     <value>Нет предложений отвечающим дополнительным настройкам сверхурочных</value>
+  </data>
+  <data name="ProductActivationKeyApplicationSuccessNoRestart" xml:space="preserve">
+    <value>Ключ активации продукта успешно применен.
+Поздравляем! Теперь вы являетесь лицензированным пользователем этого WFM решения.
+Сейчас приложение закроется.</value>
   </data>
 </root>

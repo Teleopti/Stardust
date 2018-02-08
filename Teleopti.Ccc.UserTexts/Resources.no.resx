@@ -8775,14 +8775,6 @@ Feildetaljer :
   <data name="EnterValidFile" xml:space="preserve">
     <value>Skriv inn et gyldig filnavn, bane Inkludert</value>
   </data>
-  <data name="ProductActivationKeyApplicationSuccess" xml:space="preserve">
-    <value>Produktaktiveringsnøkkel vellykket lagt til.
-Gratulerer! Du er nå en lisensiert bruker av denne prisbelønte WFM løsningen.
-Programmet vil nå avslutte.
-
-Viktig:
-For å få alle tjenester og web-applikasjoner til å fungere fullt ut og for å få tilgang til nylig lisensiert alternativer, kan du be den til å kjøre "Restart Teleopti WFM" fra Teleopti mappen på Start-menyen på serveren.</value>
-  </data>
   <data name="ProductActivationKeyHasExpiredPleaseApplyANewOne" xml:space="preserve">
     <value>Produktaktiveringsnøkkel  er utløpt, vennligst legg inn en ny</value>
   </data>
@@ -12815,5 +12807,10 @@ Denne informasjonen vil sikre at du atomatisk vil være pålogget til Teleopti C
   </data>
   <data name="ClassicIntraday" xml:space="preserve">
     <value>Klassisk Intradag</value>
+  </data>
+  <data name="ProductActivationKeyApplicationSuccessNoRestart" xml:space="preserve">
+    <value>Produktaktiveringsnøkkel vellykket lagt til.
+Gratulerer! Du er nå en lisensiert bruker av denne prisbelønte WFM løsningen.
+Programmet vil nå avslutte.</value>
   </data>
 </root>

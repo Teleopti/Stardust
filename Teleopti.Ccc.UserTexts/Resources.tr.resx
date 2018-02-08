@@ -8174,14 +8174,6 @@ Hata detayları:
   <data name="EnterValidFile" xml:space="preserve">
     <value>Lütfen geçerli bir dosya ismi veya dizini girin.</value>
   </data>
-  <data name="ProductActivationKeyApplicationSuccess" xml:space="preserve">
-    <value>Lisans başarıyla uygulandı.
-Tebrikler!
-Uygulama az sonra kapanacak.
-
-Önemli:
-Bütün Teleopti modüllerinin, ağ bazlı Teleopti uygulamalarının ve yeni lisansınız ile erişim kazanmış olduğunuz yeni modüllerin düzgün çalışabilmesi için sistem yöneticinizden ana sunucudan Başlat komutu ile ulaşabileceği "Restart Teleopti WFM (Teleopti WFM'i yeniden başlat)" isimli .bat dosyasını çalıştırmasını rica edin.</value>
-  </data>
   <data name="YouHaveAlmostTooManyActiveAgents" xml:space="preserve">
     <value>{0} aktif müşteri temsilciniz var fakat lisansınız gereği en fazla {1} müşteri temsilcisine anyı anda lisans kullandırabilirsiniz. Lütfen en kısa zamanda lisansınızı yenileyin.</value>
   </data>
@@ -11214,5 +11206,10 @@ Aşağıdaki ayarlar etkinleştirildi:
   </data>
   <data name="PartialSuccessMessageForUndoSchedule" xml:space="preserve">
     <value>{0} temsilcilerinin vardiya değişikliğini geri al. {1} başarılı, {2} başarısız.</value>
+  </data>
+  <data name="ProductActivationKeyApplicationSuccessNoRestart" xml:space="preserve">
+    <value>Lisans başarıyla uygulandı.
+Tebrikler!
+Uygulama az sonra kapanacak.</value>
   </data>
 </root>
