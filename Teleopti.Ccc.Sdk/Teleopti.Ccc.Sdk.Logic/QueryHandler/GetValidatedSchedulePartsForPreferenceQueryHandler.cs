@@ -111,8 +111,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 				IScheduleDictionary scheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(personList, new ScheduleDictionaryLoadOptions(true, false), period.ToDateOnlyPeriod(timeZoneInfo), _scenarioRepository.Current());
 
 
-				using (ISchedulingResultStateHolder stateHolder = new SchedulingResultStateHolder())
-				{
+				var stateHolder = new SchedulingResultStateHolder();
 					stateHolder.Schedules = scheduleDictionary;
 					stateHolder.LoadedAgents = personList;
 
@@ -142,7 +141,6 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 												(int)periodTarget.TotalMinutes, (int)tolerance.StartTime.TotalMinutes, (int)tolerance.EndTime.TotalMinutes, daysOffTarget, person,
 												schedulePeriod.MustHavePreference, (int)schedulePeriodTargetBalanced.TotalMinutes, (int)schedulePeriod.BalanceIn.TotalMinutes,
 												(int)schedulePeriod.Extra.TotalMinutes, (int)schedulePeriod.BalanceOut.TotalMinutes, numberOfDaysOff, schedulePeriod.Seasonality.Value, useStudentAvailability);
-				}
 			}
 		}
 

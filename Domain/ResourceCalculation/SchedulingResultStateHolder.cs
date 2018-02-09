@@ -202,55 +202,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public ISeniorityWorkDayRanks SeniorityWorkDayRanks { get; set; }
 
-		///<summary>
-		///Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-		///</summary>
-		/// <remarks>
-		/// So far only managed code. No need implementing destructor.
-		/// </remarks>
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		/// <summary>
-		/// Virtual dispose method
-		/// </summary>
-		/// <param name="disposing">
-		/// If set to <c>true</c>, explicitly called.
-		/// If set to <c>false</c>, implicitly called from finalizer.
-		/// </param>
-		private void Dispose(bool disposing)
-		{
-			if (disposing)
-			{
-				ReleaseManagedResources();
-			}
-			ReleaseUnmanagedResources();
-		}
-
-		/// <summary>
-		/// Releases the unmanaged resources.
-		/// </summary>
-		protected virtual void ReleaseUnmanagedResources()
-		{
-		}
-
-		/// <summary>
-		/// Releases the managed resources.
-		/// </summary>
-		protected virtual void ReleaseManagedResources()
-		{
-			_skillStaffPeriodHolder = null;
-			_skillDays = null;
-			_skills.Clear();
-			_visibleSkills = null;
-			LoadedAgents = new List<IPerson>();
-			AllPersonAccounts = null;
-			Schedules = null;
-		}
-
 		public INewBusinessRuleCollection GetRulesToRun()
 		{
 			if (UseValidation)

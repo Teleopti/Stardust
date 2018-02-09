@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
@@ -12,7 +11,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
     ///  Created by: Ola
     ///  Created date: 2008-11-17    
     /// </remarks>
-    public interface ISchedulingResultStateHolder : IDisposable
+    public interface ISchedulingResultStateHolder
     {
         /// <summary>
         /// Gets or sets all person accounts.

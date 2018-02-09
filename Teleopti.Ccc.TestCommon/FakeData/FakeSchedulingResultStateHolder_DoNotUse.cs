@@ -10,10 +10,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 	{
 		private readonly List<ISkill> _skills = new List<ISkill>();
 
-		public void Dispose()
-		{
-		}
-
 		public IDictionary<IPerson, IPersonAccountCollection> AllPersonAccounts { get; set; }
 		public bool SkipResourceCalculation { get; set; }
 		public ICollection<IPerson> LoadedAgents { get; set; }

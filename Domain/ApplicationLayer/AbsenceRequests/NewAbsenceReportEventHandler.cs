@@ -180,7 +180,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 		private void clearStateHolder()
 		{
-			_schedulingResultStateHolder.Dispose();
 			_schedulingResultStateHolder = null;
 		}
 

@@ -43,10 +43,9 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 					_jobParameters.StateHolder.GetSkillDaysDictionary(period, skills, scenario, staffingCalculatorServiceFacade);
 				IScheduleDictionary scheduleDictionary = _jobParameters.StateHolder.GetSchedules(period, scenario);
 
-				using (ISchedulingResultStateHolder schedulingResultStateHolder = new SchedulingResultStateHolder(persons,
-																										   scheduleDictionary,
-																										   skillDaysDictionary))
-				{
+				var schedulingResultStateHolder = new SchedulingResultStateHolder(persons,
+					scheduleDictionary,
+					skillDaysDictionary);
 					ISchedulingResultService schedulingResultService =
 						new SchedulingResultService(schedulingResultStateHolder, skills, new CascadingPersonSkillProvider());
 					IScheduleForecastSkillResourceCalculation scheduleForecastSkillResourceCalculation =
@@ -62,7 +61,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 																				 DateTime.Now);
 
 					raptorTransformer.Transform(scheduleForecastSkillResourceCalculation, BulkInsertDataTable1);
-				}
 			}
 
 			//Truncate stage table & Bulk insert data to stage database

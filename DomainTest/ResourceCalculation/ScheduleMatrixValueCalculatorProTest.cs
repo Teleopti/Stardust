@@ -39,7 +39,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			Assert.AreEqual(0d, _target.PeriodValue(IterationOperationOption.IntradayOptimization), 0.01d);
             Assert.AreEqual(0d, _target.PeriodValue(IterationOperationOption.WorkShiftOptimization), 0.01d);
-            stateHolder.Dispose();
         }
 
         [Test]
@@ -49,7 +48,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _target = new ScheduleMatrixValueCalculatorPro(_scheduleDays, _schedulingOptions, stateHolder, new UtcTimeZone());
 
 			Assert.AreEqual(0d, _target.PeriodValue(IterationOperationOption.WorkShiftOptimization), 0.01d);
-            stateHolder.Dispose();
         }
 
         [Test]
@@ -59,7 +57,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _target = new ScheduleMatrixValueCalculatorPro(_scheduleDays, _schedulingOptions, stateHolder, new UtcTimeZone());
 
             Assert.AreEqual(0d, _target.PeriodValue(IterationOperationOption.DayOffOptimization), 0.01d);
-            stateHolder.Dispose();
         }
 
 

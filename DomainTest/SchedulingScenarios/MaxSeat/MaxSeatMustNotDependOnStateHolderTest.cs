@@ -444,10 +444,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			{
 				throw new NotImplementedException();
 			}
-
-			public void Dispose()
-			{
-			}
 		}
 	}
 }
