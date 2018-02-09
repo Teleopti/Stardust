@@ -1,4 +1,5 @@
 @ECHO OFF
+SET PROCESSNAME=IIS7ConfigMoveToNET4
 ::current dir
 SET DIRECTORY=%~dp0
 ::remove trailer slash
@@ -6,7 +7,7 @@ SET DIRECTORY=%DIRECTORY:~0,-1%
 SET FILE=%~n0
 
 IF EXIST "%DIRECTORY%\PendingReboot.txt" (
-  ECHO Pending reboot flag exists.. exiting >> "%DIRECTORY%\StartupLog.txt" 2>&1
+  ECHO Pending reboot flag exists.. exiting %PROCESSNAME%>> "%DIRECTORY%\StartupLog.txt" 2>&1
   GOTO Finish
 )
 
