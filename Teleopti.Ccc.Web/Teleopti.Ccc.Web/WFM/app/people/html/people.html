@@ -64,7 +64,8 @@
 
 	<div class="view-header with-fab with-desc">
 		<div class="view-title">
-			<h1><i class="mdi mdi-account-multiple"></i> People</h1>
+			<h1>
+				<i class="mdi mdi-account-multiple"></i> People</h1>
 			<p>Search for one or many persons to manage their roles.</p>
 		</div>
 	</div>
@@ -89,19 +90,19 @@
 						</div>
 					-->
 						<div class="con-flex x3">
-							<button class="wfm-btn wfm-btn-primary mdi mdi-check" ng-disabled="itemArr.length === 0" ng-class="{'wfm-btn-invis-disabled': itemArr.length === 0}"
-							 ng-click="modalShownGrant = !modalShownGrant;">Grant Role</button>
-							<button class="wfm-btn wfm-btn-primary mdi mdi-close" ng-disabled="itemArr.length === 0" ng-class="{'wfm-btn-invis-disabled': itemArr.length === 0}"
-							 ng-click="modalShownRevoke = !modalShownRevoke">Revoke Role</button>
+							<button class="wfm-btn wfm-btn-primary mdi mdi-check" ng-disabled="selectedPeopleIds.length === 0" ng-class="{'wfm-btn-invis-disabled': selectedPeopleIds.length === 0}"
+							 ng-click="viewState.showGrant = !viewState.showGrant;">Grant Role</button>
+							<button class="wfm-btn wfm-btn-primary mdi mdi-close" ng-disabled="selectedPeopleIds.length === 0" ng-class="{'wfm-btn-invis-disabled': selectedPeopleIds.length === 0}"
+							 ng-click="viewState.showRevoke = !viewState.showRevoke">Revoke Role</button>
 						</div>
 					</div>
 				</div>
 				<div class="con-row">
 					<div class="con-flex">
 						<div class="con-row">
-							<button class="wfm-btn wfm-btn-primary" ng-disabled="itemArr.length === 0" ng-class="{'wfm-btn-invis-disabled': itemArr.length === 0}"
+							<button class="wfm-btn wfm-btn-primary" ng-disabled="selectedPeopleIds.length === 0" ng-class="{'wfm-btn-invis-disabled': selectedPeopleIds.length === 0}"
 							 ng-click="resetMulti()">Clear</button>
-							<button class="wfm-btn wfm-btn-primary" ng-click="showAll()">{{buttonText()}}</button>
+							<button class="wfm-btn wfm-btn-primary" ng-click="showAll()">Show selected ({{selectedPeopleIds.length}})</button>
 						</div>
 						<table class="wfm-table">
 							<thead>
@@ -111,60 +112,55 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr ng-repeat="person in peopleToShow | filter: filterInput">
+								<tr ng-repeat="person in people">
 									<td>
-										<div tabindex=0 class="context-menu card-context" ng-click="person.marked = !person.marked; assertMulti(person); $event.stopPropagation();"
-										 ng-class="{'notice-success':person.marked, 'notice-info':!person.marked}">
-											<i class="mdi mdi-account" ng-class="{'mdi-check':person.marked}"></i>
+										<div tabindex=0 class="context-menu card-context" ng-click="toggleSelectedPerson(person);"
+										 ng-class="{'notice-success':isSelectedPerson(person), 'notice-info':!isSelectedPerson(person)}">
+											<i class="mdi mdi-account" ng-class="{'mdi-check':isSelectedPerson(person)}"></i>
 											<md-tooltip>Select person</md-tooltip>
 										</div>
-										{{person.firstName}} {{person.lastName}}
+										{{person.FirstName}} {{person.LastName}}
 									</td>
 									<td>
-										<span ng-repeat="role in person.roles" ng-if="role.checked">
-											{{role.name}}<span ng-if="$index < getNumberOfCheckedRoles(person.roles) - 1">,</span>
-										</span>
+										{{joinRoleNames(person)}}
 									</td>
 								</tr>
 							</tbody>
 						</table>
 
 
-						<modal-dialog show='modalShownGrant' ng-cloak>
+						<modal-dialog show='viewState.showGrant' ng-cloak>
 							<div class="person-header relative">
 								<div class="avatar">
-									<i class="mdi" ng-class="itemArr.length > 1 ? 'mdi-account-multiple' : 'mdi-account'"></i>
+									<i class="mdi" ng-class="selectedPeopleIds.length > 1 ? 'mdi-account-multiple' : 'mdi-account'"></i>
 								</div>
-								<h1 ng-if="itemArr.length == 1">Grant role on {{itemArr[0].firstName}} {{itemArr[0].lastName}}</h1>
-								<h1 ng-if="itemArr.length > 1">Grant role on multiple persons</h1>
-								<h3>{{itemArr.length}} person(s) selected</h3>
+								<h1 ng-if="selectedPeopleIds.length === 1">Grant roles on {{selectedPeople[0].FirstName}} {{selectedPeople[0].LastName}}</h1>
+								<h1 ng-if="selectedPeopleIds.length > 1">Grant role on multiple persons</h1>
+								<h3>{{selectedPeopleIds.length}} person(s) selected</h3>
 							</div>
 							<div style="margin: 15px;">
-								<div>
-									<h2>
-										<strong>Current roles</strong>
-									</h2>
-									<div class="con-fluid-row">
-										<div class="con-fluid-flex" ng-repeat="role in currentRoles" ng-if="checkExistingRoles(role) === true">
-											<div>
-												<h2 class="mdi" ng-class="isChecked(role) === true ? 'mdi-check' : 'mdi-minus'">{{role.name}}
-													<span ng-bind="item.id"></span>
-												</h2>
-											</div>
-										</div>
-									</div>
-									<hr/>
-								</div>
-								<div>
-									<h2>
-										<strong>Available roles</strong>
-									</h2>
-									<div class="con-fluid-row">
-										<div class="con-fluid-flex" ng-repeat="role in roles" ng-if="checkRolesNotOnAll(role) === false">
-											<md-checkbox ng-model="role.checked" ng-change="addRole(role, true)" aria-label="Checkbox">{{role.name}}
-												<span ng-bind="item.id"></span>
+								<h2>
+									<strong>Current roles</strong>
+								</h2>
+								<div class="con-fluid-row">
+									<div class="con-fluid-flex" ng-repeat="roleId in selectedPeopleRoleIds">
+										<div>
+											<md-checkbox ng-checked="isRoleOnAllSelected(roleId)" md-indeterminate="!isRoleOnAllSelected(roleId)" ng-disabled="true"
+											 aria-label="Checkbox">{{getRole(roleId).Name}}
 											</md-checkbox>
 										</div>
+									</div>
+								</div>
+
+								<h2>
+									<strong>Available roles</strong>
+								</h2>
+								<div class="con-fluid-row">
+									<div class="con-fluid-flex" ng-repeat="role in roles" ng-if="!isRoleOnAllSelected(role.Id)">
+										<md-checkbox ng-model="role.checked" ng-checked="isSelectedRole(role.Id)" md-indeterminate="!isSelectedRole(role.Id) && selectedPeopleIds.length > 1 && isUsedBySome(role.Id)"
+										 ng-change="toggleSelectedRole(role.Id)" aria-label="Checkbox">{{role.Name}}
+
+										</md-checkbox>
 									</div>
 								</div>
 								<div class="modal-actions">
@@ -176,15 +172,14 @@
 							</div>
 						</modal-dialog>
 
-
-						<modal-dialog show='modalShownRevoke' ng-cloak>
+						<modal-dialog show='viewState.showRevoke' ng-cloak>
 							<div class="person-header relative">
 								<div class="avatar">
-									<i class="mdi" ng-class="itemArr.length > 1 ? 'mdi-account-multiple' : 'mdi-account'"></i>
+									<i class="mdi" ng-class="selectedPeopleIds.length > 1 ? 'mdi-account-multiple' : 'mdi-account'"></i>
 								</div>
-								<h1 ng-if="itemArr.length == 1">Revoke role on {{itemArr[0].firstName}} {{itemArr[0].lastName}}</h1>
-								<h1 ng-if="itemArr.length > 1">Revoke role on multiple persons</h1>
-								<h3>{{itemArr.length}} person(s) selected</h3>
+								<h1 ng-if="selectedPeopleIds.length == 1">Revoke role on {{selectedPeople[0].firstName}} {{selectedPeople[0].lastName}}</h1>
+								<h1 ng-if="selectedPeopleIds.length > 1">Revoke role on multiple persons</h1>
+								<h3>{{selectedPeopleIds.length}} person(s) selected</h3>
 							</div>
 							<!--<div ng-controller="MyCtrl">
 								{{state}}
@@ -192,39 +187,22 @@
 							</div>
 							!-->
 							<div style="margin: 15px;">
-								<div>
-									<h2>
-										<strong>Current roles on all</strong>
-									</h2>
-									<div class="con-fluid-row">
-										<div class="con-fluid-flex" ng-repeat="role in currentRoles" ng-if="isChecked(role) === true">
-											<div>
-												<md-checkbox ng-model="role.checked" ng-checked="isChecked(role)" ng-change="addRole(role, false)" aria-label="Checkbox">{{role.name}}
-													<span ng-bind="item.id"></span>
-												</md-checkbox>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div ng-if="itemArr.length > 1">
-									<hr/>
-									<h2>
-										<strong>Current roles on some</strong>
-									</h2>
-									<div class="con-fluid-row">
-										<div class="con-fluid-flex" ng-repeat="role in currentRoles" ng-if="isIndeterminate(role) === true">
-											<div>
-												<md-checkbox ng-model="role.checked" ng-checked="isIndeterminate(role)" ng-change="addRole(role, false)" aria-label="Checkbox">{{role.name}}
-													<span ng-bind="item.id"></span>
-												</md-checkbox>
-											</div>
+								<h2>
+									<strong>Roles to revoke</strong>
+								</h2>
+								<div class="con-fluid-row">
+									<div class="con-fluid-flex" ng-repeat="roleId in selectedPeopleRoleIds">
+										<div>
+											<md-checkbox ng-checked="false" 
+											 aria-label="Checkbox">{{getRole(roleId).Name}}
+											</md-checkbox>
 										</div>
 									</div>
 								</div>
 								<div class="modal-actions">
 									<aside>
 										<button class="wfm-btn wfm-btn-invis" ng-click="close()">Cancel</button>
-										<button class="wfm-btn wfm-btn-invis-primary" ng-click="save(false)">Save</button>
+										<button class="wfm-btn wfm-btn-invis-primary" ng-click="save(true)">Save</button>
 									</aside>
 								</div>
 							</div>
