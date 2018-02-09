@@ -14,9 +14,9 @@
 		}
 	});
 
-	StaffingInfoController.$inject = ['$scope','$document', '$timeout', 'TeamScheduleSkillService', 'StaffingInfoService', 'TeamScheduleChartService', 'teamsToggles', 'skillIconService'];
+	StaffingInfoController.$inject = ['$scope', '$document', '$timeout', '$q', 'TeamScheduleSkillService', 'StaffingInfoService', 'TeamScheduleChartService', 'teamsToggles', 'skillIconService'];
 
-	function StaffingInfoController($scope, $document, $timeout, SkillService, StaffingInfoService, ChartService, teamsToggles, skillIconService) {
+	function StaffingInfoController($scope, $document, $timeout, $q, SkillService, StaffingInfoService, ChartService, teamsToggles, skillIconService) {
 		var vm = this;
 
 		vm.skills = [];
@@ -24,7 +24,7 @@
 
 		vm.isLoading = false;
 		var staffingDataAvailable = false;
-
+		var loadedSkillsData = false;
 		vm.selectedSkillGroup = null;
 		vm.toggleShowSkillsForSelectedSkillGroup = teamsToggles.all().WfmTeamSchedule_ShowSkillsForSelectedSkillGroupInStaffingInfo_47202;
 		var selectedSkill = null;
@@ -34,12 +34,8 @@
 		vm.$onInit = function () {
 			vm.preselectedSkills = vm.preselectedSkills || {};
 			vm.useShrinkage = vm.useShrinkage || false;
-			SkillService.getAllSkills().then(function (data) {
-				vm.skills = data;
-			});
-
-			SkillService.getAllSkillGroups().then(function (data) {
-				vm.skillGroups = data.SkillAreas;
+			loadSkillsAndSkillGroups().then(function () {
+				loadedSkillsData = true;
 				loadChartForPreselection();
 			});
 		}
@@ -61,6 +57,10 @@
 		}
 
 		vm.setSkill = function (selectedItem) {
+			if (selectedItem && loadedSkillsData
+				&& ((!!vm.selectedSkillGroup && vm.selectedSkillGroup.Id == selectedItem.Id)
+					|| (!!selectedSkill && selectedSkill.Id == selectedItem.Id)))
+				return;
 			selectedSkill = null;
 			vm.selectedSkillGroup = null;
 			if (!selectedItem) {
@@ -101,7 +101,7 @@
 			var $skillsContent = angular.element($document[0].querySelector('.skills-content'))[0];
 			var totalWidthForChildren = 0;
 			angular.forEach($skillsContent.children,
-				function(c) {
+				function (c) {
 					totalWidthForChildren += c.offsetWidth;
 				});
 			return totalWidthForChildren > $skillsContent.offsetWidth;
@@ -110,6 +110,18 @@
 		vm.isSkillsToggled = function () {
 			var $skillsContent = angular.element($document[0].querySelector('.skills-content'));
 			return !$skillsContent.hasClass('nooverflow');
+		}
+
+		function loadSkillsAndSkillGroups() {
+
+			var getSkillsPromise = SkillService.getAllSkills().then(function (data) {
+				vm.skills = data;
+			});
+
+			var getSkillsGroupPromise = SkillService.getAllSkillGroups().then(function (data) {
+				vm.skillGroups = data.SkillAreas;
+			});
+			return $q.all([getSkillsPromise, getSkillsGroupPromise]);
 		}
 
 		function loadChartForPreselection() {

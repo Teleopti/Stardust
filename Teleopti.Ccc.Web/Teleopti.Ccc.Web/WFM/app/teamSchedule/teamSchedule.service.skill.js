@@ -14,25 +14,41 @@
 		this.getAllSkills = getAllSkills;
 		this.getAllSkillGroups = getAllSkillGroups;
 
+		var skills = [];
+		var loadedSkills = false;
 		function getAllSkills() {
 			return $q(function (resolve, reject) {
-				$http.get(urlMap.skill).then(function(response) {
-						resolve(response.data);
-					},
-					function(error) {
-						reject(error);
-					});
+				if (loadedSkills) {
+					resolve(skills);
+					return;
+				}
+				$http.get(urlMap.skill).then(function (response) {
+					skills = response.data || [];
+					loadedSkills = true;
+					resolve(skills);
+				},
+				function (error) {
+					reject(error);
+				});
 			});
 		}
 
+		var skillGroups = [];
+		var loadedSkillGroups = false;
 		function getAllSkillGroups() {
 			return $q(function (resolve, reject) {
-				$http.get(urlMap.skillGroups).then(function(response) {
-						resolve(response.data);
-					},
-					function(error) {
-						reject(error);
-					});
+				if (loadedSkillGroups) {
+					resolve(skillGroups);
+					return;
+				}
+				$http.get(urlMap.skillGroups).then(function (response) {
+					skillGroups = response.data || [];
+					loadedSkillGroups = true;
+					resolve(response.data);
+				},
+				function (error) {
+					reject(error);
+				});
 			});
 		}
 

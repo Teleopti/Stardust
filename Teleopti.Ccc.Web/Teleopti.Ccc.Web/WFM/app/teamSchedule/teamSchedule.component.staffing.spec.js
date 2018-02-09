@@ -160,6 +160,16 @@
 		expect(skillsRow.length).toEqual(0);
 	});
 
+	it("should not generate chart if the selected skill or skill group is not changed when set skill", function () {
+		enableShowSkillsToggle();
+		var scope = $rootScope.$new();
+		scope.preselectedSkills = { skillAreaId: skillGroups[0].Id };
+		var panel = setupComponent('selected-date="2017-09-27" preselected-skills="preselectedSkills"', scope);
+		var ctrl = panel.isolateScope().vm;
+		ctrl.setSkill(skillGroups[0]);
+		expect(_staffingInfoService.getStaffingCount).toEqual(1);
+	});
+
 	function enableShowSkillsToggle() {
 		toggles.set({
 			WfmTeamSchedule_ShowSkillsForSelectedSkillGroupInStaffingInfo_47202: true
@@ -246,11 +256,13 @@
 
 	function setUpStaffingInfoService() {
 		return {
+			getStaffingCount: 0,
 			selectedSkill: null,
 			selectedSkillGroup: null,
 			getStaffingByDate: function (selectedSkill, selectedSkillGroup) {
 				this.selectedSkill = selectedSkill;
 				this.selectedSkillGroup = selectedSkillGroup;
+				this.getStaffingCount += 1;
 				return {
 					then: function (callback) {
 						callback({
