@@ -35,22 +35,28 @@ exec Purge
 */
 
 --Set up (i.e. skip migration scripts just for the purpose of populating the config table)
+--All set up has now also been removed from migration scripts to have this list as one source of truth
+--Default purge values have been changed to reflect the new Teleopti Data Retention Policy
+/* Part of Teleopti Data Retention Policy */
+/* Talk to Anders before changing anything in this section */
 if not exists (select 1 from PurgeSetting where [key] = 'YearsToKeepForecast')
-	insert into PurgeSetting ([Key], [Value]) values ('YearsToKeepForecast', 10)
+	insert into PurgeSetting ([Key], [Value]) values ('YearsToKeepForecast', 3)
 if not exists (select 1 from PurgeSetting where [key] = 'YearsToKeepMessage')
-	insert into PurgeSetting ([Key], [Value]) values ('YearsToKeepMessage', 10)
+	insert into PurgeSetting ([Key], [Value]) values ('YearsToKeepMessage', 1)
 if not exists (select 1 from PurgeSetting where [key] = 'MonthsToKeepPayroll')
-	insert into PurgeSetting ([Key], [Value]) values ('MonthsToKeepPayroll', 240)
+	insert into PurgeSetting ([Key], [Value]) values ('MonthsToKeepPayroll', 3)
 if not exists (select 1 from PurgeSetting where [key] = 'YearsToKeepSchedule')
-	insert into PurgeSetting ([Key], [Value]) values ('YearsToKeepSchedule', 10)
+	insert into PurgeSetting ([Key], [Value]) values ('YearsToKeepSchedule', 3)
 if not exists (select 1 from PurgeSetting where [key] = 'DaysToKeepSecurityAudit')
 	insert into PurgeSetting ([Key], [Value]) values ('DaysToKeepSecurityAudit', 30)
 if not exists (select 1 from PurgeSetting where [key] = 'MonthsToKeepRequests')
-	insert into PurgeSetting ([Key], [Value]) values ('MonthsToKeepRequests', 120)
+	insert into PurgeSetting ([Key], [Value]) values ('MonthsToKeepRequests', 12)
+if not exists (select 1 from PurgeSetting where [key] = 'YearsToKeepPersons')
+	insert into PurgeSetting ([Key], [Value]) values ('YearsToKeepPersons', 3)
+
+/* Not part of Teleopti Data Retention Policy */
 if not exists (select 1 from PurgeSetting where [key] = 'DenyPendingRequestsAfterNDays')
 	insert into PurgeSetting ([Key], [Value]) values ('DenyPendingRequestsAfterNDays', 14)
-if not exists (select 1 from PurgeSetting where [key] = 'YearsToKeepPersons')
-	insert into PurgeSetting ([Key], [Value]) values ('YearsToKeepPersons', 10)
 if not exists (select 1 from PurgeSetting where [Key] = 'DaysToKeepReadmodels')
 	insert into PurgeSetting ([Key], [Value]) values('DaysToKeepReadmodels', 30)
 if not exists (select 1 from PurgeSetting where [Key] = 'DaysToKeepJobResultArtifacts')
