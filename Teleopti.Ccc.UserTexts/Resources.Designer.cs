@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.UserTexts {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -38779,7 +38779,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You got a new bronze badge for {0} in {1:yyyy-MM-dd}. Your data is better than {2}..
+        ///   Looks up a localized string similar to You got a new bronze badge for {0} on {1}..
         /// </summary>
         public static string YouGotANewBronzeBadge {
             get {
@@ -38815,7 +38815,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You got a new gold badge for {0} in {1:yyyy-MM-dd}. Your data is better than {2}..
+        ///   Looks up a localized string similar to You got a new gold badge for {0} on {1}..
         /// </summary>
         public static string YouGotANewGoldBadge {
             get {
@@ -38851,7 +38851,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You got a new silver badge for {0} in {1:yyyy-MM-dd}. Your data is better than {2}..
+        ///   Looks up a localized string similar to You got a new silver badge for {0} on {1}..
         /// </summary>
         public static string YouGotANewSilverBadge {
             get {

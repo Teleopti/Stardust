@@ -138,12 +138,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			Target.Calculate(Guid.NewGuid());
 
 			var formmater = new NormalizeText();
+			var date = _calculatedDate.Date.ToString(_agent.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern,
+				_agent.PermissionInformation.Culture());
 			var resultMessage = PushMessagePersister.GetMessage();
 			PushMessagePersister.GetReceivers().First().Id.Should().Be.EqualTo(_agent.Id.GetValueOrDefault());
 			resultMessage.AllowDialogueReply.Should().Be.False();
 			resultMessage.GetTitle(formmater).Should().Be.EqualTo(Resources.Congratulations);
 			resultMessage.GetMessage(formmater).Should().Be.EqualTo(
-				string.Format(Resources.YouGotANewGoldBadge, _badgeSetting.Name, _calculatedDate.Date, _badgeSetting.GoldThreshold));
+				string.Format(Resources.YouGotANewGoldBadge, _badgeSetting.Name, date));
 		}
 
 		[Test]
@@ -156,12 +158,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			Target.Calculate(Guid.NewGuid());
 
 			var formmater = new NormalizeText();
+			var date = _calculatedDate.Date.ToString(_agent.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern,
+				_agent.PermissionInformation.Culture());
 			var resultMessage = PushMessagePersister.GetMessage();
 			PushMessagePersister.GetReceivers().First().Id.Should().Be.EqualTo(_agent.Id.GetValueOrDefault());
 			resultMessage.AllowDialogueReply.Should().Be.False();
 			resultMessage.GetTitle(formmater).Should().Be.EqualTo(Resources.Congratulations);
 			resultMessage.GetMessage(formmater).Should().Be.EqualTo(
-				string.Format(Resources.YouGotANewSilverBadge, _badgeSetting.Name, _calculatedDate.Date, _badgeSetting.SilverThreshold));
+				string.Format(Resources.YouGotANewSilverBadge, _badgeSetting.Name, date));
 		}
 
 		[Test]
@@ -174,12 +178,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			Target.Calculate(Guid.NewGuid());
 
 			var formmater = new NormalizeText();
+			var date = _calculatedDate.Date.ToString(_agent.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern,
+				_agent.PermissionInformation.Culture());
 			var resultMessage = PushMessagePersister.GetMessage();
 			PushMessagePersister.GetReceivers().First().Id.Should().Be.EqualTo(_agent.Id.GetValueOrDefault());
 			resultMessage.AllowDialogueReply.Should().Be.False();
 			resultMessage.GetTitle(formmater).Should().Be.EqualTo(Resources.Congratulations);
 			resultMessage.GetMessage(formmater).Should().Be.EqualTo(
-				string.Format(Resources.YouGotANewBronzeBadge, _badgeSetting.Name, _calculatedDate.Date, _badgeSetting.BronzeThreshold));
+				string.Format(Resources.YouGotANewBronzeBadge, _badgeSetting.Name, date));
 		}
 
 		[Test]
@@ -246,12 +252,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			Target.Calculate(Guid.NewGuid());
 
 			var formmater = new NoFormatting();
+			var date = _calculatedDate.Date.ToString(_agent.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern,
+				_agent.PermissionInformation.Culture());
 			var resultMessage = PushMessagePersister.GetMessage();
 			PushMessagePersister.GetReceivers().First().Id.Should().Be.EqualTo(_agent.Id.GetValueOrDefault());
 			resultMessage.AllowDialogueReply.Should().Be.False();
 			resultMessage.GetTitle(formmater).Should().Be.EqualTo(Resources.Congratulations);
 			resultMessage.GetMessage(formmater).Should().Be.EqualTo(
-				string.Format(Resources.YouGotANewBronzeBadge, _badgeSetting.Name, _calculatedDate.Date, _badgeSetting.Threshold));
+				string.Format(Resources.YouGotANewBronzeBadge, _badgeSetting.Name, date));
 		}
 
 		[Test]
@@ -265,12 +273,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			Target.Calculate(Guid.NewGuid());
 
 			var formmater = new NoFormatting();
+			var date = _calculatedDate.Date.ToString(_agent.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern,
+				_agent.PermissionInformation.Culture());
 			var resultMessage = PushMessagePersister.GetMessage();
 			PushMessagePersister.GetReceivers().First().Id.Should().Be.EqualTo(_agent.Id.GetValueOrDefault());
 			resultMessage.AllowDialogueReply.Should().Be.False();
 			resultMessage.GetTitle(formmater).Should().Be.EqualTo(Resources.Congratulations);
 			resultMessage.GetMessage(formmater).Should().Be.EqualTo(
-				string.Format(Resources.YouGotANewSilverBadge, _badgeSetting.Name, _calculatedDate.Date, _badgeSetting.Threshold));
+				string.Format(Resources.YouGotANewSilverBadge, _badgeSetting.Name, date));
 		}
 
 		[Test]
@@ -284,12 +294,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			Target.Calculate(Guid.NewGuid());
 
 			var formmater = new NoFormatting();
+			var date = _calculatedDate.Date.ToString(_agent.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern,
+				_agent.PermissionInformation.Culture());
 			var resultMessage = PushMessagePersister.GetMessage();
 			PushMessagePersister.GetReceivers().First().Id.Should().Be.EqualTo(_agent.Id.GetValueOrDefault());
 			resultMessage.AllowDialogueReply.Should().Be.False();
 			resultMessage.GetTitle(formmater).Should().Be.EqualTo(Resources.Congratulations);
 			resultMessage.GetMessage(formmater).Should().Be.EqualTo(
-				string.Format(Resources.YouGotANewGoldBadge, _badgeSetting.Name, _calculatedDate.Date, _badgeSetting.Threshold));
+				string.Format(Resources.YouGotANewGoldBadge, _badgeSetting.Name, date));
 		}
 
 		[Test]
@@ -565,6 +577,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			_team = TeamFactory.CreateSimpleTeam("myTeam");
 			_agent = PersonFactory.CreatePersonWithPersonPeriodFromTeam(DateOnly.MinValue, _team);
 			_agent.WithId(Guid.NewGuid());
+			_agent.PermissionInformation.SetCulture(CultureInfo.CreateSpecificCulture("sv-SE"));
 			var applicationFunction = ApplicationFunction.FindByPath(
 				new DefinedRaptorApplicationFunctionFactory().ApplicationFunctions,
 				DefinedRaptorApplicationFunctionPaths.ViewBadge);

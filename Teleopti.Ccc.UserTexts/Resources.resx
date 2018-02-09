@@ -17144,7 +17144,7 @@ Do you want to participate?</value>
     <comment>Duplicate name</comment>
   </data>
   <data name="YouGotANewBronzeBadge" xml:space="preserve">
-    <value>You got a new bronze badge for {0} in {1:yyyy-MM-dd}. Your data is better than {2}.</value>
+    <value>You got a new bronze badge for {0} on {1}.</value>
     <comment>use to inform agent when he/she get a new bronze badge for an external performance type</comment>
   </data>
   <data name="RestrictionNotAbleToBeScheduledReasonConflictingRestrictions" xml:space="preserve">
@@ -17152,11 +17152,11 @@ Do you want to participate?</value>
     <comment>Conflicting restrictions</comment>
   </data>
   <data name="YouGotANewGoldBadge" xml:space="preserve">
-    <value>You got a new gold badge for {0} in {1:yyyy-MM-dd}. Your data is better than {2}.</value>
+    <value>You got a new gold badge for {0} on {1}.</value>
     <comment>use to inform agent when he/she get a new gold badge for an external performance type</comment>
   </data>
   <data name="YouGotANewSilverBadge" xml:space="preserve">
-    <value>You got a new silver badge for {0} in {1:yyyy-MM-dd}. Your data is better than {2}.</value>
+    <value>You got a new silver badge for {0} on {1}.</value>
     <comment>use to inform agent when he/she get a new silver badge for an external performance type</comment>
   </data>
   <data name="ImportBpoShowingTheFirstXErrorMessagesOfY" xml:space="preserve">
