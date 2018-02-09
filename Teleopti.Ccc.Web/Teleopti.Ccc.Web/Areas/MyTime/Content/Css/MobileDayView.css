@@ -97,6 +97,7 @@
 }
 .mobile-start-day .mobile-summary-content {
 	border-radius: 3px;
+	border: 1px solid #efefef;
 	padding: 5px 0;
 	margin: 10px 0;
 	width: 100%;
@@ -104,6 +105,11 @@
 	text-align: center;
 	position: relative;
 }
+
+.mobile-start-day .mobile-summary-content span{
+	display: inline-block;
+}
+
 .mobile-start-day .mobile-summary-content-text {
 	letter-spacing: -1px;
 	display: inline-block;
