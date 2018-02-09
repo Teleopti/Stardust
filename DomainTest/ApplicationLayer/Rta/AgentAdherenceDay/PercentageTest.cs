@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AgentAdherenceDay
 				.WithAssignment(person, "2017-12-08")
 				.WithActivity(null, "phone")
 				.WithAssignedActivity("2017-12-08 08:00", "2017-12-08 17:00")
-				.WithAdherenceIn("2017-12-08 08:00".Utc());
+				.WithAdherenceIn("2017-12-08 08:00");
 
 			var result = Target.Load(person, "2017-12-08".Date());
 
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AgentAdherenceDay
 				.WithAssignment(person, "2017-12-08")
 				.WithActivity(null, "phone")
 				.WithAssignedActivity("2017-12-08 08:00", "2017-12-08 16:00")
-				.WithAdherenceIn("2017-12-08 07:30".Utc());
+				.WithAdherenceIn("2017-12-08 07:30");
 
 			var result = Target.Load(person, "2017-12-08".Date());
 
@@ -65,9 +65,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AgentAdherenceDay
 				.WithAssignment(person, "2017-12-08")
 				.WithActivity(null, "phone")
 				.WithAssignedActivity("2017-12-08 08:00", "2017-12-08 16:00")
-				.WithAdherenceIn("2017-12-08 07:30".Utc())
-				.WithAdherenceIn("2017-12-08 08:30".Utc())
-				.WithAdherenceIn("2017-12-08 09:30".Utc());
+				.WithAdherenceIn("2017-12-08 07:30")
+				.WithAdherenceIn("2017-12-08 08:30")
+				.WithAdherenceIn("2017-12-08 09:30");
 
 			var result = Target.Load(person, "2017-12-08".Date());
 
@@ -84,9 +84,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AgentAdherenceDay
 				.WithAssignment(person, "2017-12-08")
 				.WithActivity(null, "phone")
 				.WithAssignedActivity("2017-12-08 08:00", "2017-12-08 16:00")
-				.WithAdherenceOut("2017-12-08 07:30".Utc())
-				.WithAdherenceOut("2017-12-08 08:30".Utc())
-				.WithAdherenceIn("2017-12-08 12:00".Utc());
+				.WithAdherenceOut("2017-12-08 07:30")
+				.WithAdherenceOut("2017-12-08 08:30")
+				.WithAdherenceIn("2017-12-08 12:00");
 
 			var result = Target.Load(person);
 
@@ -104,8 +104,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AgentAdherenceDay
 				.WithActivity(null, "phone")
 				.WithAssignedActivity("2017-12-08 08:00", "2017-12-08 16:00")
 				;
-			Database.WithAdherenceIn("2017-12-08 08:00".Utc());
-			Database.WithAdherenceOut("2017-12-08 12:00".Utc());
+			Database.WithAdherenceIn("2017-12-08 08:00");
+			Database.WithAdherenceOut("2017-12-08 12:00");
 
 			var result = Target.Load(person);
 
@@ -123,8 +123,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AgentAdherenceDay
 				.WithActivity(null, "phone")
 				.WithAssignedActivity("2017-12-08 08:00", "2017-12-08 16:00")
 				;
-			Database.WithAdherenceOut("2017-12-08 08:00".Utc());
-			Database.WithAdherenceIn("2017-12-08 14:00".Utc());
+			Database.WithAdherenceOut("2017-12-08 08:00");
+			Database.WithAdherenceIn("2017-12-08 14:00");
 
 			var result = Target.Load(person);
 
@@ -142,11 +142,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AgentAdherenceDay
 				.WithActivity(null, "phone")
 				.WithAssignedActivity("2017-12-08 08:00", "2017-12-08 16:00")
 				;
-			Database.WithAdherenceOut("2017-12-08 08:00".Utc());
-			Database.WithAdherenceIn("2017-12-08 10:00".Utc());
-			Database.WithAdherenceOut("2017-12-08 12:00".Utc());
-			Database.WithAdherenceIn("2017-12-08 14:00".Utc());
-			Database.WithAdherenceOut("2017-12-08 16:00".Utc());
+			Database.WithAdherenceOut("2017-12-08 08:00");
+			Database.WithAdherenceIn("2017-12-08 10:00");
+			Database.WithAdherenceOut("2017-12-08 12:00");
+			Database.WithAdherenceIn("2017-12-08 14:00");
+			Database.WithAdherenceOut("2017-12-08 16:00");
 
 			var result = Target.Load(person);
 
@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AgentAdherenceDay
 				.WithActivity(null, "phone")
 				.WithAssignedActivity("2017-12-08 08:00", "2017-12-08 16:00")
 				;
-			Database.WithAdherenceOut("2017-12-01 00:00".Utc());
+			Database.WithAdherenceOut("2017-12-01 00:00");
 
 			var result = Target.Load(person);
 
@@ -182,7 +182,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AgentAdherenceDay
 				.WithActivity(null, "phone")
 				.WithAssignedActivity("2017-12-08 08:00", "2017-12-08 16:00")
 				;
-			Database.WithAdherenceIn("2017-12-01 00:00".Utc());
+			Database.WithAdherenceIn("2017-12-01 00:00");
 
 			var result = Target.Load(person);
 
@@ -200,8 +200,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AgentAdherenceDay
 				.WithActivity(null, "phone")
 				.WithAssignedActivity("2017-12-08 08:00", "2017-12-08 16:00")
 				;
-			Database.WithAdherenceIn("2017-12-08 07:30".Utc());
-			Database.WithAdherenceOut("2017-12-08 07:31".Utc());
+			Database.WithAdherenceIn("2017-12-08 07:30");
+			Database.WithAdherenceOut("2017-12-08 07:31");
 
 			var result = Target.Load(person);
 
@@ -219,8 +219,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AgentAdherenceDay
 				.WithActivity(null, "phone")
 				.WithAssignedActivity("2017-12-08 08:00", "2017-12-08 16:00")
 				;
-			Database.WithAdherenceOut("2017-12-08 08:00".Utc());
-			Database.WithAdherenceIn("2017-12-08 16:30".Utc());
+			Database.WithAdherenceOut("2017-12-08 08:00");
+			Database.WithAdherenceIn("2017-12-08 16:30");
 
 			var result = Target.Load(person);
 
@@ -251,7 +251,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AgentAdherenceDay
 				.WithActivity(null, "phone")
 				.WithAssignedActivity("2017-12-08 08:00", "2017-12-08 16:00")
 				;
-			Database.WithAdherenceIn("2017-12-08 08:00".Utc());
+			Database.WithAdherenceIn("2017-12-08 08:00");
 
 			var result = Target.Load(person);
 
@@ -269,8 +269,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AgentAdherenceDay
 				.WithActivity(null, "phone")
 				.WithAssignedActivity("2017-12-08 08:00", "2017-12-08 16:00")
 				;
-			Database.WithAdherenceNeutral("2017-12-08 08:00".Utc());
-			Database.WithAdherenceIn("2017-12-08 12:00".Utc());
+			Database.WithAdherenceNeutral("2017-12-08 08:00");
+			Database.WithAdherenceIn("2017-12-08 12:00");
 
 			var result = Target.Load(person);
 
@@ -288,9 +288,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AgentAdherenceDay
 				.WithActivity(null, "phone")
 				.WithAssignedActivity("2017-12-08 08:00", "2017-12-08 16:00")
 				;
-			Database.WithAdherenceOut("2017-12-08 08:00".Utc());
-			Database.WithAdherenceIn("2017-12-08 10:00".Utc());
-			Database.WithAdherenceNeutral("2017-12-08 12:00".Utc());
+			Database.WithAdherenceOut("2017-12-08 08:00");
+			Database.WithAdherenceIn("2017-12-08 10:00");
+			Database.WithAdherenceNeutral("2017-12-08 12:00");
 
 			var result = Target.Load(person);
 
@@ -308,9 +308,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AgentAdherenceDay
 				.WithActivity(null, "phone")
 				.WithAssignedActivity("2017-12-08 08:00", "2017-12-08 16:00")
 				;
-			Database.WithAdherenceNeutral("2017-12-08 07:30".Utc());
-			Database.WithAdherenceNeutral("2017-12-08 08:30".Utc());
-			Database.WithAdherenceIn("2017-12-08 14:00".Utc());
+			Database.WithAdherenceNeutral("2017-12-08 07:30");
+			Database.WithAdherenceNeutral("2017-12-08 08:30");
+			Database.WithAdherenceIn("2017-12-08 14:00");
 
 			var result = Target.Load(person);
 

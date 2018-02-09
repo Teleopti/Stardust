@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ApprovePeriodAsInAdherenc
 			var person = Guid.NewGuid();
 			Database
 				.WithPerson(person)
-				.WithApprovedPeriods("2018-02-07 08:00:00", "2018-02-07 08:00:00");
+				.WithApprovedPeriod("2018-02-07 08:00:00", "2018-02-07 08:00:00");
 
 			var result = Target.Load(person, "2018-02-07".Date());
 

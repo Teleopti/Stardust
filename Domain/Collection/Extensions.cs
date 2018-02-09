@@ -258,6 +258,11 @@ namespace Teleopti.Ccc.Domain.Collection
 			return source.ElementAt(1);
 		}
 
+		public static T Third<T>(this IEnumerable<T> source)
+		{
+			return source.ElementAt(2);
+		}
+		
 		public static IEnumerable<T> Except<T>(this IEnumerable<T> source, Func<T, bool> predicate)
 		{
 			return source.Where(x => !predicate(x));

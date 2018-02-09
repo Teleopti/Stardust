@@ -523,7 +523,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				RemoveActivity(layer);
 
 				var layerContainsCurrentLayerPeriod = layer.Period;
-				var splittedLayerPeriods = layerContainsCurrentLayerPeriod.ExcludeDateTimePeriod(currentLayerPeriod);
+				var splittedLayerPeriods = layerContainsCurrentLayerPeriod.Subtract(currentLayerPeriod);
 				splittedLayerPeriods.ForEach(period => InsertActivity(layer.Payload, period, originalOrderIndex));
 				anyLayerFound = true;
 			}

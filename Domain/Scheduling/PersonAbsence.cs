@@ -266,7 +266,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			{
 				if (_layer.Period.Intersect(period))
 				{
-					var newPeriods = Period.ExcludeDateTimePeriod(period);
+					var newPeriods = Period.Subtract(period);
 					foreach (var dateTimePeriod in newPeriods)
 					{
 						if (dateTimePeriod.ElapsedTime() > TimeSpan.Zero)

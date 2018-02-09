@@ -1073,7 +1073,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return WithAlarm(threshold, null);
 		}
 
-		public FakeDatabase WithApprovedPeriods(string startTime, string endTime)
+		public FakeDatabase WithApprovedPeriod(string startTime, string endTime)
 		{
 			_approvePeriod.Approve(new ApprovedPeriod
 			{
@@ -1084,22 +1084,21 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return this;
 		}
 
-		
-		public FakeDatabase WithAdherenceIn(DateTime time)
+		public FakeDatabase WithAdherenceIn(string time)
 		{
-			_adherenceChange.In(_person.Id.Value, time);
+			_adherenceChange.In(_person.Id.Value, time.Utc());
 			return this;
 		}
 
-		public FakeDatabase WithAdherenceOut(DateTime time)
+		public FakeDatabase WithAdherenceOut(string time)
 		{
-			_adherenceChange.Out(_person.Id.Value, time);
+			_adherenceChange.Out(_person.Id.Value, time.Utc());
 			return this;
 		}
 
-		public FakeDatabase WithAdherenceNeutral(DateTime time)
+		public FakeDatabase WithAdherenceNeutral(string time)
 		{
-			_adherenceChange.Neutral(_person.Id.Value, time);
+			_adherenceChange.Neutral(_person.Id.Value, time.Utc());
 			return this;
 		}
 		

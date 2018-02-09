@@ -909,7 +909,7 @@ namespace Teleopti.Ccc.DomainTest.Time
             var excludeEndTime = new DateTime(2011, 1, 1, 18, 0, 0, DateTimeKind.Utc);
             var excludeDateTimePeriod = new DateTimePeriod(excludeStartTime, excludeEndTime);
 
-            var result = dateTimePeriod.ExcludeDateTimePeriod(excludeDateTimePeriod);
+            var result = dateTimePeriod.Subtract(excludeDateTimePeriod);
             Assert.AreEqual(1, result.Count());
             var resultDateTimePeriod = new DateTimePeriod(startTime, excludeStartTime);
             Assert.AreEqual(resultDateTimePeriod, result.FirstOrDefault());
@@ -918,13 +918,13 @@ namespace Teleopti.Ccc.DomainTest.Time
             excludeEndTime = new DateTime(2011, 1, 1, 18, 0, 0, DateTimeKind.Utc);
             excludeDateTimePeriod = new DateTimePeriod(excludeStartTime, excludeEndTime);
 
-            result = dateTimePeriod.ExcludeDateTimePeriod(excludeDateTimePeriod);
+            result = dateTimePeriod.Subtract(excludeDateTimePeriod);
             Assert.AreEqual(0, result.Count());
 
             excludeStartTime = new DateTime(2011, 1, 1, 10, 0, 0, DateTimeKind.Utc);
             excludeEndTime = new DateTime(2011, 1, 1, 16, 0, 0, DateTimeKind.Utc);
             excludeDateTimePeriod = new DateTimePeriod(excludeStartTime, excludeEndTime);
-            result = dateTimePeriod.ExcludeDateTimePeriod(excludeDateTimePeriod);
+            result = dateTimePeriod.Subtract(excludeDateTimePeriod);
             var resultDateTimePeriod1 = new DateTimePeriod(startTime, excludeStartTime);
             var resultDateTimePeriod2 = new DateTimePeriod(excludeEndTime, endTime);
             Assert.AreEqual(2, result.Count());

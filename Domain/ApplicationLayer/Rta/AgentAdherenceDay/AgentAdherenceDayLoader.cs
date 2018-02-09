@@ -58,11 +58,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay
 
 			var changes = _changes.Read(personId, period.StartDateTime, period.EndDateTime);
 
+			var approvedPeriods = _approvedPeriods.Read(personId, period.StartDateTime, period.EndDateTime);
 			var adherences = new[] {_adherences.ReadLastBefore(personId, period.StartDateTime)}
 				.Concat(_adherences.Read(personId, period.StartDateTime, period.EndDateTime))
 				.Where(x => x != null);
 
-			var approvedPeriods = _approvedPeriods.Read(personId, period.StartDateTime, period.EndDateTime);
+			
 
 			var obj = new AgentAdherenceDay();
 			obj.Load(

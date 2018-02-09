@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 
 				personAssignment.RemoveActivity(layer);
 
-				var newPeriods = layerPeriod.ExcludeDateTimePeriod(period);
+				var newPeriods = layerPeriod.Subtract(period);
 				foreach (var dateTimePeriod in newPeriods)
 				{
 					if (dateTimePeriod.ElapsedTime() > TimeSpan.Zero)

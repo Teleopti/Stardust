@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.HistoricalAdhe
 			var person = Guid.NewGuid();
 			Database
 				.WithPerson(person)
-				.WithApprovedPeriods("2018-01-29 08:05:00", "2018-01-29 08:15:00");
+				.WithApprovedPeriod("2018-01-29 08:05:00", "2018-01-29 08:15:00");
 
 			var viemModel = Target.Build(person, "2018-01-29".Date());
 
@@ -39,8 +39,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.HistoricalAdhe
 			var person = Guid.NewGuid();
 			Database
 				.WithPerson(person)
-				.WithApprovedPeriods("2018-01-30 08:05:00", "2018-01-30 08:15:00")
-				.WithApprovedPeriods("2018-01-30 10:00:00", "2018-01-30 10:30:00");
+				.WithApprovedPeriod("2018-01-30 08:05:00", "2018-01-30 08:15:00")
+				.WithApprovedPeriod("2018-01-30 10:00:00", "2018-01-30 10:30:00");
 
 			var viewModel = Target.Build(person, "2018-01-30".Date());
 
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.HistoricalAdhe
 			var person = Guid.NewGuid();
 			Database
 				.WithPerson(person)
-				.WithApprovedPeriods("2018-01-31 08:05:00", "2018-01-31 08:15:00");
+				.WithApprovedPeriod("2018-01-31 08:05:00", "2018-01-31 08:15:00");
 
 			var viewModel = Target.Build(person, "2018-01-31".Date());
 

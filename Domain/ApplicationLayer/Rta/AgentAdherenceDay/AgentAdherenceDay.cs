@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
+using System.Security.Cryptography.X509Certificates;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ApprovePeriodAsInAdherence;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay
@@ -14,6 +18,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay
 		private int? _percentage;
 		private IEnumerable<ApprovedPeriod> _approvedPeriods;
 		private DateTimePeriod _period;
+		private IEnumerable<OutOfAdherencePeriod> _recordedOutOfAdherences;
 
 		public void Load(
 			DateTime now,
@@ -25,7 +30,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay
 		{
 			_period = period;
 			_changes = loadChanges(changes);
-			_outOfAdherences = loadOutOfAdherencePeriods(adherences, now);
+			_recordedOutOfAdherences = buildRecordedOutOfAdherencePeriods(adherences, now);
+			_outOfAdherences = buildOutOfAdherencePeriods(_recordedOutOfAdherences, approvedPeriods);
 			_percentage = new AdherencePercentageCalculator().Calculate(shift, adherences, now);
 			_approvedPeriods = approvedPeriods;
 		}
@@ -47,7 +53,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay
 				.ToArray();
 		}
 
-		private static IEnumerable<OutOfAdherencePeriod> loadOutOfAdherencePeriods(IEnumerable<HistoricalAdherence> adherences, DateTime now)
+		private static IEnumerable<OutOfAdherencePeriod> buildRecordedOutOfAdherencePeriods(IEnumerable<HistoricalAdherence> adherences, DateTime now)
 		{
 			var seed = Enumerable.Empty<OutOfAdherencePeriod>();
 			return adherences
@@ -74,11 +80,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay
 				.ToArray();
 		}
 
+		private static IEnumerable<OutOfAdherencePeriod> buildOutOfAdherencePeriods(IEnumerable<OutOfAdherencePeriod> recordedOutOfAdherences, IEnumerable<ApprovedPeriod> approvedPeriods)
+		{
+			var approveds = approvedPeriods.Select(a => new DateTimePeriod(a.StartTime, a.EndTime));
+			var recordeds = recordedOutOfAdherences.Select(a => new DateTimePeriod(a.StartTime, a.EndTime));
+
+			return approveds
+				.Aggregate(recordeds, (rs, approved) => rs.Aggregate(Enumerable.Empty<DateTimePeriod>(), (r, recorded) => r.Concat(recorded.Subtract(approved))))
+				.Select(r => new OutOfAdherencePeriod {StartTime = r.StartDateTime, EndTime = r.EndDateTime})
+				.ToArray();
+		}
+
 		public DateTimePeriod Period() => _period;
 		public IEnumerable<HistoricalChange> Changes() => _changes;
 		public IEnumerable<OutOfAdherencePeriod> OutOfAdherences() => _outOfAdherences;
 		public int? Percentage() => _percentage;
-
 		public IEnumerable<ApprovedPeriod> ApprovedPeriods() => _approvedPeriods;
+		public IEnumerable<OutOfAdherencePeriod> RecordedOutOfAdherences() => _recordedOutOfAdherences;
 	}
 }

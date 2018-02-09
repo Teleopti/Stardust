@@ -227,6 +227,7 @@
     <Compile Include="ApplicationLayer\RemoveActivityCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\RemoveShiftCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\ClearPlanningPeriodSchedulingCommandHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\AgentAdherenceDay\ApprovedPeriodTest.cs" />
     <Compile Include="ApplicationLayer\Rta\AgentAdherenceDay\PercentageTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ApprovePeriodAsInAdherence\ApprovePeriodAsInAdherenceCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ApprovePeriodAsInAdherence\ApprovedPeriodTest.cs" />
