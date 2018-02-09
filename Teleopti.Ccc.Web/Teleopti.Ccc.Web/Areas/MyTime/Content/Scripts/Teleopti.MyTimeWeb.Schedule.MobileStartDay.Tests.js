@@ -154,6 +154,39 @@
 		equal(vm.unreadMessageCount(), 2);
 	});
 
+	test("should not show unreadMessage number if it is zero", function () {
+		var tempFn = Teleopti.MyTimeWeb.Common.IsToggleEnabled;
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
+			if (x === 'MyTimeWeb_DayScheduleForStartPage_43446' || x === 'MyTimeWeb_MonthlyScheduleMobileView_45004') return true;
+			return false;
+		};
+
+		startDayData.UnReadMessageCount = 0;
+		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax);
+		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
+
+		var html = '<div id="testUnreadMessageHtml">'
+					+	'<ul class="nav navbar-nav navbar-teleopti row submenu">'
+					+		'<li class="mobile-message" data-bind="click: navigateToMessages">'
+					+			'<a>'
+					+				'<i class="glyphicon glyphicon-envelope"></i>'
+					+				'<span id="MobileDayView-message" class="badge" data-bind="visible: unreadMessageCount() > 0, text: unreadMessageCount">'
+					+				'</span>'
+					+			'</a>'
+					+		'</li>'
+					+	'</ul>'
+					+'</div>';
+		$('body').append(html);
+
+		ko.applyBindings(vm, $('#testUnreadMessageHtml')[0]);
+
+		equal(vm.unreadMessageCount(), 0);
+		equal($('#MobileDayView-message')[0].style['display'], 'none');
+
+		$('#testUnreadMessageHtml').remove();
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = tempFn;
+	});
+
 	test("should navigate to messages", function () {
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
 			if (x === "MyTimeWeb_DayScheduleForStartPage_43446") return true;
