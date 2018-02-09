@@ -398,11 +398,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return !PersistableScheduleDataInternalCollection().Any();
 		}
 
-		public void Reassociate(IUnitOfWork unitOfWork)
-		{
-			unitOfWork.Reassociate(PersistableScheduleDataInternalCollection());
-		}
-
 		protected override void CloneDerived(Schedule clone)
 		{
 			var typedClone = (ScheduleRange)clone;

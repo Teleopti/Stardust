@@ -175,10 +175,6 @@ namespace Teleopti.Ccc.TestCommon
 			throw new NotImplementedException();
 		}
 
-		public void Reassociate(IUnitOfWork unitOfWork)
-		{
-		}
-
 		public void SolveConflictBecauseOfExternalInsert(IScheduleData databaseVersion, bool discardMyChanges)
 		{
 
