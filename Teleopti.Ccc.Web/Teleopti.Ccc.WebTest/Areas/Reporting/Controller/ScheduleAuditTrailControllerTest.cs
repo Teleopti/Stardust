@@ -5,7 +5,6 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Reports;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -27,7 +26,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Reporting.Controller
 		public FakeTeamRepository TeamRepository;
 		public FakeGroupingReadOnlyRepository GroupingReadOnlyRepository;
 		public Global.FakePermissionProvider PermissionProvider;
-		public FakePersonRepository PersonRepository;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -39,7 +37,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Reporting.Controller
 		public void ShouldReturnPermittedSitesAndTeams()
 		{
 
-			var mainPage = new ReadOnlyGroupPage()
+			var mainPage = new ReadOnlyGroupPage
 			{
 				PageName = "Main",
 				PageId = Group.PageMainId
@@ -60,18 +58,22 @@ namespace Teleopti.Ccc.WebTest.Areas.Reporting.Controller
 				}
 			};
 			TeamRepository.Add(team);
-			GroupingReadOnlyRepository.Has(new[] { mainPage, },
-				groupDetails);
+			GroupingReadOnlyRepository.Has(new[] { mainPage }, groupDetails);
 			var dateOnly = new DateOnly(2017, 11, 01);
 			PermissionProvider.Enable();
-			PermissionProvider.PermitGroup(DefinedRaptorApplicationFunctionPaths.ScheduleAuditTrailWebReport, dateOnly, new PersonAuthorization
-			{
-				SiteId = team.Site.Id,
-				TeamId = team.Id,
-				BusinessUnitId = businessUnitId
-			});
+			PermissionProvider.PermitGroup(DefinedRaptorApplicationFunctionPaths.ScheduleAuditTrailWebReport,
+				dateOnly, new PersonAuthorization
+				{
+					SiteId = team.Site.Id,
+					TeamId = team.Id,
+					BusinessUnitId = businessUnitId
+				});
 
-			var result = Target.OrganizationSelectionAuditTrail(new ValidPeriod() { StartDate = dateOnly.Date, EndDate = dateOnly.Date});
+			var result = Target.OrganizationSelectionAuditTrail(new ValidPeriod
+			{
+				StartDate = dateOnly.Date,
+				EndDate = dateOnly.Date
+			});
 
 			result.Length.Should().Be.EqualTo(1);
 			result.First().Name.Should().Be.EqualTo("Site");
@@ -79,14 +81,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Reporting.Controller
 			result.First().Children.Count.Should().Be.EqualTo(1);
 			result.First().Children.First().Name.Should().Be.EqualTo("Team");
 			result.First().Children.First().Id.Should().Be.EqualTo(team.Id);
-
 		}
 
 		[Test]
 		public void ShouldNotReturnNotPermittedSitesAndTeams()
 		{
-
-			var mainPage = new ReadOnlyGroupPage()
+			var mainPage = new ReadOnlyGroupPage
 			{
 				PageName = "Main",
 				PageId = Group.PageMainId
@@ -107,15 +107,16 @@ namespace Teleopti.Ccc.WebTest.Areas.Reporting.Controller
 				}
 			};
 			TeamRepository.Add(team);
-			GroupingReadOnlyRepository.Has(new[] { mainPage, },
-				groupDetails);
+			GroupingReadOnlyRepository.Has(new[] { mainPage }, groupDetails);
 			PermissionProvider.Enable();
 
-			var result = Target.OrganizationSelectionAuditTrail(new ValidPeriod(){StartDate = DateTime.Now, EndDate = DateTime.Now });
+			var result = Target.OrganizationSelectionAuditTrail(new ValidPeriod
+			{
+				StartDate = DateTime.Now,
+				EndDate = DateTime.Now
+			});
 
 			result.Length.Should().Be.EqualTo(0);
 		}
-
-
 	}
 }

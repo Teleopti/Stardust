@@ -28,23 +28,20 @@ BEGIN
    SELECT * FROM SplitStringString(@pageIds)
 
    SELECT DISTINCT PageId
-      ,GroupId
-      ,GroupName      
-      ,CAST('00000000-0000-0000-0000-000000000000' AS UNIQUEIDENTIFIER) PersonId
-      ,'' FirstName
-      ,'' LastName
-      ,'' EmploymentNumber
-      ,TeamId
-      ,SiteId
-      ,BusinessUnitId
-   FROM ReadModel.groupingreadonly
-   Join #AllPageId on ReadModel.groupingreadonly.PageId = #AllPageId.Id
-   WHERE businessunitid = @businessUnitId
-      AND @startDate <= isnull(EndDate, '2059-12-31')
-	  AND @endDate >= isnull(StartDate, '1900-01-01')
-      AND (
-        LeavingDate >= @startDate
-        OR LeavingDate IS NULL
-        )
-   ORDER BY groupname
+        , GroupId
+        , GroupName
+        , CAST('00000000-0000-0000-0000-000000000000' AS UNIQUEIDENTIFIER) PersonId
+        , '' FirstName
+        , '' LastName
+        , '' EmploymentNumber
+        , TeamId
+        , SiteId
+        , BusinessUnitId
+     FROM ReadModel.GroupingReadOnly
+     JOIN #AllPageId on ReadModel.GroupingReadOnly.PageId = #AllPageId.Id
+    WHERE BusinessUnitId = @businessUnitId
+      AND @startDate <= EndDate
+      AND @endDate >= StartDate
+      AND (LeavingDate >= @startDate OR LeavingDate IS NULL)
+    ORDER BY groupname
 END
