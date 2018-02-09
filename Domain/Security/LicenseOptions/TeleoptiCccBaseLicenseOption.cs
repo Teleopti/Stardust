@@ -112,7 +112,8 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 				DefinedRaptorApplicationFunctionPaths.EditShiftCategory,
 				DefinedRaptorApplicationFunctionPaths.MoveInvalidOverlappedActivity,
 				DefinedRaptorApplicationFunctionPaths.RemoveOvertime,
-				DefinedRaptorApplicationFunctionPaths.MoveOvertime
+				DefinedRaptorApplicationFunctionPaths.MoveOvertime,
+				DefinedRaptorApplicationFunctionPaths.RemoveShift
 
 			};
 
