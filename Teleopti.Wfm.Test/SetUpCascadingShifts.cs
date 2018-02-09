@@ -273,23 +273,23 @@ namespace Teleopti.Wfm.Test
 			Data.Apply(scenario);
 
 
-			var activity = new ActivityConfigurable
+			var activity = new ActivitySpec
 			{
 				Name = "PhoneActivity"
 			};
-			var activityWrong = new ActivityConfigurable
+			var activityWrong = new ActivitySpec
 			{
 				Name = "WrongActivity"
 			};
-			var activityLunch = new ActivityConfigurable
+			var activityLunch = new ActivitySpec
 			{
 				Name = "LunchActivity"
 			};
-			var activityAdministration = new ActivityConfigurable
+			var activityAdministration = new ActivitySpec
 			{
 				Name = "AdministrationActivity"
 			};
-			var nonSkillActivity = new ActivityConfigurable
+			var nonSkillActivity = new ActivitySpec
 			{
 				Name = "NonSkillActivity",
 				RequiresSkill = false
@@ -798,7 +798,7 @@ namespace Teleopti.Wfm.Test
 			AddShift(personAllSkillsOvertime.Name, shiftStart.AddDays(3), 0, 9, shiftCategory.ShiftCategory, activity.Activity, scenario.Scenario, multiplicatorDefinitionSet.MultiplicatorDefinitionSet, true);
 		}
 
-	    private void personSetupForOvertime(ContractConfigurable contract, ContractScheduleConfigurable contractSchedule, PartTimePercentageConfigurable partTimePercentage, TeamConfigurable team, SkillConfigurable bronzeSkill, WorkflowControlSetConfigurable wfcs, DateTime shiftStart, ShiftCategoryConfigurable shiftCategory, ActivityConfigurable activity, ScenarioConfigurable scenario)
+	    private void personSetupForOvertime(ContractConfigurable contract, ContractScheduleConfigurable contractSchedule, PartTimePercentageConfigurable partTimePercentage, TeamConfigurable team, SkillConfigurable bronzeSkill, WorkflowControlSetConfigurable wfcs, DateTime shiftStart, ShiftCategoryConfigurable shiftCategory, ActivitySpec activity, ScenarioConfigurable scenario)
 	    {
 			var personPeriodOvertime = new PersonPeriodConfigurable
 			{
@@ -826,7 +826,7 @@ namespace Teleopti.Wfm.Test
 		}
 
 	    private static void personSetupForShiftHours(ContractConfigurable contract,ContractScheduleConfigurable contractSchedule, PartTimePercentageConfigurable partTimePercentage,
-	        TeamConfigurable team, SkillConfigurable bronzeSkill, WorkflowControlSetConfigurable wfcs, DateTime shiftStart,ShiftCategoryConfigurable shiftCategory, ActivityConfigurable activity, ScenarioConfigurable scenario)
+	        TeamConfigurable team, SkillConfigurable bronzeSkill, WorkflowControlSetConfigurable wfcs, DateTime shiftStart,ShiftCategoryConfigurable shiftCategory, ActivitySpec activity, ScenarioConfigurable scenario)
 	    {
 	        var personPeriodBronzeOpenHours = new PersonPeriodConfigurable
 	        {
@@ -906,7 +906,7 @@ namespace Teleopti.Wfm.Test
 		}
 
 		private static void personSetupForSkillOpenhours(ContractConfigurable contract, ContractScheduleConfigurable contractSchedule, PartTimePercentageConfigurable partTimePercentage,
-		  TeamConfigurable team, SkillConfigurable privateCustomerSkill, WorkflowControlSetConfigurable wfcs, DateTime shiftStart, ShiftCategoryConfigurable shiftCategory, ActivityConfigurable activity, ScenarioConfigurable scenario, SkillConfigurable businessCustomerSkill)
+		  TeamConfigurable team, SkillConfigurable privateCustomerSkill, WorkflowControlSetConfigurable wfcs, DateTime shiftStart, ShiftCategoryConfigurable shiftCategory, ActivitySpec activity, ScenarioConfigurable scenario, SkillConfigurable businessCustomerSkill)
 		{
 			var personPeriodBronzeSkillOpenHours = new PersonPeriodConfigurable
 			{

@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Staffing
 		{
 			var datasourceData = DefaultAnalyticsDataCreator.GetDataSources();
 
-			DataMaker.Data().Apply(new ActivityConfigurable
+			DataMaker.Data().Apply(new ActivitySpec
 			{
 				Name = activity
 			});
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Staffing
 		{
 			var datasourceData = DefaultAnalyticsDataCreator.GetDataSources();
 
-			DataMaker.Data().Apply(new ActivityConfigurable
+			DataMaker.Data().Apply(new ActivitySpec
 			{
 				Name = activity
 			});
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Staffing
 		{
 			var datasourceData = DefaultAnalyticsDataCreator.GetDataSources();
 
-			DataMaker.Data().Apply(new ActivityConfigurable
+			DataMaker.Data().Apply(new ActivitySpec
 			{
 				Name = activity
 			});

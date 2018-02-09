@@ -12,21 +12,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Given(@"there is an activity with")]
 		public void GivenThereIsAnActivity(Table table)
 		{
-			var activity = table.CreateInstance<ActivityConfigurable>();
+			var activity = table.CreateInstance<ActivitySpec>();
 			DataMaker.Data().Apply(activity);
 		}
 
 		[Given(@"there is an activity named '(.*)'")]
 		public void GivenThereIsAnActivityNamed(string name)
 		{
-			var activity = new ActivityConfigurable {Name = name};
+			var activity = new ActivitySpec {Name = name};
 			DataMaker.Data().Apply(activity);
 		}
 
 		[Given(@"there are activities")]
 		public void GivenThereAreShiftCategories(Table table)
 		{
-			var shiftCategories = table.CreateSet<ActivityConfigurable>();
+			var shiftCategories = table.CreateSet<ActivitySpec>();
 			shiftCategories.ForEach(x => DataMaker.Data().Apply(x));
 		}
 	}

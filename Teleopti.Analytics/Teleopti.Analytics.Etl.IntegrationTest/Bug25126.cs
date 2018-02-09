@@ -50,8 +50,8 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			BasicShiftSetup.AddPerson(out person, "Ola H", "", testDate);
 
 			var cat = new ShiftCategoryConfigurable { Name = "Kattegat", Color = "Green" };
-			var activityPhone = new ActivityConfigurable { Name = "Phone", Color = "LightGreen", InReadyTime = true };
-			var activityLunch = new ActivityConfigurable { Name = "Lunch", Color = "Red" };
+			var activityPhone = new ActivitySpec { Name = "Phone", Color = "LightGreen", InReadyTime = true };
+			var activityLunch = new ActivitySpec { Name = "Lunch", Color = "Red" };
 
 			Data.Apply(cat);
 			Data.Apply(activityPhone);
@@ -139,8 +139,8 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup> { brasilTimeZone }, testDate);
 
 			var cat = new ShiftCategoryConfigurable { Name = "Kattegat", Color = "Green" };
-			var activityPhone = new ActivityConfigurable { Name = "Phone", Color = "LightGreen", InReadyTime = true };
-			var activityLunch = new ActivityConfigurable { Name = "Lunch", Color = "Red" };
+			var activityPhone = new ActivitySpec { Name = "Phone", Color = "LightGreen", InReadyTime = true };
+			var activityLunch = new ActivitySpec { Name = "Lunch", Color = "Red" };
 
 			Data.Apply(cat);
 			Data.Apply(activityPhone);

@@ -39,6 +39,19 @@ namespace Teleopti.Ccc.TestCommon.IoC
 					.Select(i => i)
 				)
 				.SingleInstance();
+			builder.RegisterAssemblyTypes(typeof(IDataSetup<>).Assembly)
+				.Where(t => t
+					.GetInterfaces()
+					.Where(i => i.IsGenericType)
+					.Any(i => i.GetGenericTypeDefinition() == typeof(IDataSetup<>))
+				)
+				.As(t => t
+					.GetInterfaces()
+					.Where(i => i.IsGenericType)
+					.Where(i => i.GetGenericTypeDefinition() == typeof(IDataSetup<>))
+					.Select(i => i)
+				)
+				.SingleInstance();
 
 			// data factories keep state...
 			builder.RegisterType<TestDataFactory>().InstancePerDependency();

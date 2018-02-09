@@ -9,9 +9,9 @@ namespace Teleopti.Wfm.Test
 			return TestState.TestDataFactory.Person(name);
 		}
 
-		public static void Apply(IDataSetup setup)
+		public static void Apply<T>(T specOrSetup)
 		{
-			TestState.TestDataFactory.Apply(setup);
+			TestState.TestDataFactory.Apply(specOrSetup);
 		}
 	}
 }

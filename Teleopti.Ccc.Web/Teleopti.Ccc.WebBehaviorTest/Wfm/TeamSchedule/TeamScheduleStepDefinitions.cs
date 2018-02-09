@@ -506,7 +506,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 
 		private static Guid idForActivity(string activityName)
 		{
-			var activityId = (from a in DataMaker.Data().UserDatasOfType<ActivityConfigurable>()
+			var activityId = (from a in DataMaker.Data().UserDatasOfType<ActivitySpec>()
 							  let activity = a.Activity
 							  where activity.Name.Equals(activityName)
 							  select activity.Id.GetValueOrDefault()).First();

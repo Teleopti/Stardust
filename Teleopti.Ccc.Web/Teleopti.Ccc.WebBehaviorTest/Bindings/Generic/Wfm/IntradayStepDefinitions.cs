@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		{
 			var datasourceData = DefaultAnalyticsDataCreator.GetDataSources();
 
-			DataMaker.Data().Apply(new ActivityConfigurable
+			DataMaker.Data().Apply(new ActivitySpec
 			{
 				Name = activity
 			});
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		{
 			var datasourceData = DefaultAnalyticsDataCreator.GetDataSources();
 
-			DataMaker.Data().Apply(new ActivityConfigurable
+			DataMaker.Data().Apply(new ActivitySpec
 			{
 				Name = activity
 			});

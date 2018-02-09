@@ -2,6 +2,8 @@
 using Autofac;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
+using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Specific;
 
 namespace Teleopti.Ccc.TestCommon.TestData.Core
@@ -11,6 +13,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 		IUserDataSetup<T> ResolveUserDataSetupFor<T>();
 		IUserSetup<T> ResolveUserSetupFor<T>();
 		PersonDataFactory MakePersonDataFactory();
+		IDataSetup<T> ResolveDataSetupFor<T>();
 	}
 
 	public class LegacyResolver : IResolver
@@ -19,13 +22,14 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 		private readonly ICurrentTenantSession _currentTenantSession;
 		private readonly ITenantUnitOfWork _tenantUnitOfWork;
 
-		public LegacyResolver(ICurrentUnitOfWork unitOfWork, ICurrentTenantSession currentTenantSession, ITenantUnitOfWork tenantUnitOfWork)
+		public LegacyResolver(ICurrentUnitOfWork unitOfWork, ICurrentTenantSession currentTenantSession,
+			ITenantUnitOfWork tenantUnitOfWork)
 		{
 			_unitOfWork = unitOfWork;
 			_currentTenantSession = currentTenantSession;
 			_tenantUnitOfWork = tenantUnitOfWork;
 		}
-		
+
 		public IUserDataSetup<T> ResolveUserDataSetupFor<T>()
 		{
 			return null;
@@ -49,6 +53,16 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 				this
 			);
 		}
+
+		public IDataSetup<T> ResolveDataSetupFor<T>()
+		{
+			if (typeof(T) == typeof(ActivitySpec))
+				return new ActivitySetup(
+					new BusinessUnitRepository(_unitOfWork),
+					new ActivityRepository(_unitOfWork)
+				) as IDataSetup<T>;
+			return null;
+		}
 	}
 
 	public class AutofacResolver : IResolver
@@ -61,6 +75,13 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 		}
 
 		public PersonDataFactory MakePersonDataFactory() => _container.Resolve<PersonDataFactory>();
+
+		public IDataSetup<T> ResolveDataSetupFor<T>()
+		{
+			var specType = typeof(T);
+			var setupType = typeof(IDataSetup<>).MakeGenericType(specType);
+			return _container.ResolveOptional(setupType) as IDataSetup<T>;
+		}
 
 		public IUserDataSetup<T> ResolveUserDataSetupFor<T>()
 		{
@@ -75,6 +96,5 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 			var setupType = typeof(IUserSetup<>).MakeGenericType(specType);
 			return _container.ResolveOptional(setupType) as IUserSetup<T>;
 		}
-
 	}
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -58,16 +59,18 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 			{
 				userDataSetup.Apply(spec, _person, _person.PermissionInformation.Culture());
 				_unitOfWork.Current().PersistAll();
+				_applied.Add(spec);
+				return;
 			}
-
 			var userSetup = _resolver.ResolveUserSetupFor<T>();
 			if (userSetup != null)
 			{
 				userSetup.Apply(spec, _person, _person.PermissionInformation.Culture());
 				_unitOfWork.Current().PersistAll();
+				_applied.Add(spec);
+				return;
 			}
-
-			_applied.Add(spec);
+			throw new NotImplementedException($"Cant resolve setup for {spec.GetType().Name}");
 		}
 
 		private void apply(IUserSetup setup)

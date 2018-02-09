@@ -39,12 +39,12 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 		{
 			_unitOfWork = unitOfWork;
 			_resolver = resolver;
-			_dataFactory = new DataFactory(_unitOfWork);
+			_dataFactory = new DataFactory(_unitOfWork, resolver);
 		}
 
 		public PersonDataFactory Me() => _persons.First().Value;
 		public PersonDataFactory Person(string name) => addPerson(name);
-		public void Apply(IDataSetup setup) => _dataFactory.Apply(setup);
+		public void Apply<T>(T specOrSetup) => _dataFactory.Apply(specOrSetup);
 
 		private PersonDataFactory addPerson(string name)
 		{

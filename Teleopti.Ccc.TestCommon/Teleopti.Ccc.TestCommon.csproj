@@ -681,7 +681,7 @@
     <Compile Include="TestData\Core\PersonDataFactory.cs" />
     <Compile Include="TestData\Core\TestDataFactory.cs" />
     <Compile Include="TestData\Setups\Configurable\AbsenceConfigurable.cs" />
-    <Compile Include="TestData\Setups\Configurable\ActivityConfigurable.cs" />
+    <Compile Include="TestData\Setups\Configurable\ActivitySpec.cs" />
     <Compile Include="TestData\Setups\Configurable\RtaMapConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\BusinessUnitConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\ExternalLogonConfigurable.cs" />

@@ -14,12 +14,18 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Default
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly ICurrentUnitOfWork _unitOfWork;
 		private readonly IEventPublisherScope _eventPublisher;
+		private readonly IResolver _resolver;
 
-		public DefaultDataCreator(ICurrentUnitOfWorkFactory unitOfWorkFactory, ICurrentUnitOfWork unitOfWork, IEventPublisherScope eventPublisher)
+		public DefaultDataCreator(
+			ICurrentUnitOfWorkFactory unitOfWorkFactory, 
+			ICurrentUnitOfWork unitOfWork, 
+			IEventPublisherScope eventPublisher,
+			IResolver resolver)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_unitOfWork = unitOfWork;
 			_eventPublisher = eventPublisher;
+			_resolver = resolver;
 		}
 
 		private static readonly IEnumerable<IHashableDataSetup> setups = new IHashableDataSetup[]
@@ -45,7 +51,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Default
 
 		public void Create()
 		{
-			var dataFactory = new DataFactory(_unitOfWork);
+			var dataFactory = new DataFactory(_unitOfWork, _resolver);
 			setups.ForEach(s =>
 			{
 				if (s is DefaultPersonThatCreatesData)

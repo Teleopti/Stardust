@@ -103,9 +103,9 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 			var businessUnit = DefaultBusinessUnit.BusinessUnit;
 
 			data.Apply(new ScenarioConfigurable {Name = "Default", BusinessUnit = businessUnit.Name});
-			data.Apply(new ActivityConfigurable {Name = "Phone"});
-			data.Apply(new ActivityConfigurable {Name = "Lunch"});
-			data.Apply(new ActivityConfigurable {Name = "Break"});
+			data.Apply(new ActivitySpec {Name = "Phone"});
+			data.Apply(new ActivitySpec {Name = "Lunch"});
+			data.Apply(new ActivitySpec {Name = "Break"});
 
 			data.Apply(new ContractConfigurable {Name = "contract"});
 			data.Apply(new PartTimePercentageConfigurable {Name = "partTimePercentage"});
