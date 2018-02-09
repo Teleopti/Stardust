@@ -4,7 +4,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain;
 using log4net;
 using NHibernate;
-using NHibernate.Engine;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Common.Messaging;
@@ -14,7 +13,6 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Secrets.Licensing;
-using Teleopti.Interfaces.Domain;
 using IsolationLevel = System.Data.IsolationLevel;
 using TransactionException = NHibernate.TransactionException;
 

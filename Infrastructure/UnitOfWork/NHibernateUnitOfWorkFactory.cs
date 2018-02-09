@@ -36,6 +36,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private readonly IAuditSetter _auditSettingProvider;
 		private readonly ICurrentTransactionHooks _transactionHooks;
 		private readonly ICurrentBusinessUnit _businessUnit;
+		private readonly INestedUnitOfWorkStrategy _nestedUnitOfWorkStrategy;
 		private readonly UnitOfWorkFactoryNewerUper _unitOfWorkFactoryNewerUper;
 
 		// can not inject here because the lifetime of the factory
@@ -47,6 +48,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			ICurrentTransactionHooks transactionHooks,
 			string tenant,
 			ICurrentBusinessUnit businessUnit,
+			INestedUnitOfWorkStrategy nestedUnitOfWorkStrategy, 
 			UnitOfWorkFactoryNewerUper unitOfWorkFactoryNewerUper)
 		{
 			ConnectionString = connectionString;
@@ -55,6 +57,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_auditSettingProvider = auditSettingProvider;
 			_transactionHooks = transactionHooks;
 			_businessUnit = businessUnit;
+			_nestedUnitOfWorkStrategy = nestedUnitOfWorkStrategy;
 			_unitOfWorkFactoryNewerUper = unitOfWorkFactoryNewerUper;
 		}
 
@@ -103,7 +106,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		private IUnitOfWork createAndOpenUnitOfWork(TransactionIsolationLevel isolationLevel, IQueryFilter businessUnitFilter)
 		{
-			ServiceLocatorForLegacy.NestedUnitOfWorkStrategy.Strategize(_context);
+			_nestedUnitOfWorkStrategy.Strategize(_context);
 
 			var interceptor = _unitOfWorkFactoryNewerUper.MakeInterceptor();
 			var session = _factory

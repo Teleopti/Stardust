@@ -23,7 +23,6 @@ namespace Teleopti.Wfm.Test
 		{
 			Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
 			DataSource = DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
-			ServiceLocatorForLegacy.NestedUnitOfWorkStrategy = new SirLeakAlot();
 
 			var personThatCreatesTestData = PersonFactory.CreatePerson("UserThatCreatesTestData", "password");
 

@@ -46,7 +46,8 @@ namespace Teleopti.Ccc.TestCommon
 						hooks,
 						new CurrentHttpContext(),
 						ServiceLocatorForLegacy.UpdatedBy,
-						ServiceLocatorForEntity.CurrentBusinessUnit
+						ServiceLocatorForEntity.CurrentBusinessUnit,
+						new SirLeakAlot()
 					));
 			});
 		}

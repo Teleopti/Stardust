@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private readonly ICurrentHttpContext _httpContext;
 		private readonly IUpdatedBy _updatedBy;
 		private readonly ICurrentBusinessUnit _businessUnit;
+		private readonly INestedUnitOfWorkStrategy _nestedUnitOfWorkStrategy;
 
 		public UnitOfWorkFactoryNewerUper(
 			ICurrentPreCommitHooks currentPreCommitHooks,
@@ -31,7 +32,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			ICurrentTransactionHooks transactionHooks,
 			ICurrentHttpContext httpContext,
 			IUpdatedBy updatedBy,
-			ICurrentBusinessUnit businessUnit)
+			ICurrentBusinessUnit businessUnit,
+			INestedUnitOfWorkStrategy nestedUnitOfWorkStrategy)
 		{
 			_currentPreCommitHooks = currentPreCommitHooks;
 			_enversConfiguration = enversConfiguration;
@@ -39,6 +41,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_httpContext = httpContext;
 			_updatedBy = updatedBy;
 			_businessUnit = businessUnit;
+			_nestedUnitOfWorkStrategy = nestedUnitOfWorkStrategy;
 		}
 
 		public NHibernateUnitOfWorkInterceptor MakeInterceptor()
@@ -58,6 +61,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				_transactionHooks,
 				tenant,
 				_businessUnit,
+				_nestedUnitOfWorkStrategy,
 				this);
 		}
 

@@ -27,7 +27,6 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		{
 			Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
 			DataSource = DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
-			ServiceLocatorForLegacy.NestedUnitOfWorkStrategy = new SirLeakAlot();
 
 			var personThatCreatesTestData = PersonFactory.CreatePerson("UserThatCreatesTestData", "password");
 
@@ -67,7 +66,6 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			openUnitOfWork();
 			var tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(UnitOfWorkFactory.Current.ConnectionString);
 			TestState.TestDataFactory = TestDataFactory.Make(TestState.UnitOfWork, tenantUnitOfWorkManager);
-			ServiceLocatorForLegacy.NestedUnitOfWorkStrategy = new SirLeakAlot();
 		}
 
 		public static void EndTest()
