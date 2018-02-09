@@ -964,7 +964,7 @@ $(document).ready(function() {
 	    equal(viewModel.showProbabilityOptionsToggleIcon(), true);
     });
 
-    test("should not show probability icon when not scheduled", function () {
+    test("should show probability icon on not scheduled day", function () {
         Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
             if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
             return false;
@@ -989,7 +989,7 @@ $(document).ready(function() {
         };
         viewModel.readData(rawData);
 
-	    equal(viewModel.showProbabilityOptionsToggleIcon(), false);
+	    equal(viewModel.showProbabilityOptionsToggleIcon(), true);
 	});
 
 	test("should not show probability option icon when OvertimeProbability and AbsenceProbability are disabled", function () {

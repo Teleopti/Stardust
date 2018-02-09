@@ -27,7 +27,6 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 	self.isFullDayAbsence = false;
 	self.isDayOff = ko.observable(false);
 	self.hasOvertime = ko.observable(false);
-	self.hasScheduled = ko.observable(true);
 	self.timeLines = ko.observableArray();
 	self.periods = [];
 	self.layers = ko.observableArray();
@@ -101,7 +100,6 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 		self.summaryColor(data.Schedule.Summary.Color);
 		self.textColor(Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor(self.summaryColor()));
 		self.summaryName(data.Schedule.Summary.Title);
-		self.hasScheduled(!data.Schedule.HasNotScheduled);
 		self.summaryTime(data.Schedule.Summary.TimeSpan);
 		self.isDayOff(data.Schedule.IsDayOff);
 		self.isFullDayAbsence = data.Schedule.IsFullDayAbsence;
@@ -263,7 +261,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 		}
 
 		var withinProbabilityDisplayPeriod = self.selectedDate() >= getCurrentUserDate() && self.selectedDate() < getCurrentUserDate().add('day', constants.maximumDaysDisplayingProbability).startOf('day');
-		self.showProbabilityOptionsToggleIcon(self.staffingProbabilityOnMobileEnabled() && withinProbabilityDisplayPeriod && self.hasScheduled());
+		self.showProbabilityOptionsToggleIcon(self.staffingProbabilityOnMobileEnabled() && withinProbabilityDisplayPeriod);
 
 	}
 
