@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 	[DomainTest]
 	[TestFixture]
 	[FakePermissions]
-	public class PermittedViewModelBuilderTest : ISetup
+	public class PermissionTest : ISetup
 	{
 		public AgentStatesViewModelBuilder Target;
 		public FakeAgentStateReadModelPersister Database;
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 					PersonId = personId2,
 					SiteId = siteId2
 				});
-			Permissions.HasPermissionForSite(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, siteId1);
+			Permissions.HasPermissionToSite(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, siteId1);
 			var agentState = Target.Build(new AgentStateFilter { SiteIds = new[] { siteId1, siteId2 } }).States.ToArray();
 
 			agentState.Select(x => x.PersonId).Should().Have.SameValuesAs(personId1);
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 					SiteId = siteId,
 					TeamId = Guid.NewGuid()
 				});
-			Permissions.HasPermissionForTeam(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, teamId);
+			Permissions.HasPermissionToTeam(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, teamId);
 			var agentState = Target.Build(new AgentStateFilter { SiteIds = new[] { siteId } }).States.ToArray();
 
 			agentState.Select(x => x.PersonId).Should().Have.SameValuesAs(personId1);
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 					SiteId = siteId,
 					TeamId = Guid.NewGuid()
 				});
-			Permissions.HasPermissionForTeam(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, teamId);
+			Permissions.HasPermissionToTeam(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, teamId);
 			var agentState = Target.Build(new AgentStateFilter { TeamIds = new[] { teamId } }).States.ToArray();
 
 			agentState.Select(x => x.PersonId).Should().Have.SameValuesAs(personId1);

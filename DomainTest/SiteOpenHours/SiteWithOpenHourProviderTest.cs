@@ -57,8 +57,8 @@ namespace Teleopti.Ccc.DomainTest.SiteOpenHours
 		[Test]
 		public void ShouldGetSitesWithOpenHours()
 		{
-			_fakeAuthorization.HasPermissionForSite(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb, londonSiteId);
-			_fakeAuthorization.HasPermissionForSite(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb, parisSiteId);
+			_fakeAuthorization.HasPermissionToSite(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb, londonSiteId);
+			_fakeAuthorization.HasPermissionToSite(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb, parisSiteId);
 
 			var result = target.GetSitesWithOpenHour().ToArray();
 			Assert.AreEqual(result.Length, 2);
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.DomainTest.SiteOpenHours
 		[Test]
 		public void ShouldGetSitesWithPermissionOnly()
 		{
-			_fakeAuthorization.HasPermissionForSite(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb, londonSiteId);
+			_fakeAuthorization.HasPermissionToSite(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb, londonSiteId);
 
 			var result = target.GetSitesWithOpenHour().ToArray();
 			Assert.AreEqual(result.Length, 1);

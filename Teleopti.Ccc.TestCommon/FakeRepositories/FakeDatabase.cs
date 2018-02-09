@@ -585,7 +585,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public FakeDatabase WithTeam(Guid? id, string name)
 		{
 			ensureExists(_businessUnits, null, () => WithBusinessUnit(null));
-			ensureExists(_sites, null, () => this.WithSite(null, null));
+			ensureExists(_sites, null, () => WithSite(null, null));
 			_team = new Team {Site = _site};
 			_team.SetId(id ?? Guid.NewGuid());
 			if (name != null)

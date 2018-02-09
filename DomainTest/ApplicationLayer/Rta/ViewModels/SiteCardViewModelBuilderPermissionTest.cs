@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 					TeamId = team2
 				})
 				;
-			Permissions.HasPermissionForSite(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, site1);
+			Permissions.HasPermissionToSite(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, site1);
 
 			var result = Target.Build();
 
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 					TeamId = team
 				})
 				;
-			Permissions.HasPermissionForTeam(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, team);
+			Permissions.HasPermissionToTeam(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, team);
 
 			var result = Target.Build();
 

@@ -32,7 +32,6 @@ namespace Teleopti.Ccc.DomainTest.Logon.Permissions
 				.WithTenant("tenant")
 				.WithTeam("other team")
 				.WithAgent(otherGuyId, "other guy")
-
 				.WithTeam("my team")
 				.WithAgent(meId, "me")
 				.WithRole(AvailableDataRangeOption.MyTeam, DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview)
@@ -60,6 +59,34 @@ namespace Teleopti.Ccc.DomainTest.Logon.Permissions
 					})
 				.Should().Be.False();
 		}
-		
+
+		[Test]
+		public void ShouldNotHaveSiteAuthorizationForMyTeamPermission()
+		{
+			var businessUnit = Guid.NewGuid();
+			var site = Guid.NewGuid();
+			var team1 = Guid.NewGuid();
+			var team2 = Guid.NewGuid();
+			var personOnTeam1 = Guid.NewGuid();
+			var personOnTeam2 = Guid.NewGuid();
+			Database
+				.WithTenant("tenant")
+				.WithBusinessUnit(businessUnit)
+				.WithSite(site)
+				.WithTeam(team1, "team 1")
+				.WithAgent(personOnTeam1, "blip")
+				.WithRole(AvailableDataRangeOption.MyTeam, DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview)
+				.WithTeam(team2, "team 2")
+				.WithAgent(personOnTeam2, "blop")
+				.WithRole(AvailableDataRangeOption.MyTeam, DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview)
+				;
+			var person1 = Persons.Load(personOnTeam1);
+
+			LogOnOff.LogOn("tenant", person1, Database.CurrentBusinessUnitId());
+
+			Authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, "2017-03-07".Date(),
+				new SiteAuthorization {BusinessUnitId = businessUnit, SiteId = site}
+			).Should().Be.False();
+		}
 	}
 }

@@ -48,8 +48,8 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		}
 
 	    public bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, ISiteAuthorization authorization)
-	    {
-			return queryingPerson.BelongsToSite(authorization.SiteId, dateOnly);
+		{
+			return false;
 		}
 	}
 }

@@ -86,12 +86,12 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			_permittedAnyData.Add(functionPath);
 		}
 
-		public void HasPermissionForSite(string functionPath, Guid siteId)
+		public void HasPermissionToSite(string functionPath, Guid siteId)
 		{
 			_permittedSites.Add(new Tuple<string, Guid>(functionPath, siteId));
 		}
 
-		public void HasPermissionForTeam(string functionPath, Guid teamId)
+		public void HasPermissionToTeam(string functionPath, Guid teamId)
 		{
 			_permittedTeams.Add(new Tuple<string, Guid>(functionPath, teamId));
 		}
