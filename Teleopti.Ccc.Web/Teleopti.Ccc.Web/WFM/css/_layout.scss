@@ -107,6 +107,10 @@ _:-ms-lang(x),.con-fluid-flex {
 		font: .6em sans-serif;
 	}
 
+	.align-row-center{
+		align-items: baseline!important;
+	}
+
 	_:-ms-lang(x),.con-fluid-flex {
 		-ms-flex: 1;
 		flex-basis: 100%;
@@ -142,11 +146,11 @@ wfm-card > md-card {
 }
 
 .notice-item ul {
-  list-style-type: disc;
+	list-style-type: disc;
 }
 
 .flex {
-  display: flex;
+	display: flex;
 }
 
 md-card{

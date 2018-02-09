@@ -44,6 +44,8 @@
     opacity: 0 !important;
 }
 
-
-
-
+@media screen and (max-width:1000px) {
+	_:-ms-lang(x).staffing-toolbar{
+		display: table!important;
+	}
+}

@@ -15,7 +15,7 @@
   <div class="con-row">
     <div class="con-flex">
       <div class="panel material-depth-1">
-        <div class="con-row baseline" style="flex-wrap:wrap">
+        <div class="con-row align-row-center staffing-toolbar" style="flex-wrap:wrap">
           <div class="con-flex">
             <md-autocomplete id="skill-id" class="autocomplete-skill" md-selected-item="vm.selectedSkill" md-search-text="searchSkillText" md-selected-item-change="vm.selectedSkillChange(vm.selectedSkill)" md-items="skill in vm.querySearchSkills(searchSkillText)" md-item-text="skill.Name" md-min-length="0" placeholder="{{'SelectSkill'|translate}}">
               <md-item-template>
@@ -49,16 +49,13 @@
             </i>
           </div>
 
-          <div class="con-flex" ng-if="vm.unifiedSkillGroupManagement && vm.HasPermissionToModifySkillArea">
-            <skill-group-button id="manage_skill_group_button" ng-click="vm.configMode()"/>
-          </div>
-
-          <div class="con-flex">
-            <team-schedule-datepicker style="margin-top:-10px" selected-date="vm.selectedDate" status="vm.showDatePicker" on-date-change="vm.navigateToNewDay()"></team-schedule-datepicker>
+          <div class="con-flex" style="display:flex; justify-content:space-around;">
+            <skill-group-button id="manage_skill_group_button" ng-if="vm.unifiedSkillGroupManagement && vm.HasPermissionToModifySkillArea" ng-click="vm.configMode()"></skill-group-button>
+              <team-schedule-datepicker style="margin-top:-5px" selected-date="vm.selectedDate" status="vm.showDatePicker" on-date-change="vm.navigateToNewDay()"></team-schedule-datepicker>
           </div>
 
 			<div class="con-flex">
-				<md-checkbox ng-change="vm.useShrinkageForStaffing()" ng-model="vm.useShrinkage" aria-label="Checkbox">{{'UseShrinkage'| translate}}</md-checkbox>
+				<md-checkbox class="pull-right" ng-change="vm.useShrinkageForStaffing()" ng-model="vm.useShrinkage" aria-label="Checkbox">{{'UseShrinkage'| translate}}</md-checkbox>
 			</div>
         </div>
       </div>
