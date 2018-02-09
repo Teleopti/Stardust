@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Reports
 
 		public IList<SimplestPersonInfo> Provide()
 		{
-			return _scheduleAuditTrailReport.GetRevisionPeople().ToList();
+			return _scheduleAuditTrailReport.GetRevisionPeople().OrderBy(x=>x.Name).ToList();
 		}
 	}
 }
