@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			_target.Handle(_event);
 
 			var queuedRequests = _queuedAbsenceRequestRepository.LoadAll();
-			queuedRequests.Count.Should().Be(1);
+			queuedRequests.Count().Should().Be(1);
 
 			var queuedRequest = queuedRequests.First();
 			queuedRequest.Created.Should().Be.EqualTo(_personRequest.CreatedOn.GetValueOrDefault());
@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			_target.Handle(newEvent);
 
 			var queuedRequests = _queuedAbsenceRequestRepository.LoadAll();
-			queuedRequests.Count.Should().Be(1);
+			queuedRequests.Count().Should().Be(1);
 
 			var queuedRequest = queuedRequests.First();
 			queuedRequest.Created.Should().Be.EqualTo(_personRequest.CreatedOn.GetValueOrDefault());

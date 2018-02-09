@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
         public TeamProvider(ITeamRepository teamRepository)
         {
             _teamRepository = teamRepository;
-			_teamCollection = new Lazy<IList<ITeam>>(()=>_teamRepository.LoadAll());
+			_teamCollection = new Lazy<IList<ITeam>>(()=>_teamRepository.LoadAll().ToList());
         }
 
         public IEnumerable<ITeam> GetTeams()

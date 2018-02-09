@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _data.Single(x => x.Id == id);
 		}
 
-		public IList<ISite> LoadAll()
+		public IEnumerable<ISite> LoadAll()
 		{
 			return _data;
 		}

@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 		public void Handle(TenantMinuteTickEvent @event)
 		{
-			IList<IBusinessUnit> businessUnits;
+			IEnumerable<IBusinessUnit> businessUnits;
 			const int windowSize = 2;
 			int absenceRequestBulkFrequencyMinutes;
 			IDictionary<Guid, int> reqWithVersion = new Dictionary<Guid, int>();

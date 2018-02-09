@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return storage.FirstOrDefault(s => id == s.Id);
 		}
 
-		public IList<IShiftCategory> LoadAll()
+		public IEnumerable<IShiftCategory> LoadAll()
 		{
 			return storage;
 		}

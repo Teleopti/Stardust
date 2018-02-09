@@ -16,10 +16,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.SkillPages
 		private readonly ISkillGeneralView _skillGeneralView;
 		private readonly ISkill _theSkill;
 		private IList<IActivity> _activities;
-		private readonly IList<ISkill> _allSkills;
+		private readonly IEnumerable<ISkill> _allSkills;
 
 
-		public SkillGeneralPresenter(ISkillGeneralView skillGeneralView, ISkill theSkill, IEnumerable<IActivity> allActivities, IList<ISkill> allSkills)
+		public SkillGeneralPresenter(ISkillGeneralView skillGeneralView, ISkill theSkill, IEnumerable<IActivity> allActivities, IEnumerable<ISkill> allSkills)
 		{
 			_skillGeneralView = skillGeneralView;
 			_theSkill = theSkill;

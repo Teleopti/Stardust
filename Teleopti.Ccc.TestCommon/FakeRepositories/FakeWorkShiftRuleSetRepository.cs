@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public IList<IWorkShiftRuleSet> LoadAll()
+		public IEnumerable<IWorkShiftRuleSet> LoadAll()
 		{
 			throw new NotImplementedException();
 		}

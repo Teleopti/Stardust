@@ -265,7 +265,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 				UpdateStaffingLevel.Update(new DateTimePeriod(Now.UtcDateTime().AddDays(-2), Now.UtcDateTime().AddDays(2)));
 			}));
 
-			IList<IPerson> allPersons = new List<IPerson>();
+			IEnumerable<IPerson> allPersons = new List<IPerson>();
 			WithUnitOfWork.Do(() =>
 			{
 				allPersons = PersonRepository.LoadAll();

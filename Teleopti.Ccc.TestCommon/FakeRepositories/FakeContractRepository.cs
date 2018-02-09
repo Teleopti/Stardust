@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _contracts.FirstOrDefault(x => id == x.Id);
 		}
 
-		public IList<IContract> LoadAll()
+		public IEnumerable<IContract> LoadAll()
 		{
 			return _contracts.ToArray();
 		}

@@ -291,7 +291,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		{
 			if (_kpiList != null) return;
 			var kpiRep = new KpiRepository(_unitOfWork);
-			_kpiList = kpiRep.LoadAll();
+			_kpiList = kpiRep.LoadAll().ToList();
 			_kpiList = _kpiList.OrderBy(p => p.Name).ToList();
 			checkedListBoxKpi.Items.Clear();
 			foreach (IKeyPerformanceIndicator item in _kpiList)

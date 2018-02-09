@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 
 		private void createWorkDayRanksModel()
 		{
-			var workDayRankings = _repositoryWorkDayRanks.LoadAll();
+			var workDayRankings = _repositoryWorkDayRanks.LoadAll().ToList();
 			
 			for (var i = workDayRankings.Count -1; i > 0; i--)
 			{

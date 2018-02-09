@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
@@ -36,13 +37,13 @@ namespace Teleopti.Ccc.DomainTest
 			var repository = PersonAssignmentRepository;
 
 			Target.Add(item);
-			repository.LoadAll().Count.Should().Be.EqualTo(1);
+			repository.LoadAll().Count().Should().Be.EqualTo(1);
 			var result = Target.LoadScheduleDataAggregate(item.GetType(), item.Id.GetValueOrDefault());
 			Assert.AreSame(item, result);
 			var result2 = Target.Get(item.GetType(), item.Id.GetValueOrDefault());
 			Assert.AreSame(item, result2);
 			Target.Remove(item);
-			repository.LoadAll().Count.Should().Be.EqualTo(0);
+			repository.LoadAll().Count().Should().Be.EqualTo(0);
 		}
 
 		[Test]
@@ -52,13 +53,13 @@ namespace Teleopti.Ccc.DomainTest
 			var repository = PersonAbsenceRepository;
 
 			Target.Add(item);
-			repository.LoadAll().Count.Should().Be.EqualTo(1);
+			repository.LoadAll().Count().Should().Be.EqualTo(1);
 			var result = Target.LoadScheduleDataAggregate(item.GetType(), item.Id.GetValueOrDefault());
 			Assert.AreSame(item, result);
 			var result2 = Target.Get(item.GetType(), item.Id.GetValueOrDefault());
 			Assert.AreSame(item, result2);
 			Target.Remove(item);
-			repository.LoadAll().Count.Should().Be.EqualTo(0);
+			repository.LoadAll().Count().Should().Be.EqualTo(0);
 		}
 
 		[Test]
@@ -68,13 +69,13 @@ namespace Teleopti.Ccc.DomainTest
 			var repository = PreferenceDayRepository;
 
 			Target.Add(item);
-			repository.LoadAll().Count.Should().Be.EqualTo(1);
+			repository.LoadAll().Count().Should().Be.EqualTo(1);
 			var result = Target.LoadScheduleDataAggregate(item.GetType(), item.Id.GetValueOrDefault());
 			Assert.AreSame(item, result);
 			var result2 = Target.Get(item.GetType(), item.Id.GetValueOrDefault());
 			Assert.AreSame(item, result2);
 			Target.Remove(item);
-			repository.LoadAll().Count.Should().Be.EqualTo(0);
+			repository.LoadAll().Count().Should().Be.EqualTo(0);
 		}
 
 		[Test]
@@ -84,13 +85,13 @@ namespace Teleopti.Ccc.DomainTest
 			var repository = NoteRepository;
 
 			Target.Add(item);
-			repository.LoadAll().Count.Should().Be.EqualTo(1);
+			repository.LoadAll().Count().Should().Be.EqualTo(1);
 			var result = Target.LoadScheduleDataAggregate(item.GetType(), item.Id.GetValueOrDefault());
 			Assert.AreSame(item, result);
 			var result2 = Target.Get(item.GetType(), item.Id.GetValueOrDefault());
 			Assert.AreSame(item, result2);
 			Target.Remove(item);
-			repository.LoadAll().Count.Should().Be.EqualTo(0);
+			repository.LoadAll().Count().Should().Be.EqualTo(0);
 		}
 
 		[Test]
@@ -100,13 +101,13 @@ namespace Teleopti.Ccc.DomainTest
 			var repository = StudentAvailabilityDayRepository;
 
 			Target.Add(item);
-			repository.LoadAll().Count.Should().Be.EqualTo(1);
+			repository.LoadAll().Count().Should().Be.EqualTo(1);
 			var result = Target.LoadScheduleDataAggregate(item.GetType(), item.Id.GetValueOrDefault());
 			Assert.AreSame(item, result);
 			var result2 = Target.Get(item.GetType(), item.Id.GetValueOrDefault());
 			Assert.AreSame(item, result2);
 			Target.Remove(item);
-			repository.LoadAll().Count.Should().Be.EqualTo(0);
+			repository.LoadAll().Count().Should().Be.EqualTo(0);
 		}
 
 		[Test]
@@ -116,13 +117,13 @@ namespace Teleopti.Ccc.DomainTest
 			var repository = PublicNoteRepository;
 
 			Target.Add(item);
-			repository.LoadAll().Count.Should().Be.EqualTo(1);
+			repository.LoadAll().Count().Should().Be.EqualTo(1);
 			var result = Target.LoadScheduleDataAggregate(item.GetType(), item.Id.GetValueOrDefault());
 			Assert.AreSame(item, result);
 			var result2 = Target.Get(item.GetType(), item.Id.GetValueOrDefault());
 			Assert.AreSame(item, result2);
 			Target.Remove(item);
-			repository.LoadAll().Count.Should().Be.EqualTo(0);
+			repository.LoadAll().Count().Should().Be.EqualTo(0);
 		}
 
 		[Test]
@@ -132,13 +133,13 @@ namespace Teleopti.Ccc.DomainTest
 			var repository = AgentDayScheduleTagRepository;
 
 			Target.Add(item);
-			repository.LoadAll().Count.Should().Be.EqualTo(1);
+			repository.LoadAll().Count().Should().Be.EqualTo(1);
 			var result = Target.LoadScheduleDataAggregate(item.GetType(), item.Id.GetValueOrDefault());
 			Assert.AreSame(item, result);
 			var result2 = Target.Get(item.GetType(), item.Id.GetValueOrDefault());
 			Assert.AreSame(item, result2);
 			Target.Remove(item);
-			repository.LoadAll().Count.Should().Be.EqualTo(0);
+			repository.LoadAll().Count().Should().Be.EqualTo(0);
 		}
 
 		[Test]
@@ -148,13 +149,13 @@ namespace Teleopti.Ccc.DomainTest
 			var repository = OvertimeAvailabilityRepository;
 
 			Target.Add(item);
-			repository.LoadAll().Count.Should().Be.EqualTo(1);
+			repository.LoadAll().Count().Should().Be.EqualTo(1);
 			var result = Target.LoadScheduleDataAggregate(item.GetType(), item.Id.GetValueOrDefault());
 			Assert.AreSame(item, result);
 			var result2 = Target.Get(item.GetType(), item.Id.GetValueOrDefault());
 			Assert.AreSame(item, result2);
 			Target.Remove(item);
-			repository.LoadAll().Count.Should().Be.EqualTo(0);
+			repository.LoadAll().Count().Should().Be.EqualTo(0);
 		}
 
 		[Test]

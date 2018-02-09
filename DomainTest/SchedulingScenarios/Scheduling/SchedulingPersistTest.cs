@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using System;
+using System.Linq;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -48,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			
 			Target.DoScheduling(planningPeriod.Id.Value);
 						
-			PersonAssignmentRepository.LoadAll().Count
+			PersonAssignmentRepository.LoadAll().Count()
 				.Should().Be.EqualTo(30);
 		}
 

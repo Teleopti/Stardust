@@ -358,7 +358,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			};
 		}
 
-		private DateOnlyPeriod getCampaignPeriod(IList<IOutboundCampaign> campaigns)
+		private DateOnlyPeriod getCampaignPeriod(IEnumerable<IOutboundCampaign> campaigns)
 		{
 			var periods = campaigns.Select(c => c.SpanningPeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc)).ToArray();
 			var earliestStart = periods.Min(c => c.StartDate);

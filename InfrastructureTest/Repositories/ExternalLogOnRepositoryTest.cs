@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -66,7 +67,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(source2);
 			
 
-			IList<IExternalLogOn> logins = new ExternalLogOnRepository(CurrUnitOfWork).LoadAll();
+			IList<IExternalLogOn> logins = new ExternalLogOnRepository(CurrUnitOfWork).LoadAll().ToList();
 
             Assert.AreEqual(2,logins.Count);
             Assert.IsTrue(logins.Contains(source1));

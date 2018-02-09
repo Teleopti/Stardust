@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             _contract.WorkTimeSource = WorkTimeSource.FromContract;
 
             PersistAndRemoveFromUnitOfWork(_contract);
-            IList<IContract> loadedContracts = new ContractRepository(UnitOfWork).LoadAll();
+            var loadedContracts = new ContractRepository(UnitOfWork).LoadAll().ToList();
             Assert.AreEqual(1, loadedContracts.Count);
             Assert.AreEqual(1, loadedContracts[0].MultiplicatorDefinitionSetCollection.Count);
             Assert.AreEqual(definitionSet.MultiplicatorType, loadedContracts[0].MultiplicatorDefinitionSetCollection[0].MultiplicatorType);

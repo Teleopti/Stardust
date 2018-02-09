@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -81,7 +82,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(multiplicatorSet);
 
             IMultiplicatorDefinitionSetRepository rep = new MultiplicatorDefinitionSetRepository(UnitOfWork);
-            IList<IMultiplicatorDefinitionSet> lst = rep.LoadAll();
+            IList<IMultiplicatorDefinitionSet> lst = rep.LoadAll().ToList();
 
             Assert.AreEqual(1, lst.Count);
             Assert.AreEqual(2, lst[0].DefinitionCollection.Count);

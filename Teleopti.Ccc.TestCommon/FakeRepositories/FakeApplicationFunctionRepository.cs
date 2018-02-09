@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public IList<IApplicationFunction> LoadAll()
+		public IEnumerable<IApplicationFunction> LoadAll()
 		{
 			return _applicationFunctions;
 		}

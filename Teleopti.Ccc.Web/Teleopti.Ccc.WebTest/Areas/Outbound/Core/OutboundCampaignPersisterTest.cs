@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		{
 			_outboundCampaignPersister.Persist(_campaignInput);
 
-			var campaigns = _fakeCampaignRepository.LoadAll();
+			var campaigns = _fakeCampaignRepository.LoadAll().ToList();
 
 			campaigns.Count.Should().Be.EqualTo(1);
 			campaigns[0].Skill.Should().Be.SameInstanceAs(_fakeSkillRepository.LoadAll().First());
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		{
 			_outboundCampaignPersister.Persist(_campaignInput);
 
-			var campaigns = _fakeCampaignRepository.LoadAll();
+			var campaigns = _fakeCampaignRepository.LoadAll().ToList();
 			campaigns[0].Name.Should().Be.EqualTo(_campaignInput.Name);
 		}
 
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		{
 			_outboundCampaignPersister.Persist(_campaignInput);
 
-			var campaigns = _fakeCampaignRepository.LoadAll();
+			var campaigns = _fakeCampaignRepository.LoadAll().ToList();
 			campaigns[0].CallListLen.Should().Be.EqualTo(_campaignInput.CallListLen);
 		}
 
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		{
 			_outboundCampaignPersister.Persist(_campaignInput);
 
-			var campaigns = _fakeCampaignRepository.LoadAll();
+			var campaigns = _fakeCampaignRepository.LoadAll().ToList();
 			campaigns[0].TargetRate.Should().Be.EqualTo(_campaignInput.TargetRate);
 		}
 
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		{
 			_outboundCampaignPersister.Persist(_campaignInput);
 
-			var campaigns = _fakeCampaignRepository.LoadAll();
+			var campaigns = _fakeCampaignRepository.LoadAll().ToList();
 			campaigns[0].ConnectRate.Should().Be.EqualTo(_campaignInput.ConnectRate);
 		}
 
@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		{
 			_outboundCampaignPersister.Persist(_campaignInput);
 
-			var campaigns = _fakeCampaignRepository.LoadAll();
+			var campaigns = _fakeCampaignRepository.LoadAll().ToList();
 			campaigns[0].RightPartyConnectRate.Should().Be.EqualTo(_campaignInput.RightPartyConnectRate);
 		}
 
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		{
 			_outboundCampaignPersister.Persist(_campaignInput);
 
-			var campaigns = _fakeCampaignRepository.LoadAll();
+			var campaigns = _fakeCampaignRepository.LoadAll().ToList();
 			campaigns[0].ConnectAverageHandlingTime.Should().Be.EqualTo(_campaignInput.ConnectAverageHandlingTime);
 		}
 
@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		{
 			_outboundCampaignPersister.Persist(_campaignInput);
 
-			var campaigns = _fakeCampaignRepository.LoadAll();
+			var campaigns = _fakeCampaignRepository.LoadAll().ToList();
 			campaigns[0].RightPartyAverageHandlingTime.Should().Be.EqualTo(_campaignInput.RightPartyAverageHandlingTime);
 		}
 
@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		{
 			_outboundCampaignPersister.Persist(_campaignInput);
 
-			var campaigns = _fakeCampaignRepository.LoadAll();
+			var campaigns = _fakeCampaignRepository.LoadAll().ToList();
 			campaigns[0].UnproductiveTime.Should().Be.EqualTo(_campaignInput.UnproductiveTime);
 		}
 
@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		{
 			_outboundCampaignPersister.Persist(_campaignInput);
 
-			var campaigns = _fakeCampaignRepository.LoadAll();
+			var campaigns = _fakeCampaignRepository.LoadAll().ToList();
 
 			var startDateTime = new DateTime(_campaignInput.StartDate.Year, _campaignInput.StartDate.Month, _campaignInput.StartDate.Day, 0,0,0, DateTimeKind.Utc);
 			var endDateTime = new DateTime(_campaignInput.EndDate.Year, _campaignInput.EndDate.Month, _campaignInput.EndDate.Day, 23,59,59, DateTimeKind.Utc);
@@ -177,7 +177,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		{
 			_outboundCampaignPersister.Persist(_campaignInput);
 
-			var campaigns = _fakeCampaignRepository.LoadAll();
+			var campaigns = _fakeCampaignRepository.LoadAll().ToList();
 
 			campaigns[0].BelongsToPeriod.Should().Be.EqualTo(new DateOnlyPeriod(_campaignInput.StartDate, _campaignInput.EndDate));
 		}
@@ -187,7 +187,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		{
 			_outboundCampaignPersister.Persist(_campaignInput);
 			
-			var campaigns = _fakeCampaignRepository.LoadAll();
+			var campaigns = _fakeCampaignRepository.LoadAll().ToList();
 			for (var i = 0; i < 7; ++i)
 			{
 				campaigns[0].WorkingHours[_campaignInput.WorkingHours[i].WeekDay].Should().Be.EqualTo(new TimePeriod(_campaignInput.WorkingHours[i].StartTime, (_campaignInput.WorkingHours[i].EndTime)));

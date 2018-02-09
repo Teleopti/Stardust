@@ -66,7 +66,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				IContractRepository repository = new ContractRepository(uow);
-				return repository.LoadAll();
+				return repository.LoadAll().ToList();
 			}
 		}
 
@@ -75,7 +75,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				IContractScheduleRepository repository = new ContractScheduleRepository(uow);
-				return repository.LoadAll();
+				return repository.LoadAll().ToList();
 			}
 		}
 
@@ -84,7 +84,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				IPartTimePercentageRepository repository = new PartTimePercentageRepository(uow);
-				return repository.LoadAll();
+				return repository.LoadAll().ToList();
 			}
 		}
 
@@ -93,7 +93,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				IRuleSetBagRepository repository = new RuleSetBagRepository(uow);
-				return repository.LoadAll();
+				return repository.LoadAll().ToList();
 			}
 		}
 
@@ -150,7 +150,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				IMultiplicatorDefinitionSetRepository repository = new MultiplicatorDefinitionSetRepository(uow);
-				IList<IMultiplicatorDefinitionSet> multiplicatorDefninitionSets = repository.LoadAll();
+				var multiplicatorDefninitionSets = repository.LoadAll().ToList();
 
 				foreach (IMultiplicatorDefinitionSet multiplicatorDefinitionSet in multiplicatorDefninitionSets)
 				{
@@ -220,7 +220,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				BusinessUnitRepository repository = new BusinessUnitRepository(uow);
-				return repository.LoadAll();
+				return repository.LoadAll().ToList();
 			}
 		}
 
@@ -455,7 +455,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 				ApplicationFunctionRepository repository = new ApplicationFunctionRepository(uow);
 
-				return repository.LoadAll();
+				return repository.LoadAll().ToList();
 			}
 		}
 
@@ -484,7 +484,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 				businessUnitRepository.LoadAllBusinessUnitSortedByName();
 
 				ApplicationRoleRepository repository = new ApplicationRoleRepository(uow);
-				return repository.LoadAll();
+				return repository.LoadAll().ToList();
 			}
 		}
 
@@ -499,7 +499,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 					businessUnitRepository.LoadAllBusinessUnitSortedByName();
 
 					AbsenceRepository repository = new AbsenceRepository(uow);
-					return repository.LoadAll();
+					return repository.LoadAll().ToList();
 				}
 			}
 		}
@@ -647,11 +647,11 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			uow.Reassociate(persons);
 
 			var businessUnitRepository = new BusinessUnitRepository(uow);
-			IList<IBusinessUnit> businessUnitList = businessUnitRepository.LoadAll();
+			var businessUnitList = businessUnitRepository.LoadAll();
 			var scenarioRep = new ScenarioRepository(uow);
 			IList<IScenario> scenarioList = scenarioRep.FindAllSorted();
 
-			Trace.WriteLine("Lazy load business unit list: " + businessUnitList.Count);
+			Trace.WriteLine("Lazy load business unit list: " + businessUnitList.Count());
 			Trace.WriteLine("Lazy load scenario list: " + scenarioList.Count);
 		}
 
@@ -847,7 +847,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 					businessUnitRepository.LoadAllBusinessUnitSortedByName();
 
 					ShiftCategoryRepository repository = new ShiftCategoryRepository(uow);
-					return repository.LoadAll();
+					return repository.LoadAll().ToList();
 				}
 			}
 		}
@@ -1149,7 +1149,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 				// Handle deleted
 				using (uow.DisableFilter(QueryFilter.Deleted))
 				{
-					workloadsIncludedDeleted = repository.LoadAll();
+					workloadsIncludedDeleted = repository.LoadAll().ToList();
 					foreach (IWorkload workload in workloadsIncludedDeleted)
 					{
 						if (!LazyLoadingManager.IsInitialized(workload.Skill))
@@ -1196,12 +1196,12 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 				{
 					//Avoid lazy load error
 					WorkloadRepository workloadRep = new WorkloadRepository(uow);
-					IList<IWorkload> workloadList = workloadRep.LoadAll();
-					Trace.WriteLine("Lazy load Workload list: " + workloadList.Count);
+					var workloadList = workloadRep.LoadAll();
+					Trace.WriteLine("Lazy load Workload list: " + workloadList.Count());
 
 					SkillTypeRepository skillTypeRepository = new SkillTypeRepository(uow);
 					var skillTypeList = skillTypeRepository.LoadAll();
-					Trace.WriteLine("Lazy load Skill Type list: " + skillTypeList.Count);
+					Trace.WriteLine("Lazy load Skill Type list: " + skillTypeList.Count());
 				}
 
 				uow.Reassociate(skills);
@@ -1404,7 +1404,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 				businessUnitRepository.LoadAllBusinessUnitSortedByName();
 
 				KpiRepository repository = new KpiRepository(uow);
-				return repository.LoadAll();
+				return repository.LoadAll().ToList();
 			}
 		}
 
@@ -1535,7 +1535,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 				businessUnitRepository.LoadAllBusinessUnitSortedByName();
 
 				ScorecardRepository repository = new ScorecardRepository(uow);
-				IList<IScorecard> ret = repository.LoadAll();
+				var ret = repository.LoadAll().ToList();
 				foreach (IScorecard scorecard in ret)
 				{
 					if (!LazyLoadingManager.IsInitialized(scorecard.KeyPerformanceIndicatorCollection))
@@ -1581,7 +1581,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 				businessUnitRepository.LoadAllBusinessUnitSortedByName();
 
 				KpiTargetRepository repository = new KpiTargetRepository(uow);
-				IList<IKpiTarget> ret = repository.LoadAll();
+				var ret = repository.LoadAll().ToList();
 				foreach (IKpiTarget target in ret)
 				{
 					if (!LazyLoadingManager.IsInitialized(target.KeyPerformanceIndicator))
@@ -1620,7 +1620,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 				{
 					new SkillTypeRepository(uow).LoadAll();
 
-					ret = repository.LoadAll();
+					ret = repository.LoadAll().ToList();
 					foreach (ISkill skill in ret)
 					{
 						if (!LazyLoadingManager.IsInitialized(skill.Activity))

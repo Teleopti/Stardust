@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		private readonly IDistributedLockAcquirer _distributedLockAcquirer;
 		private readonly IEventPublisher _eventPublisher;
 
-		private IList<IPerson> _people;
+		private IEnumerable<IPerson> _people;
 		private IScenario _defaultScenario;
 		private DateOnlyPeriod _period;
 		private DateTimePeriod _utcPeriod;

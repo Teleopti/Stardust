@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public IList<IAvailableData> LoadAll()
+		public IEnumerable<IAvailableData> LoadAll()
 		{
 			return _roles;
 		}

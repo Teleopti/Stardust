@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts.Forecasting
                     using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
                     {
                         ScenarioRepository scenarioRepository = new ScenarioRepository(uow);
-                        _scenarios = scenarioRepository.LoadAll();
+                        _scenarios = scenarioRepository.LoadAll().ToList();
                     }
                     return _scenarios;
                 }

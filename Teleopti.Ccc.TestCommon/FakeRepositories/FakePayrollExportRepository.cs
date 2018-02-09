@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _exports.FirstOrDefault(e => id == e.Id);
 		}
 
-		public IList<IPayrollExport> LoadAll()
+		public IEnumerable<IPayrollExport> LoadAll()
 		{
 			throw new NotImplementedException();
 		}

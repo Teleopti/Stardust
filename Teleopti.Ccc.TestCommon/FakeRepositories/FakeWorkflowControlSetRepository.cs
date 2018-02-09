@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _storage.Get<IWorkflowControlSet>(id);
 		}
 
-		public IList<IWorkflowControlSet> LoadAll()
+		public IEnumerable<IWorkflowControlSet> LoadAll()
 		{
 			return _storage.LoadAll<IWorkflowControlSet>().ToArray();
 		}

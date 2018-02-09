@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			throw new NotImplementedException();
 		}
 
-		public IList<IPushMessageDialogue> LoadAll()
+		public IEnumerable<IPushMessageDialogue> LoadAll()
 		{
 			throw new NotImplementedException();
 		}

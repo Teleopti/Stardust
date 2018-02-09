@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return externalLogOns.FirstOrDefault(x => x.Id == id);
 		}
 
-		public IList<IExternalLogOn> LoadAll()
+		public IEnumerable<IExternalLogOn> LoadAll()
 		{
 			return externalLogOns;
 		}

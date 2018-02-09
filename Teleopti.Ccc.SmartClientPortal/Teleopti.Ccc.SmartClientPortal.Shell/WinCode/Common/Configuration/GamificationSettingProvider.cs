@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
         {
 			if (_gamificationSettingCollection == null)
             {
-                var result = _gamificationSettingRepository.LoadAll();
+                var result = _gamificationSettingRepository.LoadAll().ToList();
 				if (IsEmptySettingIncluded)
                     result.Add(NullGamificationSetting);
                 _gamificationSettingCollection = result;

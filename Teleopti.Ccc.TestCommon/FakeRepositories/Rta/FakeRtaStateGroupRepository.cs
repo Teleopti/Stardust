@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			throw new NotImplementedException();
 		}
 
-		public IList<IRtaStateGroup> LoadAll()
+		public IEnumerable<IRtaStateGroup> LoadAll()
 		{
 			return _storage.LoadAll<IRtaStateGroup>().ToList();
 		}

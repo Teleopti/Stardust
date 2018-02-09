@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return _workloads.FirstOrDefault(x => x.Id == id);
 		}
 
-		public IList<IWorkload> LoadAll()
+		public IEnumerable<IWorkload> LoadAll()
 		{
 			return _workloads;
 		}

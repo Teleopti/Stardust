@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 	{
 		IList<IUserDevice> Find(IPerson person);
 		IUserDevice FindByToken(string token);
-		IList<IUserDevice> LoadAll();
+		IEnumerable<IUserDevice> LoadAll();
 
 		IUserDevice Load(Guid id);
 

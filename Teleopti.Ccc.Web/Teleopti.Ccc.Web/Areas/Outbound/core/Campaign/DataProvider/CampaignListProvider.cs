@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 		private IList<IOutboundCampaign> getCampaigns(GanttPeriod period)
 		{
 			var campaigns = period == null
-				? _outboundCampaignRepository.LoadAll()
+				? _outboundCampaignRepository.LoadAll().ToList()
 				: _outboundCampaignRepository.GetCampaigns(new DateOnlyPeriod(period.StartDate, period.EndDate));
 
 			return campaigns;

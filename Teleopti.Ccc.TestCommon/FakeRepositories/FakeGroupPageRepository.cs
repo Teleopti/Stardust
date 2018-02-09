@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _groupPages.First(x => x.Id == id);
 		}
 
-		public IList<IGroupPage> LoadAll()
+		public IEnumerable<IGroupPage> LoadAll()
 		{
 			return _groupPages;
 		}

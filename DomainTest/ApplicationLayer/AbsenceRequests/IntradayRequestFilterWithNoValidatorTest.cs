@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
@@ -193,7 +194,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			Target.Process(personRequest);
 
-			QueuedAbsenceRequestRepository.LoadAll().Count.Should().Be.EqualTo(1);
+			QueuedAbsenceRequestRepository.LoadAll().Count().Should().Be.EqualTo(1);
 			CommandDispatcher.LatestCommand.Should().Be.Null();
 		}
 

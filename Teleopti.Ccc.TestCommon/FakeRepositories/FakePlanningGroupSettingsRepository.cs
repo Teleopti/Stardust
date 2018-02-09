@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _workRuleSettings.SingleOrDefault(x => x.Id == id);
 		}
 
-		public IList<PlanningGroupSettings> LoadAll()
+		public IEnumerable<PlanningGroupSettings> LoadAll()
 		{
 			return _workRuleSettings.ToArray();
 		}
@@ -41,8 +41,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			throw new NotImplementedException();
 		}
-
-		public IUnitOfWork UnitOfWork { get; private set; }
 
 		private PlanningGroupSettings Default()
 		{

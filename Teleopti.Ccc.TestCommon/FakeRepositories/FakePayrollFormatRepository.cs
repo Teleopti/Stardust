@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public IList<IPayrollFormat> LoadAll()
+		public IEnumerable<IPayrollFormat> LoadAll()
 		{
 			return internalStore;
 		}

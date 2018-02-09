@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                 T inCorrect = CreateAggregateWithCorrectBusinessUnit();
                 PersistAndRemoveFromUnitOfWork(inCorrect);
 
-                IList<T> retList = rep.LoadAll();
+                var retList = rep.LoadAll();
                 Assert.IsTrue(retList.All(r => ((IBelongsToBusinessUnit)r).BusinessUnit.Equals(buRef.BusinessUnit)));
             }
             else

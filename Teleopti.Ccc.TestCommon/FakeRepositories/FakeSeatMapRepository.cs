@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _seatMaps.SingleOrDefault (seatMap => seatMap.Id.Value == id);
 		}
 
-		public IList<ISeatMapLocation> LoadAll()
+		public IEnumerable<ISeatMapLocation> LoadAll()
 		{
 			throw new NotImplementedException();
 		}

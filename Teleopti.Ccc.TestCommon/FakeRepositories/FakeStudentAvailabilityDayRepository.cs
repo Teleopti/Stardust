@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return Storage.FirstOrDefault(x => x.Id == id);
 		}
 
-		public IList<IStudentAvailabilityDay> LoadAll()
+		public IEnumerable<IStudentAvailabilityDay> LoadAll()
 		{
 			return Storage;
 		}

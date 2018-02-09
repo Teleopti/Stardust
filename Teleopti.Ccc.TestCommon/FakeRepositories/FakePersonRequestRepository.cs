@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return RequestRepository.FirstOrDefault(x => x.Id == id);
 		}
 
-		public IList<IPersonRequest> LoadAll()
+		public IEnumerable<IPersonRequest> LoadAll()
 		{
 			return RequestRepository;
 		}

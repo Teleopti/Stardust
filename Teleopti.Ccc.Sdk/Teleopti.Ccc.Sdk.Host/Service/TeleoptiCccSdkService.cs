@@ -818,7 +818,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 			using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				ISiteRepository repository = new SiteRepository(unitOfWork);
-				IList<ISite> sites = repository.LoadAll();
+				var sites = repository.LoadAll();
 
 				foreach (ISite site in sites)
 				{
@@ -838,7 +838,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 			using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				ITeamRepository repository = new TeamRepository(unitOfWork);
-				IList<ITeam> teams = repository.LoadAll();
+				var teams = repository.LoadAll();
 
 				foreach (ITeam team in teams)
 				{

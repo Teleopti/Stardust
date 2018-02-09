@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _storage.Get<IPersonAbsence>(id);
 		}
 
-		public IList<IPersonAbsence> LoadAll()
+		public IEnumerable<IPersonAbsence> LoadAll()
 		{
 			return _storage.LoadAll<IPersonAbsence>().ToList();
 		}

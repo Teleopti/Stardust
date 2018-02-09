@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _skillDays.FirstOrDefault(x => x.Id.GetValueOrDefault() == id);
 		}
 
-		public IList<ISkillDay> LoadAll()
+		public IEnumerable<ISkillDay> LoadAll()
 		{
 			throw new NotImplementedException();
 		}

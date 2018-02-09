@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _planningGroups.First(x => x.Id == id);
 		}
 
-		public IList<IPlanningGroup> LoadAll()
+		public IEnumerable<IPlanningGroup> LoadAll()
 		{
 			return _planningGroups;
 		}

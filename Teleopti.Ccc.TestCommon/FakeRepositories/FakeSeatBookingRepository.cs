@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _seatBookings.SingleOrDefault(booking => booking.Id == id);
 		}
 
-		public IList<ISeatBooking> LoadAll()
+		public IEnumerable<ISeatBooking> LoadAll()
 		{
 			return _seatBookings;
 		}

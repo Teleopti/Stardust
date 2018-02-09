@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _partTimePercentages.FirstOrDefault(p => id == p.Id);
 		}
 
-		public IList<IPartTimePercentage> LoadAll()
+		public IEnumerable<IPartTimePercentage> LoadAll()
 		{
 			return _partTimePercentages.ToArray();
 		}

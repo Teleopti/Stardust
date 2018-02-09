@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification
 			var vm = Target.CreateGamification();
 			
 			var result = GamificationSettingRepository.LoadAll();
-			result.Count.Should().Be.EqualTo(1);
+			result.Count().Should().Be.EqualTo(1);
 			vm.Id.HasValue.Should().Be.True();
 		}
 		
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification
 			Target.CreateGamification();
 			Target.CreateGamification();
 
-			var result = GamificationSettingRepository.LoadAll();
+			var result = GamificationSettingRepository.LoadAll().ToList();
 			result.Count.Should().Be.EqualTo(2);
 			result[0].Description.Name.Should().Be.EqualTo(Resources.NewGamificationSetting);
 			result[1].Description.Name.Should().Be.EqualTo(Resources.NewGamificationSetting + "1");
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification
 
 			var result = Target.RemoveGamification(gamificationSetting.Id.Value);
 			result.Should().Be.InstanceOf<OkResult>();
-			GamificationSettingRepository.LoadAll().Count.Should().Be.EqualTo(0);
+			GamificationSettingRepository.LoadAll().Count().Should().Be.EqualTo(0);
 		}
 
 		[Test]

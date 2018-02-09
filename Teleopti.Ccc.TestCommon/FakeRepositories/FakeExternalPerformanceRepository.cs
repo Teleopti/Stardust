@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return Get(id);
 		}
 
-		public IList<IExternalPerformance> LoadAll()
+		public IEnumerable<IExternalPerformance> LoadAll()
 		{
 			return externalPerformances;
 		}

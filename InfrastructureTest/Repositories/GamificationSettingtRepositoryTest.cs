@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			};
 
 			PersistAndRemoveFromUnitOfWork(_gamificationSetting);
-			IList<IGamificationSetting> loadedGamificationSettings = new GamificationSettingRepository(UnitOfWork).LoadAll();
+			IList<IGamificationSetting> loadedGamificationSettings = new GamificationSettingRepository(UnitOfWork).LoadAll().ToList();
 			Assert.AreEqual(1, loadedGamificationSettings.Count);
 			Assert.AreEqual(TimeSpan.FromMinutes(10), loadedGamificationSettings[0].AHTBronzeThreshold);
 			Assert.AreEqual(2, loadedGamificationSettings[0].GoldToSilverBadgeRate);

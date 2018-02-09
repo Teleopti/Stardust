@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		{
 			handle(true);
 
-			QueuedAbsenceRequestRepository.LoadAll().Count.Should().Be.EqualTo(1);			
+			QueuedAbsenceRequestRepository.LoadAll().Count().Should().Be.EqualTo(1);			
 		}
 
 		[Test]
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		{
 			handle(); 
 
-			QueuedAbsenceRequestRepository.LoadAll().Count.Should().Be.EqualTo(0);
+			QueuedAbsenceRequestRepository.LoadAll().Count().Should().Be.EqualTo(0);
 		}
 
 		[Test]
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			handle();
 
-			QueuedAbsenceRequestRepository.LoadAll().Count.Should().Be.EqualTo(1);
+			QueuedAbsenceRequestRepository.LoadAll().Count().Should().Be.EqualTo(1);
 		}
 
 		[Test]
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			removedEvent.LogOnBusinessUnitId = businessUnit.Id.GetValueOrDefault();
 			BusinessUnitRepository.Add(businessUnit);
 			createHandler().Handle(removedEvent);
-			QueuedAbsenceRequestRepository.LoadAll().Count.Should().Be.EqualTo(7);
+			QueuedAbsenceRequestRepository.LoadAll().Count().Should().Be.EqualTo(7);
 		}
 
 		[Test]
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			removedEvent.LogOnBusinessUnitId = businessUnit.Id.GetValueOrDefault();
 			BusinessUnitRepository.Add(businessUnit);
 			new RequestPersonAbsenceRemovedEventHandler(QueuedAbsenceRequestRepository, WorkflowControlSetRepository, Now).Handle(removedEvent);
-			QueuedAbsenceRequestRepository.LoadAll().Count.Should().Be.EqualTo(3);
+			QueuedAbsenceRequestRepository.LoadAll().Count().Should().Be.EqualTo(3);
 		}
 
 		private void addWaitlistEnabledWorkFlowControlSet()

@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWor
 				throw new NotImplementedException();
 			}
 
-			public IList<ISkillDay> LoadAll()
+			public IEnumerable<ISkillDay> LoadAll()
 			{
 				throw new NotImplementedException();
 			}

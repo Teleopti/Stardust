@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -53,7 +54,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             ILicenseStatus oneLicenseTooMany = new LicenseStatus { XmlString = "<overflow></overflow>" };
             licenseRepository.Add(oneLicenseTooMany);
             Session.Flush();
-            Assert.AreEqual(1, licenseRepository.LoadAll().Count);
+            Assert.AreEqual(1, licenseRepository.LoadAll().Count());
         }
 
         [Test]
@@ -67,7 +68,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             var oneLicenseTooMany = new LicenseStatus { XmlString = "<overflow></overflow>" };
             licenseRepository.AddRange(new Collection<ILicenseStatus> {oneLicenseTooMany} );
             Session.Flush();
-            Assert.AreEqual(1, licenseRepository.LoadAll().Count);
+            Assert.AreEqual(1, licenseRepository.LoadAll().Count());
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]

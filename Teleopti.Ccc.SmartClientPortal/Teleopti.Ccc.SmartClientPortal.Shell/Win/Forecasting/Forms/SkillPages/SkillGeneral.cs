@@ -49,9 +49,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SkillPages
             var skill = aggregateRoot as ISkill;
             if (skill==null) throw new ArgumentNullException("aggregateRoot","The supplied root must be of type: ISkill.");
 
-            ICollection<ISkillType> skillTypeList;
+            IEnumerable<ISkillType> skillTypeList;
             IList<IActivity> activityList;
-        	IList<ISkill> skills;
+			IEnumerable<ISkill> skills;
             using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
                 ISkillTypeRepository skillTypeRepository = new SkillTypeRepository(unitOfWork);
@@ -204,7 +204,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SkillPages
             using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
                 ISkillRepository rep = _repositoryFactory.CreateSkillRepository(uow);
-                IList<ISkill> skills = rep.LoadAll();
+                var skills = rep.LoadAll();
                 foreach (ISkill skill in skills)
                 {
                     if (skill.Activity.Equals(activity))

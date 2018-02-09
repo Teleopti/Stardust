@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _dayOffTemplates.FirstOrDefault(d => id == d.Id);
 		}
 
-		public IList<IDayOffTemplate> LoadAll()
+		public IEnumerable<IDayOffTemplate> LoadAll()
 		{
 			return _dayOffTemplates;
 		}

@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public IList<IBudgetGroup> LoadAll()
+		public IEnumerable<IBudgetGroup> LoadAll()
 		{
 			return _budgetGroups.ToList();
 		}

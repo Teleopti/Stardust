@@ -30,7 +30,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest
 			return _absences.FirstOrDefault(a => id == a.Id);
 		}
 
-		public IList<IAbsence> LoadAll()
+		public IEnumerable<IAbsence> LoadAll()
 		{
 			return _absences.ToArray();
 		}

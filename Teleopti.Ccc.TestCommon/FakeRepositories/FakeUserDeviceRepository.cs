@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _savedUserDevices.SingleOrDefault(d => d.Token == token);
 		}
 
-		public IList<IUserDevice> LoadAll()
+		public IEnumerable<IUserDevice> LoadAll()
 		{
 			throw new NotImplementedException();
 		}

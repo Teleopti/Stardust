@@ -380,7 +380,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			setupStateHolderProxy();
 			Target.RunWaitlist(new DateTimePeriod(2016, 12, 24, 12, 2016, 12, 31, 12));
 
-			QueuedAbsenceRequestRepository.LoadAll().Count.Should().Be.EqualTo(8);
+			QueuedAbsenceRequestRepository.LoadAll().Count().Should().Be.EqualTo(8);
 			QueuedAbsenceRequestRepository.LoadAll().ForEach(x => x.PersonRequest.Should().Be.EqualTo(Guid.Empty));
 		}
 

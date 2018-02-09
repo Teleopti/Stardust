@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _ruleSetBags.FirstOrDefault(r => r.Id == id);
 		}
 
-		public IList<IRuleSetBag> LoadAll()
+		public IEnumerable<IRuleSetBag> LoadAll()
 		{
 			return _ruleSetBags;
 		}
@@ -42,7 +42,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _ruleSetBags.FirstOrDefault(r => r.Id == id);
 		}
 
-		public IUnitOfWork UnitOfWork { get; }
 		public IEnumerable<IRuleSetBag> LoadAllWithRuleSets()
 		{
 			return _ruleSetBags.Where(r => r.RuleSetCollection.Any());

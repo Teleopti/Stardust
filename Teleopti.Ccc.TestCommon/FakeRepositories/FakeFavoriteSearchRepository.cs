@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return Get(id);
 		}
 
-		public IList<IFavoriteSearch> LoadAll()
+		public IEnumerable<IFavoriteSearch> LoadAll()
 		{
 			return storage;
 		}

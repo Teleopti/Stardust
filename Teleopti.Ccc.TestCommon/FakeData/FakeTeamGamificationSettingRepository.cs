@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return Get(id);
 		}
 
-		public IList<ITeamGamificationSetting> LoadAll()
+		public IEnumerable<ITeamGamificationSetting> LoadAll()
 		{
 			return _teamGamificationSettings;
 		}

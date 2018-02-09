@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public IList<IPersonAvailability> LoadAll()
+		public IEnumerable<IPersonAvailability> LoadAll()
 		{
 			throw new NotImplementedException();
 		}

@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _scheduleTags.FirstOrDefault(s => s.Id == id);
 		}
 
-		public IList<IScheduleTag> LoadAll()
+		public IEnumerable<IScheduleTag> LoadAll()
 		{
 			return _scheduleTags.ToArray();
 		}

@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification
 				GamificationSettingId = Guid.Empty
 			});
 
-			TeamGamificationSettingRepository.LoadAll().Count.Should().Be.EqualTo(0);
+			TeamGamificationSettingRepository.LoadAll().Count().Should().Be.EqualTo(0);
 		}
 
 		[Test]

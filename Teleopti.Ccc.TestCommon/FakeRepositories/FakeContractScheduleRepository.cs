@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _contractSchedules.FirstOrDefault(c => id == c.Id);
 		}
 
-		public IList<IContractSchedule> LoadAll()
+		public IEnumerable<IContractSchedule> LoadAll()
 		{
 			return _contractSchedules.ToArray();
 		}

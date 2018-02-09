@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
         {
             if (_scorecardCollection==null)
             {
-                var result = _scorecardRepository.LoadAll();
+                var result = _scorecardRepository.LoadAll().ToList();
                 if (_includeNullScorecardItem)
                     result.Add(NullScorecard);
                 _scorecardCollection = result;

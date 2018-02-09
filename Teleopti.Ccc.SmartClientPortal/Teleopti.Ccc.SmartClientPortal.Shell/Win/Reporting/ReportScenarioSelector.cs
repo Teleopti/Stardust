@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -47,7 +48,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Reporting
             using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
                 var scenarioRepository = new ScenarioRepository(unitOfWork);
-                IList<IScenario> scenarios = scenarioRepository.LoadAll();
+                var scenarios = scenarioRepository.LoadAll().ToList();
 
                 comboBoxAdvScenario.DisplayMember = "Description";
                 comboBoxAdvScenario.DataSource = scenarios;

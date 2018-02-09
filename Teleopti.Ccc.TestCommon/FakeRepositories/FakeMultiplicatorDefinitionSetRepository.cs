@@ -36,14 +36,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return Get(id);
 		}
 
-		public IList<IMultiplicatorDefinitionSet> LoadAll()
+		public IEnumerable<IMultiplicatorDefinitionSet> LoadAll()
 		{
 			return _multiplicatorDefinitionSets;
 		}
-
-		
-
-		public IUnitOfWork UnitOfWork { get; private set; }
 
 		public IList<IMultiplicatorDefinitionSet> FindAllOvertimeDefinitions()
 		{

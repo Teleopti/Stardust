@@ -9,6 +9,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		void Remove(T root);
 		T Get(Guid id);
 		T Load(Guid id);
-		IList<T> LoadAll();
+		IEnumerable<T> LoadAll();
 	}
 }

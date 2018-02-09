@@ -147,12 +147,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 				_requestableAbsenceCollection = absenceRepository.LoadRequestableAbsence();
 
 				var shiftCategoryRepository = _repositoryFactory.CreateShiftCategoryRepository(uow);
-				_shiftCategories = shiftCategoryRepository.LoadAll();
+				_shiftCategories = shiftCategoryRepository.LoadAll().ToList();
 
-				_absences = absenceRepository.LoadAll();
+				_absences = absenceRepository.LoadAll().ToList();
 
 				var dayOffRepository = _repositoryFactory.CreateDayOffRepository(uow);
-				_dayOffTemplates = dayOffRepository.LoadAll();
+				_dayOffTemplates = dayOffRepository.LoadAll().ToList();
 
 				var skillRepository = _repositoryFactory.CreateSkillRepository(uow);
 				_skillCollection = new List<ISkill>(skillRepository.FindAllWithoutMultisiteSkills());

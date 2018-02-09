@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Linq;
+using NUnit.Framework;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
@@ -31,7 +32,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var seniorityWorkDayRanks = CreateAggregateWithCorrectBusinessUnit();
 
 			PersistAndRemoveFromUnitOfWork(seniorityWorkDayRanks);
-			var loadedRanks = new SeniorityWorkDayRanksRepository(UnitOfWork).LoadAll();
+			var loadedRanks = new SeniorityWorkDayRanksRepository(UnitOfWork).LoadAll().ToList();
 
 			Assert.AreEqual(1, loadedRanks.Count);
 			Assert.AreEqual(7, loadedRanks[0].Monday);

@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public IList<ISiteOpenHour> LoadAll()
+		public IEnumerable<ISiteOpenHour> LoadAll()
 		{
 			throw new NotImplementedException();
 		}

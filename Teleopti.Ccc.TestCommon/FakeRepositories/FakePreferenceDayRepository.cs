@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _preferensDays.FirstOrDefault(x => x.Id == id);
 		}
 
-		public IList<IPreferenceDay> LoadAll()
+		public IEnumerable<IPreferenceDay> LoadAll()
 		{
 			return _preferensDays;
 		}

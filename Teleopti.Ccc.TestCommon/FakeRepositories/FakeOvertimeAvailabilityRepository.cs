@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _overtimeAvailabilities.FirstOrDefault(x => x.Id == id);
 		}
 
-		public IList<IOvertimeAvailability> LoadAll()
+		public IEnumerable<IOvertimeAvailability> LoadAll()
 		{
 			return _overtimeAvailabilities;
 		}

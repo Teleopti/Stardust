@@ -261,7 +261,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 		private ICollection<skillTypeModel> loadSkillTypeCollection(IUnitOfWork uow)
 		{
 			ISkillTypeRepository skillTypeRep = new SkillTypeRepository(uow);
-			ICollection<ISkillType> skillTypes = skillTypeRep.LoadAll();
+			var skillTypes = skillTypeRep.LoadAll();
 			skillTypes = skillTypes.Where(s => s.ForecastSource != ForecastSource.OutboundTelephony).ToList();
 
 			return

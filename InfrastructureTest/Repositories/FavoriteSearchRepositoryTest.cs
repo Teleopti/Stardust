@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var loadedAll = new FavoriteSearchRepository(UnitOfWork).LoadAll();
 
-			Assert.AreEqual(1, loadedAll.Count);
+			Assert.AreEqual(1, loadedAll.Count());
 			Assert.AreEqual("myFav", loadedAll.First().Name);
 			Assert.AreEqual("agent", loadedAll.First().SearchTerm);
 			Assert.AreEqual(FavoriteSearchStatus.Default, loadedAll.First().Status);

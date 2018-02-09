@@ -242,7 +242,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			personAssigment = PersonAssignmentRepository.Get(personAssigment.Id.Value);
 			personAssigment.MainActivities().Count().Should().Be.EqualTo(0);
-			PersonAbsenceRepository.LoadAll().Count.Should().Be.EqualTo(1);
+			PersonAbsenceRepository.LoadAll().Count().Should().Be.EqualTo(1);
 		}
 		[Test]
 		public void ShouldKeepPersonMeeting()

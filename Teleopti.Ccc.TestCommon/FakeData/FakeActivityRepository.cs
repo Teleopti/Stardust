@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return _activities.FirstOrDefault(a => id == a.Id);
 		}
 
-		public IList<IActivity> LoadAll()
+		public IEnumerable<IActivity> LoadAll()
 		{
 			return _activities;
 		}

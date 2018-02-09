@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _result.Single(x => x.Id.Value == id);
 		}
 
-		public virtual IList<IJobResult> LoadAll()
+		public virtual IEnumerable<IJobResult> LoadAll()
 		{
 			return _result.ToList();
 		}
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<IJobResult> LoadAllWithNoLock()
 		{
-			return LoadAll();
+			return LoadAll().ToList();
 		}
 	}
 
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_currentBusinessUnit = currentBusinessUnit;
 		}
 
-		public override IList<IJobResult> LoadAll()
+		public override IEnumerable<IJobResult> LoadAll()
 		{
 			return _result.Where(r => (r as JobResult).BusinessUnit?.Id == _currentBusinessUnit.Current()?.Id).ToList();
 		}

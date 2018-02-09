@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _roles.FirstOrDefault(r => r.Id.GetValueOrDefault() == id);
 		}
 
-		public IList<IApplicationRole> LoadAll()
+		public IEnumerable<IApplicationRole> LoadAll()
 		{
 			return _roles;
 		}

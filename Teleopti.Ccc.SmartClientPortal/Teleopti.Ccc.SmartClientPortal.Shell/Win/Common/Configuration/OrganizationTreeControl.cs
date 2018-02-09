@@ -52,12 +52,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
         private void loadSites()
         {
-            _siteCollection = _siteRepository.LoadAll();
+            _siteCollection = _siteRepository.LoadAll().ToList();
         }
 
         private void loadTeams()
         {
-            _teamCollection = _teamRepository.LoadAll();
+            _teamCollection = _teamRepository.LoadAll().ToList();
         }
 
         private void createTreeNodes()

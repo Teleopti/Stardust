@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return _campaigns.First(x => x.Id == id);
 		}
 
-		public IList<IOutboundCampaign> LoadAll()
+		public IEnumerable<IOutboundCampaign> LoadAll()
 		{
 			return _campaigns;
 		}

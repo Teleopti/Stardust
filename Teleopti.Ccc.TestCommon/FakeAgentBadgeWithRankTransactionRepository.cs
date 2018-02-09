@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.TestCommon
 			return Load(id);
 		}
 
-		public IList<IAgentBadgeWithRankTransaction> LoadAll()
+		public IEnumerable<IAgentBadgeWithRankTransaction> LoadAll()
 		{
 			return _agentBadgeWithRankTransactions;
 		}

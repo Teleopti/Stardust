@@ -77,19 +77,19 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.Core
 			scenario.EnableReporting.Should().Be.True();
 
 			var applicationRoles = _applicationRoleRepository.LoadAll();
-			applicationRoles.Count.Should().Be.EqualTo(5);
+			applicationRoles.Count().Should().Be.EqualTo(5);
 
 			var availabledata = _availableDataRepository.LoadAll();
-			availabledata.Count.Should().Be.EqualTo(5);
+			availabledata.Count().Should().Be.EqualTo(5);
 
 			var kpis = _kpiRepository.LoadAll();
-			kpis.Count.Should().Be.EqualTo(7);
+			kpis.Count().Should().Be.EqualTo(7);
 
 			var skillTypes = _skillTypeRepository.LoadAll();
-			skillTypes.Count.Should().Be.EqualTo(6);
+			skillTypes.Count().Should().Be.EqualTo(6);
 
 			var stateGroup = _rtaStateGroupRepository.LoadAll();
-			stateGroup.Count.Should().Be.EqualTo(1);
+			stateGroup.Count().Should().Be.EqualTo(1);
 		}
 	}
 }

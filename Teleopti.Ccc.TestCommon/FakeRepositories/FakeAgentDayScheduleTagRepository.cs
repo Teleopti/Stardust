@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _storage.Get<IAgentDayScheduleTag>(id);
 		}
 
-		public IList<IAgentDayScheduleTag> LoadAll()
+		public IEnumerable<IAgentDayScheduleTag> LoadAll()
 		{
 			return _storage.LoadAll<IAgentDayScheduleTag>().ToArray();
 		}

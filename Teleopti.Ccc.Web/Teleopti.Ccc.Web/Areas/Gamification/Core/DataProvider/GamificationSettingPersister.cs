@@ -414,7 +414,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 
 		private string getNewName()
 		{
-			var currentCount = _gamificationSettingRepository.LoadAll().Count;
+			var currentCount = _gamificationSettingRepository.LoadAll().Count();
 			return currentCount > 0 ? string.Format(Resources.NewGamificationSetting + "{0}", currentCount) : Resources.NewGamificationSetting;
 		}
 	}

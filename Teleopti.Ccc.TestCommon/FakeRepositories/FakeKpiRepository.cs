@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _kpis.FirstOrDefault(x => x.Id.GetValueOrDefault() == id);
 		}
 
-		public IList<IKeyPerformanceIndicator> LoadAll()
+		public IEnumerable<IKeyPerformanceIndicator> LoadAll()
 		{
 			return _kpis;
 		}

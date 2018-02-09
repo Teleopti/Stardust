@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return Get(id);
 		}
 
-		public IList<IGamificationSetting> LoadAll()
+		public IEnumerable<IGamificationSetting> LoadAll()
 		{
 			return _gamificationSettings.Values.ToList();
 		}

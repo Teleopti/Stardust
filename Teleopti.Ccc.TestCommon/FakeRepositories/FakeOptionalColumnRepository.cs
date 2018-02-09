@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public IList<IOptionalColumn> LoadAll()
+		public IEnumerable<IOptionalColumn> LoadAll()
 		{
 			throw new NotImplementedException();
 		}

@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public IList<IExtendedPreferenceTemplate> LoadAll()
+		public IEnumerable<IExtendedPreferenceTemplate> LoadAll()
 		{
 			return storage;
 		}

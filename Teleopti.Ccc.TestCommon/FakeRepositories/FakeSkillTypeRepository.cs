@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _skillTypes.FirstOrDefault(x => x.Id.GetValueOrDefault() == id);
 		}
 
-		public IList<ISkillType> LoadAll()
+		public IEnumerable<ISkillType> LoadAll()
 		{
 			return _skillTypes;
 		}

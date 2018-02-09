@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _storage.FirstOrDefault(p => id == p.Id);
 		}
 
-		public IList<IPayrollResult> LoadAll()
+		public IEnumerable<IPayrollResult> LoadAll()
 		{
 			throw new NotImplementedException();
 		}
@@ -36,7 +36,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return Get(id);
 		}
 
-		public IUnitOfWork UnitOfWork { get; private set; }
 		public ICollection<IPayrollResult> GetPayrollResultsByPayrollExport(IPayrollExport payrollExport)
 		{
 			throw new NotImplementedException();

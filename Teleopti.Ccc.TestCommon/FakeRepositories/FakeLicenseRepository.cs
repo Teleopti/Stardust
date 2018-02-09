@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public IList<ILicense> LoadAll()
+		public IEnumerable<ILicense> LoadAll()
 		{
 			return new ILicense[] { _license.Value }.ToList();
 		}

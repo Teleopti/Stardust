@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
         /// </remarks>
         public int SynchronizeExternalLogOns(IList<IExternalLogOn> matrixExternalLogOns)
         {
-            IList<IExternalLogOn> raptorExternalLogOns = _externalLogOnRepository.LoadAll();
+            var raptorExternalLogOns = _externalLogOnRepository.LoadAll();
             IList<IExternalLogOn> externalLogOnsToAdd = new List<IExternalLogOn>(matrixExternalLogOns);
             int updatedCount = 0;
 
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		    return validToFind && matrixLogin != null;
 	    }
 
-	    private static void clearInvalidMartDataOnRaptorLogOns(IList<IExternalLogOn> raptorLogOns, IDictionary<int, IExternalLogOn> matrixLogOns)
+	    private static void clearInvalidMartDataOnRaptorLogOns(IEnumerable<IExternalLogOn> raptorLogOns, IDictionary<int, IExternalLogOn> matrixLogOns)
 		{
 			foreach (var raptorLogOn in raptorLogOns)
 			{

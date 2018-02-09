@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			Target.Handle(command);
 
-			FakeQueuedAbsenceRequestRepository.LoadAll().Count.Should().Be.EqualTo(8);
+			FakeQueuedAbsenceRequestRepository.LoadAll().Count().Should().Be.EqualTo(8);
 			FakeQueuedAbsenceRequestRepository.LoadAll().ForEach(x => x.PersonRequest.Should().Be.EqualTo(Guid.Empty));
 		}
 	}

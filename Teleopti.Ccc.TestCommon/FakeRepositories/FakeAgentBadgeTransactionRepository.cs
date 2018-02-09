@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return Load(id);
 		}
 
-		public IList<IAgentBadgeTransaction> LoadAll()
+		public IEnumerable<IAgentBadgeTransaction> LoadAll()
 		{
 			return _agentBadgeTransactions;
 		}

@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _storage.Get<IPerson>(id);
 		}
 
-		public IList<IPerson> LoadAll()
+		public IEnumerable<IPerson> LoadAll()
 		{
 			return _storage.LoadAll<IPerson>().ToList();
 		}

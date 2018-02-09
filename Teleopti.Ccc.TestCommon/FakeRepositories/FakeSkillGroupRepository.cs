@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _skillAreas.Single(x => x.Id == id);
 		}
 
-		public IList<SkillGroup> LoadAll()
+		public IEnumerable<SkillGroup> LoadAll()
 		{
 			return _skillAreas;
 		}

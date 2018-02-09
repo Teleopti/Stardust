@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _scenario.FirstOrDefault(s => s.Id == id);
 		}
 
-		public IList<IScenario> LoadAll()
+		public IEnumerable<IScenario> LoadAll()
 		{
 			return _scenario;
 		}

@@ -14,10 +14,10 @@ namespace Teleopti.Ccc.Domain.Security.Matrix
 	public class TeamResolver : ITeamResolver
 	{
 		private readonly IPerson _person;
-		private readonly IList<ISite> _sites;
+		private readonly IEnumerable<ISite> _sites;
 		private HashSet<MatrixPermissionHolder> _result;
 
-		public TeamResolver(IPerson person, IList<ISite> sites)
+		public TeamResolver(IPerson person, IEnumerable<ISite> sites)
 		{
 			_person = person;
 			_sites = sites;

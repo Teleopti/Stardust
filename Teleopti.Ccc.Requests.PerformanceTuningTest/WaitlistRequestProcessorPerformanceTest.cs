@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 		private IList<IPersonRequest> requests;
 		private DateTime _nowDateTime;
 		private ICollection<IPerson> _personList;
-		private IList<IAbsence> _absences;
+		private IEnumerable<IAbsence> _absences;
 		private List<IWorkflowControlSet> _wfcs;
 
 

@@ -636,7 +636,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			// Loads all categories.
 			var repository = new ShiftCategoryRepository(UnitOfWork);
 
-			IList<IShiftCategory> list = repository.LoadAll();
+			var list = repository.LoadAll();
 			IEnumerable<IShiftCategory> sortedList = (from s in list
 													  orderby s.Description.ShortName
 													  select s).ToList();
@@ -653,7 +653,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			// Loads all categories.
 			var repository = new DayOffTemplateRepository(UnitOfWork);
 
-			IList<IDayOffTemplate> list = repository.LoadAll();
+			var list = repository.LoadAll();
 			IEnumerable<IDayOffTemplate> sortedList = (from d in list
 														orderby d.Description.ShortName
 														select d).ToList();

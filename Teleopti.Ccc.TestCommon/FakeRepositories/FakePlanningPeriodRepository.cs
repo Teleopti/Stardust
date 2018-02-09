@@ -37,22 +37,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return Has(start, numberOfWeeks, null);
 		}
 
-		//public IPlanningPeriod Has(DateOnlyPeriod period)
-		//{
-		//	return Has(period, null);
-		//}
-
 		public IPlanningPeriod Has(DateOnly startDate, DateOnly endDate, SchedulePeriodType schedulePeriodType, int number)
 		{
 			return Has(startDate,endDate,schedulePeriodType, number, null);
 		}
-
-		//public IPlanningPeriod Has(DateOnlyPeriod period, IPlanningGroup planningGroup)
-		//{
-		//	var planningPeriod = new PlanningPeriod(period, planningGroup).WithId();
-		//	_planningPeriods.Add(planningPeriod);
-		//	return planningPeriod;
-		//}
 
 		public IPlanningPeriod Has(DateOnly startDate, DateOnly endDate, SchedulePeriodType schedulePeriodType,int number, IPlanningGroup planningGroup)
 		{
@@ -60,7 +48,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_planningPeriods.Add(planningPeriod);
 			return planningPeriod;
 		}
-
 
 		public IPlanningPeriod Has(DateOnly start, int number, SchedulePeriodType type, IPlanningGroup planningGroup)
 		{
@@ -112,7 +99,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _planningPeriods.FirstOrDefault(planningPeriod => planningPeriod.Id == id);
 		}
 
-		public IList<IPlanningPeriod> LoadAll()
+		public IEnumerable<IPlanningPeriod> LoadAll()
 		{
 			return _planningPeriods;
 		}
@@ -124,8 +111,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			//TODO: fix this!
 			return _planningPeriods.FirstOrDefault(planningPeriod => planningPeriod.Id == id);
 		}
-
-		public IUnitOfWork UnitOfWork { get; private set; }
 
 		public IPlanningPeriodSuggestions Suggestions(INow now)
 		{

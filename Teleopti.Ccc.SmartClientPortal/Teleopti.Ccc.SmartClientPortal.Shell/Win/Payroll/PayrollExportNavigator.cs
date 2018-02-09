@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll
 		private IEnumerable<IPayrollExport> loadPayrollExportsCollection(IUnitOfWork uow)
 		{
 			IPayrollExportRepository payrollExportRepository = _repositoryFactory.CreatePayrollExportRepository(uow);
-			ICollection<IPayrollExport> payrollExports = payrollExportRepository.LoadAll();
+			var payrollExports = payrollExportRepository.LoadAll();
 			return payrollExports;
 		}
 

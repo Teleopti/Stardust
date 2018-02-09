@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return Get(id);
 		}
 
-		public IList<IAgentBadgeWithRank> LoadAll()
+		public IEnumerable<IAgentBadgeWithRank> LoadAll()
 		{
 			return _agentBadgeWithRanks;
 		}

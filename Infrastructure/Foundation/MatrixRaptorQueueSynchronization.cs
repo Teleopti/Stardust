@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		/// </remarks>
 		public int SynchronizeQueues(IList<IQueueSource> matrixQueues)
 		{
-			IList<IQueueSource> raptorQueues = _queueSourceRepository.LoadAll();
+			var raptorQueues = _queueSourceRepository.LoadAll();
 			IList<IQueueSource> queuesToAdd = new List<IQueueSource>(matrixQueues);
 			int updatedCount = 0;
 
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			return validToFind && matrixQueue != null;
 		}
 
-		private static void clearInvalidMartDataOnRaptorQueues(IList<IQueueSource> raptorQueues, IDictionary<int, IQueueSource> matrixQueues)
+		private static void clearInvalidMartDataOnRaptorQueues(IEnumerable<IQueueSource> raptorQueues, IDictionary<int, IQueueSource> matrixQueues)
 		{
 			foreach (var raptorQueue in raptorQueues)
 			{

@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public IList<IQueuedAbsenceRequest> LoadAll()
+		public IEnumerable<IQueuedAbsenceRequest> LoadAll()
 		{
 			return _queuedRequests;
 		}

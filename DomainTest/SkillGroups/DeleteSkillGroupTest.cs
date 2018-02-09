@@ -1,3 +1,4 @@
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.SkillGroupManagement;
@@ -19,11 +20,11 @@ namespace Teleopti.Ccc.DomainTest.SkillGroups
 			var skillArea = new SkillGroup().WithId();
 			SkillGroupRepository.Has(skillArea);
 
-			SkillGroupRepository.LoadAll().Count.Should().Be.EqualTo(1);
+			SkillGroupRepository.LoadAll().Count().Should().Be.EqualTo(1);
 
 			Target.Do(skillArea.Id.Value);
 
-			SkillGroupRepository.LoadAll().Count.Should().Be.EqualTo(0);
+			SkillGroupRepository.LoadAll().Count().Should().Be.EqualTo(0);
 		}
 	}
 }

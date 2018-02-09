@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _storage.FirstOrDefault(r => r.Id == id);
 		}
 
-		public IList<IPersonRotation> LoadAll()
+		public IEnumerable<IPersonRotation> LoadAll()
 		{
 			return _storage;
 		}

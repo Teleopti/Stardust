@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return _skills.FirstOrDefault(x => x.Id == id);
 		}
 
-		public IList<ISkill> LoadAll()
+		public IEnumerable<ISkill> LoadAll()
 		{
 			return _skills;
 		}

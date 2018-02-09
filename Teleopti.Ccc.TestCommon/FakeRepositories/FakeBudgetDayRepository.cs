@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _budgetDays.FirstOrDefault(b => b.Id == id);
 		}
 
-		public IList<IBudgetDay> LoadAll()
+		public IEnumerable<IBudgetDay> LoadAll()
 		{
 			throw new NotImplementedException();
 		}

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -85,7 +86,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 
             _target = new QueueSourceRepository(UnitOfWork);
-            IList<IQueueSource> queueSources = _target.LoadAll();
+            IList<IQueueSource> queueSources = _target.LoadAll().ToList();
             Assert.IsNotNull(queueSources);
             Assert.AreEqual(queueSources.Count, 3);
 

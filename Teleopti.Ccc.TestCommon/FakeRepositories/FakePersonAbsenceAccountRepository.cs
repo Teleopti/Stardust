@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _absenceAccounts.SingleOrDefault(account => account.Id == id);
 		}
 
-		public IList<IPersonAbsenceAccount> LoadAll()
+		public IEnumerable<IPersonAbsenceAccount> LoadAll()
 		{
 			return _absenceAccounts;
 		}

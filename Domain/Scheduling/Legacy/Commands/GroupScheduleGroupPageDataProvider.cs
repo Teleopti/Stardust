@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -15,14 +16,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
         private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IDisableDeletedFilter _disableDeletedFilter;
 
-		private IList<IContract> _contractCollection;
-        private IList<IContractSchedule> _contractScheduleCollection;
-        private IList<IPartTimePercentage> _partTimePercentageCollection;
-        private IList<IRuleSetBag> _ruleSetBagCollection;
-        private IList<IGroupPage> _groupPageCollection;
+		private IEnumerable<IContract> _contractCollection;
+        private IEnumerable<IContractSchedule> _contractScheduleCollection;
+        private IEnumerable<IPartTimePercentage> _partTimePercentageCollection;
+        private IEnumerable<IRuleSetBag> _ruleSetBagCollection;
+        private IEnumerable<IGroupPage> _groupPageCollection;
         private IBusinessUnit _businessUnit;
         private IList<ISkill> _skillCollection;
-		private IList<IPerson> _allPersons;
+		private IEnumerable<IPerson> _allPersons;
 		private readonly object _lockObject = new Object();
 
 		public GroupScheduleGroupPageDataProvider(Func<ISchedulerStateHolder> stateHolder, IRepositoryFactory repositoryFactory, ICurrentUnitOfWorkFactory unitOfWorkFactory, IDisableDeletedFilter disableDeletedFilter)
@@ -226,7 +227,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					{
 						using (var uow = maybeDisposableUnitOfWork.Create(_unitOfWorkFactory))
 						{
-							_skillCollection = _repositoryFactory.CreateSkillRepository(uow.Uow).LoadAll();
+							_skillCollection = _repositoryFactory.CreateSkillRepository(uow.Uow).LoadAll().ToList();
 						}
 					}
 	            }

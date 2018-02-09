@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml.Linq;
 using NHibernate;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -15,7 +16,7 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 	{
 		public XmlLicenseService Make(ILicenseRepository licenseRepository, int numberOfActiveAgents)
 		{
-			IList<ILicense> allLicenses = licenseRepository.LoadAll();
+			IList<ILicense> allLicenses = licenseRepository.LoadAll().ToList();
 			if (allLicenses.Count == 0)
 			{
 				throw new LicenseMissingException();

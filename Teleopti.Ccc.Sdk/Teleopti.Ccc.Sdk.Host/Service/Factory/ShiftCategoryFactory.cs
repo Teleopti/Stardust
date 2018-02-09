@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service.Factory
                 IShiftCategoryRepository repository = repositoryFactory.CreateShiftCategoryRepository(unitOfWork);
                 ShiftCategoryAssembler shiftCategoryAssembler = new ShiftCategoryAssembler(repository);
                 
-                IList<IShiftCategory> shiftCategoryList;
+                IEnumerable<IShiftCategory> shiftCategoryList;
                 if (loadOptionDto.LoadDeleted)
                 {
                     using (unitOfWork.DisableFilter(QueryFilter.Deleted))

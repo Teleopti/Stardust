@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var target = new QueuedAbsenceRequestRepository(CurrUnitOfWork);
 			target.Remove(sent);
 			var result = target.LoadAll();
-			result.Count.Should().Be.EqualTo(1);
+			result.Count().Should().Be.EqualTo(1);
 			result.First().PersonRequest.Should().Be.EqualTo(notDeletedId);
 		}
 
@@ -158,7 +158,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var target = new QueuedAbsenceRequestRepository(CurrUnitOfWork);
 			target.CheckAndUpdateSent(90);
 			var requests = target.LoadAll();
-			requests.Count.Should().Be.EqualTo(1);
+			requests.Count().Should().Be.EqualTo(1);
 			requests.FirstOrDefault().Sent.Should().Be.EqualTo(null);
 		}
 

@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _teams.FirstOrDefault(t => t.Id.GetValueOrDefault() == id);
 		}
 
-		public IList<ITeam> LoadAll()
+		public IEnumerable<ITeam> LoadAll()
 		{
 			return _teams;
 		}

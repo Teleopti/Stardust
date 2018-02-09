@@ -57,10 +57,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			Target.Persist(result);
 
 			var performanceData = ExternalPerformanceDataRepository.LoadAll();
-			performanceData.Count.Should().Be.EqualTo(1);
+			performanceData.Count().Should().Be.EqualTo(1);
 
 			var performanceType = ExternalPerformanceRepository.LoadAll();
-			performanceType.Count.Should().Be.EqualTo(1);
+			performanceType.Count().Should().Be.EqualTo(1);
 			performanceType.First().Name.Should().Be.EqualTo(perfName);
 			performanceType.First().ExternalId.Should().Be.EqualTo(perfExtId);
 			performanceType.First().DataType.Should().Be.EqualTo(numeric);
@@ -85,10 +85,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			Target.Persist(result);
 
 			var performanceData = ExternalPerformanceDataRepository.LoadAll();
-			performanceData.Count.Should().Be.EqualTo(0);
+			performanceData.Count().Should().Be.EqualTo(0);
 
 			var performanceType = ExternalPerformanceRepository.LoadAll();
-			performanceType.Count.Should().Be.EqualTo(1);
+			performanceType.Count().Should().Be.EqualTo(1);
 			performanceType.First().Name.Should().Be.EqualTo(perfName);
 			performanceType.First().ExternalId.Should().Be.EqualTo(perfExtId);
 			performanceType.First().DataType.Should().Be.EqualTo(numeric);
@@ -118,10 +118,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			Target.Persist(result);
 
 			var performanceData = ExternalPerformanceDataRepository.LoadAll();
-			performanceData.Count.Should().Be.EqualTo(0);
+			performanceData.Count().Should().Be.EqualTo(0);
 
 			var performanceType = ExternalPerformanceRepository.LoadAll();
-			performanceType.Count.Should().Be.EqualTo(0);
+			performanceType.Count().Should().Be.EqualTo(0);
 		}
 
 		[Test]
@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 			Target.Persist(result);
 
 			var performanceData = ExternalPerformanceDataRepository.LoadAll();
-			performanceData.Count.Should().Be.EqualTo(1);
+			performanceData.Count().Should().Be.EqualTo(1);
 			performanceData.First().Score.Should().Be.EqualTo(0.8735);
 
 		}
@@ -222,7 +222,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 
 			Target.Persist(data);
 
-			var result = ExternalPerformanceDataRepository.LoadAll();
+			var result = ExternalPerformanceDataRepository.LoadAll().ToList();
 			result.Count.Should().Be.EqualTo(2);
 			result[0].Score.Should().Be.EqualTo(record1.MeasureNumberScore);
 			result[1].Score.Should().Be.EqualTo(record2.MeasureNumberScore);

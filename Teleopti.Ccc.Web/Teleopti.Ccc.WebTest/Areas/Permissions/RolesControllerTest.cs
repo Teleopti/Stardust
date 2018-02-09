@@ -439,7 +439,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 			ApplicationRoleRepository.Add(agentBuiltInRole);
 			person.PermissionInformation.AddApplicationRole(agentBuiltInRole);
 			Target.Delete(role.Id.Value);
-			ApplicationRoleRepository.LoadAll().Count.Should().Be.EqualTo(1);
+			ApplicationRoleRepository.LoadAll().Count().Should().Be.EqualTo(1);
 		}
 
 		[Test]

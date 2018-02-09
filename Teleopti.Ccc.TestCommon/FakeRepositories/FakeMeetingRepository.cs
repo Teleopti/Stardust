@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _storage.Get<IMeeting>(id);
 		}
 
-		public IList<IMeeting> LoadAll()
+		public IEnumerable<IMeeting> LoadAll()
 		{
 			return _storage.LoadAll<IMeeting>().ToList();
 		}

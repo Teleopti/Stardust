@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -28,7 +29,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var rep = TestRepository(new ThisUnitOfWork(UnitOfWork));
 			rep.Add(format2);
 			Session.Flush();
-			var all = rep.LoadAll();
+			var all = rep.LoadAll().ToList();
 
 			all.Count.Should().Be.EqualTo(1);
 			all[0].Id.Should().Not.Be.EqualTo(null);

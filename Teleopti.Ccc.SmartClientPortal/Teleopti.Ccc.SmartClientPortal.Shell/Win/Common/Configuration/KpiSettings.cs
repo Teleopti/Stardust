@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 				if (_lstTargets == null)
 				{
 					var tarRep = new KpiTargetRepository(_unitOfWork);
-					_lstTargets = tarRep.LoadAll();
+					_lstTargets = tarRep.LoadAll().ToList();
 				}
 				return _lstTargets;
 			}
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 				if (_lstTeams == null)
 				{
 					var teamRep = new TeamRepository(_unitOfWork);
-					_lstTeams = teamRep.LoadAll();
+					_lstTeams = teamRep.LoadAll().ToList();
 				}
 				return _lstTeams;
 			}
@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			if (comboBoxKpi.Items.Count > 0) return;
 
 			var kpiRep = new KpiRepository(_unitOfWork);
-			IList<IKeyPerformanceIndicator> lst = kpiRep.LoadAll();
+			var lst = kpiRep.LoadAll();
 			var collection = new TypedBindingCollection<IKeyPerformanceIndicator>();
 			lst.ForEach(collection.Add);
 
@@ -264,7 +264,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		private void loadSites()
 		{
 			var repSite = new SiteRepository(_unitOfWork);
-			IList<ISite> lst = repSite.LoadAll();
+			var lst = repSite.LoadAll();
 			comboBoxSite.Sorted = false;
 			comboBoxSite.DisplayMember = "Description";
 			comboBoxSite.ValueMember = "Id";

@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _notes.FirstOrDefault (note => note.Id == id);
 		}
 
-		public IList<IPublicNote> LoadAll()
+		public IEnumerable<IPublicNote> LoadAll()
 		{
 			return _notes;
 		}

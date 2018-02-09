@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			Target.Calculate(Guid.NewGuid());
 
 			var result = AgentBadgeWithRankTransactionRepository.LoadAll();
-			result.Count.Should().Be.EqualTo(0);
+			result.Count().Should().Be.EqualTo(0);
 		}
 
 		[Test]
@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			Target.Calculate(Guid.NewGuid());
 
 			var result = AgentBadgeWithRankTransactionRepository.LoadAll();
-			result.Count.Should().Be.EqualTo(0);
+			result.Count().Should().Be.EqualTo(0);
 		}
 
 		[Test]
@@ -226,7 +226,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			Target.Calculate(Guid.NewGuid());
 
 			var result = AgentBadgeTransactionRepository.LoadAll();
-			result.Count.Should().Be.EqualTo(0);
+			result.Count().Should().Be.EqualTo(0);
 		}
 
 		[Test]
@@ -239,7 +239,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			Target.Calculate(Guid.NewGuid());
 
 			var result = AgentBadgeTransactionRepository.LoadAll();
-			result.Count.Should().Be.EqualTo(0);
+			result.Count().Should().Be.EqualTo(0);
 		}
 
 		[Test]
@@ -328,7 +328,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			Target.Calculate(Guid.NewGuid());
 
 			var result = AgentBadgeTransactionRepository.LoadAll();
-			result.Count.Should().Be.EqualTo(0);
+			result.Count().Should().Be.EqualTo(0);
 		}
 
 		[Test]
@@ -347,7 +347,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			Target.Calculate(Guid.NewGuid());
 
 			var result = AgentBadgeWithRankTransactionRepository.LoadAll();
-			result.Count.Should().Be.EqualTo(0);
+			result.Count().Should().Be.EqualTo(0);
 		}
 
 		[Test]
@@ -364,7 +364,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			Target.Calculate(Guid.NewGuid());
 
 			var result = AgentBadgeWithRankTransactionRepository.LoadAll();
-			result.Count.Should().Be.EqualTo(0);
+			result.Count().Should().Be.EqualTo(0);
 		}
 
 		[Test]
@@ -383,7 +383,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			Target.Calculate(Guid.NewGuid());
 
 			var result = AgentBadgeWithRankTransactionRepository.LoadAll();
-			result.Count.Should().Be.EqualTo(0);
+			result.Count().Should().Be.EqualTo(0);
 		}
 
 		[Test]

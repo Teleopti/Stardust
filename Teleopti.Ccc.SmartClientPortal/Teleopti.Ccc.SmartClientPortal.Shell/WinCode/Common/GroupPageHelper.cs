@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 					_ruleSetBagCollection = new List<IRuleSetBag>(ruleSetBagRepository.LoadAll());
 
 					ISkillRepository skillRep = _repositoryFactory.CreateSkillRepository(uow);
-					_skillCollection = skillRep.LoadAll();
+					_skillCollection = skillRep.LoadAll().ToList();
 				}
 				IPersonRepository rep = _repositoryFactory.CreatePersonRepository(uow);
 				_personCollection = rep.LoadAllPeopleWithHierarchyDataSortByName(SelectedPeriod.StartDate).ToList();

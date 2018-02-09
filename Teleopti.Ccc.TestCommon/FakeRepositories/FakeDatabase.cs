@@ -451,7 +451,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public void CreateDefaultData()
 		{
 			// default data already created. ugly for now...
-			if (_applicationFunctions.LoadAll().Count > 0)
+			if (_applicationFunctions.LoadAll().Any())
 				return;
 
 			// all application functions

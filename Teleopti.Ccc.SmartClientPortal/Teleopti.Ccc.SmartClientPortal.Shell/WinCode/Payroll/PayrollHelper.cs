@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
@@ -76,7 +77,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Payroll
         /// <returns></returns>
         IList<IMultiplicatorDefinitionSet> IPayrollHelper.LoadDefinitionSets()
         {
-            return GetMultiplicatorDefinitionSetRepository().LoadAll();
+            return GetMultiplicatorDefinitionSetRepository().LoadAll().ToList();
         }
 
         /// <summary>
