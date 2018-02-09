@@ -377,7 +377,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		IScheduleDay ReFetch();
 		void AddMainShift(IPersonAssignment mainShiftSource);
 		bool HasProjection();
-		void RemoveActivity(ShiftLayer shiftLayer, bool b, TrackedCommandInfo commandTrackedCommandInfo);
 
 		IPreferenceDay PreferenceDay();
 	}
