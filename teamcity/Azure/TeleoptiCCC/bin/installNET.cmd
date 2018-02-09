@@ -2,6 +2,11 @@ REM Set the value of netfx to install appropriate .NET Framework.
 REM ***** To install .NET 4.5.2 set the variable netfx to "NDP452" *****
 REM ***** To install .NET 4.6 set the variable netfx to "NDP46" *****
 REM ***** To install .NET 4.6.1 set the variable netfx to "NDP461" *****
+::current dir
+SET DIRECTORY=%~dp0
+::remove trailer slash
+SET DIRECTORY=%DIRECTORY:~0,-1%
+
 set netfx="NDP461"
 
 REM ***** Set script start timestamp *****
@@ -49,7 +54,7 @@ if %ERRORLEVEL%== 0 goto installed
 
 REM ***** Installing .NET *****
 echo Installing .NET with commandline: start /wait %~dp0%netfxinstallfile% /q /serialdownload /log %netfxinstallerlog%  /chainingpackage "CloudService Startup Task" >> %startuptasklog%
-start /wait %~dp0%netfxinstallfile% /q /serialdownload /log %netfxinstallerlog% /chainingpackage "CloudService Startup Task" >> %startuptasklog% 2>>&1
+start /wait %~dp0%netfxinstallfile% /q /norestart /serialdownload /log %netfxinstallerlog% /chainingpackage "CloudService Startup Task" >> %startuptasklog% 2>>&1
 if %ERRORLEVEL%== 0 goto installed
     echo .NET installer exited with code %ERRORLEVEL% >> %startuptasklog%   
     if %ERRORLEVEL%== 3010 goto restart
@@ -57,10 +62,12 @@ if %ERRORLEVEL%== 0 goto installed
     echo .NET (%netfx%) install failed with Error Code %ERRORLEVEL%. Further logs can be found in %netfxinstallerlog% >> %startuptasklog%
 
 :restart
-echo Restarting to complete .NET (%netfx%) installation >> %startuptasklog%
+echo PendingReboot >> PendingReboot.txt
+echo Setting Flag for "Restarting to complete .NET" (%netfx%) installation >> %startuptasklog%
 goto end
 
 :installed
+del %DIRECTORY%\PendingReboot.txt
 echo .NET (%netfx%) is installed >> %startuptasklog%
 
 :end

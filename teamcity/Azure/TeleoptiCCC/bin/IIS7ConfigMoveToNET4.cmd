@@ -1,5 +1,14 @@
 @ECHO OFF
+::current dir
+SET DIRECTORY=%~dp0
+::remove trailer slash
+SET DIRECTORY=%DIRECTORY:~0,-1%
 SET FILE=%~n0
+
+IF EXIST "%DIRECTORY%\PendingReboot.txt" (
+  ECHO Pending reboot flag exists.. exiting >> "%DIRECTORY%\StartupLog.txt" 2>&1
+  GOTO Finish
+)
 
 ECHO setting security for PowerShell on Azure instance >> %FILE%.log
 powershell set-executionpolicy unrestricted  >> %FILE%.log
@@ -23,3 +32,8 @@ PowerShell .\ChangeAppPoolVersion.ps1 "%1" "%2" >> %FILE%.log
 ECHO %1 Done >> %FILE%.log
 ECHO. >> %FILE%.log
 goto :eof
+
+exit /b 0
+
+:Finish
+exit /b 0
