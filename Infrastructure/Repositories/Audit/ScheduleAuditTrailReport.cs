@@ -50,28 +50,32 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 
 			var retTemp = new List<ScheduleAuditingReportData>();
 
-			auditSession.CreateQuery().ForHistoryOf<PersonAssignment, Revision>()
-				.Add(AuditEntity.RevisionProperty("ModifiedAt")
-					.Between(changedPeriodAgentTimeZone.StartDateTime, changedPeriodAgentTimeZone.EndDateTime))
-				.AddModifiedByIfNotNull(changedByPerson)
-				.Add(AuditEntity.Property("Date").Between(scheduledPeriod.StartDate, scheduledPeriod.EndDate))
-				.Add(AuditEntity.Property("Person").In(scheduledAgents))
-				.AddOrder(AuditEntity.RevisionProperty("ModifiedAt").Desc())
-				.SetMaxResults(maximumResults)
-				.Results()
-				.ForEach(assRev => retTemp.Add(createAssignmentAuditingData(assRev)));
+			foreach (var personsBatch in scheduledAgents.Batch(500))
+			{
+				var personArray = personsBatch as IList<IPerson> ?? personsBatch.ToList();
+				auditSession.CreateQuery().ForHistoryOf<PersonAssignment, Revision>()
+					.Add(AuditEntity.RevisionProperty("ModifiedAt")
+						.Between(changedPeriodAgentTimeZone.StartDateTime, changedPeriodAgentTimeZone.EndDateTime))
+					.AddModifiedByIfNotNull(changedByPerson)
+					.Add(AuditEntity.Property("Date").Between(scheduledPeriod.StartDate, scheduledPeriod.EndDate))
+					.Add(AuditEntity.Property("Person").In(personArray))
+					.AddOrder(AuditEntity.RevisionProperty("ModifiedAt").Desc())
+					.SetMaxResults(maximumResults)
+					.Results()
+					.ForEach(assRev => retTemp.Add(createAssignmentAuditingData(assRev)));
 
-			auditSession.CreateQuery().ForHistoryOf<PersonAbsence, Revision>()
-				.Add(AuditEntity.RevisionProperty("ModifiedAt")
-					.Between(changedPeriodAgentTimeZone.StartDateTime, changedPeriodAgentTimeZone.EndDateTime))
-				.AddModifiedByIfNotNull(changedByPerson)
-				.Add(AuditEntity.Property("Layer.Period.period.Minimum").Lt(scheduledPeriodAgentTimeZone.EndDateTime))
-				.Add(AuditEntity.Property("Layer.Period.period.Maximum").Gt(scheduledPeriodAgentTimeZone.StartDateTime))
-				.Add(AuditEntity.Property("Person").In(scheduledAgents))
-				.AddOrder(AuditEntity.RevisionProperty("ModifiedAt").Desc())
-				.SetMaxResults(maximumResults)
-				.Results()
-				.ForEach(absRev => retTemp.Add(createAbsenceAuditingData(absRev)));
+				auditSession.CreateQuery().ForHistoryOf<PersonAbsence, Revision>()
+					.Add(AuditEntity.RevisionProperty("ModifiedAt")
+						.Between(changedPeriodAgentTimeZone.StartDateTime, changedPeriodAgentTimeZone.EndDateTime))
+					.AddModifiedByIfNotNull(changedByPerson)
+					.Add(AuditEntity.Property("Layer.Period.period.Minimum").Lt(scheduledPeriodAgentTimeZone.EndDateTime))
+					.Add(AuditEntity.Property("Layer.Period.period.Maximum").Gt(scheduledPeriodAgentTimeZone.StartDateTime))
+					.Add(AuditEntity.Property("Person").In(personArray))
+					.AddOrder(AuditEntity.RevisionProperty("ModifiedAt").Desc())
+					.SetMaxResults(maximumResults)
+					.Results()
+					.ForEach(absRev => retTemp.Add(createAbsenceAuditingData(absRev)));
+			}
 
 			ret.AddRange(retTemp
 				.OrderByDescending(o => o.ModifiedAt)
