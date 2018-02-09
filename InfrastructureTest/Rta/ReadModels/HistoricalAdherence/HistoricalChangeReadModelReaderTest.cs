@@ -40,6 +40,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.HistoricalAdherence
 			change.PersonId.Should().Be(personId);
 			change.BelongsToDate.Should().Be("2017-03-07".Date());
 			change.Timestamp.Should().Be("2017-03-07 10:00".Utc());
+			change.Timestamp.Kind.Should().Be(DateTimeKind.Utc);
 			change.StateName.Should().Be("ready");
 			change.StateGroupId.Should().Be(state);
 			change.ActivityName.Should().Be("phone");

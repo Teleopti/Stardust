@@ -30,8 +30,21 @@ AND EndTime >= :StartTime
 				.SetParameter("PersonId", personId)
 				.SetParameter("StartTime", startTime)
 				.SetParameter("EndTime", endTime)
-				.SetResultTransformer(Transformers.AliasToBean<ApprovedPeriod>())
+				.SetResultTransformer(Transformers.AliasToBean<approvedPeriod>())
 				.List<ApprovedPeriod>();
+		}
+
+		internal class approvedPeriod : ApprovedPeriod
+		{
+			public new DateTime StartTime
+			{
+				set => base.StartTime = DateTime.SpecifyKind(value, DateTimeKind.Utc);
+			}
+			
+			public new DateTime EndTime
+			{
+				set => base.EndTime = DateTime.SpecifyKind(value, DateTimeKind.Utc);
+			}
 		}
 	}
 }

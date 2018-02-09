@@ -38,10 +38,16 @@ ORDER BY [Timestamp] ASC")
 
 		private class internalModel : HistoricalChange
 		{
-			public new DateTime? BelongsToDate { set
+			public new DateTime? BelongsToDate
 			{
-				base.BelongsToDate = value.HasValue ? new DateOnly(value.Value) : (DateOnly?) null;
-			} }
+				set { base.BelongsToDate = value.HasValue ? new DateOnly(value.Value) : (DateOnly?) null; }
+			}
+
+			public new DateTime Timestamp
+			{
+				set { base.Timestamp = DateTime.SpecifyKind(value, DateTimeKind.Utc); }
+			}
+
 			public new int Adherence { set { base.Adherence = (HistoricalChangeAdherence) value; } }
 		}
 	}

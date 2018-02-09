@@ -14,11 +14,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.HistoricalAdherence
 	[DatabaseTest]
 	public class HistoricalAdherenceReadModelReaderTest
 	{
-		public Database Database;
 		public IHistoricalAdherenceReadModelPersister Persister;
 		public IHistoricalAdherenceReadModelReader Reader;
-		public IPersonRepository Persons;
-		public WithUnitOfWork WithUnitOfWork;
 		public WithReadModelUnitOfWork WithReadModelUnitOfWork;
 
 		[Test]
@@ -40,11 +37,20 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.HistoricalAdherence
 				.SameValuesAs("2016-10-18 08:00".Utc(), "2016-10-18 08:05".Utc(), "2016-10-18 09:00".Utc(), "2016-10-18 09:15".Utc());
 		}
 
+		[Test]
+		public void ShouldReadOutOfAdherenceTimestampAsUtc()
+		{
+			var person = Guid.NewGuid();
+			WithReadModelUnitOfWork.Do(() => { Persister.AddOut(person, "2016-10-18 08:00".Utc()); });
+
+			var result = WithReadModelUnitOfWork.Get(() => Reader.Read(person, "2016-10-18 00:00".Utc(), "2016-10-19 00:00".Utc()));
+
+			result.Single().Timestamp.Kind.Should().Be(DateTimeKind.Utc);
+		}
 
 		[Test]
 		public void ShouldReadFromYesterday()
 		{
-
 			var person = Guid.NewGuid();
 			WithReadModelUnitOfWork.Do(() =>
 			{
@@ -61,7 +67,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.HistoricalAdherence
 		[Test]
 		public void ShouldReadLatestFromYesterday()
 		{
-
 			var person = Guid.NewGuid();
 			WithReadModelUnitOfWork.Do(() =>
 			{
@@ -75,6 +80,5 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.HistoricalAdherence
 			result.Timestamp
 				.Should().Be("2016-10-17 08:00".Utc());
 		}
-
 	}
 }

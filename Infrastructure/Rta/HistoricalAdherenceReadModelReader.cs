@@ -29,7 +29,7 @@ ORDER BY [Timestamp] ASC")
 				.SetParameter("PersonId", personId)
 				.SetParameter("StartTime", startTime)
 				.SetParameter("EndTime", endTime)
-				.SetResultTransformer(Transformers.AliasToBean<HistoricalAdherence>())
+				.SetResultTransformer(Transformers.AliasToBean<internalModel>())
 				.List<HistoricalAdherence>();
 		}
 
@@ -45,8 +45,16 @@ ORDER BY [Timestamp] DESC")
 				.SetParameter("PersonId", personId)
 				.SetParameter("Timestamp", timestamp)
 				
-				.SetResultTransformer(Transformers.AliasToBean<HistoricalAdherence>())
+				.SetResultTransformer(Transformers.AliasToBean<internalModel>())
 				.UniqueResult<HistoricalAdherence>();
+		}
+
+		internal class internalModel : HistoricalAdherence
+		{
+			public new DateTime Timestamp
+			{
+				set { base.Timestamp = DateTime.SpecifyKind(value, DateTimeKind.Utc); }
+			}
 		}
 	}
 }

@@ -33,6 +33,23 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.HistoricalAdherence
 		}
 
 		[Test]
+		public void ShouldReadApprovedPeriodTimeAsUtc()
+		{
+			var person = Guid.NewGuid();
+			Target.Persist(new ApprovedPeriod
+			{
+				PersonId = person,
+				StartTime = "2018-01-30 15:00".Utc(),
+				EndTime = "2018-01-30 16:00".Utc()
+			});
+
+			var result = Reader.Read(person, "2018-01-30 00:00".Utc(), "2018-01-30 23:00".Utc());
+
+			result.Single().StartTime.Kind.Should().Be(DateTimeKind.Utc);
+			result.Single().EndTime.Kind.Should().Be(DateTimeKind.Utc);
+		}
+
+		[Test]
 		public void ShouldExcludeBeforeStartTime()
 		{
 			var personId = Guid.NewGuid();
