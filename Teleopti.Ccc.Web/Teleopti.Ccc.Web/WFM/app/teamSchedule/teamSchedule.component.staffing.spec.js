@@ -170,6 +170,14 @@
 		expect(_staffingInfoService.getStaffingCount).toEqual(1);
 	});
 
+	it("should format date before call getStaffingByDate", function () {
+		var scope = $rootScope.$new();
+		scope.selectedDate = new Date("2018-02-11");
+		scope.preselectedSkills = { skillIds: ['XYZ'] };
+		setupComponent('selected-date="selectedDate" preselected-skills="preselectedSkills"', scope);
+		expect(_staffingInfoService.date).toEqual('2018-02-11');
+	});
+
 	function enableShowSkillsToggle() {
 		toggles.set({
 			WfmTeamSchedule_ShowSkillsForSelectedSkillGroupInStaffingInfo_47202: true
@@ -259,10 +267,12 @@
 			getStaffingCount: 0,
 			selectedSkill: null,
 			selectedSkillGroup: null,
-			getStaffingByDate: function (selectedSkill, selectedSkillGroup) {
+			date: null,
+			getStaffingByDate: function (selectedSkill, selectedSkillGroup, date) {
 				this.selectedSkill = selectedSkill;
 				this.selectedSkillGroup = selectedSkillGroup;
 				this.getStaffingCount += 1;
+				this.date = date;
 				return {
 					then: function (callback) {
 						callback({

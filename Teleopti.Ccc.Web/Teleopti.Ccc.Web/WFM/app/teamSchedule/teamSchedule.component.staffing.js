@@ -139,7 +139,7 @@
 		function generateChart() {
 			if (!selectedSkill && !vm.selectedSkillGroup) return;
 			vm.isLoading = true;
-			var query = StaffingInfoService.getStaffingByDate(selectedSkill, vm.selectedSkillGroup, vm.selectedDate, vm.useShrinkage);
+			var query = StaffingInfoService.getStaffingByDate(selectedSkill, vm.selectedSkillGroup, moment(vm.selectedDate).format("YYYY-MM-DD"), vm.useShrinkage);
 			query.then(function (result) {
 				vm.isLoading = false;
 				if (staffingPrecheck(result.DataSeries)) {
