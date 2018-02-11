@@ -1496,6 +1496,8 @@
     <Content Include="WFM\app\global\tree-picker\tree.component.typeTwo.spec.js" />
     <Content Include="WFM\app\global\tree-picker\tree_data.tpl.html" />
     <Content Include="WFM\app\global\tree-picker\_modules.js" />
+    <Content Include="WFM\app\global\utilities\serviceDateFormatHelper.service.spec.js" />
+    <Content Include="WFM\app\global\utilities\serviceDateFormatHelper.service.js" />
     <Content Include="WFM\app\people\html\people.html" />
     <Content Include="WFM\app\people\people.routes.js" />
     <Content Include="WFM\app\people\people.start.controller.js" />
