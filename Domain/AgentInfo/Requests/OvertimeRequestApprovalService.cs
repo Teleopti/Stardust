@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			var skills = _overtimeRequestSkillProvider.GetAvailableSkills(request.Person, period).ToList();
 			if (!skills.Any())
 			{
-				return getBusinessRuleResponses(Resources.NoAvailableSkillForOvertime, period, person);
+				return getBusinessRuleResponses(Resources.ThereIsNoAvailableSkillForOvertime, period, person);
 			}
 
 			Guid activityId;

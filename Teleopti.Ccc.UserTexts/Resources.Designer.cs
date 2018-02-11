@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.UserTexts {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -20663,15 +20663,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Agent has no available skill for overtime.
-        /// </summary>
-        public static string NoAvailableSkillForOvertime {
-            get {
-                return ResourceManager.GetString("NoAvailableSkillForOvertime", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to One or more days during this requested period {0} has no budget allowance..
         /// </summary>
         public static string NoBudgetDefineForSomeRequestedDays {
@@ -34974,6 +34965,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ThereIsAlreadyAnAssignment {
             get {
                 return ResourceManager.GetString("ThereIsAlreadyAnAssignment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There is no available skill for overtime.
+        /// </summary>
+        public static string ThereIsNoAvailableSkillForOvertime {
+            get {
+                return ResourceManager.GetString("ThereIsNoAvailableSkillForOvertime", resourceCulture);
             }
         }
         

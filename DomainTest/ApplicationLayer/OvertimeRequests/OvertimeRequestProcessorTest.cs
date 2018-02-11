@@ -305,7 +305,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			personRequest.IsApproved.Should().Be.False();
 			personRequest.IsDenied.Should().Be.True();
 			personRequest.DenyReason.Should()
-				.Be.EqualTo(Resources.NoAvailableSkillForOvertime);
+				.Be.EqualTo(Resources.ThereIsNoAvailableSkillForOvertime);
 		}
 
 		[Test]

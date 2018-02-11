@@ -577,7 +577,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var result = target.Approve(personRequest.Request);
 
 			result.Count().Should().Be(1);
-			result.First().Message.Should().Be(Resources.NoAvailableSkillForOvertime);
+			result.First().Message.Should().Be(Resources.ThereIsNoAvailableSkillForOvertime);
 		}
 
 		[Test]

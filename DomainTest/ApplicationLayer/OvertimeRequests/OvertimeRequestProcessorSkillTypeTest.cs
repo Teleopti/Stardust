@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			personRequest.IsApproved.Should().Be.False();
 			personRequest.IsDenied.Should().Be.True();
-			personRequest.DenyReason.Trim().Should().Contain("Agent has no available skill for overtime");
+			personRequest.DenyReason.Trim().Should().Contain("There is no available skill for overtime");
 		}
 
 		[Test]
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			personRequest.IsApproved.Should().Be.False();
 			personRequest.IsDenied.Should().Be.True();
-			personRequest.DenyReason.Trim().Should().Contain("Agent has no available skill for overtime");
+			personRequest.DenyReason.Trim().Should().Contain("There is no available skill for overtime");
 		}
 
 		[Test]
