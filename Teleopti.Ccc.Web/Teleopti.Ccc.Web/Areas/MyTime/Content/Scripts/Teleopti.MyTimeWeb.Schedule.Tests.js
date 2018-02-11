@@ -35,7 +35,25 @@ $(document).ready(function () {
 			init: function () { },
 			setHash: function (data) { hash = "#" + data; }
 		};
-	}
+	}	
+
+	test("should not set probability info for month view", function() {
+		setupHash();
+		var old = Teleopti.MyTimeWeb.Portal.ParseHash;
+		Teleopti.MyTimeWeb.Portal.ParseHash = function () {
+			return {
+				dateHash: "20180209"
+			}
+		}
+		var vm = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null);
+		vm.selectedProbabilityType = 2;
+
+		vm.month();
+
+		equal(hash, "#Schedule/Month/20180209");
+		Teleopti.MyTimeWeb.Portal.ParseHash = old;
+		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
+	});
 
 	test("should read absence report permission", function () {
 		initUserTexts();
