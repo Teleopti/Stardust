@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			_personRequestRepository = personRequestRepository;
 		}
 
-		public bool CheckShiftTradeExchangeOffer { get; set; }
+		public bool CheckShiftTradeExchangeOffer { get; set; } = true;
 
 		public IEnumerable<IBusinessRuleResponse> Approve(IRequest request)
 		{
@@ -57,21 +57,27 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 																  _scheduleDictionary,
 																   _newBusinessRules, new ScheduleTagSetter(NullScheduleTag.Instance)).ToList();
 
-			if (needToCheckShiftTradeExchangeOffer(shiftTradeRequest, responses))
+			if (needToDenyOtherRequests(shiftTradeRequest, responses))
 			{
-				var shiftTradeRequests = _personRequestRepository.FindShiftTradeRequestsByOfferId(shiftTradeRequest.Offer.Id.GetValueOrDefault());
-				var otherShiftTradeRequests = shiftTradeRequests.Where(a => !a.Id.Equals(request.Parent.Id.GetValueOrDefault()));
-				foreach (var otherShiftTradeRequest in otherShiftTradeRequests)
-				{
-					otherShiftTradeRequest.Deny(Resources.ShiftTradeRequestForExchangeOfferHasBeenCompleted,
-						_personRequestCheckAuthorization);
-				}
+				denyOtherRequests(request, shiftTradeRequest);
 			}
 
 			return responses;
 		}
 
-		private bool needToCheckShiftTradeExchangeOffer(IShiftTradeRequest shiftTradeRequest, List<IBusinessRuleResponse> responses)
+		private void denyOtherRequests(IRequest request, IShiftTradeRequest shiftTradeRequest)
+		{
+			var shiftTradeRequests =
+				_personRequestRepository.FindShiftTradeRequestsByOfferId(shiftTradeRequest.Offer.Id.GetValueOrDefault());
+			var otherShiftTradeRequests = shiftTradeRequests.Where(a => !a.Id.Equals(request.Parent.Id.GetValueOrDefault()));
+			foreach (var otherShiftTradeRequest in otherShiftTradeRequests)
+			{
+				otherShiftTradeRequest.Deny(Resources.ShiftTradeRequestForExchangeOfferHasBeenCompleted,
+					_personRequestCheckAuthorization);
+			}
+		}
+
+		private bool needToDenyOtherRequests(IShiftTradeRequest shiftTradeRequest, List<IBusinessRuleResponse> responses)
 		{
 			return CheckShiftTradeExchangeOffer && shiftTradeRequest.Offer != null && responses.Count == 0;
 		}

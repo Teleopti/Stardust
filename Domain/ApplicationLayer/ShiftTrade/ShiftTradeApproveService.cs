@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -47,6 +48,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 
 			var requestApprovalServiceScheduler = _requestFactory.GetRequestApprovalService(allNewRules,
 				_scenarioRepository.Current(), schedulingResultStateHolder, shiftTradeRequest.Parent as IPersonRequest);
+			((ShiftTradeRequestApprovalService) requestApprovalServiceScheduler).CheckShiftTradeExchangeOffer = false;
 			var brokenBusinessRules = requestApprovalServiceScheduler.Approve(shiftTradeRequest).ToList();
 
 			undoRedoContainer.UndoAll();

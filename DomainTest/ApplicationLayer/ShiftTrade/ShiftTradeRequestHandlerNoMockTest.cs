@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IdentityModel.Claims;
 using System.Linq;
+using System.Threading;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -8,10 +12,13 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
@@ -55,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		public void ShouldSetMinWeeklyWorkTimeBrokenRuleWhenUseMinWeekWorkTimeIsOn()
 		{
 			var businessRuleProvider = new BusinessRuleProvider();
-			var personRequest = doShiftTradeWithBrokenRules(businessRuleProvider, useMinWeekWorkTime: true);
+			var personRequest = doShiftTradeWithBrokenRules(businessRuleProvider, true);
 			Assert.IsTrue(personRequest.BrokenBusinessRules.Value.HasFlag(BusinessRuleFlags.MinWeekWorkTimeRule));
 		}
 
@@ -136,6 +143,120 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			Assert.IsTrue(personRequest.BrokenBusinessRules.Value.HasFlag(BusinessRuleFlags.SiteOpenHoursRule));
 		}
 
+		[Test]
+		public void ShouldDenyOtherShiftTradeRequestsWhenShiftExchangeOfferIsCompleted()
+		{
+			var shiftDate = new DateOnly(2007, 1, 1);
+			var agent1 = PersonFactory.CreatePersonWithId();
+			_personRepository.AddRange(new[]
+			{
+				agent1
+			});
+
+			var period = new DateTimePeriod(new DateTime(2007, 1, 1, 3, 0, 0, DateTimeKind.Utc),
+				new DateTime(2007, 01, 01, 15, 0, 0, DateTimeKind.Utc));
+			var activity = ActivityFactory.CreateActivity("Phone").WithId();
+			var agent1Shift = createScheduleDay(shiftDate, period.ChangeEndTime(TimeSpan.FromHours(3)), agent1, activity);
+			var shiftTradeOffer =
+				new ShiftExchangeOffer(agent1Shift, new ShiftExchangeCriteria(), ShiftExchangeOfferStatus.Pending)
+				{
+					Criteria = new ShiftExchangeCriteria(DateOnly.Today.AddDays(1),
+						new ScheduleDayFilterCriteria
+						{
+							DayType = ShiftExchangeLookingForDay.DayOffOrEmptyDay
+						}),
+					ShiftExchangeOfferId = Guid.NewGuid().ToString()
+				}.WithId();
+
+			var workflowControlSet = ShiftTradeTestHelper.CreateWorkFlowControlSet(false);
+
+			var result1 = doBasicShiftTrade(workflowControlSet, offer: shiftTradeOffer);
+
+			workflowControlSet.AutoGrantShiftTradeRequest = true;
+			var result2 = doBasicShiftTrade(workflowControlSet, offer: shiftTradeOffer);
+
+			Assert.IsTrue(result2.PersonRequest.IsApproved);
+			Assert.IsTrue(result1.PersonRequest.IsDenied);
+			Assert.IsTrue(result1.PersonRequest.DenyReason.Equals(Resources.ShiftTradeRequestForExchangeOfferHasBeenCompleted));
+		}
+
+		[Test]
+		public void ShouldNotDenyOtherShiftTradeRequestsWhenShiftExchangeOfferIsCompletedWithAutoGrantOff()
+		{
+			var shiftDate = new DateOnly(2007, 1, 1);
+			var agent1 = PersonFactory.CreatePersonWithId();
+			_personRepository.AddRange(new[]
+			{
+				agent1
+			});
+
+			var period = new DateTimePeriod(new DateTime(2007, 1, 1, 3, 0, 0, DateTimeKind.Utc),
+				new DateTime(2007, 01, 01, 15, 0, 0, DateTimeKind.Utc));
+			var activity = ActivityFactory.CreateActivity("Phone").WithId();
+			var agent1Shift = createScheduleDay(shiftDate, period.ChangeEndTime(TimeSpan.FromHours(3)), agent1, activity);
+			var shiftTradeOffer =
+				new ShiftExchangeOffer(agent1Shift, new ShiftExchangeCriteria(), ShiftExchangeOfferStatus.Pending)
+				{
+					Criteria = new ShiftExchangeCriteria(DateOnly.Today.AddDays(1),
+						new ScheduleDayFilterCriteria
+						{
+							DayType = ShiftExchangeLookingForDay.DayOffOrEmptyDay
+						}),
+					ShiftExchangeOfferId = Guid.NewGuid().ToString()
+				}.WithId();
+
+			var workflowControlSet = ShiftTradeTestHelper.CreateWorkFlowControlSet(false);
+
+			var result1 = doBasicShiftTrade(workflowControlSet, offer: shiftTradeOffer);
+			var result2 = doBasicShiftTrade(workflowControlSet, offer: shiftTradeOffer);
+
+			Assert.IsTrue(result2.PersonRequest.IsPending);
+			Assert.IsTrue(result1.PersonRequest.IsPending);
+		}
+
+		[Test]
+		public void ShouldNotDenyOtherShiftTradeRequestsWhenShiftTradeRequestIsInvalid()
+		{
+			var shiftDate = new DateOnly(2007, 1, 1);
+			var agent1 = PersonFactory.CreatePersonWithId();
+			_personRepository.AddRange(new[]
+			{
+				agent1
+			});
+
+			var period = new DateTimePeriod(new DateTime(2007, 1, 1, 3, 0, 0, DateTimeKind.Utc),
+				new DateTime(2007, 01, 01, 15, 0, 0, DateTimeKind.Utc));
+			var activity = ActivityFactory.CreateActivity("Phone").WithId();
+			var agent1Shift = createScheduleDay(shiftDate, period.ChangeEndTime(TimeSpan.FromHours(3)), agent1, activity);
+			var shiftTradeOffer =
+				new ShiftExchangeOffer(agent1Shift, new ShiftExchangeCriteria(), ShiftExchangeOfferStatus.Pending)
+				{
+					Criteria = new ShiftExchangeCriteria(DateOnly.Today.AddDays(1),
+						new ScheduleDayFilterCriteria
+						{
+							DayType = ShiftExchangeLookingForDay.DayOffOrEmptyDay
+						}),
+					ShiftExchangeOfferId = Guid.NewGuid().ToString()
+				}.WithId();
+
+			var workflowControlSet = ShiftTradeTestHelper.CreateWorkFlowControlSet(false);
+			var result1 = doBasicShiftTrade(workflowControlSet, offer: shiftTradeOffer);
+
+			var invalidPersonRequest = doShiftTradeWithBrokenRules(new BusinessRuleProvider(), offer: shiftTradeOffer);
+
+			Assert.IsTrue(invalidPersonRequest.IsPending);
+			Assert.IsTrue(result1.PersonRequest.IsPending);
+		}
+
+		private IScheduleDay createScheduleDay(DateOnly date, DateTimePeriod period, IPerson agent, IActivity activity)
+		{
+			var scheduleDay = ScheduleDayFactory.Create(date, agent, _currentScenario.Current());
+			scheduleDay.AddMainShift(EditableShiftFactory.CreateEditorShift(activity,
+				period,
+				ShiftCategoryFactory.CreateShiftCategory("Early")));
+			return scheduleDay;
+		}
+
 		private static IBusinessRuleProvider getConfigurableBusinessRuleProvider(params ShiftTradeBusinessRuleConfig[] businessRuleConfigs)
 		{
 			var globalSettingDataRepository = new FakeGlobalSettingDataRepository();
@@ -148,8 +269,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			return businessRuleProvider;
 		}
 
-		private basicShiftTradeTestResult doBasicShiftTrade(IWorkflowControlSet workflowControlSet, bool addBrokenBusinessRules = false)
+		private basicShiftTradeTestResult doBasicShiftTrade(IWorkflowControlSet workflowControlSet, bool addBrokenBusinessRules = false, IShiftExchangeOffer offer = null)
 		{
+			setPermissions();
+
 			var personTo = PersonFactory.CreatePerson("To").WithId();
 			var personFrom = PersonFactory.CreatePerson("With").WithId();
 
@@ -182,10 +305,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			_personRepository.Add(personTo);
 
 			var personRequest = _shiftTradeTestHelper.PrepareAndGetPersonRequest(personFrom, personTo, DateOnly.Today);
+			((ShiftTradeRequest)personRequest.Request).Offer = offer;
 
 			_shiftTradeTestHelper.SetScheduleDictionary(scheduleDictionary);
 
-			_shiftTradeTestHelper.HandleRequest(_shiftTradeTestHelper.GetAcceptShiftTradeEvent(personTo, personRequest.Id.Value));
+			_shiftTradeTestHelper.HandleRequest(_shiftTradeTestHelper.GetAcceptShiftTradeEvent(personTo, personRequest.Id.GetValueOrDefault()));
 
 			return new basicShiftTradeTestResult
 			{
@@ -197,8 +321,33 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			};
 		}
 
-		private IPersonRequest doShiftTradeWithBrokenRules(IBusinessRuleProvider businessRuleProvider, bool useMinWeekWorkTime = false, bool autoGrantShiftTrade = true)
+		private static void setPermissions()
 		{
+			var principal = Thread.CurrentPrincipal as ITeleoptiPrincipal;
+			var claims = new List<Claim>
+			{
+				new Claim(string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace
+						, "/", DefinedRaptorApplicationFunctionPaths.ViewSchedules)
+					, new AuthorizeEveryone(), Rights.PossessProperty),
+				new Claim(string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace
+						, "/", DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules)
+					, new AuthorizeEveryone(), Rights.PossessProperty),
+				new Claim(string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace
+						, "/", DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment)
+					, new AuthorizeEveryone(), Rights.PossessProperty),
+				new Claim(
+					string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace,
+						"/AvailableData"), new AuthorizeEveryone(), Rights.PossessProperty)
+			};
+			principal.AddClaimSet(new DefaultClaimSet(ClaimSet.System, claims));
+		}
+
+		private IPersonRequest doShiftTradeWithBrokenRules(IBusinessRuleProvider businessRuleProvider
+			, bool useMinWeekWorkTime = false, bool autoGrantShiftTrade = true,
+			IShiftExchangeOffer offer = null)
+		{
+			setPermissions();
+
 			var scheduleDate = new DateTime(2016, 7, 25);
 			var scheduleDateOnly = new DateOnly(scheduleDate);
 
@@ -221,6 +370,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			}
 
 			var personRequest = _shiftTradeTestHelper.PrepareAndGetPersonRequest(personFrom, personTo, scheduleDateOnly);
+			((ShiftTradeRequest) personRequest.Request).Offer = offer;
 
 			_shiftTradeTestHelper.SetPersonAccounts(personTo, personFrom, scheduleDateOnly);
 

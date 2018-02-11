@@ -50,6 +50,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			_personRequestRepository = new FakePersonRequestRepository();
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_requestFactory = new FakeRequestFactory();
+			_requestFactory.SetPersonRequestRepository(_personRequestRepository);
 
 			_scheduleStorage = scheduleStorage;
 			_personRepository = personRepository;
