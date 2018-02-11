@@ -10760,6 +10760,10 @@ These options are activated:
     <value>A shift trade request {0} must be accepted again due to a schedule change.</value>
     <comment>A shift trade request for one day must be accepted again.</comment>
   </data>
+  <data name="ShiftTradeRequestForExchangeOfferHasBeenCompleted" xml:space="preserve">
+    <value>The shift trade offer was completed by other agent.</value>
+    <comment>used in shift trade request deny reason,when the shift trade offer was completed by other agent</comment>
+  </data>
   <data name="ExternalResourceInUse" xml:space="preserve">
     <value>External resource in use</value>
     <comment>External resource in use</comment>

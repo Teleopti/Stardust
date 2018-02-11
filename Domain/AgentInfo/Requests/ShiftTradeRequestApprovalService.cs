@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
@@ -14,17 +16,22 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		private readonly IScheduleDictionary _scheduleDictionary;
 		private readonly INewBusinessRuleCollection _newBusinessRules;
 		private readonly IPersonRequestCheckAuthorization _personRequestCheckAuthorization;
+		private readonly IPersonRequestRepository _personRequestRepository;
 
 		public ShiftTradeRequestApprovalService(IScheduleDictionary scheduleDictionary,
 			ISwapAndModifyService swapAndModifyService,
 			INewBusinessRuleCollection newBusinessRules,
-			IPersonRequestCheckAuthorization personRequestCheckAuthorization)
+			IPersonRequestCheckAuthorization personRequestCheckAuthorization,
+			IPersonRequestRepository personRequestRepository)
 		{
 			_swapAndModifyService = swapAndModifyService;
 			_scheduleDictionary = scheduleDictionary;
 			_newBusinessRules = newBusinessRules;
 			_personRequestCheckAuthorization = personRequestCheckAuthorization;
+			_personRequestRepository = personRequestRepository;
 		}
+
+		public bool CheckShiftTradeExchangeOffer { get; set; }
 
 		public IEnumerable<IBusinessRuleResponse> Approve(IRequest request)
 		{
@@ -45,9 +52,28 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 						, person, shiftTradeRequest.Period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone()), string.Empty)
 				};
 			}
-			return _swapAndModifyService.SwapShiftTradeSwapDetails(shiftTradeRequest.ShiftTradeSwapDetails,
+
+			var responses = _swapAndModifyService.SwapShiftTradeSwapDetails(shiftTradeRequest.ShiftTradeSwapDetails,
 																  _scheduleDictionary,
-																   _newBusinessRules, new ScheduleTagSetter(NullScheduleTag.Instance));
+																   _newBusinessRules, new ScheduleTagSetter(NullScheduleTag.Instance)).ToList();
+
+			if (needToCheckShiftTradeExchangeOffer(shiftTradeRequest, responses))
+			{
+				var shiftTradeRequests = _personRequestRepository.FindShiftTradeRequestsByOfferId(shiftTradeRequest.Offer.Id.GetValueOrDefault());
+				var otherShiftTradeRequests = shiftTradeRequests.Where(a => !a.Id.Equals(request.Parent.Id.GetValueOrDefault()));
+				foreach (var otherShiftTradeRequest in otherShiftTradeRequests)
+				{
+					otherShiftTradeRequest.Deny(Resources.ShiftTradeRequestForExchangeOfferHasBeenCompleted,
+						_personRequestCheckAuthorization);
+				}
+			}
+
+			return responses;
+		}
+
+		private bool needToCheckShiftTradeExchangeOffer(IShiftTradeRequest shiftTradeRequest, List<IBusinessRuleResponse> responses)
+		{
+			return CheckShiftTradeExchangeOffer && shiftTradeRequest.Offer != null && responses.Count == 0;
 		}
 	}
 }

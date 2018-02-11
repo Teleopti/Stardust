@@ -23,9 +23,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 		private readonly IGlobalSettingDataRepository _globalSettingDataRepository;
 		private readonly INewBusinessRuleCollection _newBusinessRules;
 		private readonly IPersonAbsenceAccountRepository _personAbsenceAccountRepository;
+		private readonly IPersonRequestRepository _personRequestRepository;
 
 		public ApprovePersonRequestCommand(IViewBase view, IScheduleDictionary schedules, IScenario scenario, IRequestPresenterCallback callback, IHandleBusinessRuleResponse handleBusinessRuleResponse,
-			IPersonRequestCheckAuthorization authorization, INewBusinessRuleCollection newBusinessRules, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder, IScheduleDayChangeCallback scheduleDayChangeCallback, IGlobalSettingDataRepository globalSettingDataRepository, IPersonAbsenceAccountRepository personAbsenceAccountRepository)
+			IPersonRequestCheckAuthorization authorization, INewBusinessRuleCollection newBusinessRules, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder, IScheduleDayChangeCallback scheduleDayChangeCallback, IGlobalSettingDataRepository globalSettingDataRepository, IPersonAbsenceAccountRepository personAbsenceAccountRepository,
+			IPersonRequestRepository personRequestRepository)
 		{
 			_view = view;
 			_schedules = schedules;
@@ -34,6 +36,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 			_globalSettingDataRepository = globalSettingDataRepository;
 			_personAbsenceAccountRepository = personAbsenceAccountRepository;
+			_personRequestRepository = personRequestRepository;
 			_scenario = scenario;
 			_callback = callback;
 			_handleBusinessRuleResponse = handleBusinessRuleResponse;
@@ -98,7 +101,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 					break;
 				case RequestType.ShiftTradeRequest:
 					service = new ShiftTradeRequestApprovalService(_schedules,
-						new SwapAndModifyService(new SwapService(), _scheduleDayChangeCallback), newBusinessRules, _authorization);
+						new SwapAndModifyService(new SwapService(), _scheduleDayChangeCallback), newBusinessRules, _authorization, _personRequestRepository);
 					break;
 			}
 			return Model.PersonRequest.Approve(service, _authorization);

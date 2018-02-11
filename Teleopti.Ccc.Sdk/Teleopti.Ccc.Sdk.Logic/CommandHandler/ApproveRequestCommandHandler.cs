@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 						_globalSettingDataRepository, _checkingPersonalAccountDaysProvider);
 				case RequestType.ShiftTradeRequest:
 					return new ShiftTradeRequestApprovalService(scheduleDictionary,
-						new SwapAndModifyService(new SwapService(), _scheduleDayChangeCallback), newBusinessRules, _authorization);
+						new SwapAndModifyService(new SwapService(), _scheduleDayChangeCallback), newBusinessRules, _authorization, _personRequestRepository);
 			}
 
 			return null;

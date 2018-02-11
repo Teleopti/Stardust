@@ -37,7 +37,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		private PartTimePercentage _partTimePercentage;
 		private IContractSchedule _contractSchedule;
 
-
 		protected override void ConcreteSetup()
 		{
 			_defaultScenario = ScenarioFactory.CreateScenarioAggregate("Default", true);
@@ -2454,5 +2453,35 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			requests.FirstOrDefault().Person.Id.Should().Be(persons[0].Id);
 		}
 
+		[Test]
+		public void ShouldFilterShiftTradeRequestByShiftExchangeOffer()
+		{
+			var startDate = new DateTime(2008, 4, 1, 0, 0, 0, DateTimeKind.Utc);
+
+			IPersonRequest offerRequest = createShiftExchangeOffer(startDate);
+			PersistAndRemoveFromUnitOfWork(offerRequest);
+
+			var exchangeOffer = (IShiftExchangeOffer) offerRequest.Request;
+
+			var agent1 = PersonFactory.CreatePerson("agent1");
+			PersistAndRemoveFromUnitOfWork(agent1);
+			var agent2 = PersonFactory.CreatePerson("agent2");
+			PersistAndRemoveFromUnitOfWork(agent2);
+
+			var shiftDateOnly =  new DateOnly(2008, 5, 1);
+			var shift1 = ScheduleDayFactory.Create(shiftDateOnly, agent1);
+			var shiftTradeRequest1 = exchangeOffer.MakeShiftTradeRequest(shift1);
+			PersistAndRemoveFromUnitOfWork(shiftTradeRequest1);
+
+			var shift2 = ScheduleDayFactory.Create(shiftDateOnly, agent2);
+			var shiftTradeRequest2= exchangeOffer.MakeShiftTradeRequest(shift2);
+			PersistAndRemoveFromUnitOfWork(shiftTradeRequest2);
+
+			var shiftTradeRequest3 = CreateShiftTradeRequest("agent3");
+			PersistAndRemoveFromUnitOfWork(shiftTradeRequest3);
+
+			var requests = new PersonRequestRepository(UnitOfWork).FindShiftTradeRequestsByOfferId(exchangeOffer.Id.Value);
+			requests.Count().Should().Be(2);
+		}
 	}
 }

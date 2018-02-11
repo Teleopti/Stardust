@@ -18,18 +18,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		private readonly IGlobalSettingDataRepository _globalSettingDataRepository;
 		private readonly ICheckingPersonalAccountDaysProvider _checkingPersonalAccountDaysProvider;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
+		private readonly IPersonRequestRepository _personRequestRepository;
 
 		public RequestFactory(ISwapAndModifyService swapAndModifyService, 
 							IPersonRequestCheckAuthorization personRequestCheckAuthorization,  
 							IGlobalSettingDataRepository globalSettingDataRepository, 
 							ICheckingPersonalAccountDaysProvider checkingPersonalAccountDaysProvider,
-							IScheduleDayChangeCallback scheduleDayChangeCallback)
+							IScheduleDayChangeCallback scheduleDayChangeCallback,IPersonRequestRepository personRequestRepository)
 		{
 			_swapAndModifyService = swapAndModifyService;
 			_personRequestCheckAuthorization = personRequestCheckAuthorization;
 			_globalSettingDataRepository = globalSettingDataRepository;
 			_checkingPersonalAccountDaysProvider = checkingPersonalAccountDaysProvider;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
+			_personRequestRepository = personRequestRepository;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
@@ -45,7 +47,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			}
 
 			return new ShiftTradeRequestApprovalService(schedulingResultStateHolder.Schedules,
-				 _swapAndModifyService, allNewRules, _personRequestCheckAuthorization);
+				 _swapAndModifyService, allNewRules, _personRequestCheckAuthorization, _personRequestRepository);
 		}
 
 		public IShiftTradeRequestStatusChecker GetShiftTradeRequestStatusChecker(ISchedulingResultStateHolder schedulingResultStateHolder)

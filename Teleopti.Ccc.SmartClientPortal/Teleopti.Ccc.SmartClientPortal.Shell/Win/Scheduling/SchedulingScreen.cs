@@ -5253,12 +5253,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			{
 				var globalSettingRepository = new GlobalSettingDataRepository(uow);
 				var personAbsenceAccountRepository = new PersonAbsenceAccountRepository(uow);
+				var personRequestRepository = new PersonRequestRepository(uow);
 				var approveRequestCommand = new ApprovePersonRequestCommand(this, _schedulerState.Schedules,
 					_schedulerState.RequestedScenario, _requestPresenter,
 					_handleBusinessRuleResponse, _personRequestAuthorizationChecker, businessRules,
 					_overriddenBusinessRulesHolder,
 				_container.Resolve<IScheduleDayChangeCallback>(),
-					globalSettingRepository, personAbsenceAccountRepository);
+					globalSettingRepository, personAbsenceAccountRepository, personRequestRepository);
 
 				IList<PersonRequestViewModel> selectedRequestList = new List<PersonRequestViewModel>() {obj.Value.Request};
 				using (
@@ -5309,12 +5310,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			{
 				var globalSettingRepository = new GlobalSettingDataRepository(uow);
 				var personAbsenceAccountRepository = new PersonAbsenceAccountRepository(uow);
+				var personRequestRepository = new PersonRequestRepository(uow);
 				var approvePersonRequestCommand = new ApprovePersonRequestCommand(this, _schedulerState.Schedules,
 					_schedulerState.RequestedScenario, _requestPresenter,
 					_handleBusinessRuleResponse,
 					_personRequestAuthorizationChecker, allNewBusinessRules, _overriddenBusinessRulesHolder,
 				_container.Resolve<IScheduleDayChangeCallback>(),
-					globalSettingRepository, personAbsenceAccountRepository);
+					globalSettingRepository, personAbsenceAccountRepository, personRequestRepository);
 
 				var selectedAdapters = new List<PersonRequestViewModel>() {eventParameters.Value.Request};
 
@@ -5887,12 +5889,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			{
 				var globalSettingRepository = new GlobalSettingDataRepository(uow);
 				var personAbsenceAccountRepository = new PersonAbsenceAccountRepository(uow);
+				var personRequestRepository = new PersonRequestRepository(uow);
 				changeRequestStatus(
 					new ApprovePersonRequestCommand(this, _schedulerState.Schedules, _schedulerState.RequestedScenario,
 						_requestPresenter, _handleBusinessRuleResponse,
 						_personRequestAuthorizationChecker, allNewBusinessRules, _overriddenBusinessRulesHolder,
 				_container.Resolve<IScheduleDayChangeCallback>(),
-						globalSettingRepository, personAbsenceAccountRepository), _requestView.SelectedAdapters());
+						globalSettingRepository, personAbsenceAccountRepository, personRequestRepository), _requestView.SelectedAdapters());
 			}
 
 			if (_requestView != null)
@@ -5924,12 +5927,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			{
 				var globalSettingRepository = new GlobalSettingDataRepository(uow);
 				var personAbsenceAccountRepository = new PersonAbsenceAccountRepository(uow);
+				var personRequestRepository = new PersonRequestRepository(uow);
 				replyAndChangeStatus(new ApprovePersonRequestCommand(this, _schedulerState.Schedules,
 					_schedulerState.RequestedScenario, _requestPresenter,
 					_handleBusinessRuleResponse, _personRequestAuthorizationChecker, businessRules,
 					_overriddenBusinessRulesHolder,
 				_container.Resolve<IScheduleDayChangeCallback>(),
-					globalSettingRepository, personAbsenceAccountRepository));
+					globalSettingRepository, personAbsenceAccountRepository, personRequestRepository));
 			}
 			if (_requestView != null)
 				_requestView.NeedUpdate = true;

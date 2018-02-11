@@ -211,6 +211,16 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			return criteria.List<IPersonRequest>();
 		}
+		public IEnumerable<IPersonRequest> FindShiftTradeRequestsByOfferId(Guid offerId)
+		{
+			var criteria = Session.CreateCriteria<IPersonRequest>("personRequests");
+			criteria.SetFetchMode("requests", FetchMode.Join);
+			criteria.CreateCriteria("Person", "p", JoinType.InnerJoin);
+			criteria.CreateCriteria("requests", "req", JoinType.InnerJoin);
+			criteria.Add(toRequestClassTypeConstraint(RequestType.ShiftTradeRequest));
+			criteria.Add(Restrictions.Eq("req.Offer.Id", offerId));
+			return criteria.List<IPersonRequest>();
+		}
 
 		public IEnumerable<IPersonRequest> FindOvertimeRequests(RequestFilter filter, out int count, bool ignoreCount = false)
 		{

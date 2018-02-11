@@ -4,52 +4,43 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
-using Teleopti.Ccc.Domain.Scheduling.Rules;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Tracking;
+using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Services;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 {
 	[TestFixture]
+	[DomainTest]
 	[TestWithStaticDependenciesAvoidUse]
-	public class RequestApprovalServiceSchedulerNoMockTest
+	public class RequestApprovalServiceSchedulerNoMockTest : ISetup
 	{
+		public IRequestApprovalServiceFactory RequestApprovalServiceFactory;
+		public ICurrentScenario Scenario;
+		public FakeGlobalSettingDataRepository GlobalSettingDataRepository;
+		public FakePersonAbsenceAccountRepository PersonAbsenceAccountRepository;
+		public FakePersonRequestRepository PersonRequestRepository;
+		public IScheduleStorage ScheduleStorage;
+
 		private IRequestApprovalService _requestApprovalService;
 		private IScheduleDictionary _scheduleDictionary;
-		private IScenario _scenario;
-		private ISwapAndModifyService _swapAndModifyService;
-		private INewBusinessRuleCollection _newBusinessRules;
-		private IScheduleDayChangeCallback _scheduleDayChangeCallback;
-		private IGlobalSettingDataRepository _globalSettingsDataRepository;
-		private IPersonAbsenceAccountRepository _personAbsenceAccountRepository;
-		private IDisposable dispose;
 
-		[SetUp]
-		public void Setup()
+		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			_scenario = ScenarioFactory.CreateScenarioWithId("default", true);
-
-			_scheduleDayChangeCallback = new DoNothingScheduleDayChangeCallBack();
-			_swapAndModifyService = new SwapAndModifyService(new SwapService(), _scheduleDayChangeCallback);
-
-			_globalSettingsDataRepository = new FakeGlobalSettingDataRepository();
-			_personAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
-			dispose =CurrentAuthorization.ThreadlyUse(new FullPermission());
-		}
-
-		[TearDown]
-		public void TearDown()
-		{
-			dispose.Dispose();
+			system.UseTestDouble(new FakeScenarioRepository(new Scenario() {DefaultScenario = true}.WithId()))
+				.For<IScenarioRepository>();
 		}
 
 		[Test]
@@ -64,11 +55,9 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 
 			var accountDay1 = createAccountDay(new DateOnly(2015, 12, 1));
 			var accountDay2 = createAccountDay(new DateOnly(2016, 08, 18));
-			var account = createAccount(person, absence, accountDay1, accountDay2);
+			createAccount(person, absence, accountDay1, accountDay2);
 
-			setBusinessRules(person, account);
-
-			setAbsenceApprovalService();
+			setAbsenceApprovalService(person);
 			var responses = _requestApprovalService.Approve(personRequest.Request);
 
 			Assert.AreEqual(0, responses.Count());
@@ -90,12 +79,10 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			var holidayAccountDay1 = createAccountDay(new DateOnly(2015, 12, 1));
 			var holidayAccountDay2 = createAccountDay(new DateOnly(2016, 08, 18));
 			var lieuAccountDay = createAccountDay(new DateOnly(2016, 08, 18));
-			var holidayAccount = createAccount(person, holidayAbsence, holidayAccountDay1, holidayAccountDay2);
+			createAccount(person, holidayAbsence, holidayAccountDay1, holidayAccountDay2);
 			createAccount(person, lieuAbsence, lieuAccountDay);
 
-			setBusinessRules(person, holidayAccount);
-
-			setAbsenceApprovalService();
+			setAbsenceApprovalService(person);
 			var responses = _requestApprovalService.Approve(personRequest.Request);
 
 			Assert.AreEqual(0, responses.Count());
@@ -120,11 +107,9 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 
 			var accountDay1 = createAccountDay(new DateOnly(2015, 12, 1));
 			var accountDay2 = createAccountDay(new DateOnly(2016, 08, 18));
-			var account = createAccount(person, absence, accountDay1, accountDay2);
+			createAccount(person, absence, accountDay1, accountDay2);
 
-			setBusinessRules(person, account);
-
-			setAbsenceApprovalService();
+			setAbsenceApprovalService(person);
 			var absence1Responses =_requestApprovalService.Approve(personRequest1.Request);
 			var absence2Responses = _requestApprovalService.Approve(personRequest2.Request);
 
@@ -145,16 +130,14 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			var scheduleDatas = createScheduleDatas(new DateOnlyPeriod(2016, 11, 23, 2016, 11, 23), new TimePeriod(8, 17), personFrom).ToList();
 			scheduleDatas.AddRange(createScheduleDatas(new DateOnlyPeriod(2016, 11, 23, 2016, 11, 23), new TimePeriod(7, 18), personTo1,
 				personTo2, personTo3));
-			_scheduleDictionary = ScheduleDictionaryForTest.WithScheduleDataForManyPeople(_scenario, new DateTimePeriod(2016, 11, 23, 7, 2016, 11, 23, 18), scheduleDatas.ToArray());
+			_scheduleDictionary = ScheduleDictionaryForTest.WithScheduleDataForManyPeople(Scenario.Current(), new DateTimePeriod(2016, 11, 23, 7, 2016, 11, 23, 18), scheduleDatas.ToArray());
 
 			var requestDate = new DateOnly(2016, 11, 23);
 			var shiftTradeRequest1 = createPersonShiftTradeRequest(personFrom, personTo1, requestDate);
 			var shiftTradeRequest2 = createPersonShiftTradeRequest(personFrom, personTo2, requestDate);
 			var shiftTradeRequest3 = createPersonShiftTradeRequest(personFrom, personTo3, requestDate);
 
-			_newBusinessRules = new FakeNewBusinessRuleCollection();
-
-			setRequestApprovalService();
+			setRequestApprovalService(personFrom);
 			_requestApprovalService.Approve(shiftTradeRequest1.Request);
 			_requestApprovalService.Approve(shiftTradeRequest2.Request);
 			_requestApprovalService.Approve(shiftTradeRequest3.Request);
@@ -164,6 +147,119 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 
 			assertShiftTradeRequestStatus(shiftTradeRequest2, ShiftTradeStatus.Referred);
 			assertShiftTradeRequestStatus(shiftTradeRequest3, ShiftTradeStatus.Referred);
+		}
+
+		[Test]
+		public void ShouldDenyOtherShiftTradeRequestsWhenShiftExchangeOfferIsCompleted()
+		{
+			var agent1 = PersonFactory.CreatePersonWithId();
+			var agent2 = PersonFactory.CreatePersonWithId();
+			var agent3 = PersonFactory.CreatePersonWithId();
+
+			var period = new DateTimePeriod(new DateTime(2007, 1, 1, 3, 0, 0, DateTimeKind.Utc),
+				new DateTime(2007, 01, 01, 15, 0, 0, DateTimeKind.Utc));
+			var activity = ActivityFactory.CreateActivity("Phone").WithId();
+			var shiftDate = new DateOnly(2007, 1, 1);
+
+			var agent1Shift = createScheduleDay(shiftDate, period.ChangeEndTime(TimeSpan.FromHours(3)), agent1, activity);
+			var shiftTradeOffer =
+				new ShiftExchangeOffer(agent1Shift, new ShiftExchangeCriteria(), ShiftExchangeOfferStatus.Pending)
+				{
+					Criteria = new ShiftExchangeCriteria(DateOnly.Today.AddDays(1),
+						new ScheduleDayFilterCriteria
+						{
+							DayType = ShiftExchangeLookingForDay.DayOffOrEmptyDay
+						}),
+					ShiftExchangeOfferId = Guid.NewGuid().ToString()
+				}.WithId();
+			PersonRequestRepository.Add(new PersonRequest(agent1, shiftTradeOffer).WithId());
+
+			var agent2Shift = createScheduleDay(shiftDate, period.ChangeEndTime(TimeSpan.FromHours(3)), agent2, activity);
+			var personRequest2 = shiftTradeOffer.MakeShiftTradeRequest(agent2Shift).WithId();
+			personRequest2.ForcePending();
+			((ShiftTradeRequest) personRequest2.Request).SetShiftTradeStatus(ShiftTradeStatus.OkByBothParts, null);
+			PersonRequestRepository.Add(personRequest2);
+
+			var agent3Shift = createScheduleDay(shiftDate, period.ChangeEndTime(TimeSpan.FromHours(3)), agent3, activity);
+			var personRequest3 = shiftTradeOffer.MakeShiftTradeRequest(agent3Shift).WithId();
+			personRequest3.ForcePending();
+			((ShiftTradeRequest) personRequest3.Request).SetShiftTradeStatus(ShiftTradeStatus.OkByBothParts, null);
+			PersonRequestRepository.Add(personRequest3);
+
+			_scheduleDictionary = ScheduleDictionaryForTest.WithScheduleDataForManyPeople(Scenario.Current()
+				, new DateTimePeriod(2007, 01, 01, 7, 2007, 01, 01, 18), agent1Shift.PersonAssignment(),
+				agent2Shift.PersonAssignment(), agent3Shift.PersonAssignment());
+
+			setRequestApprovalService(agent1);
+			((ShiftTradeRequestApprovalService) _requestApprovalService).CheckShiftTradeExchangeOffer = true;
+			_requestApprovalService.Approve(personRequest3.Request);
+
+			personRequest2.IsDenied.Should().Be(true);
+			personRequest2.DenyReason.Should().Be(Resources.ShiftTradeRequestForExchangeOfferHasBeenCompleted);
+
+			personRequest3.IsPending.Should().Be(true);
+		}
+
+		[Test]
+		public void ShouldNotDenyOtherShiftTradeRequestsWhenShiftExchangeFailed()
+		{
+			var agent1 = PersonFactory.CreatePersonWithId();
+			var agent2 = PersonFactory.CreatePersonWithId();
+			var agent3 = PersonFactory.CreatePersonWithId();
+
+			var period = new DateTimePeriod(new DateTime(2007, 1, 1, 3, 0, 0, DateTimeKind.Utc),
+				new DateTime(2007, 01, 01, 15, 0, 0, DateTimeKind.Utc));
+			var activity = ActivityFactory.CreateActivity("Phone").WithId();
+			var shiftDate = new DateOnly(2007, 1, 1);
+
+			var agent1Shift = createScheduleDay(shiftDate, period.ChangeEndTime(TimeSpan.FromHours(3)), agent1, activity);
+			var shiftTradeOffer =
+				new ShiftExchangeOffer(agent1Shift, new ShiftExchangeCriteria(), ShiftExchangeOfferStatus.Pending)
+				{
+					Criteria = new ShiftExchangeCriteria(DateOnly.Today.AddDays(1),
+						new ScheduleDayFilterCriteria
+						{
+							DayType = ShiftExchangeLookingForDay.DayOffOrEmptyDay
+						}),
+					ShiftExchangeOfferId = Guid.NewGuid().ToString()
+				}.WithId();
+			PersonRequestRepository.Add(new PersonRequest(agent1, shiftTradeOffer).WithId());
+
+			var agent2Shift = createScheduleDay(shiftDate, period.ChangeEndTime(TimeSpan.FromHours(3)), agent2, activity);
+			var personRequest2 = shiftTradeOffer.MakeShiftTradeRequest(agent2Shift).WithId();
+			personRequest2.ForcePending();
+			((ShiftTradeRequest)personRequest2.Request).SetShiftTradeStatus(ShiftTradeStatus.OkByBothParts, null);
+			PersonRequestRepository.Add(personRequest2);
+
+			var nextShiftDay = shiftDate.AddDays(1);
+			var agent3Shift = createScheduleDay(nextShiftDay, period.ChangeEndTime(TimeSpan.FromHours(3)), agent3, activity);
+			var personRequest3 = shiftTradeOffer.MakeShiftTradeRequest(agent3Shift).WithId();
+			personRequest3.ForcePending();
+			((ShiftTradeRequest)personRequest3.Request).SetShiftTradeStatus(ShiftTradeStatus.OkByBothParts, null);
+			PersonRequestRepository.Add(personRequest3);
+
+			ScheduleStorage.Add(agent1Shift.PersonAssignment());
+			ScheduleStorage.Add(agent2Shift.PersonAssignment());
+			ScheduleStorage.Add(agent3Shift.PersonAssignment());
+
+			_scheduleDictionary = ScheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] {agent1, agent2, agent3},
+				new ScheduleDictionaryLoadOptions(false, false), new DateOnlyPeriod(shiftDate, nextShiftDay), Scenario.Current());
+
+			setRequestApprovalService(agent1);
+			((ShiftTradeRequestApprovalService)_requestApprovalService).CheckShiftTradeExchangeOffer = true;
+			_requestApprovalService.Approve(personRequest3.Request);
+
+			personRequest2.IsPending.Should().Be(true);
+			personRequest3.IsPending.Should().Be(true);
+		}
+
+		private IScheduleDay createScheduleDay(DateOnly date, DateTimePeriod period, IPerson agent, IActivity activity)
+		{
+			var scheduleDay = ScheduleDayFactory.Create(date, agent, Scenario.Current());
+			scheduleDay.AddMainShift(EditableShiftFactory.CreateEditorShift(activity,
+				period,
+				ShiftCategoryFactory.CreateShiftCategory("Early")));
+			return scheduleDay;
 		}
 
 		private void assertShiftTradeRequestStatus(IPersonRequest request, ShiftTradeStatus shiftTradeStatus)
@@ -206,7 +302,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 					scheduleDatas.Add(addAssignment(person, dateOnlyPeriod.ToDateTimePeriod(new TimePeriod(0, 0, 23, 0), timeZone)));
 				}
 			}
-			_scheduleDictionary = ScheduleDictionaryForTest.WithScheduleDataForManyPeople(_scenario, dateTimePeriod, scheduleDatas.ToArray());
+			_scheduleDictionary = ScheduleDictionaryForTest.WithScheduleDataForManyPeople(Scenario.Current(), dateTimePeriod, scheduleDatas.ToArray());
 		}
 
 		private IList<IScheduleData> createScheduleDatas(DateOnlyPeriod dateOnlyPeriod, TimePeriod timePeriod, params IPerson[] persons)
@@ -239,14 +335,6 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			return request;
 		}
 
-		private void setBusinessRules(IPerson person, PersonAbsenceAccount account)
-		{
-			_newBusinessRules = NewBusinessRuleCollection.MinimumAndPersonAccount(_scheduleDictionary, new Dictionary<IPerson, IPersonAccountCollection>
-			{
-				{person, new PersonAccountCollection(person) {account}}
-			});
-		}
-
 		private PersonRequest createAbsenceRequest(IPerson person, IAbsence absence, DateTimePeriod dateTimePeriod)
 		{
 			var personRequestFactory = new PersonRequestFactory() { Person = person };
@@ -264,7 +352,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			{
 				personAbsenceAccount.Add(accountDay);
 			}
-			_personAbsenceAccountRepository.Add(personAbsenceAccount);
+			PersonAbsenceAccountRepository.Add(personAbsenceAccount);
 			return personAbsenceAccount;
 		}
 
@@ -282,20 +370,20 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		private IPersonAssignment addAssignment(IPerson person, DateTimePeriod dateTimePeriod)
 		{
 			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
-				_scenario, dateTimePeriod);
+				Scenario.Current(), dateTimePeriod);
 			return assignment;
 		}
 
-		private void setRequestApprovalService()
+		private void setRequestApprovalService(IPerson person)
 		{
-			_requestApprovalService = new ShiftTradeRequestApprovalService(_scheduleDictionary, _swapAndModifyService,
-				_newBusinessRules, null);
+			_requestApprovalService =
+				RequestApprovalServiceFactory.MakeShiftTradeRequestApprovalService(_scheduleDictionary, person);
 		}
 
-		private void setAbsenceApprovalService()
+		private void setAbsenceApprovalService(IPerson person)
 		{
-			_requestApprovalService = new AbsenceRequestApprovalService(_scenario, _scheduleDictionary, _newBusinessRules, 
-				_scheduleDayChangeCallback, _globalSettingsDataRepository, new CheckingPersonalAccountDaysProvider(_personAbsenceAccountRepository));
+			_requestApprovalService =
+				RequestApprovalServiceFactory.MakeAbsenceRequestApprovalService(_scheduleDictionary, Scenario.Current(), person);
 		}
 	}
 }

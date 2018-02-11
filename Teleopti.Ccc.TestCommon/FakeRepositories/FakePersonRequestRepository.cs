@@ -216,6 +216,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
+		public IEnumerable<IPersonRequest> FindShiftTradeRequestsByOfferId(Guid offerId)
+		{
+			var result = RequestRepository.Where(request => request.Request.RequestType == RequestType.ShiftTradeRequest
+															&& ((IShiftTradeRequest) request.Request).Offer.Id == offerId);
+			return result;
+		}
+
 		public IEnumerable<IShiftExchangeOffer> FindShiftExchangeOffersForBulletin(DateOnly shiftTradeDate)
 		{
 			var result = RequestRepository.Where(request => request.Request.RequestType == RequestType.ShiftExchangeOffer

@@ -31691,6 +31691,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The shift trade offer was completed by other agent..
+        /// </summary>
+        public static string ShiftTradeRequestForExchangeOfferHasBeenCompleted {
+            get {
+                return ResourceManager.GetString("ShiftTradeRequestForExchangeOfferHasBeenCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A shift trade request {0} was accepted by other person..
         /// </summary>
         public static string ShiftTradeRequestForOneDayHasBeenAcceptedDot {
