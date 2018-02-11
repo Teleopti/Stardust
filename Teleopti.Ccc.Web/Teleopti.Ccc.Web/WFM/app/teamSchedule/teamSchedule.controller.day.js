@@ -20,12 +20,13 @@
 		'bootstrapCommon',
 		'groupPageService',
 		'TeamsStaffingConfigurationStorageService',
+		'serviceDateFormatHelper',
 		TeamScheduleController]);
 
 	function TeamScheduleController($scope, $q, $translate, $stateParams, $state, $mdSidenav, $mdComponentRegistry, $document,
 		teamScheduleSvc, personSelectionSvc, scheduleMgmtSvc, NoticeService, ValidateRulesService,
 		CommandCheckService, ScheduleNoteManagementService, teamsToggles, bootstrapCommon, groupPageService,
-		StaffingConfigStorageService) {
+		StaffingConfigStorageService, serviceDateFormatHelper) {
 		var vm = this;
 		vm.isLoading = false;
 		vm.scheduleFullyLoaded = false;
@@ -303,7 +304,7 @@
 				return;
 			}
 
-			var currentDate = vm.scheduleDateMoment().format('YYYY-MM-DD');
+			var currentDate = serviceDateFormatHelper.getDateOnly(vm.scheduleDate);
 
 			teamScheduleSvc.getSchedules(currentDate, selectedPersonIdList).then(function (result) {
 				scheduleMgmtSvc.resetSchedules(result.Schedules, vm.scheduleDateMoment());
@@ -348,7 +349,7 @@
 			options = options || {};
 			var params = {
 				Keyword: options.keyword || vm.searchOptions.keyword,
-				Date: options.date || vm.scheduleDateMoment().format('YYYY-MM-DD'),
+				Date: options.date || serviceDateFormatHelper.getDateOnly(vm.scheduleDate),
 				PageSize: options.pageSize || vm.paginationOptions.pageSize,
 				CurrentPageIndex: options.currentPageIndex || vm.paginationOptions.pageNumber,
 				IsOnlyAbsences: vm.currentSettings.onlyLoadScheduleWithAbsence,
@@ -415,7 +416,7 @@
 					vm.searchOptions.focusingSearch = false;
 				});
 			} else if (preSelectPersonIds.length > 0) {
-				var date = vm.scheduleDateMoment().format('YYYY-MM-DD');
+				var date = serviceDateFormatHelper.getDateOnly(vm.scheduleDate);
 
 				teamScheduleSvc.getSchedules(date, preSelectPersonIds).then(function (result) {
 					scheduleMgmtSvc.resetSchedules(result.Schedules, vm.scheduleDateMoment(), vm.currentTimezone);
@@ -573,7 +574,7 @@
 			vm.onFavoriteSearchInitDefer.resolve();
 		}
 		vm.getGroupPagesAsync = function () {
-			var dateStr = moment(vm.scheduleDate).format('YYYY-MM-DD');
+			var dateStr = serviceDateFormatHelper.getDateOnly(vm.scheduleDate);
 			groupPageService.fetchAvailableGroupPages(dateStr, dateStr).then(function (data) {
 				vm.availableGroups = data;
 				loggedonUsersTeamId.resolve(data.LogonUserTeamId || null);
@@ -585,7 +586,7 @@
 
 		vm.getSitesAndTeamsAsync = function () {
 			return $q(function (resolve, reject) {
-				var date = moment(vm.scheduleDate).format('YYYY-MM-DD');
+				var date = serviceDateFormatHelper.getDateOnly(vm.scheduleDate);
 				teamScheduleSvc.hierarchy(date)
 					.then(function (data) {
 						resolve(data);

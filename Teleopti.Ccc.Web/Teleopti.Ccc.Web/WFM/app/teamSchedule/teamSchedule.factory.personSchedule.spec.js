@@ -1,12 +1,12 @@
 ﻿"use strict";
 
 describe("teamschedule person schedule tests", function () {
-	
+
 	var target;
 
-	beforeEach(function() {
+	beforeEach(function () {
 		module("wfm.teamSchedule");
-		module(function($provide) {
+		module(function ($provide) {
 			$provide.value("CurrentUserInfoStub", {
 				DefaultTimeZone: "Etc/UTC"
 			});
@@ -17,443 +17,473 @@ describe("teamschedule person schedule tests", function () {
 	beforeEach(inject(function (PersonSchedule) {
 		target = PersonSchedule;
 	}));
-	
-	it("Can get correct projection", inject(function () {
-		var queryDate = "2015-10-26";
 
-		var timeLineStart = 480;
-		var timeLineEnd = 1200;
+	function commonTestsInDifferentLocale() {
 
-		var timeLine = {
-			Offset: moment(queryDate),
-			StartMinute: timeLineStart,
-			EndMinute: timeLineEnd,
-			LengthPercentPerMinute: 100 / (timeLineEnd - timeLineStart)
-		};
+		it("Can get correct projection", inject(function () {
+			var queryDate = "2015-10-26";
 
-		var schedule = {
-			"PersonId": "221B-Baker-Street",
-			"Name": "Sherlock Holmes",
-			"Date": queryDate,
-			"Projection": [
+			var timeLineStart = 480;
+			var timeLineEnd = 1200;
+
+			var timeLine = {
+				Offset: moment(queryDate),
+				StartMinute: timeLineStart,
+				EndMinute: timeLineEnd,
+				LengthPercentPerMinute: 100 / (timeLineEnd - timeLineStart)
+			};
+
+			var schedule = {
+				"PersonId": "221B-Baker-Street",
+				"Name": "Sherlock Holmes",
+				"Date": queryDate,
+				"Projection": [
+					{
+						"Color": "Red",
+						"Description": "Phone",
+						"Start": queryDate + " 08:00",
+						"End": queryDate + " 10:00",
+						"Minutes": 120
+					},
+					{
+						"Color": "Yellow",
+						"Description": "Email",
+						"Start": queryDate + " 10:00",
+						"End": queryDate + " 16:00",
+						"Minutes": 360 // End = "2015-10-26 16:00"
+					}
+				],
+				DayOff: null
+			};
+
+			var personSchedule = target.Create(schedule, timeLine);
+
+			expect(personSchedule.PersonId).toEqual(schedule.PersonId);
+			expect(personSchedule.Name).toEqual(schedule.Name);
+			expect(personSchedule.Date).toEqual(schedule.Date);
+
+			expect(personSchedule.Shifts.length).toEqual(1);
+			expect(personSchedule.DayOffs.length).toEqual(0);
+
+			verifyShift(timeLine, personSchedule.Shifts[0], schedule);
+		}));
+
+		it("Can get correct dayoff schedule", inject(function () {
+			var queryDate = "2015-10-26";
+			var tomorrow = moment(queryDate).add(1, "days").format("YYYY-MM-DD");
+
+			var timeLineStart = 480;
+			var timeLineEnd = 1200;
+
+			var timeLine = {
+				Offset: moment(queryDate),
+				StartMinute: timeLineStart,
+				EndMinute: timeLineEnd,
+				LengthPercentPerMinute: 100 / (timeLineEnd - timeLineStart)
+			};
+
+			var schedule = {
+				"PersonId": "221B-Baker-Street",
+				"Name": "Sherlock Holmes",
+				"Date": queryDate,
+				"Projection": [],
+				"DayOff":
 				{
-					"Color": "Red",
-					"Description": "Phone",
-					"Start": queryDate + " 08:00",
-					"End": queryDate + " 10:00",
-					"Minutes": 120
-				},
-				{
-					"Color": "Yellow",
-					"Description": "Email",
-					"Start": queryDate + " 10:00",
-					"End": queryDate + " 16:00",
-					"Minutes": 360 // End = "2015-10-26 16:00"
+					"DayOffName": "Day off",
+					"Start": "2015-10-26 00:00",
+					"End": tomorrow + " 00:00",
+					"Minutes": 1440
 				}
-			],
-			DayOff: null
-		};
+			};
 
-		var personSchedule = target.Create(schedule, timeLine);
+			var personSchedule = target.Create(schedule, timeLine);
 
-		expect(personSchedule.PersonId).toEqual(schedule.PersonId);
-		expect(personSchedule.Name).toEqual(schedule.Name);
-		expect(personSchedule.Date).toEqual(schedule.Date);
+			expect(personSchedule.PersonId).toEqual(schedule.PersonId);
+			expect(personSchedule.Name).toEqual(schedule.Name);
+			expect(personSchedule.Date).toEqual(schedule.Date);
+			expect(personSchedule.Shifts.length).toEqual(0);
+			expect(personSchedule.DayOffs.length).toEqual(1);
 
-		expect(personSchedule.Shifts.length).toEqual(1);
-		expect(personSchedule.DayOffs.length).toEqual(0);
+			verifyDayOff(timeLine, personSchedule.DayOffs[0], schedule.DayOff);
+		}));
 
-		verifyShift(timeLine, personSchedule.Shifts[0], schedule);
-	}));
+		it("Should merge schedules for same people", inject(function () {
+			var queryDate = "2015-10-26";
+			var yesterday = moment(queryDate).add(-1, "days").startOf("days").format("YYYY-MM-DD");
 
-	it("Can get correct dayoff schedule", inject(function () {
-		var queryDate = "2015-10-26";
-		var tomorrow = moment(queryDate).add(1, "days").format("YYYY-MM-DD");
+			var timeLineStart = 0;
+			var timeLineEnd = 1440;
 
-		var timeLineStart = 480;
-		var timeLineEnd = 1200;
+			var timeLine = {
+				Offset: moment(queryDate),
+				StartMinute: timeLineStart,
+				EndMinute: timeLineEnd,
+				LengthPercentPerMinute: 100 / (timeLineEnd - timeLineStart)
+			};
 
-		var timeLine = {
-			Offset: moment(queryDate),
-			StartMinute: timeLineStart,
-			EndMinute: timeLineEnd,
-			LengthPercentPerMinute: 100 / (timeLineEnd - timeLineStart)
-		};
+			var schedule = {
+				"PersonId": "221B-Baker-Street",
+				"Name": "Sherlock Holmes",
+				"Date": yesterday,
+				"Projection": [
+					{
+						"Color": "Red",
+						"Description": "Phone",
+						"Start": yesterday + " 20:00",
+						"End": queryDate + " 04:00",
+						"Minutes": 480 // End = "2015-10-26 04:00"
+					}
+				],
+				DayOff: null
+			};
 
-		var schedule = {
-			"PersonId": "221B-Baker-Street",
-			"Name": "Sherlock Holmes",
-			"Date": queryDate,
-			"Projection": [],
-			"DayOff":
-			{
-				"DayOffName": "Day off",
-				"Start": "2015-10-26 00:00",
-				"End": tomorrow + " 00:00",
-				"Minutes": 1440
-			}
-		};
+			var anotherSchedule = {
+				"PersonId": "221B-Baker-Street",
+				"Name": "Sherlock Holmes",
+				"Date": queryDate,
+				"Projection": [
+					{
+						"Color": "Red",
+						"Description": "Phone",
+						"Start": queryDate + " 15:00",
+						"End": queryDate + "16:00",
+						"Minutes": 120
+					},
+					{
+						"Color": "Yellow",
+						"Description": "Email",
+						"Start": queryDate + " 17:00",
+						"End": queryDate + " 23:00",
+						"Minutes": 360 // End = "2015-10-26 23:00"
+					}
+				],
+				DayOff: null
+			};
 
-		var personSchedule = target.Create(schedule, timeLine);
+			var personSchedule = target.Create(schedule, timeLine);
 
-		expect(personSchedule.PersonId).toEqual(schedule.PersonId);
-		expect(personSchedule.Name).toEqual(schedule.Name);
-		expect(personSchedule.Date).toEqual(schedule.Date);
-		expect(personSchedule.Shifts.length).toEqual(0);
-		expect(personSchedule.DayOffs.length).toEqual(1);
+			personSchedule.Merge(anotherSchedule, timeLine);
 
-		verifyDayOff(timeLine, personSchedule.DayOffs[0], schedule.DayOff);
-	}));
+			expect(personSchedule.PersonId).toEqual(schedule.PersonId);
+			expect(personSchedule.Name).toEqual(schedule.Name);
+			expect(personSchedule.Date).toEqual(yesterday);
+			expect(personSchedule.Shifts.length).toEqual(2);
+			expect(personSchedule.DayOffs.length).toEqual(0);
 
-	it("Should merge schedules for same people", inject(function () {
-		var queryDate = "2015-10-26";
-		var yesterday = moment(queryDate).add(-1, "days").startOf("days").format("YYYY-MM-DD");
+			verifyShift(timeLine, personSchedule.Shifts[0], schedule);
+			verifyShift(timeLine, personSchedule.Shifts[1], anotherSchedule);
+		}));
 
-		var timeLineStart = 0;
-		var timeLineEnd = 1440;
+		it("Should merge dayoff for same people", inject(function () {
+			var queryDate = "2015-10-30";
+			var yesterday = moment(queryDate).add(-1, "days").startOf("days").format("YYYY-MM-DD");
+			var tomorrow = moment(queryDate).add(1, "days").format("YYYY-MM-DD");
 
-		var timeLine = {
-			Offset: moment(queryDate),
-			StartMinute: timeLineStart,
-			EndMinute: timeLineEnd,
-			LengthPercentPerMinute: 100 / (timeLineEnd - timeLineStart)
-		};
+			var timeLineStart = 1200; // 2015-10-26 20:00
+			var timeLineEnd = 2640;   // 2015-10-27 20:00
 
-		var schedule = {
-			"PersonId": "221B-Baker-Street",
-			"Name": "Sherlock Holmes",
-			"Date": yesterday,
-			"Projection": [
+			var timeLine = {
+				Offset: moment(yesterday),
+				StartMinute: timeLineStart,
+				EndMinute: timeLineEnd,
+				LengthPercentPerMinute: 100 / (timeLineEnd - timeLineStart)
+			};
+
+			var schedule4Yesterday = {
+				"PersonId": "221B-Baker-Street",
+				"Name": "Sherlock Holmes",
+				"Date": yesterday,
+				"Projection": [],
+				"DayOff":
 				{
-					"Color": "Red",
-					"Description": "Phone",
-					"Start": yesterday + " 20:00",
-					"End": queryDate + " 04:00",
-					"Minutes": 480 // End = "2015-10-26 04:00"
+					"DayOffName": "Day off",
+					"Start": yesterday + " 00:00",
+					"End": queryDate + " 00:00",
+					"Minutes": 1440
 				}
-			],
-			DayOff: null
-		};
+			};
 
-		var anotherSchedule = {
-			"PersonId": "221B-Baker-Street",
-			"Name": "Sherlock Holmes",
-			"Date": queryDate,
-			"Projection": [
+			var schedule4Today = {
+				"PersonId": "221B-Baker-Street",
+				"Name": "Sherlock Holmes",
+				"Date": queryDate,
+				"Projection": [],
+				"DayOff":
 				{
-					"Color": "Red",
-					"Description": "Phone",
-					"Start": queryDate + " 15:00",
-					"End": queryDate + "16:00",
-					"Minutes": 120
-				},
-				{
-					"Color": "Yellow",
-					"Description": "Email",
-					"Start": queryDate + " 17:00",
-					"End": queryDate + " 23:00",
-					"Minutes": 360 // End = "2015-10-26 23:00"
+					"DayOffName": "Shoft DayOff",
+					"Start": queryDate + " 00:00",
+					"End": tomorrow + "00:00",
+					"Minutes": 1440
 				}
-			],
-			DayOff: null
-		};
+			};
 
-		var personSchedule = target.Create(schedule, timeLine);
+			var personSchedule = target.Create(schedule4Yesterday, timeLine);
+			personSchedule.Merge(schedule4Today, timeLine);
 
-		personSchedule.Merge(anotherSchedule, timeLine);
+			expect(personSchedule.PersonId).toEqual(schedule4Yesterday.PersonId);
+			expect(personSchedule.Name).toEqual(schedule4Yesterday.Name);
+			expect(personSchedule.Date).toEqual(schedule4Yesterday.Date);
+			expect(personSchedule.Shifts.length).toEqual(0);
+			expect(personSchedule.DayOffs.length).toEqual(2);
 
-		expect(personSchedule.PersonId).toEqual(schedule.PersonId);
-		expect(personSchedule.Name).toEqual(schedule.Name);
-		expect(personSchedule.Date).toEqual(yesterday);
-		expect(personSchedule.Shifts.length).toEqual(2);
-		expect(personSchedule.DayOffs.length).toEqual(0);
+			verifyDayOff(timeLine, personSchedule.DayOffs[0], schedule4Yesterday.DayOff);
+			verifyDayOff(timeLine, personSchedule.DayOffs[1], schedule4Today.DayOff);
+		}));
 
-		verifyShift(timeLine, personSchedule.Shifts[0], schedule);
-		verifyShift(timeLine, personSchedule.Shifts[1], anotherSchedule);
-	}));
+		it("should get correct schedule start time", function () {
+			var queryDate = "2015-10-30";
+			var tomorrow = moment(queryDate).add(1, "days").format("YYYY-MM-DD");
+			var timeLineStart = 0;
+			var timeLineEnd = 1440;
 
-	it("Should merge dayoff for same people", inject(function () {
-		var queryDate = "2015-10-30";
-		var yesterday = moment(queryDate).add(-1, "days").startOf("days").format("YYYY-MM-DD");
-		var tomorrow = moment(queryDate).add(1, "days").format("YYYY-MM-DD");
+			var timeLine = {
+				Offset: moment(queryDate),
+				StartMinute: timeLineStart,
+				EndMinute: timeLineEnd,
+				LengthPercentPerMinute: 100 / (timeLineEnd - timeLineStart)
+			};
+			var scheduleYesterday = {
+				"PersonId": "221B-Baker-Street",
+				"Name": "Sherlock Holmes",
+				"Date": new Date('2015-10-29T00:00:00Z'),
+				"Projection": [],
+				"DayOff":
+				{
+					"DayOffName": "Day off",
+					"Start": "2015-10-30T07:00:00",
+					"End": tomorrow + "00:00",
+					"Minutes": 1440
+				}
+			};
 
-		var timeLineStart = 1200; // 2015-10-26 20:00
-		var timeLineEnd = 2640;   // 2015-10-27 20:00
+			var scheduleToday = {
+				"PersonId": "221B-Baker-Street",
+				"Name": "Sherlock Holmes",
+				"Date": new Date('2015-10-30T00:00:00Z'),
+				"Projection": [
+					{
+						"Color": "#80FF80",
+						"Description": "Email",
+						"Start": '2015-10-30T07:00:00',
+						"End": '2015-10-30T15:00:00',
+						"Minutes": 480
+					}],
+				"DayOff": null
+			};
+			var personSchedule = target.Create(scheduleToday, timeLine);
+			personSchedule.Merge(scheduleYesterday, timeLine);
 
-		var timeLine = {
-			Offset: moment(yesterday),
-			StartMinute: timeLineStart,
-			EndMinute: timeLineEnd,
-			LengthPercentPerMinute: 100 / (timeLineEnd - timeLineStart)
-		};
+			expect(personSchedule.ScheduleStartTime()).toEqual('2015-10-30T07:00:00');
+		});
 
-		var schedule4Yesterday = {
-			"PersonId": "221B-Baker-Street",
-			"Name": "Sherlock Holmes",
-			"Date": yesterday,
-			"Projection": [],
-			"DayOff":
-			{
-				"DayOffName": "Day off",
-				"Start": yesterday + " 00:00",
-				"End": queryDate + " 00:00",
-				"Minutes": 1440
-			}
-		};
+		it("should get correct schedule end time", function () {
+			var queryDate = "2015-10-30T00:00:00";
+			var timeLineStart = 0;
+			var timeLineEnd = 1440;
 
-		var schedule4Today = {
-			"PersonId": "221B-Baker-Street",
-			"Name": "Sherlock Holmes",
-			"Date": queryDate,
-			"Projection": [],
-			"DayOff":
-			{
-				"DayOffName": "Shoft DayOff",
-				"Start": queryDate + " 00:00",
-				"End": tomorrow + "00:00",
-				"Minutes": 1440
-			}
-		};
+			var timeLine = {
+				Offset: moment(queryDate),
+				StartMinute: timeLineStart,
+				EndMinute: timeLineEnd,
+				LengthPercentPerMinute: 100 / (timeLineEnd - timeLineStart)
+			};
+			var scheduleYesterday = {
+				"PersonId": "221B-Baker-Street",
+				"Name": "Sherlock Holmes",
+				"Date": new Date('2015-10-29T00:00:00'),
+				"Projection": [],
+				"DayOff":
+				{
+					"DayOffName": "Day off",
+					"Start": '2015-10-29T08:00:00',
+					"End": '2015-10-30T08:00:00',
+					"Minutes": 1440
+				}
+			};
 
-		var personSchedule = target.Create(schedule4Yesterday, timeLine);
-		personSchedule.Merge(schedule4Today, timeLine);
+			var scheduleToday = {
+				"PersonId": "221B-Baker-Street",
+				"Name": "Sherlock Holmes",
+				"Date": queryDate,
+				"Projection": [
+					{
+						"Color": "#80FF80",
+						"Description": "Email",
+						"Start": "2015-10-30T07:00:00",
+						"End": "2015-10-30T15:00:00",
+						"Minutes": 480
+					}],
+				"DayOff": null
+			};
+			var personSchedule = target.Create(scheduleToday, timeLine);
+			personSchedule.Merge(scheduleYesterday, timeLine);
 
-		expect(personSchedule.PersonId).toEqual(schedule4Yesterday.PersonId);
-		expect(personSchedule.Name).toEqual(schedule4Yesterday.Name);
-		expect(personSchedule.Date).toEqual(schedule4Yesterday.Date);
-		expect(personSchedule.Shifts.length).toEqual(0);
-		expect(personSchedule.DayOffs.length).toEqual(2);
+			expect(personSchedule.ScheduleEndTime()).toEqual("2015-10-30T15:00:00");
+		});
 
-		verifyDayOff(timeLine, personSchedule.DayOffs[0], schedule4Yesterday.DayOff);
-		verifyDayOff(timeLine, personSchedule.DayOffs[1], schedule4Today.DayOff);
-	}));
+		it('Should get correct person activities count', function () {
+			var queryDate = "2015-10-30";
+			var yesterday = moment(queryDate).add(-1, "days").startOf("days").format("YYYY-MM-DD");
+			var tomorrow = moment(queryDate).add(1, "days").format("YYYY-MM-DD");
+			var timeLineStart = 0;
+			var timeLineEnd = 1440;
 
-	it("should get correct schedule start time", function() {
-		var queryDate = "2015-10-30";
-		var tomorrow = moment(queryDate).add(1, "days").format("YYYY-MM-DD");
-		var timeLineStart = 0;
-		var timeLineEnd = 1440;
+			var timeLine = {
+				Offset: moment(queryDate),
+				StartMinute: timeLineStart,
+				EndMinute: timeLineEnd,
+				LengthPercentPerMinute: 100 / (timeLineEnd - timeLineStart)
+			};
+			var scheduleYesterday = {
+				"PersonId": "221B-Baker-Street",
+				"Name": "Sherlock Holmes",
+				"Date": yesterday,
+				"Projection": [
+					{
+						"ShiftLayerIds": ["111"],
+						"Color": "#80FF80",
+						"Description": "Email",
+						"Start": yesterday + " 19:00",
+						"End": tomorrow + " 02:00",
+						"Minutes": 480
+					}],
+				"DayOff": null
+			};
 
-		var timeLine = {
-			Offset: moment(queryDate),
-			StartMinute: timeLineStart,
-			EndMinute: timeLineEnd,
-			LengthPercentPerMinute: 100 / (timeLineEnd - timeLineStart)
-		};
-		var scheduleYesterday = {
-			"PersonId": "221B-Baker-Street",
-			"Name": "Sherlock Holmes",
-			"Date": new Date('2015-10-29T00:00:00Z'),
-			"Projection": [],
-			"DayOff":
-			{
-				"DayOffName": "Day off",
-				"Start": "2015-10-30T07:00:00",
-				"End": tomorrow + "00:00",
-				"Minutes": 1440
-			}
-		};
+			var scheduleToday = {
+				"PersonId": "221B-Baker-Street",
+				"Name": "Sherlock Holmes",
+				"Date": queryDate,
+				"Projection": [
+					{
+						"ShiftLayerIds": ["222"],
+						"Color": "#80FF80",
+						"Description": "Email",
+						"Start": queryDate + " 07:00",
+						"End": queryDate + " 11:00",
+						"Minutes": 240
+					},
+					{
+						"ShiftLayerIds": ["333"],
+						"Color": "#80FF80",
+						"Description": "Email",
+						"Start": queryDate + " 11:00",
+						"End": queryDate + " 15:00",
+						"Minutes": 240
+					}],
+				"DayOff": null
+			};
+			var personSchedule = target.Create(scheduleToday, timeLine);
+			personSchedule.Merge(scheduleYesterday, timeLine);
+			expect(personSchedule.Shifts[0].ActivityCount()).toEqual(2);
+			expect(personSchedule.Shifts[1].ActivityCount()).toEqual(1);
+		});
 
-		var scheduleToday = {
-			"PersonId": "221B-Baker-Street",
-			"Name": "Sherlock Holmes",
-			"Date": new Date('2015-10-30T00:00:00Z'),
-			"Projection": [
-			{
-				"Color": "#80FF80",
-				"Description": "Email",
-				"Start": '2015-10-30T07:00:00',
-				"End": '2015-10-30T15:00:00',
-				"Minutes": 480
-			}],
-			"DayOff":null
-		};
-		var personSchedule = target.Create(scheduleToday, timeLine);
-		personSchedule.Merge(scheduleYesterday, timeLine);
+		it('Should get correct formatted contact time', function () {
+			var queryDate = "2015-10-30";
+			var timeLineStart = 0;
+			var timeLineEnd = 1440;
 
-		expect(personSchedule.ScheduleStartTime()).toEqual('2015-10-30T07:00:00');
+			var timeLine = {
+				Offset: moment(queryDate),
+				StartMinute: timeLineStart,
+				EndMinute: timeLineEnd,
+				LengthPercentPerMinute: 100 / (timeLineEnd - timeLineStart)
+			};
+			var scheduleToday = {
+				"PersonId": "221B-Baker-Street",
+				"Name": "Sherlock Holmes",
+				"Date": queryDate,
+				"ContractTimeMinutes": 480,
+				"Projection": [
+					{
+						"ShiftLayerIds": ["222"],
+						"Color": "#80FF80",
+						"Description": "Email",
+						"Start": queryDate + " 07:00",
+						"End": queryDate + " 11:00",
+						"Minutes": 240
+					},
+					{
+						"ShiftLayerIds": ["333"],
+						"Color": "#80FF80",
+						"Description": "Email",
+						"Start": queryDate + " 11:00",
+						"End": queryDate + " 07:30",
+						"Minutes": 1230
+					}],
+				"DayOff": null
+			};
+			var personSchedule = target.Create(scheduleToday, timeLine);
+			expect(personSchedule.ContractTime).toEqual("8:00");
+		});
+
+		it('Should get correct formatted contact time when it is greater than 24 hours', function () {
+			var queryDate = "2015-10-30";
+			var timeLineStart = 0;
+			var timeLineEnd = 1440;
+
+			var timeLine = {
+				Offset: moment(queryDate),
+				StartMinute: timeLineStart,
+				EndMinute: timeLineEnd,
+				LengthPercentPerMinute: 100 / (timeLineEnd - timeLineStart)
+			};
+			var scheduleToday = {
+				"PersonId": "221B-Baker-Street",
+				"Name": "Sherlock Holmes",
+				"Date": queryDate,
+				"ContractTimeMinutes": 1470,
+				"Projection": [
+					{
+						"ShiftLayerIds": ["222"],
+						"Color": "#80FF80",
+						"Description": "Email",
+						"Start": queryDate + " 07:00",
+						"End": queryDate + " 11:00",
+						"Minutes": 240
+					},
+					{
+						"ShiftLayerIds": ["333"],
+						"Color": "#80FF80",
+						"Description": "Email",
+						"Start": queryDate + " 11:00",
+						"End": queryDate + " 15:00",
+						"Minutes": 240
+					}],
+				"DayOff": null
+			};
+			var personSchedule = target.Create(scheduleToday, timeLine);
+			expect(personSchedule.ContractTime).toEqual("24:30");
+		});
+	}
+
+	commonTestsInDifferentLocale();
+
+	describe('in locale ar-AE', function () {
+		beforeAll(function () {
+			moment.locale('ar-AE');
+		});
+
+		afterAll(function () {
+			moment.locale('en');
+		});
+
+		commonTestsInDifferentLocale();
 	});
 
-	it("should get correct schedule end time", function() {
-		var queryDate = "2015-10-30T00:00:00";
-		var timeLineStart = 0;
-		var timeLineEnd = 1440;
+	describe('in locale fa-IR', function () {
+		beforeAll(function () {
+			moment.locale('fa-IR');
+		});
 
-		var timeLine = {
-			Offset: moment(queryDate),
-			StartMinute: timeLineStart,
-			EndMinute: timeLineEnd,
-			LengthPercentPerMinute: 100 / (timeLineEnd - timeLineStart)
-		};
-		var scheduleYesterday = {
-			"PersonId": "221B-Baker-Street",
-			"Name": "Sherlock Holmes",
-			"Date": new Date('2015-10-29T00:00:00'),
-			"Projection": [],
-			"DayOff":
-			{
-				"DayOffName": "Day off",
-				"Start": '2015-10-29T08:00:00',
-				"End": '2015-10-30T08:00:00',
-				"Minutes": 1440
-			}
-		};
+		afterAll(function () {
+			moment.locale('en');
+		});
 
-		var scheduleToday = {
-			"PersonId": "221B-Baker-Street",
-			"Name": "Sherlock Holmes",
-			"Date": queryDate,
-			"Projection": [
-			{
-				"Color": "#80FF80",
-				"Description": "Email",
-				"Start": "2015-10-30T07:00:00",
-				"End": "2015-10-30T15:00:00",
-				"Minutes": 480
-			}],
-			"DayOff":null
-		};
-		var personSchedule = target.Create(scheduleToday, timeLine);
-		personSchedule.Merge(scheduleYesterday, timeLine);
-
-		expect(personSchedule.ScheduleEndTime()).toEqual("2015-10-30T15:00:00");
+		commonTestsInDifferentLocale();
 	});
 
-	it('Should get correct person activities count', function() {
-		var queryDate = "2015-10-30";
-		var yesterday = moment(queryDate).add(-1, "days").startOf("days").format("YYYY-MM-DD");
-		var tomorrow = moment(queryDate).add(1, "days").format("YYYY-MM-DD");
-		var timeLineStart = 0;
-		var timeLineEnd = 1440;
-
-		var timeLine = {
-			Offset: moment(queryDate),
-			StartMinute: timeLineStart,
-			EndMinute: timeLineEnd,
-			LengthPercentPerMinute: 100 / (timeLineEnd - timeLineStart)
-		};
-		var scheduleYesterday = {
-			"PersonId": "221B-Baker-Street",
-			"Name": "Sherlock Holmes",
-			"Date": yesterday,
-			"Projection": [
-			{
-			    "ShiftLayerIds": ["111"],
-				"Color": "#80FF80",
-				"Description": "Email",
-				"Start": yesterday + " 19:00",
-				"End": tomorrow + " 02:00",
-				"Minutes": 480
-			}],
-			"DayOff":null
-		};
-
-		var scheduleToday = {
-			"PersonId": "221B-Baker-Street",
-			"Name": "Sherlock Holmes",
-			"Date": queryDate,
-			"Projection": [
-			{
-			    "ShiftLayerIds": ["222"],
-				"Color": "#80FF80",
-				"Description": "Email",
-				"Start": queryDate + " 07:00",
-				"End": queryDate + " 11:00",
-				"Minutes": 240
-			},
-			{
-			    "ShiftLayerIds": ["333"],
-				"Color": "#80FF80",
-				"Description": "Email",
-				"Start": queryDate + " 11:00",
-				"End": queryDate + " 15:00",
-				"Minutes": 240
-			}],
-			"DayOff": null
-		};
-		var personSchedule = target.Create(scheduleToday, timeLine);
-		personSchedule.Merge(scheduleYesterday, timeLine);
-		expect(personSchedule.Shifts[0].ActivityCount()).toEqual(2);
-		expect(personSchedule.Shifts[1].ActivityCount()).toEqual(1);
-	});
-
-	it('Should get correct formatted contact time', function() {
-		var queryDate = "2015-10-30";
-		var timeLineStart = 0;
-		var timeLineEnd = 1440;
-
-		var timeLine = {
-			Offset: moment(queryDate),
-			StartMinute: timeLineStart,
-			EndMinute: timeLineEnd,
-			LengthPercentPerMinute: 100 / (timeLineEnd - timeLineStart)
-		};
-		var scheduleToday = {
-			"PersonId": "221B-Baker-Street",
-			"Name": "Sherlock Holmes",
-			"Date": queryDate,
-			"ContractTimeMinutes": 480,
-			"Projection": [
-			{
-			    "ShiftLayerIds": ["222"],
-				"Color": "#80FF80",
-				"Description": "Email",
-				"Start": queryDate + " 07:00",
-				"End": queryDate + " 11:00",
-				"Minutes": 240
-			},
-			{
-			    "ShiftLayerIds": ["333"],
-				"Color": "#80FF80",
-				"Description": "Email",
-				"Start": queryDate + " 11:00",
-				"End": queryDate + " 07:30",
-				"Minutes": 1230
-			}],
-			"DayOff": null
-		};
-		var personSchedule = target.Create(scheduleToday, timeLine);
-		expect(personSchedule.ContractTime).toEqual("8:00");
-	});
-
-	it('Should get correct formatted contact time when it is greater than 24 hours', function() {
-		var queryDate = "2015-10-30";
-		var timeLineStart = 0;
-		var timeLineEnd = 1440;
-
-		var timeLine = {
-			Offset: moment(queryDate),
-			StartMinute: timeLineStart,
-			EndMinute: timeLineEnd,
-			LengthPercentPerMinute: 100 / (timeLineEnd - timeLineStart)
-		};
-		var scheduleToday = {
-			"PersonId": "221B-Baker-Street",
-			"Name": "Sherlock Holmes",
-			"Date": queryDate,
-			"ContractTimeMinutes": 1470,
-			"Projection": [
-			{
-			    "ShiftLayerIds": ["222"],
-				"Color": "#80FF80",
-				"Description": "Email",
-				"Start": queryDate + " 07:00",
-				"End": queryDate + " 11:00",
-				"Minutes": 240
-			},
-			{
-			    "ShiftLayerIds": ["333"],
-				"Color": "#80FF80",
-				"Description": "Email",
-				"Start": queryDate + " 11:00",
-				"End": queryDate + " 15:00",
-				"Minutes": 240
-			}],
-			"DayOff": null
-		};
-		var personSchedule = target.Create(scheduleToday, timeLine);
-		expect(personSchedule.ContractTime).toEqual("24:30");
-	});
 
 	function verifyShift(timeLine, shift, rawSchedule) {
 		shift.Projections.forEach(function (projection, index) {

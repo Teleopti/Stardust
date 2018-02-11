@@ -3,7 +3,9 @@
 
 	angular.module('wfm.teamSchedule').service('PersonSelection', PersonSelectionService);
 
-	function PersonSelectionService() {
+	PersonSelectionService.$inject = ['serviceDateFormatHelper'];
+
+	function PersonSelectionService(serviceDateFormatHelper) {
 		var svc = this;
 		svc.personInfo = {};
 
@@ -15,14 +17,14 @@
 			if (personSchedule.IsSelected) {
 				var absences = [], activities = [];
 				if (personSchedule.Shifts && personSchedule.Shifts.length > 0) {
-					personSchedule.Shifts.forEach(function(shift) {
+					personSchedule.Shifts.forEach(function (shift) {
 						if (shift.Date !== personSchedule.Date) {
 							return;
 						}
 
 						if (!shift.Projections) return;
 
-						shift.Projections.forEach(function(projection) {
+						shift.Projections.forEach(function (projection) {
 							if (projection.ParentPersonAbsences) {
 								projection.ParentPersonAbsences.forEach(function (personAbsId) {
 									var targetSelectedAbsence = new SelectedAbsence(personAbsId, shift.Date);
@@ -51,7 +53,7 @@
 
 		svc.preSelectPeople = function (preSelectedPersonIds, schedules, viewDate) {
 			if (preSelectedPersonIds.length === 0) return;
-			angular.forEach(schedules, function(personSchedule) {
+			angular.forEach(schedules, function (personSchedule) {
 				var personId = personSchedule.PersonId;
 				if (preSelectedPersonIds.indexOf(personId) > -1) {
 					personSchedule.IsSelected = true;
@@ -61,8 +63,8 @@
 			});
 		}
 
-		svc.updatePersonInfo = function(schedules) {
-			schedules.forEach(function(personSchedule) {
+		svc.updatePersonInfo = function (schedules) {
+			schedules.forEach(function (personSchedule) {
 				var personId = personSchedule.PersonId;
 				if (svc.personInfo[personId] && svc.personInfo[personId].Checked)
 					personSchedule.IsSelected = true;
@@ -75,23 +77,23 @@
 					svc.personInfo[personId].ScheduleEndTime = personSchedule.ScheduleEndTime();
 					svc.personInfo[personId].AllowSwap = personSchedule.AllowSwap();
 
-					personSchedule.Shifts.forEach(function(shift) {
+					personSchedule.Shifts.forEach(function (shift) {
 						if (shift.Date !== personSchedule.Date) {
 							return;
 						}
 
 						if (!shift.Projections) return;
 
-						shift.Projections.forEach(function(projection) {
+						shift.Projections.forEach(function (projection) {
 							if (projection.ParentPersonAbsences && projection.ParentPersonAbsences.length > 0) {
 								projection.Selected =
-									!projection.ParentPersonAbsences.some(function(absenceId) {
+									!projection.ParentPersonAbsences.some(function (absenceId) {
 										var targetAbsence = new SelectedAbsence(absenceId, shift.Date);
 										return lookUpIndex(svc.personInfo[personId].SelectedAbsences, targetAbsence) < 0;
 									});
 							} else if (projection.ShiftLayerIds) {
 								projection.Selected =
-									!projection.ShiftLayerIds.some(function(shiftLayerId) {
+									!projection.ShiftLayerIds.some(function (shiftLayerId) {
 										var targetActivity = new SelectedActivity(shiftLayerId, shift.Date, projection.IsOvertime);
 										return lookUpIndex(svc.personInfo[personId].SelectedActivities, targetActivity) < 0;
 									});
@@ -103,9 +105,9 @@
 		};
 
 		svc.isAllProjectionSelected = function (personSchedule, viewDate) {
-			return personSchedule.Shifts.every( function (shift) {
-				if (shift.Date === moment(viewDate).format('YYYY-MM-DD')) {
-					return shift.Projections.every(function(projection) {
+			return personSchedule.Shifts.every(function (shift) {
+				if (shift.Date === serviceDateFormatHelper.getDateOnly(viewDate)) {
+					return shift.Projections.every(function (projection) {
 						if (projection.Selectable()) {
 							return projection.Selected;
 						}
@@ -118,7 +120,7 @@
 
 		svc.toggleAllPersonProjections = function (personSchedule, viewDate) {
 			angular.forEach(personSchedule.Shifts, function (shift) {
-				if (shift.Date === moment(viewDate).format('YYYY-MM-DD') || !personSchedule.IsSelected) {
+				if (shift.Date === serviceDateFormatHelper.getDateOnly(viewDate) || !personSchedule.IsSelected) {
 					angular.forEach(shift.Projections, function (projection) {
 						if (projection.Selectable()) {
 							projection.Selected = personSchedule.IsSelected;
@@ -142,11 +144,11 @@
 			var personInfo = svc.personInfo[personId];
 			if (currentProjection.Selected) {
 				if (currentProjection.ParentPersonAbsences && currentProjection.ParentPersonAbsences.length > 0) {
-					currentProjection.ParentPersonAbsences.forEach(function(absenceId) {
+					currentProjection.ParentPersonAbsences.forEach(function (absenceId) {
 						addAbsence(personInfo.SelectedAbsences, absenceId, currentShift.Date);
 					});
 				} else if (currentProjection.ShiftLayerIds && currentProjection.Selectable()) {
-					currentProjection.ShiftLayerIds.forEach(function(shiftLayerId) {
+					currentProjection.ShiftLayerIds.forEach(function (shiftLayerId) {
 						addActivity(personInfo.SelectedActivities, shiftLayerId, currentShift.Date, currentProjection.IsOvertime);
 					});
 				}
@@ -188,7 +190,7 @@
 					delete svc.personInfo[personSchedule.PersonId];
 				}
 			});
-			if(Object.keys(svc.personInfo).length > 0){
+			if (Object.keys(svc.personInfo).length > 0) {
 				svc.personInfo = {};
 			}
 		};
@@ -205,14 +207,14 @@
 
 		svc.getCheckedPersonInfoList = function () {
 			return svc.getSelectedPersonInfoList()
-				.filter(function(info) {
+				.filter(function (info) {
 					return info.Checked === true;
 				});
 		};
 
 		svc.getSelectedPersonInfoList = function () {
 			return svc.getSelectedPersonIdList()
-				.map(function(key) {
+				.map(function (key) {
 					return svc.personInfo[key];
 				});
 		};
@@ -238,7 +240,8 @@
 			}
 
 			var isBothAllowSwap = svc.personInfo[personIds[0]].AllowSwap && svc.personInfo[personIds[1]].AllowSwap;
-			var isOnlyTodaySchedules = moment(svc.personInfo[personIds[0]].ScheduleStartTime).format('YYYY-MM-DD') === moment(svc.personInfo[personIds[1]].ScheduleStartTime).format('YYYY-MM-DD');
+			var isOnlyTodaySchedules = serviceDateFormatHelper.getDateOnly(svc.personInfo[personIds[0]].ScheduleStartTime)
+				=== serviceDateFormatHelper.getDateOnly(svc.personInfo[personIds[1]].ScheduleStartTime);
 			var isBothOnSameTimezone = svc.personInfo[personIds[0]].Timezone.IanaId === svc.personInfo[personIds[1]].Timezone.IanaId;
 			return isBothAllowSwap && isOnlyTodaySchedules && isBothOnSameTimezone;
 		};
@@ -275,123 +278,124 @@
 		};
 
 		svc.syncProjectionSelection = syncProjectionSelection;
-	}
-
-	function SelectedAbsence(absenceId, date) {
-		this.absenceId = absenceId;
-		this.date = date;
-		this.equals = function(other) {
-			return this.absenceId === other.absenceId &&
-				moment(this.date).format('YYYY-MM-DD') === moment(other.date).format('YYYY-MM-DD');
-		}
-	}
-
-	function SelectedActivity(shiftLayerId, date, isOvertime) {
-		this.shiftLayerId = shiftLayerId;
-		this.date = date;
-		this.isOvertime = isOvertime;
-		this.equals = function (other) {
-			return this.shiftLayerId === other.shiftLayerId &&
-				moment(this.date).format('YYYY-MM-DD') === moment(other.date).format('YYYY-MM-DD');
-		}
-	}
 
 
-	function lookUpIndex(array, target ) {
-		var index = -1;
-		for (var i = 0; i < array.length; i++) {
-			if (target.equals(array[i])) {
-				index = i;
-				break;
+		function SelectedAbsence(absenceId, date) {
+			this.absenceId = absenceId;
+			this.date = date;
+			this.equals = function (other) {
+				return this.absenceId === other.absenceId &&
+					serviceDateFormatHelper.getDateOnly(this.date) === serviceDateFormatHelper.getDateOnly(other.date);
 			}
 		}
-		return index;
-	}
 
-	function createDefaultPersonInfo(personSchedule, absences, activities) {
-		var isDayOff = personSchedule.DayOffs && personSchedule.DayOffs.filter(function(d){return d.Date == personSchedule.Date;}).length > 0;
-		var isEmptyDay = !isDayOff && (!absences || absences.length == 0) && (!activities || activities.length == 0);
-
-		return {
-			PersonId: personSchedule.PersonId,
-			Name: personSchedule.Name,
-			Checked: true,
-			OrderIndex: personSchedule.Index,
-			AllowSwap: personSchedule.AllowSwap(),
-			IsDayOff: isDayOff,
-			IsEmptyDay: isEmptyDay,
-			IsFullDayAbsence: personSchedule.IsFullDayAbsence,
-			ScheduleStartTime: personSchedule.ScheduleStartTime(),
-			ScheduleEndTime: personSchedule.ScheduleEndTime(),
-			SelectedAbsences: absences || [],
-			SelectedActivities: activities || [],
-			Timezone: personSchedule.Timezone,
-			SelectedDayOffs:personSchedule.DayOffs || []
-		};
-	}
-
-	function addAbsence(absences, absenceId, date) {
-		var targetSelectedAbsence = new SelectedAbsence(absenceId, date);
-		var index = lookUpIndex(absences, targetSelectedAbsence);
-		if (index < 0) {
-			absences.push(targetSelectedAbsence);
-		}
-	}
-
-	function deleteAbsence(absences, absenceId, date) {
-		var targetSelectedAbsence = new SelectedAbsence(absenceId, date);
-		var index = lookUpIndex(absences, targetSelectedAbsence);
-		while (index >= 0) {
-			absences.splice(index, 1);
-			index = lookUpIndex(absences, targetSelectedAbsence);
-		}
-	}
-
-	function addActivity(activities, shiftLayerId, date, isOvertime) {
-		var targetSelectedActivity = new SelectedActivity(shiftLayerId, date, isOvertime);
-		var index = lookUpIndex(activities, targetSelectedActivity);
-		if (index < 0) {
-			activities.push(targetSelectedActivity);
-		}
-	}
-
-	function deleteActivity(activities, shiftLayerId, date, isOvertime) {
-		var targetSelectedActivity = new SelectedActivity(shiftLayerId, date, isOvertime);
-		var index = lookUpIndex(activities, targetSelectedActivity);
-		while(index >= 0) {
-			activities.splice(index, 1);
-			index = lookUpIndex(activities, targetSelectedActivity);
-		}
-	}
-
-	function syncProjectionSelection(personSchedules) {
-		var personInfo = this.personInfo
-		personSchedules.forEach(function (sched) {
-			if (!sched.Shifts) {
-				return;
+		function SelectedActivity(shiftLayerId, date, isOvertime) {
+			this.shiftLayerId = shiftLayerId;
+			this.date = date;
+			this.isOvertime = isOvertime;
+			this.equals = function (other) {
+				return this.shiftLayerId === other.shiftLayerId &&
+					serviceDateFormatHelper.getDateOnly(this.date) === serviceDateFormatHelper.getDateOnly(other.date);
 			}
-			sched.Shifts.forEach(function (shift) {
-				shift.Projections.forEach(function (proj) {
-					if (!proj.ShiftLayerIds) {
-						return;
-					}
-					proj.ShiftLayerIds.forEach(function (id) {
-						if (!personInfo[sched.PersonId]) {
+		}
+
+
+		function lookUpIndex(array, target) {
+			var index = -1;
+			for (var i = 0; i < array.length; i++) {
+				if (target.equals(array[i])) {
+					index = i;
+					break;
+				}
+			}
+			return index;
+		}
+
+		function createDefaultPersonInfo(personSchedule, absences, activities) {
+			var isDayOff = personSchedule.DayOffs && personSchedule.DayOffs.filter(function (d) { return d.Date == personSchedule.Date; }).length > 0;
+			var isEmptyDay = !isDayOff && (!absences || absences.length == 0) && (!activities || activities.length == 0);
+
+			return {
+				PersonId: personSchedule.PersonId,
+				Name: personSchedule.Name,
+				Checked: true,
+				OrderIndex: personSchedule.Index,
+				AllowSwap: personSchedule.AllowSwap(),
+				IsDayOff: isDayOff,
+				IsEmptyDay: isEmptyDay,
+				IsFullDayAbsence: personSchedule.IsFullDayAbsence,
+				ScheduleStartTime: personSchedule.ScheduleStartTime(),
+				ScheduleEndTime: personSchedule.ScheduleEndTime(),
+				SelectedAbsences: absences || [],
+				SelectedActivities: activities || [],
+				Timezone: personSchedule.Timezone,
+				SelectedDayOffs: personSchedule.DayOffs || []
+			};
+		}
+
+		function addAbsence(absences, absenceId, date) {
+			var targetSelectedAbsence = new SelectedAbsence(absenceId, date);
+			var index = lookUpIndex(absences, targetSelectedAbsence);
+			if (index < 0) {
+				absences.push(targetSelectedAbsence);
+			}
+		}
+
+		function deleteAbsence(absences, absenceId, date) {
+			var targetSelectedAbsence = new SelectedAbsence(absenceId, date);
+			var index = lookUpIndex(absences, targetSelectedAbsence);
+			while (index >= 0) {
+				absences.splice(index, 1);
+				index = lookUpIndex(absences, targetSelectedAbsence);
+			}
+		}
+
+		function addActivity(activities, shiftLayerId, date, isOvertime) {
+			var targetSelectedActivity = new SelectedActivity(shiftLayerId, date, isOvertime);
+			var index = lookUpIndex(activities, targetSelectedActivity);
+			if (index < 0) {
+				activities.push(targetSelectedActivity);
+			}
+		}
+
+		function deleteActivity(activities, shiftLayerId, date, isOvertime) {
+			var targetSelectedActivity = new SelectedActivity(shiftLayerId, date, isOvertime);
+			var index = lookUpIndex(activities, targetSelectedActivity);
+			while (index >= 0) {
+				activities.splice(index, 1);
+				index = lookUpIndex(activities, targetSelectedActivity);
+			}
+		}
+
+		function syncProjectionSelection(personSchedules) {
+			var personInfo = this.personInfo
+			personSchedules.forEach(function (sched) {
+				if (!sched.Shifts) {
+					return;
+				}
+				sched.Shifts.forEach(function (shift) {
+					shift.Projections.forEach(function (proj) {
+						if (!proj.ShiftLayerIds) {
 							return;
 						}
-						var selected = false;
-						for (var i = 0; i < personInfo[sched.PersonId].SelectedActivities.length; i++) {
-							if (personInfo[sched.PersonId].SelectedActivities[i].shiftLayerId === id) {
-								selected = true;
-								break;
+						proj.ShiftLayerIds.forEach(function (id) {
+							if (!personInfo[sched.PersonId]) {
+								return;
 							}
-						}
-						if (selected) {
-							proj.Selected = true;
-						}
+							var selected = false;
+							for (var i = 0; i < personInfo[sched.PersonId].SelectedActivities.length; i++) {
+								if (personInfo[sched.PersonId].SelectedActivities[i].shiftLayerId === id) {
+									selected = true;
+									break;
+								}
+							}
+							if (selected) {
+								proj.Selected = true;
+							}
+						});
 					});
 				});
-			});
-		}, this);
+			}, this);
+		}
 	}
 })(angular);

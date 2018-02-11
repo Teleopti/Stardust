@@ -7,6 +7,7 @@
 		utility,
 		fakeActivityService,
 		fakePersonSelectionService,
+		fakeScheduleManagementSvc,
 		scheduleHelper;
 
 	var mockCurrentUserInfo = {
@@ -21,6 +22,7 @@
 	beforeEach(function () {
 		fakeActivityService = new FakeActivityService();
 		fakePersonSelectionService = new FakePersonSelectionService();
+		fakeScheduleManagementSvc = new FakeScheduleManagementService();
 
 		module(function ($provide) {
 			$provide.service('ActivityService', function () {
@@ -31,6 +33,12 @@
 			});
 			$provide.service('PersonSelection', function () {
 				return fakePersonSelectionService;
+			});
+			$provide.service('ScheduleManagement', function () {
+				return fakeScheduleManagementSvc;
+			});
+			$provide.service('CurrentUserInfo', function () {
+				return mockCurrentUserInfo;
 			});
 		});
 	});
@@ -235,6 +243,99 @@
 		expect(moment(result.commandControl.toTime).format('YYYY-MM-DD HH:mm')).toEqual(moment('2018-01-23 18:00:00').format('YYYY-MM-DD HH:mm'));
 	});
 
+	commonTestsInDifferentLocale();
+
+	describe('in locale ar-AE', function () {
+		beforeAll(function () {
+			moment.locale('ar-AE');
+		});
+
+		afterAll(function () {
+			moment.locale('en');
+		});
+
+		commonTestsInDifferentLocale();
+	});
+
+	describe('in locale fa-IR', function () {
+		beforeEach(function () {
+			moment.locale('fa-IR');
+		});
+
+		afterEach(function () {
+			moment.locale('en');
+		});
+
+		commonTestsInDifferentLocale();
+	});
+
+	function commonTestsInDifferentLocale() {
+		it('should call add overtime when click apply with correct data', function () {
+			var personInfoList = [{
+				PersonId: '7c25f4ae-96ea-409e-b959-2c02587c649e',
+				Name: 'Bill',
+				Checked: true,
+				OrderIndex: 1,
+				AllowSwap: false,
+				IsDayOff: false,
+				IsEmptyDay: true,
+				IsFullDayAbsence: false,
+				ScheduleStartTime: '2018-02-12T00:00:00',
+				ScheduleEndTime: '2018-02-12T23:59:00',
+				Schedules: [],
+				SelectedAbsences: [],
+				SelectedActivities: [],
+				Timezone: {
+					IanaId: "Asia/Shanghai",
+					DisplayName: "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi"
+				},
+				SelectedDayOffs: []
+			}];
+
+			fakePersonSelectionService.setFakeCheckedPersonInfoList(personInfoList);
+
+			var date = "2018-02-12";
+			var result = setUp(date);
+			var scope = result.scope;
+			var ctrl = result.commandControl;
+			var panel = result.container;
+
+			ctrl.selectedActivityId = '472e02c8-1a84-4064-9a3b-9b5e015ab3c6';
+			ctrl.selectedDefinitionSetId = '5c1409de-a0f1-4cd4-b383-9b5e015ab789';
+			scope.$apply();
+
+			ctrl.fromTime = new Date('2018-02-12T10:00:00');
+			ctrl.toTime = new Date('2018-02-12T10:30:00');
+			var timezone1 = {
+				IanaId: "Asia/Hong_Kong",
+				DisplayName: "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi"
+			};
+			ctrl.containerCtrl.scheduleManagementSvc.setPersonScheduleVm('7c25f4ae-96ea-409e-b959-2c02587c649e', {
+				Date: date,
+				PersonId: '7c25f4ae-96ea-409e-b959-2c02587c649e',
+				Timezone: timezone1,
+				Shifts: [
+					{
+						Date: date,
+						Projections: [
+						],
+						ProjectionTimeRange: null
+					}]
+			});
+
+			scope.$apply();
+
+			ctrl.addOvertime();
+
+			expect(fakeActivityService.lastAddedOvertimeActivity.PersonDates[0].PersonId).toEqual(personInfoList[0].PersonId);
+			expect(fakeActivityService.lastAddedOvertimeActivity.PersonDates[0].Date).toEqual(date);
+			expect(fakeActivityService.lastAddedOvertimeActivity.ActivityId).toEqual('472e02c8-1a84-4064-9a3b-9b5e015ab3c6');
+			expect(fakeActivityService.lastAddedOvertimeActivity.StartDateTime).toEqual('2018-02-12T10:00');
+			expect(fakeActivityService.lastAddedOvertimeActivity.EndDateTime).toEqual('2018-02-12T10:30');
+		});
+
+	}
+
 	function setUp(inputDate) {
 		var date;
 		var html = '<teamschedule-command-container date="curDate" timezone="timezone"></teamschedule-command-container>';
@@ -293,7 +394,7 @@
 
 	function FakeActivityService() {
 		var availableActivities = [];
-		var targetActivity = null;
+		this.lastAddedOvertimeActivity = null;
 		var fakeResponse = { data: [] };
 
 		this.fetchAvailableActivities = function () {
@@ -304,22 +405,28 @@
 			};
 		};
 
-		this.addActivity = function (input) {
-			targetActivity = input;
+		this.addOvertimeActivity = function (input) {
+			this.lastAddedOvertimeActivity = input;
 			return {
 				then: (function (cb) {
 					cb(fakeResponse);
 				})
 			};
 		};
-
-		this.getAddActivityCalledWith = function () {
-			return targetActivity;
-		};
-
 		this.setAvailableActivities = function (activities) {
 			availableActivities = activities;
 		};
+
+		this.fetchAvailableDefinitionSets = function () {
+			return {
+				then: function (cb) {
+					cb([{
+						'Id': '5c1409de-a0f1-4cd4-b383-9b5e015ab789',
+						'Name': 'Overtime Paid'
+					}]);
+				}
+			};
+		}
 	}
 
 	function FakePersonSelectionService() {
@@ -336,6 +443,42 @@
 		this.getSelectedPersonInfoList = function () {
 			return fakePersonList;
 		};
+	}
+
+	function FakeScheduleManagementService() {
+		var savedPersonScheduleVm = {};
+
+		this.setPersonScheduleVm = function (personId, vm) {
+			savedPersonScheduleVm[personId] = vm;
+		}
+
+		this.findPersonScheduleVmForPersonId = function (personId) {
+			return savedPersonScheduleVm[personId];
+		}
+
+		this.schedules = function () {
+			return null;
+		};
+
+		this.newService = function () {
+			return new FakeScheduleManagementService();
+		};
+
+		function FakeScheduleManagementService() {
+			var savedPersonScheduleVm = {};
+
+			this.setPersonScheduleVm = function (personId, vm) {
+				savedPersonScheduleVm[personId] = vm;
+			}
+
+			this.findPersonScheduleVmForPersonId = function (personId) {
+				return savedPersonScheduleVm[personId];
+			}
+
+			this.schedules = function () {
+				return null;
+			};
+		}
 	}
 
 });

@@ -24,9 +24,9 @@
 		};
 	}
 
-	commandCheckCtrl.$inject = ['$scope', '$translate', 'CommandCheckService'];
+	commandCheckCtrl.$inject = ['$scope', '$translate', 'CommandCheckService','serviceDateFormatHelper'];
 
-	function commandCheckCtrl($scope, $translate, CommandCheckService) {
+	function commandCheckCtrl($scope, $translate, CommandCheckService, serviceDateFormatHelper) {
 		var vm = this;
 		vm.showCheckbox = false;
 
@@ -70,8 +70,8 @@
 			var result = [];
 			overlappedLayers.forEach(function(overlappedLayer) {
 				result.push(overlappedLayer.Name);
-				result.push(moment(overlappedLayer.StartTime).format('YYYY-MM-DD HH:mm'));
-				result.push(moment(overlappedLayer.EndTime).format('YYYY-MM-DD HH:mm'));
+				result.push(serviceDateFormatHelper.getDateTime(overlappedLayer.StartTime));
+				result.push(serviceDateFormatHelper.getDateTime(overlappedLayer.EndTime));
 			});
 			return result;
 		}

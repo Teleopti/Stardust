@@ -5,9 +5,9 @@
 
 	TeamScheduleWeeklyController.$inject = ['$window', '$stateParams', '$q', '$translate',
 		'$filter', 'PersonScheduleWeekViewCreator', 'UtilityService', 'weekViewScheduleSvc',
-		'TeamSchedule', 'signalRSVC', '$scope', 'Toggle', 'bootstrapCommon', 'groupPageService'];
+		'TeamSchedule', 'signalRSVC', '$scope', 'Toggle', 'bootstrapCommon', 'groupPageService', 'serviceDateFormatHelper'];
 
-	function TeamScheduleWeeklyController($window, $stateParams, $q, $translate, $filter, WeekViewCreator, Util, weekViewScheduleSvc, teamScheduleSvc, signalR, $scope, toggles, bootstrapCommon, groupPageService) {
+	function TeamScheduleWeeklyController($window, $stateParams, $q, $translate, $filter, WeekViewCreator, Util, weekViewScheduleSvc, teamScheduleSvc, signalR, $scope, toggles, bootstrapCommon, groupPageService, serviceDateFormatHelper) {
 		var vm = this;
 		vm.searchOptions = {
 			keyword: angular.isDefined($stateParams.keyword) && $stateParams.keyword !== '' ? $stateParams.keyword : '',
@@ -78,7 +78,7 @@
 			}
 			vm.weekDays = Util.getWeekdays(vm.startOfWeek);
 			vm.loadSchedules();
-			if (toggles.Wfm_HideUnusedTeamsAndSites_42690){
+			if (toggles.Wfm_HideUnusedTeamsAndSites_42690) {
 				loadGroupings();
 			}
 		};
@@ -133,7 +133,7 @@
 
 		vm.getSearch = function () {
 			return {
-				TeamIds: vm.selectedGroups.mode === 'BusinessHierarchy' ? vm.selectedGroups.groupIds:[],
+				TeamIds: vm.selectedGroups.mode === 'BusinessHierarchy' ? vm.selectedGroups.groupIds : [],
 				SearchTerm: vm.searchOptions.keyword
 			};
 		};
@@ -165,8 +165,8 @@
 		};
 
 		vm.getGroupPagesAsync = function () {
-			var startDateStr = moment(vm.startOfWeek).format('YYYY-MM-DD');
-			var endDateStr = moment(vm.startOfWeek).add(6, 'days').format('YYYY-MM-DD');
+			var startDateStr = serviceDateFormatHelper.getDateOnly(vm.startOfWeek);
+			var endDateStr = serviceDateFormatHelper.getDateOnly(moment(vm.startOfWeek).add(6, 'days'));
 			groupPageService.fetchAvailableGroupPages(startDateStr, endDateStr).then(function (data) {
 				vm.availableGroups = data;
 				loggedonUsersTeamId.resolve(data.LogonUserTeamId || null);
@@ -177,14 +177,14 @@
 
 		vm.getSitesAndTeamsAsync = function () {
 			return $q(function (resolve, reject) {
-				var startDate = moment(vm.startOfWeek);
-				var endDate = moment(vm.startOfWeek).add(6, 'days');
+				var startDate = serviceDateFormatHelper.getDateOnly(moment(vm.startOfWeek));
+				var endDate = serviceDateFormatHelper.getDateOnly(moment(vm.startOfWeek).add(6, 'days'));
 
 				var promise;
 				if (toggles.Wfm_HideUnusedTeamsAndSites_42690) {
-					promise = teamScheduleSvc.hierarchyOverPeriod(startDate.format('YYYY-MM-DD'), endDate.format('YYYY-MM-DD'));
+					promise = teamScheduleSvc.hierarchyOverPeriod(startDate, endDate);
 				} else {
-					promise = teamScheduleSvc.hierarchy(startDate.format('YYYY-MM-DD'));
+					promise = teamScheduleSvc.hierarchy(startDate);
 				}
 
 				promise.then(function (data) {
@@ -222,7 +222,7 @@
 
 		function openSelectedAgentDayInNewWindow(personId, scheduleDate) {
 			if (!vm.enableClickableCell) return;
-			$window.open('#/teams/?personId=' + personId + '&selectedDate=' + moment(scheduleDate).format('YYYY-MM-DD'),
+			$window.open('#/teams/?personId=' + personId + '&selectedDate=' + serviceDateFormatHelper.getDateOnly(scheduleDate),
 				'_blank');
 		}
 
@@ -230,7 +230,7 @@
 			options = options || {};
 			var params = {
 				Keyword: options.keyword || vm.searchOptions.keyword,
-				Date: options.date || moment(vm.startOfWeek).format('YYYY-MM-DD'),
+				Date: options.date || serviceDateFormatHelper.getDateOnly(vm.startOfWeek),
 				PageSize: options.pageSize || vm.paginationOptions.pageSize,
 				CurrentPageIndex: options.currentPageIndex || vm.paginationOptions.pageNumber,
 				SelectedGroupIds: vm.selectedGroups.groupIds,

@@ -1,10 +1,10 @@
-﻿(function() {
+﻿(function () {
 	'use strict';
 
 	angular.module('wfm.teamSchedule')
-		.service('ScheduleManagement', ['Toggle', '$filter', 'TeamSchedule', 'GroupScheduleFactory', 'CurrentUserInfo', ScheduleManagement]);
+		.service('ScheduleManagement', ['Toggle', '$filter', 'TeamSchedule', 'GroupScheduleFactory', 'CurrentUserInfo','serviceDateFormatHelper', ScheduleManagement]);
 
-	function ScheduleManagement(toggleSvc, $filter, teamScheduleSvc, groupScheduleFactory, CurrentUserInfo) {
+	function ScheduleManagement(toggleSvc, $filter, teamScheduleSvc, groupScheduleFactory, CurrentUserInfo, serviceDateFormatHelper) {
 
 		function ScheduleManagementService() {
 			var svc = this;
@@ -69,7 +69,7 @@
 			}
 
 			function updateScheduleForPeoples(personIdList, scheduleDateMoment, timezone, afterLoading) {
-				var scheduleDateStr = scheduleDateMoment.format('YYYY-MM-DD');
+				var scheduleDateStr = serviceDateFormatHelper.getDateOnly(scheduleDateMoment);
 				teamScheduleSvc.getSchedules(scheduleDateStr, personIdList).then(function (result) {
 
 					angular.forEach(result.Schedules, function (schedule) {

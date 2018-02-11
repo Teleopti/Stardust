@@ -1,4 +1,4 @@
-﻿describe('team schedule command container test', function() {
+﻿describe('team schedule command container test', function () {
 	'use strict';
 
 	var $compile,
@@ -10,24 +10,24 @@
 	beforeEach(module('wfm.templates'));
 	beforeEach(module('wfm.teamSchedule'));
 
-	beforeEach(module('wfm.teamSchedule', function($provide) {
+	beforeEach(module('wfm.teamSchedule', function ($provide) {
 		fakeCommandCheckService = new FakeCommandCheckService();
 
-		$provide.factory('addPersonalActivityDirective', function() {
+		$provide.factory('addPersonalActivityDirective', function () {
 			return {};
 		});
 
-		$provide.service('CommandCheckService', function() {
+		$provide.service('CommandCheckService', function () {
 			return fakeCommandCheckService;
 		});
 
 		$provide.service('TeamSchedule', function () {
 			fakeTeamScheduleService = new FakeTeamScheduleService();
 		});
-		
+
 	}));
 
-	beforeEach(inject(function(_$rootScope_, _$compile_,  _$httpBackend_) {
+	beforeEach(inject(function (_$rootScope_, _$compile_, _$httpBackend_) {
 		$compile = _$compile_;
 		$rootScope = _$rootScope_;
 		$httpBackend = _$httpBackend_;
@@ -35,7 +35,7 @@
 		$httpBackend.expectGET('../ToggleHandler/AllToggles').respond(200, 'mock');
 	}));
 
-	it('container should render correctly', function() {
+	it('container should render correctly', function () {
 		var html = '<teamschedule-command-container date="curDate"></teamschedule-command-container>';
 		var scope = $rootScope.$new();
 		scope.curDate = new Date();
@@ -45,7 +45,7 @@
 		expect(result).not.toBeNull();
 	});
 
-	it('container should respond to set and reset command events correctly', function() {
+	it('container should respond to set and reset command events correctly', function () {
 		var html = '<teamschedule-command-container date="curDate"></teamschedule-command-container>';
 		var scope = $rootScope.$new();
 		scope.curDate = new Date();
@@ -63,7 +63,7 @@
 		expect(innerScope.vm.activeCmd).toBeNull();
 	});
 
-	it('container should keep original active command and open command check sidenav when checking command', function() {
+	it('container should keep original active command and open command check sidenav when checking command', function () {
 		var html = '<teamschedule-command-container date="curDate"></teamschedule-command-container>';
 		var scope = $rootScope.$new();
 		scope.curDate = new Date();
@@ -103,6 +103,45 @@
 		expect(fakeTeamScheduleService.getCurrentDate()).toEqual(null);
 	});
 
+	function commonTestsInDifferentLocale() {
+		it('should get correct date', function () {
+			var html = '<teamschedule-command-container date="curDate"></teamschedule-command-container>';
+			var scope = $rootScope.$new();
+			scope.curDate = new Date('2018-02-26');
+			var target = $compile(html)(scope);
+			scope.$apply();
+			var innerScope = angular.element(target[0].querySelector('.teamschedule-command-container')).scope();
+
+			expect(innerScope.vm.getDate()).toEqual('2018-02-26');
+		});
+	}
+
+	commonTestsInDifferentLocale();
+	describe('in locale ar-AE', function () {
+		beforeAll(function () {
+			moment.locale('ar-AE');
+		});
+
+		afterAll(function () {
+			moment.locale('en');
+		});
+
+		commonTestsInDifferentLocale();
+	});
+
+	describe('in locale fa-IR', function () {
+		beforeAll(function () {
+			moment.locale('fa-IR');
+		});
+
+		afterAll(function () {
+			moment.locale('en');
+		});
+
+		commonTestsInDifferentLocale();
+	});
+
+
 	function FakeCommandCheckService() {
 		var fakeResponse = {
 			data: []
@@ -118,22 +157,22 @@
 
 		this.checkAddActivityOverlapping = function () {
 			return {
-				then: function(cb) {
+				then: function (cb) {
 					checkStatus = true;
 					cb(fakeResponse);
 				}
 			}
 		}
 
-		this.getCommandCheckStatus = function() {
+		this.getCommandCheckStatus = function () {
 			return checkStatus;
 		}
 
-		this.resetCommandCheckStatus = function() {
+		this.resetCommandCheckStatus = function () {
 			checkStatus = false;
 		}
 
-		this.fakeIsCheckingCommand = function() {
+		this.fakeIsCheckingCommand = function () {
 			checkStatus = true;
 		}
 
@@ -141,7 +180,7 @@
 			return fakeOverlappingList;
 		}
 
-		this.getCheckConfig = function() {
+		this.getCheckConfig = function () {
 			return fakeCheckConfig;
 		};
 	}

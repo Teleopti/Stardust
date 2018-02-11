@@ -8,7 +8,10 @@
 		$compile,
 		$rootScope,
 		$httpBackend,
-		fakePersonSelectionService;
+		fakePersonSelectionService,
+		serviceDateFormatHelper,
+		fakeCommandCheckService,
+		currentUserInfo;
 
 	beforeEach(module('wfm.templates'));
 	beforeEach(module('wfm.teamSchedule'));
@@ -19,7 +22,8 @@
 		fakePermissions = new FakePermissions();
 		scheduleHelper = new FakeScheduleHelper();
 		fakePersonSelectionService = new FakePersonSelectionService();
-
+		fakeCommandCheckService = new FakeCommandCheckService();
+		currentUserInfo = new FakeCurrentUserInfo();
 		module(function ($provide) {
 			$provide.service('PersonAbsence', function () {
 				return fakeAbsenceService;
@@ -36,44 +40,27 @@
 			$provide.service('PersonSelection', function () {
 				return fakePersonSelectionService;
 			});
+			$provide.service('CommandCheckService', function () {
+				return fakeCommandCheckService;
+			});
+			$provide.service('CurrentUserInfo', function () {
+				return currentUserInfo;
+			});
 		});
 	});
 
 
-	beforeEach(inject(function (_$rootScope_, _$compile_, _$httpBackend_) {
+	beforeEach(inject(function (_$rootScope_, _$compile_, _$httpBackend_,_serviceDateFormatHelper_) {
 		$compile = _$compile_;
 		$rootScope = _$rootScope_;
 		$httpBackend = _$httpBackend_;
 		$httpBackend.expectGET('../ToggleHandler/AllToggles').respond(200, 'mock');
+		serviceDateFormatHelper = _serviceDateFormatHelper_;
 	}));
 
 	it('add-absence should render correctly', function () {
 		var result = setUp();
 		expect(result.commandScope.vm).not.toBeNull();
-	});
-
-	it('should handle default start and end time attribute', function () {
-		scheduleHelper.setEarliestStartTime(new Date('2015-01-01 10:00:00'));
-
-		fakePermissions.setPermissions({ IsAddIntradayAbsenceAvailable: true, IsAddFullDayAbsenceAvailable: true });
-
-		var result = setUp(moment('2015-01-01T00:00:00').toDate());
-
-		var startDateString = result.container[0].querySelectorAll('team-schedule-datepicker input')[0].value,
-
-			endDateString = result.container[0].querySelectorAll('team-schedule-datepicker input')[1].value,
-
-			startTimeString = result.container[0].querySelectorAll('.uib-timepicker input')[0].value
-				+ result.container[0].querySelectorAll('.uib-timepicker input')[1].value,
-
-			endTimeString = result.container[0].querySelectorAll('.uib-timepicker input')[2].value
-				+ result.container[0].querySelectorAll('.uib-timepicker input')[3].value;
-
-		expect(moment(new Date(startDateString)).format("YYYY-MM-DD")).toBe('2015-01-01');
-		expect(moment(new Date(endDateString)).format("YYYY-MM-DD")).toBe('2015-01-01');
-
-		expect(startTimeString).toBe('1000');
-		expect(endTimeString).toBe('1100');
 	});
 
 	it('should display full day absence check box with only full day absence permission', function () {
@@ -112,15 +99,172 @@
 			}];
 		vm.getCurrentTimezone = function () { return 'Europe/Stockholm'; };
 		fakePersonSelectionService.setFakeCheckedPersonInfoList(vm.selectedAgents);
+		vm.containerCtrl.scheduleManagementSvc.setPersonScheduleVm('agent1', {
+			Date: '2015-01-01',
+			PersonId: 'agent1',
+			Timezone: {
+				IanaId: 'Europe/Stockholm'
+			},
+			Shifts: [
+				{
+					Date: '2015-01-01',
+					Projections: [
+					],
+					ProjectionTimeRange: null
+				}]
+		});
 		result.commandScope.$apply();
 		var applyButton = result.container[0].querySelectorAll('#applyAbsence');
 		expect(applyButton[0].disabled).toBe(true);
 	});
 
+	commonTestsInDifferentLocale();
 
-	function setUp(inputDate, inputConfigurations) {
+	function commonTestsInDifferentLocale() {
+		it('should handle default start and end time attribute', function () {
+			scheduleHelper.setEarliestStartTime(new Date('2015-01-01 10:00:00'));
+
+			fakePermissions.setPermissions({ IsAddIntradayAbsenceAvailable: true, IsAddFullDayAbsenceAvailable: true });
+
+			var result = setUp(moment('2015-01-01T00:00:00').toDate());
+
+			var startDateString = result.container[0].querySelectorAll('team-schedule-datepicker input')[0].value,
+				endDateString = result.container[0].querySelectorAll('team-schedule-datepicker input')[1].value,
+				startTimeString = result.container[0].querySelectorAll('.uib-timepicker input')[0].value
+					+ result.container[0].querySelectorAll('.uib-timepicker input')[1].value,
+
+				endTimeString = result.container[0].querySelectorAll('.uib-timepicker input')[2].value
+					+ result.container[0].querySelectorAll('.uib-timepicker input')[3].value;
+
+			expect(serviceDateFormatHelper.getDateOnly(new Date(startDateString))).toBe('2015-01-01');
+			expect(serviceDateFormatHelper.getDateOnly(new Date(endDateString))).toBe('2015-01-01');
+
+			expect(startTimeString).toBe('1000');
+			expect(endTimeString).toBe('1100');
+		});
+
+		it('should apply add fullday absence with correct data', function () {
+
+			fakePermissions.setPermissions({ IsAddIntradayAbsenceAvailable: true, IsAddFullDayAbsenceAvailable: true });
+			var result = setUp(moment('2015-01-01T00:00:00').toDate());
+			var vm = result.commandScope.vm;
+			vm.timeRange = {};
+			vm.timeRange.startTime = new Date('2015-01-01');
+			vm.timeRange.endTime = new Date('2015-01-01');
+			vm.selectedAbsenceId = getAvailableAbsenceTypes()[0].Id;
+			vm.isFullDayAbsence = true;
+			vm.selectedAgents = [
+				{
+					PersonId: 'agent1',
+					Name: 'agent1',
+					ScheduleStartTime: null,
+					ScheduleEndTime: null
+				}];
+			vm.getCurrentTimezone = function () { return 'Europe/Stockholm'; };
+			fakePersonSelectionService.setFakeCheckedPersonInfoList(vm.selectedAgents);
+			vm.containerCtrl.scheduleManagementSvc.setPersonScheduleVm('agent1', {
+				Date: '2015-01-01',
+				PersonId: 'agent1',
+				Timezone: {
+					IanaId: 'Europe/Stockholm'
+				},
+				Shifts: [
+					{
+						Date: '2015-01-01',
+						Projections: [
+						],
+						ProjectionTimeRange: null
+					}]
+			});
+			result.commandScope.$apply();
+
+			var panel = result.container;
+			var applyButton = panel[0].querySelector('#applyAbsence');
+			applyButton.click();
+
+			var lastAbsence = fakeAbsenceService.getAddAbsenceCalledWith();
+			expect(lastAbsence.PersonIds[0]).toEqual('agent1');
+			expect(lastAbsence.Date).toEqual('2015-01-01');
+
+		});
+
+		it('should apply add intraday absence with correct data', function () {
+
+			fakePermissions.setPermissions({ IsAddIntradayAbsenceAvailable: true, IsAddFullDayAbsenceAvailable: true });
+			var result = setUp(moment('2015-01-01T00:00:00').toDate());
+			var vm = result.commandScope.vm;
+			vm.timeRange = {};
+			vm.timeRange.startTime = new Date('2015-01-01 10:00:00');
+			vm.timeRange.endTime = new Date('2015-01-01 10:30:00');
+			vm.selectedAbsenceId = getAvailableAbsenceTypes()[0].Id;
+			vm.isFullDayAbsence = false;
+			vm.selectedAgents = [
+				{
+					PersonId: 'agent1',
+					Name: 'agent1',
+					ScheduleStartTime: null,
+					ScheduleEndTime: null
+				}];
+			vm.getCurrentTimezone = function () { return 'Europe/Stockholm'; };
+			fakePersonSelectionService.setFakeCheckedPersonInfoList(vm.selectedAgents);
+			vm.containerCtrl.scheduleManagementSvc.setPersonScheduleVm('agent1', {
+				Date: '2015-01-01',
+				PersonId: 'agent1',
+				Timezone: {
+					IanaId: 'Europe/Stockholm'
+				},
+				Shifts: [
+					{
+						Date: '2015-01-01',
+						Projections: [],
+						ProjectionTimeRange: {
+							Start: '2015-01-01 08:00',
+							End: '2015-01-01 17:00'
+						}
+					}]
+			});
+			result.commandScope.$apply();
+
+			var panel = result.container;
+			var applyButton = panel[0].querySelector('#applyAbsence');
+			applyButton.click();
+
+			var lastAbsence = fakeAbsenceService.getAddAbsenceCalledWith();
+			expect(lastAbsence.PersonIds[0]).toEqual('agent1');
+			expect(lastAbsence.Date).toEqual('2015-01-01');
+			expect(lastAbsence.Start).toEqual('2015-01-01T10:00');
+			expect(lastAbsence.End).toEqual('2015-01-01T10:30');
+		});
+	}
+
+	describe('in locale ar-AE', function () {
+		beforeAll(function () {
+			moment.locale('ar-AE');
+		});
+
+		afterAll(function () {
+			moment.locale('en');
+		});
+
+		commonTestsInDifferentLocale();
+	});
+
+	describe('in locale fa-IR', function () {
+		beforeAll(function () {
+			moment.locale('fa-IR');
+		});
+
+		afterAll(function () {
+			moment.locale('en');
+		});
+
+		commonTestsInDifferentLocale();
+	});
+
+
+	function setUp(inputDate, inputConfigurations, timeZone) {
 		var date, configurations;
-		var html = '<teamschedule-command-container date="curDate" configurations="configurations"></teamschedule-command-container>';
+		var html = '<teamschedule-command-container date="curDate" configurations="configurations" timezone="timezone"></teamschedule-command-container>';
 		var scope = $rootScope.$new();
 
 		if (inputDate == null)
@@ -137,6 +281,7 @@
 		scope.curDate = date;
 		scope.configurations = configurations;
 		fakeAbsenceService.setAvailableAbsenceTypes(getAvailableAbsenceTypes());
+		scope.timezone = timeZone || "Europe/Stockholm";
 
 		var container = $compile(html)(scope);
 		scope.$apply();
@@ -182,27 +327,15 @@
 			return new FakeScheduleManagementService();
 		};
 
-		this.findPersonScheduleVmForPersonId = function () {
-			return null;
-		};
+		var savedPersonScheduleVm = {};
 
-		function FakeScheduleManagementService() {
-
-			this.schedules = function () {
-				return null;
-			};
-
-			this.findPersonScheduleVmForPersonId = function () {
-				return {
-					Date: new Date(),
-					Timezone: {
-						IanaId: 'Asia/Shanghai'
-					}
-				};
-			};
-
+		this.setPersonScheduleVm = function (personId, vm) {
+			savedPersonScheduleVm[personId] = vm;
 		}
 
+		this.findPersonScheduleVmForPersonId = function (personId) {
+			return savedPersonScheduleVm[personId];
+		}
 	}
 
 	function FakeScheduleHelper() {
@@ -260,7 +393,7 @@
 			};
 		};
 
-		this.addFullDayAbsence = function (input) {
+		this.addAbsence = function (input) {
 			targetAbsence = input;
 			return {
 				then: (function (cb) {
@@ -268,16 +401,7 @@
 				})
 			};
 		};
-
-		this.addIntradayAbsence = function (input) {
-			targetAbsence = input;
-			return {
-				then: (function (cb) {
-					cb(fakeResponse);
-				})
-			};
-		};
-
+		
 		this.getAddAbsenceCalledWith = function () {
 			return targetAbsence;
 		};
@@ -297,6 +421,35 @@
 		this.getCheckedPersonInfoList = function () {
 			return fakePersonList;
 		}
+	}
+	function FakeCommandCheckService() {
+		var checkStatus = false;
+
+		
+		this.getCommandCheckStatus = function () {
+			return checkStatus;
+		}
+
+		this.resetCommandCheckStatus = function () {
+			checkStatus = false;
+		}
+
+		
+		this.checkPersonalAccounts = function (requestedData) {
+			return {
+				then: function (cb) {
+					cb(requestedData);
+				}
+			}
+		};
+	}
+
+	function FakeCurrentUserInfo() {
+		this.CurrentUserInfo = function () {
+			return {
+				DefaultTimeZone: "Europe/Stockholm"
+			};
+		};
 	}
 
 });

@@ -1,9 +1,9 @@
 ﻿(function () {
 	'use strict';
 
-	angular.module('wfm.teamSchedule').directive('addPersonalActivity', addPersonalActivity);
+	angular.module('wfm.teamSchedule').directive('addPersonalActivity', ['serviceDateFormatHelper', addPersonalActivity]);
 
-	function addPersonalActivity() {
+	function addPersonalActivity(serviceDateFormatHelper) {
 		return {
 			restrict: 'E',
 			scope: {},
@@ -20,7 +20,7 @@
 				scope.vm.selectedDate = containerCtrl.getDate;
 				scope.vm.trackId = containerCtrl.getTrackId();
 				scope.vm.currentTimezone = containerCtrl.getCurrentTimezone;
-				scope.vm.convertTime = containerCtrl.convertTimeToCurrentUserTimezone;
+				scope.vm.convertTime = containerCtrl.getServiceTimeInCurrentUserTimezone;
 				scope.vm.getActionCb = containerCtrl.getActionCb;
 
 				scope.vm.timeRange = {
@@ -32,8 +32,8 @@
 						if (!scope.vm.timeRange) return null;
 
 						return {
-							startTime: moment(scope.vm.timeRange.startTime).format("YYYY-MM-DD HH:mm"),
-							endTime: moment(scope.vm.timeRange.endTime).format("YYYY-MM-DD HH:mm")
+							startTime: serviceDateFormatHelper.getDateTime(scope.vm.timeRange.startTime),
+							endTime: serviceDateFormatHelper.getDateTime(scope.vm.timeRange.endTime)
 						};
 					},
 					function (newVal, oldVal) {
@@ -47,9 +47,9 @@
 		};
 	}
 
-	addPersonalActivityCtrl.$inject = ['$scope', 'ActivityService', 'PersonSelection', 'UtilityService', 'ScheduleHelper', 'teamScheduleNotificationService', 'CommandCheckService', 'belongsToDateDecider'];
+	addPersonalActivityCtrl.$inject = ['$scope', 'ActivityService', 'PersonSelection', 'UtilityService', 'ScheduleHelper', 'teamScheduleNotificationService', 'CommandCheckService', 'belongsToDateDecider', 'serviceDateFormatHelper'];
 
-	function addPersonalActivityCtrl($scope, activityService, personSelectionSvc, utility, scheduleHelper, teamScheduleNotificationService, CommandCheckService, belongsToDateDecider) {
+	function addPersonalActivityCtrl($scope, activityService, personSelectionSvc, utility, scheduleHelper, teamScheduleNotificationService, CommandCheckService, belongsToDateDecider, serviceDateFormatHelper) {
 		var vm = this;
 
 		vm.label = 'AddPersonalActivity';
@@ -158,8 +158,8 @@
 			});
 			return {
 				PersonDates: decidePersonBelongsToDates(validAgents, getTimeRangeMoment()),
-				StartTime: vm.convertTime(moment(vm.timeRange.startTime).format("YYYY-MM-DDTHH:mm")),
-				EndTime: vm.convertTime(moment(vm.timeRange.endTime).format("YYYY-MM-DDTHH:mm")),
+				StartTime: vm.convertTime(serviceDateFormatHelper.getDateTime(vm.timeRange.startTime)),
+				EndTime: vm.convertTime(serviceDateFormatHelper.getDateTime(vm.timeRange.endTime)),
 				ActivityId: vm.selectedActivityId,
 				ActivityType:2,
 				TrackedCommandInfo: {
@@ -190,7 +190,7 @@
 				defaultStart = moment(overnightEnds).add(1, 'hour').toDate();
 			}
 
-			if (moment(utility.nowInUserTimeZone()).format('YYYY-MM-DD') === vm.selectedDate()) {
+			if (serviceDateFormatHelper.getDateOnly(utility.nowInUserTimeZone()) === vm.selectedDate()) {
 				var nextTickTime = new Date(utility.getNextTickNoEarlierThanEight());
 				if (nextTickTime > defaultStart) {
 					defaultStart = nextTickTime;

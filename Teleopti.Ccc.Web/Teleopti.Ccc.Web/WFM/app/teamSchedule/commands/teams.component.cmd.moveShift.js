@@ -9,9 +9,9 @@
 		controller: MoveShiftCtrl
 	});
 
-	MoveShiftCtrl.$inject = ['$scope', '$locale', '$element', 'ActivityValidator', 'PersonSelection', 'ActivityService', 'teamScheduleNotificationService'];
+	MoveShiftCtrl.$inject = ['$scope', '$locale', '$element', 'ActivityValidator', 'PersonSelection', 'ActivityService', 'teamScheduleNotificationService','serviceDateFormatHelper'];
 
-	function MoveShiftCtrl($scope, $locale, $element, validator, personSelectionSvc, activitySvc, teamScheduleNotificationService) {
+	function MoveShiftCtrl($scope, $locale, $element, validator, personSelectionSvc, activitySvc, teamScheduleNotificationService, serviceDateFormatHelper) {
 		var ctrl = this;
 		ctrl.label = 'MoveShift';
 		ctrl.processingCommand = false;
@@ -91,7 +91,7 @@
 			if (validAgentIds.length > 0) {
 				var requestData = {
 					Date: ctrl.containerCtrl.getDate(),
-					NewShiftStart:ctrl.containerCtrl.convertTimeToCurrentUserTimezone(moment(ctrl.moveToTime).format('YYYY-MM-DD HH:mm')),
+					NewShiftStart: ctrl.containerCtrl.getServiceTimeInCurrentUserTimezone(serviceDateFormatHelper.getDateTime(ctrl.moveToTime)),
 					PersonIds: validAgentIds,
 					TrackedCommandInfo: { TrackId: ctrl.trackId }
 				};

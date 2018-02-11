@@ -3,9 +3,9 @@
 
 	angular.module('wfm.teamSchedule').service('belongsToDateDecider', belongsToDateDecider);
 
-	belongsToDateDecider.$inject = ['$filter'];
+	belongsToDateDecider.$inject = ['$filter','serviceDateFormatHelper'];
 
-	function belongsToDateDecider($filter) {
+	function belongsToDateDecider($filter, serviceDateFormatHelper) {
 
 		var self = this;
 
@@ -64,14 +64,17 @@
 
 		function normalizePersonScheduleVm(personScheduleVm, currentTimezone) {
 			
-			var dates = [moment(personScheduleVm.Date).add(-1, 'day').format('YYYY-MM-DD'), personScheduleVm.Date, moment(personScheduleVm.Date).add(1, 'day').format('YYYY-MM-DD')];
+			var dates = [
+				serviceDateFormatHelper.getDateOnly(moment(personScheduleVm.Date).add(-1, 'day')),
+				personScheduleVm.Date,
+				serviceDateFormatHelper.getDateOnly(moment(personScheduleVm.Date).add(1, 'day'))];
 
 			var result = dates.map(function (date) {
 				var dayStart = moment(date).startOf('day');
 				var dayEnd = moment(date).add(24, 'hour');
 				var timeRangeForDate = {
-					startTime: moment($filter('timezone')(dayStart.format('YYYY-MM-DD HH:mm'), currentTimezone, personScheduleVm.Timezone.IanaId)),
-					endTime: moment($filter('timezone')(dayEnd.format('YYYY-MM-DD HH:mm'), currentTimezone, personScheduleVm.Timezone.IanaId))
+					startTime: moment($filter('timezone')(serviceDateFormatHelper.getDateTime(dayStart), currentTimezone, personScheduleVm.Timezone.IanaId)),
+					endTime: moment($filter('timezone')(serviceDateFormatHelper.getDateTime(dayEnd), currentTimezone, personScheduleVm.Timezone.IanaId))
 				}
 				return {
 					date: date,

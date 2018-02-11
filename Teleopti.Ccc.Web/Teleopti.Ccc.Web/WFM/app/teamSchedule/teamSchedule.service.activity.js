@@ -1,9 +1,9 @@
 ﻿(function () {
 	'use strict';
 
-	angular.module("wfm.teamSchedule").service("ActivityService", ['$http', '$q', ActivityService]);
+	angular.module("wfm.teamSchedule").service("ActivityService", ['$http', '$q', 'serviceDateFormatHelper',ActivityService]);
 
-	function ActivityService($http, $q) {
+	function ActivityService($http, $q, serviceDateFormatHelper) {
 		var activities = [];
 
 		var getAllActivitiesUrl = '../api/TeamScheduleData/FetchActivities';
@@ -118,7 +118,7 @@
 
 		function normalizeInput(input) {
 			var normalized = angular.copy(input);
-			normalized.Date = moment(input.Date).format('YYYY-MM-DD');
+			normalized.Date = serviceDateFormatHelper.getDateOnly(input.Date);
 			return normalized;
 		}
 

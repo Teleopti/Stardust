@@ -291,49 +291,75 @@
 		expect(menuListItemForAddingDayOff[0].disabled).toEqual(false);
 	});
 
-	it('should remove day off menu item unclickable unless day off on view date is selected', function () {
-		var html = '<teamschedule-command-menu selected-date="vm.selectedDate"></teamschedule-command-menu>';
-		var scope = $rootScope.$new();
-		var date = "2018-01-16";
-		scope.vm = {
-			toggleCurrentSidenav: function () { },
-			selectedDate: new Date(date)
-		};
-		var element = $compile(html)(scope);
-		scope.$apply();
+	function commonTestsInDifferentLocale() {
+		it('should remove day off menu item unclickable unless day off on view date is selected', function () {
+			var html = '<teamschedule-command-menu selected-date="vm.selectedDate"></teamschedule-command-menu>';
+			var scope = $rootScope.$new();
+			var date = "2018-01-16";
+			scope.vm = {
+				toggleCurrentSidenav: function () { },
+				selectedDate: new Date(date)
+			};
+			var element = $compile(html)(scope);
+			scope.$apply();
 
-		var menuListItemForRemovingDayOff = angular.element(element[0].querySelector('.wfm-list #menuItemRemoveDayOff'));
-		expect(menuListItemForRemovingDayOff[0].disabled).toEqual(true);
-
-
-		var selectedAgents = [
-			{
-				PersonId: 'agent1',
-				Name: 'agent1',
-				Checked: true,
-				SelectedDayOffs: [{ Date: '2018-01-15' }]
-			}];
-		personSelectionSvc.setFakeCheckedPersonInfoList(selectedAgents);
-		scope.$apply();
-
-		menuListItemForRemovingDayOff = angular.element(element[0].querySelector('.wfm-list #menuItemRemoveDayOff'));
-		expect(menuListItemForRemovingDayOff[0].disabled).toEqual(true);
+			var menuListItemForRemovingDayOff = angular.element(element[0].querySelector('.wfm-list #menuItemRemoveDayOff'));
+			expect(menuListItemForRemovingDayOff[0].disabled).toEqual(true);
 
 
-		var selectedAgents = [
-			{
-				PersonId: 'agent1',
-				Name: 'agent1',
-				Checked: true,
-				SelectedDayOffs: [{ Date: date }]
-			}];
-		personSelectionSvc.setFakeCheckedPersonInfoList(selectedAgents);
-		scope.$apply();
+			var selectedAgents = [
+				{
+					PersonId: 'agent1',
+					Name: 'agent1',
+					Checked: true,
+					SelectedDayOffs: [{ Date: '2018-01-15' }]
+				}];
+			personSelectionSvc.setFakeCheckedPersonInfoList(selectedAgents);
+			scope.$apply();
 
-		menuListItemForRemovingDayOff = angular.element(element[0].querySelector('.wfm-list #menuItemRemoveDayOff'));
-		expect(menuListItemForRemovingDayOff[0].disabled).toEqual(false);
+			menuListItemForRemovingDayOff = angular.element(element[0].querySelector('.wfm-list #menuItemRemoveDayOff'));
+			expect(menuListItemForRemovingDayOff[0].disabled).toEqual(true);
 
 
+			var selectedAgents = [
+				{
+					PersonId: 'agent1',
+					Name: 'agent1',
+					Checked: true,
+					SelectedDayOffs: [{ Date: date }]
+				}];
+			personSelectionSvc.setFakeCheckedPersonInfoList(selectedAgents);
+			scope.$apply();
+
+			menuListItemForRemovingDayOff = angular.element(element[0].querySelector('.wfm-list #menuItemRemoveDayOff'));
+			expect(menuListItemForRemovingDayOff[0].disabled).toEqual(false);
+
+
+		});
+	}
+
+	describe('in locale ar-AE', function () {
+		beforeAll(function () {
+			moment.locale('ar-AE');
+		});
+
+		afterAll(function () {
+			moment.locale('en');
+		});
+
+		commonTestsInDifferentLocale();
+	});
+
+	describe('in locale fa-IR', function () {
+		beforeAll(function () {
+			moment.locale('fa-IR');
+		});
+
+		afterAll(function () {
+			moment.locale('en');
+		});
+
+		commonTestsInDifferentLocale();
 	});
 
 	it('should not view remove shift menu unless toggle is on', function () {

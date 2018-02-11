@@ -1,9 +1,9 @@
 ﻿(function () {
 	'use strict';
 
-	angular.module('wfm.teamSchedule').directive('addAbsence', addAbsenceDirective);
+	angular.module('wfm.teamSchedule').directive('addAbsence', ['serviceDateFormatHelper', addAbsenceDirective]);
 
-	function addAbsenceDirective() {
+	function addAbsenceDirective(serviceDateFormatHelper) {
 		return {
 			restrict: 'E',
 			scope: {},
@@ -20,7 +20,7 @@
 
 				scope.vm.selectedDate = containerCtrl.getDate;
 				scope.vm.trackId = containerCtrl.getTrackId();
-				scope.vm.convertTime = containerCtrl.convertTimeToCurrentUserTimezone;
+				scope.vm.convertTime = containerCtrl.getServiceTimeInCurrentUserTimezone;
 				scope.vm.getActionCb = containerCtrl.getActionCb;
 				scope.vm.getCurrentTimezone = containerCtrl.getCurrentTimezone;
 				scope.vm.isAddFullDayAbsenceAvailable = function () {
@@ -71,9 +71,10 @@
 		'$locale',
 		'CommandCheckService',
 		'belongsToDateDecider',
-		'teamsToggles'];
+		'teamsToggles',
+		'serviceDateFormatHelper'];
 
-	function addAbsenceCtrl(PersonAbsenceSvc, personSelectionSvc, scheduleHelper, teamScheduleNotificationService, $locale, CommandCheckService, belongsToDateDecider, teamsToggles) {
+	function addAbsenceCtrl(PersonAbsenceSvc, personSelectionSvc, scheduleHelper, teamScheduleNotificationService, $locale, CommandCheckService, belongsToDateDecider, teamsToggles, serviceDateFormatHelper) {
 		var vm = this;
 
 		vm.label = 'AddAbsence';
@@ -197,11 +198,11 @@
 				TrackedCommandInfo: { TrackId: vm.trackId }
 			};
 			if (vm.isFullDayAbsence) {
-				requestData.Start = moment(vm.timeRange.startTime).format("YYYY-MM-DD");
-				requestData.End = moment(vm.timeRange.endTime).format("YYYY-MM-DD");
+				requestData.Start = serviceDateFormatHelper.getDateOnly(vm.timeRange.startTime);
+				requestData.End = serviceDateFormatHelper.getDateOnly(vm.timeRange.endTime);
 			} else {
-				requestData.Start = vm.convertTime(moment(vm.timeRange.startTime).format("YYYY-MM-DDTHH:mm"));
-				requestData.End = vm.convertTime(moment(vm.timeRange.endTime).format("YYYY-MM-DDTHH:mm"));
+				requestData.Start = vm.convertTime(serviceDateFormatHelper.getDateTime(vm.timeRange.startTime));
+				requestData.End = vm.convertTime(serviceDateFormatHelper.getDateTime(vm.timeRange.endTime));
 			}
 			requestData.IsFullDay = vm.isFullDayAbsence;
 

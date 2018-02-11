@@ -2,9 +2,9 @@
 	'use strict';
 	angular.module("wfm.teamSchedule").service("ScheduleNoteManagementService", ScheduleNoteService);
 
-	ScheduleNoteService.$inject = ['$q','$http'];
+	ScheduleNoteService.$inject = ['$q', '$http','serviceDateFormatHelper'];
 
-	function ScheduleNoteService($q, $http) {
+	function ScheduleNoteService($q, $http, serviceDateFormatHelper) {
 		var self = this;
 		var noteDict = {};
 		var editScheduleNoteUrl = '../api/TeamScheduleCommand/EditScheduleNote';
@@ -37,7 +37,7 @@
 		function submitNoteForPerson(personId, note, date) {
 			var deferred = $q.defer();
 			var inputData = {
-				SelectedDate: moment(date).format('YYYY-MM-DD'),
+				SelectedDate: serviceDateFormatHelper.getDateOnly(date),
 				PersonId: personId,
 				InternalNote: note.internalNotes,
 				PublicNote: note.publicNotes

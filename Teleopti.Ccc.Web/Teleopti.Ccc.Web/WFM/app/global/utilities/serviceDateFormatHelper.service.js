@@ -11,20 +11,23 @@
 			dateOnly: "YYYY-MM-DD",
 			timeOnly: "HH:mm"
 		};
+		var self = this;
+
+		this.getDateByFormat = function (date, format) {
+			var localeSafeMoment = moment(date).locale('en');
+			return localeSafeMoment.format(format);
+		}
 
 		this.getDateOnly = function (date) {
-			var localeSafeMoment = moment(date).locale('en');
-			return localeSafeMoment.format(serviceDateFormat.dateOnly);
+			return self.getDateByFormat(date, serviceDateFormat.dateOnly);
 		}
 
 		this.getTimeOnly = function (date) {
-			var localeSafeMoment = moment(date).locale('en');
-			return localeSafeMoment.format(serviceDateFormat.timeOnly);
+			return self.getDateByFormat(date, serviceDateFormat.timeOnly);
 		}
 
 		this.getDateTime = function (date) {
-			var localeSafeMoment = moment(date).locale('en');
-			return localeSafeMoment.format(serviceDateFormat.dateTime);
+			return self.getDateByFormat(date, serviceDateFormat.dateTime);
 		}
 	}
 })();

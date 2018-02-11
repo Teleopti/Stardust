@@ -1,18 +1,18 @@
-﻿(function() {
+﻿(function () {
 	'use strict';
-	angular.module('wfm.teamSchedule').factory('PersonSchedule', ['$filter', 'teamsToggles', 'teamsPermissions', personScheduleFactory]);
+	angular.module('wfm.teamSchedule').factory('PersonSchedule', ['$filter', 'teamsToggles', 'teamsPermissions', 'serviceDateFormatHelper', personScheduleFactory]);
 
-	function personScheduleFactory($filter, toggles, permissions) {
+	function personScheduleFactory($filter, toggles, permissions, serviceDateFormatHelper) {
 
 		var personScheduleFactory = {
 			Create: create
 		};
 
-		var getPersonAbsencesCount = function() {
+		var getPersonAbsencesCount = function () {
 			var personAbsences = [];
 			angular.forEach(this.Projections, function (projection) {
 				if (projection.ParentPersonAbsences != null) {
-					angular.forEach(projection.ParentPersonAbsences, function(personAbsId) {
+					angular.forEach(projection.ParentPersonAbsences, function (personAbsId) {
 						if (personAbsences.indexOf(personAbsId) === -1) {
 							personAbsences.push(personAbsId);
 						}
@@ -22,11 +22,11 @@
 			return personAbsences.length;
 		};
 
-		var getPersonActivitiesCount = function() {
-			var personActivities =[];
+		var getPersonActivitiesCount = function () {
+			var personActivities = [];
 			angular.forEach(this.Projections, function (projection) {
 				if (projection.ShiftLayerIds != null && !projection.IsOvertime) {
-					angular.forEach(projection.ShiftLayerIds, function(shiftLayerId) {
+					angular.forEach(projection.ShiftLayerIds, function (shiftLayerId) {
 						if (personActivities.indexOf(shiftLayerId) === -1) {
 							personActivities.push(shiftLayerId);
 						}
@@ -38,13 +38,13 @@
 		};
 
 		function getProjectionTimeRange(schedule) {
-			
+
 			if (!schedule.Projection || schedule.Projection.length == 0) {
 				return null;
 			}
-			
+
 			return {
-				Start:  schedule.Projection[0].Start,
+				Start: schedule.Projection[0].Start,
 				End: schedule.Projection[schedule.Projection.length - 1].End
 			};
 		}
@@ -59,10 +59,10 @@
 			shiftVm.Projections = projectionVms;
 
 			var dayOffVm = createDayOffViewModel(schedule.Date, schedule.DayOff, timeLine, personSchedule);
-						
+
 			if (angular.isDefined(projectionVms)) personSchedule.Shifts = [shiftVm];
 			if (angular.isDefined(dayOffVm)) personSchedule.DayOffs = [dayOffVm];
-			
+
 			return personSchedule;
 		}
 
@@ -71,14 +71,14 @@
 				return undefined;
 			}
 
-			var projectionVms = projections.map(function(projection) {
+			var projectionVms = projections.map(function (projection) {
 				return createShiftProjectionViewModel(projection, timeline, shiftVm);
-			}).filter(function(result) {
+			}).filter(function (result) {
 				return angular.isDefined(result);
 			});
 
-			for (var i = 0; i < projectionVms.length; i ++) {
-				projectionVms[i].SameTypeAsLast = i === 0? false: projectionVms[i].Description === projectionVms[i - 1].Description;
+			for (var i = 0; i < projectionVms.length; i++) {
+				projectionVms[i].SameTypeAsLast = i === 0 ? false : projectionVms[i].Description === projectionVms[i - 1].Description;
 			}
 
 			return projectionVms;
@@ -92,7 +92,7 @@
 			var timelineStartMinute = timeLine.StartMinute;
 			var timelineEndMinute = timeLine.EndMinute;
 			var lengthPercentPerMinute = timeLine.LengthPercentPerMinute;
-			
+
 			var startTime = moment(dayOff.Start);
 			var startTimeMinutes = startTime.diff(timeLine.Offset, 'minutes');
 
@@ -106,7 +106,7 @@
 			var displayStart = startTimeMinutes < timelineStartMinute ? timelineStartMinute : startTimeMinutes;
 			var start = displayStart - timelineStartMinute;
 			var startPosition = start * lengthPercentPerMinute;
-			
+
 			var displayEnd = endTimeMinutes <= timelineEndMinute ? endTimeMinutes : timelineEndMinute;
 			var length = (displayEnd - displayStart) * lengthPercentPerMinute;
 
@@ -145,7 +145,7 @@
 			var endTime = moment(projection.End);
 			var startTimeMinutes = startTime.diff(timeLine.Offset, 'minutes');
 			var endTimeMinutes = endTime.diff(timeLine.Offset, 'minutes');
-			
+
 			var timelineStartMinute = timeLine.StartMinute;
 			var timelineEndMinute = timeLine.EndMinute;
 
@@ -155,7 +155,7 @@
 				return undefined;
 			}
 
-			var start = startTimeMinutes < timelineStartMinute ? 0:startTimeMinutes - timelineStartMinute ;
+			var start = startTimeMinutes < timelineStartMinute ? 0 : startTimeMinutes - timelineStartMinute;
 			var startPosition = start * timeLine.LengthPercentPerMinute;
 
 			var lengthReduction = 0;
@@ -167,7 +167,7 @@
 			}
 
 			var lengthMinutes = projectionMinutes - lengthReduction;
-			
+
 			var length = lengthMinutes * timeLine.LengthPercentPerMinute;
 
 			var shiftProjectionVm = new ProjectionViewModel(projection, shiftVm, length, startPosition);
@@ -222,7 +222,7 @@
 		}
 
 		function formatContractTimeMinutes(minutes) {
-			return Math.floor(minutes / 60) + ':' + (minutes % 60 === 0 ? '00':minutes%60);
+			return Math.floor(minutes / 60) + ':' + (minutes % 60 === 0 ? '00' : minutes % 60);
 		}
 
 		function PersonSchedule(schedule, timeLine, index) {
@@ -282,7 +282,7 @@
 						.add(this.Shifts[i].Projections[this.Shifts[i].Projections.length - 1].Minutes, 'minutes');
 				}
 			}
-			return end.format('YYYY-MM-DDTHH:mm:00');
+			return serviceDateFormatHelper.getDateByFormat(end, 'YYYY-MM-DDTHH:mm:00');
 		};
 
 		PersonSchedule.prototype.ScheduleStartTime = function () {
@@ -292,7 +292,7 @@
 					start = this.Shifts[i].Projections[0].Start;
 				}
 			}
-			return moment(start).format('YYYY-MM-DDTHH:mm:00');
+			return serviceDateFormatHelper.getDateByFormat(start, 'YYYY-MM-DDTHH:mm:00');
 		};
 
 		function ShiftViewModel(schedule, personSchedule, timeLine) {
@@ -334,10 +334,10 @@
 		};
 
 		ProjectionViewModel.prototype.Selectable = function () {
-			if (this.ParentPersonAbsences && this.ParentPersonAbsences.length > 0) 
+			if (this.ParentPersonAbsences && this.ParentPersonAbsences.length > 0)
 				return true;
 
-			if (!this.ShiftLayerIds || this.ShiftLayerIds.length == 0) 
+			if (!this.ShiftLayerIds || this.ShiftLayerIds.length == 0)
 				return false;
 
 			if (this.ShiftLayerIds && this.ShiftLayerIds.length > 0)

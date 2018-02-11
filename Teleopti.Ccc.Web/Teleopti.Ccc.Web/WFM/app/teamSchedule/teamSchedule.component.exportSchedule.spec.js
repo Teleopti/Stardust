@@ -27,16 +27,7 @@
 					expect(ctrl.isOptionalColDisabled('opt4')).toEqual(true);
 					expect(ctrl.isOptionalColDisabled('opt1')).toEqual(false);
 				});
-			
-			it('should get available groups with correct dates',
-				function() {
-					var ctrl = $componentController('teamsExportSchedule', null, {});
-					ctrl.configuration.period = {startDate: new Date('2017-01-01'), endDate: new Date('2017-01-10')};
-					ctrl.onPeriodChanged();
-					var currentInputPeriod = groupPageService.currentPeriod();
-					expect(currentInputPeriod.startDate).toEqual('2017-01-01');
-					expect(currentInputPeriod.endDate).toEqual('2017-01-10');
-				});
+
 			it('should not load available groups with incorrect dates',
 				function () {
 					var ctrl = $componentController('teamsExportSchedule', null, {});
@@ -45,6 +36,44 @@
 					var currentInputPeriod = groupPageService.currentPeriod();
 					expect(currentInputPeriod).toEqual(undefined);
 				});
+
+			function commonTestsInDifferentLocale() {
+				it('should get available groups with correct dates',
+					function () {
+						var ctrl = $componentController('teamsExportSchedule', null, {});
+						ctrl.configuration.period = { startDate: new Date('2017-01-01'), endDate: new Date('2017-01-10') };
+						ctrl.onPeriodChanged();
+						var currentInputPeriod = groupPageService.currentPeriod();
+						expect(currentInputPeriod.startDate).toEqual('2017-01-01');
+						expect(currentInputPeriod.endDate).toEqual('2017-01-10');
+					});
+			}
+
+			commonTestsInDifferentLocale();
+
+			describe('in locale ar-AE', function () {
+				beforeAll(function () {
+					moment.locale('ar-AE');
+				});
+
+				afterAll(function () {
+					moment.locale('en');
+				});
+
+				commonTestsInDifferentLocale();
+			});
+
+			describe('in locale fa-IR', function () {
+				beforeAll(function () {
+					moment.locale('fa-IR');
+				});
+
+				afterAll(function () {
+					moment.locale('en');
+				});
+
+				commonTestsInDifferentLocale();
+			});
 
 			function fakeExportScheduleService() {
 				this.getOptionalColumnsData = function() {

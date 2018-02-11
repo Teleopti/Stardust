@@ -9,9 +9,9 @@
 			},
 			controller: RemoveDayOffCtrl
 		});
-	RemoveDayOffCtrl.$inject = ['$scope', '$wfmConfirmModal', 'PersonSelection', 'DayOffService', 'teamScheduleNotificationService'];
+	RemoveDayOffCtrl.$inject = ['$scope', '$wfmConfirmModal', 'PersonSelection', 'DayOffService', 'teamScheduleNotificationService','serviceDateFormatHelper'];
 
-	function RemoveDayOffCtrl($scope, $wfmModal, personSelectionSvc, dayOffService, teamScheduleNotificationService) {
+	function RemoveDayOffCtrl($scope, $wfmModal, personSelectionSvc, dayOffService, teamScheduleNotificationService, serviceDateFormatHelper) {
 		var ctrl = this;
 		ctrl.label = 'RemoveDayOff';
 
@@ -29,6 +29,7 @@
 
 			var input = {
 				Date: moment(ctrl.selectedDate).format('YYYY-MM-DD'),
+				Date: serviceDateFormatHelper.getDateOnly(ctrl.selectedDate),
 				PersonIds: personIds,
 				TrackedCommandInfo: { TrackId: ctrl.trackId }
 			}
@@ -72,7 +73,7 @@
 		function getCheckedPersonInfoListWithDayOff() {
 			return personSelectionSvc.getCheckedPersonInfoList().filter(function(p) {
 				var dayoffsOnSelectedDay = p.SelectedDayOffs.filter(function(d) {
-					return d.Date === moment(ctrl.selectedDate).format('YYYY-MM-DD');
+					return d.Date === serviceDateFormatHelper.getDateOnly(ctrl.selectedDate);
 				});
 				return dayoffsOnSelectedDay.length > 0;
 			});

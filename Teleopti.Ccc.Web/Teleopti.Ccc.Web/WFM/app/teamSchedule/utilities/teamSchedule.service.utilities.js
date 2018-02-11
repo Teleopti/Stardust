@@ -1,10 +1,10 @@
-﻿(function() {
+﻿(function () {
 	'use strict';
 	angular.module("wfm.teamSchedule").service("UtilityService", utilityService);
 
-	utilityService.$inject = ['CurrentUserInfo'];
+	utilityService.$inject = ['CurrentUserInfo', 'serviceDateFormatHelper'];
 
-	function utilityService(CurrentUserInfo) {
+	function utilityService(CurrentUserInfo, serviceDateFormatHelper) {
 
 		var self = this;
 		var tick = 15;
@@ -29,11 +29,11 @@
 		};
 
 		function nowMoment() {
-			return moment(nowDate);
+			return moment(self.now());
 		}
 
 		function nowInUserTimeZone() {
-			return moment.tz(nowMoment(), CurrentUserInfo.DefaultTimeZone).format();
+			return format(moment.tz(nowMoment(), CurrentUserInfo.DefaultTimeZone));
 		}
 
 		function getWeekdayNames() {
@@ -48,7 +48,7 @@
 			}
 			return result;
 		}
-	
+
 		function getWeekDays(date) {
 			var names = getWeekdayNames();
 			var startOfWeek = moment(date).startOf('week');
@@ -59,16 +59,16 @@
 					name: names[i],
 					date: startOfWeek.clone().add(i, 'days').toDate()
 				});
-			}			
-			return dates;			
+			}
+			return dates;
 		}
-		
+
 		function getNextTick() {
 			var nowInUserTimeZoneMoment = moment(nowInUserTimeZone());
 
 			var minutes = Math.ceil(nowInUserTimeZoneMoment.minute() / tick) * tick;
 			var start = nowInUserTimeZoneMoment.startOf('hour').minutes(minutes);
-			return start.format();
+			return format(start);
 		}
 
 		function getNextTickNoEarlierThanEight() {
@@ -79,7 +79,11 @@
 
 			start.hours() < 8 && start.hours(8) && start.minutes(minutes);
 
-			return start.format();
+			return format(start);
+		}
+
+		function format(dateMoment) {
+			return serviceDateFormatHelper.getDateByFormat(dateMoment, 'YYYY-MM-DDTHH:mm:ssZ');
 		}
 	}
 })();

@@ -9,9 +9,9 @@
 		controller: AddOvertimeCtrl
 	});
 
-	AddOvertimeCtrl.$inject = ['PersonSelection', 'ActivityService', 'ActivityValidator', 'belongsToDateDecider', 'teamScheduleNotificationService'];
+	AddOvertimeCtrl.$inject = ['PersonSelection', 'ActivityService', 'ActivityValidator', 'belongsToDateDecider', 'teamScheduleNotificationService','serviceDateFormatHelper'];
 
-	function AddOvertimeCtrl(personSelectionSvc, activityService, activityValidator, belongsToDateDecider, teamScheduleNotificationService) {
+	function AddOvertimeCtrl(personSelectionSvc, activityService, activityValidator, belongsToDateDecider, teamScheduleNotificationService, serviceDateFormatHelper) {
 		var ctrl = this;
 		var defaultWorkStartInHour = 8,
 			defaultWorkEndInHour = 17;
@@ -151,8 +151,8 @@
 				PersonDates: personDates,
 				ActivityId: ctrl.selectedActivityId,
 				MultiplicatorDefinitionSetId: ctrl.selectedDefinitionSetId,
-				StartDateTime: ctrl.containerCtrl.convertTimeToCurrentUserTimezone(moment(ctrl.fromTime).format('YYYY-MM-DD HH:mm')),
-				EndDateTime: ctrl.containerCtrl.convertTimeToCurrentUserTimezone(moment(ctrl.toTime).format('YYYY-MM-DD HH:mm')),
+				StartDateTime: ctrl.containerCtrl.getServiceTimeInCurrentUserTimezone(serviceDateFormatHelper.getDateTime(ctrl.fromTime)),
+				EndDateTime: ctrl.containerCtrl.getServiceTimeInCurrentUserTimezone(serviceDateFormatHelper.getDateTime(ctrl.toTime)),
 				TrackedCommandInfo: { TrackId: ctrl.trackId }
 			};
 

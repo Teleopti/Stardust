@@ -7,8 +7,8 @@
 				controllerAs: 'vm'
 			});
 
-	TeamsExportScheduleCtrl.$inject = ['$state','$timeout', '$scope', 'groupPageService', 'exportScheduleService', 'NoticeService'];
-	function TeamsExportScheduleCtrl($state, $timeout, $scope, groupPageService, exportScheduleService, NoticeService) {
+	TeamsExportScheduleCtrl.$inject = ['$state', '$timeout', '$scope', 'groupPageService', 'exportScheduleService', 'NoticeService','serviceDateFormatHelper'];
+	function TeamsExportScheduleCtrl($state, $timeout, $scope, groupPageService, exportScheduleService, NoticeService, serviceDateFormatHelper) {
 		var vm = this;
 		vm.configuration = {
 			period:{
@@ -52,8 +52,8 @@
 
 		vm.getGroupPagesAsync = function () {
 			if (vm.configuration.period) {
-				var startDate = moment(vm.configuration.period.startDate).format('YYYY-MM-DD');
-				var endDate = moment(vm.configuration.period.endDate).format('YYYY-MM-DD');
+				var startDate = serviceDateFormatHelper.getDateOnly(vm.configuration.period.startDate);
+				var endDate = serviceDateFormatHelper.getDateOnly(vm.configuration.period.endDate);
 				groupPageService.fetchAvailableGroupPages(startDate, endDate).then(function (data) {
 					vm.availableGroups = data;
 					if (data.LogonUserTeamId) {

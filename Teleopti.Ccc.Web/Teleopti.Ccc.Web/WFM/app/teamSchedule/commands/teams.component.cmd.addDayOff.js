@@ -9,9 +9,9 @@
 			controller: AddDayOffCtrl
 		});
 
-	AddDayOffCtrl.$inject = ['$scope', 'PersonSelection', 'DayOffService', 'teamScheduleNotificationService'];
+	AddDayOffCtrl.$inject = ['$scope', 'PersonSelection', 'DayOffService', 'teamScheduleNotificationService','serviceDateFormatHelper'];
 
-	function AddDayOffCtrl($scope, personSelectionSvc, dayOffService, teamScheduleNotificationService) {
+	function AddDayOffCtrl($scope, personSelectionSvc, dayOffService, teamScheduleNotificationService, serviceDateFormatHelper) {
 		var ctrl = this;
 		ctrl.runningCommand = false;
 		ctrl.label = 'AddDayOff';
@@ -47,8 +47,8 @@
 			var personIds = agents.map(function (agent) { return agent.PersonId; });
 			var input = {
 				PersonIds: personIds,
-				StartDate: moment(ctrl.dateRange.startDate).format('YYYY-MM-DD'),
-				EndDate: moment(ctrl.dateRange.endDate).format('YYYY-MM-DD'),
+				StartDate: serviceDateFormatHelper.getDateOnly(ctrl.dateRange.startDate),
+				EndDate: serviceDateFormatHelper.getDateOnly(ctrl.dateRange.endDate),
 				TemplateId: ctrl.selectedTemplateId,
 				TrackedCommandInfo: { TrackId: ctrl.trackId }
 			};

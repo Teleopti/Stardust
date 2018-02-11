@@ -26,7 +26,7 @@
 		};
 	}
 
-	modifyShiftCategoryCtrl.$inject = ['ScheduleManagement','ShiftCategoryService', 'PersonSelection', 'teamScheduleNotificationService'];
+	modifyShiftCategoryCtrl.$inject = ['ScheduleManagement', 'ShiftCategoryService', 'PersonSelection', 'teamScheduleNotificationService'];
 
 	function modifyShiftCategoryCtrl(scheduleMgmtSvc, shiftCategorySvc, personSelectionSvc, teamScheduleNotificationService){
 		var vm = this;
@@ -58,7 +58,7 @@
 				}
 				var agentSchedule = scheduleMgmtSvc.findPersonScheduleVmForPersonId(agent.PersonId);
 				var hasDayOffSelected = agentSchedule.DayOffs.filter(function(d) {
-						return d.Date === moment(vm.selectedDate()).format('YYYY-MM-DD');
+					return d.Date === vm.selectedDate();
 					}).length > 0;
 				if (agentSchedule.IsFullDayAbsence || hasDayOffSelected) {
 					invalidAgents[agent.PersonId] = {

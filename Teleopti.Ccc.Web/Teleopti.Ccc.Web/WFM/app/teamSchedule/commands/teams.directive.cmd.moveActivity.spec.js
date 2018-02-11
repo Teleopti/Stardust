@@ -132,51 +132,6 @@
 		expect(vm.anyValidAgent()).toBe(false);
 	});
 
-	it('should call move activity when click apply with correct data', function () {
-		var date = moment('2016-06-15');
-
-		var result = setUp(date.toDate());
-		var vm = result.commandControl;
-
-		var selectedActivities = {
-			date: '2016-06-15',
-			shiftLayerId: '472e02c8-1a84-4064-9a3b-9b5e015ab3c6'
-		};
-
-		scheduleHelper.setLatestStartTime(date.clone().hour(10).toDate());
-
-		vm.nextDay = false;
-		vm.moveToTime = vm.getDefaultMoveToStartTime();
-
-		vm.selectedAgents = [
-			{
-				PersonId: 'agent1',
-				Name: 'agent1',
-				ScheduleStartTime: '2016-06-15T08:00:00Z',
-				ScheduleEndTime: '2016-06-15T17:00:00Z',
-				SelectedActivities: [selectedActivities]
-			}, {
-				PersonId: 'agent2',
-				Name: 'agent2',
-				ScheduleStartTime: '2016-06-15T09:00:00Z',
-				ScheduleEndTime: '2016-06-15T18:00:00Z',
-				SelectedActivities: [selectedActivities]
-			}];
-
-		fakePersonSelectionService.setFakeSelectedPersonInfoList(vm.selectedAgents);
-
-		var applyButton = angular.element(result.container[0].querySelector(".move-activity .form-submit"));
-		applyButton.triggerHandler('click');
-
-		result.scope.$apply();
-
-		var activityData = fakeActivityService.getMoveActivityCalledWith();
-		expect(activityData).not.toBeNull();
-		expect(activityData.PersonActivities.length).toEqual(vm.selectedAgents.length);
-		expect(moment(activityData.StartTime).format('YYYY-MM-DDTHH:mm:00')).toEqual(moment(vm.moveToTime).add(8, 'hours').format('YYYY-MM-DDTHH:mm:00'));
-		expect(activityData.PersonActivities[0].Date).toEqual(moment(vm.selectedDate()).format('YYYY-MM-DD'));
-		expect(activityData.TrackedCommandInfo.TrackId).toBe(vm.trackId);
-	});
 
 	it('should invoke action callback after calling move activity', function () {
 		var date = moment('2016-06-15');
@@ -233,6 +188,80 @@
 		var defaultMoveToStartTime = vm.getDefaultMoveToStartTime();
 
 		expect(defaultMoveToStartTime.getHours()).toBe(11);
+	});
+
+	function commonTestsInDifferentLocale() {
+		it('should call move activity when click apply with correct data', function () {
+			var date = moment('2016-06-15');
+
+			var result = setUp(date.toDate());
+			var vm = result.commandControl;
+
+			var selectedActivities = {
+				date: '2016-06-15',
+				shiftLayerId: '472e02c8-1a84-4064-9a3b-9b5e015ab3c6'
+			};
+
+			scheduleHelper.setLatestStartTime(date.clone().hour(10).toDate());
+
+			vm.nextDay = false;
+			vm.moveToTime = vm.getDefaultMoveToStartTime();
+
+			vm.selectedAgents = [
+				{
+					PersonId: 'agent1',
+					Name: 'agent1',
+					ScheduleStartTime: '2016-06-15T08:00:00Z',
+					ScheduleEndTime: '2016-06-15T17:00:00Z',
+					SelectedActivities: [selectedActivities]
+				}, {
+					PersonId: 'agent2',
+					Name: 'agent2',
+					ScheduleStartTime: '2016-06-15T09:00:00Z',
+					ScheduleEndTime: '2016-06-15T18:00:00Z',
+					SelectedActivities: [selectedActivities]
+				}];
+
+			fakePersonSelectionService.setFakeSelectedPersonInfoList(vm.selectedAgents);
+
+			var applyButton = angular.element(result.container[0].querySelector(".move-activity .form-submit"));
+			applyButton.triggerHandler('click');
+
+			result.scope.$apply();
+
+			var activityData = fakeActivityService.getMoveActivityCalledWith();
+			expect(activityData).not.toBeNull();
+			expect(activityData.PersonActivities.length).toEqual(vm.selectedAgents.length);
+			expect(activityData.StartTime).toEqual('2016-06-15T19:00');
+			expect(activityData.PersonActivities[0].Date).toEqual('2016-06-15');
+			expect(activityData.TrackedCommandInfo.TrackId).toBe(vm.trackId);
+		});
+	}
+
+	commonTestsInDifferentLocale();
+
+	describe('in locale ar-AE', function () {
+		beforeAll(function () {
+			moment.locale('ar-AE');
+		});
+
+		afterAll(function () {
+			moment.locale('en');
+		});
+
+		commonTestsInDifferentLocale();
+	});
+
+	describe('in locale fa-IR', function () {
+		beforeAll(function () {
+			moment.locale('fa-IR');
+		});
+
+		afterAll(function () {
+			moment.locale('en');
+		});
+
+		commonTestsInDifferentLocale();
 	});
 
 	function setUp(inputDate) {

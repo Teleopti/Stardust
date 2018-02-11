@@ -2,9 +2,9 @@
 	'use strict';
 	angular.module("wfm.teamSchedule").service("exportScheduleService", ExportScheduleService);
 
-	ExportScheduleService.$inject = ['$q', '$http'];
+	ExportScheduleService.$inject = ['$q', '$http','serviceDateFormatHelper'];
 
-	function ExportScheduleService($q, $http) {
+	function ExportScheduleService($q, $http, serviceDateFormatHelper) {
 		var self = this;
 		var scenarioUrl = "../api/TeamScheduleData/Scenarios";
 		var timezoneUrl = '../api/Global/TimeZone';
@@ -71,8 +71,8 @@
 				SelectedGroupPageId: input.selectedGroups.groupPageId
 			};
 			return {
-				StartDate: moment(input.period.startDate).format('YYYY-MM-DD'),
-				EndDate: moment(input.period.endDate).format('YYYY-MM-DD'),
+				StartDate: serviceDateFormatHelper.getDateOnly(input.period.startDate),
+				EndDate: serviceDateFormatHelper.getDateOnly(input.period.endDate),
 				ScenarioId: input.scenarioId,
 				TimezoneId: input.timezoneId,
 				SelectedGroups: normalizedSelectedGroups,

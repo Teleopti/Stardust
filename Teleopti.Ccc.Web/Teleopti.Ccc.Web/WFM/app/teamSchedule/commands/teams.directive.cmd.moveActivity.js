@@ -1,9 +1,9 @@
 ﻿(function () {
 	'use strict';
 
-	angular.module('wfm.teamSchedule').directive('moveActivity', moveActivityDirective);
+	angular.module('wfm.teamSchedule').directive('moveActivity', ['serviceDateFormatHelper', moveActivityDirective]);
 
-	function moveActivityDirective() {
+	function moveActivityDirective(serviceDateFormatHelper) {
 		return {
 			restrict: 'E',
 			scope: {},
@@ -20,13 +20,13 @@
 
 				scope.vm.selectedDate = containerCtrl.getDate;
 				scope.vm.trackId = containerCtrl.getTrackId();
-				scope.vm.convertTime = containerCtrl.convertTimeToCurrentUserTimezone;
+				scope.vm.convertTime = containerCtrl.getServiceTimeInCurrentUserTimezone;
 				scope.vm.getActionCb = containerCtrl.getActionCb;
 				scope.vm.getCurrentTimezone = containerCtrl.getCurrentTimezone;
 				scope.vm.scheduleMgtSvc = containerCtrl.scheduleManagementSvc;
 
 				scope.vm.moveToTime = selfCtrl.getDefaultMoveToStartTime();
-				scope.vm.nextDay = moment(selfCtrl.getDefaultMoveToStartTime()).format('YYYY-MM-DD') !== moment(scope.vm.selectedDate()).format('YYYY-MM-DD');
+				scope.vm.nextDay = serviceDateFormatHelper.getDateOnly(selfCtrl.getDefaultMoveToStartTime()) !== serviceDateFormatHelper.getDateOnly(scope.vm.selectedDate());
 
 				scope.$on('teamSchedule.command.focus.default', function () {
 					var focusTarget = elem[0].querySelector('.focus-default input');
@@ -51,9 +51,9 @@
 		};
 	}
 
-	moveActivityCtrl.$inject = ['$attrs', '$locale', '$translate', 'ActivityService', 'PersonSelection',  'ScheduleHelper', 'teamScheduleNotificationService', 'ActivityValidator', 'CommandCheckService'];
+	moveActivityCtrl.$inject = ['$attrs', '$locale', '$translate', 'ActivityService', 'PersonSelection', 'ScheduleHelper', 'teamScheduleNotificationService', 'ActivityValidator', 'CommandCheckService','serviceDateFormatHelper'];
 
-	function moveActivityCtrl($attrs, $locale, $translate, activityService, personSelectionSvc, scheduleHelper, teamScheduleNotificationService, validator, CommandCheckService) {
+	function moveActivityCtrl($attrs, $locale, $translate, activityService, personSelectionSvc, scheduleHelper, teamScheduleNotificationService, validator, CommandCheckService, serviceDateFormatHelper) {
 		var vm = this;
 
 		vm.label = 'MoveActivity';
@@ -100,7 +100,7 @@
 		};
 
 		vm.getMoveToStartTimeStr = function () {
-			var dateStr = (vm.nextDay ? moment(vm.selectedDate()).add(1, 'days') : moment(vm.selectedDate())).format('YYYY-MM-DD');
+			var dateStr = (vm.nextDay ? moment(vm.selectedDate()).add(1, 'days') : serviceDateFormatHelper.getDateOnly(vm.selectedDate()));
 			var timeStr = moment(vm.moveToTime).format('HH:mm');
 			return dateStr + 'T' + timeStr;
 		};

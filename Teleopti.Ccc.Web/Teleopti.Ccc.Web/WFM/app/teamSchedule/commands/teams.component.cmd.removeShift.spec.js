@@ -62,239 +62,6 @@
 		expect(dialog).toEqual(null);
 	});
 
-	it("should apply the command with person whose shift is day off excluded", function () {
-		var document = setUp("2018-02-01");
-		var modal = document.dialog;
-
-		var checkedPersonInfos = [
-			{
-				PersonId: 'agent1',
-				Name: 'agent1',
-				Checked: true,
-				ScheduleStartTime: null,
-				ScheduleEndTime: null,
-				SelectedActivities: ['activity']
-			},
-			{
-				PersonId: 'agent2',
-				Name: 'agent2',
-				Checked: true,
-				ScheduleStartTime: null,
-				ScheduleEndTime: null,
-				SelectedDayOffs: [],
-				SelectedActivities: ['activity']
-			},
-			{
-				PersonId: 'agent3',
-				Checked: true,
-				Name: 'agent3',
-				ScheduleStartTime: null,
-				ScheduleEndTime: null,
-				SelectedDayOffs: [{ Date: '2018-02-01' }]
-			}
-		];
-		fakePersonSelectionService.setFakeCheckedPersonInfoList(checkedPersonInfos);
-		
-		var button = modal.querySelectorAll("button");
-		var ctrl = document.removeElement.isolateScope().$ctrl;
-		button[1].click();
-
-		var removeShiftData = fakeActivityService.lastRequestedData();
-		expect(moment(removeShiftData.Date).format("YYYY-MM-DD")).toEqual('2018-02-01');
-		expect(removeShiftData.PersonIds.length).toEqual(2);
-		expect(removeShiftData.PersonIds[0]).toEqual('agent1');
-		expect(removeShiftData.PersonIds[1]).toEqual('agent2');
-		expect(removeShiftData.TrackedCommandInfo.TrackId).toEqual(ctrl.trackId);
-	});
-
-
-	it("should apply the command with person whose shift is full day absence excluded", function () {
-		var document = setUp("2018-02-01");
-		var modal = document.dialog;
-
-		var checkedPersonInfos = [
-			{
-				PersonId: 'agent1',
-				Name: 'agent1',
-				Checked: true,
-				ScheduleStartTime: null,
-				ScheduleEndTime: null,
-				SelectedActivities: ['activity']
-			},
-			{
-				PersonId: 'agent2',
-				Name: 'agent2',
-				Checked: true,
-				ScheduleStartTime: null,
-				ScheduleEndTime: null,
-				SelectedDayOffs: [],
-				SelectedActivities: ['activity']
-			},
-			{
-				PersonId: 'agent3',
-				Checked: true,
-				Name: 'agent3',
-				ScheduleStartTime: null,
-				ScheduleEndTime: null,
-				IsFullDayAbsence: true,
-				SelectedDayOffs: [],
-				SelectedAbsences:['absence']
-			}
-		];
-		fakePersonSelectionService.setFakeCheckedPersonInfoList(checkedPersonInfos);
-		
-		var button = modal.querySelectorAll("button");
-		var ctrl = document.removeElement.isolateScope().$ctrl;
-		button[1].click();
-
-		var removeShiftData = fakeActivityService.lastRequestedData();
-		expect(moment(removeShiftData.Date).format("YYYY-MM-DD")).toEqual('2018-02-01');
-		expect(removeShiftData.PersonIds.length).toEqual(2);
-		expect(removeShiftData.PersonIds[0]).toEqual('agent1');
-		expect(removeShiftData.PersonIds[1]).toEqual('agent2');
-		expect(removeShiftData.TrackedCommandInfo.TrackId).toEqual(ctrl.trackId);
-	});
-
-	it("should apply the command with person whose shift only contains overtime excluded", function () {
-		var document = setUp("2018-02-01");
-		var modal = document.dialog;
-
-		var checkedPersonInfos = [
-			{
-				PersonId: 'agent1',
-				Name: 'agent1',
-				Checked: true,
-				ScheduleStartTime: null,
-				ScheduleEndTime: null,
-				SelectedActivities: ['activity']
-			},
-			{
-				PersonId: 'agent2',
-				Name: 'agent2',
-				Checked: true,
-				ScheduleStartTime: null,
-				ScheduleEndTime: null,
-				SelectedDayOffs: [],
-				SelectedActivities: ['activity']
-			},
-			{
-				PersonId: 'agent3',
-				Checked: true,
-				Name: 'agent3',
-				ScheduleStartTime: null,
-				ScheduleEndTime: null,
-				SelectedDayOffs: [],
-				SelectedActivities: [{isOvertime:true}]
-			}
-		];
-		fakePersonSelectionService.setFakeCheckedPersonInfoList(checkedPersonInfos);
-		
-		var button = modal.querySelectorAll("button");
-		var ctrl = document.removeElement.isolateScope().$ctrl;
-		button[1].click();
-
-		var removeShiftData = fakeActivityService.lastRequestedData();
-		expect(moment(removeShiftData.Date).format("YYYY-MM-DD")).toEqual('2018-02-01');
-		expect(removeShiftData.PersonIds.length).toEqual(2);
-		expect(removeShiftData.PersonIds[0]).toEqual('agent1');
-		expect(removeShiftData.PersonIds[1]).toEqual('agent2');
-		expect(removeShiftData.TrackedCommandInfo.TrackId).toEqual(ctrl.trackId);
-	});
-
-
-	it("should apply the command with person whose schedule is empty excluded", function () {
-		var document = setUp("2018-02-01");
-		var modal = document.dialog;
-
-		var checkedPersonInfos = [
-			{
-				PersonId: 'agent1',
-				Name: 'agent1',
-				Checked: true,
-				ScheduleStartTime: null,
-				ScheduleEndTime: null,
-				SelectedActivities: ['activity']
-			},
-			{
-				PersonId: 'agent2',
-				Name: 'agent2',
-				Checked: true,
-				ScheduleStartTime: null,
-				ScheduleEndTime: null,
-				SelectedDayOffs: [],
-				SelectedActivities: ['activity']
-			},
-			{
-				PersonId: 'agent3',
-				Checked: true,
-				Name: 'agent3',
-				ScheduleStartTime: null,
-				ScheduleEndTime: null,
-				SelectedDayOffs: [],
-				SelectedActivities: []
-			}
-		];
-		fakePersonSelectionService.setFakeCheckedPersonInfoList(checkedPersonInfos);
-		
-		var button = modal.querySelectorAll("button");
-		var ctrl = document.removeElement.isolateScope().$ctrl;
-		button[1].click();
-
-		var removeShiftData = fakeActivityService.lastRequestedData();
-		expect(moment(removeShiftData.Date).format("YYYY-MM-DD")).toEqual('2018-02-01');
-		expect(removeShiftData.PersonIds.length).toEqual(2);
-		expect(removeShiftData.PersonIds[0]).toEqual('agent1');
-		expect(removeShiftData.PersonIds[1]).toEqual('agent2');
-		expect(removeShiftData.TrackedCommandInfo.TrackId).toEqual(ctrl.trackId);
-	});
-
-
-	it("should apply the command with person who is unchecked excluded", function () {
-		var document = setUp("2018-02-01");
-		var modal = document.dialog;
-
-		var checkedPersonInfos = [
-			{
-				PersonId: 'agent1',
-				Name: 'agent1',
-				Checked: true,
-				ScheduleStartTime: null,
-				ScheduleEndTime: null,
-				SelectedActivities: ['activity']
-			},
-			{
-				PersonId: 'agent2',
-				Name: 'agent2',
-				Checked: true,
-				ScheduleStartTime: null,
-				ScheduleEndTime: null,
-				SelectedDayOffs: [],
-				SelectedActivities: ['activity']
-			},
-			{
-				PersonId: 'agent3',
-				Checked: false,
-				Name: 'agent3',
-				ScheduleStartTime: null,
-				ScheduleEndTime: null,
-				SelectedDayOffs: [],
-				SelectedActivities: ['activity']
-			}
-		];
-		fakePersonSelectionService.setFakeCheckedPersonInfoList(checkedPersonInfos);
-		
-		var button = modal.querySelectorAll("button");
-		var ctrl = document.removeElement.isolateScope().$ctrl;
-		button[1].click();
-
-		var removeShiftData = fakeActivityService.lastRequestedData();
-		expect(moment(removeShiftData.Date).format("YYYY-MM-DD")).toEqual('2018-02-01');
-		expect(removeShiftData.PersonIds.length).toEqual(2);
-		expect(removeShiftData.PersonIds[0]).toEqual('agent1');
-		expect(removeShiftData.PersonIds[1]).toEqual('agent2');
-		expect(removeShiftData.TrackedCommandInfo.TrackId).toEqual(ctrl.trackId);
-	});
-
 	it("should show success notification and reset active cmd when remove shift successed", function () {
 		var document = setUp("2018-02-01");
 		var modal = document.dialog;
@@ -318,7 +85,6 @@
 		expect(fakeNoticeService.successMessage).toEqual('FinishedRemoveShift');
 		expect(!!ctrl.containerCtrl.activeCmd).toEqual(false);
 	});
-
 
 	it("should show warning and success notification and reset active command when remove shift apply with warning", function () {
 		var document = setUp("2018-02-01");
@@ -379,6 +145,265 @@
 		expect(!!fakeNoticeService.successMessage).toEqual(false);
 		expect(fakeNoticeService.errorMessage).toEqual("error : agent1");
 		expect(!!ctrl.containerCtrl.activeCmd).toEqual(false);
+	});
+
+	commonTestsInDifferentLocale();
+
+	function commonTestsInDifferentLocale() {
+
+		it("should apply the command with person whose shift is day off excluded", function () {
+			var document = setUp("2018-02-01");
+			var modal = document.dialog;
+
+			var checkedPersonInfos = [
+				{
+					PersonId: 'agent1',
+					Name: 'agent1',
+					Checked: true,
+					ScheduleStartTime: null,
+					ScheduleEndTime: null,
+					SelectedActivities: ['activity']
+				},
+				{
+					PersonId: 'agent2',
+					Name: 'agent2',
+					Checked: true,
+					ScheduleStartTime: null,
+					ScheduleEndTime: null,
+					SelectedDayOffs: [],
+					SelectedActivities: ['activity']
+				},
+				{
+					PersonId: 'agent3',
+					Checked: true,
+					Name: 'agent3',
+					ScheduleStartTime: null,
+					ScheduleEndTime: null,
+					SelectedDayOffs: [{ Date: '2018-02-01' }]
+				}
+			];
+			fakePersonSelectionService.setFakeCheckedPersonInfoList(checkedPersonInfos);
+
+			var button = modal.querySelectorAll("button");
+			var ctrl = document.removeElement.isolateScope().$ctrl;
+			button[1].click();
+
+			var removeShiftData = fakeActivityService.lastRequestedData();
+			expect(removeShiftData.Date).toEqual('2018-02-01');
+			expect(removeShiftData.PersonIds.length).toEqual(2);
+			expect(removeShiftData.PersonIds[0]).toEqual('agent1');
+			expect(removeShiftData.PersonIds[1]).toEqual('agent2');
+			expect(removeShiftData.TrackedCommandInfo.TrackId).toEqual(ctrl.trackId);
+		});
+
+		it("should apply the command with person whose shift is full day absence excluded", function () {
+			var document = setUp("2018-02-01");
+			var modal = document.dialog;
+
+			var checkedPersonInfos = [
+				{
+					PersonId: 'agent1',
+					Name: 'agent1',
+					Checked: true,
+					ScheduleStartTime: null,
+					ScheduleEndTime: null,
+					SelectedActivities: ['activity']
+				},
+				{
+					PersonId: 'agent2',
+					Name: 'agent2',
+					Checked: true,
+					ScheduleStartTime: null,
+					ScheduleEndTime: null,
+					SelectedDayOffs: [],
+					SelectedActivities: ['activity']
+				},
+				{
+					PersonId: 'agent3',
+					Checked: true,
+					Name: 'agent3',
+					ScheduleStartTime: null,
+					ScheduleEndTime: null,
+					IsFullDayAbsence: true,
+					SelectedDayOffs: [],
+					SelectedAbsences: ['absence']
+				}
+			];
+			fakePersonSelectionService.setFakeCheckedPersonInfoList(checkedPersonInfos);
+
+			var button = modal.querySelectorAll("button");
+			var ctrl = document.removeElement.isolateScope().$ctrl;
+			button[1].click();
+
+			var removeShiftData = fakeActivityService.lastRequestedData();
+			expect(removeShiftData.Date).toEqual('2018-02-01');
+			expect(removeShiftData.PersonIds.length).toEqual(2);
+			expect(removeShiftData.PersonIds[0]).toEqual('agent1');
+			expect(removeShiftData.PersonIds[1]).toEqual('agent2');
+			expect(removeShiftData.TrackedCommandInfo.TrackId).toEqual(ctrl.trackId);
+		});
+
+		it("should apply the command with person whose shift only contains overtime excluded", function () {
+			var document = setUp("2018-02-01");
+			var modal = document.dialog;
+
+			var checkedPersonInfos = [
+				{
+					PersonId: 'agent1',
+					Name: 'agent1',
+					Checked: true,
+					ScheduleStartTime: null,
+					ScheduleEndTime: null,
+					SelectedActivities: ['activity']
+				},
+				{
+					PersonId: 'agent2',
+					Name: 'agent2',
+					Checked: true,
+					ScheduleStartTime: null,
+					ScheduleEndTime: null,
+					SelectedDayOffs: [],
+					SelectedActivities: ['activity']
+				},
+				{
+					PersonId: 'agent3',
+					Checked: true,
+					Name: 'agent3',
+					ScheduleStartTime: null,
+					ScheduleEndTime: null,
+					SelectedDayOffs: [],
+					SelectedActivities: [{ isOvertime: true }]
+				}
+			];
+			fakePersonSelectionService.setFakeCheckedPersonInfoList(checkedPersonInfos);
+
+			var button = modal.querySelectorAll("button");
+			var ctrl = document.removeElement.isolateScope().$ctrl;
+			button[1].click();
+
+			var removeShiftData = fakeActivityService.lastRequestedData();
+			expect(removeShiftData.Date).toEqual('2018-02-01');
+			expect(removeShiftData.PersonIds.length).toEqual(2);
+			expect(removeShiftData.PersonIds[0]).toEqual('agent1');
+			expect(removeShiftData.PersonIds[1]).toEqual('agent2');
+			expect(removeShiftData.TrackedCommandInfo.TrackId).toEqual(ctrl.trackId);
+		});
+
+		it("should apply the command with person whose schedule is empty excluded", function () {
+			var document = setUp("2018-02-01");
+			var modal = document.dialog;
+
+			var checkedPersonInfos = [
+				{
+					PersonId: 'agent1',
+					Name: 'agent1',
+					Checked: true,
+					ScheduleStartTime: null,
+					ScheduleEndTime: null,
+					SelectedActivities: ['activity']
+				},
+				{
+					PersonId: 'agent2',
+					Name: 'agent2',
+					Checked: true,
+					ScheduleStartTime: null,
+					ScheduleEndTime: null,
+					SelectedDayOffs: [],
+					SelectedActivities: ['activity']
+				},
+				{
+					PersonId: 'agent3',
+					Checked: true,
+					Name: 'agent3',
+					ScheduleStartTime: null,
+					ScheduleEndTime: null,
+					SelectedDayOffs: [],
+					SelectedActivities: []
+				}
+			];
+			fakePersonSelectionService.setFakeCheckedPersonInfoList(checkedPersonInfos);
+
+			var button = modal.querySelectorAll("button");
+			var ctrl = document.removeElement.isolateScope().$ctrl;
+			button[1].click();
+
+			var removeShiftData = fakeActivityService.lastRequestedData();
+			expect(removeShiftData.Date).toEqual('2018-02-01');
+			expect(removeShiftData.PersonIds.length).toEqual(2);
+			expect(removeShiftData.PersonIds[0]).toEqual('agent1');
+			expect(removeShiftData.PersonIds[1]).toEqual('agent2');
+			expect(removeShiftData.TrackedCommandInfo.TrackId).toEqual(ctrl.trackId);
+		});
+
+		it("should apply the command with person who is unchecked excluded", function () {
+			var document = setUp("2018-02-01");
+			var modal = document.dialog;
+
+			var checkedPersonInfos = [
+				{
+					PersonId: 'agent1',
+					Name: 'agent1',
+					Checked: true,
+					ScheduleStartTime: null,
+					ScheduleEndTime: null,
+					SelectedActivities: ['activity']
+				},
+				{
+					PersonId: 'agent2',
+					Name: 'agent2',
+					Checked: true,
+					ScheduleStartTime: null,
+					ScheduleEndTime: null,
+					SelectedDayOffs: [],
+					SelectedActivities: ['activity']
+				},
+				{
+					PersonId: 'agent3',
+					Checked: false,
+					Name: 'agent3',
+					ScheduleStartTime: null,
+					ScheduleEndTime: null,
+					SelectedDayOffs: [],
+					SelectedActivities: ['activity']
+				}
+			];
+			fakePersonSelectionService.setFakeCheckedPersonInfoList(checkedPersonInfos);
+
+			var button = modal.querySelectorAll("button");
+			var ctrl = document.removeElement.isolateScope().$ctrl;
+			button[1].click();
+
+			var removeShiftData = fakeActivityService.lastRequestedData();
+			expect(removeShiftData.Date).toEqual('2018-02-01');
+			expect(removeShiftData.PersonIds.length).toEqual(2);
+			expect(removeShiftData.PersonIds[0]).toEqual('agent1');
+			expect(removeShiftData.PersonIds[1]).toEqual('agent2');
+			expect(removeShiftData.TrackedCommandInfo.TrackId).toEqual(ctrl.trackId);
+		});
+	}
+
+	describe('in locale ar-AE', function () {
+		beforeAll(function () {
+			moment.locale('ar-AE');
+		});
+
+		afterAll(function () {
+			moment.locale('en');
+		});
+
+		commonTestsInDifferentLocale();
+	});
+
+	describe('in locale fa-IR', function () {
+		beforeAll(function () {
+			moment.locale('fa-IR');
+		});
+
+		afterAll(function () {
+			moment.locale('en');
+		});
+
+		commonTestsInDifferentLocale();
 	});
 
 

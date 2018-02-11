@@ -43,6 +43,6 @@ describe("teamschedule person week view creator tests",function () {
 		};
 
 		var result = target.Create([personSchedule]);
-		expect(result[0].days[0].summeryTimeSpan).toEqual('22:00 (-1) - 09:00');
+		expect(result[0].days[0].summeryTimeSpan).toEqual('10:00 PM (-1) - 9:00 AM');
 	});
 });

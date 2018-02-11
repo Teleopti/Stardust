@@ -198,64 +198,6 @@
 		expect(vm.anyValidAgent()).toBe(false);
 	});
 
-	it('should call add activity when click apply with correct data', function () {
-		var result = setUp();
-		var vm = result.commandControl;
-		vm.isNextDay = false;
-		vm.disableNextDay = false;
-		vm.timeRange = {
-			startTime: moment('2016-06-15 08:00').toDate(),
-			endTime:  moment('2016-06-15 16:00').toDate()
-		};
-
-		vm.selectedAgents = [
-			{
-				PersonId: 'agent1',
-				Name: 'agent1',
-				ScheduleStartTime: null,
-				ScheduleEndTime: null
-			}];
-
-		vm.selectedActivityId = '472e02c8-1a84-4064-9a3b-9b5e015ab3c6';
-
-		fakePersonSelectionService.setFakeCheckedPersonInfoList(vm.selectedAgents);
-
-		var timezone1 = {
-			IanaId: "Asia/Hong_Kong",
-			DisplayName: "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi"
-		};
-
-		vm.containerCtrl.scheduleManagementSvc.setPersonScheduleVm('agent1', {
-			Date: '2016-06-15',
-			PersonId: 'agent1',
-			Timezone: timezone1,
-			Shifts: [
-			{
-				Date: '2016-06-15',
-				Projections: [
-				],
-				ProjectionTimeRange: null
-			}]
-		});
-
-		result.scope.$apply();
-
-
-		var applyButton = angular.element(result.container[0].querySelector(".add-activity .form-submit"));
-		applyButton.triggerHandler('click');
-
-		result.scope.$apply();
-
-		var activityData = fakeActivityService.getAddActivityCalledWith();
-		expect(activityData).not.toBeNull();
-		expect(activityData.PersonDates.length).toEqual(vm.selectedAgents.length);
-		expect(activityData.ActivityId).toEqual(vm.selectedActivityId);
-		expect(moment(activityData.StartTime).format('YYYY-MM-DDTHH:mm')).toEqual('2016-06-15T08:00');
-		expect(moment(activityData.EndTime).format('YYYY-MM-DDTHH:mm')).toEqual('2016-06-15T16:00');
-
-		expect(activityData.TrackedCommandInfo.TrackId).toBe(vm.trackId);
-	});
-
 	it('should invoke action callback after calling add activity', function () {
 		var result = setUp();
 
@@ -361,6 +303,94 @@
 		var defaultStartTime = vm.getDefaultActvityStartTime();
 		expect(defaultStartTime.getHours()).toBe(11);
 	});
+
+
+	function commonTestsInDifferentLocale() {
+		it('should call add activity when click apply with correct data', function () {
+			var result = setUp();
+			var vm = result.commandControl;
+			vm.isNextDay = false;
+			vm.disableNextDay = false;
+			vm.timeRange = {
+				startTime: moment('2016-06-15 08:00').toDate(),
+				endTime: moment('2016-06-15 16:00').toDate()
+			};
+
+			vm.selectedAgents = [
+				{
+					PersonId: 'agent1',
+					Name: 'agent1',
+					ScheduleStartTime: null,
+					ScheduleEndTime: null
+				}];
+
+			vm.selectedActivityId = '472e02c8-1a84-4064-9a3b-9b5e015ab3c6';
+
+			fakePersonSelectionService.setFakeCheckedPersonInfoList(vm.selectedAgents);
+
+			var timezone1 = {
+				IanaId: "Asia/Hong_Kong",
+				DisplayName: "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi"
+			};
+
+			vm.containerCtrl.scheduleManagementSvc.setPersonScheduleVm('agent1', {
+				Date: '2016-06-15',
+				PersonId: 'agent1',
+				Timezone: timezone1,
+				Shifts: [
+					{
+						Date: '2016-06-15',
+						Projections: [
+						],
+						ProjectionTimeRange: null
+					}]
+			});
+
+			result.scope.$apply();
+
+
+			var applyButton = angular.element(result.container[0].querySelector(".add-activity .form-submit"));
+			applyButton.triggerHandler('click');
+
+			result.scope.$apply();
+
+			var activityData = fakeActivityService.getAddActivityCalledWith();
+			expect(activityData).not.toBeNull();
+			expect(activityData.PersonDates.length).toEqual(vm.selectedAgents.length);
+			expect(activityData.ActivityId).toEqual(vm.selectedActivityId);
+			expect(activityData.StartTime).toEqual('2016-06-15T08:00');
+			expect(activityData.EndTime).toEqual('2016-06-15T16:00');
+
+			expect(activityData.TrackedCommandInfo.TrackId).toBe(vm.trackId);
+		});
+	}
+
+	commonTestsInDifferentLocale();
+
+	describe('in locale ar-AE', function () {
+		beforeAll(function () {
+			moment.locale('ar-AE');
+		});
+
+		afterAll(function () {
+			moment.locale('en');
+		});
+
+		commonTestsInDifferentLocale();
+	});
+
+	describe('in locale fa-IR', function () {
+		beforeEach(function () {
+			moment.locale('fa-IR');
+		});
+
+		afterEach(function () {
+			moment.locale('en');
+		});
+
+		commonTestsInDifferentLocale();
+	});
+
 
 	function setUp(inputDate) {
 		var date;

@@ -1,5 +1,5 @@
 ﻿describe('move shift component test',
-	function() {
+	function () {
 		'use strict';
 		var $rootScope,
 			$compile,
@@ -24,21 +24,21 @@
 					return scheduleManagementSvc;
 				});
 			$provide.service('teamsToggles',
-				function() {
-					return { all: function() {} };
+				function () {
+					return { all: function () { } };
 				});
 			$provide.service('Toggle',
-				function() {
+				function () {
 					return {};
 				});
 			$provide.service('ActivityService',
-				function() {
+				function () {
 					return activityService;
 				});
 			$provide.service('CurrentUserInfo',
-				function() {
+				function () {
 					return {
-						CurrentUserInfo: function() {
+						CurrentUserInfo: function () {
 							return {
 								DefaultTimeZone: "Etc/UTC",
 								DefaultTimeZoneName: "Etc/UTC",
@@ -49,7 +49,7 @@
 				});
 		}));
 
-		beforeEach(inject(function(_$rootScope_,_$compile_) {
+		beforeEach(inject(function (_$rootScope_, _$compile_) {
 			$rootScope = _$rootScope_;
 			$compile = _$compile_;
 		}));
@@ -118,14 +118,14 @@
 				{
 					PersonId: 'agent1',
 					Name: 'agent1',
-					Checked:true,
+					Checked: true,
 					ScheduleStartTime: '2016-06-15T08:00:00Z',
 					ScheduleEndTime: '2016-06-15T17:00:00Z',
 					SelectedActivities: '472e02c8-1a84-4064-9a3b-9b5e015ab3c6'
 				}, {
 					PersonId: 'agent2',
 					Name: 'agent2',
-					Checked:true,
+					Checked: true,
 					ScheduleStartTime: '2016-06-15T19:00:00Z',
 					ScheduleEndTime: '2016-06-16T08:00:00Z',
 					SelectedActivities: '472e02c8-1a84-4064-9a3b-9b5e015ab3c6'
@@ -186,12 +186,12 @@
 				DisplayName: 'UTC'
 			};
 			var currentTimezone = 'Etc/UTC';
-				
+
 			var selectedAgents = [
 				{
 					PersonId: 'agent1',
 					Name: 'agent1',
-					Checked:true,
+					Checked: true,
 					ScheduleStartTime: '2016-06-15T08:00:00Z',
 					ScheduleEndTime: '2016-06-15T17:00:00Z',
 					SelectedActivities: '472e02c8-1a84-4064-9a3b-9b5e015ab3c6'
@@ -237,7 +237,7 @@
 				{
 					PersonId: 'agent1',
 					Name: 'agent1',
-					Checked:true,
+					Checked: true,
 					ScheduleStartTime: '2016-06-15T08:00:00Z',
 					ScheduleEndTime: '2016-06-15T17:00:00Z',
 					SelectedActivities: [],
@@ -269,95 +269,122 @@
 			expect(applyButton.attr('disabled')).toBe('disabled');
 		});
 
+		commonTestsInDifferentLocale();
 
-		it('should apply command only to checked agents', function () {
-			var timezone1 = {
-				IanaId: 'Etc/UTC',
-				DisplayName: 'UTC'
-			};
-			var currentTimezone = 'Etc/UTC';
+		function commonTestsInDifferentLocale() {
+			it('should apply command only to checked agents', function () {
+				var timezone1 = {
+					IanaId: 'Etc/UTC',
+					DisplayName: 'UTC'
+				};
+				var currentTimezone = 'Etc/UTC';
 
-			var selectedAgents = [
-				{
-					PersonId: 'agent1',
-					Name: 'agent1',
-					Checked: true,
-					ScheduleStartTime: '2016-06-15T08:00:00Z',
-					ScheduleEndTime: '2016-06-15T17:00:00Z',
-					SelectedActivities: ['472e02c8-1a84-4064-9a3b-9b5e015ab3c6'],
-					SelectedDayOffs: []
-				},
-				{
-					PersonId: 'agent2',
-					Name: 'agent2',
-					ScheduleStartTime: '2016-06-15T08:00:00Z',
-					ScheduleEndTime: '2016-06-15T17:00:00Z',
-					SelectedActivities: ['472e02c8-1a84-4064-9a3b-9b5e015ab3c6'],
-					SelectedDayOffs: []
-				}
-			];
-			personSelectionService.setFakeSelectedPersonInfoList(selectedAgents);
-
-			scheduleManagementSvc.setPersonScheduleVm('agent1', {
-				Date: '2016-06-15',
-				PersonId: 'agent1',
-				Timezone: timezone1,
-				Shifts: [
+				var selectedAgents = [
 					{
-						Date: '2016-06-15',
-						Projections: [
-							{
-								Start: '2016-06-15 08:00',
-								End: '2016-06-15 17:00',
-								Minutes: 540
-							}],
-						ProjectionTimeRange: {
-							Start: '2016-06-15 08:00',
-							End: '2016-06-15 17:00'
-						}
-					}],
-				ExtraShifts:[]
-			});
-			scheduleManagementSvc.setPersonScheduleVm('agent2', {
-				Date: '2016-06-15',
-				PersonId: 'agent2',
-				Timezone: timezone1,
-				Shifts: [
+						PersonId: 'agent1',
+						Name: 'agent1',
+						Checked: true,
+						ScheduleStartTime: '2016-06-15T08:00:00Z',
+						ScheduleEndTime: '2016-06-15T17:00:00Z',
+						SelectedActivities: ['472e02c8-1a84-4064-9a3b-9b5e015ab3c6'],
+						SelectedDayOffs: []
+					},
 					{
-						Date: '2016-06-15',
-						Projections: [
-							{
-								Start: '2016-06-15 08:00',
-								End: '2016-06-15 17:00',
-								Minutes: 540
-							}
-						],
-						ProjectionTimeRange: {
-							Start: '2016-06-15 08:00',
-							End: '2016-06-15 17:00'
-						}
+						PersonId: 'agent2',
+						Name: 'agent2',
+						ScheduleStartTime: '2016-06-15T08:00:00Z',
+						ScheduleEndTime: '2016-06-15T17:00:00Z',
+						SelectedActivities: ['472e02c8-1a84-4064-9a3b-9b5e015ab3c6'],
+						SelectedDayOffs: []
 					}
-				],
-				ExtraShifts:[]
-		});
-			var compiledResult = setUp(moment('2016-06-15').toDate(), currentTimezone);
-			var element = compiledResult.element;
-			var scope = compiledResult.scope;
-			var ctrl = element.scope().$ctrl;
-			ctrl.moveToTime = new Date('2016-06-15 09:00');
-			var applyButton = angular.element(element[0].querySelector(".move-shift .form-submit"));
-			applyButton[0].click();
-			scope.$apply();
+				];
+				personSelectionService.setFakeSelectedPersonInfoList(selectedAgents);
 
-			var lastRequestedData = activityService.lastRequestedData();
-			expect(lastRequestedData.PersonIds.length).toBe(1);
-			expect(lastRequestedData.PersonIds[0]).toBe('agent1');
-			expect(lastRequestedData.Date).toBe('2016-06-15');
-			expect(lastRequestedData.NewShiftStart).toBe('2016-06-15T09:00');
-			expect(!!lastRequestedData.TrackedCommandInfo.TrackId).toBe(true);
+				scheduleManagementSvc.setPersonScheduleVm('agent1', {
+					Date: '2016-06-15',
+					PersonId: 'agent1',
+					Timezone: timezone1,
+					Shifts: [
+						{
+							Date: '2016-06-15',
+							Projections: [
+								{
+									Start: '2016-06-15 08:00',
+									End: '2016-06-15 17:00',
+									Minutes: 540
+								}],
+							ProjectionTimeRange: {
+								Start: '2016-06-15 08:00',
+								End: '2016-06-15 17:00'
+							}
+						}],
+					ExtraShifts: []
+				});
+				scheduleManagementSvc.setPersonScheduleVm('agent2', {
+					Date: '2016-06-15',
+					PersonId: 'agent2',
+					Timezone: timezone1,
+					Shifts: [
+						{
+							Date: '2016-06-15',
+							Projections: [
+								{
+									Start: '2016-06-15 08:00',
+									End: '2016-06-15 17:00',
+									Minutes: 540
+								}
+							],
+							ProjectionTimeRange: {
+								Start: '2016-06-15 08:00',
+								End: '2016-06-15 17:00'
+							}
+						}
+					],
+					ExtraShifts: []
+				});
+				var compiledResult = setUp(moment('2016-06-15').toDate(), currentTimezone);
+				var element = compiledResult.element;
+				var scope = compiledResult.scope;
+				var ctrl = element.scope().$ctrl;
+				ctrl.moveToTime = new Date('2016-06-15 09:00');
+				var applyButton = angular.element(element[0].querySelector(".move-shift .form-submit"));
+				applyButton[0].click();
+				scope.$apply();
+
+				var lastRequestedData = activityService.lastRequestedData();
+				expect(lastRequestedData.PersonIds.length).toBe(1);
+				expect(lastRequestedData.PersonIds[0]).toBe('agent1');
+				expect(lastRequestedData.Date).toBe('2016-06-15');
+				expect(lastRequestedData.NewShiftStart).toBe('2016-06-15T09:00');
+				expect(!!lastRequestedData.TrackedCommandInfo.TrackId).toBe(true);
+			});
+		}
+
+		describe('in locale ar-AE', function () {
+			beforeAll(function () {
+				moment.locale('ar-AE');
+			});
+
+			afterAll(function () {
+				moment.locale('en');
+			});
+
+			commonTestsInDifferentLocale();
 		});
 
-		function setUp(inputDate,timeZone) {
+		describe('in locale fa-IR', function () {
+			beforeEach(function () {
+				moment.locale('fa-IR');
+			});
+
+			afterEach(function () {
+				moment.locale('en');
+			});
+
+			commonTestsInDifferentLocale();
+		});
+
+		function setUp(inputDate, timeZone) {
 			var date;
 			var html = '<teamschedule-command-container date="curDate" timezone="timezone"></teamschedule-command-container>';
 			var scope = $rootScope.$new();
@@ -392,11 +419,11 @@
 			}
 
 			this.getCheckedPersonInfoList = function () {
-				return fakePersonList.filter(function(p) { return p.Checked; });
+				return fakePersonList.filter(function (p) { return p.Checked; });
 			}
 
-			this.getSelectedPersonIdList = function() {
-				return fakePersonList.map(function(p) { return p.PersonId; });
+			this.getSelectedPersonIdList = function () {
+				return fakePersonList.map(function (p) { return p.PersonId; });
 			};
 		}
 		function FakeScheduleManagementService() {
@@ -438,12 +465,12 @@
 		function FakeActivityService() {
 			var lastRequestData;
 
-			this.lastRequestedData = function() { return lastRequestData; }
+			this.lastRequestedData = function () { return lastRequestData; }
 
-			this.moveShift = function(requestData) {
+			this.moveShift = function (requestData) {
 				lastRequestData = requestData;
-				return{
-					then: function(cb) { cb({data:[]}); }
+				return {
+					then: function (cb) { cb({ data: [] }); }
 				}
 			}
 		}

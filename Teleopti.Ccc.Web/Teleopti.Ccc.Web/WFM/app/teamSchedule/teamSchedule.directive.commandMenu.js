@@ -18,6 +18,7 @@
 				'keyCodes',
 				'teamsPermissions',
 				'teamsToggles',
+				'serviceDateFormatHelper',
 				teamscheduleCommandMenuCtrl
 			],
 			controllerAs: 'vm',
@@ -33,7 +34,8 @@
 		shortCuts,
 		keyCodes,
 		teamsPermissions,
-		teamsToggles
+		teamsToggles,
+		serviceDateFormatHelper
 	) {
 		var vm = this;
 
@@ -326,12 +328,13 @@
 			return personSelectionSvc.anyAgentChecked();
 		};
 
-		vm.canRemoveDayOff = function() {
+		vm.canRemoveDayOff = function () {
+			var selectedDate = serviceDateFormatHelper.getDateOnly(vm.selectedDate);
 			var selectedPersonInfoList = personSelectionSvc.getCheckedPersonInfoList();
 			if (selectedPersonInfoList.length === 0) return false;
 			var selectedDayOffs = selectedPersonInfoList.filter(function(p) {
 				var dayOffsOnCurrentDay = p.SelectedDayOffs.filter(function(d) {
-					return d.Date === moment(vm.selectedDate).format('YYYY-MM-DD');
+					return d.Date === selectedDate;
 				});
 				return dayOffsOnCurrentDay.length > 0;
 			});

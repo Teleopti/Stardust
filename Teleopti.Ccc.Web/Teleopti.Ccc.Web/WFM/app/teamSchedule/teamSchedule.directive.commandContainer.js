@@ -31,9 +31,9 @@
 		};
 	}
 
-	teamscheduleCommandContainerCtrl.$inject = ['$q', '$filter', '$element', '$scope', 'guidgenerator', 'teamsToggles', 'teamsPermissions', 'CommandCheckService', 'ScheduleManagement', 'PersonSelection', 'TeamSchedule'];
+	teamscheduleCommandContainerCtrl.$inject = ['$q', '$filter', '$element', '$scope', 'guidgenerator', 'teamsToggles', 'teamsPermissions', 'CommandCheckService', 'ScheduleManagement', 'PersonSelection', 'TeamSchedule','serviceDateFormatHelper'];
 
-	function teamscheduleCommandContainerCtrl($q, $filter, $element, $scope, guidgenerator, teamsToggles, teamsPermissions, CommandCheckService, scheduleManagementSvc, personSelectionSvc, teamScheduleSvc) {
+	function teamscheduleCommandContainerCtrl($q, $filter, $element, $scope, guidgenerator, teamsToggles, teamsPermissions, CommandCheckService, scheduleManagementSvc, personSelectionSvc, teamScheduleSvc, serviceDateFormatHelper) {
 		var vm = this;
 
 		vm.scheduleManagementSvc = scheduleManagementSvc.newService();
@@ -82,7 +82,7 @@
 		};
 
 		vm.getDate = function () {
-			return moment(vm.date).format('YYYY-MM-DD');
+			return serviceDateFormatHelper.getDateOnly(vm.date);
 		};
 
 		vm.getCurrentTimezone = function () { return vm.timezone; };
@@ -90,6 +90,11 @@
 		vm.convertTimeToCurrentUserTimezone = function (time) {
 			return $filter('timezone')(time, null, vm.timezone);
 		};
+
+		vm.getServiceTimeInCurrentUserTimezone = function (time) {
+			return $filter('serviceTimezone')(time, null, vm.timezone);
+		}
+
 
 		vm.getTrackId = guidgenerator.newGuid;
 

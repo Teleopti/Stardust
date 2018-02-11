@@ -1,9 +1,9 @@
 ﻿(function () {
 	'use strict';
 
-	angular.module("wfm.teamSchedule").service('ActivityValidator', ['$filter', 'PersonSelection', 'belongsToDateDecider', 'teamsToggles', validator]);
+	angular.module("wfm.teamSchedule").service('ActivityValidator', ['$filter', 'PersonSelection', 'belongsToDateDecider', 'teamsToggles', 'serviceDateFormatHelper', validator]);
 
-	function validator($filter, PersonSelectionSvc, belongsToDateDecider, teamsToggles) {
+	function validator($filter, PersonSelectionSvc, belongsToDateDecider, teamsToggles, serviceDateFormatHelper) {
 		var self = this;
 		var MAX_SCHEDULE_LENGTH_IN_MINUTES = 36 * 60; // 36 hours
 		var invalidPeople = [];
@@ -45,7 +45,7 @@
 					}
 					durationInMinutes = end.diff(start, 'minutes');
 
-					if (moment($filter('timezone')(timeRange.startTime.format('YYYY-MM-DD HH:mm'), personSchedule.Timezone.IanaId, currentTimezone))
+					if (moment($filter('timezone')(serviceDateFormatHelper.getDateTime(timeRange.startTime), personSchedule.Timezone.IanaId, currentTimezone))
 						.isBefore(belongsToDate, 'day')) {
 						invalidPeople.push({ PersonId: personId, Name: personSchedule.Name });
 						continue;
@@ -87,7 +87,7 @@
 					continue;
 				}
 
-				var newStartInAgentTimezone = $filter('timezone')(newStartMoment.format('YYYY-MM-DD HH:mm'),
+				var newStartInAgentTimezone = $filter('timezone')(serviceDateFormatHelper.getDateTime(newStartMoment),
 					personSchedule.Timezone.IanaId,
 					currentTimezone);
 
@@ -138,7 +138,7 @@
 				var personSchedule = ScheduleMgmt.findPersonScheduleVmForPersonId(personId);
 				var shiftDate = getShiftDate(personSchedule);
 
-				var newStartInAgentTimezone = $filter('timezone')(newStartMoment.format('YYYY-MM-DD HH:mm'),
+				var newStartInAgentTimezone = $filter('timezone')(serviceDateFormatHelper.getDateTime(newStartMoment),
 					personSchedule.Timezone.IanaId,
 					currentTimezone);
 				if (moment(newStartInAgentTimezone).isBefore(shiftDate, 'day')) {
@@ -146,12 +146,12 @@
 					continue;
 				}
 				var newShiftStart = getNewScheduleStartMoment(shiftDate, personSchedule, newStartMoment);
-				var newShiftStartInAgentTimezone = $filter('timezone')(newShiftStart.format('YYYY-MM-DD HH:mm'),
+				var newShiftStartInAgentTimezone = $filter('timezone')(serviceDateFormatHelper.getDateTime(newShiftStart),
 					personSchedule.Timezone.IanaId,
 					currentTimezone);
 				var newShiftEnd = getLatestScheduleEndMoment(shiftDate, personSchedule, newStartMoment);
 				var scheduleLength = newShiftEnd ? newShiftEnd.diff(newShiftStart, 'minutes') : 0;
-				if (moment(newShiftStartInAgentTimezone).format('YYYY-MM-DD') != shiftDate || scheduleLength > MAX_SCHEDULE_LENGTH_IN_MINUTES) {
+				if (serviceDateFormatHelper.getDateOnly(newShiftStartInAgentTimezone) != shiftDate || scheduleLength > MAX_SCHEDULE_LENGTH_IN_MINUTES) {
 					invalidPeople.push(personSchedule);
 				}
 			}

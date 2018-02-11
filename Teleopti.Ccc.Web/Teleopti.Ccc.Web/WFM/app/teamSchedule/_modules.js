@@ -1,25 +1,25 @@
-﻿(function() {
+﻿(function () {
 	'use strict';
 	var myteam = angular.module('wfm.teamSchedule', [
-			'currentUserInfoService',
-			'wfm.pagination',
-			'toggleService',
-			'ngResource',
-			'wfm.notice',
-			'ngMaterial',
-			'ui.bootstrap',
-			'wfm.signalR',
-			'ui.router',
-			'wfm.multiplesearchinput',
-			'wfm.utilities',
-			'wfm.confirmModal',
-			'wfm.favoriteSearch',
-			'wfm.organizationPicker',
-			'wfm.focusInput',
-			'wfm.groupPage'
+		'currentUserInfoService',
+		'wfm.pagination',
+		'toggleService',
+		'ngResource',
+		'wfm.notice',
+		'ngMaterial',
+		'ui.bootstrap',
+		'wfm.signalR',
+		'ui.router',
+		'wfm.multiplesearchinput',
+		'wfm.utilities',
+		'wfm.confirmModal',
+		'wfm.favoriteSearch',
+		'wfm.organizationPicker',
+		'wfm.focusInput',
+		'wfm.groupPage'
 	])
-	.config(['$mdThemingProvider','$mdDateLocaleProvider', teamScheduleConfig])
-		.run(['$rootScope', '$state', '$location', 'FavoriteSearchDataService','groupPageService', teamScheduleRun]);
+		.config(['$mdThemingProvider', '$mdDateLocaleProvider', teamScheduleConfig])
+		.run(['$rootScope', '$state', '$location', 'FavoriteSearchDataService', 'groupPageService', teamScheduleRun]);
 
 	function teamScheduleConfig($mdThemingProvider, $mdDateLocaleProvider) {
 		var teleoptiStyleguideWarnMap = $mdThemingProvider.extendPalette('orange', {
@@ -41,11 +41,11 @@
 			});
 
 		$mdDateLocaleProvider.formatDate = function (date) {
-			return moment(date).format('YYYY-MM-DD');
+			return moment(date).locale(en).format('YYYY-MM-DD');
 		};
 	}
 
-	function teamScheduleRun($rootScope, $state, $location, FavoriteSearchDataService,GroupPageService) {
+	function teamScheduleRun($rootScope, $state, $location, FavoriteSearchDataService, GroupPageService) {
 		$rootScope.$on('$stateChangeSuccess',
 			function (event, toState) {
 				if (!toState) return;

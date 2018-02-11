@@ -7,8 +7,8 @@
 			},
 			controller: RemoveShiftCtrl
 		});
-	RemoveShiftCtrl.$inject = ['$scope', '$wfmConfirmModal', 'PersonSelection', 'ActivityService', 'teamScheduleNotificationService'];
-	function RemoveShiftCtrl($scope, $wfmModal, personSelectionSvc, activityService, teamScheduleNotificationService) {
+	RemoveShiftCtrl.$inject = ['$scope', '$wfmConfirmModal', 'PersonSelection', 'ActivityService', 'teamScheduleNotificationService','serviceDateFormatHelper'];
+	function RemoveShiftCtrl($scope, $wfmModal, personSelectionSvc, activityService, teamScheduleNotificationService, serviceDateFormatHelper) {
 		var ctrl = this;
 		ctrl.runningCommand = false;
 		ctrl.label = 'RemoveShift';
@@ -42,7 +42,7 @@
 			var personInfos = getCheckedPersonInfoListWithShift();
 			var personIds = personInfos.map(function (p) { return p.PersonId; });
 			var input = {
-				Date: moment(ctrl.selectedDate).format('YYYY-MM-DD'),
+				Date: serviceDateFormatHelper.getDateOnly(ctrl.selectedDate),
 				PersonIds: personIds,
 				TrackedCommandInfo: { TrackId: ctrl.trackId }
 			}

@@ -1,9 +1,9 @@
 ﻿(function () {
 	'use strict';
 
-	angular.module('wfm.teamSchedule').directive('addActivity', addActivityDirective);
+	angular.module('wfm.teamSchedule').directive('addActivity', ['serviceDateFormatHelper', addActivityDirective]);
 
-	function addActivityDirective() {
+	function addActivityDirective(serviceDateFormatHelper) {
 		return {
 			restrict: 'E',
 			scope: {},
@@ -12,7 +12,7 @@
 			bindToController: true,
 			templateUrl: 'app/teamSchedule/commands/teams.directive.cmd.addActivity.html',
 			require: ['^teamscheduleCommandContainer', 'addActivity'],
-			link: function(scope, elem, attrs, ctrls) {
+			link: function (scope, elem, attrs, ctrls) {
 				var containerCtrl = ctrls[0],
 					selfCtrl = ctrls[1];
 
@@ -20,7 +20,7 @@
 
 				scope.vm.selectedDate = containerCtrl.getDate;
 				scope.vm.currentTimezone = containerCtrl.getCurrentTimezone;
-				scope.vm.convertTime = containerCtrl.convertTimeToCurrentUserTimezone;
+				scope.vm.convertTime = containerCtrl.getServiceTimeInCurrentUserTimezone;
 				scope.vm.trackId = containerCtrl.getTrackId();
 				scope.vm.getActionCb = containerCtrl.getActionCb;
 
@@ -29,15 +29,15 @@
 					endTime: selfCtrl.getDefaultActvityEndTime()
 				};
 
-				scope.$watch(function() {
-						if (!scope.vm.timeRange) return null;
+				scope.$watch(function () {
+					if (!scope.vm.timeRange) return null;
 
-						return {
-							startTime: moment(scope.vm.timeRange.startTime).format("YYYY-MM-DD HH:mm"),
-							endTime: moment(scope.vm.timeRange.endTime).format("YYYY-MM-DD HH:mm")
-						};
-					},
-					function(newVal) {
+					return {
+						startTime: serviceDateFormatHelper.getDateTime(scope.vm.timeRange.startTime),
+						endTime: serviceDateFormatHelper.getDateTime(scope.vm.timeRange.endTime)
+					};
+				},
+					function (newVal) {
 						if (newVal) {
 							scope.vm.updateInvalidAgents();
 						}
@@ -47,9 +47,9 @@
 		};
 	}
 
-	addActivityCtrl.$inject = ['ActivityService', 'PersonSelection', 'UtilityService', 'ScheduleHelper','teamScheduleNotificationService', 'CommandCheckService', 'belongsToDateDecider'];
+	addActivityCtrl.$inject = ['ActivityService', 'PersonSelection', 'UtilityService', 'ScheduleHelper', 'teamScheduleNotificationService', 'CommandCheckService', 'belongsToDateDecider', 'serviceDateFormatHelper'];
 
-	function addActivityCtrl(activityService, personSelectionSvc, utility, scheduleHelper, teamScheduleNotificationService, CommandCheckService, belongsToDateDecider) {
+	function addActivityCtrl(activityService, personSelectionSvc, utility, scheduleHelper, teamScheduleNotificationService, CommandCheckService, belongsToDateDecider, serviceDateFormatHelper) {
 		var vm = this;
 
 		vm.label = 'AddActivity';
@@ -70,8 +70,8 @@
 		function decidePersonBelongsToDates(agents, targetTimeRange) {
 			return agents.map(function (selectedAgent) {
 				var belongsToDate = belongsToDateDecider.decideBelongsToDate(targetTimeRange,
-						belongsToDateDecider.normalizePersonScheduleVm(vm.containerCtrl.scheduleManagementSvc.findPersonScheduleVmForPersonId(selectedAgent.PersonId), vm.currentTimezone()),
-						vm.selectedDate());
+					belongsToDateDecider.normalizePersonScheduleVm(vm.containerCtrl.scheduleManagementSvc.findPersonScheduleVmForPersonId(selectedAgent.PersonId), vm.currentTimezone()),
+					vm.selectedDate());
 
 				return {
 					Date: belongsToDate,
@@ -99,7 +99,7 @@
 			vm.notAllowedNameListString = vm.invalidAgents.map(function (x) { return x.Name; }).join(', ');
 		};
 
-		vm.isNewActivityAllowedForAgent = function(agent, timeRange) {
+		vm.isNewActivityAllowedForAgent = function (agent, timeRange) {
 			var mNewActivityStart = moment(timeRange.startTime);
 			var mNewActivityEnd = moment(timeRange.endTime);
 			var mScheduleStart = moment(agent.ScheduleStartTime);
@@ -116,21 +116,21 @@
 			}
 		};
 
-		var addActivity = function(requestData) {
-			var personIds = requestData.PersonDates.map(function(personDate) {
+		var addActivity = function (requestData) {
+			var personIds = requestData.PersonDates.map(function (personDate) {
 				return personDate.PersonId;
 			});
 			if (requestData.PersonDates.length > 0) {
 				activityService.addActivity(requestData)
-					.then(function(response) {
+					.then(function (response) {
 						if (vm.getActionCb(vm.label)) {
 							vm.getActionCb(vm.label)(vm.trackId, personIds);
 						}
 						teamScheduleNotificationService.reportActionResult({
-								success: 'SuccessfulMessageForAddingActivity',
-								warning: 'PartialSuccessMessageForAddingActivity'
-							},
-							vm.selectedAgents.map(function(x) {
+							success: 'SuccessfulMessageForAddingActivity',
+							warning: 'PartialSuccessMessageForAddingActivity'
+						},
+							vm.selectedAgents.map(function (x) {
 								return {
 									PersonId: x.PersonId,
 									Name: x.Name
@@ -157,8 +157,8 @@
 
 			return {
 				PersonDates: decidePersonBelongsToDates(validAgents, getTimeRangeMoment()),
-				StartTime: vm.convertTime(moment(vm.timeRange.startTime).format("YYYY-MM-DDTHH:mm")),
-				EndTime: vm.convertTime(moment(vm.timeRange.endTime).format("YYYY-MM-DDTHH:mm")),
+				StartTime: vm.convertTime(serviceDateFormatHelper.getDateTime(vm.timeRange.startTime)),
+				EndTime: vm.convertTime(serviceDateFormatHelper.getDateTime(vm.timeRange.endTime)),
 				ActivityId: vm.selectedActivityId,
 				ActivityType: 1,
 				TrackedCommandInfo: {
@@ -176,7 +176,7 @@
 				});
 		};
 
-		vm.getDefaultActvityStartTime =  function () {
+		vm.getDefaultActvityStartTime = function () {
 			var curDateMoment = moment(vm.selectedDate());
 			var personIds = vm.selectedAgents.map(function (agent) { return agent.PersonId; });
 			var schedules = vm.containerCtrl.scheduleManagementSvc.schedules();
@@ -191,7 +191,7 @@
 				defaultStart = moment(overnightEnds).add(1, 'hour').toDate();
 			}
 
-			if (moment(utility.nowInUserTimeZone()).format('YYYY-MM-DD') === vm.selectedDate()) {
+			if (serviceDateFormatHelper.getDateOnly(moment(utility.nowInUserTimeZone())) === vm.selectedDate()) {
 				var nextTickTime = new Date(utility.getNextTickNoEarlierThanEight());
 				if (nextTickTime > defaultStart) {
 					defaultStart = nextTickTime;

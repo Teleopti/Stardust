@@ -198,26 +198,6 @@
 			expectApplyButtonStatus(false, panel);
 		});
 
-		it('should call add day off when click apply with correct data', function () {
-			var date = "2018-01-09";
-			var panel = setUp(date);
-			var scope = panel.isolateScope();
-			var ctrl = scope.$ctrl;
-
-			ctrl.selectedTemplateId = "template1";
-			fakePersonSelectionService.setFakeCheckedPersonInfoList();
-			scope.$apply();
-
-			var applyButton = panel[0].querySelector("#applyDayOff");
-			applyButton.click();
-
-			var dayOffData = fakeDayOffService.lastPostData;
-			expect(dayOffData.StartDate).toEqual(date);
-			expect(dayOffData.EndDate).toEqual(date);
-			expect(dayOffData.TemplateId).toEqual("template1");
-			expect(dayOffData.PersonIds).toEqual(personList.map(function (person) { return person.PersonId; }));
-			expect(dayOffData.TrackedCommandInfo.TrackId).toEqual(ctrl.trackId);
-		});
 
 		it('should not call addDayOff if apply button is disabled', function () {
 			var panel = setUp("2018-01-09");
@@ -263,6 +243,55 @@
 			expect(!!result.scope.$ctrl.containerCtrl.activeCmd).toEqual(false);
 		});
 
+		commonTestsInDifferentLocale();
+
+		function commonTestsInDifferentLocale() {
+
+			it('should call add day off when click apply with correct data', function () {
+				var date = "2018-01-09";
+				var panel = setUp(date);
+				var scope = panel.isolateScope();
+				var ctrl = scope.$ctrl;
+
+				ctrl.selectedTemplateId = "template1";
+				fakePersonSelectionService.setFakeCheckedPersonInfoList();
+				scope.$apply();
+
+				var applyButton = panel[0].querySelector("#applyDayOff");
+				applyButton.click();
+
+				var dayOffData = fakeDayOffService.lastPostData;
+				expect(dayOffData.StartDate).toEqual(date);
+				expect(dayOffData.EndDate).toEqual(date);
+				expect(dayOffData.TemplateId).toEqual("template1");
+				expect(dayOffData.PersonIds).toEqual(personList.map(function (person) { return person.PersonId; }));
+				expect(dayOffData.TrackedCommandInfo.TrackId).toEqual(ctrl.trackId);
+			});
+		}
+
+		describe('in locale ar-AE', function () {
+			beforeAll(function () {
+				moment.locale('ar-AE');
+			});
+
+			afterAll(function () {
+				moment.locale('en');
+			});
+
+			commonTestsInDifferentLocale();
+		});
+
+		describe('in locale fa-IR', function () {
+			beforeEach(function () {
+				moment.locale('fa-IR');
+			});
+
+			afterEach(function () {
+				moment.locale('en');
+			});
+
+			commonTestsInDifferentLocale();
+		});
 
 		function setUp(inputDate) {
 			var date;
@@ -376,3 +405,4 @@
 		}
 
 	});
+
