@@ -255,8 +255,9 @@ drop table dbo.revinfo
 --Date: 2011-09-27
 --Desc: Adding auditsetting row
 ----------------  
+--AF 2018-02-12: With GDPR we will ship system with Audit Trail for schedules on as default
 insert into [Auditing].[AuditSetting] (Id,IsScheduleEnabled)
-values (1, 0)
+values (1, 1)
 
 ----------------  
 --Name: TamasB
