@@ -166,7 +166,19 @@
 		scope.preselectedSkills = { skillAreaId: skillGroups[0].Id };
 		var panel = setupComponent('selected-date="2017-09-27" preselected-skills="preselectedSkills"', scope);
 		var ctrl = panel.isolateScope().vm;
+		ctrl.loadedSkillsData = true;
 		ctrl.setSkill(skillGroups[0]);
+		expect(_staffingInfoService.getStaffingCount).toEqual(1);
+	});
+
+	it("should not generate chart when it did not load skill or skill group ", function () {
+		enableShowSkillsToggle();
+		var scope = $rootScope.$new();
+		scope.preselectedSkills = { skillAreaId: skillGroups[0].Id };
+		var panel = setupComponent('selected-date="2018-02-11" preselected-skills="preselectedSkills"', scope);
+		var ctrl = panel.isolateScope().vm;
+		ctrl.loadedSkillsData = false;
+		ctrl.setSkill(skillGroups[1]);
 		expect(_staffingInfoService.getStaffingCount).toEqual(1);
 	});
 
@@ -183,7 +195,6 @@
 			WfmTeamSchedule_ShowSkillsForSelectedSkillGroupInStaffingInfo_47202: true
 		});
 	}
-
 
 	function setupComponent(attrs, scope) {
 		var el;

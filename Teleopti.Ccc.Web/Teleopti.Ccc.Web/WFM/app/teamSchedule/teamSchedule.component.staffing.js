@@ -24,7 +24,7 @@
 
 		vm.isLoading = false;
 		var staffingDataAvailable = false;
-		var loadedSkillsData = false;
+		vm.loadedSkillsData = false;
 		vm.selectedSkillGroup = null;
 		vm.toggleShowSkillsForSelectedSkillGroup = teamsToggles.all().WfmTeamSchedule_ShowSkillsForSelectedSkillGroupInStaffingInfo_47202;
 		var selectedSkill = null;
@@ -35,7 +35,7 @@
 			vm.preselectedSkills = vm.preselectedSkills || {};
 			vm.useShrinkage = vm.useShrinkage || false;
 			loadSkillsAndSkillGroups().then(function () {
-				loadedSkillsData = true;
+				vm.loadedSkillsData = true;
 				loadChartForPreselection();
 			});
 		}
@@ -57,9 +57,9 @@
 		}
 
 		vm.setSkill = function (selectedItem) {
-			if (selectedItem && loadedSkillsData
-				&& ((!!vm.selectedSkillGroup && vm.selectedSkillGroup.Id == selectedItem.Id)
-					|| (!!selectedSkill && selectedSkill.Id == selectedItem.Id)))
+			if (!vm.loadedSkillsData || 
+				(selectedItem && ((!!vm.selectedSkillGroup && vm.selectedSkillGroup.Id == selectedItem.Id)
+					|| (!!selectedSkill && selectedSkill.Id == selectedItem.Id))))
 				return;
 			selectedSkill = null;
 			vm.selectedSkillGroup = null;
@@ -73,6 +73,7 @@
 				selectedSkill = selectedItem;
 			}
 			generateChart();
+			
 			var skillChanged;
 			vm.onSelectedSkillChanged && (skillChanged = vm.onSelectedSkillChanged()) && skillChanged(selectedSkill, vm.selectedSkillGroup);
 		}
