@@ -539,5 +539,22 @@ namespace Teleopti.Ccc.DomainTest.Time
             Assert.IsTrue(TimeHelper.CurrentCultureUsing24HourClock());
         }
 
-    }
+		[Test]
+		public void ShouldHandleSmallNegativeTimeCorrect()
+		{
+			var info = CultureInfo.GetCultureInfo("sv-SE");
+			Thread.CurrentThread.CurrentCulture = info;
+			TimeHelper.TryParseLongHourString("-0:30",  out timeValue, TimeFormatsType.HoursMinutes);
+			Assert.That(timeValue, Is.EqualTo(new TimeSpan(0, -30, 0)));
+		}
+
+		[Test]
+		public void ShouldHandleLittleBiggerNegativeTimeCorrect()
+		{
+			var info = CultureInfo.GetCultureInfo("sv-SE");
+			Thread.CurrentThread.CurrentCulture = info;
+			TimeHelper.TryParseLongHourString("-1:20", out timeValue, TimeFormatsType.HoursMinutes);
+			Assert.That(timeValue, Is.EqualTo(new TimeSpan(-1, -20, 0)));
+		}
+	}
 }

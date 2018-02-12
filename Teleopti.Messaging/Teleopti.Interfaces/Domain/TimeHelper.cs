@@ -311,7 +311,13 @@ namespace Teleopti.Interfaces.Domain
             if(hours < 0)
                 timeValue = TimeSpan.FromHours(hours).Add(TimeSpan.FromMinutes(-minutes)).Add(TimeSpan.FromSeconds(-seconds));
             else
-                timeValue = TimeSpan.FromHours(hours).Add(TimeSpan.FromMinutes(minutes)).Add(TimeSpan.FromSeconds(seconds));
+			{
+				if (text.StartsWith("-") && hours == 0)
+					timeValue = TimeSpan.FromHours(0).Add(TimeSpan.FromMinutes(-minutes)).Add(TimeSpan.FromSeconds(seconds));
+				else
+					timeValue = TimeSpan.FromHours(hours).Add(TimeSpan.FromMinutes(minutes)).Add(TimeSpan.FromSeconds(seconds));
+
+			}
             return true;
         }
 
