@@ -23,7 +23,7 @@ Scenario: Create Skill Area
 	And I should monitor 'my Area'
 
 @OnlyRunIfEnabled('WFM_Unified_Skill_Group_Management_45417')
-@OnlyRunIfDisabled('WFM_Modify_Skill_Groups_45727')
+@OnlyRunIfDisabled('WFM_Modify_Skill_Groups_43727')
 Scenario: Create Skill Group
 	Given I am viewing intraday page
 	And I select to create a new Skill Group
@@ -34,7 +34,7 @@ Scenario: Create Skill Group
 	And I should monitor 'my Area'
 
 @OnlyRunIfEnabled('WFM_Unified_Skill_Group_Management_45417')
-@OnlyRunIfEnabled('WFM_Modify_Skill_Groups_45727')
+@OnlyRunIfEnabled('WFM_Modify_Skill_Groups_43727')
 Scenario: Create Skill Group in SGM
 	Given I am viewing intraday page
 	And I select to manage Skill Groups
@@ -47,7 +47,7 @@ Scenario: Create Skill Group in SGM
 	Then I should monitor 'my Area'
 
 @OnlyRunIfEnabled('WFM_Unified_Skill_Group_Management_45417')
-@OnlyRunIfEnabled('WFM_Modify_Skill_Groups_45727')
+@OnlyRunIfEnabled('WFM_Modify_Skill_Groups_43727')
 Scenario: Rename Skill Group in SGM
 	Given I am viewing intraday page
 	And I select to manage Skill Groups
@@ -64,7 +64,7 @@ Scenario: Rename Skill Group in SGM
 	Then I should monitor 'my Area 2'
 
 @OnlyRunIfEnabled('WFM_Unified_Skill_Group_Management_45417')
-@OnlyRunIfEnabled('WFM_Modify_Skill_Groups_45727')
+@OnlyRunIfEnabled('WFM_Modify_Skill_Groups_43727')
 	Scenario: Add Skill to Skill Group in SGM
 	Given there is a Skill Area called 'SkillArea A' that monitors skills 'Skill B'
 	And I am viewing intraday page
@@ -77,7 +77,7 @@ Scenario: Rename Skill Group in SGM
 	Then I should see 'Skill A' as included skill
 
 @OnlyRunIfEnabled('WFM_Unified_Skill_Group_Management_45417')
-@OnlyRunIfEnabled('WFM_Modify_Skill_Groups_45727')
+@OnlyRunIfEnabled('WFM_Modify_Skill_Groups_43727')
 Scenario: Remove Skill from Skill Group in SGM
 	Given there is a Skill Area called 'SkillArea A' that monitors skills 'Skill A, Skill B'
 	And I am viewing intraday page
@@ -90,7 +90,7 @@ Scenario: Remove Skill from Skill Group in SGM
 	Then I should monitor 'SkillArea A'
 	And I should not see 'Skill A' as included skill
 
-@OnlyRunIfDisabled('WFM_Modify_Skill_Groups_45727')
+@OnlyRunIfDisabled('WFM_Modify_Skill_Groups_43727')
 Scenario: Remove Skill Area
 	Given there is a Skill Area called 'Area A' that monitors skill 'Skill A'
 	And I am viewing intraday page

@@ -164,7 +164,7 @@
 		WFM_WebScheduling_LowPriority_44320,
 		WFM_Intraday_SupportOtherSkillsLikeEmail_44026,
 		WFM_Unified_Skill_Group_Management_45417,
-		WFM_Modify_Skill_Groups_45727,
+		WFM_Modify_Skill_Groups_43727,
 		WFM_AuditTrail_44006,
 		Report_Show_Utc_In_Report_Selection_When_In_Use_45079,
 		WFM_Gamification_Setting_With_External_Quality_Values_45003,

@@ -504,7 +504,7 @@
             vm.toggles.exportToExcel = toggleSvc.WFM_Intraday_Export_To_Excel_44892;
             vm.toggles.otherSkillsLikeEmail = toggleSvc.WFM_Intraday_SupportOtherSkillsLikeEmail_44026;
             vm.toggles.unifiedSkillGroupManagement = toggleSvc.WFM_Unified_Skill_Group_Management_45417;
-            vm.toggles.modifySkillGroups = toggleSvc.WFM_Modify_Skill_Groups_45727;
+            vm.toggles.modifySkillGroups = toggleSvc.WFM_Modify_Skill_Groups_43727;
         });
 
         if (vm.latestActualInterval === '--:--') {
