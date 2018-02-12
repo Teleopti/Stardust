@@ -354,6 +354,7 @@
     <Compile Include="Scheduling\Restrictions\RestrictionsAbleToBeScheduledTest.cs" />
     <Compile Include="Scheduling\Restrictions\RestrictionCombinerTest.cs" />
     <Compile Include="Scheduling\SchedulerStateHolderLoadRequestsTest.cs" />
+    <Compile Include="Scheduling\Tracking\PersonAccountProjectionServicePermissionTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccOvertimeRequestsLicenseOptionTest.cs" />
     <Compile Include="SkillGroups\ModifySkillGroupTest.cs" />
     <Compile Include="Intraday\PerformanceViewModelCreatorTest.cs" />
