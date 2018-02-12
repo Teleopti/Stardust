@@ -365,7 +365,6 @@ Try
     $DataSourceName = TeleoptiDriveMapProperty-get -name "DataSourceName"
 
 	
-	Remove-Item "$fullPathsettingsFile"
 	if (Test-Path "$fullPathsettingsFile") {
 		Remove-Item "$fullPathsettingsFile"
 	}
@@ -451,7 +450,11 @@ Try
     $pwd ="T3l30pt1"
 	log-info "Running ClickOnceSign.exe..."
     $cmdArgs = @("-s","-a Teleopti.Ccc.SmartClientPortal.Shell.application", "-m Teleopti.Ccc.SmartClientPortal.Shell.exe.manifest","-u https://$DataSourceName.teleopticloud.com/Client/","-c $scriptPath\Teleopti.pfx","-dir $ClientPath","-p $pwd")
-    Remove-Item "$ClickOnceSignPath\SignAdminClient.bat"
+	
+	if (Test-Path "$ClickOnceSignPath\SignAdminClient.bat") {
+		Remove-Item "$ClickOnceSignPath\SignAdminClient.bat"
+	}
+    
 	Add-Content "$ClickOnceSignPath\SignAdminClient.bat" "E:"
 	Add-Content "$ClickOnceSignPath\SignAdminClient.bat" "CD $ClickOnceSignPath"
     Add-Content "$ClickOnceSignPath\SignAdminClient.bat" "$ClickOnceTool $cmdArgs"
