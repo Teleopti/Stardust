@@ -21068,6 +21068,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No permission to edit unpublished schedule for agent(s).
+        /// </summary>
+        public static string NoPermissionToEditUnpublishedSchedule {
+            get {
+                return ResourceManager.GetString("NoPermissionToEditUnpublishedSchedule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to More information about forecast methods and outlier detection .
         /// </summary>
         public static string NoPermissionToModifyPersonAssignment {

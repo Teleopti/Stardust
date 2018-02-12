@@ -17237,4 +17237,8 @@ Congratulations! You are now a licensed user of this award winning workforce man
 The application will now exit.</value>
     <comment>product activation key upload success message without stating that a restart is necessary</comment>
   </data>
+  <data name="NoPermissionToEditUnpublishedSchedule" xml:space="preserve">
+    <value>No permission to edit unpublished schedule for agent(s)</value>
+    <comment>Error message for editing unpublished schedule when there's no permission to view unpublished schedule in Teams</comment>
+  </data>
 </root>

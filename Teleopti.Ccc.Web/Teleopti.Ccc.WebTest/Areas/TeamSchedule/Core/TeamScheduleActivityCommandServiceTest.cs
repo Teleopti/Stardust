@@ -112,6 +112,41 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 		}
 
 		[Test]
+		public void ShouldNotInvokeAddActivityCommandHandleWhenScheduleIsUnpublishedAndNoPermissionToViewUnpublishedSchedule()
+		{
+			PermissionProvider.Enable();
+			var person = PersonFactory.CreatePerson().WithId();
+			PersonRepository.Has(person);
+
+			var date = new DateOnly(2016, 4, 16);
+			PermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.AddActivity, person, date);
+			PermissionProvider.PublishToDate(date.AddDays(-1));
+
+			var input = new AddActivityFormData
+			{
+				ActivityId = Guid.NewGuid(),
+				StartTime = new DateTime(2016, 4, 16, 8, 0, 0),
+				EndTime = new DateTime(2016, 4, 16, 17, 0, 0),
+				PersonDates = new[]
+				{
+					new PersonDate
+					{
+						PersonId = person.Id.Value,
+						Date = date
+					}
+				},
+				TrackedCommandInfo = new TrackedCommandInfo()
+			};
+
+			ActivityCommandHandler.ResetCalledCount();
+
+			var results = Target.AddActivity(input);
+
+			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(0);
+			results.Single().ErrorMessages.Single().Should().Be.EqualTo(Resources.NoPermissionToEditUnpublishedSchedule);
+		}
+
+		[Test]
 		public void ShouldInvokeAddPersonalActivityCommandHandleWithPermission()
 		{
 			var person1 = PersonFactory.CreatePersonWithGuid("a", "b");
@@ -191,6 +226,42 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(0);
 		}
 
+
+		[Test]
+		public void ShouldNotInvokeAddPersonalActivityCommandHandleWhenScheduleIsUnpublishedAndNoPermissionToViewUnpublishedSchedule()
+		{
+			PermissionProvider.Enable();
+			var person = PersonFactory.CreatePerson().WithId();
+			PersonRepository.Has(person);
+
+			var date = new DateOnly(2016, 4, 16);
+			PermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.AddPersonalActivity, person, date);
+			PermissionProvider.PublishToDate(date.AddDays(-1));
+
+			var input = new AddPersonalActivityFormData
+			{
+				ActivityId = Guid.NewGuid(),
+				StartTime = new DateTime(2016, 4, 16, 8, 0, 0),
+				EndTime = new DateTime(2016, 4, 16, 17, 0, 0),
+				PersonDates = new[]
+				{
+					new PersonDate
+					{
+						PersonId = person.Id.Value,
+						Date = date
+					}
+				},
+				TrackedCommandInfo = new TrackedCommandInfo()
+			};
+
+			ActivityCommandHandler.ResetCalledCount();
+
+			var results = Target.AddPersonalActivity(input);
+
+			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(0);
+			results.Single().ErrorMessages.Single().Should().Be.EqualTo(Resources.NoPermissionToEditUnpublishedSchedule);
+		}
+
 		[Test]
 		public void ShouldInvokeAddOvertimeActivityCommandHandlerWithPermission()
 		{
@@ -265,6 +336,42 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			Target.AddOvertimeActivity(input);
 
 			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(0);
+		}
+
+
+		[Test]
+		public void ShouldNotInvokeAddOvertimeActivityCommandHandleWhenScheduleIsUnpublishedAndNoPermissionToViewUnpublishedSchedule()
+		{
+			PermissionProvider.Enable();
+			var person = PersonFactory.CreatePerson().WithId();
+			PersonRepository.Has(person);
+
+			var date = new DateOnly(2016, 4, 16);
+			PermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.AddOvertimeActivity, person, date);
+			PermissionProvider.PublishToDate(date.AddDays(-1));
+
+			var input = new AddOvertimeActivityForm
+			{
+				ActivityId = Guid.NewGuid(),
+				StartDateTime = new DateTime(2016, 4, 16, 8, 0, 0),
+				EndDateTime = new DateTime(2016, 4, 16, 17, 0, 0),
+				PersonDates = new[]
+				{
+					new PersonDate
+					{
+						PersonId = person.Id.Value,
+						Date = date
+					}
+				},
+				TrackedCommandInfo = new TrackedCommandInfo()
+			};
+
+			ActivityCommandHandler.ResetCalledCount();
+
+			var results = Target.AddOvertimeActivity(input);
+
+			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(0);
+			results.Single().ErrorMessages.Single().Should().Be.EqualTo(Resources.NoPermissionToEditUnpublishedSchedule);
 		}
 
 		[Test]

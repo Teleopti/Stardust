@@ -327,6 +327,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			{
 				newMessages.Add(_permissionDic[path]);
 			}
+			if (!_permissionProvider.IsPersonSchedulePublished(date, agent) &&
+				!_permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules, date,
+					agent))
+			{
+				newMessages.Add(Resources.NoPermissionToEditUnpublishedSchedule);
+			}
 
 			messages.AddRange(newMessages);
 			return !newMessages.Any();
