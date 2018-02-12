@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SiteOpenHours
 				_loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone()));
 
 			return _siteRepository.LoadAllOrderByName()
-				.Where(s => currentAuth.IsPermitted(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb, userToday, s));
+				.Where(s => currentAuth.IsPermitted(DefinedRaptorApplicationFunctionPaths.WebRequests, userToday, s));
 		}
 
 		private static IEnumerable<SiteOpenHourViewModel> openHours(ISite site)
