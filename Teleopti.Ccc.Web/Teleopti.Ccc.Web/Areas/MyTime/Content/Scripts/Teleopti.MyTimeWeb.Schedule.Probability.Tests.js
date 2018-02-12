@@ -690,6 +690,7 @@ $(document).ready(function () {
 		};
 
 		var fakeScheduleData = getFakeScheduleData();
+		fakeScheduleData.StaffingInfoAvailableDays = 14;
 
 		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null);
 		week.initializeData(fakeScheduleData);
@@ -709,6 +710,36 @@ $(document).ready(function () {
 		week.selectedProbabilityType = constants.probabilityType.none;
 		week.initializeData(fakeScheduleData);
 		equal(week.showProbabilityToggle(), false);
+		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
+	});
+
+	test("should show probability toggle if current week is within staffing info availableDays", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
+			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
+			if (x === "MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880") return true;
+		};
+
+		var fakeScheduleData = getFakeScheduleData();
+		fakeScheduleData.StaffingInfoAvailableDays = 28;
+
+		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null);
+		week.initializeData(fakeScheduleData);
+
+		week.selectedProbabilityType = constants.probabilityType.overtime;
+		week.updateProbabilityData(getFakeProbabilityData());
+		equal(week.showProbabilityToggle(), true);
+
+		fakeScheduleData.Days[0].FixedDate = momentWithLocale(basedDate).add('day', 15).format('YYYY-MM-DD');
+		fakeScheduleData.Days[0].Periods[0].StartTime = momentWithLocale(fakeScheduleData.Days[0].FixedDate).startOf('day').add('hour', 9).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss');
+		fakeScheduleData.Days[0].Periods[0].EndTime = momentWithLocale(fakeScheduleData.Days[0].FixedDate).startOf('day').add('hour', 16).add('minute', 45).format('YYYY-MM-DDTHH:mm:ss');
+
+		fakeScheduleData.Days[0].FixedDate = momentWithLocale(basedDate).add('day', 15).format('YYYY-MM-DD');
+		fakeScheduleData.Days[1].Periods[0].StartTime = momentWithLocale(fakeScheduleData.Days[1].FixedDate).startOf('day').add('hour', 9).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss');
+		fakeScheduleData.Days[1].Periods[0].EndTime = momentWithLocale(fakeScheduleData.Days[1].FixedDate).startOf('day').add('hour', 16).add('minute', 45).format('YYYY-MM-DDTHH:mm:ss');
+
+		week.selectedProbabilityType = constants.probabilityType.none;
+		week.initializeData(fakeScheduleData);
+		equal(week.showProbabilityToggle(), true);
 		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
 	});
 

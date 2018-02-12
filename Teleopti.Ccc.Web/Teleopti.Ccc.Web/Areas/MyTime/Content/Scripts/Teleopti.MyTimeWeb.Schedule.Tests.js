@@ -56,6 +56,11 @@ $(document).ready(function () {
 	});
 
 	test("should read absence report permission", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
+				if (x === "MyTimeWeb_OvertimeRequest_44558") return true;
+				return false;
+			};
+		
 		initUserTexts();
 		var vm = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null);
 		vm.initializeData(getFakeScheduleData());
@@ -64,6 +69,11 @@ $(document).ready(function () {
 	});
 
 	test("should read scheduled days", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
+			if (x === "MyTimeWeb_OvertimeRequest_44558") return true;
+			return false;
+		};
+
 		var fakeScheduleData = getFakeScheduleData();
 		var vm = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null);
 
@@ -80,6 +90,11 @@ $(document).ready(function () {
 	});
 
 	test("should read timelines", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
+			if (x === "MyTimeWeb_OvertimeRequest_44558") return true;
+			return false;
+		};
+
 		initUserTexts();
 		var fakeScheduleData = getFakeScheduleData();
 		//9:30 ~ 17:00 makes 9 timeline points

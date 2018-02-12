@@ -583,11 +583,12 @@ $(document).ready(function() {
 					Title: null,
 					TimeSpan: null
 				},
-				Header:{Title: null},
+				Header: { Title: null }
 			},
 			ViewPossibilityPermission: true,
 			CheckStaffingByIntraday: false,
-			AbsenceProbabilityEnabled: true
+			AbsenceProbabilityEnabled: true,
+			StaffingInfoAvailableDays: 14
 		};
 		viewModel.readData(rawData);
 		equal(viewModel.showProbabilityOptionsToggleIcon(), true);
@@ -614,7 +615,8 @@ $(document).ready(function() {
 			ViewPossibilityPermission: true,
 			CheckStaffingByIntraday: true,
 			AbsenceProbabilityEnabled: false,
-			OvertimeProbabilityEnabled: true
+			OvertimeProbabilityEnabled: true,
+			StaffingInfoAvailableDays: 14
 		};
 		viewModel.readData(rawData);
 		equal(viewModel.showProbabilityOptionsToggleIcon(), true);
@@ -641,6 +643,7 @@ $(document).ready(function() {
 			ViewPossibilityPermission: true,
 			CheckStaffingByIntraday: true,
 			AbsenceProbabilityEnabled: false,
+			StaffingInfoAvailableDays: 14
 		};
 		viewModel.readData(rawData);
 		equal(viewModel.showProbabilityOptionsToggleIcon(), true);
@@ -667,7 +670,8 @@ $(document).ready(function() {
 			ViewPossibilityPermission: true,
 			CheckStaffingByIntraday: true,
 			AbsenceProbabilityEnabled: false,
-			OvertimeProbabilityEnabled: false
+			OvertimeProbabilityEnabled: false,
+			StaffingInfoAvailableDays: 14
 		};
 		viewModel.readData(rawData);
 		equal(viewModel.showProbabilityOptionsToggleIcon(), false);
@@ -695,6 +699,7 @@ $(document).ready(function() {
 			CheckStaffingByIntraday: true,
 			AbsenceProbabilityEnabled: false,
 			OvertimeProbabilityEnabled: false,
+			StaffingInfoAvailableDays: 14
 		};
 		viewModel.readData(rawData);
 		equal(viewModel.showProbabilityOptionsToggleIcon(), true);
@@ -720,6 +725,7 @@ $(document).ready(function() {
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel(null, fakeParent, null);
 		var rawData = {
 			Date: moment().format('YYYY-MM-DD'),
+			StaffingInfoAvailableDays: 14,
 			Schedule: {
 				FixedDate: null,
 				Summary: {
@@ -954,10 +960,11 @@ $(document).ready(function() {
                 },
                 Header: { Title: null },
                 HasNotScheduled: false
-            },
+			},
+			StaffingInfoAvailableDays: 14,
             ViewPossibilityPermission: true,
             CheckStaffingByIntraday: true,
-            AbsenceProbabilityEnabled: true,
+            AbsenceProbabilityEnabled: true
         };
         viewModel.readData(rawData);
 
@@ -985,7 +992,8 @@ $(document).ready(function() {
             },
             ViewPossibilityPermission: true,
             CheckStaffingByIntraday: true,
-            AbsenceProbabilityEnabled: true,
+			AbsenceProbabilityEnabled: true,
+			StaffingInfoAvailableDays: 14
         };
         viewModel.readData(rawData);
 

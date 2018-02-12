@@ -10,6 +10,8 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Infrastructure.Requests;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
@@ -36,6 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 		private readonly ISiteOpenHourProvider _siteOpenHourProvider;
 		private readonly IScheduledSkillOpenHourProvider _scheduledSkillOpenHourProvider;
 		private readonly ILicenseAvailability _licenseAvailability;
+		private readonly IToggleManager _toggleManager;
 
 		public WeekScheduleViewModelMapper(IPeriodSelectionViewModelFactory periodSelectionViewModelFactory,
 			IPeriodViewModelFactory periodViewModelFactory,
@@ -46,7 +49,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			OvertimeAvailabilityViewModelMapper overtimeMapper,
 			IRequestsViewModelFactory requestsViewModelFactory,
 			ISiteOpenHourProvider siteOpenHourProvider,
-			IScheduledSkillOpenHourProvider scheduledSkillOpenHourProvider, ILicenseAvailability licenseAvailability)
+			IScheduledSkillOpenHourProvider scheduledSkillOpenHourProvider, ILicenseAvailability licenseAvailability, IToggleManager toggleManager)
 		{
 			_periodSelectionViewModelFactory = periodSelectionViewModelFactory;
 			_periodViewModelFactory = periodViewModelFactory;
@@ -60,6 +63,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			_siteOpenHourProvider = siteOpenHourProvider;
 			_scheduledSkillOpenHourProvider = scheduledSkillOpenHourProvider;
 			_licenseAvailability = licenseAvailability;
+			_toggleManager = toggleManager;
 		}
 
 		public WeekScheduleViewModel Map(WeekScheduleDomainData s, bool loadOpenHourPeriod = false)
@@ -90,7 +94,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				IsCurrentWeek = s.IsCurrentWeek,
 				CheckStaffingByIntraday = isCheckStaffingByIntradayForWeek(currentUser.WorkflowControlSet, s.Date),
 				AbsenceProbabilityEnabled = currentUser.WorkflowControlSet?.AbsenceProbabilityEnabled ?? false,
-				OvertimeProbabilityEnabled = isOvertimeProbabilityEnabled()
+				OvertimeProbabilityEnabled = isOvertimeProbabilityEnabled(),
+				StaffingInfoAvailableDays = StaffingInfoAvailableDaysProvider.GetDays(_toggleManager)
 			};
 		}
 
@@ -121,7 +126,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				AbsenceProbabilityEnabled = currentUser.WorkflowControlSet?.AbsenceProbabilityEnabled ?? false,
 				OvertimeProbabilityEnabled = isOvertimeProbabilityEnabled(),
 				UnReadMessageCount = s.UnReadMessageCount,
-				ShiftTradeRequestSetting = _requestsViewModelFactory.CreateShiftTradePeriodViewModel()
+				ShiftTradeRequestSetting = _requestsViewModelFactory.CreateShiftTradePeriodViewModel(),
+				StaffingInfoAvailableDays = StaffingInfoAvailableDaysProvider.GetDays(_toggleManager)
 			};
 		}
 

@@ -168,4 +168,15 @@ $(document).ready(function () {
 		equal(vm.summaryTimeSpan(), getFakeScheduleData().Days[0].Summary.TimeSpan);
 		equal(vm.layers.length, 1);
 	});
+
+	test("should show staffing probability bar when current date is within staffing info available days", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+			if (x === "MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880") return true;
+		};
+		var weekViewModel = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel(fakeUserText, null, null, stopFetchProbabilityData);
+		weekViewModel.staffingProbabilityForMultipleDaysEnabled(true);
+		weekViewModel.staffingInfoAvailableDays = 14;
+		var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(getFakeScheduleData().Days[0], true, true, weekViewModel);
+		equal(vm.showStaffingProbabilityBar(), true);
+	});
 });

@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Infrastructure.Requests;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Interfaces.Domain;
 
@@ -29,11 +30,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			var today =
 				new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(),
 					_user.CurrentUser().PermissionInformation.DefaultTimeZone()));
-			var maxEndDate = today;
-			if (_toggleManager.IsEnabled(Domain.FeatureFlags.Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880))
-			{
-				maxEndDate = today.AddDays(ScheduleStaffingPossibilityConsts.MaxAvailableDays);
-			}
+
+			var staffingInfoAvailableDays = StaffingInfoAvailableDaysProvider.GetDays(_toggleManager);
+			var maxEndDate = today.AddDays(staffingInfoAvailableDays);
+
 			var availablePeriod = new DateOnlyPeriod(today, maxEndDate);
 			return availablePeriod.Intersection(period);
 		}

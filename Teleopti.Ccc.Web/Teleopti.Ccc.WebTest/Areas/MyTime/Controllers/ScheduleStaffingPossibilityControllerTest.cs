@@ -16,7 +16,9 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.Infrastructure.Requests;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -47,6 +49,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public FakeSkillRepository SkillRepository;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeSkillTypeRepository SkillTypeRepository;
+		public FakeToggleManager ToggleManager;
 
 		private readonly TimeSpan[] intervals = { TimeSpan.FromMinutes(495), TimeSpan.FromMinutes(510) };
 
@@ -101,6 +104,70 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var result = getPossibilityViewModels(Now.ServerDate_DontUse().AddWeeks(1), StaffingPossiblityType.Absence).ToList();
 			result.Count.Should().Be.EqualTo(14);
 			DateHelper.GetWeekPeriod(Now.ServerDate_DontUse().AddWeeks(1), CultureInfo.CurrentCulture)
+				.DayCollection()
+				.ToList()
+				.ForEach(day =>
+				{
+					Assert.AreEqual(2, result.Count(d => d.Date == day.ToFixedClientDateOnlyFormat()), day.ToShortDateString());
+				});
+		}
+
+		[Test, SetCulture("en-US")]
+		public void ShouldReturnPossibiliesForDaysLongerThan14()
+		{
+			ToggleManager.Enable(Toggles.Wfm_Staffing_StaffingReadModel28DaysStep1_45109);
+
+			setupSiteOpenHour();
+			setupDefaultTestData();
+			setupWorkFlowControlSet();
+
+			var workflowControlSet = User.CurrentUser().WorkflowControlSet;
+			var phoneSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony)
+				.WithId();
+			SkillTypeRepository.Add(phoneSkillType);
+
+			var staffingInfoAvailableDays = StaffingInfoAvailableDaysProvider.GetDays(ToggleManager);
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod()
+			{
+				BetweenDays = new MinMax<int>(0, staffingInfoAvailableDays),
+				SkillType = phoneSkillType
+			});
+
+			var result = getPossibilityViewModels(Now.ServerDate_DontUse().AddWeeks(3), StaffingPossiblityType.Overtime).ToList();
+			result.Count.Should().Be.EqualTo(14);
+			DateHelper.GetWeekPeriod(Now.ServerDate_DontUse().AddWeeks(3), CultureInfo.CurrentCulture)
+				.DayCollection()
+				.ToList()
+				.ForEach(day =>
+				{
+					Assert.AreEqual(2, result.Count(d => d.Date == day.ToFixedClientDateOnlyFormat()), day.ToShortDateString());
+				});
+		}
+
+		[Test, SetCulture("en-US")]
+		public void ShouldReturnPossibiliesForDaysLongerThan28()
+		{
+			ToggleManager.Enable(Toggles.Wfm_Staffing_StaffingReadModel49DaysStep2_45109);
+
+			setupSiteOpenHour();
+			setupDefaultTestData();
+			setupWorkFlowControlSet();
+
+			var workflowControlSet = User.CurrentUser().WorkflowControlSet;
+			var phoneSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony)
+				.WithId();
+			SkillTypeRepository.Add(phoneSkillType);
+
+			var staffingInfoAvailableDays = StaffingInfoAvailableDaysProvider.GetDays(ToggleManager);
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod()
+			{
+				BetweenDays = new MinMax<int>(0, staffingInfoAvailableDays),
+				SkillType = phoneSkillType
+			});
+
+			var result = getPossibilityViewModels(Now.ServerDate_DontUse().AddWeeks(4), StaffingPossiblityType.Overtime).ToList();
+			result.Count.Should().Be.EqualTo(14);
+			DateHelper.GetWeekPeriod(Now.ServerDate_DontUse().AddWeeks(4), CultureInfo.CurrentCulture)
 				.DayCollection()
 				.ToList()
 				.ForEach(day =>
@@ -917,8 +984,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 		private DateOnlyPeriod getAvailablePeriod()
 		{
+			var staffingInfoAvailableDays = StaffingInfoAvailableDaysProvider.GetDays(ToggleManager);
 			var today = Now.ServerDate_DontUse();
-			var period = new DateOnlyPeriod(today, today.AddDays(13)).Inflate(1);
+			var period = new DateOnlyPeriod(today, today.AddDays(staffingInfoAvailableDays)).Inflate(1);
 			return period;
 		}
 

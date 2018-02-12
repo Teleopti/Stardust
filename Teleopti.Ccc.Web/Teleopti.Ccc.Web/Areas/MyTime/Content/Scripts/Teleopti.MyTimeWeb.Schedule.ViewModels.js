@@ -189,7 +189,7 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (scheduleDay, parent) {
 		if (parent.staffingProbabilityForMultipleDaysEnabled)
 		{
 			return (fixedDateMoment >= currentUserDate) &&
-				(fixedDateMoment < currentUserDate.add('day', constants.maximumDaysDisplayingProbability));
+				(fixedDateMoment < currentUserDate.add('day', parent.staffingInfoAvailableDays));
 		}
 
 		return self.formattedFixedDate() === self.formatedCurrentUserDate();

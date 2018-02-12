@@ -42,6 +42,7 @@ Teleopti.MyTimeWeb.Schedule.FakeData = (function ($) {
 					CanPickPeriod: false
 				}
 			},
+			StaffingInfoAvailableDays: 14,
 			BaseUtcOffsetInMinutes: 60,
 			Days: [
 				{

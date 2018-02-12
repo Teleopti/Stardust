@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 		public bool CheckStaffingByIntraday { get; set; }
 		public bool AbsenceProbabilityEnabled { get; set; }
 		public bool OvertimeProbabilityEnabled { get; set; }
+		public int StaffingInfoAvailableDays { get; set; }
 	}
 
 	public class DayScheduleViewModel: BaseScheduleViewModel

@@ -528,6 +528,19 @@
 		equal(vm.showProbabilityOptionsToggleIcon(), true);
 	});
 
+	test("should show probability toggle when the day is within staffing info availableDays", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
+			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
+			return false;
+		};
+
+		startDayData.BaseUtcOffsetInMinutes = -600;
+		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax);
+		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
+		vm.today();
+		equal(vm.showProbabilityOptionsToggleIcon(), true);
+	});
+
 	test("should show overtime probability by site open hour period", function() {
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
@@ -680,6 +693,7 @@
 			"Date": "2017-04-28",
 			"DisplayDate": "28/04/2017",
 			"IsToday": false,
+			"StaffingInfoAvailableDays":14,
 			"Schedule": {
 				"RequestsCount": 0,
 				"Date": "28/04/2017",

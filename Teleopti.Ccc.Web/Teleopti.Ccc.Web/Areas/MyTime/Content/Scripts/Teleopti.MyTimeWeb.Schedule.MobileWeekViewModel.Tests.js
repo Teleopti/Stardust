@@ -730,6 +730,7 @@ $(document).ready(function () {
 		};
 
 		var fakeScheduleData = getFakeScheduleData();
+		fakeScheduleData.StaffingInfoAvailableDays = 14;
 		var weekViewModel = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel(null, null, blockFetchProbabilityAjax);
 		weekViewModel.readData(fakeScheduleData);
 		var fakeFixedDateObj = {fixedDate: function(){return fakeScheduleData.Days[0].FixedDate}};
@@ -795,10 +796,52 @@ $(document).ready(function () {
 		};
 
 		var fakeScheduleData = getFakeScheduleData();
+		fakeScheduleData.StaffingInfoAvailableDays = 14;
 		var fakeProbabilityData = fakeProbabilitiesDataLowBeforeTwelveAndHighAfter(basedDate);
 		var ajax = {
 			Ajax: function(data){
 				if(data.url == '../api/ScheduleStaffingPossibility' && data.success)
+					data.success(fakeProbabilityData);
+			}
+		};
+		var weekViewModel = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel(ajax, null);
+		weekViewModel.readData(fakeScheduleData);
+		//Steps in production code:
+		//var fakeFixedDateObj = {fixedDate: function(){return fakeScheduleData.Days[0].FixedDate}};
+		//weekViewModel.toggleProbabilityOptionsPanel(fakeFixedDateObj);
+		//weekViewModel.OnProbabilityOptionSelectCallback(Teleopti.MyTimeWeb.Common.Constants.probabilityType.overtime);
+		weekViewModel.selectedProbabilityOptionValue(constants.probabilityType.overtime);
+		weekViewModel.updateProbabilityData(fakeProbabilityData);
+
+		equal(weekViewModel.dayViewModels()[0].probabilities().length, 2);
+
+		//change the fakeScheduleData and make period of it exceeds 14 upcoming days 
+		fakeScheduleData.Days[0].FixedDate = momentWithLocale(basedDate).add('day', 15).format('YYYY-MM-DD');
+		fakeScheduleData.Days[0].Periods[0].StartTime = momentWithLocale(fakeScheduleData.Days[0].FixedDate).startOf('day').add('hour', 9).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss');
+		fakeScheduleData.Days[0].Periods[0].EndTime = momentWithLocale(fakeScheduleData.Days[0].FixedDate).startOf('day').add('hour', 16).add('minute', 45).format('YYYY-MM-DDTHH:mm:ss');
+
+		fakeScheduleData.Days[0].FixedDate = momentWithLocale(basedDate).add('day', 16).format('YYYY-MM-DD');
+		fakeScheduleData.Days[1].Periods[0].StartTime = momentWithLocale(fakeScheduleData.Days[1].FixedDate).startOf('day').add('hour', 9).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss');
+		fakeScheduleData.Days[1].Periods[0].EndTime = momentWithLocale(fakeScheduleData.Days[1].FixedDate).startOf('day').add('hour', 16).add('minute', 45).format('YYYY-MM-DDTHH:mm:ss');
+
+		weekViewModel.readData(fakeScheduleData);
+		equal(weekViewModel.showProbabilityOptionsToggleIcon(), false);
+		equal(weekViewModel.dayViewModels()[0].probabilities().length, 0);
+		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
+	});
+
+	test("should show probability toggle if current week is within staffing info availableDays", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
+			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
+			if (x === "MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880") return true;
+		};
+
+		var fakeScheduleData = getFakeScheduleData();
+		fakeScheduleData.StaffingInfoAvailableDays = 28;
+		var fakeProbabilityData = fakeProbabilitiesDataLowBeforeTwelveAndHighAfter(basedDate);
+		var ajax = {
+			Ajax: function (data) {
+				if (data.url == '../api/ScheduleStaffingPossibility' && data.success)
 					data.success(fakeProbabilityData);
 			}
 		};
@@ -823,7 +866,7 @@ $(document).ready(function () {
 		fakeScheduleData.Days[1].Periods[0].EndTime = momentWithLocale(fakeScheduleData.Days[1].FixedDate).startOf('day').add('hour', 16).add('minute', 45).format('YYYY-MM-DDTHH:mm:ss');
 
 		weekViewModel.readData(fakeScheduleData);
-		equal(weekViewModel.showProbabilityOptionsToggleIcon(), false);
+		equal(weekViewModel.showProbabilityOptionsToggleIcon(), true);
 		equal(weekViewModel.dayViewModels()[0].probabilities().length, 0);
 		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
 	});

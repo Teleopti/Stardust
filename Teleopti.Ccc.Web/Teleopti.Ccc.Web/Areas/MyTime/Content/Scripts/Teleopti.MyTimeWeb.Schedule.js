@@ -596,8 +596,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		}
 
 		if (self.staffingProbabilityForMultipleDaysEnabled) {
-			var interceptWith14Days = (moment(data.Days[data.Days.length - 1].FixedDate) >= moment(currentUserDate)) && (moment(data.Days[0].FixedDate) < moment(currentUserDate).add('day', constants.maximumDaysDisplayingProbability));
-			self.showProbabilityToggle(interceptWith14Days);
+			var interceptWithinDays = (moment(data.Days[data.Days.length - 1].FixedDate) >= moment(currentUserDate)) && (moment(data.Days[0].FixedDate) < moment(currentUserDate).add('day', data.StaffingInfoAvailableDays));
+			self.showProbabilityToggle(interceptWithinDays);
 		} else {
 			self.showProbabilityToggle(self.staffingProbabilityEnabled && self.isCurrentWeek());
 		}
@@ -630,6 +630,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 		self.styles(styleToSet);
 
+		self.staffingInfoAvailableDays = data.StaffingInfoAvailableDays;
 		var timelines = ko.utils.arrayMap(data.TimeLine, function (item) {
 			// "Week schedule" module will be shown on PC only, so continue apply fixed schedule height
 			return new TimelineViewModel(item, constants.scheduleHeight, timeLineOffset);

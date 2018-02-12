@@ -271,8 +271,8 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (ajax, reloadData, bl
 			self.showingOvertimeProbability(false);
 		}
 		if(self.staffingProbabilityOnMobileEnabled() && self.staffingProbabilityForMultipleDaysEnabled()){
-			var interceptWith14Days = (moment(data.Days[data.Days.length - 1].FixedDate) >= moment(self.formatedCurrentUserDate())) && (moment(data.Days[0].FixedDate) < moment(self.formatedCurrentUserDate()).add('day', constants.maximumDaysDisplayingProbability));
-			self.showProbabilityOptionsToggleIcon(interceptWith14Days);
+			var interceptWithinDays = (moment(data.Days[data.Days.length - 1].FixedDate) >= moment(self.formatedCurrentUserDate())) && (moment(data.Days[0].FixedDate) < moment(self.formatedCurrentUserDate()).add('day', data.StaffingInfoAvailableDays));
+			self.showProbabilityOptionsToggleIcon(interceptWithinDays);
 		}
 	}
 
@@ -283,6 +283,7 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (ajax, reloadData, bl
 			self.datePickerFormat("");
 		}
 
+		self.staffingInfoAvailableDays = data.StaffingInfoAvailableDays;
 		setStaffingProbabilityToggleStates(data);
 
 		self.baseUtcOffsetInMinutes(data.BaseUtcOffsetInMinutes);
