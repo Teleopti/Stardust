@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Models;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Presenters;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Views;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.WinCode.Common;
 
 namespace Teleopti.Ccc.WinCodeTest.Budgeting
@@ -29,7 +28,7 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
             service = mock.StrictMock<IBudgetNavigatorDataService>();
             settings = new FakeSettings();
             model = new BudgetGroupNavigatorModel(settings, service); //Sets ActionHeigt to 13
-            target = new BudgetGroupNavigatorPresenter(view, model, new FakeApplicationInsights());
+            target = new BudgetGroupNavigatorPresenter(view, model);
         }
 
         [Test]

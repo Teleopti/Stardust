@@ -4,7 +4,6 @@ using System.Globalization;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Main;
 
@@ -13,13 +12,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PerformanceManager
     public partial class PerformanceManagerNavigator : AbstractNavigator
     {
 	    private readonly string _matrixWebSiteUrl;
-		private readonly IApplicationInsights _applicationInsights;
 
-	    public PerformanceManagerNavigator(string matrixWebSiteUrl, IApplicationInsights applicationInsights)
+	    public PerformanceManagerNavigator(string matrixWebSiteUrl)
         {
 				_matrixWebSiteUrl = matrixWebSiteUrl;
-			_applicationInsights = applicationInsights;
-			InitializeComponent();
+				InitializeComponent();
 
             if (!DesignMode)
             {
@@ -48,7 +45,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PerformanceManager
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Win.Common.MessageDialogs.ShowError(System.Windows.Forms.Control,System.String,System.String)")]
 		private void toolStripNewReport_Click(object sender, EventArgs e)
         {
-			_applicationInsights.TrackEvent("Opened report in Performance Manager Module.");
             var forceFormsLogin = "true";
             if (LogonPresenter.AuthenticationTypeOption == AuthenticationTypeOption.Windows)
                 forceFormsLogin = "false";

@@ -17,7 +17,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.PropertyPageAndWizard;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Main;
@@ -43,14 +42,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll
 		private readonly IComponentContext _componentContext;
 		private readonly IPayrollResultRepository _payrollResultRepository;
 		private readonly IStardustSender _stardustSender;
-		private readonly IApplicationInsights _applicationInsights;
 
 
 		public PayrollExportNavigator(PortalSettings portalSettings, IRepositoryFactory repositoryFactory,
 			IUnitOfWorkFactory unitOfWorkFactory,
 			IComponentContext componentContext, 
 			IPayrollResultRepository payrollResultRepository,
-			IStardustSender stardustSender, IApplicationInsights applicationInsights)
+			IStardustSender stardustSender)
 		{
 			InitializeComponent();
 
@@ -79,7 +77,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll
 			
 			_payrollResultRepository = payrollResultRepository;
 			_stardustSender = stardustSender;
-			_applicationInsights = applicationInsights;
 		}
 
 		private void setColors()
@@ -201,7 +198,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll
 			var payrollExport = e.Argument as IPayrollExport;
 			if (payrollExport == null) return;
 
-			_applicationInsights.TrackEvent("Ran selected payroll in Payroll Integration Module.");
 			using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				var personRepository = _repositoryFactory.CreatePersonRepository(uow);

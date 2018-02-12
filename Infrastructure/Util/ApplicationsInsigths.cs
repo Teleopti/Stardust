@@ -5,12 +5,12 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 
 namespace Teleopti.Ccc.Infrastructure.Util
 {
-	public class ApplicationInsights : IApplicationInsights 
+	public class ApplicationsInsigths : IApplicationsInsights 
 	{
 		private readonly ISharedSettingsQuerier _sharedSettingsQuerier;
 		private readonly TelemetryClient _telemetryClient;
 
-		public ApplicationInsights(ISharedSettingsQuerier sharedSettingsQuerier, TelemetryClient telemetryClient)
+		public ApplicationsInsigths(ISharedSettingsQuerier sharedSettingsQuerier, TelemetryClient telemetryClient)
 		{
 			_sharedSettingsQuerier = sharedSettingsQuerier;
 			_telemetryClient = telemetryClient;
