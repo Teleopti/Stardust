@@ -408,6 +408,34 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 		}
 
 		[Test]
+		public void ShouldReturnErrorWhenAddingDayOffToUnpublishedScheduleAndNoPermissionToViewUnpublishedSchedule()
+		{
+			PermissionProvider.Enable();
+			var dateonly = new DateOnly(2018, 1, 10);
+			var person = PersonFactory.CreatePersonWithGuid("a", "b");
+			PersonRepository.Has(person);
+			PermissionProvider.PublishToDate(dateonly.AddDays(-1));
+			PermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, person, dateonly);
+
+			var template = DayOffFactory.CreateDayOff(new Description("template")).WithId();
+			DayOffTemplateRepository.Has(template);
+
+			CommandHandler.ResetCalledCount();
+			var trackId = Guid.NewGuid();
+			var results = Target.AddDayOff(new AddDayOffFormData
+			{
+				StartDate = dateonly,
+				EndDate = dateonly,
+				PersonIds = new Guid[] { person.Id.Value },
+				TemplateId = template.Id.Value,
+				TrackedCommandInfo = new TrackedCommandInfo { TrackId = trackId }
+
+			});
+			CommandHandler.CalledCount.Should().Be.EqualTo(0);
+			results.Single().ErrorMessages.Single().Should().Be.EqualTo(Resources.NoPermissionToEditUnpublishedSchedule);
+		}
+
+		[Test]
 		public void ShouldInvokeAddDayOffCommandHandler()
 		{
 			PermissionProvider.Enable();
