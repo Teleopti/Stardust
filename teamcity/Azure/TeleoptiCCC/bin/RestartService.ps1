@@ -82,6 +82,22 @@ function StopWindowsService
     {
          $arrService = Get-Service -Name $ServiceName
          
+		 $bailOut = 100
+
+         while ($arrService.Name -ne $ServiceName)
+         {
+            log-info "Waiting for $ServiceName to be accessible..."
+            $arrService = Get-Service -Name $ServiceName
+            Start-sleep 3
+			$bailOut--
+         }
+		 
+		 if ($bailOut -eq 0) 
+		 {
+			log-info "Could not get access to service: $ServiceName"
+		 }
+		 
+		 
          if ($arrService.Status -ne "Stopped")
          {
              $arrService.Stop()
@@ -125,7 +141,34 @@ function StopWindowsService
     {
          $arrService = Get-Service -Name $ServiceName
          
-         if ($arrService.Status -ne "Running")
+		 $bailOut = 100
+		 while ($arrService.Status -eq "Stopping")
+		 {
+			log-info "Stopping " $ServiceName " service"
+			$bailOut --
+			Start-Sleep 3
+			if ($bailOut -eq 0)
+                {
+                    log-info "Could not stop service $ServiceName, status remains " + $arrService.Status
+					log-error "Could not stop service $ServiceName, status remains " + $arrService.Status
+					Throw "Could not stop service $ServiceName, status remains " + $arrService.Status
+                }
+		 }
+		 
+		 while ($arrService.Status -eq "Starting")
+		 {
+			log-info "Starting " $ServiceName " service"
+			$bailOut --
+			Start-Sleep 3
+			if ($bailOut -eq 0)
+                {
+                    log-info "Could not start service $ServiceName, status remains " + $arrService.Status
+					log-error "Could not start service $ServiceName, status remains " + $arrService.Status
+					Throw "Could not start service $ServiceName, status remains " + $arrService.Status
+                }
+		 }
+         
+		 if ($arrService.Status -ne "Running")
          {
              $arrService.Start()
              log-info "Starting " $ServiceName " service" 
@@ -138,7 +181,9 @@ function StopWindowsService
                 $bailOut--
                 if ($bailOut -eq 0)
                 {
-                    Throw "Could not start service $ServiceName, status remains " + $arrService.Status
+                    log-info "Could not start service $ServiceName, status remains " + $arrService.Status
+					log-error "Could not start service $ServiceName, status remains " + $arrService.Status
+					Throw "Could not start service $ServiceName, status remains " + $arrService.Status
                 }
              } while ($arrService.Status -ne "Running")
              log-info "`nService $ServiceName successfully started"
@@ -146,10 +191,12 @@ function StopWindowsService
          else
          {
             log-info "Warning! Service $ServiceName status is:" $arrService.Status
+			log-error "Warning! Service $ServiceName status is:" $arrService.Status
          }
     }
     else {
-        log-info "Service" $ServiceName " is not installed on this host." 
+        log-info "Service" $ServiceName " is not installed on this host."
+		log-error "Service" $ServiceName " is not installed on this host."
     }
  }
 
@@ -248,7 +295,7 @@ function StartTeleoptiServer
 	{ 
 		log-info "." 
 	}
-	until (($WaitforLocalWeb = CheckThisInstanceWeb -SubSite Web) -eq "200")
+	until (($WaitforLocalWeb = CheckThisInstanceWeb -SubSite "Web") -eq "200")
 	
 	log-info "Local Web Service on this Instance is up..."
 	
