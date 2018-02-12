@@ -1,12 +1,32 @@
-(function () {
+(function() {
 	'use strict';
 
-	angular
-	.module('wfm.staffing')
-	.controller('StaffingController', StaffingController);
+	angular.module('wfm.staffing').controller('StaffingController', StaffingController);
 
-	StaffingController.$inject = ['staffingService', '$state', 'Toggle', 'UtilService', 'ChartService', '$filter', 'NoticeService', '$translate', '$scope', '$window'];
-	function StaffingController(staffingService, $state, toggleService, utilService, chartService, $filter, NoticeService, $translate, $scope, $window) {
+	StaffingController.$inject = [
+		'staffingService',
+		'$state',
+		'Toggle',
+		'UtilService',
+		'ChartService',
+		'$filter',
+		'NoticeService',
+		'$translate',
+		'$scope',
+		'$window'
+	];
+	function StaffingController(
+		staffingService,
+		$state,
+		toggleService,
+		utilService,
+		chartService,
+		$filter,
+		NoticeService,
+		$translate,
+		$scope,
+		$window
+	) {
 		var vm = this;
 
 		vm.skills;
@@ -59,7 +79,7 @@
 		var sample = {
 			date: null,
 			status: 'full'
-		}
+		};
 
 		getSkills();
 		getSkillAreas();
@@ -68,13 +88,7 @@
 		isUnifiedSkillGroupManagementEnabled();
 
 		vm.onStateChanged = function(evt, to, params, from) {
-			if(to.name !== 'staffingModule'){
-				return;
-			}
-
-			if(params.isNewSkillArea === true){
-				getSkillAreas();
-			}
+			getSkillAreas();
 		};
 
 		$scope.$on('$stateChangeSuccess', vm.onStateChanged);
@@ -89,16 +103,16 @@
 			return toggleService.WfmStaffing_AddOvertime_42524;
 		}
 
-		function isUnifiedSkillGroupManagementEnabled(){
+		function isUnifiedSkillGroupManagementEnabled() {
 			vm.unifiedSkillGroupManagement = toggleService.WFM_Unified_Skill_Group_Management_45417;
 		}
 
 		function toggleOverstaffSettings() {
-			return vm.showOverstaffSettings = !vm.showOverstaffSettings;
+			return (vm.showOverstaffSettings = !vm.showOverstaffSettings);
 		}
 
 		function goToImportView() {
-			$state.transitionTo('bpo-gatekeeper')
+			$state.transitionTo('bpo-gatekeeper');
 		}
 
 		function selectFirstCompensation(compensations) {
@@ -111,7 +125,7 @@
 			vm.overtimeForm.MinMinutesToAdd = new Date();
 			vm.overtimeForm.MinMinutesToAdd.setHours(0, 15, 0);
 			vm.overtimeForm.MaxMinutesToAdd = new Date();
-			vm.overtimeForm.MaxMinutesToAdd.setHours(1, 0, 0)
+			vm.overtimeForm.MaxMinutesToAdd.setHours(1, 0, 0);
 		}
 
 		function isRunning() {
@@ -129,7 +143,7 @@
 		}
 		function getStaffingSettings() {
 			var data = staffingService.staffingSettings.get();
-			data.$promise.then(function (response) {
+			data.$promise.then(function(response) {
 				vm.showBpoInterface = response.isLicenseAvailable;
 				vm.hasPermissionForBpoExchange = response.HasPermissionForBpoExchange;
 			});
@@ -158,7 +172,7 @@
 				clearSuggestions();
 				var query = getSkillAreaStaffingByDate(area.Id, vm.selectedDate, vm.useShrinkage);
 			}
-			query.$promise.then(function (result) {
+			query.$promise.then(function(result) {
 				if (staffingPrecheck(result.DataSeries)) {
 					timeSerie = result.DataSeries.Time;
 					staffingData = utilService.prepareStaffingData(result);
@@ -217,36 +231,46 @@
 
 		function getSkills() {
 			var query = staffingService.getSkills.query();
-			query.$promise.then(function (skills) {
-				if ($window.sessionStorage.staffingSelectedSkill){
+			query.$promise.then(function(skills) {
+				if ($window.sessionStorage.staffingSelectedSkill) {
 					manageSkillSessionStorage();
 					manageDateSessionStorage();
 					manageShrinkageSessionStorage();
-				}else if (!$window.sessionStorage.staffingSelectedArea){
+				} else if (!$window.sessionStorage.staffingSelectedArea) {
 					selectSkillOrArea(skills[0]);
 				}
 				allSkills = skills;
 				vm.allSkills = skills;
-			})
+			});
+		}
+
+		function checkArea(area) {
+			return area.Id === JSON.parse($window.sessionStorage.staffingSelectedArea).Id;
 		}
 
 		function getSkillAreas() {
 			var query = staffingService.getSkillAreas.get();
-			query.$promise.then(function (response) {
+			query.$promise.then(function(response) {
 				vm.HasPermissionToModifySkillArea = response.HasPermissionToModifySkillArea;
-				if($window.sessionStorage.staffingSelectedArea){
-					manageAreaSessionStorage();
+
+				if ($window.sessionStorage.staffingSelectedArea) {
+					if (response.SkillAreas.find(checkArea)) {
+						vm.selectedArea = response.SkillAreas.find(checkArea);
+					}else{
+						manageAreaSessionStorage();
+					}
+
 					manageDateSessionStorage();
 					manageShrinkageSessionStorage();
 				}
 				allSkillAreas = response.SkillAreas;
 				vm.allSkillAreas = response.SkillAreas;
-			})
+			});
 		}
 
 		function selectedSkillChange(skill) {
-			if(document.getElementById("skill-tooltip")){
-				document.getElementById("skill-tooltip").remove();
+			if (document.getElementById('skill-tooltip')) {
+				document.getElementById('skill-tooltip').remove();
 			}
 
 			if (skill == null) return;
@@ -262,15 +286,15 @@
 
 		function querySearchSkills(query) {
 			var results = query ? allSkills.filter(createFilterFor(query)) : allSkills,
-			deferred;
+				deferred;
 			return results;
-		};
+		}
 
 		function querySearchAreas(query) {
 			var results = query ? allSkillAreas.filter(createFilterFor(query)) : allSkillAreas,
-			deferred;
+				deferred;
 			return results;
-		};
+		}
 
 		function dynamicIcon(skill) {
 			if (!skill.DoDisplayData) {
@@ -281,17 +305,17 @@
 			}
 			switch (skill.SkillType) {
 				case 'SkillTypeChat':
-				return 'mdi mdi-message-text-outline';
+					return 'mdi mdi-message-text-outline';
 				case 'SkillTypeEmail':
-				return 'mdi mdi-email-outline';
+					return 'mdi mdi-email-outline';
 				case 'SkillTypeInboundTelephony':
-				return 'mdi mdi-phone';
+					return 'mdi mdi-phone';
 				case 'SkillTypeRetail':
-				return 'mdi mdi-credit-card';
+					return 'mdi mdi-credit-card';
 				case 'SkillTypeBackoffice':
-				return 'mdi mdi-archive';
+					return 'mdi mdi-archive';
 				default:
-				return 'mdi mdi-creation'
+					return 'mdi mdi-creation';
 			}
 		}
 
@@ -299,9 +323,9 @@
 			var lowercaseQuery = angular.lowercase(query);
 			return function filterFn(item) {
 				var lowercaseName = angular.lowercase(item.Name);
-				return (lowercaseName.indexOf(lowercaseQuery) === 0);
+				return lowercaseName.indexOf(lowercaseQuery) === 0;
 			};
-		};
+		}
 
 		function addOvertime() {
 			if (overTimeModels.length === 0) {
@@ -309,7 +333,7 @@
 			}
 			isRequestingOvertime = true;
 			var query = staffingService.addOvertime.save(overTimeModels);
-			query.$promise.then(function () {
+			query.$promise.then(function() {
 				if (vm.selectedSkill) {
 					generateChart(vm.selectedSkill, null);
 				} else if (vm.selectedSkillArea) {
@@ -318,11 +342,11 @@
 				clearSuggestions();
 				isRequestingOvertime = false;
 			});
-		};
+		}
 
 		function getCompensations() {
 			var query = staffingService.getCompensations.query();
-			query.$promise.then(function (data) {
+			query.$promise.then(function(data) {
 				vm.compensations = data;
 				selectFirstCompensation(data);
 			});
@@ -330,8 +354,7 @@
 		function validSettings(input) {
 			if (input.MinMinutesToAdd > input.MaxMinutesToAdd) {
 				return false;
-			}
-			else {
+			} else {
 				return true;
 			}
 		}
@@ -342,15 +365,19 @@
 			var skillIds;
 			var settings = utilService.prepareSettings(form);
 			if (currentSkills.Skills) {
-				skillIds = currentSkills.Skills.map(function (skill) {
+				skillIds = currentSkills.Skills.map(function(skill) {
 					return skill.Id;
 				});
 			} else {
 				skillIds = [currentSkills.Id];
 			}
 
-			var query = staffingService.getSuggestion.save({ SkillIds: skillIds, TimeSerie: timeSerie, OvertimePreferences: settings });
-			query.$promise.then(function (response) {
+			var query = staffingService.getSuggestion.save({
+				SkillIds: skillIds,
+				TimeSerie: timeSerie,
+				OvertimePreferences: settings
+			});
+			query.$promise.then(function(response) {
 				isRequestingSuggestions = false;
 				hasRequestedSuggestions = true;
 				if (staffingPrecheck(response.DataSeries)) {
@@ -369,7 +396,7 @@
 					vm.staffingDataAvailable = false;
 				}
 			});
-		};
+		}
 
 		function generateChartForView(data, isSuggestedData) {
 			c3.generate(chartService.staffingChartConfig(data, isSuggestedData));
@@ -392,7 +419,7 @@
 		function manageShrinkageSessionStorage() {
 			if ($window.sessionStorage.staffingUseShrinkage) {
 				vm.useShrinkage = JSON.parse($window.sessionStorage.staffingUseShrinkage);
-				vm.useShrinkageForStaffing()
+				vm.useShrinkageForStaffing();
 			}
 		}
 
@@ -404,11 +431,10 @@
 		}
 
 		function testSessionStorage(test) {
-			if (test = 1) manageAreaSessionStorage();
-			if (test = 2)	manageSkillSessionStorage();
-			if (test = 3)	manageShrinkageSessionStorage();
-			if (test = 4)	manageDateSessionStorage();
+			if ((test = 1)) manageAreaSessionStorage();
+			if ((test = 2)) manageSkillSessionStorage();
+			if ((test = 3)) manageShrinkageSessionStorage();
+			if ((test = 4)) manageDateSessionStorage();
 		}
-
 	}
 })();
