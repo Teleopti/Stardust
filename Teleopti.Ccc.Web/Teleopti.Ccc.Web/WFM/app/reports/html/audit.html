@@ -20,7 +20,7 @@
 </div>
 </div> -->
 
-<div ng-cloak class="con-row" ng-show="!vm.chartLoaded">
+<div ng-cloak class="con-row" ng-if="!vm.chartLoaded">
 	<div class="con-flex">
 		<div class="panel material-depth-1">
 			<md-progress-linear ng-if="vm.loading" md-mode="indeterminate"></md-progress-linear>
