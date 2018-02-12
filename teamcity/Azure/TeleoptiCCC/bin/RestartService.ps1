@@ -223,7 +223,7 @@ function CheckThisInstanceWeb
 
 	[System.Net.ServicePointManager]::CertificatePolicy = New-Object TrustAllCertsPolicy
 
-	$statusCode = wget $BaselUrl | % {$_.StatusCode} 
+	$statusCode = wget $BaselUrl -UseBasicParsing | % {$_.StatusCode} 
 	
 	return $statusCode
 
@@ -343,6 +343,8 @@ Catch [Exception]
 	$ErrorMessage = $_.Exception.Message
 	#$_.Exception | format-list -force
 	Write-EventLog -LogName Application -Source $JOB -EventID 1 -EntryType Error -Message "$ErrorMessage"
+	log-info "Script failed: $ErrorMessage"
+	log-error "Script failed: $ErrorMessage"
 	Throw "Script failed, Check Windows event log for details"
 }
 
