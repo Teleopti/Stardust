@@ -14617,9 +14617,6 @@ Vill du registrera dig?</value>
   <data name="PlansPageEditPlanningGroup" xml:space="preserve">
     <value>Ändra namn och filter för vald planeringsgrupp</value>
   </data>
-  <data name="NoAvailableSkillForOvertime" xml:space="preserve">
-    <value>Agenten har ingen tillgänglig kompetens för övertiden</value>
-  </data>
   <data name="PeriodIsOutOfSkillOpenHours" xml:space="preserve">
     <value>Perioden för förfrågan är utanför kompetensernas öppettider</value>
   </data>

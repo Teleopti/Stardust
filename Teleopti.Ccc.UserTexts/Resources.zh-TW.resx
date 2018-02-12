@@ -13851,9 +13851,6 @@ Teleopti R&amp;D</value>
   <data name="OvertimeRequestForOneDayHasBeenDeniedDot" xml:space="preserve">
     <value>加班申請 {0} 已被拒絕。</value>
   </data>
-  <data name="NoAvailableSkillForOvertime" xml:space="preserve">
-    <value>座席代表無可用技能以申請加班</value>
-  </data>
   <data name="PeriodIsOutOfSkillOpenHours" xml:space="preserve">
     <value>申請週期超出技能開放時間</value>
   </data>

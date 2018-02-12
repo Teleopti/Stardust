@@ -12772,9 +12772,6 @@ Denne informasjonen vil sikre at du atomatisk vil være pålogget til Teleopti C
   <data name="PeriodIsOutOfSkillOpenHours" xml:space="preserve">
     <value>Forespørselsperioden er utenfor ferdighetens åpningstid</value>
   </data>
-  <data name="NoAvailableSkillForOvertime" xml:space="preserve">
-    <value>Agent har ingen tilgjengelig ferdighet for overtid</value>
-  </data>
   <data name="OvertimeRequestHasBeenApprovedDot" xml:space="preserve">
     <value>Overtidsforespørselen {0} - {1} er godkjent.</value>
   </data>

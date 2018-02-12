@@ -785,7 +785,7 @@ Fecha</value>
     <value>Disponibilidad (%)</value>
   </data>
   <data name="KPIsIncludedInScorecardColon" xml:space="preserve">
-    <value>KPI´s en Scorecards:</value>
+    <value>KPIs en Scorecards:</value>
   </data>
   <data name="Language" xml:space="preserve">
     <value>Lenguaje</value>
@@ -1067,10 +1067,10 @@ Fecha</value>
     <value>Configuración de página</value>
   </data>
   <data name="PartTimePercentage" xml:space="preserve">
-    <value>Porcentaje de tiempo parcial</value>
+    <value>Porcentaje de Tiempo Parcial</value>
   </data>
   <data name="PartTimepercentages" xml:space="preserve">
-    <value>Porcentajes de tiempo parcial</value>
+    <value>Porcentajes de Tiempo Parcial</value>
   </data>
   <data name="Password" xml:space="preserve">
     <value>Contraseña</value>
@@ -1336,7 +1336,7 @@ Planificación</value>
     <value>Seleccione Cultura</value>
   </data>
   <data name="SetKPITargets" xml:space="preserve">
-    <value>Seleccione objetivos KPI</value>
+    <value>Seleccione Objetivos KPI</value>
   </data>
   <data name="SetPassword" xml:space="preserve">
     <value>Seleccione contraseña</value>
@@ -1819,7 +1819,7 @@ Planificación</value>
     <value>Roles disponibles</value>
   </data>
   <data name="ShortName" xml:space="preserve">
-    <value>Nombre corto</value>
+    <value>Nombre Corto</value>
   </data>
   <data name="UnableToConnectRemoteService" xml:space="preserve">
     <value>No se puede conectar con el servicio remoto</value>
@@ -1861,7 +1861,7 @@ Planificación</value>
     <value>Introducir nuevo nombre de grupo</value>
   </data>
   <data name="NewGroupName" xml:space="preserve">
-    <value>Nuevo nombre del grupo</value>
+    <value>Nuevo Nombre del Grupo</value>
   </data>
   <data name="TerminalDate" xml:space="preserve">
     <value>Fecha de baja</value>
@@ -2068,7 +2068,7 @@ Planificación</value>
     <value>Configuración de la Pantalla de la Página de Grupo</value>
   </data>
   <data name="OptionalColumn" xml:space="preserve">
-    <value>Columna opcional</value>
+    <value>Columna Opcional</value>
   </data>
   <data name="PreviewOrEditGroupPage" xml:space="preserve">
     <value>Vista previa de la agrupación</value>
@@ -2239,7 +2239,7 @@ Planificación</value>
     <value>Introducir valores de objetivo para cada equipo</value>
   </data>
   <data name="FilterKPIs" xml:space="preserve">
-    <value>Filtro KPI´s</value>
+    <value>Filtro KPIs</value>
   </data>
   <data name="PeriodColon" xml:space="preserve">
     <value>Período:</value>
@@ -2266,7 +2266,7 @@ Planificación</value>
     <value>Gestionar actividades</value>
   </data>
   <data name="CommonAgentDescription" xml:space="preserve">
-    <value>Descripción común de agentes</value>
+    <value>Descripción Común de Agentes</value>
   </data>
   <data name="Main" xml:space="preserve">
     <value>Jerarquía de Negocio</value>
@@ -3956,7 +3956,7 @@ Personal</value>
     <value>Días Libres:</value>
   </data>
   <data name="EnterSettingsForDaysOff" xml:space="preserve">
-    <value>Introducir Ajustes para Día Libre</value>
+    <value>Introducir ajustes para día libre</value>
   </data>
   <data name="FlexibilityColon" xml:space="preserve">
     <value>Flexibilidad:</value>
@@ -4238,7 +4238,7 @@ Personal</value>
     <value>&amp;Navegar</value>
   </data>
   <data name="AbsenceCouldNotBeLoaded" xml:space="preserve">
-    <value>Las cuentas personales no pueden cargarse. Debe de haber al menos una ausencia con rastreador definido en Opciones.</value>
+    <value>Las cuentas personales no pueden cargarse. Debe de haber al menos una ausencia con tipo de cuenta definido en Opciones.</value>
   </data>
   <data name="NameAlreadyExists" xml:space="preserve">
     <value>El nombre ya existe</value>
@@ -4346,7 +4346,7 @@ Personal</value>
     <value>Descripción General del Grupo de Estados</value>
   </data>
   <data name="StaffingEffect" xml:space="preserve">
-    <value>Efecto de la dotación de personal</value>
+    <value>Efecto en la dotación de personal</value>
   </data>
   <data name="OpenBudgetThreeDots" xml:space="preserve">
     <value>Abrir Presupuesto...</value>
@@ -4529,7 +4529,7 @@ Personal</value>
     <value>Abandono y Velocidad de Respuesta</value>
   </data>
   <data name="ResReportAgentQueueStatistics" xml:space="preserve">
-    <value>Estadísticas de las Colas de Agente</value>
+    <value>Estadísticas de Cola por Agente</value>
   </data>
   <data name="ResReportAgentScheduleResult" xml:space="preserve">
     <value>Métricas de Agente</value>
@@ -4550,7 +4550,7 @@ Personal</value>
     <value>Preferencia por Día</value>
   </data>
   <data name="ResReportQueueStatistics" xml:space="preserve">
-    <value>Estadísticas de la Cola</value>
+    <value>Estadísticas de Cola</value>
   </data>
   <data name="ResReportScheduledAgentsPerIntervalAndTeam" xml:space="preserve">
     <value>Agentes Planificados por Intervalo y Equipo</value>
@@ -4580,7 +4580,7 @@ Personal</value>
     <value>¿Estás seguro que quieres borrar columna opcional '{0}'?</value>
   </data>
   <data name="ShortNameColon" xml:space="preserve">
-    <value>Nombre corto:</value>
+    <value>Nombre Corto:</value>
   </data>
   <data name="MultiplicatorTypeOBTime" xml:space="preserve">
     <value>Concesión de Turno</value>
@@ -4829,7 +4829,7 @@ Personal</value>
     <value>Período de Planificación</value>
   </data>
   <data name="RequiresSkill" xml:space="preserve">
-    <value>Requiere Skill</value>
+    <value>Requiere skill</value>
   </data>
   <data name="MultiplicatorDefinitionDeleteConfirmation" xml:space="preserve">
     <value>Borrar Definición(es) de Multiplicador seleccionada?</value>
@@ -4871,7 +4871,7 @@ Personal</value>
     <value>Añadir Reunión</value>
   </data>
   <data name="MultiplicatorDefinitionSets" xml:space="preserve">
-    <value>Conjunto de definiciones de Multiplicador</value>
+    <value>Conjunto de Definiciones de Multiplicador</value>
   </data>
   <data name="EmploymentType" xml:space="preserve">
     <value>Tipo de Empleo</value>
@@ -4907,7 +4907,7 @@ Personal</value>
     <value>Gestionar conjuntos de definiciones</value>
   </data>
   <data name="DefinitionSetNameColon" xml:space="preserve">
-    <value>Nombre del conjunto de defin.:</value>
+    <value>Nombre del conjunto:</value>
   </data>
   <data name="MultiplicatorDefinitionSetColon" xml:space="preserve">
     <value>Conjunto de definiciones:</value>
@@ -4970,7 +4970,7 @@ Personal</value>
     <value>Borrar resumen de skill</value>
   </data>
   <data name="DefaultTrackerDefaultDescription" xml:space="preserve">
-    <value>Sin rastreo</value>
+    <value>Sin cuenta</value>
   </data>
   <data name="CreatedBy" xml:space="preserve">
     <value>Creado por</value>
@@ -5461,7 +5461,7 @@ Actualizado en: {1}</value>
     <value>No Planificado</value>
   </data>
   <data name="AdherenceReportCalculation" xml:space="preserve">
-    <value>Cálculo de Adherencia</value>
+    <value>Cálculo de adherencia</value>
   </data>
   <data name="AddDays" xml:space="preserve">
     <value>Añadir días</value>
@@ -6015,7 +6015,7 @@ Anterior</value>
     <value>Cortar ausencia</value>
   </data>
   <data name="ChoosePartTimePercentageDefinitionToChange" xml:space="preserve">
-    <value>Eligir definición de porcentage de tiempo parcial a editar </value>
+    <value>Eligir definición de porcentaje de tiempo parcial a editar </value>
   </data>
   <data name="CreateTemplate" xml:space="preserve">
     <value>Crear plantilla</value>
@@ -6205,10 +6205,10 @@ de Preferencias</value>
     <value>[{0}] carece de capas</value>
   </data>
   <data name="AbsenceSaveWasInvalid" xml:space="preserve">
-    <value>Una o más ausencias no han sido guardadas. No tiene permisos para modificar el tipo de rastreo de una ausencia, al ser usada por una cuenta personal</value>
+    <value>Una o más ausencias no han sido guardadas. No tiene permisos para modificar el tipo de cuenta de una ausencia, al ser usada por una cuenta personal</value>
   </data>
   <data name="TrackerType" xml:space="preserve">
-    <value>Tipo de rastreo</value>
+    <value>Tipo de cuenta</value>
   </data>
   <data name="BlockNotValidConflictingCategories" xml:space="preserve">
     <value>Conflicto en categorías de turno pre-planificadas, bloque no válido</value>
@@ -6506,22 +6506,22 @@ Período: {3}</value>
     <value>Solicitudes de Cambio de Turnos</value>
   </data>
   <data name="ShiftCategoriesAvailableForExtendedPreference" xml:space="preserve">
-    <value>Categoría de Turnos Disponible para Preferencias</value>
+    <value>Categorías de turnos disponibles para Preferencias</value>
   </data>
   <data name="DaysOffAvailableForExtendedPreferences" xml:space="preserve">
-    <value>Días Libres Disponibles para Preferencias</value>
+    <value>Días libres disponibles para Preferencias</value>
   </data>
   <data name="NotAvailable" xml:space="preserve">
     <value>No Disponible</value>
   </data>
   <data name="CheckToEnableAutoGrant" xml:space="preserve">
-    <value>Seleccionar para Habilitar Auto-aprobación.</value>
+    <value>Auto-aprobación</value>
   </data>
   <data name="HColonMM" xml:space="preserve">
     <value>h:mm</value>
   </data>
   <data name="OpenForShiftTradeRequests" xml:space="preserve">
-    <value>Abra su solicitud de cambio de turno</value>
+    <value>Período abierto para solicitudes de cambio de turno</value>
   </data>
   <data name="ToleranceForMatchingContractTime" xml:space="preserve">
     <value>Tolerancia para correspondencia con tiempo de contrato</value>
@@ -6542,7 +6542,7 @@ Período: {3}</value>
     <value>Protección contra Escritura:</value>
   </data>
   <data name="MatchingSkills" xml:space="preserve">
-    <value>Skills correspondientes</value>
+    <value>Skills coincidentes</value>
   </data>
   <data name="PlaceHolder" xml:space="preserve">
     <value>[Espacio reservado]</value>
@@ -6644,7 +6644,7 @@ Período: {3}</value>
     <value>Seleccionar Scorecard a usar en los equipos</value>
   </data>
   <data name="SetScorecard" xml:space="preserve">
-    <value>Establecer scorecard</value>
+    <value>Establecer Scorecard</value>
   </data>
   <data name="SetScorecards" xml:space="preserve">
     <value>Establecer scorecards</value>
@@ -7057,7 +7057,7 @@ Fechas</value>
     <value>Max. no. de Puestos</value>
   </data>
   <data name="RequiresSeat" xml:space="preserve">
-    <value>Requiere Puesto</value>
+    <value>Requiere puesto</value>
   </data>
   <data name="Sites" xml:space="preserve">
     <value>Sites</value>
@@ -7370,7 +7370,7 @@ La longitud actual de la asignación es {1} hrs.</value>
     <value>Nivel de servicio actual</value>
   </data>
   <data name="CommonAgentDescriptionForScheduleExports" xml:space="preserve">
-    <value>Descripción común de agentes para Exporatción de Planificaciones</value>
+    <value>Descripción Común de Agentes para Exportación de Planificaciones</value>
   </data>
   <data name="EditCommonAgentDescriptionForScheduleExportsFormat" xml:space="preserve">
     <value>Editar formato de descripción común de agentes para Exporatción de Planificaciones</value>
@@ -7529,7 +7529,7 @@ La longitud actual de la asignación es {1} hrs.</value>
     <value>La auditoría de planificación está habilitada.</value>
   </data>
   <data name="AuditingPageName" xml:space="preserve">
-    <value>Haciendo auditoría</value>
+    <value>Auditoría</value>
   </data>
   <data name="AuditingReportAbsence" xml:space="preserve">
     <value>Ausencia</value>
@@ -7571,10 +7571,10 @@ La longitud actual de la asignación es {1} hrs.</value>
     <value>Fecha de planificación hasta:</value>
   </data>
   <data name="AdjustTimeBankWithPartTimePercentage" xml:space="preserve">
-    <value>Ajustar Banco de Tiempo con Porcentage de Tiempo Parcial</value>
+    <value>Ajustar Banco de Tiempo con Porcentaje de Tiempo Parcial</value>
   </data>
   <data name="AdjustTimeBankWithSeasonality" xml:space="preserve">
-    <value>ajustar Banco de Tiempo con Estacionalidad</value>
+    <value>Ajustar Banco de Tiempo con Estacionalidad</value>
   </data>
   <data name="Previous" xml:space="preserve">
     <value>Anterior</value>
@@ -7652,7 +7652,7 @@ La longitud actual de la asignación es {1} hrs.</value>
     <value>Etiqueta de Planif.:</value>
   </data>
   <data name="TagChangesWithColon" xml:space="preserve">
-    <value>La etiqueta cambia con:</value>
+    <value>Marcar cambios con la etiqueta:</value>
   </data>
   <data name="ScheduleTags" xml:space="preserve">
     <value>Etiquetas de Planificación</value>
@@ -7781,10 +7781,10 @@ La longitud actual de la asignación es {1} hrs.</value>
     <value>Valor del Objetivo</value>
   </data>
   <data name="DayOffTolerancePlus" xml:space="preserve">
-    <value>Tolerancia de día libre (+)</value>
+    <value>Tolerancia de Día Libre (+)</value>
   </data>
   <data name="DayOffTolerancMinus" xml:space="preserve">
-    <value>Tolerancia de día libre (-)</value>
+    <value>Tolerancia de Día Libre (-)</value>
   </data>
   <data name="ExtendingAndReducingDaysoff" xml:space="preserve">
     <value>Extendiendo y reduciendo días libres de agentes flexibles.</value>
@@ -8204,7 +8204,7 @@ La longitud actual de la asignación es {1} hrs.</value>
     <value>Empleados</value>
   </data>
   <data name="FullDayAbsence" xml:space="preserve">
-    <value>Ausencia de día completo</value>
+    <value>Ausencia de Día Completo</value>
   </data>
   <data name="InsufficientPermissionForWeb" xml:space="preserve">
     <value>No tiene permisos para acceder al portal Web</value>
@@ -8216,7 +8216,7 @@ La longitud actual de la asignación es {1} hrs.</value>
     <value>Clientes previstos:</value>
   </data>
   <data name="SchedulePeriodTypeChineseMonth" xml:space="preserve">
-    <value>Mes 7-8 días libres</value>
+    <value>Mes 7-8</value>
   </data>
   <data name="ActualEmployees" xml:space="preserve">
     <value>Empleados Actuales</value>
@@ -8866,7 +8866,7 @@ Reduzca el nivel de complejidad para usar estos turnos.</value>
     <value>Incumplido</value>
   </data>
   <data name="ShiftCategoryHeader" xml:space="preserve">
-    <value>Categoría de turno</value>
+    <value>Categoría de Turno</value>
   </data>
   <data name="SwitchToViewPointOfSelectedAgent" xml:space="preserve">
     <value>Cambiar Punto de vista para el agente seleccionado</value>
@@ -8893,13 +8893,13 @@ Reduzca el nivel de complejidad para usar estos turnos.</value>
     <value>Tiempo pagado</value>
   </data>
   <data name="PartTimePercentageHeader" xml:space="preserve">
-    <value>Porcentage de Tiempo parcial</value>
+    <value>Porcentaje de Tiempo Parcial</value>
   </data>
   <data name="RuleSetBagLower" xml:space="preserve">
     <value>Bolsa de turnos</value>
   </data>
   <data name="TrackerTypeHeader" xml:space="preserve">
-    <value>Tipo de rastreo</value>
+    <value>Tipo de cuenta</value>
   </data>
   <data name="WorkTimeHeader" xml:space="preserve">
     <value>Tiempo de trabajo</value>
@@ -8962,7 +8962,7 @@ Reduzca el nivel de complejidad para usar estos turnos.</value>
     <value>Usar Estacionalidad mensual (día del mes)</value>
   </data>
   <data name="ResReportAgentSkills" xml:space="preserve">
-    <value>Skills de los agentes</value>
+    <value>Skills de los Agentes</value>
   </data>
   <data name="BudgetGroupMissing" xml:space="preserve">
     <value>Usted carece de grupo de presupuesto.</value>
@@ -8986,7 +8986,7 @@ Reduzca el nivel de complejidad para usar estos turnos.</value>
     <value>Euipo de comparación</value>
   </data>
   <data name="ResReportTimeInStatePerAgent" xml:space="preserve">
-    <value>Tiempo en el estado por agente</value>
+    <value>Tiempo en el estado por Agente</value>
   </data>
   <data name="DetailedAdherence" xml:space="preserve">
     <value>Adherencia detallada</value>
@@ -9151,10 +9151,10 @@ Reduzca el nivel de complejidad para usar estos turnos.</value>
     <value>Hora de inicio de próxima actividad</value>
   </data>
   <data name="TimeInState" xml:space="preserve">
-    <value>Tiempo en el estado</value>
+    <value>Tiempo en Estado</value>
   </data>
   <data name="MinimumTimePerWeekColon" xml:space="preserve">
-    <value>Tiempo mínimo por Semana:</value>
+    <value>Tiempo Mínimo por Semana:</value>
   </data>
   <data name="WeeklyWorkTimeBroken" xml:space="preserve">
     <value>Ha violado el límite de tiempo semanal de trabajo</value>
@@ -9181,7 +9181,7 @@ Reduzca el nivel de complejidad para usar estos turnos.</value>
     <value>Abrir Turnos...</value>
   </data>
   <data name="MoveActivity" xml:space="preserve">
-    <value>Mover actividad</value>
+    <value>Mover Actividad</value>
   </data>
   <data name="MyTradeCart" xml:space="preserve">
     <value>Mi cesta de cambios de turno</value>
@@ -9439,7 +9439,7 @@ Reduzca el nivel de complejidad para usar estos turnos.</value>
     <value>El umbral para una medalla de oro por Llamadas Contestadas debe ser mayor que el resto.</value>
   </data>
   <data name="AddMustHave" xml:space="preserve">
-    <value>Agregar Imprescindible</value>
+    <value>Añadir Imprescindible</value>
   </data>
   <data name="OptionEmptyDay" xml:space="preserve">
     <value>Día Vacío</value>
@@ -10299,7 +10299,7 @@ Detalles del error:
     <value>Por favor consulte la plantilla para el archivo</value>
   </data>
   <data name="Setting" xml:space="preserve">
-    <value>Ajuste</value>
+    <value>Objetivos</value>
   </data>
   <data name="YouHaveTooManyActiveAgents" xml:space="preserve">
     <value>Tienes {0} agentes activos pero tienes licencia para tener sólo {1}. Debes actualizar tu clave de activación de producto para poder continuar.</value>
@@ -10395,7 +10395,7 @@ Detalles del error:
     <value>Los horarios de apertura han sido actualizados</value>
   </data>
   <data name="NoPermissionAddFullDayAbsenceForAgent" xml:space="preserve">
-    <value>No tienes permiso para agregar ausencias de día completo para {0}</value>
+    <value>No tienes permiso para añadir ausencias de día completo para {0}</value>
   </data>
   <data name="FavoriteSearch" xml:space="preserve">
     <value>Búsqueda favorita</value>
@@ -10524,7 +10524,7 @@ Detalles del error:
     <value>Usar skills:</value>
   </data>
   <data name="ServiceLevel" xml:space="preserve">
-    <value>Nivel de Servicio</value>
+    <value>Nivel de servicio</value>
   </data>
   <data name="TotalCallsCaret" xml:space="preserve">
     <value>Total Llamadas &lt;</value>
@@ -10587,7 +10587,7 @@ Detalles del error:
     <value>Cuenta Personal</value>
   </data>
   <data name="DescriptionOfNonMainShiftActivityRule" xml:space="preserve">
-    <value>Reunión, actividad o actividad en tiempo extra en el turno</value>
+    <value>Reunión, actividad personal o actividad en tiempo extra en el turno</value>
   </data>
   <data name="DescriptionOfNewDayOffRule" xml:space="preserve">
     <value>Día libre en conflicto con la actividad</value>
@@ -10602,7 +10602,7 @@ Detalles del error:
     <value>Máximo tiempo de trabajo semanal</value>
   </data>
   <data name="DescriptionOfNewNightlyRestRule" xml:space="preserve">
-    <value>Tiempo de Descanso Nocturno</value>
+    <value>Tiempo de descanso nocturno</value>
   </data>
   <data name="ShiftTradeRequestValidatingRules" xml:space="preserve">
     <value>Reglad de validación</value>
@@ -10614,7 +10614,7 @@ Detalles del error:
     <value>ACW Total &gt;</value>
   </data>
   <data name="WhenValidationFails" xml:space="preserve">
-    <value>Cuando la Validación Falla</value>
+    <value>Si la Validación Falla</value>
   </data>
   <data name="SendToAdministrator" xml:space="preserve">
     <value>Mandar a Administrador</value>
@@ -10650,7 +10650,7 @@ Detalles del error:
     <value>Nivel</value>
   </data>
   <data name="NoPermissionAddOvertimeActivity" xml:space="preserve">
-    <value>No tienes permiso para agregar actividad en tiempo extra para {0}.</value>
+    <value>No tienes permiso para añadir actividad en tiempo extra para {0}.</value>
   </data>
   <data name="DeleteFilter" xml:space="preserve">
     <value>Borrar filtro</value>
@@ -10662,7 +10662,7 @@ Detalles del error:
     <value>El periodo solicitado es demasiado largo</value>
   </data>
   <data name="AddOvertimeActivity" xml:space="preserve">
-    <value>Agregar Acividad en Tiempo Extra</value>
+    <value>Añadir Acividad en Tiempo Extra</value>
   </data>
   <data name="NotAllowed" xml:space="preserve">
     <value>No permitido!</value>
@@ -10722,7 +10722,7 @@ Detalles del error:
     <value>Archivar horario</value>
   </data>
   <data name="AddLocation" xml:space="preserve">
-    <value>Agregar Ubicación</value>
+    <value>Añadir Ubicación</value>
   </data>
   <data name="CannotApplyChangeToAgentsInDifferentTimezone" xml:space="preserve">
     <value>No se pueden aplicar cambio para agentes en otras zonas horarias</value>
@@ -10965,7 +10965,7 @@ Detalles del error:
     <value>Cuenta Personal</value>
   </data>
   <data name="WeeklyRestTime" xml:space="preserve">
-    <value>Tiempo de Descanso Semanal</value>
+    <value>Tiempo de descanso semanal</value>
   </data>
   <data name="NightRest" xml:space="preserve">
     <value>Descanso nocturno</value>
@@ -11049,10 +11049,10 @@ Detalles del error:
     <value>Se agregó con éxito la/las ausencia(s) en los agentes seleccionados</value>
   </data>
   <data name="SwapShifts" xml:space="preserve">
-    <value>Intercambio de turnos</value>
+    <value>Intercambiar Turnos</value>
   </data>
   <data name="ShiftTrade" xml:space="preserve">
-    <value>Intercambio de turnos</value>
+    <value>Intercambio de Turnos</value>
   </data>
   <data name="ProcessWaitlistRequestsReminder" xml:space="preserve">
     <value>El procesamiento de la lista de espera será hecho en el fondo y podría tomar cierto tiempo en finalizar.</value>
@@ -11103,7 +11103,7 @@ Detalles del error:
     <value>Cancelar Solicitud</value>
   </data>
   <data name="AddAbsenceFailed" xml:space="preserve">
-    <value>Error al agregar ausencia(s)</value>
+    <value>Error al añadir ausencia(s)</value>
   </data>
   <data name="ModifySkill" xml:space="preserve">
     <value>Modificar Skill</value>
@@ -11160,7 +11160,7 @@ Detalles del error:
     <value>Puesto en lista de espera:</value>
   </data>
   <data name="NoPermissionAddAgentActivity" xml:space="preserve">
-    <value>No tienes permiso para agregar actividades para este(os) agente(s)</value>
+    <value>No tienes permiso para añadir actividades para este(os) agente(s)</value>
   </data>
   <data name="MustSelectTwoAgentsToSwap" xml:space="preserve">
     <value>Debes seleccionar dos agentes para hacer el intercambio.</value>
@@ -11193,7 +11193,7 @@ Detalles del error:
     <value>Se agregó satisfactoriamente actividades para los agentes seleccionados</value>
   </data>
   <data name="FailedMessageForAddingActivity" xml:space="preserve">
-    <value>No se pudo agregar actividades para los agentes seleccionados</value>
+    <value>No se pudo añadir actividades para los agentes seleccionados</value>
   </data>
   <data name="SameDay" xml:space="preserve">
     <value>Mismo día</value>
@@ -11274,7 +11274,7 @@ Detalles del error:
     <value>Borrar periodo</value>
   </data>
   <data name="AddEmptyPeriod" xml:space="preserve">
-    <value>Agregar horarios de apertura</value>
+    <value>Añadir horarios de apertura</value>
   </data>
   <data name="Waitlisted" xml:space="preserve">
     <value>En lista de espera</value>
@@ -11501,9 +11501,6 @@ Detalles del error:
   <data name="PartialSuccessMessageForAddingOvertime" xml:space="preserve">
     <value>Agregando actividad en tiempo extra para {0} agente(s). {1} completo y {2} fallaron.</value>
   </data>
-  <data name="NoAvailableSkillForOvertime" xml:space="preserve">
-    <value>El agente no tiene ninguna skill disponible para tiempo extra</value>
-  </data>
   <data name="AllowedOvertime" xml:space="preserve">
     <value>Tiempo extra permitido</value>
   </data>
@@ -11622,7 +11619,7 @@ Detalles del error:
     <value>Mostrar dotación de personal</value>
   </data>
   <data name="StaffingInfo" xml:space="preserve">
-    <value>Dotación de personal</value>
+    <value>Dotacion de personal</value>
   </data>
   <data name="StaffingLevels" xml:space="preserve">
     <value>Niveles de dotación de personal</value>
@@ -11720,7 +11717,7 @@ Estas opciones están activadas:
     <value>La optimización intradía para el periodo {0} - {1} se realizó con éxito</value>
   </data>
   <data name="NoPermisionAddIntradayAbsenceForAgent" xml:space="preserve">
-    <value>No tienes permiso para agregar ausencias intradía para {0}</value>
+    <value>No tienes permiso para añadir ausencias intradía para {0}</value>
   </data>
   <data name="RtaLoggedIn" xml:space="preserve">
     <value>Logged in</value>
@@ -11868,7 +11865,7 @@ Quieres participar?</value>
     <value>Se aplicarán reglas de días libres para todos los períodos a planificar</value>
   </data>
   <data name="WFMAppGuideStep1Description" xml:space="preserve">
-    <value>Descargue e instale la aplicación Teleopti WFM haciendo clic en un botón que corresponda o escaneando el código QR a continuación.</value>
+    <value>Descargue e instale la aplicación Teleopti WFM haciendo clic en el botón que corresponda o escaneando el código QR a continuación.</value>
   </data>
   <data name="EnableMobileNotifications" xml:space="preserve">
     <value>Habilitar notificaciones en la aplicación móvil</value>
@@ -11949,10 +11946,10 @@ Quieres participar?</value>
     <value>No tienes permiso para ver {0}.</value>
   </data>
   <data name="CanNotAddPersonalActivityToAgentWithoutShift" xml:space="preserve">
-    <value>No puedes agregar actividad personal cuando no hay turno</value>
+    <value>No puedes añadir actividad personal cuando no hay turno</value>
   </data>
   <data name="CanNotAddActivityToAgentWithoutShift" xml:space="preserve">
-    <value>No puedes agregar una actividad a {0} para el día siguiente sin un turno</value>
+    <value>No puedes añadir una actividad a {0} para el día siguiente sin un turno</value>
   </data>
   <data name="MaximumAgentToExport" xml:space="preserve">
     <value>Solo puedes exportar un máximo de 1000 agentes cada vez, estás intentando exportar {0}.</value>
@@ -11976,7 +11973,7 @@ Quieres participar?</value>
     <value>Moverá un turno de trabajo a otro día</value>
   </data>
   <data name="OvertimeRequestMaximumTimeHandleType" xml:space="preserve">
-    <value>Cuando la validación falla:</value>
+    <value>Si la validación falla:</value>
   </data>
   <data name="ScheduleIsRunning" xml:space="preserve">
     <value>Atención: el servidor está ocupado planificando, intente de nuevo más tarde.</value>
@@ -12009,7 +12006,7 @@ Quieres participar?</value>
     <value>Configuración de usuario</value>
   </data>
   <data name="UseShiftsFromColon" xml:space="preserve">
-    <value>Usar Turnos Desde:</value>
+    <value>Usar turnos en:</value>
   </data>
   <data name="UseDefaultStartTime" xml:space="preserve">
     <value>Usar hora de inicio predeterminada</value>
@@ -12318,7 +12315,7 @@ Quieres participar?</value>
     <value>Mostrando los primeros {0} mensajes de error de {1}.</value>
   </data>
   <data name="RequestSubmitterTimeZone" xml:space="preserve">
-    <value>Mostrar tiempo en zona horaria de solicitud</value>
+    <value>Mostrar hora en zona horaria de solicitud</value>
   </data>
   <data name="ShowAllSchedules" xml:space="preserve">
     <value>Mostrar todas las planificaciones</value>
@@ -12592,7 +12589,7 @@ Verifique su conexión a internet o contacte a su administrador.</value>
     <value>Nota: Para mover un turno para un agente en una zona horaria diferente, primero seleccione su zona horaria del menú desplegable de la zona horaria.</value>
   </data>
   <data name="AbsenceCannotBeAddedToAgentsInAnotherTimeZone" xml:space="preserve">
-    <value>Nota: Para agregar una ausencia a un agente en una zona horaria diferente, primero seleccione su zona horaria en el menú desplegable de la zona horaria.</value>
+    <value>Nota: Para añadir una ausencia a un agente en una zona horaria diferente, primero seleccione su zona horaria en el menú desplegable de la zona horaria.</value>
   </data>
   <data name="NoPermissionToEditShiftCategory" xml:space="preserve">
     <value>No se permite editar la categoría de turno para agente(s)</value>
@@ -12634,7 +12631,7 @@ Verifique su conexión a internet o contacte a su administrador.</value>
     <value>No tienes permiso para mover actividad para el agente(s)</value>
   </data>
   <data name="NoPermissionAddPersonalActivity" xml:space="preserve">
-    <value>No tienes permiso para agregar actividad personal para {0}.</value>
+    <value>No tienes permiso para añadir actividad personal para {0}.</value>
   </data>
   <data name="ImportBpoNoDefaultResolutionForSkill" xml:space="preserve">
     <value>No se encontró la longitud del intervalo para la skill {0}.</value>
@@ -12760,7 +12757,7 @@ Verifique su conexión a internet o contacte a su administrador.</value>
     <value>La línea tiene {0} parámetros, pero se esperaban {1} parámetros.</value>
   </data>
   <data name="Feedback" xml:space="preserve">
-    <value>Háganos saber lo que piensas</value>
+    <value>Haznos saber lo que piensas</value>
   </data>
   <data name="LatestScheduleResult" xml:space="preserve">
     <value>Último resultado de planificación</value>
@@ -13081,7 +13078,7 @@ Verifique su conexión a internet o contacte a su administrador.</value>
     <value>La celda no se puede analizar, requiere {0} valor formateado</value>
   </data>
   <data name="ActivityConflictsWithOvernightShiftsFromPreviousDay" xml:space="preserve">
-    <value>No se puede agregar una actividad dentro de un turno que pertenece al día anterior</value>
+    <value>No se puede añadir una actividad dentro de un turno que pertenece al día anterior</value>
   </data>
   <data name="RequestInvalidMessageModification" xml:space="preserve">
     <value>No se puede guardar su respuesta a esta solicitud, ya que ha sido {0}</value>
@@ -13256,10 +13253,5 @@ Verifique su conexión a internet o contacte a su administrador.</value>
   </data>
   <data name="ManyAgentsAlert" xml:space="preserve">
     <value>{0} Agentes seleccionados, haga clic en Actualizar para comenzar a analizar</value>
-  </data>
-  <data name="ProductActivationKeyApplicationSuccessNoRestart" xml:space="preserve">
-    <value>La aplicación de su clave de activación de producto fue exitosa.
-Felicitaciones! Ahora tienes licencia para usar esta galardonada solución para workforce management.
-La aplicación se cerrará ahora.</value>
   </data>
 </root>

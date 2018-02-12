@@ -14271,9 +14271,6 @@ Seuraavat ominaisuudet ovat aktivoitu:
   <data name="ClassicIntraday" xml:space="preserve">
     <value>Classic: Päivänsisäinen</value>
   </data>
-  <data name="NoAvailableSkillForOvertime" xml:space="preserve">
-    <value>Agentilla ei ole taitoa ylityölle</value>
-  </data>
   <data name="PeriodIsOutOfSkillOpenHours" xml:space="preserve">
     <value>Pyyntö on taidon aukioloaikojen ulkopuolella.</value>
   </data>

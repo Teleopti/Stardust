@@ -12117,9 +12117,6 @@ Teleopti R&amp;D</value>
   <data name="MissingPersonPeriodForPeriod" xml:space="preserve">
     <value>پاسخگو فاقد دوره شخص برای همه یا بخشی از دوره انتخاب شده است</value>
   </data>
-  <data name="NoAvailableSkillForOvertime" xml:space="preserve">
-    <value>پاسخگو فاقد مهارتی است که اضافه کاری برایش لازم باشد</value>
-  </data>
   <data name="PartialSuccessMessageForRemovingActivity" xml:space="preserve">
     <value>حذف فعالیت برای {0} پاسخگو. {1} مورد موفق و {2} مورد ناموفق بود</value>
   </data>

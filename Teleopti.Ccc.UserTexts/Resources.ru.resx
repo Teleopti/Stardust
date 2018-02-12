@@ -14095,9 +14095,6 @@ Email: &lt;br&gt;{0}&lt;/b&gt;&lt;br&gt;
   <data name="ClassicIntraday" xml:space="preserve">
     <value>Классический мониторинг</value>
   </data>
-  <data name="NoAvailableSkillForOvertime" xml:space="preserve">
-    <value>У оператора нет доступного навыка для сверхурочных</value>
-  </data>
   <data name="PeriodIsOutOfSkillOpenHours" xml:space="preserve">
     <value>Период запроса не соответствует часам работы навыка</value>
   </data>

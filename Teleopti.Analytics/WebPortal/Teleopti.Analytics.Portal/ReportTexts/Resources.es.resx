@@ -313,7 +313,7 @@
     <value>Totales:</value>
   </data>
   <data name="ResPercent" xml:space="preserve">
-    <value>Porcentaje</value>
+    <value>Porciento</value>
   </data>
   <data name="ResActualACW" xml:space="preserve">
     <value>ACW actual</value>
@@ -424,7 +424,7 @@
     <value>Llamadas Ofrecidas / Agente</value>
   </data>
   <data name="ResServiceLevel" xml:space="preserve">
-    <value>Nivel de Servicio</value>
+    <value>Nivel de servicio</value>
   </data>
   <data name="ResServiceLevelCalcColon" xml:space="preserve">
     <value>Cálculo del Nivel de Servicio</value>
@@ -460,7 +460,7 @@
     <value>Cola:</value>
   </data>
   <data name="ResReportQueueStatistics" xml:space="preserve">
-    <value>Estadísticas de la Cola</value>
+    <value>Estadísticas de Cola</value>
   </data>
   <data name="ResAbandonedCallsWithinSL" xml:space="preserve">
     <value>Abandonadas Dentro del Nivel de Servicio</value>
@@ -502,10 +502,10 @@
     <value>ACD Login</value>
   </data>
   <data name="ResReportAgentQueueStatistics" xml:space="preserve">
-    <value>Estadísticas del Agente y Cola</value>
+    <value>Estadísticas de Cola por Agente</value>
   </data>
   <data name="ResReportAgentStatistics" xml:space="preserve">
-    <value>Estadísticas del Agente</value>
+    <value>Estadísticas de Agente</value>
   </data>
   <data name="ResAdminTime" xml:space="preserve">
     <value>Tiempo de Administración</value>
@@ -860,7 +860,7 @@ por Contrato</value>
     <value>Nota</value>
   </data>
   <data name="PartTimepercentages" xml:space="preserve">
-    <value>Porcentage de tiempo parcial</value>
+    <value>Porcentajes de tiempo parcial</value>
   </data>
   <data name="RuleSetBag" xml:space="preserve">
     <value>Bolsa de Turnos</value>
@@ -1073,7 +1073,7 @@ por Contrato</value>
     <value>Solo agentes activos</value>
   </data>
   <data name="ResReportAgentSkills" xml:space="preserve">
-    <value>Skills de los agentes</value>
+    <value>Skills de los Agentes</value>
   </data>
   <data name="ResOnlyActiveSkillColon" xml:space="preserve">
     <value>Solo skills activas:</value>
