@@ -2,6 +2,7 @@ using System;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ApprovePeriodAsInAdherence;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -15,6 +16,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 	{
 		private readonly IHistoricalAdherenceReadModelPersister _historicalAdherencePersister;
 		private readonly IHistoricalChangeReadModelPersister _historicalChangePersister;
+		private readonly IApprovedPeriodsPersister _approvedPeriodsPersister;
 		private readonly INow _now;
 		private readonly int _keepDays;
 
@@ -34,11 +36,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		public HistoricalAdherenceMaintainer(
 			IHistoricalAdherenceReadModelPersister historicalAdherencePersister,
 			IHistoricalChangeReadModelPersister historicalChangePersister,
+			IApprovedPeriodsPersister approvedPeriodsPersister,
 			INow now,
 			IConfigReader config)
 		{
 			_historicalAdherencePersister = historicalAdherencePersister;
 			_historicalChangePersister = historicalChangePersister;
+			_approvedPeriodsPersister = approvedPeriodsPersister;
 			_now = now;
 			_keepDays = keepDays(config);
 		}
@@ -48,6 +52,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 			var removeUntil = _now.UtcDateTime().Date.AddDays(_keepDays * -1);
 			purgeHistoricalAdherence(removeUntil);
 			purgeHistoricalChange(removeUntil);
+			purgeApprovedPeriods(removeUntil);
 		}
 
 		[ReadModelUnitOfWork]
@@ -60,6 +65,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		protected virtual void purgeHistoricalAdherence(DateTime removeUntil)
 		{
 			_historicalAdherencePersister.Remove(removeUntil);
+		}
+		
+		[UnitOfWork]
+		protected virtual void purgeApprovedPeriods(DateTime removeUntil)
+		{
+			_approvedPeriodsPersister.Remove(removeUntil);
 		}
 	}
 

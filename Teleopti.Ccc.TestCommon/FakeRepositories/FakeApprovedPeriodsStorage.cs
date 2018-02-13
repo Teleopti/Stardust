@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ApprovePeriodAsInAdherence;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
-	public class FakeApprovedPeriodsStorage : IApprovedPeriodsReader,IApprovedPeriodsPersister
+	public class FakeApprovedPeriodsStorage : IApprovedPeriodsReader, IApprovedPeriodsPersister
 	{
 		private readonly IList<ApprovedPeriod> _data = new List<ApprovedPeriod>();
 
@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		}
 
 		public IEnumerable<ApprovedPeriod> Data => _data;
-		
+
 		public IEnumerable<ApprovedPeriod> Read(Guid personId, DateTime startTime, DateTime endTime)
 		{
 			return _data
@@ -27,6 +27,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public void Persist(ApprovedPeriod approvedPeriod)
 		{
 			_data.Add(approvedPeriod);
+		}
+
+		public void Remove(DateTime until)
+		{
 		}
 	}
 }

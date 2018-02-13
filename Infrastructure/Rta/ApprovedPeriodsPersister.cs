@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay;
+﻿using System;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ApprovePeriodAsInAdherence;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -33,6 +34,15 @@ VALUES
 				.SetParameter("PersonId", model.PersonId)
 				.SetParameter("StartTime", model.StartTime)
 				.SetParameter("EndTime", model.EndTime)
+				.ExecuteUpdate();
+		}
+
+		public void Remove(DateTime until)
+		{
+			_unitOfWork.Current().Session()
+				.CreateSQLQuery(@"
+DELETE FROM [rta].[ApprovedPeriods] WHERE EndTime < :ts")
+				.SetParameter("ts", until)
 				.ExecuteUpdate();
 		}
 	}
