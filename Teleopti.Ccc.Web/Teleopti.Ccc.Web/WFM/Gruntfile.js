@@ -463,8 +463,8 @@ module.exports = function(grunt) {
         //     dev: webpackConfig
         // },
         exec: {
-            ngbuild_dev: 'npm run ng build --verbose',
-            ngbuild_prod: 'npm run ng build --prod --verbose'
+            ngbuild_dev: 'npm run ng build',
+            ngbuild_prod: 'npm run ng build --prod'
         }
     });
 
@@ -497,12 +497,12 @@ module.exports = function(grunt) {
         'imageEmbed',
         'concat:distModules',
         'concat:devJs',
-        'exec:ngbuild_dev',
         'newer:concat:distCss',
         'newer:concat:distDarkCss',
         'copy:devCss',
         'newer:copy',
-        'generateIndexDev'
+        'generateIndexDev',
+        'exec:ngbuild_dev'
     ]);
     grunt.registerTask('test-continuous', ['ngtemplates', 'karma:continuous']);
     grunt.registerTask('nova', ['devDist', 'iisexpress:web', 'watch:dev']); // this task run the main task and then watch for file changes
@@ -526,13 +526,13 @@ module.exports = function(grunt) {
         'concat:distJsForDesktop',
         'concat:distCss',
         'concat:distDarkCss',
-        'exec:ngbuild_prod',
         'cssmin',
         'uglify:dist',
         'uglify:distForDesktop',
         'copy:extras',
         'copy:bootstrap',
-        'generateIndex'
+        'generateIndex',
+        'exec:ngbuild_prod'
     ]); // this task should only be used by the build. It's kind of packaging for production.
 
     // for desktop client
