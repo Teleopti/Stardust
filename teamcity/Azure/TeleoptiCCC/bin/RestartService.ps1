@@ -284,11 +284,9 @@ function StartTeleoptiServer
 	if ($iisInstalled) {
 		StartWindowsService -ServiceName "W3SVC"
 		Invoke-Expression -Command:"iisreset /START"
-       
-		
-	}
+    }
 
-    #Make sure W3SVC is started before starting ServiceBus and ETL
+    #Make sure local W3SVC on this instance is started before starting ServiceBus and ETL
     do
 	{ 
 		log-info "." 
@@ -305,8 +303,15 @@ function StartTeleoptiServer
 	
 	log-info "local url: 'Web/ToggleHandler/AllToggles' on this instance is accessible..."
 	
+	#Checking public URL is responding:
+	$BaseUrl = BaseUrl-get $isAzure
+    Write-Host "Waiting for web services to start..."
+    $Url = $BaseURL + "web/"
+    $cred = GetCredentials
+    WaitForUrl $Url $cred
 	
-    #Starting ServiceBus and ETL 
+	
+	#Starting ServiceBus and ETL 
     TeleoptiWindowsServices-Start
 	
 	do
@@ -316,6 +321,13 @@ function StartTeleoptiServer
 	until (($WaitforLocalTeleoptiServices = CheckThisInstanceWeb -SubSite "web/StardustDashboard/ping") -eq "200")
 	
 	log-info "Teleopti Services on this instance is started..."
+	
+	#Checking public URL is responding:
+	$BaseUrl = BaseUrl-get $isAzure
+    Write-Host "Waiting for Teleopti Services to start..."
+    $Url = $BaseURL + "web/StardustDashboard/ping"
+    $cred = GetCredentials
+    WaitForUrl $Url $cred
    
 }
 
@@ -358,8 +370,8 @@ function RemoveAppOfflinePage {
 $JOB = "Teleopti.Ccc.RestartService"
 	
 	#Get local path
-    [string]$scriptPath = split-path -parent $MyInvocation.MyCommand.Definition
-    [string]$ScriptFileName = $MyInvocation.MyCommand.Name
+    [string]$global:scriptPath = split-path -parent $MyInvocation.MyCommand.Definition
+    [string]$global:ScriptFileName = $MyInvocation.MyCommand.Name
     Set-Location $scriptPath
 
  	#start log4net
@@ -370,7 +382,7 @@ $JOB = "Teleopti.Ccc.RestartService"
     configure-logging -configFile "$configFile" -serviceName "$serviceName"
 	
 	log-info "running: $ScriptFileName"
-
+	
 Try
 {
 	    
