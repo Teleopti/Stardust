@@ -225,17 +225,6 @@ function StopTeleoptiServer
 	}
 }
 
-function GetCredentials
-{
-	$username = "tfsintegration"
-	$domain = "toptinet"
-	$password = "m8kemew0rk"
-	$secstr = New-Object -TypeName System.Security.SecureString
-	$password.ToCharArray() | ForEach-Object {$secstr.AppendChar($_)}
-	$AdminCredentials = new-object -typename System.Management.Automation.PSCredential -argumentlist $domain\$username, $secstr
-	return $AdminCredentials
-}
-
 function CheckThisInstanceWeb
 {
 	param 
@@ -281,9 +270,10 @@ function StartTeleoptiServer
     }
 
     #Make sure local W3SVC on this instance is started before starting ServiceBus and ETL
-    do
+    log-info ""
+	do
 	{ 
-		log-info "." 
+		log-info "Waiting for local web site '/Web' on this instance to become responsive..." 
 	}
 	until (($WaitforLocalWeb = CheckThisInstanceWeb -SubSite "Web") -eq "200")
 	
@@ -291,7 +281,7 @@ function StartTeleoptiServer
 	
 	do
 	{ 
-		log-info "." 
+		log-info "Waiting for local web site 'Web/ToggleHandler/AllToggles' on this instance to become responsive..." 
 	}
 	until (($WaitforLocalWeb = CheckThisInstanceWeb -SubSite "Web/ToggleHandler/AllToggles") -eq "200")
 	
@@ -301,8 +291,7 @@ function StartTeleoptiServer
 	$BaseUrl = BaseUrl-get
     Write-Host "Waiting for web services to start..."
     $Url = $BaseURL + "web/"
-    $cred = GetCredentials
-    WaitForUrl $Url $cred
+    WaitForUrl $Url 
 	
 	
 	#Starting ServiceBus and ETL 
@@ -310,7 +299,7 @@ function StartTeleoptiServer
 	
 	do
 	{ 
-		log-info "." 
+		log-info "Waiting for local web site 'web/StardustDashboard/ping' on this instance to become responsive..." 
 	}
 	until (($WaitforLocalTeleoptiServices = CheckThisInstanceWeb -SubSite "web/StardustDashboard/ping") -eq "200")
 	
@@ -320,8 +309,7 @@ function StartTeleoptiServer
 	$BaseUrl = BaseUrl-get
     Write-Host "Waiting for Teleopti Services to start..."
     $Url = $BaseURL + "web/StardustDashboard/ping"
-    $cred = GetCredentials
-    WaitForUrl $Url $cred
+    WaitForUrl $Url
    
 }
 
