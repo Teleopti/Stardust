@@ -42,9 +42,10 @@ function Check-HttpStatus {
 	[net.httpWebRequest] $req = [net.webRequest]::create($url)
     $req.Credentials = $credentials;
 	$req.Method = "GET"
-    log-info 'Check-HttpStatus: ' $url
+    log-info "Check-HttpStatus: '$url'"
 	[net.httpWebResponse] $res = $req.getResponse()
-	log-info 'Response Code:' $res.StatusCode
+	$rescode = $res.StatusCode
+	log-info "Response Code: '$rescode'"
     $ret = $res.StatusCode -eq "200"
     $res.Close()
     return $ret
@@ -86,7 +87,7 @@ function StopWindowsService
 
          while ($arrService.Name -ne $ServiceName)
          {
-            log-info "Waiting for $ServiceName to be accessible..."
+            log-info "Waiting for '$ServiceName' to be accessible..."
             $arrService = Get-Service -Name $ServiceName
             Start-sleep 3
 			$bailOut--
@@ -94,14 +95,14 @@ function StopWindowsService
 		 
 		 if ($bailOut -eq 0) 
 		 {
-			log-info "Could not get access to service: $ServiceName"
+			log-info "Could not get access to service: '$ServiceName'"
 		 }
 		 
 		 
          if ($arrService.Status -ne "Stopped")
          {
              $arrService.Stop()
-             log-info "Stopping " $ServiceName " service"
+             log-info "Stopping '$ServiceName' service"
 			 
              $bailOut = 100
              $sleep = 3
@@ -121,15 +122,16 @@ function StopWindowsService
                     Stop-Process $ServicePID -Force
                 }
              } while ($arrService.Status -ne "Stopped")
-             log-info "`nService $ServiceName successfully stopped"
+             log-info "Service '$ServiceName' successfully stopped"
          }
          else
          {
-            log-info "Warning! Service $ServiceName status is:" $arrService.Status
+            $status = $arrService.Status
+			log-info "Warning! Service $ServiceName status is: $status"
          }
     }
     else {
-        log-info "Service" $ServiceName " is not installed on this host." 
+        log-info "Service '$ServiceName' is not installed on this host." 
     }
  }
 
@@ -142,56 +144,52 @@ function StopWindowsService
          $arrService = Get-Service -Name $ServiceName
          
 		 $bailOut = 100
-		 while ($arrService.Status -eq "Stopping")
+		 while ($arrService.Status -ne "Stopped")
 		 {
-			log-info "Stopping " $ServiceName " service"
+			$arrService = Get-Service -Name $ServiceName
+			$status = $arrService.status
+			log-info "Waiting for service: '$ServiceName' status to be Stopped. Current status is: $status"
 			$bailOut --
-			Start-Sleep 3
+			Start-Sleep 5
 			if ($bailOut -eq 0)
                 {
-                    log-info "Could not stop service $ServiceName, status remains " + $arrService.Status
-					log-error "Could not stop service $ServiceName, status remains " + $arrService.Status
-					Throw "Could not stop service $ServiceName, status remains " + $arrService.Status
+                    $status = $arrService.status
+                    log-info "'$ServiceName' never entered stopped state. Status remains: $status"
+					log-error "'$ServiceName' never entered stopped state. Status remains: $status"
+					Throw "'$ServiceName' never entered stopped state. Status remains: $status"
                 }
 		 }
 		 
-		 while ($arrService.Status -eq "Starting")
-		 {
-			log-info "Starting " $ServiceName " service"
-			$bailOut --
-			Start-Sleep 3
-			if ($bailOut -eq 0)
-                {
-                    log-info "Could not start service $ServiceName, status remains " + $arrService.Status
-					log-error "Could not start service $ServiceName, status remains " + $arrService.Status
-					Throw "Could not start service $ServiceName, status remains " + $arrService.Status
-                }
-		 }
-         
+		 log-info "'$ServiceName' is stopped!"
+		 
+		          
 		 if ($arrService.Status -ne "Running")
          {
              $arrService.Start()
-             log-info "Starting " $ServiceName " service" 
+             log-info "Starting '$ServiceName'..." 
              $bailOut = 100
              do
              {
                 $arrService = Get-Service -Name $ServiceName
-                log-info $arrservice.status
-                Start-Sleep 3
+				$status = $arrService.status
+                log-info "Current status of '$ServiceName' is: $status"
+                Start-Sleep 5
                 $bailOut--
                 if ($bailOut -eq 0)
                 {
-                    log-info "Could not start service $ServiceName, status remains " + $arrService.Status
-					log-error "Could not start service $ServiceName, status remains " + $arrService.Status
-					Throw "Could not start service $ServiceName, status remains " + $arrService.Status
+                    $status = $arrService.status
+					log-info "Could not start service $ServiceName, status remains: $Status" 
+					log-error "Could not start service $ServiceName, status remains: $Status" 
+					Throw "Could not start service $ServiceName, status remains: $Status" 
                 }
              } while ($arrService.Status -ne "Running")
              log-info "`nService $ServiceName successfully started"
          }
          else
          {
-            log-info "Warning! Service $ServiceName status is:" $arrService.Status
-			log-error "Warning! Service $ServiceName status is:" $arrService.Status
+            $status = $arrService.status
+			log-info "Warning! Service $ServiceName status is: $Status" 
+			log-error "Warning! Service $ServiceName status is: $Status" 
          }
     }
     else {
@@ -297,7 +295,15 @@ function StartTeleoptiServer
 	}
 	until (($WaitforLocalWeb = CheckThisInstanceWeb -SubSite "Web") -eq "200")
 	
-	log-info "Local Web Service on this Instance is up..."
+	log-info "Local 'Web' Service on this Instance is up..."
+	
+	do
+	{ 
+		log-info "." 
+	}
+	until (($WaitforLocalWeb = CheckThisInstanceWeb -SubSite "Web/ToggleHandler/AllToggles") -eq "200")
+	
+	log-info "local url: 'Web/ToggleHandler/AllToggles' on this instance is accessible..."
 	
 	
     #Starting ServiceBus and ETL 
