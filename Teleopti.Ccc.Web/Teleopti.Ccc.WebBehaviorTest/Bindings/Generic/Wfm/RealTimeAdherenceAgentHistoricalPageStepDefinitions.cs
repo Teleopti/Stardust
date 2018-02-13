@@ -30,10 +30,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			Navigation.GoToAgentHistoricalAdherence(personId, DateTime.Parse(date));
 		}
 
-		[When(@"I approve adherence as in adherence between '(.*)' and '(.*)'")]
-		public void WhenIApproveAdherenceAsInAdherenceBetween(string from, string to)
+		[When(@"I approve out of adherence starting at '(.*)' as in adherence")]
+		public void WhenIApproveAdherenceAsInAdherenceBetween(string from)
 		{
-			Browser.Interactions.Click(".recorded-out-of-adherence");
+			Browser.Interactions.ClickContaining(".recorded-out-of-adherence", from);
 			Browser.Interactions.Click(".approve-adherence-submit");
 		}
 

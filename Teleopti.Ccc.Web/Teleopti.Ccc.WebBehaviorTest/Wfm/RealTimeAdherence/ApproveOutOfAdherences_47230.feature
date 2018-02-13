@@ -47,7 +47,7 @@ Feature: Approve out of adherences
 	And at '09:00' 'Mikkey Dee' sets his phone state to 'LoggedOff'
 	And at '10:00' 'Mikkey Dee' sets his phone state to 'Ready'
 	When I view historical adherence for 'Mikkey Dee' on '2018-01-22'
-	And I approve adherence as in adherence between '09:00:00' and '10:00:00'
+	And I approve out of adherence starting at '09:00:00' as in adherence
 	Then I should see approved period between '09:00:00' and '10:00:00'
 	And I should not see any out of adherences
 	And I should see adherence percentage of 100%
