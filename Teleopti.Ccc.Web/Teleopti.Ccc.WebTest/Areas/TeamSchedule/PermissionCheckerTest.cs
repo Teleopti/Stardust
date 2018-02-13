@@ -55,11 +55,12 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		}
 
 		[Test]
-		public void ShouldReturnNullWhenHasFullDayPermission()
+		public void ShouldReturnNullWhenHasFullDayPermissionNHasViewUnpublishedSchedule()
 		{
 			var date = new DateOnly(2015,12,31);
 			var person = new Person();
 			_permissionProvider.Stub(x => x.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.AddFullDayAbsence, date, person)).Return(true);
+			_permissionProvider.Stub(x => x.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules, date, person)).Return(true);
 
 			var target = new PermissionChecker(_permissionProvider);
 			var result = target.CheckAddFullDayAbsenceForPerson(person, date);
@@ -80,13 +81,29 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			result.Should().Be.EqualTo(expectedError);
 		}
-		
+
 		[Test]
-		public void ShouldReturnNullWhenHasIntradayPermission()
+		public void ShouldReturnErrorMessageWhenHasNoViewUnpublishedScheduleForFullDayAbsence()
+		{
+			var date = new DateOnly(2015, 12, 31);
+			var person = new Person();
+			var expectedError = string.Format(Resources.NoPermissionToEditUnpublishedSchedule, person.Name);
+			_permissionProvider.Stub(x => x.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.AddFullDayAbsence, date, person)).Return(true);
+			_permissionProvider.Stub(x => x.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules, date, person)).Return(false);
+
+			var target = new PermissionChecker(_permissionProvider);
+			var result = target.CheckAddFullDayAbsenceForPerson(person, date);
+
+			result.Should().Be.EqualTo(expectedError);
+		}
+
+		[Test]
+		public void ShouldReturnNullWhenHasIntradayPermissionNHasViewUnpublishedSchedule()
 		{
 			var date = new DateOnly(2015,12,31);
 			var person = new Person();
 			_permissionProvider.Stub(x => x.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.AddIntradayAbsence, date, person)).Return(true);
+			_permissionProvider.Stub(x => x.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules, date, person)).Return(true);
 
 			var target = new PermissionChecker(_permissionProvider);
 			var result = target.CheckAddIntradayAbsenceForPerson(person, date);
@@ -101,6 +118,21 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			var person = new Person();
 			var expectedError = string.Format(Resources.NoPermisionAddIntradayAbsenceForAgent, person.Name);
 			_permissionProvider.Stub(x => x.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.AddIntradayAbsence, date, person)).Return(false);
+
+			var target = new PermissionChecker(_permissionProvider);
+			var result = target.CheckAddIntradayAbsenceForPerson(person, date);
+
+			result.Should().Be.EqualTo(expectedError);
+		}
+
+		[Test]
+		public void ShouldReturnErrorMessageWhenHasNoViewUnpublishedScheduleForIntradayAbsence()
+		{
+			var date = new DateOnly(2015, 12, 31);
+			var person = new Person();
+			var expectedError = string.Format(Resources.NoPermissionToEditUnpublishedSchedule, person.Name);
+			_permissionProvider.Stub(x => x.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.AddIntradayAbsence, date, person)).Return(true);
+			_permissionProvider.Stub(x => x.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules, date, person)).Return(false);
 
 			var target = new PermissionChecker(_permissionProvider);
 			var result = target.CheckAddIntradayAbsenceForPerson(person, date);
