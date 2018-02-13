@@ -43,10 +43,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay
 			var person = _persons.Load(personId);
 
 			var time = TimeZoneInfo.ConvertTimeToUtc(date.Date, person?.PermissionInformation.DefaultTimeZone() ?? TimeZoneInfo.Utc);
-			var period = new DateTimePeriod(
-				time,
-				time.AddDays(1)
-			);
+			var period = new DateTimePeriod(time, time.AddDays(1));
 
 			var schedule = _scheduleLoader.Load(personId, date);
 			var shift = default(DateTimePeriod?);
@@ -63,10 +60,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay
 				.Concat(_adherences.Read(personId, period.StartDateTime, period.EndDateTime))
 				.Where(x => x != null);
 
-			
 
 			var obj = new AgentAdherenceDay();
 			obj.Load(
+				personId,
 				now,
 				period,
 				shift,
@@ -77,6 +74,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay
 
 			return obj;
 		}
-
 	}
 }

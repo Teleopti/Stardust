@@ -1,71 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay
 {
 	public class AdherencePercentageCalculator
 	{
-		public int? Calculate(
-			DateTimePeriod? period,
-			IEnumerable<HistoricalAdherence> data,
-			DateTime now)
+		public int? Calculate(DateTimePeriod? shift, IEnumerable<DateTimePeriod> neutralPeriods, IEnumerable<DateTimePeriod> outPeriods, DateTime now)
 		{
-			if (!period.HasValue)
+			if (!shift.HasValue)
 				return null;
 
-			var shiftStartTime = period.Value.StartDateTime;
-			var shiftEndTime = period.Value.EndDateTime;
-			
-			var onGoingShift = now < shiftEndTime;
-			var calculateUntil = onGoingShift ? now : shiftEndTime;
-			var adherenceAtStart = data.LastOrDefault(x => x.Timestamp <= shiftStartTime)?.Adherence ?? HistoricalAdherenceAdherence.Neutral;
+			var calculateUntil = new[] {now, shift.Value.EndDateTime}.Min();
 
-			var adherenceReadModels = data
-				.Select(a => new adherenceMoment {Time = a.Timestamp, Adherence = a.Adherence})
-				.Append(new adherenceMoment {Time = shiftStartTime, Adherence = adherenceAtStart})
-				.Append(new adherenceMoment {Time = calculateUntil})
-				.Where(a =>
-				{
-					var isOnShift = a.Time >= shiftStartTime && a.Time <= shiftEndTime;
-					return isOnShift;
-				})
-				.OrderBy(x => x.Time)
-				.ToArray();
+			var shiftTime = calculateUntil - shift.Value.StartDateTime;
 
-			var timeInAdherence = timeIn(HistoricalAdherenceAdherence.In, adherenceReadModels);
-			var timeInNeutral = timeIn(HistoricalAdherenceAdherence.Neutral, adherenceReadModels);
-			var shiftTime = shiftEndTime - shiftStartTime;
-			var timeToAdhere = shiftTime - timeInNeutral;
+			var timeNeutral = time(neutralPeriods);
+			var timeOut = time(outPeriods);
+			var timeIn = shiftTime - timeOut - timeNeutral;
+
+			var timeToAdhere = shiftTime - timeNeutral;
 
 			if (timeToAdhere == TimeSpan.Zero)
-				return 0;
-			return Convert.ToInt32((timeInAdherence.TotalSeconds / timeToAdhere.TotalSeconds) * 100);
+				return null;
+			return Convert.ToInt32((timeIn.TotalSeconds / timeToAdhere.TotalSeconds) * 100);
 		}
 
-		private static TimeSpan timeIn(
-			HistoricalAdherenceAdherence adherenceType,
-			IEnumerable<adherenceMoment> data) =>
-			data.Aggregate(new timeAccumulated(), (t, m) =>
-			{
-				if (t.AccumulateSince != null)
-					t.AccumulatedTime += (m.Time - t.AccumulateSince).Value;
-				t.AccumulateSince = m.Adherence == adherenceType ? m?.Time : null;
-				return t;
-			}).AccumulatedTime;
-
-		private class timeAccumulated
-		{
-			public TimeSpan AccumulatedTime { get; set; }
-			public DateTime? AccumulateSince { get; set; }
-		}
-
-		private class adherenceMoment
-		{
-			public HistoricalAdherenceAdherence? Adherence { get; set; }
-			public DateTime Time { get; set; }
-		}
+		private static TimeSpan time(IEnumerable<DateTimePeriod> periods) =>
+			TimeSpan.FromSeconds(periods.Sum(x => (x.EndDateTime - x.StartDateTime).TotalSeconds));
 	}
 }

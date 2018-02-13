@@ -119,6 +119,41 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.HistoricalAdhe
 		}
 
 		[Test]
+		public void ShouldCloseOutOfAdherenceOnFirstChange()
+		{
+			Now.Is("2016-10-12 12:00");
+			var person = Guid.NewGuid();
+
+			Database.WithAgent(person, "nicklas");
+			ReadModel.Has(new[]
+			{
+				new HistoricalAdherence
+				{
+					PersonId = person,
+					Adherence = HistoricalAdherenceAdherence.Out,
+					Timestamp = "2016-10-11 09:00".Utc()
+				},
+				new HistoricalAdherence
+				{
+					PersonId = person,
+					Adherence = HistoricalAdherenceAdherence.Neutral,
+					Timestamp = "2016-10-12 10:00".Utc()
+				},
+				new HistoricalAdherence
+				{
+					PersonId = person,
+					Adherence = HistoricalAdherenceAdherence.In,
+					Timestamp = "2016-10-12 11:00".Utc()
+				}
+			});
+
+			var viewModel = Target.Build(person);
+
+			viewModel.OutOfAdherences.Single().StartTime.Should().Be("2016-10-11T09:00:00");
+			viewModel.OutOfAdherences.Single().EndTime.Should().Be("2016-10-12T10:00:00");
+		}
+
+		[Test]
 		public void ShouldEndOpenOutOfAdherenceAtCurrentTime()
 		{
 			Now.Is("2018-02-01 10:00");

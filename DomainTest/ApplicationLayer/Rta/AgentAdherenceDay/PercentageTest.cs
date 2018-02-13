@@ -250,12 +250,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AgentAdherenceDay
 				.WithAssignment(person, "2017-12-08")
 				.WithActivity(null, "phone")
 				.WithAssignedActivity("2017-12-08 08:00", "2017-12-08 16:00")
-				;
-			Database.WithAdherenceIn("2017-12-08 08:00");
+				.WithAdherenceIn("2017-12-08 08:00");
 
 			var result = Target.Load(person);
 
-			result.Percentage().Should().Be(50);
+			result.Percentage().Should().Be(100);
 		}
 
 		[Test]
@@ -275,6 +274,26 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AgentAdherenceDay
 			var result = Target.Load(person);
 
 			result.Percentage().Should().Be(100);
+		}
+
+		[Test]
+		public void ShouldNotExcludeNeutralInTheMorning()
+		{
+			Now.Is("2017-12-08 23:00");
+			var person = Guid.NewGuid();
+			Database
+				.WithAgent(person)
+				.WithAssignment(person, "2017-12-08")
+				.WithActivity(null, "phone")
+				.WithAssignedActivity("2017-12-08 09:00", "2017-12-08 20:00")
+				.WithAdherenceNeutral("2017-12-08 06:00")
+				.WithAdherenceOut("2017-12-08 10:00")
+				.WithAdherenceIn("2017-12-08 11:00")
+				;
+
+			var result = Target.Load(person);
+
+			result.Percentage().Should().Be(90);
 		}
 
 		[Test]
