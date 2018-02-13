@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule
 					.ModifyWriteProtectedSchedule) && person.PersonWriteProtection.IsWriteProtected(date))
 				return Resources.WriteProtectSchedule;
 
-			if (!_permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules, date, person))
+			if (!_permissionProvider.IsPersonSchedulePublished(date, person) && !_permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules, date, person))
 				return string.Format(Resources.NoPermissionToEditUnpublishedSchedule, person.Name);
 			return null;
 		}
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule
 		{
 			if (!_permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.AddIntradayAbsence, date, person))
 				return string.Format(Resources.NoPermisionAddIntradayAbsenceForAgent, person.Name);
-			if (!_permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules, date, person))
+			if (!_permissionProvider.IsPersonSchedulePublished(date, person) && !_permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules, date, person))
 				return string.Format(Resources.NoPermissionToEditUnpublishedSchedule, person.Name);
 			return null;
 		}
