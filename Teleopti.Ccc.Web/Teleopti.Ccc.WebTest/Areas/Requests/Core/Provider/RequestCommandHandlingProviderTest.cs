@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Claims;
 using System.Linq;
+using System.Threading;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Collection;
@@ -14,7 +17,9 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
+using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -50,6 +55,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 		public FakePersonAbsenceAccountRepositoryWithOptimisticLockException PersonAbsenceAccountRepository;
 		public FullPermission Permission;
 		private IAbsence _absence;
+		
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -458,6 +464,203 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			Assert.AreEqual(5, accountDay1.Remaining.TotalDays);
 		}
 
+		[Test]
+		public void ShouldApproveShiftTradeRequestWithoutCopyFullDayAbsenceToDestinationAgent()
+		{
+			initializeState();
+
+			var date = new DateOnly(2008, 7, 16);
+			var personFrom = PersonFactory.CreatePerson("person from").WithId();
+
+			var personTo = PersonFactory.CreatePerson("person to").WithId();
+			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(personFrom, personTo, date,
+				date).WithId();
+			var personFromActivity = new Activity("person from activity").WithId();
+			var personToActivity = new Activity("person to activity").WithId();
+			var shiftCategory = new ShiftCategory("day");
+
+			var personFromAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(personFrom, Scenario.Current(),
+				personFromActivity
+				, new DateTimePeriod(2008, 7, 16, 8, 2008, 7, 16, 17), shiftCategory).WithId();
+			var personFromFullDayAbsence =
+				PersonAbsenceFactory.CreatePersonAbsence(personFrom, Scenario.Current()
+				, new DateTimePeriod(2008, 7, 16, 8, 2008, 7, 16, 17)).WithId();
+			var personToAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(personTo, Scenario.Current(),
+				personToActivity, new DateTimePeriod(2008, 7, 16, 9, 2008, 7, 16, 18), shiftCategory).WithId();
+
+			ScheduleStorage.Add(personFromAssignment);
+			ScheduleStorage.Add(personFromFullDayAbsence);
+			ScheduleStorage.Add(personToAssignment);
+
+			var scheduleDictionary = ScheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] {personFrom, personTo},
+				new ScheduleDictionaryLoadOptions(false, false), date.ToDateOnlyPeriod(), Scenario.Current());
+
+			shiftTradeSwapDetail.SchedulePartFrom = scheduleDictionary[personFrom].ScheduledDay(date);
+			shiftTradeSwapDetail.SchedulePartTo = scheduleDictionary[personTo].ScheduledDay(date);
+
+			shiftTradeSwapDetail.ChecksumFrom = new ShiftTradeChecksumCalculator(shiftTradeSwapDetail.SchedulePartFrom).CalculateChecksum();
+			shiftTradeSwapDetail.ChecksumTo = new ShiftTradeChecksumCalculator(shiftTradeSwapDetail.SchedulePartTo).CalculateChecksum();
+
+			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail>
+			{
+				shiftTradeSwapDetail
+			});
+			var personRequest = new PersonRequest(personFrom, shiftTradeRequest).WithId();
+			personRequest.ForcePending();
+			PersonRequestRepository.Add(personRequest);
+
+			Target.ApproveRequests(new[] {personRequest.Id.GetValueOrDefault()}, string.Empty);
+
+			personRequest.IsApproved.Should().Be(true);
+
+			scheduleDictionary = ScheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { personFrom, personTo },
+				new ScheduleDictionaryLoadOptions(false, false), date.ToDateOnlyPeriod(), Scenario.Current());
+
+			var scheduleDayFrom = scheduleDictionary[personFrom].ScheduledDay(date);
+			var scheduleDayTo = scheduleDictionary[personTo].ScheduledDay(date);
+
+			scheduleDayFrom.PersonAbsenceCollection().Length.Should().Be(1);
+			scheduleDayFrom.PersonAssignment().ShiftLayers.FirstOrDefault()?.Payload.Should().Be(personToActivity);
+
+			scheduleDayTo.PersonAbsenceCollection().Length.Should().Be(0);
+			scheduleDayTo.PersonAssignment().ShiftLayers.FirstOrDefault()?.Payload.Should().Be(personFromActivity);
+		}
+
+		[Test]
+		public void ShouldApproveShiftTradeRequestWithoutCopyFullDayAbsenceToSourceAgent()
+		{
+			initializeState();
+
+			var date = new DateOnly(2008, 7, 16);
+			var personFrom = PersonFactory.CreatePerson("person from").WithId();
+
+			var personTo = PersonFactory.CreatePerson("person to").WithId();
+			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(personFrom, personTo, date,
+				date).WithId();
+			var personFromActivity = new Activity("person from activity").WithId();
+			var personToActivity = new Activity("person to activity").WithId();
+			var shiftCategory = new ShiftCategory("day");
+
+			var personFromAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(personFrom, Scenario.Current(),
+				personFromActivity
+				, new DateTimePeriod(2008, 7, 16, 8, 2008, 7, 16, 17), shiftCategory).WithId();
+			var personToFullDayAbsence =
+				PersonAbsenceFactory.CreatePersonAbsence(personTo, Scenario.Current()
+				, new DateTimePeriod(2008, 7, 16, 9, 2008, 7, 16, 18)).WithId();
+			var personToAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(personTo, Scenario.Current(),
+				personToActivity, new DateTimePeriod(2008, 7, 16, 9, 2008, 7, 16, 18), shiftCategory).WithId();
+
+			ScheduleStorage.Add(personFromAssignment);
+			ScheduleStorage.Add(personToFullDayAbsence);
+			ScheduleStorage.Add(personToAssignment);
+
+			var scheduleDictionary = ScheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { personFrom, personTo },
+				new ScheduleDictionaryLoadOptions(false, false), date.ToDateOnlyPeriod(), Scenario.Current());
+
+			shiftTradeSwapDetail.SchedulePartFrom = scheduleDictionary[personFrom].ScheduledDay(date);
+			shiftTradeSwapDetail.SchedulePartTo = scheduleDictionary[personTo].ScheduledDay(date);
+
+			shiftTradeSwapDetail.ChecksumFrom = new ShiftTradeChecksumCalculator(shiftTradeSwapDetail.SchedulePartFrom).CalculateChecksum();
+			shiftTradeSwapDetail.ChecksumTo = new ShiftTradeChecksumCalculator(shiftTradeSwapDetail.SchedulePartTo).CalculateChecksum();
+
+			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail>
+			{
+				shiftTradeSwapDetail
+			});
+			var personRequest = new PersonRequest(personFrom, shiftTradeRequest).WithId();
+			personRequest.ForcePending();
+			PersonRequestRepository.Add(personRequest);
+
+			Target.ApproveRequests(new[] { personRequest.Id.GetValueOrDefault() }, string.Empty);
+
+			personRequest.IsApproved.Should().Be(true);
+
+			scheduleDictionary = ScheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { personFrom, personTo },
+				new ScheduleDictionaryLoadOptions(false, false), date.ToDateOnlyPeriod(), Scenario.Current());
+
+			var scheduleDayFrom = scheduleDictionary[personFrom].ScheduledDay(date);
+			var scheduleDayTo = scheduleDictionary[personTo].ScheduledDay(date);
+
+			scheduleDayFrom.PersonAbsenceCollection().Length.Should().Be(0);
+			scheduleDayFrom.PersonAssignment().ShiftLayers.FirstOrDefault()?.Payload.Should().Be(personToActivity);
+
+			scheduleDayTo.PersonAbsenceCollection().Length.Should().Be(1);
+			scheduleDayTo.PersonAssignment().ShiftLayers.FirstOrDefault()?.Payload.Should().Be(personFromActivity);
+		}
+
+		[Test]
+		public void ShouldApproveShiftTradeRequestWithPartialAndFullDayAbsenceStayInSourceAgent()
+		{
+			initializeState();
+
+			var date = new DateOnly(2008, 7, 16);
+			var personFrom = PersonFactory.CreatePerson("person from").WithId();
+
+			var personTo = PersonFactory.CreatePerson("person to").WithId();
+			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(personFrom, personTo, date,
+				date).WithId();
+			var personFromActivity = new Activity("person from activity").WithId();
+			var personToActivity = new Activity("person to activity").WithId();
+			var shiftCategory = new ShiftCategory("day");
+
+			var personFromAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(personFrom, Scenario.Current(),
+				personFromActivity
+				, new DateTimePeriod(2008, 7, 16, 8, 2008, 7, 16, 17), shiftCategory).WithId();
+			var personFromFullDayAbsence =
+				PersonAbsenceFactory.CreatePersonAbsence(personFrom, Scenario.Current()
+				, new DateTimePeriod(2008, 7, 16, 8, 2008, 7, 16, 17)).WithId();
+			var personFromPartialAbsence =
+				PersonAbsenceFactory.CreatePersonAbsence(personFrom, Scenario.Current()
+					, new DateTimePeriod(2008, 7, 16, 8, 2008, 7, 16, 9)).WithId();
+			var personToAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(personTo, Scenario.Current(),
+				personToActivity, new DateTimePeriod(2008, 7, 16, 9, 2008, 7, 16, 18), shiftCategory).WithId();
+
+			ScheduleStorage.Add(personFromAssignment);
+			ScheduleStorage.Add(personFromPartialAbsence);
+			ScheduleStorage.Add(personFromFullDayAbsence);
+			ScheduleStorage.Add(personToAssignment);
+
+			var scheduleDictionary = ScheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { personFrom, personTo },
+				new ScheduleDictionaryLoadOptions(false, false), date.ToDateOnlyPeriod(), Scenario.Current());
+
+			shiftTradeSwapDetail.SchedulePartFrom = scheduleDictionary[personFrom].ScheduledDay(date);
+			shiftTradeSwapDetail.SchedulePartTo = scheduleDictionary[personTo].ScheduledDay(date);
+
+			shiftTradeSwapDetail.ChecksumFrom = new ShiftTradeChecksumCalculator(shiftTradeSwapDetail.SchedulePartFrom).CalculateChecksum();
+			shiftTradeSwapDetail.ChecksumTo = new ShiftTradeChecksumCalculator(shiftTradeSwapDetail.SchedulePartTo).CalculateChecksum();
+
+			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail>
+			{
+				shiftTradeSwapDetail
+			});
+			var personRequest = new PersonRequest(personFrom, shiftTradeRequest).WithId();
+			personRequest.ForcePending();
+			PersonRequestRepository.Add(personRequest);
+
+			Target.ApproveRequests(new[] { personRequest.Id.GetValueOrDefault() }, string.Empty);
+
+			personRequest.IsApproved.Should().Be(true);
+
+			scheduleDictionary = ScheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { personFrom, personTo },
+				new ScheduleDictionaryLoadOptions(false, false), date.ToDateOnlyPeriod(), Scenario.Current());
+
+			var scheduleDayFrom = scheduleDictionary[personFrom].ScheduledDay(date);
+			var scheduleDayTo = scheduleDictionary[personTo].ScheduledDay(date);
+
+			scheduleDayFrom.PersonAbsenceCollection().Length.Should().Be(2);
+			scheduleDayFrom.PersonAssignment().ShiftLayers.FirstOrDefault()?.Payload.Should().Be(personToActivity);
+
+			scheduleDayTo.PersonAbsenceCollection().Length.Should().Be(0);
+			scheduleDayTo.PersonAssignment().ShiftLayers.FirstOrDefault()?.Payload.Should().Be(personFromActivity);
+		}
+
+		[TearDown]
+		public void AfterTest()
+		{
+			StateHolderProxyHelper.ClearStateHolder();
+			Thread.CurrentPrincipal = null;
+		}
+
 		private void createShiftsForPeriod(DateTimePeriod period, IPerson person)
 		{
 			foreach (var day in period.WholeDayCollection(TimeZoneInfo.Utc))
@@ -600,6 +803,20 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			workflowControlSet.InsertPeriod(absenceRequestOpenPeriod, 0);
 
 			return workflowControlSet;
+		}
+
+		private static void initializeState()
+		{
+			var dataSource = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory("for test"), null, null);
+			var loggedOnPerson = StateHolderProxyHelper.CreateLoggedOnPerson();
+			loggedOnPerson.PermissionInformation.SetDefaultTimeZone(
+				TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+			var principal = new TeleoptiPrincipalFactory().MakePrincipal(loggedOnPerson, dataSource,
+				BusinessUnitFactory.BusinessUnitUsedInTest, null);
+			Thread.CurrentPrincipal = principal;
+
+			StateHolderProxyHelper.ClearStateHolder();
+			StateHolder.Initialize(new FakeState(), new MessageBrokerCompositeDummy());
 		}
 
 		public class FakePersonAbsenceAccountRepositoryWithOptimisticLockException : FakePersonAbsenceAccountRepository, IPersonAbsenceAccountRepository

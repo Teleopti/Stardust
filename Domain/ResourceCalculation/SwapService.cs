@@ -31,7 +31,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             IScheduleDay schedulePart2 = schedules[_selectedSchedules[0].Person].ReFetch(_selectedSchedules[0]);
 	        var ass1 = schedulePart1.PersonAssignment();
 	        var ass2 = schedulePart2.PersonAssignment();
-            if ((ass1==null || ass2==null) && (!schedulePart1.HasDayOff() && !schedulePart2.HasDayOff()))
+
+			removeAbsences(schedulePart1);
+			removeAbsences(schedulePart2);
+
+			if ((ass1==null || ass2==null) && (!schedulePart1.HasDayOff() && !schedulePart2.HasDayOff()))
             {
                 if (ass1 == null)
                 {
@@ -70,7 +74,19 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return retList;
         }
 
-        private bool checkBasicRules()
+		private static void removeAbsences(IScheduleDay schedulePart)
+		{
+			if (schedulePart.SignificantPartForDisplay() == SchedulePartView.FullDayAbsence)
+			{
+				var personAbsences = schedulePart.PersonAbsenceCollection();
+				foreach (var personAbsence in personAbsences)
+				{
+					schedulePart.Remove(personAbsence);
+				}
+			}
+		}
+
+		private bool checkBasicRules()
         {
             if (_selectedSchedules.Count != 2)
                 return false;
