@@ -23,8 +23,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 		private readonly IUserTimeZone _timeZone;
 		private readonly IGlobalSettingDataRepository _globalSettingDataRepository;
-		
-		private CommonNameDescriptionSetting _commonNameDescription;
 
 		public ScheduleAuditTrailReport(ICurrentUnitOfWork currentUnitOfWork, IUserTimeZone timeZone,
 			IGlobalSettingDataRepository globalSettingDataRepository)
@@ -38,8 +36,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 		{
 			const string sql = "SELECT DISTINCT p.Id, p.FirstName, p.LastName, p.EmploymentNumber "
 							   + "FROM Auditing.Revision r INNER JOIN dbo.Person p ON r.ModifiedBy = p.Id";
-			
-			getNameDescriptionSetting();
+
+			var commonNameDescription = getNameDescriptionSetting();
 			return _currentUnitOfWork.Current().Session().CreateSQLQuery(sql)
 				.AddScalar("Id", NHibernateUtil.Guid)
 				.AddScalar("FirstName", NHibernateUtil.String)
@@ -50,7 +48,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 				.Select(x => new SimplestPersonInfo
 					{
 						Id = (Guid) x[0],
-						Name = _commonNameDescription.BuildFor((string) x[1], (string) x[2], (string) x[3])
+						Name = commonNameDescription.BuildFor((string) x[1], (string) x[2], (string) x[3])
 					}
 				);
 		}
@@ -58,8 +56,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 		public IList<ScheduleAuditingReportData> Report(IPerson changedByPerson, DateOnlyPeriod changedPeriod,
 			DateOnlyPeriod scheduledPeriod, int maximumResults, IList<IPerson> scheduledAgents)
 		{
-			getNameDescriptionSetting();
-			
+			var commonNameDescription = getNameDescriptionSetting();
+
 			var auditSession = _currentUnitOfWork.Current().Session().Auditer();
 			var ret = new List<ScheduleAuditingReportData>();
 			var changedPeriodAgentTimeZone = changedPeriod.ToDateTimePeriod(_timeZone.TimeZone());
@@ -79,7 +77,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 					.AddOrder(AuditEntity.RevisionProperty("ModifiedAt").Desc())
 					.SetMaxResults(maximumResults)
 					.Results()
-					.ForEach(assRev => retTemp.Add(createAssignmentAuditingData(assRev)));
+					.ForEach(assRev => retTemp.Add(createAssignmentAuditingData(assRev, commonNameDescription)));
 
 				auditSession.CreateQuery().ForHistoryOf<PersonAbsence, Revision>()
 					.Add(AuditEntity.RevisionProperty("ModifiedAt")
@@ -91,7 +89,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 					.AddOrder(AuditEntity.RevisionProperty("ModifiedAt").Desc())
 					.SetMaxResults(maximumResults)
 					.Results()
-					.ForEach(absRev => retTemp.Add(createAbsenceAuditingData(absRev)));
+					.ForEach(absRev => retTemp.Add(createAbsenceAuditingData(absRev, commonNameDescription)));
 			}
 
 			ret.AddRange(retTemp
@@ -101,16 +99,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 			return ret;
 		}
 
-		private void getNameDescriptionSetting()
+		private CommonNameDescriptionSetting getNameDescriptionSetting()
 		{
-			_commonNameDescription = _globalSettingDataRepository.FindValueByKey("CommonNameDescription",
-				new CommonNameDescriptionSetting());
+			return _globalSettingDataRepository.FindValueByKey("CommonNameDescription", new CommonNameDescriptionSetting());
 		}
 
-		private ScheduleAuditingReportData createAssignmentAuditingData(IRevisionEntityInfo<PersonAssignment, Revision> auditedAssignment)
+		private ScheduleAuditingReportData createAssignmentAuditingData(IRevisionEntityInfo<PersonAssignment, Revision> auditedAssignment,
+			CommonNameDescriptionSetting commonNameDescription)
 		{
-			var ret = new ScheduleAuditingReportData { ShiftType = Resources.AuditingReportShift };
-			addCommonScheduleData(ret, auditedAssignment.Entity, auditedAssignment.RevisionEntity, auditedAssignment.Operation);
+			var ret = new ScheduleAuditingReportData {ShiftType = Resources.AuditingReportShift};
+			addCommonScheduleData(ret, auditedAssignment.Entity, auditedAssignment.RevisionEntity, auditedAssignment.Operation,
+				commonNameDescription);
 
 			ret.Detail = string.Empty;
 			var personAssignment = auditedAssignment.Entity;
@@ -142,7 +141,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 			return ret;
 		}
 
-		private ScheduleAuditingReportData createAbsenceAuditingData(IRevisionEntityInfo<PersonAbsence, Revision> auditedAbsence)
+		private ScheduleAuditingReportData createAbsenceAuditingData(IRevisionEntityInfo<PersonAbsence, Revision> auditedAbsence,
+			CommonNameDescriptionSetting commonNameDescription)
 		{
 			var ret = new ScheduleAuditingReportData
 			{
@@ -151,16 +151,18 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 				ScheduleStart = TimeZoneInfo.ConvertTimeFromUtc(auditedAbsence.Entity.Period.StartDateTime, _timeZone.TimeZone()),
 				ScheduleEnd = TimeZoneInfo.ConvertTimeFromUtc(auditedAbsence.Entity.Period.EndDateTime, _timeZone.TimeZone())
 			};
-			addCommonScheduleData(ret, auditedAbsence.Entity, auditedAbsence.RevisionEntity, auditedAbsence.Operation);
+			addCommonScheduleData(ret, auditedAbsence.Entity, auditedAbsence.RevisionEntity, auditedAbsence.Operation,
+				commonNameDescription);
 			return ret;
 		}
 
 		private void addCommonScheduleData(ScheduleAuditingReportData scheduleAuditingReportData,
-			IPersistableScheduleData auditedEntity, Revision revision, RevisionType revisionType)
+			IPersistableScheduleData auditedEntity, Revision revision, RevisionType revisionType,
+			CommonNameDescriptionSetting commonNameDescription)
 		{
 			scheduleAuditingReportData.ModifiedAt = TimeZoneInfo.ConvertTimeFromUtc(revision.ModifiedAt, _timeZone.TimeZone());
-			scheduleAuditingReportData.ModifiedBy = _commonNameDescription.BuildFor(revision.ModifiedBy);
-			scheduleAuditingReportData.ScheduledAgent = _commonNameDescription.BuildFor(auditedEntity.Person);
+			scheduleAuditingReportData.ModifiedBy = commonNameDescription.BuildFor(revision.ModifiedBy);
+			scheduleAuditingReportData.ScheduledAgent = commonNameDescription.BuildFor(auditedEntity.Person);
 			addRevisionType(scheduleAuditingReportData, revisionType);
 		}
 
