@@ -1,17 +1,14 @@
 ﻿{
-	"compilerOptions": {
-		"module": "commonjs",
-		"target": "es2015",
-		"allowJs": true,
-		"sourceMap": true,
-		"outDir": "./dist/temp"
-	},
-	"exclude": [
-		"node_modules",
-		"Gruntfile.js",
-		"dist",
-		"karma.conf.js",
-		"webpack.config.js",
-		"vendor"
-	]
+    "compilerOptions": {
+        "target": "es5",
+        "experimentalDecorators": true,
+        "allowSyntheticDefaultImports": true,
+        "moduleResolution": "node",
+        "emitDecoratorMetadata": true,
+        "module": "es2015",
+        "allowJs": true,
+        "types": ["angular"],
+        "lib": ["es2017", "dom"]
+    },
+    "exclude": ["node_modules"]
 }

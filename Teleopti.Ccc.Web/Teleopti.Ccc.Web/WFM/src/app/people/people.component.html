@@ -1,0 +1,136 @@
+<style>
+	.agent-row {
+		border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+		border-left: 3px solid transparent;
+	}
+
+	.agent-row:hover {
+		background: rgba(0, 0, 0, 0.12);
+		border-left: 3px solid #888;
+	}
+
+	.person-header {
+		background: dodgerblue;
+		height: 50%;
+		padding: 5px;
+		text-align: center;
+		color: white;
+	}
+
+	.avatar {
+		height: 50px;
+		width: 50px;
+		background: dodgerblue;
+		border: 4px solid white;
+		color: white;
+		line-height: 42px;
+		border-radius: 50%;
+		text-align: center;
+		margin: 0 auto;
+		margin-top: 15px;
+	}
+
+	.mm,
+	.front {
+		display: inline-grid;
+	}
+
+	.mm {
+		z-index: 2;
+		opacity: 0.6;
+	}
+
+	.front {
+		position: relative;
+		z-index: 3;
+	}
+
+	.x1 {
+		transform: translateX(15px) scale(0.8);
+		transform-origin: center;
+	}
+
+	.x2 {
+		transform: translateX(-15px) scale(0.8);
+		transform-origin: center;
+	}
+</style>
+
+<!--<div>
+
+	<div class="view-header with-fab with-desc">
+		<div class="view-title">
+			<h1>
+				<i class="mdi mdi-account"></i> People</h1>
+			<p>Optional description of the view goes here.</p>
+		</div>
+	</div>
+
+	<div class="con-row">
+		<div class="con-flex">
+			<div class="panel material-depth-1">
+				<div class="sub-header">
+					<div class="con-row">
+						<div class="con-flex">
+							<label for="filter" class="input-icon">
+								<i class="mdi mdi-filter-outline">
+									<input matTooltip="Filter" type="text" id="filter" placeholder="filter roles..." [(ngModel)]="filterInput">
+								</i>
+							</label>
+						</div>
+						<div class="con-flex x3">
+							<button class="wfm-btn wfm-btn-primary" [disabled]="itemArr.length === 0" [ngClass]="{'wfm-btn-invis-disabled': itemArr.length === 0}" (click)="openDialog()">Grant Role</button>
+							<button class="wfm-btn wfm-btn-primary" [disabled]="itemArr.length === 0" [ngClass]="{'wfm-btn-invis-disabled': itemArr.length === 0}" (click)="openDialog()">Revoke Role</button>
+						</div>
+					</div>
+				</div>
+				<div class="con-row">
+					<div class="con-flex">
+						<ul>
+							<li *ngFor="let person of people" class="con-row align-row-baseline agent-row">
+								<div class="con-flex">
+									<div matTooltip="Select person" tabindex=0 class="context-menu card-context" (click)="assertMulti(person); person.marked = !person.marked;"
+									 [ngClass]="{'notice-success':person.marked, 'notice-info':!person.marked}">
+										<i class="mdi mdi-account" [ngClass]="{'mdi-check':person.marked}"></i>
+									</div>
+									{{person.firstName}} {{person.lastName}}
+								</div>
+								<div class="con-flex">
+									{{person.phone}}
+								</div>
+								<div class="con-flex">
+									{{person.role}}
+								</div>
+							</li>
+						</ul>
+						<!--<modal-dialog show='modalShownRevoke' ng-cloak>
+							<div class="person-header relative">
+								<div class="avatar">
+									<i class="mdi mdi-account"></i>
+								</div>
+								<h1>{{person.firstName}} {{person.lastName}}</h1>
+							</div>
+							<div class="con-fluid-row">
+								<div class="con-fluid-flex" *ngFor="existingRole in existingRoles">
+									<div>
+										<mat-checkbox [(ngModel)]="existingRole.checked" ng-checked="true" aria-label="Checkbox">{{existingRole.name}} <span ng-bind="item.id"></span></mat-checkbox>
+									</div>
+								</div>
+							</div>
+							<div class="modal-actions">
+								<aside>
+									<button class="wfm-btn wfm-btn-invis" (click)="close()">Edit</button>
+									<button class="wfm-btn wfm-btn-invis-primary" (click)="close()">Close</button>
+								</aside>
+							</div>
+						</modal-dialog>
+					</div>
+				</div>
+				<div class="con-footer">
+					<!--<wfm-pagination class="pull-pagination" pagination-options="paginationOptions" get-data-for-page-callback="getPageData"></wfm-pagination>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>-->
+

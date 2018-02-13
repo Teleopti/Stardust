@@ -1,4 +1,4 @@
-module.exports = function (grunt) {
+module.exports = function(grunt) {
     // Project configuration.
     grunt.initConfig({
         watch: {
@@ -6,7 +6,7 @@ module.exports = function (grunt) {
                 files: ['css/*.scss', 'index.tpl.html', 'app/**/*.html', 'html/**/*.html', 'app/**/*.js'],
                 tasks: ['devDist', 'eslint:dev'],
                 options: {
-                    spawn: false,
+                    spawn: false
                 }
             }
         },
@@ -22,7 +22,6 @@ module.exports = function (grunt) {
                     verbose: true
                 }
             }
-
         },
         msbuild: {
             rebuild: {
@@ -51,7 +50,7 @@ module.exports = function (grunt) {
                     verbosity: 'normal'
                 }
             },
-            buildWeb:{
+            buildWeb: {
                 src: ['../Teleopti.Ccc.Web.csproj'],
                 options: {
                     projectConfiguration: 'Debug',
@@ -67,7 +66,7 @@ module.exports = function (grunt) {
         },
         karma: {
             options: {
-                configFile: 'karma.conf.js',
+                configFile: 'karma.conf.js'
             },
             unit: {
                 browsers: ['Chrome_small']
@@ -80,7 +79,7 @@ module.exports = function (grunt) {
             },
             rta: {
                 singleRun: false,
-                configFile: 'karma.rta.conf.js',
+                configFile: 'karma.rta.conf.js'
             }
         },
         sass: {
@@ -166,7 +165,13 @@ module.exports = function (grunt) {
                     separator: ';' + grunt.util.linefeed,
                     sourceMap: true
                 },
-                src: ['app/**/*.js', '!app/**/*.spec.js', '!app/**/*.fake.js', '!app/**/*.fortest.js', '!app/app_desktop_client.js'],
+                src: [
+                    'app/**/*.js',
+                    '!app/**/*.spec.js',
+                    '!app/**/*.fake.js',
+                    '!app/**/*.fortest.js',
+                    '!app/app_desktop_client.js'
+                ],
                 dest: 'dist/main.js'
             },
             distJsForDesktop: {
@@ -250,13 +255,19 @@ module.exports = function (grunt) {
                     'node_modules/teleopti-styleguide/styleguide/dist/main_dark.min.css'
                 ],
                 dest: 'dist/resources/modules_dark.css'
-            },
+            }
         },
 
         uglify: {
             dist: {
                 files: {
-                    'dist/main.min.js': ['app/**/*.js', '!app/**/*.spec.js', '!app/**/*.fake.js', '!app/**/*.fortest.js', '!app/app_desktop_client.js'],
+                    'dist/main.min.js': [
+                        'app/**/*.js',
+                        '!app/**/*.spec.js',
+                        '!app/**/*.fake.js',
+                        '!app/**/*.fortest.js',
+                        '!app/app_desktop_client.js'
+                    ],
                     'dist/resources/modules.min.js': ['dist/resources/modules.js'],
                     'dist/templates.min.js': ['dist/templates.js']
                 },
@@ -268,7 +279,13 @@ module.exports = function (grunt) {
             },
             distForDesktop: {
                 files: {
-                    'dist/mainForDesktop.min.js': ['app/**/*.js', '!app/**/*.spec.js', '!app/**/*.fake.js', '!app/**/*.fortest.js', '!app/app.js'],
+                    'dist/mainForDesktop.min.js': [
+                        'app/**/*.js',
+                        '!app/**/*.spec.js',
+                        '!app/**/*.fake.js',
+                        '!app/**/*.fortest.js',
+                        '!app/app.js'
+                    ],
                     'dist/resources/modulesForDesktop.min.js': ['dist/resources/modulesForDesktop.js'],
                     'dist/templatesForDesktop.min.js': ['dist/templates.js']
                 },
@@ -322,23 +339,26 @@ module.exports = function (grunt) {
         },
         copy: {
             devCss: {
-                files: [{
-                    expand: true,
-                    cwd: 'dist/resources',
-                    src: ['*.css','!*.min.css'],
-                    dest: 'dist/resources/',
-                    rename: function (dest, src) {
-                        return dest + src.replace('.css', '.min.css')
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'dist/resources',
+                        src: ['*.css', '!*.min.css'],
+                        dest: 'dist/resources/',
+                        rename: function(dest, src) {
+                            return dest + src.replace('.css', '.min.css');
+                        }
+                    },
+                    {
+                        expand: true,
+                        cwd: 'css',
+                        src: '*.css',
+                        dest: 'dist/',
+                        rename: function(dest, src) {
+                            return dest + src.replace('.css', '.min.css');
+                        }
                     }
-                },{
-                    expand: true,
-                    cwd: 'css',
-                    src: '*.css',
-                    dest: 'dist/',
-                    rename: function (dest, src) {
-                        return dest + src.replace('.css', '.min.css')
-                    }
-                }]
+                ]
             },
             sourceMaps: {
                 files: [
@@ -350,26 +370,30 @@ module.exports = function (grunt) {
                         src: ['*/*.map'],
                         dest: 'dist/',
                         filter: 'isFile'
-                    },
-                ],
+                    }
+                ]
             },
             extras: {
-                files: [{
-                    expand: true,
-                    cwd: 'node_modules/angular-ui-grid',
-                    src: ['*.ttf', '*.woff', '*.eot'],
-                    dest: 'dist/resources/',
-                    filter: 'isFile'
-                }]
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'node_modules/angular-ui-grid',
+                        src: ['*.ttf', '*.woff', '*.eot'],
+                        dest: 'dist/resources/',
+                        filter: 'isFile'
+                    }
+                ]
             },
             bootstrap: {
-                files: [{
-                    expand: true,
-                    cwd: 'node_modules/bootstrap/fonts',
-                    src: ['*.ttf', '*.woff', '*.eot'],
-                    dest: 'dist/fonts',
-                    filter: 'isFile'
-                }]
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'node_modules/bootstrap/fonts',
+                        src: ['*.ttf', '*.woff', '*.eot'],
+                        dest: 'dist/fonts',
+                        filter: 'isFile'
+                    }
+                ]
             }
         },
 
@@ -385,16 +409,18 @@ module.exports = function (grunt) {
 
         imageEmbed: {
             distDark: {
-                src: ["css/style_dark.css"],
-                dest: "dist/style_dark.css",
+                src: ['css/style_dark.css'],
+                dest: 'dist/style_dark.css',
                 options: {
                     deleteAfterEncoding: false,
-                    preEncodeCallback: function (filename) { return true; }
+                    preEncodeCallback: function(filename) {
+                        return true;
+                    }
                 }
             },
             distClassic: {
-                src: ["css/style_classic.css"],
-                dest: "dist/style_classic.css",
+                src: ['css/style_classic.css'],
+                dest: 'dist/style_classic.css',
                 options: {
                     deleteAfterEncoding: false
                 }
@@ -402,18 +428,10 @@ module.exports = function (grunt) {
         },
         eslint: {
             global: {
-                src: [
-                    'app/global/**/*.js',
-                    '!app/**/*.spec.js',
-                    '!app/**/*.fake.js',
-                    '!app/global/i18n/*.js'
-                ]
+                src: ['app/global/**/*.js', '!app/**/*.spec.js', '!app/**/*.fake.js', '!app/global/i18n/*.js']
             },
             rta: {
-                src: [
-                    'app/rta/**/*.js',
-                    '!app/rta/rta/rta.faketime.service.js'
-                ]
+                src: ['app/rta/**/*.js', '!app/rta/rta/rta.faketime.service.js']
             },
             schedule: {
                 src: [
@@ -427,7 +445,7 @@ module.exports = function (grunt) {
                 src: [
                     //add your path to module here
                     'app/permissions/refact/**/*js',
-                    "app/staffing/**/*.js",
+                    'app/staffing/**/*.js',
                     'app/skillPrio/**/*.js',
                     'app/requests/**/*.js',
                     'app/teamSchedule/**/*.js',
@@ -436,6 +454,17 @@ module.exports = function (grunt) {
                     '!app/**/*.fake.js'
                 ]
             }
+        },
+        // webpack: {
+        //     options: {
+        //         stats: !process.env.NODE_ENV || process.env.NODE_ENV === 'development'
+        //     },
+        //     prod: webpackConfig,
+        //     dev: webpackConfig
+        // },
+        exec: {
+            ngbuild_dev: 'ng build',
+            ngbuild_prod: 'ng build --prod'
         }
     });
 
@@ -454,24 +483,62 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-newer');
     grunt.loadNpmTasks('grunt-eslint');
     grunt.loadNpmTasks('grunt-image-embed');
+    grunt.loadNpmTasks('grunt-webpack');
+    grunt.loadNpmTasks('grunt-exec');
 
     // Default task(s).
     grunt.registerTask('default', ['devDist', 'test', 'watch:dev']); // this task run the main task and then watch for file changes
     grunt.registerTask('test', ['ngtemplates', 'karma:unit']);
     grunt.registerTask('devTest', ['ngtemplates', 'karma:dev']);
     grunt.registerTask('rtaTest', ['ngtemplates', 'karma:rta']);
-    grunt.registerTask('devDist', ['ngtemplates', 'sass', 'imageEmbed', 'concat:distModules', 'concat:devJs', 'newer:concat:distCss', 'newer:concat:distDarkCss', 'copy:devCss', 'newer:copy', 'generateIndexDev']);
+    grunt.registerTask('devDist', [
+        'ngtemplates',
+        'sass',
+        'imageEmbed',
+        'concat:distModules',
+        'concat:devJs',
+        'exec:ngbuild_dev',
+        'newer:concat:distCss',
+        'newer:concat:distDarkCss',
+        'copy:devCss',
+        'newer:copy',
+        'generateIndexDev'
+    ]);
     grunt.registerTask('test-continuous', ['ngtemplates', 'karma:continuous']);
     grunt.registerTask('nova', ['devDist', 'iisexpress:web', 'watch:dev']); // this task run the main task and then watch for file changes
     grunt.registerTask('build', ['msbuild:build']); // build the solution
     grunt.registerTask('buildWeb', ['msbuild:buildWeb']); // build the web project
     grunt.registerTask('rebuild', ['msbuild:rebuild']); // rebuild the solution
-    grunt.registerTask('generateIndex', ['processhtml:dist', 'cacheBust:dist', 'processhtml:distForDesktop', 'cacheBust:distForDesktop']);
-    grunt.registerTask('generateIndexDev', ['processhtml:dev','cacheBust:dist']);
+    grunt.registerTask('generateIndex', [
+        'processhtml:dist',
+        'cacheBust:dist',
+        'processhtml:distForDesktop',
+        'cacheBust:distForDesktop'
+    ]);
+    grunt.registerTask('generateIndexDev', ['processhtml:dev', 'cacheBust:dist']);
     grunt.registerTask('eslint-beta', ['eslint']);
     grunt.registerTask('devDistWatch', ['devDist', 'watch:dev']);
-    grunt.registerTask('dist', ['ngtemplates', 'sass', 'imageEmbed', 'concat:distModules', 'concat:distJsForDesktop', 'concat:distCss', 'concat:distDarkCss', 'cssmin', 'uglify:dist', 'uglify:distForDesktop', 'copy:extras', 'copy:bootstrap', 'generateIndex']); // this task should only be used by the build. It's kind of packaging for production.
+    grunt.registerTask('dist', [
+        'ngtemplates',
+        'sass',
+        'imageEmbed',
+        'concat:distModules',
+        'concat:distJsForDesktop',
+        'concat:distCss',
+        'concat:distDarkCss',
+        'exec:ngbuild_prod',
+        'cssmin',
+        'uglify:dist',
+        'uglify:distForDesktop',
+        'copy:extras',
+        'copy:bootstrap',
+        'generateIndex'
+    ]); // this task should only be used by the build. It's kind of packaging for production.
 
     // for desktop client
-    grunt.registerTask('buildForDesktop', ['copy:sourceMaps', 'processhtml:distForDesktop','cacheBust:distForDesktop']);
+    grunt.registerTask('buildForDesktop', [
+        'copy:sourceMaps',
+        'processhtml:distForDesktop',
+        'cacheBust:distForDesktop'
+    ]);
 };

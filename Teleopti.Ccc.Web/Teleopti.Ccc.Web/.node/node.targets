@@ -26,7 +26,7 @@
 
 		<!-- NPM install command -->
 		<NpmInstallCmd>"$(NpmCmd)" install</NpmInstallCmd>
-		<NpmSetServerCmd>"$(NpmCmd)" set registry http://hestia:4873</NpmSetServerCmd>
+		<NpmSetServerCmd>"$(NpmCmd)" set registry https://registry.npmjs.org/</NpmSetServerCmd>
 		<NpmRebuildNodeSassCmd>"$(NpmCmd)" rebuild node-sass</NpmRebuildNodeSassCmd>
 
 		<!-- NPM dedupe command -->

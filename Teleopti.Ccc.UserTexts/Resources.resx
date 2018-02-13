@@ -16774,7 +16774,7 @@ Do you want to participate?</value>
   <data name="BlockSchedulingNotWorkingWhenUsingPreferences" xml:space="preserve">
     <value>Block scheduling may not work when using preferences.</value>
     <comment>Plans: Validation messages</comment>
-  </data>
+  </data> 
   <data name="IntraDayChipNumberOf" xml:space="preserve">
     <value>of</value>
     <comment>Used to show how many skills of a skill group that are selected</comment>
