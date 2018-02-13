@@ -58,6 +58,10 @@
 	.wfm-table td {
 		border: none;
 	}
+
+	.hidden-demo {
+		display: none;
+	}
 </style>
 
 <div ng-controller="PeopleStart">
@@ -99,15 +103,15 @@
 				<div class="con-row">
 					<div class="con-flex">
 						<div class="con-row">
-							<button class="wfm-btn wfm-btn-primary" ng-disabled="itemArr.length === 0" ng-class="{'wfm-btn-invis-disabled': itemArr.length === 0}"
+							<button class="wfm-btn wfm-btn-primary" ng-disabled="selectedPeopleIds.length === 0" ng-class="{'wfm-btn-invis-disabled': selectedPeopleIds.length === 0}"
 							 ng-click="resetMulti()">Clear</button>
-							<button class="wfm-btn wfm-btn-primary" ng-click="showAll()">{{buttonText()}}</button>
+							<button class="wfm-btn wfm-btn-primary" ng-disabled="selectedPeopleIds.length === 0" ng-click="showAll()">Show selected ({{selectedPeopleIds.length}})</button>
 						</div>
 						<table class="wfm-table">
 							<thead>
 								<tr>
 									<th>Name</th>
-									<th>Roles</th>
+									<!--<th>Roles</th>-->
 								</tr>
 							</thead>
 							<tbody>
@@ -120,11 +124,9 @@
 										</div>
 										{{person.firstName}} {{person.lastName}}
 									</td>
-									<td>
+									<!--<td>
 										<span ng-repeat="role in person.roles" ng-if="role.checked">
-											{{role.name}}<span ng-if="$index < getNumberOfCheckedRoles(person.roles) - 1">,</span>
 										</span>
-									</td>
 								</tr>
 							</tbody>
 						</table>
