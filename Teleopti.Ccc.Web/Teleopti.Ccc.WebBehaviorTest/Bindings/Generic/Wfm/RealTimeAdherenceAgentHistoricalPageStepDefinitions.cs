@@ -33,8 +33,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[When(@"I approve adherence as in adherence between '(.*)' and '(.*)'")]
 		public void WhenIApproveAdherenceAsInAdherenceBetween(string from, string to)
 		{
-			Browser.Interactions.FillWith(".approve-adherence-from", from);
-			Browser.Interactions.FillWith(".approve-adherence-to", from);
+			Browser.Interactions.Click(".recorded-out-of-adherence");
 			Browser.Interactions.Click(".approve-adherence-submit");
 		}
 
@@ -59,7 +58,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			Browser.Interactions.AssertAnyContains(".approved-period", to);
 		}
 
-		[Then(@" I should not see any out of adherences")]
+		[Then(@"I should not see any out of adherences")]
 		public void ThenIShouldNotSeeAnyOutOfAdherences()
 		{
 			Browser.Interactions.AssertNotExists(".rta-view", ".out-of-adherence");
