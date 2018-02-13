@@ -244,9 +244,9 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 		});
 
 		expect(t.backend.lastParams.approvePeriod()).toEqual({
-			personId: '1',
-			startTime: '2018-01-29 08:00:00',
-			endTime: '2018-01-29 09:00:00'
+			PersonId: '1',
+			StartDateTime: '2018-01-29 08:00:00',
+			EndDateTime: '2018-01-29 09:00:00'
 		});
 	});
 

@@ -2,10 +2,8 @@
 using System.Globalization;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ApprovePeriodAsInAdherence;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
@@ -38,8 +36,8 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		}
 		
 		[UnitOfWork]
-		[HttpGet, Route("api/HistoricalAdherence/ApprovePeriod")]
-		public virtual IHttpActionResult ApprovePeriod(ApprovePeriodAsInAdherenceCommand command)
+		[HttpPost, Route("api/HistoricalAdherence/ApprovePeriod")]
+		public virtual IHttpActionResult ApprovePeriod([FromBody] ApprovePeriodAsInAdherenceCommand command)
 		{
 			_approvePeriodCommandHandler.Handle(command);
 			return Ok();

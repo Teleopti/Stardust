@@ -170,6 +170,29 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		}
 	}
 
+	public static class FakeDatabaseAdherenceExtensions
+	{
+		public static FakeDatabase WithApprovedPeriod(this FakeDatabase database, string startTime, string endTime)
+		{
+			return database.WithApprovedPeriod(null, startTime, endTime);
+		}
+		
+		public static FakeDatabase WithAdherenceIn(this FakeDatabase database, string time)
+		{
+			return database.WithAdherenceIn(null, time);
+		}
+		
+		public static FakeDatabase WithAdherenceOut(this FakeDatabase database, string time)
+		{
+			return database.WithAdherenceOut(null, time);
+		}
+		
+		public static FakeDatabase WithAdherenceNeutral(this FakeDatabase database, string time)
+		{
+			return database.WithAdherenceNeutral(null, time);
+		}
+	}
+	
 	public static class FakeDatabaseRuleExtensions
 	{
 		public static FakeDatabase WithMappedRule(this FakeDatabase database)
@@ -1073,35 +1096,35 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return WithAlarm(threshold, null);
 		}
 
-		public FakeDatabase WithApprovedPeriod(string startTime, string endTime)
+		public FakeDatabase WithApprovedPeriod(Guid? id, string startTime, string endTime)
 		{
 			_approvePeriod.Approve(new ApprovedPeriod
 			{
-				PersonId = _person.Id.Value,
+				PersonId = id ?? _person.Id.Value,
 				StartTime = startTime.Utc(),
 				EndTime = endTime.Utc()
 			});
 			return this;
 		}
 
-		public FakeDatabase WithAdherenceIn(string time)
+		public FakeDatabase WithAdherenceIn(Guid? id, string time)
 		{
-			_adherenceChange.In(_person.Id.Value, time.Utc());
+			_adherenceChange.In(id ?? _person.Id.Value, time.Utc());
 			return this;
 		}
 
-		public FakeDatabase WithAdherenceOut(string time)
+		public FakeDatabase WithAdherenceOut(Guid? id, string time)
 		{
-			_adherenceChange.Out(_person.Id.Value, time.Utc());
+			_adherenceChange.Out(id ?? _person.Id.Value, time.Utc());
 			return this;
 		}
 
-		public FakeDatabase WithAdherenceNeutral(string time)
+		public FakeDatabase WithAdherenceNeutral(Guid? id, string time)
 		{
-			_adherenceChange.Neutral(_person.Id.Value, time.Utc());
+			_adherenceChange.Neutral(id ?? _person.Id.Value, time.Utc());
 			return this;
 		}
-		
+
 		[UnitOfWork]
 		public virtual FakeDatabase ClearAssignments(Guid? personId)
 		{
@@ -1150,6 +1173,5 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			if (all.IsEmpty())
 				createAction();
 		}
-
 	}
 }

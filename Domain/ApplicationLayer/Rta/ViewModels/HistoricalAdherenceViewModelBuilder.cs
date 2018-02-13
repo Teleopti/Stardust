@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 				Schedules = buildSchedules(_schedule.Load(personId, date)),
 				Changes = buildChanges(adherenceDay.Changes()),
 				OutOfAdherences = buildOutOfAdherences(adherenceDay.OutOfAdherences()),
-				RecordedOutOfAdherences = buildOutOfAdherences(adherenceDay.OutOfAdherences()),
+				RecordedOutOfAdherences = buildOutOfAdherences(adherenceDay.RecordedOutOfAdherences()),
 				ApprovedPeriods = buildApprovedPeriods(adherenceDay.ApprovedPeriods()),
 				Timeline = new ScheduleTimeline
 				{

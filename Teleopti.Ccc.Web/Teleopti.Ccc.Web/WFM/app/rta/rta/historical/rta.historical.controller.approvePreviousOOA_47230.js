@@ -108,6 +108,7 @@
 		}
 
 		function buildRecordedOutOfAdherences(timeline, intervals) {
+			
 			return intervals
 				.map(function (interval) {
 					var o = buildInterval(timeline, interval);
@@ -174,9 +175,9 @@
 		vm.submitApprove = function () {
 			$http.post('../api/HistoricalAdherence/ApprovePeriod',
 				{
-					personId: $stateParams.personId,
-					startTime: moment(vm.approveStartTime).format("YYYY-MM-DD HH:mm:ss"),
-					endTime: moment(vm.approveEndTime).format("YYYY-MM-DD HH:mm:ss")
+					PersonId: $stateParams.personId,
+					StartDateTime: moment(vm.approveStartTime).format("YYYY-MM-DD HH:mm:ss"),
+					EndDateTime: moment(vm.approveEndTime).format("YYYY-MM-DD HH:mm:ss")
 				}
 			).then(loadData);
 		};
