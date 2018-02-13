@@ -373,16 +373,6 @@ GROUP BY
 		WHEN 6 THEN convert(varchar(10),left(d.year_month,4) + '-' + right(d.year_month,2))
 		WHEN 7 THEN d.weekday_resource_key
 	END
-ORDER BY 
-		CASE @interval_type 
-		WHEN 1 THEN i.interval_name
-		WHEN 2 THEN i.halfhour_name
-		WHEN 3 THEN i.hour_name
-		WHEN 4 THEN LEFT(convert(varchar(30),d.date_date,120),10)--According to current culture
-		WHEN 5 THEN convert(varchar(10),left(d.year_week,4) + '-' + right(d.year_week,2))
-		WHEN 6 THEN convert(varchar(10),left(d.year_month,4) + '-' + right(d.year_month,2))
-		WHEN 7 THEN d.weekday_resource_key
-		END
 
 /*Service Level Calculations*/
 IF @sl_calc_id=1
@@ -426,7 +416,7 @@ IF @interval_type=7
 	END
 	
 --Return data to report
-SELECT * FROM #result ORDER BY weekday_number
+SELECT * FROM #result ORDER BY weekday_number, period
 
 END
 
