@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 
 			var scheduleRange = dictionary[person];
 			return visibleReason.HasFlag(ScheduleVisibleReasons.StudentAvailability)
-				? scheduleRange.ScheduledDayCollectionForStudentAvailability(period)
+				? scheduleRange.ScheduledDayCollectionNoViewPublishedScheduleCheck(period)
 				: scheduleRange.ScheduledDayCollection(period);
 		}
 	}

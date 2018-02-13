@@ -173,7 +173,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				{
 					_target.Add(createPersonAssignment(new DateTimePeriod(2000, 1, 2, 2000, 1, 3)));
 					var part =
-						_target.ScheduledDayCollectionForStudentAvailability(new DateOnlyPeriod(2000, 1, 2, 2000, 1, 3)).ToList();
+						_target.ScheduledDayCollectionNoViewPublishedScheduleCheck(new DateOnlyPeriod(2000, 1, 2, 2000, 1, 3)).ToList();
 					Assert.AreEqual(part.Count(), 2);
 					Assert.IsFalse(part[0].IsFullyPublished);
 					Assert.IsFalse(part[1].IsFullyPublished);

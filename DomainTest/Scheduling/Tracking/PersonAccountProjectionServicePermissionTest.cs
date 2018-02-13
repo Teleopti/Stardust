@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Tracking
 	[LoggedOff]
 	[DefaultData]
 	[RealPermissions]
-	[Ignore("48040 - to be fixed")]
 	public class PersonAccountProjectionServicePermissionTest
 	{
 		public FakeDatabase Database;

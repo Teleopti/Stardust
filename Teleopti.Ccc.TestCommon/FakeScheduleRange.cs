@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.TestCommon
 			return new IScheduleDay[] { scheduleDay };
 		}
 
-		public IEnumerable<IScheduleDay> ScheduledDayCollectionForStudentAvailability(DateOnlyPeriod dateOnlyPeriod)
+		public IEnumerable<IScheduleDay> ScheduledDayCollectionNoViewPublishedScheduleCheck(DateOnlyPeriod dateOnlyPeriod)
 		{
 			throw new NotImplementedException();
 		}

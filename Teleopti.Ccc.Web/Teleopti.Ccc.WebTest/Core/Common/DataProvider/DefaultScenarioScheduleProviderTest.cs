@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 				period,
 				scenario)).Return(scheduleDictionary).IgnoreArguments();
 			scheduleDictionary.Stub(x => x[person]).Return(scheduleRange);
-			scheduleRange.Stub(x => x.ScheduledDayCollectionForStudentAvailability(period)).Return(new[] { scheduleDay, scheduleDay });
+			scheduleRange.Stub(x => x.ScheduledDayCollectionNoViewPublishedScheduleCheck(period)).Return(new[] { scheduleDay, scheduleDay });
 
 			var result = _target.GetScheduleForStudentAvailability(period).ToList();
 			result.Count.Should().Be.EqualTo(2);

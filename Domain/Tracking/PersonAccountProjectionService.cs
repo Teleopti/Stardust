@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Tracking
 
 	        var range = storage.ScheduleRangeBasedOnAbsence(_account.Period().ToDateTimePeriod(timeZone), scenario,
 		        _person, _account.Owner.Absence);
-	        return range.ScheduledDayCollection(_account.Period()).ToList();
+	        return range.ScheduledDayCollectionNoViewPublishedScheduleCheck(_account.Period()).ToList();
         }
     }
 }

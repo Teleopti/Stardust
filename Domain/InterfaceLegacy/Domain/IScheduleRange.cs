@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// Created by: xinfengl
 		/// Created date: 2015-05-21
 		/// </remarks>
-		IEnumerable<IScheduleDay> ScheduledDayCollectionForStudentAvailability(DateOnlyPeriod dateOnlyPeriod);
+		IEnumerable<IScheduleDay> ScheduledDayCollectionNoViewPublishedScheduleCheck(DateOnlyPeriod dateOnlyPeriod);
 
         /// <summary>
         /// Refetches the schedulepart

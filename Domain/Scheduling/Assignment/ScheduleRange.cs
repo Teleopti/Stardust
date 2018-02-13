@@ -252,7 +252,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		/// It should only be used to get schedule to retrieve student availability.
 		/// Refer to bug #33327: Agents can no longer see Availability they entered for dates that have not been published.
 		/// </summary>
-		public IEnumerable<IScheduleDay> ScheduledDayCollectionForStudentAvailability(DateOnlyPeriod dateOnlyPeriod)
+		public IEnumerable<IScheduleDay> ScheduledDayCollectionNoViewPublishedScheduleCheck(DateOnlyPeriod dateOnlyPeriod)
 		{
 			return getScheduledDayCollection(dateOnlyPeriod, true);
 		}
