@@ -33,7 +33,7 @@
 			controller: 'ReportsOverviewController as reports'
 		})
 		.state('auditTrail', {
-			url: '/report/audit-trail',
+			url: '/report/audit-trail/',
 			templateUrl: 'app/reports/html/audit.html',
 			controller: 'AuditTrailController as vm'
 		});
