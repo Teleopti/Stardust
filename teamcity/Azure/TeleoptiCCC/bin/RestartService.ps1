@@ -52,17 +52,11 @@ function Check-HttpStatus {
 }
 
 function BaseUrl-get {
-    param([bool]$IsAzure)
-    if ($IsAzure) {
-        $DataSourceName = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("TeleoptiDriveMap.DataSourceName")
-        $BaseUrl = "https://" + $DataSourceName +".teleopticloud.com/"
-    }
-    else
-    {
-         $BaseUrl = fnDnsAlias-Get
-         $BaseUrl = $BaseUrl + "TeleoptiWFM/"
-    }
-	return $BaseUrl
+    
+    $DataSourceName = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("TeleoptiDriveMap.DataSourceName")
+    $BaseUrl = "https://" + $DataSourceName +".teleopticloud.com/"
+    
+    return $BaseUrl
 }
 
 function fnDnsAlias-Get {
@@ -304,7 +298,7 @@ function StartTeleoptiServer
 	log-info "local url: 'Web/ToggleHandler/AllToggles' on this instance is accessible..."
 	
 	#Checking public URL is responding:
-	$BaseUrl = BaseUrl-get $isAzure
+	$BaseUrl = BaseUrl-get
     Write-Host "Waiting for web services to start..."
     $Url = $BaseURL + "web/"
     $cred = GetCredentials
@@ -323,7 +317,7 @@ function StartTeleoptiServer
 	log-info "Teleopti Services on this instance is started..."
 	
 	#Checking public URL is responding:
-	$BaseUrl = BaseUrl-get $isAzure
+	$BaseUrl = BaseUrl-get
     Write-Host "Waiting for Teleopti Services to start..."
     $Url = $BaseURL + "web/StardustDashboard/ping"
     $cred = GetCredentials
