@@ -463,8 +463,8 @@ module.exports = function(grunt) {
         //     dev: webpackConfig
         // },
         exec: {
-            ngbuild_dev: 'ng build',
-            ngbuild_prod: 'ng build --prod'
+            ngbuild_dev: 'npm run ng build',
+            ngbuild_prod: 'npm run ng build --prod'
         }
     });
 
