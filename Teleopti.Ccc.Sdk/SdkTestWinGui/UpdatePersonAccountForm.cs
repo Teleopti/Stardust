@@ -47,7 +47,7 @@ namespace SdkTestWinGui
 
         private void loadAbsences()
         {
-            var absencesDtos = _service.SchedulingService.GetAbsences(new AbsenceLoadOptionDto() { LoadDeleted = false, LoadDeletedSpecified = true });
+            var absencesDtos = _service.SchedulingService.GetAbsences(new AbsenceLoadOptionDto { LoadDeleted = false, LoadDeletedSpecified = true });
             var datasource = absencesDtos.Where(a => a.IsTrackable).ToList();
             comboBoxTracker.DataSource = datasource;
             comboBoxTracker.DisplayMember = "Name";
@@ -79,8 +79,7 @@ namespace SdkTestWinGui
 
         private void invokePersonAccountSaved(PersonAccountSavedEventArgs e)
         {
-            EventHandler<PersonAccountSavedEventArgs> handler = PersonAccountSaved;
-            if (handler != null) handler(this, e);
+			PersonAccountSaved?.Invoke(this, e);
         }
     }
 

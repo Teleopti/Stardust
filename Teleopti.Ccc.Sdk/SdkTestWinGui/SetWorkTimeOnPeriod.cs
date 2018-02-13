@@ -37,7 +37,7 @@ namespace SdkTestWinGui
 			var res = _form1.Service.OrganizationService.SetSchedulePeriodWorktimeOverride(command);
 			if (res.AffectedId != null)
 			{
-				labelResult.Text = "Schedule Period " + res.AffectedId + " updated";
+				labelResult.Text = $"Schedule Period {res.AffectedId} updated";
 			}
 			else
 			{

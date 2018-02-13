@@ -4,7 +4,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Interfaces.Domain;
 
-
 namespace Teleopti.Ccc.Domain.Common
 {
 	public class PersonAccountUpdater : IPersonAccountUpdater

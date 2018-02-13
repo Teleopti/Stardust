@@ -1867,8 +1867,6 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 		/// Created by: Ola
 		/// Created date: 2009-06-15
 		/// </remarks>
-		/// 
-		/// 
 		[SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		public ICollection<PersonAccountDto> GetPersonAccounts(PersonDto person, DateOnlyDto containingDate)
 		{
