@@ -87,7 +87,7 @@
 
 		function buildTimeline(data) {
 			var timeline = [];
-			var time = moment(data.Timeline.StartTime);
+			var time = moment(data.Timeline.StartTime).startOf('hour');
 			var endTime = moment(data.Timeline.EndTime);
 			while (true) {
 				time.add(1, 'hour');
@@ -108,7 +108,7 @@
 		}
 
 		function buildRecordedOutOfAdherences(timeline, intervals) {
-			
+
 			return intervals
 				.map(function (interval) {
 					var o = buildInterval(timeline, interval);
