@@ -47,7 +47,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 		expect(vm.fullTimeline[last].Offset.substr(0, 5)).toEqual((100 / 24 * 23).toString().substr(0, 5));
 	});
 
-  fit('should display timeline labels for whole hours', function (t) {
+  it('should display timeline labels for whole hours', function (t) {
     t.stateParams.personId = '1';
     t.backend
       .with.historicalAdherence({
