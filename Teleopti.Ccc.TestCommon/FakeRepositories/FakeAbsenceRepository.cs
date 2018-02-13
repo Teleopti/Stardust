@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
-	public class FakeAbsenceRepository : IAbsenceRepository
+	public class FakeAbsenceRepository : IAbsenceRepository, IProxyForId<IAbsence>
 	{
 		private readonly List<IAbsence> _absences = new List<IAbsence>();
 

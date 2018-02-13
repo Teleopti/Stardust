@@ -18,18 +18,23 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule
 		{
 			if (!_permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.AddFullDayAbsence, date, person))
 				return string.Format(Resources.NoPermissionAddFullDayAbsenceForAgent, person.Name);
-			
+
 			if (!_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths
 					.ModifyWriteProtectedSchedule) && person.PersonWriteProtection.IsWriteProtected(date))
 				return Resources.WriteProtectSchedule;
+
+			if (!_permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules, date, person))
+				return string.Format(Resources.NoPermissionToEditUnpublishedSchedule, person.Name);
 			return null;
 		}
 
 		public string CheckAddIntradayAbsenceForPerson(IPerson person, DateOnly date)
 		{
-			if (_permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.AddIntradayAbsence, date, person)) return null;
-			var ret = string.Format(Resources.NoPermisionAddIntradayAbsenceForAgent, person.Name);
-			return ret;
+			if (!_permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.AddIntradayAbsence, date, person))
+				return string.Format(Resources.NoPermisionAddIntradayAbsenceForAgent, person.Name);
+			if (!_permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules, date, person))
+				return string.Format(Resources.NoPermissionToEditUnpublishedSchedule, person.Name);
+			return null;
 		}
 	}
 }
