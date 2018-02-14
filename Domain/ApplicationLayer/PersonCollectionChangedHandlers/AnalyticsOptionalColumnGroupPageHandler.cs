@@ -141,12 +141,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		private void saveNewDimGroupPageOrGet(AnalyticsGroup dimGroupPage)
 		{
 				logger.Debug($"Insert or get group page for {dimGroupPage.GroupPageName}/{dimGroupPage.GroupName}. Group page code: {dimGroupPage.GroupPageCode}");
-				var existingGroupPage = _analyticsGroupPageRepository.AddOrGetGroupPage(dimGroupPage);
-				if (existingGroupPage == null)
-					return;
+				var newOrExistingGroupPage = _analyticsGroupPageRepository.AddAndGetGroupPage(dimGroupPage);
 
-				dimGroupPage.GroupId = existingGroupPage.GroupId;
-				dimGroupPage.GroupCode = existingGroupPage.GroupCode;
+				dimGroupPage.GroupId = newOrExistingGroupPage.GroupId;
+				dimGroupPage.GroupCode = newOrExistingGroupPage.GroupCode;
 		}
 		
 		private IDictionary<Guid, IList<Guid>> createNewBridgeGroupPagePerson(
