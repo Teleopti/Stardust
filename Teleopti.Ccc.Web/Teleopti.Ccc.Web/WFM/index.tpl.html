@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="wfm">
+
 <head lang="en">
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,9 +11,41 @@
 	<link id="themeModules" rel="stylesheet" href="">
 	<link id="themeStyle" rel="stylesheet" href="">
 	<style>
-	.loader{width:75px;height:75px;margin:5% auto 0;border:6px solid transparent;border-top:6px solid #09f;animation-name:spin;animation-duration:1s;animation-iteration-count:infinite;border-radius:50%;transform:rotate(0);overflow:hidden}@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}.backdrop{position:fixed;z-index:999999;left:0;right:0;bottom:0;top:0;background:#fff}
+		.loader {
+			width: 75px;
+			height: 75px;
+			margin: 5% auto 0;
+			border: 6px solid transparent;
+			border-top: 6px solid #09f;
+			animation-name: spin;
+			animation-duration: 1s;
+			animation-iteration-count: infinite;
+			border-radius: 50%;
+			transform: rotate(0);
+			overflow: hidden
+		}
+
+		@keyframes spin {
+			from {
+				transform: rotate(0)
+			}
+			to {
+				transform: rotate(360deg)
+			}
+		}
+
+		.backdrop {
+			position: fixed;
+			z-index: 999999;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			top: 0;
+			background: #fff
+		}
 	</style>
 </head>
+
 <body ng-show="isAuthenticated" ng-cloak ng-controller="MainController as main">
 	<div class="backdrop" ng-if="!main.styleIsFullyLoaded">
 		<div class="loader"></div>
@@ -38,7 +71,6 @@
 			</div>
 		</div>
 
-
 		<div id="materialcontainer" class="container content">
 			<div ui-view></div>
 			<wfm-notice notices="$parent.wfmNotices"></wfm-notice>
@@ -52,20 +84,10 @@
 	<script src="dist/resources/modules.js"></script>
 	<script src="dist/templates.js"></script>
 	<script src="dist/main.js"></script>
-	<script src="dist/ng2/inline.bundle.js?4e5cef97b6a54e05"></script>
-	<script src="dist/ng2/polyfills.bundle.js?4e5cef97b6a54e05"></script>
-	<script src="dist/ng2/styles.bundle.js?4e5cef97b6a54e05"></script>
-	<script src="dist/ng2/vendor.bundle.js?4e5cef97b6a54e05"></script>
-	<script src="dist/ng2/main.bundle.js?4e5cef97b6a54e05"></script>
 	<% } else { %>
 	<script src="dist/resources/modules.min.js"></script>
 	<script src="dist/templates.min.js"></script>
 	<script src="dist/main.min.js"></script>
-	<script src="dist/ng2/inline.bundle.js?4e5cef97b6a54e05"></script>
-	<script src="dist/ng2/polyfills.bundle.js?4e5cef97b6a54e05"></script>
-	<script src="dist/ng2/styles.bundle.js?4e5cef97b6a54e05"></script>
-	<script src="dist/ng2/vendor.bundle.js?4e5cef97b6a54e05"></script>
-	<script src="dist/ng2/main.bundle.js?4e5cef97b6a54e05"></script>
 	<% } %>
 	/build -->
 
