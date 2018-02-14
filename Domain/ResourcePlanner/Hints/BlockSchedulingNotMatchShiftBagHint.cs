@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 					if (scheduleDay?.PersonAssignment() == null || scheduleDay.HasDayOff() || !scheduleDay.PersonAssignment().ShiftLayers.Any()) continue;
 					var timezone = scheduleDay.TimeZone;
 
-					if (blockOption.UseBlockSameShiftCategory)
+					if (blockOption.UseBlockSameShiftCategory && scheduleDay.PersonAssignment().ShiftCategory != null)
 					{
 						var allShiftCategories = shiftBag.ShiftCategoriesInBag();
 						var shiftCategory = scheduleDay.PersonAssignment().ShiftCategory;

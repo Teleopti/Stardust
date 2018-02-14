@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 				{
 					break;
 				}
-				if (blockOption.UseBlockSameShiftCategory && scheduleDay.PersonAssignment().ShiftCategory != shiftCategory)
+				if (blockOption.UseBlockSameShiftCategory && scheduleDay.PersonAssignment().ShiftCategory != shiftCategory && shiftCategory != null && scheduleDay.PersonAssignment().ShiftCategory != null)
 				{
 					addValidationError(validationResult, person, nameof(Resources.ExistingShiftNotMatchShiftCategory),
 						shiftCategory.Description.ShortName, firstDayAfterPeriod.DateOnlyAsPeriod.DateOnly.Date,

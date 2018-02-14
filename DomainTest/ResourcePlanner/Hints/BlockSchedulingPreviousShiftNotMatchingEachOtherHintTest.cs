@@ -302,5 +302,71 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 
 			result.First().ValidationTypes.Count(x=>x.Name== nameof(BlockSchedulingPreviousShiftNotMatchingEachOtherHint)).Should().Be.EqualTo(0);
 		}
+
+		[Test]
+		public void ShouldNotCrashWhenHavingPersonAssignmentWithNoShiftCategory()
+		{
+			var startDate = new DateOnly(2017, 01, 23);
+			var endDate = new DateOnly(2017, 01, 29);
+			var period = new DateOnlyPeriod(startDate.AddDays(-7), endDate);
+			var planningPeriod = new DateOnlyPeriod(startDate, endDate);
+			var scenario = new Scenario { DefaultScenario = true };
+			ScenarioRepository.Has(scenario);
+			var shiftCategory = new ShiftCategory("_2").WithId();
+			var activity = ActivityRepository.Has("_");
+			var skill = SkillRepository.Has("skill", activity);
+			var contract = new Contract("_");
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+			var agent = PersonRepository.Has(contract, new ContractScheduleWorkingMondayToFriday(), new PartTimePercentage("_"), new Team { Site = new Site("site") }, new SchedulePeriod(startDate, SchedulePeriodType.Week, 1), ruleSet, skill);
+
+			var currentSchedule = new ScheduleDictionaryForTest(scenario, period.ToDateTimePeriod(TimeZoneInfo.Utc));
+
+			var personAssignmentWithoutShiftCategory = new PersonAssignment(agent, scenario, startDate).WithLayer(activity, new TimePeriod(8, 16));
+			var personAssignment2 = new PersonAssignment(agent, scenario, startDate.AddDays(-1)).WithLayer(activity, new TimePeriod(8, 16)).ShiftCategory(shiftCategory);
+			currentSchedule.AddPersonAssignment(personAssignmentWithoutShiftCategory);
+			currentSchedule.AddPersonAssignment(personAssignment2);
+
+
+			Target.Execute(new HintInput(currentSchedule, new[] { agent }, planningPeriod,
+				new FixedBlockPreferenceProvider(new ExtraPreferences
+				{
+					UseTeamBlockOption = true,
+					BlockTypeValue = BlockFinderType.BetweenDayOff,
+					UseBlockSameShiftCategory = true
+				}), false));
+		}
+
+		[Test]
+		public void ShouldNotCrashWhenHavingPreviousPersonAssignmentWithNoShiftCategory()
+		{
+			var startDate = new DateOnly(2017, 01, 23);
+			var endDate = new DateOnly(2017, 01, 29);
+			var period = new DateOnlyPeriod(startDate.AddDays(-7), endDate);
+			var planningPeriod = new DateOnlyPeriod(startDate, endDate);
+			var scenario = new Scenario { DefaultScenario = true };
+			ScenarioRepository.Has(scenario);
+			var shiftCategory = new ShiftCategory("_2").WithId();
+			var activity = ActivityRepository.Has("_");
+			var skill = SkillRepository.Has("skill", activity);
+			var contract = new Contract("_");
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+			var agent = PersonRepository.Has(contract, new ContractScheduleWorkingMondayToFriday(), new PartTimePercentage("_"), new Team { Site = new Site("site") }, new SchedulePeriod(startDate, SchedulePeriodType.Week, 1), ruleSet, skill);
+
+			var currentSchedule = new ScheduleDictionaryForTest(scenario, period.ToDateTimePeriod(TimeZoneInfo.Utc));
+
+			var personAssignmentWithoutShiftCategory = new PersonAssignment(agent, scenario, startDate.AddDays(-1)).WithLayer(activity, new TimePeriod(8, 16));
+			var personAssignment2 = new PersonAssignment(agent, scenario, startDate).WithLayer(activity, new TimePeriod(8, 16)).ShiftCategory(shiftCategory);
+			currentSchedule.AddPersonAssignment(personAssignmentWithoutShiftCategory);
+			currentSchedule.AddPersonAssignment(personAssignment2);
+
+
+			Target.Execute(new HintInput(currentSchedule, new[] { agent }, planningPeriod,
+				new FixedBlockPreferenceProvider(new ExtraPreferences
+				{
+					UseTeamBlockOption = true,
+					BlockTypeValue = BlockFinderType.BetweenDayOff,
+					UseBlockSameShiftCategory = true
+				}), false));
+		}
 	}
 }

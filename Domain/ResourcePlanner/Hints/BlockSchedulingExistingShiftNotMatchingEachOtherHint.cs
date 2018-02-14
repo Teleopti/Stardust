@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 							firstDate = null;
 							continue;
 						}
-						if (personAssignment != null && personAssignment.ShiftLayers.Count() != 0)
+						if (personAssignment != null && personAssignment.ShiftLayers.Count() != 0 && personAssignment.ShiftCategory!= null)
 						{
 							var shiftCategory = personAssignment.ShiftCategory;
 							var startTime = personAssignment.Period.StartDateTime;
