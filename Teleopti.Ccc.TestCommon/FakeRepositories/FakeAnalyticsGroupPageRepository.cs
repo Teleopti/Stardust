@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			groups.Add(analyticsGroup);
 		}
 
-		public AnalyticsGroup AddAndGetGroupPage(AnalyticsGroup analyticsGroup)
+		public AnalyticsGroup AddOrGetGroupPage(AnalyticsGroup analyticsGroup)
 		{
 			var groupPageGroup = groups.SingleOrDefault(x =>
 				x.BusinessUnitCode == analyticsGroup.BusinessUnitCode && x.GroupPageCode == analyticsGroup.GroupPageCode &&
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				return groupPageGroup;
 
 			groups.Add(analyticsGroup);
-			return analyticsGroup;
+			return null;
 		}
 
 		public void DeleteGroupPages(IEnumerable<Guid> groupPageIds, Guid businessUnitCode)

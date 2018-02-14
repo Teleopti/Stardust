@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		}
 
 		[Test]
-		public void ShouldGetWhenTryingToAddAlreadyExisting()
+		public void ShouldGetIfExisting()
 		{
 			var existingGroupPage = new AnalyticsGroup
 			{
@@ -101,13 +101,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			};
 
 			WithAnalyticsUnitOfWork.Do(() => Target.AddGroupPageIfNotExisting(existingGroupPage));
-			var result = WithAnalyticsUnitOfWork.Get(() => Target.AddAndGetGroupPage(potentialGroupPage));
-			result.GroupId.Should().Be.GreaterThan(-1);
+			var result = WithAnalyticsUnitOfWork.Get(() => Target.AddOrGetGroupPage(potentialGroupPage));
 			result.GroupCode.Should().Be(existingGroupPage.GroupCode);
 		}
 
 		[Test]
-		public void ShouldAddNewIfNotExistingAndReturnNew()
+		public void ShouldAddNewIfNotExistingAndReturnNull()
 		{
 			var newGroupPage = new AnalyticsGroup
 			{
@@ -119,9 +118,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				GroupIsCustom = true,
 				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
 			};
-			var result = WithAnalyticsUnitOfWork.Get(() => Target.AddAndGetGroupPage(newGroupPage));
-			result.GroupId.Should().Be.GreaterThan(-1);
-			result.GroupCode.Should().Be(newGroupPage.GroupCode);
+			var result = WithAnalyticsUnitOfWork.Get(() => Target.AddOrGetGroupPage(newGroupPage));
+			result.Should().Be.Null();
 		}
 		
 		[Test]
