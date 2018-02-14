@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			const string searchTerm = "  ";
 			var result = SearchTermParser.Parse(searchTerm);
 
-			Assert.AreEqual(0,result.Count());
+			Assert.AreEqual(0,result.Count);
 		
 		}
 

@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		{
 			var currentDate = input.Date;
 			var criDic = SearchTermParser.Parse(input.Keyword);
-			if (criDic.IsEmpty())
+			if (!input.Keyword.IsNullOrEmpty() && criDic.IsEmpty())
 			{
 				return Json(new GroupScheduleViewModel
 				{
