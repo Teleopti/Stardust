@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 		private readonly IScheduledSkillOpenHourProvider _scheduledSkillOpenHourProvider;
 		private readonly ILicenseAvailability _licenseAvailability;
 		private readonly IToggleManager _toggleManager;
+		private readonly IStaffingDataAvailablePeriodProvider _staffingDataAvailablePeriodProvider;
 
 		public WeekScheduleViewModelMapper(IPeriodSelectionViewModelFactory periodSelectionViewModelFactory,
 			IPeriodViewModelFactory periodViewModelFactory,
@@ -49,7 +50,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			OvertimeAvailabilityViewModelMapper overtimeMapper,
 			IRequestsViewModelFactory requestsViewModelFactory,
 			ISiteOpenHourProvider siteOpenHourProvider,
-			IScheduledSkillOpenHourProvider scheduledSkillOpenHourProvider, ILicenseAvailability licenseAvailability, IToggleManager toggleManager)
+			IScheduledSkillOpenHourProvider scheduledSkillOpenHourProvider, ILicenseAvailability licenseAvailability,
+			IToggleManager toggleManager, 
+			IStaffingDataAvailablePeriodProvider staffingDataAvailablePeriodProvider)
 		{
 			_periodSelectionViewModelFactory = periodSelectionViewModelFactory;
 			_periodViewModelFactory = periodViewModelFactory;
@@ -64,6 +67,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			_scheduledSkillOpenHourProvider = scheduledSkillOpenHourProvider;
 			_licenseAvailability = licenseAvailability;
 			_toggleManager = toggleManager;
+			_staffingDataAvailablePeriodProvider = staffingDataAvailablePeriodProvider;
 		}
 
 		public WeekScheduleViewModel Map(WeekScheduleDomainData s, bool loadOpenHourPeriod = false)
@@ -94,7 +98,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				IsCurrentWeek = s.IsCurrentWeek,
 				CheckStaffingByIntraday = isCheckStaffingByIntradayForWeek(currentUser.WorkflowControlSet, s.Date),
 				AbsenceProbabilityEnabled = currentUser.WorkflowControlSet?.AbsenceProbabilityEnabled ?? false,
-				OvertimeProbabilityEnabled = isOvertimeProbabilityEnabled(),
+				OvertimeProbabilityEnabled = isOvertimeProbabilityEnabled(s.Date, true),
 				StaffingInfoAvailableDays = StaffingInfoAvailableDaysProvider.GetDays(_toggleManager) + 1
 			};
 		}
@@ -124,20 +128,24 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				IsToday = s.IsCurrentDay,
 				CheckStaffingByIntraday = isCheckStaffingByIntradayForDay(currentUser.WorkflowControlSet, s.Date),
 				AbsenceProbabilityEnabled = currentUser.WorkflowControlSet?.AbsenceProbabilityEnabled ?? false,
-				OvertimeProbabilityEnabled = isOvertimeProbabilityEnabled(),
+				OvertimeProbabilityEnabled = isOvertimeProbabilityEnabled(s.Date, false),
 				UnReadMessageCount = s.UnReadMessageCount,
 				ShiftTradeRequestSetting = _requestsViewModelFactory.CreateShiftTradePeriodViewModel(),
 				StaffingInfoAvailableDays = StaffingInfoAvailableDaysProvider.GetDays(_toggleManager) + 1
 			};
 		}
 
-		private bool isOvertimeProbabilityEnabled()
+		private bool isOvertimeProbabilityEnabled(DateOnly date, bool forThisWeek)
 		{
 			var currentUser = _loggedOnUser.CurrentUser();
 			var overtimeProbabilityEnabled = currentUser.WorkflowControlSet?.OvertimeProbabilityEnabled != null
 											 && currentUser.WorkflowControlSet.OvertimeProbabilityEnabled
 											 && isOvertimeProbabilityLicenseAvailable();
-			return overtimeProbabilityEnabled;
+			if (!overtimeProbabilityEnabled)
+				return false;
+
+			var isStaffingDataAvailable = _staffingDataAvailablePeriodProvider.GetPeriodForOvertime(date, forThisWeek).HasValue;
+			return isStaffingDataAvailable;
 		}
 
 		private bool isOvertimeProbabilityLicenseAvailable()

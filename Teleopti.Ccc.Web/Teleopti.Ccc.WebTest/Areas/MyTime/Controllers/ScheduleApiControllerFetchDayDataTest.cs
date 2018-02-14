@@ -842,6 +842,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldReturnTrueForOvertimeProbabilityEnabledAfterItHasBeenToggledOnAtFatClient()
 		{
 			var workFlowControlSet = new WorkflowControlSet {OvertimeProbabilityEnabled = true};
+			workFlowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod()
+			{
+				BetweenDays = new MinMax<int>(0, 13)
+			});
 			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
 
 			var result = Target.FetchDayData(Now.ServerDate_DontUse());
@@ -878,6 +882,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			DefinedLicenseDataFactory.SetLicenseActivator(CurrentDataSource.CurrentName(), licenseActivator);
 
 			var workFlowControlSet = new WorkflowControlSet { OvertimeProbabilityEnabled = true };
+			workFlowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod()
+			{
+				BetweenDays = new MinMax<int>(0, 13)
+			});
 			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
 
 			var result = Target.FetchDayData(Now.ServerDate_DontUse());
@@ -891,6 +899,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			DefinedLicenseDataFactory.SetLicenseActivator(CurrentDataSource.CurrentName(), licenseActivator);
 
 			var workFlowControlSet = new WorkflowControlSet { OvertimeProbabilityEnabled = true };
+			workFlowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod()
+			{
+				BetweenDays = new MinMax<int>(0, 13)
+			});
 			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
 
 			var result = Target.FetchDayData(Now.ServerDate_DontUse());
@@ -904,6 +916,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			DefinedLicenseDataFactory.SetLicenseActivator(CurrentDataSource.CurrentName(), licenseActivator);
 
 			var workFlowControlSet = new WorkflowControlSet { OvertimeProbabilityEnabled = true };
+			workFlowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod()
+			{
+				BetweenDays = new MinMax<int>(0, 13)
+			});
 			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
 
 			var result = Target.FetchDayData(Now.ServerDate_DontUse());

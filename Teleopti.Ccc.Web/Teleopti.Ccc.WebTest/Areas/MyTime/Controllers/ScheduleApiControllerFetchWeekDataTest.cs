@@ -26,8 +26,10 @@ using Teleopti.Ccc.WebTest.Core.IoC;
 using Teleopti.Interfaces.Domain;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Licensing;
+using Teleopti.Ccc.IocCommon.Toggle;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 {
@@ -46,6 +48,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeMeetingRepository MeetingRepository;
 		public ICurrentDataSource CurrentDataSource;
+		public FakeToggleManager ToggleManager;
 
 		[Test]
 		public void ShouldMap()
@@ -62,8 +65,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldReturnOvertimeProbabilityEnabledTrueWhenItHasBeenToggledOnInFatClient()
 		{
-			var workFlowControlSet = new WorkflowControlSet();
-			workFlowControlSet.OvertimeProbabilityEnabled= true;
+			var workFlowControlSet = new WorkflowControlSet {OvertimeProbabilityEnabled = true};
+			workFlowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod()
+			{
+				BetweenDays = new MinMax<int>(0, 13)
+			});
 			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
 
 			var result = Target.FetchWeekData(null);
@@ -103,6 +109,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			DefinedLicenseDataFactory.SetLicenseActivator(CurrentDataSource.CurrentName(), licenseActivator);
 
 			var workFlowControlSet = new WorkflowControlSet { OvertimeProbabilityEnabled = true };
+			workFlowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod()
+			{
+				BetweenDays = new MinMax<int>(0, 13)
+			});
 			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
 
 			var result = Target.FetchWeekData(null);
@@ -116,6 +126,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			DefinedLicenseDataFactory.SetLicenseActivator(CurrentDataSource.CurrentName(), licenseActivator);
 
 			var workFlowControlSet = new WorkflowControlSet { OvertimeProbabilityEnabled = true };
+			workFlowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod()
+			{
+				BetweenDays = new MinMax<int>(0, 13)
+			});
 			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
 
 			var result = Target.FetchWeekData(null);
@@ -129,9 +143,45 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			DefinedLicenseDataFactory.SetLicenseActivator(CurrentDataSource.CurrentName(), licenseActivator);
 
 			var workFlowControlSet = new WorkflowControlSet { OvertimeProbabilityEnabled = true };
+			workFlowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod()
+			{
+				BetweenDays = new MinMax<int>(0, 13)
+			});
 			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
 
 			var result = Target.FetchWeekData(null);
+			result.OvertimeProbabilityEnabled.Should().Be(true);
+		}
+
+		[Test]
+		public void ShouldReturnFalseForOvertimeProbabilityEnabledWhenTheWholeWeekIsOutsideOpenPeriod()
+		{
+			ToggleManager.Enable(Toggles.Wfm_Staffing_StaffingReadModel28DaysStep1_45109);
+
+			var workFlowControlSet = new WorkflowControlSet {OvertimeProbabilityEnabled = true};
+			workFlowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod()
+			{
+				BetweenDays = new MinMax<int>(0, 13)
+			});
+			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
+
+			var result = Target.FetchWeekData(Now.ServerDate_DontUse().AddWeeks(3));
+			result.OvertimeProbabilityEnabled.Should().Be(false);
+		}
+
+		[Test]
+		public void ShouldReturnTrueForOvertimeProbabilityEnabledWhenThePartialWeekIsWithinOpenPeriod()
+		{
+			ToggleManager.Enable(Toggles.Wfm_Staffing_StaffingReadModel28DaysStep1_45109);
+
+			var workFlowControlSet = new WorkflowControlSet { OvertimeProbabilityEnabled = true };
+			workFlowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod()
+			{
+				BetweenDays = new MinMax<int>(0, 19)
+			});
+			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
+
+			var result = Target.FetchWeekData(Now.ServerDate_DontUse().AddWeeks(3));
 			result.OvertimeProbabilityEnabled.Should().Be(true);
 		}
 
