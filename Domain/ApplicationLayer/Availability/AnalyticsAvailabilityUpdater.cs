@@ -11,11 +11,13 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure.Analytics;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Availability
 {
 	public class AnalyticsAvailabilityUpdater : 
 		IHandleEvent<AvailabilityChangedEvent>,
+		IHandleEvent<ScheduleChangedEvent>,
 		IRunOnHangfire
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(AnalyticsAvailabilityUpdater));
@@ -49,25 +51,30 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Availability
 		[UnitOfWork]
 		[AnalyticsUnitOfWork]
 		[Attempts(10)]
-		public virtual void Handle(AvailabilityChangedEvent @event)
+		public virtual void Handle(ScheduleChangedEvent @event)
 		{
-			var person = _personRepository.Get(@event.PersonId);
+		
+		}
+
+		private void handleOneDay(Guid personId, DateOnly date)
+		{
+			var person = _personRepository.Get(personId);
 			if (person == null)
 			{
-				logger.Debug($"No person found for personId {@event.PersonId}");
+				logger.Debug($"No person found for personId {personId}");
 				return;
 			}
-			var analyticsPersonPeriod = getAnalyticsPersonPeriod(@event, person);
-			var availabilityDays = _availabilityDayRepository.Find(@event.Date, person);
-			var date = getAnalyticsDate(@event);
+			var analyticsPersonPeriod = getAnalyticsPersonPeriod(date, person);
+			var availabilityDays = _availabilityDayRepository.Find(date, person);
+			var analyticsDate = getAnalyticsDate(date);
 			var scenarios = getScenarios();
 
 			if (!availabilityDays.Any())
 			{
 				foreach (var scenario in scenarios)
 				{
-					logger.Debug($"Deleting availability for PersonPeriod:{analyticsPersonPeriod.PersonId}, Date:{date.DateId}, Scenario:{scenario.ScenarioId}");
-					_analyticsHourlyAvailabilityRepository.Delete(analyticsPersonPeriod.PersonId, date.DateId, scenario.ScenarioId);
+					logger.Debug($"Deleting availability for PersonPeriod:{analyticsPersonPeriod.PersonId}, Date:{analyticsDate.DateId}, Scenario:{scenario.ScenarioId}");
+					_analyticsHourlyAvailabilityRepository.Delete(analyticsPersonPeriod.PersonId, analyticsDate.DateId, scenario.ScenarioId);
 				}
 				return;
 			}
@@ -87,20 +94,31 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Availability
 					AvailableDays = 1,
 					AvailableTimeMinutes = getMaxAvailable(availabilityDay),
 					BusinessUnitId = scenario.BusinessUnitId,
-					DateId = date.DateId,
+					DateId = analyticsDate.DateId,
 					PersonId = analyticsPersonPeriod.PersonId,
 					ScenarioId = scenario.ScenarioId,
 					ScheduledDays = Convert.ToInt32(scheduledTime > 0),
 					ScheduledTimeMinutes = scheduledTime
 				};
-				logger.Debug($"Adding or updating availability for PersonPeriod:{analyticsPersonPeriod.PersonId}, Date:{date.DateId}, Scenario:{scenario.ScenarioId}");
+				logger.Debug($"Adding or updating availability for PersonPeriod:{analyticsPersonPeriod.PersonId}, Date:{analyticsDate.DateId}, Scenario:{scenario.ScenarioId}");
 				_analyticsHourlyAvailabilityRepository.AddOrUpdate(analyticsHourlyAvailability);
 			}
 		}
 
-		private AnalyticsPersonPeriod getAnalyticsPersonPeriod(AvailabilityChangedEvent @event, IPerson person)
+		[ImpersonateSystem]
+		[UnitOfWork]
+		[AnalyticsUnitOfWork]
+		[Attempts(10)]
+		public virtual void Handle(AvailabilityChangedEvent @event)
 		{
-			var personPeriod = person.Period(@event.Date);
+			handleOneDay(@event.PersonId, @event.Date);
+		}
+
+
+
+		private AnalyticsPersonPeriod getAnalyticsPersonPeriod(DateOnly date, IPerson person)
+		{
+			var personPeriod = person.Period(date);
 			if (personPeriod?.Id == null)
 				throw new ApplicationException("Person period was not found for person in application");
 			var analyticsPersonPeriod = _analyticsPersonPeriodRepository.PersonPeriod(personPeriod.Id.GetValueOrDefault());
@@ -109,12 +127,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Availability
 			return analyticsPersonPeriod;
 		}
 
-		private IAnalyticsDate getAnalyticsDate(AvailabilityChangedEvent @event)
+		private IAnalyticsDate getAnalyticsDate(DateOnly date)
 		{
-			var date = _analyticsDateRepository.Date(@event.Date.Date);
-			if (date == null)
-				throw new DateMissingInAnalyticsException(@event.Date.Date);
-			return date;
+			var analyticsDate = _analyticsDateRepository.Date(date.Date);
+			if (analyticsDate == null)
+				throw new DateMissingInAnalyticsException(date.Date);
+			return analyticsDate;
 		}
 
 		private IList<AnalyticsScenario> getScenarios()

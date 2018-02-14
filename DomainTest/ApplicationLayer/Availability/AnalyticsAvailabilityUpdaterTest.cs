@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -31,6 +32,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Availability
 		public FakeAnalyticsHourlyAvailabilityRepository AnalyticsHourlyAvailabilityRepository;
 		public IScenarioRepository ScenarioRepository;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
+		public FakePersonAssignmentRepository PersonAssignmentRepository;
 
 		private const int businessUnitId = 123;
 		private const int personId = 321;
@@ -169,6 +171,47 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Availability
 			});
 
 			AnalyticsHourlyAvailabilityRepository.AnalyticsHourlyAvailabilities.Should().Be.Empty();
+		}
+
+		[Test]
+		public void ShouldAddAvailabilityWithScheduleTimeWhenScheduleAdded()
+		{
+			var businessUnitCode = Guid.NewGuid();
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(businessUnitCode));
+
+			var personCode = Guid.NewGuid();
+			var scenarioCode = Guid.NewGuid();
+			var personPeroidId = Guid.NewGuid();
+			var today = DateOnly.Today;
+			var person = PersonFactory.CreatePersonWithPersonPeriod(today.AddDays(-1)).WithId(personCode);
+			var personPeriod = person.PersonPeriodCollection.First();
+			personPeriod.SetId(personPeroidId);
+			var scenario = new Scenario("Asd");
+			scenario.SetId(scenarioCode);
+
+			PersonRepository.Add(person);
+			AnalyticsPersonPeriodRepository.AddOrUpdatePersonPeriod(new AnalyticsPersonPeriod { PersonId = personId, PersonCode = personCode, PersonPeriodCode = personPeroidId });
+			AnalyticsScenarioRepository.AddScenario(AnalyticsScenarioFactory.CreateAnalyticsScenario(scenario, businessUnitId));
+			ScenarioRepository.Add(scenario);
+
+			PersonAssignmentRepository.Has(person, scenario, new Activity("act"), new DateOnlyPeriod(today, today), new TimePeriod(0, 1));
+
+			Target.Handle(new ScheduleChangedEvent
+			{
+				PersonId = personCode,
+				ScenarioId = scenarioCode,
+				StartDateTime = today.Date,
+				EndDateTime = today.Date,
+				LogOnBusinessUnitId = businessUnitCode
+			});
+
+			AnalyticsHourlyAvailabilityRepository.AnalyticsHourlyAvailabilities.Should().Not.Be.Empty();
+			var result = AnalyticsHourlyAvailabilityRepository.AnalyticsHourlyAvailabilities.Single();
+			result.PersonId.Should().Be.EqualTo(personId);
+			result.BusinessUnitId.Should().Be.EqualTo(businessUnitId);
+			result.ScenarioId.Should().Be.GreaterThan(0);
+			result.DateId.Should().Be.GreaterThan(0);
+			result.ScheduledTimeMinutes.Should().Be(60);
 		}
 	}
 }
