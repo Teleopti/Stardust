@@ -1453,6 +1453,9 @@
     <Content Include="Content\moment-datepicker\moment-datepicker-ext.js" />
     <Content Include="Content\signalr\jquery.signalR-2.2.2.js" />
     <Content Include="Content\signalr\jquery.signalR-2.2.2.min.js" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <Content Include="WFM\app\gamification\gamification.component.gamification.js" />
     <Content Include="WFM\app\gamification\gamification.component.gamificationImport.js" />
     <Content Include="WFM\app\gamification\gamification.component.gamificationImport.spec.js" />
@@ -1748,7 +1751,6 @@
     <Content Include="WFM\css\_staffing.scss" />
     <Content Include="WFM\css\_grouppage.scss" />
     <Content Include="WFM\css\_organizationpicker.scss" />
-    <None Include="packages.config" />
     <Content Include="WFM\css\_gamification.scss" />
     <Content Include="WFM\css\_cascade.scss" />
     <Content Include="WFM\css\_cardpanel.scss" />
@@ -2732,11 +2734,6 @@
     <Content Include="WFM\css\_reports.scss" />
     <Content Include="WFM\vendor\angular-bootstrap-persian-datepicker-master\README.md" />
     <Content Include="WFM\manifest.webmanifest.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="packages.config">
-      <SubType>Designer</SubType>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Domain\Teleopti.Ccc.Domain.csproj">
