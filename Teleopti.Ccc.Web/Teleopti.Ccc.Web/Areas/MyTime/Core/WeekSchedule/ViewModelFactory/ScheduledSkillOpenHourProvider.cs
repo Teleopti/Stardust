@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 
 		public TimePeriod? GetMergedSkillOpenHourPeriod(IList<IScheduleDay> scheduleDays)
 		{
-			var staffingDataAvailablePeriod = _staffingDataAvailablePeriodProvider.GetPeriod(scheduleDays.First().DateOnlyAsPeriod.DateOnly, true);
+			var staffingDataAvailablePeriod = _staffingDataAvailablePeriodProvider.GetPeriodForAbsence(scheduleDays.First().DateOnlyAsPeriod.DateOnly, true);
 			if (!staffingDataAvailablePeriod.HasValue)
 				return null;
 			var validScheduleDays = scheduleDays.OrderBy(s => s.DateOnlyAsPeriod.DateOnly)

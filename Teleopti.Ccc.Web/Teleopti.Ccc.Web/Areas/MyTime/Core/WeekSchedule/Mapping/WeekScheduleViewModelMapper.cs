@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				CheckStaffingByIntraday = isCheckStaffingByIntradayForWeek(currentUser.WorkflowControlSet, s.Date),
 				AbsenceProbabilityEnabled = currentUser.WorkflowControlSet?.AbsenceProbabilityEnabled ?? false,
 				OvertimeProbabilityEnabled = isOvertimeProbabilityEnabled(),
-				StaffingInfoAvailableDays = StaffingInfoAvailableDaysProvider.GetDays(_toggleManager)
+				StaffingInfoAvailableDays = StaffingInfoAvailableDaysProvider.GetDays(_toggleManager) + 1
 			};
 		}
 
@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				OvertimeProbabilityEnabled = isOvertimeProbabilityEnabled(),
 				UnReadMessageCount = s.UnReadMessageCount,
 				ShiftTradeRequestSetting = _requestsViewModelFactory.CreateShiftTradePeriodViewModel(),
-				StaffingInfoAvailableDays = StaffingInfoAvailableDaysProvider.GetDays(_toggleManager)
+				StaffingInfoAvailableDays = StaffingInfoAvailableDaysProvider.GetDays(_toggleManager) + 1
 			};
 		}
 

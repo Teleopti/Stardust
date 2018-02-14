@@ -333,6 +333,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldGetFairPossibilitiesForOvertimeWhenOverstaffing()
 		{
+			setupWorkFlowControlSet();
 			setupSiteOpenHour();
 			setupDefaultTestData(new double?[] { 10d, 10d }, new double?[] { 22d, 22d });
 			var possibilities = getPossibilityViewModels(null, StaffingPossiblityType.Overtime)
@@ -531,6 +532,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldGetGoodPossibilitiesForOvertimeWhenNotOverstaffing()
 		{
+			setupWorkFlowControlSet();
 			setupSiteOpenHour();
 			setupDefaultTestData(new double?[] { 10d, 10d }, new double?[] { 6d, 6d });
 			var possibilities = getPossibilityViewModels(null, StaffingPossiblityType.Overtime)
@@ -556,6 +558,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldGetFairPossibilitiesForOvertimeWhenOneOfSkillIsNotCriticalUnderStaffing()
 		{
+			setupWorkFlowControlSet();
 			var person = User.CurrentUser();
 			var activity1 = createActivity();
 			var skill1 = createSkill("skill1");
@@ -581,6 +584,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldGetPossibilitiesForOvertimeWithDayOff()
 		{
+			setupWorkFlowControlSet();
 			setupSiteOpenHour();
 			setupDefaultTestData();
 			PersonAssignmentRepository.Clear();
@@ -668,6 +672,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Toggle(Toggles.MyTimeWeb_CalculateOvertimeProbabilityByPrimarySkill_44686)]
 		public void ShouldUsePrimarySkillsWhenCalculatingOvertimeProbability()
 		{
+			setupWorkFlowControlSet();
 			var primarySkill = createSkill("primarySkill");
 			primarySkill.SetCascadingIndex(1);
 			setupIntradayStaffingForSkill(primarySkill, new double?[] { 5, 5 }, new double?[] { 1, 1 });
@@ -695,6 +700,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Toggle(Toggles.MyTimeWeb_CalculateOvertimeProbabilityByPrimarySkill_44686)]
 		public void ShouldGetFairOvertimePossibilitiesWhenAllSkillsArePrimarySkillWithOneSkillCriticalUnderStaffing()
 		{
+			setupWorkFlowControlSet();
 			var primarySkill = createSkill("primarySkill1");
 			primarySkill.SetCascadingIndex(1);
 			setupIntradayStaffingForSkill(primarySkill, new double?[] { 5, 5 }, new double?[] { 0, 0 });
@@ -722,6 +728,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldNotUsePrimarySkillsWhenCalculatingOvertimeProbabilityToggle44686Off()
 		{
+			setupWorkFlowControlSet();
 			var primarySkill = createSkill("primarySkill");
 			primarySkill.SetCascadingIndex(1);
 			setupIntradayStaffingForSkill(primarySkill, new double?[] { 5, 5 }, new double?[] { 0, 0 });
@@ -778,6 +785,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Toggle(Toggles.MyTimeWeb_CalculateOvertimeProbabilityByPrimarySkill_44686)]
 		public void ShouldGetOvertimePossibilitiesWhenAgentHasNoCascadingSkillInPrimarySkills()
 		{
+			setupWorkFlowControlSet();
 			var primarySkill = createSkill("primarySkill");
 			primarySkill.SetCascadingIndex(1);
 			setupIntradayStaffingForSkill(primarySkill, new double?[] { 5, 5 }, new double?[] { 1, 1 });
@@ -846,6 +854,30 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			Assert.AreEqual(0, possibilities.Count);
 		}
 
+		[Test, SetCulture("en-US")]
+		public void ShouldNotReturnPossibiliesForDaysOutOfOvertimeOpenPeriod()
+		{
+			ToggleManager.Enable(Toggles.Wfm_Staffing_StaffingReadModel28DaysStep1_45109);
+
+			setupSiteOpenHour();
+			setupDefaultTestData();
+
+			var phoneSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony)
+				.WithId();
+			SkillTypeRepository.Add(phoneSkillType);
+
+			var workFlowControlSet = new WorkflowControlSet();
+			workFlowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod
+			{
+				BetweenDays = new MinMax<int>(0, 13),
+				SkillType = phoneSkillType
+			});
+			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
+
+			var result = getPossibilityViewModels(Now.ServerDate_DontUse().AddWeeks(3), StaffingPossiblityType.Overtime).ToList();
+			result.Count.Should().Be.EqualTo(0);
+		}
+
 		private void setupWorkFlowControlSet()
 		{
 			var absenceRequestOpenDatePeriod = new AbsenceRequestOpenDatePeriod
@@ -854,8 +886,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				OpenForRequestsPeriod = new DateOnlyPeriod(Now.ServerDate_DontUse().AddDays(-20), Now.ServerDate_DontUse().AddDays(20)),
 				StaffingThresholdValidator = new StaffingThresholdValidator()
 			};
+			var overtimeRequestOpenDatePeriod = new OvertimeRequestOpenRollingPeriod
+			{
+				BetweenDays = new MinMax<int>(0, 13)
+			};
 			var workFlowControlSet = new WorkflowControlSet();
 			workFlowControlSet.AddOpenAbsenceRequestPeriod(absenceRequestOpenDatePeriod);
+			workFlowControlSet.AddOpenOvertimeRequestPeriod(overtimeRequestOpenDatePeriod);
 			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
 		}
 

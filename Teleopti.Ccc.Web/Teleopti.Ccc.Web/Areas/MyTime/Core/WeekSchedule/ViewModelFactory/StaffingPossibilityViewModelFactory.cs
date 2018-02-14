@@ -23,23 +23,39 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 		public IEnumerable<PeriodStaffingPossibilityViewModel> CreatePeriodStaffingPossibilityViewModels(DateOnly startDate,
 			StaffingPossiblityType staffingPossiblityType, bool returnOneWeekData)
 		{
-			var period = _staffingDataAvailablePeriodProvider.GetPeriod(startDate, returnOneWeekData);
-
-			if (period.HasValue && staffingPossiblityType == StaffingPossiblityType.Absence)
+			if (staffingPossiblityType == StaffingPossiblityType.Absence)
 			{
-				var possibilityModels =
-					_scheduleStaffingPossibilityCalculator.CalculateIntradayAbsenceIntervalPossibilities(period.Value);
-				return createPeriodStaffingPossibilityViewModels(possibilityModels);
+				return getAbsencePeriodStaffingPossibilityViewModels(startDate, returnOneWeekData);
 			}
+			if (staffingPossiblityType == StaffingPossiblityType.Overtime)
+			{
+				return getOvertimePeriodStaffingPossibilityViewModels(startDate, returnOneWeekData);
+			}
+			return emptyResult();
+		}
 
-			if (period.HasValue && staffingPossiblityType == StaffingPossiblityType.Overtime)
+		private IEnumerable<PeriodStaffingPossibilityViewModel> getOvertimePeriodStaffingPossibilityViewModels(DateOnly startDate, bool returnOneWeekData)
+		{
+			var period = _staffingDataAvailablePeriodProvider.GetPeriodForOvertime(startDate, returnOneWeekData);
+			if (period.HasValue)
 			{
 				var possibilityModels =
 					_scheduleStaffingPossibilityCalculator.CalculateIntradayOvertimeIntervalPossibilities(period.Value);
 				return createPeriodStaffingPossibilityViewModels(possibilityModels);
 			}
+			return emptyResult();
+		}
 
-			return new PeriodStaffingPossibilityViewModel[] { };
+		private IEnumerable<PeriodStaffingPossibilityViewModel> getAbsencePeriodStaffingPossibilityViewModels(DateOnly startDate, bool returnOneWeekData)
+		{
+			var period = _staffingDataAvailablePeriodProvider.GetPeriodForAbsence(startDate, returnOneWeekData);
+			if (period.HasValue)
+			{
+				var possibilityModels =
+					_scheduleStaffingPossibilityCalculator.CalculateIntradayAbsenceIntervalPossibilities(period.Value);
+				return createPeriodStaffingPossibilityViewModels(possibilityModels);
+			}
+			return emptyResult();
 		}
 
 		private IEnumerable<PeriodStaffingPossibilityViewModel> createPeriodStaffingPossibilityViewModels(
@@ -59,6 +75,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 				periodStaffingPossibilityViewModels.AddRange(possibilities);
 			}
 			return periodStaffingPossibilityViewModels;
+		}
+
+		private static IEnumerable<PeriodStaffingPossibilityViewModel> emptyResult()
+		{
+			return new PeriodStaffingPossibilityViewModel[] { };
 		}
 	}
 }

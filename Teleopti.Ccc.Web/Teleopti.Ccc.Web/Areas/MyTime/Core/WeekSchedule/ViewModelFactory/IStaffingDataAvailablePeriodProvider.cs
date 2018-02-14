@@ -4,6 +4,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 {
 	public interface IStaffingDataAvailablePeriodProvider
 	{
-		DateOnlyPeriod? GetPeriod(DateOnly date, bool forThisWeek);
+		DateOnlyPeriod? GetPeriodForAbsence(DateOnly date, bool forThisWeek);
+		DateOnlyPeriod? GetPeriodForOvertime(DateOnly date, bool forThisWeek);
 	}
 }

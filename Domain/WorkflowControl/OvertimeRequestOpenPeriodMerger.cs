@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl
 {
@@ -11,7 +12,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			if (overtimeRequestOpenPeriods.IsNullOrEmpty())
 				return null;
 
-			var mergedPeriod = new OvertimeRequestOpenDatePeriod
+			IOvertimeRequestOpenPeriod mergedOvertimeRequestOpenPeriod = new OvertimeRequestOpenDatePeriod
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes
 			};
@@ -19,16 +20,30 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			foreach (var overtimeRequestOpenPeriod in overtimeRequestOpenPeriods)
 			{
 				if (prioritizedAutoGrantTypes.IndexOf(overtimeRequestOpenPeriod.AutoGrantType) <=
-					prioritizedAutoGrantTypes.IndexOf(mergedPeriod.AutoGrantType))
+					prioritizedAutoGrantTypes.IndexOf(mergedOvertimeRequestOpenPeriod.AutoGrantType))
 				{
-					mergedPeriod.AutoGrantType = overtimeRequestOpenPeriod.AutoGrantType;
-					mergedPeriod.DenyReason = overtimeRequestOpenPeriod.DenyReason;
-					mergedPeriod.EnableWorkRuleValidation = overtimeRequestOpenPeriod.EnableWorkRuleValidation;
-					mergedPeriod.WorkRuleValidationHandleType = overtimeRequestOpenPeriod.WorkRuleValidationHandleType;
-					mergedPeriod.SkillType = overtimeRequestOpenPeriod.SkillType;
+					if (overtimeRequestOpenPeriod is OvertimeRequestOpenDatePeriod period)
+					{
+						mergedOvertimeRequestOpenPeriod = new OvertimeRequestOpenDatePeriod
+						{
+							Period = period.Period
+						};
+					}
+					else
+					{
+						mergedOvertimeRequestOpenPeriod = new OvertimeRequestOpenRollingPeriod
+						{
+							BetweenDays = ((OvertimeRequestOpenRollingPeriod)overtimeRequestOpenPeriod).BetweenDays
+						};
+					}
+					mergedOvertimeRequestOpenPeriod.AutoGrantType = overtimeRequestOpenPeriod.AutoGrantType;
+					mergedOvertimeRequestOpenPeriod.DenyReason = overtimeRequestOpenPeriod.DenyReason;
+					mergedOvertimeRequestOpenPeriod.EnableWorkRuleValidation = overtimeRequestOpenPeriod.EnableWorkRuleValidation;
+					mergedOvertimeRequestOpenPeriod.WorkRuleValidationHandleType = overtimeRequestOpenPeriod.WorkRuleValidationHandleType;
+					mergedOvertimeRequestOpenPeriod.SkillType = overtimeRequestOpenPeriod.SkillType;
 				}
 			}
-			return mergedPeriod;
+			return mergedOvertimeRequestOpenPeriod;
 		}
 
 		private static IList<OvertimeRequestAutoGrantType> prioritizedAutoGrantTypes =>

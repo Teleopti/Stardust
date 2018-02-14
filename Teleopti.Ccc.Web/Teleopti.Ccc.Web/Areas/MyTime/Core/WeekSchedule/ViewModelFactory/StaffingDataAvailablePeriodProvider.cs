@@ -1,5 +1,7 @@
-﻿using System.Globalization;
-using Teleopti.Ccc.Domain.AgentInfo;
+﻿using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Requests;
 using Teleopti.Ccc.Infrastructure.Toggle;
@@ -20,7 +22,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			_user = user;
 		}
 
-		public DateOnlyPeriod? GetPeriod(DateOnly date, bool forThisWeek)
+		public DateOnlyPeriod? GetPeriodForAbsence(DateOnly date, bool forThisWeek)
 		{
 			var period = date.ToDateOnlyPeriod();
 			if (forThisWeek)
@@ -35,6 +37,44 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			var maxEndDate = today.AddDays(staffingInfoAvailableDays);
 
 			var availablePeriod = new DateOnlyPeriod(today, maxEndDate);
+			return availablePeriod.Intersection(period);
+		}
+
+		public DateOnlyPeriod? GetPeriodForOvertime(DateOnly date, bool forThisWeek)
+		{
+			var period = date.ToDateOnlyPeriod();
+			if (forThisWeek)
+			{
+				period = DateHelper.GetWeekPeriod(date, CultureInfo.CurrentCulture);
+			}
+
+			var person = _user.CurrentUser();
+			var timezone = person.PermissionInformation.DefaultTimeZone();
+			var today = new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), timezone));
+
+			var workflowControlSet = person.WorkflowControlSet;
+			if (workflowControlSet == null)
+				return null;
+
+			var days = period.DayCollection();
+			var availableDays = new List<DateOnly>();
+			foreach (var day in days)
+			{
+				var overtimeRequestOpenPeriod =
+					workflowControlSet.GetMergedOvertimeRequestOpenPeriod(
+						day.ToDateTimePeriod(timezone), today, person.PermissionInformation);
+
+				if (overtimeRequestOpenPeriod.AutoGrantType != Domain.WorkflowControl.OvertimeRequestAutoGrantType.Deny)
+				{
+					availableDays.Add(day);
+				}
+			}
+			if (availableDays.Count == 0)
+			{
+				return null;
+			}
+
+			var availablePeriod = new DateOnlyPeriod(availableDays.Min(), availableDays.Max());
 			return availablePeriod.Intersection(period);
 		}
 	}

@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 		private bool needAdjustTimeline(StaffingPossiblityType staffingPossiblityType, DateOnly date, bool forThisWeek)
 		{
 			return staffingPossiblityType == StaffingPossiblityType.Overtime &&
-				   _staffingDataAvailablePeriodProvider.GetPeriod(date, forThisWeek).HasValue;
+				   _staffingDataAvailablePeriodProvider.GetPeriodForAbsence(date, forThisWeek).HasValue;
 		}
 	}
 }
