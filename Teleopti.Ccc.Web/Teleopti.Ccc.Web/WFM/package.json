@@ -124,18 +124,22 @@
         "webpack-concat-plugin": "^2.4.2"
     },
     "scripts": {
-        "pretest": "ng build & ..\\.node\\grunt.cmd devDist",
+        "pretest": "..\\.node\\grunt.cmd devDist",
         "test": "karma start karma.conf.js",
         "devTest": "npm test -- --reporters dots --no-single-run --auto-watch --autoWatchBatchDelay 1000 --",
         "minify:css": ".\\node_modules\\.bin\\cleancss --source-map './css/style_classic.css' -o ./dist/dist.min.css",
-        "prestart": "ng build & ..\\.node\\grunt.cmd devDist",
+        "prestart": "..\\.node\\grunt.cmd devDist",
         "start": ".\\node_modules\\.bin\\run-p iis openWeb watch:* ",
         "openWeb": "start http://localhost:52858/TeleoptiWFM/Web/",
-        "iis": "c:\\\"program files\\iis express\"\\iisexpress.exe /config:../../../.vs/config/applicationhost.config /site:Teleopti.Ccc.Web-Site",
+        "iis":
+            "c:\\\"program files\\iis express\"\\iisexpress.exe /config:../../../.vs/config/applicationhost.config /site:Teleopti.Ccc.Web-Site",
         "sass": "npm run sass:classic && npm run sass:dark",
-        "sass:classic": ".\\node_modules\\.bin\\node-sass  --output-style compressed  --include-path node_modules/teleopti-styleguide/styleguide/sass ./css/style.scss > ./dist/style_classic.min.css",
-        "sass:dark": ".\\node_modules\\.bin\\node-sass  --output-style compressed  --include-path node_modules/teleopti-styleguide/styleguide/sass ./css/darkstyle.scss > ./dist/style_dark.min.css",
-        "concat:js": ".\\node_modules\\.bin\\ncat.cmd  \"./app/**/!(*.spec|*.fake|*.fortest|app_desktop_client).js\" -m -o ./dist/main.js ",
+        "sass:classic":
+            ".\\node_modules\\.bin\\node-sass  --output-style compressed  --include-path node_modules/teleopti-styleguide/styleguide/sass ./css/style.scss > ./dist/style_classic.min.css",
+        "sass:dark":
+            ".\\node_modules\\.bin\\node-sass  --output-style compressed  --include-path node_modules/teleopti-styleguide/styleguide/sass ./css/darkstyle.scss > ./dist/style_dark.min.css",
+        "concat:js":
+            ".\\node_modules\\.bin\\ncat.cmd  \"./app/**/!(*.spec|*.fake|*.fortest|app_desktop_client).js\" -m -o ./dist/main.js ",
         "concat:html": "nghtml2js -m wfm.templates -f app/**/*.html -o ./dist/templates.js",
         "watch:js": ".\\node_modules\\.bin\\onchange ./app/**/*.js -v -- npm run eslint:js {{changed}}",
         "watch:sass": ".\\node_modules\\.bin\\onchange ./css/*.scss  -v -- npm run sass",
