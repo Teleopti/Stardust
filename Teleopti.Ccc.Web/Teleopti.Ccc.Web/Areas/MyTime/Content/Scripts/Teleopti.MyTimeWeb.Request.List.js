@@ -406,7 +406,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			var splitedTextSegs = _splitChunk(textSegs);
 
 			//remove line breaks for summary display...
-			$.each(splitedTextSegs, function (index, text) {
+			$.each(textSegs, function (index, text) {
 				if (text !== undefined && text !== '') {
 					var updatedText = text;
 					if (index === 0) {
