@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
@@ -10,6 +11,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
@@ -17,6 +19,7 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.TestData.Core;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 {
@@ -35,7 +38,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			var personAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
 			var scheduleDifferenceSaver = new SaveSchedulePartService(new ScheduleDifferenceSaver(scheduleRepository, CurrentUnitOfWork.Make(), new EmptyScheduleDayDifferenceSaver()), personAbsenceAccountRepository, new DoNothingScheduleDayChangeCallBack());
 			var businessRulesForAccountUpdate = new BusinessRulesForPersonalAccountUpdate(personAbsenceAccountRepository, new SchedulingResultStateHolder());
-			var personAbsenceCreator = new PersonAbsenceCreator (scheduleDifferenceSaver, businessRulesForAccountUpdate);
+			var personAbsenceCreator = new NoScheduleChangedEventPersonAbsenceCreator(scheduleDifferenceSaver, businessRulesForAccountUpdate);
 			var commandConverter = new AbsenceCommandConverter(new ThisCurrentScenario(scenario), new PersonRepository(unitOfWork), new AbsenceRepository(unitOfWork), scheduleRepository, UserTimeZone.Make());
 			var handler = new AddFullDayAbsenceCommandHandler(personAbsenceCreator, commandConverter);
 			handler.Handle(new AddFullDayAbsenceCommand
@@ -45,6 +48,37 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 					EndDate = Date,
 					PersonId = person.Id.Value
 				});
+		}
+	}
+
+	internal class NoScheduleChangedEventPersonAbsenceCreator : PersonAbsenceCreator, IPersonAbsenceCreator
+	{
+		private readonly ISaveSchedulePartService _saveSchedulePartService;
+		private readonly IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
+
+		public NoScheduleChangedEventPersonAbsenceCreator(ISaveSchedulePartService saveSchedulePartService,
+			IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate) : base(saveSchedulePartService, businessRulesForPersonalAccountUpdate)
+		{
+			_saveSchedulePartService = saveSchedulePartService;
+			_businessRulesForPersonalAccountUpdate = businessRulesForPersonalAccountUpdate;
+		}
+
+		public new IList<string> Create(AbsenceCreatorInfo absenceCreatorInfo, bool isFullDayAbsence)
+		{
+			var businessRulesForPersonAccountUpdate = _businessRulesForPersonalAccountUpdate.FromScheduleRange(absenceCreatorInfo.ScheduleRange);
+			createPersonAbsence(absenceCreatorInfo);
+			var ruleCheckResult = _saveSchedulePartService.Save(absenceCreatorInfo.ScheduleDay, businessRulesForPersonAccountUpdate, KeepOriginalScheduleTag.Instance);
+			return ruleCheckResult;
+		}
+
+		private static void createPersonAbsence(AbsenceCreatorInfo absenceCreatorInfo)
+		{
+			var absenceLayer = new AbsenceLayer(
+				absenceCreatorInfo.Absence,
+				new DateTimePeriod(absenceCreatorInfo.AbsenceTimePeriod.StartDateTime,
+					absenceCreatorInfo.AbsenceTimePeriod.EndDateTime));
+
+			absenceCreatorInfo.ScheduleDay.CreateAndAddAbsence(absenceLayer);
 		}
 	}
 }
