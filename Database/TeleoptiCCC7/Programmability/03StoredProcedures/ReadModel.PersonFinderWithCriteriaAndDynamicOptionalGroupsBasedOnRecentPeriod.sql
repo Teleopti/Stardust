@@ -40,7 +40,7 @@ DECLARE @isSearchInAll bit
 --create needed temp tables
 -- Temp table for combined criteria string (FirstName:ashley)
 DECLARE @SearchStrings TABLE(
-	SearchString nvarchar(200) NOT NULL
+	SearchString nvarchar(600) NOT NULL
 )
 
 DECLARE @SearchCriteria TABLE(
@@ -75,7 +75,7 @@ Declare @searchValue nvarchar(max)
 
 Declare @keywordSplitterIndex int
 Declare @searchKeyword nvarchar(max)
-Declare @notProcessedSearchValue nvarchar(100)
+Declare @notProcessedSearchValue nvarchar(600)
 
 WHILE @@FETCH_STATUS = 0
 BEGIN

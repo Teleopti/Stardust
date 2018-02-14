@@ -13,13 +13,14 @@ CREATE   FUNCTION [dbo].[SplitStringString]
 -- Omgjord till en funktion Ola 2004-11-09
 -- returnerar en tabell istället
 -- Changed from varchar to nvarchar Ola 2012-01-17
+-- Increase the substring length to make function can handle longer strings. Chundan 2018-02-13
 (@string_string nvarchar(max))
-RETURNS @strings TABLE (string nvarchar(200) NOT NULL)
+RETURNS @strings TABLE (string nvarchar(600) NOT NULL)
 As
 BEGIN 
 
  DECLARE @pos int
- DECLARE @string nvarchar(100)
+ DECLARE @string nvarchar(600)
  DECLARE @insert_text nvarchar(200)
  -- Exit if an empty string is given 
  IF @string_string = '' BEGIN

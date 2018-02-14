@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 {
 	public static class SearchTermParser
 	{
+		private static int _MAX_FIELD_VALUE_LENGTH = 500;
 		public static IDictionary<PersonFinderField, string> Parse(string values)
 		{
 			const char keyValueSplitter = ':';
@@ -68,6 +69,8 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 				searchKeywords.AddRange(result);
 				parsedTerms[searchType] = string.Join(keywordsSplitter.ToString(CultureInfo.CurrentCulture),
 					new HashSet<string>(searchKeywords));
+				if (parsedTerms[searchType].Length > _MAX_FIELD_VALUE_LENGTH)
+					return new Dictionary<PersonFinderField, string>();
 			}
 
 			return parsedTerms;
