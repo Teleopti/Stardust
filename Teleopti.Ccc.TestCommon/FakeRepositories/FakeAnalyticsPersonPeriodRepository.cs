@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public AnalyticsPersonPeriod PersonPeriod(Guid personPeriodCode)
 		{
-			return fakePersonPeriods.FirstOrDefault(a => a.PersonPeriodCode == personPeriodCode);
+			return fakePersonPeriods.First(a => a.PersonPeriodCode == personPeriodCode);
 		}
 		
 		public void AddOrUpdatePersonPeriod(AnalyticsPersonPeriod personPeriod)

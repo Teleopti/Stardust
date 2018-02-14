@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.ApplicationLayer.Availability;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Exceptions;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -53,11 +52,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Availability
 			var personCode = Guid.NewGuid();
 			var today = DateOnly.Today;
 			var person = PersonFactory.CreatePersonWithPersonPeriod(today.AddDays(-1)).WithId(personCode);
-			person.PersonPeriodCollection.First().WithId();
 			PersonRepository.Add(person);
 			AvailabilityDayRepository.Add(new StudentAvailabilityDay(person, today, new IStudentAvailabilityRestriction[] { new StudentAvailabilityRestriction() }));
 
-			Assert.Throws<PersonPeriodMissingInAnalyticsException>(() => Target.Handle(new AvailabilityChangedEvent
+			Assert.Throws<ApplicationException>(() => Target.Handle(new AvailabilityChangedEvent
 			{
 				AvailabilityId = Guid.NewGuid(),
 				PersonId = personCode,
@@ -211,8 +209,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Availability
 				LogOnBusinessUnitId = businessUnitCode
 			});
 
+			AnalyticsHourlyAvailabilityRepository.AnalyticsHourlyAvailabilities.Should().Not.Be.Empty();
 			var result = AnalyticsHourlyAvailabilityRepository.AnalyticsHourlyAvailabilities;
-			result.Should().Not.Be.Empty();
 			result.Count.Should().Be(1);
 			result.First().PersonId.Should().Be.EqualTo(personId);
 			result.First().BusinessUnitId.Should().Be.EqualTo(businessUnitId);
@@ -260,45 +258,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Availability
 				LogOnBusinessUnitId = businessUnitCode
 			});
 
+			AnalyticsHourlyAvailabilityRepository.AnalyticsHourlyAvailabilities.Should().Not.Be.Empty();
 			var result = AnalyticsHourlyAvailabilityRepository.AnalyticsHourlyAvailabilities;
-			result.Should().Not.Be.Empty();
 			result.Count.Should().Be(2);
 			result.First().ScheduledTimeMinutes.Should().Be(60);
 			result.Last().ScheduledTimeMinutes.Should().Be(120);
-		}
-
-		[Test]
-		public void ShouldNotAddAvailabilityWhenNoPersonPeriod()
-		{
-			var businessUnitCode = Guid.NewGuid();
-			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(businessUnitCode));
-
-			var personCode = Guid.NewGuid();
-			var scenarioCode = Guid.NewGuid();
-			var today = DateOnly.Today;
-			var person = PersonFactory.CreatePerson().WithId(personCode);
-			var scenario = new Scenario("Asd");
-			scenario.SetId(scenarioCode);
-			scenario.EnableReporting = true;
-
-			PersonRepository.Add(person);
-			AvailabilityDayRepository.Add(new StudentAvailabilityDay(person, today, new IStudentAvailabilityRestriction[] { new StudentAvailabilityRestriction() }));
-			ScenarioRepository.Add(scenario);
-
-			IActivity phoneActivity = new Activity("act");
-			phoneActivity.InWorkTime = true;
-			PersonAssignmentRepository.Has(person, scenario, phoneActivity, new DateOnlyPeriod(today, today), new TimePeriod(0, 1));
-
-			Target.Handle(new ScheduleChangedEvent
-			{
-				PersonId = personCode,
-				ScenarioId = scenarioCode,
-				StartDateTime = today.Date,
-				EndDateTime = today.Date,
-				LogOnBusinessUnitId = businessUnitCode
-			});
-
-			AnalyticsHourlyAvailabilityRepository.AnalyticsHourlyAvailabilities.Should().Be.Empty();
 		}
 	}
 }
