@@ -69,6 +69,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Availability
 				return;
 			}
 			var analyticsPersonPeriod = getAnalyticsPersonPeriod(date, person);
+			if (analyticsPersonPeriod == null)
+			{
+				logger.Debug($"No person period found in application for person {personId} on date {date}");
+				return;
+			}
 			var availabilityDays = _availabilityDayRepository.Find(date, person);
 			var analyticsDate = getAnalyticsDate(date);
 			var scenarios = getScenarios();
@@ -124,7 +129,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Availability
 		{
 			var personPeriod = person.Period(date);
 			if (personPeriod?.Id == null)
-				throw new ApplicationException("Person period was not found for person in application");
+				return null;
 			var analyticsPersonPeriod = _analyticsPersonPeriodRepository.PersonPeriod(personPeriod.Id.GetValueOrDefault());
 			if (analyticsPersonPeriod == null)
 				throw new PersonPeriodMissingInAnalyticsException(personPeriod.Id.GetValueOrDefault());
