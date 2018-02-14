@@ -53,11 +53,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Availability
 		[Attempts(10)]
 		public virtual void Handle(ScheduleChangedEvent @event)
 		{
-			for (var dateToHandle = @event.StartDateTime; dateToHandle < @event.EndDateTime.AddDays(1); )
-			{
-				handleOneDay(@event.PersonId, new DateOnly(dateToHandle.Date));
-				dateToHandle = dateToHandle.AddDays(1);
-			}
+		
 		}
 
 		private void handleOneDay(Guid personId, DateOnly date)
