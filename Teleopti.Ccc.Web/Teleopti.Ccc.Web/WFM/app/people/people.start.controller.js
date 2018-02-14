@@ -109,8 +109,9 @@ var getPeople = function () { return __awaiter(_this, void 0, void 0, function (
 }); };
 (function () {
     'use strict';
-    angular.module('wfm.people').controller('PeopleStart', ['$scope', PeopleStartController]);
-    function PeopleStartController($scope) {
+    angular.module('wfm.people').controller('PeopleStart', ['$scope', '$state', PeopleStartController]);
+
+    function PeopleStartController($scope, $state) {
         $scope.roles = [];
         $scope.people = [];
         $scope.selectedPeople = [];

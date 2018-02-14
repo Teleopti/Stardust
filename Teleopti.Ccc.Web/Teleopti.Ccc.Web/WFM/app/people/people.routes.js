@@ -13,12 +13,16 @@
 					currentKeyword: '',
 					paginationOptions: {}
 				},
-				templateUrl: 'app/people/html/people.html',
-				controller: 'PeopleStart'
+				templateUrl: 'app/people/html/people.start.html',
+				controller: 'PeopleDefault'
 		})
-			//.state('peopleold.start', {
-			//	templateUrl: 'app/peopleold/html/people-list.html',
-			//	controller: 'PeopleStartCtrl'
-			//})
+		.state('people.mock', {
+			templateUrl: 'app/people/html/people.html',
+			controller: 'PeopleStart'
+		})
+		.state('people.new', {
+			url: '/new',
+			template: '<ng2-people></ng2-people>'
+		})
 	}
 })();

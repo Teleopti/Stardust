@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
+import { UpgradeModule, downgradeComponent } from '@angular/upgrade/static';
 
 import { SharedModule } from '../shared/shared.module';
 
 import { PeopleComponent } from './people.component';
-/* import {
+import {
   MatInputModule,
   MatDialogModule,
   MatProgressSpinnerModule,
@@ -11,7 +12,7 @@ import { PeopleComponent } from './people.component';
   MatDialog,
   MatDialogRef,
   MatCheckboxModule,
-} from '@angular/material'; */
+} from '@angular/material';
 import { DialogContentExampleDialog } from './peoplemodal.component';
 
 @NgModule({
@@ -36,3 +37,5 @@ export class PeopleModule {
   ngDoBootstrap() {
   }
  }
+
+ angular.module('wfm').directive('ng2People', downgradeComponent({component: PeopleComponent}) as angular.IDirectiveFactory);

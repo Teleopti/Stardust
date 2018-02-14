@@ -23,7 +23,7 @@ import {
   styleUrls: ['./people.component.css']
 })
 export class PeopleComponent implements OnInit {
-
+/* 
   constructor(public dialog: MatDialog) { console.log(dialog); }
 
   people = PEOPLE;
@@ -57,9 +57,9 @@ export class PeopleComponent implements OnInit {
       console.log(value);
     });
   }
-
+*/
   ngOnInit() {
 
     
-  }
+  } 
 }
