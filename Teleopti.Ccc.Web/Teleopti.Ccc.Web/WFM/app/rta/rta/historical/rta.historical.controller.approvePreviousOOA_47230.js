@@ -30,7 +30,6 @@
 		loadData();
 
 		function loadData() {
-
 			$http.get('../api/HistoricalAdherence/ForPerson', {
 				params: {
 					personId: $stateParams.personId,
@@ -108,7 +107,6 @@
 		}
 
 		function buildRecordedOutOfAdherences(timeline, intervals) {
-
 			return intervals
 				.map(function (interval) {
 					var o = buildInterval(timeline, interval);
@@ -118,6 +116,7 @@
 							r.highlight = false;
 						});
 						o.highlight = true;
+
 						vm.openRecordedOutOfAdherences = true;
 						vm.openApprovedPeriods = true;
 						vm.openApproveForm = true;
@@ -127,6 +126,8 @@
 
 						if (moment(vm.approveStartTime).isBefore(timelineStart))
 							vm.approveStartTime = moment(timelineStart).toDate();
+
+
 					};
 
 					return o
@@ -137,8 +138,10 @@
 				return vm.approveStartTime
 			},
 			function (newValue, oldValue) {
-				if (timelineStart)
+				if (timelineStart) {
 					vm.approveStartTime = putTimeAfter(newValue, oldValue, timelineStart);
+					updateApprovePositioning();
+				}
 			}
 		);
 
@@ -146,9 +149,17 @@
 				return vm.approveEndTime
 			},
 			function (newValue, oldValue) {
-				vm.approveEndTime = putTimeAfter(newValue, oldValue, vm.approveStartTime);
+				if (timelineStart) {
+					vm.approveEndTime = putTimeAfter(newValue, oldValue, vm.approveStartTime || timelineStart);
+					updateApprovePositioning();
+				}
 			}
 		);
+
+		function updateApprovePositioning() {
+			vm.approveWidth = calculate.Width(vm.approveStartTime, vm.approveEndTime);
+			vm.approveOffset = calculate.Offset(vm.approveStartTime);
+		}
 
 		function putTimeAfter(time, oldTime, putAfter) {
 			var oldTimestamp = oldTime ? oldTime.getTime() : null;

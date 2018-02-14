@@ -148,6 +148,27 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 		expect(vm.approveStartTime).toEqual(moment('2018-02-06T01:00:00').toDate());
 	});
 
+	it('should fix start time entered manually - long time line', function (t) {
+		t.stateParams.personId = '1';
+		t.backend.with.historicalAdherence({
+			Timeline: {
+				StartTime: '2018-02-06T00:00:00',
+				EndTime: '2018-02-07T03:00:00'
+			}
+		});
+		var vm = t.createController();
+
+		t.apply(function () {
+			vm.approveStartTime = moment('1970-01-01T02:00:00').toDate();
+		});
+		t.apply(function () {
+			vm.approveEndTime = moment('1970-01-01T01:00:00').toDate();
+		});
+
+		expect(vm.approveStartTime).toEqual(moment('2018-02-06T02:00:00').toDate());
+		expect(vm.approveEndTime).toEqual(moment('2018-02-07T01:00:00').toDate());
+	});
+
 	it('should fix start and end time entered manually - after time line', function (t) {
 		t.stateParams.personId = '1';
 		t.backend.with.historicalAdherence({
@@ -218,6 +239,31 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 		expect(vm.approveStartTime).toEqual(moment('2018-02-06T01:15:00').toDate());
 	});
 
+	it('should fix start and end time entered manually - reverse order', function (t) {
+		t.stateParams.personId = '1';
+		t.backend.with.historicalAdherence({
+			Timeline: {
+				StartTime: '2018-02-06T08:00:00',
+				EndTime: '2018-02-06T18:00:00'
+			},
+			Schedules: [{
+				StartTime: '2018-02-06T09:00:00',
+				EndTime: '2018-02-06T17:00:00'
+			}]
+		});
+		var vm = t.createController();
+
+		t.apply(function () {
+			vm.approveEndTime = moment('1970-01-01T10:00:00').toDate();
+		});
+		t.apply(function () {
+			vm.approveStartTime = moment('1970-01-01T09:00:00').toDate();
+		});
+
+		expect(vm.approveStartTime).toEqual(moment('2018-02-06T09:00:00').toDate());
+		expect(vm.approveEndTime).toEqual(moment('2018-02-06T10:00:00').toDate());
+	});
+	
 	it('should fix start time - early recorded out of adherence start', function (t) {
 		t.stateParams.personId = '1';
 		t.backend.with.historicalAdherence({
@@ -242,4 +288,51 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 
 		expect(vm.approveStartTime).toEqual(moment('2018-02-06T08:00:00').toDate());
 	});
+	
+	it('should display period to be approved', function (t) {
+		t.stateParams.personId = '1';
+		t.backend.with.historicalAdherence({
+			Timeline: {
+				StartTime: '2018-02-06T08:00:00',
+				EndTime: '2018-02-06T18:00:00'
+			},
+			Schedules: [{
+				StartTime: '2018-02-06T09:00:00',
+				EndTime: '2018-02-06T17:00:00'
+			}]
+		});
+		var vm = t.createController();
+
+		t.apply(function () {
+			vm.approveStartTime = moment('1970-01-01T10:00:00').toDate();
+		});
+		t.apply(function () {
+			vm.approveEndTime = moment('1970-01-01T11:00:00').toDate();
+		});
+
+		expect(vm.approveOffset).toEqual("20%");
+		expect(vm.approveWidth).toEqual("10%");
+	});
+
+	it('should display period to be approved - changed reverse order', function (t) {
+		t.stateParams.personId = '1';
+		t.backend.with.historicalAdherence({
+			Timeline: {
+				StartTime: '2018-02-06T10:00:00',
+				EndTime: '2018-02-06T20:00:00'
+			}
+		});
+		var vm = t.createController();
+
+		t.apply(function () {
+			vm.approveEndTime = moment('1970-01-01T15:00:00').toDate();
+		});
+		t.apply(function () {
+			vm.approveStartTime = moment('1970-01-01T13:00:00').toDate();
+		});
+
+		expect(vm.approveOffset).toEqual("30%");
+		expect(vm.approveWidth).toEqual("20%");
+	});
+	
 });

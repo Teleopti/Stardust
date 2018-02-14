@@ -152,6 +152,10 @@
 	  .approved-period {
 		@include adherence-layer($in-adherence-color);
 	  }
+    .approve-period {
+      @include adherence-layer($in-adherence-color);
+      opacity: 0.5;
+    }
 	}
 
   }
