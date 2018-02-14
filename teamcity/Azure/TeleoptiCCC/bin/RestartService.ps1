@@ -12,7 +12,7 @@ function ServiceExist{
 }
 
 
-function WaitForUrl
+<#function WaitForUrl
 {
 	param
 	(
@@ -31,9 +31,9 @@ function WaitForUrl
 		$bailOut--
 		if ($bailOut -eq 0)	{ break }
 	}
-}
+}#>
 
-function Check-HttpStatus {     
+<#function Check-HttpStatus {     
 	param(
 	[string] $url,
     [System.Net.NetworkCredential]$credentials = $null
@@ -49,7 +49,7 @@ function Check-HttpStatus {
     $ret = $res.StatusCode -eq "200"
     $res.Close()
     return $ret
-}
+}#>
 
 function BaseUrl-get {
     
@@ -257,7 +257,34 @@ function CheckThisInstanceWeb
 
 }
 
-function GetCredentials
+function CheckPublicWeb
+{
+	param 
+	(
+		$PublicUrl
+	)
+	
+	add-type @"
+		using System.Net;
+		using System.Security.Cryptography.X509Certificates;
+		public class TrustAllCertsPolicy : ICertificatePolicy {
+        public bool CheckValidationResult(
+            ServicePoint srvPoint, X509Certificate certificate,
+            WebRequest request, int certificateProblem) {
+            return true;
+			}
+		}
+"@
+
+	[System.Net.ServicePointManager]::CertificatePolicy = New-Object TrustAllCertsPolicy
+
+	$statusCode = wget $PublicUrl -UseBasicParsing | % {$_.StatusCode} 
+	
+	return $statusCode
+
+}
+
+<#function GetCredentials
 {
 	$username = "tfsintegration"
 	$domain = "toptinet"
@@ -266,7 +293,7 @@ function GetCredentials
 	$password.ToCharArray() | ForEach-Object {$secstr.AppendChar($_)}
 	$AdminCredentials = new-object -typename System.Management.Automation.PSCredential -argumentlist $domain\$username, $secstr
 	return $AdminCredentials
-}
+}#>
 
 function StartTeleoptiServer
 {
@@ -300,11 +327,16 @@ function StartTeleoptiServer
 	
 	#Checking public URL is responding:
 	$BaseUrl = BaseUrl-get
-    Write-Host "Waiting for web services to start..."
+    log-info "Waiting for web services to start..."
     $Url = $BaseURL + "web/"
-    $cred = GetCredentials
-    WaitForUrl $Url $cred 
+    do
+	{ 
+		log-info "Waiting for public web site '$Url' to become responsive..." 
+	}
+	until (($WaitforLocalWeb = CheckPublicWeb -PublicUrl $Url) -eq "200")
 	
+	log-info "Public url: '$Url' is accessible..."
+		
 	
 	#Starting ServiceBus and ETL 
     TeleoptiWindowsServices-Start
@@ -319,11 +351,15 @@ function StartTeleoptiServer
 	
 	#Checking public URL is responding:
 	$BaseUrl = BaseUrl-get
-    Write-Host "Waiting for Teleopti Services to start..."
+    log-info "Waiting for Teleopti Services to start..."
     $Url = $BaseURL + "web/StardustDashboard/ping"
-	$cred = GetCredentials
-    WaitForUrl $Url $cred
-   
+	do
+	{ 
+		log-info "Waiting for public web site '$Url' on this instance to become responsive..." 
+	}
+	until (($WaitforLocalWeb = CheckPublicWeb -PublicUrl $Url) -eq "200")
+	
+	log-info "Public url: '$Url' is accessible..."
    
 }
 
