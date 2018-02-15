@@ -78,6 +78,10 @@ begin
 	where p.IsDeleted = 1
 	and exists (select 1 from PersonPeriod pp where pp.Parent = p.Id)
 
+	--Anonymize for GDPR
+	update Person set Email = '', Note = '', EmploymentNumber = '', FirstName = '', LastName = ''
+	from Person p inner join #deleted d on p.Id = d.Id 
+
 	delete SchedulePeriodShiftCategoryLimitation
 	from SchedulePeriodShiftCategoryLimitation scl
 	inner join SchedulePeriod sp on scl.SchedulePeriod = sp.Id
