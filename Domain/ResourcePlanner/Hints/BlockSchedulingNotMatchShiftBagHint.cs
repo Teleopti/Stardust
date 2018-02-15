@@ -31,7 +31,10 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 				if (!people.Contains(person)) continue;
 				var blockOption = blockPreferenceProvider.ForAgent(person, period.StartDate);
 				if (!blockOption.UseTeamBlockOption) continue;
-				var shiftBag = person.Period(period.StartDate).RuleSetBag;
+
+				var personPeriod = person.Period(period.StartDate);
+
+				var shiftBag = personPeriod?.RuleSetBag;
 				if (shiftBag == null)
 					continue;
 				var shiftProjectionCaches = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(new DateOnlyAsDateTimePeriod(period.StartDate, person.PermissionInformation.DefaultTimeZone()), shiftBag.RuleSetCollection, false);

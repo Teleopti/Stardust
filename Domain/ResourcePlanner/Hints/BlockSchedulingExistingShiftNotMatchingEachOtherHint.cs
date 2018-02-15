@@ -136,9 +136,14 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 				{
 					var scheduleDays = schedule.Value.ScheduledDayCollection(period);
 					var personPeriod = person.PersonPeriods(period).First();
+
+					if (personPeriod.StartDate > scheduleDays.First().DateOnlyAsPeriod.DateOnly)
+						continue;
+
 					var shiftsOnNonworkingDays = scheduleDays.Any(scheduleDay =>
 					{
 						var personAssignment = scheduleDay.PersonAssignment();
+
 						return personAssignment != null && personAssignment.ShiftLayers.Count() != 0 &&
 							   !personPeriod.PersonContract.ContractSchedule.IsWorkday(personPeriod.StartDate,
 								   scheduleDay.DateOnlyAsPeriod.DateOnly, person.FirstDayOfWeek);

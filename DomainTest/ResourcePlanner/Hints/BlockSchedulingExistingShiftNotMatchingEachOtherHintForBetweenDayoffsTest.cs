@@ -482,5 +482,37 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 					UseBlockSameShiftCategory = true
 				}), false));
 		}
+
+		[Test]
+		public void ShouldNotCrashWhenPersonPeriodStartsInTheMiddleOfPlanningPeriod()
+		{
+			var startDate = new DateOnly(2017, 01, 23);
+			var endDate = new DateOnly(2017, 01, 29);
+			var planningPeriod = new DateOnlyPeriod(startDate, endDate);
+			var scenario = new Scenario { DefaultScenario = true };
+			ScenarioRepository.Has(scenario);
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var activity = ActivityRepository.Has("_");
+
+			var agent = PersonRepository.Has(new Person().WithId(), new Team {Site = new Site("site")}, startDate.AddDays(1));
+			agent.AddSchedulePeriod(new SchedulePeriod(startDate,SchedulePeriodType.Week, 1));
+
+			agent.PersonPeriodCollection.First().PersonContract = new PersonContract(new Contract("_"),new PartTimePercentage("_"),new ContractScheduleWorkingMondayToFriday()  );
+
+			var currentSchedule = new ScheduleDictionaryForTest(scenario, planningPeriod.ToDateTimePeriod(TimeZoneInfo.Utc));
+
+			var personAssignment = new PersonAssignment(agent, scenario, startDate).WithLayer(activity, new TimePeriod(8, 16)).ShiftCategory(shiftCategory);
+			currentSchedule.AddPersonAssignment(personAssignment);
+
+
+			Target.Execute(new HintInput(currentSchedule, new[] { agent }, planningPeriod,
+				new FixedBlockPreferenceProvider(new ExtraPreferences
+				{
+					UseTeamBlockOption = true,
+					BlockTypeValue = BlockFinderType.BetweenDayOff,
+					UseBlockSameShiftCategory = true
+				}), false));
+
+		}
 	}
 }

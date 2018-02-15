@@ -43,6 +43,9 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 					else
 					{
 						var personPeriod = person.PersonPeriods(period).First();
+						if (personPeriod.StartDate > period.StartDate)
+							continue;
+
 						if (personPeriod.PersonContract.ContractSchedule.IsWorkday(personPeriod.StartDate, period.StartDate, person.FirstDayOfWeek))
 						{
 							var lastDayInPreviousPeriod = reversedScheduleDays.Skip(1).First();
