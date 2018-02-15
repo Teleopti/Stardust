@@ -251,8 +251,11 @@ function CheckThisInstanceWeb
 
 	[System.Net.ServicePointManager]::CertificatePolicy = New-Object TrustAllCertsPolicy
 
-	$statusCode = wget $BaselUrl -UseBasicParsing | % {$_.StatusCode} 
 	
+	log-info "Url to check: '$BaselUrl'"
+	$statusCode = wget $BaselUrl -UseBasicParsing | % {$_.StatusCode} 
+		
+	log-info "Wget return: '$statusCode'"
 	return $statusCode
 
 }
@@ -278,8 +281,10 @@ function CheckPublicWeb
 
 	[System.Net.ServicePointManager]::CertificatePolicy = New-Object TrustAllCertsPolicy
 
+	log-info "Url to check: '$PublicUrl'"
 	$statusCode = wget $PublicUrl -UseBasicParsing | % {$_.StatusCode} 
 	
+	log-info "Wget return: '$statusCode'"
 	return $statusCode
 
 }
