@@ -33,43 +33,20 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 		private IBackgroundJobClient backgroundJobs => _backgroundJobs.Value;
 		private RecurringJobManager recurringJobs => _recurringJobs.Value;
 
-		public void TriggerReccuringJobs()
-		{
-			triggerRecurringJob(null);
-		}
-
-		public void TriggerDailyRecurringJobs()
-		{
-			triggerRecurringJob(Cron.Daily());
-		}
-
-		public void TriggerHourlyRecurringJobs()
-		{
-			triggerRecurringJob(Cron.Hourly());
-		}
-
-		public void TriggerMinutelyRecurringJobs()
-		{
-			triggerRecurringJob(Cron.Minutely());
-		}
+		public void TriggerReccuringJobs() => triggerRecurringJob(null);
+		public void TriggerDailyRecurringJobs() => triggerRecurringJob(Cron.Daily());
+		public void TriggerHourlyRecurringJobs() => triggerRecurringJob(Cron.Hourly());
+		public void TriggerMinutelyRecurringJobs() => triggerRecurringJob(Cron.Minutely());
 
 		private void triggerRecurringJob(string cron)
 		{
 			var jobs = _storage.Value.GetConnection().GetRecurringJobs();
 			jobs
 				.Where(j => cron == null || j.Cron == cron)
-				.ForEach(j =>
-				{
-					recurringJobs.Trigger(j.Id);
-				});
+				.ForEach(j => { recurringJobs.Trigger(j.Id); });
 		}
 
-		public void RequeueScheduledJobs()
-		{
-			monitoring
-				.ScheduledJobs(0, 100)
-				.ForEach(j => backgroundJobs.Requeue(j.Key));
-		}
+		public void RequeueScheduledJobs() => monitoring.ScheduledJobs(0, 100).ForEach(j => backgroundJobs.Requeue(j.Key));
 
 		public void CleanQueue()
 		{
@@ -99,8 +76,8 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 			foreach (var queueName in Queues.OrderOfPriority())
 			{
 				monitoring
-				.EnqueuedJobs(queueName, 0, 1000)
-				.ForEach(j => backgroundJobs.Delete(j.Key));
+					.EnqueuedJobs(queueName, 0, 1000)
+					.ForEach(j => backgroundJobs.Delete(j.Key));
 			}
 
 			monitoring
@@ -108,42 +85,13 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 				.ForEach(j => backgroundJobs.Delete(j.Key));
 		}
 
-		public long NumberOfJobsInQueue(string name)
-		{
-			return monitoring.EnqueuedCount(name);
-		}
-
-		public long NumberOfEnqueuedJobs()
-		{
-			return Queues.OrderOfPriority()
-				.Select(x => monitoring.EnqueuedCount(x))
-				.Sum();
-		}
-
-		public long NumberOfFailedJobs()
-		{
-			return monitoring.FailedCount();
-		}
-
-		public long NumberOfScheduledJobs()
-		{
-			return monitoring.ScheduledCount();
-		}
-
-		public long NumberOfProcessingJobs()
-		{
-			return monitoring.ProcessingCount();
-		}
-
-		public long NumberOfSucceededJobs()
-		{
-			return monitoring.SucceededListCount();
-		}
-
-		public long SucceededFromStatistics()
-		{
-			return monitoring.GetStatistics().Succeeded;
-		}
+		public long NumberOfEnqueuedJobs() => Queues.OrderOfPriority().Select(x => monitoring.EnqueuedCount(x)).Sum();
+		public long NumberOfJobsInQueue(string name) => monitoring.EnqueuedCount(name);
+		public long NumberOfFailedJobs() => monitoring.FailedCount();
+		public long NumberOfScheduledJobs() => monitoring.ScheduledCount();
+		public long NumberOfProcessingJobs() => monitoring.ProcessingCount();
+		public long NumberOfSucceededJobs() => monitoring.SucceededListCount();
+		public long SucceededFromStatistics() => monitoring.GetStatistics().Succeeded;
 
 		public void CleanFailedJobsBefore(DateTime time)
 		{
@@ -153,11 +101,11 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 			var expiredFailed = new Dictionary<string, FailedJobDto>();
 			while (true)
 			{
-				var failedJobs = monitoring.FailedJobs(iteration*batch, batch);
-				 failedJobs
+				var failedJobs = monitoring.FailedJobs(iteration * batch, batch);
+				failedJobs
 					.Where(x => x.Value.FailedAt.HasValue && x.Value.FailedAt < time)
 					.ForEach(x => expiredFailed[x.Key] = x.Value);
-				
+
 				if (failedJobs.Count < batch)
 					break;
 
@@ -179,6 +127,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 					enqueuedCount += monitoring.EnqueuedCount(queueName);
 					fetchedCount += monitoring.FetchedCount(queueName);
 				}
+
 				var scheduledCount = monitoring.ScheduledCount();
 				var processingCount = monitoring.ProcessingCount();
 
@@ -204,11 +153,6 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 			throw new AggregateException("Hangfire job has failed!", exceptions);
 		}
 
-
-
-
-
-
 		public void EmulateWorkerIteration()
 		{
 			// will hang if nothing to work with
@@ -222,15 +166,11 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 					));
 		}
 
-		public void RequeueFailed(string eventName, string handlerName, string tenant)
-		{
+		public void RequeueFailed(string eventName, string handlerName, string tenant) =>
 			getFailedJobs(eventName, handlerName, tenant).ForEach(jobId => backgroundJobs.Requeue(jobId));
-		}
 
-		public void DeleteFailed(string eventName, string handlerName, string tenant)
-		{
+		public void DeleteFailed(string eventName, string handlerName, string tenant) =>
 			getFailedJobs(eventName, handlerName, tenant).ForEach(jobId => backgroundJobs.Delete(jobId));
-		}
 
 		private IList<string> getFailedJobs(string eventName, string handlerName, string tenant)
 		{
@@ -251,21 +191,21 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 						{
 							if (x.Value.Job.Args.Count == 5)
 							{
-								tenant1 = (string)x.Value.Job.Args[1];
-								eventName1 = ((string)x.Value.Job.Args[2]).Split(',')[0];
-								handlerName1 = ((string)x.Value.Job.Args[4]).Split(',')[0];
+								tenant1 = (string) x.Value.Job.Args[1];
+								eventName1 = ((string) x.Value.Job.Args[2]).Split(',')[0];
+								handlerName1 = ((string) x.Value.Job.Args[4]).Split(',')[0];
 							}
 							else if (x.Value.Job.Args.Count == 6)
 							{
-								tenant1 = (string)x.Value.Job.Args[1];
-								eventName1 = ((string)x.Value.Job.Args[3]).Split(',')[0];
-								handlerName1 = ((string)x.Value.Job.Args[5]).Split(',')[0];
+								tenant1 = (string) x.Value.Job.Args[1];
+								eventName1 = ((string) x.Value.Job.Args[3]).Split(',')[0];
+								handlerName1 = ((string) x.Value.Job.Args[5]).Split(',')[0];
 							}
 							else if (x.Value.Job.Args.Count == 7)
 							{
-								tenant1 = (string)x.Value.Job.Args[1];
-								eventName1 = ((string)x.Value.Job.Args[4]).Split(',')[0];
-								handlerName1 = ((string)x.Value.Job.Args[6]).Split(',')[0];
+								tenant1 = (string) x.Value.Job.Args[1];
+								eventName1 = ((string) x.Value.Job.Args[4]).Split(',')[0];
+								handlerName1 = ((string) x.Value.Job.Args[6]).Split(',')[0];
 							}
 							else
 							{
@@ -297,6 +237,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 
 				iteration++;
 			}
+
 			return failed.Keys.ToList();
 		}
 	}

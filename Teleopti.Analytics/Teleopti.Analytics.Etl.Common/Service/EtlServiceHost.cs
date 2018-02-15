@@ -24,6 +24,7 @@ namespace Teleopti.Analytics.Etl.Common.Service
 				var service = buildEtlService();
 				service.EnsureSystemWideRecurringJobs();
 				service.EnsureTenantRecurringJobs();
+				service.TriggerRecurringJobs();
 			});
 		}
 

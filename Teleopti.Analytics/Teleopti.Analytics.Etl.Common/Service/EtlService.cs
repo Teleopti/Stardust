@@ -5,6 +5,7 @@ using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Infrastructure.Events;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Infrastructure.Hangfire;
 
 namespace Teleopti.Analytics.Etl.Common.Service
 {
@@ -15,16 +16,23 @@ namespace Teleopti.Analytics.Etl.Common.Service
 		private Timer _timer;
 		private readonly EtlJobStarter _etlJobStarter;
 		private readonly TenantTickEventPublisher _tenantTickEventPublisher;
+		private readonly HangfireUtilities _hangfire;
 		private readonly IRecurringEventPublisher _recurringEventPublisher;
 		private DateTime? lastTenantRecurringJobPublishing;
 		private INow _now;
 		private int tickTries;
 
-		public EtlService(EtlJobStarter etlJobStarter, TenantTickEventPublisher tenantTickEventPublisher, IRecurringEventPublisher recurringEventPublisher, INow now)
+		public EtlService(
+			EtlJobStarter etlJobStarter,
+			TenantTickEventPublisher tenantTickEventPublisher,
+			HangfireUtilities hangfire,
+			IRecurringEventPublisher recurringEventPublisher,
+			INow now)
 		{
 			tickTries = 0;
 			_etlJobStarter = etlJobStarter;
 			_tenantTickEventPublisher = tenantTickEventPublisher;
+			_hangfire = hangfire;
 			_recurringEventPublisher = recurringEventPublisher;
 			_now = now;
 			_timer = new Timer(tick, null, TimeSpan.FromMilliseconds(-1), TimeSpan.FromMilliseconds(-1));
@@ -98,6 +106,8 @@ namespace Teleopti.Analytics.Etl.Common.Service
 				log.Error($"Exception occurred invoking {nameof(TenantTickEventPublisher)}", ex);
 			}
 		}
+
+		public void TriggerRecurringJobs() => _hangfire.TriggerReccuringJobs();
 
 		public void Dispose()
 		{
