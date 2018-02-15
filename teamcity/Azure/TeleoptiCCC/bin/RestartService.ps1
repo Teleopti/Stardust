@@ -396,8 +396,8 @@ function StartTeleoptiServer
 	until (($WaitforLocalWeb = CheckPublicWeb -PublicUrl $Url) -eq "200")
 	
 	log-info "Public url: '$Url' is accessible..."
-   
-} #>
+ #>
+}
 
 function EventlogSource-Create {
     param([string]$EventSourceName)
