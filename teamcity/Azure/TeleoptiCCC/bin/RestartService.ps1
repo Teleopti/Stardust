@@ -282,8 +282,19 @@ function CheckPublicWeb
 	[System.Net.ServicePointManager]::CertificatePolicy = New-Object TrustAllCertsPolicy
 
 	log-info "Url to check: '$PublicUrl'"
-	$statusCode = wget $PublicUrl -UseBasicParsing | % {$_.StatusCode} 
+	$statusCode = $null
 	
+	try {
+		$statusCode = wget $PublicUrl -UseBasicParsing -ErrorAction SilentlyContinue
+	}
+	catch [System.Net.WebException] {
+		$StatusCode = $_.Exception.Response
+	}
+	catch {
+		log-info $_.Exception
+		return $null
+	}
+	$StatusCode = $statusCode.StatusCode
 	log-info "Wget return: '$statusCode'"
 	return $statusCode
 
@@ -316,7 +327,8 @@ function StartTeleoptiServer
     log-info ""
 	do
 	{ 
-		log-info "Waiting for local web site '/Web' on this instance to become responsive..." 
+		log-info "Waiting for local web site '/Web' on this instance to become responsive..."
+		Start-Sleep 5
 	}
 	until (($WaitforLocalWeb = CheckThisInstanceWeb -SubSite "Web") -eq "200")
 	
@@ -324,7 +336,8 @@ function StartTeleoptiServer
 	
 	do
 	{ 
-		log-info "Waiting for local web site 'Web/ToggleHandler/AllToggles' on this instance to become responsive..." 
+		log-info "Waiting for local web site 'Web/ToggleHandler/AllToggles' on this instance to become responsive..."
+		Start-Sleep 5
 	}
 	until (($WaitforLocalWeb = CheckThisInstanceWeb -SubSite "Web/ToggleHandler/AllToggles") -eq "200")
 	
@@ -336,7 +349,8 @@ function StartTeleoptiServer
     $Url = $BaseURL + "web/"
     do
 	{ 
-		log-info "Waiting for public web site '$Url' to become responsive..." 
+		log-info "Waiting for public web site '$Url' to become responsive..."
+		Start-Sleep 5		
 	}
 	until (($WaitforLocalWeb = CheckPublicWeb -PublicUrl $Url) -eq "200")
 	
@@ -348,7 +362,8 @@ function StartTeleoptiServer
 	
 	do
 	{ 
-		log-info "Waiting for local web site 'web/StardustDashboard/ping' on this instance to become responsive..." 
+		log-info "Waiting for local web site 'web/StardustDashboard/ping' on this instance to become responsive..."
+		Start-Sleep 5
 	}
 	until (($WaitforLocalTeleoptiServices = CheckThisInstanceWeb -SubSite "web/StardustDashboard/ping") -eq "200")
 	
@@ -361,6 +376,7 @@ function StartTeleoptiServer
 	do
 	{ 
 		log-info "Waiting for public web site '$Url' on this instance to become responsive..." 
+		Start-Sleep 5
 	}
 	until (($WaitforLocalWeb = CheckPublicWeb -PublicUrl $Url) -eq "200")
 	
