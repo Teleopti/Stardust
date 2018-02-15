@@ -85,6 +85,15 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 		}
 
 		[Test]
+		public void ShouldBeEqualIfEqualSkill()
+		{
+			_target.Skill.WithId();
+			var personSkill2 = new PersonSkill(_target.Skill.EntityClone(), new Percent(1));
+
+			_target.Equals(personSkill2).Should().Be.True();
+		}
+
+		[Test]
 		public void ShouldNotBeEqualIfNotSameSkill()
 		{
 			var skill2 = new Skill("test skill", "test", Color.Red, 15, SkillTypeFactory.CreateSkillType());

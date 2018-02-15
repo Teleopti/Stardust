@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			if (otherPersonSkill == null)
 				return false;
 
-			return (this.Skill == otherPersonSkill.Skill);
+			return _skill.Equals(otherPersonSkill.Skill);
 		}
 
 		public override int GetHashCode()
