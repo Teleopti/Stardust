@@ -253,13 +253,26 @@ function CheckThisInstanceWeb
 
 	
 	log-info "Url to check: '$BaselUrl'"
-	$statusCode = wget $BaselUrl -UseBasicParsing | % {$_.StatusCode} 
-		
+	$statusCode = $null
+	
+	try {
+	$statusCode = wget $BaselUrl -UseBasicParsing -ErrorAction SilentlyContinue 
+	}
+	catch [System.Net.WebException] {
+		$StatusCode = $_.Exception.Response
+	}
+	catch {
+		log-info $_.Exception
+		return $null
+	}	
+	
+	$StatusCode = $statusCode.StatusCode
 	log-info "Wget return: '$statusCode'"
 	return $statusCode
 
 }
 
+<#
 function CheckPublicWeb
 {
 	param 
@@ -299,6 +312,7 @@ function CheckPublicWeb
 	return $statusCode
 
 }
+#>
 
 <#function GetCredentials
 {
@@ -342,7 +356,8 @@ function StartTeleoptiServer
 	until (($WaitforLocalWeb = CheckThisInstanceWeb -SubSite "Web/ToggleHandler/AllToggles") -eq "200")
 	
 	log-info "local url: 'Web/ToggleHandler/AllToggles' on this instance is accessible..."
-	
+
+<#	
 	#Checking public URL is responding:
 	$BaseUrl = BaseUrl-get
     log-info "Waiting for web services to start..."
@@ -355,7 +370,7 @@ function StartTeleoptiServer
 	until (($WaitforLocalWeb = CheckPublicWeb -PublicUrl $Url) -eq "200")
 	
 	log-info "Public url: '$Url' is accessible..."
-		
+#>		
 	
 	#Starting ServiceBus and ETL 
     TeleoptiWindowsServices-Start
@@ -369,7 +384,7 @@ function StartTeleoptiServer
 	
 	log-info "Teleopti Services on this instance is started..."
 	
-	#Checking public URL is responding:
+<#	#Checking public URL is responding:
 	$BaseUrl = BaseUrl-get
     log-info "Waiting for Teleopti Services to start..."
     $Url = $BaseURL + "web/StardustDashboard/ping"
@@ -382,7 +397,7 @@ function StartTeleoptiServer
 	
 	log-info "Public url: '$Url' is accessible..."
    
-}
+} #>
 
 function EventlogSource-Create {
     param([string]$EventSourceName)
