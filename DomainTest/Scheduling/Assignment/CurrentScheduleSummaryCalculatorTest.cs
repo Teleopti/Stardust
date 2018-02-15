@@ -13,7 +13,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 {
 	[TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
+	[DomainTestWithStaticDependenciesAvoidUse]
 	public class CurrentScheduleSummaryCalculatorTest
 	{
 		[Test]

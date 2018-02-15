@@ -11,6 +11,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 {
+	[DomainTestWithStaticDependenciesAvoidUse]
 	public class EnsureWeeklyRestRuleTest
     {
         private IEnsureWeeklyRestRule _target;
