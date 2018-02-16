@@ -64,6 +64,15 @@ if not exists (select 1 from PurgeSetting where [Key] = 'DaysToKeepJobResultArti
 if not exists (select 1 from PurgeSetting where [Key] = 'DaysToKeepExternalPerformanceData')
 	insert into PurgeSetting ([Key], [Value]) values('DaysToKeepExternalPerformanceData', 30)
 
+/*
+exec Purge
+*/
+
+--Pseudonymization of personal data for GDPR
+--Deleted persons first
+update Person set Email = '', Note = '', EmploymentNumber = '', FirstName = 'Deleted', LastName = 'Deleted'
+where IsDeleted = 1 and FirstName <> 'Deleted' and LastName <> 'Deleted'
+
 --Persons who has left, i.e. with a since long past leaving date
 select @KeepUntil = dateadd(year,-1*(select isnull(Value,100) from PurgeSetting where [Key] = 'YearsToKeepPersons'),getdate())
 
@@ -77,10 +86,6 @@ begin
 	from Person p
 	where p.IsDeleted = 1
 	and exists (select 1 from PersonPeriod pp where pp.Parent = p.Id)
-
-	--Anonymize for GDPR
-	update Person set Email = '', Note = '', EmploymentNumber = '', FirstName = '', LastName = ''
-	from Person p inner join #deleted d on p.Id = d.Id 
 
 	delete SchedulePeriodShiftCategoryLimitation
 	from SchedulePeriodShiftCategoryLimitation scl
