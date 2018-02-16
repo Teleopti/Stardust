@@ -11,12 +11,13 @@ function New-RandomPassword() {
     param(
         [int]$Length = 6
     )
-    $ascii=$NULL;For ($a=33;$a –le 126;$a++) {$ascii+=,[char][byte]$a }
-    For ($loop=1; $loop –le $length; $loop++) {
+    $ascii=$NULL;For ($a=33;$a -le 126;$a++) {$ascii+=,[char][byte]$a }
+    For ($loop=1; $loop -le $length; $loop++) {
         $RandomPassword+=($ascii | GET-RANDOM)
     }
     return $RandomPassword
 }
+
 
 Try 
 {
@@ -29,7 +30,7 @@ Try
     }
 
     $pwd = New-RandomPassword
-    $SecurePassword = ConvertTo-SecureString "$pwd" –asplaintext –force 
+   $SecurePassword = ConvertTo-SecureString "$pwd" –asplaintext –force 
 
     Write-Output "Creating temporary user '$admin' with password $pwd" | out-file $scriptLog -Append
     New-LocalUser -Name $admin -Password $SecurePassword -FullName "Service Starter" -Description "ServiceStarter" | out-null
