@@ -1,3 +1,7 @@
+Param 
+(
+	$StopOnly = $false
+)
 
 function ServiceExist{
     param($ServiceName)
@@ -467,7 +471,11 @@ Try
     }
 	
 	StopTeleoptiServer $iisInstalled
-	StartTeleoptiServer $iisInstalled
+	
+	if ($StopOnly -eq $false) 
+	{
+		StartTeleoptiServer $iisInstalled
+	}
 
 }
 
