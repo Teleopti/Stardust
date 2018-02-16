@@ -26,6 +26,7 @@ BEGIN
 
 	--20131120 Reset @date_from in case of night shifts and person_period change
 	SET @date_from = DATEADD(d,-1,@date_from)
+	SET @date_to = DATEADD(d,1,@date_to)
 
 	DECLARE @teams TABLE
 	(
