@@ -139,10 +139,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			query.ExecuteUpdate();
 		}
 
-		public AnalyticsGroup AddOrGetGroupPage(AnalyticsGroup analyticsGroup)
+		public AnalyticsGroup AddAndGetGroupPage(AnalyticsGroup analyticsGroup)
 		{
 			var existingGroupPage = _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-					$@"exec mart.[etl_dim_group_page_insert_or_get]
+					$@"exec mart.[etl_dim_group_page_insert_and_get]
                     @group_page_code=:{nameof(AnalyticsGroup.GroupPageCode)}
 					,@group_page_name=:{nameof(AnalyticsGroup.GroupPageName)}
 					,@group_page_name_resource_key=:{nameof(AnalyticsGroup.GroupPageNameResourceKey)}
