@@ -53,6 +53,9 @@ if not exists (select 1 from PurgeSetting where [key] = 'MonthsToKeepRequests')
 	insert into PurgeSetting ([Key], [Value]) values ('MonthsToKeepRequests', 12)
 if not exists (select 1 from PurgeSetting where [key] = 'YearsToKeepPersons')
 	insert into PurgeSetting ([Key], [Value]) values ('YearsToKeepPersons', 3)
+if not exists (select 1 from PurgeSetting where [key] = 'MonthsToKeepPersonalData')
+	insert into PurgeSetting ([Key], [Value]) values ('MonthsToKeepPersonalData', 3) --Set to 3 for new and 120 for existing in migration scripts
+
 
 /* Not part of Teleopti Data Retention Policy */
 if not exists (select 1 from PurgeSetting where [key] = 'DenyPendingRequestsAfterNDays')
@@ -71,7 +74,12 @@ exec Purge
 --Pseudonymization of personal data for GDPR
 --Deleted persons first
 update Person set Email = '', Note = '', EmploymentNumber = '', FirstName = 'Deleted', LastName = 'Deleted'
-where IsDeleted = 1 and FirstName <> 'Deleted' and LastName <> 'Deleted'
+where IsDeleted = 1
+
+select @KeepUntil = dateadd(month,-1*(select isnull(Value,100) from PurgeSetting where [Key] = 'MonthsToKeepPersonalData'),getdate())
+
+update Person set Email = '', Note = '', EmploymentNumber = '', FirstName = 'Pseudo', LastName = 'HasLeft'
+where isnull(TerminalDate,'20591231') < @KeepUntil
 
 --Persons who has left, i.e. with a since long past leaving date
 select @KeepUntil = dateadd(year,-1*(select isnull(Value,100) from PurgeSetting where [Key] = 'YearsToKeepPersons'),getdate())

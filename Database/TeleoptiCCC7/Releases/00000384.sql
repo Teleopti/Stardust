@@ -94,6 +94,10 @@ CREATE TABLE [dbo].[PurgeSetting](
 )
 GO
 
+/* AF 2018-02-16: All new installs will have personal data pseudonymized after 3 months to support GDPR laws */
+/* Need to put the insert into an old migration script so that it does not effect exiting installs. */
+/* Yes, there may be a handful out there using older versions and I'm OK with that. */
+insert into PurgeSetting ([Key], [Value]) values ('MonthsToKeepPersonalData', 3)
 
 ----------------  
 --Name: Ola & David
