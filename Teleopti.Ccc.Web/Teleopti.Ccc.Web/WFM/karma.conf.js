@@ -45,7 +45,7 @@ module.exports = function(config) {
             './src/test.ts': ['@angular/cli']
         },
 
-        // to use this attribute, run "npm run devTest -- keyWordFromSpecFileDescribe". example: npm run devTest -- rta
+        // to use this attribute, run "npm run devTest -- keyWordFromSpecFileDescribe". example: npm run devTest -- Rta
         client: {
             clearContext: false,
             args: parseTestPattern(process.argv)
@@ -82,7 +82,7 @@ module.exports = function(config) {
 
         // level of logging
         // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-        logLevel: config.LOG_DEBUG,
+        logLevel: config.LOG_INFO,
 
         // enable / disable watching file and executing tests whenever any file changes
         autoWatch: true,
@@ -105,19 +105,6 @@ module.exports = function(config) {
 };
 
 function parseTestPattern(argv) {
-    var found = false;
-    var pattern = argv
-        .map(function(v) {
-            if (found) {
-                return v;
-            }
-            if (v === '--') {
-                found = true;
-            }
-        })
-        .filter(function(a) {
-            return a;
-        })
-        .join(' ');
-    return pattern ? ['--grep', pattern] : [];
+	var pattern = argv.slice(argv.indexOf('--')+1).join(' ');
+	return pattern ? ['--grep', pattern] : [];
 }

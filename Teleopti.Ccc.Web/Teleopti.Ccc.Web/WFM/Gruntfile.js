@@ -76,10 +76,6 @@ module.exports = function(grunt) {
             },
             continuous: {
                 reporters: 'teamcity'
-            },
-            rta: {
-                singleRun: false,
-                configFile: 'karma.rta.conf.js'
             }
         },
         sass: {
@@ -490,7 +486,6 @@ module.exports = function(grunt) {
     grunt.registerTask('default', ['devDist', 'test', 'watch:dev']); // this task run the main task and then watch for file changes
     grunt.registerTask('test', ['ngtemplates', 'karma:unit']);
     grunt.registerTask('devTest', ['ngtemplates', 'karma:dev']);
-    grunt.registerTask('rtaTest', ['ngtemplates', 'karma:rta']);
     grunt.registerTask('devDist', [
         'ngtemplates',
         'sass',

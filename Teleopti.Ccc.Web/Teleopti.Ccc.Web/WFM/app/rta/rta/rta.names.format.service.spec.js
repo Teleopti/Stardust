@@ -1,5 +1,5 @@
 'use strict';
-describe('rtaNamesFormatService', function () {
+describe('RtaNamesFormatService', function () {
 	var target;
 	var sites = buildSites();
 	beforeEach(module('wfm.rta'));

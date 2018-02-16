@@ -1,5 +1,5 @@
 'use strict';
-describe('rtaFormatService', function () {
+describe('RtaFormatService', function () {
 	var target;
 
 	beforeEach(module('wfm.rta'));

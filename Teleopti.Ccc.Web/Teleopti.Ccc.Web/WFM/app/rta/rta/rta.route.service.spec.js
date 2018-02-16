@@ -1,5 +1,5 @@
 ﻿'use strict';
-describe('rtaRouteService', function () {
+describe('RtaRouteService', function () {
 	var target, $state;
 
 	beforeEach(module('wfm.rta'));

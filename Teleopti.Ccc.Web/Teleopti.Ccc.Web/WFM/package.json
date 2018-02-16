@@ -127,6 +127,7 @@
         "pretest": "..\\.node\\grunt.cmd devDist",
         "test": "karma start karma.conf.js",
         "devTest": "npm test -- --reporters dots --no-single-run --auto-watch --autoWatchBatchDelay 1000 --",
+        "rtaTest": "npm test -- --reporters dots --no-single-run --auto-watch --autoWatchBatchDelay 1000 -- Rta",
         "minify:css": ".\\node_modules\\.bin\\cleancss --source-map './css/style_classic.css' -o ./dist/dist.min.css",
         "prestart": "..\\.node\\grunt.cmd devDist",
         "start": ".\\node_modules\\.bin\\run-p iis openWeb watch:* ",
