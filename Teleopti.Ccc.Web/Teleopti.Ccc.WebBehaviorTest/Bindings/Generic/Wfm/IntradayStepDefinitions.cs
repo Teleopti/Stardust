@@ -171,6 +171,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 
 
 		[Given(@"I select to manage Skill Groups")]
+		[When(@"I select to manage Skill Groups")]
+		[Then(@"I select to manage Skill Groups")]
 		public void GivenISelectToManageSkillGroups()
 		{
 			Browser.Interactions.Click("#manage_skill_group_button");
@@ -233,6 +235,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		}
 
 		[When(@"I close the Skill Manager")]
+		[Then(@"I close the Skill Manager")]
 		public void WhenICloseTheSkillManager()
 		{
 			try
@@ -336,6 +339,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		}
 
 		[Then(@"I should see incoming traffic data in the chart")]
+		[Given(@"I should see incoming traffic data in the chart")]
 		[When(@"I should see incoming traffic data in the chart")]
 		public void ThenIShouldSeeIncomingTrafficDataInTheChart()
 		{
@@ -465,6 +469,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		}
 
 		[Then(@"I should see forecasted staffing data in the chart")]
+		[When(@"I should see forecasted staffing data in the chart")]
 		public void ThenIShouldSeeForecastedStaffingDataInTheChart()
 		{
 			Browser.Interactions.AssertJavascriptResultContains(
@@ -500,12 +505,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			Browser.Interactions.AssertExists(".no-data-available");
 		}
 
+		[Given(@"I change date offset to '(.*)'")]
 		[When(@"I change date offset to '(.*)'")]
 		public void WhenIChangeDateOffsetTo(int offset)
 		{
 			Browser.Interactions.Javascript("var scope = angular.element(document.querySelector('date-offset')).scope();" +
 											$"scope.vm.changeChosenOffset('{offset}');" +
 											"setTimeout(function(){console.log('delay')}, 1000);");
+		}
+
+		[Then(@"I should see the offset is set to '(.*)'")]
+		public void ShouldSeeOffsetIsSetTo(int offset)
+		{
+			Browser.Interactions.AssertJavascriptResultContains(
+				"var scope = angular.element(document.querySelector('#skill-id')).scope();" +
+				$"scope.vm.chosenOffset === '{offset}';", "True");
 		}
 
 		[Then(@"I should see the export to excel button")]
