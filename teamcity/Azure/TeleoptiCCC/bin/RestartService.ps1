@@ -276,7 +276,6 @@ function CheckThisInstanceWeb
 
 }
 
-<#
 function CheckPublicWeb
 {
 	param 
@@ -316,7 +315,7 @@ function CheckPublicWeb
 	return $statusCode
 
 }
-#>
+
 
 <#function GetCredentials
 {
@@ -361,7 +360,7 @@ function StartTeleoptiServer
 	
 	log-info "local url: 'Web/ToggleHandler/AllToggles' on this instance is accessible..."
 
-<#	
+	
 	#Checking public URL is responding:
 	$BaseUrl = BaseUrl-get
     log-info "Waiting for web services to start..."
@@ -374,7 +373,7 @@ function StartTeleoptiServer
 	until (($WaitforLocalWeb = CheckPublicWeb -PublicUrl $Url) -eq "200")
 	
 	log-info "Public url: '$Url' is accessible..."
-#>		
+		
 	
 	#Starting ServiceBus and ETL 
     TeleoptiWindowsServices-Start
@@ -388,7 +387,7 @@ function StartTeleoptiServer
 	
 	log-info "Teleopti Services on this instance is started..."
 	
-<#	#Checking public URL is responding:
+	#Checking public URL is responding:
 	$BaseUrl = BaseUrl-get
     log-info "Waiting for Teleopti Services to start..."
     $Url = $BaseURL + "web/StardustDashboard/ping"
@@ -400,7 +399,7 @@ function StartTeleoptiServer
 	until (($WaitforLocalWeb = CheckPublicWeb -PublicUrl $Url) -eq "200")
 	
 	log-info "Public url: '$Url' is accessible..."
- #>
+ 
 }
 
 function EventlogSource-Create {
