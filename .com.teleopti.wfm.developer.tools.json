@@ -1,5 +1,6 @@
 {
 	RestoreToLocalFlow: true,
 	EtlEnsureRecurringJobs: true,
-	EtlEnsureRecurringJobsWithRetries: true
+	EtlEnsureRecurringJobsWithRetries: true,
+	NpmRunRtaTest: true
 }
