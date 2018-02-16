@@ -53,28 +53,31 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Availability
 		[Attempts(10)]
 		public virtual void Handle(ScheduleChangedEvent @event)
 		{
-			var person = _personRepository.Get(@event.PersonId);
-			var scenarios = getScenarios();
-			if (person != null)
+			for (var dateToHandle = @event.StartDateTime; dateToHandle < @event.EndDateTime.AddDays(1); )
 			{
-				for (var dateToHandle = @event.StartDateTime; dateToHandle < @event.EndDateTime.AddDays(1);)
-				{
-					handleOneDay(person, new DateOnly(dateToHandle.Date), scenarios);
-					dateToHandle = dateToHandle.AddDays(1);
-				}
-			}
-			else
-			{
-				logger.Debug($"No person found for personId {@event.PersonId}");
+				handleOneDay(@event.PersonId, new DateOnly(dateToHandle.Date));
+				dateToHandle = dateToHandle.AddDays(1);
 			}
 		}
 
-		private void handleOneDay(IPerson person, DateOnly date, IList<AnalyticsScenario> scenarios)
+		private void handleOneDay(Guid personId, DateOnly date)
 		{
+			var person = _personRepository.Get(personId);
+			if (person == null)
+			{
+				logger.Debug($"No person found for personId {personId}");
+				return;
+			}
 			var analyticsPersonPeriod = getAnalyticsPersonPeriod(date, person);
+			if (analyticsPersonPeriod == null)
+			{
+				logger.Debug($"No person period found in application for person {personId} on date {date}");
+				return;
+			}
 			var availabilityDays = _availabilityDayRepository.Find(date, person);
 			var analyticsDate = getAnalyticsDate(date);
-			
+			var scenarios = getScenarios();
+
 			if (!availabilityDays.Any())
 			{
 				foreach (var scenario in scenarios)
@@ -117,9 +120,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Availability
 		[Attempts(10)]
 		public virtual void Handle(AvailabilityChangedEvent @event)
 		{
-			var person = _personRepository.Get(@event.PersonId);
-			var scenarios = getScenarios();
-			handleOneDay(person, @event.Date, scenarios);
+			handleOneDay(@event.PersonId, @event.Date);
 		}
 
 
