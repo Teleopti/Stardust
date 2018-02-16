@@ -50,8 +50,8 @@ BEGIN
 		INSERT INTO [mart].[etl_maintenance_configuration] VALUES(12,'YearsToKeepFactScheduleForecastSkill',3)
 	IF NOT EXISTS (SELECT 1 FROM [mart].[etl_maintenance_configuration] WHERE configuration_id = 13)
 		INSERT INTO [mart].[etl_maintenance_configuration] VALUES(13,'YearsToKeepFactSchedulePreferences',2)
-
-
+	IF NOT EXISTS (SELECT 1 FROM [mart].[etl_maintenance_configuration] WHERE configuration_id = 18)
+		INSERT INTO [mart].[etl_maintenance_configuration] VALUES(18,'MonthsToKeepPersonalData',3) --Set to 3 for new and 120 for existing in migration scripts
 
 	/* Not part of Teleopti Data Retention Policy */
 	if not exists (select 1 from mart.etl_maintenance_configuration where configuration_id = 1)
@@ -101,6 +101,16 @@ BEGIN
 	DELETE FROM mart.etl_jobstep_error
 	WHERE insert_date < dateadd(day, -@daysToKeepETLError, getdate())
 	
+	--------------- Personal Data for GDPR ---------------------
+	-- Pseudonymize data for persons who left the company long ago ----
+	SET @confMinDate = dateadd(month,-1*isnull((select isnull(configuration_value,120) FROM [mart].[etl_maintenance_configuration] 
+			WHERE configuration_id = 18 AND configuration_name = 'MonthsToKeepPersonalData'),120),getdate())
+
+	update mart.dim_person set person_name = 'Pseudo', first_name = 'Pseudo', last_name = 'Pseudo', employment_number = '', email = '', note = '', windows_username = ''
+	from mart.dim_person dp
+	where not exists (select 1 from mart.dim_person dp2 where dp2.person_code = dp.person_code and dp2.employment_end_date > '2059-12-30')
+	and dp.employment_end_date < @confMinDate
+
 	--------------- Fact tables ---------------------
 	SELECT @minDimDate =  MIN(date_date) FROM mart.dim_date WHERE date_id>-1
 

@@ -25,7 +25,10 @@ ALTER TABLE mart.etl_maintenance_configuration ADD CONSTRAINT
 	configuration_id
 	) ON [MART]
 	
---add default data
+--AF 2018-02-18: Pseudonymize persona data for new installs according to Teleopti Data Retention Policy
+IF NOT EXISTS (SELECT 1 FROM [mart].[etl_maintenance_configuration] WHERE configuration_id = 18)
+	INSERT INTO [mart].[etl_maintenance_configuration] VALUES(18,'MonthsToKeepPersonalData',3) --Set to 3 for new and 120 for existing in migration scripts
+
 
 ----------------  
 --Name: David Jonsson
