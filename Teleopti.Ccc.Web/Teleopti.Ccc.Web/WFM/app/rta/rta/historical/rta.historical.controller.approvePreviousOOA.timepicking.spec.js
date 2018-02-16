@@ -334,5 +334,4 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 		expect(vm.approveOffset).toEqual("30%");
 		expect(vm.approveWidth).toEqual("20%");
 	});
-	
 });

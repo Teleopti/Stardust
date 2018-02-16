@@ -1,4 +1,41 @@
+@media all and (-ms-high-contrast: none), // Internet Explorer
+(-ms-high-contrast: active) {
+
+  .rta-view {
+	.approve-form {
+	  &.non-ie {
+		display: none !important;
+	  }
+	  &.ie {
+		display: inline !important;
+	  }
+	}
+
+  }
+}
+
 .rta-view {
+
+  .approve-form {
+
+	input {
+	  margin-left: 10px;
+	  margin-right: 30px;
+	  width: 90px;
+	  border: none;
+	  border-bottom: 1px solid lightgrey;
+	  line-height: 20px;
+	}
+
+	&.non-ie {
+	  display: inline;
+	}
+
+	&.ie {
+	  display: none;
+	}
+
+  }
 
   $out-of-adherence-color: darkred;
   $in-adherence-color: darkgreen;
@@ -152,10 +189,10 @@
 	  .approved-period {
 		@include adherence-layer($in-adherence-color);
 	  }
-    .approve-period {
-      @include adherence-layer($in-adherence-color);
-      opacity: 0.5;
-    }
+	  .approve-period {
+		@include adherence-layer($in-adherence-color);
+		opacity: 0.5;
+	  }
 	}
 
   }

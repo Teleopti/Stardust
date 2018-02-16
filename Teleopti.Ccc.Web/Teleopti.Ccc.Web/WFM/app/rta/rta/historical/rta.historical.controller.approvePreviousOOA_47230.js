@@ -18,12 +18,6 @@
 		vm.openApprovedPeriods = $stateParams.open;
 		vm.openApproveForm = $stateParams.open;
 
-		vm.ooaTooltipTime = function (time) {
-			if (time == null)
-				return '';
-			return time.format('HH:mm:ss');
-		};
-
 		var calculate;
 		var timelineStart;
 
@@ -124,24 +118,48 @@
 						vm.approveStartTime = moment(interval.StartTime).toDate();
 						vm.approveEndTime = moment(interval.EndTime).toDate();
 
+						startTime = moment(vm.approveStartTime).format("HH:mm:ss");
+						endTime = moment(vm.approveEndTime).format("HH:mm:ss");
+
 						if (moment(vm.approveStartTime).isBefore(timelineStart))
 							vm.approveStartTime = moment(timelineStart).toDate();
-
-
 					};
 
 					return o
 				});
 		}
 
+		var startTime;
+		Object.defineProperty(vm, 'approveStartTimeString', {
+			get: function () {
+				return startTime;
+			},
+			set: function (value) {
+				startTime = value;
+				var m = moment('1970-01-01T' + startTime);
+				vm.approveStartTime = m.isValid() ? m.toDate() : undefined;
+			}
+		});
+
+		var endTime;
+		Object.defineProperty(vm, 'approveEndTimeString', {
+			get: function () {
+				return endTime;
+			},
+			set: function (value) {
+				endTime = value;
+				var m = moment('1970-01-01T' + endTime);
+				vm.approveEndTime = m.isValid() ? m.toDate() : undefined;
+			}
+		});
+
 		$scope.$watch(function () {
 				return vm.approveStartTime
 			},
 			function (newValue, oldValue) {
-				if (timelineStart) {
-					vm.approveStartTime = putTimeAfter(newValue, oldValue, timelineStart);
-					updateApprovePositioning();
-				}
+				if (timelineStart && timeChanged(newValue, oldValue))
+					vm.approveStartTime = putTimeAfter(newValue, timelineStart);
+				updateApprovePositioning();
 			}
 		);
 
@@ -149,28 +167,35 @@
 				return vm.approveEndTime
 			},
 			function (newValue, oldValue) {
-				if (timelineStart) {
-					vm.approveEndTime = putTimeAfter(newValue, oldValue, vm.approveStartTime || timelineStart);
-					updateApprovePositioning();
-				}
+				if (timelineStart && timeChanged(newValue, oldValue))
+					vm.approveEndTime = putTimeAfter(newValue, vm.approveStartTime || timelineStart);
+				updateApprovePositioning();
 			}
 		);
 
 		function updateApprovePositioning() {
-			vm.approveWidth = calculate.Width(vm.approveStartTime, vm.approveEndTime);
-			vm.approveOffset = calculate.Offset(vm.approveStartTime);
+			if (vm.approveStartTime && vm.approveEndTime) {
+				vm.approveWidth = calculate.Width(vm.approveStartTime, vm.approveEndTime);
+				vm.approveOffset = calculate.Offset(vm.approveStartTime);
+				return;
+			}
+			vm.approveWidth = undefined;
+			vm.approveOffset = undefined;
 		}
 
-		function putTimeAfter(time, oldTime, putAfter) {
-			var oldTimestamp = oldTime ? oldTime.getTime() : null;
+		function timeChanged(time, oldTime) {
 			var newTimestamp = time ? time.getTime() : null;
-			if (oldTimestamp != newTimestamp) {
-				time = intoTimeline(time);
-				if (time.isBefore(putAfter))
-					time = time.add(1, "days");
-				return time.toDate();
-			}
-			return time;
+			var oldTimestamp = oldTime ? oldTime.getTime() : null;
+			return newTimestamp != oldTimestamp;
+		}
+
+		function putTimeAfter(time, putAfter) {
+			if (!time)
+				return undefined;
+			time = intoTimeline(time);
+			if (time.isBefore(putAfter))
+				time = time.add(1, "days");
+			return time.toDate();
 		}
 
 		function intoTimeline(time) {
