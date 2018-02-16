@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": "Teleopti.Ccc.Web"
+		}
+	],
+	"settings": {
+		"terminal.integrated.cwd": "Teleopti.Ccc.Web/WFM/",
+		"typescript.tsdk": "./Teleopti.Ccc.Web/Teleopti.Ccc.Web/WFM/node_modules/typescript/lib"
+	}
+}
