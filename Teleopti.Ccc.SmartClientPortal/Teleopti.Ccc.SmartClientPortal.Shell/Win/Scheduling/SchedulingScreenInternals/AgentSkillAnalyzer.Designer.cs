@@ -85,8 +85,10 @@
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.toolStripMain = new System.Windows.Forms.ToolStrip();
 			this.toolStripButtonRemoveNotLoadedSkills = new System.Windows.Forms.ToolStripButton();
-			this.toolStripButtonFindAgentsThatHaveChangedSkillgroupDuringPeriod = new System.Windows.Forms.ToolStripButton();
-			this.toolStripButtonToggleReduce = new System.Windows.Forms.ToolStripButton();
+			this.toolStripDropDownButtonStep = new System.Windows.Forms.ToolStripDropDownButton();
+			this.beforeReducingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.afterReducingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.afterMergingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.tabControl1.SuspendLayout();
 			this.tabPage2.SuspendLayout();
@@ -608,11 +610,10 @@
 			this.toolStripMain.Dock = System.Windows.Forms.DockStyle.None;
 			this.toolStripMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonRemoveNotLoadedSkills,
-            this.toolStripButtonToggleReduce,
-            this.toolStripButtonFindAgentsThatHaveChangedSkillgroupDuringPeriod});
+            this.toolStripDropDownButtonStep});
 			this.toolStripMain.Location = new System.Drawing.Point(3, 0);
 			this.toolStripMain.Name = "toolStripMain";
-			this.toolStripMain.Size = new System.Drawing.Size(573, 25);
+			this.toolStripMain.Size = new System.Drawing.Size(289, 25);
 			this.toolStripMain.TabIndex = 0;
 			// 
 			// toolStripButtonRemoveNotLoadedSkills
@@ -625,26 +626,37 @@
 			this.toolStripButtonRemoveNotLoadedSkills.Text = "Remove not loaded skills";
 			this.toolStripButtonRemoveNotLoadedSkills.Click += new System.EventHandler(this.toolStripButtonRemoveNotLoadedSkillsClick);
 			// 
-			// toolStripButtonFindAgentsThatHaveChangedSkillgroupDuringPeriod
+			// toolStripDropDownButtonStep
 			// 
-			this.toolStripButtonFindAgentsThatHaveChangedSkillgroupDuringPeriod.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.toolStripButtonFindAgentsThatHaveChangedSkillgroupDuringPeriod.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonFindAgentsThatHaveChangedSkillgroupDuringPeriod.Image")));
-			this.toolStripButtonFindAgentsThatHaveChangedSkillgroupDuringPeriod.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripButtonFindAgentsThatHaveChangedSkillgroupDuringPeriod.Name = "toolStripButtonFindAgentsThatHaveChangedSkillgroupDuringPeriod";
-			this.toolStripButtonFindAgentsThatHaveChangedSkillgroupDuringPeriod.Size = new System.Drawing.Size(275, 22);
-			this.toolStripButtonFindAgentsThatHaveChangedSkillgroupDuringPeriod.Text = "Find agents with skillgroup changes during period";
-			this.toolStripButtonFindAgentsThatHaveChangedSkillgroupDuringPeriod.Click += new System.EventHandler(this.toolStripButtonFindAgentsThatHaveChangedSkillGroupDuringPeriodClick);
+			this.toolStripDropDownButtonStep.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.toolStripDropDownButtonStep.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.beforeReducingToolStripMenuItem,
+            this.afterReducingToolStripMenuItem,
+            this.afterMergingToolStripMenuItem});
+			this.toolStripDropDownButtonStep.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButtonStep.Image")));
+			this.toolStripDropDownButtonStep.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripDropDownButtonStep.Name = "toolStripDropDownButtonStep";
+			this.toolStripDropDownButtonStep.Size = new System.Drawing.Size(104, 22);
+			this.toolStripDropDownButtonStep.Text = "Before reducing";
+			this.toolStripDropDownButtonStep.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.toolStripDropDownButtonStep_DropDownItemClicked);
 			// 
-			// toolStripButtonToggleReduce
+			// beforeReducingToolStripMenuItem
 			// 
-			this.toolStripButtonToggleReduce.CheckOnClick = true;
-			this.toolStripButtonToggleReduce.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.toolStripButtonToggleReduce.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonToggleReduce.Image")));
-			this.toolStripButtonToggleReduce.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripButtonToggleReduce.Name = "toolStripButtonToggleReduce";
-			this.toolStripButtonToggleReduce.Size = new System.Drawing.Size(113, 22);
-			this.toolStripButtonToggleReduce.Text = "Toggle auto reduce";
-			this.toolStripButtonToggleReduce.Click += new System.EventHandler(this.toolStripButtonToggleReduce_Click);
+			this.beforeReducingToolStripMenuItem.Name = "beforeReducingToolStripMenuItem";
+			this.beforeReducingToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+			this.beforeReducingToolStripMenuItem.Text = "Before reducing";
+			// 
+			// afterReducingToolStripMenuItem
+			// 
+			this.afterReducingToolStripMenuItem.Name = "afterReducingToolStripMenuItem";
+			this.afterReducingToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+			this.afterReducingToolStripMenuItem.Text = "After reducing";
+			// 
+			// afterMergingToolStripMenuItem
+			// 
+			this.afterMergingToolStripMenuItem.Name = "afterMergingToolStripMenuItem";
+			this.afterMergingToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+			this.afterMergingToolStripMenuItem.Text = "After merging";
 			// 
 			// AgentSkillAnalyzer
 			// 
@@ -732,7 +744,9 @@
 		private System.Windows.Forms.ColumnHeader columnHeader31;
 		private System.Windows.Forms.ColumnHeader columnHeader32;
 		private System.Windows.Forms.ToolStripButton toolStripButtonRemoveNotLoadedSkills;
-		private System.Windows.Forms.ToolStripButton toolStripButtonFindAgentsThatHaveChangedSkillgroupDuringPeriod;
-		private System.Windows.Forms.ToolStripButton toolStripButtonToggleReduce;
+		private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButtonStep;
+		private System.Windows.Forms.ToolStripMenuItem beforeReducingToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem afterReducingToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem afterMergingToolStripMenuItem;
 	}
 }

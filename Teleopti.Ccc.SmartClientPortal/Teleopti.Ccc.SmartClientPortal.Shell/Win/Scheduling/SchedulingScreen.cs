@@ -46,6 +46,7 @@ using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
+using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -732,7 +733,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					skillGridMenuItem2.Click += skillGridMenuItemShovelAnalyzerClick;
 					_contextMenuSkillGrid.Items.Add(skillGridMenuItem2);
 					var skillGridMenuItem = new ToolStripMenuItem("Agent Skill Analyzer...");
-					skillGridMenuItem.Click += skillGridMenuItemAgentSkillAnalyser_Click;
+					skillGridMenuItem.Click += skillGridMenuItemAgentSkillAnalyserClick;
 					_contextMenuSkillGrid.Items.Add(skillGridMenuItem);
 				}
 			}
@@ -4286,11 +4287,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			}
 		}
 
-		private void skillGridMenuItemAgentSkillAnalyser_Click(object sender, EventArgs e)
+		private void skillGridMenuItemAgentSkillAnalyserClick(object sender, EventArgs e)
 		{
 			using (var analyzer = new AgentSkillAnalyzer(SchedulerState.SchedulingResultState.LoadedAgents,
 				SchedulerState.SchedulingResultState.Skills, SchedulerState.SchedulingResultState.SkillDays,
-				SchedulerState.RequestedPeriod.DateOnlyPeriod, _container.Resolve<CreateIslands>()))
+				SchedulerState.RequestedPeriod.DateOnlyPeriod, _container.Resolve<CreateIslands>(), _container.Resolve<DesktopSchedulingContext>(), _schedulerState))
 			{
 				analyzer.LoadData();
 				analyzer.ShowDialog(this);

@@ -4,13 +4,18 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
-using System.ServiceModel;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Islands;
 using Teleopti.Ccc.Domain.Islands.ClientModel;
+using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -26,6 +31,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 		private readonly IDictionary<ISkill, IEnumerable<ISkillDay>> _skillDays;
 		private readonly DateOnlyPeriod _datePeriod;
 		private readonly CreateIslands _createIslands;
+		private readonly DesktopSchedulingContext _desktopSchedulingContext;
+		private readonly ISchedulerStateHolder _schedulerStateHolder;
 		private IList<Island> _islandListBeforeReducing;
 		private IList<Island> _islandListAfterReducing;
 		private IDictionary<ISkill,TimeSpan> _skillDayForecastForSkills = new Dictionary<ISkill, TimeSpan>();
@@ -33,6 +40,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 		private readonly TimeFormatter _timeFormatter = new TimeFormatter(new ThisCulture(CultureInfo.CurrentCulture));
 		private IList<ISkill> _allSkills;
 		private readonly DateTimePicker _dtpDate;
+		private IList<Island> _islandListAfterMerging;
 
 		public AgentSkillAnalyzer()
 		{
@@ -41,7 +49,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 
 		public AgentSkillAnalyzer(IEnumerable<IPerson> personList, IEnumerable<ISkill> skillList,
 			IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, DateOnlyPeriod datePeriod,
-			CreateIslands createIslands)
+			CreateIslands createIslands, DesktopSchedulingContext desktopSchedulingContext,
+			ISchedulerStateHolder schedulerStateHolder)
 		{
 			InitializeComponent();
 			_dtpDate = new DateTimePicker {Format = DateTimePickerFormat.Short};
@@ -51,6 +60,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 			_skillDays = skillDays;
 			_datePeriod = datePeriod;
 			_createIslands = createIslands;
+			_desktopSchedulingContext = desktopSchedulingContext;
+			_schedulerStateHolder = schedulerStateHolder;
 			_date = datePeriod.StartDate;
 			_dtpDate.MinDate = datePeriod.StartDate.Date;
 			_dtpDate.MaxDate = datePeriod.EndDate.Date;
@@ -354,7 +365,21 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 			if (selectedSkill == null)
 				return;
 
-			var islands = toolStripButtonToggleReduce.Checked ? _islandListAfterReducing : _islandListBeforeReducing;
+			IList<Island> islands = new List<Island>();
+			switch (toolStripDropDownButtonStep.Text)
+			{
+				case "Before reducing":
+					islands = _islandListBeforeReducing;
+					break;
+
+				case "After reducing":
+					islands = _islandListAfterReducing;
+					break;
+
+				case "After merging":
+					islands = _islandListAfterMerging;
+					break;
+			}
 			drawVirtualGroupList(selectedSkill, listViewSkillGroupsForSkill, islands);
 
 			listViewSkillViewAgents.SuspendLayout();
@@ -371,6 +396,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 
 		private IEnumerable<IPerson> getPersonsOnSkill(ISkill skill)
 		{
+			if (skill == null)
+			{
+				return new List<IPerson>();
+			}
+
 			var personsOnSkill = new List<IPerson>();
 			foreach (var person in _personList)
 			{
@@ -465,7 +495,21 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 
 		private void drawLists()
 		{
-			var islands = toolStripButtonToggleReduce.Checked ? _islandListAfterReducing : _islandListBeforeReducing;
+			IList<Island> islands = new List<Island>();
+			switch (toolStripDropDownButtonStep.Text)
+			{
+				case "Before reducing":
+					islands = _islandListBeforeReducing;
+					break;
+
+				case "After reducing":
+					islands = _islandListAfterReducing;
+					break;
+
+				case "After merging":
+					islands = _islandListAfterMerging;
+					break;
+			}
 			drawVirtualGroupList(null, listViewAllVirtualGroups, islands);
 			drawSkillList(islands);
 			drawIslandList(islands);
@@ -474,13 +518,43 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 		private void calculate()
 		{
 			var callback = new LogCreateIslandsCallback();
-			_createIslands.Create(_date.ToDateOnlyPeriod(), callback);
+			var commandId = Guid.NewGuid();
+			var command = new SchedulingCommand
+			{
+				CommandId = commandId,
+				AgentsToSchedule = _personList.ToArray(),
+				FromWeb = false,
+				Period = _date.ToDateOnlyPeriod(),
+				RunWeeklyRestSolver = false
+			};
+
+			var schedulingWasOrdered = new SchedulingWasOrdered{CommandId = commandId };
+			using (CommandScope.Create(schedulingWasOrdered))
+			{
+				using (_desktopSchedulingContext.Set(command, _schedulerStateHolder, new SchedulingOptions(), new NoSchedulingCallback()))
+				{
+					_createIslands.Create(_date.ToDateOnlyPeriod(), callback);
+				}
+			}
+
 			_skillDayForecastForSkills = new Dictionary<ISkill, TimeSpan>();
 			_totalForecastedForDate = TimeSpan.Zero;
 			_islandListBeforeReducing = callback.IslandsBasic.Islands.ToList();
 			_islandListAfterReducing = callback.IslandsAfterReducing.Islands.ToList();
+			_islandListAfterMerging = callback.IslandsComplete.Islands.ToList();
 			createSkillDayForSkillsDic();
 		}
+
+		//private void run(SchedulingWasOrdered @event)
+		//{
+		//	var schedulerStateHolder = _schedulerStateHolder();
+		//	var selectedPeriod = new DateOnlyPeriod(@event.StartDate, @event.EndDate);
+		//	using (CommandScope.Create(@event))
+		//	{
+		//		DoScheduling(@event, schedulerStateHolder, selectedPeriod);
+		//		_synchronizeSchedulesAfterIsland.Synchronize(schedulerStateHolder.Schedules, selectedPeriod);
+		//	}
+		//}
 
 		private void toolStripButtonRemoveNotLoadedSkillsClick(object sender, EventArgs e)
 		{
@@ -528,8 +602,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 			}
 		}
 
-		private void toolStripButtonToggleReduce_Click(object sender, EventArgs e)
+		private void toolStripDropDownButtonStep_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
 		{
+			toolStripDropDownButtonStep.Text = e.ClickedItem.Text;
 			drawLists();
 		}
 	}
