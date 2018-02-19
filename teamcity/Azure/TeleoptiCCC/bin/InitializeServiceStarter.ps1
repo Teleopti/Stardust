@@ -10,17 +10,20 @@ function New-RandomPassword()
 {
     [CmdletBinding()]
     param(
-        [int]$Length = 9
+        [int]$Length = 20
     )
-     $ascii=$NULL
-     For ($a=48;$a -le 57;$a++) {$ascii+=,[char][byte]$a }
-     For ($a=65;$a -le 90;$a++) {$ascii+=,[char][byte]$a }
-     For ($a=97;$a -le 122;$a++) {$ascii+=,[char][byte]$a }
-     For ($loop=1; $loop -le $length; $loop++) 
-	{
-		$RandomPassword+=($ascii | GET-RANDOM)
-    }
-    return $RandomPassword
+		$ascii=$NULL
+		For ($a=48;$a -le 57;$a++) {$ascii+=,[char][byte]$a }
+		For ($a=65;$a -le 90;$a++) {$ascii+=,[char][byte]$a }
+		For ($a=97;$a -le 122;$a++) {$ascii+=,[char][byte]$a }
+		For ($loop=1; $loop -le $length; $loop++) 
+	
+		{
+			$RandomPassword+=($ascii | GET-RANDOM)
+		}
+    
+    $RandomPassword+= "aB1!"
+	return $RandomPassword
 }
 
 Try 
