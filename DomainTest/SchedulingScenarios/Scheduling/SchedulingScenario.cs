@@ -7,30 +7,18 @@ using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
-	[TestFixture(SeperateWebRequest.SimulateSecondRequestOrScheduler, false)]
-	[TestFixture(SeperateWebRequest.SimulateFirstRequest, false)]
-	[TestFixture(SeperateWebRequest.SimulateSecondRequestOrScheduler, true)]
-	[TestFixture(SeperateWebRequest.SimulateFirstRequest, true)]
+	[TestFixture(SeperateWebRequest.SimulateSecondRequestOrScheduler)]
+	[TestFixture(SeperateWebRequest.SimulateFirstRequest)]
 	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
 	[LoggedOnAppDomain]
-	public abstract class SchedulingScenario : IConfigureToggleManager, ITestInterceptor, ISetup
+	public abstract class SchedulingScenario : ITestInterceptor, ISetup
 	{
 		private readonly SeperateWebRequest _seperateWebRequest;
-		private readonly bool _resourcePlannerNoPytteIslands47500;
-
 		public IIoCTestContext IoCTestContext;
 
-		protected SchedulingScenario(SeperateWebRequest seperateWebRequest, 
-			bool resourcePlannerNoPytteIslands47500)
+		protected SchedulingScenario(SeperateWebRequest seperateWebRequest)
 		{
 			_seperateWebRequest = seperateWebRequest;
-			_resourcePlannerNoPytteIslands47500 = resourcePlannerNoPytteIslands47500;
-		}
-
-		public void Configure(FakeToggleManager toggleManager)
-		{
-			if(_resourcePlannerNoPytteIslands47500)
-				toggleManager.Enable(Toggles.ResourcePlanner_NoPytteIslands_47500);
 		}
 
 		public virtual void OnBefore()

@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			}
 		}
 
-		public PerformanceTestHackTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerNoPytteIslands47500) : base(seperateWebRequest, resourcePlannerNoPytteIslands47500)
+		public PerformanceTestHackTest(SeperateWebRequest seperateWebRequest) : base(seperateWebRequest)
 		{
 		}
 	}

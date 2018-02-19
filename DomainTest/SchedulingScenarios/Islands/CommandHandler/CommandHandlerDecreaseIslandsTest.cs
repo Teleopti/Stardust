@@ -100,10 +100,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 				.Should().Be.EqualTo(3);
 		}
 
-		public CommandHandlerDecreaseIslandsTest(SUT sut, bool noPytteIslands47500) : base(sut, noPytteIslands47500)
+		public CommandHandlerDecreaseIslandsTest(SUT sut) : base(sut)
 		{
-			if(!noPytteIslands47500)
-				Assert.Ignore("Only valid when toggle is true");
 		}
 	}
 }

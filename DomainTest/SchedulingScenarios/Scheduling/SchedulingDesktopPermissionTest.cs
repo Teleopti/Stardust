@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		
 		
 
-		public SchedulingDesktopPermissionTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerNoPytteIslands47500) : base(seperateWebRequest, resourcePlannerNoPytteIslands47500)
+		public SchedulingDesktopPermissionTest(SeperateWebRequest seperateWebRequest) : base(seperateWebRequest)
 		{
 		}
 	}

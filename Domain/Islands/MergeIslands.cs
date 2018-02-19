@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.FeatureFlags;
 
 namespace Teleopti.Ccc.Domain.Islands
 {
@@ -13,8 +12,7 @@ namespace Teleopti.Ccc.Domain.Islands
 			_mergeIslandsSizeLimit = mergeIslandsSizeLimit;
 		}
 		
-		[RemoveMeWithToggle("Seal this", Toggles.ResourcePlanner_NoPytteIslands_47500)]
-		public virtual IEnumerable<Island> Execute(IEnumerable<Island> islands)
+		public IEnumerable<Island> Execute(IEnumerable<Island> islands)
 		{
 			var ret = islands.ToList();
 			while (ret.Count > 1)
@@ -37,19 +35,5 @@ namespace Teleopti.Ccc.Domain.Islands
 			return ret;
 		}
 
-	}
-
-	
-	[RemoveMeWithToggle(Toggles.ResourcePlanner_NoPytteIslands_47500)]
-	public class NeverMergeIslands : MergeIslands
-	{
-		public override IEnumerable<Island> Execute(IEnumerable<Island> islands)
-		{
-			return islands;
-		}
-
-		public NeverMergeIslands() : base(null)
-		{
-		}
 	}
 }

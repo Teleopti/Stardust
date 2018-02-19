@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
 		}
 
-		public WebScheduleStardustHandlerEventPublishTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerNoPytteIslands47500) : base(seperateWebRequest, resourcePlannerNoPytteIslands47500)
+		public WebScheduleStardustHandlerEventPublishTest(SeperateWebRequest seperateWebRequest) : base(seperateWebRequest)
 		{
 		}
 	}

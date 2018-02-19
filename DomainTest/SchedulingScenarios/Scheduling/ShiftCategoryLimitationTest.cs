@@ -555,7 +555,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			};
 		}
 
-		public ShiftCategoryLimitationTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerNoPytteIslands47500) : base(seperateWebRequest, resourcePlannerNoPytteIslands47500)
+		public ShiftCategoryLimitationTest(SeperateWebRequest seperateWebRequest) : base(seperateWebRequest)
 		{
 		}
 	}

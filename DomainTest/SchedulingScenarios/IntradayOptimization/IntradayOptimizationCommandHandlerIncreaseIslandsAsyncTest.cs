@@ -24,11 +24,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public FakeEventPublisher EventPublisher;
 		public FakePersonRepository PersonRepository;
 		public ReduceIslandsLimits ReduceIslandsLimits;
+		public MergeIslandsSizeLimit MergeIslandsSizeLimit;
 
 		[Test]
 		public void ShouldSetTotalEvents()
 		{
 			ReduceIslandsLimits.SetValues_UseOnlyFromTest(0, 4);
+			MergeIslandsSizeLimit.TurnOff_UseOnlyFromTest();
 			var skillA = new Skill("A");
 			var skillB = new Skill("B");
 			var skillC = new Skill("C");

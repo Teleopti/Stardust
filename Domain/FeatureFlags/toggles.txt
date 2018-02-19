@@ -119,7 +119,6 @@ ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don'
 ResourcePlanner_RunPerfTestWithoutEvents_47256 = false # Only here for perftests - don't turn on in production
 ResourcePlanner_BreakPreferenceStartTimeByMax_46002 = RC
 ResourcePlanner_DayOffOptimizationIslands_47208 = true
-ResourcePlanner_NoPytteIslands_47500 = true
 ResourcePlanner_PrepareToRemoveExportSchedule_46576 = true
 ResourcePlanner_ScheduleDeadlock_48170 = RC # Anders! Dont put to true until we verified some green Intraday/Booking/Perftests
 

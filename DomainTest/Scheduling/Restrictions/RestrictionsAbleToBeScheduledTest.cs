@@ -417,7 +417,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			return period;
 		}
 
-		public RestrictionsAbleToBeScheduledTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerNoPytteIslands47500) : base(seperateWebRequest, resourcePlannerNoPytteIslands47500)
+		public RestrictionsAbleToBeScheduledTest(SeperateWebRequest seperateWebRequest) : base(seperateWebRequest)
 		{
 		}
 	}
