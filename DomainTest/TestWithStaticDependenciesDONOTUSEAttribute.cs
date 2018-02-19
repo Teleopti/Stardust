@@ -15,16 +15,6 @@ namespace Teleopti.Ccc.DomainTest
 
 		public void BeforeTest(ITest test)
 		{
-			BeforeTest();
-		}
-
-		public void AfterTest(ITest test)
-		{
-			AfterTest();
-		}
-
-		public static void BeforeTest()
-		{
 			var dataSource = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory("for test"), null, null);
 			var loggedOnPerson = StateHolderProxyHelper.CreateLoggedOnPerson();
 			loggedOnPerson.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
@@ -36,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest
 			StateHolder.Initialize(new FakeState(), new MessageBrokerCompositeDummy());
 		}
 
-		public static void AfterTest()
+		public void AfterTest(ITest test)
 		{
 			StateHolderProxyHelper.ClearStateHolder();
 			Thread.CurrentPrincipal = null;
