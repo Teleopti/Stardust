@@ -16,12 +16,12 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
-	[TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
+	[DomainTest]
 	public class RemoveSelectedPersonAbsenceComandHandlerTest
 	{
 		private SaveSchedulePartService _saveSchedulePartService;
@@ -33,14 +33,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		private PersonAbsenceCreator _personAbsenceCreator;
 		private PersonAbsenceRemover _personAbsenceRemover;
 		private IPerson _person;
-		private ICurrentUnitOfWork _currentUnitOfWork;
+		public ICurrentUnitOfWork _currentUnitOfWork;
 
 		[SetUp]
 		public void Setup()
 		{
 
 			_scenario = new FakeCurrentScenario_DoNotUse();
-			_currentUnitOfWork = CurrentUnitOfWork.Make();
 
 			var personAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
 			_businessRulesForAccountUpdate = new BusinessRulesForPersonalAccountUpdate(personAbsenceAccountRepository,

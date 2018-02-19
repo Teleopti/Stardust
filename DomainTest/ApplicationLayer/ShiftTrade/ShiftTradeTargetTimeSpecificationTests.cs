@@ -17,12 +17,13 @@ using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 {
-	[TestFixture]
+	[DomainTest]
 	[TestWithStaticDependenciesAvoidUse]
 	public class ShiftTradeTargetTimeSpecificationTests
 	{
@@ -33,6 +34,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		private IBusinessRuleProvider _businessRuleProvider;
 		private ShiftTradeTestHelper _shiftTradeTestHelper;
 		private IGlobalSettingDataRepository _globalSettingDataRepository;
+		public ITimeZoneGuard TimeZoneGuard;
 
 		[SetUp]
 		public void Setup()
@@ -258,7 +260,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var periodExtractor = new PeriodExtractorFromScheduleParts();
 			var matrixListFactory = new MatrixListFactory(matrixUserLocker, notPermittedLocker, personListExtraxtor, periodExtractor);
 			return new ShiftTradeTargetTimeSpecification(
-				() => new SchedulerStateHolder(_schedulingResultStateHolder, new CommonStateHolder(null), new TimeZoneGuard())
+				() => new SchedulerStateHolder(_schedulingResultStateHolder, new CommonStateHolder(null), TimeZoneGuard)
 				, matrixListFactory, new SchedulePeriodTargetTimeCalculator());
 		}
 

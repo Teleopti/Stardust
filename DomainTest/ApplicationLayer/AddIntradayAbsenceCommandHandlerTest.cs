@@ -14,12 +14,12 @@ using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
-	[TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
+	[DomainTest]
 	public class AddIntradayAbsenceCommandHandlerTest
 	{
 
