@@ -9,9 +9,11 @@ using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Interfaces.Domain;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Tracking
 {
+	[DomainTest]
 	public class TrackerCalculatorTest
     {
         private TrackerCalculator _target;

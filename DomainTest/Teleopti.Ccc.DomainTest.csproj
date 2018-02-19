@@ -1110,7 +1110,6 @@
     <Compile Include="ResourceCalculation\ScheduleDayAvailableForDayOffSpecificationTest.cs" />
     <Compile Include="Optimization\SkillExtractorForGroupOfPeopleTest.cs" />
     <Compile Include="ResourceCalculation\SingleSkillDictionaryTest.cs" />
-    <Compile Include="ResourceCalculation\SwapRawServiceTest.cs" />
     <Compile Include="ResourceCalculation\WorkShiftCalculatorsManagerTest.cs" />
     <Compile Include="Scheduling\AffectsSameDayAndPersonSpecificationTest.cs" />
     <Compile Include="Scheduling\Assignment\HasContractDayOffDefinitionTest.cs" />
