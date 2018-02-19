@@ -41,13 +41,15 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 		private readonly IStaffingSettingsReader _staffingSettingsReader;
 		private readonly INow _now;
 		private readonly IUserUiCulture _userUiCulture;
+		private readonly ExportForecastAndStaffingFile _exportForecastAndStaffingFile;
 
 		public StaffingController(AddOverTime addOverTime, ScheduledStaffingToDataSeries scheduledStaffingToDataSeries,
 								  ForecastedStaffingToDataSeries forecastedStaffingToDataSeries, IUserTimeZone timeZone,
 								  IMultiplicatorDefinitionSetRepository multiplicatorDefinitionSetRepository, ISkillGroupRepository skillGroupRepository,
 								  ScheduledStaffingViewModelCreator staffingViewModelCreator, ImportBpoFile bpoFile, ICurrentDataSource currentDataSource, 
 								  IExportBpoFile exportBpoFile, ISkillRepository skillRepository, IAuthorization authorization,
-								  IStaffingSettingsReader staffingSettingsReader, INow now, IUserUiCulture userUiCulture)
+								  IStaffingSettingsReader staffingSettingsReader, INow now, IUserUiCulture userUiCulture,
+			ExportForecastAndStaffingFile exportForecastAndStaffingFile)
 		{
 			_addOverTime = addOverTime;
 			_scheduledStaffingToDataSeries = scheduledStaffingToDataSeries;
@@ -64,6 +66,7 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 			_staffingSettingsReader = staffingSettingsReader;
 			_now = now;
 			_userUiCulture = userUiCulture;
+			_exportForecastAndStaffingFile = exportForecastAndStaffingFile;
 		}
 
 		[UnitOfWork, HttpGet, Route("api/staffing/monitorskillareastaffing")]
@@ -171,6 +174,43 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 			returnVal.ErrorMessage = "";
 			return Ok(returnVal);
 		}
+		
+		[UnitOfWork, HttpGet, Route("api/staffing/exportforecastandstaffing")]
+		public virtual IHttpActionResult ExportForecastAndStaffing(Guid skillId, DateTime exportStartDate, DateTime exportEndDate)
+		{
+			var returnVal = new exportReturnObject();
+			var exportStartDateOnly = new DateOnly(exportStartDate);
+			var exportEndDateOnly = new DateOnly(exportEndDate);
+			var readModelNumberOfDays = _staffingSettingsReader.GetIntSetting("StaffingReadModelNumberOfDays", 14);
+
+			var utcNowDate = new DateOnly(_now.UtcDateTime());
+			var exportPeriodMaxDate = utcNowDate.AddDays(readModelNumberOfDays);
+			if (exportStartDateOnly > exportEndDateOnly)
+			{
+				returnVal.ErrorMessage = Resources.BpoExportPeriodStartDateBeforeEndDate;
+				return Ok(returnVal);
+			}
+			if (exportStartDateOnly < utcNowDate || exportEndDateOnly > exportPeriodMaxDate)
+			{
+				var validExportPeriodText = getExportPeriodMessageString();
+				returnVal.ErrorMessage = validExportPeriodText;
+				return Ok(returnVal);
+			}
+
+			var skill = _skillRepository.Get(skillId);
+			if (skill == null)
+			{
+				returnVal.ErrorMessage = $"Cannot find skill with id: {skillId}";
+				return Ok(returnVal);
+			}
+			var exportedContent = _exportForecastAndStaffingFile.ExportDemand(skill,
+				new DateOnlyPeriod(exportStartDateOnly, exportEndDateOnly));
+		
+			returnVal.Content = exportedContent;
+			returnVal.ErrorMessage = "";
+			return Ok(returnVal);
+		}
+		
 
 		private string getExportPeriodMessageString()
 		{

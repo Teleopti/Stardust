@@ -531,6 +531,7 @@
     <Compile Include="SkillGroupManagement\ModifySkillGroupInput.cs" />
     <Compile Include="Staffing\ExportBpoFile.cs" />
     <Compile Include="Staffing\ExportBpoFileOld.cs" />
+    <Compile Include="Staffing\ExportForecastAndStaffingFile.cs" />
     <Compile Include="Staffing\IExportBpoFile.cs" />
     <Compile Include="Staffing\ImportBpoFile.cs" />
     <Compile Include="SystemSetting\UserDevice.cs" />

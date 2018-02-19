@@ -48,6 +48,16 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			throw new NotImplementedException();
 		}
 
+		public IEnumerable<SkillCombinationResourceForBpo> BpoResourcesForSkill(Guid skillId, DateOnlyPeriod period)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IEnumerable<ScheduledHeads> ScheduledHeadsForSkill(Guid skillId, DateOnlyPeriod period)
+		{
+			throw new NotImplementedException();
+		}
+
 		public IList<SkillCombinationResourceBpo> LoadSkillCombinationResourcesBpo()
 		{
 			throw new NotImplementedException();

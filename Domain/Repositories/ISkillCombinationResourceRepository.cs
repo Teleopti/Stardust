@@ -15,5 +15,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 		DateTime GetLastCalculatedTime();
 		void PersistSkillCombinationResourceBpo(List<ImportSkillCombinationResourceBpo> combinationResources);
 		Dictionary<Guid, string> LoadSourceBpo(SqlConnection connection);
+		IEnumerable<SkillCombinationResourceForBpo> BpoResourcesForSkill(Guid skillId, DateOnlyPeriod period);
+		IEnumerable<ScheduledHeads> ScheduledHeadsForSkill(Guid skillId, DateOnlyPeriod period);
 	}
 }

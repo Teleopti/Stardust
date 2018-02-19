@@ -46,6 +46,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			else
 				builder.RegisterType<ExportBpoFileOld>().As<IExportBpoFile>();
 			
+			builder.RegisterType<ExportForecastAndStaffingFile>().SingleInstance();
+			
 			if (_configuration.Toggle(Toggles.MyTimeWeb_CalculateOvertimeProbabilityByPrimarySkill_44686))
 			{
 				builder.RegisterType<PrimaryPersonSkillFilter>().As<IPrimaryPersonSkillFilter>().SingleInstance();

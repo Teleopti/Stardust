@@ -33,4 +33,16 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return result;
 		}
 	}
+	
+	public class SkillCombinationResourceForBpo : SkillCombinationResource
+	{
+		public string Source { get; set; }
+	}
+
+	public class ScheduledHeads
+	{
+		public DateTime StartDateTime { get; set; }
+		public DateTime EndDateTime { get; set; }
+		public double Heads { get; set; }
+	}
 }

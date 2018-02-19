@@ -1061,5 +1061,114 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				Target.LoadSkillCombinationResources(new DateTimePeriod(2016, 12, 20, 0, 2016, 12, 20, 1),false);
 			loadedCombinationResources.Single().Resource.Should().Be.EqualTo(4d);
 		}
+		
+		[Test]
+		public void ShouldReturnSumOfResourcesPerSkill()
+		{
+			var skillId1 = persistSkill();
+			var skillId2 = persistSkill();
+			Now.Is("2017-06-01 08:00");
+
+			var combinationResourcesBpo = new List<ImportSkillCombinationResourceBpo>()
+			{
+				new ImportSkillCombinationResourceBpo()
+				{
+					StartDateTime = new DateTime(2017, 06, 01, 0, 0, 0),
+					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
+					Resources = 5.5,
+					Source = "TPBRAZIL",
+					SkillIds = new List<Guid>{skillId1, skillId2}
+				},
+				new ImportSkillCombinationResourceBpo()
+				{
+					StartDateTime = new DateTime(2017, 06, 01, 0, 0, 0),
+					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
+					Resources = 5.1,
+					Source = "TPBRAZIL",
+					SkillIds = new List<Guid>{skillId1}
+				}
+			};
+			Target.PersistSkillCombinationResourceBpo(combinationResourcesBpo);
+
+			var loadedCombinationResources =
+				Target.BpoResourcesForSkill(skillId1, new DateOnlyPeriod(2017, 06, 01, 2017, 06, 01)).ToList();
+			loadedCombinationResources.Count.Should().Be.EqualTo(1);
+			loadedCombinationResources.First().Resource.Should().Be(10.6);
+		}
+		
+		[Test]
+		public void ShouldReturnSumOfResourcesPerBpo()
+		{
+			var skillId1 = persistSkill();
+			var skillId2 = persistSkill();
+			Now.Is("2017-06-01 08:00");
+
+			var combinationResourcesBpo = new List<ImportSkillCombinationResourceBpo>()
+			{
+				new ImportSkillCombinationResourceBpo()
+				{
+					StartDateTime = new DateTime(2017, 06, 01, 0, 0, 0),
+					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
+					Resources = 5.5,
+					Source = "TPSWEDEN",
+					SkillIds = new List<Guid>{skillId1, skillId2}
+				},
+				new ImportSkillCombinationResourceBpo()
+				{
+					StartDateTime = new DateTime(2017, 06, 01, 0, 0, 0),
+					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
+					Resources = 5.1,
+					Source = "TPBRAZIL",
+					SkillIds = new List<Guid>{skillId1}
+				}
+			};
+			Target.PersistSkillCombinationResourceBpo(combinationResourcesBpo);
+
+			var skill1Resources =
+				Target.BpoResourcesForSkill(skillId1, new DateOnlyPeriod(2017, 06, 01, 2017, 06, 01)).ToList();
+			skill1Resources.Count.Should().Be.EqualTo(2);
+			
+			var skill2Resources =
+				Target.BpoResourcesForSkill(skillId2, new DateOnlyPeriod(2017, 06, 01, 2017, 06, 01)).ToList();
+			skill2Resources.Count.Should().Be.EqualTo(1);
+			skill2Resources.First().Resource.Should().Be(5.5);
+		}
+		
+		[Test]
+		public void ShouldReturnHeadsPerSkill()
+		{
+			var skillId1 = persistSkill();
+			var skillId2 = persistSkill();
+			Now.Is("2017-06-01 08:00");
+
+			var combinationResources = new List<SkillCombinationResource>()
+			{
+				new SkillCombinationResource()
+				{
+					StartDateTime = new DateTime(2017, 06, 01, 0, 0, 0),
+					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
+					Resource = 5.5,
+					SkillCombination = new List<Guid>{skillId1, skillId2}
+				},
+				new SkillCombinationResource()
+				{
+					StartDateTime = new DateTime(2017, 06, 01, 0, 0, 0),
+					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
+					Resource = 5.1,
+					SkillCombination = new List<Guid>{skillId1}
+				}
+			};
+			Target.PersistSkillCombinationResource(Now.UtcDateTime(), combinationResources);
+
+			var skill1Resources =
+				Target.ScheduledHeadsForSkill(skillId1, new DateOnlyPeriod(2017, 06, 01, 2017, 06, 01)).ToList();
+			skill1Resources.Count.Should().Be.EqualTo(1);
+			skill1Resources.First().Heads.Should().Be(10.6);
+			
+			var skill2Resources =
+				Target.ScheduledHeadsForSkill(skillId2, new DateOnlyPeriod(2017, 06, 01, 2017, 06, 01)).ToList();
+			skill2Resources.Count.Should().Be.EqualTo(1);
+			skill2Resources.First().Heads.Should().Be(5.5);
+		}
 	}
 }

@@ -363,6 +363,51 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			return mergedResult.ToArray();
 		}
+
+		public IEnumerable<ScheduledHeads> ScheduledHeadsForSkill(Guid skillId, DateOnlyPeriod period)
+		{
+			var bu = _currentBusinessUnit.Current().Id.GetValueOrDefault();
+			var result = _currentUnitOfWork.Current().Session()
+				.CreateSQLQuery(@"select StartDateTime,EndDateTime, SUM(Resource) Heads
+			FROM ReadModel.SkillCombinationResource scrb 
+			INNER JOIN [ReadModel].[SkillCombination] c ON c.Id = scrb.SkillCombinationId 
+								WHERE c.SkillId = :skillId
+								AND scrb.StartDateTime <= :endDateTime 
+									AND scrb.EndDateTime >= :startDateTime
+									AND scrb.BusinessUnit = :bu
+								GROUP BY StartDateTime,EndDateTime")
+				.SetDateTime("startDateTime", period.StartDate.Date)
+				.SetDateTime("endDateTime", period.EndDate.Date)
+				.SetParameter("bu", bu)
+				.SetGuid("skillId", skillId)
+				.SetResultTransformer(new AliasToBeanResultTransformer(typeof(ScheduledHeads)))
+				.List<ScheduledHeads>();
+
+			return result.ToArray();
+		}
+		
+		public IEnumerable<SkillCombinationResourceForBpo> BpoResourcesForSkill(Guid skillId, DateOnlyPeriod period)
+		{
+			var bu = _currentBusinessUnit.Current().Id.GetValueOrDefault();
+			var result = _currentUnitOfWork.Current().Session()
+				.CreateSQLQuery(@"select b.[Source],StartDateTime,EndDateTime, SUM(Resources) Resource
+								FROM ReadModel.SkillCombinationResourceBpo scrb 
+								INNER JOIN [ReadModel].[SkillCombination] c ON c.Id = scrb.SkillCombinationId 
+								INNER JOIN BusinessProcessOutsourcer b ON b.Id = scrb.SourceId
+								WHERE c.SkillId = :skillId
+								AND scrb.StartDateTime <= :endDateTime 
+									AND scrb.EndDateTime >= :startDateTime
+									AND scrb.BusinessUnit = :bu
+								GROUP BY StartDateTime,EndDateTime, b.[Source]")
+				.SetDateTime("startDateTime", period.StartDate.Date)
+				.SetDateTime("endDateTime", period.EndDate.Date)
+				.SetParameter("bu", bu)
+				.SetGuid("skillId", skillId)
+				.SetResultTransformer(new AliasToBeanResultTransformer(typeof(SkillCombinationResourceForBpo)))
+				.List<SkillCombinationResourceForBpo>();
+
+			return result.ToArray();
+		}
 		
 		protected IEnumerable<SkillCombinationResource> skillCombinationResourcesWithBpo(DateTimePeriod period)
 		{
@@ -504,6 +549,5 @@ AND d.StartDateTime < :endDateTime AND d.EndDateTime > :startDateTime)
 	{
 		public Guid SkillCombinationId { get; set; }
 	}
-
 }
  

@@ -15,6 +15,9 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 	{
 		private List<SkillCombinationResource> _combinationResources = new List<SkillCombinationResource>();
 		private List<ImportSkillCombinationResourceBpo> _combinationResourcesBpo = new List<ImportSkillCombinationResourceBpo>();
+		public List<SkillCombinationResourceForBpo> SkillCombinationResourceForBpos = new List<SkillCombinationResourceForBpo>();
+		public List<ScheduledHeads> ScheduledHeadsForSkillList = new List<ScheduledHeads>();
+		
 		private readonly INow _now;
 		private DateTime? _lastCalcualted;
 
@@ -31,6 +34,25 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		public void PersistSkillCombinationResource(DateTime dataLoaded, IEnumerable<SkillCombinationResource> skillCombinationResources)
 		{
 			_combinationResources = skillCombinationResources.ToList();
+		}
+
+		public void AddBpoResources(List<SkillCombinationResourceForBpo> bpoResources)
+		{
+			SkillCombinationResourceForBpos.AddRange(bpoResources);
+			bpoResources.ForEach(br => _combinationResourcesBpo.Add(translateImportBpoResourceToSkillCombResource(br)));
+		}
+
+		private ImportSkillCombinationResourceBpo translateImportBpoResourceToSkillCombResource(
+			SkillCombinationResourceForBpo skillComb)
+		{
+			return new ImportSkillCombinationResourceBpo()
+			{
+				SkillIds = new List<Guid>(skillComb.SkillCombination),
+				Source = skillComb.Source,
+				StartDateTime = skillComb.StartDateTime,
+				EndDateTime = skillComb.EndDateTime,
+				Resources = skillComb.Resource
+			};
 		}
 
 		public IEnumerable<SkillCombinationResource> LoadSkillCombinationResources(DateTimePeriod period, bool useBpoExchange = true)
@@ -100,6 +122,16 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		public Dictionary<Guid, string> LoadSourceBpo(SqlConnection connection)
 		{
 			throw new NotImplementedException();
+		}
+
+		public IEnumerable<SkillCombinationResourceForBpo> BpoResourcesForSkill(Guid skillId, DateOnlyPeriod period)
+		{
+			return SkillCombinationResourceForBpos;
+		}
+
+		public IEnumerable<ScheduledHeads> ScheduledHeadsForSkill(Guid skillId, DateOnlyPeriod period)
+		{
+			return ScheduledHeadsForSkillList;
 		}
 
 		public IList<SkillCombinationResourceBpo> LoadSkillCombinationResourcesBpo()
