@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule<SSOAreaModule>();
 			builder.RegisterModule<StartAreaModule>();
 			builder.RegisterModule(new AnywhereAreaModule(_configuration));
-			
+
 			builder.RegisterModule<ForecastingAreaModule>();
 			builder.RegisterType<BasicActionThrottler>().As<IActionThrottler>().SingleInstance();
 			builder.RegisterModule<ResourceHandlerModule>();
@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 		private static void registerCommonTypes(ContainerBuilder builder)
 		{
-			builder.RegisterType<ResourceVersion>().As<IResourceVersion>();
+			builder.RegisterType<ResourceVersion>().SingleInstance();
 			builder.RegisterType<ErrorMessageProvider>().As<IErrorMessageProvider>();
 			builder.RegisterType<Log4NetLogger>().AsSelf();
 			builder.RegisterType<LazyLoadingManagerWrapper>().As<ILazyLoadingManager>();

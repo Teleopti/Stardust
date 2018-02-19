@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		public static void SelectBrowserByTag()
 		{
 			var activatorsWithMatchingTag = activators
-				.Where(a => ScenarioContext.Current.IsTaggedWith(a.Tag))
+				.Where(a => ScenarioContext.Current?.IsTaggedWith(a.Tag) ?? false)
 				.ToArray();
 			_activator = activatorsWithMatchingTag.Any() ? 
 				activatorsWithMatchingTag.First() : 

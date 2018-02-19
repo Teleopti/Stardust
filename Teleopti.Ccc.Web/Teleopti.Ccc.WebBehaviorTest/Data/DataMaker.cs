@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 	{
 		public static ScenarioDataFactory Data() => LocalSystem.DataMaker.Data();
 		public static void EndSetupPhase() => LocalSystem.DataMaker.EndSetupPhase();
-		public static void AfterScenario() => LocalSystem.DataMaker.AfterScenario();
+		public static void AfterTest() => LocalSystem.DataMaker.AfterTest();
 		public static PersonDataFactory Me() => LocalSystem.DataMaker.Data().Me();
 		public static PersonDataFactory Person(string name) => LocalSystem.DataMaker.Data().Person(name);
 		public static bool PersonExists(string name) => LocalSystem.DataMaker.Data().HasPerson(name);
@@ -23,7 +23,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 	public class DataMakerImpl
 	{
 		private readonly IComponentContext _container;
-
+		private ScenarioDataFactory _scenarioDataFactory;
+		private bool _setupDone = false;
+		
 		public DataMakerImpl(IComponentContext container)
 		{
 			_container = container;
@@ -31,22 +33,24 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		public ScenarioDataFactory Data()
 		{
-			if (ScenarioContext.Current.Value<ScenarioDataFactory>() == null)
-				ScenarioContext.Current.Value(_container.Resolve<ScenarioDataFactory>());
-			return ScenarioContext.Current.Value<ScenarioDataFactory>();
+			if (_scenarioDataFactory == null)
+				_scenarioDataFactory = _container.Resolve<ScenarioDataFactory>();
+			return _scenarioDataFactory;
 		}
 
 		public void EndSetupPhase()
 		{
-			if (ScenarioContext.Current.Value<bool>("setupDone")) return;
-			ScenarioContext.Current.Value("setupDone", true);
-			Data().EndSetupPhase();
+			if (!_setupDone)
+				Data().EndSetupPhase();
+			_setupDone = true;
 		}
 
-		public void AfterScenario()
+		public void AfterTest()
 		{
-			if (ScenarioContext.Current.Value<ScenarioDataFactory>() != null)
+			if (_scenarioDataFactory != null)
 				Data().Dispose();
+			_scenarioDataFactory = null;
+			_setupDone = false;
 		}
 
 		public void ApplyFromTable<T>(Table table)

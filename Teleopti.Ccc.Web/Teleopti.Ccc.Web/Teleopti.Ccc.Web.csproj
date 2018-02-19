@@ -728,6 +728,7 @@
     <Compile Include="Areas\SkillGroup\SkillGroupInfo.cs" />
     <Compile Include="Areas\SkillGroup\SkillGroupInput.cs" />
     <Compile Include="Areas\Staffing\Controllers\StaffingController.cs" />
+    <Compile Include="Areas\Start\Controllers\TeapotController.cs" />
     <Compile Include="Areas\Start\Controllers\UserTokenController.cs" />
     <Compile Include="Areas\Start\Core\Authentication\Services\MaximumSessionTimeProvider.cs" />
     <Compile Include="Areas\TeamSchedule\Controllers\EditScheduleNoteFormData.cs" />
@@ -1011,7 +1012,6 @@
     <Compile Include="Core\IIdentityProviderProvider.cs" />
     <Compile Include="Core\IoC\WebAppModule.cs" />
     <Compile Include="Core\IoC\WebCommonModule.cs" />
-    <Compile Include="Core\IResourceVersion.cs" />
     <Compile Include="Core\Logging\Log4NetMvCLogger.cs" />
     <Compile Include="Core\Logging\Log4NetLogger.cs" />
     <Compile Include="Core\Logging\Log4NetWebApiLogger.cs" />
@@ -1747,6 +1747,10 @@
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.staffing.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.staffingChart.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.staffingChart.spec.js" />
+    <Content Include="WFM\app\teapot\controller.js" />
+    <Content Include="WFM\app\teapot\view.html" />
+    <Content Include="WFM\app\teapot\teapot.state.provider.js" />
+    <Content Include="WFM\app\teapot\_modules.js" />
     <Content Include="WFM\css\_rta.legacy.scss" />
     <Content Include="WFM\css\_rta.prototype.scss" />
     <Content Include="WFM\css\_staffing.scss" />

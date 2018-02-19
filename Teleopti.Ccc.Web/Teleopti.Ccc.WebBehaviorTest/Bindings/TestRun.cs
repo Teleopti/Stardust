@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		private static readonly ILog log = LogManager.GetLogger(typeof(TestRun));
 		private const string suppressHangfireQueueTag = "suppressHangfireQueue";
 
-		public void Setup()
+		public void OneTimeSetUp()
 		{
 			Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
 			XmlConfigurator.Configure();
@@ -32,10 +32,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			log.Debug("Starting test run");
 		}
 
-		public void BeforeScenario()
+		public void BeforeTest()
 		{
-			log.Debug($"Preparing for scenario {ScenarioContext.Current.ScenarioInfo.Title}");
-			
+			log.Debug($"Preparing for scenario {ScenarioContext.Current?.ScenarioInfo.Title}");
+
 			Browser.SelectBrowserByTag();
 
 			ToggleStepDefinition.IgnoreScenarioIfDisabledByToggle();
@@ -54,27 +54,27 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			GlobalPrincipalState.EnsureThreadPrincipal();
 
 			Browser.Interactions.Javascript("sessionStorage.clear();");
-			
-			log.Debug($"Starting scenario {ScenarioContext.Current.ScenarioInfo.Title}");
+
+			log.Debug($"Starting scenario {ScenarioContext.Current?.ScenarioInfo.Title}");
 		}
 
-		public void AfterScenario()
+		public void AfterTest()
 		{
-			log.Debug($"Cleaning up after scenario {ScenarioContext.Current.ScenarioInfo.Title}");
+			log.Debug($"Cleaning up after scenario {ScenarioContext.Current?.ScenarioInfo.Title}");
 			log.Info(TestContext.CurrentContext.Result.Outcome.Status);
 			if (Browser.IsStarted)
 				Browser.Interactions.GoTo("about:blank");
-			DataMaker.AfterScenario();
+			DataMaker.AfterTest();
 			// some scenarios should not trigger handfire queue jobs which may throw an exception caused by no data available.
 			if (!suppressHangfireQueue())
 			{
 				LocalSystem.Hangfire.WaitForQueue();
 			}
 
-			if (ScenarioContext.Current.TestError != null)
-				Console.WriteLine($"\r\nTest Scenario \"{ScenarioContext.Current.ScenarioInfo.Title}\" failed, please check the error message.");
+			if (ScenarioContext.Current?.TestError != null)
+				Console.WriteLine($"\r\nTest Scenario \"{ScenarioContext.Current?.ScenarioInfo.Title}\" failed, please check the error message.");
 
-			log.Debug($"Finished scenario {ScenarioContext.Current.ScenarioInfo.Title}");
+			log.Debug($"Finished scenario {ScenarioContext.Current?.ScenarioInfo.Title}");
 		}
 
 		public void AfterStep()
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Browser.Interactions.DumpInfo(log.Error);
 		}
 
-		public void TearDown()
+		public void OneTimeTearDown()
 		{
 			log.Debug("Cleaing up after test run");
 
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 
 		private static bool suppressHangfireQueue()
 		{
-			return ScenarioContext.Current.IsTaggedWith(suppressHangfireQueueTag);
+			return ScenarioContext.Current?.IsTaggedWith(suppressHangfireQueueTag) ?? false;
 		}
 	}
 }

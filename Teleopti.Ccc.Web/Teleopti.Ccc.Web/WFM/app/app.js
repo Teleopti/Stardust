@@ -42,6 +42,7 @@ var wfm = angular.module('wfm', [
 		'wfm.rta',
 		'wfm.rtaTool',
 		'wfm.rtaTracer',
+		'wfm.teapot',
 		'wfm.start',
 		'wfm.businessunits',
 		'wfm.teamSchedule',
@@ -160,6 +161,7 @@ var wfm = angular.module('wfm', [
 				areasService.getAreasWithPermission().then(function(areasWithPermission) {
 					areasService.getAreasList().then(function(areasList) {
 						$rootScope.$on('$stateChangeStart', function(event, next, toParams) {
+							
 							var areaName, moduleName,
 								hasModulePermission = false,
 								name = next.name.split('.')[0],
@@ -173,6 +175,8 @@ var wfm = angular.module('wfm', [
 								} else if ('resourceplanner.importschedule' === next.name.toLowerCase() || 'resourceplanner.archiveschedule' === next.name.toLowerCase()) {
 									hasModulePermission = true;
 								} else if ('skillprio' === next.name.toLowerCase()) {
+									hasModulePermission = true;
+								} else if ('teapot' === next.name.toLowerCase()){
 									hasModulePermission = true;
 								}
 							});

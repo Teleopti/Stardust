@@ -25,12 +25,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			DataMaker.EndSetupPhase();
 			navigateOrRequest("Test/SetCurrentTime?ticks=" + time.Ticks);
 		}
-		
+
+		public static void SetVersion(string version)
+		{
+			navigateOrRequest("Test/SetVersion?version=" + version);
+		}
+
 		public static void ClearConnections()
 		{
 			navigateOrRequest("Test/ClearConnections");
 		}
-		
+
 		private static void navigateOrRequest(string url)
 		{
 			if (Browser.Interactions.TryCheckIfUrlContains("/Test/"))
@@ -44,16 +49,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void BeforeScenario()
 		{
+			if (ScenarioContext.Current == null)
+			{
+				Navigation.Navigation.GoToPage($"Test/BeforeScenario");
+				return;
+			}
+			
 			var useBroker = "false";
 			if (ScenarioContext.Current.ScenarioInfo.Tags.Contains("broker"))
 				useBroker = "true";
 			var defaultProvider = "Teleopti";
 			if (ScenarioContext.Current.ScenarioInfo.Tags.Contains("WindowsAsDefaultIdentityProviderLogon"))
-		        defaultProvider = "Windows";
+				defaultProvider = "Windows";
 			var usePolicy = FeatureContext.Current.FeatureInfo.Tags.Contains("PasswordPolicy");
 
 			// use a scenario tag here for enableMyTimeMessageBroker if required
-			Navigation.Navigation.GoToPage($"Test/BeforeScenario?name={ScenarioContext.Current.ScenarioInfo.Title}&enableMyTimeMessageBroker={useBroker}&defaultProvider={defaultProvider}&usePasswordPolicy={usePolicy}");
+			Navigation.Navigation.GoToPage($"Test/BeforeScenario?name={ScenarioContext.Current?.ScenarioInfo.Title}&enableMyTimeMessageBroker={useBroker}&defaultProvider={defaultProvider}&usePasswordPolicy={usePolicy}");
 		}
 
 		/// <summary>
@@ -84,7 +95,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			innerLogon(userName, password);
 		}
 
-		private static void innerLogon(string userName, string password, bool isPersistent=false)
+		private static void innerLogon(string userName, string password, bool isPersistent = false)
 		{
 			var businessUnitName = DataMaker.Me().Person.PermissionInformation.ApplicationRoleCollection.First().BusinessUnit.Name;
 			var queryString =
@@ -109,6 +120,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			Browser.Interactions.AssertJavascriptResultContains("return (Teleopti != undefined) ? 'go' : 'x';", "go");
 			Browser.Interactions.AssertJavascriptResultContains("return Teleopti.MyTimeWeb.Test.GetTestMessages();", "Completely loaded");
 		}
-
 	}
 }

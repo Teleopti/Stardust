@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Security.Claims;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Aop;
@@ -46,6 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		private readonly IFindPersonInfo _findPersonInfo;
 		private readonly HangfireUtilities _hangfire;
 		private readonly TenantTickEventPublisher _tenantTickEventPublisher;
+		private readonly ResourceVersion _version;
 
 		public TestController(
 			IMutateNow mutateNow,
@@ -62,7 +64,8 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			IPhysicalApplicationPath physicalApplicationPath,
 			IFindPersonInfo findPersonInfo,
 			HangfireUtilities hangfire,
-			TenantTickEventPublisher tenantTickEventPublisher)
+			TenantTickEventPublisher tenantTickEventPublisher,
+			ResourceVersion version)
 		{
 			_mutateNow = mutateNow;
 			_now = now;
@@ -79,21 +82,26 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			_findPersonInfo = findPersonInfo;
 			_hangfire = hangfire;
 			_tenantTickEventPublisher = tenantTickEventPublisher;
+			_version = version;
 		}
 
 		[TestLog]
-		public virtual ViewResult BeforeScenario(string name, bool enableMyTimeMessageBroker, string defaultProvider = null, bool usePasswordPolicy = false)
+		public virtual ViewResult BeforeScenario(
+			string name = "Teapots are nice!",
+			bool enableMyTimeMessageBroker = false,
+			string defaultProvider = "Teleopti",
+			bool usePasswordPolicy = false)
 		{
 			_sessionSpecificWfmCookieProvider.RemoveCookie();
 			_formsAuthentication.SignOut();
 			_mutateNow.Reset();
 
-			((IdentityProviderProvider)_identityProviderProvider).SetDefaultProvider(defaultProvider);
+			((IdentityProviderProvider) _identityProviderProvider).SetDefaultProvider(defaultProvider);
 			_loadPasswordPolicyService.ClearFile();
 			_loadPasswordPolicyService.Path = Path.Combine(_physicalApplicationPath.Get(), usePasswordPolicy ? "." : _settings.ConfigurationFilesPath());
 
 			UserDataFactory.EnableMyTimeMessageBroker = enableMyTimeMessageBroker;
-			
+
 			clearAllConnectionPools();
 
 			return View("Message", new TestMessageViewModel
@@ -161,7 +169,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 				new Claim(ClaimTypes.NameIdentifier, userName + TokenIdentityProvider.ApplicationIdentifier)
 			};
 			var claimsIdentity = new ClaimsIdentity(claims, "IssuerForTest");
-			_httpContext.Current().User = new ClaimsPrincipal(new[] { claimsIdentity });
+			_httpContext.Current().User = new ClaimsPrincipal(new[] {claimsIdentity});
 			_logon.LogOn(result.DataSource.DataSourceName, businessUnit.Id.Value, result.Person.Id.Value, tenantPassword, isPersistent, true);
 
 			return View("Message", new TestMessageViewModel
@@ -207,7 +215,20 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		}
 
 		[TestLog]
-		[HttpGet]
+		[System.Web.Mvc.HttpGet]
+		public virtual ViewResult SetVersion(string version)
+		{
+			_version.Is(version);
+
+			return View("Message", new TestMessageViewModel
+			{
+				Title = "Version changed on server!",
+				Message = $"Version is set to {version}"
+			});
+		}
+
+		[TestLog]
+		[System.Web.Mvc.HttpGet]
 		public virtual ViewResult SetCurrentTime(long? ticks, string time)
 		{
 			setCurrentTime(ticks, time, true);
@@ -218,10 +239,10 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 				Message = "Time is set to " + _now.UtcDateTime() + " in UTC"
 			});
 		}
-		
+
 		[TestLog]
-		[HttpPost]
-		[ActionName("SetCurrentTime")]
+		[System.Web.Mvc.HttpPost]
+		[System.Web.Mvc.ActionName("SetCurrentTime")]
 		public virtual void SetCurrentTimePost(long? ticks, string time, bool waitForQueue = true)
 		{
 			setCurrentTime(ticks, time, waitForQueue);
@@ -235,7 +256,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			else
 				_mutateNow.Is(time.Utc());
 			var newNow = _now.UtcDateTime();
-			
+
 			_tenantTickEventPublisher.WithPublishingsForTest(() =>
 			{
 				var timePassed = new TimePassingSimulator(oldNow, newNow);
@@ -244,9 +265,8 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 				timePassed.IfMinutePassed(_hangfire.TriggerMinutelyRecurringJobs);
 			});
 
-			if(waitForQueue)
+			if (waitForQueue)
 				_hangfire.WaitForQueue();
 		}
-
 	}
 }
