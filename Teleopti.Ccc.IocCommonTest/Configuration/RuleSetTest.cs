@@ -32,31 +32,6 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		}
 
 		[Test]
-		public void ProjectionServiceIsCachedPerScope()
-		{
-			var containerBuilder = new ContainerBuilder();
-			var configuration = new IocConfiguration(new IocArgs(new ConfigReader()), null);
-			containerBuilder.RegisterModule(new CommonModule(configuration));
-			var wsRs = createRuleset(true);
-			var callback = new WorkShiftAddStopperCallback();
-			using (var container = containerBuilder.Build())
-			{
-				IRuleSetProjectionEntityService projSvc;
-				IRuleSetProjectionEntityService projSvc2;
-				using (var inner1 = container.BeginLifetimeScope())
-				{
-					projSvc = inner1.Resolve<IRuleSetProjectionEntityService>();
-				}
-				using (var inner2 = container.BeginLifetimeScope())
-				{
-					projSvc2 = inner2.Resolve<IRuleSetProjectionEntityService>();
-				}
-
-				Assert.AreNotSame(projSvc.ProjectionCollection(wsRs, callback), projSvc2.ProjectionCollection(wsRs, callback));
-			}
-		}
-
-		[Test]
 		public void ShouldCacheWorkShiftWorkTime()
 		{
 			var containerBuilder = new ContainerBuilder();
@@ -67,28 +42,6 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			{
 				container.Resolve<IMbCacheFactory>()
 					.IsKnownInstance(container.Resolve<IWorkShiftWorkTime>());
-			}
-		}
-
-		[Test]
-		public void CacheShouldBeInvalidatedWhenContainerScopeIsDead()
-		{
-			var containerBuilder = new ContainerBuilder();
-			var configuration = new IocConfiguration(new IocArgs(new ConfigReader()), null);
-			containerBuilder.RegisterModule(new CommonModule(configuration));
-			var wsRs = createRuleset(true);
-			var callback = new WorkShiftAddStopperCallback();
-			using (var container = containerBuilder.Build())
-			{
-				IEnumerable<WorkShiftVisualLayerInfo> proj;
-				IRuleSetProjectionEntityService projSvc;
-				using (var inner1 = container.BeginLifetimeScope())
-				{
-					projSvc = inner1.Resolve<IRuleSetProjectionEntityService>();
-					proj = projSvc.ProjectionCollection(wsRs, callback);
-
-				}
-				Assert.AreNotSame(proj, projSvc.ProjectionCollection(wsRs, callback));
 			}
 		}
 
