@@ -84,7 +84,6 @@
 			this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.toolStripMain = new System.Windows.Forms.ToolStrip();
-			this.toolStripButtonRemoveNotLoadedSkills = new System.Windows.Forms.ToolStripButton();
 			this.toolStripDropDownButtonStep = new System.Windows.Forms.ToolStripDropDownButton();
 			this.beforeReducingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.afterReducingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -609,22 +608,11 @@
 			// 
 			this.toolStripMain.Dock = System.Windows.Forms.DockStyle.None;
 			this.toolStripMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButtonRemoveNotLoadedSkills,
             this.toolStripDropDownButtonStep});
 			this.toolStripMain.Location = new System.Drawing.Point(3, 0);
 			this.toolStripMain.Name = "toolStripMain";
-			this.toolStripMain.Size = new System.Drawing.Size(289, 25);
+			this.toolStripMain.Size = new System.Drawing.Size(116, 25);
 			this.toolStripMain.TabIndex = 0;
-			// 
-			// toolStripButtonRemoveNotLoadedSkills
-			// 
-			this.toolStripButtonRemoveNotLoadedSkills.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.toolStripButtonRemoveNotLoadedSkills.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonRemoveNotLoadedSkills.Image")));
-			this.toolStripButtonRemoveNotLoadedSkills.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripButtonRemoveNotLoadedSkills.Name = "toolStripButtonRemoveNotLoadedSkills";
-			this.toolStripButtonRemoveNotLoadedSkills.Size = new System.Drawing.Size(142, 22);
-			this.toolStripButtonRemoveNotLoadedSkills.Text = "Remove not loaded skills";
-			this.toolStripButtonRemoveNotLoadedSkills.Click += new System.EventHandler(this.toolStripButtonRemoveNotLoadedSkillsClick);
 			// 
 			// toolStripDropDownButtonStep
 			// 
@@ -638,7 +626,7 @@
 			this.toolStripDropDownButtonStep.Name = "toolStripDropDownButtonStep";
 			this.toolStripDropDownButtonStep.Size = new System.Drawing.Size(104, 22);
 			this.toolStripDropDownButtonStep.Text = "Before reducing";
-			this.toolStripDropDownButtonStep.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.toolStripDropDownButtonStep_DropDownItemClicked);
+			this.toolStripDropDownButtonStep.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.toolStripDropDownButtonStepDropDownItemClicked);
 			// 
 			// beforeReducingToolStripMenuItem
 			// 
@@ -743,7 +731,6 @@
 		private System.Windows.Forms.ColumnHeader columnHeader30;
 		private System.Windows.Forms.ColumnHeader columnHeader31;
 		private System.Windows.Forms.ColumnHeader columnHeader32;
-		private System.Windows.Forms.ToolStripButton toolStripButtonRemoveNotLoadedSkills;
 		private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButtonStep;
 		private System.Windows.Forms.ToolStripMenuItem beforeReducingToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem afterReducingToolStripMenuItem;

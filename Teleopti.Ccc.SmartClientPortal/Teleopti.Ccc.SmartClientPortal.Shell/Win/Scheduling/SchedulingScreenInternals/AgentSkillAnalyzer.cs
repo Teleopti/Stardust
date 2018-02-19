@@ -5,7 +5,6 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
-using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -29,7 +28,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 		private DateOnly _date;
 		private readonly IList<ISkill> _loadedSkillList;
 		private readonly IDictionary<ISkill, IEnumerable<ISkillDay>> _skillDays;
-		private readonly DateOnlyPeriod _datePeriod;
 		private readonly CreateIslands _createIslands;
 		private readonly DesktopSchedulingContext _desktopSchedulingContext;
 		private readonly ISchedulerStateHolder _schedulerStateHolder;
@@ -39,7 +37,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 		private TimeSpan _totalForecastedForDate;
 		private readonly TimeFormatter _timeFormatter = new TimeFormatter(new ThisCulture(CultureInfo.CurrentCulture));
 		private IList<ISkill> _allSkills;
-		private readonly DateTimePicker _dtpDate;
 		private IList<Island> _islandListAfterMerging;
 
 		public AgentSkillAnalyzer()
@@ -53,20 +50,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 			ISchedulerStateHolder schedulerStateHolder)
 		{
 			InitializeComponent();
-			_dtpDate = new DateTimePicker {Format = DateTimePickerFormat.Short};
-			toolStripMain.Items.Add(new ToolStripControlHost(_dtpDate));
 			_personList = personList;
 			_loadedSkillList = skillList.Where(s => s.SkillType.ForecastSource != ForecastSource.MaxSeatSkill).ToList();
 			_skillDays = skillDays;
-			_datePeriod = datePeriod;
 			_createIslands = createIslands;
 			_desktopSchedulingContext = desktopSchedulingContext;
 			_schedulerStateHolder = schedulerStateHolder;
 			_date = datePeriod.StartDate;
-			_dtpDate.MinDate = datePeriod.StartDate.Date;
-			_dtpDate.MaxDate = datePeriod.EndDate.Date;
-			_dtpDate.Value = _date.Date;
-			_dtpDate.ValueChanged += dtpDateValueChanged;
 			listViewGroupsInIsland.ListViewItemSorter = new listViewItemComparer(0, SortOrder.Ascending);
 			listViewIslands.ListViewItemSorter = new listViewItemComparer(0, SortOrder.Ascending);
 			listViewSkillGroupsForSkill.ListViewItemSorter = new listViewItemComparer(0, SortOrder.Ascending);
@@ -75,12 +65,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 			listViewSkillInSkillGroup.ListViewItemSorter = new listViewItemComparer(0, SortOrder.Ascending);
 			listViewAgents.ListViewItemSorter = new listViewItemComparer(0, SortOrder.Ascending);
 			listViewSkillViewAgents.ListViewItemSorter = new listViewItemComparer(0, SortOrder.Ascending);
-		}
-
-		void dtpDateValueChanged(object sender, EventArgs e)
-		{
-			_date = new DateOnly(_dtpDate.Value);
-			LoadData();
 		}
 
 		private void drawIslandList(IEnumerable<Island> islands)
@@ -110,8 +94,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 					}
 				}
 				islandNumber++;
-				var item = new ListViewItem("Island " + islandNumber);
-				item.Tag = islandModel;
+				var item = new ListViewItem("Island " + islandNumber) {Tag = islandModel};
 				item.SubItems.Add(islandModel.SkillSetsInIsland.Count().ToString(CultureInfo.InvariantCulture));
 				item.SubItems.Add(loadedSkills.ToString(CultureInfo.InvariantCulture).PadLeft(3) + " (" + notLoadedSkills.ToString(CultureInfo.InvariantCulture).PadLeft(3) + ")");
 				item.SubItems.Add(personsInIsland.ToString(CultureInfo.InvariantCulture).PadLeft(6));
@@ -233,8 +216,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 				return;
 
 			var selectedItem = listViewAllVirtualGroups.SelectedItems[0];
-			var selectedGroup = selectedItem.Tag as SkillSetExtendedModel;
-			if (selectedGroup == null)
+			if (!(selectedItem.Tag is SkillSetExtendedModel selectedGroup))
 				return;
 
 			fillSkillListView(selectedGroup, listViewSkillInSkillGroup);
@@ -275,8 +257,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 				color = Color.Red;
 			}
 
-			var item = new ListViewItem(skill.Name);
-			item.Tag = skill;
+			var item = new ListViewItem(skill.Name) {Tag = skill};
 			if (color == Color.Black)
 			{
 				var agentCount = getPersonsOnSkill(skill).Count();
@@ -308,8 +289,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 
 		private void sortListView(object sender, ColumnClickEventArgs e)
 		{
-			var listView = sender as ListView;
-			if (listView == null)
+			if (!(sender is ListView listView))
 				return;
 
 			if (((listViewItemComparer) listView.ListViewItemSorter).Column == e.Column)
@@ -336,9 +316,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 
 			public int Compare(object x, object y)
 			{
-				var ix = x as ListViewItem;
-				var iy = y as ListViewItem;
-				if (iy == null || ix == null)
+				if (!(y is ListViewItem iy) || !(x is ListViewItem ix))
 					return 0;
 
 				if(ix.SubItems.Count <= Column || iy.SubItems.Count <= Column)
@@ -352,7 +330,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 				return returnVal;
 			}
 
-			public int Column { get; private set; }
+			public int Column { get; }
 		}
 
 		private void listViewSkillViewSkillsSelectedIndexChanged(object sender, EventArgs e)
@@ -361,8 +339,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 				return;
 
 			var selectedItem = listViewSkillViewSkills.SelectedItems[0];
-			var selectedSkill = selectedItem.Tag as ISkill;
-			if (selectedSkill == null)
+			if (!(selectedItem.Tag is ISkill selectedSkill))
 				return;
 
 			IList<Island> islands = new List<Island>();
@@ -423,8 +400,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 			if (listViewIslands.SelectedItems.Count == 0)
 				return;
 
-			var selectedIsland = listViewIslands.SelectedItems[0].Tag as IslandExtendedModel;
-			if (selectedIsland == null)
+			if (!(listViewIslands.SelectedItems[0].Tag is IslandExtendedModel selectedIsland))
 				return;
 
 			listViewGroupsInIsland.Items.Clear();
@@ -445,8 +421,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 						loadedSkills++;
 				}
 
-				var item = new ListViewItem(skillGroupCounter.ToString());
-				item.Tag = skillGroup;
+				var item = new ListViewItem(skillGroupCounter.ToString()) {Tag = skillGroup};
 				item.SubItems.Add(loadedSkills.ToString().PadLeft(3) + " (" + notLoadedSkills.ToString().PadLeft(3) + ")");
 				item.SubItems.Add(skillGroup.AgentsInSkillSet.Count().ToString().PadLeft(6));
 				listViewGroupsInIsland.Items.Add(item);
@@ -463,8 +438,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 				return;
 
 			var selectedItem = listViewGroupsInIsland.SelectedItems[0];
-			var selectedGroup = selectedItem.Tag as SkillSetExtendedModel;
-			if (selectedGroup == null)
+			if (!(selectedItem.Tag is SkillSetExtendedModel selectedGroup))
 				return;
 
 			listViewIslandsSkillsOnGroup.Items.Clear();
@@ -478,7 +452,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 
 		public void LoadData()
 		{
-			Text = "Agent Skill Analyzer " + _date.ToShortDateString(CultureInfo.CurrentCulture);
+			Text = @"Agent Skill Analyzer " + _date.ToShortDateString(CultureInfo.CurrentCulture);
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				_allSkills = new SkillRepository(uow).LoadAll().ToList();
@@ -545,64 +519,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 			createSkillDayForSkillsDic();
 		}
 
-		//private void run(SchedulingWasOrdered @event)
-		//{
-		//	var schedulerStateHolder = _schedulerStateHolder();
-		//	var selectedPeriod = new DateOnlyPeriod(@event.StartDate, @event.EndDate);
-		//	using (CommandScope.Create(@event))
-		//	{
-		//		DoScheduling(@event, schedulerStateHolder, selectedPeriod);
-		//		_synchronizeSchedulesAfterIsland.Synchronize(schedulerStateHolder.Schedules, selectedPeriod);
-		//	}
-		//}
-
-		private void toolStripButtonRemoveNotLoadedSkillsClick(object sender, EventArgs e)
-		{
-			MessageBox.Show("Not implemented");
-			//Gör något annat dessa skills ska redan vara borttagna, indikerar bara att det finns oanvända skills för agenterna och det vill jag visa
-			
-			//foreach (var key in _skillGroupsCreatorResult.GetKeys())
-			//{
-			//	var splitted = key.Split("|".ToCharArray());
-			//	foreach (var guidString in splitted)
-			//	{
-			//		Guid guid;
-			//		if (!Guid.TryParse(guidString, out guid))
-			//			continue;
-
-			//		var skill = _loadedSkillList.FirstOrDefault(s => s.Id == guid);
-
-			//		if (skill == null)
-			//		{
-			//			skill = _allSkills.FirstOrDefault(s => s.Id == guid);
-			//			if (skill == null)
-			//				continue;
-
-			//			foreach (var person in _skillGroupsCreatorResult.GetPersonsForSkillGroupKey(key))
-			//			{
-			//				inactivatePersonalSkillFor(person, guidString);
-			//			}
-			//		}
-			//	}
-			//}
-			//LoadData();
-		}
-
-		private void toolStripButtonFindAgentsThatHaveChangedSkillGroupDuringPeriodClick(object sender, EventArgs e)
-		{
-			var results = new PersonsThatChangedPersonSkillsDuringPeriodFinder().Find(_datePeriod, _personList);
-			makeReport(results);
-		}
-
-		private void makeReport(IList<PersonsThatChangedPersonSkillsDuringPeriodFinder.PersonsThatChangedPersonSkillsDuringPeriodFinderResult> results)
-		{
-			using (var x = new PersonsThatChangedPersonSkillsDuringPeriodFinderView(results))
-			{
-				x.ShowDialog(this);
-			}
-		}
-
-		private void toolStripDropDownButtonStep_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+		private void toolStripDropDownButtonStepDropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
 		{
 			toolStripDropDownButtonStep.Text = e.ClickedItem.Text;
 			drawLists();
