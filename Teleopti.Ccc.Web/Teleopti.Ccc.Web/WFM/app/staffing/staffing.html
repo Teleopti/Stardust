@@ -51,16 +51,38 @@
 
           <div class="con-flex" style="display:flex; justify-content:space-around;">
             <skill-group-button id="manage_skill_group_button" ng-if="vm.unifiedSkillGroupManagement && vm.HasPermissionToModifySkillArea" ng-click="vm.configMode()"></skill-group-button>
-              <team-schedule-datepicker style="margin-top:-5px" selected-date="vm.selectedDate" status="vm.showDatePicker" on-date-change="vm.navigateToNewDay()"></team-schedule-datepicker>
+            <team-schedule-datepicker style="margin-top:-5px" selected-date="vm.selectedDate" status="vm.showDatePicker" on-date-change="vm.navigateToNewDay()"></team-schedule-datepicker>
           </div>
 
-			<div class="con-flex">
-				<md-checkbox class="pull-right" ng-change="vm.useShrinkageForStaffing()" ng-model="vm.useShrinkage" aria-label="Checkbox">{{'UseShrinkage'| translate}}</md-checkbox>
-			</div>
+          <div class="con-flex">
+            <md-checkbox class="pull-right" ng-change="vm.useShrinkageForStaffing()" ng-model="vm.useShrinkage" aria-label="Checkbox">{{'UseShrinkage'| translate}}</md-checkbox>
+          </div>
         </div>
       </div>
     </div>
   </div>
+
+  <modal-dialog show='vm.exportModal' ng-cloak>
+    <div ng-if="vm.showBpoInterface && vm.hasPermissionForBpoExchange">
+      <div class="con-row">
+        <div class="con-flex">
+          <b>{{'ExportToFile'|translate}}</b>
+        </div>
+      </div>
+      <div class="modal-inner-content" style="text-align:center;">
+        <wfm-calendar-picker ng-model="vm.exportStaffingDataDate"></wfm-calendar-picker>
+      </div>
+      <div class="modal-actions">
+        <aside>
+          <button class="wfm-btn wfm-btn-invis-default" ng-click="vm.exportModal = false" >{{'Cancel'|translate}}</button>
+          <button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.exportStaffingData()">{{'Export'|translate}}</button>
+        </aside>
+      </div>
+      <div ng-if="vm.skillMaster.isForecastRunning">
+        <md-progress-linear md-mode="indeterminate"></md-progress-linear>
+      </div>
+    </div>
+  </modal-dialog>
 
   <div class="con-row" ng-show="vm.staffingDataAvailable">
     <div class="con-flex">
@@ -68,6 +90,13 @@
         <md-progress-linear ng-show="vm.isRunning()" md-mode="indeterminate"></md-progress-linear>
         <div class="sub-header">
           <h2>{{'Staffing' | translate}} - {{vm.selectedDate | date:'yyyy-MM-dd'}} </h2>
+          <div class="head-actions panel-menu" ng-if="vm.showBpoInterface && vm.hasPermissionForBpoExchange">
+            <div tabindex=0 class="context-menu card-context" ng-click="vm.exportModal = true;">
+              <i class="mdi mdi-file-excel">
+                <md-tooltip>{{'ExportToFile'|translate}}</md-tooltip>
+              </i>
+            </div>
+          </div>
           <div class="wfm-chip-wrap" ng-show="vm.isNoSuggestion()">
             <div class="wfm-chip-wrap">
               <span class="wfm-chip">
@@ -104,12 +133,12 @@
         </div>
         <div class="con-row">
           <div class="con-flex">
-			  <h3>{{'Compensations' | translate}}</h3>
-			  <md-radio-group ng-model="vm.overtimeForm.Compensation">
-				  <md-radio-button ng-repeat="comp in vm.compensations" ng-value="comp.Id" >
-					  {{comp.Name}}
-				  </md-radio-button>
-			  </md-radio-group>
+            <h3>{{'Compensations' | translate}}</h3>
+            <md-radio-group ng-model="vm.overtimeForm.Compensation">
+              <md-radio-button ng-repeat="comp in vm.compensations" ng-value="comp.Id" >
+                {{comp.Name}}
+              </md-radio-button>
+            </md-radio-group>
           </div>
           <div class="con-flex">
             <h3>{{'Duration' | translate}}</h3>

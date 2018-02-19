@@ -49,6 +49,7 @@
 		vm.isNoSuggestion = isNoSuggestion;
 		vm.goToImportExports = goToImportView;
 		vm.testSessionStorage = testSessionStorage;
+		vm.exportStaffingData = exportStaffingData;
 
 		vm.showOverstaffSettings = false;
 		vm.openImportData = false;
@@ -61,7 +62,15 @@
 
 		vm.compensations = [];
 		vm.selectedDate = new Date();
-
+		vm.exportStaffingDataDate = {
+			startDate: moment()
+				.utc()
+				.toDate(),
+			endDate: moment()
+				.utc()
+				.add(7, 'days')
+				.toDate()
+		};
 		vm.unifiedSkillGroupManagement = false;
 		vm.HasPermissionToModifySkillArea = false;
 
@@ -256,7 +265,7 @@
 				if ($window.sessionStorage.staffingSelectedArea) {
 					if (response.SkillAreas.find(checkArea)) {
 						vm.selectedArea = response.SkillAreas.find(checkArea);
-					}else{
+					} else {
 						manageAreaSessionStorage();
 					}
 
@@ -400,6 +409,29 @@
 
 		function generateChartForView(data, isSuggestedData) {
 			c3.generate(chartService.staffingChartConfig(data, isSuggestedData));
+		}
+
+		function exportStaffingData() {
+			if (vm.exportStaffingDataDate.startDate === null || vm.exportStaffingDataDate.endDate === null) {
+				vm.ErrorMessage = $translate.instant('DiscardSuggestionData');
+				return;
+			}
+			if (vm.selectedSkill === null) {
+				vm.ErrorMessage = $translate.instant('BpoExportYouMustSelectASkill');
+				return;
+			}
+			var request = staffingService.exportStaffingData.get({
+				skillId: vm.selectedSkill.Id,
+				exportStartDate: vm.exportStaffingDataDate.startDate,
+				exportEndDate: vm.exportStaffingDataDate.endDate
+			});
+			request.$promise.then(function(response) {
+				vm.ErrorMessage = response.ErrorMessage;
+				if (vm.ErrorMessage !== '') return;
+				var data = angular.toJson(response.Content);
+				vm.exportModal = false;
+				utilService.saveToFs(response.Content, vm.selectedSkill.Name + '.csv', 'text/csv');
+			});
 		}
 
 		function manageAreaSessionStorage() {
