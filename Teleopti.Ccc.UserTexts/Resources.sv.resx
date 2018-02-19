@@ -13942,7 +13942,7 @@ Dessa val är aktiverade:
     <value>Tolerans för kontraktstid </value>
   </data>
   <data name="WebStaffing" xml:space="preserve">
-    <value>Staffing</value>
+    <value>Bemanning</value>
   </data>
   <data name="Primary" xml:space="preserve">
     <value>Primär</value>
@@ -14967,7 +14967,7 @@ Vill du registrera dig?</value>
     <value>Öppen för övertidsförfrågningar</value>
   </data>
   <data name="ExistingShiftNotMatchShift" xml:space="preserve">
-    <value>Skiftet för {0:d} matchar inte skiftet för {1:d}</value>
+    <value>Skiftet för {0:d} matchar inte skiftet för {1:d}.</value>
   </data>
   <data name="ExistingShiftNotMatchShiftCategory" xml:space="preserve">
     <value>Skiftkategorin {0} för {1:d} matchar inte skiftkategorin {2} för {3:d}. </value>
@@ -15389,5 +15389,38 @@ Vill du registrera dig?</value>
     <value>Produktaktiveringsnyckeln har nu lagts på.
 Grattis! Du är nu en licensierad användare av den här prisbelönta WFM-lösningen. 
 Applikationen kommer nu att stängas. </value>
+  </data>
+  <data name="NoPermissionToEditUnpublishedSchedule" xml:space="preserve">
+    <value>Inga rättigheter att ändra opublicerat schema för agenter</value>
+  </data>
+  <data name="ExitSGM" xml:space="preserve">
+    <value>Lämna kompetensgruppshanteraren</value>
+  </data>
+  <data name="AreYouSureYouWantToExitSGM" xml:space="preserve">
+    <value>Du har kompetensgrupper som inte är sparade. Är du säker på att du vill lämna kompetensgruppshanteraren?</value>
+  </data>
+  <data name="DoYouWantToDeleteSkillGroup" xml:space="preserve">
+    <value>Ta bort kompetensgrupp</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteTheSkillGroup" xml:space="preserve">
+    <value>Är du säker på att du vill ta bort kompetensgruppen</value>
+  </data>
+  <data name="OvertimeRequestContinuousWorkTimeDenyReason" xml:space="preserve">
+    <value>{0} innehåller för mycket sammanhängande arbetstid ({1}). Max är {2}.</value>
+  </data>
+  <data name="OvertimeRequestMaximumContinuousWorkTime" xml:space="preserve">
+    <value>Maximal sammanhängande arbetstid:</value>
+  </data>
+  <data name="OvertimeRequestMinimumRestTimeThreshold" xml:space="preserve">
+    <value>Minsta vilotid:</value>
+  </data>
+  <data name="AuditType" xml:space="preserve">
+    <value>Uppföljningstyp</value>
+  </data>
+  <data name="ThereIsNoAvailableSkillForOvertime" xml:space="preserve">
+    <value>Det finns ingen tillgänglig kompetens för övertid</value>
+  </data>
+  <data name="MaximumContinuousWorkTimeRuleName" xml:space="preserve">
+    <value>Maximal sammanhängande arbetstid</value>
   </data>
 </root>
