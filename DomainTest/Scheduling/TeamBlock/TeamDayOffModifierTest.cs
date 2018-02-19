@@ -10,16 +10,18 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 {
-	[DomainTestWithStaticDependenciesDONOTUSE]
+	[DomainTest]
 	public class TeamDayOffModifierTest
 	{
 		public ITeamDayOffModifier Target;
 		public MatrixListFactory MatrixListFactory;
 		public SchedulerStateHolder SchedulerStateHolder;
+		public ITimeZoneGuard TimeZoneGuard;
 
 		[Test]
 		public void ShouldNotAddDayOffIfFullDayAbsence()
@@ -40,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var rollBackService = new SchedulePartModifyAndRollbackService(
 				SchedulerStateHolder.SchedulingResultState,
 				new SchedulerStateScheduleDayChangedCallback(
-						new ScheduleChangesAffectedDates(new TimeZoneGuard()),
+						new ScheduleChangesAffectedDates(TimeZoneGuard),
 					() => SchedulerStateHolder),
 				new ScheduleTagSetter(new NullScheduleTag()));
 
@@ -72,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var rollBackService = new SchedulePartModifyAndRollbackService(
 				SchedulerStateHolder.SchedulingResultState,
 				new SchedulerStateScheduleDayChangedCallback(
-						new ScheduleChangesAffectedDates(new TimeZoneGuard()),
+						new ScheduleChangesAffectedDates(TimeZoneGuard),
 					() => SchedulerStateHolder),
 				new ScheduleTagSetter(new NullScheduleTag()));
 
@@ -104,7 +106,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var rollBackService = new SchedulePartModifyAndRollbackService(
 				SchedulerStateHolder.SchedulingResultState,
 				new SchedulerStateScheduleDayChangedCallback(
-						new ScheduleChangesAffectedDates(new TimeZoneGuard()),
+						new ScheduleChangesAffectedDates(TimeZoneGuard),
 					() => SchedulerStateHolder),
 				new ScheduleTagSetter(new NullScheduleTag()));
 
@@ -133,7 +135,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var rollBackService = new SchedulePartModifyAndRollbackService(
 				SchedulerStateHolder.SchedulingResultState,
 				new SchedulerStateScheduleDayChangedCallback(
-						new ScheduleChangesAffectedDates(new TimeZoneGuard()),
+						new ScheduleChangesAffectedDates(TimeZoneGuard),
 					() => SchedulerStateHolder),
 				new ScheduleTagSetter(new NullScheduleTag()));
 
