@@ -301,7 +301,7 @@ INNER JOIN [mart].[DimPersonLocalized](@date_from, @date_to) dpl
 	ON dpl.person_id = fs.person_id
 INNER JOIN mart.dim_person dp  WITH (NOLOCK)
 	ON dp.person_id = dpl.person_id
-WHERE shift_startdate_local_id between @date_from_id and @date_to_id
+WHERE shift_startdate_local_id between @date_from_id -1 and @date_to_id +1 
 	AND fs.scenario_id = @default_scenario_id
 	AND fs.scheduled_ready_time_m > 0
 
