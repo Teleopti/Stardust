@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 {
 	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
 	[LoggedOnAppDomain]
-	[DomainTestWithStaticDependenciesDONOTUSE]
+	[DomainTest]
 	public class IntradayOptimizationBlockTest : IntradayOptimizationScenarioTest
 	{
 		public IntradayOptimizationFromWeb Target;

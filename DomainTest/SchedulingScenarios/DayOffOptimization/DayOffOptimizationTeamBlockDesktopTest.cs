@@ -22,7 +22,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 {
-	[DomainTestWithStaticDependenciesDONOTUSE]
+	[DomainTest]
 	[UseIocForFatClient]
 	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
 	public class DayOffOptimizationTeamBlockDesktopTest : DayOffOptimizationScenario
