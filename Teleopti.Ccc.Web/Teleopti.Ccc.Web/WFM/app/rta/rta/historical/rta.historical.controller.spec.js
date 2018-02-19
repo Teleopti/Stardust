@@ -151,11 +151,11 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 		var vm = t.createController();
 
 		expect(vm.cards.length).toEqual(3);
-		expect(vm.cards[0].Header).toEqual('phone 08:00 - 11:00');
+		expect(vm.cards[0].Header).toEqual('phone ' + moment('2016-10-10T08:00:00').format('LT') +  ' - ' + moment('2016-10-10T11:00:00').format('LT'));
 		expect(vm.cards[0].Color).toEqual('lightgreen');
-		expect(vm.cards[1].Header).toEqual('break 11:00 - 11:10');
+		expect(vm.cards[1].Header).toEqual('break ' + moment('2016-10-10T11:00:00').format('LT') +  ' - ' + moment('2016-10-10T11:10:00').format('LT'));
 		expect(vm.cards[1].Color).toEqual('red');
-		expect(vm.cards[2].Header).toEqual('phone 11:10 - 14:00');
+		expect(vm.cards[2].Header).toEqual('phone ' + moment('2016-10-10T11:10:00').format('LT') +  ' - ' + moment('2016-10-10T14:00:00').format('LT'));
 		expect(vm.cards[2].Color).toEqual('lightgreen');
 
 		expect(vm.cards[0].Items.length).toEqual(2);
