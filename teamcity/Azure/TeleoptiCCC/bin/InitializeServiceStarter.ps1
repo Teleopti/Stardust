@@ -36,7 +36,7 @@ Try
     $pwd = New-RandomPassword
     $SecurePassword = ConvertTo-SecureString "$pwd" -asplaintext -force 
 
-    Write-Output "Creating temporary user '$admin' with password $pwd" | out-file $scriptLog -Append
+    Write-Output "Creating temporary user '$admin'" | out-file $scriptLog -Append
     New-LocalUser -Name $admin -Password $SecurePassword -FullName "Service Starter" -Description "ServiceStarter" | out-null
 
     Write-Output "Adding user '$admin' to 'Administrators' group..." | out-file $scriptLog -Append
@@ -78,7 +78,7 @@ Try
         Write-Output $setupTask   
     }
     
-	Write-Host "ServiceStarter Scheduler task completed!"
+	Write-Output "ServiceStarter Scheduler task completed!"
 
 }
 Catch

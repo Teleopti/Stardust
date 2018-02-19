@@ -471,6 +471,11 @@ Try
 	
 	StopTeleoptiServer $iisInstalled
 	
+	if ($StopOnly -eq $True) 
+	{
+		log-info "StopOnly param is intentionally set to 'True', will stop services and start them from a scheduled task!"
+	}
+	
 	if ($StopOnly -eq $false) 
 	{
 		StartTeleoptiServer $iisInstalled
