@@ -17,6 +17,7 @@ using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 	 * something that real code execute, eg scheduling.
 	 * Don't write tests against inner service "IWeeklyRestSolverCommand"
 	 */
-	[DomainTestWithStaticDependenciesDONOTUSE]
+	[DomainTest]
 	public class WeeklyRestSolverLaterTest
 	{
 		public WeeklyRestSolverCommand Target;
@@ -34,6 +35,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 		public SchedulerStateHolder SchedulerStateHolder;
 		public IResourceCalculation CascadingResourceCalculation;
 		public CascadingResourceCalculationContextFactory CascadingResourceCalculationContextFactory;
+		public ITimeZoneGuard TimeZoneGuard;
 
 		private DateOnlyPeriod weekPeriod = new DateOnlyPeriod(2015, 9, 28, 2015, 10, 04);
 		private readonly IScenario scenario = new Scenario("unimportant");
@@ -355,7 +357,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 				new SchedulePartModifyAndRollbackService(
 					SchedulerStateHolder.SchedulingResultState,
 					new SchedulerStateScheduleDayChangedCallback(
-						new ScheduleChangesAffectedDates(new TimeZoneGuard()),
+						new ScheduleChangesAffectedDates(TimeZoneGuard),
 						() => SchedulerStateHolder
 						),
 					new ScheduleTagSetter(
@@ -507,7 +509,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 					new SchedulePartModifyAndRollbackService(
 						SchedulerStateHolder.SchedulingResultState,
 						new SchedulerStateScheduleDayChangedCallback(
-							new ScheduleChangesAffectedDates(new TimeZoneGuard()),
+							new ScheduleChangesAffectedDates(TimeZoneGuard),
 							() => SchedulerStateHolder
 						),
 						new ScheduleTagSetter(
