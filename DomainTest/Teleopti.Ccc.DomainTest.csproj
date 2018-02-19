@@ -893,7 +893,6 @@
     <Compile Include="Optimization\GroupPersonBuilderWrapperTest.cs" />
     <Compile Include="Optimization\IntraIntervalOptimization\IntraIntervalIssueCalculatorTest.cs" />
     <Compile Include="Optimization\IntraIntervalOptimization\IntraIntervalIssuesTest.cs" />
-    <Compile Include="Optimization\IntraIntervalOptimization\ScheduleDayIntraIntervalIssueExtractorTest.cs" />
     <Compile Include="Optimization\IntraIntervalOptimization\ShiftProjectionCacheIntraIntervalValueCalculatorTest.cs" />
     <Compile Include="Optimization\IntraIntervalOptimization\ShiftProjectionIntraIntervalBestFitCalculatorTest.cs" />
     <Compile Include="Optimization\IntraIntervalOptimization\SkillDayIntraIntervalIssueExtractorTest.cs" />
@@ -970,7 +969,6 @@
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockLockValidatorTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockPeriodValidatorTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockPersonSkillCheckerTest.cs" />
-    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockSwapDayValidatorTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockSwapTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockSwapValidatorTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockSameRuleSetBagValidatorTest.cs" />

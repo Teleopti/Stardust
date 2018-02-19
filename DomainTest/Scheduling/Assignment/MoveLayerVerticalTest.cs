@@ -2,10 +2,11 @@
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 {
-	[DomainTestWithStaticDependenciesAvoidUse]
+	[DomainTest]
 	public class MoveLayerVerticalTest
 	{
 		[Test]

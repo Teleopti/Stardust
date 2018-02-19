@@ -2,20 +2,23 @@
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 {
-	[TestFixture]
-	[DomainTestWithStaticDependenciesAvoidUse]
+	[DomainTest]
 	public class CurrentScheduleSummaryCalculatorTest
 	{
+		public IUserTimeZone UserTimeZone;
+		
 		[Test]
 		public void ShouldCalculateCorrectWhenLoggedOnInSwedenAndAgentInFinland()
 		{
@@ -25,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var phoneActivity = ActivityFactory.CreateActivity("phone");
 			phoneActivity.InContractTime = true;
 			var shiftCategory = new ShiftCategory("_").WithId();
-			var loggedOnTimeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
+			var loggedOnTimeZone = UserTimeZone.TimeZone();
 			var date = new DateOnly(2016, 01, 28);
 			var loggedOnDateTime = TimeZoneHelper.ConvertToUtc(date.Date, loggedOnTimeZone);
 			var visibleDateTimePeriod = new DateTimePeriod(loggedOnDateTime, loggedOnDateTime.AddDays(1));
@@ -66,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var phoneActivity = ActivityFactory.CreateActivity("phone");
 			phoneActivity.InContractTime = true;
 			var shiftCategory = new ShiftCategory("_").WithId();
-			var loggedOnTimeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
+			var loggedOnTimeZone = UserTimeZone.TimeZone();
 			var date = new DateOnly(2016, 01, 28);
 			var loggedOnDateTime = TimeZoneHelper.ConvertToUtc(date.Date, loggedOnTimeZone);
 			var visibleDateTimePeriod = new DateTimePeriod(loggedOnDateTime, loggedOnDateTime.AddDays(1));
