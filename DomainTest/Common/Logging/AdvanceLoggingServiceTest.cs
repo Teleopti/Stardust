@@ -11,7 +11,7 @@ using log4net.Filter;
 namespace Teleopti.Ccc.DomainTest.Common.Logging
 {
     [TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
+	[TestWithStaticDependenciesDONOTUSE]
 	public class AdvanceLoggingServiceTest
     {
         private SchedulingOptions _schedulingOptions;

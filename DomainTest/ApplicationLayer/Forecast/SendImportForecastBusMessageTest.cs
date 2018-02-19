@@ -11,7 +11,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 {
 	[TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
+	[TestWithStaticDependenciesDONOTUSE]
 	public class SendImportForecastBusMessageTest
 	{
 		private ISplitImportForecastMessage _target;

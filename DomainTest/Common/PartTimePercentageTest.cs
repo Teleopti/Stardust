@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.DomainTest.Common
     /// Tests for PartTimePercentage class.
     /// </summary>
     [TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
+	[TestWithStaticDependenciesDONOTUSE]
 	public class PartTimePercentageTest
     {
         private PartTimePercentage testPartTimePercentage;

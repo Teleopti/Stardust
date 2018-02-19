@@ -10,7 +10,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Time
 {
     [TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
+	[TestWithStaticDependenciesDONOTUSE]
 	public class SetupDateTimePeriodDefaultLocalHoursForAbsenceTest
     {
         private ISetupDateTimePeriod _target;

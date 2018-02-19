@@ -15,7 +15,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 {
 	[TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
+	[TestWithStaticDependenciesDONOTUSE]
 	public class DailyTargetValueCalculatorForTeamBlockTest
 	{
 		private MockRepository _mock;

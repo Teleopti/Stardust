@@ -9,7 +9,7 @@ using Teleopti.Ccc.DomainTest.Common;
 namespace Teleopti.Ccc.DomainTest.Helper
 {
     [TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
+	[TestWithStaticDependenciesDONOTUSE]
 	public class LogPointOutputTest
     {
         [Test]

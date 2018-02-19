@@ -34,7 +34,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
 	[DomainTest]
-	[TestWithStaticDependenciesAvoidUse]
+	[TestWithStaticDependenciesDONOTUSE]
 	public class MultiAbsenceRequestsHandlerTest : ISetup
 	{
 		public IPersonRequestRepository PersonRequestRepository;

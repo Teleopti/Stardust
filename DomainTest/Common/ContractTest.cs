@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.DomainTest.Common
     /// Tests for Contract class.
     /// </summary>
     [TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
+	[TestWithStaticDependenciesDONOTUSE]
 	public class ContractTest
     {
         private IContract _testContract;

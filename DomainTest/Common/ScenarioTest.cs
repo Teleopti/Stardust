@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.DomainTest.Common
     /// Tests for Scenario class
     /// </summary>
     [TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
+	[TestWithStaticDependenciesDONOTUSE]
 	public class ScenarioTest
     {
         private Scenario _scenario;

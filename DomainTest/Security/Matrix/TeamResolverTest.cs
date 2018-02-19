@@ -9,7 +9,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 namespace Teleopti.Ccc.DomainTest.Security.Matrix
 {
 	[TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
+	[TestWithStaticDependenciesDONOTUSE]
 	public class TeamResolverForPersonAndApplicationRoleTest
 	{
 		private TeamResolver _target;

@@ -10,7 +10,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Security.Principal
 {
     [TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
+	[TestWithStaticDependenciesDONOTUSE]
 	public class AllowedToSeeUsersNotInOrganizationSpecificationTest
     {
         private ISpecification<IEnumerable<ClaimSet>> target;

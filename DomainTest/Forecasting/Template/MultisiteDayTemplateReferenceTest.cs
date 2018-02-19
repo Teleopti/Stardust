@@ -11,7 +11,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Forecasting.Template
 {
     [TestFixture, SetUICulture("en-US")]
-	[TestWithStaticDependenciesAvoidUse]
+	[TestWithStaticDependenciesDONOTUSE]
     public class MultisiteDayTemplateReferenceTest
     {
         private MultisiteDay target;

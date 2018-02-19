@@ -16,7 +16,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Optimization
 {
     [TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
+	[TestWithStaticDependenciesDONOTUSE]
 	public class RelativeDailyStandardDeviationsByPersonalSkillsExtractorTest
     {
         private RelativeDailyValueByPersonalSkillsExtractor _target;

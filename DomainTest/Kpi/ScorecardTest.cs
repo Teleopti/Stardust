@@ -9,7 +9,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 namespace Teleopti.Ccc.DomainTest.Kpi
 {
     [TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
+	[TestWithStaticDependenciesDONOTUSE]
 	public class ScorecardTest
     {
         private Scorecard  target;

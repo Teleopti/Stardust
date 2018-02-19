@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 {
     //tests when permissions are disabled on scheduledictionary
     [TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
+	[TestWithStaticDependenciesDONOTUSE]
     public class ScheduleRangeLowPermissionCheckTest
     {
 	    private const string function = DefinedRaptorApplicationFunctionPaths.ViewSchedules;

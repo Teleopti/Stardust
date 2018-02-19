@@ -4,7 +4,7 @@ using Teleopti.Ccc.Domain.Common;
 namespace Teleopti.Ccc.DomainTest.Common
 {
     [TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
+	[TestWithStaticDependenciesDONOTUSE]
 	public class LocalizedUpdateInfoTest
     {
         private LocalizedUpdateInfo target;

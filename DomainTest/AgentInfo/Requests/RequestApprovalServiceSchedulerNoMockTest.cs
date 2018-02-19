@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 {
 	[TestFixture]
 	[DomainTest]
-	[TestWithStaticDependenciesAvoidUse]
+	[TestWithStaticDependenciesDONOTUSE]
 	public class RequestApprovalServiceSchedulerNoMockTest : ISetup
 	{
 		public IRequestApprovalServiceFactory RequestApprovalServiceFactory;

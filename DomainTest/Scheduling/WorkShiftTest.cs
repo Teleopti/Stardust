@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
     /// Tests for work shift
     /// </summary>
     [TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
+	[TestWithStaticDependenciesDONOTUSE]
 	public class WorkShiftTest
     {
         private IWorkShift target;
