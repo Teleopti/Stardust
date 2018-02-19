@@ -21,7 +21,7 @@ using System.Threading;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 {
-	[DomainTestWithStaticDependenciesAvoidUse]
+	[DomainTest]
 	public class NotOverwriteLayerRuleTest : ISetup
 	{
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
