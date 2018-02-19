@@ -263,7 +263,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 		expect(vm.approveStartTime).toEqual(moment('2018-02-06T09:00:00').toDate());
 		expect(vm.approveEndTime).toEqual(moment('2018-02-06T10:00:00').toDate());
 	});
-	
+
 	it('should fix start time - early recorded out of adherence start', function (t) {
 		t.stateParams.personId = '1';
 		t.backend.with.historicalAdherence({
@@ -288,7 +288,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 
 		expect(vm.approveStartTime).toEqual(moment('2018-02-06T08:00:00').toDate());
 	});
-	
+
 	it('should display period to be approved', function (t) {
 		t.stateParams.personId = '1';
 		t.backend.with.historicalAdherence({
@@ -333,5 +333,31 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 
 		expect(vm.approveOffset).toEqual("30%");
 		expect(vm.approveWidth).toEqual("20%");
+	});
+
+	it('should remove start and end time on cancel', function (t) {
+		t.backend.with.historicalAdherence({
+			Timeline: {
+				StartTime: '2018-01-29T07:00:00',
+				EndTime: '2018-01-29T17:00:00'
+			},
+			RecordedOutOfAdherences: [{
+				StartTime: '2018-01-29T08:00:00',
+				EndTime: '2018-01-29T09:00:00'
+			}]
+		});
+		var vm = t.createController();
+
+		t.apply(function () {
+			vm.recordedOutOfAdherences[0].click();
+		});
+		t.apply(function () {
+			vm.cancelApprove();
+		});
+
+		expect(vm.approveStartTime).toEqual(undefined);
+		expect(vm.approveEndTime).toEqual(undefined);
+		expect(vm.approveOffset).toEqual(undefined);
+		expect(vm.approveWidth).toEqual(undefined);
 	});
 });

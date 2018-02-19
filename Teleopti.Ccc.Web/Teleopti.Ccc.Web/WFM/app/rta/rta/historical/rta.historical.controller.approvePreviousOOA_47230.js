@@ -206,6 +206,8 @@
 
 		vm.cancelApprove = function () {
 			vm.openApproveForm = false;
+			vm.approveStartTime = undefined;
+			vm.approveEndTime = undefined;
 		};
 
 		vm.submitApprove = function () {
