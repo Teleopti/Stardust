@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
@@ -9,13 +11,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
 	public class TeamBlockClearer
 	{
-		private readonly IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
+		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
 		private readonly IDeleteSchedulePartService _deleteSchedulePartService;
+		private readonly IResourceCalculation _resourceCalculation;
+		private readonly AffectedDates _affectedDates;
 
-		public TeamBlockClearer(IDeleteAndResourceCalculateService deleteAndResourceCalculateService, IDeleteSchedulePartService deleteSchedulePartService)
+		public TeamBlockClearer(Func<ISchedulingResultStateHolder> schedulingResultStateHolder,
+								IDeleteSchedulePartService deleteSchedulePartService,
+								IResourceCalculation resourceCalculation,
+								AffectedDates affectedDates)
 		{
-			_deleteAndResourceCalculateService = deleteAndResourceCalculateService;
+			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_deleteSchedulePartService = deleteSchedulePartService;
+			_resourceCalculation = resourceCalculation;
+			_affectedDates = affectedDates;
 		}
 
 		public void ClearTeamBlock(SchedulingOptions schedulingOptions,
@@ -33,11 +42,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 			foreach (var scheduleDay in toRemove)
 			{
-				_deleteAndResourceCalculateService.DeleteWithResourceCalculation(scheduleDay,
-					schedulePartModifyAndRollbackService,
-					schedulingOptions.ConsiderShortBreaks, false);
-			}
+				_deleteSchedulePartService.Delete(new[] { scheduleDay }, schedulePartModifyAndRollbackService);
 
+				var resCalcData = _schedulingResultStateHolder().ToResourceOptimizationData(schedulingOptions.ConsiderShortBreaks, false);
+				foreach (var date in _affectedDates.For(scheduleDay))
+				{
+					_resourceCalculation.ResourceCalculate(date, resCalcData);
+				}
+			}
 		}
 
 		public void ClearTeamBlockWithNoResourceCalculation(
