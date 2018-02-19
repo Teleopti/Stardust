@@ -466,7 +466,6 @@
     <Compile Include="Intraday\StaffingViewModelCreatorTestHelper.cs" />
     <Compile Include="Intraday\StaffingViewModelCreatorTest.cs" />
     <Compile Include="Intraday\LatestStatisticsTimeProviderTest.cs" />
-    <Compile Include="DomainTestWithStaticDependenciesDONOTUSEAttribute.cs" />
     <Compile Include="Logon\Permissions\AvailablePersonTest.cs" />
     <Compile Include="Logon\Permissions\AvailableSiteAuthorizationTest.cs" />
     <Compile Include="Logon\Permissions\AvailableSiteTest.cs" />
