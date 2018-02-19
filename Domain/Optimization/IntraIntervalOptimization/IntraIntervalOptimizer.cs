@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 		private readonly ITeamInfoFactory _teamInfoFactory;
 		private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
 		private readonly ISkillStaffPeriodEvaluator _skillStaffPeriodEvaluator;
-		private readonly IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
+		private readonly DeleteAndResourceCalculateService _deleteAndResourceCalculateService;
 		private readonly IIntraIntervalIssueCalculator _intraIntervalIssueCalculator;
 		private readonly TeamScheduling _teamScheduling;
 		private readonly IShiftProjectionIntraIntervalBestFitCalculator _shiftProjectionIntraIntervalBestFitCalculator;
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 
 		public IntraIntervalOptimizer(ITeamInfoFactory teamInfoFactory, ITeamBlockInfoFactory teamBlockInfoFactory,
 			ISkillStaffPeriodEvaluator skillStaffPeriodEvaluator,
-			IDeleteAndResourceCalculateService deleteAndResourceCalculateService,
+			DeleteAndResourceCalculateService deleteAndResourceCalculateService,
 			IIntraIntervalIssueCalculator intraIntervalIssueCalculator,
 			TeamScheduling teamScheduling,
 			IShiftProjectionIntraIntervalBestFitCalculator shiftProjectionIntraIntervalBestFitCalculator,

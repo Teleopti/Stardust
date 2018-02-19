@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly MatrixListFactory _matrixListFactory;
 		private readonly IScheduleResultDataExtractorProvider _scheduleResultDataExtractorProvider;
 		private readonly IScheduleService _scheduleService;
-		private readonly IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
+		private readonly DeleteAndResourceCalculateService _deleteAndResourceCalculateService;
 		private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
 		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 		private readonly ScheduleChangesAffectedDates _scheduleChangesAffectedDates;
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		public ExtendReduceDaysOffHelper(MatrixListFactory matrixListFactory,
 										IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider,
 										IScheduleService scheduleService,
-										IDeleteAndResourceCalculateService deleteAndResourceCalculateService,
+										DeleteAndResourceCalculateService deleteAndResourceCalculateService,
 										ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 										IEffectiveRestrictionCreator effectiveRestrictionCreator,
 										ScheduleChangesAffectedDates scheduleChangesAffectedDates,

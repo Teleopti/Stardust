@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
 		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 		private readonly IResourceCalculation _resourceOptimizationHelper;
-		private readonly IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
+		private readonly DeleteAndResourceCalculateService _deleteAndResourceCalculateService;
 		private readonly IScheduleResultDataExtractorProvider _scheduleResultDataExtractorProvider;
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			Func<ISchedulingResultStateHolder> schedulingResultStateHolder,
 			IEffectiveRestrictionCreator effectiveRestrictionCreator, 
 			IResourceCalculation resourceOptimizationHelper, 
-			IDeleteAndResourceCalculateService deleteAndResourceCalculateService, 
+			DeleteAndResourceCalculateService deleteAndResourceCalculateService, 
 			IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider, 
 			IUserTimeZone userTimeZone,
 			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter) 

@@ -2,19 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
-	public interface IDeleteAndResourceCalculateService
-	{
-		void DeleteWithResourceCalculation(IEnumerable<IScheduleDay> daysToDelete, ISchedulePartModifyAndRollbackService rollbackService, bool considerShortBreaks, bool doIntraIntervalCalculation);
-	}
-
-	public class DeleteAndResourceCalculateService : IDeleteAndResourceCalculateService
+	public class DeleteAndResourceCalculateService
 	{
 		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
 		private readonly IDeleteSchedulePartService _deleteSchedulePartService;
@@ -44,8 +38,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			foreach (var scheduleDay in daysToDelete)
 			{
 				var key = scheduleDay.DateOnlyAsPeriod.DateOnly;
-				IList<IScheduleDay> value;
-				if (!dic.TryGetValue(key, out value))
+				if (!dic.TryGetValue(key, out var value))
 				{
 					value = new List<IScheduleDay>();
 					dic.Add(key, value);

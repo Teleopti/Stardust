@@ -598,7 +598,6 @@
     <Compile Include="Scheduler\GroupPageCreatorTest.cs" />
     <Compile Include="Scheduler\GroupScheduleGroupPageDataProviderTest.cs" />
     <Compile Include="Scheduler\MatrixUserLockLockerTest.cs" />
-    <Compile Include="Scheduler\MoveTimeOptimizerCreatorTest.cs" />
     <Compile Include="Scheduler\NotesEditorViewModelTest.cs" />
     <Compile Include="Scheduler\Panels\LengthToDateCalculatorTest.cs" />
     <Compile Include="Scheduler\PersistConflictTest.cs" />

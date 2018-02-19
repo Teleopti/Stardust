@@ -8,14 +8,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
 	public class NightRestWhiteSpotSolverServiceFactory : INightRestWhiteSpotSolverServiceFactory
 	{
-		private readonly IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
+		private readonly DeleteAndResourceCalculateService _deleteAndResourceCalculateService;
 		private readonly IScheduleService _scheduleService;
 		private readonly IResourceCalculation _resourceOptimization;
 		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 
-		public NightRestWhiteSpotSolverServiceFactory(IDeleteAndResourceCalculateService deleteAndResourceCalculateService,
+		public NightRestWhiteSpotSolverServiceFactory(DeleteAndResourceCalculateService deleteAndResourceCalculateService,
 			IScheduleService scheduleService, 
 			IResourceCalculation resourceOptimization,
 			Func<ISchedulingResultStateHolder> schedulingResultStateHolder,
