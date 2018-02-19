@@ -35,7 +35,7 @@
 					<div ng-repeat="row in vm.fullTimeline"
 						 class="label label-info time"
 						 ng-attr-style="left: {{row.Offset}}">
-						{{row.Time | amDateFormat: 'HH.mm'}}
+						{{row.Time | amDateFormat: 'LT'}}
 					</div>
 				</div>
 
@@ -239,7 +239,7 @@
 					data-time="{{item.Time | amDateFormat: 'HH:mm:ss'}}"
 					ng-click="item.click()">
 					<td>
-						{{item.Time | amDateFormat: 'HH:mm:ss' }}
+						{{item.Time | amDateFormat: 'LTS' }}
 					</td>
 					<td>
 						<span ng-if="item.Activity" class="label"

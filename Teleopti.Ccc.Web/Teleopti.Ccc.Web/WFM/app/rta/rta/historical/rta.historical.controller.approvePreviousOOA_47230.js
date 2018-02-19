@@ -304,7 +304,7 @@
 				.concat(schedules.map(function (l) {
 					var activityStart = moment(l.StartTime);
 					var activityEnd = moment(l.EndTime);
-					var header = l.Name + ' ' + activityStart.format('HH:mm') + ' - ' + activityEnd.format('HH:mm');
+					var header = l.Name + ' ' + activityStart.format('LT') + ' - ' + activityEnd.format('LT');
 					return makeCard(header, l.Color, l.StartTime, l.EndTime);
 				}))
 				.concat(afterShift)
