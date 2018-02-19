@@ -10,16 +10,18 @@ function New-RandomPassword()
 {
     [CmdletBinding()]
     param(
-        [int]$Length = 6
+        [int]$Length = 9
     )
-     $ascii=$NULL;For ($a=33;$a -le 126;$a++) {$ascii+=,[char][byte]$a }
+     $ascii=$NULL
+     For ($a=48;$a -le 57;$a++) {$ascii+=,[char][byte]$a }
+     For ($a=65;$a -le 90;$a++) {$ascii+=,[char][byte]$a }
+     For ($a=97;$a -le 122;$a++) {$ascii+=,[char][byte]$a }
      For ($loop=1; $loop -le $length; $loop++) 
 	{
 		$RandomPassword+=($ascii | GET-RANDOM)
     }
     return $RandomPassword
 }
-
 
 Try 
 {
