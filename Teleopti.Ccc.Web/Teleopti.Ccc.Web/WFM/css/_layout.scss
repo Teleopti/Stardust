@@ -108,7 +108,7 @@ _:-ms-lang(x),.con-fluid-flex {
 	}
 
 	.align-row-center{
-		align-items: baseline!important;
+	  align-items: unset!important;
 	}
 
 	_:-ms-lang(x),.con-fluid-flex {
