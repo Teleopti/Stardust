@@ -15,46 +15,6 @@ function ServiceExist{
     }
 }
 
-
-<#function WaitForUrl
-{
-	param
-	(
-		$Url,
-		$cred
- 	)
-
-	$isOk = Check-HttpStatus -url $Url -credentials $cred
-	$bailOut = 200
-
-	while ($isOk -eq $false)
-	{ 
-		sleep 3
-		$isOk = Check-HttpStatus -url $Url -credentials $cred
-		log-info '.'
-		$bailOut--
-		if ($bailOut -eq 0)	{ break }
-	}
-}#>
-
-<#function Check-HttpStatus {     
-	param(
-	[string] $url,
-    [System.Net.NetworkCredential]$credentials = $null
-	)
-
-	[net.httpWebRequest] $req = [net.webRequest]::create($url)
-    $req.Credentials = $credentials;
-	$req.Method = "GET"
-    log-info "Check-HttpStatus: '$url'"
-	[net.httpWebResponse] $res = $req.getResponse()
-	$rescode = $res.StatusCode
-	log-info "Response Code: '$rescode'"
-    $ret = $res.StatusCode -eq "200"
-    $res.Close()
-    return $ret
-}#>
-
 function BaseUrl-get {
     
     $DataSourceName = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("TeleoptiDriveMap.DataSourceName")
@@ -224,7 +184,7 @@ function StopTeleoptiServer
 	)
 	TeleoptiWindowsServices-Stop
 	if ($iisInstalled) {
-		Invoke-Expression -Command:"iisreset /STOP"
+		#Invoke-Expression -Command:"iisreset /STOP"
 		StopWindowsService -ServiceName "W3SVC"
 	}
 }
@@ -316,18 +276,6 @@ function CheckPublicWeb
 
 }
 
-
-<#function GetCredentials
-{
-	$username = "tfsintegration"
-	$domain = "toptinet"
-	$password = "m8kemew0rk"
-	$secstr = New-Object -TypeName System.Security.SecureString
-	$password.ToCharArray() | ForEach-Object {$secstr.AppendChar($_)}
-	$AdminCredentials = new-object -typename System.Management.Automation.PSCredential -argumentlist $domain\$username, $secstr
-	return $AdminCredentials
-}#>
-
 function StartTeleoptiServer
 {
 	param
@@ -337,7 +285,7 @@ function StartTeleoptiServer
 	
 	if ($iisInstalled) {
 		StartWindowsService -ServiceName "W3SVC"
-		Invoke-Expression -Command:"iisreset /START"
+		#Invoke-Expression -Command:"iisreset /START"
     }
 
     #Make sure local W3SVC on this instance is started before starting ServiceBus and ETL
@@ -479,6 +427,7 @@ Try
 	if ($StopOnly -eq $false) 
 	{
 		StartTeleoptiServer $iisInstalled
+		log-info "IIS and Teleopti services started..."
 	}
 
 }
