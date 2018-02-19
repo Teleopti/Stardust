@@ -8,12 +8,13 @@ using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 
 namespace Teleopti.Ccc.DomainTest.Collection
 {
-	[TestFixture]
+	[DomainTest]
 	public class CachedNumberOfEachCategoryPerDateTest
 	{
 		private ICachedNumberOfEachCategoryPerDate _target;

@@ -8,12 +8,14 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 {
     [TestFixture, SetCulture("sv-SE"), SetUICulture("en-US")]
 	[TestWithStaticDependenciesDONOTUSE]
+	[DomainTest]
     public class SchedulePartStringVisualizerTest
     {
         private IPerson _agent;

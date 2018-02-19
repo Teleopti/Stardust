@@ -4,18 +4,22 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 {
 	[TestWithStaticDependenciesDONOTUSE]
+	[DomainTest]
 	public class MergeScheduleDayTest
 	{
 		private readonly DateTimePeriod period1 = new DateTimePeriod(new DateTime(2000, 1, 1, 8, 0, 0, DateTimeKind.Utc), new DateTime(2000, 1, 1, 17, 0, 0, DateTimeKind.Utc));
@@ -974,30 +978,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			destination.Merge(source, false);
 			destination.PersonAssignment().Period.StartDateTime.Hour.Should().Be.EqualTo(shiftSourcePeriod.StartDateTime.Hour);
-		}
-
-		[Test]
-		public void ShouldConsiderDaylightSavingsWhenMergeOvertime()
-		{
-			var person1 = PersonFactory.CreatePerson();
-			var scenario = ScenarioFactory.CreateScenarioAggregate();
-			var underlyingDictionary = new Dictionary<IPerson, IScheduleRange>();
-			var dic = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(rangePeriod), underlyingDictionary);
-
-			var sourcePeriod = new DateTimePeriod(2016, 3, 25, 23, 2016, 3, 26, 23);
-			var destinationPeriod = new DateTimePeriod(2016, 3, 26, 23, 2016, 3, 27, 22);
-			var shiftSourcePeriod = new DateTimePeriod(2016, 3, 26, 9, 2016, 3, 26, 10);
-
-			var source = ExtractedSchedule.CreateScheduleDay(dic, person1, new DateOnly(sourcePeriod.StartDateTime));
-			var destination = ExtractedSchedule.CreateScheduleDay(dic, person1, new DateOnly(destinationPeriod.StartDateTime));
-
-			var definitionSet = new MultiplicatorDefinitionSet("Overtime", MultiplicatorType.Overtime);
-			PersonFactory.AddDefinitionSetToPerson(person1, definitionSet);
-			var activity = ActivityFactory.CreateActivity("activity");
-			source.CreateAndAddOvertime(activity, shiftSourcePeriod, definitionSet);
-
-			((ExtractedSchedule)destination).MergeOvertime(source);
-			destination.PersonAssignment().Period.Should().Be.EqualTo(shiftSourcePeriod.MovePeriod(TimeSpan.FromHours(23)));
 		}
 
 		[Test]

@@ -6,10 +6,11 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Reports;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.Reports
 {
-	[TestFixture]
+	[DomainTest]
 	public class ScheduleAnalysisAuditTrailProviderTest
 	{
 		private ScheduleAnalysisAuditTrailProvider _target;

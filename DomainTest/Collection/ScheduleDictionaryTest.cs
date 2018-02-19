@@ -21,11 +21,13 @@ using Teleopti.Ccc.Domain.UndoRedo;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 using List = Rhino.Mocks.Constraints.List;
 
 namespace Teleopti.Ccc.DomainTest.Collection
 {
+	[DomainTest]
 	public class ScheduleDictionaryNoMockTest
 	{
 		private ScheduleDictionary target;
@@ -138,6 +140,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		}
 	}
 
+	[DomainTest]
 	public class ScheduleDictionaryTest
 	{
 		private IContract _contract;

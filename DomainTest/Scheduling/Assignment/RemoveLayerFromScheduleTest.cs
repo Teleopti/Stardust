@@ -3,10 +3,11 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 {
-    [TestFixture]
+    [DomainTest]
 	public class RemoveLayerFromScheduleTest
     {
 	    [Test]
