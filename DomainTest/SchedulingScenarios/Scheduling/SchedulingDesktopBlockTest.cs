@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			stateholder.Schedules[agent].ScheduledDay(date.AddDays(1)).IsScheduled().Should().Be.EqualTo(daysScheduled);
 		}
 
-		public SchedulingDesktopBlockTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerNoPytteIslands47500, bool resourcePlannerXxl47258) : base(seperateWebRequest, resourcePlannerNoPytteIslands47500, resourcePlannerXxl47258)
+		public SchedulingDesktopBlockTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerNoPytteIslands47500) : base(seperateWebRequest, resourcePlannerNoPytteIslands47500)
 		{
 		}
 	}

@@ -7,39 +7,28 @@ using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
-	[TestFixture(SeperateWebRequest.SimulateSecondRequestOrScheduler, false, false)]
-	[TestFixture(SeperateWebRequest.SimulateFirstRequest, false, false)]
-	[TestFixture(SeperateWebRequest.SimulateSecondRequestOrScheduler, true, false)]
-	[TestFixture(SeperateWebRequest.SimulateFirstRequest, true, false)]
-
-	[TestFixture(SeperateWebRequest.SimulateSecondRequestOrScheduler, false, true)]
-	[TestFixture(SeperateWebRequest.SimulateFirstRequest, false, true)]
-	[TestFixture(SeperateWebRequest.SimulateSecondRequestOrScheduler, true, true)]
-	[TestFixture(SeperateWebRequest.SimulateFirstRequest, true, true)]
-
+	[TestFixture(SeperateWebRequest.SimulateSecondRequestOrScheduler, false)]
+	[TestFixture(SeperateWebRequest.SimulateFirstRequest, false)]
+	[TestFixture(SeperateWebRequest.SimulateSecondRequestOrScheduler, true)]
+	[TestFixture(SeperateWebRequest.SimulateFirstRequest, true)]
 	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
 	[LoggedOnAppDomain]
 	public abstract class SchedulingScenario : IConfigureToggleManager, ITestInterceptor, ISetup
 	{
 		private readonly SeperateWebRequest _seperateWebRequest;
 		private readonly bool _resourcePlannerNoPytteIslands47500;
-		protected readonly bool _resourcePlannerXxl47258;
 
 		public IIoCTestContext IoCTestContext;
 
 		protected SchedulingScenario(SeperateWebRequest seperateWebRequest, 
-			bool resourcePlannerNoPytteIslands47500,
-			bool resourcePlannerXxl47258)
+			bool resourcePlannerNoPytteIslands47500)
 		{
 			_seperateWebRequest = seperateWebRequest;
 			_resourcePlannerNoPytteIslands47500 = resourcePlannerNoPytteIslands47500;
-			_resourcePlannerXxl47258 = resourcePlannerXxl47258;
 		}
 
 		public void Configure(FakeToggleManager toggleManager)
 		{
-			if (_resourcePlannerXxl47258)
-				toggleManager.Enable(Toggles.ResourcePlanner_XXL_47258);
 			if(_resourcePlannerNoPytteIslands47500)
 				toggleManager.Enable(Toggles.ResourcePlanner_NoPytteIslands_47500);
 		}

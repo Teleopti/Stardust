@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				.Should().Be.EqualTo(30);
 		}
 
-		public SchedulingPersistTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerNoPytteIslands47500, bool resourcePlannerXxl47258) : base(seperateWebRequest, resourcePlannerNoPytteIslands47500, resourcePlannerXxl47258)
+		public SchedulingPersistTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerNoPytteIslands47500) : base(seperateWebRequest, resourcePlannerNoPytteIslands47500)
 		{
 		}
 	}

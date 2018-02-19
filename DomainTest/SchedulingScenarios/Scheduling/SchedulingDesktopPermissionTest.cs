@@ -78,8 +78,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		[TestCase(false)]
 		public void ShouldConsiderDataTheEndUserHasNoPermissionFor(bool havePermissonOtherAgentsSchedule)
 		{
-			if(!_resourcePlannerXxl47258)
-				Assert.Ignore("Bug only fixed when toggle 47258 is on for now");
 			var personId = Guid.NewGuid();
 			Database.WithTenant("_").WithPerson(personId, "_");
 			var dataRangeOptions = havePermissonOtherAgentsSchedule
@@ -109,7 +107,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		
 		
 
-		public SchedulingDesktopPermissionTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerNoPytteIslands47500, bool resourcePlannerXxl47258) : base(seperateWebRequest, resourcePlannerNoPytteIslands47500, resourcePlannerXxl47258)
+		public SchedulingDesktopPermissionTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerNoPytteIslands47500) : base(seperateWebRequest, resourcePlannerNoPytteIslands47500)
 		{
 		}
 	}

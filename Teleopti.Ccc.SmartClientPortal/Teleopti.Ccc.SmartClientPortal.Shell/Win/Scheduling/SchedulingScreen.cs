@@ -3522,8 +3522,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void loadAndOptimizeData(DoWorkEventArgs e)
 		{
-			if (_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_XXL_47258))
-				_container.Resolve<IMbCacheFactory>().Invalidate();
+			_container.Resolve<IMbCacheFactory>().Invalidate();
 			var optimizerHelper = new OptimizerHelperHelper();
 			IList<LoaderMethod> methods = new List<LoaderMethod>();
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())

@@ -14,11 +14,10 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 	public class RuleSetTest
 	{
 		[Test]
-		public void VerifyProjectionServiceIsCached([Values(true, false)] bool perLifeTimeScope)
+		public void VerifyProjectionServiceIsCached()
 		{
 			var containerBuilder = new ContainerBuilder();
 			var configuration = new IocConfiguration(new IocArgs(new ConfigReader()), null);
-			configuration.Args().CacheRulesetPerLifeTimeScope = perLifeTimeScope;
 			containerBuilder.RegisterModule(new CommonModule(configuration));
 			var callback = new WorkShiftAddStopperCallback();
 			using (var container = containerBuilder.Build())
@@ -58,11 +57,10 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		}
 
 		[Test]
-		public void ShouldCacheWorkShiftWorkTime([Values(true, false)] bool perLifeTimeScope)
+		public void ShouldCacheWorkShiftWorkTime()
 		{
 			var containerBuilder = new ContainerBuilder();
 			var configuration = new IocConfiguration(new IocArgs(new ConfigReader()), null);
-			configuration.Args().CacheRulesetPerLifeTimeScope = perLifeTimeScope;
 			containerBuilder.RegisterModule(new CommonModule(configuration));
 
 			using (var container = containerBuilder.Build())
@@ -95,11 +93,10 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		}
 
 		[Test]
-		public void ShouldCacheWithDifferentCallbacks([Values(true, false)] bool perLifeTimeScope)
+		public void ShouldCacheWithDifferentCallbacks()
 		{
 			var containerBuilder = new ContainerBuilder();
 			var configuration = new IocConfiguration(new IocArgs(new ConfigReader()), null);
-			configuration.Args().CacheRulesetPerLifeTimeScope = perLifeTimeScope;
 			containerBuilder.RegisterModule(new CommonModule(configuration));
 			using (var container = containerBuilder.Build())
 			{
@@ -113,11 +110,10 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		}
 
 		[Test]
-		public void ShouldNotCacheRuleSetWithNoId([Values(true, false)] bool perLifeTimeScope)
+		public void ShouldNotCacheRuleSetWithNoId()
 		{
 			var containerBuilder = new ContainerBuilder();
 			var configuration = new IocConfiguration(new IocArgs(new ConfigReader()), null);
-			configuration.Args().CacheRulesetPerLifeTimeScope = perLifeTimeScope;
 			containerBuilder.RegisterModule(new CommonModule(configuration));
 			var wsRs = createRuleset(false);
 			var callback = new WorkShiftAddStopperCallback();

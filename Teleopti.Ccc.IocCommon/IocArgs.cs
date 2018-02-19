@@ -23,8 +23,6 @@ namespace Teleopti.Ccc.IocCommon
 		public IContainer SharedContainer { get; set; }
 		public IDataSourceConfigurationSetter DataSourceConfigurationSetter { get; set; }
 		public Type ImplementationTypeForCurrentUnitOfWork { get; set; }
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_XXL_47258)]
-		public bool CacheRulesetPerLifeTimeScope { get; set; } = true;
 
 		public bool BehaviorTestServer { get; set; }
 		public bool AllEventPublishingsAsSync { get; set; }

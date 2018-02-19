@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			MergeIslandsSizeLimit.TurnOff_UseOnlyFromTest();
 		}
 
-		public ConcurrencyDesktopTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerNoPytteIslands47500, bool resourcePlannerXxl47258) : base(seperateWebRequest, resourcePlannerNoPytteIslands47500, resourcePlannerXxl47258)
+		public ConcurrencyDesktopTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerNoPytteIslands47500) : base(seperateWebRequest, resourcePlannerNoPytteIslands47500)
 		{
 		}
 	}

@@ -35,14 +35,7 @@ namespace Teleopti.Ccc.IocCommon
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			if (_configuration.Toggle(Toggles.ResourcePlanner_XXL_47258))
-			{
-				builder.RegisterModule(new RuleSetModule(_configuration));
-			}
-			else
-			{
-				builder.RegisterModule(new RuleSetModuleOLD(_configuration));
-			}
+			builder.RegisterModule(new RuleSetModule(_configuration));
 			builder.RegisterModule(new MbCacheModule(_configuration));
 			builder.RegisterModule<DateAndTimeModule>();
 			builder.RegisterModule<ServiceLocatorModule>();

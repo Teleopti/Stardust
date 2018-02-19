@@ -241,7 +241,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			schedulerStateHolder.Schedules[agent].BusinessRuleResponseInternalCollection.Should().Be.Empty();
 		}
 
-		public SchedulingDesktopTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerNoPytteIslands47500, bool resourcePlannerXxl47258) : base(seperateWebRequest, resourcePlannerNoPytteIslands47500, resourcePlannerXxl47258)
+		public SchedulingDesktopTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerNoPytteIslands47500) : base(seperateWebRequest, resourcePlannerNoPytteIslands47500)
 		{
 		}
 	}

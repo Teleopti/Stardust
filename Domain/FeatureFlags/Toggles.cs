@@ -92,7 +92,6 @@
 		ResourcePlanner_BlockSchedulingValidation_46092,
 		ResourcePlanner_UseErlangAWithInfinitePatience_45845,
 		ResourcePlanner_DayOffOptimizationIslands_47208,
-		ResourcePlanner_XXL_47258,
 		ResourcePlanner_NoPytteIslands_47500,
 		ResourcePlanner_PrepareToRemoveExportSchedule_46576,
 		ResourcePlanner_ScheduleDeadlock_48170,

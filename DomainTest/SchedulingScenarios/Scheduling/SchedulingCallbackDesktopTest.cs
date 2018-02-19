@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			callbackTracker.NumberOfScheduleAttempts.Should().Be.LessThanOrEqualTo(1);
 		}
 
-		public SchedulingCallbackTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerNoPytteIslands47500, bool resourcePlannerXxl47258) : base(seperateWebRequest, resourcePlannerNoPytteIslands47500, resourcePlannerXxl47258)
+		public SchedulingCallbackTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerNoPytteIslands47500) : base(seperateWebRequest, resourcePlannerNoPytteIslands47500)
 		{
 		}
 	}
