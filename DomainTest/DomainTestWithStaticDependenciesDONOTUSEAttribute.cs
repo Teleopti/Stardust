@@ -3,10 +3,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest
 {
-	/// <summary>
-	/// If possible, use [DomainTest] instead (or fix so that could be used by removing static dependencies in code)
-	/// </summary>
-	public class DomainTestWithStaticDependenciesAvoidUseAttribute : DomainTestAttribute
+	public class DomainTestWithStaticDependenciesDONOTUSEAttribute : DomainTestAttribute
 	{
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{

@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 	 * something that real code execute, eg scheduling.
 	 * Don't write tests against inner service "IWeeklyRestSolverCommand"
 	 */
-	[DomainTestWithStaticDependenciesAvoidUse]
+	[DomainTestWithStaticDependenciesDONOTUSE]
 	public class WeeklyRestSolverLaterTest
 	{
 		public WeeklyRestSolverCommand Target;

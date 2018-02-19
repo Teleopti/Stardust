@@ -30,7 +30,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
-	[DomainTestWithStaticDependenciesAvoidUse]
+	[DomainTestWithStaticDependenciesDONOTUSE]
 	[TestFixture, SetCulture("en-US")]
 	public class MultiAbsenceRequestsUpdaterTest : ISetup
 	{
