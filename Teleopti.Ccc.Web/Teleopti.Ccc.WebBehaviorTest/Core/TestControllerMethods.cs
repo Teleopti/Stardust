@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			}
 		}
 
-		public static void BeforeScenario()
+		public static void BeforeTest()
 		{
 			if (ScenarioContext.Current == null)
 			{

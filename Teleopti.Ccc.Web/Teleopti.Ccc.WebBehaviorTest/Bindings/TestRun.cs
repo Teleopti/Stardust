@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 
 			CurrentTime.Reset();
 			CurrentScopeBusinessUnit.Reset();
-			TestControllerMethods.BeforeScenario();
+			TestControllerMethods.BeforeTest();
 
 			TestDataSetup.RestoreCcc7Data();
 			TestDataSetup.ClearAnalyticsData();

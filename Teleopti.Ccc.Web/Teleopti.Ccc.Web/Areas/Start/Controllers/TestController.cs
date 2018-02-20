@@ -105,8 +105,8 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 
 			return View("Message", new TestMessageViewModel
 			{
-				Title = $"Setting up for test{name}",
-				Message = $"Setting up for test{name}",
+				Title = $"Setting up for test {name}",
+				Message = $"Setting up for test {name}",
 				ListItems = new[]
 				{
 					"Invalidating browser cookie",
