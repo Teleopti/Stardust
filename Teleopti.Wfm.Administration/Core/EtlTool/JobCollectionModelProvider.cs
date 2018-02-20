@@ -16,6 +16,10 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 {
 	public class JobCollectionModelProvider
 	{
+		private const string reloadDatamartJobName = "Reload datamart (old nightly)";
+		private const string nightlyJobName = "Nightly";
+		private const string permissionJobName = "Permission";
+
 		private readonly IComponentContext _componentContext;
 		private readonly IPmInfoProvider _pmInfoProvider;
 		private readonly IConfigurationHandler _configurationHandler;
@@ -32,42 +36,66 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 			_configurationHandler = configurationHandler;
 			_analyticsConnectionsStringExtractor = analyticsConnectionsStringExtractor;
 		}
+
 		public IList<JobCollectionModel> Create(string tenantName)
 		{
 			IJobParameters jobParameters;
-			if (Tenants.IsAllTenants(tenantName))
+
+			var isAllTenants = Tenants.IsAllTenants(tenantName);
+			if (isAllTenants)
 			{
-				// For "<All>" tenants, just create a dummy JobParameters
-				jobParameters = new JobParameters(null, 0, TimeZone.CurrentTimeZone.StandardName, 15, "", "",
-					CultureInfo.CurrentCulture, new IocContainerHolder(_componentContext), true);
+				// Create a dummy JobParameters to load all ETL jobs for all tenants
+				jobParameters = new JobParameters(null, 0, TimeZone.CurrentTimeZone.StandardName, 15,
+					_pmInfoProvider.Cube(), _pmInfoProvider.PmInstallation(), CultureInfo.CurrentCulture,
+					new IocContainerHolder(_componentContext), true);
 			}
 			else
 			{
 				var dataMartConnectionString = _analyticsConnectionsStringExtractor.Extract(tenantName);
 
 				_configurationHandler.SetConnectionString(dataMartConnectionString);
+				var baseConfiguration = _configurationHandler.BaseConfiguration;
 				jobParameters = new JobParameters(null, 1,
-					_configurationHandler.BaseConfiguration.TimeZoneCode,
-					_configurationHandler.BaseConfiguration.IntervalLength.Value,
-					_pmInfoProvider.Cube(), _pmInfoProvider.PmInstallation(),
-					CultureInfo.GetCultureInfo(_configurationHandler.BaseConfiguration.CultureId.Value),
+					baseConfiguration.TimeZoneCode,
+					baseConfiguration.IntervalLength.Value,
+					_pmInfoProvider.Cube(),
+					_pmInfoProvider.PmInstallation(),
+					CultureInfo.GetCultureInfo(baseConfiguration.CultureId.Value),
 					new IocContainerHolder(_componentContext),
-					_configurationHandler.BaseConfiguration.RunIndexMaintenance);
+					baseConfiguration.RunIndexMaintenance);
 			}
 
-			var jobCollection = new JobCollection(jobParameters);
 
-			return jobCollection
-				.Select(m => new JobCollectionModel
+			return new JobCollection(jobParameters)
+				.Select(job => new JobCollectionModel
 				{
-					JobName = m.Name,
-					JobStepNames = m.StepList
-						.Select(y => y.Name)
-						.ToList(),
-					NeedsParameterDataSource = m.NeedsParameterDataSource,
-					NeededDatePeriod = getJobCategoryPeriods(m)
-				})
-				.ToList();
+					JobName = job.Name,
+					JobSteps = job.StepList
+						.Select(step => new JobStepModel
+						{
+							Name = step.Name,
+							DependsOnTenant = isAllTenants && IsJobStepDependsOnTenant(job.Name, step.Name)
+						}).ToList(),
+					NeedsParameterDataSource = job.NeedsParameterDataSource,
+					NeededDatePeriod = getJobCategoryPeriods(job)
+				}).ToList();
+		}
+
+		public static bool IsJobStepDependsOnTenant(string jobName, string stepName)
+		{
+			if (jobName == reloadDatamartJobName &&
+				(stepName == "AnalyticsIndexMaintenance" || stepName == "AppIndexMaintenance" || stepName == "AggIndexMaintenance"))
+			{
+				return true;
+			}
+
+			if ((jobName == nightlyJobName || jobName == permissionJobName || jobName == reloadDatamartJobName) &&
+				(stepName == "Process Cube" || stepName == "Performance Manager permissions"))
+			{
+				return true;
+			}
+
+			return false;
 		}
 
 		private IList<string> getJobCategoryPeriods(IJob job)

@@ -5,14 +5,21 @@ namespace Teleopti.Wfm.AdministrationTest.FakeData
 {
 	public class FakePmInfoProvider : IPmInfoProvider
 	{
+		private bool pmInstalled = false;
+
+		public void SetPmInstalled(bool installed)
+		{
+			pmInstalled = installed;
+		}
+
 		public string PmInstallation()
 		{
-			return "False";
+			return pmInstalled ? "True" : "False";
 		}
 
 		public string Cube()
 		{
-			return String.Empty;
+			return string.Empty;
 		}
 	}
 }
