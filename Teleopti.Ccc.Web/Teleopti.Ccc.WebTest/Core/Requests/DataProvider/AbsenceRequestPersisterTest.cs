@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			personRequest.Should().Not.Be(null);
 			personRequest.IsDenied.Should().Be(true);
-			personRequest.DenyReason.Should().Be(Resources.RequestDenyReasonNoWorkflow);
+			personRequest.DenyReason.Should().Be(nameof(Resources.RequestDenyReasonNoWorkflow));
 		}
 
 		[Test]
