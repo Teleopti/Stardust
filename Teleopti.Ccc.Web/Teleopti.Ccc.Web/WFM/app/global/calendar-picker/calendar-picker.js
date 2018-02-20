@@ -27,9 +27,9 @@
         })
         .controller('PpDateRangeController', PpDateRangeController);
 
-    PpDateRangeController.$inject = ['$scope', '$element', '$attrs', '$timeout'];
+    PpDateRangeController.$inject = ['$scope', '$element', '$attrs', '$timeout', '$translate'];
 
-    function PpDateRangeController($scope, $element, $attrs, $timeout) {
+    function PpDateRangeController($scope, $element, $attrs, $timeout, $translate) {
         var vm = this;
 
         vm.resetStartDate = resetStartDate;
@@ -147,64 +147,64 @@
 
         function validateDate() {
             if (!vm.pickStartDate && !vm.pickEndDate) {
-                return vm.dateRangeText = 'SelectStartDateAndEndDate';
+                return vm.dateRangeText = $translate.instant('SelectStartDateAndEndDate');
             }
             if (!vm.pickStartDate) {
-                return vm.dateRangeText = 'SelectStartDate';
+                return vm.dateRangeText = $translate.instant('SelectStartDate');
             }
             if (!vm.pickEndDate) {
-                return vm.dateRangeText = 'SelectEndDate';
+                return vm.dateRangeText = $translate.instant('SelectEndDate');
             }
             if (!!$attrs.customValidate) {
                 return vm.dateRangeText = vm.customValidate();
             }
             if (vm.pickEndDate - vm.pickStartDate < 0) {
-                return vm.dateRangeText = 'ValidateEndDate';
+                return vm.dateRangeText = $translate.instant('ValidateEndDate');
             }
             return vm.dateRangeText = '';
         }
 
         function validateNoneDate() {
             if (!vm.pickStartDate && !vm.pickEndDate) {
-                return vm.dateRangeText = 'NoStartAndEndDateToDisplay';
+                return vm.dateRangeText = $translate.instant('NoStartAndEndDateToDisplay');
             }
             if (!!$attrs.customValidate) {
                 return vm.dateRangeText = vm.customValidate();
             }
             if (!vm.pickStartDate) {
-                return vm.dateRangeText = 'NoStartDateToDisplay';
+                return vm.dateRangeText = $translate.instant('NoStartDateToDisplay');
             }
             if (!vm.pickEndDate) {
-                return vm.dateRangeText = 'NoEndToDisplay';
+                return vm.dateRangeText = $translate.instant('NoEndToDisplay');
             }
             if (vm.pickEndDate - vm.pickStartDate < 0) {
-                return vm.dateRangeText = 'ValidateEndDate';
+                return vm.dateRangeText = $translate.instant('ValidateEndDate');
             }
             return vm.dateRangeText = '';
         }
 
         function validateEndDate() {
             if (!vm.pickEndDate) {
-                return vm.dateRangeText = 'SelectEndDate';
+                return vm.dateRangeText = $translate.instant('SelectEndDate');
             }
             if (!!$attrs.customValidate) {
                 return vm.dateRangeText = vm.customValidate();
             }
             if (vm.pickEndDate - vm.pickStartDate <= 0) {
-                return vm.dateRangeText = 'ValidateEndDate';
+                return vm.dateRangeText = $translate.instant('ValidateEndDate');
             }
             return vm.dateRangeText = '';
         }
 
         function validateStartDate() {
             if (!vm.pickStartDate) {
-                return vm.dateRangeText = 'SelectStartDate';
+                return vm.dateRangeText = $translate.instant('SelectStartDate');
             }
             if (!!$attrs.customValidate) {
                 return vm.dateRangeText = vm.customValidate();
             }
             if (vm.pickEndDate - vm.pickStartDate <= 0) {
-                return vm.dateRangeText = 'ValidateStartDate';
+                return vm.dateRangeText = $translate.instant('ValidateStartDate');
             }
             return vm.dateRangeText = '';
         }

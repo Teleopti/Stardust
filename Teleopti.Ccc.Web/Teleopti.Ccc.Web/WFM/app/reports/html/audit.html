@@ -38,7 +38,7 @@
 								&nbsp;
 								&nbsp;
 								<div ng-if="vm.dateModifyRange.endDate">{{'To'|translate}}: {{vm.dateModifyRange.endDate | amDateFormat:"L"}}</div>
-								<div ng-if="!vm.dateModifyRange.endDate && !vm.dateModifyRange.startDate" class="text-warning"> No selected date</div>
+								<div ng-if="!vm.dateModifyRange.endDate && !vm.dateModifyRange.startDate" class="text-warning"> {{'NoDateIsSelected'|translate}}</div>
 							</div>
 
 							<wfm-popup show="toggleSchedule" class="datepicker-popup">
@@ -57,7 +57,7 @@
 								&nbsp;
 								&nbsp;
 								<div ng-if="vm.dateChangeRange.endDate">{{'To'|translate}}: {{vm.dateChangeRange.endDate | amDateFormat:"L"}}</div>
-								<div ng-if="!vm.dateChangeRange.endDate && !vm.dateChangeRange.startDate" class="text-warning"> No selected date</div>
+								<div ng-if="!vm.dateChangeRange.endDate && !vm.dateChangeRange.startDate" class="text-warning"> {{'NoDateIsSelected'|translate}}</div>
 							</div>
 
 							<wfm-popup show="toggleChange" class="datepicker-popup">
