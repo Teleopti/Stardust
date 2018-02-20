@@ -237,6 +237,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			}
 		}
 		
+		[RemoveMeWithToggle("merge with calling method", Toggles.ResourcePlanner_ScheduleDeadlock_48170)]
 		private void transactionRollbackNoTryCatch()
 		{
 			_transactionSynchronization = null;
