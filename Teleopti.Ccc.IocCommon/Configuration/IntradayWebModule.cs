@@ -63,16 +63,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<IncomingTrafficViewModelCreator>().SingleInstance();
 			builder.RegisterType<PerformanceViewModelCreator>().SingleInstance();
 			builder.RegisterType<EstimatedServiceLevelProvider>().SingleInstance();
-			if (_configuration.Toggle(Toggles.ResourcePlanner_UseErlangAWithInfinitePatience_45845))
-			{
-				builder.RegisterType<StaffingCalculatorServiceFacadeErlangA>().As<IStaffingCalculatorServiceFacade>()
-					.SingleInstance();
-			}
-			else
-			{
-				builder.RegisterType<StaffingCalculatorServiceFacade>().As<IStaffingCalculatorServiceFacade>().SingleInstance();
-			}
-
+			
 			builder.RegisterType<LatestStatisticsTimeProvider>().SingleInstance();
 			builder.RegisterType<ExtractSkillForecastIntervals>().SingleInstance();
 			builder.RegisterType<IntradayQueueStatisticsLoader>().As<IIntradayQueueStatisticsLoader>().SingleInstance();

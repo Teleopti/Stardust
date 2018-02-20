@@ -101,16 +101,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SkillCombinationResourceRepository>().As<ISkillCombinationResourceReader>().SingleInstance();
 
 			builder.RegisterType<SkillDayLoadHelper>().As<ISkillDayLoadHelper>().SingleInstance();
-			if (_configuration.Toggle(Toggles.ResourcePlanner_UseErlangAWithInfinitePatience_45845))
-			{
-				builder.RegisterType<StaffingCalculatorServiceFacadeErlangA>().As<IStaffingCalculatorServiceFacade>()
-					.SingleInstance();
-			}
-			else
-			{
-				builder.RegisterType<StaffingCalculatorServiceFacade>().As<IStaffingCalculatorServiceFacade>().SingleInstance();
-			}
-
 			builder.RegisterType<CascadingResourceCalculation>().As<IResourceCalculation>().SingleInstance();
 			builder.RegisterType<WeeklyRestSolverCommand>().ApplyAspects();
 			builder.RegisterType<ResourceOptimizationHelper>().SingleInstance();
