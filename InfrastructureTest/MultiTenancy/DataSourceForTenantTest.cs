@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 		public void CanFindDataSourceByTenant()
 		{
 			var dsName = Guid.NewGuid().ToString();
-			var ds = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory(dsName), null, null);
+			var ds = new DataSource(UnitOfWorkFactoryFactoryForTest.CreateUnitOfWorkFactory(dsName), null, null);
 			var target = new FakeDataSourceForTenant(null, null, null);
 			target.Has(ds);
 			target.Tenant(dsName).Should().Be.SameInstanceAs(ds);
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 		public void MissingDataSourceTenant()
 		{
 			var dsName = Guid.NewGuid().ToString();
-			var ds = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory(dsName), null, null);
+			var ds = new DataSource(UnitOfWorkFactoryFactoryForTest.CreateUnitOfWorkFactory(dsName), null, null);
 			var target = new FakeDataSourceForTenant(null, null, new FindTenantByNameWithEnsuredTransactionFake());
 			target.Has(ds);
 			target.Tenant("something else").Should().Be.Null();
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 		public void CanRemoveTenant()
 		{
 			var dsName = Guid.NewGuid().ToString();
-			var ds = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory(dsName), null, null);
+			var ds = new DataSource(UnitOfWorkFactoryFactoryForTest.CreateUnitOfWorkFactory(dsName), null, null);
 			var target = new FakeDataSourceForTenant(null, null, new FindTenantByNameWithEnsuredTransactionFake());
 			target.Has(ds);
 			target.RemoveDataSource(dsName);

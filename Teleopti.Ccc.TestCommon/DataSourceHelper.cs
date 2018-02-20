@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.TestCommon
 					enversConfiguration,
 					configurationSetter,
 					nHibernateConfigurationCache,
-					new UnitOfWorkFactoryNewerUper(
+					new UnitOfWorkFactoryFactory(
 						new NoPreCommitHooks(),
 						enversConfiguration,
 						hooks,

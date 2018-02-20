@@ -593,7 +593,7 @@
     <Compile Include="FakeData\TeamFactory.cs" />
     <Compile Include="FakeData\TimeFactory.cs" />
     <Compile Include="FakeData\TimeZoneInfoFactory.cs" />
-    <Compile Include="FakeData\UnitOfWorkFactoryFactory.cs" />
+    <Compile Include="FakeData\UnitOfWorkFactoryFactoryFortest.cs" />
     <Compile Include="FakeData\VisualLayerCollectionFactory.cs" />
     <Compile Include="FakeData\WorkloadDayFactory.cs" />
     <Compile Include="FakeData\WorkloadFactory.cs" />

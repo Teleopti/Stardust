@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
     /// <summary>
     /// Creates stubs of type IUnitOfWorkFactory
     /// </summary>
-    public static class UnitOfWorkFactoryFactory
+    public static class UnitOfWorkFactoryFactoryForTest
     {
         /// <summary>
         /// Creates the unit of work factory.

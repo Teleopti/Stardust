@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.OldTests
         public static void RunAsPeterWestlinJunior()
         {
             var state = new FakeState();
-	        var ds = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory("for test"), null, null);
+	        var ds = new DataSource(UnitOfWorkFactoryFactoryForTest.CreateUnitOfWorkFactory("for test"), null, null);
             var applicationData = StateHolderProxyHelper.CreateApplicationData(null);
             var businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
             

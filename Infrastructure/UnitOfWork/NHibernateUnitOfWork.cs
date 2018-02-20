@@ -7,6 +7,7 @@ using NHibernate;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Common.Messaging;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -28,6 +29,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private readonly ICurrentTransactionHooks _transactionHooks;
 		private readonly NHibernateFilterManager _filterManager;
 		private readonly NHibernateUnitOfWorkInterceptor _interceptor;
+		private readonly bool _toggle48170;
 		private ITransaction _transaction;
 		private IInitiatorIdentifier _initiator;
 		private TransactionSynchronization _transactionSynchronization;
@@ -37,13 +39,16 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			ISession session,
 			TransactionIsolationLevel isolationLevel,
 			NHibernateUnitOfWorkInterceptor interceptor,
-			ICurrentTransactionHooks transactionHooks)
+			ICurrentTransactionHooks transactionHooks,		
+			[RemoveMeWithToggle(Toggles.ResourcePlanner_ScheduleDeadlock_48170)]
+			bool toggle48170)
 		{
 			_clearContext = clearContext;
 			_session = session;
 			_session.FlushMode = FlushMode.Manual;
 			_isolationLevel = isolationLevel;
 			_interceptor = interceptor;
+			_toggle48170 = toggle48170;
 			_transactionHooks = transactionHooks ?? new NoTransactionHooks();
 			_filterManager = new NHibernateFilterManager(session);
 		}
@@ -207,7 +212,16 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private void transactionRollback()
 		{
 			if (_transaction == null || !_transaction.IsActive) return;
+			
+			if(_toggle48170)
+				transactionRollbackNoTryCatch();
+			else
+				transactionRollbackTryCatch();
+		}
 
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_ScheduleDeadlock_48170)]
+		private void transactionRollbackTryCatch()
+		{
 			_transactionSynchronization = null;
 			var transaction = _transaction;
 			_transaction = null;
@@ -221,6 +235,15 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				_logger.Error("Cannot rollback transaction!", ex);
 				//don't do anything - should be handled higher up the chain
 			}
+		}
+		
+		private void transactionRollbackNoTryCatch()
+		{
+			_transactionSynchronization = null;
+			var transaction = _transaction;
+			_transaction = null;
+			transaction.Rollback();
+			transaction.Dispose();
 		}
 
 		public bool Contains(IEntity entity)

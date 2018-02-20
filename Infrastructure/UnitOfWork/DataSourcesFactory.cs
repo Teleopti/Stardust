@@ -7,90 +7,16 @@ using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Common.Logging;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Analytics;
-using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
-using Teleopti.Ccc.Infrastructure.Web;
 using Environment = NHibernate.Cfg.Environment;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-	public class UnitOfWorkFactoryNewerUper
-	{
-		private readonly ICurrentPreCommitHooks _currentPreCommitHooks;
-		private readonly IEnversConfiguration _enversConfiguration;
-		private readonly ICurrentTransactionHooks _transactionHooks;
-		private readonly ICurrentHttpContext _httpContext;
-		private readonly IUpdatedBy _updatedBy;
-		private readonly ICurrentBusinessUnit _businessUnit;
-		private readonly INestedUnitOfWorkStrategy _nestedUnitOfWorkStrategy;
-
-		public UnitOfWorkFactoryNewerUper(
-			ICurrentPreCommitHooks currentPreCommitHooks,
-			IEnversConfiguration enversConfiguration,
-			ICurrentTransactionHooks transactionHooks,
-			ICurrentHttpContext httpContext,
-			IUpdatedBy updatedBy,
-			ICurrentBusinessUnit businessUnit,
-			INestedUnitOfWorkStrategy nestedUnitOfWorkStrategy)
-		{
-			_currentPreCommitHooks = currentPreCommitHooks;
-			_enversConfiguration = enversConfiguration;
-			_transactionHooks = transactionHooks;
-			_httpContext = httpContext;
-			_updatedBy = updatedBy;
-			_businessUnit = businessUnit;
-			_nestedUnitOfWorkStrategy = nestedUnitOfWorkStrategy;
-		}
-
-		public NHibernateUnitOfWorkInterceptor MakeInterceptor()
-		{
-			return new NHibernateUnitOfWorkInterceptor(_updatedBy, _currentPreCommitHooks);
-		}
-
-		public NHibernateUnitOfWorkFactory MakeAppFactory(
-			ISessionFactory sessionFactory,
-			string connectionString,
-			string tenant)
-		{
-			return new NHibernateUnitOfWorkFactory(
-				sessionFactory,
-				_enversConfiguration.AuditSettingProvider,
-				connectionString,
-				_transactionHooks,
-				tenant,
-				_businessUnit,
-				_nestedUnitOfWorkStrategy,
-				this);
-		}
-
-		public AnalyticsUnitOfWorkFactory MakeAnalyticsFactory(
-			ISessionFactory sessionFactory,
-			string connectionString,
-			string tenant)
-		{
-			return new AnalyticsUnitOfWorkFactory(
-				sessionFactory,
-				connectionString,
-				tenant
-			);
-		}
-
-		public ReadModelUnitOfWorkFactory MakeReadModelFactory(
-			string applicationConnectionString
-		)
-		{
-			var factory = new ReadModelUnitOfWorkFactory(_httpContext, applicationConnectionString);
-			factory.Configure();
-			return factory;
-		}
-	}
-
 	public class DataSourcesFactory : IDataSourcesFactory
 	{
 		private readonly IEnversConfiguration _enversConfiguration;
-		private readonly UnitOfWorkFactoryNewerUper _unitOfWorkFactoryNewerUper;
+		private readonly UnitOfWorkFactoryFactory _unitOfWorkFactoryFactory;
 		private readonly IDataSourceConfigurationSetter _dataSourceConfigurationSetter;
 		private readonly INHibernateConfigurationCache _nhibernateConfigurationCache;
 
@@ -100,12 +26,12 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			IEnversConfiguration enversConfiguration,
 			IDataSourceConfigurationSetter dataSourceConfigurationSetter,
 			INHibernateConfigurationCache nhibernateConfigurationCache,
-			UnitOfWorkFactoryNewerUper unitOfWorkFactoryNewerUper)
+			UnitOfWorkFactoryFactory unitOfWorkFactoryFactory)
 		{
 			_enversConfiguration = enversConfiguration;
 			_dataSourceConfigurationSetter = dataSourceConfigurationSetter;
 			_nhibernateConfigurationCache = nhibernateConfigurationCache;
-			_unitOfWorkFactoryNewerUper = unitOfWorkFactoryNewerUper;
+			_unitOfWorkFactoryFactory = unitOfWorkFactoryFactory;
 		}
 
 		public IDataSource Create(IDictionary<string, string> applicationNhibConfiguration, string statisticConnectionString)
@@ -144,7 +70,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			NHibernateUnitOfWorkFactory appFactory;
 			try
 			{
-				appFactory = _unitOfWorkFactoryNewerUper.MakeAppFactory(
+				appFactory = _unitOfWorkFactoryFactory.MakeAppFactory(
 					buildSessionFactory(configuration),
 					applicationConnectionString,
 					tenant);
@@ -165,13 +91,13 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 					"Teleopti.Ccc.Domain.Analytics.AnalyticsBridgeTimeZone.analytics.xml",
 					"Teleopti.Ccc.Domain.Analytics.AnalyticsDate.analytics.xml"
 				}, typeof(AnalyticsPermission).Assembly);
-				statFactory = _unitOfWorkFactoryNewerUper.MakeAnalyticsFactory(
+				statFactory = _unitOfWorkFactoryFactory.MakeAnalyticsFactory(
 					buildSessionFactory(statConfiguration),
 					statConfiguration.Properties[Environment.ConnectionString],
 					tenant);
 			}
 
-			var readModel = _unitOfWorkFactoryNewerUper.MakeReadModelFactory(applicationConnectionString);
+			var readModel = _unitOfWorkFactoryFactory.MakeReadModelFactory(applicationConnectionString);
 
 			return new DataSource(appFactory, statFactory, readModel);
 		}

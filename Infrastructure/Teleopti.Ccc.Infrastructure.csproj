@@ -625,6 +625,7 @@
     <Compile Include="UnitOfWork\CurrentSchedulingSource.cs" />
     <Compile Include="UnitOfWork\DisableBusinessUnitFilter.cs" />
     <Compile Include="UnitOfWork\ICurrentPreCommitHooks.cs" />
+    <Compile Include="UnitOfWork\INestedUnitOfWorkStrategy.cs" />
     <Compile Include="UnitOfWork\IPreCommitHook.cs" />
     <Compile Include="UnitOfWork\INHibernateConfigurationCache.cs" />
     <Compile Include="UnitOfWork\KeepScheduleEvents.cs" />
@@ -646,8 +647,11 @@
     <Compile Include="UnitOfWork\ITransactionHooksScope.cs" />
     <Compile Include="UnitOfWork\NoTransactionHooks.cs" />
     <Compile Include="UnitOfWork\SetSourceOnPersonAssignment.cs" />
+    <Compile Include="UnitOfWork\SirLeakAlot.cs" />
+    <Compile Include="UnitOfWork\ThrowOnNestedUnitOfWork.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkAspect.cs" />
     <Compile Include="UnitOfWork\AllBusinessUnitsUnitOfWorkAspect.cs" />
+    <Compile Include="UnitOfWork\UnitOfWorkFactoryFactory.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkNoCommitAspect.cs" />
     <Compile Include="Util\ApplicationInsightsFilterOutSignalR.cs" />
     <Compile Include="Util\ApplicationsInsigths.cs" />

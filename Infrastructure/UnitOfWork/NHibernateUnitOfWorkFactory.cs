@@ -1,34 +1,12 @@
-using System;
 using NHibernate;
 using NHibernate.Engine;
-using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-	public interface INestedUnitOfWorkStrategy
-	{
-		void Strategize(ApplicationUnitOfWorkContext context);
-	}
-
-	public class SirLeakAlot : INestedUnitOfWorkStrategy
-	{
-		public void Strategize(ApplicationUnitOfWorkContext context)
-		{
-		}
-	}
-
-	public class ThrowOnNestedUnitOfWork : INestedUnitOfWorkStrategy
-	{
-		public void Strategize(ApplicationUnitOfWorkContext context)
-		{
-			if (context.Get() != null)
-				throw new NestedUnitOfWorkException();
-		}
-	}
-
 	public class NHibernateUnitOfWorkFactory : IUnitOfWorkFactory
 	{
 		private readonly ISessionFactory _factory;
@@ -37,7 +15,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private readonly ICurrentTransactionHooks _transactionHooks;
 		private readonly ICurrentBusinessUnit _businessUnit;
 		private readonly INestedUnitOfWorkStrategy _nestedUnitOfWorkStrategy;
-		private readonly UnitOfWorkFactoryNewerUper _unitOfWorkFactoryNewerUper;
+		private readonly UnitOfWorkFactoryFactory _unitOfWorkFactoryFactory;
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_ScheduleDeadlock_48170)]
+		private readonly bool _toggle48170;
 
 		// can not inject here because the lifetime of the factory
 		// is longer than the container when running unit tests
@@ -49,7 +29,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			string tenant,
 			ICurrentBusinessUnit businessUnit,
 			INestedUnitOfWorkStrategy nestedUnitOfWorkStrategy, 
-			UnitOfWorkFactoryNewerUper unitOfWorkFactoryNewerUper)
+			UnitOfWorkFactoryFactory unitOfWorkFactoryFactory,
+			bool toggle48170)
 		{
 			ConnectionString = connectionString;
 			_factory = sessionFactory;
@@ -58,7 +39,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_transactionHooks = transactionHooks;
 			_businessUnit = businessUnit;
 			_nestedUnitOfWorkStrategy = nestedUnitOfWorkStrategy;
-			_unitOfWorkFactoryNewerUper = unitOfWorkFactoryNewerUper;
+			_unitOfWorkFactoryFactory = unitOfWorkFactoryFactory;
+			_toggle48170 = toggle48170;
 		}
 
 		public string Name => ((ISessionFactoryImplementor) _factory).Settings.SessionFactoryName;
@@ -108,7 +90,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			_nestedUnitOfWorkStrategy.Strategize(_context);
 
-			var interceptor = _unitOfWorkFactoryNewerUper.MakeInterceptor();
+			var interceptor = _unitOfWorkFactoryFactory.MakeInterceptor();
 			var session = _factory
 				.WithOptions()
 				.Interceptor(interceptor)
@@ -123,7 +105,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				session,
 				isolationLevel,
 				interceptor,
-				_transactionHooks);
+				_transactionHooks,
+				_toggle48170);
 			_context.Set(unitOfWork);
 
 			return unitOfWork;
