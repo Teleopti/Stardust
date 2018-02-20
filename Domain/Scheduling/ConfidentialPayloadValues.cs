@@ -13,8 +13,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 	    public static Description TranslatedDescription(IUserTextTranslator userTextTranslator)
 	    {
-		    return new Description(userTextTranslator.TranslateText(Resources.ConfidentPayloadName),
-			    userTextTranslator.TranslateText(Resources.ConfidentPayloadShortName));
+		    return new Description(userTextTranslator.TranslateText(nameof(Resources.ConfidentPayloadName)),
+			    userTextTranslator.TranslateText(nameof(Resources.ConfidentPayloadShortName)));
 	    }
     }
 }

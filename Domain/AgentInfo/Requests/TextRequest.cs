@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.AgentInfo.Requests
@@ -12,8 +13,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
     public class TextRequest : Request
     {
         private string _typeDescription = UserTexts.Resources.RequestTypeText;
-        private const string _textRequestHasBeenApprovedDot = "TextRequestHasBeenApprovedDot";
-        private const string _textRequestHasBeenDeniedDot = "TextRequestHasBeenDeniedDot";
+        private const string _textRequestHasBeenApprovedDot =  nameof(Resources.TextRequestHasBeenApprovedDot);
+        private const string _textRequestHasBeenDeniedDot = nameof(Resources.TextRequestHasBeenDeniedDot);
 
         /// <summary>
         /// Constructor for NHibernate

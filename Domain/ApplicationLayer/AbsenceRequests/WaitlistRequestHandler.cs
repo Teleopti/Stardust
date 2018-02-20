@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Resources;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Aop;
@@ -89,7 +90,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					{
 						pRequest.Deny(result.ValidationErrors, new PersonRequestCheckAuthorization(), null,
 							PersonRequestDenyOption.AutoDeny | result.DenyOption.GetValueOrDefault(PersonRequestDenyOption.None));
-						_stardustJobFeedback.SendProgress(result.ValidationErrors);
+						_stardustJobFeedback.SendProgress(Resources.ResourceManager.GetString(result.ValidationErrors));
 						continue;
 					}
 					if (isRequestUsingShrinkage(pRequest))
@@ -173,7 +174,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 				if (!_rollbackService.ModifyStrictly(requestScheduledDays, new NoScheduleTagSetter(), dataHolder.BusinessRules))
 				{
-					pRequest.Deny(Resources.RequestDenyReasonPersonAccount, new PersonRequestCheckAuthorization());
+					pRequest.Deny(nameof(Resources.RequestDenyReasonPersonAccount), new PersonRequestCheckAuthorization());
 					continue;
 				}
 				

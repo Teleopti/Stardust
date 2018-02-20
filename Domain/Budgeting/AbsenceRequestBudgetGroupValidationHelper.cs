@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Budgeting
 		public static IValidatedRequest PersonPeriodOrBudgetGroupIsNull(CultureInfo langauage, Guid? personId)
 		{
 			var logInfo = string.Format("There is no budget group for person: {0}.", personId);
-			var errorInfo = Resources.ResourceManager.GetString("BudgetGroupMissing",
+			var errorInfo = Resources.ResourceManager.GetString(nameof(Resources.BudgetGroupMissing),
                 langauage) ?? Resources.BudgetGroupMissing;
 
 			return logAndReturnValidatedRequest(logInfo, errorInfo);
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Budgeting
 		public static IValidatedRequest BudgetDaysAreNull(CultureInfo langauage, CultureInfo culture, DateOnlyPeriod requestedPeriod)
 		{
 			var logInfo = string.Format("There is no budget for this period {0}.", requestedPeriod);
-			var errorInfo = string.Format(Resources.ResourceManager.GetString("NoBudgetForThisPeriod",
+			var errorInfo = string.Format(Resources.ResourceManager.GetString(nameof(Resources.NoBudgetForThisPeriod),
                 langauage) ?? Resources.NoBudgetForThisPeriod, requestedPeriod.ToShortDateString(culture));
 			return logAndReturnValidatedRequest(logInfo, errorInfo);
 		}
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Budgeting
 		public static IValidatedRequest BudgetDaysAreNotEqualToRequestedPeriodDays(CultureInfo langauage, CultureInfo culture, DateOnlyPeriod requestedPeriod)
 		{
 			var logInfo = string.Format("One or more days during this requested period {0} has no budget.", requestedPeriod);
-			var errorInfo = string.Format(Resources.ResourceManager.GetString("NoBudgetDefineForSomeRequestedDays",
+			var errorInfo = string.Format(Resources.ResourceManager.GetString(nameof(Resources.NoBudgetDefineForSomeRequestedDays),
                 langauage) ?? Resources.NoBudgetDefineForSomeRequestedDays, requestedPeriod.ToShortDateString(culture));
 			return logAndReturnValidatedRequest(logInfo, errorInfo);
 		}

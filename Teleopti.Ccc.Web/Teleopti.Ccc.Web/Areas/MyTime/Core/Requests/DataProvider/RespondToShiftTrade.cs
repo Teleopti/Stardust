@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 
@@ -69,7 +70,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 				return new RequestViewModel();
 			}
 			personRequest.TrySetMessage(message);
-			personRequest.Deny("RequestDenyReasonOtherPart", _personRequestCheckAuthorization, _loggedOnUser.CurrentUser());
+			personRequest.Deny(nameof(Resources.RequestDenyReasonOtherPart), _personRequestCheckAuthorization, _loggedOnUser.CurrentUser());
 
 			return _mapper.Map(personRequest);
 		}

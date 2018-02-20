@@ -112,13 +112,13 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			string notification;
 			if (isShiftTradeRequestForOneDayOnly())
 			{
-				var notificationTemplate = getNotificationTemplate("ShiftTradeRequestForOneDayHasBeenAcceptedDot", language);
+				var notificationTemplate = getNotificationTemplate(nameof(Resources.ShiftTradeRequestForOneDayHasBeenAcceptedDot), language);
 				notification = string.Format(culture, notificationTemplate,
 					Period.StartDateTimeLocal(timezone).ToString(datePattern));
 			}
 			else
 			{
-				var notificationTemplate = getNotificationTemplate("ShiftTradeRequestHasBeenAcceptedDot", language);
+				var notificationTemplate = getNotificationTemplate(nameof(Resources.ShiftTradeRequestHasBeenAcceptedDot), language);
 				notification = string.Format(culture, notificationTemplate,
 					Period.StartDateTimeLocal(timezone).ToString(datePattern),
 					Period.EndDateTimeLocal(timezone).ToString(datePattern));
@@ -137,13 +137,13 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			string notification;
 			if (isShiftTradeRequestForOneDayOnly())
 			{
-				var notificationTemplate = getNotificationTemplate("ANewShiftTradeForOneDayHasBeenCreatedDot", language);
+				var notificationTemplate = getNotificationTemplate(nameof(Resources.ANewShiftTradeForOneDayHasBeenCreatedDot), language);
 				notification = string.Format(culture, notificationTemplate,
 					Period.StartDateTimeLocal(timezone).ToString(datePattern));
 			}
 			else
 			{
-				var notificationTemplate = getNotificationTemplate("ANewShiftTradeHasBeenCreatedDot", language);
+				var notificationTemplate = getNotificationTemplate(nameof(Resources.ANewShiftTradeHasBeenCreatedDot), language);
 				notification = string.Format(culture, notificationTemplate,
 					Period.StartDateTimeLocal(timezone).ToString(datePattern),
 					Period.EndDateTimeLocal(timezone).ToString(datePattern));
@@ -162,13 +162,13 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			string notification;
 			if (isShiftTradeRequestForOneDayOnly())
 			{
-				var notificationTemplate = getNotificationTemplate("ShiftTradeRequestForOneDayHasBeenDeniedDot", language);
+				var notificationTemplate = getNotificationTemplate(nameof(Resources.ShiftTradeRequestForOneDayHasBeenDeniedDot), language);
 				notification = string.Format(culture, notificationTemplate,
 					Period.StartDateTimeLocal(timezone).ToString(datePattern));
 			}
 			else
 			{
-				var notificationTemplate = getNotificationTemplate("ShiftTradeRequestHasBeenDeniedDot", language);
+				var notificationTemplate = getNotificationTemplate(nameof(Resources.ShiftTradeRequestHasBeenDeniedDot), language);
 				notification = string.Format(culture, notificationTemplate,
 					Period.StartDateTimeLocal(timezone).ToString(datePattern),
 					Period.EndDateTimeLocal(timezone).ToString(datePattern));
@@ -187,13 +187,13 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			string notification;
 			if (!isShiftTradeRequestForOneDayOnly())
 			{
-				var notificationTemplate = getNotificationTemplate("ShiftTradeRequestForOneDayHasBeenReferredDot", language);
+				var notificationTemplate = getNotificationTemplate(nameof(Resources.ShiftTradeRequestForOneDayHasBeenReferredDot), language);
 				notification = string.Format(culture, notificationTemplate,
 					Period.StartDateTimeLocal(timezone).ToString(datePattern));
 			}
 			else
 			{
-				var notificationTemplate = getNotificationTemplate("ShiftTradeRequestHasBeenReferredDot", language);
+				var notificationTemplate = getNotificationTemplate(nameof(Resources.ShiftTradeRequestHasBeenReferredDot), language);
 				notification = string.Format(culture, notificationTemplate,
 					Period.StartDateTimeLocal(timezone).ToString(datePattern),
 					Period.EndDateTimeLocal(timezone).ToString(datePattern));
@@ -212,13 +212,13 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			string notification;
 			if (isShiftTradeRequestForOneDayOnly())
 			{
-				var notificationTemplate = getNotificationTemplate("ShiftTradeRequestForOneDayHasBeenApprovedDot", language);
+				var notificationTemplate = getNotificationTemplate(nameof(Resources.ShiftTradeRequestForOneDayHasBeenApprovedDot), language);
 				notification = string.Format(culture, notificationTemplate,
 					Period.StartDateTimeLocal(timezone).ToString(datePattern));
 			}
 			else
 			{
-				var notificationTemplate = getNotificationTemplate("ShiftTradeRequestHasBeenApprovedDot", language);
+				var notificationTemplate = getNotificationTemplate(nameof(Resources.ShiftTradeRequestHasBeenApprovedDot), language);
 				notification = string.Format(culture, notificationTemplate,
 					Period.StartDateTimeLocal(timezone).ToString(datePattern),
 					Period.EndDateTimeLocal(timezone).ToString(datePattern));

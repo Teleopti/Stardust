@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		}
 
 		[Test]
-		[Culture("en-US")]
+		[SetCulture("en-US")]
 		public void ShouldReturnErrorWhenDenyADeniedRequest()
 		{
 			var personRequest = createPersonRequest();
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		}
 
 		[Test]
-		[Culture("en-US")]
+		[SetCulture("en-US")]
 		public void CanDenyAWaitlistedRequest()
 		{
 			var absence = new Absence();

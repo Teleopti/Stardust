@@ -1,4 +1,5 @@
 ﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 {
@@ -6,7 +7,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 	{
 		private readonly IRequestPresenterCallback _callback;
 		private readonly IPersonRequestCheckAuthorization _authorization;
-		private const string DenyReasonResourceKey = "RequestDenyReasonSupervisor";
+		private const string denyReasonResourceKey = nameof(Resources.RequestDenyReasonSupervisor);
 
 		public DenyPersonRequestCommand(IRequestPresenterCallback callback, IPersonRequestCheckAuthorization authorization)
 		{
@@ -16,7 +17,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 
 		public void Execute()
 		{
-			Model.PersonRequest.Deny(DenyReasonResourceKey,_authorization);
+			Model.PersonRequest.Deny(denyReasonResourceKey,_authorization);
 			_callback.CommitUndo();
 		}
 

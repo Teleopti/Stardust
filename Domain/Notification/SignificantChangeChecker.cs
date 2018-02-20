@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Domain.Notification
 				return ret;
 			}
 
-			ret.Subject = UserTexts.Resources.ResourceManager.GetString("YourWorkingHoursHaveChanged", lang);
+			ret.Subject = UserTexts.Resources.ResourceManager.GetString(UserTexts.Resources.YourWorkingHoursHaveChanged, lang);
 			ret.Data = new ExpandoObject();
 			ret.Data.domainType = nameof(ScheduleChangedInDefaultScenario);
 			return ret;

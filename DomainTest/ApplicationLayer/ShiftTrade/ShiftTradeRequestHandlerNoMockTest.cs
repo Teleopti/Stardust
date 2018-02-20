@@ -4,6 +4,7 @@ using System.IdentityModel.Claims;
 using System.Linq;
 using System.Threading;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
@@ -177,7 +178,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 
 			Assert.IsTrue(result2.PersonRequest.IsApproved);
 			Assert.IsTrue(result1.PersonRequest.IsDenied);
-			Assert.IsTrue(result1.PersonRequest.DenyReason.Equals(Resources.ShiftTradeRequestForExchangeOfferHasBeenCompleted));
+			result1.PersonRequest.DenyReason.Should().Be(nameof(Resources.ShiftTradeRequestForExchangeOfferHasBeenCompleted));
 		}
 
 		[Test]

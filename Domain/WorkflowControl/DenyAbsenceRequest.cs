@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl
 {
@@ -7,7 +8,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 	{
 		public DenyAbsenceRequest()
 		{
-			DenyReason = "RequestDenyReasonAutodeny";
+			DenyReason = nameof(Resources.RequestDenyReasonAutodeny);
 		}
 
 		public override string DisplayText

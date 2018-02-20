@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using Teleopti.Analytics.ReportTexts;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -179,13 +180,13 @@ namespace Teleopti.Wfm.Administration.Core
 			const EnumTargetValueType percent = EnumTargetValueType.TargetValueTypePercent;
 			return new List<IKeyPerformanceIndicator>
 			{
-				new KeyPerformanceIndicator("Readiness (%)", "KpiReadiness", percent, 80, 75, 80, yellow, red, green),
-				new KeyPerformanceIndicator("Average After Call Work (s)", "KpiAverageAfterCallWork", number, 20, 0, 40, green, green, red),
-				new KeyPerformanceIndicator("Average Handle Time (s)", "KpiAverageHandleTime", number, 140, 30, 180, green, yellow, red),
-				new KeyPerformanceIndicator("Answered Calls per Scheduled Phone Hour", "KpiAnsweredCallsPerScheduledPhoneHour", number, 25, 0, 10, yellow, red, green),
-				new KeyPerformanceIndicator("Adherence (%)", "KpiAdherence", percent, 80, 75, 80, yellow, red, green),
-				new KeyPerformanceIndicator("Average Talk Time (s)", "KpiAverageTalkTime", number, 120, 30, 160, green, yellow, red),
-				new KeyPerformanceIndicator("Absenteeism (%)", "KpiAbsenteeism", percent, 5, 4, 6, yellow, green, red)
+				new KeyPerformanceIndicator("Readiness (%)", nameof(Resources.KpiReadiness), percent, 80, 75, 80, yellow, red, green),
+				new KeyPerformanceIndicator("Average After Call Work (s)",  nameof(Resources.KpiAverageAfterCallWork), number, 20, 0, 40, green, green, red),
+				new KeyPerformanceIndicator("Average Handle Time (s)",  nameof(Resources.KpiAverageHandleTime), number, 140, 30, 180, green, yellow, red),
+				new KeyPerformanceIndicator("Answered Calls per Scheduled Phone Hour",  nameof(Resources.KpiAnsweredCallsPerScheduledPhoneHour), number, 25, 0, 10, yellow, red, green),
+				new KeyPerformanceIndicator("Adherence (%)",  nameof(Resources.KpiAdherence), percent, 80, 75, 80, yellow, red, green),
+				new KeyPerformanceIndicator("Average Talk Time (s)",  nameof(Resources.KpiAverageTalkTime), number, 120, 30, 160, green, yellow, red),
+				new KeyPerformanceIndicator("Absenteeism (%)", nameof(Resources.KpiAbsenteeism), percent, 5, 4, 6, yellow, green, red)
 			};
 		}
 

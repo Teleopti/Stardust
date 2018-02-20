@@ -1,5 +1,6 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.Domain.Kpi
 {
@@ -15,11 +16,11 @@ namespace Teleopti.Ccc.Domain.Kpi
     {
         private readonly int _id;
         private readonly string _name;
-        private const string PERIODDAY = "Day";
-        private const string PERIODWEEK = "Week";
-        private const string PERIODMONTH = "Month";
-        private const string PERIODQUARTER = "Quarter";
-        private const string PERIODYEAR = "Year";
+        private const string PERIODDAY = nameof(Resources.Day);
+        private const string PERIODWEEK = nameof(Resources.Week);
+        private const string PERIODMONTH = nameof(Resources.Month);
+        private const string PERIODQUARTER = nameof(Resources.Quarter);
+        private const string PERIODYEAR = nameof(Resources.Year);
 
 
         /// <summary>

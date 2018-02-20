@@ -21,6 +21,7 @@ using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.UndoRedo;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Absence
@@ -326,7 +327,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			var command = new DenyRequestCommand
 			{
 				PersonRequestId = personRequest.Id.GetValueOrDefault(),
-				DenyReason = UserTexts.Resources.ResourceManager.GetString("DenyReasonTechnicalIssues", personRequest.Person.PermissionInformation.Culture()),
+				DenyReason = Resources.ResourceManager.GetString(nameof(Resources.DenyReasonTechnicalIssues), personRequest.Person.PermissionInformation.Culture()),
 				DenyOption = PersonRequestDenyOption.None
 			};
 

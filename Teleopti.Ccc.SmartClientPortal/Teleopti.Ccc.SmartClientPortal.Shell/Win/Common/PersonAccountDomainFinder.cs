@@ -131,6 +131,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
             string searchText = searchCriteria.SearchText;
             CultureInfo currentCulture = CultureInfo.CurrentCulture;
 
+			if (account == null) return false;
+			
             if (searchCriteria.IsCaseSensitive)
             {
                 isFound = account.StartDate.ToShortDateString().Contains(searchText) ||

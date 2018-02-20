@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 				return requestExpired;
 
 			if (_alreadyAbsentValidator.Validate(absenceRequest, scheduleRange))
-				return new ValidatedRequest { IsValid = false, ValidationErrors = Resources.RequestDenyReasonAlreadyAbsent
+				return new ValidatedRequest { IsValid = false, ValidationErrors = nameof(Resources.RequestDenyReasonAlreadyAbsent)
 					, DenyOption = PersonRequestDenyOption.AlreadyAbsence };
 
 			var workflowControlSet = personRequest.Person.WorkflowControlSet;
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 			var personAccountValidateResult = AbsenceRequestPersonAccountValidator.ValidatedRequestWithPersonAccount(personRequest, scheduleRange, personAbsenceAccount);
 			if (!personAccountValidateResult.IsValid)
-				return new ValidatedRequest { IsValid = false, ValidationErrors = Resources.RequestDenyReasonPersonAccount
+				return new ValidatedRequest { IsValid = false, ValidationErrors = nameof(Resources.RequestDenyReasonPersonAccount)
 					, DenyOption = PersonRequestDenyOption.InsufficientPersonAccount };
 
 			// We don't check open hours when we process waitlist 

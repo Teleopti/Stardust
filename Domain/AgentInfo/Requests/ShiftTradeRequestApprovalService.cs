@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			var otherShiftTradeRequests = shiftTradeRequests.Where(a => !a.Id.Equals(request.Parent.Id.GetValueOrDefault()));
 			foreach (var otherShiftTradeRequest in otherShiftTradeRequests)
 			{
-				otherShiftTradeRequest.Deny(Resources.ShiftTradeRequestForExchangeOfferHasBeenCompleted,
+				otherShiftTradeRequest.Deny(nameof(Resources.ShiftTradeRequestForExchangeOfferHasBeenCompleted),
 					_personRequestCheckAuthorization);
 			}
 		}

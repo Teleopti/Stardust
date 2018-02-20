@@ -195,8 +195,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			_requestApprovalService.Approve(personRequest3.Request);
 
 			personRequest2.IsDenied.Should().Be(true);
-			personRequest2.DenyReason.Should().Be(Resources.ShiftTradeRequestForExchangeOfferHasBeenCompleted);
-
+			personRequest2.DenyReason.Should().Be(nameof(Resources.ShiftTradeRequestForExchangeOfferHasBeenCompleted));
 			personRequest3.IsPending.Should().Be(true);
 		}
 

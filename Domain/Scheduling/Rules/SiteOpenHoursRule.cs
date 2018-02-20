@@ -89,5 +89,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				scheduleTimePeriod.StartDateTimeLocal(timeZone),
 				scheduleTimePeriod.EndDateTimeLocal(timeZone));
 		}
+		
+		// NOTE: These strings are only added to create references to translation keys
+		private const string monday = nameof(Resources.Monday);
+		private const string tuesday = nameof(Resources.Tuesday);
+		private const string wednesday = nameof(Resources.Wednesday);
+		private const string thursday = nameof(Resources.Thursday);
+		private const string friday = nameof(Resources.Friday);
+		private const string saturday = nameof(Resources.Saturday);
+		private const string sunday = nameof(Resources.Sunday);
 	}
 }

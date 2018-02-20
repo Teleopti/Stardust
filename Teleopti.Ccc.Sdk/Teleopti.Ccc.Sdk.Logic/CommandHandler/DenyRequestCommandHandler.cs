@@ -24,13 +24,12 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Handle(DenyRequestCommandDto command)
         {
-            IPersonRequest personRequest;
-            using (var uow = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			using (var uow = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
             {
-                personRequest = _personRequestRepository.Get(command.PersonRequestId);
+                var personRequest = _personRequestRepository.Get(command.PersonRequestId);
                 try
                 {
-                    personRequest.Deny("RequestDenyReasonSupervisor",
+                    personRequest.Deny(nameof(UserTexts.Resources.RequestDenyReasonSupervisor),
                                        _authorization);
                 }
                 catch (InvalidRequestStateTransitionException e)
