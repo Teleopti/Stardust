@@ -622,6 +622,7 @@
     <Compile Include="UnitOfWork\AnalyticsUnitOfWork.cs" />
     <Compile Include="UnitOfWork\ASMScheduleChangeTimePersister.cs" />
     <Compile Include="UnitOfWork\CurrentAnalyticsUnitOfWorkFactory.cs" />
+    <Compile Include="UnitOfWork\CurrentPreCommitHooks.cs" />
     <Compile Include="UnitOfWork\CurrentSchedulingSource.cs" />
     <Compile Include="UnitOfWork\DisableBusinessUnitFilter.cs" />
     <Compile Include="UnitOfWork\ICurrentPreCommitHooks.cs" />
