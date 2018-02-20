@@ -51,7 +51,13 @@ namespace CheckPreRequisites.Checks
 			{
 				case 6:
 					if (SystemInfo.Version == WindowsVersion.WindowsServer2008R2 || SystemInfo.Version == WindowsVersion.WindowsServer2012
-					    || SystemInfo.Version == WindowsVersion.WindowsServer2012R2 || SystemInfo.Version == WindowsVersion.WindowsServer2016)
+					    || SystemInfo.Version == WindowsVersion.WindowsServer2012R2 )
+						_form1.printFeatureStatus(true, "", lineNumber);
+					else
+						_form1.printFeatureStatus(false, "", lineNumber);
+					break;
+				case 10:
+					if(SystemInfo.Version == WindowsVersion.WindowsServer2016)
 						_form1.printFeatureStatus(true, "", lineNumber);
 					else
 						_form1.printFeatureStatus(false, "", lineNumber);
