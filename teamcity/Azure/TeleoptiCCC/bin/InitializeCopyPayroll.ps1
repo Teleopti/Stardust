@@ -1,13 +1,4 @@
-﻿$path = Get-Location
-$scriptName = $MyInvocation.MyCommand.Name
-$scriptLog = "$path\$scriptName.log"
-
-$admin = 'ScheduleTaskAdmin'
-$taskName = 'CopyPayrollDll'
-#$taskName2 = 'ClickOnceSign'
-$FailedTaskSetup = "This means that customized Payroll Exports will not function at all and that is a CRITICAL issue."
-
-function New-RandomPassword {
+﻿function New-RandomPassword {
 
     [CmdletBinding(DefaultParameterSetName='FixedLength',ConfirmImpact='None')]
     [OutputType([String])]
@@ -108,7 +99,26 @@ function New-RandomPassword {
 
 Try 
 {
-    
+    #Get local path
+    [string]$global:scriptPath = split-path -parent $MyInvocation.MyCommand.Definition
+    [string]$global:ScriptFileName = $MyInvocation.MyCommand.Name
+    Set-Location $scriptPath
+
+ 	#start log4net
+	$log4netPath = $scriptPath + "\log4net"
+    Unblock-File -Path "$log4netPath\log4net.ps1"
+    . "$log4netPath\log4net.ps1";
+    $configFile = new-object System.IO.FileInfo($log4netPath + "\log4net.config");
+    configure-logging -configFile "$configFile" -serviceName "$serviceName"
+	
+	log-info "running: $ScriptFileName"
+	
+	$admin = 'ScheduleTaskAdmin'
+	$taskName = 'CopyPayrollDll'
+
+	$FailedTaskSetup = "This means that customized Payroll Exports will not function at all and that is a CRITICAL issue."
+	
+	
     $userExits = Get-localuser -Name $admin -ErrorAction SilentlyContinue
 
     if ($userExits) {
@@ -119,21 +129,21 @@ Try
     $pwd = New-RandomPassword
     $SecurePassword = ConvertTo-SecureString "$pwd" –asplaintext –force 
 
-    Write-Output "Creating temporary user '$admin' with password $pwd" | out-file $scriptLog -Append
-    New-LocalUser -Name $admin -Password $SecurePassword -FullName "Payroll Automation" -Description "Payroll" | out-null
+    log-info "Creating temporary user '$admin'" 
+    New-LocalUser -Name $admin -Password $SecurePassword -FullName "Payroll Automation" -Description "Payroll"
 
-    Write-Output "Adding user '$admin' to 'Administrators' group..." | out-file $scriptLog -Append
+    log-info "Adding user '$admin' to 'Administrators' group..."
     Add-LocalGroupMember -Group "Administrators" -Member "$admin"
     
 
-    Start-Service "task scheduler" | out-file $scriptLog -Append
+    Start-Service "task scheduler"
 
     $taskExists = Get-ScheduledTask -TaskName $taskName -ErrorAction SilentlyContinue
 
         if ($taskExists) {
         
-            Write-Host "Removing Scheduled task '$taskName'..."
-            Unregister-ScheduledTask -TaskName $taskName -Confirm:$false | out-file $scriptLog -Append
+            log-info "Removing Scheduled task '$taskName'..."
+            Unregister-ScheduledTask -TaskName $taskName -Confirm:$false
         }
 
  <#   $taskExists = Get-ScheduledTask -TaskName $taskName2 -ErrorAction SilentlyContinue
@@ -145,22 +155,24 @@ Try
         }
  #>
    
-    #Schedule task every 20 minutes
-    $setupTask = schtasks /create /sc minute /mo 20 /tn "$taskName" /f /ru "$admin" /rp "$pwd" /tr "$path\CopyPayrollDll.cmd" 2>&1 #| Out-File $scriptLog -Append
-    $setupTask | out-file $scriptLog -Append
+    log-info "Create scheduled task to be run every 20 minutes..."
+    $setupTask = schtasks /create /sc minute /mo 20 /tn "$taskName" /f /ru "$admin" /rp "$pwd" /tr "$global:scriptPath\CopyPayrollDll.cmd"
+    $setupTask 
     
     if ($lastexitcode -ne 0) {
         
         New-EventLog -LogName Application -Source "InitilizeCopyPayroll" -ErrorAction SilentlyContinue
         Write-EventLog -LogName Application -Source "InitilizeCopyPayroll" -EntryType Error -EventId 666 -Message "$setupTask `n$FailedTaskSetup"
-        Write-Output $setupTask   
+        log-info $setupTask
+		log-error $setupTask
     }
     
-    #Run task for the first time
-    schtasks /RUN /TN "$taskName" | Out-File $scriptLog
+   	log-info "Run task for the first time..."
+    schtasks /RUN /TN "$taskName"
 }
 Catch
 {
-    Write-Error $_.Exception
+    log-error "$_.Exception"
+	log-info "$_.Exception"
     Throw $_.Exception
 }
