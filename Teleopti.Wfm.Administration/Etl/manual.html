@@ -174,8 +174,8 @@
 								<button ng-if="vm.selectedJob.JobName === job.JobName" ng-click="$event.stopPropagation(); vm.encueueJob(job);" type="button" class="btn btn-primary">Enqueue</button>
 							</td>
 						</tr>
-						<tr ng-if="job.Open" ng-repeat="task in job.JobStepNames track by $index">
-							<td class="subrow">{{task}}</td>
+						<tr ng-if="job.Open" ng-repeat="task in job.JobSteps track by $index">
+							<td class="subrow">{{task.Name}}</td>
 							<td></td>
 							<td></td>
 						</tr>
