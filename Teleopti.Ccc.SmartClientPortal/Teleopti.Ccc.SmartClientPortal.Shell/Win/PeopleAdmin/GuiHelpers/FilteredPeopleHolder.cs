@@ -1526,5 +1526,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 			}
 		}
 		#endregion
+
+		public void ClearIsTerminalDateChanged()
+		{
+			_filteredPeopleGridData.ForEach(x => x.SetIsTerminalDateChanged(false));
+		}
 	}
 }

@@ -10091,6 +10091,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to One or several agents&apos; terminal date is changed. Do you want to proceed and save?.
+        /// </summary>
+        public static string DoYouWantToSaveChangesWithTerminalDate {
+            get {
+                return ResourceManager.GetString("DoYouWantToSaveChangesWithTerminalDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do you want to save changes you made?.
         /// </summary>
         public static string DoYouWantToSaveChangesYouMade {

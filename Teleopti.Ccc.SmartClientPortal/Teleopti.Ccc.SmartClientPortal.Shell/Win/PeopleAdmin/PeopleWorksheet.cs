@@ -11,6 +11,7 @@ using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -554,8 +555,18 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin
         private void save()
         {
             if (_readOnly) return;
+			if (_toggleManager.IsEnabled(Toggles.WFM_Clear_Data_From_Analytics_For_Resigned_Agents_47768) 
+				&& _filteredPeopleHolder.FilteredPeopleGridData.FirstOrDefault(y => y.IsTerminalDateChanged) != null)
+			{
+				DialogResult response = ShowYesNoMessage(UserTexts.Resources.DoYouWantToSaveChangesWithTerminalDate, Text);
 
-            Cursor.Current = Cursors.WaitCursor;
+				if(response.Equals(DialogResult.No))
+				{
+					return;
+				}
+				_filteredPeopleHolder.ClearIsTerminalDateChanged();
+			}
+			Cursor.Current = Cursors.WaitCursor;
 
             //Set current cell out of focus to make changes reflect to the data.
             setCurrentCellOutOfFocus();
@@ -597,15 +608,22 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin
             //Clear
             _filteredPeopleHolder.ValidatePasswordPolicy.Clear();
 
-            //View data saved.
-            _gridConstructor.View.ViewDataSaved(_gridConstructor.View, new EventArgs());
+			//View data saved.
+			_gridConstructor.View.ViewDataSaved(_gridConstructor.View, new EventArgs());
 
             //Refresh grid control
             _gridConstructor.View.Invalidate();
 
             Cursor.Current = Cursors.Default;
         }
-        private void notifySaveChanges()
+
+		private void ValidateTerminalDateChange()
+		{
+			throw new NotImplementedException();
+		}
+
+
+		private void notifySaveChanges()
         {
             var handler = PeopleWorksheetSaved;
             if (handler != null)

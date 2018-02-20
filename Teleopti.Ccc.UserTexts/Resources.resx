@@ -17241,6 +17241,10 @@ The application will now exit.</value>
     <value>No permission to edit unpublished schedule for agent(s)</value>
     <comment>Error message for editing unpublished schedule when there's no permission to view unpublished schedule in Teams</comment>
   </data>
+  <data name="DoYouWantToSaveChangesWithTerminalDate" xml:space="preserve">
+    <value>One or several agents' terminal date is changed. Do you want to proceed and save?</value>
+    <comment>One or several agents' terminal date is changed. Do you want to proceed and save?</comment>
+  </data>
   <data name="PickADateRangeToStartBadgeCalculation" xml:space="preserve">
     <value>Pick a date range to start badge calculation</value>
     <comment>Prompt in the Gamification module</comment>

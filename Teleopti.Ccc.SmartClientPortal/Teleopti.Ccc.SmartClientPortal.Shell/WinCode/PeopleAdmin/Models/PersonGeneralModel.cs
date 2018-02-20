@@ -263,6 +263,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
 			get { return ContainedEntity.TerminalDate; }
 			set
 			{
+				IsTerminalDateChanged = true;
 				var terminateDate = value;
 
 				if (terminateDate.HasValue)
@@ -305,6 +306,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
 			_roleCollectionParser = new RoleCollectionParser(value, new RoleDisplay());
 		}
 
+		public void SetIsTerminalDateChanged(bool value)
+		{
+			IsTerminalDateChanged = value;
+		}
+
 		public IList<IOptionalColumn> OptionalColumns => _optionalColumns;
 
 		public IWorkflowControlSet WorkflowControlSet
@@ -333,6 +339,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
 		public bool IsValid => _isValid;
 
 		public bool CanGray => false;
+		public bool IsTerminalDateChanged { get; set; }
 
 		public void SetOptionalColumns(IList<IOptionalColumn> columns)
 		{

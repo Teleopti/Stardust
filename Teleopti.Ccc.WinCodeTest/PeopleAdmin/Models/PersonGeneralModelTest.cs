@@ -276,6 +276,15 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 		}
 
 		[Test]
+		public void VerifyIsTerminalDateChanged()
+		{
+			var dateOnly = DateOnly.Today;
+			_target.TerminalDate = dateOnly;
+			_target.IsTerminalDateChanged.Should().Be(true);
+
+		}
+
+		[Test]
 		public void VerifyLanguageInfo()
 		{
 			var culture = new Culture(0, "No Language");

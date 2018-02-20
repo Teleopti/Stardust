@@ -173,7 +173,8 @@
 		WFM_Gamification_Recalculate_Badges_Within_Period_48403,
 		Report_Remove_Realtime_AuditTrail_44006,
 		ETL_Show_Web_Based_ETL_Tool_46880,
-		WFM_Remember_My_Selection_In_Intraday_47254
+		WFM_Remember_My_Selection_In_Intraday_47254,
+		WFM_Clear_Data_From_Analytics_For_Resigned_Agents_47768
 		// ReSharper restore InconsistentNaming
 	}
 }
