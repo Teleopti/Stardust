@@ -25,6 +25,7 @@ namespace Teleopti.Analytics.Etl.Common.Interfaces.Common
         string Description { get;  }
         JobScheduleType ScheduleType { get; }
 		DateTime InsertDate { get; }
+		string TenantName { get; set; }
 		void SetScheduleIdOnPersistedItem(int scheduleId);
     }
 }
