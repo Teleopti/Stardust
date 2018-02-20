@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using Autofac;
+using Teleopti.Analytics.Etl.Common;
 using Teleopti.Analytics.Etl.Common.Entity;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
@@ -429,25 +430,38 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 
 			if (radioButtonOccursOnce.Checked)
 			{
-				_etlJobSchedule = new Common.JobSchedule.EtlJobSchedule(_isNewSchedule ? -1 : _etlJobSchedule.ScheduleId, textBoxScheduleName.Text,
-														checkBoxEnabled.Checked,
-														(int)dateTimePickerOccursOnce.Value.TimeOfDay.TotalMinutes,
-														(string)comboBoxJob.SelectedValue,
-														radioButtonRelativePeriodTodayInitial.Checked ? 0 : (int)numericUpDownRelativePeriodStartInitial.Value,
-														radioButtonRelativePeriodTodayInitial.Checked ? 0 : (int)numericUpDownRelativePeriodEndInitial.Value,
-														logDataSource, labelDescription.Text, null, getRelativePeriodCollection());
+				_etlJobSchedule = new Common.JobSchedule.EtlJobSchedule(
+					_isNewSchedule ? -1 : _etlJobSchedule.ScheduleId, 
+					textBoxScheduleName.Text,
+					checkBoxEnabled.Checked,
+					(int)dateTimePickerOccursOnce.Value.TimeOfDay.TotalMinutes,
+					(string)comboBoxJob.SelectedValue,
+					radioButtonRelativePeriodTodayInitial.Checked ? 0 : (int)numericUpDownRelativePeriodStartInitial.Value,
+					radioButtonRelativePeriodTodayInitial.Checked ? 0 : (int)numericUpDownRelativePeriodEndInitial.Value,
+					logDataSource, 
+					labelDescription.Text, 
+					null, 
+					getRelativePeriodCollection(),
+					_isNewSchedule ? Tenants.AllTenantName : _etlJobSchedule.TenantName);
 			}
 			else
 			{
-				_etlJobSchedule = new Common.JobSchedule.EtlJobSchedule(_isNewSchedule ? -1 : _etlJobSchedule.ScheduleId, textBoxScheduleName.Text,
-														checkBoxEnabled.Checked,
-														(int)numericUpDownOccursEveryMinute.Value,
-														(int)dateTimePickerStartingAt.Value.TimeOfDay.TotalMinutes,
-														(int)dateTimePickerEndingAt.Value.TimeOfDay.TotalMinutes,
-														(string)comboBoxJob.SelectedValue,
-														radioButtonRelativePeriodTodayInitial.Checked ? 0 : (int)numericUpDownRelativePeriodStartInitial.Value,
-														radioButtonRelativePeriodTodayInitial.Checked ? 0 : (int)numericUpDownRelativePeriodEndInitial.Value,
-														logDataSource, labelDescription.Text, null, DateTime.Now, getRelativePeriodCollection());
+				_etlJobSchedule = new Common.JobSchedule.EtlJobSchedule(
+					_isNewSchedule ? -1 : _etlJobSchedule.ScheduleId, 
+					textBoxScheduleName.Text,
+					checkBoxEnabled.Checked,
+					(int)numericUpDownOccursEveryMinute.Value,
+					(int)dateTimePickerStartingAt.Value.TimeOfDay.TotalMinutes,
+					(int)dateTimePickerEndingAt.Value.TimeOfDay.TotalMinutes,
+					(string)comboBoxJob.SelectedValue,
+					radioButtonRelativePeriodTodayInitial.Checked ? 0 : (int)numericUpDownRelativePeriodStartInitial.Value,
+					radioButtonRelativePeriodTodayInitial.Checked ? 0 : (int)numericUpDownRelativePeriodEndInitial.Value,
+					logDataSource, 
+					labelDescription.Text, 
+					null, 
+					DateTime.Now, 
+					getRelativePeriodCollection(),
+					_etlJobSchedule.TenantName);
 			}
 		}
 

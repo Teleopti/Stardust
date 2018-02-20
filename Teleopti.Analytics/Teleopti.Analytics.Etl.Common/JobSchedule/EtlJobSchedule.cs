@@ -23,7 +23,8 @@ namespace Teleopti.Analytics.Etl.Common.JobSchedule
 			int dataSourceId,
 			string description,
 			DateTime insertDate,
-			IList<IEtlJobRelativePeriod> relativePeriodCollection)
+			IList<IEtlJobRelativePeriod> relativePeriodCollection,
+			string tenantName)
 		{
 			ScheduleId = scheduleId;
 			ScheduleType = JobScheduleType.Manual;
@@ -33,13 +34,15 @@ namespace Teleopti.Analytics.Etl.Common.JobSchedule
 			DataSourceId = dataSourceId;
 			Description = description;
 			InsertDate = insertDate;
+			TenantName = tenantName;
 			_relativePeriodCollection = relativePeriodCollection;
 		}
 
 		public EtlJobSchedule(int scheduleId, String scheduleName, bool enabled, int occursDailyAt,
-                            string jobName, int relativePeriodStart, int relativePeriodEnd, int dataSourceId,
-                            string description, IEtlJobLogCollection etlJobLogCollection, 
-                            IList<IEtlJobRelativePeriod> relativePeriodCollection)
+            string jobName, int relativePeriodStart, int relativePeriodEnd, int dataSourceId,
+            string description, IEtlJobLogCollection etlJobLogCollection, 
+            IList<IEtlJobRelativePeriod> relativePeriodCollection,
+			string tenantName)
         {
             _etlJobLogCollection = etlJobLogCollection;
 
@@ -57,13 +60,15 @@ namespace Teleopti.Analytics.Etl.Common.JobSchedule
             RelativePeriodEnd = relativePeriodEnd;
             DataSourceId = dataSourceId;
             Description = description;
-            _relativePeriodCollection = relativePeriodCollection;
+			TenantName = tenantName;
+			_relativePeriodCollection = relativePeriodCollection;
         }
 
         public EtlJobSchedule(int scheduleId, String scheduleName, bool enabled, int cyclicInterval, int startTime, int endTime,
-                            string jobName, int relativePeriodStart, int relativePeriodEnd, int dataSourceId,
-                            string description, IEtlJobLogCollection etlJobLogCollection, DateTime serverStartTime, 
-                            IList<IEtlJobRelativePeriod> relativePeriodCollection)
+            string jobName, int relativePeriodStart, int relativePeriodEnd, int dataSourceId,
+            string description, IEtlJobLogCollection etlJobLogCollection, DateTime serverStartTime, 
+            IList<IEtlJobRelativePeriod> relativePeriodCollection,
+			string tenantName)
         {
             _etlJobLogCollection = etlJobLogCollection;
 
@@ -89,7 +94,8 @@ namespace Teleopti.Analytics.Etl.Common.JobSchedule
             RelativePeriodEnd = relativePeriodEnd;
             DataSourceId = dataSourceId;
             Description = description;
-            _serverStartTime = serverStartTime;
+			TenantName = tenantName;
+			_serverStartTime = serverStartTime;
             _relativePeriodCollection = relativePeriodCollection;
         }
 
@@ -207,5 +213,6 @@ namespace Teleopti.Analytics.Etl.Common.JobSchedule
         public int DataSourceId { get; private set; }
         public string Description { get; private set; }
 		public DateTime InsertDate { get; }
+		public string TenantName { get; set; }
 	}
 }

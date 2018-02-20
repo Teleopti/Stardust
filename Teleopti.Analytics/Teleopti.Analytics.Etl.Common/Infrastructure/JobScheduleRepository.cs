@@ -45,7 +45,8 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 				new SqlParameter("etl_relative_period_start", etlJobScheduleItem.RelativePeriodStart),
 				new SqlParameter("etl_relative_period_end", etlJobScheduleItem.RelativePeriodEnd),
 				new SqlParameter("etl_datasource_id", etlJobScheduleItem.DataSourceId),
-				new SqlParameter("description", etlJobScheduleItem.Description)
+				new SqlParameter("description", etlJobScheduleItem.Description),
+				new SqlParameter("tenant_name", etlJobScheduleItem.TenantName)
 			};
 
 			return

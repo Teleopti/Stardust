@@ -121,6 +121,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Infrastructure
 			scheduleTable.Columns.Add("etl_datasource_id", typeof(int));
 			scheduleTable.Columns.Add("description", typeof(string));
 			scheduleTable.Columns.Add("insert_date", typeof(DateTime));
+			scheduleTable.Columns.Add("tenant_name", typeof(string));
 
 			return scheduleTable;
 		}
@@ -179,6 +180,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Infrastructure
 			dr["etl_relative_period_end"] = 14;
 			dr["etl_datasource_id"] = 1;
 			dr["description"] = "Occurs daily at x.";
+			dr["tenant_name"] = "Teleopti WFM";
 			_scheduleTable.Rows.Add(dr);
 		}
 
@@ -198,6 +200,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Infrastructure
 			dr["etl_relative_period_end"] = 7;
 			dr["etl_datasource_id"] = 1;
 			dr["description"] = "Occurs daily every x minute.";
+			dr["tenant_name"] = "Teleopti WFM";
 
 			_scheduleTable.Rows.Add(dr);
 		}
@@ -213,6 +216,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Infrastructure
 			dr["etl_datasource_id"] = 1;
 			dr["description"] = "Manual ETL";
 			dr["insert_date"] = "2017-12-12 15:33:00";
+			dr["tenant_name"] = "Teleopti WFM";
 			_scheduleTable.Rows.Add(dr);
 		}
 

@@ -132,8 +132,15 @@ namespace Teleopti.Analytics.Etl.Common.Service
 					{
 						log.InfoFormat(CultureInfo.InvariantCulture, "Scheduled job '{0}' ready to start.", jobToRun.Name);
 
-						foreach (var tenant in _tenants.EtlTenants())
+						var etlTenantName = scheduleJob.TenantName;
+						var etlTenants = Tenants.IsAllTenants(etlTenantName)
+							? _tenants.EtlTenants().ToList()
+							: new List<TenantInfo> {_tenants.Tenant(etlTenantName)};
+
+						foreach (var tenant in etlTenants)
 						{
+							if (tenant == null) continue;
+
 							var jobStepsNotToRun = new List<IJobStep>();
 							jobToRun.StepList[0].JobParameters.SetTenantBaseConfigValues(tenant.EtlConfiguration);
 
@@ -150,6 +157,7 @@ namespace Teleopti.Analytics.Etl.Common.Service
 							}
 							jobRunner.SaveResult(jobResults, repository, scheduleJob.ScheduleId);
 						}
+
 						if (scheduleJob.ScheduleType == JobScheduleType.Manual)
 						{
 							jobScheduleRepository.DisableScheduleJob(scheduleJob.ScheduleId);

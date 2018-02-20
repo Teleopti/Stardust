@@ -28,6 +28,7 @@ BEGIN
 		,[etl_datasource_id]
 		,[description]
 		,[insert_date]
+		,[tenant_name]
 	FROM Mart.[etl_job_schedule]
 	WHERE schedule_id > -1
 END

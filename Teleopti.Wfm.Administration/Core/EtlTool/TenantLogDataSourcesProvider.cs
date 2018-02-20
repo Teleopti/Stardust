@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Analytics.Etl.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 
 namespace Teleopti.Wfm.Administration.Core.EtlTool
@@ -9,7 +10,8 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 		private readonly AnalyticsConnectionsStringExtractor _analyticsConnectionsStringExtractor;
 		private readonly IGeneralFunctions _generalFunctions;
 
-		public TenantLogDataSourcesProvider(AnalyticsConnectionsStringExtractor analyticsConnectionsStringExtractor, IGeneralFunctions generalFunctions)
+		public TenantLogDataSourcesProvider(AnalyticsConnectionsStringExtractor analyticsConnectionsStringExtractor,
+			IGeneralFunctions generalFunctions)
 		{
 			_analyticsConnectionsStringExtractor = analyticsConnectionsStringExtractor;
 			_generalFunctions = generalFunctions;
@@ -17,6 +19,17 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 
 		public IList<DataSourceModel> Load(string tenantName)
 		{
+			if (Tenants.IsAllTenants(tenantName))
+			{
+				return new List<DataSourceModel>
+				{
+					new DataSourceModel {
+						Id = -2,
+						Name = "< All >"
+					}
+				};
+			}
+
 			_generalFunctions.SetConnectionString(_analyticsConnectionsStringExtractor.Extract(tenantName));
 			var logDataSources = _generalFunctions.DataSourceValidListIncludedOptionAll;
 			return logDataSources

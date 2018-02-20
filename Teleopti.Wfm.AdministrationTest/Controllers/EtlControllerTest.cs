@@ -157,6 +157,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			scheduledJob.ScheduleId.Should().Be(1);
 			scheduledJob.ScheduleType.Should().Be(JobScheduleType.Manual);
 			scheduledJob.Description.Should().Be("Manual ETL");
+			scheduledJob.TenantName.Should().Be("Tenant");
 			scheduledPeriods.Count.Should().Be(1);
 			scheduledPeriods.First().JobCategoryName.Should().Be("Initial");
 			scheduledPeriods.First().RelativePeriod.Minimum.Should().Be(-1);
