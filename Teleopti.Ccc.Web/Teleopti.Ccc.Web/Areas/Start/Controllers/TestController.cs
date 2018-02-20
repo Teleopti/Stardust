@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
-using System.Reflection.Emit;
 using System.Security.Claims;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Aop;
@@ -106,8 +105,8 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 
 			return View("Message", new TestMessageViewModel
 			{
-				Title = "Setting up for scenario",
-				Message = "Setting up for scenario",
+				Title = $"Setting up for test{name}",
+				Message = $"Setting up for test{name}",
 				ListItems = new[]
 				{
 					"Invalidating browser cookie",
@@ -215,7 +214,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		}
 
 		[TestLog]
-		[System.Web.Mvc.HttpGet]
+		[HttpGet]
 		public virtual ViewResult SetVersion(string version)
 		{
 			_version.Is(version);
@@ -228,7 +227,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		}
 
 		[TestLog]
-		[System.Web.Mvc.HttpGet]
+		[HttpGet]
 		public virtual ViewResult SetCurrentTime(long? ticks, string time)
 		{
 			setCurrentTime(ticks, time, true);
@@ -241,8 +240,8 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		}
 
 		[TestLog]
-		[System.Web.Mvc.HttpPost]
-		[System.Web.Mvc.ActionName("SetCurrentTime")]
+		[HttpPost]
+		[ActionName("SetCurrentTime")]
 		public virtual void SetCurrentTimePost(long? ticks, string time, bool waitForQueue = true)
 		{
 			setCurrentTime(ticks, time, waitForQueue);
