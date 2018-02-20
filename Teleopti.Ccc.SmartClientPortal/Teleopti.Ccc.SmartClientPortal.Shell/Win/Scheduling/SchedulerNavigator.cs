@@ -21,6 +21,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
@@ -46,6 +47,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private IScheduleNavigatorPresenter _myPresenter;
 		private readonly IEventAggregator _localEventAggregator;
 		private Form _mainWindow;
+		private readonly IApplicationInsights _applicationInsights;
 
 		public SchedulerNavigator()
 		{
@@ -54,7 +56,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		public SchedulerNavigator(IComponentContext componentContext, PortalSettings portalSettings,
 			IPersonRepository personRepository, IUnitOfWorkFactory unitOfWorkFactory,
-			IGracefulDataSourceExceptionHandler gracefulDataSourceExceptionHandler)
+			IGracefulDataSourceExceptionHandler gracefulDataSourceExceptionHandler, IApplicationInsights applicationInsights)
 			: this()
 		{
 			var lifetimeScope = componentContext.Resolve<ILifetimeScope>();
@@ -64,6 +66,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_personRepository = personRepository;
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_gracefulDataSourceExceptionHandler = gracefulDataSourceExceptionHandler;
+			_applicationInsights = applicationInsights;
 			SetTexts();
 			toolStripButtonOpen.Click += onOpenScheduler;
 		}
@@ -231,6 +234,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 														   ownerWindow);
 				sc.Show();
 			});
+			_applicationInsights.TrackEvent("Opened schedule for agents in Schedule Module.");
 		}
 
 		private static void loadNeededStuffIntoUnitOfWork(IUnitOfWork uow)

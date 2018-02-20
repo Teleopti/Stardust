@@ -1,11 +1,9 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.Config;
-using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Reports;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Budgeting;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms;
@@ -50,8 +48,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main
             builder.RegisterType<PortalSettingsProvider>().SingleInstance();
             builder.RegisterType<BudgetGroupGroupNavigatorView>();
             builder.RegisterType<BudgetGroupNavigatorModel>();
-            builder.Register(c => new PerformanceManagerNavigator(_config.Args().MatrixWebSiteUrl));
-            builder.RegisterType<PayrollExportNavigator>();
+			builder.Register(c => new PerformanceManagerNavigator(_config.Args().MatrixWebSiteUrl, c.Resolve<IApplicationInsights>()));
+			builder.RegisterType<PayrollExportNavigator>();
             builder.RegisterType<ShiftsNavigationPanel>();
             builder.RegisterType<PeopleNavigator>();
             builder.RegisterType<SchedulerNavigator>();

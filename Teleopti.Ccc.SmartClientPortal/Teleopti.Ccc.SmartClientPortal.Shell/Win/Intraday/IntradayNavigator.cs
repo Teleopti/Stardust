@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
@@ -28,24 +29,27 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
 		private readonly IPersonRepository _personRepository;
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IGracefulDataSourceExceptionHandler _gracefulDataSourceExceptionHandler;
+		private readonly IApplicationInsights _applicationInsights;
 
 		private IOpenPeriodMode _intraday;
 
-		public IntradayNavigator()
+		public IntradayNavigator(IApplicationInsights applicationInsights)
 		{
+			_applicationInsights = applicationInsights;
 			SelectorPresenter.ShowPersons = true;
 		}
 
 		public IntradayNavigator(IComponentContext container, PortalSettings portalSettings,
 			IIntradayViewFactory intradayViewFactory, ICurrentScenario scenarioRepos, IPersonRepository personRepository,
-			IUnitOfWorkFactory unitOfWorkFactory, IGracefulDataSourceExceptionHandler gracefulDataSourceExceptionHandler)
-			: base(container, portalSettings, personRepository, unitOfWorkFactory, gracefulDataSourceExceptionHandler)
+			IUnitOfWorkFactory unitOfWorkFactory, IGracefulDataSourceExceptionHandler gracefulDataSourceExceptionHandler, IApplicationInsights applicationInsights)
+			: base(container, portalSettings, personRepository, unitOfWorkFactory, gracefulDataSourceExceptionHandler, applicationInsights)
 		{
 			_intradayViewFactory = intradayViewFactory;
 			_scenarioRepos = scenarioRepos;
 			_personRepository = personRepository;
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_gracefulDataSourceExceptionHandler = gracefulDataSourceExceptionHandler;
+			_applicationInsights = applicationInsights;
 			SetTexts();
 			SetOpenToolStripText(Resources.Open);
 			TodayButton.Visible = true;
@@ -87,6 +91,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
 		{
 			var intradayView = _intradayViewFactory.Create(selectedPeriod, scenario, entityCollection);
 			((Control)intradayView).Show();
+			_applicationInsights.TrackEvent("Opened classic intraday for period in Intraday Module.");
 		}
 
 

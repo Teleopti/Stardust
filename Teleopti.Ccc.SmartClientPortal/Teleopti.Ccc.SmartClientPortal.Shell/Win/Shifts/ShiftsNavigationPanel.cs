@@ -1,5 +1,6 @@
 ﻿using System.Windows.Forms;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.ExceptionHandling;
 using Teleopti.Ccc.UserTexts;
 
@@ -9,11 +10,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts
     {
         private readonly ShiftsModule.IShiftsExplorerFactory _shiftsExplorerFactory;
 	    private Form _mainWindow;
+		private readonly IApplicationInsights _applicationInsights;
 
-	    public ShiftsNavigationPanel(ShiftsModule.IShiftsExplorerFactory shiftsExplorerFactory)
+	    public ShiftsNavigationPanel(ShiftsModule.IShiftsExplorerFactory shiftsExplorerFactory, IApplicationInsights applicationInsights)
         {
             _shiftsExplorerFactory = shiftsExplorerFactory;
-            InitializeComponent();
+			_applicationInsights = applicationInsights;
+			InitializeComponent();
             SetTexts();
         }
 
@@ -36,7 +39,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts
             }
 
             Cursor.Current = Cursors.Default;
-        }
+			_applicationInsights.TrackEvent("Opened shifts in Shifts Module.");
+		}
 
         public void OpenShifts()
         {

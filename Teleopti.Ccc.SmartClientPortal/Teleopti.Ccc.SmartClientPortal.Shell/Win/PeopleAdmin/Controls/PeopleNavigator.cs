@@ -18,6 +18,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views;
@@ -51,11 +52,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls
 		private readonly IEventAggregator _globalEventAggregator;
 		private ICurrentScenario _currentScenario;
 		private Form _mainWindow;
+		private readonly IApplicationInsights _applicationInsights;
 
 		public PeopleNavigator(PortalSettings portalSettings, IComponentContext componentContext,
 			IPersonRepository personRepository, IUnitOfWorkFactory unitOfWorkFactory,
 			IGracefulDataSourceExceptionHandler gracefulDataSourceExceptionHandler,
-			ITenantLogonDataManager tenantDataManager)
+			ITenantLogonDataManager tenantDataManager, IApplicationInsights applicationInsights)
 			: this()
 		{
 			_portalSettings = portalSettings;
@@ -64,6 +66,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_gracefulDataSourceExceptionHandler = gracefulDataSourceExceptionHandler;
 			_tenantDataManager = tenantDataManager;
+			_applicationInsights = applicationInsights;
 
 			var lifetimeScope = componentContext.Resolve<ILifetimeScope>();
 			_container = lifetimeScope.BeginLifetimeScope();
@@ -141,6 +144,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls
 			Cursor.Current = Cursors.WaitCursor;
 			openPeople(_selectorPresenter.SelectedPersonGuids);
 			Cursor.Current = Cursors.Default;
+			_applicationInsights.TrackEvent("Opened agents in People Module.");
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
