@@ -1,11 +1,3 @@
-$path = Get-Location
-$scriptName = $MyInvocation.MyCommand.Name
-$scriptLog = "$path\$scriptName.log"
-
-$admin = 'ServiceStarterAdmin'
-$taskName = 'ServiceStarter'
-$FailedTaskSetup = "This means that task scheduler ServiceStarter failed..."
-
 function New-RandomPassword {
 
     [CmdletBinding(DefaultParameterSetName='FixedLength',ConfirmImpact='None')]
@@ -107,32 +99,49 @@ function New-RandomPassword {
 
 Try 
 {
-    
+    #Get local path
+    [string]$global:scriptPath = split-path -parent $MyInvocation.MyCommand.Definition
+    [string]$global:ScriptFileName = $MyInvocation.MyCommand.Name
+    Set-Location $scriptPath
+
+ 	#start log4net
+	$log4netPath = $scriptPath + "\log4net"
+    Unblock-File -Path "$log4netPath\log4net.ps1"
+    . "$log4netPath\log4net.ps1";
+    $configFile = new-object System.IO.FileInfo($log4netPath + "\log4net.config");
+    configure-logging -configFile "$configFile" -serviceName "$serviceName"
+	
+	log-info "running: $ScriptFileName"
+	
+	$admin = 'ServiceStarterAdmin'
+	$taskName = 'ServiceStarter'
+	$FailedTaskSetup = "This means that task scheduler ServiceStarter failed..."
+	
     $userExits = Get-localuser -Name $admin -ErrorAction SilentlyContinue
 
     if ($userExits) {
 
-        Remove-LocalUser -Name $admin | Out-null
+        Remove-LocalUser -Name $admin
     }
 
     $pwd = New-RandomPassword
     $SecurePassword = ConvertTo-SecureString "$pwd" -asplaintext -force 
 
-    Write-Output "Creating temporary user '$admin'" | out-file $scriptLog -Append
-    New-LocalUser -Name $admin -Password $SecurePassword -FullName "Service Starter" -Description "ServiceStarter" | out-null
+    log-info "Creating temporary user '$admin'"
+    New-LocalUser -Name $admin -Password $SecurePassword -FullName "Service Starter" -Description "ServiceStarter"
 
-    Write-Output "Adding user '$admin' to 'Administrators' group..." | out-file $scriptLog -Append
+    log-info "Adding user '$admin' to 'Administrators' group..."
     Add-LocalGroupMember -Group "Administrators" -Member "$admin"
     
-
-    Start-Service "task scheduler" | out-file $scriptLog -Append
+	log-info "Starting task scheduler..."
+    Start-Service "task scheduler" 
 
     $taskExists = Get-ScheduledTask -TaskName $taskName -ErrorAction SilentlyContinue
 
         if ($taskExists) {
         
-            Write-Host "Removing Scheduled task '$taskName'..."
-            Unregister-ScheduledTask -TaskName $taskName -Confirm:$false | out-file $scriptLog -Append
+            log-info "Removing Scheduled task '$taskName'..."
+            Unregister-ScheduledTask -TaskName $taskName -Confirm:$false 
         }
 
  <#   $taskExists = Get-ScheduledTask -TaskName $taskName2 -ErrorAction SilentlyContinue
@@ -149,22 +158,24 @@ Try
 	$newTime = $Time.AddMinutes(2)
 	$setTime = $newTime.tostring("HH:mm:ss")
 
-	$setupTask = schtasks /create /sc once /st "$setTime" /tn "$taskName" /f /ru "$admin" /rp "$pwd" /tr "$path\ServiceStarter.cmd" 2>&1 #| Out-File $scriptLog -Append
+	$setupTask = schtasks /create /sc once /st "$setTime" /tn "$taskName" /f /ru "$admin" /rp "$pwd" /tr "$global:scriptPath\ServiceStarter.cmd"
 
-    $setupTask | out-file $scriptLog -Append
+    $setupTask 
     
     if ($lastexitcode -ne 0) {
         
         New-EventLog -LogName Application -Source "InitializeServiceStarter" -ErrorAction SilentlyContinue
         Write-EventLog -LogName Application -Source "InitializeServiceStarter" -EntryType Error -EventId 666 -Message "$setupTask `n$FailedTaskSetup"
-        Write-Output $setupTask   
+        log-info $setupTask
+		log-error $setupTask
     }
     
-	Write-Output "ServiceStarter Scheduler task completed!"
+	log-info "ServiceStarter Scheduler task completed!"
 
 }
 Catch
 {
-    Write-Error $_.Exception
+    log-error "$_.Exception"
+	log-info "$_.Exception"
     Throw $_.Exception
 }
