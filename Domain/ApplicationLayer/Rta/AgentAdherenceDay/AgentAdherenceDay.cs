@@ -36,15 +36,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay
 			_personId = personId;
 			_period = period;
 			_changes = loadChanges(changes);
+			now = floorToSeconds(now);
 
 			_approvedPeriods = approvedPeriods.Select(a => new DateTimePeriod(a.StartTime, a.EndTime)).ToArray();
-
 			_recordedOutOfAdherences = buildPeriods(HistoricalAdherenceAdherence.Out, adherences, now);
+
 			var recordedNeutralAdherences = buildPeriods(HistoricalAdherenceAdherence.Neutral, adherences, now);
-
+			
 			_outOfAdherences = subtractPeriods(_recordedOutOfAdherences, _approvedPeriods);
-			var neutralAdherences = subtractPeriods(recordedNeutralAdherences, _approvedPeriods);
 
+			var neutralAdherences = subtractPeriods(recordedNeutralAdherences, _approvedPeriods);
 			var outOfAhderencesWithinShift = withinShift(shift, _outOfAdherences);
 			var neutralAdherencesWithinShift = withinShift(shift, neutralAdherences);
 
@@ -78,23 +79,28 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay
 				.TransitionsOf(x => x.Adherence)
 				.Aggregate(new periodAccumulator(), (a, model) =>
 				{
+					var timestamp = floorToSeconds(model.Timestamp);
+					
 					if (model.Adherence == adherence)
-						a.StartTime = model.Timestamp;
+						a.StartTime = timestamp;
 					else
 					{
-						if (a.StartTime != null)
-							a.Periods.Add(new DateTimePeriod(a.StartTime.Value, model.Timestamp));
+						if (a.StartTime != null && a.StartTime != timestamp)
+							a.Periods.Add(new DateTimePeriod(a.StartTime.Value, timestamp));
 						a.StartTime = null;
 					}
 
 					return a;
 				});
-			if (result.StartTime.HasValue)
+			if (result.StartTime.HasValue && result.StartTime != now)
 				result.Periods.Add(new DateTimePeriod(result.StartTime.Value, now));
 
 			return result.Periods;
 		}
 
+		private static DateTime floorToSeconds(DateTime dateTime) =>
+			dateTime.AddMilliseconds(-dateTime.Millisecond);
+		
 		private static IEnumerable<DateTimePeriod> subtractPeriods(IEnumerable<DateTimePeriod> periods, IEnumerable<DateTimePeriod> toSubtract) =>
 			toSubtract
 				.Aggregate(periods, (rs, approved) => rs.Aggregate(Enumerable.Empty<DateTimePeriod>(), (r, recorded) => r.Concat(recorded.Subtract(approved))))
@@ -118,7 +124,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay
 				.ToArray();
 
 		public IEnumerable<OutOfAdherencePeriod> OutOfAdherences() =>
-			_outOfAdherences.Select(x => new OutOfAdherencePeriod {StartTime = x.StartDateTime, EndTime = x.EndDateTime})
+			_outOfAdherences
+				.Select(x => new OutOfAdherencePeriod {StartTime = x.StartDateTime, EndTime = x.EndDateTime})
 				.ToArray();
 
 		public int? Percentage() => _percentage;

@@ -219,5 +219,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AgentAdherenceDay
 			result.OutOfAdherences().Second().StartTime.Should().Be("2018-02-08 08:30".Utc());
 			result.OutOfAdherences().Second().EndTime.Should().Be("2018-02-08 08:50".Utc());
 		}
+		
 	}
 }
