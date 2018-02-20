@@ -241,10 +241,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private void transactionRollbackNoTryCatch()
 		{
 			_transactionSynchronization = null;
-			var transaction = _transaction;
+			_transaction.Rollback();
+			_transaction.Dispose();
 			_transaction = null;
-			transaction.Rollback();
-			transaction.Dispose();
 		}
 
 		public bool Contains(IEntity entity)
