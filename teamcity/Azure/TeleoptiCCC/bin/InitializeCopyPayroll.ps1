@@ -100,7 +100,7 @@
 Try 
 {
     #Get local path
-    [string]$global:scriptPath = split-path -parent $MyInvocation.MyCommand.Definition
+	[string]$global:scriptPath = split-path -parent $MyInvocation.MyCommand.Definition
     [string]$global:ScriptFileName = $MyInvocation.MyCommand.Name
     Set-Location $scriptPath
 
@@ -157,7 +157,7 @@ Try
    
     log-info "Create scheduled task to be run every 20 minutes..."
     $setupTask = schtasks /create /sc minute /mo 20 /tn "$taskName" /f /ru "$admin" /rp "$pwd" /tr "$global:scriptPath\CopyPayrollDll.cmd"
-    $setupTask 
+    log-info $setupTask 
     
     if ($lastexitcode -ne 0) {
         

@@ -100,7 +100,7 @@ function New-RandomPassword {
 Try 
 {
     #Get local path
-    [string]$global:scriptPath = split-path -parent $MyInvocation.MyCommand.Definition
+	[string]$global:scriptPath = split-path -parent $MyInvocation.MyCommand.Definition
     [string]$global:ScriptFileName = $MyInvocation.MyCommand.Name
     Set-Location $scriptPath
 
@@ -160,7 +160,7 @@ Try
 
 	$setupTask = schtasks /create /sc once /st "$setTime" /tn "$taskName" /f /ru "$admin" /rp "$pwd" /tr "$global:scriptPath\ServiceStarter.cmd"
 
-    $setupTask 
+    log-info $setupTask 
     
     if ($lastexitcode -ne 0) {
         
