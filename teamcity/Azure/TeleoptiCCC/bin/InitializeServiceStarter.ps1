@@ -100,6 +100,7 @@ function New-RandomPassword {
 Try 
 {
     #Get local path
+	$path = Get-Location
 	[string]$global:scriptPath = split-path -parent $MyInvocation.MyCommand.Definition
     [string]$global:ScriptFileName = $MyInvocation.MyCommand.Name
     Set-Location $scriptPath
@@ -158,7 +159,7 @@ Try
 	$newTime = $Time.AddMinutes(2)
 	$setTime = $newTime.tostring("HH:mm:ss")
 
-	$setupTask = schtasks /create /sc once /st "$setTime" /tn "$taskName" /f /ru "$admin" /rp "$pwd" /tr "$global:scriptPath\ServiceStarter.cmd"
+	$setupTask = schtasks /create /sc once /st "$setTime" /tn "$taskName" /f /ru "$admin" /rp "$pwd" /tr "$path\ServiceStarter.cmd"
 
     log-info $setupTask 
     
