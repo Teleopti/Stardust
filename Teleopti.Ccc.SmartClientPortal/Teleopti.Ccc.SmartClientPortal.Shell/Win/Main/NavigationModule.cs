@@ -44,17 +44,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main
             builder.RegisterType<ShiftsNavigationPanel>();
             builder.RegisterType<NavigationPanelProvider>().SingleInstance();
             builder.RegisterType<ForecasterNavigator>();
-			 if (_config.Toggle(Toggles.ResourcePlanner_UseErlangAWithInfinitePatience_45845))
-			 {
-				 builder.RegisterType<StaffingCalculatorServiceFacadeErlangA>().As<IStaffingCalculatorServiceFacade>()
-					 .SingleInstance();
-			 }
-			 else
-			 {
-				 builder.RegisterType<StaffingCalculatorServiceFacade>().As<IStaffingCalculatorServiceFacade>().SingleInstance();
-			 }
-
-			 builder.RegisterType<IntradayNavigator>();
+			 
+			builder.RegisterType<IntradayNavigator>();
             builder.RegisterType<IntradayWebNavigator>();
             builder.RegisterType<PortalSettingsProvider>().SingleInstance();
             builder.RegisterType<BudgetGroupGroupNavigatorView>();

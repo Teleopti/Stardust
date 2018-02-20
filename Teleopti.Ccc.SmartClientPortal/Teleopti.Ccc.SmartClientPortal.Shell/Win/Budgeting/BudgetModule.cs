@@ -56,15 +56,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Budgeting
 		private void providerWiring(ContainerBuilder builder)
 		{
 			builder.RegisterType<SkillDayLoadHelper>().As<ISkillDayLoadHelper>();
-			if (_configuration.Toggle(Toggles.ResourcePlanner_UseErlangAWithInfinitePatience_45845))
-			{
-				builder.RegisterType<StaffingCalculatorServiceFacadeErlangA>().As<IStaffingCalculatorServiceFacade>()
-					.SingleInstance();
-			}
-			else
-			{
-				builder.RegisterType<StaffingCalculatorServiceFacade>().As<IStaffingCalculatorServiceFacade>().SingleInstance();
-			}
+			
 			builder.RegisterType<BudgetingSkillStaffPeriodProvider>().As<IBudgetSkillStaffPeriodProvider>();
 			builder.RegisterType<BudgetPeopleProvider>().As<IBudgetPeopleProvider>();
 			builder.RegisterType<BudgetSettingsProvider>().SingleInstance().As<IBudgetSettingsProvider>();
