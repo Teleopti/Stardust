@@ -105,10 +105,20 @@ function StopWindowsService
 		 while ($arrService.Status -ne "Stopped")
 		 {
 			$arrService = Get-Service -Name $ServiceName
+			
+			if ($arrService.Status -eq "Running")
+			{
+				$status = $arrService.status
+				log-info "Warning! Service $ServiceName status is: $Status" 
+				log-error "Warning! Service $ServiceName status is: $Status"
+				Return
+			}
+			
 			$status = $arrService.status
 			log-info "Waiting for service: '$ServiceName' status to be Stopped. Current status is: $status"
 			$bailOut --
 			Start-Sleep 5
+			
 			if ($bailOut -eq 0)
                 {
                     $status = $arrService.status
@@ -118,10 +128,11 @@ function StopWindowsService
                 }
 		 }
 		 
-		 log-info "'$ServiceName' is stopped!"
+		 $status = $arrService.status
+		 log-info "'$ServiceName' is: '$status'"
 		 
 		          
-		 if ($arrService.Status -ne "Running")
+		 if ($arrService.Status -eq "Stopped")
          {
              $arrService.Start()
              log-info "Starting '$ServiceName'..." 
@@ -143,12 +154,7 @@ function StopWindowsService
              } while ($arrService.Status -ne "Running")
              log-info "`nService $ServiceName successfully started"
          }
-         else
-         {
-            $status = $arrService.status
-			log-info "Warning! Service $ServiceName status is: $Status" 
-			log-error "Warning! Service $ServiceName status is: $Status" 
-         }
+         
     }
     else {
         log-info "Service" $ServiceName " is not installed on this host."
