@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 		public string InvalidReason => nameof(Resources.RequestDenyReasonPersonAccount);
 
-		public string DisplayText => UserTexts.Resources.Yes;
+		public string DisplayText => Resources.Yes;
 
 		public IValidatedRequest Validate(IAbsenceRequest absenceRequest,
 			RequiredForHandlingAbsenceRequest requiredForHandlingAbsenceRequest)

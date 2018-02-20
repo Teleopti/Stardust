@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             
             Assert.IsTrue(_personRequest.IsNew);
 
-            _target.Process(_absenceRequest, new RequiredForProcessingAbsenceRequest(null, _requestApprovalService,_authorization), handling, new List<IAbsenceRequestValidator> {new AbsenceRequestDenyValidator("KeyForInvalidRequest") });
+            _target.Process(_absenceRequest, new RequiredForProcessingAbsenceRequest(null, _requestApprovalService,_authorization), handling, new List<IAbsenceRequestValidator> {new AbsenceRequestDenyValidator() });
 
             Assert.IsTrue(_personRequest.IsDenied);
         }
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 
 			Assert.IsTrue(_personRequest.IsNew);
 
-			_target.Process(_absenceRequest, new RequiredForProcessingAbsenceRequest(new UndoRedoContainer(), _requestApprovalService, _authorization), handling, new List<IAbsenceRequestValidator> { new AbsenceRequestDenyValidator("KeyForInvalidRequest") });
+			_target.Process(_absenceRequest, new RequiredForProcessingAbsenceRequest(new UndoRedoContainer(), _requestApprovalService, _authorization), handling, new List<IAbsenceRequestValidator> { new AbsenceRequestDenyValidator() });
 
 			Assert.IsTrue(_personRequest.IsDenied);
 		}
@@ -165,14 +165,8 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 
 	public class AbsenceRequestDenyValidator : IAbsenceRequestValidator
 	{
-		public AbsenceRequestDenyValidator(string reason = "")
-		{
-			InvalidReason = reason ?? string.Empty;
-		}
-
+		
 		public IBudgetGroupHeadCountSpecification BudgetGroupHeadCountSpecification { get; set; }
-
-		public string InvalidReason { get; }
 
 		public string DisplayText => UserTexts.Resources.No;
 
@@ -181,14 +175,13 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		{
 			return new ValidatedRequest
 			{
-				IsValid = false,
-				ValidationErrors = InvalidReason
+				IsValid = false
 			};
 		}
 
 		public IAbsenceRequestValidator CreateInstance()
 		{
-			return new AbsenceRequestDenyValidator(InvalidReason);
+			return new AbsenceRequestDenyValidator();
 		}
 
 		public override bool Equals(object obj)

@@ -52,12 +52,6 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 		}
 
 		[Test]
-		public void ShouldReportSolverName()
-		{
-			Assert.AreEqual("CMSBCaseSolver", _target.ResolverDescriptionKey);
-		}
-
-		[Test]
 		public void ShouldKickInIfNeeded()
 		{
 			IList<double?> values = new List<double?>();

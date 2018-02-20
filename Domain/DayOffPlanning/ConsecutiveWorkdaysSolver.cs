@@ -72,7 +72,6 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
             return true;
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
 		public bool SetToFewBackToLegalState()
         {
             if (ResolvableState() == MinMaxNumberOfResult.Ok)
@@ -162,11 +161,6 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
             }
 
             return true;
-        }
-
-        public string ResolverDescriptionKey
-        {
-            get { return "ConsecutiveWorkdaysRule"; }
         }
 
         public bool SwapBits(int indexToMoveFrom, int indexToMoveTo)

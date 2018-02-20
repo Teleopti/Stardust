@@ -52,12 +52,6 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		}
 
 		[Test]
-		public void VerifyInvalidReason()
-		{
-			Assert.AreEqual("RequestDenyReasonSkillThreshold", _target.InvalidReason);
-		}
-
-		[Test]
 		public void VerifyProperties()
 		{
 			Assert.AreEqual(UserTexts.Resources.Intraday, _target.DisplayText);

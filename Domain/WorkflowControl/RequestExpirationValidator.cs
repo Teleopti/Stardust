@@ -11,8 +11,6 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			_expiredRequestValidator = expiredRequestValidator;
 		}
 
-		public string InvalidReason { get; }
-
 		public string DisplayText { get; }
 
 		public IValidatedRequest Validate(IAbsenceRequest absenceRequest,

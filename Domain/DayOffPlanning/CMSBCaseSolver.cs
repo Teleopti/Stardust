@@ -43,7 +43,5 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 		{
 			return ResolvableState() != MinMaxNumberOfResult.Ok;
 		}
-
-		public string ResolverDescriptionKey => "CMSBCaseSolver";
 	}
 }

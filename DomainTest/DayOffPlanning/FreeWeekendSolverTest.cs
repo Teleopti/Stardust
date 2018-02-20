@@ -26,12 +26,6 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
         }
 
         [Test]
-        public void VerifyResolverDescriptionKey()
-        {
-            Assert.AreEqual("FreeWeekendRule", _target.ResolverDescriptionKey);
-        }
-
-        [Test]
         public void VerifySwapBits()
         {
             FreeWeekendSolver target = new FreeWeekendSolver(_bitArray, _functions, _daysOffPreferences, 20);

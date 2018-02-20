@@ -3,6 +3,7 @@ using System.Drawing;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Secrets.DayOffPlanning;
+using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.Domain.DayOffPlanning
 {
@@ -136,11 +137,6 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
             }
 
             return true;
-        }
-
-        public string ResolverDescriptionKey
-        {
-            get { return "FreeWeekendRule"; }
         }
 
         public bool SwapBits(int indexToMoveFrom, int indexToMoveTo)

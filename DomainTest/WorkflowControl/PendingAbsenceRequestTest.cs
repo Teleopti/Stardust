@@ -41,13 +41,12 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         public void VerifyDenyRequestIfNotValid()
         {
             _validatedRequest.IsValid = false;
-            _validatedRequest.ValidationErrors = "KeyForInvalidRequest";
-
+           
             var handling = new RequiredForHandlingAbsenceRequest();
             using (_mocks.Record())
             {
                 Expect.Call(_validator.Validate(_absenceRequest,handling)).Return(_validatedRequest);
-                Expect.Call(_validator.InvalidReason).Return("KeyForInvalidRequest");
+                
                 _authorization.VerifyEditRequestPermission(_personRequest);
             }
 

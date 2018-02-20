@@ -5,6 +5,5 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
         MinMaxNumberOfResult ResolvableState();
         bool SetToManyBackToLegalState();
         bool SetToFewBackToLegalState();
-        string ResolverDescriptionKey { get; }
     }
 }

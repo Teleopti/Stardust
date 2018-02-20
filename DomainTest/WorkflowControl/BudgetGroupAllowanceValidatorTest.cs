@@ -17,12 +17,6 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		}
 
 		[Test]
-		public void ShouldExplainInvalidReason()
-		{
-			Assert.AreEqual("RequestDenyReasonBudgetGroupAllowance", _target.InvalidReason);
-		}
-
-		[Test]
 		public void ShouldHaveDisplayText()
 		{
 			Assert.AreEqual(UserTexts.Resources.BudgetGroup, _target.DisplayText);

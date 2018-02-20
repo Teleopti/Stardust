@@ -25,12 +25,6 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
         }
 
         [Test]
-        public void VerifyResolverDescriptionKey()
-        {
-            Assert.AreEqual("TUI Case solver", _target.ResolverDescriptionKey);
-        }
-
-        [Test]
         public void VerifyIsInLegalState()
         {
             _daysOffPreferences.ConsecutiveWorkdaysValue = new MinMax<int>(1, 16);

@@ -25,12 +25,6 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 		}
 
 		[Test]
-		public void VerifyResolverDescriptionKey()
-		{
-			Assert.AreEqual("FiveConsecutiveWorkdaysRule", _target.ResolverDescriptionKey);
-		}
-
-		[Test]
 		public void VerifyIsInLegalState()
 		{
 			_datDaysOffPreferences.ConsecutiveWorkdaysValue = new MinMax<int>(1, 16);

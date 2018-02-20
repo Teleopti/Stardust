@@ -4,11 +4,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
 	public interface IAbsenceRequestValidator
 	{
-
-		string InvalidReason { get; }
-
 		string DisplayText { get; }
-
 
 		IValidatedRequest Validate(IAbsenceRequest absenceRequest, RequiredForHandlingAbsenceRequest requiredForHandlingAbsenceRequest);
 

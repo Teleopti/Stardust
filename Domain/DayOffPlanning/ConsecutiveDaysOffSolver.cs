@@ -88,11 +88,6 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
             return true;
         }
 
-        public string ResolverDescriptionKey
-        {
-            get { return "ConsecutiveDaysOffRule"; }
-        }
-
         public bool SwapBits(int indexToMoveFrom, int indexToMoveTo)
         {
             if (indexToMoveFrom == -1 || indexToMoveTo == -1)

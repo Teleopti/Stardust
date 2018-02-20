@@ -4,11 +4,6 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 {
 	public class BudgetGroupHeadCountValidator : IAbsenceRequestValidator
 	{
-		public string InvalidReason
-		{
-			get { return "RequestDenyReasonBudgetGroupAllowance"; }
-		}
-
 		public string DisplayText
 		{
 			get { return UserTexts.Resources.BudgetGroupHeadCount; }

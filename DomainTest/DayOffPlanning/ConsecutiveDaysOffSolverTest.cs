@@ -25,12 +25,6 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
         }
 
         [Test]
-        public void VerifyResolverDescriptionKey()
-        {
-            Assert.AreEqual("ConsecutiveDaysOffRule", _target.ResolverDescriptionKey);
-        }
-
-        [Test]
         public void VerifySwapBits()
         {
             ConsecutiveDaysOffSolver target = new ConsecutiveDaysOffSolver(_bitArray, _functions, _daysOffPreferences, 20);

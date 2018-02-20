@@ -5,10 +5,6 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 	public class AbsenceRequestNoneValidator : IAbsenceRequestValidator
 	{
 		public IBudgetGroupHeadCountSpecification BudgetGroupHeadCountSpecification { get; set; }
-		public string InvalidReason
-		{
-			get { return string.Empty; }
-		}
 
 		public string DisplayText
 		{

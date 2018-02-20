@@ -108,11 +108,6 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 			return ResolvableState() != MinMaxNumberOfResult.Ok;
         }
 
-        public string ResolverDescriptionKey
-        {
-            get { return "FiveConsecutiveWorkdaysRule"; }
-        }
-
         public bool SwapBits(int indexToMoveFrom, int indexToMoveTo)
         {
             if (indexToMoveFrom == -1 || indexToMoveTo == -1)

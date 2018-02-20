@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
@@ -36,11 +35,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         public void Execute(IDaysOffPreferences daysOffPreferences)
         {
-			var failedSolverDescriptionKeys = new List<string>();
-            _result = _dayOffBackToLegalStateService.Execute(_dayOffBackToLegalStateService.BuildSolverList(BitArray, daysOffPreferences, 20), 20, failedSolverDescriptionKeys);
-	        FailedSolverDescriptionKeys = failedSolverDescriptionKeys;
+            _result = _dayOffBackToLegalStateService.Execute(_dayOffBackToLegalStateService.BuildSolverList(BitArray, daysOffPreferences, 20), 20);
         }
-
-        public IList<string> FailedSolverDescriptionKeys { get; set; }
     }
 }

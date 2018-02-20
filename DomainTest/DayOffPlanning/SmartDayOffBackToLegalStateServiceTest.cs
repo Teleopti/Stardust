@@ -63,23 +63,20 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
             {
                 Expect.Call(s1.SetToFewBackToLegalState()).Return(true).Repeat.Times(_maxIterations + 1);
                 Expect.Call(s1.SetToManyBackToLegalState()).Return(true).Repeat.Times(_maxIterations + 1);
-                Expect.Call(s1.ResolverDescriptionKey).Return("hej").Repeat.Once();
-                Expect.Call(s2.SetToFewBackToLegalState()).Return(true).Repeat.Times(_maxIterations + 1);
+               Expect.Call(s2.SetToFewBackToLegalState()).Return(true).Repeat.Times(_maxIterations + 1);
                 Expect.Call(s2.SetToManyBackToLegalState()).Return(true).Repeat.Times(_maxIterations + 1);
-                Expect.Call(s2.ResolverDescriptionKey).Return("hupp").Repeat.Once();
+               
             }
 
             bool result;
-			var failedDescKeys = new List<string>();
+			
 			using (_mocks.Playback())
             {
-                result = _target.Execute(solvers, _maxIterations, failedDescKeys);
+                result = _target.Execute(solvers, _maxIterations);
             }
 
             Assert.IsFalse(result);
-            Assert.IsTrue(failedDescKeys.Contains("hej"));
-            Assert.IsTrue(failedDescKeys.Contains("hupp"));
-            Assert.AreEqual(2, failedDescKeys.Count);
+
         }
 
         [Test]
@@ -108,7 +105,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 
             using (_mocks.Playback())
             {
-                result = _target.Execute(solvers, _maxIterations, new List<string>());
+                result = _target.Execute(solvers, _maxIterations);
             }
 
             Assert.IsTrue(result);
@@ -132,21 +129,18 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 				Expect.Call(s2.SetToFewBackToLegalState()).Return(true).Repeat.Times(maxIteration + 1);
 				Expect.Call(s2.SetToManyBackToLegalState()).Return(true).Repeat.Times(maxIteration + 1);
 
-                Expect.Call(s1.ResolverDescriptionKey).Return("hej").Repeat.Once();
-                Expect.Call(s2.ResolverDescriptionKey).Return("hupp").Repeat.Once();
 
             }
 
             bool result;
-	        var failedDescKeys = new List<string>();
+
             using (_mocks.Playback())
             {
-                result = _target.Execute(solvers, 1, failedDescKeys);
+                result = _target.Execute(solvers, 1);
             }
 
             Assert.IsFalse(result);
-			Assert.IsTrue(failedDescKeys.Contains("hej"));
-			Assert.IsTrue(failedDescKeys.Contains("hupp"));
+
         }
 
 

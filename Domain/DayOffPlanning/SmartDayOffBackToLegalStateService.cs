@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
             return solvers;
         }
 
-        public bool Execute(IList<IDayOffBackToLegalStateSolver> solvers, int maxIterations, ICollection<string> failedSolverDescriptionKeys)
+        public bool Execute(IList<IDayOffBackToLegalStateSolver> solvers, int maxIterations)
         {
             bool inLegalState = false;
             int iterationCounter = 0;
@@ -57,10 +57,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
                 {
                     var isSolverInLegalState = executeSolver(solver);
 	                inLegalState = inLegalState && isSolverInLegalState;
-
-					if (!isSolverInLegalState && iterationCounter == maxIterations)
-						failedSolverDescriptionKeys.Add(solver.ResolverDescriptionKey);
-                }
+				}
                 iterationCounter++;
             }
 			return inLegalState;
