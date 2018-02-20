@@ -93,7 +93,10 @@
     function getTennants() {
       $http.get("./AllTenants", tokenHeaderService.getHeaders())
       .success(function (data) {
-        vm.tenants = data;
+		  vm.tenants = data;
+		  vm.tenants.unshift({
+			  Name: '<All>'
+		  });
         vm.selectedTenant = vm.tenants[0].Name;
         vm.sendTennant(vm.selectedTenant);
         vm.getJobs(vm.selectedTenant);
