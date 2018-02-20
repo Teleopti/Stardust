@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -25,10 +26,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Main
 		private readonly IAvailableBusinessUnitsProvider _availableBusinessUnitsProvider;
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(LogonPresenter));
 		private readonly ILog _customLogger = LogManager.GetLogger("CustomEOLogger");
+		private readonly IApplicationInsights _applicationInsights;
 
 		public LogonPresenter(ILogonView view, LogonModel model, ILoginInitializer initializer, ILogOnOff logOnOff,
 			IMessageBrokerComposite messageBroker, ISharedSettingsQuerier sharedSettingsQuerier,
-			IAuthenticationQuerier authenticationQuerier, IAvailableBusinessUnitsProvider availableBusinessUnitsProvider)
+			IAuthenticationQuerier authenticationQuerier, IAvailableBusinessUnitsProvider availableBusinessUnitsProvider, 
+			IApplicationInsights applicationInsights)
 		{
 			_view = view;
 			_model = model;
@@ -38,6 +41,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Main
 			_sharedSettingsQuerier = sharedSettingsQuerier;
 			_authenticationQuerier = authenticationQuerier;
 			_availableBusinessUnitsProvider = availableBusinessUnitsProvider;
+			_applicationInsights = applicationInsights;
 			_model.AuthenticationType = AuthenticationTypeOption.Windows;
 		}
 
@@ -48,6 +52,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Main
 
 		public bool Start(string serverUrl)
 		{
+			_applicationInsights.Init();
 			_view.ServerUrl = serverUrl;
 			logInfo("EO Browser: show the login screen.");
 			return _view.StartLogon();

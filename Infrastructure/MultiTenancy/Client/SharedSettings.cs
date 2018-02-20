@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
@@ -9,7 +10,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 		public string MessageBrokerLongPolling { get; set; }
 		public string RtaPollingInterval { get; set; }
 		public string PasswordPolicy { get; set; }
-		public string InstrumentationKey { get; set; }
+		public string InstrumentationKey { get; set; } = Guid.Empty.ToString();
 		public int NumberOfDaysToShowNonPendingRequests { get; set; }
 		public int MessageBrokerMailboxPollingIntervalInSeconds { get; set; }
 		public int MessageBrokerMailboxExpirationInSeconds { get; set; }

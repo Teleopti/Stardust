@@ -176,7 +176,7 @@
     <Compile Include="Database.cs" />
     <Compile Include="DatabaseLegacy.cs" />
     <Compile Include="FakeAgentBadgeWithRankTransactionRepository.cs" />
-    <Compile Include="FakeApplicationsInsights.cs" />
+    <Compile Include="FakeApplicationInsights.cs" />
     <Compile Include="FakeApplicationInsightsConfigReader.cs" />
     <Compile Include="FakeCancelSchedulingProgress.cs" />
     <Compile Include="FakeCloseSchedulingProgress.cs" />
