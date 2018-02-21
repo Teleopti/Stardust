@@ -133,6 +133,7 @@ var wfm = angular.module('wfm', [
 			preloads.push(initializePermissionCheck());
 			preloads.push($http.get('../api/Global/Version').then(function (response) {
 				$rootScope.version = response.data;
+				$http.defaults.headers.common['X-Version'] = $rootScope.version;
 			}));
 			var preloadDone = false;
 
