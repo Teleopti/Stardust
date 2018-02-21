@@ -1,0 +1,27 @@
+.agent-row {
+	border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+	border-left: 3px solid transparent;
+	cursor: pointer;
+}
+
+.agent-row:hover {
+	background: rgba(0, 0, 0, 0.12);
+	border-left: 3px solid #888;
+}
+
+.workspace-parent {
+	max-width: 250px;
+	.workspace {
+		width: 100%;
+		padding: 7px;
+		height: 100%;
+
+		li {
+			border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+
+			.mdi {
+				cursor: pointer;
+			}
+		}
+	}
+}

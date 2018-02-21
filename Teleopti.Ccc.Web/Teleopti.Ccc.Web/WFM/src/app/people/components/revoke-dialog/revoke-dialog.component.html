@@ -1,0 +1,31 @@
+<div class="person-header">
+    <div class="avatar">
+        <i class="mdi" [ngClass]="{'mdi-account-multiple': isMultipleSelected(), 'mdi-account': isSingleSelected()}"></i>
+    </div>
+    <h1 mat-dialog-title>
+        <span *ngIf="isMultipleSelected()">Revoke roles</span>
+        <span *ngIf="isSingleSelected()">Revoke roles on {{people[0].FirstName}} {{people[0].LastName}}</span>
+    </h1>
+    <h3 *ngIf="isMultipleSelected()">{{people.length}} people selected</h3>
+</div>
+<mat-dialog-content>
+    <h2>Roles to revoke</h2>
+    <div class="con-fluid-row">
+        <div class="con-fluid-flex" *ngFor="let roleId of getRoleIdsOfPeople()">
+            <div class="wfm-chip-wrap">
+                <span class="wfm-chip" (click)="toggleSelectedRole(roleId)">
+                    <span class="chip-handle" [ngClass]="{'chip-error':isSelectedRole(roleId)}">
+                        <i class="mdi" [ngClass]="{'mdi-close':isSelectedRole(roleId), 'mdi-delete':!isSelectedRole(roleId)}"></i>
+                    </span>
+                    <span class="chip-text">{{getRole(roleId).Name}}</span>
+                </span>
+            </div>
+        </div>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <aside>
+        <button mat-button mat-dialog-close class="wfm-btn wfm-btn-default">Cancel</button>
+        <button mat-button (click)="save()" cdkFocusInitial class="wfm-btn wfm-btn-primary">Save</button>
+    </aside>
+</mat-dialog-actions>

@@ -1,0 +1,13 @@
+.wfm-chip {
+	user-select: none;
+
+	&.chip-disabled {
+		cursor: default;
+		.chip-handle {
+			background: rgba(0, 0, 0, 0.26);
+		}
+		// .chip-text {
+		// 	color: black;
+		// }
+	}
+}

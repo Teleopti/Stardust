@@ -1,65 +1,121 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MatDialog, MatDialogRef } from '@angular/material';
+import { Person, Role } from './types';
 
-import { PEOPLE } from './people.mock';
-
-import { People } from './people';
-import { ROLES } from './roles.mock';
-import { Roles } from './roles';
-import { DialogContentExampleDialog } from './peoplemodal.component';
-
-import {
-	MatInputModule,
-	MatDialogModule,
-	MatProgressSpinnerModule,
-	MatButtonModule,
-	MatDialog,
-    MatDialogRef,
-    MatCheckboxModule
-} from '@angular/material'; 
+import { GrantDialog, GrantResponse, RevokeDialog, RevokeResponse, RoleResponse } from './components';
+import { Observable } from 'rxjs/Rx';
+import { PeopleService, RolesService } from './services';
 
 @Component({
-  selector: 'app-people',
-  templateUrl: './people.component.html',
-  styleUrls: ['./people.component.css']
+	selector: 'app-people',
+	templateUrl: './people.component.html',
+	styleUrls: ['./people.component.scss']
 })
 export class PeopleComponent implements OnInit {
-/* 
-  constructor(public dialog: MatDialog) { console.log(dialog); }
+	constructor(private dialog: MatDialog, private peopleService: PeopleService, private rolesService: RolesService) {}
 
-  people = PEOPLE;
-  itemArr: Array<People>;
-  roles = ROLES;
-  currentRoles: Array<Roles>;
+	people: Array<Person> = [];
+	roles: Array<Role> = [];
+	selectedPeopleIds: Array<string> = [];
 
-  openDialog() {
-    const dialogRef = this.dialog.open(DialogContentExampleDialog, {
-      height: '350px'
-    });
+	isPeopleSelected() {
+		return this.selectedPeopleIds.length > 0;
+	}
 
-    dialogRef.componentInstance.itemArr = this.itemArr;
-    dialogRef.componentInstance.currentRoles = this.currentRoles;
+	getSelectedPeople() {
+		return this.people.filter(person => this.isPersonSelected(person.Id));
+	}
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-    });
-  }
+	toggleSelectedPerson(id) {
+		if (!this.selectedPeopleIds.includes(id)) {
+			this.selectedPeopleIds = [...this.selectedPeopleIds, id];
+		} else {
+			this.selectedPeopleIds = this.selectedPeopleIds.filter(personId => personId !== id);
+		}
 
-  assertMulti(person){
-    let index = this.itemArr.indexOf(person, 0);
+		// Workspace
+		if (this.selectedPeopleIds.length === 0) {
+			this.displayGrantView = false;
+			this.displayRevokeView = false;
+		}
+	}
 
-    if(index > -1){
-      this.itemArr.splice(index, 1);
-    }else{
-      this.itemArr.push(person);
-    }
+	personToRoles(person: Person): string {
+		return person.Roles.map(role => role.Name).join(', ');
+	}
 
-    this.itemArr.forEach(function(value){
-      console.log(value);
-    });
-  }
-*/
-  ngOnInit() {
+	isPersonSelected(id) {
+		return this.selectedPeopleIds.includes(id);
+	}
 
-    
-  } 
+	getSelectedPeopleCount() {
+		return this.selectedPeopleIds.length;
+	}
+
+	openDialog(dialogType) {
+		return this.dialog.open(dialogType, {
+			width: '70vw',
+			maxHeight: '80vh',
+			panelClass: 'dialog-without-padding',
+			data: {
+				people: this.getSelectedPeople(),
+				roles: this.roles
+			}
+		});
+	}
+
+	openGrantDialog() {
+		const dialogRef = this.openDialog(GrantDialog);
+		dialogRef.afterClosed().subscribe((result: RoleResponse) => {
+			if (typeof result !== 'undefined' && Array.isArray(result.roles)) {
+				this.grantRoles(result.roles);
+			}
+		});
+	}
+
+	openRevokeDialog() {
+		const dialogRef = this.openDialog(RevokeDialog);
+		dialogRef.afterClosed().subscribe((result: RevokeResponse) => {
+			if (typeof result !== 'undefined' && Array.isArray(result.roles)) {
+				this.revokeRoles(result.roles);
+			}
+		});
+	}
+
+	grantRoles(roles) {
+		this.rolesService.grantRoles(this.selectedPeopleIds, roles).then(ok => {});
+	}
+
+	revokeRoles(roles) {
+		this.rolesService.revokeRoles(this.selectedPeopleIds, roles).then(ok => {});
+	}
+
+	ngOnInit() {
+		this.rolesService.getPeople().then(people => {
+			this.people = people;
+		});
+		this.rolesService.getRoles().then(roles => {
+			this.roles = roles;
+		});
+	}
+
+	/** Below is window grant component */
+	displayGrantView = false;
+	displayRevokeView = false;
+	toggleGrantView() {
+		this.displayGrantView = !this.displayGrantView;
+	}
+	toggleRevokeView() {
+		this.displayRevokeView = !this.displayRevokeView;
+	}
+
+	handleGranted(roles: Array<Role>) {
+		if (roles.length > 0) this.grantRoles(roles);
+		this.toggleGrantView();
+	}
+
+	handleRevoked(roles: Array<Role>) {
+		if (roles.length > 0) this.revokeRoles(roles);
+		this.toggleRevokeView();
+	}
 }

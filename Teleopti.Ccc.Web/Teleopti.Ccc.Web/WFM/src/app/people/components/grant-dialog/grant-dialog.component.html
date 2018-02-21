@@ -1,0 +1,45 @@
+<div class="person-header">
+    <div class="avatar">
+        <i class="mdi" [ngClass]="{'mdi-account-multiple': isMultipleSelected(), 'mdi-account': isSingleSelected()}"></i>
+    </div>
+    <h1 mat-dialog-title>
+        <span *ngIf="isMultipleSelected()">Grant roles</span>
+        <span *ngIf="isSingleSelected()">Grant roles on {{people[0].FirstName}} {{people[0].LastName}}</span>
+    </h1>
+    <h3 *ngIf="isMultipleSelected()">{{people.length}} people selected</h3>
+</div>
+<mat-dialog-content>
+    <h2>Current roles</h2>
+    <div class="con-fluid-row">
+        <div class="con-fluid-flex" *ngFor="let roleId of getRoleIdsOfPeople()">
+            <div class="wfm-chip-wrap">
+                <span class="wfm-chip">
+                    <span class="chip-handle chip-disabled">
+                        <i class="mdi" [ngClass]="{'mdi-check':isRoleOnAll(roleId), 'mdi-minus':!isRoleOnAll(roleId)}"></i>
+                    </span>
+                    <span class="chip-text">{{getRole(roleId).Name}}</span>
+                </span>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <h2>Available roles</h2>
+    <div class="con-fluid-row">
+        <div class="con-fluid-flex" *ngFor="let role of getRolesNotOnAll()">
+            <div class="wfm-chip-wrap">
+                <span class="wfm-chip" (click)="toggleSelectedRole(role.Id)">
+                    <span class="chip-handle" [ngClass]="{'chip-success':isSelectedRole(role.Id)}">
+                        <i class="mdi" [ngClass]="{'mdi-check':isSelectedRole(role.Id), 'mdi-plus':!isSelectedRole(role.Id)}"></i>
+                    </span>
+                    <span class="chip-text">{{role.Name}}</span>
+                </span>
+            </div>
+        </div>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <aside>
+        <button mat-button mat-dialog-close class="wfm-btn wfm-btn-default">Cancel</button>
+        <button mat-button (click)="save()" cdkFocusInitial class="wfm-btn wfm-btn-primary">Save</button>
+    </aside>
+</mat-dialog-actions>

@@ -1,0 +1,19 @@
+<div class="panel material-depth-1 role-page">
+	<div class="blue-box con-flex">
+		<h2>Revoke roles</h2>
+	</div>
+	<div class="role-content">
+		<h3>Current roles</h3>
+		<div class="con-fluid-row">
+			<div class="con-fluid-flex" *ngFor="let roleId of getRoleIdsOfPeople()">
+				<chip-remove (click)="toggleSelectedRole(roleId)" [active]="isSelectedRole(roleId)">{{getRole(roleId).Name}}</chip-remove>
+			</div>
+		</div>
+
+		<aside style="float:right">
+			<button (click)="close()" class="wfm-btn wfm-btn-default">Cancel</button>
+			<button (click)="save()" cdkFocusInitial class="wfm-btn wfm-btn-primary" [disabled]="!isAnyRoleSelected()">Save</button>
+		</aside>
+
+	</div>
+</div>
