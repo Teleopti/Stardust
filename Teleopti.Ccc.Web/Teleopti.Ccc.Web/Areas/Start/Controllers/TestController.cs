@@ -94,6 +94,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			_sessionSpecificWfmCookieProvider.RemoveCookie();
 			_formsAuthentication.SignOut();
 			_mutateNow.Reset();
+			_version.Reset();
 
 			((IdentityProviderProvider) _identityProviderProvider).SetDefaultProvider(defaultProvider);
 			_loadPasswordPolicyService.ClearFile();

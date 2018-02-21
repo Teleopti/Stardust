@@ -10,6 +10,9 @@ namespace Teleopti.Ccc.Web.Core
 		public void Is(string version) =>
 			_version = new Version(version);
 
+		public void Reset() =>
+			_version = null;
+
 		public string Version() => version().ToString();
 
 		public string VersionOrTimestamp() =>
