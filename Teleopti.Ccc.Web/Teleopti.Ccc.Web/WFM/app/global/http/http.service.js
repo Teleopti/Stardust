@@ -5,9 +5,9 @@
 		.module('wfm.http', ['currentUserInfoService', 'wfm.notice', 'pascalprecht.translate'])
 		.factory('httpInterceptor', httpInterceptor);
 
-	httpInterceptor.$inject = ['$q', '$injector', '$timeout', '$translate'];
+	httpInterceptor.$inject = ['$q', '$injector', '$timeout', '$translate', '$window'];
 
-	function httpInterceptor($q, $injector, $timeout, $translate) {
+	function httpInterceptor($q, $injector, $timeout, $translate, $window) {
 		var connected = true;
 
 		var service = {
@@ -52,6 +52,10 @@
 
 				case (rejection.status === 403):
 					NoticeService.error("<span class='test-alert'></span>" + $translate.instant('NoPermissionToViewErrorMessage'), null, false);
+					break;
+
+				case (rejection.status === 418):
+					$window.location.reload();
 					break;
 
 				case (rejection.status === 422):

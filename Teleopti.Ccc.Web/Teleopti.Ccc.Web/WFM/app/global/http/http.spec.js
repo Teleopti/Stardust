@@ -19,6 +19,7 @@ describe('HttpTest', function () {
 			});
 		});
 	});
+
 	beforeEach(inject(function (_$httpBackend_, _$q_, _$rootScope_, _$http_, _httpInterceptor_, _NoticeService_, _Settings_) {
 		$q = _$q_;
 		$rootScope = _$rootScope_;
@@ -38,7 +39,7 @@ describe('HttpTest', function () {
 		};
 		Settings.init();
 		var response = httpInterceptor.responseError(rejection);
-		var successCallback = function () { };
+		var successCallback = function () {	};
 		var errorCallback = function () {
 			expect(NoticeService.error).toHaveBeenCalled();
 			done();
@@ -57,12 +58,16 @@ describe('HttpTest', function () {
 
 	it('Should react to http error 500', function (done) {
 		reactHttp(500, done);
-
 	});
 
 	it('Should react to all 404-600 http errors', function (done) {
-		reactHttp(418, done);
+		reactHttp(419, done);
+	});
 
+	xit('Should reload on 418', function (done) {
+	});
+
+	xit('Should ignore on 422', function (done) {
 	});
 
 	it('Should react to http error -1', function (done) {
