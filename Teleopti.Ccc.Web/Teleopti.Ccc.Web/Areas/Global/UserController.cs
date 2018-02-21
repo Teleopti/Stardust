@@ -1,7 +1,6 @@
 ﻿using System.Globalization;
 using System.Web.Http;
 using Castle.Core.Internal;
-using NPOI.OpenXmlFormats.Shared;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Web.Core;
 
