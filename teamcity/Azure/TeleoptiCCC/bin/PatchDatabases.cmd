@@ -34,7 +34,6 @@ IF %ERRORLEVEL% EQU 0 (
   TIME /T >> "%DIRECTORY%\StartupLog.txt" 2>&1
   ECHO  An error occurred running task 1. Errorlevel = %ERRORLEVEL%. >> "%DIRECTORY%\StartupLog.txt" 2>&1
 
-  EXIT %ERRORLEVEL%
 )
 
 exit /b 0
