@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="Content/bootstrap/Content/bootstrap.css" />
     <link rel="stylesheet" href="Content/bootstrap/Content/bootstrap-theme.css" />	
 	
-	<script>var require = { urlArgs: 'v=<%=new ResourceVersion().Version()%>' };</script>
+	<script>var require = { urlArgs: 'v=<%=new SystemVersion().VersionOrTimestamp()%>' };</script>
 	<%--<script>var require = { urlArgs: 'v=<%=1%>' };</script>--%>
 	<script src="Areas/RtaTool/Content/Scripts/require/configuration.js"></script>
     <script data-main="Areas/RtaTool/Content/Scripts/main" type="text/javascript" src="Content/require/require.js"></script>

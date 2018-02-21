@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		private readonly IFindPersonInfo _findPersonInfo;
 		private readonly HangfireUtilities _hangfire;
 		private readonly TenantTickEventPublisher _tenantTickEventPublisher;
-		private readonly ResourceVersion _version;
+		private readonly SystemVersion _version;
 
 		public TestController(
 			IMutateNow mutateNow,
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			IFindPersonInfo findPersonInfo,
 			HangfireUtilities hangfire,
 			TenantTickEventPublisher tenantTickEventPublisher,
-			ResourceVersion version)
+			SystemVersion version)
 		{
 			_mutateNow = mutateNow;
 			_now = now;

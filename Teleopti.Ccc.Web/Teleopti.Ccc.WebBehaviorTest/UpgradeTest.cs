@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Navigation.GoToPage($"wfm/#/teapot");
 			Browser.Interactions.AssertFirstContains("body", "Bad coffee");
 
-			TestControllerMethods.SetVersion("2");
+			TestControllerMethods.SetVersion("2.0");
 			
 			Browser.Interactions.AssertFirstContains("body", "I'm a teapot");
 		}

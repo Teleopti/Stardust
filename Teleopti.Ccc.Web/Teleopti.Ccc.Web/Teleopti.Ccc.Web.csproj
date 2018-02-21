@@ -450,6 +450,7 @@
     <Compile Include="Areas\Global\NotificationsController.cs" />
     <Compile Include="Areas\Global\StatusController.cs" />
     <Compile Include="Areas\Global\TimeZoneController.cs" />
+    <Compile Include="Areas\Global\VersionController.cs" />
     <Compile Include="Areas\Global\WfmAreaRegistration.cs" />
     <Compile Include="Areas\Global\UserController.cs" />
     <Compile Include="Areas\HealthCheck\Controllers\HealthCheckApiController.cs" />
@@ -1030,7 +1031,7 @@
     <Compile Include="Core\RequestContext\Cookie\DefaultSessionSpecificTeleoptiCookieSettings.cs" />
     <Compile Include="Core\RequestContext\Cookie\ISessionSpecificCookieSettings.cs" />
     <Compile Include="Core\RequestContext\Cookie\SessionSpecificTeleoptiCookieProvider.cs" />
-    <Compile Include="Core\ResourceVersion.cs" />
+    <Compile Include="Core\SystemVersion.cs" />
     <Compile Include="Areas\MyTime\Models\Settings\CalendarLinkViewModel.cs" />
     <Compile Include="Areas\MyTime\Core\ShareCalendar\CalendarLinkId.cs" />
     <Compile Include="Areas\MyTime\Core\ShareCalendar\CalendarLinkIdGenerator.cs" />

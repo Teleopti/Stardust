@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 		private static void registerCommonTypes(ContainerBuilder builder)
 		{
-			builder.RegisterType<ResourceVersion>().SingleInstance();
+			builder.RegisterType<SystemVersion>().SingleInstance();
 			builder.RegisterType<ErrorMessageProvider>().As<IErrorMessageProvider>();
 			builder.RegisterType<Log4NetLogger>().AsSelf();
 			builder.RegisterType<LazyLoadingManagerWrapper>().As<ILazyLoadingManager>();

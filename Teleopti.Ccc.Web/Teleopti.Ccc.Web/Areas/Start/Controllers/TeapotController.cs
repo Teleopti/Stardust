@@ -6,9 +6,9 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 {
 	public class TeapotController : ApiController
 	{
-		private readonly ResourceVersion _version;
+		private readonly SystemVersion _version;
 
-		public TeapotController(ResourceVersion version)
+		public TeapotController(SystemVersion version)
 		{
 			_version = version;
 		}
@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		[HttpGet, Route("api/Teapot/MakeBadCoffee")]
 		public virtual IHttpActionResult MakeBadCoffee()
 		{
-			if (_version.TeapotVersion() == "2")
+			if (_version.Version() == "2.0")
 				throw new NotImplementedException();
 			return Ok("Bad coffee");
 		}
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		[HttpGet, Route("api/Teapot/MakeGoodCoffee")]
 		public virtual IHttpActionResult MakeGoodCoffee()
 		{
-			if (_version.TeapotVersion() == "2")
+			if (_version.Version() == "2.0")
 				return Ok("I'm a teapot");
 			throw new NotImplementedException();
 		}

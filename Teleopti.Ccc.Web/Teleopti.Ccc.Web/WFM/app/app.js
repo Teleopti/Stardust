@@ -103,6 +103,7 @@ var wfm = angular.module('wfm', [
 		'areasService',
 		'NoticeService',
 		'$q',
+		'$http',
 		function ($rootScope,
 				  $state,
 				  $translate,
@@ -112,7 +113,8 @@ var wfm = angular.module('wfm', [
 				  toggleService,
 				  areasService,
 				  noticeService,
-				  $q) {
+				  $q,
+				  $http) {
 			$rootScope.isAuthenticated = false;
 
 			$rootScope.$watchGroup(['toggleLeftSide', 'toggleRightSide'], function () {
@@ -129,6 +131,9 @@ var wfm = angular.module('wfm', [
 			preloads.push(toggleService.togglesLoaded);
 			preloads.push(initializeUserInfo());
 			preloads.push(initializePermissionCheck());
+			preloads.push($http.get('../api/Global/Version').then(function (response) {
+				$rootScope.version = response.data;
+			}));
 			var preloadDone = false;
 
 			$rootScope.$on('$stateChangeStart', function (event, next, toParams) {

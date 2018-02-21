@@ -17,7 +17,7 @@
 	
 	<link rel="stylesheet" href="Areas/Messages/Content/Styles/main.css" />
 	
-	<script>var require = { urlArgs: 'v=<%=new ResourceVersion().Version()%>' };</script>
+	<script>var require = { urlArgs: 'v=<%=new SystemVersion().VersionOrTimestamp()%>' };</script>
 	<script src="Areas/Messages/Content/Scripts/require/configuration.js"></script>
 	<script data-main="Areas/Messages/Content/Scripts/main" type="text/javascript" src="<%= Url.Content("~/Content/require/require.js") %>"></script>
 </head>
