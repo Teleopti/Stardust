@@ -71,6 +71,9 @@
       </div>
       <div class="modal-inner-content" style="text-align:center;">
         <wfm-calendar-picker ng-model="vm.exportStaffingDataDate"></wfm-calendar-picker>
+        <div ng-if="!vm.exporting && vm.ErrorMessage" class="text-danger">
+          {{vm.ErrorMessage}}
+        </div>
       </div>
       <div class="modal-actions">
         <aside>
@@ -78,7 +81,7 @@
           <button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.exportStaffingData()">{{'Export'|translate}}</button>
         </aside>
       </div>
-      <div ng-if="vm.skillMaster.isForecastRunning">
+      <div ng-if="vm.exporting">
         <md-progress-linear md-mode="indeterminate"></md-progress-linear>
       </div>
     </div>
@@ -90,7 +93,7 @@
         <md-progress-linear ng-show="vm.isRunning()" md-mode="indeterminate"></md-progress-linear>
         <div class="sub-header">
           <h2>{{'Staffing' | translate}} - {{vm.selectedDate | date:'yyyy-MM-dd'}} </h2>
-          <div class="head-actions panel-menu" ng-if="vm.showBpoInterface && vm.hasPermissionForBpoExchange">
+          <div class="head-actions panel-menu" ng-if="vm.showBpoInterface && vm.hasPermissionForBpoExchange && vm.selectedSkill">
             <div tabindex=0 class="context-menu card-context" ng-click="vm.exportModal = true;">
               <i class="mdi mdi-file-excel">
                 <md-tooltip>{{'ExportToFile'|translate}}</md-tooltip>

@@ -420,6 +420,7 @@
 				vm.ErrorMessage = $translate.instant('BpoExportYouMustSelectASkill');
 				return;
 			}
+			vm.exporting = true;
 			var request = staffingService.exportStaffingData.get({
 				skillId: vm.selectedSkill.Id,
 				exportStartDate: vm.exportStaffingDataDate.startDate,
@@ -427,10 +428,14 @@
 			});
 			request.$promise.then(function(response) {
 				vm.ErrorMessage = response.ErrorMessage;
-				if (vm.ErrorMessage !== '') return;
-				var data = angular.toJson(response.Content);
-				vm.exportModal = false;
-				utilService.saveToFs(response.Content, vm.selectedSkill.Name + '.csv', 'text/csv');
+				vm.exporting = false;
+				if (vm.ErrorMessage !== ''){
+					return;
+				} else{
+					var data = angular.toJson(response.Content);
+					vm.exportModal = false;
+					utilService.saveToFs(response.Content, vm.selectedSkill.Name + '.csv', 'text/csv');
+				}
 			});
 		}
 
