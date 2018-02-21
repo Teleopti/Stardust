@@ -132,8 +132,10 @@ var wfm = angular.module('wfm', [
 			preloads.push(initializeUserInfo());
 			preloads.push(initializePermissionCheck());
 			preloads.push($http.get('../api/Global/Version').then(function (response) {
-				$rootScope.version = response.data;
-				$http.defaults.headers.common['X-Version'] = $rootScope.version;
+				if (response.data) { // remove if statement with toggle RTA_ReloadUIOnSystemVersionChanged_48196
+					$rootScope.version = response.data;
+					$http.defaults.headers.common['X-Client-Version'] = $rootScope.version;
+				}
 			}));
 			var preloadDone = false;
 

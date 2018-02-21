@@ -6,6 +6,8 @@ using System.Web;
 using System.Web.Mvc;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Teleopti.Ccc.Domain;
+using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.Web.Core.RequestContext.Initialize;
 using Teleopti.Ccc.Web.Core.Startup;
 
@@ -48,16 +50,39 @@ namespace Teleopti.Ccc.Web.Core.Startup
 		public void Init(HttpApplication application)
 		{
 			// this will run on every HttpApplication initialization in the application pool
-			application.PostAuthenticateRequest += setupPrincipal;
-			application.BeginRequest += checkForStartupErrors;
+			application.BeginRequest += (s, e) =>
+			{
+				if (_isDisposed) return;
+				checkForStartupErrors();
+				validateClientVersion();
+			};
+			application.PostAuthenticateRequest += (s, e) =>
+			{
+				if (_isDisposed) return;
+				setupPrincipal();
+			};
+		}
+
+		private static void validateClientVersion()
+		{
+			var clientVersion = HttpContext.Current.Request.Headers["X-Client-Version"];
+			var versionValidationDisabled = string.IsNullOrEmpty(clientVersion);
+			if (versionValidationDisabled)
+				return;
+			var clientVersionIsOk = clientVersion == SystemVersion.Version();
+			if (clientVersionIsOk)
+				return;
+
+			HttpContext.Current.Response.StatusCode = 418;
+			HttpContext.Current.Response.End();
 		}
 
 		public static IRequestContextInitializer RequestContextInitializer { get; set; }
+		public static SystemVersion SystemVersion { get; set; }
 
-		private void setupPrincipal(object sender, EventArgs e)
+		private void setupPrincipal()
 		{
 			if (requestMatching(withoutPrincipal())) return;
-			if (_isDisposed) return;
 			RequestContextInitializer.SetupPrincipalAndCulture(onlyUseGregorianCalendar(HttpContext.Current));
 		}
 
@@ -67,9 +92,10 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			return patterns.Any(url.Contains);
 		}
 
-		private void checkForStartupErrors(object sender, EventArgs e)
+		private void checkForStartupErrors()
 		{
-			if (_noStartupErrors) return;
+			if (_noStartupErrors)
+				return;
 
 			if (requestMatching(ignoreStartupErrors()))
 				return;

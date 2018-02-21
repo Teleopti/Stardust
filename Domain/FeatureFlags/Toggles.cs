@@ -21,7 +21,8 @@
 		RTA_ViewHistoricalAhderence7DaysBack_46826,
 		RTA_ConfigurationValidationNotification_46933,
 		RTA_ApprovePreviousOOA_47230,
-
+		RTA_ReloadUIOnSystemVersionChanged_48196,
+		
 		MyTimeWeb_SortRequestList_40711,
 		MyTimeWeb_ViewIntradayStaffingProbability_41608,
 		MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913,

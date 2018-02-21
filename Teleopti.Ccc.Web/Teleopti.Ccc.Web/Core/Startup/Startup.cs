@@ -60,6 +60,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 				AutofacHostFactory.Container = container;
 
 				ApplicationStartModule.RequestContextInitializer = container.Resolve<IRequestContextInitializer>();
+				ApplicationStartModule.SystemVersion = container.Resolve<SystemVersion>();
 
 				DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
 				GlobalConfiguration.Configuration.DependencyResolver = new AutofacWebApiDependencyResolver(container);
