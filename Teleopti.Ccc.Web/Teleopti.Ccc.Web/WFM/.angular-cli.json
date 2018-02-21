@@ -15,7 +15,7 @@
       "tsconfig": "tsconfig.app.json",
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "app",
-      "styles": ["styles.css", "../node_modules/c3/c3.min.css"],
+      "styles": ["styles.scss", "../node_modules/c3/c3.min.css"],
       "scripts": [],
       "environmentSource": "environments/environment.ts",
       "environments": {
@@ -49,7 +49,7 @@
     }
   },
   "defaults": {
-    "styleExt": "css",
+    "styleExt": "scss",
     "component": {}
   }
 }
