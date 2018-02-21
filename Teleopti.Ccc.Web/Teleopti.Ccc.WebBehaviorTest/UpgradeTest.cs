@@ -1,4 +1,6 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.WebBehaviorTest.Core;
@@ -14,7 +16,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			base.BeforeTest();
 			SetupFixtureForAssembly.TestRun.BeforeTest();
-			
+
 			var role = new RoleConfigurable
 			{
 				AccessToEverything = true,
@@ -35,17 +37,17 @@ namespace Teleopti.Ccc.WebBehaviorTest
 
 	[TestFixture]
 	[FullIntegrationTest]
-	[Ignore("WIP")]
 	public class UpgradeTest
 	{
 		[Test]
+		[OnlyRunIfEnabled(Toggles.RTA_ReloadUIOnSystemVersionChanged_48196)]
 		public void ShouldRefreshClientApplicationAfterUpgrade()
 		{
 			Navigation.GoToPage($"wfm/#/teapot");
 			Browser.Interactions.AssertFirstContains("body", "Bad coffee");
 
 			TestControllerMethods.SetVersion("2.0");
-			
+
 			Browser.Interactions.AssertFirstContains("body", "I'm a teapot");
 		}
 	}

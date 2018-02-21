@@ -37,36 +37,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.Toggle
 		{
 			theReply.Should().Be.EqualTo(reply);
 		}
-
-		public static void IgnoreScenarioIfDisabledByToggle()
-		{
-			if (ScenarioContext.Current == null)
-				return;
-
-			var matchingEnkelsnuffs = new Regex(@"\'(.*)\'");
-
-			var tags = ScenarioContext.Current.ScenarioInfo.Tags.Union(FeatureContext.Current.FeatureInfo.Tags).ToArray();
-			var runIfEnabled = tags.Where(s => s.StartsWith("OnlyRunIfEnabled"))
-				.Select(onlyRunIfEnabled => (Toggles) Enum.Parse(typeof(Toggles), matchingEnkelsnuffs.Match(onlyRunIfEnabled).Groups[1].ToString()));
-			var runIfDisabled = tags.Where(s => s.StartsWith("OnlyRunIfDisabled"))
-				.Select(onlyRunIfDisabled => (Toggles) Enum.Parse(typeof(Toggles), matchingEnkelsnuffs.Match(onlyRunIfDisabled).Groups[1].ToString()));
-
-			runIfEnabled.ForEach(t =>
-			{
-				if (!LocalSystem.Toggles.IsEnabled(t))
-					Assert.Ignore("Ignoring scenario {0} because toggle {1} is disabled", ScenarioContext.Current.ScenarioInfo.Title, t);
-			});
-
-			runIfDisabled.ForEach(t =>
-			{
-				if (LocalSystem.Toggles.IsEnabled(t))
-					Assert.Ignore("Ignoring scenario {0} because toggle {1} is enabled", ScenarioContext.Current.ScenarioInfo.Title, t);
-			});
-		}
-
-		public static bool CheckToggleEnabled(Toggles toggle)
-		{
-			return LocalSystem.Toggles.IsEnabled(toggle);
-		}
 	}
 }

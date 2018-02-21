@@ -1,9 +1,13 @@
 using System;
 using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
 using log4net;
 using log4net.Config;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
+using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 using Teleopti.Ccc.WebBehaviorTest.Core;
@@ -34,11 +38,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 
 		public void BeforeTest()
 		{
-			log.Debug($"Preparing for scenario {ScenarioContext.Current?.ScenarioInfo.Title}");
+			log.Debug($"Preparing for test {ScenarioContext.Current?.ScenarioInfo.Title}");
 
 			Browser.SelectBrowserByTag();
 
-			ToggleStepDefinition.IgnoreScenarioIfDisabledByToggle();
+			ignoreScenarioIfDisabledByToggle();
 
 			CurrentTime.Reset();
 			CurrentScopeBusinessUnit.Reset();
@@ -55,12 +59,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 
 			Browser.Interactions.Javascript("sessionStorage.clear();");
 
-			log.Debug($"Starting scenario {ScenarioContext.Current?.ScenarioInfo.Title}");
+			log.Debug($"Starting test {ScenarioContext.Current?.ScenarioInfo.Title}");
 		}
 
 		public void AfterTest()
 		{
-			log.Debug($"Cleaning up after scenario {ScenarioContext.Current?.ScenarioInfo.Title}");
+			log.Debug($"Cleaning up after test {ScenarioContext.Current?.ScenarioInfo.Title}");
 			log.Info(TestContext.CurrentContext.Result.Outcome.Status);
 			if (Browser.IsStarted)
 				Browser.Interactions.GoTo("about:blank");
@@ -72,9 +76,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			}
 
 			if (ScenarioContext.Current?.TestError != null)
-				Console.WriteLine($"\r\nTest Scenario \"{ScenarioContext.Current?.ScenarioInfo.Title}\" failed, please check the error message.");
+				Console.WriteLine($@"Test {ScenarioContext.Current?.ScenarioInfo.Title} failed, please check the error message.");
 
-			log.Debug($"Finished scenario {ScenarioContext.Current?.ScenarioInfo.Title}");
+			log.Debug($"Finished test {ScenarioContext.Current?.ScenarioInfo.Title}");
 		}
 
 		public void AfterStep()
@@ -98,6 +102,33 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		private static bool suppressHangfireQueue()
 		{
 			return ScenarioContext.Current?.IsTaggedWith(suppressHangfireQueueTag) ?? false;
+		}
+
+
+		private static void ignoreScenarioIfDisabledByToggle()
+		{
+			if (ScenarioContext.Current == null)
+				return;
+
+			var matchingEnkelsnuffs = new Regex(@"\'(.*)\'");
+
+			var tags = ScenarioContext.Current.ScenarioInfo.Tags.Union(FeatureContext.Current.FeatureInfo.Tags).ToArray();
+			var runIfEnabled = tags.Where(s => s.StartsWith("OnlyRunIfEnabled"))
+				.Select(onlyRunIfEnabled => (Toggles) Enum.Parse(typeof(Toggles), matchingEnkelsnuffs.Match(onlyRunIfEnabled).Groups[1].ToString()));
+			var runIfDisabled = tags.Where(s => s.StartsWith("OnlyRunIfDisabled"))
+				.Select(onlyRunIfDisabled => (Toggles) Enum.Parse(typeof(Toggles), matchingEnkelsnuffs.Match(onlyRunIfDisabled).Groups[1].ToString()));
+
+			runIfEnabled.ForEach(t =>
+			{
+				if (!LocalSystem.Toggles.IsEnabled(t))
+					Assert.Ignore($"Ignoring test {ScenarioContext.Current.ScenarioInfo.Title} because toggle {t} is disabled");
+			});
+
+			runIfDisabled.ForEach(t =>
+			{
+				if (LocalSystem.Toggles.IsEnabled(t))
+					Assert.Ignore($"Ignoring test {ScenarioContext.Current.ScenarioInfo.Title} because toggle {t} is enabled");
+			});
 		}
 	}
 }
