@@ -192,10 +192,14 @@
 		function putTimeAfter(time, putAfter) {
 			if (!time)
 				return undefined;
-			time = intoTimeline(time);
-			if (time.isBefore(putAfter))
-				time = time.add(1, "days");
-			return time.toDate();
+			var result = intoTimeline(time);
+			if (result.isBefore(putAfter))
+				result = result.add(1, "days");
+			result = result.toDate();
+
+			if (timeChanged(result, time))
+				return result;
+			return time;
 		}
 
 		function intoTimeline(time) {

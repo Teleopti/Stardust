@@ -360,4 +360,28 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 		expect(vm.approveOffset).toEqual(undefined);
 		expect(vm.approveWidth).toEqual(undefined);
 	});
+
+	it('should not create a new date object because the angular binding cant handle it well', function (t) {
+		t.stateParams.personId = '1';
+		t.backend.with.historicalAdherence({
+			Timeline: {
+				StartTime: '2018-02-06T10:00:00',
+				EndTime: '2018-02-06T20:00:00'
+			}
+		});
+		var vm = t.createController();
+		var startTime = moment('2018-02-06T11:00:00').toDate();
+		var endTime = moment('2018-02-06T12:00:00').toDate();
+
+		t.apply(function () {
+			vm.approveStartTime = startTime;
+		});
+		t.apply(function () {
+			vm.approveEndTime = endTime;
+		});
+
+		expect(vm.approveStartTime === startTime).toBe(true);
+		expect(vm.approveEndTime === endTime).toBe(true);
+	});
+
 });
