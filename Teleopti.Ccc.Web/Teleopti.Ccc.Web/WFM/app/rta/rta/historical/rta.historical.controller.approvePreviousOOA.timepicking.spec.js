@@ -361,7 +361,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 		expect(vm.approveWidth).toEqual(undefined);
 	});
 
-	it('should not create a new date object because the angular binding cant handle it well', function (t) {
+	it('should provide the same date object for angular binding', function (t) {
 		t.stateParams.personId = '1';
 		t.backend.with.historicalAdherence({
 			Timeline: {
