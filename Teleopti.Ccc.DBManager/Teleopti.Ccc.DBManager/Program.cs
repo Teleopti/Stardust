@@ -45,14 +45,12 @@ namespace Teleopti.Ccc.DBManager
                     Console.Out.WriteLine("-D[Database name]");
                     Console.Out.WriteLine("-U[User name]");
                     Console.Out.WriteLine("-P[Password]");
-                    Console.Out.WriteLine("-N[Target build number]");
                     Console.Out.WriteLine("-E Uses Integrated Security, otherwise SQL Server security.");
                     string databaseTypeList = string.Join("|", Enum.GetNames(typeof(DatabaseType)));
                     Console.Out.WriteLine(string.Format(CultureInfo.CurrentCulture, "-O[{0}]", databaseTypeList));
                     Console.Out.WriteLine("-C Creates a database with name from -D switch.");
                     Console.Out.WriteLine("-L[sqlUserName:sqlUserPassword] Will create a sql user that the application will use when running. Mandatory while using -C or -R");
                     Console.Out.WriteLine("-W[Local windows Group] Will create a Windows Group that the application will use when running. . Mandatory while using -C or -R");
-                    Console.Out.WriteLine("-B[Business Unit]");
                     Console.Out.WriteLine("-F Path to where dbmanager runs from");
 	                return 0;
                 }

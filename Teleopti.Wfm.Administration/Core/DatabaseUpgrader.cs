@@ -21,12 +21,12 @@ namespace Teleopti.Wfm.Administration.Core
 				DatabaseName = database,
 				UserName = adminUserName,
 				Password = adminPassword,
-				appUserName = appUser,
-				appUserPwd = appPassword,
-				TargetDatabaseType = type,
-				PathToDbManager = _pathProvider.GetDbPath(),
-				PatchMode = true,
-				PermissionMode = permissionMode,
+				AppUserName = appUser,
+				AppUserPassword = appPassword,
+				DatabaseType = type,
+				DbManagerFolderPath = _pathProvider.GetDbPath(),
+				UpgradeDatabase = true,
+				CreatePermissions = permissionMode,
 				UseIntegratedSecurity = useIntegratedSecurity
 			};
 			_databasePatcher.SetLogger(new TenantLogger(tenant, tenantId));

@@ -16,50 +16,49 @@ namespace Teleopti.Ccc.DBManager.Library
 			_logger = upgradeLog;
 		}
 		
-		public int Run(CommandLineArgument commandLineArgument)
+		public int Run(CommandLineArgument args)
 		{
 			try
 			{
 				var safeMode = true;
-				var isAzure = commandLineArgument.ServerName.Contains(".database.windows.net");
 
-				var databaseFolder = new DatabaseFolder(new DbManagerFolder(commandLineArgument.PathToDbManager));
+				var databaseFolder = new DatabaseFolder(new DbManagerFolder(args.DbManagerFolderPath));
 				var schemaVersionInformation = new SchemaVersionInformation(databaseFolder);
 				_logger.Write("Running from:" + databaseFolder.Path());
 
 				//If Permission Mode: check if application user name and password/windowsgroup is submitted
-				if (commandLineArgument.PermissionMode)
+				if (args.CreatePermissions)
 				{
-					if (!(commandLineArgument.appUserName.Length > 0 && (commandLineArgument.appUserPwd.Length > 0 || commandLineArgument.isWindowsGroupName)))
+					if (!(args.AppUserName.Length > 0 && (args.AppUserPassword.Length > 0 || args.IsWindowsGroupName)))
 						throw new Exception("No Application user/Windows group name submitted!");
 				}
 
-				if (isAzure && commandLineArgument.isWindowsGroupName)
+				if (args.IsAzure && args.IsWindowsGroupName)
 					throw new Exception("Windows Azure don't support Windows Login for the moment!");
 
 				//special for Azure => fn_my_permissions does not exist: http://msdn.microsoft.com/en-us/library/windowsazure/ee336248.aspx
 				bool isSrvDbCreator;
 				bool isSrvSecurityAdmin;
 				ExecuteSql masterExecuteSql = null;
-				if (isAzure)
+				if (args.IsAzure)
 				{
 					isSrvDbCreator = true;
 					isSrvSecurityAdmin = true;
 				}
 				else
 				{
-					masterExecuteSql = new ExecuteSql(() => connectAndOpen(commandLineArgument.ConnectionStringToMaster), _logger);
+					masterExecuteSql = new ExecuteSql(() => connectAndOpen(args.ConnectionStringToMaster), _logger);
 					isSrvDbCreator = hasSrvDbCreator(masterExecuteSql);
 					isSrvSecurityAdmin = hasSrvSecurityAdmin(masterExecuteSql);
 				}
 
 				//try connect to DB using given AppLogin
 				var loginExist = false;
-				if (!commandLineArgument.isWindowsGroupName) //SQL
+				if (!args.IsWindowsGroupName) //SQL
 				{
 					try
 					{
-						using (connectAndOpen(commandLineArgument.ConnectionStringAppLogOn(isAzure ? commandLineArgument.DatabaseName : DatabaseHelper.MasterDatabaseName)))
+						using (connectAndOpen(args.ConnectionStringAppLogOn(args.IsAzure ? args.DatabaseName : DatabaseHelper.MasterDatabaseName)))
 						{
 						}
 
@@ -70,11 +69,11 @@ namespace Teleopti.Ccc.DBManager.Library
 						loginExist = false;
 					}
 				}
-				else if (!isAzure) //Win 
-					loginExist = verifyWinGroup(commandLineArgument.appUserName, masterExecuteSql); //We will need to check on sys.syslogins
+				else if (!args.IsAzure) //Win 
+					loginExist = verifyWinGroup(args.AppUserName, masterExecuteSql); //We will need to check on sys.syslogins
 				
 				//New installation
-				if (commandLineArgument.WillCreateNewDatabase && !((isSrvDbCreator && isSrvSecurityAdmin)))
+				if (args.CreateDatabase && !((isSrvDbCreator && isSrvSecurityAdmin)))
 				{
 					throw new Exception("Either sysAdmin or dbCreator + SecurityAdmin permissions are needed to install WFM databases!");
 				}
@@ -82,14 +81,14 @@ namespace Teleopti.Ccc.DBManager.Library
 				//patch
 				if (!loginExist && !isSrvSecurityAdmin)
 				{
-					throw new Exception(string.Format(CultureInfo.CurrentCulture, "The login '{0}' does not exist or wrong password supplied, and You don't have the permission to create/alter the login.", commandLineArgument.appUserName));
+					throw new Exception(string.Format(CultureInfo.CurrentCulture, "The login '{0}' does not exist or wrong password supplied, and You don't have the permission to create/alter the login.", args.AppUserName));
 				}
 
 				//Same sql login for admin and end user?
-				if ((commandLineArgument.PermissionMode) &&
-					 (!commandLineArgument.UseIntegratedSecurity) &&
-					 (commandLineArgument.appUserName.Length > 0 && commandLineArgument.UserName.Length > 0) &&
-			 (compareStringLowerCase(commandLineArgument.appUserName, commandLineArgument.UserName))
+				if ((args.CreatePermissions) &&
+					 (!args.UseIntegratedSecurity) &&
+					 (args.AppUserName.Length > 0 && args.UserName.Length > 0) &&
+			 (compareStringLowerCase(args.AppUserName, args.UserName))
 					 )
 				{
 					safeMode = false;
@@ -98,26 +97,26 @@ namespace Teleopti.Ccc.DBManager.Library
 				}
 
 				//Exclude Agg from Azure
-				if (isAzure && commandLineArgument.TargetDatabaseTypeName == DatabaseType.TeleoptiCCCAgg.ToString())
+				if (args.IsAzure && args.TargetDatabaseTypeName == DatabaseType.TeleoptiCCCAgg.ToString())
 				{
 					_logger.Write("This is a TeleoptiCCCAgg, exclude from SQL Azure");
 					return 0;
 				}
 
-				if (commandLineArgument.WillCreateNewDatabase)
+				if (args.CreateDatabase)
 				{
 					if(masterExecuteSql == null)
-						masterExecuteSql = new ExecuteSql(() => connectAndOpen(commandLineArgument.ConnectionStringToMaster), _logger);
-					createDB(commandLineArgument.DatabaseName, commandLineArgument.TargetDatabaseType, isAzure, new DatabaseCreator(databaseFolder, masterExecuteSql));
+						masterExecuteSql = new ExecuteSql(() => connectAndOpen(args.ConnectionStringToMaster), _logger);
+					createDB(args.DatabaseName, args.DatabaseType, args.IsAzure, new DatabaseCreator(databaseFolder, masterExecuteSql));
 				}
 				ExecuteSql executeSql;
 				try
 				{
-					executeSql = new ExecuteSql(() => connectAndOpen(commandLineArgument.ConnectionString), _logger);
+					executeSql = new ExecuteSql(() => connectAndOpen(args.ConnectionString), _logger);
 				}
 				catch
 				{
-					_logger.Write("Database " + commandLineArgument.DatabaseName + " does not exist on server " + commandLineArgument.ServerName);
+					_logger.Write("Database " + args.DatabaseName + " does not exist on server " + args.ServerName);
 					_logger.Write("Run DBManager.exe with -c switch to create.");
 					return 0;
 				}
@@ -125,10 +124,10 @@ namespace Teleopti.Ccc.DBManager.Library
 
 				//Try create or re-create login
 				
-					if (commandLineArgument.PermissionMode && safeMode && isSrvSecurityAdmin)
+					if (args.CreatePermissions && safeMode && isSrvSecurityAdmin)
 					{
 						var loginHelper = new LoginHelper(_logger, masterExecuteSql, databaseFolder);
-						loginHelper.CreateLogin(commandLineArgument.appUserName, commandLineArgument.appUserPwd, commandLineArgument.isWindowsGroupName, isAzure);
+						loginHelper.CreateLogin(args.AppUserName, args.AppUserPassword, args.IsWindowsGroupName, args.IsAzure);
 					}
 
 					var databaseVersionInformation = new DatabaseVersionInformation(databaseFolder, executeSql);
@@ -140,33 +139,37 @@ namespace Teleopti.Ccc.DBManager.Library
 					}
 
 					//if this is the very first create, add VersionControl table
-					if (commandLineArgument.WillCreateNewDatabase)
+					if (args.CreateDatabase)
 					{
 						createDefaultVersionInformation(databaseVersionInformation);
 					}
 
 					//Set permissions of the newly application user on db.
-					if (commandLineArgument.PermissionMode && safeMode)
+					if (args.CreatePermissions && safeMode)
 					{
 						var permissionsHelper = new PermissionsHelper(_logger, databaseFolder, executeSql);
-						permissionsHelper.CreatePermissions(commandLineArgument.appUserName, commandLineArgument.appUserPwd, isAzure);
+						permissionsHelper.CreatePermissions(args.AppUserName, args.AppUserPassword, args.IsAzure);
 					}
 
 					//Patch database
-					if (commandLineArgument.PatchMode)
+					if (args.UpgradeDatabase)
 					{
 						//Does the Version Table exist?
 						if (versionTableExists(executeSql))
 						{
 							//Shortcut to release 329, Azure specific script
-							if (isAzure && databaseVersionInformation.GetDatabaseVersion() == 0)
+							if (args.IsAzure && databaseVersionInformation.GetDatabaseVersion() == 0)
 							{
-								new AzureStartDDL(databaseFolder, executeSql).Apply((DatabaseType)Enum.Parse(typeof(DatabaseType), commandLineArgument.TargetDatabaseTypeName));
+								new AzureStartDDL(databaseFolder, executeSql).Apply((DatabaseType)Enum.Parse(typeof(DatabaseType), args.TargetDatabaseTypeName));
 							}
 
-							var dbCreator = new DatabaseSchemaCreator(databaseVersionInformation,
-								schemaVersionInformation, executeSql, databaseFolder, _logger);
-							dbCreator.Create(commandLineArgument.TargetDatabaseType, isAzure);
+							new DatabaseSchemaCreator(
+									databaseVersionInformation, 
+									schemaVersionInformation, 
+									executeSql, 
+									databaseFolder, 
+									_logger)
+								.Create(args.DatabaseType, args.IsAzure);
 						}
 						else
 						{
@@ -199,24 +202,6 @@ namespace Teleopti.Ccc.DBManager.Library
 			const string sql = "SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME LIKE 'DatabaseVersion'";
 			return Convert.ToBoolean(executeSql.ExecuteScalar(sql));
 		}
-
-		//private bool isDbOwner(ExecuteSql executeSql)
-		//{
-		//	// Testing workaround to Internal .Net Framework Data Provider error 6. error
-		//	bool result = false;
-		//	for(var attempt=0;attempt<5; attempt++)
-		//		try
-		//		{
-		//			result = _isDbOwner(executeSql);
-		//			break;
-		//		}
-		//		catch (Exception)
-		//		{
-		//			Thread.Sleep(TimeSpan.FromSeconds(5));
-		//			continue;
-		//		}
-		//	return result;
-		//}
 
 		private bool isDbOwner(ExecuteSql executeSql)
 		{
