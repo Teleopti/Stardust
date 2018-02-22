@@ -22,29 +22,48 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	INSERT INTO [mart].[fact_schedule_day_count]
-           ([shift_startdate_local_id]
-           ,[person_id]
-           ,[scenario_id]
-           ,[starttime]
-           ,[shift_category_id]
-           ,[day_off_id]
-           ,[absence_id]
-           ,[day_count]
-           ,[business_unit_id]
-           ,[datasource_update_date])
-     VALUES
-           (@shift_startdate_local_id
-           ,@person_id
-           ,@scenario_id
-           ,@starttime
-           ,@shift_category_id
-           ,@day_off_id
-           ,@absence_id
-           ,1
-           ,@business_unit_id
-           ,GETDATE())
-
+	MERGE [mart].[fact_schedule_day_count] AS target  
+    USING (
+			SELECT 
+				@shift_startdate_local_id,
+				@person_id,
+				@scenario_id
+			) AS src 
+					(
+						[shift_startdate_local_id]
+					   ,[person_id]
+					   ,[scenario_id]
+					)
+		ON (
+			target.shift_startdate_local_id = src.shift_startdate_local_id
+			AND target.person_id = src.person_id
+			AND target.scenario_id = src.scenario_id
+			)
+	WHEN NOT MATCHED THEN  
+		INSERT (
+					[shift_startdate_local_id]
+				   ,[person_id]
+				   ,[scenario_id]
+				   ,[starttime]
+				   ,[shift_category_id]
+				   ,[day_off_id]
+				   ,[absence_id]
+				   ,[day_count]
+				   ,[business_unit_id]
+				   ,[datasource_update_date]
+				)
+		VALUES (
+					@shift_startdate_local_id
+				   ,@person_id
+				   ,@scenario_id
+				   ,@starttime
+				   ,@shift_category_id
+				   ,@day_off_id
+				   ,@absence_id
+				   ,1
+				   ,@business_unit_id
+				   ,GETDATE()
+				);
 END
 
 GO
