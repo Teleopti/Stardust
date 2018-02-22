@@ -1158,7 +1158,6 @@
     <Compile Include="InterfaceLegacy\Domain\ITaskSource.cs" />
     <Compile Include="InterfaceLegacy\Domain\ITaskTimeDistributionService.cs" />
     <Compile Include="InterfaceLegacy\Domain\ITeam.cs" />
-    <Compile Include="InterfaceLegacy\Domain\ITeamBlockTargetValueCalculator.cs" />
     <Compile Include="InterfaceLegacy\Domain\ITeamGamificationSetting.cs" />
     <Compile Include="InterfaceLegacy\Domain\ITeamGroupedBooking.cs" />
     <Compile Include="InterfaceLegacy\Domain\ITeleoptiDiagnosticsInformation.cs" />
