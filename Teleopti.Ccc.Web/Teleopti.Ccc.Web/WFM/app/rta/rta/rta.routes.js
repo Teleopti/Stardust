@@ -91,6 +91,7 @@ angular.module('wfm.rta').config(function ($stateProvider, ToggleProvider) {
 				$state.go('rta', $stateParams);
 			}
 		})
+		// remove with RTA_ModifySkillGroup_48191
 		.state("rta-skill-area-config", {
 			params: {
 				isNewSkillArea: false,
