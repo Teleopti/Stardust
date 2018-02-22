@@ -1001,7 +1001,6 @@
     <Compile Include="InterfaceLegacy\Domain\IRecurrentWeeklyMeeting.cs" />
     <Compile Include="InterfaceLegacy\Domain\IRelativeDailyDifferencesByAllSkillsExtractor.cs" />
     <Compile Include="InterfaceLegacy\Domain\IRemoveLayerFromSchedule.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IRemoveShiftCategoryBackToLegalService.cs" />
     <Compile Include="InterfaceLegacy\Domain\IRemoveShiftCategoryOnBestDateService.cs" />
     <Compile Include="InterfaceLegacy\Domain\IReplaceLayerInSchedule.cs" />
     <Compile Include="InterfaceLegacy\Domain\IReplyOptionsSource.cs" />
@@ -3003,7 +3002,6 @@
     <Compile Include="Repositories\IWorkflowControlSetRepository.cs" />
     <Compile Include="Repositories\IWorkShiftRuleSetRepository.cs" />
     <Compile Include="Optimization\FullWeekOuterWeekPeriodCreator.cs" />
-    <Compile Include="Optimization\RemoveShiftCategoryBackToLegalService.cs" />
     <Compile Include="Optimization\ScheduleDayService.cs" />
     <Compile Include="Optimization\SchedulePartExtractor.cs" />
     <Compile Include="Optimization\ScheduleDayPro.cs" />
