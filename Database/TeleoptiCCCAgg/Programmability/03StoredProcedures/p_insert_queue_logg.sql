@@ -79,6 +79,28 @@ WHERE [id]=1
 H�r blir det lite nytt  
 
 */
+
+
+SELECT @minutes_per_interval = (1440/int_value) 
+FROM ccc_system_info 
+WHERE [id]=1
+
+SELECT @interval_per_hour = 60/@minutes_per_interval
+
+SELECT @CTI_minutes_per_interval = (1440/intervals_per_day)
+FROM log_object 
+WHERE log_object_id = @log_object_id
+
+
+
+SELECT @CTI_interval_per_hour = 60/@CTI_minutes_per_interval
+
+
+SELECT @last_logg_date_time = dateadd(minute,@last_logg_interval*@minutes_per_interval,@last_logg_date)
+
+
+
+
 IF ( @start_date > '1970-01-01' ) 
 BEGIN
 	SELECT @last_logg_date = @start_date
@@ -112,29 +134,22 @@ BEGIN
 	ELSE
 	BEGIN
 		/* The interval is on "yesterday" */
-		SELECT @last_logg_date = dateadd ( day,-1,@last_logg_date)
-		SELECT @last_logg_interval = (@int_per_day - 1) - (@last_logg_interval - @rel_start_int)
+
+
+				declare @currentLogtime smalldatetime
+		select @currentLogtime=DATEADD(minute,@CTI_minutes_per_interval*@last_logg_interval,@last_logg_date)
+		
+		select @last_logg_date=dateadd(MINUTE,@CTI_minutes_per_interval*@rel_start_int,@currentLogtime)
+		select @last_logg_interval=DATEPART(HOUR,@last_logg_date)*@CTI_interval_per_hour+DATEPART(MINUTE,@last_logg_date)/@CTI_minutes_per_interval
+		
+		select @last_logg_date=CONVERT(varchar(10),@last_logg_date,120)
+		--SELECT @last_logg_date = dateadd ( day,-1,@last_logg_date)
+		--SELECT @last_logg_interval = (@int_per_day - 1) - (@last_logg_interval - @rel_start_int)
 	END 
 END
 
 
 /* Calculate @minutes_per_interval and @interval_per_hour*/
-SELECT @minutes_per_interval = (1440/int_value) 
-FROM ccc_system_info 
-WHERE [id]=1
-
-SELECT @interval_per_hour = 60/@minutes_per_interval
-
-SELECT @CTI_minutes_per_interval = (1440/intervals_per_day)
-FROM log_object 
-WHERE log_object_id = @log_object_id
-
-
-
-SELECT @CTI_interval_per_hour = 60/@CTI_minutes_per_interval
-
-
-SELECT @last_logg_date_time = dateadd(minute,@last_logg_interval*@minutes_per_interval,@last_logg_date)
 
 
 SELECT @acd_type=acd_type_id, @default_service_level_sec  = isnull(default_service_level_sec,0), @default_short_call_treshold = isnull(default_short_call_treshold,0)
