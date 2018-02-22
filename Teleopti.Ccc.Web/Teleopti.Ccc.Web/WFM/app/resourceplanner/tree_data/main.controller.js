@@ -35,7 +35,7 @@
         var data = {
             nodes: [
                 {
-                    label: 'parent1',
+                    label: 'parent1 中国',
                     id: '1',
                     selected: false,
                     nodes: [
@@ -50,7 +50,7 @@
                                     selected: false,
                                     nodes: [
                                         {
-                                            label: 'child1',
+                                            label: 'child1 中国',
                                             id: '12',
                                             selected: true,
                                             nodes: [
@@ -68,7 +68,7 @@
                                             selected: false,
                                             nodes: [
                                                 {
-                                                    label: 'grandchild2',
+                                                    label: 'grandchild2 中国',
                                                     id: '23',
                                                     selected: false,
                                                     nodes: []

@@ -25,12 +25,21 @@
                 option: "="
             }
         })
+        .component('treeFilter', {
+            controller: 'TreeFilterController',
+            controllerAs: 'vm',
+            bindings: {
+                search: "<"
+            }
+        })
         .controller('TreeDataOneController', TreeDataOneController)
         .controller('TreeDataTwoController', TreeDataTwoController)
+        .controller('TreeFilterController', TreeFilterController)
         .directive('treeAnimate', treeAnimate);
 
     TreeDataOneController.$inject = ['$element', '$timeout'];
     TreeDataTwoController.$inject = ['$element', '$timeout', '$attrs'];
+    TreeFilterController.$inject = ['$element'];
 
     function TreeDataOneController($element, $timeout) {
         var vm = this;
@@ -40,6 +49,7 @@
         vm.nodeDisplayName = "name";
         vm.nodeChildrenName = "children";
         vm.nodeSelectedMark = "mark";
+        vm.displayTreeFilter = false;
         vm.selectNode = selectNode;
 
         vm.$onInit = fetchSetting;
@@ -49,6 +59,7 @@
                 vm.nodeDisplayName = vm.option.NodeDisplayName ? vm.option.NodeDisplayName : "name";
                 vm.nodeChildrenName = vm.option.NodeChildrenName ? vm.option.NodeChildrenName : "children";
                 vm.nodeSelectedMark = vm.option.NodeSelectedMark ? vm.option.NodeSelectedMark : "mark";
+                vm.displayTreeFilter = vm.option.DisplayTreeFilter ? vm.option.DisplayTreeFilter : false;
             }
             vm.ngModel.$viewChangeListeners.push(onChange);
             vm.ngModel.$render = onChange;
@@ -107,8 +118,8 @@
         vm.nodeDisplayName = "name";
         vm.nodeChildrenName = "children";
         vm.nodeSelectedMark = "mark";
+        vm.displayTreeFilter = false;
         vm.selectNode = selectNode;
-
         vm.$onInit = fetchSetting;
 
         function fetchSetting() {
@@ -117,7 +128,8 @@
                 vm.nodeChildrenName = vm.option.NodeChildrenName ? vm.option.NodeChildrenName : "children";
                 vm.nodeSelectedMark = vm.option.NodeSelectedMark ? vm.option.NodeSelectedMark : "mark";
                 vm.nodeSemiSelected = vm.option.nodeSemiSelected ? vm.option.nodeSemiSelected : "semiSelected";
-                rootSelectUnique = vm.option.RootSelectUnique ? vm.option.RootSelectUnique : false;
+                vm.displayTreeFilter = vm.option.DisplayTreeFilter ? vm.option.DisplayTreeFilter : false;
+                rootSelectUnique = vm.option.RootSelectUnique ? vm.option.RootSelectUnique : false;   
             }
             vm.ngModel.$viewChangeListeners.push(onChange);
             vm.ngModel.$render = onChange;
@@ -242,6 +254,100 @@
                     setChildrenNodesSelectState(child[vm.nodeChildrenName], false);
                 }
             });
+        }
+    }
+
+    function TreeFilterController($element) {
+        var vm = this;
+        var searchString = '';
+        var parentsElement = $element["0"].parentNode.parentNode;
+
+        vm.$onChanges = function (changesObj) {
+            searchString = !changesObj.search.currentValue ? '' : changesObj.search.currentValue;
+            catchFilterChange();
+        }
+
+        function catchFilterChange() {
+            if (searchString.length == 0) {
+                resetTree();
+            } else {
+                hideAllNodes();
+                displayMatchNodes();
+            }
+        }
+
+        function resetTree() {
+            var selectedItems = parentsElement.getElementsByTagName('li');
+            for (var index = 0; index < selectedItems.length; index++) {
+                if (selectedItems[index].classList.contains("tree-child")) {
+                    selectedItems[index].classList.add("hidden");
+                }
+                selectedItems[index].classList.remove("filter-hidden");
+                resetExtendIcon(selectedItems[index]);
+            }
+            return;
+        }
+
+        function resetExtendIcon(item) {
+            var icon = item.children["0"].childNodes[1].children["0"];
+            if (icon.classList.contains("mdi-chevron-down")) {
+                icon.classList.add("mdi-chevron-right");
+                icon.classList.remove("mdi-chevron-down");
+            }
+            return;
+        }
+
+        function hideAllNodes() {
+            var selectedItems = parentsElement.getElementsByTagName('li');
+            for (var index = 0; index < selectedItems.length; index++) {
+                selectedItems[index].classList.add("filter-hidden");
+                if (selectedItems[index].classList.contains("hidden")) {
+                    selectedItems[index].classList.remove("hidden");
+                }
+            }
+            return;
+        }
+
+        function displayMatchNodes() {
+            var selectedItems = parentsElement.getElementsByClassName('tree-handle-wrapper');
+            var noCaseSensitiveSearchString = new RegExp(searchString, "i");
+            for (var index = 0; index < selectedItems.length; index++) {
+                if (selectedItems[index].textContent.match(noCaseSensitiveSearchString)) {
+                    selectedItems[index].parentNode.parentNode.classList.remove("filter-hidden");
+                    removeFilterHiddenForChildNodes(selectedItems[index].parentNode.parentNode);
+                    displayMatchNodesParents(selectedItems[index].parentNode.parentNode);
+                }
+            }
+            return;
+        }
+
+        function removeFilterHiddenForChildNodes(matechedNode) {
+            var selectedItems = matechedNode.getElementsByClassName("filter-hidden");
+            for (var index = 0; index < selectedItems.length; index++) {
+                if (selectedItems[index].getElementsByTagName("ol").length == 1) {
+                    selectedItems[index].classList.add("hidden");
+                }
+                selectedItems[index].classList.remove("filter-hidden");
+            }
+            return;
+        }
+
+        function displayMatchNodesParents(matechedNode) {
+            if (matechedNode.parentNode.parentNode.classList.contains("filter-hidden")) {
+                matechedNode.parentNode.parentNode.classList.remove("filter-hidden");
+                displayExtendIconForMatchNodesParents(matechedNode);
+                displayMatchNodesParents(matechedNode.parentNode.parentNode);
+            }
+            return;
+        }
+
+        function displayExtendIconForMatchNodesParents(matechedNode) {
+            var icon = matechedNode.parentNode.parentNode.getElementsByClassName("mdi-chevron-right")[0];
+            if (!!icon) {
+                icon.classList.add("mdi-chevron-down");
+                icon.classList.remove("mdi-chevron-right");
+            }
+            return;
         }
     }
 
