@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -27,11 +26,10 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		private readonly IProjectionSplitter _projectionSplitter;
 		private readonly IIanaTimeZoneProvider _ianaTimeZoneProvider;
 		private readonly IPersonNameProvider _personNameProvider;
-		private readonly IUserTextTranslator _userTextTranslator;
 
 		public TeamScheduleProjectionProvider(IProjectionProvider projectionProvider, ILoggedOnUser loggedOnUser,
 			IToggleManager toggleManager, IScheduleProjectionHelper projectionHelper, IProjectionSplitter projectionSplitter,
-			IIanaTimeZoneProvider ianaTimeZoneProvider, IPersonNameProvider personNameProvider, IUserTextTranslator userTextTranslator)
+			IIanaTimeZoneProvider ianaTimeZoneProvider, IPersonNameProvider personNameProvider)
 		{
 			_projectionProvider = projectionProvider;
 			_loggedOnUser = loggedOnUser;
@@ -40,7 +38,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			_projectionSplitter = projectionSplitter;
 			_ianaTimeZoneProvider = ianaTimeZoneProvider;
 			_personNameProvider = personNameProvider;
-			_userTextTranslator = userTextTranslator;
 		}
 
 		public GroupScheduleShiftViewModel MakeViewModel(IPerson person, DateOnly date, IScheduleDay scheduleDay,
@@ -154,7 +151,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 					var startDateTimeInUserTimeZone = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.StartDateTime, userTimeZone);
 					var description = isPayloadAbsence
 						? (isAbsenceConfidential && !canViewConfidential
-							? ConfidentialPayloadValues.TranslatedDescription(_userTextTranslator)
+							? ConfidentialPayloadValues.Description
 							: ((IAbsence)layer.Payload).Description)
 						: layer.DisplayDescription();
 					var matchedPersonalLayers = _projectionHelper.GetMatchedPersonalShiftLayers(scheduleDay, layer);
@@ -240,7 +237,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 					var description = isPayloadAbsence
 						? (isAbsenceConfidential && !isPermittedToViewConfidential
-							? ConfidentialPayloadValues.TranslatedDescription(_userTextTranslator)
+							? ConfidentialPayloadValues.Description
 							: ((IAbsence)layer.Payload).Description)
 						: layer.DisplayDescription();
 					var expectedTime = string.Format(CultureInfo.CurrentCulture, "{0} - {1}",

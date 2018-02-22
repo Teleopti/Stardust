@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		private readonly IIanaTimeZoneProvider _ianaTimeZoneProvider;
 		private readonly IToggleManager _toggleManager;
 		private readonly IUserUiCulture _userUiCulture;
-		private readonly IUserTextTranslator _userTextTranslator;
 		private readonly IScheduleDayProvider _scheduleDayProvider;
 
 		public TeamScheduleViewModelFactory(IPermissionProvider permissionProvider, IScheduleProvider scheduleProvider,
@@ -39,7 +38,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			IPersonRepository personRepository, IIanaTimeZoneProvider ianaTimeZoneProvider,
 			IToggleManager toggleManager,
 			IUserUiCulture userUiCulture,
-			IUserTextTranslator userTextTranslator,
 			IScheduleDayProvider scheduleDayProvider)
 		{
 			_permissionProvider = permissionProvider;
@@ -52,7 +50,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			_ianaTimeZoneProvider = ianaTimeZoneProvider;
 			_toggleManager = toggleManager;
 			_userUiCulture = userUiCulture;
-			_userTextTranslator = userTextTranslator;
 			_scheduleDayProvider = scheduleDayProvider;
 		}
 
@@ -385,7 +382,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 							if (absence.Confidential && !canViewConfidentialAbsence)
 							{
-								dayScheduleViewModel.Title = ConfidentialPayloadValues.TranslatedDescription(_userTextTranslator).Name;
+								dayScheduleViewModel.Title = ConfidentialPayloadValues.Description.Name;
 								dayScheduleViewModel.Color = ConfidentialPayloadValues.DisplayColorHex;
 							}
 							else

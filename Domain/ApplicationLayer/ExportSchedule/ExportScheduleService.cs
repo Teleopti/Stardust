@@ -178,7 +178,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ExportSchedule
 
 						if (absence.Confidential && !hasPermissionToViewConfidential)
 						{
-							scheduleDaySummary.Summary = ConfidentialPayloadValues.TranslatedDescription(_userTextTranslator).Name;
+							scheduleDaySummary.Summary = ConfidentialPayloadValues.Description.Name;
 						}
 						else
 						{
