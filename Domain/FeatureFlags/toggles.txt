@@ -122,7 +122,6 @@ ResourcePlanner_RunPerfTestWithoutEvents_47256 = false # Only here for perftests
 ResourcePlanner_BreakPreferenceStartTimeByMax_46002 = RC
 ResourcePlanner_DayOffOptimizationIslands_47208 = true
 ResourcePlanner_PrepareToRemoveExportSchedule_46576 = true
-ResourcePlanner_ScheduleDeadlock_48170 = RC # Anders! Dont put to true until we verified some green Intraday/Booking/Perftests
 
 # From old Kittens team... #
 ETL_SpeedUpPersonPeriodNightly_38097 = true

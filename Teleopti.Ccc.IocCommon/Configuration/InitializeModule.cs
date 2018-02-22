@@ -1,7 +1,5 @@
-using System.Runtime.InteropServices;
 using Autofac;
 using Teleopti.Ccc.Domain.Config;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
@@ -23,14 +21,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterInstance(_iocConfiguration.Args().DataSourceConfigurationSetter);
 			builder.RegisterType<InitializeApplication>().As<IInitializeApplication>().SingleInstance();
 			builder.RegisterType<MemoryNHibernateConfigurationCache>().As<INHibernateConfigurationCache>().SingleInstance();
-			if (_iocConfiguration.Toggle(Toggles.ResourcePlanner_ScheduleDeadlock_48170))
-			{
-				builder.RegisterType<UnitOfWorkFactoryFactory48170>().As<UnitOfWorkFactoryFactory>().SingleInstance();
-			}
-			else
-			{
-				builder.RegisterType<UnitOfWorkFactoryFactory>().SingleInstance();				
-			}
+			builder.RegisterType<UnitOfWorkFactoryFactory>().SingleInstance();				
 			builder.RegisterType<DataSourcesFactory>().As<IDataSourcesFactory>().SingleInstance();
 			builder.RegisterType<SetLicenseActivator>().As<ISetLicenseActivator>().SingleInstance();
 			builder.RegisterType<LicenseVerifierFactory>().As<ILicenseVerifierFactory>().SingleInstance();

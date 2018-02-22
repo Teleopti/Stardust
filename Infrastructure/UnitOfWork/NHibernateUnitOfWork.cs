@@ -29,7 +29,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private readonly ICurrentTransactionHooks _transactionHooks;
 		private readonly NHibernateFilterManager _filterManager;
 		private readonly NHibernateUnitOfWorkInterceptor _interceptor;
-		private readonly bool _toggle48170;
 		private ITransaction _transaction;
 		private IInitiatorIdentifier _initiator;
 		private TransactionSynchronization _transactionSynchronization;
@@ -39,16 +38,13 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			ISession session,
 			TransactionIsolationLevel isolationLevel,
 			NHibernateUnitOfWorkInterceptor interceptor,
-			ICurrentTransactionHooks transactionHooks,		
-			[RemoveMeWithToggle(Toggles.ResourcePlanner_ScheduleDeadlock_48170)]
-			bool toggle48170)
+			ICurrentTransactionHooks transactionHooks)
 		{
 			_clearContext = clearContext;
 			_session = session;
 			_session.FlushMode = FlushMode.Manual;
 			_isolationLevel = isolationLevel;
 			_interceptor = interceptor;
-			_toggle48170 = toggle48170;
 			_transactionHooks = transactionHooks ?? new NoTransactionHooks();
 			_filterManager = new NHibernateFilterManager(session);
 		}
@@ -212,16 +208,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private void transactionRollback()
 		{
 			if (_transaction == null || !_transaction.IsActive) return;
-			
-			if(_toggle48170)
-				transactionRollbackNoTryCatch();
-			else
-				transactionRollbackTryCatch();
-		}
-
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_ScheduleDeadlock_48170)]
-		private void transactionRollbackTryCatch()
-		{
 			_transactionSynchronization = null;
 			var transaction = _transaction;
 			_transaction = null;
@@ -236,15 +222,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				//don't do anything - should be handled higher up the chain
 			}
 		}
-		
-		[RemoveMeWithToggle("merge with calling method", Toggles.ResourcePlanner_ScheduleDeadlock_48170)]
-		private void transactionRollbackNoTryCatch()
-		{
-			_transactionSynchronization = null;
-			_transaction.Rollback();
-			_transaction.Dispose();
-			_transaction = null;
-		}
+
 
 		public bool Contains(IEntity entity)
 		{

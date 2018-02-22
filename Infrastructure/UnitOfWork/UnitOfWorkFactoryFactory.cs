@@ -1,5 +1,4 @@
 using NHibernate;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Analytics;
@@ -9,41 +8,15 @@ using Teleopti.Ccc.Infrastructure.Web;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-	[RemoveMeWithToggle("merge with base type", Toggles.ResourcePlanner_ScheduleDeadlock_48170)]
-	public class UnitOfWorkFactoryFactory48170 : UnitOfWorkFactoryFactory
-	{
-		public UnitOfWorkFactoryFactory48170(ICurrentPreCommitHooks currentPreCommitHooks, IEnversConfiguration enversConfiguration, ICurrentTransactionHooks transactionHooks, ICurrentHttpContext httpContext, IUpdatedBy updatedBy, ICurrentBusinessUnit businessUnit, INestedUnitOfWorkStrategy nestedUnitOfWorkStrategy) : base(currentPreCommitHooks, enversConfiguration, transactionHooks, httpContext, updatedBy, businessUnit, nestedUnitOfWorkStrategy)
-		{
-		}
-
-		public override NHibernateUnitOfWorkFactory MakeAppFactory(ISessionFactory sessionFactory, string connectionString, string tenant)
-		{
-			return new NHibernateUnitOfWorkFactory(
-				sessionFactory,
-				_enversConfiguration.AuditSettingProvider,
-				connectionString,
-				_transactionHooks,
-				tenant,
-				_businessUnit,
-				_nestedUnitOfWorkStrategy,
-				this,
-				true);
-		}
-	}
-	
 	public class UnitOfWorkFactoryFactory
 	{
 		private readonly ICurrentPreCommitHooks _currentPreCommitHooks;
-		[RemoveMeWithToggle("make private", Toggles.ResourcePlanner_ScheduleDeadlock_48170)]
-		protected readonly IEnversConfiguration _enversConfiguration;
-		[RemoveMeWithToggle("make private", Toggles.ResourcePlanner_ScheduleDeadlock_48170)]
-		protected readonly ICurrentTransactionHooks _transactionHooks;
+		private readonly IEnversConfiguration _enversConfiguration;
+		private readonly ICurrentTransactionHooks _transactionHooks;
 		private readonly ICurrentHttpContext _httpContext;
 		private readonly IUpdatedBy _updatedBy;
-		[RemoveMeWithToggle("make private", Toggles.ResourcePlanner_ScheduleDeadlock_48170)]
-		protected readonly ICurrentBusinessUnit _businessUnit;
-		[RemoveMeWithToggle("make private", Toggles.ResourcePlanner_ScheduleDeadlock_48170)]
-		protected readonly INestedUnitOfWorkStrategy _nestedUnitOfWorkStrategy;
+		private readonly ICurrentBusinessUnit _businessUnit;
+		private readonly INestedUnitOfWorkStrategy _nestedUnitOfWorkStrategy;
 
 		public UnitOfWorkFactoryFactory(
 			ICurrentPreCommitHooks currentPreCommitHooks,
@@ -81,8 +54,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				tenant,
 				_businessUnit,
 				_nestedUnitOfWorkStrategy,
-				this,
-				false);
+				this);
 		}
 
 		public AnalyticsUnitOfWorkFactory MakeAnalyticsFactory(

@@ -4,7 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
@@ -12,13 +11,11 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 {
 	[DatabaseTest]
-	[Toggle(Toggles.ResourcePlanner_ScheduleDeadlock_48170)]
 	public class ReadWriteDeadlockTest
 	{
 		public ICurrentUnitOfWorkFactory CurrentUnitOfWorkFactory;
@@ -32,6 +29,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		[TestCase(1)]
 		[TestCase(2)]
 		[TestCase(10)]
+		[Ignore("Was part of #48170 but fix wasn't fixing real issue so fix rolled back. Keeping test for a while to see if it's needed. If not, remove this.")]
 		public void ShouldHandleConcurrentReadsAndUpdates(int numberOfDays)
 		{
 			var date = new DateOnly(2000, 1, 1);

@@ -1,6 +1,5 @@
 using NHibernate;
 using NHibernate.Engine;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
@@ -16,8 +15,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private readonly ICurrentBusinessUnit _businessUnit;
 		private readonly INestedUnitOfWorkStrategy _nestedUnitOfWorkStrategy;
 		private readonly UnitOfWorkFactoryFactory _unitOfWorkFactoryFactory;
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_ScheduleDeadlock_48170)]
-		private readonly bool _toggle48170;
 
 		// can not inject here because the lifetime of the factory
 		// is longer than the container when running unit tests
@@ -29,8 +26,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			string tenant,
 			ICurrentBusinessUnit businessUnit,
 			INestedUnitOfWorkStrategy nestedUnitOfWorkStrategy, 
-			UnitOfWorkFactoryFactory unitOfWorkFactoryFactory,
-			bool toggle48170)
+			UnitOfWorkFactoryFactory unitOfWorkFactoryFactory)
 		{
 			ConnectionString = connectionString;
 			_factory = sessionFactory;
@@ -40,7 +36,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_businessUnit = businessUnit;
 			_nestedUnitOfWorkStrategy = nestedUnitOfWorkStrategy;
 			_unitOfWorkFactoryFactory = unitOfWorkFactoryFactory;
-			_toggle48170 = toggle48170;
 		}
 
 		public string Name => ((ISessionFactoryImplementor) _factory).Settings.SessionFactoryName;
@@ -105,8 +100,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				session,
 				isolationLevel,
 				interceptor,
-				_transactionHooks,
-				_toggle48170);
+				_transactionHooks);
 			_context.Set(unitOfWork);
 
 			return unitOfWork;
