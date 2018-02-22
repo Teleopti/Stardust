@@ -8,15 +8,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
     /// </summary>
     public interface IScheduleDayService
     {
-
-		/// <summary>
-		/// Schedules the day.
-		/// </summary>
-		/// <param name="schedulePart">The schedule part.</param>
-		/// <param name="schedulingOptions">The scheduling options.</param>
-		/// <returns></returns>
-		bool ScheduleDay(IScheduleDay schedulePart, SchedulingOptions schedulingOptions);
-
 		/// <summary>
 		/// Deletes the main shift on supplied ScheduleParts.
 		/// </summary>

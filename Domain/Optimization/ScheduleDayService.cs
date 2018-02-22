@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
@@ -11,39 +10,23 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
     public class ScheduleDayService :IScheduleDayService
     {
-    	private readonly IScheduleService _scheduleService;
         private readonly IDeleteSchedulePartService _deleteSchedulePartService;
         private readonly IResourceCalculation _resourceOptimizationHelper;
-        private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
     	private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
 	    private readonly Func<ISchedulerStateHolder> _schedulingResultStateHolder;
-	    private readonly IUserTimeZone _userTimeZone;
 
-	    public ScheduleDayService(IScheduleService scheduleService,
-								  IDeleteSchedulePartService deleteSchedulePartService,
+	    public ScheduleDayService(IDeleteSchedulePartService deleteSchedulePartService,
 								  IResourceCalculation resourceOptimizationHelper,
-								  IEffectiveRestrictionCreator effectiveRestrictionCreator,
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-			Func<ISchedulerStateHolder> schedulingResultStateHolder,
-			IUserTimeZone userTimeZone
+			Func<ISchedulerStateHolder> schedulingResultStateHolder
 			)
 		{
-			_scheduleService = scheduleService;
 			_deleteSchedulePartService = deleteSchedulePartService;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
-			_effectiveRestrictionCreator = effectiveRestrictionCreator;
 			_schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
 		    _schedulingResultStateHolder = schedulingResultStateHolder;
-			_userTimeZone = userTimeZone;
 		}
 
-		public bool ScheduleDay(IScheduleDay schedulePart, SchedulingOptions schedulingOptions)
-        {
-			var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(schedulePart, schedulingOptions);
-
-        	var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, schedulingOptions.ConsiderShortBreaks, _schedulingResultStateHolder().SchedulingResultState, _userTimeZone);
-			return _scheduleService.SchedulePersonOnDay(schedulePart, schedulingOptions, effectiveRestriction, resourceCalculateDelayer, _schedulePartModifyAndRollbackService);
-        }
 
 		public IList<IScheduleDay> DeleteMainShift(IList<IScheduleDay> schedulePartList, SchedulingOptions schedulingOptions)
         {

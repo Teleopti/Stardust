@@ -1255,7 +1255,6 @@
     <Compile Include="RealTimeAdherence\RtaStateTest.cs" />
     <Compile Include="Optimization\FullWeekOuterWeekPeriodCreatorTest.cs" />
     <Compile Include="Optimization\RemoveShiftCategoryBackToLegalServiceTest.cs" />
-    <Compile Include="Optimization\ScheduleDayServiceTest.cs" />
     <Compile Include="Optimization\SchedulePartExtractorTest.cs" />
     <Compile Include="Optimization\ScheduleDayProTest.cs" />
     <Compile Include="ResourceCalculation\AffectedPersonSkillServiceTest.cs" />
