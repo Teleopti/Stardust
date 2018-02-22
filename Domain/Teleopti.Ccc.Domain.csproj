@@ -1176,7 +1176,6 @@
     <Compile Include="InterfaceLegacy\Domain\ITrackingDataProvider.cs" />
     <Compile Include="InterfaceLegacy\Domain\ITrueFalseRandomizer.cs" />
     <Compile Include="InterfaceLegacy\Domain\IUndoRedoContainer.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IUniqueSchedulePartExtractor.cs" />
     <Compile Include="InterfaceLegacy\Domain\IUnsafePersonProvider.cs" />
     <Compile Include="InterfaceLegacy\Domain\IUnsavedDaysInfo.cs" />
     <Compile Include="InterfaceLegacy\Domain\IUnvalidatedScheduleRangeUpdate.cs" />
