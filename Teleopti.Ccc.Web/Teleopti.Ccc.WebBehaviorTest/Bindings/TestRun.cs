@@ -5,8 +5,10 @@ using System.Text.RegularExpressions;
 using log4net;
 using log4net.Config;
 using NUnit.Framework;
+using NUnit.Framework.Interfaces;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
@@ -20,7 +22,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 	public class TestRun
 	{
 		private static readonly ILog log = LogManager.GetLogger(typeof(TestRun));
-		private const string suppressHangfireQueueTag = "suppressHangfireQueue";
+		private ITestInfo _testInfo;
 
 		public void OneTimeSetUp()
 		{
@@ -36,13 +38,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			log.Debug("Starting test run");
 		}
 
-		public void BeforeTest()
+		public ITestInfo TestInfo() => _testInfo;
+
+		public void BeforeTest(ITestInfo testInfo)
 		{
-			log.Debug($"Preparing for test {ScenarioContext.Current?.ScenarioInfo.Title}");
+			_testInfo = testInfo;
+
+			log.Debug($"Preparing for test {TestInfo().Name()}");
 
 			Browser.SelectBrowserByTag();
 
-			ignoreScenarioIfDisabledByToggle();
+			ignoreTestIfDisabledByToggle();
 
 			CurrentTime.Reset();
 			CurrentScopeBusinessUnit.Reset();
@@ -59,33 +65,32 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 
 			Browser.Interactions.Javascript("sessionStorage.clear();");
 
-			log.Debug($"Starting test {ScenarioContext.Current?.ScenarioInfo.Title}");
+			log.Debug($"Starting test {TestInfo().Name()}");
 		}
 
 		public void AfterTest()
 		{
-			log.Debug($"Cleaning up after test {ScenarioContext.Current?.ScenarioInfo.Title}");
+			log.Debug($"Cleaning up after test {TestInfo().Name()}");
 			log.Info(TestContext.CurrentContext.Result.Outcome.Status);
 			if (Browser.IsStarted)
 				Browser.Interactions.GoTo("about:blank");
 			DataMaker.AfterTest();
+
 			// some scenarios should not trigger handfire queue jobs which may throw an exception caused by no data available.
-			if (!suppressHangfireQueue())
-			{
+			if (!TestInfo().IsTaggedWith("suppressHangfireQueue"))
 				LocalSystem.Hangfire.WaitForQueue();
-			}
 
-			if (ScenarioContext.Current?.TestError != null)
-				Console.WriteLine($@"Test {ScenarioContext.Current?.ScenarioInfo.Title} failed, please check the error message.");
+			if (TestInfo().Error() != null)
+				Console.WriteLine($@"Test {TestInfo().Name()} failed, please check the error message.");
 
-			log.Debug($"Finished test {ScenarioContext.Current?.ScenarioInfo.Title}");
+			log.Debug($"Finished test {TestInfo().Name()}");
 		}
 
 		public void AfterStep()
 		{
-			if (ScenarioContext.Current.TestError == null) return;
+			if (TestInfo().Error() == null)
+				return;
 			log.Error("Step exception occurred, dumping info here.");
-
 			Browser.Interactions.DumpInfo(log.Error);
 		}
 
@@ -99,35 +104,28 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			log.Debug("Finished test run");
 		}
 
-		private static bool suppressHangfireQueue()
+
+		private void ignoreTestIfDisabledByToggle()
 		{
-			return ScenarioContext.Current?.IsTaggedWith(suppressHangfireQueueTag) ?? false;
-		}
-
-
-		private static void ignoreScenarioIfDisabledByToggle()
-		{
-			if (ScenarioContext.Current == null)
-				return;
-
 			var matchingEnkelsnuffs = new Regex(@"\'(.*)\'");
 
-			var tags = ScenarioContext.Current.ScenarioInfo.Tags.Union(FeatureContext.Current.FeatureInfo.Tags).ToArray();
-			var runIfEnabled = tags.Where(s => s.StartsWith("OnlyRunIfEnabled"))
+			var runIfEnabled = TestInfo().Tags()
+				.Where(s => s.StartsWith("OnlyRunIfEnabled"))
 				.Select(onlyRunIfEnabled => (Toggles) Enum.Parse(typeof(Toggles), matchingEnkelsnuffs.Match(onlyRunIfEnabled).Groups[1].ToString()));
-			var runIfDisabled = tags.Where(s => s.StartsWith("OnlyRunIfDisabled"))
+			var runIfDisabled = TestInfo().Tags()
+				.Where(s => s.StartsWith("OnlyRunIfDisabled"))
 				.Select(onlyRunIfDisabled => (Toggles) Enum.Parse(typeof(Toggles), matchingEnkelsnuffs.Match(onlyRunIfDisabled).Groups[1].ToString()));
 
 			runIfEnabled.ForEach(t =>
 			{
 				if (!LocalSystem.Toggles.IsEnabled(t))
-					Assert.Ignore($"Ignoring test {ScenarioContext.Current.ScenarioInfo.Title} because toggle {t} is disabled");
+					Assert.Ignore($"Ignoring test {TestInfo().Name()} because toggle {t} is disabled");
 			});
 
 			runIfDisabled.ForEach(t =>
 			{
 				if (LocalSystem.Toggles.IsEnabled(t))
-					Assert.Ignore($"Ignoring test {ScenarioContext.Current.ScenarioInfo.Title} because toggle {t} is enabled");
+					Assert.Ignore($"Ignoring test {TestInfo().Name()} because toggle {t} is enabled");
 			});
 		}
 	}

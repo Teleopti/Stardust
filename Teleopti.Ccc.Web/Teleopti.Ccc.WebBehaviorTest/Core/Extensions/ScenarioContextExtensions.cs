@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using TechTalk.SpecFlow;
 
@@ -5,21 +6,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Extensions
 {
 	public static class ScenarioContextExtensions
 	{
-
 		public static T Value<T>(this ScenarioContext context)
 		{
-			return Value<T>(context, typeof (T).FullName);
+			return Value<T>(context, typeof(T).FullName);
 		}
 
 		public static T Value<T>(this ScenarioContext context, T value)
 		{
-			return Value(context, typeof (T).FullName, value);
+			return Value(context, typeof(T).FullName, value);
 		}
 
 		public static T Value<T>(this ScenarioContext context, string key)
 		{
 			if (context.ContainsKey(key))
-				return (T)context[key];
+				return (T) context[key];
 			return default(T);
 		}
 
@@ -32,6 +32,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Extensions
 			}
 			else
 				context[key] = value;
+
 			return value;
 		}
 
@@ -42,6 +43,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Extensions
 			if (context.ScenarioInfo.Tags.Any(s => s == tag))
 				return true;
 			return false;
+		}
+
+		public static IEnumerable<string> AllTags(this ScenarioContext context)
+		{
+			return context.ScenarioInfo.Tags.Union(
+					FeatureContext.Current.FeatureInfo.Tags)
+				.ToArray();
 		}
 	}
 }

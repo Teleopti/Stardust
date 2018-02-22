@@ -49,22 +49,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void BeforeTest()
 		{
-			if (ScenarioContext.Current == null)
-			{
-				Navigation.Navigation.GoToPage($"Test/BeforeScenario");
-				return;
-			}
-			
 			var useBroker = "false";
-			if (ScenarioContext.Current.ScenarioInfo.Tags.Contains("broker"))
+			if (SetupFixtureForAssembly.TestRun.TestInfo().IsTaggedWith("broker"))
 				useBroker = "true";
+
 			var defaultProvider = "Teleopti";
-			if (ScenarioContext.Current.ScenarioInfo.Tags.Contains("WindowsAsDefaultIdentityProviderLogon"))
+			if (SetupFixtureForAssembly.TestRun.TestInfo().IsTaggedWith("WindowsAsDefaultIdentityProviderLogon"))
 				defaultProvider = "Windows";
-			var usePolicy = FeatureContext.Current.FeatureInfo.Tags.Contains("PasswordPolicy");
+
+			var usePolicy = SetupFixtureForAssembly.TestRun.TestInfo().IsTaggedWith("PasswordPolicy");
 
 			// use a scenario tag here for enableMyTimeMessageBroker if required
-			Navigation.Navigation.GoToPage($"Test/BeforeScenario?name={ScenarioContext.Current?.ScenarioInfo.Title}&enableMyTimeMessageBroker={useBroker}&defaultProvider={defaultProvider}&usePasswordPolicy={usePolicy}");
+			Navigation.Navigation.GoToPage($"Test/BeforeScenario?name={SetupFixtureForAssembly.TestRun.TestInfo().Name()}&enableMyTimeMessageBroker={useBroker}&defaultProvider={defaultProvider}&usePasswordPolicy={usePolicy}");
 		}
 
 		/// <summary>

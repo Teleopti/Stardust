@@ -19,8 +19,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			public Exception StartException { get; set; }
 		}
 
-		private static IBrowserActivator _noBrowser = new NoBrowserActivator();
-
 		private static readonly IEnumerable<registeredActivator> activators =
 			new List<registeredActivator>
 			{
@@ -32,7 +30,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 				new registeredActivator
 				{
 					Tag = "NoBrowser",
-					Activator = _noBrowser
+					Activator = new NoBrowserActivator()
 				}
 			};
 
@@ -78,7 +76,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		public static void SelectBrowserByTag()
 		{
 			var activatorsWithMatchingTag = activators
-				.Where(a => ScenarioContext.Current?.IsTaggedWith(a.Tag) ?? false)
+				.Where(a => SetupFixtureForAssembly.TestRun.TestInfo().IsTaggedWith(a.Tag))
 				.ToArray();
 			_activator = activatorsWithMatchingTag.Any() ? 
 				activatorsWithMatchingTag.First() : 

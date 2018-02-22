@@ -16,15 +16,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 		public IToggleManager Toggles;
 
-		protected virtual void BeforeTest()
-		{
-		}
-
-		protected virtual void AfterTest()
-		{
-		}
-
-		public void BeforeTest(ITest testDetails)
+		public virtual void BeforeTest(ITest testDetails)
 		{
 			_service = new IoCTestService(testDetails, this);
 			_service.InjectFrom(IntegrationIoCTest.Container);
@@ -34,13 +26,10 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				.FirstOrDefault(a => !Toggles.IsEnabled(a.Toggle));
 			if (disabledToggle != null)
 				Assert.Ignore($"Ignoring test {testDetails.Name} because toggle {disabledToggle.Toggle} is disabled");
-
-			BeforeTest();
 		}
 
-		public void AfterTest(ITest testDetails)
+		public virtual void AfterTest(ITest testDetails)
 		{
-			AfterTest();
 			_service = null;
 		}
 	}

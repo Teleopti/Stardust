@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using Autofac;
+using NUnit.Framework.Interfaces;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
@@ -30,9 +31,9 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 		public HangfireUtilities Hangfire;
 		public StateQueueUtilities StateQueue;
 
-		protected override void BeforeTest()
+		public override void BeforeTest(ITest testDetails)
 		{
-			base.BeforeTest();
+			base.BeforeTest(testDetails);
 
 			var dataHash = DefaultDataCreator.HashValue ^ TestConfiguration.HashValue;
 			var path = Path.Combine(InfraTestConfigReader.DatabaseBackupLocation, "Rta");
@@ -73,9 +74,9 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 			TestSiteConfigurationSetup.Setup();
 		}
 
-		protected override void AfterTest()
+		public override void AfterTest(ITest testDetails)
 		{
-			base.AfterTest();
+			base.AfterTest(testDetails);
 
 			Hangfire.WaitForQueue();
 			StateQueue.WaitForQueue();

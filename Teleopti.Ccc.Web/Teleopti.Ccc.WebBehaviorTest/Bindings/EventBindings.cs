@@ -7,15 +7,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 	public class EventBindings
 	{
 		[BeforeScenario]
-		public static void BeforeScenario() =>
-			SetupFixtureForAssembly.TestRun.BeforeTest();
+		public static void BeforeScenario() => SetupFixtureForAssembly.TestRun.BeforeTest(new ScenarioTest());
 
 		[AfterStep]
-		public static void AfterStep() =>
-			SetupFixtureForAssembly.TestRun.AfterStep();
+		public static void AfterStep() => SetupFixtureForAssembly.TestRun.AfterStep();
 
 		[AfterScenario]
-		public static void AfterScenario() =>
-			SetupFixtureForAssembly.TestRun.AfterTest();
+		public static void AfterScenario() => SetupFixtureForAssembly.TestRun.AfterTest();
 	}
 }

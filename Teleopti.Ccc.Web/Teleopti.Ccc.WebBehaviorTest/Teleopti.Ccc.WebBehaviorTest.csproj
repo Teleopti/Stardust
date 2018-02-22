@@ -111,6 +111,7 @@
     <Compile Include="Bindings\Generic\Wfm\RealTimeAdherenceTracerPageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Wfm\ResourcePlannerStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\WorkloadStepDefinitions.cs" />
+    <Compile Include="Bindings\ITestInfo.cs" />
     <Compile Include="Bindings\TestRun.cs" />
     <Compile Include="Core\CurrentScopeBusinessUnit.cs" />
     <Compile Include="Core\Extensions\DateOnlyForBehaviorTests.cs" />

@@ -1,8 +1,10 @@
 ﻿using System;
 using NUnit.Framework;
+using NUnit.Framework.Interfaces;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.WebBehaviorTest.Bindings;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Navigation;
 using Teleopti.Ccc.WebBehaviorTest.Data;
@@ -12,10 +14,11 @@ namespace Teleopti.Ccc.WebBehaviorTest
 {
 	public class FullIntegrationTestAttribute : IntegrationIoCTestAttribute
 	{
-		protected override void BeforeTest()
+		public override void BeforeTest(ITest testDetails)
 		{
-			base.BeforeTest();
-			SetupFixtureForAssembly.TestRun.BeforeTest();
+			base.BeforeTest(testDetails);
+			
+			SetupFixtureForAssembly.TestRun.BeforeTest(new NUnitTest(testDetails));
 
 			var role = new RoleConfigurable
 			{
@@ -28,10 +31,10 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			TestControllerMethods.Logon();
 		}
 
-		protected override void AfterTest()
+		public override void AfterTest(ITest testDetails)
 		{
 			SetupFixtureForAssembly.TestRun.AfterTest();
-			base.AfterTest();
+			base.AfterTest(testDetails);
 		}
 	}
 
