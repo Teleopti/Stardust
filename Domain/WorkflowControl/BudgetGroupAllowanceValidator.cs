@@ -1,12 +1,10 @@
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl
 {
 	public class BudgetGroupAllowanceValidator : IAbsenceRequestValidator
 	{
 		public IBudgetGroupHeadCountSpecification BudgetGroupHeadCountSpecification { get; set; }
-		public string InvalidReason => nameof(Resources.RequestDenyReasonBudgetGroupAllowance);
 
 		public string DisplayText
 		{

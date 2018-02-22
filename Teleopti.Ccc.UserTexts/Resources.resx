@@ -16354,7 +16354,7 @@ Do you want to participate?</value>
     <comment>Interaction tip for the user on how to upload files</comment>
   </data>
   <data name="SuccessfullyImported" xml:space="preserve">
-    <value>Import successfull</value>
+    <value>Import successful</value>
     <comment>An import has been processed successfully</comment>
   </data>
   <data name="AnywhereMigrated" xml:space="preserve">

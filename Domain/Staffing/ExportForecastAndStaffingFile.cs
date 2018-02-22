@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly ISkillCombinationResourceRepository _skillCombinationResourceRepository;
 		private readonly ILoggedOnUser _loggedOnUser;
+		private const int numberOfDecimals = 2;
 
 		public ExportForecastAndStaffingFile(ISkillDayRepository skillDayRepository, ICurrentScenario currentScenario, 
 			ScheduledStaffingProvider scheduledStaffingProvider, IUserTimeZone userTimeZone, IForecastsRowExtractor forecastsRowExtractor,
@@ -82,25 +84,26 @@ namespace Teleopti.Ccc.Domain.Staffing
 				var endDateTime = skillStaffPeriod.Period.EndDateTimeLocal(_userTimeZone.TimeZone()).ToString("g", userCulture);
 				var demand = skillStaffPeriod.FStaff;
 			
-				var bpoResourcesString = createBpoResourcesString(bpoNames, resourcesByBpo, ssiStartDate, ssiEndDate, separator, userCulture);
+				var bpoResourceTuple = createBpoResourcesString(bpoNames, resourcesByBpo, ssiStartDate, ssiEndDate, separator, userCulture);
 				var totalDiff = staffing - demand;
 
-				var totalScheduledHeads =
+				var internalScheduledHeads =
 					scheduledHeads.SingleOrDefault(h => h.StartDateTime == ssiStartDate && h.EndDateTime == ssiEndDate)?.Heads ?? 0;
 				
 				var row = $"{skill.Name}{separator}{startDateTime}{separator}{endDateTime}{separator}" +
-						  $"{demand.ToString(userCulture)}{separator}{staffing.ToString(userCulture)}{separator}" +
-						  $"{totalDiff.ToString(userCulture)}{separator}{totalScheduledHeads}{bpoResourcesString}";
+						  $"{Math.Round(demand,numberOfDecimals).ToString(userCulture)}{separator}{Math.Round(staffing,numberOfDecimals).ToString(userCulture)}{separator}" +
+						  $"{Math.Round(totalDiff,numberOfDecimals).ToString(userCulture)}{separator}{internalScheduledHeads+bpoResourceTuple.bpoHeads}{bpoResourceTuple.bpoResourceString}";
 				forecastedData.AppendLine(row);
 			}
 			return forecastedData.ToString().Trim();
 		}
 
-		private static string createBpoResourcesString(IEnumerable<string> bpoNames,
+		private static (string bpoResourceString, double bpoHeads) createBpoResourcesString(IEnumerable<string> bpoNames,
 			ILookup<string, SkillCombinationResourceForBpo> resourcesByBpo,
 			DateTime startDate, DateTime endDate, string separator, IFormatProvider userCulture)
 		{
 			var resourcesString = new StringBuilder();
+			var bpoHeadsSum = 0.0;
 			foreach (var bpoName in bpoNames)
 			{
 				resourcesString.Append(separator);
@@ -108,10 +111,11 @@ namespace Teleopti.Ccc.Domain.Staffing
 				var resourceForPeriod = resources.SingleOrDefault(r => r.StartDateTime == startDate && r.EndDateTime == endDate);
 
 				var resourceValue = resourceForPeriod?.Resource ?? 0;
+				bpoHeadsSum += resourceValue;
 				resourcesString.Append($"{resourceValue.ToString(userCulture)}");
 			}
 
-			return resourcesString.ToString();
+			return (bpoResourceString: resourcesString.ToString(), bpoHeads: bpoHeadsSum);
 		}
 	}
 }

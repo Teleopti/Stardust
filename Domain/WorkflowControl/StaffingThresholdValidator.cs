@@ -277,7 +277,6 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			return new StaffingThresholdValidator();
 		}
 
-		public string InvalidReason => nameof(Resources.RequestDenyReasonSkillThreshold);
 		public virtual string DisplayText => Resources.Intraday;
 
 		public override bool Equals(object obj)

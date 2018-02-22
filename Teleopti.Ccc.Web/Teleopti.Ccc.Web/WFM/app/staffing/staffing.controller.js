@@ -68,7 +68,7 @@
 				.toDate(),
 			endDate: moment()
 				.utc()
-				.add(7, 'days')
+				.add(6, 'days')
 				.toDate()
 		};
 		vm.unifiedSkillGroupManagement = false;
@@ -413,7 +413,7 @@
 
 		function exportStaffingData() {
 			if (vm.exportStaffingDataDate.startDate === null || vm.exportStaffingDataDate.endDate === null) {
-				vm.ErrorMessage = $translate.instant('DiscardSuggestionData');
+				vm.ErrorMessage = $translate.instant('SelectStartDateAndEndDate');
 				return;
 			}
 			if (vm.selectedSkill === null) {
