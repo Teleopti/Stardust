@@ -249,7 +249,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<DayIntervalDataCalculator>().As<IDayIntervalDataCalculator>().SingleInstance();
 			builder.RegisterType<DeleteSchedulePartService>().As<IDeleteSchedulePartService>().SingleInstance();
 			builder.RegisterType<DeleteAndResourceCalculateService>().InstancePerLifetimeScope();
-			builder.RegisterType<ScheduleDayService>().As<IScheduleDayService>().InstancePerLifetimeScope();
 			builder.RegisterType<IntervalDataMedianCalculator>().As<IIntervalDataCalculator>().SingleInstance();
 			builder.RegisterType<ScheduleDayEquator>().As<IScheduleDayEquator>().SingleInstance();
 

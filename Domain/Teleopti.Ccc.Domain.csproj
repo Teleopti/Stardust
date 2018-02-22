@@ -1048,7 +1048,6 @@
     <Compile Include="InterfaceLegacy\Domain\IScheduleDayPro.cs" />
     <Compile Include="InterfaceLegacy\Domain\IScheduleDayRestrictionExtractor.cs" />
     <Compile Include="InterfaceLegacy\Domain\IScheduleDayRotationRestrictionExtractor.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IScheduleDayService.cs" />
     <Compile Include="InterfaceLegacy\Domain\IScheduleDayStudentAvailabilityRestrictionExtractor.cs" />
     <Compile Include="InterfaceLegacy\Domain\IScheduleDictionary.cs" />
     <Compile Include="InterfaceLegacy\Domain\IScheduleExtractor.cs" />
@@ -3001,7 +3000,6 @@
     <Compile Include="Repositories\IWorkflowControlSetRepository.cs" />
     <Compile Include="Repositories\IWorkShiftRuleSetRepository.cs" />
     <Compile Include="Optimization\FullWeekOuterWeekPeriodCreator.cs" />
-    <Compile Include="Optimization\ScheduleDayService.cs" />
     <Compile Include="Optimization\SchedulePartExtractor.cs" />
     <Compile Include="Optimization\ScheduleDayPro.cs" />
     <Compile Include="ResourceCalculation\AffectedPersonSkillService.cs" />
