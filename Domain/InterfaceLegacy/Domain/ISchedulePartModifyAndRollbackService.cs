@@ -13,7 +13,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 	    void Modify(IScheduleDay schedulePart, IScheduleTagSetter scheduleTagSetter);
 
 	    bool ModifyStrictly(IScheduleDay schedulePart, IScheduleTagSetter scheduleTagSetter, INewBusinessRuleCollection newBusinessRuleCollection);
-	    bool ModifyStrictlyRollbackWithoutValidation(IScheduleDay schedulePart, IScheduleTagSetter scheduleTagSetter, INewBusinessRuleCollection newBusinessRuleCollection);
 
 	    void Rollback();
 	    IEnumerable<IScheduleDay> ModificationCollection { get; }
