@@ -39,7 +39,14 @@ BEGIN
 			AND target.person_id = src.person_id
 			AND target.scenario_id = src.scenario_id
 			)
-	WHEN NOT MATCHED THEN  
+	WHEN MATCHED THEN
+		UPDATE SET
+			[starttime] = @starttime
+			,[shift_category_id] = @shift_category_id
+			,[day_off_id] = @day_off_id
+			,[absence_id] = @absence_id
+			,[datasource_update_date] = GETDATE()
+	WHEN NOT MATCHED THEN
 		INSERT (
 					[shift_startdate_local_id]
 				   ,[person_id]
