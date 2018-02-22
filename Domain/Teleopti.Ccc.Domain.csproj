@@ -1065,8 +1065,6 @@
     <Compile Include="InterfaceLegacy\Domain\ISchedulePartExtractor.cs" />
     <Compile Include="InterfaceLegacy\Domain\ISchedulePartModifyAndRollbackService.cs" />
     <Compile Include="InterfaceLegacy\Domain\ISchedulePeriod.cs" />
-    <Compile Include="InterfaceLegacy\Domain\ISchedulePeriodShiftCategoryBackToLegalStateService.cs" />
-    <Compile Include="InterfaceLegacy\Domain\ISchedulePeriodShiftCategoryBackToLegalStateServiceBuilder.cs" />
     <Compile Include="InterfaceLegacy\Domain\ISchedulePeriodTargetCalculator.cs" />
     <Compile Include="InterfaceLegacy\Domain\ISchedulePeriodTargetCalculatorFactory.cs" />
     <Compile Include="InterfaceLegacy\Domain\ISchedulePeriodTargetDayOffCalculator.cs" />
@@ -2978,8 +2976,6 @@
     <Compile Include="Forecasting\Template\WorkloadDayTemplateReference.cs" />
     <Compile Include="Helper\SerializationHelper.cs" />
     <Compile Include="Helper\StaffingEmailCalculatorService.cs" />
-    <Compile Include="Optimization\SchedulePeriodShiftCategoryBackToLegalStateServiceBuilder.cs" />
-    <Compile Include="Optimization\SchedulePeriodShiftCategoryBackToLegalStateService.cs" />
     <Compile Include="Optimization\ShiftCategoryLimitationChecker.cs" />
     <Compile Include="Payroll\PayrollExport.cs" />
     <Compile Include="Payroll\PayrollResult.cs" />
