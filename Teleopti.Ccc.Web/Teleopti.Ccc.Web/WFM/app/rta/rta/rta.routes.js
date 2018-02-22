@@ -20,6 +20,8 @@ angular.module('wfm.rta').config(function ($stateProvider, ToggleProvider) {
 				es: {array: true}
 			},
 			templateUrl: function () {
+				if (toggles.RTA_ModifySkillGroup_48191)
+					return 'app/rta/rta/overview/view.RTA_ModifySkillGroup_48191.html';
 				return 'app/rta/rta/overview/view.RTA_UnifiedSkillGroupManagement_45417.html';
 			},
 			controllerProvider: function () {
@@ -45,6 +47,8 @@ angular.module('wfm.rta').config(function ($stateProvider, ToggleProvider) {
 				es: {array: true}
 			},
 			templateUrl: function () {
+				if (toggles.RTA_ModifySkillGroup_48191)
+					return 'app/rta/rta/agents/rta-agents.RTA_ModifySkillGroup_48191.html';
 				return 'app/rta/rta/agents/rta-agents.RTA_ViewHistoricalAhderenceForRecentShifts_46786.html';
 			},
 			controllerProvider: function () {
