@@ -611,15 +611,23 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			LoggedOnUser.SetDefaultTimeZone(TimeZoneInfo.Utc);
 		}
 
-		private IPersonRequest createOvertimeRequest(int startHour, int duration)
+		private IPersonRequest createOvertimeRequest(int startHour, int hours)
 		{
 			var requestStartTime = new DateTime(2017, 7, 17, startHour, 0, 0, DateTimeKind.Utc);
-			return createOvertimeRequest(requestStartTime, duration);
+			return createOvertimeRequest(requestStartTime, hours);
 		}
 
-		private IPersonRequest createOvertimeRequest(DateTime requestStartTime, int duration)
+		private IPersonRequest createOvertimeRequestInMinutes(int startHour, int minutes)
 		{
-			var personRequest = createOvertimeRequest(new DateTimePeriod(requestStartTime, requestStartTime.AddHours(duration)));
+			var requestStartTime = new DateTime(2017, 7, 17, startHour, 0, 0, DateTimeKind.Utc);
+			var personRequest =
+				createOvertimeRequest(new DateTimePeriod(requestStartTime, requestStartTime.AddMinutes(minutes)));
+			return personRequest;
+		}
+
+		private IPersonRequest createOvertimeRequest(DateTime requestStartTime, int hours)
+		{
+			var personRequest = createOvertimeRequest(new DateTimePeriod(requestStartTime, requestStartTime.AddHours(hours)));
 			return personRequest;
 		}
 

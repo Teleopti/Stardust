@@ -38,8 +38,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 				if (skillStaffingDataInPeriod.Any(s => !hasSeriousUnderstaffing(skillStaffingDataGroup.Key, s)))
 					continue;
 
-				var skillUnderStaffedLevel = skillStaffingDataInPeriod.Select(x => x.SkillStaffingInterval).Sum(y => y.RelativeDifference);
-
+				var skillUnderStaffedLevel = skillStaffingDataInPeriod.Select(x => new { interval = x.SkillStaffingInterval, ratio = x.Skill.DefaultResolution / x.Resolution })
+																	.Sum(y => y.interval.RelativeDifference * y.ratio);
 				if (skillUnderStaffedLevel < minmumUnderStaffedLevel)
 				{
 					minmumUnderStaffedLevel = skillUnderStaffedLevel;
