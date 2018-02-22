@@ -79,7 +79,10 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		public static IScheduleDictionary WithScheduleData(IPerson person, IScenario scenario, DateTimePeriod period, params IScheduleData[] data)
 		{
 			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, period);
-			scheduleDictionary.AddScheduleData(person, data);
+			if (data != null)
+			{
+				scheduleDictionary.AddScheduleData(person, data);
+			}
 			return scheduleDictionary;
 		}
 

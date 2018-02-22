@@ -16,7 +16,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics
 {
-	public class AnalyticsScheduleChangeUpdater:
+	public class AnalyticsScheduleChangeUpdater :
 		IHandleEvent<ProjectionChangedEvent>,
 		IHandleEvent<ReloadSchedules>,
 		IRunOnHangfire
@@ -45,8 +45,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 			IAnalyticsScheduleChangeUpdaterFilter analyticsScheduleChangeUpdaterFilter,
 			IAnalyticsScenarioRepository analyticsScenarioRepository,
 			IAnalyticsShiftCategoryRepository analyticsShiftCategoryRepository,
-			IScheduleStorage scheduleStorage, 
-			IPersonRepository personRepository, 
+			IScheduleStorage scheduleStorage,
+			IPersonRepository personRepository,
 			IScenarioRepository scenarioRepository,
 			IProjectionChangedEventBuilder projectionChangedEventBuilder,
 			IAnalyticsDayOffRepository analyticsDayOffRepository)
@@ -82,45 +82,47 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 		[Attempts(2)]
 		public virtual void Handle(ReloadSchedules @event)
 		{
-			
 			updateForPersonAndDates(@event.PersonId, @event.ScenarioId, @event.LogOnBusinessUnitId,
 				@event.Dates, @event.Timestamp);
 		}
 
-		private void updateForPersonAndDates(Guid personId, Guid scenarioId, Guid businessUnitId, IEnumerable<DateTime> dates, DateTime timestamp)
+		private void updateForPersonAndDates(Guid personId, Guid scenarioId, Guid businessUnitId, IEnumerable<DateTime> dates,
+			DateTime timestamp)
 		{
 			var scenario = _scenarioRepository.Get(scenarioId);
 			if (scenario == null)
 				throw new Exception($"Could not load scenario {scenarioId} from application database.");
 			if (!_analyticsScheduleChangeUpdaterFilter.ContinueProcessingEvent(scenario.DefaultScenario, scenarioId))
 				return;
-			
+
 			var analyticsScenario = _analyticsScenarioRepository.Get(scenarioId);
 			if (analyticsScenario == null)
 			{
-				logger.Warn($"Scenario with code {scenarioId} has not been inserted in analytics yet. Schedule changes for agent {personId} is not saved into Analytics database.");
+				logger.Warn($"Scenario with code {scenarioId} has not been inserted in analytics yet. Schedule changes for " +
+							$"agent {personId} is not saved into Analytics database.");
 				throw new ScenarioMissingInAnalyticsException();
 			}
+
 			var person = _personRepository.Get(personId);
 			if (person == null)
 				throw new PersonNotFoundException($"Could not load person {personId} from application database.");
 
 			updateForDates(dates, person, scenario, analyticsScenario.ScenarioId, businessUnitId, timestamp);
-
-			
 		}
-		private void updateForDates(IEnumerable<DateTime> dates, IPerson person, IScenario scenario, int scenarioId, Guid businessUnitId, DateTime timestamp)
+
+		private void updateForDates(IEnumerable<DateTime> dates, IPerson person, IScenario scenario, int scenarioId,
+			Guid businessUnitId, DateTime timestamp)
 		{
 			var dayOffs = _analyticsDayOffRepository.DayOffs();
 			foreach (var date in dates)
 			{
 				var dateOnly = new DateOnly(date);
 
-				int dateId;
-				if (!_factScheduleDateMapper.MapDateId(dateOnly, out dateId))
+				if (!_factScheduleDateMapper.MapDateId(dateOnly, out var dateId))
 				{
-					logger.Warn($"Date {date} could not be mapped to Analytics date_id. Schedule changes for agent {person.Id.GetValueOrDefault()} is not saved into Analytics database.");
-					return;
+					logger.Warn($"Date {date} could not be mapped to Analytics date_id. Schedule changes for " +
+								$"agent {person.Id.GetValueOrDefault()} is not saved into Analytics database.");
+					continue;
 				}
 
 				var schedule = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
@@ -129,17 +131,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 				if (scheduleDay == null)
 				{
 					_analyticsScheduleRepository.DeleteFactSchedule(dateId, person.Id.GetValueOrDefault(), scenarioId);
-					return;
+					continue;
 				}
 
 				var currentEventScheduleDay = _projectionChangedEventBuilder.BuildEventScheduleDay(scheduleDay);
 				if (currentEventScheduleDay == null)
-					throw new Exception("No schedule");
+				{
+					throw new Exception($"No schedule found for {dateOnly.Date:yyyy-MM-dd}");
+				}
+
 				var personPart = _factSchedulePersonMapper.Map(currentEventScheduleDay.PersonPeriodId);
 				if (personPart.PersonId == -1)
 				{
-					logger.Warn(
-						$"PersonPeriodId {currentEventScheduleDay.PersonPeriodId} could not be found. Schedule changes for agent {person.Id.GetValueOrDefault()} is not saved into Analytics database.");
+					logger.Warn($"PersonPeriodId {currentEventScheduleDay.PersonPeriodId} could not be found. Schedule " +
+								$"changes for agent {person.Id.GetValueOrDefault()} is not saved into Analytics database.");
 					throw new PersonPeriodMissingInAnalyticsException(currentEventScheduleDay.PersonPeriodId);
 				}
 
@@ -155,7 +160,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 						timestamp, shiftCategoryId, scenarioId, scenario.Id.GetValueOrDefault(), person.Id.GetValueOrDefault());
 
 					if (agentDaySchedule == null)
-						return;
+					{
+						continue;
+					}
 
 					if (dayCount != null)
 					{
@@ -177,6 +184,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 									DatasourceId = 1
 								});
 							}
+
 							dayOffs = _analyticsDayOffRepository.DayOffs();
 							dayCount.DayOffId = dayOffs.Single(x => x.DayOffCode == dayOff.DayOffTemplateId).DayOffId;
 						}
@@ -184,6 +192,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 						{
 							dayCount.DayOffId = -1;
 						}
+
 						_analyticsScheduleRepository.PersistFactScheduleDayCountRow(dayCount);
 					}
 
@@ -194,8 +203,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 				{
 					if (currentEventScheduleDay.Date < DateTime.Now.AddDays(1))
 					{
-						_analyticsScheduleRepository.InsertStageScheduleChangedServicebus(dateOnly, person.Id.GetValueOrDefault(), scenario.Id.GetValueOrDefault(),
-							businessUnitId, DateTime.Now);
+						_analyticsScheduleRepository.InsertStageScheduleChangedServicebus(dateOnly, person.Id.GetValueOrDefault(),
+							scenario.Id.GetValueOrDefault(), businessUnitId, DateTime.Now);
 					}
 				}
 			}

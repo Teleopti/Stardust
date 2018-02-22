@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 			if (scheduleData.IsEmpty())
 			{
-				return ScheduleDictionaryForTest.WithScheduleData(person, scenario, dateTimePeriod, scheduleData); ;
+				return ScheduleDictionaryForTest.WithScheduleData(person, scenario, dateTimePeriod, null); ;
 			}
 			var period = scheduleData.Select(s => s.Period).Aggregate((a, b) => a.MaximumPeriod(b));
 			return ScheduleDictionaryForTest.WithScheduleData(person, scenario, period, scheduleData);
