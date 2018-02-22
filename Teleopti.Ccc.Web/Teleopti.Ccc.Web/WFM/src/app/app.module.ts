@@ -5,12 +5,6 @@ import { UpgradeModule, downgradeComponent } from '@angular/upgrade/static';
 import { AppComponent } from './app.component';
 import { PeopleModule } from './people/people.module';
 
-import * as _angular_ from 'angular';
-
-declare global {
-    const angular: typeof _angular_;
-}
-
 @NgModule({
     declarations: [AppComponent],
     imports: [BrowserModule, UpgradeModule, PeopleModule],
