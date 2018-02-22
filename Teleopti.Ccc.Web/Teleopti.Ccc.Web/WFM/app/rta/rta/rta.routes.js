@@ -100,5 +100,14 @@ angular.module('wfm.rta').config(function ($stateProvider, ToggleProvider) {
 			templateUrl: "app/global/skill-group/skillgroup.html",
 			controller: "SkillGroupController as vm"
 		})
+		.state("rta-skill-area-manager", {
+			params: {
+				isNewSkillArea: false,
+				returnState: "rta-without-slash"
+			},
+			url: "/rta/skill-area-manager",
+			templateUrl: "app/global/skill-group/skill-group-manager.html",
+			controller: "SkillGroupManagerController as vm"
+		})
 
 });
