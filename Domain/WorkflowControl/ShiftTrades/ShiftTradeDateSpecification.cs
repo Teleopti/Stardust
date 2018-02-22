@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 {
@@ -32,11 +33,6 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 			return true;
 		}
 
-		public override string DenyReason
-		{
-			get { return "ShiftTradeDifferentDateDenyReason"; }
-		}
-
-		
+		public override string DenyReason => nameof(Resources.ShiftTradeDifferentDateDenyReason);
 	}
 }

@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.Time;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 			_shiftTradeMaxSeatValidator = shiftTradeMaxSeatValidator;
 		}
 
-		public override string DenyReason => "ShiftTradeMaxSeatViolationDenyReason";
+		public override string DenyReason => nameof(Resources.ShiftTradeMaxSeatViolationDenyReason);
 
 		public override bool IsSatisfiedBy(IEnumerable<IShiftTradeSwapDetail> shiftTradeSwapDetails)
 		{

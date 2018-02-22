@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 	public class AbsenceRequestForm : TextRequestForm
 	{
 		[Required(ErrorMessageResourceType = typeof(Resources),
-			ErrorMessageResourceName = "MissingAbsenceType")]
+			ErrorMessageResourceName = nameof(Resources.MissingAbsenceType))]
 		public Guid AbsenceId { get; set; }
 	}
 }

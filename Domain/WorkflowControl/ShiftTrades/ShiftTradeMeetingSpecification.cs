@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 {
 	public class ShiftTradeMeetingSpecification : ShiftTradeSpecification
 	{
-		public override string DenyReason => "ShiftTradeMeetingSpecificationDenyReason";
+		public override string DenyReason => nameof(Resources.ShiftTradeMeetingSpecificationDenyReason);
 
 		public override bool IsSatisfiedBy(IEnumerable<IShiftTradeSwapDetail> obj)
 		{

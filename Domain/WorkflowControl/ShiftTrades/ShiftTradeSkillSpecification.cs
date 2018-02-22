@@ -2,6 +2,7 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Specification;
+using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 {
@@ -54,9 +55,6 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 			return listOfSkills;
 		}
 
-		public string DenyReason
-		{
-			get { return "ShiftTradeSkillDenyReason"; }
-		}
+		public string DenyReason => nameof(Resources.ShiftTradeSkillDenyReason);
 	}
 }

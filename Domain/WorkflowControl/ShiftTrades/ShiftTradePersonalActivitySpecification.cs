@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 {
 	public class ShiftTradePersonalActivitySpecification : ShiftTradeSpecification
 	{
-		public override string DenyReason => "ShiftTradePersonalActivityDenyReason";
+		public override string DenyReason => nameof(Resources.ShiftTradePersonalActivityDenyReason);
 
 		public override bool IsSatisfiedBy(IEnumerable<IShiftTradeSwapDetail> obj)
 		{

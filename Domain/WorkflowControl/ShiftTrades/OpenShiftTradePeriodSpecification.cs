@@ -1,5 +1,6 @@
 ﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Specification;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
@@ -30,9 +31,6 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 			return openPeriodFrom.Contains(obj.DateOnly) && openPeriodTo.Contains(obj.DateOnly);
 		}
 
-		public string DenyReason
-		{
-			get { return "OpenShiftTradePeriodDenyReason"; }
-		}
+		public string DenyReason => nameof(Resources.OpenShiftTradePeriodDenyReason);
 	}
 }

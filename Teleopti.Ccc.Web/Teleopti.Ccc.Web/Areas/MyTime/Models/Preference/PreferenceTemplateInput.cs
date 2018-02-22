@@ -7,8 +7,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 	{
 		[Required(AllowEmptyStrings = false,
 			ErrorMessageResourceType = typeof (Resources),
-			ErrorMessageResourceName = "Name50CharactersLimit")]
-		[StringLength(50, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Name50CharactersLimit")]
+			ErrorMessageResourceName = nameof(Resources.Name50CharactersLimit))]
+		[StringLength(50, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = nameof(Resources.Name50CharactersLimit))]
 		public string NewTemplateName { get; set; }
 	}
 }

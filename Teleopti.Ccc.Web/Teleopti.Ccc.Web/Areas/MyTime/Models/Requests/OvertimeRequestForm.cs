@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 
 		[Required(AllowEmptyStrings = false,
 			ErrorMessageResourceType = typeof(Resources),
-			ErrorMessageResourceName = "MissingOvertimeType")]
+			ErrorMessageResourceName = nameof(Resources.MissingOvertimeType))]
 		public Guid? MultiplicatorDefinitionSet { get; set; }
 		public DateTimePeriodForm Period { get; set; }
 	}

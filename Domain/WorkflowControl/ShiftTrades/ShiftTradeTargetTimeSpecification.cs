@@ -14,10 +14,10 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 		private readonly MatrixListFactory _scheduleMatrixListCreator;
 		private readonly ISchedulePeriodTargetTimeCalculator _targetTimeTimeCalculator;
 
-		public override string DenyReason => "ShiftTradeTargetTimeDenyReason";
+		public override string DenyReason => nameof(Resources.ShiftTradeTargetTimeDenyReason);
 		public override bool Configurable => true;
 		public override string Description => Resources.DescriptionOfShiftTradeTargetTimeSpecification;
-		public override string PendingReason => "ShiftTradeTargetTimePendingReason";
+		public override string PendingReason => nameof(Resources.ShiftTradeTargetTimePendingReason);
 
 		public ShiftTradeTargetTimeSpecification(Func<ISchedulerStateHolder> schedulerStateHolder, MatrixListFactory scheduleMatrixListCreator, ISchedulePeriodTargetTimeCalculator targetTimeTimeCalculator)
 		{
