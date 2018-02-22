@@ -878,6 +878,23 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.Count.Should().Be.EqualTo(0);
 		}
 
+		[Test, SetCulture("en-US")]
+		public void ShouldReturnPossibiliesWithoutOvertimeOpenPeriod()
+		{
+			setupSiteOpenHour();
+			setupDefaultTestData();
+
+			var phoneSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony)
+				.WithId();
+			SkillTypeRepository.Add(phoneSkillType);
+
+			var workFlowControlSet = new WorkflowControlSet();
+			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
+
+			var result = getPossibilityViewModels(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime).ToList();
+			result.Count.Should().Be.EqualTo(6);
+		}
+
 		private void setupWorkFlowControlSet()
 		{
 			var absenceRequestOpenDatePeriod = new AbsenceRequestOpenDatePeriod

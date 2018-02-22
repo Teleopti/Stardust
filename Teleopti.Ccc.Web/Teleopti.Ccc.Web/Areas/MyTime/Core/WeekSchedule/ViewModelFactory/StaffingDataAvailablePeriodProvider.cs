@@ -23,38 +23,29 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 
 		public DateOnlyPeriod? GetPeriodForAbsence(DateOnly date, bool forThisWeek)
 		{
-			var period = date.ToDateOnlyPeriod();
-			if (forThisWeek)
-			{
-				period = DateHelper.GetWeekPeriod(date, CultureInfo.CurrentCulture);
-			}
-			var today =
-				new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(),
-					_user.CurrentUser().PermissionInformation.DefaultTimeZone()));
-
-			var staffingInfoAvailableDays = StaffingInfoAvailableDaysProvider.GetDays(_toggleManager);
-			var maxEndDate = today.AddDays(staffingInfoAvailableDays);
-
-			var availablePeriod = new DateOnlyPeriod(today, maxEndDate);
-			return availablePeriod.Intersection(period);
+			return getStaffingDataAvailablePeriod(date, forThisWeek);
 		}
 
 		public DateOnlyPeriod? GetPeriodForOvertime(DateOnly date, bool forThisWeek)
 		{
+			var person = _user.CurrentUser();
+			var workflowControlSet = person.WorkflowControlSet;
+			if (workflowControlSet == null)
+				return null;
+
+			if (workflowControlSet.OvertimeRequestOpenPeriods.Count == 0)
+			{
+				return getStaffingDataAvailablePeriod(date, forThisWeek);
+			}
+
 			var period = date.ToDateOnlyPeriod();
 			if (forThisWeek)
 			{
 				period = DateHelper.GetWeekPeriod(date, CultureInfo.CurrentCulture);
 			}
 
-			var person = _user.CurrentUser();
 			var timezone = person.PermissionInformation.DefaultTimeZone();
 			var today = new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), timezone));
-
-			var workflowControlSet = person.WorkflowControlSet;
-			if (workflowControlSet == null)
-				return null;
-
 			var days = period.DayCollection();
 			var availableDays = new List<DateOnly>();
 			foreach (var day in days)
@@ -74,6 +65,24 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			}
 
 			var availablePeriod = new DateOnlyPeriod(availableDays.Min(), availableDays.Max());
+			return availablePeriod.Intersection(period);
+		}
+
+		private DateOnlyPeriod? getStaffingDataAvailablePeriod(DateOnly date, bool forThisWeek)
+		{
+			var period = date.ToDateOnlyPeriod();
+			if (forThisWeek)
+			{
+				period = DateHelper.GetWeekPeriod(date, CultureInfo.CurrentCulture);
+			}
+			var today =
+				new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(),
+					_user.CurrentUser().PermissionInformation.DefaultTimeZone()));
+
+			var staffingInfoAvailableDays = StaffingInfoAvailableDaysProvider.GetDays(_toggleManager);
+			var maxEndDate = today.AddDays(staffingInfoAvailableDays);
+
+			var availablePeriod = new DateOnlyPeriod(today, maxEndDate);
 			return availablePeriod.Intersection(period);
 		}
 	}
