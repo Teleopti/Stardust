@@ -22,6 +22,7 @@
 		RTA_ConfigurationValidationNotification_46933,
 		RTA_ApprovePreviousOOA_47230,
 		RTA_ReloadUIOnSystemVersionChanged_48196,
+		RTA_ModifySkillGroup_48191,
 		
 		MyTimeWeb_SortRequestList_40711,
 		MyTimeWeb_ViewIntradayStaffingProbability_41608,
