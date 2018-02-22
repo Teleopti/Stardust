@@ -257,8 +257,8 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			var rows = forecastedData.Split(new[] { "\r\n" }, StringSplitOptions.None);
 			rows.Length.Should().Be(3);
 			rows[0].Should().Be("skill;startdatetime;enddatetime;forecasted agents;total scheduled agents;total diff;total scheduled heads;BpoName");
-			rows[1].Should().Be.EqualTo("skillname;2017-08-15 08:00;2017-08-15 08:15;15,7;10;-5,7;10;2");
-			rows[2].Should().Be.EqualTo("skillname;2017-08-15 08:15;2017-08-15 08:30;15,7;10;-5,7;10;4");
+			rows[1].Should().Be.EqualTo("skillname;2017-08-15 08:00;2017-08-15 08:15;15,7;10;-5,7;12;2");
+			rows[2].Should().Be.EqualTo("skillname;2017-08-15 08:15;2017-08-15 08:30;15,7;10;-5,7;14;4");
 		}
 		
 		[Test]
@@ -340,8 +340,8 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			var rows = forecastedData.Split(new[] { "\r\n" }, StringSplitOptions.None);
 			rows.Length.Should().Be(3);
 			rows[0].Should().Be("skill;startdatetime;enddatetime;forecasted agents;total scheduled agents;total diff;total scheduled heads;BpoName;Teleopti");
-			rows[1].Should().Be.EqualTo("skillname;2017-08-15 08:00;2017-08-15 08:15;15,7;10;-5,7;10;2;0");
-			rows[2].Should().Be.EqualTo("skillname;2017-08-15 08:15;2017-08-15 08:30;15,7;14;-1,7;14;4;4");
+			rows[1].Should().Be.EqualTo("skillname;2017-08-15 08:00;2017-08-15 08:15;15,7;10;-5,7;12;2;0");
+			rows[2].Should().Be.EqualTo("skillname;2017-08-15 08:15;2017-08-15 08:30;15,7;14;-1,7;22;4;4");
 		}
 		
 		[Test]
@@ -406,8 +406,8 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			var rows = forecastedData.Split(new[] { "\r\n" }, StringSplitOptions.None);
 			rows.Length.Should().Be(3);
 			rows[0].Should().Be("skill;startdatetime;enddatetime;forecasted agents;total scheduled agents;total diff;total scheduled heads;BpoName;Teleopti");
-			rows[1].Should().Be.EqualTo("skillname;2017-08-15 08:00;2017-08-15 08:15;15,7;2;-13,7;2;2;0");
-			rows[2].Should().Be.EqualTo("skillname;2017-08-15 08:15;2017-08-15 08:30;15,7;8;-7,7;8;4;4");
+			rows[1].Should().Be.EqualTo("skillname;2017-08-15 08:00;2017-08-15 08:15;15,7;2;-13,7;4;2;0");
+			rows[2].Should().Be.EqualTo("skillname;2017-08-15 08:15;2017-08-15 08:30;15,7;8;-7,7;16;4;4");
 		}
 		
 		[Test]
@@ -489,8 +489,8 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			var rows = forecastedData.Split(new[] { "\r\n" }, StringSplitOptions.None);
 			rows.Length.Should().Be(3);
 			rows[0].Should().Be("skill;startdatetime;enddatetime;forecasted agents;total scheduled agents;total diff;total scheduled heads;BpoName;Teleopti");
-			rows[1].Should().Be.EqualTo("skillname;2017-08-15 08:00;2017-08-15 08:15;15,7;10;-5,7;10;2;0");
-			rows[2].Should().Be.EqualTo("skillname;2017-08-15 08:15;2017-08-15 08:30;15,7;17;1,3;17;4;7");
+			rows[1].Should().Be.EqualTo("skillname;2017-08-15 08:00;2017-08-15 08:15;15,7;10;-5,7;12;2;0");
+			rows[2].Should().Be.EqualTo("skillname;2017-08-15 08:15;2017-08-15 08:30;15,7;17;1,3;28;4;7");
 		}
 		
 		private static ISkill createSkill(int intervalLength, string skillName, TimePeriod openHours)
