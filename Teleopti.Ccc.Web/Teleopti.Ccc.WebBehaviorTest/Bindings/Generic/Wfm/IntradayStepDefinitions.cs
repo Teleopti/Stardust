@@ -128,6 +128,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		}
 
 		[Given(@"I select to create a new Skill Group in SGM")]
+		[When(@"I select to create a new Skill Group in SGM")]
 		public void GivenISelectToCreateANewSkillGroupInSGM()
 		{
 			Browser.Interactions.Click("#create-skill-group-button");
@@ -216,6 +217,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		}
 
 		[Given(@"I select the skill '(.*)' in SGM")]
+		[When(@"I select the skill '(.*)' in SGM")]
 		public void GivenISelectTheSkillInSGM(string skillName)
 		{
 			Browser.Interactions.ClickContaining("#available_skills_list", skillName);

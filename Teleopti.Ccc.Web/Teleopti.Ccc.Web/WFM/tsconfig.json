@@ -1,14 +1,15 @@
 ﻿{
-    "compilerOptions": {
-        "target": "es5",
-        "experimentalDecorators": true,
-        "allowSyntheticDefaultImports": true,
-        "moduleResolution": "node",
-        "emitDecoratorMetadata": true,
-        "module": "es2015",
-        "allowJs": true,
-        "types": ["angular"],
-        "lib": ["es2017", "dom"]
-    },
-    "exclude": ["node_modules"]
+	"compilerOptions": {
+		"target": "es5",
+		"experimentalDecorators": true,
+		"allowSyntheticDefaultImports": true,
+		"moduleResolution": "node",
+		"emitDecoratorMetadata": true,
+		"module": "es2015",
+		"allowJs": true,
+		"types": ["angular"],
+		"lib": ["es2017", "dom"]
+	},
+	"include": ["app", "src", "e2e"],
+	"exclude": ["node_modules", "dist"]
 }
