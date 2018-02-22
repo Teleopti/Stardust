@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
-using Teleopti.Ccc.Web.Areas.RtaTool.Controllers;
 using Teleopti.Ccc.Web.Areas.SSO.Controllers;
 using Teleopti.Ccc.Web.Areas.Start.Controllers;
 using Teleopti.Ccc.Web.Core.Logging;
@@ -51,16 +50,16 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			{
 				filters.Add(new CsrfFilter());
 			}
+
 			filters.Add(new NoCacheFilterMvc());
 			filters.Add(new AjaxHandleErrorAttribute(_errorMessageProvider));
 			filters.Add(new TeleoptiPrincipalAuthorizeAttribute(_authenticationModule, _identityProviderProvider, _checkTenantUserExists, new List<Type>
 			{
-				typeof (ShareCalendarController),
-				typeof (TestController),
-				typeof (UrlController),
-				typeof (OpenIdController),
-				typeof (ApplicationController),
-				typeof (ReturnController),
+				typeof(ShareCalendarController),
+				typeof(TestController),
+				typeof(UrlController),
+				typeof(OpenIdController),
+				typeof(ReturnController),
 				typeof(TenantAdminInfoController)
 			}));
 		}
