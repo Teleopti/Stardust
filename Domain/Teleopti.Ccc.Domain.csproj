@@ -1001,7 +1001,6 @@
     <Compile Include="InterfaceLegacy\Domain\IRecurrentWeeklyMeeting.cs" />
     <Compile Include="InterfaceLegacy\Domain\IRelativeDailyDifferencesByAllSkillsExtractor.cs" />
     <Compile Include="InterfaceLegacy\Domain\IRemoveLayerFromSchedule.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IRemoveShiftCategoryOnBestDateService.cs" />
     <Compile Include="InterfaceLegacy\Domain\IReplaceLayerInSchedule.cs" />
     <Compile Include="InterfaceLegacy\Domain\IReplyOptionsSource.cs" />
     <Compile Include="InterfaceLegacy\Domain\IReplyOptionTarget.cs" />
@@ -3014,7 +3013,6 @@
     <Compile Include="RealTimeAdherence\RtaRule.cs" />
     <Compile Include="RealTimeAdherence\RtaStateHolder.cs" />
     <Compile Include="Optimization\ScheduleMatrixPro.cs" />
-    <Compile Include="Optimization\RemoveShiftCategoryOnBestDateService.cs" />
     <Compile Include="ResourceCalculation\ShiftProjectionCacheManager.cs" />
     <Compile Include="ResourceCalculation\ShiftProjectionCacheFilter.cs" />
     <Compile Include="ResourceCalculation\SkillStaffPeriodHolder.cs" />
