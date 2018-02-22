@@ -8,6 +8,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			_schedulingResultStateHolder.Schedules = _dictionary;
 			_resourceOptimizationHelper = MockRepository.GenerateMock<IResourceCalculation>();
 			_personRequestFactory = new PersonRequestFactory();
-			_person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2001,1,1));
+			_person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2001, 1, 1));
 			_personRequestFactory.Person = _person;
 			_person.PermissionInformation.SetCulture(new CultureInfo(1033));
 			_timeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
@@ -596,13 +597,71 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 																		});
 			stateHolder.Schedules = _dictionary;
 			_dictionary.AddTestItem(_person, GetExpectationForTwoDays(date, absence, requestedDateTimePeriod, new List<IVisualLayer> { existingLayerWithSameAbsence, existingLayerWithSameAbsence2 }));
-			
-			_person.AddSkill(_skill,date);
+
+			_person.AddSkill(_skill, date);
 
 			var personSkillProvider = new PersonSkillProvider();
 
 			var result = _target.GetUnderStaffingDays(absenceRequest, new RequiredForHandlingAbsenceRequest(stateHolder, null, _resourceOptimizationHelper, null), personSkillProvider);
 			result.UnderstaffingDays.Count().Should().Be.EqualTo(2);
+		}
+
+		[Test]
+		public void ShouldSayIsValidFalseWhenSeriousUnderstaffed()
+		{
+			var start = new DateTime(2010, 02, 01, 7, 0, 0, DateTimeKind.Utc);
+			var requestedDateTimePeriod1 = new DateTimePeriod(start, start.AddHours(1));
+			
+			_skill = SkillFactory.CreateSkill("TunaFish", SkillTypeFactory.CreateSkillType(), 15);
+			_skill.StaffingThresholds = new StaffingThresholds(new Percent(-0.2), new Percent(-0.1), new Percent(), new Percent(0.4));
+			((PersonPeriod)_person.PersonPeriodCollection.First()).AddPersonSkill((new PersonSkill(_skill, new Percent(1))));
+
+			// to get it open
+			SkillDayFactory.CreateSkillDay(_skill, new DateOnly(requestedDateTimePeriod1.StartDateTime));
+
+			var intervals = new List<IValidatePeriod>
+			{
+				new SkillStaffingInterval
+				{
+					FStaff = 200,
+					//Serious understaffed
+					CalculatedResource = 100,
+					StartDateTime = start,
+					EndDateTime = start.AddMinutes(15),
+					SkillId = _skill.Id.GetValueOrDefault()
+				},
+				new SkillStaffingInterval
+				{
+					FStaff = 200,
+					CalculatedResource = 175,
+					StartDateTime = start.AddMinutes(15),
+					EndDateTime = start.AddMinutes(30),
+					SkillId = _skill.Id.GetValueOrDefault()
+				},
+				new SkillStaffingInterval
+				{
+					FStaff = 200,
+					CalculatedResource = 180,
+					StartDateTime = start.AddMinutes(30),
+					EndDateTime = start.AddMinutes(45),
+					SkillId = _skill.Id.GetValueOrDefault()
+				},
+				new SkillStaffingInterval
+				{
+					FStaff = 200,
+					CalculatedResource = 180,
+					StartDateTime = start.AddMinutes(45),
+					EndDateTime = start.AddMinutes(60),
+					SkillId = _skill.Id.GetValueOrDefault()
+				}
+			};
+
+			IAbsence absence = AbsenceFactory.CreateAbsence("Holiday");
+			var req = _personRequestFactory.CreateAbsenceRequest(absence, requestedDateTimePeriod1);
+
+			var validatedUnderStaffing = _target.ValidateLight(req, intervals);
+
+			validatedUnderStaffing.IsValid.Should().Be.False();
 		}
 	}
 }

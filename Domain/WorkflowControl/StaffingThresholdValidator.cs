@@ -200,18 +200,24 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 				if (skill == null) continue;
 				if (validatePeriods.IsEmpty()) continue;
 
-				var validatedUnderStaffingResult = ValidateUnderstaffing(skill,
-					validatePeriods.Where(
-						x => ((SkillStaffingInterval) x).SkillId == skill.Id.GetValueOrDefault() && ((SkillStaffingInterval) x).FStaff > 0),
+				ValidateSeriousUnderstaffing(skill,
+					validatePeriods.Where(x =>
+						((SkillStaffingInterval)x).SkillId == skill.Id.GetValueOrDefault() && ((SkillStaffingInterval)x).FStaff > 0),
 					timeZone, result);
-				if (validatedUnderStaffingResult.IsValid) continue;
+
+				ValidateUnderstaffing(skill,
+					validatePeriods.Where(x =>
+						((SkillStaffingInterval) x).SkillId == skill.Id.GetValueOrDefault() && ((SkillStaffingInterval) x).FStaff > 0),
+					timeZone, result);
+
+				if (result.IsNotUnderstaffed()) continue;
 
 				requestsLogger.Debug(
 					$"Understaffed on skill: {skill.Name}, Intervals: {string.Join(",", result.UnderstaffingPeriods.Select(x => x.StartDateTime))}");
 
 				result.AddUnderstaffingDay(date);
 			}
-
+			
 			return result;
 		}
 
@@ -237,6 +243,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			if (skillStaffPeriodList == null) throw new ArgumentNullException(nameof(skillStaffPeriodList));
 
 			var validatedRequest = new ValidatedRequest();
+
 			var intervalHasUnderstaffing = getIntervalsForUnderstaffing(skill);
 			var exceededUnderstaffingList = skillStaffPeriodList.Where(intervalHasUnderstaffing.IsSatisfiedBy).ToArray();
 			var exceededRate = exceededUnderstaffingList.Sum(t => t.DateTimePeriod.ElapsedTime().TotalMinutes) /
