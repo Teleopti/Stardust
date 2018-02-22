@@ -18,16 +18,16 @@ namespace Teleopti.Ccc.DBManager
 			else if (args.Any(a => a.Contains("-O" + DatabaseType.TeleoptiCCCAgg.GetName())))
 				loggerSuffix = "Agg";
 
-			var logger = new FileLogger(loggerSuffix);
+			var command = PatchCommand.ParseCommandLine(args);
+			var log = new FileLogger(loggerSuffix);
 			try
 			{
-				logger.Write($"Teleopti Database Manager version {Assembly.GetExecutingAssembly().GetName().Version}");
-				logger.Write($"Was called with args: {string.Join(" ", args)}");
+				log.Write($"Teleopti Database Manager version {Assembly.GetExecutingAssembly().GetName().Version}");
+				log.Write($"Was called with args: {string.Join(" ", args)}");
 				if (args.Length > 0 && args.Length < 20)
 				{
-					var commandLineArgument = new CommandLineArgument(args);
-					var patcher = new DatabasePatcher(logger);
-					return patcher.Run(commandLineArgument);
+					return new DatabasePatcher(log)
+						.Run(PatchCommand.ParseCommandLine(args));
 				}
 				else
 				{
@@ -50,13 +50,13 @@ namespace Teleopti.Ccc.DBManager
 			}
 			catch (Exception e)
 			{
-				logger.Write("An error occurred:");
-				logger.Write(e.ToString());
+				log.Write("An error occurred:");
+				log.Write(e.ToString());
 				return -1;
 			}
 			finally
 			{
-				logger.Dispose();
+				log.Dispose();
 			}
 		}
 	}

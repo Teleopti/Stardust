@@ -15,7 +15,7 @@ namespace Teleopti.Wfm.Administration.Core
 
 		public int Upgrade(string server, string database, DatabaseType type, string adminUserName, string adminPassword,bool useIntegratedSecurity, string appUser, string appPassword, bool permissionMode, string tenant, int tenantId)
 		{
-			var commands = new CommandLineArgument(new string[] {})
+			var command = new PatchCommand
 			{
 				ServerName = server,
 				DatabaseName = database,
@@ -30,7 +30,7 @@ namespace Teleopti.Wfm.Administration.Core
 				UseIntegratedSecurity = useIntegratedSecurity
 			};
 			_databasePatcher.SetLogger(new TenantLogger(tenant, tenantId));
-         return _databasePatcher.Run(commands);
+         return _databasePatcher.Run(command);
 
 		}
 	}
