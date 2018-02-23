@@ -13,6 +13,8 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 using System.Globalization;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Intraday;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 {
@@ -31,13 +33,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly IPersonRequestRepository _personRequestRepository;
 		private readonly INow _now;
 		private readonly SmartDeltaDoer _smartDeltaDoer;
+		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
+		private readonly ScheduledStaffingProvider _scheduledStaffingProvider;
 
 		public RequestProcessor(ICommandDispatcher commandDispatcher,
 			ISkillCombinationResourceRepository skillCombinationResourceRepository,
 			IScheduleStorage scheduleStorage, ICurrentScenario currentScenario,
 			ISkillRepository skillRepository, SkillCombinationResourceReadModelValidator skillCombinationResourceReadModelValidator,
 			IAbsenceRequestValidatorProvider absenceRequestValidatorProvider, SkillStaffingIntervalProvider skillStaffingIntervalProvider,
-			IActivityRepository activityRepository, IPersonRequestRepository personRequestRepository, INow now, SmartDeltaDoer smartDeltaDoer)
+			IActivityRepository activityRepository, IPersonRequestRepository personRequestRepository, INow now, SmartDeltaDoer smartDeltaDoer,
+			ISkillDayLoadHelper skillDayLoadHelper, ScheduledStaffingProvider scheduledStaffingProvider)
 		{
 			_commandDispatcher = commandDispatcher;
 			_skillCombinationResourceRepository = skillCombinationResourceRepository;
@@ -51,6 +56,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_personRequestRepository = personRequestRepository;
 			_now = now;
 			_smartDeltaDoer = smartDeltaDoer;
+			_skillDayLoadHelper = skillDayLoadHelper;
+			_scheduledStaffingProvider = scheduledStaffingProvider;
 		}
 
 		public void Process(IPersonRequest personRequest)
@@ -83,7 +90,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 				//what if the agent changes personPeriod in the middle of the request period?
 				//what if the request is 8:00-8:05, only a third of a resource should be removed
-
 				var combinationResources = _skillCombinationResourceRepository.LoadSkillCombinationResources(personRequest.Request.Period).ToArray();
 				if (!combinationResources.Any())
 				{
@@ -93,14 +99,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				}
 
 				_activityRepository.LoadAll();
-				var allSkills = _skillRepository.LoadAll();
+				var allSkills = _skillRepository.LoadAll().ToList();
 
 				var schedules = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(personRequest.Person, new ScheduleDictionaryLoadOptions(false, false), loadSchedulesPeriodToCoverForMidnightShifts, _currentScenario.Current())[personRequest.Person];
 
 				var dateOnlyPeriod = loadSchedulesPeriodToCoverForMidnightShifts.ToDateOnlyPeriod(timeZone);
 
 				var scheduleDays = schedules.ScheduledDayCollection(dateOnlyPeriod);
-				
+
 				var skillIds = combinationResources.SelectMany(s => s.SkillCombination).Distinct().ToArray();
 				var skillInterval = allSkills.Where(x => skillIds.Contains(x.Id.GetValueOrDefault())).Min(x => x.DefaultResolution);
 
@@ -128,6 +134,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				var staffingThresholdValidators = validators.OfType<StaffingThresholdValidator>().ToList();
 				if (staffingThresholdValidators.Any())
 				{
+					var dateOnlyPeriod8 = new DateOnlyPeriod(new DateOnly(personRequest.Request.Period.StartDateTime.Date),
+						new DateOnly(personRequest.Request.Period.EndDateTime.Date));
+					var skillDaysBySkills = _skillDayLoadHelper.LoadSchedulerSkillDays(dateOnlyPeriod8, allSkills, _currentScenario.Current());
+
+					foreach (var day in dateOnlyPeriod8.DayCollection())
+					{
+						calculateForecastedAgentsForEmailSkills(day, false, skillDaysBySkills, timeZone);
+					}
+
 					var useShrinkage = staffingThresholdValidators.Any(x => x.GetType() == typeof(StaffingThresholdWithShrinkageValidator));
 					var skillStaffingIntervals = _skillStaffingIntervalProvider.GetSkillStaffIntervalsAllSkills(personRequest.Request.Period, combinationResources.ToList(), useShrinkage);
 					var skillStaffingIntervalsToValidate = new List<SkillStaffingInterval>();
@@ -200,6 +215,40 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		{
 			return new ResourceCalculationContext(new Lazy<IResourceCalculationDataContainerWithSingleOperation>(() => new ResourceCalculationDataContainerFromSkillCombinations(combinationResources, skills, useAllSkills)));
 		}
+
+		private List<SkillStaffingIntervalLightModel> calculateForecastedAgentsForEmailSkills(DateOnly? dateOnly, bool useShrinkage,
+			IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, TimeZoneInfo timeZone)
+		{
+			var scheduledStaffingPerSkill = new List<SkillStaffingIntervalLightModel>();
+			var skillGroupsByResuolution = skillDays.Keys
+				.Where(SkillTypesWithBacklog.IsBacklogSkillType)
+				.GroupBy(x => x.DefaultResolution);
+			foreach (var group in skillGroupsByResuolution)
+			{
+				var emailSkillsForOneResoultion = group.ToList();
+				scheduledStaffingPerSkill.AddRange(_scheduledStaffingProvider.StaffingPerSkill(emailSkillsForOneResoultion, group.Key, dateOnly, useShrinkage));
+
+				foreach (var skill in emailSkillsForOneResoultion)
+				{
+					var skillDaysEmail = skillDays[skill];
+					foreach (var skillDay in skillDaysEmail)
+					{
+						foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
+						{
+							var intervalStartLocal = TimeZoneHelper.ConvertFromUtc(skillStaffPeriod.Period.StartDateTime, timeZone);
+							var scheduledStaff =
+								scheduledStaffingPerSkill.FirstOrDefault(
+									x => x.Id == skill.Id.Value && x.StartDateTime == intervalStartLocal);
+							skillStaffPeriod.SetCalculatedResource65(0);
+							if (scheduledStaff.StaffingLevel > 0)
+								skillStaffPeriod.SetCalculatedResource65(scheduledStaff.StaffingLevel);
+						}
+					}
+				}
+			}
+
+			return scheduledStaffingPerSkill;
+		}
 	}
 
 	public interface IRequestProcessor
@@ -222,7 +271,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		public int ImmediatePeriodInHours => 24 * 14 + 1;
 	}
 
-	public class SmartDeltaDoer 
+	public class SmartDeltaDoer
 	{
 		private readonly IPersonSkillProvider _personSkillProvider;
 
@@ -236,7 +285,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			foreach (var layer in layers)
 			{
 				var skillCombination = _personSkillProvider.SkillsOnPersonDate(person, startDate).ForActivity(layer.PayloadId);
-				if(!skillCombination.Skills.Any()) continue;
+				if (!skillCombination.Skills.Any()) continue;
 				distributeSmartly(combinationResources, skillCombination, layer);
 			}
 
@@ -257,7 +306,9 @@ combinationResources.SingleOrDefault(x => x.SkillCombination.NonSequenceEquals(s
 
 			skillCombinationResourceByAgentAndLayer.Resource = resource;
 		}
+
+
 	}
 
-	
+
 }
