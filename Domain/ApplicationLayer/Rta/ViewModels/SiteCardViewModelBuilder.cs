@@ -84,6 +84,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 						InAlarmCount = t.InAlarmCount,
 						Color = getColor(t.InAlarmCount,t.AgentsCount)
 					})
+					.OrderBy(t => t.Name)
 				}).OrderBy(x => x.Name).ToArray();
 
 			return new SiteCardViewModel

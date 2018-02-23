@@ -133,7 +133,66 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			viewModel.Teams.Single().InAlarmCount.Should().Be(1);
 			viewModel.Teams.Single().Color.Should().Be("warning");
 		}
+		
+		[Test]
+		public void ShouldOrderTeamsByName()
+		{
+			Now.Is("2018-02-23 08:30");
+			var personId1 = Guid.NewGuid();
+			var personId2 = Guid.NewGuid();
+			var personId3 = Guid.NewGuid();
+			var siteId = Guid.NewGuid();
+			var teamId1 = Guid.NewGuid();
+			var teamId2 = Guid.NewGuid();
+			var teamId3 = Guid.NewGuid();
 
+			Database
+				.WithSite(siteId)
+				.WithTeam(teamId1)
+				.WithTeam(teamId2)
+				.WithTeam(teamId3)
+				.WithAgentState(new AgentStateReadModel
+				{
+					PersonId = personId1,
+					BusinessUnitId = Guid.NewGuid(),
+					SiteId = siteId,
+					TeamId = teamId1,
+					TeamName = "C",
+					IsRuleAlarm = true,
+					AlarmStartTime = "2018-02-23 08:29".Utc()
+				})
+				.WithAgent(personId1)
+				.WithAgentState(new AgentStateReadModel
+				{
+					PersonId = personId2,
+					BusinessUnitId = Guid.NewGuid(),
+					SiteId = siteId,
+					TeamId = teamId2,
+					TeamName = "A",
+					IsRuleAlarm = true,
+					AlarmStartTime = "2018-02-23 08:29".Utc()
+				})
+				.WithAgent(personId2)
+				.WithAgentState(new AgentStateReadModel
+				{
+					PersonId = personId3,
+					BusinessUnitId = Guid.NewGuid(),
+					SiteId = siteId,
+					TeamId = teamId3,
+					TeamName = "B",
+					IsRuleAlarm = true,
+					AlarmStartTime = "2018-02-23 08:29".Utc()
+				})
+				.WithAgent(personId3);
 
+			var viewModel = Target.Build(null, new[] { siteId }).Sites.Single();
+
+			viewModel.Teams.Select(x => x.Id).Should().Have.SameSequenceAs(new[]
+			{
+				teamId2,
+				teamId3,
+				teamId1
+			});
+		}
 	}
 }
