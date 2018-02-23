@@ -35,6 +35,11 @@ describe('Requests controller tests',
 					}
 				});
 				$provide.service('requestsDataService', function () { return requestsDataService; });
+				$provide.service('$timeout', function() {
+					return function(callback) {
+						callback();
+					}
+				});
 			});
 
 		});
