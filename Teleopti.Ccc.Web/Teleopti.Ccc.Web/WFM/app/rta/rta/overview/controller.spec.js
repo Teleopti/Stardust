@@ -546,6 +546,38 @@ rtaTester.describe('RtaOverviewController', function (it, fit, xit) {
 			vm.siteCards[0].isOpen = true;
 		});
 
-		expect(vm.siteCards[0].teams[0].href).toBe(t.href('rta-agents', {siteIds: ['londonId']})); 
+		expect(vm.siteCards[0].teams[0].href).toBe(t.href('rta-agents', {siteIds: ['londonId']}));
+	});
+
+	it('should update agents in alarm with missing team in organization', function (t) {
+		t.backend
+			.withSiteAdherence({
+				Id: 'siteId'
+			})
+			.withTeamAdherence({
+				SiteId: 'siteId',
+				Id: 'team1Id',
+				InAlarmCount: 1
+			})
+			.withTeamAdherence({
+				SiteId: 'siteId',
+				Id: 'team2Id',
+				InAlarmCount: 2
+			})
+			.clearOrganization() // because withSiteAdherence/withTeamAdherence also adds to the organization :'(
+			.withOrganization({
+				Id: 'siteId',
+				Teams: [{
+					Id: 'team1Id',
+				}]
+			})
+		;
+		var vm = t.createController();
+
+		t.apply(function () {
+			vm.siteCards[0].isOpen = true;
+		});
+
+		expect(vm.siteCards[0].teams[1].InAlarmCount).toEqual(2);
 	});
 });

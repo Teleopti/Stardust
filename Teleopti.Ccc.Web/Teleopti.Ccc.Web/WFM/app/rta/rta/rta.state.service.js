@@ -148,10 +148,13 @@
 			var teamSelected = state.teamIds.some(function (teamId) { return teamId == id });
 			if (teamSelected)
 				return true;
-			var siteId = organization.find(function (site) {
+			var site = organization.find(function (site) {
 				return site.Teams.some(function (team) { return team.Id == id });
-			}).Id;
-			return isSiteSelected(siteId);
+			});
+			
+			if(site)
+				return isSiteSelected(site.Id);
+			return false;
 		}
 
 		function cleanState() {

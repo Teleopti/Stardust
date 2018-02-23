@@ -34,6 +34,7 @@
 		service.withPhoneState = withPhoneState;
 		service.withOrganization = withOrganization;
 		service.withOrganizationOnSkills = withOrganizationOnSkills;
+		service.clearOrganization = clearOrganization;
 
 		Object.defineProperty(service, 'skills', {
 			get: function () {
@@ -291,6 +292,11 @@
 			return this;
 		}
 
+		function clearOrganization() {
+			sitesWithTeams = [];
+			return this;
+		}
+		
 		function withSite(site) {
 			sitesWithTeams.push(site);
 			return this;
