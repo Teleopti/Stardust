@@ -1,4 +1,4 @@
-<div class="rta-view historical">
+<div class="rta-view prototype historical">
 
 	<div class="view-header with-fab with-desc">
 		<div class="view-title">
@@ -214,9 +214,9 @@
 										{{approved.EndTime}}
 									</td>
 									<td width="100px">{{'InAdherence' | translate}}</td>
-									<td style="background-color: #ffffff">
-										<span tabindex=0 class="context-menu card-context" type="submit"
-											  ng-click="vm.remove()">
+									<td>
+										<span tabindex=0 type="submit"
+											  ng-click="vm.remove()" style="cursor: pointer; margin:0 8px">
 											<i class="mdi mdi-delete"></i>
 											<md-tooltip>Remove</md-tooltip>
 										</span>
