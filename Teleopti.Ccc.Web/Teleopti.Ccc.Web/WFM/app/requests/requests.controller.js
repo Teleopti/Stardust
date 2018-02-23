@@ -8,6 +8,7 @@
 		'$state',
 		'$q',
 		'$translate',
+		'$timeout',
 		'Toggle',
 		'requestsDefinitions',
 		'requestsNotificationService',
@@ -25,6 +26,7 @@
 		$state,
 		$q,
 		$translate,
+		$timeout,
 		toggleService,
 		requestsDefinitions,
 		requestsNotificationService,
@@ -93,28 +95,36 @@
 			return text;
 		};
 
+		var loadRequetsDelay = 300;
+
 		vm.activeAbsenceAndTextTab = function () {
 			vm.paging.pageNumber = 1;
 			requestCommandParamsHolder.resetAllSelectedRequestsIds();
-			vm.selectedTabIndex = 0;
 			vm.period = vm.absenceAndOvertimePeriod;
-			$state.go('requests.absenceAndText', {getParams: getParams});
+			$timeout(function () {
+				vm.selectedTabIndex = 0;
+				$state.go('requests.absenceAndText', { getParams: getParams });
+			}, loadRequetsDelay);
 		};
 
 		vm.activeShiftTradeTab = function () {
 			vm.paging.pageNumber = 1;
 			requestCommandParamsHolder.resetAllSelectedRequestsIds();
-			vm.selectedTabIndex = 1;
 			vm.period = vm.shiftTradePeriod;
-			$state.go('requests.shiftTrade', {getParams: getParams});
+			$timeout(function () {
+				vm.selectedTabIndex = 1;
+				$state.go('requests.shiftTrade', { getParams: getParams });
+			}, loadRequetsDelay);
 		};
 
 		vm.activeOvertimeTab = function () {
 			vm.paging.pageNumber = 1;
 			requestCommandParamsHolder.resetAllSelectedRequestsIds();
-			vm.selectedTabIndex = 2;
 			vm.period = vm.absenceAndOvertimePeriod;
-			$state.go('requests.overtime', {getParams: getParams});
+			$timeout(function () {
+				vm.selectedTabIndex = 2;
+				$state.go('requests.overtime', { getParams: getParams });
+			}, loadRequetsDelay);
 		};
 
 		vm.getSitesAndTeamsAsync = function () {
