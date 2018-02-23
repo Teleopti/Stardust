@@ -170,7 +170,7 @@
 							visible: true,
 							minWidth: 111
 						};
-						columns.splice(10, 0, brokenRulesColumn);
+						columns.splice(11, 0, brokenRulesColumn);
 					}
 				}
 				// since upgrading to ui-grid 3.2.6, require copy of columns array
