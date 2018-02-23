@@ -37,6 +37,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			Browser.Interactions.Click(".approve-adherence-submit");
 		}
 
+		[When(@"I remove approved period between '(.*)' and '(.*)'")]
+		public void WhenIRemoveApprovedPeriodBetweenAnd(string start, string end)
+		{
+			ScenarioContext.Current.Pending();
+		}
+
+
 		[Then(@"I should see out of adherences")]
 		public void ThenIShouldSeeOutOfAdherences(Table table)
 		{
