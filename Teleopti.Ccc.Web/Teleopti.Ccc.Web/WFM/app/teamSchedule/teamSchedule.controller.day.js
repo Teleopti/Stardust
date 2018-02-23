@@ -135,28 +135,22 @@
 		var commandContainerId = 'teamschedule-command-container';
 		var settingsContainerId = 'teamschedule-settings-container';
 
-		vm.triggerCommand = function (command, needToOpenSidePanel) {
+		vm.triggerCommand = function (label, needToOpenSidePanel) {
 			closeSettingsSidenav();
-			if ($mdSidenav(commandContainerId).isOpen()) {
-				$mdSidenav(commandContainerId).close().then(function () {
-					initCommand(command, needToOpenSidePanel);
-				});
-			} else
-				initCommand(command, needToOpenSidePanel);
-		};
-		function initCommand(command, needToOpenSidePanel) {
-			vm.onCommandContainerReady = function () {
-				$scope.$applyAsync(function () {
-					if (needToOpenSidePanel)
-						openSidePanel();
-				});
-				return true;
-			};
+			$mdSidenav(commandContainerId).close().then(function () {
+				vm.onCommandContainerReady = function () {
+					$scope.$applyAsync(function () {
+						if (needToOpenSidePanel)
+							openSidePanel();
+					});
+					return true;
+				};
 
-			$scope.$broadcast('teamSchedule.init.command', {
-				activeCmd: command
+				$scope.$broadcast('teamSchedule.init.command', {
+					activeCmd: label
+				});
 			});
-		}
+		};
 
 		$scope.$on('teamSchedule.show.loading',
 			function () {
@@ -600,7 +594,7 @@
 		if (!vm.toggles.Wfm_GroupPages_45057)
 			vm.getSitesAndTeamsAsync();
 
-
+		
 
 		function showReleaseNotification() {
 			var template = $translate.instant('WFMReleaseNotificationWithoutOldModuleLink');
