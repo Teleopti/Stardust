@@ -71,6 +71,8 @@ angular.module('wfm.rta').config(function ($stateProvider, ToggleProvider) {
 		.state('rta-historical', {
 			url: '/rta/agent-historical/:personId/:date?open',
 			templateUrl: function () {
+				if (toggles.RTA_RemoveApprovedOOA_47721)
+					return 'app/rta/rta/historical/rta-historical.removeApprovedOOA_47721.html';
 				if (toggles.RTA_ApprovePreviousOOA_47230)
 					return 'app/rta/rta/historical/rta-historical.approvePreviousOOA_47230.html';
 				if (toggles.RTA_ViewHistoricalAhderence7DaysBack_46826)
