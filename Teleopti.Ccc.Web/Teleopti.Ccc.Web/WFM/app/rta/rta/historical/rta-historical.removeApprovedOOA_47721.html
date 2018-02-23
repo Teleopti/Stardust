@@ -215,9 +215,11 @@
 									</td>
 									<td width="100px">{{'InAdherence' | translate}}</td>
 									<td style="background-color: #ffffff">
-										<button type="submit" class="wfm-btn wfm-btn-invis-primary"
-												ng-click="vm.remove()">
-											Remove</button>
+										<span tabindex=0 class="context-menu card-context" type="submit"
+											  ng-click="vm.remove()">
+											<i class="mdi mdi-delete"></i>
+											<md-tooltip>Remove</md-tooltip>
+										</span>
 									</td>
 								</tr>
 							</table>
