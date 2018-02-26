@@ -40,8 +40,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			var seriousUnderstaffingSkills = new List<ISkill>();
 			foreach (var skillStaffingDataGroup in skillStaffingDataGroups)
 			{
-				var skillStaffingDataInPeriod = skillStaffingDataGroup.Where(s => s.Time >= dateTimePeriod.StartDateTime
-																				  && s.Time <= dateTimePeriod.EndDateTime).ToList();
+				var skillStaffingDataInPeriod = skillStaffingDataGroup.ToList();
 
 				if (!skillStaffingDataInPeriod.Any())
 					continue;

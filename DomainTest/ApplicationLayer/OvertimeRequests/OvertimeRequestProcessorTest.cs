@@ -51,6 +51,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		public ICurrentScenario Scenario;
 		public ISchedulingResultStateHolder SchedulingResultStateHolder;
 		public FakeActivityRepository ActivityRepository;
+		public FakeUserTimeZone UserTimeZone;
 
 		private readonly TimePeriod _defaultOpenPeriod = new TimePeriod(8, 00, 21, 00);
 		private readonly DateOnly _periodStartDate = new DateOnly(2016, 1, 1);
@@ -617,9 +618,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			return createOvertimeRequest(requestStartTime, hours);
 		}
 
-		private IPersonRequest createOvertimeRequestInMinutes(int startHour, int minutes)
+		private IPersonRequest createOvertimeRequestInMinutes(int startHour, int minutes, TimeZoneInfo timeZoneInfo = null)
 		{
-			var requestStartTime = new DateTime(2017, 7, 17, startHour, 0, 0, DateTimeKind.Utc);
+			timeZoneInfo = timeZoneInfo ?? TimeZoneInfo.Utc;
+			var requestStartTimeLocal = new DateTime(2017, 7, 17, startHour, 0, 0);
+			var requestStartTime = TimeZoneHelper.ConvertToUtc(requestStartTimeLocal, timeZoneInfo);
 			var personRequest =
 				createOvertimeRequest(new DateTimePeriod(requestStartTime, requestStartTime.AddMinutes(minutes)));
 			return personRequest;

@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
@@ -350,6 +351,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		public void ShouldUseEmailActivityAsOvertimeActivityWhenEmailSKillIsMoreCriticalUnderStaffedIn30Minutes()
 		{
 			setupPerson();
+			LoggedOnUser.SetDefaultTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo());
+			UserTimeZone.Is(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 
 			var phoneSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony).WithId();
 
@@ -379,7 +382,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var personSkill3 = createPersonSkill(emailActivity, mostCriticalUnderStaffedEmailSkill);
 
 			var date = new DateOnly(2017, 7, 17);
-			var period = new DateTimePeriod(2017, 7, 17, 11, 2017, 7, 17, 12);
+			var period = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(new DateTime(2017, 7, 17, 11, 00, 00), timeZone)
+				, TimeZoneHelper.ConvertToUtc(new DateTime(2017, 7, 17, 12, 00, 00), timeZone));
 
 			setupIntradayStaffingForSkill(criticalUnderStaffedPhoneSkill, date, new List<StaffingPeriodData>
 			{
@@ -396,7 +400,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			addPersonSkillsToPersonPeriod(personSkill1, personSkill2, personSkill3);
 
-			var personRequest = createOvertimeRequestInMinutes(11, 30);
+			var personRequest = createOvertimeRequestInMinutes(11, 30, timeZone);
 			getTarget().Process(personRequest);
 
 			var schedule = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(LoggedOnUser.CurrentUser(),
@@ -530,11 +534,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		private List<Tuple<TimePeriod, double>> createSkillForecastedStaffings(ISkill skill, DateTimePeriod dateTimePeriod, double forecastedStaffing)
 		{
 			var skillForecastedStaffings = new List<Tuple<TimePeriod, double>>();
-			var intervals = dateTimePeriod.Intervals(TimeSpan.FromMinutes(skill.DefaultResolution));
-			for (var i = 0; i < intervals.Count; i++)
+
+			var timezone = LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
+			for (var time = dateTimePeriod.StartDateTimeLocal(timezone);
+				time < dateTimePeriod.EndDateTimeLocal(timezone);
+				time = time.AddMinutes(skill.DefaultResolution))
 			{
 				skillForecastedStaffings.Add(new Tuple<TimePeriod, double>(
-					new TimePeriod(intervals[i].StartDateTime.TimeOfDay, intervals[i].EndDateTime.TimeOfDay),
+					new TimePeriod(time.TimeOfDay, time.AddMinutes(skill.DefaultResolution).TimeOfDay),
 					forecastedStaffing));
 			}
 			return skillForecastedStaffings;
