@@ -5,6 +5,7 @@ using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.SqlCommand;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Angel.LegacyWrappers;
 using Teleopti.Ccc.Domain.Forecasting.Template;
@@ -51,7 +52,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
             DetachedCriteria skilldayDataPeriod = getSkilldayDataPeriod(restriction);
 
-            DetachedCriteria skilldayScenario = getSkilldayScenario(restriction);
+            DetachedCriteria skilldayScenario = getSkilldayScenario(scenario);
                 
 			DetachedCriteria workloadDayOpenHour = getWorkloadDayOpenHour(restriction);
 
@@ -110,7 +111,7 @@ SELECT 0
 
 				DetachedCriteria skilldayDataPeriod = getSkilldayDataPeriod(restriction);
 
-				DetachedCriteria skilldayScenario = getSkilldayScenario(restriction);
+				DetachedCriteria skilldayScenario = getSkilldayScenario(scenario);
 
 				DetachedCriteria workloadDayOpenHour = getWorkloadDayOpenHour(restriction);
 
@@ -147,12 +148,11 @@ SELECT 0
 				.SetFetchMode("TaskPeriodList", FetchMode.Join);
 	    }
 
-	    private static DetachedCriteria getSkilldayScenario(Junction skilldaySubquery)
-	    {
-	        return DetachedCriteria.For<SkillDay>("skillDay")
-				.Add(skilldaySubquery)
-	            .SetFetchMode("Scenario", FetchMode.Join);
-	    }
+	    private static DetachedCriteria getSkilldayScenario(IScenario scenario)
+		{
+			return DetachedCriteria.For<Scenario>("scenario")
+				.Add(Restrictions.IdEq(scenario.Id));
+		}
 
 	    private static DetachedCriteria getSkilldayDataPeriod(Junction skilldaySubquery)
 	    {
