@@ -77,13 +77,14 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
             DateTime endOfPeriodAfter = TimeZoneHelper.ConvertToUtc(extendedWeek.EndDate.AddDays(1).Date, personWeek.Person.PermissionInformation.DefaultTimeZone());
 
 
-			var scheduleDayAfter1 = schedules[personWeek.Week.StartDate.AddDays(1)].ScheduleDay;
-			var scheduleDayAfter2 = schedules[personWeek.Week.StartDate.AddDays(2)].ScheduleDay;
+			var scheduleDayAfter1 = schedules[personWeek.Week.EndDate.AddDays(1)].ScheduleDay;
+			var scheduleDayAfter2 = schedules[personWeek.Week.EndDate.AddDays(2)].ScheduleDay;
             result = _dayOffMaxFlexCalculator.MaxFlex(scheduleDayAfter1, scheduleDayAfter2);
             if (result != null)
                 endOfPeriodAfter = result.Value.StartDateTime;
 
             if ((endOfPeriodAfter - endOfPeriodBefore) >= weeklyRest)
+
                 return true;
 
             return false;
