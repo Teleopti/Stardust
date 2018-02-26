@@ -2,7 +2,9 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.IocCommon.Toggle;
+using Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers;
@@ -16,14 +18,20 @@ namespace Teleopti.Ccc.WebTest.Core
 	{
 		private FakeScheduleProvider scheduleProvider;
 		private IMonthScheduleDomainDataProvider target;
-
+		private ILicenseAvailability licenseAvailability;
+		private IPermissionProvider permissionProvider;
 
 		[SetUp]
 		public void Setup()
 		{
 			scheduleProvider = new FakeScheduleProvider();
+			permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
+			licenseAvailability = MockRepository.GenerateMock<ILicenseAvailability>();
+
 			target = new MonthScheduleDomainDataProvider(scheduleProvider,
-				new FakeToggleManager(), MockRepository.GenerateMock<ISeatOccupancyProvider>());
+				MockRepository.GenerateMock<ISeatOccupancyProvider>(),
+				permissionProvider,
+				licenseAvailability);
 		}
 
 		[Test]
@@ -48,6 +56,42 @@ namespace Teleopti.Ccc.WebTest.Core
 
 			result.Days.Count().Should().Be(1);
 			result.Days.ElementAt(0).ScheduleDay.DateOnlyAsPeriod.DateOnly.Should().Be(new DateOnly(2013, 12, 30));
+		}
+
+		[Test]
+		public void ShouldMapAsmPermissionToTrueWhenHavingBothLicenseAndPermission()
+		{
+			var today = DateOnly.Today;
+			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger)).Return(true);
+			licenseAvailability.Stub(x => x.IsLicenseEnabled(DefinedLicenseOptionPaths.TeleoptiCccAgentScheduleMessenger)).Return(true);
+
+			var result = target.Get(today, true);
+
+			result.AsmPermission.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldMapAsmPermissionToFalseWhenNoAsmLicense()
+		{
+			var today = DateOnly.Today;
+			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger)).Return(true);
+			licenseAvailability.Stub(x => x.IsLicenseEnabled(DefinedLicenseOptionPaths.TeleoptiCccAgentScheduleMessenger)).Return(false);
+
+			var result = target.Get(today, true);
+
+			result.AsmPermission.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldMapAsmPermissionToFalseWhenNoAsmPermission()
+		{
+			var today = DateOnly.Today;
+			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger)).Return(false);
+			licenseAvailability.Stub(x => x.IsLicenseEnabled(DefinedLicenseOptionPaths.TeleoptiCccAgentScheduleMessenger)).Return(true);
+
+			var result = target.Get(today, true);
+
+			result.AsmPermission.Should().Be.False();
 		}
 	}
 }

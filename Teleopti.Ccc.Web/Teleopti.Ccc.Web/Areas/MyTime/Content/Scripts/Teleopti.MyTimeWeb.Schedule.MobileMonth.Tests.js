@@ -143,6 +143,13 @@
 		equal(vm.selectedDate().format('YYYY-MM-DD'), '2017-11-12');
 	});
 
+	test("should show message icon when has asmPermission", function () {
+		fakeMonthData.AsmPermission = true;
+		Teleopti.MyTimeWeb.Schedule.MobileMonth.PartialInit(null, null, ajax);
+		var vm = Teleopti.MyTimeWeb.Schedule.MobileMonth.Vm();
+		equal(vm.hasAsmPermission(), true);
+	});
+
 	function getDefaultSetting() {
 		return {
 			defaultNavigation: '/',
@@ -292,6 +299,7 @@
 				},
 				'SeatBookings': null
 			}],
+			'AsmPermission':false,
 			'CurrentDate': '2017-10-12T00:00:00',
 			'FixedDate': '2017-10-12',
 			'DayHeaders': [{

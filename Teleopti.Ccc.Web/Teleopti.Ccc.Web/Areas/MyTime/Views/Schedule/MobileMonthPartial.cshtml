@@ -40,7 +40,7 @@ Layout = null;
 						<i class="glyphicon glyphicon-home"></i>
 					</a>
 				</li>
-				<li>
+				<li data-bind="visible: hasAsmPermission()">
 					<a href="#MessageTab">
 						<i class="glyphicon glyphicon-envelope"></i>
 						<span id="MobileDayView-message" class="badge" data-bind="visible: unreadMessageCount() > 0, text: unreadMessageCount"></span>

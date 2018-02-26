@@ -940,64 +940,64 @@ $(document).ready(function() {
 		equal(viewModel.probabilities()[0].tooltips().indexOf("00:00 - 12:00") > -1, true);
 		equal(viewModel.probabilities()[1].tooltips().indexOf("12:00 - 16:45") > -1, true);
 		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
-    });
+	});
 
 	test("should show probability icon when scheduled", function() {
-        Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
-            if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
-            return false;
-        };
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
+			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
+			return false;
+		};
 
-        var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
-        var rawData = {
-            Date: moment().format('YYYY-MM-DD'),
-            Schedule: {
-                FixedDate: null,
-                Summary: {
-                    Color: null,
-                    Title: null,
-                    TimeSpan: null
-                },
-                Header: { Title: null },
-                HasNotScheduled: false
+		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
+		var rawData = {
+			Date: moment().format('YYYY-MM-DD'),
+			Schedule: {
+				FixedDate: null,
+				Summary: {
+					Color: null,
+					Title: null,
+					TimeSpan: null
+				},
+				Header: { Title: null },
+				HasNotScheduled: false
 			},
 			StaffingInfoAvailableDays: 14,
-            ViewPossibilityPermission: true,
-            CheckStaffingByIntraday: true,
-            AbsenceProbabilityEnabled: true
-        };
-        viewModel.readData(rawData);
+			ViewPossibilityPermission: true,
+			CheckStaffingByIntraday: true,
+			AbsenceProbabilityEnabled: true
+		};
+		viewModel.readData(rawData);
 
-	    equal(viewModel.showProbabilityOptionsToggleIcon(), true);
-    });
+		equal(viewModel.showProbabilityOptionsToggleIcon(), true);
+	});
 
-    test("should show probability icon on not scheduled day", function () {
-        Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
-            if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
-            return false;
-        };
+	test("should show probability icon on not scheduled day", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
+			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
+			return false;
+		};
 
-        var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
-        var rawData = {
-            Date: moment().format('YYYY-MM-DD'),
-            Schedule: {
-                FixedDate: null,
-                Summary: {
-                    Color: null,
-                    Title: null,
-                    TimeSpan: null
-                },
-                Header: { Title: null },
-                HasNotScheduled: true
-            },
-            ViewPossibilityPermission: true,
-            CheckStaffingByIntraday: true,
+		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
+		var rawData = {
+			Date: moment().format('YYYY-MM-DD'),
+			Schedule: {
+				FixedDate: null,
+				Summary: {
+					Color: null,
+					Title: null,
+					TimeSpan: null
+				},
+				Header: { Title: null },
+				HasNotScheduled: true
+			},
+			ViewPossibilityPermission: true,
+			CheckStaffingByIntraday: true,
 			AbsenceProbabilityEnabled: true,
 			StaffingInfoAvailableDays: 14
-        };
-        viewModel.readData(rawData);
+		};
+		viewModel.readData(rawData);
 
-	    equal(viewModel.showProbabilityOptionsToggleIcon(), true);
+		equal(viewModel.showProbabilityOptionsToggleIcon(), true);
 	});
 
 	test("should not show probability option icon when OvertimeProbability and AbsenceProbability are disabled", function () {
@@ -1023,5 +1023,31 @@ $(document).ready(function() {
 		};
 		viewModel.readData(rawData);
 		equal(viewModel.showProbabilityOptionsToggleIcon(), false);
+	});
+
+	test("should show message icon when has asmPermission", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
+			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
+			return false;
+		};
+
+		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
+		var rawData = {
+			Date: moment().format('YYYY-MM-DD'),
+			Schedule: {
+				FixedDate: null,
+				Summary: {
+					Color: null,
+					Title: null,
+					TimeSpan: null
+				},
+				Header: { Title: null },
+				HasNotScheduled: false
+			},
+			AsmPermission: true
+		};
+		viewModel.readData(rawData);
+
+		equal(viewModel.hasAsmPermission(), true);
 	});
 });

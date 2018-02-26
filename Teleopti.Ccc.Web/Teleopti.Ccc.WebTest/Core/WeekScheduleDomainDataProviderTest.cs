@@ -6,6 +6,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -34,6 +35,7 @@ namespace Teleopti.Ccc.WebTest.Core
 		private INow now;
 		private IAbsenceRequestProbabilityProvider probabilityProvider;
 		private ISeatOccupancyProvider seatBookingProvider;
+		private ILicenseAvailability licenseAvailability;
 		private IWeekScheduleDomainDataProvider target;
 
 		[SetUp]
@@ -48,6 +50,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			now = MockRepository.GenerateMock<INow>();
 			probabilityProvider = MockRepository.GenerateMock<IAbsenceRequestProbabilityProvider>();
 			seatBookingProvider = MockRepository.GenerateMock<ISeatOccupancyProvider>();
+			licenseAvailability = MockRepository.GenerateMock<ILicenseAvailability>();
 
 			target = new WeekScheduleDomainDataProvider(scheduleProvider,
 					projectionProvider,
@@ -56,7 +59,8 @@ namespace Teleopti.Ccc.WebTest.Core
 					new FuncTimeZone(() => timeZone),
 					permissionProvider,
 					now,
-					probabilityProvider);
+					probabilityProvider,
+					licenseAvailability);
 		}
 
 		#region Test cases for GetWeekSchedule()
@@ -606,7 +610,7 @@ namespace Teleopti.Ccc.WebTest.Core
 		}
 
 		[Test]
-		public void ShouldMapAsmPermission()
+		public void ShouldMapAsmPermissionToTrueWhenHavingBothLicenseAndPermission()
 		{
 			var date = new DateOnly(2012, 08, 26);
 			var firstDayOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(date.Date, CultureInfo.CurrentCulture));
@@ -624,10 +628,63 @@ namespace Teleopti.Ccc.WebTest.Core
 			scheduleProvider.Stub(x => x.GetScheduleForPeriod(period)).Return(new[] { scheduleDay });
 			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
 			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger)).Return(true);
+			licenseAvailability.Stub(x => x.IsLicenseEnabled(DefinedLicenseOptionPaths.TeleoptiCccAgentScheduleMessenger)).Return(true);
 
 			var result = target.GetWeekSchedule(firstDayOfWeek);
 
 			result.AsmPermission.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldMapAsmPermissionToFalseWhenNoAsmLicense()
+		{
+			var date = new DateOnly(2012, 08, 26);
+			var firstDayOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(date.Date, CultureInfo.CurrentCulture));
+			var lastDayOfWeek = new DateOnly(DateHelper.GetLastDateInWeek(date.Date, CultureInfo.CurrentCulture));
+			var period = new DateOnlyPeriod(firstDayOfWeek.AddDays(-1), lastDayOfWeek);
+
+			var scheduleDay = new StubFactory().ScheduleDayStub(lastDayOfWeek.Date);
+
+			var localMidnightInUtc = timeZone.SafeConvertTimeToUtc(lastDayOfWeek.Date);
+			var projectionPeriod = new DateTimePeriod(localMidnightInUtc.AddHours(20), localMidnightInUtc.AddHours(28));
+
+			var layer = new StubFactory().VisualLayerStub(projectionPeriod);
+			var projection = new StubFactory().ProjectionStub(new[] { layer });
+
+			scheduleProvider.Stub(x => x.GetScheduleForPeriod(period)).Return(new[] { scheduleDay });
+			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
+			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger)).Return(true);
+			licenseAvailability.Stub(x => x.IsLicenseEnabled(DefinedLicenseOptionPaths.TeleoptiCccAgentScheduleMessenger)).Return(false);
+
+			var result = target.GetWeekSchedule(firstDayOfWeek);
+
+			result.AsmPermission.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldMapAsmPermissionToFalseWhenNoAsmPermission()
+		{
+			var date = new DateOnly(2012, 08, 26);
+			var firstDayOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(date.Date, CultureInfo.CurrentCulture));
+			var lastDayOfWeek = new DateOnly(DateHelper.GetLastDateInWeek(date.Date, CultureInfo.CurrentCulture));
+			var period = new DateOnlyPeriod(firstDayOfWeek.AddDays(-1), lastDayOfWeek);
+
+			var scheduleDay = new StubFactory().ScheduleDayStub(lastDayOfWeek.Date);
+
+			var localMidnightInUtc = timeZone.SafeConvertTimeToUtc(lastDayOfWeek.Date);
+			var projectionPeriod = new DateTimePeriod(localMidnightInUtc.AddHours(20), localMidnightInUtc.AddHours(28));
+
+			var layer = new StubFactory().VisualLayerStub(projectionPeriod);
+			var projection = new StubFactory().ProjectionStub(new[] { layer });
+
+			scheduleProvider.Stub(x => x.GetScheduleForPeriod(period)).Return(new[] { scheduleDay });
+			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
+			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger)).Return(false);
+			licenseAvailability.Stub(x => x.IsLicenseEnabled(DefinedLicenseOptionPaths.TeleoptiCccAgentScheduleMessenger)).Return(true);
+
+			var result = target.GetWeekSchedule(firstDayOfWeek);
+
+			result.AsmPermission.Should().Be.False();
 		}
 
 		[Test]
@@ -1289,7 +1346,7 @@ namespace Teleopti.Ccc.WebTest.Core
 		}
 
 		[Test]
-		public void ShouldMapAsmPermissionOnGetDaySchedule()
+		public void ShouldMapAsmPermissionOnGetDayScheduleToTrueWhenHavingBothLicenseAndPermission()
 		{
 			var date = new DateOnly(2012, 08, 26);
 			var period = new DateOnlyPeriod(date.AddDays(-1), date);
@@ -1307,10 +1364,63 @@ namespace Teleopti.Ccc.WebTest.Core
 			permissionProvider
 				.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger))
 				.Return(true);
+			licenseAvailability.Stub(x => x.IsLicenseEnabled(DefinedLicenseOptionPaths.TeleoptiCccAgentScheduleMessenger)).Return(true);
 
 			var result = target.GetDaySchedule(date);
 
 			result.AsmPermission.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldMapAsmPermissionOnGetDayScheduleToFalseWhenNoAsmLicense()
+		{
+			var date = new DateOnly(2012, 08, 26);
+			var period = new DateOnlyPeriod(date.AddDays(-1), date);
+
+			var scheduleDay = new StubFactory().ScheduleDayStub(date.Date);
+
+			var localMidnightInUtc = timeZone.SafeConvertTimeToUtc(date.Date);
+			var projectionPeriod = new DateTimePeriod(localMidnightInUtc.AddHours(20), localMidnightInUtc.AddHours(28));
+
+			var layer = new StubFactory().VisualLayerStub(projectionPeriod);
+			var projection = new StubFactory().ProjectionStub(new[] { layer });
+
+			scheduleProvider.Stub(x => x.GetScheduleForPeriod(period)).Return(new[] { scheduleDay });
+			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
+			permissionProvider
+				.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger))
+				.Return(true);
+			licenseAvailability.Stub(x => x.IsLicenseEnabled(DefinedLicenseOptionPaths.TeleoptiCccAgentScheduleMessenger)).Return(false);
+
+			var result = target.GetDaySchedule(date);
+
+			result.AsmPermission.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldMapAsmPermissionOnGetDayScheduleToFalseWhenNoAsmPermission()
+		{
+			var date = new DateOnly(2012, 08, 26);
+			var period = new DateOnlyPeriod(date.AddDays(-1), date);
+
+			var scheduleDay = new StubFactory().ScheduleDayStub(date.Date);
+
+			var localMidnightInUtc = timeZone.SafeConvertTimeToUtc(date.Date);
+			var projectionPeriod = new DateTimePeriod(localMidnightInUtc.AddHours(20), localMidnightInUtc.AddHours(28));
+
+			var layer = new StubFactory().VisualLayerStub(projectionPeriod);
+			var projection = new StubFactory().ProjectionStub(new[] { layer });
+
+			scheduleProvider.Stub(x => x.GetScheduleForPeriod(period)).Return(new[] { scheduleDay });
+			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
+			permissionProvider
+				.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger))
+				.Return(false);
+			licenseAvailability.Stub(x => x.IsLicenseEnabled(DefinedLicenseOptionPaths.TeleoptiCccAgentScheduleMessenger)).Return(true);
+
+			var result = target.GetDaySchedule(date);
+
+			result.AsmPermission.Should().Be.False();
 		}
 
 		[Test]

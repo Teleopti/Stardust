@@ -11,5 +11,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.MonthSchedule
 		public string FixedDate { get; set; }
 		public IEnumerable<Description> DayHeaders { get; set; }
 		public int UnReadMessageCount { get; set; }
+		public bool AsmPermission { get; set; }
 	}
 }

@@ -98,7 +98,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldMapAbsenceName()
 		{
 			ScheduleData.Add(new PersonAbsence(User.CurrentUser(), Scenario.Current(),
-				new AbsenceLayer(new Absence { Description = new Description("Illness", "IL") }, new DateTimePeriod(2014, 12, 1, 8, 2014, 12, 1, 17))));
+				new AbsenceLayer(new Absence {Description = new Description("Illness", "IL")},
+					new DateTimePeriod(2014, 12, 1, 8, 2014, 12, 1, 17))));
 
 			var result = Target.FetchMonthData(null);
 
@@ -111,7 +112,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldMapAbsenceColor()
 		{
 			ScheduleData.Add(new PersonAbsence(User.CurrentUser(), Scenario.Current(),
-				new AbsenceLayer(new Absence { DisplayColor = Color.Red, Description = new Description("Illness", "IL") }, new DateTimePeriod(2014, 12, 1, 8, 2014, 12, 1, 17))));
+				new AbsenceLayer(new Absence {DisplayColor = Color.Red, Description = new Description("Illness", "IL")},
+					new DateTimePeriod(2014, 12, 1, 8, 2014, 12, 1, 17))));
 
 			var result = Target.FetchMonthData(null);
 
@@ -122,10 +124,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldMapAbsencesRespectingPriority()
 		{
 			ScheduleData.Add(new PersonAbsence(User.CurrentUser(), Scenario.Current(),
-							new AbsenceLayer(new Absence { Description = new Description("a", "IL"), Priority = 1 }, new DateTimePeriod(2014, 12, 1, 8, 2014, 12, 1, 17))));
+				new AbsenceLayer(new Absence {Description = new Description("a", "IL"), Priority = 1},
+					new DateTimePeriod(2014, 12, 1, 8, 2014, 12, 1, 17))));
 
 			ScheduleData.Add(new PersonAbsence(User.CurrentUser(), Scenario.Current(),
-							new AbsenceLayer(new Absence { Description = new Description("a", "HO"), Priority = 100 }, new DateTimePeriod(2014, 12, 1, 8, 2014, 12, 1, 17))));
+				new AbsenceLayer(new Absence {Description = new Description("a", "HO"), Priority = 100},
+					new DateTimePeriod(2014, 12, 1, 8, 2014, 12, 1, 17))));
 
 			var result = Target.FetchMonthData(null);
 			result.ScheduleDays.First().Absences[0].ShortName.Should().Be.EqualTo("IL");
@@ -139,7 +143,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			assignment.AddActivity(new Activity("Phone"), new DateTimePeriod(2014, 12, 1, 8, 2014, 12, 1, 17), true);
 			ScheduleData.Add(assignment);
 			ScheduleData.Add(new PersonAbsence(User.CurrentUser(), Scenario.Current(),
-				new AbsenceLayer(new Absence { Description = new Description("Illness", "IL") }, new DateTimePeriod(2014, 12, 1, 8, 2014, 12, 1, 17))));
+				new AbsenceLayer(new Absence {Description = new Description("Illness", "IL")},
+					new DateTimePeriod(2014, 12, 1, 8, 2014, 12, 1, 17))));
 
 			var result = Target.FetchMonthData(null);
 			result.ScheduleDays.First().Absences[0].IsFullDayAbsence.Should().Be.True();
@@ -177,7 +182,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			User.CurrentUser().AddPersonPeriod(personPeriod);
 
 			ScheduleData.Add(new PersonAbsence(User.CurrentUser(), Scenario.Current(),
-				new AbsenceLayer(new Absence { Description = new Description("Illness", "IL") }, new DateTimePeriod(2014, 12, 6, 8, 2014, 12, 6, 17))));
+				new AbsenceLayer(new Absence {Description = new Description("Illness", "IL")},
+					new DateTimePeriod(2014, 12, 6, 8, 2014, 12, 6, 17))));
 
 			var result = Target.FetchMonthData(null);
 			result.ScheduleDays.ElementAt(5).IsDayOff.Should().Be.True();
@@ -188,8 +194,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldMapTimeSpanForWorkingDay()
 		{
 			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2014, 12, 01));
-			assignment.AddActivity(new Activity("Phone") { InWorkTime = true }, new DateTimePeriod(2014, 12, 1, 7, 2014, 12, 1, 16), true);
-			assignment.SetShiftCategory(new ShiftCategory("Late") { Description = new Description("Late", "PM"), DisplayColor = Color.Green });
+			assignment.AddActivity(new Activity("Phone") {InWorkTime = true},
+				new DateTimePeriod(2014, 12, 1, 7, 2014, 12, 1, 16), true);
+			assignment.SetShiftCategory(new ShiftCategory("Late")
+			{
+				Description = new Description("Late", "PM"),
+				DisplayColor = Color.Green
+			});
 			ScheduleData.Add(assignment);
 
 			var result = Target.FetchMonthData(null).ScheduleDays.ElementAt(1);
@@ -207,9 +218,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2014, 12, 01));
 			var period = new DateTimePeriod(2014, 12, 1, 7, 2014, 12, 1, 16);
-			assignment.AddActivity(new Activity("a") { InWorkTime = true }, period);
+			assignment.AddActivity(new Activity("a") {InWorkTime = true}, period);
 			assignment.SetShiftCategory(new ShiftCategory("sc"));
-			assignment.AddPersonalActivity(new Activity("b") { InWorkTime = true }, period.MovePeriod(TimeSpan.FromHours(-2)));
+			assignment.AddPersonalActivity(new Activity("b") {InWorkTime = true}, period.MovePeriod(TimeSpan.FromHours(-2)));
 			ScheduleData.Add(assignment);
 
 			var result = Target.FetchMonthData(null).ScheduleDays.ElementAt(1);
@@ -223,12 +234,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2014, 12, 01));
 			var period = new DateTimePeriod(2014, 12, 1, 7, 2014, 12, 1, 16);
-			assignment.AddActivity(new Activity("a") { InWorkTime = true, InContractTime = true }, period);
+			assignment.AddActivity(new Activity("a") {InWorkTime = true, InContractTime = true}, period);
 			assignment.SetShiftCategory(new ShiftCategory("sc"));
 			ScheduleData.Add(assignment);
 
 			var result = Target.FetchMonthData(null).ScheduleDays.ElementAt(1);
-			result.Shift.WorkingHours.Should().Be(TimeHelper.GetLongHourMinuteTimeString(TimeSpan.FromHours(9), CultureInfo.CurrentUICulture));
+			result.Shift.WorkingHours.Should()
+				.Be(TimeHelper.GetLongHourMinuteTimeString(TimeSpan.FromHours(9), CultureInfo.CurrentUICulture));
 		}
 
 		[Test]
@@ -237,7 +249,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2014, 12, 1));
 			var period = new DateTimePeriod(2014, 12, 1, 7, 2014, 12, 1, 16);
-			assignment.AddActivity(new Activity("a") { InWorkTime = true, InContractTime = true }, period);
+			assignment.AddActivity(new Activity("a") {InWorkTime = true, InContractTime = true}, period);
 			assignment.SetShiftCategory(new ShiftCategory("sc"));
 			ScheduleData.Add(assignment);
 
@@ -245,7 +257,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			SeatMapRepository.Add(seatMapLocation);
 			var seat = seatMapLocation.AddSeat("s1", 1);
 			SeatBookingRepository.Add(new SeatBooking(User.CurrentUser(), new DateOnly(2014, 12, 1),
-				new DateTime(2014, 12, 1, 8, 0, 0, DateTimeKind.Utc), new DateTime(2014, 12, 1, 9, 0, 0, DateTimeKind.Utc)){ Seat = seat });
+				new DateTime(2014, 12, 1, 8, 0, 0, DateTimeKind.Utc), new DateTime(2014, 12, 1, 9, 0, 0, DateTimeKind.Utc))
+			{
+				Seat = seat
+			});
 
 			var result = Target.FetchMobileMonthData(null).ScheduleDays.ElementAt(1);
 			result.SeatBookings.Should().Be.Null();
@@ -253,11 +268,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 		[Test]
 		[SetCulture("en-US")]
-		public void ShouldMapOvertimes()
+		public void ShouldMapOvertimesForMobileMonthView()
 		{
 			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2014, 12, 1));
 			var period = new DateTimePeriod(2014, 12, 1, 7, 2014, 12, 1, 16);
-			assignment.AddActivity(new Activity("a") { InWorkTime = true, InContractTime = true }, period);
+			assignment.AddActivity(new Activity("a") {InWorkTime = true, InContractTime = true}, period);
 			assignment.SetShiftCategory(new ShiftCategory("sc"));
 			assignment.AddOvertimeActivity(new Activity("ot") {DisplayColor = Color.Purple}
 				, new DateTimePeriod(2014, 12, 1, 16, 2014, 12, 1, 18),
@@ -271,7 +286,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		public void ShouldMapUnReadMessageCount()
+		public void ShouldMapUnReadMessageCountForMobileMonthView()
 		{
 			PushMessageDialogueRepository.Add(new PushMessageDialogue(new PushMessage(), User.CurrentUser()));
 
@@ -279,6 +294,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var unReadMessagetCount = result.UnReadMessageCount;
 
 			unReadMessagetCount.Should().Be(1);
+		}
+
+		[Test]
+		public void ShouldMapAsmPermissionsForMobileMonthView()
+		{
+			var result = Target.FetchMobileMonthData(null);
+			result.AsmPermission.Should().Be.True();
 		}
 	}
 }

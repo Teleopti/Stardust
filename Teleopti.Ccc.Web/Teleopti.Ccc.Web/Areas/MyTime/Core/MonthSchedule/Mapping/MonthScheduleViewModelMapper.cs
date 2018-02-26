@@ -33,7 +33,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping
 								w =>
 									new Description(CultureInfo.CurrentUICulture.DateTimeFormat.GetDayName(w),
 										CultureInfo.CurrentUICulture.DateTimeFormat.GetAbbreviatedDayName(w))),
-				UnReadMessageCount = _pushMessageProvider.UnreadMessageCount
+				UnReadMessageCount = _pushMessageProvider.UnreadMessageCount,
+				AsmPermission = s.AsmPermission
 			};
 		}
 

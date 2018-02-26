@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -24,6 +25,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly INow _now;
+		private readonly ILicenseAvailability _licenseAvailability;
 		private readonly IAbsenceRequestProbabilityProvider _absenceRequestProbabilityProvider;
 
 		public WeekScheduleDomainDataProvider(IScheduleProvider scheduleProvider,
@@ -33,7 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 			IUserTimeZone userTimeZone,
 			IPermissionProvider permissionProvider,
 			INow now,
-			IAbsenceRequestProbabilityProvider absenceRequestProbabilityProvider)
+			IAbsenceRequestProbabilityProvider absenceRequestProbabilityProvider, ILicenseAvailability licenseAvailability)
 		{
 			_scheduleProvider = scheduleProvider;
 			_projectionProvider = projectionProvider;
@@ -43,6 +45,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 			_permissionProvider = permissionProvider;
 			_now = now;
 			_absenceRequestProbabilityProvider = absenceRequestProbabilityProvider;
+			_licenseAvailability = licenseAvailability;
 		}
 
 		internal class ScheduleDaysAndProjection
@@ -193,7 +196,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 				Days = days,
 				ColorSource = colorSource,
 				MinMaxTime = minMaxTime,
-				AsmPermission = asmPermission,
+				AsmPermission = asmPermission && isAsmLicenseAvailable(),
 				TextRequestPermission = textRequestPermission,
 				OvertimeAvailabilityPermission = overtimeAvailabilityPermission,
 				AbsenceRequestPermission = absenceRequestPermission,
@@ -205,6 +208,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 				ViewPossibilityPermission = viewPossibilityPermission,
 				IsCurrentWeek = isCurrentWeek
 			};
+		}
+
+		private bool isAsmLicenseAvailable()
+		{
+			return _licenseAvailability.IsLicenseEnabled(DefinedLicenseOptionPaths.TeleoptiCccAgentScheduleMessenger);
 		}
 
 		private TimeSpan minFunction(ScheduleDaysAndProjection scheduleDayData, DateOnlyPeriod period)
