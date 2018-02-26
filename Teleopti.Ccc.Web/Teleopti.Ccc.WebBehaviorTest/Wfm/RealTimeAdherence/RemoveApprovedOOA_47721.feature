@@ -28,13 +28,12 @@ Feature: Remove approved out of adherences
 	
   Scenario: Remove approved out of adherences
 	Given Mikkey Dee has a 'Phone' shift between '2018-02-22 10:00' and '20:00'
-	And at '2018-02-22 10:00:00' 'Mikkey Dee' sets his phone state to 'LoggedOff'
-	And at '2018-02-22 11:00:00' 'Mikkey Dee' sets his phone state to 'Ready'
+	And today is '2018-02-22'
+	And at '10:00' 'Mikkey Dee' sets his phone state to 'LoggedOff'
+	And at '11:00' 'Mikkey Dee' sets his phone state to 'Ready'
+  	And 'Mikkey Dee' has an approved period between '10:00' and '11:00'
 	Given the time is '2018-02-22 21:00:00'
 	When I view historical adherence for 'Mikkey Dee' on '2018-02-22'
-	And I approve out of adherence starting at '10:00:00' as in adherence
-	Then I should see approved period between '10:00:00' and '11:00:00'
-	Given the time is '2018-02-22 21:05:00'
-	When I remove approved period between '10:00:00' and '11:00:00'
+	And I remove approved period between '10:00:00' and '11:00:00'
 	Then I should see adherence percentage of 90%
-	And I should see recorded out of adherence between '09:00:00' and '10:00:00'
+	And I should see out of adherence between '09:00:00' and '10:00:00'
