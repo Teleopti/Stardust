@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		    _currentUnitOfWork = currentUnitOfWork;
 	    }
 
-	    public IEnumerable<T> LoadAll()
+	    public virtual IEnumerable<T> LoadAll()
         {
             return Session.CreateCriteria(typeof(T)).List<T>();
         }

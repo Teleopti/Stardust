@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	    }
 
         // We have to filter so we don't get the masterActivities here but at the same time activate masterActivity.Activitycollection
-        public new IList<IActivity> LoadAll()
+        public override IEnumerable<IActivity> LoadAll()
         {
             var lst = base.LoadAll();
             foreach (var activity in lst)

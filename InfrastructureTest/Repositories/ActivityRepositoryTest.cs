@@ -1,9 +1,12 @@
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
@@ -83,6 +86,22 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.AreEqual("payrollcode007", loadedAbctivity.PayrollCode);
             Assert.AreEqual(true, loadedAbctivity.AllowOverwrite );
         }
+
+		[Test]
+		public void LoadAllShouldBeOverriden()
+		{
+			//not really testing correct thing, just verifying it works as before
+			var activity = new Activity("asdf");
+			PersistAndRemoveFromUnitOfWork(activity);
+			var masterActivity = new MasterActivity {Description = new Description("asdf")};
+			masterActivity.ActivityCollection.Add(activity);
+			PersistAndRemoveFromUnitOfWork(masterActivity);
+
+			var allActivities = TestRepository(CurrUnitOfWork).LoadAll();
+			
+			allActivities.Any(x => x is MasterActivity)
+				.Should().Be.False();
+		}
 
         protected override Repository<IActivity> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
