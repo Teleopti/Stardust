@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -54,6 +55,29 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.BusinessRules
 			stateHolder.Schedules[agent].ScheduledDay(dateFirstDayOfWeek.AddDays(3)).BusinessRuleResponseCollection
 				.Where(x => x.TypeOfRule == typeof(MinWeeklyRestRule))
 				.Should().Not.Be.Empty();
+		}
+
+		[Test]
+		[Ignore("48370 to be fixed")]
+		public void ShouldNotGenerateBrokenWeeklyRestDayOffAndAbsenceInvolved()
+		{
+			var firstDayOfWeek = new DateOnly(2018, 3, 12);
+			var scenario = new Scenario();
+			var activity = new Activity { InWorkTime = true };
+			var contract = new Contract("_") {WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(1), TimeSpan.FromHours(48), TimeSpan.FromHours(11), TimeSpan.FromHours(31))};
+			var agent = new Person().WithPersonPeriod(contract);
+			var data = new List<IPersistableScheduleData>
+			{
+				new PersonAssignment(agent, scenario, firstDayOfWeek).ShiftCategory(new ShiftCategory()),
+				new PersonAssignment(agent, scenario, firstDayOfWeek.AddDays(1)).WithDayOff(),
+				new PersonAbsence(agent, scenario, new AbsenceLayer(new Absence(), firstDayOfWeek.AddDays(2).ToDateTimePeriod(TimeZoneInfo.Utc)))
+			};
+			var stateHolder = StateHolder.Fill(scenario, new DateOnlyPeriod(firstDayOfWeek, firstDayOfWeek.AddDays(7)), new[] { agent }, data, Enumerable.Empty<ISkillDay>());
+			var scheduleDay = stateHolder.Schedules[agent].ScheduledDay(firstDayOfWeek);
+			scheduleDay.PersonAssignment().AddActivity(activity, new TimePeriod(8, 17));
+
+			stateHolder.Schedules.Modify(scheduleDay, NewBusinessRuleCollection.All(stateHolder.SchedulingResultState)).Should()
+				.Be.Empty();
 		}
 	}
 }
