@@ -12,7 +12,6 @@ namespace Teleopti.Analytics.Etl.Common
 {
 	public class Tenants : ITenants
 	{
-		public const string AllTenantName = "<All>";
 		private readonly ITenantUnitOfWork _tenantUnitOfWork;
 		private readonly ILoadAllTenants _loadAllTenants;
 		private readonly IDataSourcesFactory _dataSourcesFactory;
@@ -28,11 +27,6 @@ namespace Teleopti.Analytics.Etl.Common
 			_loadAllTenants = loadAllTenants;
 			_dataSourcesFactory = dataSourcesFactory;
 			_baseConfigurationRepository = baseConfigurationRepository;
-		}
-
-		public static bool IsAllTenants(string tenantName)
-		{
-			return tenantName == AllTenantName;
 		}
 
 		public IEnumerable<TenantInfo> CurrentTenants()

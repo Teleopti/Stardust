@@ -27,7 +27,6 @@ namespace Teleopti.Analytics.Etl.CommonTest.Service
 		public string Description { get; set; }
 		public JobScheduleType ScheduleType { get; set; }
 		public DateTime InsertDate { get; set; }
-		public string TenantName { get; set; }
 
 		public void SetScheduleIdOnPersistedItem(int scheduleId)
 		{

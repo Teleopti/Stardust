@@ -21,14 +21,14 @@ CREATE PROCEDURE [mart].[etl_job_save_schedule]
 @etl_relative_period_start int,
 @etl_relative_period_end int,
 @etl_datasource_id int,
-@description nvarchar(500),
-@tenant_name nvarchar(255)
+@description nvarchar(500)
 AS
 BEGIN
 	SET NOCOUNT ON;
 
 	IF @schedule_id = -1
 	BEGIN
+		-- INSERT
 		INSERT INTO Mart.[etl_job_schedule]
 			([schedule_name]
 			,[enabled]
@@ -41,8 +41,7 @@ BEGIN
 			,[etl_relative_period_start]
 			,[etl_relative_period_end]
 			,[etl_datasource_id]
-			,[description]
-			,[tenant_name])
+			,[description])
 		VALUES
 			(@schedule_name
 			,@enabled
@@ -55,13 +54,13 @@ BEGIN
 			,@etl_relative_period_start
 			,@etl_relative_period_end
 			,@etl_datasource_id
-			,@description
-			,@tenant_name)
+			,@description)
 
 			SET @schedule_id = @@IDENTITY
 	END
 	ELSE
 	BEGIN
+		-- UPDATE
 		UPDATE Mart.[etl_job_schedule]
 		SET [schedule_name] = @schedule_name
 			,[enabled] = @enabled
@@ -75,7 +74,6 @@ BEGIN
 			,[etl_relative_period_end] = @etl_relative_period_end
 			,[etl_datasource_id] = @etl_datasource_id
 			,[description] = @description
-			,[tenant_name] = @tenant_name
 		WHERE schedule_id = @schedule_id
 
 		-- Clear its schedule periods since new will be inserted after this procedure
