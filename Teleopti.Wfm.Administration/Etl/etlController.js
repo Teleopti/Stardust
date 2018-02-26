@@ -18,12 +18,12 @@
     vm.getJobs = getJobs;
     vm.getTennants = getTennants;
     vm.sendTennant = sendTennant;
+    vm.selectedTenantChanged = selectedTenantChanged;
     vm.selectJob = selectJob;
     vm.encueueJob = encueueJob;
     vm.selectDataSource = null;
 
     var today = new Date();
-
 
     vm.dataSources = [];
 
@@ -103,6 +103,12 @@
       });
     }
 
+	function selectedTenantChanged() {
+		vm.sendTennant(vm.selectedTenant);
+		vm.getJobs(vm.selectedTenant);
+		vm.selectDataSource = null;
+	}
+
     function sendTennant(data) {
       $http.post("./Etl/TenantLogDataSources", JSON.stringify(data), tokenHeaderService.getHeaders())
       .success(function (data) {
@@ -111,7 +117,6 @@
     }
 
     function encueueJob(job) {
-
       var data = {
         JobName: job.JobName,
         JobPeriods: [],
@@ -163,9 +168,7 @@
         $timeout(function () {
           job.Status = null;
         }, 5000);
-      })
-
-      ;
+      });
     }
 
     function selectJob(job) {
@@ -204,7 +207,6 @@
       } else {
         setDateInput(vm.manualForecast, today);
       }
-
     }
 
     function setDateInput(data, value) {
@@ -221,7 +223,6 @@
     //schedule inputs
     vm.scheduleNameEnabled = true;
 
-
     vm.schedules = [
       {
         Name: 'My main job',
@@ -236,8 +237,6 @@
         Description: 'Occurs some days at 15:58. Who knows?'
       }
     ];
-
-
   }
 
 })();

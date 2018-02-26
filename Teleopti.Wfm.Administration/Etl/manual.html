@@ -1,4 +1,4 @@
-<br />
+﻿<br />
 <div class="panel panel-default">
 	<div class="panel-heading">Settings</div>
 	<div class="panel-body text-container">
@@ -19,7 +19,7 @@
 					<div class="form-group">
 						<label for="exampleFormControlSelect2">Tenant</label>
 						{{vm.selectedTenant}}
-						<select class="form-control" id="exampleFormControlSelect2" ng-model="vm.selectedTenant" ng-change="vm.getJobs(vm.selectedTenant)">
+						<select class="form-control" id="exampleFormControlSelect2" ng-model="vm.selectedTenant" ng-change="vm.selectedTenantChanged()">
 							<option ng-repeat="tenant in vm.tenants">{{tenant.Name}}</option>
 						</select>
 					</div>
@@ -164,7 +164,6 @@
 										</svg>
 									</span>
 								</span>
-
 								{{job.JobName}}
 							</td>
 							<td>
@@ -175,7 +174,10 @@
 							</td>
 						</tr>
 						<tr ng-if="job.Open" ng-repeat="task in job.JobSteps track by $index">
-							<td class="subrow">{{task.Name}}</td>
+							<td class="subrow">
+								<span>{{task.Name}}</span>
+								<span class="pull-right" style="color: tomato" ng-if="task.DependsOnTenant">(Depends on configuration of tenant)</span>
+							</td>
 							<td></td>
 							<td></td>
 						</tr>
