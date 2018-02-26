@@ -58,6 +58,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.BusinessRules
 		}
 
 		[Test]
+		[Ignore("48370 to be fixed")]
 		public void ShouldNotGenerateBrokenWeeklyRestDayOffAndAbsenceInvolved()
 		{
 			var firstDayOfWeek = new DateOnly(2018, 3, 12);
