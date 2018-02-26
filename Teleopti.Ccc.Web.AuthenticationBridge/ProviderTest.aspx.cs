@@ -1,19 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using AuthBridge.Configuration;
 using AuthBridge.Model;
-using AuthBridge.Web.Controllers;
 
 namespace Teleopti.Ccc.Web.AuthenticationBridge
 {
-	public partial class ProviderTest : ViewPage<HrdViewModel>
+	public class ProviderTest : ViewPage
 	{
-		protected void Page_Load(object sender, System.EventArgs e)
+		protected void Page_Load(object sender, EventArgs e)
 		{
 			var results = provider();
 			
