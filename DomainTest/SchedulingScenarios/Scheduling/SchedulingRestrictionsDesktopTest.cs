@@ -237,34 +237,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 
 		[Test]
-		[Ignore("#48243 - to be fixed")]
-		public void ShouldNotReplaceManualAddedScheduleWhenSolvingNightlyRest()
-		{
-			var activity = new Activity().WithId();
-			var date = new DateOnly(2016, 10, 25);
-			var period = new DateOnlyPeriod(date, date.AddDays(6));
-			var scenario = new Scenario();
-			var shiftCategory = new ShiftCategory("_").WithId();
-			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(7, 0, 7, 0, 60), new TimePeriodWithSegment(15, 0, 15, 0, 60), shiftCategory));
-			var skill = new Skill().For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
-			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, date, 5, 5, 5, 5, 5, 5, 5);
-			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, new ContractWithMaximumTolerance(), skill).WithSchedulePeriodOneWeek(date);
-			var ass = new PersonAssignment(agent, scenario, date.AddDays(4)).WithLayer(activity, new TimePeriod(7, 8)).ShiftCategory(shiftCategory);
-			var preferenceDay = new PreferenceDay(agent, date.AddDays(4), new PreferenceRestriction { StartTimeLimitation = new StartTimeLimitation(new TimeSpan(7, 0, 0), null) });
-			var dayOff = new PersonAssignment(agent, scenario, date.AddDays(6)).WithDayOff();
-			var schedulerStateHolder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, new IScheduleData[] {preferenceDay, ass, dayOff }, skillDays);
-			var schedulingOptions = new SchedulingOptions
-			{
-				UsePreferences = true,
-				PreferencesDaysOnly = true
-			};
-
-			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new[] { agent }, new DateOnlyPeriod(date.AddDays(4), date.AddDays(5)));
-
-			schedulerStateHolder.Schedules[agent].ScheduledDay(date.AddDays(4)).PersonAssignment(true).Period.EndDateTime.Hour.Should().Be.EqualTo(8);
-		}
-
-		[Test]
 		public void ShouldNotCrashWhenSolvingNightRestWhiteSpotAndHavingConflictingRestrictions()
 		{
 			var activity = new Activity().WithId();
