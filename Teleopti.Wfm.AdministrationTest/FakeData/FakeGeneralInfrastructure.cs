@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Teleopti.Analytics.Etl.Common;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -10,7 +12,6 @@ namespace Teleopti.Wfm.AdministrationTest.FakeData
 	public class FakeGeneralInfrastructure : IGeneralInfrastructure
 	{
 		private readonly IList<IDataSourceEtl> dataSourceEtls = new List<IDataSourceEtl>();
-		private bool isForAllTenants;
 		public IList<IDataSourceEtl> GetDataSourceList(bool getValidDataSources, bool includeOptionAll)
 		{
 			return dataSourceEtls;
@@ -48,7 +49,7 @@ namespace Teleopti.Wfm.AdministrationTest.FakeData
 
 		public IBaseConfiguration LoadBaseConfiguration()
 		{
-			return new BaseConfiguration(1053, 15, "UTC", isForAllTenants);
+			return new BaseConfiguration(1053,15,"UTC", false);
 		}
 
 		public void SaveBaseConfiguration(IBaseConfiguration configuration)
@@ -63,7 +64,7 @@ namespace Teleopti.Wfm.AdministrationTest.FakeData
 
 		public void SetDataMartConnectionString(string dataMartConnectionString)
 		{
-			isForAllTenants = dataMartConnectionString == Tenants.AllTenantName;
+			
 		}
 	}
 }
