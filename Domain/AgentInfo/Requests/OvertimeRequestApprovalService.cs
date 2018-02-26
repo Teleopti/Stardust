@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			}
 
 			Guid activityId;
-			var seriousUnderstaffingSkills = _overtimeRequestUnderStaffingSkillProvider.GetSeriousUnderstaffingSkills(period, skills);
+			var seriousUnderstaffingSkills = _overtimeRequestUnderStaffingSkillProvider.GetSeriousUnderstaffingSkills(period, skills, person.PermissionInformation.DefaultTimeZone());
 			if (seriousUnderstaffingSkills.Count == 0)
 			{
 				activityId = skills.FirstOrDefault().Activity.Id.GetValueOrDefault();
