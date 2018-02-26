@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 	{
 		public HangfireUtilities Hangfire;
 		public TestLog TestLog;
-		public HangfireClientStarter HangfireClientStarter;
 
 		[Test]
 		[Category("ScheduleOptimizationStardust")]
