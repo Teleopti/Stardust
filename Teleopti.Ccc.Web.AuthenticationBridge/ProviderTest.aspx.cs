@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Web.AuthenticationBridge
 				web.GetResponse();
 				return true;
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 				return false;
 			}
