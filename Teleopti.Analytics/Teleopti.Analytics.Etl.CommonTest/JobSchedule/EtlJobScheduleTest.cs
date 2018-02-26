@@ -62,7 +62,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.JobSchedule
 			Assert.AreEqual("Intraday", jobSchedule.JobName);
 			Assert.AreEqual(1, jobSchedule.DataSourceId);
 			Assert.AreEqual("Manual ETL", jobSchedule.Description);
-			Assert.AreEqual("Teleopti WFM", jobSchedule.TenantName);
+
 		}
 
         [Test]
@@ -79,6 +79,8 @@ namespace Teleopti.Analytics.Etl.CommonTest.JobSchedule
             Assert.AreEqual(7, schedule1.RelativePeriodCollection[0].RelativePeriod.Maximum);
         }
 
+       
+
         [Test]
         public void VerifySetScheduleIdOnPersistedItem()
         {
@@ -91,6 +93,8 @@ namespace Teleopti.Analytics.Etl.CommonTest.JobSchedule
 
             Assert.AreNotEqual(newScheduleId, etlJobScheduleCannotChange.ScheduleId);
             Assert.AreEqual(newScheduleId, etlJobScheduleCanChange.ScheduleId);
+
+
         }
     }
 }
