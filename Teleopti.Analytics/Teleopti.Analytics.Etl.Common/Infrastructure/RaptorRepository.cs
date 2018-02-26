@@ -440,7 +440,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 					ActivityRepository repository = new ActivityRepository(uow);
 
-					return repository.LoadAll();
+					return repository.LoadAll().ToList();
 				}
 			}
 		}
