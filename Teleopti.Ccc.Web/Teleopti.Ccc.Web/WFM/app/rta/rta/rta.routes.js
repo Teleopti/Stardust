@@ -80,6 +80,8 @@ angular.module('wfm.rta').config(function ($stateProvider, ToggleProvider) {
 				return 'app/rta/rta/historical/rta-historical.html';
 			},
 			controllerProvider: function () {
+				if (toggles.RTA_RemoveApprovedOOA_47721)
+					return 'RtaHistoricalController47721 as vm';
 				if (toggles.RTA_ApprovePreviousOOA_47230)
 					return 'RtaHistoricalController47230 as vm';
 				if (toggles.RTA_ViewHistoricalAhderence7DaysBack_46826)

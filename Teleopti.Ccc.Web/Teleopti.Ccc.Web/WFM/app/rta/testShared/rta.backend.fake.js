@@ -74,6 +74,11 @@
 			name: 'approvePeriod',
 			url: /\.\.\/api\/HistoricalAdherence\/ApprovePeriod/
 		});
+		
+		service.fake({
+			name: 'removeApprovedPeriod',
+			url: /\.\.\/api\/HistoricalAdherence\/RemoveApprovedPeriod/
+		});
 
 		service.fake({
 			name: 'historicalAdherence',
