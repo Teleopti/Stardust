@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 				bposString = separator + bposString;
 			
 			var scheduledHeads =
-				_skillCombinationResourceRepository.ScheduledHeadsForSkill(skill.Id.GetValueOrDefault(), period).ToList();
+				_skillCombinationResourceRepository.ScheduledHeadsForSkill(skill.Id.GetValueOrDefault(), period.Inflate(1)).ToList();
 			
 			forecastedData.AppendLine($"skill{separator}startdatetime{separator}enddatetime{separator}forecasted agents" +
 				$"{separator}total scheduled agents{separator}total diff{separator}total scheduled heads{bposString}");
