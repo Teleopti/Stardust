@@ -66,10 +66,19 @@
 	position: absolute;
   }
 
-  .wfm-table td .label {
-	font-size: 12px;
-	font-weight: 100;
-	padding: 5px;
+  .wfm-table td {
+	&.label {
+	  font-size: 12px;
+	  font-weight: 100;
+	  padding: 5px;
+	}
+	.mdi:before {
+	  font-size: 14px !important;
+	}
+	.remove-approved-period {
+	  cursor: pointer;
+	  margin: 0 8px;
+	}
   }
 
   .highlight > td {
@@ -199,6 +208,5 @@
 		z-index: 10;
 	  }
 	}
-
   }
 }
