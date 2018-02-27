@@ -1,7 +1,7 @@
 // Karma configuration
 // Generated on Wed Feb 04 2015 10:25:13 GMT+0100 (W. Europe Standard Time)
 
-module.exports = function (config) {
+module.exports = function(config) {
 	config.set({
 		// base path that will be used to resolve all patterns (eg. files, exclude)
 		basePath: '',
@@ -14,16 +14,16 @@ module.exports = function (config) {
 			// 'node_modules/angular-material/angular-material-mocks.js',
 			// 'node_modules/angular-mocks/angular-mocks.js',
 
-			{pattern: 'dist/resources/modules.js', watched: false},
-			{pattern: 'dist/resources/*.js.map', included: false},
-			{pattern: 'dist/templates.js', watched: false, nocache: true},
-			{pattern: 'node_modules/angular-material/angular-material-mocks.js', watched: false},
-			{pattern: 'node_modules/angular-mocks/angular-mocks.js', watched: false},
-			{pattern: 'app/**/!(*.spec|app_desktop_client).js', watched: false, nocache: true},
-			{pattern: 'app/**/*.spec.js', watched: false, nocache: true},
+			{ pattern: 'dist/resources/modules.js', watched: false },
+			{ pattern: 'dist/resources/*.js.map', included: false },
+			{ pattern: 'dist/templates.js', watched: false, nocache: true },
+			{ pattern: 'node_modules/angular-material/angular-material-mocks.js', watched: false },
+			{ pattern: 'node_modules/angular-mocks/angular-mocks.js', watched: false },
+			{ pattern: 'app/**/!(*.spec|app_desktop_client).js', watched: false, nocache: true },
+			{ pattern: 'app/**/*.spec.js', watched: false, nocache: true },
 
 			//served seat image file at browser because addSeat function need to create seat object from image in seatManagement test.
-			{pattern: 'app/seatManagement/images/*.svg', watched: false, included: false, served: true}
+			{ pattern: 'app/seatManagement/images/*.svg', watched: false, included: false, served: true }
 		],
 
 		// frameworks to use
@@ -48,7 +48,6 @@ module.exports = function (config) {
 
 		// to use this attribute, run "npm run devTest -- keyWordFromSpecFileDescribe". example: npm run devTest -- Rta
 		client: {
-			clearContext: false,
 			args: parseTestPattern(process.argv)
 		},
 
@@ -86,7 +85,7 @@ module.exports = function (config) {
 		logLevel: config.LOG_INFO,
 
 		// enable / disable watching file and executing tests whenever any file changes
-		autoWatch: false,
+		autoWatch: true,
 
 		// start these browsers
 		// available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
@@ -108,7 +107,7 @@ module.exports = function (config) {
 function parseTestPattern(argv) {
 	var found = false;
 	var pattern = argv
-		.map(function (v) {
+		.map(function(v) {
 			if (found) {
 				return v;
 			}
@@ -116,7 +115,7 @@ function parseTestPattern(argv) {
 				found = true;
 			}
 		})
-		.filter(function (a) {
+		.filter(function(a) {
 			return a;
 		})
 		.join(' ');
