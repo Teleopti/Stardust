@@ -65,6 +65,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 				ColorSource = periodSchedule.ColorSource,
 				MinMaxTime = periodSchedule.MinMaxTime,
 				AsmPermission = periodSchedule.AsmPermission,
+				AsmEnabled = periodSchedule.AsmEnabled,
 				TextRequestPermission = periodSchedule.TextRequestPermission,
 				OvertimeAvailabilityPermission = periodSchedule.OvertimeAvailabilityPermission,
 				AbsenceRequestPermission = periodSchedule.AbsenceRequestPermission,
