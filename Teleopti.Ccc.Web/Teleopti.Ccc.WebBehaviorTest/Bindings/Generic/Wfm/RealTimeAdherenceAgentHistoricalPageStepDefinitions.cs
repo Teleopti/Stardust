@@ -51,6 +51,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			outOfAdherences.ForEach(x => { Browser.Interactions.AssertExists(".out-of-adherence[data-starttime='{0}'][data-endtime='{1}']", x.StartTime, x.EndTime); });
 		}
 
+		[Then(@"I should see out of adherence between '(.*)' and '(.*)'")]
+		public void ThenIShouldSeeOutOfAdherenceBetweenAnd(string from, string to)
+		{
+			Browser.Interactions.AssertAnyContains(".out-of-adherence", from);
+			Browser.Interactions.AssertAnyContains(".out-of-adherence", to);
+		}
+
 		[Then(@"I should see recorded out of adherence between '(.*)' and '(.*)'")]
 		public void ThenIShouldSeeRecordedOutOfAdherenceBetween(string from, string to)
 		{
@@ -58,6 +65,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			Browser.Interactions.AssertAnyContains(".recorded-out-of-adherence", to);
 		}
 
+		
 		[Then(@"I should see approved period between '(.*)' and '(.*)'")]
 		public void ThenIShouldSeeApprovedPeriodBetween(string from, string to)
 		{

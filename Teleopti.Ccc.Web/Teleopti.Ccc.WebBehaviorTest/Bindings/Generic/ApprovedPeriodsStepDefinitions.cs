@@ -27,5 +27,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			});
 		}
 
+		[Given(@"the period between '(.*)' and '(.*)' is approved for '(.*)'")]
+		public void GivenThePeriodBetweenAndIsApprovedFor(string from, string to, string person)
+			=> GivenIHaveAnApprovedPeriodBetween(person, from, to);
 	}
 }
