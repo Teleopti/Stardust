@@ -25,11 +25,11 @@
 		};
 		ctrl.tabs = [
 			{
-				title: 'BusinessHierarchy',
+				title: $translate.instant('BusinessHierarchy'),
 				icon: 'file-tree'
 			},
 			{
-				title: 'GroupPages',
+				title: $translate.instant('GroupPages'),
 				icon: 'folder-account'
 			}
 		];
@@ -102,13 +102,13 @@
 					var resource = "";
 					switch (ctrl.selectedGroups.mode) {
 						case "GroupPages":
-							resource = "SeveralGroupsSelected";
+							resource = $translate.instant('SeveralGroupsSelected').replace('{0}', ctrl.selectedGroups.groupIds.length);
 							break;
 						case "BusinessHierarchy":
-							resource = "SeveralTeamsSelected";
+							resource = $translate.instant('SeveralTeamsSelected').replace('{0}', ctrl.selectedGroups.groupIds.length);
 							break;
 					};
-					text = $translate.instant(resource).replace('{0}', ctrl.selectedGroups.groupIds.length);
+					text = resource;
 					break;
 			}
 			return text;

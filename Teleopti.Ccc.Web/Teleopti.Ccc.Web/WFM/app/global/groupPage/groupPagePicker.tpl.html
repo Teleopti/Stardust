@@ -10,7 +10,7 @@
 			<md-content>
 				<md-tabs md-selected="$ctrl.selectedIndex" md-dynamic-height md-no-pagination="true">
 					<md-tab ng-repeat="tab in $ctrl.tabs">
-						<md-tab-label><i title="{{tab.title|translate}}" class="mdi mdi-{{tab.icon}} group-pages-icon"></i></md-tab-label>
+						<md-tab-label><i title="{{tab.title}}" class="mdi mdi-{{tab.icon}} group-pages-icon"></i></md-tab-label>
 						<md-tab-body>
 							<md-progress-linear md-mode="indeterminate" ng-if="!$ctrl.isDataAvailable"></md-progress-linear>
 							<div class="header">
