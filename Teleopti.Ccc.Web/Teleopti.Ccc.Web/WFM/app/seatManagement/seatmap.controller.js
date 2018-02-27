@@ -5,9 +5,9 @@
 	angular.module('wfm.seatMap')
 		.controller('SeatMapCanvasCtrl', seatMapCanvasDirectiveController);
 
-	seatMapCanvasDirectiveController.$inject = ['$scope', '$document', '$window', 'seatMapCanvasUtilsService', 'seatMapCanvasEditService', 'PermissionsServiceRefact', 'NoticeService', '$timeout'];
+	seatMapCanvasDirectiveController.$inject = ['$scope', '$translate', '$document', '$window', 'seatMapCanvasUtilsService', 'seatMapCanvasEditService', 'PermissionsServiceRefact', 'NoticeService', '$timeout'];
 
-	function seatMapCanvasDirectiveController($scope, $document, $window, canvasUtils, editor, PermissionsServiceRefact, NoticeService, $timeout) {
+	function seatMapCanvasDirectiveController($scope, $translate, $document, $window, canvasUtils, editor, PermissionsServiceRefact, NoticeService, $timeout) {
 
 		var vm = this;
 		vm.isLoading = true;
@@ -30,7 +30,7 @@
 		vm.zoomData = { min: 0.1, max: 2, step: 0.05, zoomValue: 1 };
 		vm.rightPanelOptions = {
 			panelState: false,
-			sidePanelTitle: "SeatProperties",
+			sidePanelTitle: $translate.instant('SeatProperties'),
 			showCloseButton: true,
 			showBackdrop: false,
 			showResizer: true,
@@ -38,7 +38,7 @@
 		};
 		vm.prefixSuffixPanelOptions = {
 			panelState: false,
-			sidePanelTitle: "LocationProperties",
+			sidePanelTitle: $translate.instant('LocationProperties'),
 			showCloseButton: true,
 			showBackdrop: false,
 			showResizer: true,

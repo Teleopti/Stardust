@@ -3,9 +3,9 @@
 (function () {
 
 	angular.module('wfm.seatPlan').controller('SeatMapOccupancyCtrl', seatMapOccupancyDirectiveController);
-	seatMapOccupancyDirectiveController.$inject = ['seatMapCanvasUtilsService', 'seatPlanService', 'seatMapService', 'NoticeService', 'seatMapTranslatorFactory'];
+	seatMapOccupancyDirectiveController.$inject = ['seatMapCanvasUtilsService', '$translate', 'seatPlanService', 'seatMapService', 'NoticeService', 'seatMapTranslatorFactory'];
 
-	function seatMapOccupancyDirectiveController(utils, seatPlanService, seatMapService, NoticeService, seatmapTranslator) {
+	function seatMapOccupancyDirectiveController(utils, $translate, seatPlanService, seatMapService, NoticeService, seatmapTranslator) {
 		var vm = this;
 		vm.selectedPeople = [];
 		vm.showPeopleSelection = false;
@@ -254,7 +254,7 @@
 		vm.rightPanelVm = controllers[2];
 
 		vm.parentVm.rightPanelOptions.panelTitle = " "; //remove when styleguide update
-		vm.parentVm.rightPanelOptions.sidePanelTitle = "SeatBookingsList";
+		vm.parentVm.rightPanelOptions.sidePanelTitle = $translate.instant('SeatBookingsList');
 
 		vm.init();
 	};
