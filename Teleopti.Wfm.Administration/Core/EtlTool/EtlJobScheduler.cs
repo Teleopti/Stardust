@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Analytics.Etl.Common;
 using Teleopti.Analytics.Etl.Common.Entity;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.JobSchedule;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Wfm.Administration.Models;
@@ -17,35 +19,42 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 		private readonly IJobScheduleRepository _jobScheduleRepository;
 		private readonly IBaseConfigurationRepository _baseConfigurationRepository;
 		private readonly INow _now;
+		private readonly IConfigReader _configReader;
 		private readonly AnalyticsConnectionsStringExtractor _analyticsConnectionsStringExtractor;
 
-		public EtlJobScheduler(IJobScheduleRepository jobScheduleRepository, 
-			IBaseConfigurationRepository baseConfigurationRepository, 
-			INow now, 
+		public EtlJobScheduler(IJobScheduleRepository jobScheduleRepository,
+			IBaseConfigurationRepository baseConfigurationRepository,
+			INow now,
+			IConfigReader configReader,
 			AnalyticsConnectionsStringExtractor analyticsConnectionsStringExtractor)
 		{
 			_jobScheduleRepository = jobScheduleRepository;
 			_baseConfigurationRepository = baseConfigurationRepository;
 			_now = now;
+			_configReader = configReader;
 			_analyticsConnectionsStringExtractor = analyticsConnectionsStringExtractor;
 		}
 
 		public void ScheduleJob(JobEnqueModel jobEnqueModel)
 		{
-			var connectionString = _analyticsConnectionsStringExtractor.Extract(jobEnqueModel.TenantName);
+			var connectionString = Tenants.IsAllTenants(jobEnqueModel.TenantName)
+				? _configReader.ConnectionString("Hangfire")
+				: _analyticsConnectionsStringExtractor.Extract(jobEnqueModel.TenantName);
+
 			var baseConfig = _baseConfigurationRepository.LoadBaseConfiguration(connectionString);
-			IList<IEtlJobRelativePeriod> relativePeriodCollection =
-				GetRelativePeriods(jobEnqueModel, baseConfig.TimeZoneCode);
+			var relativePeriodCollection = GetRelativePeriods(jobEnqueModel, baseConfig.TimeZoneCode);
+
 			var etlJobSchedule = new EtlJobSchedule(
-				-1, 
-				"Manual ETL", 
-				jobEnqueModel.JobName, 
-				true, 
+				-1,
+				"Manual ETL",
+				jobEnqueModel.JobName,
+				true,
 				jobEnqueModel.LogDataSourceId,
-				"Manual ETL", 
-				DateTime.MinValue, 
+				"Manual ETL",
+				DateTime.MinValue,
 				relativePeriodCollection,
 				jobEnqueModel.TenantName);
+
 			_jobScheduleRepository.SetDataMartConnectionString(connectionString);
 			var scheduleId = _jobScheduleRepository.SaveSchedule(etlJobSchedule);
 			etlJobSchedule.SetScheduleIdOnPersistedItem(scheduleId);
@@ -64,10 +73,11 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 
 			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
 			var localNow = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), timeZone);
-			
+
 			foreach (var jobPeriod in job.JobPeriods)
 			{
-				var jobCategory = Enum.GetValues(typeof(JobCategoryType)).Cast<JobCategoryType>().First(x => x.ToString() == jobPeriod.JobCategoryName);
+				var jobCategory = Enum.GetValues(typeof(JobCategoryType)).Cast<JobCategoryType>()
+					.First(x => x.ToString() == jobPeriod.JobCategoryName);
 				var localStart = TimeZoneHelper.ConvertFromUtc(jobPeriod.Start, timeZone);
 				var localEnd = TimeZoneHelper.ConvertFromUtc(jobPeriod.End, timeZone);
 				var relativeStart = localStart.Date.Subtract(localNow.Date).Days;
@@ -75,6 +85,7 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 				var relativePeriod = new MinMax<int>(relativeStart, relativeEnd);
 				ret.Add(new EtlJobRelativePeriod(relativePeriod, jobCategory));
 			}
+
 			return ret;
 		}
 	}

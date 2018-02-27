@@ -45,7 +45,6 @@ namespace Teleopti.Analytics.Etl.Common.Service
 			_baseConfigurationRepository = baseConfigurationRepository;
 			_pmInfoProvider = pmInfoProvider;
 			_connectionString = ConfigurationManager.AppSettings["datamartConnectionString"];
-			
 		}
 
 		public void Initialize(DateTime serviceStartTime, Action stopService)
@@ -62,7 +61,8 @@ namespace Teleopti.Analytics.Etl.Common.Service
 		private bool checkForEtlJob()
 		{
 			log.Debug("Checking configuration");
-			var configHandler = new ConfigurationHandler(new GeneralFunctions(new GeneralInfrastructure(_baseConfigurationRepository)));
+			var configHandler =
+				new ConfigurationHandler(new GeneralFunctions(new GeneralInfrastructure(_baseConfigurationRepository)));
 			configHandler.SetConnectionString(_connectionString);
 			if (!configHandler.IsConfigurationValid)
 			{
@@ -75,14 +75,14 @@ namespace Teleopti.Analytics.Etl.Common.Service
 			log.Debug("Configuration OK");
 
 			log.Debug("Getting scheduled schedule");
-			var jobScheduleRepository =  new JobScheduleRepository();
+			var jobScheduleRepository = new JobScheduleRepository();
 			jobScheduleRepository.SetDataMartConnectionString(_connectionString);
 			var repository = new Repository(_connectionString);
 			var etlJobScheduleCollection =
-				 new EtlJobScheduleCollection(
-					 jobScheduleRepository,
-					  new EtlJobLogCollection(repository),
-					  _serviceStartTime);
+				new EtlJobScheduleCollection(
+					jobScheduleRepository,
+					new EtlJobLogCollection(repository),
+					_serviceStartTime);
 
 			log.Debug("Getting due schedule");
 			var scheduleToRun = new SchedulePriority().GetTopPriority(etlJobScheduleCollection, DateTime.Now, _serviceStartTime);
@@ -94,91 +94,97 @@ namespace Teleopti.Analytics.Etl.Common.Service
 
 			log.DebugFormat("Schedule to run {0}, Job: {1}", scheduleToRun.ScheduleName, scheduleToRun.JobName);
 
-			var culture = CultureInfo.CurrentCulture;
-			if (configHandler.BaseConfiguration.CultureId.HasValue)
-				culture = CultureInfo.GetCultureInfo(configHandler.BaseConfiguration.CultureId.Value).FixPersianCulture();
+			var culture = configHandler.BaseConfiguration.CultureId.HasValue
+				? CultureInfo.GetCultureInfo(configHandler.BaseConfiguration.CultureId.Value).FixPersianCulture()
+				: CultureInfo.CurrentCulture;
 			Thread.CurrentThread.CurrentCulture = culture;
 
 			var cube = _pmInfoProvider.Cube();
 			var pmInstallation = _pmInfoProvider.PmInstallation();
 			log.Debug("Extracting job to run from schedule");
 			var jobToRun = _jobExtractor.ExtractJobFromSchedule(
-				 scheduleToRun,
-				 _jobHelper,
-				 configHandler.BaseConfiguration.TimeZoneCode,
-				 configHandler.BaseConfiguration.IntervalLength.GetValueOrDefault(),
-				 cube,
-				 pmInstallation,
-				 configHandler.BaseConfiguration.RunIndexMaintenance,
-				 culture
-				 );
+				scheduleToRun,
+				_jobHelper,
+				configHandler.BaseConfiguration.TimeZoneCode,
+				configHandler.BaseConfiguration.IntervalLength.GetValueOrDefault(),
+				cube,
+				pmInstallation,
+				configHandler.BaseConfiguration.RunIndexMaintenance,
+				culture
+			);
 
 			log.DebugFormat("Running job {0}", jobToRun.Name);
 			var success = runEtlJob(jobToRun, scheduleToRun, repository, jobScheduleRepository);
 			return success;
 		}
 
-		private bool runEtlJob(IJob jobToRun, IEtlJobSchedule scheduleJob, IJobLogRepository repository, IJobScheduleRepository jobScheduleRepository)
+		private bool runEtlJob(IJob jobToRun, IEtlJobSchedule scheduleJob, IJobLogRepository repository,
+			IJobScheduleRepository jobScheduleRepository)
 		{
-			var runController = new RunController((IRunControllerRepository)repository);
+			var runController = new RunController((IRunControllerRepository) repository);
 
 			log.Debug("Checking if permitted to run");
-			if (runController.CanIRunAJob(out var etlRunningInformation))
+			if (!runController.CanIRunAJob(out var etlRunningInformation))
 			{
-				try
+				logConflictingEtlRun(jobToRun, etlRunningInformation);
+				return true;
+			}
+
+			try
+			{
+				log.Debug("Trying to acquire lock");
+				using (new EtlJobLock(_connectionString, jobToRun.Name, true))
 				{
-					log.Debug("Trying to acquire lock");
-					using (new EtlJobLock(_connectionString, jobToRun.Name, true))
-					{
-						log.InfoFormat(CultureInfo.InvariantCulture, "Scheduled job '{0}' ready to start.", jobToRun.Name);
+					log.InfoFormat(CultureInfo.InvariantCulture, "Scheduled job '{0}' ready to start.", jobToRun.Name);
 
-						var etlTenantName = scheduleJob.TenantName;
-						var etlTenants = Tenants.IsAllTenants(etlTenantName)
-							? _tenants.EtlTenants().ToList()
-							: new List<TenantInfo> {_tenants.Tenant(etlTenantName)};
-
-						foreach (var tenant in etlTenants)
+					var etlTenantName = scheduleJob.TenantName;
+					var etlTenants = Tenants.IsAllTenants(etlTenantName)
+						? _tenants.EtlTenants().ToList()
+						: new List<TenantInfo>
 						{
-							if (tenant == null) continue;
+							_tenants.Tenant(etlTenantName)
+						};
 
-							var jobStepsNotToRun = new List<IJobStep>();
-							jobToRun.StepList[0].JobParameters.SetTenantBaseConfigValues(tenant.EtlConfiguration);
+					foreach (var tenant in etlTenants)
+					{
+						if (tenant == null) continue;
 
-							var jobResultCollection = new List<IJobResult>();
-							_jobHelper.SelectDataSourceContainer(tenant.Name);
+						var jobStepsNotToRun = new List<IJobStep>();
+						jobToRun.StepList[0].JobParameters.SetTenantBaseConfigValues(tenant.EtlConfiguration);
 
-							var jobRunner = new JobRunner();
-							var jobResults = jobRunner.Run(jobToRun, jobResultCollection, jobStepsNotToRun);
-							if (jobResults != null && jobResults.Any())
+						var jobResultCollection = new List<IJobResult>();
+						_jobHelper.SelectDataSourceContainer(tenant.Name);
+
+						var jobRunner = new JobRunner();
+						var jobResults = jobRunner.Run(jobToRun, jobResultCollection, jobStepsNotToRun);
+						if (jobResults != null && jobResults.Any())
+						{
+							var exception = jobResults.First().JobStepResultCollection.First().JobStepException;
+							if (exception != null && exception.Message.Contains("license"))
 							{
-								var exception = jobResults.First().JobStepResultCollection.First().JobStepException;
-								if (exception != null && exception.Message.Contains("license"))
-									logInvalidLicense(tenant.Name);
+								logInvalidLicense(tenant.Name);
 							}
-							jobRunner.SaveResult(jobResults, repository, scheduleJob.ScheduleId);
 						}
 
-						if (scheduleJob.ScheduleType == JobScheduleType.Manual)
-						{
-							jobScheduleRepository.DisableScheduleJob(scheduleJob.ScheduleId);
-						}
+						jobRunner.SaveResult(jobResults, repository, scheduleJob.ScheduleId);
 					}
-				}
-				catch (DistributedLockException)
-				{
-					if (!runController.CanIRunAJob(out var runningEtlJob))
+
+					if (scheduleJob.ScheduleType == JobScheduleType.Manual)
 					{
-						logConflictingEtlRun(jobToRun, runningEtlJob);
-					}
-					else
-					{
-						log.InfoFormat("Distributed lock could not created. Job '{0}' could not be started.", jobToRun.Name);
+						jobScheduleRepository.DisableScheduleJob(scheduleJob.ScheduleId);
 					}
 				}
 			}
-			else
+			catch (DistributedLockException)
 			{
-				logConflictingEtlRun(jobToRun, etlRunningInformation);
+				if (!runController.CanIRunAJob(out var runningEtlJob))
+				{
+					logConflictingEtlRun(jobToRun, runningEtlJob);
+				}
+				else
+				{
+					log.InfoFormat("Distributed lock could not created. Job '{0}' could not be started.", jobToRun.Name);
+				}
 			}
 
 			return true;
@@ -187,12 +193,13 @@ namespace Teleopti.Analytics.Etl.Common.Service
 		private static void logConflictingEtlRun(IJob jobToRun, IEtlRunningInformation etlRunningInformation)
 		{
 			log.InfoFormat(CultureInfo.InvariantCulture,
-				 "Scheduled job '{0}' could not start due to another job is running at the moment. (ServerName: {1}; JobName: {2}; StartTime: {3}; IsStartByService: {4})",
-				 jobToRun.Name,
-				 etlRunningInformation.ComputerName,
-				 etlRunningInformation.JobName,
-				 etlRunningInformation.StartTime,
-				 etlRunningInformation.IsStartedByService);
+				"Scheduled job '{0}' could not start due to another job is running at the moment. (ServerName: {1}; JobName: {2}; "
+				+ "StartTime: {3}; IsStartByService: {4})",
+				jobToRun.Name,
+				etlRunningInformation.ComputerName,
+				etlRunningInformation.JobName,
+				etlRunningInformation.StartTime,
+				etlRunningInformation.IsStartedByService);
 		}
 
 		private static void logInvalidLicense(string tenant)
@@ -204,16 +211,13 @@ namespace Teleopti.Analytics.Etl.Common.Service
 
 		private static void logInvalidConfiguration(ConfigurationHandler configHandler)
 		{
-			var culture = configHandler.BaseConfiguration.CultureId.HasValue
-				 ? configHandler.BaseConfiguration.CultureId.Value.ToString(CultureInfo.InvariantCulture)
-				 : "null";
-			var intervalLength = configHandler.BaseConfiguration.IntervalLength.HasValue
-				 ? configHandler.BaseConfiguration.IntervalLength.Value.ToString(CultureInfo.InvariantCulture)
-				 : "null";
+			var culture = configHandler.BaseConfiguration.CultureId?.ToString(CultureInfo.InvariantCulture) ?? "null";
+			var intervalLength = configHandler.BaseConfiguration.IntervalLength?.ToString(CultureInfo.InvariantCulture) ?? "null";
 			var timeZone = configHandler.BaseConfiguration.TimeZoneCode ?? "null";
 			log.WarnFormat(CultureInfo.InvariantCulture,
-				 "ETL Service was stopped due to invalid base configuration (Culture: '{0}'; IntervalLengthMinutes: '{1}; TimeZoneCode: '{2}'). Please start the manual ETL Tool and configure. Then start the service again.",
-				 culture, intervalLength, timeZone);
+				"ETL Service was stopped due to invalid base configuration (Culture: '{0}'; IntervalLengthMinutes: "
+				+ "'{1}; TimeZoneCode: '{2}'). Please start the manual ETL Tool and configure. Then start the service again.",
+				culture, intervalLength, timeZone);
 		}
 	}
 }

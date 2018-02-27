@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
@@ -40,6 +41,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 		public FakeBaseConfigurationRepository BaseConfigurationRepository;
 		public FakeGeneralInfrastructure GeneralInfrastructure;
 		public IConfigurationHandler ConfigurationHandler;
+		public FakeConfigReader ConfigReader;
 		public FakePmInfoProvider PmInfoProvider;
 		public FakeJobScheduleRepository JobScheduleRepository;
 		public MutableNow Now;
@@ -247,8 +249,10 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			}
 		}
 
-		private IList<JobCollectionModel> getJobs(string tenantName, bool toggle38131Enabled, bool pmInstalled)
+		private IEnumerable<JobCollectionModel> getJobs(string tenantName, bool toggle38131Enabled, bool pmInstalled)
 		{
+			ConfigReader.FakeConnectionString("Hangfire", connectionString);
+
 			BaseConfigurationRepository.SaveBaseConfiguration(connectionString,
 				new BaseConfiguration(1053, 15, timezoneName, false));
 			AllTenants.HasWithAnalyticsConnectionsTring(testTenantName, connectionString);

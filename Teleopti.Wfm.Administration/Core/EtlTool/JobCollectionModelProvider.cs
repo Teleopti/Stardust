@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Autofac;
@@ -10,6 +9,7 @@ using Teleopti.Analytics.Etl.Common.Service;
 using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Wfm.Administration.Models;
 
 namespace Teleopti.Wfm.Administration.Core.EtlTool
@@ -23,59 +23,50 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 		private readonly IComponentContext _componentContext;
 		private readonly IPmInfoProvider _pmInfoProvider;
 		private readonly IConfigurationHandler _configurationHandler;
+		private readonly IConfigReader _configReader;
 		private readonly AnalyticsConnectionsStringExtractor _analyticsConnectionsStringExtractor;
 
 		public JobCollectionModelProvider(
 			IComponentContext componentContext, 
 			IPmInfoProvider pmInfoProvider, 
 			IConfigurationHandler configurationHandler, 
+			IConfigReader configReader,
 			AnalyticsConnectionsStringExtractor analyticsConnectionsStringExtractor)
 		{
 			_componentContext = componentContext;
 			_pmInfoProvider = pmInfoProvider;
 			_configurationHandler = configurationHandler;
+			_configReader = configReader;
 			_analyticsConnectionsStringExtractor = analyticsConnectionsStringExtractor;
 		}
 
 		public IList<JobCollectionModel> Create(string tenantName)
 		{
-			IJobParameters jobParameters;
-
 			var isAllTenants = Tenants.IsAllTenants(tenantName);
-			if (isAllTenants)
-			{
-				// Create a dummy JobParameters to load all ETL jobs for all tenants
-				jobParameters = new JobParameters(null, 0, TimeZone.CurrentTimeZone.StandardName, 15,
-					_pmInfoProvider.Cube(), _pmInfoProvider.PmInstallation(), CultureInfo.CurrentCulture,
-					new IocContainerHolder(_componentContext), true);
-			}
-			else
-			{
-				var dataMartConnectionString = _analyticsConnectionsStringExtractor.Extract(tenantName);
+			var dataMartConnectionString = isAllTenants
+				? _configReader.ConnectionString("Hangfire")
+				: _analyticsConnectionsStringExtractor.Extract(tenantName);
+			_configurationHandler.SetConnectionString(dataMartConnectionString);
 
-				_configurationHandler.SetConnectionString(dataMartConnectionString);
-				var baseConfiguration = _configurationHandler.BaseConfiguration;
-				jobParameters = new JobParameters(null, 1,
-					baseConfiguration.TimeZoneCode,
-					baseConfiguration.IntervalLength.Value,
-					_pmInfoProvider.Cube(),
-					_pmInfoProvider.PmInstallation(),
-					CultureInfo.GetCultureInfo(baseConfiguration.CultureId.Value),
-					new IocContainerHolder(_componentContext),
-					baseConfiguration.RunIndexMaintenance);
-			}
-
+			var baseConfiguration = _configurationHandler.BaseConfiguration;
+			var jobParameters = new JobParameters(null, 1,
+				baseConfiguration.TimeZoneCode,
+				baseConfiguration.IntervalLength.Value,
+				_pmInfoProvider.Cube(),
+				_pmInfoProvider.PmInstallation(),
+				CultureInfo.GetCultureInfo(baseConfiguration.CultureId.Value),
+				new IocContainerHolder(_componentContext),
+				baseConfiguration.RunIndexMaintenance);
 
 			return new JobCollection(jobParameters)
 				.Select(job => new JobCollectionModel
 				{
 					JobName = job.Name,
-					JobSteps = job.StepList
-						.Select(step => new JobStepModel
-						{
-							Name = step.Name,
-							DependsOnTenant = isAllTenants && IsJobStepDependsOnTenant(job.Name, step.Name)
-						}).ToList(),
+					JobSteps = job.StepList.Select(step => new JobStepModel
+					{
+						Name = step.Name,
+						DependsOnTenant = isAllTenants && IsJobStepDependsOnTenant(job.Name, step.Name)
+					}).ToList(),
 					NeedsParameterDataSource = job.NeedsParameterDataSource,
 					NeededDatePeriod = getJobCategoryPeriods(job)
 				}).ToList();
