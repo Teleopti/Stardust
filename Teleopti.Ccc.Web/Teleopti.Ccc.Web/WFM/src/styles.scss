@@ -1,10 +1,3 @@
 /* You can add global styles to this file, and also import other style files */
-@import '~@angular/material/prebuilt-themes/indigo-pink.css';
-
-
-// # Dialog adjustments
-// Used for some material dialogs to remove
-// the default padding and margins of their container */
-.dialog-without-padding .mat-dialog-container {
-	padding: 0;
-}
+// @import '~@angular/material/prebuilt-themes/indigo-pink.css';
+@import './themes/classic';

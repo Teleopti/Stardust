@@ -52,51 +52,18 @@ export class PeopleComponent implements OnInit {
 		return this.selectedPeopleIds.length;
 	}
 
-	openDialog(dialogType) {
-		return this.dialog.open(dialogType, {
-			width: '70vw',
-			maxHeight: '80vh',
-			panelClass: 'dialog-without-padding',
-			data: {
-				people: this.getSelectedPeople(),
-				roles: this.roles
-			}
-		});
+	getSelectedPeopleCount(): number {
+		return this.workspaceService.getSelectedPeople().length;
 	}
 
-	openGrantDialog() {
-		const dialogRef = this.openDialog(GrantDialog);
-		dialogRef.afterClosed().subscribe((result: RoleResponse) => {
-			if (typeof result !== 'undefined' && Array.isArray(result.roles)) {
-				this.grantRoles(result.roles);
-			}
-		});
+	grantRoles(roles): void {
+		const peopleIds = this.workspaceService.getSelectedPeople().map(({ Id }) => Id);
+		this.rolesService.grantRoles(peopleIds, roles).then(ok => { });
 	}
 
-	openRevokeDialog() {
-		const dialogRef = this.openDialog(RevokeDialog);
-		dialogRef.afterClosed().subscribe((result: RevokeResponse) => {
-			if (typeof result !== 'undefined' && Array.isArray(result.roles)) {
-				this.revokeRoles(result.roles);
-			}
-		});
-	}
-
-	grantRoles(roles) {
-		this.rolesService.grantRoles(this.selectedPeopleIds, roles).then(ok => {});
-	}
-
-	revokeRoles(roles) {
-		this.rolesService.revokeRoles(this.selectedPeopleIds, roles).then(ok => {});
-	}
-
-	ngOnInit() {
-		this.rolesService.getPeople().then(people => {
-			this.people = people;
-		});
-		this.rolesService.getRoles().then(roles => {
-			this.roles = roles;
-		});
+	revokeRoles(roles): void {
+		const peopleIds = this.workspaceService.getSelectedPeople().map(({ Id }) => Id);
+		this.rolesService.revokeRoles(peopleIds, roles).then(ok => { });
 	}
 
 	/** Below is window grant component */
