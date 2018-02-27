@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -47,19 +47,19 @@ namespace Teleopti.Analytics.Parameters
 
 		public static string ErrorMessageValText
 		{
-			get { return ReportTexts.Resources.InvalidValueErrorMessage; } // "xx Du har angett ett ogiltigt värde i";
+			get { return ReportTexts.Resources.InvalidValueErrorMessage; } // "xx Du har angett ett ogiltigt vÃ¤rde i";
 		}
 
 		public static string ErrorMessage
 		{
-			get { return ReportTexts.Resources.MissingValueErrorMessage; } //"xxDu har inte angett något i";;
+			get { return ReportTexts.Resources.MissingValueErrorMessage; } //"xxDu har inte angett nÃ¥got i";;
 		}
 
 		public bool SkipPermissions { get; set; }
 
-		//ola 2005-12-20 lagt till så man kan skicka in en arraylist av parameter
-		// som ska användas till FÖRSTA kontrollen.
-		// Denna är bra om man vill använda selectorn som ett komplement till andra urval
+		//ola 2005-12-20 lagt till s?man kan skicka in en arraylist av parameter
+		// som ska anvÃ¤ndas till FÃ–RSTA kontrollen.
+		// Denna Ã¤r bra om man vill anvÃ¤nda selectorn som ett komplement till andra urval
 		public IList<SqlParameter> StartParams
 		{
 			set
@@ -354,7 +354,7 @@ namespace Teleopti.Analytics.Parameters
 					}
 					ctrl.IntervalLength = intervalLength;
 
-					// bara första kontrollen ska ha startparametrar
+					// bara fÃ¶rsta kontrollen ska ha startparametrar
 					if (flag == 0)
 					{
 						ctrl.StartParams = _startParams;

@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -27,8 +27,8 @@ namespace Teleopti.Analytics.Parameters
 
 		private bool _reLoaded;
 		// det som returneras ut i Parameter
-		// från början samma som default
-		// sedan det som fanns i  databasen (om det fanns något från tidigare)
+		// frÃ¥n bÃ¶rjan samma som default
+		// sedan det som fanns i  databasen (om det fanns nÃ¥got frÃ¥n tidigare)
 		// sedan det som hamnar efter anrop till FetchValue
 		internal bool Valid;
 		protected object Value;
@@ -59,7 +59,7 @@ namespace Teleopti.Analytics.Parameters
 			}
 		}
 
-		protected override HtmlTextWriterTag TagKey//För att "starttaggen" ska vara <tr> istället för <span>
+		protected override HtmlTextWriterTag TagKey//FÃ¶r att "starttaggen" ska vara <tr> istÃ¤llet fÃ¶r <span>
 		{
 			get
 			{
@@ -92,8 +92,8 @@ namespace Teleopti.Analytics.Parameters
 			// Use the config setting to determine where the client files are located.
 			// Client files are located in the aspnet_client v-root and then distributed
 			// into subfolders by assembly name and assembly version.
-			// För att detta ska fungera måste det finnas directory med namnen
-			// reportparameters\1_0_0_0 under Inetpub\wwwroot\aspnet_client\ på servern.
+			// FÃ¶r att detta ska fungera mÃ¥ste det finnas directory med namnen
+			// reportparameters\1_0_0_0 under Inetpub\wwwroot\aspnet_client\ pÃ¥ servern.
 			// Filerna (bilder, script etc) ska ligga i 1_0_0_0-mappen.
 
 			string location = null;
@@ -203,7 +203,7 @@ namespace Teleopti.Analytics.Parameters
 			}
 		}
 
-		// anropas efter Parameter annars kanske inte värdet är satt
+		// anropas efter Parameter annars kanske inte vÃ¤rdet Ã¤r satt
 		public string ParameterText
 		{
 			get
@@ -257,9 +257,9 @@ namespace Teleopti.Analytics.Parameters
 
 		public string ProcParam { get; set; }
 
-		//ola 2005-12-20 lagt till så man kan skicka in en arraylist av parameter
-		// som ska användas till FÖRSTA kontrollen.
-		// Denna är bra om man vill använda selectorn som ett komplement till andra urval
+		//ola 2005-12-20 lagt till sÃ¥ man kan skicka in en arraylist av parameter
+		// som ska anvÃ¤ndas till FÃ–RSTA kontrollen.
+		// Denna Ã¤r bra om man vill anvÃ¤nda selectorn som ett komplement till andra urval
 		public IList<SqlParameter> StartParams { get; set; }
 
 		public int SavedId { get; set; }
