@@ -2,6 +2,7 @@
 describe('SeatPlanCtrl', function () {
 	var $q,
 		$rootScope,
+		$translate,
 		$httpBackend;
 
 	beforeEach(function() {
@@ -19,9 +20,10 @@ describe('SeatPlanCtrl', function () {
 		});
 	});
 
-	beforeEach(inject(function (_$httpBackend_, _$q_, _$rootScope_) {
+	beforeEach(inject(function (_$httpBackend_, _$q_, _$rootScope_, _$translate_) {
 		$q = _$q_;
 		$rootScope = _$rootScope_;
+		$translate = _$translate_;
 		$httpBackend = _$httpBackend_;
 	}));
 
@@ -75,7 +77,7 @@ describe('SeatPlanCtrl', function () {
 		scope.$digest();
 
 		var info = controller.getToDayInfo();
-		expect(info).toEqual("SeatBookingSummary");
+		expect(info).toEqual($translate.instant('SeatBookingSummary'));
 	}));
 
 	it('returns the correct info for a failed seatplan status', inject(function ($controller) {

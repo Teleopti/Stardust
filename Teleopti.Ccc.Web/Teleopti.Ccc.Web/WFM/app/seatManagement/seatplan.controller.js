@@ -4,9 +4,9 @@
 
 	angular.module('wfm.seatPlan').controller('SeatPlanCtrl', seatPlanDirectiveController);
 
-	seatPlanDirectiveController.$inject = ['$scope', '$stateParams', '$timeout', 'seatPlanService'];
+	seatPlanDirectiveController.$inject = ['$scope', '$translate', '$stateParams', '$timeout', 'seatPlanService'];
 
-	function seatPlanDirectiveController($scope, params, $timeout, seatPlanService) {
+	function seatPlanDirectiveController($scope, $translate, params, $timeout, seatPlanService) {
 		var vm = this;
 
 		vm.isLoadingCalendar = true;
@@ -145,7 +145,7 @@
 				if (moment(vm.selectedDate).isSame(dateEvent.Date, 'day')) {
 					dayInfoString = vm.seatPlanStatus[dateEvent.Status];
 					if (dayInfoString !== vm.seatPlanStatus[3]) {
-						dayInfoString = "SeatBookingSummary";
+						dayInfoString = $translate.instant('SeatBookingSummary');
 					}
 
 				}
@@ -198,9 +198,7 @@
 		} else {
 			var paramDate = moment();
 			vm.loadMonthDetails(paramDate);
-		
+
 		}
 	}
 }());
-
-
