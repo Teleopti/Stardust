@@ -75,10 +75,6 @@
 	.mdi:before {
 	  font-size: 14px !important;
 	}
-	.remove-approved-period {
-	  cursor: pointer;
-	  margin: 0 8px;
-	}
   }
 
   .highlight > td {
@@ -207,6 +203,11 @@
 		opacity: 0.5;
 		z-index: 10;
 	  }
+	}
+
+	.remove-approved-period {
+	  cursor: pointer;
+	  margin: 0 8px;
 	}
   }
 }
