@@ -135,7 +135,7 @@
 
 		vm.getToDayInfo = function () {
 			if (vm.isLoadingCalendar) {
-				return 'LoadingSeatPlanStatus';
+				return $translate.instant('LoadingSeatPlanStatus');
 			}
 
 			var dayInfoString = vm.seatPlanStatus[3];

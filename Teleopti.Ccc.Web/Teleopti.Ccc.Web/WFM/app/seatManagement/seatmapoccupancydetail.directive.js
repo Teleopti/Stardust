@@ -64,7 +64,7 @@
 
 		function onSeatPlanCompleted(seatPlanResultMessage) {
 
-			var seatPlanResultDetailMessage = seatmapTranslator.TranslatedStrings['SeatPlanResultDetailMessage']
+			var seatPlanResultDetailMessage = $translate.instant('SeatPlanResultDetailMessage')
 						.replace('{0}', seatPlanResultMessage.NumberOfBookingRequests)
 						.replace('{1}', seatPlanResultMessage.RequestsGranted)
 						.replace('{2}', seatPlanResultMessage.RequestsDenied)
