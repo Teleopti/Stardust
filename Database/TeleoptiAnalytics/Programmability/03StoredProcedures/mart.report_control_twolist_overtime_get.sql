@@ -1,4 +1,4 @@
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[report_control_twolist_overtime_get]') AND type in (N'P', N'PC'))
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[report_control_twolist_overtime_get]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [mart].[report_control_twolist_overtime_get]
 GO
 
@@ -15,12 +15,12 @@ GO
 -- =============================================
 CREATE PROC [mart].[report_control_twolist_overtime_get]
 @report_id uniqueidentifier,
-@person_code uniqueidentifier, -- user 
+@person_code uniqueidentifier, -- user
 @language_id int,	-- t ex.  1053 = SV-SE
 @bu_id uniqueidentifier
 AS
 
-CREATE TABLE #overtime (counter int identity(1,1),id int, name nvarchar(50)) 
+CREATE TABLE #overtime (counter int identity(1,1),id int, name nvarchar(100))
 
 INSERT #overtime(id,name)
 SELECT
@@ -28,9 +28,9 @@ SELECT
 	name	= overtime_name
 FROM
 	mart.dim_overtime d WITH(NOLOCK)
-INNER JOIN 
+INNER JOIN
 	mart.dim_business_unit b WITH(NOLOCK)
-ON 
+ON
 	b.business_unit_id=d.business_unit_id
 WHERE overtime_id<>-1
 AND b.business_unit_code=@bu_id
@@ -41,6 +41,4 @@ SELECT id,name
 FROM #overtime
 ORDER BY counter
 
-
 GO
-
