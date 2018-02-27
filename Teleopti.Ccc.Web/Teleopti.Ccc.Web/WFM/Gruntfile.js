@@ -364,7 +364,7 @@ module.exports = function(grunt) {
 						cwd: 'vendor',
 						flatten: true,
 						src: ['*/*.map'],
-						dest: 'dist/',
+						dest: 'dist/resources',
 						filter: 'isFile'
 					}
 				]
