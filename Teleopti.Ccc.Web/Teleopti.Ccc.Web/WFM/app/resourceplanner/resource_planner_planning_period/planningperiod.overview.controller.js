@@ -43,7 +43,7 @@
     vm.valNumber = getTotalValidationErrorsNumber;
     vm.showTab = showTab;
     vm.goDoRulesSetting = goDoRulesSetting;
-    vm.textForClearPp = $translate.instant("AreYouSureYouWantToClearPlanningPeriodData")
+    vm.textForClearPp = $translate.instant('AreYouSureYouWantToClearPlanningPeriodData')
       .replace('{0}', moment(vm.selectedPp.StartDate).format('L'))
       .replace('{1}', moment(vm.selectedPp.EndDate).format('L'));
 

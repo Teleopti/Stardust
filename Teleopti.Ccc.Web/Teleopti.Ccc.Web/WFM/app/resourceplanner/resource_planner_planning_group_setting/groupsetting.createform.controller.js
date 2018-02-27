@@ -32,16 +32,16 @@
             Id: filterId,
             Default: vm.default,
             Filters: [],
-            Name: $stateParams.isDefault ? $translate.instant("Default") : "",
+            Name: $stateParams.isDefault ? $translate.instant('Default') : "",
             PlanningGroupId: $stateParams.groupId
         };
         vm.schedulingSettings = [
-            { Id: "IndividualFlexible", Selected: true, Name: $translate.instant("IndividualFlexible") + " (" + $translate.instant("Default") + ")" },
+            { Id: "IndividualFlexible", Selected: true, Name: $translate.instant('IndividualFlexible') + " (" + $translate.instant('Default') + ")" },
             {
-                Id: "BlockScheduling", Selected: false, Name: $translate.instant("BlockScheduling"),
+                Id: "BlockScheduling", Selected: false, Name: $translate.instant('BlockScheduling'),
                 Types: [
-                    { Id: "BlockFinderTypeBetweenDayOff", Selected: false, Code: 1, Name: $translate.instant("BlockFinderTypeBetweenDayOff") },
-                    { Id: "BlockFinderTypeSchedulePeriod", Selected: false, Code: 2, Name: $translate.instant("BlockFinderTypeSchedulePeriod") }
+                    { Id: "BlockFinderTypeBetweenDayOff", Selected: false, Code: 1, Name: $translate.instant('BlockFinderTypeBetweenDayOff') },
+                    { Id: "BlockFinderTypeSchedulePeriod", Selected: false, Code: 2, Name: $translate.instant('BlockFinderTypeSchedulePeriod') }
                 ], Options: [
                     { Id: "BlockSameShiftCategory", Selected: true },
                     { Id: "BlockSameStartTime", Selected: false },

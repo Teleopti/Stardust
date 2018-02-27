@@ -16,7 +16,7 @@
 	<label for="inputId" class="input-prepend">
 		<i class="mdi mdi-filter-outline"></i>
 		<input type="text" id="inputId" placeholder="{{'FilterRoles' | translate}}" name="roleFilter" ng-model="roleFilter.DescriptionText" />
-		<md-tooltip>{{"FilterRoles" | translate}}</md-tooltip>
+		<md-tooltip>{{'FilterRoles' | translate}}</md-tooltip>
 	</label>
 	<div class="seat-roles">
 		<div class="wfm-checkbox" ng-repeat="role in vm.roles | filter: roleFilter | orderBy:'Name'">

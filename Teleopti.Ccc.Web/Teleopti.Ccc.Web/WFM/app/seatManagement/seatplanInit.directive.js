@@ -38,7 +38,7 @@
 			};
 
 			if (vm.selectedTeams.length == 0 || vm.selectedLocations.length == 0) {
-				onSelectedTeamsLocationsEmpty($translate.instant("TeamsOrLocationsAreUnselected"));
+				onSelectedTeamsLocationsEmpty($translate.instant('TeamsOrLocationsAreUnselected'));
 				vm.processingSeatPlan = false;
 			}
 			else {

@@ -137,7 +137,7 @@
 		vm.gridOptions.onRegisterApi = function (gridApi) {
 			vm.gridApi = gridApi;
 			var cellTemplate = '<div>' +
-				'<md-tooltip>{{"Remove" | translate}}</md-tooltip>' +
+				"<md-tooltip>{{'Remove' | translate}}</md-tooltip>" +
 				'<i ng-click="grid.appScope.vm.removePerson(row.entity)" style="position: relative;top: 0.5rem;left: 0.5rem;" class="mdi mdi-account-remove">' +
 				'</div>';
 			vm.gridApi.core.addRowHeaderColumn({ name: 'rowHeaderCol', displayName: '', width: 30, cellTemplate: cellTemplate });

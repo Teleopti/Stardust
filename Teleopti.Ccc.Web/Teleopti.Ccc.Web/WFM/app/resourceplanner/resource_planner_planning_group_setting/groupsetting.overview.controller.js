@@ -17,8 +17,8 @@
 		vm.selectedSchedulingSetting = {};
 		vm.schedulingSetting = schedulingSettingInfo.sort(localeLanguageSortingService.localeSort('-Priority', '+Name'));
 		vm.textDeleteSchedulingSetting = '';
-		vm.textManageSchedulingSetting = $translate.instant("ManagePlanningGroupSchedulingSetting").replace("{0}", planningGroupInfo.Name);
-		vm.textOfAppliedFilter = $translate.instant("PlanGroupSchedulingSettingAppliedFilters").replace("{0}", planningGroupInfo.Name);
+		vm.textManageSchedulingSetting = $translate.instant('ManagePlanningGroupSchedulingSetting').replace("{0}", planningGroupInfo.Name);
+		vm.textOfAppliedFilter = $translate.instant('PlanGroupSchedulingSettingAppliedFilters').replace("{0}", planningGroupInfo.Name);
 		vm.getSchedulingSettingInfo = getSchedulingSettingInfo;
 		vm.deleteSchedulingSetting = deleteSchedulingSetting;
 		vm.goEditSchedulingSetting = goEditSchedulingSetting;
@@ -38,12 +38,12 @@
 			return vm.schedulingSetting.forEach(function (item) {
 				if (item.BlockFinderType > 0) {
 					if (item.BlockFinderType == 1) {
-						item.BlockSchedulingSetting = $translate.instant("BlockScheduling") + " (" + $translate.instant("BlockFinderTypeBetweenDayOff") + ")";
+						item.BlockSchedulingSetting = $translate.instant('BlockScheduling') + " (" + $translate.instant('BlockFinderTypeBetweenDayOff') + ")";
 					} else {
-						item.BlockSchedulingSetting = $translate.instant("BlockScheduling") + " (" + $translate.instant("BlockFinderTypeSchedulePeriod") + ")";
+						item.BlockSchedulingSetting = $translate.instant('BlockScheduling') + " (" + $translate.instant('BlockFinderTypeSchedulePeriod') + ")";
 					}
 				} else {
-					item.BlockSchedulingSetting = $translate.instant("IndividualFlexible") + " (" + $translate.instant("Default") + ")";
+					item.BlockSchedulingSetting = $translate.instant('IndividualFlexible') + " (" + $translate.instant('Default') + ")";
 				}
 			});
 		}
@@ -60,7 +60,7 @@
 
 		function getSchedulingSettingInfo(setting) {
 			vm.confirmDeleteModal = true;
-			vm.textDeleteSchedulingSetting = $translate.instant("AreYouSureYouWantToDeleteSchedulingSetting").replace("{0}", setting.Name);
+			vm.textDeleteSchedulingSetting = $translate.instant('AreYouSureYouWantToDeleteSchedulingSetting').replace("{0}", setting.Name);
 			return vm.selectedSchedulingSetting = setting;
 		}
 
@@ -168,8 +168,8 @@
 		var vm = this;
 
 		vm.schedulingSetting = [];
-		vm.textManageSchedulingSetting = $translate.instant("ManagePlanningGroupSchedulingSetting").replace("{0}", vm.planningGroup.Name);
-		vm.textOfAppliedFilter = $translate.instant("PlanGroupSchedulingSettingAppliedFilters").replace("{0}", vm.planningGroup.Name);
+		vm.textManageSchedulingSetting = $translate.instant('ManagePlanningGroupSchedulingSetting').replace("{0}", vm.planningGroup.Name);
+		vm.textOfAppliedFilter = $translate.instant('PlanGroupSchedulingSettingAppliedFilters').replace("{0}", vm.planningGroup.Name);
 		vm.color = {
 			render: 'linear',
 			rgba: 'rgba(156, 39, 176, 1)'
@@ -188,12 +188,12 @@
 			return vm.schedulingSetting.forEach(function (item) {
 				if (item.BlockFinderType > 0) {
 					if (item.BlockFinderType == 1) {
-						item.BlockSchedulingSetting = $translate.instant("BlockScheduling") + " (" + $translate.instant("BlockFinderTypeBetweenDayOff") + ")";
+						item.BlockSchedulingSetting = $translate.instant('BlockScheduling') + " (" + $translate.instant('BlockFinderTypeBetweenDayOff') + ")";
 					} else {
-						item.BlockSchedulingSetting = $translate.instant("BlockScheduling") + " (" + $translate.instant("BlockFinderTypeSchedulePeriod") + ")";
+						item.BlockSchedulingSetting = $translate.instant('BlockScheduling') + " (" + $translate.instant('BlockFinderTypeSchedulePeriod') + ")";
 					}
 				} else {
-					item.BlockSchedulingSetting = $translate.instant("IndividualFlexible") + " (" + $translate.instant("Default") + ")";
+					item.BlockSchedulingSetting = $translate.instant('IndividualFlexible') + " (" + $translate.instant('Default') + ")";
 				}
 			});
 		}

@@ -289,11 +289,11 @@
               AHT: "#FB8C00"
             },
             names: {
-              Forecasted_calls: $translate.instant("ForecastedVolume") + " ←",
-              Calls: $translate.instant("ActualVolume") + " ←",
+              Forecasted_calls: $translate.instant('ForecastedVolume') + " ←",
+              Calls: $translate.instant('ActualVolume') + " ←",
               Forecasted_AHT:
-                $translate.instant("ForecastedAverageHandlingTime") + " →",
-              AHT: $translate.instant("ActualAverageHandlingTime") + " →"
+                $translate.instant('ForecastedAverageHandlingTime') + " →",
+              AHT: $translate.instant('ActualAverageHandlingTime') + " →"
             },
             axes: {
               Forecasted_AHT: "y2",
@@ -303,7 +303,7 @@
           axis: {
             x: {
               label: {
-                text: $translate.instant("SkillTypeTime"),
+                text: $translate.instant('SkillTypeTime'),
                 position: "outer-center"
               },
               type: "category",
@@ -318,7 +318,7 @@
             },
             y: {
               label: {
-                text: $translate.instant("Volume"),
+                text: $translate.instant('Volume'),
                 position: "outer-middle"
               },
               tick: {
@@ -327,7 +327,7 @@
             },
             y2: {
               label: {
-                text: $translate.instant("AverageHandlingTime"),
+                text: $translate.instant('AverageHandlingTime'),
                 position: "outer-middle"
               },
               show: true,

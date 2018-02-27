@@ -11,7 +11,7 @@
 		vm.selectedBudgetGroupId = "";
 
 		vm.formatAbsenceName = function (absence) {
-			var template = $translate.instant("UsedBy");
+			var template = $translate.instant('UsedBy');
 			return template.replace("{0}", absence);
 		}
 

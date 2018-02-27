@@ -10,7 +10,7 @@
 						'<div>' +
 						'		<md-tooltip class=\"account-tooltip\">' +
 						'				<div ng-repeat=\"accountDetail in row.entity[\'PersonAccountSummaryViewModel\'].PersonAccountSummaryDetails\">' +
-						'				<div ng-if=\"$first\"><b>{{\"PersonAccount\" | translate}} {{\"Remaining\" | translate}}</b></div>	' +
+						"				<div ng-if=\'$first\'><b>{{\'PersonAccount\' | translate}} {{\'Remaining\' | translate}}</b></div>	" +
 						'				{{::accountDetail.StartDate  | date : \"shortDate"}} - {{::accountDetail.EndDate  | date : \"shortDate"}} : ' +
 						'				{{::accountDetail.RemainingDescription}}' +
 						'				{{::accountDetail.TrackingTypeDescription}}' +

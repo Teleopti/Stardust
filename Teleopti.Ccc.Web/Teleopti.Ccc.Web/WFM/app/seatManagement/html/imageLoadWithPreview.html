@@ -8,15 +8,15 @@
 				<div class="modal-inner-content">
 					<form name="myForm">
 						<a href="javascript:;" class="load-image-file">
-							{{"Choose" | translate}} {{'Image' | translate}}
+							{{'Choose' | translate}} {{'Image' | translate}}
 							<input type="file" name="myImage" image-with-preview ng-model="image" accept="image/*"
 								   dimensions="height < 2000 && width < 4000">
 						</a>
 						<span class="error" ng-show="myForm.myImage.$error.image">
-							{{"NotAJPEGSVGOrAPNG" | translate}}
+							{{'NotAJPEGSVGOrAPNG' | translate}}
 						</span>
 						<span class="error" ng-show="myForm.myImage.$error.dimensions">
-							{{"InvalidDimensionsExpectingAnImageSmallerThan2000x4000" | translate}}
+							{{'InvalidDimensionsExpectingAnImageSmallerThan2000x4000' | translate}}
 						</span>
 						<img id="image-preview" class="material-depth-1" ng-show="image.src" ng-src="{{image.src}}"/>
 					</form>
@@ -24,7 +24,7 @@
 				<div class="modal-actions">
 					<aside>
 						<button ng-click="vm.showFileDialog = false" class="wfm-btn wfm-btn-invis-default">
-							{{"Cancel" | translate}}
+							{{'Cancel' | translate}}
 						</button>
 						<button ng-click="vm.fileCallbackFunction(image)" class="wfm-btn wfm-btn-invis-primary">
 							{{'OK' | translate}}

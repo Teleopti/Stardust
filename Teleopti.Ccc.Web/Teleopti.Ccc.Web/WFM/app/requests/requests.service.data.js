@@ -130,21 +130,21 @@
 					Id: requestsDefinitions.REQUEST_VALIDATORS.BudgetAllotmentValidator,
 					Checked: false,
 					Name: "BudgetAllotmentValidator",
-					Description: $translate.instant("ValidateRequestsBasedOnBudgetAllotment"),
+					Description: $translate.instant('ValidateRequestsBasedOnBudgetAllotment'),
 					Enabled: toggleSvc.Wfm_Requests_Approve_Based_On_Budget_Allotment_39626
 				},
 				{
 					Id: requestsDefinitions.REQUEST_VALIDATORS.IntradayValidator,
 					Checked: false,
 					Name: "IntradayValidator",
-					Description: $translate.instant("ValidateRequestsBasedOnIntraday"),
+					Description: $translate.instant('ValidateRequestsBasedOnIntraday'),
 					Enabled: toggleSvc.Wfm_Requests_Approve_Based_On_Intraday_39868
 				},
 				{
 					Id: requestsDefinitions.REQUEST_VALIDATORS.ExpirationValidator,
 					Checked: false,
 					Name: "ExpirationValidator",
-					Description: $translate.instant("ValidateRequestsBasedOnExpiration"),
+					Description: $translate.instant('ValidateRequestsBasedOnExpiration'),
 					Enabled: toggleSvc.Wfm_Requests_Approve_Based_On_Minimum_Approval_Time_40274
 				}
 			];
@@ -166,8 +166,8 @@
 
 		this.getAbsenceAndTextRequestsStatuses = function () {
 			var statuses = [
-				{ Id: 5, Name: $translate.instant("Waitlisted") },
-				{ Id: 6, Name: $translate.instant("Cancelled") }
+				{ Id: 5, Name: $translate.instant('Waitlisted') },
+				{ Id: 6, Name: $translate.instant('Cancelled') }
 			];
 
 			return getBasicStatuses().concat(statuses);
@@ -185,9 +185,9 @@
 			// TODO: Should get this list in a better way
 			// Refer to definition Teleopti.Ccc.Domain.AgentInfo.Requests.PersonRequest.personRequestState.CreateFromId()
 			var basicStatuses = [
-				{ Id: 0, Name: $translate.instant("Pending") },
-				{ Id: 1, Name: $translate.instant("Denied") },
-				{ Id: 2, Name: $translate.instant("Approved") }
+				{ Id: 0, Name: $translate.instant('Pending') },
+				{ Id: 1, Name: $translate.instant('Denied') },
+				{ Id: 2, Name: $translate.instant('Approved') }
 			];
 
 			return basicStatuses;

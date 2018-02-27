@@ -33,7 +33,7 @@
 		function prepareEditInfo() {
 			if (editPlanningGroup == null)
 				return;
-			vm.deletePlanningGroupText = $translate.instant("AreYouSureYouWantToDeleteThePlanningGroup").replace("{0}", editPlanningGroup.Name);
+			vm.deletePlanningGroupText = $translate.instant('AreYouSureYouWantToDeleteThePlanningGroup').replace("{0}", editPlanningGroup.Name);
 			vm.name = editPlanningGroup.Name;
 			vm.selectedResults = editPlanningGroup.Filters.sort(localeLanguageSortingService.localeSort('+FilterType', '+Name'));
 		}

@@ -6,7 +6,7 @@
 			<h3>{{'StartTime' | translate}}:</h3>
 			<div uib-timepicker class="focus-default" ng-model="vm.moveToTime" required show-meridian="vm.showMeridian" meridians="vm.meridians" md-autofocus="::vm.containerCtrl.onReady()"></div>
 			<md-switch ng-model="vm.nextDay">
-				<span>{{"NextDay" | translate}}</span>
+				<span>{{'NextDay' | translate}}</span>
 			</md-switch>
 		</form>
 		<div class="text-danger" ng-if="vm.anyInvalidAgent()">

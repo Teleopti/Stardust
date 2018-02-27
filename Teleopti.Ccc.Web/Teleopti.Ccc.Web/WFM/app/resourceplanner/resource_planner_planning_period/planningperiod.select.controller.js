@@ -151,7 +151,7 @@
 		function youAreGoingToChangeThisPlanningPeriodMessage() {
 			if (!vm.originLastPp.startDate && !vm.selectedSuggestion.startDate)
 				return;
-			return vm.textForChangeThisPpMeg = $translate.instant("YouAreGoingToChangeThisPlanningPeriodFrom")
+			return vm.textForChangeThisPpMeg = $translate.instant('YouAreGoingToChangeThisPlanningPeriodFrom')
 				.replace("{0}", moment(vm.selectedSuggestion.startDate).format('LL'))
 				.replace("{1}", moment(vm.selectedSuggestion.endDate).format('LL'));
 		}
@@ -205,7 +205,7 @@
 
 		function getPpInfo(p) {
 			vm.confirmDeletePpModal = true;
-			vm.textForDeletePp = $translate.instant("AreYouSureYouWantToDeleteThePlanningPeriod")
+			vm.textForDeletePp = $translate.instant('AreYouSureYouWantToDeleteThePlanningPeriod')
 				.replace("{0}", moment(p.StartDate).format('L'))
 				.replace("{1}", moment(p.EndDate).format('L'));
 		}

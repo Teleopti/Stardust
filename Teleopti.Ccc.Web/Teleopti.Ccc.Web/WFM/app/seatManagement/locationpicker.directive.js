@@ -23,9 +23,9 @@
 
 		vm.getLocationDisplayText = function (location) {
 			if (location == null || location.Name == undefined) {
-				return $translate.instant("NoLocationsAvailable");
+				return $translate.instant('NoLocationsAvailable');
 			}
-			return location.Name + " (" + $translate.instant("SeatCountTitle") + ": {0})".replace("{0}", location.Seats.length);
+			return location.Name + " (" + $translate.instant('SeatCountTitle') + ": {0})".replace("{0}", location.Seats.length);
 		};
 
 		vm.toggleLocationSelection = function (location) {
