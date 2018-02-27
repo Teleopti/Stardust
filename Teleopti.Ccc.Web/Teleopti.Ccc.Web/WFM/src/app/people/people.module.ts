@@ -17,9 +17,6 @@ import {
 	MatDividerModule
 } from '@angular/material';
 import {
-	GrantDialog,
-	RevokeDialog,
-	RoleDialog,
 	RolePage,
 	ChipComponent,
 	ChipAddComponent,
@@ -32,9 +29,6 @@ import { RolesService } from './services/roles.service';
 @NgModule({
 	declarations: [
 		PeopleComponent,
-		GrantDialog,
-		RevokeDialog,
-		RoleDialog,
 		GrantPageComponent,
 		RevokePageComponent,
 		RolePage,
@@ -45,7 +39,7 @@ import { RolesService } from './services/roles.service';
 	imports: [SharedModule, MatCheckboxModule, MatDialogModule, MatPaginatorModule, MatButtonModule, MatDividerModule],
 	providers: [PeopleService, RolesService],
 	exports: [],
-	entryComponents: [PeopleComponent, GrantDialog, RevokeDialog, RoleDialog]
+	entryComponents: [PeopleComponent]
 })
 export class PeopleModule {
 	constructor() {}
