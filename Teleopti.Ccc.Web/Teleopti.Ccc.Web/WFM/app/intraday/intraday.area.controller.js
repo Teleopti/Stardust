@@ -45,8 +45,7 @@
         var timeoutPromise;
         var polling;
         var pollingTimeout = 60000;
-        var message = $translate
-            .instant('WFMReleaseNotificationWithoutOldModuleLink')
+        var message = $translate.instant('WFMReleaseNotificationWithoutOldModuleLink')
             .replace('{0}', $translate.instant('Intraday'))
             .replace('{1}', "<a href=' http://www.teleopti.com/wfm/customer-feedback.aspx' target='_blank'>")
             .replace('{2}', '</a>');
@@ -313,8 +312,7 @@
                 }
             }
             if (item.UnsupportedSkills.length > 0) {
-                vm.skillAreaMessage = $translate
-                    .instant('UnsupportedSkills')
+                vm.skillAreaMessage = $translate.instant('UnsupportedSkills')
                     .replace('{0}', item.UnsupportedSkills.length);
             } else {
                 vm.skillAreaMessage = '';
