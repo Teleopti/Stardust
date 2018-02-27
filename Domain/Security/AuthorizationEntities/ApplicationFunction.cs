@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         private int? _sortOrder;
         private bool? _isPermitted;
         private bool _isPreliminary;
-        private IUserTextTranslator _userTextTranslator = new UserTextTranslator();
+        private static IUserTextTranslator _userTextTranslator = new UserTextTranslator();
         private bool _isDeleted;
         private string _functionPathCache;
 

@@ -24,7 +24,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				var cacheBuilder = new CacheBuilder(c.Resolve<LinFuProxyFactory>())
 					.SetCacheKey(c.Resolve<TeleoptiCacheKey>())
 					.AddEventListener(new MbCacheLog4NetListener());
-				_configuration.Cache().Build(c, cacheBuilder);
+				IComponentContext threadSpecificContext = c.Resolve<IComponentContext>();
+				_configuration.Cache().Build(threadSpecificContext, cacheBuilder);
 				return cacheBuilder;
 			}).SingleInstance();
 

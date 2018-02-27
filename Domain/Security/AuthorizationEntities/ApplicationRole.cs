@@ -12,14 +12,11 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         private IAvailableData _availableData;
         private bool _builtIn;
         private IBusinessUnit _businessUnit;
-        private IUserTextTranslator _userTextTranslator = new UserTextTranslator();
+        private static IUserTextTranslator _userTextTranslator = new UserTextTranslator();
 
-	    public virtual ICollection<IApplicationFunction> ApplicationFunctionCollection
-        {
-            get { return new ReadOnlyCollection<IApplicationFunction>(_applicationFunctionCollection); }
-        }
+	    public virtual ICollection<IApplicationFunction> ApplicationFunctionCollection => new ReadOnlyCollection<IApplicationFunction>(_applicationFunctionCollection);
 
-        public virtual void AddApplicationFunction(IApplicationFunction applicationFunction)
+		public virtual void AddApplicationFunction(IApplicationFunction applicationFunction)
         {
             if(!_applicationFunctionCollection.Contains(applicationFunction))
                 _applicationFunctionCollection.Add(applicationFunction);
