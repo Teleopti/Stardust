@@ -59,8 +59,9 @@
 
 					<measure-config-form2 ng-if="$ctrl.ruleSet == 1" read-only="!config.enabled" bronze-badge-threshold="config.bronzeBadgeThreshold"
 					 update-bronze="config.setBronzeBadgeThreshold(bronzeBadgeThreshold)" update-silver="config.setSilverBadgeThreshold(silverBadgeThreshold)"
-					 update-gold="config.setGoldBadgeThreshold(goldBadgeThreshold)" silver-badge-threshold="config.silverBadgeThreshold" gold-badge-threshold="config.goldBadgeThreshold"
-					 value-order="config.valueOrder" value-format="config.valueFormat" max="config.max" value-data-type="config.dataType">
+					 update-gold="config.setGoldBadgeThreshold(goldBadgeThreshold)" silver-badge-threshold="config.silverBadgeThreshold"
+					 gold-badge-threshold="config.goldBadgeThreshold" value-order="config.valueOrder" value-format="config.valueFormat" max="config.max"
+					 value-data-type="config.dataType">
 					</measure-config-form2>
 				</card-body>
 			</wfm-card>
@@ -81,7 +82,8 @@
 					<measure-config-form2 ng-if="$ctrl.ruleSet == 1" read-only="!config.enabled" bronze-badge-threshold="config.bronzeBadgeThreshold"
 					 update-bronze="config.setBronzeBadgeThreshold(bronzeBadgeThreshold)" silver-badge-threshold="config.silverBadgeThreshold"
 					 update-silver="config.setSilverBadgeThreshold(silverBadgeThreshold)" gold-badge-threshold="config.goldBadgeThreshold"
-					 update-gold="config.setGoldBadgeThreshold(goldBadgeThreshold)" value-format="config.valueFormat" max="config.max" value-data-type="config.dataType">
+					 update-gold="config.setGoldBadgeThreshold(goldBadgeThreshold)" value-order="config.valueOrder" value-format="config.valueFormat"
+					 max="config.max" value-data-type="config.dataType">
 					</measure-config-form2>
 				</card-body>
 			</wfm-card>

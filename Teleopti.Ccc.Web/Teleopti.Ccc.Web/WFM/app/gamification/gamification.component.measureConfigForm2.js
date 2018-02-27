@@ -102,7 +102,7 @@
 								ctrl.errorMsg = 'ValuesShouldBeInAscendingOrderFromGoldToBronze';
 							break;
 
-						default:
+						case 'desc':
 							if (!valuesAreInDescendingOrder(gold, silver, bronze))
 								ctrl.errorMsg = 'ValuesShouldBeInDescendingOrderFromGoldToBronze';
 							break;

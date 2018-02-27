@@ -129,6 +129,8 @@
 						'^[0-9]+([.]{1}[0-9]{1,6})?$'
 					);
 
+					config.valueOrder = 'desc';
+
 					if (config.dataType == 1) {
 						config.valueFormat = '^[0-9]+([.]{1}[0-9]{1,2})?$';
 						config.badgeThreshold = floatMul(config.badgeThreshold);
