@@ -13,15 +13,9 @@ namespace Teleopti.Ccc.Infrastructure.Config
     public class LoadPasswordPolicyService : ILoadPasswordPolicyService
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-        public string FileName
-        {
-            get
-            {
-                return "PasswordPolicy.xml";
-            }
-        }
+        public string FileName => "PasswordPolicy.xml";
 
-        private string _path = string.Empty;
+		private string _path = string.Empty;
         private XDocument _file;
     	private const int _defaultMaxNumberOfAttempts = 3;
     	private const int _defaultInvalidAttemptWindow = 0;
@@ -30,12 +24,9 @@ namespace Teleopti.Ccc.Infrastructure.Config
     	private readonly ILog _logger = LogManager.GetLogger(typeof(LoadPasswordPolicyService));
 	    private const int _defaultMinAccepted = 1;
 
-	    public XDocument File
-        {
-            get { return LoadFile(); }
-        }
+	    public XDocument File => LoadFile();
 
-        public LoadPasswordPolicyService(XDocument file)
+		public LoadPasswordPolicyService(XDocument file)
         {
             _file = file;
         }
@@ -150,9 +141,9 @@ namespace Teleopti.Ccc.Infrastructure.Config
 		    _file = null;
 	    }
 
-	    public string DocumentAsString { get { return File.ToString(); } }
+	    public string DocumentAsString => File.ToString();
 
-	    private static XDocument defaultXDocument()
+		private static XDocument defaultXDocument()
 		{
 			return new XDocument(
 			 new XDeclaration("1.0", "utf-8", "yes"),

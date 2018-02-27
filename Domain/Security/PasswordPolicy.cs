@@ -13,32 +13,18 @@ namespace Teleopti.Ccc.Domain.Security
         {
             _service = service;
         }
+		
+        public TimeSpan InvalidAttemptWindow => _service.LoadInvalidAttemptWindow();
 
-      
+		public int MaxAttemptCount => _service.LoadMaxAttemptCount();
 
-        public TimeSpan InvalidAttemptWindow
-        {
-            get { return _service.LoadInvalidAttemptWindow(); }
-        }
-
-        public int MaxAttemptCount
-        {
-            get { return _service.LoadMaxAttemptCount(); }
-        }
-
-        public bool CheckPasswordStrength(string password)
+		public bool CheckPasswordStrength(string password)
         {
             return _service.LoadPasswordStrengthRules().All(r => r.VerifyPasswordStrength(password));
         }
 
-        public int PasswordValidForDayCount
-        {
-            get { return _service.LoadPasswordValidForDayCount(); }
-        }
+        public int PasswordValidForDayCount => _service.LoadPasswordValidForDayCount();
 
-        public int PasswordExpireWarningDayCount
-        {
-            get { return _service.LoadPasswordExpireWarningDayCount(); }
-        }
-    }
+		public int PasswordExpireWarningDayCount => _service.LoadPasswordExpireWarningDayCount();
+	}
 }
