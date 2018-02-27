@@ -95,7 +95,7 @@ namespace Teleopti.Support.Tool.Tool
 
 				if (argument.StartsWith("-BC"))
 				{
-					Mode = new ModeFile("DeployConfigFiles.txt");
+					Mode = new ModeFile("DeployConfigFilesWeb.txt");
 					Command = backupCommand;
 				}
 				if (argument.StartsWith("-RC"))
