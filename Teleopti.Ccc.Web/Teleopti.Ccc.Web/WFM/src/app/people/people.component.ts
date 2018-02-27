@@ -2,7 +2,6 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { Person, Role } from './types';
 
-import { GrantDialog, GrantResponse, RevokeDialog, RevokeResponse, RoleResponse } from './components';
 import { Observable } from 'rxjs/Rx';
 import { PeopleService, RolesService } from './services';
 
