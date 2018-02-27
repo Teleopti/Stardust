@@ -20,5 +20,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 
 		IEnumerable<IAgentBadgeTransaction> CalculateBadges(IEnumerable<IPerson> allPersons, DateOnly date,
 			IBadgeSetting badgeSetting, Guid businessId);
+
+		void ResetAgentBadges();
 	}
 }

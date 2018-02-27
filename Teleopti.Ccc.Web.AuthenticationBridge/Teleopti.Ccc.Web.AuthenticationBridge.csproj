@@ -271,7 +271,9 @@
     <Compile Include="Controllers\Log4NetModule.cs" />
     <Compile Include="Controllers\MachineKeyCookieTransform.cs" />
     <Compile Include="Controllers\MachineKeySessionSecurityTokenHandler.cs" />
-    <Compile Include="ProviderTest.aspx.cs" />
+    <Compile Include="ProviderTest.aspx.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\claimsPolicies.xml" />

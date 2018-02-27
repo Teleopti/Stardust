@@ -23,6 +23,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 		private readonly INow _now;
 		private readonly IExternalPerformanceDataRepository _externalPerformanceDataRepository;
 
+		public void ResetAgentBadges()
+		{
+			_transactionRepository.ResetAgentBadges();
+		}
+
 		public AgentBadgeWithRankCalculator(IBadgeCalculationRepository badgeCalculationRepository,
 			IAgentBadgeWithRankTransactionRepository transactionRepository,
 			IDefinedRaptorApplicationFunctionFactory appFunctionFactory,

@@ -36,6 +36,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 			_pushMessageSender = pushMessageSender;
 		}
 
+		public bool ResetBadge()
+		{
+			try
+			{
+				_badgeWithRankCalculator.ResetAgentBadges();
+				_calculator.ResetAgentBadges();
+			}
+			catch (Exception e)
+			{
+				logger.Error(e);
+				return false;
+			}
+
+			return true;
+		}
+
 		public void Calculate(CalculateBadgeMessage message)
 		{
 			var teamSettings = _teamSettingsRepository.FindAllTeamGamificationSettingsSortedByTeam().Where(t => t.GamificationSetting != null).ToLookup(t => t.GamificationSetting);

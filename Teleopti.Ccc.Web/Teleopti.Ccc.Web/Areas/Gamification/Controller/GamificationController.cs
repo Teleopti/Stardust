@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
 	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage)]
 	public class GamificationController : ApiController
 	{
-		private readonly string CSV_CONTENT_TYPE = "text/csv"; //maybe text/x-csv or application/csv or application/x-csv
+		private readonly string CSV_CONTENT_TYPE = "text/csv";
 		private readonly IGamificationSettingPersister _gamificationSettingPersister;
 		private readonly IGamificationSettingProvider _gamificationSettingProvider;
 		private readonly ISiteViewModelFactory _siteViewModelFactory;

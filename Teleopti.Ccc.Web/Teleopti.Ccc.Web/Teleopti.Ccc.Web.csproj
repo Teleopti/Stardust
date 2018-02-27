@@ -387,6 +387,7 @@
     <Compile Include="Areas\Forecasting\Controllers\ExportForecastInput.cs" />
     <Compile Include="Areas\Forecasting\Controllers\ForecastExportController.cs" />
     <Compile Include="Areas\Forecasting\Core\ForecastExportToExcel.cs" />
+    <Compile Include="Areas\Gamification\Controller\GamificationCalculationController.cs" />
     <Compile Include="Areas\Gamification\Controller\GamificationController.cs" />
     <Compile Include="Areas\Gamification\Core\DataProvider\GamificationSettingPersister.cs" />
     <Compile Include="Areas\Gamification\Core\DataProvider\GamificationSettingProvider.cs" />

@@ -218,6 +218,7 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Areas\Anywhere\BusinessUnitControllerTest.cs" />
+    <Compile Include="Areas\Gamification\GamificationCalculationControllerTest.cs" />
     <Compile Include="Areas\Gamification\GamificationControllerPersistTest.cs" />
     <Compile Include="Areas\Gamification\GamificationControllerReadTest.cs" />
     <Compile Include="Areas\Gamification\GamificationTestAttribute.cs" />
