@@ -13,7 +13,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
@@ -42,22 +41,26 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			InParameter.NotNull(nameof(period), period);
 			InParameter.NotNull(nameof(skill), skill);
 			InParameter.NotNull(nameof(scenario), scenario);
-			
-			var restriction = Restrictions.Conjunction()
-				.Add(Restrictions.Eq("skillDay.Skill", skill))
-				.Add(Restrictions.Eq("skillDay.Scenario", scenario))
-				.Add(Restrictions.Between("skillDay.CurrentDate", period.StartDate, period.EndDate));
-			
-		    DetachedCriteria skilldayWorkloadDay = getSkilldayWorkloadDay(restriction);
 
-            DetachedCriteria skilldayDataPeriod = getSkilldayDataPeriod(restriction);
+			DetachedCriteria skillDayQuery = DetachedCriteria.For<SkillDay>("skillDay")
+				.Add(Restrictions.Eq("skillDay.Scenario", scenario))
+				.Add(Restrictions.Between("skillDay.CurrentDate", period.StartDate, period.EndDate))
+				.Add(Restrictions.Eq("skillDay.Skill", skill));
+
+			DetachedCriteria skillDaySubquery = DetachedCriteria.For<SkillDay>("skillDay")
+				.Add(Restrictions.Eq("skillDay.Scenario", scenario))
+				.Add(Restrictions.Between("skillDay.CurrentDate", period.StartDate, period.EndDate))
+				.Add(Restrictions.Eq("skillDay.Skill", skill))
+				.SetProjection(Projections.Property("skillDay.Id"));
+
+            DetachedCriteria skilldayDataPeriod = getSkilldayDataPeriod(skillDaySubquery);
 
             DetachedCriteria skilldayScenario = getSkilldayScenario(scenario);
                 
-			DetachedCriteria workloadDayOpenHour = getWorkloadDayOpenHour(restriction);
+			DetachedCriteria workloadDayOpenHour = getWorkloadDayOpenHour(skillDaySubquery);
 
 		    var multi = Session.CreateMultiCriteria()
-		        .Add(skilldayWorkloadDay)
+		        .Add(skillDayQuery)
 		        .Add(skilldayDataPeriod)
                 .Add(skilldayScenario)
 		        .Add(workloadDayOpenHour);
@@ -101,23 +104,28 @@ SELECT 0
 	        var defaultReadOnly = Session.DefaultReadOnly;
 	        Session.DefaultReadOnly = true;
             foreach (var skillBatch in skills.Batch(300))
-            {
-                var restriction = Restrictions.Conjunction()
-                .Add(Restrictions.Eq("skillDay.Scenario", scenario))
-                .Add(Restrictions.Between("skillDay.CurrentDate", period.StartDate, period.EndDate))
-                .Add(Restrictions.InG("skillDay.Skill", skillBatch.ToArray()));
-                
-                DetachedCriteria skilldayWorkloadDay = getSkilldayWorkloadDay(restriction);
+			{
+				var skillsInBatch = skillBatch.ToArray();
+				DetachedCriteria skillDayQuery = DetachedCriteria.For<SkillDay>("skillDay")
+					.Add(Restrictions.Eq("skillDay.Scenario", scenario))
+					.Add(Restrictions.Between("skillDay.CurrentDate", period.StartDate, period.EndDate))
+					.Add(Restrictions.InG("skillDay.Skill", skillsInBatch));
 
-				DetachedCriteria skilldayDataPeriod = getSkilldayDataPeriod(restriction);
+				DetachedCriteria skillDaySubquery = DetachedCriteria.For<SkillDay>("skillDay")
+					.Add(Restrictions.Eq("skillDay.Scenario", scenario))
+					.Add(Restrictions.Between("skillDay.CurrentDate", period.StartDate, period.EndDate))
+					.Add(Restrictions.InG("skillDay.Skill", skillsInBatch))
+					.SetProjection(Projections.Property("skillDay.Id"));
+
+				DetachedCriteria skilldayDataPeriod = getSkilldayDataPeriod(skillDaySubquery);
 
 				DetachedCriteria skilldayScenario = getSkilldayScenario(scenario);
 
-				DetachedCriteria workloadDayOpenHour = getWorkloadDayOpenHour(restriction);
+				DetachedCriteria workloadDayOpenHour = getWorkloadDayOpenHour(skillDaySubquery);
 
                 var multi = Session
 					.CreateMultiCriteria()
-                    .Add(skilldayWorkloadDay)
+                    .Add(skillDayQuery)
                     .Add(skilldayDataPeriod)
                     .Add(skilldayScenario)
                     .Add(workloadDayOpenHour);
@@ -140,10 +148,10 @@ SELECT 0
             return skillDays;
         }
 
-	    private static DetachedCriteria getWorkloadDayOpenHour(Junction skilldaySubquery)
+	    private static DetachedCriteria getWorkloadDayOpenHour(DetachedCriteria skilldaySubquery)
 	    {
 	        return DetachedCriteria.For<WorkloadDay>()
-				.Add(Subqueries.PropertyIn("Parent", DetachedCriteria.For<SkillDay>("skillDay").Add(skilldaySubquery).SetProjection(Projections.Id())))
+				.Add(Subqueries.PropertyIn("Parent", skilldaySubquery))
 	            .SetFetchMode("OpenHourList", FetchMode.Join)
 				.SetFetchMode("TaskPeriodList", FetchMode.Join);
 	    }
@@ -154,19 +162,11 @@ SELECT 0
 				.Add(Restrictions.IdEq(scenario.Id));
 		}
 
-	    private static DetachedCriteria getSkilldayDataPeriod(Junction skilldaySubquery)
+	    private static DetachedCriteria getSkilldayDataPeriod(DetachedCriteria skilldaySubquery)
 	    {
-	        return DetachedCriteria.For<SkillDay>("skillDay")
-				.Add(skilldaySubquery)
-	            .SetFetchMode("SkillDataPeriodCollection", FetchMode.Join);
-	    }
-
-	    private static DetachedCriteria getSkilldayWorkloadDay(Junction skilldaySubquery)
-	    {
-	        return DetachedCriteria.For<SkillDay>("skillDay")
-				.Add(skilldaySubquery)
-	            .SetFetchMode("WorkloadDayCollection", FetchMode.Join);
-	    }
+	        return DetachedCriteria.For<SkillDataPeriod>("skillDataPeriod")
+				.Add(Subqueries.PropertyIn("Parent", skilldaySubquery));
+		}
 
 		public ICollection<ISkillDay> GetAllSkillDays(DateOnlyPeriod period, ICollection<ISkillDay> skillDays, ISkill skill, IScenario scenario, Action<IEnumerable<ISkillDay>> optionalAction)
 		{
