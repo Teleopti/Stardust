@@ -32,7 +32,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 	self.layers = ko.observableArray();
 	self.scheduleHeight = ko.observable();
 	self.unreadMessageCount = ko.observable();
-	self.hasAsmPermission = ko.observable(false);
+	self.asmEnabled = ko.observable(false);
 	self.requestsCount = ko.observable(0);
 	self.requestViewModel = ko.observable();
 
@@ -106,7 +106,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 		self.isFullDayAbsence = data.Schedule.IsFullDayAbsence;
 		self.periods = data.Schedule.Periods;
 		self.unreadMessageCount(data.UnReadMessageCount);
-		self.hasAsmPermission(data.AsmPermission);
+		self.asmEnabled(data.AsmEnabled);
 		self.openHourPeriod = data.Schedule.OpenHourPeriod;
 
 		self.hasOvertime(data.Schedule.HasOvertime);

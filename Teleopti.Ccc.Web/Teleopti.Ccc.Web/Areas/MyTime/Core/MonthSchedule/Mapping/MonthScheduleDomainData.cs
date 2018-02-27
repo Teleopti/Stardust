@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping
 		public DateOnly CurrentDate { get; set; }
 		public IEnumerable<MonthScheduleDayDomainData> Days { get; set; }
 
-		public bool AsmPermission { get; set; }
+		public bool AsmEnabled { get; set; }
 	}
 
 	public class MonthScheduleDayDomainData

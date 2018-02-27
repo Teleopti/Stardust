@@ -610,7 +610,7 @@ namespace Teleopti.Ccc.WebTest.Core
 		}
 
 		[Test]
-		public void ShouldMapAsmPermissionToTrueWhenHavingBothLicenseAndPermission()
+		public void ShouldMapAsmEnabledToTrueWhenHavingBothLicenseAndPermission()
 		{
 			var date = new DateOnly(2012, 08, 26);
 			var firstDayOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(date.Date, CultureInfo.CurrentCulture));
@@ -632,11 +632,11 @@ namespace Teleopti.Ccc.WebTest.Core
 
 			var result = target.GetWeekSchedule(firstDayOfWeek);
 
-			result.AsmPermission.Should().Be.True();
+			result.AsmEnabled.Should().Be.True();
 		}
 
 		[Test]
-		public void ShouldMapAsmPermissionToFalseWhenNoAsmLicense()
+		public void ShouldMapAsmEnabledToFalseWhenNoAsmLicense()
 		{
 			var date = new DateOnly(2012, 08, 26);
 			var firstDayOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(date.Date, CultureInfo.CurrentCulture));
@@ -658,11 +658,11 @@ namespace Teleopti.Ccc.WebTest.Core
 
 			var result = target.GetWeekSchedule(firstDayOfWeek);
 
-			result.AsmPermission.Should().Be.False();
+			result.AsmEnabled.Should().Be.False();
 		}
 
 		[Test]
-		public void ShouldMapAsmPermissionToFalseWhenNoAsmPermission()
+		public void ShouldMapAsmEnabledToFalseWhenNoAsmPermission()
 		{
 			var date = new DateOnly(2012, 08, 26);
 			var firstDayOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(date.Date, CultureInfo.CurrentCulture));
@@ -684,7 +684,7 @@ namespace Teleopti.Ccc.WebTest.Core
 
 			var result = target.GetWeekSchedule(firstDayOfWeek);
 
-			result.AsmPermission.Should().Be.False();
+			result.AsmEnabled.Should().Be.False();
 		}
 
 		[Test]
@@ -1346,7 +1346,7 @@ namespace Teleopti.Ccc.WebTest.Core
 		}
 
 		[Test]
-		public void ShouldMapAsmPermissionOnGetDayScheduleToTrueWhenHavingBothLicenseAndPermission()
+		public void ShouldMapAsmEnabledOnGetDayScheduleToTrueWhenHavingBothLicenseAndPermission()
 		{
 			var date = new DateOnly(2012, 08, 26);
 			var period = new DateOnlyPeriod(date.AddDays(-1), date);
@@ -1368,11 +1368,11 @@ namespace Teleopti.Ccc.WebTest.Core
 
 			var result = target.GetDaySchedule(date);
 
-			result.AsmPermission.Should().Be.True();
+			result.AsmEnabled.Should().Be.True();
 		}
 
 		[Test]
-		public void ShouldMapAsmPermissionOnGetDayScheduleToFalseWhenNoAsmLicense()
+		public void ShouldMapAsmEnabledOnGetDayScheduleToFalseWhenNoAsmLicense()
 		{
 			var date = new DateOnly(2012, 08, 26);
 			var period = new DateOnlyPeriod(date.AddDays(-1), date);
@@ -1394,11 +1394,11 @@ namespace Teleopti.Ccc.WebTest.Core
 
 			var result = target.GetDaySchedule(date);
 
-			result.AsmPermission.Should().Be.False();
+			result.AsmEnabled.Should().Be.False();
 		}
 
 		[Test]
-		public void ShouldMapAsmPermissionOnGetDayScheduleToFalseWhenNoAsmPermission()
+		public void ShouldMapAsmEnabledOnGetDayScheduleToFalseWhenNoAsmPermission()
 		{
 			var date = new DateOnly(2012, 08, 26);
 			var period = new DateOnlyPeriod(date.AddDays(-1), date);
@@ -1420,7 +1420,7 @@ namespace Teleopti.Ccc.WebTest.Core
 
 			var result = target.GetDaySchedule(date);
 
-			result.AsmPermission.Should().Be.False();
+			result.AsmEnabled.Should().Be.False();
 		}
 
 		[Test]

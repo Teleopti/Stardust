@@ -1025,7 +1025,7 @@ $(document).ready(function() {
 		equal(viewModel.showProbabilityOptionsToggleIcon(), false);
 	});
 
-	test("should show message icon when has asmPermission", function () {
+	test("should show message icon when asmEnabled", function () {
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
 			return false;
@@ -1044,10 +1044,10 @@ $(document).ready(function() {
 				Header: { Title: null },
 				HasNotScheduled: false
 			},
-			AsmPermission: true
+			AsmEnabled: true
 		};
 		viewModel.readData(rawData);
 
-		equal(viewModel.hasAsmPermission(), true);
+		equal(viewModel.asmEnabled(), true);
 	});
 });

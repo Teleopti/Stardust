@@ -100,7 +100,7 @@
 						<i class="glyphicon glyphicon-home"></i>
 					</a>
 				</li>
-				<li class="mobile-message" data-bind="click: navigateToMessages, visible: hasAsmPermission()">
+				<li class="mobile-message" data-bind="click: navigateToMessages, visible: asmEnabled()">
 					<a>
 						<i class="glyphicon glyphicon-envelope"></i>
 						<span id="MobileDayView-message" class="badge" data-bind="visible: unreadMessageCount() > 0, text: unreadMessageCount">

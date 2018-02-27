@@ -25,7 +25,7 @@ Teleopti.MyTimeWeb.Schedule.MobileMonthViewModel = function(parent) {
 	self.weekDayNames = ko.observableArray();
 
 	self.unreadMessageCount = ko.observable();
-	self.hasAsmPermission = ko.observable(false);
+	self.asmEnabled = ko.observable(false);
 	self.selectedDate = ko.observable(Teleopti.MyTimeWeb.Portal.ParseHash().dateHash ? moment(Teleopti.MyTimeWeb.Portal.ParseHash().dateHash) : moment());
 	self.getSelectedDate = ko.computed(self.selectedDate).extend({throttle: 50});
 
@@ -56,7 +56,7 @@ Teleopti.MyTimeWeb.Schedule.MobileMonthViewModel = function(parent) {
 		self.weekDayNames(data.DayHeaders);
 		self.weekViewModels([]);
 		self.unreadMessageCount(data.UnReadMessageCount);
-		self.hasAsmPermission(data.AsmPermission);
+		self.asmEnabled(data.AsmEnabled);
 		var newWeek;
 		for (var i = 0; i < data.ScheduleDays.length; i++) {
 			if (i % 7 === 0) {

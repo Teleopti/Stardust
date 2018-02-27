@@ -297,10 +297,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		public void ShouldMapAsmPermissionsForMobileMonthView()
+		public void ShouldMapAsmEnabledForMobileMonthView()
 		{
 			var result = Target.FetchMobileMonthData(null);
-			result.AsmPermission.Should().Be.True();
+			result.AsmEnabled.Should().Be.True();
 		}
 	}
 }

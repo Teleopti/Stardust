@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.WebTest.Core
 		}
 
 		[Test]
-		public void ShouldMapAsmPermissionToTrueWhenHavingBothLicenseAndPermission()
+		public void ShouldMapAsmEnabledToTrueWhenHavingBothLicenseAndPermission()
 		{
 			var today = DateOnly.Today;
 			var licenseActivator = LicenseProvider.GetLicenseActivator(new AsmFakeLicenseService(true));
@@ -67,11 +67,11 @@ namespace Teleopti.Ccc.WebTest.Core
 
 			var result = Target.Get(today, true);
 
-			result.AsmPermission.Should().Be.True();
+			result.AsmEnabled.Should().Be.True();
 		}
 
 		[Test]
-		public void ShouldMapAsmPermissionToFalseWhenNoAsmLicense()
+		public void ShouldMapAsmEnabledToFalseWhenNoAsmLicense()
 		{
 			var today = DateOnly.Today;
 			var licenseActivator = LicenseProvider.GetLicenseActivator(new AsmFakeLicenseService(false));
@@ -79,11 +79,11 @@ namespace Teleopti.Ccc.WebTest.Core
 
 			var result = Target.Get(today, true);
 
-			result.AsmPermission.Should().Be.False();
+			result.AsmEnabled.Should().Be.False();
 		}
 
 		[Test]
-		public void ShouldMapAsmPermissionToFalseWhenNoAsmPermission()
+		public void ShouldMapAsmEnabledToFalseWhenNoAsmPermission()
 		{
 			Authorization.AddToBlackList(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger);
 			var today = DateOnly.Today;
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.WebTest.Core
 
 			var result = Target.Get(today, true);
 
-			result.AsmPermission.Should().Be.False();
+			result.AsmEnabled.Should().Be.False();
 		}
 	}
 }

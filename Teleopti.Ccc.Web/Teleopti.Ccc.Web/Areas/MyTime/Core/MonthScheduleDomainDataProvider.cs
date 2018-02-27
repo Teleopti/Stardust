@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 			{
 				CurrentDate = date,
 				Days = days,
-				AsmPermission = asmPermission && isAsmLicenseAvailable()
+				AsmEnabled = asmPermission && isAsmLicenseAvailable()
 			};
 		}
 		private bool isAsmLicenseAvailable()
