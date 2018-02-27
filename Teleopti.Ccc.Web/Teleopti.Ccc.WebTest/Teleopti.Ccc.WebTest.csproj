@@ -296,6 +296,7 @@
     <Compile Include="Core\Common\DataProvider\MultiplicatorDefinitionSetProviderTest.cs" />
     <Compile Include="Core\Gamification\GamificationSettingProviderTest.cs" />
     <Compile Include="Core\Gamification\GamificationSettingPersisterTest.cs" />
+    <Compile Include="Core\MonthScheduleDomainDataProviderTest.cs" />
     <Compile Include="Core\Requests\DataProvider\OvertimeRequestPersisterTest.cs" />
     <Compile Include="Core\Requests\DataProvider\AbsenceRequestPersisterTest.cs" />
     <Compile Include="Core\Requests\DataProvider\FakeLinkProvider.cs" />
@@ -414,7 +415,6 @@
     <Compile Include="Core\Common\DataProvider\FakeScheduleResourceProvider.cs" />
     <Compile Include="Core\Common\DataProvider\ShiftCategoryProviderTest.cs" />
     <Compile Include="Core\IanaTimeZoneProviderTest.cs" />
-    <Compile Include="Core\MonthScheduleDomainDataProviderTest.cs" />
     <Compile Include="Core\NoCacheFilterTests.cs" />
     <Compile Include="Core\PersonNameProviderTest.cs" />
     <Compile Include="Core\Portal\DataProvider\ReportsNavigationProviderTest.cs" />

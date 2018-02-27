@@ -168,6 +168,7 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AnalyticsDatabase.cs" />
+    <Compile Include="AsmFakeLicenseService.cs" />
     <Compile Include="BaseLineData.cs" />
     <Compile Include="BitArrayHelper.cs" />
     <Compile Include="ConcurrencyRunner.cs" />

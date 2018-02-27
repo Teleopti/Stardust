@@ -1,37 +1,37 @@
 using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Infrastructure.Licensing;
+using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers;
 using Teleopti.Ccc.WebTest.Core.Common.DataProvider;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core
 {
+	[FullPermissions]
+	[DomainTest]
 	[TestFixture]
-	public class MonthScheduleDomainDataProviderTest
+	public class MonthScheduleDomainDataProviderTest : ISetup
 	{
-		private FakeScheduleProvider scheduleProvider;
-		private IMonthScheduleDomainDataProvider target;
-		private ILicenseAvailability licenseAvailability;
-		private IPermissionProvider permissionProvider;
+		public FakeScheduleProvider ScheduleProvider;
+		public IMonthScheduleDomainDataProvider Target;
+		public ICurrentDataSource CurrentDataSource;
+		public FullPermission Authorization;
 
-		[SetUp]
-		public void Setup()
+		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			scheduleProvider = new FakeScheduleProvider();
-			permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			licenseAvailability = MockRepository.GenerateMock<ILicenseAvailability>();
-
-			target = new MonthScheduleDomainDataProvider(scheduleProvider,
-				MockRepository.GenerateMock<ISeatOccupancyProvider>(),
-				permissionProvider,
-				licenseAvailability);
+			system.UseTestDouble<MonthScheduleDomainDataProvider>().For<IMonthScheduleDomainDataProvider>();
+			system.UseTestDouble<FakeScheduleProvider>().For<IScheduleProvider>();
+			system.UseTestDouble<SeatOccupancyProvider>().For<ISeatOccupancyProvider>();
 		}
 
 		[Test]
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.WebTest.Core
 		{
 			var today = DateOnly.Today;
 
-			var result = target.Get(today, true);
+			var result = Target.Get(today, true);
 
 			result.CurrentDate.Should().Be.EqualTo(today);
 		}
@@ -50,9 +50,9 @@ namespace Teleopti.Ccc.WebTest.Core
 		public void ShouldMapDays()
 		{
 			var date = new DateOnly(2014, 1, 11);
-			scheduleProvider.AddScheduleDay(ScheduleDayFactory.Create(new DateOnly(2013, 12, 30)));
+			ScheduleProvider.AddScheduleDay(ScheduleDayFactory.Create(new DateOnly(2013, 12, 30)));
 
-			var result = target.Get(date, true);
+			var result = Target.Get(date, true);
 
 			result.Days.Count().Should().Be(1);
 			result.Days.ElementAt(0).ScheduleDay.DateOnlyAsPeriod.DateOnly.Should().Be(new DateOnly(2013, 12, 30));
@@ -62,10 +62,10 @@ namespace Teleopti.Ccc.WebTest.Core
 		public void ShouldMapAsmPermissionToTrueWhenHavingBothLicenseAndPermission()
 		{
 			var today = DateOnly.Today;
-			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger)).Return(true);
-			licenseAvailability.Stub(x => x.IsLicenseEnabled(DefinedLicenseOptionPaths.TeleoptiCccAgentScheduleMessenger)).Return(true);
+			var licenseActivator = LicenseProvider.GetLicenseActivator(new AsmFakeLicenseService(true));
+			DefinedLicenseDataFactory.SetLicenseActivator(CurrentDataSource.CurrentName(), licenseActivator);
 
-			var result = target.Get(today, true);
+			var result = Target.Get(today, true);
 
 			result.AsmPermission.Should().Be.True();
 		}
@@ -74,10 +74,10 @@ namespace Teleopti.Ccc.WebTest.Core
 		public void ShouldMapAsmPermissionToFalseWhenNoAsmLicense()
 		{
 			var today = DateOnly.Today;
-			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger)).Return(true);
-			licenseAvailability.Stub(x => x.IsLicenseEnabled(DefinedLicenseOptionPaths.TeleoptiCccAgentScheduleMessenger)).Return(false);
+			var licenseActivator = LicenseProvider.GetLicenseActivator(new AsmFakeLicenseService(false));
+			DefinedLicenseDataFactory.SetLicenseActivator(CurrentDataSource.CurrentName(), licenseActivator);
 
-			var result = target.Get(today, true);
+			var result = Target.Get(today, true);
 
 			result.AsmPermission.Should().Be.False();
 		}
@@ -85,11 +85,12 @@ namespace Teleopti.Ccc.WebTest.Core
 		[Test]
 		public void ShouldMapAsmPermissionToFalseWhenNoAsmPermission()
 		{
+			Authorization.AddToBlackList(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger);
 			var today = DateOnly.Today;
-			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger)).Return(false);
-			licenseAvailability.Stub(x => x.IsLicenseEnabled(DefinedLicenseOptionPaths.TeleoptiCccAgentScheduleMessenger)).Return(true);
+			var licenseActivator = LicenseProvider.GetLicenseActivator(new AsmFakeLicenseService(true));
+			DefinedLicenseDataFactory.SetLicenseActivator(CurrentDataSource.CurrentName(), licenseActivator);
 
-			var result = target.Get(today, true);
+			var result = Target.Get(today, true);
 
 			result.AsmPermission.Should().Be.False();
 		}
