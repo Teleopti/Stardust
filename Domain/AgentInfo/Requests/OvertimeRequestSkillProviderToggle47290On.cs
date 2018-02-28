@@ -23,11 +23,35 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			_now = now;
 		}
 
+		public IEnumerable<ISkill> GetAvailableSkills(IPerson person, DateTimePeriod requestPeriod)
+		{
+			var overtimeRequestOpenPeriod = person.WorkflowControlSet.GetMergedOvertimeRequestOpenPeriod(
+				requestPeriod,
+				new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), person.PermissionInformation.DefaultTimeZone())),
+				person.PermissionInformation);
+			var period = requestPeriod.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone());
+			return _primaryPersonSkillFilter.Filter(getSupportedPersonSkills(person, period, overtimeRequestOpenPeriod))
+				.Select(s => s.Skill).ToList();
+		}
+
 		public IEnumerable<ISkill> GetAvailableSkillsBySkillType(IPerson person, DateTimePeriod requestPeriod)
 		{
 			var period = requestPeriod.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone());
 			return _primaryPersonSkillFilter.Filter(getSupportedPersonSkillsInOpenPeriods(person, period))
 				.Select(s => s.Skill).ToList();
+		}
+
+		private IEnumerable<IPersonSkill> getSupportedPersonSkills(IPerson person, DateOnlyPeriod period,
+			IOvertimeRequestOpenPeriod overtimeRequestOpenPeriod)
+		{
+			var personPeriod = person.PersonPeriods(period).ToArray();
+			if (!personPeriod.Any())
+				return new IPersonSkill[] { };
+
+			var personSkills = personPeriod.SelectMany(p => _personalSkills.PersonSkills(p))
+				.Where(p => isSkillTypeMatchedInOpenPeriod(p, overtimeRequestOpenPeriod));
+
+			return !personSkills.Any() ? new IPersonSkill[] { } : personSkills.Distinct();
 		}
 
 		private IEnumerable<IPersonSkill> getSupportedPersonSkillsInOpenPeriods(IPerson person, DateOnlyPeriod period)
@@ -37,7 +61,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 				return new IPersonSkill[] { };
 
 			var overtimeRequestOpenPeriods = person.WorkflowControlSet.OvertimeRequestOpenPeriods.Where(o =>
-				!isDeniedPeriod(o) && isPeriodMatched(o, person, period));
+				o.AutoGrantType != OvertimeRequestAutoGrantType.Deny);
 
 			var phoneSkillType = _skillTypeRepository.LoadAll()
 				.FirstOrDefault(s => s.Description.Name.Equals(SkillTypeIdentifier.Phone));
@@ -48,23 +72,18 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			return !personSkills.Any() ? new IPersonSkill[] { } : personSkills.Distinct();
 		}
 
+		private bool isSkillTypeMatchedInOpenPeriod(IPersonSkill personSkill, IOvertimeRequestOpenPeriod overtimeRequestOpenPeriod)
+		{
+			var skillTypeInOvertimeRequestOpenPeriod = overtimeRequestOpenPeriod.SkillType ??
+													   _skillTypeRepository.LoadAll().First(s => s.Description.Name.Equals(SkillTypeIdentifier.Phone));
+			return personSkill.Skill.SkillType.Description.Name.Equals(skillTypeInOvertimeRequestOpenPeriod.Description.Name);
+		}
+
 		private bool isSkillTypeMatchedInOpenPeriods(IPersonSkill personSkill,
 			IEnumerable<IOvertimeRequestOpenPeriod> overtimeRequestOpenPeriods, ISkillType defaultSkillType)
 		{
 			return overtimeRequestOpenPeriods.Any(o =>
 				(o.SkillType ?? defaultSkillType).Description.Name.Equals(personSkill.Skill.SkillType.Description.Name));
-		}
-
-		private bool isDeniedPeriod(IOvertimeRequestOpenPeriod overtimeRequestOpenPeriod)
-		{
-			return overtimeRequestOpenPeriod.AutoGrantType == OvertimeRequestAutoGrantType.Deny;
-		}
-
-		private bool isPeriodMatched(IOvertimeRequestOpenPeriod overtimeRequestOpenPeriod, IPerson person,
-			DateOnlyPeriod requestPeriod)
-		{
-			return overtimeRequestOpenPeriod.GetPeriod(new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(),
-				person.PermissionInformation.DefaultTimeZone()))).Contains(requestPeriod);
 		}
 	}
 }

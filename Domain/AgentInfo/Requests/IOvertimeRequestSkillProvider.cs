@@ -6,6 +6,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 {
 	public interface IOvertimeRequestSkillProvider
 	{
+		IEnumerable<ISkill> GetAvailableSkills(IPerson person, DateTimePeriod requestPeriod);
+
 		IEnumerable<ISkill> GetAvailableSkillsBySkillType(IPerson person, DateTimePeriod requestPeriod);
 	}
 }
