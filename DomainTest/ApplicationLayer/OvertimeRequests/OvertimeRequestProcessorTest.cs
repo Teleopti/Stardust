@@ -94,6 +94,31 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
+		public void ShouldApproveRequestInLessThan15Minutes()
+		{
+			setupPerson(8, 21);
+			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 8d);
+
+			var personRequest = createOvertimeRequestInMinutes(18, 10);
+			getTarget().Process(personRequest, true);
+
+			personRequest.IsApproved.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldApproveRequestIn31Minutes()
+		{
+			setupPerson(8, 21);
+			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 8d);
+
+			var personRequest = createOvertimeRequestInMinutes(18, 31);
+			getTarget().Process(personRequest, true);
+
+			personRequest.IsApproved.Should().Be.True();
+		}
+
+
+		[Test]
 		public void ShouldDenyWhenThereIsNoUnderStaffingSkillWithShrinkage()
 		{
 			setupPerson(8, 21);
@@ -227,6 +252,21 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 15d);
 
 			var personRequest = createOvertimeRequest(18, 1);
+			getTarget().Process(personRequest, true);
+
+			personRequest.IsApproved.Should().Be.False();
+			personRequest.IsDenied.Should().Be.True();
+			personRequest.DenyReason.Should()
+				.Be.EqualTo(Resources.NoUnderStaffingSkill);
+		}
+
+		[Test]
+		public void ShouldDenyWhenThereIsNoUnderStaffingSkillForRequestIn16Minutes()
+		{
+			setupPerson(8, 21);
+			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 15d);
+
+			var personRequest = createOvertimeRequestInMinutes(18, 16);
 			getTarget().Process(personRequest, true);
 
 			personRequest.IsApproved.Should().Be.False();

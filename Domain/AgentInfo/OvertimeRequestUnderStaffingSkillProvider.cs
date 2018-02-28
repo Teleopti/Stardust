@@ -22,6 +22,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 		public IList<ISkill> GetSeriousUnderstaffingSkills(DateTimePeriod dateTimePeriod, IEnumerable<ISkill> skills, TimeZoneInfo timeZoneInfo)
 		{
+			var resolution = skills.Min(s => s.DefaultResolution);
+			dateTimePeriod = ceilingToNextInterval(dateTimePeriod, resolution);
 			var skillStaffingDatas = _skillStaffingDataLoader.Load(skills.ToList(), dateTimePeriod.ToDateOnlyPeriod(timeZoneInfo), true);
 			skillStaffingDatas = skillStaffingDatas.Where(x =>
 				x.Time >= dateTimePeriod.StartDateTimeLocal(timeZoneInfo) &&
@@ -64,5 +66,14 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			return new IntervalHasSeriousUnderstaffing(skill).IsSatisfiedBy(skillStaffingData.SkillStaffingInterval);
 		}
 
+		private DateTimePeriod ceilingToNextInterval(DateTimePeriod dateTimePeriod, int resolution)
+		{
+			var leftMinutes = dateTimePeriod.EndDateTime.Minute % 15;
+			if (leftMinutes == 0)
+				return dateTimePeriod;
+
+			var minutesToNextInterval = resolution - leftMinutes;
+			return dateTimePeriod.ChangeEndTime(TimeSpan.FromMinutes(minutesToNextInterval));
+		}
 	}
 }
