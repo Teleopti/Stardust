@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.Domain.Rta.ReadModelUpdaters
 		IHandleEvent<TenantDayTickEvent>,
 		IRunOnHangfire
 	{
-		private readonly IHistoricalAdherenceReadModelPersister _historicalAdherencePersister;
 		private readonly IHistoricalChangeReadModelPersister _historicalChangePersister;
 		private readonly IApprovedPeriodsPersister _approvedPeriodsPersister;
 		private readonly INow _now;
@@ -35,13 +34,11 @@ namespace Teleopti.Ccc.Domain.Rta.ReadModelUpdaters
 		}
 
 		public HistoricalAdherenceMaintainer(
-			IHistoricalAdherenceReadModelPersister historicalAdherencePersister,
 			IHistoricalChangeReadModelPersister historicalChangePersister,
 			IApprovedPeriodsPersister approvedPeriodsPersister,
 			INow now,
 			IConfigReader config)
 		{
-			_historicalAdherencePersister = historicalAdherencePersister;
 			_historicalChangePersister = historicalChangePersister;
 			_approvedPeriodsPersister = approvedPeriodsPersister;
 			_now = now;
@@ -51,7 +48,6 @@ namespace Teleopti.Ccc.Domain.Rta.ReadModelUpdaters
 		public void Handle(TenantDayTickEvent tenantDayTickEvent)
 		{
 			var removeUntil = _now.UtcDateTime().Date.AddDays(_keepDays * -1);
-			purgeHistoricalAdherence(removeUntil);
 			purgeHistoricalChange(removeUntil);
 			purgeApprovedPeriods(removeUntil);
 		}
@@ -62,12 +58,6 @@ namespace Teleopti.Ccc.Domain.Rta.ReadModelUpdaters
 			_historicalChangePersister.Remove(removeUntil);
 		}
 
-		[ReadModelUnitOfWork]
-		protected virtual void purgeHistoricalAdherence(DateTime removeUntil)
-		{
-			_historicalAdherencePersister.Remove(removeUntil);
-		}
-		
 		[UnitOfWork]
 		protected virtual void purgeApprovedPeriods(DateTime removeUntil)
 		{
@@ -80,23 +70,19 @@ namespace Teleopti.Ccc.Domain.Rta.ReadModelUpdaters
 		IHandleEvent<TenantDayTickEvent>,
 		IRunOnHangfire
 	{
-		private readonly IHistoricalAdherenceReadModelPersister _historicalAdherencePersister;
 		private readonly IHistoricalChangeReadModelPersister _historicalChangePersister;
 		private readonly INow _now;
 
 		public HistoricalAdherenceMaintainerLegacy(
-			IHistoricalAdherenceReadModelPersister historicalAdherencePersister,
 			IHistoricalChangeReadModelPersister historicalChangePersister,
 			INow now)
 		{
-			_historicalAdherencePersister = historicalAdherencePersister;
 			_historicalChangePersister = historicalChangePersister;
 			_now = now;
 		}
 
 		public void Handle(TenantDayTickEvent tenantDayTickEvent)
 		{
-			purgeHistoricalAdherence();
 			purgeHistoricalChange();
 		}
 
@@ -104,12 +90,6 @@ namespace Teleopti.Ccc.Domain.Rta.ReadModelUpdaters
 		protected virtual void purgeHistoricalChange()
 		{
 			_historicalChangePersister.Remove(_now.UtcDateTime().Date.AddDays(-5));
-		}
-
-		[ReadModelUnitOfWork]
-		protected virtual void purgeHistoricalAdherence()
-		{
-			_historicalAdherencePersister.Remove(_now.UtcDateTime().Date.AddDays(-5));
 		}
 	}
 }

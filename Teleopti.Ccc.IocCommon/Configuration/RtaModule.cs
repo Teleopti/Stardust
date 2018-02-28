@@ -85,8 +85,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ScheduleLoader>().SingleInstance();
 			builder.RegisterType<AdherencePercentageCalculator>().SingleInstance();
 
-			builder.RegisterType<HistoricalAdherenceReadModelReader>().As<IHistoricalAdherenceReadModelReader>().SingleInstance();
-			builder.RegisterType<HistoricalAdherenceReadModelPersister>().As<IHistoricalAdherenceReadModelPersister>().SingleInstance();
 			builder.RegisterType<HistoricalChangeReadModelReader>().As<IHistoricalChangeReadModelReader>().SingleInstance();
 			builder.RegisterType<HistoricalChangeReadModelPersister>().As<IHistoricalChangeReadModelPersister>().SingleInstance();
 			builder.RegisterType<ApprovedPeriodsReader>().As<IApprovedPeriodsReader>().SingleInstance();

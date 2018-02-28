@@ -368,7 +368,6 @@
     <Compile Include="Rta\ReadModels\AgentState\AgentStateReadModelPersisterTest.cs" />
     <Compile Include="Rta\ReadModels\Schedules\CurrentScheduleReadModelPersisterTest.cs" />
     <Compile Include="Rta\ReadModels\ExternalLogon\ExternalLogonReadModelPersisterTest.cs" />
-    <Compile Include="Rta\ReadModels\HistoricalAdherence\HistoricalAdherenceReadModelPersisterTest.cs" />
     <Compile Include="Rta\ReadModels\HistoricalAdherence\HistoricalChangeReadModelPersisterTest.cs" />
     <Compile Include="Rta\ReadModels\Mappings\MappingReadModelPersisterTest.cs" />
     <Compile Include="Rta\ReadModels\Mappings\MappingReadModelUpdaterTest.cs" />

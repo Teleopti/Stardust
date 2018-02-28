@@ -11,7 +11,6 @@ namespace Teleopti.Ccc.Domain.Rta.AgentAdherenceDay
 	{
 		private readonly INow _now;
 		private readonly IHistoricalChangeReadModelReader _changes;
-		private readonly IHistoricalAdherenceReadModelReader _adherences;
 		private readonly IApprovedPeriodsReader _approvedPeriods;
 		private readonly ScheduleLoader _scheduleLoader;
 		private readonly IPersonRepository _persons;
@@ -19,7 +18,6 @@ namespace Teleopti.Ccc.Domain.Rta.AgentAdherenceDay
 		public AgentAdherenceDayLoader(
 			INow now,
 			IHistoricalChangeReadModelReader changes,
-			IHistoricalAdherenceReadModelReader adherences,
 			IApprovedPeriodsReader approvedPeriods,
 			ScheduleLoader scheduleLoader,
 			IPersonRepository persons
@@ -27,7 +25,6 @@ namespace Teleopti.Ccc.Domain.Rta.AgentAdherenceDay
 		{
 			_now = now;
 			_changes = changes;
-			_adherences = adherences;
 			_approvedPeriods = approvedPeriods;
 			_scheduleLoader = scheduleLoader;
 			_persons = persons;

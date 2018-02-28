@@ -463,8 +463,6 @@
     <Compile Include="Rta\ReadModelUpdaters\ExternalLogonReadModelUpdater.cs" />
     <Compile Include="Rta\ReadModelUpdaters\HistoricalAdherenceMaintainer.cs" />
     <Compile Include="Rta\ReadModelUpdaters\HistoricalAdherenceUpdater.cs" />
-    <Compile Include="Rta\ReadModelUpdaters\IHistoricalAdherenceReadModelPersister.cs" />
-    <Compile Include="Rta\ReadModelUpdaters\IHistoricalAdherenceReadModelReader.cs" />
     <Compile Include="Rta\ReadModelUpdaters\IMappingReadModelPersister.cs" />
     <Compile Include="Rta\ReadModelUpdaters\IOrganizationReader.cs" />
     <Compile Include="Rta\ReadModelUpdaters\ITeamCardReader.cs" />

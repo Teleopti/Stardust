@@ -295,7 +295,6 @@
     <Compile Include="FakeRepositories\Rta\FakeCurrentScheduleReadModelPersister.cs" />
     <Compile Include="FakeRepositories\Rta\FakeDataSourceReader.cs" />
     <Compile Include="FakeRepositories\Rta\FakeExternalLogonReadModelPersister.cs" />
-    <Compile Include="FakeRepositories\Rta\FakeHistoricalAdherenceReadModelPersister.cs" />
     <Compile Include="FakeRepositories\Rta\FakeKeyValueStorePersister.cs" />
     <Compile Include="FakeRepositories\Rta\FakeNoRtaLicenseActivator.cs" />
     <Compile Include="FakeRepositories\Rta\FakeMappingReadModelPersister.cs" />

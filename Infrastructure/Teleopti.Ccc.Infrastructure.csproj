@@ -474,8 +474,6 @@
     <Compile Include="Rta\DeadLockVictimThrower.cs" />
     <Compile Include="Rta\ExternalLogonReadModelPersister.cs" />
     <Compile Include="Rta\HardcodedSkillGroupingPageId.cs" />
-    <Compile Include="Rta\HistoricalAdherenceReadModelPersister.cs" />
-    <Compile Include="Rta\HistoricalAdherenceReadModelReader.cs" />
     <Compile Include="Rta\HistoricalChangeReadModelPersister.cs" />
     <Compile Include="Rta\HistoricalChangeReadModelReader.cs" />
     <Compile Include="Rta\MappingReadModelReader.cs" />
