@@ -6,10 +6,11 @@ import { AppComponent } from './app.component';
 import { PeopleModule } from './people/people.module';
 import { MAT_RIPPLE_GLOBAL_OPTIONS } from '@angular/material';
 import { globalRippleConfig } from '../themes/material-config';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
 	declarations: [AppComponent],
-	imports: [BrowserModule, UpgradeModule, PeopleModule],
+	imports: [BrowserModule, UpgradeModule, PeopleModule, HttpClientModule],
 	providers: [
 		{
 			provide: MAT_RIPPLE_GLOBAL_OPTIONS,
@@ -19,7 +20,7 @@ import { globalRippleConfig } from '../themes/material-config';
 	entryComponents: [AppComponent]
 })
 export class AppModule {
-	constructor(private upgrade: UpgradeModule) {}
+	constructor(private upgrade: UpgradeModule) { }
 	ngDoBootstrap() {
 		this.upgrade.bootstrap(document.body, ['wfm'], { strictDi: false });
 	}

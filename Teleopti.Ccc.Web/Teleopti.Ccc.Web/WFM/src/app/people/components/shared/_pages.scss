@@ -1,9 +1,11 @@
+@import '~teleopti-styleguide/styleguide/sass/classicvariables';
+
 .role-page {
 	height: 100%;
 
 	.blue-box {
 		height: 35px;
-		background-color: #0099ff;
+		background-color: $primary;
 		color: white;
 
 		h2 {

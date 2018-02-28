@@ -1,13 +1,13 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Person, Role } from '../../../types';
+import { WorkspaceService } from '../../../services';
 
 @Component({
 	template: '<div>Override me</div>'
 })
 export class RolePage {
-	constructor() {}
+	constructor(public workspaceService: WorkspaceService) { }
 
-	@Input() people: Array<Person> = [];
 	@Input() roles: Array<Role> = [];
 	@Output() onRolesChanged = new EventEmitter<Array<Role>>();
 	selectedRoles = [];
@@ -18,7 +18,7 @@ export class RolePage {
 
 	getRoleIdsOfPeople() {
 		let uniqueIds = new Set();
-		this.people.forEach(({ Roles }) => {
+		this.workspaceService.getSelectedPeople().forEach(({ Roles }) => {
 			Roles.forEach(role => {
 				uniqueIds.add(role.Id);
 			});
@@ -49,7 +49,7 @@ export class RolePage {
 
 	isRoleOnAll(roleId: string): boolean {
 		return (
-			this.people.filter(({ Roles }) => Roles.map(role => role.Id).includes(roleId)).length === this.people.length
+			this.workspaceService.getSelectedPeople().filter(({ Roles }) => Roles.map(role => role.Id).includes(roleId)).length === this.workspaceService.getSelectedPeople().length
 		);
 	}
 
@@ -62,10 +62,10 @@ export class RolePage {
 	}
 
 	isMultipleSelected(): boolean {
-		return this.people.length > 1;
+		return this.workspaceService.getSelectedPeople().length > 1;
 	}
 
 	isSingleSelected(): boolean {
-		return this.people.length === 1;
+		return this.workspaceService.getSelectedPeople().length === 1;
 	}
 }

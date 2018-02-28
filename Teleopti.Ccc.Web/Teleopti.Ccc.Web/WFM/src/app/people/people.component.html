@@ -5,8 +5,8 @@
 	</div>
 </div>
 <div class="con-row">
-	<app-grant *ngIf="displayGrantView" class="con-flex" [people]="getSelectedPeople()" [roles]="roles" (onRolesChanged)="handleGranted($event)"></app-grant>
-	<app-revoke *ngIf="displayRevokeView" class="con-flex" [people]="getSelectedPeople()" [roles]="roles" (onRolesChanged)="handleRevoked($event)"></app-revoke>
+	<app-grant *ngIf="displayGrantView" class="con-flex" [roles]="roles" (onRolesChanged)="handleGranted($event)"></app-grant>
+	<app-revoke *ngIf="displayRevokeView" class="con-flex" [roles]="roles" (onRolesChanged)="handleRevoked($event)"></app-revoke>
 	<div class="con-flex" *ngIf="!displayGrantView && !displayRevokeView">
 		<div class="panel material-depth-1">
 			<div class="sub-header">
@@ -19,26 +19,24 @@
 						</label>
 					</div>
 					<div class="con-flex x3">
-						<!-- <button class="wfm-btn wfm-btn-primary mdi mdi-plus" [disabled]="!isPeopleSelected()" [ngClass]="{'wfm-btn-invis-disabled': !isPeopleSelected()}"
-						 (click)="openGrantDialog()">Grant Role</button>
-						<button class="wfm-btn wfm-btn-primary mdi mdi-close" [disabled]="!isPeopleSelected()" [ngClass]="{'wfm-btn-invis-disabled': !isPeopleSelected()}"
-						 (click)="openRevokeDialog()">Revoke Role</button> -->
-						<button class="wfm-btn wfm-btn-primary mdi mdi-plus" [disabled]="!isPeopleSelected()" [ngClass]="{'wfm-btn-invis-disabled': !isPeopleSelected()}"
-						 (click)="toggleGrantView()">Grant page</button>
-						<button class="wfm-btn wfm-btn-primary mdi mdi-close" [disabled]="!isPeopleSelected()" [ngClass]="{'wfm-btn-invis-disabled': !isPeopleSelected()}"
-						 (click)="toggleRevokeView()">Revoke page</button>
+						<button class="wfm-btn wfm-btn-primary mdi mdi-plus" data-test-grant-button [disabled]="!workspaceService.isAnySelected()"
+						 [ngClass]="{'wfm-btn-invis-disabled': !workspaceService.isAnySelected()}" (click)="toggleGrantView()">Grant page</button>
+						<button class="wfm-btn wfm-btn-primary mdi mdi-close" data-test-revoke-button [disabled]="!workspaceService.isAnySelected()"
+						 [ngClass]="{'wfm-btn-invis-disabled': !workspaceService.isAnySelected()}" (click)="toggleRevokeView()">Revoke page</button>
 					</div>
 				</div>
 			</div>
 			<div class="con-row">
 				<div class="con-flex">
-					<ul>
-						<li *ngFor="let person of people" class="con-row align-row-baseline agent-row" (click)="toggleSelectedPerson(person.Id)">
+					<ul data-test-search>
+						<li *ngFor="let person of searchService.getPeople()" class="con-row align-row-baseline agent-row" data-test-person (click)="toggleSelectedPerson(person.Id)">
 							<div class="con-flex">
-								<div matTooltip="Select person" tabindex=0 class="context-menu card-context" [ngClass]="{'notice-success':isPersonSelected(person.Id), 'notice-info':!isPersonSelected(person.Id)}">
-									<i class="mdi mdi-account" [ngClass]="{'mdi-check':isPersonSelected(person.Id)}"></i>
+								<div matTooltip="Select person" tabindex=0 class="context-menu card-context" [ngClass]="{'notice-success':workspaceService.isPersonSelected(person.Id), 'notice-info':!workspaceService.isPersonSelected(person.Id)}">
+									<i class="mdi mdi-account" [ngClass]="{'mdi-check':workspaceService.isPersonSelected(person.Id)}"></i>
 								</div>
-								{{person.FirstName}} {{person.LastName}}
+								<span data-test-person-name>
+									{{person.FirstName}} {{person.LastName}}
+								</span>
 							</div>
 							<div class="con-flex">
 								{{personToRoles(person)}}
@@ -54,15 +52,18 @@
 		</div>
 	</div>
 	<div class="con-flex workspace-parent">
-		<div class="panel material-depth-1 workspace">
+		<div class="panel material-depth-1 workspace" data-test-workspace>
 			<h2>
 				<i class="mdi mdi-account-switch"></i> Workspace
 				<span *ngIf="getSelectedPeopleCount() > 0">({{getSelectedPeopleCount()}})</span>
 			</h2>
 			<ul>
-				<li *ngFor="let person of getSelectedPeople()" class="">
+				<li *ngFor="let person of workspaceService.getSelectedPeople()" class="" data-test-person>
 					<div class="con-flex">
-						<i class="mdi mdi-close" (click)="toggleSelectedPerson(person.Id)"></i> {{person.FirstName}} {{person.LastName}}
+						<i class="mdi mdi-close" (click)="workspaceService.deselectPerson(person)" data-test-person-remove></i>
+						<span data-test-person-name>
+							{{person.FirstName}} {{person.LastName}}
+						</span>
 					</div>
 				</li>
 			</ul>

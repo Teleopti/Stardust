@@ -4,24 +4,26 @@
 	</div>
 	<div class="role-content">
 		<h3>Current roles</h3>
-		<div class="con-fluid-row">
+		<div class="con-fluid-row" data-test-grant-current>
 			<div class="con-fluid-flex" *ngFor="let roleId of getRoleIdsOfPeople()">
-				<chip [disabled]="true" [inactiveIcon]="isRoleOnAll(roleId) ? 'mdi-check' : 'mdi-minus'">
+				<chip [disabled]="true" [inactiveIcon]="isRoleOnAll(roleId) ? 'mdi-check' : 'mdi-minus'" data-test-chip>
 					{{getRole(roleId).Name}}
 				</chip>
 			</div>
 		</div>
 		<hr>
 		<h3>Available roles</h3>
-		<div class="con-fluid-row">
+		<div class="con-fluid-row" data-test-grant-available>
 			<div class="con-fluid-flex" *ngFor="let role of getRolesNotOnAll()">
-				<chip-add (click)="toggleSelectedRole(role.Id)" [active]="isSelectedRole(role.Id)">{{role.Name}}</chip-add>
+				<chip-add (click)="toggleSelectedRole(role.Id)" [active]="isSelectedRole(role.Id)" data-test-chip>
+					{{role.Name}}
+				</chip-add>
 			</div>
 		</div>
 
 		<aside style="float:right">
 			<button (click)="close()" class="wfm-btn wfm-btn-default">Cancel</button>
-			<button (click)="save()" cdkFocusInitial class="wfm-btn wfm-btn-primary" [disabled]="!isAnyRoleSelected()">Save</button>
+			<button (click)="save()" cdkFocusInitial class="wfm-btn wfm-btn-primary" [disabled]="!isAnyRoleSelected()" data-test-grant-save>Save</button>
 		</aside>
 	</div>
 

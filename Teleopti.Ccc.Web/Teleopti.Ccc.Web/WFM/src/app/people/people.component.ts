@@ -3,7 +3,7 @@ import { MatDialog, MatDialogRef } from '@angular/material';
 import { Person, Role } from './types';
 
 import { Observable } from 'rxjs/Rx';
-import { PeopleService, RolesService } from './services';
+import { WorkspaceService, RolesService, SearchService } from './services';
 
 @Component({
 	selector: 'app-people',
@@ -11,29 +11,30 @@ import { PeopleService, RolesService } from './services';
 	styleUrls: ['./people.component.scss']
 })
 export class PeopleComponent implements OnInit {
-	constructor(private dialog: MatDialog, private peopleService: PeopleService, private rolesService: RolesService) {}
+	constructor(protected workspaceService: WorkspaceService, private rolesService: RolesService, public searchService: SearchService) { }
 
-	people: Array<Person> = [];
 	roles: Array<Role> = [];
-	selectedPeopleIds: Array<string> = [];
 
-	isPeopleSelected() {
-		return this.selectedPeopleIds.length > 0;
+	ngOnInit() {
+		this.searchService.searchPeople().then(people => {
+		});
+		this.rolesService.getRoles().then(roles => {
+			this.roles = roles;
+		});
 	}
 
-	getSelectedPeople() {
-		return this.people.filter(person => this.isPersonSelected(person.Id));
-	}
-
-	toggleSelectedPerson(id) {
-		if (!this.selectedPeopleIds.includes(id)) {
-			this.selectedPeopleIds = [...this.selectedPeopleIds, id];
+	toggleSelectedPerson(id: string): void {
+		const isSelected = this.workspaceService.isPersonSelected(id);
+		if (isSelected) {
+			const person = this.workspaceService.getSelectedPerson(id)
+			this.workspaceService.deselectPerson(person)
 		} else {
-			this.selectedPeopleIds = this.selectedPeopleIds.filter(personId => personId !== id);
+			const person = this.searchService.getPerson(id)
+			this.workspaceService.selectPerson(person)
 		}
 
 		// Workspace
-		if (this.selectedPeopleIds.length === 0) {
+		if (this.workspaceService.getSelectedPeople().length === 0) {
 			this.displayGrantView = false;
 			this.displayRevokeView = false;
 		}
@@ -41,14 +42,6 @@ export class PeopleComponent implements OnInit {
 
 	personToRoles(person: Person): string {
 		return person.Roles.map(role => role.Name).join(', ');
-	}
-
-	isPersonSelected(id) {
-		return this.selectedPeopleIds.includes(id);
-	}
-
-	getSelectedPeopleCount() {
-		return this.selectedPeopleIds.length;
 	}
 
 	getSelectedPeopleCount(): number {
@@ -68,19 +61,19 @@ export class PeopleComponent implements OnInit {
 	/** Below is window grant component */
 	displayGrantView = false;
 	displayRevokeView = false;
-	toggleGrantView() {
+	toggleGrantView(): void {
 		this.displayGrantView = !this.displayGrantView;
 	}
-	toggleRevokeView() {
+	toggleRevokeView(): void {
 		this.displayRevokeView = !this.displayRevokeView;
 	}
 
-	handleGranted(roles: Array<Role>) {
+	handleGranted(roles: Array<Role>): void {
 		if (roles.length > 0) this.grantRoles(roles);
 		this.toggleGrantView();
 	}
 
-	handleRevoked(roles: Array<Role>) {
+	handleRevoked(roles: Array<Role>): void {
 		if (roles.length > 0) this.revokeRoles(roles);
 		this.toggleRevokeView();
 	}

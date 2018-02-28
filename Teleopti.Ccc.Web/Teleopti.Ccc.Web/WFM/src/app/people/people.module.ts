@@ -4,7 +4,6 @@ import { UpgradeModule, downgradeComponent } from '@angular/upgrade/static';
 import { SharedModule } from '../shared/shared.module';
 
 import { PeopleComponent } from './people.component';
-import { PeopleService } from './services/people.service';
 import {
 	MatInputModule,
 	MatDialogModule,
@@ -24,7 +23,7 @@ import {
 	GrantPageComponent,
 	RevokePageComponent
 } from './components';
-import { RolesService } from './services/roles.service';
+import { RolesService, WorkspaceService, SearchService } from './services';
 
 @NgModule({
 	declarations: [
@@ -37,13 +36,13 @@ import { RolesService } from './services/roles.service';
 		ChipRemoveComponent
 	],
 	imports: [SharedModule, MatCheckboxModule, MatDialogModule, MatPaginatorModule, MatButtonModule, MatDividerModule],
-	providers: [PeopleService, RolesService],
+	providers: [WorkspaceService, RolesService, SearchService],
 	exports: [],
 	entryComponents: [PeopleComponent]
 })
 export class PeopleModule {
-	constructor() {}
-	ngDoBootstrap() {}
+	constructor() { }
+	ngDoBootstrap() { }
 }
 
 angular
