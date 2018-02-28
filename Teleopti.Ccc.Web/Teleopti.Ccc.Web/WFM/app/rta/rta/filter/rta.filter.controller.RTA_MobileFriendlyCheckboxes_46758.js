@@ -55,12 +55,14 @@
 		vm.goToAgents = goToAgents;
 		vm.clearOrgSelection = clearOrgSelection;
 		vm.clearSearchTerm = clearSearchTerm;
-		vm.skillsLoaded = false;
-		vm.skillAreasLoaded = false;
 		vm.showOrganization = $state.current.name === agentsState;
 		vm.clearSelection = clearSelection;
 		vm.sortByLocaleLanguage = localeLanguageSortingService.sort;
 		vm.openPicker = false;
+		vm.placeholderTextForSkillSelection = $translate.instant('LoadingSkills');
+		vm.placeholderTextForSkillGroupSelection = $translate.instant('LoadingSkillGroups');
+		vm.skillsLoaded = false;
+		vm.skillAreasLoaded = false;
 
 		(function initialize() {
 			rtaService.getSkills()
@@ -68,6 +70,7 @@
 					var deffered = $q.defer();
 					deffered.resolve();
 					vm.skillsLoaded = true;
+					vm.placeholderTextForSkillSelection = $translate.instant('SelectSkill');
 					vm.skills = skills;
 					if (skillIds != null && skillAreaId == null) {
 						vm.selectedSkill = skills.find(function (s) {
@@ -81,6 +84,7 @@
 							var deffered = $q.defer();
 							deffered.resolve();
 							vm.skillAreasLoaded = true;
+							vm.placeholderTextForSkillGroupSelection = $translate.instant('SelectSkillGroup');
 							vm.skillAreas = skillAreas;
 							if (skillAreaId != null && skillIds == null)
 								vm.selectedSkillArea = vm.skillAreas.find(function (s) { return s.Id === skillAreaId });
@@ -147,7 +151,6 @@
 			if (selectedFieldText.length > 0) {
 				vm.selectFieldText = selectedFieldText;
 			}
-			//vm.defaultInputText = vm.selectFieldText === $translate.instant('SelectOrganization');
 		}
 
 		/*********AUTOCOMPLETE*****/

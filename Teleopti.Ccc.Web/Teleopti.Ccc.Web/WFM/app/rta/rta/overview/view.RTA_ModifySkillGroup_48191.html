@@ -16,7 +16,9 @@
 			<i class="mdi mdi-filter-outline filter-icon"></i>
 			</span>
 			<span></span>
-			<button class="wfm-btn wfm-btn-default select-skill wfm-badge-wrapper" ng-click="vm.goToAgents()">{{'Agents'|translate}} <md-tooltip md-direction="bottom">{{vm.highlightAgentsButton() ? 'ViewAgentsBySelection' : 'ViewAgents'|translate}}</md-tooltip>
+			<button class="wfm-btn wfm-btn-default select-skill wfm-badge-wrapper" ng-click="vm.goToAgents()">{{'Agents'|translate}} 
+				<md-tooltip md-direction="bottom" ng-if="vm.highlightAgentsButton()">{{'ViewAgentsBySelection'|translate}}</md-tooltip>
+				<md-tooltip md-direction="bottom" ng-if="!vm.highlightAgentsButton()">{{'ViewAgents'|translate}}</md-tooltip>
 			</button>
 			</span>
 			</span>
@@ -46,8 +48,11 @@
 	<div class="con-flex">
 		<div class="panel material-depth-1">
 			<div class="con-row">
-				<div class="con-flex">
-					{{vm.displayNoSitesForSkillMessage() ? 'NoSitesFound' : 'NoAccessToSites' | translate}}
+				<div class="con-flex" ng-if="vm.displayNoSitesForSkillMessage()">
+					{{'NoSitesFound'|translate}}
+				</div>
+				<div class="con-flex" ng-if="!vm.displayNoSitesForSkillMessage()">
+					{{'NoAccessToSites'|translate}}
 				</div>
 			</div>
 		</div>
@@ -76,7 +81,8 @@
 					</div>
 					<div ng-click="$event.stopPropagation(); vm.selectTeamOrSite(card);" class="rta-icons-container">
 						<i class="mdi" ng-class="{'mdi-check': card.isSelected, 'mdi-plus':!card.isSelected}"></i>
-						<md-tooltip>{{card.isSelected ? 'UnselectSite' : 'SelectSite' | translate}}</md-tooltip>
+						<md-tooltip ng-if="card.isSelected">{{'UnselectSite'|translate}}</md-tooltip>
+						<md-tooltip ng-if="!card.isSelected">{{'SelectSite'|translate}}</md-tooltip>
 					</div>
 					<a href="{{card.href}}" class="rta-icons-container" style="text-decoration: none;">
 						<div><i class="mdi mdi-arrow-right"></i>
@@ -94,8 +100,8 @@
 									{{team.Name}}
 								</h1>
 								<i class="mdi pull-right flex-1" ng-class="{'mdi-check': team.isSelected, 'mdi-plus': !team.isSelected}"></i>
-								<md-tooltip>{{team.isSelected ? 'UnselectTeam' : 'SelectTeam' | translate}}
-								</md-tooltip>
+								<md-tooltip ng-if="team.isSelected">{{'UnselectTeam'|translate}}</md-tooltip>
+								<md-tooltip ng-if="!team.isSelected">{{'SelectTeam'|translate}}</md-tooltip>
 							</div>
 							<div class="con-row">
 								<div class="con-flex">

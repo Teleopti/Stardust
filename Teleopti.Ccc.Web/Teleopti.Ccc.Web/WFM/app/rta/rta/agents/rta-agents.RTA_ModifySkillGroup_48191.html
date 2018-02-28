@@ -17,7 +17,8 @@
 		<div class="fab-wrapper pull-right">
 			<button class="wfm-fab material-depth-1" ng-click="vm.pause = !vm.pause">
 				<i ng-class="{'mdi mdi-play': vm.pause, 'mdi mdi-pause': !vm.pause}"></i>
-				<md-tooltip>{{(vm.pause ? 'Play' : 'Pause')|translate}}</md-tooltip>
+				<md-tooltip ng-if="vm.pause">{{'Play'|translate}}</md-tooltip>
+				<md-tooltip ng-if="!vm.pause">{{'Pause'|translate}}</md-tooltip>
 			</button>
 		</div>
 	</div>
@@ -53,7 +54,8 @@
 				<md-switch ng-model="vm.showInAlarm" aria-label="Switch"
 						   class="rta-agents-in-alarm-switch grid-tools pull-right"
 						   style="min-width: 150px">
-					<span>{{vm.showInAlarm ? 'InAlarm' : 'All'|translate}}</span>
+					<span ng-if="vm.showInAlarm">{{'InAlarm'|translate}}</span>
+					<span ng-if="!vm.showInAlarm">{{'All'|translate}}</span>
 				</md-switch>
 			</div>
 		</div>

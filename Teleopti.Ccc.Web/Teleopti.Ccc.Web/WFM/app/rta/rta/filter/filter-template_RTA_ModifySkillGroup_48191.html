@@ -13,18 +13,18 @@
 								<div>
 								<label for="filter" class="input-icon">
 									<i class="mdi mdi-filter-outline"></i>
-									<input type="text" id="filter" placeholder="{{'DataFilterThreeDots' | translate}}"
+									<input type="text" id="filter" placeholder="{{'DataFilterThreeDots'|translate}}"
 										   ng-model="vm.searchTerm">
-									<md-tooltip>{{'DataFilterThreeDots' | translate}}</md-tooltip>
+									<md-tooltip>{{'DataFilterThreeDots'|translate}}</md-tooltip>
 								</label>
 								</div>
 								<div>
 									<button class="wfm-btn wfm-btn-invis-primary"
 											ng-class="vm.siteMarkedOrChecked ? 'wfm-btn-invis-primary' : 'wfm-btn-invis-disabled'"
 											type="clear"
-											ng-click="vm.clearOrgSelection()">{{'ClearAll' | translate}}</button>
+											ng-click="vm.clearOrgSelection()">{{'ClearAll'|translate}}</button>
 									<button class="wfm-btn wfm-btn-invis-primary" ng-class="wfm-btn-invis-primary"
-											type="clear" ng-click="vm.goToAgents()">{{'Close' | translate}}</button>									
+											type="clear" ng-click="vm.goToAgents()">{{'Close'|translate}}</button>									
 								</div>
 		</div>
 		<div class="panel">
@@ -62,7 +62,7 @@
 										 md-items="skill in vm.querySearch(searchSkillText, vm.skills)"
 										 md-item-text="skill.Name"
 										 md-min-length="0"
-										 placeholder="{{vm.skillsLoaded ? 'SelectSkill' : 'LoadingSkills' | translate}}">
+										 placeholder="{{vm.placeholderTextForSkillSelection}}">
 							<md-item-template>
 								<span class="rta-skill-item" md-highlight-text="searchSkillText"
 									  md-highlight-flags="^i">{{skill.Name}}</span>
@@ -88,7 +88,7 @@
 										 md-items="skillArea in vm.querySearch(searchSkillAreaText, vm.skillAreas)"
 										 md-item-text="skillArea.Name"
 										 md-min-length="0"
-										 placeholder="{{vm.skillAreasLoaded ? 'SelectSkillGroup' : 'LoadingSkillGroups' | translate}}">
+										 placeholder="{{vm.placeholderTextForSkillGroupSelection}}">
 							<md-item-template>
 								<span class="rta-skill-area-item" md-highlight-text="searchSkillText"
 									  md-highlight-flags="^i">{{skillArea.Name}}</span>
