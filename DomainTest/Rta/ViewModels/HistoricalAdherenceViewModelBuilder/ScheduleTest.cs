@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.DomainTest.Rta.ViewModels.HistoricalAdherenceViewModelBui
 	{
 		public Domain.Rta.ViewModels.HistoricalAdherenceViewModelBuilder Target;
 		public FakeDatabase Database;
-		public FakeHistoricalAdherenceReadModelPersister ReadModel;
 		public MutableNow Now;
 
 		[Test]
@@ -54,11 +53,10 @@ namespace Teleopti.Ccc.DomainTest.Rta.ViewModels.HistoricalAdherenceViewModelBui
 				.WithAssignedActivity("2016-10-11 09:00", "2016-10-11 12:00")
 				.WithActivity(null, "email")
 				.WithAssignedActivity("2016-10-11 12:00", "2016-10-11 17:00")
-				;
-			ReadModel.AddOut(person, "2016-10-11 11:00".Utc());
-			ReadModel.AddIn(person, "2016-10-11 11:05".Utc());
-			ReadModel.AddOut(person, "2016-10-11 13:30".Utc());
-			ReadModel.AddIn(person, "2016-10-11 17:00".Utc());
+				.WithAdherenceOut(person, "2016-10-11 11:00")
+				.WithAdherenceIn(person, "2016-10-11 11:05")
+				.WithAdherenceOut(person, "2016-10-11 13:30")
+				.WithAdherenceIn(person, "2016-10-11 17:00");
 
 			var viewModel = Target.Build(person);
 

@@ -22,7 +22,6 @@ namespace Teleopti.Ccc.DomainTest.Rta.ViewModels.HistoricalAdherenceViewModelBui
 	{
 		public Domain.Rta.ViewModels.HistoricalAdherenceViewModelBuilder Target;
 		public FakeDatabase Database;
-		public FakeHistoricalAdherenceReadModelPersister Adherences;
 		public MutableNow Now;
 		public FakeUserTimeZone TimeZone;
 		public FakeHistoricalChangeReadModelPersister Changes;
@@ -53,14 +52,9 @@ namespace Teleopti.Ccc.DomainTest.Rta.ViewModels.HistoricalAdherenceViewModelBui
 			TimeZone.IsSweden();
 			Now.Is("2016-10-10 15:00");
 			var person = Guid.NewGuid();
-			Adherences.Has(person, new[]
-				{
-					new HistoricalOutOfAdherenceReadModel
-					{
-						StartTime = "2016-10-10 06:05".Utc(),
-						EndTime = "2016-10-10 06:15".Utc()
-					}
-				});
+			Database
+				.WithAdherenceOut(person, "2016-10-10 06:05")
+				.WithAdherenceIn(person, "2016-10-10 06:15");
 
 			var data = Target.Build(person);
 
@@ -93,15 +87,10 @@ namespace Teleopti.Ccc.DomainTest.Rta.ViewModels.HistoricalAdherenceViewModelBui
 			TimeZone.IsSweden();
 			Now.Is("2016-10-12 12:00");
 			var person = Guid.NewGuid();
-			Database.WithAgent(person, "nicklas");
-			Adherences.Has(person, new[]
-			{
-				new HistoricalOutOfAdherenceReadModel
-				{
-					StartTime = "2016-10-12 14:00".Utc(),
-					EndTime = "2016-10-12 15:00".Utc()
-				}
-			});
+			Database
+				.WithAgent(person, "nicklas")
+				.WithAdherenceOut(person, "2016-10-12 14:00")
+				.WithAdherenceIn(person, "2016-10-12 15:00");
 
 			var data = Target.Build(person);
 

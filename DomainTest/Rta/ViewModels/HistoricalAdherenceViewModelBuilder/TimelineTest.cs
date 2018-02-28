@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.DomainTest.Rta.ViewModels.HistoricalAdherenceViewModelBui
 	{
 		public Domain.Rta.ViewModels.HistoricalAdherenceViewModelBuilder Target;
 		public FakeDatabase Database;
-		public FakeHistoricalAdherenceReadModelPersister ReadModel;
 		public MutableNow Now;
 
 		[Test]

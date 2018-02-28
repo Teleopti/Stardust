@@ -4,6 +4,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
 
@@ -15,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.Rta.ViewModels.HistoricalAdherenceViewModelBui
 	public class AdherencesTest
 	{
 		public Domain.Rta.ViewModels.HistoricalAdherenceViewModelBuilder Target;
-		public FakeHistoricalAdherenceReadModelPersister ReadModel;
+		public FakeDatabase Database;
 		public MutableNow Now;
 
 		[Test]
@@ -23,14 +24,9 @@ namespace Teleopti.Ccc.DomainTest.Rta.ViewModels.HistoricalAdherenceViewModelBui
 		{
 			Now.Is("2016-10-10 15:00");
 			var person = Guid.NewGuid();
-			ReadModel.Has(person, new[]
-			{
-				new HistoricalOutOfAdherenceReadModel
-				{
-					StartTime = "2016-10-10 08:05".Utc(),
-					EndTime = "2016-10-10 08:15".Utc()
-				}
-			});
+			Database
+				.WithAdherenceOut(person, "2016-10-10 08:05")
+				.WithAdherenceIn(person, "2016-10-10 08:15");
 
 			var data = Target.Build(person);
 

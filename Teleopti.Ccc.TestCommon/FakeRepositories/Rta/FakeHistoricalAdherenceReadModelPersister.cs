@@ -21,24 +21,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 	{
 		private IList<HistoricalAdherence> _data = new List<HistoricalAdherence>();
 
-		public FakeHistoricalAdherenceReadModelPersister Has(IEnumerable<HistoricalAdherence> data)
-		{
-			_data = _data.Concat(data).ToArray();
-			return this;
-		}
-
-		public FakeHistoricalAdherenceReadModelPersister Has(Guid personId, IEnumerable<HistoricalOutOfAdherenceReadModel> models)
-		{
-			models
-				.ForEach(x =>
-				{
-					AddOut(personId, x.StartTime);
-					if (x.EndTime.HasValue)
-						AddIn(personId, x.EndTime.Value);
-				});
-			return this;
-		}
-
 		public void AddIn(Guid personId, DateTime timestamp)
 		{
 			add(personId, timestamp, HistoricalAdherenceAdherence.In);

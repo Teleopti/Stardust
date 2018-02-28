@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.DomainTest.Rta.ViewModels.HistoricalAdherenceViewModelBui
 	{
 		public Domain.Rta.ViewModels.HistoricalAdherenceViewModelBuilder Target;
 		public FakeDatabase Database;
-		public FakeHistoricalAdherenceReadModelPersister ReadModel;
 		public MutableNow Now;
 
 		[Test]
@@ -43,9 +42,9 @@ namespace Teleopti.Ccc.DomainTest.Rta.ViewModels.HistoricalAdherenceViewModelBui
 			Database
 				.WithAgent(person, "name");
 
-			ReadModel
-				.Has(person, new[] { new HistoricalOutOfAdherenceReadModel { StartTime = "2016-10-08 00:00".Utc() } })
-				.Has(person, new[] { new HistoricalOutOfAdherenceReadModel { StartTime = "2016-10-10 00:00".Utc() } });
+			Database
+				.WithAdherenceOut(person, "2016-10-08 00:00")
+				.WithAdherenceOut(person, "2016-10-10 00:00");
 
 			var data = Target.Build(person);
 
