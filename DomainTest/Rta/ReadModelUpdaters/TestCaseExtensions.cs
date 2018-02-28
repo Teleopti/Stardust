@@ -6,7 +6,7 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters
+namespace Teleopti.Ccc.DomainTest.Rta.ReadModelUpdaters
 {
 	public class TestCase
 	{

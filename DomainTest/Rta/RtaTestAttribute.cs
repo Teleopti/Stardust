@@ -11,7 +11,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
+namespace Teleopti.Ccc.DomainTest.Rta
 {
 	[LoggedOff]
 	public class RtaTestAttribute : RtaTestLoggedOnAttribute

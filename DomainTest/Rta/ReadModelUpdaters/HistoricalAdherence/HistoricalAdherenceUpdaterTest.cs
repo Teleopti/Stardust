@@ -10,7 +10,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.HistoricalAdherence
+namespace Teleopti.Ccc.DomainTest.Rta.ReadModelUpdaters.HistoricalAdherence
 {
 	[DomainTest]
 	[TestFixture]

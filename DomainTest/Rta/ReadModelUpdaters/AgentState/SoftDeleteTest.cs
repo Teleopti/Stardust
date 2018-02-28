@@ -11,7 +11,7 @@ using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
 using ExternalLogon = Teleopti.Ccc.Domain.ApplicationLayer.Events.ExternalLogon;
 
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentState
+namespace Teleopti.Ccc.DomainTest.Rta.ReadModelUpdaters.AgentState
 {
 	[TestFixture]
 	[DomainTest]

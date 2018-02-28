@@ -11,7 +11,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AgentAdherenceDay
+namespace Teleopti.Ccc.DomainTest.Rta.AgentAdherenceDay
 {
 	[DomainTest]
 	[DefaultData]

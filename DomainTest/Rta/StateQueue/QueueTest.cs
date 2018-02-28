@@ -11,8 +11,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 
-
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.StateQueue
+namespace Teleopti.Ccc.DomainTest.Rta.StateQueue
 {
 	[TestFixture]
 	[RtaTest]

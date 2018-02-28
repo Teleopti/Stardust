@@ -9,8 +9,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 
-
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
+namespace Teleopti.Ccc.DomainTest.Rta.Service
 {
 	[TestFixture]
 	[RtaTest]

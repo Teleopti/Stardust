@@ -9,7 +9,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
+namespace Teleopti.Ccc.DomainTest.Rta.ViewModels
 {
 	[DomainTest]
 	[TestFixture]

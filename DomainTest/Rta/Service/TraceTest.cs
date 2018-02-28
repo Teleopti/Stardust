@@ -3,15 +3,13 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Rta.Service;
 using Teleopti.Ccc.Domain.Rta.Tracer;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
 
-
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
+namespace Teleopti.Ccc.DomainTest.Rta.Service
 {
 	[TestFixture]
 	[RtaTest]

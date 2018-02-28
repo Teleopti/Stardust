@@ -7,7 +7,7 @@ using Teleopti.Ccc.Domain.Rta.ViewModels;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateViewModelBuilder
+namespace Teleopti.Ccc.DomainTest.Rta.ViewModels.AgentStateViewModelBuilder
 {
 	[DomainTest]
 	[TestFixture]

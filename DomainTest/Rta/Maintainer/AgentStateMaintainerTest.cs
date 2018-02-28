@@ -8,7 +8,7 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using ExternalLogon = Teleopti.Ccc.Domain.ApplicationLayer.Events.ExternalLogon;
 
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Maintainer
+namespace Teleopti.Ccc.DomainTest.Rta.Maintainer
 {
 	[TestFixture]
 	[RtaTest]

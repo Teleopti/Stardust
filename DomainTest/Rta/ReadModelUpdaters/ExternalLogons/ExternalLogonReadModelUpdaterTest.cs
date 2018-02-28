@@ -9,7 +9,7 @@ using Teleopti.Ccc.Domain.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.ExternalLogons
+namespace Teleopti.Ccc.DomainTest.Rta.ReadModelUpdaters.ExternalLogons
 {
 	[TestFixture]
 	[DomainTest]

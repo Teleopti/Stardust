@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
+namespace Teleopti.Ccc.DomainTest.Rta.Service
 {
 	[RtaTest]
 	[TestFixture]

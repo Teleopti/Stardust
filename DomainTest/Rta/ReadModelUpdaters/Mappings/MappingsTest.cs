@@ -10,7 +10,7 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Mappings
+namespace Teleopti.Ccc.DomainTest.Rta.ReadModelUpdaters.Mappings
 {
 	[TestFixture]
 	[DomainTest]

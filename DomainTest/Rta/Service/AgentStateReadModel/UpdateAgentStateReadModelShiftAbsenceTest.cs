@@ -8,7 +8,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.AgentStateReadModel
+namespace Teleopti.Ccc.DomainTest.Rta.Service.AgentStateReadModel
 {
 	[TestFixture]
 	[RtaTest]

@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.Rta.Configuration;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Configuration
+namespace Teleopti.Ccc.DomainTest.Rta.Configuration
 {
 	[RtaTest]
 	[Toggle(Toggles.RTA_ConfigurationValidationNotification_46933)]

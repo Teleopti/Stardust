@@ -11,7 +11,7 @@ using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Cache
+namespace Teleopti.Ccc.DomainTest.Rta.Cache
 {
 	[DomainTest]
 	[TestFixture]

@@ -8,7 +8,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ApprovePeriodAsInAdherence
+namespace Teleopti.Ccc.DomainTest.Rta.ApprovePeriodAsInAdherence
 {
 	[DomainTest]
 	[TestFixture]

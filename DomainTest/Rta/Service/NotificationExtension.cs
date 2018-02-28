@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.MessageBroker;
 
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
+namespace Teleopti.Ccc.DomainTest.Rta.Service
 {
 	public static class NotificationExtension
 	{

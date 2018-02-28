@@ -5,7 +5,7 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.AgentStateReadModel
+namespace Teleopti.Ccc.DomainTest.Rta.Service.AgentStateReadModel
 {
 	[RtaTest]
 	[TestFixture]
