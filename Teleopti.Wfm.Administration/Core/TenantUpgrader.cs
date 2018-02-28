@@ -28,6 +28,7 @@ namespace Teleopti.Wfm.Administration.Core
 
 		public void Upgrade(Tenant tenant, string adminUserName, string adminPassword, bool permissionMode, bool useIntegratedSecurity)
 		{
+			var aggDB = "";
 			if (string.IsNullOrEmpty(adminUserName))
 				adminUserName = "";
 			if (string.IsNullOrEmpty(adminPassword))
@@ -47,6 +48,7 @@ namespace Teleopti.Wfm.Administration.Core
 			builder.Password = adminPassword;
 			builder.IntegratedSecurity = useIntegratedSecurity;
 			var analConnstring = builder.ConnectionString;
+			aggDB = builder.InitialCatalog;
 			// and agg to
 			if (!isAzure() && !string.IsNullOrEmpty(tenant.DataSourceConfiguration.AggregationConnectionString))
 			{
@@ -56,6 +58,7 @@ namespace Teleopti.Wfm.Administration.Core
 				builder.UserID = adminUserName;
 				builder.Password = adminPassword;
 				builder.IntegratedSecurity = useIntegratedSecurity;
+				aggDB = builder.InitialCatalog;
 			}
 
 			//security 
@@ -65,7 +68,7 @@ namespace Teleopti.Wfm.Administration.Core
 				ApplicationDbConnectionStringToStore = appConnstring,
 				AnalyticsDbConnectionString = analConnstring,
 				AnalyticsDbConnectionStringToStore = analConnstring,
-				AggDatabase = builder.ConnectionString,
+				AggDatabase = aggDB
 			};
 			_upgradeRunner.Logger = new TenantLogger(tenant.Name, tenant.Id);
 
