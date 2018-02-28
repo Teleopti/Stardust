@@ -118,7 +118,7 @@ Scenario: Manually navigate to other page when sign in with password already exp
 Scenario: Change password successfully
 	Given I have user logon details with
 	| Field                           | Value |
-	| Last Password Change X Days Ago | 30    |
+	| Last Password Change X Days Ago | 31    |
 	And I have user credential with
 	| Field    | Value     |
 	| Role     | Role1     |
@@ -138,10 +138,9 @@ Scenario: Change password successfully
 Scenario: Change password fails if new password is weak
 	Given I have user logon details with
 	| Field                           | Value |
-	| Last Password Change X Days Ago | 30    |
+	| Last Password Change X Days Ago | 31    |
 	And I have user credential with
 	| Field    | Value     |
-	| Role     | Role1     |
 	| UserName | aa        |
 	| Password | P@ssword1 |
 	When I try to sign in with
@@ -158,7 +157,7 @@ Scenario: Change password fails if new password is weak
 Scenario: Change password fails if old password is wrong
 	Given I have user logon details with
 	| Field                           | Value |
-	| Last Password Change X Days Ago | 30    |
+	| Last Password Change X Days Ago | 31    |
 	And I have user credential with
 	| Field    | Value     |
 	| Role     | Role1     |
