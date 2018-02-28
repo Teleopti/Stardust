@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var workflowControlSet = new WorkflowControlSet();
 			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod
 			{
-				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
+				AutoGrantType = OvertimeRequestAutoGrantType.Deny,
 				BetweenDays = new MinMax<int>(0, 48),
 				SkillType = phoneSkillType,
 				OrderIndex = 1
