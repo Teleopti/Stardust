@@ -197,6 +197,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 				Days = days,
 				ColorSource = colorSource,
 				MinMaxTime = minMaxTime,
+				AsmPermission = asmPermission,
 				AsmEnabled = asmPermission && isAsmLicenseAvailable(),
 				TextRequestPermission = textRequestPermission,
 				OvertimeAvailabilityPermission = overtimeAvailabilityPermission,

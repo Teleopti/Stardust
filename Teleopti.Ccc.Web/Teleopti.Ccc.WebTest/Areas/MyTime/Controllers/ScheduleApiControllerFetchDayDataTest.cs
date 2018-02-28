@@ -758,6 +758,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
+		public void ShouldMapAsmEnabled()
+		{
+			var result = Target.FetchWeekData(null);
+			result.AsmEnabled.Should().Be.True();
+		}
+
+		[Test]
 		public void ShouldMapSiteOpenHourIntradayTimePeriodOnFetchDayData()
 		{
 			var date = new DateOnly(2014, 12, 18);

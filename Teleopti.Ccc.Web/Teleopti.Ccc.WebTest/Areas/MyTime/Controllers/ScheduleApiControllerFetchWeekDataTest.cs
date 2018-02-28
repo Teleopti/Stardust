@@ -932,6 +932,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
+		public void ShouldMapAsmEnabled()
+		{
+			var result = Target.FetchWeekData(null);
+			result.AsmEnabled.Should().Be.True();
+		}
+
+		[Test]
 		public void ShouldMapViewPossibilityPermission()
 		{
 			var result = Target.FetchWeekData(null);
