@@ -129,7 +129,7 @@
                 vm.nodeSelectedMark = vm.option.NodeSelectedMark ? vm.option.NodeSelectedMark : "mark";
                 vm.nodeSemiSelected = vm.option.nodeSemiSelected ? vm.option.nodeSemiSelected : "semiSelected";
                 vm.displayTreeFilter = vm.option.DisplayTreeFilter ? vm.option.DisplayTreeFilter : false;
-                rootSelectUnique = vm.option.RootSelectUnique ? vm.option.RootSelectUnique : false;   
+                rootSelectUnique = vm.option.RootSelectUnique ? vm.option.RootSelectUnique : false;
             }
             vm.ngModel.$viewChangeListeners.push(onChange);
             vm.ngModel.$render = onChange;
@@ -322,12 +322,10 @@
         }
 
         function removeFilterHiddenForChildNodes(matechedNode) {
-            var selectedItems = matechedNode.getElementsByClassName("filter-hidden");
+            var selectedItems = matechedNode.getElementsByTagName("li");
             for (var index = 0; index < selectedItems.length; index++) {
-                if (selectedItems[index].getElementsByTagName("ol").length == 1) {
-                    selectedItems[index].classList.add("hidden");
-                }
                 selectedItems[index].classList.remove("filter-hidden");
+                displayExtendIconForMatchNodesParents(matechedNode);
             }
             return;
         }
@@ -335,14 +333,14 @@
         function displayMatchNodesParents(matechedNode) {
             if (matechedNode.parentNode.parentNode.classList.contains("filter-hidden")) {
                 matechedNode.parentNode.parentNode.classList.remove("filter-hidden");
-                displayExtendIconForMatchNodesParents(matechedNode);
+                displayExtendIconForMatchNodesParents(matechedNode.parentNode.parentNode);
                 displayMatchNodesParents(matechedNode.parentNode.parentNode);
             }
             return;
         }
 
         function displayExtendIconForMatchNodesParents(matechedNode) {
-            var icon = matechedNode.parentNode.parentNode.getElementsByClassName("mdi-chevron-right")[0];
+            var icon = matechedNode.getElementsByClassName("mdi-chevron-right")[0];
             if (!!icon) {
                 icon.classList.add("mdi-chevron-down");
                 icon.classList.remove("mdi-chevron-right");
