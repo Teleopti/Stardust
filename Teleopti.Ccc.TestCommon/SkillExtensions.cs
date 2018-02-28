@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -22,6 +23,12 @@ namespace Teleopti.Ccc.TestCommon
 		public static ISkill IsOpen(this ISkill skill, params TimePeriod[] periods)
 		{
 			WorkloadFactory.CreateWorkloadWithOpenHours(skill, periods);
+			return skill;
+		}
+
+		public static ISkill IsOpen(this ISkill skill, IDictionary<DayOfWeek, TimePeriod> days)
+		{
+			WorkloadFactory.CreateWorkloadWithOpenHoursOnDays(skill, days);
 			return skill;
 		}
 

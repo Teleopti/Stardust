@@ -1,4 +1,6 @@
-﻿using Teleopti.Ccc.Domain.Collection;
+﻿using System;
+using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
@@ -82,6 +84,30 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return workload;
 		}
 
+		public static IWorkload CreateWorkloadWithOpenHoursOnDays(ISkill skill, IDictionary<DayOfWeek, TimePeriod> days)
+		{
+			IWorkload workload = new Workload(skill);
+			workload.Description = "desc from factory";
+			workload.Name = "name from factory";
+			for (var i = 0; i < workload.TemplateWeekCollection.Count; i++)
+			{
+				var open = false;
+				foreach (var day in days)
+				{
+					var weekDay = (int)day.Key;
+					if (!weekDay.Equals(i)) continue;
+					workload.TemplateWeekCollection[i].ChangeOpenHours(new[] { day.Value });
+					open = true;
+					break;
+				}
+				if (!open)
+				{
+					workload.TemplateWeekCollection[i].Close();
+				}
+			}
+
+			return workload;
+		}
 
 		public static IWorkload CreateWorkloadThatIsClosed(ISkill skill)
 		{

@@ -241,6 +241,39 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			schedulerStateHolder.Schedules[agent].BusinessRuleResponseInternalCollection.Should().Be.Empty();
 		}
 
+		[Test]
+		[Ignore("48175 to be fixed")]
+		public void ShouldChooseShiftWithCorrectLengthWhenDifferentOpenHoursOnDays()
+		{
+			var date = new DateOnly(2017, 5, 15);
+			var period = new DateOnlyPeriod(date.AddDays(6), date.AddDays(6));
+			var activity = new Activity {InContractTime = true}.WithId();
+			var days = new Dictionary<DayOfWeek, TimePeriod>
+			{
+				{DayOfWeek.Saturday, new TimePeriod(6, 22)},
+				{DayOfWeek.Sunday, new TimePeriod(7, 22)}
+			};
+			var skill = new Skill().For(activity).WithId().InTimeZone(TimeZoneInfo.Utc).IsOpen(days);
+			var scenario = new Scenario();
+			var shiftCategory = new ShiftCategory().WithId();
+			var workTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(0), TimeSpan.FromHours(90), TimeSpan.FromHours(0), TimeSpan.FromHours(0));
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 15, 15), new ShiftCategory("_").WithId()));
+			var contract = new Contract("_") { WorkTimeDirective = workTimeDirective, EmploymentType = EmploymentType.FixedStaffNormalWorkTime, WorkTime = new WorkTime(TimeSpan.FromHours(8)) };
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, contract, skill).WithSchedulePeriodOneWeek(date);
+			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, date, 10, 10, 10, 10, 10, 10, 10);
+			var asses = new List<IPersonAssignment>();
+			for (var i = 0; i < 6; i++)
+			{
+				asses.Add(new PersonAssignment(agent, scenario, date.AddDays(i)).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 16)));
+			}
+			var schedulerStateHolder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, asses, skillDays);
+			var schedulingOptions = new SchedulingOptions { ScheduleEmploymentType = ScheduleEmploymentType.FixedStaff };
+
+			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new[] { agent }, period);
+
+			schedulerStateHolder.Schedules[agent].ScheduledDay(date.AddDays(6)).IsScheduled().Should().Be.True();
+		}
+
 		public SchedulingDesktopTest(SeperateWebRequest seperateWebRequest) : base(seperateWebRequest)
 		{
 		}
