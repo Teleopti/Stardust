@@ -23,18 +23,17 @@ namespace Teleopti.Ccc.Domain.Rta.AgentAdherenceDay
 			DateTimePeriod period,
 			DateTimePeriod? shift,
 			IEnumerable<HistoricalChange> changes,
-			IEnumerable<HistoricalAdherence> adherences,
 			IEnumerable<ApprovedPeriod> approvedPeriods)
 		{
 			_personId = personId;
 			_period = period;
-			_changes = loadChanges(changes);
+			_changes = loadChanges(changes.Where(x => _period.ContainsPart(x.Timestamp)));
 			now = floorToSeconds(now);
 
 			_approvedPeriods = approvedPeriods.Select(a => new DateTimePeriod(a.StartTime, a.EndTime)).ToArray();
-			_recordedOutOfAdherences = buildPeriods(HistoricalAdherenceAdherence.Out, adherences, now);
+			_recordedOutOfAdherences = buildPeriods(HistoricalChangeAdherence.Out, changes, now);
 
-			var recordedNeutralAdherences = buildPeriods(HistoricalAdherenceAdherence.Neutral, adherences, now);
+			var recordedNeutralAdherences = buildPeriods(HistoricalChangeAdherence.Neutral, changes, now);
 			
 			_outOfAdherences = subtractPeriods(_recordedOutOfAdherences, _approvedPeriods);
 
@@ -66,7 +65,7 @@ namespace Teleopti.Ccc.Domain.Rta.AgentAdherenceDay
 			public readonly IList<DateTimePeriod> Periods = new List<DateTimePeriod>();
 		}
 
-		private static IEnumerable<DateTimePeriod> buildPeriods(HistoricalAdherenceAdherence adherence, IEnumerable<HistoricalAdherence> adherenceChanges, DateTime now)
+		private static IEnumerable<DateTimePeriod> buildPeriods(HistoricalChangeAdherence adherence, IEnumerable<HistoricalChange> adherenceChanges, DateTime now)
 		{
 			var result = adherenceChanges
 				.TransitionsOf(x => x.Adherence)

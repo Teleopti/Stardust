@@ -54,52 +54,14 @@ namespace Teleopti.Ccc.Domain.Rta.AgentAdherenceDay
 			}
 
 			var changes = _changes.Read(personId, period.StartDateTime, period.EndDateTime);
-
-			var approvedPeriods = _approvedPeriods.Read(personId, period.StartDateTime, period.EndDateTime);
-
-			HistoricalAdherence last = null;
-			var lastFoo = _changes.Read(personId, DateTime.MinValue, period.StartDateTime).LastOrDefault();
-			if(lastFoo != null)
-			{
-				var lastAdherence = HistoricalAdherenceAdherence.Neutral;
-				if (lastFoo.Adherence == HistoricalChangeAdherence.In)
-					lastAdherence = HistoricalAdherenceAdherence.In;
-				else if (lastFoo.Adherence == HistoricalChangeAdherence.Out)
-					lastAdherence = HistoricalAdherenceAdherence.Out;
-				last = new HistoricalAdherence
-				{
-					PersonId = personId,
-					Timestamp = lastFoo.Timestamp,
-					Adherence = lastAdherence
-				};
-			}
-
+			var lastAdherenceChange = _changes.Read(personId, DateTime.MinValue, period.StartDateTime).LastOrDefault();
 			var adherences =
-				new[] {last}
-					.Concat(
-						changes.Select(x =>
-						{
-							var adherence = HistoricalAdherenceAdherence.Neutral;
-							if (x.Adherence == HistoricalChangeAdherence.In)
-								adherence = HistoricalAdherenceAdherence.In;
-							else if (x.Adherence == HistoricalChangeAdherence.Out)
-								adherence = HistoricalAdherenceAdherence.Out;
-
-							return new HistoricalAdherence
-							{
-								PersonId = x.PersonId,
-								Timestamp = x.Timestamp,
-								Adherence = adherence
-							};
-						}))
+				new[] {lastAdherenceChange}
+					.Concat(changes)
 					.Where(x => x != null)
-				.ToArray();
-
-
-			var adherences2 = new[] {_adherences.ReadLastBefore(personId, period.StartDateTime)}
-				.Concat(_adherences.Read(personId, period.StartDateTime, period.EndDateTime))
-				.Where(x => x != null);
-
+					.ToArray();
+		
+			var approvedPeriods = _approvedPeriods.Read(personId, period.StartDateTime, period.EndDateTime);
 
 			var obj = new AgentAdherenceDay();
 			obj.Load(
@@ -107,7 +69,6 @@ namespace Teleopti.Ccc.Domain.Rta.AgentAdherenceDay
 				now,
 				period,
 				shift,
-				changes,
 				adherences,
 				approvedPeriods
 			);
