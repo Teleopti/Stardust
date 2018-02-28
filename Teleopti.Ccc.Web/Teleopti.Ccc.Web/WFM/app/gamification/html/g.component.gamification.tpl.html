@@ -11,7 +11,8 @@
 						</div>
 					</md-content>
 				</md-tab>
-				<md-tab md-on-select="$ctrl.tabSelected('targets');$ctrl.setElementHeightToCoverRestOfViewport()" label="{{ 'SetGamificationTargets'|translate }}" md-on-deselect="$ctrl.resetElementHeight()">
+				<md-tab md-on-select="$ctrl.tabSelected('targets');$ctrl.setElementHeightToCoverRestOfViewport()" label="{{ 'SetGamificationTargets'|translate }}"
+				 md-on-deselect="$ctrl.resetElementHeight()">
 					<md-content class="md-padding">
 						<div class="con-row">
 							<div class="con-flex">
@@ -25,6 +26,16 @@
 						<div class="con-row">
 							<div class="con-flex">
 								<gamification-import></gamification-import>
+							</div>
+						</div>
+					</md-content>
+				</md-tab>
+
+				<md-tab md-on-select="$ctrl.tabSelected('calculation')" label="{{ 'BadgeCalculation'|translate }}">
+					<md-content class="md-padding">
+						<div class="con-row">
+							<div class="con-flex">
+								<badge-calculation></badge-calculation>
 							</div>
 						</div>
 					</md-content>

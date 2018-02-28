@@ -330,6 +330,83 @@
 			}
 		}
 	}
+
+	badge-calculation{
+		.container-box{
+			border-bottom: $SEPARATOR;
+			padding: 12px 24px;
+			margin-bottom: 5px;
+		}
+		
+		.con-fluid-flex{
+			vertical-align: bottom;
+		}
+
+		.date-picker-container{
+			padding-top: 10px;
+		}
+		.calculation-job-table {
+			$HEADER_HEIGHT: 54px;
+			border-top: $SEPARATOR;
+			margin: 0 -5px;
+			padding-bottom: $PADDING;
+
+			header {
+				box-sizing: border-box;
+				display: flex;
+				padding: 0 $PADDING;
+				height: $HEADER_HEIGHT + 1px;
+				line-height: 18px;
+				border-bottom: $SEPARATOR;
+				font-weight: bold;
+				color: $text-color-standard;
+				background-color: $blue-300;
+
+				& > * {
+					padding: $PADDING 0;
+				}
+
+			}
+
+			.job, .owner, .started, .status, .period-start, .period-end{
+				display: flex;
+				align-items: center;
+				flex: 1 1 300px;
+			}
+
+
+			.calculation-job {
+					box-sizing: border-box;
+					padding: 0 $PADDING;
+					display: flex;
+					height: 48px + 1px;
+		
+					&:hover {
+						background-color: $gray026;
+					}
+		
+					&.selected {
+						background-color: $gray012;
+		
+						&:hover {
+							background-color: $gray026;
+						}
+					}
+		
+					&.ng-enter {
+						animation: 1s ease-in-out .3s justCreated;
+					}
+			}
+
+			// import-job + import-job {
+			// 	border-top: $SEPARATOR;
+			// }
+
+			// import-job:last-child {
+			// 	border-bottom: $SEPARATOR;
+			// }
+		}
+	}
 }
 
 //Stars

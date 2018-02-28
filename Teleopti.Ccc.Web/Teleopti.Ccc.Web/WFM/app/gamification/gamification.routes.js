@@ -23,6 +23,10 @@
 				url: '.import',
 				templateUrl: 'app/gamification/html/gamification.html',
 				controller: 'GamificationDefaultCtrl'
+			}).state('gamification.calculation', {
+				url: '.calculation',
+				templateUrl: 'app/gamification/html/gamification.html',
+				controller: 'GamificationDefaultCtrl'
 			});
 	}
 })();

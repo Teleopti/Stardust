@@ -27,6 +27,8 @@
 			}
 			else if (currentState.indexOf('import') > -1) {
 				ctrl.selectedTab = 2;
+			} else if (currentState.indexOf('calculation') > -1) {
+				ctrl.selectedTab = 3;
 			}
 		};
 
