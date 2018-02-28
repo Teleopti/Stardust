@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Rta.Tracer;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
+namespace Teleopti.Ccc.Domain.Rta.ViewModels
 {
 	public class RtaTracerViewModelBuilder
 	{

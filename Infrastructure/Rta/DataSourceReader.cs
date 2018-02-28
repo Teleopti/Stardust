@@ -1,8 +1,8 @@
 ﻿using System.Collections.Concurrent;
 using System.Linq;
 using NHibernate.Transform;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Rta.Service;
 using Teleopti.Ccc.Infrastructure.Repositories;
 
 namespace Teleopti.Ccc.Infrastructure.Rta

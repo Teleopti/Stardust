@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
+namespace Teleopti.Ccc.Domain.Rta.ReadModelUpdaters
 {
 	public interface IOrganizationReader
 	{

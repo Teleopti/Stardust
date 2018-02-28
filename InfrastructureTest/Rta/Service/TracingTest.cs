@@ -1,10 +1,10 @@
 ﻿using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Rta.ReadModelUpdaters;
+using Teleopti.Ccc.Domain.Rta.Service;
+using Teleopti.Ccc.Domain.Rta.Tracer;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Service
 	{
 		public Database Database;
 		public AnalyticsDatabase Analytics;
-		public Domain.ApplicationLayer.Rta.Service.Rta Rta;
+		public Domain.Rta.Service.Rta Rta;
 		public IRtaTracer Tracer;
 		public FakeEventPublisher Publisher;
 		public IRtaTracerReader Reader;

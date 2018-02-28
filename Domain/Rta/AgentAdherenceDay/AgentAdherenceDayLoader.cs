@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Linq;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Rta.ReadModelUpdaters;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay
+namespace Teleopti.Ccc.Domain.Rta.AgentAdherenceDay
 {
 	public class AgentAdherenceDayLoader
 	{

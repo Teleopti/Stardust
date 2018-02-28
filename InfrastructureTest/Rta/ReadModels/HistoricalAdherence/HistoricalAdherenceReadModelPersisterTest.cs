@@ -2,8 +2,8 @@ using System;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Rta.ReadModelUpdaters;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.HistoricalAdherence
 {

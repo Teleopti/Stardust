@@ -2,11 +2,11 @@
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Rta.ReadModelUpdaters;
+using Teleopti.Ccc.Domain.Rta.Service;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Service
 		public WithAnalyticsUnitOfWork WithAnalyticsUnitOfWork;
 		public WithUnitOfWork WithUnitOfWork;
 		public IPersonRepository Persons;
-		public Domain.ApplicationLayer.Rta.Service.Rta Rta;
+		public Domain.Rta.Service.Rta Rta;
 		public IAgentStateReadModelReader ReadModels;
 		public FakeEventPublisher Publisher;
 
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Service
 			Publisher.AddHandler(typeof(ExternalLogonReadModelUpdater));
 			Publisher.AddHandler(typeof(AgentStateReadModelMaintainer));
 			Publisher.AddHandler(typeof(AgentStateReadModelUpdater));
-			var logOutBySnapshot = Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot;
+			var logOutBySnapshot = Domain.Rta.Service.Rta.LogOutBySnapshot;
 			Analytics.WithDataSource(9, "sourceId");
 			Database
 				.WithAgent("user1")

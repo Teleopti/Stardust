@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
+namespace Teleopti.Ccc.Domain.Rta.Tracer
 {
 	public interface IRtaTracer
 	{

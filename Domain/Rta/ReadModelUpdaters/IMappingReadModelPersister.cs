@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
+using Teleopti.Ccc.Domain.Rta.Service;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
+namespace Teleopti.Ccc.Domain.Rta.ReadModelUpdaters
 {
 	public interface IMappingReadModelPersister
 	{

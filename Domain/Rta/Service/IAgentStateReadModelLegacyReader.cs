@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
+using Teleopti.Ccc.Domain.Rta.ViewModels;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
+namespace Teleopti.Ccc.Domain.Rta.Service
 {
 	public interface IAgentStateReadModelReader
 	{

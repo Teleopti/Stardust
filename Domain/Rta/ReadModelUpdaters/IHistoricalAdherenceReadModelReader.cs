@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay;
+using Teleopti.Ccc.Domain.Rta.AgentAdherenceDay;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
+namespace Teleopti.Ccc.Domain.Rta.ReadModelUpdaters
 {
 	public interface IHistoricalAdherenceReadModelReader
 	{

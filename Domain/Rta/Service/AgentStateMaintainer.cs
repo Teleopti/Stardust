@@ -1,8 +1,9 @@
 ﻿using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
+namespace Teleopti.Ccc.Domain.Rta.Service
 {
 	public class AgentStateMaintainer :
 		IRunOnHangfire,

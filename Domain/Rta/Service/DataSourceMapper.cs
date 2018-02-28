@@ -1,10 +1,10 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Rta.Tracer;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
+namespace Teleopti.Ccc.Domain.Rta.Service
 {
 	public class DataSourceMapper
 	{

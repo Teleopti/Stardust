@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
+namespace Teleopti.Ccc.Domain.Rta.ViewModels
 {
 	public class AgentViewModel
 	{

@@ -2,10 +2,10 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Rta.Service;
+using Teleopti.Ccc.Domain.Rta.Tracer;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 	public class TraceTest
 	{
 		public FakeDatabase Database;
-		public Domain.ApplicationLayer.Rta.Service.Rta Target;
+		public Domain.Rta.Service.Rta Target;
 		public FakeRtaTracerPersister Logs;
 		public IRtaTracer Tracer;
 		public IDataSourceScope DataSource;

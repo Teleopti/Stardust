@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using NHibernate.Transform;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Rta.Service;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork;
 
 namespace Teleopti.Ccc.Infrastructure.Rta

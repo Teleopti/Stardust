@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.DistributedLock;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Rta.Service;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
+namespace Teleopti.Ccc.Domain.Rta.ReadModelUpdaters
 {
 	public class MappingReadModelUpdater :
 		IHandleEvent<UnknownStateCodeReceviedEvent>,

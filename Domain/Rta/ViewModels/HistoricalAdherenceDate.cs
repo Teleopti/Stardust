@@ -5,7 +5,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
+namespace Teleopti.Ccc.Domain.Rta.ViewModels
 {
 	public class HistoricalAdherenceDate
 	{

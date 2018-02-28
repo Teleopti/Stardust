@@ -3,8 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CSharp.RuntimeBinder;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Messages;
+using Teleopti.Ccc.Domain.Rta.Service;
 
 namespace Teleopti.Ccc.Domain.Logon.Aspects
 {

@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 	public class EmptyExistingStateTest
 	{
 		public FakeDatabase Database;
-		public Domain.ApplicationLayer.Rta.Service.Rta Rta;
+		public Domain.Rta.Service.Rta Rta;
 		public RtaTestAttribute Context;
 		public FakeEventPublisher Publisher;
 		

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ApprovePeriodAsInAdherence;
+using Teleopti.Ccc.Domain.Rta.ApprovePeriodAsInAdherence;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay
+namespace Teleopti.Ccc.Domain.Rta.AgentAdherenceDay
 {
 	public interface IApprovedPeriodsReader
 	{

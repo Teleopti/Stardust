@@ -1,7 +1,7 @@
 using System;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay
+namespace Teleopti.Ccc.Domain.Rta.AgentAdherenceDay
 {
 	public class HistoricalChange
 	{

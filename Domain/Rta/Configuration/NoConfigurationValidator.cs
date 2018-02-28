@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Configuration
+namespace Teleopti.Ccc.Domain.Rta.Configuration
 {
 	public class NoConfigurationValidator : IConfigurationValidator
 	{

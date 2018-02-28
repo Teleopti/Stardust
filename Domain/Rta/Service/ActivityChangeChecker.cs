@@ -1,6 +1,6 @@
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer;
+using Teleopti.Ccc.Domain.Rta.Tracer;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
+namespace Teleopti.Ccc.Domain.Rta.Service
 {
 	public interface IActivityChangeCheckerFromScheduleChangeProcessor
 	{

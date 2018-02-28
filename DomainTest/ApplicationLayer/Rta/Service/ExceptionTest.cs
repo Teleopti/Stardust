@@ -1,5 +1,5 @@
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
+using Teleopti.Ccc.Domain.Rta.Service;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 
@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 	public class ExceptionTest
 	{
 		public FakeDatabase Database;
-		public Domain.ApplicationLayer.Rta.Service.Rta Target;
+		public Domain.Rta.Service.Rta Target;
 
 		[Test]
 		public void ShouldThrowIfNoSourceId()

@@ -3,7 +3,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
+namespace Teleopti.Ccc.Domain.Rta.ReadModelUpdaters
 {
 	public class CurrentBelongsToDate 
 	{

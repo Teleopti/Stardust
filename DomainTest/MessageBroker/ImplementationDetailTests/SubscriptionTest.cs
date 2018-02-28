@@ -1,9 +1,9 @@
 ﻿using System;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MessageBroker;
+using Teleopti.Ccc.Domain.Rta.Service;
 
 namespace Teleopti.Ccc.DomainTest.MessageBroker.ImplementationDetailTests
 {

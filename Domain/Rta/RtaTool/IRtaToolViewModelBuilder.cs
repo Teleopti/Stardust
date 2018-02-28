@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.RtaTool
+namespace Teleopti.Ccc.Domain.Rta.RtaTool
 {
 	public class RtaToolAgentStateFilter
 	{

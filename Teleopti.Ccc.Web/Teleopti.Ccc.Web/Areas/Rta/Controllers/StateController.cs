@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Http;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Rta;
+using Teleopti.Ccc.Domain.Rta.Service;
+using Teleopti.Ccc.Domain.Rta.Tracer;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 {
 	public class StateController : ApiController
 	{
-		private readonly Domain.ApplicationLayer.Rta.Service.Rta _rta;
+		private readonly Domain.Rta.Service.Rta _rta;
 		private readonly INow _now;
 		private readonly IRtaTracer _tracer;
 
-		public StateController(Domain.ApplicationLayer.Rta.Service.Rta rta, INow now, IRtaTracer tracer)
+		public StateController(Domain.Rta.Service.Rta rta, INow now, IRtaTracer tracer)
 		{
 			_rta = rta;
 			_now = now;

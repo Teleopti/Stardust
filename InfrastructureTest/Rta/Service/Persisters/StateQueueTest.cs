@@ -1,9 +1,9 @@
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Rta;
+using Teleopti.Ccc.Domain.Rta.Service;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta.Service.Persisters

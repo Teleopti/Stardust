@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ApprovePeriodAsInAdherence
+namespace Teleopti.Ccc.Domain.Rta.ApprovePeriodAsInAdherence
 {
 	public class ApprovedPeriod
 	{

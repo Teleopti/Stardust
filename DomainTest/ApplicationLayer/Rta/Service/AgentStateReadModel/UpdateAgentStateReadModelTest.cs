@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.AgentStateReadMod
 	{
 		public FakeDatabase Database;
 		public FakeRtaStateGroupRepository StateGroups;
-		public Domain.ApplicationLayer.Rta.Service.Rta Target;
+		public Domain.Rta.Service.Rta Target;
 		public MutableNow Now;
 
 		[Test]

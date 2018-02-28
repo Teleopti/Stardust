@@ -2,10 +2,10 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Rta.ReadModelUpdaters;
+using Teleopti.Ccc.Domain.Rta.Service;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Service
 	public class UnrecognizedStatesTest2
 	{
 		public IPrincipalAndStateContext Context;
-		public Domain.ApplicationLayer.Rta.Service.Rta Target;
+		public Domain.Rta.Service.Rta Target;
 		public Database Database;
 		public AnalyticsDatabase Analytics;
 		public WithUnitOfWork UnitOfWork;
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Service
 			Context.Login();
 			var actual = UnitOfWork.Get(() => StateGroupRepository.LoadAllCompleteGraph());
 			actual.SelectMany(g => g.StateCollection.Select(s => s.StateCode))
-				.Where(x => x == Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
+				.Where(x => x == Domain.Rta.Service.Rta.LogOutBySnapshot)
 				.Should().Have.Count.EqualTo(1);
 		}
 	}

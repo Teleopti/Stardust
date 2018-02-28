@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Configuration
+namespace Teleopti.Ccc.Domain.Rta.Configuration
 {
 	public class ConfigurationValidationViewModel
 	{

@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.AgentStateReadMod
 		public FakeDatabase Database;
 		public MutableNow Now;
 		public IJsonDeserializer Deserializer;
-		public Domain.ApplicationLayer.Rta.Service.Rta Target;
+		public Domain.Rta.Service.Rta Target;
 
 		[Test]
 		public void ShouldPersistShift()

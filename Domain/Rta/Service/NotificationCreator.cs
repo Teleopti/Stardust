@@ -1,7 +1,7 @@
 using System;
 using Teleopti.Ccc.Domain.MessageBroker;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
+namespace Teleopti.Ccc.Domain.Rta.Service
 {
 	public class NotificationCreator : INotificationCreator
 	{

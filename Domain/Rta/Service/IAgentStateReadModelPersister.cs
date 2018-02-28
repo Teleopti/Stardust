@@ -1,7 +1,7 @@
 ﻿using System;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
+using Teleopti.Ccc.Domain.Rta.ReadModelUpdaters;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
+namespace Teleopti.Ccc.Domain.Rta.Service
 {
 	public interface IAgentStateReadModelPersister
 	{

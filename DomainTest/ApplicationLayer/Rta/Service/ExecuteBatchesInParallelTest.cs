@@ -5,7 +5,7 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using System.Linq;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
+using Teleopti.Ccc.Domain.Rta.Service;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 
@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 	{
 		public FakeDatabase Database;
 		public MutableNow Now;
-		public Domain.ApplicationLayer.Rta.Service.Rta Target;
+		public Domain.Rta.Service.Rta Target;
 		public FakeAgentStateReadModelPersister Persister;
 		
 		[Test]
@@ -62,9 +62,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithAgent("user1", personId1)
 				.WithAgent("user2", personId2)
-				.WithStateGroup(null, Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot, false, true)
-				.WithStateCode(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
-				.WithMappedRule(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
+				.WithStateGroup(null, Domain.Rta.Service.Rta.LogOutBySnapshot, false, true)
+				.WithStateCode(Domain.Rta.Service.Rta.LogOutBySnapshot)
+				.WithMappedRule(Domain.Rta.Service.Rta.LogOutBySnapshot)
 				.WithMappedRule("ready")
 				.WithMappedRule("phone")
 				;
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				SnapshotId = "2016-07-11 08:10".Utc()
 			});
 
-			Persister.Load(personId1).StateName.Should().Be(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot);
+			Persister.Load(personId1).StateName.Should().Be(Domain.Rta.Service.Rta.LogOutBySnapshot);
 			Persister.Load(personId2).StateName.Should().Be("phone");
 		}
 

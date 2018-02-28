@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 	public class ExternalLogonPersonMappingTest
 	{
 		public FakeDatabase Database;
-		public Domain.ApplicationLayer.Rta.Service.Rta Target;
+		public Domain.Rta.Service.Rta Target;
 		public FakeEventPublisher Publisher;
 		public MutableNow Now;
 

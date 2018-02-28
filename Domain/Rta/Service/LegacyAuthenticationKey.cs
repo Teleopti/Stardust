@@ -1,8 +1,8 @@
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
+namespace Teleopti.Ccc.Domain.Rta.Service
 {
 	public class LegacyAuthenticationKey
 	{
-		public static string TheKey = "!#¤atAbgT%";
+		public static string TheKey = "!#Â¤atAbgT%";
 		
 		public static string MakeEncodingSafe(string authenticationKey)
 		{

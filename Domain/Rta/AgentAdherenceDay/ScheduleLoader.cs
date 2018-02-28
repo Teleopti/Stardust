@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay
+namespace Teleopti.Ccc.Domain.Rta.AgentAdherenceDay
 {
 	public class ScheduleLoader
 	{

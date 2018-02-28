@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.AgentStateReadMod
 		public FakeAgentStateReadModelPersister Persister;
 		public FakeDatabase Database;
 		public MutableNow Now;
-		public Domain.ApplicationLayer.Rta.Service.Rta Target;
+		public Domain.Rta.Service.Rta Target;
 
 		[Test]
 		public void ShouldLogOutPersonsNotInSnapshot()
@@ -27,8 +27,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.AgentStateReadMod
 				.WithAgent("usercode2", personId)
 				.WithMappedRule("statecode", Guid.Empty, null, "A State")
 				.WithStateGroup(null, "Logged Out", false, true)
-				.WithStateCode(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
-				.WithMappedRule(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot, Guid.Empty, null, "Logged Out")
+				.WithStateCode(Domain.Rta.Service.Rta.LogOutBySnapshot)
+				.WithMappedRule(Domain.Rta.Service.Rta.LogOutBySnapshot, Guid.Empty, null, "Logged Out")
 				;
 
 			Now.Is("2014-10-20 10:00");
@@ -87,8 +87,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.AgentStateReadMod
 				.WithAgent("usercode2", personId)
 				.WithMappedRule("statecode", Guid.Empty, null, "A State")
 				.WithStateGroup(null, "Logged Out", false, true)
-				.WithStateCode(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
-				.WithMappedRule(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot, Guid.Empty, null, "Logged Out")
+				.WithStateCode(Domain.Rta.Service.Rta.LogOutBySnapshot)
+				.WithMappedRule(Domain.Rta.Service.Rta.LogOutBySnapshot, Guid.Empty, null, "Logged Out")
 				;
 			Now.Is("2014-10-20 10:00");
 			Target.Process(new BatchForTest
@@ -163,8 +163,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.AgentStateReadMod
 				.WithAgent("usercode2", personId)
 				.WithMappedRule("statecode1", Guid.Empty, null, "A State")
 				.WithStateGroup(null, "Logged Out", false, true)
-				.WithStateCode(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
-				.WithMappedRule(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot, Guid.Empty, null, "Logged Out")
+				.WithStateCode(Domain.Rta.Service.Rta.LogOutBySnapshot)
+				.WithMappedRule(Domain.Rta.Service.Rta.LogOutBySnapshot, Guid.Empty, null, "Logged Out")
 				;
 			Now.Is("2014-10-20 10:00");
 
@@ -217,8 +217,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.AgentStateReadMod
 				.WithAgent("usercode2", personId)
 				.WithMappedRule("statecode1", Guid.Empty, null, "A State")
 				.WithStateGroup(null, "Logged Out", false, true)
-				.WithStateCode(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
-				.WithMappedRule(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot, Guid.Empty, null, "Logged Out")
+				.WithStateCode(Domain.Rta.Service.Rta.LogOutBySnapshot)
+				.WithMappedRule(Domain.Rta.Service.Rta.LogOutBySnapshot, Guid.Empty, null, "Logged Out")
 				;
 			Now.Is("2014-10-20 10:00");
 
@@ -270,7 +270,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.AgentStateReadMod
 				.WithStateGroup(null, "state", true, false)
 				.WithStateCode("statecode")
 				.WithStateGroup(null, "loggedout", false, true)
-				.WithStateCode(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
+				.WithStateCode(Domain.Rta.Service.Rta.LogOutBySnapshot)
 				;
 			Now.Is("2014-10-20 10:00");
 			Target.Process(new BatchForTest
@@ -286,7 +286,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.AgentStateReadMod
 					new BatchStateForTest
 					{
 						UserCode = "usercode2",
-						StateCode = Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot
+						StateCode = Domain.Rta.Service.Rta.LogOutBySnapshot
 					}
 				}
 			});

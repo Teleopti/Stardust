@@ -1,4 +1,4 @@
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer
+namespace Teleopti.Ccc.Domain.Rta.Tracer
 {
 	public class RtaTracerConfig
 	{

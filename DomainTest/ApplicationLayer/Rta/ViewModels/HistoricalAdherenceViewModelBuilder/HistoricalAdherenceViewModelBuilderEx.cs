@@ -1,6 +1,6 @@
 ﻿using System;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Rta.ViewModels;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.HistoricalAdherenceViewModelBuilder
@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.HistoricalAdhe
 	public static class HistoricalAdherenceViewModelBuilderEx
 	{
 		public static HistoricalAdherenceViewModel Build(
-			this Domain.ApplicationLayer.Rta.ViewModels.HistoricalAdherenceViewModelBuilder target,
+			this Domain.Rta.ViewModels.HistoricalAdherenceViewModelBuilder target,
 			Guid personId) =>
 			target.Build(personId, new DateOnly(ServiceLocatorForEntity.Now.UtcDateTime().Date));
 	}

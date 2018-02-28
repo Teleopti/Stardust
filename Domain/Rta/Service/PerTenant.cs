@@ -2,7 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using Teleopti.Ccc.Domain.Common;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
+namespace Teleopti.Ccc.Domain.Rta.Service
 {
 	public class PerTenant<T>
 	{

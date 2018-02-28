@@ -1,9 +1,9 @@
 using System;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Rta.Service;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 
@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public FakeAgentStatePersister Persister;
 		public FakeDatabase Database;
 		public MutableNow Now;
-		public Domain.ApplicationLayer.Rta.Service.Rta Target;
+		public Domain.Rta.Service.Rta Target;
 
 		[Test]
 		public void ShouldLogOutPersonsNotInSnapshot()
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithAgent("usercode1", Guid.NewGuid())
 				.WithAgent("usercode2", personId)
 				.WithStateGroup(loggedout, "loggedout", false, true)
-				.WithStateCode(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
+				.WithStateCode(Domain.Rta.Service.Rta.LogOutBySnapshot)
 				.WithStateGroup(null, "state")
 				.WithStateCode("statecode")
 				;
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithDataSource("source2")
 				.WithAgent("usercode2", user2)
 				.WithStateGroup(Guid.NewGuid(), "loggedout", false, true)
-				.WithStateCode(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
+				.WithStateCode(Domain.Rta.Service.Rta.LogOutBySnapshot)
 				.WithStateGroup(state, "state")
 				.WithStateCode("statecode")
 				;
@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithAgent("usercode1", Guid.NewGuid())
 				.WithAgent("usercode2", personId)
 				.WithStateGroup(loggedout, "loggedout", false, true)
-				.WithStateCode(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
+				.WithStateCode(Domain.Rta.Service.Rta.LogOutBySnapshot)
 				.WithStateGroup(null, "state1")
 				.WithStateCode("statecode1")
 				.WithStateGroup(null, "state2")
@@ -219,7 +219,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithDataSource("source2")
 				.WithAgent("usercode2", personId)
 				.WithStateGroup(Guid.NewGuid(), "loggedout", false, true)
-				.WithStateCode(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
+				.WithStateCode(Domain.Rta.Service.Rta.LogOutBySnapshot)
 				.WithStateGroup(state1, "state1")
 				.WithStateCode("statecode1")
 				.WithStateGroup(null, "state2")
@@ -273,7 +273,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithAgent("usercode1", Guid.NewGuid())
 				.WithAgent("usercode2", user2)
 				.WithStateGroup(loggedout, "loggedout", false, true)
-				.WithStateCode(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
+				.WithStateCode(Domain.Rta.Service.Rta.LogOutBySnapshot)
 				.WithStateGroup(null, "state")
 				.WithStateCode("statecode")
 				;
@@ -291,7 +291,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 					new BatchStateForTest
 					{
 						UserCode = "usercode2",
-						StateCode = Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot
+						StateCode = Domain.Rta.Service.Rta.LogOutBySnapshot
 					}
 				}
 			});

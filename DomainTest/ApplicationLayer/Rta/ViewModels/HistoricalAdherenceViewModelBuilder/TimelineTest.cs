@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.HistoricalAdhe
 	[DefaultData]
 	public class TimelineTest
 	{
-		public Domain.ApplicationLayer.Rta.ViewModels.HistoricalAdherenceViewModelBuilder Target;
+		public Domain.Rta.ViewModels.HistoricalAdherenceViewModelBuilder Target;
 		public FakeDatabase Database;
 		public FakeHistoricalAdherenceReadModelPersister ReadModel;
 		public MutableNow Now;

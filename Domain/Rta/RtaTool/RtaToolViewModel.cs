@@ -1,4 +1,4 @@
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.RtaTool
+namespace Teleopti.Ccc.Domain.Rta.RtaTool
 {
 	public class RtaToolViewModel
 	{

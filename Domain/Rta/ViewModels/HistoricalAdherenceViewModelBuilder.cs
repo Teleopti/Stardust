@@ -2,16 +2,15 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ApprovePeriodAsInAdherence;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Rta.AgentAdherenceDay;
+using Teleopti.Ccc.Domain.Rta.ApprovePeriodAsInAdherence;
+using Teleopti.Ccc.Domain.Rta.ReadModelUpdaters;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
+namespace Teleopti.Ccc.Domain.Rta.ViewModels
 {
 	public class HistoricalAdherenceViewModelBuilder
 	{

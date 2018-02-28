@@ -1,21 +1,20 @@
 using System;
 using System.Threading.Tasks;
 using Hangfire.Server;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer;
 using Teleopti.Ccc.Domain.DistributedLock;
 using Teleopti.Ccc.Domain.Logon.Aspects;
+using Teleopti.Ccc.Domain.Rta.Service;
 
 namespace Teleopti.Ccc.Infrastructure.Rta
 {
 	public class StateQueueWorker : IBackgroundProcess
 	{
-		private readonly Domain.ApplicationLayer.Rta.Service.Rta _rta;
+		private readonly Domain.Rta.Service.Rta _rta;
 		private readonly StateQueueTenants _tenants;
 		private readonly IDistributedLockAcquirer _distributedLock;
 
 		public StateQueueWorker(
-			Domain.ApplicationLayer.Rta.Service.Rta rta,
+			Domain.Rta.Service.Rta rta,
 			StateQueueTenants tenants,
 			IDistributedLockAcquirer distributedLock)
 		{

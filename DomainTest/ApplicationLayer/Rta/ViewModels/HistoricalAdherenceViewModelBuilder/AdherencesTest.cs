@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.HistoricalAdhe
 	[TestFixture]
 	public class AdherencesTest
 	{
-		public Domain.ApplicationLayer.Rta.ViewModels.HistoricalAdherenceViewModelBuilder Target;
+		public Domain.Rta.ViewModels.HistoricalAdherenceViewModelBuilder Target;
 		public FakeHistoricalAdherenceReadModelPersister ReadModel;
 		public MutableNow Now;
 

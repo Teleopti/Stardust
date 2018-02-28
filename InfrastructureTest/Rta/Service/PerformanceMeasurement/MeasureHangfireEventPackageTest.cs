@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Service.PerformanceMeasurement
 	public class MeasureHangfireEventPackageTest
 	{
 		public Database Database;
-		public Domain.ApplicationLayer.Rta.Service.Rta Rta;
+		public Domain.Rta.Service.Rta Rta;
 		public FakeConfigReader Config;
 		public AnalyticsDatabase Analytics;
 		public PerformanceMeasurementTestAttribute Context;
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Service.PerformanceMeasurement
 				Database
 					.WithDefaultScenario("default")
 					.WithStateGroup("default", true)
-					.WithStateCode(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot);
+					.WithStateCode(Domain.Rta.Service.Rta.LogOutBySnapshot);
 				stateCodes.ForEach(x => Database.WithStateGroup(x).WithStateCode(x));
 				Enumerable.Range(0, 10).ForEach(x => Database.WithActivity($"activity{x}"));
 

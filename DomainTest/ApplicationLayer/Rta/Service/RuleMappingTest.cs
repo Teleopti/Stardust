@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 	public class RuleMappingTest
 	{
 		public FakeDatabase Database;
-		public Domain.ApplicationLayer.Rta.Service.Rta Target;
+		public Domain.Rta.Service.Rta Target;
 		public MutableNow Now;
 		public FakeEventPublisher EventPublisher;
 		

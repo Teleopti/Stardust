@@ -1,10 +1,10 @@
 ﻿using System;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Rta.AgentAdherenceDay;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -339,7 +339,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AgentAdherenceDay
 
 	public static class AgentAdherenceDayLoaderEx
 	{
-		public static Domain.ApplicationLayer.Rta.AgentAdherenceDay.AgentAdherenceDay Load(this AgentAdherenceDayLoader loader, Guid personId)
+		public static Domain.Rta.AgentAdherenceDay.AgentAdherenceDay Load(this AgentAdherenceDayLoader loader, Guid personId)
 		{
 			return loader.Load(personId, new DateOnly(ServiceLocatorForEntity.Now.UtcDateTime().Date));
 		}

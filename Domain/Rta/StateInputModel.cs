@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Rta.Tracer;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
+namespace Teleopti.Ccc.Domain.Rta
 {
 	public class BatchInputModel
 	{

@@ -1,7 +1,6 @@
-﻿using Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay;
-using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ApprovePeriodAsInAdherence
+namespace Teleopti.Ccc.Domain.Rta.ApprovePeriodAsInAdherence
 {
 	public class ApprovePeriodAsInAdherence
 	{

@@ -1,5 +1,5 @@
 ﻿using System;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
+using Teleopti.Ccc.Domain.Rta.Service;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta.Service.Persisters
 {

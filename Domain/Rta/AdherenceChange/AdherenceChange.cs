@@ -1,8 +1,8 @@
 ﻿using System;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
+using Teleopti.Ccc.Domain.Rta.AgentAdherenceDay;
+using Teleopti.Ccc.Domain.Rta.ReadModelUpdaters;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.AdherenceChange
+namespace Teleopti.Ccc.Domain.Rta.AdherenceChange
 {
 	public class AdherenceChange
 	{

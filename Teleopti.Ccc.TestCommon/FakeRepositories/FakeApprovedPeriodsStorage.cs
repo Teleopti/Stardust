@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.AgentAdherenceDay;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ApprovePeriodAsInAdherence;
+using Teleopti.Ccc.Domain.Rta.AgentAdherenceDay;
+using Teleopti.Ccc.Domain.Rta.ApprovePeriodAsInAdherence;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {

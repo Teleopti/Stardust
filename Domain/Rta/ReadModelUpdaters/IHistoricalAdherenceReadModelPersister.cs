@@ -1,6 +1,6 @@
 using System;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
+namespace Teleopti.Ccc.Domain.Rta.ReadModelUpdaters
 {
 	public interface IHistoricalAdherenceReadModelPersister
 	{

@@ -2,9 +2,9 @@ using System;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Tracer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Rta.Tracer;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 				Target.Trace(userCode);
 
 			using (DataSource.OnThisThreadUse(Database.TenantName()))
-				Target.SnapshotLogout(person, Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot);
+				Target.SnapshotLogout(person, Domain.Rta.Service.Rta.LogOutBySnapshot);
 
 			using (DataSource.OnThisThreadUse(Database.TenantName()))
 				Logs.ReadOfType<StateTraceLog>().Single().Log.User.Should().Contain(userCode);
@@ -50,10 +50,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 				Target.Trace("usercode");
 
 			using (DataSource.OnThisThreadUse(Database.TenantName()))
-				Target.SnapshotLogout(person, Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot);
+				Target.SnapshotLogout(person, Domain.Rta.Service.Rta.LogOutBySnapshot);
 
 			using (DataSource.OnThisThreadUse(Database.TenantName()))
-				Logs.ReadOfType<StateTraceLog>().Single().Log.StateCode.Should().Be(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot);
+				Logs.ReadOfType<StateTraceLog>().Single().Log.StateCode.Should().Be(Domain.Rta.Service.Rta.LogOutBySnapshot);
 		}
 
 		[Test]
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Tracer
 				Target.Trace("usercode");
 
 			using (DataSource.OnThisThreadUse(Database.TenantName()))
-				Target.SnapshotLogout(person, Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot);
+				Target.SnapshotLogout(person, Domain.Rta.Service.Rta.LogOutBySnapshot);
 
 			using (DataSource.OnThisThreadUse(Database.TenantName()))
 				Logs.ReadOfType<StateTraceLog>().Single().Message.Should().Be("Snapshot logout");

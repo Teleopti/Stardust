@@ -1,6 +1,6 @@
 using Teleopti.Ccc.Domain.MultiTenancy;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
+namespace Teleopti.Ccc.Domain.Rta.Service
 {
 	public class TenantLoader
 	{

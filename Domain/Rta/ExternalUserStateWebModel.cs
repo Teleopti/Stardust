@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
+namespace Teleopti.Ccc.Domain.Rta
 {
 	public class ExternalUserStateWebModel
 	{

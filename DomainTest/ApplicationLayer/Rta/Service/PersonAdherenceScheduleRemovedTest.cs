@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public FakeDatabase Database;
 		public MutableNow Now;
 		public FakeEventPublisher Publisher;
-		public Domain.ApplicationLayer.Rta.Service.Rta Target;
+		public Domain.Rta.Service.Rta Target;
 		public FakeAgentStatePersister X;
 
 		[Test]

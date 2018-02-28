@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using NHibernate.Util;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Rta;
+using Teleopti.Ccc.Domain.Rta.Service;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -15,12 +15,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 {
 	public static class RtaExtensions
 	{
-		public static void CheckForActivityChanges(this Domain.ApplicationLayer.Rta.Service.Rta rta, string tenant, Guid personId)
+		public static void CheckForActivityChanges(this Domain.Rta.Service.Rta rta, string tenant, Guid personId)
 		{
 			rta.CheckForActivityChanges(tenant);
 		}
 
-		public static void ProcessState(this Domain.ApplicationLayer.Rta.Service.Rta rta, StateForTest input)
+		public static void ProcessState(this Domain.Rta.Service.Rta rta, StateForTest input)
 		{
 			rta.Process(new BatchInputModel
 			{
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			});
 		}
 
-		public static void CloseSnapshot(this Domain.ApplicationLayer.Rta.Service.Rta rta, CloseSnapshotForTest input)
+		public static void CloseSnapshot(this Domain.Rta.Service.Rta rta, CloseSnapshotForTest input)
 		{
 			rta.Process(new BatchInputModel
 			{
