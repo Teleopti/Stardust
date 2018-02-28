@@ -1,77 +1,53 @@
-﻿using NUnit.Framework;
-using Rhino.Mocks;
+﻿using System;
+using System.Collections.Generic;
+using System.IdentityModel.Claims;
+using NUnit.Framework;
 using SharpTestsEx;
-using System.Globalization;
 using System.Linq;
+using System.Threading;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.Security;
-using Teleopti.Ccc.Infrastructure.Toggle;
-using Teleopti.Ccc.IocCommon.Toggle;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.TestData;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider;
-using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
-using Teleopti.Ccc.Web.Core;
+using Teleopti.Ccc.WebTest.Core.IoC;
 using Teleopti.Interfaces.Domain;
+using Claim = System.IdentityModel.Claims.Claim;
 
 namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 {
+	[MyTimeWebTest]
 	[TestFixture]
-	public class PortalViewModelFactoryTest
+	public class PortalViewModelFactoryTest : ISetup
 	{
-		private IReportsNavigationProvider _reportsNavProvider;
-		private static IPersonNameProvider _personNameProvider;
-		private static ILoggedOnUser _loggedOnUser;
-		private static IUserCulture _userCulture;
-		private ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
-		private IToggleManager _toggleManager;
+		public ICurrentDataSource CurrentDataSource;
+		public IPortalViewModelFactory Target;
+		public FakeCurrentUnitOfWorkFactory CurrentUnitOfWorkFactory;
+		public CurrentTenantUserFake CurrentTenantUser;
 
-		[SetUp]
-		public void Setup()
+		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			_reportsNavProvider = MockRepository.GenerateMock<IReportsNavigationProvider>();
-
-			_loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			_loggedOnUser.Stub(x => x.CurrentUser()).Return(new Person().WithName(new Name()));
-
-			var culture = CultureInfo.GetCultureInfo("sv-SE");
-			_userCulture = MockRepository.GenerateMock<IUserCulture>();
-			_userCulture.Expect(x => x.GetCulture()).Return(culture);
-
-			_currentTeleoptiPrincipal = MockRepository.GenerateMock<ICurrentTeleoptiPrincipal>();
-
-			_personNameProvider = MockRepository.GenerateMock<IPersonNameProvider>();
-			_personNameProvider.Stub(x => x.BuildNameFromSetting(_loggedOnUser.CurrentUser().Name)).Return("Agent Name");
-
-			_toggleManager = new FakeToggleManager();
+			system.UseTestDouble<PrincipalAuthorization>().For<IAuthorization>();
+			system.UseTestDouble<PermissionProvider>().For<IPermissionProvider>();
+			system.UseTestDouble<CurrentTenantUserFake>().For<ICurrentTenantUser>();
+			system.UseTestDouble(new FakeCurrentUnitOfWorkFactory(null).WithCurrent(new FakeUnitOfWorkFactory(null, null, null, null) { Name = MyTimeWebTestAttribute.DefaultTenantName })).For<ICurrentUnitOfWorkFactory>();
 		}
 
 		[Test]
 		public void ShouldHaveNavigationItems()
 		{
-			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(Arg<string>.Is.Anything)).Return(true);
-			_reportsNavProvider.Stub(x => x.GetNavigationItems())
-				.Return(new[] { new ReportNavigationItem { Action = "Index", Controller = "MyReport", IsWebReport = true } });
-			var target = new PortalViewModelFactory(permissionProvider,
-				MockRepository.GenerateMock<ILicenseActivatorProvider>(),
-				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
-				_reportsNavProvider, MockRepository.GenerateMock<IBadgeProvider>(),
-				_personNameProvider,
-				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(),
-				MockRepository.GenerateStub<ICurrentTenantUser>(),
-				_userCulture, _currentTeleoptiPrincipal,_toggleManager);
+			setPermissions();
 
-			var result = target.CreatePortalViewModel();
+			var result = Target.CreatePortalViewModel();
 
 			result.NavigationItems.Should().Have.Count.EqualTo(7);
 			result.NavigationItems.ElementAt(0).Action.Should().Be("Week");
@@ -91,152 +67,134 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		}
 
 		[Test]
+		public void ShouldHaveMessageNavigationItemsWhenHavingBothLicenseAndPermission()
+		{
+			setPermissions();
+
+			var licenseActivator = LicenseProvider.GetLicenseActivator(new AsmFakeLicenseService(true));
+			DefinedLicenseDataFactory.SetLicenseActivator(CurrentDataSource.CurrentName(), licenseActivator);
+			var result = Target.CreatePortalViewModel();
+
+			result.NavigationItems.Should().Have.Count.EqualTo(7);
+			result.NavigationItems.ElementAt(5).Action.Should().Be("Index");
+			result.NavigationItems.ElementAt(5).Controller.Should().Be("Message");
+		}
+
+		[Test]
 		public void ShouldHaveCustomerName()
 		{
-			var licenseActivatorProvider = MockRepository.GenerateMock<ILicenseActivatorProvider>();
-			var target = new PortalViewModelFactory(MockRepository.GenerateMock<IPermissionProvider>(),
-				licenseActivatorProvider,
-				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
-				_reportsNavProvider, MockRepository.GenerateMock<IBadgeProvider>(),
-				_personNameProvider,
-				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(),
-				MockRepository.GenerateStub<ICurrentTenantUser>(),
-				_userCulture, _currentTeleoptiPrincipal,_toggleManager);
+			var result = Target.CreatePortalViewModel();
 
-			var licenseActivator = MockRepository.GenerateMock<ILicenseActivator>();
-			licenseActivator.Stub(x => x.CustomerName).Return("Customer Name");
-			licenseActivatorProvider.Stub(x => x.Current()).Return(licenseActivator);
-
-			var result = target.CreatePortalViewModel();
-
-			result.CustomerName.Should().Be.EqualTo("Customer Name");
+			result.CustomerName.Should().Be.EqualTo("Teleopti_RD");
 		}
 
 		[Test]
 		public void ShouldHaveLogonAgentName()
 		{
-			var target = new PortalViewModelFactory(MockRepository.GenerateMock<IPermissionProvider>(),
-				MockRepository.GenerateMock<ILicenseActivatorProvider>(),
-				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
-				_reportsNavProvider, MockRepository.GenerateMock<IBadgeProvider>(),
-				_personNameProvider,
-				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(),
-				MockRepository.GenerateStub<ICurrentTenantUser>(),
-				_userCulture, _currentTeleoptiPrincipal,_toggleManager);
+			var result = Target.CreatePortalViewModel();
 
-			var result = target.CreatePortalViewModel();
-
-			result.CurrentLogonAgentName.Should().Be.EqualTo("Agent Name");
+			result.CurrentLogonAgentName.Should().Be.EqualTo("arne arne");
 		}
 
 		[Test]
 		public void ShouldHideChangePasswordIfNoApplicationLogonExists()
 		{
-			var agent = new PersonInfo();
-			var loggedOnUser = MockRepository.GenerateMock<ICurrentTenantUser>();
-			loggedOnUser.Expect(m => m.CurrentUser()).Return(agent);
-			var target = new PortalViewModelFactory(MockRepository.GenerateStub<IPermissionProvider>(),
-				MockRepository.GenerateStub<ILicenseActivatorProvider>(),
-				MockRepository.GenerateMock<IPushMessageProvider>(),
-				_loggedOnUser, _reportsNavProvider, MockRepository.GenerateMock<IBadgeProvider>(),
-				_personNameProvider,
-				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(),
-				loggedOnUser, _userCulture, _currentTeleoptiPrincipal,_toggleManager);
-
-			var res = target.CreatePortalViewModel();
+			var res = Target.CreatePortalViewModel();
 			res.ShowChangePassword.Should().Be.False();
 		}
 
 		[Test]
 		public void ShouldShowChangePasswordIfApplicationLogonExists()
 		{
-			var agent = new PersonInfo();
-			agent.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), RandomName.Make(), new OneWayEncryption());
-			var loggedOnUser = MockRepository.GenerateMock<ICurrentTenantUser>();
-			loggedOnUser.Expect(m => m.CurrentUser()).Return(agent);
-			var target = new PortalViewModelFactory(MockRepository.GenerateStub<IPermissionProvider>(),
-				MockRepository.GenerateStub<ILicenseActivatorProvider>(),
-				MockRepository.GenerateMock<IPushMessageProvider>(),
-				_loggedOnUser, _reportsNavProvider, MockRepository.GenerateMock<IBadgeProvider>(),
-				_personNameProvider,
-				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(),
-				loggedOnUser, _userCulture, _currentTeleoptiPrincipal,_toggleManager);
+			var tenant = new Tenant("Tenn");
+			var personInfo = new PersonInfo(tenant, Guid.NewGuid());
+			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), "Perra", "passadej", new OneWayEncryption());
+			CurrentTenantUser.Set(personInfo);
 
-			var res = target.CreatePortalViewModel();
+			var res = Target.CreatePortalViewModel();
 			res.ShowChangePassword.Should().Be.True();
 		}
 
 		[Test]
 		public void ShouldShowAsmIfPermissionToShowAsm()
 		{
-			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			permissionProvider.Expect(
-				p => p.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger)).Return(true);
+			setPermissions();
+			var licenseActivator = LicenseProvider.GetLicenseActivator(new AsmFakeLicenseService(true));
+			DefinedLicenseDataFactory.SetLicenseActivator(CurrentDataSource.CurrentName(), licenseActivator);
 
-			var target = createTarget(permissionProvider);
+			var res = Target.CreatePortalViewModel();
 
-			Assert.That(target.CreatePortalViewModel().HasAsmPermission, Is.True);
+			Assert.That(res.HasAsmPermission, Is.True);
 		}
 
 		[Test]
 		public void ShouldNotShowAsmIfNoPermission()
 		{
-			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			permissionProvider.Expect(
-				p => p.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger)).Return(false);
+			setPermissions(false);
 
-			var target = createTarget(permissionProvider);
+			var licenseActivator = LicenseProvider.GetLicenseActivator(new AsmFakeLicenseService(true));
+			DefinedLicenseDataFactory.SetLicenseActivator(CurrentDataSource.CurrentName(), licenseActivator);
 
-			Assert.That(target.CreatePortalViewModel().HasAsmPermission, Is.False);
+			var res = Target.CreatePortalViewModel();
+
+			Assert.That(res.HasAsmPermission, Is.False);
 		}
 
 		[Test]
 		public void ShouldNotShowBadgeIfNoPermission()
 		{
-			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			permissionProvider.Expect(p => p.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewBadge))
-				.Return(false);
-
-			var target = createTarget(permissionProvider);
-
-			Assert.That(target.CreatePortalViewModel().ShowBadge, Is.False);
+			Assert.That(Target.CreatePortalViewModel().ShowBadge, Is.False);
 		}
 
 		[Test, SetCulture("en-US")]
 		public void ShouldShowMeridianWhenUsCulture()
 		{
-			var target = createTarget(MockRepository.GenerateMock<IPermissionProvider>());
-
-			target.CreatePortalViewModel().ShowMeridian.Should().Be.True();
+			Target.CreatePortalViewModel().ShowMeridian.Should().Be.True();
 		}
 
 		[Test, SetCulture("sv-SE")]
 		public void ShouldShowMeridianWhenSwedishCulture()
 		{
-			var target = createTarget(MockRepository.GenerateMock<IPermissionProvider>());
-
-			target.CreatePortalViewModel().ShowMeridian.Should().Be.False();
+			Target.CreatePortalViewModel().ShowMeridian.Should().Be.False();
 		}
 
 		[Test, SetCulture("en-GB")]
 		public void ShouldShowMeridianWhenBritishCulture()
 		{
-			var target = createTarget(MockRepository.GenerateMock<IPermissionProvider>());
-
-			target.CreatePortalViewModel().ShowMeridian.Should().Be.False();
+			Target.CreatePortalViewModel().ShowMeridian.Should().Be.False();
 		}
 
-		private PortalViewModelFactory createTarget(IPermissionProvider permissionProvider)
+		private static void setPermissions(bool asmPermission = true)
 		{
-			return new PortalViewModelFactory(permissionProvider,
-				MockRepository.GenerateMock<ILicenseActivatorProvider>(),
-				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
-				MockRepository.GenerateMock<IReportsNavigationProvider>(),
-				MockRepository.GenerateMock<IBadgeProvider>(),
-				_personNameProvider,
-				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(),
-				MockRepository.GenerateStub<ICurrentTenantUser>(),
-				_userCulture, _currentTeleoptiPrincipal,_toggleManager);
+			var principal = Thread.CurrentPrincipal as ITeleoptiPrincipal;
+			var claims = new List<Claim>
+			{
+				new Claim(string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace
+						, "/", DefinedRaptorApplicationFunctionPaths.MyReportWeb)
+					, new AuthorizeEveryone(), Rights.PossessProperty),
+				new Claim(string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace
+						, "/", DefinedRaptorApplicationFunctionPaths.TeamSchedule)
+					, new AuthorizeEveryone(), Rights.PossessProperty),
+				new Claim(string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace
+						, "/", DefinedRaptorApplicationFunctionPaths.StudentAvailability)
+					, new AuthorizeEveryone(), Rights.PossessProperty),
+				new Claim(string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace
+						, "/", DefinedRaptorApplicationFunctionPaths.StandardPreferences)
+					, new AuthorizeEveryone(), Rights.PossessProperty),
+				new Claim(string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace
+						, "/", DefinedRaptorApplicationFunctionPaths.TextRequests)
+					, new AuthorizeEveryone(), Rights.PossessProperty),
+				new Claim(
+					string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace,
+						"/AvailableData"), new AuthorizeEveryone(), Rights.PossessProperty)
+			};
+
+			if (asmPermission)
+				claims.Add(new Claim(string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace
+						, "/", DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger)
+					, new AuthorizeEveryone(), Rights.PossessProperty));
+
+			principal.AddClaimSet(new DefaultClaimSet(ClaimSet.System, claims));
 		}
 	}
 }

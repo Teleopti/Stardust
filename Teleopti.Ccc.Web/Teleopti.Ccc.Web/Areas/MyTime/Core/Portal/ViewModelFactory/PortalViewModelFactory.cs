@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
@@ -33,6 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 		private readonly ICurrentTenantUser _currentTenantUser;
 		private readonly IUserCulture _userCulture;
 		private readonly ICurrentTeleoptiPrincipal _currentIdentity;
+		private readonly ILicenseAvailability _licenseAvailability;
 		private readonly IToggleManager _toggleManager;
 
 		public PortalViewModelFactory(IPermissionProvider permissionProvider,
@@ -44,7 +46,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			ITeamGamificationSettingRepository teamGamificationSettingReop,
 			ICurrentTenantUser currentTenantUser,
 			IUserCulture userCulture,
-			ICurrentTeleoptiPrincipal currentIdentity, IToggleManager toggleManager)
+			ICurrentTeleoptiPrincipal currentIdentity, IToggleManager toggleManager, ILicenseAvailability licenseAvailability)
 		{
 			_permissionProvider = permissionProvider;
 			_licenseActivatorProvider = licenseActivatorProviderProvider;
@@ -58,6 +60,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			_userCulture = userCulture;
 			_currentIdentity = currentIdentity;
 			_toggleManager = toggleManager;
+			_licenseAvailability = licenseAvailability;
 		}
 
 		public PortalViewModel CreatePortalViewModel()
@@ -104,7 +107,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 				&& _toggleManager.IsEnabled(Toggles.MyTimeWeb_ViewWFMAppGuide_43848),
 				HasAsmPermission =
 					_permissionProvider.HasApplicationFunctionPermission(
-						DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger),
+						DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger) && isAsmLicenseAvailable(),
 				ShowMeridian = CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern.Contains("t"),
 				UseJalaaliCalendar = useJalaaliCalendar,
 				DateFormat = culture.DateTimeFormat.ShortDatePattern.ToUpper(),
@@ -144,7 +147,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			{
 				navigationItems.Add(createRequestsNavigationItem());
 			}
-			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger))
+			if (isAsmLicenseAvailable() && _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger))
 			{
 				navigationItems.Add(createMessageNavigationItem(_pushMessageProvider.UnreadMessageCount));
 			}
@@ -239,6 +242,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 				Controller = "Schedule",
 				Title = Resources.Schedule
 			};
+		}
+
+		private bool isAsmLicenseAvailable()
+		{
+			return _licenseAvailability.IsLicenseEnabled(DefinedLicenseOptionPaths.TeleoptiCccAgentScheduleMessenger);
 		}
 	}
 }

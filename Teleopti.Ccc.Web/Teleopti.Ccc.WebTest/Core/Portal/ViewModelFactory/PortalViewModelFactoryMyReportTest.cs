@@ -1,76 +1,83 @@
+using System.Collections.Generic;
+using System.IdentityModel.Claims;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
-using System.Globalization;
 using System.Linq;
+using System.Threading;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
-using Teleopti.Ccc.IocCommon.Toggle;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider;
-using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
-using Teleopti.Ccc.Web.Core;
+using Teleopti.Ccc.WebTest.Core.IoC;
 using Teleopti.Interfaces.Domain;
+using Claim = System.IdentityModel.Claims.Claim;
 
 namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 {
+	[MyTimeWebTest]
 	[TestFixture]
-	public class PortalViewModelFactoryMyReportTest
+	public class PortalViewModelFactoryMyReportTest : ISetup
 	{
-		private static NavigationItem relevantTab(PortalViewModel result)
+		public IPortalViewModelFactory Target;
+		public ICurrentDataSource CurrentDataSource;
+		public FakeLoggedOnUser LoggedOnUser;
+		public CurrentTenantUserFake CurrentTenantUser;
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			return (from i in result.NavigationItems where i.Controller == "MyReport" select i)
-				.SingleOrDefault();
-		}
-
-		private IPersonNameProvider _personNameProvider;
-		private ILoggedOnUser _loggedOnUser;
-		private IUserCulture _userCulture;
-		private ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
-
-		[SetUp]
-		public void Setup()
-		{
-			_loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			_loggedOnUser.Stub(x => x.CurrentUser()).Return(new Person().WithName(new Name()));
-
-			var culture = CultureInfo.GetCultureInfo("sv-SE");
-			_userCulture = MockRepository.GenerateMock<IUserCulture>();
-			_userCulture.Expect(x => x.GetCulture()).Return(culture);
-
-			_currentTeleoptiPrincipal = MockRepository.GenerateMock<ICurrentTeleoptiPrincipal>();
-
-			_personNameProvider = MockRepository.GenerateMock<IPersonNameProvider>();
-			_personNameProvider.Stub(x => x.BuildNameFromSetting(_loggedOnUser.CurrentUser().Name)).Return("A B");
+			system.UseTestDouble<PrincipalAuthorization>().For<IAuthorization>();
+			system.UseTestDouble<PermissionProvider>().For<IPermissionProvider>();
+			system.UseTestDouble<CurrentTenantUserFake>().For<ICurrentTenantUser>();
+			system.UseTestDouble(new FakeCurrentUnitOfWorkFactory(null).WithCurrent(new FakeUnitOfWorkFactory(null, null, null, null) { Name = MyTimeWebTestAttribute.DefaultTenantName })).For<ICurrentUnitOfWorkFactory>();
 		}
 
 		[Test]
 		public void NavigationItems_WhenNoPermissionForMyReportWeb_ShouldNotContainLinkToReports()
 		{
-			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			permissionProvider.Stub(
-				x => x.HasApplicationFunctionPermission(Arg<string>.Is.NotEqual(DefinedRaptorApplicationFunctionPaths.MyReportWeb)))
-				.Return(true);
-			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.MyReportWeb))
-				.Return(false);
-			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<ILicenseActivatorProvider>(),
-				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
-				MockRepository.GenerateMock<IReportsNavigationProvider>(), MockRepository.GenerateMock<IBadgeProvider>(),
-				_personNameProvider,
-				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(), MockRepository.GenerateStub<ICurrentTenantUser>(),
-				_userCulture, _currentTeleoptiPrincipal, new FakeToggleManager());
+			setPermissions();
 
-			var result = relevantTab(target.CreatePortalViewModel());
+			var result = Target.CreatePortalViewModel();
 
-			result.Should().Be.Null();
+			var report = (from i in result.NavigationItems where i.Controller == "MyReport" select i).SingleOrDefault();
+			report.Should().Be.Null();
+		}
+
+		private static void setPermissions(bool asmPermission = true)
+		{
+			var principal = Thread.CurrentPrincipal as ITeleoptiPrincipal;
+			var claims = new List<Claim>
+			{
+				new Claim(string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace
+						, "/", DefinedRaptorApplicationFunctionPaths.TeamSchedule)
+					, new AuthorizeEveryone(), Rights.PossessProperty),
+				new Claim(string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace
+						, "/", DefinedRaptorApplicationFunctionPaths.StudentAvailability)
+					, new AuthorizeEveryone(), Rights.PossessProperty),
+				new Claim(string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace
+						, "/", DefinedRaptorApplicationFunctionPaths.StandardPreferences)
+					, new AuthorizeEveryone(), Rights.PossessProperty),
+				new Claim(string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace
+						, "/", DefinedRaptorApplicationFunctionPaths.TextRequests)
+					, new AuthorizeEveryone(), Rights.PossessProperty),
+				new Claim(
+					string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace,
+						"/AvailableData"), new AuthorizeEveryone(), Rights.PossessProperty)
+			};
+
+			if (asmPermission)
+				claims.Add(new Claim(string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace
+						, "/", DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger)
+					, new AuthorizeEveryone(), Rights.PossessProperty));
+
+			principal.AddClaimSet(new DefaultClaimSet(ClaimSet.System, claims));
 		}
 	}
 }

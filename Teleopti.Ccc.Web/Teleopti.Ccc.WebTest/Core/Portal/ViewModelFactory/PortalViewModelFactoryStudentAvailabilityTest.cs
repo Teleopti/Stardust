@@ -1,76 +1,50 @@
-using NUnit.Framework;
-using Rhino.Mocks;
-using SharpTestsEx;
+using System.Collections.Generic;
 using System.Globalization;
+using System.IdentityModel.Claims;
+using NUnit.Framework;
+using SharpTestsEx;
 using System.Linq;
+using System.Threading;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
-using Teleopti.Ccc.Infrastructure.Toggle;
-using Teleopti.Ccc.IocCommon.Toggle;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider;
-using Teleopti.Ccc.Web.Core;
+using Teleopti.Ccc.WebTest.Core.IoC;
 using Teleopti.Interfaces.Domain;
+using Claim = System.IdentityModel.Claims.Claim;
 
 namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 {
+	[MyTimeWebTest]
 	[TestFixture]
-	public class PortalViewModelFactoryStudentAvailabilityTest
+	public class PortalViewModelFactoryStudentAvailabilityTest : ISetup
 	{
-		private IPersonNameProvider _personNameProvider;
-		private ILoggedOnUser _loggedOnUser;
-		private IUserCulture _userCulture;
-		private ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
-		private IToggleManager _toggleManager;
+		public IPortalViewModelFactory Target;
+		public ICurrentDataSource CurrentDataSource;
+		public FakeLoggedOnUser LoggedOnUser;
+		public CurrentTenantUserFake CurrentTenantUser;
+		public FakeUserCulture UserCulture;
 
-		[SetUp]
-		public void Setup()
+		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			_loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			_loggedOnUser.Stub(x => x.CurrentUser()).Return(new Person().WithName(new Name()));
-
-			var culture = CultureInfo.GetCultureInfo("sv-SE");
-			_userCulture = MockRepository.GenerateMock<IUserCulture>();
-			_userCulture.Expect(x => x.GetCulture()).Return(culture);
-
-			var principal = MockRepository.GenerateMock<ITeleoptiPrincipal>();
-			principal.Expect(x => x.Regional);
-			_currentTeleoptiPrincipal = MockRepository.GenerateMock<ICurrentTeleoptiPrincipal>();
-			_currentTeleoptiPrincipal.Expect(x => x.Current()).Return(principal);
-
-			_personNameProvider = MockRepository.GenerateMock<IPersonNameProvider>();
-			_personNameProvider.Stub(x => x.BuildNameFromSetting(_loggedOnUser.CurrentUser().Name)).Return("A B");
-			_toggleManager = new FakeToggleManager();
+			system.UseTestDouble<PrincipalAuthorization>().For<IAuthorization>();
+			system.UseTestDouble<PermissionProvider>().For<IPermissionProvider>();
+			system.UseTestDouble<CurrentTenantUserFake>().For<ICurrentTenantUser>();
+			system.UseTestDouble(new FakeCurrentUnitOfWorkFactory(null).WithCurrent(new FakeUnitOfWorkFactory(null, null, null, null) { Name = MyTimeWebTestAttribute.DefaultTenantName })).For<ICurrentUnitOfWorkFactory>();
 		}
 
 		[Test]
 		public void ShouldNotHaveStudentAvailabilityNavigationItemIfNotPermission()
 		{
-			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			permissionProvider.Stub(
-				x => x.HasApplicationFunctionPermission(
-					Arg<string>.Is.NotEqual(DefinedRaptorApplicationFunctionPaths.StudentAvailability))).Return(true);
-			permissionProvider.Stub(
-				x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.StudentAvailability)).Return(false);
-
-			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<ILicenseActivatorProvider>(),
-				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
-				MockRepository.GenerateMock<IReportsNavigationProvider>(),
-				MockRepository.GenerateMock<IBadgeProvider>(),
-				_personNameProvider,
-				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(),
-				MockRepository.GenerateStub<ICurrentTenantUser>(),
-				_userCulture, _currentTeleoptiPrincipal,_toggleManager);
-
-			var result = target.CreatePortalViewModel();
+			var result = Target.CreatePortalViewModel();
 
 			var studentAvailability =
 				(from i in result.NavigationItems where i.Controller == "Availability" select i).SingleOrDefault();
@@ -78,25 +52,11 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		}
 
 		[Test]
-		public void ShouldNotHaveStudentAvailabilityNavigationItemIfPermitted()
+		public void ShouldHaveStudentAvailabilityNavigationItemIfPermitted()
 		{
-			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			permissionProvider.Stub(
-				x => x.HasApplicationFunctionPermission(
-					Arg<string>.Is.Equal(DefinedRaptorApplicationFunctionPaths.StudentAvailability))).Return(true);
-			permissionProvider.Stub(
-				x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.StudentAvailability)).Return(true);
+			setPermissions();
 
-			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<ILicenseActivatorProvider>(),
-				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
-				MockRepository.GenerateMock<IReportsNavigationProvider>(),
-				MockRepository.GenerateMock<IBadgeProvider>(),
-				_personNameProvider,
-				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(),
-				MockRepository.GenerateStub<ICurrentTenantUser>(),
-				_userCulture, _currentTeleoptiPrincipal,_toggleManager);
-
-			var result = target.CreatePortalViewModel();
+			var result = Target.CreatePortalViewModel();
 
 			var studentAvailability =
 				(from i in result.NavigationItems where i.Controller == "Availability" select i).SingleOrDefault();
@@ -106,29 +66,29 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		[Test]
 		public void ShouldNotHaveStudentAvailabilityNavigationItemIfJalaliCalendarIsUsed()
 		{
-			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			permissionProvider.Stub(
-				x => x.HasApplicationFunctionPermission(
-					Arg<string>.Is.Equal(DefinedRaptorApplicationFunctionPaths.StudentAvailability))).Return(true);
-			permissionProvider.Stub(
-				x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.StudentAvailability)).Return(true);
-			var culture = CultureInfo.GetCultureInfo("fa-IR");
-			var userCulture = MockRepository.GenerateMock<IUserCulture>();
-			userCulture.Expect(x => x.GetCulture()).Return(culture);
-			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<ILicenseActivatorProvider>(),
-				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
-				MockRepository.GenerateMock<IReportsNavigationProvider>(),
-				MockRepository.GenerateMock<IBadgeProvider>(),
-				_personNameProvider,
-				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(),
-				MockRepository.GenerateStub<ICurrentTenantUser>(),
-				userCulture, _currentTeleoptiPrincipal,_toggleManager);
+			UserCulture.Is(new CultureInfo("fa-IR"));
 
-			var result = target.CreatePortalViewModel();
+			var result = Target.CreatePortalViewModel();
 
 			var studentAvailability =
 				(from i in result.NavigationItems where i.Controller == "Availability" select i).SingleOrDefault();
 			studentAvailability.Should().Be.Null();
+		}
+
+		private void setPermissions()
+		{
+			var principal = Thread.CurrentPrincipal as ITeleoptiPrincipal;
+			var claims = new List<Claim>
+			{
+				new Claim(string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace
+						, "/", DefinedRaptorApplicationFunctionPaths.StudentAvailability)
+					, new AuthorizeEveryone(), Rights.PossessProperty),
+				new Claim(
+					string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace,
+						"/AvailableData"), new AuthorizeEveryone(), Rights.PossessProperty)
+			};
+
+			principal.AddClaimSet(new DefaultClaimSet(ClaimSet.System, claims));
 		}
 	}
 }

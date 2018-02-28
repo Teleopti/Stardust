@@ -1,106 +1,127 @@
+using System.Collections.Generic;
+using System.IdentityModel.Claims;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
-using System.Globalization;
 using System.Linq;
+using System.Threading;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
-using Teleopti.Ccc.Infrastructure.Toggle;
-using Teleopti.Ccc.IocCommon.Toggle;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider;
-using Teleopti.Ccc.Web.Core;
+using Teleopti.Ccc.WebTest.Core.IoC;
 using Teleopti.Interfaces.Domain;
-
+using Claim = System.IdentityModel.Claims.Claim;
 namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 {
+	[MyTimeWebTest]
 	[TestFixture]
-	public class PortalViewModelFactoryRequestsTest
+	public class PortalViewModelFactoryRequestsTest : ISetup
 	{
-		private IPersonNameProvider _personNameProvider;
-		private ILoggedOnUser _loggedOnUser;
-		private IUserCulture _userCulture;
-		private ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
-		private IToggleManager _toggleManager;
+		public IPortalViewModelFactory Target;
+		public ICurrentDataSource CurrentDataSource;
+		public FakeLoggedOnUser LoggedOnUser;
+		public CurrentTenantUserFake CurrentTenantUser;
+		public FakeUserCulture UserCulture;
 
-		[SetUp]
-		public void Setup()
+		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			_loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			_loggedOnUser.Stub(x => x.CurrentUser()).Return(new Person().WithName(new Name()));
-
-			var culture = CultureInfo.GetCultureInfo("sv-SE");
-			_userCulture = MockRepository.GenerateMock<IUserCulture>();
-			_userCulture.Expect(x => x.GetCulture()).Return(culture);
-
-			_currentTeleoptiPrincipal = MockRepository.GenerateMock<ICurrentTeleoptiPrincipal>();
-
-			_personNameProvider = MockRepository.GenerateMock<IPersonNameProvider>();
-			_personNameProvider.Stub(x => x.BuildNameFromSetting(_loggedOnUser.CurrentUser().Name)).Return("A B");
-			_toggleManager = new FakeToggleManager();
+			system.UseTestDouble<PrincipalAuthorization>().For<IAuthorization>();
+			system.UseTestDouble<PermissionProvider>().For<IPermissionProvider>();
+			system.UseTestDouble<CurrentTenantUserFake>().For<ICurrentTenantUser>();
+			system.UseTestDouble(new FakeCurrentUnitOfWorkFactory(null).WithCurrent(new FakeUnitOfWorkFactory(null, null, null, null) { Name = MyTimeWebTestAttribute.DefaultTenantName })).For<ICurrentUnitOfWorkFactory>();
 		}
-
 		[Test]
 		public void ShouldCreateRequestTabIfOnlyPermissionsToTextRequest()
 		{
-			TestThatRequestTabIsCreated(DefinedRaptorApplicationFunctionPaths.TextRequests);
+			setTextRequestsPermissions();
+
+			TestThatRequestTabIsCreated();
 		}
 
 		[Test]
 		public void ShouldCreateRequestTabIfOnlyPermissionsToAbsenceRequest()
 		{
-			TestThatRequestTabIsCreated(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb);
-		}
+			setAbsenceRequestsWebPermissions();
 
+			TestThatRequestTabIsCreated();
+		}
+		
 		[Test]
 		public void ShouldCreateRequestTabIfOnlyPermissionsToShiftTradeRequest()
 		{
-			TestThatRequestTabIsCreated(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb);
+			setShiftTradeRequestsWebPermissions();
+
+			TestThatRequestTabIsCreated();
 		}
 
 		[Test]
 		public void ShouldNotCreateRequestTabIfNoPermissionsToRequests()
 		{
-			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TextRequests))
-				.Return(false);
-			permissionProvider.Stub(
-				x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb)).Return(false);
-			permissionProvider.Stub(
-				x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb)).Return(false);
-
-			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<ILicenseActivatorProvider>(),
-				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
-				MockRepository.GenerateMock<IReportsNavigationProvider>(), MockRepository.GenerateMock<IBadgeProvider>(),
-				_personNameProvider, MockRepository.GenerateMock<ITeamGamificationSettingRepository>(),
-				MockRepository.GenerateStub<ICurrentTenantUser>(), _userCulture, _currentTeleoptiPrincipal,_toggleManager);
-
-			var result = target.CreatePortalViewModel();
+			var result = Target.CreatePortalViewModel();
 
 			var requestTab = (from i in result.NavigationItems where i.Controller == "Requests" select i).SingleOrDefault();
 			requestTab.Should().Be.Null();
 		}
 
-		private void TestThatRequestTabIsCreated(string applicationFunctionPath)
+		private void setShiftTradeRequestsWebPermissions()
 		{
-			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(applicationFunctionPath)).Return(true);
+			var principal = Thread.CurrentPrincipal as ITeleoptiPrincipal;
+			var claims = new List<Claim>
+			{
+				new Claim(string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace
+						, "/", DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb)
+					, new AuthorizeEveryone(), Rights.PossessProperty),
+				new Claim(
+					string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace,
+						"/AvailableData"), new AuthorizeEveryone(), Rights.PossessProperty)
+			};
 
-			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<ILicenseActivatorProvider>(),
-				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
-				MockRepository.GenerateMock<IReportsNavigationProvider>(), MockRepository.GenerateMock<IBadgeProvider>(),
-				_personNameProvider, MockRepository.GenerateMock<ITeamGamificationSettingRepository>(),
-				MockRepository.GenerateStub<ICurrentTenantUser>(), _userCulture, _currentTeleoptiPrincipal,_toggleManager);
+			principal.AddClaimSet(new DefaultClaimSet(ClaimSet.System, claims));
+		}
 
-			var result = target.CreatePortalViewModel();
+		private void setTextRequestsPermissions()
+		{
+			var principal = Thread.CurrentPrincipal as ITeleoptiPrincipal;
+			var claims = new List<Claim>
+			{
+				new Claim(string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace
+						, "/", DefinedRaptorApplicationFunctionPaths.TextRequests)
+					, new AuthorizeEveryone(), Rights.PossessProperty),
+				new Claim(
+					string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace,
+						"/AvailableData"), new AuthorizeEveryone(), Rights.PossessProperty)
+			};
+
+			principal.AddClaimSet(new DefaultClaimSet(ClaimSet.System, claims));
+		}
+
+		private void setAbsenceRequestsWebPermissions()
+		{
+			var principal = Thread.CurrentPrincipal as ITeleoptiPrincipal;
+			var claims = new List<Claim>
+			{
+				new Claim(string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace
+						, "/", DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb)
+					, new AuthorizeEveryone(), Rights.PossessProperty),
+				new Claim(
+					string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace,
+						"/AvailableData"), new AuthorizeEveryone(), Rights.PossessProperty)
+			};
+
+			principal.AddClaimSet(new DefaultClaimSet(ClaimSet.System, claims));
+		}
+
+		private void TestThatRequestTabIsCreated()
+		{
+			var result =Target.CreatePortalViewModel();
 
 			var requestTab = (from i in result.NavigationItems where i.Controller == "Requests" select i).SingleOrDefault();
 			requestTab.Should().Not.Be.Null();

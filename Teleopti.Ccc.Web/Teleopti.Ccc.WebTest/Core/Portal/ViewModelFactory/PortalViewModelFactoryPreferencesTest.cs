@@ -1,70 +1,52 @@
-using NUnit.Framework;
-using Rhino.Mocks;
-using Rhino.Mocks.Constraints;
-using SharpTestsEx;
+using System.Collections.Generic;
 using System.Globalization;
+using System.IdentityModel.Claims;
+using NUnit.Framework;
+using SharpTestsEx;
 using System.Linq;
+using System.Threading;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
-using Teleopti.Ccc.Infrastructure.Toggle;
-using Teleopti.Ccc.IocCommon.Toggle;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider;
-using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
-using Teleopti.Ccc.Web.Core;
+using Teleopti.Ccc.WebTest.Core.IoC;
 using Teleopti.Interfaces.Domain;
+using Claim = System.IdentityModel.Claims.Claim;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
 
 namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 {
+	[MyTimeWebTest]
 	[TestFixture]
-	public class PortalViewModelFactoryPreferencesTest
+	public class PortalViewModelFactoryPreferencesTest : ISetup
 	{
-		private IPersonNameProvider _personNameProvider;
-		private ILoggedOnUser _loggedOnUser;
-		private IUserCulture _userCulture;
-		private ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
-		private IToggleManager _toggleManager;
+		public IPortalViewModelFactory Target;
+		public ICurrentDataSource CurrentDataSource;
+		public FakeLoggedOnUser LoggedOnUser;
+		public CurrentTenantUserFake CurrentTenantUser;
+		public FakeUserCulture UserCulture;
 
-		[SetUp]
-		public void Setup()
+		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			_loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			_loggedOnUser.Stub(x => x.CurrentUser()).Return(new Person().WithName(new Name()));
-
-			var culture = CultureInfo.GetCultureInfo("sv-SE");
-			_userCulture = MockRepository.GenerateMock<IUserCulture>();
-			_userCulture.Expect(x => x.GetCulture()).Return(culture);
-
-			var principal = MockRepository.GenerateMock<ITeleoptiPrincipal>();
-			principal.Expect(x => x.Regional);
-			_currentTeleoptiPrincipal = MockRepository.GenerateMock<ICurrentTeleoptiPrincipal>();
-			_currentTeleoptiPrincipal.Expect(x => x.Current()).Return(principal);
-
-			_personNameProvider = MockRepository.GenerateMock<IPersonNameProvider>();
-			_personNameProvider.Stub(x => x.BuildNameFromSetting(_loggedOnUser.CurrentUser().Name)).Return("A B");
-
-			_toggleManager = new FakeToggleManager();
+			system.UseTestDouble<PrincipalAuthorization>().For<IAuthorization>();
+			system.UseTestDouble<PermissionProvider>().For<IPermissionProvider>();
+			system.UseTestDouble<CurrentTenantUserFake>().For<ICurrentTenantUser>();
+			system.UseTestDouble(new FakeCurrentUnitOfWorkFactory(null).WithCurrent(new FakeUnitOfWorkFactory(null, null, null, null) { Name = MyTimeWebTestAttribute.DefaultTenantName })).For<ICurrentUnitOfWorkFactory>();
 		}
 
 		[Test]
 		public void ShouldNotHavePreferencesNavigationItemIfNotPermission()
 		{
-			var permissionProvider = NoPermissionToPreferences();
-			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<ILicenseActivatorProvider>(),
-				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
-				MockRepository.GenerateMock<IReportsNavigationProvider>(), MockRepository.GenerateMock<IBadgeProvider>(),
-				_personNameProvider, MockRepository.GenerateMock<ITeamGamificationSettingRepository>(),
-				MockRepository.GenerateStub<ICurrentTenantUser>(), _userCulture, _currentTeleoptiPrincipal,_toggleManager);
 
-			var result = target.CreatePortalViewModel();
+			var result = Target.CreatePortalViewModel();
 
 			result.Controller("Preference").Should().Be.Null();
 		}
@@ -72,14 +54,9 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		[Test]
 		public void ShouldHavePreferencesNavigationItemIfOnlyPermissionToExtendedPreferences()
 		{
-			var permissionProvider = NoPermissionToStandardPreferences();
-			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<ILicenseActivatorProvider>(),
-				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
-				MockRepository.GenerateMock<IReportsNavigationProvider>(), MockRepository.GenerateMock<IBadgeProvider>(),
-				_personNameProvider, MockRepository.GenerateMock<ITeamGamificationSettingRepository>(),
-				MockRepository.GenerateStub<ICurrentTenantUser>(), _userCulture, _currentTeleoptiPrincipal,_toggleManager);
+			setExtendedPreferencesPermissions();
 
-			var result = target.CreatePortalViewModel();
+			var result = Target.CreatePortalViewModel();
 
 			result.Controller("Preference").Should().Not.Be.Null();
 		}
@@ -87,14 +64,9 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		[Test]
 		public void ShouldHavePreferencesNavigationItemIfOnlyPermissionToStandardPreferences()
 		{
-			var permissionProvider = NoPermissionToExtendedPreferences();
-			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<ILicenseActivatorProvider>(),
-				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
-				MockRepository.GenerateMock<IReportsNavigationProvider>(), MockRepository.GenerateMock<IBadgeProvider>(),
-				_personNameProvider, MockRepository.GenerateMock<ITeamGamificationSettingRepository>(),
-				MockRepository.GenerateStub<ICurrentTenantUser>(), _userCulture, _currentTeleoptiPrincipal,_toggleManager);
+			setStandardPreferencesPermissions();
 
-			var result = target.CreatePortalViewModel();
+			var result = Target.CreatePortalViewModel();
 
 			result.Controller("Preference").Should().Not.Be.Null();
 		}
@@ -102,16 +74,10 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		[Test]
 		public void ShouldNotHavePreferencesNavigationItemIfJalaliCalendarIsUsedAndPermissionToExtendedPreferences()
 		{
-			var permissionProvider = NoPermissionToStandardPreferences();
-			var userCulture = MockRepository.GenerateMock<IUserCulture>();
-			userCulture.Expect(x => x.GetCulture()).Return(CultureInfo.GetCultureInfo("fa-IR"));
-			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<ILicenseActivatorProvider>(),
-				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
-				MockRepository.GenerateMock<IReportsNavigationProvider>(), MockRepository.GenerateMock<IBadgeProvider>(),
-				_personNameProvider, MockRepository.GenerateMock<ITeamGamificationSettingRepository>(),
-				MockRepository.GenerateStub<ICurrentTenantUser>(), userCulture, _currentTeleoptiPrincipal,_toggleManager);
+			UserCulture.Is(new CultureInfo("fa-IR"));
+			setExtendedPreferencesPermissions();
 
-			var result = target.CreatePortalViewModel();
+			var result = Target.CreatePortalViewModel();
 
 			result.Controller("Preference").Should().Be.Null();
 		}
@@ -119,66 +85,50 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		[Test]
 		public void ShouldNotHavePreferencesNavigationItemIfJalaliCalendarIsUsedAndPermissionToStandardPreferences()
 		{
-			var permissionProvider = NoPermissionToExtendedPreferences();
-			var userCulture = MockRepository.GenerateMock<IUserCulture>();
-			userCulture.Expect(x => x.GetCulture()).Return(CultureInfo.GetCultureInfo("fa-IR"));
-			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<ILicenseActivatorProvider>(),
-				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
-				MockRepository.GenerateMock<IReportsNavigationProvider>(), MockRepository.GenerateMock<IBadgeProvider>(),
-				_personNameProvider, MockRepository.GenerateMock<ITeamGamificationSettingRepository>(),
-				MockRepository.GenerateStub<ICurrentTenantUser>(), userCulture, _currentTeleoptiPrincipal,_toggleManager);
+			UserCulture.Is(new CultureInfo("fa-IR"));
+			setStandardPreferencesPermissions();
 
-			var result = target.CreatePortalViewModel();
+			var result = Target.CreatePortalViewModel();
 
 			result.Controller("Preference").Should().Be.Null();
 		}
 
-		private IPermissionProvider NoPermissionToPreferences()
+		private static void setExtendedPreferencesPermissions()
 		{
-			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			permissionProvider.Stub(
-				x =>
-					x.HasApplicationFunctionPermission(
-						Arg<string>.Matches(
-							new PredicateConstraint<string>(s => s != DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb &&
-																 s != DefinedRaptorApplicationFunctionPaths.StandardPreferences))))
-				.Return(true);
-			permissionProvider.Stub(
-				x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb)).Return(false);
-			permissionProvider.Stub(
-				x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.StandardPreferences)).Return(false);
-
-			return permissionProvider;
+			var principal = Thread.CurrentPrincipal as ITeleoptiPrincipal;
+			var claims = new List<Claim>
+			{
+				new Claim(string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace
+						, "/", DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb)
+					, new AuthorizeEveryone(), Rights.PossessProperty),
+				new Claim(
+					string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace,
+						"/AvailableData"), new AuthorizeEveryone(), Rights.PossessProperty)
+			};
+			principal.AddClaimSet(new DefaultClaimSet(ClaimSet.System, claims));
 		}
 
-		private IPermissionProvider NoPermissionToStandardPreferences()
+		private static void setStandardPreferencesPermissions()
 		{
-			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			permissionProvider.Stub(
-				x =>
-					x.HasApplicationFunctionPermission(
-						Arg<string>.Is.NotEqual(DefinedRaptorApplicationFunctionPaths.StandardPreferences))).Return(true);
-			permissionProvider.Stub(
-				x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.StandardPreferences)).Return(false);
-			return permissionProvider;
-		}
+			var principal = Thread.CurrentPrincipal as ITeleoptiPrincipal;
+			var claims = new List<Claim>
+			{
+				new Claim(string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace
+						, "/", DefinedRaptorApplicationFunctionPaths.StandardPreferences)
+					, new AuthorizeEveryone(), Rights.PossessProperty),
+				new Claim(
+					string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace,
+						"/AvailableData"), new AuthorizeEveryone(), Rights.PossessProperty)
+			};
 
-		private IPermissionProvider NoPermissionToExtendedPreferences()
-		{
-			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			permissionProvider.Stub(
-				x =>
-					x.HasApplicationFunctionPermission(
-						Arg<string>.Is.NotEqual(DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb))).Return(true);
-			permissionProvider.Stub(
-				x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb)).Return(false);
-			return permissionProvider;
+			principal.AddClaimSet(new DefaultClaimSet(ClaimSet.System, claims));
 		}
 	}
 
 	public static class Ext
 	{
 		public static NavigationItem Controller(this PortalViewModel model, string controllerName)
+
 		{
 			return model.NavigationItems.SingleOrDefault(c => c.Controller == controllerName);
 		}
