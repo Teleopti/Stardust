@@ -124,7 +124,9 @@ namespace Teleopti.Ccc.Infrastructure.Config
                 try
                 {
 	                var policy = System.IO.Path.Combine(_path, FileName);
-	                _file = System.IO.File.Exists(policy) ? XDocument.Load(policy) : defaultXDocument();
+					var exists = System.IO.File.Exists(policy);
+					_logger.WarnFormat("Policy exists at {1}: {0}",exists,policy);
+					_file = exists ? XDocument.Load(policy) : defaultXDocument();
                 }
                 catch (Exception e)
                 {
