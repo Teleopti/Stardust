@@ -29,6 +29,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				.ToArray();
 		}
 
+		public HistoricalChange ReadLastBefore(Guid personId, DateTime timestamp)
+		{
+			return data
+				.OrderBy(x => x.Timestamp)
+				.LastOrDefault(x => x.PersonId == personId && x.Timestamp < timestamp);
+		}
+
 		public void Remove(DateTime until)
 		{
 		}

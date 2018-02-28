@@ -350,7 +350,6 @@
     <Compile Include="Rta\ReadModels\AgentState\Reader\ForSkillTest.cs" />
     <Compile Include="Rta\ReadModels\AgentState\Reader\WithNamestest.cs" />
     <Compile Include="Rta\Service\PerformanceMeasurement\MeasureHangfireEventPackageTest.cs" />
-    <Compile Include="Rta\ReadModels\HistoricalAdherence\HistoricalAdherenceReadModelReaderTest.cs" />
     <Compile Include="Rta\ReadModels\HistoricalAdherence\HistoricalChangeReadModelReaderTest.cs" />
     <Compile Include="Rta\Service\PerformanceMeasurement\MeasureClosingSnapshotTest.cs" />
     <Compile Include="Rta\Service\PerformanceMeasurement\MeasureActivityCheckerTest.cs" />

@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Domain.Rta.AgentAdherenceDay
 			}
 
 			var changes = _changes.Read(personId, period.StartDateTime, period.EndDateTime);
-			var lastAdherenceChange = _changes.Read(personId, DateTime.MinValue, period.StartDateTime).LastOrDefault();
+			var lastAdherenceChange = _changes.ReadLastBefore(personId, period.StartDateTime);
 			var adherences =
 				new[] {lastAdherenceChange}
 					.Concat(changes)

@@ -9,7 +9,6 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 {
 	public class HistoricalChangeReadModelReader : IHistoricalChangeReadModelReader
 	{
-
 		private readonly ICurrentReadModelUnitOfWork _unitOfWork;
 
 		public HistoricalChangeReadModelReader(ICurrentReadModelUnitOfWork unitOfWork)
@@ -33,6 +32,22 @@ ORDER BY [Timestamp] ASC")
 				.List<internalModel>();
 
 			return result;
+		}
+
+		public HistoricalChange ReadLastBefore(Guid personId, DateTime timestamp)
+		{
+			return _unitOfWork.Current()
+				.CreateSqlQuery(@"
+SELECT TOP 1 *
+FROM [ReadModel].[HistoricalChange]
+WHERE PersonId = :PersonId
+AND [Timestamp] < :Timestamp
+ORDER BY [Timestamp] DESC")
+				.SetParameter("PersonId", personId)
+				.SetParameter("Timestamp", timestamp)
+				
+				.SetResultTransformer(Transformers.AliasToBean<internalModel>())
+				.UniqueResult<HistoricalChange>();
 		}
 
 		private class internalModel : HistoricalChange
