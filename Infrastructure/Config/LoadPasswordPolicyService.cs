@@ -109,9 +109,9 @@ namespace Teleopti.Ccc.Infrastructure.Config
 
                 return elements.First();
             }
-            catch (Exception) //Catch any exception 
+            catch (Exception e) //Catch any exception 
             {
-
+				_logger.Error("Error when getting value from document.",e);
                 return defaultValue;
             }
         }
@@ -128,6 +128,7 @@ namespace Teleopti.Ccc.Infrastructure.Config
                 }
                 catch (Exception e)
                 {
+					_logger.Error("Error when loading policy.", e);
                     _logger.Info("Default password policy will be used:  " + e.Message);
                     return defaultXDocument();
                 }
