@@ -271,9 +271,8 @@
     <Compile Include="Controllers\Log4NetModule.cs" />
     <Compile Include="Controllers\MachineKeyCookieTransform.cs" />
     <Compile Include="Controllers\MachineKeySessionSecurityTokenHandler.cs" />
-    <Compile Include="ProviderTest.aspx.cs">
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
+    <Compile Include="Global.asax.cs" />
+    <Compile Include="SystemStatus.aspx.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\claimsPolicies.xml" />
@@ -297,7 +296,7 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Global.asax" />
     <Content Include="Policy.xml" />
-    <Content Include="ProviderTest.aspx" />
+    <Content Include="SystemStatus.aspx" />
     <Content Include="Scripts\spinner.js" />
     <Content Include="Views\Shared\Error.aspx" />
     <Content Include="xrds.aspx" />
