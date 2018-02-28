@@ -8,7 +8,7 @@ using AuthBridge.Model;
 
 namespace Teleopti.Ccc.Web.AuthenticationBridge
 {
-	public class SystemStatus : ViewPage
+	public class ProviderTest : ViewPage
 	{
 		protected void Page_Load(object sender, EventArgs e)
 		{
