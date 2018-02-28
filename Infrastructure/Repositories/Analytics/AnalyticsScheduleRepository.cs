@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Data.SqlTypes;
+using NHibernate.SqlAzure;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 		public void PersistFactScheduleBatch(IList<IFactScheduleRow> factScheduleRows)
 		{
 			var table = getTable(factScheduleRows);
-			var insertCommand = new SqlCommand("mart.etl_fact_schedule_insert", (SqlConnection)_analyticsUnitOfWork.Current().Session().Connection)
+			var insertCommand = new SqlCommand("mart.etl_fact_schedule_insert", ((ReliableSqlDbConnection)_analyticsUnitOfWork.Current().Session().Connection).ReliableConnection.Current)
 			{
 				CommandType = CommandType.StoredProcedure,
 				UpdatedRowSource = UpdateRowSource.None,

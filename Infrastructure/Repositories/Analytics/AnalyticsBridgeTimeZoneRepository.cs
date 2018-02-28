@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using NHibernate.SqlAzure;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -64,7 +65,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 					dt.Rows.Add(row);
 				}
 				
-				using (var sqlBulkCopy = new SqlBulkCopy((SqlConnection) session.Connection, SqlBulkCopyOptions.Default, (SqlTransaction) transaction))
+				using (var sqlBulkCopy = new SqlBulkCopy(((ReliableSqlDbConnection) session.Connection).ReliableConnection.Current, SqlBulkCopyOptions.Default, (SqlTransaction) transaction))
 				{
 					sqlBulkCopy.DestinationTableName = "[mart].[bridge_time_zone]";
 					sqlBulkCopy.BulkCopyTimeout = 300;
