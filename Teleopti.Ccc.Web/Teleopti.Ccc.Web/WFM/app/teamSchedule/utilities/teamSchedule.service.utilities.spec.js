@@ -20,7 +20,7 @@
 		realNow = _UtilityService_.now;
 		target = _UtilityService_;
 		target.now = function () {
-			return new Date('2018-02-26 15:00:00');
+			return new Date('2018-02-26 15:00:00+08:00');
 		}
 	}));
 
@@ -44,7 +44,7 @@
 
 	function commonTestsInDifferentLocale() {
 		it('should get correct now in user time zone', function () {
-			expect(target.nowInUserTimeZone()).toEqual('2018-02-26T07:00:00+00:00');
+			expect(target.nowInUserTimeZone()).toEqual('2018-02-26T15:00:00+08:00');
 		});
 
 		it('should get correct next tick', function () {
@@ -85,7 +85,7 @@
 		this.CurrentUserInfo = function () {
 			return {
 				DateFormatLocale: "en-US",
-				DefaultTimeZone: 'Asia/HongKong'
+				DefaultTimeZone: 'Asia/Hong_Kong'
 			};
 		};
 	}

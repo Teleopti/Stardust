@@ -28,7 +28,6 @@
 			var personIds = personInfos.map(function(p) { return p.PersonId; });
 
 			var input = {
-				Date: moment(ctrl.selectedDate).format('YYYY-MM-DD'),
 				Date: serviceDateFormatHelper.getDateOnly(ctrl.selectedDate),
 				PersonIds: personIds,
 				TrackedCommandInfo: { TrackId: ctrl.trackId }
