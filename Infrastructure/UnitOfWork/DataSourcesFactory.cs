@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			var statCfg = new Configuration()
 					.SetProperty(Environment.ConnectionString, connectionString)
 					.SetProperty(Environment.ConnectionProvider, "NHibernate.Connection.DriverConnectionProvider")
-					.SetProperty(Environment.ConnectionDriver, "NHibernate.Driver.SqlClientDriver")
+					.SetProperty(Environment.ConnectionDriver, typeof(SqlAzureClientDriverWithLogRetries).AssemblyQualifiedName)
 					.SetProperty(Environment.Dialect, typeof(MsSql2008Dialect).AssemblyQualifiedName)
 					.SetProperty(Environment.SessionFactoryName, tenant + "_" + AnalyticsDataSourceName)
 					.SetProperty(Environment.SqlExceptionConverter, typeof(SqlServerExceptionConverter).AssemblyQualifiedName)
