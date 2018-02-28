@@ -25,11 +25,16 @@ html {
 }
 
 .animate-material {
-  animation-name: material;
-  animation-duration: 0.5s;
-  animation-delay: 0.5s;
-  animation-iteration-count: 1;
-  animation-fill-mode: forwards;
+	-webkit-animation-name: material;
+	animation-name: material;
+	-webkit-animation-duration: 0.5s;
+	animation-duration: 0.5s;
+	-webkit-animation-delay: 0.5s;
+	animation-delay: 0.5s;
+	-webkit-animation-iteration-count: 1;
+	animation-iteration-count: 1;
+	-webkit-animation-fill-mode: forwards;
+	animation-fill-mode: forwards;
   max-height: 54px;
 }
 
@@ -49,11 +54,16 @@ html {
 }
 
 .animate-content, .wfm-checkbox-toggle::after, .animate-content input[type=text] {
-  animation-name: content;
-  animation-duration: 0.5s;
-  animation-delay: 0.7s;
-  animation-iteration-count: 1;
-  animation-fill-mode: forwards;
+	-webkit-animation-name: content;
+	animation-name: content;
+	-webkit-animation-duration: 0.5s;
+	animation-duration: 0.5s;
+	-webkit-animation-delay: 0.7s;
+	animation-delay: 0.7s;
+	-webkit-animation-iteration-count: 1;
+	animation-iteration-count: 1;
+	-webkit-animation-fill-mode: forwards;
+	animation-fill-mode: forwards;
   opacity: 0;
   background: white;
 }
@@ -68,7 +78,9 @@ html {
 }
 
 .formError {
+	-webkit-animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
 	animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+	-webkit-transform: translate3d(0, 0, 0);
 	transform: translate3d(0, 0, 0);
 	backface-visibility: hidden;
 	perspective: 1000px;
@@ -76,18 +88,22 @@ html {
 
 @keyframes shake {
 	10%, 90% {
+		-webkit-transform: translate3d(-1px, 0, 0);
 		transform: translate3d(-1px, 0, 0);
 	}
 
 	20%, 80% {
+		-webkit-transform: translate3d(2px, 0, 0);
 		transform: translate3d(2px, 0, 0);
 	}
 
 	30%, 50%, 70% {
+		-webkit-transform: translate3d(-4px, 0, 0);
 		transform: translate3d(-4px, 0, 0);
 	}
 
 	40%, 60% {
+		-webkit-transform: translate3d(4px, 0, 0);
 		transform: translate3d(4px, 0, 0);
 	}
 }
