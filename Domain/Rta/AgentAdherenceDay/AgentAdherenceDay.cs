@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Rta.AgentAdherenceDay
 			_recordedOutOfAdherences = buildPeriods(HistoricalChangeAdherence.Out, changes, now);
 
 			var recordedNeutralAdherences = buildPeriods(HistoricalChangeAdherence.Neutral, changes, now);
-			
+
 			_outOfAdherences = subtractPeriods(_recordedOutOfAdherences, _approvedPeriods);
 
 			var neutralAdherences = subtractPeriods(recordedNeutralAdherences, _approvedPeriods);
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Domain.Rta.AgentAdherenceDay
 				.Aggregate(new periodAccumulator(), (a, model) =>
 				{
 					var timestamp = floorToSeconds(model.Timestamp);
-					
+
 					if (model.Adherence == adherence)
 						a.StartTime = timestamp;
 					else
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.Domain.Rta.AgentAdherenceDay
 
 		private static DateTime floorToSeconds(DateTime dateTime) =>
 			dateTime.AddMilliseconds(-dateTime.Millisecond);
-		
+
 		private static IEnumerable<DateTimePeriod> subtractPeriods(IEnumerable<DateTimePeriod> periods, IEnumerable<DateTimePeriod> toSubtract) =>
 			toSubtract
 				.Aggregate(periods, (rs, approved) => rs.Aggregate(Enumerable.Empty<DateTimePeriod>(), (r, recorded) => r.Concat(recorded.Subtract(approved))))
@@ -103,7 +103,8 @@ namespace Teleopti.Ccc.Domain.Rta.AgentAdherenceDay
 			periods
 				.Where(x => shift.HasValue)
 				.Where(x => shift.Value.Intersect(x))
-				.Select(x => shift.Value.Intersection(x).Value);
+				.Select(x => shift.Value.Intersection(x).Value)
+				.ToArray();
 
 		public DateTimePeriod Period() => _period;
 		public IEnumerable<HistoricalChange> Changes() => _changes;

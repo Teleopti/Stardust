@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Rta.ReadModelUpdaters;
@@ -53,11 +54,11 @@ namespace Teleopti.Ccc.Domain.Rta.AgentAdherenceDay
 			var changes = _changes.Read(personId, period.StartDateTime, period.EndDateTime);
 			var lastAdherenceChange = _changes.ReadLastBefore(personId, period.StartDateTime);
 			var adherences =
-				new[] {lastAdherenceChange}
+				lastAdherenceChange.AsArray()
 					.Concat(changes)
 					.Where(x => x != null)
 					.ToArray();
-		
+
 			var approvedPeriods = _approvedPeriods.Read(personId, period.StartDateTime, period.EndDateTime);
 
 			var obj = new AgentAdherenceDay();
