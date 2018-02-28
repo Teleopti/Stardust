@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.DomainTest.Rta.ReadModelUpdaters.HistoricalAdherence
 	[TestFixture]
 	public class PackageTest
 	{
-		public FakeHistoricalAdherenceReadModelPersister AdherencePersister;
 		public FakeHistoricalChangeReadModelPersister ChangePersister;
 		public HistoricalAdherenceUpdater Target;
 		public MutableNow Now;
@@ -45,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.Rta.ReadModelUpdaters.HistoricalAdherence
 			});
 
 
-			AdherencePersister.Read(personId, "2017-05-03".Date()).Single().Timestamp.Should().Be("2017-05-03 12:00".Utc());
+			ChangePersister.Read(personId, "2017-05-03".Date()).Single().Timestamp.Should().Be("2017-05-03 12:00".Utc());
 		}
 
 		[Test]
@@ -60,8 +59,8 @@ namespace Teleopti.Ccc.DomainTest.Rta.ReadModelUpdaters.HistoricalAdherence
 				new PersonOutOfAdherenceEvent {PersonId = personId2, Timestamp = "2017-05-03 12:00".Utc()}
 			});
 
-			AdherencePersister.Read(personId, "2017-05-03".Date()).Single().Timestamp.Should().Be("2017-05-03 12:00".Utc());
-			AdherencePersister.Read(personId2, "2017-05-03".Date()).Single().Timestamp.Should().Be("2017-05-03 12:00".Utc());
+			ChangePersister.Read(personId, "2017-05-03".Date()).Single().Timestamp.Should().Be("2017-05-03 12:00".Utc());
+			ChangePersister.Read(personId2, "2017-05-03".Date()).Single().Timestamp.Should().Be("2017-05-03 12:00".Utc());
 		}
 
 
@@ -89,7 +88,7 @@ namespace Teleopti.Ccc.DomainTest.Rta.ReadModelUpdaters.HistoricalAdherence
 				}
 			});
 
-			AdherencePersister.Read(personId, "2017-05-03".Date()).Last().Timestamp.Should().Be("2017-05-03 12:15".Utc());
+			ChangePersister.Read(personId, "2017-05-03".Date()).Last().Timestamp.Should().Be("2017-05-03 12:15".Utc());
 		}
 
 		[Test]
@@ -106,7 +105,7 @@ namespace Teleopti.Ccc.DomainTest.Rta.ReadModelUpdaters.HistoricalAdherence
 				}
 			});
 
-			AdherencePersister.Read(personId, "2017-05-03".Date()).Last().Timestamp.Should().Be("2017-05-03 12:15".Utc());
+			ChangePersister.Read(personId, "2017-05-03".Date()).Last().Timestamp.Should().Be("2017-05-03 12:15".Utc());
 		}
 	}
 }

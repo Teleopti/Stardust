@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Rta.AgentAdherenceDay
 		{
 			_personId = personId;
 			_period = period;
-			_changes = loadChanges(changes.Where(x => _period.ContainsPart(x.Timestamp)));
+			_changes = removeDuplicateChangesWithinPeriod(changes, period);
 			now = floorToSeconds(now);
 
 			_approvedPeriods = approvedPeriods.Select(a => new DateTimePeriod(a.StartTime, a.EndTime)).ToArray();
@@ -44,8 +44,9 @@ namespace Teleopti.Ccc.Domain.Rta.AgentAdherenceDay
 			_percentage = new AdherencePercentageCalculator().Calculate(shift, neutralAdherencesWithinShift, outOfAhderencesWithinShift, now);
 		}
 
-		private static IEnumerable<HistoricalChange> loadChanges(IEnumerable<HistoricalChange> changes) =>
+		private static IEnumerable<HistoricalChange> removeDuplicateChangesWithinPeriod(IEnumerable<HistoricalChange> changes, DateTimePeriod period) =>
 			changes
+				.Where(x => period.ContainsPart(x.Timestamp))
 				.GroupBy(y => new
 				{
 					y.Timestamp,
