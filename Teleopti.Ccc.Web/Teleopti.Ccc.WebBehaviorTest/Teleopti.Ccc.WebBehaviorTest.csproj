@@ -98,6 +98,7 @@
     <Compile Include="Bindings\Generic\Messages\MessageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\OutboundStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PhoneStateStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\Wfm\PeopleStepDefinition.cs" />
     <Compile Include="Bindings\Generic\Wfm\RealTimeAdherenceAgentHistoricalPageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Wfm\RealTimeAdherenceAgentsDefinitions.cs" />
     <Compile Include="Bindings\Generic\Wfm\RealTimeAdherenceOverviewDefinitions.cs" />
@@ -684,6 +685,11 @@
       <DependentUpon>AdvancedSearch.feature</DependentUpon>
     </Compile>
     <Compile Include="Wfm\People\PeopleListStepDefinitions.cs" />
+    <Compile Include="Wfm\People\Roles.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Roles.feature</DependentUpon>
+    </Compile>
     <Compile Include="Wfm\People\ShowBasicInformation.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1210,6 +1216,10 @@
     <None Include="Wfm\Outbound\OutboundCampaignBasicOperations.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>OutboundCampaignBasicOperations.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Wfm\People\Roles.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Roles.feature.cs</LastGenOutput>
     </None>
     <None Include="Wfm\People\ShowBasicInformation.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
