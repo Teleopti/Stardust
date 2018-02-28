@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.WebTest.Core
 
 			var result = Target.GetDaySchedule(date);
 
-			result.ScheduleDay.OvertimeAvailability.Should().Be(overtimeAvailabilityYesterday);
+			result.ScheduleDay.OvertimeAvailabilityYesterday.Should().Be(overtimeAvailabilityYesterday);
 		}
 
 		[Test]
