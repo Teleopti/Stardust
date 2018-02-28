@@ -5,7 +5,6 @@
                    default-access="field.camelcase-underscore">
 
   <class name="BusinessUnit">
-	  <cache usage ="read-write"/> <!--Use readonly cache instead?-->
     <!--IEntity-->
     <id name="Id"
             type="guid"

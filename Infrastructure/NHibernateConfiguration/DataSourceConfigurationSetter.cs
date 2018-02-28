@@ -12,47 +12,39 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 	{
 		public static IDataSourceConfigurationSetter ForTest()
 		{
-			return new DataSourceConfigurationSetter(false, "unit tests", new ConfigReader());
-		}
-		public static IDataSourceConfigurationSetter ForTestWithCache()
-		{
-			return new DataSourceConfigurationSetter(true, "unit tests", new ConfigReader());
+			return new DataSourceConfigurationSetter("unit tests", new ConfigReader());
 		}
 		public static IDataSourceConfigurationSetter ForEtl()
 		{
-			return new DataSourceConfigurationSetter(false, "Teleopti.Wfm.Etl", new ConfigReader());
+			return new DataSourceConfigurationSetter("Teleopti.Wfm.Etl", new ConfigReader());
 		}
 		public static IDataSourceConfigurationSetter ForSdk()
 		{
-			return new DataSourceConfigurationSetter(false, "Teleopti.Wfm.Sdk.Host", new ConfigReader());
+			return new DataSourceConfigurationSetter("Teleopti.Wfm.Sdk.Host", new ConfigReader());
 		}
 		public static IDataSourceConfigurationSetter ForServiceBus()
 		{
-			return new DataSourceConfigurationSetter(false, "Teleopti.Wfm.ServiceBus.Host", new ConfigReader());
+			return new DataSourceConfigurationSetter("Teleopti.Wfm.ServiceBus.Host", new ConfigReader());
 		}
 		public static IDataSourceConfigurationSetter ForWeb()
 		{
-			return new DataSourceConfigurationSetter(false, "Teleopti.Wfm.Web", new ConfigReader());
+			return new DataSourceConfigurationSetter("Teleopti.Wfm.Web", new ConfigReader());
 		}
 		public static IDataSourceConfigurationSetter ForDesktop()
 		{
-			return new DataSourceConfigurationSetter(false, "Teleopti.Wfm.SmartClientPortal.Shell", new ConfigReader());
+			return new DataSourceConfigurationSetter("Teleopti.Wfm.SmartClientPortal.Shell", new ConfigReader());
 		}
 
 		public const string NoDataSourceName = "[not set]";
 
-		protected DataSourceConfigurationSetter(
-			bool useSecondLevelCache,
-			string applicationName,
+		protected DataSourceConfigurationSetter(string applicationName,
 			IConfigReader configReader)
 		{
-			UseSecondLevelCache = useSecondLevelCache;
 			ApplicationName = applicationName ?? string.Empty;
 			if (!string.IsNullOrEmpty(configReader.AppConfig("latency")))
 				UseLatency = true;
 		}
 
-		public bool UseSecondLevelCache { get; }
 		public string ApplicationName { get; }
 		private bool UseLatency { get; }
 
@@ -61,22 +53,15 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.Dialect, typeof(MsSql2008Dialect).AssemblyQualifiedName);
 			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.DefaultSchema, "dbo");
 			nhConfiguration.AddAssembly(typeof(Person).Assembly);
-			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.SqlExceptionConverter, typeof(SqlServerExceptionConverter).AssemblyQualifiedName);
-			if (UseSecondLevelCache)
-			{
-				nhConfiguration.SetPropertyIfNotAlreadySet(Environment.CacheProvider, typeof(RtMemoryCacheProvider).AssemblyQualifiedName);
-				nhConfiguration.SetPropertyIfNotAlreadySet(Environment.UseSecondLevelCache, "true");
-				nhConfiguration.SetPropertyIfNotAlreadySet(Environment.UseQueryCache, "true");
-			}
-			else
-			{
-				nhConfiguration.SetPropertyIfNotAlreadySet(Environment.UseSecondLevelCache, "false");
-			}
+			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.SqlExceptionConverter,
+				typeof(SqlServerExceptionConverter).AssemblyQualifiedName);
+			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.UseSecondLevelCache, "false");
 			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.ConnectionDriver,
 				UseLatency
 					? typeof(TeleoptiLatencySqlDriver).AssemblyQualifiedName
 					: typeof(SqlAzureClientDriverWithLogRetries).AssemblyQualifiedName);
-			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.TransactionStrategy, typeof(ReliableAdoNetTransactionFactory).AssemblyQualifiedName);
+			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.TransactionStrategy,
+				typeof(ReliableAdoNetTransactionFactory).AssemblyQualifiedName);
 			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.SessionFactoryName, NoDataSourceName);
 			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.OrderUpdates, "true");
 			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.OrderInserts, "true");

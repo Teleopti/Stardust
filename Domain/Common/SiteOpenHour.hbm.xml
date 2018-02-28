@@ -4,7 +4,6 @@
                    namespace="Teleopti.Ccc.Domain.Common"
                    default-access="field.camelcase-underscore">
   <class name="SiteOpenHour">
-    <cache usage="read-write"/>
     <!--IEntity-->
     <id name="Id"
             type="guid"

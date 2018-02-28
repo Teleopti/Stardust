@@ -4,8 +4,6 @@
                    namespace="Teleopti.Ccc.Domain.Common"
                    default-access="field.camelcase-underscore">
   <class name="Site">
-    <cache usage ="read-write"/>
-    <!--Use readonly cache instead?-->
     <!--IEntity-->
     <id name="Id" access="nosetter.camelcase-underscore"
             type="guid"

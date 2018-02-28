@@ -4,7 +4,6 @@
                    namespace="Teleopti.Ccc.Domain.Security.AuthorizationEntities"
                    default-access="field.camelcase-underscore">
   <class name="AvailableData">
-	  <cache usage ="read-write"/><!--Use readonly cache instead?-->
     <id name="Id"
             type="guid"
 		  access="nosetter.camelcase-underscore"
@@ -29,7 +28,6 @@
     
     <bag name="AvailableTeams"
          table="AvailableTeamsInApplicationRole">
-		 <cache usage ="read-write"/> <!--Use readonly cache instead?-->
       <key column="AvailableData" 
            foreign-key ="FK_AvailableTeamsInApplicationRole_AvailableData" />
       <many-to-many class="Teleopti.Ccc.Domain.AgentInfo.Team" 
@@ -39,7 +37,6 @@
 
     <bag name="AvailableBusinessUnits"
          table="AvailableUnitsInApplicationRole">
-		 <cache usage ="read-write"/> <!--Use readonly cache instead?-->
       <key column="AvailableData" 
            foreign-key="FK_AvailableUnitsInApplicationRole_AvailableData" />
       <many-to-many class="Teleopti.Ccc.Domain.Common.BusinessUnit"
@@ -49,7 +46,6 @@
 
     <bag name="AvailableSites"
          table="AvailableSitesInApplicationRole">
-		 <cache usage ="read-write"/> <!--Use readonly cache instead?-->
       <key column ="AvailableData" 
            foreign-key="FK_AvailableSitesInApplicationRole_AvailableData" />
       <many-to-many class="Teleopti.Ccc.Domain.Common.Site" 
