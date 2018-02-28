@@ -45,9 +45,7 @@
 		}
 
 		function getSelectedRequestsInfoText() {
-			$translate("SelectedRequestsInfo").then(function (text) {
-				vm.selectedRequestsInfoText = text;
-			});
+			vm.selectedRequestsInfoText = $translate.instant('SelectedRequestsInfo');
 		}
 
 		function showSelectedRequestsInfo() {
