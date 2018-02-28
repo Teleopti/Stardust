@@ -80,7 +80,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 							RunWeeklyRestSolver = command.RunWeeklyRestSolver,
 							PlanningPeriodId = command.PlanningPeriodId,
 							CommandId = command.CommandId,
-							UserLocks = _gridLockManager.LockInfos()
+							UserLocks = _gridLockManager.LockInfos(),
+							FromPlan = command.FromPlan
 						});	
 					}
 				}

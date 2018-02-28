@@ -34,7 +34,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			try
 			{
 				using (_lowThreadPriorityScope.OnThisThread())
-				using (_schedulingSourceScope.OnThisThreadUse(ScheduleSource.WebScheduling))
 				{
 					var result = _dayOffOptimizationWeb.Execute(@event.PlanningPeriodId);
 					SaveDetailToJobResult(@event, DetailLevel.Info, JsonConvert.SerializeObject(result), null);

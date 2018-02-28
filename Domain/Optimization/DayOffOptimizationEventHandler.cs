@@ -16,29 +16,34 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly FillSchedulerStateHolder _fillSchedulerStateHolder;
 		private readonly ISynchronizeSchedulesAfterIsland _synchronizeSchedulesAfterIsland;
 		private readonly IGridlockManager _gridlockManager;
+		private readonly ISchedulingSourceScope _schedulingSourceScope;
+
 
 		public DayOffOptimizationEventHandler(DayOffOptimization dayOffOptimization,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
 			FillSchedulerStateHolder fillSchedulerStateHolder,
 			ISynchronizeSchedulesAfterIsland synchronizeSchedulesAfterIsland,
-			IGridlockManager gridlockManager)
+			IGridlockManager gridlockManager, ISchedulingSourceScope schedulingSourceScope)
 		{
 			_dayOffOptimization = dayOffOptimization;
 			_schedulerStateHolder = schedulerStateHolder;
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
 			_synchronizeSchedulesAfterIsland = synchronizeSchedulesAfterIsland;
 			_gridlockManager = gridlockManager;
+			_schedulingSourceScope = schedulingSourceScope;
 		}
-		
+
 		public void Handle(DayOffOptimizationWasOrdered @event)
 		{
 			var schedulerStateHolder = _schedulerStateHolder();
 			var selectedPeriod = new DateOnlyPeriod(@event.StartDate, @event.EndDate);
+
+			using (_schedulingSourceScope.OnThisThreadUse(ScheduleSource.WebScheduling))
 			using (CommandScope.Create(@event))
 			{
 				DoOptimization(@event, schedulerStateHolder, selectedPeriod);
 				_synchronizeSchedulesAfterIsland.Synchronize(schedulerStateHolder.Schedules, selectedPeriod);
-			}		
+			}
 		}
 
 		[UnitOfWork]

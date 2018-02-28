@@ -3,13 +3,12 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security;
-using Teleopti.Ccc.DomainTest.SchedulingScenarios;
 using Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -69,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			jobResult.Details.Count().Should().Be.EqualTo(1);
 			jobResult.FinishedOk.Should().Be.False();
 
-			FakeSchedulingSourceScope.UsedToBe().Should().Be.EqualTo(ScheduleSource.WebScheduling);
+			FakeSchedulingSourceScope.UsedToBe().ForEach(x => x.Should().Be.EqualTo(ScheduleSource.WebScheduling));
 		}
 
 		[Test]
@@ -98,7 +97,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			jobResult.Details.Count().Should().Be.EqualTo(1);
 			jobResult.FinishedOk.Should().Be.True();
 
-			FakeSchedulingSourceScope.UsedToBe().Should().Be.EqualTo(ScheduleSource.WebScheduling);
+			FakeSchedulingSourceScope.UsedToBe().ForEach(x => x.Should().Be.EqualTo(ScheduleSource.WebScheduling));
 		}
 
 		public WebIntradayOptimizationStardustHandlerTest(BreakPreferenceStartTimeByMax resourcePlannerBreakPreferenceStartTimeByMax46002) : base(resourcePlannerBreakPreferenceStartTimeByMax46002)

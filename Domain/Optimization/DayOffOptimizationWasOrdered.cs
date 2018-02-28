@@ -19,5 +19,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public IEnumerable<Guid> Skills { get; set; }
 		public IEnumerable<Guid> AgentsInIsland { get; set; }
 		public IEnumerable<LockInfo> UserLocks { get; set; }
+		public bool FromPlan { get; set; }
 	}
 }
