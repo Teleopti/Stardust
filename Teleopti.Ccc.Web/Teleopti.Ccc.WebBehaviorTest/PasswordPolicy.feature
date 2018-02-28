@@ -141,6 +141,7 @@ Scenario: Change password fails if new password is weak
 	| Last Password Change X Days Ago | 30    |
 	And I have user credential with
 	| Field    | Value     |
+	| Role     | Role1     |
 	| UserName | aa        |
 	| Password | P@ssword1 |
 	When I try to sign in with
@@ -160,6 +161,7 @@ Scenario: Change password fails if old password is wrong
 	| Last Password Change X Days Ago | 30    |
 	And I have user credential with
 	| Field    | Value     |
+	| Role     | Role1     |
 	| UserName | aa        |
 	| Password | P@ssword1 |
 	When I try to sign in with
