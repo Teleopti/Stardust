@@ -17,10 +17,10 @@
 
 		vm.setupSeatPlanStatusStrings = function () {
 			vm.seatPlanStatus = {};
-			vm.seatPlanStatus[0] = 'SeatPlanStatusOK';
-			vm.seatPlanStatus[1] = 'SeatPlanStatusInProgress';
-			vm.seatPlanStatus[2] = 'SeatPlanStatusError';
-			vm.seatPlanStatus[3] = 'SeatPlanStatusNoSeatPlanned';
+			vm.seatPlanStatus[0] = $translate.instant('SeatPlanStatusOK');
+			vm.seatPlanStatus[1] = $translate.instant('SeatPlanStatusInProgress');
+			vm.seatPlanStatus[2] = $translate.instant('SeatPlanStatusError');
+			vm.seatPlanStatus[3] = $translate.instant('SeatPlanStatusNoSeatPlanned');
 		};
 
 		var getServiceSafeDate = function (dateMoment) {
