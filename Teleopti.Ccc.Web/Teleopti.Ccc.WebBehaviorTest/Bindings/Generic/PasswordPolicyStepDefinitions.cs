@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using log4net;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		{
 			var targetTestPasswordPolicyFile = Path.Combine(Paths.WebPath(),  "PasswordPolicy.xml");
 			if (File.Exists(targetTestPasswordPolicyFile))
-				File.Delete(targetTestPasswordPolicyFile);
+				File.Move(targetTestPasswordPolicyFile,Path.GetRandomFileName());
 			_timeoutScope.Dispose();
 			_timeoutScope = null;
 		}
@@ -33,6 +34,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void GivenThereIsAPasswordPolicyWith(Table table)
 		{
 			var targetTestPasswordPolicyFile = Path.Combine(Paths.WebPath(), "PasswordPolicy.xml");
+			LogManager.GetLogger(typeof(PasswordPolicyStepDefinitions)).InfoFormat("Using password policy: {0}", targetTestPasswordPolicyFile);
 			if (File.Exists(targetTestPasswordPolicyFile))
 				return;
 			var contents = File.ReadAllText("Data\\PasswordPolicy.xml");
