@@ -35,13 +35,7 @@ namespace Teleopti.Ccc.Infrastructure.Aop
 					.OrderBy(x => x.Order)
 					.Select(a => a.AspectType)
 					.Select(t => _aspects.Value.Single(t.IsInstanceOfType))
-					.ToArray()
-				;
-			if (!aspects.Any())
-			{
-				invocation.Proceed();
-				return;
-			}
+					.ToArray();
 
 			var invocationInfo = new InvocationInfo(invocation);
 
