@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			((IdentityProviderProvider) _identityProviderProvider).SetDefaultProvider(defaultProvider);
 			_loadPasswordPolicyService.ClearFile();
 			_loadPasswordPolicyService.Path = Path.Combine(_physicalApplicationPath.Get(), usePasswordPolicy ? "" : _settings.ConfigurationFilesPath());
-			LogManager.GetLogger(typeof(TestController)).ErrorFormat("Troubleshooting: Path = {0}, PasswordValidForDayCount = {1}", _loadPasswordPolicyService.Path, _loadPasswordPolicyService.LoadPasswordValidForDayCount());
+			LogManager.GetLogger(typeof(TestController)).ErrorFormat("Troubleshooting: Path = {0}, PasswordValidForDayCount = {1}", _loadPasswordPolicyService.Path, "");
 
 			UserDataFactory.EnableMyTimeMessageBroker = enableMyTimeMessageBroker;
 

@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 	public class PasswordPolicyStepDefinitions
 	{
 		private IDisposable _timeoutScope;
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(PasswordPolicyStepDefinitions));
 
 		[BeforeScenario("PasswordPolicy")]
 		public void BeforePasswordPolicyScenario()
@@ -34,9 +35,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void GivenThereIsAPasswordPolicyWith(Table table)
 		{
 			var targetTestPasswordPolicyFile = Path.Combine(Paths.WebPath(), "PasswordPolicy.xml");
-			LogManager.GetLogger(typeof(PasswordPolicyStepDefinitions)).ErrorFormat("Using password policy: {0}", targetTestPasswordPolicyFile);
+			Logger.ErrorFormat("Using password policy: {0}", targetTestPasswordPolicyFile);
 			if (File.Exists(targetTestPasswordPolicyFile))
+			{
+				Logger.Error("File already exists!");
 				return;
+			}
 			var contents = File.ReadAllText("Data\\PasswordPolicy.xml");
 			var passwordPolicy = table.CreateInstance<PasswordPolicyInfo>();
 
