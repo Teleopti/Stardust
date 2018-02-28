@@ -242,7 +242,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 
 		[Test]
-		[Ignore("48175 to be fixed")]
 		public void ShouldChooseShiftWithCorrectLengthWhenDifferentOpenHoursOnDays()
 		{
 			var date = new DateOnly(2017, 5, 15);

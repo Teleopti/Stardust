@@ -25,16 +25,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Specification
 		public bool Check(IEnumerable<ISkillDay> allSkillDays, ITeamBlockInfo teamBlockInfo, IGroupPersonSkillAggregator groupPersonSkillAggregator)
 		{
 			var skillIntervalDataPerDateAndActivity = _createSkillIntervalDataPerDateAndActivity.CreateFor(teamBlockInfo, allSkillDays, groupPersonSkillAggregator);
-
+			var blockPeriod = teamBlockInfo.BlockInfo.BlockPeriod;
 			var dates = skillIntervalDataPerDateAndActivity.Keys;
 			TimePeriod? sampleOpenHour = null;
 			foreach (var date in dates)
 			{
+				if(!blockPeriod.Contains(date))
+					continue;
 				sampleOpenHour = _openHourForDate.OpenHours(date, skillIntervalDataPerDateAndActivity[date]);
 				if(sampleOpenHour != null)
 					break;
 			}
-			var blockPeriod = teamBlockInfo.BlockInfo.BlockPeriod;
+			
 			foreach (var dateOnly in dates)
 			{
 				if (!blockPeriod.Contains(dateOnly))
