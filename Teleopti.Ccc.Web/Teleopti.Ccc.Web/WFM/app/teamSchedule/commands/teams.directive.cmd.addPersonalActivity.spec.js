@@ -289,7 +289,7 @@
 	});
 
 
-	it('should have correct default start time when no other shifts on today', function () {
+	xit('should have correct default start time when no other shifts on today', function () {
 		var date = new Date(utility.nowInUserTimeZone());
 		scheduleHelper.setLatestEndTime(null);
 		scheduleHelper.setLatestStartTime(null);
