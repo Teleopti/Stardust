@@ -37,7 +37,8 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 				{
 					TrackedCommandInfo = trackInfo,
 					PersonRequestId = personRequestId,
-					ReplyMessage = replyMessage
+					ReplyMessage = replyMessage,
+					IgnoreErrorMessageForApprovedRequest = false
 				};
 
 				_commandDispatcher.Execute(command);

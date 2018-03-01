@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IdentityModel.Claims;
 using System.Linq;
 using System.Threading;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Collection;
@@ -17,9 +15,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
-using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -652,6 +648,28 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 
 			scheduleDayTo.PersonAbsenceCollection().Length.Should().Be(0);
 			scheduleDayTo.PersonAssignment().ShiftLayers.FirstOrDefault()?.Payload.Should().Be(personFromActivity);
+		}
+
+		[Test]
+		[SetCulture("en-US")]
+		public void ShouldNotBeAbleToApproveApprovedRequest()
+		{
+			var person = PersonFactory.CreatePersonWithId();
+			var absence = AbsenceFactory.CreateAbsenceWithId();
+
+			var absenceDateTimePeriod = new DateTimePeriod(2016, 01, 01, 00, 2016, 01, 01, 23);
+
+			var personRequest = createAbsenceRequest(person, absence, absenceDateTimePeriod, false);
+			personRequest.ForcePending();
+			var personRequestCheckAuthorization = new PersonRequestAuthorizationCheckerConfigurable();
+			personRequest.Approve(new ApprovalServiceForTest(), personRequestCheckAuthorization);
+
+			var result = Target.ApproveRequests(new[] {personRequest.Id.GetValueOrDefault()}, string.Empty);
+
+			Assert.IsFalse(result.Success);
+			Assert.IsTrue(result.ErrorMessages.Contains("A request that is Approved cannot be Approved."),
+				string.Join(",", result.ErrorMessages));
+			Assert.IsTrue(personRequest.IsApproved);
 		}
 
 		[TearDown]
