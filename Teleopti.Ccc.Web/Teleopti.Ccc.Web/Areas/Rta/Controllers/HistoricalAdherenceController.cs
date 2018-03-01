@@ -2,8 +2,8 @@
 using System.Globalization;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.Rta.ApprovePeriodAsInAdherence;
-using Teleopti.Ccc.Domain.Rta.ViewModels;
+using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels;
+using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.ApprovePeriodAsInAdherence;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;

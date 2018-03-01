@@ -6,8 +6,8 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.Rta.Events;
-using Teleopti.Ccc.Domain.Rta.ReadModelUpdaters;
+using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels;
+using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 

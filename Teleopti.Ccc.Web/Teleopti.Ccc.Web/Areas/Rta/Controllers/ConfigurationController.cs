@@ -1,7 +1,7 @@
 ﻿using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Logon.Aspects;
-using Teleopti.Ccc.Domain.Rta.Configuration;
+using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Configuration;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 {

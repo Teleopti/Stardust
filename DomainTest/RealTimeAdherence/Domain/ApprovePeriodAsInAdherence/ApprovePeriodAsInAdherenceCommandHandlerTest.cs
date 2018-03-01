@@ -1,0 +1,87 @@
+﻿using System;
+using System.Linq;
+using NUnit.Framework;
+using SharpTestsEx;
+using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.ApprovePeriodAsInAdherence;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
+
+namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.ApprovePeriodAsInAdherence
+{
+	[DomainTest]
+	[TestFixture]
+	public class ApprovePeriodAsInAdherenceCommandHandlerTest
+	{
+		public ApprovePeriodAsInAdherenceCommandHandler Target;
+		public FakeApprovedPeriodsStorage Storage;
+		public FakeUserTimeZone TimeZone;
+
+		[Test]
+		public void ShouldApprove()
+		{
+			var person = Guid.NewGuid();
+
+			Target.Handle(new ApprovePeriodAsInAdherenceCommand
+			{
+				PersonId = person,
+				StartDateTime = "2018-01-29 08:05:00",
+				EndDateTime = "2018-01-29 08:15:00"
+			});
+
+			Storage.Data.Single().PersonId.Should().Be(person);
+			Storage.Data.Single().StartTime.Should().Be("2018-01-29 08:05:00".Utc());
+			Storage.Data.Single().EndTime.Should().Be("2018-01-29 08:15:00".Utc());
+		}
+
+		[Test]
+		public void ShouldApproveFromUsersTimeZone()
+		{
+			var person = Guid.NewGuid();
+			TimeZone.IsSweden();
+
+			Target.Handle(new ApprovePeriodAsInAdherenceCommand
+			{
+				PersonId = person,
+				StartDateTime = "2018-01-29 08:00:00",
+				EndDateTime = "2018-01-29 09:00:00"
+			});
+
+			Storage.Data.Single().StartTime.Should().Be("2018-01-29 07:00:00".Utc());
+			Storage.Data.Single().EndTime.Should().Be("2018-01-29 08:00:00".Utc());
+		}
+
+		[Test]
+		public void ShouldApproveFromUsersTimeZone24Hours()
+		{
+			var person = Guid.NewGuid();
+			TimeZone.IsSweden();
+
+			Target.Handle(new ApprovePeriodAsInAdherenceCommand
+			{
+				PersonId = person,
+				StartDateTime = "2018-01-29 15:00:00",
+				EndDateTime = "2018-01-29 16:00:00"
+			});
+
+			Storage.Data.Single().StartTime.Should().Be("2018-01-29 14:00:00".Utc());
+			Storage.Data.Single().EndTime.Should().Be("2018-01-29 15:00:00".Utc());
+		}
+
+		[Test]
+		public void ShouldNotAllowEndTimeBeforeStartTime()
+		{
+			var person = Guid.NewGuid();
+			var command = new ApprovePeriodAsInAdherenceCommand
+			{
+				PersonId = person,
+				StartDateTime = "2018-01-29 17:00:00",
+				EndDateTime = "2018-01-29 16:00:00"
+			};
+
+			Assert.Throws<ArgumentOutOfRangeException>(() => Target.Handle(command));
+			Storage.Data.Should().Be.Empty();
+		}
+	}
+}

@@ -8,8 +8,8 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Rta.ReadModelUpdaters;
-using Teleopti.Ccc.Domain.Rta.Service;
+using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels;
+using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 

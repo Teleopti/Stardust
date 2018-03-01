@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Domain.Rta.Configuration;
+using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Configuration;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Repositories;

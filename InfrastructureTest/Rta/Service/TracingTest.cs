@@ -2,9 +2,9 @@
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Rta.ReadModelUpdaters;
-using Teleopti.Ccc.Domain.Rta.Service;
-using Teleopti.Ccc.Domain.Rta.Tracer;
+using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels;
+using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
+using Teleopti.Ccc.Domain.RealTimeAdherence.Tracer;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Service
 	{
 		public Database Database;
 		public AnalyticsDatabase Analytics;
-		public Domain.Rta.Service.Rta Rta;
+		public Domain.RealTimeAdherence.Domain.Service.Rta Rta;
 		public IRtaTracer Tracer;
 		public FakeEventPublisher Publisher;
 		public IRtaTracerReader Reader;

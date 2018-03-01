@@ -1,0 +1,79 @@
+using System;
+using NUnit.Framework;
+using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
+
+namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service
+{
+	[RtaTest]
+	[TestFixture]
+	public class DontUpdateAgentStateReadModel
+	{
+		public FakeAgentStateReadModelPersister Persister;
+		public FakeDatabase Database;
+		public MutableNow Now;
+		public AgentStateReadModelMaintainer Maintainer; 
+		public Ccc.Domain.RealTimeAdherence.Domain.Service.Rta Target;
+
+		[Test]
+		public void ShouldNotUpdateIfPersonIsTerminated()
+		{
+			var person = Guid.NewGuid();
+			Database
+				.WithAgent("usercode", person)
+				.WithMappedRule("phone")
+				.WithMappedRule("loggedOff");
+			
+			Target.ProcessState(new StateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "phone"
+			});
+			Maintainer.Handle(new PersonAssociationChangedEvent
+			{
+				PersonId = person,
+				TeamId = null
+			});
+
+			Target.ProcessState(new StateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "loggedOff"
+			});
+
+			Persister.Load(person).StateName.Should().Be("phone");
+		}
+
+		[Test]
+		public void ShouldNotUpdateIfPersonIsDeleted()
+		{
+			var person = Guid.NewGuid();
+			Database
+				.WithAgent("usercode", person)
+				.WithMappedRule("phone")
+				.WithMappedRule("loggedOff");
+
+			Target.ProcessState(new StateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "phone"
+			});
+			Maintainer.Handle(new PersonDeletedEvent
+			{
+				PersonId = person
+			});
+
+			Target.ProcessState(new StateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "loggedOff"
+			});
+
+			Persister.Load(person).StateName.Should().Be("phone");
+		}
+	}
+}

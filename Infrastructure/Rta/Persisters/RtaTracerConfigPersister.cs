@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Rta.Tracer;
+using Teleopti.Ccc.Domain.RealTimeAdherence.Tracer;
 
 namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 {

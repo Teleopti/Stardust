@@ -6,9 +6,9 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels;
+using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Rta.Service;
-using Teleopti.Ccc.Domain.Rta.ViewModels;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 

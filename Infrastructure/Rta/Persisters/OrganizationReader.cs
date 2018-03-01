@@ -5,7 +5,7 @@ using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Domain.Rta.ReadModelUpdaters;
+using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels;
 using Teleopti.Ccc.Infrastructure.Repositories;
 
 namespace Teleopti.Ccc.Infrastructure.Rta.Persisters

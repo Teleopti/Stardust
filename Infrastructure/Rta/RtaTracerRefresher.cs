@@ -2,7 +2,7 @@ using System;
 using Hangfire.Server;
 using log4net;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Rta.Tracer;
+using Teleopti.Ccc.Domain.RealTimeAdherence.Tracer;
 
 namespace Teleopti.Ccc.Infrastructure.Rta
 {
