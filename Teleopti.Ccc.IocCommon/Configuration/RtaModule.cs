@@ -12,8 +12,10 @@ using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Tool;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Tracer;
 using Teleopti.Ccc.Infrastructure.Aop;
-using Teleopti.Ccc.Infrastructure.Rta;
-using Teleopti.Ccc.Infrastructure.Rta.Persisters;
+using Teleopti.Ccc.Infrastructure.RealTimeAdherence.ApplicationLayer;
+using Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain.ApprovePeriodAsInAdherence;
+using Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain.Service;
+using Teleopti.Ccc.Infrastructure.RealTimeAdherence.Tracer;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
