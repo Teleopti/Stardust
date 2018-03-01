@@ -95,7 +95,7 @@
 			vm.isExporting = true;
 			exportScheduleService.startExport(vm.configuration).then(function(response) {
 			        vm.isExporting = false;
-				var failReason = response.headers()['message']
+				var failReason = response.headers()['message'];
 				if(failReason && failReason.length > 0){
 					NoticeService.error(failReason, null, true);
 				}
@@ -113,7 +113,7 @@
 			vm.getOptionalColumnsAsync();
 		}
 
-		function saveData(data, status, headers, config) {
+		function saveData(data) {
 			var blob = new Blob([data]);
 			vm.exporting = false;
 			saveAs(blob, 'TeamsExportedSchedules' + moment().format('YYYY-MM-DD') + '.xlsx');

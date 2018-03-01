@@ -124,8 +124,6 @@
 						Name: agent.Name
 					}
 				}), response.data);
-
-				
 			});
 		};
 	}

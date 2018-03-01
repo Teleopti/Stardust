@@ -1970,7 +1970,6 @@
     <Content Include="WFM\app\teamSchedule\html\teamscheduledatepicker.html" />
     <Content Include="WFM\app\teamSchedule\html\view-changer.tpl.html" />
     <Content Include="WFM\app\teamSchedule\html\weekViewSchedule.html" />
-    <Content Include="WFM\app\teamSchedule\teamSchedule.controller.commandConfirmDialog.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.controller.day.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.controller.day.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.controller.week.js" />

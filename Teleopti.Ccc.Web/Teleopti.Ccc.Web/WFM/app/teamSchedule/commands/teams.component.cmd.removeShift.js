@@ -70,9 +70,6 @@
 				return p.Checked && p.SelectedActivities && p.SelectedActivities.filter(function (a) { return !a.isOvertime; }).length > 0;
 			});
 		}
-
-
-
 	}
 
 })();

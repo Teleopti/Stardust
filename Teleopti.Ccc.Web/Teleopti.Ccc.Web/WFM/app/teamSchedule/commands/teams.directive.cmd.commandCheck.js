@@ -24,20 +24,14 @@
 		};
 	}
 
-	commandCheckCtrl.$inject = ['$scope', '$translate', 'CommandCheckService','serviceDateFormatHelper'];
+	commandCheckCtrl.$inject = ['$scope', 'CommandCheckService','serviceDateFormatHelper'];
 
-	function commandCheckCtrl($scope, $translate, CommandCheckService, serviceDateFormatHelper) {
+	function commandCheckCtrl($scope, CommandCheckService, serviceDateFormatHelper) {
 		var vm = this;
 		vm.showCheckbox = false;
 
 		vm.checkFailedAgentList = [];
 		vm.initFinished = false;
-
-
-		vm.updatePersonSelection = function(agent) {
-			personSelectionSvc.updatePersonSelection(agent);
-			personSelectionSvc.toggleAllPersonProjections(agent, vm.getDate());
-		};
 
 		function getAgentListModifier(keepAgents) {
 			var checkFailedAgentIdList = vm.checkFailedAgentList.map(function(agent) { return agent.personId; });
@@ -78,12 +72,12 @@
 
 		vm.applyCommandFix = function () {
 			vm.config.actionOptions.forEach(function (option) {
-				if (option == vm.currentActionOptionValue) {
-					if (option == 'DoNotModifyForTheseAgents') {
+				if (option === vm.currentActionOptionValue) {
+					if (option === 'DoNotModifyForTheseAgents') {
 						CommandCheckService.completeCommandCheck(getAgentListModifier(false));
-					} else if (option == 'OverrideForTheseAgents') {
+					} else if (option === 'OverrideForTheseAgents') {
 						CommandCheckService.completeCommandCheck(getAgentListModifier(true));
-					} else if (option == 'MoveNonoverwritableActivityForTheseAgents') {
+					} else if (option === 'MoveNonoverwritableActivityForTheseAgents') {
 						CommandCheckService.completeCommandCheck(function (requestData) {
 							requestData.MoveConflictLayerAllowed = true;
 							return requestData;
@@ -94,7 +88,6 @@
 		};
 
 		vm.init = function() {
-
 			var groupSchedules = vm.containerCtrl.scheduleManagementSvc.schedules();
 
 			function getScheduleVm(personId) {
@@ -118,6 +111,5 @@
 
 			vm.initFinished = true;
 		};
-
 	}
 })();

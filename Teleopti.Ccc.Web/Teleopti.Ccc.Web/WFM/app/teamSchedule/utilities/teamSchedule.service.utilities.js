@@ -17,7 +17,6 @@
 		self.setNowDate = setNowDate;
 		self.now = now;
 
-
 		var nowDate = new Date();
 
 		function setNowDate(date) {

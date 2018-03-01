@@ -264,8 +264,6 @@
 			}
 		};
 
-
-
 		function openSidePanel() {
 			if (!$mdSidenav(commandContainerId).isOpen()) {
 				$mdSidenav(commandContainerId).open().then(function () {
@@ -600,8 +598,6 @@
 		};
 		if (!vm.toggles.Wfm_GroupPages_45057)
 			vm.getSitesAndTeamsAsync();
-
-
 
 		function showReleaseNotification() {
 			var template = $translate.instant('WFMReleaseNotificationWithoutOldModuleLink');

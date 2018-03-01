@@ -3,7 +3,7 @@
 
 	angular.module('wfm.teamSchedule').directive('addAbsence', ['serviceDateFormatHelper', addAbsenceDirective]);
 
-	function addAbsenceDirective(serviceDateFormatHelper) {
+	function addAbsenceDirective() {
 		return {
 			restrict: 'E',
 			scope: {},

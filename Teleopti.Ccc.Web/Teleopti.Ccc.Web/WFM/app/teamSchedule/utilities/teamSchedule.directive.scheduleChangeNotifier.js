@@ -3,9 +3,9 @@
 
 	angular.module('wfm.teamSchedule').directive('scheduleChangeNotifier', scheduleChangeNotifierDirective);
 
-	scheduleChangeNotifierDirective.$inject = ['signalRSVC', 'ScheduleManagement', 'teamsToggles'];
+	scheduleChangeNotifierDirective.$inject = ['signalRSVC', 'ScheduleManagement'];
 
-	function scheduleChangeNotifierDirective(signalRSVC, scheduleMgmtSvc, teamsToggles) {
+	function scheduleChangeNotifierDirective(signalRSVC, scheduleMgmtSvc) {
 		return {
 			restrict: 'E',
 			link: function($scope, $element, $attr) {
