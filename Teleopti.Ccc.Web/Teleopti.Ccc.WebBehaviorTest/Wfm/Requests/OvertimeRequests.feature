@@ -41,6 +41,7 @@ Scenario: Should view overtime requests
 	And I click button for search requests
 	Then I should see a overtime request from 'Ashley Andeen' in the list
 
+@OnlyRunIfDisabled('OvertimeRequestPeriodSkillTypeSetting_47290')
 Scenario: Should approve overtime request
 	When I view wfm requests
 	And I select to go to overtime view
