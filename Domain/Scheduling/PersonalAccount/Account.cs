@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.PersonalAccount
 		{
 			get
 			{
-				TimeSpan remaining = Remaining;
+				var remaining = Remaining;
 				return remaining < TimeSpan.Zero;
 			}
 		}
@@ -63,10 +63,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.PersonalAccount
 		public virtual void CalculateUsed(IScheduleStorage storage, IScenario scenario)
 		{
 			var projectionServiceForPersonAccount = new PersonAccountProjectionService(this);
-			IList<IScheduleDay> scheduleDays = projectionServiceForPersonAccount.CreateProjection(storage, scenario);
+			var scheduleDays = projectionServiceForPersonAccount.CreateProjection(storage, scenario);
 			_usedInScheduler = TimeSpan.Zero;
 			_usedOutsideScheduler = null;
-			TimeSpan result = Owner.Absence.Tracker.TrackForReset(Owner.Absence, scheduleDays);
+			var result = Owner.Absence.Tracker.TrackForReset(Owner.Absence, scheduleDays);
 			LatestCalculatedBalance = result;
 		}
 
