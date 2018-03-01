@@ -6,8 +6,8 @@
 	"license": "ISC",
 	"dependencies": {
 		"@angular/animations": "^5.2.3",
-		"@angular/cdk": "^5.2.0",
-		"@angular/material": "^5.2.0",
+		"@angular/cdk": "^5.2.3",
+		"@angular/material": "^5.2.3",
 		"@types/angular-ui-router": "^1.1.40",
 		"@types/bootstrap": "^3.3.37",
 		"@types/bootstrap-datepicker": "0.0.11",
