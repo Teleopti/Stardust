@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 			{
 				return View("Xrds");
 			}
-			return View();
+			throw new HttpException(404, "NotFound");
 		}
 
 		[ValidateInput(false)]

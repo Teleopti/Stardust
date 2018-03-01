@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Web;
 using System.Web.Mvc;
 using DotNetOpenAuth.Messaging;
 using DotNetOpenAuth.OpenId;
@@ -47,7 +48,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 		}
 
 		[Test]
-		public void IdentifierShouldReturnView()
+		public void ShouldReturn404()
 		{
 			var request = MockRepository.GenerateStub<FakeHttpRequest>("/", new Uri("http://mock/"), new Uri("http://mock/"));
 			var context = new FakeHttpContext("/");
@@ -55,9 +56,9 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 			var target = new OpenIdController(null, null, null, null, getToggleManager());
 			target.ControllerContext = new ControllerContext(context, new RouteData(), target);
 
-			var result = target.Identifier();
 
-			(result as ViewResult).ViewName.Should().Be.EqualTo("");
+			var ex = Assert.Throws<HttpException>(() => target.Identifier());
+			Assert.That(ex.GetHttpCode(), Is.EqualTo(404));
 		}
 
 		[Test]
