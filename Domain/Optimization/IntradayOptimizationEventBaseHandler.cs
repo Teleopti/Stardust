@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			HandleEvent(@event, null);
 		}
 
-		[UnitOfWork]
+		[ReadonlyUnitOfWork]
 		protected virtual void DoOptimization(
 			DateOnlyPeriod period,
 			IEnumerable<Guid> agentsInIsland,
