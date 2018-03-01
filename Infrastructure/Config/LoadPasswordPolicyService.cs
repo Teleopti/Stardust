@@ -125,11 +125,13 @@ namespace Teleopti.Ccc.Infrastructure.Config
                 {
 	                var policy = System.IO.Path.Combine(_path, FileName);
 					var exists = System.IO.File.Exists(policy);
+					_logger.WarnFormat("Policy exists at {1}: {0}",exists,policy);
 					_file = exists ? XDocument.Load(policy) : defaultXDocument();
                 }
                 catch (Exception e)
                 {
-                    _logger.Info("Default password policy will be used:  " + e.Message,e);
+					_logger.Error("Error when loading policy.", e);
+                    _logger.Info("Default password policy will be used:  " + e.Message);
                     return defaultXDocument();
                 }
 

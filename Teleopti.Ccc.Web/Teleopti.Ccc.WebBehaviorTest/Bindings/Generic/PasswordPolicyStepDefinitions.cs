@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using log4net;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
@@ -12,6 +13,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 	public class PasswordPolicyStepDefinitions
 	{
 		private IDisposable _timeoutScope;
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(PasswordPolicyStepDefinitions));
 
 		[BeforeScenario("PasswordPolicy")]
 		public void BeforePasswordPolicyScenario()
@@ -24,7 +26,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		{
 			var targetTestPasswordPolicyFile = Path.Combine(Paths.WebPath(),  "PasswordPolicy.xml");
 			if (File.Exists(targetTestPasswordPolicyFile))
-				File.Delete(targetTestPasswordPolicyFile);
+				File.Move(targetTestPasswordPolicyFile,Path.GetRandomFileName());
 			_timeoutScope.Dispose();
 			_timeoutScope = null;
 		}
@@ -33,8 +35,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void GivenThereIsAPasswordPolicyWith(Table table)
 		{
 			var targetTestPasswordPolicyFile = Path.Combine(Paths.WebPath(), "PasswordPolicy.xml");
+			Logger.ErrorFormat("Using password policy: {0}", targetTestPasswordPolicyFile);
 			if (File.Exists(targetTestPasswordPolicyFile))
 			{
+				Logger.Error("File already exists!");
 				return;
 			}
 			var contents = File.ReadAllText("Data\\PasswordPolicy.xml");
@@ -49,14 +53,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			{
 			}
 
-			using (var file = File.Create(targetTestPasswordPolicyFile, 4096, FileOptions.WriteThrough))
-			{
-				using (var writer = new StreamWriter(file))
-				{
-					writer.Write(contents);
-					writer.Flush();
-				}
-			}
+			File.WriteAllText(targetTestPasswordPolicyFile, contents);
 		}
 
 		public class PasswordPolicyInfo
