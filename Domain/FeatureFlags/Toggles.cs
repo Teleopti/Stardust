@@ -96,6 +96,7 @@
 		ResourcePlanner_UseErlangAWithInfinitePatience_45845,
 		ResourcePlanner_DayOffOptimizationIslands_47208,
 		ResourcePlanner_PrepareToRemoveExportSchedule_46576,
+		ResourcePlanner_Deadlock_48170,
 
 		Wfm_DisplayOnlineHelp_39402,
 

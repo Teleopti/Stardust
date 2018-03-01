@@ -59,6 +59,7 @@ using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Persisters.Outbound;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.Scheduling;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 using Teleopti.Ccc.Secrets.WorkShiftPeriodValueCalculator;
@@ -455,7 +456,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<PeopleInOrganization>().As<IAllStaff>().SingleInstance();
 				builder.RegisterType<CurrentOptimizationCallback>().As<ICurrentOptimizationCallback>().AsSelf().SingleInstance();
 				builder.RegisterType<CurrentSchedulingCallback>().As<ICurrentSchedulingCallback>().AsSelf().SingleInstance();
-				builder.RegisterType<FillSchedulerStateHolderFromDatabase>().As<FillSchedulerStateHolder>().ApplyAspects().SingleInstance();
+				if (_configuration.Toggle(Toggles.ResourcePlanner_Deadlock_48170))
+				{
+					builder.RegisterType<FillSchedulerStateHolderFromDatabaseWithScheduleReadRetries>().As<FillSchedulerStateHolder>().ApplyAspects().SingleInstance();
+				}
+				else
+				{
+					builder.RegisterType<FillSchedulerStateHolderFromDatabase>().As<FillSchedulerStateHolder>().ApplyAspects().SingleInstance();					
+				}
 			}
 
 
