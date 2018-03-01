@@ -450,8 +450,15 @@
     <Compile Include="Rta\ApprovePeriodAsInAdherence\IApprovedPeriodsPersister.cs" />
     <Compile Include="Rta\Configuration\ConfigurationValidationViewModel.cs" />
     <Compile Include="Rta\Configuration\ConfigurationValidator.cs" />
+    <Compile Include="Rta\Configuration\DefaultStateGroupException.cs" />
     <Compile Include="Rta\Configuration\IConfigurationValidator.cs" />
+    <Compile Include="Rta\Configuration\IRtaStateHolder.cs" />
     <Compile Include="Rta\Configuration\NoConfigurationValidator.cs" />
+    <Compile Include="Rta\Configuration\RtaMap.cs" />
+    <Compile Include="Rta\Configuration\RtaRule.cs" />
+    <Compile Include="Rta\Configuration\RtaState.cs" />
+    <Compile Include="Rta\Configuration\RtaStateGroup.cs" />
+    <Compile Include="Rta\Configuration\RtaStateHolder.cs" />
     <Compile Include="Rta\Events\EventAdherence.cs" />
     <Compile Include="Rta\Events\PersonInAdherenceEvent.cs" />
     <Compile Include="Rta\Events\PersonNeutralAdherenceEvent.cs" />
@@ -2941,7 +2948,6 @@
     <Compile Include="Common\PersonWriteProtectionInfo.cs" />
     <Compile Include="Optimization\RmsPeriodValueCalculator.cs" />
     <Compile Include="Optimization\RelativeDailyDifferencesByPersonalSkillsExtractor.cs" />
-    <Compile Include="RealTimeAdherence\DefaultStateGroupException.cs" />
     <Compile Include="Forecasting\ActiveAgentCount.cs" />
     <Compile Include="Forecasting\DayHasAboveMaxAgents.cs" />
     <Compile Include="Forecasting\DayHasBelowMinAgents.cs" />
@@ -2970,8 +2976,6 @@
     <Compile Include="Optimization\ShiftCategoryLimitationChecker.cs" />
     <Compile Include="Payroll\PayrollExport.cs" />
     <Compile Include="Payroll\PayrollResult.cs" />
-    <Compile Include="RealTimeAdherence\IRtaStateHolder.cs" />
-    <Compile Include="RealTimeAdherence\RtaMap.cs" />
     <Compile Include="Repositories\IAbsenceRepository.cs" />
     <Compile Include="Repositories\IGroupPageRepository.cs" />
     <Compile Include="Repositories\INoteRepository.cs" />
@@ -3002,8 +3006,6 @@
     <Compile Include="ResourceCalculation\PersonSkillPeriodsDataHolderManager.cs" />
     <Compile Include="ResourceCalculation\PopulationStatisticsData.cs" />
     <Compile Include="ResourceCalculation\PreSchedulingStatusChecker.cs" />
-    <Compile Include="RealTimeAdherence\RtaRule.cs" />
-    <Compile Include="RealTimeAdherence\RtaStateHolder.cs" />
     <Compile Include="Optimization\ScheduleMatrixPro.cs" />
     <Compile Include="ResourceCalculation\ShiftProjectionCacheManager.cs" />
     <Compile Include="ResourceCalculation\ShiftProjectionCacheFilter.cs" />
@@ -3310,8 +3312,6 @@
     <Compile Include="Tracking\PersonAccountProjectionService.cs" />
     <Compile Include="Tracking\TraceableRefreshService.cs" />
     <Compile Include="Tracking\Tracker.cs" />
-    <Compile Include="RealTimeAdherence\RtaState.cs" />
-    <Compile Include="RealTimeAdherence\RtaStateGroup.cs" />
     <Compile Include="Repositories\IContractRepository.cs" />
     <Compile Include="Repositories\IContractScheduleRepository.cs" />
     <Compile Include="Repositories\IDayOffTemplateRepository.cs" />
@@ -3602,6 +3602,12 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Rta\Configuration\RtaMap.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Rta\Configuration\RtaRule.hbm.xml" />
+    <EmbeddedResource Include="Rta\Configuration\RtaState.hbm.xml" />
+    <EmbeddedResource Include="Rta\Configuration\RtaStateGroup.hbm.xml" />
     <EmbeddedResource Include="Scheduling\Assignment\PersonAssignment.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -3861,21 +3867,7 @@
     <EmbeddedResource Include="AgentInfo\Requests\TextRequest.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="RealTimeAdherence\RtaStateGroup.hbm.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="RealTimeAdherence\RtaState.hbm.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Scheduling\DayOffTemplate.hbm.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="RealTimeAdherence\RtaRule.hbm.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="RealTimeAdherence\RtaMap.hbm.xml">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Security\License.hbm.xml" />
@@ -4073,6 +4065,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
+    <Folder Include="RealTimeAdherence" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="WorkflowControl\OvertimeRequestOpenRollingPeriod.hbm.xml" />

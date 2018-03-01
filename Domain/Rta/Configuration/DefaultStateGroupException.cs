@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace Teleopti.Ccc.Domain.RealTimeAdherence
+namespace Teleopti.Ccc.Domain.Rta.Configuration
 {
     [Serializable]
     public class DefaultStateGroupException : Exception

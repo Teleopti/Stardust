@@ -2,14 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Rta.Events;
 using Teleopti.Ccc.UserTexts;
 
-namespace Teleopti.Ccc.Domain.RealTimeAdherence
+namespace Teleopti.Ccc.Domain.Rta.Configuration
 {
 	public class RtaRule : VersionedAggregateRootWithBusinessUnit, IRtaRule
 	{

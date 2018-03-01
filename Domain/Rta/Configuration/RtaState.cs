@@ -1,7 +1,7 @@
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
-namespace Teleopti.Ccc.Domain.RealTimeAdherence
+namespace Teleopti.Ccc.Domain.Rta.Configuration
 {
     public class RtaState : AggregateEntity, IRtaState
     {

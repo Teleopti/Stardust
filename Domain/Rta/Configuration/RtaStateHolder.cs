@@ -9,7 +9,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Rta.Service;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.RealTimeAdherence
+namespace Teleopti.Ccc.Domain.Rta.Configuration
 {
     public class RtaStateHolder : IRtaStateHolder
     {

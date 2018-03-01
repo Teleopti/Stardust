@@ -4,7 +4,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Rta.Service;
 
-namespace Teleopti.Ccc.Domain.RealTimeAdherence
+namespace Teleopti.Ccc.Domain.Rta.Configuration
 {
     public interface IRtaStateHolder
     {
