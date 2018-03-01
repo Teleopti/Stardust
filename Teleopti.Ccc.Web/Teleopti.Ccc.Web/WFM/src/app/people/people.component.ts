@@ -11,7 +11,7 @@ import { WorkspaceService, RolesService, SearchService } from './services';
 	styleUrls: ['./people.component.scss']
 })
 export class PeopleComponent implements OnInit {
-	constructor(protected workspaceService: WorkspaceService, private rolesService: RolesService, public searchService: SearchService) { }
+	constructor(protected workspaceService: WorkspaceService, public rolesService: RolesService, public searchService: SearchService) { }
 
 	roles: Array<Role> = [];
 

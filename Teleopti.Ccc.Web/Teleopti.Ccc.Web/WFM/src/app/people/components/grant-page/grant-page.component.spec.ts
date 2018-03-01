@@ -4,8 +4,9 @@ import { GrantPageComponent } from './grant-page.component';
 import { PeopleModule } from '../../people.module';
 import { DebugElement, Component, OnInit, ViewChild } from '@angular/core';
 import { By } from '@angular/platform-browser';
-import { RolesService, RolesServiceStub, WorkspaceService, WorkspaceServiceStub, SearchService, SearchServiceStub } from '../../services';
+import { RolesService, WorkspaceService, WorkspaceServiceStub, SearchService } from '../../services';
 import { Person, Role } from '../../types';
+import { ROLES } from '../../services/fake-backend.provider'
 
 describe('GrantPage', () => {
 	let component: GrantPageComponent;
@@ -32,12 +33,7 @@ describe('GrantPage', () => {
 		component = fixture.componentInstance;
 
 		fixture.whenStable().then(async () => {
-			let searchService = new SearchServiceStub();
-			let rolesService = new RolesServiceStub();
-			let people = await searchService.getPeople();
-			let roles = await rolesService.getRoles();
-
-			component.roles = roles;
+			component.roles = ROLES;
 
 			fixture.detectChanges();
 		});

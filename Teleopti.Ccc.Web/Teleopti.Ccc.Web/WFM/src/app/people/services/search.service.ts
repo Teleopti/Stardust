@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Person } from '../types';
-import { WorkspaceService } from './workspace.service';
+import { HttpClient } from '@angular/common/http';
 
 
 @Injectable()
 export class SearchService {
 	protected peopleCache: Array<Person> = [];
 
-	constructor() { }
+	constructor(private http: HttpClient) { }
 
 	public getPerson(id: string): Person {
 		return this.peopleCache.find(p => p.Id === id);
@@ -18,42 +18,32 @@ export class SearchService {
 	}
 
 	async searchPeople(keyword = 'a'): Promise<Array<Person>> {
-		const personToId = ({ PersonId }) => PersonId;
-		const sortPeopleByName = (person1, person2) => person1.FirstName >= person2.FirstName;
-
-		const requestCredentials: RequestCredentials = 'include';
-
-		const fetchDefaultOptions: RequestInit = {
-			method: 'GET',
-			headers: {
-				Accept: 'application/json',
-				'Content-Type': 'application/json',
-				Cache: 'no-cache'
-			},
-			credentials: requestCredentials
+		const sortPeopleByName = (a: Person, b: Person) => {
+			if (a.FirstName >= b.FirstName) return 1;
+			if (a.FirstName < b.FirstName) return -1;
+			return 0;
 		};
 
-		const fetchJSON = async (input, init) => {
-			return fetch(input, init).then(response => response.json());
+		interface SearchPerson {
+			PersonId: string
+		}
+		interface SearchResult {
+			People: Array<SearchPerson>,
+			CurrentPage: number,
+			OptionalColumns: Array<string>,
+			TotalPages: number
+		}
+		const searchPeople = async (): Promise<Array<SearchPerson>> => {
+			const result = this.http.get(`../api/Search/People/Keyword?currentPageIndex=1&keyword=${keyword}&pageSize=10&sortColumns=LastName:true`).toPromise() as Promise<SearchResult>
+			return result.then(({ People }) => People)
 		};
 
-		const searchPeople = async () => {
-			return fetchJSON(
-				`../api/Search/People/Keyword?currentPageIndex=1&keyword=${keyword}&pageSize=10&sortColumns=LastName:true`,
-				fetchDefaultOptions
-			).then(({ People }) => People);
-		};
+		const getPersonIds = async () => searchPeople().then(people => people.map(person => person.PersonId))
 
 		const getPersons = async ({ Date = '2017-02-08', PersonIdList }) => {
-			return fetchJSON(`../api/PeopleData/fetchPersons`, {
-				...fetchDefaultOptions,
-				method: 'POST',
-				body: JSON.stringify({ Date, PersonIdList })
-			});
+			return this.http.post('../api/PeopleData/fetchPersons', { Date, PersonIdList }).toPromise() as Promise<Array<Person>>
 		};
-
-		const peopleResult = await searchPeople();
-		const PersonIdList = peopleResult.map(personToId);
+		const PersonIdList = await getPersonIds()
 
 		let people = await getPersons({ PersonIdList });
 

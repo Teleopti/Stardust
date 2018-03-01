@@ -1,12 +1,13 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PeopleComponent } from './people.component';
-import { RolesService, RolesServiceStub, SearchService, SearchServiceStub } from './services';
 import { PeopleModule } from './people.module';
 import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
+import { fakeBackendProvider } from './services/fake-backend.provider';
+import { HttpClientModule } from '@angular/common/http';
 
-describe('PeopleComponent', () => {
+fdescribe('PeopleComponent', () => {
 	let component: PeopleComponent;
 	let fixture: ComponentFixture<PeopleComponent>;
 	const SEARCH_PERSON_QUERY = '[data-test-search] [data-test-person]';
@@ -16,10 +17,10 @@ describe('PeopleComponent', () => {
 	beforeEach(
 		async(() => {
 			TestBed.configureTestingModule({
-				imports: [PeopleModule],
+				imports: [PeopleModule, HttpClientModule],
 				providers: [
-					{ provide: RolesService, useValue: new RolesServiceStub() },
-					{ provide: SearchService, useValue: new SearchServiceStub() }]
+					fakeBackendProvider
+				]
 			}).compileComponents();
 		})
 	);
