@@ -15,8 +15,6 @@ CREATE PROCEDURE [mart].[etl_fact_schedule_day_count_insert]
 	@starttime smalldatetime,
 	@shift_category_id int,
 	@absence_id int,
-	@day_off_name nvarchar(50),
-	@day_off_shortname nvarchar(25),
 	@day_off_id int
 AS
 BEGIN

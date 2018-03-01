@@ -137,10 +137,10 @@ INNER JOIN
 	mart.dim_business_unit bu
 ON
 	p.business_unit_code = bu.business_unit_code
-LEFT JOIN				--vi kör tills vidare på day_off_name som "primary key"
+LEFT JOIN
 	mart.dim_day_off ddo
 ON
-	f.day_off_name = ddo.day_off_name  AND ddo.business_unit_id = @business_unit_id
+	f.day_off_code = ddo.day_off_code  AND ddo.business_unit_id = @business_unit_id
 LEFT JOIN
 	mart.dim_absence ab
 ON

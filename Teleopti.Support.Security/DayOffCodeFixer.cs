@@ -53,11 +53,17 @@ namespace Teleopti.Support.Security
 							foreach (var dayOff in ds.Tables[0].Rows.Cast<DataRow>()
 								.Select(row => new AnalyticsDayOff(row))
 								.OrderByDescending(x => x.DayOffId)
-								.Where(x => x.DayOffCode.HasValue))
+								.Where(x => x.DayOffCode.HasValue && 
+									x.DayOffName != "ContractDayOff" && x.DayOffShortName != "CD"))
 							{
-								correct.Add(dayOff.DayOffCode.Value, dayOff);
+								if (!correct.ContainsKey(dayOff.DayOffCode.Value))
+								{
+									correct.Add(dayOff.DayOffCode.Value, dayOff);
+								}
 							}
-							foreach (var dayOff in ds.Tables[0].Rows.Cast<DataRow>().Select(row => new AnalyticsDayOff(row)))
+							foreach (var dayOff in ds.Tables[0].Rows.Cast<DataRow>()
+								.Select(row => new AnalyticsDayOff(row))
+								.Where(x => x.DayOffName != "ContractDayOff" && x.DayOffShortName != "CD"))
 							{
 								if (dayOff.DayOffId == -1) // Not defined, just assign empty guid and move on
 								{
@@ -103,6 +109,27 @@ namespace Teleopti.Support.Security
 
 								}
 							}
+							var contractDayoffs = ds.Tables[0].Rows.Cast<DataRow>()
+								.Where(x => x.RowState != DataRowState.Deleted)
+								.Select(row => new AnalyticsDayOff(row))
+								.OrderByDescending(x => x.DayOffId)
+								.Where(x => x.DayOffName == "ContractDayOff" && x.DayOffShortName == "CD")
+								.ToList();
+							foreach (var contractDayoff in contractDayoffs)
+							{
+								if (contractDayoff.DayOffCode.HasValue)
+									continue;
+
+								var contractDayoffWithEmptyGuid = contractDayoffs.FirstOrDefault(x =>
+									x.BusinessUnitId == contractDayoff.BusinessUnitId && x.DayOffCode == Guid.Empty);
+								if (contractDayoffWithEmptyGuid == null)
+								{
+									contractDayoff.DayOffCode = Guid.Empty;
+									continue;
+								}
+								deleteAndReconnect(analyticsConnection, transaction, contractDayoff, contractDayoffWithEmptyGuid.DayOffId);
+							}
+
 							daDayOff.Update(ds);
 						}
 					}
@@ -140,12 +167,7 @@ namespace Teleopti.Support.Security
 
 		private static void updateTable(SqlConnection connection, SqlTransaction transaction)
 		{
-			
 			executeNonQuery(connection, transaction, "ALTER TABLE [mart].[dim_day_off] ALTER COLUMN [day_off_code] UNIQUEIDENTIFIER NOT NULL");
-			executeNonQuery(connection, transaction, @"IF NOT EXISTS(SELECT * FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE CONSTRAINT_NAME ='AK_day_off_code')
-				BEGIN
-					ALTER TABLE [mart].[dim_day_off] ADD CONSTRAINT AK_day_off_code UNIQUE (day_off_code)
-				END");
 		}
 
 		private static void deleteAndReconnect(SqlConnection connection, SqlTransaction transaction, AnalyticsDayOff dayOffToRemove, int dayOffIdToReconnectTo)
@@ -201,6 +223,7 @@ namespace Teleopti.Support.Security
 			public int DayOffId { get { return (int)row["day_off_id"]; } set { row["day_off_id"] = value; } }
 			public Guid? DayOffCode { get { return row["day_off_code"] == DBNull.Value ? (Guid?)null : (Guid)row["day_off_code"]; } set { row["day_off_code"] = value; } }
 			public string DayOffName { get { return (string)row["day_off_name"]; } set { row["day_off_name"] = value; } }
+			public string DayOffShortName { get { return (string)row["day_off_shortname"]; } set { row["day_off_shortname"] = value; } }
 			public int BusinessUnitId { get { return (int)row["business_unit_id"]; } set { row["business_unit_id"] = value; } }
 
 			public void Delete()
