@@ -1,39 +1,43 @@
-(function (angular) {
+(function(angular) {
 	'use strict';
 
-	angular.module('wfm.gamification')
-		.component('gamification', {
-			templateUrl: 'app/gamification/html/g.component.gamification.tpl.html',
-			controller: ['$element', '$scope', '$state', GamificationController]
-		});
+	angular.module('wfm.gamification').component('gamification', {
+		templateUrl: 'app/gamification/html/g.component.gamification.tpl.html',
+		controller: ['$element', '$scope', '$state', 'Toggle', GamificationController]
+	});
 
-	function GamificationController($element, $scope, $state) {
-
+	function GamificationController($element, $scope, $state, toggleService) {
 		var ctrl = this;
 
 		var element = $element[0];
 
-		ctrl.tabSelected = function (tab) {
+		ctrl.toggle = {};
+
+		ctrl.onSelectTab = function(tab) {
 			$state.go('gamification.' + tab);
 		};
 
-		ctrl.$onInit = function () {
-			ctrl.selectedTab = 0;
+		ctrl.$onInit = function() {
+			toggleService.togglesLoaded.then(function() {
+				var recalBadges = 'WFM_Gamification_Recalculate_Badges_Within_Period_48403';
+				ctrl.toggle[recalBadges] = toggleService[recalBadges];
+			});
 
-			var currentState = $state.current.name;
+			openTab($state.current.name);
 
-			if (currentState.indexOf('targets') > -1) {
-				ctrl.selectedTab = 1;
-			}
-			else if (currentState.indexOf('import') > -1) {
-				ctrl.selectedTab = 2;
-			} else if (currentState.indexOf('calculation') > -1) {
-				ctrl.selectedTab = 3;
+			function openTab(state) {
+				ctrl.selectedTab = 0;
+				if (state.indexOf('targets') > -1) {
+					ctrl.selectedTab = 1;
+				} else if (state.indexOf('import') > -1) {
+					ctrl.selectedTab = 2;
+				} else if (state.indexOf('calculation') > -1) {
+					ctrl.selectedTab = 3;
+				}
 			}
 		};
 
-		ctrl.setElementHeightToCoverRestOfViewport = function () {
-
+		ctrl.setElementHeightToCoverRestOfViewport = function() {
 			var top = element.getBoundingClientRect().top || element.getBoundingClientRect().y;
 
 			var bottomMargin = 18;
@@ -43,11 +47,10 @@
 			element.style.height = height;
 
 			$scope.$broadcast('gamification.selectTargetsTab');
-
 		};
 
-		ctrl.resetElementHeight = function () { element.style.height = ''; };
-
+		ctrl.resetElementHeight = function() {
+			element.style.height = '';
+		};
 	}
-
 })(angular);
