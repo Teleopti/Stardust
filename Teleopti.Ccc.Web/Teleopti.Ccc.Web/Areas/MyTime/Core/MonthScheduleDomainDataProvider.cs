@@ -27,7 +27,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 
 		public MonthScheduleDomainData Get(DateOnly date, bool loadSeatBooking)
 		{
-
 			var firstDate = DateHelper.GetFirstDateInMonth(date.Date, CultureInfo.CurrentCulture);
 			firstDate = DateHelper.GetFirstDateInWeek(firstDate, CultureInfo.CurrentCulture);
 			var lastDate = DateHelper.GetLastDateInMonth(date.Date, CultureInfo.CurrentCulture);

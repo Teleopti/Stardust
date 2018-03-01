@@ -1,8 +1,11 @@
+using System;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Logon;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.IocCommon;
@@ -10,27 +13,29 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers;
-using Teleopti.Ccc.WebTest.Core.Common.DataProvider;
+using Teleopti.Ccc.WebTest.Core.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core
 {
-	[FullPermissions]
-	[DomainTest]
+	[MyTimeWebTest]
 	[TestFixture]
 	public class MonthScheduleDomainDataProviderTest : ISetup
 	{
-		public FakeScheduleProvider ScheduleProvider;
+		public FakeLoggedOnUser LoggedOnUser;
 		public IMonthScheduleDomainDataProvider Target;
 		public ICurrentDataSource CurrentDataSource;
+		public ICurrentScenario CurrentScenario;
+		public IScheduleStorage ScheduleStorage;
 		public FullPermission Authorization;
+		public Areas.Global.FakePermissionProvider PermissionProvider;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<MonthScheduleDomainDataProvider>().For<IMonthScheduleDomainDataProvider>();
-			system.UseTestDouble<FakeScheduleProvider>().For<IScheduleProvider>();
+			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+			system.UseTestDouble<Areas.Global.FakePermissionProvider>().For<IPermissionProvider>();
 			system.UseTestDouble<SeatOccupancyProvider>().For<ISeatOccupancyProvider>();
 		}
 
@@ -44,17 +49,16 @@ namespace Teleopti.Ccc.WebTest.Core
 			result.CurrentDate.Should().Be.EqualTo(today);
 		}
 
-
 		[Test]
 		[SetCulture("sv-SE")]
 		public void ShouldMapDays()
 		{
 			var date = new DateOnly(2014, 1, 11);
-			ScheduleProvider.AddScheduleDay(ScheduleDayFactory.Create(new DateOnly(2013, 12, 30)));
+			addPersonSchedule(new DateOnly(2013, 12, 30), TimeSpan.FromHours(1), TimeSpan.FromHours(2));
 
 			var result = Target.Get(date, true);
 
-			result.Days.Count().Should().Be(1);
+			result.Days.Count().Should().Be(35);
 			result.Days.ElementAt(0).ScheduleDay.DateOnlyAsPeriod.DateOnly.Should().Be(new DateOnly(2013, 12, 30));
 		}
 
@@ -85,7 +89,7 @@ namespace Teleopti.Ccc.WebTest.Core
 		[Test]
 		public void ShouldMapAsmEnabledToFalseWhenNoAsmPermission()
 		{
-			Authorization.AddToBlackList(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger);
+			PermissionProvider.Enable();
 			var today = DateOnly.Today;
 			var licenseActivator = LicenseProvider.GetLicenseActivator(new AsmFakeLicenseService(true));
 			DefinedLicenseDataFactory.SetLicenseActivator(CurrentDataSource.CurrentName(), licenseActivator);
@@ -93,6 +97,22 @@ namespace Teleopti.Ccc.WebTest.Core
 			var result = Target.Get(today, true);
 
 			result.AsmEnabled.Should().Be.False();
+		}
+
+		private void addPersonSchedule(DateOnly date, TimeSpan startTime, TimeSpan endTime, IActivity activity = null)
+		{
+			var start = DateTime.SpecifyKind(date.Date.Add(startTime), DateTimeKind.Utc);
+			var end = DateTime.SpecifyKind(date.Date.Add(endTime), DateTimeKind.Utc);
+			addPersonSchedule(date, start, end, activity);
+		}
+
+		private void addPersonSchedule(DateOnly date, DateTime startTime, DateTime endTime, IActivity activity = null)
+		{
+			activity = activity ?? new Activity().WithId();
+			var assignmentPeriod = new DateTimePeriod(startTime, endTime);
+			var personAssignment = new PersonAssignment(LoggedOnUser.CurrentUser(), CurrentScenario.Current(), date).WithId();
+			personAssignment.AddActivity(activity, assignmentPeriod);
+			ScheduleStorage.Add(personAssignment);
 		}
 	}
 }
