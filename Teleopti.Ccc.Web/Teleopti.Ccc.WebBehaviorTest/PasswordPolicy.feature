@@ -135,6 +135,7 @@ Scenario: Change password successfully
 	| Old Password       | P@ssword1    |
 	Then I should be signed in
 
+@ignore
 Scenario: Change password fails if new password is weak
 	Given I have user logon details with
 	| Field                           | Value |
