@@ -331,20 +331,21 @@
 		}
 	}
 
-	badge-calculation{
-		.container-box{
-			border-bottom: $SEPARATOR;
+	badge-calculation {
+		display: block;
+		min-height: 400px; // to display the entire date range picker
+
+		.run-calculation {
 			padding: 12px 24px;
 			margin-bottom: 5px;
 		}
-		
-		.con-fluid-flex{
-			vertical-align: bottom;
+
+		.con-fluid-row {
+			.align-self-center {
+				align-self: center;
+			}
 		}
 
-		.date-picker-container{
-			padding-top: 10px;
-		}
 		.calculation-job-table {
 			$HEADER_HEIGHT: 54px;
 			border-top: $SEPARATOR;
@@ -380,19 +381,19 @@
 					padding: 0 $PADDING;
 					display: flex;
 					height: 48px + 1px;
-		
+
 					&:hover {
 						background-color: $gray026;
 					}
-		
+
 					&.selected {
 						background-color: $gray012;
-		
+
 						&:hover {
 							background-color: $gray026;
 						}
 					}
-		
+
 					&.ng-enter {
 						animation: 1s ease-in-out .3s justCreated;
 					}

@@ -1,10 +1,13 @@
 <div>
-    <div class="con-fluid-row container-box">
-        <div class="date-picker-container">
-            <date-range-picker ng-model="$ctrl.dateRange" template-type='$ctrl.templateType'></date-range-picker>
-        </div>
-        <div>
-            <button class="wfm-btn">{{'Start'|translate}}</button>
+    <div class="run-calculation">
+        <div>{{'PickADateRangeToStartBadgeCalculation'|translate}}</div>
+        <div class="con-fluid-row">
+            <div class="con-fluid-flex align-self-center">
+                <date-range-picker ng-model="$ctrl.dateRange" template-type="$ctrl.templateType"></date-range-picker>
+            </div>
+            <div class="con-fluid-flex align-self-center">
+                <button class="wfm-btn wfm-btn-primary">{{'Start'|translate}}</button>
+            </div>
         </div>
     </div>
     <div class="calculation-job-table">
