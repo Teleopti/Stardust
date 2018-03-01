@@ -1,5 +1,4 @@
-﻿@ignore
-@PasswordPolicy
+﻿@PasswordPolicy
 Feature: Password Policy
 	In order to have a good security
 	As a user that is trying to sign in or change password
@@ -136,7 +135,6 @@ Scenario: Change password successfully
 	| Old Password       | P@ssword1    |
 	Then I should be signed in
 
-@ignore
 Scenario: Change password fails if new password is weak
 	Given I have user logon details with
 	| Field                           | Value |
