@@ -20,6 +20,13 @@
             var startDate = moment.utc().subtract(2, 'days').toDate();
             var endDate = moment.utc().toDate();
             $ctrl.dateRange = { startDate: startDate, endDate: endDate };
+            $ctrl.dateRangeCustomValidators = [{
+                key: 'startDateValidation',
+                message: 'StartDateCannotEarlierThanLastPurgeDate',
+                validate: function (start, end) {
+                    return moment(start).toDate() > moment.utc().subtract(30, 'days').toDate();
+                }
+            }];
 
         };
         $ctrl.$onChanges = function (changesObj) { };

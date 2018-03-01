@@ -24094,15 +24094,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Period End.
-        /// </summary>
-        public static string PeriodEnd {
-            get {
-                return ResourceManager.GetString("PeriodEnd", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Period hours.
         /// </summary>
         public static string PeriodHours {
@@ -24162,15 +24153,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string PeriodSelectionTip {
             get {
                 return ResourceManager.GetString("PeriodSelectionTip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Period Start.
-        /// </summary>
-        public static string PeriodStart {
-            get {
-                return ResourceManager.GetString("PeriodStart", resourceCulture);
             }
         }
         

@@ -17249,14 +17249,6 @@ The application will now exit.</value>
     <value>BADGE CALCULATION</value>
     <comment>Badge calculation</comment>
   </data>
-  <data name="PeriodEnd" xml:space="preserve">
-    <value>Period End</value>
-    <comment>Period End</comment>
-  </data>
-  <data name="PeriodStart" xml:space="preserve">
-    <value>Period Start</value>
-    <comment>Period Start</comment>
-  </data>
   <data name="StartBadgeCalculation" xml:space="preserve">
     <value>START</value>
     <comment>Start to calcluate badge.</comment>
