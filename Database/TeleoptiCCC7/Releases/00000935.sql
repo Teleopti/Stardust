@@ -6,8 +6,14 @@ FROM ReadModel.SkillCombinationResourceDelta d
  INNER JOIN ReadModel.SkillCombination c ON d.SkillCombinationId = c.Id
  INNER JOIN Skill s ON s.Id = c.SkillId
 GO
+DELETE FROM ReadModel.SkillCombinationResourceDelta
+WHERE  BusinessUnit Is NULL
+GO
  ALTER TABLE ReadModel.SkillCombinationResourceDelta
 ALTER COLUMN  BusinessUnit uniqueidentifier NOT NULL
+
+
+
 
 
 
