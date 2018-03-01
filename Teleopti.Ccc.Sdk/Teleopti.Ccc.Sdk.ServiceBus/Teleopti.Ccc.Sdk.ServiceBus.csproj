@@ -166,6 +166,7 @@
     <Compile Include="NodeHandlers\ProcessWaitlistedRequestsHandler.cs" />
     <Compile Include="NodeHandlers\MultiAbsenceRequestsHandler.cs" />
     <Compile Include="NodeHandlers\PersonAbsenceRemovedHandler.cs" />
+    <Compile Include="NodeHandlers\RecalculateBadgeHandler.cs" />
     <Compile Include="NodeHandlers\UpdateStaffingLevelReadModelHandler.cs" />
     <Compile Include="NodeHandlers\ImportForecastFromFileHandler.cs" />
     <Compile Include="NodeHandlers\NodeHandlersModule.cs" />

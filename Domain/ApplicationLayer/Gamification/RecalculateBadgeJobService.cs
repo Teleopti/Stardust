@@ -1,0 +1,74 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.UserTexts;
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Gamification
+{
+	public interface IRecalculateBadgeJobService
+	{
+		IJobResult CreateJob(DateOnlyPeriod period);
+		IList<RecalculateBadgeJobResultDetail> GetJobsForCurrentBusinessUnit();
+	}
+
+	public class RecalculateBadgeJobService : IRecalculateBadgeJobService
+	{
+		private readonly IJobResultRepository _jobResultRepository;
+		private readonly IEventPublisher _eventPublisher;
+		private readonly ILoggedOnUser _loggedOnUser;
+
+		public RecalculateBadgeJobService(IJobResultRepository jobResultRepository, IEventPublisher eventPublisher, ILoggedOnUser loggedOnUser)
+		{
+			_jobResultRepository = jobResultRepository;
+			_eventPublisher = eventPublisher;
+			_loggedOnUser = loggedOnUser;
+		}
+
+		public IJobResult CreateJob(DateOnlyPeriod period)
+		{
+			var jobResult = new JobResult(JobCategory.WebRecalculateBadge, period, _loggedOnUser.CurrentUser(), DateTime.UtcNow);
+			_jobResultRepository.Add(jobResult);
+			_eventPublisher.Publish(new RecalculateBadgeEvent
+			{
+				JobResultId = jobResult.Id.GetValueOrDefault(),
+				Period = period
+			});
+			return jobResult;
+		}
+
+		public IList<RecalculateBadgeJobResultDetail> GetJobsForCurrentBusinessUnit()
+		{
+			var resultList = _jobResultRepository.LoadAllWithNoLock()
+				.Where(r => r.JobCategory == JobCategory.WebRecalculateBadge)
+				.OrderByDescending(r => r.Timestamp)
+				.ToList();
+			return resultList.Select(jobResult =>
+			{
+				var hasError = jobResult.HasError();
+				var finished = jobResult.FinishedOk;
+				var jobResultDetail = jobResult.Details.FirstOrDefault();
+				var hasException = !(jobResultDetail?.ExceptionMessage.IsNullOrEmpty() ?? true)
+								   || !(jobResultDetail?.InnerExceptionMessage.IsNullOrEmpty() ?? true);
+				var status = "InProgess";
+				if (hasError) status = "HasError";
+				else if(finished) status = "Finished";
+				return new RecalculateBadgeJobResultDetail
+				{
+					Id = jobResult.Id.GetValueOrDefault(),
+					Period = jobResult.Period,
+					Owner = jobResult.Owner.Name.ToString(),
+					CreateDateTime = jobResult.Artifacts.First().CreateTime,
+					Status = status,
+					HasError = hasError,
+					ErrorMessage = hasError ? (hasException ? Resources.InternalErrorMsg : jobResultDetail?.Message) : string.Empty
+				};
+			}).ToList();
+		}
+	}
+}

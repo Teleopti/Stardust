@@ -109,5 +109,7 @@ namespace Teleopti.Ccc.Domain.Common
         public const string WebIntradayOptimiztion = "WebIntradayOptimiztion";
 	    public const string WebImportAgent = "WebImportAgent";
 	    public const string WebImportExternalGamification = "WebImportExternalGamification";
-    }
+		public const string WebRecalculateBadge = "WebRecalculateBadge";
+
+	}
 }

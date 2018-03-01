@@ -1,7 +1,9 @@
-﻿using System.Web.Http;
+﻿using System;
+using System.Web.Http;
+using System.Web.Http.Results;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Badge;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ApplicationLayer.Gamification;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
@@ -12,14 +14,12 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
 	public class GamificationCalculationController: ApiController
 	{
 		private readonly CalculateBadges _calculateBadges;
-		private readonly IPerformBadgeCalculation _performBadgeCalculation;
-		private readonly ICurrentBusinessUnit _currentBusinessUnit;
+		private readonly IRecalculateBadgeJobService _recalculateBadgeJobService;
 
-		public GamificationCalculationController( CalculateBadges calculateBadges, IPerformBadgeCalculation performBadgeCalculation, ICurrentBusinessUnit currentBusinessUnit)
+		public GamificationCalculationController( CalculateBadges calculateBadges, IRecalculateBadgeJobService recalculateBadgeJobService)
 		{
 			_calculateBadges = calculateBadges;
-			_performBadgeCalculation = performBadgeCalculation;
-			_currentBusinessUnit = currentBusinessUnit;
+			_recalculateBadgeJobService = recalculateBadgeJobService;
 		}
 
 		[HttpPost, Route("api/GamificationCalculation/Reset"), UnitOfWork]
@@ -28,14 +28,21 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
 			return _calculateBadges.ResetBadge();
 		}
 
-		[HttpPost, Route("api/GamificationCalculation/RecalculateBadges"), UnitOfWork]
-		public virtual void RecalculateBadges(DateOnlyPeriod period)
+		[HttpPost, Route("api/Gamification/NewRecalculateBadgeJob")]
+		public OkResult NewRecalculateBadgeJob(DateOnlyPeriod peroid)
 		{
-			_calculateBadges.RemoveAgentBadges(period);
-			foreach (var date in period.DayCollection())
+			createJob(peroid);
+			return Ok();
+		}
+
+		[UnitOfWork]
+		protected virtual void createJob(DateOnlyPeriod peroid)
+		{
+			if (peroid == null)
 			{
-				_performBadgeCalculation.Calculate(_currentBusinessUnit.Current().Id.GetValueOrDefault(), date.Date);
+				throw new ArgumentNullException();
 			}
+			_recalculateBadgeJobService.CreateJob(peroid);
 		}
 	}
 }
