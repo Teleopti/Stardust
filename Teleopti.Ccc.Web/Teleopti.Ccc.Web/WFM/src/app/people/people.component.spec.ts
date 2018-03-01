@@ -7,7 +7,7 @@ import { By } from '@angular/platform-browser';
 import { fakeBackendProvider } from './services/fake-backend.provider';
 import { HttpClientModule } from '@angular/common/http';
 
-fdescribe('PeopleComponent', () => {
+describe('PeopleComponent', () => {
 	let component: PeopleComponent;
 	let fixture: ComponentFixture<PeopleComponent>;
 	const SEARCH_PERSON_QUERY = '[data-test-search] [data-test-person]';
