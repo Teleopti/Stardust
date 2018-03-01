@@ -1,6 +1,6 @@
 using NUnit.Framework;
 using Teleopti.Ccc.Infrastructure.Hangfire;
-using Teleopti.Ccc.Infrastructure.Rta;
+using Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Rta.PerformanceTest.Code;
 
 namespace Teleopti.Ccc.Rta.PerformanceTest
