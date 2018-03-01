@@ -746,7 +746,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var date = new DateOnly(2014, 12, 18);
 			var result = Target.FetchDayData(date);
-			result.AsmPermission.Should().Be.True();
 			result.ViewPossibilityPermission.Should().Be.True();
 			result.RequestPermission.AbsenceRequestPermission.Should().Be.True();
 			result.RequestPermission.OvertimeAvailabilityPermission.Should().Be.True();

@@ -13,7 +13,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 	{
 		public RequestPermission RequestPermission { get; set; }
 		public IEnumerable<TimeLineViewModel> TimeLine { get; set; }
-		public bool AsmPermission { get; set; }
 		public bool AsmEnabled { get; set; }
 		public bool ViewPossibilityPermission { get; set; }
 		public string DatePickerFormat { get; set; }

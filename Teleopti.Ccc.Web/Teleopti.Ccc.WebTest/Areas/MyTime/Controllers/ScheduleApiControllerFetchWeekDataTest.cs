@@ -925,13 +925,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		public void ShouldMapAsmPermission()
-		{
-			var result = Target.FetchWeekData(null);
-			result.AsmPermission.Should().Be.True();
-		}
-
-		[Test]
 		public void ShouldMapAsmEnabled()
 		{
 			var result = Target.FetchWeekData(null);

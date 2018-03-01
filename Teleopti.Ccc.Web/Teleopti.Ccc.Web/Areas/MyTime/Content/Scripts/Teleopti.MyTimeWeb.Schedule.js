@@ -170,7 +170,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.textPermission = ko.observable();
 		self.requestPermission = ko.observable();
 		self.periodSelection = ko.observable();
-		self.asmPermission = ko.observable();
+		self.asmEnabled = ko.observable();
 		self.absenceRequestPermission = ko.observable();
 		self.absenceReportPermission = ko.observable();
 		self.overtimeAvailabilityPermission = ko.observable();
@@ -606,7 +606,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			self.showProbabilityToggle(false);
 		}
 
-		self.asmPermission(data.AsmPermission);
+		self.asmEnabled(data.AsmEnabled);
 		self.displayDate(Teleopti.MyTimeWeb.Common.FormatDatePeriod(
 			moment(data.CurrentWeekStartDate),
 			moment(data.CurrentWeekEndDate)));
