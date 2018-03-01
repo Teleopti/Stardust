@@ -1,6 +1,6 @@
 using System.Web.Http;
-using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Tracer;
+using Teleopti.Ccc.Domain.Rta.Tracer;
+using Teleopti.Ccc.Domain.Rta.ViewModels;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Filters;
 

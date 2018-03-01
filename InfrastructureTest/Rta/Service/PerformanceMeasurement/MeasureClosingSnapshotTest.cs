@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Service.PerformanceMeasurement
 	public class MeasureClosingSnapshotTest
 	{
 		public Database Database;
-		public Domain.RealTimeAdherence.Domain.Service.Rta Rta;
+		public Domain.Rta.Service.Rta Rta;
 		public FakeConfigReader Config;
 		public FakeEventPublisher Publisher;
 		public AnalyticsDatabase Analytics;
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Service.PerformanceMeasurement
 			Database
 				.WithStateGroup("default", true)
 				.WithStateGroup("logged out", false, true)
-				.WithStateCode(Domain.RealTimeAdherence.Domain.Service.Rta.LogOutBySnapshot)
+				.WithStateCode(Domain.Rta.Service.Rta.LogOutBySnapshot)
 				.WithStateGroup("phone")
 				.WithStateCode("phone");
 			stateCodes.ForEach(x => Database.WithStateGroup($"code{x}").WithStateCode($"code{x}"));

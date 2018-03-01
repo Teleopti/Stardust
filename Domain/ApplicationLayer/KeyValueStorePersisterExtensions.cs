@@ -1,5 +1,5 @@
 using System;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
+using Teleopti.Ccc.Domain.Rta.Service;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer
 {

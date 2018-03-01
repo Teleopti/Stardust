@@ -5,8 +5,10 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Rta.AdherenceChange;
+using Teleopti.Ccc.Domain.Rta.AgentAdherenceDay;
+using Teleopti.Ccc.Domain.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 

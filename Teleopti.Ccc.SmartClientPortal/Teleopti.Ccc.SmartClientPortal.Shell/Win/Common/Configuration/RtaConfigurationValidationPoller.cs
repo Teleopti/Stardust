@@ -8,7 +8,7 @@ using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Configuration;
+using Teleopti.Ccc.Domain.Rta.Configuration;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 {

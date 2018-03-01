@@ -4,7 +4,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
+using Teleopti.Ccc.Domain.Rta.Service;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta.Service.Persisters
 {

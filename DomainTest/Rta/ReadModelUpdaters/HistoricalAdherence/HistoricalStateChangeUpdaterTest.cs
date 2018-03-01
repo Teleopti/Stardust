@@ -1,0 +1,91 @@
+﻿using System;
+using System.Drawing;
+using System.Linq;
+using NUnit.Framework;
+using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Rta.AgentAdherenceDay;
+using Teleopti.Ccc.Domain.Rta.Events;
+using Teleopti.Ccc.Domain.Rta.ReadModelUpdaters;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
+using Teleopti.Ccc.TestCommon.IoC;
+
+namespace Teleopti.Ccc.DomainTest.Rta.ReadModelUpdaters.HistoricalAdherence
+{
+	[DomainTest]
+	[TestFixture]
+	public class HistoricalStateChangeUpdaterTest
+	{
+		public HistoricalChangeUpdater Target;
+		public FakeHistoricalChangeReadModelPersister Persister;
+
+		[Test]
+		public void ShouldSubscribe()
+		{
+			var subscriptionsRegistrator = new SubscriptionRegistrator();
+
+			Target.Subscribe(subscriptionsRegistrator);
+
+			subscriptionsRegistrator.SubscribesTo(typeof(PersonStateChangedEvent)).Should().Be(true);
+		}
+
+		[Test]
+		public void ShouldAddStateChange()
+		{
+			var personId = Guid.NewGuid();
+
+			Target.Handle(new[]
+			{
+				new PersonStateChangedEvent
+				{
+					PersonId = personId,
+					Timestamp = "2017-03-07 10:00".Utc(),
+					StateName = "phone"
+				}
+			});
+
+			var change = Persister.Read(personId, "2017-03-07".Date()).Single();
+			change.PersonId.Should().Be(personId);
+			change.StateName.Should().Be("phone");
+		}
+
+		[Test]
+		public void ShouldAddStateChange2()
+		{
+			var personId = Guid.NewGuid();
+			var state = Guid.NewGuid();
+
+			Target.Handle(new[]
+			{
+				new PersonStateChangedEvent
+				{
+					PersonId = personId,
+					BelongsToDate = "2017-03-07".Date(),
+					Timestamp = "2017-03-07 10:00".Utc(),
+					StateName = "ready",
+					StateGroupId = state,
+					ActivityName = "phone",
+					ActivityColor = Color.DarkGoldenrod.ToArgb(),
+					RuleName = "in",
+					RuleColor = Color.Azure.ToArgb(),
+					Adherence = EventAdherence.In
+				}
+			});
+
+			var change = Persister.Read(personId, "2017-03-07".Date()).Single();
+			change.PersonId.Should().Be(personId);
+			change.BelongsToDate.Should().Be("2017-03-07".Date());
+			change.Timestamp.Should().Be("2017-03-07 10:00".Utc());
+			change.StateName.Should().Be("ready");
+			change.StateGroupId.Should().Be(state);
+			change.ActivityName.Should().Be("phone");
+			change.ActivityColor.Should().Be(Color.DarkGoldenrod.ToArgb());
+			change.RuleName.Should().Be("in");
+			change.RuleColor.Should().Be(Color.Azure.ToArgb());
+			change.Adherence.Should().Be(HistoricalChangeAdherence.In);
+		}
+	}
+}

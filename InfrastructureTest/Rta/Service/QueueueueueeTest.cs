@@ -3,9 +3,10 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Rta;
+using Teleopti.Ccc.Domain.Rta.ReadModelUpdaters;
+using Teleopti.Ccc.Domain.Rta.Service;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Service
 	[MultiDatabaseTest]
 	public class QueueueueueeTest : ISetup
 	{
-		public Domain.RealTimeAdherence.Domain.Service.Rta Target;
+		public Domain.Rta.Service.Rta Target;
 		public Database Database;
 		public AnalyticsDatabase Analytics;
 		public IAgentStateReadModelPersister AgentStates;

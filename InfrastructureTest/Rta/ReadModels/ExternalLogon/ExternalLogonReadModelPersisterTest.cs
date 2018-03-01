@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
+using Teleopti.Ccc.Domain.Rta.Service;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.ExternalLogon
 {

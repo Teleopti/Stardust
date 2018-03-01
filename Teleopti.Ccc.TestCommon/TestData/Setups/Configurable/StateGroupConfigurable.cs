@@ -1,5 +1,5 @@
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Configuration;
+using Teleopti.Ccc.Domain.Rta.Configuration;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Rta.Repositories;
 using Teleopti.Ccc.TestCommon.TestData.Core;

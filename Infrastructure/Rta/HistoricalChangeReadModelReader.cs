@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NHibernate.Transform;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay;
+using Teleopti.Ccc.Domain.Rta.AgentAdherenceDay;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork;
 using Teleopti.Interfaces.Domain;
 

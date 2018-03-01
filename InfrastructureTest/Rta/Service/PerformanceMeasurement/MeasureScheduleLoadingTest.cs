@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Service.PerformanceMeasurement
 	public class MeasureScheduleLoadingTest
 	{
 		public Database Database;
-		public Domain.RealTimeAdherence.Domain.Service.Rta Rta;
+		public Domain.Rta.Service.Rta Rta;
 		public FakeConfigReader Config;
 		public FakeEventPublisher Publisher;
 		public AnalyticsDatabase Analytics;
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Service.PerformanceMeasurement
 			Database
 				.WithDefaultScenario("default")
 				.WithStateGroup("default", true)
-				.WithStateCode(Domain.RealTimeAdherence.Domain.Service.Rta.LogOutBySnapshot)
+				.WithStateCode(Domain.Rta.Service.Rta.LogOutBySnapshot)
 				.WithActivity("phone")
 				.WithActivity("break")
 				.WithActivity("lunch");
