@@ -18,6 +18,5 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public bool RunWeeklyRestSolver { get; set; }
 		public Guid CommandId { get; set; }
 		public Guid PlanningPeriodId { get; set; }
-		public bool FromPlan { get; set; }
 	}
 }

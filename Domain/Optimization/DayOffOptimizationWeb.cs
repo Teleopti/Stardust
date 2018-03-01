@@ -55,7 +55,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 					AgentsToOptimize = optiData.Agents,
 					RunWeeklyRestSolver = true,
 					PlanningPeriodId = planningPeriodId,
-					FromPlan = true
 				}, 
 				null);
 			optiData.PlanningPeriod.Scheduled();
