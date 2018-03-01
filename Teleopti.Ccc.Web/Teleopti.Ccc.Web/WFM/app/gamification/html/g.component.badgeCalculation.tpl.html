@@ -6,7 +6,7 @@
                 <date-range-picker ng-model="$ctrl.dateRange" template-type="$ctrl.templateType" custom-validators="$ctrl.dateRangeCustomValidators"></date-range-picker>
             </div>
             <div class="con-fluid-flex align-self-center">
-                <button class="wfm-btn wfm-btn-primary">{{'Start'|translate}}</button>
+                <button class="wfm-btn wfm-btn-primary" ng-click="$ctrl.calculate()">{{'Start'|translate}}</button>
             </div>
         </div>
     </div>

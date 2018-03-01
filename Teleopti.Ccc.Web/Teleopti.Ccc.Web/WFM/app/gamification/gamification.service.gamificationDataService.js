@@ -124,6 +124,10 @@
 				});
 			});
 		};
+
+		svc.startCalculation = function (startDate, endDate) {
+			console.log("Start to calculate for period", startDate, endDate);
+		};
 	}
 
 	function overload(config) {
