@@ -520,13 +520,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			var possibilities = getPossibilityViewModels(new DateOnly(2018, 2, 5), StaffingPossiblityType.Overtime);
 
-			var goodPossibilities = possibilities.Where(d => d.Date == new DateOnly(2018, 2, 5).ToFixedClientDateOnlyFormat()).ToList();
-			Assert.AreEqual(1, goodPossibilities.ElementAt(0).Possibility);
-			Assert.AreEqual(1, goodPossibilities.ElementAt(1).Possibility);
+			var possibilitiesOn5th = possibilities.Where(d => d.Date == new DateOnly(2018, 2, 5).ToFixedClientDateOnlyFormat()).ToList();
+			Assert.AreEqual(0, possibilitiesOn5th.ElementAt(0).Possibility);
+			Assert.AreEqual(0, possibilitiesOn5th.ElementAt(1).Possibility);
 
-			var weakPossibilities = possibilities.Where(d => d.Date == new DateOnly(2018, 2, 7).ToFixedClientDateOnlyFormat()).ToList();
-			Assert.AreEqual(0, weakPossibilities.ElementAt(0).Possibility);
-			Assert.AreEqual(0, weakPossibilities.ElementAt(1).Possibility);
+			var possibilitiesOn7th = possibilities.Where(d => d.Date == new DateOnly(2018, 2, 7).ToFixedClientDateOnlyFormat()).ToList();
+			Assert.AreEqual(0, possibilitiesOn7th.ElementAt(0).Possibility);
+			Assert.AreEqual(0, possibilitiesOn7th.ElementAt(1).Possibility);
 		}
 
 		[Test]
