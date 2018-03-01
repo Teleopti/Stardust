@@ -1,6 +1,6 @@
 ﻿describe('teamschedule utility tests', function () {
 
-	var target, currentUserInfo, realNow;
+	var target, currentUserInfo;
 
 	beforeEach(module('wfm.teamSchedule'));
 	beforeEach(module(function ($provide) {
@@ -17,16 +17,10 @@
 	});
 
 	beforeEach(inject(function (_UtilityService_) {
-		realNow = _UtilityService_.now;
 		target = _UtilityService_;
-		target.now = function () {
-			return new Date('2018-02-26 15:00:00+08:00');
-		}
+		target.setNowDate(new Date('2018-02-26T15:00:00+08:00'));
 	}));
-
-	afterEach(function () {
-		target.now = realNow;
-	});
+	
 
 	it('should get correct week day names', function () {
 

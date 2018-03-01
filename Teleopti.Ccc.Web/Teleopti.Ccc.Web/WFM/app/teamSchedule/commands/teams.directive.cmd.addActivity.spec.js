@@ -259,10 +259,11 @@
 	});
 
 
-	xit('should have correct default start time when no other shifts on today', function () {
-		var date = new Date(utility.nowInUserTimeZone());
+	it('should have correct default start time when no other shifts on today', function () {
+		var date = new Date("2018-03-01T10:00:00");
 		scheduleHelper.setLatestEndTime(null);
 		scheduleHelper.setLatestStartTime(null);
+		utility.setNowDate(date);
 
 		var result = setUp(date);
 		var vm = result.commandControl;
