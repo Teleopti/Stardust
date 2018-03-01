@@ -17,8 +17,8 @@
 
         $ctrl.$onInit = function () {
             $ctrl.templateType = 'popup';
-            var startDate = moment.utc().add(1, 'months').startOf('month').toDate();
-            var endDate = moment.utc().add(2, 'months').startOf('month').toDate();
+            var startDate = moment.utc().subtract(2, 'days').toDate();
+            var endDate = moment.utc().toDate();
             $ctrl.dateRange = { startDate: startDate, endDate: endDate };
 
         };
