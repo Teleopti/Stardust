@@ -51,6 +51,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return retList;
 		}
 
+		public void Remove(DateOnlyPeriod period)
+		{
+			var existings = Session.CreateCriteria(typeof(IAgentBadgeTransaction), "ab")
+				.Add(Restrictions.Between("CalculatedDate", period.StartDate, period.EndDate))
+				.List<IAgentBadgeTransaction>();
+
+			existings.ForEach(Remove);
+		}
 
 		public void ResetAgentBadges()
 		{

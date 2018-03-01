@@ -5,7 +5,6 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Badge;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
@@ -36,7 +35,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 		public FakeAgentBadgeWithRankRepository AgentBadgeWithRankRepository;
 		public FakeBadgeCalculationRepository BadgeCalculationRepository;
-		public INow Now = new MutableNow(DateTime.UtcNow);
 
 		private ITeamGamificationSetting _teamGamificationSetting;
 		private GamificationSetting _gamificationSetting;
@@ -56,7 +54,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			system.UseTestDouble<LogObjectDateChecker>().For<ILogObjectDateChecker>();
 			system.UseTestDouble<FakeStatisticRepository>().For<IStatisticRepository>();
 			system.UseTestDouble<FakeBadgeCalculationRepository>().For<IBadgeCalculationRepository>();
-			system.UseTestDouble<MutableNow>().For<INow>();
 		}
 
 		[Test]
@@ -66,7 +63,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			createGamificationSetting(GamificationSettingRuleSet.RuleWithDifferentThreshold, 90, 85, 80);
 			addExternalPerformanceData(90);
 
-			Target.Calculate(Guid.NewGuid());
+			Target.Calculate(Guid.NewGuid(), _systemCalculateDate);
 
 			var result = AgentBadgeWithRankTransactionRepository.LoadAll();
 			result.First().IsExternal.Should().Be.True();
@@ -80,7 +77,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			createGamificationSetting(GamificationSettingRuleSet.RuleWithDifferentThreshold, 90, 85, 80);
 			addExternalPerformanceData(87);
 
-			Target.Calculate(Guid.NewGuid());
+			Target.Calculate(Guid.NewGuid(), _systemCalculateDate);
 
 			var result = AgentBadgeWithRankTransactionRepository.LoadAll();
 			result.First().IsExternal.Should().Be.True();
@@ -94,7 +91,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			createGamificationSetting(GamificationSettingRuleSet.RuleWithDifferentThreshold, 90, 85, 80);
 			addExternalPerformanceData(81);
 
-			Target.Calculate(Guid.NewGuid());
+			Target.Calculate(Guid.NewGuid(), _systemCalculateDate);
 
 			var result = AgentBadgeWithRankTransactionRepository.LoadAll();
 			result.First().IsExternal.Should().Be.True();
@@ -108,7 +105,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			createGamificationSetting(GamificationSettingRuleSet.RuleWithDifferentThreshold, 90, 85, 80);
 			addExternalPerformanceData(79);
 
-			Target.Calculate(Guid.NewGuid());
+			Target.Calculate(Guid.NewGuid(), DateTime.Today);
 
 			var result = AgentBadgeWithRankTransactionRepository.LoadAll();
 			result.Count().Should().Be.EqualTo(0);
@@ -122,7 +119,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			_badgeSetting.Enabled = false;
 			addExternalPerformanceData(81);
 
-			Target.Calculate(Guid.NewGuid());
+			Target.Calculate(Guid.NewGuid(), DateTime.Today);
 
 			var result = AgentBadgeWithRankTransactionRepository.LoadAll();
 			result.Count().Should().Be.EqualTo(0);
@@ -135,7 +132,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			createGamificationSetting(GamificationSettingRuleSet.RuleWithDifferentThreshold, 90, 85, 80);
 			addExternalPerformanceData(91);
 
-			Target.Calculate(Guid.NewGuid());
+			Target.Calculate(Guid.NewGuid(), _systemCalculateDate);
 
 			var formmater = new NormalizeText();
 			var date = _calculatedDate.Date.ToString(_agent.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern,
@@ -155,7 +152,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			createGamificationSetting(GamificationSettingRuleSet.RuleWithDifferentThreshold, 90, 85, 80);
 			addExternalPerformanceData(87);
 
-			Target.Calculate(Guid.NewGuid());
+			Target.Calculate(Guid.NewGuid(), _systemCalculateDate);
 
 			var formmater = new NormalizeText();
 			var date = _calculatedDate.Date.ToString(_agent.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern,
@@ -175,7 +172,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			createGamificationSetting(GamificationSettingRuleSet.RuleWithDifferentThreshold, 90, 85, 80);
 			addExternalPerformanceData(81);
 
-			Target.Calculate(Guid.NewGuid());
+			Target.Calculate(Guid.NewGuid(), _systemCalculateDate);
 
 			var formmater = new NormalizeText();
 			var date = _calculatedDate.Date.ToString(_agent.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern,
@@ -195,7 +192,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			createGamificationSetting(GamificationSettingRuleSet.RuleWithDifferentThreshold, 90, 85, 80);
 			addExternalPerformanceData(79);
 
-			Target.Calculate(Guid.NewGuid());
+			Target.Calculate(Guid.NewGuid(), DateTime.Today);
 
 			PushMessagePersister.GetReceivers().Count.Should().Be.EqualTo(0);
 			PushMessagePersister.GetMessage().Should().Be.Null();
@@ -208,7 +205,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			createGamificationSetting(GamificationSettingRuleSet.RuleWithRatioConvertor, 90, 85, 80, 80);
 			addExternalPerformanceData(87);
 
-			Target.Calculate(Guid.NewGuid());
+			Target.Calculate(Guid.NewGuid(), _systemCalculateDate);
 
 			var result = AgentBadgeTransactionRepository.LoadAll();
 			result.First().IsExternal.Should().Be.True();
@@ -223,7 +220,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			_badgeSetting.Enabled = false;
 			addExternalPerformanceData(87);
 
-			Target.Calculate(Guid.NewGuid());
+			Target.Calculate(Guid.NewGuid(), DateTime.Today);
 
 			var result = AgentBadgeTransactionRepository.LoadAll();
 			result.Count().Should().Be.EqualTo(0);
@@ -236,7 +233,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			createGamificationSetting(GamificationSettingRuleSet.RuleWithRatioConvertor, 90, 85, 80, 80);
 			addExternalPerformanceData(79);
 
-			Target.Calculate(Guid.NewGuid());
+			Target.Calculate(Guid.NewGuid(), DateTime.Today);
 
 			var result = AgentBadgeTransactionRepository.LoadAll();
 			result.Count().Should().Be.EqualTo(0);
@@ -249,7 +246,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			createGamificationSetting(GamificationSettingRuleSet.RuleWithRatioConvertor, 90, 85, 80, 80);
 			addExternalPerformanceData(87);
 
-			Target.Calculate(Guid.NewGuid());
+			Target.Calculate(Guid.NewGuid(), _systemCalculateDate);
 
 			var formmater = new NoFormatting();
 			var date = _calculatedDate.Date.ToString(_agent.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern,
@@ -270,7 +267,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			addExternalPerformanceData(87);
 			AgentBadgeRepository.Add(new Domain.Common.AgentBadge(){BadgeType = _badgeSetting.QualityId, IsExternal = true, Person = _agent.Id.GetValueOrDefault(), TotalAmount = 1});
 
-			Target.Calculate(Guid.NewGuid());
+			Target.Calculate(Guid.NewGuid(), _systemCalculateDate);
 
 			var formmater = new NoFormatting();
 			var date = _calculatedDate.Date.ToString(_agent.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern,
@@ -291,7 +288,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			addExternalPerformanceData(87);
 			AgentBadgeRepository.Add(new Domain.Common.AgentBadge(){BadgeType = 1, IsExternal = true, Person = _agent.Id.GetValueOrDefault(), TotalAmount = 3});
 
-			Target.Calculate(Guid.NewGuid());
+			Target.Calculate(Guid.NewGuid(), _systemCalculateDate);
 
 			var formmater = new NoFormatting();
 			var date = _calculatedDate.Date.ToString(_agent.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern,
@@ -311,7 +308,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			createGamificationSetting(GamificationSettingRuleSet.RuleWithRatioConvertor, 90, 85, 80, 80);
 			addExternalPerformanceData(77);
 
-			Target.Calculate(Guid.NewGuid());
+			Target.Calculate(Guid.NewGuid(), DateTime.Today);
 
 			PushMessagePersister.GetMessage().Should().Be.Null();
 			PushMessagePersister.GetReceivers().Count.Should().Be.EqualTo(0);
@@ -325,7 +322,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			_gamificationSetting.SetDeleted();
 			addExternalPerformanceData(87);
 
-			Target.Calculate(Guid.NewGuid());
+			Target.Calculate(Guid.NewGuid(), DateTime.Today);
 
 			var result = AgentBadgeTransactionRepository.LoadAll();
 			result.Count().Should().Be.EqualTo(0);
@@ -344,7 +341,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			setTeamGamificationSetting();
 			BusinessUnitRepository.AddTimeZone(TimeZoneInfo.FindSystemTimeZoneById("UTC"));
 
-			Target.Calculate(Guid.NewGuid());
+			Target.Calculate(Guid.NewGuid(), DateTime.Today);
 
 			var result = AgentBadgeWithRankTransactionRepository.LoadAll();
 			result.Count().Should().Be.EqualTo(0);
@@ -361,7 +358,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			setTeamGamificationSetting();
 			BusinessUnitRepository.AddTimeZone(TimeZoneInfo.FindSystemTimeZoneById("UTC"));
 
-			Target.Calculate(Guid.NewGuid());
+			Target.Calculate(Guid.NewGuid(), DateTime.Today);
 
 			var result = AgentBadgeWithRankTransactionRepository.LoadAll();
 			result.Count().Should().Be.EqualTo(0);
@@ -380,7 +377,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			};
 			BusinessUnitRepository.AddTimeZone(TimeZoneInfo.FindSystemTimeZoneById("UTC"));
 
-			Target.Calculate(Guid.NewGuid());
+			Target.Calculate(Guid.NewGuid(), DateTime.Today);
 
 			var result = AgentBadgeWithRankTransactionRepository.LoadAll();
 			result.Count().Should().Be.EqualTo(0);
@@ -399,7 +396,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			BusinessUnitRepository.AddTimeZone(TimeZoneInfo.FindSystemTimeZoneById("UTC"));
 			BadgeCalculationRepository.AddAht(_systemCalculateDate, new TimeSpan(0, 4, 0), _agent.Id.GetValueOrDefault());
 
-			Target.Calculate(Guid.NewGuid());
+			Target.Calculate(Guid.NewGuid(), _systemCalculateDate);
 
 			var result = AgentBadgeWithRankTransactionRepository.LoadAll();
 			result.First().SilverBadgeAmount.Should().Be.EqualTo(1);
@@ -419,7 +416,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			BusinessUnitRepository.AddTimeZone(TimeZoneInfo.FindSystemTimeZoneById("UTC"));
 			BadgeCalculationRepository.AddAnsweredCalls(_systemCalculateDate, 100, _agent.Id.GetValueOrDefault());
 
-			Target.Calculate(Guid.NewGuid());
+			Target.Calculate(Guid.NewGuid(), _systemCalculateDate);
 
 			var result = AgentBadgeWithRankTransactionRepository.LoadAll();
 			result.First().BronzeBadgeAmount.Should().Be.EqualTo(1);
@@ -441,7 +438,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			BusinessUnitRepository.AddTimeZone(TimeZoneInfo.FindSystemTimeZoneById("UTC"));
 			BadgeCalculationRepository.AddAnsweredCalls(_systemCalculateDate, 100, _agent.Id.GetValueOrDefault());
 
-			Target.Calculate(Guid.NewGuid());
+			Target.Calculate(Guid.NewGuid(), _systemCalculateDate);
 
 			var result = AgentBadgeTransactionRepository.LoadAll();
 			result.First().Amount.Should().Be.EqualTo(1);
@@ -463,7 +460,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			BusinessUnitRepository.AddTimeZone(TimeZoneInfo.FindSystemTimeZoneById("UTC"));
 			BadgeCalculationRepository.AddAht(_systemCalculateDate, new TimeSpan(0,4,0), _agent.Id.GetValueOrDefault());
 
-			Target.Calculate(Guid.NewGuid());
+			Target.Calculate(Guid.NewGuid(), _systemCalculateDate);
 
 			var result = AgentBadgeTransactionRepository.LoadAll();
 			result.First().Amount.Should().Be.EqualTo(1);
@@ -483,7 +480,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			BusinessUnitRepository.AddTimeZone(TimeZoneInfo.FindSystemTimeZoneById("UTC"));
 			BadgeCalculationRepository.AddAht(_systemCalculateDate, new TimeSpan(0,4,0), _agent.Id.GetValueOrDefault());
 
-			Target.Calculate(Guid.NewGuid());
+			Target.Calculate(Guid.NewGuid(), _systemCalculateDate);
 
 			var formmater = new NoFormatting();
 			var resultMessage = PushMessagePersister.GetMessage();
@@ -509,7 +506,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			BusinessUnitRepository.AddTimeZone(TimeZoneInfo.FindSystemTimeZoneById("UTC"));
 			BadgeCalculationRepository.AddAnsweredCalls(_systemCalculateDate, 160, _agent.Id.GetValueOrDefault());
 
-			Target.Calculate(Guid.NewGuid());
+			Target.Calculate(Guid.NewGuid(), _systemCalculateDate);
 
 			var formmater = new NoFormatting();
 			var resultMessage = PushMessagePersister.GetMessage();

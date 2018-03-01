@@ -28,6 +28,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 			_transactionRepository.ResetAgentBadges();
 		}
 
+		public void RemoveAgentBadges(DateOnlyPeriod period)
+		{
+			_transactionRepository.Remove(period);
+		}
+
 		public AgentBadgeWithRankCalculator(IBadgeCalculationRepository badgeCalculationRepository,
 			IAgentBadgeWithRankTransactionRepository transactionRepository,
 			IDefinedRaptorApplicationFunctionFactory appFunctionFactory,

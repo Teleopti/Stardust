@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Teleopti.Ccc.Domain.ApplicationLayer.Badge;
 using Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider;
 using Teleopti.Ccc.Web.Areas.Gamification.Mapping;
 using Teleopti.Ccc.Web.Areas.Global.Core;
@@ -14,6 +15,8 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.core.IoC
 			builder.RegisterType<GamificationSettingProvider>().As<IGamificationSettingProvider>().SingleInstance();
 			builder.RegisterType<TeamGamificationSettingProviderAndPersister>().As<ITeamGamificationSettingProviderAndPersister>().SingleInstance();
 			builder.RegisterType<MultipartHttpContentExtractor>().As<IMultipartHttpContentExtractor>().SingleInstance();
+			builder.RegisterType<CalculateBadges>().As<CalculateBadges>().SingleInstance();
+			builder.RegisterType<PerformAllBadgeCalculation>().As<IPerformBadgeCalculation>().SingleInstance();
 		}
 	}
 }

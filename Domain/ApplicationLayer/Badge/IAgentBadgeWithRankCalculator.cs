@@ -22,5 +22,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 			IBadgeSetting badgeSetting, Guid businessId);
 
 		void ResetAgentBadges();
+		void RemoveAgentBadges(DateOnlyPeriod period);
 	}
 }

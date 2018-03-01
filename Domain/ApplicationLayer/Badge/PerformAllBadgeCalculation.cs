@@ -2,7 +2,6 @@
 using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
@@ -12,19 +11,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(PerformBadgeCalculation));
 		private readonly IBusinessUnitRepository _buRepository;
-		private readonly INow _now;
 		private readonly ILogObjectDateChecker _logObjectDateChecker;
 		private readonly CalculateBadges _calculateBadges;
 
-		public PerformAllBadgeCalculation(IBusinessUnitRepository buRepository, INow now, ILogObjectDateChecker logObjectDateChecker, CalculateBadges calculateBadges)
+		public PerformAllBadgeCalculation(IBusinessUnitRepository buRepository, ILogObjectDateChecker logObjectDateChecker, CalculateBadges calculateBadges)
 		{
 			_buRepository = buRepository;
-			_now = now;
 			_logObjectDateChecker = logObjectDateChecker;
 			_calculateBadges = calculateBadges;
 		}
 
-		public void Calculate(Guid businessUnitId)
+		public void Calculate(Guid businessUnitId, DateTime date)
 		{
 			var timeZoneList = _buRepository.LoadAllTimeZones().ToList();
 
@@ -35,23 +32,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 
 			foreach (var timeZoneInfo in timeZoneList)
 			{
-				calculateSystemBadges(businessUnitId, timeZoneInfo.Id);
+				calculateSystemBadges(businessUnitId, timeZoneInfo.Id, date);
 			}
 
 			_calculateBadges.CalculateExternalBadge(new CalculateBadgeMessage
 			{
 				LogOnBusinessUnitId = businessUnitId,
-				CalculationDate = DateTime.Today.AddDays(-2)
+				CalculationDate = date
 			});
 		}
 
-		private void calculateSystemBadges(Guid businessUnitId, string timeZoneInfoId)
+		private void calculateSystemBadges(Guid businessUnitId, string timeZoneInfoId, DateTime date)
 		{
-			const int badgeCalculationDelayDays = -2;
-			var today = _now.UtcDateTime();
 			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(timeZoneInfoId);
-			var todayForGivenTimeZone = TimeZoneHelper.ConvertFromUtc(today, timeZone);
-			var calculationDateForGivenTimeZone = todayForGivenTimeZone.AddDays(badgeCalculationDelayDays).Date;
+			var dateForGivenTimeZone = TimeZoneHelper.ConvertFromUtc(date, timeZone);
+			var calculationDateForGivenTimeZone = dateForGivenTimeZone.Date;
 
 			if (logger.IsDebugEnabled)
 			{

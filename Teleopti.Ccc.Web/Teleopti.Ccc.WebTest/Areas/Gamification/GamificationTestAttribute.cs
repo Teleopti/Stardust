@@ -1,9 +1,11 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.ApplicationLayer.Badge;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -38,6 +40,16 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification
 			system.UseTestDouble<FakeAgentBadgeTransactionRepository>().For<IAgentBadgeTransactionRepository>();
 			system.UseTestDouble<FakeAgentBadgeWithRankTransactionRepository>().For<IAgentBadgeWithRankTransactionRepository>();
 			system.UseTestDouble<CalculateBadges>().For<CalculateBadges>();
+			system.UseTestDouble<LogObjectDateChecker>().For<ILogObjectDateChecker>();
+			system.UseTestDouble<FakeBusinessUnitRepository>().For<IBusinessUnitRepository>(); 
+			system.UseTestDouble<PerformAllBadgeCalculation>().For<IPerformBadgeCalculation>();
+			system.UseTestDouble<FakeCurrentBusinessUnit>().For<ICurrentBusinessUnit>();
+			system.UseTestDouble<GamificationSetting>().For<IGamificationSetting>();
+			system.UseTestDouble<BadgeSetting>().For<IBadgeSetting>();
+			system.UseTestDouble<FakeTeamGamificationSettingRepository>().For<ITeamGamificationSettingRepository>();
+			system.UseTestDouble<FakeExternalPerformanceDataRepository>().For<IExternalPerformanceDataRepository>();
+			system.UseTestDouble<PushMessageRepository>().For<IPushMessageRepository>();
+			system.UseTestDouble<FakePushMessagePersister>().For<IPushMessagePersister>();
 		}
 	}
 }

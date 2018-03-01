@@ -15,6 +15,13 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		IAgentBadgeTransaction Find(IPerson person, int badgeType, DateOnly calculateDate);
 
 		IList<IAgentBadgeTransaction> Find(IEnumerable<IPerson> personCollection, DateOnlyPeriod period);
+
+		/// <summary>
+		/// remove all badges for all agents within period
+		/// </summary>
+		/// <param name="period"></param>
+		void Remove(DateOnlyPeriod period);
+
 		/// <summary>
 		/// reset all badges for all agents
 		/// </summary>

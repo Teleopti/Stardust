@@ -52,6 +52,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 			return true;
 		}
 
+		public void RemoveAgentBadges(DateOnlyPeriod period)
+		{
+			_badgeWithRankCalculator.RemoveAgentBadges(period);
+			_calculator.RemoveAgentBadges(period);
+		}
+
 		public void Calculate(CalculateBadgeMessage message)
 		{
 			var teamSettings = _teamSettingsRepository.FindAllTeamGamificationSettingsSortedByTeam().Where(t => t.GamificationSetting != null).ToLookup(t => t.GamificationSetting);

@@ -73,6 +73,31 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
+		public void ShouldRemoveBadgesWithinPeriod()
+		{
+			var date = new DateOnly(2018, 2, 28);
+			var badge1 = CreateAggregateWithCorrectBusinessUnit();
+			var badge2 = CreateAggregateWithCorrectBusinessUnit();
+			badge2.CalculatedDate = date.AddDays(-1);
+			var badge3 = CreateAggregateWithCorrectBusinessUnit();
+			badge3.CalculatedDate = date;
+			var badge4 = CreateAggregateWithCorrectBusinessUnit();
+			badge4.CalculatedDate = date.AddDays(1);
+			PersistAndRemoveFromUnitOfWork(badge1);
+			PersistAndRemoveFromUnitOfWork(badge2);
+			PersistAndRemoveFromUnitOfWork(badge3);
+			PersistAndRemoveFromUnitOfWork(badge4);
+
+			var target = new AgentBadgeWithRankTransactionRepository(UnitOfWork);
+			target.Remove(new DateOnlyPeriod(date.AddDays(-1), date.AddDays(1)));
+			Session.Flush();
+
+			var result = target.LoadAll();
+			result.Count().Should().Be.EqualTo(1);
+			result.ToList()[0].CalculatedDate.Should().Be.EqualTo(badge1.CalculatedDate);
+		}
+
+		[Test]
 		public void ShouldAbleToPersistExternalBadgeWithRankTransaction()
 		{
 			IAgentBadgeWithRankTransaction agentBadgeTransaction = new AgentBadgeWithRankTransaction

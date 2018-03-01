@@ -34,6 +34,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return result;
 		}
 
+		public void Remove(DateOnlyPeriod period)
+		{
+			var existings =  Session.CreateCriteria(typeof(IAgentBadgeWithRankTransaction), "ab")
+				.Add(Restrictions.Between("CalculatedDate", period.StartDate, period.EndDate))
+				.List<IAgentBadgeWithRankTransaction>();
+
+			existings.ForEach(Remove);
+		}
+
 		public IList<IAgentBadgeWithRankTransaction> Find(IEnumerable<IPerson> personCollection,DateOnlyPeriod period)
 		{
 			var retList = new List<IAgentBadgeWithRankTransaction>();
