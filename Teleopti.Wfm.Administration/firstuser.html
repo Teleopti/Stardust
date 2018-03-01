@@ -1,0 +1,81 @@
+﻿
+<link href="StardustDashboard/style.css" rel="stylesheet" type="text/css" />
+<link href="Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+<link href="Content/Site.css" rel="stylesheet" type="text/css" />
+
+
+<link href="Content/angular-material.min.css" rel="stylesheet" />
+<link href="Content/jquery-ui.min.css" rel="stylesheet" />
+
+<script src="Scripts/angular.js"></script>
+<script src="Scripts/angular-animate/angular-animate.min.js"></script>
+<script src="Scripts/angular-route.min.js"></script>
+<script src="Scripts/angular-aria/angular-aria.min.js"></script>
+<script src="Scripts/angular-cookies.min.js"></script>
+
+<script src="Scripts/App/httpInterceptor.js"></script>
+<script src="Scripts/App/app.module.js"></script>
+<script src="Scripts/App/tokenHeaderService.js"></script>
+<script src="Scripts/App/adduserController.js"></script>
+
+<!--<script src="Scripts/angular-messages.min.js"></script>-->
+
+<script src="Scripts/angular-material/angular-material.js"></script>
+
+<body ng-app="adminApp" >
+
+	<div ng-controller="adduserController as vm" style="margin-left: 50px; margin-right: 50px">
+		<div class="row">
+			<div class="col-md-12" ng-show="vm.FirstUser == false">
+				<a style="float: left; padding-top: 25px; padding-right: 50px" href="#users"><img alt="back" title="Back to Users" src="Content/images/left_round.png" /></a>
+				<h2>Add new User</h2>
+				<p>
+					Lets you add a new user to administrate the Tenants.
+				</p>
+			</div>
+			<div class="col-md-12" ng-show="vm.FirstUser == true">
+				<h2>Add first user for adminstration of Tenants</h2>
+				<p>
+					There must be at least one user that administer Tenants. Be sure you remember the account information so you can logon the next time.
+				</p>
+			</div>
+
+			<div class="col-md-12">
+				<div>
+					<div class="importCaption">Name</div>
+					<input class="form-control" type="text" ng-model="vm.Name" ng-blur="vm.CheckName()" placeholder="name">
+				</div>
+				<label ng-class="(vm.NameOk==true) ? 'dataIsOk' : 'dataIsNotOk'">{{vm.NameMessage}}</label>
+				<div>
+					<div class="importCaption">Email</div>
+					<div>
+						<input class="form-control" type="email" ng-model="vm.Email" ng-blur="vm.CheckEmail()" placeholder="Email">
+						<label ng-class="(vm.EmailOk==true) ? 'dataIsOk' : 'dataIsNotOk'">{{vm.EmailMessage}}</label>
+					</div>
+				</div>
+				<div>
+					<div class="importCaption">Password</div>
+					<div>
+						<input class="form-control" type="password" ng-model="vm.Password" ng-blur="vm.CheckPassword()" placeholder="Password">
+					</div>
+				</div>
+				<div>
+					<div class="importCaption">Confirm Password</div>
+					<div>
+						<input class="form-control" type="password" ng-model="vm.ConfirmPassword" ng-blur="vm.CheckPassword()" placeholder="Confirm password">
+						<label ng-class="(vm.PasswordOk==true) ? 'dataIsOk' : 'dataIsNotOk'">{{vm.PasswordMessage}}</label>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div style="margin-top: 30px" class="col-md-6">
+				<button class="btn btn-primary btn-default" ng-disabled="!vm.SaveEnabled" ng-click="vm.save()">Save</button>
+				<br />
+				<label class="ErrorLabel">{{vm.ErrorMessage}}</label>
+			</div>
+
+		</div>
+	</div>
+	</body>

@@ -86,7 +86,7 @@
 			firstUser = data;
 			if (firstUser) {
 				vm.user = 'xxfirstxx';
-				window.location = "#adduser";
+				window.location = "firstuser.html";
 			} else {
 				if (!token) {
 					$("#modal-login").dialog({
