@@ -3,8 +3,7 @@ using Hangfire;
 using Owin;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Messages;
-using Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain.Service;
-using Teleopti.Ccc.Infrastructure.RealTimeAdherence.Tracer;
+using Teleopti.Ccc.Infrastructure.Rta;
 
 namespace Teleopti.Ccc.Infrastructure.Hangfire
 {
