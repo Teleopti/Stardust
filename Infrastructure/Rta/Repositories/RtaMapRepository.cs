@@ -5,8 +5,9 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Rta.Configuration;
+using Teleopti.Ccc.Infrastructure.Repositories;
 
-namespace Teleopti.Ccc.Infrastructure.Repositories
+namespace Teleopti.Ccc.Infrastructure.Rta.Repositories
 {
 	public class RtaMapRepository : Repository<IRtaMap>,
 		IRtaMapRepository

@@ -279,6 +279,9 @@
     <Compile Include="Rta\ApprovedPeriodsReader.cs" />
     <Compile Include="Rta\Persisters\OrganizationReader.cs" />
     <Compile Include="Rta\Persisters\RtaTracerConfigPersister.cs" />
+    <Compile Include="Rta\Repositories\RtaMapRepository.cs" />
+    <Compile Include="Rta\Repositories\RtaRuleRepository.cs" />
+    <Compile Include="Rta\Repositories\RtaStateGroupRepository.cs" />
     <Compile Include="Rta\RtaTracerReader.cs" />
     <Compile Include="Rta\RtaTracerRefresher.cs" />
     <Compile Include="Rta\RtaTracerSessionFactory.cs" />
@@ -696,16 +699,13 @@
     <Compile Include="Repositories\AbsenceRepository.cs" />
     <Compile Include="Repositories\AvailableDataRepository.cs" />
     <Compile Include="Repositories\CollectionHelper.cs" />
-    <Compile Include="Repositories\RtaRuleRepository.cs" />
     <Compile Include="Repositories\LicenseRepository.cs" />
     <Compile Include="Repositories\MultiplicatorRepository.cs" />
     <Compile Include="Repositories\PayrollExportRepository.cs" />
     <Compile Include="Repositories\PeopleAndSkillLoaderDecider.cs" />
     <Compile Include="Repositories\PersonalSettingDataRepository.cs" />
     <Compile Include="Repositories\SettingDataRepository.cs" />
-    <Compile Include="Repositories\RtaMapRepository.cs" />
     <Compile Include="Repositories\DayOffTemplateRepository.cs" />
-    <Compile Include="Repositories\RtaStateGroupRepository.cs" />
     <Compile Include="Repositories\ForecastProcessReportRepository.cs" />
     <Compile Include="Repositories\GroupPageRepository.cs" />
     <Compile Include="Repositories\OptionalColumnRepository.cs">

@@ -17,6 +17,7 @@ using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.Rta.Repositories;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Support.Security;
