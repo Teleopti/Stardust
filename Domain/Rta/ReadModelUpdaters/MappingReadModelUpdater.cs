@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.DistributedLock;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Rta.Events;
 using Teleopti.Ccc.Domain.Rta.Service;
 
 namespace Teleopti.Ccc.Domain.Rta.ReadModelUpdaters

@@ -1,4 +1,4 @@
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
+namespace Teleopti.Ccc.Domain.Rta.Events
 {
 	public enum EventAdherence
 	{

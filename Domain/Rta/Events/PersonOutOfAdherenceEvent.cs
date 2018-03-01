@@ -2,9 +2,9 @@ using System;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
+namespace Teleopti.Ccc.Domain.Rta.Events
 {
-	public class PersonNeutralAdherenceEvent : IEvent
+	public class PersonOutOfAdherenceEvent : IEvent
 	{
 		public Guid PersonId { get; set; }
 		public DateOnly? BelongsToDate { get; set; }

@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Rta.Events;
 using Teleopti.Ccc.Domain.Rta.Service;
 
 namespace Teleopti.Ccc.Domain.Rta.ReadModelUpdaters

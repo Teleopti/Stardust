@@ -1,6 +1,7 @@
 using System;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Rta.Events;
 
 namespace Teleopti.Ccc.Domain.Rta.Service
 {

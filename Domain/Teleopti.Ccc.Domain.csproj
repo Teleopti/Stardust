@@ -452,6 +452,15 @@
     <Compile Include="Rta\Configuration\ConfigurationValidator.cs" />
     <Compile Include="Rta\Configuration\IConfigurationValidator.cs" />
     <Compile Include="Rta\Configuration\NoConfigurationValidator.cs" />
+    <Compile Include="Rta\Events\EventAdherence.cs" />
+    <Compile Include="Rta\Events\PersonInAdherenceEvent.cs" />
+    <Compile Include="Rta\Events\PersonNeutralAdherenceEvent.cs" />
+    <Compile Include="Rta\Events\PersonOutOfAdherenceEvent.cs" />
+    <Compile Include="Rta\Events\PersonRuleChangedEvent.cs" />
+    <Compile Include="Rta\Events\PersonStateChangedEvent.cs" />
+    <Compile Include="Rta\Events\RtaMapChangedEvent.cs" />
+    <Compile Include="Rta\Events\RtaRuleChangedEvent.cs" />
+    <Compile Include="Rta\Events\RtaStateGroupChangedEvent.cs" />
     <Compile Include="Rta\ExternalUserStateWebModel.cs" />
     <Compile Include="Rta\ReadModelUpdaters\AgentStateReadModelMaintainer.cs" />
     <Compile Include="Rta\ReadModelUpdaters\AgentStateReadModelUpdater.cs" />
@@ -726,7 +735,6 @@
     <Compile Include="ApplicationLayer\ResourcePlanner\SchedulePlanningPeriodCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Events\InitialLoadScheduleProjectionEvent.cs" />
     <Compile Include="ApplicationLayer\ReadModelInitializeHandler.cs" />
-    <Compile Include="ApplicationLayer\Events\PersonRuleChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\AnalyticsDatesChangedEvent.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\IAnalyticsPersonPeriodMapNotDefined.cs" />
     <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradeApproveService.cs" />
@@ -1439,9 +1447,6 @@
     <Compile Include="Common\NonoverwritableLayerChecker.cs" />
     <Compile Include="Common\ScheduleProjectionHelper.cs" />
     <Compile Include="FeatureFlags\RemoveMeWithToggleAttribute.cs" />
-    <Compile Include="ApplicationLayer\Events\RtaMapChangedEvent.cs" />
-    <Compile Include="ApplicationLayer\Events\RtaRuleChangedEvent.cs" />
-    <Compile Include="ApplicationLayer\Events\RtaStateGroupChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\SkillDayChangedEvent.cs" />
     <Compile Include="ApplicationLayer\ReadModelValidator\FixReadModelsEvent.cs" />
     <Compile Include="ApplicationLayer\ReadModelValidator\FixReadModelsEventHandler.cs" />
@@ -1858,7 +1863,6 @@
     <Compile Include="ApplicationLayer\Events\ActivityMovedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\DayOffAddedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\DayUnscheduledEvent.cs" />
-    <Compile Include="ApplicationLayer\Events\EventAdherence.cs" />
     <Compile Include="ApplicationLayer\Events\ScheduleOnNode.cs" />
     <Compile Include="ApplicationLayer\Events\StardustHealthCheckEvent.cs" />
     <Compile Include="ApplicationLayer\Events\TenantHourTickEvent.cs" />
@@ -1870,12 +1874,8 @@
     <Compile Include="ApplicationLayer\Events\PersonActivityStartEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonCollectionChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonDeletedEvent.cs" />
-    <Compile Include="ApplicationLayer\Events\PersonInAdherenceEvent.cs" />
-    <Compile Include="ApplicationLayer\Events\PersonNeutralAdherenceEvent.cs" />
-    <Compile Include="ApplicationLayer\Events\PersonOutOfAdherenceEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonShiftEndEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonShiftStartEvent.cs" />
-    <Compile Include="ApplicationLayer\Events\PersonStateChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonTeamChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonTerminalDateChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\ScheduledResourcesChangedEvent.cs" />
