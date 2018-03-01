@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Rta.AgentAdherenceDay
 	{
 		private Guid _personId;
 		private DateTimePeriod _period;
-		private IEnumerable<HistoricalChange> _changes;
+		private IEnumerable<HistoricalChangeModel> _changes;
 		private IEnumerable<DateTimePeriod> _outOfAdherences;
 		private IEnumerable<DateTimePeriod> _recordedOutOfAdherences;
 		private IEnumerable<DateTimePeriod> _approvedPeriods;
@@ -22,12 +22,12 @@ namespace Teleopti.Ccc.Domain.Rta.AgentAdherenceDay
 			DateTime now,
 			DateTimePeriod period,
 			DateTimePeriod? shift,
-			IEnumerable<HistoricalChange> changes,
+			IEnumerable<HistoricalChangeModel> changes,
 			IEnumerable<ApprovedPeriod> approvedPeriods)
 		{
 			_personId = personId;
 			_period = period;
-			_changes = removeDuplicateChangesWithinPeriod(changes, period);
+			_changes = buildChanges(changes, period);
 			now = floorToSeconds(now);
 
 			_approvedPeriods = approvedPeriods.Select(a => new DateTimePeriod(a.StartTime, a.EndTime)).ToArray();
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Rta.AgentAdherenceDay
 			_percentage = new AdherencePercentageCalculator().Calculate(shift, neutralAdherencesWithinShift, outOfAhderencesWithinShift, now);
 		}
 
-		private static IEnumerable<HistoricalChange> removeDuplicateChangesWithinPeriod(IEnumerable<HistoricalChange> changes, DateTimePeriod period) =>
+		private static IEnumerable<HistoricalChangeModel> buildChanges(IEnumerable<HistoricalChangeModel> changes, DateTimePeriod period) =>
 			changes
 				.Where(x => period.ContainsPart(x.Timestamp))
 				.GroupBy(y => new
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Domain.Rta.AgentAdherenceDay
 			public readonly IList<DateTimePeriod> Periods = new List<DateTimePeriod>();
 		}
 
-		private static IEnumerable<DateTimePeriod> buildPeriods(HistoricalChangeAdherence adherence, IEnumerable<HistoricalChange> adherenceChanges, DateTime now)
+		private static IEnumerable<DateTimePeriod> buildPeriods(HistoricalChangeAdherence adherence, IEnumerable<HistoricalChangeModel> adherenceChanges, DateTime now)
 		{
 			var result = adherenceChanges
 				.TransitionsOf(x => x.Adherence)
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.Domain.Rta.AgentAdherenceDay
 				.ToArray();
 
 		public DateTimePeriod Period() => _period;
-		public IEnumerable<HistoricalChange> Changes() => _changes;
+		public IEnumerable<HistoricalChangeModel> Changes() => _changes;
 
 		public IEnumerable<OutOfAdherencePeriod> RecordedOutOfAdherences() =>
 			_recordedOutOfAdherences.Select(x => new OutOfAdherencePeriod {StartTime = x.StartDateTime, EndTime = x.EndDateTime})

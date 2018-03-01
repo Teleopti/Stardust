@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.Domain.Rta.ViewModels
 				.ToArray();
 		}
 
-		private IEnumerable<HistoricalChangeViewModel> buildChanges(IEnumerable<HistoricalChange> changes)
+		private IEnumerable<HistoricalChangeViewModel> buildChanges(IEnumerable<HistoricalChangeModel> changes)
 		{
 			return changes
 				.Select(x => new HistoricalChangeViewModel

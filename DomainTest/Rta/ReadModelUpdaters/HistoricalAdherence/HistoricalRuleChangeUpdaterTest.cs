@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.Rta.ReadModelUpdaters.HistoricalAdherence
 	[TestFixture]
 	public class HistoricalRuleChangeUpdaterTest
 	{
-		public HistoricalAdherenceUpdater Target;
+		public HistoricalChangeUpdater Target;
 		public FakeHistoricalChangeReadModelPersister Persister;
 		
 		[Test]

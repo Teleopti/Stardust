@@ -14,6 +14,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Rta.AdherenceChange;
+using Teleopti.Ccc.Domain.Rta.AgentAdherenceDay;
 using Teleopti.Ccc.Domain.Rta.ApprovePeriodAsInAdherence;
 using Teleopti.Ccc.Domain.Rta.Service;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -174,23 +175,23 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return database.WithApprovedPeriod(null, startTime, endTime);
 		}
-		
+
 		public static FakeDatabase WithAdherenceIn(this FakeDatabase database, string time)
 		{
 			return database.WithAdherenceIn(null, time);
 		}
-		
+
 		public static FakeDatabase WithAdherenceOut(this FakeDatabase database, string time)
 		{
 			return database.WithAdherenceOut(null, time);
 		}
-		
+
 		public static FakeDatabase WithAdherenceNeutral(this FakeDatabase database, string time)
 		{
 			return database.WithAdherenceNeutral(null, time);
 		}
 	}
-	
+
 	public static class FakeDatabaseRuleExtensions
 	{
 		public static FakeDatabase WithMappedRule(this FakeDatabase database)
@@ -377,7 +378,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private readonly HardcodedSkillGroupingPageId _hardcodedSkillGroupingPageId;
 		private readonly FakeMultiplicatorDefinitionSetRepository _multiplicatorDefinitionSets;
 		private readonly ApprovePeriodAsInAdherence _approvePeriod;
-		private readonly AdherenceChange _adherenceChange;
+		private readonly HistoricalChange _historicalChange;
 
 		private BusinessUnit _businessUnit;
 		private Site _site;
@@ -432,7 +433,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			HardcodedSkillGroupingPageId hardcodedSkillGroupingPageId,
 			FakeMultiplicatorDefinitionSetRepository multiplicatorDefinitionSets,
 			ApprovePeriodAsInAdherence approvePeriod,
-			AdherenceChange adherenceChange)
+			HistoricalChange historicalChange)
 		{
 			_tenants = tenants;
 			_persons = persons;
@@ -466,7 +467,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_hardcodedSkillGroupingPageId = hardcodedSkillGroupingPageId;
 			_multiplicatorDefinitionSets = multiplicatorDefinitionSets;
 			_approvePeriod = approvePeriod;
-			_adherenceChange = adherenceChange;
+			_historicalChange = historicalChange;
 		}
 
 		public void CreateDefaultData()
@@ -1107,19 +1108,34 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public FakeDatabase WithAdherenceIn(Guid? id, string time)
 		{
-			_adherenceChange.In(id ?? _person.Id.Value, time.Utc());
+			_historicalChange.Change(new HistoricalChangeModel
+			{
+				PersonId = id ?? _person.Id.Value,
+				Timestamp = time.Utc(),
+				Adherence = HistoricalChangeAdherence.In
+			});
 			return this;
 		}
 
 		public FakeDatabase WithAdherenceOut(Guid? id, string time)
 		{
-			_adherenceChange.Out(id ?? _person.Id.Value, time.Utc());
+			_historicalChange.Change(new HistoricalChangeModel
+			{
+				PersonId = id ?? _person.Id.Value,
+				Timestamp = time.Utc(),
+				Adherence = HistoricalChangeAdherence.Out
+			});
 			return this;
 		}
 
 		public FakeDatabase WithAdherenceNeutral(Guid? id, string time)
 		{
-			_adherenceChange.Neutral(id ?? _person.Id.Value, time.Utc());
+			_historicalChange.Change(new HistoricalChangeModel
+			{
+				PersonId = id ?? _person.Id.Value,
+				Timestamp = time.Utc(),
+				Adherence = HistoricalChangeAdherence.Neutral
+			});
 			return this;
 		}
 

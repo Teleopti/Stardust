@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.DomainTest.Rta.ViewModels.HistoricalAdherenceViewModelBui
 				.WithAssignment(person, "2017-04-18")
 				.WithActivity(null, ColorTranslator.FromHtml("#80FF80"))
 				.WithAssignedActivity("2017-04-18 08:00", "2017-04-18 09:00"); ;
-			Changes.Persist( new HistoricalChange
+			Changes.Persist( new HistoricalChangeModel
 			{
 				PersonId = person,
 				BelongsToDate = "2017-04-18".Date(),

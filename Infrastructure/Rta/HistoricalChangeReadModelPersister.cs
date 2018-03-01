@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			_unitOfWork = unitOfWork;
 		}
 
-		public void Persist(HistoricalChange model)
+		public void Persist(HistoricalChangeModel model)
 		{
 			_unitOfWork.Current().CreateSqlQuery(@"
 INSERT INTO [ReadModel].[HistoricalChange] (

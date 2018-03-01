@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.Rta.ViewModels.HistoricalAdherenceViewModelBui
 			var name = RandomName.Make();
 			Database.WithAgent(person, name);
 
-			ReadModel.Persist(new HistoricalChange
+			ReadModel.Persist(new HistoricalChangeModel
 			{
 				PersonId = person,
 				BelongsToDate = "2017-03-07".Date(),
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.Rta.ViewModels.HistoricalAdherenceViewModelBui
 			var name = RandomName.Make();
 			Database.WithAgent(person, name);
 
-			ReadModel.Persist(new HistoricalChange
+			ReadModel.Persist(new HistoricalChangeModel
 			{
 				PersonId = person,
 				Timestamp = "2017-03-07 14:00".Utc()
@@ -100,12 +100,12 @@ namespace Teleopti.Ccc.DomainTest.Rta.ViewModels.HistoricalAdherenceViewModelBui
 				.WithAgent(person, "name");
 
 			ReadModel
-				.Persist(new HistoricalChange
+				.Persist(new HistoricalChangeModel
 				{
 					PersonId = person,
 					Timestamp = "2017-03-06 14:00".Utc()
 				});
-			ReadModel.Persist(new HistoricalChange
+			ReadModel.Persist(new HistoricalChangeModel
 			{
 				PersonId = person,
 				Timestamp = "2017-03-07 14:00".Utc()
@@ -124,12 +124,12 @@ namespace Teleopti.Ccc.DomainTest.Rta.ViewModels.HistoricalAdherenceViewModelBui
 				.WithAgent(person, "nicklas")
 				.WithSchedule(person, "2017-03-14 09:00", "2017-03-14 17:00");
 			ReadModel
-				.Persist(new HistoricalChange
+				.Persist(new HistoricalChangeModel
 				{
 					PersonId = person,
 					Timestamp = "2017-03-14 07:59".Utc()
 				});
-			ReadModel.Persist(new HistoricalChange
+			ReadModel.Persist(new HistoricalChangeModel
 			{
 				PersonId = person,
 				Timestamp = "2017-03-14 08:00".Utc()
@@ -149,12 +149,12 @@ namespace Teleopti.Ccc.DomainTest.Rta.ViewModels.HistoricalAdherenceViewModelBui
 				.WithAgent(person, "nicklas")
 				.WithSchedule(person, "2017-03-14 09:00", "2017-03-14 17:00");
 			ReadModel
-				.Persist(new HistoricalChange
+				.Persist(new HistoricalChangeModel
 				{
 					PersonId = person,
 					Timestamp = "2017-03-14 18:00".Utc()
 				});
-			ReadModel.Persist(new HistoricalChange
+			ReadModel.Persist(new HistoricalChangeModel
 			{
 				PersonId = person,
 				Timestamp = "2017-03-14 18:01".Utc()
@@ -177,7 +177,7 @@ namespace Teleopti.Ccc.DomainTest.Rta.ViewModels.HistoricalAdherenceViewModelBui
 			var name = RandomName.Make();
 			Database.WithAgent(person, name);
 
-			ReadModel.Persist(new HistoricalChange
+			ReadModel.Persist(new HistoricalChangeModel
 			{
 				PersonId = person,
 				BelongsToDate = "2017-03-07".Date(),
@@ -191,7 +191,7 @@ namespace Teleopti.Ccc.DomainTest.Rta.ViewModels.HistoricalAdherenceViewModelBui
 				Adherence = HistoricalChangeAdherence.In
 			});
 
-			ReadModel.Persist(new HistoricalChange
+			ReadModel.Persist(new HistoricalChangeModel
 			{
 				PersonId = person,
 				BelongsToDate = "2017-03-07".Date(),

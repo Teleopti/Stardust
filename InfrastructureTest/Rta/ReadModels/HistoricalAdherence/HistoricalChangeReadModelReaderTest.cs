@@ -4,6 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Rta.AdherenceChange;
 using Teleopti.Ccc.Domain.Rta.AgentAdherenceDay;
@@ -17,23 +18,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.HistoricalAdherence
 	[DatabaseTest]
 	public class HistoricalChangeReadModelReaderTest
 	{
-		public AdherenceChange AdherenceChange;
+		public Database Database;
 		public IHistoricalChangeReadModelReader Reader;
 		public WithReadModelUnitOfWork WithReadModelUnitOfWork;
 
 		[Test]
 		public void ShouldRead()
 		{
-			var person = Guid.NewGuid();
-			WithReadModelUnitOfWork.Do(() =>
-			{
-				AdherenceChange.Out(person, "2016-10-18 08:00".Utc());
-				AdherenceChange.In(person, "2016-10-18 08:05".Utc());
-				AdherenceChange.Out(person, "2016-10-18 09:00".Utc());
-				AdherenceChange.Neutral(person, "2016-10-18 09:15".Utc());
-			});
+			Database.WithAgent();
+			Database.WithAdherenceOut("2016-10-18 08:00");
+			Database.WithAdherenceIn("2016-10-18 08:05");
+			Database.WithAdherenceOut("2016-10-18 09:00");
+			Database.WithAdherenceNeutral("2016-10-18 09:15");
+			var personId = Database.CurrentPersonId();
 
-			var result = WithReadModelUnitOfWork.Get(() => Reader.Read(person, "2016-10-18 00:00".Utc(), "2016-10-19 00:00".Utc()));
+			var result = WithReadModelUnitOfWork.Get(() => Reader.Read(personId, "2016-10-18 00:00".Utc(), "2016-10-19 00:00".Utc()));
 
 			result.Select(x => x.Timestamp)
 				.Should().Have
@@ -43,23 +42,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.HistoricalAdherence
 		[Test]
 		public void ShouldReadWithProperties()
 		{
-			var personId = Guid.NewGuid();
-			var state = Guid.NewGuid();
-			WithReadModelUnitOfWork.Do(() =>
-				AdherenceChange.Change(new HistoricalChange
-				{
-					PersonId = personId,
-					BelongsToDate = "2017-03-07".Date(),
-					Timestamp = "2017-03-07 10:00".Utc(),
-					StateName = "ready",
-					StateGroupId = state,
-					ActivityName = "phone",
-					ActivityColor = Color.DarkGoldenrod.ToArgb(),
-					RuleName = "in",
-					RuleColor = Color.Azure.ToArgb(),
-					Adherence = HistoricalChangeAdherence.In
-				})
-			);
+			Database
+				.WithAgent()
+				.WithStateGroup("ready")
+				.WithStateCode("ready")
+				.WithActivity("phone", Color.DarkGoldenrod)
+				.WithRule("in", 0, Adherence.In, Color.Azure)
+				.WithHistoricalChange("2017-03-07 10:00");
+			var personId = Database.CurrentPersonId();
+			var state = Database.CurrentStateGroupId();
 
 			var change = WithReadModelUnitOfWork.Get(() => Reader.Read(personId, "2017-03-07 00:00".Utc(), "2017-03-08 00:00".Utc()).Single());
 			change.PersonId.Should().Be(personId);
@@ -77,11 +68,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.HistoricalAdherence
 
 		[Test]
 		public void ShouldReadWithTimestampAsUtc()
-		{
-			var person = Guid.NewGuid();
-			WithReadModelUnitOfWork.Do(() => { AdherenceChange.Out(person, "2016-10-18 08:00".Utc()); });
-
-			var result = WithReadModelUnitOfWork.Get(() => Reader.Read(person, "2016-10-18 00:00".Utc(), "2016-10-19 00:00".Utc()));
+		{	
+			Database
+				.WithAgent()
+				.WithAdherenceOut("2016-10-18 08:00");
+			var personId = Database.CurrentPersonId();
+			
+			var result = WithReadModelUnitOfWork.Get(() => Reader.Read(personId, "2016-10-18 00:00".Utc(), "2016-10-19 00:00".Utc()));
 
 			result.Single().Timestamp.Kind.Should().Be(DateTimeKind.Utc);
 		}
@@ -89,14 +82,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.HistoricalAdherence
 		[Test]
 		public void ShouldReadFromYesterday()
 		{
-			var person = Guid.NewGuid();
-			WithReadModelUnitOfWork.Do(() =>
-			{
-				AdherenceChange.Out(person, "2016-10-17 08:00".Utc());
-				AdherenceChange.In(person, "2016-10-18 08:05".Utc());
-			});
-
-			var result = WithReadModelUnitOfWork.Get(() => Reader.ReadLastBefore(person, "2016-10-18 08:05".Utc()));
+			Database
+				.WithAgent()
+				.WithAdherenceOut("2016-10-17 08:00")
+				.WithAdherenceIn("2016-10-18 08:05");
+			var personId = Database.CurrentPersonId();
+			
+			var result = WithReadModelUnitOfWork.Get(() => Reader.ReadLastBefore(personId, "2016-10-18 08:05".Utc()));
 
 			result.Timestamp
 				.Should().Be("2016-10-17 08:00".Utc());
@@ -105,15 +97,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.HistoricalAdherence
 		[Test]
 		public void ShouldReadLatestFromYesterday()
 		{
-			var person = Guid.NewGuid();
-			WithReadModelUnitOfWork.Do(() =>
-			{
-				AdherenceChange.Neutral(person, "2016-10-17 07:59".Utc());
-				AdherenceChange.Out(person, "2016-10-17 08:00".Utc());
-				AdherenceChange.In(person, "2016-10-18 08:05".Utc());
-			});
-
-			var result = WithReadModelUnitOfWork.Get(() => Reader.ReadLastBefore(person, "2016-10-18 08:05".Utc()));
+			Database
+				.WithAgent()
+				.WithAdherenceNeutral("2016-10-17 07:59")
+				.WithAdherenceOut("2016-10-17 08:00")
+				.WithAdherenceIn("2016-10-18 08:05");
+			var personId = Database.CurrentPersonId();
+			
+			var result = WithReadModelUnitOfWork.Get(() => Reader.ReadLastBefore(personId, "2016-10-18 08:05".Utc()));
 
 			result.Timestamp
 				.Should().Be("2016-10-17 08:00".Utc());

@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.Rta.ReadModelUpdaters.HistoricalAdherence
 	public class PackageTest
 	{
 		public FakeHistoricalChangeReadModelPersister ChangePersister;
-		public HistoricalAdherenceUpdater Target;
+		public HistoricalChangeUpdater Target;
 		public MutableNow Now;
 
 		[Test]
@@ -28,9 +28,8 @@ namespace Teleopti.Ccc.DomainTest.Rta.ReadModelUpdaters.HistoricalAdherence
 
 			Target.Subscribe(subscriptionsRegistrator);
 
-			subscriptionsRegistrator.SubscribesTo(typeof(PersonInAdherenceEvent)).Should().Be(true);
-			subscriptionsRegistrator.SubscribesTo(typeof(PersonOutOfAdherenceEvent)).Should().Be(true);
-			subscriptionsRegistrator.SubscribesTo(typeof(PersonNeutralAdherenceEvent)).Should().Be(true);
+			subscriptionsRegistrator.SubscribesTo(typeof(PersonStateChangedEvent)).Should().Be(true);
+			subscriptionsRegistrator.SubscribesTo(typeof(PersonRuleChangedEvent)).Should().Be(true);
 		}
 
 		[Test]
@@ -40,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.Rta.ReadModelUpdaters.HistoricalAdherence
 
 			Target.Handle(new[]
 			{
-				new PersonOutOfAdherenceEvent {PersonId = personId, Timestamp = "2017-05-03 12:00".Utc()}
+				new PersonStateChangedEvent {PersonId = personId, Timestamp = "2017-05-03 12:00".Utc()}
 			});
 
 
@@ -55,49 +54,21 @@ namespace Teleopti.Ccc.DomainTest.Rta.ReadModelUpdaters.HistoricalAdherence
 
 			Target.Handle(new[]
 			{
-				new PersonOutOfAdherenceEvent {PersonId = personId, Timestamp = "2017-05-03 12:00".Utc()},
-				new PersonOutOfAdherenceEvent {PersonId = personId2, Timestamp = "2017-05-03 12:00".Utc()}
+				new PersonStateChangedEvent {PersonId = personId, Timestamp = "2017-05-03 12:00".Utc()},
+				new PersonStateChangedEvent {PersonId = personId2, Timestamp = "2017-05-03 12:00".Utc()}
 			});
 
 			ChangePersister.Read(personId, "2017-05-03".Date()).Single().Timestamp.Should().Be("2017-05-03 12:00".Utc());
 			ChangePersister.Read(personId2, "2017-05-03".Date()).Single().Timestamp.Should().Be("2017-05-03 12:00".Utc());
 		}
 
-
 		[Test]
-		public void ShouldPutOutOfAdherenceEndTime()
-		{
-			var personId = Guid.NewGuid();
-
-			Target.Handle(new[]
-			{
-				new PersonOutOfAdherenceEvent
-				{
-					PersonId = personId,
-					BelongsToDate = "2017-05-03".Date(),
-					Timestamp = "2017-05-03 12:00".Utc()
-				}
-			});
-			Target.Handle(new[]
-			{
-				new PersonInAdherenceEvent
-				{
-					PersonId = personId,
-					BelongsToDate = "2017-05-03".Date(),
-					Timestamp = "2017-05-03 12:15".Utc()
-				}
-			});
-
-			ChangePersister.Read(personId, "2017-05-03".Date()).Last().Timestamp.Should().Be("2017-05-03 12:15".Utc());
-		}
-
-		[Test]
-		public void ShouldHandleNeutralAdherenceEvent()
+		public void ShouldHandlePersonStateChangedEvent()
 		{
 			var personId = Guid.NewGuid();
 			Target.Handle(new[]
 			{
-				new PersonNeutralAdherenceEvent
+				new PersonStateChangedEvent
 				{
 					PersonId = personId,
 					BelongsToDate = "2017-05-03".Date(),

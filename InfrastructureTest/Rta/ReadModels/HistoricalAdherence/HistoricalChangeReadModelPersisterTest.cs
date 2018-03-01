@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.HistoricalAdherence
 			var personId = Guid.NewGuid();
 			var state = Guid.NewGuid();
 
-			Target.Persist(new HistoricalChange
+			Target.Persist(new HistoricalChangeModel
 			{
 				PersonId = personId,
 				BelongsToDate = "2017-03-07".Date(),

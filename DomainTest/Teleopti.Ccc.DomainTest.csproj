@@ -278,7 +278,6 @@
     <Compile Include="Rta\ReadModelUpdaters\AgentState\TeamNameChangedTest.cs" />
     <Compile Include="Rta\ReadModelUpdaters\AgentState\UnorderedEventsTest.cs" />
     <Compile Include="Rta\ReadModelUpdaters\ExternalLogons\ExternalLogonReadModelUpdaterTest.cs" />
-    <Compile Include="Rta\ReadModelUpdaters\HistoricalAdherence\HistoricalAdherenceUpdaterTest.cs" />
     <Compile Include="Rta\ReadModelUpdaters\HistoricalAdherence\HistoricalRuleChangeUpdaterTest.cs" />
     <Compile Include="Rta\ReadModelUpdaters\HistoricalAdherence\HistoricalStateChangeUpdaterTest.cs" />
     <Compile Include="Rta\ReadModelUpdaters\HistoricalAdherence\PackageTest.cs" />

@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<HistoricalAdherenceViewModelBuilder>().SingleInstance();
 			builder.RegisterType<HistoricalAdherenceDate>().SingleInstance();
 
-			builder.RegisterType<AdherenceChange>().SingleInstance();
+			builder.RegisterType<HistoricalChange>().SingleInstance();
 			builder.RegisterType<ApprovePeriodAsInAdherenceCommandHandler>().SingleInstance();
 			builder.RegisterType<ApprovePeriodAsInAdherence>().SingleInstance();
 			builder.RegisterType<AgentAdherenceDayLoader>().SingleInstance();

@@ -432,13 +432,11 @@
     <Compile Include="ResourcePlanner\Hints\ScheduleStartOnWrongDateHint.cs" />
     <Compile Include="ResourcePlanner\Hints\HintInput.cs" />
     <Compile Include="ResourcePlanner\IBlockPreferenceProviderForPlanningPeriod.cs" />
-    <Compile Include="Rta\AdherenceChange\AdherenceChange.cs" />
+    <Compile Include="Rta\AdherenceChange\HistoricalChange.cs" />
     <Compile Include="Rta\AgentAdherenceDay\AdherencePercentageCalculator.cs" />
     <Compile Include="Rta\AgentAdherenceDay\AgentAdherenceDay.cs" />
     <Compile Include="Rta\AgentAdherenceDay\AgentAdherenceDayLoader.cs" />
-    <Compile Include="Rta\AgentAdherenceDay\HistoricalAdherence.cs" />
-    <Compile Include="Rta\AgentAdherenceDay\HistoricalAdherenceAdherence.cs" />
-    <Compile Include="Rta\AgentAdherenceDay\HistoricalChange.cs" />
+    <Compile Include="Rta\AgentAdherenceDay\HistoricalChangeModel.cs" />
     <Compile Include="Rta\AgentAdherenceDay\HistoricalChangeAdherence.cs" />
     <Compile Include="Rta\AgentAdherenceDay\IApprovedPeriodsReader.cs" />
     <Compile Include="Rta\AgentAdherenceDay\IHistoricalChangeReadModelPersister.cs" />
@@ -462,7 +460,7 @@
     <Compile Include="Rta\ReadModelUpdaters\CurrentScheduleReadModelUpdater.cs" />
     <Compile Include="Rta\ReadModelUpdaters\ExternalLogonReadModelUpdater.cs" />
     <Compile Include="Rta\ReadModelUpdaters\HistoricalAdherenceMaintainer.cs" />
-    <Compile Include="Rta\ReadModelUpdaters\HistoricalAdherenceUpdater.cs" />
+    <Compile Include="Rta\ReadModelUpdaters\HistoricalChangeUpdater.cs" />
     <Compile Include="Rta\ReadModelUpdaters\IMappingReadModelPersister.cs" />
     <Compile Include="Rta\ReadModelUpdaters\IOrganizationReader.cs" />
     <Compile Include="Rta\ReadModelUpdaters\ITeamCardReader.cs" />

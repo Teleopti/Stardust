@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			_unitOfWork = unitOfWork;
 		}
 
-		public IEnumerable<HistoricalChange> Read(Guid personId, DateTime startTime, DateTime endTime)
+		public IEnumerable<HistoricalChangeModel> Read(Guid personId, DateTime startTime, DateTime endTime)
 		{
 			var result = _unitOfWork.Current()
 				.CreateSqlQuery(@"
@@ -34,7 +34,7 @@ ORDER BY [Timestamp] ASC")
 			return result;
 		}
 
-		public HistoricalChange ReadLastBefore(Guid personId, DateTime timestamp)
+		public HistoricalChangeModel ReadLastBefore(Guid personId, DateTime timestamp)
 		{
 			return _unitOfWork.Current()
 				.CreateSqlQuery(@"
@@ -47,10 +47,10 @@ ORDER BY [Timestamp] DESC")
 				.SetParameter("Timestamp", timestamp)
 				
 				.SetResultTransformer(Transformers.AliasToBean<internalModel>())
-				.UniqueResult<HistoricalChange>();
+				.UniqueResult<HistoricalChangeModel>();
 		}
 
-		private class internalModel : HistoricalChange
+		private class internalModel : HistoricalChangeModel
 		{
 			public new DateTime? BelongsToDate
 			{

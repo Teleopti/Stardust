@@ -1,4 +1,5 @@
 using System;
+using System.Drawing;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
@@ -9,6 +10,8 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Rta.AdherenceChange;
+using Teleopti.Ccc.Domain.Rta.AgentAdherenceDay;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -37,6 +40,7 @@ namespace Teleopti.Ccc.TestCommon
 		private readonly IRtaMapRepository _mappings;
 		private readonly IExternalLogOnRepository _externalLogOns;
 		private readonly IGroupingReadOnlyRepository _groupings;
+		private readonly HistoricalChange _historicalChange;
 
 		private DateOnly _date;
 		private string _person;
@@ -60,16 +64,17 @@ namespace Teleopti.Ccc.TestCommon
 			IContractRepository contracts,
 			IPartTimePercentageRepository partTimePercentages,
 			IContractScheduleRepository contractSchedules,
-			IScenarioRepository scenarios, 
-			IActivityRepository activities, 
-			ISkillRepository skills, 
+			IScenarioRepository scenarios,
+			IActivityRepository activities,
+			ISkillRepository skills,
 			ISkillTypeRepository skillTypes,
 			IRtaStateGroupRepository stateGroups,
 			IRtaRuleRepository rules,
 			IRtaMapRepository mappings,
 			IExternalLogOnRepository externalLogOns,
-			IGroupingReadOnlyRepository groupings
-			)
+			IGroupingReadOnlyRepository groupings,
+			HistoricalChange historicalChange
+		)
 		{
 			_analytics = analytics;
 			_eventPublisher = eventPublisher;
@@ -89,6 +94,7 @@ namespace Teleopti.Ccc.TestCommon
 			_mappings = mappings;
 			_externalLogOns = externalLogOns;
 			_groupings = groupings;
+			_historicalChange = historicalChange;
 		}
 
 		[UnitOfWork]
@@ -97,6 +103,12 @@ namespace Teleopti.Ccc.TestCommon
 			return person().Id.Value;
 		}
 
+		[UnitOfWork]
+		public virtual Guid CurrentStateGroupId()
+		{
+			return stateGroup().Id.Value;
+		}
+		
 		[UnitOfWork]
 		public virtual Guid CurrentScenarioId()
 		{
@@ -120,7 +132,7 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			return team(_team).Id.Value;
 		}
-		
+
 		[UnitOfWork]
 		public virtual Guid TeamIdFor(string name)
 		{
@@ -132,16 +144,12 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			return _skills.LoadAll().Where(x => x.Name == name).Select(x => x.Id).Single().Value;
 		}
-		
+
 		[UnitOfWork]
 		public virtual Guid PersonIdFor(string name)
 		{
 			return _persons.LoadAll().Single(x => x.Name == new Name(name, name)).Id.Value;
 		}
-
-
-
-
 
 
 		[UnitOfWork]
@@ -158,11 +166,10 @@ namespace Teleopti.Ccc.TestCommon
 			if (_scenario != null)
 				return _scenarios.LoadAll().Single(x => x.Description.Name == _scenario);
 			_scenario = RandomName.Make();
-			var s = new Scenario(_scenario) { DefaultScenario = true, EnableReporting = true };
+			var s = new Scenario(_scenario) {DefaultScenario = true, EnableReporting = true};
 			_scenarios.Add(s);
 			return s;
 		}
-
 
 
 		[UnitOfWork]
@@ -193,6 +200,7 @@ namespace Teleopti.Ccc.TestCommon
 				if (existing != null)
 					return existing;
 			}
+
 			name = RandomName.Make();
 			_site = name;
 			var s = new Site(name);
@@ -223,11 +231,12 @@ namespace Teleopti.Ccc.TestCommon
 				_team = name;
 				return existing;
 			}
+
 			_team = name;
 			var s = site(_site);
 			var t = new Team {Site = s}
 				.WithDescription(new Description(_team));
-			
+
 			_teams.Add(t);
 			s.AddTeam(t);
 			return t;
@@ -376,12 +385,6 @@ namespace Teleopti.Ccc.TestCommon
 		}
 
 
-
-
-
-
-
-
 		[UnitOfWork]
 		public virtual Database WithSkill(string name)
 		{
@@ -413,12 +416,17 @@ namespace Teleopti.Ccc.TestCommon
 
 			return skill;
 		}
-		
+
+		public virtual Database WithActivity(string name) => WithActivity(name, null);
+
 		[UnitOfWork]
-		public virtual Database WithActivity(string name)
+		public virtual Database WithActivity(string name, Color? color)
 		{
 			_activity = name;
-			_activities.Add(new Activity(name));
+			var activity = new Activity(name);
+			if (color.HasValue)
+				activity.DisplayColor = color.Value;
+			_activities.Add(activity);
 			return this;
 		}
 
@@ -435,7 +443,7 @@ namespace Teleopti.Ccc.TestCommon
 			_assignments.Add(new PersonAssignment(person(), scenario(), date));
 			return this;
 		}
-		
+
 		[UnitOfWork]
 		public virtual Database WithAssignedActivity(string activityName, DateTime startTime, DateTime endTime)
 		{
@@ -470,11 +478,6 @@ namespace Teleopti.Ccc.TestCommon
 			var pa = _assignments.LoadAll().Single(x => x.Date == _date && x.Person == person());
 			return _assignments.LoadAggregate(pa.Id.Value);
 		}
-
-
-
-
-
 
 
 		public virtual Database WithStateGroup(string name)
@@ -520,43 +523,39 @@ namespace Teleopti.Ccc.TestCommon
 		}
 
 
-
-
+		public virtual Database WithRule(string name, int? staffingEffect, Adherence? adherence) =>
+			WithRule(name, staffingEffect, adherence, null);
 
 		[UnitOfWork]
-		public virtual Database WithRule(string name, int? staffingEffect, Adherence? adherence)
-		{
-			addRule(name, staffingEffect, adherence);
-			return this;
-		}
+		public virtual Database WithRule(string name, int? staffingEffect, Adherence? adherence, Color? color) =>
+			addRule(name, staffingEffect, adherence, color);
 
 		private IRtaRule rule()
 		{
 			if (_rule == null)
-				addRule(RandomName.Make(), null, null);
+				addRule(RandomName.Make(), null, null, null);
 			return _rules.LoadAll().Single(x => x.Description.Name == _rule);
 		}
 
-		private void addRule(string name, int? staffingEffect, Adherence? adherence)
+		private Database addRule(string name, int? staffingEffect, Adherence? adherence, Color? color)
 		{
 			_rule = name;
-			var rule = new RtaRule { Description = new Description(name) };
+			var rule = new RtaRule {Description = new Description(name)};
 			if (staffingEffect.HasValue)
 				rule.StaffingEffect = staffingEffect.Value;
 			if (adherence.HasValue)
 				rule.Adherence = adherence.Value;
+			if (color.HasValue)
+				rule.DisplayColor = color.Value;
 			_rules.Add(rule);
+			return this;
 		}
-
-
-
-
 
 
 		[UnitOfWork]
 		public virtual Database WithMapping()
 		{
-			var mapping = new RtaMap(stateGroup(), activity()) { RtaRule = rule() };
+			var mapping = new RtaMap(stateGroup(), activity()) {RtaRule = rule()};
 			_mappings.Add(mapping);
 			return this;
 		}
@@ -566,20 +565,72 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			_rule = ruleName;
 			_stateGroup = stateGroupName;
-			var mapping = new RtaMap(stateGroup(), null) { RtaRule = rule() };
+			var mapping = new RtaMap(stateGroup(), null) {RtaRule = rule()};
 			_mappings.Add(mapping);
 			return this;
 		}
 
-		
+		[ReadModelUnitOfWork, UnitOfWork]
+		public virtual Database WithAdherenceIn(string time)
+		{
+			_historicalChange.Change(new HistoricalChangeModel
+			{
+				PersonId = person().Id.Value,
+				Timestamp = time.Utc(),
+				Adherence = HistoricalChangeAdherence.In
+			});
+			return this;
+		}
 
+		[ReadModelUnitOfWork, UnitOfWork]
+		public virtual Database WithAdherenceOut(string time)
+		{
+			_historicalChange.Change(new HistoricalChangeModel
+			{
+				PersonId = person().Id.Value,
+				Timestamp = time.Utc(),
+				Adherence = HistoricalChangeAdherence.Out
+			});
+			return this;
+		}
+
+		[ReadModelUnitOfWork, UnitOfWork]
+		public virtual Database WithAdherenceNeutral(string time)
+		{
+			_historicalChange.Change(new HistoricalChangeModel
+			{
+				PersonId = person().Id.Value,
+				Timestamp = time.Utc(),
+				Adherence = HistoricalChangeAdherence.Neutral
+			});
+			return this;
+		}
+
+		[ReadModelUnitOfWork, UnitOfWork]
+		public virtual Database WithHistoricalChange(string time)
+		{
+			_historicalChange.Change(new HistoricalChangeModel
+			{
+				PersonId = person().Id.Value,
+				BelongsToDate = time.Date(),
+				Timestamp = time.Utc(),
+				StateName = stateGroup().Name,
+				StateGroupId = stateGroup().Id.Value,
+				ActivityName = activity().Name,
+				ActivityColor = activity().DisplayColor.ToArgb(),
+				RuleName = rule().Description.Name,
+				RuleColor = rule().DisplayColor.ToArgb(),
+				Adherence = (HistoricalChangeAdherence) Enum.Parse(typeof(HistoricalChangeAdherence), rule().Adherence.ToString())
+			});
+			return this;
+		}
+
+		
 		public Database PublishRecurringEvents()
 		{
 			_eventPublisher.Current().Publish(new TenantMinuteTickEvent(), new TenantHourTickEvent());
 			return this;
 		}
-
-
 
 
 		[UnitOfWork]
@@ -588,5 +639,6 @@ namespace Teleopti.Ccc.TestCommon
 			_groupings.UpdateGroupingReadModel(_persons.LoadAll().Select(x => x.Id.Value).ToArray());
 			return this;
 		}
+
 	}
 }

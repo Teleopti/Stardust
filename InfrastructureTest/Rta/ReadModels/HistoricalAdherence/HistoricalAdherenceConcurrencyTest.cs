@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.HistoricalAdherence
 	[Toggle(Toggles.RTA_ViewHistoricalAhderence7DaysBack_46826)]
 	public class HistoricalAdherenceConcurrencyTest
 	{
-		public HistoricalAdherenceUpdater Updater;
+		public HistoricalChangeUpdater Updater;
 		public HistoricalAdherenceMaintainer Maintainer;
 		public MutableNow Now;
 

@@ -10,35 +10,19 @@ using Teleopti.Ccc.Domain.Rta.AgentAdherenceDay;
 
 namespace Teleopti.Ccc.Domain.Rta.ReadModelUpdaters
 {
-	public static class HistoricalAdherenceUpdaterExtensions
-	{
-		public static void Handle(this HistoricalAdherenceUpdater instance, PersonOutOfAdherenceEvent @event)
-		{
-			instance.Handle(@event.AsArray());
-		}
-
-		public static void Handle(this HistoricalAdherenceUpdater instance, PersonInAdherenceEvent @event)
-		{
-			instance.Handle(@event.AsArray());
-		}
-	}
-
-	public class HistoricalAdherenceUpdater :
+	public class HistoricalChangeUpdater :
 		IHandleEvents,
 		IRunInSync
 	{
-		private readonly AdherenceChange.AdherenceChange _adherenceChange;
+		private readonly AdherenceChange.HistoricalChange _historicalChange;
 
-		public HistoricalAdherenceUpdater(AdherenceChange.AdherenceChange adherenceChange)
+		public HistoricalChangeUpdater(AdherenceChange.HistoricalChange historicalChange)
 		{
-			_adherenceChange = adherenceChange;
+			_historicalChange = historicalChange;
 		}
 
 		public void Subscribe(SubscriptionRegistrator registrator)
 		{
-			registrator.SubscribeTo<PersonOutOfAdherenceEvent>();
-			registrator.SubscribeTo<PersonInAdherenceEvent>();
-			registrator.SubscribeTo<PersonNeutralAdherenceEvent>();
 			registrator.SubscribeTo<PersonStateChangedEvent>();
 			registrator.SubscribeTo<PersonRuleChangedEvent>();
 		}
@@ -47,18 +31,9 @@ namespace Teleopti.Ccc.Domain.Rta.ReadModelUpdaters
 		public virtual void Handle(IEnumerable<IEvent> events) =>
 			events.ForEach(e => handle((dynamic) e));
 
-		private void handle(PersonOutOfAdherenceEvent @event) =>
-			_adherenceChange.Out(@event.PersonId, @event.Timestamp);
-
-		private void handle(PersonInAdherenceEvent @event) =>
-			_adherenceChange.In(@event.PersonId, @event.Timestamp);
-
-		private void handle(PersonNeutralAdherenceEvent @event) =>
-			_adherenceChange.Neutral(@event.PersonId, @event.Timestamp);
-
 		private void handle(PersonStateChangedEvent @event)
 		{
-			_adherenceChange.Change(new HistoricalChange
+			_historicalChange.Change(new HistoricalChangeModel
 			{
 				PersonId = @event.PersonId,
 				BelongsToDate = @event.BelongsToDate,
@@ -75,7 +50,7 @@ namespace Teleopti.Ccc.Domain.Rta.ReadModelUpdaters
 
 		private void handle(PersonRuleChangedEvent @event)
 		{
-			_adherenceChange.Change(new HistoricalChange
+			_historicalChange.Change(new HistoricalChangeModel
 			{
 				PersonId = @event.PersonId,
 				BelongsToDate = @event.BelongsToDate,
