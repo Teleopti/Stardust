@@ -34,6 +34,7 @@ Background:
 	| Messsage  | Message - Overtime request message from Ashley |
 
 Scenario: Should view overtime requests 
+	Given today is '2018-02-03'
 	When I view wfm requests
 	And I select to go to overtime view
 	And I select date range from '2018-02-01' to '2018-02-06'
@@ -41,8 +42,8 @@ Scenario: Should view overtime requests
 	And I click button for search requests
 	Then I should see a overtime request from 'Ashley Andeen' in the list
 
-@OnlyRunIfDisabled('OvertimeRequestPeriodSkillTypeSetting_47290')
 Scenario: Should approve overtime request
+	Given today is '2018-02-03'
 	When I view wfm requests
 	And I select to go to overtime view
 	And I select date range from '2018-02-01' to '2018-02-06'
@@ -53,6 +54,7 @@ Scenario: Should approve overtime request
 	Then I should see a success message
 
 Scenario: Should deny overtime request
+	Given today is '2018-02-03'
 	When I view wfm requests
 	And I select to go to overtime view
 	And I select date range from '2018-02-01' to '2018-02-06'
