@@ -135,6 +135,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			{
 				checkBoxAdvAutoGrantOvertimeRequest.Visible = false;
 				tableLayoutPanelOvertimeMaximumSetting.Visible = false;
+				tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.Visible = false;
 				tableLayoutPanelOpenForOvertimeRequests.Visible = false;
 				gridControlOvertimeRequestOpenPeriods.Visible = false;
 			}
