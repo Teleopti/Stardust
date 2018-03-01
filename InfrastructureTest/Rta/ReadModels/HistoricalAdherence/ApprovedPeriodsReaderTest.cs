@@ -3,8 +3,8 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.Rta.AgentAdherenceDay;
-using Teleopti.Ccc.Domain.Rta.ApprovePeriodAsInAdherence;
+using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay;
+using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.ApprovePeriodAsInAdherence;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.HistoricalAdherence
 {

@@ -5,8 +5,8 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Rta.ReadModelUpdaters;
-using Teleopti.Ccc.Domain.Rta.Service;
+using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels;
+using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 {

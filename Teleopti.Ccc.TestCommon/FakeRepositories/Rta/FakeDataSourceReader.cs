@@ -1,6 +1,6 @@
 using System.Collections.Concurrent;
 using System.Linq;
-using Teleopti.Ccc.Domain.Rta.Service;
+using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 {

@@ -6,9 +6,9 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels;
+using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Rta.ReadModelUpdaters;
-using Teleopti.Ccc.Domain.Rta.Service;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Service
 	{
 		public Database Database;
 		public AnalyticsDatabase Analytics;
-		public Domain.Rta.Service.Rta Rta;
+		public Domain.RealTimeAdherence.Domain.Service.Rta Rta;
 		public ConcurrencyRunner Run;
 		public ICurrentDataSource DataSource;
 		public FakeEventPublisher Publisher;

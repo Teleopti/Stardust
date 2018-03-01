@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Service.PerformanceMeasurement
 	public class MeasureBatchTest
 	{
 		public Database Database;
-		public Domain.Rta.Service.Rta Rta;
+		public Domain.RealTimeAdherence.Domain.Service.Rta Rta;
 		public FakeConfigReader Config;
 		public FakeEventPublisher Publisher;
 		public AnalyticsDatabase Analytics;
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Service.PerformanceMeasurement
 			Database
 				.WithDefaultScenario("default")
 				.WithStateGroup("default", true)
-				.WithStateCode(Domain.Rta.Service.Rta.LogOutBySnapshot);
+				.WithStateCode(Domain.RealTimeAdherence.Domain.Service.Rta.LogOutBySnapshot);
 			stateCodes.ForEach(x => Database.WithStateGroup(x).WithStateCode(x));
 			Enumerable.Range(0, 10).ForEach(x => Database.WithActivity($"activity{x}"));
 

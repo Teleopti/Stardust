@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Rta.ReadModelUpdaters;
-using Teleopti.Ccc.Domain.Rta.Service;
-using Teleopti.Ccc.Domain.Rta.ViewModels;
+using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels;
+using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels;
+using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 {

@@ -4,9 +4,8 @@ using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Activation;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.Rta;
-using Teleopti.Ccc.Domain.Rta.Service;
-using Teleopti.Ccc.Domain.Rta.Tracer;
+using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
+using Teleopti.Ccc.Domain.RealTimeAdherence.Tracer;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Rta.WebService;
 
@@ -16,10 +15,10 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 	[AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
 	public class TeleoptiRtaService : ITeleoptiRtaService
 	{
-		private readonly Domain.Rta.Service.Rta _rta;
+		private readonly Domain.RealTimeAdherence.Domain.Service.Rta _rta;
 		private readonly IRtaTracer _tracer;
 
-		public TeleoptiRtaService(Domain.Rta.Service.Rta rta, IRtaTracer tracer)
+		public TeleoptiRtaService(Domain.RealTimeAdherence.Domain.Service.Rta rta, IRtaTracer tracer)
 		{
 			_rta = rta;
 			_tracer = tracer;

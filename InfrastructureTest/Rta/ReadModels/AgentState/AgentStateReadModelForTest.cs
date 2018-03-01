@@ -1,6 +1,6 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Rta.Service;
+using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 {
