@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		}
 
 		[Test]
-		public void ShouldShowAsmIfPermissionToShowAsm()
+		public void ShouldMapAsmEnabledToTrueWhenHavingBothLicenseAndPermission()
 		{
 			setPermissions();
 			var licenseActivator = LicenseProvider.GetLicenseActivator(new AsmFakeLicenseService(true));
@@ -124,11 +124,23 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 
 			var res = Target.CreatePortalViewModel();
 
-			Assert.That(res.HasAsmPermission, Is.True);
+			Assert.That(res.AsmEnabled, Is.True);
 		}
 
 		[Test]
-		public void ShouldNotShowAsmIfNoPermission()
+		public void ShouldMapAsmEnabledToFalseWhenNoAsmLicense()
+		{
+			setPermissions();
+			var licenseActivator = LicenseProvider.GetLicenseActivator(new AsmFakeLicenseService(false));
+			DefinedLicenseDataFactory.SetLicenseActivator(CurrentDataSource.CurrentName(), licenseActivator);
+
+			var res = Target.CreatePortalViewModel();
+
+			Assert.That(res.AsmEnabled, Is.False);
+		}
+
+		[Test]
+		public void ShouldMapAsmEnabledToFalseWhenNoAsmPermission()
 		{
 			setPermissions(false);
 
@@ -137,7 +149,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 
 			var res = Target.CreatePortalViewModel();
 
-			Assert.That(res.HasAsmPermission, Is.False);
+			Assert.That(res.AsmEnabled, Is.False);
 		}
 
 		[Test]
