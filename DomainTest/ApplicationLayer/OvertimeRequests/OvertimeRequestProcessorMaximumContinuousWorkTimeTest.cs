@@ -581,6 +581,43 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 		[Test]
 		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestMaxContinuousWorkTime_47964)]
+		public void ShouldDenyWhenRestTimeIsLessThanMinimumRestTimeWithMultipleActivitiesBefore()
+		{
+			setupPerson(8, 21);
+			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 8d);
+
+			var person = LoggedOnUser.CurrentUser();
+			var period1 = new DateTimePeriod(2017, 7, 17, 8, 2017, 7, 17, 16);
+			var pa = createMainPersonAssignment(person, period1);
+
+			var period2 = new DateTimePeriod(new DateTime(2017, 7, 17, 16, 29, 0, 0, DateTimeKind.Utc),
+				new DateTime(2017, 7, 17, 17, 0, 0, DateTimeKind.Utc));
+			pa.AddActivity(new Activity(), period2);
+
+			ScheduleStorage.Add(pa);
+
+			var workflowControlSet =
+				new WorkflowControlSet
+				{
+					OvertimeRequestMaximumContinuousWorkTimeEnabled = true,
+					OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(10),
+					OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny,
+					OvertimeRequestMinimumRestTimeThreshold = TimeSpan.FromMinutes(30)
+				};
+			person.WorkflowControlSet = workflowControlSet;
+
+			var personRequest = createOvertimeRequestInMinutes(17, 90);
+			getTarget().Process(personRequest, true);
+
+			var expectedDenyReason = buildDenyReason("7/17/2017 8:00:00 AM - 7/17/2017 6:30:00 PM", TimeSpan.FromHours(10).Add(TimeSpan.FromMinutes(1)),
+				TimeSpan.FromHours(10));
+
+			personRequest.IsDenied.Should().Be.True();
+			personRequest.DenyReason.Should().Be.EqualTo(expectedDenyReason);
+		}
+
+		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestMaxContinuousWorkTime_47964)]
 		public void ShouldDenyWhenRestTimeIsLessThanMinimumRestTimeWithOverNightShiftBefore()
 		{
 			setupPerson(8, 21);
