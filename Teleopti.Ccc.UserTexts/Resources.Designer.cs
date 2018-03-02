@@ -12657,6 +12657,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Finished.
+        /// </summary>
+        public static string Finished {
+            get {
+                return ResourceManager.GetString("Finished", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Absence removed successfully..
         /// </summary>
         public static string FinishedRemoveAbsence {
@@ -13967,6 +13976,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string HandlingTime {
             get {
                 return ResourceManager.GetString("HandlingTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Has error.
+        /// </summary>
+        public static string HasError {
+            get {
+                return ResourceManager.GetString("HasError", resourceCulture);
             }
         }
         

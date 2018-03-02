@@ -55,15 +55,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Gamification
 				var jobResultDetail = jobResult.Details.FirstOrDefault();
 				var hasException = !(jobResultDetail?.ExceptionMessage.IsNullOrEmpty() ?? true)
 								   || !(jobResultDetail?.InnerExceptionMessage.IsNullOrEmpty() ?? true);
-				var status = "InProgess";
-				if (hasError) status = "HasError";
-				else if(finished) status = "Finished";
+				var status = Resources.InProgress;
+				if (hasError) status = Resources.HasError;
+				else if(finished) status = Resources.Finished;
 				return new RecalculateBadgeJobResultDetail
 				{
 					Id = jobResult.Id.GetValueOrDefault(),
 					Period = jobResult.Period,
 					Owner = jobResult.Owner.Name.ToString(),
-					CreateDateTime = jobResult.Artifacts.First().CreateTime,
+					CreateDateTime = jobResult.Timestamp,
 					Status = status,
 					HasError = hasError,
 					ErrorMessage = hasError ? (hasException ? Resources.InternalErrorMsg : jobResultDetail?.Message) : string.Empty

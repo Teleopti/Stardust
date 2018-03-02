@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web.Http;
 using System.Web.Http.Results;
 using Teleopti.Ccc.Domain.Aop;
@@ -43,6 +44,12 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
 				throw new ArgumentNullException();
 			}
 			_recalculateBadgeJobService.CreateJob(peroid);
+		}
+
+		[Route("api/gamification/RecalcualteBadges"), HttpGet, UnitOfWork]
+		public virtual IList<RecalculateBadgeJobResultDetail> GetJobList()
+		{
+			return _recalculateBadgeJobService.GetJobsForCurrentBusinessUnit();
 		}
 	}
 }

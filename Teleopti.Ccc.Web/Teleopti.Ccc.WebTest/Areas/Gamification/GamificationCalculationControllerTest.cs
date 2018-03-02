@@ -1,9 +1,12 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Gamification.Controller;
 using Teleopti.Interfaces.Domain;
 
@@ -40,6 +43,64 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification
 			jobResult.Count.Should().Be.EqualTo(1);
 			jobResult[0].JobCategory.Should().Be.EqualTo(JobCategory.WebRecalculateBadge);
 			jobResult[0].Period.Should().Be.EqualTo(peroid);
+		}
+
+		[Test]
+		public void ShouldGetJobListWithFinishedResult()
+		{
+			var period = DateOnly.Today.ToDateOnlyPeriod();
+			var person = PersonFactory.CreatePersonWithId(Guid.NewGuid());
+			var jobResult = new JobResult(JobCategory.WebRecalculateBadge, period, person, DateTime.UtcNow);
+			jobResult.SetId(Guid.NewGuid());
+			jobResult.FinishedOk = true;
+			JobResultRepository.Add(jobResult);
+
+			var result = Target.GetJobList();
+
+			result.Count.Should().Be.EqualTo(1);
+			result[0].Id.Should().Be.EqualTo(jobResult.Id);
+			result[0].CreateDateTime.Should().Be.EqualTo(jobResult.Timestamp);
+			result[0].Owner.Should().Be.EqualTo(jobResult.Owner.Name.ToString());
+			result[0].Period.Should().Be.EqualTo(jobResult.Period);
+			result[0].Status.Should().Be.EqualTo(Resources.Finished);
+			result[0].HasError.Should().Be.EqualTo(false);
+			result[0].ErrorMessage.Should().Be.EqualTo("");
+		}
+
+		[Test]
+		public void ShouldGetJobListWithInternalErrorResult()
+		{
+			var period = DateOnly.Today.ToDateOnlyPeriod();
+			var person = PersonFactory.CreatePersonWithId(Guid.NewGuid());
+			var jobResult = new JobResult(JobCategory.WebRecalculateBadge, period, person, DateTime.UtcNow);
+			jobResult.SetId(Guid.NewGuid());
+			jobResult.AddDetail(new JobResultDetail(DetailLevel.Error, "errorMessage", DateTime.Now, new Exception()));
+			JobResultRepository.Add(jobResult);
+
+			var result = Target.GetJobList();
+
+			result.Count.Should().Be.EqualTo(1);
+			result[0].Status.Should().Be.EqualTo(Resources.HasError);
+			result[0].HasError.Should().Be.EqualTo(true);
+			result[0].ErrorMessage.Should().Be.EqualTo(Resources.InternalErrorMsg);
+		}
+
+		[Test]
+		public void ShouldGetJobListWithErrorDetailResult()
+		{
+			var period = DateOnly.Today.ToDateOnlyPeriod();
+			var person = PersonFactory.CreatePersonWithId(Guid.NewGuid());
+			var jobResult = new JobResult(JobCategory.WebRecalculateBadge, period, person, DateTime.UtcNow);
+			jobResult.SetId(Guid.NewGuid());
+			jobResult.AddDetail(new JobResultDetail(DetailLevel.Error, "detailError", DateTime.Now, null));
+			JobResultRepository.Add(jobResult);
+
+			var result = Target.GetJobList();
+
+			result.Count.Should().Be.EqualTo(1);
+			result[0].Status.Should().Be.EqualTo(Resources.HasError);
+			result[0].HasError.Should().Be.EqualTo(true);
+			result[0].ErrorMessage.Should().Be.EqualTo("detailError");
 		}
 	}
 }
