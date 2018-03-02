@@ -66,6 +66,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			{
 				entity.Source = CurrentSchedulingSource.Current();
 			}
+			if (!entity.Id.HasValue)
+			{
+				entity = entity.WithId(Guid.NewGuid());
+			}
 			_storage.Add(entity);
 		}
 

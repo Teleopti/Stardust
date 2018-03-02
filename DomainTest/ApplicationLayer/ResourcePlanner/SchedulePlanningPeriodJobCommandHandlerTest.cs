@@ -40,4 +40,5 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 			webScheduleStardustEvent.Policy.Should().Be.EqualTo(WebScheduleStardustBaseEvent.HalfNodesAffinity);
 		}
 	}
+
 }
