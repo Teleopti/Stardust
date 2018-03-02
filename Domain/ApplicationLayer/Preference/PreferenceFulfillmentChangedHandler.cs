@@ -9,7 +9,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 {
 	public class PreferenceFulfillmentChangedHandler :
-		IHandleEvent<ProjectionChangedEvent>,
+		IHandleEvent<ScheduleChangedEvent>,
 		IRunOnHangfire
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(PreferenceFulfillmentChangedHandler));
@@ -34,18 +34,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 
 		[ImpersonateSystem]
 		[UnitOfWork]
-		public virtual void Handle(ProjectionChangedEvent @event)
+		public virtual void Handle(ScheduleChangedEvent @event)
 		{
 			var person = _personRepository.Get(@event.PersonId);
 			if (person == null)
 				return;
 
-			foreach (var projectionChangedEventScheduleDay in @event.ScheduleDays)
+			var period =
+				new DateTimePeriod(@event.StartDateTime, @event.EndDateTime.AddSeconds(1)).ToDateOnlyPeriod(person.PermissionInformation
+					.DefaultTimeZone());
+			var preferenceDays =
+				_preferenceDayRepository.Find(period, person).ToLookup(p => p.RestrictionDate);
+			foreach (var projectionChangedEventScheduleDay in period.DayCollection())
 			{
-				var preferenceDay =
-					_preferenceDayRepository.Find(new DateOnly(projectionChangedEventScheduleDay.Date), person).FirstOrDefault();
-				if (preferenceDay == null)
-					continue;
+				var preferenceDay = preferenceDays[projectionChangedEventScheduleDay].FirstOrDefault();
+				if (preferenceDay == null) continue;
+
 				_eventPublisher.Publish(new PreferenceChangedEvent
 				{
 					PreferenceDayId = preferenceDay.Id.GetValueOrDefault(),

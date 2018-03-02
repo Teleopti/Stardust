@@ -4,14 +4,12 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Preference;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
-using System.Collections.ObjectModel;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 
@@ -37,23 +35,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 		{
 			var businessUnitId = Guid.NewGuid();
 			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(businessUnitId));
-			var person = PersonFactory.CreatePerson("firstName", "lastName").WithId();
+			var timeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
+			var person = PersonFactory.CreatePerson(timeZone).WithId();
 			PersonRepository.Add(person);
 			PreferenceDayRepository.Add(new PreferenceDay(person, DateOnly.Today, new PreferenceRestriction()));
 
-			var list = new Collection<ProjectionChangedEventScheduleDay>
-			{
-				new ProjectionChangedEventScheduleDay
-				{
-					Date = DateTime.Today
-				}
-			};
-
 			EventPublisher.PublishedEvents.Count().Should().Be.EqualTo(0);
-			Target.Handle(new ProjectionChangedEvent
+			Target.Handle(new ScheduleChangedEvent
 			{
 				PersonId = person.Id.GetValueOrDefault(),
-				ScheduleDays = list,
+				StartDateTime = timeZone.SafeConvertTimeToUtc(DateTime.Today),
+				EndDateTime = timeZone.SafeConvertTimeToUtc(DateTime.Today),
 				LogOnBusinessUnitId = businessUnitId
 			});
 
@@ -65,28 +57,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 		{
 			var businessUnitId = Guid.NewGuid();
 			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(businessUnitId));
-			var person = PersonFactory.CreatePerson("firstName", "lastName").WithId();
+			var zoneInfo = TimeZoneInfoFactory.StockholmTimeZoneInfo();
+			var person = PersonFactory.CreatePerson(zoneInfo).WithId();
 			PersonRepository.Add(person);
 			PreferenceDayRepository.Add(new PreferenceDay(person, DateOnly.Today, new PreferenceRestriction()));
 			PreferenceDayRepository.Add(new PreferenceDay(person, DateOnly.Today.AddDays(1), new PreferenceRestriction()));
 
-			var list = new Collection<ProjectionChangedEventScheduleDay>
-			{
-				new ProjectionChangedEventScheduleDay
-				{
-					Date = DateTime.Today
-				},
-				new ProjectionChangedEventScheduleDay
-				{
-					Date = DateTime.Today.AddDays(1)
-				}
-			};
-
 			EventPublisher.PublishedEvents.Count().Should().Be.EqualTo(0);
-			Target.Handle(new ProjectionChangedEvent
+			Target.Handle(new ScheduleChangedEvent
 			{
 				PersonId = person.Id.GetValueOrDefault(),
-				ScheduleDays = list,
+				StartDateTime = zoneInfo.SafeConvertTimeToUtc(DateTime.Today),
+				EndDateTime = zoneInfo.SafeConvertTimeToUtc(DateTime.Today.AddDays(1)),
 				LogOnBusinessUnitId = businessUnitId
 			});
 
@@ -98,24 +80,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 		{
 			var businessUnitId = Guid.NewGuid();
 			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(businessUnitId));
-			var person = PersonFactory.CreatePerson("firstName", "lastName").WithId();
+			var timeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
+			var person = PersonFactory.CreatePerson(timeZone).WithId();
 			PersonRepository.Add(person);
 			PreferenceDayRepository.Add(new PreferenceDay(person, DateOnly.Today, new PreferenceRestriction()));
 			PreferenceDayRepository.Add(new PreferenceDay(person, DateOnly.Today.AddDays(1), new PreferenceRestriction()));
 
-			var list = new Collection<ProjectionChangedEventScheduleDay>
-			{
-				new ProjectionChangedEventScheduleDay
-				{
-					Date = DateTime.Today
-				}
-			};
-
 			EventPublisher.PublishedEvents.Count().Should().Be.EqualTo(0);
-			Target.Handle(new ProjectionChangedEvent
+			Target.Handle(new ScheduleChangedEvent
 			{
 				PersonId = person.Id.GetValueOrDefault(),
-				ScheduleDays = list,
+				StartDateTime = timeZone.SafeConvertTimeToUtc(DateTime.Today),
+				EndDateTime = timeZone.SafeConvertTimeToUtc(DateTime.Today),
 				LogOnBusinessUnitId = businessUnitId
 			});
 
@@ -127,22 +103,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 		{
 			var businessUnitId = Guid.NewGuid();
 			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(businessUnitId));
-			var person = PersonFactory.CreatePerson("firstName", "lastName").WithId();
+			var timeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
+			var person = PersonFactory.CreatePerson(timeZone).WithId();
 			PersonRepository.Add(person);
 
-			var list = new Collection<ProjectionChangedEventScheduleDay>
-			{
-				new ProjectionChangedEventScheduleDay
-				{
-					Date = DateTime.Today
-				}
-			};
-
 			EventPublisher.PublishedEvents.Count().Should().Be.EqualTo(0);
-			Target.Handle(new ProjectionChangedEvent
+			Target.Handle(new ScheduleChangedEvent
 			{
 				PersonId = person.Id.GetValueOrDefault(),
-				ScheduleDays = list,
+				StartDateTime = timeZone.SafeConvertTimeToUtc(DateTime.Today),
+				EndDateTime = timeZone.SafeConvertTimeToUtc(DateTime.Today),
 				LogOnBusinessUnitId = businessUnitId
 			});
 			EventPublisher.PublishedEvents.Count().Should().Be.EqualTo(0);
