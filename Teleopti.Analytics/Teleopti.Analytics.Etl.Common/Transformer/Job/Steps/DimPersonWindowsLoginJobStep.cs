@@ -11,7 +11,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 	public class DimPersonWindowsLoginJobStep : JobStepBase
 	{
 		private const int windowsDomainColumnLength = 50;
-		private const int windowsUserNameColumnLength = 50;
+		private const int windowsUserNameColumnLength = 100;
 
 		private const string updateStatement =
 			"UPDATE mart.dim_person SET windows_domain=@windows_domain, windows_username=@windows_username "
