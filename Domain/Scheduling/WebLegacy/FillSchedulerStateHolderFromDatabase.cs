@@ -14,7 +14,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 {
-	[RemoveMeWithToggle("make abstract or merge with retry type", Toggles.ResourcePlanner_Deadlock_48170)]
 	public class FillSchedulerStateHolderFromDatabase : FillSchedulerStateHolder
 	{
 		private readonly IScenarioRepository _scenarioRepository;

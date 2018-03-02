@@ -457,14 +457,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<PeopleInOrganization>().As<IAllStaff>().SingleInstance();
 				builder.RegisterType<CurrentOptimizationCallback>().As<ICurrentOptimizationCallback>().AsSelf().SingleInstance();
 				builder.RegisterType<CurrentSchedulingCallback>().As<ICurrentSchedulingCallback>().AsSelf().SingleInstance();
-				if (_configuration.Toggle(Toggles.ResourcePlanner_Deadlock_48170))
-				{
-					builder.RegisterType<FillSchedulerStateHolderFromDatabaseWithScheduleReadRetries>().As<FillSchedulerStateHolder>().ApplyAspects().SingleInstance();
-				}
-				else
-				{
-					builder.RegisterType<FillSchedulerStateHolderFromDatabase>().As<FillSchedulerStateHolder>().ApplyAspects().SingleInstance();					
-				}
+				builder.RegisterType<FillSchedulerStateHolderFromDatabase>().As<FillSchedulerStateHolder>().ApplyAspects().SingleInstance();
 			}
 
 
