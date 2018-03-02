@@ -1,5 +1,5 @@
+using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Infrastructure.Foundation;
 
 namespace Teleopti.Ccc.Infrastructure.Licensing
 {

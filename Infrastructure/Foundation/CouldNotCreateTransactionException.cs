@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using System.Security;
+using Teleopti.Ccc.Domain.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Foundation
 {

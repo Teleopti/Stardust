@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.ExceptionHandling;
 

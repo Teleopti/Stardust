@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using Autofac;
 using Autofac.Core;
+using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Interfaces;

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using Microsoft.Practices.Composite.Events;
+using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Commands;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Events;
@@ -41,7 +42,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Overview
         {
             _exportMeetingView.ProgressBarVisible = false;
             _exportMeetingView.ExportInfoText = string.Empty;
-            //sätt startdatum och ladda scenariocombo före visning
+            //sï¿½tt startdatum och ladda scenariocombo fï¿½re visning
             
             _exportMeetingView.SelectedDates = new List<DateOnlyPeriod> { _overviewView.SelectedWeek };
             _exportMeetingView.SetScenarioList(_exportableScenarioProvider.AllowedScenarios());

@@ -53,7 +53,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Main;
 using Teleopti.Ccc.Win.Main;
 using Action = System.Action;
-using DataSourceException = Teleopti.Ccc.Infrastructure.Foundation.DataSourceException;
+using DataSourceException = Teleopti.Ccc.Domain.Infrastructure.DataSourceException;
 using Timer = System.Windows.Forms.Timer;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell

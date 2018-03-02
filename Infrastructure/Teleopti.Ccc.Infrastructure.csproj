@@ -565,7 +565,6 @@
     <Compile Include="Foundation\ConstraintViolationException.cs" />
     <Compile Include="NHibernateConfiguration\DateOnlyMappingType.cs" />
     <Compile Include="Foundation\LazyLoadingManager.cs" />
-    <Compile Include="Foundation\DataSourceException.cs" />
     <Compile Include="Foundation\InitializeApplication.cs">
       <SubType>Code</SubType>
     </Compile>

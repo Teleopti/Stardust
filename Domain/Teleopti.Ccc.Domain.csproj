@@ -366,6 +366,8 @@
     <Compile Include="Forecasting\Import\ForecastsRowExtractor.cs" />
     <Compile Include="GroupPageCreator\OptionalColumnGroupPage.cs" />
     <Compile Include="Helper\CellExtensions.cs" />
+    <Compile Include="Infrastructure\DataSourceException.cs" />
+    <Compile Include="Infrastructure\DeadLockVictimException.cs" />
     <Compile Include="Infrastructure\Events\PublishInitializeReadModelEvent.cs" />
     <Compile Include="Infrastructure\Events\RequeueHangfireEvent.cs" />
     <Compile Include="Infrastructure\PublishInitializeReadModelEventHandler.cs" />

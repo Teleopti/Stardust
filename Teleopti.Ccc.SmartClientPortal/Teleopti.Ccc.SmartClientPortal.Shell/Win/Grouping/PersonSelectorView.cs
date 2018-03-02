@@ -20,7 +20,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping.Commands;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping.Events;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
-using DataSourceException = Teleopti.Ccc.Infrastructure.Foundation.DataSourceException;
+using DataSourceException = Teleopti.Ccc.Domain.Infrastructure.DataSourceException;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Grouping
 {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data.SqlClient;
 using NHibernate.Exceptions;
+using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using ConstraintViolationException = Teleopti.Ccc.Infrastructure.Foundation.ConstraintViolationException;
 
@@ -24,6 +25,8 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 					case 10053:
 					case 10054:
 						return new DatabaseConnectionLostException(adoExceptionContextInfo.Message, sqle, adoExceptionContextInfo.Sql);
+					case 1205:
+						return new DeadLockVictimException(adoExceptionContextInfo.Message, sqle);
 					default:
 						return new DataSourceException(adoExceptionContextInfo.Message, sqle);
 				}

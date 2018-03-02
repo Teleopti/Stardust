@@ -4,7 +4,7 @@ using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
-using DataSourceException = Teleopti.Ccc.Infrastructure.Foundation.DataSourceException;
+using DataSourceException = Teleopti.Ccc.Domain.Infrastructure.DataSourceException;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping
 {

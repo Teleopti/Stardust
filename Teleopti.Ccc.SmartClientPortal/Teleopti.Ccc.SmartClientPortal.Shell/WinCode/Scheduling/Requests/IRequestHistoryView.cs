@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Foundation;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Requests

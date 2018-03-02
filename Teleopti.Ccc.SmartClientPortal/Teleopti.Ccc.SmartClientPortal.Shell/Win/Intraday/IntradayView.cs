@@ -32,7 +32,7 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Intraday;
 using Teleopti.Interfaces.Domain;
 using Cursors = System.Windows.Forms.Cursors;
-using DataSourceException = Teleopti.Ccc.Infrastructure.Foundation.DataSourceException;
+using DataSourceException = Teleopti.Ccc.Domain.Infrastructure.DataSourceException;
 using ToolStripItemClickedEventArgs = Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.ToolStripGallery.ToolStripItemClickedEventArgs;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday

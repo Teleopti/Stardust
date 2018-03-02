@@ -3,6 +3,7 @@ using System.Reflection;
 using NHibernate;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.SystemSetting;

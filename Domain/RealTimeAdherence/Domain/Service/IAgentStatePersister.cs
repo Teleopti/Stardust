@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using log4net;
+using Teleopti.Ccc.Domain.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 {
@@ -28,13 +29,6 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 						.Warn($"Transaction deadlocked, running attempt {attempt} of {_totalRetries}.", e);
 				}
 			}
-		}
-	}
-
-	public class DeadLockVictimException : Exception
-	{
-		public DeadLockVictimException(string message, Exception innerException):base(message, innerException)
-		{
 		}
 	}
 

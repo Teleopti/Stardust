@@ -4,7 +4,7 @@ using System.Security;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Principal;
 
-namespace Teleopti.Ccc.Infrastructure.Foundation
+namespace Teleopti.Ccc.Domain.Infrastructure
 {
     /// <summary>
     /// Used when exception occurs to and from datasource

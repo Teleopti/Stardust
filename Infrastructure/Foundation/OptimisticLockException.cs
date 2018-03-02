@@ -2,6 +2,7 @@
 using System.Runtime.Serialization;
 using System.Security;
 using NHibernate;
+using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Foundation

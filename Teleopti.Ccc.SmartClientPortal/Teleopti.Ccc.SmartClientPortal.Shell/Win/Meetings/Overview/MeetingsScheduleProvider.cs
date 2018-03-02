@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using Syncfusion.Schedule;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;

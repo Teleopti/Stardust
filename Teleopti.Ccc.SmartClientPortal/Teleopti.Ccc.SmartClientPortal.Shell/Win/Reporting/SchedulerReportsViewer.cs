@@ -9,6 +9,7 @@ using Autofac;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;

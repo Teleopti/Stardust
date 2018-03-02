@@ -19,7 +19,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Interfaces;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Views;
-using DataSourceException = Teleopti.Ccc.Infrastructure.Foundation.DataSourceException;
+using DataSourceException = Teleopti.Ccc.Domain.Infrastructure.DataSourceException;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts
 {
