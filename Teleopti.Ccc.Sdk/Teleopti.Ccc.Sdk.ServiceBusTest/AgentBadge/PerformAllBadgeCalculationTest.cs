@@ -41,7 +41,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		private IPerson _agent;
 		private ITeam _team;
 		private BadgeSetting _badgeSetting;
-		private readonly DateOnly _calculatedDate = DateOnly.Today.AddDays(-2);
 		private readonly DateTime _systemCalculateDate = DateTime.UtcNow.AddDays(-2);
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
@@ -135,7 +134,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			Target.Calculate(Guid.NewGuid(), _systemCalculateDate);
 
 			var formmater = new NormalizeText();
-			var date = _calculatedDate.Date.ToString(_agent.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern,
+			var date = _systemCalculateDate.Date.ToString(_agent.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern,
 				_agent.PermissionInformation.Culture());
 			var resultMessage = PushMessagePersister.GetMessage();
 			PushMessagePersister.GetReceivers().First().Id.Should().Be.EqualTo(_agent.Id.GetValueOrDefault());
@@ -155,7 +154,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			Target.Calculate(Guid.NewGuid(), _systemCalculateDate);
 
 			var formmater = new NormalizeText();
-			var date = _calculatedDate.Date.ToString(_agent.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern,
+			var date = _systemCalculateDate.Date.ToString(_agent.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern,
 				_agent.PermissionInformation.Culture());
 			var resultMessage = PushMessagePersister.GetMessage();
 			PushMessagePersister.GetReceivers().First().Id.Should().Be.EqualTo(_agent.Id.GetValueOrDefault());
@@ -175,7 +174,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			Target.Calculate(Guid.NewGuid(), _systemCalculateDate);
 
 			var formmater = new NormalizeText();
-			var date = _calculatedDate.Date.ToString(_agent.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern,
+			var date = _systemCalculateDate.Date.ToString(_agent.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern,
 				_agent.PermissionInformation.Culture());
 			var resultMessage = PushMessagePersister.GetMessage();
 			PushMessagePersister.GetReceivers().First().Id.Should().Be.EqualTo(_agent.Id.GetValueOrDefault());
@@ -249,7 +248,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			Target.Calculate(Guid.NewGuid(), _systemCalculateDate);
 
 			var formmater = new NoFormatting();
-			var date = _calculatedDate.Date.ToString(_agent.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern,
+			var date = _systemCalculateDate.Date.ToString(_agent.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern,
 				_agent.PermissionInformation.Culture());
 			var resultMessage = PushMessagePersister.GetMessage();
 			PushMessagePersister.GetReceivers().First().Id.Should().Be.EqualTo(_agent.Id.GetValueOrDefault());
@@ -270,7 +269,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			Target.Calculate(Guid.NewGuid(), _systemCalculateDate);
 
 			var formmater = new NoFormatting();
-			var date = _calculatedDate.Date.ToString(_agent.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern,
+			var date = _systemCalculateDate.Date.ToString(_agent.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern,
 				_agent.PermissionInformation.Culture());
 			var resultMessage = PushMessagePersister.GetMessage();
 			PushMessagePersister.GetReceivers().First().Id.Should().Be.EqualTo(_agent.Id.GetValueOrDefault());
@@ -291,7 +290,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			Target.Calculate(Guid.NewGuid(), _systemCalculateDate);
 
 			var formmater = new NoFormatting();
-			var date = _calculatedDate.Date.ToString(_agent.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern,
+			var date = _systemCalculateDate.Date.ToString(_agent.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern,
 				_agent.PermissionInformation.Culture());
 			var resultMessage = PushMessagePersister.GetMessage();
 			PushMessagePersister.GetReceivers().First().Id.Should().Be.EqualTo(_agent.Id.GetValueOrDefault());
@@ -562,7 +561,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		{
 			ExternalPerformanceDataRepository.Add(new ExternalPerformanceData()
 			{
-				DateFrom = _calculatedDate,
+				DateFrom = new DateOnly(_systemCalculateDate),
 				ExternalPerformance = new ExternalPerformance() { ExternalId = 1 },
 				PersonId = _agent.Id.GetValueOrDefault(),
 				Score = score
