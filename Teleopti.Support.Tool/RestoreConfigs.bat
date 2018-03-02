@@ -1,1 +1,1 @@
-Teleopti.Support.Tool -RC -MODEPLOY
+Teleopti.Support.Tool -RC -MODEPLOYWEB
