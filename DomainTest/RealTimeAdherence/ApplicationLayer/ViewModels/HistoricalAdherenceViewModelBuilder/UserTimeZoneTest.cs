@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 		public FakeDatabase Database;
 		public MutableNow Now;
 		public FakeUserTimeZone TimeZone;
-		public FakeHistoricalChangeReadModelPersister Changes;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -107,13 +106,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 				.WithAgent(person, "nicklas")
 				.WithAssignment(person, "2017-04-18")
 				.WithActivity(null, ColorTranslator.FromHtml("#80FF80"))
-				.WithAssignedActivity("2017-04-18 08:00", "2017-04-18 09:00"); ;
-			Changes.Persist( new HistoricalChangeModel
-			{
-				PersonId = person,
-				BelongsToDate = "2017-04-18".Date(),
-				Timestamp = "2017-04-18 08:20".Utc()
-			});
+				.WithAssignedActivity("2017-04-18 08:00", "2017-04-18 09:00")
+				.WithHistoricalChange("2017-04-18 08:20");
 
 			var data = Target.Build(person);
 

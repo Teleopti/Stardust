@@ -14,6 +14,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.ApprovePeriodAsInAdherence;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Configuration;
+using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -1137,6 +1138,26 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			});
 			return this;
 		}
+
+		[ReadModelUnitOfWork, UnitOfWork]
+		public virtual FakeDatabase WithHistoricalChange(string time)
+		{
+			_historicalChange.Change(new HistoricalChangeModel
+			{
+				PersonId = _person.Id.Value,
+				BelongsToDate = time.Date(),
+				Timestamp = time.Utc(),
+				StateName = _stateGroup?.Name,
+				StateGroupId = _stateGroup?.Id.Value,
+				ActivityName = _activity?.Name,
+				ActivityColor = _activity?.DisplayColor.ToArgb(),
+				RuleName = _rule?.Description.Name,
+				RuleColor = _rule?.DisplayColor.ToArgb(),
+				Adherence = _rule == null ? null : (HistoricalChangeAdherence?) Enum.Parse(typeof(HistoricalChangeAdherence), _rule?.Adherence.ToString())
+			});
+			return this;
+		}
+
 
 		[UnitOfWork]
 		public virtual FakeDatabase ClearAssignments(Guid? personId)

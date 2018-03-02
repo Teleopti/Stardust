@@ -22,7 +22,6 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 	public class ChangesTest : ISetup
 	{
 		public Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels.HistoricalAdherenceViewModelBuilder Target;
-		public FakeHistoricalChangeReadModelPersister ReadModel;
 		public FakeDatabase Database;
 		public MutableNow Now;
 
@@ -35,26 +34,19 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 		public void ShouldGetByPersonId()
 		{
 			Now.Is("2017-03-07 14:00");
-			var state = Guid.NewGuid();
-			var person = Guid.NewGuid();
+			var personId = Guid.NewGuid();
 			var name = RandomName.Make();
-			Database.WithAgent(person, name);
+			Database
+				.WithAgent(personId, name)
+				.WithStateGroup(null, "InCall")
+				.WithStateCode("InCall")
+				.WithActivity(null, "phone", Color.Crimson)
+				.WithRule(null, "in", 0, Adherence.In, Color.DarkKhaki)
+				.WithHistoricalChange("2017-03-07 14:00")
+				;
 
-			ReadModel.Persist(new HistoricalChangeModel
-			{
-				PersonId = person,
-				BelongsToDate = "2017-03-07".Date(),
-				Timestamp = "2017-03-07 14:00".Utc(),
-				StateName = "InCall",
-				StateGroupId = state,
-				ActivityName = "phone",
-				ActivityColor = Color.Crimson.ToArgb(),
-				RuleName = "in",
-				RuleColor = Color.DarkKhaki.ToArgb(),
-				Adherence = HistoricalChangeAdherence.In
-			});
-
-			var result = Target.Build(person).Changes.Single();
+			var result = Target.Build(personId).Changes.Single();
+			
 			result.Time.Should().Be("2017-03-07T14:00:00");
 			result.Activity.Should().Be("phone");
 			result.ActivityColor.Should().Be(ColorTranslator.ToHtml(Color.FromArgb(Color.Crimson.ToArgb())));
@@ -69,17 +61,14 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 		public void ShouldHandleNulls()
 		{
 			Now.Is("2017-03-07 14:00");
-			var person = Guid.NewGuid();
+			var personId = Guid.NewGuid();
 			var name = RandomName.Make();
-			Database.WithAgent(person, name);
-
-			ReadModel.Persist(new HistoricalChangeModel
-			{
-				PersonId = person,
-				Timestamp = "2017-03-07 14:00".Utc()
-			});
-
-			var result = Target.Build(person).Changes.Single();
+			Database
+				.WithAgent(personId, name)
+				.WithHistoricalChange("2017-03-07 14:00");
+			
+			var result = Target.Build(personId).Changes.Single();
+			
 			result.Activity.Should().Be(null);
 			result.ActivityColor.Should().Be(null);
 			result.State.Should().Be(null);
@@ -94,48 +83,29 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 		public void ShouldGetForCorrectDate()
 		{
 			Now.Is("2017-03-07 15:00");
-			var person = Guid.NewGuid();
-
+			var personId = Guid.NewGuid();
 			Database
-				.WithAgent(person, "name");
+				.WithAgent(personId, "name")
+				.WithHistoricalChange("2017-03-06 14:00")
+				.WithHistoricalChange("2017-03-07 14:00");
 
-			ReadModel
-				.Persist(new HistoricalChangeModel
-				{
-					PersonId = person,
-					Timestamp = "2017-03-06 14:00".Utc()
-				});
-			ReadModel.Persist(new HistoricalChangeModel
-			{
-				PersonId = person,
-				Timestamp = "2017-03-07 14:00".Utc()
-			});
-
-			var historicalData = Target.Build(person).Changes.Single();
+			var historicalData = Target.Build(personId).Changes.Single();
+			
 			historicalData.Time.Should().Be("2017-03-07T14:00:00");
 		}
-		
+
 		[Test]
 		public void ShouldExcludeChangesEarlierThanOneHourBeforeShiftStart()
 		{
 			Now.Is("2017-03-14 09:00");
-			var person = Guid.NewGuid();
+			var personId = Guid.NewGuid();
 			Database
-				.WithAgent(person, "nicklas")
-				.WithSchedule(person, "2017-03-14 09:00", "2017-03-14 17:00");
-			ReadModel
-				.Persist(new HistoricalChangeModel
-				{
-					PersonId = person,
-					Timestamp = "2017-03-14 07:59".Utc()
-				});
-			ReadModel.Persist(new HistoricalChangeModel
-			{
-				PersonId = person,
-				Timestamp = "2017-03-14 08:00".Utc()
-			});
-
-			var data = Target.Build(person);
+				.WithAgent(personId, "nicklas")
+				.WithSchedule(personId, "2017-03-14 09:00", "2017-03-14 17:00")
+				.WithHistoricalChange("2017-03-14 07:59")
+				.WithHistoricalChange("2017-03-14 08:00");
+			
+			var data = Target.Build(personId);
 
 			data.Changes.Single().Time.Should().Be("2017-03-14T08:00:00");
 		}
@@ -144,28 +114,17 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 		public void ShouldExcludeChangesLaterThanOneHourAfterShiftEnd()
 		{
 			Now.Is("2017-03-14 18:00");
-			var person = Guid.NewGuid();
+			var personId = Guid.NewGuid();
 			Database
-				.WithAgent(person, "nicklas")
-				.WithSchedule(person, "2017-03-14 09:00", "2017-03-14 17:00");
-			ReadModel
-				.Persist(new HistoricalChangeModel
-				{
-					PersonId = person,
-					Timestamp = "2017-03-14 18:00".Utc()
-				});
-			ReadModel.Persist(new HistoricalChangeModel
-			{
-				PersonId = person,
-				Timestamp = "2017-03-14 18:01".Utc()
-			});
-
-			var data = Target.Build(person);
+				.WithAgent(personId, "nicklas")
+				.WithSchedule(personId, "2017-03-14 09:00", "2017-03-14 17:00")
+				.WithHistoricalChange("2017-03-14 18:00")
+				.WithHistoricalChange("2017-03-14 18:01");
+			
+			var data = Target.Build(personId);
 
 			data.Changes.Single().Time.Should().Be("2017-03-14T18:00:00");
 		}
-
-
 
 
 		[Test]
@@ -173,39 +132,24 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 		{
 			Now.Is("2017-03-07 14:00");
 			var state = Guid.NewGuid();
-			var person = Guid.NewGuid();
+			var personId = Guid.NewGuid();
 			var name = RandomName.Make();
-			Database.WithAgent(person, name);
+			Database.WithAgent(personId, name);
+	
+			Database
+				.WithAgent(personId, name)
+				.WithStateGroup(state, "InCall")
+				.WithStateCode("InCall")
+				.WithActivity(null, "phone", Color.Crimson)
+				.WithRule(null, "in", 0, Adherence.In, Color.DarkKhaki)
+				.WithHistoricalChange("2017-03-07 14:00")
+				.WithHistoricalChange("2017-03-07 14:00")
+				.WithHistoricalChange("2017-03-07 14:00")
+				.WithHistoricalChange("2017-03-07 14:00")
+				;
 
-			ReadModel.Persist(new HistoricalChangeModel
-			{
-				PersonId = person,
-				BelongsToDate = "2017-03-07".Date(),
-				Timestamp = "2017-03-07 14:00".Utc(),
-				StateName = "InCall",
-				StateGroupId = state,
-				ActivityName = "phone",
-				ActivityColor = Color.Crimson.ToArgb(),
-				RuleName = "in",
-				RuleColor = Color.DarkKhaki.ToArgb(),
-				Adherence = HistoricalChangeAdherence.In
-			});
-
-			ReadModel.Persist(new HistoricalChangeModel
-			{
-				PersonId = person,
-				BelongsToDate = "2017-03-07".Date(),
-				Timestamp = "2017-03-07 14:00".Utc(),
-				StateName = "InCall",
-				StateGroupId = state,
-				ActivityName = "phone",
-				ActivityColor = Color.Crimson.ToArgb(),
-				RuleName = "in",
-				RuleColor = Color.DarkKhaki.ToArgb(),
-				Adherence = HistoricalChangeAdherence.In
-			});
-
-			var result = Target.Build(person).Changes.Single();
+			var result = Target.Build(personId).Changes.Single();
+			
 			result.Time.Should().Be("2017-03-07T14:00:00");
 			result.Activity.Should().Be("phone");
 			result.ActivityColor.Should().Be(ColorTranslator.ToHtml(Color.FromArgb(Color.Crimson.ToArgb())));
