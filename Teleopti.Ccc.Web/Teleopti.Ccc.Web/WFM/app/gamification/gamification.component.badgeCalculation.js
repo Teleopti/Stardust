@@ -37,6 +37,10 @@
             }
         }
 
+        $ctrl.allowCalcalution = function () {
+            return $ctrl.dateRange && $ctrl.dateRange.startDate && $ctrl.dateRange.endDate;
+        }
+
         $ctrl.$onChanges = function (changesObj) { };
         $ctrl.$onDestroy = function () { };
     }
