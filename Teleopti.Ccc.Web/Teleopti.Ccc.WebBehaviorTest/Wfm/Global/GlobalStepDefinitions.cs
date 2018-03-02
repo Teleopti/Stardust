@@ -2,6 +2,7 @@
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Wfm
@@ -52,7 +53,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm
 		[Then(@"I select all skills on group page picker")]
 		public void ThenISelectAllSkillsOnGroupPagePicker()
 		{
-			Browser.Interactions.ClickContaining(".group-page-picker-menu .virtual-repeat .repeated-item .md-button", "Skill");
+			Browser.Interactions.ClickContaining(".group-page-picker-menu .virtual-repeat .repeated-item .md-button", Resources.Skill);
 		}
 
 		public class BusinessUnitData

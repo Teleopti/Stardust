@@ -527,6 +527,7 @@
     <Compile Include="TestData\Setups\Specific\ChineseCulture.cs" />
     <Compile Include="TestData\Setups\Specific\IranianCulture.cs" />
     <Compile Include="TestData\Setups\Specific\SpecificUserTimeZone.cs" />
+    <Compile Include="TestData\Setups\Specific\PersianCulture.cs" />
     <Compile Include="TestData\ShiftForDate.cs" />
     <Compile Include="ThreadCulture.cs" />
     <Compile Include="DummyInfrastructureInfoPopulator.cs" />

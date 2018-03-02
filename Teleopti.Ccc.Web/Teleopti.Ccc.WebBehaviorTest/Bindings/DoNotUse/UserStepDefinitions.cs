@@ -446,6 +446,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.DoNotUse
 			DataMaker.Data().Apply(new SwedeSpeakingEnglishCulture());
 		}
 
+		[Given(@"I am persian")]
+		public void GivenIAmPersian()
+		{
+			DataMaker.Data().Apply(new PersianCulture());
+		}
+
 		[Given(@"'?(I)'? am located in [hH]awaii")]
 		[Given(@"'?(.*)'? is located in [hH]awaii")]
 		public void GivenIAmLocatedInHawaii(string userName)

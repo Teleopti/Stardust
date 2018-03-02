@@ -653,6 +653,11 @@
       <DependentUpon>Global.feature</DependentUpon>
     </Compile>
     <Compile Include="Wfm\Global\GlobalStepDefinitions.cs" />
+    <Compile Include="Wfm\Global\GroupPages.Persian.feature.cs">
+      <DependentUpon>GroupPages.Persian.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Wfm\Global\GroupPages.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1192,6 +1197,10 @@
     <None Include="Wfm\Global\Global.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Global.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Wfm\Global\GroupPages.Persian.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>GroupPages.Persian.feature.cs</LastGenOutput>
     </None>
     <None Include="Wfm\Global\GroupPages.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
