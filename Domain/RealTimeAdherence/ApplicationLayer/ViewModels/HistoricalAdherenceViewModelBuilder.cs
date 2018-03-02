@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels
 			_now = now;
 			_timeZone = timeZone;
 			_agentAdherenceDayLoader = agentAdherenceDayLoader;
-			_displayPastDays = HistoricalAdherenceMaintainer.DisplayPastDays(config);
+			_displayPastDays = HistoricalChangeMaintainer.DisplayPastDays(config);
 		}
 
 		public HistoricalAdherenceViewModel Build(Guid personId, DateOnly date)

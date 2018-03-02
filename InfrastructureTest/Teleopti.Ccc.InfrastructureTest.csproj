@@ -248,7 +248,7 @@
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\ExternalLogon\ExternalLogonReadModelPersisterTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\HistoricalAdherence\ApprovedPeriodsPersisterTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\HistoricalAdherence\ApprovedPeriodsReaderTest.cs" />
-    <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\HistoricalAdherence\HistoricalAdherenceConcurrencyTest.cs" />
+    <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\HistoricalAdherence\HistoricalChangeConcurrencyTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\HistoricalAdherence\HistoricalChangeReadModelPersisterTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\HistoricalAdherence\HistoricalChangeReadModelReaderTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\Mappings\MappingReadModelPersisterTest.cs" />

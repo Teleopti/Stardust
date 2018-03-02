@@ -414,7 +414,7 @@
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\CurrentBelongsToDate.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\CurrentScheduleReadModelUpdater.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\ExternalLogonReadModelUpdater.cs" />
-    <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\HistoricalAdherenceMaintainer.cs" />
+    <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\HistoricalChangeMaintainer.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\HistoricalChangeUpdater.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\IMappingReadModelPersister.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\IOrganizationReader.cs" />

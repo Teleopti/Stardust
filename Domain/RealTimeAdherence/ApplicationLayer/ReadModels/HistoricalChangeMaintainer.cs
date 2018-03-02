@@ -11,7 +11,7 @@ using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.ApprovePeriodAsInAdherence;
 namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels
 {
 	[EnabledBy(Toggles.RTA_ViewHistoricalAhderence7DaysBack_46826)]
-	public class HistoricalAdherenceMaintainer :
+	public class HistoricalChangeMaintainer :
 		IHandleEvent<TenantDayTickEvent>,
 		IRunOnHangfire
 	{
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels
 			return config.ReadValue("HistoricalAdherenceKeepDays", 7) - 1;
 		}
 
-		public HistoricalAdherenceMaintainer(
+		public HistoricalChangeMaintainer(
 			IHistoricalChangeReadModelPersister historicalChangePersister,
 			IApprovedPeriodsPersister approvedPeriodsPersister,
 			INow now,

@@ -18,10 +18,10 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 	[Explicit]
 	[Category("LongRunning")]
 	[Toggle(Toggles.RTA_ViewHistoricalAhderence7DaysBack_46826)]
-	public class HistoricalAdherenceConcurrencyTest
+	public class HistoricalChangeConcurrencyTest
 	{
 		public HistoricalChangeUpdater Updater;
-		public HistoricalAdherenceMaintainer Maintainer;
+		public HistoricalChangeMaintainer Maintainer;
 		public MutableNow Now;
 
 		[Test]
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 				let events = (
 					from t in times
 					from p in persons
-					select new PersonInAdherenceEvent
+					select new PersonStateChangedEvent
 					{
 						PersonId = p,
 						Timestamp = t
