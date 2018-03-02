@@ -411,6 +411,7 @@
     <Compile Include="Optimization\DayOffOptimizationEventHandler.cs" />
     <Compile Include="Optimization\DayOffOptimizationWasOrdered.cs" />
     <Compile Include="Optimization\EffectiveRestrictionStartTimeDecider.cs" />
+    <Compile Include="Optimization\IntradayOptimizationExecutorWithDeadlockRetries.cs" />
     <Compile Include="Optimization\TeamBlock\BlockPreferencesMapper.cs" />
     <Compile Include="Optimization\TeamBlock\PreferenceLimits.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\AgentStateReadModelMaintainer.cs" />
