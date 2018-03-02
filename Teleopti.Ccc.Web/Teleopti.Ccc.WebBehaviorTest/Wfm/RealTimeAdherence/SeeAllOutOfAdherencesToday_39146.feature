@@ -52,7 +52,7 @@ Scenario: See out of adherences
 	And at '2016-10-11 09:00:00' 'Pierre Baldi' sets his phone state to 'Ready'
 	And at '2016-10-11 10:00:00' 'Pierre Baldi' sets his phone state to 'Pause'
 	And at '2016-10-11 10:20:00' 'Pierre Baldi' sets his phone state to 'Ready'
-	When I view historical adherence for 'Pierre Baldi'
+	When I view historical adherence for 'Pierre Baldi' on '2016-10-11'
 	Then I should see out of adherences
 		| Start time | End time |
 		| 08:30:00   | 08:45:00 |
