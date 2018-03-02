@@ -17,7 +17,9 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 		private readonly IApplicationRoleRepository _roleRepository;
 		private readonly IRoleManager _roleManager;
 
-		public RoleController(IPersonRepository personRepository, IApplicationRoleRepository roleRepository,
+
+		public RoleController(IPersonRepository personRepository, 
+			IApplicationRoleRepository roleRepository,
 			IRoleManager roleManager)
 		{
 			_roleRepository = roleRepository;
@@ -33,7 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			var res = roles.Select(x => new RoleViewModel
 			{
 				Id = x.Id.GetValueOrDefault(),
-				Name = x.Name,
+				Name = x.DescriptionText,
 				CanBeChangedByCurrentUser = true
 			});
 
