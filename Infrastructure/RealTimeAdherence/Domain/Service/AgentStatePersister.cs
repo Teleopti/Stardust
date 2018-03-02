@@ -14,20 +14,20 @@ namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain.Service
 	public class AgentStatePersister : IAgentStatePersister
 	{
 		private readonly ICurrentUnitOfWork _unitOfWork;
-		private readonly DeadLockVictimThrower _deadLockVictimThrower;
+		private readonly DeadLockVictimPriority _deadLockVictimPriority;
 
 		public AgentStatePersister(
 			ICurrentUnitOfWork unitOfWork,
-			DeadLockVictimThrower deadLockVictimThrower)
+			DeadLockVictimPriority deadLockVictimPriority)
 		{
 			_unitOfWork = unitOfWork;
-			_deadLockVictimThrower = deadLockVictimThrower;
+			_deadLockVictimPriority = deadLockVictimPriority;
 		}
 
 		[LogInfo]
 		public virtual void Prepare(AgentStatePrepare model, DeadLockVictim deadLockVictim)
 		{
-			_deadLockVictimThrower.SetDeadLockPriority(deadLockVictim);
+			_deadLockVictimPriority.Specify(deadLockVictim);
 
 			var updated = _unitOfWork.Current().Session()
 				.CreateSQLQuery(@"
@@ -66,7 +66,6 @@ VALUES
 					.SetParameter("SiteId", model.SiteId)
 					.SetParameter("TeamId", model.TeamId)
 					.ExecuteUpdate();
-
 		}
 
 		[LogInfo]
@@ -104,12 +103,12 @@ WHERE
 					.SetParameter("Adherence", (int?) model.Adherence)
 				;
 
-			_deadLockVictimThrower.ThrowOnDeadlock(() => query.ExecuteUpdate());
+			query.ExecuteUpdate();
 		}
 
 		public void Delete(Guid personId, DeadLockVictim deadLockVictim)
 		{
-			_deadLockVictimThrower.SetDeadLockPriority(deadLockVictim);
+			_deadLockVictimPriority.Specify(deadLockVictim);
 
 			_unitOfWork.Current().Session()
 				.CreateSQLQuery("DELETE [dbo].[AgentState] WHERE PersonId = :PersonId")
@@ -155,41 +154,38 @@ AND StateGroupId {stateGroups}")
 		[LogInfo]
 		public virtual LockedData LockNLoad(IEnumerable<Guid> personIds, DeadLockVictim deadLockVictim)
 		{
-			_deadLockVictimThrower.SetDeadLockPriority(deadLockVictim);
+			_deadLockVictimPriority.Specify(deadLockVictim);
 
 			var sql = SelectAgentState + "WITH (UPDLOCK, ROWLOCK) WHERE PersonId IN (:PersonIds)";
 
-			return _deadLockVictimThrower.ThrowOnDeadlock(() =>
+			var agentStateQuery = _unitOfWork.Current().Session()
+				.CreateSQLQuery(sql)
+				.SetParameterList("PersonIds", personIds)
+				.SetResultTransformer(Transformers.AliasToBean<internalAgentState>())
+				.SetReadOnly(true);
+			// shared lock for versions so we wait for running updaters
+			var keyValueQuery = _unitOfWork.Current().Session()
+				.CreateSQLQuery("SELECT * FROM [ReadModel].[KeyValueStore] WHERE [Key] IN ('RuleMappingsVersion', 'CurrentScheduleReadModelVersion')")
+				.SetResultTransformer(Transformers.AliasToBean<internalKeyValue>())
+				.SetReadOnly(true);
+
+			var results = _unitOfWork.Current().Session().CreateMultiQuery()
+				.Add(agentStateQuery)
+				.Add(keyValueQuery)
+				.List();
+
+			var agentStates = (results[0] as IEnumerable<object>).Cast<AgentState>();
+			var keyValues = (results[1] as IEnumerable<object>).Cast<internalKeyValue>();
+
+			return new LockedData
 			{
-				var agentStateQuery = _unitOfWork.Current().Session()
-					.CreateSQLQuery(sql)
-					.SetParameterList("PersonIds", personIds)
-					.SetResultTransformer(Transformers.AliasToBean<internalAgentState>())
-					.SetReadOnly(true);
-				// shared lock for versions so we wait for running updaters
-				var keyValueQuery = _unitOfWork.Current().Session()
-					.CreateSQLQuery("SELECT * FROM [ReadModel].[KeyValueStore] WHERE [Key] IN ('RuleMappingsVersion', 'CurrentScheduleReadModelVersion')")
-					.SetResultTransformer(Transformers.AliasToBean<internalKeyValue>())
-					.SetReadOnly(true);
-
-				var results = _unitOfWork.Current().Session().CreateMultiQuery()
-					.Add(agentStateQuery)
-					.Add(keyValueQuery)
-					.List();
-
-				var agentStates = (results[0] as IEnumerable<object>).Cast<AgentState>();
-				var keyValues = (results[1] as IEnumerable<object>).Cast<internalKeyValue>();
-
-				return new LockedData
-				{
-					AgentStates =
-						agentStates
-							.GroupBy(x => x.PersonId, (guid, states) => states.First())
-							.ToArray(),
-					MappingVersion = keyValues.SingleOrDefault(x => x.Key == "RuleMappingsVersion")?.Value,
-					ScheduleVersion = parseVersion(keyValues.SingleOrDefault(x => x.Key == "CurrentScheduleReadModelVersion")?.Value)
-				};
-			});
+				AgentStates =
+					agentStates
+						.GroupBy(x => x.PersonId, (guid, states) => states.First())
+						.ToArray(),
+				MappingVersion = keyValues.SingleOrDefault(x => x.Key == "RuleMappingsVersion")?.Value,
+				ScheduleVersion = parseVersion(keyValues.SingleOrDefault(x => x.Key == "CurrentScheduleReadModelVersion")?.Value)
+			};
 		}
 
 		private CurrentScheduleReadModelVersion parseVersion(string version)
@@ -198,7 +194,7 @@ AND StateGroupId {stateGroups}")
 		}
 
 		private static string SelectAgentState = "SELECT * FROM [dbo].[AgentState] ";
-		
+
 		private class internalKeyValue
 		{
 			public string Key { get; set; }
@@ -207,8 +203,15 @@ AND StateGroupId {stateGroups}")
 
 		private class internalAgentState : AgentState
 		{
-			public new long? SnapshotId { set { base.SnapshotId = value == null ? (DateTime?)null : new DateTime(value.Value); } }
-			public new int? Adherence { set { base.Adherence = (EventAdherence?) value; } }
+			public new long? SnapshotId
+			{
+				set { base.SnapshotId = value == null ? (DateTime?) null : new DateTime(value.Value); }
+			}
+
+			public new int? Adherence
+			{
+				set { base.Adherence = (EventAdherence?) value; }
+			}
 		}
 	}
 }

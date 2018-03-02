@@ -8,31 +8,19 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 
 namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain.Service
 {
-	public class DeadLockVictimThrower
+	public class DeadLockVictimPriority
 	{
 		private readonly ICurrentUnitOfWork _unitOfWork;
 
-		public DeadLockVictimThrower(ICurrentUnitOfWork unitOfWork)
+		public DeadLockVictimPriority(ICurrentUnitOfWork unitOfWork)
 		{
 			_unitOfWork = unitOfWork;
 		}
 
-		public void SetDeadLockPriority(DeadLockVictim deadLockVictim)
+		public void Specify(DeadLockVictim deadLockVictim)
 		{
 			var sql = "SET DEADLOCK_PRIORITY " + (deadLockVictim == DeadLockVictim.Yes ? "LOW" : "HIGH");
 			_unitOfWork.Current().Session().CreateSQLQuery(sql).ExecuteUpdate();
-		}
-
-		public T ThrowOnDeadlock<T>(Func<T> action)
-		{
-			try
-			{
-				return action.Invoke();
-			}
-			catch (DataSourceException e) when (e.ContainsSqlDeadlock())
-			{
-				throw new DeadLockVictimException("Transaction deadlocked", e);
-			}
 		}
 	}
 }

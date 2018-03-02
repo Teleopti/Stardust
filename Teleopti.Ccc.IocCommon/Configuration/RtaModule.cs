@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<ContextLoader>().As<IContextLoader>().ApplyAspects().SingleInstance();
 			builder.RegisterType<DeadLockRetrier>().SingleInstance();
-			builder.RegisterType<DeadLockVictimThrower>().SingleInstance();
+			builder.RegisterType<DeadLockVictimPriority>().SingleInstance();
 
 			builder.RegisterType<DataSourceMapper>().SingleInstance().ApplyAspects();
 			builder.RegisterType<DataSourceReader>().As<IDataSourceReader>().SingleInstance();

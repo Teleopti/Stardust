@@ -31,11 +31,6 @@ namespace Teleopti.Ccc.Domain
 			return e.AllExceptions().OfType<SqlException>().Any(x => x.Number == 2627);
 		}
 
-		public static bool ContainsSqlDeadlock(this Exception e)
-		{
-			return e.AllExceptions().OfType<SqlException>().Any(x => x.Number == 1205);
-		}
-
 		public static bool IsSqlDeadlock(this Exception source)
 		{
 			return (source as SqlException)?.Number == 1205;

@@ -490,6 +490,7 @@
     <Compile Include="RealTimeAdherence\Domain\Service\Context.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\ContextLoader.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\DataSourceMapper.cs" />
+    <Compile Include="RealTimeAdherence\Domain\Service\DeadLockRetrier.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\EventCollector.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\ExternalLogonMapper.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\ExternalUserStateWebModel.cs" />

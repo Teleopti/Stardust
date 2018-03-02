@@ -280,7 +280,7 @@
     <Compile Include="RealTimeAdherence\Domain\Repositories\RtaStateGroupRepository.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\AgentStatePersister.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\DataSourceReader.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\DeadLockVictimThrower.cs" />
+    <Compile Include="RealTimeAdherence\Domain\Service\DeadLockVictimPriority.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\StateQueue.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\StateQueueUtilities.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\StateQueueWorker.cs" />
