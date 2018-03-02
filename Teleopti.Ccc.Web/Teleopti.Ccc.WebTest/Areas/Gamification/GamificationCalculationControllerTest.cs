@@ -3,6 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -63,7 +64,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification
 			result[0].Id.Should().Be.EqualTo(jobResult.Id);
 			result[0].CreateDateTime.Should().Be.EqualTo(jobResult.Timestamp);
 			result[0].Owner.Should().Be.EqualTo(jobResult.Owner.Name.ToString());
-			result[0].Period.Should().Be.EqualTo(jobResult.Period);
+			result[0].StartDate.Should().Be.EqualTo(jobResult.Period.StartDate.Utc());
+			result[0].EndDate.Should().Be.EqualTo(jobResult.Period.EndDate.Utc());
 			result[0].Status.Should().Be.EqualTo(Resources.Finished);
 			result[0].HasError.Should().Be.EqualTo(false);
 			result[0].ErrorMessage.Should().Be.EqualTo("");

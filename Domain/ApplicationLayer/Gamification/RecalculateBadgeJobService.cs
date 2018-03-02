@@ -61,9 +61,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Gamification
 				return new RecalculateBadgeJobResultDetail
 				{
 					Id = jobResult.Id.GetValueOrDefault(),
-					Period = jobResult.Period,
+					StartDate = jobResult.Period.StartDate.Utc(),
+					EndDate = jobResult.Period.EndDate.Utc(),
 					Owner = jobResult.Owner.Name.ToString(),
-					CreateDateTime = jobResult.Timestamp,
+					CreateDateTime = jobResult.Timestamp.ToUniversalTime(),
 					Status = status,
 					HasError = hasError,
 					ErrorMessage = hasError ? (hasException ? Resources.InternalErrorMsg : jobResultDetail?.Message) : string.Empty

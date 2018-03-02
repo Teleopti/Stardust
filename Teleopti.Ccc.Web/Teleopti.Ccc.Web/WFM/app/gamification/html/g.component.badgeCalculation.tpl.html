@@ -17,32 +17,18 @@
             <div class="started">{{'TimeStarted'|translate}}</div>
             <div class="status">{{'Status'|translate}}</div>
         </header>
-        <div class="calculation-job">
+        <div ng-repeat="job in $ctrl.jobs" class="calculation-job">
             <div class="job">
-                <span>2018/02/01--2018/02/22</span>
+                <span>{{job.startDate}}--{{job.endDate}}</span>
             </div>
             <div class="owner">
-                <span>Demo</span>
+                <span>{{job.owner}}</span>
             </div>
             <div class="started">
-                <span>2018-02-10 10:07:33</span>
+                <span>{{job.startingTime}}</span>
             </div>
             <div class="status">
-                <span>In progress</span>
-            </div>
-        </div>
-        <div class="calculation-job">
-            <div class="job">
-                <span>2018/02/09--2018/02/25</span>
-            </div>
-            <div class="owner">
-                <span>Demo</span>
-            </div>
-            <div class="started">
-                <span>2018-02-26 10:07:33</span>
-            </div>
-            <div class="status">
-                <span>Finished</span>
+                <span>{{job.status}}</span>
             </div>
         </div>
     </div>
