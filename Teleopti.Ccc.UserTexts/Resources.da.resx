@@ -1347,7 +1347,7 @@ Dato</value>
     <comment>People</comment>
   </data>
   <data name="OpenSchedulePage" xml:space="preserve">
-    <value>Planer</value>
+    <value>Vagtplaner</value>
     <comment>Schedules</comment>
   </data>
   <data name="Options" xml:space="preserve">
@@ -3204,7 +3204,7 @@ Erstat</value>
     <comment>Enter name on the new grouping</comment>
   </data>
   <data name="PersonAssignmentIsNotValidDot" xml:space="preserve">
-    <value>Tildeling af person er ikke gyldig. {0}</value>
+    <value>Tildeling af person er ikke gyldig.</value>
     <comment>Person assignment is not valid.</comment>
   </data>
   <data name="ChangeYourRotations" xml:space="preserve">
@@ -9200,7 +9200,7 @@ Det vil påvirke performance på planlægning og optimering negativt  på et sen
   </data>
   <data name="ShareMyCalendarHint" xml:space="preserve">
     <value>For at abonnere på din vagtplan fra en kalender App, brug URL'en herunder.
-For indstruktioner til de mest almindelige kalender Apps. se  </value>
+For indstruktioner til de mest almindelige kalender Apps, se  </value>
   </data>
   <data name="WorkflowControlSetHeader" xml:space="preserve">
     <value>Arbejdsproces Styring</value>
@@ -10150,7 +10150,7 @@ Der er ikke nok budgetteret kvote til denne forespørgelse.</value>
     <value>Ressource beregnet hver: </value>
   </data>
   <data name="ShiftTradeRequestForOneDayHasBeenAcceptedDot" xml:space="preserve">
-    <value>Ee vagtbytte forespørgelse den {0} er accepteret af din kollega. </value>
+    <value>En vagtbytte forespørgelse den {0} er accepteret af din kollega. </value>
   </data>
   <data name="ShiftTradeRequestForOneDayHasBeenApprovedDot" xml:space="preserve">
     <value>En vagtbytte forespørgelse den {0} er godkendt. </value>
@@ -11182,7 +11182,16 @@ Der er ikke nok budgetteret kvote til denne forespørgelse.</value>
     <value>Denne produktaktiveringsnögle däkker kun {0} pladser. Du skal skaffe en produktaktiveringsnögle der däkker nok pladser.</value>
   </data>
   <data name="SeatProductActivationKeyV8" xml:space="preserve">
-    <value>Dette system er licenseret til "{0} i henhold til betingelser i licensaftalen og produktaktiveringsnöglen udlöber {1}                                                           Produktaktiveringsnöglen däkker et maksimum af {2} pladser                                                                                       Stor version {5}                                                                               Produktaktiveringsnögleskema er "{3}"                                         Disse muligheder er aktiverede: {4}</value>
+    <value>Dette system er licenseret til "{0} i henhold til betingelser i licensaftalen og produktaktiveringsnöglen udlöber {1}
+
+Produktaktiveringsnöglen däkker et maksimum af {2} pladser    
+
+Stor version {5}                                                                               
+
+Produktaktiveringsnögleskema er "{3}"                                         
+
+Disse muligheder er aktiverede: 
+{4}</value>
   </data>
   <data name="YouHaveAlmostTooManySeats" xml:space="preserve">
     <value>Du har nästen nået dit maximum af {0} pladser. Vär venlig at opgrader din produktaktiveringsnögle snarest</value>
@@ -11578,13 +11587,13 @@ Der er ikke nok budgetteret kvote til denne forespørgelse.</value>
     <value>Vär venlig at opsätte din emailadresse for at tilgå Teleopti </value>
   </data>
   <data name="YouGotANewBronzeBadgeForAdherence" xml:space="preserve">
-    <value>Du har fået et nyt bronzemärke! Din adherence i {1.yyyy-MM-dd} er over {0}</value>
+    <value>Du har fået et nyt bronzemärke! Din adherence i {1:yyyy-MM-dd} er over {0}</value>
   </data>
   <data name="YouGotANewBronzeBadgeForAHT" xml:space="preserve">
-    <value>Du har fået et nyt bronzemärke! Din gennemsnitlige AHT i {1.yyyy.MM.dd} er lavere end {0} sekunder</value>
+    <value>Du har fået et nyt bronzemärke! Din gennemsnitlige AHT i {1:yyyy.MM.dd} er lavere end {0} sekunder</value>
   </data>
   <data name="YouGotANewBronzeBadgeForAnsweredCalls" xml:space="preserve">
-    <value>Du har fået et nyt bronzemärke! Du har besvaret mere end {0} kald i {1.yyyy.MM.dd}.</value>
+    <value>Du har fået et nyt bronzemärke! Du har besvaret mere end {0} kald i {1:yyyy.MM.dd}.</value>
   </data>
   <data name="YouGotANewGoldBadgeForAdherence" xml:space="preserve">
     <value>Du har fået et nyt guldmärke! Din adherence er over {0} på {1} forskellige dage.</value>
@@ -11971,7 +11980,7 @@ Der er ikke nok budgetteret kvote til denne forespørgelse.</value>
     <value>Problemer</value>
   </data>
   <data name="MissingForecastFrom" xml:space="preserve">
-    <value>Manglende prognose format</value>
+    <value>Manglende prognose fra {0:d} til {1:d}</value>
   </data>
   <data name="MissingSkills" xml:space="preserve">
     <value>Prognose mangler for disse skills</value>
@@ -12862,7 +12871,7 @@ Der er ikke nok budgetteret kvote til denne forespørgelse.</value>
     <value>Fravärsforespörgslen for {0} blev annulleret og fraväret er fjernet fra din vagtplan.</value>
   </data>
   <data name="AbsenceRequestWasCancelled" xml:space="preserve">
-    <value>Fravärsforespörgslen fra {0} -{1} blev annulleret og fraväret er fjernet fra din vagtplan.</value>
+    <value>Fravärsforespörgslen fra {0} - {1} blev annulleret og fraväret er fjernet fra din vagtplan.</value>
   </data>
   <data name="Cancelled" xml:space="preserve">
     <value>Annulleret</value>
@@ -12907,7 +12916,7 @@ Der er ikke nok budgetteret kvote til denne forespørgelse.</value>
     <value>Sletning af aktivitet for {0} medarbejdersktivitet(er). {1} lykkedes og {2} fejlede.</value>
   </data>
   <data name="CouldNotCancelRequestNoAbsenceMultiDay" xml:space="preserve">
-    <value>Frvärsforespörgslen for {0} fra {1} {2} kunne ikke annulleres da det relaterede fravär ikke kan findes eller er blevet ändret.</value>
+    <value>Frvärsforespörgslen for {0} fra {1} - {2} kunne ikke annulleres da det relaterede fravär ikke kan findes eller er blevet ändret.</value>
   </data>
   <data name="AddAbsenceFailed" xml:space="preserve">
     <value>Tilföjelse af fravär er fejlet</value>
@@ -12970,7 +12979,7 @@ Der er ikke nok budgetteret kvote til denne forespørgelse.</value>
     <value>Minimum godkendelsestid gränsevärdi (minutter för forespurgt start):</value>
   </data>
   <data name="NoPermissionMoveAgentActivity" xml:space="preserve">
-    <value>Ingen tilladelse til at flytte aktivitet for medarbejder {0}</value>
+    <value>Ingen tilladelse til at flytte aktivitet for medarbejder</value>
   </data>
   <data name="SelectedAgentsColon" xml:space="preserve">
     <value>Valgte medarbejdere:</value>
@@ -13048,10 +13057,26 @@ Der er ikke nok budgetteret kvote til denne forespørgelse.</value>
     <value>Kan ikke flytte flere aktiviteter for de valgte medarbejdere</value>
   </data>
   <data name="ProductActivationKeyV8Perpetual" xml:space="preserve">
-    <value>Systemet er licenseret til "{0}" i henhold til vilkår og betingelser i licensaftalen.                                                                                                                                                                                                                          Produktaktiveringsnöglen däkker et maximum af {1} aktive medarbejdere.                                                                                                                          Overordnet version:{4}                                                                                                                                                                                                          Produktaktiveringsnöglen nögle skema er "{2}".                                           Disse muligheder er aktiveret:                                                                         {3}</value>
+    <value>Systemet er licenseret til "{0}" i henhold til vilkår og betingelser i licensaftalen.  
+
+Produktaktiveringsnöglen däkker et maximum af {1} aktive medarbejdere. 
+
+Overordnet version:{4} 
+
+Produktaktiveringsnöglen nögle skema er "{2}".
+Disse muligheder er aktiveret:
+{3}</value>
   </data>
   <data name="SeatProductActivationKeyV8Perpetual" xml:space="preserve">
-    <value>Systemet er licenseret til "{0}" i henhold til vilkår og betingelser i licensaftalen.                                                                                                                                                                                                                          Produktaktiveringsnöglen däkker et maximum af {1} antal pladser.                                                                                                                          Overordnet version:{4}                                                                                                                                                                                                          Produktaktiveringsnöglen nögle skema er "{2}".                                           Disse muligheder er aktiveret:                                                                         {3}</value>
+    <value>Systemet er licenseret til "{0}" i henhold til vilkår og betingelser i licensaftalen.  
+
+Produktaktiveringsnöglen däkker et maximum af {1} antal pladser.   
+
+Overordnet version: {4}  
+
+Produktaktiveringsnöglen nögle skema er "{2}".  
+Disse muligheder er aktiveret: 
+{3}</value>
   </data>
   <data name="FilterReports" xml:space="preserve">
     <value>Filter rapporter</value>
@@ -13831,7 +13856,14 @@ Der er ikke nok budgetteret kvote til denne forespørgelse.</value>
     <value>Spörg mig senere</value>
   </data>
   <data name="DataProtectionQuestion" xml:space="preserve">
-    <value>Vär venlig at deltage på Teleopti Kunde Web. Du vil få adgang til tips og tricks, blogindläg, selstudier og anden brugbar information. Til dette formål vil Teleopti gerne bede om disse data fra dig, så du kan tilgå Teleopti Kunde Web.&lt;b&gt;&lt;br&gt;                                                                                      Email:&lt;b&gt;{0}&lt;b&gt;&lt;br&gt;                                                                                     Fornavn: &lt;b&gt;{1}&lt;b&gt;&lt;br&gt;                                                                               Efternavn:&lt;b&gt;{2}&lt;b&gt;&lt;br&gt;                                                                              Sprog: &lt;b&gt;{3}&lt;b&gt;&lt;br&gt;                                                                                     Firma:&lt;b&gt;{4}&lt;r&gt;&lt;br&gt;&lt;br&gt;                                                                                Disse oplysninger vil sikre at du bliver automatisk logget på Teleopti Kunde Web og får adgang til det relevante materiale. &lt;br&gt;&lt;br&gt;                                 Vil du deltage?</value>
+    <value>Vär venlig at deltage på Teleopti Kunde Web. Du vil få adgang til tips og tricks, blogindläg, selstudier og anden brugbar information. Til dette formål vil Teleopti gerne bede om disse data fra dig, så du kan tilgå Teleopti Kunde Web.&lt;b&gt;&lt;br&gt;
+Email:&lt;b&gt;{0}&lt;b&gt;&lt;br&gt;
+Fornavn: &lt;b&gt;{1}&lt;b&gt;&lt;br&gt;  
+Efternavn:&lt;b&gt;{2}&lt;b&gt;&lt;br&gt; 
+Sprog: &lt;b&gt;{3}&lt;b&gt;&lt;br&gt;
+Firma:&lt;b&gt;{4}&lt;r&gt;&lt;br&gt;&lt;br&gt;
+Disse oplysninger vil sikre at du bliver automatisk logget på Teleopti Kunde Web og får adgang til det relevante materiale. &lt;br&gt;&lt;br&gt; 
+Vil du deltage?</value>
   </data>
   <data name="NoThanks" xml:space="preserve">
     <value>Nej tak</value>
@@ -13900,7 +13932,7 @@ Der er ikke nok budgetteret kvote til denne forespørgelse.</value>
     <value>Indtast et tal</value>
   </data>
   <data name="ImportAgentsColumnFixedWithFallbackValue" xml:space="preserve">
-    <value>{0} repareret med tildligere värdi</value>
+    <value>{0} repareret med '{1}'</value>
   </data>
   <data name="NewImport" xml:space="preserve">
     <value>Ny import</value>
@@ -13924,7 +13956,7 @@ Der er ikke nok budgetteret kvote til denne forespørgelse.</value>
     <value>Kun support: {0}</value>
   </data>
   <data name="FailedToImportAgents" xml:space="preserve">
-    <value>Kunne ikke importere [0} medarbejder(e)</value>
+    <value>Kunne ikke importere {0} medarbejder(e)</value>
   </data>
   <data name="SuccessfullyImportedAgents" xml:space="preserve">
     <value>Det er lykkedes at importere {0} medarbejder(e)</value>
@@ -13947,9 +13979,907 @@ Der er ikke nok budgetteret kvote til denne forespørgelse.</value>
   <data name="StaffingInfo" xml:space="preserve">
     <value>Bemandingsinformation</value>
   </data>
-  <data name="ProductActivationKeyApplicationSuccessNoRestart" xml:space="preserve">
-    <value>Produkt aktiveringsnöglen er anvendt med succes. 
-Tillykke! Du er nu licenseret bruger af dette prisvindende workforce management system. 
-Applikationen lukker nu. </value>
+  <data name="GamificationSettings" xml:space="preserve">
+    <value>Gamification indstillinger</value>
+  </data>
+  <data name="SelectOneOrMoreSites" xml:space="preserve">
+    <value>Välg en eller flere sites</value>
+  </data>
+  <data name="SetGamificationTargets" xml:space="preserve">
+    <value>Angiv gamification mål</value>
+  </data>
+  <data name="AppliedSetting" xml:space="preserve">
+    <value>Anvendt indstilling</value>
+  </data>
+  <data name="BlockSchedulingNotWorkingWhenUsingPreferences" xml:space="preserve">
+    <value>Blok planlägning virker måske ikke når der bruges präferencer.</value>
+  </data>
+  <data name="IntraDayChipNumberOf" xml:space="preserve">
+    <value>af</value>
+  </data>
+  <data name="AllSkillGroups" xml:space="preserve">
+    <value>Alle skill grupper</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteTheSkillGroup" xml:space="preserve">
+    <value>Er du sikker på at du vil slette skill gruppen</value>
+  </data>
+  <data name="AreYouSureYouWantToExitSGM" xml:space="preserve">
+    <value>Er du sikker på at du vil lukke skill gruppemanager?</value>
+  </data>
+  <data name="AvailableSkills" xml:space="preserve">
+    <value>Tilgängelige skills</value>
+  </data>
+  <data name="CreateNewSkillGroup" xml:space="preserve">
+    <value>Opret ny skill gruppe</value>
+  </data>
+  <data name="DoYouWantToDeleteSkillGroup" xml:space="preserve">
+    <value>Vil du slette skill gruppe</value>
+  </data>
+  <data name="ManageSkillGroups" xml:space="preserve">
+    <value>Håndter skill grupper</value>
+  </data>
+  <data name="SelectSite" xml:space="preserve">
+    <value>Välg site</value>
+  </data>
+  <data name="SelectTeam" xml:space="preserve">
+    <value>Välg team</value>
+  </data>
+  <data name="UnselectSite" xml:space="preserve">
+    <value>Fravälg site</value>
+  </data>
+  <data name="UnselectTeam" xml:space="preserve">
+    <value>Fravälg team</value>
+  </data>
+  <data name="ThresholdForBadge" xml:space="preserve">
+    <value>Gränsevärdi for märke:</value>
+  </data>
+  <data name="ThresholdForGoldBadge" xml:space="preserve">
+    <value>Gränsevärdi for bronzemärke:</value>
+  </data>
+  <data name="ThresholdForSilverBadge" xml:space="preserve">
+    <value>Gränsevärdi for guldmärke:</value>
+  </data>
+  <data name="ThresholdForBronzeBadge" xml:space="preserve">
+    <value>Gränsevärdi for sölvmärke:</value>
+  </data>
+  <data name="DenyReasonSystemBusy" xml:space="preserve">
+    <value>Din forespörgsel er blevet afvist fordi systemet er optaget. Vär venlig at pröve igen senere.</value>
+  </data>
+  <data name="DenyReasonNoSkillCombinationsFound" xml:space="preserve">
+    <value>Din forespörgsel er blevet afvist fordi systemet ikke kan finde bemandingsdata for den önskede periode.</value>
+  </data>
+  <data name="YourScheduleHasChanged" xml:space="preserve">
+    <value>Dit skema er ändret!</value>
+  </data>
+  <data name="AnErrorOccurredWhenUploadingTheFile" xml:space="preserve">
+    <value>En fejl er opstået ved upload af denne fil</value>
+  </data>
+  <data name="ImportExternalData" xml:space="preserve">
+    <value>Importer ekstern data</value>
+  </data>
+  <data name="UploadAndStart" xml:space="preserve">
+    <value>Upload og start</value>
+  </data>
+  <data name="InvalidNumberOfFields" xml:space="preserve">
+    <value>Hver räkke skal have {0} felter. Denne räkke har {1}.</value>
+  </data>
+  <data name="MeasureTypeMustBeEitherNumericOrPercent" xml:space="preserve">
+    <value>Måltype skal väre enten "Numerisk"eller "Procent"</value>
+  </data>
+  <data name="MeasureTypeNotMatchExistingDefinition" xml:space="preserve">
+    <value>Måltype matcher ikke den eksisterende definition</value>
+  </data>
+  <data name="MeasureIdMustContainAnInteger" xml:space="preserve">
+    <value>Mål ID skal indeholde et helt tal</value>
+  </data>
+  <data name="RowExceedsLimitOfGamificationMeasures" xml:space="preserve">
+    <value>Der er en gränse på {0} gamification mål. Denne räkke kan ikke importeres, da den vil overstige gränsen</value>
+  </data>
+  <data name="InvalidScore" xml:space="preserve">
+    <value>Ugyldig score</value>
+  </data>
+  <data name="BusinessHierarchy" xml:space="preserve">
+    <value>Forretnings hieraki</value>
+  </data>
+  <data name="GroupPages" xml:space="preserve">
+    <value>Gruppe sider</value>
+  </data>
+  <data name="SelectEndDate" xml:space="preserve">
+    <value>Välg venligst slutdato</value>
+  </data>
+  <data name="SelectStartDate" xml:space="preserve">
+    <value>Välg venligst startdato</value>
+  </data>
+  <data name="SelectStartDateAndEndDate" xml:space="preserve">
+    <value>Välg venligst startdato og slutdato</value>
+  </data>
+  <data name="ValidateEndDate" xml:space="preserve">
+    <value>Slutdato bör väre senere end startdato</value>
+  </data>
+  <data name="ValidateStartDate" xml:space="preserve">
+    <value>Startdato bör väre tidligere end slutdato</value>
+  </data>
+  <data name="NoPermissionToViewWFMModuleErrorMessage" xml:space="preserve">
+    <value>Du har ikke tilladelse til at se {0}</value>
+  </data>
+  <data name="GamificationViewImportFileFormat" xml:space="preserve">
+    <value>Se detaljer i import fil formatet</value>
+  </data>
+  <data name="BpoExportPeriodStartDateBeforeEndDate" xml:space="preserve">
+    <value>Eksportperiodens startdato skal väre en dato för eksportperiodens slutdato</value>
+  </data>
+  <data name="BpoOnlyExportPeriodBetweenDates" xml:space="preserve">
+    <value>Kun eksportperioder indenfor disse datoer {0} kan välges</value>
+  </data>
+  <data name="BpoExportYouMustSelectASkill" xml:space="preserve">
+    <value>Et skill skal välges</value>
+  </data>
+  <data name="DragAndDropYourCsvFileOrClickToSelect" xml:space="preserve">
+    <value>Träk og slip dine CSV filer hertil eller klik for at välge</value>
+  </data>
+  <data name="OpenPlansPage" xml:space="preserve">
+    <value>Planer</value>
+  </data>
+  <data name="RequestTypeOvertime" xml:space="preserve">
+    <value>Overtid</value>
+  </data>
+  <data name="OvertimeRequest" xml:space="preserve">
+    <value>Overtidsforespörgsel</value>
+  </data>
+  <data name="OvertimeType" xml:space="preserve">
+    <value>Overtidstype</value>
+  </data>
+  <data name="MaxSearchPersonCountExceeded" xml:space="preserve">
+    <value>Denne sögning vil returnere resultatet for mere end {0} medarbejdere, vär venlig at forfine din sögning ved at tilföje flere kriterier.</value>
+  </data>
+  <data name="OvertimeRequestAlreadyHasScheduleInPeriod" xml:space="preserve">
+    <value>Der er allerede en aktivitet planalgt i denne periode {0}-{1}</value>
+  </data>
+  <data name="OvertimeRequestForOneDayHasBeenDeniedDot" xml:space="preserve">
+    <value>Overtidsforespörgslen {0} er afvist</value>
+  </data>
+  <data name="OvertimeRequestWasCancelled" xml:space="preserve">
+    <value>Overtidsforespörgslen er annulleret</value>
+  </data>
+  <data name="OvertimeRequestDenyReasonExpired" xml:space="preserve">
+    <value>Din overtidsforespörgsel er blevet automatisk afvist. Starttiden for denne forespörgsel er {0}, den skal väre mindst {1} minutter senere end den nuvärende tid.</value>
+  </data>
+  <data name="OvertimeRequestDenyReasonOutOfSiteOpenHour" xml:space="preserve">
+    <value>Din overtidsforespörgsel er blevet automatisk afvist. Perioden for forespörgslen er {0}, men åbningstiden er {1}</value>
+  </data>
+  <data name="OvertimeRequestDenyReasonSiteOpenHourClosed" xml:space="preserve">
+    <value>Din overtidsforespörgsel er blevet automatisk afvist. Der er lukket på i den önskede periode {0}</value>
+  </data>
+  <data name="OvertimeRequestDenyReasonInvalidPeriod" xml:space="preserve">
+    <value>Din overtidsforespörgsel er blevet automatisk afvist. Den gyldige forespörgselsperiode er {0}</value>
+  </data>
+  <data name="InternalErrorMsg" xml:space="preserve">
+    <value>En intern fejl er opstået.</value>
+  </data>
+  <data name="ModifySkillGroup" xml:space="preserve">
+    <value>Ändr skillgruppe</value>
+  </data>
+  <data name="CreateSkillGroup" xml:space="preserve">
+    <value>Opret skillgruppe</value>
+  </data>
+  <data name="OnlyAbsenceRequestCanBeCancelled" xml:space="preserve">
+    <value>Kun fravärsforespörgsler kan annulleres</value>
+  </data>
+  <data name="EmptyFile" xml:space="preserve">
+    <value>Tom fil</value>
+  </data>
+  <data name="NoInput" xml:space="preserve">
+    <value>Intet input</value>
+  </data>
+  <data name="ColumnCanNotBeEmpty" xml:space="preserve">
+    <value>Kolonne {0} kan ikke väre tom</value>
+  </data>
+  <data name="ANewImportJobHasBeenCreatedFor" xml:space="preserve">
+    <value>Et nyt importjob er blevet skabt for {0}</value>
+  </data>
+  <data name="ImportAgentsJobResultSummaryForFullSuccess" xml:space="preserve">
+    <value>{0} importeret. Alle med succes.</value>
+  </data>
+  <data name="ImportAgentsJobResultSummaryForNonfullSuccess" xml:space="preserve">
+    <value>{0} imorteret. {1} fejlet.</value>
+  </data>
+  <data name="ImportJob" xml:space="preserve">
+    <value>Import job</value>
+  </data>
+  <data name="InProgress" xml:space="preserve">
+    <value>I gang</value>
+  </data>
+  <data name="TimeStarted" xml:space="preserve">
+    <value>Starttid</value>
+  </data>
+  <data name="InvalidParameters" xml:space="preserve">
+    <value>Ugyldig parametre</value>
+  </data>
+  <data name="NumberOfRowsExceedsTheMaximum" xml:space="preserve">
+    <value>Antallet af räkker overskrider det maksimale ({0})</value>
+  </data>
+  <data name="DynamicGroupPageColon" xml:space="preserve">
+    <value>Dynamisk Gruppe Side</value>
+  </data>
+  <data name="ForecastedVolume" xml:space="preserve">
+    <value>Forventet volume</value>
+  </data>
+  <data name="Volume" xml:space="preserve">
+    <value>Volume</value>
+  </data>
+  <data name="ExceedsMaximumUploadFileSize" xml:space="preserve">
+    <value>Overskrider den maksimale upload filstörrelse</value>
+  </data>
+  <data name="ActualVolume" xml:space="preserve">
+    <value>Aktuel volume</value>
+  </data>
+  <data name="ForecastedAverageHandlingTime" xml:space="preserve">
+    <value>Forventet gennemsnitlig håndteringstid</value>
+  </data>
+  <data name="ErrorOccurredWhenGeneratingQrcode" xml:space="preserve">
+    <value>En fejl er opstået ved generering af QR-kode</value>
+  </data>
+  <data name="ActualAverageHandlingTime" xml:space="preserve">
+    <value>Aktuel gennemsnitlig håndteringstid</value>
+  </data>
+  <data name="FilterRtaFull" xml:space="preserve">
+    <value>Filtrer agent navn/ sites / teams / regler/ status / nuvärende</value>
+  </data>
+  <data name="FilterRtaShort" xml:space="preserve">
+    <value>Filtrer agent navne / status / ...</value>
+  </data>
+  <data name="FilterSites" xml:space="preserve">
+    <value>Filtrer sites</value>
+  </data>
+  <data name="FilterSkills" xml:space="preserve">
+    <value>Filtrer skills</value>
+  </data>
+  <data name="Purged" xml:space="preserve">
+    <value>Renset</value>
+  </data>
+  <data name="DeletedContractAssigned" xml:space="preserve">
+    <value>Kontrakten {0} som er tildelt til denne agent er blevet slettet</value>
+  </data>
+  <data name="DeletedContractScheduleAssigned" xml:space="preserve">
+    <value>Kontraktsplanen {0} som er tildelt denne agent er blevet slettet</value>
+  </data>
+  <data name="DeletedPartTimePercentageAssigned" xml:space="preserve">
+    <value>Deltidsprocentsatsen {0} som er tildelt denne agent er blevet slettet</value>
+  </data>
+  <data name="DeletedShiftBagAssigned" xml:space="preserve">
+    <value>Vagtsamlingen {0} som er tildelt til denne agent er blevet slettet</value>
+  </data>
+  <data name="MissingPersonPeriodForPeriod" xml:space="preserve">
+    <value>Agenten har ikke en personlig periode for hele eller en del af den valgte periode</value>
+  </data>
+  <data name="MissingSchedulePeriodForPeriod" xml:space="preserve">
+    <value>Agenten har ikke nogen vagtplan for den valgte periode</value>
+  </data>
+  <data name="MissingShiftBagForPeriod" xml:space="preserve">
+    <value>Agenten har ikke en vagtsamling for hele eller en del af den valgte periode</value>
+  </data>
+  <data name="MissingSkillsForPeriod" xml:space="preserve">
+    <value>Agenten har ikke skill for hele eller en del af den valgte periode</value>
+  </data>
+  <data name="NoMatchingSchedulePeriod" xml:space="preserve">
+    <value>Vagtplanlagt periode matcher ikke den valgte periode</value>
+  </data>
+  <data name="AgentHasDaysWithoutAnySchedule" xml:space="preserve">
+    <value>Agenten har {0} dage uden en vagtplan</value>
+  </data>
+  <data name="TargetScheduleTimeNotFullfilled" xml:space="preserve">
+    <value>Kontrakttidsmålet {0} er ikke opfyldt</value>
+  </data>
+  <data name="EmailSkillSelected" xml:space="preserve">
+    <value>Et e-mail skill er i öjeblikket valgt. Derfor kan abandon rate ikke vises.</value>
+  </data>
+  <data name="AgentsHaveScheduled" xml:space="preserve">
+    <value>Agenten er blevet vagtplanlagt</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteThePlanningGroup" xml:space="preserve">
+    <value>Er du sikker på at du vil slette planlägningsgruppen {0} og de tilhörende indstillinger?</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteTheDayOffRule" xml:space="preserve">
+    <value>Er du sikker på at du vil slette fridagsreglen {0} og de tilhörende indstillinger?</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteThePlanningPeriod" xml:space="preserve">
+    <value>Er sikker på at du vil slette planlägningsperioden {0}-{1} og de tilhörende indstillinger?</value>
+  </data>
+  <data name="ChangePlanningDuration" xml:space="preserve">
+    <value>Ändr planlägningsvarigheden</value>
+  </data>
+  <data name="CreatePlanningGroup" xml:space="preserve">
+    <value>Opret Planlägnings Gruppe</value>
+  </data>
+  <data name="CreateFirstPlanningPeriod" xml:space="preserve">
+    <value>Opret förste planlägningsperiode</value>
+  </data>
+  <data name="CreateNextPp" xml:space="preserve">
+    <value>Opret näste planlägningsperiode</value>
+  </data>
+  <data name="DayOffRule" xml:space="preserve">
+    <value>Fridags regel</value>
+  </data>
+  <data name="PlanGroupSchedulingSettingAppliedFilters" xml:space="preserve">
+    <value>Den fölgende indstilling er anvendt til planlägnings gruppen {0}</value>
+  </data>
+  <data name="DayOffRuleSetting" xml:space="preserve">
+    <value>Fridags regel indstilling</value>
+  </data>
+  <data name="DeletePlanningGroup" xml:space="preserve">
+    <value>Slet planlägnings gruppe</value>
+  </data>
+  <data name="DeleteDayOffRule" xml:space="preserve">
+    <value>Slet fridags regel</value>
+  </data>
+  <data name="DeletePlanningPeriod" xml:space="preserve">
+    <value>Slet planlägningsperiode</value>
+  </data>
+  <data name="EditPlanningGroup" xml:space="preserve">
+    <value>Rediger planlägnings gruppe</value>
+  </data>
+  <data name="FilterValidationIssues" xml:space="preserve">
+    <value>Filtrer valideringsproblemer</value>
+  </data>
+  <data name="HelpCreatePlanningGroup" xml:space="preserve">
+    <value>En planlägnings gruppe er nödvendig for at kunne planlägge dine agenter. Vil du oprette en planlägnings gruppe?</value>
+  </data>
+  <data name="HelpDayOffForPlanningPeriod" xml:space="preserve">
+    <value>Fridags regel vil blive tildelt alle planlägnings perioder</value>
+  </data>
+  <data name="Issue" xml:space="preserve">
+    <value>Problem</value>
+  </data>
+  <data name="ManageDayOffForPlanningGroup" xml:space="preserve">
+    <value>Håndter fridags regel for planlägnings gruppe {0}</value>
+  </data>
+  <data name="NoAgentsWithinPlanningGroup" xml:space="preserve">
+    <value>Der er ingen agenter som kan blive planlagt i denne planlägnings gruppe</value>
+  </data>
+  <data name="NoPreviousScheduleResult" xml:space="preserve">
+    <value>Denne planlägningsperiode har ingen foregående vagtplansresultat</value>
+  </data>
+  <data name="NoValidIssuesForPp" xml:space="preserve">
+    <value>Der er ingen valideringsproblemer for denne planlägningsperiode</value>
+  </data>
+  <data name="NoValidScheduleResult" xml:space="preserve">
+    <value>Denne planlägningsperiode har intet gyldig vagtplansresultat</value>
+  </data>
+  <data name="PreSchedulingValidationIssues" xml:space="preserve">
+    <value>For-planlägning valideringsproblemer</value>
+  </data>
+  <data name="RefreshPreSchedulingValidationIssues" xml:space="preserve">
+    <value>Opdater for-planlägnings valideringsproblemer</value>
+  </data>
+  <data name="SchedulePlanningGroup" xml:space="preserve">
+    <value>Vagtplanläg planlägnings gruppe</value>
+  </data>
+  <data name="SchedulingFailed" xml:space="preserve">
+    <value>Vagtplanlägning er fejlet</value>
+  </data>
+  <data name="ScheduledIssues" xml:space="preserve">
+    <value>Problemer i löbet af sidste vagtplanlägning</value>
+  </data>
+  <data name="SchedulingSucceeded" xml:space="preserve">
+    <value>Vagtplanlägningen er gennemfört med succes</value>
+  </data>
+  <data name="PlansPageSelectPlanningGroup" xml:space="preserve">
+    <value>Välg planlägnings gruppe for at vagtplanlägge dine agenter</value>
+  </data>
+  <data name="SearchForPlanningGroup" xml:space="preserve">
+    <value>Sög site / team / skill / kontrakt</value>
+  </data>
+  <data name="SearchForDayOff" xml:space="preserve">
+    <value>Sög site / team / kontrakt</value>
+  </data>
+  <data name="SelectedPlanningPeriod" xml:space="preserve">
+    <value>Valgt planlägningsperiode</value>
+  </data>
+  <data name="SelectPpToSchedulePlanningGroup" xml:space="preserve">
+    <value>Välg planlägningsperiode for at vagtplanlägge fin planlägnings gruppe</value>
+  </data>
+  <data name="UpdatedValidation" xml:space="preserve">
+    <value>Valideringsproblemerne er blevet opdateret</value>
+  </data>
+  <data name="ConfirmToggleAllData" xml:space="preserve">
+    <value>Dette vil skifte elementet og alle nedenstående elementer, er du sikker på, at du vil fortsätte?</value>
+  </data>
+  <data name="AnErrorOccurredPleaseTryAgain" xml:space="preserve">
+    <value>En fejl opstod. Vär venlig at pröve igen.</value>
+  </data>
+  <data name="ChangePlanningPeriodDurationColon" xml:space="preserve">
+    <value>Ändr planlägningsperiodens varighed:</value>
+  </data>
+  <data name="ClearScheduleResultAndHistoryData" xml:space="preserve">
+    <value>Ryd vagtplanlagte vagter og fridage</value>
+  </data>
+  <data name="CreatePlanningPeriod" xml:space="preserve">
+    <value>Opret planlägningsperiode</value>
+  </data>
+  <data name="ModifyEndDateForThisPlanningPeriodDot" xml:space="preserve">
+    <value>Ret slutdato for denne planlägningsperiode.</value>
+  </data>
+  <data name="ModifyStartAndEndDateForThisPlanningPeriodDot" xml:space="preserve">
+    <value>Ret startdato og slutdato for denne planlägningsperiode</value>
+  </data>
+  <data name="RunningIntradayOptimization" xml:space="preserve">
+    <value>Gennemlöb af intradag optimering</value>
+  </data>
+  <data name="SelectASuggestedPeriodToWorkWithOrPickStartAndEndDateDirectlyDot" xml:space="preserve">
+    <value>Välg en foreslået periode at arbejde med eller välg startdato og slutdato direkte.</value>
+  </data>
+  <data name="SuccessfullyScheduledPlanningPeriodFromTo" xml:space="preserve">
+    <value>Denne planlägningsperiode er vagtplanlagt med succes {0} - {1}</value>
+  </data>
+  <data name="YouAreGoingToChangeThisPlanningPeriodFrom" xml:space="preserve">
+    <value>Du er ved at ändre denne planlägningsperiode til {0} - {1}.</value>
+  </data>
+  <data name="YouAreGoingToCreateAPlanningPeriodFrom" xml:space="preserve">
+    <value>Du er ved at oprette en planlägningsperiode fra {0} - {1}.</value>
+  </data>
+  <data name="YouNeedAPlanningPeriodToScheduleYourAgentsDoYouWantToCreateAPlanningPeriodQuestion" xml:space="preserve">
+    <value>Du mangler en planlägningsperiode for at kunne vagtplanlägge dine agenter. Vil du oprette en planlägningsperiode?</value>
+  </data>
+  <data name="AreYouSureYouWantToClearPlanningPeriodData" xml:space="preserve">
+    <value>Er du sikker på at du vil rydde vagtplanlagte vagter og fridage i denne planlägningsperiode {0}-{1} ?</value>
+  </data>
+  <data name="ClearPlanningPeriod" xml:space="preserve">
+    <value>Ryd vagtplanlagte vagter og fridage for planlägningsperioden</value>
+  </data>
+  <data name="PublishingSchedule" xml:space="preserve">
+    <value>Offentliggör vagtplan</value>
+  </data>
+  <data name="PublishScheduleSuccess" xml:space="preserve">
+    <value>Det er lykkedes at offetliggöre vagtplanen</value>
+  </data>
+  <data name="SuccessClearPlanningPeriodData" xml:space="preserve">
+    <value>Det er lykkedes at rydde planlagte vagter og fridage for planlägningsperioden {0}-{1}</value>
+  </data>
+  <data name="FailedToIntradayOptimizeForSelectedPlanningPeriodDueToTechnicalError" xml:space="preserve">
+    <value>Det er ikke lykkedes at optimere intradag for planlägningsperioden {0}-{1} på grund af en teknisk fejl. Pröv venligst igen.</value>
+  </data>
+  <data name="PublishingScheduleSuccess" xml:space="preserve">
+    <value>Offentliggör vagtplan for planlägningsperioden {0} - {1}</value>
+  </data>
+  <data name="PublishScheduleSucessForSelectedPlanningPeriod" xml:space="preserve">
+    <value>Det er lykkedes at offentliggöre vagtplanen for planlägningsperioden {0} - {1}</value>
+  </data>
+  <data name="SuccessfullyIntradayOptimizationPlanningPeriodFromTo" xml:space="preserve">
+    <value>Det er lykkedes at optimere intradag for planlägningsperioden {0} - {1}</value>
+  </data>
+  <data name="BadRequest" xml:space="preserve">
+    <value>Ugyldig forespörgsel</value>
+  </data>
+  <data name="EndTimeMustBeGreaterThanStartTime" xml:space="preserve">
+    <value>Sluttidspunktet bör forekomme efter starttidspunktet.</value>
+  </data>
+  <data name="TeleoptiWFMApp" xml:space="preserve">
+    <value>Teleopti WFM App</value>
+  </data>
+  <data name="WFMAppGuideStep1" xml:space="preserve">
+    <value>Trin 1:</value>
+  </data>
+  <data name="WFMAppGuideStep1Description" xml:space="preserve">
+    <value>Download og installer Teleopti WFM App ved at klikke på en egnet knap eller ved at scanne QR koden nedenfor.</value>
+  </data>
+  <data name="WFMAppGuideStep2" xml:space="preserve">
+    <value>Trin 2:</value>
+  </data>
+  <data name="WFMAppGuideStep2Description" xml:space="preserve">
+    <value>Konfigurer Teleopti WFM appen. Sät appen i gang og scan QR koden nedenfor eller tast ind.</value>
+  </data>
+  <data name="WFMAppGuideTitle" xml:space="preserve">
+    <value>Guide til Teleopti WFM App</value>
+  </data>
+  <data name="EnableMobileNotifications" xml:space="preserve">
+    <value>Aktiver mobil app notifikationer</value>
+  </data>
+  <data name="MobileNotificationSettings" xml:space="preserve">
+    <value>Mobil App meddelelsesindstillinger</value>
+  </data>
+  <data name="IgnoreSchedules" xml:space="preserve">
+    <value>Ignorer vagtplaner</value>
+  </data>
+  <data name="ShowAllSchedules" xml:space="preserve">
+    <value>Vis alle vagtplaner</value>
+  </data>
+  <data name="IgnoredScheduleHint" xml:space="preserve">
+    <value>Ignorer vagtplaner</value>
+  </data>
+  <data name="FilterPlanningGroups" xml:space="preserve">
+    <value>Filtrer planlägningsgrupper</value>
+  </data>
+  <data name="PlansPageCreatePlanningGroup" xml:space="preserve">
+    <value>Udfyld et navn og välg passende filtre for at oprette en planlägningsgruppe</value>
+  </data>
+  <data name="UnsupportedDataSeriesFound" xml:space="preserve">
+    <value>Indeholder mixed skilltyper, bestemte dataserier er muligvis utilgängelige</value>
+  </data>
+  <data name="FilterPlanningPeriods" xml:space="preserve">
+    <value>Filtrer planlägningsperioder</value>
+  </data>
+  <data name="ETOTRequests" xml:space="preserve">
+    <value>Overtidsforespörgsel</value>
+  </data>
+  <data name="UnavailableSeries" xml:space="preserve">
+    <value>Nuvärende markering indeholder e-mailskills, bestemte dataserier er utilgängelige.</value>
+  </data>
+  <data name="NotShowingReforcastedAgents" xml:space="preserve">
+    <value>Genprognosticerede agenter kan ikke vises i den nuvärende markering.</value>
+  </data>
+  <data name="NotShowingAbandonRate" xml:space="preserve">
+    <value>Abandon rate kan ikke vises i den nuvärende markering.</value>
+  </data>
+  <data name="EnableAbsenceProbability" xml:space="preserve">
+    <value>Aktiver Fravärssandsynlighed</value>
+  </data>
+  <data name="EnableOvertimeProbability" xml:space="preserve">
+    <value>Aktiver overtidssandsynlighed</value>
+  </data>
+  <data name="Plans" xml:space="preserve">
+    <value>Planer</value>
+  </data>
+  <data name="ApplySuggestion" xml:space="preserve">
+    <value>Anvend forslag</value>
+  </data>
+  <data name="GetSuggestionsForOvertime" xml:space="preserve">
+    <value>Få foreslag for overtid</value>
+  </data>
+  <data name="MoveOvertime" xml:space="preserve">
+    <value>Flyt overtid</value>
+  </data>
+  <data name="NoPermissionMoveAgentOvertime" xml:space="preserve">
+    <value>Ingen tilladelse til at flytte overtid for agent(er)</value>
+  </data>
+  <data name="ChooseDayOffset" xml:space="preserve">
+    <value>Välg dag</value>
+  </data>
+  <data name="CannotApplyThisToAgentsInADifferentTimeZone" xml:space="preserve">
+    <value>Kan ikke tilföjes til agenter i andre tidszoner</value>
+  </data>
+  <data name="MissingDuration" xml:space="preserve">
+    <value>Manglende varighed</value>
+  </data>
+  <data name="MissingStartTime" xml:space="preserve">
+    <value>Manglende starttid</value>
+  </data>
+  <data name="OvertimeRequestDateExceeds14Days" xml:space="preserve">
+    <value>Den önskede dato er mere end 14 dage fra nu.</value>
+  </data>
+  <data name="OvertimeRequestDateIsPast" xml:space="preserve">
+    <value>Kan ikke tilföje en overtidsforespörgsel for en dato som er overskredet</value>
+  </data>
+  <data name="AllowedOvertime" xml:space="preserve">
+    <value>Tilladt overtid</value>
+  </data>
+  <data name="CloseOvertimeSettings" xml:space="preserve">
+    <value>Luk overtidsindstillinger</value>
+  </data>
+  <data name="Compensations" xml:space="preserve">
+    <value>Kompensationer</value>
+  </data>
+  <data name="DiscardSuggestionData" xml:space="preserve">
+    <value>Du har aktive forslagsdata. Hvis du fortsätter vil disse blive kasseret</value>
+  </data>
+  <data name="OvertimeSettings" xml:space="preserve">
+    <value>Overtidsindstillinger</value>
+  </data>
+  <data name="PressEscToClose" xml:space="preserve">
+    <value>Tryk Esc for at lukke</value>
+  </data>
+  <data name="CreateDayOffRule" xml:space="preserve">
+    <value>Opret fridagsregel</value>
+  </data>
+  <data name="EditDayOffRule" xml:space="preserve">
+    <value>Rediger fridagsregel</value>
+  </data>
+  <data name="FilterDayOffRules" xml:space="preserve">
+    <value>Filtrer fridagsregel</value>
+  </data>
+  <data name="PlansPageEditPlanningGroup" xml:space="preserve">
+    <value>Rediger navn og filter for den valgte planlägningsgruppe</value>
+  </data>
+  <data name="ClassicIntraday" xml:space="preserve">
+    <value>Klassisk intradag</value>
+  </data>
+  <data name="PeriodIsOutOfSkillOpenHours" xml:space="preserve">
+    <value>Den efterspurgte periode er udenfor skillets åbningstider</value>
+  </data>
+  <data name="NoUnderStaffingSkill" xml:space="preserve">
+    <value>Der er ingen skills som er kritisk underbemandet i hele den forespurgte periode.</value>
+  </data>
+  <data name="NoAccessToSites" xml:space="preserve">
+    <value>Du har ikke adgang til sites eller teams </value>
+  </data>
+  <data name="PublicNote" xml:space="preserve">
+    <value>Offentlig note</value>
+  </data>
+  <data name="ShiftCannotBeAddedToAgentsInAnotherTimeZone" xml:space="preserve">
+    <value>Bemärk: For at flytte en vagt for en agent i en anden tidszone, skal du först välge deres tidzone fra rullemenuen.</value>
+  </data>
+  <data name="OvertimeRequestHasBeenApprovedDot" xml:space="preserve">
+    <value>Overtidsforespörgslen {0}-{1} er blevet godkendt.</value>
+  </data>
+  <data name="BpoExchange" xml:space="preserve">
+    <value>BPO Excange</value>
+  </data>
+  <data name="DragAndDropCSVFilesHereOrClickToUpload" xml:space="preserve">
+    <value>Träk og slip. CSV filerne her eller klik for at uploade</value>
+  </data>
+  <data name="SuccessfullyImported" xml:space="preserve">
+    <value>Importen er lykkedes</value>
+  </data>
+  <data name="AnywhereMigrated" xml:space="preserve">
+    <value>Overalt er blevet migreret til {0} Teleopti WFM {1}!</value>
+  </data>
+  <data name="PageWillBeRedirected" xml:space="preserve">
+    <value>Denne side vil automatisk omdirigere til WFM om {0} sekunder...</value>
+  </data>
+  <data name="SeveralGroupsSelected" xml:space="preserve">
+    <value>{0} grupper er valgt</value>
+  </data>
+  <data name="OpenSite" xml:space="preserve">
+    <value>Åben site</value>
+  </data>
+  <data name="NoSuggestionsFound" xml:space="preserve">
+    <value>Der er ingen forslag ifölge de ekstra overtidsindstillinger</value>
+  </data>
+  <data name="ImportBpoWrongDateFormat" xml:space="preserve">
+    <value>Dataformatet er ikke korrekt</value>
+  </data>
+  <data name="ImportBpoWrongResourceFormat" xml:space="preserve">
+    <value>Ressourceparameteret (parameter nummer {0} med värdi: {1}) er ikke korrekt. Parameter skal angives som et decimaltal, for eksempel 14.2.</value>
+  </data>
+  <data name="ImportBpoDuplicateRecord" xml:space="preserve">
+    <value>Dobbelt optegnelser fundet. Den samme information er indtastet på mere end en linje i importfilen og det er ikke tilladt.</value>
+  </data>
+  <data name="AbandonedRateParenthesisPercentSign" xml:space="preserve">
+    <value>Abandon rate (%)</value>
+  </data>
+  <data name="AverageSpeedOfAnswersParenthesisSeconds" xml:space="preserve">
+    <value>Gennemsnitlig besvarelsestid(er)</value>
+  </data>
+  <data name="ESLParenthesisPercentSign" xml:space="preserve">
+    <value>ESL (%)</value>
+  </data>
+  <data name="Interval" xml:space="preserve">
+    <value>Interval</value>
+  </data>
+  <data name="SkillsParenthesisS" xml:space="preserve">
+    <value>Skill(s)</value>
+  </data>
+  <data name="OverstaffingAfterOT" xml:space="preserve">
+    <value>Overbemanding efter OT</value>
+  </data>
+  <data name="ScheduledAgentsAfterOT" xml:space="preserve">
+    <value>Planlagte agenter efter OT</value>
+  </data>
+  <data name="UnderstaffingAfterOT" xml:space="preserve">
+    <value>Underbemanding efter OT</value>
+  </data>
+  <data name="InAlarmInSite" xml:space="preserve">
+    <value>I alarm på site</value>
+  </data>
+  <data name="SelectionTooLarge" xml:space="preserve">
+    <value>Markering er for stor</value>
+  </data>
+  <data name="ExportToExcel" xml:space="preserve">
+    <value>Eksporter til Excel</value>
+  </data>
+  <data name="SkillAreaNoSkillSelected" xml:space="preserve">
+    <value>Du skal välge mindst et skill.</value>
+  </data>
+  <data name="TotalAgentsInAlarm" xml:space="preserve">
+    <value>Total agenter i alarm</value>
+  </data>
+  <data name="ReportGeneratedTime" xml:space="preserve">
+    <value>Rapport er dannet</value>
+  </data>
+  <data name="ExportGap" xml:space="preserve">
+    <value>Eksport mangel</value>
+  </data>
+  <data name="AbsenceRequestAlreadyInWaitlist" xml:space="preserve">
+    <value>Der er allerede ugyldige forespörgsler til denn periode, vent venligst.</value>
+  </data>
+  <data name="NoAgentsToBeDisplayed" xml:space="preserve">
+    <value>Ingen agenter kan vises</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteSchedulingSetting" xml:space="preserve">
+    <value>Er du sikker på at du vil slette planlägningdindstillingen {0} og de tilhörende indstillinger?</value>
+  </data>
+  <data name="BlockSameShift" xml:space="preserve">
+    <value>Samme vagt</value>
+  </data>
+  <data name="BlockSameShiftCategory" xml:space="preserve">
+    <value>Samme vagtkategori</value>
+  </data>
+  <data name="BlockSameStartTime" xml:space="preserve">
+    <value>Samme starttid</value>
+  </data>
+  <data name="CreatePlanGroupSchedulingSetting" xml:space="preserve">
+    <value>Opret planlägningsindstilling</value>
+  </data>
+  <data name="DeletePlanGroupSchedullingSetting" xml:space="preserve">
+    <value>Slet planlägningsindstilling</value>
+  </data>
+  <data name="EditPlanGroupSchedulingSetting" xml:space="preserve">
+    <value>Ret planlägningsindstilling</value>
+  </data>
+  <data name="FilterPlanGroupSchedulingSetting" xml:space="preserve">
+    <value>Filtrer planlägningsindstilling</value>
+  </data>
+  <data name="GeneralSettingOfPlanGroupSchedulingSetting" xml:space="preserve">
+    <value>Navn og filter</value>
+  </data>
+  <data name="IndividualFlexible" xml:space="preserve">
+    <value>Fleksibel</value>
+  </data>
+  <data name="InfoOfSchedulingSetting" xml:space="preserve">
+    <value>Planlägningsindstillingen er tilföjet planlägningsgruppen</value>
+  </data>
+  <data name="ManagePlanningGroupSchedulingSetting" xml:space="preserve">
+    <value>Håndter planlägningsindstillingen for planlägningsgruppen {0}</value>
+  </data>
+  <data name="NewPlanGroupSchedulingSetting" xml:space="preserve">
+    <value>Ny planlägningsindstilling</value>
+  </data>
+  <data name="PlanGroupScheduling" xml:space="preserve">
+    <value>Planlägningsindstilling</value>
+  </data>
+  <data name="SelectedFilters" xml:space="preserve">
+    <value>Valgte filtre</value>
+  </data>
+  <data name="SelectScheduleMethod" xml:space="preserve">
+    <value>Välg planlägningsmetode</value>
+  </data>
+  <data name="TextOFCreatePlanGroupSchedulingSetting" xml:space="preserve">
+    <value>Udfyld information forden valgte planlägningsindstilling</value>
+  </data>
+  <data name="TextOfEditPlanGroupSchedulingSetting" xml:space="preserve">
+    <value>Ändr informationen for den valgte planlägningsindstilling</value>
+  </data>
+  <data name="TextOfNoBlockScheduling" xml:space="preserve">
+    <value>Ingen blok planlägning</value>
+  </data>
+  <data name="LoadingSkillGroups" xml:space="preserve">
+    <value>Indläser skill grupper</value>
+  </data>
+  <data name="NoSkillGroupsFound" xml:space="preserve">
+    <value>Ingen skill grupper er fundet</value>
+  </data>
+  <data name="SelectSkillGroup" xml:space="preserve">
+    <value>Välg skill grupper</value>
+  </data>
+  <data name="SkillGroupColon" xml:space="preserve">
+    <value>Skill gruppe:</value>
+  </data>
+  <data name="ViewAgents" xml:space="preserve">
+    <value>Se agenter</value>
+  </data>
+  <data name="ViewAgentsBySelection" xml:space="preserve">
+    <value>Se valgte agenter</value>
+  </data>
+  <data name="AuditType" xml:space="preserve">
+    <value>Revision type</value>
+  </data>
+  <data name="ModifiedAt" xml:space="preserve">
+    <value>Rettet kl. </value>
+  </data>
+  <data name="ModifiedBy" xml:space="preserve">
+    <value>Rette af</value>
+  </data>
+  <data name="ScheduledAgent" xml:space="preserve">
+    <value>Vagtplanlagt agent</value>
+  </data>
+  <data name="DeleteSchedulingSetting" xml:space="preserve">
+    <value>Slet vagtplanlägningsindstilling</value>
+  </data>
+  <data name="MissingOvertimeType" xml:space="preserve">
+    <value>Mangler overtidstype</value>
+  </data>
+  <data name="PlanningGroup" xml:space="preserve">
+    <value>Planlägningsgruppe</value>
+  </data>
+  <data name="BreakPreferenceStartTimeByMaxColon" xml:space="preserve">
+    <value>Pausepreferencer starttid som maksimum:</value>
+  </data>
+  <data name="NoOvertimeType" xml:space="preserve">
+    <value>Ingen overtidstype fundet i din kontrakt. Vär venlig at kontakte din administrator.</value>
+  </data>
+  <data name="OvertimeShortName" xml:space="preserve">
+    <value>OT</value>
+  </data>
+  <data name="ExportSchedule" xml:space="preserve">
+    <value>Eksporter vagtplaner</value>
+  </data>
+  <data name="ExportSchedulesMaximumDays" xml:space="preserve">
+    <value>Et maksimun på 31 dage kan välges</value>
+  </data>
+  <data name="ExportSchedulesMaximumOptionalColumns" xml:space="preserve">
+    <value>Et maksimum af tre valgfrie kolonner kan välges</value>
+  </data>
+  <data name="ShiftTradeTargetTimeRuleName" xml:space="preserve">
+    <value>Kontraktstidstolerence</value>
+  </data>
+  <data name="ShowStaffing" xml:space="preserve">
+    <value>Vis bemanding</value>
+  </data>
+  <data name="Feedback" xml:space="preserve">
+    <value>Lad os vide, hvad du tänker</value>
+  </data>
+  <data name="UserSettings" xml:space="preserve">
+    <value>Brugerindstillinger</value>
+  </data>
+  <data name="ShiftStartsDayBeforeOrAfter" xml:space="preserve">
+    <value>{0:d}: En vagt begynder dagen för eller efter og det er ikke tilladt. Dette skyldes sandsynligvis en ändring i agentens tidszone i Medarbejdere. Ändr til korrekt tidszone eller tryk slet denne dag for at rette fejlen, </value>
+  </data>
+  <data name="MaximumAgentToExport" xml:space="preserve">
+    <value>Du kan kun eksportere et maksimum af 1000 agenter hver gang du forsöger at eksporterer {0}.</value>
+  </data>
+  <data name="SelectedGroups" xml:space="preserve">
+    <value>Valgte grupper</value>
+  </data>
+  <data name="PriorityHigher" xml:space="preserve">
+    <value>Höj prioritet</value>
+  </data>
+  <data name="PriorityLower" xml:space="preserve">
+    <value>Lav prioritet</value>
+  </data>
+  <data name="MaxResultsReached" xml:space="preserve">
+    <value>Resultatet af sögeord vil overstige {0}, vär venlig af begränse din sögning</value>
+  </data>
+  <data name="RequestDenyReasonNoPersonSkillOpen" xml:space="preserve">
+    <value>Forespörgslen blev afvist fordi alle dine skills er lukkede i den forespurgte periode</value>
+  </data>
+  <data name="OvertimeRequestDatePeriodError" xml:space="preserve">
+    <value>Gyldigt interval af datoer er {0} - {1} </value>
+  </data>
+  <data name="OvertimeRequestRollingPeriodError" xml:space="preserve">
+    <value>Gyldigt interval er 0 - {0}</value>
+  </data>
+  <data name="OvertimeRequestDenyReasonClosedPeriod" xml:space="preserve">
+    <value>Din overtidsforespörgsel kan ikke tildeles. Nogle datoer er ikke åbne for forespörgsler på nuvärende tidspunkt</value>
+  </data>
+  <data name="OvertimeRequestDenyReasonAutodeny" xml:space="preserve">
+    <value>Din overtidsforespörgsel er blevet automatisk afvist, på grund af en reglse som er opsat af administratoren</value>
+  </data>
+  <data name="StartTimeNotMatchingShiftBag" xml:space="preserve">
+    <value>Starttiden {0:HH:mm} på {1:d} eksisterer ikke i vagtsamlingen {2}</value>
+  </data>
+  <data name="ShiftNotMatchingShiftBag" xml:space="preserve">
+    <value>Vagten på {0:d} eksisterer ikke i vagtsamlingen {1}</value>
+  </data>
+  <data name="OpenForOvertimeRequests" xml:space="preserve">
+    <value>Åben for overtidsforespörgsler</value>
+  </data>
+  <data name="OvertimeRequestMaximum" xml:space="preserve">
+    <value>Maksimal overtid pr. kalendermåned: </value>
+  </data>
+  <data name="OvertimeRequestMaximumTimeHandleType" xml:space="preserve">
+    <value>Når valideringen fejler:</value>
+  </data>
+  <data name="OvertimeRequestMaximumTimeDenyReason" xml:space="preserve">
+    <value>{0} indeholder for meget overtid ({1}). Maksimun er {2}</value>
+  </data>
+  <data name="ExistingShiftNotMatchShift" xml:space="preserve">
+    <value>Vagten på {0:d} matcher ikke vagten på {1:d}.</value>
+  </data>
+  <data name="ExistingShiftNotMatchShiftCategory" xml:space="preserve">
+    <value>Vagtkategorien {0} på {1:d} matcher ikke vagtkategorien {2} på {3:d}.</value>
+  </data>
+  <data name="ExistingShiftNotMatchStartTime" xml:space="preserve">
+    <value>Startiden {0:HH:mm} på {1:d} matcher ikke starttiden {2:HH:mm} på {3:d}.</value>
+  </data>
+  <data name="OvertimeRequestDenyReasonNoPeriod" xml:space="preserve">
+    <value>Din overtidsforespörgsel er blevet afvist. Nogle af dagene i den forespurgte periode er endnu ikke åbnet for forespörgsler. Du kan sende en forespörgsel for denne periode: {0}.</value>
+  </data>
+  <data name="ShiftCategoryNotMatchingShiftBag" xml:space="preserve">
+    <value>Vagtkategorien {0} på {1:d} eksisterer ikke i vagtsamlingen {2}</value>
+  </data>
+  <data name="ContractWorkRuleValidation" xml:space="preserve">
+    <value>Kontrakt arbejdsregel validering</value>
+  </data>
+  <data name="OvertimeRequests" xml:space="preserve">
+    <value>Overtidsforespörgsler</value>
   </data>
 </root>
