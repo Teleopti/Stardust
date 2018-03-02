@@ -36,11 +36,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 				{
 					if (numberOfTries < maxNumberOfTries)
 					{
-						log.Warn($"Failed to read schedule. Attempt {numberOfTries} - retrying... {deadLockEx}");	
+						log.Warn($"Deadlock during intraday optimization. Attempt {numberOfTries} - retrying... {deadLockEx}");	
 					}
 					else
 					{
-						log.Warn($"Failed to read schedule. Attempt {numberOfTries} - giving up... {deadLockEx}");
+						log.Warn($"Deadlock during intraday optimization. Attempt {numberOfTries} - giving up... {deadLockEx}");
 						throw;
 					}
 				}
