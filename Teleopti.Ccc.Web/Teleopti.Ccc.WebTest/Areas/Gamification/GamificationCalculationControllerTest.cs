@@ -8,6 +8,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Gamification.Controller;
+using Teleopti.Ccc.Web.Areas.Gamification.Models;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Gamification
@@ -36,8 +37,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification
 		[Test]
 		public void ShouldCreatNewJob()
 		{
+			var form = new RecalculateForm {Start = DateTime.Today, End = DateTime.Today};
 			var peroid = DateOnly.Today.ToDateOnlyPeriod();
-			Target.NewRecalculateBadgeJob(peroid);
+			Target.NewRecalculateBadgeJob(form);
 
 			var jobResult = JobResultRepository.LoadAll().ToList();
 			jobResult.Count.Should().Be.EqualTo(1);

@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Web.Http;
 using System.Web.Http.Results;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Badge;
 using Teleopti.Ccc.Domain.ApplicationLayer.Gamification;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Web.Areas.Gamification.Models;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 
@@ -30,19 +30,15 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
 		}
 
 		[HttpPost, Route("api/Gamification/RecalculateBadges/NewRecalculateBadgeJob")]
-		public OkResult NewRecalculateBadgeJob(DateOnlyPeriod peroid)
+		public OkResult NewRecalculateBadgeJob([FromBody]RecalculateForm input)
 		{
-			createJob(peroid);
+			createJob(new DateOnlyPeriod(new DateOnly(input.Start), new DateOnly(input.End)));
 			return Ok();
 		}
 
 		[UnitOfWork]
 		protected virtual void createJob(DateOnlyPeriod peroid)
 		{
-			if (peroid == null)
-			{
-				throw new ArgumentNullException();
-			}
 			_recalculateBadgeJobService.CreateJob(peroid);
 		}
 
