@@ -468,13 +468,11 @@
     <Compile Include="Areas\MyTime\Models\WeekSchedule\RequestLicense.cs" />
     <Compile Include="Areas\People\Controllers\RoleManager.cs" />
     <Compile Include="Areas\People\Core\ActionFilters.cs" />
-    <Compile Include="Areas\People\Models\GrantRolesInputModel.cs" />
-    <Compile Include="Areas\People\Models\RevokeRolesInputModel.cs" />
-    <Compile Include="Areas\People\Models\PersonRoleInputModel.cs" />
+    <Compile Include="Areas\People\Core\Aspects\AuditPersonAspect.cs" />
+    <Compile Include="Areas\People\Core\Aspects\AuditPersonAttribute.cs" />
+    <Compile Include="Areas\People\Core\AuditHelper.cs" />
     <Compile Include="Areas\People\Controllers\RoleController.cs" />
-    <Compile Include="Areas\People\Models\FecthPersonsInputModel.cs" />
-    <Compile Include="Areas\People\Models\PersonViewModel.cs" />
-    <Compile Include="Areas\People\Models\RoleViewModel.cs" />
+    <Compile Include="Areas\People\Models\RoleModels.cs" />
     <Compile Include="Areas\Rta\Controllers\ConfigurationController.cs" />
     <Compile Include="Areas\Rta\Controllers\HistoricalAdherenceController.cs" />
     <Compile Include="Areas\Rta\Controllers\AgentStateController.cs" />

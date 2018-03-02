@@ -1,10 +1,12 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.ImportAgent;
+using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
+using Teleopti.Ccc.Infrastructure.Persisters.Auditing;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
@@ -22,6 +24,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<WorkbookHandler>().As<IWorkbookHandler>().SingleInstance();
 			builder.RegisterType<ImportAgentJobService>().As<IImportAgentJobService>();
 			builder.RegisterType<ImportJobArtifactValidator>().As<IImportJobArtifactValidator>().ApplyAspects();
+			builder.RegisterType<PersonAccessPersister>().As<IPersonAccessPersister>().SingleInstance().ApplyAspects();
 		}
 	}
 }

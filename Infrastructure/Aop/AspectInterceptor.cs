@@ -1,11 +1,10 @@
+using Castle.DynamicProxy;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
-using Autofac;
-using Castle.DynamicProxy;
 using Teleopti.Ccc.Domain.Aop.Core;
 using Teleopti.Ccc.Domain.Collection;
 

@@ -1,0 +1,111 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Teleopti.Ccc.Domain.Auditing;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Web.Areas.People.Models;
+
+namespace Teleopti.Ccc.Web.Areas.People.Core
+{
+	public interface IAuditHelper
+	{
+		void AuditCall(PersonAuditActionType actionType, PersonRolesBaseModel inputmodel);
+	}
+
+	public class AuditHelper : IAuditHelper
+	{
+		private readonly IPersonRepository _personRepository;
+		private readonly IApplicationRoleRepository _roleRepository;
+		private readonly ILoggedOnUser _loggonUser;
+		private readonly IPersonAccessPersister _personAccessPersister;
+		private readonly ICurrentUnitOfWork _unitOfWork;
+
+		public AuditHelper(IPersonRepository personRepository,
+			IApplicationRoleRepository roleRepository,
+			ILoggedOnUser loggedOnUser,
+			IPersonAccessPersister personAccessPersister,
+			ICurrentUnitOfWork unitOfWork)
+		{
+			_roleRepository = roleRepository;
+			_personRepository = personRepository;
+			_loggonUser = loggedOnUser;
+			_personAccessPersister = personAccessPersister;
+			_unitOfWork = unitOfWork;
+		}
+
+		public void AuditCall(PersonAuditActionType actionType, PersonRolesBaseModel inputmodel)
+		{
+			actionType = tryTuneActionType(actionType, inputmodel);
+			var persons = _personRepository.FindPeople(inputmodel.Persons);
+			var updatingUser = _loggonUser.CurrentUser();
+			var allRoles = _roleRepository.LoadAll();
+			var selectedRoles = allRoles.Where(x => inputmodel.Roles.ToList().Contains(x.Id ?? Guid.Empty));
+			var correlationId = Guid.NewGuid();
+
+			foreach (var person in persons)
+			{
+				IEnumerable<IApplicationRole> rolesThatMakesChange;
+				IEnumerable<IApplicationRole> rolesThatMakesNOChange;
+
+				switch (actionType)
+				{
+					case PersonAuditActionType.MulitGrantRole:
+					case PersonAuditActionType.SingleGrantRole:
+						rolesThatMakesChange = selectedRoles.Except(person.PermissionInformation.ApplicationRoleCollection);
+						rolesThatMakesNOChange = selectedRoles.Where(r => person.PermissionInformation.ApplicationRoleCollection.Contains(r));
+						break;
+					case PersonAuditActionType.MulitRevokeRole:
+					case PersonAuditActionType.SingleRevokeRole:
+					default:
+						rolesThatMakesChange = selectedRoles.Where(r => person.PermissionInformation.ApplicationRoleCollection.Contains(r));
+						rolesThatMakesNOChange = selectedRoles.Except(person.PermissionInformation.ApplicationRoleCollection);
+						break;
+				}
+
+				persistAudit(actionType, rolesThatMakesNOChange, updatingUser, person, correlationId, PersonAuditActionResult.NoChange);
+				persistAudit(actionType, rolesThatMakesChange, updatingUser, person, correlationId, PersonAuditActionResult.Change);
+			}
+		}
+
+		private PersonAuditActionType tryTuneActionType(PersonAuditActionType actionType, PersonRolesBaseModel model)
+		{
+			switch (actionType)
+			{
+				case PersonAuditActionType.GrantRole:
+					return model.Persons.Count() > 1 ? PersonAuditActionType.MulitGrantRole : PersonAuditActionType.SingleGrantRole;
+				case PersonAuditActionType.RevokeRole:
+					return model.Persons.Count() > 1 ? PersonAuditActionType.MulitRevokeRole : PersonAuditActionType.SingleRevokeRole;
+				default:
+					return actionType;
+			}
+		}
+
+		private void persistAudit(PersonAuditActionType actionType, IEnumerable<IApplicationRole> rolesToUpdate, IPerson actionBy, IPerson actionOn, Guid correlationId, PersonAuditActionResult actionResult)
+		{
+			foreach (var role in rolesToUpdate)
+			{
+				var actionJsonData = Newtonsoft.Json.JsonConvert.SerializeObject(new { RoleId = role.Id, Name = role.DescriptionText });
+				var pa = new PersonAccess(actionBy.Id.GetValueOrDefault(), actionOn.Id.GetValueOrDefault(), actionType.ToString(), actionResult.ToString(), actionJsonData, correlationId);
+				_personAccessPersister.Persist(pa);
+			}
+		}
+	}
+
+	public enum PersonAuditActionResult
+	{
+		Change,
+		NoChange
+	}
+
+	public enum PersonAuditActionType
+	{
+		GrantRole,
+		RevokeRole,
+		SingleGrantRole,
+		SingleRevokeRole,
+		MulitGrantRole,
+		MulitRevokeRole
+	}
+}

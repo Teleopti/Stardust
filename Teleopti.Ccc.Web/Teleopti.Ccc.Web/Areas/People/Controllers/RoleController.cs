@@ -10,6 +10,7 @@ using Teleopti.Ccc.Web.Areas.People.Models;
 
 namespace Teleopti.Ccc.Web.Areas.People.Controllers
 {
+	//[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.ScheduleAuditTrailWebReport)]
 	public class RoleController : ApiController
 	{
 		private readonly IPersonRepository _personRepository;

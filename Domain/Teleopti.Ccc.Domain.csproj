@@ -338,6 +338,9 @@
     <Compile Include="ApplicationLayer\SiteOpenHours\SiteWithOpenHourProvider.cs" />
     <Compile Include="ApplicationLayer\SiteTeamChangedHandlers\AnalyticsSiteUpdater.cs" />
     <Compile Include="ApplicationLayer\SiteTeamChangedHandlers\AnalyticsTeamUpdater.cs" />
+    <Compile Include="Auditing\IPersonAccess.cs" />
+    <Compile Include="Auditing\IPersonAccessPersister.cs" />
+    <Compile Include="Auditing\PersonAccess.cs" />
     <Compile Include="Cascading\ResourceOptimizationHelperThatThrows.cs" />
     <Compile Include="Common\BadgeSetting.cs" />
     <Compile Include="Common\BadgeSettingDataConverter.cs" />

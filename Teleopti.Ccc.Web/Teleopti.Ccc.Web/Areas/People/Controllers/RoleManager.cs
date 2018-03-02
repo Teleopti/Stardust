@@ -1,34 +1,48 @@
 ﻿using System;
 using System.Linq;
+using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Web.Areas.People.Core.Aspects;
 using Teleopti.Ccc.Web.Areas.People.Models;
 
 namespace Teleopti.Ccc.Web.Areas.People.Controllers
 {
 	public interface IRoleManager
 	{
-		void GrantRoles(GrantRolesInputModel userRoles);
-		void RevokeRoles(RevokeRolesInputModel userRoles);
+		void GrantRoles(GrantRolesInputModel grantModel);
+		void RevokeRoles(RevokeRolesInputModel revokeModel);
 	}
 
 	public class RoleManager : IRoleManager
 	{
-		private readonly IPersonRepository _personRepository;
-		private readonly IApplicationRoleRepository _roleRepository;
+		private readonly IPersonRepository personRepository;
+		private readonly IApplicationRoleRepository roleRepository;
+		private readonly ILoggedOnUser loggedOnUser;
+		private readonly IPersonAccessPersister personAccessPersister;
+		private readonly ICurrentUnitOfWork unitOfWork;
 
-		public RoleManager(IPersonRepository personRepository, IApplicationRoleRepository roleRepository)
+		public RoleManager(IPersonRepository personRepository,
+			IApplicationRoleRepository roleRepository,
+			ILoggedOnUser loggedOnUser,
+			IPersonAccessPersister personAccessPersister,
+			ICurrentUnitOfWork unitOfWork)
 		{
-			_roleRepository = roleRepository;
-			_personRepository = personRepository;
+			this.roleRepository = roleRepository;
+			this.personRepository = personRepository;
+			this.loggedOnUser = loggedOnUser;
+			this.personAccessPersister = personAccessPersister;
+			this.unitOfWork = unitOfWork;
 		}
 
-		public void GrantRoles(GrantRolesInputModel userRoles)
+		[AuditPerson]
+		public virtual void GrantRoles(GrantRolesInputModel grantModel)
 		{
-			// Validate Input here
-			var persons = _personRepository.FindPeople(userRoles.Persons);
-			var roles = _roleRepository.LoadAll();
-			var selectedRoles = roles.Where(x => userRoles.Roles.ToList().Contains(x.Id ?? Guid.Empty));
+			var persons = personRepository.FindPeople(grantModel.Persons);
+			var allRoles = roleRepository.LoadAll();
+			var selectedRoles = allRoles.Where(x => grantModel.Roles.ToList().Contains(x.Id ?? Guid.Empty));
 
 			foreach (var person in persons)
 			{
@@ -36,12 +50,12 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			}
 		}
 
-		public void RevokeRoles(RevokeRolesInputModel userRoles)
+		[AuditPerson]
+		public virtual void RevokeRoles(RevokeRolesInputModel revokeModel)
 		{
-			// Validate Input here
-			var persons = _personRepository.FindPeople(userRoles.Persons);
-			var roles = _roleRepository.LoadAll();
-			var selectedRoles = roles.Where(x => userRoles.Roles.ToList().Contains(x.Id ?? Guid.Empty));
+			var persons = personRepository.FindPeople(revokeModel.Persons);
+			var allRoles = roleRepository.LoadAll();
+			var selectedRoles = allRoles.Where(x => revokeModel.Roles.ToList().Contains(x.Id ?? Guid.Empty));
 
 			foreach (var person in persons)
 			{
