@@ -7,14 +7,13 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public class WebIntradayOptimizationStardustHandler : IntradayOptimizationEventBaseHandler, IRunOnStardust, IHandleEvent<WebIntradayOptimizationStardustEvent>
+	public class WebIntradayOptimizationStardustHandler : IRunOnStardust, IHandleEvent<WebIntradayOptimizationStardustEvent>
 	{
+		private readonly IntradayOptimizationExecutor _intradayOptimizationExecutor;
 		private readonly IJobResultRepository _jobResultRepository;
 		private readonly ISchedulingSourceScope _schedulingSourceScope;
 		private readonly ILowThreadPriorityScope _lowThreadPriorityScope;
@@ -22,18 +21,14 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly BlockPreferenceProviderUsingFiltersFactory _blockPreferenceProviderUsingFiltersFactory;
 
 		public WebIntradayOptimizationStardustHandler(
-			IntradayOptimization intradayOptimization,
-			Func<ISchedulerStateHolder> schedulerStateHolder, 
-			FillSchedulerStateHolder fillSchedulerStateHolder,
-			ISynchronizeSchedulesAfterIsland synchronizeSchedulesAfterIsland,
-			IGridlockManager gridlockManager,
+			IntradayOptimizationExecutor intradayOptimizationExecutor,
 			IJobResultRepository jobResultRepository,
 			ISchedulingSourceScope schedulingSourceScope, 
 			ILowThreadPriorityScope lowThreadPriorityScope,
 			IPlanningPeriodRepository planningPeriodRepository, 
 			BlockPreferenceProviderUsingFiltersFactory blockPreferenceProviderUsingFiltersFactory)
-			: base(intradayOptimization, schedulerStateHolder, fillSchedulerStateHolder, synchronizeSchedulesAfterIsland, gridlockManager)
 		{
+			_intradayOptimizationExecutor = intradayOptimizationExecutor;
 			_jobResultRepository = jobResultRepository;
 			_schedulingSourceScope = schedulingSourceScope;
 			_lowThreadPriorityScope = lowThreadPriorityScope;
@@ -49,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				using (_lowThreadPriorityScope.OnThisThread())
 				using (_schedulingSourceScope.OnThisThreadUse(ScheduleSource.WebScheduling))
 				{
-					HandleEvent(@event.IntradayOptimizationWasOrdered, @event.PlanningPeriodId);
+					_intradayOptimizationExecutor.HandleEvent(blockPreferenceProvider(@event.PlanningPeriodId), @event.IntradayOptimizationWasOrdered, @event.PlanningPeriodId);
 					SaveDetailToJobResult(@event, DetailLevel.Info, "", null);
 				}
 			}
@@ -61,13 +56,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 		}
 
 		[UnitOfWork]
-		protected virtual void SaveDetailToJobResult(WebIntradayOptimizationStardustEvent @event, DetailLevel level,
-			string message, Exception exception)
+		protected virtual void SaveDetailToJobResult(WebIntradayOptimizationStardustEvent @event, DetailLevel level, string message, Exception exception)
 		{
 			_jobResultRepository.AddDetailAndCheckSuccess(@event.JobResultId, new JobResultDetail(level, message, DateTime.UtcNow, exception), @event.TotalEvents);
 		}
 
-		protected override IBlockPreferenceProvider GetBlockPreferenceProvider(Guid? planningPeriodId)
+		private IBlockPreferenceProvider blockPreferenceProvider(Guid? planningPeriodId)
 		{
 			var planningPeriod = _planningPeriodRepository.Load(planningPeriodId.Value);
 			var planningGroup = planningPeriod.PlanningGroup;

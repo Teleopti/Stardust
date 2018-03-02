@@ -1,33 +1,28 @@
-﻿using System;
-using Teleopti.Ccc.Domain.ApplicationLayer;
+﻿using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
-using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public class IntradayOptimizationEventRunInSyncInFatClientProcessHandler: IntradayOptimizationEventBaseHandler, IRunInSyncInFatClientProcess, IHandleEvent<IntradayOptimizationWasOrdered>
+	public class IntradayOptimizationEventRunInSyncInFatClientProcessHandler: IRunInSyncInFatClientProcess, IHandleEvent<IntradayOptimizationWasOrdered>
 	{
+		private readonly IntradayOptimizationExecutor _intradayOptimizationExecutor;
 		private readonly IOptimizationPreferencesProvider _optimizationPreferencesProvider;
 
-		public IntradayOptimizationEventRunInSyncInFatClientProcessHandler(IntradayOptimization intradayOptimization,
-			Func<ISchedulerStateHolder> schedulerStateHolder, FillSchedulerStateHolder fillSchedulerStateHolder,
-			ISynchronizeSchedulesAfterIsland synchronizeSchedulesAfterIsland, IGridlockManager gridlockManager,
+		public IntradayOptimizationEventRunInSyncInFatClientProcessHandler(
+			IntradayOptimizationExecutor intradayOptimizationExecutor,
 			IOptimizationPreferencesProvider optimizationPreferencesProvider)
-			: base(intradayOptimization, schedulerStateHolder, fillSchedulerStateHolder, synchronizeSchedulesAfterIsland,gridlockManager)
 		{
+			_intradayOptimizationExecutor = intradayOptimizationExecutor;
 			_optimizationPreferencesProvider = optimizationPreferencesProvider;
 		}
 
 		public void Handle(IntradayOptimizationWasOrdered @event)
 		{
-			HandleEvent(@event);
-		}
-
-		protected override IBlockPreferenceProvider GetBlockPreferenceProvider(Guid? planningPeriodId)
-		{
-			return new FixedBlockPreferenceProvider(_optimizationPreferencesProvider.Fetch().Extra);
+			using (CommandScope.Create(@event))
+			{
+				_intradayOptimizationExecutor.HandleEvent(new FixedBlockPreferenceProvider(_optimizationPreferencesProvider.Fetch().Extra), @event, null);
+			}
 		}
 	}
 }
