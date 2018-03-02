@@ -198,12 +198,6 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
 			return _gamificationSettingPersister.PersistAdherenceBronzeThreshold(input);
 		}
 
-		[HttpPost, Route("api/Gamification/Reset"), UnitOfWork]
-		public virtual bool ResetBadge()
-		{
-			return _gamificationSettingPersister.ResetBadge();
-		}
-
 		[HttpPost, Route("api/Gamification/ModifyChangeRule"), UnitOfWork]
 		public virtual GamificationSettingViewModel GamificationChangeRule([FromBody]GamificationChangeRuleForm input)
 		{

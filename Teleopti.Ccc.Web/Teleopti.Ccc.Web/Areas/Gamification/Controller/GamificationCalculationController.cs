@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
 			return _calculateBadges.ResetBadge();
 		}
 
-		[HttpPost, Route("api/Gamification/NewRecalculateBadgeJob")]
+		[HttpPost, Route("api/Gamification/RecalculateBadges/NewRecalculateBadgeJob")]
 		public OkResult NewRecalculateBadgeJob(DateOnlyPeriod peroid)
 		{
 			createJob(peroid);
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
 			_recalculateBadgeJobService.CreateJob(peroid);
 		}
 
-		[Route("api/gamification/RecalcualteBadges"), HttpGet, UnitOfWork]
+		[Route("api/gamification/RecalcualteBadges/GetJobList"), HttpGet, UnitOfWork]
 		public virtual IList<RecalculateBadgeJobResultDetail> GetJobList()
 		{
 			return _recalculateBadgeJobService.GetJobsForCurrentBusinessUnit();

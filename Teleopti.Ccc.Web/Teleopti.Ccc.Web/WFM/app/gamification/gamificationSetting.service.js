@@ -57,7 +57,7 @@
 		method: 'post'
 	}, {
 		id: '',
-		url: '../api/Gamification/Reset',
+		url: '../api/GamificationCalculation/Reset',
 		method: 'post'
 	}, {
 		id: 'ModifyChangeRule',
@@ -151,7 +151,7 @@
 			return $http.post(api.url, data, {});
 		}
 
-		var resetbadgeUrl = '../api/Gamification/Reset';
+		var resetbadgeUrl = '../api/GamificationCalculation/Reset';
 		this.resetBadge = function () {
 			return $http.post(resetbadgeUrl, {}, {});
 		}

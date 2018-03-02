@@ -3,8 +3,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Gamification.Mapping;
 using Teleopti.Ccc.Web.Areas.Gamification.Models;
@@ -18,16 +16,12 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 		private readonly IGamificationSettingMapper _mapper;
 		private readonly IExternalPerformanceRepository _externalPerformanceRepository;		
 		private readonly BadgeSettingDataConverter _converter = new BadgeSettingDataConverter();
-		private readonly IAgentBadgeTransactionRepository _agentBadgeTransactionRepository;
-		private readonly IAgentBadgeWithRankTransactionRepository _agentBadgeWithRankTransactionRepository;
 
-		public GamificationSettingPersister(IGamificationSettingRepository gamificationSettingRepository, IGamificationSettingMapper mapper, IExternalPerformanceRepository externalPerformanceRepository, IAgentBadgeTransactionRepository agentBadgeTransactionRepository, IAgentBadgeWithRankTransactionRepository agentBadgeWithRankTransactionRepository)
+		public GamificationSettingPersister(IGamificationSettingRepository gamificationSettingRepository, IGamificationSettingMapper mapper, IExternalPerformanceRepository externalPerformanceRepository)
 		{
 			_gamificationSettingRepository = gamificationSettingRepository;
 			_mapper = mapper;
 			_externalPerformanceRepository = externalPerformanceRepository;
-			_agentBadgeTransactionRepository = agentBadgeTransactionRepository;
-			_agentBadgeWithRankTransactionRepository = agentBadgeWithRankTransactionRepository;
 		}
 
 		public GamificationSettingViewModel Persist()
@@ -49,21 +43,6 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 			if (gamificationSetting == null) return false;
 
 			_gamificationSettingRepository.Remove(gamificationSetting);
-			return true;
-		}
-
-		public bool ResetBadge()
-		{
-			try
-			{
-				_agentBadgeTransactionRepository.ResetAgentBadges();
-				_agentBadgeWithRankTransactionRepository.ResetAgentBadges();
-			}
-			catch (Exception)
-			{
-				return false;
-			}
-
 			return true;
 		}
 
