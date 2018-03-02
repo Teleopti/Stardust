@@ -145,14 +145,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 				var currentStart = beforeShiftLayers[i].Period.StartDateTime;
 				var currentEnd = beforeShiftLayers[i].Period.EndDateTime;
 
-				totalWorkTime += beforeShiftLayers[i].Period.ElapsedTime();
 				if (lastShiftLayerStartTime.CompareTo(default(DateTime)) == 0)
 				{
+					totalWorkTime += beforeShiftLayers[i].Period.ElapsedTime();
 					lastShiftLayerStartTime = currentStart;
-					
 				}
 				else if (isContinousPeriod(currentEnd, lastShiftLayerStartTime, minimumRestTime))
 				{
+					totalWorkTime += beforeShiftLayers[i].Period.ElapsedTime();
 					lastShiftLayerStartTime = currentStart;
 				}
 				else
@@ -193,14 +193,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			{
 				var currentStart = afterShiftLayers[i].Period.StartDateTime;
 				var currentEnd = afterShiftLayers[i].Period.EndDateTime;
-				totalWorkTime += afterShiftLayers[i].Period.ElapsedTime();
 
 				if (lastShiftLayerEndTime.CompareTo(default(DateTime)) == 0)
 				{
+					totalWorkTime += afterShiftLayers[i].Period.ElapsedTime();
 					lastShiftLayerEndTime = currentEnd;
 				}
 				else if (isContinousPeriod(lastShiftLayerEndTime, currentStart, minimumRestTime))
 				{
+					totalWorkTime += afterShiftLayers[i].Period.ElapsedTime();
 					lastShiftLayerEndTime = currentEnd;
 				}
 				else

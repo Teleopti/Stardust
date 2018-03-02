@@ -661,10 +661,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 8d);
 
 			var person = LoggedOnUser.CurrentUser();
-			var period1 = new DateTimePeriod(2017, 7, 17, 8, 2017, 7, 17, 16);
-			var pa = createMainPersonAssignment(person, period1);
+			var period = new DateTimePeriod(new DateTime(2017, 7, 17, 7, 0, 0, DateTimeKind.Utc),
+				new DateTime(2017, 7, 17, 7, 10, 0, DateTimeKind.Utc));
+			var pa = createMainPersonAssignment(person, period);
 
-			var period2 = new DateTimePeriod(new DateTime(2017, 7, 17, 16, 29, 0, 0, DateTimeKind.Utc),
+			var period1 = new DateTimePeriod(2017, 7, 17, 8, 2017, 7, 17, 16);
+			pa.AddActivity(new Activity(), period1);
+
+			var period2 = new DateTimePeriod(new DateTime(2017, 7, 17, 16, 29, 0, DateTimeKind.Utc),
 				new DateTime(2017, 7, 17, 17, 0, 0, DateTimeKind.Utc));
 			pa.AddActivity(new Activity(), period2);
 
@@ -859,13 +863,20 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 8d);
 
 			var person = LoggedOnUser.CurrentUser();
-			var period = new DateTimePeriod(2017, 7, 17, 10, 2017, 7, 17, 20);
-			var pa = createMainPersonAssignment(person, period);
-			ScheduleStorage.Add(pa);
 
-			var period2 = new DateTimePeriod(new DateTime(2017, 7, 17, 9, 0, 0, DateTimeKind.Utc),
+			var period = new DateTimePeriod(new DateTime(2017, 7, 17, 9, 0, 0, DateTimeKind.Utc),
 				new DateTime(2017, 7, 17, 9, 31, 0, DateTimeKind.Utc));
+
+			var pa = createMainPersonAssignment(person, period);
+
+			var period1 = new DateTimePeriod(2017, 7, 17, 10, 2017, 7, 17, 20);
+			pa.AddActivity(new Activity(), period1);
+
+			var period2 = new DateTimePeriod(new DateTime(2017, 7, 17, 20, 31, 0, DateTimeKind.Utc),
+				new DateTime(2017, 7, 17, 21, 0, 0, DateTimeKind.Utc));
 			pa.AddActivity(new Activity(), period2);
+
+			ScheduleStorage.Add(pa);
 
 			var workflowControlSet =
 				new WorkflowControlSet
