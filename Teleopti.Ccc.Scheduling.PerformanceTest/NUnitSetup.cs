@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 		{
 			Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
 			XmlConfigurator.Configure();
-			TestSiteConfigurationSetup.Setup(true);
+			TestSiteConfigurationSetup.Setup();
 		}
 
 		[OneTimeTearDown]
