@@ -399,6 +399,7 @@
     <Compile Include="Scheduling\Restrictions\RestrictionCombinerTest.cs" />
     <Compile Include="Scheduling\SchedulerStateHolderLoadRequestsTest.cs" />
     <Compile Include="Scheduling\Tracking\PersonAccountProjectionServicePermissionTest.cs" />
+    <Compile Include="Security\Authentication\IdentityHelperTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccOvertimeRequestsLicenseOptionTest.cs" />
     <Compile Include="SkillGroups\ModifySkillGroupTest.cs" />
     <Compile Include="Intraday\PerformanceViewModelCreatorTest.cs" />
@@ -1789,8 +1790,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
-    <Folder Include="RealTimeAdherence\ApplicationLayer" />
-    <Folder Include="RealTimeAdherence\Domain" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Forecasting\DayInMonthIndex\DayInMonthSeasonalityData.txt">
