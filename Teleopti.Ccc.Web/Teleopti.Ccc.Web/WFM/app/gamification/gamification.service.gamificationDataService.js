@@ -126,51 +126,8 @@
 		};
 
 		svc.startCalculation = function (startDate, endDate) {
-			var url = '../api/Gamification/RecalculateBadges/NewRecalculateBadgeJob'
-			var data = {
-				Start: startDate,
-				End: endDate
-			};
-
-			return $q(function (resolve, reject) {
-				return $http.post(url, data, {}).then(function (response) {
-					resolve(response);
-				}, function (response) {
-					reject(response);
-				})
-			});
-
 			console.log("Start to calculate for period", startDate, endDate);
 		};
-
-		svc.fetchCalculationJobs = function () {
-			return $q(function (resolve, reject) {
-				$http({
-					method: 'GET',
-					url: '../api/gamification/RecalcualteBadges/GetJobList'
-				}).then(function (response) {
-					var jobs = [];
-					if (response.data && response.data.length) {
-						response.data.forEach(function (job) {
-							jobs.push(new CalculationJob(
-								job.Id,
-								job.Owner,
-								job.StartDate,
-								job.EndDate,
-								job.CreateDateTime,
-								job.Status,
-								job.HasError,
-								job.ErrorMessage
-							));
-						});
-					}
-					resolve(jobs);
-				}, function (response) {
-					$log.error('Badge Calculation: failed to fetch calculation jobs');
-					reject(response);
-				});
-			});
-		}
 	}
 
 	function overload(config) {
@@ -228,16 +185,5 @@
 		this.hasError = hasError;
 		this.message = message;
 		this.hasInvalidRecords = hasInvalidRecords;
-	}
-
-	function CalculationJob(id, owner, startDate, endDate, startingTime, status, hasError, errorMsg) {
-		this.id = id;
-		this.owner = owner;
-		this.startingTime = startingTime;
-		this.status = status;
-		this.hasError = hasError;
-		this.errorMsg = errorMsg;
-		this.startDate = startDate;
-		this.endDate = endDate;
 	}
 })(angular);

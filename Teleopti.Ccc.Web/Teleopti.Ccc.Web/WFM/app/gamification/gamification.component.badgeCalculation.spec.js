@@ -1,28 +1,18 @@
-fdescribe('badgeCalculation', function () {
+describe('badgeCalculation', function () {
     var attachedElements = [];
     var $compile,
         $rootScope,
         $material,
-        $q,
-        $document,
-        $httpBackend;
+        $document;
 
     beforeEach(function () {
         module('wfm.templates', 'externalModules', 'wfm.gamification', 'ngMaterial', 'ngMaterial-mock');
-
-        module(function ($provide) {
-            $provide.service('GamificationDataService', function () { return new DataService(); });
-        });
 
         inject(function ($injector) {
             $compile = $injector.get('$compile');
             $rootScope = $injector.get('$rootScope');
             $material = $injector.get('$material');
             $document = $injector.get('$document');
-            $httpBackend = $injector.get('$httpBackend');
-            $q = $injector.get('$q');
-
-            $httpBackend.when('GET', '../ToggleHandler/AllToggles').respond('');
         });
     });
 
@@ -36,7 +26,7 @@ fdescribe('badgeCalculation', function () {
         attachedElements = [];
     });
 
-    fit('should render badge calculation page', function () {
+    it('should render badge calculation page', function () {
         var cmp = setupComponent(testScope());
         var startBtn = cmp[0].querySelector('button.wfm-btn.ng-binding');
         expect(startBtn).not.toBe(null);
@@ -63,16 +53,5 @@ fdescribe('badgeCalculation', function () {
     function testScope() {
         var scope = $rootScope.$new();
         return scope;
-    }
-
-    function DataService() {
-        this.fetchCalculationJobs = function () {
-            return $q(function (resolve, reject) {
-                resolve([
-                    { id: 0, owner: 'demo0' },
-                    { id: 1, owner: 'demo0' },
-                ]);
-            });
-        };
     }
 }); 
