@@ -104,6 +104,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			var scheduledStaffingPerSkill = _scheduledStaffingProvider.StaffingPerSkill(skills.Any(x => x is MultisiteSkill) ? skillDaysBySkills.Keys.ToList() : skills, minutesPerInterval, dateOnly, useShrinkage);
 
 			var timeSeries = _timeSeriesProvider.DataSeries(forecastedStaffing, scheduledStaffingPerSkill, minutesPerInterval);
+			var validTimes = timeSeries.Where(time => !_timeZone.TimeZone().IsInvalidTime(time)).ToArray();
 
 			var workloadBacklog = _emailBacklogProvider.GetStatisticsBacklogByWorkload(skillDaysBySkills, statisticsPerWorkloadInterval, userDateOnly, minutesPerInterval, forecastedCallsModel.SkillDayStatsRange);
 
@@ -114,7 +115,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 					forecastedCallsModel.CallsPerSkill,
 					latestStatsTime,
 					minutesPerInterval,
-					timeSeries
+					validTimes
 				)
 				: new double?[0];
 
@@ -130,11 +131,11 @@ namespace Teleopti.Ccc.Domain.Intraday
 			var dataSeries = new StaffingDataSeries
 			{
 				Date = userDateOnly,
-				Time = timeSeries,
-				ForecastedStaffing = _forecastedStaffingToDataSeries.DataSeries(forecastedStaffing, timeSeries),
+				Time = validTimes,
+				ForecastedStaffing = _forecastedStaffingToDataSeries.DataSeries(forecastedStaffing, validTimes),
 				UpdatedForecastedStaffing = updatedForecastedSeries,
-				ActualStaffing = _requiredStaffingProvider.DataSeries(requiredStaffingPerSkill, latestStatsTime, minutesPerInterval, timeSeries),
-				ScheduledStaffing = _scheduledStaffingToDataSeries.DataSeries(scheduledStaffingPerSkill, timeSeries)
+				ActualStaffing = _requiredStaffingProvider.DataSeries(requiredStaffingPerSkill, latestStatsTime, minutesPerInterval, validTimes),
+				ScheduledStaffing = _scheduledStaffingToDataSeries.DataSeries(scheduledStaffingPerSkill, validTimes)
 			};
 			return new IntradayStaffingViewModel
 			{

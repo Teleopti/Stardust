@@ -71,12 +71,14 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 			var timeSeries = _timeSeriesProvider.DataSeries(forecastedStaffing, scheduledStaffingPerSkill, minutesPerInterval);
 
+			var validTimes = timeSeries.Where(time => !_timeZone.TimeZone().IsInvalidTime(time)).ToArray();
+
 			var dataSeries = new StaffingDataSeries
 			{
 				Date = userDateOnly,
-				Time = timeSeries,
-				ForecastedStaffing = _forecastedStaffingToDataSeries.DataSeries(forecastedStaffing, timeSeries),
-				ScheduledStaffing = _scheduledStaffingToDataSeries.DataSeries(scheduledStaffingPerSkill, timeSeries)
+				Time = validTimes,
+				ForecastedStaffing = _forecastedStaffingToDataSeries.DataSeries(forecastedStaffing, validTimes),
+				ScheduledStaffing = _scheduledStaffingToDataSeries.DataSeries(scheduledStaffingPerSkill, validTimes)
 			};
 			calculateAbsoluteDifference(dataSeries);
 			return new ScheduledStaffingViewModel
