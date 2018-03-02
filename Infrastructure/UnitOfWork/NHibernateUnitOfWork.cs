@@ -218,7 +218,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			}
 			catch (Exception ex)
 			{
-				_logger.Error("Cannot rollback transaction!", ex);
+				_logger.Warn("Cannot rollback transaction!", ex);
 				//don't do anything - should be handled higher up the chain
 			}
 		}
