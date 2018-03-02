@@ -146,11 +146,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			if (_configuration.Toggle(Toggles.ResourcePlanner_Deadlock_48170))
 			{
-				builder.RegisterType<IntradayOptimizationExecutorWithDeadlockRetries>().As<IntradayOptimizationExecutor>().InstancePerLifetimeScope();
+				builder.RegisterType<IntradayOptimizationExecutorWithDeadlockRetries>().As<IntradayOptimizationExecutor>().InstancePerLifetimeScope().ApplyAspects();
 			}
 			else
 			{
-				builder.RegisterType<IntradayOptimizationExecutor>().InstancePerLifetimeScope();
+				builder.RegisterType<IntradayOptimizationExecutor>().InstancePerLifetimeScope().ApplyAspects();
 			}
 			
 			//change to scope? 
