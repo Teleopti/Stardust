@@ -59,7 +59,6 @@ using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Persisters.Outbound;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.Scheduling;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 using Teleopti.Ccc.Secrets.WorkShiftPeriodValueCalculator;
