@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -74,23 +73,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 				ScenarioCode = scenarioId,
 				ScenarioId = 3
 			};
-			var scheduleDay = new ProjectionChangedEventScheduleDay
-			{
-				Date = startDate.Date,
-				PersonPeriodId = personPeriodId
-			};
 
 			var analyticsPersonPeriod = new AnalyticsPersonPeriod
 			{
 				PersonId = 1,
 				BusinessUnitId = 2,
-				PersonPeriodCode = scheduleDay.PersonPeriodId
+				PersonPeriodCode = personPeriodId
 			};
 			var existingSchedule = new FactScheduleRow
 			{
 				DatePart = new AnalyticsFactScheduleDate
 				{
-					ScheduleDateId = AnalyticsDates.Date(scheduleDay.Date).DateId
+					ScheduleDateId = AnalyticsDates.Date(startDate.Date).DateId
 				},
 				PersonPart = new AnalyticsFactSchedulePerson
 				{
@@ -113,9 +107,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			AnalyticsSchedules.PersistFactScheduleBatch(new List<IFactScheduleRow> {existingSchedule});
 			AnalyticsDates.Clear();
 
-			Target.Handle(new ProjectionChangedEvent
+			Target.Handle(new ScheduleChangedEvent
 			{
-				ScheduleDays = new Collection<ProjectionChangedEventScheduleDay> {scheduleDay},
+				StartDateTime = startDate,
+				EndDateTime = endDate,
 				ScenarioId = scenarioId,
 				LogOnBusinessUnitId = businessUnitId,
 				PersonId = personId
@@ -141,12 +136,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			{
 				ScenarioCode = scenarioId, ScenarioId = 6
 			};
-			var scheduleDay = new ProjectionChangedEventScheduleDay
-			{
-				Date = startDate.Date,
-				PersonPeriodId = personPeriodId
-			};
-
+			
 			BusinessUnits.Add(businessUnit);
 			Scenarios.Add(scenario);
 			Persons.Add(person);
@@ -154,9 +144,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 
 			AnalyticsScenarios.AddScenario(analyticsScenario);
 
-			Assert.Throws<PersonPeriodMissingInAnalyticsException>(() => Target.Handle(new ProjectionChangedEvent
+			Assert.Throws<PersonPeriodMissingInAnalyticsException>(() => Target.Handle(new ScheduleChangedEvent
 			{
-				ScheduleDays = new Collection<ProjectionChangedEventScheduleDay> {scheduleDay},
+				StartDateTime = startDate,
+				EndDateTime = endDate,
 				ScenarioId = scenarioId,
 				LogOnBusinessUnitId = businessUnitId,
 				PersonId = personId
@@ -177,13 +168,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario,
 				new DateTimePeriod(startDate, endDate));
 			assignment.ShiftCategory.SetId(shiftCategoryId);
-
-			var scheduleDay = new ProjectionChangedEventScheduleDay
-			{
-				ShiftCategoryId = Guid.Empty, // This category should not be used
-				PersonPeriodId = personPeriodId,
-				Date = startDate.Date
-			};
+			
 			var cat = new AnalyticsShiftCategory
 			{
 				ShiftCategoryId = 1,
@@ -209,9 +194,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			});
 			IntervalLength.Has(intervalLengthInMinute);
 
-			Target.Handle(new ProjectionChangedEvent
+			Target.Handle(new ScheduleChangedEvent
 			{
-				ScheduleDays = new Collection<ProjectionChangedEventScheduleDay> {scheduleDay},
+				StartDateTime = startDate,
+				EndDateTime = endDate,
 				ScenarioId = scenarioId,
 				PersonId = personId,
 				LogOnBusinessUnitId = businessUnitId
@@ -295,9 +281,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			AnalyticsSchedules.PersistFactScheduleDayCountRow(existingScheduleDayCount);
 			AnalyticsSchedules.PersistFactScheduleBatch(new List<IFactScheduleRow> {existingSchedule});
 
-			Target.Handle(new ProjectionChangedEvent
+			Target.Handle(new ScheduleChangedEvent
 			{
-				ScheduleDays = new Collection<ProjectionChangedEventScheduleDay> {scheduleDay},
+				StartDateTime = startDate,
+				EndDateTime = endDate,
 				ScenarioId = scenarioId,
 				PersonId = personId,
 				LogOnBusinessUnitId = businessUnitId
@@ -320,19 +307,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			var dayOffTemplate = DayOffFactory.CreateDayOff(new Description("Slackday", "SD"));
 			var assignment = PersonAssignmentFactory.CreateAssignmentWithDayOff(person, scenario,
 				new DateOnly(startDate), dayOffTemplate);
-
-			var shift = new ProjectionChangedEventShift
-			{
-				StartDateTime = startDate,
-				EndDateTime = startDate.AddHours(2).AddMinutes(15)
-			};
-
-			var scheduleDay = new ProjectionChangedEventScheduleDay
-			{
-				Shift = shift,
-				PersonPeriodId = personPeriodId,
-				Date = startDate.Date
-			};
+			
 			var analyticsScenario = new AnalyticsScenario
 			{
 				ScenarioCode = scenarioId, ScenarioId = 66
@@ -352,9 +327,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			});
 			IntervalLength.Has(intervalLengthInMinute);
 
-			Target.Handle(new ProjectionChangedEvent
+			Target.Handle(new ScheduleChangedEvent
 			{
-				ScheduleDays = new Collection<ProjectionChangedEventScheduleDay> {scheduleDay},
+				StartDateTime = startDate,
+				EndDateTime = endDate,
 				ScenarioId = scenarioId,
 				PersonId = personId,
 				LogOnBusinessUnitId = businessUnitId
@@ -387,19 +363,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			var dayOffTemplate = DayOffFactory.CreateDayOff(new Description("Slackday", "SD")).WithId(Guid.NewGuid());
 			var assignment = PersonAssignmentFactory.CreateAssignmentWithDayOff(person, scenario,
 				new DateOnly(startDate), dayOffTemplate);
-
-			var shift = new ProjectionChangedEventShift
-			{
-				StartDateTime = startDate,
-				EndDateTime = startDate.AddHours(2).AddMinutes(15)
-			};
-
-			var scheduleDay = new ProjectionChangedEventScheduleDay
-			{
-				Shift = shift,
-				PersonPeriodId = personPeriodId,
-				Date = startDate.Date
-			};
+			
 			var analyticsScenario = new AnalyticsScenario
 			{
 				ScenarioCode = scenarioId, ScenarioId = 66
@@ -419,9 +383,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			});
 			IntervalLength.Has(intervalLengthInMinute);
 
-			Target.Handle(new ProjectionChangedEvent
+			Target.Handle(new ScheduleChangedEvent
 			{
-				ScheduleDays = new Collection<ProjectionChangedEventScheduleDay> {scheduleDay},
+				StartDateTime = startDate,
+				EndDateTime = endDate,
 				ScenarioId = scenarioId,
 				PersonId = personId,
 				LogOnBusinessUnitId = businessUnitId
@@ -448,19 +413,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			var absence = AbsenceFactory.CreateAbsence("FullDayAbsence").WithId(absenceId);
 			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario,
 				new DateTimePeriod(startDate, endDate), absence);
-
-			var shift = new ProjectionChangedEventShift
-			{
-				StartDateTime = startDate,
-				EndDateTime = startDate.AddHours(2).AddMinutes(15)
-			};
-
-			var scheduleDay = new ProjectionChangedEventScheduleDay
-			{
-				Shift = shift,
-				PersonPeriodId = personPeriodId,
-				Date = startDate.Date
-			};
+			
 			var analyticsScenario = new AnalyticsScenario
 			{
 				ScenarioCode = scenarioId, ScenarioId = 66
@@ -486,9 +439,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			});
 			IntervalLength.Has(intervalLengthInMinute);
 
-			Target.Handle(new ProjectionChangedEvent
+			Target.Handle(new ScheduleChangedEvent
 			{
-				ScheduleDays = new Collection<ProjectionChangedEventScheduleDay> {scheduleDay},
+				StartDateTime = startDate,
+				EndDateTime = endDate,
 				ScenarioId = scenarioId,
 				PersonId = personId,
 				LogOnBusinessUnitId = businessUnitId
@@ -527,20 +481,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			var dayOffTemplate = DayOffFactory.CreateDayOff(new Description("Slackday", "SD"));
 			var assignment = PersonAssignmentFactory.CreateAssignmentWithDayOff(person, scenario,
 				new DateOnly(startDate), dayOffTemplate);
-
-			var shift = new ProjectionChangedEventShift
-			{
-				StartDateTime = startDate,
-				EndDateTime = startDate.AddHours(2).AddMinutes(15)
-			};
-
-			var scheduleDay = new ProjectionChangedEventScheduleDay
-			{
-				Shift = shift,
-				PersonPeriodId = personPeriodId,
-				Date = startDate.Date
-			};
-
+			
 			BusinessUnits.Add(businessUnit);
 			Scenarios.Add(scenario);
 			Persons.Add(person);
@@ -554,9 +495,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			});
 			IntervalLength.Has(intervalLengthInMinute);
 
-			Assert.Throws<ScenarioMissingInAnalyticsException>(() => Target.Handle(new ProjectionChangedEvent
+			Assert.Throws<ScenarioMissingInAnalyticsException>(() => Target.Handle(new ScheduleChangedEvent
 			{
-				ScheduleDays = new Collection<ProjectionChangedEventScheduleDay> {scheduleDay},
+				StartDateTime = startDate,
+				EndDateTime = endDate,
 				ScenarioId = scenarioId,
 				PersonId = personId,
 				LogOnBusinessUnitId = businessUnitId
@@ -570,21 +512,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			AnalyticsDates.HasDatesBetween(new DateTime(1999, 12, 31), new DateTime(2030, 12, 31));
 			var businessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit("Default BU").WithId(businessUnitId);
 			var scenario = ScenarioFactory.CreateScenario("Default", false, false).WithId(scenarioId);
-
-			var scheduleDay = new ProjectionChangedEventScheduleDay
-			{
-				DayOff = new ProjectionChangedEventDayOff(),
-				PersonPeriodId = Guid.NewGuid()
-			};
-
+			
 			BusinessUnits.Add(businessUnit);
 			Scenarios.Add(scenario);
 
-			Assert.DoesNotThrow(() => Target.Handle(new ProjectionChangedEvent
+			Assert.DoesNotThrow(() => Target.Handle(new ScheduleChangedEvent
 			{
-				ScheduleDays = new Collection<ProjectionChangedEventScheduleDay> {scheduleDay},
+				StartDateTime = startDate,
+				EndDateTime = endDate,
 				ScenarioId = scenarioId,
-				IsDefaultScenario = false,
 				LogOnBusinessUnitId = businessUnitId
 			}));
 		}
@@ -648,38 +584,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 				PersonPeriodCode = personPeriodId
 			});
 			IntervalLength.Has(intervalLengthInMinute);
-
-			var scheduleDate = scheduleStartDate.AddDays(-1);
-			var scheduleDay1 = new ProjectionChangedEventScheduleDay
-			{
-				PersonPeriodId = personPeriodId,
-				Date = scheduleDate.Date
-			};
-
-			scheduleDate = scheduleStartDate;
-			var scheduleDay2 = new ProjectionChangedEventScheduleDay
-			{
-				Shift = new ProjectionChangedEventShift
-				{
-					StartDateTime = scheduleDate,
-					EndDateTime = scheduleDate.AddHours(3).AddMinutes(30)
-				},
-				PersonPeriodId = personPeriodId,
-				Date = scheduleDate.Date
-			};
-
-			scheduleDate = scheduleStartDate.AddDays(1);
-			var scheduleDay3 = new ProjectionChangedEventScheduleDay
-			{
-				Shift = new ProjectionChangedEventShift
-				{
-					StartDateTime = scheduleDate,
-					EndDateTime = scheduleDate.AddHours(4).AddMinutes(45)
-				},
-				PersonPeriodId = personPeriodId,
-				Date = scheduleDate.Date
-			};
-
+			
 			AnalyticsScenarios.AddScenario(analyticsScenario);
 			AnalyticsPersonPeriods.AddOrUpdatePersonPeriod(new AnalyticsPersonPeriod
 			{
@@ -690,14 +595,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			IntervalLength.Has(intervalLengthInMinute);
 
 			// 2017-12-31 is out of analytics date range, schedule change for it will not be processed
-			Target.Handle(new ProjectionChangedEvent
+			Target.Handle(new ScheduleChangedEvent
 			{
-				ScheduleDays = new Collection<ProjectionChangedEventScheduleDay>
-				{
-					scheduleDay1,
-					scheduleDay2,
-					scheduleDay3
-				},
+				StartDateTime = scheduleStartDate.AddDays(-1),
+				EndDateTime = scheduleStartDate.AddDays(1).AddHours(4).AddMinutes(45),
 				ScenarioId = scenarioId,
 				PersonId = personId,
 				LogOnBusinessUnitId = businessUnitId
@@ -705,9 +606,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 
 			var factScheduleDays = AnalyticsSchedules.FactScheduleDayCountRows;
 			factScheduleDays.Count.Should().Be.EqualTo(2);
-			factScheduleDays.First().StartTime.Should().Be.EqualTo(scheduleDay2.Shift.StartDateTime);
+			factScheduleDays.First().StartTime.Should().Be.EqualTo(assignment2Period.StartDateTime);
 			// Full DayOff, start from 00:00
-			factScheduleDays.Second().StartTime.Should().Be.EqualTo(scheduleDay3.Shift.StartDateTime.Date);
+			factScheduleDays.Second().StartTime.Should().Be.EqualTo(assignmentDayOff.Date.Date);
 
 			AnalyticsDayOffRepository.DayOffs().Count.Should().Be.EqualTo(1);
 			AnalyticsSchedules.FactScheduleRows.Count.Should().Be
@@ -772,43 +673,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 				PersonPeriodCode = personPeriodId
 			});
 			IntervalLength.Has(intervalLengthInMinute);
-
-			var scheduleDate = startDate.AddDays(-1);
-			var scheduleDay1 = new ProjectionChangedEventScheduleDay
-			{
-				Shift = new ProjectionChangedEventShift
-				{
-					StartDateTime = scheduleDate,
-					EndDateTime = scheduleDate.AddHours(2).AddMinutes(15)
-				},
-				PersonPeriodId = personPeriodId,
-				Date = scheduleDate.Date
-			};
-
-			scheduleDate = startDate;
-			var scheduleDay2 = new ProjectionChangedEventScheduleDay
-			{
-				Shift = new ProjectionChangedEventShift
-				{
-					StartDateTime = scheduleDate,
-					EndDateTime = scheduleDate.AddHours(3).AddMinutes(30)
-				},
-				PersonPeriodId = personPeriodId,
-				Date = scheduleDate.Date
-			};
-
-			scheduleDate = startDate.AddDays(1);
-			var scheduleDay3 = new ProjectionChangedEventScheduleDay
-			{
-				Shift = new ProjectionChangedEventShift
-				{
-					StartDateTime = scheduleDate,
-					EndDateTime = scheduleDate.AddHours(4).AddMinutes(45)
-				},
-				PersonPeriodId = personPeriodId,
-				Date = scheduleDate.Date
-			};
-
+			
 			AnalyticsScenarios.AddScenario(analyticsScenario);
 			AnalyticsPersonPeriods.AddOrUpdatePersonPeriod(new AnalyticsPersonPeriod
 			{
@@ -819,14 +684,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			IntervalLength.Has(intervalLengthInMinute);
 
 			// No assignment for 2017-03-06, so schedule will be deleted for that day
-			Target.Handle(new ProjectionChangedEvent
+			Target.Handle(new ScheduleChangedEvent
 			{
-				ScheduleDays = new Collection<ProjectionChangedEventScheduleDay>
-				{
-					scheduleDay1,
-					scheduleDay2,
-					scheduleDay3
-				},
+				StartDateTime = startDate.AddDays(-1),
+				EndDateTime = startDate.AddDays(1).AddHours(4).AddMinutes(45),
 				ScenarioId = scenarioId,
 				PersonId = personId,
 				LogOnBusinessUnitId = businessUnitId
@@ -834,9 +695,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 
 			var factScheduleDays = AnalyticsSchedules.FactScheduleDayCountRows;
 			factScheduleDays.Count.Should().Be.EqualTo(2);
-			factScheduleDays.First().StartTime.Should().Be.EqualTo(scheduleDay2.Shift.StartDateTime);
+			factScheduleDays.First().StartTime.Should().Be.EqualTo(assignmentPeriod.StartDateTime);
 			// Full DayOff, start from 00:00
-			factScheduleDays.Second().StartTime.Should().Be.EqualTo(scheduleDay3.Shift.StartDateTime.Date);
+			factScheduleDays.Second().StartTime.Should().Be.EqualTo(assignmentDayOff.Date.Date);
 
 			AnalyticsDayOffRepository.DayOffs().Count.Should().Be.EqualTo(1);
 			AnalyticsSchedules.FactScheduleRows.Count.Should().Be
