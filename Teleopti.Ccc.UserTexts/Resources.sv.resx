@@ -15423,4 +15423,16 @@ Applikationen kommer nu att stängas. </value>
   <data name="MaximumContinuousWorkTimeRuleName" xml:space="preserve">
     <value>Maximal sammanhängande arbetstid</value>
   </data>
+  <data name="ShiftTradeRequestForExchangeOfferHasBeenCompleted" xml:space="preserve">
+    <value>Skiftbyteserbjudandet antogs av en annan agent.</value>
+  </data>
+  <data name="PickADateRangeToStartBadgeCalculation" xml:space="preserve">
+    <value>Välj ett datumintervall för att starta medaljberäkningen</value>
+  </data>
+  <data name="Finished" xml:space="preserve">
+    <value>Avslutad</value>
+  </data>
+  <data name="OpenPlansPage" xml:space="preserve">
+    <value>Planer</value>
+  </data>
 </root>
