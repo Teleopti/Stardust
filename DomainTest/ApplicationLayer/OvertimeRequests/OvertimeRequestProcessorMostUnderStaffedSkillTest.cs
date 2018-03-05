@@ -688,6 +688,19 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			personAssignment.OvertimeActivities().First().Payload.Should().Be(emailActivity);
 		}
 
+		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestUseMostUnderStaffedSkill_47853)]
+		public void ShouldApproveRequestInLessThan15MinutesWithToggle47853On()
+		{
+			setupPerson(8, 21);
+			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 8d);
+
+			var personRequest = createOvertimeRequestInMinutes(18, 10);
+			getTarget().Process(personRequest, true);
+
+			personRequest.IsApproved.Should().Be.True();
+		}
+
 		private void setupIntradayStaffingForSkill(ISkill skill, DateOnly date, IEnumerable<StaffingPeriodData> staffingPeriodDatas)
 		{
 			var skillCombinationResources = new List<SkillCombinationResource>();
