@@ -141,7 +141,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 				var currentEventScheduleDay = _projectionChangedEventBuilder.BuildEventScheduleDay(scheduleDay);
 				if (currentEventScheduleDay == null)
 				{
-					throw new Exception($"No schedule found for {date.Date:yyyy-MM-dd}");
+					logger.Warn($"No schedule found for {person.Id.GetValueOrDefault()} {date.Date:yyyy-MM-dd}");
+					continue;
 				}
 
 				var personPart = _factSchedulePersonMapper.Map(currentEventScheduleDay.PersonPeriodId);
