@@ -19,7 +19,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 {
 	[DatabaseTest]
-	[Ignore("#47654 To be fixed")]
 	[Toggle(Toggles.ResourcePlanner_DayOffOptimizationIslands_47208)]
 	public class DayOffOptimizationWithResultWhenOneAgentCannotBeScheduledTest
 	{

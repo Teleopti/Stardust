@@ -52,9 +52,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 		[UnitOfWork]
 		public virtual OptimizationResultModel Create(DateOnlyPeriod period, IEnumerable<IPerson> fixedStaffPeople, IPlanningGroup planningGroup, bool usePreferences)
 		{
-			//TODO - try to remove this one
+			//TODO: investigate, hackelihack
 			_currentUnitOfWork.Current().Reassociate(fixedStaffPeople);
+			var planningGroupSkills = fixedStaffPeople.SelectMany(person => person.PersonPeriods(period)).SelectMany(p => p.PersonSkillCollection.Select(s => s.Skill)).Distinct().ToArray();
+			_currentUnitOfWork.Current().Reassociate(planningGroupSkills);
 			//
+
 			var schedulerStateHolder = _schedulerStateHolder();
 			_fillSchedulerStateHolder.Fill(schedulerStateHolder, null, null, period);
 			var resultStateHolder = schedulerStateHolder.SchedulingResultState;
@@ -63,7 +66,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				_resourceCalculation.ResourceCalculate(period.Inflate(1),
 					new ResourceCalculationData(resultStateHolder, false, false));
 			}
-			var allSkillsForAgentGroup = getAllSkillsForPlanningGroup(period, fixedStaffPeople, resultStateHolder);
+			var allSkillsForAgentGroup = getAllSkillsForPlanningGroup(planningGroupSkills, resultStateHolder);
 			var scheduleOfSelectedPeople = _findSchedulesForPersons.FindSchedulesForPersons(_currentScenario.Current(), fixedStaffPeople, 
 				new ScheduleDictionaryLoadOptions(usePreferences, false, usePreferences), period.ToDateTimePeriod(_userTimeZone.TimeZone()), fixedStaffPeople, true);
 			var validationResults = _checkScheduleHints.Execute(new HintInput(scheduleOfSelectedPeople, fixedStaffPeople, period, _blockPreferenceProviderUsingFiltersFactory.Create(planningGroup), usePreferences)).InvalidResources;
@@ -79,11 +82,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 			return result;
 		}
 
-		private static Dictionary<ISkill, IEnumerable<ISkillDay>> getAllSkillsForPlanningGroup(DateOnlyPeriod period, IEnumerable<IPerson> fixedStaffPeople,
+		private static Dictionary<ISkill, IEnumerable<ISkillDay>> getAllSkillsForPlanningGroup(ISkill[] planningGroupSkills,
 			ISchedulingResultStateHolder resultStateHolder)
 		{
-			var planningGroupSkills = fixedStaffPeople.SelectMany(person => person.PersonPeriods(period)).SelectMany(p => p.PersonSkillCollection.Select(s => s.Skill)).Distinct().ToArray();
-		
 			var planningGroupSkillsDictionary =
 				resultStateHolder.SkillDays.Where(skill => planningGroupSkills.Contains(skill.Key))
 					.ToDictionary(skill => skill.Key, skill => skill.Value);
