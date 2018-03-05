@@ -17,7 +17,6 @@ $output =  "$PSScriptroot\Teleopti.Ccc.SmartClientPortal.Shell.application"
 $wc = New-Object System.Net.WebClient
 $wc.DownloadFile($url, $output)
 
-
 #Download Client
 $p = Start-Process "$PSScriptroot\Teleopti.Ccc.SmartClientPortal.Shell.application" -PassThru
 $Title = "Application Install - Security Warning"
