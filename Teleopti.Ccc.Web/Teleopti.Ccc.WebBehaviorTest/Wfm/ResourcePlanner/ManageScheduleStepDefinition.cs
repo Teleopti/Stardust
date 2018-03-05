@@ -32,7 +32,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.ResourcePlanner
 		[When(@"I select the team '(.*)'")]
 		public void WhenISelectTheTeam(string team)
 		{
-			Browser.Interactions.ClickContaining(".hierarchy-tree-container li", team);
+			Browser.Interactions.ClickVisibleOnly(".toggle-handle");
+			Browser.Interactions.ClickContaining(".tree-handle-wrapper", team);
 		}
 
 		[When(@"I pick new dates")]

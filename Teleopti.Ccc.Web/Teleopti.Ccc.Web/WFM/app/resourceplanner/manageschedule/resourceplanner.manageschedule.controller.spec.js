@@ -1,5 +1,5 @@
 ﻿'use strict';
-describe('ResourceplannerManageScheduleCtrl', function () {
+xdescribe('ResourceplannerManageScheduleCtrl', function () {
 	var $q,
 		$rootScope,
 		manageScheduleSrvc;

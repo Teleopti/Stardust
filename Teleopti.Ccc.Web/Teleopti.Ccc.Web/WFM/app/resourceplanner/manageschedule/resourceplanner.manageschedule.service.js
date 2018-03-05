@@ -18,6 +18,10 @@
 			{
 				query: { method: 'GET', params: {}, isArray: false }
 			});
+
+			this.organization = $resource('../api/ResourcePlanner/OrganizationSelection', {}, {
+				query: { method: 'GET', params: {}, isArray: false }
+			});
 		}
 		]);
 })();

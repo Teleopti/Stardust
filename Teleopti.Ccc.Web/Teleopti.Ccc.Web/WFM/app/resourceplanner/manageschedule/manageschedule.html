@@ -45,25 +45,9 @@
 					</div>
 				</div>
 			</div>
-			<div class="con-row" ng-controller="HierarchyController">
-				<div class="data-container full-padding flex-element-fill flex-column">
-					<div class="con-row">
-						<label for="HierarchyDataFilter" class="input-prepend">
-							<i class="mdi mdi-filter-outline"></i>
-							<input type="text" id="HierarchyDataFilter" name="filterDetails" ng-model="searchData.Name" placeholder="{{'DataFilterThreeDots' | translate}}"
-							/>
-							<md-tooltip>{{'DataFilterThreeDots' | translate}}</md-tooltip>
-						</label>
-					</div>
-					<div class="flex-relative-element hierarchy-tree-container">
-						<div class="tree hierarchy-tree flex-absolute-child" style="overflow-y:unset !important">
-							<div ui-tree data-drag-enabled="false">
-								<ol ui-tree-nodes="" ng-model="organization.BusinessUnit" id="tree-root">
-									<li ng-repeat="node in organization.BusinessUnit | filter: searchData.Name" ui-tree-node ng-include="'app/resourceplanner/manageschedule/organization-tree-node.html'"></li>
-								</ol>
-							</div>
-						</div>
-					</div>
+			<div class="con-row">
+				<div class="con-flex">
+					<tree-data-two ng-model="vm.orgTree" ng-change="vm.fecthSelectedTeamsId()" option="vm.option"></tree-data-two>
 				</div>
 			</div>
 		</div>

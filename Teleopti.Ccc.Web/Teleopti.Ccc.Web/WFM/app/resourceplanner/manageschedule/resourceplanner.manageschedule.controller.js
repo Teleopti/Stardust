@@ -2,17 +2,17 @@
 	'use strict';
 	angular.module('wfm.resourceplanner')
 		.filter('defaultScenario',
-			function () {
-				return function (input, defaultScenario) {
-					var result = [];
-					angular.forEach(input,
-						function (value) {
-							if (value.DefaultScenario === defaultScenario)
-								result.push(value);
-						});
-					return result;
-				};
-			})
+		function () {
+			return function (input, defaultScenario) {
+				var result = [];
+				angular.forEach(input,
+					function (value) {
+						if (value.DefaultScenario === defaultScenario)
+							result.push(value);
+					});
+				return result;
+			};
+		})
 		.controller('ResourceplannerManageScheduleCtrl',
 		[
 			'ManageScheduleSrvc',
@@ -47,10 +47,41 @@
 						endDate: moment().utc().add(2, 'months').startOf('month').toDate()
 					}
 				};
-
 				vm.showConfirmModal = false;
+				vm.option = {
+					NodeDisplayName: "Name",
+					NodeChildrenName: "ChildNodes",
+					NodeSelectedMark: "Selected",
+					nodeSemiSelected: "SemiSelected",
+					DisplayTreeFilter: true
+				}
+				vm.orgTree = {};
+				vm.canRunManaging = canRunManaging;
+				vm.runManaging = runManaging;
+				vm.fecthSelectedTeamsId = fecthSelectedTeamsId;
+				vm.validateAndShowModal = validateAndShowModal;
 
-				var validateManagingParameters = function (fromScenario, toScenario, period, teamSelection) {
+				resetTracking();
+				fetchOrgData();
+				fetchScenarioData();
+
+				function fetchOrgData() {
+					return ManageScheduleSrvc.organization.query().$promise.then(function (result) {
+						vm.orgTree = result.BusinessUnit;
+					});
+				}
+
+				function fetchScenarioData() {
+					return ManageScheduleSrvc.scenarios.query().$promise.then(function (result) {
+						vm.scenarios = result;
+						if (vm.isImportSchedule)
+							vm.selection.toScenario = defaultScenarioFilter(result, true)[0];
+						else
+							vm.selection.fromScenario = defaultScenarioFilter(result, true)[0];
+					});
+				}
+
+				function validateManagingParameters(fromScenario, toScenario, period, teamSelection) {
 					var validationResult = { messages: [] };
 
 					if (fromScenario == null)
@@ -74,7 +105,8 @@
 					validationResult.successful = validationResult.messages.length === 0;
 					return validationResult;
 				}
-				var resetTracking = function () {
+
+				function resetTracking() {
 					vm.tracking = {
 						totalMessages: 0,
 						recievedMessages: 0,
@@ -83,23 +115,13 @@
 						jobId: null
 					};
 				};
-				resetTracking();
 
-				var updateProgress = function () {
+				function updateProgress() {
 					if (vm.tracking.totalMessages === 0) return 0;
 					return 100 * (vm.tracking.recievedMessages / vm.tracking.totalMessages);
 				}
 
-				ManageScheduleSrvc.scenarios.query()
-					.$promise.then(function (result) {
-						vm.scenarios = result;
-						if (vm.isImportSchedule)
-							vm.selection.toScenario = defaultScenarioFilter(result, true)[0];
-						else
-							vm.selection.fromScenario = defaultScenarioFilter(result, true)[0];
-					});
-
-				var completedManaging = function () {
+				function completedManaging() {
 					if (vm.tracking.totalPeople === 0) {
 						NoticeService.info($translate.instant('YourSelectionResultedInZeroPeopleDot'), null, true);
 					} else {
@@ -112,11 +134,11 @@
 					}, 3000);
 				}
 
-				vm.canRunManaging = function () {
+				function canRunManaging() {
 					return !vm.showProgress;
 				};
 
-				vm.validateAndShowModal = function (fromScenario, toScenario, period, teamSelection) {
+				function validateAndShowModal(fromScenario, toScenario, period, teamSelection) {
 					if (!vm.canRunManaging()) return;
 					var validationResult = validateManagingParameters(fromScenario, toScenario, period, teamSelection);
 					if (!validationResult.successful) {
@@ -131,25 +153,27 @@
 						.replace('{2}', moment(period.endDate).format('L'));
 					vm.showConfirmModal = true;
 				};
-				var checkProgress = function () {
-					$timeout(function() {
-							if (vm.showProgress) {
-								ManageScheduleSrvc.getStatus.query({ id: vm.tracking.jobId })
-									.$promise.then(function(result) {
-										vm.tracking.recievedMessages = result.Successful;
-										vm.tracking.progress = updateProgress();
-										if (vm.tracking.totalMessages === vm.tracking.recievedMessages) {
-											completedManaging();
-										} else {
-											checkProgress();
-										}
-									});
-							}
-						},
+
+				function checkProgress() {
+					$timeout(function () {
+						if (vm.showProgress) {
+							ManageScheduleSrvc.getStatus.query({ id: vm.tracking.jobId })
+								.$promise.then(function (result) {
+									vm.tracking.recievedMessages = result.Successful;
+									vm.tracking.progress = updateProgress();
+									if (vm.tracking.totalMessages === vm.tracking.recievedMessages) {
+										completedManaging();
+									} else {
+										checkProgress();
+									}
+								});
+						}
+					},
 						1000);
 				};
 
-				vm.runManaging = function (fromScenario, toScenario, period, teamSelection) {
+				function runManaging(fromScenario, toScenario, period, teamSelection) {
+					console.log(teamSelection)
 					vm.showConfirmModal = false;
 					resetTracking();
 					vm.showProgress = true;
@@ -172,25 +196,21 @@
 						});
 				};
 
-				$scope.$on('teamSelectionChanged',
-					function (event, args) {
-						angular.forEach(args,
-							function (value) {
-								if (value.type === "Team") {
-									// We only care about teams
-									var itemIndex = vm.selection.teams.indexOf(value.id);
-									if (value.selected) {
-										// It should be added to selectedTeams
-										if (itemIndex === -1)
-											vm.selection.teams.push(value.id);
-									} else {
-										// It should be removed from selectedTeams
-										if (itemIndex !== -1)
-											vm.selection.teams.splice(itemIndex, 1);
-									}
-								}
-							});
-					});
+				function fecthSelectedTeamsId() {
+					vm.selection.teams = [];
+					filterSelectedTeamsId(vm.orgTree);
+				}
+
+				function filterSelectedTeamsId(data) {
+					angular.forEach(data.ChildNodes, function (value) {
+						if (value.Type === "Team" && value.Selected == true) {
+							vm.selection.teams.push(value.Id);
+						}
+						if (!!value.ChildNodes && value.ChildNodes.length > 0) {
+							filterSelectedTeamsId(value);
+						}
+					})
+				}
 			}
 		]);
 })();
