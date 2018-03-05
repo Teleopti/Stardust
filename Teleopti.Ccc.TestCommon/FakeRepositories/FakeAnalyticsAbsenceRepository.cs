@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Analytics;
@@ -34,6 +35,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			analyticsAbsence.AbsenceId = fakeAbsences.First(a => a.AbsenceCode == analyticsAbsence.AbsenceCode).AbsenceId;
 			fakeAbsences.RemoveAll(a => a.AbsenceCode == analyticsAbsence.AbsenceCode);
 			fakeAbsences.Add(analyticsAbsence);
+		}
+
+		public AnalyticsAbsence Absence(Guid absenceId)
+		{
+			return fakeAbsences.FirstOrDefault(a => a.AbsenceCode == absenceId);
 		}
 	}
 }

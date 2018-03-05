@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Absence
 			}
 
 			var analyticsBusinessUnit = _analyticsBusinessUnitRepository.Get(@event.LogOnBusinessUnitId);
-			var analyticsAbsence = _analyticsAbsenceRepository.Absences().FirstOrDefault(a => a.AbsenceCode == @event.AbsenceId);
+			var analyticsAbsence = _analyticsAbsenceRepository.Absence(@event.AbsenceId);
 
 			if (analyticsBusinessUnit == null) throw new BusinessUnitMissingInAnalyticsException();
 
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Absence
 		public virtual void Handle(AbsenceDeletedEvent @event)
 		{
 			logger.Debug($"Consuming {nameof(AbsenceDeletedEvent)} for absence id = {@event.AbsenceId}. (Message timestamp = {@event.Timestamp})");
-			var analyticsAbsence = _analyticsAbsenceRepository.Absences().FirstOrDefault(a => a.AbsenceCode == @event.AbsenceId);
+			var analyticsAbsence = _analyticsAbsenceRepository.Absence(@event.AbsenceId);
 
 			if (analyticsAbsence == null)
 				return;

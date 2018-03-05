@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Analytics;
 
@@ -8,5 +9,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		IList<AnalyticsAbsence> Absences();
 		void AddAbsence(AnalyticsAbsence analyticsAbsence);
 		void UpdateAbsence(AnalyticsAbsence analyticsAbsence);
+		AnalyticsAbsence Absence(Guid absenceId);
 	}
 }

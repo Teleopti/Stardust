@@ -170,8 +170,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Request
 			var absenceRequest = personRequest.Request as IAbsenceRequest;
 			if (absenceRequest == null) return -1;
 
-			var analyticsAbsence = _analyticsAbsenceRepository.Absences()
-				.FirstOrDefault(x => x.AbsenceCode == absenceRequest.Absence.Id.GetValueOrDefault());
+			var analyticsAbsence = _analyticsAbsenceRepository.Absence(absenceRequest.Absence.Id.GetValueOrDefault());
 			if (analyticsAbsence != null)
 				return analyticsAbsence.AbsenceId;
 			throw new AbsenceMissingInAnalyticsException();

@@ -92,9 +92,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 
 		public AnalyticsAbsence MapAbsenceId(Guid absenceCode)
 		{
-			var absences = _analyticsAbsenceRepository.Absences();
-			var abs = absences.FirstOrDefault(a => a.AbsenceCode.Equals(absenceCode));
-			return abs;
+			return _analyticsAbsenceRepository.Absence(absenceCode);
 		}
 
 		public int MapOvertimeId(Guid overtimeCode)

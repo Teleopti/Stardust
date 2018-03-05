@@ -38,8 +38,35 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			analyticsDataFactory.Setup(absence);
 			analyticsDataFactory.Persist();
 
-			var scenarios = WithAnalyticsUnitOfWork.Get(() => Target.Absences());
-			scenarios.Count.Should().Be.EqualTo(1);
+			var absences = WithAnalyticsUnitOfWork.Get(() => Target.Absences());
+			absences.Count.Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldLoadAbsence()
+		{
+			var id = Guid.NewGuid();
+			var absence = new Absence(22, id, "Freee", Color.LightGreen, _datasource, businessUnitId);
+			analyticsDataFactory.Setup(absence);
+			analyticsDataFactory.Persist();
+
+			var a = WithAnalyticsUnitOfWork.Get(() => Target.Absence(id));
+			a.AbsenceCode.Should().Be.EqualTo(id);
+			a.AbsenceId.Should().Be.EqualTo(22);
+			a.AbsenceName.Should().Be.EqualTo("Freee");
+			a.DisplayColor.Should().Be.EqualTo(Color.LightGreen.ToArgb());
+		}
+
+		[Test]
+		public void ShouldLoadNullAbsenceForNotFound()
+		{
+			var id = Guid.NewGuid();
+			var absence = new Absence(22, id, "Freee", Color.LightGreen, _datasource, businessUnitId);
+			analyticsDataFactory.Setup(absence);
+			analyticsDataFactory.Persist();
+
+			var a = WithAnalyticsUnitOfWork.Get(() => Target.Absence(Guid.NewGuid()));
+			a.Should().Be.Null();
 		}
 
 		[Test]

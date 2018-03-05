@@ -118,5 +118,34 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				.SetString(nameof(AnalyticsAbsence.AbsenceShortName), analyticsAbsence.AbsenceShortName);
 			query.ExecuteUpdate();
 		}
+
+		public AnalyticsAbsence Absence(Guid absenceId)
+		{
+			return _currentAnalyticsUnitOfWork.Current().Session().CreateSQLQuery(
+					$@"select [absence_id] {nameof(AnalyticsAbsence.AbsenceId)}
+					,[absence_code] {nameof(AnalyticsAbsence.AbsenceCode)}
+					,[absence_name] {nameof(AnalyticsAbsence.AbsenceName)}
+					,[display_color] {nameof(AnalyticsAbsence.DisplayColor)}
+					,[in_contract_time] {nameof(AnalyticsAbsence.InContractTime)}
+					,[in_contract_time_name] {nameof(AnalyticsAbsence.InContractTimeName)}
+					,[in_paid_time] {nameof(AnalyticsAbsence.InPaidTime)}
+					,[in_paid_time_name] {nameof(AnalyticsAbsence.InPaidTimeName)}
+					,[in_work_time] {nameof(AnalyticsAbsence.InWorkTime)}
+					,[in_work_time_name] {nameof(AnalyticsAbsence.InWorkTimeName)}
+					,[business_unit_id] {nameof(AnalyticsAbsence.BusinessUnitId)}
+					,[datasource_id] {nameof(AnalyticsAbsence.DatasourceId)}
+					,[insert_date] {nameof(AnalyticsAbsence.InsertDate)}
+					,[update_date] {nameof(AnalyticsAbsence.UpdateDate)}
+					,[datasource_update_date] {nameof(AnalyticsAbsence.DatasourceUpdateDate)}
+					,[is_deleted] {nameof(AnalyticsAbsence.IsDeleted)}
+					,[display_color_html] {nameof(AnalyticsAbsence.DisplayColorHtml)}
+					,[absence_shortname] {nameof(AnalyticsAbsence.AbsenceShortName)}
+					from [mart].[dim_absence] WITH (NOLOCK)
+					where absence_code=:id")
+				.SetGuid("id",absenceId)
+				.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsAbsence)))
+				.SetReadOnly(true)
+				.UniqueResult<AnalyticsAbsence>();
+		}
 	}
 }
