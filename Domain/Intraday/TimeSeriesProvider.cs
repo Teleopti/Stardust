@@ -1,14 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 
 namespace Teleopti.Ccc.Domain.Intraday
 {
-	public class TimeSeriesProvider
+	public static class TimeSeriesProvider
 	{
-
-		public DateTime[] DataSeries(IList<StaffingIntervalModel> forecastedStaffing, IList<SkillStaffingIntervalLightModel> scheduledStaffing, int minutesPerInterval)
+		public static DateTime[] DataSeries(IList<StaffingIntervalModel> forecastedStaffing, IList<SkillStaffingIntervalLightModel> scheduledStaffing, int minutesPerInterval, TimeZoneInfo timeZoneInfo)
 		{
 			var min1 = DateTime.MaxValue;
 			var min2 = DateTime.MaxValue;
@@ -31,9 +32,26 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 			var timeSeries = new List<DateTime>();
 
-			for (DateTime time = theMinTime; time <= theMaxTime; time = time.AddMinutes(minutesPerInterval))
+			var ambiguousTimes = new List<DateTime>();
+			for (var time = theMinTime; time <= theMaxTime; time = time.AddMinutes(minutesPerInterval))
 			{
-				timeSeries.Add(time);
+				if(timeZoneInfo != null && timeZoneInfo.IsAmbiguousTime(time))
+					ambiguousTimes.Add(time);
+
+				if (!ambiguousTimes.IsEmpty() && timeZoneInfo != null && !timeZoneInfo.IsAmbiguousTime(time))
+				{
+					timeSeries.AddRange(ambiguousTimes);
+					ambiguousTimes.Clear();
+				}
+				
+				if(timeZoneInfo == null || !timeZoneInfo.IsInvalidTime(time))
+					timeSeries.Add(time);
+			}
+			
+			foreach (var timeSeriesTime in timeSeries)
+			{
+				if(timeZoneInfo != null && timeZoneInfo.IsAmbiguousTime(timeSeriesTime))
+					ambiguousTimes.Add(timeSeriesTime);
 			}
 
 			return timeSeries.ToArray();

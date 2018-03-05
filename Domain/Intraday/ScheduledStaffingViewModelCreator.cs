@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly ScheduledStaffingProvider _scheduledStaffingProvider;
 		private readonly ScheduledStaffingToDataSeries _scheduledStaffingToDataSeries;
-		private readonly TimeSeriesProvider _timeSeriesProvider;
 		private readonly ForecastedStaffingProvider _forecastedStaffingProvider;
 		private readonly ForecastedStaffingToDataSeries _forecastedStaffingToDataSeries;
 		private readonly ISupportedSkillsInIntradayProvider _supportedSkillsInIntradayProvider;
@@ -31,7 +30,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 			IScenarioRepository scenarioRepository,
 			ScheduledStaffingProvider scheduledStaffingProvider,
 			ScheduledStaffingToDataSeries scheduledStaffingToDataSeries,
-			TimeSeriesProvider timeSeriesProvider,
 			ForecastedStaffingProvider forecastedStaffingProvider,
 			ForecastedStaffingToDataSeries forecastedStaffingToDataSeries,
 			ISupportedSkillsInIntradayProvider supportedSkillsInIntradayProvider,
@@ -44,7 +42,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 			_scenarioRepository = scenarioRepository;
 			_scheduledStaffingProvider = scheduledStaffingProvider;
 			_scheduledStaffingToDataSeries = scheduledStaffingToDataSeries;
-			_timeSeriesProvider = timeSeriesProvider;
 			_forecastedStaffingProvider = forecastedStaffingProvider;
 			_forecastedStaffingToDataSeries = forecastedStaffingToDataSeries;
 			_supportedSkillsInIntradayProvider = supportedSkillsInIntradayProvider;
@@ -69,16 +66,14 @@ namespace Teleopti.Ccc.Domain.Intraday
 			var forecastedStaffing = _forecastedStaffingProvider.StaffingPerSkill(skillDaysBySkills, minutesPerInterval, dateOnly, useShrinkage);
 			var scheduledStaffingPerSkill = _scheduledStaffingProvider.StaffingPerSkill(skills, minutesPerInterval, dateOnly, useShrinkage);
 
-			var timeSeries = _timeSeriesProvider.DataSeries(forecastedStaffing, scheduledStaffingPerSkill, minutesPerInterval);
-
-			var validTimes = timeSeries.Where(time => !_timeZone.TimeZone().IsInvalidTime(time)).ToArray();
+			var timeSeries = TimeSeriesProvider.DataSeries(forecastedStaffing, scheduledStaffingPerSkill, minutesPerInterval, _timeZone.TimeZone());
 
 			var dataSeries = new StaffingDataSeries
 			{
 				Date = userDateOnly,
-				Time = validTimes,
-				ForecastedStaffing = _forecastedStaffingToDataSeries.DataSeries(forecastedStaffing, validTimes),
-				ScheduledStaffing = _scheduledStaffingToDataSeries.DataSeries(scheduledStaffingPerSkill, validTimes)
+				Time = timeSeries,
+				ForecastedStaffing = _forecastedStaffingToDataSeries.DataSeries(forecastedStaffing, timeSeries),
+				ScheduledStaffing = _scheduledStaffingToDataSeries.DataSeries(scheduledStaffingPerSkill, timeSeries)
 			};
 			calculateAbsoluteDifference(dataSeries);
 			return new ScheduledStaffingViewModel

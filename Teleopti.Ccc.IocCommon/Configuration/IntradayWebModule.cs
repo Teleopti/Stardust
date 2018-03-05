@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<RequiredStaffingProvider>().SingleInstance();
 			builder.RegisterType<ScheduledStaffingProvider>().SingleInstance();
 			builder.RegisterType<ScheduledStaffingToDataSeries>().SingleInstance();
-			builder.RegisterType<TimeSeriesProvider>().SingleInstance();
 			builder.RegisterType<ForecastedStaffingProvider>().SingleInstance();
 			builder.RegisterType<ForecastedStaffingToDataSeries>().SingleInstance();
 			builder.RegisterType<ReforecastedStaffingProvider>().SingleInstance();
