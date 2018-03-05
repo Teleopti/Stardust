@@ -1,4 +1,4 @@
-(function () {
+(function (angular, moment) {
     'use strict';
     angular
         .module('wfm.gamification')
@@ -11,14 +11,15 @@
             },
         });
 
-    badgeCalculationController.$inject = ['GamificationDataService', 'CurrentUserInfo'];
-    function badgeCalculationController(dataService, userInfo) {
+    badgeCalculationController.$inject = ['$locale', 'GamificationDataService', 'CurrentUserInfo'];
+    function badgeCalculationController(locale, dataService, userInfo) {
         var $ctrl = this;
         var currentTimezone = userInfo.CurrentUserInfo().DefaultTimeZone;
 
         $ctrl.$onInit = function () {
             fetchJobs();
 
+            $ctrl.dateTimeFormat = locale.DATETIME_FORMATS.medium;
             $ctrl.templateType = 'popup';
             var startDate = moment.utc().subtract(2, 'days').toDate();
             var endDate = moment.utc().toDate();
@@ -79,4 +80,4 @@
             }
         }
     }
-})();
+})(angular, moment);
