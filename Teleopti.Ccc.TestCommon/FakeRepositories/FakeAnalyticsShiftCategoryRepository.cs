@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Analytics;
@@ -35,6 +36,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			analyticsShiftCategory.ShiftCategoryId = fakeShiftCategories.First(a => a.ShiftCategoryCode == analyticsShiftCategory.ShiftCategoryCode).ShiftCategoryId;
 			fakeShiftCategories.RemoveAll(a => a.ShiftCategoryCode == analyticsShiftCategory.ShiftCategoryCode);
 			fakeShiftCategories.Add(analyticsShiftCategory);
+		}
+
+		public AnalyticsShiftCategory ShiftCategory(Guid shiftCategoryId)
+		{
+			return fakeShiftCategories.FirstOrDefault(s => s.ShiftCategoryCode == shiftCategoryId);
 		}
 	}
 }

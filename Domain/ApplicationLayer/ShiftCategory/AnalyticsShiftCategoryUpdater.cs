@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Aop;
@@ -38,7 +37,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftCategory
 			var shiftCategory = _shiftCategoryRepository.Load(@event.ShiftCategoryId);
 			var analyticsBusinessUnit = _analyticsBusinessUnitRepository.Get(@event.LogOnBusinessUnitId);
 			if (analyticsBusinessUnit == null) throw new BusinessUnitMissingInAnalyticsException();
-			var analyticsShiftCategory = _analyticsShiftCategoryRepository.ShiftCategories().FirstOrDefault(a => a.ShiftCategoryCode == @event.ShiftCategoryId);
+			var analyticsShiftCategory = _analyticsShiftCategoryRepository.ShiftCategory(@event.ShiftCategoryId);
 
 			if (shiftCategory == null)
 			{
@@ -78,7 +77,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftCategory
 		public virtual void Handle(ShiftCategoryDeletedEvent @event)
 		{
 			logger.Debug($"Consuming {nameof(ShiftCategoryDeletedEvent)} for shift category id = {@event.ShiftCategoryId}. (Message timestamp = {@event.Timestamp})");
-			var analyticsShiftCategory = _analyticsShiftCategoryRepository.ShiftCategories().FirstOrDefault(a => a.ShiftCategoryCode == @event.ShiftCategoryId);
+			var analyticsShiftCategory = _analyticsShiftCategoryRepository.ShiftCategory(@event.ShiftCategoryId);
 
 			if (analyticsShiftCategory == null)
 				return;

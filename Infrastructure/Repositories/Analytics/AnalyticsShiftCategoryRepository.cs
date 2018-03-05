@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Analytics;
@@ -81,6 +82,28 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				.SetDateTime(nameof(AnalyticsShiftCategory.DatasourceUpdateDate), analyticsShiftCategory.DatasourceUpdateDate)
 				.SetBoolean(nameof(AnalyticsShiftCategory.IsDeleted), analyticsShiftCategory.IsDeleted);
 			query.ExecuteUpdate();
+		}
+
+		public AnalyticsShiftCategory ShiftCategory(Guid shiftCategoryId)
+		{
+			return _currentAnalyticsUnitOfWork.Current().Session().CreateSQLQuery(
+					$@"select [shift_category_id] {nameof(AnalyticsShiftCategory.ShiftCategoryId)}
+					,[shift_category_code] {nameof(AnalyticsShiftCategory.ShiftCategoryCode)}
+					,[shift_category_name] {nameof(AnalyticsShiftCategory.ShiftCategoryName)}
+					,[shift_category_shortname] {nameof(AnalyticsShiftCategory.ShiftCategoryShortname)}
+					,[display_color] {nameof(AnalyticsShiftCategory.DisplayColor)}
+					,[business_unit_id] {nameof(AnalyticsShiftCategory.BusinessUnitId)}
+					,[datasource_id] {nameof(AnalyticsShiftCategory.DatasourceId)}
+					,[insert_date] {nameof(AnalyticsShiftCategory.InsertDate)}
+					,[update_date] {nameof(AnalyticsShiftCategory.UpdateDate)}
+					,[datasource_update_date] {nameof(AnalyticsShiftCategory.DatasourceUpdateDate)}
+					,[is_deleted] {nameof(AnalyticsShiftCategory.IsDeleted)}
+					from [mart].[dim_shift_category] WITH (NOLOCK)
+					where shift_category_code = :id")
+				.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsShiftCategory)))
+				.SetGuid("id",shiftCategoryId)
+				.SetReadOnly(true)
+				.UniqueResult<AnalyticsShiftCategory>();
 		}
 	}
 }

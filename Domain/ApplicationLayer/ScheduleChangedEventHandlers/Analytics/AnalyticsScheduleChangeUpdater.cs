@@ -217,8 +217,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 
 		private int getCategory(Guid shiftCategoryCode)
 		{
-			var cats = _analyticsShiftCategoryRepository.ShiftCategories();
-			var cat = cats.FirstOrDefault(x => x.ShiftCategoryCode.Equals(shiftCategoryCode));
+			var cat = _analyticsShiftCategoryRepository.ShiftCategory(shiftCategoryCode);
 			if (cat == null)
 				return -1;
 			return cat.ShiftCategoryId;

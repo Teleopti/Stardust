@@ -43,6 +43,35 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		}
 
 		[Test]
+		public void ShouldLoadShiftCategory()
+		{
+			var shiftCategoryId = Guid.NewGuid();
+			analyticsDataFactory.Setup(Scenario.DefaultScenarioFor(1, Guid.NewGuid()));
+			var analyticsShiftCategory = new ShiftCategory(1, shiftCategoryId, "Kattegat", Color.Green, _datasource, businessUnitId);
+			analyticsDataFactory.Setup(analyticsShiftCategory);
+			analyticsDataFactory.Persist();
+
+			var shiftCategoryFromDb = WithAnalyticsUnitOfWork.Get(() => Target.ShiftCategory(shiftCategoryId));
+			shiftCategoryFromDb.ShiftCategoryCode.Should().Be.EqualTo(shiftCategoryId);
+			shiftCategoryFromDb.ShiftCategoryName.Should().Be.EqualTo("Kattegat");
+			shiftCategoryFromDb.BusinessUnitId.Should().Be.EqualTo(businessUnitId);
+			shiftCategoryFromDb.DisplayColor.Should().Be.EqualTo(Color.Green.ToArgb());
+		}
+
+		[Test]
+		public void ShouldReturnNullShiftCategoryWhenNotFound()
+		{
+			var shiftCategoryId = Guid.NewGuid();
+			analyticsDataFactory.Setup(Scenario.DefaultScenarioFor(1, Guid.NewGuid()));
+			var analyticsShiftCategory = new ShiftCategory(1, shiftCategoryId, "Kattegat", Color.Green, _datasource, businessUnitId);
+			analyticsDataFactory.Setup(analyticsShiftCategory);
+			analyticsDataFactory.Persist();
+
+			var shiftCategoryFromDb = WithAnalyticsUnitOfWork.Get(() => Target.ShiftCategory(Guid.NewGuid()));
+			shiftCategoryFromDb.Should().Be.Null();
+		}
+
+		[Test]
 		public void ShouldAddShiftCategoryAndMapAllValues()
 		{
 			var analyticsShiftCategory = new AnalyticsShiftCategory
