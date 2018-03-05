@@ -115,9 +115,24 @@ namespace Teleopti.Ccc.TestCommon
 			return agent.WithPersonPeriod(DateOnly.MinValue, ruleSetBag, contract, team, skills);
 		}
 		
-
+		public static Person WithPersonPeriod(this Person agent, DateOnly periodStart, IRuleSetBag ruleSetBag, IContract contract, params ISkill[] skills)
+		{
+			return agent.WithPersonPeriod(periodStart, ruleSetBag, contract, null, skills);
+		}
 
 		public static Person WithPersonPeriod(this Person agent, DateOnly periodStart, IRuleSetBag ruleSetBag, IContract contract, ITeam team, params ISkill[] skills)
+		{
+			return agent.WithPersonPeriod(periodStart, ruleSetBag, contract, null, null, team, skills);
+		}
+
+		public static Person WithPersonPeriod(this Person agent, IRuleSetBag ruleSetBag, IContract contract,
+			IContractSchedule contractSchedule, IPartTimePercentage partTimePercentage, ITeam team, params ISkill[] skills)
+		{
+			return agent.WithPersonPeriod(DateOnly.MinValue, ruleSetBag, contract, contractSchedule, partTimePercentage, team, skills);
+		}
+		
+		public static Person WithPersonPeriod(this Person agent, DateOnly periodStart, IRuleSetBag ruleSetBag, IContract contract, 
+			IContractSchedule contractSchedule, IPartTimePercentage partTimePercentage, ITeam team, params ISkill[] skills)
 		{
 			var defaultTeam = new Team {Site = new Site("_")};
 			defaultTeam.SetDescription(new Description("_"));
@@ -140,6 +155,14 @@ namespace Teleopti.Ccc.TestCommon
 			if (team != null)
 			{
 				personPeriod.Team = team;
+			}
+			if (contractSchedule != null)
+			{
+				personPeriod.PersonContract.ContractSchedule = contractSchedule;
+			}
+			if (partTimePercentage != null)
+			{
+				personPeriod.PersonContract.PartTimePercentage = partTimePercentage;
 			}
 			agent.AddPersonPeriod(personPeriod);
 			return agent;

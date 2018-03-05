@@ -52,7 +52,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 		[UnitOfWork]
 		public virtual OptimizationResultModel Create(DateOnlyPeriod period, IEnumerable<IPerson> fixedStaffPeople, IPlanningGroup planningGroup, bool usePreferences)
 		{
+			//TODO - try to remove this one
 			_currentUnitOfWork.Current().Reassociate(fixedStaffPeople);
+			//
 			var schedulerStateHolder = _schedulerStateHolder();
 			_fillSchedulerStateHolder.Fill(schedulerStateHolder, null, null, period);
 			var resultStateHolder = schedulerStateHolder.SchedulingResultState;

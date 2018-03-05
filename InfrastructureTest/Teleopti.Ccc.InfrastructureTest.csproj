@@ -394,6 +394,7 @@
     <Compile Include="RealTimeAdherence\Tracer\RtaTracerWriterTenantTest.cs" />
     <Compile Include="RealTimeAdherence\Tracer\RtaTracerWriterTest.cs" />
     <Compile Include="RealTimeAdherence\WithUnitOfWorkWithRecurringEvents.cs" />
+    <Compile Include="Scheduling\DayOffOptimizationWithResultWhenOneAgentCannotBeScheduledTest.cs" />
     <Compile Include="Scheduling\DayOffOptimizationWebUowTest.cs" />
     <Compile Include="Scheduling\FullSchedulingUowTest.cs" />
     <Compile Include="Scheduling\MoveAgentToNewTimeZoneTest.cs" />
