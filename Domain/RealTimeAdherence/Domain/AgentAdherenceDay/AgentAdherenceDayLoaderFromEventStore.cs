@@ -1,39 +1,37 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.ApprovePeriodAsInAdherence;
+using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay
 {
-	public class AgentAdherenceDayLoader : IAgentAdherenceDayLoader
+	public class AgentAdherenceDayLoaderFromEventStore : IAgentAdherenceDayLoader
 	{
 		private readonly INow _now;
-		private readonly IHistoricalChangeReadModelReader _changes;
-		private readonly IApprovedPeriodsReader _approvedPeriods;
+		private readonly IRtaEventStore _eventStore;
 		private readonly ScheduleLoader _scheduleLoader;
 		private readonly IPersonRepository _persons;
 
-		public AgentAdherenceDayLoader(
+		public AgentAdherenceDayLoaderFromEventStore(
 			INow now,
-			IHistoricalChangeReadModelReader changes,
-			IApprovedPeriodsReader approvedPeriods,
 			ScheduleLoader scheduleLoader,
-			IPersonRepository persons
-		)
+			IPersonRepository persons,
+			IRtaEventStore eventStore)
 		{
 			_now = now;
-			_changes = changes;
-			_approvedPeriods = approvedPeriods;
 			_scheduleLoader = scheduleLoader;
 			_persons = persons;
+			_eventStore = eventStore;
 		}
 
 		public IAgentAdherenceDay Load(
 			Guid personId,
-			DateOnly date
-		)
+			DateOnly date)
 		{
 			var now = _now.UtcDateTime();
 
@@ -50,28 +48,23 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay
 				period = new DateTimePeriod(shift.Value.StartDateTime.AddHours(-1), shift.Value.EndDateTime.AddHours(1));
 			}
 
-			var changes = _changes.Read(personId, period.StartDateTime, period.EndDateTime);
-			var lastAdherenceChange = _changes.ReadLastBefore(personId, period.StartDateTime);
-			var adherences =
-				lastAdherenceChange.AsArray()
-					.Concat(changes)
+			var events =
+				_eventStore.LoadLastBefore(personId, period.StartDateTime)
+					.AsArray()
+					.Concat(_eventStore.Load(personId, period))
 					.Where(x => x != null)
 					.ToArray();
 
-			var approvedPeriods = _approvedPeriods.Read(personId, period.StartDateTime, period.EndDateTime);
-
-			var obj = new AgentAdherenceDay();
+			var obj = new AgentAdherenceDayWithEventStore();
 			obj.Load(
 				personId,
 				now,
 				period,
 				shift,
-				adherences,
-				approvedPeriods
+				events
 			);
 
 			return obj;
-
 		}
 	}
 }

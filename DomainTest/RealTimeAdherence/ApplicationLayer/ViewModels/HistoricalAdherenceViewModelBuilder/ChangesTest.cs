@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 				.WithRule(null, "in", 0, Adherence.In, Color.DarkKhaki)
 				.WithHistoricalChange("2017-03-07 14:00")
 				;
-
+			
 			var result = Target.Build(personId).Changes.Single();
 			
 			result.Time.Should().Be("2017-03-07T14:00:00");

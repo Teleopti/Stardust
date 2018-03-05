@@ -441,13 +441,18 @@
     <Compile Include="RealTimeAdherence\ApplicationLayer\ViewModels\TeamCardViewModel.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\AdherencePercentageCalculator.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\AgentAdherenceDay.cs" />
+    <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\AgentAdherenceDayLoaderFromEventStore.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\AgentAdherenceDayLoader.cs" />
+    <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\AgentAdherenceDayWithEventStore.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\HistoricalChange.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\HistoricalChangeAdherence.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\HistoricalChangeModel.cs" />
+    <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\IAgentAdherenceDay.cs" />
+    <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\IAgentAdherenceDayLoader.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\IApprovedPeriodsReader.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\IHistoricalChangeReadModelPersister.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\IHistoricalChangeReadModelReader.cs" />
+    <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\IRtaEventStore.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\OutOfAdherencePeriod.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\ScheduleLoader.cs" />
     <Compile Include="RealTimeAdherence\Domain\ApprovePeriodAsInAdherence\ApprovedPeriod.cs" />
@@ -467,6 +472,7 @@
     <Compile Include="RealTimeAdherence\Domain\Configuration\RtaStateGroup.cs" />
     <Compile Include="RealTimeAdherence\Domain\Configuration\RtaStateHolder.cs" />
     <Compile Include="RealTimeAdherence\Domain\Events\EventAdherence.cs" />
+    <Compile Include="RealTimeAdherence\Domain\Events\PeriodApprovedAsInAdherenceEvent.cs" />
     <Compile Include="RealTimeAdherence\Domain\Events\PersonInAdherenceEvent.cs" />
     <Compile Include="RealTimeAdherence\Domain\Events\PersonNeutralAdherenceEvent.cs" />
     <Compile Include="RealTimeAdherence\Domain\Events\PersonOutOfAdherenceEvent.cs" />

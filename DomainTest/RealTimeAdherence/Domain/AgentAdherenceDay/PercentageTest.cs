@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 	[TestFixture]
 	public class PercentageTest
 	{
-		public AgentAdherenceDayLoader Target;
+		public IAgentAdherenceDayLoader Target;
 		public FakeDatabase Database;
 		public MutableNow Now;
 
@@ -338,7 +338,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 
 	public static class AgentAdherenceDayLoaderEx
 	{
-		public static Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay.AgentAdherenceDay Load(this AgentAdherenceDayLoader loader, Guid personId)
+		public static Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay.IAgentAdherenceDay Load(this IAgentAdherenceDayLoader loader, Guid personId)
 		{
 			return loader.Load(personId, new DateOnly(ServiceLocatorForEntity.Now.UtcDateTime().Date));
 		}

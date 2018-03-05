@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 	[TestFixture]
 	public class ApprovedPeriodPercentageTest
 	{
-		public AgentAdherenceDayLoader Target;
+		public IAgentAdherenceDayLoader Target;
 		public FakeDatabase Database;
 		public MutableNow Now;
 

@@ -1,5 +1,6 @@
 using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -30,6 +31,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<HangfireAsSyncEventPublisher>().SingleInstance().ApplyAspects();
 			builder.RegisterType<MultiEventPublisherServiceBusAsSync>().SingleInstance();
 			builder.RegisterType<StardustEventPublisher>().SingleInstance();
+			builder.RegisterType<RtaEventPublisher>().SingleInstance();
 
 			builder.RegisterType<MultiEventPublisher>().As<IEventPublisher>().SingleInstance();
 			builder.RegisterType<LogExceptions>().As<ISyncEventPublisherExceptionHandler>().SingleInstance();

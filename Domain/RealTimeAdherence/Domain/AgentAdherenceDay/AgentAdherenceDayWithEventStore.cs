@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.ApprovePeriodAsInAdherence;
+using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay
 {
-	public class AgentAdherenceDay : IAgentAdherenceDay
+	public class AgentAdherenceDayWithEventStore : IAgentAdherenceDay
 	{
 		private Guid _personId;
 		private DateTimePeriod _period;
@@ -22,18 +24,22 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay
 			DateTime now,
 			DateTimePeriod period,
 			DateTimePeriod? shift,
-			IEnumerable<HistoricalChangeModel> changes,
-			IEnumerable<ApprovedPeriod> approvedPeriods)
+			IEnumerable<IEvent> events)
 		{
 			_personId = personId;
 			_period = period;
-			_changes = buildChanges(changes, period);
+			var allChanges = buildChanges(events);
+			_changes = buildChanges(events)
+				.Where(x => period.ContainsPart(x.Timestamp))
+				.ToArray();
+
 			now = floorToSeconds(now);
 
-			_approvedPeriods = approvedPeriods.Select(a => new DateTimePeriod(a.StartTime, a.EndTime)).ToArray();
-			_recordedOutOfAdherences = buildPeriods(HistoricalChangeAdherence.Out, changes, now);
+			_approvedPeriods = buildApprovedPeriods(events);
 
-			var recordedNeutralAdherences = buildPeriods(HistoricalChangeAdherence.Neutral, changes, now);
+			_recordedOutOfAdherences = buildPeriods(HistoricalChangeAdherence.Out, allChanges, now);
+
+			var recordedNeutralAdherences = buildPeriods(HistoricalChangeAdherence.Neutral, allChanges, now);
 
 			_outOfAdherences = subtractPeriods(_recordedOutOfAdherences, _approvedPeriods);
 
@@ -44,9 +50,22 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay
 			_percentage = new AdherencePercentageCalculator().Calculate(shift, neutralAdherencesWithinShift, outOfAhderencesWithinShift, now);
 		}
 
-		private static IEnumerable<HistoricalChangeModel> buildChanges(IEnumerable<HistoricalChangeModel> changes, DateTimePeriod period) =>
+		private static IEnumerable<HistoricalChangeModel> buildChanges(IEnumerable<IEvent> changes) =>
 			changes
-				.Where(x => period.ContainsPart(x.Timestamp))
+				.OfType<PersonStateChangedEvent>()
+				.Select(@event => new HistoricalChangeModel
+				{
+					PersonId = @event.PersonId,
+					BelongsToDate = @event.BelongsToDate,
+					Timestamp = @event.Timestamp,
+					StateName = @event.StateName,
+					StateGroupId = @event.StateGroupId,
+					ActivityName = @event.ActivityName,
+					ActivityColor = @event.ActivityColor,
+					RuleName = @event.RuleName,
+					RuleColor = @event.RuleColor,
+					Adherence = @event.Adherence == null ? null : (HistoricalChangeAdherence?) Enum.Parse(typeof(HistoricalChangeAdherence), @event.Adherence.ToString())
+				})
 				.GroupBy(y => new
 				{
 					y.Timestamp,
@@ -58,6 +77,12 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay
 					y.Adherence
 				})
 				.Select(x => x.First())
+				.ToArray();
+
+		private static IEnumerable<DateTimePeriod> buildApprovedPeriods(IEnumerable<IEvent> events) =>
+			events
+				.OfType<PeriodApprovedAsInAdherenceEvent>()
+				.Select(a => new DateTimePeriod(a.StartTime, a.EndTime))
 				.ToArray();
 
 		private class periodAccumulator

@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels
 		private readonly ScheduleLoader _schedule;
 		private readonly INow _now;
 		private readonly IUserTimeZone _timeZone;
-		private readonly AgentAdherenceDayLoader _agentAdherenceDayLoader;
+		private readonly IAgentAdherenceDayLoader _agentAdherenceDayLoader;
 		private readonly int _displayPastDays;
 
 		public HistoricalAdherenceViewModelBuilder(
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels
 			INow now,
 			IUserTimeZone timeZone,
 			IConfigReader config,
-			AgentAdherenceDayLoader agentAdherenceDayLoader
+			IAgentAdherenceDayLoader agentAdherenceDayLoader
 		)
 		{
 			_persons = persons;

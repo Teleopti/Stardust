@@ -47,6 +47,7 @@ using Teleopti.Ccc.TestCommon.Services;
 
 namespace Teleopti.Ccc.TestCommon.IoC
 {
+	[Toggle(Domain.FeatureFlags.Toggles.RTA_RemoveApprovedOOA_47721)]
 	public class DomainTestAttribute : IoCTestAttribute
 	{
 		public static string DefaultTenantName = "default";
@@ -81,6 +82,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			// Event stuff
 			system.UseTestDouble<FakeMessageSender>().For<IMessageSender>();
 			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
+			system.UseTestDouble<FakeRtaEventStore>().For<IRtaEventStore>();
 			QueryAllAttributes<UseEventPublisherAttribute>()
 				.ForEach(a => system.UseTestDoubleForType(a.EventPublisher).For<IEventPublisher>());
 			system.UseTestDouble<FakeRecurringEventPublisher>().For<IRecurringEventPublisher>();

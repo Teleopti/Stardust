@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.ApprovePeriodAsInAdhe
 	public class ApprovedPeriodTest
 	{
 		public FakeDatabase Database;
-		public AgentAdherenceDayLoader Target;
+		public IAgentAdherenceDayLoader Target;
 
 		[Test]
 		public void ShouldApprove()

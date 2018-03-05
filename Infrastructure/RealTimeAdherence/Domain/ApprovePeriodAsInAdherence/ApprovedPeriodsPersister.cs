@@ -1,10 +1,12 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.ApprovePeriodAsInAdherence;
 using Teleopti.Ccc.Infrastructure.Repositories;
 
 namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain.ApprovePeriodAsInAdherence
 {
+	[RemoveMeWithToggle(Toggles.RTA_RemoveApprovedOOA_47721)]
 	public class ApprovedPeriodsPersister : IApprovedPeriodsPersister
 	{
 		private readonly ICurrentUnitOfWork _unitOfWork;

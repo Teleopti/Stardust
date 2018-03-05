@@ -4,6 +4,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.ApprovePeriodAsInAdherence;
+using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -15,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.ApprovePeriodAsInAdhe
 	public class ApprovePeriodAsInAdherenceCommandHandlerTest
 	{
 		public ApprovePeriodAsInAdherenceCommandHandler Target;
-		public FakeApprovedPeriodsStorage Storage;
+		public FakeEventPublisher Publisher;
 		public FakeUserTimeZone TimeZone;
 
 		[Test]
@@ -30,9 +31,10 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.ApprovePeriodAsInAdhe
 				EndDateTime = "2018-01-29 08:15:00"
 			});
 
-			Storage.Data.Single().PersonId.Should().Be(person);
-			Storage.Data.Single().StartTime.Should().Be("2018-01-29 08:05:00".Utc());
-			Storage.Data.Single().EndTime.Should().Be("2018-01-29 08:15:00".Utc());
+			var published = Publisher.PublishedEvents.OfType<PeriodApprovedAsInAdherenceEvent>().Single();
+			published.PersonId.Should().Be(person);
+			published.StartTime.Should().Be("2018-01-29 08:05:00".Utc());
+			published.EndTime.Should().Be("2018-01-29 08:15:00".Utc());
 		}
 
 		[Test]
@@ -48,8 +50,9 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.ApprovePeriodAsInAdhe
 				EndDateTime = "2018-01-29 09:00:00"
 			});
 
-			Storage.Data.Single().StartTime.Should().Be("2018-01-29 07:00:00".Utc());
-			Storage.Data.Single().EndTime.Should().Be("2018-01-29 08:00:00".Utc());
+			var published = Publisher.PublishedEvents.OfType<PeriodApprovedAsInAdherenceEvent>().Single();
+			published.StartTime.Should().Be("2018-01-29 07:00:00".Utc());
+			published.EndTime.Should().Be("2018-01-29 08:00:00".Utc());
 		}
 
 		[Test]
@@ -65,8 +68,9 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.ApprovePeriodAsInAdhe
 				EndDateTime = "2018-01-29 16:00:00"
 			});
 
-			Storage.Data.Single().StartTime.Should().Be("2018-01-29 14:00:00".Utc());
-			Storage.Data.Single().EndTime.Should().Be("2018-01-29 15:00:00".Utc());
+			var published = Publisher.PublishedEvents.OfType<PeriodApprovedAsInAdherenceEvent>().Single();
+			published.StartTime.Should().Be("2018-01-29 14:00:00".Utc());
+			published.EndTime.Should().Be("2018-01-29 15:00:00".Utc());
 		}
 
 		[Test]
@@ -81,7 +85,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.ApprovePeriodAsInAdhe
 			};
 
 			Assert.Throws<ArgumentOutOfRangeException>(() => Target.Handle(command));
-			Storage.Data.Should().Be.Empty();
+			Publisher.PublishedEvents.Should().Be.Empty();
 		}
 	}
 }

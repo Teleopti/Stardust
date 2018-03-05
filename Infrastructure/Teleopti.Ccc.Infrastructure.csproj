@@ -192,6 +192,7 @@
     <Compile Include="ApplicationLayer\HangfireEventProcessor.cs" />
     <Compile Include="ApplicationLayer\HangfireEventPublisher.cs" />
     <Compile Include="ApplicationLayer\ISyncEventPublisherExceptionHandler.cs" />
+    <Compile Include="ApplicationLayer\RtaEventPublisher.cs" />
     <Compile Include="ApplicationLayer\SyncEventPublisher.cs" />
     <Compile Include="ApplicationLayer\MultiEventPublisher.cs" />
     <Compile Include="ApplicationLayer\IHangfireEventClient.cs" />

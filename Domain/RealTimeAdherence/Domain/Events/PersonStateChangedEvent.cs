@@ -19,6 +19,6 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events
 		public string RuleName { get; set; }
 		public int? RuleColor { get; set; }
 
-		public EventAdherence Adherence { get; set; }
+		public EventAdherence? Adherence { get; set; }
 	}
 }

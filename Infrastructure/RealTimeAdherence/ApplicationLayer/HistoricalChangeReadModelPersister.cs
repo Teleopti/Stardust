@@ -1,9 +1,11 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork;
 
 namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.ApplicationLayer
 {
+	[RemoveMeWithToggle(Toggles.RTA_RemoveApprovedOOA_47721)]
 	public class HistoricalChangeReadModelPersister : IHistoricalChangeReadModelPersister
 	{
 		private readonly ICurrentReadModelUnitOfWork _unitOfWork;

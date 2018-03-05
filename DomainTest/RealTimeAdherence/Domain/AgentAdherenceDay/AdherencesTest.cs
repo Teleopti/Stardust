@@ -3,6 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay;
 using Teleopti.Ccc.TestCommon;
@@ -16,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 	[TestFixture]
 	public class AdherencesTest
 	{
-		public AgentAdherenceDayLoader Target;
+		public IAgentAdherenceDayLoader Target;
 		public FakeDatabase Database;
 		public MutableNow Now;
 

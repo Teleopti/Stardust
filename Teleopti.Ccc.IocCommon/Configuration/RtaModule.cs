@@ -1,8 +1,11 @@
-﻿using Autofac;
+﻿using System;
+using System.Collections.Generic;
+using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Skill;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels;
 using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay;
@@ -16,6 +19,7 @@ using Teleopti.Ccc.Infrastructure.RealTimeAdherence.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain.ApprovePeriodAsInAdherence;
 using Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Infrastructure.RealTimeAdherence.Tracer;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
@@ -82,7 +86,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<HistoricalChange>().SingleInstance();
 			builder.RegisterType<ApprovePeriodAsInAdherenceCommandHandler>().SingleInstance();
 			builder.RegisterType<ApprovePeriodAsInAdherence>().SingleInstance();
-			builder.RegisterType<AgentAdherenceDayLoader>().SingleInstance();
+			if (_config.Toggle(Toggles.RTA_RemoveApprovedOOA_47721))
+				builder.RegisterType<AgentAdherenceDayLoaderFromEventStore>().As<IAgentAdherenceDayLoader>().SingleInstance();
+			else
+				builder.RegisterType<AgentAdherenceDayLoader>().As<IAgentAdherenceDayLoader>().SingleInstance();
 			builder.RegisterType<ScheduleLoader>().SingleInstance();
 			builder.RegisterType<AdherencePercentageCalculator>().SingleInstance();
 

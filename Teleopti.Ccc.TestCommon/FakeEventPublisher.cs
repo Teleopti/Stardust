@@ -6,19 +6,26 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 
 namespace Teleopti.Ccc.TestCommon
 {
 	public class FakeEventPublisher : IEventPublisher
 	{
+		private readonly RtaEventPublisher _rtaPublisher;
 		private readonly ResolveEventHandlers _resolver;
 		private readonly CommonEventProcessor _processor;
 		private readonly ICurrentDataSource _dataSource;
 		private readonly List<Type> _handlerTypes = new List<Type>();
 		private ConcurrentQueue<IEvent> queuedEvents = new ConcurrentQueue<IEvent>();
 
-		public FakeEventPublisher(ResolveEventHandlers resolver, CommonEventProcessor processor, ICurrentDataSource dataSource)
+		public FakeEventPublisher(
+			RtaEventPublisher rtaPublisher,
+			ResolveEventHandlers resolver,
+			CommonEventProcessor processor,
+			ICurrentDataSource dataSource)
 		{
+			_rtaPublisher = rtaPublisher;
 			_resolver = resolver;
 			_processor = processor;
 			_dataSource = dataSource;
@@ -43,6 +50,8 @@ namespace Teleopti.Ccc.TestCommon
 
 		public void Publish(params IEvent[] events)
 		{
+			_rtaPublisher.Publish(events);
+
 			events.ForEach(queuedEvents.Enqueue);
 
 			if (_handlerTypes.IsEmpty())
@@ -66,6 +75,5 @@ namespace Teleopti.Ccc.TestCommon
 			thread.Start();
 			thread.Join();
 		}
-
 	}
 }
