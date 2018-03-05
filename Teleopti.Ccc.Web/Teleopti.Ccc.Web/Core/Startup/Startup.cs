@@ -4,6 +4,7 @@ using System.Configuration;
 using System.IdentityModel.Services;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
@@ -26,74 +27,62 @@ namespace Teleopti.Ccc.Web.Core.Startup
 	public class Startup
 	{
 		private static readonly ILog log = LogManager.GetLogger(typeof(Startup));
-
+		private static bool _applicationStarted;
+		private static readonly object applicationStartLock = new object();
 		private readonly IBootstrapper _bootstrapper = new Bootstrapper();
 		private readonly IContainerConfiguration _containerConfiguration = new ContainerConfiguration();
 
-		private static bool _applicationStarted;
-		private static readonly object applicationStartLock = new object();
-
 		public void Configuration(IAppBuilder app)
 		{
-			if (!_applicationStarted)
+			if (_applicationStarted) return;
+			lock (applicationStartLock)
 			{
-				lock (applicationStartLock)
-				{
-					if (!_applicationStarted)
-					{
-						// this will run only once per application start
-						OnStart(app, new HttpConfiguration());
-						_applicationStarted = true;
-					}
-				}
+				if (_applicationStarted) return;
+				// this will run only once per application start
+				OnStart(app, new HttpConfiguration());
+				_applicationStarted = true;
 			}
 		}
+
+		public static Exception ErrorAtStartup { get; set; }
+		public static Task[] TasksFromStartup { get; set; }
 
 		public void OnStart(IAppBuilder application, HttpConfiguration config)
 		{
 			MvcHandler.DisableMvcResponseHeader = true;
-			ApplicationStartModule.ErrorAtStartup = null;
+			ErrorAtStartup = null;
 			try
 			{
 				var container = _containerConfiguration.Configure(pathToToggle(), config);
 
 				AutofacHostFactory.Container = container;
 
-				ApplicationStartModule.RequestContextInitializer = container.Resolve<IRequestContextInitializer>();
-				ApplicationStartModule.SystemVersion = container.Resolve<SystemVersion>();
+				ApplicationModule.Inject(container);
 
 				DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
 				GlobalConfiguration.Configuration.DependencyResolver = new AutofacWebApiDependencyResolver(container);
 
-				GlobalHost.DependencyResolver =
-					new Autofac.Integration.SignalR.AutofacDependencyResolver(container);
+				GlobalHost.DependencyResolver = new Autofac.Integration.SignalR.AutofacDependencyResolver(container);
 				container.Resolve<IEnumerable<IHubPipelineModule>>().ForEach(m => GlobalHost.HubPipeline.AddModule(m));
 
-				ApplicationStartModule.TasksFromStartup =
-					_bootstrapper.Run(container.Resolve<IEnumerable<IBootstrapperTask>>(), application).ToArray();
+				TasksFromStartup = _bootstrapper.Run(container.Resolve<IEnumerable<IBootstrapperTask>>(), application).ToArray();
 
 				SignalRConfiguration.Configure(SignalRSettings.Load(), () => application.MapSignalR(new HubConfiguration()));
-				FederatedAuthentication.WSFederationAuthenticationModule.SignedIn += WSFederationAuthenticationModule_SignedIn;
-				FederatedAuthentication.WSFederationAuthenticationModule.SignInError +=
-					WSFederationAuthenticationModule_SignInError;
-				FederatedAuthentication.FederationConfiguration.IdentityConfiguration.SecurityTokenHandlers.AddOrReplace(
-					new MachineKeySessionSecurityTokenHandler());
+				FederatedAuthentication.WSFederationAuthenticationModule.SignedIn += wsFederationAuthenticationModuleSignedIn;
+				FederatedAuthentication.WSFederationAuthenticationModule.SignInError += wsFederationAuthenticationModuleSignInError;
+				FederatedAuthentication.FederationConfiguration.IdentityConfiguration.SecurityTokenHandlers.AddOrReplace(new MachineKeySessionSecurityTokenHandler());
 			}
-
 			catch (Exception ex)
 			{
 				log.Error(ex);
-				ApplicationStartModule.ErrorAtStartup = ex;
+				ErrorAtStartup = ex;
 			}
 		}
 
-		private static string pathToToggle()
-		{
-			return Path.Combine(HttpContext.Current.Server.MapPath("~/"), ConfigurationManager.AppSettings["FeatureToggle"]);
-		}
+		private static string pathToToggle() =>
+			Path.Combine(HttpContext.Current.Server.MapPath("~/"), ConfigurationManager.AppSettings["FeatureToggle"]);
 
-		private void WSFederationAuthenticationModule_SignInError(object sender,
-			System.IdentityModel.Services.ErrorEventArgs e)
+		private void wsFederationAuthenticationModuleSignInError(object sender, System.IdentityModel.Services.ErrorEventArgs e)
 		{
 			// http://stackoverflow.com/questions/15904480/how-to-avoid-samlassertion-notonorafter-condition-is-not-satisfied-errors
 			if (e.Exception.Message.StartsWith("ID4148") ||
@@ -105,19 +94,17 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			}
 		}
 
-		private void WSFederationAuthenticationModule_SignedIn(object sender, EventArgs e)
+		private static void wsFederationAuthenticationModuleSignedIn(object sender, EventArgs e)
 		{
-			WSFederationMessage wsFederationMessage =
-				WSFederationMessage.CreateFromFormPost(new HttpRequestWrapper(HttpContext.Current.Request));
-			if (wsFederationMessage.Context != null)
-			{
-				var wctx = HttpUtility.ParseQueryString(wsFederationMessage.Context);
-				string returnUrl = wctx["ru"];
+			var wsFederationMessage = WSFederationMessage.CreateFromFormPost(new HttpRequestWrapper(HttpContext.Current.Request));
+			if (wsFederationMessage.Context == null) return;
 
-				// TODO: check for absolute url and throw to avoid open redirects
-				HttpContext.Current.Response.Redirect(returnUrl, false);
-				HttpContext.Current.ApplicationInstance.CompleteRequest();
-			}
+			var wctx = HttpUtility.ParseQueryString(wsFederationMessage.Context);
+			var returnUrl = wctx["ru"];
+
+			// TODO: check for absolute url and throw to avoid open redirects
+			HttpContext.Current.Response.Redirect(returnUrl, false);
+			HttpContext.Current.ApplicationInstance.CompleteRequest();
 		}
 	}
 }

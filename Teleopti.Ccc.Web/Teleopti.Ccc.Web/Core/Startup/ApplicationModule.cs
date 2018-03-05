@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Autofac;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -11,22 +13,16 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.Web.Core.RequestContext.Initialize;
 using Teleopti.Ccc.Web.Core.Startup;
 
-[assembly: PreApplicationStartMethod(typeof(ApplicationStartModule), "RegisterModule")]
+[assembly: PreApplicationStartMethod(typeof(ApplicationModule), "RegisterModule")]
 
 namespace Teleopti.Ccc.Web.Core.Startup
 {
-	public class ApplicationStartModule : IHttpModule
+	public class ApplicationModule : IHttpModule
 	{
 		public static void RegisterModule()
 		{
-			DynamicModuleUtility.RegisterModule(typeof(ApplicationStartModule));
+			DynamicModuleUtility.RegisterModule(typeof(ApplicationModule));
 		}
-
-		public static Exception ErrorAtStartup { get; set; }
-		public static Task[] TasksFromStartup { get; set; }
-
-		private readonly object _taskWaitLockObject = new object();
-		private bool _noStartupErrors;
 
 		private static IEnumerable<string> withoutPrincipal()
 		{
@@ -45,8 +41,6 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			yield return "/togglehandler/";
 		}
 
-		private bool _isDisposed;
-
 		public void Init(HttpApplication application)
 		{
 			// this will run on every HttpApplication initialization in the application pool
@@ -63,13 +57,22 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			};
 		}
 
+		private static IRequestContextInitializer _requestContextInitializer;
+		private static SystemVersion _systemVersion;
+
+		public static void Inject(IComponentContext container)
+		{
+			_requestContextInitializer = container.Resolve<IRequestContextInitializer>();
+			_systemVersion = container.Resolve<SystemVersion>();
+		}
+
 		private static void validateClientVersion()
 		{
 			var clientVersion = HttpContext.Current.Request.Headers["X-Client-Version"];
 			var versionValidationDisabled = string.IsNullOrEmpty(clientVersion);
 			if (versionValidationDisabled)
 				return;
-			var clientVersionIsOk = clientVersion == SystemVersion.Version();
+			var clientVersionIsOk = clientVersion == _systemVersion.Version();
 			if (clientVersionIsOk)
 				return;
 
@@ -77,13 +80,10 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			HttpContext.Current.Response.End();
 		}
 
-		public static IRequestContextInitializer RequestContextInitializer { get; set; }
-		public static SystemVersion SystemVersion { get; set; }
-
-		private void setupPrincipal()
+		private static void setupPrincipal()
 		{
 			if (requestMatching(withoutPrincipal())) return;
-			RequestContextInitializer.SetupPrincipalAndCulture(onlyUseGregorianCalendar(HttpContext.Current));
+			_requestContextInitializer.SetupPrincipalAndCulture(onlyUseGregorianCalendar(HttpContext.Current));
 		}
 
 		private static bool requestMatching(IEnumerable<string> patterns)
@@ -91,6 +91,9 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			var url = HttpContext.Current.Request.Url.AbsolutePath.ToLowerInvariant();
 			return patterns.Any(url.Contains);
 		}
+
+		private readonly object _taskWaitLockObject = new object();
+		private bool _noStartupErrors;
 
 		private void checkForStartupErrors()
 		{
@@ -100,21 +103,21 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			if (requestMatching(ignoreStartupErrors()))
 				return;
 
-			if (TasksFromStartup != null)
+			if (Startup.TasksFromStartup != null)
 			{
 				lock (_taskWaitLockObject)
 				{
-					if (TasksFromStartup != null)
+					if (Startup.TasksFromStartup != null)
 					{
-						Task.WaitAll(TasksFromStartup);
-						TasksFromStartup = null;
+						Task.WaitAll(Startup.TasksFromStartup);
+						Startup.TasksFromStartup = null;
 					}
 				}
 			}
 
-			if (ErrorAtStartup != null)
+			if (Startup.ErrorAtStartup != null)
 			{
-				var startupException = new ApplicationException("Failure on start up", ErrorAtStartup);
+				var startupException = new ApplicationException("Failure on start up", Startup.ErrorAtStartup);
 				PreserveStack.ForInnerOf(startupException);
 				throw startupException;
 			}
@@ -122,7 +125,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			_noStartupErrors = true;
 		}
 
-		private bool onlyUseGregorianCalendar(HttpContext context)
+		private static bool onlyUseGregorianCalendar(HttpContext context)
 		{
 			var useGregorianCalendar = string.Empty;
 			var headers = context.Request.Headers;
@@ -130,9 +133,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			return !string.IsNullOrEmpty(useGregorianCalendar) && bool.Parse(useGregorianCalendar);
 		}
 
-		public void Dispose()
-		{
-			_isDisposed = true;
-		}
+		private bool _isDisposed;
+		public void Dispose() => _isDisposed = true;
 	}
 }

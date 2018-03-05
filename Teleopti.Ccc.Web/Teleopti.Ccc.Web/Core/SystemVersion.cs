@@ -21,6 +21,6 @@ namespace Teleopti.Ccc.Web.Core
 				: version().ToString();
 
 		private Version version() =>
-			_version ?? typeof(ApplicationStartModule).Assembly.GetName().Version;
+			_version ?? typeof(ApplicationModule).Assembly.GetName().Version;
 	}
 }
