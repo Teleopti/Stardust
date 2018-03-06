@@ -5408,6 +5408,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			toolStripButtonSummaryView.Click -= toolStripButtonZoomClick;
 			toolStripButtonRequestView.Click -= toolStripButtonZoomClick;
 			toolStripButtonRestrictions.Click -= toolStripButtonZoomClick;
+			toolStripButtonShowPropertyPanel.Click -= toolStripButtonShowPropertyPanelClick;
 
 			toolStripSplitButtonUnlock.ButtonClick -= toolStripSplitButtonUnlockButtonClick;
 			
