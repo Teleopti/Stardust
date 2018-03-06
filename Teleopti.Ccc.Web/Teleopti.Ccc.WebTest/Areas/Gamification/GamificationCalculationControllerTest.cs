@@ -2,6 +2,7 @@
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon;
@@ -66,7 +67,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification
 			result[0].Owner.Should().Be.EqualTo(jobResult.Owner.Name.ToString());
 			result[0].StartDate.Should().Be.EqualTo(jobResult.Period.StartDate.Utc());
 			result[0].EndDate.Should().Be.EqualTo(jobResult.Period.EndDate.Utc());
-			result[0].Status.Should().Be.EqualTo(Resources.Finished);
+			result[0].Status.Should().Be.EqualTo(ImportExternalPerformanceJobStatus.Finished.ToString().ToLower());
 			result[0].HasError.Should().Be.EqualTo(false);
 			result[0].ErrorMessage.Should().Be.EqualTo("");
 		}
@@ -84,7 +85,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification
 			var result = Target.GetJobList();
 
 			result.Count.Should().Be.EqualTo(1);
-			result[0].Status.Should().Be.EqualTo(Resources.HasError);
+			result[0].Status.Should().Be.EqualTo(ImportExternalPerformanceJobStatus.Failed.ToString().ToLower());
 			result[0].HasError.Should().Be.EqualTo(true);
 			result[0].ErrorMessage.Should().Be.EqualTo(Resources.InternalErrorMsg);
 		}
@@ -102,7 +103,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification
 			var result = Target.GetJobList();
 
 			result.Count.Should().Be.EqualTo(1);
-			result[0].Status.Should().Be.EqualTo(Resources.HasError);
+			result[0].Status.Should().Be.EqualTo(ImportExternalPerformanceJobStatus.Failed.ToString().ToLower());
 			result[0].HasError.Should().Be.EqualTo(true);
 			result[0].ErrorMessage.Should().Be.EqualTo("detailError");
 		}
