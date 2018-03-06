@@ -87,9 +87,15 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ApprovePeriodAsInAdherenceCommandHandler>().SingleInstance();
 			builder.RegisterType<ApprovePeriodAsInAdherence>().SingleInstance();
 			if (_config.Toggle(Toggles.RTA_RemoveApprovedOOA_47721))
+			{
 				builder.RegisterType<AgentAdherenceDayLoaderFromEventStore>().As<IAgentAdherenceDayLoader>().SingleInstance();
+				builder.RegisterType<NoRtaEventStore>().As<IRtaEventStore>().SingleInstance();
+			}
 			else
+			{
 				builder.RegisterType<AgentAdherenceDayLoader>().As<IAgentAdherenceDayLoader>().SingleInstance();
+				builder.RegisterType<NoRtaEventStore>().As<IRtaEventStore>().SingleInstance();
+			}
 			builder.RegisterType<ScheduleLoader>().SingleInstance();
 			builder.RegisterType<AdherencePercentageCalculator>().SingleInstance();
 
