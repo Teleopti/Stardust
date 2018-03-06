@@ -14,10 +14,12 @@ using Teleopti.Ccc.Web.Core.IoC;
 
 namespace Teleopti.Ccc.WebTest.Areas.Gamification
 {
-	class GamificationTestAttribute : IoCTestAttribute
+	class GamificationTestAttribute : DomainTestAttribute
 	{
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
+			base.Setup(system, configuration);
+			
 			var principalAuthorization = new FullPermission();
 			CurrentAuthorization.DefaultTo(principalAuthorization);
 

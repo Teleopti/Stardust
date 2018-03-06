@@ -24,13 +24,12 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC
 {
-	class RequestsTestAttribute : IoCTestAttribute
+	public class RequestsTestAttribute : DomainTestAttribute
 	{
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			var principalAuthorization = new FullPermission();
+			base.Setup(system, configuration);
 
-			CurrentAuthorization.DefaultTo(principalAuthorization);
 			var scenario = new FakeScenarioRepository();
 			scenario.Has("Default");
 
@@ -39,7 +38,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC
 			system.AddService<FakeStorage>();
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			system.UseTestDouble<Global.FakePermissionProvider>().For<IPermissionProvider>();
-			system.UseTestDouble(principalAuthorization).For<IAuthorization>();
 			system.UseTestDouble(scenario).For<IScenarioRepository>();
 			system.UseTestDouble<FakeRepositoryFactory>().For<IRepositoryFactory>();
 			system.UseTestDouble<FakePersonRequestRepository>().For<IPersonRequestRepository>();
@@ -66,11 +64,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC
 
 			system.UseTestDouble<SyncCommandDispatcher>().For<ICommandDispatcher>();
 			system.UseTestDouble<FakeRequestApprovalServiceFactory>().For<IRequestApprovalServiceFactory>();
-			
+
 			system.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
 			var personRequestCheckAuthorization = new PersonRequestAuthorizationCheckerConfigurable();
 			system.UseTestDouble(personRequestCheckAuthorization).For<IPersonRequestCheckAuthorization>();
-			system.UseTestDouble(new FakePermissions()).For<IAuthorization>();
 			system.UseTestDouble(new FakeCommonAgentNameProvider()).For<ICommonAgentNameProvider>();
 
 			system.UseTestDouble(new FakeLoggedOnUser()).For<ILoggedOnUser>();
@@ -78,15 +75,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC
 			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
 			system.UseTestDouble(new FakeStardustJobFeedback()).For<IStardustJobFeedback>();
 
-			system.UseTestDouble (new FakeToggleManager()).For<IToggleManager>();
+			system.UseTestDouble(new FakeToggleManager()).For<IToggleManager>();
 		}
 	}
 
-    public class FakeDisableDeletedFilter : IDisableDeletedFilter
-    {
-        public IDisposable Disable()
-        {
-            return null;
-        }
-    }
+	public class FakeDisableDeletedFilter : IDisableDeletedFilter
+	{
+		public IDisposable Disable()
+		{
+			return null;
+		}
+	}
 }
