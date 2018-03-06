@@ -281,6 +281,7 @@
     <Compile Include="RealTimeAdherence\Domain\Repositories\RtaMapRepository.cs" />
     <Compile Include="RealTimeAdherence\Domain\Repositories\RtaRuleRepository.cs" />
     <Compile Include="RealTimeAdherence\Domain\Repositories\RtaStateGroupRepository.cs" />
+    <Compile Include="RealTimeAdherence\Domain\RtaEventStore.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\AgentStatePersister.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\DataSourceReader.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\DeadLockVictimPriority.cs" />

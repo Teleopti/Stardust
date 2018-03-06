@@ -1,22 +1,48 @@
-﻿using Teleopti.Ccc.Domain.ApplicationLayer;
+﻿using System;
+using System.Linq;
+using System.Threading;
+using log4net;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay;
+using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events;
+using Teleopti.Ccc.Domain.UnitOfWork;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
 	public class RtaEventPublisher : IEventPublisher
 	{
 		private readonly IRtaEventStore _store;
+		private readonly WithUnitOfWork _unitOfWork;
+		private readonly ILog _logger;
 
-		public RtaEventPublisher(IRtaEventStore store)
+		public RtaEventPublisher(IRtaEventStore store, WithUnitOfWork unitOfWork, ILog logger)
 		{
+			_logger = logger;
+			_unitOfWork = unitOfWork;
 			_store = store;
 		}
-		
+
 		public void Publish(params IEvent[] events)
 		{
-			events.ForEach(_store.Add);
+			var storedEvents = events.OfType<IRtaStoredEvent>().Cast<IEvent>().ToArray();
+			if (!storedEvents.Any())
+				return;
+
+			var thread = new Thread(() =>
+			{
+				try
+				{
+					_unitOfWork.Do(() => storedEvents.ForEach(_store.Add));
+				}
+				catch (Exception e)
+				{
+					_logger.Error("Rta event store publishing failed", e);
+				}
+			});
+			thread.Start();
+			thread.Join();
 		}
 	}
 }

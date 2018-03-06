@@ -4,7 +4,12 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events
 {
-	public class PersonStateChangedEvent : IEvent
+	public interface IRtaStoredEvent
+	{
+		
+	}
+	
+	public class PersonStateChangedEvent : IRtaStoredEvent, IEvent
 	{
 		public Guid PersonId { get; set; }
 		public DateOnly? BelongsToDate { get; set; }

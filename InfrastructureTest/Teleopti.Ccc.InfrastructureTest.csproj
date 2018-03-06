@@ -260,6 +260,7 @@
     <Compile Include="RealTimeAdherence\Domain\Repositories\RtaRuleRepositoryTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\Repositories\RtaStateGroupRepositoryNotSignedInTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\Repositories\RtaStateGroupRepositoryTest.cs" />
+    <Compile Include="RealTimeAdherence\Domain\RtaEventStoreTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\CyrillicCharactersTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\DataSourceReaderTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\DeadlockTest.cs" />
@@ -790,7 +791,6 @@
   <ItemGroup>
     <Folder Include="Properties\" />
     <Folder Include="RealTimeAdherence\ApplicationLayer" />
-    <Folder Include="RealTimeAdherence\Domain" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

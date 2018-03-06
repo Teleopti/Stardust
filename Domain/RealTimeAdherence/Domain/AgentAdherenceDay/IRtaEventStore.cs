@@ -5,10 +5,15 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay
 {
-	public interface IRtaEventStore
+	public interface IRtaEventStore 
 	{
 		void Add(IEvent @event);
 		IEnumerable<IEvent> Load(Guid personId, DateTimePeriod period);
 		IEvent LoadLastBefore(Guid personId, DateTime timestamp);
+	}
+
+	public interface IRtaEventStoreTestReader
+	{
+		IEnumerable<IEvent> LoadAll();
 	}
 }

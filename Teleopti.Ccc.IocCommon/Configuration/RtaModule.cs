@@ -16,6 +16,7 @@ using Teleopti.Ccc.Domain.RealTimeAdherence.Tool;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Tracer;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.RealTimeAdherence.ApplicationLayer;
+using Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain;
 using Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain.ApprovePeriodAsInAdherence;
 using Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Infrastructure.RealTimeAdherence.Tracer;
@@ -89,7 +90,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			if (_config.Toggle(Toggles.RTA_RemoveApprovedOOA_47721))
 			{
 				builder.RegisterType<AgentAdherenceDayLoaderFromEventStore>().As<IAgentAdherenceDayLoader>().SingleInstance();
-				builder.RegisterType<NoRtaEventStore>().As<IRtaEventStore>().SingleInstance();
+				builder.RegisterType<RtaEventStore>().As<IRtaEventStore>().As<IRtaEventStoreTestReader>().SingleInstance();
 			}
 			else
 			{
@@ -143,6 +144,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<ConfigurationValidator>().As<IConfigurationValidator>().SingleInstance();
 			else
 				builder.RegisterType<NoConfigurationValidator>().As<IConfigurationValidator>().SingleInstance();
+
 		}
 	}
 }
