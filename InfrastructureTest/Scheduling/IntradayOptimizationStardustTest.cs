@@ -16,12 +16,12 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 {
 	[DatabaseTest]
-	[Ignore("#48512")]
 	public class IntradayOptimizationStardustTest : ISetup
 	{
 		public IntradayOptimizationFromWeb Target;
 
 		public IActivityRepository ActivityRepository;
+		public IScenarioRepository ScenarioRepository;
 		public IPersonRepository PersonRepository;
 		public ISkillRepository SkillRepository;
 		public IWorkloadRepository WorkloadRepository;
@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 		public void ShouldNotCrashReadingBlockPreference()
 		{
 			var date = new DateOnly(2000, 1, 1);
+			var scenario = new Scenario("_") { DefaultScenario = true };
 			var planningPeriod = new PlanningPeriod(date.ToDateOnlyPeriod(), SchedulePeriodType.Day, 1);
 			var activity = new Activity("_");
 			var skill = new Skill().IsOpen().InTimeZone(TimeZoneInfo.Utc);
@@ -48,6 +49,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 			var personPeriod = agent.Period(date);
 			using (var uow = CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
+				ScenarioRepository.Add(scenario);
 				SiteRepository.Add(personPeriod.Team.Site);
 				TeamRepository.Add(personPeriod.Team);
 				PartTimePercentageRepository.Add(personPeriod.PersonContract.PartTimePercentage);

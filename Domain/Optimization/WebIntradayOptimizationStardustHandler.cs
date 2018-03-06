@@ -63,7 +63,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_jobResultRepository.AddDetailAndCheckSuccess(@event.JobResultId, new JobResultDetail(level, message, DateTime.UtcNow, exception), @event.TotalEvents);
 		}
 
-		private IBlockPreferenceProvider blockPreferenceProvider(Guid? planningPeriodId)
+		[UnitOfWork]
+		protected virtual IBlockPreferenceProvider blockPreferenceProvider(Guid? planningPeriodId)
 		{
 			var planningPeriod = _planningPeriodRepository.Load(planningPeriodId.Value);
 			var planningGroup = planningPeriod.PlanningGroup;
