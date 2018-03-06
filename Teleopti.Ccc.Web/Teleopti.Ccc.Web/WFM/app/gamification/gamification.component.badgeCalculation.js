@@ -5,10 +5,7 @@
         .component('badgeCalculation', {
             templateUrl: 'app/gamification/html/g.component.badgeCalculation.tpl.html',
             controller: badgeCalculationController,
-            controllerAs: '$ctrl',
-            bindings: {
-                Binding: '=',
-            },
+            controllerAs: '$ctrl'
         });
 
     badgeCalculationController.$inject = ['$locale', 'GamificationDataService', 'CurrentUserInfo'];
@@ -49,10 +46,6 @@
                 return !$ctrl.intersected;
             }
         }
-
-
-        $ctrl.$onChanges = function (changesObj) { };
-        $ctrl.$onDestroy = function () { };
 
         function fetchJobs() {
             dataService.fetchCalculationJobs().then(function (jobs) {
