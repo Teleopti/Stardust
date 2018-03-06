@@ -696,6 +696,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		}
 		
 		[When(@"I view people")]
+		[Given(@"I view people")]
 		public void WhenIViewPeople()
 		{
 			TestControllerMethods.Logon();

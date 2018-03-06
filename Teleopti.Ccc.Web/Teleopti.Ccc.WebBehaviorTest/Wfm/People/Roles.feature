@@ -5,18 +5,26 @@ Feature: Roles
 	I want to be able to grant or revoke roles from people
 
 Background:
-	Given Role 'Agent' exists
-	And Role 'TeamLeader' exists
+	Given I have a role with
+	| Field              | Value |
+	| Access to People | True  |
+	And I have a role with full access
+	And there is a role with
+	 | Field          | Value |
+	 | Name           | Agent |
+	 And there is a role with
+	 | Field          | Value |
+	 | Name           | TeamLeader |
 	And Person 'Ashley' exists
 	And Person 'John' exists
 	And Person 'Pierre' exists
 
 @ignore
 Scenario: Show selected people in workspace
-	Given I am viewing people page
-	And Person 'Ashley' is selected
-	And Person 'John' is selected
-	And Person 'Pierre' is selected
+	Given I view people
+	When I select person 'Ashley'
+	And I select person 'John'
+	And I select person 'Pierre'
 	Then I should see 'Ashley' in the workspace
 	And I should see 'John' in the workspace
 	And I should see 'Pierre' in the workspace
