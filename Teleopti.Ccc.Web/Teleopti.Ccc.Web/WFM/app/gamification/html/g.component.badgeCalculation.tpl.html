@@ -7,6 +7,11 @@
             </div>
             <div class="con-fluid-flex align-self-center">
                 <button ng-disabled="!$ctrl.allowCalcalution()" class="wfm-btn wfm-btn-primary" ng-click="$ctrl.calculate()">{{'Start'|translate}}</button>
+                <div class="period-error-box">
+                    <span class="text-danger" ng-show="$ctrl.intersected">
+                        {{'Selected period has intersection with the running jobs'|translate}}
+                    </span>
+                </div>
             </div>
         </div>
     </div>
@@ -28,9 +33,18 @@
                 <span>{{job.startingTime | date: $ctrl.dateTimeFormat}}</span>
             </div>
             <div class="status">
-                <span>{{job.status}}</span>
+                <div ng-if="job.status=='inprogress'">
+                    <span>{{'InProgress'|translate}}</span>
+                </div>
+                <div ng-if="job.status=='failed'">
+                    <i class="mdi mdi-alert-octagon"></i>
+                    <span ng-if="job.errorMsg.length">&nbsp;{{job.errorMessage}}</span>
+                    <span ng-if="!job.errorMsg.length">{{'Failed'|translate}}</span>
+                </div>
+                <div ng-if="job.status=='finished'">
+                    <span>{{'Finished'|translate}}</span>
+                </div>
             </div>
         </div>
     </div>
-
 </div>

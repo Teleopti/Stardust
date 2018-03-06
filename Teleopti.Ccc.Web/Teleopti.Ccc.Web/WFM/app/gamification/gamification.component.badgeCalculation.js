@@ -44,8 +44,12 @@
         }
 
         $ctrl.allowCalcalution = function () {
-            return $ctrl.dateRange && $ctrl.dateRange.startDate && $ctrl.dateRange.endDate;
+            if ($ctrl.dateRange && $ctrl.dateRange.startDate && $ctrl.dateRange.endDate) {
+                $ctrl.intersected = hasIntersection();
+                return !$ctrl.intersected;
+            }
         }
+
 
         $ctrl.$onChanges = function (changesObj) { };
         $ctrl.$onDestroy = function () { };
@@ -78,6 +82,26 @@
             for (var i = 0; i < n; i++) {
                 $ctrl.jobs.unshift(jobs[i]);
             }
+        }
+
+        function hasIntersection() {
+            var result = false;
+            if ($ctrl.jobs && $ctrl.jobs.length > 0) {
+                var runningJobs = $ctrl.jobs.filter(function (item) {
+                    return item.status == 'inprogress';
+                });
+
+                if (runningJobs.length > 0) {
+
+                    runningJobs.forEach(function (j) {
+                        if (moment(j.endDate).toDate() > moment($ctrl.dateRange.startDate).toDate() && moment($ctrl.dateRange.endDate).toDate() > moment(j.startDate).toDate()) {
+                            result = true;
+                        }
+                    });
+                }
+            }
+
+            return result;
         }
     }
 })(angular, moment);

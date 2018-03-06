@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -55,9 +56,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Gamification
 				var jobResultDetail = jobResult.Details.FirstOrDefault();
 				var hasException = !(jobResultDetail?.ExceptionMessage.IsNullOrEmpty() ?? true)
 								   || !(jobResultDetail?.InnerExceptionMessage.IsNullOrEmpty() ?? true);
-				var status = Resources.InProgress;
-				if (hasError) status = Resources.HasError;
-				else if(finished) status = Resources.Finished;
+				var status = ImportExternalPerformanceJobStatus.InProgress;
+				if (hasError) status = ImportExternalPerformanceJobStatus.Failed;
+				else if(finished) status = ImportExternalPerformanceJobStatus.Finished;
 				return new RecalculateBadgeJobResultDetail
 				{
 					Id = jobResult.Id.GetValueOrDefault(),
@@ -65,7 +66,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Gamification
 					EndDate = jobResult.Period.EndDate.Utc(),
 					Owner = jobResult.Owner.Name.ToString(),
 					CreateDateTime = jobResult.Timestamp.ToUniversalTime(),
-					Status = status,
+					Status = status.ToString().ToLower(),
 					HasError = hasError,
 					ErrorMessage = hasError ? (hasException ? Resources.InternalErrorMsg : jobResultDetail?.Message) : string.Empty
 				};
