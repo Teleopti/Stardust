@@ -1,8 +1,10 @@
 using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
+using Teleopti.Ccc.Infrastructure.RealTimeAdherence;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
@@ -31,8 +33,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<HangfireAsSyncEventPublisher>().SingleInstance().ApplyAspects();
 			builder.RegisterType<MultiEventPublisherServiceBusAsSync>().SingleInstance();
 			builder.RegisterType<StardustEventPublisher>().SingleInstance();
-			builder.RegisterType<RtaEventPublisher>().SingleInstance();
-
+			if (_configuration.Toggle(Toggles.RTA_RemoveApprovedOOA_47721))
+				builder.RegisterType<RtaEventPublisher>().As<IRtaEventPublisher>().SingleInstance();
+			else
+				builder.RegisterType<SafeRtaEventPublisher>().As<IRtaEventPublisher>().SingleInstance();
 			builder.RegisterType<MultiEventPublisher>().As<IEventPublisher>().SingleInstance();
 			builder.RegisterType<LogExceptions>().As<ISyncEventPublisherExceptionHandler>().SingleInstance();
 

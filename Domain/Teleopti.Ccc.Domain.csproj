@@ -517,7 +517,6 @@
     <Compile Include="RealTimeAdherence\Domain\Service\InvalidSourceException.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\InvalidStateCodeException.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\InvalidUserCodeException.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\IRtaEventPublisher.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\IRtaExceptionHandler.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\IScheduleReader.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\IStateQueueReader.cs" />

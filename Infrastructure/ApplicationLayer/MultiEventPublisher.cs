@@ -1,12 +1,6 @@
-using System.Diagnostics;
-using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay;
-using Teleopti.Ccc.Domain.UnitOfWork;
-using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.RealTimeAdherence;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
@@ -16,14 +10,14 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		private readonly StardustEventPublisher _stardustEventPublisher;
 		private readonly SyncInFatClientProcessEventPublisher _syncInFatClientProcessEventPublisher;
 		private readonly SyncEventPublisher _syncEventPublisher;
-		private RtaEventPublisher _rtaEventPublisher;
+		private readonly IRtaEventPublisher _rtaEventPublisher;
 
 		public MultiEventPublisher(
 			HangfireEventPublisher hangfirePublisher,
 			StardustEventPublisher stardustEventPublisher,
 			SyncEventPublisher syncEventPublisher,
 			SyncInFatClientProcessEventPublisher syncInFatClientProcessEventPublisher,
-			RtaEventPublisher rtaEventPublisher
+			IRtaEventPublisher rtaEventPublisher
 		)
 		{
 			_rtaEventPublisher = rtaEventPublisher;

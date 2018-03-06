@@ -194,7 +194,6 @@
     <Compile Include="ApplicationLayer\HangfireEventPublisher.cs" />
     <Compile Include="ApplicationLayer\InProcessEventPublisher.cs" />
     <Compile Include="ApplicationLayer\ISyncEventPublisherExceptionHandler.cs" />
-    <Compile Include="ApplicationLayer\RtaEventPublisher.cs" />
     <Compile Include="ApplicationLayer\SyncEventPublisher.cs" />
     <Compile Include="ApplicationLayer\MultiEventPublisher.cs" />
     <Compile Include="ApplicationLayer\IHangfireEventClient.cs" />
@@ -288,6 +287,7 @@
     <Compile Include="RealTimeAdherence\Domain\Service\StateQueue.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\StateQueueUtilities.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\StateQueueWorker.cs" />
+    <Compile Include="RealTimeAdherence\RtaEventPublisher.cs" />
     <Compile Include="RealTimeAdherence\Tracer\RtaTracerReader.cs" />
     <Compile Include="RealTimeAdherence\Tracer\RtaTracerRefresher.cs" />
     <Compile Include="RealTimeAdherence\Tracer\RtaTracerSessionFactory.cs" />

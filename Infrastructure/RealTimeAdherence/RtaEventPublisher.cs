@@ -4,14 +4,27 @@ using System.Threading;
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events;
 using Teleopti.Ccc.Domain.UnitOfWork;
 
-namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
+namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence
 {
-	public class RtaEventPublisher : IEventPublisher
+	public interface IRtaEventPublisher : IEventPublisher
+	{
+	}
+	
+	[RemoveMeWithToggle(Toggles.RTA_RemoveApprovedOOA_47721)]
+	public class SafeRtaEventPublisher : IRtaEventPublisher
+	{
+		public void Publish(params IEvent[] events)
+		{
+		}
+	}
+	
+	public class RtaEventPublisher : IRtaEventPublisher
 	{
 		private readonly IRtaEventStore _store;
 		private readonly WithUnitOfWork _unitOfWork;
