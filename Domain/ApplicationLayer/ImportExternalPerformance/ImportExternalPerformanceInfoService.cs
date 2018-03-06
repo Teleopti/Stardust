@@ -88,15 +88,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 
 		private string getJobStatus(IJobResult job)
 		{
-			ImportExternalPerformanceJobStatus status = ImportExternalPerformanceJobStatus.InProgress;
+			GamificationJobStatus status = GamificationJobStatus.InProgress;
 			if (job.HasError())
 			{
-				status = ImportExternalPerformanceJobStatus.Failed;
+				status = GamificationJobStatus.Failed;
 			}
 			else
 			if (job.FinishedOk)
 			{
-				status = ImportExternalPerformanceJobStatus.Finished;
+				status = GamificationJobStatus.Finished;
 			}
 
 			return status.ToString().ToLower();

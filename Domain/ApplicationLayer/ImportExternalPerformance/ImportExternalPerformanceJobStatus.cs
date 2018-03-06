@@ -1,6 +1,6 @@
 ﻿namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 {
-	public enum ImportExternalPerformanceJobStatus
+	public enum GamificationJobStatus
 	{
 		Failed,
 		Finished,

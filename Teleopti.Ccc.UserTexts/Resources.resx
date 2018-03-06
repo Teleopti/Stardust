@@ -17253,12 +17253,4 @@ The application will now exit.</value>
     <value>START</value>
     <comment>Start to calcluate badge.</comment>
   </data>
-  <data name="Finished" xml:space="preserve">
-    <value>Finished</value>
-    <comment>use in WFM Gamification recalculate badge tab, status for the recalculate state.</comment>
-  </data>
-  <data name="HasError" xml:space="preserve">
-    <value>Has error</value>
-    <comment>use in WFM Gamification recalculate badge tab, status for the recalculate state.</comment>
-  </data>
 </root>
