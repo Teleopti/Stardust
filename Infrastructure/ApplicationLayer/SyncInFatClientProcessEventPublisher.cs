@@ -1,33 +1,12 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using Teleopti.Ccc.Domain.ApplicationLayer;
+﻿using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
-	public class SyncInFatClientProcessEventPublisher : IEventPublisher
+	public class SyncInFatClientProcessEventPublisher : InProcessEventPublisher<IRunInSyncInFatClientProcess>
 	{
-		private readonly ResolveEventHandlers _resolver;
-		private readonly CommonEventProcessor _processor;
-
-		public SyncInFatClientProcessEventPublisher(ResolveEventHandlers resolver, CommonEventProcessor processor)
+		public SyncInFatClientProcessEventPublisher(ResolveEventHandlers resolver, CommonEventProcessor processor) : base(resolver, processor)
 		{
-			_resolver = resolver;
-			_processor = processor;
-		}
-
-		public void Publish(params IEvent[] events)
-		{
-			Task.WaitAll((
-				from @event in events
-#pragma warning disable 618
-				from handlerType in _resolver.HandlerTypesFor<IRunInSyncInFatClientProcess>(@event)
-				select Task.Run(() =>
-					_processor.Process(@event, handlerType)
-#pragma warning restore 618
-					))
-				.ToArray());
 		}
 	}
 }
