@@ -93,6 +93,7 @@
     <Compile Include="AzureStartDDL.cs" />
     <Compile Include="BackupByFileCopy.cs" />
     <Compile Include="BackupBySql.cs" />
+    <Compile Include="DatabaseRestorer.cs" />
     <Compile Include="PatchContext.cs" />
     <Compile Include="PatchCommand.cs" />
     <Compile Include="ConsoleLogger.cs" />

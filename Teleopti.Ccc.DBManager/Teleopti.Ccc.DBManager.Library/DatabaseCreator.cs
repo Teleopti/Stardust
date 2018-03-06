@@ -18,21 +18,21 @@ namespace Teleopti.Ccc.DBManager.Library
 		public void CreateDatabase(DatabaseType type, string name)
 		{
 			var scriptFile = _databaseFolder.CreateScriptsPath().ScriptFilePath(type);
-			CreateDatabaseByScriptFile(scriptFile, type, name);
+			createDatabaseByScriptFile(scriptFile, type, name);
 		}
 
 		public void CreateAzureDatabase(DatabaseType type, string name)
 		{
 			var scriptFile = _databaseFolder.AzureCreateScriptsPath().ScriptFilePath(type);
-			CreateDatabaseByScriptFile(scriptFile, type, name);
+			createDatabaseByScriptFile(scriptFile, type, name);
 		}
 
-		private void CreateDatabaseByScriptFile(string scriptFile, DatabaseType type, string name)
+		private void createDatabaseByScriptFile(string scriptFile, DatabaseType type, string name)
 		{
 			try
 			{
 				var script = File.ReadAllText(scriptFile);
-				script = ReplaceScriptTags(script, type, name);
+				script = replaceScriptTags(script, type, name);
 				_executeSql.ExecuteTransactionlessNonQuery(script, Timeouts.CommandTimeout);
 			}
 			catch (SqlException exception)
@@ -41,12 +41,12 @@ namespace Teleopti.Ccc.DBManager.Library
 			}
 		}
 
-		private string ReplaceScriptTags(string script, DatabaseType type, string name)
+		private string replaceScriptTags(string script, DatabaseType type, string name)
 		{
 			script = script.Replace("$(DBNAME)", name);
 			script = script.Replace("$(DBTYPE)", type.GetName());
 
-			var iniFile = IniFile(type);
+			var iniFile = this.iniFile(type);
 			var sectionValues = iniFile.GetSectionValues("Settings");
 
 			// Dynamic DatabaseSettings.ini now, throw in just about anything within the section "Settings".
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.DBManager.Library
 			return script;
 		}
 
-		private IniFile IniFile(DatabaseType type)
+		private IniFile iniFile(DatabaseType type)
 		{
 			return new IniFile(_databaseFolder + "\\" + type.GetName() + "\\DatabaseSettings.ini");
 		}

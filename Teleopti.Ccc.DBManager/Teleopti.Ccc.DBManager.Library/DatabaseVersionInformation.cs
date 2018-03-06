@@ -13,7 +13,6 @@ namespace Teleopti.Ccc.DBManager.Library
 			_executeSql = executeSql;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
 		public void CreateTable()
 		{
 			var path = _databaseFolder.CreateScriptsPath();

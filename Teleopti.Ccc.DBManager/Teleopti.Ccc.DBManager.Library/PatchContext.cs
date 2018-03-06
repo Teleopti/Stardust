@@ -20,12 +20,41 @@ namespace Teleopti.Ccc.DBManager.Library
 
 		private ExecuteSql _masterExecuteSql;
 		private ExecuteSql _executeSql;
+		private DatabaseFolder _databaseFolder;
+		private DatabaseVersionInformation _databaseVersionInformation;
+		private SchemaVersionInformation _schemaVersionInformation;
+		private DatabaseRestorer _restorer;
 
 		public ExecuteSql MasterExecuteSql() =>
 			_masterExecuteSql ?? (_masterExecuteSql = new ExecuteSql(() => connectAndOpen(connectionStringToMaster()), _log));
 
 		public ExecuteSql ExecuteSql() =>
 			_executeSql ?? (_executeSql = new ExecuteSql(() => connectAndOpen(connectionString()), _log));
+
+		public DatabaseFolder DatabaseFolder() =>
+			_databaseFolder ?? (_databaseFolder = new DatabaseFolder(new DbManagerFolder(_command.DbManagerFolderPath)));
+
+		public DatabaseVersionInformation DatabaseVersionInformation() =>
+			_databaseVersionInformation ?? (_databaseVersionInformation = new DatabaseVersionInformation(DatabaseFolder(), ExecuteSql()));
+
+		public SchemaVersionInformation SchemaVersionInformation() =>
+			_schemaVersionInformation ?? (_schemaVersionInformation = new SchemaVersionInformation(DatabaseFolder()));
+
+		public DatabaseRestorer Restorer() =>
+			_restorer ?? (_restorer = new DatabaseRestorer(MasterExecuteSql(), ExecuteSql(), new RepoFolder(), new DebugSetupDatabaseFolder(new RepoFolder())));
+
+		public bool DatabaseExists()
+		{
+			try
+			{
+				ExecuteSql();
+				return true;
+			}
+			catch
+			{
+				return false;
+			}
+		}
 
 		public bool LoginExist()
 		{

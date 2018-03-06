@@ -22,9 +22,7 @@ namespace Teleopti.Ccc.DBManager.Library
 
 				var safeMode = true;
 
-				var databaseFolder = new DatabaseFolder(new DbManagerFolder(command.DbManagerFolderPath));
-				var schemaVersionInformation = new SchemaVersionInformation(databaseFolder);
-				_log.Write("Running from:" + databaseFolder.Path());
+				_log.Write("Running from:" + context.DatabaseFolder().Path());
 
 				//If Permission Mode: check if application user name and password/windowsgroup is submitted
 				if (command.CreatePermissions)
@@ -78,18 +76,29 @@ namespace Teleopti.Ccc.DBManager.Library
 				if (command.CreateDatabase)
 				{
 					_log.Write("Creating database " + command.DatabaseName + "...");
-					var creator = new DatabaseCreator(databaseFolder, context.MasterExecuteSql());
+					var creator = new DatabaseCreator(context.DatabaseFolder(), context.MasterExecuteSql());
 					if (command.IsAzure)
 						creator.CreateAzureDatabase(command.DatabaseType, command.DatabaseName);
 					else
 						creator.CreateDatabase(command.DatabaseType, command.DatabaseName);
 				}
 
-				try
+				if (!string.IsNullOrEmpty(command.RestoreBackup))
+					context.Restorer().Restore(command);
+
+				if (!string.IsNullOrEmpty(command.RestoreBackupIfNotExistsOrNewer))
 				{
-					context.ExecuteSql();
+					if (!context.DatabaseExists())
+						context.Restorer().Restore(command);
+					else
+					{
+						var existingDatabaseIsNewer = context.DatabaseVersionInformation().GetDatabaseVersion() > context.SchemaVersionInformation().GetSchemaVersion(command.DatabaseType);
+						if (existingDatabaseIsNewer)
+							context.Restorer().Restore(command);
+					}
 				}
-				catch
+
+				if (!context.DatabaseExists())
 				{
 					_log.Write("Database " + command.DatabaseName + " does not exist on server " + command.ServerName);
 					_log.Write("Run DBManager.exe with -c switch to create.");
@@ -98,10 +107,8 @@ namespace Teleopti.Ccc.DBManager.Library
 
 				//Try create or re-create login
 				if (command.CreatePermissions && safeMode && isSrvSecurityAdmin)
-					new LoginHelper(_log, context.MasterExecuteSql(), databaseFolder)
+					new LoginHelper(_log, context.MasterExecuteSql(), context.DatabaseFolder())
 						.CreateLogin(command.AppUserName, command.AppUserPassword, command.IsWindowsGroupName, command.IsAzure);
-
-				var databaseVersionInformation = new DatabaseVersionInformation(databaseFolder, context.ExecuteSql());
 
 				//if we are not db_owner, bail out
 				if (!context.IsDbOwner())
@@ -111,12 +118,12 @@ namespace Teleopti.Ccc.DBManager.Library
 				if (command.CreateDatabase)
 				{
 					_log.Write("Creating database version table and setting inital version to 0...");
-					databaseVersionInformation.CreateTable();
+					context.DatabaseVersionInformation().CreateTable();
 				}
 
 				//Set permissions of the newly application user on db.
 				if (command.CreatePermissions && safeMode)
-					new PermissionsHelper(_log, databaseFolder, context.ExecuteSql())
+					new PermissionsHelper(_log, context.DatabaseFolder(), context.ExecuteSql())
 						.CreatePermissions(command.AppUserName, command.AppUserPassword, command.IsAzure);
 
 				if (command.UpgradeDatabase)
@@ -124,15 +131,15 @@ namespace Teleopti.Ccc.DBManager.Library
 					if (context.VersionTableExists())
 					{
 						//Shortcut to release 329, Azure specific script
-						if (command.IsAzure && databaseVersionInformation.GetDatabaseVersion() == 0)
-							new AzureStartDDL(databaseFolder, context.ExecuteSql())
+						if (command.IsAzure && context.DatabaseVersionInformation().GetDatabaseVersion() == 0)
+							new AzureStartDDL(context.DatabaseFolder(), context.ExecuteSql())
 								.Apply((DatabaseType) Enum.Parse(typeof(DatabaseType), command.DatabaseTypeName));
 
 						new DatabaseSchemaCreator(
-								databaseVersionInformation,
-								schemaVersionInformation,
+								context.DatabaseVersionInformation(),
+								context.SchemaVersionInformation(),
 								context.ExecuteSql(),
-								databaseFolder,
+								context.DatabaseFolder(),
 								_log)
 							.Create(command.DatabaseType, command.IsAzure);
 					}

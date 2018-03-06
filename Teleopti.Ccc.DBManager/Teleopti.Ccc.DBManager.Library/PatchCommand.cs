@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Globalization;
+using System.Linq;
 
 namespace Teleopti.Ccc.DBManager.Library
 {
@@ -13,38 +13,24 @@ namespace Teleopti.Ccc.DBManager.Library
 
 			foreach (var s in args)
 			{
-				var @switch = s.Substring(0, 2).ToUpper(CultureInfo.CurrentCulture);
-				var value = s.Remove(0, 2);
-				switch (@switch)
+				new Func<string, bool>[]
 				{
-					case "-S":
-						command.ServerName = value;
-						break;
-					case "-D":
-						command.DatabaseName = value;
-						break;
-					case "-U":
-						command.UserName = value;
-						break;
-					case "-P":
-						command.Password = value;
-						break;
-					case "-E":
-						command.UseIntegratedSecurity = true;
-						break;
-					case "-O":
-						command.DatabaseType = (DatabaseType) Enum.Parse(typeof(DatabaseType), value);
-						break;
-					case "-C":
+					x => matchArgument(x, "-S", v => command.ServerName = v),
+					x => matchArgument(x, "-D", v => command.DatabaseName = v),
+					x => matchArgument(x, "-U", v => command.UserName = v),
+					x => matchArgument(x, "-P", v => command.Password = v),
+					x => matchArgument(x, "-E", v => command.UseIntegratedSecurity = true),
+					x => matchArgument(x, "-O", v => command.DatabaseType = (DatabaseType) Enum.Parse(typeof(DatabaseType), v)),
+					x => matchArgument(x, "-C", v =>
+					{
 						command.CreateDatabase = true;
 						command.UpgradeDatabase = true;
-						break;
-					case "-T":
-						command.UpgradeDatabase = true;
-						break;
-					case "-L":
+					}),
+					x => matchArgument(x, "-T", v => command.UpgradeDatabase = true),
+					x => matchArgument(x, "-L", v =>
+					{
 						command.CreatePermissions = true;
-						var userAndPassword = value.Split(':');
+						var userAndPassword = v.Split(':');
 						if (userAndPassword.Length == 2)
 						{
 							command.AppUserName = userAndPassword[0];
@@ -52,26 +38,39 @@ namespace Teleopti.Ccc.DBManager.Library
 							command.IsWindowsGroupName = false;
 						}
 						else
-						{
 							throw new Exception("Not the correct inparameters for application sql user and password");
-						}
-
-						break;
-					case "-W":
+					}),
+					x => matchArgument(x, "-W", v =>
+					{
 						command.CreatePermissions = true;
-						command.AppUserName = value;
+						command.AppUserName = v;
 						command.IsWindowsGroupName = true;
-						break;
-					case "-F":
-						command.DbManagerFolderPath = value;
-						break;
-					case "-R":
-						command.CreatePermissions = true;
-						break;
-				}
+					}),
+					x => matchArgument(x, "-F", v => command.DbManagerFolderPath = v),
+					x => matchArgument(x, "-R", v => command.CreatePermissions = true),
+					x => matchArgument(x, "-🏄🐘", v =>
+					{
+						command.RestoreBackupIfNotExistsOrNewer = v;
+						command.UpgradeDatabase = true;
+					}),
+					x => matchArgument(x, "-🏄", v => command.RestoreBackup = v),
+					x => matchArgument(x, "-🐘", v => command.UpgradeDatabase = true),
+				}.Any(matcher => matcher(s));
 			}
 
 			return command;
+		}
+		
+		private static bool matchArgument(string arg, string match, Action<string> value)
+		{
+			if (arg.ToUpper(CultureInfo.CurrentCulture).StartsWith(match))
+			{
+				var v = arg.Remove(0, match.Length);
+				value(v);
+				return true;
+			}
+
+			return false;
 		}
 
 		public string DbManagerFolderPath { get; set; }
@@ -89,5 +88,7 @@ namespace Teleopti.Ccc.DBManager.Library
 		public bool CreateDatabase { get; private set; }
 		public bool CreatePermissions { get; set; }
 		public bool UpgradeDatabase { get; set; }
+		public string RestoreBackup { get; private set; }
+		public string RestoreBackupIfNotExistsOrNewer { get; set; }
 	}
 }
