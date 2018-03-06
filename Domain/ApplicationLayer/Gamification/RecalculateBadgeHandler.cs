@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Gamification
 			_feedback = feedback;
 		}
 
-		public void Handle(RecalculateBadgeEvent @event)
+		public virtual void Handle(RecalculateBadgeEvent @event)
 		{
 			try
 			{
@@ -39,9 +39,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Gamification
 			catch (Exception e)
 			{
 				Logger.Error(e);
-				SaveJobResultDetail(@event, e);
+				SaveJobResult(@event, e);
 				throw;
 			}
+		}
+
+		[UnitOfWork]
+		protected virtual void SaveJobResult(RecalculateBadgeEvent @event, Exception e)
+		{
+			saveJobResultDetail(@event.JobResultId, DetailLevel.Error, e.Message, e);
 		}
 
 		[UnitOfWork]
@@ -52,17 +58,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Gamification
 			{
 				_performBadgeCalculation.Calculate(_currentBusinessUnit.Current().Id.GetValueOrDefault(), date.Date);
 			}
+
+			saveJobResultDetail(@event.JobResultId, DetailLevel.Info, "Recalculated Agent Badges", null);
 		}
 
-		[UnitOfWork]
-		protected virtual void SaveJobResultDetail(RecalculateBadgeEvent @event, Exception e)
+		private void saveJobResultDetail(Guid jobResultId, DetailLevel level, string message, Exception e)
 		{
-			var result = _jobResultRepository.FindWithNoLock(@event.JobResultId);
-			var detail = new JobResultDetail(DetailLevel.Error, e.Message, DateTime.UtcNow, e);
+			var result = _jobResultRepository.FindWithNoLock(jobResultId);
+			var detail = new JobResultDetail(level, message, DateTime.UtcNow, e);
 			result.AddDetail(detail);
 			result.FinishedOk = true;
 
-			_feedback.SendProgress($"Added Job Result Detail. Detail level: {DetailLevel.Error}, message: {e.Message}, exception: {e}");
+			_feedback.SendProgress($"Added Job Result Detail. Detail level: {level}, message: {message}, exception: {e}");
 		}
 	}
 }

@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Badge;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Gamification;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -18,6 +19,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Gamification
@@ -34,6 +36,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Gamification
 		public FakePersonRepository PersonRepository;
 		public FakeTeamGamificationSettingRepository TeamGamificationSettingRepository;
 		public FakeCurrentBusinessUnit CurrentBusinessUnit;
+		public FakePushMessagePersister PushMessagePersister;
 
 		private IPerson _agent;
 		private ITeam _team;
@@ -58,6 +61,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Gamification
 			system.UseTestDouble<FakeExternalPerformanceDataRepository>().For<IExternalPerformanceDataRepository>();
 			system.UseTestDouble<PushMessageRepository>().For<IPushMessageRepository>();
 			system.UseTestDouble<FakePushMessagePersister>().For<IPushMessagePersister>();
+			system.UseTestDouble<FakeAgentBadgeRepository>().For<IAgentBadgeRepository>();
 		}
 
 		[Test]
@@ -70,15 +74,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Gamification
 		public void ShouldCleanOldBadgeData()
 		{
 			var period = new DateOnlyPeriod(_calculatedate, _calculatedate);
-			var jobResult = NewJobResult();
-			var message = new RecalculateBadgeEvent {Period = period , JobResultId = jobResult.Id.GetValueOrDefault() };
+			var jobResult = newJobResult();
+			var badgeEvent = new RecalculateBadgeEvent {Period = period , JobResultId = jobResult.Id.GetValueOrDefault() };
 			CurrentBusinessUnit.FakeBusinessUnit(BusinessUnitFactory.CreateWithId("bu"));
 			AgentBadgeTransactionRepository.Add(new AgentBadgeTransaction { CalculatedDate = _calculatedate });
 			AgentBadgeWithRankTransactionRepository.Add(new AgentBadgeWithRankTransaction() { CalculatedDate = _calculatedate });
 			createAgentAndTeam();
 			createGamificationSetting(GamificationSettingRuleSet.RuleWithDifferentThreshold, 90, 85, 80);
 
-			Target.Handle(message);
+			Target.Handle(badgeEvent);
 			AgentBadgeTransactionRepository.LoadAll().Any().Should().Be.False();
 			AgentBadgeWithRankTransactionRepository.LoadAll().Any().Should().Be.False();
 		}
@@ -87,15 +91,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Gamification
 		public void ShouldUpdateBadgeAmountWhenRecalculate()
 		{
 			var period = new DateOnlyPeriod(_calculatedate, _calculatedate);
-			var jobResult = NewJobResult();
-			var message = new RecalculateBadgeEvent { Period = period, JobResultId = jobResult.Id.GetValueOrDefault() };
+			var jobResult = newJobResult();
+			var badgeEvent = new RecalculateBadgeEvent { Period = period, JobResultId = jobResult.Id.GetValueOrDefault() };
 			createAgentAndTeam();
 			createGamificationSetting(GamificationSettingRuleSet.RuleWithDifferentThreshold, 90, 85, 80);
 			createExistingBadgeAndNewData(0, 0, 1, period, 87);
 
 			var oldData = AgentBadgeWithRankTransactionRepository.Find(_agent, _externalId, _calculatedate);
 			oldData.BronzeBadgeAmount.Should().Be.EqualTo(1);
-			Target.Handle(message);
+			Target.Handle(badgeEvent);
 
 			var newData = AgentBadgeWithRankTransactionRepository.Find(_agent, _externalId, _calculatedate);
 			newData.BronzeBadgeAmount.Should().Be.EqualTo(0);
@@ -106,15 +110,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Gamification
 		public void ShouldRemoveBadgeWhenNewDataCannotGetBadge()
 		{
 			var period = new DateOnlyPeriod(_calculatedate, _calculatedate);
-			var jobResult = NewJobResult();
-			var message = new RecalculateBadgeEvent { Period = period, JobResultId = jobResult.Id.GetValueOrDefault() };
+			var jobResult = newJobResult();
+			var badgeEvent = new RecalculateBadgeEvent { Period = period, JobResultId = jobResult.Id.GetValueOrDefault() };
 			createAgentAndTeam();
 			createGamificationSetting(GamificationSettingRuleSet.RuleWithDifferentThreshold, 90, 85, 80);
 			createExistingBadgeAndNewData(0, 0, 1, period, 70);
 
 			var oldData = AgentBadgeWithRankTransactionRepository.Find(_agent, _externalId, _calculatedate);
 			oldData.BronzeBadgeAmount.Should().Be.EqualTo(1);
-			Target.Handle(message);
+			Target.Handle(badgeEvent);
 
 			var newData = AgentBadgeWithRankTransactionRepository.Find(_agent, _externalId, _calculatedate);
 			newData.Should().Be.Null();
@@ -124,15 +128,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Gamification
 		public void ShouldAddNewBadgeWhenNewDataCanGetABadge()
 		{
 			var period = new DateOnlyPeriod(_calculatedate.AddDays(-1), _calculatedate.AddDays(1));
-			var jobResult = NewJobResult();
-			var message = new RecalculateBadgeEvent { Period = period, JobResultId = jobResult.Id.GetValueOrDefault() };
+			var jobResult = newJobResult();
+			var badgeEvent = new RecalculateBadgeEvent { Period = period, JobResultId = jobResult.Id.GetValueOrDefault() };
 			createAgentAndTeam();
 			createGamificationSetting(GamificationSettingRuleSet.RuleWithDifferentThreshold, 90, 85, 80);
 			createExistingBadgeAndNewData(0, 0, 0, period, 80);
 
 			var oldData = AgentBadgeWithRankTransactionRepository.Find(_agent, _externalId, _calculatedate);
 			oldData.BronzeBadgeAmount.Should().Be.EqualTo(0);
-			Target.Handle(message);
+			Target.Handle(badgeEvent);
 
 			var newData = AgentBadgeWithRankTransactionRepository.Find(_agent, _externalId, _calculatedate);
 			newData.BronzeBadgeAmount.Should().Be.EqualTo(1);
@@ -142,18 +146,175 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Gamification
 		public void ShouldCalculateMultiDaysData()
 		{
 			var period = new DateOnlyPeriod(_calculatedate.AddDays(-1), _calculatedate.AddDays(1));
-			var jobResult = NewJobResult();
-			var message = new RecalculateBadgeEvent { Period = period, JobResultId = jobResult.Id.GetValueOrDefault() };
+			var jobResult = newJobResult();
+			var badgeEvent = new RecalculateBadgeEvent { Period = period, JobResultId = jobResult.Id.GetValueOrDefault() };
 			createAgentAndTeam();
 			createGamificationSetting(GamificationSettingRuleSet.RuleWithDifferentThreshold, 90, 85, 80);
 			createExistingBadgeAndNewData(0, 0, 0, period, 80);
 
 			var oldData = AgentBadgeWithRankTransactionRepository.LoadAll();
 			oldData.Count().Should().Be.EqualTo(1);
-			Target.Handle(message);
+			Target.Handle(badgeEvent);
 
 			var newData = AgentBadgeWithRankTransactionRepository.LoadAll();
 			newData.Count().Should().Be.EqualTo(3);
+		}
+
+		[Test]
+		public void ShouldSetJobResultFinishedAfterRecalculated()
+		{
+			var period = new DateOnlyPeriod(_calculatedate.AddDays(-1), _calculatedate.AddDays(1));
+			var jobResult = newJobResult();
+			var badgeEvent = new RecalculateBadgeEvent { Period = period, JobResultId = jobResult.Id.GetValueOrDefault() };
+			createAgentAndTeam();
+			createGamificationSetting(GamificationSettingRuleSet.RuleWithDifferentThreshold, 90, 85, 80);
+			createExistingBadgeAndNewData(0, 0, 0, period, 80);
+
+			jobResult.FinishedOk.Should().Be.False();
+			Target.Handle(badgeEvent);
+
+			jobResult.FinishedOk.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldSetJobResultHasErrorWhenErrorHappens()
+		{
+			var period = new DateOnlyPeriod(_calculatedate.AddDays(-1), _calculatedate.AddDays(1));
+			var jobResult = newJobResult();
+			var badgeEvent = new RecalculateBadgeEvent { Period = period, JobResultId = jobResult.Id.GetValueOrDefault() };
+
+			try
+			{
+				Target.Handle(badgeEvent);
+			}
+			catch (Exception)
+			{
+				jobResult.HasError().Should().Be.True();
+			}
+		}
+		
+		[Test]
+		public void ShouldSendMessageWhenGetBronzeExternalBadge()
+		{
+			var period = new DateOnlyPeriod(_calculatedate, _calculatedate);
+			var jobResult = newJobResult();
+			var badgeEvent = new RecalculateBadgeEvent { Period = period, JobResultId = jobResult.Id.GetValueOrDefault() };
+			createAgentAndTeam();
+			createGamificationSetting(GamificationSettingRuleSet.RuleWithRatioConvertor, 90, 85, 80, 80);
+			createExistingBadgeAndNewData(0, 0, 0, period, 87);
+
+			Target.Handle(badgeEvent);
+
+			var formmater = new NoFormatting();
+			var date = _calculatedate.Date.ToString(_agent.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern,
+				_agent.PermissionInformation.Culture());
+			var resultMessage = PushMessagePersister.GetMessage();
+			PushMessagePersister.GetReceivers().First().Id.Should().Be.EqualTo(_agent.Id.GetValueOrDefault());
+			resultMessage.AllowDialogueReply.Should().Be.False();
+			resultMessage.GetTitle(formmater).Should().Be.EqualTo(Resources.Congratulations);
+			resultMessage.GetMessage(formmater).Should().Be.EqualTo(
+				string.Format(Resources.YouGotANewBronzeBadge, _badgeSetting.Name, date));
+		}
+
+		[Test]
+		public void ShouldNotSendMessageWhenNotGetAnyExternalBadge()
+		{
+			var period = new DateOnlyPeriod(_calculatedate, _calculatedate);
+			var jobResult = newJobResult();
+			var badgeEvent = new RecalculateBadgeEvent { Period = period, JobResultId = jobResult.Id.GetValueOrDefault() };
+			createAgentAndTeam();
+			createGamificationSetting(GamificationSettingRuleSet.RuleWithRatioConvertor, 90, 85, 80, 80);
+			createExistingBadgeAndNewData(0, 0, 0, period, 77);
+
+			Target.Handle(badgeEvent);
+
+			PushMessagePersister.GetMessage().Should().Be.Null();
+			PushMessagePersister.GetReceivers().Count.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldSendMessageWhenGetGoldExternalBadgeWithRank()
+		{
+			var period = new DateOnlyPeriod(_calculatedate, _calculatedate);
+			var jobResult = newJobResult();
+			var badgeEvent = new RecalculateBadgeEvent { Period = period, JobResultId = jobResult.Id.GetValueOrDefault() };
+			createAgentAndTeam();
+			createGamificationSetting(GamificationSettingRuleSet.RuleWithDifferentThreshold, 90, 85, 80);
+			createExistingBadgeAndNewData(0, 1, 0, period, 91);
+
+			Target.Handle(badgeEvent);
+
+			var formmater = new NormalizeText();
+			var date = _calculatedate.Date.ToString(_agent.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern,
+				_agent.PermissionInformation.Culture());
+			var resultMessage = PushMessagePersister.GetMessage();
+			PushMessagePersister.GetReceivers().First().Id.Should().Be.EqualTo(_agent.Id.GetValueOrDefault());
+			resultMessage.AllowDialogueReply.Should().Be.False();
+			resultMessage.GetTitle(formmater).Should().Be.EqualTo(Resources.Congratulations);
+			resultMessage.GetMessage(formmater).Should().Be.EqualTo(
+				string.Format(Resources.YouGotANewGoldBadge, _badgeSetting.Name, date));
+		}
+
+		[Test]
+		public void ShouldSendMessageWhenGetSilverExternalBadgeWithRank()
+		{
+			var period = new DateOnlyPeriod(_calculatedate, _calculatedate);
+			var jobResult = newJobResult();
+			var badgeEvent = new RecalculateBadgeEvent { Period = period, JobResultId = jobResult.Id.GetValueOrDefault() };
+			createAgentAndTeam();
+			createGamificationSetting(GamificationSettingRuleSet.RuleWithDifferentThreshold, 90, 85, 80);
+			createExistingBadgeAndNewData(0, 0, 0, period, 87);
+
+			Target.Handle(badgeEvent);
+
+			var formmater = new NormalizeText();
+			var date = _calculatedate.Date.ToString(_agent.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern,
+				_agent.PermissionInformation.Culture());
+			var resultMessage = PushMessagePersister.GetMessage();
+			PushMessagePersister.GetReceivers().First().Id.Should().Be.EqualTo(_agent.Id.GetValueOrDefault());
+			resultMessage.AllowDialogueReply.Should().Be.False();
+			resultMessage.GetTitle(formmater).Should().Be.EqualTo(Resources.Congratulations);
+			resultMessage.GetMessage(formmater).Should().Be.EqualTo(
+				string.Format(Resources.YouGotANewSilverBadge, _badgeSetting.Name, date));
+		}
+
+		[Test]
+		public void ShouldSendMessageWhenGetBronzeExternalBadgeWithRank()
+		{
+			var period = new DateOnlyPeriod(_calculatedate, _calculatedate);
+			var jobResult = newJobResult();
+			var badgeEvent = new RecalculateBadgeEvent { Period = period, JobResultId = jobResult.Id.GetValueOrDefault() };
+			createAgentAndTeam();
+			createGamificationSetting(GamificationSettingRuleSet.RuleWithDifferentThreshold, 90, 85, 80);
+			createExistingBadgeAndNewData(0, 0, 0, period, 81);
+
+			Target.Handle(badgeEvent);
+
+			var formmater = new NormalizeText();
+			var date = _calculatedate.Date.ToString(_agent.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern,
+				_agent.PermissionInformation.Culture());
+			var resultMessage = PushMessagePersister.GetMessage();
+			PushMessagePersister.GetReceivers().First().Id.Should().Be.EqualTo(_agent.Id.GetValueOrDefault());
+			resultMessage.AllowDialogueReply.Should().Be.False();
+			resultMessage.GetTitle(formmater).Should().Be.EqualTo(Resources.Congratulations);
+			resultMessage.GetMessage(formmater).Should().Be.EqualTo(
+				string.Format(Resources.YouGotANewBronzeBadge, _badgeSetting.Name, date));
+		}
+
+		[Test]
+		public void ShouldNotSendMessageWhenNotGetAnyExternalBadgeWithRank()
+		{
+			var period = new DateOnlyPeriod(_calculatedate, _calculatedate);
+			var jobResult = newJobResult();
+			var badgeEvent = new RecalculateBadgeEvent { Period = period, JobResultId = jobResult.Id.GetValueOrDefault() };
+			createAgentAndTeam();
+			createGamificationSetting(GamificationSettingRuleSet.RuleWithDifferentThreshold, 90, 85, 80);
+			createExistingBadgeAndNewData(0, 0, 0, period, 79);
+
+			Target.Handle(badgeEvent);
+
+			PushMessagePersister.GetReceivers().Count.Should().Be.EqualTo(0);
+			PushMessagePersister.GetMessage().Should().Be.Null();
 		}
 
 		private void createExistingBadgeAndNewData(int gold, int silver, int bronze, DateOnlyPeriod period, int newScore)
@@ -230,13 +391,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Gamification
 			PersonRepository.Add(_agent);
 		}
 
-		private IJobResult NewJobResult()
+		private IJobResult newJobResult()
 		{
 			var person = PersonFactory.CreatePerson().WithId();
 			var jobResult = new JobResult(JobCategory.WebImportExternalGamification, DateOnly.Today.ToDateOnlyPeriod(), person, DateTime.UtcNow).WithId();
 			jobResult.SetVersion(1);
 			JobResultRepository.Add(jobResult);
-			var updated = JobResultRepository.Get(jobResult.Id.Value);
+			var updated = JobResultRepository.Get(jobResult.Id.GetValueOrDefault());
 			return updated;
 		}
 	}

@@ -57,8 +57,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Gamification
 				var hasException = !(jobResultDetail?.ExceptionMessage.IsNullOrEmpty() ?? true)
 								   || !(jobResultDetail?.InnerExceptionMessage.IsNullOrEmpty() ?? true);
 				var status = ImportExternalPerformanceJobStatus.InProgress;
+				if (finished) status = ImportExternalPerformanceJobStatus.Finished;
 				if (hasError) status = ImportExternalPerformanceJobStatus.Failed;
-				else if(finished) status = ImportExternalPerformanceJobStatus.Finished;
+				
 				return new RecalculateBadgeJobResultDetail
 				{
 					Id = jobResult.Id.GetValueOrDefault(),

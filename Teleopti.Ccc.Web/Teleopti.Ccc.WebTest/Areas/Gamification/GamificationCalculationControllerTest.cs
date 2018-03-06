@@ -79,6 +79,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification
 			var person = PersonFactory.CreatePersonWithId(Guid.NewGuid());
 			var jobResult = new JobResult(JobCategory.WebRecalculateBadge, period, person, DateTime.UtcNow);
 			jobResult.SetId(Guid.NewGuid());
+			jobResult.FinishedOk = true;
 			jobResult.AddDetail(new JobResultDetail(DetailLevel.Error, "errorMessage", DateTime.Now, new Exception()));
 			JobResultRepository.Add(jobResult);
 
