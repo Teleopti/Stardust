@@ -190,6 +190,8 @@
 		expect(defaultMoveToStartTime.getHours()).toBe(11);
 	});
 
+
+
 	function commonTestsInDifferentLocale() {
 		it('should call move activity when click apply with correct data', function () {
 			var date = moment('2016-06-15');
@@ -235,6 +237,19 @@
 			expect(activityData.StartTime).toEqual('2016-06-15T19:00');
 			expect(activityData.PersonActivities[0].Date).toEqual('2016-06-15');
 			expect(activityData.TrackedCommandInfo.TrackId).toBe(vm.trackId);
+		});
+
+		it('should get correct move start time str', function () {
+			var result = setUp('2018-03-05');
+			var vm = result.commandControl;
+
+			vm.moveToTime = new Date('2018-03-05T10:30:00');
+			vm.nextDay = false;
+			var startTimeStr = vm.getMoveToStartTimeStr();
+			expect(startTimeStr).toEqual('2018-03-05T10:30');
+			vm.nextDay = true;
+			startTimeStr = vm.getMoveToStartTimeStr();
+			expect(startTimeStr).toEqual('2018-03-06T10:30')
 		});
 	}
 

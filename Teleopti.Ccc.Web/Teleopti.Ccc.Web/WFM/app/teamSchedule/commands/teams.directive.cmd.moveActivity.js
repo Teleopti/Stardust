@@ -100,8 +100,8 @@
 		};
 
 		vm.getMoveToStartTimeStr = function () {
-			var dateStr = (vm.nextDay ? moment(vm.selectedDate()).add(1, 'days') : serviceDateFormatHelper.getDateOnly(vm.selectedDate()));
-			var timeStr = moment(vm.moveToTime).format('HH:mm');
+			var dateStr = serviceDateFormatHelper.getDateOnly(vm.nextDay ? moment(vm.selectedDate()).add(1, 'days') : vm.selectedDate());
+			var timeStr = serviceDateFormatHelper.getTimeOnly(vm.moveToTime);
 			return dateStr + 'T' + timeStr;
 		};
 
