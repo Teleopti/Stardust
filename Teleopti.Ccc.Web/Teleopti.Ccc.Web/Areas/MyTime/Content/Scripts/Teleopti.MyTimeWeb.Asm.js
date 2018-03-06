@@ -181,7 +181,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 			resize();
 		}
 
-		var yesterDayFromNow = moment(new Date(new Date().getTeleoptiTime())).add('days', -1).startOf('day').toDate();
+		var yesterDayFromNow = moment(new Date(new Date().getTeleoptiTimeInUserTimezone())).add('days', -1).startOf('day').toDate();
 		vm = new asmViewModel(yesterDayFromNow);
 		var elementToBind = $('.asm-outer-canvas')[0];
 		ko.applyBindings(vm, elementToBind);
@@ -294,6 +294,9 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		Dispose: function () {
 			ajax.AbortAll();
 			Teleopti.MyTimeWeb.MessageBroker.RemoveListeners(currentPage);
+		},
+		_replaceAjax: function(another_ajax) {
+			ajax = another_ajax;
 		}
 	};
 })(jQuery);

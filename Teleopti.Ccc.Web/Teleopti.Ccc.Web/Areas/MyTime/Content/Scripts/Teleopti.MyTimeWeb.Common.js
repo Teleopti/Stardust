@@ -487,7 +487,10 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 			$("#autocollapse.bdd-mytime-top-menu ul.show-outside-toolbar #asm-divider").hide();
 			$("#autocollapse.bdd-mytime-top-menu ul.show-outside-toolbar #asm-link").hide();
 		},
-		GetCurrentUserDateTime: _getCurrentUserDateTime
+		GetCurrentUserDateTime: _getCurrentUserDateTime,
+		FakeToggles: function(toggles) {
+			toggleCache = toggles;
+		}
 	};
 
 })(jQuery);
