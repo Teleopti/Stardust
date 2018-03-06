@@ -11154,7 +11154,7 @@ Disse alternativene er aktivert:
     <value>Forhåndsvis den nye People modulen!</value>
   </data>
   <data name="WFMReleaseNotificationWithoutOldModuleLink" xml:space="preserve">
-    <value>{0} har blitt forbedrett! Vi setter pris på din {1} tilbakemelding. {2}</value>
+    <value>{0} har blitt forbedret! Vi setter pris på din {1} tilbakemelding. {2}</value>
   </data>
   <data name="DateRange" xml:space="preserve">
     <value>Datointervall</value>
