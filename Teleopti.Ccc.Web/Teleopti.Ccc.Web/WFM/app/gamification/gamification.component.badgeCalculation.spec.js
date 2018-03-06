@@ -1,4 +1,4 @@
-fdescribe('badgeCalculation', function () {
+describe('badgeCalculation', function () {
     var attachedElements = [];
     var $compile,
         $rootScope,
@@ -36,7 +36,7 @@ fdescribe('badgeCalculation', function () {
         attachedElements = [];
     });
 
-    fit('should render badge calculation page', function () {
+    it('should render badge calculation page', function () {
         var cmp = setupComponent(testScope());
         var startBtn = cmp[0].querySelector('button.wfm-btn.ng-binding');
         expect(startBtn).not.toBe(null);
