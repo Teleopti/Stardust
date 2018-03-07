@@ -11,11 +11,11 @@ namespace Teleopti.Ccc.Domain.Notification
 			_configReader = configReader;
 		}
 
-		public string SmtpHost { get { return _configReader.SmtpHost; } }
-		public int SmtpPort { get { return _configReader.SmtpPort; } }
-		public bool SmtpUseSsl { get { return _configReader.SmtpUseSsl; } }
-		public string SmtpUser { get { return _configReader.SmtpUser; } }
-		public string SmtpPassword { get { return _configReader.SmtpPassword; } }
-		public bool SmtpUseRelay { get { return _configReader.SmtpUseRelay; } }
+		public string SmtpHost => _configReader.SmtpHost;
+		public int SmtpPort => _configReader.SmtpPort;
+		public bool SmtpUseSsl => _configReader.SmtpUseSsl;
+		public string SmtpUser => _configReader.SmtpUser;
+		public string SmtpPassword => _configReader.SmtpPassword;
+		public bool SmtpUseRelay => _configReader.SmtpUseRelay;
 	}
 }
