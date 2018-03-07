@@ -11,13 +11,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(PerformBadgeCalculation));
 		private readonly IBusinessUnitRepository _buRepository;
-		private readonly ILogObjectDateChecker _logObjectDateChecker;
 		private readonly CalculateBadges _calculateBadges;
 
 		public PerformAllBadgeCalculation(IBusinessUnitRepository buRepository, ILogObjectDateChecker logObjectDateChecker, CalculateBadges calculateBadges)
 		{
 			_buRepository = buRepository;
-			_logObjectDateChecker = logObjectDateChecker;
 			_calculateBadges = calculateBadges;
 		}
 
@@ -52,12 +50,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 			{
 				logger.Debug($"Calculate badge of {calculationDateForGivenTimeZone:yyyy-MM-dd} for business "
 							 + $"unit (Id=\"{businessUnitId}\" and timezone $(Id=\"{timeZoneInfoId}\"))");
-			}
-
-			if (_logObjectDateChecker.HistoricalDataIsEarlierThan(new DateOnly(calculationDateForGivenTimeZone)))
-			{
-				logger.Warn("Badge calculation result may be incorrect since one or more historical data detail "
-							+ $"comes late than latest interval of \"{calculationDateForGivenTimeZone:yyyy-MM-dd}\"");
 			}
 
 			_calculateBadges.Calculate(new CalculateBadgeMessage

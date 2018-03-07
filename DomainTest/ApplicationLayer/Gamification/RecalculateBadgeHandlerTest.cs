@@ -74,8 +74,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Gamification
 		public void ShouldCleanOldBadgeData()
 		{
 			var period = new DateOnlyPeriod(_calculatedate, _calculatedate);
-			var jobResult = newJobResult();
-			var badgeEvent = new RecalculateBadgeEvent {Period = period , JobResultId = jobResult.Id.GetValueOrDefault() };
+			var jobResult = newJobResult(period);
+			var badgeEvent = new RecalculateBadgeEvent {JobResultId = jobResult.Id.GetValueOrDefault() };
 			CurrentBusinessUnit.FakeBusinessUnit(BusinessUnitFactory.CreateWithId("bu"));
 			AgentBadgeTransactionRepository.Add(new AgentBadgeTransaction { CalculatedDate = _calculatedate });
 			AgentBadgeWithRankTransactionRepository.Add(new AgentBadgeWithRankTransaction() { CalculatedDate = _calculatedate });
@@ -91,8 +91,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Gamification
 		public void ShouldUpdateBadgeAmountWhenRecalculate()
 		{
 			var period = new DateOnlyPeriod(_calculatedate, _calculatedate);
-			var jobResult = newJobResult();
-			var badgeEvent = new RecalculateBadgeEvent { Period = period, JobResultId = jobResult.Id.GetValueOrDefault() };
+			var jobResult = newJobResult(period);
+			var badgeEvent = new RecalculateBadgeEvent { JobResultId = jobResult.Id.GetValueOrDefault() };
 			createAgentAndTeam();
 			createGamificationSetting(GamificationSettingRuleSet.RuleWithDifferentThreshold, 90, 85, 80);
 			createExistingBadgeAndNewData(0, 0, 1, period, 87);
@@ -110,8 +110,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Gamification
 		public void ShouldRemoveBadgeWhenNewDataCannotGetBadge()
 		{
 			var period = new DateOnlyPeriod(_calculatedate, _calculatedate);
-			var jobResult = newJobResult();
-			var badgeEvent = new RecalculateBadgeEvent { Period = period, JobResultId = jobResult.Id.GetValueOrDefault() };
+			var jobResult = newJobResult(period);
+			var badgeEvent = new RecalculateBadgeEvent { JobResultId = jobResult.Id.GetValueOrDefault() };
 			createAgentAndTeam();
 			createGamificationSetting(GamificationSettingRuleSet.RuleWithDifferentThreshold, 90, 85, 80);
 			createExistingBadgeAndNewData(0, 0, 1, period, 70);
@@ -128,8 +128,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Gamification
 		public void ShouldAddNewBadgeWhenNewDataCanGetABadge()
 		{
 			var period = new DateOnlyPeriod(_calculatedate.AddDays(-1), _calculatedate.AddDays(1));
-			var jobResult = newJobResult();
-			var badgeEvent = new RecalculateBadgeEvent { Period = period, JobResultId = jobResult.Id.GetValueOrDefault() };
+			var jobResult = newJobResult(period);
+			var badgeEvent = new RecalculateBadgeEvent { JobResultId = jobResult.Id.GetValueOrDefault() };
 			createAgentAndTeam();
 			createGamificationSetting(GamificationSettingRuleSet.RuleWithDifferentThreshold, 90, 85, 80);
 			createExistingBadgeAndNewData(0, 0, 0, period, 80);
@@ -146,8 +146,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Gamification
 		public void ShouldCalculateMultiDaysData()
 		{
 			var period = new DateOnlyPeriod(_calculatedate.AddDays(-1), _calculatedate.AddDays(1));
-			var jobResult = newJobResult();
-			var badgeEvent = new RecalculateBadgeEvent { Period = period, JobResultId = jobResult.Id.GetValueOrDefault() };
+			var jobResult = newJobResult(period);
+			var badgeEvent = new RecalculateBadgeEvent { JobResultId = jobResult.Id.GetValueOrDefault() };
 			createAgentAndTeam();
 			createGamificationSetting(GamificationSettingRuleSet.RuleWithDifferentThreshold, 90, 85, 80);
 			createExistingBadgeAndNewData(0, 0, 0, period, 80);
@@ -164,8 +164,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Gamification
 		public void ShouldSetJobResultFinishedAfterRecalculated()
 		{
 			var period = new DateOnlyPeriod(_calculatedate.AddDays(-1), _calculatedate.AddDays(1));
-			var jobResult = newJobResult();
-			var badgeEvent = new RecalculateBadgeEvent { Period = period, JobResultId = jobResult.Id.GetValueOrDefault() };
+			var jobResult = newJobResult(period);
+			var badgeEvent = new RecalculateBadgeEvent { JobResultId = jobResult.Id.GetValueOrDefault() };
 			createAgentAndTeam();
 			createGamificationSetting(GamificationSettingRuleSet.RuleWithDifferentThreshold, 90, 85, 80);
 			createExistingBadgeAndNewData(0, 0, 0, period, 80);
@@ -180,8 +180,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Gamification
 		public void ShouldSetJobResultHasErrorWhenErrorHappens()
 		{
 			var period = new DateOnlyPeriod(_calculatedate.AddDays(-1), _calculatedate.AddDays(1));
-			var jobResult = newJobResult();
-			var badgeEvent = new RecalculateBadgeEvent { Period = period, JobResultId = jobResult.Id.GetValueOrDefault() };
+			var jobResult = newJobResult(period);
+			var badgeEvent = new RecalculateBadgeEvent { JobResultId = jobResult.Id.GetValueOrDefault() };
 
 			try
 			{
@@ -197,8 +197,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Gamification
 		public void ShouldSendMessageWhenGetBronzeExternalBadge()
 		{
 			var period = new DateOnlyPeriod(_calculatedate, _calculatedate);
-			var jobResult = newJobResult();
-			var badgeEvent = new RecalculateBadgeEvent { Period = period, JobResultId = jobResult.Id.GetValueOrDefault() };
+			var jobResult = newJobResult(period);
+			var badgeEvent = new RecalculateBadgeEvent { JobResultId = jobResult.Id.GetValueOrDefault() };
 			createAgentAndTeam();
 			createGamificationSetting(GamificationSettingRuleSet.RuleWithRatioConvertor, 90, 85, 80, 80);
 			createExistingBadgeAndNewData(0, 0, 0, period, 87);
@@ -220,8 +220,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Gamification
 		public void ShouldNotSendMessageWhenNotGetAnyExternalBadge()
 		{
 			var period = new DateOnlyPeriod(_calculatedate, _calculatedate);
-			var jobResult = newJobResult();
-			var badgeEvent = new RecalculateBadgeEvent { Period = period, JobResultId = jobResult.Id.GetValueOrDefault() };
+			var jobResult = newJobResult(period);
+			var badgeEvent = new RecalculateBadgeEvent { JobResultId = jobResult.Id.GetValueOrDefault() };
 			createAgentAndTeam();
 			createGamificationSetting(GamificationSettingRuleSet.RuleWithRatioConvertor, 90, 85, 80, 80);
 			createExistingBadgeAndNewData(0, 0, 0, period, 77);
@@ -236,8 +236,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Gamification
 		public void ShouldSendMessageWhenGetGoldExternalBadgeWithRank()
 		{
 			var period = new DateOnlyPeriod(_calculatedate, _calculatedate);
-			var jobResult = newJobResult();
-			var badgeEvent = new RecalculateBadgeEvent { Period = period, JobResultId = jobResult.Id.GetValueOrDefault() };
+			var jobResult = newJobResult(period);
+			var badgeEvent = new RecalculateBadgeEvent { JobResultId = jobResult.Id.GetValueOrDefault() };
 			createAgentAndTeam();
 			createGamificationSetting(GamificationSettingRuleSet.RuleWithDifferentThreshold, 90, 85, 80);
 			createExistingBadgeAndNewData(0, 1, 0, period, 91);
@@ -259,8 +259,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Gamification
 		public void ShouldSendMessageWhenGetSilverExternalBadgeWithRank()
 		{
 			var period = new DateOnlyPeriod(_calculatedate, _calculatedate);
-			var jobResult = newJobResult();
-			var badgeEvent = new RecalculateBadgeEvent { Period = period, JobResultId = jobResult.Id.GetValueOrDefault() };
+			var jobResult = newJobResult(period);
+			var badgeEvent = new RecalculateBadgeEvent { JobResultId = jobResult.Id.GetValueOrDefault() };
 			createAgentAndTeam();
 			createGamificationSetting(GamificationSettingRuleSet.RuleWithDifferentThreshold, 90, 85, 80);
 			createExistingBadgeAndNewData(0, 0, 0, period, 87);
@@ -282,8 +282,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Gamification
 		public void ShouldSendMessageWhenGetBronzeExternalBadgeWithRank()
 		{
 			var period = new DateOnlyPeriod(_calculatedate, _calculatedate);
-			var jobResult = newJobResult();
-			var badgeEvent = new RecalculateBadgeEvent { Period = period, JobResultId = jobResult.Id.GetValueOrDefault() };
+			var jobResult = newJobResult(period);
+			var badgeEvent = new RecalculateBadgeEvent { JobResultId = jobResult.Id.GetValueOrDefault() };
 			createAgentAndTeam();
 			createGamificationSetting(GamificationSettingRuleSet.RuleWithDifferentThreshold, 90, 85, 80);
 			createExistingBadgeAndNewData(0, 0, 0, period, 81);
@@ -305,8 +305,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Gamification
 		public void ShouldNotSendMessageWhenNotGetAnyExternalBadgeWithRank()
 		{
 			var period = new DateOnlyPeriod(_calculatedate, _calculatedate);
-			var jobResult = newJobResult();
-			var badgeEvent = new RecalculateBadgeEvent { Period = period, JobResultId = jobResult.Id.GetValueOrDefault() };
+			var jobResult = newJobResult(period);
+			var badgeEvent = new RecalculateBadgeEvent {JobResultId = jobResult.Id.GetValueOrDefault() };
 			createAgentAndTeam();
 			createGamificationSetting(GamificationSettingRuleSet.RuleWithDifferentThreshold, 90, 85, 80);
 			createExistingBadgeAndNewData(0, 0, 0, period, 79);
@@ -391,10 +391,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Gamification
 			PersonRepository.Add(_agent);
 		}
 
-		private IJobResult newJobResult()
+		private IJobResult newJobResult(DateOnlyPeriod peroid)
 		{
 			var person = PersonFactory.CreatePerson().WithId();
-			var jobResult = new JobResult(JobCategory.WebImportExternalGamification, DateOnly.Today.ToDateOnlyPeriod(), person, DateTime.UtcNow).WithId();
+			var jobResult = new JobResult(JobCategory.WebImportExternalGamification, peroid, person, DateTime.UtcNow).WithId();
 			jobResult.SetVersion(1);
 			JobResultRepository.Add(jobResult);
 			var updated = JobResultRepository.Get(jobResult.Id.GetValueOrDefault());

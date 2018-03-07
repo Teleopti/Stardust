@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
@@ -30,6 +31,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Gamification
 			_feedback = feedback;
 		}
 
+		[AsSystem, UnitOfWork]
 		public virtual void Handle(RecalculateBadgeEvent @event)
 		{
 			try
@@ -39,22 +41,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Gamification
 			catch (Exception e)
 			{
 				Logger.Error(e);
-				SaveJobResult(@event, e);
-				throw;
+				saveJobResultDetail(@event.JobResultId, DetailLevel.Error, e.Message, e);
 			}
 		}
 
-		[UnitOfWork]
-		protected virtual void SaveJobResult(RecalculateBadgeEvent @event, Exception e)
+		protected void HandleJob(RecalculateBadgeEvent @event)
 		{
-			saveJobResultDetail(@event.JobResultId, DetailLevel.Error, e.Message, e);
-		}
-
-		[UnitOfWork]
-		protected virtual void HandleJob(RecalculateBadgeEvent @event)
-		{
-			_calculateBadges.RemoveAgentBadges(@event.Period);
-			foreach (var date in @event.Period.DayCollection())
+			var result = _jobResultRepository.FindWithNoLock(@event.JobResultId);
+			_calculateBadges.RemoveAgentBadges(result.Period);
+			foreach (var date in result.Period.DayCollection())
 			{
 				_performBadgeCalculation.Calculate(_currentBusinessUnit.Current().Id.GetValueOrDefault(), date.Date);
 			}

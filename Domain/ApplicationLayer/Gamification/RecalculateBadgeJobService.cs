@@ -37,8 +37,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Gamification
 			_jobResultRepository.Add(jobResult);
 			_eventPublisher.Publish(new RecalculateBadgeEvent
 			{
-				JobResultId = jobResult.Id.GetValueOrDefault(),
-				Period = period
+				JobResultId = jobResult.Id.GetValueOrDefault()
 			});
 			return jobResult;
 		}

@@ -16,7 +16,6 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.core.IoC
 			builder.RegisterType<TeamGamificationSettingProviderAndPersister>().As<ITeamGamificationSettingProviderAndPersister>().SingleInstance();
 			builder.RegisterType<MultipartHttpContentExtractor>().As<IMultipartHttpContentExtractor>().SingleInstance();
 			builder.RegisterType<CalculateBadges>().As<CalculateBadges>().SingleInstance();
-			builder.RegisterType<PerformAllBadgeCalculation>().As<IPerformBadgeCalculation>().SingleInstance();
 		}
 	}
 }
