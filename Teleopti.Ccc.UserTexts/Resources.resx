@@ -17253,4 +17253,12 @@ The application will now exit.</value>
     <value>START</value>
     <comment>Start to calcluate badge.</comment>
   </data>
+  <data name="NoGamificationDataForThePeriod" xml:space="preserve">
+    <value>There is no gamification data for the selected period.</value>
+    <comment>There is no gamification data for the selected period. Used in gamification calculation Tab.</comment>
+  </data>
+  <data name="SelectedPeriodHasAnIntersectionWithOneInProgressJob" xml:space="preserve">
+    <value>Selected period has an intersection with one in progress job.</value>
+    <comment>Selected period has an intersection with one in progress job. Used in gamification calculation Tab.</comment>
+  </data>
 </root>

@@ -20798,6 +20798,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There is no gamification data for the selected period..
+        /// </summary>
+        public static string NoGamificationDataForThePeriod {
+            get {
+                return ResourceManager.GetString("NoGamificationDataForThePeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No gamification setting.
         /// </summary>
         public static string NoGamificationSetting {
@@ -30289,6 +30298,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SelectedPeople {
             get {
                 return ResourceManager.GetString("SelectedPeople", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selected period has an intersection with one in progress job..
+        /// </summary>
+        public static string SelectedPeriodHasAnIntersectionWithOneInProgressJob {
+            get {
+                return ResourceManager.GetString("SelectedPeriodHasAnIntersectionWithOneInProgressJob", resourceCulture);
             }
         }
         

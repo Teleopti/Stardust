@@ -22,8 +22,8 @@
             var endDate = moment.utc().toDate();
             $ctrl.dateRange = { startDate: startDate, endDate: endDate };
             $ctrl.dateRangeCustomValidators = [{
-                key: 'startDateValidation',
-                message: 'StartDateCannotEarlierThanLastPurgeDate',
+                key: 'NoGamificationDataForThePeriod',
+                message: 'NoGamificationDataForThePeriod',
                 validate: function (start, end) {
                     return moment(start).toDate() > moment.utc().subtract(30, 'days').toDate();
                 }
