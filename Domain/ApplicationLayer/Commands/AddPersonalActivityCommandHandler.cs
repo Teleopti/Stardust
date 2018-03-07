@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		
 			var schedulePreviousDay = scheduleRange.ScheduledDay(command.Date.AddDays(-1));
 			var personAssignmentOfPreviousDay = schedulePreviousDay.PersonAssignment();
-			if (personAssignmentOfPreviousDay != null && personAssignmentOfPreviousDay.Period.EndDateTime >= period.StartDateTime)
+			if (personAssignmentOfPreviousDay != null && !personAssignmentOfPreviousDay.ShiftLayers.IsEmpty() && personAssignmentOfPreviousDay.Period.EndDateTime >= period.StartDateTime)
 			{
 				command.ErrorMessages.Add(Resources.ActivityConflictsWithOvernightShiftsFromPreviousDay);
 				return;

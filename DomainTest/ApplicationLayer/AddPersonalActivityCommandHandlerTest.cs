@@ -186,6 +186,44 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			command.ErrorMessages.Single().Should().Be(Resources.ActivityConflictsWithOvernightShiftsFromPreviousDay);
 		}
 
+
+		[Test]
+		public void ShouldNotReportErrorWhenAddingActivityFromZeroOclockAndPreviousDayIsEmpty()
+		{
+			var scenario = CurrentScenario.Has("Default");
+			var activity = ActivityFactory.CreateActivity("Phone").WithId();
+			ActivityRepository.Add(activity);
+			ActivityRepository.Add(_mainActivity);
+
+			var person = PersonFactory.CreatePersonWithId();
+			PersonRepository.Add(person);
+
+			var personAssignmentYesterday = PersonAssignmentFactory.CreatePersonAssignment(person, scenario, _date.AddDays(-1));
+
+			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, scenario, _date);
+			personAssignment.AddActivity(_mainActivity, _mainActivityDateTimePeriod);
+			PersonAssignmentRepository.Add(personAssignment);
+			PersonAssignmentRepository.Add(personAssignmentYesterday);
+
+			var command = new AddPersonalActivityCommand
+			{
+				Person = person,
+				Date = _date,
+				PersonalActivityId = activity.Id.GetValueOrDefault(),
+				StartTime = new DateTime(2016, 05, 17, 0, 0, 0, DateTimeKind.Utc),
+				EndTime = new DateTime(2016, 05, 17, 09, 0, 0, DateTimeKind.Utc),
+				TrackedCommandInfo = new TrackedCommandInfo
+				{
+					OperatedPersonId = Guid.NewGuid(),
+					TrackId = Guid.NewGuid()
+				}
+			};
+
+			Target.Handle(command);
+
+			command.ErrorMessages.Should().Be.Empty();
+		}
+
 		[Test]
 		public void ShouldCanAddPersonalActivityIfPersonAssignmentIsNotExists()
 		{

@@ -248,6 +248,35 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		}
 
 		[Test]
+		public void ShouldNotReportErrorWhenAddingActivityFromZeroOclockAndPreviousDayIsEmpty()
+		{
+			var person = PersonFactory.CreatePersonWithId();
+			PersonRepository.Add(person);
+			var scenario = ScenarioRepository.Has("Default");
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day");
+			ShiftCategoryRepository.Add(shiftCategory);
+
+			var mainActivity = ActivityFactory.CreateActivity("Phone");
+			var addedActivity = ActivityFactory.CreateActivity("Added activity");
+			ActivityRepository.Add(addedActivity);
+			ActivityRepository.Add(mainActivity);
+			var pa = PersonAssignmentFactory.CreateEmptyAssignment(person, scenario, new DateTimePeriod(2013, 11, 13, 0, 2013, 11, 14, 0));
+			PersonAssignmentRepository.Add(pa);
+
+			var command = new AddActivityCommand
+			{
+				Person = person,
+				Date = new DateOnly(2013, 11, 14),
+				ActivityId = addedActivity.Id.Value,
+				StartTime = new DateTime(2013, 11, 14, 0, 0, 0),
+				EndTime = new DateTime(2013, 11, 14, 8, 0, 0)
+			};
+			Target.Handle(command);
+
+			command.ErrorMessages.Should().Be.Empty();
+		}
+
+		[Test]
 		public void ShouldMoveConflictNonoverwritableLayerWhenItsFixable()
 		{
 			var scenario = ScenarioRepository.Has("Default");
