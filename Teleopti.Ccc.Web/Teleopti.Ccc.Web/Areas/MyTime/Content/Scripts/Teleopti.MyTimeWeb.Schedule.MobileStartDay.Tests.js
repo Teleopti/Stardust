@@ -20,6 +20,7 @@
 				setup();
 			},
 			teardown: function () {
+				$("body").removeClass("mobile-start-day-body");
 				templates.forEach(function (template) {
 					if (template) {
 						template.remove();
@@ -73,6 +74,7 @@
 		var currentDate = vm.selectedDate();
 		$(".mobile-start-day-body").swipe("option").swipeLeft();
 		$(".mobile-start-day-body").swipe("disable");
+
 		equal(vm.selectedDate().format("MMM Do YY"), moment(currentDate).add(1, 'days').format("MMM Do YY"));
 
 	});
