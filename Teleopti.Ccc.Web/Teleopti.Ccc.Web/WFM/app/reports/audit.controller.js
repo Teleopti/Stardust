@@ -33,7 +33,8 @@
 		vm.option = {
 			NodeDisplayName: "Name",
 			NodeChildrenName: "Children",
-			NodeSelectedMark: "selected"
+			NodeSelectedMark: "selected",
+			DisplayTreeFilter: true
 		}
 
 		vm.sendForm = sendForm;
