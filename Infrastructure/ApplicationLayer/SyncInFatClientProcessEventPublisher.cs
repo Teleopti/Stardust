@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		private readonly ResolveEventHandlers _resolver;
 		private readonly CommonEventProcessor _processor;
 
-		protected SyncInFatClientProcessEventPublisher(ResolveEventHandlers resolver, CommonEventProcessor processor)
+		public SyncInFatClientProcessEventPublisher(ResolveEventHandlers resolver, CommonEventProcessor processor)
 		{
 			_resolver = resolver;
 			_processor = processor;

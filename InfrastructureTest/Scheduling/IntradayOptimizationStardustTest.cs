@@ -36,6 +36,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 		
 		
 		[Test]
+		[Ignore("#48512")]
 		public void ShouldNotCrashReadingBlockPreference()
 		{
 			var date = new DateOnly(2000, 1, 1);
