@@ -46,15 +46,15 @@
 	};
 
 	function getIntervalStartMinutes(startTime) {
-		var startMoment = moment(startTime);
-		var startMinutes = startMoment.diff(moment(startTime).startOf("day"));
+		var startMoment = moment.tz(startTime, 'UTC');
+		var startMinutes = startMoment.diff(moment.tz(startTime, 'UTC').startOf('day'));
 
 		return (startMinutes > 0 ? startMinutes : 0) / (60 * 1000);
 	}
 
 	function getIntervalEndMinutes(startTime, endTime) {
-		var startMoment = moment(startTime);
-		var endMoment = moment(endTime);
+		var startMoment = moment.tz(startTime, 'UTC');
+		var endMoment = moment.tz(endTime, 'UTC');
 
 		return endMoment.isSame(startMoment, "day")
 		? endMoment.diff(startMoment.startOf("day")) / (60 * 1000)

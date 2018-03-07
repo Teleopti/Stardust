@@ -55,6 +55,7 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 					"~/Content/Scripts/knockout-2.2.1.js",
 					"~/Content/moment/moment.js",
 					"~/Content/moment/moment-with-locales.min.js",
+					"~/Content/moment-timezone/moment-timezone-with-data.min.js",
 					"~/Content/jalaali-calendar-datepicker/moment-jalaali.js",
 					"~/Content/moment-datepicker/moment-datepicker.js",
 					"~/Content/moment-datepicker/moment-datepicker-ext.js",

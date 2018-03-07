@@ -48,8 +48,8 @@ $(document).ready(function () {
 		var result = [];
 		for (var i = 0; i < 24 * 60 / 15; i++) {
 			result.push({
-				"StartTime": moment(baseDate).add(15 * i, "minutes").toDate(),
-				"EndTime": moment(baseDate).add(15 * (i + 1), "minutes").toDate(),
+				"StartTime": moment(baseDate).add(15 * i, "minutes").format('YYYY-MM-DDTHH:mm:ss'),
+				"EndTime": moment(baseDate).add(15 * (i + 1), "minutes").format('YYYY-MM-DDTHH:mm:ss'),
 				"Possibility": Math.round(Math.random())
 			});
 		}

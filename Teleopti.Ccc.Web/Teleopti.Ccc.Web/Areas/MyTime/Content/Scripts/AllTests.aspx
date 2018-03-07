@@ -17,6 +17,7 @@
 		<script type="text/javascript" src="../../../../Content/Scripts/knockout-2.2.1.js"></script>
 		<script type="text/javascript" src="../../../../Content/moment/moment.js"></script>
 		<script type="text/javascript" src="../../../../Content/moment/moment-with-locales.min.js"></script>
+		<script type="text/javascript" src="../../../../Content/moment-timezone/moment-timezone-with-data.min.js"></script>
 
 		<script type="text/javascript" src="../../../../Content/jalaali-calendar-datepicker/moment-jalaali.js"></script>
 		<script type="text/javascript" src="../../../../Content/moment-datepicker/moment-datepicker.js"></script>

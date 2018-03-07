@@ -602,8 +602,16 @@
 	function createPropabilities(periods, date) {
 		var values = [];
 		periods.forEach(function(period) {
-			values
-				.push({ Date: date, StartTime: moment(date + " " + period), EndTime: moment(date + " " + period).add(15, 'minute'), Possibility: 1 });
+			values.push({
+				Date: date,
+				StartTime: moment(date + " " + period).format(
+					"YYYY-MM-DDTHH:mm:ss"
+				),
+				EndTime: moment(date + " " + period)
+					.add(15, "minute")
+					.format("YYYY-MM-DDTHH:mm:ss"),
+				Possibility: 1
+			});
 		});
 		return values;
 	}

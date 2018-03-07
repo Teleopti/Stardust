@@ -28,18 +28,21 @@ Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary = function (dayViewModel, timeli
 
 	var lengthPercentagePerMinute = 1 / (timelineEndMinutes - timelineStartMinutes);
 
-	var momentDate = moment(dayViewModel.fixedDate());
+	var momentDate = moment.tz(
+					dayViewModel.fixedDate()._isAMomentObject ?
+					dayViewModel.fixedDate().format("YYYY-MM-DD") : 
+					dayViewModel.fixedDate(), "UTC");
 
 	if (dayViewModel.periods.length > 0) {
 		var firstPeriod = dayViewModel.periods[0];
 		var lastPeriod = dayViewModel.periods[dayViewModel.periods.length - 1];
 
-		shiftStartMinutes = moment(firstPeriod.StartTime).diff(momentDate) / (60 * 1000);
+		shiftStartMinutes = moment.tz(firstPeriod.StartTime, 'UTC').diff(momentDate) / (60 * 1000);
 		if (shiftStartMinutes < 0) {
 			shiftStartMinutes = 0;
 		}
 
-		shiftEndMinutes = moment(lastPeriod.EndTime).diff(momentDate) / (60 * 1000);
+		shiftEndMinutes = moment.tz(lastPeriod.EndTime, 'UTC').diff(momentDate) / (60 * 1000);
 		if (shiftEndMinutes > constants.totalMinutesOfOneDay) {
 			shiftEndMinutes = constants.totalMinutesOfOneDay;
 		}
@@ -48,7 +51,7 @@ Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary = function (dayViewModel, timeli
 	var rawProbabilityStartMinutes = -1;
 	var rawProbabilityEndMinutes = constants.totalMinutesOfOneDay + 1;
 	if (probabilities.length > 0) {
-		var firstProbabilityStartTime = moment(probabilities[0].StartTime);
+		var firstProbabilityStartTime = moment.tz(probabilities[0].StartTime, 'UTC');
 		var firstProbabilityStartMinute = (firstProbabilityStartTime.diff(momentDate)) / (60 * 1000);
 		if (firstProbabilityStartMinute < 0) {
 			firstProbabilityStartMinute = 0;
@@ -58,7 +61,7 @@ Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary = function (dayViewModel, timeli
 			rawProbabilityStartMinutes = firstProbabilityStartMinute;
 		}
 
-		var lastProbabilityEndTime = moment(probabilities[probabilities.length - 1].EndTime);
+		var lastProbabilityEndTime = moment.tz(probabilities[probabilities.length - 1].EndTime, 'UTC');
 		var lastProbabilityEndMinute = (lastProbabilityEndTime.diff(momentDate)) / (60 * 1000);
 		if (lastProbabilityEndMinute > constants.totalMinutesOfOneDay) {
 			lastProbabilityEndMinute = constants.totalMinutesOfOneDay;
