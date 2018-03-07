@@ -5,17 +5,12 @@ using System.Text.RegularExpressions;
 using log4net;
 using log4net.Config;
 using NUnit.Framework;
-using NUnit.Framework.Interfaces;
-using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 using Teleopti.Ccc.WebBehaviorTest.Core;
-using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
-using Teleopti.Ccc.WebBehaviorTest.Toggle;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 {

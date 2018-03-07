@@ -198,6 +198,7 @@ Scenario: Add absence request
 	And I click the send button
 	Then I should see the request of type 'Vacation' in the list
 
+@suppressHangfireQueue
 Scenario: Add absence request when multiple absences exist
 	Given I am an agent
 	And I have a requestable absence called Vacation
