@@ -2,11 +2,12 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
+using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Infrastructure.ApplicationLayer;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.RealTimeAdherence;
 
 namespace Teleopti.Ccc.TestCommon
@@ -17,6 +18,7 @@ namespace Teleopti.Ccc.TestCommon
 		private readonly ResolveEventHandlers _resolver;
 		private readonly CommonEventProcessor _processor;
 		private readonly ICurrentDataSource _dataSource;
+		private readonly IThreadPrincipalContext _threadPrincipalContext;
 		private readonly List<Type> _handlerTypes = new List<Type>();
 		private ConcurrentQueue<IEvent> queuedEvents = new ConcurrentQueue<IEvent>();
 
@@ -24,12 +26,14 @@ namespace Teleopti.Ccc.TestCommon
 			IRtaEventPublisher rtaPublisher,
 			ResolveEventHandlers resolver,
 			CommonEventProcessor processor,
-			ICurrentDataSource dataSource)
+			ICurrentDataSource dataSource,
+			IThreadPrincipalContext threadPrincipalContext)
 		{
 			_rtaPublisher = rtaPublisher;
 			_resolver = resolver;
 			_processor = processor;
 			_dataSource = dataSource;
+			_threadPrincipalContext = threadPrincipalContext;
 		}
 
 		public IEnumerable<IEvent> PublishedEvents => queuedEvents.ToArray();
@@ -59,13 +63,17 @@ namespace Teleopti.Ccc.TestCommon
 				return;
 
 			var tenant = _dataSource.CurrentName();
+
 			onAnotherThread(() =>
 			{
 				_resolver.ResolveAllJobs(events)
 					.ForEach(job =>
 					{
-						if (_handlerTypes.Contains(job.HandlerType))
-							_processor.Process(tenant, job.Event, job.Package, job.HandlerType);
+						using (clearCurrentPrincipal())
+						{
+							if (_handlerTypes.Contains(job.HandlerType))
+								_processor.Process(tenant, job.Event, job.Package, job.HandlerType);								
+						}
 					});
 			});
 		}
@@ -75,6 +83,13 @@ namespace Teleopti.Ccc.TestCommon
 			var thread = new Thread(action.Invoke);
 			thread.Start();
 			thread.Join();
+		}
+
+		private IDisposable clearCurrentPrincipal()
+		{
+			var current = _threadPrincipalContext.Current();
+			_threadPrincipalContext.SetCurrentPrincipal(null);
+			return new GenericDisposable(() => _threadPrincipalContext.SetCurrentPrincipal(current));
 		}
 	}
 }

@@ -415,6 +415,7 @@
     <Compile Include="IoC\LoggedOnAppDomainAttribute.cs" />
     <Compile Include="DbManagerLog4Net.cs" />
     <Compile Include="IoC\UseIocForFatClientAttribute.cs" />
+    <Compile Include="JobResultExtensions.cs" />
     <Compile Include="LegacyFakeEventPublisher.cs" />
     <Compile Include="MessageBrokerCompositeDummy.cs" />
     <Compile Include="MultisiteDayExtensions.cs" />

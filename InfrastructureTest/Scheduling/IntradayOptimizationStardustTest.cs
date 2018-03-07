@@ -1,14 +1,14 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Infrastructure.ApplicationLayer;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
@@ -16,7 +16,8 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 {
 	[DatabaseTest]
-	public class IntradayOptimizationStardustTest : ISetup
+	[ExtendScope(typeof(WebIntradayOptimizationStardustHandler))]
+	public class IntradayOptimizationStardustTest
 	{
 		public IntradayOptimizationFromWeb Target;
 
@@ -33,6 +34,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 		public IContractRepository ContractRepository;
 		public IContractScheduleRepository ContractScheduleRepository;
 		public ICurrentUnitOfWorkFactory CurrentUnitOfWorkFactory;
+		public IJobResultRepository JobResultRepository;
 		
 		
 		[Test]
@@ -67,13 +69,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 			}
 			
 			Target.Execute(planningPeriod.Id.Value, true);
-		}
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
-		{
-			//TODO: make [UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))] work for databasetest/infratest as well instead
-			//if needed more times...
-			system.AddService<FakeStardustAndRunInProcess>();
+			using (CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			{
+				JobResultRepository
+					.LoadAllWithNoLock()
+					.Single()
+					.RethrowIfException();
+			}
 		}
 	}
 }
