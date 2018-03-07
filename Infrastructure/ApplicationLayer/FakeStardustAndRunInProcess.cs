@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Security.Principal;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
@@ -11,15 +12,15 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 	{
 		private readonly ResolveEventHandlers _resolver;
 		private readonly CommonEventProcessor _processor;
-		private readonly IThreadPrincipalContext _threadPrincipalContext;
+		private readonly ICurrentPrincipalContext _currentPrincipalContext;
 
-		protected FakeStardustAndRunInProcess(ResolveEventHandlers resolver, 
+		public FakeStardustAndRunInProcess(ResolveEventHandlers resolver, 
 			CommonEventProcessor processor,
-			IThreadPrincipalContext threadPrincipalContext)
+			ICurrentPrincipalContext currentPrincipalContext)
 		{
 			_resolver = resolver;
 			_processor = processor;
-			_threadPrincipalContext = threadPrincipalContext;
+			_currentPrincipalContext = currentPrincipalContext;
 		}
 
 		public void Publish(params IEvent[] events)
@@ -31,7 +32,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 					select Task.Run(() =>
 						{
 							//to simulate going to new process/being "logged out"
-							_threadPrincipalContext.SetCurrentPrincipal(null);
+							_currentPrincipalContext.SetCurrentPrincipal(null);
 							//
 							_processor.Process(@event, handlerType);
 						}
