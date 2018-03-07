@@ -38,8 +38,7 @@
                 </div>
                 <div ng-if="job.status=='failed'">
                     <i class="mdi mdi-alert-octagon"></i>
-                    <span ng-if="job.errorMsg.length">&nbsp;{{job.errorMessage}}</span>
-                    <span ng-if="!job.errorMsg.length">{{'Failed'|translate}}</span>
+                    <span>{{'Failed'|translate}}</span>
                 </div>
                 <div ng-if="job.status=='finished'">
                     <span>{{'Finished'|translate}}</span>
