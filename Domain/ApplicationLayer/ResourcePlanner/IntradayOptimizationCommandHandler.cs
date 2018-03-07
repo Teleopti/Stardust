@@ -14,14 +14,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 {
 	public class IntradayOptimizationCommandHandler
 	{
-		private readonly IEventPublisher _eventPublisher;
+		private readonly IEventPopulatingPublisher _eventPublisher;
 		private readonly IGridlockManager _gridLockManager;
 		private readonly IAllStaff _allStaff;
 		private readonly IOptimizationPreferencesProvider _optimizationPreferencesProvider;
 		private readonly CrossAgentsAndSkills _crossAgentsAndSkills;
 		private readonly CreateIslands _createIslands;
 
-		protected IntradayOptimizationCommandHandler(IEventPublisher eventPublisher,
+		protected IntradayOptimizationCommandHandler(IEventPopulatingPublisher eventPublisher,
 												IGridlockManager gridLockManager,
 												IAllStaff allStaff,
 												IOptimizationPreferencesProvider optimizationPreferencesProvider,
