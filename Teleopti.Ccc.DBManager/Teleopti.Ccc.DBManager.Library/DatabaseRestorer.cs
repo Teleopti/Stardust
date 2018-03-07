@@ -62,17 +62,27 @@ namespace Teleopti.Ccc.DBManager.Library
 			restore(command.DatabaseType, command.DatabaseName, command.RestoreBackup);
 			createLoginDropUsers(command.DatabaseName, command.AppUserName, command.AppUserPassword);
 			setTenantActive(command.DatabaseType);
+			addLicence(command.DatabaseType);
 		}
 
+		private void addLicence(DatabaseType databaseType)
+		{
+			if (databaseType != DatabaseType.TeleoptiCCC7)
+				return;
+			var file = Path.Combine(_debugDbFolder.Path(), @"tsql\AddLic.sql");
+			var script = File.ReadAllText(file);
+			var lincenceFile = Path.GetFullPath(Path.Combine(_repoFolder.Path(), @"LicenseFiles\Teleopti_RD.xml"));
+			script = replaceVariables(script, null, null, null, null, lincenceFile);
+			_sql.ExecuteTransactionlessNonQuery(script, Timeouts.CommandTimeout);
+		}
+		
 		private void restore(DatabaseType databaseType, string databaseName, string bakFile)
 		{
 			var file = Path.Combine(_debugDbFolder.Path(), @"tsql\DemoDatabase\RestoreDatabase.sql");
 			if (databaseType == DatabaseType.TeleoptiAnalytics)
 				file = Path.Combine(_debugDbFolder.Path(), @"tsql\DemoDatabase\RestoreAnalytics.sql");
 			var script = File.ReadAllText(file);
-
-			script = replaceVariables(script, bakFile, databaseName, null, null);
-
+			script = replaceVariables(script, bakFile, databaseName, null, null, null);
 			_masterSql.ExecuteTransactionlessNonQuery(script, Timeouts.CommandTimeout);
 		}
 
@@ -80,9 +90,7 @@ namespace Teleopti.Ccc.DBManager.Library
 		{
 			var file = Path.Combine(_debugDbFolder.Path(), @"tsql\DemoDatabase\CreateLoginDropUsers.sql");
 			var script = File.ReadAllText(file);
-
-			script = replaceVariables(script, null, databaseName, user, password);
-
+			script = replaceVariables(script, null, databaseName, user, password, null);
 			_sql.ExecuteTransactionlessNonQuery(script, Timeouts.CommandTimeout);
 		}
 
@@ -90,21 +98,18 @@ namespace Teleopti.Ccc.DBManager.Library
 		{
 			if (databaseType != DatabaseType.TeleoptiCCC7)
 				return;
-
 			var file = Path.Combine(_debugDbFolder.Path(), @"tsql\DemoDatabase\SetTenantActive.sql");
 			var script = File.ReadAllText(file);
-
-			script = replaceVariables(script, null, null, null, null);
-
+			script = replaceVariables(script, null, null, null, null, null);
 			_sql.ExecuteTransactionlessNonQuery(script, Timeouts.CommandTimeout);
 		}
 
-		private string replaceVariables(
-			string script,
+		private string replaceVariables(string script,
 			string bakFile,
 			string databaseName,
 			string user,
-			string password)
+			string password, 
+			string todo)
 		{
 			script = script.Replace(":on error exit", "");
 			script = script.Replace("$(SQLLogin)", user);
