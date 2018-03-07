@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 
 		public ScheduleDayReadModel FetchFromRepository(IPerson person,DateOnly date)
 		{
-			return _scheduleDayReadModelRepository.ReadModelsOnPerson(date,date,person.Id.GetValueOrDefault()).FirstOrDefault();
+			return _scheduleDayReadModelRepository.ForPerson(date,person.Id.GetValueOrDefault());
 		}
 
 		public ScheduleDayReadModel Build(IPerson person,IScheduleDay scheduleDay)

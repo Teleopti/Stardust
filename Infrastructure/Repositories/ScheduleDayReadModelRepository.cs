@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -16,7 +15,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		    _currentUnitOfWork = currentUnitOfWork;
 		}
 
-		public IList<ScheduleDayReadModel> ReadModelsOnPerson(DateOnly startDate, DateOnly toDate, Guid personId)
+		public ScheduleDayReadModel ForPerson(DateOnly date, Guid personId)
 		{
             return _currentUnitOfWork.Session().CreateSQLQuery(
 				$@"SELECT 
@@ -31,13 +30,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 						ContractTime AS ContractTimeTicks, 
 						NotScheduled 
 					FROM ReadModel.ScheduleDay 
-					WHERE PersonId=:{nameof(personId)} AND BelongsToDate Between :{nameof(startDate)} AND :{nameof(toDate)}")
+					WHERE PersonId=:{nameof(personId)} AND BelongsToDate = :{nameof(date)}")
 				.SetGuid(nameof(personId), personId)
-				.SetDateOnly(nameof(startDate), startDate)
-				.SetDateOnly(nameof(toDate), toDate)
+				.SetDateOnly(nameof(date), date)
 				.SetResultTransformer(Transformers.AliasToBean(typeof (ScheduleDayReadModel)))
 				.SetReadOnly(true)
-				.List<ScheduleDayReadModel>();
+				.UniqueResult<ScheduleDayReadModel>();
 		}
 
 		public void ClearPeriodForPerson(DateOnlyPeriod period, Guid personId)

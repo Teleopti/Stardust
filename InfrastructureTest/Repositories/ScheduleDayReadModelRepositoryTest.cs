@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
@@ -23,7 +22,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			_target = new ScheduleDayReadModelRepository(UnitOfWorkFactory.CurrentUnitOfWork());	
 			var dateOnly = new DateOnly(2012, 8, 28);
 			var personId = Guid.NewGuid();
-			Assert.That(_target.ReadModelsOnPerson(dateOnly, dateOnly.AddDays(5),personId),Is.Not.Null);
+			Assert.That(_target.ForPerson(dateOnly,personId),Is.Null);
 		}
 
 		[Test]
@@ -34,12 +33,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var dateOnly = new DateOnly(2012, 8, 29);
 			Assert.That(_target.IsInitialized(),Is.False);
 			createAndSaveReadModel(guid);
-			var ret = _target.ReadModelsOnPerson(dateOnly.AddDays(-1), dateOnly.AddDays(5), guid);
-			Assert.That(ret.Count, Is.EqualTo(1));
+			var ret = _target.ForPerson(dateOnly, guid);
+			Assert.That(ret, Is.Not.Null);
 
-			var readmodel = ret.First();
-			readmodel.Workday.Should().Be.True();
-			readmodel.NotScheduled.Should().Be.False();
+			ret.Workday.Should().Be.True();
+			ret.NotScheduled.Should().Be.False();
 
 			Assert.That(_target.IsInitialized(), Is.True);
 			_target.ClearPeriodForPerson(new DateOnlyPeriod(dateOnly,dateOnly.AddDays(2)), guid);

@@ -6,9 +6,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 {
 	public interface IScheduleDayReadModelRepository
 	{
-		IList<ScheduleDayReadModel> ReadModelsOnPerson(DateOnly startDate, DateOnly toDate, Guid personId);
+		ScheduleDayReadModel ForPerson(DateOnly date, Guid personId);
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		void ClearPeriodForPerson(DateOnlyPeriod period, Guid personId);
 
 		void SaveReadModel(ScheduleDayReadModel model);

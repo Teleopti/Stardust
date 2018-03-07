@@ -10,9 +10,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	{
 		private IList<ScheduleDayReadModel> _scheduleDayReadModels = new List<ScheduleDayReadModel>();
 
-		public IList<ScheduleDayReadModel> ReadModelsOnPerson(DateOnly startDate, DateOnly toDate, Guid personId)
+		public ScheduleDayReadModel ForPerson(DateOnly date, Guid personId)
 		{
-			return _scheduleDayReadModels.Where(m => m.PersonId == personId && startDate <= m.BelongsToDate && toDate >= m.BelongsToDate).ToList();
+			return _scheduleDayReadModels.FirstOrDefault(m => m.PersonId == personId && date == m.BelongsToDate);
 		}
 
 		public void ClearPeriodForPerson(DateOnlyPeriod period, Guid personId)

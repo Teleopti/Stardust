@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Dynamic;
 using System.Globalization;
-using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -59,9 +58,7 @@ namespace Teleopti.Ccc.Domain.Notification
 				return ret;
 			}
 
-			var oldReadModels = _scheduleDayReadModelRepository.ReadModelsOnPerson(date, date, person.Id.GetValueOrDefault());
-
-			var existingReadModelDay = oldReadModels.FirstOrDefault();
+			var existingReadModelDay = _scheduleDayReadModelRepository.ForPerson(date, person.Id.GetValueOrDefault());
 
 			string message = _scheduleDayReadModelComparer.FindSignificantChanges(newReadModel, existingReadModelDay, lang, date);
 			if (!string.IsNullOrEmpty(message))
