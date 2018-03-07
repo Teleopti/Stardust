@@ -481,8 +481,8 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 			var checkResult = ReadModelValidationResultPersistor.LoadAllInvalidScheduleDay().ToList();
 			checkResult.Count.Should().Be.EqualTo(1);
 
-			var readModels = ScheduleDayReadModelRepository.ReadModelsOnPerson(new DateOnly(2016,1,1),new DateOnly(2016,1,1),person.Id.Value);
-			readModels.Count.Should().Be.EqualTo(1);			
+			var readModels = ScheduleDayReadModelRepository.ForPerson(new DateOnly(2016,1,1),person.Id.Value);
+			readModels.Should().Not.Be.Null();
 		}
 
 		[Test]
@@ -509,8 +509,8 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 			var checkResult = ReadModelValidationResultPersistor.LoadAllInvalidScheduleDay().ToList();
 			checkResult.Count.Should().Be.EqualTo(0);
 
-			var readModels = ScheduleDayReadModelRepository.ReadModelsOnPerson(new DateOnly(2016, 1, 1), new DateOnly(2016, 1, 1), person.Id.Value);
-			readModels.Count.Should().Be.EqualTo(1);			
+			var readModels = ScheduleDayReadModelRepository.ForPerson(new DateOnly(2016, 1, 1), person.Id.Value);
+			readModels.Should().Not.Be.Null();
 		}
 
 		[Test]

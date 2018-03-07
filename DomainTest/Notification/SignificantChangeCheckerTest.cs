@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
@@ -64,7 +63,6 @@ namespace Teleopti.Ccc.DomainTest.Notification
                     Date = date.AddDays(1).Date
                 };
 
-            IList<ScheduleDayReadModel> oldReadModelList = new List<ScheduleDayReadModel>();
             var oldReadModel = new ScheduleDayReadModel
                 {
                     StartDateTime = date.AddDays(1).AddHours(1),
@@ -73,13 +71,12 @@ namespace Teleopti.Ccc.DomainTest.Notification
                     Workday = true,
                     Date = date.AddDays(1).Date
                 };
-            oldReadModelList.Add(oldReadModel);
 
             const string message = "test message ";
 
-            Expect.Call(_scheduleDayReadModelRepository.ReadModelsOnPerson(new DateOnly(date), new DateOnly(date),
+            Expect.Call(_scheduleDayReadModelRepository.ForPerson(new DateOnly(date),
                                                                            _person.Id.GetValueOrDefault())).Return
-                                                                           (oldReadModelList);
+                                                                           (oldReadModel);
 
             Expect.Call(_scheduleDayReadModelComparer.FindSignificantChanges(newReadModel, oldReadModel,
                                                                              _person.PermissionInformation.UICulture(),
@@ -115,7 +112,6 @@ namespace Teleopti.Ccc.DomainTest.Notification
                     Date = date.AddDays(-1).Date
                 };
 
-            IList<ScheduleDayReadModel> oldReadModelList = new List<ScheduleDayReadModel>();
             var oldReadModel = new ScheduleDayReadModel
                 {
                     StartDateTime = date.AddDays(1).AddHours(1),
@@ -124,13 +120,12 @@ namespace Teleopti.Ccc.DomainTest.Notification
                     Workday = true,
                     Date = date.AddDays(1).Date
                 };
-            oldReadModelList.Add(oldReadModel);
-
+            
             const string message = "test message ";
 
-            Expect.Call(_scheduleDayReadModelRepository.ReadModelsOnPerson(new DateOnly(date.AddDays(1)), new DateOnly(date.AddDays(1)),
+            Expect.Call(_scheduleDayReadModelRepository.ForPerson(new DateOnly(date.AddDays(1)),
                                                                            _person.Id.GetValueOrDefault())).Return
-                                                                           (oldReadModelList);
+                                                                           (oldReadModel);
 
             Expect.Call(_scheduleDayReadModelComparer.FindSignificantChanges(newReadModel, oldReadModel,
                                                                              _person.PermissionInformation.UICulture(),
@@ -156,13 +151,11 @@ namespace Teleopti.Ccc.DomainTest.Notification
                     Date = date.AddDays(1).Date
                 };
 
-            IList<ScheduleDayReadModel> oldReadModelList = new List<ScheduleDayReadModel>();
-
             const string message = "test message ";
 
-            Expect.Call(_scheduleDayReadModelRepository.ReadModelsOnPerson(new DateOnly(date.AddDays(1)), new DateOnly(date.AddDays(1)),
+            Expect.Call(_scheduleDayReadModelRepository.ForPerson(new DateOnly(date.AddDays(1)),
                                                                            _person.Id.GetValueOrDefault())).Return
-                                                                           (oldReadModelList);
+                                                                           (null);
 
             Expect.Call(_scheduleDayReadModelComparer.FindSignificantChanges(newReadModel, null,
                                                                              _person.PermissionInformation.UICulture(),
@@ -203,8 +196,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
             _person.WorkflowControlSet = new WorkflowControlSet("mm");
             var period = new DateOnlyPeriod(new DateOnly(date.AddDays(0)), new DateOnly(date.AddDays(1)));
            
-            Expect.Call(_scheduleDayReadModelRepository.ReadModelsOnPerson(new DateOnly(date.AddDays(0)), new DateOnly(date.AddDays(0)),
-                                                                           _person.Id.GetValueOrDefault())).Repeat.Never();
+            Expect.Call(_scheduleDayReadModelRepository.ForPerson(new DateOnly(date), _person.Id.GetValueOrDefault())).Repeat.Never();
 
             Expect.Call(_scheduleDayReadModelComparer.FindSignificantChanges(null, null,
                                                                              _person.PermissionInformation.UICulture(),
@@ -223,8 +215,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
             
             var period = new DateOnlyPeriod(new DateOnly(date.AddDays(0)), new DateOnly(date.AddDays(1)));
 
-            Expect.Call(_scheduleDayReadModelRepository.ReadModelsOnPerson(new DateOnly(date.AddDays(0)), new DateOnly(date.AddDays(0)),
-                                                                           _person.Id.GetValueOrDefault())).Repeat.Never();
+            Expect.Call(_scheduleDayReadModelRepository.ForPerson(new DateOnly(date), _person.Id.GetValueOrDefault())).Repeat.Never();
 
             Expect.Call(_scheduleDayReadModelComparer.FindSignificantChanges(null, null,
                                                                              _person.PermissionInformation.UICulture(),

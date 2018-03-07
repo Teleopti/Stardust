@@ -100,8 +100,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			FixHandler.Handle(fixReadModelEvent);
 
-			var readModels = ScheduleDayReadModelRepository.ReadModelsOnPerson(new DateOnly(2016, 1, 1), new DateOnly(2016, 1, 1), person.Id.Value);
-			readModels.Should().Be.Empty();
+			var readModels = ScheduleDayReadModelRepository.ForPerson(new DateOnly(2016, 1, 1), person.Id.Value);
+			readModels.Should().Be.Null();
 
 		}
 
