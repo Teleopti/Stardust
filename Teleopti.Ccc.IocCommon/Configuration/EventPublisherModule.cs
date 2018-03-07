@@ -36,9 +36,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			if (_configuration.Toggle(Toggles.RTA_RemoveApprovedOOA_47721))
 				builder.RegisterType<RtaEventPublisher>().As<IRtaEventPublisher>().SingleInstance();
 			else
-				builder.RegisterType<SafeRtaEventPublisher>().As<IRtaEventPublisher>().SingleInstance();
+				builder.RegisterType<NoRtaEventPublisher>().As<IRtaEventPublisher>().SingleInstance();
 			builder.RegisterType<MultiEventPublisher>().As<IEventPublisher>().SingleInstance();
-			builder.RegisterType<LogExceptions>().As<ISyncEventPublisherExceptionHandler>().SingleInstance();
+			builder.RegisterType<LogExceptions>().As<ISyncEventProcessingExceptionHandler>().SingleInstance();
 
 			builder.RegisterType<CurrentEventPublisher>()
 				.As<ICurrentEventPublisher>()
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			{
 				builder.Register(c => c.Resolve<MultiEventPublisherServiceBusAsSync>()).As<IEventPublisher>().SingleInstance();
 				builder.RegisterType<IgnoreDelayedMessages>().As<IDelayedMessageSender>().SingleInstance();
-				builder.RegisterType<ThrowExceptions>().As<ISyncEventPublisherExceptionHandler>().SingleInstance();
+				builder.RegisterType<ThrowExceptions>().As<ISyncEventProcessingExceptionHandler>().SingleInstance();
 			}
 
 			if (_configuration.Args().AllEventPublishingsAsSync)

@@ -15,9 +15,9 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		private readonly ResolveEventHandlers _resolver;
 		private readonly CommonEventProcessor _processor;
 		private readonly ICurrentDataSource _dataSource;
-		private readonly ISyncEventPublisherExceptionHandler _exceptionHandler;
+		private readonly ISyncEventProcessingExceptionHandler _exceptionHandler;
 
-		public SyncEventPublisher(ResolveEventHandlers resolver, CommonEventProcessor processor, ICurrentDataSource dataSource, ISyncEventPublisherExceptionHandler exceptionHandler)
+		public SyncEventPublisher(ResolveEventHandlers resolver, CommonEventProcessor processor, ICurrentDataSource dataSource, ISyncEventProcessingExceptionHandler exceptionHandler)
 		{
 			_resolver = resolver;
 			_processor = processor;

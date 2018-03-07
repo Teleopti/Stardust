@@ -26,6 +26,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.SeatPlanning;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.MessageBrokerUnitOfWork;
@@ -82,6 +83,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			// Event stuff
 			system.UseTestDouble<FakeMessageSender>().For<IMessageSender>();
 			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
+			system.UseTestDouble<ThrowExceptions>().For<ISyncEventProcessingExceptionHandler>();
 			system.UseTestDouble<FakeRtaEventStore>().For<IRtaEventStore>();
 			QueryAllAttributes<UseEventPublisherAttribute>()
 				.ForEach(a => system.UseTestDoubleForType(a.EventPublisher).For<IEventPublisher>());
@@ -111,8 +113,9 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 			system.UseTestDouble<FakeAgentStateReadModelPersister>().For<IAgentStateReadModelPersister, IAgentStateReadModelReader>();
 			system.UseTestDouble<FakeHistoricalChangeReadModelPersister>().For<IHistoricalChangeReadModelPersister, IHistoricalChangeReadModelReader>();
-			system.UseTestDouble<FakeApprovedPeriodsStorage>().For<IApprovedPeriodsReader, IApprovedPeriodsPersister>();;
-			
+			system.UseTestDouble<FakeApprovedPeriodsStorage>().For<IApprovedPeriodsReader, IApprovedPeriodsPersister>();
+			;
+
 			system.UseTestDouble<FakeAllLicenseActivatorProvider>().For<ILicenseActivatorProvider>();
 			system.UseTestDouble<FakeTeamCardReader>().For<ITeamCardReader>();
 			system.UseTestDouble<FakeOrganizationReader>().For<IOrganizationReader>();
@@ -250,6 +253,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				system.UseTestDouble<SeatFrequencyCalculator>().For<ISeatFrequencyCalculator>();
 				system.UseTestDouble<FakeOptionalColumnRepository>().For<IOptionalColumnRepository>();
 			}
+
 			system.UseTestDouble<ScheduleStorageRepositoryWrapper>().For<IScheduleStorageRepositoryWrapper>();
 			system.AddService<FakeSchedulingSourceScope>();
 
@@ -287,11 +291,11 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			// because DomainTest project has OneTimeSetUp that sets FullPermissions globally... 
 			// ... we need to scope real/fake/full for this test
 			if (realPermissions())
-				_authorizationScope = AuthorizationScope.OnThisThreadUse((PrincipalAuthorization)Authorization);
+				_authorizationScope = AuthorizationScope.OnThisThreadUse((PrincipalAuthorization) Authorization);
 			else if (fakePermissions())
-				_authorizationScope = AuthorizationScope.OnThisThreadUse((FakePermissions)Authorization);
+				_authorizationScope = AuthorizationScope.OnThisThreadUse((FakePermissions) Authorization);
 			else
-				_authorizationScope = AuthorizationScope.OnThisThreadUse((FullPermission)Authorization);
+				_authorizationScope = AuthorizationScope.OnThisThreadUse((FullPermission) Authorization);
 		}
 
 		private void fakeSignin()
@@ -359,5 +363,4 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			_authorizationScope?.Dispose();
 		}
 	}
-
 }

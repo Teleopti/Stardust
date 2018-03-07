@@ -2,60 +2,76 @@
 using System.Linq;
 using System.Threading;
 using log4net;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Logon.Aspects;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events;
 using Teleopti.Ccc.Domain.UnitOfWork;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 
 namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence
 {
 	public interface IRtaEventPublisher : IEventPublisher
 	{
 	}
-	
+
 	[RemoveMeWithToggle(Toggles.RTA_RemoveApprovedOOA_47721)]
-	public class SafeRtaEventPublisher : IRtaEventPublisher
+	public class NoRtaEventPublisher : IRtaEventPublisher
 	{
 		public void Publish(params IEvent[] events)
 		{
 		}
 	}
-	
+
 	public class RtaEventPublisher : IRtaEventPublisher
 	{
 		private readonly IRtaEventStore _store;
-		private readonly WithUnitOfWork _unitOfWork;
-		private readonly ILog _logger;
+		private readonly ICurrentDataSource _currentDataSource;
+		private readonly ISyncEventProcessingExceptionHandler _exceptionHandler;
 
-		public RtaEventPublisher(IRtaEventStore store, WithUnitOfWork unitOfWork, ILog logger)
+		public RtaEventPublisher(
+			IRtaEventStore store,
+			ICurrentDataSource currentDataSource,
+			ISyncEventProcessingExceptionHandler exceptionHandler)
 		{
-			_logger = logger;
-			_unitOfWork = unitOfWork;
+			_exceptionHandler = exceptionHandler;
 			_store = store;
+			_currentDataSource = currentDataSource;
 		}
-
+		
+		
 		public void Publish(params IEvent[] events)
 		{
 			var storedEvents = events.OfType<IRtaStoredEvent>().Cast<IEvent>().ToArray();
 			if (!storedEvents.Any())
 				return;
 
+			var dataSource = _currentDataSource.CurrentName();
 			var thread = new Thread(() =>
 			{
 				try
 				{
-					_unitOfWork.Do(() => storedEvents.ForEach(_store.Add));
+					withUnitOfWork(dataSource, () => storedEvents.ForEach(_store.Add));
 				}
 				catch (Exception e)
 				{
-					_logger.Error("Rta event store publishing failed", e);
+					_exceptionHandler.Handle(e);
 				}
 			});
 			thread.Start();
 			thread.Join();
+		}
+
+		[TenantScope]
+		[UnitOfWork]
+		protected virtual void withUnitOfWork(string tenant, Action action)
+		{
+			action();
 		}
 	}
 }
