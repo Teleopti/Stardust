@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay
 	public class AgentAdherenceDayLoaderFromEventStore : IAgentAdherenceDayLoader
 	{
 		private readonly INow _now;
-		private readonly IRtaEventStore _eventStore;
+		private readonly IRtaEventStoreReader _eventStore;
 		private readonly ScheduleLoader _scheduleLoader;
 		private readonly IPersonRepository _persons;
 
@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay
 			INow now,
 			ScheduleLoader scheduleLoader,
 			IPersonRepository persons,
-			IRtaEventStore eventStore)
+			IRtaEventStoreReader eventStore)
 		{
 			_now = now;
 			_scheduleLoader = scheduleLoader;

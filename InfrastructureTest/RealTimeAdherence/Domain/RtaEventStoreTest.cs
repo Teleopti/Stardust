@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain
 {
@@ -19,18 +20,18 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain
 	[DatabaseTest]
 	public class RtaEventStoreTest
 	{
-		public IEventPublisher Publisher;
+		public IEventPublisher Target;
 		public IRtaEventStoreTestReader Events;
 		public WithUnitOfWork WithUnitOfWork;
 
 		[Test]
 		public void ShouldStore()
 		{
-			Publisher.Publish(new PersonStateChangedEvent());
+			Target.Publish(new PersonStateChangedEvent());
 
-			WithUnitOfWork.Get(() =>
-					Events.LoadAll())
-				.Should().Not.Be.Empty();
+			var actal = WithUnitOfWork.Get(() => Events.LoadAll());
+
+			actal.Should().Not.Be.Empty();
 		}
 
 		[Test]
@@ -38,7 +39,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain
 		{
 			var personId = Guid.NewGuid();
 			var stateGroupId = Guid.NewGuid();
-			Publisher.Publish(new PersonStateChangedEvent
+			Target.Publish(new PersonStateChangedEvent
 			{
 				PersonId = personId,
 				BelongsToDate = "2018-03-06".Date(),
@@ -68,7 +69,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain
 		[Test]
 		public void ShouldWorkWithOpenUnitOfWork()
 		{
-			WithUnitOfWork.Do(() => Publisher.Publish(new PersonStateChangedEvent()));
+			WithUnitOfWork.Do(() => Target.Publish(new PersonStateChangedEvent()));
 
 			WithUnitOfWork.Get(() => Events.LoadAll())
 				.Should().Not.Be.Empty();
@@ -81,7 +82,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain
 			{
 				WithUnitOfWork.Do(() =>
 				{
-					Publisher.Publish(new PersonStateChangedEvent());
+					Target.Publish(new PersonStateChangedEvent());
 					throw new Exception();
 				});
 			});
@@ -96,7 +97,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain
 			var first = Guid.NewGuid();
 			var second = Guid.NewGuid();
 
-			Publisher.Publish(
+			Target.Publish(
 				new PersonStateChangedEvent {PersonId = first},
 				new PersonStateChangedEvent {PersonId = second}
 			);
@@ -112,17 +113,35 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain
 		{
 			var id = Guid.NewGuid();
 
-			Publisher.Publish(new TestEvent {Id = id});
+			Target.Publish(new TestEvent {Id = id});
 
 			WithUnitOfWork.Get(() => Events.LoadAll())
 				.Cast<TestEvent>()
 				.Single().Id.Should().Be(id);
 		}
 
+		[Test]
+		public void ShouldStorePersonRuleChangedEvent()
+		{
+			Target.Publish(new PersonRuleChangedEvent());
+
+			WithUnitOfWork.Get(() => Events.LoadAll())
+				.Should().Not.Be.Empty();
+		}
+
+		[Test]
+		public void ShouldStorePeriodApprovedAsInAdherenceEvent()
+		{
+			Target.Publish(new PeriodApprovedAsInAdherenceEvent());
+
+			WithUnitOfWork.Get(() => Events.LoadAll())
+				.Should().Not.Be.Empty();
+		}
 
 		public class TestEvent : IRtaStoredEvent, IEvent
 		{
 			public Guid Id;
+			public QueryData QueryData() => new QueryData();
 		}
 	}
 }

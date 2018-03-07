@@ -1,17 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NHibernate;
 using NHibernate.Transform;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay;
+using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain
 {
-	public class RtaEventStore : IRtaEventStore, IRtaEventStoreTestReader
+	public class RtaEventStore : IRtaEventStore, IRtaEventStoreTestReader, IRtaEventStoreReader
 	{
 		private readonly ICurrentUnitOfWork _unitOfWork;
 		private readonly IJsonEventSerializer _serializer;
@@ -29,40 +32,81 @@ namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain
 
 		public void Add(IEvent @event)
 		{
+			var queryData = (@event as IRtaStoredEvent).QueryData();
+
 			_unitOfWork.Current().Session()
-				.CreateSQLQuery(@"INSERT INTO [rta].[Events] ([Event]) VALUES (:Event)")
-				.SetParameter("Event", _serializer.SerializeEvent(new internalModel
-				{
-					Event = @event,
-					Type = @event.GetType()
-				}))
+				.CreateSQLQuery(@"
+INSERT INTO [rta].[Events] (
+	[Type],
+	[PersonId], 
+	[StartTime], 
+	[EndTime],
+	[Event]
+) VALUES (
+	:Type,
+	:PersonId, 
+	:StartTime, 
+	:EndTime,
+	:Event
+)")
+				.SetParameter("PersonId", queryData.PersonId)
+				.SetParameter("StartTime", queryData.StartTime == DateTime.MinValue ? null : queryData.StartTime)
+				.SetParameter("EndTime", queryData.EndTime == DateTime.MinValue ? null : queryData.EndTime)
+				.SetParameter("Type", @event.GetType().AssemblyQualifiedName)
+				.SetParameter("Event", _serializer.SerializeEvent(@event))
 				.ExecuteUpdate();
 		}
 
-		public IEnumerable<IEvent> Load(Guid personId, DateTimePeriod period)
-		{
-			throw new NotImplementedException();
-		}
+		public IEnumerable<IEvent> Load(Guid personId, DateTimePeriod period) =>
+			load(
+				_unitOfWork.Current().Session()
+					.CreateSQLQuery(@"
+SELECT 
+	[Type],
+	[Event] 
+FROM 
+	[rta].[Events] 
+WHERE 
+	PersonId = :PersonId AND 
+	StartTime <= :EndTime AND 
+	EndTime >= :StartTime
+")
+					.SetParameter("PersonId", personId)
+					.SetParameter("StartTime", period.StartDateTime)
+					.SetParameter("EndTime", period.EndDateTime)
+			);
 
 		public IEvent LoadLastBefore(Guid personId, DateTime timestamp)
 		{
 			throw new NotImplementedException();
 		}
 
-		public IEnumerable<IEvent> LoadAll()
-		{
-			return _unitOfWork.Current().Session()
-					.CreateSQLQuery(@"SELECT [Event] FROM [rta].[Events]")
-					.List<string>()
-					.Select(x => _deserializer.DeserializeEvent(x, typeof(internalModel)) as internalModel)
-					.Select(x => x.Event)
-				;
-		}
+		public IEnumerable<IEvent> LoadAll() =>
+			load(
+				_unitOfWork.Current().Session()
+					.CreateSQLQuery(@"
+SELECT 
+	[Type],
+	[Event] 
+FROM 
+	[rta].[Events] 
+")
+			);
 
-		public class internalModel
+		private IEnumerable<IEvent> load(IQuery query) =>
+			query
+				.SetResultTransformer(Transformers.AliasToBean<internalModel>())
+				.List<internalModel>()
+				.Select(x => _deserializer.DeserializeEvent(x.Event, Type.GetType(x.Type)))
+				.Cast<IEvent>()
+				.ToArray();
+
+		private class internalModel
 		{
-			public IEvent @Event;
-			public Type Type;
+#pragma warning disable 649
+			public string Type;
+			public string Event;
+#pragma warning restore 649
 		}
 	}
 }

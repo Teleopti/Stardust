@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			if (_config.Toggle(Toggles.RTA_RemoveApprovedOOA_47721))
 			{
 				builder.RegisterType<AgentAdherenceDayLoaderFromEventStore>().As<IAgentAdherenceDayLoader>().SingleInstance();
-				builder.RegisterType<RtaEventStore>().As<IRtaEventStore>().As<IRtaEventStoreTestReader>().SingleInstance();
+				builder.RegisterType<RtaEventStore>().As<IRtaEventStore>().As<IRtaEventStoreTestReader>().As<IRtaEventStoreReader>().SingleInstance();
 			}
 			else
 			{

@@ -1,14 +1,10 @@
 using System;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events
 {
-	public interface IRtaStoredEvent
-	{
-		
-	}
-	
 	public class PersonStateChangedEvent : IRtaStoredEvent, IEvent
 	{
 		public Guid PersonId { get; set; }
@@ -25,5 +21,13 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events
 		public int? RuleColor { get; set; }
 
 		public EventAdherence? Adherence { get; set; }
+
+		public QueryData QueryData() =>
+			new QueryData
+			{
+				PersonId = PersonId,
+				StartTime = Timestamp,
+				EndTime = Timestamp
+			};
 	}
 }

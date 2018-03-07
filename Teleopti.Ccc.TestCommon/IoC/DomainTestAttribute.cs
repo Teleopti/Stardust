@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<FakeMessageSender>().For<IMessageSender>();
 			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
 			system.UseTestDouble<ThrowExceptions>().For<ISyncEventProcessingExceptionHandler>();
-			system.UseTestDouble<FakeRtaEventStore>().For<IRtaEventStore>();
+			system.UseTestDouble<FakeRtaEventStore>().For<IRtaEventStore, IRtaEventStoreReader>();
 			QueryAllAttributes<UseEventPublisherAttribute>()
 				.ForEach(a => system.UseTestDoubleForType(a.EventPublisher).For<IEventPublisher>());
 			system.UseTestDouble<FakeRecurringEventPublisher>().For<IRecurringEventPublisher>();

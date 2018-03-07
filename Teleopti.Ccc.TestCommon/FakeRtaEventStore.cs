@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon
 {
-	public class FakeRtaEventStore : IRtaEventStore
+	public class FakeRtaEventStore : IRtaEventStore, IRtaEventStoreReader
 	{
 		private class storedEvent
 		{

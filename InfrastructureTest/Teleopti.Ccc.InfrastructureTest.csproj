@@ -260,6 +260,8 @@
     <Compile Include="RealTimeAdherence\Domain\Repositories\RtaRuleRepositoryTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\Repositories\RtaStateGroupRepositoryNotSignedInTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\Repositories\RtaStateGroupRepositoryTest.cs" />
+    <Compile Include="RealTimeAdherence\Domain\RtaEventStoreApprovedReadTest.cs" />
+    <Compile Include="RealTimeAdherence\Domain\RtaEventStoreReadTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\RtaEventStoreTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\CyrillicCharactersTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\DataSourceReaderTest.cs" />
