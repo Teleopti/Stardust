@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain
 		public IEnumerable<IEvent> LoadAll()
 		{
 			return _unitOfWork.Current().Session()
-					.CreateSQLQuery(@"SELECT * FROM [rta].[Events]")
+					.CreateSQLQuery(@"SELECT [Event] FROM [rta].[Events]")
 					.List<string>()
 					.Select(x => _deserializer.DeserializeEvent(x, typeof(internalModel)) as internalModel)
 					.Select(x => x.Event)
