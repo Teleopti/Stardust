@@ -21,22 +21,18 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(StardustSender));
 		private readonly IPostHttpRequest _postHttpRequest;
-		private readonly IEventInfrastructureInfoPopulator _eventInfrastructureInfoPopulator;
 		private readonly IUpdatedBy _updatedBy;
 		private readonly IConfigReader _configReader;
 
-		public StardustSender(IPostHttpRequest postHttpRequest, IEventInfrastructureInfoPopulator eventInfrastructureInfoPopulator, IUpdatedBy updatedBy, IConfigReader configReader)
+		public StardustSender(IPostHttpRequest postHttpRequest, IUpdatedBy updatedBy, IConfigReader configReader)
 		{
 			_postHttpRequest = postHttpRequest;
-			_eventInfrastructureInfoPopulator = eventInfrastructureInfoPopulator;
 			_updatedBy = updatedBy;
 			_configReader = configReader;
 		}
 
 		public Guid Send(IEvent @event)
 		{
-			_eventInfrastructureInfoPopulator.PopulateEventContext(@event);
-
 			var userName = "Stardust";
 			if (_updatedBy.Person() != null)
 				userName = _updatedBy.Person().Name.ToString();
