@@ -1,4 +1,5 @@
-﻿@WFM
+﻿@Ignore
+@WFM
 @OnlyRunIfEnabled('Wfm_GroupPages_45057')
 
 Feature: GroupPages_Persian
