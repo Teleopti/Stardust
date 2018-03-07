@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public class FakeEventPublisher : IEventPublisher
 	{
-		private readonly RtaEventPublisher _rtaPublisher;
+		private readonly IRtaEventPublisher _rtaPublisher;
 		private readonly ResolveEventHandlers _resolver;
 		private readonly CommonEventProcessor _processor;
 		private readonly ICurrentDataSource _dataSource;
@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.TestCommon
 		private ConcurrentQueue<IEvent> queuedEvents = new ConcurrentQueue<IEvent>();
 
 		public FakeEventPublisher(
-			RtaEventPublisher rtaPublisher,
+			IRtaEventPublisher rtaPublisher,
 			ResolveEventHandlers resolver,
 			CommonEventProcessor processor,
 			ICurrentDataSource dataSource)
