@@ -44,12 +44,12 @@ $(document).ready(function () {
 		return timelinePoints;
 	}
 
-	function createRawProbabilities() {
+	function createRawProbabilities(date) {
 		var result = [];
 		for (var i = 0; i < 24 * 60 / 15; i++) {
 			result.push({
-				"StartTime": moment(baseDate).add(15 * i, "minutes").format('YYYY-MM-DDTHH:mm:ss'),
-				"EndTime": moment(baseDate).add(15 * (i + 1), "minutes").format('YYYY-MM-DDTHH:mm:ss'),
+				"StartTime": moment.tz(date || baseDate,'UTC').add(15 * i, "minutes").format('YYYY-MM-DDTHH:mm:ss'),
+				"EndTime": moment.tz(date || baseDate,'UTC').add(15 * (i + 1), "minutes").format('YYYY-MM-DDTHH:mm:ss'),
 				"Possibility": Math.round(Math.random())
 			});
 		}
@@ -206,6 +206,60 @@ $(document).ready(function () {
 
 		var probabilities = Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(rawProbability, scheduleDay, options);
 		equal(probabilities.length, 0);
+	});
+
+	test("Should create probability correctly for absence probability on leaving DST day", function () {
+		var date = '2017-11-05';
+		var scheduleDay = {
+			isFullDayAbsence: false,
+			isDayOff: function() { return false},
+			fixedDate: function () { return date; },
+			periods: [
+				{
+					"StartTime": date + 'T01:00:00',
+					"EndTime": date + 'T04:00:00'
+				}
+			]
+		};
+		var rawProbability = createRawProbabilities(date);
+		//There are two 01:00 - 02:00 on leaving DST day and we will sum the probabilities data to one hour
+		var extraProbability = rawProbability.slice(4, 8);
+		extraProbability.forEach(function(p, i) {
+			rawProbability[4 + i].Possibility = parseInt(rawProbability[4 + i].Possibility + extraProbability.Possibility) / 2;
+		});
+
+		var options = {
+			probabilityType: constants.probabilityType.absence,
+			timelines: createTimeline(1, 8)
+		};
+
+		var probabilities = Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(rawProbability, scheduleDay, options);
+		equal(probabilities.length, 12);
+	});
+
+	test("Should create probability correctly for overtime probability on entering DST day", function () {
+		var date = '2018-03-11';
+		var scheduleDay = {
+			isFullDayAbsence: false,
+			isDayOff: function() { return true; },
+			fixedDate: function () { return date; },
+			periods: [
+				{
+					"StartTime": date + 'T01:00:00',
+					"EndTime": date + 'T04:00:00'
+				}
+			]
+		};
+		var rawProbability = createRawProbabilities(date);
+		//02:00 - 03:00 is deleted from raw probability data on entering DST day
+		rawProbability.splice(8, 4);
+		var options = {
+			probabilityType: constants.probabilityType.overtime,
+			timelines: createTimeline(1, 4)
+		};
+
+		var probabilities = Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(rawProbability, scheduleDay, options);
+		equal(probabilities.length, 8);
 	});
 
 	test("Should not create probability if set to show absence probability but is dayoff", function () {

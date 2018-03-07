@@ -7,10 +7,12 @@
 		var continousPeriods = [];
 		var previousEndMinutes = 0;
 		var continousPeriodStart = 0;
+		baseDate = Teleopti.MyTimeWeb.Common.MomentAsUTCIgnoringTimezone(baseDate.format('YYYY-MM-DDTHH:mm:ss'));
+		
 		for (var i = 0; i < periods.length; i++) {
-			var currentPeriodStartMinutes = moment(periods[i].StartTime).diff(baseDate) / (60 * 1000);
-			var currentPeriodEndMinutes = moment(periods[i].EndTime).diff(baseDate) / (60 * 1000);
-
+			var currentPeriodStartMinutes = Teleopti.MyTimeWeb.Common.MomentAsUTCIgnoringTimezone(periods[i].StartTime).diff(baseDate) / (60 * 1000);
+			var currentPeriodEndMinutes =  Teleopti.MyTimeWeb.Common.MomentAsUTCIgnoringTimezone(periods[i].EndTime).diff(baseDate) / (60 * 1000);
+			
 			if (currentPeriodStartMinutes < 0) {
 				currentPeriodStartMinutes = 0;
 			}
@@ -46,15 +48,15 @@
 	};
 
 	function getIntervalStartMinutes(startTime) {
-		var startMoment = moment.tz(startTime, 'UTC');
-		var startMinutes = startMoment.diff(moment.tz(startTime, 'UTC').startOf('day'));
+		var startMoment = Teleopti.MyTimeWeb.Common.MomentAsUTCIgnoringTimezone(startTime);
+		var startMinutes = startMoment.diff(Teleopti.MyTimeWeb.Common.MomentAsUTCIgnoringTimezone(startTime).startOf('day'));
 
 		return (startMinutes > 0 ? startMinutes : 0) / (60 * 1000);
 	}
 
 	function getIntervalEndMinutes(startTime, endTime) {
-		var startMoment = moment.tz(startTime, 'UTC');
-		var endMoment = moment.tz(endTime, 'UTC');
+		var startMoment = Teleopti.MyTimeWeb.Common.MomentAsUTCIgnoringTimezone(startTime);
+		var endMoment = Teleopti.MyTimeWeb.Common.MomentAsUTCIgnoringTimezone(endTime);
 
 		return endMoment.isSame(startMoment, "day")
 		? endMoment.diff(startMoment.startOf("day")) / (60 * 1000)

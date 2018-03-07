@@ -463,6 +463,9 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 		IsFixedDate: function (dateString) {
 			return _isFixedDate(dateString);
 		},
+		MomentAsUTCIgnoringTimezone: function (dateTimeStr) {
+			return moment.tz(dateTimeStr, 'UTC');
+		},
 		GetTextColorBasedOnBackgroundColor: function (backgroundColor) {
 			return _getTextColorBasedOnBackgroundColor(backgroundColor);
 		},
