@@ -175,6 +175,7 @@
     <Compile Include="ApplicationLayer\Badge\IPushMessageSender.cs" />
     <Compile Include="ApplicationLayer\Badge\PerformAllBadgeCalculation.cs" />
     <Compile Include="ApplicationLayer\Badge\PushMessageSender.cs" />
+    <Compile Include="ApplicationLayer\TerminatePersonHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\RemoveDayOffCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\RemoveShiftCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\RemoveShiftCommandHandler.cs" />

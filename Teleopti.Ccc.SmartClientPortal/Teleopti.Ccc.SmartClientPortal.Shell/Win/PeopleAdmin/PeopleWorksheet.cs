@@ -555,7 +555,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin
         private void save()
         {
             if (_readOnly) return;
-			if (_toggleManager.IsEnabled(Toggles.WFM_Clear_Data_From_Analytics_For_Resigned_Agents_47768) 
+			if (_toggleManager.IsEnabled(Toggles.WFM_Clear_Data_After_Leaving_Date_47768) 
 				&& _filteredPeopleHolder.FilteredPeopleGridData.FirstOrDefault(y => y.IsTerminalDateChanged) != null)
 			{
 				DialogResult response = ShowYesNoMessage(UserTexts.Resources.DoYouWantToSaveChangesWithTerminalDate, Text);

@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.IocCommon
 			builder.RegisterModule(new IntradayWebModule(_configuration));
 			builder.RegisterModule<StardustModule>();
 			builder.RegisterModule(new RequestModule(_configuration));
-			builder.RegisterModule<PersonAccountModule>();
+			builder.RegisterModule( new PersonAccountModule(_configuration));
 			builder.RegisterModule(new SchedulingCommonModule(_configuration));
 			builder.RegisterModule(new StaffingModule(_configuration));
 			builder.RegisterModule(new ShiftTradeModule());
