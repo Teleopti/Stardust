@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.ApplicationLayer.Badge;
 using Teleopti.Ccc.Domain.ApplicationLayer.Gamification;
 using Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance;
 using Teleopti.Ccc.Domain.MultiTenancy;
@@ -23,7 +22,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<TenantLogonPersonProvider>().As<ITenantLogonPersonProvider>().ApplyAspects();
 			builder.RegisterType<TenantPersonLogonQuerier>().As<ITenantPersonLogonQuerier>().ApplyAspects();
 			builder.RegisterType<RecalculateBadgeJobService>().As<IRecalculateBadgeJobService>();
-			builder.RegisterType<PerformAllBadgeCalculation>().As<IPerformBadgeCalculation>().SingleInstance();
 		}
 	}
 }
