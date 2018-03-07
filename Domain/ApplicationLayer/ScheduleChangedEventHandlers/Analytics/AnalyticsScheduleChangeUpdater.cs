@@ -94,7 +94,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 		{
 			var scenario = _scenarioRepository.Get(scenarioId);
 			if (scenario == null)
-				throw new Exception($"Could not load scenario {scenarioId} from application database.");
+			{
+				logger.Warn($"Could not load scenario {scenarioId} from application database.");
+				return;
+			}
+
 			if (!_analyticsScheduleChangeUpdaterFilter.ContinueProcessingEvent(scenario.DefaultScenario, scenarioId))
 				return;
 

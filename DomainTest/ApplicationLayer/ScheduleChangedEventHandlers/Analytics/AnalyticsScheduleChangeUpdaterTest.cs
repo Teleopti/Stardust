@@ -526,6 +526,25 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		}
 
 		[Test]
+		public void ShouldNotThrowWhenScenarioDoesNotExistInApp()
+		{
+			AnalyticsDates.HasDatesBetween(new DateTime(1999, 12, 31), new DateTime(2030, 12, 31));
+			var businessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit("Default BU").WithId(businessUnitId);
+			var scenario = ScenarioFactory.CreateScenario("Default", false, false).WithId(scenarioId);
+
+			BusinessUnits.Add(businessUnit);
+			Scenarios.Add(scenario);
+
+			Assert.DoesNotThrow(() => Target.Handle(new ScheduleChangedEvent
+			{
+				StartDateTime = startDate,
+				EndDateTime = endDate,
+				ScenarioId = Guid.NewGuid(),
+				LogOnBusinessUnitId = businessUnitId
+			}));
+		}
+
+		[Test]
 		public void ShouldContinueSaveScheduleChangeWhenAnyDateIdMappingFails()
 		{
 			var scheduleStartDate = new DateTime(2018, 01, 01, 8, 0, 0, DateTimeKind.Utc);
