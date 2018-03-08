@@ -23,10 +23,11 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public IDisposable Disable(IQueryFilter filter)
 		{
-			_disabledFilterCounter.Increase(filter);
 			var currentFilter = (FilterImpl)_session.GetEnabledFilter(filter.Name);
-			var parameters= currentFilter==null ? new Dictionary<string, object>() : currentFilter.Parameters;
-			var scope = new DisableFilterScope(this, filter, parameters);
+			if (currentFilter == null) return null;
+
+			_disabledFilterCounter.Increase(filter);
+			var scope = new DisableFilterScope(this, filter, currentFilter);
 			_session.DisableFilter(filter.Name);
 			return scope;	
 		}

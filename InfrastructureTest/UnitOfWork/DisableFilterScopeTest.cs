@@ -58,5 +58,33 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			}
 			personRep.LoadAll().Should().Not.Contain(deletedPerson);
 		}
+
+		[Test]
+		public void ShouldDoNothingIfNoFilterFromBeginningWithCurrentUnitOfWork()
+		{
+			Session.DisableFilter(QueryFilter.Deleted.Name);
+
+			var personRep = new PersonRepository(new ThisUnitOfWork(UnitOfWork));
+			personRep.LoadAll().Should().Contain(deletedPerson);
+			using (UnitOfWorkFactory.Current.CurrentUnitOfWork().DisableFilter(QueryFilter.Deleted))
+			{
+				personRep.LoadAll().Should().Contain(deletedPerson);
+			}
+			personRep.LoadAll().Should().Contain(deletedPerson);
+		}
+
+		[Test]
+		public void ShouldDoNothingIfNoFilterFromBeginning()
+		{
+			Session.DisableFilter(QueryFilter.Deleted.Name);
+
+			var personRep = new PersonRepository(new ThisUnitOfWork(UnitOfWork));
+			personRep.LoadAll().Should().Contain(deletedPerson);
+			using (UnitOfWork.DisableFilter(QueryFilter.Deleted))
+			{
+				personRep.LoadAll().Should().Contain(deletedPerson);
+			}
+			personRep.LoadAll().Should().Contain(deletedPerson);
+		}
 	}
 }

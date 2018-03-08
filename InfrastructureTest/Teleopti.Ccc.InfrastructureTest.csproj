@@ -192,6 +192,7 @@
     <Compile Include="ApplicationLayer\ScheduleProjectionReadOnly\ScheduleProjectionReadOnlyPersisterConcurrencyTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleProjectionReadOnly\ScheduleProjectionReadOnlyPersisterTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleProjectionReadOnly\ScheduleProjectionReadOnlyUpdaterTest.cs" />
+    <Compile Include="ApplicationLayer\Staffing\SendUpdateStaffingReadModelHandlerTest.cs" />
     <Compile Include="ApplicationLayer\SyncCommandDispatcherContextBug48226Test.cs" />
     <Compile Include="Auditing\AuditSettingTest.cs" />
     <Compile Include="Auditing\RevisionTest.cs" />
@@ -793,7 +794,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
-    <Folder Include="RealTimeAdherence\ApplicationLayer" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
