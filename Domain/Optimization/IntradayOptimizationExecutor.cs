@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		}
 
 		[TestLog]
-		public virtual void HandleEvent(IBlockPreferenceProvider blockPreferenceProvider, IntradayOptimizationWasOrdered @event, Guid? planningPeriodId)
+		public virtual void HandleEvent(IntradayOptimizationWasOrdered @event, Guid? planningPeriodId, Func<IBlockPreferenceProvider> blockPreferenceProvider)
 		{
 			var period = new DateOnlyPeriod(@event.StartDate, @event.EndDate);
 			DoOptimization(blockPreferenceProvider, period, @event.AgentsInIsland, @event.Agents, @event.UserLocks, @event.Skills, @event.RunResolveWeeklyRestRule, planningPeriodId);
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		[ReadonlyUnitOfWork]
 		protected virtual void DoOptimization(
-			IBlockPreferenceProvider blockPreferenceProvider,
+			Func<IBlockPreferenceProvider> blockPreferenceProvider,
 			DateOnlyPeriod period,
 			IEnumerable<Guid> agentsInIsland,
 			IEnumerable<Guid> agentsToOptimize,
@@ -49,10 +49,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 			bool runResolveWeeklyRestRule,
 			Guid? planningPeriodId)
 		{
-			
 			var schedulerStateHolder = _schedulerStateHolder();
 			_fillSchedulerStateHolder.Fill(schedulerStateHolder, agentsInIsland, new LockInfoForStateHolder(_gridlockManager, locks), period, onlyUseSkills);
-			_intradayOptimization.Execute(period, schedulerStateHolder.ChoosenAgents.Filter(agentsToOptimize), runResolveWeeklyRestRule, blockPreferenceProvider);
+			_intradayOptimization.Execute(period, schedulerStateHolder.ChoosenAgents.Filter(agentsToOptimize), runResolveWeeklyRestRule, blockPreferenceProvider());
 		}
 	}
 }

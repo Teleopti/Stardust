@@ -81,7 +81,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 		}
 
 		[Test]
-		[Ignore("48512 - to be fixed")]
 		public void ShouldNotCrashReadingPlanningGroupSettingFilters()
 		{
 			var date = new DateOnly(2000, 1, 1);

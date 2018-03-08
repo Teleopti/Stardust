@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		//if below is needed on more places - make an attribute/"something" instead?
 		[TestLog]
-		public override void HandleEvent(IBlockPreferenceProvider blockPreferenceProvider, IntradayOptimizationWasOrdered @event, Guid? planningPeriodId)
+		public override void HandleEvent(IntradayOptimizationWasOrdered @event, Guid? planningPeriodId, Func<IBlockPreferenceProvider> blockPreferenceProvider)
 		{
 			var numberOfTries = 0;
 			while (true)
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				try
 				{
 					numberOfTries++;
-					base.HandleEvent(blockPreferenceProvider, @event, planningPeriodId);
+					base.HandleEvent(@event, planningPeriodId, blockPreferenceProvider);
 					return;
 				}
 				catch (DeadLockVictimException deadLockEx)

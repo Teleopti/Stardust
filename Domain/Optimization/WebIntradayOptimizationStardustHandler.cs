@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				using (_lowThreadPriorityScope.OnThisThread())
 				using (_schedulingSourceScope.OnThisThreadUse(ScheduleSource.WebScheduling))
 				{
-					_intradayOptimizationExecutor.HandleEvent(blockPreferenceProvider(@event.PlanningPeriodId), @event.IntradayOptimizationWasOrdered, @event.PlanningPeriodId);
+					_intradayOptimizationExecutor.HandleEvent(@event.IntradayOptimizationWasOrdered, @event.PlanningPeriodId, () => blockPreferenceProvider(@event.PlanningPeriodId));
 					SaveDetailToJobResult(@event, DetailLevel.Info, "", null);
 				}
 			}
@@ -61,8 +61,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_jobResultRepository.AddDetailAndCheckSuccess(@event.JobResultId, new JobResultDetail(level, message, DateTime.UtcNow, exception), @event.TotalEvents);
 		}
 
-		[UnitOfWork]
-		protected virtual IBlockPreferenceProvider blockPreferenceProvider(Guid? planningPeriodId)
+
+		private IBlockPreferenceProvider blockPreferenceProvider(Guid? planningPeriodId)
 		{
 			var planningPeriod = _planningPeriodRepository.Load(planningPeriodId.Value);
 			var planningGroup = planningPeriod.PlanningGroup;
