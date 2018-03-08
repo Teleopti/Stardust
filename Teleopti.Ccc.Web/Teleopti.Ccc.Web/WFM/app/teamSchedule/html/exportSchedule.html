@@ -38,9 +38,8 @@
 				{{'TimeZone' | translate}}
 			</div>
 			<div class="con-flex x3">
-				<md-select ng-model="vm.configuration.timezoneId" placeholder="{{ 'Timezone'|translate }}" required>
-					<md-option ng-repeat="timezone in vm.timezones" ng-value="timezone.Id">{{::timezone.Name}}</md-option>
-				</md-select>
+				<timezone-picker class="timezone-picker" available-timezones="vm.timezones"
+								 on-pick="vm.changeTimezone(timezone)"></timezone-picker>
 			</div>
 		</div>
 		<div class="con-row">

@@ -20,6 +20,7 @@
 		vm.scenarios = [];
 		vm.optionalColumns = [];
 		vm.availableGroups = { BusinessHierarchy: [], GroupPages: [] };
+		vm.timezones = [];
 		vm.configuration.selectedGroups = {
 			mode: 'BusinessHierarchy',
 			groupIds: [],
@@ -34,6 +35,10 @@
 			}
 		}];
 		vm.isExporting = false;
+
+		vm.changeTimezone = function (timezone) {
+			vm.configuration.timezoneId = timezone;
+		};
 
 		vm.isOptionalColDisabled = function(optionalColumnId) {
 			var result = vm.configuration.optionalColumnIds &&

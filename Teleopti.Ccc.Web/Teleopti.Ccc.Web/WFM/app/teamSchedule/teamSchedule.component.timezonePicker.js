@@ -21,7 +21,7 @@
 		ctrl.$onChanges = $onChanges;
 		ctrl.onSelectionChanged = onSelectionChanged;
 		ctrl.shortDisplayNameOfTheSelected = shortDisplayNameOfTheSelected;
-
+		
 		function $onInit() {
 			populateTimezoneList();
 			ctrl.selectedTimezone = currentUserInfo.CurrentUserInfo().DefaultTimeZone;
@@ -30,6 +30,7 @@
 
 		function $onChanges(changesObj) {
 			if (!changesObj.availableTimezones) return;
+
 			populateTimezoneList();
 
 			var ianaList = ctrl.timezoneList.map(function(z) {
@@ -42,6 +43,14 @@
 			}
 		}
 
+		var isIncludeIanaIdInTimezones = function (timezones) {
+			return timezones.filter(function (z) {
+				if (!!z.IanaId) {
+					return true;
+				}
+			}).length > 0;
+		}
+
 		ctrl.isSelectedEnabled = function(timezoneId) {
 			return timezoneId && (timezoneId.indexOf('invalidIanaId') < 0);
 		}
@@ -52,27 +61,42 @@
 
 			var timezoneDict = {};
 			timezoneDict[defaultTimezone] = defaultTimezoneName;
-			ctrl.availableTimezones.forEach(function (z) {
-				if (z.IanaId === "") {
-					timezoneDict['invalidIanaId' +' '+ z.DisplayName] = z.DisplayName;
-				} else {
-					timezoneDict[z.IanaId] = z.DisplayName;
-				}
-				
-			});
 			ctrl.timezoneList = [];
-		
+
+			if (!isIncludeIanaIdInTimezones(ctrl.availableTimezones)) {
+				ctrl.availableTimezones.forEach(function (z) {
+					if (z.Id === "") {
+						timezoneDict['invalidIanaId' + ' ' + z.Name] = z.Name;
+					} else {
+						timezoneDict[z.Id] = z.Name;
+					}
+				});
+			}
+			else {
+				ctrl.availableTimezones.forEach(function (z) {
+					if (z.IanaId === "") {
+						timezoneDict['invalidIanaId' + ' ' + z.DisplayName] = z.DisplayName;
+					} else {
+						timezoneDict[z.IanaId] = z.DisplayName;
+					}
+
+				});
+			}
 			angular.forEach(timezoneDict, function (value, key) {
 				ctrl.timezoneList.push({
 					ianaId: key,
 					displayName: value
 				});
 			});
+			
 		}
+
+		
 
 		function shortDisplayNameOfTheSelected() {
 			var reg = /\((.+?)\)/;
 			var displayName = '';
+
 			for (var i = 0; i < ctrl.timezoneList.length; i++) {
 				if (ctrl.timezoneList[i].ianaId === ctrl.selectedTimezone) {
 					displayName = ctrl.timezoneList[i].displayName;
