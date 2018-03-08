@@ -3,44 +3,58 @@
         <div>{{'PickADateRangeToStartBadgeCalculation'|translate}}</div>
         <div class="con-fluid-row">
             <div class="con-fluid-flex align-self-center">
-                <date-range-picker ng-model="$ctrl.dateRange" template-type="$ctrl.templateType" custom-validators="$ctrl.dateRangeCustomValidators"></date-range-picker>
+                <div class="form-input-wrap">
+                    <div class="inline-flex baseline pointer" ng-click="toggleSchedule =!toggleSchedule">
+                        <div tabindex=0 class="context-menu card-context">
+                            <i class="mdi mdi-calendar"></i>
+                        </div>
+                        <div ng-if="$ctrl.dateRange.startDate">{{'From'| translate}}: {{$ctrl.dateRange.startDate | amDateFormat:"L"}}</div>
+                        &nbsp; &nbsp; &nbsp;
+                        <div ng-if="$ctrl.dateRange.endDate">{{'To'|translate}}: {{$ctrl.dateRange.endDate | amDateFormat:"L"}}</div>
+                        <div ng-if="!$ctrl.dateRange.endDate && !$ctrl.dateRange.startDate" class="text-warning"> {{'NoDateIsSelected'|translate}}</div>
+                    </div>
+
+                    <wfm-popup show="toggleSchedule" class="datepicker-popup">
+                        <wfm-calendar-picker ng-model="$ctrl.dateRange" custom-validate="$ctrl.validate($ctrl.dateRange)"></wfm-calendar-picker>
+                    </wfm-popup>
+                </div>
             </div>
-            <div class="con-fluid-flex align-self-center">
-                <button ng-disabled="!$ctrl.allowCalcalution()" class="wfm-btn wfm-btn-primary" ng-click="$ctrl.calculate()">{{'Start'|translate}}</button>
-                <div class="period-error-box">
-                    <span class="text-danger" ng-show="$ctrl.intersected">
+            <div class="con-fluid-flex align-self-center ">
+                <button ng-disabled="!$ctrl.allowCalcalution()" class="wfm-btn wfm-btn-primary " ng-click="$ctrl.calculate() ">{{'Start'|translate}}</button>
+                <div class="period-error-box ">
+                    <span class="text-danger " ng-show="$ctrl.intersected ">
                         {{'SelectedPeriodHasAnIntersectionWithOneInProgressJob'|translate}}
                     </span>
                 </div>
             </div>
         </div>
     </div>
-    <div class="calculation-job-table">
+    <div class="calculation-job-table ">
         <header>
-            <div class="period">{{'Period'|translate}}</div>
-            <div class="owner">{{'Owner'|translate}}</div>
-            <div class="started">{{'TimeStarted'|translate}}</div>
-            <div class="status">{{'Status'|translate}}</div>
+            <div class="period ">{{'Period'|translate}}</div>
+            <div class="owner ">{{'Owner'|translate}}</div>
+            <div class="started ">{{'TimeStarted'|translate}}</div>
+            <div class="status ">{{'Status'|translate}}</div>
         </header>
-        <div ng-repeat="job in $ctrl.jobs" class="calculation-job">
-            <div class="job">
+        <div ng-repeat="job in $ctrl.jobs " class="calculation-job ">
+            <div class="job ">
                 <span>{{job.startDate|date:'yyyyMMdd'}}--{{job.endDate|date:'yyyyMMdd'}}</span>
             </div>
-            <div class="owner">
+            <div class="owner ">
                 <span>{{job.owner}}</span>
             </div>
-            <div class="started">
+            <div class="started ">
                 <span>{{job.startingTime | date: $ctrl.dateTimeFormat}}</span>
             </div>
-            <div class="status">
-                <div ng-if="job.status=='inprogress'">
+            <div class="status ">
+                <div ng-if="job.status=='inprogress' ">
                     <span>{{'InProgress'|translate}}</span>
                 </div>
-                <div ng-if="job.status=='failed'">
-                    <i class="mdi mdi-alert-octagon"></i>
+                <div ng-if="job.status=='failed' ">
+                    <i class="mdi mdi-alert-octagon "></i>
                     <span>{{'Failed'|translate}}</span>
                 </div>
-                <div ng-if="job.status=='finished'">
+                <div ng-if="job.status=='finished' ">
                     <span>{{'Finished'|translate}}</span>
                 </div>
             </div>

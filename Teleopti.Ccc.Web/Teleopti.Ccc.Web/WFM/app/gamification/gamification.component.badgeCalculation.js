@@ -8,8 +8,8 @@
             controllerAs: '$ctrl'
         });
 
-    badgeCalculationController.$inject = ['$locale', 'GamificationDataService', 'CurrentUserInfo'];
-    function badgeCalculationController(locale, dataService, userInfo) {
+    badgeCalculationController.$inject = ['$translate', '$locale', 'GamificationDataService', 'CurrentUserInfo'];
+    function badgeCalculationController($translate, locale, dataService, userInfo) {
         var $ctrl = this;
         var currentTimezone = userInfo.CurrentUserInfo().DefaultTimeZone;
 
@@ -17,18 +17,25 @@
             fetchJobs();
 
             $ctrl.dateTimeFormat = locale.DATETIME_FORMATS.medium;
-            $ctrl.templateType = 'popup';
+
             var startDate = moment.utc().subtract(2, 'days').toDate();
             var endDate = moment.utc().toDate();
             $ctrl.dateRange = { startDate: startDate, endDate: endDate };
-            $ctrl.dateRangeCustomValidators = [{
-                key: 'NoGamificationDataForThePeriod',
-                message: 'NoGamificationDataForThePeriod',
-                validate: function (start, end) {
-                    return moment(start).toDate() > moment.utc().subtract(30, 'days').toDate();
-                }
-            }];
+            $ctrl.isValid = true;
         };
+
+        $ctrl.validate = function () {
+            if (moment($ctrl.dateRange.startDate).toDate() > moment($ctrl.endDate).toDate()) {
+                $ctrl.isValid = false;
+                return $translate.instant('StartDateMustBeEqualToOrEarlierThanEndDate');
+            }
+            if (moment($ctrl.dateRange.startDate).toDate() < moment.utc().subtract(30, 'days').toDate()) {
+                $ctrl.isValid = false;
+                return $translate.instant('NoGamificationDataForThePeriod');
+            }
+
+            $ctrl.isValid = true;
+        }
 
         $ctrl.calculate = function () {
             if ($ctrl.dateRange && $ctrl.dateRange.startDate && $ctrl.dateRange.endDate) {
@@ -41,7 +48,7 @@
         }
 
         $ctrl.allowCalcalution = function () {
-            if ($ctrl.dateRange && $ctrl.dateRange.startDate && $ctrl.dateRange.endDate) {
+            if ($ctrl.dateRange && $ctrl.dateRange.startDate && $ctrl.dateRange.endDate && $ctrl.isValid) {
                 $ctrl.intersected = hasIntersection();
                 return !$ctrl.intersected;
             }
