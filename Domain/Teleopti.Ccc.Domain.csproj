@@ -461,6 +461,10 @@
     <Compile Include="RealTimeAdherence\Domain\ApprovePeriodAsInAdherence\ApprovePeriodAsInAdherenceCommand.cs" />
     <Compile Include="RealTimeAdherence\Domain\ApprovePeriodAsInAdherence\ApprovePeriodAsInAdherenceCommandHandler.cs" />
     <Compile Include="RealTimeAdherence\Domain\ApprovePeriodAsInAdherence\IApprovedPeriodsPersister.cs" />
+    <Compile Include="RealTimeAdherence\Domain\ApprovePeriodAsInAdherence\RemoveApprovedPeriod.cs" />
+    <Compile Include="RealTimeAdherence\Domain\ApprovePeriodAsInAdherence\RemoveApprovedPeriodCommand.cs" />
+    <Compile Include="RealTimeAdherence\Domain\ApprovePeriodAsInAdherence\RemoveApprovedPeriodCommandHandler.cs" />
+    <Compile Include="RealTimeAdherence\Domain\ApprovePeriodAsInAdherence\RemovedPeriod.cs" />
     <Compile Include="RealTimeAdherence\Domain\Configuration\ConfigurationValidationViewModel.cs" />
     <Compile Include="RealTimeAdherence\Domain\Configuration\ConfigurationValidator.cs" />
     <Compile Include="RealTimeAdherence\Domain\Configuration\DefaultStateGroupException.cs" />
@@ -472,6 +476,7 @@
     <Compile Include="RealTimeAdherence\Domain\Configuration\RtaState.cs" />
     <Compile Include="RealTimeAdherence\Domain\Configuration\RtaStateGroup.cs" />
     <Compile Include="RealTimeAdherence\Domain\Configuration\RtaStateHolder.cs" />
+    <Compile Include="RealTimeAdherence\Domain\Events\ApprovedPeriodRemovedEvent.cs" />
     <Compile Include="RealTimeAdherence\Domain\Events\EventAdherence.cs" />
     <Compile Include="RealTimeAdherence\Domain\Events\IRtaStoredEvent.cs" />
     <Compile Include="RealTimeAdherence\Domain\Events\PeriodApprovedAsInAdherenceEvent.cs" />

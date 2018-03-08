@@ -87,6 +87,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<HistoricalChange>().SingleInstance();
 			builder.RegisterType<ApprovePeriodAsInAdherenceCommandHandler>().SingleInstance();
 			builder.RegisterType<ApprovePeriodAsInAdherence>().SingleInstance();
+			builder.RegisterType<RemoveApprovedPeriodCommandHandler>().SingleInstance();
+			builder.RegisterType<RemoveApprovedPeriod>().SingleInstance();
 			if (_config.Toggle(Toggles.RTA_RemoveApprovedOOA_47721))
 			{
 				builder.RegisterType<AgentAdherenceDayLoaderFromEventStore>().As<IAgentAdherenceDayLoader>().SingleInstance();

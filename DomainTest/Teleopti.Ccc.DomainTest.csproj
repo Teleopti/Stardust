@@ -300,6 +300,7 @@
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\ResolutionTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\ApprovePeriodAsInAdherence\ApprovedPeriodTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\ApprovePeriodAsInAdherence\ApprovePeriodAsInAdherenceCommandHandlerTest.cs" />
+    <Compile Include="RealTimeAdherence\Domain\ApprovePeriodAsInAdherence\RemovePeriodAsInAdherenceCommandHandlerTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\Configuration\DefaultStateGroupMissingInConfigurationTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\Configuration\LoggedOutStateGroupMissingInConfigurationTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\Configuration\LoggedOutStateGroupMissingInRtaServiceTest.cs" />
