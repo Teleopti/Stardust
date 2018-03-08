@@ -48,6 +48,7 @@
         }
 
         $ctrl.allowCalcalution = function () {
+            $ctrl.intersected = false;;
             if ($ctrl.dateRange && $ctrl.dateRange.startDate && $ctrl.dateRange.endDate && $ctrl.isValid) {
                 $ctrl.intersected = hasIntersection();
                 return !$ctrl.intersected;
@@ -92,9 +93,13 @@
                 });
 
                 if (runningJobs.length > 0) {
-
                     runningJobs.forEach(function (j) {
-                        if (moment(j.endDate).toDate() > moment($ctrl.dateRange.startDate).toDate() && moment($ctrl.dateRange.endDate).toDate() > moment(j.startDate).toDate()) {
+                        var jobStart = moment(j.startDate).toDate();
+                        var jobEnd = moment(j.endtDate).toDate();
+                        var start = moment($ctrl.dateRange.startDate).toDate();
+                        var end = moment($ctrl.dateRange.endDate).toDate();
+
+                        if ((start >= jobStart && start <= jobEnd) || (end >= jobStart && end <= jobEnd) || (start <= jobStart && end >= jobEnd)) {
                             result = true;
                         }
                     });
