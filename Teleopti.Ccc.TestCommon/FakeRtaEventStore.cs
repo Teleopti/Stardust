@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.TestCommon
 				.Select(e => e.Event);
 		}
 
-		public IEvent LoadLastBefore(Guid personId, DateTime timestamp)
+		public IEvent LoadLastAdherenceEventBefore(Guid personId, DateTime timestamp)
 		{
 			return _events
 				.Where(e => e.PersonId == personId &&

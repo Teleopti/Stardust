@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay
 			}
 
 			var events =
-				_eventStore.LoadLastBefore(personId, period.StartDateTime)
+				_eventStore.LoadLastAdherenceEventBefore(personId, period.StartDateTime)
 					.AsArray()
 					.Concat(_eventStore.Load(personId, period))
 					.Where(x => x != null)

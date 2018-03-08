@@ -76,9 +76,29 @@ WHERE
 					.SetParameter("EndTime", period.EndDateTime)
 			);
 
-		public IEvent LoadLastBefore(Guid personId, DateTime timestamp)
+		public IEvent LoadLastAdherenceEventBefore(Guid personId, DateTime timestamp)
 		{
-			throw new NotImplementedException();
+			return load(_unitOfWork.Current().Session()
+					.CreateSQLQuery(@"
+SELECT TOP 1 
+	[Type],
+	[Event] 
+FROM 
+	[rta].[Events] 
+WHERE 
+	[Type] IN (:Types) AND
+	PersonId = :PersonId AND 
+	[EndTime] < :Timestamp
+	ORDER BY [StartTime] DESC
+")
+					.SetParameterList("Types", new[]
+					{
+						typeof(PersonStateChangedEvent).AssemblyQualifiedName,
+						typeof(PersonRuleChangedEvent).AssemblyQualifiedName
+					})
+					.SetParameter("PersonId", personId)
+					.SetParameter("Timestamp", timestamp))
+				.SingleOrDefault();
 		}
 
 		public IEnumerable<IEvent> LoadAll() =>
