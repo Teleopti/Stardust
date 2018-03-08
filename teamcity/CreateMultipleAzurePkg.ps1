@@ -93,7 +93,7 @@ task CreateAzureMultiplePkg -depends Init, PreReq -description "Create Azure Mul
 		}
 	}
 	
-	parallelAzurePackaging -CSPackEXE $CSPackEXE -AzurePackagePath_Medium $AzurePackagePath_Large -AzurePackagePath_Large $AzurePackagePath_XLarge -WorkingDir $WorkingDir
+	parallelAzurePackaging -CSPackEXE $CSPackEXE -AzurePackagePath_Large $AzurePackagePath_Large -AzurePackagePath_XLarge $AzurePackagePath_XLarge -WorkingDir $WorkingDir
 	
 	Write-Output "##teamcity[blockClosed name='<CreateAzureMultiplePkg>']"
 }
