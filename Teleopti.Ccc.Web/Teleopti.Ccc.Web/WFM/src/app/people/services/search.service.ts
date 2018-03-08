@@ -1,13 +1,18 @@
 import { Injectable } from '@angular/core';
 import { Person } from '../types';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
+export interface PeopleSearchResult {
+	people: Array<Person>;
+	currentPage: number;
+	pages: number;
+}
 
 @Injectable()
 export class SearchService {
 	protected peopleCache: Array<Person> = [];
 
-	constructor(private http: HttpClient) { }
+	constructor(private http: HttpClient) {}
 
 	public getPerson(id: string): Person {
 		return this.peopleCache.find(p => p.Id === id);
@@ -17,39 +22,55 @@ export class SearchService {
 		return this.peopleCache;
 	}
 
-	async searchPeople(keyword = 'a'): Promise<Array<Person>> {
-		const sortPeopleByName = (a: Person, b: Person) => {
-			if (a.FirstName >= b.FirstName) return 1;
-			if (a.FirstName < b.FirstName) return -1;
-			return 0;
-		};
-
+	async searchPeople({ keyword = 'a', pageIndex = 0, pageSize = 10 } = {}): Promise<PeopleSearchResult> {
 		interface SearchPerson {
-			PersonId: string
+			PersonId: string;
 		}
 		interface SearchResult {
-			People: Array<SearchPerson>,
-			CurrentPage: number,
-			OptionalColumns: Array<string>,
-			TotalPages: number
+			People: Array<SearchPerson>;
+			CurrentPage: number;
+			OptionalColumns: Array<string>;
+			TotalPages: number;
 		}
-		const searchPeople = async (): Promise<Array<SearchPerson>> => {
-			const result = this.http.get(`../api/Search/People/Keyword?currentPageIndex=1&keyword=${keyword}&pageSize=10&sortColumns=LastName:true`).toPromise() as Promise<SearchResult>
-			return result.then(({ People }) => People)
+		const searchPeople = async (): Promise<SearchResult> => {
+			const params = new HttpParams()
+				.set('currentPageIndex', (++pageIndex).toString()) // uses non-zero index
+				.set('keyword', keyword)
+				.set('pageSize', pageSize.toString())
+				.set('sortColumns', 'LastName:true');
+			const result = this.http.get(`../api/Search/People/Keyword`, { params }).toPromise() as Promise<
+				SearchResult
+			>;
+
+			return result;
 		};
 
-		const getPersonIds = async () => searchPeople().then(people => people.map(person => person.PersonId))
+		const searchResult: SearchResult = await searchPeople();
 
-		const getPersons = async ({ Date = '2017-02-08', PersonIdList }) => {
-			return this.http.post('../api/PeopleData/fetchPersons', { Date, PersonIdList }).toPromise() as Promise<Array<Person>>
-		};
-		const PersonIdList = await getPersonIds()
+		const getPersonIds = (people: Array<SearchPerson>) => people.map(person => person.PersonId);
 
-		let people = await getPersons({ PersonIdList });
+		const PersonIdList = await getPersonIds(searchResult.People);
 
-		people.sort(sortPeopleByName);
+		let people = await this.getPersons({ PersonIdList });
+
+		// const sortPeopleByName = (a: Person, b: Person) => {
+		// 	if (a.FirstName >= b.FirstName) return 1;
+		// 	if (a.FirstName < b.FirstName) return -1;
+		// 	return 0;
+		// };
+		// people.sort(sortPeopleByName);
 
 		this.peopleCache = people;
-		return people;
+		return {
+			people,
+			currentPage: searchResult.CurrentPage,
+			pages: searchResult.TotalPages
+		};
+	}
+
+	async getPersons({ Date = '2017-02-08', PersonIdList }): Promise<Array<Person>> {
+		return this.http.post('../api/PeopleData/fetchPersons', { Date, PersonIdList }).toPromise() as Promise<
+			Array<Person>
+		>;
 	}
 }

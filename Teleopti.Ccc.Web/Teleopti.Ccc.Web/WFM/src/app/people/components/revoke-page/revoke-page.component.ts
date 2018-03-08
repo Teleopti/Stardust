@@ -3,7 +3,7 @@ import { Person, Role } from '../../types';
 import { RolePage } from '../shared/role-page';
 
 @Component({
-	selector: 'app-revoke',
+	selector: 'people-revoke',
 	templateUrl: './revoke-page.component.html',
 	styleUrls: ['./revoke-page.component.scss']
 })

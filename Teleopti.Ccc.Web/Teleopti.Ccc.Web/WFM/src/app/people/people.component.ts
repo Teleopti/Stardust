@@ -1,9 +1,10 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { PageEvent } from '@angular/material';
 import { Person, Role } from './types';
 
 import { Observable } from 'rxjs/Rx';
 import { WorkspaceService, RolesService, SearchService } from './services';
+import { GrantPageComponent } from './components';
 
 @Component({
 	selector: 'app-people',
@@ -11,26 +12,48 @@ import { WorkspaceService, RolesService, SearchService } from './services';
 	styleUrls: ['./people.component.scss']
 })
 export class PeopleComponent implements OnInit {
-	constructor(protected workspaceService: WorkspaceService, public rolesService: RolesService, public searchService: SearchService) { }
+	constructor(
+		protected workspaceService: WorkspaceService,
+		public rolesService: RolesService,
+		public searchService: SearchService
+	) {}
 
 	roles: Array<Role> = [];
 
+	pagination = {
+		length: 0, // Get from API
+		pageSize: 10,
+		pageIndex: 0,
+		pageSizeOptions: [20, 50, 100, 500]
+	};
+
 	ngOnInit() {
-		this.searchService.searchPeople().then(people => {
-		});
+		this.searchPeople();
 		this.rolesService.getRoles().then(roles => {
 			this.roles = roles;
 		});
 	}
 
+	searchPeople() {
+		return this.searchService
+			.searchPeople({
+				pageSize: this.pagination.pageSize,
+				pageIndex: this.pagination.pageIndex
+			})
+			.then(searchResult => {
+				this.pagination.length = searchResult.people.length * searchResult.pages;
+				return searchResult;
+			});
+	}
+
 	toggleSelectedPerson(id: string): void {
 		const isSelected = this.workspaceService.isPersonSelected(id);
 		if (isSelected) {
-			const person = this.workspaceService.getSelectedPerson(id)
-			this.workspaceService.deselectPerson(person)
+			const person = this.workspaceService.getSelectedPerson(id);
+			this.workspaceService.deselectPerson(person);
 		} else {
-			const person = this.searchService.getPerson(id)
-			this.workspaceService.selectPerson(person)
+			const person = this.searchService.getPerson(id);
+			this.workspaceService.selectPerson(person);
 		}
 
 		// Workspace
@@ -41,7 +64,9 @@ export class PeopleComponent implements OnInit {
 	}
 
 	personToRoles(person: Person): string {
-		return person.Roles.map(role => role.Name).join(', ');
+		return person.Roles.map((role: Role) => role.Name)
+			.sort((r1, r2) => r1.localeCompare(r2))
+			.join(', ');
 	}
 
 	getSelectedPeopleCount(): number {
@@ -50,12 +75,18 @@ export class PeopleComponent implements OnInit {
 
 	grantRoles(roles): void {
 		const peopleIds = this.workspaceService.getSelectedPeople().map(({ Id }) => Id);
-		this.rolesService.grantRoles(peopleIds, roles).then(ok => { });
+		this.rolesService.grantRoles(peopleIds, roles).then(ok => {
+			this.searchPeople();
+			this.workspaceService.update();
+		});
 	}
 
 	revokeRoles(roles): void {
 		const peopleIds = this.workspaceService.getSelectedPeople().map(({ Id }) => Id);
-		this.rolesService.revokeRoles(peopleIds, roles).then(ok => { });
+		this.rolesService.revokeRoles(peopleIds, roles).then(ok => {
+			this.searchPeople();
+			this.workspaceService.update();
+		});
 	}
 
 	/** Below is window grant component */
@@ -77,4 +108,13 @@ export class PeopleComponent implements OnInit {
 		if (roles.length > 0) this.revokeRoles(roles);
 		this.toggleRevokeView();
 	}
+
+	//#region Pagination
+	paginationChanged(event: PageEvent) {
+		this.pagination.pageSize = event.pageSize;
+		this.pagination.pageIndex = event.pageIndex;
+		this.searchPeople();
+	}
+
+	//#endregion
 }

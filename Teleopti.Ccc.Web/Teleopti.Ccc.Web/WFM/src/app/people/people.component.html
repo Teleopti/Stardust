@@ -5,24 +5,24 @@
 	</div>
 </div>
 <div class="con-row">
-	<app-grant *ngIf="displayGrantView" class="con-flex" [roles]="roles" (onRolesChanged)="handleGranted($event)"></app-grant>
-	<app-revoke *ngIf="displayRevokeView" class="con-flex" [roles]="roles" (onRolesChanged)="handleRevoked($event)"></app-revoke>
-	<div class="con-flex" *ngIf="!displayGrantView && !displayRevokeView">
+	<people-grant *ngIf="displayGrantView" class="con-flex" [roles]="roles" (onRolesChanged)="handleGranted($event)"></people-grant>
+	<people-revoke *ngIf="displayRevokeView" class="con-flex" [roles]="roles" (onRolesChanged)="handleRevoked($event)"></people-revoke>
+	<div class="con-flex" [hidden]="displayGrantView || displayRevokeView">
 		<div class="panel material-depth-1">
 			<div class="sub-header">
 				<div class="con-row">
 					<div class="con-flex">
 						<label for="filter" class="input-icon">
 							<i class="mdi mdi-magnify">
-								<input matTooltip="Filter" type="text" id="filter" placeholder="Search">
+								<input type="text" placeholder="Search">
 							</i>
 						</label>
 					</div>
 					<div class="con-flex x3">
 						<button class="wfm-btn wfm-btn-primary mdi mdi-plus" data-test-grant-button [disabled]="!workspaceService.isAnySelected()"
-						 [ngClass]="{'wfm-btn-invis-disabled': !workspaceService.isAnySelected()}" (click)="toggleGrantView()">Grant page</button>
+						 [ngClass]="{'wfm-btn-invis-disabled': !workspaceService.isAnySelected()}" (click)="toggleGrantView()">Grant role</button>
 						<button class="wfm-btn wfm-btn-primary mdi mdi-close" data-test-revoke-button [disabled]="!workspaceService.isAnySelected()"
-						 [ngClass]="{'wfm-btn-invis-disabled': !workspaceService.isAnySelected()}" (click)="toggleRevokeView()">Revoke page</button>
+						 [ngClass]="{'wfm-btn-invis-disabled': !workspaceService.isAnySelected()}" (click)="toggleRevokeView()">Revoke role</button>
 					</div>
 				</div>
 			</div>
@@ -46,7 +46,8 @@
 				</div>
 			</div>
 			<div class="con-footer">
-				<mat-paginator [length]="100" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]">
+				<mat-paginator [length]="pagination.length" [pageSize]="pagination.pageSize" [pageSizeOptions]="pagination.pageSizeOptions"
+				 (page)="paginationChanged($event)">
 				</mat-paginator>
 			</div>
 		</div>

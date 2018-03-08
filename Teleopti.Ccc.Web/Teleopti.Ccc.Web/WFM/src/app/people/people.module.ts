@@ -21,7 +21,8 @@ import {
 	ChipAddComponent,
 	ChipRemoveComponent,
 	GrantPageComponent,
-	RevokePageComponent
+	RevokePageComponent,
+	SearchPageComponent
 } from './components';
 import { RolesService, WorkspaceService, SearchService } from './services';
 
@@ -33,7 +34,8 @@ import { RolesService, WorkspaceService, SearchService } from './services';
 		RolePage,
 		ChipComponent,
 		ChipAddComponent,
-		ChipRemoveComponent
+		ChipRemoveComponent,
+		SearchPageComponent
 	],
 	imports: [SharedModule, MatCheckboxModule, MatDialogModule, MatPaginatorModule, MatButtonModule, MatDividerModule],
 	providers: [WorkspaceService, RolesService, SearchService],
@@ -41,8 +43,8 @@ import { RolesService, WorkspaceService, SearchService } from './services';
 	entryComponents: [PeopleComponent]
 })
 export class PeopleModule {
-	constructor() { }
-	ngDoBootstrap() { }
+	constructor() {}
+	ngDoBootstrap() {}
 }
 
 angular
