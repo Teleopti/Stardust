@@ -3,6 +3,7 @@ using System.Globalization;
 using log4net;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Messages;
@@ -23,12 +24,14 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		private readonly IPostHttpRequest _postHttpRequest;
 		private readonly IUpdatedBy _updatedBy;
 		private readonly IConfigReader _configReader;
-
-		public StardustSender(IPostHttpRequest postHttpRequest, IUpdatedBy updatedBy, IConfigReader configReader)
+		private readonly ICurrentDataSource _currentDataSource;
+		
+		public StardustSender(IPostHttpRequest postHttpRequest, IUpdatedBy updatedBy, IConfigReader configReader, ICurrentDataSource currentDataSource)
 		{
 			_postHttpRequest = postHttpRequest;
 			_updatedBy = updatedBy;
 			_configReader = configReader;
+			_currentDataSource = currentDataSource;
 		}
 
 		public Guid Send(IEvent @event)
@@ -55,6 +58,23 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			{
 				policy = job.Policy;
 			}
+			var datasource = "<unknown>";
+			var raptorDomainMessage = @event as ILogOnContext;
+			if (raptorDomainMessage != null)
+			{
+				datasource = raptorDomainMessage.LogOnDatasource;
+				if (string.IsNullOrEmpty(datasource))
+					datasource = _currentDataSource.CurrentName();
+
+				raptorDomainMessage.LogOnDatasource = datasource;
+				if (logger.IsDebugEnabled)
+				{
+					logger.Debug(string.Format(CultureInfo.InvariantCulture,
+						"Sending {0} message (Data source = {1})",
+						jobName, datasource));
+				}
+			}
+
 			var ser = JsonConvert.SerializeObject(@event);
 			var jobModel = new JobRequestModel
 			{
@@ -65,18 +85,10 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 				Policy = policy
 			};
 			var mess = JsonConvert.SerializeObject(jobModel);
-			if (logger.IsDebugEnabled)
-			{
-				var datasource = "<unknown>";
-				var raptorDomainMessage = @event as ILogOnContext;
-				if (raptorDomainMessage != null)
-				{
-					datasource = raptorDomainMessage.LogOnDatasource;
-				}
-				logger.Debug(string.Format(CultureInfo.InvariantCulture,
-											"Sending {0} message (Data source = {1})",
-											jobName, datasource));
-			}
+			
+				
+
+			
 
 			var managerLocation = _configReader.AppConfig("ManagerLocation");
 			return _postHttpRequest.Send<Guid>(managerLocation + "job", mess);
