@@ -4,7 +4,7 @@
 	self.myTimeWebBaseUrl = ko.observable("");
 	self.androidAppLink = ko.observable("https://play.google.com/store/apps/details?id=com.teleopti.mobile");
 	self.iOSAppLink = ko.observable("https://itunes.apple.com/us/app/teleopti-wfm-mytime/id1196833421#");
-	self.appQRCodeUrl = ko.observable(window.location.origin + Teleopti.MyTimeWeb.AjaxSettings.baseUrl + "../Areas/MyTime/Content/appdownload.html");
+	self.appQRCodeUrl = ko.observable(window.location.origin + Teleopti.MyTimeWeb.AjaxSettings.baseUrl + "Static/appdownload.html");
 	self.myTimeCustomUrl = ko.observable("");
 	self.myTimeQRCode = ko.observable("");
 	self.appQRCode = ko.observable("");

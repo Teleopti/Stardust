@@ -1386,7 +1386,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include=".node\Gruntfile.js" />
-    <Content Include="Areas\MyTime\Content\appdownload.html" />
+    <Content Include="appdownload.html" />
     <Content Include="Areas\Anywhere\Views\Application\redirect.aspx" />
     <Content Include="Areas\MyTime\Content\Css\MobileApp.css" />
     <Content Include="Areas\MyTime\Content\Images\download-on-the-app-store.png" />
@@ -1403,6 +1403,7 @@
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.MobileMonth.Tests.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.MobileMonthViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.Probability.Tests.js" />
+    <Content Include="Areas\MyTime\Views\Static\appdownload.html" />
     <Content Include="Areas\MyTime\Content\Css\CiscoWidget.css" />
     <Content Include="Areas\MyTime\Content\Css\MobileDayView.css" />
     <Content Include="Areas\MyTime\Content\Css\MobileMonthView.css" />
