@@ -42,6 +42,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public MutableNow Now;
 		public IPushMessageProvider PushMessageProvider;
 		public IPushMessageDialogueRepository PushMessageDialogueRepository;
+		public FakeUserTimeZone UserTimeZone;
 
 		[Test]
 		public void ShouldAdjustTimelineForOverTimeWhenSiteOpenHourPeriodContainsSchedulePeriod()
@@ -408,6 +409,53 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var result = Target.FetchDayData(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime);
 
 			AssertTimeLine(result.TimeLine.ToList(),9,0,10,0);
+		}
+
+		[Test]
+		public void ShouldRemoveOneHourTimelineOnEnteringDSTDay()
+		{
+			var timeZone = TimeZoneInfoFactory.CentralStandardTime();
+			UserTimeZone.Is(timeZone);
+			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(timeZone);
+			Now.Is(new DateTime(2018, 03, 11, 6, 0, 0, DateTimeKind.Utc));
+
+			addSiteOpenHour();
+			var period = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(new DateTime(2018, 03, 11, 01, 15, 0), timeZone),
+				TimeZoneHelper.ConvertToUtc(new DateTime(2018, 03, 11, 03, 45, 0), timeZone));
+			addAssignment(period);
+
+			var result = Target.FetchDayData(null, StaffingPossiblityType.Absence);
+
+			AssertTimeLine(result.TimeLine.ToList(), 1, 0, 4, 0);
+			result.TimeLine.Count().Should().Be(3);
+			result.TimeLine.ElementAt(0).Time.Should().Be(TimeSpan.FromHours(1));
+			result.TimeLine.ElementAt(1).Time.Should().Be(TimeSpan.FromHours(3));
+			result.TimeLine.ElementAt(2).Time.Should().Be(TimeSpan.FromHours(4));
+		}
+
+		[Test]
+		public void ShouldCalculatePercentageCorrectlyOnEnteringDSTDay()
+		{
+			var timeZone = TimeZoneInfoFactory.CentralStandardTime();
+			UserTimeZone.Is(timeZone);
+			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(timeZone);
+			Now.Is(new DateTime(2018, 03, 11, 6, 0, 0, DateTimeKind.Utc));
+
+			addSiteOpenHour();
+			var period = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(new DateTime(2018, 03, 11, 01, 15, 0), timeZone),
+				TimeZoneHelper.ConvertToUtc(new DateTime(2018, 03, 11, 03, 45, 0), timeZone));
+			addAssignment(period);
+
+			var result = Target.FetchDayData(null, StaffingPossiblityType.Absence);
+
+			AssertTimeLine(result.TimeLine.ToList(), 1, 0, 4, 0);
+			result.TimeLine.Count().Should().Be(3);
+			result.TimeLine.ElementAt(0).Time.Should().Be(TimeSpan.FromHours(1));
+			result.TimeLine.ElementAt(0).PositionPercentage.Should().Be(0);
+			result.TimeLine.ElementAt(1).Time.Should().Be(TimeSpan.FromHours(3));
+			result.TimeLine.ElementAt(1).PositionPercentage.Should().Be(1/(decimal)2);
+			result.TimeLine.ElementAt(2).Time.Should().Be(TimeSpan.FromHours(4));
+			result.TimeLine.ElementAt(2).PositionPercentage.Should().Be(1);
 		}
 
 		[Test]

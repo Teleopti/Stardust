@@ -109,5 +109,10 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 	    {
 		    return TimeZoneInfo.FindSystemTimeZoneById("Nepal Standard Time");
 	    }
-    }
+
+		public static TimeZoneInfo CentralStandardTime()
+		{
+			return TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time");
+		}
+	}
 }

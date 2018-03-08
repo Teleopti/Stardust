@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				CurrentWeekEndDate = firstDayOfWeek.AddDays(6).ToFixedClientDateOnlyFormat(),
 				PeriodSelection = _periodSelectionViewModelFactory.CreateModel(s.Date),
 				Styles = s.Days == null ? null : map(_scheduleColorProvider.GetColors(s.ColorSource)),
-				TimeLine = createTimeLine(s.MinMaxTime).ToArray(),
+				TimeLine = createTimeLine(s.MinMaxTime, s.Date).ToArray(),
 				RequestPermission = map(s),
 				ViewPossibilityPermission = s.ViewPossibilityPermission,
 				DatePickerFormat = DateTimeFormatExtensions.LocalizedDateFormat,
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				Date = s.Date.ToFixedClientDateOnlyFormat(),
 				BaseUtcOffsetInMinutes = timeZone.BaseUtcOffset.TotalMinutes,
 				DaylightSavingTimeAdjustment = daylightModel,
-				TimeLine = createTimeLine(s.MinMaxTime).ToArray(),
+				TimeLine = createTimeLine(s.MinMaxTime, s.Date, daylightSavingAdjustment, timeZone),
 				RequestPermission = mapDaySchedulePermission(s),
 				ViewPossibilityPermission = s.ViewPossibilityPermission,
 				DatePickerFormat = DateTimeFormatExtensions.LocalizedDateFormat,
@@ -253,7 +253,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			return colors?.Select(_commonMapper.Map).ToArray();
 		}
 
-		private IEnumerable<TimeLineViewModel> createTimeLine(TimePeriod timelinePeriod)
+		private IEnumerable<TimeLineViewModel> createTimeLine(TimePeriod timelinePeriod, DateOnly date, DaylightTime daylightTime = null, TimeZoneInfo timezone = null)
 		{
 			timelinePeriod = adjustMinEndTime(timelinePeriod);
 			var startTime = timelinePeriod.StartTime;
@@ -269,15 +269,64 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				.Append(startTime)
 				.Append(endTime)
 				.Append(firstHour)
+				.Where(t => daylightTime == null || fiterByDayLightTime(t, date, daylightTime, timezone))
 				.OrderBy(t => t)
-				.Distinct();
+				.Distinct()
+				.ToList();
+
+			var isOnEnteringDstDay = isEnteringDST(date, daylightTime, timezone);
+			var localDayLightTimeStart = new DateTime();
+
 			var diff = endTime - startTime;
-			return times.Select(t => new TimeLineViewModel
+			if (isOnEnteringDstDay)
 			{
-				Time = t,
-				TimeLineDisplay = new DateTime().Add(t).ToLocalizedTimeFormat(),
-				PositionPercentage = diff == TimeSpan.Zero ? 0 : (decimal)(t - startTime).Ticks / diff.Ticks
-			});
+				diff = getAjustedTimeSpanByDayLightTime(diff, daylightTime);
+				localDayLightTimeStart = TimeZoneHelper.ConvertFromUtc(daylightTime.Start, timezone);
+			}
+
+			var timesCount = times.Count;
+			for (var i = 0; i < timesCount; i++)
+			{
+				var time = times[i];
+				if (isOnEnteringDstDay && isTimeSpanInDSTPeriod(time, localDayLightTimeStart))
+				{
+					time = getAjustedTimeSpanByDayLightTime(time, daylightTime);
+				}
+
+				yield return new TimeLineViewModel
+				{
+					Time = times[i],
+					TimeLineDisplay = new DateTime().Add(times[i]).ToLocalizedTimeFormat(),
+					PositionPercentage = diff == TimeSpan.Zero ? 0 : (decimal)(time - startTime).Ticks / diff.Ticks
+				};
+			}
+		}
+
+		private bool isEnteringDST(DateOnly localDate, DaylightTime daylightTime, TimeZoneInfo timezone)
+		{
+			if (daylightTime == null)
+				return false;
+
+			return TimeZoneHelper.ConvertFromUtc(daylightTime.Start, timezone).Date
+					   .CompareTo(localDate.Date) == 0;
+		}
+
+		private bool isTimeSpanInDSTPeriod(TimeSpan timeSpan, DateTime localDayLightTimeStart)
+		{
+			return timeSpan.CompareTo(localDayLightTimeStart.TimeOfDay) >= 0;
+		}
+
+		private TimeSpan getAjustedTimeSpanByDayLightTime(TimeSpan timeSpan, DaylightTime daylightTime)
+		{
+			return timeSpan.Subtract(daylightTime.Delta);
+		}
+
+		private bool fiterByDayLightTime(TimeSpan timeSpan, DateOnly date, DaylightTime daylightTime, TimeZoneInfo timezone)
+		{
+			var localDayLightTimeStart = TimeZoneHelper.ConvertFromUtc(daylightTime.Start, timezone);
+
+			return date.Date.Add(timeSpan).CompareTo(localDayLightTimeStart.AddMinutes(-daylightTime.Delta.TotalMinutes)) < 0
+				   || date.Date.Add(timeSpan).CompareTo(localDayLightTimeStart) >= 0;
 		}
 
 		private IEnumerable<PeriodViewModel> projections(WeekScheduleDayDomainData s)
