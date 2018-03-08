@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NHibernate.Criterion;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -39,15 +40,22 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.Add(Restrictions.Eq("ExternalId", performanceId)))
 				.UniqueResult<IExternalPerformance>();
 
-			return Session.CreateCriteria<ExternalPerformanceData>()
-				.Add(Restrictions.Conjunction()
-					.Add(Restrictions.Eq("BusinessUnit", businessUnit))
-					.Add(Restrictions.Eq("DateFrom", date))
-					.Add(Restrictions.In("PersonId", personIds))
-					.Add(Restrictions.Eq("ExternalPerformance", performance))
-					.Add(Restrictions.Ge("Score", badgeThreshold))
-				)
-				.List<IExternalPerformanceData>();
+			var performanceData = new List<IExternalPerformanceData>();
+			foreach (var batch in personIds.Batch(1000))
+			{
+				performanceData.AddRange(Session.CreateCriteria<ExternalPerformanceData>()
+					.Add(Restrictions.Conjunction()
+						.Add(Restrictions.Eq("BusinessUnit", businessUnit))
+						.Add(Restrictions.Eq("DateFrom", date))
+						.Add(Restrictions.In("PersonId", batch.ToArray()))
+						.Add(Restrictions.Eq("ExternalPerformance", performance))
+						.Add(Restrictions.Ge("Score", badgeThreshold))
+					)
+					.List<IExternalPerformanceData>()
+				);
+			}
+
+			return performanceData;
 		}
 	}
 }

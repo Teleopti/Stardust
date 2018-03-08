@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 		private readonly IBusinessUnitRepository _buRepository;
 		private readonly CalculateBadges _calculateBadges;
 
-		public PerformAllBadgeCalculation(IBusinessUnitRepository buRepository, ILogObjectDateChecker logObjectDateChecker, CalculateBadges calculateBadges)
+		public PerformAllBadgeCalculation(IBusinessUnitRepository buRepository, CalculateBadges calculateBadges)
 		{
 			_buRepository = buRepository;
 			_calculateBadges = calculateBadges;

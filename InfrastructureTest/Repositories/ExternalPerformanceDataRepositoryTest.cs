@@ -126,6 +126,28 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
+		public void ShouldFindWithLargePersonList()
+		{
+			var date = new DateOnly(2018, 03, 07);
+			var personList = new List<Guid>();
+			prepareRelatedData();
+			for (var i = 0; i < 3000; ++i)
+			{
+				var person = createPerson();
+				personList.Add(person.Id.GetValueOrDefault());
+				persistExternalPerformanceData(date, person, 80);
+			}
+
+			var result = WithUnitOfWork.Get(() =>
+			{
+				var data = Target.FindPersonsCouldGetBadgeOverThreshold(date, personList, 1, 70, _externalPerformance.BusinessUnit.Id.Value);
+				return data;
+			});
+
+			result.Count.Should().Be.EqualTo(3000);
+		}
+
+		[Test]
 		public void ShouldNotFindPersonWhenHeCannotGetBadge()
 		{
 			var date = new DateOnly(2018, 01, 25);
