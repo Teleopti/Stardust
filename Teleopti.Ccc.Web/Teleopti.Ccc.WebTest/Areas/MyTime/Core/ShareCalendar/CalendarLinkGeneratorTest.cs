@@ -186,12 +186,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.ShareCalendar
 				PersonId = person.Id.GetValueOrDefault()
 			};
 			var startDate = DateOnly.Today.AddDays(-60);
-			personScheduleDayReadModelFinder.Stub(x => x.ForPerson(startDate, publishedToDate, person.Id.GetValueOrDefault())).Return(new PersonScheduleDayReadModel[] { });
+			personScheduleDayReadModelFinder.Stub(x => x.ForPerson(new DateOnlyPeriod(startDate, publishedToDate), person.Id.GetValueOrDefault())).Return(new PersonScheduleDayReadModel[] { });
 
 			target.GetScheduleDays(calendarlinkid, _unitOfWork, publishedToDate.Date);
 
-			personScheduleDayReadModelFinder.AssertWasNotCalled(x => x.ForPerson(startDate, DateOnly.Today.AddDays(180), person.Id.GetValueOrDefault()));
-			personScheduleDayReadModelFinder.AssertWasCalled(x => x.ForPerson(startDate, publishedToDate, person.Id.GetValueOrDefault()));
+			personScheduleDayReadModelFinder.AssertWasNotCalled(x => x.ForPerson(new DateOnlyPeriod(startDate, DateOnly.Today.AddDays(180)), person.Id.GetValueOrDefault()));
+			personScheduleDayReadModelFinder.AssertWasCalled(x => x.ForPerson(new DateOnlyPeriod(startDate, publishedToDate), person.Id.GetValueOrDefault()));
 		}
 
 		[Test]

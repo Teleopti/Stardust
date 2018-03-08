@@ -8,9 +8,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 {
 	public interface IPersonScheduleDayReadModelFinder
 	{
-		IEnumerable<PersonScheduleDayReadModel> ForPerson(DateOnly startDate, DateOnly endDate, Guid personId);
+		IEnumerable<PersonScheduleDayReadModel> ForPerson(DateOnlyPeriod period, Guid personId);
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Date")]
 		PersonScheduleDayReadModel ForPerson(DateOnly date, Guid personId);
 
 		bool IsInitialized();

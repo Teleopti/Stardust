@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.PersonScheduleDayReadModel
 {
@@ -95,7 +96,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.PersonScheduleDayRead
 
 			simulator.RetryCount.Should().Be(0);
 
-			var readModels = WithUnitOfWork.Get(() => Finder.ForPerson(dates.First(), dates.Last(), personId));
+			var readModels = WithUnitOfWork.Get(() => Finder.ForPerson(new DateOnlyPeriod(dates.First(), dates.Last()), personId));
 			readModels.Count().Should().Be.EqualTo(dates.Length);
 		}
 	}

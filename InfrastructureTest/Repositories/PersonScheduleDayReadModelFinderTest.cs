@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				Assert.That(Target.ForPerson(dateOnly, dateOnly.AddDays(5), personId), Is.Not.Null);
+				Assert.That(Target.ForPerson(new DateOnlyPeriod(dateOnly, dateOnly.AddDays(5)), personId), Is.Not.Null);
 			}
 		}
 
@@ -221,7 +221,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			createAndSaveReadModel(personId, Guid.NewGuid(), new DateTime(2012, 8, 29), 10);
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var ret = Target.ForPerson(dateOnly.AddDays(-1), dateOnly.AddDays(5), personId);
+				var ret = Target.ForPerson(new DateOnlyPeriod(dateOnly.AddDays(-1), dateOnly.AddDays(5)), personId);
 
 				Assert.That(ret.Count(), Is.EqualTo(1));
 			}

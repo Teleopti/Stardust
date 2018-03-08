@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_personRepository = personRepository;
 		}
 
-		public IEnumerable<PersonScheduleDayReadModel> ForPerson(DateOnly startDate, DateOnly endDate, Guid personId)
+		public IEnumerable<PersonScheduleDayReadModel> ForPerson(DateOnlyPeriod period, Guid personId)
 		{
 			throw new NotImplementedException();
 		}

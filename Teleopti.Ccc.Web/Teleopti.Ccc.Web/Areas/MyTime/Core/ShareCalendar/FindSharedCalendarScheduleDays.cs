@@ -33,8 +33,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.ShareCalendar
                     endDate = publishedToDate;
             }
             var personScheduleDayReadModelFinder = _repositoryFactory.CreatePersonScheduleDayReadModelFinder(uow);
-            var scheduleDays = personScheduleDayReadModelFinder.ForPerson(_now.ServerDate_DontUse().AddDays(sharingStartDay),
-                endDate,
+            var scheduleDays = personScheduleDayReadModelFinder.ForPerson(new DateOnlyPeriod(_now.ServerDate_DontUse().AddDays(sharingStartDay),
+                endDate),
                 calendarLinkId.PersonId);
             return scheduleDays;
         }

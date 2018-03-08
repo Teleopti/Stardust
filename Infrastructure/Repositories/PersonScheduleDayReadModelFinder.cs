@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return result.Count > 0;
 		}
 
-		public IEnumerable<PersonScheduleDayReadModel> ForPerson(DateOnly startDate, DateOnly endDate, Guid personId)
+		public IEnumerable<PersonScheduleDayReadModel> ForPerson(DateOnlyPeriod period, Guid personId)
 		{
 			return _unitOfWork.Session().CreateSQLQuery(@"
 					SELECT PersonId, BelongsToDate AS Date, Start, [End], IsDayOff, Model 
@@ -48,8 +48,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.AddScalar("End", NHibernateUtil.DateTime)
 				.AddScalar("IsDayOff", NHibernateUtil.Boolean)
 				.AddScalar("Model", NHibernateUtil.Custom(typeof(CompressedString)))
-				.SetDateOnly("startdate", startDate)
-				.SetDateOnly("enddate", endDate)
+				.SetDateOnly("startdate", period.StartDate)
+				.SetDateOnly("enddate", period.EndDate)
 				.SetGuid("personid", personId)
 				.SetResultTransformer(Transformers.AliasToBean(typeof(PersonScheduleDayReadModel)))
 				.SetReadOnly(true)
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public PersonScheduleDayReadModel ForPerson(DateOnly date, Guid personId)
 		{
-			return ForPerson(date, date, personId).FirstOrDefault();
+			return ForPerson(date.ToDateOnlyPeriod(), personId).FirstOrDefault();
 		}
 
 		public IEnumerable<PersonScheduleDayReadModel> ForPeople(DateTimePeriod period, IEnumerable<Guid> personIds)
