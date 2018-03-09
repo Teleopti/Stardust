@@ -98,15 +98,8 @@
 		expect(triggeredTimezone).toEqual("Asia/Shanghai");
 	});
 
-	it("should list timezone order by displayName that available timezones include ianaId", function () {
-		var availableTimezones = [{
-				IanaId: "Asia/Shanghai",
-				DisplayName: "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi"
-			}, {
-				IanaId: "Europe/Berlin",
-				DisplayName: "(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna"
-			}];
-		var panel = setUp(availableTimezones);
+	it("should list timezone order by displayName", function () {
+		var panel = setUp();
 		var timezoneSelect = panel[0].querySelectorAll("md-select");
 		var timezoneOptions = panel[0].querySelectorAll("md-option");
 
@@ -115,41 +108,27 @@
 		expect(timezoneOptions[0].innerText.trim()).toEqual("(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna");
 		expect(timezoneOptions[1].innerText.trim()).toEqual("(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi");
 		expect(timezoneOptions[2].innerText.trim()).toEqual("");
-
+		
 	});
 
-	it("should list timezone order by Name that available timezones exclude ianaId", function () {
-		var availableTimezones = [{
-			Id: "Aleutian Standard Time",
-			Name: "(UTC-10:00) Aleutian Islands"
-		},
-		{
-			Id: "Central kStandard Time",
-			Name: "(UTC-06:00) Central Time (US & Canada)"
-		}];
-		var panel = setUp(availableTimezones);
-		var timezoneSelect = panel[0].querySelectorAll("md-select");
-		var timezoneOptions = panel[0].querySelectorAll("md-option");
-
-		expect(timezoneSelect.length).toEqual(1);
-		expect(timezoneOptions.length).toEqual(3);
-		expect(timezoneOptions[0].innerText.trim()).toEqual("(UTC-06:00) Central Time (US & Canada)");
-		expect(timezoneOptions[1].innerText.trim()).toEqual("(UTC-10:00) Aleutian Islands");
-		expect(timezoneOptions[2].innerText.trim()).toEqual("");
-
-	});
-
-
-
-	function setUp(availableTimezones) {
+	function setUp() {
 		var scope = $rootScope.$new();
 		var html = '<timezone-picker class="timezone-picker" on-pick="onPick" available-timezones="availableTimezones"></timezone-picker> ';
-		scope.availableTimezones = availableTimezones;
+		scope.availableTimezones = [
+			{
+				IanaId: "Asia/Shanghai",
+				DisplayName: "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi"
+			}, {
+				IanaId: "Europe/Berlin",
+				DisplayName: "(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna"
+			}];
 		scope.onPick = {};
 
 		var element = $compile(html)(scope);
 		scope.$apply();
+
 		return element;
+
 	}
 
 });
