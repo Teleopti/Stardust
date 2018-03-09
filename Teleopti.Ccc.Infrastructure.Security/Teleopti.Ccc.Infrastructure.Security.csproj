@@ -51,6 +51,7 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="BCryptHashFunction.cs" />
+    <Compile Include="BCryptTokenHashFunction.cs" />
     <Compile Include="OneWayEncryption.cs" />
     <Compile Include="IHashFunction.cs" />
   </ItemGroup>

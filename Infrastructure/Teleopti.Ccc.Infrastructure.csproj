@@ -256,7 +256,9 @@
     <Compile Include="Hangfire\JobExpirationTimeAttribute.cs" />
     <Compile Include="MultiTenancy\Admin\CheckTenantUserExists.cs" />
     <Compile Include="MultiTenancy\Server\ExternalApplicationAccess.cs" />
+    <Compile Include="MultiTenancy\Server\HashFromToken.cs" />
     <Compile Include="MultiTenancy\Server\ITenantLogonInfoLoader.cs" />
+    <Compile Include="MultiTenancy\Server\Queries\IPersistExternalApplicationAccess.cs" />
     <Compile Include="MultiTenancy\Server\Queries\PersistExternalApplicationAccess.cs" />
     <Compile Include="Persisters\Auditing\PersonAccessPersister.cs" />
     <Compile Include="Persisters\Schedules\ScheduleRangePersisterWithConflictSolve.cs" />

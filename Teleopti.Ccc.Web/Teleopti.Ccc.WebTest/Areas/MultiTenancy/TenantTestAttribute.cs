@@ -4,6 +4,7 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
@@ -29,6 +30,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			system.UseTestDouble<TenantAuthenticationFake>().For<ITenantAuthentication>();
 			system.UseTestDouble<LogLogonAttemptFake>().For<ILogLogonAttempt>();
 			system.UseTestDouble<CurrentTenantUserFake>().For<ICurrentTenantUser>();
+			system.UseTestDouble<FakePersistExternalApplicationAccess>().For<IPersistExternalApplicationAccess>();
+			system.UseTestDouble<FakeFindExternalApplicationAccessByHash>().For<IFindExternalApplicationAccessByHash>();
 		}
 	}
 }

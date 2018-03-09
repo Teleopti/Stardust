@@ -2,7 +2,7 @@
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 {
-	public class PersistExternalApplicationAccess
+	public class PersistExternalApplicationAccess : IPersistExternalApplicationAccess
 	{
 		private readonly ICurrentTenantSession _currentTenantSession;
 

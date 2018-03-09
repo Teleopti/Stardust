@@ -304,6 +304,8 @@
     <Compile Include="FakeRepositories\Rta\FakeRtaTracerConfigPersister.cs" />
     <Compile Include="FakeRepositories\Rta\FakeTeamCardReader.cs" />
     <Compile Include="FakeRepositories\Rta\FakeRtaTracerPersister.cs" />
+    <Compile Include="FakeRepositories\Tenant\FakePersistExternalApplicationAccess.cs" />
+    <Compile Include="FakeRepositories\Tenant\FakeFindExternalApplicationAccessByHash.cs" />
     <Compile Include="FakeRtaEventStore.cs" />
     <Compile Include="FakeSchedulingSourceScope.cs" />
     <Compile Include="FakeTenantLogonDataManager.cs" />

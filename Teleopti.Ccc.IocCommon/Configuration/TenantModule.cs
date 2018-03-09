@@ -128,6 +128,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<PersistExternalApplicationAccess>().SingleInstance();
 			builder.RegisterType<FindExternalApplicationAccessByHash>().As<IFindExternalApplicationAccessByHash>().SingleInstance();
+			builder.RegisterType<HashFromToken>().SingleInstance();
 		}
 
 		private static bool isRunFromTest(string server)

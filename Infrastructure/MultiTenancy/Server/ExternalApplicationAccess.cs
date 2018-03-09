@@ -14,13 +14,17 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 
 		protected ExternalApplicationAccess()
 		{
-			
 		}
 
 		public virtual int Id { get; protected set; }
-		public virtual Guid PersonId { get; set; }
-		public virtual string Hash { get; set; }
-		public virtual string Name { get; set; }
-		public virtual DateTime CreatedOn { get; set; }
+		public virtual Guid PersonId { get; protected set; }
+		public virtual string Hash { get; protected set; }
+		public virtual string Name { get; protected set; }
+		public virtual DateTime CreatedOn { get; protected set; }
+
+		public void SetHash(string hash)
+		{
+			Hash = hash;
+		}
 	}
 }
