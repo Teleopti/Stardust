@@ -14,6 +14,7 @@
         var currentTimezone = userInfo.CurrentUserInfo().DefaultTimeZone;
 
         $ctrl.$onInit = function () {
+            $ctrl.jobs = [];
             fetchJobs();
 
             $ctrl.dateTimeFormat = locale.DATETIME_FORMATS.medium;
@@ -50,7 +51,7 @@
         $ctrl.allowCalcalution = function () {
             $ctrl.intersected = false;;
             if ($ctrl.dateRange && $ctrl.dateRange.startDate && $ctrl.dateRange.endDate && $ctrl.isValid) {
-                $ctrl.intersected = hasIntersection();
+                $ctrl.intersected = $ctrl.hasIntersection();
                 return !$ctrl.intersected;
             }
         }
@@ -85,7 +86,7 @@
             }
         }
 
-        function hasIntersection() {
+        $ctrl.hasIntersection = function () {
             var result = false;
             if ($ctrl.jobs && $ctrl.jobs.length > 0) {
                 var runningJobs = $ctrl.jobs.filter(function (item) {

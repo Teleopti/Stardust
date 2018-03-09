@@ -7,6 +7,7 @@ describe('badgeCalculation', function () {
         $document,
         $httpBackend;
 
+
     beforeEach(function () {
         module('wfm.templates', 'externalModules', 'wfm.gamification', 'ngMaterial', 'ngMaterial-mock');
 
@@ -34,6 +35,46 @@ describe('badgeCalculation', function () {
             element.remove();
         });
         attachedElements = [];
+    });
+
+    it('should show error if the date range has intersection with one of the running job.', function () {
+        var cmp = setupComponent(testScope());
+        var ctrl = cmp.controller('badgeCalculation');
+        expect(ctrl).toBeTruthy();
+        ctrl.dateRange = {
+            startDate: 'Mar 1, 2018',
+            endDate: 'Mar 6, 2018'
+        };
+
+        ctrl.jobs = [{
+            id: 'job1',
+            owner: 'demo',
+            startDate: 'Mar 5, 2018',
+            endDate: 'Mar 10, 2018',
+            status: 'inprogress'
+        }];
+
+        expect(ctrl.hasIntersection()).toBe(true);
+    });
+
+    it('should not show error if the date range has no intersection with all of the running job.', function () {
+        var cmp = setupComponent(testScope());
+        var ctrl = cmp.controller('badgeCalculation');
+        expect(ctrl).toBeTruthy();
+        ctrl.dateRange = {
+            startDate: 'Mar 1, 2018',
+            endDate: 'Mar 6, 2018'
+        };
+
+        ctrl.jobs = [{
+            id: 'job1',
+            owner: 'demo',
+            startDate: 'Mar 7, 2018',
+            endDate: 'Mar 10, 2018',
+            status: 'inprogress'
+        }];
+
+        expect(ctrl.hasIntersection()).toBe(false);
     });
 
     it('should render badge calculation page', function () {
