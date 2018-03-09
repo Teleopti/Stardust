@@ -7,7 +7,7 @@
 <div class="con-row">
 	<people-grant *ngIf="displayGrantView" class="con-flex" [roles]="roles" (onRolesChanged)="handleGranted($event)"></people-grant>
 	<people-revoke *ngIf="displayRevokeView" class="con-flex" [roles]="roles" (onRolesChanged)="handleRevoked($event)"></people-revoke>
-	<div class="con-flex" [hidden]="displayGrantView || displayRevokeView">
+	<div class="con-flex" *ngIf="!(displayGrantView || displayRevokeView)">
 		<div class="panel material-depth-1">
 			<div class="sub-header">
 				<div class="con-row">
