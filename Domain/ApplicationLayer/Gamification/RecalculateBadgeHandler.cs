@@ -16,7 +16,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Gamification
 	{
 		private readonly CalculateBadges _calculateBadges;
 		private readonly IPerformBadgeCalculation _performBadgeCalculation;
-		private readonly ICurrentBusinessUnit _currentBusinessUnit;
 		private readonly IJobResultRepository _jobResultRepository;
 		private readonly IStardustJobFeedback _feedback;
 
@@ -26,7 +25,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Gamification
 		{
 			_calculateBadges = calculateBadges;
 			_performBadgeCalculation = performBadgeCalculation;
-			_currentBusinessUnit = currentBusinessUnit;
 			_jobResultRepository = jobResultRepository;
 			_feedback = feedback;
 		}
@@ -51,7 +49,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Gamification
 			_calculateBadges.RemoveAgentBadges(result.Period);
 			foreach (var date in result.Period.DayCollection())
 			{
-				_performBadgeCalculation.Calculate(_currentBusinessUnit.Current().Id.GetValueOrDefault(), date.Date);
+				_performBadgeCalculation.Calculate(@event.LogOnBusinessUnitId, date.Date);
 			}
 
 			saveJobResultDetail(@event.JobResultId, DetailLevel.Info, "Recalculated Agent Badges", null);
