@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 		public virtual string Name { get; protected set; }
 		public virtual DateTime CreatedOn { get; protected set; }
 
-		public void SetHash(string hash)
+		public virtual void SetHash(string hash)
 		{
 			Hash = hash;
 		}
