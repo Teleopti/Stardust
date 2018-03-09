@@ -10,16 +10,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly IRequestStrategySettingsReader _requestStrategySettingReader;
 		private readonly INow _now;
 		private readonly ISkillCombinationResourceRepository _skillCombinationResourceRepository;
-		private readonly IStardustJobFeedback _stardustJobFeedback;
 
 		public SkillCombinationResourceReadModelValidator(IRequestStrategySettingsReader requestStrategySettingReader,
-			INow now, ISkillCombinationResourceRepository skillCombinationResourceRepository,
-			IStardustJobFeedback stardustJobFeedback)
+			INow now, ISkillCombinationResourceRepository skillCombinationResourceRepository)
 		{
 			_requestStrategySettingReader = requestStrategySettingReader;
 			_now = now;
 			_skillCombinationResourceRepository = skillCombinationResourceRepository;
-			_stardustJobFeedback = stardustJobFeedback;
 		}
 
 		public bool Validate()
