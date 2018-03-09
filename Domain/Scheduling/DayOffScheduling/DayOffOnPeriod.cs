@@ -26,11 +26,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 			get { return _period; }
 		}
 
-		public IList<IScheduleDay> ScheduleDays
-		{
-			get { return _scheduleDays; }
-		}
-
 		public int DaysOffCount
 		{
 			get { return _daysOffcount; }

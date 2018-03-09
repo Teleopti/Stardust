@@ -49,13 +49,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 		}
 
 		[Test]
-		public void ShouldReturnDays()
-		{
-			var days = _target.ScheduleDays;
-			Assert.AreEqual(days, _scheduleDays);
-		}
-
-		[Test]
 		public void ShouldReturnDayOffCount()
 		{
 			var count = _target.DaysOffCount;

@@ -450,44 +450,5 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Assert.AreEqual(expectedPeriod2, periods[1].Period);
 			}
 		}
-
-		[Test]
-		public void ShouldReturnNumberOfDayOffsOnPeriod()
-		{
-			var dateOnly = new DateOnly(2013, 1, 1);
-			var dateOnlyNoDayOff = new DateOnly(2013, 1, 2);
-			var dateOnlyOutside = new DateOnly(2013, 1, 3);
-			var dateOnlyPeriod = new DateOnlyPeriod(dateOnly, dateOnlyOutside);
-			var scheduleMatrixPro = _mocks.StrictMock<IScheduleMatrixPro>();
-			var scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
-			var scheduleDayProNoDayOff = _mocks.StrictMock<IScheduleDayPro>();
-			var scheduleDay = _mocks.StrictMock<IScheduleDay>();
-			var scheduleDayNoDayOff = _mocks.StrictMock<IScheduleDay>();
-			var scheduleDayOutside = _mocks.StrictMock<IScheduleDay>();
-			var scheduleDayProOutside = _mocks.StrictMock<IScheduleDayPro>();
-
-			using (_mocks.Record())
-			{
-				Expect.Call(scheduleMatrixPro.UnlockedDays).Return(new [] {scheduleDayPro, scheduleDayProNoDayOff}).Repeat.AtLeastOnce();
-				Expect.Call(scheduleMatrixPro.OuterWeeksPeriodDays).Return(new [] {scheduleDayPro, scheduleDayProNoDayOff, scheduleDayProOutside});
-				Expect.Call(scheduleDayPro.Day).Return(dateOnly);
-				Expect.Call(scheduleDayProNoDayOff.Day).Return(dateOnlyNoDayOff);
-				Expect.Call(scheduleDayProOutside.Day).Return(dateOnlyOutside);
-				Expect.Call(scheduleDayPro.DaySchedulePart()).Return(scheduleDay);
-				Expect.Call(scheduleDayProNoDayOff.DaySchedulePart()).Return(scheduleDayNoDayOff);
-				Expect.Call(scheduleDayProOutside.DaySchedulePart()).Return(scheduleDayOutside);
-				Expect.Call(scheduleDay.SignificantPart()).Return(SchedulePartView.ContractDayOff);
-				Expect.Call(scheduleDayNoDayOff.SignificantPart()).Return(SchedulePartView.MainShift);
-				Expect.Call(scheduleDayOutside.SignificantPart()).Return(SchedulePartView.ContractDayOff);
-			}
-
-			using (_mocks.Playback())
-			{
-				var periods = _target.CountDayOffsOnPeriod(scheduleMatrixPro, dateOnlyPeriod);
-				Assert.AreEqual(2, periods.DaysOffCount);
-				Assert.AreEqual(2, periods.ScheduleDays.Count);
-				Assert.IsFalse(periods.ScheduleDays.Contains(scheduleDayOutside));
-			}
-		}
 	}	
 }
