@@ -23,6 +23,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	    /// Gets the deviation statistics calculator.
 	    /// </summary>
 	    /// <value>The deviation statistics calculator.</value>
-	    public IDeviationStatisticsCalculator StatisticsCalculator { get; }
+	    public DeviationStatisticsCalculator StatisticsCalculator { get; }
     }
 }

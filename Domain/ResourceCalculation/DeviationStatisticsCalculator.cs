@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     /// <summary>
     /// Carries out statictical calculations on the difference between two input list of values.
     /// </summary>
-    public class DeviationStatisticsCalculator : IDeviationStatisticsCalculator
+    public class DeviationStatisticsCalculator
     {
 		private readonly double[] _relativeStatisticsValues;
 
