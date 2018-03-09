@@ -15,26 +15,14 @@
         /// <param name="realValue">The real value.</param>
         public DeviationStatisticData(double expectedValue, double realValue)
         {
-            AbsoluteDeviation = calculateAbsoluteDeviation(expectedValue, realValue);
-
 			var relativeDeviation = calculateRelativeDeviation(expectedValue, realValue);
 			RelativeDeviation = forCalculations(relativeDeviation);
 			RelativeDeviationForDisplay = forDisplay(relativeDeviation);
         }
-		
-        public double AbsoluteDeviation { get; }
 
 		public double RelativeDeviation { get; }
 
 		public double RelativeDeviationForDisplay { get; }
-
-		/// <summary>
-        /// Calculates the absolut deviation.
-        /// </summary>
-        private static double calculateAbsoluteDeviation(double expectedValue, double realValue)
-        {
-            return realValue - expectedValue;
-        }
 
         /// <summary>
         /// Calculates the visual relative deviation. That is the value to be displayed!!!
