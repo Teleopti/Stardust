@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.Domain.MessageBroker.Server
 		private readonly ISignalR _signalR;
 		private readonly IMailboxRepository _mailboxRepository;
 		private readonly INow _now;
-		private readonly IDistributedLockAcquirer _distributedLock;
 		private readonly IBeforeSubscribe _beforeSubscribe;
 		public ILog Logger = LogManager.GetLogger(typeof(MessageBrokerServer));
 		private readonly TimeSpan _expirationInterval;
@@ -28,13 +27,11 @@ namespace Teleopti.Ccc.Domain.MessageBroker.Server
 			IBeforeSubscribe beforeSubscribe,
 			IMailboxRepository mailboxRepository,
 			IConfigReader config,
-			INow now,
-			IDistributedLockAcquirer distributedLock)
+			INow now)
 		{
 			_signalR = signalR;
 			_mailboxRepository = mailboxRepository;
 			_now = now;
-			_distributedLock = distributedLock;
 			_beforeSubscribe = beforeSubscribe ?? new SubscriptionPassThrough();
 			_expirationInterval = TimeSpan.FromSeconds(config.ReadValue("MessageBrokerMailboxExpirationInSeconds", 60 * 15));
 			_purgeInterval = TimeSpan.FromSeconds(config.ReadValue("MessageBrokerMailboxPurgeIntervalInSeconds", 60 * 5));
