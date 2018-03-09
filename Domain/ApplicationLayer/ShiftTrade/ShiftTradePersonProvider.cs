@@ -18,10 +18,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly IPersonForScheduleFinder _personForScheduleFinder;
 		private readonly IPeopleForShiftTradeFinder _peopleForShiftTradeFinder;
-		private readonly INow _now;
 		private readonly ILoggedOnUser _loggedOnUser;
 
-		public ShiftTradePersonProvider(IPersonRepository personRepository, IShiftTradeLightValidator shiftTradeValidator, IPermissionProvider permissionProvider, IPersonForScheduleFinder personForScheduleFinder, ILoggedOnUser loggedOnUser, IPeopleForShiftTradeFinder peopleForShiftTradeFinder, INow now)
+		public ShiftTradePersonProvider(IPersonRepository personRepository, IShiftTradeLightValidator shiftTradeValidator, IPermissionProvider permissionProvider, IPersonForScheduleFinder personForScheduleFinder, ILoggedOnUser loggedOnUser, IPeopleForShiftTradeFinder peopleForShiftTradeFinder)
 		{
 			_personRepository = personRepository;
 			_shiftTradeValidator = shiftTradeValidator;
@@ -29,7 +28,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 			_personForScheduleFinder = personForScheduleFinder;
 			_loggedOnUser = loggedOnUser;
 			_peopleForShiftTradeFinder = peopleForShiftTradeFinder;
-			_now = now;
 		}
 
 		public IEnumerable<IPerson> RetrievePersons(DateOnly shiftTradeDate, Guid[] teamIds, string personName,
