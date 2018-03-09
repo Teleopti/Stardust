@@ -21,37 +21,16 @@ namespace Teleopti.Ccc.TestCommon
 
 		public void Add(IEvent @event)
 		{
-			if (@event is PersonStateChangedEvent e)
-				_events.Add(new storedEvent
-				{
-					PersonId = e.PersonId,
-					Period = new DateTimePeriod(e.Timestamp, e.Timestamp),
-					Event = e
-				});
-
-			if (@event is PersonRuleChangedEvent ev)
-				_events.Add(new storedEvent
-				{
-					PersonId = ev.PersonId,
-					Period = new DateTimePeriod(ev.Timestamp, ev.Timestamp),
-					Event = ev
-				});
-
-			if (@event is PeriodApprovedAsInAdherenceEvent eve)
-				_events.Add(new storedEvent
-				{
-					PersonId = eve.PersonId,
-					Period = new DateTimePeriod(eve.StartTime, eve.EndTime),
-					Event = eve
-				});
+			var rtaStoredEvent = (@event as IRtaStoredEvent).QueryData();
+			if (rtaStoredEvent == null)
+				return;
 			
-			if (@event is ApprovedPeriodRemovedEvent even)
-				_events.Add(new storedEvent
-				{
-					PersonId = even.PersonId,
-					Period = new DateTimePeriod(even.StartTime, even.EndTime),
-					Event = even
-				});
+			_events.Add(new storedEvent
+			{
+				PersonId = rtaStoredEvent.PersonId.Value,
+				Period = new DateTimePeriod(rtaStoredEvent.StartTime.Value, rtaStoredEvent.EndTime.Value),
+				Event = @event
+			});
 		}
 
 		public IEnumerable<IEvent> Load(Guid personId, DateTimePeriod period)

@@ -8,9 +8,13 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events
 		public Guid PersonId { get; set; }
 		public DateTime StartTime { get; set; }
 		public DateTime EndTime { get; set; }
-		public QueryData QueryData()
-		{
-			throw new NotImplementedException();
-		}
+
+		public QueryData QueryData() =>
+			new QueryData
+			{
+				PersonId = PersonId,
+				StartTime = StartTime,
+				EndTime = EndTime
+			};
 	}
 }
