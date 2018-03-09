@@ -46,7 +46,7 @@
 				</div>
 			</div>
 			<div class="con-footer">
-				<mat-paginator [length]="pagination.length" [pageSize]="pagination.pageSize" [pageSizeOptions]="pagination.pageSizeOptions"
+				<mat-paginator [length]="pagination.length" [pageIndex]="pagination.pageIndex" [pageSize]="pagination.pageSize" [pageSizeOptions]="pagination.pageSizeOptions"
 				 (page)="paginationChanged($event)">
 				</mat-paginator>
 			</div>
