@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.UserTexts;
@@ -15,11 +16,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 	{
 		private readonly IUserTimeZone _timeZone;
 		private readonly OvertimeAvailabilityViewModelMapper _overtimeMapper;
+		private readonly INow _now;
 
-		public PeriodViewModelFactory(IUserTimeZone timeZone, OvertimeAvailabilityViewModelMapper overtimeMapper)
+		public PeriodViewModelFactory(IUserTimeZone timeZone, OvertimeAvailabilityViewModelMapper overtimeMapper, INow now)
 		{
 			_timeZone = timeZone;
 			_overtimeMapper = overtimeMapper;
+			_now = now;
 		}
 
 		public IEnumerable<PeriodViewModel> CreatePeriodViewModels(IEnumerable<IVisualLayer> visualLayerCollection, TimePeriod minMaxTime, DateOnly localDate, TimeZoneInfo timeZone)
@@ -28,6 +31,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			var layerExtendedList = calendarDayExtractor.CreateVisualPeriods(localDate, visualLayerCollection, timeZone);
 
 			var newList = new List<PeriodViewModel>();
+
+			var timezone = _timeZone.TimeZone();
+			var daylightTime = TimeZoneHelper.GetDaylightChanges(
+				timezone, TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), timezone).Year);
+			var isOnDSTStartDay = isEnteringDST(localDate, daylightTime, timezone);
+			var localDaylightStartTime = getLocalDaylightStartTime(daylightTime, timezone);
+
+			var totalLengthTicks = (minMaxTime.EndTime - minMaxTime.StartTime).Ticks;
+			if (isOnDSTStartDay)
+				totalLengthTicks = totalLengthTicks - daylightTime.Delta.Ticks;
 
 			foreach (var visualLayer in layerExtendedList)
 			{
@@ -47,14 +60,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 
 				var isOvertimeLayer = visualLayer.DefinitionSet?.MultiplicatorType == MultiplicatorType.Overtime;
 
-				var timezone = _timeZone.TimeZone();
 				var timePeriod = visualLayer.VisualPeriod.TimePeriod(timezone);
+				timePeriod = getAjustedTimePeriodByDaylightTime(timePeriod, isOnDSTStartDay, localDaylightStartTime, daylightTime);
+
 				var startPositionPercentage =
-					(decimal)(timePeriod.StartTime - minMaxTime.StartTime).Ticks /
-					(minMaxTime.EndTime - minMaxTime.StartTime).Ticks;
+					(decimal)(timePeriod.StartTime - minMaxTime.StartTime).Ticks / totalLengthTicks;
+
 				var endPositionPercentage =
-					(decimal)(timePeriod.EndTime - minMaxTime.StartTime).Ticks /
-					(minMaxTime.EndTime - minMaxTime.StartTime).Ticks;
+					(decimal)(timePeriod.EndTime - minMaxTime.StartTime).Ticks / totalLengthTicks;
+
 				newList.Add(new PeriodViewModel
 				{
 					Summary =
@@ -73,6 +87,39 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 				});
 			}
 			return newList;
+		}
+
+		private static TimeSpan getLocalDaylightStartTime(DaylightTime daylightTime, TimeZoneInfo localTimeZone)
+		{
+			if (daylightTime == null)
+				return TimeSpan.Zero;
+			return TimeZoneHelper.ConvertFromUtc(daylightTime.Start, localTimeZone).TimeOfDay;
+		}
+
+		private bool isEnteringDST(DateOnly localDate, DaylightTime daylightTime, TimeZoneInfo timeZone)
+		{
+			if (daylightTime == null)
+				return false;
+
+			return TimeZoneHelper.ConvertFromUtc(daylightTime.Start, timeZone).Date
+					   .CompareTo(localDate.Date) == 0;
+		}
+
+		private TimePeriod getAjustedTimePeriodByDaylightTime(TimePeriod timePeriod, bool isOnDSTStartDay, TimeSpan localDaylightStartTime, DaylightTime daylightTime)
+		{
+			if (!isOnDSTStartDay) return timePeriod;
+
+			if (timePeriod.StartTime >= localDaylightStartTime)
+			{
+				timePeriod = new TimePeriod(timePeriod.StartTime.Add(-daylightTime.Delta), timePeriod.EndTime);
+			}
+
+			if (timePeriod.EndTime >= localDaylightStartTime)
+			{
+				timePeriod = new TimePeriod(timePeriod.StartTime, timePeriod.EndTime.Add(-daylightTime.Delta));
+			}
+
+			return timePeriod;
 		}
 
 		public IEnumerable<OvertimeAvailabilityPeriodViewModel> CreateOvertimeAvailabilityPeriodViewModels(IOvertimeAvailability overtimeAvailability, IOvertimeAvailability overtimeAvailabilityYesterday, TimePeriod minMaxTime)

@@ -213,6 +213,34 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
+		public void ShouldCalculateCorrectPercentageforActivityLayersOnFetchDayData()
+		{
+			var timeZone = TimeZoneInfoFactory.CentralStandardTime();
+			TimeZone.Is(timeZone);
+			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(timeZone);
+			Now.Is(new DateTime(2018, 03, 11, 6, 0, 0, DateTimeKind.Utc));
+
+			var date = new DateOnly(2018, 03, 11);
+			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), date);
+			var period = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(new DateTime(2018, 03, 11, 01, 0, 0), timeZone),
+				TimeZoneHelper.ConvertToUtc(new DateTime(2018, 03, 11, 4, 0, 0), timeZone));
+			var phoneActivity = new Activity("Phone")
+			{
+				InWorkTime = true,
+				InContractTime = true,
+				DisplayColor = Color.Green
+			};
+			assignment.AddActivity(phoneActivity, period);
+			assignment.SetShiftCategory(new ShiftCategory("sc"));
+			ScheduleData.Add(assignment);
+
+			var result = Target.FetchDayData(date);
+			var layerDetails = result.Schedule.Periods.Single();
+			layerDetails.StartPositionPercentage.Should().Be.EqualTo(0.25M / 2.5M);
+			layerDetails.EndPositionPercentage.Should().Be.EqualTo(2.25M / 2.5M);
+		}
+
+		[Test]
 		public void ShouldNotMapDaylightSavingTimeAdjustmentOnFetchDayData()
 		{
 			TimeZone.IsChina();
