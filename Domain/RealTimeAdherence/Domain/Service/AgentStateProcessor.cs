@@ -65,7 +65,6 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 		private readonly AdherenceEventPublisher _adherenceEventPublisher;
 		private readonly IEventPublisherScope _eventPublisherScope;
 		private readonly ICurrentEventPublisher _currentEventPublisher;
-		private readonly IEventPublisher _eventPublisher;
 		private readonly IRtaTracer _tracer;
 
 		public AgentStateProcessor(
@@ -76,7 +75,6 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 			AdherenceEventPublisher adherenceEventPublisher,
 			IEventPublisherScope eventPublisherScope,
 			ICurrentEventPublisher currentEventPublisher,
-			IEventPublisher eventPublisher,
 			IRtaTracer tracer)
 		{
 			_shiftEventPublisher = shiftEventPublisher;
@@ -86,7 +84,6 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 			_adherenceEventPublisher = adherenceEventPublisher;
 			_eventPublisherScope = eventPublisherScope;
 			_currentEventPublisher = currentEventPublisher;
-			_eventPublisher = eventPublisher;
 			_tracer = tracer;
 		}
 
