@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 		[LogInfo]
 		public virtual ProcessResult Process(ProcessInput input)
 		{
-			var eventCollector = new EventCollector(_currentEventPublisher);
+			var eventCollector = new EventCollector();
 			using (_eventPublisherScope.OnThisThreadPublishTo(eventCollector))
 			{
 				var resultState = processRelevantMoments(input);

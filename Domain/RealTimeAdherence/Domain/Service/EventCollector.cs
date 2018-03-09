@@ -9,12 +9,6 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 	public class EventCollector : IEventPublisher
 	{
 		private readonly IList<IEvent> _events = new List<IEvent>();
-		private readonly ICurrentEventPublisher _publisher;
-
-		public EventCollector(ICurrentEventPublisher publisher)
-		{
-			_publisher = publisher;
-		}
 
 		public void Publish(params IEvent[] events)
 		{
