@@ -167,6 +167,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 
 		setPostShiftTradeMenuVisibility(data);
 		self.currentUserDate(getCurrentUserDate());
+		self.daylightSavingTimeAdjustment = data.DaylightSavingTimeAdjustment;
 		self.isLoading(false);
 	};
 
@@ -316,7 +317,8 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 			timelines: self.timeLines(),
 			mergeSameIntervals: self.mergeIdenticalProbabilityIntervals,
 			hideProbabilityEarlierThanNow: self.hideProbabilityEarlierThanNow,
-			userTexts: self.userTexts
+			userTexts: self.userTexts,
+			daylightSavingTimeAdjustment: self.daylightSavingTimeAdjustment
 		};
 		self.fixedDate = self.selectedDate;
 

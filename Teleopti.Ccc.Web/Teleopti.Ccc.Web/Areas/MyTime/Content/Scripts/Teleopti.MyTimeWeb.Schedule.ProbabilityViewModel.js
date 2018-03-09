@@ -1,4 +1,4 @@
-﻿Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel = function (rawProbabilityCellData, probabilityType, boundaries, userTexts, parent, layoutDirection, hideProbabilityEarlierThanNow) {
+﻿Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel = function (rawProbabilityCellData, parent, boundaries, options) {
 	var startPositionVal,
 		intervalLengthVal,
 		constants = Teleopti.MyTimeWeb.Common.Constants;
@@ -21,12 +21,26 @@
 
 	function generateStyleJson() {
 		var styleJson = {};
-		var startPositionProperty = layoutDirection === constants.layoutDirection.horizontal ? "left" : "top";
-		var lengthProperty = layoutDirection === constants.layoutDirection.horizontal ? "width" : "height";
+		var startPositionProperty = options.layoutDirection === constants.layoutDirection.horizontal ? "left" : "top";
+		var lengthProperty = options.layoutDirection === constants.layoutDirection.horizontal ? "width" : "height";
 		var percentagePerMinute = boundaries.lengthPercentagePerMinute;
 
-		startPositionVal = (percentagePerMinute * (rawProbabilityCellData.startTimeInMinutes - boundaries.timelineStartMinutes + 0.1) * 100).toFixed(2);
-		intervalLengthVal = (percentagePerMinute * (rawProbabilityCellData.endTimeInMinutes - rawProbabilityCellData.startTimeInMinutes + 0.1) * 100).toFixed(2);
+		var probabilityStartInMinutes = rawProbabilityCellData.startTimeInMinutes, 
+			probabilityEndInMinutes = rawProbabilityCellData.endTimeInMinutes;
+
+		if(options.daylightSavingTimeAdjustment && options.daylightSavingTimeAdjustment.EnteringDST) {
+			if(probabilityStartInMinutes >= options.daylightSavingTimeAdjustment.LocalDSTStartTimeInMinutes) {
+				probabilityStartInMinutes -= options.daylightSavingTimeAdjustment.AdjustmentOffsetInMinutes;
+			}
+
+			if(probabilityEndInMinutes >= options.daylightSavingTimeAdjustment.LocalDSTStartTimeInMinutes) {
+				probabilityEndInMinutes -= options.daylightSavingTimeAdjustment.AdjustmentOffsetInMinutes;
+			}
+		}
+
+		startPositionVal = (percentagePerMinute * (probabilityStartInMinutes - boundaries.timelineStartMinutes + 0.1) * 100).toFixed(2);
+		
+		intervalLengthVal = (percentagePerMinute * (probabilityEndInMinutes - probabilityStartInMinutes + 0.1) * 100).toFixed(2);
 
 		styleJson[startPositionProperty] = startPositionVal + "%";
 		styleJson[lengthProperty] = intervalLengthVal + "%";
@@ -36,24 +50,24 @@
 
 	function getTooltipsTitle() {
 		var result = "";
-		if (probabilityType === constants.probabilityType.absence) {
-			result = userTexts.ProbabilityToGetAbsenceColon;
-		} else if (probabilityType === constants.probabilityType.overtime) {
-			result = userTexts.ProbabilityToGetOvertimeColon;
+		if (options.probabilityType === constants.probabilityType.absence) {
+			result = options.userTexts.ProbabilityToGetAbsenceColon;
+		} else if (options.probabilityType === constants.probabilityType.overtime) {
+			result = options.userTexts.ProbabilityToGetOvertimeColon;
 		}
 		return result;
 	}
 
 	function generateTooltips() {
-		if (!hideProbabilityEarlierThanNow || parent.userNowInMinute() <= 0 || (parent.userNowInMinute() > 0 && parent.userNowInMinute() < rawProbabilityCellData.endTimeInMinutes)) {
+		if (!options.hideProbabilityEarlierThanNow || parent.userNowInMinute() <= 0 || (parent.userNowInMinute() > 0 && parent.userNowInMinute() < rawProbabilityCellData.endTimeInMinutes)) {
 			var label = "",
 				tooltipTitle = getTooltipsTitle(),
 				intervalTimeSpanText = generateIntervalTimeSpanText(rawProbabilityCellData.startTimeMoment, rawProbabilityCellData.endTimeMoment);
 
 			if (rawProbabilityCellData.possibility === constants.probabilityLevel.low)
-				label = userTexts.Low;
+				label = options.userTexts.Low;
 			else if (rawProbabilityCellData.possibility === constants.probabilityLevel.high)
-				label = userTexts.High;
+				label = options.userTexts.High;
 
 			return "<div>" +
 				"  <div>" + tooltipTitle + "</div>" +

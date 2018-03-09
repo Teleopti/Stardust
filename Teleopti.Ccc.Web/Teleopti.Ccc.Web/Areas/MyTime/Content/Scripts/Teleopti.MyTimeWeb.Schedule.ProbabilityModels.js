@@ -99,7 +99,7 @@
 		}
 
 		var boundaries = new Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary(dayViewModel, options.timelines,
-			options.probabilityType, rawProbabilities);
+			options.probabilityType, rawProbabilities, options.daylightSavingTimeAdjustment);
 
 		var probabilityModels = [], filteredRawProbabilities = [], cellDataList = [];
 
@@ -139,8 +139,7 @@
 				}
 			}
 
-			probabilityModel = new Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel(cellDataList[i], options.probabilityType,
-				boundaries, options.userTexts, dayViewModel, options.layoutDirection, options.hideProbabilityEarlierThanNow);
+			probabilityModel = new Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel(cellDataList[i], dayViewModel, boundaries, options);
 
 			if (!$.isEmptyObject(probabilityModel)) {
 				probabilityModels.push(probabilityModel);

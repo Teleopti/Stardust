@@ -1,7 +1,7 @@
 ﻿/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Common.js"/>
 
 Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary = function (dayViewModel, timelines, probabilityType,
-	probabilities) {
+	probabilities, daylightSavingTimeAdjustment) {
 	var constants = Teleopti.MyTimeWeb.Common.Constants;
 
 	var shiftStartMinutes = -1;
@@ -26,7 +26,12 @@ Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary = function (dayViewModel, timeli
 		? timelineEndMinutes - constants.timelineMarginInMinutes
 		: timelineEndMinutes;
 
-	var lengthPercentagePerMinute = 1 / (timelineEndMinutes - timelineStartMinutes);
+	var totalLength = timelineEndMinutes - timelineStartMinutes;
+	if (daylightSavingTimeAdjustment && daylightSavingTimeAdjustment.EnteringDST) {
+		totalLength = totalLength - daylightSavingTimeAdjustment.AdjustmentOffsetInMinutes;
+	}
+
+	var lengthPercentagePerMinute = 1 / totalLength;
 
 	var momentDate = Teleopti.MyTimeWeb.Common.MomentAsUTCIgnoringTimezone(
 					dayViewModel.fixedDate() && dayViewModel.fixedDate()._isAMomentObject ?

@@ -262,6 +262,48 @@ $(document).ready(function () {
 		equal(probabilities.length, 8);
 	});
 
+	test("Should calcultate probability postition and length correctly for overtime on entering DST day", function () {
+		var date = '2018-03-11';
+		var scheduleDay = {
+			isFullDayAbsence: false,
+			isDayOff: function() { return true; },
+			fixedDate: function () { return date; },
+			periods: [
+				{
+					"StartTime": date + 'T01:00:00',
+					"EndTime": date + 'T04:00:00'
+				}
+			]
+		};
+		//02:00 - 03:00 is deleted from raw probability data on entering DST day
+		var rawProbability = createRawProbabilities(date);
+		rawProbability.splice(8, 4);
+		rawProbability[7].EndTime = date + 'T03:00:00';
+		rawProbability.splice(12);
+
+		var options = {
+			probabilityType: constants.probabilityType.overtime,
+			timelines: createTimeline(1, 4),
+			mergeSameIntervals: true,
+			daylightSavingTimeAdjustment: {
+				AdjustmentOffsetInMinutes: 60,
+				LocalDSTStartTimeInMinutes: 180,
+				EnteringDST: true
+			}
+		};
+
+		rawProbability.forEach(function(p) {
+			p.Possibility = 1;
+		});
+
+		var probabilities = Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(rawProbability, scheduleDay, options);
+		equal(probabilities.length, 1);
+		equal(probabilities[0].startPosition, (1/150 * (60 - 45 + 0.1) * 100).toFixed(2));
+
+		var adjustmentOffsetInMinutes = options.daylightSavingTimeAdjustment.AdjustmentOffsetInMinutes;
+		equal(probabilities[0].intervalLength, (1/150 * (240 - adjustmentOffsetInMinutes - 60 + 0.1) * 100).toFixed(2));
+	});
+
 	test("Should not create probability if set to show absence probability but is dayoff", function () {
 		var scheduleDay = {
 			isFullDayAbsence: false,
@@ -625,7 +667,7 @@ $(document).ready(function () {
 		var probabilities = Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(
 			expectedRawProbabilities, scheduleDay, options);
 
-		equal(probabilities[probabilities.length - 2].tooltips().indexOf("00:00 - 04:10") > -1, true);
-		equal(probabilities[probabilities.length - 1].tooltips().indexOf("08:50 - 09:00") > -1, true);
+		equal(probabilities[0].tooltips().indexOf("00:00 - 04:10") > -1, true);
+		equal(probabilities[1].tooltips().indexOf("08:50 - 09:00") > -1, true);
 	});
 });
