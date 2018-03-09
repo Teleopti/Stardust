@@ -6,7 +6,7 @@ import { WorkspaceService } from '../../../services';
 	template: '<div>Override me</div>'
 })
 export class RolePage {
-	constructor(public workspaceService: WorkspaceService) { }
+	constructor(public workspaceService: WorkspaceService) {}
 
 	@Input() roles: Array<Role> = [];
 	@Output() onRolesChanged = new EventEmitter<Array<Role>>();
@@ -24,7 +24,11 @@ export class RolePage {
 			});
 		});
 
-		return Array.from(uniqueIds);
+		return Array.from(uniqueIds).sort((rId1, rId2) => {
+			const role1 = this.getRole(rId1);
+			const role2 = this.getRole(rId2);
+			return role1.Name.localeCompare(role2.Name);
+		});
 	}
 
 	getRolesNotOnAll() {
@@ -49,7 +53,8 @@ export class RolePage {
 
 	isRoleOnAll(roleId: string): boolean {
 		return (
-			this.workspaceService.getSelectedPeople().filter(({ Roles }) => Roles.map(role => role.Id).includes(roleId)).length === this.workspaceService.getSelectedPeople().length
+			this.workspaceService.getSelectedPeople().filter(({ Roles }) => Roles.map(role => role.Id).includes(roleId))
+				.length === this.workspaceService.getSelectedPeople().length
 		);
 	}
 
