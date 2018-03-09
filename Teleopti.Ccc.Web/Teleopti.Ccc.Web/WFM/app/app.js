@@ -143,7 +143,7 @@ var wfm = angular.module('wfm', [
 				if (preloadDone) {
 					if (!permitted(event, next)) {
 						event.preventDefault();
-						notPermitted();
+						notPermitted(next);
 					}
 					return;
 				}
@@ -204,10 +204,11 @@ var wfm = angular.module('wfm', [
 				return permitted;
 			};
 
-			function notPermitted() {
+			function notPermitted(next) {
 				$state.go('main');
 
 				var moduleName;
+				var url = next.url && next.url.split('/')[1];
 				areas.forEach(function (area) {
 					if (name && (area.InternalName.indexOf(name) > -1 || name.indexOf(area.InternalName) > -1)) {
 						moduleName = area.Name;
