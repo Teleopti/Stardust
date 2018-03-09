@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
@@ -14,6 +15,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 
 	    bool OutsideOrAtMaximumTargetDaysOff(IScheduleDictionary scheduleDictionary, IVirtualSchedulePeriod virtualSchedulePeriod);
 
-		IList<IDayOffOnPeriod> WeekPeriodsSortedOnDayOff(IScheduleMatrixPro scheduleMatrixPro);
+		IList<DayOffOnPeriod> WeekPeriodsSortedOnDayOff(IScheduleMatrixPro scheduleMatrixPro);
 	}
 }

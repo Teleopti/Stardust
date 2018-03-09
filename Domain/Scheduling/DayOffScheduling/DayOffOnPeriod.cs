@@ -8,7 +8,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 {
 	
-	public class DayOffOnPeriod : IDayOffOnPeriod
+	public class DayOffOnPeriod
 	{
 		private readonly IList<IScheduleDay> _scheduleDays;
 		private readonly DateOnlyPeriod _period;

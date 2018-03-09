@@ -78,10 +78,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return (dayOffsNow.Count >= targetDaysOff + contract.PositiveDayOffTolerance);
         }
 
-		public IList<IDayOffOnPeriod> WeekPeriodsSortedOnDayOff(IScheduleMatrixPro scheduleMatrixPro)
+		public IList<DayOffOnPeriod> WeekPeriodsSortedOnDayOff(IScheduleMatrixPro scheduleMatrixPro)
 		{
 			var weekPeriod = new DateOnlyPeriod();
-			var weekPeriods = new List<IDayOffOnPeriod>();
+			var weekPeriods = new List<DayOffOnPeriod>();
 
 			foreach (var scheduleDayPro in scheduleMatrixPro.UnlockedDays)
 			{
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return sortedOnMinList;
 		}
 
-		public IDayOffOnPeriod CountDayOffsOnPeriod(IScheduleMatrixPro scheduleMatrixPro, DateOnlyPeriod period)
+		public DayOffOnPeriod CountDayOffsOnPeriod(IScheduleMatrixPro scheduleMatrixPro, DateOnlyPeriod period)
 		{
 			var count = 0;
 			IList<IScheduleDay> scheduleDays = new List<IScheduleDay>();
