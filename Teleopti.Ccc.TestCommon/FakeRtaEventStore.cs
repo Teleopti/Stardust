@@ -44,6 +44,14 @@ namespace Teleopti.Ccc.TestCommon
 					Period = new DateTimePeriod(eve.StartTime, eve.EndTime),
 					Event = eve
 				});
+			
+			if (@event is ApprovedPeriodRemovedEvent even)
+				_events.Add(new storedEvent
+				{
+					PersonId = even.PersonId,
+					Period = new DateTimePeriod(even.StartTime, even.EndTime),
+					Event = even
+				});
 		}
 
 		public IEnumerable<IEvent> Load(Guid personId, DateTimePeriod period)

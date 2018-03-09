@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.ApprovePeriodAsInAdherence;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events;
@@ -34,15 +35,15 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay
 				.ToArray();
 
 			now = floorToSeconds(now);
-
-			_approvedPeriods = buildApprovedPeriods(events);
-
+			
+			var recordedApprovedPeriods = buildPeriods<PeriodApprovedAsInAdherenceEvent>(events);
+			var removedApprovedPeriods = buildPeriods<ApprovedPeriodRemovedEvent>(events);
+			_approvedPeriods = subtractPeriods(recordedApprovedPeriods, removedApprovedPeriods);
+			
 			_recordedOutOfAdherences = buildPeriods(HistoricalChangeAdherence.Out, allChanges, now);
-
-			var recordedNeutralAdherences = buildPeriods(HistoricalChangeAdherence.Neutral, allChanges, now);
-
 			_outOfAdherences = subtractPeriods(_recordedOutOfAdherences, _approvedPeriods);
-
+			
+			var recordedNeutralAdherences = buildPeriods(HistoricalChangeAdherence.Neutral, allChanges, now);
 			var neutralAdherences = subtractPeriods(recordedNeutralAdherences, _approvedPeriods);
 			var outOfAhderencesWithinShift = withinShift(shift, _outOfAdherences);
 			var neutralAdherencesWithinShift = withinShift(shift, neutralAdherences);
@@ -79,12 +80,12 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay
 				.Select(x => x.First())
 				.ToArray();
 
-		private static IEnumerable<DateTimePeriod> buildApprovedPeriods(IEnumerable<IEvent> events) =>
+		private static IEnumerable<DateTimePeriod> buildPeriods<T>(IEnumerable<IEvent> events) =>
 			events
-				.OfType<PeriodApprovedAsInAdherenceEvent>()
-				.Select(a => new DateTimePeriod(a.StartTime, a.EndTime))
+				.OfType<T>()
+				.Select(a => new DateTimePeriod(((dynamic)a).StartTime, ((dynamic)a).EndTime))
 				.ToArray();
-
+		
 		private class periodAccumulator
 		{
 			public DateTime? StartTime;

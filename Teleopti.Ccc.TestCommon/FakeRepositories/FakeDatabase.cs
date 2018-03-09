@@ -177,6 +177,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return database.WithApprovedPeriod(null, startTime, endTime);
 		}
 
+		public static FakeDatabase WithRemovedApprovedPeriod(this FakeDatabase database, string startTime, string endTime)
+		{
+			return database.WithRemovedApprovedPeriod(null, startTime, endTime);
+		}
+
 		public static FakeDatabase WithAdherenceIn(this FakeDatabase database, string time)
 		{
 			return database.WithAdherenceIn(null, time);
@@ -379,6 +384,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private readonly HardcodedSkillGroupingPageId _hardcodedSkillGroupingPageId;
 		private readonly FakeMultiplicatorDefinitionSetRepository _multiplicatorDefinitionSets;
 		private readonly ApprovePeriodAsInAdherence _approvePeriod;
+		private readonly RemoveApprovedPeriod _removePeriod;
 		private readonly HistoricalChange _historicalChange;
 		private readonly IEventPublisher _publisher;
 
@@ -435,6 +441,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			HardcodedSkillGroupingPageId hardcodedSkillGroupingPageId,
 			FakeMultiplicatorDefinitionSetRepository multiplicatorDefinitionSets,
 			ApprovePeriodAsInAdherence approvePeriod,
+			RemoveApprovedPeriod removePeriod,
 			HistoricalChange historicalChange,
 			IEventPublisher publisher)
 		{
@@ -472,6 +479,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_approvePeriod = approvePeriod;
 			_historicalChange = historicalChange;
 			_publisher = publisher;
+			_removePeriod = removePeriod;
 		}
 
 		public void CreateDefaultData()
@@ -1101,6 +1109,17 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public FakeDatabase WithApprovedPeriod(Guid? id, string startTime, string endTime)
 		{
 			_approvePeriod.Approve(new ApprovedPeriod
+			{
+				PersonId = id ?? _person.Id.Value,
+				StartTime = startTime.Utc(),
+				EndTime = endTime.Utc()
+			});
+			return this;
+		}
+
+		public FakeDatabase WithRemovedApprovedPeriod(Guid? id, string startTime, string endTime)
+		{
+			_removePeriod.Remove(new RemovedPeriod
 			{
 				PersonId = id ?? _person.Id.Value,
 				StartTime = startTime.Utc(),
