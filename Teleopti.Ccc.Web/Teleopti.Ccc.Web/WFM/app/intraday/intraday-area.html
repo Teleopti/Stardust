@@ -1,362 +1,300 @@
 <div>
-	<div class="view-header with-fab with-desc">
-		<div class="view-title">
-			<h1><i class="mdi mdi-compass-outline"></i> {{'Intraday'|translate}}</h1>
-		</div>
-		<div class="fab-wrapper" ng-if="vm.HasPermissionToModifySkillArea && !vm.toggles.unifiedSkillGroupManagement">
-			<button class="skill-area-create wfm-fab grow-out material-depth-1" ng-click="vm.configMode()">
-				<i class="mdi mdi-plus"></i>
-				<md-tooltip>{{'CreateSkillArea'|translate}}</md-tooltip>
-			</button>
-		</div>
-	</div>
-	<div class="con-row">
-		<div class="con-flex" style="flex: 2 1 0">
-			<div class="panel con-flex material-depth-1">
-				<div class="con-row layout-align-center-center">
-					<span class="con-flex">
-						<md-autocomplete id="skill-id"
-										class="autocomplete-skill"
-										md-selected-item="vm.selectedSkill"
-										md-search-text="vm.searchSkillText"
-										md-selected-item-change="vm.selectedSkillChange(skill)"
-										md-items="skill in vm.querySearch(vm.searchSkillText, vm.skills)"
-										md-item-text="skill.Name"
-										md-min-length="0"
-										placeholder="{{'SelectSkill'|translate}}">
-							<md-item-template>
-								<i ng-class="vm.getSkillIcon(skill)"></i>
-								<span md-highlight-text="vm.searchSkillText" md-highlight-flags="^i">{{skill.Name}}</span>
-								<md-tooltip ng-if="!skill.DoDisplayData">{{'UnsupportedSkill' | translate}}</md-tooltip>
-							</md-item-template>
-							<md-not-found>
-								{{'NoSkillFound'|translate}}
-							</md-not-found>
-						</md-autocomplete>
-						<i class="mdi mdi-close pointer ie-cross grow-out" ng-show="vm.selectedSkill"
-						ng-click="vm.clearSkillHelper()">
-							<md-tooltip>{{'Clear'|translate}}</md-tooltip>
-						</i>
-					</span>
-					<span class="con-flex ">
-						<md-autocomplete id="skill-area-id"
-										class="autocomplete-skillarea"
-										md-input-id="skill-area-input"
-										md-selected-item="vm.selectedSkillArea"
-										md-search-text="vm.searchSkillAreaText"
-										md-selected-item-change="vm.selectedSkillAreaChange(skillArea)"
-										md-items="skillArea in vm.querySearch(vm.searchSkillAreaText, vm.skillAreas)"
-										md-item-text="skillArea.Name"
-										md-min-length="0"
-										placeholder={{vm.getSkillGroupText()}}>
-							<md-item-template>
-								<span md-highlight-text="vm.searchSkillAreaText"
-									md-highlight-flags="^i">{{skillArea.Name}}</span>
-							</md-item-template>
-							<md-not-found ng-show="!vm.toggles.unifiedSkillGroupManagement">
-								{{'NoSkillAreasFound'|translate}}
-							</md-not-found>
-							<md-not-found ng-show="vm.toggles.unifiedSkillGroupManagement">
-								{{'NoSkillGroupsFound'|translate}}
-							</md-not-found>
-						</md-autocomplete>
-						<i class="mdi mdi-close pointer ie-cross grow-out" ng-show="vm.selectedSkillArea"
-						ng-click="vm.clearSkillAreaHelper()">
-							<md-tooltip>{{'Clear'|translate}}</md-tooltip>
-						</i>
-					</span>
-					<div class="line-right last-time cursor-pointer" ng-show="chosenOffset.value === 0">
-						<span ng-show="latestActualInterval && latestActualInterval !== 'undefined - undefined'">
-							{{vm.latestActualInterval}}
-						</span>
-						<span ng-cloak
-							ng-show="!vm.latestActualInterval || vm.latestActualInterval == 'undefined - undefined'">--:-- - --:--</span>
-						<i class="mdi mdi-clock"></i>
-						<md-tooltip>{{'LatestActualInterval'|translate}}</md-tooltip>
-					</div>
-					<div ng-if="vm.toggles.modifySkillGroups && vm.HasPermissionToModifySkillArea">
-						<skill-group-manager-button on-click="vm.openSkillGroupManager()" />
-					</div>
-					<div ng-if="vm.toggles.unifiedSkillGroupManagement && !vm.toggles.modifySkillGroups && vm.HasPermissionToModifySkillArea">
-						<skill-group-button on-click="vm.configMode()" />
-					</div>
-					<div style="border-left: 1px solid #e0e0e0; margin-left: 10px; height: 100%;">&nbsp;</div>
-					<div class="showOtherDay" ng-if="vm.toggles.showOtherDay">
-						<date-offset on-date-change="vm.changeChosenOffset(value)"
-									 chosen-offset="vm.chosenOffset"></date-offset>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div id="chartPanel" class="con-row intraday-monitor-item" ng-show="vm.selectedItem.Name">
-		<div class="con-flex">
-			<div class="panel material-depth-1">
-				<div class="sub-header" ng-if="vm.toggles.showOtherDay">
-					<h2 id="viewingDate">
-							{{vm.getLocalDate(vm.chosenOffset.value)}}
-							<span ng-if="vm.selectedSkillArea.Name">
-								,
-								<b>{{ vm.selectedSkillArea.Name }}</b>:
-								<span ng-if="vm.filterSkills.length > 0">{{vm.filterSkills.length}} {{'IntraDayChipNumberOf' | translate}} </span>
-								{{vm.selectedSkillArea.Skills.length}} {{'PersonSkill'|translate}} 
-								<span ng-if="vm.skillAreaMessage">({{vm.skillAreaMessage}})</span>
-							</span>
-					</h2>
-					<div ng-hide="vm.showIncluded" class="animate-show con-row">
-						<div class="con-flex">
-							<div class="wfm-chip-wrap" ng-repeat="skill in vm.selectedSkillArea.Skills | orderBy : Name"
-									ng-class="{'chip-disabled':!skill.DoDisplayData}">
-								<span class="wfm-chip" ng-click="vm.openSkillFromArea(skill)">
-								<span class="chip-handle" ng-class="vm.chipClass(skill)">
-									<i ng-class="vm.checkIfFilterSkill(skill)"></i>
-								</span>
-								<md-tooltip>
-									<span ng-if="skill.DoDisplayData && skill.IsMultisiteSkill">{{skill.SkillType | translate}} - {{'MultisiteSkill' | translate}}</span>
-									<span ng-if="skill.DoDisplayData && !skill.IsMultisiteSkill">{{skill.SkillType | translate}}</span>
-									<span ng-if="!skill.DoDisplayData">{{'UnsupportedSkill' | translate}}</span>
-								</md-tooltip>
-								<span class="chip-text">{{skill.Name}}</span>
-								</span>
-							</div>
-						</div>
-					</div>
-					<div class="head-actions panel-menu" ng-show="vm.toggles.exportToExcel">
-						<div class="head-actions panel-menu">
-							<div tabindex=0 class="context-menu card-context">
-								<i class="skill-area-options mdi mdi-dots-vertical"></i>
-								<span class="context-menu-left">
-								<ul class="wfm-list">
-									<li ng-click="vm.exportIntradayData()" ng-show="!vm.exporting">
-										<i class="mdi mdi-file-excel"></i>
-										{{'ExportToExcel' | translate}}
-										<md-progress-circular md-mode="indeterminate" md-diameter="18"
-															ng-show="vm.exporting"></md-progress-circular>
-										<md-tooltip ng-if="!vm.exporting">{{'ExportToExcel'|translate}}</md-tooltip>
-										<md-tooltip ng-if="vm.exporting">{{'WorkingThreeDots'|translate}}</md-tooltip>
-									</li>
-									<li ng-if="vm.selectedSkillArea.Name" ng-click="vm.showIncluded=!vm.showIncluded">
-										<i ng-hide="vm.showIncluded" class="mdi mdi-eye"></i>
-										<i ng-show="vm.showIncluded" class="mdi mdi-eye-off"></i>
-										{{'IncludedSkills'|translate}}
-									</li>
-									<li ng-show="!vm.toggles.modifySkillGroups && vm.selectedSkillArea.Name" ng-click='vm.toggleModal()'><i class="skill-area-delete mdi mdi-delete"></i>{{'Delete'|translate}}</li>
-								</ul>
-							</span>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="wfm-slide-tabs tabbed-panel">
-					<div class="con-row">
-						<div class="con-flex">
-							<md-tabs md-dynamic-height md-selected="vm.activeTab">
-								<md-tab label="{{'IncomingTraffic'|translate}}"
-										ng-click="vm.pollActiveTabDataHelper(vm.activeTab)">
-									<md-content ng-cloak class="md-padding">
-										<div class="con-row">
-											<div class="con-flex" style="height: 15px">
-												<md-progress-linear ng-if="vm.viewObj.waitingForData"
-																	md-mode="indeterminate"></md-progress-linear>
-											</div>
-										</div>
-									</md-content>
-									<md-content ng-cloak class="md-padding" ng-show="vm.viewObj.hasMonitorData">
-										<div class="con-row">
-											<div class="con-flex">
-												<p ng-if="vm.viewObj.hasEmailSkill && !vm.toggles.otherSkillsLikeEmail">
-													<i
-															class="mdi mdi-alert"></i> {{'UnavailableSeries'|translate}}
-												</p>
-												<div class="wfm-chart intraday-chart" id="trafficChart"></div>
-											</div>
-										</div>
-										<div class="con-row full-padding">
-											<div class="con-flex"></div>
-											<div class="con-flex">
-												<b>{{'SummaryUpToLatestActualInterval'|translate}}</b>
-												<table class="wfm-table wfm-filter-options">
-													<thead>
-													<tr>
-														<th></th>
-														<th>{{'Forecasted'|translate}}</th>
-														<th>{{'Actual'|translate}}</th>
-														<th>{{'Difference'|translate}}</th>
-													</tr>
-													</thead>
-													<tbody>
-													<tr>
-														<td>{{'Volume'|translate}}</td>
-														<td class="number-cell forecasted-calls ">
-															{{vm.viewObj.summary.summaryForecastedCalls}}
-														</td>
-														<td class="number-cell calculated-calls">
-															{{vm.viewObj.summary.summaryCalculatedCalls}}
-														</td>
-														<td class="number-cell calls-difference">
-															{{vm.viewObj.summary.forecastActualCallsDifference}}%
-														</td>
-													</tr>
-													<tr>
-														<td>{{'AverageHandlingTime'|translate}}</td>
-														<td class="number-cell forecasted-aht">
-															{{vm.viewObj.summary.summaryForecastedAverageHandleTime}}
-														</td>
-														<td class="number-cell aht">
-															{{vm.viewObj.summary.summaryAverageHandleTime}}
-														</td>
-														<td class="number-cell aht-difference">
-															{{vm.viewObj.summary.forecastActualAverageHandleTimeDifference}}%
-														</td>
-													</tr>
-													</tbody>
-												</table>
-											</div>
-											<div class="con-flex"></div>
-										</div>
-									</md-content>
-									<md-content ng-cloak class="md-padding" style="overflow: hidden" ng-show="!vm.viewObj.hasMonitorData">
-										<span class="con-flex no-data-available"
-											  ng-show="!vm.viewObj.waitingForData && !vm.viewObj.hasMonitorData">
-											{{'NoDataAvailable'|translate}}
-										</span>
-									</md-content>
-								</md-tab>
-								<md-tab label="{{'Performance'|translate}}"
-										ng-click="vm.pollActiveTabDataHelper(vm.activeTab)">
-									<md-content ng-cloak class="md-padding">
-										<div class="con-row">
-											<div class="con-flex" style="height: 15px">
-												<md-progress-linear ng-if="vm.viewObj.waitingForData"
-																	md-mode="indeterminate"></md-progress-linear>
-											</div>
-										</div>
-									</md-content>
-									<md-content ng-cloak class="md-padding" ng-show="vm.viewObj.hasMonitorData">
-										<div class="con-row">
-											<div class="con-flex">
-												<p ng-if="vm.viewObj.hasEmailSkill && !vm.toggles.otherSkillsLikeEmail">
-													<i
-															class="mdi mdi-alert"></i> {{'UnavailableSeries'|translate}}
-												</p>
-												<p ng-if="!vm.viewObj.showAbandonRate" id="noAbandonRate"><i
-														class="mdi mdi-alert"></i> {{'NotShowingAbandonRate'|translate}}
-												</p>
-												<div class="wfm-chart intraday-chart" id="performanceChart"></div>
-											</div>
-										</div>
+    <div class="view-header with-fab with-desc">
+        <div class="view-title">
+            <h1>
+                <i class="mdi mdi-compass-outline"></i> {{'Intraday'|translate}}</h1>
+        </div>
+        <div class="fab-wrapper" ng-if="vm.HasPermissionToModifySkillArea && !vm.toggles['WFM_Unified_Skill_Group_Management_45417']">
+            <button class="skill-area-create wfm-fab grow-out material-depth-1" ng-click="vm.configMode()">
+                <i class="mdi mdi-plus"></i>
+                <md-tooltip>{{'CreateSkillArea'|translate}}</md-tooltip>
+            </button>
+        </div>
+    </div>
+    <div class="con-row">
+        <div class="con-flex" style="flex: 2 1 0">
+            <div class="panel con-flex material-depth-1">
+                <div class="con-row layout-align-center-center">
+                    <span class="con-flex ">
+                        <skill-picker skills="vm.skills" skill-areas="vm.skillAreas" item-to-return="vm.selectSkillOrSkillArea" preselected-item="vm.preselectedItem"></skill-picker>
+                        <i class="mdi mdi-close pointer ie-cross grow-out" ng-show="vm.selectedSkillArea" ng-click="vm.clearSkillAreaHelper()">
+                            <md-tooltip>{{'Clear'|translate}}</md-tooltip>
+                        </i>
+                    </span>
+                    <div class="line-right last-time cursor-pointer" ng-show="chosenOffset.value === 0">
+                        <span ng-show="latestActualInterval && latestActualInterval !== 'undefined - undefined'">
+                            {{vm.latestActualInterval}}
+                        </span>
+                        <span ng-cloak ng-show="!vm.latestActualInterval || vm.latestActualInterval == 'undefined - undefined'">--:-- - --:--</span>
+                        <i class="mdi mdi-clock"></i>
+                        <md-tooltip>{{'LatestActualInterval'|translate}}</md-tooltip>
+                    </div>
+                    <div ng-if="vm.toggles['WFM_Modify_Skill_Groups_43727'] && vm.HasPermissionToModifySkillArea">
+                        <skill-group-manager-button on-click="vm.openSkillGroupManager()" />
+                    </div>
+                    <div ng-if="vm.toggles['WFM_Unified_Skill_Group_Management_45417'] && !vm.toggles['WFM_Modify_Skill_Groups_43727'] && vm.HasPermissionToModifySkillArea">
+                        <skill-group-button on-click="vm.configMode()" />
+                    </div>
+                    <div style="border-left: 1px solid #e0e0e0; margin-left: 10px; height: 100%;">&nbsp;</div>
+                    <div class="showOtherDay" ng-if="vm.toggles['WFM_Intraday_Show_For_Other_Days_43504']">
+                        <date-offset on-date-change="vm.changeChosenOffset(value)" chosen-offset="vm.chosenOffset"></date-offset>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="chartPanel" class="con-row intraday-monitor-item" ng-show="vm.selectedItem.Name">
+        <div class="con-flex">
+            <div class="panel material-depth-1">
+                <div class="sub-header" ng-if="vm.toggles['WFM_Intraday_Show_For_Other_Days_43504']">
+                    <h2 id="viewingDate">
+                        {{vm.getLocalDate(vm.chosenOffset.value)}}
+                        <span ng-if="vm.selectedSkillArea.Name">
+                            ,
+                            <b>{{ vm.selectedSkillArea.Name }}</b>:
+                            <span ng-if="vm.filterSkills.length > 0">{{vm.filterSkills.length}} {{'IntraDayChipNumberOf' | translate}} </span>
+                            {{vm.selectedSkillArea.Skills.length}} {{'PersonSkill'|translate}}
+                            <span ng-if="vm.skillAreaMessage">({{vm.skillAreaMessage}})</span>
+                        </span>
+                    </h2>
+                    <div ng-hide="vm.showIncluded" class="animate-show con-row">
+                        <div class="con-flex">
+                            <div class="wfm-chip-wrap" ng-repeat="skill in vm.selectedSkillArea.Skills | orderBy : Name" ng-class="{'chip-disabled':!skill.DoDisplayData}">
+                                <span class="wfm-chip" ng-click="vm.openSkillFromArea(skill)">
+                                    <span class="chip-handle" ng-class="vm.chipClass(skill)">
+                                        <i ng-class="vm.checkIfFilterSkill(skill)"></i>
+                                    </span>
+                                    <md-tooltip>
+                                        <span ng-if="skill.DoDisplayData && skill.IsMultisiteSkill">{{skill.SkillType | translate}} - {{'MultisiteSkill' | translate}}</span>
+                                        <span ng-if="skill.DoDisplayData && !skill.IsMultisiteSkill">{{skill.SkillType | translate}}</span>
+                                        <span ng-if="!skill.DoDisplayData">{{'UnsupportedSkill' | translate}}</span>
+                                    </md-tooltip>
+                                    <span class="chip-text">{{skill.Name}}</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="head-actions panel-menu" ng-show="vm.toggles['WFM_Intraday_Export_To_Excel_44892']">
+                        <div class="head-actions panel-menu">
+                            <div tabindex=0 class="context-menu card-context">
+                                <i class="skill-area-options mdi mdi-dots-vertical"></i>
+                                <span class="context-menu-left">
+                                    <ul class="wfm-list">
+                                        <li ng-click="vm.exportIntradayData()" ng-show="!vm.exporting">
+                                            <i class="mdi mdi-file-excel"></i>
+                                            {{'ExportToExcel' | translate}}
+                                            <md-progress-circular md-mode="indeterminate" md-diameter="18" ng-show="vm.exporting"></md-progress-circular>
+                                            <md-tooltip ng-if="!vm.exporting">{{'ExportToExcel'|translate}}</md-tooltip>
+                                            <md-tooltip ng-if="vm.exporting">{{'WorkingThreeDots'|translate}}</md-tooltip>
+                                        </li>
+                                        <li ng-if="vm.selectedSkillArea.Name" ng-click="vm.showIncluded=!vm.showIncluded">
+                                            <i ng-hide="vm.showIncluded" class="mdi mdi-eye"></i>
+                                            <i ng-show="vm.showIncluded" class="mdi mdi-eye-off"></i>
+                                            {{'IncludedSkills'|translate}}
+                                        </li>
+                                        <li ng-show="!vm.toggles['WFM_Modify_Skill_Groups_43727'] && vm.selectedSkillArea.Name" ng-click='vm.toggleModal()'>
+                                            <i class="skill-area-delete mdi mdi-delete"></i>{{'Delete'|translate}}</li>
+                                    </ul>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="wfm-slide-tabs tabbed-panel">
+                    <div class="con-row">
+                        <div class="con-flex">
+                            <md-tabs md-dynamic-height md-selected="vm.activeTab">
+                                <md-tab label="{{'IncomingTraffic'|translate}}" ng-click="vm.pollActiveTabDataHelper(vm.activeTab)">
+                                    <md-content ng-cloak class="md-padding">
+                                        <div class="con-row">
+                                            <div class="con-flex" style="height: 15px">
+                                                <md-progress-linear ng-if="vm.viewObj.waitingForData" md-mode="indeterminate"></md-progress-linear>
+                                            </div>
+                                        </div>
+                                    </md-content>
+                                    <md-content ng-cloak class="md-padding" ng-show="vm.viewObj.hasMonitorData">
+                                        <div class="con-row">
+                                            <div class="con-flex">
+                                                <p ng-if="vm.viewObj.hasEmailSkill && !vm.toggles['WFM_Intraday_SupportOtherSkillsLikeEmail_44026']">
+                                                    <i class="mdi mdi-alert"></i> {{'UnavailableSeries'|translate}}
+                                                </p>
+                                                <div class="wfm-chart intraday-chart" id="trafficChart"></div>
+                                            </div>
+                                        </div>
+                                        <div class="con-row full-padding">
+                                            <div class="con-flex"></div>
+                                            <div class="con-flex">
+                                                <b>{{'SummaryUpToLatestActualInterval'|translate}}</b>
+                                                <table class="wfm-table wfm-filter-options">
+                                                    <thead>
+                                                        <tr>
+                                                            <th></th>
+                                                            <th>{{'Forecasted'|translate}}</th>
+                                                            <th>{{'Actual'|translate}}</th>
+                                                            <th>{{'Difference'|translate}}</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>{{'Volume'|translate}}</td>
+                                                            <td class="number-cell forecasted-calls ">
+                                                                {{vm.viewObj.summary.summaryForecastedCalls}}
+                                                            </td>
+                                                            <td class="number-cell calculated-calls">
+                                                                {{vm.viewObj.summary.summaryCalculatedCalls}}
+                                                            </td>
+                                                            <td class="number-cell calls-difference">
+                                                                {{vm.viewObj.summary.forecastActualCallsDifference}}%
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>{{'AverageHandlingTime'|translate}}</td>
+                                                            <td class="number-cell forecasted-aht">
+                                                                {{vm.viewObj.summary.summaryForecastedAverageHandleTime}}
+                                                            </td>
+                                                            <td class="number-cell aht">
+                                                                {{vm.viewObj.summary.summaryAverageHandleTime}}
+                                                            </td>
+                                                            <td class="number-cell aht-difference">
+                                                                {{vm.viewObj.summary.forecastActualAverageHandleTimeDifference}}%
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="con-flex"></div>
+                                        </div>
+                                    </md-content>
+                                    <md-content ng-cloak class="md-padding" style="overflow: hidden" ng-show="!vm.viewObj.hasMonitorData">
+                                        <span class="con-flex no-data-available" ng-show="!vm.viewObj.waitingForData && !vm.viewObj.hasMonitorData">
+                                            {{'NoDataAvailable'|translate}}
+                                        </span>
+                                    </md-content>
+                                </md-tab>
+                                <md-tab label="{{'Performance'|translate}}" ng-click="vm.pollActiveTabDataHelper(vm.activeTab)">
+                                    <md-content ng-cloak class="md-padding">
+                                        <div class="con-row">
+                                            <div class="con-flex" style="height: 15px">
+                                                <md-progress-linear ng-if="vm.viewObj.waitingForData" md-mode="indeterminate"></md-progress-linear>
+                                            </div>
+                                        </div>
+                                    </md-content>
+                                    <md-content ng-cloak class="md-padding" ng-show="vm.viewObj.hasMonitorData">
+                                        <div class="con-row">
+                                            <div class="con-flex">
+                                                <p ng-if="vm.viewObj.hasEmailSkill && !vm.toggles['WFM_Intraday_SupportOtherSkillsLikeEmail_44026']">
+                                                    <i class="mdi mdi-alert"></i> {{'UnavailableSeries'|translate}}
+                                                </p>
+                                                <p ng-if="!vm.viewObj.showAbandonRate" id="noAbandonRate">
+                                                    <i class="mdi mdi-alert"></i> {{'NotShowingAbandonRate'|translate}}
+                                                </p>
+                                                <div class="wfm-chart intraday-chart" id="performanceChart"></div>
+                                            </div>
+                                        </div>
 
-										<div class="con-row full-padding">
-											<div class="con-flex"></div>
-											<div class="con-flex">
-												<b>{{'SummaryUpToLatestActualInterval'|translate}}</b>
-												<table class="wfm-table wfm-filter-options">
-													<thead>
-													<tr>
-														<th></th>
-														<th>{{'Average'|translate}}</th>
-													</tr>
-													</thead>
-													<tbody>
-													<tr>
-														<td>{{'ServiceLevel'|translate}}</td>
-														<td class="number-cell service-level">
-															{{vm.viewObj.summary.summaryServiceLevel}} %
-														</td>
-													</tr>
-													<tr ng-if="vm.toggles.showEsl">
-														<td>{{'ESL'|translate}}</td>
-														<td class="number-cell esl">
-															{{vm.viewObj.summary.summaryEstimatedServiceLevel}} %
-														</td>
-													</tr>
-													<tr ng-if="!vm.viewObj.hasEmailSkill && vm.viewObj.showAbandonRate">
-														<td>{{'AbandonedRate'|translate}}</td>
-														<td class="number-cell abandoned-rate">
-															{{vm.viewObj.summary.summaryAbandonedRate}} %
-														</td>
-													</tr>
-													<tr>
-														<td>{{'AverageSpeedOfAnswer'|translate}}</td>
-														<td class="number-cell average-speed-of-answer">
-															{{vm.viewObj.summary.summaryAverageSpeedOfAnswer}}
-															{{'SecondShort'|translate}}
-														</td>
-													</tr>
-													</tbody>
-												</table>
-											</div>
-											<div class="con-flex"></div>
-										</div>
-									</md-content>
-									<md-content ng-cloak class="md-padding" style="overflow: hidden" ng-show="!vm.viewObj.hasMonitorData">
-										<span class="con-flex no-data-available"
-											  ng-show="!vm.viewObj.waitingForData && !vm.viewObj.hasMonitorData">
-											{{'NoDataAvailable'|translate}}
-										</span>
-									</md-content>
-								</md-tab>
-								<md-tab label="{{'Staffing'|translate}}" ng-click="vm.pollActiveTabDataHelper(vm.activeTab)">
-									<md-content ng-cloak class="md-padding">
-										<div class="con-row">
-											<div class="con-flex" style="height: 15px">
-												<md-progress-linear ng-if="vm.viewObj.waitingForData"
-																	md-mode="indeterminate"></md-progress-linear>
-											</div>
-										</div>
+                                        <div class="con-row full-padding">
+                                            <div class="con-flex"></div>
+                                            <div class="con-flex">
+                                                <b>{{'SummaryUpToLatestActualInterval'|translate}}</b>
+                                                <table class="wfm-table wfm-filter-options">
+                                                    <thead>
+                                                        <tr>
+                                                            <th></th>
+                                                            <th>{{'Average'|translate}}</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>{{'ServiceLevel'|translate}}</td>
+                                                            <td class="number-cell service-level">
+                                                                {{vm.viewObj.summary.summaryServiceLevel}} %
+                                                            </td>
+                                                        </tr>
+                                                        <tr ng-if="vm.toggles['Wfm_Intraday_ESL_41827']">
+                                                            <td>{{'ESL'|translate}}</td>
+                                                            <td class="number-cell esl">
+                                                                {{vm.viewObj.summary.summaryEstimatedServiceLevel}} %
+                                                            </td>
+                                                        </tr>
+                                                        <tr ng-if="!vm.viewObj.hasEmailSkill && vm.viewObj.showAbandonRate">
+                                                            <td>{{'AbandonedRate'|translate}}</td>
+                                                            <td class="number-cell abandoned-rate">
+                                                                {{vm.viewObj.summary.summaryAbandonedRate}} %
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>{{'AverageSpeedOfAnswer'|translate}}</td>
+                                                            <td class="number-cell average-speed-of-answer">
+                                                                {{vm.viewObj.summary.summaryAverageSpeedOfAnswer}} {{'SecondShort'|translate}}
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="con-flex"></div>
+                                        </div>
+                                    </md-content>
+                                    <md-content ng-cloak class="md-padding" style="overflow: hidden" ng-show="!vm.viewObj.hasMonitorData">
+                                        <span class="con-flex no-data-available" ng-show="!vm.viewObj.waitingForData && !vm.viewObj.hasMonitorData">
+                                            {{'NoDataAvailable'|translate}}
+                                        </span>
+                                    </md-content>
+                                </md-tab>
+                                <md-tab label="{{'Staffing'|translate}}" ng-click="vm.pollActiveTabDataHelper(vm.activeTab)">
+                                    <md-content ng-cloak class="md-padding">
+                                        <div class="con-row">
+                                            <div class="con-flex" style="height: 15px">
+                                                <md-progress-linear ng-if="vm.viewObj.waitingForData" md-mode="indeterminate"></md-progress-linear>
+                                            </div>
+                                        </div>
 
-									</md-content>
-									<md-content ng-cloak class="md-padding" ng-show="vm.viewObj.hasMonitorData">
-										<div class="con-row">
-											<div class="con-flex">
-												<p ng-if="vm.viewObj.hasEmailSkill && !vm.toggles.otherSkillsLikeEmail">
-													<i
-															class="mdi mdi-alert"></i> {{'UnavailableSeries'|translate}}
-												</p>
-												<p ng-if="!vm.viewObj.showReforecastedAgents" id="noReforcastedAgents">
-													<i
-															class="mdi mdi-alert"></i>
-													{{'NotShowingReforcastedAgents'|translate}}
-												</p>
-												<div class="wfm-chart intraday-chart" id="staffingChart"
-													 ng-show="vm.viewObj.hasMonitorData"></div>
-											</div>
-										</div>
-									</md-content>
-									<md-content ng-cloak class="md-padding" style="overflow: hidden" ng-show="!vm.viewObj.hasMonitorData">
-										<span class="con-flex no-data-available"
-											  ng-show="!vm.viewObj.waitingForData && !vm.viewObj.hasMonitorData">
-											{{'NoDataAvailable'|translate}}
-										</span>
-									</md-content>
-								</md-tab>
-							</md-tabs>
-							</md-content>
-						</div>
-					</div>
-				</div>
-			</div>
+                                    </md-content>
+                                    <md-content ng-cloak class="md-padding" ng-show="vm.viewObj.hasMonitorData">
+                                        <div class="con-row">
+                                            <div class="con-flex">
+                                                <p ng-if="vm.viewObj.hasEmailSkill && !vm.toggles['WFM_Intraday_SupportOtherSkillsLikeEmail_44026']">
+                                                    <i class="mdi mdi-alert"></i> {{'UnavailableSeries'|translate}}
+                                                </p>
+                                                <p ng-if="!vm.viewObj.showReforecastedAgents" id="noReforcastedAgents">
+                                                    <i class="mdi mdi-alert"></i>
+                                                    {{'NotShowingReforcastedAgents'|translate}}
+                                                </p>
+                                                <div class="wfm-chart intraday-chart" id="staffingChart" ng-show="vm.viewObj.hasMonitorData"></div>
+                                            </div>
+                                        </div>
+                                    </md-content>
+                                    <md-content ng-cloak class="md-padding" style="overflow: hidden" ng-show="!vm.viewObj.hasMonitorData">
+                                        <span class="con-flex no-data-available" ng-show="!vm.viewObj.waitingForData && !vm.viewObj.hasMonitorData">
+                                            {{'NoDataAvailable'|translate}}
+                                        </span>
+                                    </md-content>
+                                </md-tab>
+                            </md-tabs>
+                            </md-content>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-			<div ng-cloak class="modal-box">
-				<div ng-cloak ng-show="vm.DeleteSkillAreaModal">
-					<div class="modalbg">
-						<div class="dialog-mini">
-							<div class="modal-inner-content">
-								<h3>{{vm.selectedSkillArea.Name}}</h3> {{'AreYouSureYouWantToDelete'|translate}}
-							</div>
-							<div class="modal-actions">
-								<aside>
-									<button ng-click="vm.toggleModal()" class="wfm-btn wfm-btn-invis-default">
-										{{'Cancel'|translate}}
-									</button>
-									<button ng-click='vm.deleteSkillArea(vm.selectedSkillArea)'
-											class="skill-area-delete-confirm wfm-btn wfm-btn-invis-default">
-										{{'Delete'|translate}}
-									</button>
-								</aside>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+            <div ng-cloak class="modal-box">
+                <div ng-cloak ng-show="vm.DeleteSkillAreaModal">
+                    <div class="modalbg">
+                        <div class="dialog-mini">
+                            <div class="modal-inner-content">
+                                <h3>{{vm.selectedSkillArea.Name}}</h3> {{'AreYouSureYouWantToDelete'|translate}}
+                            </div>
+                            <div class="modal-actions">
+                                <aside>
+                                    <button ng-click="vm.toggleModal()" class="wfm-btn wfm-btn-invis-default">
+                                        {{'Cancel'|translate}}
+                                    </button>
+                                    <button ng-click='vm.deleteSkillArea(vm.selectedSkillArea)' class="skill-area-delete-confirm wfm-btn wfm-btn-invis-default">
+                                        {{'Delete'|translate}}
+                                    </button>
+                                </aside>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
