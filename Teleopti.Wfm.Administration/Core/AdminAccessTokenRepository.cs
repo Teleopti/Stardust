@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Configuration;
 using System.Data.SqlClient;
-using System.Web.UI.WebControls.WebParts;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Security;
 
@@ -21,7 +20,7 @@ namespace Teleopti.Wfm.Administration.Core
 		
 		public static bool TokenIsValid(string token, INow now)
 		{
-			bool isValid = false;
+			bool isValid;
 			var builder = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
 			using (var sqlConn = new SqlConnection(builder.ConnectionString))
 			{
@@ -52,7 +51,7 @@ namespace Teleopti.Wfm.Administration.Core
 
 		public string CreateNewToken(int userId, SqlConnection sqlConnection)
 		{
-			var accessToken = "";
+			string accessToken;
 
 			using (var sqlCommand =
 				new SqlCommand("DELETE FROM Tenant.AdminAccessToken WHERE Expires < @Now", sqlConnection))
@@ -64,7 +63,7 @@ namespace Teleopti.Wfm.Administration.Core
 			using (var sqlCommand = new SqlCommand("INSERT INTO Tenant.AdminAccessToken VALUES (@UserId, @AccessToken, @Expires)", sqlConnection))
 			{
 				sqlCommand.Parameters.AddWithValue("@UserId", userId);
-				accessToken= createToken();
+				accessToken = createToken();
 				sqlCommand.Parameters.AddWithValue("@AccessToken", accessToken);
 				sqlCommand.Parameters.AddWithValue("@Expires", _now.UtcDateTime().Add(tokenTimeToLive));
 				sqlCommand.ExecuteNonQuery();

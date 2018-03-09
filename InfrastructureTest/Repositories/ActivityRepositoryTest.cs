@@ -6,36 +6,24 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
-    ///<summary>
-    /// Tests ActivityRepository
-    ///</summary>
     [TestFixture]
     [Category("BucketB")]
     public class ActivityRepositoryTest : RepositoryTest<IActivity>
     {
-        private IActivity _activity1;
-        private IActivity _activity2;
-        private IActivity _activity3;
-
-        protected override void ConcreteSetup()
-        {
-        }
-
         [Test]
         public void VerifyLoadSortedByDescription()
         {
-            _activity1 = new Activity("zz");
-						_activity2 = new Activity("ff");
-						_activity3 = new Activity("aa");
+            var activity1 = new Activity("zz");
+			var activity2 = new Activity("ff");
+			var activity3 = new Activity("aa");
 
-            PersistAndRemoveFromUnitOfWork(_activity1);
-            PersistAndRemoveFromUnitOfWork(_activity2);
-            PersistAndRemoveFromUnitOfWork(_activity3);
+            PersistAndRemoveFromUnitOfWork(activity1);
+            PersistAndRemoveFromUnitOfWork(activity2);
+            PersistAndRemoveFromUnitOfWork(activity3);
 
             ActivityRepository rep = new ActivityRepository(UnitOfWork);
             IList<IActivity> lst = rep.LoadAllSortByName();

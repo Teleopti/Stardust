@@ -289,6 +289,7 @@
     <Compile Include="RealTimeAdherence\Domain\Service\TracingTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\UnrecognizedStatesTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\UnrecognizedStatesTest2.cs" />
+    <Compile Include="Repositories\ExternalApplicationAccessRepositoryTest.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsSiteRepositoryTest.cs" />
     <Compile Include="Repositories\ASMScheduleChangeTimeRepositoryTest.cs" />
     <Compile Include="Repositories\Audit\ScheduleAuditTrailReportTest.cs" />
