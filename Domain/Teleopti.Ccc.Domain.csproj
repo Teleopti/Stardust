@@ -1330,7 +1330,6 @@
     <Compile Include="InterfaceLegacy\Domain\SchedulePeriodType.cs" />
     <Compile Include="InterfaceLegacy\Domain\ScheduleVisibleReasons.cs" />
     <Compile Include="InterfaceLegacy\Domain\SchedulingServiceBaseEventArgs.cs" />
-    <Compile Include="InterfaceLegacy\Domain\SchedulingServiceFailedEventArgs.cs" />
     <Compile Include="InterfaceLegacy\Domain\SchedulingServiceSuccessfulEventArgs.cs" />
     <Compile Include="InterfaceLegacy\Domain\SendNotificationException.cs" />
     <Compile Include="InterfaceLegacy\Domain\ServiceAgreement.cs" />

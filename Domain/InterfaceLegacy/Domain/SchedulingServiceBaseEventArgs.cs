@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
     /// <summary>
     /// EventArgs for SchedulingServiceBase
     /// </summary>
-    public abstract class SchedulingServiceBaseEventArgs : CancelEventArgs
+    public class SchedulingServiceBaseEventArgs : CancelEventArgs
     {
         private readonly IScheduleDay _schedulePart;
 	    private readonly bool _isSuccessful;
