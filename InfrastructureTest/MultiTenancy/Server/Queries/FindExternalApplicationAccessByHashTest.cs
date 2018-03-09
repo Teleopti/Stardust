@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 	public class FindExternalApplicationAccessByHashTest
 	{
 		public ITenantUnitOfWork TenantUnitOfWork;
-		public PersistExternalApplicationAccess Persist;
+		public IPersistExternalApplicationAccess Persist;
 		public IFindExternalApplicationAccessByHash Target;
 
 		[Test]
