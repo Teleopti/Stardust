@@ -6,57 +6,6 @@
     public interface IDeviationStatisticsCalculator
     {
         /// <summary>
-        /// Gets the absolute deviation average.
-        /// </summary>
-        /// <value>The absolute deviation average.</value>
-        /// <remarks>
-        /// That is the average of the absolut deviation values of all IDeviationStatisticData.
-        /// </remarks>
-        double AbsoluteDeviationAverage { get; }
-
-        /// <summary>
-        /// Gets the absolute deviation summa.
-        /// </summary>
-        /// <value>The absolute deviation summa.</value>
-        /// <remarks>
-        /// That is the summa of the absolut deviation values of all IDeviationStatisticData.
-        /// </remarks>
-        double AbsoluteDeviationSumma { get; }
-
-        /// <summary>
-        /// Gets the absolute standard deviation.
-        /// </summary>
-        /// <value>The absolute standard deviation.</value>
-        double AbsoluteStandardDeviation { get; }
-
-        /// <summary>
-        /// Gets the absolute root mean square.
-        /// </summary>
-        /// <value>The absolute root mean square.</value>
-        double AbsoluteRootMeanSquare { get; }
-
-        /// <summary>
-        /// Gets the relative deviation average.
-        /// </summary>
-        /// <value>The relative deviation average.</value>
-        double RelativeDeviationAverage { get; }
-
-        /// <summary>
-        /// Gets the relative deviation summa.
-        /// </summary>
-        /// <value>The relative deviation summa.</value>
-        /// <remarks>
-        /// That is the summa of the realtive deviation values of all IDeviationStatisticData.
-        /// </remarks>
-        double RelativeDeviationSumma { get; }
-
-        /// <summary>
-        /// Gets the relative root mean square.
-        /// </summary>
-        /// <value>The relative root mean square.</value>
-        double RelativeRootMeanSquare { get; }
-
-        /// <summary>
         /// Gets the relative standard deviation.
         /// </summary>
         /// <value>The standard deviation.</value>
