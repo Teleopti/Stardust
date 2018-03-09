@@ -4,44 +4,55 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Domain.UnitOfWork;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Staffing
 {
 	[InfrastructureTest]
-	public class SendUpdateStaffingReadModelHandlerTest
+	public class SendUpdateStaffingReadModelHandlerTest : ISetup
 	{
 		public SendUpdateStaffingReadModelHandler Target;
 		public IEventPublisherScope Publisher;
 		public IBusinessUnitRepository BusinessUnitRepository;
 		public IScenarioRepository ScenarioRepository;
 		public WithUnitOfWork WithUnitOfWork;
+		public IBusinessUnitScope BusinessUnitScope;
+		public FakeSkillDayRepository FakeSkillDayRepository;
+		public LegacyFakeEventPublisher FakeEventPublisher;
 
-		[Ignore("I don't understand the infra test setup anymore")]
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.UseTestDouble<FakeSkillDayRepository>().For<ISkillDayRepository>();
+			system.UseTestDouble<LegacyFakeEventPublisher>().For<IEventPublisher>();
+		}
+
 		[Test]
 		public void ShouldSendUpdateJob()
 		{
+			FakeSkillDayRepository.HasSkillDays = true;
 			WithUnitOfWork.Do(() =>
 			{
-				//logon blah blah
-				var scenario = ScenarioFactory.CreateScenario("Default scenario", true, false);
-				ScenarioRepository.Add(scenario);
+				var bu = BusinessUnitFactory.CreateSimpleBusinessUnit("bu");
+				BusinessUnitRepository.Add(bu);
+				using (BusinessUnitScope.OnThisThreadUse(bu))
+				{
+					var scenario = ScenarioFactory.CreateScenario("Default scenario", true, false);
+					ScenarioRepository.Add(scenario);
+				}
+
 			});
 
-			var eventPublisher = new LegacyFakeEventPublisher();
-			using (Publisher.OnThisThreadPublishTo(eventPublisher))
-			{
-				Target.Handle(new TenantMinuteTickEvent());
-			}
-			(eventPublisher.PublishedEvents.First() as UpdateStaffingLevelReadModelEvent).Should().Not.Be.Null();
+			Target.Handle(new TenantMinuteTickEvent());
+
+			FakeEventPublisher.PublishedEvents.OfType<UpdateStaffingLevelReadModelEvent>().SingleOrDefault().Should().Not.Be
+				.Null();
 		}
 	}
 }
