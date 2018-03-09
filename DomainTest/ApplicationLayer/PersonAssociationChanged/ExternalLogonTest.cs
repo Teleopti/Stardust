@@ -93,8 +93,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 			{
 				PersonId = person,
 				PreviousTerminationDate = "2016-08-30".Utc(),
-				TerminationDate = "2016-08-25".Utc(),
-				ExternalLogons = new[] {new ExternalLogon {DataSourceId = 7, UserCode = "usercode"} }
+				TerminationDate = "2016-08-25".Utc()
 			});
 
 			var @event = Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Single();

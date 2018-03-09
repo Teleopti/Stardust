@@ -68,8 +68,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 			{
 				PersonId = personId,
 				PreviousTerminationDate = "2016-06-30".Utc(),
-				TerminationDate = "2016-12-31".Utc(),
-				TeamId = teamId
+				TerminationDate = "2016-12-31".Utc()
 			});
 
 			Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Should().Be.Empty();
@@ -89,8 +88,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 			{
 				PersonId = personId,
 				PreviousTerminationDate = "2016-06-30".Utc(),
-				TerminationDate = null,
-				TeamId = teamId
+				TerminationDate = null
 			});
 
 			Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Should().Be.Empty();

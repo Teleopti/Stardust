@@ -44,11 +44,6 @@ namespace Teleopti.Ccc.DomainTest.Common
 
 			var @event = ((Person) person).PopAllEvents().OfType<PersonTerminalDateChangedEvent>().Single();
 			@event.PersonId.Should().Be(personId);
-			@event.BusinessUnitId.Should().Be(businessUnitId);
-			@event.SiteId.Should().Be(siteId);
-			@event.SiteName.Should().Be("siteName");
-			@event.TeamId.Should().Be(teamId);
-			@event.TeamName.Should().Be("teamName");
 		}
 
 		[Test]

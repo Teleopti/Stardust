@@ -72,31 +72,19 @@ namespace Teleopti.Ccc.Domain.Common
 		    DateOnly? valueToSet = null;
 		    if (value != null)
 			    valueToSet = value.Value > DefaultTerminalDate ? DefaultTerminalDate : value;
-		    if (_terminalDate != valueToSet)
-		    {
-			    var valueBefore = _terminalDate?.Date;
-			    _terminalDate = valueToSet;
-			    var valueAfter = _terminalDate?.Date;
+			if (_terminalDate == valueToSet) return;
 
-			    AddEvent(() =>
-				{
-					var info = currentAssociationInfo(ServiceLocatorForEntity.Now);
-					return new PersonTerminalDateChangedEvent
-					{
-						PersonId = Id.GetValueOrDefault(),
-						BusinessUnitId = info.BusinessUnitId,
-						SiteId = info.SiteId,
-						SiteName = info.SiteName,
-						TeamId = info.TeamId,
-						TeamName = info.TeamName,
-						TimeZoneInfoId = PermissionInformation.DefaultTimeZone().Id,
-						PreviousTerminationDate = valueBefore,
-						TerminationDate = valueAfter,
-						ExternalLogons = info.ExternalLogons
-					};
-			    });
-		    }
-	    }
+			var valueBefore = _terminalDate?.Date;
+			_terminalDate = valueToSet;
+			var valueAfter = _terminalDate?.Date;
+
+			AddEvent(() => new PersonTerminalDateChangedEvent
+			{
+				PersonId = Id.GetValueOrDefault(),
+				PreviousTerminationDate = valueBefore,
+				TerminationDate = valueAfter
+			});
+		}
 
 		public virtual void ChangeTeam(ITeam team, IPersonPeriod personPeriod)
 		{
