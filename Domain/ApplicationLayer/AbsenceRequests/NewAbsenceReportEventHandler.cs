@@ -27,7 +27,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly ICurrentScenario _scenarioRepository;
 		private readonly ISchedulingResultStateHolderProvider _schedulingResultStateHolderProvider;
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
-		private readonly IRequestFactory _factory;
 		private readonly IScheduleDifferenceSaver _scheduleDictionarySaver;
 
 		private readonly IList<LoadDataAction> _loadDataActions;
@@ -40,7 +39,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly ICheckingPersonalAccountDaysProvider _checkingPersonalAccountDaysProvider;
 
 		public NewAbsenceReport(ICurrentScenario scenarioRepository,
-			ISchedulingResultStateHolderProvider schedulingResultStateHolderProvider, IRequestFactory factory,
+			ISchedulingResultStateHolderProvider schedulingResultStateHolderProvider,
 			IScheduleDifferenceSaver scheduleDictionarySaver,
 			ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulesForRequestWithoutResourceCalculation,
 			IPersonRepository personRepository,
@@ -48,7 +47,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		{
 			_scenarioRepository = scenarioRepository;
 			_schedulingResultStateHolderProvider = schedulingResultStateHolderProvider;
-			_factory = factory;
 			_scheduleDictionarySaver = scheduleDictionarySaver;
 			_loadSchedulesForRequestWithoutResourceCalculation = loadSchedulesForRequestWithoutResourceCalculation;
 			_personRepository = personRepository;

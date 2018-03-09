@@ -42,7 +42,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private IScheduleDictionary _scheduleDictionary;
 		private IRequestApprovalService _requestApprovalService;
-		private IRequestFactory _factory;
 		private IScheduleDifferenceSaver _scheduleDictionarySaver;
 		private ICurrentScenario _scenarioRepository;
 		private IScheduleRange _scheduleRange;
@@ -74,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			businessRules.Stub(x => x.FromScheduleRange(null)).IgnoreArguments().Return(NewBusinessRuleCollection.Minimum());
 
 			_target = new NewAbsenceReport( _scenarioRepository,
-				new FakeSchedulingResultStateHolderProvider(_schedulingResultStateHolder), _factory, _scheduleDictionarySaver,
+				new FakeSchedulingResultStateHolderProvider(_schedulingResultStateHolder), _scheduleDictionarySaver,
 				_loaderWithoutResourceCalculation, _personRepository, businessRules, new DoNothingScheduleDayChangeCallBack(), new FakeGlobalSettingDataRepository(), new CheckingPersonalAccountDaysProvider(new FakePersonAbsenceAccountRepository()));
 		}
 
@@ -129,7 +128,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		private void createInfrastructure()
 		{
 			_unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
-			_factory = MockRepository.GenerateMock<IRequestFactory>();
 		}
 
 		private void createPersonAndWorkflowControlSet()
