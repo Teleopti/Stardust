@@ -10,9 +10,9 @@
 			</div>
 		</div>
 
-		<aside style="float:right">
-			<button (click)="close()" class="wfm-btn wfm-btn-default">Cancel</button>
-			<button (click)="save()" cdkFocusInitial class="wfm-btn wfm-btn-primary" [disabled]="!isAnyRoleSelected()" data-test-save>Save</button>
+		<aside class="action-buttons">
+			<button mat-raised-button (click)="close()">Cancel</button>
+			<button mat-raised-button color="primary" (click)="save()" [disabled]="!isAnyRoleSelected()" data-test-save>Save</button>
 		</aside>
 
 	</div>
