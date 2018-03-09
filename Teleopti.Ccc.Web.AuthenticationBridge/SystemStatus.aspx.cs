@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Web.AuthenticationBridge
 	{
 		protected void Page_Load(object sender, EventArgs e)
 		{
-			var results = provider();
+			var results = visitProviderUrls();
 			
 			var isScopeAccessible = tryVisitUrl(DefaultConfigurationRepository.Instance.RetrieveDefaultScope().Uri);
 			results.Add("Teleopti web site", isScopeAccessible);
@@ -29,11 +29,10 @@ namespace Teleopti.Ccc.Web.AuthenticationBridge
 			var systemText = allOk ? "System is up!" : "Some parts of the system is not working as expected.";
 			Response.Write($"<br><div style='color:{systemTextColor}'>{systemText}</div>");
 			
-			
 			Response.StatusCode =  allOk ? 200: 500;
 		}
 
-		private static Dictionary<string, bool> provider()
+		private static Dictionary<string, bool> visitProviderUrls()
 		{
 			var configurationRepository = DefaultConfigurationRepository.Instance;
 			var issuers = configurationRepository.RetrieveIssuers();
@@ -55,9 +54,9 @@ namespace Teleopti.Ccc.Web.AuthenticationBridge
 		{
 			try
 			{
-				var web = WebRequest.Create(url);
-				web.GetResponse();
-				return true;
+				var httpWebRequest = WebRequest.CreateHttp(url);
+				var httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+				return httpWebResponse.StatusCode == HttpStatusCode.OK;
 			}
 			catch (Exception)
 			{
