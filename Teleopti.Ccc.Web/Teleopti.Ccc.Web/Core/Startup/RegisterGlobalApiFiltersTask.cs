@@ -48,7 +48,8 @@ namespace Teleopti.Ccc.Web.Core.Startup
 					typeof (LanguageController),
 					typeof (ConfigController),
 					typeof (JavascriptLoggingController),
-					typeof (ChangePasswordController)
+					typeof (ChangePasswordController),
+					typeof (ExternalApplicationAccessController)
 				}));
 
 				if (string.IsNullOrEmpty(_configReader.AppConfig("DisableCsrfProtection")))
