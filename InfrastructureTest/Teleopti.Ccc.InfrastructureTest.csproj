@@ -211,6 +211,7 @@
     <Compile Include="Foundation\TeleoptiPrincipalCacheableFactoryTest.cs" />
     <Compile Include="Helper\StardustRepositoryTestHelper.cs" />
     <Compile Include="MessageBroker\MailboxNotSignedInTest.cs" />
+    <Compile Include="MultiTenancy\Server\Queries\FindExternalApplicationAccessByHashTest.cs" />
     <Compile Include="MultiTenancy\Server\Queries\TenantPersonLogonQuerierTest.cs" />
     <Compile Include="Performance\NumberOfDbCallsTest.cs" />
     <Compile Include="Persisters\Schedules\DeleteOneOfManyLayersTest.cs" />
@@ -289,7 +290,6 @@
     <Compile Include="RealTimeAdherence\Domain\Service\TracingTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\UnrecognizedStatesTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\UnrecognizedStatesTest2.cs" />
-    <Compile Include="Repositories\ExternalApplicationAccessRepositoryTest.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsSiteRepositoryTest.cs" />
     <Compile Include="Repositories\ASMScheduleChangeTimeRepositoryTest.cs" />
     <Compile Include="Repositories\Audit\ScheduleAuditTrailReportTest.cs" />

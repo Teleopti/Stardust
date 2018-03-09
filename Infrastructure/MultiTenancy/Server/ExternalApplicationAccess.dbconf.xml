@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Teleopti.Ccc.Infrastructure"
+                   namespace="Teleopti.Ccc.Infrastructure.MultiTenancy.Server"
+				   default-access="property"
+				   schema="Tenant">
+  <class name="ExternalApplicationAccess">
+	  <id name="Id">
+		  <generator class="identity" />
+	  </id>
+	<property name="CreatedOn" type="UtcDateTime" />
+	<property name="Hash" type="string" length="512" />
+	<property name="Name" type="string" length="256" />
+	<property name="PersonId" type="Guid" />
+
+  </class>
+	<query name="findByHash">
+		select a from ExternalApplicationAccess a
+		where a.Hash=:hash
+	</query>
+</hibernate-mapping>
+

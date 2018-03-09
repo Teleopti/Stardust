@@ -27,10 +27,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 
 		public virtual DataSourceConfiguration DataSourceConfiguration { get; protected set; }
 
-		public virtual IDictionary<string, string> ApplicationConfig
-		{
-			get { return new Dictionary<string, string>(_applicationConfig); }
-		}
+		public virtual IDictionary<string, string> ApplicationConfig => new Dictionary<string, string>(_applicationConfig);
 		public virtual string Name { get; protected set; }
 		public virtual string RtaKey { get; set; }
 		public virtual int Id { get; protected set; }

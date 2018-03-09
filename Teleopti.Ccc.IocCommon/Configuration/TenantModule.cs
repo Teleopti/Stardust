@@ -124,7 +124,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<LoadAllPersonInfos>().SingleInstance();
 			builder.RegisterType<PersistTenant>().SingleInstance();
 			builder.RegisterType<DeleteTenant>().SingleInstance();
-			builder.RegisterType<CheckTenantUserExists>().As<ICheckTenantUserExists>().SingleInstance();		}
+			builder.RegisterType<CheckTenantUserExists>().As<ICheckTenantUserExists>().SingleInstance();
+
+			builder.RegisterType<PersistExternalApplicationAccess>().SingleInstance();
+			builder.RegisterType<FindExternalApplicationAccessByHash>().As<IFindExternalApplicationAccessByHash>().SingleInstance();
+		}
 
 		private static bool isRunFromTest(string server)
 		{

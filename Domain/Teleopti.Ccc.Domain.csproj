@@ -395,7 +395,6 @@
     <Compile Include="Islands\MergeIslands.cs" />
     <Compile Include="Islands\MergeIslandsSizeLimit.cs" />
     <Compile Include="Islands\NullCreateIslandCallback.cs" />
-    <Compile Include="Logon\ExternalApplicationAccess.cs" />
     <Compile Include="MultiTenancy\TenantLogonPersonProvider.cs" />
     <Compile Include="Notification\ASMScheduleChangeTime.cs" />
     <Compile Include="Notification\ClickatellNotificationSender.cs" />
@@ -4111,9 +4110,6 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <Content Include="InterfaceLegacy\_DONT_PUT_NEW_TYPES_HERE.txt" />
-    <EmbeddedResource Include="Logon\ExternalApplicationAccess.hbm.xml">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <Content Include="Optimization\ClassicLegacy\REMOVE.txt" />
     <EmbeddedResource Include="Optimization\Filters\SkillFilter.hbm.xml" />
     <EmbeddedResource Include="Optimization\PlanningGroup.hbm.xml">

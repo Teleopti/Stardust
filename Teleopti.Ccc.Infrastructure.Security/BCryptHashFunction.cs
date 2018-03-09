@@ -17,7 +17,6 @@
 		public bool IsGeneratedByThisFunction(string hash)
 		{
 			return hash.StartsWith("$2a$") && hash.Length == 60;
-
 		}
 	}
 }

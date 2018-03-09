@@ -255,7 +255,9 @@
     <Compile Include="Hangfire\QueueFromArgumentAttribute.cs" />
     <Compile Include="Hangfire\JobExpirationTimeAttribute.cs" />
     <Compile Include="MultiTenancy\Admin\CheckTenantUserExists.cs" />
+    <Compile Include="MultiTenancy\Server\ExternalApplicationAccess.cs" />
     <Compile Include="MultiTenancy\Server\ITenantLogonInfoLoader.cs" />
+    <Compile Include="MultiTenancy\Server\Queries\PersistExternalApplicationAccess.cs" />
     <Compile Include="Persisters\Auditing\PersonAccessPersister.cs" />
     <Compile Include="Persisters\Schedules\ScheduleRangePersisterWithConflictSolve.cs" />
     <Compile Include="MultiTenancy\Server\Queries\TenantPersonLogonQuerier.cs" />
@@ -290,7 +292,7 @@
     <Compile Include="RealTimeAdherence\Tracer\RtaTracerRefresher.cs" />
     <Compile Include="RealTimeAdherence\Tracer\RtaTracerSessionFactory.cs" />
     <Compile Include="RealTimeAdherence\Tracer\RtaTracerWriter.cs" />
-    <Compile Include="Repositories\ExternalApplicationAccessRepository.cs" />
+    <Compile Include="MultiTenancy\Server\Queries\FindExternalApplicationAccessByHash.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsSiteRepository.cs" />
     <Compile Include="Repositories\Audit\ScheduleAuditTrailReport.cs" />
     <Compile Include="Repositories\ExternalPerformanceDataRepository.cs" />
@@ -838,6 +840,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="MultiTenancy\Server\ExternalApplicationAccess.dbconf.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Authentication\CryptoKeyInfo.dbconf.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
