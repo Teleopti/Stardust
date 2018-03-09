@@ -8,13 +8,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 {
 	public class SkillOpenHourFilter : ISkillOpenHourFilter
 	{
-		private readonly ILoggedOnUser _loggedOnUser;
-
-		public SkillOpenHourFilter(ILoggedOnUser loggedOnUser)
-		{
-			_loggedOnUser = loggedOnUser;
-		}
-
 		public IEnumerable<ISkill> Filter(DateTimePeriod requestPeriod, IEnumerable<ISkill> skills)
 		{
 			var openSkills = new List<ISkill>();
