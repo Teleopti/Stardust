@@ -17,14 +17,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	{
 		private readonly DayOffOptimizationWeb _dayOffOptimizationWeb;
 		private readonly IJobResultRepository _jobResultRepository;
-		private readonly ISchedulingSourceScope _schedulingSourceScope;
 		private readonly ILowThreadPriorityScope _lowThreadPriorityScope;
 
-		public WebDayoffOptimizationStardustHandler(DayOffOptimizationWeb dayOffOptimizationWeb, IJobResultRepository jobResultRepository, ISchedulingSourceScope schedulingSourceScope, ILowThreadPriorityScope lowThreadPriorityScope)
+		public WebDayoffOptimizationStardustHandler(DayOffOptimizationWeb dayOffOptimizationWeb, IJobResultRepository jobResultRepository, ILowThreadPriorityScope lowThreadPriorityScope)
 		{
 			_dayOffOptimizationWeb = dayOffOptimizationWeb;
 			_jobResultRepository = jobResultRepository;
-			_schedulingSourceScope = schedulingSourceScope;
 			_lowThreadPriorityScope = lowThreadPriorityScope;
 		}
 
