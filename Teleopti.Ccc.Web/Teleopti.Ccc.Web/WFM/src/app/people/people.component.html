@@ -19,10 +19,14 @@
 						</label>
 					</div>
 					<div class="con-flex x3">
-						<button class="wfm-btn wfm-btn-primary mdi mdi-plus" data-test-grant-button [disabled]="!workspaceService.isAnySelected()"
+						<button mat-raised-button color="primary" data-test-grant-button [disabled]="!workspaceService.isAnySelected()" (click)="toggleGrantView()">
+							<i class="mdi mdi-plus"></i> Grant role</button>
+						<button mat-raised-button color="primary" data-test-revoke-button [disabled]="!workspaceService.isAnySelected()" (click)="toggleRevokeView()">
+							<i class="mdi mdi-close"></i>Revoke role</button>
+						<!-- <button class="wfm-btn wfm-btn-primary mdi mdi-plus" data-test-grant-button [disabled]="!workspaceService.isAnySelected()"
 						 [ngClass]="{'wfm-btn-invis-disabled': !workspaceService.isAnySelected()}" (click)="toggleGrantView()">Grant role</button>
 						<button class="wfm-btn wfm-btn-primary mdi mdi-close" data-test-revoke-button [disabled]="!workspaceService.isAnySelected()"
-						 [ngClass]="{'wfm-btn-invis-disabled': !workspaceService.isAnySelected()}" (click)="toggleRevokeView()">Revoke role</button>
+						 [ngClass]="{'wfm-btn-invis-disabled': !workspaceService.isAnySelected()}" (click)="toggleRevokeView()">Revoke role</button> -->
 					</div>
 				</div>
 			</div>
