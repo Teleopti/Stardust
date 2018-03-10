@@ -45,9 +45,9 @@ Wfm_Outbound_IgnoreScheduleForReplan_43752 = true
 # LevelUp #
 RTA_ViewHistoricalAhderence7DaysBack_46826 = true
 RTA_ConfigurationValidationNotification_46933 = true
-RTA_ApprovePreviousOOA_47230 = RC
-RTA_ReloadUIOnSystemVersionChanged_48196 = RC
-RTA_ModifySkillGroup_48191 = RC
+RTA_ApprovePreviousOOA_47230 = true
+RTA_ReloadUIOnSystemVersionChanged_48196 = yes
+RTA_ModifySkillGroup_48191 = true
 RTA_RemoveApprovedOOA_47721 = false
 
 # Dumplings, can any of these be removed? #
@@ -56,7 +56,7 @@ WfmTeamSchedule_ExportSchedulesToExcel_45795 = true
 WfmTeamSchedule_ShowSkillsForSelectedSkillGroupInStaffingInfo_47202 = true
 WfmTeamSchedule_AddAbsenceFromPartOfDayToXDay_46010 = true
 WfmTeamSchedule_AddNDeleteDayOff_40555 = true
-WfmTeamSchedule_RemoveShift_46322 = RC
+WfmTeamSchedule_RemoveShift_46322 = true
 Wfm_HideUnusedTeamsAndSites_42690 = true
 Wfm_SearchAgentBasedOnCorrectPeriod_44552 = true
 Wfm_AddMyTimeLink_45088 = true
@@ -71,7 +71,7 @@ Wfm_Requests_OvertimeRequestHandling_45177 = true
 Wfm_Requests_OvertimeBrokenRules_47673 = true
 OvertimeRequestPeriodSetting_46417 = true
 OvertimeRequestPeriodWorkRuleSetting_46638 = true
-OvertimeRequestPeriodSkillTypeSetting_47290 = RC
+OvertimeRequestPeriodSkillTypeSetting_47290 = true
 OvertimeRequestCheckCalendarMonthMaximumOvertime_47024 = true
 OvertimeRequestUseMostUnderStaffedSkill_47853 = RC
 OvertimeRequestMaxContinuousWorkTime_47964 = RC
@@ -106,7 +106,7 @@ Staffing_Info_Configuration_44687 = true
 
 # Kittens, Bugs&Roses and Micke #
 Scheduler_IntradayOptimization_36617 = true
-Scheduler_RestrictionReport_47013 = RC
+Scheduler_RestrictionReport_47013 = true
 Wfm_SkillPriorityRoutingGUI_39885 = RC
 WfmGlobalLayout_personalOptions_37114 = true
 Wfm_ArchiveSchedule_41498 = true
@@ -115,7 +115,7 @@ WFM_WebScheduling_LowPriority_44320 = RC
 Wfm_WebPlan_Pilot_46815 = RC #Switch this on to try out the new web based scheduling in Plans#
 ResourcePlanner_HideSkillPrioSliders_41312 = RC
 ResourcePlanner_BlockSchedulingValidation_46092 = true
-ResourcePlanner_UseErlangAWithInfinitePatience_45845 = RC
+ResourcePlanner_UseErlangAWithInfinitePatience_45845 = true
 
 # Bugs&Roses #
 ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don't turn on in production
@@ -164,7 +164,7 @@ WFM_Intraday_SupportMultisiteSkill_43874 = true
 WFM_Intraday_Export_To_Excel_44892 = true
 WFM_Intraday_SupportOtherSkillsLikeEmail_44026 = true
 WFM_Unified_Skill_Group_Management_45417 = true
-WFM_Modify_Skill_Groups_43727 = RC
+WFM_Modify_Skill_Groups_43727 = true
 WFM_Remember_My_Selection_In_Intraday_47254 = DEV
 
 # Ziggy #
