@@ -78,8 +78,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			var localDaylightStartTime = getLocalDaylightStartTime(daylightTime, timezone);
 
 			var totalLengthTicks = (minMaxTime.EndTime - minMaxTime.StartTime).Ticks;
-			if (isOnDSTStartDay)
-				totalLengthTicks = totalLengthTicks - daylightTime.Delta.Ticks;
 
 			foreach (var visualLayer in layerExtendedList)
 			{
@@ -87,7 +85,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 
 				var isOvertimeLayer = visualLayer.DefinitionSet?.MultiplicatorType == MultiplicatorType.Overtime;
 
-				var positionPercentage = getPeriodPositionPercentage(minMaxTime, visualLayer.VisualPeriod.TimePeriod(timezone), isOnDSTStartDay, localDaylightStartTime, daylightTime, totalLengthTicks);
+				PeriodPositionPercentage positionPercentage;
+				if (isOnDSTStartDay && minMaxTime.Contains(localDaylightStartTime))
+				{
+					totalLengthTicks = totalLengthTicks - daylightTime.Delta.Ticks;
+					positionPercentage = getPeriodPositionPercentage(minMaxTime, visualLayer.VisualPeriod.TimePeriod(timezone),
+						true, localDaylightStartTime, daylightTime, totalLengthTicks);
+				}
+				else
+				{
+					positionPercentage = getPeriodPositionPercentage(minMaxTime, visualLayer.VisualPeriod.TimePeriod(timezone), totalLengthTicks);
+				}
 
 				newList.Add(new PeriodViewModel
 				{

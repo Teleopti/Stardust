@@ -286,20 +286,22 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				.ToList();
 
 			var isOnEnteringDstDay = isEnteringDST(date, daylightTime, timezone);
-			var localDayLightTimeStart = new DateTime();
+			var localDayLightTimeStart =
+				isOnEnteringDstDay ? TimeZoneHelper.ConvertFromUtc(daylightTime.Start, timezone) : new DateTime();
+			var isCrossDSTStartTime = timelinePeriod.Contains(localDayLightTimeStart.TimeOfDay);
 
 			var diff = endTime - startTime;
-			if (isOnEnteringDstDay)
+
+			if (isOnEnteringDstDay && isCrossDSTStartTime)
 			{
 				diff = getAjustedTimeSpanByDayLightTime(diff, daylightTime);
-				localDayLightTimeStart = TimeZoneHelper.ConvertFromUtc(daylightTime.Start, timezone);
 			}
 
 			var timesCount = times.Count;
 			for (var i = 0; i < timesCount; i++)
 			{
 				var time = times[i];
-				if (isOnEnteringDstDay && isTimeSpanInDSTPeriod(time, localDayLightTimeStart))
+				if (isOnEnteringDstDay && isCrossDSTStartTime && isTimeSpanInDSTPeriod(time, localDayLightTimeStart))
 				{
 					time = getAjustedTimeSpanByDayLightTime(time, daylightTime);
 				}

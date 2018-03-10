@@ -459,6 +459,34 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
+		public void ShouldCalculatePercentageCorrectlyAfterDSTStarted()
+		{
+			var timeZone = TimeZoneInfoFactory.CentralStandardTime();
+			UserTimeZone.Is(timeZone);
+			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(timeZone);
+			Now.Is(new DateTime(2018, 03, 11, 6, 0, 0, DateTimeKind.Utc));
+
+			addSiteOpenHour();
+			var period = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(new DateTime(2018, 03, 11, 06, 00, 0), timeZone),
+				TimeZoneHelper.ConvertToUtc(new DateTime(2018, 03, 11, 08, 00, 0), timeZone));
+			addAssignment(period);
+
+			var result = Target.FetchDayData(null, StaffingPossiblityType.Absence);
+
+			result.TimeLine.Count().Should().Be(5);
+			result.TimeLine.ElementAt(0).Time.Should().Be(TimeSpan.FromHours(5).Add(TimeSpan.FromMinutes(45)));
+			result.TimeLine.ElementAt(0).PositionPercentage.Should().Be(0);
+			result.TimeLine.ElementAt(1).Time.Should().Be(TimeSpan.FromHours(6));
+			result.TimeLine.ElementAt(1).PositionPercentage.Should().Be(0.25M / 2.5M);
+			result.TimeLine.ElementAt(2).Time.Should().Be(TimeSpan.FromHours(7));
+			result.TimeLine.ElementAt(2).PositionPercentage.Should().Be(1.25M / 2.5M);
+			result.TimeLine.ElementAt(3).Time.Should().Be(TimeSpan.FromHours(8));
+			result.TimeLine.ElementAt(3).PositionPercentage.Should().Be(2.25M / 2.5M);
+			result.TimeLine.ElementAt(4).Time.Should().Be(TimeSpan.FromHours(8).Add(TimeSpan.FromMinutes(15)));
+			result.TimeLine.ElementAt(4).PositionPercentage.Should().Be(1);
+		}
+
+		[Test]
 		public void ShouldUseDefaultTimelineForDayWithoutSchedule()
 		{
 			var date = new DateOnly(2014, 12, 18);
