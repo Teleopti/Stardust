@@ -35,11 +35,12 @@ Teleopti.MyTimeWeb.Asm = (function () {
 
 	function getUtcNowString() {
 		var now = new Date(new Date().getTeleoptiTime());
-		var dateStr = (now.getUTCMonth() + 1).toString() + '/' +
-			now.getUTCDate().toString() + '/' +
-			now.getUTCFullYear().toString() + ' ' +
-			now.getUTCHours().toString() + ':' +
-			now.getUTCMinutes().toString();
+		var dateStr = now.getUTCFullYear() + '-' +
+				(now.getUTCMonth() + 1) + '-' +
+				now.getUTCDate() + ' ' +
+				now.getUTCHours() + ':' +
+				now.getUTCMinutes() + ':' +
+				now.getUTCSeconds() + 'Z';
 		return dateStr;
 	};
 
@@ -48,7 +49,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		self.intervalPointer = null;
 
 		function setCurrentTime() {
-			self.now(new Date(new Date(getUtcNowString()).getTime() + userTimeZoneMinuteOffset * 60000));
+			self.now(Teleopti.MyTimeWeb.Common.MomentAsUTCIgnoringTimezone(getUtcNowString()).add(userTimeZoneMinuteOffset, 'minute'));
 		}
 
 		self.loadViewModel = function () {
@@ -103,12 +104,11 @@ Teleopti.MyTimeWeb.Asm = (function () {
 			self.nextLayerString(nextLayerDesc);
 		});
 
-		self.now = ko.observable(new Date().getTeleoptiTime());
+		self.now = ko.observable(moment(new Date().getTeleoptiTime()));
 		self.yesterday = ko.observable(yesterday);
 		self.unreadMessageCount = ko.observable(0);
 		self.canvasPosition = ko.computed(function () {
-			var now = new Date(self.now());
-			var msSinceStart = (now.getHours() * 60 * 60 + now.getMinutes() * 60 + now.getSeconds() + 24 * 60 * 60) * 1000;
+			var msSinceStart = (self.now().hour() * 60 * 60 + self.now().minute() * 60 + self.now().second() + 24 * 60 * 60) * 1000;
 			var hoursSinceStart = msSinceStart / 1000 / 60 / 60;
 			return - (pixelPerHours * hoursSinceStart) + 'px';
 		});
@@ -297,6 +297,9 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		},
 		_replaceAjax: function(another_ajax) {
 			ajax = another_ajax;
+		},
+		Vm: function () {
+			return vm;
 		}
 	};
 })(jQuery);
