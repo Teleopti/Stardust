@@ -208,6 +208,62 @@ $(document).ready(function () {
 		equal(probabilities.length, 0);
 	});
 
+	test("Should not merge absence probability when disconnected on mobile day", function () {
+		var date = '2018-03-12';
+		var scheduleDay = {
+			isFullDayAbsence: false,
+			isDayOff: function() { return false; },
+			fixedDate: function () { return date; },
+			periods: [
+				{
+					"StartTime": date + 'T01:00:00',
+					"EndTime": date + 'T04:00:00'
+				},
+				{
+					"StartTime": date + 'T06:00:00',
+					"EndTime": date + 'T08:00:00'
+				}
+			]
+		};
+
+		var rawProbability = createRawProbabilities(date);
+		var options = {
+			probabilityType: constants.probabilityType.absence,
+			timelines: createTimeline(1, 8)
+		};
+
+		var probabilities = Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(rawProbability, scheduleDay, options);
+		equal(probabilities.length, 12 + 8);
+	});
+
+	test("Should merge overtime probability when schedule is disconnected on mobile day", function () {
+		var date = '2018-03-12';
+		var scheduleDay = {
+			isFullDayAbsence: false,
+			isDayOff: function() { return false; },
+			fixedDate: function () { return date; },
+			periods: [
+				{
+					"StartTime": date + 'T01:00:00',
+					"EndTime": date + 'T04:00:00'
+				},
+				{
+					"StartTime": date + 'T06:00:00',
+					"EndTime": date + 'T08:00:00'
+				}
+			]
+		};
+
+		var rawProbability = createRawProbabilities(date);
+		var options = {
+			probabilityType: constants.probabilityType.overtime,
+			timelines: createTimeline(1, 8)
+		};
+
+		var probabilities = Teleopti.MyTimeWeb.Schedule.ProbabilityModels.CreateProbabilityModels(rawProbability, scheduleDay, options);
+		equal(probabilities.length, 12 + 8 + 8);
+	});
+
 	test("Should create probability correctly for absence probability on leaving DST day", function () {
 		var date = '2017-11-05';
 		var scheduleDay = {
@@ -620,7 +676,7 @@ $(document).ready(function () {
 		equal(probability.cssClass(), "probability-high");
 	});
 
-	test("Should trim probability cell data periods according continousPeriods", function () {
+	test("Should trim probability cell data periods according continousPeriods for absence", function () {
 		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
 
 		var timelineStart = 0, timelineEnd = 9;

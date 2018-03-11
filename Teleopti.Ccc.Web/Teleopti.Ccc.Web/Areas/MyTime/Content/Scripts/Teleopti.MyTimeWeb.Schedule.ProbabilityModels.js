@@ -68,8 +68,8 @@
 		var intervalEndMinutes = getIntervalEndMinutes(rawProbability.StartTime, rawProbability.EndTime);
 
 		return {
-			startTimeMoment: moment(rawProbability.StartTime),
-			endTimeMoment: moment(rawProbability.EndTime),
+			startTimeMoment: Teleopti.MyTimeWeb.Common.MomentAsUTCIgnoringTimezone(rawProbability.StartTime),
+			endTimeMoment: Teleopti.MyTimeWeb.Common.MomentAsUTCIgnoringTimezone(rawProbability.EndTime),
 			startTimeInMinutes: intervalStartMinutes,
 			endTimeInMinutes: intervalEndMinutes,
 			possibility: rawProbability.Possibility
@@ -130,7 +130,12 @@
 				for (; j < listLength; j++) {
 					var hasSamePossibilityValue = cellDataList[j].possibility === cellDataList[i].possibility;
 					var isConnectedPossibility = cellDataList[i].endTimeInMinutes === cellDataList[j].startTimeInMinutes;
-					if (!hasSamePossibilityValue || !isConnectedPossibility) {
+
+					if (options.probabilityType === constants.probabilityType.absence && (!hasSamePossibilityValue || !isConnectedPossibility)) {
+						break;
+					}
+
+					if (options.probabilityType === constants.probabilityType.overtime  && !hasSamePossibilityValue) {
 						break;
 					}
 

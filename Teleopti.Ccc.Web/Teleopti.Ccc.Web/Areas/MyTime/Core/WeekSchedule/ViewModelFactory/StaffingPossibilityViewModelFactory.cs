@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -65,29 +64,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			var periodStaffingPossibilityViewModels = new List<PeriodStaffingPossibilityViewModel>();
 			foreach (var calculatedPossibilityModel in calculatedPossibilityModels)
 			{
-				var keys = calculatedPossibilityModel.IntervalPossibilies.Keys.OrderBy(x => x).ToArray();
-				for (var i = 0; i < keys.Length; i++)
-				{
-					var startTime = keys[i];
-					var endTime = default(DateTime);
-					if (i < keys.Length - 1)
-					{
-						var nextStartTime = keys[i + 1];
-						endTime = nextStartTime;
-					}
-					else
-					{
-						endTime = startTime.AddMinutes(calculatedPossibilityModel.Resolution);
-					}
-
-					periodStaffingPossibilityViewModels.Add(new PeriodStaffingPossibilityViewModel
+				var possibilities = calculatedPossibilityModel.IntervalPossibilies.Select(
+					p => new PeriodStaffingPossibilityViewModel
 					{
 						Date = calculatedPossibilityModel.Date.ToFixedClientDateOnlyFormat(),
-						StartTime = startTime,
-						EndTime = endTime,
-						Possibility = calculatedPossibilityModel.IntervalPossibilies[keys[i]]
-					});
-				}
+						StartTime = p.Key,
+						EndTime = p.Key.AddMinutes(calculatedPossibilityModel.Resolution),
+						Possibility = p.Value
+					}).OrderBy(x => x.StartTime);
+				periodStaffingPossibilityViewModels.AddRange(possibilities);
 			}
 			return periodStaffingPossibilityViewModels;
 		}
