@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 		public ICurrentScenario CurrentScenario;
 		public FakeUserTimeZone UserTimeZone;
 		public MutableNow Now;
-		
+
 		private static readonly CultureInfo defaultCulture = CultureInfo.GetCultureInfo("sv-SE");
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
@@ -199,7 +199,7 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 		[Test]
 		public void ShouldSetHoursWhenWinterBecomesSummer()
 		{
-			var hoursAsInts = new List<int> {0, 1};
+			var hoursAsInts = new List<int> { 0, 1 };
 			//02:00 doesn't exist!
 			hoursAsInts.AddRange(Enumerable.Range(3, 21));
 			hoursAsInts.AddRange(Enumerable.Range(0, 24));
@@ -272,67 +272,6 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 				.EqualTo(TimeZoneInfo.ConvertTimeFromUtc(layerTwoStartTime, timeZone).Subtract(asmZore).TotalMinutes - 60);
 		}
 
-		[Test]
-		public void ShouldReturnDstAjustmentWhenDstStartWithinUpComing10Hours()
-		{
-			var asmZeroYesterdayLocal = new DateTime(2018, 3, 10, 0, 0, 0);
-			var centralStandardTimeZone = TimeZoneInfoFactory.CentralStandardTime();
-			Now.Is(TimeZoneHelper.ConvertToUtc(asmZeroYesterdayLocal.AddDays(1), centralStandardTimeZone));
-
-			setLoggedOnUser(centralStandardTimeZone);
-
-			var daylightSavingAdjustment = TimeZoneHelper.GetDaylightChanges(centralStandardTimeZone, asmZeroYesterdayLocal.Year);
-
-			var res = Target.Map(asmZeroYesterdayLocal, new IScheduleDay[] { }, 0);
-
-			res.DSTAdjustmentInMinutes.Should().Be(daylightSavingAdjustment.Delta.TotalMinutes);
-		}
-
-		[Test]
-		public void ShouldNotReturnDstAjustmentWhenDstStartNotWithinUpComing10HoursAndNowIsToday()
-		{
-			var asmZeroYesterdayLocal = new DateTime(2018, 3, 10, 4, 15, 0);
-			var centralStandardTimeZone = TimeZoneInfoFactory.CentralStandardTime();
-			Now.Is(TimeZoneHelper.ConvertToUtc(asmZeroYesterdayLocal.AddDays(1), centralStandardTimeZone));
-
-			setLoggedOnUser(centralStandardTimeZone);
-
-			var res = Target.Map(asmZeroYesterdayLocal, new IScheduleDay[] { }, 0);
-
-			res.DSTAdjustmentInMinutes.Should().Be(0);
-		}
-
-		[Test]
-		public void ShouldReturnDstAjustmentWhenNowIsDstStartTime()
-		{
-			var asmZeroYesterdayLocal = new DateTime(2018, 3, 10, 3, 0, 0);
-			var centralStandardTimeZone = TimeZoneInfoFactory.CentralStandardTime();
-			Now.Is(TimeZoneHelper.ConvertToUtc(asmZeroYesterdayLocal.AddDays(1), centralStandardTimeZone));
-
-			setLoggedOnUser(centralStandardTimeZone);
-
-			var daylightSavingAdjustment = TimeZoneHelper.GetDaylightChanges(centralStandardTimeZone, asmZeroYesterdayLocal.Year);
-
-			var res = Target.Map(asmZeroYesterdayLocal, new IScheduleDay[] { }, 0);
-
-			res.DSTAdjustmentInMinutes.Should().Be(daylightSavingAdjustment.Delta.TotalMinutes);
-		}
-
-		[Test]
-		public void ShouldReturnDstAjustmentWhenDstStartWithinUpComing10HoursAndNowIsNotDstDay()
-		{
-			var asmZeroYesterdayLocal = new DateTime(2018, 3, 9, 23, 0, 0);
-			var centralStandardTimeZone = TimeZoneInfoFactory.CentralStandardTime();
-			Now.Is(TimeZoneHelper.ConvertToUtc(asmZeroYesterdayLocal.AddDays(1), centralStandardTimeZone));
-
-			setLoggedOnUser(centralStandardTimeZone);
-
-			var daylightSavingAdjustment = TimeZoneHelper.GetDaylightChanges(centralStandardTimeZone, asmZeroYesterdayLocal.Year);
-
-			var res = Target.Map(asmZeroYesterdayLocal, new IScheduleDay[] { }, 0);
-
-			res.DSTAdjustmentInMinutes.Should().Be(daylightSavingAdjustment.Delta.TotalMinutes);
-		}
 
 		[Test]
 		public void ShouldStartMinutesSinceAsmZeroDelayOneHourWhenDstEndWithinThisPeriod()

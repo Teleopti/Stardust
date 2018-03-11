@@ -8,6 +8,5 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Asm
 		public IEnumerable<string> Hours { get; set; }
 		public int UnreadMessageCount { get; set; }
 		public double UserTimeZoneMinuteOffset { get; set; }
-		public int DSTAdjustmentInMinutes { get; set; }
 	}
 }
