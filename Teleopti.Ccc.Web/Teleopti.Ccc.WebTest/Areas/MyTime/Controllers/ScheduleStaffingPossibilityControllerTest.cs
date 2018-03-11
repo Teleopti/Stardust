@@ -954,7 +954,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			var result = Target.GetPossibilityViewModels(date, StaffingPossiblityType.Overtime, false).ToList();
 			result.Count.Should().Be.EqualTo(8);
-			result[3].EndTime.TimeOfDay.TotalMinutes.Should().Be.EqualTo(120);
+			result[3].EndTime.TimeOfDay.TotalMinutes.Should().Be.EqualTo(180);
 		}
 
 		private void setupWorkFlowControlSet()

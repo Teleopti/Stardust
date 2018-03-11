@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				}
 				: null;
 
-			return new DayScheduleViewModel
+			var viewModel = new DayScheduleViewModel
 			{
 				Date = s.Date.ToFixedClientDateOnlyFormat(),
 				BaseUtcOffsetInMinutes = timeZone.BaseUtcOffset.TotalMinutes,
@@ -137,6 +137,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				ShiftTradeRequestSetting = _requestsViewModelFactory.CreateShiftTradePeriodViewModel(),
 				StaffingInfoAvailableDays = StaffingInfoAvailableDaysProvider.GetDays(_toggleManager) + 1
 			};
+			viewModel.Schedule.Periods = projections(s.ScheduleDay, false);
+
+			return viewModel;
 		}
 
 		private bool isOvertimeProbabilityEnabled(DateOnly date, bool forThisWeek)
@@ -187,7 +190,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 
 		private IEnumerable<DayViewModel> days(WeekScheduleDomainData scheduleDomainData, bool loadOpenHourPeriod = false)
 		{
-			return scheduleDomainData?.Days?.Select(s => createDayViewModel(s, loadOpenHourPeriod)).ToArray();
+			return scheduleDomainData?.Days?.Select(s =>
+			{
+				var viewModel = createDayViewModel(s, loadOpenHourPeriod);
+				viewModel.Periods = projections(s, true);
+				return viewModel;
+			}).ToArray();
 		}
 
 		private DayViewModel createDayViewModel(WeekScheduleDayDomainData s, bool loadOpenHourPeriod = false)
@@ -199,7 +207,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				Date = s.Date.ToShortDateString(),
 				FixedDate = s.Date.ToFixedClientDateOnlyFormat(),
 				DayOfWeekNumber = (int)s.Date.DayOfWeek,
-				Periods = projections(s).ToArray(),
 				RequestsCount = s.PersonRequestCount,
 				ProbabilityClass = s.ProbabilityClass,
 				ProbabilityText = s.ProbabilityText,
@@ -333,7 +340,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				   || date.Date.Add(timeSpan).CompareTo(localDayLightTimeStart) >= 0;
 		}
 
-		private IEnumerable<PeriodViewModel> projections(WeekScheduleDayDomainData s)
+		private IEnumerable<PeriodViewModel> projections(WeekScheduleDayDomainData s, bool forWeek)
 		{
 			var projectionList = new List<IVisualLayer>();
 			if (s.ProjectionYesterday != null)
@@ -348,8 +355,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 
 			var periodViewModelFactory = _periodViewModelFactory;
 			var minMaxTime = adjustMinEndTime(s.MinMaxTime);
-			var periodsViewModels = periodViewModelFactory.CreatePeriodViewModels(projectionList, minMaxTime, s.Date,
-				s.ScheduleDay?.TimeZone) ?? new PeriodViewModel[0];
+
+			IEnumerable<PeriodViewModel> periodsViewModels;
+			if (forWeek)
+				periodsViewModels = periodViewModelFactory.CreatePeriodViewModelsForWeek(projectionList, minMaxTime, s.Date,
+					s.ScheduleDay?.TimeZone);
+			else
+				periodsViewModels = periodViewModelFactory.CreatePeriodViewModelsForDay(projectionList, minMaxTime, s.Date,
+					s.ScheduleDay?.TimeZone);
+
+			periodsViewModels = periodsViewModels ?? new PeriodViewModel[0];
+
 			var overtimeAvailabilityPeriodViewModels =
 				periodViewModelFactory.CreateOvertimeAvailabilityPeriodViewModels(s.OvertimeAvailability,
 					s.OvertimeAvailabilityYesterday, minMaxTime) ?? new OvertimeAvailabilityPeriodViewModel[0];

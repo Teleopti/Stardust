@@ -25,7 +25,46 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			_now = now;
 		}
 
-		public IEnumerable<PeriodViewModel> CreatePeriodViewModels(IEnumerable<IVisualLayer> visualLayerCollection, TimePeriod minMaxTime, DateOnly localDate, TimeZoneInfo timeZone)
+		public IEnumerable<PeriodViewModel> CreatePeriodViewModelsForWeek(IEnumerable<IVisualLayer> visualLayerCollection, TimePeriod minMaxTime, DateOnly localDate, TimeZoneInfo timeZone)
+		{
+			var calendarDayExtractor = new VisualLayerCalendarDayExtractor();
+			var layerExtendedList = calendarDayExtractor.CreateVisualPeriods(localDate, visualLayerCollection, timeZone);
+
+			var newList = new List<PeriodViewModel>();
+
+			var timezone = _timeZone.TimeZone();
+			var totalLengthTicks = (minMaxTime.EndTime - minMaxTime.StartTime).Ticks;
+
+			foreach (var visualLayer in layerExtendedList)
+			{
+				var meetingModel = createMeetingViewModel(visualLayer);
+
+				var isOvertimeLayer = visualLayer.DefinitionSet?.MultiplicatorType == MultiplicatorType.Overtime;
+
+				var positionPercentage =
+					getPeriodPositionPercentage(minMaxTime, visualLayer.VisualPeriod.TimePeriod(timezone), totalLengthTicks);
+
+				newList.Add(new PeriodViewModel
+				{
+					Summary =
+						TimeHelper.GetLongHourMinuteTimeString(visualLayer.Period.ElapsedTime(),
+							CultureInfo.CurrentUICulture),
+					Title = visualLayer.DisplayDescription().Name,
+					TimeSpan = visualLayer.Period.TimePeriod(timezone).ToShortTimeString(),
+					StartTime = visualLayer.Period.StartDateTimeLocal(timezone),
+					EndTime = visualLayer.Period.EndDateTimeLocal(timezone),
+					StyleClassName = colorToString(visualLayer.DisplayColor()),
+					Meeting = meetingModel,
+					Color = visualLayer.DisplayColor().ToCSV(),
+					StartPositionPercentage = positionPercentage.Start,
+					EndPositionPercentage = positionPercentage.End,
+					IsOvertime = isOvertimeLayer
+				});
+			}
+			return newList;
+		}
+
+		public IEnumerable<PeriodViewModel> CreatePeriodViewModelsForDay(IEnumerable<IVisualLayer> visualLayerCollection, TimePeriod minMaxTime, DateOnly localDate, TimeZoneInfo timeZone)
 		{
 			var calendarDayExtractor = new VisualLayerCalendarDayExtractor();
 			var layerExtendedList = calendarDayExtractor.CreateVisualPeriods(localDate, visualLayerCollection, timeZone);
@@ -44,30 +83,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 
 			foreach (var visualLayer in layerExtendedList)
 			{
-				MeetingViewModel meetingModel = null;
-
-				var meetingPayload = visualLayer.Payload as IMeetingPayload;
-				if (meetingPayload != null)
-				{
-					var formatter = new NoFormatting();
-					meetingModel = new MeetingViewModel
-					{
-						Location = meetingPayload.Meeting.GetLocation(formatter),
-						Title = meetingPayload.Meeting.GetSubject(formatter),
-						Description = meetingPayload.Meeting.GetDescription(formatter)
-					};
-				}
+				var meetingModel = createMeetingViewModel(visualLayer);
 
 				var isOvertimeLayer = visualLayer.DefinitionSet?.MultiplicatorType == MultiplicatorType.Overtime;
 
-				var timePeriod = visualLayer.VisualPeriod.TimePeriod(timezone);
-				timePeriod = getAjustedTimePeriodByDaylightTime(timePeriod, isOnDSTStartDay, localDaylightStartTime, daylightTime);
-
-				var startPositionPercentage =
-					(decimal)(timePeriod.StartTime - minMaxTime.StartTime).Ticks / totalLengthTicks;
-
-				var endPositionPercentage =
-					(decimal)(timePeriod.EndTime - minMaxTime.StartTime).Ticks / totalLengthTicks;
+				var positionPercentage = getPeriodPositionPercentage(minMaxTime, visualLayer.VisualPeriod.TimePeriod(timezone), isOnDSTStartDay, localDaylightStartTime, daylightTime, totalLengthTicks);
 
 				newList.Add(new PeriodViewModel
 				{
@@ -81,12 +101,58 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 					StyleClassName = colorToString(visualLayer.DisplayColor()),
 					Meeting = meetingModel,
 					Color = visualLayer.DisplayColor().ToCSV(),
-					StartPositionPercentage = startPositionPercentage,
-					EndPositionPercentage = endPositionPercentage,
+					StartPositionPercentage = positionPercentage.Start,
+					EndPositionPercentage = positionPercentage.End,
 					IsOvertime = isOvertimeLayer
 				});
 			}
 			return newList;
+		}
+
+		private static MeetingViewModel createMeetingViewModel(VisualLayerForWebDisplay visualLayer)
+		{
+			MeetingViewModel meetingModel = null;
+
+			var meetingPayload = visualLayer.Payload as IMeetingPayload;
+			if (meetingPayload != null)
+			{
+				var formatter = new NoFormatting();
+				meetingModel = new MeetingViewModel
+				{
+					Location = meetingPayload.Meeting.GetLocation(formatter),
+					Title = meetingPayload.Meeting.GetSubject(formatter),
+					Description = meetingPayload.Meeting.GetDescription(formatter)
+				};
+			}
+
+			return meetingModel;
+		}
+
+
+		private PeriodPositionPercentage getPeriodPositionPercentage(TimePeriod minMaxTime, TimePeriod timePeriod,
+			bool isOnDSTStartDay, TimeSpan localDaylightStartTime, DaylightTime daylightTime,
+			long totalLengthTicks)
+		{
+			timePeriod = getAjustedTimePeriodByDaylightTime(timePeriod, isOnDSTStartDay, localDaylightStartTime, daylightTime);
+
+			return getPeriodPositionPercentage(minMaxTime, timePeriod, totalLengthTicks);
+		}
+
+		private static PeriodPositionPercentage getPeriodPositionPercentage(TimePeriod minMaxTime, TimePeriod timePeriod,
+			long totalLengthTicks)
+		{
+			var startPositionPercentage =
+				(decimal) (timePeriod.StartTime - minMaxTime.StartTime).Ticks / totalLengthTicks;
+
+			var endPositionPercentage = (decimal) (timePeriod.EndTime - minMaxTime.StartTime).Ticks / totalLengthTicks;
+
+			return new PeriodPositionPercentage() {Start = startPositionPercentage, End = endPositionPercentage};
+		}
+
+		private struct PeriodPositionPercentage
+		{
+			public Decimal Start { get; set; }
+			public Decimal End { get; set; }
 		}
 
 		private static TimeSpan getLocalDaylightStartTime(DaylightTime daylightTime, TimeZoneInfo localTimeZone)

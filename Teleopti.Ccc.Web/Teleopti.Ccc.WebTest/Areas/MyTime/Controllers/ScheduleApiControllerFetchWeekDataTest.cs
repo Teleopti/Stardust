@@ -389,6 +389,49 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
+		public void ShouldCalculateCorrectPercentageforActivityLayersForEnteringDSTDay()
+		{
+			var timeZone = TimeZoneInfoFactory.CentralStandardTime();
+			TimeZone.Is(timeZone);
+			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(timeZone);
+			Now.Is(new DateTime(2018, 03, 11, 6, 0, 0, DateTimeKind.Utc));
+
+			var date = new DateOnly(2018, 03, 11);
+			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), date);
+			var period1 = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(new DateTime(2018, 03, 11, 01, 0, 0), timeZone),
+				TimeZoneHelper.ConvertToUtc(new DateTime(2018, 03, 11, 03, 0, 0), timeZone));
+			var phoneActivity = new Activity("Phone")
+			{
+				InWorkTime = true,
+				InContractTime = true,
+				DisplayColor = Color.Green
+			};
+			assignment.AddActivity(phoneActivity, period1);
+
+			var period2 = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(new DateTime(2018, 03, 11, 03, 0, 0), timeZone),
+				TimeZoneHelper.ConvertToUtc(new DateTime(2018, 03, 11, 04, 0, 0), timeZone));
+			var emailActivity = new Activity("Email")
+			{
+				InWorkTime = true,
+				InContractTime = true,
+				DisplayColor = Color.Purple
+			};
+			
+			assignment.AddActivity(emailActivity, period2);
+			assignment.SetShiftCategory(new ShiftCategory("sc"));
+			ScheduleData.Add(assignment);
+
+			var result = Target.FetchWeekData(date);
+			var firstLayerDetails = result.Days.FirstOrDefault(d => d != null && d.Date == date.ToShortDateString()).Periods.First();
+			firstLayerDetails.StartPositionPercentage.Should().Be.EqualTo(0.25M / 3.5M);
+			firstLayerDetails.EndPositionPercentage.Should().Be.EqualTo(2.25M / 3.5M);
+
+			var secondLayerDetails = result.Days.FirstOrDefault(d => d != null && d.Date == date.ToShortDateString()).Periods.Last();
+			secondLayerDetails.StartPositionPercentage.Should().Be.EqualTo(2.25M / 3.5M);
+			secondLayerDetails.EndPositionPercentage.Should().Be.EqualTo(3.25M / 3.5M);
+		}
+
+		[Test]
 		public void ShouldNotMapDaylightSavingTimeAdjustment()
 		{
 			TimeZone.IsChina();
