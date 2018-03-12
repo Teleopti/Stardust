@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.ApprovePeriodAsInAdherence;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events;
@@ -30,19 +29,16 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay
 			_personId = personId;
 			_period = period;
 			var allChanges = buildChanges(events);
-			_changes = buildChanges(events)
+			_changes = allChanges
 				.Where(x => period.ContainsPart(x.Timestamp))
 				.ToArray();
 
 			now = floorToSeconds(now);
-			
-			var recordedApprovedPeriods = buildPeriods<PeriodApprovedAsInAdherenceEvent>(events);
-			var removedApprovedPeriods = buildPeriods<ApprovedPeriodRemovedEvent>(events);
-			_approvedPeriods = subtractPeriods(recordedApprovedPeriods, removedApprovedPeriods);
-			
+
+			_approvedPeriods = buildApprovedPeriods(events);
 			_recordedOutOfAdherences = buildPeriods(HistoricalChangeAdherence.Out, allChanges, now);
 			_outOfAdherences = subtractPeriods(_recordedOutOfAdherences, _approvedPeriods);
-			
+
 			var recordedNeutralAdherences = buildPeriods(HistoricalChangeAdherence.Neutral, allChanges, now);
 			var neutralAdherences = subtractPeriods(recordedNeutralAdherences, _approvedPeriods);
 			var outOfAhderencesWithinShift = withinShift(shift, _outOfAdherences);
@@ -80,12 +76,22 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay
 				.Select(x => x.First())
 				.ToArray();
 
-		private static IEnumerable<DateTimePeriod> buildPeriods<T>(IEnumerable<IEvent> events) =>
+		private static IEnumerable<DateTimePeriod> buildApprovedPeriods(IEnumerable<IEvent> events) =>
 			events
-				.OfType<T>()
-				.Select(a => new DateTimePeriod(((dynamic)a).StartTime, ((dynamic)a).EndTime))
-				.ToArray();
-		
+				.Where(e => e.GetType() == typeof(PeriodApprovedAsInAdherenceEvent) || e.GetType() == typeof(ApprovedPeriodRemovedEvent))
+				.Aggregate(new List<DateTimePeriod>(), (acc, @event) =>
+				{
+					var eventData = ((IRtaStoredEvent) @event).QueryData();
+					var period = new DateTimePeriod(eventData.StartTime.Value, eventData.EndTime.Value);
+
+					if (@event is ApprovedPeriodRemovedEvent)
+						acc.Remove(acc.First(a => a.Equals(period)));
+					else
+						acc.Add(period);
+
+					return acc;
+				});
+
 		private class periodAccumulator
 		{
 			public DateTime? StartTime;
