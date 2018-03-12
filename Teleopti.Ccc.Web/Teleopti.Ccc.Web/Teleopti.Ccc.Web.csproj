@@ -1603,11 +1603,8 @@
     <Content Include="WFM\app\requests\requests.uigridFix.js" />
     <Content Include="WFM\app\requests\requests.controller.js" />
     <Content Include="WFM\app\resourceplanner\manageschedule\manageschedule.html" />
-    <Content Include="WFM\app\resourceplanner\manageschedule\organization-tree-node.html" />
     <Content Include="WFM\app\resourceplanner\manageschedule\resourceplanner.manageschedule.controller.js" />
     <Content Include="WFM\app\resourceplanner\manageschedule\resourceplanner.manageschedule.controller.spec.js" />
-    <Content Include="WFM\app\resourceplanner\manageschedule\resourceplanner.manageschedule.hierarchy.controller.js" />
-    <Content Include="WFM\app\resourceplanner\manageschedule\resourceplanner.manageschedule.hierarchy.service.js" />
     <Content Include="WFM\app\resourceplanner\manageschedule\resourceplanner.manageschedule.service.js" />
     <Content Include="WFM\app\resourceplanner\tree_data\cardPanel.demo.controller.js" />
     <Content Include="WFM\app\resourceplanner\tree_data\demo.html" />

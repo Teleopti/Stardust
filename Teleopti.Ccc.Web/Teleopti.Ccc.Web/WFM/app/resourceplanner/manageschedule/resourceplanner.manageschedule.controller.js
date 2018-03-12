@@ -173,7 +173,6 @@
 				};
 
 				function runManaging(fromScenario, toScenario, period, teamSelection) {
-					console.log(teamSelection)
 					vm.showConfirmModal = false;
 					resetTracking();
 					vm.showProgress = true;
@@ -193,6 +192,8 @@
 								checkProgress();
 							else
 								completedManaging();
+						}, function() {
+							vm.showProgress = false;
 						});
 				};
 
