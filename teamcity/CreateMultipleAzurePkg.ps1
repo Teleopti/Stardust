@@ -19,7 +19,6 @@ properties {
 	$Large = "Standard_D2_v3"
 	$XLarge = "Standard_E2_v3"
 	
-	
 	$WorkingDir = $TCParams['teamcity.build.workingDir']
 	
 	$TeleoptiBin = "$WorkingDir\TeleoptiCCC\bin"
@@ -74,18 +73,25 @@ task CreateAzureMultiplePkg -depends Init, PreReq -description "Create Azure Mul
 	workflow parallelAzurePackaging {
 		param(
 		$CSPackEXE,
+		$AzurePackagePath_Medium,
 		$AzurePackagePath_Large,
 		$AzurePackagePath_XLarge,
 		$WorkingDir
 			)
 		parallel {
-			#Create Azure pkg
+			#Create Azure Medium pkg
+			InlineScript {& $Using:CSPackEXE "$Using:WorkingDir\teamcity\Azure\ServiceDefinition_Medium.csdef" `
+			  "/role:TeleoptiCCC;$Using:WorkingDir\TeleoptiCCC" `
+			  "/rolePropertiesFile:TeleoptiCCC;$Using:WorkingDir\teamcity\Azure\AzureRoleProperties.txt" `
+			  "/out:$Using:AzurePackagePath_Medium"}
+			
+			#Create Azure Large pkg
 			InlineScript {& $Using:CSPackEXE "$Using:WorkingDir\teamcity\Azure\ServiceDefinition_Large.csdef" `
 			  "/role:TeleoptiCCC;$Using:WorkingDir\TeleoptiCCC" `
 			  "/rolePropertiesFile:TeleoptiCCC;$Using:WorkingDir\teamcity\Azure\AzureRoleProperties.txt" `
 			  "/out:$Using:AzurePackagePath_Large"}
 			
-			#Create Azure Large pkg
+			#Create Azure XLarge pkg
 			InlineScript {& $Using:CSPackEXE "$Using:WorkingDir\teamcity\Azure\ServiceDefinition_XLarge.csdef" `
 			  "/role:TeleoptiCCC;$Using:WorkingDir\TeleoptiCCC" `
 			  "/rolePropertiesFile:TeleoptiCCC;$Using:WorkingDir\teamcity\Azure\AzureRoleProperties.txt" `
@@ -93,7 +99,7 @@ task CreateAzureMultiplePkg -depends Init, PreReq -description "Create Azure Mul
 		}
 	}
 	
-	parallelAzurePackaging -CSPackEXE $CSPackEXE -AzurePackagePath_Large $AzurePackagePath_Large -AzurePackagePath_XLarge $AzurePackagePath_XLarge -WorkingDir $WorkingDir
+	parallelAzurePackaging -CSPackEXE $CSPackEXE -AzurePackagePath_Medium $AzurePackagePath_Medium -AzurePackagePath_Large $AzurePackagePath_Large -AzurePackagePath_XLarge $AzurePackagePath_XLarge -WorkingDir $WorkingDir
 	
 	Write-Output "##teamcity[blockClosed name='<CreateAzureMultiplePkg>']"
 }
@@ -103,6 +109,7 @@ task PostReq -depends Init, PreReq, CreateAzureMultiplePkg -description "PostReq
 	Write-Output "##teamcity[blockOpened name='<PostReq>']"
 	
 	Copy-Item -Path "$WorkingDir\teamcity\Azure\Customer\" -Destination "$ToBeArtifacted" -Recurse -Force -ErrorAction Stop
+	Copy-Item -Path "$AzurePackagePath_Medium" -Destination "$ToBeArtifacted\Azure-$env:CccVersion-$Medium.cspkg" -Force -ErrorAction Stop
 	Copy-Item -Path "$AzurePackagePath_Large" -Destination "$ToBeArtifacted\Azure-$env:CccVersion-$Large.cspkg" -Force -ErrorAction Stop
 	Copy-Item -Path "$AzurePackagePath_XLarge" -Destination "$ToBeArtifacted\Azure-$env:CccVersion-$XLarge.cspkg" -Force -ErrorAction Stop
 	
