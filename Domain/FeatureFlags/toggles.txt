@@ -46,7 +46,7 @@ Wfm_Outbound_IgnoreScheduleForReplan_43752 = true
 RTA_ViewHistoricalAhderence7DaysBack_46826 = true
 RTA_ConfigurationValidationNotification_46933 = true
 RTA_ApprovePreviousOOA_47230 = true
-RTA_ReloadUIOnSystemVersionChanged_48196 = yes
+RTA_ReloadUIOnSystemVersionChanged_48196 = true
 RTA_ModifySkillGroup_48191 = true
 RTA_RemoveApprovedOOA_47721 = false
 
