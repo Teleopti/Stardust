@@ -3,7 +3,7 @@ using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Wfm.People
+namespace Teleopti.Ccc.WebBehaviorTest.Wfm.People.old
 {
 	[Binding]
 	class PeopleListStepDefinitions
