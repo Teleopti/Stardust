@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 		private const int numberOfDecimals = 2;
 
 		public ExportForecastAndStaffingFile(ISkillDayRepository skillDayRepository, ICurrentScenario currentScenario, 
-			ScheduledStaffingProvider scheduledStaffingProvider, IUserTimeZone userTimeZone, IForecastsRowExtractor forecastsRowExtractor,
+			ScheduledStaffingProvider scheduledStaffingProvider, IUserTimeZone userTimeZone, 
 			ISkillCombinationResourceRepository skillCombinationResourceRepository, ILoggedOnUser loggedOnUser)
 		{
 			_skillDayRepository = skillDayRepository;

@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				? scheduleDay.Period
 				: excludeOvernightFromPreviousDay(previousPersonAssignmentPeriod, personAssignment.Period.Contains(personAbsences.Period)
 					? personAssignment.Period
-					: coverWholeDayAndOvernight(personAssignment.Period, personAbsences.Period, person.PermissionInformation.DefaultTimeZone()));
+					: coverWholeDayAndOvernight(personAssignment.Period, person.PermissionInformation.DefaultTimeZone()));
 
 			command.ErrorMessages = _personAbsenceRemover.RemovePartPersonAbsence(command.Date, person, personAbsences,
 				periodToRemove, scheduleRange, command.TrackedCommandInfo).ToList();
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			return period;
 		}
 
-		private DateTimePeriod coverWholeDayAndOvernight(DateTimePeriod period, DateTimePeriod absencePeriod, TimeZoneInfo timezone)
+		private DateTimePeriod coverWholeDayAndOvernight(DateTimePeriod period, TimeZoneInfo timezone)
 		{
 			var startTimeLocal = period.StartDateTimeLocal(timezone);
 			var endTimeLocal = period.EndDateTimeLocal(timezone);

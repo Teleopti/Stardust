@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Gamification
 
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(RecalculateBadgeHandler));
 
-		public RecalculateBadgeHandler(CalculateBadges calculateBadges, IPerformBadgeCalculation performBadgeCalculation, ICurrentBusinessUnit currentBusinessUnit, IJobResultRepository jobResultRepository, IStardustJobFeedback feedback)
+		public RecalculateBadgeHandler(CalculateBadges calculateBadges, IPerformBadgeCalculation performBadgeCalculation, IJobResultRepository jobResultRepository, IStardustJobFeedback feedback)
 		{
 			_calculateBadges = calculateBadges;
 			_performBadgeCalculation = performBadgeCalculation;
