@@ -4,6 +4,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
@@ -346,5 +347,49 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			published.ScenarioId.Should().Be(scenario.Id.Value);
 		}
 
+		[Test]
+		public void ShouldRemovePersonPeriodStartingAfterLeavingDate()
+		{
+			BusinessUnitRepository.Add(businessUnit);
+			var scenario = ScenarioFactory.CreateScenario("Default", true, false).WithId();
+			ScenarioRepository.Add(scenario);
+
+			var person = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(PersonFactory.CreatePerson("A", "B").WithId(),
+				new DateOnly(2001, 1, 1));
+			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2018, 2, 2)));
+			PersonRepository.Add(person);
+
+			Target.Handle(new PersonTerminalDateChangedEvent
+			{
+				LogOnBusinessUnitId = businessUnit.Id.Value,
+				PersonId = person.Id.Value,
+				TerminationDate = new DateTime(2018, 01, 31)
+			});
+
+			var personPeriod = PersonRepository.Get(person.Id.Value).PersonPeriodCollection.Single();
+			personPeriod.Period.StartDate.Should().Be(new DateOnly(2001, 1, 1));
+		}
+
+		[Test]
+		public void ShouldRemoveSchedulePeriodStartingAfterLeavingDate()
+		{
+			BusinessUnitRepository.Add(businessUnit);
+			var scenario = ScenarioFactory.CreateScenario("Default", true, false).WithId();
+			ScenarioRepository.Add(scenario);
+			var person = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(PersonFactory.CreatePerson("A", "B").WithId(),
+				new DateOnly(2001, 1, 1));
+			person.AddSchedulePeriod(SchedulePeriodFactory.CreateSchedulePeriod(new DateOnly(2001, 2, 2)));
+			PersonRepository.Add(person);
+
+			Target.Handle(new PersonTerminalDateChangedEvent
+			{
+				LogOnBusinessUnitId = businessUnit.Id.Value,
+				PersonId = person.Id.Value,
+				TerminationDate = new DateTime(2001, 01, 31)
+			});
+
+			var personScheduledPeriod = PersonRepository.Get(person.Id.Value).PersonSchedulePeriodCollection.Single();
+			personScheduledPeriod.DateFrom.Should().Be(new DateOnly(2001, 1, 1));
+		}
 	}
 }

@@ -82,8 +82,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 				});
 			}
 
-			//Ask anders
-			//person.RemoveAllPeriodsAfter(leavingDate);
+			person.RemoveAllPeriodsAfter(leavingDate);
 
 			_eventPublisher.Publish(events.ToArray());
 		}
