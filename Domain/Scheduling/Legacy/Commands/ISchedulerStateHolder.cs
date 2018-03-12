@@ -81,6 +81,5 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		IPersonRequest RequestDeleteFromBroker(Guid personRequestId);
 
 		bool AgentFilter();
-		void LoadCommonStateForResourceCalculationOnly(IUnitOfWork unitOfWork, IRepositoryFactory repositoryFactory);
 	}
 }

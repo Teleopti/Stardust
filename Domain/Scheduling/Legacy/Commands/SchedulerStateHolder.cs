@@ -159,11 +159,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			CommonStateHolder.LoadCommonStateHolder(repositoryFactory, unitOfWork);
 		}
 
-		public void LoadCommonStateForResourceCalculationOnly(IUnitOfWork unitOfWork, IRepositoryFactory repositoryFactory)
-		{
-			CommonStateHolder.LoadCommonStateHolderForResourceCalculationOnly(repositoryFactory, unitOfWork);
-		}
-
 		public void LoadPersonRequests(IUnitOfWork unitOfWork, IRepositoryFactory repositoryFactory, IPersonRequestCheckAuthorization authorization, int numberOfDaysToShowNonPendingRequests)
 		{
 			if (_shiftTradeRequestStatusChecker == null)

@@ -49,31 +49,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		    }
 	    }
 
-		public void LoadCommonStateHolderForResourceCalculationOnly(IRepositoryFactory repositoryFactory, IUnitOfWork unitOfWork)
-		{
-			_absences.Clear();
-			_activities.Clear();
-			//_dayOffs.Clear();
-			//_scheduleTags.Clear();
-			_shiftCategories.Clear();
-			//_workflowControlSets.Clear();
-			//_multiplicatorDefinitionSets.Clear();
-
-			using (_disableDeleteFilter.Disable())
-			{
-				LoadActivity(repositoryFactory.CreateActivityRepository(unitOfWork));
-				LoadAbsences(repositoryFactory.CreateAbsenceRepository(unitOfWork));
-				//LoadDayOffs(repositoryFactory.CreateDayOffRepository(unitOfWork));
-				LoadShiftCategory(repositoryFactory.CreateShiftCategoryRepository(unitOfWork));
-				//LoadContracts(repositoryFactory.CreateContractRepository(unitOfWork));
-				//LoadContractSchedules(repositoryFactory.CreateContractScheduleRepository(unitOfWork));
-				//loadScheduleTags(repositoryFactory.CreateScheduleTagRepository(unitOfWork));
-				//loadWorkflowControlSets(repositoryFactory.CreateWorkflowControlSetRepository(unitOfWork));
-				//loadPartTimePercentage(repositoryFactory.CreatePartTimePercentageRepository(unitOfWork));
-				//loadMultiplicatorDefinitionSet(repositoryFactory.CreateMultiplicatorDefinitionSetRepository(unitOfWork));
-			}
-		}
-
 		private void loadMultiplicatorDefinitionSet(IMultiplicatorDefinitionSetRepository multiplicatorDefinitionSetRepository)
 	    {
 		    _multiplicatorDefinitionSets.AddRange(multiplicatorDefinitionSetRepository.LoadAll());

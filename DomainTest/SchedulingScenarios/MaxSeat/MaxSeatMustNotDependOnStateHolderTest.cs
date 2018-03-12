@@ -439,11 +439,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			{
 				throw new NotImplementedException();
 			}
-
-			public void LoadCommonStateForResourceCalculationOnly(IUnitOfWork unitOfWork, IRepositoryFactory repositoryFactory)
-			{
-				throw new NotImplementedException();
-			}
 		}
 	}
 }
