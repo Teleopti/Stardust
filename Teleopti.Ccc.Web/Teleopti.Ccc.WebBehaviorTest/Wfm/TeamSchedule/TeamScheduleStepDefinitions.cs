@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 				() =>
 				{
 					Browser.Interactions.SetScopeValues(".team-schedule", propertyValues);
-					Browser.Interactions.AssertScopeValue(".team-schedule", "vm.scheduleDateMoment().locale('en').format('YYYY-MM-DD')",
+					Browser.Interactions.AssertScopeValue(".team-schedule", "vm.scheduleDate.toISOString().substr(0,10)",
 						scheduleDate);
 					Browser.Interactions.InvokeScopeAction(".team-schedule", "vm.onScheduleDateChanged");
 					Browser.Interactions.InvokeServiceAction(".team-schedule", "ScenarioTestUtil", "inScenarioTest");
