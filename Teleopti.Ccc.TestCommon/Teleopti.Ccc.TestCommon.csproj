@@ -220,6 +220,7 @@
     <Compile Include="FakeRepositories\FakeBadgeCalculationRepository.cs" />
     <Compile Include="FakeRepositories\FakeExternalPerformanceDataRepository.cs" />
     <Compile Include="FakeRepositories\FakeExternalPerformanceRepository.cs" />
+    <Compile Include="FakeRepositories\FakePersonAccessRepository.cs" />
     <Compile Include="FakeRepositories\FakePersonFinderReadOnlyRepository.cs" />
     <Compile Include="FakeRepositories\FakePersonScheduleChangeMessageRepository.cs" />
     <Compile Include="FakeRepositories\FakePlanningGroupRepository.cs" />

@@ -260,7 +260,6 @@
     <Compile Include="MultiTenancy\Server\ITenantLogonInfoLoader.cs" />
     <Compile Include="MultiTenancy\Server\Queries\IPersistExternalApplicationAccess.cs" />
     <Compile Include="MultiTenancy\Server\Queries\PersistExternalApplicationAccess.cs" />
-    <Compile Include="Persisters\Auditing\PersonAccessPersister.cs" />
     <Compile Include="Persisters\Schedules\ScheduleRangePersisterWithConflictSolve.cs" />
     <Compile Include="MultiTenancy\Server\Queries\TenantPersonLogonQuerier.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\AgentStateReadModelPersister.cs" />
@@ -299,6 +298,7 @@
     <Compile Include="Repositories\Audit\ScheduleAuditTrailReport.cs" />
     <Compile Include="Repositories\ExternalPerformanceDataRepository.cs" />
     <Compile Include="Repositories\ExternalPerformanceRepository.cs" />
+    <Compile Include="Repositories\PersonAccessAuditRepository.cs" />
     <Compile Include="Repositories\PersonLoadAllWithPeriodAndExternalLogOn.cs" />
     <Compile Include="Repositories\RequestPeriod.cs" />
     <Compile Include="Repositories\SkillCombinationResourceRepository.cs" />

@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
-using System.Web.Http.Results;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.People.Core;
@@ -18,7 +16,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 		private readonly IRoleManager _roleManager;
 
 
-		public RoleController(IPersonRepository personRepository, 
+		public RoleController(IPersonRepository personRepository,
 			IApplicationRoleRepository roleRepository,
 			IRoleManager roleManager)
 		{
@@ -27,8 +25,8 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			_roleManager = roleManager;
 		}
 
-		[UnitOfWork, HttpGet, Route("api/PeopleData/fetchRoles")] 
-		public virtual JsonResult<IEnumerable<RoleViewModel>> FetchRoles()
+		[UnitOfWork, HttpGet, Route("api/PeopleData/fetchRoles")]
+		public virtual IEnumerable<RoleViewModel> FetchRoles()
 		{
 			var roles = _roleRepository.LoadAllApplicationRolesSortedByName();
 
@@ -39,11 +37,11 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 				CanBeChangedByCurrentUser = true
 			});
 
-			return Json(res);
+			return res;
 		}
 
 		[UnitOfWork, HttpPost, Route("api/PeopleData/fetchPersons"), RequireArguments]
-		public virtual JsonResult<IEnumerable<PersonViewModel>> FetchPersons(FecthPersonsInputModel users)
+		public virtual IEnumerable<PersonViewModel> FetchPersons(FecthPersonsInputModel users)
 		{
 			var persons = _personRepository.FindPeople(users.PersonIdList);
 
@@ -54,41 +52,27 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 				LastName = x.Name.LastName,
 				Roles = x.PermissionInformation.ApplicationRoleCollection.Select(r => new RoleViewModel
 				{
-					Name = r.Name,
+					Name = r.DescriptionText,
 					Id = r.Id.GetValueOrDefault(),
 					CanBeChangedByCurrentUser = true
 				})
 			});
 
-			return Json(result);
+			return result;
 		}
 
 		[UnitOfWork, HttpPost, Route("api/PeopleCommand/grantRoles"), RequireArguments]
 		public virtual IHttpActionResult GrantRoles(GrantRolesInputModel inputmodel)
 		{
-			try
-			{
-				_roleManager.GrantRoles(inputmodel);
-				return Ok();
-			}
-			catch (Exception e)
-			{
-				return BadRequest(e.Message); // TODO: Log.Exception(e)
-			}
+			_roleManager.GrantRoles(inputmodel);
+			return Ok();
 		}
 
 		[UnitOfWork, HttpPost, Route("api/PeopleCommand/revokeRoles"), RequireArguments]
 		public virtual IHttpActionResult RevokeRoles(RevokeRolesInputModel inputmodel)
 		{
-			try
-			{
-				_roleManager.RevokeRoles(inputmodel);
-				return Ok();
-			}
-			catch (Exception e)
-			{
-				return BadRequest(e.Message); // TODO: Log.Exception(e)
-			}
+			_roleManager.RevokeRoles(inputmodel);
+			return Ok();
 		}
 	}
 }

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Linq;
-using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.People.Core.Aspects;
 using Teleopti.Ccc.Web.Areas.People.Models;
@@ -21,20 +19,14 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 		private readonly IPersonRepository personRepository;
 		private readonly IApplicationRoleRepository roleRepository;
 		private readonly ILoggedOnUser loggedOnUser;
-		private readonly IPersonAccessPersister personAccessPersister;
-		private readonly ICurrentUnitOfWork unitOfWork;
 
 		public RoleManager(IPersonRepository personRepository,
 			IApplicationRoleRepository roleRepository,
-			ILoggedOnUser loggedOnUser,
-			IPersonAccessPersister personAccessPersister,
-			ICurrentUnitOfWork unitOfWork)
+			ILoggedOnUser loggedOnUser)
 		{
 			this.roleRepository = roleRepository;
 			this.personRepository = personRepository;
 			this.loggedOnUser = loggedOnUser;
-			this.personAccessPersister = personAccessPersister;
-			this.unitOfWork = unitOfWork;
 		}
 
 		[AuditPerson]

@@ -285,6 +285,8 @@
     <Compile Include="Areas\Global\Core\MultipartHttpContentExtractorTest.cs" />
     <Compile Include="Areas\People\PeopleAreaModuleTest.cs" />
     <Compile Include="Areas\People\Providers\ImportAgentDataProviderTest.cs" />
+    <Compile Include="Areas\People\RoleControllerAuditTest.cs" />
+    <Compile Include="Areas\People\RoleControllerTest.cs" />
     <Compile Include="Areas\Reporting\Controller\ScheduleAuditTrailControllerTest.cs" />
     <Compile Include="Areas\Reports\ResReportTranslationPlaceholder.cs" />
     <Compile Include="Areas\Requests\Core\ViewModelFactory\RequestAllowanceViewModelFactoryTest.cs" />

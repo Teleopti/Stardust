@@ -339,7 +339,6 @@
     <Compile Include="ApplicationLayer\SiteTeamChangedHandlers\AnalyticsSiteUpdater.cs" />
     <Compile Include="ApplicationLayer\SiteTeamChangedHandlers\AnalyticsTeamUpdater.cs" />
     <Compile Include="Auditing\IPersonAccess.cs" />
-    <Compile Include="Auditing\IPersonAccessPersister.cs" />
     <Compile Include="Auditing\PersonAccess.cs" />
     <Compile Include="Cascading\ResourceOptimizationHelperThatThrows.cs" />
     <Compile Include="Common\BadgeSetting.cs" />
@@ -4104,6 +4103,9 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Common\ExternalPerformanceData.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Auditing\PersonAccess.hbm.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <Content Include="InterfaceLegacy\_DONT_PUT_NEW_TYPES_HERE.txt" />

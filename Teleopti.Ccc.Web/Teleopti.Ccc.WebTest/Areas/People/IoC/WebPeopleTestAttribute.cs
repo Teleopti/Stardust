@@ -1,7 +1,10 @@
-﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+﻿using Teleopti.Ccc.Domain.Auditing;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -26,6 +29,9 @@ namespace Teleopti.Ccc.WebTest.Areas.People.IoC
 			system.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
 			system.UseTestDouble<FakeRuleSetBagRepository>().For<IRuleSetBagRepository>();
 			system.UseTestDouble<FakeWorkShiftRuleSetRepository>().For<IWorkShiftRuleSetRepository>();
+			system.UseTestDouble<FakeApplicationRoleRepository>().For<IApplicationRoleRepository>();
+			system.UseTestDouble<FakePersonAccessRepository>().For<IRepository<IPersonAccess>>();
+			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 		}
 	}
 }

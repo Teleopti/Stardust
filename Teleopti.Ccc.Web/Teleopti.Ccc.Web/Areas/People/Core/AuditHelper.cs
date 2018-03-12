@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.People.Models;
 
@@ -19,20 +18,17 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 		private readonly IPersonRepository _personRepository;
 		private readonly IApplicationRoleRepository _roleRepository;
 		private readonly ILoggedOnUser _loggonUser;
-		private readonly IPersonAccessPersister _personAccessPersister;
-		private readonly ICurrentUnitOfWork _unitOfWork;
+		private readonly IRepository<IPersonAccess> _personAccessRepository;
 
 		public AuditHelper(IPersonRepository personRepository,
 			IApplicationRoleRepository roleRepository,
 			ILoggedOnUser loggedOnUser,
-			IPersonAccessPersister personAccessPersister,
-			ICurrentUnitOfWork unitOfWork)
+			IRepository<IPersonAccess> personAccessRepository)
 		{
 			_roleRepository = roleRepository;
 			_personRepository = personRepository;
 			_loggonUser = loggedOnUser;
-			_personAccessPersister = personAccessPersister;
-			_unitOfWork = unitOfWork;
+			_personAccessRepository = personAccessRepository;
 		}
 
 		public void AuditCall(PersonAuditActionType actionType, PersonRolesBaseModel inputmodel)
@@ -51,12 +47,12 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 
 				switch (actionType)
 				{
-					case PersonAuditActionType.MulitGrantRole:
+					case PersonAuditActionType.MultiGrantRole:
 					case PersonAuditActionType.SingleGrantRole:
 						rolesThatMakesChange = selectedRoles.Except(person.PermissionInformation.ApplicationRoleCollection);
 						rolesThatMakesNOChange = selectedRoles.Where(r => person.PermissionInformation.ApplicationRoleCollection.Contains(r));
 						break;
-					case PersonAuditActionType.MulitRevokeRole:
+					case PersonAuditActionType.MultiRevokeRole:
 					case PersonAuditActionType.SingleRevokeRole:
 					default:
 						rolesThatMakesChange = selectedRoles.Where(r => person.PermissionInformation.ApplicationRoleCollection.Contains(r));
@@ -74,9 +70,9 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 			switch (actionType)
 			{
 				case PersonAuditActionType.GrantRole:
-					return model.Persons.Count() > 1 ? PersonAuditActionType.MulitGrantRole : PersonAuditActionType.SingleGrantRole;
+					return model.Persons.Count() > 1 ? PersonAuditActionType.MultiGrantRole : PersonAuditActionType.SingleGrantRole;
 				case PersonAuditActionType.RevokeRole:
-					return model.Persons.Count() > 1 ? PersonAuditActionType.MulitRevokeRole : PersonAuditActionType.SingleRevokeRole;
+					return model.Persons.Count() > 1 ? PersonAuditActionType.MultiRevokeRole : PersonAuditActionType.SingleRevokeRole;
 				default:
 					return actionType;
 			}
@@ -87,8 +83,8 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 			foreach (var role in rolesToUpdate)
 			{
 				var actionJsonData = Newtonsoft.Json.JsonConvert.SerializeObject(new { RoleId = role.Id, Name = role.DescriptionText });
-				var pa = new PersonAccess(actionBy.Id.GetValueOrDefault(), actionOn.Id.GetValueOrDefault(), actionType.ToString(), actionResult.ToString(), actionJsonData, correlationId);
-				_personAccessPersister.Persist(pa);
+				var pa = new PersonAccess(actionBy, actionOn, actionType.ToString(), actionResult.ToString(), actionJsonData, correlationId);
+				_personAccessRepository.Add(pa);
 			}
 		}
 	}
@@ -105,7 +101,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 		RevokeRole,
 		SingleGrantRole,
 		SingleRevokeRole,
-		MulitGrantRole,
-		MulitRevokeRole
+		MultiGrantRole,
+		MultiRevokeRole
 	}
 }
