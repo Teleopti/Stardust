@@ -45,7 +45,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<MultiAbsenceRequestsUpdater>().As<IMultiAbsenceRequestsUpdater>().InstancePerLifetimeScope();
 			builder.RegisterType<AbsenceRequestIntradayFilter>().As<IAbsenceRequestIntradayFilter>().SingleInstance();
 			builder.RegisterType<SiteOpenHoursSpecification>().As<ISiteOpenHoursSpecification>();
-			builder.RegisterType<OvertimeRequestProcessor>().As<IOvertimeRequestProcessor>().SingleInstance();
+			registerType
+				<IOvertimeRequestProcessor, OvertimeRequestProcessorToggle47290On, OvertimeRequestProcessor>(builder,
+					Toggles.OvertimeRequestPeriodSkillTypeSetting_47290);
+
 			builder.RegisterType<OvertimeRequestStartTimeValidator>().As<IOvertimeRequestValidator>().SingleInstance();
 			builder.RegisterType<OvertimeRequestSiteOpenHourValidator>().As<IOvertimeRequestValidator>().SingleInstance();
 			builder.RegisterType<OvertimeRequestAlreadyHasScheduleValidator>().As<IOvertimeRequestValidator>().SingleInstance();

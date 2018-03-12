@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -62,7 +63,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<OvertimeRequestProcessor>().For<IOvertimeRequestProcessor>();
 			system.UseTestDouble<UpdatedBy>().For<IUpdatedByScope>();
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			system.UseTestDouble<DoNothingScheduleDayChangeCallBack>().For<IScheduleDayChangeCallback>();
@@ -572,7 +572,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		private ISkill createSkill(string name, TimePeriod? skillOpenHourPeriod = null,TimeZoneInfo timeZone = null)
 		{
 			var skill = SkillFactory.CreateSkill(name,timeZone).WithId();
-			skill.SkillType.Description = new Description("SkillTypeInboundTelephony");
+			skill.SkillType.Description = new Description(SkillTypeIdentifier.Phone);
 			skill.StaffingThresholds = createStaffingThresholds();
 			WorkloadFactory.CreateWorkloadWithOpenHours(skill, skillOpenHourPeriod ?? _defaultOpenPeriod);
 			SkillRepository.Has(skill);
