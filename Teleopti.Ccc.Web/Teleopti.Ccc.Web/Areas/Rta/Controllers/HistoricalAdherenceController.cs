@@ -16,14 +16,18 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		private readonly HistoricalAdherenceViewModelBuilder _historicalAdherenceViewModelBuilder;
 		private readonly ApprovePeriodAsInAdherenceCommandHandler _approvePeriodCommandHandler;
 		private readonly HistoricalAdherenceDate _historicalAdherenceDate;
+		private readonly RemoveApprovedPeriodCommandHandler _removePeriodCommandHandler;
 
 		public HistoricalAdherenceController(
 			HistoricalAdherenceViewModelBuilder historicalAdherenceViewModelBuilder,
 			ApprovePeriodAsInAdherenceCommandHandler approvePeriodCommandHandler,
-			HistoricalAdherenceDate historicalAdherenceDate)
+			RemoveApprovedPeriodCommandHandler removePeriodCommandHandler,
+			HistoricalAdherenceDate historicalAdherenceDate
+			)
 		{
 			_historicalAdherenceViewModelBuilder = historicalAdherenceViewModelBuilder;
 			_approvePeriodCommandHandler = approvePeriodCommandHandler;
+			_removePeriodCommandHandler = removePeriodCommandHandler;
 			_historicalAdherenceDate = historicalAdherenceDate;
 		}
 
@@ -40,6 +44,14 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		public virtual IHttpActionResult ApprovePeriod([FromBody] ApprovePeriodAsInAdherenceCommand command)
 		{
 			_approvePeriodCommandHandler.Handle(command);
+			return Ok();
+		}
+		
+		[UnitOfWork]
+		[HttpPost, Route("api/HistoricalAdherence/RemoveApprovedPeriod")]
+		public virtual IHttpActionResult RemoveApprovedPeriod([FromBody] RemoveApprovedPeriodCommand command)
+		{
+			_removePeriodCommandHandler.Handle(command);
 			return Ok();
 		}
 		
