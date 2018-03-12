@@ -84,10 +84,11 @@
 
 			start.hours() < 8 && start.hours(8) && start.minutes(minutes);
 
-			return format(start);
+			return format(moment.tz(start.format('YYYY-MM-DD HH:mm'),timezone));
 		}
 
 		function format(dateMoment) {
+			
 			return serviceDateFormatHelper.getDateByFormat(dateMoment, 'YYYY-MM-DDTHH:mm:ssZ');
 		}
 	}
