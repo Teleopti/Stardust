@@ -165,12 +165,14 @@ var wfm = angular.module('wfm', [
 
 			var areas;
 			var permittedAreas;
+			//State name in lowercase
 			var alwaysPermittedAreas = [
 				'main',
 				'skillprio',
 				'teapot',
 				'resourceplanner.importschedule',
-				'resourceplanner.archiveschedule'
+				'resourceplanner.archiveschedule',
+				'dataprotection'
 			];
 
 			function initializePermissionCheck() {
