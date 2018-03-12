@@ -189,9 +189,8 @@
 			if (overnightEnds !== null) {
 				defaultStart = moment(overnightEnds).add(1, 'hour').toDate();
 			}
-
-			if (serviceDateFormatHelper.getDateOnly(utility.nowInUserTimeZone()) === vm.selectedDate()) {
-				var nextTickTime = new Date(utility.getNextTickNoEarlierThanEight());
+			if (serviceDateFormatHelper.getDateOnly(utility.nowInSelectedTimeZone(vm.currentTimezone())) === vm.selectedDate()) {
+				var nextTickTime = new Date(utility.getNextTickNoEarlierThanEight(vm.currentTimezone()));
 				if (nextTickTime > defaultStart) {
 					defaultStart = nextTickTime;
 				}

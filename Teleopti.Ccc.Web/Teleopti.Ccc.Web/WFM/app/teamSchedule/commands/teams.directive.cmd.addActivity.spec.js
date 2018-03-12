@@ -265,12 +265,12 @@
 		scheduleHelper.setLatestStartTime(null);
 		utility.setNowDate(date);
 
-		var result = setUp(date);
+		var result = setUp(date, 'Etc/Utc');
 		var vm = result.commandControl;
 		vm.selectedAgents = [];
 
 		var defaultStartTime = vm.getDefaultActvityStartTime();
-		var nextTick = new Date(utility.getNextTickNoEarlierThanEight());
+		var nextTick = new Date(utility.getNextTickNoEarlierThanEight('Etc/Utc'));
 		expect(defaultStartTime.getHours()).toBe(nextTick.getHours());
 		expect(defaultStartTime.getMinutes()).toBe(nextTick.getMinutes());
 	});
@@ -393,7 +393,7 @@
 	});
 
 
-	function setUp(inputDate) {
+	function setUp(inputDate, timezone) {
 		var date;
 		var html = '<teamschedule-command-container date="curDate" timezone="timezone"></teamschedule-command-container>';
 		var scope = $rootScope.$new();
@@ -404,7 +404,12 @@
 			date = inputDate;
 
 		scope.curDate = date;
-		scope.timezone = "Asia/Hong_Kong";
+		if (timezone) {
+			scope.timezone = timezone;
+		} else {
+			scope.timezone = "Asia/Hong_Kong";
+		}
+		
 		fakeActivityService.setAvailableActivities(getAvailableActivities());
 
 		var container = $compile(html)(scope);

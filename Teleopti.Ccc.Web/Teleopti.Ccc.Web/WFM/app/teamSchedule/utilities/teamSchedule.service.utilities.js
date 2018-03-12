@@ -11,20 +11,21 @@
 
 		self.getWeekdayNames = getWeekdayNames;
 		self.getWeekdays = getWeekDays;
-		self.getNextTick = getNextTick;
 		self.getNextTickNoEarlierThanEight = getNextTickNoEarlierThanEight;
 		self.nowInUserTimeZone = formattedNowInUserTimeZone;
+		self.nowInSelectedTimeZone = formattedNowInSelectedTimeZone;
 		self.setNowDate = setNowDate;
 		self.now = now;
 
-		var nowDate = new Date();
+		var fakeNowDate;
 
 		function setNowDate(date) {
-			nowDate = date;
+			fakeNowDate = date;
 		}
 
 		function now() {
-			return nowDate;
+			if (fakeNowDate) return fakeNowDate;
+			return new Date();
 		};
 
 		function nowMoment() {
@@ -35,8 +36,16 @@
 			return format(nowInUserTimeZone());
 		}
 
+		function formattedNowInSelectedTimeZone(timezone) {
+			return format(nowInSelectedTimeZone(timezone));
+		}
+
 		function nowInUserTimeZone() {
-			return moment.tz(nowMoment(), CurrentUserInfo.CurrentUserInfo().DefaultTimeZone);
+			return nowMoment().clone().tz(CurrentUserInfo.CurrentUserInfo().DefaultTimeZone);
+		}
+
+		function nowInSelectedTimeZone(timezone) {
+			return nowMoment().clone().tz(timezone);
 		}
 
 
@@ -67,18 +76,10 @@
 			return dates;
 		}
 
-		function getNextTick() {
-			var nowInUserTimeZoneMoment = nowInUserTimeZone();
+		function getNextTickNoEarlierThanEight(timezone) {
+			var nowInUserTimeZoneMoment = moment(nowInSelectedTimeZone(timezone).format('YYYY-MM-DD HH:mm'));
 
-			var minutes = Math.ceil(nowInUserTimeZoneMoment.minute() / tick) * tick;
-			var start = nowInUserTimeZoneMoment.startOf('hour').minutes(minutes);
-			return format(start);
-		}
-
-		function getNextTickNoEarlierThanEight() {
-			var nowInUserTimeZoneMoment = nowInUserTimeZone();
-
-			var minutes = Math.ceil(nowInUserTimeZoneMoment.minute() / tick) * tick;
+			var minutes = Math.ceil((nowInUserTimeZoneMoment.minute() + 1) / tick) * tick;
 			var start = nowInUserTimeZoneMoment.startOf('hour').minutes(minutes);
 
 			start.hours() < 8 && start.hours(8) && start.minutes(minutes);

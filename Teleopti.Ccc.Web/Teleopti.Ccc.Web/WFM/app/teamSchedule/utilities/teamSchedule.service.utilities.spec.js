@@ -41,12 +41,8 @@
 			expect(target.nowInUserTimeZone()).toEqual('2018-02-26T15:00:00+08:00');
 		});
 
-		it('should get correct next tick', function () {
-			expect(target.getNextTick()).toEqual('2018-02-26T15:00:00+08:00');
-		});
-
 		it('should get correct next tick no earlier than eight', function () {
-			expect(target.getNextTickNoEarlierThanEight()).toEqual('2018-02-26T15:00:00+08:00');
+			expect(target.getNextTickNoEarlierThanEight('Asia/Hong_Kong')).toEqual('2018-02-26T15:15:00+08:00');
 		});
 	}
 
