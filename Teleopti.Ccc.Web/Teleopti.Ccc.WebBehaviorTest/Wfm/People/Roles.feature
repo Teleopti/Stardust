@@ -1,4 +1,5 @@
 ﻿@People
+@OnlyRunIfEnabled('Wfm_PeopleWeb_PrepareForRelease_47766')
 Feature: Roles
 	In order to edit roles
 	As a teamleader
