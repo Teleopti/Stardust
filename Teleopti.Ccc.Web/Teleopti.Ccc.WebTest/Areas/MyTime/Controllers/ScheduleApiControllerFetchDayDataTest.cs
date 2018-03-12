@@ -213,6 +213,54 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
+		public void ShouldMapEnteringDSTOnDSTDay()
+		{
+			TimeZone.Is(TimeZoneInfoFactory.CentralStandardTime());
+			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(TimeZone.TimeZone());
+
+			Now.Is("2018-03-11 6:00");
+			var viewModel = Target.FetchDayData(null);
+			viewModel.DaylightSavingTimeAdjustment.Should().Not.Be.Null();
+			viewModel.DaylightSavingTimeAdjustment.EnteringDST.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldNotMapEnteringDSTOnNormalDay()
+		{
+			TimeZone.Is(TimeZoneInfoFactory.CentralStandardTime());
+			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(TimeZone.TimeZone());
+
+			Now.Is("2018-03-12 6:00");
+			var viewModel = Target.FetchDayData(null);
+			viewModel.DaylightSavingTimeAdjustment.Should().Not.Be.Null();
+			viewModel.DaylightSavingTimeAdjustment.EnteringDST.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldMapLocalDSTStartTimeInMinutesOnDSTDay()
+		{
+			TimeZone.Is(TimeZoneInfoFactory.CentralStandardTime());
+			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(TimeZone.TimeZone());
+
+			Now.Is("2018-03-11 6:00");
+			var viewModel = Target.FetchDayData(null);
+			viewModel.DaylightSavingTimeAdjustment.Should().Not.Be.Null();
+			viewModel.DaylightSavingTimeAdjustment.LocalDSTStartTimeInMinutes.Should().Be(180);
+		}
+
+		[Test]
+		public void ShouldMapLocalDSTStartTimeInMinutesOnDSTDayInSweden()
+		{
+			TimeZone.IsSweden();
+			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(TimeZone.TimeZone());
+
+			Now.Is("2018-03-24 23:00");
+			var viewModel = Target.FetchDayData(null);
+			viewModel.DaylightSavingTimeAdjustment.Should().Not.Be.Null();
+			viewModel.DaylightSavingTimeAdjustment.LocalDSTStartTimeInMinutes.Should().Be(180);
+		}
+
+		[Test]
 		public void ShouldCalculateCorrectPercentageforActivityLayersOnFetchDayData()
 		{
 			var timeZone = TimeZoneInfoFactory.CentralStandardTime();

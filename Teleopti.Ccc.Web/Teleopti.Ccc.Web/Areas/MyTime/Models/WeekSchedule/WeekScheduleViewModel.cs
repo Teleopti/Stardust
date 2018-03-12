@@ -178,6 +178,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 		public DateTime StartDateTime { get; set; }
 		public DateTime EndDateTime { get; set; }
 		public double AdjustmentOffsetInMinutes { get; set; }
+		public int LocalDSTStartTimeInMinutes { get; set; }
+		public bool EnteringDST { get; set; }
 
 		public DaylightSavingsTimeAdjustmentViewModel(DaylightTime daylightTime)
 		{

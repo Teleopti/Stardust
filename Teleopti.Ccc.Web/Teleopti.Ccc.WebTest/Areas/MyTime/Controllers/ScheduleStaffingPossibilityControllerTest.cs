@@ -383,10 +383,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			createAssignment(person, activity1);
 
 			var workflowControlSet = new WorkflowControlSet();
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod{
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
+			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
 				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(13))),
-				SkillType = new SkillTypeEmail(new Description(SkillTypeIdentifier.Email), ForecastSource.Email).WithId()});
+				SkillType = new SkillTypeEmail(new Description(SkillTypeIdentifier.Email), ForecastSource.Email).WithId()
+			});
 			User.CurrentUser().WorkflowControlSet = workflowControlSet;
 
 			var possibilities = getPossibilityViewModels(null, StaffingPossiblityType.Overtime)
@@ -918,6 +920,43 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.Count.Should().Be.EqualTo(6);
 		}
 
+		[Test, SetCulture("en-US")]
+		public void ShouldReturnCorrectEndtimeOnDSTDay()
+		{
+			TimeZone.Is(TimeZoneInfoFactory.CentralStandardTime());
+			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(TimeZone.TimeZone());
+			Now.Is("2018-03-11 6:00");
+
+			var personPeriod = getOrAddPersonPeriod();
+			var timePeriod = new TimePeriod(1, 0, 4, 0);
+			var team = personPeriod.Team;
+			team.Site.AddOpenHour(new SiteOpenHour
+			{
+				TimePeriod = timePeriod,
+				IsClosed = false,
+				WeekDay = DayOfWeek.Thursday
+			});
+
+			var activity = createActivity();
+			var skill = createSkill("test1", timePeriod);
+			skill.TimeZone = TimeZone.TimeZone();
+			var personSkill = createPersonSkill(activity, skill);
+			addPersonSkillsToPersonPeriod(personSkill);
+			createAssignment(User.CurrentUser(), activity);
+
+			var date = new DateOnly(2018, 3, 11);
+			var staffingPeriodData = new List<StaffingPeriodData>();
+			staffingPeriodData.Add(new StaffingPeriodData(){Period = date.ToDateTimePeriod(timePeriod, TimeZone.TimeZone()),ForecastedStaffing = 1,ScheduledStaffing = 2});
+			setupIntradayStaffingForSkill(skill, date, staffingPeriodData);
+
+			var workFlowControlSet = new WorkflowControlSet();
+			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
+
+			var result = Target.GetPossibilityViewModels(date, StaffingPossiblityType.Overtime, false).ToList();
+			result.Count.Should().Be.EqualTo(8);
+			result[3].EndTime.TimeOfDay.TotalMinutes.Should().Be.EqualTo(180);
+		}
+
 		private void setupWorkFlowControlSet()
 		{
 			var absenceRequestOpenDatePeriod = new AbsenceRequestOpenDatePeriod
@@ -978,8 +1017,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var personSkill = createPersonSkill(activity, skill);
 			addPersonSkillsToPersonPeriod(personSkill);
 			createAssignment(User.CurrentUser(), activity);
-			forecastedStaffing = forecastedStaffing ?? new Double?[] {10d, 10d};
-			scheduledStaffing = scheduledStaffing ?? new Double?[] {8d, 8d};
+			forecastedStaffing = forecastedStaffing ?? new Double?[] { 10d, 10d };
+			scheduledStaffing = scheduledStaffing ?? new Double?[] { 8d, 8d };
 			setupIntradayStaffingForSkill(skill, forecastedStaffing, scheduledStaffing);
 		}
 
@@ -990,12 +1029,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			return personSkill;
 		}
 
-		private ISkill createSkill(string name)
+		private ISkill createSkill(string name, TimePeriod? openHour = null)
 		{
 			var skill = SkillFactory.CreateSkill(name).WithId();
 			skill.SkillType.Description = new Description("SkillTypeInboundTelephony");
 			skill.StaffingThresholds = createStaffingThresholds();
-			WorkloadFactory.CreateWorkloadWithOpenHours(skill, new TimePeriod(8, 00, 9, 30));
+			WorkloadFactory.CreateWorkloadWithOpenHours(skill, openHour ?? new TimePeriod(8, 00, 9, 30));
 			SkillRepository.Has(skill);
 			return skill;
 		}

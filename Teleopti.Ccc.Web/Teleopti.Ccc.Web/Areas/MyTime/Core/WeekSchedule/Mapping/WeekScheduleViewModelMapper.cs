@@ -112,6 +112,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				timeZone, _now.ServerDateTime_DontUse().Year);
 			var daylightModel = daylightSavingAdjustment != null
 				? new DaylightSavingsTimeAdjustmentViewModel(daylightSavingAdjustment)
+				{
+					EnteringDST = s.Date.Date.Equals(TimeZoneHelper.ConvertFromUtc(daylightSavingAdjustment.Start, timeZone).Date),
+					LocalDSTStartTimeInMinutes = (int)TimeZoneHelper.ConvertFromUtc(daylightSavingAdjustment.Start, timeZone).TimeOfDay.TotalMinutes
+				}
 				: null;
 
 			return new DayScheduleViewModel
