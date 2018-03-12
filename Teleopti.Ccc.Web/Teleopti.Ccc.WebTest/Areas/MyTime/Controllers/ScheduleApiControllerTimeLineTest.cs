@@ -875,7 +875,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 		private void addAssignment(DateOnly? belongsToDate = null, params activityDto[] activityDtos)
 		{
-			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), belongsToDate ?? Now.ServerDate_DontUse());
+			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), belongsToDate ?? new DateOnly(Now.UtcDateTime()));
 			foreach (var activityDto in activityDtos)
 			{
 				assignment.AddActivity(activityDto.Activity, activityDto.Period);
