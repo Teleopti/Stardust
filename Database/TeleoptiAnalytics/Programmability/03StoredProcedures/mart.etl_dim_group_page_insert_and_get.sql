@@ -91,7 +91,7 @@ BEGIN
 		mart.dim_group_page WITH (NOLOCK)
 	WHERE 
 		group_page_code = @group_page_code and 
-		group_name = @group_name and 
+		group_name COLLATE DATABASE_DEFAULT = @group_name COLLATE DATABASE_DEFAULT and 
 		business_unit_code = @business_unit_code
 END
 
