@@ -5,7 +5,7 @@
 	angular.module('wfm.skillGroup').directive('focusMe', ['$timeout', '$parse', setTheFocus]);
 
 	/*
-		skillgroup interface 
+		skillgroup interface
 		{
 			Name: string,
 			Id: string,
@@ -71,6 +71,7 @@
 		vm.modalShown = false;
 		vm.skillNameMaxLength = 50;
 		vm.stateName = '';
+		vm.editGroupNameBox = false;
 
 		//----------- scoped functions ----------------------------------------------------
 
@@ -121,7 +122,6 @@
 			};
 			isNew = true;
 			vm.editGroupNameBox = true;
-			ev.stopPropagation();
 		};
 
 		vm.deleteSkillGroup = function() {
