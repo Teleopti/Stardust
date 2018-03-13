@@ -107,6 +107,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SkillStaffingReadModelDataLoader>().As<ISkillStaffingReadModelDataLoader>();
 
 			registerType
+				<IOvertimeRequestOpenPeriodProvider, OvertimeRequestOpenPeriodProviderToggle47290On, OvertimeRequestOpenPeriodProvider>(builder,
+					Toggles.OvertimeRequestPeriodSkillTypeSetting_47290);
+
+			registerType
 				<IOvertimeRequestSkillProvider, OvertimeRequestSkillProviderToggle47290On, OvertimeRequestSkillProvider>(builder,
 					Toggles.OvertimeRequestPeriodSkillTypeSetting_47290);
 

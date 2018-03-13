@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Requests;
 using Teleopti.Ccc.Infrastructure.Toggle;
@@ -13,12 +14,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 		private readonly INow _now;
 		private readonly IToggleManager _toggleManager;
 		private readonly ILoggedOnUser _user;
+		private readonly IOvertimeRequestOpenPeriodProvider _mergedOvertimeRequestOpenPeriodProvider;
 
-		public StaffingDataAvailablePeriodProvider(INow now, IToggleManager toggleManager, ILoggedOnUser user)
+		public StaffingDataAvailablePeriodProvider(INow now, IToggleManager toggleManager, ILoggedOnUser user, IOvertimeRequestOpenPeriodProvider mergedOvertimeRequestOpenPeriodProvider)
 		{
 			_now = now;
 			_toggleManager = toggleManager;
 			_user = user;
+			_mergedOvertimeRequestOpenPeriodProvider = mergedOvertimeRequestOpenPeriodProvider;
 		}
 
 		public DateOnlyPeriod? GetPeriodForAbsence(DateOnly date, bool forThisWeek)
@@ -45,16 +48,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			}
 
 			var timezone = person.PermissionInformation.DefaultTimeZone();
-			var today = new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), timezone));
 			var days = period.DayCollection();
 			var availableDays = new List<DateOnly>();
 			foreach (var day in days)
 			{
-				var overtimeRequestOpenPeriod =
-					workflowControlSet.GetMergedOvertimeRequestOpenPeriod(
-						day.ToDateTimePeriod(timezone), today, person.PermissionInformation);
+				var overtimeRequestOpenPeriods =
+					_mergedOvertimeRequestOpenPeriodProvider.GetOvertimeRequestOpenPeriods(person,
+						day.ToDateTimePeriod(timezone));
 
-				if (overtimeRequestOpenPeriod.AutoGrantType != Domain.WorkflowControl.OvertimeRequestAutoGrantType.Deny)
+				if (overtimeRequestOpenPeriods.Any(overtimeRequestOpenPeriod =>
+					overtimeRequestOpenPeriod.AutoGrantType != Domain.WorkflowControl.OvertimeRequestAutoGrantType.Deny))
 				{
 					availableDays.Add(day);
 				}

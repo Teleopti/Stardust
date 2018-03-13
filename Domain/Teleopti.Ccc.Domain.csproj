@@ -175,6 +175,9 @@
     <Compile Include="ApplicationLayer\Badge\IPushMessageSender.cs" />
     <Compile Include="ApplicationLayer\Badge\PerformAllBadgeCalculation.cs" />
     <Compile Include="ApplicationLayer\Badge\PushMessageSender.cs" />
+    <Compile Include="ApplicationLayer\OvertimeRequests\IOvertimeRequestOpenPeriodProvider.cs" />
+    <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestOpenPeriodProvider.cs" />
+    <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestOpenPeriodProviderToggle47290On.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestProcessorToggle47290On.cs" />
     <Compile Include="ApplicationLayer\TerminatePersonHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\RemoveDayOffCommandHandler.cs" />

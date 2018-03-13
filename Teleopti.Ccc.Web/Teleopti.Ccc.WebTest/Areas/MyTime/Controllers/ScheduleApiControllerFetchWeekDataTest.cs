@@ -27,16 +27,21 @@ using Teleopti.Interfaces.Domain;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Intraday;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Licensing;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
+using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 {
 	[TestFixture]
 	[MyTimeWebTest]
 	[SetCulture("sv-SE")]
-	public class ScheduleApiControllerFetchWeekDataTest
+	public class ScheduleApiControllerFetchWeekDataTest : ISetup
 	{
 		public ScheduleApiController Target;
 		public ICurrentScenario Scenario;
@@ -49,6 +54,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public FakeMeetingRepository MeetingRepository;
 		public ICurrentDataSource CurrentDataSource;
 		public FakeToggleManager ToggleManager;
+		public FakeActivityRepository ActivityRepository;
+		public FakeSkillRepository SkillRepository;
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.UseTestDouble<FakeSkillRepository>().For<ISkillRepository>();
+		}
 
 		[Test]
 		public void ShouldMap()
@@ -182,6 +194,50 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
 
 			var result = Target.FetchWeekData(Now.ServerDate_DontUse().AddWeeks(3));
+			result.OvertimeProbabilityEnabled.Should().Be(true);
+		}
+
+		[Test]
+		[Toggle(Toggles.OvertimeRequestPeriodSetting_46417)]
+		[Toggle(Toggles.OvertimeRequestPeriodSkillTypeSetting_47290)]
+		public void ShouldReturnTrueForOvertimeProbabilityEnabledWhenMatchedSkillTypeIsNotDeny()
+		{
+			var phoneSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony).WithId();
+			var emailSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Email), ForecastSource.Email).WithId();
+
+			var workFlowControlSet = new WorkflowControlSet { OvertimeProbabilityEnabled = true };
+			workFlowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
+				BetweenDays = new MinMax<int>(0, 13),
+				SkillType = emailSkillType,
+				OrderIndex = 0
+			});
+			workFlowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.Deny,
+				BetweenDays = new MinMax<int>(0, 13),
+				SkillType = phoneSkillType,
+				OrderIndex = 1
+			});
+			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
+
+			var timeZone = User.CurrentUser().PermissionInformation.DefaultTimeZone();
+			var emailActivity = createActivity("emailActivity");
+			var phoneActivity = createActivity("phoneActivity");
+
+			var criticalUnderStaffedPhoneSkill = createSkill("criticalUnderStaffedPhoneSkill", null, timeZone);
+			criticalUnderStaffedPhoneSkill.SkillType = phoneSkillType;
+
+			var mostCriticalUnderStaffedEmailSkill = createSkill("mostCriticalUnderStaffedEmailSkill", null, timeZone);
+			mostCriticalUnderStaffedEmailSkill.SkillType = emailSkillType;
+			mostCriticalUnderStaffedEmailSkill.DefaultResolution = 60;
+
+			var personEmailSkill = createPersonSkill(emailActivity, mostCriticalUnderStaffedEmailSkill);
+			var personPhoneSkill = createPersonSkill(phoneActivity, criticalUnderStaffedPhoneSkill);
+			addPersonSkillsToPersonPeriod(personPhoneSkill, personEmailSkill);
+
+			var result = Target.FetchWeekData(null);
 			result.OvertimeProbabilityEnabled.Should().Be(true);
 		}
 
@@ -1195,6 +1251,46 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			personPeriod = (PersonPeriod)PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2014, 1, 1), team);
 			User.CurrentUser().AddPersonPeriod(personPeriod);
 			return personPeriod;
+		}
+
+		private IPersonSkill createPersonSkill(IActivity activity, ISkill skill)
+		{
+			skill.Activity = activity;
+			var personSkill = PersonSkillFactory.CreatePersonSkill(skill, 1);
+			return personSkill;
+		}
+
+		private IActivity createActivity(string name)
+		{
+			var activity = ActivityFactory.CreateActivity(name);
+			activity.RequiresSkill = true;
+			activity.InWorkTime = true;
+			ActivityRepository.Add(activity);
+			return activity;
+		}
+
+		private ISkill createSkill(string name, TimePeriod? skillOpenHourPeriod = null, TimeZoneInfo timeZone = null)
+		{
+			var skill = SkillFactory.CreateSkill(name, timeZone).WithId();
+			skill.SkillType.Description = new Description(SkillTypeIdentifier.Phone);
+			skill.StaffingThresholds = createStaffingThresholds();
+			WorkloadFactory.CreateWorkloadWithOpenHours(skill, skillOpenHourPeriod ?? new TimePeriod(8, 00, 21, 00));
+			SkillRepository.Has(skill);
+			return skill;
+		}
+
+		private StaffingThresholds createStaffingThresholds()
+		{
+			return new StaffingThresholds(new Percent(-0.3), new Percent(-0.1), new Percent(0.1));
+		}
+
+		private void addPersonSkillsToPersonPeriod(params IPersonSkill[] personSkills)
+		{
+			var personPeriod = getOrAddPersonPeriod();
+			foreach (var personSkill in personSkills)
+			{
+				personPeriod.AddPersonSkill(personSkill);
+			}
 		}
 	}
 }
