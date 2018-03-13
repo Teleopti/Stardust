@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 		private static IRequestContextInitializer _requestContextInitializer;
 		private static SystemVersion _systemVersion;
 
-		public static void Inject(IComponentContext container)
+		public static void Inject(ILifetimeScope container)
 		{
 			_requestContextInitializer = container.Resolve<IRequestContextInitializer>();
 			_systemVersion = container.Resolve<SystemVersion>();
