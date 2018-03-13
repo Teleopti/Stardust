@@ -48,43 +48,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			var scenarios = _scenarioRepository.LoadAll();
 			foreach (var scenario in scenarios)
 			{
-				var assignmentsToRemove = _personAssignmentRepository.Find(personList, period, scenario);
-				var allPeriods = new List<DateTimePeriod>();
-				foreach (var personAssignment in assignmentsToRemove)
-				{
-					_personAssignmentRepository.Remove(personAssignment);
-					allPeriods.Add(personAssignment.Period);
-				}
-
-				var absencesToRemove = _personAbsenceRepository.Find(personList, dateTimePeriod, scenario);
-				foreach (var personAbsence in absencesToRemove)
-				{
-					if (personAbsence.Period.StartDateTime < dateTimePeriod.StartDateTime)
-					{
-						continue;
-					}
-					((IRepository<IPersonAbsence>)_personAbsenceRepository).Remove(personAbsence);
-					allPeriods.Add(personAbsence.Period);
-				}
-
-				if (!allPeriods.Any())
-				{
-					continue;
-				}
-
-				var periodStart = allPeriods.Select(x => x.StartDateTime).Min();
-				var periodEnd = allPeriods.Select(x => x.EndDateTime).Max();
-				
-				events.Add(new ScheduleChangedEvent
-				{
-					LogOnBusinessUnitId = scenario.BusinessUnit.Id.GetValueOrDefault(),
-					ScenarioId = scenario.Id.Value,
-					PersonId = @event.PersonId,
-					StartDateTime = periodStart,
-					EndDateTime = periodEnd
-				});
+				var scheduleEvent  = createScheduleChangeEvent(@event, personList, period, scenario, dateTimePeriod);
+				if(scheduleEvent != null)
+					events.Add(scheduleEvent);
 			}
 
+			var availabilityEvent = createAvailabilityChangeEvent(@event, period, personList);
+			if(availabilityEvent != null)
+				events.Add(availabilityEvent);
+
+			if(events.Any())
+				_eventPublisher.Publish(events.ToArray());
+		}
+
+		private IEvent createAvailabilityChangeEvent(PersonTerminalDateChangedEvent @event, DateOnlyPeriod period,
+			IPerson[] personList)
+		{
 			var studentAvailabilityDays = _studentAvailabilityDayRepository.Find(period, personList);
 			foreach (var availabilityDay in studentAvailabilityDays)
 			{
@@ -93,13 +72,55 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 
 			if (studentAvailabilityDays.Any())
 			{
-				events.Add(new AvailabilityChangedEvent()
+				return new AvailabilityChangedEvent()
 				{
 					PersonId = @event.PersonId,
-					Dates = studentAvailabilityDays.Select(a=>a.RestrictionDate).ToList()
-				});
+					Dates = studentAvailabilityDays.Select(a => a.RestrictionDate).ToList()
+				};
 			}
-			_eventPublisher.Publish(events.ToArray());
+
+			return null;
+		}
+
+		private IEvent createScheduleChangeEvent(PersonTerminalDateChangedEvent @event, IPerson[] personList,
+			DateOnlyPeriod period, IScenario scenario, DateTimePeriod dateTimePeriod)
+		{
+			var assignmentsToRemove = _personAssignmentRepository.Find(personList, period, scenario);
+			var allPeriods = new List<DateTimePeriod>();
+			foreach (var personAssignment in assignmentsToRemove)
+			{
+				_personAssignmentRepository.Remove(personAssignment);
+				allPeriods.Add(personAssignment.Period);
+			}
+
+			var absencesToRemove = _personAbsenceRepository.Find(personList, dateTimePeriod, scenario);
+			foreach (var personAbsence in absencesToRemove)
+			{
+				if (personAbsence.Period.StartDateTime < dateTimePeriod.StartDateTime)
+				{
+					continue;
+				}
+
+				((IRepository<IPersonAbsence>) _personAbsenceRepository).Remove(personAbsence);
+				allPeriods.Add(personAbsence.Period);
+			}
+
+			if (!allPeriods.Any())
+			{
+				return null;
+			}
+
+			var periodStart = allPeriods.Select(x => x.StartDateTime).Min();
+			var periodEnd = allPeriods.Select(x => x.EndDateTime).Max();
+
+			return new ScheduleChangedEvent
+			{
+				LogOnBusinessUnitId = scenario.BusinessUnit.Id.GetValueOrDefault(),
+				ScenarioId = scenario.Id.Value,
+				PersonId = @event.PersonId,
+				StartDateTime = periodStart,
+				EndDateTime = periodEnd
+			};
 		}
 	}
 }
