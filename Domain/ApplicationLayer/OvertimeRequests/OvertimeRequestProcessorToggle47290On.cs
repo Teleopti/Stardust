@@ -222,7 +222,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			var projectedOvertimeRequestsOpenPeriods =
 				overtimePeriodProjection.GetProjectedOvertimeRequestsOpenPeriods(dateOnlyPeriod);
 
-			return projectedOvertimeRequestsOpenPeriods.FirstOrDefault();
+			return new OvertimeRequestOpenPeriodMerger().Merge(projectedOvertimeRequestsOpenPeriods);
 		}
 	}
 }

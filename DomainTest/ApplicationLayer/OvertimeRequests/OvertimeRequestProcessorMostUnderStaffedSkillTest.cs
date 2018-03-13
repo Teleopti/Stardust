@@ -705,7 +705,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
 		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSkillTypeSetting_47290)]
 		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestUseMostUnderStaffedSkill_47853)]
-		public void ShouldUseOvertimeRequestPeriodWithMostCriticalUnderStaffedSkillTypeMatched()
+		public void ShouldUseOvertimeRequestPeriodWithMostCriticalOfMatchedUnderStaffedSkillType()
 		{
 			setupPerson();
 
@@ -767,6 +767,78 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			personRequest.IsApproved.Should().Be.True();
 
 			personAssignment.OvertimeActivities().First().Payload.Should().Be(emailActivity);
+		}
+
+		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSkillTypeSetting_47290)]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestUseMostUnderStaffedSkill_47853)]
+		public void ShouldUseOvertimeRequestPeriodWithHigherPriorityOfMatchedSkillType()
+		{
+			setupPerson();
+
+			var phoneSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony).WithId();
+			var emailSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Email), ForecastSource.Email).WithId();
+
+			var workflowControlSet = new WorkflowControlSet();
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
+				BetweenDays = new MinMax<int>(0, 1),
+				SkillType = phoneSkillType,
+				OrderIndex = 0
+			});
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.Deny,
+				BetweenDays = new MinMax<int>(0, 1),
+				SkillType = emailSkillType,
+				OrderIndex = 0
+			});
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
+				BetweenDays = new MinMax<int>(1, 2),
+				SkillType = emailSkillType,
+				OrderIndex = 1
+			});
+			LoggedOnUser.CurrentUser().WorkflowControlSet = workflowControlSet;
+
+			var emailActivity = createActivity("emailActivity");
+			var phoneActivity = createActivity("phoneActivity");
+
+			var timeZone = LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
+
+			var criticalUnderStaffedPhoneSkill = createSkill("criticalUnderStaffedPhoneSkill", null, timeZone);
+			criticalUnderStaffedPhoneSkill.SkillType = phoneSkillType;
+
+			var mostCriticalUnderStaffedEmailSkill = createSkill("mostCriticalUnderStaffedEmailSkill", null, timeZone);
+			mostCriticalUnderStaffedEmailSkill.SkillType = emailSkillType;
+			mostCriticalUnderStaffedEmailSkill.DefaultResolution = 60;
+
+			var personEmailSkill = createPersonSkill(emailActivity, mostCriticalUnderStaffedEmailSkill);
+			var personPhoneSkill = createPersonSkill(phoneActivity, criticalUnderStaffedPhoneSkill);
+
+			var date = new DateOnly(2017, 7, 13);
+			var period = new DateTimePeriod(2017, 7, 13, 11, 2017, 7, 13, 12);
+
+			setupIntradayStaffingForSkill(criticalUnderStaffedPhoneSkill, date, new List<StaffingPeriodData>
+			{
+				new StaffingPeriodData {ForecastedStaffing = 10d, ScheduledStaffing = 2d, Period = period},
+			});
+			setupIntradayStaffingForSkill(mostCriticalUnderStaffedEmailSkill, date, new List<StaffingPeriodData>
+			{
+				new StaffingPeriodData {ForecastedStaffing = 10d, ScheduledStaffing = 1d, Period = period},
+			});
+
+			addPersonSkillsToPersonPeriod(personPhoneSkill, personEmailSkill);
+
+			var requestStartTime = new DateTime(2017, 7, 13, 11, 0, 0, DateTimeKind.Utc);
+			var personRequest = createOvertimeRequest(requestStartTime, 1);
+
+			getTarget().Process(personRequest);
+
+			personRequest.IsDenied.Should().Be.True();
 		}
 
 		private void setupIntradayStaffingForSkill(ISkill skill, DateOnly date, IEnumerable<StaffingPeriodData> staffingPeriodDatas)
