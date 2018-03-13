@@ -21,10 +21,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Gamification
 	public class RecalculateBadgeJobService : IRecalculateBadgeJobService
 	{
 		private readonly IJobResultRepository _jobResultRepository;
-		private readonly IEventPublisher _eventPublisher;
+		private readonly IEventPopulatingPublisher _eventPublisher;
 		private readonly ILoggedOnUser _loggedOnUser;
 
-		public RecalculateBadgeJobService(IJobResultRepository jobResultRepository, IEventPublisher eventPublisher, ILoggedOnUser loggedOnUser)
+		public RecalculateBadgeJobService(IJobResultRepository jobResultRepository, IEventPopulatingPublisher eventPublisher, ILoggedOnUser loggedOnUser)
 		{
 			_jobResultRepository = jobResultRepository;
 			_eventPublisher = eventPublisher;
