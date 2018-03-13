@@ -12,16 +12,16 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Gamification
 {
-	public class RecalculateBadgeHandler : IHandleEvent<RecalculateBadgeEvent>, IRunOnStardust
+	public class RecalculateBadgeEventHandler : IHandleEvent<RecalculateBadgeEvent>, IRunOnStardust
 	{
 		private readonly CalculateBadges _calculateBadges;
 		private readonly IPerformBadgeCalculation _performBadgeCalculation;
 		private readonly IJobResultRepository _jobResultRepository;
 		private readonly IStardustJobFeedback _feedback;
 
-		private static readonly ILog Logger = LogManager.GetLogger(typeof(RecalculateBadgeHandler));
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(RecalculateBadgeEventHandler));
 
-		public RecalculateBadgeHandler(CalculateBadges calculateBadges, IPerformBadgeCalculation performBadgeCalculation, IJobResultRepository jobResultRepository, IStardustJobFeedback feedback)
+		public RecalculateBadgeEventHandler(CalculateBadges calculateBadges, IPerformBadgeCalculation performBadgeCalculation, IJobResultRepository jobResultRepository, IStardustJobFeedback feedback)
 		{
 			_calculateBadges = calculateBadges;
 			_performBadgeCalculation = performBadgeCalculation;

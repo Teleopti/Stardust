@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Gamification
 	[TestFixture, DomainTest]
 	public class RecalculateBadgeHandlerTest:ISetup
 	{
-		public RecalculateBadgeHandler Target;
+		public RecalculateBadgeEventHandler Target;
 		public FakeJobResultRepository JobResultRepository;
 		public FakeAgentBadgeWithRankTransactionRepository AgentBadgeWithRankTransactionRepository;
 		public FakeAgentBadgeTransactionRepository AgentBadgeTransactionRepository;
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Gamification
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<RecalculateBadgeHandler>().For<IHandleEvent<RecalculateBadgeEvent>>();
+			system.UseTestDouble<RecalculateBadgeEventHandler>().For<IHandleEvent<RecalculateBadgeEvent>>();
 			system.UseTestDouble<FakeJobResultRepository>().For<IJobResultRepository>();
 			system.UseTestDouble<FakeAgentBadgeWithRankTransactionRepository>().For<IAgentBadgeWithRankTransactionRepository>();
 			system.UseTestDouble<FakeAgentBadgeTransactionRepository>().For<IAgentBadgeTransactionRepository>();
