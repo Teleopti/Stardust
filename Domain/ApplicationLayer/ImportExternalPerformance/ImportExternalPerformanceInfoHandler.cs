@@ -42,17 +42,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 		{
 			try
 			{
-				var stopwatch = new Stopwatch();
-				stopwatch.Start();
-
 				HandleJob(@event);
-
-				stopwatch.Stop();
-				var t = stopwatch.Elapsed;
-				var elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
-					t.Hours, t.Minutes, t.Seconds,
-					t.Milliseconds / 10);
-				_feedback.SendProgress($"Time elapsed: {elapsedTime}");
 			}
 			catch (Exception e)
 			{
