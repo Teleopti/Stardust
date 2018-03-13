@@ -11,9 +11,15 @@ properties {
 	$TCParams = ConvertFrom-StringData (Get-Content $env:TEAMCITY_BUILD_PROPERTIES_FILE -Raw)
 	#$CSPackEXE = $TCParams['AzureSDK_2.9_Path'] + "\bin\cspack.exe"
 	
+	#OLD Size 
+	#$Medium = "Standard_D1_v2"
+	#$Large = "Standard_D4_v3"
+	
 	#Size on Azure cloud VM size
-	$Medium = "Standard_D1_v2"
-	$Large = "Standard_D4_v3"
+	$Medium = "Standard_A2_v2"
+	$Large = "Standard_D2_v3"
+	$XLarge = "Standard_E2_v3"
+	
 	
 	$WorkingDir = $TCParams['teamcity.build.workingDir']
 	
@@ -26,11 +32,12 @@ properties {
 	$AzureDependencies = "\\a380\T-Files\RnD\MSI_Dependencies\ccc7_azure"
 	$AzurePackagePath_Medium = "$WorkingDir\TeleoptiWFM_Medium.cspkg"
 	$AzurePackagePath_Large = "$WorkingDir\TeleoptiWFM_Large.cspkg"
+	$AzurePackagePath_XLarge = "$WorkingDir\TeleoptiWFM_XLarge.cspkg"
 	
 	$IndexMSBuildFile = "$WorkingDir\StartPage\index.html"
 	$ForecastHtmlFile = "$WorkingDir\StartPage\forecast.html"
 	$CSPackEXE = "$env:AzureSDK_2_9_Path\bin\cspack.exe"
-	#
+	
 }
 
 Set-ExecutionPolicy bypass -force
@@ -70,10 +77,11 @@ task CreateAzurePkg -depends Init, PreReq -description "Create Azure Package" {
 		$CSPackEXE,
 		$AzurePackagePath_Medium,
 		$AzurePackagePath_Large,
+		$AzurePackagePath_XLarge,
 		$WorkingDir
 			)
 		parallel {
-			#Create Azure pkg
+			#Create Azure Medium pkg
 			InlineScript {& $Using:CSPackEXE "$Using:WorkingDir\teamcity\Azure\ServiceDefinition_Medium.csdef" `
 			  "/role:TeleoptiCCC;$Using:WorkingDir\TeleoptiCCC" `
 			  "/rolePropertiesFile:TeleoptiCCC;$Using:WorkingDir\teamcity\Azure\AzureRoleProperties.txt" `
@@ -84,10 +92,16 @@ task CreateAzurePkg -depends Init, PreReq -description "Create Azure Package" {
 			  "/role:TeleoptiCCC;$Using:WorkingDir\TeleoptiCCC" `
 			  "/rolePropertiesFile:TeleoptiCCC;$Using:WorkingDir\teamcity\Azure\AzureRoleProperties.txt" `
 			  "/out:$Using:AzurePackagePath_Large"}
+			
+			#Create Azure XLarge pkg
+			InlineScript {& $Using:CSPackEXE "$Using:WorkingDir\teamcity\Azure\ServiceDefinition_XLarge.csdef" `
+			  "/role:TeleoptiCCC;$Using:WorkingDir\TeleoptiCCC" `
+			  "/rolePropertiesFile:TeleoptiCCC;$Using:WorkingDir\teamcity\Azure\AzureRoleProperties.txt" `
+			  "/out:$Using:AzurePackagePath_XLarge"}
 		}
 	}
 	
-	parallelAzurePackaging -CSPackEXE $CSPackEXE -AzurePackagePath_Medium $AzurePackagePath_Medium -AzurePackagePath_Large $AzurePackagePath_Large -WorkingDir $WorkingDir
+	parallelAzurePackaging -CSPackEXE $CSPackEXE -AzurePackagePath_Medium $AzurePackagePath_Medium -AzurePackagePath_Large $AzurePackagePath_Large -AzurePackagePath_XLarge $AzurePackagePath_XLarge -WorkingDir $WorkingDir
 	
 	Write-Output "##teamcity[blockClosed name='<CreateAzurePkg>']"
 }
@@ -99,6 +113,7 @@ task PostReq -depends Init, PreReq, CreateAzurePkg -description "PostReq steps" 
 	Copy-Item -Path "$WorkingDir\teamcity\Azure\Customer\" -Destination "$ToBeArtifacted" -Recurse -Force -ErrorAction Stop
 	Copy-Item -Path "$AzurePackagePath_Medium" -Destination "$ToBeArtifacted\Azure-$env:CccVersion-$Medium.cspkg" -Force -ErrorAction Stop
 	Copy-Item -Path "$AzurePackagePath_Large" -Destination "$ToBeArtifacted\Azure-$env:CccVersion-$Large.cspkg" -Force -ErrorAction Stop
+	Copy-Item -Path "$AzurePackagePath_XLarge" -Destination "$ToBeArtifacted\Azure-$env:CccVersion-$XLarge.cspkg" -Force -ErrorAction Stop
 	
 	Write-Output "##teamcity[blockClosed name='<PostReq>']"
 }
