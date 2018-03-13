@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 					_mergedOvertimeRequestOpenPeriodProvider.GetOvertimeRequestOpenPeriods(person,
 						day.ToDateTimePeriod(timezone));
 
-				if (overtimeRequestOpenPeriods.Any(overtimeRequestOpenPeriod =>
+				if (overtimeRequestOpenPeriods != null && overtimeRequestOpenPeriods.Any(overtimeRequestOpenPeriod =>
 					overtimeRequestOpenPeriod.AutoGrantType != Domain.WorkflowControl.OvertimeRequestAutoGrantType.Deny))
 				{
 					availableDays.Add(day);
