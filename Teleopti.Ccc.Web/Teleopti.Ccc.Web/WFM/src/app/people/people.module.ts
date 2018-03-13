@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { HttpClientModule } from "@angular/common/http";
 import { UpgradeModule, downgradeComponent } from '@angular/upgrade/static';
 
 import { SharedModule } from '../shared/shared.module';
@@ -37,16 +38,11 @@ import { RolesService, WorkspaceService, SearchService } from './services';
 		ChipRemoveComponent,
 		SearchPageComponent
 	],
-	imports: [SharedModule, MatCheckboxModule, MatDialogModule, MatPaginatorModule, MatButtonModule, MatDividerModule],
+	imports: [SharedModule, MatCheckboxModule, MatDialogModule, MatPaginatorModule, MatButtonModule, MatDividerModule, HttpClientModule],
 	providers: [WorkspaceService, RolesService, SearchService],
 	exports: [],
 	entryComponents: [PeopleComponent]
 })
 export class PeopleModule {
-	constructor() {}
 	ngDoBootstrap() {}
 }
-
-angular
-	.module('wfm')
-	.directive('ng2People', downgradeComponent({ component: PeopleComponent }) as angular.IDirectiveFactory);

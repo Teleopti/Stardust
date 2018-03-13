@@ -22,10 +22,5 @@ import { HttpClientModule } from '@angular/common/http';
 export class AppModule {
 	constructor(private upgrade: UpgradeModule) { }
 	ngDoBootstrap() {
-		this.upgrade.bootstrap(document.body, ['wfm'], { strictDi: false });
 	}
 }
-
-angular
-	.module('wfm')
-	.directive('appRoot', downgradeComponent({ component: AppComponent }) as angular.IDirectiveFactory);
