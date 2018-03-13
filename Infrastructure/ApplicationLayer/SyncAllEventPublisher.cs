@@ -1,5 +1,6 @@
 ﻿using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Infrastructure.RealTimeAdherence;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
@@ -7,20 +8,24 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 	{
 		private readonly HangfireAsSyncEventPublisher _hangfireAsSyncEventPublisher;
 		private readonly SyncEventPublisher _syncEventPublisher;
+		private readonly IRtaEventPublisher _rtaEventPublisher;
 
 		public SyncAllEventPublisher(
 			HangfireAsSyncEventPublisher hangfireAsSyncEventPublisher,
-			SyncEventPublisher syncEventPublisher
+			SyncEventPublisher syncEventPublisher,
+			IRtaEventPublisher rtaEventPublisher
 			)
 		{
 			_hangfireAsSyncEventPublisher = hangfireAsSyncEventPublisher;
 			_syncEventPublisher = syncEventPublisher;
+			_rtaEventPublisher = rtaEventPublisher;
 		}
 
 		public void Publish(params IEvent[] events)
 		{
 			_hangfireAsSyncEventPublisher.Publish(events);
 			_syncEventPublisher.Publish(events);
+			_rtaEventPublisher.Publish(events);
 		}
 	}
 }

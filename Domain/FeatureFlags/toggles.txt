@@ -48,7 +48,7 @@ RTA_ConfigurationValidationNotification_46933 = true
 RTA_ApprovePreviousOOA_47230 = true
 RTA_ReloadUIOnSystemVersionChanged_48196 = true
 RTA_ModifySkillGroup_48191 = true
-RTA_RemoveApprovedOOA_47721 = false
+RTA_RemoveApprovedOOA_47721 = DEV
 
 # Dumplings, can any of these be removed? #
 WfmTeamSchedule_ShowStaffingInfo_45206 = true

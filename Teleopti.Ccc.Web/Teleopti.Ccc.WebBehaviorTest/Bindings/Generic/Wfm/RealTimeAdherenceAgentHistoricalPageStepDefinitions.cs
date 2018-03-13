@@ -53,8 +53,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[Then(@"I should see out of adherence between '(.*)' and '(.*)'")]
 		public void ThenIShouldSeeOutOfAdherenceBetweenAnd(string from, string to)
 		{
-			Browser.Interactions.AssertAnyContains(".out-of-adherence", from);
-			Browser.Interactions.AssertAnyContains(".out-of-adherence", to);
+			Browser.Interactions.AssertExists(".out-of-adherence[data-starttime='{0}'][data-endtime='{1}']", from, to);
 		}
 
 		[Then(@"I should see recorded out of adherence between '(.*)' and '(.*)'")]

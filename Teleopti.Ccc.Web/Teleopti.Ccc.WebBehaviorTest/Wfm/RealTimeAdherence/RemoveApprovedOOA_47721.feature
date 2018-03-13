@@ -1,6 +1,6 @@
 ﻿@RTA
-@Ignore
-
+@OnlyRunIfEnabled('RTA_RemoveApprovedOOA_47721')
+  
 Feature: Remove approved out of adherences
   As a Manager I need to remove approved hours of Out of Adherence for a certain day and agent,
   so that the daily percentage adherence number is adjusted.

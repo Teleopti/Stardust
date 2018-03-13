@@ -2,6 +2,7 @@
 using System.Globalization;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.ApprovePeriodAsInAdherence;
+using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 
 namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
@@ -14,22 +15,21 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 	public class ApprovedPeriodSetup : IUserDataSetup<ApprovedPeriodSpec>
 	{
-		private readonly IApprovedPeriodsPersister _persister;
+		private readonly ApprovePeriodAsInAdherence _approvedAsInAdherence;
 
-		public ApprovedPeriodSetup(IApprovedPeriodsPersister persister)
+		public ApprovedPeriodSetup(ApprovePeriodAsInAdherence approvedAsInAdherence)
 		{
-			_persister = persister;
+			_approvedAsInAdherence = approvedAsInAdherence;
 		}
 
 		public void Apply(ApprovedPeriodSpec spec, IPerson person, CultureInfo cultureInfo)
 		{
-			_persister
-				.Persist(new ApprovedPeriod
-				{
-					PersonId = person.Id.Value,
-					StartTime = spec.StartTime,
-					EndTime = spec.EndTime
-				});
+			_approvedAsInAdherence.Approve(new ApprovedPeriod
+			{
+				PersonId = person.Id.Value,
+				StartTime = spec.StartTime,
+				EndTime = spec.EndTime
+			});
 		}
 	}
 }
