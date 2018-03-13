@@ -290,7 +290,7 @@
 
 
 	it('should have correct default start time when no other shifts on today', function () {
-		var date = new Date("2018-03-01T10:00:00");
+		var date = new Date("2018-03-01T10:00:00+00:00");
 		scheduleHelper.setLatestEndTime(null);
 		scheduleHelper.setLatestStartTime(null);
 		utility.setNowDate(date);
@@ -301,10 +301,40 @@
 		vm.selectedAgents = [];
 
 		var defaultStartTime = vm.getDefaultActvityStartTime();
-		var nextTick = new Date(utility.getNextTickNoEarlierThanEight(currentTimezone));
 
-		expect(defaultStartTime.getHours()).toBe(nextTick.getHours());
-		expect(defaultStartTime.getMinutes()).toBe(nextTick.getMinutes());
+		expect(moment(defaultStartTime).format('YYYY-MM-DD HH:mm')).toBe("2018-03-01 10:15");
+	});
+
+
+	it('should have set correct default start time when now is later than 8:00 on today', function () {
+		var date = new Date("2018-03-01T09:10:00+00:00");
+		scheduleHelper.setLatestEndTime(null);
+		scheduleHelper.setLatestStartTime(null);
+		utility.setNowDate(date);
+
+		var result = setUp(date, 'Etc/Utc');
+		var vm = result.commandControl;
+		vm.selectedAgents = [];
+
+		var defaultStartTime = vm.getDefaultActvityStartTime();
+		expect(moment(defaultStartTime).format('YYYY-MM-DD HH:mm')).toBe("2018-03-01 09:15");
+	});
+
+	it('should have correct default start time when no other shifts on selected date which is not today', function () {
+		var today = new Date(moment(utility.nowInUserTimeZone()).add(1, 'day'));
+		scheduleHelper.setLatestEndTime(null);
+		scheduleHelper.setLatestStartTime(null);
+
+		var result = setUp(today);
+		var vm = result.commandControl;
+		vm.selectedAgents = [];
+
+		var defaultStartTime = vm.getDefaultActvityStartTime();
+		var defaultEndTime = vm.getDefaultActvityEndTime();
+		expect(defaultStartTime.getHours()).toBe(8);
+		expect(defaultStartTime.getMinutes()).toBe(0);
+		expect(defaultEndTime.getHours()).toBe(9);
+		expect(defaultEndTime.getMinutes()).toBe(0);
 	});
 
 	it('should have later default start time than previous day over night shift end', function () {

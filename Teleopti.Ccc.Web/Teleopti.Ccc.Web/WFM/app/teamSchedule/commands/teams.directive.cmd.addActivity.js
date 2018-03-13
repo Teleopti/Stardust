@@ -191,7 +191,7 @@
 				defaultStart = moment(overnightEnds).add(1, 'hour').toDate();
 			}
 			if (serviceDateFormatHelper.getDateOnly(utility.nowInSelectedTimeZone(vm.currentTimezone())) === vm.selectedDate()) {
-				var nextTickTime = new Date(utility.getNextTickNoEarlierThanEight(vm.currentTimezone()));
+				var nextTickTime = new Date(moment(utility.getNextTickNoEarlierThanEight(vm.currentTimezone())).tz(vm.currentTimezone()).format('YYYY-MM-DD HH:mm'));
 				if (nextTickTime > defaultStart) {
 					defaultStart = nextTickTime;
 				}

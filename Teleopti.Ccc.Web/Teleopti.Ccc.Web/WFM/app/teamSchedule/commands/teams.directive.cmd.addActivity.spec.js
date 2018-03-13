@@ -260,7 +260,7 @@
 
 
 	it('should have correct default start time when no other shifts on today', function () {
-		var date = new Date("2018-03-01T10:00:00");
+		var date = new Date("2018-03-01T10:00:00+00:00");
 		scheduleHelper.setLatestEndTime(null);
 		scheduleHelper.setLatestStartTime(null);
 		utility.setNowDate(date);
@@ -270,9 +270,36 @@
 		vm.selectedAgents = [];
 
 		var defaultStartTime = vm.getDefaultActvityStartTime();
-		var nextTick = new Date(utility.getNextTickNoEarlierThanEight('Etc/Utc'));
-		expect(defaultStartTime.getHours()).toBe(nextTick.getHours());
-		expect(defaultStartTime.getMinutes()).toBe(nextTick.getMinutes());
+
+		expect(moment(defaultStartTime).format('YYYY-MM-DD HH:mm')).toBe("2018-03-01 10:15");
+	});
+
+	it('should have set default start time to 8:00 when now is earlier than 8:00 on today', function () {
+		var date = new Date("2018-03-01T05:00:00+00:00");
+		scheduleHelper.setLatestEndTime(null);
+		scheduleHelper.setLatestStartTime(null);
+		utility.setNowDate(date);
+
+		var result = setUp(date, 'Etc/Utc');
+		var vm = result.commandControl;
+		vm.selectedAgents = [];
+
+		var defaultStartTime = vm.getDefaultActvityStartTime();
+		expect(moment(defaultStartTime).format('YYYY-MM-DD HH:mm')).toBe("2018-03-01 08:00");
+	});
+
+	it('should have set correct default start time when now is later than 8:00 on today', function () {
+		var date = new Date("2018-03-01T09:10:00+00:00");
+		scheduleHelper.setLatestEndTime(null);
+		scheduleHelper.setLatestStartTime(null);
+		utility.setNowDate(date);
+
+		var result = setUp(date, 'Etc/Utc');
+		var vm = result.commandControl;
+		vm.selectedAgents = [];
+
+		var defaultStartTime = vm.getDefaultActvityStartTime();
+		expect(moment(defaultStartTime).format('YYYY-MM-DD HH:mm')).toBe("2018-03-01 09:15");
 	});
 
 	it('should have correct default start time when no other shifts on selected date which is not today', function () {
