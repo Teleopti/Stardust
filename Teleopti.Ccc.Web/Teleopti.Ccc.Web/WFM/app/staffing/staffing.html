@@ -50,7 +50,7 @@
           </div>
 
           <div class="con-flex" style="display:flex; justify-content:space-around;">
-            <skill-group-button id="manage_skill_group_button" ng-if="vm.unifiedSkillGroupManagement && vm.HasPermissionToModifySkillArea" ng-click="vm.configMode()"></skill-group-button>
+            <skill-group-manager-button id="manage_skill_group_button" ng-if="vm.unifiedSkillGroupManagement && vm.HasPermissionToModifySkillArea" ng-click="vm.configMode()"></skill-group-manager-button>
             <team-schedule-datepicker style="margin-top:-5px" selected-date="vm.selectedDate" status="vm.showDatePicker" on-date-change="vm.navigateToNewDay()"></team-schedule-datepicker>
           </div>
 
