@@ -119,9 +119,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restriction
 				case DomainUpdateType.Delete:
 					AddEvent(new AvailabilityChangedEvent
 					{
-						Date = RestrictionDate,
-						PersonId = Person.Id.GetValueOrDefault(),
-						AvailabilityId = Id.GetValueOrDefault()
+						Dates = new List<DateOnly> { RestrictionDate },
+						PersonId = Person.Id.GetValueOrDefault()
 					});
 					break;
 			}

@@ -18,16 +18,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		private readonly IPersonAssignmentRepository _personAssignmentRepository;
 		private readonly IPersonAbsenceRepository _personAbsenceRepository;
 		private readonly IEventPopulatingPublisher _eventPublisher;
+		private readonly IStudentAvailabilityDayRepository _studentAvailabilityDayRepository;
 
 		public TerminatePersonHandler(IPersonRepository personRepository, IScenarioRepository scenarioRepository,
 			IPersonAssignmentRepository personAssignmentRepository, IPersonAbsenceRepository personAbsenceRepository,
-			IEventPopulatingPublisher eventPublisher)
+			IEventPopulatingPublisher eventPublisher, IStudentAvailabilityDayRepository studentAvailabilityDayRepository)
 		{
 			_personRepository = personRepository;
 			_scenarioRepository = scenarioRepository;
 			_personAssignmentRepository = personAssignmentRepository;
 			_personAbsenceRepository = personAbsenceRepository;
 			_eventPublisher = eventPublisher;
+			_studentAvailabilityDayRepository = studentAvailabilityDayRepository;
 		}
 
 		[ImpersonateSystem]
@@ -38,6 +40,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 				return;
 			var leavingDate = new DateOnly(@event.TerminationDate.Value);
 			var person = _personRepository.Get(@event.PersonId);
+			var personList = new[] {person};
 			var period = new DateOnlyPeriod(leavingDate.AddDays(1), DateOnly.MaxValue);
 			var dateTimePeriod = period.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
 			var events = new List<IEvent>();
@@ -45,7 +48,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			var scenarios = _scenarioRepository.LoadAll();
 			foreach (var scenario in scenarios)
 			{
-				var assignmentsToRemove = _personAssignmentRepository.Find(new[] { person }, period, scenario);
+				var assignmentsToRemove = _personAssignmentRepository.Find(personList, period, scenario);
 				var allPeriods = new List<DateTimePeriod>();
 				foreach (var personAssignment in assignmentsToRemove)
 				{
@@ -53,7 +56,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 					allPeriods.Add(personAssignment.Period);
 				}
 
-				var absencesToRemove = _personAbsenceRepository.Find(new[] { person }, dateTimePeriod, scenario);
+				var absencesToRemove = _personAbsenceRepository.Find(personList, dateTimePeriod, scenario);
 				foreach (var personAbsence in absencesToRemove)
 				{
 					if (personAbsence.Period.StartDateTime < dateTimePeriod.StartDateTime)
@@ -82,8 +85,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 				});
 			}
 
-			person.RemoveAllPeriodsAfter(leavingDate);
+			var studentAvailabilityDays = _studentAvailabilityDayRepository.Find(period, personList);
+			foreach (var availabilityDay in studentAvailabilityDays)
+			{
+				_studentAvailabilityDayRepository.Remove(availabilityDay);
+			}
 
+			if (studentAvailabilityDays.Any())
+			{
+				events.Add(new AvailabilityChangedEvent()
+				{
+					PersonId = @event.PersonId,
+					Dates = studentAvailabilityDays.Select(a=>a.RestrictionDate).ToList()
+				});
+			}
 			_eventPublisher.Publish(events.ToArray());
 		}
 	}

@@ -1,13 +1,15 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -29,6 +31,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public TerminatePersonHandler Target;
 		public FakeEventPublisher Publisher;
 		public IBusinessUnitRepository BusinessUnitRepository;
+		public IStudentAvailabilityDayRepository StudentAvailabilityDayRepository;
 
 		private IBusinessUnit businessUnit;
 
@@ -347,49 +350,79 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			published.ScenarioId.Should().Be(scenario.Id.Value);
 		}
 
+
 		[Test]
-		public void ShouldRemovePersonPeriodStartingAfterLeavingDate()
+		public void ShouldRemovePersonAvailabilityAfterLeavingDate()
 		{
 			BusinessUnitRepository.Add(businessUnit);
-			var scenario = ScenarioFactory.CreateScenario("Default", true, false).WithId();
-			ScenarioRepository.Add(scenario);
-
 			var person = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(PersonFactory.CreatePerson("A", "B").WithId(),
 				new DateOnly(2001, 1, 1));
-			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2018, 2, 2)));
 			PersonRepository.Add(person);
+
+			var studentAvailabilities = new List<IStudentAvailabilityDay>
+			{
+				new StudentAvailabilityDay(person, new DateOnly(2018, 01, 25), new List<IStudentAvailabilityRestriction>()),
+				new StudentAvailabilityDay(person, new DateOnly(2018, 01, 27), new List<IStudentAvailabilityRestriction>())
+			};
+			StudentAvailabilityDayRepository.AddRange(studentAvailabilities);
 
 			Target.Handle(new PersonTerminalDateChangedEvent
 			{
 				LogOnBusinessUnitId = businessUnit.Id.Value,
 				PersonId = person.Id.Value,
-				TerminationDate = new DateTime(2018, 01, 31)
+				TerminationDate = new DateTime(2018, 01, 25)
 			});
 
-			var personPeriod = PersonRepository.Get(person.Id.Value).PersonPeriodCollection.Single();
-			personPeriod.Period.StartDate.Should().Be(new DateOnly(2001, 1, 1));
+			var studentAvailability = StudentAvailabilityDayRepository
+				.Find(new DateOnlyPeriod(new DateOnly(2018, 01, 01), new DateOnly(2018, 02, 01)), new List<IPerson> {person})
+				.Single();
+			studentAvailability.RestrictionDate.Should().Be(new DateOnly(2018, 01, 25));
+		}
+
+
+		[Test]
+		public void ShouldPublishAvailabilityChangedEventOnValidPeriod()
+		{
+			BusinessUnitRepository.Add(businessUnit);
+			var person = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(PersonFactory.CreatePerson("A", "B").WithId(),
+				new DateOnly(2001, 1, 1));
+			PersonRepository.Add(person);
+
+			var studentAvailabilities = new List<IStudentAvailabilityDay>
+			{
+				new StudentAvailabilityDay(person, new DateOnly(2018, 01, 25), new List<IStudentAvailabilityRestriction>()),
+				new StudentAvailabilityDay(person, new DateOnly(2018, 01, 27), new List<IStudentAvailabilityRestriction>())
+			};
+			StudentAvailabilityDayRepository.AddRange(studentAvailabilities);
+
+			Target.Handle(new PersonTerminalDateChangedEvent
+			{
+				LogOnBusinessUnitId = businessUnit.Id.Value,
+				PersonId = person.Id.Value,
+				TerminationDate = new DateTime(2018, 01, 25)
+			});
+
+			var published = Publisher.PublishedEvents.OfType<AvailabilityChangedEvent>().Single();
+			published.Dates.Single().Should().Be(new DateOnly(2018, 01, 27));
+			published.PersonId.Should().Be(person.Id.Value);
 		}
 
 		[Test]
-		public void ShouldRemoveSchedulePeriodStartingAfterLeavingDate()
+		public void ShouldNotPublishAvailabilityChangedEventIfThereIsNoAvailabilityDaysToBeDeleted()
 		{
 			BusinessUnitRepository.Add(businessUnit);
-			var scenario = ScenarioFactory.CreateScenario("Default", true, false).WithId();
-			ScenarioRepository.Add(scenario);
 			var person = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(PersonFactory.CreatePerson("A", "B").WithId(),
 				new DateOnly(2001, 1, 1));
-			person.AddSchedulePeriod(SchedulePeriodFactory.CreateSchedulePeriod(new DateOnly(2001, 2, 2)));
 			PersonRepository.Add(person);
 
 			Target.Handle(new PersonTerminalDateChangedEvent
 			{
 				LogOnBusinessUnitId = businessUnit.Id.Value,
 				PersonId = person.Id.Value,
-				TerminationDate = new DateTime(2001, 01, 31)
+				TerminationDate = new DateTime(2018, 01, 25)
 			});
 
-			var personScheduledPeriod = PersonRepository.Get(person.Id.Value).PersonSchedulePeriodCollection.Single();
-			personScheduledPeriod.DateFrom.Should().Be(new DateOnly(2001, 1, 1));
+			 Publisher.PublishedEvents.OfType<AvailabilityChangedEvent>().Should().Be.Empty();
 		}
 	}
 }

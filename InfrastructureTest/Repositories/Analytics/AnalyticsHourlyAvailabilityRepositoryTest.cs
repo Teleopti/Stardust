@@ -78,7 +78,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		[Test]
 		public void ShouldDeleteAvailability()
 		{
-			_analyticsDataFactory.Setup(new Person(personId, Guid.NewGuid(), Guid.NewGuid(), "Ashley", "Andeen", new DateTime(2010, 1, 1),
+			var personCode = Guid.NewGuid();
+			_analyticsDataFactory.Setup(new Person(personId, personCode, Guid.NewGuid(), "Ashley", "Andeen", new DateTime(2010, 1, 1),
 				AnalyticsDate.Eternity.DateDate, 0, -2, businessUnitId, Guid.NewGuid(), _datasource, false, _timeZones.UtcTimeZoneId));
 
 			_analyticsDataFactory.Setup(Scenario.DefaultScenarioFor(scenarioId, Guid.NewGuid()));
@@ -103,7 +104,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 
 			WithAnalyticsUnitOfWork.Do(() =>
 			{
-				Target.Delete(personId, 2, scenarioId);
+				Target.Delete(personCode, 2, scenarioId);
 			});
 		}
 

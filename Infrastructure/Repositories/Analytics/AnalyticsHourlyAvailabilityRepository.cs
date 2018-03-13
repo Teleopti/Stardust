@@ -1,3 +1,4 @@
+using System;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
@@ -13,16 +14,16 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			_currentAnalyticsUnitOfWork = currentAnalyticsUnitOfWork;
 		}
 
-		public void Delete(int personId, int dateId, int scenarioId)
+		public void Delete(Guid personCode, int dateId, int scenarioId)
 		{
 			_currentAnalyticsUnitOfWork.Current().Session().CreateSQLQuery($@"
 				exec [mart].[etl_fact_hourly_availability_delete] 
 				   @date_id=:{nameof(dateId)}
-				  ,@person_id=:{nameof(personId)}
+				  ,@person_code=:{nameof(personCode)}
 				  ,@scenario_id=:{nameof(scenarioId)}
 			")
 			.SetParameter(nameof(dateId), dateId)
-			.SetParameter(nameof(personId), personId)
+			.SetParameter(nameof(personCode), personCode)
 			.SetParameter(nameof(scenarioId), scenarioId)
 			.ExecuteUpdate();
 		}

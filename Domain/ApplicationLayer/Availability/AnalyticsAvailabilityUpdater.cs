@@ -30,7 +30,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Availability
 		private readonly IAnalyticsHourlyAvailabilityRepository _analyticsHourlyAvailabilityRepository;
 		private readonly IScenarioRepository _scenarioRepository;
 
-		public AnalyticsAvailabilityUpdater(IStudentAvailabilityDayRepository availabilityDayRepository, IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository, IAnalyticsDateRepository analyticsDateRepository, IAnalyticsScenarioRepository analyticsScenarioRepository, IPersonRepository personRepository, IScheduleStorage scheduleStorage, IAnalyticsHourlyAvailabilityRepository analyticsHourlyAvailabilityRepository, IScenarioRepository scenarioRepository)
+		public AnalyticsAvailabilityUpdater(IStudentAvailabilityDayRepository availabilityDayRepository,
+			IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository, IAnalyticsDateRepository analyticsDateRepository,
+			IAnalyticsScenarioRepository analyticsScenarioRepository, IPersonRepository personRepository,
+			IScheduleStorage scheduleStorage, IAnalyticsHourlyAvailabilityRepository analyticsHourlyAvailabilityRepository,
+			IScenarioRepository scenarioRepository)
 		{
 			_availabilityDayRepository = availabilityDayRepository;
 			_analyticsPersonPeriodRepository = analyticsPersonPeriodRepository;
@@ -68,12 +72,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Availability
 				logger.Debug($"No person found for personId {personId}");
 				return;
 			}
-			var analyticsPersonPeriod = getAnalyticsPersonPeriod(date, person);
-			if (analyticsPersonPeriod == null)
-			{
-				logger.Debug($"No person period found in application for person {personId} on date {date}");
-				return;
-			}
 			var availabilityDays = _availabilityDayRepository.Find(date, person);
 			var analyticsDate = getAnalyticsDate(date);
 			var scenarios = getScenarios();
@@ -82,9 +80,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Availability
 			{
 				foreach (var scenario in scenarios)
 				{
-					logger.Debug($"Deleting availability for PersonPeriod:{analyticsPersonPeriod.PersonId}, Date:{analyticsDate.DateId}, Scenario:{scenario.ScenarioId}");
-					_analyticsHourlyAvailabilityRepository.Delete(analyticsPersonPeriod.PersonId, analyticsDate.DateId, scenario.ScenarioId);
+					logger.Debug($"Deleting availability for Date:{analyticsDate.DateId}, Scenario:{scenario.ScenarioId}");
+					_analyticsHourlyAvailabilityRepository.Delete(personId, analyticsDate.DateId, scenario.ScenarioId);
 				}
+				return;
+			}
+
+			var analyticsPersonPeriod = getAnalyticsPersonPeriod(date, person);
+			if (analyticsPersonPeriod == null)
+			{
+				logger.Debug($"No person period found in application for person {personId} on date {date}");
 				return;
 			}
 			var availabilityDay = availabilityDays.Single(); // There can be only one!
@@ -120,10 +125,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Availability
 		[Attempts(10)]
 		public virtual void Handle(AvailabilityChangedEvent @event)
 		{
-			handleOneDay(@event.PersonId, @event.Date);
+			foreach (var date in @event.Dates)
+			{
+				handleOneDay(@event.PersonId, date);
+			}
 		}
-
-
 
 		private AnalyticsPersonPeriod getAnalyticsPersonPeriod(DateOnly date, IPerson person)
 		{

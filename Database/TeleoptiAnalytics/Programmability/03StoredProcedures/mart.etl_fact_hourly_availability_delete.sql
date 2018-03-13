@@ -6,13 +6,17 @@ GO
 -- =============================================
 CREATE PROCEDURE [mart].[etl_fact_hourly_availability_delete] 
 	   @date_id int
-      ,@person_id int
+      ,@person_code uniqueidentifier
       ,@scenario_id int
 AS
 BEGIN
 
-DELETE FROM mart.fact_hourly_availability
-WHERE date_id=@date_id AND person_id=@person_id AND scenario_id=@scenario_id
+DELETE a
+  FROM mart.fact_hourly_availability a
+ INNER JOIN mart.dim_person p ON a.person_id = p.person_id
+ WHERE a.date_id = @date_id
+   AND p.person_code = @person_code
+   AND a.scenario_id = @scenario_id
 
 END
 GO
