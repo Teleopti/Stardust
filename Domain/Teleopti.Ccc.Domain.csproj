@@ -185,7 +185,7 @@
     <Compile Include="ApplicationLayer\Commands\RemoveDayOffCommand.cs" />
     <Compile Include="ApplicationLayer\Events\DayOffDeletedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\RecalculateBadgeEvent.cs" />
-    <Compile Include="ApplicationLayer\Gamification\RecalculateBadgeHandler.cs" />
+    <Compile Include="ApplicationLayer\Gamification\RecalculateBadgeEventHandler.cs" />
     <Compile Include="ApplicationLayer\Gamification\RecalculateBadgeJobResultDetail.cs" />
     <Compile Include="ApplicationLayer\Gamification\RecalculateBadgeJobService.cs" />
     <Compile Include="ApplicationLayer\ImportExternalPerformance\ExternalPerformancePersister.cs" />
