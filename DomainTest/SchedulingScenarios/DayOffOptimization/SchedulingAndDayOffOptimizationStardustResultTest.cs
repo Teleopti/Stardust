@@ -44,15 +44,14 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 
 		[TestCase("Mountain Standard Time", "Mountain Standard Time")]
 		[TestCase("Mountain Standard Time", "UTC")]
-		[Ignore("47654")]
 		public void ShouldHandleTimeZoneIssues(string skillTimeZoneStr, string assignedShiftsTimeZone)
 		{
-			//TODO
+			//TODO 1
 			FakeEventPublisher.AddHandler<WebDayoffOptimizationStardustHandler>();
 			FakeEventPublisher.AddHandler<WebScheduleStardustHandler>();
 			//
 
-			//fix
+			//TODO 2
 			var systemUser = new Person().WithName(new Name("system","system")).WithId(SystemUser.Id)
 				.InTimeZone(TimeZoneInfo.Utc);
 			TimeZoneGuard.Instance.TimeZone = systemUser.PermissionInformation.DefaultTimeZone();

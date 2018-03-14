@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public void Map(IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, DateOnlyPeriod period)
 		{
+			var timezoneToSaveToDb = TimeZoneInfo.Utc;
 			foreach (var keyValuePair in skillDays)
 			{
 				var skill = keyValuePair.Key;
@@ -31,21 +32,30 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 				var item = new OptimizationResultSkill {SkillName = skill.Name};
 				_skillResultList.Add(item);
-				var skillDaysDic = keyValuePair.Value.ToDictionary(k => k.CurrentDate);
 				foreach (var dateOnly in period.DayCollection())
 				{
-					ISkillDay skillDay;
-					var found = skillDaysDic.TryGetValue(dateOnly, out skillDay);
-					double relativeDifference = !found
-						? 0
-						: SkillStaffPeriodHelper.RelativeDifference(skillDay.SkillStaffPeriodCollection).GetValueOrDefault(0);
+					var periodInAgentTimeZone = dateOnly.ToDateOnlyPeriod().ToDateTimePeriod(timezoneToSaveToDb);
+					var skillStaffPeriods = new List<ISkillStaffPeriod>();
+
+					foreach (var skillDay in skillDays[skill])
+					{
+						foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
+						{
+							if (periodInAgentTimeZone.Contains(skillStaffPeriod.Period))
+							{
+								skillStaffPeriods.Add(skillStaffPeriod);
+							}
+						}
+					}
+
 					var detail = new OptimizationResultSkillDetail
 					{
 						Date = dateOnly,
-						RelativeDifference = relativeDifference
+						RelativeDifference = SkillStaffPeriodHelper.RelativeDifference(skillStaffPeriods).GetValueOrDefault(0)
 					};
 
-					detail.ColorId = skillDay != null && skillDay.OpenForWork.IsOpen ? mapColorId(detail.RelativeDifference, skill) : 4;
+					var oneOfTheSkillDays = skillDays[skill].FirstOrDefault();
+					detail.ColorId = oneOfTheSkillDays != null && oneOfTheSkillDays.OpenForWork.IsOpen ? mapColorId(detail.RelativeDifference, skill) : 4;
 					item.AddDetail(detail);
 				}
 			}
