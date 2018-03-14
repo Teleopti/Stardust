@@ -19,14 +19,12 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Ccc.TestCommon.Web;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory;
 using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider;
@@ -46,7 +44,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		public IDataSourceScope DataSourceScope;
 		public IPersonRepository Persons;
 		public Lazy<FakeDatabase> Database;
-		
+
 		private IDisposable _tenantScope;
 		private Person _loggedOnPerson;
 
@@ -99,7 +97,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			system.UseTestDouble<CurrentTenantFake>().For<ICurrentTenant>();
 			system.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
 			system.UseTestDouble(new FakeUserCulture(CultureInfoFactory.CreateEnglishCulture())).For<IUserCulture>();
-			system.UseTestDouble<FakePushMessageDialogueRepository>().For<IPushMessageDialogueRepository>(); 
+			system.UseTestDouble<FakePushMessageDialogueRepository>().For<IPushMessageDialogueRepository>();
 			system.UseTestDouble<FakeActivityRepository>().For<IActivityRepository>();
 			system.UseTestDouble<ScheduleMinMaxTimeCalculator>().For<IScheduleMinMaxTimeCalculator>();
 			system.UseTestDouble<SiteOpenHourProvider>().For<ISiteOpenHourProvider>();

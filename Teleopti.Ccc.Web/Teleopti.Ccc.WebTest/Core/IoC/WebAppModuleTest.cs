@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		}
 
 		private ILifetimeScope requestContainer;
-		
+
 		[Test]
 		public void ControllersShouldBeRegisteredPerInstance()
 		{
@@ -138,31 +138,15 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void ShouldRegisterToggleHandlerController()
 		{
-			var tempFile = Path.GetTempFileName();
-			try
-			{
-				File.WriteAllText(tempFile, string.Empty);
-				using (var container = new ContainerConfiguration().Configure(tempFile, new HttpConfiguration()))
-				{
-					var containerAdder = new ContainerBuilder();
-					containerAdder.Register(_ => MockRepository.GenerateMock<ILicenseActivator>());
-					containerAdder.Update(container);
-
-					container.Resolve<ToggleHandlerController>()
-						.Should().Not.Be.Null();
-				}
-			}
-			finally
-			{
-				File.Delete(tempFile);
-			}
+			requestContainer.Resolve<ToggleHandlerController>()
+				.Should().Not.Be.Null();
 		}
 
 		[Test]
 		public void ShouldResolveBadgeLeaderBoardRpeortController()
 		{
-				requestContainer.Resolve<BadgeLeaderBoardReportController>()
-					.Should().Not.Be.Null();
+			requestContainer.Resolve<BadgeLeaderBoardReportController>()
+				.Should().Not.Be.Null();
 		}
 
 		[Test]
@@ -193,12 +177,12 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 				.Should().Not.Be.Null();
 		}
 
-        [Test]
-        public void ShouldRegisterCalendarShareController()
-        {
-            requestContainer.Resolve<ShareCalendarController>()
-                .Should().Not.Be.Null();
-        }
+		[Test]
+		public void ShouldRegisterCalendarShareController()
+		{
+			requestContainer.Resolve<ShareCalendarController>()
+				.Should().Not.Be.Null();
+		}
 
 		[Test]
 		public void ShouldRegisterUserDataController()
@@ -297,7 +281,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			requestContainer.Resolve<ILayoutBaseViewModelFactory>()
 				.Should().Not.Be.Null();
 		}
-		
+
 		[Test]
 		public void ShouldRegisterPrincipalProvider()
 		{
@@ -332,24 +316,24 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			requestContainer.Resolve<IAbsenceTypesProvider>()
 				.Should().Not.Be.Null();
 		}
-		
+
 		[Test]
 		public void ShouldResolvePortalViewModelFactory()
 		{
-		    DefinedLicenseDataFactory.SetLicenseActivator("asdf",
-		        new LicenseActivator(null, DateTime.MinValue, false, 0, 0, LicenseType.Agent,
-		            new Percent(), null, null, "8"));
+			DefinedLicenseDataFactory.SetLicenseActivator("asdf",
+				new LicenseActivator(null, DateTime.MinValue, false, 0, 0, LicenseType.Agent,
+					new Percent(), null, null, "8"));
 			requestContainer.Resolve<IPortalViewModelFactory>()
 				.Should().Not.Be.Null();
 		}
-		
+
 		[Test]
 		public void ShouldResolveMenuViewModelFactory()
 		{
 			requestContainer.Resolve<IMenuViewModelFactory>()
 				.Should().Not.Be.Null();
 		}
-		
+
 		[Test]
 		public void ShouldResolvePreferenceController()
 		{
@@ -398,7 +382,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			result1.Should().Not.Be.Null();
 			result2.Should().Be.SameInstanceAs(result1);
 		}
-		
+
 		[Test]
 		public void ShouldResolveTeamScheduleController()
 		{
@@ -520,7 +504,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		public void ShouldCacheRuleSetProjectionServiceResult()
 		{
 			var mbCacheFactory = requestContainer.Resolve<IMbCacheFactory>();
-			mbCacheFactory.ImplementationTypeFor(typeof (IRuleSetProjectionService))
+			mbCacheFactory.ImplementationTypeFor(typeof(IRuleSetProjectionService))
 				.Should().Be.EqualTo<IRuleSetProjectionService>();
 		}
 
@@ -596,20 +580,20 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		public void ShouldRegisterCommandDispatcher()
 		{
 			requestContainer.Resolve<ICommandDispatcher>()
-			                .Should().Not.Be.Null();
+				.Should().Not.Be.Null();
 		}
 
 		[Test]
 		public void ShouldRegisterCommandHandlers()
 		{
 			requestContainer.Resolve<IHandleCommand<AddFullDayAbsenceCommand>>()
-			                .Should().Not.Be.Null();
+				.Should().Not.Be.Null();
 			requestContainer.Resolve<IHandleCommand<MyTeamRemovePersonAbsenceCommand>>()
-							.Should().Not.Be.Null();
+				.Should().Not.Be.Null();
 			requestContainer.Resolve<IHandleCommand<RemovePersonAbsenceCommand>>()
-							.Should().Not.Be.Null();
+				.Should().Not.Be.Null();
 			requestContainer.Resolve<IHandleCommand<RemovePartPersonAbsenceCommand>>()
-							.Should().Not.Be.Null();
+				.Should().Not.Be.Null();
 		}
 
 		[Test]
@@ -625,11 +609,11 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		public void ShouldResolveEventHandlers()
 		{
 			requestContainer.Resolve<IEnumerable<IHandleEvent<FullDayAbsenceAddedEvent>>>()
-							.Should().Not.Be.Null();
+				.Should().Not.Be.Null();
 			requestContainer.Resolve<IEnumerable<IHandleEvent<ScheduleChangedEvent>>>()
-			                .Should().Not.Be.Null();
+				.Should().Not.Be.Null();
 			requestContainer.Resolve<IEnumerable<IHandleEvent<ProjectionChangedEvent>>>()
-							.Should().Not.Be.Null();
+				.Should().Not.Be.Null();
 		}
 
 		[Test]
@@ -665,14 +649,14 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		public void ShouldResolveRequestsShiftTradeScheduleFilterController()
 		{
 			requestContainer.Resolve<RequestsShiftTradeScheduleFilterController>()
-				 .Should().Not.Be.Null();
+				.Should().Not.Be.Null();
 		}
 
 		[Test]
 		public void ShouldResolveRequestsShiftTradeBulletinBoardController()
 		{
 			requestContainer.Resolve<RequestsShiftTradeBulletinBoardController>()
-				 .Should().Not.Be.Null();
+				.Should().Not.Be.Null();
 		}
 
 		[Test]
@@ -683,10 +667,10 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 				container.Resolve<IEnumerable<IBootstrapperTask>>()
 					.Select(x => x.GetType())
 					.Should()
-					.Contain(typeof (HangfireServerStartupTask));
+					.Contain(typeof(HangfireServerStartupTask));
 			}
 		}
-		
+
 		[Test]
 		public void ShouldResolveStardustServerStartupTask()
 		{

@@ -9,9 +9,6 @@ using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
 using Autofac;
-using Autofac.Core;
-using Autofac.Core.Lifetime;
-using Autofac.Core.Resolving;
 using Autofac.Integration.Mvc;
 using Autofac.Integration.Wcf;
 using Autofac.Integration.WebApi;
@@ -22,7 +19,6 @@ using Owin;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Web.Broker;
 using Teleopti.Ccc.Web.Core.IoC;
-using Teleopti.Ccc.Web.Core.RequestContext.Initialize;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
 
 namespace Teleopti.Ccc.Web.Core.Startup
@@ -56,7 +52,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			ErrorAtStartup = null;
 			try
 			{
-				var container = new DontDisposeMe(_containerConfiguration.Configure(pathToToggle(), config));
+				var container = _containerConfiguration.Configure(pathToToggle(), config);
 
 				AutofacHostFactory.Container = container;
 
@@ -110,46 +106,4 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			HttpContext.Current.ApplicationInstance.CompleteRequest();
 		}
 	}
-	
-	public class DontDisposeMe : ILifetimeScope
-	{
-		private readonly IContainer _container;
-
-		public DontDisposeMe(IContainer container)
-		{
-			_container = container;
-		}
-
-		public void Dispose()
-		{
-		}
-		
-		public object ResolveComponent(IComponentRegistration registration, IEnumerable<Parameter> parameters) => _container.ResolveComponent(registration, parameters);
-		public IComponentRegistry ComponentRegistry => _container.ComponentRegistry;
-		public ILifetimeScope BeginLifetimeScope() => _container.BeginLifetimeScope();
-		public ILifetimeScope BeginLifetimeScope(object tag) => _container.BeginLifetimeScope(tag);
-		public ILifetimeScope BeginLifetimeScope(Action<ContainerBuilder> configurationAction) => _container.BeginLifetimeScope(configurationAction);
-		public ILifetimeScope BeginLifetimeScope(object tag, Action<ContainerBuilder> configurationAction) => _container.BeginLifetimeScope(tag, configurationAction);
-		public IDisposer Disposer => _container.Disposer;
-		public object Tag => _container.Tag;
-		
-		public event EventHandler<LifetimeScopeBeginningEventArgs> ChildLifetimeScopeBeginning
-		{
-			add => _container.ChildLifetimeScopeBeginning += value;
-			remove => _container.ChildLifetimeScopeBeginning -= value;
-		}
-
-		public event EventHandler<LifetimeScopeEndingEventArgs> CurrentScopeEnding
-		{
-			add => _container.CurrentScopeEnding += value;
-			remove => _container.CurrentScopeEnding -= value;
-		}
-
-		public event EventHandler<ResolveOperationBeginningEventArgs> ResolveOperationBeginning
-		{
-			add => _container.ResolveOperationBeginning += value;
-			remove => _container.ResolveOperationBeginning -= value;
-		}
-	}
-	
 }
