@@ -87,14 +87,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 
 		public void Process(IPersonRequest personRequest)
 		{
+			personRequest.Pending();
+
 			var validateRulesResult = validateRules(personRequest);
 			if (!validateRulesResult.IsValid)
 			{
 				handleOvertimeRequestValidationResult(personRequest, validateRulesResult);
 				return;
 			}
-
-			personRequest.Pending();
 
 			var validateSkillsResult = validateSkills(personRequest);
 			if (!validateSkillsResult.IsValid)

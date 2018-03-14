@@ -62,6 +62,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 
 		public void Process(IPersonRequest personRequest, bool isAutoGrant)
 		{
+			personRequest.Pending();
+
 			var validateRulesResult = validateRules(personRequest);
 			if (!validateRulesResult.IsValid)
 			{
@@ -75,8 +77,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 				handleOvertimeRequestValidationResult(personRequest, validateSkillsResult);
 				return;
 			}
-
-			personRequest.Pending();
 
 			if (!isAutoGrant) return;
 

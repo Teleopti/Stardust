@@ -63,6 +63,34 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 		[Test]
 		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestMaxContinuousWorkTime_47964)]
+		public void ShouldPendingWhenOvertimeRequestMaximumContinuousWorkTimeFailOptionIsSendToAdmin()
+		{
+			setupPerson(8, 21);
+			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 8d);
+
+			var workflowControlSet =
+				new WorkflowControlSet
+				{
+					OvertimeRequestMaximumContinuousWorkTimeEnabled = true,
+					OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Pending
+				};
+			var person = LoggedOnUser.CurrentUser();
+			person.WorkflowControlSet = workflowControlSet;
+
+			var personRequest = createOvertimeRequest(18, 3);
+			getTarget().Process(personRequest, true);
+
+			var expectedDenyReason = buildDenyReason("7/17/2017 6:00:00 PM - 7/17/2017 9:00:00 PM", TimeSpan.FromHours(3),
+				TimeSpan.Zero);
+
+			personRequest.IsPending.Should().Be.True();
+			personRequest.GetMessage(new NoFormatting()).Should().Be.EqualTo(expectedDenyReason);
+		}
+
+
+
+		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestMaxContinuousWorkTime_47964)]
 		public void ShouldPendingWhenContinuousWorkTimeExceedsMaximumContinuousWorkTimeWithShiftBefore()
 		{
 			setupPerson(8, 21);
