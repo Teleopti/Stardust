@@ -3,12 +3,14 @@ using System.Linq;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.People.Core;
 using Teleopti.Ccc.Web.Areas.People.Models;
+using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.People.Controllers
 {
-	//[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.ScheduleAuditTrailWebReport)]
+	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebPeople)]
 	public class RoleController : ApiController
 	{
 		private readonly IPersonRepository _personRepository;
