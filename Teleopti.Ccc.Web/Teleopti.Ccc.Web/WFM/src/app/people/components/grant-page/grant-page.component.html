@@ -23,7 +23,7 @@
 
 		<aside class="action-buttons">
 			<button mat-raised-button (click)="close()">Cancel</button>
-			<button mat-raised-button color="primary" (click)="save()" [disabled]="!isAnyRoleSelected()" data-test-save>Save</button>
+			<button #saveBtn mat-raised-button color="primary" (click)="save()" [disabled]="!isAnyRoleSelected()" data-test-save>Save</button>
 		</aside>
 	</div>
 

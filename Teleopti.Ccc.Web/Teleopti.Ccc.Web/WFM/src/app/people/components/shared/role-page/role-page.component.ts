@@ -1,18 +1,20 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewChild} from '@angular/core';
 import { Person, Role } from '../../../types';
 import { WorkspaceService } from '../../../services';
 
 @Component({
 	template: '<div>Override me</div>'
 })
-export class RolePage {
+export class RolePage{
 	constructor(public workspaceService: WorkspaceService) {}
-
+	
+	@ViewChild('saveBtn') saveButton: HTMLElement;
 	@Input() roles: Array<Role> = [];
 	@Output() onRolesChanged = new EventEmitter<Array<Role>>();
 	selectedRoles = [];
 
-	getRole(id) {
+
+	getRole(id: string): Role {
 		return this.roles.find(role => role.Id === id);
 	}
 
@@ -35,9 +37,10 @@ export class RolePage {
 		return this.roles.filter(role => !this.isRoleOnAll(role.Id));
 	}
 
-	toggleSelectedRole(id) {
+	toggleSelectedRole(id: string): void {
 		if (!this.selectedRoles.includes(id)) {
 			this.selectedRoles = [...this.selectedRoles, id];
+			//this.focusOnSave();
 		} else {
 			this.selectedRoles = this.selectedRoles.filter(roleId => id !== roleId);
 		}
@@ -60,6 +63,12 @@ export class RolePage {
 
 	isAnyRoleSelected(): boolean {
 		return this.selectedRoles.length > 0;
+	}
+
+	focusOnSave(): void {
+		if(typeof this.saveButton !== 'undefined') {
+			this.saveButton.focus();
+		}
 	}
 
 	isSelectedRole(roleId: string): boolean {
