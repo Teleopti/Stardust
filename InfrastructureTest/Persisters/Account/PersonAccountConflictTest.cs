@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account
@@ -19,13 +20,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account
 
 			if (GivenOtherHasChanged(theirAccounts.Single()))
 			{
-				Target.Persist(theirAccounts);
+				Target.Persist(theirAccounts, null);
 				theirAccounts.Should().Be.Empty();
 			}
 
 			var myAccount = myAccounts.Single();
 			WhenImChanging(myAccount);
-			Target.Persist(myAccounts);
+			Target.Persist(myAccounts, null);
 			myAccounts.Should().Be.Empty();
 
 			Then(myAccount);

@@ -5,6 +5,6 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Account
 {
 	public interface IPersonAccountPersister
 	{
-		bool Persist(ICollection<IPersonAbsenceAccount> personAbsenceAccounts);
+		bool Persist(ICollection<IPersonAbsenceAccount> personAbsenceAccounts, IScheduleDictionary scheduleDictionary);
 	}
 }

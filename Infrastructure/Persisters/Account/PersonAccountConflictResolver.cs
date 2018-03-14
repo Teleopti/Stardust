@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Account
 			_personAbsenceAccountRepository = personAbsenceAccountRepository;
 		}
 
-		public void Resolve(IEnumerable<IPersonAbsenceAccount> conflictingPersonAccounts)
+		public void Resolve(IEnumerable<IPersonAbsenceAccount> conflictingPersonAccounts, IScheduleDictionary scheduleDictionary)
 		{
 			var uow = _currentUnitOfWorkFactory.Current().CurrentUnitOfWork();
 			conflictingPersonAccounts.ForEach(paa =>
@@ -36,7 +37,17 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Account
 				}
 				uow.Remove(foundAccount);
 				uow.Refresh(paa);
-				paa.AccountCollection().ForEach(_traceableRefreshService.Refresh);
+
+				foreach (var account in paa.AccountCollection())
+				{
+					_traceableRefreshService.Refresh(account);
+					if(scheduleDictionary == null) continue;
+					var period = scheduleDictionary.Period.LoadedPeriod().ToDateOnlyPeriod(TimeZoneInfo.Utc);
+					var scheduleDays = scheduleDictionary[paa.Person].ScheduledDayCollection(period).ToList();
+					var loaded = account.Owner.Absence.Tracker.TrackForReset(account.Owner.Absence, scheduleDays);
+					account.Track(loaded);
+				}
+				//paa.AccountCollection().ForEach(_traceableRefreshService.Refresh);
 			});
 		}
 	}

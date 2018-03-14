@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
 			using (mock.Record())
 			{
-				Expect.Call(personAccountPersister.Persist(new List<IPersonAbsenceAccount>())).IgnoreArguments().Return(true);
+				Expect.Call(personAccountPersister.Persist(new List<IPersonAbsenceAccount>(), null)).IgnoreArguments().Return(true);
 				Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(uow);
 				Expect.Call(accountDay.Period()).Return(new DateOnlyPeriod(dateOnly, dateOnly));
 				Expect.Call(accountDay.Parent).Return(personAbsenceAccount);

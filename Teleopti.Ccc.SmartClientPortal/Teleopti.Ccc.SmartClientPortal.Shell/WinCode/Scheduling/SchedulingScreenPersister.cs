@@ -45,10 +45,5 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 			return foundConflicts == null || !foundConflicts.Any();
 		}
 
-
-		public void PersistPersonAccounts(ICollection<IPersonAbsenceAccount> personAbsenceAccounts)
-		{
-			_personAccountPersister.Persist(personAbsenceAccounts);
-		}
 	}
 }

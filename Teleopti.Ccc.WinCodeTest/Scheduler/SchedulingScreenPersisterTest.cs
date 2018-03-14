@@ -36,14 +36,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		}
 
 		[Test]
-		public void ShouldPersistAccounts()
-		{
-			var accounts = new List<IPersonAbsenceAccount>();
-			target.PersistPersonAccounts(accounts);
-			personAccountPersister.AssertWasCalled(x => x.Persist(accounts));
-		}
-
-		[Test]
 		public void ShouldPersistRequests()
 		{
 			IEnumerable<PersistConflict> foo;

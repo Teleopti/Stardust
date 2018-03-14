@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 
 				if (refreshedPersonAbsenceAccounts.Count > 0)
 				{
-					persisted = _personAccountPersister.Persist(refreshedPersonAbsenceAccounts);
+					persisted = _personAccountPersister.Persist(refreshedPersonAbsenceAccounts, null);
 				}
 			}
 

@@ -3996,7 +3996,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				}
 
 				var personAccountPersister = _container.Resolve<IPersonAccountPersister>();
-				personAccountPersister.Persist(_schedulerState.Schedules.ModifiedPersonAccounts);
+				personAccountPersister.Persist(_schedulerState.Schedules.ModifiedPersonAccounts, _schedulerState.Schedules);
 
 				//Denna sätts i längre inne i save-loopen. fixa på annat sätt!
 				if (_personAbsenceAccountPersistValidationBusinessRuleResponses != null &&

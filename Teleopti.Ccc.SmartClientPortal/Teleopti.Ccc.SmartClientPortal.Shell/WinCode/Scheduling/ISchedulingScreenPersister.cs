@@ -12,6 +12,5 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 						ICollection<IWorkflowControlSet> workflowControlSets,
 						out IEnumerable<PersistConflict> foundConflicts);
 
-		void PersistPersonAccounts(ICollection<IPersonAbsenceAccount> personAbsenceAccounts);
 	}
 }

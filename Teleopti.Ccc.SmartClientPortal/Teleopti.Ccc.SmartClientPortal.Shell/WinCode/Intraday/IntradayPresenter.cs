@@ -392,7 +392,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Intraday
 					}
 					uow.PersistAll(this);
 				}
-				_personAccountPersister.Persist(_schedulingResultLoader.SchedulerState.Schedules.ModifiedPersonAccounts);
+				_personAccountPersister.Persist(_schedulingResultLoader.SchedulerState.Schedules.ModifiedPersonAccounts, _schedulingResultLoader.SchedulerState.Schedules);
 			}
 			catch (OptimisticLockException)
 			{

@@ -27,14 +27,14 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Account
 			_personAccountConflictResolver = personAccountConflictResolver;
 		}
 
-		public bool Persist(ICollection<IPersonAbsenceAccount> personAbsenceAccounts)
+		public bool Persist(ICollection<IPersonAbsenceAccount> personAbsenceAccounts, IScheduleDictionary scheduleDictionary)
 		{
 			bool hadConflicts;
 			using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				var conflictingPersonAccounts = _personAccountConflictCollector.GetConflicts(personAbsenceAccounts);
 				hadConflicts = conflictingPersonAccounts.Any();
-				_personAccountConflictResolver.Resolve(conflictingPersonAccounts);
+				_personAccountConflictResolver.Resolve(conflictingPersonAccounts, scheduleDictionary);
 				_personAbsenceAccountRepository.AddRange(personAbsenceAccounts);
 				uow.PersistAll(_initiatorIdentifier);
 			}

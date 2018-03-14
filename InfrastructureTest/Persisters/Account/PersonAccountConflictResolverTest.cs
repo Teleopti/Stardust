@@ -1,19 +1,23 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Infrastructure.Persisters.Account;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.TestCommon.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account
@@ -30,9 +34,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account
 		public IScenarioRepository ScenarioRepository;
 		public IPersonAbsenceRepository PersonAbsenceRepository;
 		public IPersonAssignmentRepository PersonAssignmentRepository;
-		
+		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
+
 		[Test]
-		[Ignore("#48474")]
+		//[Ignore("#48474")]
 		public void ShouldRecalculate()
 		{
 			var scenario = new Scenario {DefaultScenario = true};
@@ -62,9 +67,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account
 				setup.PersistAll();
 			}
 
+			var schedulerStateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnly(2000, 1, 1), person, new List<IPersistableScheduleData> {ass1, ass2, personAbsence1, personAbsence2});
+
 			using (CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
-				Target.Resolve(new []{personAbsenceAccount});	
+				Target.Resolve(new []{personAbsenceAccount}, schedulerStateHolder.Schedules);	
 			}
 			
 			//simulate to remove personAbsence1

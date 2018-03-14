@@ -5,6 +5,6 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Account
 {
 	public interface IPersonAccountConflictResolver
 	{
-		void Resolve(IEnumerable<IPersonAbsenceAccount> conflictingPersonAccounts);
+		void Resolve(IEnumerable<IPersonAbsenceAccount> conflictingPersonAccounts, IScheduleDictionary scheduleDictionary);
 	}
 }

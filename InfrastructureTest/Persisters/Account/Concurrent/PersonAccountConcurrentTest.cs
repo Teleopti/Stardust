@@ -24,8 +24,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account.Concurrent
 			WhenOtherIsChanging(otherAccount);
 			WhenImChanging(myAccount);
 
-			var myTask = Task<bool>.Factory.StartNew(() => Target.Persist(myAccounts));
-			var otherTask = Task<bool>.Factory.StartNew(() => Target.Persist(otherAccounts));
+			var myTask = Task<bool>.Factory.StartNew(() => Target.Persist(myAccounts, null));
+			var otherTask = Task<bool>.Factory.StartNew(() => Target.Persist(otherAccounts, null));
 			await Task.WhenAll(myTask, otherTask);
 
 			var myHadConflicts = myTask.Result;
