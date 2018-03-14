@@ -15,19 +15,20 @@ namespace Teleopti.Ccc.DBManager.Library
 			{
 				new Func<string, bool>[]
 				{
-					x => matchArgument(x, "-S", v => command.ServerName = v),
-					x => matchArgument(x, "-D", v => command.DatabaseName = v),
-					x => matchArgument(x, "-U", v => command.UserName = v),
-					x => matchArgument(x, "-P", v => command.Password = v),
-					x => matchArgument(x, "-E", v => command.UseIntegratedSecurity = true),
-					x => matchArgument(x, "-O", v => command.DatabaseType = (DatabaseType) Enum.Parse(typeof(DatabaseType), v)),
-					x => matchArgument(x, "-C", v =>
+					x => matchSwitch(x, "-E", () => command.UseIntegratedSecurity = true),
+					x => matchSwitch(x, "-C", () =>
 					{
 						command.CreateDatabase = true;
 						command.UpgradeDatabase = true;
 					}),
-					x => matchArgument(x, "-T", v => command.UpgradeDatabase = true),
-					x => matchArgument(x, "-L", v =>
+					x => matchSwitch(x, "-T", "-TRUNK", () => command.UpgradeDatabase = true),
+					x => matchSwitch(x, "-R", () => command.CreatePermissions = true),
+					x => matchSwitchWithAdjacentValue(x, "-S", v => command.ServerName = v),
+					x => matchSwitchWithAdjacentValue(x, "-D", v => command.DatabaseName = v),
+					x => matchSwitchWithAdjacentValue(x, "-U", v => command.UserName = v),
+					x => matchSwitchWithAdjacentValue(x, "-P", v => command.Password = v),
+					x => matchSwitchWithAdjacentValue(x, "-O", v => command.DatabaseType = (DatabaseType) Enum.Parse(typeof(DatabaseType), v)),
+					x => matchSwitchWithAdjacentValue(x, "-L", v =>
 					{
 						command.CreatePermissions = true;
 						var userAndPassword = v.Split(':');
@@ -40,38 +41,56 @@ namespace Teleopti.Ccc.DBManager.Library
 						else
 							throw new Exception("Not the correct inparameters for application sql user and password");
 					}),
-					x => matchArgument(x, "-W", v =>
+					x => matchSwitchWithAdjacentValue(x, "-W", v =>
 					{
-						command.CreatePermissions = true;
 						command.AppUserName = v;
+						command.CreatePermissions = true;
 						command.IsWindowsGroupName = true;
 					}),
-					x => matchArgument(x, "-F", v => command.DbManagerFolderPath = v),
-					x => matchArgument(x, "-R", v => command.CreatePermissions = true),
-					x => matchArgument(x, "-🏄🐘", v =>
+					x => matchSwitchWithAdjacentValue(x, "-F", v => command.DbManagerFolderPath = v),
+					x => matchSwitchWithAdjacentValue(x, "-RESTORETRUNK", v =>
 					{
 						command.RestoreBackupIfNotExistsOrNewer = v;
 						command.UpgradeDatabase = true;
 					}),
-					x => matchArgument(x, "-🏄", v => command.RestoreBackup = v),
-					x => matchArgument(x, "-🐘", v => command.UpgradeDatabase = true),
+					x => matchSwitchWithAdjacentValue(x, "-RESTORE", v => command.RestoreBackup = v),
 				}.Any(matcher => matcher(s));
 			}
 
 			return command;
 		}
-		
-		private static bool matchArgument(string arg, string match, Action<string> value)
-		{
-			if (arg.ToUpper(CultureInfo.CurrentCulture).StartsWith(match))
-			{
-				var v = arg.Remove(0, match.Length);
-				value(v);
-				return true;
-			}
 
-			return false;
+		private static bool matchSwitch(string arg, string match1, Action found) =>
+			matchSwitch(arg, match1, null, found);
+
+		private static bool matchSwitch(string arg, string match1, string match2, Action found)
+		{
+			var result = new[] {match1, match2}
+				.Where(x => x != null)
+				.Any(x => arg.ToUpper(CultureInfo.CurrentCulture).Equals(x));
+			if (result)
+				found();
+			return result;
 		}
+
+		private static bool matchSwitchWithAdjacentValue(string arg, string match1, Action<string> value) =>
+			matchSwitchWithAdjacentValue(arg, match1, null, value);
+
+		private static bool matchSwitchWithAdjacentValue(string arg, string match1, string match2, Action<string> value)
+		{
+			var match = new[] {match1, match2}
+				.Where(x => x != null)
+				.OrderByDescending(x => x.Length)
+				.FirstOrDefault(arg.StartsWith);
+
+			if (match == null)
+				return false;
+
+			var v = arg.Remove(0, match.Length);
+			value(v);
+			return true;
+		}
+
 
 		public string DbManagerFolderPath { get; set; }
 		public bool IsAzure => ServerName.Contains(".database.windows.net");
