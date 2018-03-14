@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { HttpClientModule } from "@angular/common/http";
+import { HttpClientModule } from '@angular/common/http';
 import { UpgradeModule, downgradeComponent } from '@angular/upgrade/static';
 
 import { SharedModule } from '../shared/shared.module';
@@ -14,7 +14,8 @@ import {
 	MatDialogRef,
 	MatCheckboxModule,
 	MatPaginatorModule,
-	MatDividerModule
+	MatDividerModule,
+	MatTableModule
 } from '@angular/material';
 import {
 	RolePage,
@@ -38,7 +39,16 @@ import { RolesService, WorkspaceService, SearchService } from './services';
 		ChipRemoveComponent,
 		SearchPageComponent
 	],
-	imports: [SharedModule, MatCheckboxModule, MatDialogModule, MatPaginatorModule, MatButtonModule, MatDividerModule, HttpClientModule],
+	imports: [
+		SharedModule,
+		MatCheckboxModule,
+		MatDialogModule,
+		MatPaginatorModule,
+		MatButtonModule,
+		MatDividerModule,
+		MatTableModule,
+		HttpClientModule
+	],
 	providers: [WorkspaceService, RolesService, SearchService],
 	exports: [],
 	entryComponents: [PeopleComponent]

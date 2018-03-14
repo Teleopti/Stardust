@@ -1,10 +1,11 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { PageEvent } from '@angular/material';
+import { PageEvent, MatTableDataSource } from '@angular/material';
 import { Person, Role } from './types';
 
 import { Observable } from 'rxjs/Rx';
 import { WorkspaceService, RolesService, SearchService } from './services';
 import { GrantPageComponent } from './components';
+import { SelectionModel } from '@angular/cdk/collections';
 
 @Component({
 	selector: 'app-people',
@@ -42,6 +43,7 @@ export class PeopleComponent implements OnInit {
 			})
 			.then(searchResult => {
 				this.pagination.length = searchResult.people.length * searchResult.pages;
+				this.dataSource.data = this.searchService.getPeople();
 				return searchResult;
 			});
 	}
@@ -90,8 +92,26 @@ export class PeopleComponent implements OnInit {
 	}
 
 	/** Below is window grant component */
-	displayGrantView = false;
-	displayRevokeView = false;
+	private _displayGrantView = false;
+	private _displayRevokeView = false;
+
+	get displayGrantView(): boolean {
+		if (!this.workspaceService.isAnySelected()) this._displayGrantView = false;
+		return this._displayGrantView;
+	}
+	get displayRevokeView(): boolean {
+		if (!this.workspaceService.isAnySelected()) this._displayRevokeView = false;
+		return this._displayRevokeView;
+	}
+
+	set displayGrantView(shouldShow) {
+		this._displayGrantView = shouldShow;
+	}
+
+	set displayRevokeView(shouldShow) {
+		this._displayRevokeView = shouldShow;
+	}
+
 	toggleGrantView(): void {
 		this.displayGrantView = !this.displayGrantView;
 	}
@@ -117,4 +137,14 @@ export class PeopleComponent implements OnInit {
 	}
 
 	//#endregion
+
+	//region tabletest
+	displayedColumns = ['select', 'FirstName', 'LastName', 'Roles'];
+	dataSource = new MatTableDataSource<Person>(this.searchService.getPeople());
+
+	toggleRow(row: Person) {
+		this.toggleSelectedPerson(row.Id);
+	}
+
+	//endregion
 }

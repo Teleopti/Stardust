@@ -1,3 +1,4 @@
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
 <div class="view-header with-fab with-desc">
 	<div class="view-title">
 		<h1>
@@ -23,36 +24,49 @@
 							<i class="mdi mdi-plus"></i> Grant role</button>
 						<button mat-raised-button color="primary" data-test-revoke-button [disabled]="!workspaceService.isAnySelected()" (click)="toggleRevokeView()">
 							<i class="mdi mdi-close"></i>Revoke role</button>
-						<!-- <button class="wfm-btn wfm-btn-primary mdi mdi-plus" data-test-grant-button [disabled]="!workspaceService.isAnySelected()"
-						 [ngClass]="{'wfm-btn-invis-disabled': !workspaceService.isAnySelected()}" (click)="toggleGrantView()">Grant role</button>
-						<button class="wfm-btn wfm-btn-primary mdi mdi-close" data-test-revoke-button [disabled]="!workspaceService.isAnySelected()"
-						 [ngClass]="{'wfm-btn-invis-disabled': !workspaceService.isAnySelected()}" (click)="toggleRevokeView()">Revoke role</button> -->
 					</div>
 				</div>
 			</div>
 			<div class="con-row">
 				<div class="con-flex">
-					<ul data-test-search>
-						<li *ngFor="let person of searchService.getPeople()" class="con-row align-row-baseline agent-row" data-test-person (click)="toggleSelectedPerson(person.Id)">
-							<div class="con-flex">
-								<div matTooltip="Select person" tabindex=0 class="context-menu card-context" [ngClass]="{'notice-success':workspaceService.isPersonSelected(person.Id), 'notice-info':!workspaceService.isPersonSelected(person.Id)}">
-									<i class="mdi mdi-account" [ngClass]="{'mdi-check':workspaceService.isPersonSelected(person.Id)}"></i>
-								</div>
-								<span data-test-person-name>
-									{{person.FirstName}} {{person.LastName}}
-								</span>
-							</div>
-							<div class="con-flex" data-test-person-role>
-								{{personToRoles(person)}}
-							</div>
-						</li>
-					</ul>
+					<mat-table #table [dataSource]="dataSource" data-test-search>
+
+						<!-- Checkbox Column -->
+						<ng-container matColumnDef="select">
+							<mat-header-cell *matHeaderCellDef>
+								<mat-checkbox>
+								</mat-checkbox>
+							</mat-header-cell>
+							<mat-cell *matCellDef="let row">
+								<mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? toggleSelectedPerson(row.Id) : null" [checked]="workspaceService.isPersonSelected(row.Id)">
+								</mat-checkbox>
+							</mat-cell>
+						</ng-container>
+
+						<ng-container matColumnDef="FirstName">
+							<mat-header-cell *matHeaderCellDef> First name </mat-header-cell>
+							<mat-cell *matCellDef="let person" data-test-person-firstname> {{person.FirstName}} </mat-cell>
+						</ng-container>
+
+						<!-- Name Column -->
+						<ng-container matColumnDef="LastName">
+							<mat-header-cell *matHeaderCellDef> Last name </mat-header-cell>
+							<mat-cell *matCellDef="let person" data-test-person-lastname> {{person.LastName}} </mat-cell>
+						</ng-container>
+
+						<ng-container matColumnDef="Roles">
+							<mat-header-cell *matHeaderCellDef> Roles </mat-header-cell>
+							<mat-cell *matCellDef="let person" data-test-person-role> {{personToRoles(person)}} </mat-cell>
+						</ng-container>
+
+						<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+						<mat-row *matRowDef="let row; columns: displayedColumns;" (click)="toggleRow(row)" data-test-person>
+						</mat-row>
+					</mat-table>
+					<mat-paginator [length]="pagination.length" [pageIndex]="pagination.pageIndex" [pageSize]="pagination.pageSize" [pageSizeOptions]="pagination.pageSizeOptions"
+					 (page)="paginationChanged($event)">
+					</mat-paginator>
 				</div>
-			</div>
-			<div class="con-footer">
-				<mat-paginator [length]="pagination.length" [pageIndex]="pagination.pageIndex" [pageSize]="pagination.pageSize" [pageSizeOptions]="pagination.pageSizeOptions"
-				 (page)="paginationChanged($event)">
-				</mat-paginator>
 			</div>
 		</div>
 	</div>
