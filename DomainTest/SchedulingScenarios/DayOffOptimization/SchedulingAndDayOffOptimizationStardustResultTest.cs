@@ -12,8 +12,6 @@ using Teleopti.Ccc.Domain.Optimization.Filters;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security;
-using Teleopti.Ccc.Domain.Security.Authentication;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -44,17 +42,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		{
 		}
 
-		//remove somehow?
-		public override void Setup(ISystem system, IIocConfiguration configuration)
-		{
-			system.UseTestDouble<UserTimeZone>().For<IUserTimeZone>();
-			system.UseTestDouble<TimeZoneGuard>().For<ITimeZoneGuard>();
-		}
-
 		[TestCase("Mountain Standard Time", "Mountain Standard Time")]
 		[TestCase("Mountain Standard Time", "UTC")]
 		[Ignore("47654")]
-		public void ShouldHandleTimeZoneIssues(string skillTimeZoneStr, string enduserTimeZoneStr)
+		public void ShouldHandleTimeZoneIssues(string skillTimeZoneStr, string assignedShiftsTimeZone)
 		{
 			//TODO
 			FakeEventPublisher.AddHandler<WebDayoffOptimizationStardustHandler>();
@@ -77,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var filterContract = new ContractWithMaximumTolerance().WithId();
 			var agent = PersonRepository.Has(filterContract, new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod, skill)
-				.InTimeZone(TimeZoneInfo.FindSystemTimeZoneById(enduserTimeZoneStr)); //to "match" 0-24 in end user's timezone
+				.InTimeZone(TimeZoneInfo.FindSystemTimeZoneById(assignedShiftsTimeZone));
 			var planningGroup = new PlanningGroup("_").AddFilter(new ContractFilter(filterContract));
 			var planningPeriod = PlanningPeriodRepository.Has(date, 1, SchedulePeriodType.Day, planningGroup);
 			PlanningGroupRepository.Has(planningGroup);
