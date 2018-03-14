@@ -1,4 +1,5 @@
 ﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Licensing
 {
@@ -16,7 +17,7 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 		{
 		}
 
-		public void Execute(IDataSource dataSource)
+		public void Execute(IUnitOfWorkFactory unitOfWorkFactory)
 		{
 		}
 	}

@@ -1,5 +1,6 @@
 ﻿using log4net;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Licensing
 {
@@ -14,16 +15,16 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 			_licenseVerifierFactory = licenseVerifierFactory;
 		}
 
-		public void Execute(IDataSource dataSource)
+		public void Execute(IUnitOfWorkFactory unitOfWorkFactory)
 		{
 			//don't really know what this does - extracted from web startup
-			var licenseVerifier = _licenseVerifierFactory.Create(this, dataSource.Application);
-			using (dataSource.Application.CreateAndOpenUnitOfWork())
+			var licenseVerifier = _licenseVerifierFactory.Create(this, unitOfWorkFactory);
+			using (unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				var licenseService = licenseVerifier.LoadAndVerifyLicense();
 				if (licenseService != null)
 				{
-					LicenseProvider.ProvideLicenseActivator(dataSource.DataSourceName, licenseService);
+					LicenseProvider.ProvideLicenseActivator(unitOfWorkFactory.Name, licenseService);
 				}
 			}
 		}

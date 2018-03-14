@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Web.Http;
-using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Filters;
 
@@ -15,17 +16,25 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 	public class ApplicationFunctionsController : ApiController
 	{
 		private readonly IApplicationFunctionsToggleFilter _applicationFunctionsToggleFilter;
-		
-		public ApplicationFunctionsController(IApplicationFunctionsToggleFilter applicationFunctionsToggleFilter)
+		private readonly ISetLicenseActivator _setLicenseActivator;
+		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
+
+		public ApplicationFunctionsController(IApplicationFunctionsToggleFilter applicationFunctionsToggleFilter, ISetLicenseActivator setLicenseActivator, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory)
 		{
 			_applicationFunctionsToggleFilter = applicationFunctionsToggleFilter;
+			_setLicenseActivator = setLicenseActivator;
+			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 		}
 
-		[UnitOfWork, HttpGet, Route("api/Permissions/ApplicationFunctions")]
+		[HttpGet, Route("api/Permissions/ApplicationFunctions")]
 		public virtual ICollection<ApplicationFunctionViewModel> GetAllFunctions()
 		{
-			var functions = _applicationFunctionsToggleFilter.FilteredFunctions();
-			return createAllFunctionsHierarchy(functions.Functions);
+			_setLicenseActivator.Execute(_currentUnitOfWorkFactory.Current());
+			using (_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			{
+				var functions = _applicationFunctionsToggleFilter.FilteredFunctions();
+				return createAllFunctionsHierarchy(functions.Functions);
+			}
 		}
 
 		private ICollection<ApplicationFunctionViewModel> createAllFunctionsHierarchy(ICollection<SystemFunction> functions)

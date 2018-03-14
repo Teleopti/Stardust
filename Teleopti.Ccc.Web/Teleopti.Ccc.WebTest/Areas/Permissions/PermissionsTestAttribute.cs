@@ -1,6 +1,7 @@
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
@@ -22,6 +23,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 			system.UseTestDouble<FakeApplicationRoleRepository>().For<IApplicationRoleRepository>();
 			system.UseTestDouble<FakeAvailableDataRepository>().For<IAvailableDataRepository>();
 			system.UseTestDouble<FakeApplicationFunctionRepository>().For<IApplicationFunctionRepository>();
+			system.UseTestDouble<FakeLicenseRepository>().For<ILicenseRepository>();
+			system.UseTestDouble<FakeLicenseRepository>().For<ILicenseRepositoryForLicenseVerifier>();
 			system.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
 			system.UseTestDouble<FakeBusinessUnitRepository>().For<IBusinessUnitRepository>();
 			system.UseTestDouble<FakeTeamRepository>().For<ITeamRepository>();
@@ -31,7 +34,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 			system.UseTestDouble<FakePersonInRoleQuerier>().For<IPersonInRoleQuerier>();
 			system.UseTestDouble<FakeApplicationFunctionsToggleFilter>().For<IApplicationFunctionsToggleFilter>();
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
-
 		}
 	}
 

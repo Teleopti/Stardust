@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 			var target = new DataSourceForTenant(dataSourcesFactory, setLicenseActivator, null);
 			target.MakeSureDataSourceCreated(RandomName.Make(), null, null, new Dictionary<string, string>());
 
-			setLicenseActivator.AssertWasCalled(x => x.Execute(dataSource));
+			setLicenseActivator.AssertWasCalled(x => x.Execute(dataSource.Application));
 		}
 
 		[Test]

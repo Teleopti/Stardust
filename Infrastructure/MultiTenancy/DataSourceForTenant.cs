@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 					return;
 
 				var newDataSource = _dataSourcesFactory.Create(tenantName, applicationConnectionString, analyticsConnectionString, applicationNhibConfiguration);
-				_setLicenseActivator.Execute(newDataSource);
+				_setLicenseActivator.Execute(newDataSource.Application);
 				DataSources[tenantName] = newDataSource;
 			}
 		}
