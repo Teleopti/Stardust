@@ -122,6 +122,7 @@
 			};
 			isNew = true;
 			vm.editGroupNameBox = true;
+			ev.stopPropagation();
 		};
 
 		vm.deleteSkillGroup = function() {

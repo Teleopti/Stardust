@@ -4,12 +4,26 @@
 		<p>{{'ManageSkillGroups'|translate}}</p>
 	</div>
 	<div class="fab-wrapper">
-		<button class="wfm-fab material-depth-1 grow-out" ng-show="vm.skillGroups.length > 0" ng-click="vm.createSkillGroup($event)">
-			<i class="mdi mdi-plus"></i>
-			<md-tooltip>{{'CreateSkillGroup'|translate}}</md-tooltip>
+		<button class="wfm-fab material-depth-1 grow-out pull-right" id="save_all" ng-show="vm.canSave" ng-click="vm.saveAll()">
+			<i class="mdi mdi-content-save"></i>
+			<md-tooltip>{{'Save'|translate}}</md-tooltip>
 		</button>
-	</div>
+		<button class="wfm-fab material-depth-1 grow-out pull-right" id="exit_sgm" ng-click="vm.exitConfigMode();">
+			<i class="mdi mdi-close"></i>
+			<md-tooltip>{{'Close'|translate}}</md-tooltip>
+		</button>
+		<!--
+		<button class="wfm-fab material-depth-1 grow-out" ng-if="vm.canSave" ng-click="vm.createSkillGroup($event)" id="save_all" ng-click="vm.saveAll()">
+		<i class="mdi mdi-content-save"></i>
+		<md-tooltip>{{'Save'|translate}}</md-tooltip>
+	</button>
+	<button class="wfm-fab material-depth-1 grow-out" ng-click="vm.createSkillGroup($event)" id="exit_sgm" ng-click="vm.exitConfigMode()">
+	<i class="mdi mdi-close"></i>
+	<md-tooltip>{{'YourChangesWillBeDiscarded'|translate}}</md-tooltip>
+	</button> -->
 </div>
+</div>
+
 <!-- create skillgroup -->
 <modal-dialog show='vm.editGroupNameBox' ng-cloak>
 	<h1 class="modal-title">{{'Name'|translate}}</h1>
@@ -46,19 +60,11 @@
 				<div class="sub-header">
 					<h2>{{'SelectSkillGroup'|translate}}</h2>
 					<div class="head-actions panel-menu">
-						<div tabindex=0 class="context-menu card-context grow-out" id="exit_sgm" ng-click="vm.exitConfigMode()">
-							<i class="mdi mdi-close"></i>
-							<md-tooltip>Discard changes</md-tooltip>
-						</div>
 
-						<span class="pointer">
-							<div tabindex=0 class="context-menu card-context grow-out" id="save_all" ng-class="{'locked':!vm.canSave, 'notice-info':vm.canSave}" ng-click="vm.saveAll()">
-								<i class="mdi mdi-check" ng-show="vm.canSave"></i>
-								<i class="mdi mdi-alert" ng-show="!vm.canSave"></i>
-							</div>
-							<md-tooltip ng-show="vm.canSave">{{'Save'|translate}}</md-tooltip>
-							<md-tooltip ng-show="!vm.canSave">{{'ErrorMsgCaptionDuplicateUserCredentials'|translate}}</md-tooltip>
-						</span>
+						<div tabindex=0 class="context-menu card-context grow-out" ng-click="vm.createSkillGroup($event)">
+							<i class="mdi mdi-plus"></i>
+							<md-tooltip>{{'CreateSkillGroup'|translate}}</md-tooltip>
+						</div>
 
 					</div>
 				</div>
@@ -107,81 +113,77 @@
 						</ul>
 					</div>
 				</div>
-				<!-- <div class="con-footer">
-				<button class="wfm-btn wfm-btn-invis-default">Advanced</button>
-				<button class="wfm-btn wfm-btn-invis-primary">Options</button>
-			</div> -->
+			</div>
 		</div>
-	</div>
-	<div class="con-flex x3">
-		<div class="panel material-depth-1">
-			<div class="con-row">
-				<div class="con-flex">
-					<h2>{{'AvailableSkills'|translate}}</h2>
-					<div class="con-row">
-						<div class="con-flex">
+		<div class="con-flex x3">
+			<div class="panel material-depth-1" ng-show="vm.skillGroups[vm.selectedGroupIndex]">
+				<div class="con-row">
+					<div class="con-flex">
+						<h2>{{'AvailableSkills'|translate}}</h2>
+						<div class="con-row">
+							<div class="con-flex">
 
-							<label for="filter2" class="input-icon">
-								<i class="mdi mdi-filter-outline">
-									<input type="text" id="filter2" placeholder="{{'FilterSkills'|translate}}" autocomplete="off" ng-model="skillFilter">
-									<md-tooltip>{{'FilterSkills'|translate}}</md-tooltip>
-								</i>
-							</label>
+								<label for="filter2" class="input-icon">
+									<i class="mdi mdi-filter-outline">
+										<input type="text" id="filter2" placeholder="{{'FilterSkills'|translate}}" autocomplete="off" ng-model="skillFilter">
+										<md-tooltip>{{'FilterSkills'|translate}}</md-tooltip>
+									</i>
+								</label>
 
-							<ul class="wfm-list" style="width: 100%" id="available_skills_list">
-								<li ng-repeat="skill in vm.skills | filter:skillFilter" ng-click="vm.selectSkill(skill)">
-									<i ng-class="vm.getSkillIcon(skill)"></i>
-									<span class="list-item-container" style="margin-left: 0">
-										{{skill.Name}}
-									</span>
-									<span ng-cloak ng-show="vm.skillIsSelected(skill)" class="list-dot">
-										<b class="mdi mdi-check list-mark"></b>
-									</span>
-								</li>
-							</ul>
+								<ul class="wfm-list" style="width: 100%" id="available_skills_list">
+									<li ng-repeat="skill in vm.skills | filter:skillFilter" ng-click="vm.selectSkill(skill)">
+										<i ng-class="vm.getSkillIcon(skill)"></i>
+										<span class="list-item-container" style="margin-left: 0">
+											{{skill.Name}}
+										</span>
+										<span ng-cloak ng-show="vm.skillIsSelected(skill)" class="list-dot">
+											<b class="mdi mdi-check list-mark"></b>
+										</span>
+									</li>
+								</ul>
 
+							</div>
 						</div>
 					</div>
-				</div>
-				<div class="con-flex x2">
-					<h2><strong>{{vm.skillGroups[vm.selectedGroupIndex].Name}}</strong></h2>
-					<p ng-cloak class="animate-show" ng-show="vm.skillGroups[vm.selectedGroupIndex].Skills.length > 0">{{'IncludedSkills'|translate}}:</p>
-					<span>
-						<i class="mdi mdi-alert" ng-if="vm.skillGroups[vm.selectedGroupIndex].Name.length <= 0 || vm.skillGroups[vm.selectedGroupIndex].Skills.length <= 0"></i>
-						<span ng-cloak class="animate-show" ng-show="vm.skillGroups[vm.selectedGroupIndex].Name.length <= 0">{{'NameRequired'|translate}}.</span>
-						<span ng-cloak class="animate-show" ng-show="vm.skillGroups[vm.selectedGroupIndex].Skills.length <= 0">{{'YouHaveToSelectAtLeastOneSkill'|translate}}</span>
-					</span>
+					<div class="con-flex x2">
+						<h2><strong>{{vm.skillGroups[vm.selectedGroupIndex].Name}}</strong></h2>
+						<p ng-cloak class="animate-show" ng-show="vm.skillGroups[vm.selectedGroupIndex].Skills.length > 0">{{'IncludedSkills'|translate}}:</p>
+						<span>
+							<i class="mdi mdi-alert" ng-if="vm.skillGroups[vm.selectedGroupIndex].Name.length <= 0 || vm.skillGroups[vm.selectedGroupIndex].Skills.length <= 0"></i>
+							<span ng-cloak class="animate-show" ng-show="vm.skillGroups[vm.selectedGroupIndex].Name.length <= 0">{{'NameRequired'|translate}}.</span>
+							<span ng-cloak class="animate-show" ng-show="vm.skillGroups[vm.selectedGroupIndex].Skills.length <= 0">{{'YouHaveToSelectAtLeastOneSkill'|translate}}</span>
+						</span>
 
-					<div class="con-row">
-						<div class="con-flex">
-							<div class="wfm-chip-wrap" ng-repeat="skill in vm.skillGroups[vm.selectedGroupIndex].Skills | filter:areaFilter as filtered" ng-click="vm.selectGroupSkill(skill)"
-							ng-hide="(selectedFilter==true && !!vm.groupSkillIsSelected(skill)) || (supportedFilter==false && !skill.DoDisplayData)">
-							<span class="wfm-chip">
-								<span class="chip-handle chip-warning" ng-if="!skill.DoDisplayData && !vm.groupSkillIsSelected(skill)">
-									<i ng-class="vm.getSkillIcon(skill)"></i>
+						<div class="con-row">
+							<div class="con-flex">
+								<div class="wfm-chip-wrap" ng-repeat="skill in vm.skillGroups[vm.selectedGroupIndex].Skills | filter:areaFilter as filtered" ng-click="vm.selectGroupSkill(skill)"
+								ng-hide="(selectedFilter==true && !!vm.groupSkillIsSelected(skill)) || (supportedFilter==false && !skill.DoDisplayData)">
+								<span class="wfm-chip">
+									<span class="chip-handle chip-warning" ng-if="!skill.DoDisplayData && !vm.groupSkillIsSelected(skill)">
+										<i ng-class="vm.getSkillIcon(skill)"></i>
+									</span>
+									<span class="chip-handle" ng-if="skill.DoDisplayData && !vm.groupSkillIsSelected(skill)">
+										<i ng-class="vm.getSkillIcon(skill)"></i>
+									</span>
+									<span class="chip-handle chip-success" ng-if="vm.groupSkillIsSelected(skill)">
+										<i class="mdi mdi-check"></i>
+									</span>
+									<span class="chip-text skill-area-list">
+										{{skill.Name}}
+									</span>
+									<md-tooltip>
+										<span ng-if="skill.DoDisplayData && skill.IsMultisiteSkill">{{skill.SkillType | translate}} - {{'MultisiteSkill' | translate}}</span>
+										<span ng-if="skill.DoDisplayData && !skill.IsMultisiteSkill">{{skill.SkillType | translate}}</span>
+										<span ng-if="!skill.DoDisplayData">{{'UnsupportedSkill' | translate}}</span>
+									</md-tooltip>
 								</span>
-								<span class="chip-handle" ng-if="skill.DoDisplayData && !vm.groupSkillIsSelected(skill)">
-									<i ng-class="vm.getSkillIcon(skill)"></i>
-								</span>
-								<span class="chip-handle chip-success" ng-if="vm.groupSkillIsSelected(skill)">
-									<i class="mdi mdi-check"></i>
-								</span>
-								<span class="chip-text skill-area-list">
-									{{skill.Name}}
-								</span>
-								<md-tooltip>
-									<span ng-if="skill.DoDisplayData && skill.IsMultisiteSkill">{{skill.SkillType | translate}} - {{'MultisiteSkill' | translate}}</span>
-									<span ng-if="skill.DoDisplayData && !skill.IsMultisiteSkill">{{skill.SkillType | translate}}</span>
-									<span ng-if="!skill.DoDisplayData">{{'UnsupportedSkill' | translate}}</span>
-								</md-tooltip>
-							</span>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-</div>
 </form>
 
 <!-- modals -->
