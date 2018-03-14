@@ -43,11 +43,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.People
 		{
 			Browser.Interactions.AssertJavascriptResultContains(@"
 				return Array.from(
-					document.querySelectorAll('[data-test-search] [data-test-person] [data-test-person-name]'))
+					document.querySelectorAll('[data-test-search] [data-test-person] [data-test-person-firstname]'))
 				.findIndex(p => p.textContent.includes('" + name + "')) !== -1", "True");
 			Browser.Interactions.Javascript(@"
 				Array.from(
-					document.querySelectorAll('[data-test-search] [data-test-person] [data-test-person-name]'))
+					document.querySelectorAll('[data-test-search] [data-test-person] [data-test-person-firstname]'))
 				.forEach(p => {if(p.textContent.includes('" + name+"')) p.click()})");
 		}
 
