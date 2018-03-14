@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -52,9 +54,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 
 				_eventPublisher.Publish(new PreferenceChangedEvent
 				{
-					PreferenceDayId = preferenceDay.Id.GetValueOrDefault(),
 					PersonId = person.Id.GetValueOrDefault(),
-					RestrictionDate = preferenceDay.RestrictionDate.Date,
+					RestrictionDates = new List<DateTime> {preferenceDay.RestrictionDate.Date},
 					LogOnBusinessUnitId = @event.LogOnBusinessUnitId,
 					InitiatorId = @event.InitiatorId,
 					LogOnDatasource = @event.LogOnDatasource,

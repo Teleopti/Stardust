@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -73,9 +74,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 
 			Target.Handle(new PreferenceChangedEvent
 			{
-				PreferenceDayId = preferenceDay.Id.GetValueOrDefault(),
 				PersonId = person.Id.GetValueOrDefault(),
-				RestrictionDate = date1,
+				RestrictionDates = new List<DateTime> {date1},
 				ScenarioId = scenario.Id.GetValueOrDefault(),
 				LogOnBusinessUnitId = _businessUnitId
 			});
@@ -108,9 +108,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 
 			Target.Handle(new PreferenceChangedEvent
 			{
-				PreferenceDayId = preferenceDay.Id.GetValueOrDefault(),
 				PersonId = person.Id.GetValueOrDefault(),
-				RestrictionDate = date1,
+				RestrictionDates = new List<DateTime> {date1},
 				ScenarioId = scenario.Id.GetValueOrDefault(),
 				LogOnBusinessUnitId = _businessUnitId
 			});
@@ -138,9 +137,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 
 			Target.Handle(new PreferenceDeletedEvent
 			{
-				PreferenceDayId = Guid.NewGuid(),
 				PersonId = person.Id.GetValueOrDefault(),
-				RestrictionDate = date,
+				RestrictionDates = new List<DateTime> {date},
 				LogOnBusinessUnitId = _businessUnitId
 			});
 			AnalyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(0);
@@ -167,9 +165,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 
 			Target.Handle(new PreferenceChangedEvent
 			{
-				PreferenceDayId = preferenceDay.Id.GetValueOrDefault(),
 				PersonId = person.Id.GetValueOrDefault(),
-				RestrictionDate = date,
+				RestrictionDates = new List<DateTime> {date},
 				LogOnBusinessUnitId = _businessUnitId
 			});
 			AnalyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(1);
@@ -200,9 +197,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 
 			Target.Handle(new PreferenceChangedEvent
 			{
-				PreferenceDayId = preferenceDay.Id.GetValueOrDefault(),
 				PersonId = person.Id.GetValueOrDefault(),
-				RestrictionDate = new DateTime(2001, 1, 1),
+				RestrictionDates = new List<DateTime> {new DateTime(2001, 1, 1)},
 				LogOnBusinessUnitId = _businessUnitId
 			});
 			AnalyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(2);
@@ -221,9 +217,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 
 			Target.Handle(new PreferenceChangedEvent
 			{
-				PreferenceDayId = preferenceDay.Id.GetValueOrDefault(),
 				PersonId = person.Id.GetValueOrDefault(),
-				RestrictionDate = new DateTime(2001, 1, 1),
+				RestrictionDates = new List<DateTime> {new DateTime(2001, 1, 1)},
 				LogOnBusinessUnitId = _businessUnitId
 			});
 			AnalyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(1);
@@ -242,17 +237,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 
 			Target.Handle(new PreferenceChangedEvent
 			{
-				PreferenceDayId = preferenceDay.Id.GetValueOrDefault(),
 				PersonId = person.Id.GetValueOrDefault(),
-				RestrictionDate = new DateTime(2001, 1, 1),
+				RestrictionDates = new List<DateTime> {new DateTime(2001, 1, 1)},
 				LogOnBusinessUnitId = _businessUnitId
 			});
 			AnalyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(1);
 			Target.Handle(new PreferenceChangedEvent
 			{
-				PreferenceDayId = preferenceDay.Id.GetValueOrDefault(),
 				PersonId = person.Id.GetValueOrDefault(),
-				RestrictionDate = new DateTime(2001, 1, 1),
+				RestrictionDates = new List<DateTime> {new DateTime(2001, 1, 1)},
 				LogOnBusinessUnitId = _businessUnitId
 			});
 			AnalyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(1);
@@ -291,14 +284,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 
 			var preferenceDay = new PreferenceDay(person, new DateOnly(date), preferenceRestriction);
 			preferenceDay.WithId();
-			ScheduleStorage.Add(preferenceDay);
 			PreferenceDayRepository.Add(preferenceDay);
 
 			Target.Handle(new PreferenceChangedEvent
 			{
-				PreferenceDayId = preferenceDay.Id.GetValueOrDefault(),
 				PersonId = person.Id.GetValueOrDefault(),
-				RestrictionDate = new DateTime(2001, 1, 1),
+				RestrictionDates = new List<DateTime> {new DateTime(2001, 1, 1)},
 				LogOnBusinessUnitId = _businessUnitId
 			});
 
@@ -327,9 +318,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 
 			Target.Handle(new PreferenceChangedEvent
 			{
-				PreferenceDayId = preferenceDay.Id.GetValueOrDefault(),
 				PersonId = person.Id.GetValueOrDefault(),
-				RestrictionDate = new DateTime(2001, 1, 1),
+				RestrictionDates = new List<DateTime> {new DateTime(2001, 1, 1)},
 				LogOnBusinessUnitId = _businessUnitId
 			});
 			AnalyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(0);
@@ -365,7 +355,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 
 			var preferenceDay = new PreferenceDay(person, new DateOnly(date), preferenceRestriction);
 			preferenceDay.WithId();
-			ScheduleStorage.Add(preferenceDay);
 			PreferenceDayRepository.Add(preferenceDay);
 			return preferenceDay;
 		}

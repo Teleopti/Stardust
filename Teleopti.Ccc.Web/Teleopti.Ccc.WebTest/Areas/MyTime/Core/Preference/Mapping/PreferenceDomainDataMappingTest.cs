@@ -5,6 +5,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.WorkflowControl;
@@ -111,10 +112,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 				MustHave = false
 			}));
 
+			person.AddSchedulePeriod(new SchedulePeriod(DateOnly.Today.AddDays(-1), SchedulePeriodType.Day, 10000 ));
+
 			const int maxMustHave = 8;
 			var virtualSchedulePeriod = MockRepository.GenerateMock<IVirtualSchedulePeriod>();
 			virtualSchedulePeriod.Stub(x => x.MustHavePreference).Return(maxMustHave);
-			virtualScheduleProvider.Stub(x => x.VirtualSchedulePeriodForDate(DateOnly.Today)).Return(virtualSchedulePeriod);
+			virtualScheduleProvider.Stub(x => x.GetCurrentOrNextVirtualPeriodForDate(DateOnly.Today))
+				.Return(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(3)));
 
 			var result = target.Map(DateOnly.Today);
 			result.CurrentMustHave.Should().Be.EqualTo(1);

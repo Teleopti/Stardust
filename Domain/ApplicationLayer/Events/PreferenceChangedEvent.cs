@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 {
     public abstract class PreferenceEventBase : EventWithInfrastructureContext
     {
-        public Guid PreferenceDayId { get; set; }
-        public DateTime RestrictionDate { get; set; }
+        public List<DateTime> RestrictionDates { get; set; }
         public Guid PersonId { get; set; }
     }
 

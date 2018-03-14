@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<IPreferenceDay> Find(DateOnlyPeriod period, IEnumerable<IPerson> persons)
 		{
-			return _preferensDays;
+			return _preferensDays.Where(a => period.Contains(a.RestrictionDate) && persons.Contains(a.Person)).ToList();
 		}
 
 		public IList<IPreferenceDay> Find(DateOnly dateOnly, IPerson person)
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<IPreferenceDay> Find(DateOnlyPeriod period, IPerson person)
 		{
-			return _preferensDays;
+			return _preferensDays.Where(a => period.Contains(a.RestrictionDate) && a.Person == person).ToList();
 		}
 
 		public IList<IPreferenceDay> FindNewerThan(DateTime newerThan)
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IPreferenceDay Find(Guid preferenceId)
 		{
-			return _preferensDays.FirstOrDefault(a => a.Id == preferenceId);
+			return _preferensDays.Single(a => a.Id == preferenceId);
 		}
 	}
 }

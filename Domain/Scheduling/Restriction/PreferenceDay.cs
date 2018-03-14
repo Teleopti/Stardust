@@ -35,27 +35,24 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restriction
 				case DomainUpdateType.Delete:
 					AddEvent(new PreferenceDeletedEvent
 					{
-						PreferenceDayId = Id.GetValueOrDefault(),
 						PersonId = Person.Id.GetValueOrDefault(),
-						RestrictionDate = RestrictionDate.Date,
+						RestrictionDates = new List<DateTime> {RestrictionDate.Date},
 						Timestamp = ServiceLocatorForEntity.Now.UtcDateTime()
 					});
 					break;
 				case DomainUpdateType.Insert:
 					AddEvent(new PreferenceCreatedEvent
 					{
-						PreferenceDayId = Id.GetValueOrDefault(),
 						PersonId = Person.Id.GetValueOrDefault(),
-						RestrictionDate = RestrictionDate.Date,
+						RestrictionDates = new List<DateTime> {RestrictionDate.Date},
 						Timestamp = ServiceLocatorForEntity.Now.UtcDateTime()
 					});
 					break;
 				case DomainUpdateType.Update:
 					AddEvent(new PreferenceChangedEvent
 					{
-						PreferenceDayId = Id.GetValueOrDefault(),
 						PersonId = Person.Id.GetValueOrDefault(),
-						RestrictionDate = RestrictionDate.Date,
+						RestrictionDates = new List<DateTime> {RestrictionDate.Date},
 						Timestamp = ServiceLocatorForEntity.Now.UtcDateTime()
 					});
 					break;
