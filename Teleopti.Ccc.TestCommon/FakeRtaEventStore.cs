@@ -33,6 +33,10 @@ namespace Teleopti.Ccc.TestCommon
 			});
 		}
 
+		public void Remove(DateTime removeUntil)
+		{
+		}
+
 		public IEnumerable<IEvent> Load(Guid personId, DateTimePeriod period)
 		{
 			return _events

@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels
 	{
 		private readonly IHistoricalChangeReadModelPersister _historicalChangePersister;
 		private readonly IApprovedPeriodsPersister _approvedPeriodsPersister;
+		private readonly IRtaEventStore _eventStore;
 		private readonly INow _now;
 		private readonly int _keepDays;
 
@@ -36,11 +37,13 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels
 		public HistoricalChangeMaintainer(
 			IHistoricalChangeReadModelPersister historicalChangePersister,
 			IApprovedPeriodsPersister approvedPeriodsPersister,
+			IRtaEventStore eventStore,
 			INow now,
 			IConfigReader config)
 		{
 			_historicalChangePersister = historicalChangePersister;
 			_approvedPeriodsPersister = approvedPeriodsPersister;
+			_eventStore = eventStore;
 			_now = now;
 			_keepDays = keepDays(config);
 		}
@@ -50,6 +53,13 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels
 			var removeUntil = _now.UtcDateTime().Date.AddDays(_keepDays * -1);
 			purgeHistoricalChange(removeUntil);
 			purgeApprovedPeriods(removeUntil);
+			purgeEventStore(removeUntil);
+		}
+
+		[UnitOfWork]
+		protected virtual void purgeEventStore(DateTime removeUntil)
+		{
+			_eventStore.Remove(removeUntil);
 		}
 
 		[ReadModelUnitOfWork]

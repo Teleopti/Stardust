@@ -57,6 +57,15 @@ INSERT INTO [rta].[Events] (
 				.ExecuteUpdate();
 		}
 
+		public void Remove(DateTime until)
+		{
+			_unitOfWork.Current().Session()
+				.CreateSQLQuery(@"
+DELETE FROM [rta].[Events] WHERE EndTime < :ts")
+				.SetParameter("ts", until)
+				.ExecuteUpdate();
+		}
+
 		public IEnumerable<IEvent> Load(Guid personId, DateTimePeriod period) =>
 			load(
 				_unitOfWork.Current().Session()

@@ -8,6 +8,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay
 	public interface IRtaEventStore
 	{
 		void Add(IEvent @event);
+		void Remove(DateTime removeUntil);
 	}
 
 	public interface IRtaEventStoreReader
