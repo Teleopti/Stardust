@@ -88,7 +88,7 @@
 											<div class="con-flex">
 												<label for="editRole" class="input-icon">
 													<i class="mdi mdi-pencil">
-														<input type="text" id="edit-role-input" ng-model="newRoleName" required placeholder="New name">
+														<input type="text" id="edit-role-input" ng-model="newRoleName" required placeholder="{{'Name'|translate}}">
 														<md-tooltip>{{'Name' | translate}}</md-tooltip>
 													</i>
 												</label>
@@ -97,7 +97,7 @@
 									</div>
 									<div class="modal-actions">
 										<aside>
-											<button class="wfm-btn wfm-btn-invis-primary" type="submit" id="edit-role-confirm" ng-click="editRoleModal=!editRoleModal" name="button">Edit</button>
+											<button class="wfm-btn wfm-btn-invis-primary" type="submit" id="edit-role-confirm" ng-click="editRoleModal=!editRoleModal" name="button">{{'Edit'|translate}}</button>
 										</aside>
 									</div>
 								</form>
@@ -108,12 +108,13 @@
 									<div class="modalbg">
 										<div class="dialog-mini material-depth-1">
 											<div class="modal-inner-content">
-												<h3>{{role.Name}}</h3> {{'AreYouSureYouWantToDelete' | translate}}
+												<h3>{{role.DescriptionText}}</h3>
+												{{'AreYouSureYouWantToDelete' | translate}}
 											</div>
 											<div class="modal-actions">
 												<aside>
-													<button ng-click="confirmDeleteRole = false;" class="wfm-btn wfm-btn-invis-default">{{'Close' | translate}}</button>
-													<button ng-click="confirmDeleteRole = false; vm.deleteRole(role)" ng-touch="confirmDeleteRole = false; vm.deleteRole(role)" id="delete-role" class="wfm-btn wfm-btn-invis-primary">{{'Delete' | translate}}</button>
+													<button ng-click="confirmDeleteRole = false; vm.deleteRole(role)" ng-touch="confirmDeleteRole = false; vm.deleteRole(role)" id="delete-role" class="wfm-btn wfm-btn-invis-default">{{'Yes' | translate}}</button>
+													<button ng-click="confirmDeleteRole = false;" class="wfm-btn wfm-btn-invis-primary">{{'No' | translate}}</button>
 												</aside>
 											</div>
 										</div>
