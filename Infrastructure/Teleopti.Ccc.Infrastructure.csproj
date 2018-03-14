@@ -196,7 +196,6 @@
     <Compile Include="ApplicationLayer\MultiEventPublisher.cs" />
     <Compile Include="ApplicationLayer\IHangfireEventClient.cs" />
     <Compile Include="ApplicationLayer\EventPopulatingPublisher.cs" />
-    <Compile Include="ApplicationLayer\MultiEventPublisherServiceBusAsSync.cs" />
     <Compile Include="ApplicationLayer\SyncInFatClientProcessEventPublisher.cs" />
     <Compile Include="ApplicationLayer\ScheduleProjectionReadOnly\ReadModelValidationResultPersister.cs" />
     <Compile Include="ApplicationLayer\ScheduleProjectionReadOnly\ScheduleProjectionReadOnlyActivityProvider.cs" />
