@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -19,10 +20,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		private readonly IPersonAbsenceRepository _personAbsenceRepository;
 		private readonly IEventPopulatingPublisher _eventPublisher;
 		private readonly IStudentAvailabilityDayRepository _studentAvailabilityDayRepository;
+		private readonly IPreferenceDayRepository _preferenceDayRepository;
 
 		public TerminatePersonHandler(IPersonRepository personRepository, IScenarioRepository scenarioRepository,
 			IPersonAssignmentRepository personAssignmentRepository, IPersonAbsenceRepository personAbsenceRepository,
-			IEventPopulatingPublisher eventPublisher, IStudentAvailabilityDayRepository studentAvailabilityDayRepository)
+			IEventPopulatingPublisher eventPublisher, IStudentAvailabilityDayRepository studentAvailabilityDayRepository,
+			IPreferenceDayRepository preferenceDayRepository)
 		{
 			_personRepository = personRepository;
 			_scenarioRepository = scenarioRepository;
@@ -30,6 +33,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			_personAbsenceRepository = personAbsenceRepository;
 			_eventPublisher = eventPublisher;
 			_studentAvailabilityDayRepository = studentAvailabilityDayRepository;
+			_preferenceDayRepository = preferenceDayRepository;
 		}
 
 		[ImpersonateSystem]
@@ -57,8 +61,36 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			if(availabilityEvent != null)
 				events.Add(availabilityEvent);
 
+			var preferenceEvent = createPreferenceDeletedEvent(period, person);
+			if(preferenceEvent != null)
+				events.Add(preferenceEvent);
+
 			if(events.Any())
 				_eventPublisher.Publish(events.ToArray());
+		}
+
+		private IEvent createPreferenceDeletedEvent(DateOnlyPeriod period, IPerson person)
+		{
+			var preferenceDays = _preferenceDayRepository.Find(period, person).ToList();
+
+			var dates = new List<DateTime>();
+
+			foreach (var preferenceDay in preferenceDays)
+			{
+				_preferenceDayRepository.Remove(preferenceDay);
+				dates.Add(preferenceDay.RestrictionDate.Date);
+			}
+
+			if (dates.Any())
+			{
+				return new PreferenceDeletedEvent
+				{
+					PersonId = person.Id.Value,
+					RestrictionDates = dates
+				};
+			}
+
+			return null;
 		}
 
 		private IEvent createAvailabilityChangeEvent(PersonTerminalDateChangedEvent @event, DateOnlyPeriod period,

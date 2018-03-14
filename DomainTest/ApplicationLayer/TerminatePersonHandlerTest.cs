@@ -32,6 +32,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public FakeEventPublisher Publisher;
 		public IBusinessUnitRepository BusinessUnitRepository;
 		public IStudentAvailabilityDayRepository StudentAvailabilityDayRepository;
+		public IPreferenceDayRepository PreferenceDayRepository;
 
 		private IBusinessUnit businessUnit;
 
@@ -374,11 +375,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			});
 
 			var studentAvailability = StudentAvailabilityDayRepository
-				.Find(new DateOnlyPeriod(new DateOnly(2018, 01, 01), new DateOnly(2018, 02, 01)), new List<IPerson> {person})
+				.Find(new DateOnlyPeriod(new DateOnly(2018, 01, 01), new DateOnly(2018, 02, 01)), new List<IPerson> { person })
 				.Single();
 			studentAvailability.RestrictionDate.Should().Be(new DateOnly(2018, 01, 25));
 		}
-
 
 		[Test]
 		public void ShouldPublishAvailabilityChangedEventOnValidPeriod()
@@ -422,7 +422,68 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				TerminationDate = new DateTime(2018, 01, 25)
 			});
 
-			 Publisher.PublishedEvents.OfType<AvailabilityChangedEvent>().Should().Be.Empty();
+			Publisher.PublishedEvents.OfType<AvailabilityChangedEvent>().Should().Be.Empty();
+		}
+
+		[Test]
+		public void ShouldRemovePreferenceDayAfterLeavingDate()
+		{
+			BusinessUnitRepository.Add(businessUnit);
+			var person = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(PersonFactory.CreatePerson("A", "B").WithId(),
+				new DateOnly(2001, 1, 1));
+			PersonRepository.Add(person);
+
+			var activity = ActivityFactory.CreateActivity("at");
+
+			var preferenceDays = new List<IPreferenceDay>
+			{
+				PreferenceDayFactory.CreatePreferenceDay(new DateOnly(2018, 3, 15), person, activity),
+				PreferenceDayFactory.CreatePreferenceDay(new DateOnly(2018, 3, 16), person, activity),
+			};
+
+			PreferenceDayRepository.AddRange(preferenceDays);
+
+			Target.Handle(new PersonTerminalDateChangedEvent
+			{
+				LogOnBusinessUnitId = businessUnit.Id.Value,
+				PersonId = person.Id.Value,
+				TerminationDate = new DateTime(2018, 03, 15)
+			});
+
+			var preferenceDay = PreferenceDayRepository
+				.Find(new DateOnlyPeriod(new DateOnly(2018, 03, 01), new DateOnly(2018, 09, 01)),
+					new List<IPerson> {person})
+				.Single();
+			preferenceDay.RestrictionDate.Should().Be(new DateOnly(2018, 3, 15));
+		}
+
+		[Test]
+		public void ShouldPublishPreferenceDeletedEventOnValidPeriod()
+		{
+			BusinessUnitRepository.Add(businessUnit);
+			var person = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(PersonFactory.CreatePerson("A", "B").WithId(),
+				new DateOnly(2001, 1, 1));
+			PersonRepository.Add(person);
+
+			var activity = ActivityFactory.CreateActivity("at");
+			var preferenceDays = new List<IPreferenceDay>
+			{
+				PreferenceDayFactory.CreatePreferenceDay(new DateOnly(2018, 3, 15), person, activity),
+				PreferenceDayFactory.CreatePreferenceDay(new DateOnly(2018, 3, 16), person, activity),
+			};
+
+			PreferenceDayRepository.AddRange(preferenceDays);
+
+			Target.Handle(new PersonTerminalDateChangedEvent
+			{
+				LogOnBusinessUnitId = businessUnit.Id.Value,
+				PersonId = person.Id.Value,
+				TerminationDate = new DateTime(2018, 03, 15)
+			});
+
+			var published = Publisher.PublishedEvents.OfType<PreferenceDeletedEvent>().Single();
+			published.RestrictionDates.Single().Should().Be(new DateTime(2018, 03, 16));
+			published.PersonId.Should().Be(person.Id.Value);
 		}
 	}
 }

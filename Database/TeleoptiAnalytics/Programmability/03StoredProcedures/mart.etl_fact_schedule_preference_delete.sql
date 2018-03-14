@@ -6,20 +6,14 @@ GO
 -- Author:		Pontus
 -- Description:	Delete fact schedule preference data
 -- =============================================
--- exec [mart].[etl_fact_schedule_preference_delete] 260, 4809, 7
+-- exec [mart].[etl_fact_schedule_preference_delete] '5B1F11F3-483B-4C2C-BF59-A47900B0DC01', 4809, 7
 CREATE PROCEDURE [mart].[etl_fact_schedule_preference_delete]
-	@person_id int,
+	@person_code uniqueidentifier,
 	@date_id int,
 	@scenario_id int
 AS
 BEGIN
-	DECLARE @person_code uniqueidentifier
 	CREATE TABLE #person_ids(person_id int)
-
-	SELECT 
-		@person_code = person_code 
-	FROM mart.dim_person 
-	WHERE person_id = @person_id
 
 	INSERT INTO #person_ids
 		SELECT person_id

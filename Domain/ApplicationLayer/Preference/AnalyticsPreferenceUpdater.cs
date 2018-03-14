@@ -91,9 +91,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 			foreach (var restrictionDate in @event.RestrictionDates)
 			{
 				var analyticsDate = getAnalyticsDate(restrictionDate);
-				var analyticsPersonPeriod = getAnalyticsPersonPeriod(restrictionDate, person);
-
-				_analyticsPreferenceRepository.DeletePreferences(analyticsDate.DateId, analyticsPersonPeriod.PersonId);
+				_analyticsPreferenceRepository.DeletePreferences(analyticsDate.DateId, @event.PersonId);
 			}
 		}
 
@@ -119,9 +117,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 			commonHandle(@event.RestrictionDates, @event.PersonId, @event.ScenarioId);
 		}
 
-		private void commonHandle(List<DateTime> restrictionDates, Guid personId, Guid scenarioId)
+		private void commonHandle(List<DateTime> restrictionDates, Guid personCode, Guid scenarioId)
 		{
-			var person = _personRepository.Get(personId);
+			var person = _personRepository.Get(personCode);
 			if (person == null)
 			{
 				logger.Warn("Could not find person in Application database, aborting.");
@@ -150,7 +148,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 					if (scenarios.IsEmpty())
 					{
 						logger.Debug(
-							$"Nothing to do with person id {personId} and \"{restrictionDate:yyyy-MM-dd}\" because scenario {scenarioId} was not found as reportable.");
+							$"Nothing to do with person id {personCode} and \"{restrictionDate:yyyy-MM-dd}\" because scenario {scenarioId} was not found as reportable.");
 						return;
 					}
 				}
@@ -197,12 +195,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 				// Delete
 				if (scenarioId == Guid.Empty)
 				{
-					_analyticsPreferenceRepository.DeletePreferences(dateId.DateId, analyticsPersonPeriod.PersonId);
+					_analyticsPreferenceRepository.DeletePreferences(dateId.DateId, personCode);
 				}
 				else
 				{
 					var analyticsScenario = getAnalyticsScenario(analyticsScenarios, scenarioId);
-					_analyticsPreferenceRepository.DeletePreferences(dateId.DateId, analyticsPersonPeriod.PersonId,
+					_analyticsPreferenceRepository.DeletePreferences(dateId.DateId, personCode,
 						analyticsScenario.ScenarioId);
 				}
 

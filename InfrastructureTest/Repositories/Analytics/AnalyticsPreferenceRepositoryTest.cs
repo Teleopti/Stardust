@@ -25,7 +25,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		private ExistingDatasources _datasource;
 		private const int businessUnitId = 12;
 		private AnalyticsDataFactory analyticsDataFactory;
-		
+		private Guid personCode1, personCode2;
+
 
 		[SetUp]
 		public void Setup()
@@ -37,10 +38,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 
 		private void commonSetup()
 		{
-			analyticsDataFactory.Setup(new Person(10, Guid.NewGuid(), Guid.NewGuid(), "Ashley", "Andeen", new DateTime(2010, 1, 1),
+			personCode1 = Guid.NewGuid();
+			personCode2 = Guid.NewGuid();
+
+			analyticsDataFactory.Setup(new Person(10, personCode1, Guid.NewGuid(), "Ashley", "Andeen", new DateTime(2010, 1, 1),
 							AnalyticsDate.Eternity.DateDate, 0, -2, businessUnitId, Guid.NewGuid(), _datasource, false, _timeZones.UtcTimeZoneId));
 
-			analyticsDataFactory.Setup(new Person(20, Guid.NewGuid(), Guid.NewGuid(), "Teleopti", "Demo", new DateTime(2010, 1, 1),
+			analyticsDataFactory.Setup(new Person(20, personCode2, Guid.NewGuid(), "Teleopti", "Demo", new DateTime(2010, 1, 1),
 							AnalyticsDate.Eternity.DateDate, 0, -2, businessUnitId, Guid.NewGuid(), _datasource, false, _timeZones.UtcTimeZoneId));
 
 			setupForFactSchedulePreference();
@@ -169,7 +173,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 
 			WithAnalyticsUnitOfWork.Do(() =>
 			{
-				Target.DeletePreferences(1, 10);
+				Target.DeletePreferences(1, personCode1);
 			});
 
 			WithAnalyticsUnitOfWork.Do(() =>

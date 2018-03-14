@@ -59,15 +59,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			query.ExecuteUpdate();
 		}
 
-		public void DeletePreferences(int dateId, int personId, int? scenarioId = null)
+		public void DeletePreferences(int dateId, Guid personCode, int? scenarioId = null)
 		{
 			var query = _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
 				$@"exec mart.[etl_fact_schedule_preference_delete]
 					   @date_id=:{nameof(dateId)}
-					  ,@person_id=:{nameof(personId)}
+					  ,@person_code=:{nameof(personCode)}
 					  ,@scenario_id=:{nameof(scenarioId)}")
 				.SetInt32(nameof(dateId), dateId)
-				.SetInt32(nameof(personId), personId);
+				.SetGuid(nameof(personCode), personCode);
 
 			if (scenarioId.HasValue)
 			{
