@@ -60,9 +60,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 			setup();
 
 			var date1 = new DateTime(2001, 1, 1);
-			IPerson person;
-			IScenario scenario;
-			var preferenceDay = setupValidPreferenceDay(date1, out person, out scenario);
+			setupValidPreferenceDay(date1, out var person, out var scenario);
 
 			AnalyticsPreferenceRepository.AddPreference(new AnalyticsFactSchedulePreference
 			{
@@ -85,26 +83,27 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 		[Test]
 		public void ShouldHandleEventForNotNewScenario()
 		{
+			const int personId = 0;
 			setup();
 
 			var date1 = new DateTime(2001, 1, 1);
-			IPerson person;
-			IScenario scenario;
-			var preferenceDay = setupValidPreferenceDay(date1, out person, out scenario);
+			setupValidPreferenceDay(date1, out var person, out var scenario);
+			((FakeAnalyticsPreferenceRepository)AnalyticsPreferenceRepository).PersonIdAndCode[personId] =
+				person.Id.GetValueOrDefault();
 
 			AnalyticsPreferenceRepository.AddPreference(new AnalyticsFactSchedulePreference
 			{
-				PersonId = 0,
+				PersonId = personId,
 				DateId = AnalyticsDateRepository.Date(date1).DateId,
 				ScenarioId = 123 // Not matched
 			});
 			AnalyticsPreferenceRepository.AddPreference(new AnalyticsFactSchedulePreference
 			{
-				PersonId = 0,
+				PersonId = personId,
 				DateId = AnalyticsDateRepository.Date(date1).DateId,
 				ScenarioId = 0 // Matched
 			});
-			AnalyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(2);
+			AnalyticsPreferenceRepository.PreferencesForPerson(personId).Count.Should().Be.EqualTo(2);
 
 			Target.Handle(new PreferenceChangedEvent
 			{
@@ -119,21 +118,24 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 		[Test]
 		public void ShouldHandleDeletedPreferenceDay()
 		{
+			const int personId = 0;
 			setup();
-
 			var date = new DateTime(2001, 1, 1);
 			var person = PersonFactory.CreatePersonWithGuid("firstName", "lastName");
+			((FakeAnalyticsPreferenceRepository)AnalyticsPreferenceRepository).PersonIdAndCode[personId] =
+				person.Id.GetValueOrDefault();
+
 			var personPeriodCode = Guid.NewGuid();
 			person.AddPersonPeriod(newTestPersonPeriod(date, personPeriodCode));
 			PersonPeriodRepository.AddOrUpdatePersonPeriod(newTestAnalyticsPersonPeriod(person, personPeriodCode));
 			PersonRepository.Add(person);
 			AnalyticsPreferenceRepository.AddPreference(new AnalyticsFactSchedulePreference
 			{
-				PersonId = 0,
+				PersonId = personId,
 				DateId = AnalyticsDateRepository.Date(date).DateId
 			});
 
-			AnalyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(1);
+			AnalyticsPreferenceRepository.PreferencesForPerson(personId).Count.Should().Be.EqualTo(1);
 
 			Target.Handle(new PreferenceDeletedEvent
 			{
@@ -154,9 +156,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 			{
 				ShiftCategory = ShiftCategoryFactory.CreateShiftCategory("hej")
 			};
-			IPerson person;
-			IScenario scenario;
-			var preferenceDay = setupPreferenceDay(date, preferenceRestriction, out person, out scenario);
+
+			setupPreferenceDay(date, preferenceRestriction, out var person, out var scenario);
 
 			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
 				scenario, ActivityFactory.CreateActivity("sdfsdf"), new DateTimePeriod(2001, 1, 1, 2002, 1, 1), preferenceRestriction.ShiftCategory);
@@ -178,20 +179,21 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 		public void ShouldHandleDeleteAndAddPreference()
 		{
 			setup();
+			setupValidPreferenceDay(new DateTime(2001, 1, 1), out var person, out _);
+			((FakeAnalyticsPreferenceRepository)AnalyticsPreferenceRepository).PersonIdAndCode[0] =
+				person.Id.GetValueOrDefault();
 
-			IPerson person;
-			IScenario scenario;
-			var preferenceDay = setupValidPreferenceDay(new DateTime(2001, 1, 1), out person, out scenario);
-
+			var analyticsDate = AnalyticsDateRepository.Date(new DateTime(2001, 1, 1));
 			AnalyticsPreferenceRepository.AddPreference(new AnalyticsFactSchedulePreference
 			{
 				PersonId = 0,
-				DateId = AnalyticsDateRepository.Date(new DateTime(2001, 1, 1)).DateId
+				DateId = analyticsDate.DateId
 			});
+			analyticsDate = AnalyticsDateRepository.Date(new DateTime(2001, 1, 2));
 			AnalyticsPreferenceRepository.AddPreference(new AnalyticsFactSchedulePreference
 			{
 				PersonId = 0,
-				DateId = AnalyticsDateRepository.Date(new DateTime(2001, 1, 2)).DateId
+				DateId = analyticsDate.DateId
 			});
 			AnalyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(2);
 
@@ -201,19 +203,21 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 				RestrictionDates = new List<DateTime> {new DateTime(2001, 1, 1)},
 				LogOnBusinessUnitId = _businessUnitId
 			});
+
 			AnalyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(2);
-			AnalyticsPreferenceRepository.PreferencesForPerson(0).First(a => a.DateId == AnalyticsDateRepository.Date(new DateTime(2001, 1, 1)).DateId).PreferencesFulfilled.Should().Be.EqualTo(0);
-			AnalyticsPreferenceRepository.PreferencesForPerson(0).First(a => a.DateId == AnalyticsDateRepository.Date(new DateTime(2001, 1, 1)).DateId).PreferencesUnfulfilled.Should().Be.EqualTo(1);
+			AnalyticsPreferenceRepository.PreferencesForPerson(0)
+				.First(a => a.DateId == AnalyticsDateRepository.Date(new DateTime(2001, 1, 1)).DateId).PreferencesFulfilled.Should()
+				.Be.EqualTo(0);
+			AnalyticsPreferenceRepository.PreferencesForPerson(0)
+				.First(a => a.DateId == AnalyticsDateRepository.Date(new DateTime(2001, 1, 1)).DateId).PreferencesUnfulfilled
+				.Should().Be.EqualTo(1);
 		}
 
 		[Test]
 		public void ShouldHandleAndAddPreference()
 		{
 			setup();
-
-			IPerson person;
-			IScenario scenario;
-			var preferenceDay = setupValidPreferenceDay(new DateTime(2001, 1, 1), out person, out scenario);
+			setupValidPreferenceDay(new DateTime(2001, 1, 1), out var person, out _);
 
 			Target.Handle(new PreferenceChangedEvent
 			{
@@ -229,11 +233,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 		[Test]
 		public void ShouldHandleSameEventTwicePreference()
 		{
+			const int personId = 0;
+
 			setup();
 
-			IPerson person;
-			IScenario scenario;
-			var preferenceDay = setupValidPreferenceDay(new DateTime(2001, 1, 1), out person, out scenario);
+			setupValidPreferenceDay(new DateTime(2001, 1, 1), out var person, out _);
+			((FakeAnalyticsPreferenceRepository)AnalyticsPreferenceRepository).PersonIdAndCode[personId] =
+				person.Id.GetValueOrDefault();
 
 			Target.Handle(new PreferenceChangedEvent
 			{
@@ -248,9 +254,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 				RestrictionDates = new List<DateTime> {new DateTime(2001, 1, 1)},
 				LogOnBusinessUnitId = _businessUnitId
 			});
-			AnalyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(1);
-			AnalyticsPreferenceRepository.PreferencesForPerson(0).First().PreferencesFulfilled.Should().Be.EqualTo(0);
-			AnalyticsPreferenceRepository.PreferencesForPerson(0).First().PreferencesUnfulfilled.Should().Be.EqualTo(1);
+
+			AnalyticsPreferenceRepository.PreferencesForPerson(personId).Count.Should().Be.EqualTo(1);
+			AnalyticsPreferenceRepository.PreferencesForPerson(personId).First().PreferencesFulfilled.Should().Be.EqualTo(0);
+			AnalyticsPreferenceRepository.PreferencesForPerson(personId).First().PreferencesUnfulfilled.Should().Be.EqualTo(1);
 		}
 
 		[Test]
@@ -312,9 +319,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 		public void ShouldHandleEventWithInvalidRestriction()
 		{
 			setup();
-
-			IPerson person;
-			var preferenceDay = setupInvalidPreferenceDay(new DateTime(2001, 1, 1), out person);
+			setupInvalidPreferenceDay(new DateTime(2001, 1, 1), out var person);
 
 			Target.Handle(new PreferenceChangedEvent
 			{
@@ -370,8 +375,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 
 		private PreferenceDay setupInvalidPreferenceDay(DateTime date, out IPerson person)
 		{
-			IScenario scenario;
-			return setupPreferenceDay(date, new PreferenceRestriction(), out person, out scenario);
+			return setupPreferenceDay(date, new PreferenceRestriction(), out person, out _);
 		}
 
 		private static AnalyticsPersonPeriod newTestAnalyticsPersonPeriod(IPerson person, Guid personPeriodCode)

@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	public class FakeAnalyticsPreferenceRepository : IAnalyticsPreferenceRepository
 	{
 		private readonly List<AnalyticsFactSchedulePreference> fakeAnalyticsFactSchedulePreferences;
-		public readonly Dictionary<int, Guid> personIdAndCode = new Dictionary<int, Guid>();
+		public readonly Dictionary<int, Guid> PersonIdAndCode = new Dictionary<int, Guid>();
 		public FakeAnalyticsPreferenceRepository()
 		{
 			fakeAnalyticsFactSchedulePreferences = new List<AnalyticsFactSchedulePreference>();
@@ -17,10 +17,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void AddPreference(AnalyticsFactSchedulePreference analyticsFactSchedulePreference)
 		{
-			if (!personIdAndCode.TryGetValue(analyticsFactSchedulePreference.PersonId, out var personCode))
+			if (!PersonIdAndCode.TryGetValue(analyticsFactSchedulePreference.PersonId, out var personCode))
 			{
 				personCode = Guid.NewGuid();
-				personIdAndCode[analyticsFactSchedulePreference.PersonId] = personCode;
+				PersonIdAndCode[analyticsFactSchedulePreference.PersonId] = personCode;
 			}
 
 			fakeAnalyticsFactSchedulePreferences.Add(analyticsFactSchedulePreference);
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void DeletePreferences(int dateId, Guid personCode, int? scenarioId = null)
 		{
-			var person = personIdAndCode.Where(p => p.Value == personCode).ToList();
+			var person = PersonIdAndCode.Where(p => p.Value == personCode).ToList();
 			if (!person.Any()) return;
 
 			var personIds = person.Select(p => p.Key);
