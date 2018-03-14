@@ -293,7 +293,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 
 		private bool checkStatus(ShiftTradeStatus shiftTradeStatus, ShiftTradeRequestValidationResult validationResult)
 		{
-			return shiftTradeStatus == ShiftTradeStatus.OkByMe && !validationResult.ShouldBeDenied;
+			return (shiftTradeStatus == ShiftTradeStatus.OkByMe || shiftTradeStatus == ShiftTradeStatus.OkByBothParts) && !validationResult.ShouldBeDenied;
 		}
 
 		private IPerson loadPersonAcceptingPerson(AcceptShiftTradeEvent @event)

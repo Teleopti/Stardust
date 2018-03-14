@@ -249,6 +249,68 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			Assert.IsTrue(result1.PersonRequest.IsPending);
 		}
 
+		[Test]
+		public void ShouldApprovePendingRequestAfterNightlyRuleIsSatisfied()
+		{
+			var workflowControlSet = ShiftTradeTestHelper.CreateWorkFlowControlSet(true);
+
+			setPermissions();
+
+			var personTo = PersonFactory.CreatePerson("To").WithId();
+			var personFrom = PersonFactory.CreatePerson("With").WithId();
+			_personRepository.Add(personTo);
+			_personRepository.Add(personFrom);
+
+			var dateTimePeriod = new DateTimePeriod(DateTime.Today.AddHours(8).ToUniversalTime(),
+				DateTime.Today.AddHours(9).ToUniversalTime());
+
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(dateTimePeriod.StartDateTime.Date));
+			personTo.AddPersonPeriod(personPeriod);
+			personFrom.AddPersonPeriod(personPeriod);
+
+			var contract = ContractFactory.CreateContract("test contract");
+			personTo.PersonPeriodCollection.First().PersonContract.Contract = contract;
+			personFrom.PersonPeriodCollection.First().PersonContract.Contract = contract;
+
+			var activityPersonTo = new Activity("Shift_PersonTo").WithId();
+			var activityPersonFrom = new Activity("Shift_PersonFrom").WithId();
+
+			_shiftTradeTestHelper.AddPersonAssignment(personTo, dateTimePeriod, activityPersonTo);
+			_shiftTradeTestHelper.AddPersonAssignment(personFrom, dateTimePeriod, activityPersonFrom);
+
+			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] {personTo, personFrom},
+				null, new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), _currentScenario.Current());
+
+			personTo.WorkflowControlSet = workflowControlSet;
+			personFrom.WorkflowControlSet = workflowControlSet;
+
+			var businessRuleProvider = getConfigurableBusinessRuleProvider(
+				new ShiftTradeBusinessRuleConfig
+				{
+					BusinessRuleType = typeof(NightlyRestRule).FullName,
+					Enabled = true,
+					HandleOptionOnFailed = RequestHandleOption.Pending
+				}
+			);
+
+			var personRequest = _shiftTradeTestHelper.PrepareAndGetPersonRequest(personFrom, personTo, DateOnly.Today);
+			personRequest.ForcePending();
+			(personRequest.Request as IShiftTradeRequest)?.SetShiftTradeStatus(ShiftTradeStatus.OkByBothParts,
+				new PersonRequestCheckAuthorization());
+
+			_shiftTradeTestHelper.SetScheduleDictionary(scheduleDictionary);
+
+			_shiftTradeTestHelper.HandleRequest(
+				_shiftTradeTestHelper.GetAcceptShiftTradeEvent(personTo, personRequest.Id.GetValueOrDefault()),
+				businessRuleProvider);
+
+			Assert.IsTrue(personRequest.IsApproved);
+			Assert.IsTrue(scheduleDictionary[personTo].ScheduledDay(DateOnly.Today).PersonAssignment().ShiftLayers.Single()
+							  .Payload.Id == activityPersonFrom.Id);
+			Assert.IsTrue(scheduleDictionary[personFrom].ScheduledDay(DateOnly.Today).PersonAssignment().ShiftLayers.Single()
+							  .Payload.Id == activityPersonTo.Id);
+		}
+
 		private IScheduleDay createScheduleDay(DateOnly date, DateTimePeriod period, IPerson agent, IActivity activity)
 		{
 			var scheduleDay = ScheduleDayFactory.Create(date, agent, _currentScenario.Current());
