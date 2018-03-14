@@ -373,6 +373,7 @@
     <Compile Include="ResourcePlanner\Hints\BlockSchedulingPreviousShiftNotMatchingEachOtherHintTest.cs" />
     <Compile Include="ResourcePlanner\Hints\ScheduleStartOnWrongDateHintTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationCallbackDesktopTest.cs" />
+    <Compile Include="SchedulingScenarios\DayOffOptimization\SchedulingAndDayOffOptimizationStardustResultTest.cs" />
     <Compile Include="SchedulingScenarios\ExtraPreferencesFactory.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayCombinationDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationBlockTest.cs" />
