@@ -49,14 +49,12 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay
 
 		private static IEnumerable<HistoricalChangeModel> buildChanges(IEnumerable<IEvent> changes) =>
 			changes
-				.OfType<PersonStateChangedEvent>()
+				.Where(e => e is PersonStateChangedEvent || e is PersonRuleChangedEvent)
+				.Select(x => (dynamic) x)
 				.Select(@event => new HistoricalChangeModel
 				{
-					PersonId = @event.PersonId,
-					BelongsToDate = @event.BelongsToDate,
 					Timestamp = @event.Timestamp,
 					StateName = @event.StateName,
-					StateGroupId = @event.StateGroupId,
 					ActivityName = @event.ActivityName,
 					ActivityColor = @event.ActivityColor,
 					RuleName = @event.RuleName,

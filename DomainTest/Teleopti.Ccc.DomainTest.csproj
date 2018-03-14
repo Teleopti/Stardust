@@ -297,6 +297,7 @@
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\AdherencesTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\ApprovedPeriodPercentageTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\ApprovedPeriodTest.cs" />
+    <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\ChangesTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\PercentageTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\RecordedAdherenceTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\ResolutionTest.cs" />

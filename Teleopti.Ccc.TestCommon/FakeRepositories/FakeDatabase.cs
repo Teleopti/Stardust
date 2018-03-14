@@ -1208,6 +1208,28 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			});
 			return this;
 		}
+		
+		public FakeDatabase WithHistoricalRuleChange(string time)
+		{
+			_publisher.Publish(new PersonRuleChangedEvent()
+			{
+				PersonId = _person.Id.Value,
+				BelongsToDate = time.Date(),
+				Timestamp = time.Utc(),
+				StateName = _stateGroup?.Name,
+				StateGroupId = _stateGroup?.Id.Value,
+				ActivityName = _activity?.Name,
+				ActivityColor = _activity?.DisplayColor.ToArgb(),
+				RuleName = _rule?.Description.Name,
+				RuleColor = _rule?.DisplayColor.ToArgb(),
+				Adherence = _rule == null ? null : (EventAdherence?) Enum.Parse(typeof(EventAdherence), _rule?.Adherence.ToString()),
+				AlarmColor = _rule?.AlarmColor.ToArgb(),
+				AlarmStartTime = time.Utc(),
+				IsAlarm = _rule?.IsAlarm ?? false,
+				StaffingEffect = _rule?.StaffingEffect
+			});
+			return this;
+		}
 
 
 		[UnitOfWork]
