@@ -17,8 +17,8 @@
             $ctrl.jobs = [];
             fetchJobs();
 
-            $ctrl.dateTimeFormat = locale.DATETIME_FORMATS.medium;
-
+			$ctrl.dateTimeFormat = locale.DATETIME_FORMATS.short;
+			$ctrl.dateFormat = locale.DATETIME_FORMATS.shortDate;
             var startDate = moment.utc().subtract(2, 'days').toDate();
             var endDate = moment.utc().toDate();
             $ctrl.dateRange = { startDate: startDate, endDate: endDate };

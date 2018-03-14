@@ -38,7 +38,7 @@
         </header>
         <div ng-repeat="job in $ctrl.jobs " class="calculation-job ">
             <div class="job ">
-                <span>{{job.startDate|date:'yyyyMMdd'}}--{{job.endDate|date:'yyyyMMdd'}}</span>
+				<span>{{job.startDate|date:$ctrl.dateFormat}}--{{job.endDate|date:$ctrl.dateFormat}}</span>
             </div>
             <div class="owner ">
                 <span>{{job.owner}}</span>
