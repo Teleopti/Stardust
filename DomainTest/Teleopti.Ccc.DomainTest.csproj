@@ -241,6 +241,7 @@
     <Compile Include="Common\PublishPersonNameChangedEventTest.cs" />
     <Compile Include="Common\PublishPersonTeamChangedEventTest.cs" />
     <Compile Include="Common\TimePassingSimulatorTest.cs" />
+    <Compile Include="Forecasting\SkillStaffPeriodFake.cs" />
     <Compile Include="Forecasting\Export\Web\ForecastExportModelCreatorTest.cs" />
     <Compile Include="Forecasting\Import\ForecastsFileContentProviderTest.cs" />
     <Compile Include="GroupPageCreator\OptionalColumnGroupPageTest.cs" />

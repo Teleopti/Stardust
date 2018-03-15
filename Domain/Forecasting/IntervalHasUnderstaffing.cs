@@ -16,21 +16,31 @@ namespace Teleopti.Ccc.Domain.Forecasting
             _skill = skill;
         }
 
-        public override bool IsSatisfiedBy(IValidatePeriod obj)
-        {
-			var skillStaffPeriod = obj as SkillStaffPeriod;
-	        if (skillStaffPeriod != null)
-	        {
-				requestLogger.Debug($"IsSatisfiedBy -- _skill: {_skill.Name}, _skill.Id: {_skill.Id}  obj.skill {((SkillStaffPeriod) obj).SkillDay.Skill.Id} -- {obj.DateTimePeriod} -- rel diff: {obj.RelativeDifference} -- threshold {_skill.StaffingThresholds.Understaffing.Value}");
-	        }
-
-			var skillStaffignInterval = obj as SkillStaffingInterval;
-	        if (skillStaffignInterval != null)
-	        {
-				requestLogger.Debug($"IsSatisfiedBy -- _skill: {_skill.Name}, _skill.Id: {_skill.Id}  obj.skill {((SkillStaffingInterval)obj).SkillId} -- {obj.DateTimePeriod} -- rel diff: {obj.RelativeDifference} -- threshold {_skill.StaffingThresholds.Understaffing.Value}");
-			}
-			return obj.RelativeDifference < _skill.StaffingThresholds.Understaffing.Value;
+        public override bool IsSatisfiedBy(IValidatePeriod validatePeriod)
+		{
+			logIfDebugIsEnabled(validatePeriod);
+			return validatePeriod.RelativeDifference < _skill.StaffingThresholds.Understaffing.Value;
         }
+
+		private void logIfDebugIsEnabled(IValidatePeriod validatePeriod)
+		{
+			if(validatePeriod.DateTimePeriod.StartDateTime == validatePeriod.DateTimePeriod.EndDateTime)
+				requestLogger.Debug(System.Environment.StackTrace);
+			
+			switch (validatePeriod)
+			{
+				case SkillStaffPeriod skillStaffPeriod:
+					requestLogger.Debug($"IsSatisfiedBy(SkillStaffPeriod) -- " +
+										$"_skill: {_skill.Name}, _skill.Id: {_skill.Id}  obj.skill {skillStaffPeriod.SkillDay.Skill.Id} -- " +
+										$"{validatePeriod.DateTimePeriod} -- rel diff: {validatePeriod.RelativeDifference} -- threshold {_skill.StaffingThresholds.Understaffing.Value}");
+					break;
+				case SkillStaffingInterval skillStaffingInterval:
+					requestLogger.Debug($"IsSatisfiedBy(SkillStaffingInterval) -- " +
+										$"_skill: {_skill.Name}, _skill.Id: {_skill.Id}  obj.skill {skillStaffingInterval.SkillId} -- " +
+										$"{validatePeriod.DateTimePeriod} -- rel diff: {validatePeriod.RelativeDifference} -- threshold {_skill.StaffingThresholds.Understaffing.Value}");
+					break;
+			}
+		}
 
     }
 }

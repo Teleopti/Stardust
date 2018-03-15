@@ -8,7 +8,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -318,10 +317,11 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			var result = _target.Validate(absenceRequest, new RequiredForHandlingAbsenceRequest(stateHolder, null, _resourceOptimizationHelper, null, null));
 			Assert.IsTrue(result.IsValid);
 		}
-
+		
+		
 		[Test]
 		public void ShouldValidateWhenUnderstaffingForMaxOneHundredPercent()
-		{
+		{	
 			var requestedDateTimePeriod1 = DateTimeFactory.CreateDateTimePeriod(new DateTime(2010, 02, 01, 0, 0, 0, DateTimeKind.Utc), 1);
 			var requestedDateTimePeriod2 = DateTimeFactory.CreateDateTimePeriod(new DateTime(2010, 02, 02, 0, 0, 0, DateTimeKind.Utc), 1);
 
@@ -619,7 +619,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			// to get it open
 			SkillDayFactory.CreateSkillDay(_skill, new DateOnly(requestedDateTimePeriod1.StartDateTime));
 
-			var intervals = new List<IValidatePeriod>
+			var intervals = new List<SkillStaffingInterval>
 			{
 				new SkillStaffingInterval
 				{

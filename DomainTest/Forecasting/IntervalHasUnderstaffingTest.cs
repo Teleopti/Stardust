@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
@@ -10,56 +9,38 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 	public class IntervalHasUnderstaffingTest
     {
         private IntervalHasUnderstaffing target;
-        private ISkill skill;
-        private MockRepository mocks;
-        private StaffingThresholds staffingThresholds;
-        private ISkillStaffPeriod skillStaffPeriodMocked;
+        private readonly Skill skill = new Skill("skill");
 
         [SetUp]
         public void Setup()
         {
-            mocks = new MockRepository();
-            skill = mocks.StrictMock<ISkill>();
-            staffingThresholds = new StaffingThresholds(new Percent(), new Percent(-0.2), new Percent());
+			skill.StaffingThresholds = new StaffingThresholds(new Percent(), new Percent(-0.2), new Percent());
             target = new IntervalHasUnderstaffing(skill);
-            skillStaffPeriodMocked = mocks.StrictMock<ISkillStaffPeriod>();
         }
 
         [Test]
         public void VerifyIsSatisfiedByCanReturnTrue()
         {
-            Expect.Call(skillStaffPeriodMocked.RelativeDifference).Return(-0.21);
-            Expect.Call(skill.StaffingThresholds).Return(staffingThresholds).Repeat.AtLeastOnce();
-            mocks.ReplayAll();
-            Assert.IsTrue(target.IsSatisfiedBy(skillStaffPeriodMocked));
+            Assert.IsTrue(target.IsSatisfiedBy(new SkillStaffPeriodFake(-0.21)));
         }
 
         [Test]
         public void VerifyIsSatisfiedByCanReturnFalse()
         {
-            Expect.Call(skillStaffPeriodMocked.RelativeDifference).Return(-0.19);
-            Expect.Call(skill.StaffingThresholds).Return(staffingThresholds).Repeat.AtLeastOnce();
-            mocks.ReplayAll();
-            Assert.IsFalse(target.IsSatisfiedBy(skillStaffPeriodMocked));
+			Assert.IsFalse(target.IsSatisfiedBy(new SkillStaffPeriodFake(-0.19)));
         }
 
 		[Test]
 		public void ShouldConsiderActualValueOfThresholdNotTrue()
 		{
-			Expect.Call(skillStaffPeriodMocked.RelativeDifference).Return(-0.2);
-			Expect.Call(skill.StaffingThresholds).Return(staffingThresholds).Repeat.AtLeastOnce();
-			mocks.ReplayAll();
-			Assert.IsFalse(target.IsSatisfiedBy(skillStaffPeriodMocked));
+			Assert.IsFalse(target.IsSatisfiedBy(new SkillStaffPeriodFake(-0.2)));
 		}
 
         [Test]
         public void VerifyIsSatisfiedByCanHandleNoValue()
         {
-            staffingThresholds = new StaffingThresholds(new Percent(), new Percent(), new Percent());
-            Expect.Call(skillStaffPeriodMocked.RelativeDifference).Return(-0.21);
-            Expect.Call(skill.StaffingThresholds).Return(staffingThresholds).Repeat.AtLeastOnce();
-            mocks.ReplayAll();
-            Assert.IsTrue(target.IsSatisfiedBy(skillStaffPeriodMocked));
+			skill.StaffingThresholds = new StaffingThresholds(new Percent(), new Percent(), new Percent());
+			Assert.IsTrue(target.IsSatisfiedBy(new SkillStaffPeriodFake(-0.21)));
         }
     }
 }

@@ -20,7 +20,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 {
 	public class RequestProcessor : IRequestProcessor
 	{
-		private static readonly ILog logger = LogManager.GetLogger(typeof(IntradayRequestProcessorOld));
+		private static readonly ILog logger = LogManager.GetLogger(nameof(RequestProcessor));
+		private static readonly ILog requestsLogger = LogManager.GetLogger("Teleopti.Requests");
 		private readonly ICommandDispatcher _commandDispatcher;
 		private readonly ICurrentScenario _currentScenario;
 		private readonly IScheduleStorage _scheduleStorage;
@@ -127,7 +128,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 						continue;
 					}
 
-					shiftPeriodList.Add(new DateTimePeriod(projection.OriginalProjectionPeriod.Value.StartDateTime, projection.OriginalProjectionPeriod.Value.EndDateTime));
+					shiftPeriodList.Add(new DateTimePeriod(projection.OriginalProjectionPeriod.GetValueOrDefault().StartDateTime, projection.OriginalProjectionPeriod.GetValueOrDefault().EndDateTime));
+					
 					_smartDeltaDoer.Do(layers, personRequest.Person, dateOnlyPeriod.StartDate, combinationResources);
 				}
 
@@ -148,7 +150,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					var skillStaffingIntervalsToValidate = new List<SkillStaffingInterval>();
 					foreach (var projectionPeriod in shiftPeriodList)
 					{
-						skillStaffingIntervalsToValidate.AddRange(skillStaffingIntervals.Where(x => x.StartDateTime >= projectionPeriod.StartDateTime && x.StartDateTime < projectionPeriod.EndDateTime));
+						var staffingIntervalsWithinPeriod = skillStaffingIntervals.Where(x =>
+							x.StartDateTime >= projectionPeriod.StartDateTime && x.StartDateTime < projectionPeriod.EndDateTime).ToList();
+						
+						requestsLogger.Debug($"Adding {staffingIntervalsWithinPeriod.Count} intervals to validate for request: {personRequest.Request.Id} from period: {projectionPeriod.StartDateTime} - {projectionPeriod.EndDateTime}");
+						skillStaffingIntervalsToValidate.AddRange(staffingIntervalsWithinPeriod);
 					}
 					var validatedRequest = staffingThresholdValidators.FirstOrDefault().ValidateLight((IAbsenceRequest)personRequest.Request, skillStaffingIntervalsToValidate);
 					if (validatedRequest.IsValid)
@@ -180,6 +186,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 		private void sendDenyCommand(IPersonRequest personRequest, string denyReason, PersonRequestDenyOption denyOption)
 		{
+			requestsLogger.Debug($"sendDenyCommand for request: {personRequest.Request.Id}");
 			var command = new DenyRequestCommand
 			{
 				PersonRequestId = personRequest.Id.GetValueOrDefault(),
@@ -196,6 +203,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 		private bool sendApproveCommand(IPersonRequest personRequest)
 		{
+			requestsLogger.Debug($"sendApproveCommand for request: {personRequest.Request.Id}");
 			var command = new ApproveRequestCommand
 			{
 				PersonRequestId = personRequest.Id.GetValueOrDefault(),
