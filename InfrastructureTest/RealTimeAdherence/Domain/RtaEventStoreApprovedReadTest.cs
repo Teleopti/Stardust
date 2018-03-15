@@ -14,6 +14,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain
 {
+	[Toggle(Toggles.RTA_StoreEvents_47721)]
 	[Toggle(Toggles.RTA_RemoveApprovedOOA_47721)]
 	[TestFixture]
 	[DatabaseTest]
