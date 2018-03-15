@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public void Map(IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, DateOnlyPeriod period)
 		{
-			var timezoneToSaveToDb = TimeZoneInfo.Utc;
+			var timezoneToSaveToDb = TimeZoneInfo.Utc; //this is actually wrong, but maybe good enough for now... (due to stored data per day and not per interval)
 			foreach (var keyValuePair in skillDays)
 			{
 				var skill = keyValuePair.Key;
@@ -54,7 +54,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 						RelativeDifference = SkillStaffPeriodHelper.RelativeDifference(skillStaffPeriods).GetValueOrDefault(0)
 					};
 
-					var oneOfTheSkillDays = skillDays[skill].FirstOrDefault();
+					//this is wrong. will not check if skill is open correctly. 
+					//add test + fix when needed
+					var oneOfTheSkillDays = skillDays[skill].FirstOrDefault(); 
 					detail.ColorId = oneOfTheSkillDays != null && oneOfTheSkillDays.OpenForWork.IsOpen ? mapColorId(detail.RelativeDifference, skill) : 4;
 					item.AddDetail(detail);
 				}

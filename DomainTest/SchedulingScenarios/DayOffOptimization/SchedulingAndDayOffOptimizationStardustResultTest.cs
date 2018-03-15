@@ -48,10 +48,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		[TestCase("Mountain Standard Time", "UTC")]
 		public void ShouldHandleTimeZoneIssues(string skillTimeZoneStr, string assignedShiftsTimeZone)
 		{
-			//TODO 2
+			//TODO: Make attribute for this maybe?
 			var systemUser = new Person().WithName(new Name("system","system")).WithId(SystemUser.Id)
 				.InTimeZone(TimeZoneInfo.Utc);
-			TimeZoneGuard.Instance.TimeZone = systemUser.PermissionInformation.DefaultTimeZone();
+			TimeZoneGuard.Instance.TimeZone = systemUser.PermissionInformation.DefaultTimeZone(); //this should not be needed! fix if repeated
 			PersonRepository.Has(systemUser);
 			BusinessUnitRepository.Has(CurrentBusinessUnit.Current());
 			//
