@@ -463,8 +463,12 @@ Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel = function (ajax) {
 		var canvasWidth;
 
 		if (self.isReadyLoaded()) {
-			canvasWidth = $("td.shift-trade-possible-trade-schedule:visible").width();
-			if (canvasWidth === null) canvasWidth = self.getCanvasWidth();
+			if($("td.shift-trade-possible-trade-schedule:visible").length > 0)
+				canvasWidth = $("td.shift-trade-possible-trade-schedule:visible").width();
+			else if($("td.shift-trade-my-schedule:visible").length > 0)
+				canvasWidth = $("td.shift-trade-my-schedule:visible").width();
+			else 
+				canvasWidth = self.getCanvasWidth();
 		} else {
 			canvasWidth = self.getCanvasWidth();
 		}
