@@ -408,7 +408,7 @@
 							vm.selectedItem = vm.skillAreas[0];
 						}
 					}
-					//vm.loadState(); //TODO: Dont forget to put back!!
+					if (vm.toggles['WFM_Remember_My_Selection_In_Intraday_47254']) vm.loadState();
 				});
 			});
 		}
@@ -442,7 +442,7 @@
 		$scope.$on('$destroy', function(event) {
 			$interval.cancel(polling);
 			cancelTimeout();
-			vm.saveState();
+			if (vm.toggles['WFM_Remember_My_Selection_In_Intraday_47254']) vm.saveState();
 		});
 
 		$scope.$on('$locationChangeStart', function() {

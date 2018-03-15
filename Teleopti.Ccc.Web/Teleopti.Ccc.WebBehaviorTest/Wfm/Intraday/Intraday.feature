@@ -102,6 +102,7 @@ Scenario: View incoming traffic for one skill
 	And there is queue statistics for the skill 'Skill A' up until '2016-12-21 13:30'
 	And there is forecast data for skill 'Skill A' for date '2016-12-21'
 	When I am viewing intraday page
+	And I pick the skill 'Skill A'
 	Then I should see incoming traffic data in the chart
 	And I should see a summary of incoming traffic
 		
@@ -123,6 +124,7 @@ Scenario: View staffing for one skill
 	And there is forecast data for skill 'Skill A' for date '2016-12-22'
 	And there are scheduled agents for 'Skill A' for date '2016-12-22'
 	When I am viewing intraday page
+	And I pick the skill 'Skill A'
 	And I should see incoming traffic data in the chart
 	And I am navigating to intraday staffing view
 	Then I should see staffing data in the chart
@@ -218,7 +220,6 @@ Scenario: Select skill when skill group is selected
 	And I pick the skillgroup 'SkillArea1'
 	When I select skill 'Skill B' from included skills in skill group
 	Then I should see incoming traffic data in the chart
-	And I Should see skill 'Skill B' as selected skill
 
 Scenario: Return to skill group when viewing included skill
 	Given the time is '2016-12-22 14:00'

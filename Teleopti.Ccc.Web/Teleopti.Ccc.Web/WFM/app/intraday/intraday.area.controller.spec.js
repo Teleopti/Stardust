@@ -34,6 +34,7 @@ describe('IntradayAreaController', function() {
 					Wfm_Intraday_ScheduledStaffing_41476: true,
 					Wfm_Intraday_ESL_41827: true,
 					WFM_Intraday_Show_For_Other_Days_43504: false,
+					WFM_Remember_My_Selection_In_Intraday_47254: false,
 					togglesLoaded: {
 						then: function(cb) {
 							cb();
@@ -647,6 +648,125 @@ describe('IntradayAreaController', function() {
 		emptyStaffingData = { DataSeries: null };
 	});
 
+	function initBackend() {
+		skillAreas.forEach(function(item) {
+			$httpBackend.whenGET('../api/intraday/monitorskillareaperformance/' + item.Id + '/0').respond(function() {
+				return [200, performanceData];
+			});
+			$httpBackend.whenGET('../api/intraday/monitorskillareaperformance/' + item.Id + '/1').respond(function() {
+				return [200, performanceDataTomorrow];
+			});
+			$httpBackend.whenGET('../api/intraday/monitorskillareastatistics/' + item.Id + '/0').respond(function() {
+				return [200, trafficAndPerformanceData];
+			});
+
+			$httpBackend.whenGET('../api/intraday/monitorskillareastatistics/' + item.Id + '/1').respond(function() {
+				return [200, trafficAndPerformanceDataTomorrow];
+			});
+			$httpBackend.whenGET('../api/intraday/monitorskillareastaffing/' + item.Id).respond(function() {
+				return [200, staffingData];
+			});
+
+			$httpBackend.whenGET('../api/intraday/monitorskillareastaffing/' + item.Id + '/0').respond(function() {
+				return [200, staffingData];
+			});
+
+			$httpBackend.whenGET('../api/intraday/monitorskillareastaffing/' + item.Id + '/1').respond(function() {
+				return [200, staffingDataTomorrow];
+			});
+			$httpBackend
+				.whenGET(
+					'../api/intraday/monitorskillareastatisticsbydate?dateUtc=0001-01-01T14:45:00.000Z&id=' + item.Id
+				)
+				.respond(function() {
+					return [200, trafficAndPerformanceData];
+				});
+
+			$httpBackend
+				.whenGET(
+					'../api/intraday/monitorskillareastatisticsbydate?dateUtc=0001-01-02T14:45:00.000Z&id=' + item.Id
+				)
+				.respond(function() {
+					return [200, trafficAndPerformanceDataTomorrow];
+				});
+			$httpBackend
+				.whenGET(
+					'../api/intraday/monitorskillareastaffing?DateTime=0001-01-01T14:45:00.000Z&SkillAreaId=' +
+						item.Id +
+						'&UseShrinkage=false'
+				)
+				.respond(function() {
+					return [200, staffingData];
+				});
+
+			$httpBackend
+				.whenGET(
+					'../api/intraday/monitorskillareastaffing?DateTime=0001-01-02T14:45:00.000Z&SkillAreaId=' +
+						item.Id +
+						'&UseShrinkage=false'
+				)
+				.respond(function() {
+					return [200, staffingDataTomorrow];
+				});
+			$httpBackend.whenGET('../api/intraday/lateststatisticstimeforskillarea/' + item.Id).respond(function() {
+				return [200, timeData];
+			});
+
+			$httpBackend.whenGET('../api/intraday/monitorskillareastaffing/' + item.Id).respond(function() {
+				return [200, emptyStaffingData];
+			});
+			$httpBackend.whenGET('../api/intraday/monitorskillareastaffing/' + item.Id).respond(function() {
+				return [200, staffingData];
+			});
+			$httpBackend.whenGET('../api/intraday/monitorskillareaperformance/' + item.Id).respond(function() {
+				return [200, performanceData];
+			});
+			$httpBackend.whenGET('../api/intraday/monitorskillareastatistics/' + item.Id).respond(function() {
+				return [200, trafficAndPerformanceData];
+			});
+			$httpBackend.whenDELETE('../api/skillgroup/delete/' + item.Id).respond(200, {});
+		});
+		skills.forEach(function(item) {
+			$httpBackend.whenGET('../api/intraday/monitorskillstatistics/' + item.Id + '/0').respond(function() {
+				return [200, trafficAndPerformanceData];
+			});
+
+			$httpBackend.whenGET('../api/intraday/monitorskillstatistics/' + item.Id + '/1').respond(function() {
+				return [200, trafficAndPerformanceDataTomorrow];
+			});
+
+			$httpBackend.whenGET('../api/intraday/monitorskillstaffing/' + item.Id + '/0').respond(function() {
+				return [200, staffingData];
+			});
+
+			$httpBackend.whenGET('../api/intraday/monitorskillstaffing/' + item.Id + '/1').respond(function() {
+				return [200, staffingDataTomorrow];
+			});
+			$httpBackend.whenGET('../api/intraday/monitorskillperformance/' + item.Id + '/0').respond(function() {
+				return [200, performanceData];
+			});
+
+			$httpBackend.whenGET('../api/intraday/monitorskillperformance/' + item.Id + '/1').respond(function() {
+				return [200, performanceDataTomorrow];
+			});
+			$httpBackend.whenGET('../api/intraday/lateststatisticstimeforskill/' + item.Id).respond(function() {
+				return [200, timeData];
+			});
+			$httpBackend.whenGET('../api/intraday/lateststatisticstimeforskill/' + item.Id).respond(function() {
+				return [200, timeData];
+			});
+			$httpBackend.whenGET('../api/intraday/monitorskillstaffing/' + item.Id).respond(function() {
+				return [200, staffingData];
+			});
+			$httpBackend.whenGET('../api/intraday/monitorskillperformance/' + item.Id).respond(function() {
+				return [200, performanceData];
+			});
+			$httpBackend.whenGET('../api/intraday/monitorskillstatistics/' + item.Id).respond(function() {
+				return [200, trafficAndPerformanceData];
+			});
+		});
+	}
+
 	beforeEach(
 		inject(function(
 			_$httpBackend_,
@@ -677,199 +797,7 @@ describe('IntradayAreaController', function() {
 				}
 			});
 
-			$httpBackend.whenDELETE('../api/skillgroup/delete/836cebb6-cee8-41a1-bb62-729f4b3a63f4').respond(200, {});
-
-			$httpBackend
-				.whenGET('../api/intraday/monitorskillareastatistics/fa9b5393-ef48-40d1-b7cc-09e797589f81')
-				.respond(function() {
-					return [200, trafficAndPerformanceData];
-				});
-
-			$httpBackend
-				.whenGET('../api/intraday/monitorskillstatistics/5f15b334-22d1-4bc1-8e41-72359805d30f')
-				.respond(function() {
-					return [200, trafficAndPerformanceData];
-				});
-
-			$httpBackend.whenGET('../api/intraday/monitorskillstatistics/' + skills[0].Id + '/0').respond(function() {
-				return [200, trafficAndPerformanceData];
-			});
-
-			$httpBackend.whenGET('../api/intraday/monitorskillstatistics/' + skills[0].Id + '/1').respond(function() {
-				return [200, trafficAndPerformanceDataTomorrow];
-			});
-
-			$httpBackend.whenGET('../api/intraday/monitorskillstatistics/' + skills[1].Id + '/0').respond(function() {
-				return [200, trafficAndPerformanceData];
-			});
-
-			$httpBackend.whenGET('../api/intraday/monitorskillstatistics/' + skills[1].Id + '/1').respond(function() {
-				return [200, trafficAndPerformanceDataTomorrow];
-			});
-
-			$httpBackend
-				.whenGET('../api/intraday/monitorskillareastatistics/' + skillAreas[0].Id + '/0')
-				.respond(function() {
-					return [200, trafficAndPerformanceData];
-				});
-
-			$httpBackend
-				.whenGET('../api/intraday/monitorskillareastatistics/' + skillAreas[0].Id + '/1')
-				.respond(function() {
-					return [200, trafficAndPerformanceDataTomorrow];
-				});
-
-			$httpBackend
-				.whenGET(
-					'../api/intraday/monitorskillareastatisticsbydate?dateUtc=0001-01-01T14:45:00.000Z&id=' +
-						skillAreas[0].Id
-				)
-				.respond(function() {
-					return [200, trafficAndPerformanceData];
-				});
-
-			$httpBackend
-				.whenGET(
-					'../api/intraday/monitorskillareastatisticsbydate?dateUtc=0001-01-02T14:45:00.000Z&id=' +
-						skillAreas[0].Id
-				)
-				.respond(function() {
-					return [200, trafficAndPerformanceDataTomorrow];
-				});
-
-			$httpBackend
-				.whenGET('../api/intraday/monitorskillareaperformance/fa9b5393-ef48-40d1-b7cc-09e797589f81')
-				.respond(function() {
-					return [200, performanceData];
-				});
-
-			$httpBackend
-				.whenGET('../api/intraday/monitorskillareaperformance/' + skillAreas[0].Id + '/0')
-				.respond(function() {
-					return [200, performanceData];
-				});
-
-			$httpBackend
-				.whenGET('../api/intraday/monitorskillareaperformance/' + skillAreas[0].Id + '/1')
-				.respond(function() {
-					return [200, performanceDataTomorrow];
-				});
-
-			$httpBackend
-				.whenGET('../api/intraday/monitorskillperformance/5f15b334-22d1-4bc1-8e41-72359805d30f')
-				.respond(function() {
-					return [200, performanceData];
-				});
-
-			$httpBackend.whenGET('../api/intraday/monitorskillperformance/' + skills[0].Id + '/0').respond(function() {
-				return [200, performanceData];
-			});
-
-			$httpBackend.whenGET('../api/intraday/monitorskillperformance/' + skills[0].Id + '/1').respond(function() {
-				return [200, performanceDataTomorrow];
-			});
-
-			$httpBackend.whenGET('../api/intraday/monitorskillperformance/' + skills[1].Id + '/0').respond(function() {
-				return [200, performanceData];
-			});
-
-			$httpBackend.whenGET('../api/intraday/monitorskillperformance/' + skills[1].Id + '/1').respond(function() {
-				return [200, performanceDataTomorrow];
-			});
-
-			$httpBackend
-				.whenGET('../api/intraday/monitorskillstaffing/5f15b334-22d1-4bc1-8e41-72359805d30f')
-				.respond(function() {
-					return [200, staffingData];
-				});
-
-			$httpBackend.whenGET('../api/intraday/monitorskillstaffing/' + skills[0].Id + '/0').respond(function() {
-				return [200, staffingData];
-			});
-
-			$httpBackend.whenGET('../api/intraday/monitorskillstaffing/' + skills[0].Id + '/1').respond(function() {
-				return [200, staffingDataTomorrow];
-			});
-
-			$httpBackend.whenGET('../api/intraday/monitorskillstaffing/' + skills[1].Id + '/0').respond(function() {
-				return [200, staffingData];
-			});
-
-			$httpBackend.whenGET('../api/intraday/monitorskillstaffing/' + skills[1].Id + '/1').respond(function() {
-				return [200, staffingDataTomorrow];
-			});
-
-			$httpBackend.whenGET('../api/intraday/monitorskillareastaffing/' + skillAreas[0].Id).respond(function() {
-				return [200, staffingData];
-			});
-
-			$httpBackend
-				.whenGET('../api/intraday/monitorskillareastaffing/' + skillAreas[0].Id + '/0')
-				.respond(function() {
-					return [200, staffingData];
-				});
-
-			$httpBackend
-				.whenGET('../api/intraday/monitorskillareastaffing/' + skillAreas[0].Id + '/1')
-				.respond(function() {
-					return [200, staffingDataTomorrow];
-				});
-
-			$httpBackend
-				.whenGET(
-					'../api/intraday/monitorskillareastaffing?DateTime=0001-01-01T14:45:00.000Z&SkillAreaId=' +
-						skillAreas[0].Id +
-						'&UseShrinkage=false'
-				)
-				.respond(function() {
-					return [200, staffingData];
-				});
-
-			$httpBackend
-				.whenGET(
-					'../api/intraday/monitorskillareastaffing?DateTime=0001-01-02T14:45:00.000Z&SkillAreaId=' +
-						skillAreas[0].Id +
-						'&UseShrinkage=false'
-				)
-				.respond(function() {
-					return [200, staffingDataTomorrow];
-				});
-
-			$httpBackend
-				.whenGET('../api/intraday/monitorskillareastaffing/fa9b5393-ef48-40d1-b7cc-09e797589f81')
-				.respond(function() {
-					return [200, staffingData];
-				});
-
-			$httpBackend
-				.whenGET('../api/intraday/monitorskillareastaffing/3f43f39b-f01b-47e7-b59f-35fc09fd5e41')
-				.respond(function() {
-					return [200, emptyStaffingData];
-				});
-
-			$httpBackend
-				.whenGET('../api/intraday/lateststatisticstimeforskill/5f15b334-22d1-4bc1-8e41-72359805d30f')
-				.respond(function() {
-					return [200, timeData];
-				});
-
-			$httpBackend
-				.whenGET('../api/intraday/lateststatisticstimeforskill/502632DC-7A0C-434D-8A75-3153D5160787')
-				.respond(function() {
-					return [200, timeData];
-				});
-
-			$httpBackend
-				.whenGET('../api/intraday/lateststatisticstimeforskillarea/fa9b5393-ef48-40d1-b7cc-09e797589f81')
-				.respond(function() {
-					return [200, timeData];
-				});
-
-			$httpBackend
-				.whenGET('../api/intraday/lateststatisticstimeforskillarea/3f43f39b-f01b-47e7-b59f-35fc09fd5e41')
-				.respond(function() {
-					return [200, timeData];
-				});
+			initBackend();
 		})
 	);
 

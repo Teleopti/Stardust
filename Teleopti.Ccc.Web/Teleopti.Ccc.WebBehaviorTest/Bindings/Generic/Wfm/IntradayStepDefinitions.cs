@@ -128,6 +128,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		}
 
 		[Given(@"I select to create a new Skill Group in SGM")]
+		[When(@"I select to create a new Skill Group in SGM")]
 		public void GivenISelectToCreateANewSkillGroupInSGM()
 		{
 			Browser.Interactions.Click("#create-skill-group-button");
@@ -182,11 +183,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[When(@"I pick the skill '(.*)'")]
 		public void GivenIPickTheSkill(string skillName)
 		{
-			Browser.Interactions.AssertExists(".c3");
-			var javascript = "var scope = angular.element(document.querySelector('.c3')).scope();" +
+			Browser.Interactions.AssertExists("skill-picker");
+			var javascript = "var scope = angular.element(document.querySelector('skill-picker')).scope();" +
 							 "var skillet = scope.vm.skills.find(function(e){{return e.Name === '" + skillName + "'}});" +
 							 "scope.vm.selectedSkill = skillet;" +
-							 "scope.vm.selectedSkillChange(skillet);";
+							 "scope.vm.selectSkillOrSkillArea(skillet);";
 
 			Browser.Interactions.Javascript(javascript);
 		}
@@ -196,14 +197,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		public void GivenIPickTheSkillGroup(string skillName)
 		{
 			//Browser.SetDefaultTimeouts(TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(1));
-			Browser.Interactions.AssertExists("md-autocomplete");
-			var javascript = "var scope = angular.element(document.querySelector('md-autocomplete')).scope();" +
+			Browser.Interactions.AssertExists("skill-picker");
+			var javascript = "var scope = angular.element(document.querySelector('skill-picker')).scope();" +
 							 "var sg = scope.vm.skillAreas.find(function(e){{return e.Name === '" + skillName + "'}});" +
 							 "scope.vm.selectedSkillArea = sg;" +
-							 "scope.vm.selectedSkillAreaChange(sg);";
+							 "scope.vm.preselectedItem = sg;" +
+							 "scope.vm.selectSkillOrSkillArea(sg);";
 			Browser.Interactions.TryUntil(
 				() => { Browser.Interactions.Javascript(javascript); },
-				() => Browser.Interactions.IsVisible("md-autocomplete")
+				() => Browser.Interactions.IsVisible("skill-picker")
 				, TimeSpan.FromSeconds(1)
 			);
 		}
@@ -216,6 +218,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		}
 
 		[Given(@"I select the skill '(.*)' in SGM")]
+		[When(@"I select the skill '(.*)' in SGM")]
 		public void GivenISelectTheSkillInSGM(string skillName)
 		{
 			Browser.Interactions.ClickContaining("#available_skills_list", skillName);
