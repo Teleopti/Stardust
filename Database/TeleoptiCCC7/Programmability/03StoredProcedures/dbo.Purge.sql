@@ -75,6 +75,7 @@ exec Purge
 --Deleted persons first
 update Person set Email = '', Note = '', EmploymentNumber = '', FirstName = 'Deleted', LastName = 'Deleted'
 where IsDeleted = 1
+and Id <> '3F0886AB-7B25-4E95-856A-0D726EDC2A67' --Do not Pseudonymize System System as we still need him for background executions.
 
 select @KeepUntil = dateadd(month,-1*(select isnull(Value,100) from PurgeSetting where [Key] = 'MonthsToKeepPersonalData'),getdate())
 
