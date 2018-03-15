@@ -1,7 +1,30 @@
 ﻿
 $(document).ready(function () {
 
-	module("Teleopti.MyTimeWeb.Schedule.MonthViewModel");
+	var _hash = '';
+	module('Teleopti.MyTimeWeb.Schedule.MonthViewModel', {
+		setup: function () {
+			setup();
+		},
+		teardown: function () {
+			_hash = '';
+		}
+	});
+
+	function setup() {
+		this.hasher = {
+			initialized: {
+				add: function () { }
+			},
+			changed: {
+				add: function () { }
+			},
+			init: function () { },
+			setHash: function (data) {
+				_hash = data;
+			}
+		};
+	}
 	
 	test("should change text color based on background color", function () {
 		var vm = new Teleopti.MyTimeWeb.Schedule.MonthViewModel();
@@ -112,4 +135,13 @@ $(document).ready(function () {
 	    equal(viewModelMonth.weekViewModels()[0].dayViewModels().length, 1);
 	});
 
+	test("should go to today when from month view to week view without any date chosen", function() {
+		var viewModelMonth = new Teleopti.MyTimeWeb.Schedule.MonthViewModel();
+		var dayView = new Teleopti.MyTimeWeb.Schedule.MonthDayViewModel( { FixedDate: undefined }, moment());
+		dayView.currentDate = undefined;
+
+		viewModelMonth.week(dayView);
+
+		equal(_hash, 'Schedule/Week');
+	});
 });
