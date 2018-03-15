@@ -116,6 +116,7 @@ wfm
 		'Toggle',
 		'areasService',
 		'NoticeService',
+		'TabShortCut',
 		'$q',
 		'$http',
 		function(
@@ -128,6 +129,7 @@ wfm
 			toggleService,
 			areasService,
 			noticeService,
+			TabShortCut,
 			$q,
 			$http
 		) {
@@ -239,5 +241,7 @@ wfm
 				});
 				noticeService.error("<span class='test-alert'></span>" + $translate.instant('NoPermissionToViewWFMModuleErrorMessage').replace('{0}', moduleName), null, false);
 			}
+
+			TabShortCut.unifyFocusStyle();
 		}
 	]);

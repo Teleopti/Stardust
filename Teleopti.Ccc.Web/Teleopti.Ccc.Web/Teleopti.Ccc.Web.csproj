@@ -1493,6 +1493,8 @@
     <Content Include="WFM\app\global\card-panel\card-panel.component.js" />
     <Content Include="WFM\app\global\card-panel\card-panel.template.tpl.html" />
     <Content Include="WFM\app\global\card-panel\_moudules.js" />
+    <Content Include="WFM\app\global\shortcuts\shortcuts.tab.service.js" />
+    <Content Include="WFM\app\global\shortcuts\_modules.js" />
     <Content Include="WFM\app\global\skill-group\skill-group-manager.controller.js" />
     <Content Include="WFM\app\global\skill-group\skill-group-manager.html" />
     <Content Include="WFM\app\global\skill-group\skillGroupManagerButton.component.js" />
@@ -1889,7 +1891,6 @@
     <Content Include="WFM\app\global\wfm-themes\wfm.themespicker.controller.js" />
     <Content Include="WFM\app\global\wfm-themes\_modules.js" />
     <Content Include="WFM\app\global\i18n\wfm.i18n.service.spec.js" />
-    <Content Include="WFM\app\global\shortcuts\wfm.shortcuts.service.js" />
     <Content Include="WFM\app\intraday\intraday-area.html" />
     <Content Include="WFM\app\intraday\intraday.area.controller.js" />
     <Content Include="WFM\app\intraday\intraday.area.controller.spec.js" />
