@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using log4net;
-using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
@@ -23,7 +22,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		private const int maxUnderStaffingItemCount = 4; // bug #40906 needs to be max 4 
 		public IBudgetGroupHeadCountSpecification BudgetGroupHeadCountSpecification { get; set; }
 
-		public IValidatedRequest ValidateLight(IAbsenceRequest absenceRequest, IEnumerable<SkillStaffingInterval> validatePeriods)
+		public IValidatedRequest ValidateLight(IAbsenceRequest absenceRequest, IEnumerable<IValidatePeriod> validatePeriods)
 		{
 			var timeZone = absenceRequest.Person.PermissionInformation.DefaultTimeZone();
 			var culture = absenceRequest.Person.PermissionInformation.Culture();
@@ -185,7 +184,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		}
 
 		private UnderstaffingDetails getUnderStaffingDaysLight(IAbsenceRequest absenceRequest,
-			IEnumerable<SkillStaffingInterval> validatePeriods)
+			IEnumerable<IValidatePeriod> validatePeriods)
 		{
 			var result = new UnderstaffingDetails();
 			var timeZone = absenceRequest.Person.PermissionInformation.DefaultTimeZone();
@@ -193,22 +192,23 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			var personSkillProvider = new PersonSkillProvider();
 			var skills = personSkillProvider.SkillsOnPersonDate(absenceRequest.Person, date);
 
-			if (!isSkillOpenForDateOnly(date, skills.Skills) || validatePeriods.IsEmpty())
+			if (!isSkillOpenForDateOnly(date, skills.Skills))
 				return result;
-			
+
 			foreach (var skill in skills.Skills)
 			{
 				if (skill == null) continue;
-				
-				var periods = validatePeriods.Where(x =>x.SkillId == skill.Id.GetValueOrDefault() && x.FStaff > 0)
-					.ToList();
-				
-				requestsLogger.Debug(
-					$"Running Validate/Serious/Understaffing for absence request: {absenceRequest.Id} on {string.Join(",", periods.Select(x => $"{x.StartDateTime}-{x.EndDateTime}"))} ");
-				
-				ValidateSeriousUnderstaffing(skill, periods, timeZone, result);
+				if (validatePeriods.IsEmpty()) continue;
 
-				ValidateUnderstaffing(skill, periods, timeZone, result);
+				ValidateSeriousUnderstaffing(skill,
+					validatePeriods.Where(x =>
+						((SkillStaffingInterval)x).SkillId == skill.Id.GetValueOrDefault() && ((SkillStaffingInterval)x).FStaff > 0),
+					timeZone, result);
+
+				ValidateUnderstaffing(skill,
+					validatePeriods.Where(x =>
+						((SkillStaffingInterval) x).SkillId == skill.Id.GetValueOrDefault() && ((SkillStaffingInterval) x).FStaff > 0),
+					timeZone, result);
 
 				if (result.IsNotUnderstaffed()) continue;
 
@@ -221,7 +221,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			return result;
 		}
 
-		private IValidatedRequest ValidateSeriousUnderstaffing(ISkill skill, IEnumerable<IValidatePeriod> skillStaffPeriodList,
+		public IValidatedRequest ValidateSeriousUnderstaffing(ISkill skill, IEnumerable<IValidatePeriod> skillStaffPeriodList,
 			TimeZoneInfo timeZone, UnderstaffingDetails result)
 		{
 			if (skillStaffPeriodList == null) throw new ArgumentNullException(nameof(skillStaffPeriodList));
