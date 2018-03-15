@@ -10091,7 +10091,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to One or several agents&apos; terminal date is changed. Do you want to proceed and save?.
+        ///   Looks up a localized string similar to One or several agents&apos; leaving date is changed. Agent related schedule data after this date will be removed immediately. Do you want to save?.
         /// </summary>
         public static string DoYouWantToSaveChangesWithTerminalDate {
             get {

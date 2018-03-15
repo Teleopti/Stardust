@@ -17242,8 +17242,8 @@ The application will now exit.</value>
     <comment>Error message for editing unpublished schedule when there's no permission to view unpublished schedule in Teams</comment>
   </data>
   <data name="DoYouWantToSaveChangesWithTerminalDate" xml:space="preserve">
-    <value>One or several agents' terminal date is changed. Do you want to proceed and save?</value>
-    <comment>One or several agents' terminal date is changed. Do you want to proceed and save?</comment>
+    <value>One or several agents' leaving date is changed. Agent related schedule data after this date will be removed immediately. Do you want to save?</value>
+    <comment>One or several agents' leaving date is changed. Agent related schedule data after this date will be removed immediately. Do you want to save?</comment>
   </data>
   <data name="PickADateRangeToStartBadgeCalculation" xml:space="preserve">
     <value>Pick a date range to start badge calculation</value>
