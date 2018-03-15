@@ -1223,7 +1223,7 @@ describe('IntradayAreaController', function() {
 		expect(forcastedAhtSeries[forcastedAhtSeries.length - 1]).toEqual(201.4);
 	});
 
-	fit('should remember selected tab when exiting if toggle is on', function() {
+	it('should remember selected tab when exiting if toggle is on', function() {
 		createController(false);
 		vm.toggles['WFM_Remember_My_Selection_In_Intraday_47254'] = true;
 		vm.activeTab = 1;
@@ -1234,7 +1234,7 @@ describe('IntradayAreaController', function() {
 		expect(vm.activeTab).toEqual(1);
 	});
 
-	fit('should remember selected day offset when exiting if toggle is on', function() {
+	it('should remember selected day offset when exiting if toggle is on', function() {
 		createController(false);
 		vm.toggles['WFM_Remember_My_Selection_In_Intraday_47254'] = true;
 		vm.changeChosenOffset(-5, true);
