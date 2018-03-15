@@ -63,8 +63,9 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		private bool isPeriodMatched(IOvertimeRequestOpenPeriod overtimeRequestOpenPeriod, IPerson person,
 			DateOnlyPeriod requestPeriod)
 		{
-			return overtimeRequestOpenPeriod.GetPeriod(new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(),
-				person.PermissionInformation.DefaultTimeZone()))).Contains(requestPeriod);
+			var openPeriod = overtimeRequestOpenPeriod.GetPeriod(new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(),
+				person.PermissionInformation.DefaultTimeZone())));
+			return requestPeriod.Intersection(openPeriod).HasValue;
 		}
 	}
 }

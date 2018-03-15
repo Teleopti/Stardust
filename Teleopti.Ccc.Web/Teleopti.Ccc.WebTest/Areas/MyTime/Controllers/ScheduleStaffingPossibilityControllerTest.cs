@@ -511,13 +511,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			var person = User.CurrentUser();
 			var activity1 = createActivity();
-			var phoneSkill = createSkill("phoneSkill");
+			var phoneSkill = createSkill("phoneSkill", new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromHours(17)));
 			phoneSkill.SkillType = phoneSkillType;
 			var personPhoneSkill = createPersonSkill(activity1, phoneSkill);
 			setupIntradayStaffingForSkill(phoneSkill, new double?[] { 10d, 10d }, new double?[] { 15d, 15d });
 
 			var activity2 = createActivity();
-			var chatSkill = createSkill("chatSkill");
+			var chatSkill = createSkill("chatSkill", new TimePeriod(TimeSpan.FromHours(7), TimeSpan.FromHours(15)));
 			chatSkill.SkillType = chatSkillType;
 			var personChatSkill = createPersonSkill(activity2, chatSkill);
 			setupIntradayStaffingForSkill(chatSkill, new double?[] { 10d, 10d }, new double?[] { 5d, 5d });
@@ -530,28 +530,83 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
-				BetweenDays = new MinMax<int>(0, 48),
-				SkillType = phoneSkillType,
+				BetweenDays = new MinMax<int>(0, 1),
+				SkillType = chatSkillType,
 				OrderIndex = 1
 			});
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
-				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(5))),
-				SkillType = chatSkillType,
+				BetweenDays = new MinMax<int>(0, 2),
+				SkillType = phoneSkillType,
 				OrderIndex = 2
 			});
 			User.CurrentUser().WorkflowControlSet = workflowControlSet;
 
-			var possibilities = getPossibilityViewModels(new DateOnly(2018, 2, 5), StaffingPossiblityType.Overtime);
+			var possibilities = Target.GetPossibilityViewModels(new DateOnly(2018, 2, 1), StaffingPossiblityType.Overtime);
 
-			var possibilitiesOn5th = possibilities.Where(d => d.Date == new DateOnly(2018, 2, 5).ToFixedClientDateOnlyFormat()).ToList();
-			Assert.AreEqual(0, possibilitiesOn5th.ElementAt(0).Possibility);
-			Assert.AreEqual(0, possibilitiesOn5th.ElementAt(1).Possibility);
+			var possibilitiesOn2nd = possibilities.Where(d => d.Date == new DateOnly(2018, 2, 2).ToFixedClientDateOnlyFormat()).ToList();
+			Assert.AreEqual(possibilitiesOn2nd.ElementAt(0).StartTime, new DateTime(2018, 2, 2, 7, 0, 0));
+			Assert.AreEqual(0, possibilitiesOn2nd.ElementAt(0).Possibility);
+			Assert.AreEqual(0, possibilitiesOn2nd.ElementAt(1).Possibility);
 
-			var possibilitiesOn7th = possibilities.Where(d => d.Date == new DateOnly(2018, 2, 7).ToFixedClientDateOnlyFormat()).ToList();
-			Assert.AreEqual(0, possibilitiesOn7th.ElementAt(0).Possibility);
-			Assert.AreEqual(0, possibilitiesOn7th.ElementAt(1).Possibility);
+			var possibilitiesOn3rd = possibilities.Where(d => d.Date == new DateOnly(2018, 2, 3).ToFixedClientDateOnlyFormat()).ToList();
+			Assert.AreEqual(possibilitiesOn3rd.ElementAt(0).StartTime, new DateTime(2018, 2, 3, 8, 0, 0));
+			Assert.AreEqual(0, possibilitiesOn3rd.ElementAt(0).Possibility);
+			Assert.AreEqual(0, possibilitiesOn3rd.ElementAt(1).Possibility);
+		}
+
+		[Test]
+		[Toggle(Toggles.OvertimeRequestPeriodSetting_46417)]
+		[Toggle(Toggles.OvertimeRequestPeriodSkillTypeSetting_47290)]
+		public void ShouldGetPossibilitiesForOvertimeBasedOnSkillTypeOfOneDaySetInOpenPeriod()
+		{
+			Now.Is(new DateTime(2018, 2, 1, 8, 0, 0, DateTimeKind.Utc));
+
+			var phoneSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony).WithId();
+			var chatSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Chat), ForecastSource.Chat).WithId();
+
+			var person = User.CurrentUser();
+			var activity1 = createActivity();
+			var phoneSkill = createSkill("phoneSkill", new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromHours(17)));
+			phoneSkill.SkillType = phoneSkillType;
+			var personPhoneSkill = createPersonSkill(activity1, phoneSkill);
+			setupIntradayStaffingForSkill(phoneSkill, new double?[] { 10d, 10d }, new double?[] { 15d, 15d });
+
+			var activity2 = createActivity();
+			var chatSkill = createSkill("chatSkill", new TimePeriod(TimeSpan.FromHours(7), TimeSpan.FromHours(15)));
+			chatSkill.SkillType = chatSkillType;
+			var personChatSkill = createPersonSkill(activity2, chatSkill);
+			setupIntradayStaffingForSkill(chatSkill, new double?[] { 10d, 10d }, new double?[] { 5d, 5d });
+
+			addPersonSkillsToPersonPeriod(personPhoneSkill, personChatSkill);
+
+			createAssignment(person, activity1, activity2);
+
+			var workflowControlSet = new WorkflowControlSet();
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
+				BetweenDays = new MinMax<int>(0, 1),
+				SkillType = chatSkillType,
+				OrderIndex = 1
+			});
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
+				BetweenDays = new MinMax<int>(0, 2),
+				SkillType = phoneSkillType,
+				OrderIndex = 2
+			});
+			User.CurrentUser().WorkflowControlSet = workflowControlSet;
+
+			var possibilities = Target.GetPossibilityViewModels(new DateOnly(2018, 2, 3), StaffingPossiblityType.Overtime, false);
+
+			var possibilitiesOn3rd = possibilities.Where(d => d.Date == new DateOnly(2018, 2, 3).ToFixedClientDateOnlyFormat()).ToList();
+			Assert.AreEqual(possibilitiesOn3rd.ElementAt(0).StartTime, new DateTime(2018, 2, 3, 8, 0, 0));
+			Assert.AreEqual(possibilitiesOn3rd.Last().StartTime, new DateTime(2018, 2, 3, 16, 45, 0));
+			Assert.AreEqual(0, possibilitiesOn3rd.ElementAt(0).Possibility);
+			Assert.AreEqual(0, possibilitiesOn3rd.ElementAt(1).Possibility);
 		}
 
 		[Test]
