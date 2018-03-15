@@ -101,8 +101,8 @@
 			vm.paging.pageNumber = 1;
 			requestCommandParamsHolder.resetAllSelectedRequestsIds();
 			vm.period = vm.absenceAndOvertimePeriod;
+			vm.selectedTabIndex = 0;
 			$timeout(function () {
-				vm.selectedTabIndex = 0;
 				$state.go('requests.absenceAndText', { getParams: getParams });
 			}, loadRequetsDelay);
 		};
@@ -111,8 +111,8 @@
 			vm.paging.pageNumber = 1;
 			requestCommandParamsHolder.resetAllSelectedRequestsIds();
 			vm.period = vm.shiftTradePeriod;
+			vm.selectedTabIndex = 1;
 			$timeout(function () {
-				vm.selectedTabIndex = 1;
 				$state.go('requests.shiftTrade', { getParams: getParams });
 			}, loadRequetsDelay);
 		};
@@ -121,8 +121,8 @@
 			vm.paging.pageNumber = 1;
 			requestCommandParamsHolder.resetAllSelectedRequestsIds();
 			vm.period = vm.absenceAndOvertimePeriod;
+			vm.selectedTabIndex = 2;
 			$timeout(function () {
-				vm.selectedTabIndex = 2;
 				$state.go('requests.overtime', { getParams: getParams });
 			}, loadRequetsDelay);
 		};
