@@ -21,6 +21,8 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 {
 	[DomainTest]
+	[ExtendScope(typeof(WebDayoffOptimizationStardustHandler))]
+	[ExtendScope(typeof(WebScheduleStardustHandler))]
 	public class SchedulingAndDayOffOptimizationStardustResultTest : DayOffOptimizationScenario
 	{
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
@@ -46,11 +48,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		[TestCase("Mountain Standard Time", "UTC")]
 		public void ShouldHandleTimeZoneIssues(string skillTimeZoneStr, string assignedShiftsTimeZone)
 		{
-			//TODO 1
-			FakeEventPublisher.AddHandler<WebDayoffOptimizationStardustHandler>();
-			FakeEventPublisher.AddHandler<WebScheduleStardustHandler>();
-			//
-
 			//TODO 2
 			var systemUser = new Person().WithName(new Name("system","system")).WithId(SystemUser.Id)
 				.InTimeZone(TimeZoneInfo.Utc);

@@ -275,6 +275,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		public IDataSourceScope DataSourceScope;
 		public IPersonRepository Persons;
 		public Lazy<FakeDatabase> Database;
+		public FakeEventPublisher FakeEventPublisher;
 
 		private IDisposable _authorizationScope;
 		private IDisposable _tenantScope;
@@ -284,6 +285,8 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		{
 			base.BeforeTest();
 
+			extendScope();
+			
 			fakeSignin();
 
 			createDefaultData();
@@ -296,6 +299,13 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				_authorizationScope = AuthorizationScope.OnThisThreadUse((FakePermissions) Authorization);
 			else
 				_authorizationScope = AuthorizationScope.OnThisThreadUse((FullPermission) Authorization);
+		}
+
+		private void extendScope()
+		{
+			QueryAllAttributes<ExtendScopeAttribute>()
+				.Select(x => x.Handler)
+				.ForEach(x => FakeEventPublisher.AddHandler(x));
 		}
 
 		private void fakeSignin()
