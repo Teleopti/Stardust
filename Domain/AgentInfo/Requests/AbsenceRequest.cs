@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
     /// </remarks>
     public class AbsenceRequest : Request, IAbsenceRequest
     {
-        private readonly IAbsence _absence;
+        private IAbsence _absence;
         private string _typeDescription = string.Empty;
 	    
 	    /// <summary>
@@ -49,6 +49,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
         }
 		
         public virtual IAbsence Absence => _absence;
+
+		public virtual void SetAbsence(IAbsence absence)
+		{
+			_absence = absence;
+		}
 
 		public override void Deny(IPerson denyPerson)
 		{

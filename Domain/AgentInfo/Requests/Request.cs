@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 		protected Request() { }
 
-		protected void SetPeriod(DateTimePeriod period)
+		public virtual void SetPeriod(DateTimePeriod period)
 		{
 			_period = truncateSeconds(period);
 		}

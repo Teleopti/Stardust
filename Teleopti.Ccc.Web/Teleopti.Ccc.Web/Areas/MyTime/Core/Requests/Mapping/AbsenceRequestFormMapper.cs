@@ -21,32 +21,29 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			_userTimeZone = userTimeZone;
 		}
 
-		public IPersonRequest Map(AbsenceRequestForm source, IPersonRequest destination = null)
+		public IPersonRequest MapExistingAbsenceRequest(AbsenceRequestForm source, IPersonRequest existingPersonRequest)
 		{
-			destination = destination ?? new PersonRequest(_loggedOnUser.CurrentUser()) {Subject = source.Subject};
+			var period = new DateTimePeriodFormMapper(_userTimeZone).Map(source.Period);
 
-			DateTimePeriod period;
+			existingPersonRequest.Subject = source.Subject;
+			existingPersonRequest.TrySetMessage(source.Message ?? string.Empty);
 
-			if (source.FullDay)
-			{
-				var startTime = TimeZoneHelper.ConvertToUtc(new DateTime(2012, 5, 11, 0, 0, 0), _userTimeZone.TimeZone());
-				var endTime = TimeZoneHelper.ConvertToUtc(new DateTime(2012, 5, 11, 23, 59, 0), _userTimeZone.TimeZone());
-				period = new DateTimePeriod(startTime, endTime);
-			}
-			else
-			{
-				period = new DateTimePeriodFormMapper(_userTimeZone).Map(source.Period);
-			}
+			var absenceRequest = (AbsenceRequest) existingPersonRequest.Request;
+			absenceRequest.SetAbsence(_absenceRepository.Load(source.AbsenceId));
+			absenceRequest.SetPeriod(period);
 
-			destination.TrySetMessage(source.Message ?? "");
-			destination.Request = new AbsenceRequest(_absenceRepository.Load(source.AbsenceId), period);
+			return existingPersonRequest;
+		}
 
-			if (source.EntityId != null)
-				destination.SetId(source.EntityId);
+		public IPersonRequest MapNewAbsenceRequest(AbsenceRequestForm source)
+		{
+			var personRequest = new PersonRequest(_loggedOnUser.CurrentUser()) {Subject = source.Subject};
+			var period = new DateTimePeriodFormMapper(_userTimeZone).Map(source.Period);
 
-			destination.Subject = source.Subject;
+			personRequest.TrySetMessage(source.Message ?? string.Empty);
+			personRequest.Request = new AbsenceRequest(_absenceRepository.Load(source.AbsenceId), period);
 
-			return destination;
+			return personRequest;
 		}
 	}
 }

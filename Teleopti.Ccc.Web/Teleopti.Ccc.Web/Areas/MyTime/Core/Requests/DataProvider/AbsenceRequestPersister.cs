@@ -1,14 +1,9 @@
 using System;
-using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Ccc.Domain.WorkflowControl;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 {
@@ -22,9 +17,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		private readonly IActivityRepository _activityRepository;
 		private readonly ISkillTypeRepository _skillTypeRepository;
 		private readonly IDisableDeletedFilter _disableDeletedFilter;
-		private readonly IScheduleStorage _scheduleStorage;
-		private readonly ICurrentScenario _currentScenario;
-		private readonly IToggleManager _toggleManager;
 		private readonly AbsenceRequestFormMapper _mapper;
 		private readonly RequestsViewModelMapper _requestsMapper;
 
@@ -32,25 +24,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 									   IAbsenceRequestSynchronousValidator absenceRequestSynchronousValidator,
 									   IPersonRequestCheckAuthorization personRequestCheckAuthorization,
 									   IAbsenceRequestIntradayFilter absenceRequestIntradayFilter,
-									   IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository,
-									   IToggleManager toggleManager, AbsenceRequestFormMapper mapper,
+									   IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, AbsenceRequestFormMapper mapper,
 									   RequestsViewModelMapper requestsMapper, IActivityRepository activityRepository,
-									   ISkillTypeRepository skillTypeRepository, IDisableDeletedFilter disableDeletedFilter,
-									   IScheduleStorage scheduleStorage, ICurrentScenario currentScenario)
+									   ISkillTypeRepository skillTypeRepository, IDisableDeletedFilter disableDeletedFilter)
 		{
 			_personRequestRepository = personRequestRepository;
 			_absenceRequestSynchronousValidator = absenceRequestSynchronousValidator;
 			_personRequestCheckAuthorization = personRequestCheckAuthorization;
 			_absenceRequestIntradayFilter = absenceRequestIntradayFilter;
 			_queuedAbsenceRequestRepository = queuedAbsenceRequestRepository;
-			_toggleManager = toggleManager;
 			_mapper = mapper;
 			_requestsMapper = requestsMapper;
 			_activityRepository = activityRepository;
 			_skillTypeRepository = skillTypeRepository;
 			_disableDeletedFilter = disableDeletedFilter;
-			_scheduleStorage = scheduleStorage;
-			_currentScenario = currentScenario;
 		}
 
 		public RequestViewModel Persist(AbsenceRequestForm form)
@@ -64,7 +51,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			if (personRequest != null)
 			{
 				var existingPeriod = personRequest.Request.Period;
-				_mapper.Map(form, personRequest);
+				_mapper.MapExistingAbsenceRequest(form, personRequest);
 
 				checkAndProcessDeny(personRequest);
 
@@ -77,7 +64,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			}
 			else
 			{
-				personRequest = _mapper.Map(form);
+				personRequest = _mapper.MapNewAbsenceRequest(form);
 				using (_disableDeletedFilter.Disable())
 				{
 					_skillTypeRepository.LoadAll();
@@ -105,21 +92,5 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 									PersonRequestDenyOption.AutoDeny | result.DenyOption.GetValueOrDefault(PersonRequestDenyOption.None));
 			}
 		}
-
-		//private IValidatedRequest ValidatePersonRequest(IPersonRequest pRequest)
-		//{
-		//	var absenceRequest = pRequest.Request as IAbsenceRequest;
-		//	var personAbsenceAccount = absenceRequest.Absence
-		//	if (personAbsenceAccount == null || personAbsenceAccount.AccountCollection().IsEmpty())
-		//	{
-		//		var calc = new EmptyPersonAccountBalanceCalculator(absenceRequest.Absence);
-		//		var isOk = calc.CheckBalance(null, new DateOnlyPeriod());
-		//		var validatedRequest = new ValidatedRequest { IsValid = isOk };
-		//		if (!isOk) validatedRequest.DenyOption = PersonRequestDenyOption.InsufficientPersonAccount;
-		//		return validatedRequest;
-		//	}
-
-		//	return _absenceRequestSynchronousValidator.Validate(pRequest);
-		//}
 	}
 }
