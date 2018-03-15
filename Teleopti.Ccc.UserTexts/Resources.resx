@@ -8647,7 +8647,7 @@ Period: {3}</value>
     <comment>Date:</comment>
   </data>
   <data name="RequestDenyReasonAutodeny" xml:space="preserve">
-    <value>Your absence request has been denied automatically, due to a rule set up by the administrator.</value>
+    <value>Absence request approval has been disabled by the administrator for all or part of the requested period.</value>
   </data>
   <data name="RequestDenyReasonClosedPeriod" xml:space="preserve">
     <value>Your absence request cannot be granted. Some dates are not open for requests at this time.</value>
@@ -16693,7 +16693,7 @@ Do you want to participate?</value>
     <value>Your overtime request cannot be granted. Some dates are not open for requests at this time.</value>
   </data>
   <data name="OvertimeRequestDenyReasonAutodeny" xml:space="preserve">
-    <value>Your overtime request has been denied automatically, due to a rule set up by the administrator.</value>
+    <value>Overtime request approval has been disabled by the administrator for all or part of the requested period.</value>
   </data>
   <data name="StartTimeNotMatchingShiftBag" xml:space="preserve">
     <value>The start time {0:HH:mm} on {1:d} doesn't exist in the shift bag {2}</value>

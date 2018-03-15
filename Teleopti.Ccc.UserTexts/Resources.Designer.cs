@@ -23193,7 +23193,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your overtime request has been denied automatically, due to a rule set up by the administrator..
+        ///   Looks up a localized string similar to Overtime request approval has been disabled by the administrator for all or part of the requested period..
         /// </summary>
         public static string OvertimeRequestDenyReasonAutodeny {
             get {
@@ -27009,7 +27009,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your absence request has been denied automatically, due to a rule set up by the administrator..
+        ///   Looks up a localized string similar to Absence request approval has been disabled by the administrator for all or part of the requested period..
         /// </summary>
         public static string RequestDenyReasonAutodeny {
             get {
