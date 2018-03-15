@@ -1,11 +1,22 @@
 import { Injectable } from '@angular/core';
-import { Person } from '../types';
+import { Person, Role } from '../types';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
 export interface PeopleSearchResult {
 	people: Array<Person>;
 	currentPage: number;
 	pages: number;
+}
+
+export interface PeopleSearchResultNew {
+	People: Array<Person>;
+	TotalRows: number;
+}
+
+export interface PeopleSearchQuery {
+	keyword: string;
+	pageIndex: number;
+	pageSize: number;
 }
 
 @Injectable()

@@ -9,12 +9,10 @@ export class WorkspaceServiceStub extends WorkspaceService {
 			LastName: 'Lastname1',
 			Roles: [
 				{
-					CanBeChangedByCurrentUser: true,
 					Id: 'id1',
 					Name: 'Role 1'
 				},
 				{
-					CanBeChangedByCurrentUser: true,
 					Id: 'id2',
 					Name: 'Role 2'
 				}
@@ -26,7 +24,6 @@ export class WorkspaceServiceStub extends WorkspaceService {
 			LastName: 'Lastname2',
 			Roles: [
 				{
-					CanBeChangedByCurrentUser: true,
 					Id: 'id1',
 					Name: 'Role 1'
 				}
@@ -38,7 +35,6 @@ export class WorkspaceServiceStub extends WorkspaceService {
 			LastName: 'Lastname3',
 			Roles: [
 				{
-					CanBeChangedByCurrentUser: true,
 					Id: 'id1',
 					Name: 'Role 1'
 				}
