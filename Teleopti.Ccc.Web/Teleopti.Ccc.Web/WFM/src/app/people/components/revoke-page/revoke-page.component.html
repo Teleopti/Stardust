@@ -5,8 +5,8 @@
 	<div class="role-content">
 		<h3>Current roles</h3>
 		<div class="con-fluid-row" data-test-revoke-current>
-			<div class="con-fluid-flex" *ngFor="let roleId of getRoleIdsOfPeople()">
-				<chip-remove (click)="toggleSelectedRole(roleId)" [active]="isSelectedRole(roleId)" data-test-chip>{{getRole(roleId).Name}}</chip-remove>
+			<div class="con-fluid-flex" *ngFor="let role of getRolesOfPeople()">
+				<chip-remove (click)="toggleSelectedRole(role.Id)" [active]="isSelectedRole(role.Id)" data-test-chip>{{role.Name}}</chip-remove>
 			</div>
 		</div>
 

@@ -30,9 +30,6 @@ export class PeopleComponent implements OnInit {
 
 	ngOnInit() {
 		this.searchPeople();
-		this.rolesService.getRoles().then(roles => {
-			this.roles = roles;
-		});
 	}
 
 	@ViewChild(MatSort) sort: MatSort;
@@ -77,22 +74,6 @@ export class PeopleComponent implements OnInit {
 			.join(', ');
 	}
 
-	grantRoles(roles): void {
-		const peopleIds = this.workspaceService.getSelectedPeople().map(({ Id }) => Id);
-		this.rolesService.grantRoles(peopleIds, roles).then(ok => {
-			this.searchPeople();
-			this.workspaceService.update();
-		});
-	}
-
-	revokeRoles(roles): void {
-		const peopleIds = this.workspaceService.getSelectedPeople().map(({ Id }) => Id);
-		this.rolesService.revokeRoles(peopleIds, roles).then(ok => {
-			this.searchPeople();
-			this.workspaceService.update();
-		});
-	}
-
 	/** Below is window grant component */
 	private _displayGrantView = false;
 	private _displayRevokeView = false;
@@ -117,18 +98,15 @@ export class PeopleComponent implements OnInit {
 	toggleGrantView(): void {
 		this.displayGrantView = !this.displayGrantView;
 	}
+
 	toggleRevokeView(): void {
 		this.displayRevokeView = !this.displayRevokeView;
 	}
 
-	handleGranted(roles: Array<Role>): void {
-		if (roles.length > 0) this.grantRoles(roles);
-		this.toggleGrantView();
-	}
-
-	handleRevoked(roles: Array<Role>): void {
-		if (roles.length > 0) this.revokeRoles(roles);
-		this.toggleRevokeView();
+	resetPages(): void {
+		this.searchPeople();
+		this.displayGrantView = false;
+		this.displayRevokeView = false;
 	}
 
 	//#region Pagination

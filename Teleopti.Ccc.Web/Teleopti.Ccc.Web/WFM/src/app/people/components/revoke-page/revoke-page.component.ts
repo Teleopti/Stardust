@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { Person, Role } from '../../types';
 import { RolePage } from '../shared/role-page';
 
@@ -7,4 +7,16 @@ import { RolePage } from '../shared/role-page';
 	templateUrl: './revoke-page.component.html',
 	styleUrls: ['./revoke-page.component.scss']
 })
-export class RevokePageComponent extends RolePage {}
+export class RevokePageComponent extends RolePage {
+	revokeRoles(roles: Array<string>): void {
+		const peopleIds = this.workspaceService.getSelectedPeople().map(({ Id }) => Id);
+		this.rolesService.revokeRoles(peopleIds, roles).then(ok => {
+			this.workspaceService.update();
+		});
+	}
+
+	save() {
+		this.revokeRoles(this.selectedRoles);
+		super.save();
+	}
+}

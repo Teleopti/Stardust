@@ -62,19 +62,4 @@ describe('GrantPage', () => {
 
 		expect(getChipCount()).toEqual(1);
 	});
-
-	it('should return selected roles on save', () => {
-		fixture.detectChanges();
-		let chipNativeElement = fixture.debugElement.query(By.css(GRANT_AVAILABLE_CHIP_QUERY)).nativeElement;
-		chipNativeElement.click();
-		fixture.detectChanges();
-
-		expect(component.selectedRoles.length).toEqual(1);
-
-		let saveButtonNativeElement = fixture.debugElement.query(By.css(GRANT_SAVE_QUERY)).nativeElement;
-		saveButtonNativeElement.click();
-
-		component.onRolesChanged.subscribe((roles: Array<Role>) => expect(roles.length).toBe(1));
-		component.save();
-	});
 });

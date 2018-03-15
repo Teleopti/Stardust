@@ -1,34 +1,33 @@
-import { Component, Input, Output, EventEmitter, ViewChild} from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { Person, Role } from '../../../types';
-import { WorkspaceService } from '../../../services';
+import { WorkspaceService, RolesService } from '../../../services';
 
 @Component({
 	template: '<div>Override me</div>'
 })
-export class RolePage{
-	constructor(public workspaceService: WorkspaceService) {}
-	
-	@ViewChild('saveBtn') saveButton: HTMLElement;
-	@Input() roles: Array<Role> = [];
-	@Output() onRolesChanged = new EventEmitter<Array<Role>>();
-	selectedRoles = [];
+export class RolePage {
+	constructor(public workspaceService: WorkspaceService, public rolesService: RolesService) {}
 
+	@ViewChild('saveBtn') saveButton: HTMLElement;
+	@Output() onRolesChanged = new EventEmitter();
+	roles: Array<Role> = [];
+	selectedRoles = [];
 
 	getRole(id: string): Role {
 		return this.roles.find(role => role.Id === id);
 	}
 
-	getRoleIdsOfPeople() {
-		let uniqueIds = new Set();
+	getRolesOfPeople(): Array<Role> {
+		let uniqueRoles = [];
 		this.workspaceService.getSelectedPeople().forEach(({ Roles }) => {
 			Roles.forEach(role => {
-				uniqueIds.add(role.Id);
+				const isUniqueRole = uniqueRoles.findIndex(r => r.Id === role.Id) === -1;
+				if (isUniqueRole) {
+					uniqueRoles.push(role);
+				}
 			});
 		});
-
-		return Array.from(uniqueIds).sort((rId1, rId2) => {
-			const role1 = this.getRole(rId1);
-			const role2 = this.getRole(rId2);
+		return uniqueRoles.sort((role1, role2) => {
 			return role1.Name.localeCompare(role2.Name);
 		});
 	}
@@ -47,11 +46,11 @@ export class RolePage{
 	}
 
 	save() {
-		this.onRolesChanged.emit(this.selectedRoles);
+		this.onRolesChanged.emit();
 	}
 
 	close() {
-		this.onRolesChanged.emit([]);
+		this.onRolesChanged.emit();
 	}
 
 	isRoleOnAll(roleId: string): boolean {
@@ -66,7 +65,7 @@ export class RolePage{
 	}
 
 	focusOnSave(): void {
-		if(typeof this.saveButton !== 'undefined') {
+		if (typeof this.saveButton !== 'undefined') {
 			this.saveButton.focus();
 		}
 	}

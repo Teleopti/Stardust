@@ -6,9 +6,12 @@ import { HttpClient } from '@angular/common/http';
 export class RolesService {
 	constructor(private http: HttpClient) {}
 
+	protected rolesCache: Array<Role> = [];
+
 	async getRoles(): Promise<Array<Role>> {
 		const roles = (await this.http.get('../api/PeopleData/fetchRoles').toPromise()) as Array<Role>;
-		return roles.sort((r1, r2) => r1.Name.localeCompare(r2.Name));
+		this.rolesCache = roles.sort((r1, r2) => r1.Name.localeCompare(r2.Name));
+		return this.rolesCache;
 	}
 
 	async grantRoles(persons: Array<String>, roles: Array<String>): Promise<object> {

@@ -5,9 +5,9 @@
 	<div class="role-content">
 		<h3>Current roles</h3>
 		<div class="con-fluid-row" data-test-grant-current>
-			<div class="con-fluid-flex" *ngFor="let roleId of getRoleIdsOfPeople()">
-				<chip [disabled]="true" [inactiveIcon]="isRoleOnAll(roleId) ? 'mdi-check' : 'mdi-minus'" data-test-chip>
-					{{getRole(roleId).Name}}
+			<div class="con-fluid-flex" *ngFor="let role of getRolesOfPeople()">
+				<chip [disabled]="true" [inactiveIcon]="isRoleOnAll(role.Id) ? 'mdi-check' : 'mdi-minus'" data-test-chip>
+					{{role.Name}}
 				</chip>
 			</div>
 		</div>
