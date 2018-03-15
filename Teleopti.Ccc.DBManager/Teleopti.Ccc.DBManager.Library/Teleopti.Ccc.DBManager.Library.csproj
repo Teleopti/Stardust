@@ -89,7 +89,7 @@
     <Compile Include="..\..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="AppRelatedDatabaseTasks.cs" />
+    <Compile Include="ConfigureSystem.cs" />
     <Compile Include="AzureStartDDL.cs" />
     <Compile Include="BackupByFileCopy.cs" />
     <Compile Include="BackupBySql.cs" />

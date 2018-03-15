@@ -196,9 +196,9 @@ namespace Teleopti.Ccc.DBManager.Library
 			return conn;
 		}
 
-		public AppRelatedDatabaseTasks ConfigureSystem()
+		public ConfigureSystem ConfigureSystem()
 		{
-			return new AppRelatedDatabaseTasks(_usingDatabase);
+			return new ConfigureSystem(_usingDatabase);
 		}
 
 		public BackupByFileCopy BackupByFileCopy()

@@ -4,11 +4,11 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.DBManager.Library
 {
-	public class AppRelatedDatabaseTasks
+	public class ConfigureSystem
 	{
 		private readonly ExecuteSql _execute;
 
-		public AppRelatedDatabaseTasks(ExecuteSql execute)
+		public ConfigureSystem(ExecuteSql execute)
 		{
 			_execute = execute;
 		}
@@ -22,6 +22,7 @@ INSERT INTO PersonInApplicationRole
 SELECT '{2}', '193AD35C-7735-44D7-AC0C-B8EDA0011E5F' , GETUTCDATE()", firstName, lastName, personId);
 			_execute.ExecuteNonQuery(sql);
 		}
+
 		//
 		public void AddSystemUserToPersonInfo(Guid personId, string userName, string password, string tenantPassword)
 		{
@@ -67,12 +68,17 @@ SELECT NEWID(),1, '3F0886AB-7B25-4E95-856A-0D726EDC2A67' , GETUTCDATE(), '{0}', 
 			_execute.ExecuteNonQuery(
 				"update tenant.tenant set active = 1, name = @name, applicationconnectionstring = @app, analyticsconnectionstring = @analytics",
 				parameters:
-					new Dictionary<string, object>
-					{
-						{"@name", name ?? string.Empty},
-						{"@app", appConnectionString},
-						{"@analytics", analyticsConnectionString}
-					});
+				new Dictionary<string, object>
+				{
+					{"@name", name ?? string.Empty},
+					{"@app", appConnectionString},
+					{"@analytics", analyticsConnectionString}
+				});
+		}
+
+		public void ActivateAllTenants()
+		{
+			_execute.ExecuteNonQuery("update tenant.tenant set active = 1");
 		}
 
 		public void PersistAuditSetting()
@@ -80,7 +86,7 @@ SELECT NEWID(),1, '3F0886AB-7B25-4E95-856A-0D726EDC2A67' , GETUTCDATE(), '{0}', 
 			_execute.ExecuteNonQuery("exec Auditing.InitAuditTables");
 			_execute.ExecuteNonQuery("delete from auditing.Auditsetting");
 			_execute.ExecuteNonQuery("insert into auditing.Auditsetting (id, IsScheduleEnabled) values (" +
-											 AuditSettingDefault.TheId + ", 1)");
+									 AuditSettingDefault.TheId + ", 1)");
 		}
 
 		public void TryAddTenantAdminUser()
@@ -88,6 +94,16 @@ SELECT NEWID(),1, '3F0886AB-7B25-4E95-856A-0D726EDC2A67' , GETUTCDATE(), '{0}', 
 			_execute.ExecuteNonQuery(@" if not exists (select * from Tenant.AdminUser )
 										INSERT INTO Tenant.AdminUser(Name, Email, Password)
 										VALUES('FirstAdmin', 'first@admin.is', '###70D74A6BBA33B5972EADAD9DD449D273E1F4961D###')");
+		}
+
+		public void ConfigureSalesDemoDatabaseUserAsMe()
+		{
+			var userIdInSalesDemo = "10957ad5-5489-48e0-959a-9b5e015b2b5c";
+			_execute.ExecuteNonQuery($@"
+				UPDATE Tenant.PersonInfo
+				SET [Identity] = '{Environment.UserDomainName}\{Environment.UserName}'
+				WHERE Id = '{userIdInSalesDemo}'
+				");
 		}
 	}
 }

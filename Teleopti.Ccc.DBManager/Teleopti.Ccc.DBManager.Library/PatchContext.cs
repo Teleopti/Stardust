@@ -23,31 +23,24 @@ namespace Teleopti.Ccc.DBManager.Library
 		private DatabaseFolder _databaseFolder;
 		private DatabaseVersionInformation _databaseVersionInformation;
 		private SchemaVersionInformation _schemaVersionInformation;
+		private ConfigureSystem _configureSystem;
 		private DatabaseRestorer _restorer;
 
-		public ExecuteSql MasterExecuteSql() =>
-			_masterExecuteSql ?? (_masterExecuteSql = new ExecuteSql(() => connectAndOpen(connectionStringToMaster()), _log));
+		private readonly RepoFolder _repoFolder = new RepoFolder();
 
-		public ExecuteSql ExecuteSql() =>
-			_executeSql ?? (_executeSql = new ExecuteSql(() => connectAndOpen(connectionString()), _log));
-
-		public DatabaseFolder DatabaseFolder() =>
-			_databaseFolder ?? (_databaseFolder = new DatabaseFolder(new DbManagerFolder(_command.DbManagerFolderPath)));
-
-		public DatabaseVersionInformation DatabaseVersionInformation() =>
-			_databaseVersionInformation ?? (_databaseVersionInformation = new DatabaseVersionInformation(DatabaseFolder(), ExecuteSql()));
-
-		public SchemaVersionInformation SchemaVersionInformation() =>
-			_schemaVersionInformation ?? (_schemaVersionInformation = new SchemaVersionInformation(DatabaseFolder()));
-
-		public DatabaseRestorer Restorer() =>
-			_restorer ?? (_restorer = new DatabaseRestorer(MasterExecuteSql(), ExecuteSql(), new RepoFolder(), new DebugSetupDatabaseFolder(new RepoFolder())));
+		public ExecuteSql MasterExecuteSql() => _masterExecuteSql ?? (_masterExecuteSql = new ExecuteSql(() => connectAndOpen(connectionStringToMaster()), _log));
+		public ExecuteSql ExecuteSql() => _executeSql ?? (_executeSql = new ExecuteSql(() => connectAndOpen(connectionString()), _log));
+		public DatabaseFolder DatabaseFolder() => _databaseFolder ?? (_databaseFolder = new DatabaseFolder(new DbManagerFolder(_command.DbManagerFolderPath)));
+		public DatabaseVersionInformation DatabaseVersionInformation() => _databaseVersionInformation ?? (_databaseVersionInformation = new DatabaseVersionInformation(DatabaseFolder(), ExecuteSql()));
+		public SchemaVersionInformation SchemaVersionInformation() => _schemaVersionInformation ?? (_schemaVersionInformation = new SchemaVersionInformation(DatabaseFolder()));
+		private ConfigureSystem appRelatedDatabaseTasks() => _configureSystem ?? (_configureSystem = new ConfigureSystem(ExecuteSql()));
+		public DatabaseRestorer Restorer() => _restorer ?? (_restorer = new DatabaseRestorer(MasterExecuteSql(), ExecuteSql(), _repoFolder, new DebugSetupDatabaseFolder(_repoFolder), appRelatedDatabaseTasks()));
 
 		public bool DatabaseExists()
 		{
 			try
 			{
-				ExecuteSql();
+				ExecuteSql().Execute(c => { });
 				return true;
 			}
 			catch
