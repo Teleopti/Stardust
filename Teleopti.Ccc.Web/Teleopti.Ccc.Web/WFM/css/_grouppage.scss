@@ -93,6 +93,10 @@ group-page-picker {
 					@extend .vertically-centered;
 				}
 
+				&:focus .md-icon {
+					outline: 1px solid $primary;
+				}
+
 				&.md-checked .md-icon {
 					background-color: $blue-300;
 					border-color: $blue-300;
