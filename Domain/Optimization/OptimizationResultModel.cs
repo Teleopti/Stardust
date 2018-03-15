@@ -22,7 +22,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public void Map(IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, DateOnlyPeriod period)
 		{
-			var timezoneToSaveToDb = TimeZoneInfo.Utc; //this is actually wrong, but maybe good enough for now... (due to stored data per day and not per interval)
 			foreach (var keyValuePair in skillDays)
 			{
 				var skill = keyValuePair.Key;
@@ -32,32 +31,21 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 				var item = new OptimizationResultSkill {SkillName = skill.Name};
 				_skillResultList.Add(item);
+				var skillDaysDic = keyValuePair.Value.ToDictionary(k => k.CurrentDate);
 				foreach (var dateOnly in period.DayCollection())
 				{
-					var periodInAgentTimeZone = dateOnly.ToDateOnlyPeriod().ToDateTimePeriod(timezoneToSaveToDb);
-					var skillStaffPeriods = new List<ISkillStaffPeriod>();
-
-					foreach (var skillDay in skillDays[skill])
-					{
-						foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
-						{
-							if (periodInAgentTimeZone.Contains(skillStaffPeriod.Period))
-							{
-								skillStaffPeriods.Add(skillStaffPeriod);
-							}
-						}
-					}
-
+					ISkillDay skillDay;
+					var found = skillDaysDic.TryGetValue(dateOnly, out skillDay);
+					double relativeDifference = !found
+						? 0
+						: SkillStaffPeriodHelper.RelativeDifference(skillDay.SkillStaffPeriodCollection).GetValueOrDefault(0);
 					var detail = new OptimizationResultSkillDetail
 					{
 						Date = dateOnly,
-						RelativeDifference = SkillStaffPeriodHelper.RelativeDifference(skillStaffPeriods).GetValueOrDefault(0)
+						RelativeDifference = relativeDifference
 					};
 
-					//this is wrong. will not check if skill is open correctly. 
-					//add test + fix when needed
-					var oneOfTheSkillDays = skillDays[skill].FirstOrDefault(); 
-					detail.ColorId = oneOfTheSkillDays != null && oneOfTheSkillDays.OpenForWork.IsOpen ? mapColorId(detail.RelativeDifference, skill) : 4;
+					detail.ColorId = skillDay != null && skillDay.OpenForWork.IsOpen ? mapColorId(detail.RelativeDifference, skill) : 4;
 					item.AddDetail(detail);
 				}
 			}
