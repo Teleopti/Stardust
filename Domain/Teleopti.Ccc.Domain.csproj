@@ -195,7 +195,7 @@
     <Compile Include="ApplicationLayer\Gamification\RecalculateBadgeJobService.cs" />
     <Compile Include="ApplicationLayer\ImportExternalPerformance\ExternalPerformancePersister.cs" />
     <Compile Include="ApplicationLayer\ImportExternalPerformance\IExternalPerformancePersister.cs" />
-    <Compile Include="ApplicationLayer\OvertimeRequests\ IOvertimeRequestAvailability.cs" />
+    <Compile Include="ApplicationLayer\OvertimeRequests\IOvertimeRequestAvailability.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\ILicenseAvailability.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\LicenseAvailability.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeMinimumApprovalThresholdInMinutes.cs" />
