@@ -8,19 +8,30 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeAnalyticsPreferenceRepository : IAnalyticsPreferenceRepository
 	{
+		private readonly Dictionary<int, Guid> dimPerson = new Dictionary<int, Guid>();
 		private readonly List<AnalyticsFactSchedulePreference> fakeAnalyticsFactSchedulePreferences;
-		public readonly Dictionary<int, Guid> PersonIdAndCode = new Dictionary<int, Guid>();
+
 		public FakeAnalyticsPreferenceRepository()
 		{
 			fakeAnalyticsFactSchedulePreferences = new List<AnalyticsFactSchedulePreference>();
 		}
 
+		public void AddDimPerson(int personId, Guid personCode)
+		{
+			if (dimPerson.ContainsKey(personId))
+			{
+				throw new ApplicationException($"Fake dim person with personId {personId} already exists");
+			}
+
+			dimPerson[personId] = personCode;
+		}
+
 		public void AddPreference(AnalyticsFactSchedulePreference analyticsFactSchedulePreference)
 		{
-			if (!PersonIdAndCode.TryGetValue(analyticsFactSchedulePreference.PersonId, out var personCode))
+			if (!dimPerson.TryGetValue(analyticsFactSchedulePreference.PersonId, out var personCode))
 			{
 				personCode = Guid.NewGuid();
-				PersonIdAndCode[analyticsFactSchedulePreference.PersonId] = personCode;
+				dimPerson[analyticsFactSchedulePreference.PersonId] = personCode;
 			}
 
 			fakeAnalyticsFactSchedulePreferences.Add(analyticsFactSchedulePreference);
@@ -28,7 +39,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void DeletePreferences(int dateId, Guid personCode, int? scenarioId = null)
 		{
-			var person = PersonIdAndCode.Where(p => p.Value == personCode).ToList();
+			var person = dimPerson.Where(p => p.Value == personCode).ToList();
 			if (!person.Any()) return;
 
 			var personIds = person.Select(p => p.Key);

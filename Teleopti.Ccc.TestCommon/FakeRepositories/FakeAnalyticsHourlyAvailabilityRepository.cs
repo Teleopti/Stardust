@@ -8,17 +8,27 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeAnalyticsHourlyAvailabilityRepository : IAnalyticsHourlyAvailabilityRepository
 	{
+		private readonly Dictionary<int, Guid> dimPerson = new Dictionary<int, Guid>();
 		public readonly List<AnalyticsHourlyAvailability> AnalyticsHourlyAvailabilities;
-		public readonly Dictionary<int, Guid> personIdAndCode = new Dictionary<int, Guid>();
 
 		public FakeAnalyticsHourlyAvailabilityRepository()
 		{
 			AnalyticsHourlyAvailabilities = new List<AnalyticsHourlyAvailability>();
 		}
 
+		public void AddDimPerson(int personId, Guid personCode)
+		{
+			if (dimPerson.ContainsKey(personId))
+			{
+				throw new ApplicationException($"Fake dim person with personId {personId} already exists");
+			}
+
+			dimPerson[personId] = personCode;
+		}
+
 		public void Delete(Guid personCode, int dateId, int scenarioId)
 		{
-			var person = personIdAndCode.Where(p => p.Value == personCode).ToList();
+			var person = dimPerson.Where(p => p.Value == personCode).ToList();
 			if (!person.Any()) return;
 
 			var personIds = person.Select(p=>p.Key);
@@ -28,10 +38,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void AddOrUpdate(AnalyticsHourlyAvailability analyticsHourlyAvailability)
 		{
-			if (!personIdAndCode.TryGetValue(analyticsHourlyAvailability.PersonId, out var personCode))
+			if (!dimPerson.TryGetValue(analyticsHourlyAvailability.PersonId, out var personCode))
 			{
 				personCode = Guid.NewGuid();
-				personIdAndCode[analyticsHourlyAvailability.PersonId] = personCode;
+				dimPerson[analyticsHourlyAvailability.PersonId] = personCode;
 			}
 			AnalyticsHourlyAvailabilities.Add(analyticsHourlyAvailability);
 		}
