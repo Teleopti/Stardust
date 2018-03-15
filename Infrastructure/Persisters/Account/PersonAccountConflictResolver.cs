@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -42,12 +41,13 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Account
 				{
 					_traceableRefreshService.Refresh(account);
 					if(scheduleDictionary == null) continue;
-					var period = scheduleDictionary.Period.LoadedPeriod().ToDateOnlyPeriod(TimeZoneInfo.Utc);
-					var scheduleDays = scheduleDictionary[paa.Person].ScheduledDayCollection(period).ToList();
+					var period = scheduleDictionary.Period.LoadedPeriod().ToDateOnlyPeriod(account.Owner.Person.PermissionInformation.DefaultTimeZone());
+					var intersection = account.Period().Intersection(period);
+					if (!intersection.HasValue) continue;
+					var scheduleDays = scheduleDictionary[paa.Person].ScheduledDayCollection(intersection.Value).ToList();
 					var loaded = account.Owner.Absence.Tracker.TrackForReset(account.Owner.Absence, scheduleDays);
 					account.Track(loaded);
 				}
-				//paa.AccountCollection().ForEach(_traceableRefreshService.Refresh);
 			});
 		}
 	}

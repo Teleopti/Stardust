@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
@@ -37,7 +37,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 
 		[Test]
-		//[Ignore("#48474")]
 		public void ShouldRecalculate()
 		{
 			var scenario = new Scenario {DefaultScenario = true};
@@ -79,6 +78,55 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account
 
 			personAbsenceAccount.AccountCollection().Single()
 				.LatestCalculatedBalance.Should().Be.EqualTo(TimeSpan.FromDays(1));
+		}
+
+
+		[Test]
+		public void ShouldTrackCorrectAccountDay()
+		{
+			var scenario = new Scenario { DefaultScenario = true };
+			var person = new Person().InTimeZone(TimeZoneInfo.Utc);
+			var tracker = Tracker.CreateDayTracker();
+			var absence = new Absence { Description = new Description("_"), Tracker = tracker };
+			var activity = new Activity("_");
+			var accountDay1= new AccountDay(new DateOnly(1999,12,31));
+			var accountDay2 = new AccountDay(new DateOnly(2000, 1, 1));
+			var personAbsenceAccount = new PersonAbsenceAccount(person, absence);
+			personAbsenceAccount.Add(accountDay1);
+			personAbsenceAccount.Add(accountDay2);
+			var personAbsence1 = new PersonAbsence(person, scenario, new AbsenceLayer(absence, new DateTimePeriod(1999, 12, 31, 2000, 1, 1)));
+			var ass1 = new PersonAssignment(person, scenario, new DateOnly(1999, 12, 31)).WithLayer(activity, new TimePeriod(8, 17));
+			var personAbsence2 = new PersonAbsence(person, scenario, new AbsenceLayer(absence, new DateTimePeriod(2000, 1, 1, 2000, 1, 2)));
+			var ass2 = new PersonAssignment(person, scenario, new DateOnly(2000, 1, 1)).WithLayer(activity, new TimePeriod(8, 17));
+			var personAbsence3 = new PersonAbsence(person, scenario, new AbsenceLayer(absence, new DateTimePeriod(2001, 1, 1, 2001, 1, 2)));
+			var ass3 = new PersonAssignment(person, scenario, new DateOnly(2001, 1, 1)).WithLayer(activity, new TimePeriod(8, 17));
+			using (var setup = CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			{
+				ScenarioRepository.Add(scenario);
+				PersonRepository.Add(person);
+				AbsenceRepository.Add(absence);
+				ActivityRepository.Add(activity);
+				PersonAbsenceAccountRepository.Add(personAbsenceAccount);
+				((IRepository<IPersonAbsence>)PersonAbsenceRepository).Add(personAbsence1);
+				((IRepository<IPersonAbsence>)PersonAbsenceRepository).Add(personAbsence2);
+				((IRepository<IPersonAbsence>)PersonAbsenceRepository).Add(personAbsence3);
+				PersonAssignmentRepository.Add(ass1);
+				PersonAssignmentRepository.Add(ass2);
+				PersonAssignmentRepository.Add(ass3);
+				setup.PersistAll();
+			}
+			var schedulerStateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(new DateOnly(1999, 12, 31), new DateOnly(2000,1,1)), person, new List<IPersistableScheduleData> { ass1, ass2, ass3, personAbsence1, personAbsence2, personAbsence3 });
+
+			using (CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			{
+				Target.Resolve(new[] { personAbsenceAccount }, schedulerStateHolder.Schedules);
+			}
+
+			//simulate to remove personAbsence1
+			accountDay2.Track(TimeSpan.Zero);
+
+			personAbsenceAccount.AccountCollection()
+				.ForEach(account => account.LatestCalculatedBalance.Should().Be.EqualTo(TimeSpan.FromDays(1)));
 		}
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
