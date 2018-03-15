@@ -37,7 +37,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 		public ICurrentBusinessUnit CurrentBusinessUnit;
 		public FakeJobResultRepository JobResultRepository;
-		public FakeEventPublisher FakeEventPublisher;
 
 		public SchedulePlanningPeriodCommandHandler Target;
 
@@ -52,7 +51,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			//TODO: Make attribute for this maybe?
 			var systemUser = new Person().WithName(new Name("system","system")).WithId(SystemUser.Id)
 				.InTimeZone(TimeZoneInfo.Utc);
-			TimeZoneGuard.Instance.TimeZone = systemUser.PermissionInformation.DefaultTimeZone(); //this should not be needed! fix if repeated
 			PersonRepository.Has(systemUser);
 			BusinessUnitRepository.Has(CurrentBusinessUnit.Current());
 			//
