@@ -15,7 +15,8 @@ import {
 	MatCheckboxModule,
 	MatPaginatorModule,
 	MatDividerModule,
-	MatTableModule
+	MatTableModule,
+	MatSortModule
 } from '@angular/material';
 import {
 	RolePage,
@@ -27,6 +28,7 @@ import {
 	SearchPageComponent
 } from './components';
 import { RolesService, WorkspaceService, SearchService } from './services';
+import { WorkspaceComponent } from './components/workspace/workspace.component';
 
 @NgModule({
 	declarations: [
@@ -37,7 +39,8 @@ import { RolesService, WorkspaceService, SearchService } from './services';
 		ChipComponent,
 		ChipAddComponent,
 		ChipRemoveComponent,
-		SearchPageComponent
+		SearchPageComponent,
+		WorkspaceComponent
 	],
 	imports: [
 		SharedModule,
@@ -47,7 +50,8 @@ import { RolesService, WorkspaceService, SearchService } from './services';
 		MatButtonModule,
 		MatDividerModule,
 		MatTableModule,
-		HttpClientModule
+		HttpClientModule,
+		MatSortModule
 	],
 	providers: [WorkspaceService, RolesService, SearchService],
 	exports: [],

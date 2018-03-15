@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { PageEvent, MatTableDataSource } from '@angular/material';
+import { PageEvent, MatTableDataSource, MatSort } from '@angular/material';
 import { Person, Role } from './types';
 
 import { Observable } from 'rxjs/Rx';
@@ -33,6 +33,12 @@ export class PeopleComponent implements OnInit {
 		this.rolesService.getRoles().then(roles => {
 			this.roles = roles;
 		});
+	}
+
+	@ViewChild(MatSort) sort: MatSort;
+
+	ngAfterViewInit() {
+		this.dataSource.sort = this.sort;
 	}
 
 	searchPeople() {
@@ -69,10 +75,6 @@ export class PeopleComponent implements OnInit {
 		return person.Roles.map((role: Role) => role.Name)
 			.sort((r1, r2) => r1.localeCompare(r2))
 			.join(', ');
-	}
-
-	getSelectedPeopleCount(): number {
-		return this.workspaceService.getSelectedPeople().length;
 	}
 
 	grantRoles(roles): void {
@@ -139,7 +141,7 @@ export class PeopleComponent implements OnInit {
 	//#endregion
 
 	//region tabletest
-	displayedColumns = ['select', 'FirstName', 'LastName', 'Roles'];
+	displayedColumns = ['select', 'FirstName', 'LastName', 'Roles', 'Site', 'Team'];
 	dataSource = new MatTableDataSource<Person>(this.searchService.getPeople());
 
 	toggleRow(row: Person) {

@@ -29,7 +29,7 @@
 			</div>
 			<div class="con-row">
 				<div class="con-flex">
-					<mat-table #table [dataSource]="dataSource" data-test-search>
+					<mat-table #table [dataSource]="dataSource" matSort data-test-search>
 
 						<!-- Checkbox Column -->
 						<ng-container matColumnDef="select">
@@ -44,20 +44,31 @@
 						</ng-container>
 
 						<ng-container matColumnDef="FirstName">
-							<mat-header-cell *matHeaderCellDef> First name </mat-header-cell>
+							<mat-header-cell *matHeaderCellDef mat-sort-header> First name </mat-header-cell>
 							<mat-cell *matCellDef="let person" data-test-person-firstname> {{person.FirstName}} </mat-cell>
 						</ng-container>
 
 						<!-- Name Column -->
 						<ng-container matColumnDef="LastName">
-							<mat-header-cell *matHeaderCellDef> Last name </mat-header-cell>
+							<mat-header-cell *matHeaderCellDef mat-sort-header> Last name </mat-header-cell>
 							<mat-cell *matCellDef="let person" data-test-person-lastname> {{person.LastName}} </mat-cell>
 						</ng-container>
 
 						<ng-container matColumnDef="Roles">
-							<mat-header-cell *matHeaderCellDef> Roles </mat-header-cell>
+							<mat-header-cell *matHeaderCellDef mat-sort-header> Roles </mat-header-cell>
 							<mat-cell *matCellDef="let person" data-test-person-role> {{personToRoles(person)}} </mat-cell>
 						</ng-container>
+
+						<ng-container matColumnDef="Site">
+							<mat-header-cell *matHeaderCellDef mat-sort-header> Site </mat-header-cell>
+							<mat-cell *matCellDef="let person" data-test-person-site> Site Example </mat-cell>
+						</ng-container>
+
+						<ng-container matColumnDef="Team">
+							<mat-header-cell *matHeaderCellDef mat-sort-header> Team </mat-header-cell>
+							<mat-cell *matCellDef="let person" data-test-person-team> Team Example </mat-cell>
+						</ng-container>
+
 
 						<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
 						<mat-row *matRowDef="let row; columns: displayedColumns;" (click)="toggleRow(row)" data-test-person>
@@ -71,21 +82,6 @@
 		</div>
 	</div>
 	<div class="con-flex workspace-parent">
-		<div class="panel material-depth-1 workspace" data-test-workspace>
-			<h2>
-				<i class="mdi mdi-account-switch"></i> Workspace
-				<span *ngIf="getSelectedPeopleCount() > 0">({{getSelectedPeopleCount()}})</span>
-			</h2>
-			<ul>
-				<li *ngFor="let person of workspaceService.getSelectedPeople()" class="" data-test-person>
-					<div class="con-flex">
-						<i class="mdi mdi-close" (click)="workspaceService.deselectPerson(person)" data-test-person-remove></i>
-						<span data-test-person-name>
-							{{person.FirstName}} {{person.LastName}}
-						</span>
-					</div>
-				</li>
-			</ul>
-		</div>
+		<people-workspace></people-workspace>
 	</div>
 </div>
