@@ -89,16 +89,24 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ApprovePeriodAsInAdherence>().SingleInstance();
 			builder.RegisterType<RemoveApprovedPeriodCommandHandler>().SingleInstance();
 			builder.RegisterType<RemoveApprovedPeriod>().SingleInstance();
-			if (_config.Toggle(Toggles.RTA_RemoveApprovedOOA_47721))
-			{
-				builder.RegisterType<AgentAdherenceDayLoaderFromEventStore>().As<IAgentAdherenceDayLoader>().SingleInstance();
-				builder.RegisterType<RtaEventStore>().As<IRtaEventStore>().As<IRtaEventStoreTestReader>().As<IRtaEventStoreReader>().SingleInstance();
-			}
+
+			if (_config.Toggle(Toggles.RTA_StoreEvents_47721))
+				builder.RegisterType<RtaEventStore>()
+					.As<IRtaEventStore>()
+					.As<IRtaEventStoreReader>()
+					.As<IRtaEventStoreTestReader>()
+					.SingleInstance();
 			else
-			{
+				builder.RegisterType<NoRtaEventStore>()
+					.As<IRtaEventStore>()
+					.As<IRtaEventStoreReader>()
+					.SingleInstance();
+
+			if (_config.Toggle(Toggles.RTA_RemoveApprovedOOA_47721))
+				builder.RegisterType<AgentAdherenceDayLoaderFromEventStore>().As<IAgentAdherenceDayLoader>().SingleInstance();
+			else
 				builder.RegisterType<AgentAdherenceDayLoader>().As<IAgentAdherenceDayLoader>().SingleInstance();
-				builder.RegisterType<NoRtaEventStore>().As<IRtaEventStore>().SingleInstance();
-			}
+
 			builder.RegisterType<ScheduleLoader>().SingleInstance();
 			builder.RegisterType<AdherencePercentageCalculator>().SingleInstance();
 
@@ -146,7 +154,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<ConfigurationValidator>().As<IConfigurationValidator>().SingleInstance();
 			else
 				builder.RegisterType<NoConfigurationValidator>().As<IConfigurationValidator>().SingleInstance();
-
 		}
 	}
 }

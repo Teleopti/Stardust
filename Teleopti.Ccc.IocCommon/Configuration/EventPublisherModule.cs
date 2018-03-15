@@ -32,7 +32,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SyncAllEventPublisher>().SingleInstance();
 			builder.RegisterType<HangfireAsSyncEventPublisher>().SingleInstance().ApplyAspects();
 			builder.RegisterType<StardustEventPublisher>().SingleInstance();
-			if (_configuration.Toggle(Toggles.RTA_RemoveApprovedOOA_47721))
+			
+			if (_configuration.Toggle(Toggles.RTA_StoreEvents_47721))
 				builder.RegisterType<RtaEventPublisher>().As<IRtaEventPublisher>().SingleInstance().ApplyAspects();
 			else
 				builder.RegisterType<NoRtaEventPublisher>().As<IRtaEventPublisher>().SingleInstance();

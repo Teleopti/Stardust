@@ -14,7 +14,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain
 {
-	public class RtaEventStore : IRtaEventStore, IRtaEventStoreTestReader, IRtaEventStoreReader
+	public class RtaEventStore : IRtaEventStore, IRtaEventStoreReader, IRtaEventStoreTestReader
 	{
 		private readonly ICurrentUnitOfWork _unitOfWork;
 		private readonly IJsonEventSerializer _serializer;

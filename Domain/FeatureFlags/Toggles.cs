@@ -24,6 +24,7 @@
 		RTA_ReloadUIOnSystemVersionChanged_48196,
 		RTA_ModifySkillGroup_48191,
 		RTA_RemoveApprovedOOA_47721,
+		RTA_StoreEvents_47721,
 		
 		MyTimeWeb_SortRequestList_40711,
 		MyTimeWeb_ViewIntradayStaffingProbability_41608,

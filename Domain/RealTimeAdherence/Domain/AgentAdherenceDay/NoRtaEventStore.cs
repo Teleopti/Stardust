@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay
 {
-	public class NoRtaEventStore : IRtaEventStore
+	public class NoRtaEventStore : IRtaEventStore, IRtaEventStoreReader
 	{
 		public void Add(IEvent @event)
 		{
@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay
 			return Enumerable.Empty<IEvent>();
 		}
 
-		public IEvent LoadLastBefore(Guid personId, DateTime timestamp)
+		public IEvent LoadLastAdherenceEventBefore(Guid personId, DateTime timestamp)
 		{
 			return null;
 		}
