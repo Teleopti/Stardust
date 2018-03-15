@@ -341,21 +341,36 @@ where bg.IsDeleted = 1
 
 if datediff(second,@start,getdate()) > @timeout 
 	return
+/*
+exec Purge
+*/
 
 --Messages
 select @KeepUntil = dateadd(year,-1*(select isnull(Value,100) from PurgeSetting where [Key] = 'YearsToKeepMessage'),getdate())
-select @MaxDate = dateadd(day,@BatchSize,isnull(min(UpdatedOn),'19900101')) from PushMessageDialogue with (nolock)
+set @RowCount = 1
+while @RowCount > 0
+begin
+	delete top(1000) DialogueMessage
+	from DialogueMessage dm
+	inner join PushMessageDialogue pmd on pmd.Id = dm.Parent
+	where pmd.UpdatedOn < @KeepUntil
 
-delete DialogueMessage
-from DialogueMessage dm
-inner join PushMessageDialogue pmd on pmd.Id = dm.Parent
-where pmd.UpdatedOn < @KeepUntil
-and pmd.UpdatedOn < @MaxDate
+	select @RowCount = @@rowcount
+	if datediff(second,@start,getdate()) > @timeout 
+		return
+end
 
-delete PushMessageDialogue
-from PushMessageDialogue pmd
-where pmd.UpdatedOn < @KeepUntil
-and pmd.UpdatedOn < @MaxDate
+set @RowCount = 1
+while @RowCount > 0
+begin
+	delete top(1000) PushMessageDialogue
+	from PushMessageDialogue pmd
+	where pmd.UpdatedOn < @KeepUntil
+
+	select @RowCount = @@rowcount
+	if datediff(second,@start,getdate()) > @timeout 
+		return
+end
 
 delete ReplyOptions
 from ReplyOptions ro
