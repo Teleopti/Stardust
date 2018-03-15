@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Globalization;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
@@ -491,6 +492,64 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			rows[0].Should().Be("skill;startdatetime;enddatetime;forecasted agents;total scheduled agents;total diff;total scheduled heads;BpoName;Teleopti");
 			rows[1].Should().Be.EqualTo("skillname;2017-08-15 08:00;2017-08-15 08:15;15,7;10;-5,7;12;2;0");
 			rows[2].Should().Be.EqualTo("skillname;2017-08-15 08:15;2017-08-15 08:30;15,7;17;1,3;28;4;7");
+		}
+		
+		[Test, Ignore("WIP")]
+		public void ShouldHandleShrinkage()
+		{
+			FakeLoggedOnUser.CurrentUser().PermissionInformation.SetCulture(new CultureInfo("en-US"));
+			var skill = createSkill(15, "skillname", new TimePeriod(8, 0, 8, 30));
+			skill.SetId(Guid.NewGuid());
+			
+			var scenario = SkillSetupHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository);			
+			var skillDay = SkillSetupHelper.CreateSkillDayWithDemand(skill, scenario, new DateTime(2017, 8, 15), new TimePeriod(8, 0, 8, 30), 15.7);
+			skillDay.CompleteSkillStaffPeriodCollection.ForEach(ssp => ssp.Payload.Shrinkage = new Percent(0.5));
+			
+			SkillRepository.Add(skill);
+			SkillDayRepository.Add(skillDay);
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
+			{
+				new SkillCombinationResource
+				{
+					StartDateTime = new DateTime(2017, 08, 15, 8, 0, 0).Utc(),
+					EndDateTime = new DateTime(2017, 08, 15, 8, 15, 0).Utc(),
+					Resource = 8,
+					SkillCombination = new[] { skill.Id.GetValueOrDefault()}
+				},
+				new SkillCombinationResource
+				{
+					StartDateTime = new DateTime(2017, 08, 15, 8, 15, 0).Utc(),
+					EndDateTime = new DateTime(2017, 08, 15, 8, 30, 0).Utc(),
+					Resource = 6,
+					SkillCombination = new[] { skill.Id.GetValueOrDefault() }
+				}
+			});
+
+
+			var heads = new List<ScheduledHeads>
+			{
+				new ScheduledHeads
+				{
+					StartDateTime = new DateTime(2017, 08, 15, 8, 0, 0).Utc(),
+					EndDateTime = new DateTime(2017, 08, 15, 8, 15, 0).Utc(),
+					Heads = 8
+				},
+				new ScheduledHeads
+				{
+					StartDateTime = new DateTime(2017, 08, 15, 8, 15, 0).Utc(),
+					EndDateTime = new DateTime(2017, 08, 15, 8, 30, 0).Utc(),
+					Heads = 6
+				}
+			};
+			SkillCombinationResourceRepository.ScheduledHeadsForSkillList.AddRange(heads);
+
+			var period = new DateOnlyPeriod(new DateOnly(2017, 8, 15), new DateOnly(2017, 8, 16));
+			var forecastedData = Target.ExportDemand(skill, period, true);
+			var rows = forecastedData.Split(new[] { "\r\n" }, StringSplitOptions.None);
+			rows.Length.Should().Be(3);
+			rows[0].Should().Be("skill,startdatetime,enddatetime,forecasted agents,total scheduled agents,total diff,total scheduled heads");
+			rows[1].Should().Be.EqualTo("skillname,8/15/2017 8:00 AM,8/15/2017 8:15 AM,15.7,8,-7.7,8");
+			rows[2].Should().Be.EqualTo("skillname,8/15/2017 8:15 AM,8/15/2017 8:30 AM,15.7,6,-9.7,6");
 		}
 		
 		private static ISkill createSkill(int intervalLength, string skillName, TimePeriod openHours)

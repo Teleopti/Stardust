@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 			_loggedOnUser = loggedOnUser;
 		}
 
-		public string ExportDemand(ISkill skill, DateOnlyPeriod period)
+		public string ExportDemand(ISkill skill, DateOnlyPeriod period, bool useShrinkage = false)
 		{
 			var userCulture = _loggedOnUser.CurrentUser().PermissionInformation.Culture();
 			var separator = userCulture.TextInfo.ListSeparator;
@@ -48,7 +48,11 @@ namespace Teleopti.Ccc.Domain.Staffing
 			var skillStaffPeriodHolder = new SkillStaffPeriodHolder(loadSkillSchedule);
 			var forecastedData = new StringBuilder();
 			var allIntervals = new List<SkillStaffingInterval>();
-			allIntervals.AddRange(_scheduledStaffingProvider.StaffingPerSkill(new List<ISkill>{skill},period.Inflate(1).ToDateTimePeriod(TimeZoneInfo.Utc),false,true));
+			var staffingPerSkill = _scheduledStaffingProvider.StaffingPerSkill(new List<ISkill> {skill},
+				period.Inflate(1).ToDateTimePeriod(TimeZoneInfo.Utc), useShrinkage, true);
+			//staffingPerSkill[0]
+			
+			allIntervals.AddRange(staffingPerSkill);
 
 			if (!skillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.TryGetValue(skill, out var skillStaffPeriods))
 				return forecastedData.ToString().Trim();
