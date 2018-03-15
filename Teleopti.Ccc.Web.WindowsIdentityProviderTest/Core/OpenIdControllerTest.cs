@@ -99,6 +99,26 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProviderTest.Core
 		}
 
 		[Test]
+		public void ShouldReturnNotFoundWhenNoParameters()
+		{
+			var openIdProviderWapper = MockRepository.GenerateMock<IOpenIdProviderWrapper>();
+			var request = MockRepository.GenerateMock<IAuthenticationRequest>();
+			var httpRequest = MockRepository.GenerateStub<HttpRequestBase>();
+			var httpContext = MockRepository.GenerateStub<HttpContextBase>();
+			var currentHttpContext = MockRepository.GenerateMock<ICurrentHttpContext>();
+
+			request.Stub(x => x.IsResponseReady).Return(false);
+			openIdProviderWapper.Stub(x => x.GetRequest()).Return(null);
+			httpContext.Stub(x => x.Request).Return(httpRequest);
+			currentHttpContext.Stub(x => x.Current()).Return(httpContext);
+			httpRequest.Stub(x => x.HttpMethod).Return("");
+
+			var target = new OpenIdController(openIdProviderWapper, null, currentHttpContext);
+			var ex = Assert.Throws<HttpException>(() => target.Provider());
+			Assert.That(ex.GetHttpCode(), Is.EqualTo(404));
+		}
+
+		[Test]
 		public void ProviderShouldSimplyRespondIfTheResponseIsReady()
 		{
 			var openIdProviderWapper = MockRepository.GenerateMock<IOpenIdProviderWrapper>();

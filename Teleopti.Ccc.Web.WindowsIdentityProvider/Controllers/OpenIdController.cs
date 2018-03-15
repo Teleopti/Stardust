@@ -3,6 +3,7 @@ using System.Configuration;
 using System.Linq;
 using System.Reflection;
 using System.Security.Claims;
+using System.Web;
 using System.Web.Mvc;
 using DotNetOpenAuth.Messaging;
 using DotNetOpenAuth.OpenId;
@@ -51,6 +52,9 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Controllers
 				return new EmptyResult();
 			}
 			var request = _openIdProvider.GetRequest();
+
+			if (request == null)
+				throw new HttpException(404, "Authentication request not found.");
 
 			// handles request from site
 			if (request.IsResponseReady)
