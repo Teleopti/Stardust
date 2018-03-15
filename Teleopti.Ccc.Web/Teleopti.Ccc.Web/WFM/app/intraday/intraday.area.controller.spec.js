@@ -1223,13 +1223,25 @@ describe('IntradayAreaController', function() {
 		expect(forcastedAhtSeries[forcastedAhtSeries.length - 1]).toEqual(201.4);
 	});
 
-	// it('should remember selected tab when exiting', function() {
-	// 	createController(false);
-	// 	vm.activeTab = 1;
-	// 	vm.saveState();
-	// 	vm.activeTab = 0;
-	// 	vm.loadState();
+	fit('should remember selected tab when exiting if toggle is on', function() {
+		createController(false);
+		vm.toggles['WFM_Remember_My_Selection_In_Intraday_47254'] = true;
+		vm.activeTab = 1;
+		vm.saveState();
+		vm.activeTab = 0;
+		vm.loadState();
 
-	// 	expect(vm.activeTab).toEqual(1);
-	// });
+		expect(vm.activeTab).toEqual(1);
+	});
+
+	fit('should remember selected day offset when exiting if toggle is on', function() {
+		createController(false);
+		vm.toggles['WFM_Remember_My_Selection_In_Intraday_47254'] = true;
+		vm.changeChosenOffset(-5, true);
+		vm.saveState();
+		vm.changeChosenOffset(0, true);
+		vm.loadState();
+
+		expect(vm.chosenOffset.value).toEqual(-5);
+	});
 });
