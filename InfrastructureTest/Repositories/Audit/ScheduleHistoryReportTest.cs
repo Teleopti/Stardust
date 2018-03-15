@@ -379,6 +379,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 		[Test]
 		public void ShouldHaveDetailDayOffWhenDayOff()
 		{
+			// All MainActivities will be cleared on SetDayOff, then length of PersonAssignment.Period will be 0;
+			// so save it before that.
+			// Refer to bug #48576
+			var localPeriod = PersonAssignment.Period.ToDateOnlyPeriod(TimeZoneInfo.Local);
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				uow.Reassociate(PersonAssignment);
@@ -389,8 +393,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var res = target.Report(personProvider.CurrentUser(), new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
-							PersonAssignment.Period.ToDateOnlyPeriod(TimeZoneInfo.Local), new List<IPerson> { PersonAssignment.Person },100);
+				var period = new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1));
+				var res = target.Report(personProvider.CurrentUser(), period, localPeriod,
+					new List<IPerson> {PersonAssignment.Person}, 100);
 
 				Assert.AreEqual(res.ElementAt(1).Detail, DayOffTemplate.Description.Name);
 			}
