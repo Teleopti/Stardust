@@ -1,19 +1,26 @@
-<div class="panel material-depth-1 role-page">
-	<div class="blue-box con-flex">
-		<h2>Revoke roles</h2>
-	</div>
-	<div class="role-content">
-		<h3>Current roles</h3>
-		<div class="con-fluid-row" data-test-revoke-current>
-			<div class="con-fluid-flex" *ngFor="let role of getRolesOfPeople()">
-				<chip-remove (click)="toggleSelectedRole(role.Id)" [active]="isSelectedRole(role.Id)" data-test-chip>{{role.Name}}</chip-remove>
+<div class="con-row">
+	<div class="con-flex">
+		<div class="panel material-depth-1 role-page">
+			<div class="blue-box con-flex">
+				<h2>Revoke roles</h2>
+			</div>
+			<div class="role-content">
+				<h3>Current roles</h3>
+				<div class="con-fluid-row" data-test-revoke-current>
+					<div class="con-fluid-flex" *ngFor="let role of getRolesOfPeople()">
+						<chip-remove (click)="toggleSelectedRole(role.Id)" [active]="isSelectedRole(role.Id)" data-test-chip>{{role.Name}}</chip-remove>
+					</div>
+				</div>
+
+				<aside class="action-buttons">
+					<button mat-button (click)="close()">Cancel</button>
+					<button #saveBtn mat-button color="primary" (click)="save()" [disabled]="!isAnyRoleSelected()" data-test-save>Save</button>
+				</aside>
+
 			</div>
 		</div>
-
-		<aside class="action-buttons">
-			<button mat-raised-button (click)="close()">Cancel</button>
-			<button #saveBtn mat-raised-button color="primary" (click)="save()" [disabled]="!isAnyRoleSelected()" data-test-save>Save</button>
-		</aside>
-
+	</div>
+	<div class="con-flex workspace-parent">
+		<people-workspace></people-workspace>
 	</div>
 </div>

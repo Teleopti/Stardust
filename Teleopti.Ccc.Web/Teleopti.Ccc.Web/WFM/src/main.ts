@@ -7,7 +7,9 @@ import { PeopleComponent } from './app/people/people.component';
 import { environment } from './environments/environment';
 import { IRootScopeService, IControllerConstructor } from 'angular';
 
-import { MainController } from "./main.controller";
+import { MainController } from './main.controller';
+import { SearchPageComponent, GrantPageComponent, RevokePageComponent } from './app/people/components';
+import { TitleBarComponent } from './app/people/components/title-bar/title-bar.component';
 
 export interface IWfmRootScopeService extends IRootScopeService {
 	_: any;
@@ -77,7 +79,14 @@ const wfm = angular.module('wfm', [
 
 wfm.controller('MainController', MainController as IControllerConstructor);
 
-wfm.directive('ng2People', downgradeComponent({ component: PeopleComponent }) as angular.IDirectiveFactory);
+wfm.directive('ng2PeopleTitleBar', downgradeComponent({ component: TitleBarComponent }) as angular.IDirectiveFactory);
+wfm.directive('ng2PeopleSearchPage', downgradeComponent({
+	component: SearchPageComponent
+}) as angular.IDirectiveFactory);
+wfm.directive('ng2PeopleGrantPage', downgradeComponent({ component: GrantPageComponent }) as angular.IDirectiveFactory);
+wfm.directive('ng2PeopleRevokePage', downgradeComponent({
+	component: RevokePageComponent
+}) as angular.IDirectiveFactory);
 
 wfm
 	.config([
@@ -87,7 +96,14 @@ wfm
 		'$httpProvider',
 		'$mdGestureProvider',
 		'tmhDynamicLocaleProvider',
-		function($stateProvider, $urlRouterProvider, $translateProvider, $httpProvider, $mdGestureProvider, tmhDynamicLocaleProvider) {
+		function(
+			$stateProvider,
+			$urlRouterProvider,
+			$translateProvider,
+			$httpProvider,
+			$mdGestureProvider,
+			tmhDynamicLocaleProvider
+		) {
 			$urlRouterProvider.otherwise('/#');
 
 			$stateProvider.state('main', {
@@ -232,14 +248,19 @@ wfm
 				var moduleName;
 				var name = next.name.split('.')[0];
 				var url = next.url && next.url.split('/')[1];
-				areas.forEach(function (area) {
+				areas.forEach(function(area) {
 					if (name && (area.InternalName.indexOf(name) > -1 || name.indexOf(area.InternalName) > -1)) {
 						moduleName = area.Name;
 					} else if (url && (area.InternalName.indexOf(url) > -1 || url.indexOf(area.InternalName) > -1)) {
 						moduleName = area.Name;
 					}
 				});
-				noticeService.error("<span class='test-alert'></span>" + $translate.instant('NoPermissionToViewWFMModuleErrorMessage').replace('{0}', moduleName), null, false);
+				noticeService.error(
+					"<span class='test-alert'></span>" +
+						$translate.instant('NoPermissionToViewWFMModuleErrorMessage').replace('{0}', moduleName),
+					null,
+					false
+				);
 			}
 
 			TabShortCut.unifyFocusStyle();

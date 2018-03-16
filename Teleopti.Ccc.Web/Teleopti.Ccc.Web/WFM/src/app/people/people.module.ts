@@ -25,10 +25,11 @@ import {
 	ChipRemoveComponent,
 	GrantPageComponent,
 	RevokePageComponent,
-	SearchPageComponent
+	SearchPageComponent,
+	WorkspaceComponent,
+	TitleBarComponent
 } from './components';
-import { RolesService, WorkspaceService, SearchService } from './services';
-import { WorkspaceComponent } from './components/workspace/workspace.component';
+import { RolesService, WorkspaceService, SearchService, NavigationService } from './services';
 
 @NgModule({
 	declarations: [
@@ -40,7 +41,8 @@ import { WorkspaceComponent } from './components/workspace/workspace.component';
 		ChipAddComponent,
 		ChipRemoveComponent,
 		SearchPageComponent,
-		WorkspaceComponent
+		WorkspaceComponent,
+		TitleBarComponent
 	],
 	imports: [
 		SharedModule,
@@ -53,9 +55,9 @@ import { WorkspaceComponent } from './components/workspace/workspace.component';
 		HttpClientModule,
 		MatSortModule
 	],
-	providers: [WorkspaceService, RolesService, SearchService],
+	providers: [WorkspaceService, RolesService, SearchService, NavigationService],
 	exports: [],
-	entryComponents: [PeopleComponent]
+	entryComponents: [TitleBarComponent, SearchPageComponent, GrantPageComponent, RevokePageComponent]
 })
 export class PeopleModule {
 	ngDoBootstrap() {}

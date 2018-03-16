@@ -1,15 +1,18 @@
 import { Component, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { Person, Role } from '../../../types';
-import { WorkspaceService, RolesService } from '../../../services';
+import { WorkspaceService, RolesService, NavigationService } from '../../../services';
 
 @Component({
 	template: '<div>Override me</div>'
 })
 export class RolePage {
-	constructor(public workspaceService: WorkspaceService, public rolesService: RolesService) {}
+	constructor(
+		public nav: NavigationService,
+		public workspaceService: WorkspaceService,
+		public rolesService: RolesService
+	) {}
 
 	@ViewChild('saveBtn') saveButton: HTMLElement;
-	@Output() onRolesChanged = new EventEmitter();
 	roles: Array<Role> = [];
 	selectedRoles = [];
 
@@ -46,11 +49,11 @@ export class RolePage {
 	}
 
 	save() {
-		this.onRolesChanged.emit();
+		this.nav.navToSearch();
 	}
 
 	close() {
-		this.onRolesChanged.emit();
+		this.nav.navToSearch();
 	}
 
 	isRoleOnAll(roleId: string): boolean {
