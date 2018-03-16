@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
 		[HttpPost, Route("api/Gamification/RecalculateBadges/NewRecalculateBadgeJob"), UnitOfWork]
 		public virtual IHttpActionResult NewRecalculateBadgeJob([FromBody]RecalculateForm input)
 		{
-			_recalculateBadgeJobService.CreateJob(new DateOnlyPeriod(new DateOnly(input.Start), new DateOnly(input.End)));
+			_recalculateBadgeJobService.CreateJob(input.Start, input.End);
 			return Ok();
 		}
 

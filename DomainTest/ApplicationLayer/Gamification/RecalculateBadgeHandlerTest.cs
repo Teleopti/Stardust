@@ -75,7 +75,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Gamification
 		{
 			var period = new DateOnlyPeriod(_calculatedate, _calculatedate);
 			var jobResult = newJobResult(period);
-			var badgeEvent = new RecalculateBadgeEvent {JobResultId = jobResult.Id.GetValueOrDefault() };
+			var badgeEvent = new RecalculateBadgeEvent
+			{
+				JobResultId = jobResult.Id.GetValueOrDefault(),
+				StartDate = _calculatedate.Date,
+				EndDate = _calculatedate.Date
+			};
 			CurrentBusinessUnit.FakeBusinessUnit(BusinessUnitFactory.CreateWithId("bu"));
 			AgentBadgeTransactionRepository.Add(new AgentBadgeTransaction { CalculatedDate = _calculatedate });
 			AgentBadgeWithRankTransactionRepository.Add(new AgentBadgeWithRankTransaction() { CalculatedDate = _calculatedate });
@@ -92,7 +97,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Gamification
 		{
 			var period = new DateOnlyPeriod(_calculatedate, _calculatedate);
 			var jobResult = newJobResult(period);
-			var badgeEvent = new RecalculateBadgeEvent { JobResultId = jobResult.Id.GetValueOrDefault() };
+			var badgeEvent = new RecalculateBadgeEvent
+			{
+				JobResultId = jobResult.Id.GetValueOrDefault(),
+				StartDate = _calculatedate.Date,
+				EndDate = _calculatedate.Date
+			};
 			createAgentAndTeam();
 			createGamificationSetting(GamificationSettingRuleSet.RuleWithDifferentThreshold, 90, 85, 80);
 			createExistingBadgeAndNewData(0, 0, 1, period, 87);
@@ -111,7 +121,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Gamification
 		{
 			var period = new DateOnlyPeriod(_calculatedate, _calculatedate);
 			var jobResult = newJobResult(period);
-			var badgeEvent = new RecalculateBadgeEvent { JobResultId = jobResult.Id.GetValueOrDefault() };
+			var badgeEvent = new RecalculateBadgeEvent
+			{
+				JobResultId = jobResult.Id.GetValueOrDefault(),
+				StartDate = _calculatedate.Date,
+				EndDate = _calculatedate.Date
+			};
 			createAgentAndTeam();
 			createGamificationSetting(GamificationSettingRuleSet.RuleWithDifferentThreshold, 90, 85, 80);
 			createExistingBadgeAndNewData(0, 0, 1, period, 70);
@@ -129,7 +144,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Gamification
 		{
 			var period = new DateOnlyPeriod(_calculatedate.AddDays(-1), _calculatedate.AddDays(1));
 			var jobResult = newJobResult(period);
-			var badgeEvent = new RecalculateBadgeEvent { JobResultId = jobResult.Id.GetValueOrDefault() };
+			var badgeEvent = new RecalculateBadgeEvent
+			{
+				JobResultId = jobResult.Id.GetValueOrDefault(),
+				StartDate = _calculatedate.Date.AddDays(-1),
+				EndDate = _calculatedate.Date.AddDays(1)
+			};
 			createAgentAndTeam();
 			createGamificationSetting(GamificationSettingRuleSet.RuleWithDifferentThreshold, 90, 85, 80);
 			createExistingBadgeAndNewData(0, 0, 0, period, 80);
@@ -147,7 +167,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Gamification
 		{
 			var period = new DateOnlyPeriod(_calculatedate.AddDays(-1), _calculatedate.AddDays(1));
 			var jobResult = newJobResult(period);
-			var badgeEvent = new RecalculateBadgeEvent { JobResultId = jobResult.Id.GetValueOrDefault() };
+			var badgeEvent = new RecalculateBadgeEvent
+			{
+				JobResultId = jobResult.Id.GetValueOrDefault(),
+				StartDate = _calculatedate.Date.AddDays(-1),
+				EndDate = _calculatedate.Date.AddDays(1)
+			};
 			createAgentAndTeam();
 			createGamificationSetting(GamificationSettingRuleSet.RuleWithDifferentThreshold, 90, 85, 80);
 			createExistingBadgeAndNewData(0, 0, 0, period, 80);
@@ -198,7 +223,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Gamification
 		{
 			var period = new DateOnlyPeriod(_calculatedate, _calculatedate);
 			var jobResult = newJobResult(period);
-			var badgeEvent = new RecalculateBadgeEvent { JobResultId = jobResult.Id.GetValueOrDefault() };
+			var badgeEvent = new RecalculateBadgeEvent
+			{
+				JobResultId = jobResult.Id.GetValueOrDefault(),
+				StartDate = _calculatedate.Date,
+				EndDate = _calculatedate.Date
+			};
 			createAgentAndTeam();
 			createGamificationSetting(GamificationSettingRuleSet.RuleWithRatioConvertor, 90, 85, 80, 80);
 			createExistingBadgeAndNewData(0, 0, 0, period, 87);
@@ -237,7 +267,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Gamification
 		{
 			var period = new DateOnlyPeriod(_calculatedate, _calculatedate);
 			var jobResult = newJobResult(period);
-			var badgeEvent = new RecalculateBadgeEvent { JobResultId = jobResult.Id.GetValueOrDefault() };
+			var badgeEvent = new RecalculateBadgeEvent
+			{
+				JobResultId = jobResult.Id.GetValueOrDefault(),
+				StartDate = _calculatedate.Date,
+				EndDate = _calculatedate.Date
+			};
 			createAgentAndTeam();
 			createGamificationSetting(GamificationSettingRuleSet.RuleWithDifferentThreshold, 90, 85, 80);
 			createExistingBadgeAndNewData(0, 1, 0, period, 91);
@@ -260,7 +295,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Gamification
 		{
 			var period = new DateOnlyPeriod(_calculatedate, _calculatedate);
 			var jobResult = newJobResult(period);
-			var badgeEvent = new RecalculateBadgeEvent { JobResultId = jobResult.Id.GetValueOrDefault() };
+			var badgeEvent = new RecalculateBadgeEvent
+			{
+				JobResultId = jobResult.Id.GetValueOrDefault(),
+				StartDate = _calculatedate.Date,
+				EndDate = _calculatedate.Date
+			};
 			createAgentAndTeam();
 			createGamificationSetting(GamificationSettingRuleSet.RuleWithDifferentThreshold, 90, 85, 80);
 			createExistingBadgeAndNewData(0, 0, 0, period, 87);
@@ -283,7 +323,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Gamification
 		{
 			var period = new DateOnlyPeriod(_calculatedate, _calculatedate);
 			var jobResult = newJobResult(period);
-			var badgeEvent = new RecalculateBadgeEvent { JobResultId = jobResult.Id.GetValueOrDefault() };
+			var badgeEvent = new RecalculateBadgeEvent
+			{
+				JobResultId = jobResult.Id.GetValueOrDefault(),
+				StartDate = _calculatedate.Date,
+				EndDate = _calculatedate.Date
+			};
 			createAgentAndTeam();
 			createGamificationSetting(GamificationSettingRuleSet.RuleWithDifferentThreshold, 90, 85, 80);
 			createExistingBadgeAndNewData(0, 0, 0, period, 81);

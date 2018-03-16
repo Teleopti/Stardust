@@ -4,7 +4,6 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Badge;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
@@ -45,9 +44,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Gamification
 
 		protected void HandleJob(RecalculateBadgeEvent @event)
 		{
-			var result = _jobResultRepository.FindWithNoLock(@event.JobResultId);
-			_calculateBadges.RemoveAgentBadges(result.Period);
-			foreach (var date in result.Period.DayCollection())
+			var period = new DateOnlyPeriod(new DateOnly(@event.StartDate), new DateOnly(@event.EndDate));
+			_calculateBadges.RemoveAgentBadges(period);
+			foreach (var date in period.DayCollection())
 			{
 				_performBadgeCalculation.Calculate(@event.LogOnBusinessUnitId, date.Date);
 			}

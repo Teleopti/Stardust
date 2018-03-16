@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Gamification
 {
 	public interface IRecalculateBadgeJobService
 	{
-		IJobResult CreateJob(DateOnlyPeriod period);
+		IJobResult CreateJob(DateTime start, DateTime end);
 		IList<RecalculateBadgeJobResultDetail> GetJobsForCurrentBusinessUnit();
 	}
 
@@ -31,13 +31,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Gamification
 			_loggedOnUser = loggedOnUser;
 		}
 
-		public IJobResult CreateJob(DateOnlyPeriod period)
+		public IJobResult CreateJob(DateTime start, DateTime end)
 		{
-			var jobResult = new JobResult(JobCategory.WebRecalculateBadge, period, _loggedOnUser.CurrentUser(), DateTime.UtcNow);
+			var jobResult = new JobResult(JobCategory.WebRecalculateBadge, new DateOnlyPeriod(new DateOnly(start), new DateOnly(end)), _loggedOnUser.CurrentUser(), DateTime.UtcNow);
 			_jobResultRepository.Add(jobResult);
 			_eventPublisher.Publish(new RecalculateBadgeEvent
 			{
-				JobResultId = jobResult.Id.GetValueOrDefault()
+				JobResultId = jobResult.Id.GetValueOrDefault(),
+				StartDate = start,
+				EndDate = end
 			});
 			return jobResult;
 		}
