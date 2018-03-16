@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 {
 	public class PerformAllBadgeCalculation :IPerformBadgeCalculation
 	{
-		private static readonly ILog logger = LogManager.GetLogger(typeof(PerformBadgeCalculation));
+		private static readonly ILog logger = LogManager.GetLogger(typeof(PerformAllBadgeCalculation));
 		private readonly IBusinessUnitRepository _buRepository;
 		private readonly CalculateBadges _calculateBadges;
 
