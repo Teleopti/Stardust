@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
+using log4net;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Collection;
@@ -28,18 +29,21 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			_serverUrl = config.AppConfig("ConfigServer");
 			_timer = new Timer(o =>
 			{
-				if (!Monitor.TryEnter(_lock))
-					return;
-				try
+				Action<IEnumerable<string>>[] callbacksCopy;
+				lock (_lock)
 				{
 					if (_callbacks.IsEmpty())
 						return;
-					var texts = getTexts();
-					_callbacks.ForEach(c => { c(texts); });
+					callbacksCopy = _callbacks.ToArray();
 				}
-				finally
+
+				try
 				{
-					Monitor.Exit(_lock);
+					var texts = getTexts();
+					callbacksCopy.ForEach(c => { c(texts); });
+				}
+				catch
+				{
 				}
 			});
 		}
@@ -51,7 +55,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			_timer.Change(10000, 10000);
 			return new GenericDisposable(() =>
 			{
-				lock(_lock)
+				lock (_lock)
 					_callbacks.Remove(callback);
 			});
 		}
