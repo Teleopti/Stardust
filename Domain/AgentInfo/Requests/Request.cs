@@ -22,6 +22,9 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 		public virtual void SetPeriod(DateTimePeriod period)
 		{
+			if (Parent != null && !((IPersonRequest) Parent).IsEditable)
+				throw new InvalidOperationException("Requests cannot be changed once they have been handled.");
+
 			_period = truncateSeconds(period);
 		}
 

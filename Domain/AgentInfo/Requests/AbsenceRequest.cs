@@ -52,6 +52,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 		public virtual void SetAbsence(IAbsence absence)
 		{
+			if (Parent!= null && !((PersonRequest)Parent).IsEditable)
+			{
+				throw new InvalidOperationException("Requests cannot be changed once they have been handled.");
+			}
+
 			_absence = absence;
 		}
 
@@ -90,13 +95,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             return text;
         }
 
-        /// <summary>
-        /// Approves this instance.
-        /// </summary>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-06-05
-        /// </remarks>
         protected internal override IEnumerable<IBusinessRuleResponse> Approve(IRequestApprovalService approvalService)
         {
 			var personRequest = Parent as IPersonRequest;
@@ -115,9 +113,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             return result;
         }
 
-        /// <summary>
-        /// Description for the request type
-        /// </summary>
         public override string RequestTypeDescription
         {
             get{ return _typeDescription;}
@@ -126,9 +121,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
     	public override RequestType RequestType => RequestType.AbsenceRequest;
 
-		/// <summary>
-        /// Description for the absence
-        /// </summary>
         public override Description RequestPayloadDescription => _absence.Description;
 
 		private void setupTextForNotification(string oneDayRequestMessage, string requestMessage)
