@@ -48,7 +48,7 @@ Scenario: Remove selected people from workspace
 	And I should see 'John' in the workspace
 	And I should see 'Pierre' in the workspace
 
-
+@Ignore
 Scenario: Grant roles on people
 	Given I view people
 	And I have selected people
@@ -65,6 +65,7 @@ Scenario: Grant roles on people
 	And Person 'Pierre' should have role 'TeamLeader'
 
 
+@Ignore
 Scenario: Revoke roles on people
 	Given I view people
 	And I have selected people
