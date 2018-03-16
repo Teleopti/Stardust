@@ -1170,5 +1170,63 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			skill2Resources.Count.Should().Be.EqualTo(1);
 			skill2Resources.First().Heads.Should().Be(5.5);
 		}
+
+		[Test]
+		public void ShouldReturnZeroIfLessThanZeroResources()
+		{
+			var skill = persistSkill();
+			var skill2 = persistSkill();
+			Now.Is("2016-12-19 08:00");
+			var start = new DateTime(2016, 12, 20, 0, 0, 0, DateTimeKind.Utc);
+			var end = new DateTime(2016, 12, 20, 0, 15, 0, DateTimeKind.Utc);
+
+			var combinationResources = new List<SkillCombinationResource>
+			{
+				new SkillCombinationResource
+				{
+					StartDateTime = start,
+					EndDateTime = end,
+					Resource = 1,
+					SkillCombination = new[] {skill, skill2}
+				},
+				new SkillCombinationResource
+				{
+					StartDateTime = start.AddMinutes(15),
+					EndDateTime = end.AddMinutes(15),
+					Resource = 1,
+					SkillCombination = new[] {skill, skill2}
+				}
+			};
+
+			Target.PersistSkillCombinationResource(Now.UtcDateTime(), combinationResources);
+
+			Target.PersistChanges(new[]
+			{
+				new SkillCombinationResource
+				{
+					SkillCombination = new[] {skill, skill2},
+					StartDateTime = start,
+					EndDateTime = end,
+					Resource = -1
+				}
+			});
+			Thread.Sleep(TimeSpan.FromSeconds(1)); //insertedOn is PK
+			Target.PersistChanges(new[]
+			{
+				new SkillCombinationResource
+				{
+					SkillCombination = new[] {skill, skill2},
+					StartDateTime = start,
+					EndDateTime = end,
+					Resource = -1
+				}
+			});
+
+			var loadedCombinationResources =
+				Target.LoadSkillCombinationResources(new DateTimePeriod(2016, 12, 20, 0, 2016, 12, 20, 1));
+			loadedCombinationResources.Single(x => x.StartDateTime.Equals(start)).Resource.Should().Be.EqualTo(0d);
+			loadedCombinationResources.Single(x => x.StartDateTime.Equals(start.AddMinutes(15))).Resource.Should().Be
+				.EqualTo(1d);
+		}
 	}
 }

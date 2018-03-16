@@ -465,7 +465,7 @@ AND d.StartDateTime < :endDateTime AND d.EndDateTime > :startDateTime)
 							{
 								StartDateTime = x.Key.StartDateTime.Utc(),
 								EndDateTime = x.Key.EndDateTime.Utc(),
-								Resource = x.Key.Resource,
+								Resource = x.Key.Resource < 0 ? 0 : x.Key.Resource,
 								SkillCombinationId = x.Key.SkillCombinationId,
 								SkillCombination = x.Select(s => s.SkillId).OrderBy(s => s).ToArray()
 							});
