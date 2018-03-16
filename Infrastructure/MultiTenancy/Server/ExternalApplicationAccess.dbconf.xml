@@ -18,5 +18,10 @@
 		select a from ExternalApplicationAccess a
 		where a.Hash=:hash
 	</query>
+
+	<query name="findApplicationsByPerson">
+		select a from ExternalApplicationAccess a
+		where a.PersonId=:personId
+	</query>
 </hibernate-mapping>
 

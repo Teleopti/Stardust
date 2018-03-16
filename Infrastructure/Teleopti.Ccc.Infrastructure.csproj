@@ -257,6 +257,7 @@
     <Compile Include="MultiTenancy\Server\ExternalApplicationAccess.cs" />
     <Compile Include="MultiTenancy\Server\HashFromToken.cs" />
     <Compile Include="MultiTenancy\Server\ITenantLogonInfoLoader.cs" />
+    <Compile Include="MultiTenancy\Server\Queries\FindExternalApplicationAccess.cs" />
     <Compile Include="MultiTenancy\Server\Queries\IPersistExternalApplicationAccess.cs" />
     <Compile Include="MultiTenancy\Server\Queries\PersistExternalApplicationAccess.cs" />
     <Compile Include="Persisters\Schedules\ScheduleRangePersisterWithConflictSolve.cs" />
@@ -292,7 +293,7 @@
     <Compile Include="RealTimeAdherence\Tracer\RtaTracerRefresher.cs" />
     <Compile Include="RealTimeAdherence\Tracer\RtaTracerSessionFactory.cs" />
     <Compile Include="RealTimeAdherence\Tracer\RtaTracerWriter.cs" />
-    <Compile Include="MultiTenancy\Server\Queries\FindExternalApplicationAccessByHash.cs" />
+    <Compile Include="MultiTenancy\Server\Queries\IFindExternalApplicationAccess.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsSiteRepository.cs" />
     <Compile Include="Repositories\Audit\ScheduleAuditTrailReport.cs" />
     <Compile Include="Repositories\ExternalPerformanceDataRepository.cs" />

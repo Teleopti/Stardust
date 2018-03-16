@@ -463,6 +463,7 @@
     <Compile Include="Areas\Intraday\IntradayMonitorStatisticsController.cs" />
     <Compile Include="Areas\Intraday\IntradayController.cs" />
     <Compile Include="Areas\MultiTenancy\ExternalApplicationAccessController.cs" />
+    <Compile Include="Areas\MultiTenancy\ExternalApplicationModel.cs" />
     <Compile Include="Areas\MultiTenancy\NewExternalApplicationModel.cs" />
     <Compile Include="Areas\MultiTenancy\NewExternalApplicationResponseModel.cs" />
     <Compile Include="Areas\MyTime\Controllers\OvertimeRequestsController.cs" />

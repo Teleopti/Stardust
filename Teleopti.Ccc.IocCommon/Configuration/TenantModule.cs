@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<CheckTenantUserExists>().As<ICheckTenantUserExists>().SingleInstance();
 
 			builder.RegisterType<PersistExternalApplicationAccess>().As<IPersistExternalApplicationAccess>().SingleInstance();
-			builder.RegisterType<FindExternalApplicationAccessByHash>().As<IFindExternalApplicationAccessByHash>().SingleInstance();
+			builder.RegisterType<FindExternalApplicationAccess>().As<IFindExternalApplicationAccess>().SingleInstance();
 			builder.RegisterType<HashFromToken>().SingleInstance();
 		}
 

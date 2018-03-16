@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			system.UseTestDouble<LogLogonAttemptFake>().For<ILogLogonAttempt>();
 			system.UseTestDouble<CurrentTenantUserFake>().For<ICurrentTenantUser>();
 			system.UseTestDouble<FakePersistExternalApplicationAccess>().For<IPersistExternalApplicationAccess>();
-			system.UseTestDouble<FakeFindExternalApplicationAccessByHash>().For<IFindExternalApplicationAccessByHash>();
+			system.UseTestDouble<FakeFindExternalApplicationAccess>().For<IFindExternalApplicationAccess>();
 		}
 	}
 }

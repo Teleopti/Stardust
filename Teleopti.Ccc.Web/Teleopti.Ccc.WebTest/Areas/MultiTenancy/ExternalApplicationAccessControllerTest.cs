@@ -6,6 +6,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Ccc.Web.Areas.MultiTenancy;
+using Teleopti.Ccc.WebTest.TestHelper;
 
 namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 {
@@ -39,6 +40,18 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 
 			var result = (OkNegotiatedContentResult<Guid>)Target.Verify(addResult.Content.Token);
 			result.Content.Should().Be.EqualTo(personId);
+		}
+
+		[Test]
+		public void ShouldGetListOfExternalApplications()
+		{
+			var personId = Guid.NewGuid();
+			CurrentTenantUser.Set(new PersonInfo(new Tenant("asdf"), personId));
+			var model = new NewExternalApplicationModel { Name = "HR system" };
+			Target.Add(model);
+
+			var result = (OkNegotiatedContentResult<ExternalApplicationModel[]>)Target.Get();
+			result.Content.Single().Name.Should().Be.EqualTo(model.Name);
 		}
 	}
 }
