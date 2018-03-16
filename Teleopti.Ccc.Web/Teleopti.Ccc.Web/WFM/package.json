@@ -144,11 +144,11 @@
 		"watch:sass": ".\\node_modules\\.bin\\onchange ./css/*.scss  -v -- npm run sass",
 		"watch:html": ".\\node_modules\\.bin\\onchange ./app/**/*.html  -v -- npm run concat:html",
 		"watch:htmlAngular": ".\\node_modules\\.bin\\onchange ./src/app/**/*.html -v -- ng build",
-		"watch:ng": ".\\node_modules\\.bin\\onchange ./src/app/**/*.ts* -v -- ng build",
+		"watch:ng": ".\\node_modules\\.bin\\onchange ./src/**/*.ts* -v -- ng build",
 		"eslint:js": ".\\node_modules\\.bin\\eslint",
 		"preeslint:js": "npm run concat:js",
 		"ng": "ng",
-		"build": "ng build",
+		"build": "ng build -w",
 		"lint": "ng lint",
 		"e2e": "ng e2e"
 	}
