@@ -61,7 +61,6 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="ATOConcurrencyTest.cs" />
     <Compile Include="SetUpCascadingShifts.cs" />
     <Compile Include="MultiSkilledGoldSilverBronzeAgentSameDayTest.cs" />
     <Compile Include="MultiSkilledGoldSilverBronzeAgentBulkTest.cs" />
