@@ -108,7 +108,6 @@
 				vm.selectedItem = null;
 				vm.hasMonitorData = false;
 				clearSkillAreaSelection();
-				notifySkillAreaDeletion();
 			});
 			vm.toggleModal();
 		};
