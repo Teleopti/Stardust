@@ -33,10 +33,6 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
             activeLicenseSchemas.AddOrUpdate(dataSource, licenseSchema, (d, l) => licenseSchema);
         }
 
-		public static void ClearActiveLicenseSchemas()
-		{
-			activeLicenseSchemas.Clear();
-		}
 	    /// <summary>
 	    /// Gets or sets the enabled licence schema.
 	    /// </summary>
