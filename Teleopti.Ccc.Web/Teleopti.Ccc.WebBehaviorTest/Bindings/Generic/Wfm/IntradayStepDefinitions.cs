@@ -88,6 +88,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			});
 		}
 
+		[Given(@"Local storage is reset")]
+		public void GivenLocalStorageIsReset()
+		{
+			var javascript = "window.localStorage.clear();";
+
+			Browser.Interactions.Javascript(javascript);
+		}
+
 		[Given(@"there is queue statistics for the skill '(.*)' up until '(.*)'")]
 		public void GivenThereIsQueueStatisticsForTheSkillUpUntil(string skillName, string time)
 		{
@@ -131,6 +139,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[When(@"I select to create a new Skill Group in SGM")]
 		public void GivenISelectToCreateANewSkillGroupInSGM()
 		{
+			Browser.Interactions.AssertExists("#create-skill-group-button");
 			Browser.Interactions.Click("#create-skill-group-button");
 		}
 
@@ -155,6 +164,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[Given(@"I select the Skill Group '(.*)'")]
 		public void GivenISelectTheSkillGroup(string skillGroupName)
 		{
+			Browser.Interactions.AssertExists("#available_skill_groups_list");
 			Browser.Interactions.ClickContaining("#available_skill_groups_list", skillGroupName);
 		}
 
@@ -273,6 +283,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		public void GivenISelectFromSkillsInThisGroup(string skill)
 		{
 			var elementSelector = $"$(\"span:contains('{skill}')\").parent(\"div.wfm-chip-wrap\")";
+
 			Browser.Interactions.Javascript($"{elementSelector}.click();");
 		}
 
