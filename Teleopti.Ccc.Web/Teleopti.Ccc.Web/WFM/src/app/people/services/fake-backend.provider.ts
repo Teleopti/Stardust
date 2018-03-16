@@ -14,6 +14,7 @@ import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/delay';
 import 'rxjs/add/operator/mergeMap';
 import { Role, Person } from '../types';
+import { PeopleSearchResultNew } from '.';
 
 export const ROLES: Array<Role> = [
 	{
@@ -39,6 +40,8 @@ export const PEOPLE: Array<Person> = [
 		Id: 'id1',
 		FirstName: 'First1',
 		LastName: 'Lastname1',
+		Site: 'Site1',
+		Team: 'Team1',
 		Roles: [
 			{
 				Id: 'id1',
@@ -54,6 +57,8 @@ export const PEOPLE: Array<Person> = [
 		Id: 'id2',
 		FirstName: 'First2',
 		LastName: 'Lastname2',
+		Site: 'Site1',
+		Team: 'Team1',
 		Roles: [
 			{
 				Id: 'id1',
@@ -65,6 +70,8 @@ export const PEOPLE: Array<Person> = [
 		Id: 'id3',
 		FirstName: 'First3',
 		LastName: 'Lastname3',
+		Site: 'Site2',
+		Team: 'Team2',
 		Roles: [
 			{
 				Id: 'id1',
@@ -252,7 +259,11 @@ export class FakeBackendInterceptor implements HttpInterceptor {
 			}
 
 			if (request.url.endsWith('/api/Search/FindPeople') && request.method === 'POST') {
-				return Observable.of(new HttpResponse({ status: 200, body: [] }));
+				const response: PeopleSearchResultNew = {
+					People: PEOPLE,
+					TotalRows: PEOPLE.length
+				};
+				return Observable.of(new HttpResponse({ status: 200, body: response }));
 			}
 
 			// pass through any requests not handled above

@@ -53,7 +53,8 @@ import { RolesService, WorkspaceService, SearchService, NavigationService } from
 		MatDividerModule,
 		MatTableModule,
 		HttpClientModule,
-		MatSortModule
+		MatSortModule,
+		MatProgressSpinnerModule
 	],
 	providers: [WorkspaceService, RolesService, SearchService, NavigationService],
 	exports: [],

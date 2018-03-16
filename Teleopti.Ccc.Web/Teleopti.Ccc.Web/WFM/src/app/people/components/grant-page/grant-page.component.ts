@@ -15,15 +15,15 @@ export class GrantPageComponent extends RolePage implements OnInit {
 		});
 	}
 
-	grantRoles(roles: Array<string>): void {
+	grantRoles(roles: Array<string>): Promise<object> {
 		const peopleIds = this.workspaceService.getSelectedPeople().map(({ Id }) => Id);
-		this.rolesService.grantRoles(peopleIds, roles).then(ok => {
-			this.workspaceService.update();
-		});
+		return this.rolesService.grantRoles(peopleIds, roles);
 	}
 
 	save() {
-		this.grantRoles(this.selectedRoles);
-		super.save();
+		this.grantRoles(this.selectedRoles).then(() => {
+			this.workspaceService.update();
+			super.save();
+		});
 	}
 }

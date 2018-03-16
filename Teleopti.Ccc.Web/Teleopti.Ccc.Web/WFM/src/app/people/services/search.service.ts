@@ -23,6 +23,10 @@ export interface PeopleSearchQuery {
 export class SearchService {
 	protected peopleCache: Array<Person> = [];
 
+	public keyword: string = '';
+	public pageIndex: number = 0;
+	public pageSize: number = 20;
+
 	constructor(private http: HttpClient) {}
 
 	public getPerson(id: string): Person {
@@ -33,7 +37,16 @@ export class SearchService {
 		return this.peopleCache;
 	}
 
-	async searchPeople({ keyword = 'a', pageIndex = 0, pageSize = 10 } = {}): Promise<PeopleSearchResult> {
+	async searchPeople(query: PeopleSearchQuery): Promise<PeopleSearchResultNew> {
+		['keyword', 'pageIndex', 'pageSize'].forEach(key => {
+			this[key] = query[key];
+		});
+		const res = (await this.http.post('../api/Search/FindPeople', query).toPromise()) as PeopleSearchResultNew;
+		this.peopleCache = res.People;
+		return res;
+	}
+
+	async searchPeople_old({ keyword = 'a', pageIndex = 0, pageSize = 10 } = {}): Promise<PeopleSearchResult> {
 		interface SearchPerson {
 			PersonId: string;
 		}

@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { WorkspaceService, RolesService, SearchService, NavigationService } from '../../services';
+import { WorkspaceService, RolesService, SearchService, NavigationService, PeopleSearchQuery } from '../../services';
 import { Role, Person } from '../../types';
 import { MatSort, PageEvent, MatTableDataSource } from '@angular/material';
 
@@ -25,8 +25,6 @@ export class SearchPageComponent implements OnInit {
 
 	pagination = {
 		length: 0, // Get from API
-		pageSize: 20,
-		pageIndex: 0,
 		pageSizeOptions: [20, 50, 100, 500]
 	};
 
@@ -39,16 +37,16 @@ export class SearchPageComponent implements OnInit {
 	}
 
 	searchPeople() {
-		return this.searchService
-			.searchPeople({
-				pageSize: this.pagination.pageSize,
-				pageIndex: this.pagination.pageIndex
-			})
-			.then(searchResult => {
-				this.pagination.length = searchResult.people.length * searchResult.pages;
-				this.dataSource.data = this.searchService.getPeople();
-				return searchResult;
-			});
+		const query: PeopleSearchQuery = {
+			keyword: this.searchService.keyword,
+			pageSize: this.searchService.pageSize,
+			pageIndex: this.searchService.pageIndex
+		};
+		return this.searchService.searchPeople(query).then(searchResult => {
+			this.pagination.length = searchResult.TotalRows;
+			this.dataSource.data = this.searchService.getPeople();
+			return searchResult;
+		});
 	}
 
 	toggleSelectedPerson(id: string): void {
@@ -69,8 +67,8 @@ export class SearchPageComponent implements OnInit {
 	}
 
 	paginationChanged(event: PageEvent) {
-		this.pagination.pageSize = event.pageSize;
-		this.pagination.pageIndex = event.pageIndex;
+		this.searchService.pageSize = event.pageSize;
+		this.searchService.pageIndex = event.pageIndex;
 		this.searchPeople();
 	}
 

@@ -6,7 +6,7 @@
           <div class="con-flex">
             <label for="filter" class="input-icon">
               <i class="mdi mdi-magnify">
-                <input type="text" placeholder="Search">
+                <input type="text" placeholder="Search" [(ngModel)]="searchService.keyword" (keyup.enter)="searchPeople()">
               </i>
             </label>
           </div>
@@ -52,12 +52,12 @@
 
             <ng-container matColumnDef="Site">
               <mat-header-cell *matHeaderCellDef mat-sort-header> Site </mat-header-cell>
-              <mat-cell *matCellDef="let person" data-test-person-site> Site Example </mat-cell>
+              <mat-cell *matCellDef="let person" data-test-person-site> {{person.Site}} </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="Team">
               <mat-header-cell *matHeaderCellDef mat-sort-header> Team </mat-header-cell>
-              <mat-cell *matCellDef="let person" data-test-person-team> Team Example </mat-cell>
+              <mat-cell *matCellDef="let person" data-test-person-team> {{person.Team}}</mat-cell>
             </ng-container>
 
 
@@ -65,7 +65,7 @@
             <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="toggleRow(row)" data-test-person>
             </mat-row>
           </mat-table>
-          <mat-paginator [length]="pagination.length" [pageIndex]="pagination.pageIndex" [pageSize]="pagination.pageSize" [pageSizeOptions]="pagination.pageSizeOptions"
+          <mat-paginator [length]="pagination.length" [pageIndex]="searchService.pageIndex" [pageSize]="searchService.pageSize" [pageSizeOptions]="pagination.pageSizeOptions"
             (page)="paginationChanged($event)">
           </mat-paginator>
         </div>
