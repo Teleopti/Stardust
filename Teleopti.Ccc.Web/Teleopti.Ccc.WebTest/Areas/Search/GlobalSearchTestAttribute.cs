@@ -23,6 +23,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			system.UseTestDouble(new FakeToggleManager(Domain.FeatureFlags.Toggles.Wfm_WebPlan_Pilot_46815)).For<IToggleManager>();
 			system.UseTestDouble<FakeNextPlanningPeriodProvider>().For<INextPlanningPeriodProvider>();
 			system.UseTestDouble<FakeApplicationRoleRepository>().For<IApplicationRoleRepository>();
+			system.UseTestDouble<FakePersonFinderReadOnlyRepository>().For<IPersonFinderReadOnlyRepository>();
+			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
 		}
 	}
 }

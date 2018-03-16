@@ -141,14 +141,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		IList<IPersonPeriod> PersonPeriods(DateOnlyPeriod datePeriod);
 
 		/// <summary>
-		/// Returns the person period for a specific date.
-		/// If no period is found, null is returned.
-		/// </summary>
-		/// <param name="dateOnly"></param>
-		/// <returns></returns>
-		IPersonPeriod PersonPeriod(DateOnly dateOnly);
-
-		/// <summary>
 		/// Gets the person schedule periods within a period
 		/// </summary>
 		/// <param name="timePeriod"></param>

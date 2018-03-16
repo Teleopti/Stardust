@@ -1,23 +1,30 @@
+using NUnit.Framework;
+using Rhino.Mocks;
+using SharpTestsEx;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework;
-using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.Search.Controllers;
+using Teleopti.Ccc.Web.Areas.Search.Models;
 using Teleopti.Ccc.WebTest.Areas.Global;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Search
 {
-	[TestFixture]
+	[GlobalSearchTest]
 	public class PeopleSearchControllerTest
 	{
-		private PeopleSearchController target;
+		public PeopleSearchController target;
+		public FakePersonFinderReadOnlyRepository PersonFinderRepository;
+		public FakePersonRepository PersonRepository;
+
 		private ILoggedOnUser loggonUser;
 
 		[SetUp]
@@ -45,7 +52,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 
 			person.SetOptionalColumnValue(optionalColumnValue, optionalColumn);
 
-			target = new PeopleSearchController(new FakePeopleSearchProvider(new[] {person}, new[] {optionalColumn}), loggonUser);
+			target = new PeopleSearchController(new FakePeopleSearchProvider(new[] {person}, new[] {optionalColumn}), loggonUser,
+				new FakePersonFinderReadOnlyRepository(), PersonRepository);
 
 			var result = ((dynamic) target).GetResult("Ashley", 10, 1, "");
 
@@ -77,7 +85,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 
 			target =
 				new PeopleSearchController(
-					new FakePeopleSearchProvider(new[] {firstPerson, secondPerson}, new List<IOptionalColumn>()), loggonUser);
+					new FakePeopleSearchProvider(new[] {firstPerson, secondPerson}, new List<IOptionalColumn>()), loggonUser,
+					new FakePersonFinderReadOnlyRepository(), PersonRepository);
 
 			var result = ((dynamic) target).GetResult("a", 10, 1, "");
 
@@ -100,7 +109,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 
 			target =
 				new PeopleSearchController(new FakePeopleSearchProvider(new[] {person, currentUser}, new List<IOptionalColumn>()),
-					loggonUser);
+					loggonUser, new FakePersonFinderReadOnlyRepository(), PersonRepository);
 
 			var result = ((dynamic) target).GetResult("", 10, 1, "");
 			var peopleList = (IEnumerable<dynamic>) result.Content.People;
@@ -123,7 +132,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			target =
 				new PeopleSearchController(
 					new FakePeopleSearchProvider(new[] {firstPerson, secondPerson, thirdPerson}, new List<IOptionalColumn>()),
-					loggonUser);
+					loggonUser, new FakePersonFinderReadOnlyRepository(), PersonRepository);
 
 			var result = ((dynamic) target).GetResult("a", 10, 1, "lastname:true;firstname:true;employmentnumber:true");
 
@@ -133,7 +142,123 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			Assert.AreEqual(pe[1].EmploymentNumber, "2");
 			Assert.AreEqual(pe[2].EmploymentNumber, "3");
 		}
+
+		[Test]
+		public void FindPeople_ShouldReturnPeopleViewModelWithCriteria()
+		{
+			var p1 = PersonFactory.CreatePersonWithGuid("Ashley", "Andeen");
+			var p2 = PersonFactory.CreatePersonWithGuid("Aston", "Karlsson");
+			var p3 = PersonFactory.CreatePersonWithGuid("Kalle", "Anka");
+			PersonFinderRepository.Has(p1);
+			PersonFinderRepository.Has(p2);
+			PersonFinderRepository.Has(p3);
+			PersonRepository.Add(p1);
+			PersonRepository.Add(p2);
+			PersonRepository.Add(p3);
+
+			var inputModel = new FindPeopleInputModel
+			{
+				KeyWord = "as",
+				PageSize = 10,
+				PageIndex = 0
+			};
+
+			var result = target.FindPeople(inputModel);
+
+			result.People.Count().Should().Be.EqualTo(2);
+			result.People.SingleOrDefault(p => p.FirstName.Equals("Ashley")).Should().Not.Be.Null();
+			result.People.SingleOrDefault(p => p.FirstName.Equals("Aston")).Should().Not.Be.Null();
+		}
+
+
+		[Test]
+		public void FindPeople_ShouldPaginate()
+		{
+			for (int i = 0; i < 33; i++)
+			{
+				var ash = PersonFactory.CreatePersonWithGuid($"Ashley {i}", $"Andeen {i}");
+				var kal = PersonFactory.CreatePersonWithGuid($"Kalle {i}", $"Anka {i}");
+				PersonFinderRepository.Has(ash);
+				PersonFinderRepository.Has(kal);
+
+				ash.PermissionInformation.AddApplicationRole(ApplicationRoleFactory.CreateRole("Agent", "Agent").WithId());
+				var ashPP = PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today).WithId();
+				ashPP.Team = TeamFactory.CreateTeam("Prefrences", "London");
+				ash.AddPersonPeriod(ashPP);
+
+				kal.PermissionInformation.AddApplicationRole(ApplicationRoleFactory.CreateRole("Agent", "Agent").WithId());
+				var kalPP = PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today).WithId();
+				kalPP.Team = TeamFactory.CreateTeam("Prefrences", "London");
+				kal.AddPersonPeriod(kalPP);
+
+				PersonRepository.Add(ash);
+				PersonRepository.Add(kal);
+			}
+
+			var inputModel = new FindPeopleInputModel
+			{
+				KeyWord = "as",
+				PageSize = 10,
+				PageIndex = 0
+			};
+
+			var result = target.FindPeople(inputModel);
+			result.People.Count().Should().Be.EqualTo(10);
+			result.TotalRows.Should().Be.EqualTo(33);
+			result.PageIndex.Should().Be.EqualTo(inputModel.PageIndex);
+
+			inputModel.PageIndex = 3;
+			result = target.FindPeople(inputModel);
+			result.People.Count().Should().Be.EqualTo(3);
+			result.TotalRows.Should().Be.EqualTo(33);
+			result.PageIndex.Should().Be.EqualTo(inputModel.PageIndex);
+
+			inputModel.PageIndex = 0;
+			inputModel.PageSize = 100;
+			result = target.FindPeople(inputModel);
+			result.People.Count().Should().Be.EqualTo(33);
+			result.TotalRows.Should().Be.EqualTo(33);
+			result.PageIndex.Should().Be.EqualTo(inputModel.PageIndex);
+
+			inputModel.PageIndex = 4;
+			inputModel.PageSize = 10;
+			result = target.FindPeople(inputModel);
+			result.People.Count().Should().Be.EqualTo(0);
+			result.TotalRows.Should().Be.EqualTo(33);
+			result.PageIndex.Should().Be.EqualTo(inputModel.PageIndex);
+		}
+
+		[Test]
+		public void FindPeople_ShouldMapSearchResultsToViewModel()
+		{
+			var ash = PersonFactory.CreatePersonWithGuid($"Ashley", $"Andeen");
+			PersonFinderRepository.Has(ash);
+			var appRole = ApplicationRoleFactory.CreateRole("AgentZero", "Agent Zero Description").WithId();
+			ash.PermissionInformation.AddApplicationRole(appRole);
+			var ashPP = PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today).WithId();
+			ashPP.Team = TeamFactory.CreateTeam("Prefrences", "London");
+			ash.AddPersonPeriod(ashPP);
+			PersonRepository.Add(ash);
+
+			var inputModel = new FindPeopleInputModel
+			{
+				KeyWord = "as",
+				PageSize = 10,
+				PageIndex = 0
+			};
+
+			var result = target.FindPeople(inputModel);
+			result.People.Count().Should().Be.EqualTo(1);
+			var person = result.People.First();
+			person.Id.Should().Be.EqualTo(ash.Id.GetValueOrDefault().ToString());
+			person.FirstName.Should().Be.EqualTo(ash.Name.FirstName);
+			person.LastName.Should().Be.EqualTo(ash.Name.LastName);
+			person.Site.Should().Be.EqualTo(ashPP.Team.Site.Description.Name);
+			person.Team.Should().Be.EqualTo(ashPP.Team.Description.Name);
+			person.Roles.Count().Should().Be.EqualTo(1);
+			var role = person.Roles.First();
+			role.Id.Should().Be.EqualTo(appRole.Id);
+			role.Name.Should().Be.EqualTo(appRole.DescriptionText);
+		}
 	}
-
-
 }

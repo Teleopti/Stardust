@@ -481,34 +481,6 @@ namespace Teleopti.Ccc.Domain.Common
             return retList;
         }
 
-		public virtual IPersonPeriod PersonPeriod(DateOnly dateOnly)
-		{
-			IPersonPeriod period = null;
-
-			if (isTerminated(dateOnly))
-				return null;
-
-			//get list with periods where startdate is less than inparam date
-			IList<IPersonPeriod> periods = PersonPeriodCollection.Where(s => s.StartDate <= dateOnly).ToArray();
-
-			//find period
-			foreach (IPersonPeriod p in periods)
-			{
-				if ((p.StartDate == dateOnly))
-				{
-					// Latest period is startdate equal to given date.
-					return p;
-				}
-
-				if (period == null || period.EndDate() < p.StartDate)
-				{
-					period = p;
-				}
-			}
-
-			return period;
-		}
-
 		public virtual ISchedulePeriod SchedulePeriod(DateOnly dateOnly)
         {
             ISchedulePeriod period = null;

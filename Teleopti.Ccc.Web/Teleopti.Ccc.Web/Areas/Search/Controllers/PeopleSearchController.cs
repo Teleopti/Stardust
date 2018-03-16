@@ -5,7 +5,10 @@ using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Web.Areas.Search.Models;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 
@@ -14,13 +17,59 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebPeople)]
 	public class PeopleSearchController : ApiController
 	{
+		private readonly IPersonRepository _personRepository;
 		private readonly IPeopleSearchProvider _searchProvider;
 		private readonly ILoggedOnUser _loggonUser;
+		private readonly IPersonFinderReadOnlyRepository _personFinder;
 
-		public PeopleSearchController(IPeopleSearchProvider searchProvider, ILoggedOnUser loggonUser)
+		public PeopleSearchController(IPeopleSearchProvider searchProvider, ILoggedOnUser loggonUser, IPersonFinderReadOnlyRepository personFinder, IPersonRepository personRepository)
 		{
 			_searchProvider = searchProvider;
 			_loggonUser = loggonUser;
+			_personFinder = personFinder;
+			_personRepository = personRepository;
+		}
+
+
+		[UnitOfWork]
+		[HttpPost, Route("api/Search/FindPeople")]
+		public virtual FindPeopleViewModel FindPeople(FindPeopleInputModel searchCritera)
+		{
+			searchCritera.SearchDate = DateTime.Now;
+			searchCritera.PageSize = Math.Min(searchCritera.PageSize, 500);
+
+			var personFinderSearchCriteria = new PeoplePersonFinderSearchCriteria(PersonFinderField.All, searchCritera.KeyWord, searchCritera.PageSize, DateOnly.Today, 1, 1);
+			personFinderSearchCriteria.CurrentPage = searchCritera.PageIndex + 1;
+			_personFinder.FindPeople(personFinderSearchCriteria);
+			var findPeopleViewModel = new FindPeopleViewModel();
+
+			var validPersons = personFinderSearchCriteria.DisplayRows.Where(x => x.PersonId != Guid.Empty);
+			var persons = _personRepository.FindPeople(validPersons.Select(x => x.PersonId));
+
+			var pvm = new List<PeopleViewModel>();
+			foreach (var person in persons)
+			{
+				var personPeriod = person.Period(new DateOnly(searchCritera.SearchDate));
+				var pers = new PeopleViewModel
+				{
+					FirstName = person.Name.FirstName,
+					LastName = person.Name.LastName,
+					Id = person.Id.GetValueOrDefault().ToString(),
+					Team = personPeriod?.Team?.Description.Name ?? string.Empty,
+					Site = personPeriod?.Team?.Site?.Description.Name ?? string.Empty,
+					Roles = person.PermissionInformation.ApplicationRoleCollection.Select(x => new SearchPersonRoleViewModel
+					{
+						Id = x.Id.GetValueOrDefault(),
+						Name = x.DescriptionText,
+					}).ToList()
+				};
+				pvm.Add(pers);
+			}
+
+			findPeopleViewModel.People.AddRange(pvm);
+			findPeopleViewModel.TotalRows = personFinderSearchCriteria.TotalRows;
+			findPeopleViewModel.PageIndex = searchCritera.PageIndex;
+			return findPeopleViewModel;
 		}
 
 		[UnitOfWork]
@@ -150,5 +199,4 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 			return result;
 		}
 	}
-
 }

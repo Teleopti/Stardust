@@ -1,7 +1,9 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.Aop.Core;
 using Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Aop;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Areas.Global.Core;
 using Teleopti.Ccc.Web.Areas.People.Controllers;
 using Teleopti.Ccc.Web.Areas.People.Core.Aspects;
@@ -20,6 +22,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.IoC
 			builder.RegisterType<AuditHelper>().As<IAuditHelper>().SingleInstance();
 			builder.RegisterType<RoleManager>().As<IRoleManager>().SingleInstance().ApplyAspects();
 			builder.RegisterType<AuditPersonAspect>().As<IAspect>().SingleInstance();
+			builder.RegisterType<PersonFinderReadOnlyRepository>().As<IPersonFinderReadOnlyRepository>().SingleInstance();
 		}
 	}
 }

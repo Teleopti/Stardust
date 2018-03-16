@@ -295,22 +295,6 @@ namespace Teleopti.Ccc.DomainTest.Common
 		}
 
 		[Test]
-		public void CanReturnPersonPeriod()
-		{
-			ITeam team1 = TeamFactory.CreateSimpleTeam("Team1");
-			IPersonPeriod personPeriod1 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2018, 1, 1), team1);
-			IPersonPeriod personPeriod2 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2018, 2, 1), team1);
-
-			var target = new Person();
-			target.AddPersonPeriod(personPeriod1);
-			target.AddPersonPeriod(personPeriod2);
-
-			target.PersonPeriod(new DateOnly(2017, 1, 1)).Should().Be.Null();
-			target.PersonPeriod(new DateOnly(2018, 1, 1)).Should().Be.EqualTo(personPeriod1);
-			target.PersonPeriod(new DateOnly(2019, 1, 1)).Should().Be.EqualTo(personPeriod2);
-		}
-
-		[Test]
 		public void CanReturnSchedulePeriod()
 		{
 			SchedulePeriod period1 = new SchedulePeriod(new DateOnly(2005, 1, 1), SchedulePeriodType.Week, 4);

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -29,7 +30,17 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void FindPeople(IPeoplePersonFinderSearchCriteria personFinderSearchCriteria)
 		{
-			throw new NotImplementedException();
+			var personList = _personList.Where(x =>
+				x.Name.FirstName.ToLower().Contains(personFinderSearchCriteria.SearchValue.ToLower()));
+			var paginatedResult = personList.Skip((personFinderSearchCriteria.CurrentPage - 1) * personFinderSearchCriteria.PageSize).Take(personFinderSearchCriteria.PageSize);
+
+			var row = 0;
+			foreach (var personFinderDisplayRow in paginatedResult.Select(p => new PersonFinderDisplayRow { PersonId = p.Id.GetValueOrDefault(), FirstName = p.Name.FirstName, LastName = p.Name.LastName }))
+			{
+				personFinderSearchCriteria.SetRow(row, personFinderDisplayRow);
+				row++;
+			}
+			personFinderSearchCriteria.TotalRows = personList.Count();
 		}
 
 		public void UpdateFindPerson(ICollection<Guid> ids)
