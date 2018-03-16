@@ -263,11 +263,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
 			get { return ContainedEntity.TerminalDate; }
 			set
 			{
-				IsTerminalDateChanged = true;
 				var terminateDate = value;
 
 				if (terminateDate.HasValue)
 				{
+					IsTerminalDateChanged = true;
 					ContainedEntity.TerminatePerson(terminateDate.Value, _personAccountUpdater);
 				}
 				else

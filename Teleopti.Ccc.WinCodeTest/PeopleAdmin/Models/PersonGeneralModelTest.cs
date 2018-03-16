@@ -285,6 +285,13 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 		}
 
 		[Test]
+		public void ShouldNotSetIsTerminalDateChanged()
+		{
+			_target.TerminalDate = null;
+			_target.IsTerminalDateChanged.Should().Be(false);
+		}
+
+		[Test]
 		public void VerifyLanguageInfo()
 		{
 			var culture = new Culture(0, "No Language");
