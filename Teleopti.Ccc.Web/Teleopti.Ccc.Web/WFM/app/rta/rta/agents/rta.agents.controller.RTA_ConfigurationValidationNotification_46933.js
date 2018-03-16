@@ -85,14 +85,15 @@
 		};
 		vm.goToOverview = rtaRouteService.goToOverview;
 		vm.goToSelectItem = rtaRouteService.goToSelectSkill;
+		
 
 		vm.rightPanelOptions = {
 			panelState: false,
 			panelTitle: " ",
 			sidePanelTitle: " ",
 			showCloseButton: true,
-			showBackdrop: true,
-			showResizer: true,
+			showBackdrop: false,
+			showResizer: false,
 			showPopupButton: true
 		};
 
