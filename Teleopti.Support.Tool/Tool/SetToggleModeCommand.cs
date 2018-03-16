@@ -18,7 +18,7 @@ namespace Teleopti.Support.Tool.Tool
 			this.toggleMode = toggleMode;
 		}
 
-		public void Execute(ModeFile mode)
+		public void Execute()
 		{
 			_installDir = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Teleopti\TeleoptiCCC\InstallationSettings", "INSTALLDIR", @"");
 			_webConfigUri = _installDir + WebConfigSubUri;

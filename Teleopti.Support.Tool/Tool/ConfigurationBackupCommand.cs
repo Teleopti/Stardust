@@ -3,20 +3,22 @@ using System.IO;
 
 namespace Teleopti.Support.Tool.Tool
 {
-	public class ConfigurationBackupHandler : ISupportCommand
+	public class ConfigurationBackupCommand : ISupportCommand
 	{
 		private readonly CustomSection _customSection;
 		private readonly ConfigFilePathReader _configFilePathReader;
+		private readonly Func<ModeFile> _mode;
 
-		public ConfigurationBackupHandler(CustomSection customSection, ConfigFilePathReader configFilePathReader)
+		public ConfigurationBackupCommand(CustomSection customSection, ConfigFilePathReader configFilePathReader, Func<ModeFile> mode)
 		{
 			_customSection = customSection;
 			_configFilePathReader = configFilePathReader;
+			_mode = mode;
 		}
 
-		public void Execute(ModeFile mode)
+		public void Execute()
 		{
-			var ssoFilePath = _configFilePathReader.Read(mode);
+			var ssoFilePath = _configFilePathReader.Read(_mode());
 			if (!ssoFilePath.IsValid())
 			{
 				return;

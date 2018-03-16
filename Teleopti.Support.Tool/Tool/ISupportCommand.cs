@@ -2,6 +2,6 @@
 {
 	public interface ISupportCommand
 	{
-		void Execute(ModeFile modeFile);
+		void Execute();
 	}
 }

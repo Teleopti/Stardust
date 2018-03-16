@@ -10,11 +10,11 @@ namespace Teleopti.Support.Tool.Tool
 			_commands = commands;
 		}
 
-		public void Execute(ModeFile modeFile)
+		public void Execute()
 		{
 			foreach (var supportCommand in _commands)
 			{
-				supportCommand.Execute(modeFile);
+				supportCommand.Execute();
 			}
 		}
 	}

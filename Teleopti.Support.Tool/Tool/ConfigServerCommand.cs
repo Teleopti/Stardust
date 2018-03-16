@@ -12,7 +12,7 @@ namespace Teleopti.Support.Tool.Tool
 			_dbHelper = new DBHelper(connectionString);
 		}
 
-		public void Execute(ModeFile modeFile)
+		public void Execute()
 		{
 			var pmConfiguration = readPmConfigurationFromSettingsTxt();
 			_dbHelper.SavePmConfiguration(pmConfiguration);
@@ -58,7 +58,7 @@ namespace Teleopti.Support.Tool.Tool
 			_dbHelper = new DBHelper(connectionString);
 		}
 
-		public void Execute(ModeFile modeFile)
+		public void Execute()
 		{
 			var configurations = _dbHelper.GetServerConfigurations();
 			string val;

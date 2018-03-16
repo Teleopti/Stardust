@@ -7,7 +7,7 @@ namespace Teleopti.Support.Tool.Tool
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(MoveCustomReportsCommand));
 
-		public void Execute(ModeFile modeFile)
+		public void Execute()
 		{			
 			const string oldDir = "..\\TeleoptiCCC\\Analytics\\Reports\\Custom\\";
 

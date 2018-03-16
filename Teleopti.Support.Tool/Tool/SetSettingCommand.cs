@@ -13,7 +13,7 @@ namespace Teleopti.Support.Tool.Tool
 			_replaceWith = replaceWith;
 		}
 
-		public void Execute(ModeFile modeFile)
+		public void Execute()
 		{
 			new SettingsFileManager().UpdateFile(_searchFor, _replaceWith);
 		}

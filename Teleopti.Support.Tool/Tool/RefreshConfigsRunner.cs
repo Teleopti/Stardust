@@ -11,19 +11,21 @@ namespace Teleopti.Support.Tool.Tool
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(RefreshConfigsRunner));
         private readonly IRefreshConfigFile _refreshConfigFile;
+		private readonly Func<ModeFile> _mode;
 
-        public RefreshConfigsRunner(IRefreshConfigFile refreshConfigFile)
-        {
-            _refreshConfigFile = refreshConfigFile;
-        }
+		public RefreshConfigsRunner(IRefreshConfigFile refreshConfigFile, Func<ModeFile> mode)
+		{
+			_refreshConfigFile = refreshConfigFile;
+			_mode = mode;
+		}
 
-        public void Execute(ModeFile mode)
+        public void Execute()
         {
 	        var searchReplaces = new SettingsFileManager().ReadFile();
             
             try
             {
-				var file = mode.FileContents();
+				var file = _mode().FileContents();
 	            Array.ForEach(file, f => _refreshConfigFile.ReplaceFile(f, searchReplaces));
             }
             catch (Exception e)

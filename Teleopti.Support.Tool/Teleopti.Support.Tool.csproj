@@ -232,7 +232,7 @@
     </Compile>
     <Compile Include="SettingsInRegistry.cs" />
     <Compile Include="Tool\ApplicationInsightsInstrumentationKeyUpdator.cs" />
-    <Compile Include="Tool\CommandLineArgument.cs" />
+    <Compile Include="Tool\CommandBuilder.cs" />
     <Compile Include="Tool\CompositeCommand.cs" />
     <Compile Include="Tool\ConfigServerCommand.cs" />
     <Compile Include="Tool\CustomSection.cs" />
@@ -244,8 +244,8 @@
     <Compile Include="Tool\RefreshConfigsRunner.cs" />
     <Compile Include="Tool\SetSettingCommand.cs" />
     <Compile Include="Tool\SetToggleModeCommand.cs" />
-    <Compile Include="Tool\ConfigurationBackupHandler.cs" />
-    <Compile Include="Tool\ConfigurationRestoreHandler.cs" />
+    <Compile Include="Tool\ConfigurationBackupCommand.cs" />
+    <Compile Include="Tool\ConfigurationRestoreCommand.cs" />
     <Compile Include="Tool\ConfigFilePathReader.cs" />
     <EmbeddedResource Include="Controls\ConnectionString\ConnectionSettings.resx">
       <DependentUpon>ConnectionSettings.cs</DependentUpon>

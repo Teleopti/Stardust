@@ -5,18 +5,20 @@ using System.Linq;
 
 namespace Teleopti.Support.Tool.Tool
 {
-	public class ConfigurationRestoreHandler : ISupportCommand
+	public class ConfigurationRestoreCommand : ISupportCommand
 	{
 		private readonly CustomSection _customSection;
 		private readonly ConfigFilePathReader _configFilePathReader;
+		private readonly Func<ModeFile> _mode;
 
-		public ConfigurationRestoreHandler(CustomSection customSection, ConfigFilePathReader configFilePathReader)
+		public ConfigurationRestoreCommand(CustomSection customSection, ConfigFilePathReader configFilePathReader, Func<ModeFile> mode)
 		{
 			_customSection = customSection;
 			_configFilePathReader = configFilePathReader;
+			_mode = mode;
 		}
 
-		public void Execute(ModeFile mode)
+		public void Execute()
 		{
 			var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"SavedForConfiguration");
 			var backupFile = Path.Combine(path, "Configurations.txt");
@@ -25,7 +27,7 @@ namespace Teleopti.Support.Tool.Tool
 				return;
 			}
 
-			var configFilePaths = _configFilePathReader.Read(mode);
+			var configFilePaths = _configFilePathReader.Read(_mode());
 			if (!configFilePaths.IsValid())
 			{
 				return;

@@ -55,8 +55,8 @@ namespace Teleopti.Support.Tool.Controls
 		{
 			new SettingsFileManager().SaveFile(_settings);
 
-			var refreshRunner = new RefreshConfigsRunner(new RefreshConfigFile());
-			refreshRunner.Execute(new ModeFile(mode));
+			var refreshRunner = new RefreshConfigsRunner(new RefreshConfigFile(), () => new ModeFile(mode));
+			refreshRunner.Execute();
 
 			if (mode.Equals("DEPLOY"))
 			{
