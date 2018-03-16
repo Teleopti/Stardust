@@ -745,6 +745,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Expect.Call(skillStaffPeriod.SkillDay).Return(skillDay);
 				Expect.Call(skillDay.Skill).Return(skill);
 				Expect.Call(skillStaffPeriod.RelativeDifference).Return(0.0).Repeat.AtLeastOnce();
+				Expect.Call(skillStaffPeriod.DateTimePeriod).Return(new DateTimePeriod()).Repeat.Any();
 			}
 
 			using (mock.Playback())
