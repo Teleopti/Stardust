@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 				businessUnitId = WithUnitOfWork.Get(() => BusinessUnits.LoadAll().First()).Id.GetValueOrDefault();
 			AsSystem.Logon(logOnDatasource, businessUnitId);
 
-			var today = new DateTime(2018, 3, 1);
+			var today = new DateTime(2015, 3, 1);
 			var dates = Enumerable.Range(0, 30)
 				.Select(i => new DateOnly(today.AddDays(i)))
 				.ToArray();
