@@ -155,7 +155,7 @@ Try
 	log-info "running: $ScriptFileName"
 	
     $TeleoptiServiceBus = "TeleoptiServiceBus"
-    $computer = gc env:computername
+    $computer = $env:computername
 
     ## Name of the job, name of source in Windows Event Log
     $JOB = "Teleopti.Ccc.BlobStorageCopy"
@@ -189,7 +189,7 @@ Try
 
 	## Destination directory. Files in this directory will mirror the source directory. Extra files will be deleted!
 	$DESTINATION = "c:\temp\PayrollInbox"
-	if (-not(test-path -path $DESTINATION))
+	if (!(test-path -path $DESTINATION))
 	{
 		mkdir $DESTINATION
 	}
@@ -212,7 +212,7 @@ Try
 
 	log-info "Copying Payroll from blob storage..."
 	## Start the azcopy with above parameters and log errors in Windows Eventlog.
-	& $AzCopyExe @cmdArgs
+	& $AzCopyExe $cmdArgs
     $AzExitCode = $LastExitCode
     
     if ($LastExitCode -ne 0) {
