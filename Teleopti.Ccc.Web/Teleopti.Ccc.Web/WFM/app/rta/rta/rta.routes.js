@@ -49,6 +49,7 @@ angular.module('wfm.rta').config(function ($stateProvider, ToggleProvider) {
 			templateUrl: function () {
 				if (toggles.RTA_ModifySkillGroup_48191)
 					return 'app/rta/rta/agents/rta-agents.RTA_ModifySkillGroup_48191.html';
+				// return 'app/rta/rta/agents/rta-agents.RTA_NoRightPanel_48586.html';
 				return 'app/rta/rta/agents/rta-agents.RTA_ViewHistoricalAhderenceForRecentShifts_46786.html';
 			},
 			controllerProvider: function () {
