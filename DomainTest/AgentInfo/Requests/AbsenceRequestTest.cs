@@ -37,10 +37,13 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 	public class AbsenceRequestTest : ISetup
 	{
 		public IRequestApprovalServiceFactory RequestApprovalServiceFactory;
+		public IPersonRequestRepository PersonRequestRepository;
 		public ICurrentScenario CurrentScenario;
 		public FakeLoggedOnUser LoggedOnUser;
+		public FakePersonRepository PersonRepository;
 		public IScheduleStorage ScheduleStorage;
 		public FakePersonAbsenceAccountRepository PersonAbsenceAccountRepository;
+		public FakePersonAssignmentRepository PersonAssignmentRepository;
 
 		private DateTimePeriod _period;
 		private Absence _absence;
@@ -62,17 +65,14 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		{
 			_period = new DateTimePeriod(new DateTime(2008, 7, 16, 0, 0, 0, DateTimeKind.Utc),
 				new DateTime(2008, 7, 19, 0, 0, 0, DateTimeKind.Utc));
+
 			_absence = new Absence {Description = new Description("Holiday", "861")}.WithId();
+			_absence.Tracker = Tracker.CreateTimeTracker();
+			_absence.InContractTime = true;
+			_absence.InWorkTime = true;
+			_absence.InPaidTime = true;
 
 			_target = new AbsenceRequest(_absence, _period);
-
-			var dataSource = new DataSource(UnitOfWorkFactoryFactoryForTest.CreateUnitOfWorkFactory("for test"), null, null);
-			var loggedOnPerson = StateHolderProxyHelper.CreateLoggedOnPerson();
-			loggedOnPerson.PermissionInformation.SetDefaultTimeZone(
-				TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-			var principal = new TeleoptiPrincipalFactory().MakePrincipal(loggedOnPerson, dataSource,
-				BusinessUnitFactory.BusinessUnitUsedInTest, null);
-			Thread.CurrentPrincipal = principal;
 		}
 
 		[Test]
@@ -156,13 +156,10 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		[Test]
 		public void VerifyApproveAbsenceCallDoesNotSendNotificationWhenFailing()
 		{
+			setCurrentPrincipal();
 			setPermissions();
 
 			var person = LoggedOnUser.CurrentUser();
-			_absence.Tracker = Tracker.CreateTimeTracker();
-			_absence.InContractTime = true;
-			_absence.InWorkTime = true;
-			_absence.InPaidTime = true;
 			var personAbsenceAccount = new PersonAbsenceAccount(person, _absence).WithId();
 			var balance = TimeSpan.Zero;
 			personAbsenceAccount.Add(new AccountDay(new DateOnly(2008, 7, 15)) {LatestCalculatedBalance = balance}.WithId());
@@ -328,7 +325,49 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			});
 		}
 
+		[Test]
+		public void WhenAbsenceRequestIsAcceptedAbsenceShouldBeCorrect()
+		{
+			var startDateTime = new DateTime(2008, 7, 16, 0, 0, 0, DateTimeKind.Utc);
+			var endDateTime = new DateTime(2008, 7, 16, 23, 59, 00, DateTimeKind.Utc);
+			var period = new DateTimePeriod(startDateTime, endDateTime);
+
+			var person = LoggedOnUser.CurrentUser();
+			PersonRepository.Add(person);
+
+			var personRequest = createAbsenceRequest(person, _absence, period);
+			personRequest.Pending();
+
+			var scheduleDictionary = initScheduleDictionary();
+			var absenceRequestApproveService = RequestApprovalServiceFactory.MakeAbsenceRequestApprovalService(
+				scheduleDictionary, CurrentScenario.Current(),
+				LoggedOnUser.CurrentUser());
+			personRequest.Approve(absenceRequestApproveService, new PersonRequestAuthorizationCheckerForTest());
+
+			var scheduleDay = scheduleDictionary[person].ScheduledDay(new DateOnly(startDateTime));
+			var personAbsences = scheduleDay.PersonAbsenceCollection(true);
+			var personAbsence = personAbsences[0];
+
+			personAbsence.Layer.Period.Should().Be.EqualTo(period);
+		}
+
+		private PersonRequest createAbsenceRequest(IPerson person, IAbsence absence, DateTimePeriod requestDateTimePeriod)
+		{
+			var personRequest = new PersonRequest(person, new AbsenceRequest(absence, requestDateTimePeriod)).WithId();
+			PersonRequestRepository.Add(personRequest);
+
+			return personRequest;
+		}
+
 		private IRequestApprovalService createAbsenceRequestApproveService()
+		{
+			var scheduleDictionary = initScheduleDictionary();
+
+			return RequestApprovalServiceFactory.MakeAbsenceRequestApprovalService(scheduleDictionary, CurrentScenario.Current(),
+				LoggedOnUser.CurrentUser());
+		}
+
+		private IScheduleDictionary initScheduleDictionary()
 		{
 			var dateTimePeriod = new DateTimePeriod(2008, 7, 16, 2008, 7, 18);
 			var person = LoggedOnUser.CurrentUser();
@@ -337,16 +376,11 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 				new Activity("test")
 				, dateTimePeriod, new ShiftCategory("category")));
 
-			ScheduleStorage.Add(new PersonAbsence(person, CurrentScenario.Current(),
-				new AbsenceLayer(_absence, new DateTimePeriod(2008, 7, 16, 8, 2008, 7, 16, 9))));
-
 			var scheduleDictionary = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
 				new ScheduleDictionaryLoadOptions(false, false)
 				, new DateOnlyPeriod(2008, 7, 15, 2008, 7, 19), CurrentScenario.Current());
-			((IReadOnlyScheduleDictionary) scheduleDictionary).MakeEditable();
-
-			return RequestApprovalServiceFactory.MakeAbsenceRequestApprovalService(scheduleDictionary, CurrentScenario.Current(),
-				LoggedOnUser.CurrentUser());
+			((IReadOnlyScheduleDictionary)scheduleDictionary).MakeEditable();
+			return scheduleDictionary;
 		}
 
 		private static void setPermissions()
@@ -362,6 +396,17 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 						"/AvailableData"), new AuthorizeEveryone(), Rights.PossessProperty)
 			};
 			principal.AddClaimSet(new DefaultClaimSet(ClaimSet.System, claims));
+		}
+
+		private static void setCurrentPrincipal()
+		{
+			var dataSource = new DataSource(UnitOfWorkFactoryFactoryForTest.CreateUnitOfWorkFactory("for test"), null, null);
+			var loggedOnPerson = StateHolderProxyHelper.CreateLoggedOnPerson();
+			loggedOnPerson.PermissionInformation.SetDefaultTimeZone(
+				TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+			var principal = new TeleoptiPrincipalFactory().MakePrincipal(loggedOnPerson, dataSource,
+				BusinessUnitFactory.BusinessUnitUsedInTest, null);
+			Thread.CurrentPrincipal = principal;
 		}
 
 		private class
