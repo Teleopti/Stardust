@@ -44,17 +44,10 @@
 		var vm = this;
 		var timeoutPromise;
 		var polling;
+		var prevSkill;
 		var pollingTimeout = 60000;
 		var loadingSkill = true;
 		var loadingSkillArea = true;
-
-		//TODO: #47051 - Remove this and its uses
-		var message = $translate
-			.instant('WFMReleaseNotificationWithoutOldModuleLink')
-			.replace('{0}', $translate.instant('Intraday'))
-			.replace('{1}', "<a href=' http://www.teleopti.com/wfm/customer-feedback.aspx' target='_blank'>")
-			.replace('{2}', '</a>');
-		var prevSkill;
 
 		(vm.toggles = {}), (vm.DeleteSkillAreaModal = false);
 		vm.activeTab = 0;
@@ -318,11 +311,6 @@
 			return skill.DoDisplayData === true;
 		}
 
-		function notifySkillAreaDeletion() {
-			var message = $translate.instant('Deleted');
-			NoticeService.success(message, 5000, true);
-		}
-
 		function poll() {
 			$interval.cancel(polling);
 			polling = $interval(function() {
@@ -458,16 +446,6 @@
 		if (vm.latestActualInterval === '--:--') {
 			vm.hasMonitorData = false;
 		}
-
-		NoticeService.info(message, null, true);
-
-		// $timeout(
-		// 	function() {
-		// 		vm.loadState();
-		// 	},
-		// 	0,
-		// 	false
-		// );
 
 		poll();
 	}
