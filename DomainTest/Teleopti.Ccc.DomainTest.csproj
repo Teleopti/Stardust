@@ -167,7 +167,7 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\SkillSetupHelper.cs" />
     <Compile Include="ApplicationLayer\TerminatePersonHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AddActivityCommandHandlerTest.cs" />
-    <Compile Include="ApplicationLayer\Gamification\RecalculateBadgeHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\Gamification\RecalculateBadgeEventHandlerTest.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestProcessorCalendarMonthMaximumOvertimeTest.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestProcessorMaximumContinuousWorkTimeTest.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestProcessorMostUnderStaffedSkillTest.cs" />

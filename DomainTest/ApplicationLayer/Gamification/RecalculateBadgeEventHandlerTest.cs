@@ -25,7 +25,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Gamification
 {
 	[TestFixture, DomainTest]
-	public class RecalculateBadgeHandlerTest:ISetup
+	public class RecalculateBadgeEventHandlerTest:ISetup
 	{
 		public RecalculateBadgeEventHandler Target;
 		public FakeJobResultRepository JobResultRepository;
