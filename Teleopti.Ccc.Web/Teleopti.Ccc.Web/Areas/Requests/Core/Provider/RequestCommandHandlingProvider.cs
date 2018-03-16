@@ -2,12 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using log4net;
-using Stardust.Manager.Extensions;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
@@ -129,19 +126,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 					ReplyMessage = replyMessage
 				};
 
-				Retry.Handle<OptimisticLockException>()
-					.WaitAndRetry(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(2))
-					.Do(() =>
-					{
-						try
-						{
-							_commandDispatcher.Execute(command);
-						}
-						catch (Exception ex) when (ex.InnerException is OptimisticLockException)
-						{
-							throw ex.InnerException;
-						}
-					});
+				_commandDispatcher.Execute(command);
 
 				if (command.AffectedRequestId.HasValue) affectedRequestIds.Add(command.AffectedRequestId.Value);
 

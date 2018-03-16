@@ -13,7 +13,6 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.WorkflowControl;
@@ -48,15 +47,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 		public ScheduleStorage ScheduleStorage;
 		public PersonRequestAuthorizationCheckerConfigurable PersonRequestCheckAuthorization;
 		public FakeQueuedAbsenceRequestRepository QueuedAbsenceRequestRepository;
-		public FakePersonAbsenceAccountRepositoryWithOptimisticLockException PersonAbsenceAccountRepository;
 		public FullPermission Permission;
 		private IAbsence _absence;
 		
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<FakePersonAbsenceAccountRepositoryWithOptimisticLockException>()
-				.For<IPersonAbsenceAccountRepository>();
 			system.UseTestDouble<PersonRequestAuthorizationCheckerConfigurable>().For<IPersonRequestCheckAuthorization>();
 			system.UseTestDouble(new FakeScenarioRepository(new Scenario {DefaultScenario = true})).For<IScenarioRepository>();
 			system.UseTestDouble<PersonAbsenceRemover>().For<IPersonAbsenceRemover>();
@@ -434,33 +430,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 		}
 
 		[Test]
-		public void ShouldCancelPersonRequestWithOptimisticLockExceptionAndRetry()
-		{
-			var person = PersonFactory.CreatePerson("Yngwie", "Malmsteen");
-			var workflowControlSet = WorkflowControlSetFactory.CreateWorkFlowControlSet(_absence, new PendingAbsenceRequest(),
-				false);
-			workflowControlSet.SchedulePublishedToDate = new DateTime(2018, 10, 15);
-			workflowControlSet.PreferenceInputPeriod = new DateOnlyPeriod(new DateOnly(2016, 1, 1), new DateOnly(2017, 10, 15));
-			workflowControlSet.PreferencePeriod = workflowControlSet.PreferenceInputPeriod;
-			person.WorkflowControlSet = workflowControlSet;
-
-			var absenceDateTimePeriod = new DateTimePeriod(2018, 04, 15, 00, 2018, 04, 19, 23);
-			createShiftsForPeriod(absenceDateTimePeriod, person);
-
-			var accountDay1 = createAccountDay(new DateOnly(2017, 7, 1), TimeSpan.FromDays(0), TimeSpan.FromDays(5),
-				TimeSpan.FromDays(0));
-			createPersonAbsenceAccount(person, _absence, accountDay1);
-
-			var personRequest = createAcceptedRequest(person, absenceDateTimePeriod, false);
-			PersonAbsenceRepository.LoadAll().FirstOrDefault().WithId();
-
-			PersonAbsenceAccountRepository.SetThrowOptimisticLockException(true);
-			Target.CancelRequests(new List<Guid> { personRequest.Id.GetValueOrDefault() }, "test");
-
-			Assert.AreEqual(5, accountDay1.Remaining.TotalDays);
-		}
-
-		[Test]
 		public void ShouldApproveShiftTradeRequestWithoutCopyFullDayAbsenceToDestinationAgent()
 		{
 			initializeState();
@@ -679,38 +648,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			Thread.CurrentPrincipal = null;
 		}
 
-		private void createShiftsForPeriod(DateTimePeriod period, IPerson person)
-		{
-			foreach (var day in period.WholeDayCollection(TimeZoneInfo.Utc))
-			{
-				ScheduleStorage.Add(createAssignment(person, day.StartDateTime, day.EndDateTime, Scenario.Current()));
-			}
-		}
-
-		private static IPersonAssignment createAssignment(IPerson person, DateTime startDate, DateTime endDate, IScenario scenario)
-		{
-			return PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(person,
-				scenario, new DateTimePeriod(startDate, endDate)).WithId();
-		}
-
-		private AccountDay createAccountDay(DateOnly startDate, TimeSpan balanceIn, TimeSpan accrued, TimeSpan balance)
-		{
-			return new AccountDay(startDate)
-			{
-				BalanceIn = balanceIn,
-				Accrued = accrued,
-				Extra = TimeSpan.FromDays(0),
-				LatestCalculatedBalance = balance
-			};
-		}
-
-		private void createPersonAbsenceAccount(IPerson person, IAbsence absence, params IAccount[] accountDays)
-		{
-			var personAbsenceAccount = PersonAbsenceAccountFactory.CreatePersonAbsenceAccount(person, absence,
-				accountDays);
-			PersonAbsenceAccountRepository.Add(personAbsenceAccount);
-		}
-
 		private static void setupStateHolderProxy()
 		{
 			var stateMock = new FakeState();
@@ -835,26 +772,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 
 			StateHolderProxyHelper.ClearStateHolder();
 			StateHolder.Initialize(new FakeState(), new MessageBrokerCompositeDummy());
-		}
-
-		public class FakePersonAbsenceAccountRepositoryWithOptimisticLockException : FakePersonAbsenceAccountRepository, IPersonAbsenceAccountRepository
-		{
-			public bool ThrowOptimisticLockException { get; private set; }
-
-			public void SetThrowOptimisticLockException(bool throwOptimisticLockException)
-			{
-				ThrowOptimisticLockException = throwOptimisticLockException;
-			}
-
-			public new void Add(IPersonAbsenceAccount entity)
-			{
-				if (ThrowOptimisticLockException)
-				{
-					ThrowOptimisticLockException = false;
-					throw new OptimisticLockException();
-				}
-				base.Add(entity);
-			}
 		}
 	}
 
