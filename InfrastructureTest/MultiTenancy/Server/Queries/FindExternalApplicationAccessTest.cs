@@ -33,6 +33,22 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 		}
 
 		[Test]
+		public void ShouldNotFindDeletedExternalApplicationAccess()
+		{
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
+			{
+				var name = RandomName.Make();
+				var hash = Guid.NewGuid().ToString().Replace("-", "");
+				var personId = Guid.NewGuid();
+				var externalApplicationAccess = new ExternalApplicationAccess(personId, name, hash);
+				Persist.Persist(externalApplicationAccess);
+				Persist.Remove(externalApplicationAccess.Id,personId);
+
+				Target.FindByPerson(personId).Should().Be.Empty();
+			}
+		}
+
+		[Test]
 		public void ShouldFindExternalApplicationAccessByPerson()
 		{
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())

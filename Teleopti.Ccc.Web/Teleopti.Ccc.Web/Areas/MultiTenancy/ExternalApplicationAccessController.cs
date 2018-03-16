@@ -60,5 +60,13 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 			var applications = _findExternalApplicationAccess.FindByPerson(_currentTenantUser.CurrentUser().Id);
 			return Ok(applications.Select(a => new ExternalApplicationModel{Id = a.Id,Name = a.Name,TimeStamp = a.CreatedOn}).ToArray());
 		}
+
+		[HttpDelete]
+		[TenantUnitOfWork]
+		[Route("api/token/{id}")]
+		public virtual void Remove(int id)
+		{
+			_persistExternalApplicationAccess.Remove(id,_currentTenantUser.CurrentUser().Id);
+		}
 	}
 }

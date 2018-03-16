@@ -6,7 +6,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Ccc.Web.Areas.MultiTenancy;
-using Teleopti.Ccc.WebTest.TestHelper;
 
 namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 {
@@ -15,6 +14,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 	{
 		public ExternalApplicationAccessController Target;
 		public FakePersistExternalApplicationAccess Persister;
+		public FakeFindExternalApplicationAccess Finder;
 		public CurrentTenantUserFake CurrentTenantUser;
 
 		[Test]
@@ -52,6 +52,20 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 
 			var result = (OkNegotiatedContentResult<ExternalApplicationModel[]>)Target.Get();
 			result.Content.Single().Name.Should().Be.EqualTo(model.Name);
+		}
+
+		[Test]
+		public void ShouldRemoveExternalApplication()
+		{
+			var personId = Guid.NewGuid();
+			CurrentTenantUser.Set(new PersonInfo(new Tenant("asdf"), personId));
+			var model = new NewExternalApplicationModel { Name = "HR system" };
+			Target.Add(model);
+
+			var items = Finder.FindByPerson(personId);
+			
+			Target.Remove(items.Single().Id);
+			Finder.FindByPerson(personId).Should().Be.Empty();
 		}
 	}
 }

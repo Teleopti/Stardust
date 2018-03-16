@@ -1,4 +1,7 @@
-﻿using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
+﻿using System;
+using NHibernate;
+using NHibernate.Type;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 {
@@ -14,6 +17,15 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 		public void Persist(ExternalApplicationAccess externalApplicationAccess)
 		{
 			_currentTenantSession.CurrentSession().Save(externalApplicationAccess);
+		}
+
+		public void Remove(int id, Guid personId)
+		{
+			_currentTenantSession.CurrentSession()
+				.GetNamedQuery("deleteApplicationsByIdAndPerson")
+				.SetInt32("id", id)
+				.SetGuid("personId", personId)
+				.ExecuteUpdate();
 		}
 	}
 }

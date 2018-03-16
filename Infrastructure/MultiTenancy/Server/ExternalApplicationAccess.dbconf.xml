@@ -16,12 +16,16 @@
   </class>
 	<query name="findByHash">
 		select a from ExternalApplicationAccess a
-		where a.Hash=:hash
+		where a.Hash = :hash
 	</query>
 
 	<query name="findApplicationsByPerson">
 		select a from ExternalApplicationAccess a
-		where a.PersonId=:personId
+		where a.PersonId = :personId
+	</query>
+
+	<query name="deleteApplicationsByIdAndPerson">
+		delete from ExternalApplicationAccess where Id = :id AND PersonId = :personId
 	</query>
 </hibernate-mapping>
 
