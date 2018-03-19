@@ -64,6 +64,7 @@ namespace Teleopti.Ccc.IocCommon
 			builder.RegisterModule<AspectsModule>();
 			builder.RegisterModule<ReadModelUnitOfWorkModule>();
 			builder.RegisterModule<MessageBrokerUnitOfWorkModule>();
+			builder.RegisterModule(new BadgeCalculationModule(_configuration));
 			builder.RegisterModule<WebModule>();
 			builder.RegisterModule<ServiceBusModule>();
 			builder.RegisterModule(new InitializeModule(_configuration));
@@ -81,7 +82,6 @@ namespace Teleopti.Ccc.IocCommon
 			builder.RegisterModule(new SchedulingCommonModule(_configuration));
 			builder.RegisterModule(new StaffingModule(_configuration));
 			builder.RegisterModule(new ShiftTradeModule());
-			builder.RegisterModule(new BadgeCalculationModule(_configuration));
 			builder.RegisterModule<CommandDispatcherModule>();
 			builder.RegisterModule(new CommandHandlersModule(_configuration));
 			builder.RegisterModule<PeopleAreaModule>();
