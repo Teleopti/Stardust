@@ -330,5 +330,15 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 					DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb)
 			};
 		}
+
+		public void ClearLicensedFunctions(string tenantName)
+		{
+
+		}
+
+		public void ClearLicensedFunctions()
+		{
+			
+		}
 	}
 }

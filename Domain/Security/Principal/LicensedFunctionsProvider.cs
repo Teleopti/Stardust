@@ -8,7 +8,8 @@ namespace Teleopti.Ccc.Domain.Security.Principal
     public interface ILicensedFunctionsProvider
     {
         IEnumerable<IApplicationFunction> LicensedFunctions(string tenantName);
-    }
+		void ClearLicensedFunctions(string tenantName);
+	}
 
 	public class LicensedFunctionsProvider : ILicensedFunctionsProvider
 	{
@@ -34,6 +35,12 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 				return functions;
 			}
 		}
+
+		public void ClearLicensedFunctions(string tenantName)
+		{
+			_licensedFunctions.Remove(tenantName);
+		}
+			
 
 		private IEnumerable<IApplicationFunction> fetchLicensedFunctions(string tenantName)
 		{
