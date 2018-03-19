@@ -20807,7 +20807,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There is no gamification data for the selected period..
+        ///   Looks up a localized string similar to There is no gamification data for some or all days within the selected period..
         /// </summary>
         public static string NoGamificationDataForThePeriod {
             get {
