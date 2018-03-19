@@ -38,6 +38,9 @@ CREATE PROCEDURE [mart].[report_data_forecast_vs_actual_workload]
 @business_unit_code uniqueidentifier
 AS
 --SET NOCOUNT ON
+
+DECLARE @date_from_id int, @date_to_id int
+
 CREATE TABLE #skills(id int)
 CREATE TABLE #workloads(id int)
 CREATE TABLE #pre_result(
@@ -61,7 +64,6 @@ CREATE TABLE #pre_result(
 	hide_time_zone bit,
 	interval_type int,
 	weekday_number int)
-
 CREATE TABLE #result(
 	period nvarchar(30),
 	forecasted_calls decimal(28,4),
@@ -80,7 +82,15 @@ CREATE TABLE #result(
 	interval_type int,
 	weekday_number int,
 	[date] smalldatetime)
- 
+CREATE TABLE #bridge_time_zone(
+	date_id int,
+	interval_id smallint,
+	local_date_id int,
+	local_interval_id smallint)
+CREATE TABLE #bridge_queue_workload(
+	queue_id int,
+	workload_id int,
+	skill_id int) 
 /*Split string of skill id:s*/
 INSERT INTO #skills
 SELECT * FROM mart.SplitStringInt(@skill_set)
@@ -96,40 +106,81 @@ IF (SELECT COUNT(*) FROM mart.dim_time_zone tz WHERE tz.time_zone_code<>'UTC') <
 ELSE
 	SET @hide_time_zone = 0
 
+SELECT @date_from_id = date_id FROM mart.dim_date WHERE date_date = @date_from
+SELECT @date_to_id = date_id FROM mart.dim_date WHERE date_date = @date_to
+
+/* Get the interesting part of mart.bridge_time_zone to join on later */
+INSERT INTO #bridge_time_zone
+SELECT
+	date_id,
+	interval_id,
+	local_date_id,
+	local_interval_id
+FROM 
+	mart.bridge_time_zone
+WHERE 
+	time_zone_id = @time_zone_id AND 
+	date_id BETWEEN @date_from_id AND @date_to_id
+
+/* Get the interesting part of mart.bridge_queue_workload to join on later */
+INSERT INTO #bridge_queue_workload
+SELECT 
+	queue_id,
+	workload_id,
+	skill_id
+FROM 
+	mart.bridge_queue_workload
+WHERE
+	skill_id IN (select id from #skills) AND
+	workload_id IN (select id from #workloads)
+
 /* GET QUEUE DATA */
-INSERT INTO #pre_result (date_id,date,year_month,year_week,weekday_resource_key,
-						interval_id,interval_name,halfhour_name,hour_name,
-						calculated_calls, offered_calls,answered_calls,talk_time_s,acw_s)
-SELECT d.date_id,
-		d.date_date as date,
-		d.year_month,
-		d.year_week,
-		d.weekday_resource_key,
-		i.interval_id,
-		i.interval_name,
-		i.halfhour_name,
-		i.hour_name,
-		mart.CalculateQueueStatistics(w.percentage_offered,
-										w.percentage_overflow_in,
-										w.percentage_overflow_out,
-										w.percentage_abandoned,
-										w.percentage_abandoned_short,
-										w.percentage_abandoned_within_service_level,
-										w.percentage_abandoned_after_service_level,
-										fq.offered_calls,
-										fq.abandoned_calls,
-										fq.abandoned_calls_within_SL,
-										fq.abandoned_short_calls,
-										fq.overflow_out_calls,
-										fq.overflow_in_calls),
-		fq.offered_calls,
-		fq.answered_calls,
-		fq.talk_time_s,
-		fq.after_call_work_s
+INSERT INTO #pre_result (
+	date_id,
+	[date],
+	year_month,
+	year_week,
+	weekday_resource_key,
+	interval_id,
+	interval_name,
+	halfhour_name,
+	hour_name,
+	calculated_calls, 
+	offered_calls,
+	answered_calls,
+	talk_time_s,
+	acw_s)
+SELECT 
+	d.date_id,
+	d.date_date as [date],
+	d.year_month,
+	d.year_week,
+	d.weekday_resource_key,
+	i.interval_id,
+	i.interval_name,
+	i.halfhour_name,
+	i.hour_name,
+	mart.CalculateQueueStatistics(w.percentage_offered,
+									w.percentage_overflow_in,
+									w.percentage_overflow_out,
+									w.percentage_abandoned,
+									w.percentage_abandoned_short,
+									w.percentage_abandoned_within_service_level,
+									w.percentage_abandoned_after_service_level,
+									fq.offered_calls,
+									fq.abandoned_calls,
+									fq.abandoned_calls_within_SL,
+									fq.abandoned_short_calls,
+									fq.overflow_out_calls,
+									fq.overflow_in_calls),
+	fq.offered_calls,
+	fq.answered_calls,
+	fq.talk_time_s,
+	fq.after_call_work_s
 FROM mart.fact_queue fq
-INNER JOIN mart.bridge_queue_workload bqw
+INNER JOIN #bridge_queue_workload bqw
 	ON fq.queue_id=bqw.queue_id
-INNER JOIN mart.bridge_time_zone b
+INNER JOIN #bridge_time_zone b
 	ON	fq.interval_id= b.interval_id
 	AND fq.date_id= b.date_id
 INNER JOIN mart.dim_date d 
@@ -139,10 +190,7 @@ INNER JOIN mart.dim_interval i
 INNER JOIN mart.dim_workload w
 	ON bqw.workload_id = w.workload_id
 WHERE d.date_date BETWEEN @date_from AND @date_to
-AND i.interval_id BETWEEN @interval_from AND @interval_to
-AND b.time_zone_id = @time_zone_id
-AND bqw.skill_id IN (select id from #skills)
-AND bqw.workload_id IN (select id from #workloads)
+	AND i.interval_id BETWEEN @interval_from AND @interval_to
 ORDER BY 
 		CASE @interval_type 
 		WHEN 1 THEN i.interval_name
