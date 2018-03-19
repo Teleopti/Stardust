@@ -81,9 +81,19 @@ function Sync-NewFilesOnly
         {
             if (!(FilesAreEqual $sourceFile $targetFile)) 
             { 
-                $currDir = ($sourceFile).directory.name 
-                $destfile = $targetDir + "\" + $currDir + "\" + $Sourcefile.Name
+                
+                $currDir = ($sourceFile).directory.name
+                if (!($currDir -eq "PayrollInbox"))
+                {
+                    $destfile = $targetDir + "\" + $currDir + "\" + $Sourcefile.Name
+                }
+                else
+                {
+                    $destfile = $targetDir + "\" + $Sourcefile.Name
+                } 
+                
                 Copy-Item $sourceFile  $destfile -Force
+               
                 $counter = $counter + 1
             }
         }
