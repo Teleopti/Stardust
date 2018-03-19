@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.Analytics;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Exceptions;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -40,7 +41,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Availability
 			_scenarioRepository = scenarioRepository;
 		}
 
-		public void Execute(Guid personId, DateOnly date)
+		[AnalyticsUnitOfWork]
+		public virtual void Execute(Guid personId, DateOnly date)
 		{
 			var person = _personRepository.Get(personId);
 			if (person == null)

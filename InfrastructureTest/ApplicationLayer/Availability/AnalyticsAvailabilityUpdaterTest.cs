@@ -23,7 +23,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Availability
 
 		[Test]
 		[Timeout(8000)]
-		[Ignore("will be fixed soon")]
 		public void ShouldNotHangWhenMultipleThreadsCallingMultipleDates()
 		{
 			var targetDate = new DateTime(2010, 01, 05);

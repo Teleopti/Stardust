@@ -25,7 +25,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Availability
 
 		[ImpersonateSystem]
 		[UnitOfWork]
-		[AnalyticsUnitOfWork]
 		[Attempts(10)]
 		public virtual void Handle(ScheduleChangedEvent @event)
 		{
@@ -35,7 +34,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Availability
 
 		[ImpersonateSystem]
 		[UnitOfWork]
-		[AnalyticsUnitOfWork]
 		[Attempts(10)]
 		public virtual void Handle(AvailabilityChangedEvent @event)
 		{

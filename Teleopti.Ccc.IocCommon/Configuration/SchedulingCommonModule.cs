@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<HandleOneAnalyticsAvailabilityDay>().SingleInstance();
+			builder.RegisterType<HandleOneAnalyticsAvailabilityDay>().SingleInstance().ApplyAspects();
 			builder.RegisterType<HandleMultipleAnalyticsAvailabilityDays>().SingleInstance();
 
 			builder.RegisterType<ScheduleStorage>()
