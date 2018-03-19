@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Person, Role } from '../types';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Observable } from 'rxjs';
 
 export interface PeopleSearchResult {
 	People: Array<Person>;
@@ -15,7 +17,7 @@ export interface PeopleSearchQuery {
 
 @Injectable()
 export class SearchService {
-	protected peopleCache: Array<Person> = [];
+	private peopleCache$ = new BehaviorSubject<Array<Person>>([]);
 
 	public keyword: string = '';
 	public pageIndex: number = 0;
@@ -24,11 +26,11 @@ export class SearchService {
 	constructor(private http: HttpClient) {}
 
 	public getPerson(id: string): Person {
-		return this.peopleCache.find(p => p.Id === id);
+		return this.peopleCache$.getValue().find(p => p.Id === id);
 	}
 
-	public getPeople(): Array<Person> {
-		return this.peopleCache;
+	public getPeople() {
+		return this.peopleCache$;
 	}
 
 	async searchPeople(query: PeopleSearchQuery): Promise<PeopleSearchResult> {
@@ -36,7 +38,7 @@ export class SearchService {
 			this[key] = query[key];
 		});
 		const res = (await this.http.post('../api/Search/FindPeople', query).toPromise()) as PeopleSearchResult;
-		this.peopleCache = res.People;
+		this.peopleCache$.next(res.People);
 		return res;
 	}
 

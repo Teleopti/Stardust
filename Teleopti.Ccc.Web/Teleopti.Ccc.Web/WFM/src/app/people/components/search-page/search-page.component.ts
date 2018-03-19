@@ -21,7 +21,8 @@ export class SearchPageComponent implements OnInit {
 	roles: Array<Role> = [];
 
 	displayedColumns = ['select', 'FirstName', 'LastName', 'Roles', 'Site', 'Team'];
-	dataSource = new MatTableDataSource<Person>(this.searchService.getPeople());
+	dataSource = new MatTableDataSource<Person>([]);
+	searchQuery = '';
 
 	pagination = {
 		length: 0, // Get from API
@@ -29,11 +30,22 @@ export class SearchPageComponent implements OnInit {
 	};
 
 	ngOnInit() {
+		this.searchQuery = this.searchService.keyword;
+		this.searchService.getPeople().subscribe({
+			next: (people: Person[]) => {
+				this.dataSource.data = people;
+			}
+		});
 		this.searchPeople();
 	}
 
 	ngAfterViewInit() {
 		this.dataSource.sort = this.sort;
+	}
+
+	onSearch() {
+		this.searchService.keyword = this.searchQuery;
+		this.searchPeople();
 	}
 
 	searchPeople() {
@@ -44,7 +56,6 @@ export class SearchPageComponent implements OnInit {
 		};
 		return this.searchService.searchPeople(query).then(searchResult => {
 			this.pagination.length = searchResult.TotalRows;
-			this.dataSource.data = this.searchService.getPeople();
 			return searchResult;
 		});
 	}

@@ -1,11 +1,11 @@
-import { Component, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewChild, OnInit } from '@angular/core';
 import { Person, Role } from '../../../types';
 import { WorkspaceService, RolesService, NavigationService } from '../../../services';
 
 @Component({
 	template: '<div>Override me</div>'
 })
-export class RolePage {
+export class RolePage implements OnInit {
 	constructor(
 		public nav: NavigationService,
 		public workspaceService: WorkspaceService,
@@ -16,20 +16,33 @@ export class RolePage {
 	roles: Array<Role> = [];
 	selectedRoles = [];
 
+	ngOnInit() {
+		this.workspaceService.getSelectedPeople().subscribe({
+			next: (people: Person[]) => {
+				if (people.length === 0) {
+					this.close();
+				}
+			}
+		});
+	}
+
 	getRole(id: string): Role {
 		return this.roles.find(role => role.Id === id);
 	}
 
 	getRolesOfPeople(): Array<Role> {
 		let uniqueRoles = [];
-		this.workspaceService.getSelectedPeople().forEach(({ Roles }) => {
-			Roles.forEach(role => {
-				const isUniqueRole = uniqueRoles.findIndex(r => r.Id === role.Id) === -1;
-				if (isUniqueRole) {
-					uniqueRoles.push(role);
-				}
+		this.workspaceService
+			.getSelectedPeople()
+			.getValue()
+			.forEach(({ Roles }) => {
+				Roles.forEach(role => {
+					const isUniqueRole = uniqueRoles.findIndex(r => r.Id === role.Id) === -1;
+					if (isUniqueRole) {
+						uniqueRoles.push(role);
+					}
+				});
 			});
-		});
 		return uniqueRoles.sort((role1, role2) => {
 			return role1.Name.localeCompare(role2.Name);
 		});
@@ -58,8 +71,11 @@ export class RolePage {
 
 	isRoleOnAll(roleId: string): boolean {
 		return (
-			this.workspaceService.getSelectedPeople().filter(({ Roles }) => Roles.map(role => role.Id).includes(roleId))
-				.length === this.workspaceService.getSelectedPeople().length
+			this.workspaceService
+				.getSelectedPeople()
+				.getValue()
+				.filter(({ Roles }) => Roles.map(role => role.Id).includes(roleId)).length ===
+			this.workspaceService.getSelectedPeople().getValue().length
 		);
 	}
 
@@ -78,10 +94,10 @@ export class RolePage {
 	}
 
 	isMultipleSelected(): boolean {
-		return this.workspaceService.getSelectedPeople().length > 1;
+		return this.workspaceService.getSelectedPeople().getValue().length > 1;
 	}
 
 	isSingleSelected(): boolean {
-		return this.workspaceService.getSelectedPeople().length === 1;
+		return this.workspaceService.getSelectedPeople().getValue().length === 1;
 	}
 }

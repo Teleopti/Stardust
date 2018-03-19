@@ -9,7 +9,10 @@ import { RolePage } from '../shared/role-page';
 })
 export class RevokePageComponent extends RolePage {
 	revokeRoles(roles: Array<string>): Promise<object> {
-		const peopleIds = this.workspaceService.getSelectedPeople().map(({ Id }) => Id);
+		const peopleIds = this.workspaceService
+			.getSelectedPeople()
+			.getValue()
+			.map(({ Id }) => Id);
 		return this.rolesService.revokeRoles(peopleIds, roles);
 	}
 
