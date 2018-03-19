@@ -249,6 +249,10 @@ datepicker input {
 	transform: none;
 }
 
+.pointer {
+	cursor: pointer;
+}
+
 .md-calendar-scroll-container{
 	width: inherit!important;
 }

@@ -1,44 +1,42 @@
-﻿<div class="modal-content">
-	<div class="modal-header">
-		<h5 class="modal-title" id="exampleModalLabel">Datasource configuration</h5>
-		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-			<span aria-hidden="true">&times;</span>
-		</button>
+﻿<form ng-submit="vm.masterTennantConfigured = true">
+	<h2>Tenant base configuration</h2>
+	<div class="panel panel-default">
+		<div class="panel-heading">Teleopt WFM tenant</div>
+		<div class="panel-body text-container">
+			The tennant <b>Teleopti WFM tennant</b> does not have a base configuration.
+			This is a one and done action that can not be changed once configured, be careful!
+			<br />
+			<div class="row">
+				<div class="col-md-12">
+					<label for="baseLanguage">Language:</label>
+					<br />
+					<input autocomplete="off" required id="baseLanguage" type="type" placeholder="Language" />
+				</div>
+				<div class="col-md-12">
+					<label for="baseInterval">Interval:</label>
+					<br />
+					<input autocomplete="off" required id="baseInterval" type="type" placeholder="interval length (min)" />
+				</div>
+				<div class="col-md-12">
+					<label for="baseTimeZone">timezone:</label>
+					<br />
+					<input autocomplete="off" required id="baseTimeZone" type="type" placeholder="Timezone" />
+				</div>
+			</div>
+
+		</div>
+		<div class="panel-footer">
+
+			<button class="btn btn-primary" type="submit">
+				<md-icon style="padding-right: 5px" md-svg-src="Content/images/ic_forward_black_24px.svg" aria-hidden="true">
+					<svg fill="#000000" height="100%" viewBox="0 0 24 24" width="100%" xmlns="http://www.w3.org/2000/svg" fit="" preserveAspectRatio="xMidYMid meet" focusable="false">
+						<path d="M12 8V4l8 8-8 8v-4H4V8z"></path>
+						<path d="M0 0h24v24H0z" fill="none"></path>
+					</svg>
+				</md-icon>
+				<span class="text-white">Apply configuration</span>
+			</button>
+
+		</div>
 	</div>
-	<div class="modal-body">
-		<table class="table">
-			<thead>
-			<tr>
-				<th scope="col">Status</th>
-				<th scope="col">Name</th>
-				<th scope="col">Time zone</th>
-				<th scope="col">Interval length</th>
-			</tr>
-			</thead>
-			<tbody>
-			<tr>
-				<th scope="row">✓</th>
-				<td>Internal Agg: My zoom log</td>
-				<td>(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm...</td>
-				<td>15</td>
-			</tr>
-			<tr>
-				<th scope="row">✓</th>
-				<td>Teleopti CCC: Agg: ACD</td>
-				<td>(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm...</td>
-				<td>15</td>
-			</tr>
-			<tr>
-				<th scope="row">✗</th>
-				<td>Teleopti CCC: Agg: LTF log object</td>
-				<td>(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm...</td>
-				<td>15</td>
-			</tr>
-			</tbody>
-		</table>
-	</div>
-	<div class="modal-footer">
-		<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-		<button type="button" class="btn btn-primary">Ok</button>
-	</div>
-</div>
+</form>
