@@ -3,12 +3,6 @@ import { Person, Role } from '../types';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
 export interface PeopleSearchResult {
-	people: Array<Person>;
-	currentPage: number;
-	pages: number;
-}
-
-export interface PeopleSearchResultNew {
 	People: Array<Person>;
 	TotalRows: number;
 }
@@ -37,59 +31,13 @@ export class SearchService {
 		return this.peopleCache;
 	}
 
-	async searchPeople(query: PeopleSearchQuery): Promise<PeopleSearchResultNew> {
+	async searchPeople(query: PeopleSearchQuery): Promise<PeopleSearchResult> {
 		['keyword', 'pageIndex', 'pageSize'].forEach(key => {
 			this[key] = query[key];
 		});
-		const res = (await this.http.post('../api/Search/FindPeople', query).toPromise()) as PeopleSearchResultNew;
+		const res = (await this.http.post('../api/Search/FindPeople', query).toPromise()) as PeopleSearchResult;
 		this.peopleCache = res.People;
 		return res;
-	}
-
-	async searchPeople_old({ keyword = 'a', pageIndex = 0, pageSize = 10 } = {}): Promise<PeopleSearchResult> {
-		interface SearchPerson {
-			PersonId: string;
-		}
-		interface SearchResult {
-			People: Array<SearchPerson>;
-			CurrentPage: number;
-			OptionalColumns: Array<string>;
-			TotalPages: number;
-		}
-		const searchPeople = async (): Promise<SearchResult> => {
-			const params = new HttpParams()
-				.set('currentPageIndex', (++pageIndex).toString()) // uses non-zero index
-				.set('keyword', keyword)
-				.set('pageSize', pageSize.toString())
-				.set('sortColumns', 'LastName:true');
-			const result = this.http.get(`../api/Search/People/Keyword`, { params }).toPromise() as Promise<
-				SearchResult
-			>;
-
-			return result;
-		};
-
-		const searchResult: SearchResult = await searchPeople();
-
-		const getPersonIds = (people: Array<SearchPerson>) => people.map(person => person.PersonId);
-
-		const PersonIdList = await getPersonIds(searchResult.People);
-
-		let people = await this.getPersons({ PersonIdList });
-
-		// const sortPeopleByName = (a: Person, b: Person) => {
-		// 	if (a.FirstName >= b.FirstName) return 1;
-		// 	if (a.FirstName < b.FirstName) return -1;
-		// 	return 0;
-		// };
-		// people.sort(sortPeopleByName);
-
-		this.peopleCache = people;
-		return {
-			people,
-			currentPage: searchResult.CurrentPage,
-			pages: searchResult.TotalPages
-		};
 	}
 
 	async getPersons({ Date = '2017-02-08', PersonIdList }): Promise<Array<Person>> {

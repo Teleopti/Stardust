@@ -14,7 +14,7 @@ import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/delay';
 import 'rxjs/add/operator/mergeMap';
 import { Role, Person } from '../types';
-import { PeopleSearchResultNew } from '.';
+import { PeopleSearchResult } from '.';
 
 export const ROLES: Array<Role> = [
 	{
@@ -259,7 +259,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
 			}
 
 			if (request.url.endsWith('/api/Search/FindPeople') && request.method === 'POST') {
-				const response: PeopleSearchResultNew = {
+				const response: PeopleSearchResult = {
 					People: PEOPLE,
 					TotalRows: PEOPLE.length
 				};
