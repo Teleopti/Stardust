@@ -17,11 +17,11 @@ using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Scheduling.PerformanceTest
+namespace Teleopti.Ccc.Scheduling.PerformanceTest.Infrastructure
 {
 	[TestFixture]
 	[Setting("OptimizeScheduleChangedEvents_DontUseFromWeb", true)]
-	[PerformanceTest]
+	[PerformanceInfrastructureTest]
 	public class EventHandlingAfterSaveScheduleTest
 	{
 		public IPersonRepository Persons;

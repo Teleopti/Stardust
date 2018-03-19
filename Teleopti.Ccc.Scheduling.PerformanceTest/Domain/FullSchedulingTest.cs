@@ -4,7 +4,7 @@ using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.CoypuImpl;
 
-namespace Teleopti.Ccc.Scheduling.PerformanceTest
+namespace Teleopti.Ccc.Scheduling.PerformanceTest.Domain
 {
 	public class FullSchedulingTest
 	{

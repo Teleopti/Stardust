@@ -7,9 +7,9 @@ using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 using Teleopti.Messaging.Client;
 
-namespace Teleopti.Ccc.Scheduling.PerformanceTest
+namespace Teleopti.Ccc.Scheduling.PerformanceTest.Infrastructure
 {
-	public class PerformanceTestAttribute : IoCTestAttribute
+	public class PerformanceInfrastructureTestAttribute : IoCTestAttribute
 	{
 		protected override FakeConfigReader Config()
 		{

@@ -4,7 +4,7 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Messages;
 using Teleopti.Ccc.Infrastructure.Hangfire;
 
-namespace Teleopti.Ccc.Scheduling.PerformanceTest
+namespace Teleopti.Ccc.Scheduling.PerformanceTest.Infrastructure
 {
 	public static class HangfireLogger
 	{

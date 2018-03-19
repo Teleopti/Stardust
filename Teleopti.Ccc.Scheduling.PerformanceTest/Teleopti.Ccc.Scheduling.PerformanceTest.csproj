@@ -61,13 +61,13 @@
     </Compile>
     <Compile Include="AppConfigs.cs" />
     <Compile Include="AssertConfigurationTest.cs" />
-    <Compile Include="EventHandlingAfterSaveScheduleTest.cs" />
-    <Compile Include="FullSchedulingStardustTest.cs" />
-    <Compile Include="FullSchedulingTest.cs" />
-    <Compile Include="HangfireLogger.cs" />
-    <Compile Include="IntradayOptTest.cs" />
+    <Compile Include="Infrastructure\EventHandlingAfterSaveScheduleTest.cs" />
+    <Compile Include="Domain\FullSchedulingStardustTest.cs" />
+    <Compile Include="Domain\FullSchedulingTest.cs" />
+    <Compile Include="Infrastructure\HangfireLogger.cs" />
+    <Compile Include="Domain\IntradayOptTest.cs" />
     <Compile Include="NUnitSetup.cs" />
-    <Compile Include="PerformanceTestAttribute.cs" />
+    <Compile Include="Infrastructure\PerformanceInfrastructureTestAttribute.cs" />
     <Compile Include="WebAction.cs" />
   </ItemGroup>
   <ItemGroup>
