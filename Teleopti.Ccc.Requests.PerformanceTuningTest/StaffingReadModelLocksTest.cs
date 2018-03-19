@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 		public AsSystem AsSystem;
 		public FakeConfigReader ConfigReader;
 		public IPersonRequestRepository PersonRequestRepository;
-		public IAbsenceRequestIntradayFilter AbsenceRequestIntradayFilter;
+		public IAbsenceRequestProcessor AbsenceRequestProcessor;
 		public IStardustJobFeedback StardustJobFeedback;
 		public IWorkflowControlSetRepository WorkflowControlSetRepository;
 		public IAbsenceRepository AbsenceRepository;
@@ -297,7 +297,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 				{
 					WithUnitOfWork.Do(() =>
 					{
-						AbsenceRequestIntradayFilter.Process(request);
+						AbsenceRequestProcessor.Process(request);
 					});
 				}
 			}));

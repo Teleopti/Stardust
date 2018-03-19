@@ -718,7 +718,7 @@
     <Compile Include="Staffing\SendUpdateStaffingReadModelHandler.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IRunRequestWaitlistEventMessage.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\MultiAbsenceRequestsHandler.cs" />
-    <Compile Include="ApplicationLayer\AbsenceRequests\AbsenceRequestIntradayFilter.cs" />
+    <Compile Include="ApplicationLayer\AbsenceRequests\AbsenceRequestProcessor.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\RequestPersonAbsenceRemovedEventHandler.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\ResourceCalculationPeriodDictionary.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\SkillCombinationResourceReadModelValidator.cs" />
@@ -821,7 +821,7 @@
     <Compile Include="InterfaceLegacy\Domain\IAbsenceRequest.cs" />
     <Compile Include="InterfaceLegacy\Domain\IAbsenceRequestDetailViewModel.cs" />
     <Compile Include="InterfaceLegacy\Domain\IAbsenceRequestDetailViewModelFactory.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IAbsenceRequestIntradayFilter.cs" />
+    <Compile Include="InterfaceLegacy\Domain\IAbsenceRequestProcessor.cs" />
     <Compile Include="InterfaceLegacy\Domain\IAbsenceRequestOpenPeriod.cs" />
     <Compile Include="InterfaceLegacy\Domain\IAbsenceRequestPersonAccountValidator.cs" />
     <Compile Include="InterfaceLegacy\Domain\IAbsenceRequestSynchronousValidator.cs" />

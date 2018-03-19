@@ -25,7 +25,7 @@ namespace Teleopti.Wfm.Test
 		public WithUnitOfWork WithUnitOfWork;
 		public IAbsenceRepository AbsenceRepository;
 		public IPersonRepository PersonRepository;
-		public IAbsenceRequestIntradayFilter AbsenceRequestIntradayFilter;
+		public IAbsenceRequestProcessor AbsenceRequestProcessor;
 		public IPersonRequestRepository PersonRequestRepository;
 
 
@@ -53,7 +53,7 @@ namespace Teleopti.Wfm.Test
 			var personRequest = new PersonRequest(person, absenceRequest);
 			PersonRequestRepository.Add(personRequest);
 			uow.PersistAll();
-			AbsenceRequestIntradayFilter.Process(personRequest);
+			AbsenceRequestProcessor.Process(personRequest);
 			var req = PersonRequestRepository.Load(personRequest.Id.GetValueOrDefault());
 			req.IsApproved.Should().Be.True();
 		}

@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 	[DomainTest]
 	public class IntradayRequestFilterWithNoValidatorTest : ISetup
 	{
-		public IAbsenceRequestIntradayFilter Target;
+		public IAbsenceRequestProcessor Target;
 		public FakePersonRepository PersonRepository;
 		public FakeSkillRepository SkillRepository;
 		public FakeActivityRepository ActivityRepository;

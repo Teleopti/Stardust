@@ -28,7 +28,7 @@ namespace Teleopti.Wfm.Test
 
 		public IAbsenceRepository AbsenceRepository;
 		public IPersonRepository PersonRepository;
-		public IAbsenceRequestIntradayFilter AbsenceRequestIntradayFilter;
+		public IAbsenceRequestProcessor AbsenceRequestProcessor;
 		public IPersonRequestRepository PersonRequestRepository;
 
 
@@ -56,7 +56,7 @@ namespace Teleopti.Wfm.Test
 			var personRequest = new PersonRequest(person, absenceRequest);
 			PersonRequestRepository.Add(personRequest);
 			uow.PersistAll();
-			AbsenceRequestIntradayFilter.Process(personRequest);
+			AbsenceRequestProcessor.Process(personRequest);
 			var req = PersonRequestRepository.Load(personRequest.Id.GetValueOrDefault());
 			req.IsApproved.Should().Be.True();
 		}
@@ -78,7 +78,7 @@ namespace Teleopti.Wfm.Test
 			var personRequest = new PersonRequest(person, absenceRequest);
 			PersonRequestRepository.Add(personRequest);
 			uow.PersistAll();
-			AbsenceRequestIntradayFilter.Process(personRequest);
+			AbsenceRequestProcessor.Process(personRequest);
 			var req = PersonRequestRepository.Load(personRequest.Id.GetValueOrDefault());
 			req.IsApproved.Should().Be.True();
 		}
@@ -100,7 +100,7 @@ namespace Teleopti.Wfm.Test
 			var personRequest = new PersonRequest(person, absenceRequest);
 			PersonRequestRepository.Add(personRequest);
 			uow.PersistAll();
-			AbsenceRequestIntradayFilter.Process(personRequest);
+			AbsenceRequestProcessor.Process(personRequest);
 			var req = PersonRequestRepository.Load(personRequest.Id.GetValueOrDefault());
 			req.IsApproved.Should().Be.False();
 			req.DenyReason.Should().StartWith(Resources.ResourceManager.GetString("InsufficientStaffingHours", person.PermissionInformation.Culture()).Substring(0, 10));
@@ -123,7 +123,7 @@ namespace Teleopti.Wfm.Test
 			var personRequest = new PersonRequest(person, absenceRequest);
 			PersonRequestRepository.Add(personRequest);
 			uow.PersistAll();
-			AbsenceRequestIntradayFilter.Process(personRequest);
+			AbsenceRequestProcessor.Process(personRequest);
 			var req = PersonRequestRepository.Load(personRequest.Id.GetValueOrDefault());
 			req.IsApproved.Should().Be.False();
 			req.DenyReason.Should().StartWith(Resources.ResourceManager.GetString("InsufficientStaffingHours", person.PermissionInformation.Culture()).Substring(0, 10));
@@ -147,7 +147,7 @@ namespace Teleopti.Wfm.Test
 			var personRequest = new PersonRequest(person, absenceRequest);
 			PersonRequestRepository.Add(personRequest);
 			uow.PersistAll();
-			AbsenceRequestIntradayFilter.Process(personRequest);
+			AbsenceRequestProcessor.Process(personRequest);
 			var req = PersonRequestRepository.Load(personRequest.Id.GetValueOrDefault());
 			req.IsApproved.Should().Be.False();
 			req.DenyReason.Should().Be.EqualTo(CreateDenyMessage30Min(requestStart.Hour, person.PermissionInformation.Culture(), person.PermissionInformation.Culture(), TimeZoneInfo.Utc, requestStart.Date));
@@ -170,7 +170,7 @@ namespace Teleopti.Wfm.Test
 			var personRequest = new PersonRequest(person, absenceRequest);
 			PersonRequestRepository.Add(personRequest);
 			uow.PersistAll();
-			AbsenceRequestIntradayFilter.Process(personRequest);
+			AbsenceRequestProcessor.Process(personRequest);
 			var req = PersonRequestRepository.Load(personRequest.Id.GetValueOrDefault());
 			req.IsApproved.Should().Be.True();
 		}
@@ -192,7 +192,7 @@ namespace Teleopti.Wfm.Test
 			var personRequest = new PersonRequest(person, absenceRequest);
 			PersonRequestRepository.Add(personRequest);
 			uow.PersistAll();
-			AbsenceRequestIntradayFilter.Process(personRequest);
+			AbsenceRequestProcessor.Process(personRequest);
 			var req = PersonRequestRepository.Load(personRequest.Id.GetValueOrDefault());
 			req.IsApproved.Should().Be.True();
 		}
@@ -214,7 +214,7 @@ namespace Teleopti.Wfm.Test
 			var personRequest = new PersonRequest(person, absenceRequest);
 			PersonRequestRepository.Add(personRequest);
 			uow.PersistAll();
-			AbsenceRequestIntradayFilter.Process(personRequest);
+			AbsenceRequestProcessor.Process(personRequest);
 			var req = PersonRequestRepository.Load(personRequest.Id.GetValueOrDefault());
 			req.IsApproved.Should().Be.True();
 		}
@@ -236,7 +236,7 @@ namespace Teleopti.Wfm.Test
 			var personRequest = new PersonRequest(person, absenceRequest);
 			PersonRequestRepository.Add(personRequest);
 			uow.PersistAll();
-			AbsenceRequestIntradayFilter.Process(personRequest);
+			AbsenceRequestProcessor.Process(personRequest);
 			var req = PersonRequestRepository.Load(personRequest.Id.GetValueOrDefault());
 			req.IsApproved.Should().Be.False();
 			req.DenyReason.Should().StartWith(Resources.ResourceManager.GetString("InsufficientStaffingHours", person.PermissionInformation.Culture()).Substring(0, 10));
@@ -259,7 +259,7 @@ namespace Teleopti.Wfm.Test
 			var personRequest = new PersonRequest(person, absenceRequest);
 			PersonRequestRepository.Add(personRequest);
 			uow.PersistAll();
-			AbsenceRequestIntradayFilter.Process(personRequest);
+			AbsenceRequestProcessor.Process(personRequest);
 			var req = PersonRequestRepository.Load(personRequest.Id.GetValueOrDefault());
 			req.IsApproved.Should().Be.True();
 		}
@@ -281,7 +281,7 @@ namespace Teleopti.Wfm.Test
 			var personRequest = new PersonRequest(person, absenceRequest);
 			PersonRequestRepository.Add(personRequest);
 			uow.PersistAll();
-			AbsenceRequestIntradayFilter.Process(personRequest);
+			AbsenceRequestProcessor.Process(personRequest);
 			var req = PersonRequestRepository.Load(personRequest.Id.GetValueOrDefault());
 			req.IsApproved.Should().Be.False();
 		}

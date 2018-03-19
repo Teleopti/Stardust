@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Requests
 		public ISkillDayRepository SkillDayRepository;
 		public MutableNow Now;
 
-		public IAbsenceRequestIntradayFilter AbsenceRequestIntradayFilter;
+		public IAbsenceRequestProcessor AbsenceRequestProcessor;
 
 
 
@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Requests
 			{
 				using (var uow = UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 				{
-					AbsenceRequestIntradayFilter.Process(request);
+					AbsenceRequestProcessor.Process(request);
 					uow.PersistAll();
 				}
 			});

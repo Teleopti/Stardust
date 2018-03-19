@@ -1,6 +1,6 @@
 ﻿namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
-	public interface IAbsenceRequestIntradayFilter
+	public interface IAbsenceRequestProcessor
 	{
 		void Process(IPersonRequest personRequest);
 	}

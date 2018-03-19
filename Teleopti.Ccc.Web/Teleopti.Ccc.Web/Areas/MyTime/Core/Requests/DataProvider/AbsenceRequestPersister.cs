@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		private readonly IPersonRequestRepository _personRequestRepository;
 		private readonly IAbsenceRequestSynchronousValidator _absenceRequestSynchronousValidator;
 		private readonly IPersonRequestCheckAuthorization _personRequestCheckAuthorization;
-		private readonly IAbsenceRequestIntradayFilter _absenceRequestIntradayFilter;
+		private readonly IAbsenceRequestProcessor _absenceRequestProcessor;
 		private readonly IQueuedAbsenceRequestRepository _queuedAbsenceRequestRepository;
 		private readonly IActivityRepository _activityRepository;
 		private readonly ISkillTypeRepository _skillTypeRepository;
@@ -21,17 +21,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		private readonly RequestsViewModelMapper _requestsMapper;
 
 		public AbsenceRequestPersister(IPersonRequestRepository personRequestRepository,
-									   IAbsenceRequestSynchronousValidator absenceRequestSynchronousValidator,
-									   IPersonRequestCheckAuthorization personRequestCheckAuthorization,
-									   IAbsenceRequestIntradayFilter absenceRequestIntradayFilter,
-									   IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, AbsenceRequestFormMapper mapper,
-									   RequestsViewModelMapper requestsMapper, IActivityRepository activityRepository,
-									   ISkillTypeRepository skillTypeRepository, IDisableDeletedFilter disableDeletedFilter)
+										IAbsenceRequestSynchronousValidator absenceRequestSynchronousValidator,
+										IPersonRequestCheckAuthorization personRequestCheckAuthorization,
+										IAbsenceRequestProcessor absenceRequestProcessor,
+										IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, AbsenceRequestFormMapper mapper,
+										RequestsViewModelMapper requestsMapper, IActivityRepository activityRepository,
+										ISkillTypeRepository skillTypeRepository, IDisableDeletedFilter disableDeletedFilter)
 		{
 			_personRequestRepository = personRequestRepository;
 			_absenceRequestSynchronousValidator = absenceRequestSynchronousValidator;
 			_personRequestCheckAuthorization = personRequestCheckAuthorization;
-			_absenceRequestIntradayFilter = absenceRequestIntradayFilter;
+			_absenceRequestProcessor = absenceRequestProcessor;
 			_queuedAbsenceRequestRepository = queuedAbsenceRequestRepository;
 			_mapper = mapper;
 			_requestsMapper = requestsMapper;
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 
 			if (!personRequest.IsDenied)
 			{
-				_absenceRequestIntradayFilter.Process(personRequest);
+				_absenceRequestProcessor.Process(personRequest);
 			}
 
 			return _requestsMapper.Map(personRequest);

@@ -11,7 +11,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 {
-	public class AbsenceRequestIntradayFilter : IAbsenceRequestIntradayFilter
+	public class AbsenceRequestProcessor : IAbsenceRequestProcessor
 	{
 		private readonly IQueuedAbsenceRequestRepository _queuedAbsenceRequestRepository;
 		private readonly INow _now;
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly ICommandDispatcher _commandDispatcher;
 		private readonly IAbsenceRequestSetting _absenceRequestSetting;
 
-		public AbsenceRequestIntradayFilter(IRequestProcessor requestProcessor,
+		public AbsenceRequestProcessor(IRequestProcessor requestProcessor,
 			IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, INow now,
 			IAbsenceRequestValidatorProvider absenceRequestValidatorProvider, ICommandDispatcher commandDispatcher,
 			IAbsenceRequestSetting absenceRequestSetting)
@@ -41,47 +41,57 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			var intradayPeriod = new DateTimePeriod(startDateTime, startDateTime.AddHours(_absenceRequestSetting.ImmediatePeriodInHours));
 
 			var mergedPeriod = personRequest.Request.Person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod((AbsenceRequest) personRequest.Request);
-			var validators = _absenceRequestValidatorProvider.GetValidatorList(mergedPeriod);
+			var validators = _absenceRequestValidatorProvider.GetValidatorList(mergedPeriod).ToList();
 
-
-			if (checkIfNoValidatorIsUsed(validators))
+			if (ifNoStaffingValidatorIsUsed(validators))
 			{
-				//this looks strange but is how it works. Pending = no autogrant, Grant = autogrant
-				var autoGrant = mergedPeriod.AbsenceRequestProcess.GetType() != typeof(PendingAbsenceRequest);
-				if (autoGrant)
-				{
-					var command = new ApproveRequestCommand
-					{
-						PersonRequestId = personRequest.Id.GetValueOrDefault(),
-						IsAutoGrant = true
-					};
-					_commandDispatcher.Execute(command);
-				}
+				approveRequest(personRequest, mergedPeriod);
+			}
+			else if (isIntradayRequest(personRequest, intradayPeriod) && isStaffingThresholdValidatorEnabled(validators))
+			{
+				_requestProcessor.Process(personRequest);
 			}
 			else
 			{
-				var isIntradayRequest = personRequest.Request.Period.ElapsedTime() <= TimeSpan.FromDays(1) && intradayPeriod.Contains(personRequest.Request.Period.EndDateTime);
-				if (isIntradayRequest && validators.Any(v => v is StaffingThresholdValidator))
-				{
-					_requestProcessor.Process(personRequest);
-				}
-				else
-				{
-					var queuedAbsenceRequest = new QueuedAbsenceRequest
-					{
-						PersonRequest = personRequest.Id.GetValueOrDefault(),
-						Created = personRequest.CreatedOn.GetValueOrDefault(),
-						StartDateTime = personRequest.Request.Period.StartDateTime,
-						EndDateTime = personRequest.Request.Period.EndDateTime
-					};
-					_queuedAbsenceRequestRepository.Add(queuedAbsenceRequest);
-				}
+				enqueueAbsenceRequest(personRequest);
 			}
-
-			
 		}
 
-		private bool checkIfNoValidatorIsUsed(IEnumerable<IAbsenceRequestValidator> validators)
+		private static bool isStaffingThresholdValidatorEnabled(IEnumerable<IAbsenceRequestValidator> validators)
+		{
+			return validators.Any(v => v is StaffingThresholdValidator);
+		}
+
+		private static bool isIntradayRequest(IPersonRequest personRequest, DateTimePeriod intradayPeriod)
+		{
+			return personRequest.Request.Period.ElapsedTime() <= TimeSpan.FromDays(1) && intradayPeriod.Contains(personRequest.Request.Period.EndDateTime);
+		}
+
+		private void approveRequest(IPersonRequest personRequest, IAbsenceRequestOpenPeriod mergedPeriod)
+		{
+			var autoGrant = mergedPeriod.AbsenceRequestProcess.GetType() != typeof(PendingAbsenceRequest);
+			if (!autoGrant) return;
+			var command = new ApproveRequestCommand
+			{
+				PersonRequestId = personRequest.Id.GetValueOrDefault(),
+				IsAutoGrant = true
+			};
+			_commandDispatcher.Execute(command);
+		}
+
+		private void enqueueAbsenceRequest(IPersonRequest personRequest)
+		{
+			var queuedAbsenceRequest = new QueuedAbsenceRequest
+			{
+				PersonRequest = personRequest.Id.GetValueOrDefault(),
+				Created = personRequest.CreatedOn.GetValueOrDefault(),
+				StartDateTime = personRequest.Request.Period.StartDateTime,
+				EndDateTime = personRequest.Request.Period.EndDateTime
+			};
+			_queuedAbsenceRequestRepository.Add(queuedAbsenceRequest);
+		}
+
+		private bool ifNoStaffingValidatorIsUsed(IList<IAbsenceRequestValidator> validators)
 		{
 			if (validators.Any(v => v is StaffingThresholdValidator) ||
 				validators.Any(v => v is StaffingThresholdValidatorCascadingSkillsWithShrinkage) ||
