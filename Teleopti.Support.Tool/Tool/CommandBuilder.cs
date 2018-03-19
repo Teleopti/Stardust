@@ -22,7 +22,7 @@ namespace Teleopti.Support.Tool.Tool
 			var refreshConfigFile = new RefreshConfigFile();
 			var refreshConfigsRunner = new RefreshConfigsRunner(refreshConfigFile, () => mode);
 
-			var modeDefaultCommand = new CompositeCommand(
+			var modeCommonCommand = new CompositeCommand(
 				refreshConfigsRunner,
 				restoreCommand,
 				new MoveCustomReportsCommand()
@@ -42,47 +42,50 @@ namespace Teleopti.Support.Tool.Tool
 					if (new[] {"-?", "?", "-H", "-HELP", "HELP"}.Contains(argument))
 						command = new HelpWindow(HelpWindow.HelpText);
 
-					if (argument.Equals("-MODEPLOYWEB"))
+					if (argument.StartsWith("-MO"))
+					{
+						mode = new ModeFile("ConfigFiles.txt");
+						command = modeCommonCommand;
+					}
+
+					if (argument.StartsWith("-MODEPLOYWEB"))
 					{
 						mode = new ModeFile("DeployConfigFilesWeb.txt");
 						command = modeDeployCommand;
 					}
 
-					if (argument.Equals("-MODEPLOYWORKER"))
+					if (argument.StartsWith("-MODEPLOYWORKER"))
 					{
 						mode = new ModeFile("DeployConfigFilesWorker.txt");
 						command = modeDeployCommand;
 					}
 
-					if (argument.Equals("-MOAZURE"))
-					{
+					if (argument.StartsWith("-MOAZURE"))
 						mode = new ModeFile("AzureConfigFiles.txt");
-						command = modeDefaultCommand;
-					}
 
-					if (argument.Equals("-MOTEST"))
-					{
+					if (argument.StartsWith("-MOTEST"))
 						mode = new ModeFile("BuildServerConfigFiles.txt");
-						command = modeDefaultCommand;
-					}
 
-					if (argument.Equals("-BC"))
+
+					if (argument.StartsWith("-BC"))
 					{
 						mode = new ModeFile("DeployConfigFilesWeb.txt");
 						command = backupCommand;
 					}
 
-					if (argument.Equals("-RC"))
+					if (argument.StartsWith("-RC"))
 						command = restoreCommand;
 
-					if (argument.Equals("-TC"))
+
+					if (argument.StartsWith("-TC"))
 						command = new SetToggleModeCommand(argument.Remove(0, 3));
 					if (argument.Equals("-SET"))
 						command = new SetSettingCommand(args.ElementAt(1), args.ElementAt(2));
-					if (argument.Equals("-CS"))
+					if (argument.StartsWith("-CS"))
 						command = new ConfigServerCommand(args.ElementAt(1));
-					if (argument.Equals("-PM"))
+					if (argument.StartsWith("-PM"))
 						command = new SavePmConfigurationCommand(args.ElementAt(1));
+					
 				});
 
 			return command;
