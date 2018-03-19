@@ -73,6 +73,27 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification
 		}
 
 		[Test]
+		public void ShouldSortJobListByStartTime()
+		{
+			var startTime = DateTime.UtcNow;
+			var period = DateOnly.Today.ToDateOnlyPeriod();
+			var person = PersonFactory.CreatePersonWithId(Guid.NewGuid());
+			var jobResult1 = new JobResult(JobCategory.WebRecalculateBadge, period, person, startTime);
+			jobResult1.SetId(Guid.NewGuid());
+			jobResult1.FinishedOk = true;
+			var jobResult2 = new JobResult(JobCategory.WebRecalculateBadge, period, person, startTime.AddHours(1));
+			jobResult2.SetId(Guid.NewGuid());
+			jobResult2.FinishedOk = true;
+			JobResultRepository.Add(jobResult1);
+			JobResultRepository.Add(jobResult2);
+
+			var result = Target.GetJobList();
+
+			result.First().Id.Should().Be.EqualTo(jobResult2.Id);
+			result.Last().Id.Should().Be.EqualTo(jobResult1.Id);
+		}
+
+		[Test]
 		public void ShouldGetJobListWithInternalErrorResult()
 		{
 			var period = DateOnly.Today.ToDateOnlyPeriod();

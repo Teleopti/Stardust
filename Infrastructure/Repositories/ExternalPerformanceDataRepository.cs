@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.UniqueResult<IExternalPerformance>();
 
 			var performanceData = new List<IExternalPerformanceData>();
-			foreach (var batch in personIds.Batch(1000))
+			foreach (var batch in personIds.Batch(500))
 			{
 				performanceData.AddRange(Session.CreateCriteria<ExternalPerformanceData>()
 					.Add(Restrictions.Conjunction()
