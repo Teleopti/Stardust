@@ -1245,4 +1245,15 @@ describe('IntradayAreaController', function() {
 
 		expect(vm.chosenOffset.value).toEqual(-5);
 	});
+
+	it('should NOT remember selected day offset when exiting if toggle is off', function() {
+		createController(false);
+		vm.toggles['WFM_Remember_My_Selection_In_Intraday_47254'] = false;
+		vm.changeChosenOffset(-5, true);
+		vm.saveState();
+		vm.changeChosenOffset(0, true);
+		vm.loadState();
+
+		expect(vm.chosenOffset.value).toEqual(0);
+	});
 });

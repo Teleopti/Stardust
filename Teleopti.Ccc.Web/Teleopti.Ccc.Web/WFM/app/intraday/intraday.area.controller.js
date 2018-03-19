@@ -226,6 +226,7 @@
 		};
 
 		vm.saveState = function() {
+			if (!vm.toggles['WFM_Remember_My_Selection_In_Intraday_47254']) return;
 			var state = {
 				chosenOffset: vm.chosenOffset,
 				selectedItem: vm.selectedItem,
@@ -236,6 +237,8 @@
 		};
 
 		vm.loadState = function() {
+			if (!vm.toggles['WFM_Remember_My_Selection_In_Intraday_47254']) return;
+
 			var state = intradayService.loadIntradayState();
 			if (!state) return;
 			if (angular.isDefined(state.selectedItem) && angular.isArray(vm.skills) && state.selectedItem !== null) {
@@ -395,7 +398,7 @@
 							vm.selectedItem = vm.skillAreas[0];
 						}
 					}
-					if (vm.toggles['WFM_Remember_My_Selection_In_Intraday_47254']) vm.loadState();
+					vm.loadState();
 				});
 			});
 		}
@@ -429,7 +432,7 @@
 		$scope.$on('$destroy', function(event) {
 			$interval.cancel(polling);
 			cancelTimeout();
-			if (vm.toggles['WFM_Remember_My_Selection_In_Intraday_47254']) vm.saveState();
+			vm.saveState();
 		});
 
 		$scope.$on('$locationChangeStart', function() {
