@@ -338,11 +338,7 @@
 					vm.skillsLoaded = true;
 					vm.placeholderTextForSkillSelection = $translate.instant('SelectSkill');
 					vm.skills = skills;
-					if (skillIds != null && skillAreaId == null) {
-						vm.selectedSkill = skills.find(function (s) {
-							return s.Id === skillIds;
-						});
-					}
+					vm.selectedSkill = skills.find(function (s) { return s.Id === skillIds;	});
 					return deffered.promise;
 				}).then(function () {
 				rtaService.getSkillAreas()
@@ -352,8 +348,7 @@
 						vm.skillAreasLoaded = true;
 						vm.placeholderTextForSkillGroupSelection = $translate.instant('SelectSkillGroup');
 						vm.skillAreas = skillAreas;
-						if (skillAreaId != null && skillIds == null)
-							vm.selectedSkillArea = vm.skillAreas.find(function (s) { return s.Id === skillAreaId });
+						vm.selectedSkillArea = vm.skillAreas.find(function (s) { return s.Id === skillAreaId });
 						return deffered.promise;
 					})
 					.then(function () {
