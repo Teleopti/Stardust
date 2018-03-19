@@ -44,8 +44,13 @@
 			skills: function () {
 				return skills;
 			},
+			
 			skillAreas: function () {
 				return skillAreas;
+			},
+			
+			organization: function () {
+				return organization;
 			},
 
 			gotoLastState: function () {

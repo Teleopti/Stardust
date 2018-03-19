@@ -60,6 +60,7 @@
 		var skillAreaId = $stateParams.skillAreaId || undefined;
 		$stateParams.es = $stateParams.es || [];
 		var skillIds3 = undefined;
+		vm.sites = [];
 
 		// because angular cant handle an array of null in stateparams
 		var nullState = "No State";
@@ -69,7 +70,7 @@
 		vm.hexToRgb = rtaFormatService.formatHexToRgb;
 		vm.pause = false;
 		vm.pausedAt = null;
-		
+
 		vm.displayNoAgentsMessage = function () {
 			return vm.agentStates.length === 0;
 		};
@@ -152,7 +153,7 @@
 		function skillIdsForSkillArea(skillArea) {
 			if (skillArea.Skills) {
 				vm.skillArea = true;
-				skillIds3 = skillArea.Skills.map(function (skill) {
+				skillIds = skillArea.Skills.map(function (skill) {
 					return skill.Id;
 				});
 			}
@@ -162,7 +163,7 @@
 			return rtaService.agentStatesFor({
 				siteIds: siteIds,
 				teamIds: teamIds,
-				skillIds: skillIds3,
+				skillIds: skillIds,
 				inAlarm: vm.showInAlarm,
 				excludedStateIds: excludedPhoneStateIds().map(function (s) {
 					return s === nullStateId ? null : s;
@@ -306,7 +307,7 @@
 		}
 
 		////////no right panel stuff /////////////////
-		
+
 		rtaStateService.setCurrentState($stateParams)
 			.then(function () {
 
@@ -323,49 +324,92 @@
 				vm.selectedSkillArea = vm.skillAreas.find(function (s) {
 					return s.Id === skillAreaId
 				});
-				
-				getOrganizationCall()
-					.then(function (organization) {
-						vm.sites = organization;
-						vm.sites.forEach(function (site) {
-							var isSiteInParams = siteIds.indexOf(site.Id) > -1;
-							site.isChecked = isSiteInParams || false;
-							site.toggle = function () {
-								site.isChecked = !site.isChecked;
-								site.isMarked = false;
-								site.Teams.forEach(function (team) {
-									team.isChecked = site.isChecked;
-								})
-								vm.siteMarkedOrChecked = vm.sites.filter(function (site) {
-									return site.isChecked || site.isMarked;
-								}).length > 0;
-							}
-							site.Teams.forEach(function (team) {
-								var isTeamInParams = teamIds.indexOf(team.Id) > -1;
-								team.isChecked = isTeamInParams || site.isChecked || false;
-								site.isMarked = site.Teams.some(function (t) {
-									return t.isChecked;
-								});
-								team.toggle = function () {
-									team.isChecked = !team.isChecked;
-									site.isChecked = site.Teams.every(function (t) {
-										return t.isChecked;
-									});
-									site.isMarked = site.Teams.some(function (t) {
-										return t.isChecked;
-									});
-									vm.siteMarkedOrChecked = vm.sites.filter(function (site) {
-										return site.isChecked || site.isMarked;
-									}).length > 0;
-								}
-							})
-						});
-						vm.siteMarkedOrChecked = vm.sites.filter(function (site) {
-							return site.isChecked || site.isMarked;
-						}).length > 0;
-						updateSelectFieldText();
-					});
 
+				// rtaStateService.organization().forEach(function (site) {
+				// 	var siteModel = {
+				// 		Id: site.Id, 
+				// 		Name: site.Name,
+				// 		FullPermission: site.FullPermission,
+				// 		Teams: [],
+				// 		get isChecked() {
+				// 			return rtaStateService.isSiteSelected(site.Id);
+				// 		},
+				// 		set isChecked(newValue) {
+				// 			rtaStateService.selectSite(site.Id, newValue);
+				// 		}
+				// 	};
+				// 	updateTeams(siteModel, site.Teams);
+				// 	siteModel.toggle = function () {
+				// 		console.log('toggle');
+				// 		siteModel.isChecked = !siteModel.isChecked;
+				// 		siteModel.isMarked = false;
+				// 		siteModel.Teams.forEach(function (team) {
+				// 			team.isChecked = siteModel.isChecked;
+				// 		});
+				// 	};
+				// 	vm.sites.push(siteModel);
+				//	
+				// });
+				//
+				// function updateTeams(siteModel, teams) {
+				// 	teams.forEach(function (team) {
+				// 		var team = {
+				// 			Id: team.Id, 
+				// 			Name: team.Name,
+				// 			get isChecked() {
+				// 				return rtaStateService.isTeamSelected(team.Id);
+				// 			},
+				// 			set isChecked(newValue) {
+				// 				rtaStateService.selectTeam(team.Id, newValue);
+				// 			}
+				// 		};
+				//		
+				// 		siteModel.Teams.push(team);
+				// 	})
+				// }
+
+				//toggle, marked, stuff, cats
+
+				vm.sites = rtaStateService.organization();
+
+				vm.sites.forEach(function (site) {
+					var isSiteInParams = siteIds.indexOf(site.Id) > -1;
+					site.isChecked = isSiteInParams || false;
+					site.toggle = function () {
+						site.isChecked = !site.isChecked;
+						site.isMarked = false;
+						site.Teams.forEach(function (team) {
+							team.isChecked = site.isChecked;
+						})
+						vm.siteMarkedOrChecked = vm.sites.some(function (site) {
+							return site.isChecked || site.isMarked;
+						});
+					}
+					site.Teams.forEach(function (team) {
+						var isTeamInParams = teamIds.indexOf(team.Id) > -1;
+						team.isChecked = isTeamInParams || site.isChecked || false;
+						site.isMarked = site.Teams.some(function (t) {
+							return t.isChecked;
+						});
+						team.toggle = function () {
+							team.isChecked = !team.isChecked;
+							site.isChecked = site.Teams.every(function (t) {
+								return t.isChecked;
+							});
+							site.isMarked = site.Teams.some(function (t) {
+								return t.isChecked;
+							});
+							vm.siteMarkedOrChecked = vm.sites.some(function (site) {
+								return site.isChecked || site.isMarked;
+							});
+						}
+					})
+				});
+				vm.siteMarkedOrChecked = vm.sites.some(function (site) {
+					return site.isChecked || site.isMarked;
+				});
+				updateSelectFieldText();
+				
 				function getOrganizationCall() {
 					var skillIds2 = angular.isArray($stateParams.skillIds) ? $stateParams.skillIds[0] || null : $stateParams.skillIds;
 					var theSkillIds = skillIds2 != null ? [skillIds2] : null;
@@ -384,9 +428,9 @@
 					}
 					return null;
 				}
-				
+
 			});
-		
+
 		// scoped variables
 		vm.teamsSelected = [];
 		vm.selectFieldText;
