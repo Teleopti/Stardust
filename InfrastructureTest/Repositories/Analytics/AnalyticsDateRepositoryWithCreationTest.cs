@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -9,7 +8,6 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure.Analytics;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
@@ -30,7 +28,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		public IAnalyticsDateRepository Target;
 		public WithAnalyticsUnitOfWork WithAnalyticsUnitOfWork;
 		public FakeEventPublisher FakeEventPublisher;
-		public ICurrentAnalyticsUnitOfWorkFactory CurrentAnalyticsUnitOfWorkFactory;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -67,36 +64,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 
 			FakeEventPublisher.PublishedEvents.Should().Not.Be.Empty();
 			FakeEventPublisher.PublishedEvents.OfType<AnalyticsDatesChangedEvent>().SingleOrDefault().Should().Not.Be.Null();
-		}
-
-		[Timeout(10000)]
-		[Test]
-		[Ignore("#48677")]
-		public void ShouldNotHangWhenMultipleThreadsCallingMultipleDates()
-		{
-			var targetDate = new DateTime(2010, 01, 05);
-			var cts = new CancellationTokenSource();
-
-			var taskToRunInParallell = new Func<Task>(() =>
-			{
-				return Task.Factory.StartNew(() =>
-				{
-					while (!cts.IsCancellationRequested)
-					{
-						//we not commit here - the bug will only occur when date is not present in db
-						using (CurrentAnalyticsUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
-						{
-							Target.Date(targetDate);
-							Target.Date(targetDate.AddDays(1));
-						}
-					}
-				}, cts.Token);
-			});
-			var tasks = new[] {taskToRunInParallell(), taskToRunInParallell()};
-
-			Thread.Sleep(500);
-			cts.Cancel();
-			Task.WaitAll(tasks);
 		}
 
 		[Test]

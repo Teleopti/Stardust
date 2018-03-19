@@ -173,6 +173,8 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\FilterRequestsByToggle.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\WaitlistPreloadService.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\WaitlistProcessPublisher.cs" />
+    <Compile Include="ApplicationLayer\Availability\HandleMultipleAnalyticsAvailabilityDays.cs" />
+    <Compile Include="ApplicationLayer\Availability\HandleOneAnalyticsAvailabilityDay.cs" />
     <Compile Include="ApplicationLayer\Badge\IPushMessageSender.cs" />
     <Compile Include="ApplicationLayer\Badge\PerformAllBadgeCalculation.cs" />
     <Compile Include="ApplicationLayer\Badge\PushMessageSender.cs" />
