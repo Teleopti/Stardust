@@ -1,13 +1,12 @@
 {
-	"parser": "typescript-eslint-parser",
-	"extends": "angular",
-	"rules": {
-		"angular/window-service": 0,
-		"angular/document-service": 0,
-		"angular/no-service-method": 0,
-		"angular/on-watch": 1,
-		"angular/log": 1,
-		"angular/controller-as-vm": 1,
-		"angular/no-private-call": 0
-	}
+    "extends": "angular",
+    "rules": {
+        "angular/window-service":0,
+        "angular/document-service":0,
+        "angular/no-service-method":0,
+        "angular/on-watch":1,
+		"angular/log":1,
+        "angular/controller-as-vm":1,
+        "angular/no-private-call":0
+    }
 }
