@@ -1,9 +1,15 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 {
@@ -18,15 +24,18 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		private readonly ISkillTypeRepository _skillTypeRepository;
 		private readonly IDisableDeletedFilter _disableDeletedFilter;
 		private readonly AbsenceRequestFormMapper _mapper;
+		private readonly IAbsenceRequestValidatorProvider _absenceRequestValidatorProvider;
+		private readonly INow _now;
+		private readonly IAbsenceRequestSetting _absenceRequestSetting;
 		private readonly RequestsViewModelMapper _requestsMapper;
 
 		public AbsenceRequestPersister(IPersonRequestRepository personRequestRepository,
-										IAbsenceRequestSynchronousValidator absenceRequestSynchronousValidator,
-										IPersonRequestCheckAuthorization personRequestCheckAuthorization,
-										IAbsenceRequestProcessor absenceRequestProcessor,
-										IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, AbsenceRequestFormMapper mapper,
-										RequestsViewModelMapper requestsMapper, IActivityRepository activityRepository,
-										ISkillTypeRepository skillTypeRepository, IDisableDeletedFilter disableDeletedFilter)
+									   IAbsenceRequestSynchronousValidator absenceRequestSynchronousValidator,
+									   IPersonRequestCheckAuthorization personRequestCheckAuthorization,
+									   IAbsenceRequestProcessor absenceRequestProcessor,
+									   IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, AbsenceRequestFormMapper mapper,
+									   RequestsViewModelMapper requestsMapper, IActivityRepository activityRepository,
+									   ISkillTypeRepository skillTypeRepository, IDisableDeletedFilter disableDeletedFilter, IAbsenceRequestValidatorProvider absenceRequestValidatorProvider, INow now, IAbsenceRequestSetting absenceRequestSetting)
 		{
 			_personRequestRepository = personRequestRepository;
 			_absenceRequestSynchronousValidator = absenceRequestSynchronousValidator;
@@ -38,6 +47,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			_activityRepository = activityRepository;
 			_skillTypeRepository = skillTypeRepository;
 			_disableDeletedFilter = disableDeletedFilter;
+			_absenceRequestValidatorProvider = absenceRequestValidatorProvider;
+			_now = now;
+			_absenceRequestSetting = absenceRequestSetting;
 		}
 
 		public RequestViewModel Persist(AbsenceRequestForm form)
@@ -50,29 +62,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 
 			if (personRequest != null)
 			{
-				var existingPeriod = personRequest.Request.Period;
-				_mapper.MapExistingAbsenceRequest(form, personRequest);
-
-				checkAndProcessDeny(personRequest);
-
-				if (personRequest.Request.Period != existingPeriod && !personRequest.IsDenied)
-				{
-					var updatedRows = _queuedAbsenceRequestRepository.UpdateRequestPeriod(personRequest.Id.GetValueOrDefault(), personRequest.Request.Period);
-					if (updatedRows == 0)
-						throw new InvalidOperationException();
-				}
+				updateRequest(form, personRequest);
 			}
 			else
 			{
-				personRequest = _mapper.MapNewAbsenceRequest(form);
-				using (_disableDeletedFilter.Disable())
-				{
-					_skillTypeRepository.LoadAll();
-					_activityRepository.LoadAll();
-				}
-
-				_personRequestRepository.Add(personRequest);
-				checkAndProcessDeny(personRequest);
+				personRequest = addRequest(form);
 			}
 
 			if (!personRequest.IsDenied)
@@ -83,7 +77,71 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			return _requestsMapper.Map(personRequest);
 		}
 
-		private void checkAndProcessDeny(IPersonRequest personRequest)
+		private IPersonRequest addRequest(AbsenceRequestForm form)
+		{
+			var personRequest = _mapper.MapNewAbsenceRequest(form);
+			using (_disableDeletedFilter.Disable())
+			{
+				_skillTypeRepository.LoadAll();
+				_activityRepository.LoadAll();
+			}
+
+			_personRequestRepository.Add(personRequest);
+			executeSynchronousValidations(personRequest);
+			return personRequest;
+		}
+
+		private void updateRequest(AbsenceRequestForm form, IPersonRequest personRequest)
+		{
+			var existingPeriod = personRequest.Request.Period;
+			_mapper.MapExistingAbsenceRequest(form, personRequest);
+
+			executeSynchronousValidations(personRequest);
+
+			if (personRequest.IsDenied)
+				return;
+
+			if (personRequest.Request.Period == existingPeriod)
+				return;
+
+			var mergedPeriod = personRequest.Request.Person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod((AbsenceRequest)personRequest.Request);
+			var validators = _absenceRequestValidatorProvider.GetValidatorList(mergedPeriod).ToList();
+			var startDateTime = _now.UtcDateTime();
+			var intradayPeriod = new DateTimePeriod(startDateTime, startDateTime.AddHours(_absenceRequestSetting.ImmediatePeriodInHours));
+
+			if (!noStaffingValidatorIsUsed(validators) && (!isIntradayRequest(personRequest, intradayPeriod) ||
+														   !isStaffingThresholdValidatorEnabled(validators)))
+			{
+				var updatedRows =
+					_queuedAbsenceRequestRepository.UpdateRequestPeriod(personRequest.Id.GetValueOrDefault(),
+						personRequest.Request.Period);
+				if (updatedRows == 0)
+					throw new InvalidOperationException();
+			}
+		}
+
+		private bool noStaffingValidatorIsUsed(IList<IAbsenceRequestValidator> validators)
+		{
+			if (validators.Any(v => v is StaffingThresholdValidator) ||
+				validators.Any(v => v is StaffingThresholdValidatorCascadingSkillsWithShrinkage) ||
+				validators.Any(v => v is BudgetGroupAllowanceValidator) ||
+				validators.Any(v => v is BudgetGroupHeadCountValidator) ||
+				validators.Any(v => v is StaffingThresholdWithShrinkageValidator))
+				return false;
+			return true;
+		}
+
+		private static bool isStaffingThresholdValidatorEnabled(IEnumerable<IAbsenceRequestValidator> validators)
+		{
+			return validators.Any(v => v is StaffingThresholdValidator);
+		}
+
+		private static bool isIntradayRequest(IPersonRequest personRequest, DateTimePeriod intradayPeriod)
+		{
+			return personRequest.Request.Period.ElapsedTime() <= TimeSpan.FromDays(1) && intradayPeriod.Contains(personRequest.Request.Period.EndDateTime);
+		}
+
+		private void executeSynchronousValidations(IPersonRequest personRequest)
 		{
 			var result = _absenceRequestSynchronousValidator.Validate(personRequest);
 			if (!result.IsValid)

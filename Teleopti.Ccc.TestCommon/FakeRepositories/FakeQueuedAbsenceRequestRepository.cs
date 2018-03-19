@@ -92,10 +92,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			
 			var queuedReq = _queuedRequests.FirstOrDefault(x => x.PersonRequest == id);
+			if (queuedReq == null)
+				return 0;
 			if (queuedReq.Sent.HasValue)
 				return 0;
 			queuedReq.StartDateTime = period.StartDateTime;
 			queuedReq.EndDateTime = period.EndDateTime;
+			UpdateRequestPeriodWasCalled = true;
 			return 1;
 		}
 

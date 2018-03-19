@@ -36,7 +36,9 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 {
-	[TestFixture, RequestsTest, Toggle(Toggles.Wfm_Requests_DenyRequestWhenAllSkillsClosed_46384)]
+	[TestFixture]
+	[RequestsTest]
+	[Toggle(Toggles.Wfm_Requests_DenyRequestWhenAllSkillsClosed_46384)]
 	public class AbsenceRequestPersisterTest : ISetup
 	{
 		public IPersonRequestRepository PersonRequestRepository;
@@ -449,39 +451,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			request.IsWaitlisted.Should().Be.False();
 			request.DenyReason.Should().Be(Resources.RequestDenyReasonPersonAccount);
 		}
-
-		[Test]
-		public void ShouldUpdatePeriodForQueuedRequest()
-		{
-			_absence = createAbsence();
-			setWorkflowControlSet();
-
-			setupPersonSkills();
-
-			var newPersonRequest = setupSimpleAbsenceRequest();
-
-			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest()
-			{
-				PersonRequest = newPersonRequest.Id.GetValueOrDefault(),
-				StartDateTime = newPersonRequest.Request.Period.StartDateTime,
-				EndDateTime = newPersonRequest.Request.Period.EndDateTime
-			});
-
-			var form = createAbsenceRequestForm(new DateTimePeriodForm
-			{
-				StartDate = _today,
-				EndDate = _today.AddDays(1),
-				StartTime = new TimeOfDay(TimeSpan.FromHours(10)),
-				EndTime = new TimeOfDay(TimeSpan.FromMinutes(21))
-			});
-			form.EntityId = newPersonRequest.Id.GetValueOrDefault();
-
-			Persister.Persist(form);
-
-			var queuedRequest = QueuedAbsenceRequestRepository.LoadAll().FirstOrDefault();
-			queuedRequest.StartDateTime.Should().Be.EqualTo(_today.Date.Add(TimeSpan.FromHours(10)));
-			queuedRequest.EndDateTime.Should().Be.EqualTo(_today.Date.AddDays(1).Add(TimeSpan.FromMinutes(21)));
-		}
 		
 		[Test]
 		public void ShouldNotUpdateQueuedRequestPeriodIfItsSameAsRequest()
@@ -490,7 +459,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			setWorkflowControlSet();
 			var newPersonRequest = setupSimpleAbsenceRequest();
 
-			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest()
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
 			{
 				PersonRequest = newPersonRequest.Id.GetValueOrDefault(),
 				StartDateTime = newPersonRequest.Request.Period.StartDateTime,
@@ -514,6 +483,113 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			queuedRequest.StartDateTime.Should().Be.EqualTo(_today.Date.Add(TimeSpan.FromHours(8)));
 			queuedRequest.EndDateTime.Should().Be.EqualTo(_today.Date.Add(TimeSpan.FromHours(17)));
 			QueuedAbsenceRequestRepository.UpdateRequestPeriodWasCalled.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldNotUpdateQueuedRequestPeriodIfNoStaffingValidatorIsUsed()
+		{
+			_absence = createAbsence();
+			setWorkflowControlSet();
+			_workflowControlSet.AbsenceRequestOpenPeriods.ElementAt(0).StaffingThresholdValidator = new AbsenceRequestNoneValidator();
+
+			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			{
+				StartDate = _today,
+				EndDate = _today,
+				StartTime = new TimeOfDay(TimeSpan.FromHours(10)),
+				EndTime = new TimeOfDay(TimeSpan.FromHours(21))
+			});
+
+			setupPersonSkills();
+
+			var result = Persister.Persist(form);
+
+			form.EntityId = Guid.Parse(result.Id);
+			form.Period.StartTime = new TimeOfDay(TimeSpan.FromHours(1));
+			Persister.Persist(form);
+
+			QueuedAbsenceRequestRepository.UpdateRequestPeriodWasCalled.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldNotUpdateQueuedRequestPeriodIfIntradayRequestAndStaffingThresholdValidatorEnabled()
+		{
+			_absence = createAbsence();
+			setWorkflowControlSet();
+			_workflowControlSet.AbsenceRequestOpenPeriods.ElementAt(0).StaffingThresholdValidator = new StaffingThresholdValidator();
+			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			{
+				StartDate = _today,
+				EndDate = _today,
+				StartTime = new TimeOfDay(TimeSpan.FromHours(10)),
+				EndTime = new TimeOfDay(TimeSpan.FromHours(21))
+			});
+
+			setupPersonSkills();
+
+			var result = Persister.Persist(form);
+
+			form.EntityId = Guid.Parse(result.Id);
+			form.Period.StartTime = new TimeOfDay(TimeSpan.FromHours(1));
+			Persister.Persist(form);
+
+			QueuedAbsenceRequestRepository.UpdateRequestPeriodWasCalled.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldUpdateQueuedRequestForNonIntradayRequest()
+		{
+			_absence = createAbsence();
+			setWorkflowControlSet();
+			_workflowControlSet.AbsenceRequestOpenPeriods.ElementAt(0).StaffingThresholdValidator = new StaffingThresholdValidator();
+			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			{
+				StartDate = _today.AddDays(2),
+				EndDate = _today.AddDays(2),
+				StartTime = new TimeOfDay(TimeSpan.FromHours(10)),
+				EndTime = new TimeOfDay(TimeSpan.FromHours(21))
+			});
+
+			setupPersonSkills();
+
+			var result = Persister.Persist(form);
+
+			form.EntityId = Guid.Parse(result.Id);
+			form.Period.StartTime = new TimeOfDay(TimeSpan.FromHours(1));
+			Persister.Persist(form);
+
+			QueuedAbsenceRequestRepository.UpdateRequestPeriodWasCalled.Should().Be.True();
+			var queuedRequest = QueuedAbsenceRequestRepository.LoadAll().FirstOrDefault();
+			queuedRequest.StartDateTime.Should().Be.EqualTo(_today.Date.AddDays(2).Add(TimeSpan.FromHours(1)));
+			queuedRequest.EndDateTime.Should().Be.EqualTo(_today.Date.AddDays(2).Add(TimeSpan.FromHours(21)));
+		}
+
+		[Test]
+		public void ShouldUpdateQueuedRequestForBudgetGroupValidator()
+		{
+			_absence = createAbsence();
+			setWorkflowControlSet();
+			_workflowControlSet.AbsenceRequestOpenPeriods.ElementAt(0).StaffingThresholdValidator = new BudgetGroupAllowanceValidator();
+			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			{
+				StartDate = _today,
+				EndDate = _today,
+				StartTime = new TimeOfDay(TimeSpan.FromHours(10)),
+				EndTime = new TimeOfDay(TimeSpan.FromHours(21))
+			});
+
+			setupPersonSkills();
+
+			var result = Persister.Persist(form);
+
+			form.EntityId = Guid.Parse(result.Id);
+			form.Period.StartTime = new TimeOfDay(TimeSpan.FromHours(1));
+			Persister.Persist(form);
+
+			QueuedAbsenceRequestRepository.UpdateRequestPeriodWasCalled.Should().Be.True();
+			var queuedRequest = QueuedAbsenceRequestRepository.LoadAll().FirstOrDefault();
+			queuedRequest.StartDateTime.Should().Be.EqualTo(_today.Date.Add(TimeSpan.FromHours(1)));
+			queuedRequest.EndDateTime.Should().Be.EqualTo(_today.Date.Add(TimeSpan.FromHours(21)));
 		}
 
 		[Test]
