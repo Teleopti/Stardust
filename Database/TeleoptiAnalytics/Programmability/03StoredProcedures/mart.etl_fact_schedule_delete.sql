@@ -15,19 +15,28 @@ CREATE PROCEDURE [mart].[etl_fact_schedule_delete]
 AS
 BEGIN
 	SET NOCOUNT ON;
-	
 
-	DELETE FROM mart.fact_schedule
-	WHERE shift_startdate_local_id = @shift_startdate_local_id
-	AND scenario_id = @scenario_id
-	AND person_id in (select person_id from mart.dim_person  WITH (NOLOCK) where person_code = @person_code)
+	CREATE TABLE #DimPerson (
+		person_id INT NOT NULL
+	)
 
-	DELETE FROM mart.fact_schedule_day_count
-	WHERE shift_startdate_local_id = @shift_startdate_local_id
-	AND scenario_id = @scenario_id
-	AND person_id in (select person_id from mart.dim_person  WITH (NOLOCK) where person_code = @person_code)
+	INSERT INTO #DimPerson
+	SELECT person_id
+	  FROM mart.dim_person WITH (NOLOCK)
+	 WHERE person_code = @person_code
+
+	DELETE s
+	  FROM mart.fact_schedule s
+	 INNER JOIN #DimPerson p ON s.person_id = p.person_id
+	 WHERE shift_startdate_local_id = @shift_startdate_local_id
+	   AND scenario_id = @scenario_id
+
+	DELETE dc
+	  FROM mart.fact_schedule_day_count dc
+	 INNER JOIN #DimPerson p ON dc.person_id = p.person_id
+	 WHERE shift_startdate_local_id = @shift_startdate_local_id
+	   AND scenario_id = @scenario_id
 END
 
 GO
-
 
