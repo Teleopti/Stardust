@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 				return;
 			}
 
-			var overTimeRequestOpenPeriod = getOvertimeRequestOpenPeriodBySkillType(personRequest, validateSkillsResult.Skills.FirstOrDefault());
+			var overTimeRequestOpenPeriod = getOvertimeRequestOpenPeriodBySkillType(personRequest, validateSkillsResult.Skills);
 			if (overTimeRequestOpenPeriod == null)
 			{
 				denyRequest(personRequest, "xxx");
@@ -199,7 +199,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 		}
 
 		private IOvertimeRequestOpenPeriod getOvertimeRequestOpenPeriodBySkillType(IPersonRequest personRequest,
-			ISkill skillType)
+			ISkill[] skillTypes)
 		{
 			if (personRequest.Person.WorkflowControlSet == null)
 				return null;
@@ -207,7 +207,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			var defaultSkillType = getDefaultSkillType();
 			var skillTypeFilteredOvertimeRequestOpenPeriods =
 				personRequest.Person.WorkflowControlSet.OvertimeRequestOpenPeriods.Where(x =>
-					(x.SkillType ?? defaultSkillType).Description.Equals(skillType.SkillType.Description)).ToList();
+				{
+					var skillType = x.SkillType ?? defaultSkillType;
+					var matchedSkillTypes = skillTypes.Where(s => s.SkillType == skillType).ToList();
+					return matchedSkillTypes.Any();
+				}).ToList();
 
 			var permissionInformation = personRequest.Person.PermissionInformation;
 			var viewpointDate =

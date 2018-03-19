@@ -569,21 +569,30 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			return new StaffingThresholds(new Percent(-0.3), new Percent(-0.1), new Percent(0.1));
 		}
 
-		private ISkill createSkill(string name, TimePeriod? skillOpenHourPeriod = null,TimeZoneInfo timeZone = null)
+		private ISkill createSkill(string name, TimePeriod? skillOpenHourPeriod = null,TimeZoneInfo timeZone = null, ISkillType skillType = null)
 		{
 			var skill = SkillFactory.CreateSkill(name,timeZone).WithId();
-			skill.SkillType.Description = new Description(SkillTypeIdentifier.Phone);
+			if (skillType != null)
+			{
+				skill.SkillType = skillType;
+			}
+			else
+			{
+				skill.SkillType.Description = new Description(SkillTypeIdentifier.Phone);
+				skill.SkillType.SetId(new Guid());
+			}
+			
 			skill.StaffingThresholds = createStaffingThresholds();
 			WorkloadFactory.CreateWorkloadWithOpenHours(skill, skillOpenHourPeriod ?? _defaultOpenPeriod);
 			SkillRepository.Has(skill);
 			return skill;
 		}
 
-		private ISkill setupPersonSkill(TimePeriod? skillOpenHourPeriod = null, TimeZoneInfo timeZone = null)
+		private ISkill setupPersonSkill(TimePeriod? skillOpenHourPeriod = null, TimeZoneInfo timeZone = null, ISkillType skillType = null)
 		{
 			if (timeZone == null) timeZone = LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 			var activity1 = createActivity("activity1");
-			var skill1 = createSkill("skill1", skillOpenHourPeriod, timeZone);
+			var skill1 = createSkill("skill1", skillOpenHourPeriod, timeZone, skillType);
 			var personSkill1 = createPersonSkill(activity1, skill1);
 			addPersonSkillsToPersonPeriod(personSkill1);
 			return skill1;
