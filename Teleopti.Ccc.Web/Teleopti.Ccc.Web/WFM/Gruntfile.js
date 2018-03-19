@@ -451,16 +451,12 @@ module.exports = function(grunt) {
 				]
 			}
 		},
-		// webpack: {
-		//     options: {
-		//         stats: !process.env.NODE_ENV || process.env.NODE_ENV === 'development'
-		//     },
-		//     prod: webpackConfig,
-		//     dev: webpackConfig
-		// },
-		exec: {
-			ngbuild_dev: 'npm run ng build',
-			ngbuild_prod: 'npm run ng build --prod'
+		webpack: {
+			options: {
+				stats: !process.env.NODE_ENV || process.env.NODE_ENV === 'development'
+			},
+			prod: webpackConfig,
+			dev: webpackConfig
 		}
 	});
 
@@ -492,6 +488,7 @@ module.exports = function(grunt) {
 		'imageEmbed',
 		'concat:distModules',
 		'concat:devJs',
+		'webpack',
 		'newer:concat:distCss',
 		'newer:concat:distDarkCss',
 		'copy:devCss',
