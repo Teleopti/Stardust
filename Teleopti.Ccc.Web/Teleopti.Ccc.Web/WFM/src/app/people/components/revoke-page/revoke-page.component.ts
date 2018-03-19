@@ -8,15 +8,15 @@ import { RolePage } from '../shared/role-page';
 	styleUrls: ['./revoke-page.component.scss']
 })
 export class RevokePageComponent extends RolePage {
-	revokeRoles(roles: Array<string>): void {
+	revokeRoles(roles: Array<string>): Promise<object> {
 		const peopleIds = this.workspaceService.getSelectedPeople().map(({ Id }) => Id);
-		this.rolesService.revokeRoles(peopleIds, roles).then(ok => {
-			this.workspaceService.update();
-		});
+		return this.rolesService.revokeRoles(peopleIds, roles);
 	}
 
 	save() {
-		this.revokeRoles(this.selectedRoles);
-		super.save();
+		this.revokeRoles(this.selectedRoles).then(ok => {
+			this.workspaceService.update();
+			super.save();
+		});
 	}
 }

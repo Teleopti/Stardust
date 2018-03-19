@@ -6,7 +6,7 @@
           <div class="con-flex">
             <label for="filter" class="input-icon">
               <i class="mdi mdi-magnify">
-                <input type="text" placeholder="Search" [(ngModel)]="searchService.keyword" (keyup.enter)="searchPeople()">
+                <input type="text" placeholder="Search" [(ngModel)]="searchService.keyword" (keyup.enter)="searchPeople()" data-test-searchinput>
               </i>
             </label>
           </div>

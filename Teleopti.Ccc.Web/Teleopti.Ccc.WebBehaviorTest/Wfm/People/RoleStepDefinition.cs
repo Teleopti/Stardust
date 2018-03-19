@@ -18,6 +18,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.People
 			DataMaker.Person(name).Apply(role);
 		}
 
+		[Given("I searched for '(.*)'")]
+		public void ISearchedForX(string keyword)
+		{
+			Browser.Interactions.FillWith("[data-test-searchinput]", "a");
+			Browser.Interactions.PressEnter("[data-test-searchinput]");
+		}
+
+		[Given("The search list is populated")]
+		public void SearchListIsPopulated()
+		{
+			Browser.Interactions.AssertJavascriptResultContains("return document.querySelectorAll('[data-test-search] [data-test-person]').length > 0", "True");
+		}
+
 		[When("I navigate to grant page")]
 		public void INavigateToGrant()
 		{
