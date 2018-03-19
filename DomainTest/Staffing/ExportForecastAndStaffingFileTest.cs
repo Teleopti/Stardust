@@ -494,7 +494,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			rows[2].Should().Be.EqualTo("skillname;2017-08-15 08:15;2017-08-15 08:30;15,7;17;1,3;28;4;7");
 		}
 		
-		[Test, Ignore("WIP")]
+		[Test]
 		public void ShouldHandleShrinkage()
 		{
 			FakeLoggedOnUser.CurrentUser().PermissionInformation.SetCulture(new CultureInfo("en-US"));
@@ -502,7 +502,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			skill.SetId(Guid.NewGuid());
 			
 			var scenario = SkillSetupHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository);			
-			var skillDay = SkillSetupHelper.CreateSkillDayWithDemand(skill, scenario, new DateTime(2017, 8, 15), new TimePeriod(8, 0, 8, 30), 15.7);
+			var skillDay = SkillSetupHelper.CreateSkillDayWithDemand(skill, scenario, new DateTime(2017, 8, 15), new TimePeriod(8, 0, 8, 30), 15);
 			skillDay.CompleteSkillStaffPeriodCollection.ForEach(ssp => ssp.Payload.Shrinkage = new Percent(0.5));
 			
 			SkillRepository.Add(skill);
@@ -548,8 +548,8 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			var rows = forecastedData.Split(new[] { "\r\n" }, StringSplitOptions.None);
 			rows.Length.Should().Be(3);
 			rows[0].Should().Be("skill,startdatetime,enddatetime,forecasted agents,total scheduled agents,total diff,total scheduled heads");
-			rows[1].Should().Be.EqualTo("skillname,8/15/2017 8:00 AM,8/15/2017 8:15 AM,15.7,8,-7.7,8");
-			rows[2].Should().Be.EqualTo("skillname,8/15/2017 8:15 AM,8/15/2017 8:30 AM,15.7,6,-9.7,6");
+			rows[1].Should().Be.EqualTo("skillname,8/15/2017 8:00 AM,8/15/2017 8:15 AM,22.5,8,-14.5,8");
+			rows[2].Should().Be.EqualTo("skillname,8/15/2017 8:15 AM,8/15/2017 8:30 AM,22.5,6,-16.5,6");
 		}
 		
 		private static ISkill createSkill(int intervalLength, string skillName, TimePeriod openHours)

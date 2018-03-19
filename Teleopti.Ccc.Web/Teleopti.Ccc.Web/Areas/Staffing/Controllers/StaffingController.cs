@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 		}
 		
 		[UnitOfWork, HttpGet, Route("api/staffing/exportforecastandstaffing")]
-		public virtual IHttpActionResult ExportForecastAndStaffing(Guid skillId, DateTime exportStartDate, DateTime exportEndDate)
+		public virtual IHttpActionResult ExportForecastAndStaffing(Guid skillId, DateTime exportStartDate, DateTime exportEndDate, bool useShrinkage = false)
 		{
 			var returnVal = new exportReturnObject();
 			var exportStartDateOnly = new DateOnly(exportStartDate);
@@ -204,7 +204,7 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 				return Ok(returnVal);
 			}
 			var exportedContent = _exportForecastAndStaffingFile.ExportDemand(skill,
-				new DateOnlyPeriod(exportStartDateOnly, exportEndDateOnly));
+				new DateOnlyPeriod(exportStartDateOnly, exportEndDateOnly), useShrinkage);
 		
 			returnVal.Content = exportedContent;
 			returnVal.ErrorMessage = "";
