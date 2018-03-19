@@ -42,13 +42,15 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 		[Category("EventHandlingAfterSaveSchedule")]
 		public void MeasurePerformance()
 		{
+			PingWeb.Execute();
+			
 			Guid businessUnitId;
 			const string logOnDatasource = "Teleopti WFM";
 			using (DataSource.OnThisThreadUse(logOnDatasource))
 				businessUnitId = WithUnitOfWork.Get(() => BusinessUnits.LoadAll().First()).Id.GetValueOrDefault();
 			AsSystem.Logon(logOnDatasource, businessUnitId);
 
-			var today = new DateTime(2015, 3, 1);
+			var today = new DateTime(2018, 3, 1);
 			var dates = Enumerable.Range(0, 30)
 				.Select(i => new DateOnly(today.AddDays(i)))
 				.ToArray();

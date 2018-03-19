@@ -764,6 +764,7 @@
     <Compile Include="Web\WebInteractions\CryptoCreator.cs" />
     <Compile Include="Web\WebInteractions\Http.cs" />
     <Compile Include="Web\WebInteractions\Paths.cs" />
+    <Compile Include="Web\WebInteractions\PingWeb.cs" />
     <Compile Include="Web\WebInteractions\TestSiteConfigurationSetup.cs" />
   </ItemGroup>
   <ItemGroup>
