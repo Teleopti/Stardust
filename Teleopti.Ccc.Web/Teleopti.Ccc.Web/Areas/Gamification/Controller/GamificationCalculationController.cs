@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Gamification;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.Gamification.Models;
 using Teleopti.Ccc.Web.Filters;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
 {
