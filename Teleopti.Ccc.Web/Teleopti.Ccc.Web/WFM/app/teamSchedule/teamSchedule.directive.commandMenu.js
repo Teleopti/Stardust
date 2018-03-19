@@ -250,7 +250,7 @@
 		};
 
 		vm.canActiveDayOff = function() {
-			return vm.toggles.WfmTeamSchedule_AddNDeleteDayOff_40555;
+			return vm.permissions.HasAddDayOffPermission && vm.toggles.WfmTeamSchedule_AddNDeleteDayOff_40555;
 		};
 
 		vm.canActiveRemoveShift = function() {

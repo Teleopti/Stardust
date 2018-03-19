@@ -290,6 +290,27 @@
 		menuListItemForAddingDayOff = angular.element(element[0].querySelector('.wfm-list #menuItemAddDayOff'));
 		expect(menuListItemForAddingDayOff[0].disabled).toEqual(false);
 	});
+	
+	it('should not view menu when add day off is not permitted', function () {
+		var html = '<teamschedule-command-menu></teamschedule-command-menu>';
+		var scope = $rootScope.$new();
+		scope.vm = {
+			toggleCurrentSidenav: function () { }
+		};
+
+		permissions.set({
+			HasAddDayOffPermission: false
+		});
+
+		var element = $compile(html)(scope);
+
+		scope.$apply();
+
+		var menu = angular.element(element[0].querySelector('#scheduleContextMenuButton'));
+		var menuListItem = angular.element(element[0].querySelector('.wfm-list  #menuItemAddDayOff'));
+		expect(menuListItem.length).toBe(0);
+	});
+
 
 	function commonTestsInDifferentLocale() {
 		it('should remove day off menu item unclickable unless day off on view date is selected', function () {
