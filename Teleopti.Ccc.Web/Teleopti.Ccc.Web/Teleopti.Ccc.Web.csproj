@@ -1656,6 +1656,9 @@
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.filter.sort.spec.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.RTA_NoRightPanel_48586.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.RTA_ViewHistoricalAhderenceForRecentShifts_46786.js" />
+    <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.filter.skillSelection.spec.js" />
+    <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.filter.spec.js" />
+    <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.filter.QuicklyChangeAgentsSelection.spec.js" />
     <Content Include="WFM\app\rta\rta\filter\filter-template_RTA_MobileFriendlyCheckboxes_46758.html" />
     <Content Include="WFM\app\rta\rta\filter\filter-template_RTA_ModifySkillGroup_48191.html" />
     <Content Include="WFM\app\rta\rta\filter\filter-template_RTA_NoRightPanel_48586.html" />
@@ -1714,9 +1717,6 @@
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.recentOutOfAdherences.spec.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.spec.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.totalOutOfAdherenceTime.spec.js" />
-    <Content Include="WFM\app\rta\rta\filter\rta.filter.controller.agents.QuicklyChangeAgentsSelection.spec.js" />
-    <Content Include="WFM\app\rta\rta\filter\rta.filter.controller.overview.skillSelection.spec.js" />
-    <Content Include="WFM\app\rta\rta\filter\rta.filter.controller.overview.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta-card-body-component.html" />
     <Content Include="WFM\app\rta\rta\historical\rta-card-component.html" />
     <Content Include="WFM\app\rta\rta\historical\rta-card-header-component.html" />
