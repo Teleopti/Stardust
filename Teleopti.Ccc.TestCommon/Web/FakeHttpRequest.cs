@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Specialized;
+using System.Linq;
 using System.Web;
 using System.Web.Routing;
 
@@ -16,8 +17,9 @@ namespace Teleopti.Ccc.TestCommon.Web
         private readonly Uri _urlReferrer;
         private readonly string _httpMethod;
 	    private readonly NameValueCollection _headers;
+		
 
-	    public FakeHttpRequest(
+		public FakeHttpRequest(
 		    string relativeUrl,
 		    Uri url,
 		    Uri urlReferrer)
@@ -121,5 +123,15 @@ namespace Teleopti.Ccc.TestCommon.Web
 		    get { return "172.168.1.1"; }
 	    }
 
-    }
+		public override string this[string key]
+		{
+			get
+			{
+				if (_headers.AllKeys.Contains(key))
+					return _headers[key];
+
+				return string.Empty;
+			}
+		}
+	}
 }

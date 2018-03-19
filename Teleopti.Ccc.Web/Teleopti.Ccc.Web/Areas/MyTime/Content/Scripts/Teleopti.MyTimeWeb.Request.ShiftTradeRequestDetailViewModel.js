@@ -94,6 +94,12 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 				Teleopti.MyTimeWeb.Request.List.AddItemAtTop(data, true);
 				self.CanApproveAndDeny(false);
 				self.UpdatedMessage("");
+			},
+			error: function (response, textStatus) {
+				if (response.responseJSON) {
+					Teleopti.MyTimeWeb.Common.AjaxFailed(response, null, textStatus);
+				}
+				self.CanApproveAndDeny(true);
 			}
 		});
 	};
@@ -114,6 +120,12 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 			success: function (data) {
 				Teleopti.MyTimeWeb.Request.List.AddItemAtTop(data, false);
 				self.CanApproveAndDeny(false);
+			},
+			error: function (response, textStatus) {
+				if (response.responseJSON) {
+					Teleopti.MyTimeWeb.Common.AjaxFailed(response, null, textStatus);
+				}
+				self.CanApproveAndDeny(true);
 			}
 		});
 	};
@@ -127,6 +139,12 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 			success: function (data) {
 				Teleopti.MyTimeWeb.Request.List.AddItemAtTop(data, true);
 				self.isReferred(false);
+				self.CanApproveAndDeny(true);
+			},
+			error: function (response, textStatus) {
+				if (response.responseJSON) {
+					Teleopti.MyTimeWeb.Common.AjaxFailed(response, null, textStatus);
+				}
 				self.CanApproveAndDeny(true);
 			}
 		});

@@ -1227,6 +1227,7 @@
     <Compile Include="Filters\AuthenticationModule.cs" />
     <Compile Include="Filters\AuthorizeTeleoptiAttribute.cs" />
     <Compile Include="Filters\BasicAuthenticationAttribute.cs" />
+    <Compile Include="Filters\HandleOptimisticLockExceptionAttribute.cs" />
     <Compile Include="Filters\HttpAuthenticationChallengeContextExtensions.cs" />
     <Compile Include="Filters\HttpRequestBaseExtensions.cs" />
     <Compile Include="Filters\IAuthenticationModule.cs" />

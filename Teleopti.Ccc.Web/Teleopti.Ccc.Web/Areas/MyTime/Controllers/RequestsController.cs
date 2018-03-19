@@ -103,6 +103,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[UnitOfWork]
 		[HttpPostOrPut]
+		[HandleOptimisticLockException]
 		public virtual JsonResult TextRequest(TextRequestForm form)
 		{
 			if (!ModelState.IsValid)
@@ -116,6 +117,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[UnitOfWork]
 		[HttpPostOrPut]
+		[HandleOptimisticLockException]
 		public virtual JsonResult ShiftTradeRequest(ShiftTradeRequestForm form)
 		{
 			if (!ModelState.IsValid)
@@ -129,6 +131,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[UnitOfWork]
 		[HttpPostOrPut]
+		[HandleOptimisticLockException]
 		public virtual JsonResult ApproveShiftTrade(ShiftTradeRequestReplyForm form)
 		{
 			var model = _respondToShiftTrade.OkByMe(form.ID, form.Message);
@@ -138,6 +141,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[UnitOfWork]
 		[HttpPostOrPut]
+		[HandleOptimisticLockException]
 		public virtual JsonResult DenyShiftTrade(ShiftTradeRequestReplyForm form)
 		{
 			return Json(_respondToShiftTrade.Deny(form.ID, form.Message));
@@ -145,6 +149,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[UnitOfWork]
 		[HttpPostOrPut]
+		[HandleOptimisticLockException]
 		public virtual JsonResult AbsenceRequest(AbsenceRequestForm form)
 		{
 			if (!ModelState.IsValid)
@@ -168,6 +173,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[UnitOfWork]
 		[HttpDelete]
 		[ActionName("RequestDetail")]
+		[HandleOptimisticLockException]
 		public virtual JsonResult RequestDelete(Guid id)
 		{
 			_textRequestPersister.Delete(id);
@@ -176,6 +182,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[UnitOfWork]
 		[HttpPostOrPut]
+		[HandleOptimisticLockException]
 		public virtual JsonResult CancelRequest(Guid id)
 		{
 			var commandResult = _cancelAbsenceRequestCommandProvider.CancelAbsenceRequest(id);
@@ -247,6 +254,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[UnitOfWork]
 		[HttpPostOrPut]
+		[HandleOptimisticLockException]
 		public virtual JsonResult ResendShiftTrade(Guid id)
 		{
 			var model = _respondToShiftTrade.ResendReferred(id);

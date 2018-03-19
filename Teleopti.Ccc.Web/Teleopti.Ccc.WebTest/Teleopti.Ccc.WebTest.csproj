@@ -559,6 +559,7 @@
     <Compile Include="Filters\AsyncTaskAttributeTest.cs" />
     <Compile Include="Filters\AuthorizeTeleoptiAttributeTest.cs" />
     <Compile Include="Filters\CustomHttpActionDescriptorForTest.cs" />
+    <Compile Include="Filters\HandleOptimisticLockExceptionAttributeTest.cs" />
     <Compile Include="Filters\IdentityProviderProviderTest.cs" />
     <Compile Include="Filters\KeyBasedAuthenticationAttributeTest.cs" />
     <Compile Include="Filters\LicenseAttributeTest.cs" />
