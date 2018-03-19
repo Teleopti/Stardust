@@ -1,5 +1,5 @@
 'use strict';
-describe('RtaFilterController', function () {
+describe('RtaAgentsController', function () {
 	var $interval,
 		$httpBackend,
 		$state,
