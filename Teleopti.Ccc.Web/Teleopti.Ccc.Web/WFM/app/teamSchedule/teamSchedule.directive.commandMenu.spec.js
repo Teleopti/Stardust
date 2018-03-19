@@ -243,13 +243,16 @@
 		expect(menuListItem.length).toBe(1);
 	});
 
-	it('should view day off menu when toggle is on', function () {
+	it('should view day off menu when toggle is on and has permission', function () {
 		var html = '<teamschedule-command-menu></teamschedule-command-menu>';
 		var scope = $rootScope.$new();
 		scope.vm = {
 			toggleCurrentSidenav: function () { }
 		};
-
+		permissions.set({
+			HasAddDayOffPermission: true,
+			HasRemoveDayOffPermission: true
+		});
 		var element = $compile(html)(scope);
 		scope.$apply();
 
@@ -269,7 +272,9 @@
 			toggleCurrentSidenav: function () { },
 			selectedDate: date
 		};
-
+		permissions.set({
+			HasAddDayOffPermission: true
+		});
 		var element = $compile(html)(scope);
 		scope.$apply();
 
@@ -290,26 +295,6 @@
 		menuListItemForAddingDayOff = angular.element(element[0].querySelector('.wfm-list #menuItemAddDayOff'));
 		expect(menuListItemForAddingDayOff[0].disabled).toEqual(false);
 	});
-	
-	it('should not view menu when add day off is not permitted', function () {
-		var html = '<teamschedule-command-menu></teamschedule-command-menu>';
-		var scope = $rootScope.$new();
-		scope.vm = {
-			toggleCurrentSidenav: function () { }
-		};
-
-		permissions.set({
-			HasAddDayOffPermission: false
-		});
-
-		var element = $compile(html)(scope);
-
-		scope.$apply();
-
-		var menu = angular.element(element[0].querySelector('#scheduleContextMenuButton'));
-		var menuListItem = angular.element(element[0].querySelector('.wfm-list  #menuItemAddDayOff'));
-		expect(menuListItem.length).toBe(0);
-	});
 
 
 	function commonTestsInDifferentLocale() {
@@ -317,6 +302,9 @@
 			var html = '<teamschedule-command-menu selected-date="vm.selectedDate"></teamschedule-command-menu>';
 			var scope = $rootScope.$new();
 			var date = "2018-01-16";
+			permissions.set({
+				HasRemoveDayOffPermission: true
+			});
 			scope.vm = {
 				toggleCurrentSidenav: function () { },
 				selectedDate: new Date(date)
@@ -358,6 +346,8 @@
 
 		});
 	}
+
+	commonTestsInDifferentLocale();
 
 	describe('in locale ar-AE', function () {
 		beforeAll(function () {

@@ -108,7 +108,7 @@
 					return personSelectionSvc.anyAgentChecked();
 				},
 				visible: function() {
-					return vm.canActiveDayOff();
+					return vm.canActiveAddDayOff();
 				}
 			},
 			{
@@ -192,7 +192,7 @@
 					return vm.canRemoveDayOff();
 				},
 				visible: function() {
-					return vm.canActiveDayOff();
+					return vm.canActiveRemoveDayOff();
 				}
 			},
 			{
@@ -249,8 +249,12 @@
 			return vm.permissions.HasAddingOvertimeActivityPermission;
 		};
 
-		vm.canActiveDayOff = function() {
+		vm.canActiveAddDayOff = function() {
 			return vm.permissions.HasAddDayOffPermission && vm.toggles.WfmTeamSchedule_AddNDeleteDayOff_40555;
+		};
+
+		vm.canActiveRemoveDayOff = function () {
+			return vm.permissions.HasRemoveDayOffPermission && vm.toggles.WfmTeamSchedule_AddNDeleteDayOff_40555;
 		};
 
 		vm.canActiveRemoveShift = function() {
