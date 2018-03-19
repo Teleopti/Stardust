@@ -59,6 +59,7 @@
 		var skillIds = angular.isArray($stateParams.skillIds) ? $stateParams.skillIds[0] || null : $stateParams.skillIds;
 		var skillAreaId = $stateParams.skillAreaId || undefined;
 		$stateParams.es = $stateParams.es || [];
+		var skillIds3 = undefined;
 
 		// because angular cant handle an array of null in stateparams
 		var nullState = "No State";
@@ -68,8 +69,7 @@
 		vm.hexToRgb = rtaFormatService.formatHexToRgb;
 		vm.pause = false;
 		vm.pausedAt = null;
-
-			
+		
 		vm.displayNoAgentsMessage = function () {
 			return vm.agentStates.length === 0;
 		};
@@ -89,7 +89,7 @@
 		};
 		vm.goToOverview = rtaRouteService.goToOverview;
 		vm.goToSelectItem = rtaRouteService.goToSelectSkill;
-		
+
 
 		vm.rightPanelOptions = {
 			panelState: false,
@@ -152,7 +152,7 @@
 		function skillIdsForSkillArea(skillArea) {
 			if (skillArea.Skills) {
 				vm.skillArea = true;
-				skillIds = skillArea.Skills.map(function (skill) {
+				skillIds3 = skillArea.Skills.map(function (skill) {
 					return skill.Id;
 				});
 			}
@@ -162,7 +162,7 @@
 			return rtaService.agentStatesFor({
 				siteIds: siteIds,
 				teamIds: teamIds,
-				skillIds: skillIds,
+				skillIds: skillIds3,
 				inAlarm: vm.showInAlarm,
 				excludedStateIds: excludedPhoneStateIds().map(function (s) {
 					return s === nullStateId ? null : s;
@@ -304,109 +304,107 @@
 			vm.orderBy = column;
 			poller.force();
 		}
-		
+
 		////////no right panel stuff /////////////////
+		
+		rtaStateService.setCurrentState($stateParams)
+			.then(function () {
 
-		rtaStateService.setCurrentState($stateParams);
-		var agentsState = "rta-agents";
+				vm.skillsLoaded = true;
+				vm.placeholderTextForSkillSelection = $translate.instant('SelectSkill');
+				vm.skills = rtaStateService.skills();
+				vm.selectedSkill = vm.skills.find(function (s) {
+					return s.Id === skillIds;
+				});
 
+				vm.skillAreasLoaded = true;
+				vm.placeholderTextForSkillGroupSelection = $translate.instant('SelectSkillGroup');
+				vm.skillAreas = rtaStateService.skillAreas();
+				vm.selectedSkillArea = vm.skillAreas.find(function (s) {
+					return s.Id === skillAreaId
+				});
+				
+				getOrganizationCall()
+					.then(function (organization) {
+						vm.sites = organization;
+						vm.sites.forEach(function (site) {
+							var isSiteInParams = siteIds.indexOf(site.Id) > -1;
+							site.isChecked = isSiteInParams || false;
+							site.toggle = function () {
+								site.isChecked = !site.isChecked;
+								site.isMarked = false;
+								site.Teams.forEach(function (team) {
+									team.isChecked = site.isChecked;
+								})
+								vm.siteMarkedOrChecked = vm.sites.filter(function (site) {
+									return site.isChecked || site.isMarked;
+								}).length > 0;
+							}
+							site.Teams.forEach(function (team) {
+								var isTeamInParams = teamIds.indexOf(team.Id) > -1;
+								team.isChecked = isTeamInParams || site.isChecked || false;
+								site.isMarked = site.Teams.some(function (t) {
+									return t.isChecked;
+								});
+								team.toggle = function () {
+									team.isChecked = !team.isChecked;
+									site.isChecked = site.Teams.every(function (t) {
+										return t.isChecked;
+									});
+									site.isMarked = site.Teams.some(function (t) {
+										return t.isChecked;
+									});
+									vm.siteMarkedOrChecked = vm.sites.filter(function (site) {
+										return site.isChecked || site.isMarked;
+									}).length > 0;
+								}
+							})
+						});
+						vm.siteMarkedOrChecked = vm.sites.filter(function (site) {
+							return site.isChecked || site.isMarked;
+						}).length > 0;
+						updateSelectFieldText();
+					});
+
+				function getOrganizationCall() {
+					var skillIds2 = angular.isArray($stateParams.skillIds) ? $stateParams.skillIds[0] || null : $stateParams.skillIds;
+					var theSkillIds = skillIds2 != null ? [skillIds2] : null;
+					var skillIdsForOrganization = skillAreaId != null ? getSkillIdsFromSkillArea(skillAreaId) : theSkillIds;
+					return skillIdsForOrganization != null ? rtaService.getOrganizationForSkills({skillIds: skillIdsForOrganization}) : rtaService.getOrganization();
+				}
+
+				function getSkillIdsFromSkillArea(skillAreaId) {
+					var theSkillArea = vm.skillAreas.find(function (skillArea) {
+						return skillArea.Id === skillAreaId;
+					});
+					if (theSkillArea && theSkillArea.Skills != null) {
+						return theSkillArea.Skills.map(function (skill) {
+							return skill.Id;
+						});
+					}
+					return null;
+				}
+				
+			});
+		
 		// scoped variables
 		vm.teamsSelected = [];
 		vm.selectFieldText;
 		vm.searchTerm = "";
 		//scoped functions
 		vm.querySearch = querySearch;
-		vm.selectedSkillChange = selectedSkillChange;
-		vm.selectedSkillAreaChange = selectedSkillAreaChange;
 		vm.expandSite = expandSite;
-		vm.goToAgents = goToAgents;	
+		vm.goToAgents = goToAgents;
 		vm.clearOrgSelection = clearOrgSelection;
 		vm.clearSearchTerm = clearSearchTerm;
-		vm.showOrganization = $state.current.name === agentsState;
 		vm.clearSelection = clearSelection;
 		vm.openPicker = false;
 		vm.placeholderTextForSkillSelection = $translate.instant('LoadingSkills');
 		vm.placeholderTextForSkillGroupSelection = $translate.instant('LoadingSkillGroups');
 		vm.skillsLoaded = false;
 		vm.skillAreasLoaded = false;
-
-		(function initialize() {
-			rtaService.getSkills()
-				.then(function (skills) {
-					var deffered = $q.defer();
-					deffered.resolve();
-					vm.skillsLoaded = true;
-					vm.placeholderTextForSkillSelection = $translate.instant('SelectSkill');
-					vm.skills = skills;
-					vm.selectedSkill = skills.find(function (s) { return s.Id === skillIds;	});
-					return deffered.promise;
-				}).then(function () {
-				rtaService.getSkillAreas()
-					.then(function (skillAreas) {
-						var deffered = $q.defer();
-						deffered.resolve();
-						vm.skillAreasLoaded = true;
-						vm.placeholderTextForSkillGroupSelection = $translate.instant('SelectSkillGroup');
-						vm.skillAreas = skillAreas;
-						vm.selectedSkillArea = vm.skillAreas.find(function (s) { return s.Id === skillAreaId });
-						return deffered.promise;
-					})
-					.then(function () {
-						getOrganizationCall()
-							.then(function (organization) {
-								vm.sites = organization;
-								vm.sites.forEach(function (site) {
-									var isSiteInParams = siteIds.indexOf(site.Id) > -1;
-									site.isChecked = isSiteInParams || false;
-									site.toggle = function () {
-										site.isChecked = !site.isChecked;
-										site.isMarked = false;
-										site.Teams.forEach(function (team) {
-											team.isChecked = site.isChecked;
-										})
-										vm.siteMarkedOrChecked = vm.sites.filter(function (site) { return site.isChecked || site.isMarked; }).length > 0;
-									}
-									site.Teams.forEach(function (team) {
-										var isTeamInParams = teamIds.indexOf(team.Id) > -1;
-										team.isChecked = isTeamInParams || site.isChecked || false;
-										site.isMarked = site.Teams.some(function (t) {
-											return t.isChecked;
-										});
-										team.toggle = function () {
-											team.isChecked = !team.isChecked;
-											site.isChecked = site.Teams.every(function (t) {
-												return t.isChecked;
-											});
-											site.isMarked = site.Teams.some(function (t) {
-												return t.isChecked;
-											});
-											vm.siteMarkedOrChecked = vm.sites.filter(function (site) { return site.isChecked || site.isMarked; }).length > 0;
-										}
-									})
-								});
-								vm.siteMarkedOrChecked = vm.sites.filter(function (site) { return site.isChecked || site.isMarked; }).length > 0;
-								updateSelectFieldText();
-							});
-					});
-			});
-
-			function getOrganizationCall() {
-				var skillIds2 = angular.isArray($stateParams.skillIds) ? $stateParams.skillIds[0] || null : $stateParams.skillIds;
-				var theSkillIds = skillIds2 != null ? [skillIds2] : null;
-				var skillIdsForOrganization = skillAreaId != null ? getSkillIdsFromSkillArea(skillAreaId) : theSkillIds;
-				return skillIdsForOrganization != null ? rtaService.getOrganizationForSkills({ skillIds: skillIdsForOrganization }) : rtaService.getOrganization();
-			}
-
-			function getSkillIdsFromSkillArea(skillAreaId) {
-				var theSkillArea = vm.skillAreas.find(function (skillArea) {
-					return skillArea.Id === skillAreaId;
-				});
-				if (theSkillArea && theSkillArea.Skills != null) {
-					return theSkillArea.Skills.map(function (skill) { return skill.Id; });
-				}
-				return null;
-			}
-		})();
+		vm.selectedSkillChange = selectedSkillChange;
+		vm.selectedSkillAreaChange = selectedSkillAreaChange;
 
 		function updateSelectFieldText() {
 			var selectedFieldText = rtaNamesFormatService.getSelectedFieldText(vm.sites, siteIds, teamIds);
@@ -430,25 +428,25 @@
 		};
 
 		function selectedSkillChange(skill) {
-			if (!skill && vm.showOrganization)
-				rtaStateService.selectSkillArea(skillAreaId);
-			else if ((skill.Id != skillIds || $stateParams.skillAreaId) && vm.showOrganization)
-				rtaStateService.selectSkill(skill.Id);
+			var newSkillId = skill ? skill.Id : null;
+			if (newSkillId != skillIds)
+				rtaStateService.selectSkill(newSkillId);
 		}
-		
+
 		function selectedSkillAreaChange(skillArea) {
-			if (!skillArea && vm.showOrganization)
-				rtaStateService.selectSkill($stateParams.skillIds);
-			else if (!(skillArea.Id == $stateParams.skillAreaId) && vm.showOrganization)
-				rtaStateService.selectSkillArea(skillArea.Id);
+			var newSkillAreaId = skillArea ? skillArea.Id : null;
+			if (newSkillAreaId != skillAreaId)
+				rtaStateService.selectSkillArea(newSkillAreaId);
 		}
 
 		function clearSelection() {
-			vm.selectedSkill ? vm.selectedSkill = null : vm.selectedSkillArea = null;
+			rtaStateService.deselectSkillAndSkillArea();
 		}
 
 		/***********MULTI-SELECT************/
-		function expandSite(site) { site.isExpanded = !site.isExpanded; };
+		function expandSite(site) {
+			site.isExpanded = !site.isExpanded;
+		};
 
 		function shrinkSites() {
 			vm.sites.forEach(function (site) {
@@ -510,6 +508,8 @@
 			);
 		};
 
-		function clearSearchTerm() { vm.searchTerm = ''; }
+		function clearSearchTerm() {
+			vm.searchTerm = '';
+		}
 	}
 })();
