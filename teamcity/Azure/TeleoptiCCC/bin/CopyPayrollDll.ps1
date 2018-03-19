@@ -66,13 +66,26 @@ function Sync-NewFilesOnly
     $targetDir    
     )
     [int]$counter = 0
-    Get-ChildItem "$sourceDir" | Foreach-Object {
+    Get-ChildItem "$sourceDir" -recurse | Foreach-Object {
         $sourceFile = Get-Item $_.FullName
         $targetFile = $targetDir + "\" + $sourceFile.Name 
 
-        if (!(FilesAreEqual $sourceFile $targetFile)) {
-            Copy-Item "$sourceFile" "$targetDir"
-            $counter = $counter + 1
+        if ($sourceFile.PsIscontainer) 
+        {
+            if (!(Test-Path $targetFile)) 
+            {
+                New-Item -ItemType Directory -Force -Path $targetFile | Out-Null
+            }
+        }
+        else
+        {
+            if (!(FilesAreEqual $sourceFile $targetFile)) 
+            { 
+                $currDir = ($sourceFile).directory.name 
+                $destfile = $targetDir + "\" + $currDir + "\" + $Sourcefile.Name
+                Copy-Item $sourceFile  $destfile -Force
+                $counter = $counter + 1
+            }
         }
     }
     return $counter
@@ -155,7 +168,7 @@ Try
 	log-info "running: $ScriptFileName"
 	
     $TeleoptiServiceBus = "TeleoptiServiceBus"
-    $computer = gc env:computername
+    $computer = $env:computername
 
     ## Name of the job, name of source in Windows Event Log
     $JOB = "Teleopti.Ccc.BlobStorageCopy"
@@ -189,7 +202,7 @@ Try
 
 	## Destination directory. Files in this directory will mirror the source directory. Extra files will be deleted!
 	$DESTINATION = "c:\temp\PayrollInbox"
-	if (-not(test-path -path $DESTINATION))
+	if (!(test-path -path $DESTINATION))
 	{
 		mkdir $DESTINATION
 	}
