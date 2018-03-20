@@ -65,15 +65,26 @@ function Sync-NewFilesOnly
     $sourceDir,
     $targetDir    
     )
-    [int]$counter = 0
+    
+[int]$counter = 0
     Get-ChildItem "$sourceDir" -recurse | Foreach-Object {
         $sourceFile = Get-Item $_.FullName
-        $targetFile = $targetDir + "\" + $sourceFile.Name 
+        
+        $currDir = ($sourceFile).Directory.Name
+        if (!($currDir -eq "PayrollInbox"))
+        {
+            $targetFile = $targetDir + "\" + $currDir + "\" + $Sourcefile.Name      
+        }
+        else
+        {
+            $targetFile = $targetDir + "\" + $sourceFile.Name  
+        }
 
         if ($sourceFile.PsIscontainer) 
         {
             if (!(Test-Path $targetFile)) 
             {
+                log-info "Folder:'$targetFile' doesn´t exist, will be created..."
                 New-Item -ItemType Directory -Force -Path $targetFile | Out-Null
             }
         }
@@ -92,6 +103,10 @@ function Sync-NewFilesOnly
                     $destfile = $targetDir + "\" + $Sourcefile.Name
                 } 
                 
+                log-info ""
+                log-info "File:'$SourceFile' seems to be new..."
+                log-info "Will be copied to: '$destfile'..."
+                log-info ""
                 Copy-Item $sourceFile  $destfile -Force
                
                 $counter = $counter + 1
