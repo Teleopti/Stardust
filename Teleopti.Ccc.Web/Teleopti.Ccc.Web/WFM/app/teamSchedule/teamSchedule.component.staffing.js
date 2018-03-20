@@ -138,8 +138,9 @@
 		function generateChart() {
 			if (!selectedSkill && !vm.selectedSkillGroup) return;
 			vm.isLoading = true;
-			var query = StaffingInfoService.getStaffingByDate(selectedSkill, vm.selectedSkillGroup, serviceDateFormatHelper.getDateOnly(vm.selectedDate), vm.useShrinkage);
-			query.then(function (result) {
+
+			StaffingInfoService.getStaffingByDate(selectedSkill, vm.selectedSkillGroup, serviceDateFormatHelper.getDateOnly(vm.selectedDate), vm.useShrinkage)
+			.then(function (result) {
 				vm.isLoading = false;
 				if (staffingPrecheck(result.DataSeries)) {
 					var staffingData = ChartService.prepareStaffingData(result);
