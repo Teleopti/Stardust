@@ -63,19 +63,17 @@
 				return;
 			selectedSkill = null;
 			vm.selectedSkillGroup = null;
-			if (!selectedItem) {
-				return;
+			if (!!selectedItem) {
+				var isSelectedSkillArea = selectedItem.hasOwnProperty('Skills');
+				if (isSelectedSkillArea) {
+					vm.selectedSkillGroup = selectedItem;
+				} else {
+					selectedSkill = selectedItem;
+				}
+				generateChart();
 			}
-			var isSelectedSkillArea = selectedItem.hasOwnProperty('Skills');
-			if (isSelectedSkillArea) {
-				vm.selectedSkillGroup = selectedItem;
-			} else {
-				selectedSkill = selectedItem;
-			}
-			generateChart();
-			
-			var skillChanged;
-			vm.onSelectedSkillChanged && (skillChanged = vm.onSelectedSkillChanged()) && skillChanged(selectedSkill, vm.selectedSkillGroup);
+
+			vm.onSelectedSkillChanged && vm.onSelectedSkillChanged({skill:selectedSkill, skillGroup: vm.selectedSkillGroup});
 		}
 
 		vm.getSkillIcon = skillIconService.get;

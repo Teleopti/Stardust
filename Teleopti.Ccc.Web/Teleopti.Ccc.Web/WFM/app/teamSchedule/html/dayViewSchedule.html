@@ -146,7 +146,7 @@
 	<staffing-info ng-if="vm.staffingEnabled" selected-date="vm.scheduleDate"
 				   chart-height="vm.chartHeight" preselected-skills="vm.preselectedSkills"
 				   use-shrinkage="vm.useShrinkage"
-				   on-selected-skill-changed="vm.onSelectedSkillChanged"
+				   on-selected-skill-changed="vm.onSelectedSkillChanged(skill, skillGroup)"
 				   on-use-shrinkage-changed="vm.onUseShrinkageChanged"
 				   ></staffing-info>
 
