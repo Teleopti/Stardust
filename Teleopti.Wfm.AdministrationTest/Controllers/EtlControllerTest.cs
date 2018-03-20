@@ -45,6 +45,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 		public FakePmInfoProvider PmInfoProvider;
 		public FakeJobScheduleRepository JobScheduleRepository;
 		public MutableNow Now;
+		public FakeConfigReader FakeConfigReader;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -283,6 +284,24 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			jobs.Any(j => j.JobName == processCubeJobName).Should().Be.EqualTo(pmInstalled);
 
 			return jobs;
+		}
+
+		[Test]
+		public void ShouldCheckThatMasterTenantIsConfigured()
+		{
+			FakeConfigReader.FakeConnectionString("Hangfire", connectionString);
+			BaseConfigurationRepository.SaveBaseConfiguration(connectionString,
+				new BaseConfiguration(1053, 15, timezoneName, false));
+			var result = (OkNegotiatedContentResult<bool>)Target.IsBaseConfigurationAvailable();
+			result.Content.Should().Be(true);
+		}
+
+		[Test]
+		public void ShouldCheckThatMasterTenantIsNotConfigured()
+		{
+			FakeConfigReader.FakeConnectionString("Hangfire", connectionString);
+			var result = (OkNegotiatedContentResult<bool>)Target.IsBaseConfigurationAvailable();
+			result.Content.Should().Be(false);
 		}
 	}
 }

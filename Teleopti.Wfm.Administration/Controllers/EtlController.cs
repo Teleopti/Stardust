@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Net;
 using System.Web.Http;
+using Teleopti.Analytics.Etl.Common.Infrastructure;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.Toggle;
@@ -17,16 +19,22 @@ namespace Teleopti.Wfm.Administration.Controllers
 		private readonly JobCollectionModelProvider _jobCollectionModelProvider;
 		private readonly TenantLogDataSourcesProvider _tenantLogDataSourcesProvider;
 		private readonly EtlJobScheduler _etlJobScheduler;
+		private readonly IConfigReader _configReader;
+		private readonly IBaseConfigurationRepository _baseConfigurationRepository;
 
 		public EtlController(IToggleManager toggleManager, 
 			JobCollectionModelProvider jobCollectionModelProvider,
 			TenantLogDataSourcesProvider tenantLogDataSourcesProvider,
-			EtlJobScheduler etlJobScheduler)
+			EtlJobScheduler etlJobScheduler,
+			IConfigReader configReader,
+			IBaseConfigurationRepository baseConfigurationRepository)
 		{
 			_toggleManager = toggleManager;
 			_jobCollectionModelProvider = jobCollectionModelProvider;
 			_tenantLogDataSourcesProvider = tenantLogDataSourcesProvider;
 			_etlJobScheduler = etlJobScheduler;
+			_configReader = configReader;
+			_baseConfigurationRepository = baseConfigurationRepository;
 		}
 
 		[HttpGet, Route("Etl/ShouldEtlToolBeVisible")]
@@ -77,6 +85,15 @@ namespace Teleopti.Wfm.Administration.Controllers
 			{
 				return Content(HttpStatusCode.NotFound, e.Message);
 			}
+		}
+
+		[HttpGet, Route("Etl/IsBaseConfigurationAvailable")]
+		public IHttpActionResult IsBaseConfigurationAvailable()
+		{
+			var connectionString = _configReader.ConnectionString("Hangfire");
+			var baseConfig = _baseConfigurationRepository.LoadBaseConfiguration(connectionString);
+			var isConfig = baseConfig.IntervalLength.HasValue;
+			return Ok(isConfig);
 		}
 	}
 }

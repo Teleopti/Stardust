@@ -10,7 +10,9 @@ namespace Teleopti.Wfm.AdministrationTest.FakeData
 		readonly IDictionary<string, IBaseConfiguration> _baseConfigurationDic = new ConcurrentDictionary<string, IBaseConfiguration>();
 		public IBaseConfiguration LoadBaseConfiguration(string connectionString)
 		{
-			return _baseConfigurationDic[connectionString];
+			if(_baseConfigurationDic.ContainsKey(connectionString))
+				return _baseConfigurationDic[connectionString];
+			return new BaseConfiguration(null, null, null, false);
 		}
 
 		public void SaveBaseConfiguration(string connectionString, IBaseConfiguration configuration)
