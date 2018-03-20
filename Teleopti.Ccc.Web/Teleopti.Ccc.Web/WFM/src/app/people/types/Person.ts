@@ -2,9 +2,11 @@ import { Role } from './Role';
 
 export interface Person {
 	Id: string;
-	FirstName: string;
-	LastName: string;
+	FirstName?: string;
+	LastName?: string;
 	Site?: string;
 	Team?: string;
-	Roles: Array<Role>;
+	ApplicationLogon?: string;
+	WindowsLogon?: string;
+	Roles?: Array<Role>;
 }

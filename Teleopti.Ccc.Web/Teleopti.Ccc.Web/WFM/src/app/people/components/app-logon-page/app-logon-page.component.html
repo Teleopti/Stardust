@@ -1,0 +1,36 @@
+<people-page-container>
+  <div class="con-row">
+    <div class="blue-box con-flex">
+      <h2>Application logon</h2>
+    </div>
+  </div>
+  <div class="con-row">
+    <div class="con-flex">
+      <mat-table [dataSource]="dataSource" data-test-applogon>
+        <ng-container matColumnDef="Name">
+          <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+          <mat-cell *matCellDef="let person" data-test-person-name> {{getName(person)}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="ApplicationLogon">
+          <mat-header-cell *matHeaderCellDef> Application Logon </mat-header-cell>
+          <mat-cell *matCellDef="let person" data-test-person-logon>
+            <people-form-field-input [value]="person.ApplicationLogon" (onValueChange)="person.ApplicationLogon=$event"></people-form-field-input>
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;" data-test-person>
+        </mat-row>
+      </mat-table>
+    </div>
+  </div>
+  <div class="con-row">
+    <div class="con-flex">
+      <aside class="action-buttons">
+        <button mat-button (click)="nav.navToSearch()">Cancel</button>
+        <button mat-button color="primary" [disabled]="!isValid()" data-test-save>Save</button>
+      </aside>
+    </div>
+  </div>
+</people-page-container>

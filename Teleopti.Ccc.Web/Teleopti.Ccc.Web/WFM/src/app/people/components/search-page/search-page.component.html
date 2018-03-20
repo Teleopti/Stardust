@@ -13,6 +13,9 @@
           <i class="mdi mdi-plus"></i> Grant role</button>
         <button mat-raised-button color="primary" data-test-revoke-button [disabled]="!workspaceService.isAnySelected()" (click)="nav.navToRevoke()">
           <i class="mdi mdi-close"></i>Revoke role</button>
+        <button mat-raised-button color="primary" data-test-applicationlogon-button [disabled]="!workspaceService.isAnySelected()"
+          (click)="nav.navToApplicationLogon()">
+          <i class="mdi mdi-close"></i>Application logon</button>
       </div>
     </div>
   </div>

@@ -17,4 +17,8 @@ export class NavigationService {
 	public navToRevoke() {
 		this.go('#/people/roles/revoke');
 	}
+
+	public navToApplicationLogon() {
+		this.go('#/people/access/applicationlogon');
+	}
 }

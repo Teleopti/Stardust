@@ -22,6 +22,13 @@
 					content: { template: '<ng2-people-revoke-page></ng2-people-revoke-page>' }
 				}
 			})
+			.state('people.applogon', {
+				url: '/access/applicationlogon',
+				views: {
+					header: { template: '<ng2-people-title-bar></ng2-people-title-bar>' },
+					content: { template: '<ng2-people-app-logon-page></ng2-people-app-logon-page>' }
+				}
+			})
 			.state('people.index', {
 				url: '/search',
 				views: {

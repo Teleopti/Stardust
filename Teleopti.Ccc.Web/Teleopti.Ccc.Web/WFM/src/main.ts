@@ -8,7 +8,7 @@ import { environment } from './environments/environment';
 import { IRootScopeService, IControllerConstructor } from 'angular';
 
 import { MainController } from './main.controller';
-import { SearchPageComponent, GrantPageComponent, RevokePageComponent } from './app/people/components';
+import { SearchPageComponent, GrantPageComponent, RevokePageComponent, AppLogonPageComponent } from './app/people/components';
 import { TitleBarComponent } from './app/people/components/title-bar/title-bar.component';
 
 export interface IWfmRootScopeService extends IRootScopeService {
@@ -86,6 +86,9 @@ wfm.directive('ng2PeopleSearchPage', downgradeComponent({
 wfm.directive('ng2PeopleGrantPage', downgradeComponent({ component: GrantPageComponent }) as angular.IDirectiveFactory);
 wfm.directive('ng2PeopleRevokePage', downgradeComponent({
 	component: RevokePageComponent
+}) as angular.IDirectiveFactory);
+wfm.directive('ng2PeopleAppLogonPage', downgradeComponent({
+	component: AppLogonPageComponent
 }) as angular.IDirectiveFactory);
 
 wfm
