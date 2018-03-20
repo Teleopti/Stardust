@@ -51,14 +51,14 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest.Infrastructure
 				businessUnitId = WithUnitOfWork.Get(() => BusinessUnits.LoadAll().First()).Id.GetValueOrDefault();
 			AsSystem.Logon(logOnDatasource, businessUnitId);
 
-			var today = new DateOnly(2018, 3, 1);
-			var period = new DateOnlyPeriod(today, today.AddDays(30));
+			var startDate = new DateOnly(2018, 3, 1);
+			var period = new DateOnlyPeriod(startDate, startDate.AddDays(60));
 
 			IScheduleDictionary schedules = null;
 			WithUnitOfWork.Do(() =>
 			{
 				var scenario = Scenarios.LoadDefaultScenario();
-				var persons = Persons.LoadAll().Where(p => p.Period(today) != null).ToArray();
+				var persons = Persons.LoadAll().Where(p => p.Period(startDate) != null).ToArray();
 
 				schedules = Schedules.FindSchedulesForPersons(scenario, persons,
 					new ScheduleDictionaryLoadOptions(false, false),
