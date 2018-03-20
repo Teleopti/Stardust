@@ -1461,6 +1461,8 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="WFM\app\gamification\gamification.component.badgeCalculation.js" />
+    <Content Include="WFM\app\gamification\gamification.component.badgeCalculation.spec.js" />
     <Content Include="WFM\app\gamification\gamification.component.gamification.js" />
     <Content Include="WFM\app\gamification\gamification.component.gamificationImport.js" />
     <Content Include="WFM\app\gamification\gamification.component.gamificationImport.spec.js" />
@@ -1473,19 +1475,27 @@
     <Content Include="WFM\app\gamification\gamification.component.importJob.js" />
     <Content Include="WFM\app\gamification\gamification.component.measureConfigForm1.js" />
     <Content Include="WFM\app\gamification\gamification.component.measureConfigForm2.js" />
+    <Content Include="WFM\app\gamification\gamification.component.measureConfigForm2.spec.js" />
     <Content Include="WFM\app\gamification\gamification.component.measureConfigHeader.js" />
     <Content Include="WFM\app\gamification\gamification.controller.js" />
     <Content Include="WFM\app\gamification\gamification.directive.thresholdValidator.js" />
     <Content Include="WFM\app\gamification\gamification.routes.js" />
     <Content Include="WFM\app\gamification\gamification.service.gamificationDataService.js" />
+    <Content Include="WFM\app\gamification\html\g.component.badgeCalculation.tpl.html" />
     <Content Include="WFM\app\gamification\html\g.component.gamification.tpl.html" />
+    <Content Include="WFM\app\gamification\html\g.component.gamificationImport.tpl.html" />
     <Content Include="WFM\app\gamification\html\g.component.gamificationSettingInfo.tpl.html" />
     <Content Include="WFM\app\gamification\html\g.component.gamificationSettings.tpl.html" />
     <Content Include="WFM\app\gamification\html\g.component.gamificationTargetRow.tpl.html" />
     <Content Include="WFM\app\gamification\html\g.component.gamificationTargets.tpl.html" />
     <Content Include="WFM\app\gamification\html\g.component.gamificationTargetsTable.tpl.html" />
+    <Content Include="WFM\app\gamification\html\g.component.importJob.tpl.html" />
     <Content Include="WFM\app\gamification\html\gamification.html" />
     <Content Include="WFM\app\gamification\gamificationSetting.service.js" />
+    <Content Include="WFM\app\gamification\html\gSettingForm.tpl.html" />
+    <Content Include="WFM\app\gamification\html\measureConfigForm1.tpl.html" />
+    <Content Include="WFM\app\gamification\html\measureConfigForm2.tpl.html" />
+    <Content Include="WFM\app\gamification\html\measureConfigHeader.tpl.html" />
     <Content Include="WFM\app\gamification\_modules.js" />
     <Content Include="WFM\app\global\calendar-picker\calendar-picker.basic.spec.js" />
     <Content Include="WFM\app\global\calendar-picker\calendar-picker.custom.spec.js" />
