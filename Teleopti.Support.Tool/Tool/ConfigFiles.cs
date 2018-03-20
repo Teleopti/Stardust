@@ -3,11 +3,11 @@ using System.IO;
 
 namespace Teleopti.Support.Tool.Tool
 {
-	public class ModeFile
+	public class ConfigFiles
 	{
 		private readonly string _file;
 
-		public ModeFile(string file)
+		public ConfigFiles(string file)
 		{
 			_file = file;
 		}

@@ -6,12 +6,7 @@ using System.Xml.Linq;
 
 namespace Teleopti.Support.Library.Config
 {
-    public interface IMachineKeyChecker
-    {
-        bool CheckForMachineKey(string filePath);
-    }
-
-    public class MachineKeyChecker : IMachineKeyChecker
+    public class MachineKeyChecker
     {
         public bool CheckForMachineKey(string filePath)
         {

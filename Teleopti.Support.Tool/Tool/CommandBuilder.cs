@@ -13,14 +13,14 @@ namespace Teleopti.Support.Tool.Tool
 		public static ISupportCommand ParseCommandLine(IEnumerable<string> args)
 		{
 			ISupportCommand command = null;
-			ModeFile mode = null;
+			ConfigFiles configFiles = null;
 
 			var configFilePathReader = new ConfigFilePathReader();
 			var customSection = new CustomSection();
-			var restoreCommand = new ConfigurationRestoreCommand(customSection, configFilePathReader, () => mode);
-			var backupCommand = new ConfigurationBackupCommand(customSection, configFilePathReader, () => mode);
+			var restoreCommand = new ConfigurationRestoreCommand(customSection, configFilePathReader, () => configFiles);
+			var backupCommand = new ConfigurationBackupCommand(customSection, configFilePathReader, () => configFiles);
 			var refreshConfigFile = new RefreshConfigFile();
-			var refreshConfigsRunner = new RefreshConfigsRunner(refreshConfigFile, () => mode);
+			var refreshConfigsRunner = new RefreshConfigsRunner(refreshConfigFile, () => configFiles);
 
 			var modeDefaultCommand = new CompositeCommand(
 				refreshConfigsRunner,
@@ -44,37 +44,37 @@ namespace Teleopti.Support.Tool.Tool
 
 					if (argument.Equals("-MODEBUG"))
 					{
-						mode = new ModeFile("ConfigFiles.txt");
+						configFiles = new ConfigFiles("ConfigFiles.txt");
 						command = modeDefaultCommand;
 					}
 
 					if (argument.Equals("-MODEPLOYWEB"))
 					{
-						mode = new ModeFile("DeployConfigFilesWeb.txt");
+						configFiles = new ConfigFiles("DeployConfigFilesWeb.txt");
 						command = modeDeployCommand;
 					}
 
 					if (argument.Equals("-MODEPLOYWORKER"))
 					{
-						mode = new ModeFile("DeployConfigFilesWorker.txt");
+						configFiles = new ConfigFiles("DeployConfigFilesWorker.txt");
 						command = modeDeployCommand;
 					}
 
 					if (argument.Equals("-MOAZURE"))
 					{
-						mode = new ModeFile("AzureConfigFiles.txt");
+						configFiles = new ConfigFiles("AzureConfigFiles.txt");
 						command = modeDefaultCommand;
 					}
 
 					if (argument.Equals("-MOTEST"))
 					{
-						mode = new ModeFile("BuildServerConfigFiles.txt");
+						configFiles = new ConfigFiles("BuildServerConfigFiles.txt");
 						command = modeDefaultCommand;
 					}
 
 					if (argument.Equals("-BC"))
 					{
-						mode = new ModeFile("DeployConfigFilesWeb.txt");
+						configFiles = new ConfigFiles("DeployConfigFilesWeb.txt");
 						command = backupCommand;
 					}
 

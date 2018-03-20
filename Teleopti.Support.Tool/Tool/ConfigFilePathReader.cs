@@ -5,7 +5,7 @@ namespace Teleopti.Support.Tool.Tool
 {
 	public class ConfigFilePathReader
 	{
-		public ConfigFilePath Read(ModeFile mode)
+		public ConfigFilePath Read(ConfigFiles mode)
 		{
 			var result = new ConfigFilePath();
 			var file = mode.FileContents();

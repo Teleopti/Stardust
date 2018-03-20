@@ -7,18 +7,18 @@ namespace Teleopti.Support.Tool.Tool
 	{
 		private readonly CustomSection _customSection;
 		private readonly ConfigFilePathReader _configFilePathReader;
-		private readonly Func<ModeFile> _mode;
+		private readonly Func<ConfigFiles> _configFiles;
 
-		public ConfigurationBackupCommand(CustomSection customSection, ConfigFilePathReader configFilePathReader, Func<ModeFile> mode)
+		public ConfigurationBackupCommand(CustomSection customSection, ConfigFilePathReader configFilePathReader, Func<ConfigFiles> configFiles)
 		{
 			_customSection = customSection;
 			_configFilePathReader = configFilePathReader;
-			_mode = mode;
+			_configFiles = configFiles;
 		}
 
 		public void Execute()
 		{
-			var ssoFilePath = _configFilePathReader.Read(_mode());
+			var ssoFilePath = _configFilePathReader.Read(_configFiles());
 			if (!ssoFilePath.IsValid())
 			{
 				return;

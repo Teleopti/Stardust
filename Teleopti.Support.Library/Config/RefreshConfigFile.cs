@@ -3,15 +3,10 @@ using System.IO;
 
 namespace Teleopti.Support.Library.Config
 {
-	public interface IRefreshConfigFile
-	{
-		void ReplaceFile(string destinationAndSource, SearchReplaceCollection searchReplaceCollection);
-	}
-
-	public class RefreshConfigFile : IRefreshConfigFile
+	public class RefreshConfigFile
 	{
 		private readonly FileConfigurator _fileConfigurator;
-		private readonly IMachineKeyChecker _machineKeyChecker;
+		private readonly MachineKeyChecker _machineKeyChecker;
 
 		public RefreshConfigFile()
 		{
@@ -46,5 +41,4 @@ namespace Teleopti.Support.Library.Config
 			return fullPath.Substring(0, pos);
 		}
 	}
-
 }

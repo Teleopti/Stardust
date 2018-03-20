@@ -10,13 +10,13 @@ namespace Teleopti.Support.Tool.Tool
 	public class RefreshConfigsRunner : ISupportCommand
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(RefreshConfigsRunner));
-        private readonly IRefreshConfigFile _refreshConfigFile;
-		private readonly Func<ModeFile> _mode;
+        private readonly RefreshConfigFile _refreshConfigFile;
+		private readonly Func<ConfigFiles> _configFiles;
 
-		public RefreshConfigsRunner(IRefreshConfigFile refreshConfigFile, Func<ModeFile> mode)
+		public RefreshConfigsRunner(RefreshConfigFile refreshConfigFile, Func<ConfigFiles> configFiles)
 		{
 			_refreshConfigFile = refreshConfigFile;
-			_mode = mode;
+			_configFiles = configFiles;
 		}
 
         public void Execute()
@@ -25,7 +25,7 @@ namespace Teleopti.Support.Tool.Tool
             
             try
             {
-				var file = _mode().FileContents();
+				var file = _configFiles().FileContents();
 	            Array.ForEach(file, f => _refreshConfigFile.ReplaceFile(f, searchReplaces));
             }
             catch (Exception e)
