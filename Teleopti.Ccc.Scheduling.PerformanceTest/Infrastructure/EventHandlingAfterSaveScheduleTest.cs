@@ -4,7 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Logon;
@@ -13,6 +12,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Hangfire;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 using Teleopti.Interfaces.Domain;
@@ -49,41 +49,32 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest.Infrastructure
 				businessUnitId = WithUnitOfWork.Get(() => BusinessUnits.LoadAll().First()).Id.GetValueOrDefault();
 			AsSystem.Logon(logOnDatasource, businessUnitId);
 
-			var today = new DateTime(2018, 3, 1);
-			var dates = Enumerable.Range(0, 30)
-				.Select(i => new DateOnly(today.AddDays(i)))
-				.ToArray();
+			var today = new DateOnly(2018, 3, 1);
+			var period = new DateOnlyPeriod(today, today.AddDays(30));
 
 			IScheduleDictionary schedules = null;
 			WithUnitOfWork.Do(() =>
 			{
 				var scenario = Scenarios.LoadDefaultScenario();
-				var persons = Persons.LoadAll()
-					.Where(p => p.Period(new DateOnly(today)) != null)
-					.ToList();
+				var persons = Persons.LoadAll().Where(p => p.Period(today) != null).ToArray();
 
-				schedules = Schedules.FindSchedulesForPersons(scenario,
-					persons,
+				schedules = Schedules.FindSchedulesForPersons(scenario, persons,
 					new ScheduleDictionaryLoadOptions(false, false),
-					new DateTimePeriod(dates.Min().Utc(), dates.Max().AddDays(1).Utc()), persons, false);
-				schedules.TakeSnapshot();
+					period.ToDateTimePeriod(TimeZoneInfo.Utc), persons, false);
 				var phone = Activities.LoadAll().Single(x => x.Name == "Phone");
 
-				TestLog.Debug($"Creating data for {persons.Count} people for {dates.Length} dates.");
+				TestLog.Debug($"Creating data for {persons.Length} people for {period.DayCount()} dates.");
 
-				persons.ForEach(person =>
+				foreach (var person in persons)
 				{
-					dates.ForEach(date =>
+					foreach (var date in period.DayCollection())
 					{
-						var assignment = new PersonAssignment(person, scenario, date);
-						var startTime = DateTime.SpecifyKind(date.Date.AddHours(8), DateTimeKind.Utc);
-						var endTime = DateTime.SpecifyKind(date.Date.AddHours(17), DateTimeKind.Utc);
-						assignment.AddActivity(phone, startTime, endTime);
+						var assignment = new PersonAssignment(person, scenario, date).WithLayer(phone, new TimePeriod(8, 17));
 						var scheduledDay = schedules[person].ScheduledDay(date);
 						scheduledDay.Add(assignment);
 						schedules.Modify(scheduledDay, new DoNothingScheduleDayChangeCallBack());
-					});
-				});
+					}
+				}
 			});
 
 			Hangfire.CleanQueue();
