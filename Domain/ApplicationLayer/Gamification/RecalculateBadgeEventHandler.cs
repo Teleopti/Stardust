@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Gamification
 			_feedback = feedback;
 		}
 
-		[AsSystem, UnitOfWork]
+		[AsSystem]
 		public virtual void Handle(RecalculateBadgeEvent @event)
 		{
 			try
@@ -38,11 +38,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Gamification
 			catch (Exception e)
 			{
 				Logger.Error(e);
-				saveJobResultDetail(@event.JobResultId, DetailLevel.Error, e.Message, e);
+				SaveErrorJobResultDetail(@event.JobResultId, e);
+				throw;
 			}
 		}
 
-		protected void HandleJob(RecalculateBadgeEvent @event)
+		[UnitOfWork]
+		protected virtual void SaveErrorJobResultDetail(Guid jobResultId, Exception e)
+		{
+			saveJobResultDetail(jobResultId, DetailLevel.Error, e.Message, e);
+		}
+
+		[UnitOfWork]
+		protected virtual void HandleJob(RecalculateBadgeEvent @event)
 		{
 			var period = new DateOnlyPeriod(new DateOnly(@event.StartDate), new DateOnly(@event.EndDate));
 			_calculateBadges.RemoveAgentBadges(period);
