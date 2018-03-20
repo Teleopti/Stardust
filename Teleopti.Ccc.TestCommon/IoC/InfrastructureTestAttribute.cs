@@ -48,8 +48,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		public IEventPublisher Publisher;
 		public HangfireClientStarter HangfireClientStarter;
 		private IDisposable _transactionHookScope;
-		private List<Type> _scopeExtenders = new List<Type>();
-
+		
 		protected override FakeConfigReader Config()
 		{
 			var config = base.Config();
@@ -92,9 +91,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<FakeStardustJobFeedback>().For<IStardustJobFeedback>();
 			
 			// extend scope by including handlers
-			var scopeExtenders = QueryAllAttributes<ExtendScopeAttribute>();
-			_scopeExtenders.AddRange(scopeExtenders.Select(x => x.Handler));
-			if (scopeExtenders.Any())
+			if (QueryAllAttributes<ExtendScopeAttribute>().Any())
 				system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
 
 			system.AddService<Database>();
@@ -114,7 +111,8 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				HangfireClientStarter.Start();
 			
 			// extend scope by including handlers
-			_scopeExtenders.ForEach(x => (Publisher as FakeEventPublisher).AddHandler(x));
+			var scopeExtenders = QueryAllAttributes<ExtendScopeAttribute>().Select(x => x.Handler);
+			scopeExtenders.ForEach(x => (Publisher as FakeEventPublisher).AddHandler(x));
 
 			DataSourceForTenant.MakeSureDataSourceCreated(
 				DataSourceHelper.TestTenantName,
