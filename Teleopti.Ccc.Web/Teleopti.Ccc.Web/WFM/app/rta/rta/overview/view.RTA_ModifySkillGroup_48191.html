@@ -32,7 +32,7 @@
 		<div class="panel material-depth-1 rta-filter-panel">
 			<div class="con-row">
 				<div class="con-flex">
-					<skill-picker skills="vm.skills" skill-areas="vm.skillAreas" item-to-return="vm.selectSkillOrSkillArea" preselected-item="vm.skillPickerPreselectedItem"></skill-picker>
+					<skill-picker skills="vm.skills" skill-areas="vm.skillAreas(selectedItem)" item-to-return="vm.selectSkillOrSkillArea" preselected-item="vm.skillPickerPreselectedItem"></skill-picker>
 				</div>
 				<div class="pull-right">
 					<a ui-sref="rta-skill-area-manager" >

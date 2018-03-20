@@ -1,7 +1,7 @@
 ﻿<div class="staffing-panel">
 	<div class="con-row">
 		<div class="con-flex">
-			<skill-picker skills="vm.skills" skill-areas="vm.skillGroups" item-to-return="vm.setSkill" preselected-item="vm.preselectedSkills"></skill-picker>
+			<skill-picker skills="vm.skills" skill-areas="vm.skillGroups" item-to-return="vm.setSkill(selectedItem)" preselected-item="vm.preselectedSkills"></skill-picker>
 		</div>
 		<div class="con-flex">
 			<md-checkbox ng-checked="vm.useShrinkage" ng-click="vm.useShrinkageForStaffing()">
