@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 		[HttpDelete]
 		[TenantUnitOfWork]
 		[Route("api/token/{id}")]
-		public virtual void Remove(int id)
+		public virtual void Remove([FromUri]int id)
 		{
 			_persistExternalApplicationAccess.Remove(id,_currentTenantUser.CurrentUser().Id);
 		}
