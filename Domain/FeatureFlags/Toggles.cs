@@ -25,7 +25,7 @@
 		RTA_ModifySkillGroup_48191,
 		RTA_RemoveApprovedOOA_47721,
 		RTA_StoreEvents_47721,
-		RTA_NoRightPanel_48586,
+		RTA_ImprovedStateGroupFilter_48724,
 		
 		MyTimeWeb_SortRequestList_40711,
 		MyTimeWeb_ViewIntradayStaffingProbability_41608,

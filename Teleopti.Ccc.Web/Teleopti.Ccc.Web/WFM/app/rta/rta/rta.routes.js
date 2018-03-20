@@ -47,15 +47,15 @@ angular.module('wfm.rta').config(function ($stateProvider, ToggleProvider) {
 				es: {array: true}
 			},
 			templateUrl: function () {
-				if (toggles.RTA_NoRightPanel_48586)
-					return 'app/rta/rta/agents/rta-agents.RTA_NoRightPanel_48586.html';
+				if (toggles.RTA_ImprovedStateGroupFilter_48724)
+					return 'app/rta/rta/agents/rta-agents.RTA_ImprovedStateGroupFilter_48724.html';
 				if (toggles.RTA_ModifySkillGroup_48191)
 					return 'app/rta/rta/agents/rta-agents.RTA_ModifySkillGroup_48191.html';
 				return 'app/rta/rta/agents/rta-agents.RTA_ViewHistoricalAhderenceForRecentShifts_46786.html';
 			},
 			controllerProvider: function () {
-				if (toggles.RTA_NoRightPanel_48586)
-					return 'RtaAgentsController48586 as vm';
+				if (toggles.RTA_ImprovedStateGroupFilter_48724)
+					return 'RtaAgentsController48724 as vm';
 				if (toggles.RTA_ConfigurationValidationNotification_46933)
 					return 'RtaAgentsController46933 as vm';
 				return 'RtaAgentsController46786 as vm';
