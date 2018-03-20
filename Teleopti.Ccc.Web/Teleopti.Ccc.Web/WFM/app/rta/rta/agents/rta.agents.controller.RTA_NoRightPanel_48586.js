@@ -13,7 +13,6 @@
 		'$sessionStorage',
 		'$translate',
 		'$http',
-		'$q',
 		'rtaService',
 		'rtaPollingService',
 		'rtaFormatService',
@@ -32,7 +31,6 @@
 								 $sessionStorage,
 								 $translate,
 								 $http,
-								 $q,
 								 rtaService,
 								 rtaPollingService,
 								 rtaFormatService,
@@ -160,18 +158,15 @@
 		}
 
 		function loadAgentStates() {
-			return rtaService.agentStatesFor({
-				siteIds: siteIds,
-				teamIds: teamIds,
-				skillIds: skillIds,
-				inAlarm: vm.showInAlarm,
-				excludedStateIds: excludedPhoneStateIds().map(function (s) {
-					return s === nullStateId ? null : s;
-				}),
-				textFilter: vm.filterText || undefined,
-				orderBy: vm.orderBy,
-				direction: vm.direction
+			var o = rtaStateService.pollParams2();
+			o.inAlarm = vm.showInAlarm;
+			o.excludedStateIds = excludedPhoneStateIds().map(function (s) {
+				return s === nullStateId ? null : s;
 			});
+			o.textFilter = vm.filterText || undefined;
+			o.orderBy = vm.orderBy;
+			o.direction = vm.direction;
+			return rtaService.agentStatesFor(o);
 		}
 
 		function updateAgentStates(states) {
@@ -304,7 +299,7 @@
 				vm.direction = vm.direction === 'asc' ? 'desc' : 'asc';
 			vm.orderBy = column;
 			poller.force();
-		}
+		};
 
 		////////no right panel stuff /////////////////
 
@@ -325,120 +320,59 @@
 					return s.Id === skillAreaId
 				});
 
-				// rtaStateService.organization().forEach(function (site) {
-				// 	var siteModel = {
-				// 		Id: site.Id, 
-				// 		Name: site.Name,
-				// 		FullPermission: site.FullPermission,
-				// 		Teams: [],
-				// 		get isChecked() {
-				// 			return rtaStateService.isSiteSelected(site.Id);
-				// 		},
-				// 		set isChecked(newValue) {
-				// 			rtaStateService.selectSite(site.Id, newValue);
-				// 		}
-				// 	};
-				// 	updateTeams(siteModel, site.Teams);
-				// 	siteModel.toggle = function () {
-				// 		console.log('toggle');
-				// 		siteModel.isChecked = !siteModel.isChecked;
-				// 		siteModel.isMarked = false;
-				// 		siteModel.Teams.forEach(function (team) {
-				// 			team.isChecked = siteModel.isChecked;
-				// 		});
-				// 	};
-				// 	vm.sites.push(siteModel);
-				//	
-				// });
-				//
-				// function updateTeams(siteModel, teams) {
-				// 	teams.forEach(function (team) {
-				// 		var team = {
-				// 			Id: team.Id, 
-				// 			Name: team.Name,
-				// 			get isChecked() {
-				// 				return rtaStateService.isTeamSelected(team.Id);
-				// 			},
-				// 			set isChecked(newValue) {
-				// 				rtaStateService.selectTeam(team.Id, newValue);
-				// 			}
-				// 		};
-				//		
-				// 		siteModel.Teams.push(team);
-				// 	})
-				// }
-
-				//toggle, marked, stuff, cats
-
-				vm.sites = rtaStateService.organization();
-
-				vm.sites.forEach(function (site) {
-					var isSiteInParams = siteIds.indexOf(site.Id) > -1;
-					site.isChecked = isSiteInParams || false;
-					site.toggle = function () {
-						site.isChecked = !site.isChecked;
-						site.isMarked = false;
-						site.Teams.forEach(function (team) {
-							team.isChecked = site.isChecked;
-						})
-						vm.siteMarkedOrChecked = vm.sites.some(function (site) {
-							return site.isChecked || site.isMarked;
-						});
-					}
-					site.Teams.forEach(function (team) {
-						var isTeamInParams = teamIds.indexOf(team.Id) > -1;
-						team.isChecked = isTeamInParams || site.isChecked || false;
-						site.isMarked = site.Teams.some(function (t) {
-							return t.isChecked;
-						});
-						team.toggle = function () {
-							team.isChecked = !team.isChecked;
-							site.isChecked = site.Teams.every(function (t) {
-								return t.isChecked;
-							});
-							site.isMarked = site.Teams.some(function (t) {
-								return t.isChecked;
-							});
-							vm.siteMarkedOrChecked = vm.sites.some(function (site) {
-								return site.isChecked || site.isMarked;
-							});
+				var organization = rtaStateService.organization();
+				organization.forEach(function (site) {
+					var siteModel = {
+						Id: site.Id,
+						Name: site.Name,
+						FullPermission: site.FullPermission,
+						Teams: [],
+						get isChecked() {
+							return rtaStateService.isSiteSelected(site.Id);
+						},
+						set isChecked(newValue) {
+							rtaStateService.selectSite2(site.Id, newValue);
+						},
+						get isMarked() {
+							return rtaStateService.isSiteMarked(site.Id);
+						},
+						toggle: function () {
+							rtaStateService.selectSite2(site.Id, !rtaStateService.isSiteSelected(site.Id));
+							updateSelectFieldText();
 						}
-					})
+					};
+					updateTeams(siteModel, site.Teams);
+					vm.sites.push(siteModel);
 				});
-				vm.siteMarkedOrChecked = vm.sites.some(function (site) {
-					return site.isChecked || site.isMarked;
-				});
-				updateSelectFieldText();
-				
-				function getOrganizationCall() {
-					var skillIds2 = angular.isArray($stateParams.skillIds) ? $stateParams.skillIds[0] || null : $stateParams.skillIds;
-					var theSkillIds = skillIds2 != null ? [skillIds2] : null;
-					var skillIdsForOrganization = skillAreaId != null ? getSkillIdsFromSkillArea(skillAreaId) : theSkillIds;
-					return skillIdsForOrganization != null ? rtaService.getOrganizationForSkills({skillIds: skillIdsForOrganization}) : rtaService.getOrganization();
-				}
 
-				function getSkillIdsFromSkillArea(skillAreaId) {
-					var theSkillArea = vm.skillAreas.find(function (skillArea) {
-						return skillArea.Id === skillAreaId;
-					});
-					if (theSkillArea && theSkillArea.Skills != null) {
-						return theSkillArea.Skills.map(function (skill) {
-							return skill.Id;
+				function updateTeams(siteModel, teams) {
+					teams.forEach(function (team) {
+						siteModel.Teams.push({
+							Id: team.Id,
+							Name: team.Name,
+							get isChecked() {
+								return rtaStateService.isTeamSelected(team.Id);
+							},
+							set isChecked(newValue) {
+								rtaStateService.selectTeam2(team.Id, newValue);
+							},
+							toggle: function () {
+								rtaStateService.selectTeam2(team.Id, !rtaStateService.isTeamSelected(team.Id));
+								updateSelectFieldText();
+							}
 						});
-					}
-					return null;
+					})
 				}
 
+				updateSelectFieldText();
 			});
 
 		// scoped variables
-		vm.teamsSelected = [];
 		vm.selectFieldText;
 		vm.searchTerm = "";
 		//scoped functions
 		vm.querySearch = querySearch;
 		vm.expandSite = expandSite;
-		vm.goToAgents = goToAgents;
 		vm.clearOrgSelection = clearOrgSelection;
 		vm.clearSearchTerm = clearSearchTerm;
 		vm.clearSelection = clearSelection;
@@ -449,13 +383,6 @@
 		vm.skillAreasLoaded = false;
 		vm.selectedSkillChange = selectedSkillChange;
 		vm.selectedSkillAreaChange = selectedSkillAreaChange;
-
-		function updateSelectFieldText() {
-			var selectedFieldText = rtaNamesFormatService.getSelectedFieldText(vm.sites, siteIds, teamIds);
-			if (selectedFieldText.length > 0) {
-				vm.selectFieldText = selectedFieldText;
-			}
-		}
 
 		/*********AUTOCOMPLETE*****/
 		function querySearch(query, myArray) {
@@ -487,71 +414,27 @@
 			rtaStateService.deselectSkillAndSkillArea();
 		}
 
+		function clearOrgSelection() {
+			rtaStateService.deselectOrganization();
+			updateSelectFieldText();
+		};
+		
 		/***********MULTI-SELECT************/
 		function expandSite(site) {
 			site.isExpanded = !site.isExpanded;
 		};
 
-		function shrinkSites() {
-			vm.sites.forEach(function (site) {
-				site.isExpanded = false;
+		function updateSelectFieldText() {
+			var selectedSites = rtaStateService.selectedSiteIds();
+			var selectedTeams = rtaStateService.selectedTeamIds();
+			var selectedFieldText = rtaNamesFormatService.getSelectedFieldText(vm.sites, selectedSites, selectedTeams);
+			if (selectedFieldText != null)
+				vm.selectFieldText = selectedFieldText;
+			vm.siteMarkedOrChecked = vm.sites.some(function (site) {
+				return site.isChecked || site.isMarked;
 			});
 		}
-
-		function goToAgents() {
-			if (!vm.openPicker) return;
-			shrinkSites();
-			var selection = vm.sites.reduce(function (acc, site) {
-				if (site.isChecked && site.FullPermission) {
-					acc.siteIds.push(site.Id);
-				}
-				else if (site.isChecked) {
-					site.Teams.forEach(function (team) {
-						acc.teamIds.push(team.Id);
-					})
-				}
-				else if (site.isMarked) {
-					acc.teamIds = acc.teamIds.concat(
-						site.Teams
-							.filter(function (team) {
-								return team.isChecked;
-							})
-							.map(function (team) {
-								return team.Id;
-							})
-					);
-				}
-				return acc;
-			}, {
-				siteIds: [],
-				teamIds: []
-			})
-
-			if ($stateParams.skillIds)
-				selection['skillIds'] = $stateParams.skillIds;
-			else if ($stateParams.skillAreaId)
-				selection['skillAreaId'] = $stateParams.skillAreaId;
-			if (angular.toJson(selection.siteIds) === angular.toJson(siteIds) && angular.toJson(selection.teamIds) === angular.toJson(teamIds)) {
-				vm.openPicker = false;
-				return;
-			}
-
-			rtaStateService.setCurrentState(selection);
-			rtaStateService.goToAgents();
-		}
-
-		function clearOrgSelection() {
-			vm.siteMarkedOrChecked = 0;
-			vm.sites.forEach(function (site) {
-					site.isChecked = false;
-					site.isMarked = false;
-					site.Teams.forEach(function (team) {
-						team.isChecked = false;
-					});
-				}
-			);
-		};
-
+		
 		function clearSearchTerm() {
 			vm.searchTerm = '';
 		}

@@ -41,17 +41,28 @@
 		};
 
 		return {
+
+
 			skills: function () {
 				return skills;
 			},
-			
+
 			skillAreas: function () {
 				return skillAreas;
 			},
-			
+
 			organization: function () {
 				return organization;
 			},
+
+			selectedTeamIds: function () {
+				return state.teamIds;
+			},
+
+			selectedSiteIds: function () {
+				return state.siteIds;
+			},
+
 
 			gotoLastState: function () {
 				if ($sessionStorage.rtaState) {
@@ -128,6 +139,38 @@
 				$state.go($state.current.name, buildState());
 			},
 
+			selectSite2: function (id, selected) {
+				if (selected)
+					state.siteIds.push(id);
+				else
+					state.siteIds = state.siteIds.filter(function (s) {
+						return s != id
+					});
+				$state.go($state.current.name, buildState(), {notify: false});
+			},
+
+			selectTeam2: function (id, selected) {
+				if (selected)
+					state.teamIds.push(id);
+				else {
+					state.teamIds = state.teamIds.filter(function (s) {
+						return s != id
+					});
+					selectOtherTeamsIfSiteIsSelected(id);
+				}
+				$state.go($state.current.name, buildState(), {notify: false});
+			},
+
+			isSiteMarked: function (siteId) {
+				return organization.find(function (site) {
+					return site.Id == siteId;
+				}).Teams.some(function (team) {
+					return state.teamIds.some(function (teamId) {
+						return teamId == team.Id;
+					})
+				})
+			},
+
 			isSiteOpen: function (id) {
 				return state.openedSiteIds.some(function (siteId) {
 					return siteId == id
@@ -143,18 +186,16 @@
 					});
 			},
 
-			pollParams: function () {
-				var skillIds = state.skillIds;
-				if (state.skillAreaId)
-					skillIds = skillAreas
-						.find(function (skillArea) {
-							return skillArea.Id === state.skillAreaId;
-						})
-						.Skills.map(function (skill) {
-							return skill.Id;
-						});
+			deselectOrganization: function () {
+				$state.go($state.current.name, buildState({siteIds: [], teamIds: []}), {notify: false});
+			},
 
-				return {skillIds: skillIds, siteIds: state.openedSiteIds}
+			pollParams: function () {
+				return {skillIds: selectedSkillIds(), siteIds: state.openedSiteIds}
+			},
+
+			pollParams2: function () {
+				return {skillIds: selectedSkillIds(), siteIds: state.siteIds, teamIds: state.teamIds}
 			},
 
 			goToAgents: function () {
@@ -164,6 +205,20 @@
 			hasSelection: function () {
 				return state.siteIds.length > 0 || state.teamIds.length > 0 || state.skillIds.length > 0 || state.skillAreaId;
 			}
+		}
+
+		function selectedSkillIds() {
+			if (!state.skillAreaId)
+				return state.skillIds;
+			var skillArea = skillAreas
+				.find(function (skillArea) {
+					return skillArea.Id === state.skillAreaId;
+				});
+			if (!skillArea)
+				return [];
+			return skillArea.Skills.map(function (skill) {
+				return skill.Id;
+			});
 		}
 
 		function isSiteSelected(id) {

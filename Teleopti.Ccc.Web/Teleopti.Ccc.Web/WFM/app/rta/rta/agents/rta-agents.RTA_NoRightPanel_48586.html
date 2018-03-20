@@ -26,7 +26,7 @@
 	<div class="panel material-depth-1 rta-filter-panel">
 	<div class="con-row rta-filters-container">
 	<span class="con-flex rta-multiple-selection-panel">
-				<div class="relative" outside-click="vm.goToAgents()">
+				<div class="relative" outside-click="vm.openPicker = false">
 							<input type="text" placeholder="{{'DataFilterThreeDots'|translate}}"
 								   ng-style="vm.openPicker && {'visibility': 'hidden'}"
 								   ng-class="vm.defaultInputText ? 'rta-light-text' : ''"
@@ -50,7 +50,7 @@
 											type="clear"
 											ng-click="vm.clearOrgSelection()">{{'ClearAll'|translate}}</button>
 									<button class="wfm-btn wfm-btn-invis-primary" ng-class="wfm-btn-invis-primary"
-											type="clear" ng-click="vm.goToAgents()">{{'Close'|translate}}</button>									
+											type="clear" ng-click="vm.openPicker = false">{{'Close'|translate}}</button>									
 								</div>
 		</div>
 		<div class="panel">
