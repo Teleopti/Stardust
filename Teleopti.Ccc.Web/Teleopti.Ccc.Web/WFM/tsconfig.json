@@ -10,6 +10,6 @@
 		"types": ["angular"],
 		"lib": ["es2017", "dom"]
 	},
-	"include": ["app", "src", "e2e"],
+	"include": ["./app/appwp.js"],
 	"exclude": ["node_modules", "dist"]
 }
