@@ -114,7 +114,8 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 				DefinedRaptorApplicationFunctionPaths.RemoveOvertime,
 				DefinedRaptorApplicationFunctionPaths.MoveOvertime,
 				DefinedRaptorApplicationFunctionPaths.RemoveShift,
-				DefinedRaptorApplicationFunctionPaths.AddDayOff
+				DefinedRaptorApplicationFunctionPaths.AddDayOff,
+				DefinedRaptorApplicationFunctionPaths.RemoveDayOff
 			};
 
 			webTeamsFunctionPaths.ForEach(appFunctionPaths.Add);

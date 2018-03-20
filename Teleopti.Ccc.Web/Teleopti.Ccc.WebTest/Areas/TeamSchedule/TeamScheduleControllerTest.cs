@@ -112,11 +112,19 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		}
 
 		[Test]
-		public void ShouldGetAddDayOfPermission()
+		public void ShouldGetAddDayOffPermission()
 		{
 			principalAuthorization.HasPermission(DefinedRaptorApplicationFunctionPaths.AddDayOff);
 			var result = target.GetPermissions();
 			result.Content.HasAddDayOffPermission.Should().Be.EqualTo(true);
+		}
+
+		[Test]
+		public void ShouldGetRemoveDayOffPermission()
+		{
+			principalAuthorization.HasPermission(DefinedRaptorApplicationFunctionPaths.RemoveDayOff);
+			var result = target.GetPermissions();
+			result.Content.HasRemoveDayOffPermission.Should().Be.EqualTo(true);
 		}
 
 		[Test]

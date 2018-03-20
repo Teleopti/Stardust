@@ -47,5 +47,14 @@ namespace Teleopti.Ccc.DomainTest.Security.LicenseOptions
 			var enabledFunctions = _target.EnabledApplicationFunctions;
 			enabledFunctions.Single(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.AddDayOff).Should().Not.Be.Null();
 		}
+
+		[Test]
+		public void ShouldIncludeRemoveDayOffInBaseCollection()
+		{
+			var inputList = new DefinedRaptorApplicationFunctionFactory().ApplicationFunctions;
+			_target.EnableApplicationFunctions(inputList);
+			var enabledFunctions = _target.EnabledApplicationFunctions;
+			enabledFunctions.Single(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.RemoveDayOff).Should().Not.Be.Null();
+		}
 	}
 }
