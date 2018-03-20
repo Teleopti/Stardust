@@ -21,41 +21,17 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 		public static string UrlWindowsIdentityProvider;
 
 		private static IISExpress _server;
-		private static Process _stardustProcess;
 		private static IDisposable _portsConfiguration;
 
 		private static readonly SettingsFileManager settingsFile = new SettingsFileManager();
 
-		public static void Setup(bool runStardust = false)
+		public static void Setup()
 		{
 			_portsConfiguration = RandomPortsAndUrls();
 			writeWebConfigs();
 			killProcess("killAllIISExpress", "iisexpress");
 			killProcess("killStardustConsoleHost", "Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost");
 			StartIISExpress();
-
-			if (runStardust)
-			{
-				writeStardustConfig();
-				startStardust();
-			}
-		}
-
-		private static void writeStardustConfig()
-		{
-			WriteConfig("ServiceBusHost.config", Paths.StardustConsoleHostFolderPath(), "Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost.exe.config");
-		}
-
-		private static void startStardust()
-		{
-			var starDustConsoleHostPath = $"{Paths.StardustConsoleHostFolderPath()}\\Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost.exe";
-
-			if (!File.Exists(starDustConsoleHostPath))
-				throw new ArgumentException("Stardust console host executable not found", starDustConsoleHostPath);
-			_stardustProcess = Process.Start(new ProcessStartInfo
-			{
-				FileName = starDustConsoleHostPath
-			});
 		}
 
 		private static IDisposable RandomPortsAndUrls()
@@ -135,7 +111,6 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 		{
 			try
 			{
-				_stardustProcess?.Dispose();
 				_server?.Dispose();
 			}
 			catch (NullReferenceException)
