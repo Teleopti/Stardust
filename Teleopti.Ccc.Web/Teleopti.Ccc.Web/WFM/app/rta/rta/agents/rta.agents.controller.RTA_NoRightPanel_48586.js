@@ -52,12 +52,9 @@
 
 		var lastUpdate, notice;
 
-		var siteIds = $stateParams.siteIds || [];
-		var teamIds = $stateParams.teamIds || [];
 		var skillIds = angular.isArray($stateParams.skillIds) ? $stateParams.skillIds[0] || null : $stateParams.skillIds;
 		var skillAreaId = $stateParams.skillAreaId || undefined;
 		$stateParams.es = $stateParams.es || [];
-		var skillIds3 = undefined;
 		vm.sites = [];
 
 		// because angular cant handle an array of null in stateparams
@@ -135,26 +132,9 @@
 		});
 
 		function pollAgentStates() {
-			if (skillAreaId) {
-				return rtaService.getSkillArea(skillAreaId)
-					.then(skillIdsForSkillArea)
-					.then(loadAgentStates)
-					.then(updateAgentStates)
-					.then(updatePhoneStates);
-			} else {
-				return loadAgentStates()
-					.then(updateAgentStates)
-					.then(updatePhoneStates);
-			}
-		}
-
-		function skillIdsForSkillArea(skillArea) {
-			if (skillArea.Skills) {
-				vm.skillArea = true;
-				skillIds = skillArea.Skills.map(function (skill) {
-					return skill.Id;
-				});
-			}
+			return loadAgentStates()
+				.then(updateAgentStates)
+				.then(updatePhoneStates);
 		}
 
 		function loadAgentStates() {
@@ -418,7 +398,7 @@
 			rtaStateService.deselectOrganization();
 			updateSelectFieldText();
 		};
-		
+
 		/***********MULTI-SELECT************/
 		function expandSite(site) {
 			site.isExpanded = !site.isExpanded;
@@ -434,7 +414,7 @@
 				return site.isChecked || site.isMarked;
 			});
 		}
-		
+
 		function clearSearchTerm() {
 			vm.searchTerm = '';
 		}
