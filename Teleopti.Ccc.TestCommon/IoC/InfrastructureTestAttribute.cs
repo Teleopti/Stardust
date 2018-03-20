@@ -82,13 +82,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 			// Hangfire bus maybe? ;)
 			if (QueryAllAttributes<RealHangfireAttribute>().IsEmpty())
-			{
-				system.UseTestDouble<FakeHangfireEventClient>().For<IHangfireEventClient>();				
-			}
-			else
-			{
-				HangfireClientStarter.Start();
-			}
+				system.UseTestDouble<FakeHangfireEventClient>().For<IHangfireEventClient>();
 
 			// message broker
 			system.UseTestDouble(new FakeSignalR()).For<ISignalR>();
@@ -116,6 +110,9 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		{
 			base.BeforeTest();
 
+			if (QueryAllAttributes<RealHangfireAttribute>().Any())
+				HangfireClientStarter.Start();
+			
 			// extend scope by including handlers
 			_scopeExtenders.ForEach(x => (Publisher as FakeEventPublisher).AddHandler(x));
 
