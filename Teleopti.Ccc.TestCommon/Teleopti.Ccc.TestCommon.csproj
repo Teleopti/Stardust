@@ -813,13 +813,15 @@
     <None Include="Teleopti.Ccc.TestCommon.dll.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Web\WebInteractions\iisexpress.config">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\packages\WebDriver.ChromeDriver.win32.2.34.0\content\chromedriver.exe">
+    <Content Include="..\packages\WebDriver.ChromeDriver.win32.2.37.0\content\chromedriver.exe">
       <Link>chromedriver.exe</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

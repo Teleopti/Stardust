@@ -123,7 +123,7 @@
     <PostBuildEvent>copy "$(SolutionDir)Teleopti.Ccc.TestCommon\Web\WebInteractions\iisexpress.config" "$(TargetDir)iisexpress.config" /y
 copy "$(SolutionDir)packages\Selenium.WebDriver.2.53.0\lib\net40\webdriver.dll" "$(TargetDir)webdriver.dll"
 copy "$(SolutionDir)packages\Selenium.Support.2.53.0\lib\net40\WebDriver.Support.dll" "$(TargetDir)webdriver.support.dll"
-copy "$(SolutionDir)packages\WebDriver.ChromeDriver.win32.2.34.0\content\chromedriver.exe" "$(TargetDir)chromedriver.exe"
+copy "$(SolutionDir)packages\WebDriver.ChromeDriver.win32.2.37.0\content\chromedriver.exe" "$(TargetDir)chromedriver.exe"
 copy "$(ProjectDir)SettingsForTest.config.template" "$(TargetDir)SettingsForTest.config"</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
