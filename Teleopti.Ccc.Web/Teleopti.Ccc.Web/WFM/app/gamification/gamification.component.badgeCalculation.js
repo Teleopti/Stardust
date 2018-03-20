@@ -17,8 +17,8 @@
             $ctrl.jobs = [];
             fetchJobs();
 
-			$ctrl.dateTimeFormat = locale.DATETIME_FORMATS.short;
-			$ctrl.dateFormat = locale.DATETIME_FORMATS.shortDate;
+            $ctrl.dateTimeFormat = locale.DATETIME_FORMATS.short;
+            $ctrl.dateFormat = locale.DATETIME_FORMATS.shortDate;
             var startDate = moment.utc().subtract(2, 'days').toDate();
             var endDate = moment.utc().toDate();
             $ctrl.dateRange = { startDate: startDate, endDate: endDate };
@@ -26,7 +26,7 @@
         };
 
         $ctrl.validate = function () {
-            if (moment($ctrl.dateRange.startDate).toDate() > moment($ctrl.endDate).toDate()) {
+            if (moment($ctrl.dateRange.startDate).toDate() > moment($ctrl.dateRange.endDate).toDate()) {
                 $ctrl.isValid = false;
                 return $translate.instant('StartDateMustBeEqualToOrEarlierThanEndDate');
             }
@@ -40,8 +40,8 @@
 
         $ctrl.calculate = function () {
             if ($ctrl.dateRange && $ctrl.dateRange.startDate && $ctrl.dateRange.endDate) {
-                var start = moment($ctrl.dateRange.startDate).toDate();
-                var end = moment($ctrl.dateRange.endDate).toDate();
+                var start = moment.tz(moment($ctrl.dateRange.startDate).format('YYYY-MM-DD'), 'UTC').toDate();
+                var end = moment.tz(moment($ctrl.dateRange.endDate).format('YYYY-MM-DD'), 'UTC').toDate();
                 dataService.startCalculation(start, end).then(function () {
                     fetchJobs();
                 });
@@ -96,7 +96,7 @@
                 if (runningJobs.length > 0) {
                     runningJobs.forEach(function (j) {
                         var jobStart = moment(j.startDate).toDate();
-                        var jobEnd = moment(j.endtDate).toDate();
+                        var jobEnd = moment(j.endDate).toDate();
                         var start = moment($ctrl.dateRange.startDate).toDate();
                         var end = moment($ctrl.dateRange.endDate).toDate();
 
