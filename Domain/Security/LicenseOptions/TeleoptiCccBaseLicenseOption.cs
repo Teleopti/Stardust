@@ -113,8 +113,8 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 				DefinedRaptorApplicationFunctionPaths.MoveInvalidOverlappedActivity,
 				DefinedRaptorApplicationFunctionPaths.RemoveOvertime,
 				DefinedRaptorApplicationFunctionPaths.MoveOvertime,
-				DefinedRaptorApplicationFunctionPaths.RemoveShift
-
+				DefinedRaptorApplicationFunctionPaths.RemoveShift,
+				DefinedRaptorApplicationFunctionPaths.AddDayOff
 			};
 
 			webTeamsFunctionPaths.ForEach(appFunctionPaths.Add);

@@ -31,7 +31,8 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 					DefinedRaptorApplicationFunctionPaths.MoveInvalidOverlappedActivity)
 				, ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.RemoveOvertime)
 				,ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.MoveOvertime)
-				,ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.RemoveShift));
+				,ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.RemoveShift)
+				, ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.AddDayOff));
 		}
 	}
 }

@@ -138,6 +138,7 @@
 		public const string RemoveOvertime = "Raptor/Anywhere/Schedules/RemoveOvertime";
 		public const string MoveOvertime = "Raptor/Anywhere/Schedules/MoveOvertime";
 		public const string WebModifySkillGroup = "Raptor/Anywhere/WebModifySkillGroup";
+		public const string AddDayOff = "Raptor/Anywhere/Schedules/AddDayOff";
 
 		// Angel
 		public const string WebForecasts = "Raptor/Anywhere/WebForecasts";

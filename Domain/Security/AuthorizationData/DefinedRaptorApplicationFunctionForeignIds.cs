@@ -151,6 +151,7 @@
 		public const string MoveOvertime = "0145";
 		public const string BpoExchange = "0147";
 		public const string RemoveShift = "0150";
+		public const string AddDayOff = "0151";
 
 		//Seat Planner
 		public const string SeatPlanner = "0107";
