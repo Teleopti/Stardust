@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest.Infrastructure
 
 		[Test]
 		[Category("EventHandlingAfterSaveSchedule")]
+		[RealHangfire]
 		public void MeasurePerformance()
 		{
 			PingWeb.Execute();
