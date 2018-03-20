@@ -67,7 +67,6 @@
     <Compile Include="Infrastructure\HangfireLogger.cs" />
     <Compile Include="Domain\IntradayOptTest.cs" />
     <Compile Include="NUnitSetup.cs" />
-    <Compile Include="Infrastructure\PerformanceInfrastructureTestAttribute.cs" />
     <Compile Include="WebAction.cs" />
   </ItemGroup>
   <ItemGroup>

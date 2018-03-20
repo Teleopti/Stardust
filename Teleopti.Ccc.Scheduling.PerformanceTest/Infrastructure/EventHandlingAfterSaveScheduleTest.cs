@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest.Infrastructure
 {
 	[Category("EventHandlingAfterSaveSchedule")]
 	[Setting("OptimizeScheduleChangedEvents_DontUseFromWeb", true)]
-	[PerformanceInfrastructureTest]
+	[InfrastructureTest]
 	public class EventHandlingAfterSaveScheduleTest
 	{
 		public IPersonRepository Persons;

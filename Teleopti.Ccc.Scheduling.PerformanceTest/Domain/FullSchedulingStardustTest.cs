@@ -5,13 +5,14 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Scheduling.PerformanceTest.Infrastructure;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.CoypuImpl;
 
 namespace Teleopti.Ccc.Scheduling.PerformanceTest.Domain
 {
-	[PerformanceInfrastructureTest]
+	[InfrastructureTest]
 	public class FullSchedulingStardustTest
 	{
 		public HangfireUtilities Hangfire;
