@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
@@ -41,13 +39,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			var intradayPeriod = new DateTimePeriod(startDateTime, startDateTime.AddHours(_absenceRequestSetting.ImmediatePeriodInHours));
 
 			var mergedPeriod = personRequest.Request.Person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod((AbsenceRequest) personRequest.Request);
-			var validators = _absenceRequestValidatorProvider.GetValidatorList(mergedPeriod).ToList();
 
-			if (ifNoStaffingValidatorIsUsed(validators))
+			if (!_absenceRequestValidatorProvider.IsAnyStaffingValidatorEnabled(mergedPeriod))
 			{
 				approveRequest(personRequest, mergedPeriod);
 			}
-			else if (isIntradayRequest(personRequest, intradayPeriod) && isStaffingThresholdValidatorEnabled(validators))
+			else if (isIntradayRequest(personRequest, intradayPeriod) && _absenceRequestValidatorProvider.IsValidatorEnabled<StaffingThresholdValidator>(mergedPeriod))
 			{
 				_requestProcessor.Process(personRequest);
 			}
@@ -55,11 +52,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			{
 				enqueueAbsenceRequest(personRequest);
 			}
-		}
-
-		private static bool isStaffingThresholdValidatorEnabled(IEnumerable<IAbsenceRequestValidator> validators)
-		{
-			return validators.Any(v => v is StaffingThresholdValidator);
 		}
 
 		private static bool isIntradayRequest(IPersonRequest personRequest, DateTimePeriod intradayPeriod)
@@ -89,17 +81,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				EndDateTime = personRequest.Request.Period.EndDateTime
 			};
 			_queuedAbsenceRequestRepository.Add(queuedAbsenceRequest);
-		}
-
-		private bool ifNoStaffingValidatorIsUsed(IList<IAbsenceRequestValidator> validators)
-		{
-			if (validators.Any(v => v is StaffingThresholdValidator) ||
-				validators.Any(v => v is StaffingThresholdValidatorCascadingSkillsWithShrinkage) ||
-				validators.Any(v => v is BudgetGroupAllowanceValidator) ||
-				validators.Any(v => v is BudgetGroupHeadCountValidator) ||
-				validators.Any(v => v is StaffingThresholdWithShrinkageValidator))
-				return false;
-			return true;
 		}
 	}
 }

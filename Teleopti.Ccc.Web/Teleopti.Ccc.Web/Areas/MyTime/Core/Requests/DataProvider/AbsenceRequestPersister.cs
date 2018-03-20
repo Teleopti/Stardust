@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -105,12 +103,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 				return;
 
 			var mergedPeriod = personRequest.Request.Person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod((AbsenceRequest)personRequest.Request);
-			var validators = _absenceRequestValidatorProvider.GetValidatorList(mergedPeriod).ToList();
-			var startDateTime = _now.UtcDateTime();
-			var intradayPeriod = new DateTimePeriod(startDateTime, startDateTime.AddHours(_absenceRequestSetting.ImmediatePeriodInHours));
 
-			if (!noStaffingValidatorIsUsed(validators) && (!isIntradayRequest(personRequest, intradayPeriod) ||
-														   !isStaffingThresholdValidatorEnabled(validators)))
+			if (_absenceRequestValidatorProvider.IsAnyStaffingValidatorEnabled(mergedPeriod) &&
+				(!isIntradayRequest(personRequest) ||
+				 !_absenceRequestValidatorProvider.IsValidatorEnabled<StaffingThresholdValidator>(mergedPeriod)))
 			{
 				var updatedRows =
 					_queuedAbsenceRequestRepository.UpdateRequestPeriod(personRequest.Id.GetValueOrDefault(),
@@ -120,24 +116,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			}
 		}
 
-		private bool noStaffingValidatorIsUsed(IList<IAbsenceRequestValidator> validators)
+		private bool isIntradayRequest(IPersonRequest personRequest)
 		{
-			if (validators.Any(v => v is StaffingThresholdValidator) ||
-				validators.Any(v => v is StaffingThresholdValidatorCascadingSkillsWithShrinkage) ||
-				validators.Any(v => v is BudgetGroupAllowanceValidator) ||
-				validators.Any(v => v is BudgetGroupHeadCountValidator) ||
-				validators.Any(v => v is StaffingThresholdWithShrinkageValidator))
-				return false;
-			return true;
-		}
-
-		private static bool isStaffingThresholdValidatorEnabled(IEnumerable<IAbsenceRequestValidator> validators)
-		{
-			return validators.Any(v => v is StaffingThresholdValidator);
-		}
-
-		private static bool isIntradayRequest(IPersonRequest personRequest, DateTimePeriod intradayPeriod)
-		{
+			var startDateTime = _now.UtcDateTime();
+			var intradayPeriod = new DateTimePeriod(startDateTime, startDateTime.AddHours(_absenceRequestSetting.ImmediatePeriodInHours));
 			return personRequest.Request.Period.ElapsedTime() <= TimeSpan.FromDays(1) && intradayPeriod.Contains(personRequest.Request.Period.EndDateTime);
 		}
 

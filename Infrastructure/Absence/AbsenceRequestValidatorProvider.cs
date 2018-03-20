@@ -45,6 +45,25 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			return absenceRequestValidatorList;
 		}
 
+		public bool IsAnyStaffingValidatorEnabled(IAbsenceRequestOpenPeriod absenceRequestOpenPeriod)
+		{
+			var validators = GetValidatorList(absenceRequestOpenPeriod).ToList();
+			if (validators.Any(v => v is StaffingThresholdValidator) ||
+				validators.Any(v => v is StaffingThresholdValidatorCascadingSkillsWithShrinkage) ||
+				validators.Any(v => v is BudgetGroupAllowanceValidator) ||
+				validators.Any(v => v is BudgetGroupHeadCountValidator) ||
+				validators.Any(v => v is StaffingThresholdWithShrinkageValidator))
+				return true;
+			return false;
+		}
+
+		public bool IsValidatorEnabled<T>(IAbsenceRequestOpenPeriod absenceRequestOpenPeriod)
+			where T : IAbsenceRequestValidator
+		{
+			var validators = GetValidatorList(absenceRequestOpenPeriod).ToList();
+			return validators.Any(v => v is T);
+		}
+
 		private IAbsenceRequestValidator getIntradayValidator(IPersonRequest personRequest)
 		{
 			var validators = personRequest.Request.Person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod(
