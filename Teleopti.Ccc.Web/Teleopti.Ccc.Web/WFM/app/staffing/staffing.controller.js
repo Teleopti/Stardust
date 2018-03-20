@@ -203,6 +203,18 @@
 			return false;
 		}
 
+		function updateExportDate() {
+			vm.exportStaffingDataDate = {
+				startDate: moment(vm.selectedDate)
+					.utc()
+					.toDate(),
+				endDate: moment(vm.selectedDate)
+					.utc()
+					.add(6, 'days')
+					.toDate()
+			};
+		}
+
 		function navigateToNewDay() {
 			$window.sessionStorage.staffingSelectedDate = vm.selectedDate;
 			if (vm.hasSuggestionData) {
@@ -215,6 +227,7 @@
 				vm.showOverstaffSettings = false;
 				vm.generateChart(vm.selectedSkill, vm.selectedArea);
 			}
+			updateExportDate();
 		}
 
 		function extracted(area) {
