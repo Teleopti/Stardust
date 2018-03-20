@@ -49,14 +49,12 @@
 		var loadingSkill = true;
 		var loadingSkillArea = true;
 
-		vm.toggles = {};
-		vm.DeleteSkillAreaModal = false;
+		(vm.toggles = {}), (vm.DeleteSkillAreaModal = false);
 		vm.activeTab = 0;
 		vm.getSkillIcon = skillIconService.get;
 		vm.viewObj;
 		vm.chosenOffset = { value: 0 };
 		vm.filterSkills = [];
-		vm.showGroupInfo = false;
 
 		vm.changeChosenOffset = function(value, dontPoll) {
 			$interval.cancel(polling);
@@ -160,23 +158,6 @@
 			} else reloadSkillAreas(false);
 		};
 
-		vm.openSkillFromArea = function(skill) {
-			if (skill.DoDisplayData) {
-				var skillIndex = vm.filterSkills.indexOf(skill);
-				if (skillIndex === -1) {
-					vm.filterSkills = [];
-					vm.filterSkills.push(skill);
-					vm.selectedItem = skill;
-					selectASkill(skill);
-				} else {
-					vm.selectSkillOrSkillArea(vm.selectedSkillArea);
-					vm.filterSkills.splice(skillIndex, 1);
-				}
-			} else {
-				UnsupportedSkillNotice();
-			}
-		};
-
 		vm.openSkillGroupManager = function() {
 			$state.go('intraday.skill-area-manager', {
 				isNewSkillArea: false,
@@ -202,17 +183,9 @@
 				vm.selectedItem = null;
 				return;
 			}
-
-			if (angular.isUndefined(item.Name)) {
-				vm.selectedItem = null;
-				return;
-			}
-
 			//Is it a skillgroup?
 			vm.filterSkills = [];
-			if (isSkill(item)) {
-				vm.showIncluded = false;
-				vm.showGroupInfo = true;
+			if (angular.isDefined(item.Skills)) {
 				vm.skillAreaSelected(item);
 				pollData(vm.activeTab);
 				vm.prevArea = vm.selectedItem;
@@ -220,15 +193,19 @@
 				checkUnsupported(item);
 			} else {
 				//Or a skill
-				vm.showIncluded = true;
-				vm.showGroupInfo = false;
-				selectASkill(item);
+				if (item.DoDisplayData) {
+					vm.skillSelected(item);
+					pollActiveTabDataByDayOffset(vm.activeTab, vm.chosenOffset.value);
+					if (prevSkill) {
+						if (!(prevSkill === vm.selectedSkill)) {
+							clearPrev();
+						}
+					}
+				} else {
+					clearSkillSelection();
+					UnsupportedSkillNotice();
+				}
 			}
-
-			$log.log('selectedItem', vm.selectedItem);
-			$log.log('selectedSkill', vm.selectedSkill);
-			$log.log('selectedSkillArea', vm.selectedSkillArea);
-			$log.log('filterSkills', vm.filterSkills);
 		};
 
 		vm.skillAreaSelected = function(item) {
@@ -260,12 +237,9 @@
 		};
 
 		vm.loadState = function() {
-			var state;
-			if (vm.toggles['WFM_Remember_My_Selection_In_Intraday_47254']) {
-				state = intradayService.loadIntradayState();
-			} else {
-				state = { chosenOffset: { value: 0 }, selectedItem: {}, filterSkills: [], activeTab: 0 };
-			}
+			if (!vm.toggles['WFM_Remember_My_Selection_In_Intraday_47254']) return;
+
+			var state = intradayService.loadIntradayState();
 			if (!state) return;
 			if (angular.isDefined(state.selectedItem) && angular.isArray(vm.skills) && state.selectedItem !== null) {
 				vm.selectSkillOrSkillArea(state.selectedItem);
@@ -281,25 +255,6 @@
 			vm.filterSkills = state.filterSkills;
 			vm.activeTab = state.activeTab;
 		};
-
-		function selectASkill(item) {
-			if (item.DoDisplayData) {
-				vm.skillSelected(item);
-				pollActiveTabDataByDayOffset(vm.activeTab, vm.chosenOffset.value);
-				if (prevSkill) {
-					if (!(prevSkill === vm.selectedSkill)) {
-						clearPrev();
-					}
-				}
-			} else {
-				clearSkillSelection();
-				UnsupportedSkillNotice();
-			}
-		}
-
-		function isSkill(item) {
-			return angular.isDefined(item.Skills);
-		}
 
 		function cancelTimeout() {
 			if (timeoutPromise) {
@@ -335,11 +290,11 @@
 		}
 
 		function clearSkillAreaSelection() {
-			//vm.selectedSkillArea = null;
+			vm.selectedSkillArea = null;
 		}
 
 		function clearSkillSelection() {
-			//vm.selectedSkill = null;
+			vm.selectedSkill = null;
 		}
 
 		function createFilterFor(query) {
