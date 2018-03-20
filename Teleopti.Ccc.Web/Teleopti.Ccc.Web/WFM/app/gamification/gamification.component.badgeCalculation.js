@@ -14,7 +14,6 @@
         var currentTimezone = userInfo.CurrentUserInfo().DefaultTimeZone;
 
         $ctrl.$onInit = function () {
-            $ctrl.jobs = [];
             fetchJobs();
 
             $ctrl.dateTimeFormat = locale.DATETIME_FORMATS.short;
