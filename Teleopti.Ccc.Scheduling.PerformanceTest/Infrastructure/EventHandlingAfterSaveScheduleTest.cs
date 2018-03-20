@@ -27,7 +27,6 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest.Infrastructure
 		public IPersonRepository Persons;
 		public IBusinessUnitRepository BusinessUnits;
 		public WithUnitOfWork WithUnitOfWork;
-		public Http Http;
 		public IDataSourceScope DataSource;
 		public AsSystem AsSystem;
 		public IScenarioRepository Scenarios;
