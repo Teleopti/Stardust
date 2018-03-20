@@ -33,6 +33,8 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest.Infrastructure
 		public IActivityRepository Activities;
 		public IScheduleStorage Schedules;
 		public IScheduleDictionaryPersister Persister;
+		public IDayOffTemplateRepository DayOffTemplateRepository;
+		public IAbsenceRepository AbsenceRepository;
 
 		public HangfireUtilities Hangfire;
 		public TestLog TestLog;
@@ -61,7 +63,11 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest.Infrastructure
 				schedules = Schedules.FindSchedulesForPersons(scenario, persons,
 					new ScheduleDictionaryLoadOptions(false, false),
 					period.ToDateTimePeriod(TimeZoneInfo.Utc), persons, false);
-				var phone = Activities.LoadAll().Single(x => x.Name == "Phone");
+				var activities = Activities.LoadAll().OrderBy(x => x.Description.Name).ToArray();
+				var inWorkTimeActivities = activities.Where(x => x.InWorkTime).ToArray();
+				var notInWorkTimeActivity = activities.First(x => !x.InWorkTime);
+				var dayoffTempate = DayOffTemplateRepository.FindActivedDayOffsSortByDescription().First();
+				var absence = AbsenceRepository.LoadAllSortByName().First();
 
 				TestLog.Debug($"Creating data for {persons.Length} people for {period.DayCount()} dates.");
 
@@ -69,9 +75,26 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest.Infrastructure
 				{
 					foreach (var date in period.DayCollection())
 					{
-						var assignment = new PersonAssignment(person, scenario, date).WithLayer(phone, new TimePeriod(8, 17));
 						var scheduledDay = schedules[person].ScheduledDay(date);
-						scheduledDay.Add(assignment);
+
+						if (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday)
+						{
+							scheduledDay.CreateAndAddDayOff(dayoffTempate);
+						}
+						else if (date.DayOfWeek == DayOfWeek.Wednesday)
+						{
+							scheduledDay.CreateAndAddAbsence(new AbsenceLayer(absence, date.ToDateTimePeriod(TimeZoneInfo.Utc)));
+						}
+						else
+						{
+							var assignment = new PersonAssignment(person, scenario, date)
+								.WithLayer(inWorkTimeActivities[0], new TimePeriod(8, 17))
+								.WithLayer(inWorkTimeActivities[1], new TimePeriod(10, 0, 10, 15))
+								.WithLayer(inWorkTimeActivities[1], new TimePeriod(14, 0, 14, 15))
+								.WithLayer(notInWorkTimeActivity, new TimePeriod(12, 13));
+							scheduledDay.Add(assignment);
+						}
+
 						schedules.Modify(scheduledDay, new DoNothingScheduleDayChangeCallBack());
 					}
 				}
