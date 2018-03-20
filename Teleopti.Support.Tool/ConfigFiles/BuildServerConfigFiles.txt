@@ -34,3 +34,5 @@
 ..\..\..\Teleopti.Wfm.Test\App.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
 ..\..\..\Teleopti.Wfm.Test\bin\Debug\Teleopti.Wfm.Test.dll.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
 ..\..\..\Teleopti.Wfm.Test\bin\Release\Teleopti.Wfm.Test.dll.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
+..\..\..\Teleopti.Ccc.Scheduling.PerformanceTest\bin\Debug\Teleopti.Ccc.Scheduling.PerformanceTest.dll.config,BuildArtifacts\PerformanceTest.config
+..\..\..\Teleopti.Ccc.Scheduling.PerformanceTest\bin\Release\Teleopti.Ccc.Scheduling.PerformanceTest.dll.config,BuildArtifacts\PerformanceTest.config

@@ -126,8 +126,7 @@ copy "$(SolutionDir)packages\WebDriver.ChromeDriver.win32.2.34.0\content\chromed
 copy "$(ProjectDir)SettingsForTest.config.template" "$(TargetDir)SettingsForTest.config"</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
+    <PreBuildEvent>if not exist "$(ProjectDir)App.config" copy "$(SolutionDir)BuildArtifacts\PerformanceTest.config" "$(ProjectDir)App.config"</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
