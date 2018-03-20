@@ -10,7 +10,7 @@ wfm-multiple-search-input {
 		min-height: 40px;
 
 		.time-zone-switch {
-			md-radio-button{
+			md-radio-button {
 				float: left;
 				margin-right: 10px;
 			}
@@ -156,7 +156,7 @@ wfm-multiple-search-input {
 		}
 	}
 
-	.requests-table-header{
+	.requests-table-header {
 		margin-bottom: 10px;
 	}
 
@@ -196,11 +196,11 @@ wfm-multiple-search-input {
 			padding: 5px;
 		}
 
-		md-select{
+		md-select {
 			padding: 0 5px;
 		}
 
-		md-select-value span{
+		md-select-value span {
 			white-space: nowrap;
 		}
 	}
@@ -218,7 +218,6 @@ wfm-multiple-search-input {
 	input.ui-grid-filter-input {
 		text-overflow: ellipsis;
 	}
-
 	/* Fix angular material issue where tabs are not displayed correctly on occasion
         https://github.com/angular/material/issues/9660
         https://github.com/angular/material/issues/9644 seem to be related.
@@ -328,7 +327,6 @@ wfm-multiple-search-input {
 	.shift-trade-view {
 		height: 60vh;
 		overflow: hidden;
-
 		/* show scroll bar outside of grid*/
 		.ui-grid-render-container-body .ui-grid-viewport {
 			position: absolute;
@@ -438,6 +436,12 @@ wfm-multiple-search-input {
 		.ui-grid-pinned-container-left .ui-grid-header-viewport,
 		.ui-grid-pinned-container-right .ui-grid-header-viewport {
 			overflow: visible;
+		}
+
+		.dayoff {
+			height: 22px;
+			background-size: 11px 11px;
+			background-image: linear-gradient(135deg, transparent, transparent 7px, rgba(0,0,0,0.2) 8px, transparent 8px, transparent );
 		}
 	}
 
