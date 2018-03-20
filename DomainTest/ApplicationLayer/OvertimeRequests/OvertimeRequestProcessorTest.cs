@@ -677,6 +677,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			return personRequest;
 		}
 
+		private IPersonRequest createOvertimeRequestInMinutes(TimeSpan startTime, int minutes, TimeZoneInfo timeZoneInfo = null)
+		{
+			timeZoneInfo = timeZoneInfo ?? TimeZoneInfo.Utc;
+			var requestStartTimeLocal = new DateTime(2017, 7, 17, 0, 0, 0).Add(startTime);
+			var requestStartTime = TimeZoneHelper.ConvertToUtc(requestStartTimeLocal, timeZoneInfo);
+			var personRequest =
+				createOvertimeRequest(new DateTimePeriod(requestStartTime, requestStartTime.AddMinutes(minutes)));
+			return personRequest;
+		}
+
 		private IPersonRequest createOvertimeRequest(DateTime requestStartTime, int hours)
 		{
 			var personRequest = createOvertimeRequest(new DateTimePeriod(requestStartTime, requestStartTime.AddHours(hours)));

@@ -702,6 +702,46 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestUseMostUnderStaffedSkill_47853)]
+		public void ShouldApproveRequestWithPeriodEquals15MinutesWithToggle47853On()
+		{
+			setupPerson(8, 21);
+
+			var skill = setupPersonSkill();
+			skill.DefaultResolution = 60;
+			var period = new DateTimePeriod(2017, 7, 17, 18, 2017, 7, 17, 19);
+			setupIntradayStaffingForSkill(skill, new DateOnly(2017, 7, 17), new List<StaffingPeriodData>
+			{
+				new StaffingPeriodData {ForecastedStaffing = 10d, ScheduledStaffing = 1d, Period = period},
+			});
+
+			var personRequest = createOvertimeRequestInMinutes(18, 15);
+			getTarget().Process(personRequest, true);
+
+			personRequest.IsApproved.Should().Be.True();
+		}
+
+		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestUseMostUnderStaffedSkill_47853)]
+		public void ShouldApproveRequestWithPeriodStartTimeEquals45MinutesWithToggle47853On()
+		{
+			setupPerson(8, 21);
+
+			var skill = setupPersonSkill();
+			skill.DefaultResolution = 60;
+			var period = new DateTimePeriod(2017, 7, 17, 18, 2017, 7, 17, 19);
+			setupIntradayStaffingForSkill(skill, new DateOnly(2017, 7, 17), new List<StaffingPeriodData>
+			{
+				new StaffingPeriodData {ForecastedStaffing = 10d, ScheduledStaffing = 1d, Period = period},
+			});
+
+			var personRequest = createOvertimeRequestInMinutes(TimeSpan.FromHours(18).Add(TimeSpan.FromMinutes(45)), 15);
+			getTarget().Process(personRequest, true);
+
+			personRequest.IsApproved.Should().Be.True();
+		}
+
+		[Test]
 		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
 		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSkillTypeSetting_47290)]
 		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestUseMostUnderStaffedSkill_47853)]
