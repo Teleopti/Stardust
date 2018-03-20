@@ -853,14 +853,13 @@ describe('IntradayAreaController', function() {
 		expect(vm.skillAreas.length).toEqual(2);
 	});
 
-	// Removed due to new behaviour: Anders Sjöberg 2018-03-20
-	// it('should monitor first skill if no skill areas', function() {
-	// 	skillAreaInfo.SkillAreas = [];
-	// 	createController(false);
+	it('should monitor first skill if no skill areas', function() {
+		skillAreaInfo.SkillAreas = [];
+		createController(false);
 
-	// 	vm.skillSelected(vm.skills[0]);
-	// 	expect(vm.selectedItem).toEqual(vm.skills[0]);
-	// });
+		vm.skillSelected(vm.skills[0]);
+		expect(vm.selectedItem).toEqual(vm.skills[0]);
+	});
 
 	it('should monitor first skill area if there are any', function() {
 		createController(false);
@@ -1050,16 +1049,15 @@ describe('IntradayAreaController', function() {
 		expect(vm.viewObj.summary.summaryEstimatedServiceLevel).toEqual(undefined);
 	});
 
-	// Removed due to new behaviour: Anders Sjöberg 2018-03-20
-	// it('should monitor first skill that is supported', function() {
-	// 	skillAreaInfo.SkillAreas = [];
-	// 	isUnsupportedSkillTest = true;
-	// 	createController(false);
+	it('should monitor first skill that is supported', function() {
+		skillAreaInfo.SkillAreas = [];
+		isUnsupportedSkillTest = true;
+		createController(false);
 
-	// 	vm.selectSkillOrSkillArea(skillsWithFirstUnsupported[0]);
+		vm.selectSkillOrSkillArea(skillsWithFirstUnsupported[0]);
 
-	// 	expect(vm.selectedItem).toEqual(vm.skills[1]);
-	// });
+		expect(vm.selectedItem).toEqual(vm.skills[1]);
+	});
 
 	it('should get traffic data corresponding to chosenOffset', function() {
 		skillAreaInfo.SkillAreas = [];
@@ -1241,7 +1239,6 @@ describe('IntradayAreaController', function() {
 		createController(false);
 		vm.toggles['WFM_Remember_My_Selection_In_Intraday_47254'] = true;
 		vm.changeChosenOffset(-5, true);
-		vm.selectedItem = {};
 		vm.saveState();
 		vm.changeChosenOffset(0, true);
 		vm.loadState();
@@ -1253,7 +1250,6 @@ describe('IntradayAreaController', function() {
 		createController(false);
 		vm.toggles['WFM_Remember_My_Selection_In_Intraday_47254'] = false;
 		vm.changeChosenOffset(-5, true);
-		vm.selectedItem = {};
 		vm.saveState();
 		vm.changeChosenOffset(0, true);
 		vm.loadState();

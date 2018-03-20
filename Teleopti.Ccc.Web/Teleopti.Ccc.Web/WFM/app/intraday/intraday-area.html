@@ -49,7 +49,7 @@
                 <div class="sub-header" ng-if="vm.toggles['WFM_Intraday_Show_For_Other_Days_43504']">
                     <h2 id="viewingDate">
                         {{vm.getLocalDate(vm.chosenOffset.value)}}
-                        <span ng-if="vm.showGroupInfo">
+                        <span ng-if="vm.selectedSkillArea.Name">
                             ,
                             <b>{{ vm.selectedSkillArea.Name }}</b>:
                             <span ng-if="vm.filterSkills.length > 0">{{vm.filterSkills.length}} {{'IntraDayChipNumberOf' | translate}} </span>
