@@ -1,26 +1,12 @@
 @import '~teleopti-styleguide/styleguide/sass/classicvariables';
 
-.role-page {
-	height: 100%;
+.role-content {
+	padding: 7px;
+}
 
-	.blue-box {
-		height: 35px;
-		background-color: $primary;
-		color: white;
-
-		h2 {
-			margin-top: 3px !important;
-		}
-	}
-
-	.role-content {
-		padding: 7px;
-	}
-
-	.action-buttons {
-		float: right;
-		padding-bottom: 7px;
-	}
+.action-buttons {
+	float: right;
+	padding-bottom: 7px;
 }
 
 .workspace-parent {
@@ -29,4 +15,14 @@
 
 .panel {
 	height: 100%;
+}
+
+.blue-box {
+	height: 35px;
+	background-color: $primary;
+	color: white;
+
+	h2 {
+		margin-top: 3px !important;
+	}
 }

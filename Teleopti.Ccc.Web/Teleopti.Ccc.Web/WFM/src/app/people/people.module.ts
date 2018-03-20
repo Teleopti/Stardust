@@ -30,6 +30,7 @@ import {
 	TitleBarComponent
 } from './components';
 import { RolesService, WorkspaceService, SearchService, NavigationService } from './services';
+import { PageContainerComponent } from './components/shared/page-container/page-container.component';
 
 @NgModule({
 	declarations: [
@@ -42,7 +43,8 @@ import { RolesService, WorkspaceService, SearchService, NavigationService } from
 		ChipRemoveComponent,
 		SearchPageComponent,
 		WorkspaceComponent,
-		TitleBarComponent
+		TitleBarComponent,
+		PageContainerComponent
 	],
 	imports: [
 		SharedModule,
