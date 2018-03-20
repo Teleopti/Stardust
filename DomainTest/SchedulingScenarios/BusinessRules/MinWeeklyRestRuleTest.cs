@@ -78,5 +78,40 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.BusinessRules
 			stateHolder.Schedules.Modify(scheduleDay, NewBusinessRuleCollection.All(stateHolder.SchedulingResultState)).Should()
 				.Be.Empty();
 		}
+
+		[Test]
+		public void ShouldNotGenerateBrokenWeeklyRestWhenAbsenceInNextWeekShouldEnsureRest()
+		{
+			var firstDayOfWeek = new DateOnly(2018, 3, 12);
+			var scenario = new Scenario();
+			var activity = new Activity { InWorkTime = true };
+			var absence = new Absence();
+			var shiftCategory = new ShiftCategory("_");
+			var contract = new Contract("_") { WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(1), TimeSpan.FromHours(48), TimeSpan.FromHours(11), TimeSpan.FromHours(48)) };
+			var agent = new Person().WithPersonPeriod(contract);
+			var dayOffTemplate = new DayOffTemplate(new Description("_")) { Anchor = TimeSpan.FromHours(12) };
+			dayOffTemplate.SetTargetAndFlexibility(TimeSpan.FromDays(1), TimeSpan.Zero);
+			var data = new List<IPersistableScheduleData>
+			{
+				new PersonAssignment(agent, scenario, firstDayOfWeek.AddDays(-1)).WithLayer(activity, new TimePeriod(17, 24)).ShiftCategory(shiftCategory),
+				new PersonAssignment(agent, scenario, firstDayOfWeek.AddDays(0)).ShiftCategory(shiftCategory),
+				new PersonAssignment(agent, scenario, firstDayOfWeek.AddDays(1)).WithLayer(activity, new TimePeriod(8, 16)).ShiftCategory(shiftCategory),
+				new PersonAssignment(agent, scenario, firstDayOfWeek.AddDays(2)),
+				new PersonAssignment(agent, scenario, firstDayOfWeek.AddDays(3)).WithLayer(activity, new TimePeriod(8, 16)).ShiftCategory(shiftCategory),
+				new PersonAssignment(agent, scenario, firstDayOfWeek.AddDays(4)).WithLayer(activity, new TimePeriod(8, 16)).ShiftCategory(shiftCategory),
+				new PersonAssignment(agent, scenario, firstDayOfWeek.AddDays(5)).WithLayer(activity, new TimePeriod(8, 16)).ShiftCategory(shiftCategory),
+				new PersonAssignment(agent, scenario, firstDayOfWeek.AddDays(6)),
+				new PersonAssignment(agent, scenario, firstDayOfWeek.AddDays(7)).WithLayer(activity, new TimePeriod(8, 16)).ShiftCategory(shiftCategory),
+				new PersonAbsence(agent, scenario, new AbsenceLayer(absence,  firstDayOfWeek.AddDays(7).ToDateTimePeriod(TimeZoneInfo.Utc)))
+		};
+			((PersonAssignment)data[3]).SetDayOff(dayOffTemplate);
+			((PersonAssignment)data[7]).SetDayOff(dayOffTemplate);	
+			var stateHolder = StateHolder.Fill(scenario, new DateOnlyPeriod(firstDayOfWeek, firstDayOfWeek.AddDays(7)), new[] { agent }, data, Enumerable.Empty<ISkillDay>());
+			var scheduleDay = stateHolder.Schedules[agent].ScheduledDay(firstDayOfWeek);
+			scheduleDay.PersonAssignment().AddActivity(activity, new TimePeriod(8, 17));
+
+			stateHolder.Schedules.Modify(scheduleDay, NewBusinessRuleCollection.All(stateHolder.SchedulingResultState)).Should()
+				.Be.Empty();
+		}
 	}
 }

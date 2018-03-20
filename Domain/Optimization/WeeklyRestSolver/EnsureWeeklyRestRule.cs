@@ -57,7 +57,8 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
                 endOfPeriodBefore = result.Value.EndDateTime;
 
             foreach (var ass in pAss)
-            {
+			{
+				if(ass.Value.ScheduleDay.IsFullDayAbsence()) continue;
                 var proj = ass.Value.PersonAssignment.ProjectionService().CreateProjection();
                 var nextStartDateTime =
                     _workTimeStartEndExtractor.WorkTimeStart(proj);
