@@ -19,7 +19,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Scheduling.PerformanceTest.Infrastructure
 {
-	[TestFixture]
+	[Category("EventHandlingAfterSaveSchedule")]
 	[Setting("OptimizeScheduleChangedEvents_DontUseFromWeb", true)]
 	[PerformanceInfrastructureTest]
 	public class EventHandlingAfterSaveScheduleTest
@@ -38,7 +38,6 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest.Infrastructure
 		public TestLog TestLog;
 
 		[Test]
-		[Category("EventHandlingAfterSaveSchedule")]
 		[RealHangfire]
 		public void MeasurePerformance()
 		{
