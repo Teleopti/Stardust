@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest.Infrastructure
 	{
 		protected override void Startup(IComponentContext container)
 		{
-			container.Resolve<HangfireClientStarter>().Start();
+			//container.Resolve<HangfireClientStarter>().Start();
 		}
 	}
 }

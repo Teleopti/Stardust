@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.MessageBroker.Server;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
@@ -45,7 +46,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		public FakeTransactionHook TransactionHook;
 		public IDataSourceForTenant DataSourceForTenant;
 		public IEventPublisher Publisher;
-
+		public HangfireClientStarter HangfireClientStarter;
 		private IDisposable _transactionHookScope;
 		private List<Type> _scopeExtenders = new List<Type>();
 
@@ -81,7 +82,13 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 			// Hangfire bus maybe? ;)
 			if (QueryAllAttributes<RealHangfireAttribute>().IsEmpty())
-				system.UseTestDouble<FakeHangfireEventClient>().For<IHangfireEventClient>();
+			{
+				system.UseTestDouble<FakeHangfireEventClient>().For<IHangfireEventClient>();				
+			}
+			else
+			{
+				HangfireClientStarter.Start();
+			}
 
 			// message broker
 			system.UseTestDouble(new FakeSignalR()).For<ISignalR>();

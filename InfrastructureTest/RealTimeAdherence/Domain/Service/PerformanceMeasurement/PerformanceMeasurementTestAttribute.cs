@@ -30,12 +30,12 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service.Perfo
 		public IExternalLogOnRepository ExternalLogOns;
 		public ITeamRepository Teams;
 		public ISiteRepository Sites;
-		public HangfireClientStarter HangfireClientStarter;
 
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			base.Setup(system, configuration);
 
+			//?????????????????????????????????
 			if (QueryAllAttributes<RealHangfireAttribute>().Any())
 				system.UseTestDouble<FakeEventPublisher>().For<FakeEventPublisher>();
 			else
@@ -47,9 +47,6 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service.Perfo
 		protected override void BeforeTest()
 		{
 			base.BeforeTest();
-
-			if (QueryAllAttributes<RealHangfireAttribute>().Any())
-				HangfireClientStarter.Start();
 
 			FakePublisher.AddHandler<PersonAssociationChangedEventPublisher>();
 			FakePublisher.AddHandler<AgentStateMaintainer>();
