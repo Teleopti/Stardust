@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core;
+using Teleopti.Ccc.WebBehaviorTest.Core.Navigation;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse;
@@ -78,7 +81,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Requests
 		[When(@"I select to go to overtime view")]
 		public void WhenISelectToGoToOvertimeView()
 		{
-			Browser.Interactions.ClickUsingJQuery("md-tab-item:contains('Overtime')");
+			TestControllerMethods.Logon();
+			Navigation.GoToPage("wfm/#/requests/overtime");
 		}
 
 		[When(@"I click button for search requests")]
@@ -103,6 +107,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Requests
 		[When(@"I select date range from '(.*)' to '(.*)'")]
 		public void WhenISelectDateRangeFromTo(string from, string to)
 		{
+			Browser.Interactions.SetScopeValues(".wfm-requests", new Dictionary<string, string>
+			{
+				{ "vm.period", "{" + string.Format("startDate: new Date('{0}'), endDate: new Date('{1}')", from, to) + "}" }
+			});
+		}
+
+		[When(@"I select date range from '(.*)' to '(.*)' after '(.*)' milliseconds")]
+		public void WhenISelectDateRangeFromToAfterAWhile(string from, string to, int afterMilliseconds)
+		{
+			Thread.Sleep(afterMilliseconds);
 			Browser.Interactions.SetScopeValues(".wfm-requests", new Dictionary<string, string>
 			{
 				{ "vm.period", "{" + string.Format("startDate: new Date('{0}'), endDate: new Date('{1}')", from, to) + "}" }
