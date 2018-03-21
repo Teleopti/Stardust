@@ -9,7 +9,8 @@
 		utility,
 		fakeScheduleManagementSvc,
 		fakePersonSelectionService,
-		scheduleHelper;
+		scheduleHelper,
+		fakeNoticeService;
 
 	var mockCurrentUserInfo = {
 		CurrentUserInfo: function () {
@@ -26,6 +27,7 @@
 		fakePersonSelectionService = new FakePersonSelectionService();
 		fakeScheduleManagementSvc = new FakeScheduleManagementService();
 		scheduleHelper = new FakeScheduleHelper();
+		fakeNoticeService = new FakeNoticeService();
 
 		module(function ($provide) {
 			$provide.service('ActivityService', function () {
@@ -45,6 +47,9 @@
 			});
 			$provide.service('CommandCheckService', function () {
 				return fakeCommandCheckService;
+			});
+			$provide.service('NoticeService', function () {
+				return fakeNoticeService;
 			});
 		});
 	});
@@ -177,19 +182,19 @@
 			PersonId: 'agent1',
 			Timezone: timezone1,
 			Shifts: [
-			{
-				Date: '2016-06-16',
-				Projections: [
 				{
-					Start: '2016-06-16 08:00',
-					End: '2016-06-16 12:00',
-					Minutes: 600
-				}],
-				ProjectionTimeRange: {
-					Start: '2016-06-16 08:00',
-					End: '2016-06-16 12:00'
-				}
-			}]
+					Date: '2016-06-16',
+					Projections: [
+						{
+							Start: '2016-06-16 08:00',
+							End: '2016-06-16 12:00',
+							Minutes: 600
+						}],
+					ProjectionTimeRange: {
+						Start: '2016-06-16 08:00',
+						End: '2016-06-16 12:00'
+					}
+				}]
 		});
 
 		result.scope.$apply();
@@ -350,6 +355,60 @@
 		expect(defaultStartTime.getHours()).toBe(11);
 	});
 
+	it("should show success notification and reset active cmd when apply add personal activity successed", function () {
+		var result = setUp();
+		var vm = result.commandControl;
+		vm.isNextDay = false;
+		vm.disableNextDay = false;
+		vm.timeRange = {
+			startTime: new Date('2016-06-15T08:00:00Z'),
+			endTime: new Date('2016-06-15T16:00:00Z')
+		};
+
+		var timezone1 = {
+			IanaId: 'Etc/Utc',
+			DisplayName: 'UTC'
+		};
+
+		vm.selectedAgents = [
+			{
+				PersonId: 'agent1',
+				Name: 'agent1',
+				ScheduleEndTime: '2016-06-15T17:00:00Z'
+			}];
+
+		vm.containerCtrl.scheduleManagementSvc.setPersonScheduleVm('agent1', {
+			Date: '2016-06-15',
+			PersonId: 'agent1',
+			Timezone: timezone1,
+			Shifts: [
+				{
+					Date: '2016-06-15',
+					Projections: [
+						{
+							Start: '2016-06-15 08:00',
+							End: '2016-06-15 17:00',
+							Minutes: 540
+						}],
+					ProjectionTimeRange: {
+						Start: '2016-06-15 08:00',
+						End: '2016-06-15 17:00'
+					}
+				}]
+		});
+		vm.selectedActivityId = '472e02c8-1a84-4064-9a3b-9b5e015ab3c6';
+
+		fakePersonSelectionService.setFakeCheckedPersonInfoList(vm.selectedAgents);
+
+		var applyButton = angular.element(result.container[0].querySelector(".add-activity .form-submit"));
+		applyButton.triggerHandler('click');
+
+		result.scope.$apply();
+		expect(fakeNoticeService.successMessage).toEqual('SuccessfulMessageForAddingActivity');
+		expect(!!result.commandControl.containerCtrl.activeCmd).toEqual(false);
+
+	});
+
 	function commonTestsInDifferentLocale() {
 
 		it('should call add personal activity when click apply with correct data', function () {
@@ -469,7 +528,7 @@
 		var scope = $rootScope.$new();
 
 		if (inputDate == null)
-			 date = moment('2016-06-15').toDate();
+			date = moment('2016-06-15').toDate();
 		else
 			date = inputDate;
 
@@ -479,7 +538,7 @@
 		} else {
 			scope.timezone = "Etc/UTC";
 		}
-		
+
 		fakeActivityService.setAvailableActivities(getAvailableActivities());
 
 		var container = $compile(html)(scope);
@@ -567,40 +626,40 @@
 		};
 	}
 
-	function FakePersonSelectionService(){
+	function FakePersonSelectionService() {
 		var fakePersonList = [];
 
-		this.setFakeCheckedPersonInfoList = function(input){
+		this.setFakeCheckedPersonInfoList = function (input) {
 			fakePersonList = input;
 		}
 
-		this.getCheckedPersonInfoList = function(){
+		this.getCheckedPersonInfoList = function () {
 			return fakePersonList;
 		}
 	}
 
 	function getAvailableActivities() {
 		return [
-				{
-					"Id": "472e02c8-1a84-4064-9a3b-9b5e015ab3c6",
-					"Name": "E-mail"
-				},
-				{
-					"Id": "5c1409de-a0f1-4cd4-b383-9b5e015ab3c6",
-					"Name": "Invoice"
-				},
-				{
-					"Id": "0ffeb898-11bf-43fc-8104-9b5e015ab3c2",
-					"Name": "Phone"
-				},
-				{
-					"Id": "84db44f4-22a8-44c7-b376-a0a200da613e",
-					"Name": "Sales"
-				},
-				{
-					"Id": "35e33821-862f-461c-92db-9f0800a8d095",
-					"Name": "Social Media"
-				}
+			{
+				"Id": "472e02c8-1a84-4064-9a3b-9b5e015ab3c6",
+				"Name": "E-mail"
+			},
+			{
+				"Id": "5c1409de-a0f1-4cd4-b383-9b5e015ab3c6",
+				"Name": "Invoice"
+			},
+			{
+				"Id": "0ffeb898-11bf-43fc-8104-9b5e015ab3c2",
+				"Name": "Phone"
+			},
+			{
+				"Id": "84db44f4-22a8-44c7-b376-a0a200da613e",
+				"Name": "Sales"
+			},
+			{
+				"Id": "35e33821-862f-461c-92db-9f0800a8d095",
+				"Name": "Social Media"
+			}
 		];
 	}
 	function FakeCommandCheckService() {
@@ -668,5 +727,20 @@
 		this.setAvailableActivities = function (activities) {
 			availableActivities = activities;
 		};
+	}
+
+	function FakeNoticeService() {
+		this.successMessage = '';
+		this.errorMessage = '';
+		this.warningMessage = '';
+		this.success = function (message, time, destroyOnStateChange) {
+			this.successMessage = message;
+		}
+		this.error = function (message, time, destroyOnStateChange) {
+			this.errorMessage = message;
+		}
+		this.warning = function (message, time, destroyOnStateChange) {
+			this.warningMessage = message;
+		}
 	}
 });

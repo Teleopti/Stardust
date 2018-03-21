@@ -73,6 +73,7 @@ Scenario: Should be able to add activity
 	When I apply my new activity
 	Then I should see a successful notice
 
+
 Scenario: Should see enabled add personal activity button
 	Given 'John Smith' has a shift with
 	| Field            | Value            |
@@ -88,6 +89,7 @@ Scenario: Should see enabled add personal activity button
 	And I open menu in team schedule
 	Then I should see 'AddPersonalActivity' menu is enabled
 
+@ignore just keep it as information, already cover it by unit test.
 Scenario: Should be able to add personal activity
 	Given 'John Smith' has a shift with
 	| Field            | Value            |
@@ -109,8 +111,10 @@ Scenario: Should be able to add personal activity
 	| StartTime    | 2016-10-10 12:00 |
 	| EndTime      | 2016-10-10 13:00 |
 	| Is next day  | false            |
-	And I apply add personal activity
+	Then I should see 'AddPersonalActivity' menu is enabled
+	When I apply add personal activity
 	Then I should see a successful notice
+
 
 Scenario: Should see disabled remove activity button when no activity is selected
 	Given 'John Smith' has a shift with
