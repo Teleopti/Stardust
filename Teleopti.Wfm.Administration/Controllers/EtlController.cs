@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Web.Http;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.MultiTenancy;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Wfm.Administration.Core;
 using Teleopti.Wfm.Administration.Core.EtlTool;
@@ -21,13 +23,14 @@ namespace Teleopti.Wfm.Administration.Controllers
 		private readonly EtlJobScheduler _etlJobScheduler;
 		private readonly IConfigReader _configReader;
 		private readonly IBaseConfigurationRepository _baseConfigurationRepository;
+		private readonly ILoadAllTenants _loadAllTenants;
 
 		public EtlController(IToggleManager toggleManager, 
 			JobCollectionModelProvider jobCollectionModelProvider,
 			TenantLogDataSourcesProvider tenantLogDataSourcesProvider,
 			EtlJobScheduler etlJobScheduler,
 			IConfigReader configReader,
-			IBaseConfigurationRepository baseConfigurationRepository)
+			IBaseConfigurationRepository baseConfigurationRepository, ILoadAllTenants loadAllTenants)
 		{
 			_toggleManager = toggleManager;
 			_jobCollectionModelProvider = jobCollectionModelProvider;
@@ -35,6 +38,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			_etlJobScheduler = etlJobScheduler;
 			_configReader = configReader;
 			_baseConfigurationRepository = baseConfigurationRepository;
+			_loadAllTenants = loadAllTenants;
 		}
 
 		[HttpGet, Route("Etl/ShouldEtlToolBeVisible")]
@@ -88,12 +92,22 @@ namespace Teleopti.Wfm.Administration.Controllers
 		}
 
 		[HttpGet, Route("Etl/IsBaseConfigurationAvailable")]
-		public IHttpActionResult IsBaseConfigurationAvailable()
+		public virtual IHttpActionResult IsBaseConfigurationAvailable()
 		{
 			var connectionString = _configReader.ConnectionString("Hangfire");
 			var baseConfig = _baseConfigurationRepository.LoadBaseConfiguration(connectionString);
 			var isConfig = baseConfig.IntervalLength.HasValue;
 			return Ok(isConfig);
+		}
+
+		[HttpPost, Route("Etl/SaveConfigurationForTenant")]
+		public virtual IHttpActionResult SaveConfigurationForTenant(TenantConfiguration tenantConfiguration)
+		{
+			var tenant = _loadAllTenants.Tenants().Single(x => x.Name.Equals(tenantConfiguration.TenantName));
+			if (tenant == null) return Content(HttpStatusCode.NotFound, "Tenant not found"); 
+			var connectionString = tenant.DataSourceConfiguration.AnalyticsConnectionString;
+			_baseConfigurationRepository.SaveBaseConfiguration(connectionString, tenantConfiguration.BaseConfig);
+			return Ok();
 		}
 	}
 }

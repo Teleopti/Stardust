@@ -330,6 +330,7 @@
     <Compile Include="Controllers\ConfigurationController.cs" />
     <Compile Include="Controllers\EtlController.cs" />
     <Compile Include="Controllers\LicenseController.cs" />
+    <Compile Include="Models\TenantConfiguration.cs" />
     <Compile Include="Models\JobPeriod.cs" />
     <Compile Include="Models\JobEnqueModel.cs" />
     <Compile Include="Core\EtlTool\EtlJobScheduler.cs" />

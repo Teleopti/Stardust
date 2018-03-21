@@ -56,7 +56,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 		public void ShouldReturnJobCollection()
 		{
 			BaseConfigurationRepository.SaveBaseConfiguration(connectionString, new BaseConfiguration(1053, 15, "UTC", false));
-			AllTenants.HasWithAnalyticsConnectionsTring(testTenantName, connectionString);
+			AllTenants.HasWithAnalyticsConnectionString(testTenantName, connectionString);
 			var result = (OkNegotiatedContentResult<IList<JobCollectionModel>>) Target.Jobs(testTenantName);
 			result.Content.Count.Should().Be.GreaterThanOrEqualTo(13);
 		}
@@ -65,7 +65,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 		public void ShouldReturnNotFoundTenantForJobs()
 		{
 			BaseConfigurationRepository.SaveBaseConfiguration(connectionString, new BaseConfiguration(1053, 15, "UTC", false));
-			AllTenants.HasWithAnalyticsConnectionsTring(testTenantName, connectionString);
+			AllTenants.HasWithAnalyticsConnectionString(testTenantName, connectionString);
 			var result = (NegotiatedContentResult<string>) Target.Jobs("TenantNotFound");
 			result.StatusCode.Should().Be(HttpStatusCode.NotFound);
 		}
@@ -74,7 +74,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 		public void ShouldReturnIfJobNeedsParameterDataSource()
 		{
 			BaseConfigurationRepository.SaveBaseConfiguration(connectionString, new BaseConfiguration(1053, 15, "UTC", false));
-			AllTenants.HasWithAnalyticsConnectionsTring(testTenantName, connectionString);
+			AllTenants.HasWithAnalyticsConnectionString(testTenantName, connectionString);
 			var result = (OkNegotiatedContentResult<IList<JobCollectionModel>>) Target.Jobs(testTenantName);
 
 			result.Content.First(x => x.JobName == "Initial").NeedsParameterDataSource.Should().Be(false);
@@ -85,7 +85,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 		public void ShouldReturnDatePeriodCollectionRequiredForJobs()
 		{
 			BaseConfigurationRepository.SaveBaseConfiguration(connectionString, new BaseConfiguration(1053, 15, "UTC", false));
-			AllTenants.HasWithAnalyticsConnectionsTring(testTenantName, connectionString);
+			AllTenants.HasWithAnalyticsConnectionString(testTenantName, connectionString);
 			var result = (OkNegotiatedContentResult<IList<JobCollectionModel>>) Target.Jobs(testTenantName);
 
 			result.Content.First(x => x.JobName == "Initial").NeededDatePeriod.Count.Should().Be(1);
@@ -109,7 +109,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 		[Test]
 		public void ShouldReturnTenantLogDataSources()
 		{
-			AllTenants.HasWithAnalyticsConnectionsTring(testTenantName, connectionString);
+			AllTenants.HasWithAnalyticsConnectionString(testTenantName, connectionString);
 			GeneralInfrastructure.HasDataSources(new DataSourceEtl(3, "myDs", 1, "UTC", 15, false));
 
 			var result = (OkNegotiatedContentResult<IList<DataSourceModel>>) Target.TenantLogDataSources(testTenantName);
@@ -122,7 +122,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 		public void ShouldReturnNotFoundTenantForDataSources()
 		{
 			BaseConfigurationRepository.SaveBaseConfiguration(connectionString, new BaseConfiguration(1053, 15, "UTC", false));
-			AllTenants.HasWithAnalyticsConnectionsTring(testTenantName, connectionString);
+			AllTenants.HasWithAnalyticsConnectionString(testTenantName, connectionString);
 			var result = (NegotiatedContentResult<string>) Target.TenantLogDataSources("TenantNotFound");
 			result.StatusCode.Should().Be(HttpStatusCode.NotFound);
 		}
@@ -132,7 +132,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 		{
 			BaseConfigurationRepository.SaveBaseConfiguration(connectionString,
 				new BaseConfiguration(1053, 15, timezoneName, false));
-			AllTenants.HasWithAnalyticsConnectionsTring(testTenantName, connectionString);
+			AllTenants.HasWithAnalyticsConnectionString(testTenantName, connectionString);
 
 			var localToday = new DateTime(2017, 12, 11);
 			var utcToday = TimeZoneHelper.ConvertToUtc(localToday, TimeZoneInfo.FindSystemTimeZoneById(timezoneName));
@@ -176,7 +176,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 		public void ShouldReturnNotFoundTenantForEnqueueJob()
 		{
 			BaseConfigurationRepository.SaveBaseConfiguration(connectionString, new BaseConfiguration(1053, 15, "UTC", false));
-			AllTenants.HasWithAnalyticsConnectionsTring(testTenantName, connectionString);
+			AllTenants.HasWithAnalyticsConnectionString(testTenantName, connectionString);
 			var result = (NegotiatedContentResult<string>) Target.EnqueueJob(new JobEnqueModel {TenantName = "TenantNotFound"});
 			result.StatusCode.Should().Be(HttpStatusCode.NotFound);
 		}
@@ -186,7 +186,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 		{
 			BaseConfigurationRepository.SaveBaseConfiguration(connectionString,
 				new BaseConfiguration(1053, 15, timezoneName, false));
-			AllTenants.HasWithAnalyticsConnectionsTring(testTenantName, connectionString);
+			AllTenants.HasWithAnalyticsConnectionString(testTenantName, connectionString);
 
 			var localToday = new DateTime(2017, 12, 11);
 			var utcToday =
@@ -256,7 +256,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 
 			BaseConfigurationRepository.SaveBaseConfiguration(connectionString,
 				new BaseConfiguration(1053, 15, timezoneName, false));
-			AllTenants.HasWithAnalyticsConnectionsTring(testTenantName, connectionString);
+			AllTenants.HasWithAnalyticsConnectionString(testTenantName, connectionString);
 
 			var localToday = new DateTime(2017, 12, 11);
 			var utcToday = TimeZoneHelper.ConvertToUtc(localToday, TimeZoneInfo.FindSystemTimeZoneById(timezoneName));
@@ -302,6 +302,23 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			FakeConfigReader.FakeConnectionString("Hangfire", connectionString);
 			var result = (OkNegotiatedContentResult<bool>)Target.IsBaseConfigurationAvailable();
 			result.Content.Should().Be(false);
+		}
+
+		[Test]
+		public void ShouldSaveBaseConfigurationForTenant()
+		{
+			AllTenants.HasWithAnalyticsConnectionString(testTenantName, connectionString);
+			var baseConfig = new BaseConfiguration(1053, 15, timezoneName, false);
+			var tenantConfig = new TenantConfiguration()
+			{
+				TenantName = testTenantName,
+				BaseConfig = baseConfig
+			};
+			Target.SaveConfigurationForTenant(tenantConfig);
+			var savedConfig = BaseConfigurationRepository.LoadBaseConfiguration(connectionString);
+			savedConfig.IntervalLength.Should().Be(baseConfig.IntervalLength);
+			savedConfig.CultureId.Should().Be(baseConfig.CultureId);
+			savedConfig.TimeZoneCode.Should().Be(baseConfig.TimeZoneCode);
 		}
 	}
 }
