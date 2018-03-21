@@ -13,17 +13,20 @@
     vm.tenants = [];
     vm.selectedTenant = '';
     vm.selectedJob = null;
-	vm.dataSources = null;
-	vm.masterTennantConfigured = false;
+    vm.dataSources = null;
+    vm.masterTenantConfigured = false;
+    vm.selectDataSource = null;
 
-	vm.getConfigStatus = getConfigStatus;
+    vm.getConfigStatus = getConfigStatus;
     vm.getJobs = getJobs;
-    vm.getTennants = getTennants;
-    vm.sendTennant = sendTennant;
+    vm.getTenants = getTenants;
+    vm.sendTenant = sendTenant;
     vm.selectedTenantChanged = selectedTenantChanged;
     vm.selectJob = selectJob;
     vm.encueueJob = encueueJob;
-    vm.selectDataSource = null;
+    vm.sendBaseConfig = sendBaseConfig;
+
+
 
     var today = new Date();
 
@@ -71,58 +74,125 @@
       if (vm.selectedJob.Forecast) {
         vm.manualForecast[param] = input;
       }
-
     }
 
     //init
-
     vm.getManualData = function () {
-		vm.getTennants();
-		vm.getConfigStatus();
-	}
+      vm.getTenants();
+      vm.getConfigStatus();
+    }
     vm.getManualData();
 
+    function selectJob(job) {
+      vm.selectedJob = job;
+      for (var i = 0; i < vm.selectedJob.NeededDatePeriod.length; i++) {
+        vm.selectedJob[vm.selectedJob.NeededDatePeriod[i]] = true;
+      }
+      if (!vm.selectedJob.NeedsParameterDataSource) {
+        vm.selectDataSource = null;
+      } else {
+        vm.selectDataSource = vm.dataSources[0].Id;
+      }
+
+      if (!vm.selectedJob.Initial) {
+        setDateInput(vm.manualInitial, null);
+      } else {
+        setDateInput(vm.manualInitial, today);
+      }
+      if (!vm.selectedJob.QueueStatistics) {
+        setDateInput(vm.manualQueueStats, null);
+      } else {
+        setDateInput(vm.manualQueueStats, today);
+      }
+      if (!vm.selectedJob.AgentStatistics) {
+        setDateInput(vm.manualAgentStats, null);
+      } else {
+        setDateInput(vm.manualAgentStats, today);
+      }
+      if (!vm.selectedJob.Schedule) {
+        setDateInput(vm.manualSchedule, null);
+      } else {
+        setDateInput(vm.manualSchedule, today);
+      }
+      if (!vm.selectedJob.Forecast) {
+        setDateInput(vm.manualForecast, null);
+      } else {
+        setDateInput(vm.manualForecast, today);
+      }
+    }
+
+    function setDateInput(data, value) {
+      data.StartDate = value;
+      data.EndDate = value;
+    }
+
     function getJobs(data) {
-      $http.post("./Etl/Jobs", JSON.stringify(data), tokenHeaderService.getHeaders())
+      // $http.post("./Etl/Jobs", JSON.stringify(data), tokenHeaderService.getHeaders())
+      // .success(function (data) {
+      //   vm.jobs = data;
+      // })
+      // .error(function (data) {
+      //   vm.jobs = [];
+      //   console.log(data, 'failed to get jobs');
+      // });
+    }
+
+    function getTenants() {
+      $http.get("./AllTenants", tokenHeaderService.getHeaders())
       .success(function (data) {
-        vm.jobs = data;
-      })
-      .error(function (data) {
-        vm.jobs = [];
-        console.log(data, 'failed to get jobs');
+        vm.tenants = data;
+        vm.tenants.unshift({
+          Name: '<All>'
+        });
+        vm.selectedTenant = vm.tenants[0].Name;
+        vm.sendTenant(vm.selectedTenant);
+        vm.getJobs(vm.selectedTenant);
       });
     }
 
-    function getTennants() {
-      $http.get("./AllTenants", tokenHeaderService.getHeaders())
+    function getConfigStatus() {
+      $http.get("./Etl/IsBaseConfigurationAvailable", tokenHeaderService.getHeaders())
       .success(function (data) {
-		  vm.tenants = data;
-		  vm.tenants.unshift({
-			  Name: '<All>'
-		  });
-        vm.selectedTenant = vm.tenants[0].Name;
-        vm.sendTennant(vm.selectedTenant);
-        vm.getJobs(vm.selectedTenant);
+        vm.masterTenant  = {
+          IsBaseConfigured: data.IsBaseConfigured,
+          ConnectionString: data.ConnectionString,
+          TenantName: data.TenantName
+        };
       });
-	  }
+    }
 
-	  function getConfigStatus() {
-		  $http.get("./Etl/IsBaseConfigurationAvailable", tokenHeaderService.getHeaders())
-			  .success(function (data) {
-				  vm.masterTennantConfigured = data;
-			  });
-	  }
+    function selectedTenantChanged() {
+      vm.sendTenant(vm.selectedTenant);
+      vm.getJobs(vm.selectedTenant);
+      vm.selectDataSource = null;
+    }
 
-	function selectedTenantChanged() {
-		vm.sendTennant(vm.selectedTenant);
-		vm.getJobs(vm.selectedTenant);
-		vm.selectDataSource = null;
-	}
-
-    function sendTennant(data) {
+    function sendTenant(data) {
       $http.post("./Etl/TenantLogDataSources", JSON.stringify(data), tokenHeaderService.getHeaders())
       .success(function (data) {
         vm.dataSources = data;
+      });
+    }
+
+    function sendBaseConfig(nonMasterConnectionString) {
+      var baseObj = {
+        ConnectionString: '',
+        BaseConfig: {
+          CultureId: vm.baseConfig.culture,
+          IntervalLength: vm.baseConfig.interval,
+          TimeZoneCode: vm.baseConfig.timezone
+        }
+      }
+
+      if (nonMasterConnectionString) {
+        baseObj.ConnectionString = nonMasterConnectionString;
+      } else if(vm.masterTenant.ConnectionString){
+        baseObj.ConnectionString = vm.masterTenant.ConnectionString
+      }
+
+      $http.post("./Etl/SaveConfigurationForTenant", baseObj, tokenHeaderService.getHeaders())
+      .success(function (data) {
+        vm.masterTenant.IsBaseConfigured = true;
       });
     }
 
@@ -179,49 +249,6 @@
           job.Status = null;
         }, 5000);
       });
-    }
-
-    function selectJob(job) {
-      vm.selectedJob = job;
-      for (var i = 0; i < vm.selectedJob.NeededDatePeriod.length; i++) {
-        vm.selectedJob[vm.selectedJob.NeededDatePeriod[i]] = true;
-      }
-      if (!vm.selectedJob.NeedsParameterDataSource) {
-        vm.selectDataSource = null;
-      } else {
-        vm.selectDataSource = vm.dataSources[0].Id;
-      }
-
-      if (!vm.selectedJob.Initial) {
-        setDateInput(vm.manualInitial, null);
-      } else {
-        setDateInput(vm.manualInitial, today);
-      }
-      if (!vm.selectedJob.QueueStatistics) {
-        setDateInput(vm.manualQueueStats, null);
-      } else {
-        setDateInput(vm.manualQueueStats, today);
-      }
-      if (!vm.selectedJob.AgentStatistics) {
-        setDateInput(vm.manualAgentStats, null);
-      } else {
-        setDateInput(vm.manualAgentStats, today);
-      }
-      if (!vm.selectedJob.Schedule) {
-        setDateInput(vm.manualSchedule, null);
-      } else {
-        setDateInput(vm.manualSchedule, today);
-      }
-      if (!vm.selectedJob.Forecast) {
-        setDateInput(vm.manualForecast, null);
-      } else {
-        setDateInput(vm.manualForecast, today);
-      }
-    }
-
-    function setDateInput(data, value) {
-      data.StartDate = value;
-      data.EndDate = value;
     }
 
     //history inputs

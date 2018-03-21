@@ -1,10 +1,10 @@
-<div class="container body-content" ng-controller="etlController as vm">	
-	
-	<div ng-cloak ng-if="!vm.masterTennantConfigured">
+<div class="container body-content" ng-controller="etlController as vm">
+
+	<div ng-cloak ng-if="!vm.masterTenant.IsBaseConfigured">
 		<div ng-include="'/Etl/modal.html'"></div>
 	</div>
 
-	<div ng-cloak ng-if="vm.masterTennantConfigured">
+	<div ng-cloak ng-if="vm.masterTenant.IsBaseConfigured">
 		<h2 >
 			ETL tool
 		</h2>
@@ -20,14 +20,14 @@
 				</button>
 			</div>
 		</div>
-	
+
 		<div ng-if="vm.state === 'manual'">
 			<div ng-include="'Etl/manual.html'"></div>
 		</div>
 
 		<div ng-if="vm.state === 'schedule'">
 			<div ng-include="'Etl/schedule.html'"></div>
-		</div>	
+		</div>
 
 		<div ng-if="vm.state === 'history'">
 			<div ng-include="'Etl/history.html'"></div>
@@ -39,7 +39,7 @@
 	</div>
 
 	<style>
-	
+
 		.subrow {
 			padding-left: 25px;
 		}

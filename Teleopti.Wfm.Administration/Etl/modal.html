@@ -1,32 +1,50 @@
-﻿<form ng-submit="vm.masterTennantConfigured = true">
+<form ng-submit="vm.sendBaseConfig();" Name="baseForm">
 	<h2>Tenant base configuration</h2>
 	<div class="panel panel-default">
-		<div class="panel-heading">Teleopt WFM tenant</div>
+		<div class="panel-heading">
+			<span ng-if="vm.masterTenant.TenantName">
+				{{vm.masterTenant.TenantName}}
+			</span>
+			<span ng-if="!vm.masterTenant.TenantName">
+				ETL initial configuration
+			</span>
+		</div>
 		<div class="panel-body text-container">
-			The tennant <b>Teleopti WFM tennant</b> does not have a base configuration.
-			This is a one and done action that can not be changed once configured, be careful!
+			<b>Before it is possible to use the ETL manual tool or background service for processing reporting data a few important decisions must be made. Please select carefully as these, once set, cannot be undone easily without major maintenance work.</b>
+			<br />
+			<br />
+			<p> - Interval length: Highest reporting resolution, typically 15 minutes. This absolutely must match the interval used in the aggregation database, which in it self will most often mirror the interval used in the ACD reports (If interval length is already in use in Analytics database this option is disabled).</p>
+			<p> - Culture: The culture used for some report data, i.e, will decide day names and week numbering for all reporting users. Will not affect the date and numbering formats in reports.</p>
+			<p> - Time Zone: Should normally reflect the time zone of the server where ETL is running. Used by ETL to know exactly which data periods jobs should be run with.</p>
 			<br />
 			<div class="row">
 				<div class="col-md-12">
-					<label for="baseLanguage">Language:</label>
-					<br />
-					<input autocomplete="off" required id="baseLanguage" type="type" placeholder="Language" />
+					<div class="form-group">
+						<label for="baseInterval">Interval length:</label>
+						<select class="form-control" id="baseInterval" ng-model="vm.baseConfig.interval">
+							<option>15</option>
+						</select>
+					</div>
 				</div>
 				<div class="col-md-12">
-					<label for="baseInterval">Interval:</label>
-					<br />
-					<input autocomplete="off" required id="baseInterval" type="type" placeholder="interval length (min)" />
+					<div class="form-group">
+						<label for="baseCulture">Culture:</label>
+						<select class="form-control" id="baseCulture" ng-model="vm.baseConfig.culture">
+							<option>1053</option>
+						</select>
+					</div>
 				</div>
 				<div class="col-md-12">
-					<label for="baseTimeZone">timezone:</label>
-					<br />
-					<input autocomplete="off" required id="baseTimeZone" type="type" placeholder="Timezone" />
+					<div class="form-group">
+						<label for="baseTimezone">Time zone:</label>
+						<select class="form-control" id="baseTimezone" ng-model="vm.baseConfig.timezone">
+							<option>(UTC + 01:00) Belgrade, Bratislava, Budapest, Ljubljana, Prague</option>
+						</select>
+					</div>
 				</div>
 			</div>
-
 		</div>
 		<div class="panel-footer">
-
 			<button class="btn btn-primary" type="submit">
 				<md-icon style="padding-right: 5px" md-svg-src="Content/images/ic_forward_black_24px.svg" aria-hidden="true">
 					<svg fill="#000000" height="100%" viewBox="0 0 24 24" width="100%" xmlns="http://www.w3.org/2000/svg" fit="" preserveAspectRatio="xMidYMid meet" focusable="false">
@@ -36,7 +54,6 @@
 				</md-icon>
 				<span class="text-white">Apply configuration</span>
 			</button>
-
 		</div>
 	</div>
 </form>
