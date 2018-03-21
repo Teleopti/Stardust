@@ -4,7 +4,7 @@ namespace Teleopti.Wfm.Administration.Models
 {
 	public class TenantConfiguration		
 	{
-		public string TenantName { get; set; }
+		public string ConnectionString { get; set; }
 
 		public BaseConfiguration BaseConfig { get; set; }
 	}

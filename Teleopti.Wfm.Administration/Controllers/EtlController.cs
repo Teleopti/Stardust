@@ -100,13 +100,11 @@ namespace Teleopti.Wfm.Administration.Controllers
 			return Ok(isConfig);
 		}
 
+		[TenantUnitOfWork]
 		[HttpPost, Route("Etl/SaveConfigurationForTenant")]
 		public virtual IHttpActionResult SaveConfigurationForTenant(TenantConfiguration tenantConfiguration)
 		{
-			var tenant = _loadAllTenants.Tenants().Single(x => x.Name.Equals(tenantConfiguration.TenantName));
-			if (tenant == null) return Content(HttpStatusCode.NotFound, "Tenant not found"); 
-			var connectionString = tenant.DataSourceConfiguration.AnalyticsConnectionString;
-			_baseConfigurationRepository.SaveBaseConfiguration(connectionString, tenantConfiguration.BaseConfig);
+			_baseConfigurationRepository.SaveBaseConfiguration(tenantConfiguration.ConnectionString, tenantConfiguration.BaseConfig);
 			return Ok();
 		}
 	}

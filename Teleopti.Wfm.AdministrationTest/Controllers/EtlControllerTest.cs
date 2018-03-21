@@ -311,7 +311,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			var baseConfig = new BaseConfiguration(1053, 15, timezoneName, false);
 			var tenantConfig = new TenantConfiguration()
 			{
-				TenantName = testTenantName,
+				ConnectionString = connectionString,
 				BaseConfig = baseConfig
 			};
 			Target.SaveConfigurationForTenant(tenantConfig);
