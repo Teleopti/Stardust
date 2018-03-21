@@ -88,14 +88,15 @@ namespace Teleopti.Analytics.Etl.CommonTest.JobSchedule
 			}
 		}
 
-		[Test]
-		public void ShouldShovel()
+		[TestCase(true)]
+		[TestCase(false)]
+		public void ShouldShovel(bool defaultScenario)
 		{
 			var date = new DateOnly(2016, 12, 20);
 			var dateAsUtc = new DateTime(date.Year, date.Month, date.Day, 0, 0, 0, DateTimeKind.Utc);
 			var dateList = new JobMultipleDate(TimeZoneInfo.FindSystemTimeZoneById("UTC"));
 			dateList.Add(date.Date, date.Date, JobCategoryType.Schedule);
-			var scenario = new Scenario("_");
+			var scenario = new Scenario("_") {DefaultScenario = defaultScenario};
 			var activity = new Activity("_");
 			var primarySkill = new Skill("primary", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
 			primarySkill.SetCascadingIndex(1);
