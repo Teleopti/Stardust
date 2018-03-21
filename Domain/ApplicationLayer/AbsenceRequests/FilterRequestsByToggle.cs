@@ -32,6 +32,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			var requestsUsingBudget = new List<IPersonRequest>();
 			foreach (var pr in personRequests)
 			{
+				if(pr.Person.WorkflowControlSet == null)
+					continue;
 				var mergedPeriod = pr.Person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod(pr.Request as IAbsenceRequest);
 				var validators = _absenceRequestValidatorProvider.GetValidatorList(mergedPeriod);
 				if(validators.Any(x => (x.GetType() == typeof(BudgetGroupAllowanceValidator) || x.GetType() == typeof(BudgetGroupHeadCountValidator))) || 
