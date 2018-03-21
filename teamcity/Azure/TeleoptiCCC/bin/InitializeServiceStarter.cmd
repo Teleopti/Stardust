@@ -1,5 +1,6 @@
 SET PROCESSNAME=RestartService
 SET PROCESSNAME2=InitializeServiceStarter
+SET PROCESSNAME2=CopyLogfilesToBlob
 ::current dir
 SET DIRECTORY=%~dp0
 ::remove trailer slash
@@ -17,5 +18,8 @@ powershell set-executionpolicy unrestricted
 powershell . %DIRECTORY%\%PROCESSNAME%.ps1 "True">> "%DIRECTORY%\StartupLog.txt" 2>&1
 ::execute task scheduler script
 powershell . %DIRECTORY%\%PROCESSNAME2%.ps1 >> "%DIRECTORY%\StartupLog.txt" 2>&1
+::copy logfiles to blob for teleoptirnd cloudservice ONLY
+powershell . %DIRECTORY%\%PROCESSNAME3%.ps1 >> "%DIRECTORY%\CopyLogfilesToBlob.txt" 2>&1
+
 exit /b 0
 
