@@ -17261,4 +17261,8 @@ The application will now exit.</value>
     <value>Badge calculation is already in progress within the selected period.</value>
     <comment>Selected period has an intersection with one in progress job. Used in gamification calculation Tab.</comment>
   </data>
+  <data name="AddSkillGroup" xml:space="preserve">
+    <value>Add skill group</value>
+    <comment>label for adding a new skill group in skill-group-manager</comment>
+  </data>
 </root>

@@ -1466,6 +1466,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add skill group.
+        /// </summary>
+        public static string AddSkillGroup {
+            get {
+                return ResourceManager.GetString("AddSkillGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add specific authorization in the list below:.
         /// </summary>
         public static string AddSpecificAuthorizationLabel {
