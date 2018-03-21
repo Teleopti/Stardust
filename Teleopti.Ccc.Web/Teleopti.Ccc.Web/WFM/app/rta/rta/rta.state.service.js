@@ -72,7 +72,6 @@
 			},
 
 			setCurrentState: function (newState) {
-				newState.openedSiteIds = state.openedSiteIds;
 				mutate(state, newState);
 				cleanState();
 				storeState();
@@ -124,7 +123,7 @@
 					state.siteIds = state.siteIds.filter(function (s) {
 						return s != id
 					});
-				$state.go($state.current.name, buildState());
+				$state.go($state.current.name, buildState(), {notify: false});
 			},
 
 			selectTeam: function (id, selected) {
@@ -136,7 +135,7 @@
 					});
 					selectOtherTeamsIfSiteIsSelected(id);
 				}
-				$state.go($state.current.name, buildState());
+				$state.go($state.current.name, buildState(), {notify: false});
 			},
 
 			selectSite2: function (id, selected) {
