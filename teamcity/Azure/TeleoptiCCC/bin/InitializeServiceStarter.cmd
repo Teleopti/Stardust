@@ -1,6 +1,6 @@
 SET PROCESSNAME=RestartService
 SET PROCESSNAME2=InitializeServiceStarter
-SET PROCESSNAME2=CopyLogfilesToBlob
+SET PROCESSNAME3=CopyLogfilesToBlob
 ::current dir
 SET DIRECTORY=%~dp0
 ::remove trailer slash
