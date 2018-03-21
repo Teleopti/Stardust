@@ -29,11 +29,10 @@ using WorkloadFactory = Teleopti.Ccc.TestCommon.FakeData.WorkloadFactory;
 namespace Teleopti.Analytics.Etl.CommonTest.JobSchedule
 {
 	[DomainTest]
-	[Ignore("#48532")]
 	public class PBI41857 : ISetup
 	{
 		public IComponentContext ComponentContext;
-		
+
 		[Test]
 		public void ShouldCalculateResourceBasedOnPrimarySkill()
 		{

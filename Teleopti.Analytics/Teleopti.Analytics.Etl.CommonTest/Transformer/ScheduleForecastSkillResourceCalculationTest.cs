@@ -52,7 +52,8 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 				new ScheduleDictionaryForTest(new Scenario("_"), new DateTimePeriod()),
 				new[] {skill},
 				intervalPerDay, 
-				_scheduleLoadedForPeriod);
+				_scheduleLoadedForPeriod,
+				new CascadingResourceCalculationContextFactory(new CascadingPersonSkillProvider(), TimeZoneGuard.Instance, new AddBpoResourcesToContext()));
 		}
 
 		[Test]

@@ -49,12 +49,15 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 					ISchedulingResultService schedulingResultService =
 						new SchedulingResultService(schedulingResultStateHolder, skills, new CascadingPersonSkillProvider());
 					IScheduleForecastSkillResourceCalculation scheduleForecastSkillResourceCalculation =
-						new ScheduleForecastSkillResourceCalculation(new ShovelResources(new ReducePrimarySkillResources(), new AddResourcesToSubSkills(), new SkillSetPerActivityProvider(), new PrimarySkillOverstaff(), new TimeZoneGuard(), new AddBpoResourcesToContext()), 
+						new ScheduleForecastSkillResourceCalculation(new ShovelResources(new ReducePrimarySkillResources(), new AddResourcesToSubSkills(), new SkillSetPerActivityProvider(), new PrimarySkillOverstaff(), 
+								_jobParameters.ContainerHolder.IocContainer.Resolve<ITimeZoneGuard>(), 
+								new AddBpoResourcesToContext()), 
 																	skillDaysDictionary, schedulingResultService,
 																	schedulingResultStateHolder.SkillStaffPeriodHolder,
 																	schedulingResultStateHolder.Schedules,
 																	skills,
-																	 _jobParameters.IntervalsPerDay, period);
+																	 _jobParameters.IntervalsPerDay, period, 
+							_jobParameters.ContainerHolder.IocContainer.Resolve<CascadingResourceCalculationContextFactory>());
 
 					//Transform data from Raptor to Matrix format
 					var raptorTransformer = new ScheduleForecastSkillTransformer(_jobParameters.IntervalsPerDay,

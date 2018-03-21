@@ -19,7 +19,8 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 		private Dictionary<IScheduleForecastSkillKey, IScheduleForecastSkill> _scheduleForecastSkillDictionary;
 		private readonly int _intervalsPerDay;
 		private readonly DateTimePeriod _period;
-		
+		private readonly CascadingResourceCalculationContextFactory _cascadingResourceCalculationContextFactory;
+
 		public ScheduleForecastSkillResourceCalculation(ShovelResources shovelResources,
 									IDictionary<ISkill, IEnumerable<ISkillDay>> skillDaysDictionary, 
 									ISchedulingResultService schedulingResultService, 
@@ -27,12 +28,14 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 									IScheduleDictionary scheduleDictionary,
 									IEnumerable<ISkill> skillsWithSkillDays,
 									int intervalsPerDay, 
-									DateTimePeriod period)
+									DateTimePeriod period,
+									CascadingResourceCalculationContextFactory cascadingResourceCalculationContextFactory)
 		{
 			_shovelResources = shovelResources;
 			_skillDaysDictionary = skillDaysDictionary;
 			_intervalsPerDay = intervalsPerDay;
 			_period = period;
+			_cascadingResourceCalculationContextFactory = cascadingResourceCalculationContextFactory;
 			_schedulingResultService = schedulingResultService;
 			_skillStaffPeriodHolder = skillStaffPeriodHolder;
 			_scheduleDictionary = scheduleDictionary;
@@ -61,10 +64,13 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 				skillStaffPeriod.Payload.UseShrinkage = useShrinkage;
 			}
 
-			_schedulingResultService.SchedulingResult(_period);
 			var dateOnlyPeriodInUtc = _period.ToDateOnlyPeriod(TimeZoneInfo.Utc); //don't know if correct - copied from StageScheduleForecastSkillJobStep when getting skills
-			_shovelResources.Execute(new SkillResourceCalculationPeriodWrapper(_skillStaffPeriodHolder.SkillSkillStaffPeriodDictionary), _scheduleDictionary, _skillsWithSkillDays, dateOnlyPeriodInUtc,new NoShovelingCallback(), null);
-
+			using (_cascadingResourceCalculationContextFactory.Create(_scheduleDictionary, _skillsWithSkillDays, null, false, dateOnlyPeriodInUtc))
+			{
+				_schedulingResultService.SchedulingResult(_period);
+				_shovelResources.Execute(new SkillResourceCalculationPeriodWrapper(_skillStaffPeriodHolder.SkillSkillStaffPeriodDictionary), _scheduleDictionary, _skillsWithSkillDays, dateOnlyPeriodInUtc,new NoShovelingCallback(), null);
+			}
+	
 			collectResourceData(_skillDaysDictionary, useShrinkage, insertDateTime);
 		}
 
