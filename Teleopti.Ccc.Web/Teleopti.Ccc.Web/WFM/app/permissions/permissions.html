@@ -159,7 +159,7 @@
 									<div class="con-flex">
 										<form class="permission-radio-buttons inline-flex" ng-class="{'non-pointer text-muted': vm.selectedRole.BuiltIn}">
 
-											<md-radio-group class="inline-flex" ng-model="vm.functionGroup">
+											<md-radio-group class="inline-flex" ng-model="vm.functionGroup" tabindex="-1">
 												<label>{{'Show'|translate}}:</label>
 												<md-radio-button value="All" aria-label="radio" ng-click="vm.allFunctionsFilter()">{{'All' | translate}}</md-radio-button>
 												<md-radio-button value="Selected" aria-label="radio" ng-click="vm.selectedFunctionsFilter()">{{'SelectedItems' | translate}}</md-radio-button>
@@ -199,7 +199,7 @@
 									<div class="con-flex">
 										<form class="permission-radio-buttons inline-flex" ng-class="{'non-pointer text-muted': vm.selectedRole.BuiltIn}">
 
-											<md-radio-group class="inline-flex" ng-model="vm.orgGroup">
+											<md-radio-group class="inline-flex" ng-model="vm.orgGroup" tabindex="-1">
 												<label>{{'Show'|translate}}:</label>
 												<md-radio-button value="All" aria-label="radio" ng-click="vm.allDataFilter()">{{'All' | translate}}</md-radio-button>
 												<md-radio-button value="Selected" aria-label="radio" ng-click="vm.selectedDataFilter()">{{'SelectedItems' | translate}}</md-radio-button>
