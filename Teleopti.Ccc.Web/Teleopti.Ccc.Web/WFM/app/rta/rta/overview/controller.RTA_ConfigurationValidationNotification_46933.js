@@ -47,7 +47,11 @@
 		};
 
 		function getSites() {
-			return rtaService.getOverviewModelFor(rtaStateService.pollParams())
+			return rtaService.getOverviewModelFor(
+				rtaStateService.pollParams({
+					skillIds: true,
+					openedSiteIds: true
+				}))
 				.then(function (data) {
 					data.Sites.forEach(function (site) {
 						var siteCard = vm.siteCards.find(function (siteCard) {

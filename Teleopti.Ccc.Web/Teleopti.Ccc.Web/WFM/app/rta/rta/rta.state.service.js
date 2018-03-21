@@ -5,7 +5,7 @@
 		.module('wfm.rta')
 		.service('rtaStateService', rtaStateService);
 
-	function rtaStateService($state, rtaService, $q, $sessionStorage) {
+	function rtaStateService($state, rtaService, $q, $sessionStorage, rtaDataService) {
 
 		var state = {
 			open: undefined,
@@ -16,53 +16,13 @@
 			openedSiteIds: []
 		};
 
-		var organization = [];
-		var skills = [];
-		var skillAreas = [];
-
-		var dataLoaded = function () {
-			return $q.all([
-				rtaService.getOrganization()
-					.then(function (data) {
-						organization = data;
-						organization.forEach(function (site) {
-							site.Teams = site.Teams || [];
-						});
-					}),
-				rtaService.getSkills()
-					.then(function (data) {
-						skills = data;
-					}),
-				rtaService.getSkillAreas()
-					.then(function (data) {
-						skillAreas = data;
-					})
-			]);
+		var data = {
+			organization: [],
+			skills: [],
+			skillAreas: [],
 		};
 
 		return {
-
-
-			skills: function () {
-				return skills;
-			},
-
-			skillAreas: function () {
-				return skillAreas;
-			},
-
-			organization: function () {
-				return organization;
-			},
-
-			selectedTeamIds: function () {
-				return state.teamIds;
-			},
-
-			selectedSiteIds: function () {
-				return state.siteIds;
-			},
-
 
 			gotoLastState: function () {
 				if ($sessionStorage.rtaState) {
@@ -75,7 +35,11 @@
 				mutate(state, newState);
 				cleanState();
 				storeState();
-				return dataLoaded()
+				return rtaDataService
+					.load()
+					.then(function (d) {
+						data = d;
+					})
 					.then(updateOpenedSites);
 			},
 
@@ -108,7 +72,7 @@
 			},
 
 			agentsHrefForTeam: function (siteId, teamId) {
-				var site = organization.find(function (site) {
+				var site = data.organization.find(function (site) {
 					return siteId == site.Id;
 				});
 				if (site.Teams.length == 1)
@@ -134,59 +98,18 @@
 			isSiteSelected: isSiteSelected,
 			isTeamSelected: isTeamSelected,
 
-			selectSite: function (id, selected) {
-				if (selected)
-					state.siteIds.push(id);
-				else
-					state.siteIds = state.siteIds.filter(function (s) {
-						return s != id
-					});
-				$state.go($state.current.name, buildState(), {notify: false});
+			toggleSite: function (id) {
+				selectSite(id, !isSiteSelected(id));
 			},
 
-			selectTeam: function (id, selected) {
-				if (selected)
-					state.teamIds.push(id);
-				else {
-					state.teamIds = state.teamIds.filter(function (s) {
-						return s != id
-					});
-					selectOtherTeamsIfSiteIsSelected(id);
-				}
-				$state.go($state.current.name, buildState(), {notify: false});
+			toggleTeam: function (id) {
+				selectTeam(id, !isTeamSelected(id));
 			},
 
-			selectSite2: function (id, selected) {
-				if (selected)
-					state.siteIds.push(id);
-				else
-					state.siteIds = state.siteIds.filter(function (s) {
-						return s != id
-					});
-				$state.go($state.current.name, buildState(), {notify: false});
-			},
+			selectSite: selectSite,
+			selectTeam: selectTeam,
 
-			selectTeam2: function (id, selected) {
-				if (selected)
-					state.teamIds.push(id);
-				else {
-					state.teamIds = state.teamIds.filter(function (s) {
-						return s != id
-					});
-					selectOtherTeamsIfSiteIsSelected(id);
-				}
-				$state.go($state.current.name, buildState(), {notify: false});
-			},
-
-			isSiteMarked: function (siteId) {
-				return organization.find(function (site) {
-					return site.Id == siteId;
-				}).Teams.some(function (team) {
-					return state.teamIds.some(function (teamId) {
-						return teamId == team.Id;
-					})
-				})
-			},
+			siteHasTeamsSelected: siteHasTeamsSelected,
 
 			isSiteOpen: function (id) {
 				return state.openedSiteIds.some(function (siteId) {
@@ -207,12 +130,34 @@
 				$state.go($state.current.name, buildState({siteIds: [], teamIds: []}), {notify: false});
 			},
 
-			pollParams: function () {
-				return {skillIds: selectedSkillIds(), siteIds: state.openedSiteIds}
+			organizationSelectionText: function () {
+				return data.organization
+					.flatMap(function (site) {
+						if (isSiteSelected(site.Id))
+							return [site.Name];
+						return site.Teams.map(function (team) {
+							if (isTeamSelected(team.Id))
+								return team.Name;
+						})
+					})
+					.filter(function (x) {
+						return x;
+					})
+					.slice(0, 9)
+					.join(', ');
 			},
 
-			pollParams2: function () {
-				return {skillIds: selectedSkillIds(), siteIds: state.siteIds, teamIds: state.teamIds}
+			pollParams: function (o) {
+				var r = {};
+				if (o.skillIds)
+					r.skillIds = selectedSkillIds();
+				if (o.openedSiteIds)
+					r.siteIds = state.openedSiteIds;
+				if (o.siteIds)
+					r.siteIds = state.siteIds;
+				if (o.teamIds)
+					r.teamIds = state.teamIds;
+				return r
 			},
 
 			goToAgents: function () {
@@ -224,16 +169,48 @@
 			}
 		};
 
+		function selectSite(id, selected) {
+			if (selected)
+				state.siteIds.push(id);
+			else
+				state.siteIds = state.siteIds.filter(function (s) {
+					return s != id
+				});
+			$state.go($state.current.name, buildState(), {notify: false});
+		}
+
+		function selectTeam(id, selected) {
+			if (selected)
+				state.teamIds.push(id);
+			else {
+				state.teamIds = state.teamIds.filter(function (s) {
+					return s != id
+				});
+				selectOtherTeamsIfSiteIsSelected(id);
+			}
+			$state.go($state.current.name, buildState(), {notify: false});
+		}
+
 		function selectedSkill() {
 			if (state.skillIds.length > 0)
-				return skills.find(function (s) {
+				return data.skills.find(function (s) {
 					return s.Id === state.skillIds[0];
 				});
 			return undefined;
 		}
 
+		function siteHasTeamsSelected(siteId) {
+			return data.organization.find(function (site) {
+				return site.Id == siteId;
+			}).Teams.some(function (team) {
+				return state.teamIds.some(function (teamId) {
+					return teamId == team.Id;
+				})
+			})
+		}
+
 		function selectedSkillArea() {
-			return skillAreas.find(function (s) {
+			return data.skillAreas.find(function (s) {
 				return s.Id === state.skillAreaId;
 			});
 		}
@@ -241,7 +218,7 @@
 		function selectedSkillIds() {
 			if (!state.skillAreaId)
 				return state.skillIds;
-			var skillArea = skillAreas
+			var skillArea = data.skillAreas
 				.find(function (skillArea) {
 					return skillArea.Id === state.skillAreaId;
 				});
@@ -264,7 +241,7 @@
 			});
 			if (teamSelected)
 				return true;
-			var site = organization.find(function (site) {
+			var site = data.organization.find(function (site) {
 				return site.Teams.some(function (team) {
 					return team.Id == id
 				});
@@ -291,7 +268,7 @@
 			});
 
 			// add sites where all teams are selected
-			organization.filter(function (site) {
+			data.organization.filter(function (site) {
 				return site.Teams.length > 0;
 			}).filter(function (site) {
 				return site.Teams.every(function (team) {
@@ -309,7 +286,7 @@
 			});
 
 			// remove teams where site is selected
-			var teamIdsSelectedBySite = organization
+			var teamIdsSelectedBySite = data.organization
 				.filter(function (site) {
 					return state.siteIds.indexOf(site.Id) > -1;
 				})
@@ -340,7 +317,7 @@
 		}
 
 		function selectOtherTeamsIfSiteIsSelected(teamId) {
-			var siteOfTeam = organization.find(function (site) {
+			var siteOfTeam = data.organization.find(function (site) {
 				return site.Teams.some(function (team) {
 					return team.Id == teamId
 				});
@@ -367,12 +344,12 @@
 
 		function updateOpenedSites() {
 			if (state.open) {
-				state.openedSiteIds = organization.map(function (site) {
+				state.openedSiteIds = data.organization.map(function (site) {
 					return site.Id;
 				})
 			}
 			else {
-				state.openedSiteIds = organization.filter(function (site) {
+				state.openedSiteIds = data.organization.filter(function (site) {
 					return site.Teams.some(function (team) {
 						return state.teamIds.some(function (teamId) {
 							return team.Id == teamId;
