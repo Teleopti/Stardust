@@ -23,7 +23,7 @@
                 <button ng-disabled="!$ctrl.allowCalcalution()" class="wfm-btn wfm-btn-primary " ng-click="$ctrl.calculate() ">{{'Start'|translate}}</button>
                 <div class="period-error-box ">
                     <span class="text-danger " ng-show="$ctrl.intersected ">
-                        {{'SelectedPeriodHasAnIntersectionWithOneInProgressJob'|translate}}
+                        {{'BadgeCalculationIsAlreadyInProgressWithinTheSelectedPeriod'|translate}}
                     </span>
                 </div>
             </div>
@@ -38,7 +38,7 @@
         </header>
         <div ng-repeat="job in $ctrl.jobs " class="calculation-job ">
             <div class="job ">
-				<span>{{job.startDate|date:$ctrl.dateFormat}}--{{job.endDate|date:$ctrl.dateFormat}}</span>
+                <span>{{job.startDate|date:$ctrl.dateFormat}}--{{job.endDate|date:$ctrl.dateFormat}}</span>
             </div>
             <div class="owner ">
                 <span>{{job.owner}}</span>

@@ -4143,11 +4143,20 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to BADGE CALCULATION.
+        ///   Looks up a localized string similar to Badge calculation.
         /// </summary>
         public static string BadgeCalculation {
             get {
                 return ResourceManager.GetString("BadgeCalculation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Badge calculation is already in progress within the selected period..
+        /// </summary>
+        public static string BadgeCalculationIsAlreadyInProgressWithinTheSelectedPeriod {
+            get {
+                return ResourceManager.GetString("BadgeCalculationIsAlreadyInProgressWithinTheSelectedPeriod", resourceCulture);
             }
         }
         
@@ -30311,15 +30320,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Selected period has an intersection with one in progress job..
-        /// </summary>
-        public static string SelectedPeriodHasAnIntersectionWithOneInProgressJob {
-            get {
-                return ResourceManager.GetString("SelectedPeriodHasAnIntersectionWithOneInProgressJob", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Selected period should not be longer than {0}..
         /// </summary>
         public static string SelectedPeriodShouldNotBeLongerThanParameterDot {
@@ -33253,15 +33253,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Start {
             get {
                 return ResourceManager.GetString("Start", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to START.
-        /// </summary>
-        public static string StartBadgeCalculation {
-            get {
-                return ResourceManager.GetString("StartBadgeCalculation", resourceCulture);
             }
         }
         
