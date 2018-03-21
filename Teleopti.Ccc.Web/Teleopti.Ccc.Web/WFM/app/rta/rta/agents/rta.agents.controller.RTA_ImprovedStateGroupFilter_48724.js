@@ -46,37 +46,41 @@
 		rtaConfigurationValidator.validate();
 
 		vm.agentStates = [];
-
-		// duplication of state
+		vm.sites = [];
+		vm.states = [];
 		vm.showInAlarm = !$stateParams.showAllAgents;
 
-		var lastUpdate, notice;
-
-		var skillIds = angular.isArray($stateParams.skillIds) ? $stateParams.skillIds[0] || null : $stateParams.skillIds;
-		var skillAreaId = $stateParams.skillAreaId || undefined;
-		$stateParams.es = $stateParams.es || [];
-		vm.sites = [];
-
+		var excludedStates = $stateParams.es || [];
+		var lastUpdate;
+		var notice;
 		// because angular cant handle an array of null in stateparams
 		var nullState = "No State";
 		var nullStateId = "noState";
 		vm.filterText = null;
-		vm.states = [];
-		vm.hexToRgb = rtaFormatService.formatHexToRgb;
 		vm.pause = false;
 		vm.pausedAt = null;
-
-		vm.displayNoAgentsMessage = function () {
-			return vm.agentStates.length === 0;
-		};
-		vm.displayNoAgentsForSkillMessage = rtaStateService.hasSkillSelection;
+		vm.loading = true;
+		
+		rtaStateService.setCurrentState($stateParams)
+			.then(function () {
+				vm.loading = false;
+				// promises here please
+				vm.skills = rtaStateService.skills();
+				vm.skillAreas = rtaStateService.skillAreas();
+				buildSites();
+			});
 
 		var defaultSorting = function () {
 			vm.orderBy = vm.showInAlarm ? undefined : 'Name';
 			vm.direction = vm.showInAlarm ? undefined : 'asc';
 		};
 		defaultSorting();
-
+		
+		vm.displayNoAgentsMessage = function () {
+			return vm.agentStates.length === 0;
+		};
+		vm.displayNoAgentsForSkillMessage = rtaStateService.hasSkillSelection;
+		
 		vm.changeScheduleUrl = function (personId) {
 			return rtaRouteService.urlForChangingSchedule(personId);
 		};
@@ -84,25 +88,12 @@
 			return rtaRouteService.urlForHistoricalAdherence(personId);
 		};
 		vm.goToOverview = rtaRouteService.goToOverview;
-		vm.goToSelectItem = rtaRouteService.goToSelectSkill;
-
-
-		vm.rightPanelOptions = {
-			panelState: false,
-			panelTitle: " ",
-			sidePanelTitle: " ",
-			showCloseButton: true,
-			showBackdrop: false,
-			showResizer: false,
-			showPopupButton: true
-		};
 
 		var phoneStates = [];
 		var phoneStatesLoaded;
 		loadPhoneStates();
 
 		var poller;
-		var pollingInterval = angular.isDefined($stateParams.pollingInterval) ? $stateParams.pollingInterval : 5000;
 
 		$scope.$watch(
 			function () {
@@ -131,6 +122,12 @@
 				poller.destroy();
 		});
 
+		function forcePoll(){
+			console.log('force!!!');
+			if (poller)
+				poller.force();
+		}
+		
 		function pollAgentStates() {
 			return loadAgentStates()
 				.then(updateAgentStates)
@@ -165,12 +162,12 @@
 			phoneStates.push({
 				Id: nullStateId,
 				Name: nullState,
-				Selected: !$stateParams.es.some(function (id) {
+				Selected: !excludedStates.some(function (id) {
 					return id === nullStateId
 				})
 			});
 
-			$stateParams.es
+			excludedStates
 				.filter(function (id) {
 					return id !== nullStateId
 				})
@@ -281,142 +278,94 @@
 			poller.force();
 		};
 
-		////////no right panel stuff /////////////////
+		function buildSites() {
 
-		rtaStateService.setCurrentState($stateParams)
-			.then(function () {
+			var organization = rtaStateService.organization();
+			organization.forEach(function (site) {
+				var siteModel = {
+					Id: site.Id,
+					Name: site.Name,
+					FullPermission: site.FullPermission,
+					Teams: [],
+					get isChecked() {
+						return rtaStateService.isSiteSelected(site.Id);
+					},
+					get isMarked() {
+						return rtaStateService.isSiteMarked(site.Id);
+					},
+					toggle: function () {
+						rtaStateService.selectSite2(site.Id, !rtaStateService.isSiteSelected(site.Id));
+						updateOrganizationPicker();
+						forcePoll();
+					}
+				};
 
-				vm.skillsLoaded = true;
-				vm.placeholderTextForSkillSelection = $translate.instant('SelectSkill');
-				vm.skills = rtaStateService.skills();
-				vm.selectedSkill = vm.skills.find(function (s) {
-					return s.Id === skillIds;
-				});
-
-				vm.skillAreasLoaded = true;
-				vm.placeholderTextForSkillGroupSelection = $translate.instant('SelectSkillGroup');
-				vm.skillAreas = rtaStateService.skillAreas();
-				vm.selectedSkillArea = vm.skillAreas.find(function (s) {
-					return s.Id === skillAreaId
-				});
-
-				var organization = rtaStateService.organization();
-				organization.forEach(function (site) {
-					var siteModel = {
-						Id: site.Id,
-						Name: site.Name,
-						FullPermission: site.FullPermission,
-						Teams: [],
+				site.Teams.forEach(function (team) {
+					siteModel.Teams.push({
+						Id: team.Id,
+						Name: team.Name,
 						get isChecked() {
-							return rtaStateService.isSiteSelected(site.Id);
-						},
-						set isChecked(newValue) {
-							rtaStateService.selectSite2(site.Id, newValue);
-						},
-						get isMarked() {
-							return rtaStateService.isSiteMarked(site.Id);
+							return rtaStateService.isTeamSelected(team.Id);
 						},
 						toggle: function () {
-							rtaStateService.selectSite2(site.Id, !rtaStateService.isSiteSelected(site.Id));
-							updateSelectFieldText();
+							rtaStateService.selectTeam2(team.Id, !rtaStateService.isTeamSelected(team.Id));
+							updateOrganizationPicker();
+							forcePoll();
 						}
-					};
-					updateTeams(siteModel, site.Teams);
-					vm.sites.push(siteModel);
+					});
 				});
 
-				function updateTeams(siteModel, teams) {
-					teams.forEach(function (team) {
-						siteModel.Teams.push({
-							Id: team.Id,
-							Name: team.Name,
-							get isChecked() {
-								return rtaStateService.isTeamSelected(team.Id);
-							},
-							set isChecked(newValue) {
-								rtaStateService.selectTeam2(team.Id, newValue);
-							},
-							toggle: function () {
-								rtaStateService.selectTeam2(team.Id, !rtaStateService.isTeamSelected(team.Id));
-								updateSelectFieldText();
-							}
-						});
-					})
-				}
-
-				updateSelectFieldText();
+				vm.sites.push(siteModel);
 			});
 
-		// scoped variables
-		vm.selectFieldText;
-		vm.searchTerm = "";
-		//scoped functions
-		vm.querySearch = querySearch;
-		vm.expandSite = expandSite;
-		vm.clearOrgSelection = clearOrgSelection;
-		vm.clearSearchTerm = clearSearchTerm;
-		vm.clearSelection = clearSelection;
-		vm.openPicker = false;
-		vm.placeholderTextForSkillSelection = $translate.instant('LoadingSkills');
-		vm.placeholderTextForSkillGroupSelection = $translate.instant('LoadingSkillGroups');
-		vm.skillsLoaded = false;
-		vm.skillAreasLoaded = false;
-		vm.selectedSkillChange = selectedSkillChange;
-		vm.selectedSkillAreaChange = selectedSkillAreaChange;
-
-		/*********AUTOCOMPLETE*****/
-		function querySearch(query, myArray) {
-			var results = query ? myArray.filter(createFilterFor(query)) : myArray;
-			return results;
-		};
-
-		function createFilterFor(query) {
-			var lowercaseQuery = angular.lowercase(query);
-			return function filterFn(item) {
-				var lowercaseName = angular.lowercase(item.Name);
-				return (lowercaseName.indexOf(lowercaseQuery) === 0);
-			};
-		};
-
-		function selectedSkillChange(skill) {
-			var newSkillId = skill ? skill.Id : null;
-			if (newSkillId != skillIds)
-				rtaStateService.selectSkill(newSkillId);
+			updateOrganizationPicker();
 		}
 
-		function selectedSkillAreaChange(skillArea) {
-			var newSkillAreaId = skillArea ? skillArea.Id : null;
-			if (newSkillAreaId != skillAreaId)
-				rtaStateService.selectSkillArea(newSkillAreaId);
-		}
-
-		function clearSelection() {
-			rtaStateService.deselectSkillAndSkillArea();
-		}
-
-		function clearOrgSelection() {
+		vm.clearOrganizationSelection = function () {
 			rtaStateService.deselectOrganization();
-			updateSelectFieldText();
+			updateOrganizationPicker();
 		};
 
-		/***********MULTI-SELECT************/
-		function expandSite(site) {
-			site.isExpanded = !site.isExpanded;
-		};
-
-		function updateSelectFieldText() {
+		function updateOrganizationPicker() {
 			var selectedSites = rtaStateService.selectedSiteIds();
 			var selectedTeams = rtaStateService.selectedTeamIds();
 			var selectedFieldText = rtaNamesFormatService.getSelectedFieldText(vm.sites, selectedSites, selectedTeams);
 			if (selectedFieldText != null)
-				vm.selectFieldText = selectedFieldText;
-			vm.siteMarkedOrChecked = vm.sites.some(function (site) {
+				vm.organizationPickerSelectionText = selectedFieldText;
+			vm.organizationPickerClearEnabled = vm.sites.some(function (site) {
 				return site.isChecked || site.isMarked;
 			});
 		}
 
-		function clearSearchTerm() {
-			vm.searchTerm = '';
-		}
+		Object.defineProperty(vm, 'selectedSkillNew', {
+			get: function () {
+				return rtaStateService.selectedSkill();
+			},
+			set: function (value) {
+				rtaStateService.selectSkill2(value);
+				forcePoll();
+			}
+		});
+
+		Object.defineProperty(vm, 'selectedSkillArea', {
+			get: function () {
+				return rtaStateService.selectedSkillArea();
+			},
+			set: function (value) {
+				rtaStateService.selectSkillArea2(value);
+				forcePoll();
+			}
+		});
+		
+		vm.filterSkills = function (query, data) {
+			if (!query)
+				return data;
+			var q = angular.lowercase(query);
+			return data.filter(function (item) {
+				return angular.lowercase(item.Name).indexOf(q) === 0;
+			});
+		};
+		
+		vm.clearSkillSelection = rtaStateService.deselectSkillAndSkillArea
 	}
 })();

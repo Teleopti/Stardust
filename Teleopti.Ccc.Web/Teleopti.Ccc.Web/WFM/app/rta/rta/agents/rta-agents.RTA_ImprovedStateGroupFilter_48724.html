@@ -7,7 +7,7 @@
 			<div class="rta-top-buttons-wrapper pull-left">
 			<span>
 				<button class="wfm-btn wfm-btn-default" ng-click="vm.goToOverview()">{{'Dashboard'|translate}}</button>
-				<button class="wfm-btn wfm-btn-primary rta-default-cursor" ng-click="vm.goToSelectItem()">{{'Agents'|translate}}</button>
+				<button class="wfm-btn wfm-btn-primary rta-default-cursor">{{'Agents'|translate}}</button>
 			</span>
 				<span class="rta-paused-message-wrapper" ng-if="vm.pausedAt">
 				{{'PausedAt'|translate}} {{vm.pausedAt}}
@@ -26,37 +26,39 @@
 	<div class="panel material-depth-1 rta-filter-panel">
 	<div class="con-row rta-filters-container">
 	<span class="con-flex rta-multiple-selection-panel">
-				<div class="relative" outside-click="vm.openPicker = false">
-							<input type="text" placeholder="{{'DataFilterThreeDots'|translate}}"
-								   ng-style="vm.openPicker && {'visibility': 'hidden'}"
-								   ng-class="vm.defaultInputText ? 'rta-light-text' : ''"
-								   ng-click="vm.openPicker = !vm.openPicker" ng-value="vm.selectFieldText"
-								   ng-model="vm.searchTerm"/>
+				<div class="relative" outside-click="vm.organizationPickerOpen = false">
+							<input type="text" 
+								   placeholder="{{'DataFilterThreeDots'|translate}}"
+								   ng-style="vm.organizationPickerOpen && {'visibility': 'hidden'}"
+								   ng-click="vm.organizationPickerOpen = !vm.organizationPickerOpen" 
+								   ng-value="vm.organizationPickerSelectionText"
+								   ng-model="vm.organizationPickerSearchTerm"/>
 						<form ng-cloak name="form"
-							  class="wfm-form wfm-dropdown-panel panel material-depth-2 animate-show" novalidate
-							  ng-show="vm.openPicker">
+							  class="wfm-form wfm-dropdown-panel panel material-depth-2 animate-show" 
+							  novalidate
+							  ng-show="vm.organizationPickerOpen">
 							<div class="sub-header">
 								<div>
 								<label for="filter" class="input-icon">
 									<i class="mdi mdi-filter-outline"></i>
 									<input type="text" id="filter" placeholder="{{'DataFilterThreeDots'|translate}}"
-										   ng-model="vm.searchTerm">
+										   ng-model="vm.organizationPickerSearchTerm">
 									<md-tooltip>{{'DataFilterThreeDots'|translate}}</md-tooltip>
 								</label>
 								</div>
 								<div>
 									<button class="wfm-btn wfm-btn-invis-primary"
-											ng-class="vm.siteMarkedOrChecked ? 'wfm-btn-invis-primary' : 'wfm-btn-invis-disabled'"
+											ng-class="vm.organizationPickerClearEnabled ? 'wfm-btn-invis-primary' : 'wfm-btn-invis-disabled'"
 											type="clear"
-											ng-click="vm.clearOrgSelection()">{{'ClearAll'|translate}}</button>
+											ng-click="vm.clearOrganizationSelection()">{{'ClearAll'|translate}}</button>
 									<button class="wfm-btn wfm-btn-invis-primary" ng-class="wfm-btn-invis-primary"
-											type="clear" ng-click="vm.openPicker = false">{{'Close'|translate}}</button>									
+											type="clear" ng-click="vm.organizationPickerOpen = false">{{'Close'|translate}}</button>									
 								</div>
 		</div>
 		<div class="panel">
-			<div ng-repeat="site in vm.sites | filter:vm.searchTerm" class="rta-option-group">
+			<div ng-repeat="site in vm.sites | filter:vm.organizationPickerSearchTerm" class="rta-option-group">
 				<div>
-					<span ng-click="vm.expandSite(site)" class="rta-options-prepend">
+					<span ng-click="site.isExpanded = !site.isExpanded" class="rta-options-prepend">
 						<i class="mdi" ng-class="site.isExpanded ? 'mdi-chevron-up' : 'mdi-chevron-down'"></i>
 					</span>
 					<label>
@@ -95,20 +97,19 @@
 					<!--</form>-->
 			<!--</div>-->
 	<!--</span>-->
-		
-	<span class="con-flex">
+
+		<span class="con-flex">
 						<md-autocomplete id="skill-id"
-										 ng-disabled="!vm.skillsLoaded"
-										 ng-attr-skillsLoaded="{{vm.skillsLoaded}}"
-										 class="autocomplete-skill "
+										 ng-disabled="vm.loading"
+										 ng-attr-skillsLoaded="{{!vm.loading}}"
+										 class="autocomplete-skill"
 										 md-input-id="skill-input"
-										 md-selected-item="vm.selectedSkill"
+										 md-selected-item="vm.selectedSkillNew"
 										 md-search-text="searchSkillText"
-										 md-selected-item-change="vm.selectedSkillChange(skill)"
-										 md-items="skill in vm.querySearch(searchSkillText, vm.skills)"
+										 md-items="skill in vm.filterSkills(searchSkillText, vm.skills)"
 										 md-item-text="skill.Name"
 										 md-min-length="0"
-										 placeholder="{{vm.placeholderTextForSkillSelection}}">
+										 placeholder="{{'SelectSkill'|translate}}">
 							<md-item-template>
 								<span class="rta-skill-item" md-highlight-text="searchSkillText"
 									  md-highlight-flags="^i">{{skill.Name}}</span>
@@ -117,24 +118,26 @@
 						{{'RepViewerNoMoreMatches'|translate}}
 					</md-not-found>
 			</md-autocomplete>
-			<i class="mdi mdi-close pointer ie-cross grow-out" ng-show="vm.selectedSkill"
-			   ng-click="vm.clearSelection()">
+			<i class="mdi mdi-close pointer ie-cross grow-out" 
+			   ng-show="vm.selectedSkill"
+			   ng-click="vm.clearSkillSelection()">
 						<md-tooltip>{{'Clear'|translate}}</md-tooltip>
 					</i>
 			</span>
-	<span class="con-flex">
+
+
+		<span class="con-flex">
 						<md-autocomplete id="skill-area-id"
-										 ng-disabled="!vm.skillAreasLoaded"
-										 ng-attr-skillAreasLoaded="{{vm.skillAreasLoaded}}"
+										 ng-disabled="vm.loading"
+										 ng-attr-skillAreasLoaded="{{!vm.loading}}"
 										 class="autocomplete-skillarea"
 										 md-input-id="skill-area-input"
 										 md-selected-item="vm.selectedSkillArea"
 										 md-search-text="searchSkillAreaText"
-										 md-selected-item-change="vm.selectedSkillAreaChange(skillArea)"
-										 md-items="skillArea in vm.querySearch(searchSkillAreaText, vm.skillAreas)"
+										 md-items="skillArea in vm.filterSkills(searchSkillAreaText, vm.skillAreas)"
 										 md-item-text="skillArea.Name"
 										 md-min-length="0"
-										 placeholder="{{vm.placeholderTextForSkillGroupSelection}}">
+										 placeholder="{{'SelectSkillGroup'|translate}}">
 							<md-item-template>
 								<span class="rta-skill-area-item" md-highlight-text="searchSkillText"
 									  md-highlight-flags="^i">{{skillArea.Name}}</span>
@@ -143,8 +146,9 @@
 						{{'RepViewerNoMoreMatches'|translate}}
 					</md-not-found>
 			</md-autocomplete>
-			<i class="mdi mdi-close pointer ie-cross grow-out" ng-show="vm.selectedSkillArea"
-			   ng-click="vm.clearSelection()">
+			<i class="mdi mdi-close pointer ie-cross grow-out" 
+			   ng-show="vm.selectedSkillArea"
+			   ng-click="vm.clearSkillSelection()">
 						<md-tooltip>{{'Clear'|translate}}</md-tooltip>
 					</i>
 			</span>
@@ -277,7 +281,7 @@
 			</td>
 			<td>
 				<div ng-if="agentState.Rule" class="label"
-					 ng-attr-style="background-color: {{vm.hexToRgb(agentState.Color)}}">
+					 ng-attr-style="background-color: {{agentState.Color}}">
 					{{agentState.Rule}}
 				</div>
 			</td>

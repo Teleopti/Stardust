@@ -91,6 +91,22 @@
 				$state.go($state.current.name, buildState({skillIds: skillId, skillAreaId: undefined}));
 			},
 
+			selectSkill2: function (skillOrId) {
+				if (skillOrId && skillOrId.Id)
+					skillOrId = skillOrId.Id;
+				var previousSkillId = state.skillIds.length > 0 ? state.skillIds[0] : null;
+				if (skillOrId != previousSkillId)
+					$state.go($state.current.name, buildState({skillIds: skillOrId, skillAreaId: undefined}), {notify: false});
+			},
+
+			selectSkillArea2: function (skillArea) {
+				if (skillArea && skillArea.Id)
+					var skillAreaId = skillArea.Id;
+				var previousSkillAreaId = state.skillAreaId ? state.skillAreaId : null;
+				if (skillAreaId != previousSkillAreaId)
+					$state.go($state.current.name, buildState({skillIds: undefined, skillAreaId: skillAreaId}), {notify: false});
+			},
+
 			agentsHrefForTeam: function (siteId, teamId) {
 				var site = organization.find(function (site) {
 					return siteId == site.Id;
@@ -112,8 +128,10 @@
 				return state.skillIds.length > 0;
 			},
 
-			isSiteSelected: isSiteSelected,
+			selectedSkill: selectedSkill,
+			selectedSkillArea: selectedSkillArea,
 
+			isSiteSelected: isSiteSelected,
 			isTeamSelected: isTeamSelected,
 
 			selectSite: function (id, selected) {
@@ -204,6 +222,20 @@
 			hasSelection: function () {
 				return state.siteIds.length > 0 || state.teamIds.length > 0 || state.skillIds.length > 0 || state.skillAreaId;
 			}
+		};
+
+		function selectedSkill() {
+			if (state.skillIds.length > 0)
+				return skills.find(function (s) {
+					return s.Id === state.skillIds[0];
+				});
+			return undefined;
+		}
+
+		function selectedSkillArea() {
+			return skillAreas.find(function (s) {
+				return s.Id === state.skillAreaId;
+			});
 		}
 
 		function selectedSkillIds() {
