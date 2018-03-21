@@ -219,12 +219,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			return !command.ErrorMessages.Any();
 		}
 
-		private static IDisposable getContext(List<SkillCombinationResource> combinationResources, List<ISkill> skills, bool useAllSkills)
-		{
-			return new ResourceCalculationContext(new Lazy<IResourceCalculationDataContainerWithSingleOperation>(() => new ResourceCalculationDataContainerFromSkillCombinations(combinationResources, skills, useAllSkills)));
-		}
-
-		private List<SkillStaffingIntervalLightModel> calculateForecastedAgentsForEmailSkills(DateOnly? dateOnly, bool useShrinkage,
+		private void calculateForecastedAgentsForEmailSkills(DateOnly? dateOnly, bool useShrinkage,
 			IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, TimeZoneInfo timeZone)
 		{
 			var scheduledStaffingPerSkill = new List<SkillStaffingIntervalLightModel>();
@@ -254,8 +249,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					}
 				}
 			}
-
-			return scheduledStaffingPerSkill;
 		}
 	}
 
@@ -314,9 +307,5 @@ combinationResources.SingleOrDefault(x => x.SkillCombination.NonSequenceEquals(s
 
 			skillCombinationResourceByAgentAndLayer.Resource = resource;
 		}
-
-
 	}
-
-
 }
