@@ -432,7 +432,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll
 			//with no item selected these are not viable
 			toolStripMenuItemRunExport.Enabled = true;
 			toolStripMenuItemContextRunExport.Enabled = true;
-			SmartPartEnvironment.SmartPartWorkspace.GridSize = GridSizeType.TwoByTwo;
 			LoadSmartPart(payrollExport.Id.GetValueOrDefault(), 1, UserTexts.Resources.PayrollExport, ClassPrefix + PayrollExports, 0, 0);
 		}
 
