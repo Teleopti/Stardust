@@ -148,6 +148,8 @@ BEGIN
 	END 
 END
 
+--reset the @last_logg_date_time according to the above #48758
+SELECT @last_logg_date_time = dateadd(minute,@last_logg_interval*@minutes_per_interval,@last_logg_date)
 
 /* Calculate @minutes_per_interval and @interval_per_hour*/
 

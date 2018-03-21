@@ -128,6 +128,9 @@ BEGIN
 	END 
 END
 
+--reset the @last_logg_date_time according to the above #48758
+SELECT @last_logg_date_time = dateadd(minute,@last_logg_interval*@minutes_per_interval,@last_logg_date)
+
 SELECT @acd_type=acd_type_id FROM log_object WHERE log_object_id = @log_object_id
 /*********************************************************************************/
 /* Adjust for different time zones between log_object and T-CCC?      */
