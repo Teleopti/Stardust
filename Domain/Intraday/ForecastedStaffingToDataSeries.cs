@@ -6,10 +6,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 {
 	public class ForecastedStaffingToDataSeries
 	{
-		public ForecastedStaffingToDataSeries()
-		{
-		}
-
 		public double?[] DataSeries(IList<StaffingIntervalModel> forecastedStaffingPerSkill, DateTime[] timeSeries)
 		{
 			var forecastedStaffing = forecastedStaffingPerSkill

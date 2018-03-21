@@ -10,14 +10,6 @@ namespace Teleopti.Ccc.Domain.Common
 		private ITeam _team;
 		private IGamificationSetting _gamificationSetting;
 
-		/// <summary>
-		/// Constructor for NHibernate
-		/// </summary>
-		public TeamGamificationSetting()
-		{
-			
-		}
-
 		public virtual ITeam Team
 		{
 			get { return _team; }
