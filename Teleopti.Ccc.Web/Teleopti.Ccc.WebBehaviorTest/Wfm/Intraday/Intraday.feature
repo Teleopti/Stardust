@@ -106,7 +106,8 @@ I want to be able to monitor my part of the business
         When I select to remove 'Area A'
         Then I should no longer be able to monitor 'Area A'
 
-    Scenario: View incoming traffic for one skill
+    @Ignore
+	Scenario: View incoming traffic for one skill
         Given the time is '2016-12-21 14:00'
         And there is queue statistics for the skill 'Skill A' up until '2016-12-21 13:30'
         And there is forecast data for skill 'Skill A' for date '2016-12-21'
@@ -151,6 +152,7 @@ I want to be able to monitor my part of the business
         And I should see a summary of incoming traffic
 
 
+	@Ignore
     @OnlyRunIfEnabled('WFM_Intraday_Show_For_Other_Days_43504')
     Scenario: Switch tab when other day than today is selected
         Given the time is '2016-12-21 14:00'
@@ -176,6 +178,7 @@ I want to be able to monitor my part of the business
         Then I should see incoming traffic data in the chart
         And I should see the date
 
+	@Ignore
     @OnlyRunIfEnabled('WFM_Intraday_Export_To_Excel_44892')
     Scenario: If toggled we should see export to excel button
         Given the time is '2016-12-21 14:00'
