@@ -169,7 +169,7 @@
 		}
 
 		function useShrinkageForStaffing() {
-			sessionStorage.staffingUseShrinkage = JSON.stringify(vm.useShrinkage);
+			sessionStorage.staffingUseShrinkage = angular.toJson(vm.useShrinkage);
 			return generateChart(vm.selectedSkill, vm.selectedArea);
 		}
 
@@ -233,7 +233,7 @@
 		function extracted(area) {
 			currentSkills = area;
 			vm.selectedArea = area;
-			$window.sessionStorage.staffingSelectedArea = JSON.stringify(area);
+			$window.sessionStorage.staffingSelectedArea = angular.toJson(area);
 			delete $window.sessionStorage.staffingSelectedSkill;
 			vm.selectedSkill = null;
 		}
@@ -245,7 +245,7 @@
 			} else {
 				currentSkills = skill;
 				vm.selectedSkill = currentSkills;
-				$window.sessionStorage.staffingSelectedSkill = JSON.stringify(skill);
+				$window.sessionStorage.staffingSelectedSkill = angular.toJson(skill);
 				delete $window.sessionStorage.staffingSelectedArea;
 				vm.selectedArea = null;
 			}
@@ -267,7 +267,7 @@
 		}
 
 		function checkArea(area) {
-			return area.Id === JSON.parse($window.sessionStorage.staffingSelectedArea).Id;
+			return area.Id === angular.fromJson($window.sessionStorage.staffingSelectedArea).Id;
 		}
 
 		function getSkillAreas() {
@@ -455,20 +455,20 @@
 		function manageAreaSessionStorage() {
 			if ($window.sessionStorage.staffingSelectedArea) {
 				vm.selectedArea = null;
-				selectedAreaChange(JSON.parse($window.sessionStorage.staffingSelectedArea));
+				selectedAreaChange(angular.fromJson($window.sessionStorage.staffingSelectedArea));
 			}
 		}
 
 		function manageSkillSessionStorage() {
 			if ($window.sessionStorage.staffingSelectedSkill) {
 				vm.selectedSkill = null;
-				selectedSkillChange(JSON.parse($window.sessionStorage.staffingSelectedSkill));
+				selectedSkillChange(angular.fromJson($window.sessionStorage.staffingSelectedSkill));
 			}
 		}
 
 		function manageShrinkageSessionStorage() {
 			if ($window.sessionStorage.staffingUseShrinkage) {
-				vm.useShrinkage = JSON.parse($window.sessionStorage.staffingUseShrinkage);
+				vm.useShrinkage = angular.fromJson($window.sessionStorage.staffingUseShrinkage);
 				vm.useShrinkageForStaffing();
 			}
 		}
