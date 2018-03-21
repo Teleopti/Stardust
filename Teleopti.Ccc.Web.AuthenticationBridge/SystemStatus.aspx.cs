@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Web.AuthenticationBridge
 		{
 			var result = new Dictionary<string, bool>();
 			foreach (var provider in providers)
-				result.Add(provider.DisplayName, tryVisitUrl(provider.Url.AbsoluteUri));
+				result.Add(provider.DisplayName + " " + provider.Url, tryVisitUrl(provider.Url.AbsoluteUri));
 
 			return result;
 		}
