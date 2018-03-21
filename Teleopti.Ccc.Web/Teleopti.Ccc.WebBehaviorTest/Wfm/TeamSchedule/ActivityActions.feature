@@ -88,8 +88,9 @@ Scenario: Should see enabled add personal activity button
 	And I selected agent 'John Smith'
 	And I open menu in team schedule
 	Then I should see 'AddPersonalActivity' menu is enabled
-
-@ignore just keep it as information, already cover it by unit test.
+	
+#just keep it as information, already cover it by unit test.
+@ignore 
 Scenario: Should be able to add personal activity
 	Given 'John Smith' has a shift with
 	| Field            | Value            |
