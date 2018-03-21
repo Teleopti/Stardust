@@ -13,8 +13,6 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Tool
 		private readonly IExternalLogonReader _externalLogons;
 		private readonly ICommonAgentNameProvider _nameDisplaySetting;
 		private readonly IDataSourceReader _dataSources;
-		private static Random _random = new Random();
-
 
 		public RtaToolViewModelBuilderFromAgentState(
 			IAgentStateReadModelReader agentStates,
