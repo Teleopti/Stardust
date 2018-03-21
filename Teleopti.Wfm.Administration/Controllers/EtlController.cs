@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Web.Http;
@@ -102,10 +104,32 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 		[TenantUnitOfWork]
 		[HttpPost, Route("Etl/SaveConfigurationForTenant")]
-		public virtual IHttpActionResult SaveConfigurationForTenant(TenantConfiguration tenantConfiguration)
+		public virtual IHttpActionResult SaveConfigurationForTenant(TenantConfigurationModel tenantConfigurationModel)
 		{
-			_baseConfigurationRepository.SaveBaseConfiguration(tenantConfiguration.ConnectionString, tenantConfiguration.BaseConfig);
+			_baseConfigurationRepository.SaveBaseConfiguration(tenantConfigurationModel.ConnectionString, tenantConfigurationModel.BaseConfig);
 			return Ok();
+		}
+
+		[TenantUnitOfWork]
+		[HttpGet, Route("Etl/GetTenants")]
+		public virtual IHttpActionResult GetTenants()
+		{
+			var tenants = new List<TenantConfigurationModel>();
+			foreach (var tenant in _loadAllTenants.Tenants())
+			{
+				var analyticsConnectionString =
+					new SqlConnectionStringBuilder(tenant.DataSourceConfiguration.AnalyticsConnectionString).ToString();
+				var baseConfig = _baseConfigurationRepository.LoadBaseConfiguration(analyticsConnectionString);
+				tenants.Add(new TenantConfigurationModel()
+				{
+					TenantName = tenant.Name,
+					ConnectionString = analyticsConnectionString,
+					BaseConfig = baseConfig,
+					IsBaseConfigured = baseConfig.IntervalLength.HasValue
+				});
+			}
+
+			return Ok(tenants);
 		}
 	}
 }

@@ -10,11 +10,13 @@ using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Wfm.Administration.Controllers;
 using Teleopti.Wfm.Administration.Core.EtlTool;
@@ -309,7 +311,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 		{
 			AllTenants.HasWithAnalyticsConnectionString(testTenantName, connectionString);
 			var baseConfig = new BaseConfiguration(1053, 15, timezoneName, false);
-			var tenantConfig = new TenantConfiguration()
+			var tenantConfig = new TenantConfigurationModel()
 			{
 				ConnectionString = connectionString,
 				BaseConfig = baseConfig
@@ -319,6 +321,41 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			savedConfig.IntervalLength.Should().Be(baseConfig.IntervalLength);
 			savedConfig.CultureId.Should().Be(baseConfig.CultureId);
 			savedConfig.TimeZoneCode.Should().Be(baseConfig.TimeZoneCode);
+		}
+
+		[Test]
+		public void ShouldReturnAllTenants()
+		{
+			var masterTenant = new Tenant(RandomName.Make());
+			masterTenant.DataSourceConfiguration.SetAnalyticsConnectionString(string.Format("Initial Catalog={0}", RandomName.Make()));
+			var childTenant = new Tenant(RandomName.Make());
+			childTenant.DataSourceConfiguration.SetAnalyticsConnectionString(string.Format("Initial Catalog={0}", RandomName.Make()));
+
+			AllTenants.HasWithAnalyticsConnectionString(masterTenant.Name, masterTenant.DataSourceConfiguration.AnalyticsConnectionString);
+			AllTenants.HasWithAnalyticsConnectionString(childTenant.Name, childTenant.DataSourceConfiguration.AnalyticsConnectionString);
+
+			var baseConfig = new BaseConfiguration(1053, 15, timezoneName, false);
+			BaseConfigurationRepository.SaveBaseConfiguration(masterTenant.DataSourceConfiguration.AnalyticsConnectionString, baseConfig);
+
+			var result = (OkNegotiatedContentResult<List<TenantConfigurationModel>>)Target.GetTenants();
+			result.Should().Be.OfType<OkNegotiatedContentResult<List<TenantConfigurationModel>>>();
+
+			var mTenant = result.Content.Single(x => x.TenantName == masterTenant.Name);
+			var cTenant = result.Content.Single(x => x.TenantName == childTenant.Name);
+
+			mTenant.TenantName.Should().Be(masterTenant.Name);
+			mTenant.ConnectionString.Should().Be(masterTenant.DataSourceConfiguration.AnalyticsConnectionString);
+			mTenant.BaseConfig.IntervalLength.Should().Be(baseConfig.IntervalLength);
+			mTenant.BaseConfig.CultureId.Should().Be(baseConfig.CultureId);
+			mTenant.BaseConfig.TimeZoneCode.Should().Be(baseConfig.TimeZoneCode);
+			mTenant.IsBaseConfigured.Should().Be(true);
+
+			cTenant.TenantName.Should().Be(childTenant.Name);
+			cTenant.ConnectionString.Should().Be(childTenant.DataSourceConfiguration.AnalyticsConnectionString);
+			cTenant.BaseConfig.IntervalLength.Should().Be(null);
+			cTenant.BaseConfig.CultureId.Should().Be(null);
+			cTenant.BaseConfig.TimeZoneCode.Should().Be(null);
+			cTenant.IsBaseConfigured.Should().Be(false);
 		}
 	}
 }
