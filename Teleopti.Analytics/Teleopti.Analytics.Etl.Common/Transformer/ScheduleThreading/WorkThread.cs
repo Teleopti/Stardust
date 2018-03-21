@@ -69,13 +69,16 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.ScheduleThreading
 						DateTimePeriod? layerCollectionPeriod = scheduleProjectionService.SchedulePartProjection.Period();
 						if (layerCollectionPeriod.HasValue)
 						{
+							var shiftStart = layerCollectionPeriod.Value.StartDateTime;
+							var shiftEnd = layerCollectionPeriod.Value.EndDateTime;
+
 							//Use two variables to get shiftStart and shiftEnd in "sync" with Analytics intervals
-							var shiftStart = getDateFromInterval(layerCollectionPeriod.Value.StartDateTime, minutesPerInterval, true);
-							var shiftEnd = getDateFromInterval(layerCollectionPeriod.Value.EndDateTime, minutesPerInterval, false);
+							var intervalShiftStart = getDateFromInterval(layerCollectionPeriod.Value.StartDateTime, minutesPerInterval, true);
+							var intervalShiftEnd = getDateFromInterval(layerCollectionPeriod.Value.EndDateTime, minutesPerInterval, false);
 
 							// We have a shift - break it down into intervals
-							for (DateTime date = shiftStart;
-										  date <= shiftEnd;
+							for (DateTime date = intervalShiftStart;
+										  date <= intervalShiftEnd;
 										  date = date.AddMinutes(minutesPerInterval))
 							{
 								// Loop through every interval of this day´s projected layers
@@ -122,7 +125,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.ScheduleThreading
 			if (shiftStart)
 				return date.AddMinutes(-1 * (date.Minute % minutesPerInterval));
 
-			return date.AddMinutes(minutesPerInterval + (date.Minute % minutesPerInterval));
+			return date.AddMinutes(minutesPerInterval - (date.Minute % minutesPerInterval));
 		}
 	}
 }

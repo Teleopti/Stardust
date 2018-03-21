@@ -62,7 +62,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.ScheduleThreading
 			row["shift_startinterval_id"] = new IntervalBase(shiftStart, intervalsPerDay).Id;
 			row["shift_endinterval_id"] = new IntervalBase(shiftEnd.AddSeconds(-1), intervalsPerDay).Id; //remove one seconds to get EndDateTime on correct mart interval
 
-			row["shift_length_m"] = shiftEnd.Subtract(shiftEnd).TotalMinutes;
+			row["shift_length_m"] = shiftEnd.Subtract(shiftStart).TotalMinutes;
 
 			var timeInfo = new TimeInfo(payload, layer, layerCollection);
 
