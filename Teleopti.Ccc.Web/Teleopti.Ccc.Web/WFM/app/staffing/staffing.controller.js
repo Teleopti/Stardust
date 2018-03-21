@@ -437,7 +437,8 @@
 			var request = staffingService.exportStaffingData.get({
 				skillId: vm.selectedSkill.Id,
 				exportStartDate: vm.exportStaffingDataDate.startDate,
-				exportEndDate: vm.exportStaffingDataDate.endDate
+				exportEndDate: vm.exportStaffingDataDate.endDate,
+				useShrinkage: vm.useShrinkage
 			});
 			request.$promise.then(function(response) {
 				vm.ErrorMessage = response.ErrorMessage;
