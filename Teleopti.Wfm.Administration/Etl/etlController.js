@@ -13,8 +13,10 @@
     vm.tenants = [];
     vm.selectedTenant = '';
     vm.selectedJob = null;
-    vm.dataSources = null;
+	vm.dataSources = null;
+	vm.masterTennantConfigured = false;
 
+	vm.getConfigStatus = getConfigStatus;
     vm.getJobs = getJobs;
     vm.getTennants = getTennants;
     vm.sendTennant = sendTennant;
@@ -75,8 +77,9 @@
     //init
 
     vm.getManualData = function () {
-      vm.getTennants();
-    }
+		vm.getTennants();
+		vm.getConfigStatus();
+	}
     vm.getManualData();
 
     function getJobs(data) {
@@ -101,7 +104,14 @@
         vm.sendTennant(vm.selectedTenant);
         vm.getJobs(vm.selectedTenant);
       });
-    }
+	  }
+
+	  function getConfigStatus() {
+		  $http.get("./Etl/IsBaseConfigurationAvailable", tokenHeaderService.getHeaders())
+			  .success(function (data) {
+				  vm.masterTennantConfigured = data;
+			  });
+	  }
 
 	function selectedTenantChanged() {
 		vm.sendTennant(vm.selectedTenant);
