@@ -164,8 +164,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[Given(@"I select the Skill Group '(.*)'")]
 		public void GivenISelectTheSkillGroup(string skillGroupName)
 		{
-			Browser.Interactions.AssertExists("#available_skill_groups_list");
-			Browser.Interactions.ClickContaining("#available_skill_groups_list", skillGroupName);
+			Browser.Interactions.TryUntil(
+				() => { Browser.Interactions.ClickContaining("#available_skill_groups_list", skillGroupName); },
+				() => Browser.Interactions.IsVisible("#available_skill_groups_list"), 
+				TimeSpan.FromSeconds(1));
 		}
 
 		[Given(@"I chose to rename the Skill Group '(.*)'")]

@@ -35,6 +35,7 @@ I want to be able to monitor my part of the business
         Then I select to monitor skill area 'my Area'
         And I should monitor 'my Area'
 
+@Ignore
     @OnlyRunIfEnabled('WFM_Unified_Skill_Group_Management_45417')
     @OnlyRunIfEnabled('WFM_Modify_Skill_Groups_43727')
     Scenario: Create Skill Group in SGM
@@ -49,6 +50,7 @@ I want to be able to monitor my part of the business
         And I pick the skillgroup 'my Area'
         Then I should monitor 'my Area'
 
+	@Ignore
     @OnlyRunIfEnabled('WFM_Unified_Skill_Group_Management_45417')
     @OnlyRunIfEnabled('WFM_Modify_Skill_Groups_43727')
     Scenario: Rename Skill Group in SGM
