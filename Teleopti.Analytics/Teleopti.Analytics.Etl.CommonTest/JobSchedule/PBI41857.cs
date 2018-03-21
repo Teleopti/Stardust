@@ -3,20 +3,23 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Analytics.Etl.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
+using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.MultipleDate;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.Steps;
 using Teleopti.Analytics.Etl.CommonTest.Transformer;
-using Teleopti.Analytics.Etl.CommonTest.Transformer.FakeData;
 using Teleopti.Analytics.Etl.CommonTest.Transformer.Job;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -26,8 +29,11 @@ using WorkloadFactory = Teleopti.Ccc.TestCommon.FakeData.WorkloadFactory;
 namespace Teleopti.Analytics.Etl.CommonTest.JobSchedule
 {
 	[DomainTest]
-	public class PBI41857
+	[Ignore("#48532")]
+	public class PBI41857 : ISetup
 	{
+		public IComponentContext ComponentContext;
+		
 		[Test]
 		public void ShouldCalculateResourceBasedOnPrimarySkill()
 		{
@@ -58,11 +64,12 @@ namespace Teleopti.Analytics.Etl.CommonTest.JobSchedule
 			raptorRep.SetLoadSkillDays(skillDays);
 			raptorRep.SetLoadSchedule(scheduleDictionary);
 			var jobHelper = new JobHelperForTest(raptorRep, null);
-			var containerHolder = new JobParametersFactory.FakeContainerHolder();
+			var containerHolder = new IocContainerHolder(ComponentContext);
 			var jobParameters = new JobParameters(dateList, 0, "UTC", 15, "", "", null, containerHolder, false) { Helper = jobHelper };
 			var target = new StageScheduleForecastSkillJobStep(jobParameters) { ClearDataTablesAfterRun = false };
 
-			target.Run(new List<IJobStep>(), null, null, false);
+			var res = target.Run(new List<IJobStep>(), null, null, false);
+			res.JobStepException.Should().Be.Null();
 
 			var result = target.BulkInsertDataTable1;
 			const double expectedScheduledOnPrimary = 1;
@@ -112,11 +119,12 @@ namespace Teleopti.Analytics.Etl.CommonTest.JobSchedule
 			raptorRep.SetLoadSkillDays(skillDays);
 			raptorRep.SetLoadSchedule(scheduleDictionary);
 			var jobHelper = new JobHelperForTest(raptorRep, null);
-			var containerHolder = new JobParametersFactory.FakeContainerHolder();
+			var containerHolder = new IocContainerHolder(ComponentContext);
 			var jobParameters = new JobParameters(dateList, 0, "UTC", 15, "", "", null, containerHolder, false) { Helper = jobHelper};
 			var target = new StageScheduleForecastSkillJobStep(jobParameters) {ClearDataTablesAfterRun = false};
 
-			target.Run(new List<IJobStep>(), null, null, false);
+			var res = target.Run(new List<IJobStep>(), null, null, false);
+			res.JobStepException.Should().Be.Null();
 
 			var result = target.BulkInsertDataTable1;
 			const double expectedScheduledOnPrimary = 0.5;
@@ -134,6 +142,11 @@ namespace Teleopti.Analytics.Etl.CommonTest.JobSchedule
 			{
 				secondaryRow["scheduled_resources"].Should().Be.EqualTo(expectedScheduledOnSecondary);
 			}
+		}
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.AddModule(new EtlModule(configuration));
 		}
 	}
 }
