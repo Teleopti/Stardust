@@ -1,10 +1,8 @@
 import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
 import { UpgradeModule, downgradeComponent } from '@angular/upgrade/static';
 
 import { SharedModule } from '../shared/shared.module';
 
-import { PeopleComponent } from './people.component';
 import {
 	MatInputModule,
 	MatDialogModule,
@@ -27,14 +25,15 @@ import {
 	RevokePageComponent,
 	SearchPageComponent,
 	WorkspaceComponent,
-	TitleBarComponent
+	TitleBarComponent,
+	AppLogonPageComponent,
+	PageContainerComponent
 } from './components';
 import { RolesService, WorkspaceService, SearchService, NavigationService } from './services';
-import { PageContainerComponent } from './components/shared/page-container/page-container.component';
+import { FormFieldInputComponent } from './components/form-field-input/form-field-input.component';
 
 @NgModule({
 	declarations: [
-		PeopleComponent,
 		GrantPageComponent,
 		RevokePageComponent,
 		RolePage,
@@ -44,7 +43,9 @@ import { PageContainerComponent } from './components/shared/page-container/page-
 		SearchPageComponent,
 		WorkspaceComponent,
 		TitleBarComponent,
-		PageContainerComponent
+		PageContainerComponent,
+		AppLogonPageComponent,
+		FormFieldInputComponent
 	],
 	imports: [
 		SharedModule,
@@ -54,13 +55,20 @@ import { PageContainerComponent } from './components/shared/page-container/page-
 		MatButtonModule,
 		MatDividerModule,
 		MatTableModule,
-		HttpClientModule,
 		MatSortModule,
-		MatProgressSpinnerModule
+		MatProgressSpinnerModule,
+		MatInputModule
 	],
 	providers: [WorkspaceService, RolesService, SearchService, NavigationService],
 	exports: [],
-	entryComponents: [TitleBarComponent, SearchPageComponent, GrantPageComponent, RevokePageComponent]
+	entryComponents: [
+		TitleBarComponent,
+		SearchPageComponent,
+		GrantPageComponent,
+		RevokePageComponent,
+		AppLogonPageComponent,
+		FormFieldInputComponent
+	]
 })
 export class PeopleModule {
 	ngDoBootstrap() {}
