@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var target = new OvertimeRequestApprovalService(
 				OvertimeRequestUnderStaffingSkillProvider, OvertimeRequestSkillProvider,
-				CommandDispatcher, null, Now);
+				CommandDispatcher, null);
 
 			var result = target.Approve(personRequest.Request);
 
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var target = new OvertimeRequestApprovalService(
 				OvertimeRequestUnderStaffingSkillProvider, OvertimeRequestSkillProvider,
-				CommandDispatcher, null,Now);
+				CommandDispatcher, null);
 
 			var result = target.Approve(personRequest.Request);
 
@@ -182,7 +182,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var target = new OvertimeRequestApprovalService(
 				OvertimeRequestUnderStaffingSkillProvider, OvertimeRequestSkillProvider,
-				CommandDispatcher, null, Now);
+				CommandDispatcher, null);
 
 			var result = target.Approve(personRequest.Request);
 
@@ -239,7 +239,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var target = new OvertimeRequestApprovalService(
 				OvertimeRequestUnderStaffingSkillProvider, OvertimeRequestSkillProvider,
-				CommandDispatcher, null, Now);
+				CommandDispatcher, null);
 
 			var result = target.Approve(personRequest.Request);
 
@@ -287,7 +287,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var target = new OvertimeRequestApprovalService(
 				OvertimeRequestUnderStaffingSkillProvider, OvertimeRequestSkillProvider,
-				CommandDispatcher, null, Now);
+				CommandDispatcher, null);
 
 			var result = target.Approve(personRequest.Request);
 
@@ -336,7 +336,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var target = new OvertimeRequestApprovalService(
 				OvertimeRequestUnderStaffingSkillProvider, OvertimeRequestSkillProvider,
-				CommandDispatcher, null, Now);
+				CommandDispatcher, null);
 
 			var result = target.Approve(personRequest.Request);
 
@@ -393,7 +393,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var target = new OvertimeRequestApprovalService(
 				OvertimeRequestUnderStaffingSkillProvider, OvertimeRequestSkillProvider,
-				CommandDispatcher, null, Now);
+				CommandDispatcher, null);
 
 			var result = target.Approve(personRequest.Request);
 
@@ -449,7 +449,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var target = new OvertimeRequestApprovalService(
 				OvertimeRequestUnderStaffingSkillProvider, OvertimeRequestSkillProvider,
-				CommandDispatcher, null, Now);
+				CommandDispatcher, null);
 
 			var result = target.Approve(personRequest.Request);
 
@@ -495,7 +495,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var target = new OvertimeRequestApprovalService(
 				OvertimeRequestUnderStaffingSkillProvider, OvertimeRequestSkillProvider,
-				CommandDispatcher, null, Now);
+				CommandDispatcher, null);
 
 			var result = target.Approve(personRequest.Request);
 
@@ -525,7 +525,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var target = new OvertimeRequestApprovalService(
 				OvertimeRequestUnderStaffingSkillProvider, OvertimeRequestSkillProvider,
-				CommandDispatcher, null, Now);
+				CommandDispatcher, null);
 
 			var result = target.Approve(personRequest.Request);
 
@@ -572,7 +572,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var target = new OvertimeRequestApprovalService(
 				OvertimeRequestUnderStaffingSkillProvider, OvertimeRequestSkillProvider,
-				CommandDispatcher, null, Now);
+				CommandDispatcher, null);
 
 			var result = target.Approve(personRequest.Request);
 
@@ -615,7 +615,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var target = new OvertimeRequestApprovalService(
 				OvertimeRequestUnderStaffingSkillProvider, OvertimeRequestSkillProvider,
-				CommandDispatcher, null, Now);
+				CommandDispatcher, null);
 
 			var result = target.Approve(personRequest.Request);
 
