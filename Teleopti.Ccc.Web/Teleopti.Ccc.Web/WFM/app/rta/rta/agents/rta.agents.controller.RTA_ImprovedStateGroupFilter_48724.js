@@ -328,6 +328,7 @@
 		vm.clearOrganizationSelection = function () {
 			rtaStateService.deselectOrganization();
 			updateOrganizationPicker();
+			forcePoll();
 		};
 
 		function updateOrganizationPicker() {
