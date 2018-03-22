@@ -227,8 +227,8 @@
 				vm.currentArea = item;
 				vm.selectedItem = item;
 				pollActiveTabDataByDayOffset(vm.activeTab, vm.chosenOffset.value);
-				item.UnsupportedSkills = [];
-				checkUnsupported(item);
+				// item.UnsupportedSkills = [];
+				// checkUnsupported(item);
 			}
 		};
 
@@ -354,13 +354,13 @@
 			var services = [intradayTrafficService, intradayPerformanceService, intradayMonitorStaffingService];
 			var timeData;
 			if (vm.selectedItem !== null && angular.isDefined(vm.selectedItem)) {
-				if (vm.selectedItem.Skills) {
-					services[activeTab].pollSkillAreaDataByDayOffset(vm.selectedItem, vm.toggles, dayOffset);
+				if (vm.isSkill(vm.selectedItem)) {
+					services[activeTab].pollSkillDataByDayOffset(vm.selectedItem, vm.toggles, dayOffset);
 					if (dayOffset === 0) {
 						timeData = intradayLatestTimeService.getLatestTime(vm.selectedItem);
 					}
 				} else {
-					services[activeTab].pollSkillDataByDayOffset(vm.selectedItem, vm.toggles, dayOffset);
+					services[activeTab].pollSkillAreaDataByDayOffset(vm.selectedItem, vm.toggles, dayOffset);
 					if (dayOffset === 0) {
 						timeData = intradayLatestTimeService.getLatestTime(vm.selectedItem);
 					}
