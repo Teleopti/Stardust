@@ -47,15 +47,7 @@
 				$state.go($state.current.name, buildState({skillIds: undefined, skillAreaId: undefined}));
 			},
 
-			selectSkillArea: function (skillAreaId) {
-				$state.go($state.current.name, buildState({skillIds: undefined, skillAreaId: skillAreaId}));
-			},
-
-			selectSkill: function (skillId) {
-				$state.go($state.current.name, buildState({skillIds: skillId, skillAreaId: undefined}));
-			},
-
-			selectSkill2: function (skillOrId) {
+			selectSkill: function (skillOrId) {
 				if (skillOrId && skillOrId.Id)
 					skillOrId = skillOrId.Id;
 				var previousSkillId = state.skillIds.length > 0 ? state.skillIds[0] : null;
@@ -63,12 +55,12 @@
 					$state.go($state.current.name, buildState({skillIds: skillOrId, skillAreaId: undefined}), {notify: false});
 			},
 
-			selectSkillArea2: function (skillArea) {
-				if (skillArea && skillArea.Id)
-					var skillAreaId = skillArea.Id;
+			selectSkillArea: function (skillAreaOrId) {
+				if (skillAreaOrId && skillAreaOrId.Id)
+					skillAreaOrId = skillAreaOrId.Id;
 				var previousSkillAreaId = state.skillAreaId ? state.skillAreaId : null;
-				if (skillAreaId != previousSkillAreaId)
-					$state.go($state.current.name, buildState({skillIds: undefined, skillAreaId: skillAreaId}), {notify: false});
+				if (skillAreaOrId != previousSkillAreaId)
+					$state.go($state.current.name, buildState({skillIds: undefined, skillAreaId: skillAreaOrId}), {notify: false});
 			},
 
 			agentsHrefForTeam: function (siteId, teamId) {

@@ -1727,9 +1727,9 @@
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.spec.js" />
     <Content Include="WFM\app\rta\rta\overview\controller.openclose.spec.js" />
-    <Content Include="WFM\app\rta\rta\overview\controller.redirects.spec.js" />
+    <Content Include="WFM\app\rta\rta\overview\controller.skill.selection.spec.js" />
     <Content Include="WFM\app\rta\rta\overview\controller.RTA_RememberMyPartOfTheBusiness_39082.js" />
-    <Content Include="WFM\app\rta\rta\overview\controller.selection.spec.js" />
+    <Content Include="WFM\app\rta\rta\overview\controller.organization.selection.spec.js" />
     <Content Include="WFM\app\rta\rta\overview\controller.spec.js" />
     <Content Include="WFM\app\rta\rta\overview\controller.storeState.spec.js" />
     <Content Include="WFM\app\rta\rta\rta.adherence.service.js" />

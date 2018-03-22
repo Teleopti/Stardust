@@ -53,45 +53,48 @@
 					openedSiteIds: true
 				}))
 				.then(function (data) {
-					data.Sites.forEach(function (site) {
-						var siteCard = vm.siteCards.find(function (siteCard) {
-							return siteCard.Id === site.Id;
-						});
-
-						site.Teams = site.Teams || [];
-						if (!siteCard) {
-							siteCard = {
-								Id: site.Id,
-								Name: site.Name,
-								get isOpen() {
-									return rtaStateService.isSiteOpen(site.Id);
-								},
-								set isOpen(newValue) {
-									rtaStateService.openSite(site.Id, newValue);
-									if (newValue) poller.force();
-								},
-								get isSelected() {
-									return rtaStateService.isSiteSelected(site.Id);
-								},
-								set isSelected(newValue) {
-									rtaStateService.selectSite(site.Id, newValue);
-								},
-								teams: [],
-								AgentsCount: site.AgentsCount,
-								href: rtaStateService.agentsHrefForSite(site.Id)
-							};
-
-							vm.siteCards.push(siteCard);
-						}
-
-						updateTeams(siteCard, site.Teams);
-						siteCard.ClassesOnSelection = siteCard.isSelected ? (site.Color + classSuffixOnSelection + ' ' + noBorderClass) : (site.Color + classSuffixNoSelection);
-						siteCard.InAlarmCount = site.InAlarmCount;
-					});
-
+					updateSites(data);
 					vm.totalAgentsInAlarm = data.TotalAgentsInAlarm;
 					vm.noSiteCards = !vm.siteCards.length;
+				})
+		}
+
+		function updateSites(data) {
+			data.Sites.forEach(function (site) {
+				var siteCard = vm.siteCards.find(function (siteCard) {
+					return siteCard.Id === site.Id;
 				});
+
+				site.Teams = site.Teams || [];
+				if (!siteCard) {
+					siteCard = {
+						Id: site.Id,
+						Name: site.Name,
+						get isOpen() {
+							return rtaStateService.isSiteOpen(site.Id);
+						},
+						set isOpen(newValue) {
+							rtaStateService.openSite(site.Id, newValue);
+							if (newValue) poller.force();
+						},
+						get isSelected() {
+							return rtaStateService.isSiteSelected(site.Id);
+						},
+						set isSelected(newValue) {
+							rtaStateService.selectSite(site.Id, newValue);
+						},
+						teams: [],
+						AgentsCount: site.AgentsCount,
+						href: rtaStateService.agentsHrefForSite(site.Id)
+					};
+
+					vm.siteCards.push(siteCard);
+				}
+
+				updateTeams(siteCard, site.Teams);
+				siteCard.ClassesOnSelection = siteCard.isSelected ? (site.Color + classSuffixOnSelection + ' ' + noBorderClass) : (site.Color + classSuffixNoSelection);
+				siteCard.InAlarmCount = site.InAlarmCount;
+			});
 		}
 
 		function updateTeams(siteCard, teams) {
@@ -129,8 +132,10 @@
 				rtaStateService.selectSkillArea(skillOrSkillArea.Id);
 			else
 				rtaStateService.selectSkill(skillOrSkillArea.Id);
+			vm.siteCards = [];
+			poller.force();
 		}
-
 	}
+
 })();
 

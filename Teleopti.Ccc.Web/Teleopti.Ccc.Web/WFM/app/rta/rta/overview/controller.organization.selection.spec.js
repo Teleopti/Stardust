@@ -2,133 +2,84 @@
 
 rtaTester.describe('RtaOverviewController', function (it, fit, xit) {
 
-	var
-		channelSales,
-		phone,
-		invoice,
-		bts;
-
-	var
-		skills1,
-		skills2,
-		allSkills;
-
-	var
-		skillArea1,
-		skillArea2;
-
-	var skillAreas;
-
-	var goodColor = '#C2E085';
-	var warningColor = '#FFC285';
-	var dangerColor = '#EE8F7D';
-	
-	channelSales = {
-		Name: 'Channel Sales',
-		Id: 'channelSalesId'
-	};
-
-	phone = {
-		Name: 'Phone',
-		Id: 'phoneId'
-	};
-
-	invoice = {
-		Name: 'Invoice',
-		Id: 'invoiceId'
-	};
-
-	bts = {
-		Name: 'BTS',
-		Id: 'btsId'
-	};
-
-	skills1 = [channelSales, phone];
-	skills2 = [invoice, bts];
-	allSkills = [channelSales, phone, invoice, bts];
-
-	skillArea1 = {
-		Id: 'skillArea1Id',
-		Name: 'SkillArea1',
-		Skills: skills1
-	};
-	skillArea2 = {
-		Id: 'skillArea2Id',
-		Name: 'SkillArea2',
-		Skills: skills2
-	};
-	skillAreas = [skillArea1, skillArea2];
-
-	it('should go to sites by skill state', function (t) {
-		allSkills.forEach(function (skill) {
-			t.backend.withSkill(skill);
-		});
+	it('should select site', function (t) {
+		t.backend
+			.withSiteAdherence({
+				Id: 'parisId'
+			});
 		var vm = t.createController();
 
 		t.apply(function () {
-			vm.selectSkillOrSkillArea(vm.skills[0]);
+			vm.siteCards[0].isSelected = true;
 		});
 
-		expect(t.lastGoParams.skillIds).toEqual(['channelSalesId']);
+		expect(vm.siteCards[0].isSelected).toEqual(true);
 	});
 
-	it('should go to sites by skill area state', function (t) {
-		t.backend.withSkillAreas(skillAreas);
+	it('should select site from url', function (t) {
+		t.stateParams.siteIds = ['parisId'];
+		t.backend
+			.withSiteAdherence({
+				Id: 'parisId'
+			});
+
 		var vm = t.createController();
 
-		vm.selectSkillOrSkillArea(vm.skillAreas[0]);
-
-		expect(t.lastGoParams.skillAreaId).toEqual('skillArea1Id');
+		expect(vm.siteCards[0].isSelected).toEqual(true);
 	});
 
-	it('should go to sites with skill when changing selection from skill area to skill', function (t) {
-		t.stateParams.skillAreaId = 'skillArea1Id';
-		allSkills.forEach(function (skill) {
-			t.backend.withSkill(skill);
-		});
-		t.backend.withSkillAreas(skillAreas);
+	it('should select team from url', function (t) {
+		t.stateParams.teamIds = ['redId'];
+		t.backend
+			.withSiteAdherence({
+				Id: 'parisId'
+			})
+			.withTeamAdherence({
+				SiteId: 'parisId',
+				Id: 'redId'
+			});
+
 		var vm = t.createController();
 
+		expect(vm.siteCards[0].teams[0].isSelected).toEqual(true);
+	});
+
+	it('should open site when team in url', function (t) {
+		t.stateParams.teamIds = ['redId'];
+		t.backend
+			.withSiteAdherence({
+				Id: 'parisId'
+			})
+			.withTeamAdherence({
+				SiteId: 'parisId',
+				Id: 'redId'
+			})
+			.withTeamAdherence({
+				SiteId: 'parisId',
+				Id: 'greenId'
+			});
+
+		var vm = t.createController();
+
+		expect(vm.siteCards[0].isOpen).toEqual(true);
+	});
+
+	it('should still display opened sites even though no team is selected', function (t) {
+		t.backend
+			.withSiteAdherence({
+				Id: 'parisId'
+			})
+			.withTeamAdherence({
+				SiteId: 'parisId',
+				Id: 'redId'
+			});
+
+		var vm = t.createController();
 		t.apply(function () {
-			vm.selectSkillOrSkillArea(vm.skills[0]);
+			vm.siteCards[0].isOpen = true;
 		});
 
-		expect(t.lastGoParams.skillAreaId).toEqual(undefined);
-		expect(t.lastGoParams.skillIds).toEqual(['channelSalesId']);
-	});
-
-	it('should go to sites with skill area when changing selection from skill to skill area', function (t) {
-		t.stateParams.skillIds = ['channelSalesId'];
-		allSkills.forEach(function (skill) {
-			t.backend.withSkill(skill);
-		});
-		t.backend.withSkillAreas(skillAreas);
-		var vm = t.createController();
-
-		t.apply(function () {
-			vm.selectSkillOrSkillArea(skillArea1);
-		});
-
-		expect(t.lastGoParams.skillAreaId).toEqual('skillArea1Id');
-		expect(t.lastGoParams.skillIds).toEqual(undefined);
-	});
-
-	it('should clear url when sending in empty input in filter', function (t) {
-		t.stateParams.skillIds = ['channelSalesId'];
-		allSkills.forEach(function (skill) {
-			t.backend.withSkill(skill);
-		});
-		t.backend.withSkillAreas(skillAreas);
-		var vm = t.createController();
-
-		t.apply(function () {
-			vm.selectSkillOrSkillArea(undefined);
-		});
-
-		expect(t.lastGoParams.hasOwnProperty('skillAreaId')).toEqual(true);
-		expect(t.lastGoParams.skillAreaId).toEqual(undefined);
-		expect(t.lastGoParams.hasOwnProperty('skillIds')).toEqual(true);
-		expect(t.lastGoParams.skillIds).toEqual(undefined);
+		expect(vm.siteCards[0].teams[0].isSelected).toEqual(false);
 	});
 
 	it('should go to agents for selected site', function (t) {
@@ -209,8 +160,28 @@ rtaTester.describe('RtaOverviewController', function (it, fit, xit) {
 
 	it('should go to agents for selected site with  skill area', function (t) {
 		t.stateParams.skillAreaId = 'skillArea1Id';
-		t.backend.withSkillAreas(skillAreas);
 		t.backend
+			.withSkillAreas([{
+				Id: 'skillArea1Id',
+				Name: 'SkillArea1',
+				Skills: [{
+					Name: 'Channel Sales',
+					Id: 'channelSalesId'
+				}, {
+					Name: 'Phone',
+					Id: 'phoneId'
+				}]
+			}, {
+				Id: 'skillArea2Id',
+				Name: 'SkillArea2',
+				Skills: [{
+					Name: 'Invoice',
+					Id: 'invoiceId'
+				}, {
+					Name: 'BTS',
+					Id: 'btsId'
+				}]
+			}])
 			.withSiteAdherence({
 				Id: 'parisId',
 				SkillId: 'channelSalesId'
@@ -263,10 +234,23 @@ rtaTester.describe('RtaOverviewController', function (it, fit, xit) {
 
 	it('should go to agents for selected team with selected skill', function (t) {
 		t.stateParams.skillIds = ['channelSalesId'];
-		allSkills.forEach(function (skill) {
-			t.backend.withSkill(skill);
-		});
 		t.backend
+			.withSkill({
+				Name: 'Channel Sales',
+				Id: 'channelSalesId'
+			})
+			.withSkill({
+				Name: 'Phone',
+				Id: 'phoneId'
+			})
+			.withSkill({
+				Name: 'Invoice',
+				Id: 'invoiceId'
+			})
+			.withSkill({
+				Name: 'BTS',
+				Id: 'btsId'
+			})
 			.withSiteAdherence({
 				Id: 'londonId',
 				SkillId: 'channelSalesId'
@@ -299,10 +283,23 @@ rtaTester.describe('RtaOverviewController', function (it, fit, xit) {
 
 	it('should go to agents for selected team with preselected skill', function (t) {
 		t.stateParams.skillIds = ['channelSalesId'];
-		allSkills.forEach(function (skill) {
-			t.backend.withSkill(skill);
-		});
 		t.backend
+			.withSkill({
+				Name: 'Channel Sales',
+				Id: 'channelSalesId'
+			})
+			.withSkill({
+				Name: 'Phone',
+				Id: 'phoneId'
+			})
+			.withSkill({
+				Name: 'Invoice',
+				Id: 'invoiceId'
+			})
+			.withSkill({
+				Name: 'BTS',
+				Id: 'btsId'
+			})
 			.withSiteAdherence({
 				Id: 'londonId',
 				SkillId: 'channelSalesId'
@@ -335,8 +332,28 @@ rtaTester.describe('RtaOverviewController', function (it, fit, xit) {
 
 	it('should go to agents for selected team with selected skill area', function (t) {
 		t.stateParams.skillAreaId = 'skillArea1Id';
-		t.backend.withSkillAreas(skillAreas);
 		t.backend
+			.withSkillAreas([{
+				Id: 'skillArea1Id',
+				Name: 'SkillArea1',
+				Skills: [{
+					Name: 'Channel Sales',
+					Id: 'channelSalesId'
+				}, {
+					Name: 'Phone',
+					Id: 'phoneId'
+				}]
+			}, {
+				Id: 'skillArea2Id',
+				Name: 'SkillArea2',
+				Skills: [{
+					Name: 'Invoice',
+					Id: 'invoiceId'
+				}, {
+					Name: 'BTS',
+					Id: 'btsId'
+				}]
+			}])
 			.withSiteAdherence({
 				Id: 'parisId',
 				SkillId: 'channelSalesId'
@@ -359,8 +376,7 @@ rtaTester.describe('RtaOverviewController', function (it, fit, xit) {
 				SiteId: 'parisId',
 				SkillId: 'phoneId',
 				Id: 'greenId'
-			})
-		;
+			});
 		var vm = t.createController();
 
 		t.apply(function () {
@@ -379,8 +395,28 @@ rtaTester.describe('RtaOverviewController', function (it, fit, xit) {
 
 	it('should go to agents for selected team with preselected skill area', function (t) {
 		t.stateParams.skillAreaId = 'skillArea1Id';
-		t.backend.withSkillAreas(skillAreas);
-		t.backend
+		t.backend.withSkillAreas([
+			{
+				Id: 'skillArea1Id',
+				Name: 'SkillArea1',
+				Skills: [{
+					Name: 'Channel Sales',
+					Id: 'channelSalesId'
+				}, {
+					Name: 'Phone',
+					Id: 'phoneId'
+				}]
+			}, {
+				Id: 'skillArea2Id',
+				Name: 'SkillArea2',
+				Skills: [{
+					Name: 'Invoice',
+					Id: 'invoiceId'
+				}, {
+					Name: 'BTS',
+					Id: 'btsId'
+				}]
+			}])
 			.withSiteAdherence({
 				Id: 'parisId',
 				SkillId: 'channelSalesId'
@@ -403,9 +439,8 @@ rtaTester.describe('RtaOverviewController', function (it, fit, xit) {
 				SiteId: 'parisId',
 				SkillId: 'phoneId',
 				Id: 'greenId'
-			})
-		;
-		var vm = t.createController(undefined, skillAreas);
+			});
+		var vm = t.createController();
 
 		t.apply(function () {
 			vm.siteCards[0].isOpen = true;
@@ -661,4 +696,3 @@ rtaTester.describe('RtaOverviewController', function (it, fit, xit) {
 	});
 
 });
-

@@ -342,7 +342,7 @@
 				return rtaStateService.selectedSkill();
 			},
 			set: function (value) {
-				rtaStateService.selectSkill2(value);
+				rtaStateService.selectSkill(value);
 				forcePoll();
 			}
 		});
@@ -352,7 +352,7 @@
 				return rtaStateService.selectedSkillArea();
 			},
 			set: function (value) {
-				rtaStateService.selectSkillArea2(value);
+				rtaStateService.selectSkillArea(value);
 				forcePoll();
 			}
 		});

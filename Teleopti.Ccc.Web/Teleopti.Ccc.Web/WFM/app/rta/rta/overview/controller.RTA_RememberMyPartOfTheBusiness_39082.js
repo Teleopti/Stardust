@@ -127,6 +127,8 @@
 				rtaStateService.selectSkillArea(skillOrSkillArea.Id);
 			else
 				rtaStateService.selectSkill(skillOrSkillArea.Id);
+			vm.siteCards = [];
+			poller.force();
 		}
 
 	}
