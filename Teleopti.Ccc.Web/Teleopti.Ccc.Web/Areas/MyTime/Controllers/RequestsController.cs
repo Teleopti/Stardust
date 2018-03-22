@@ -34,7 +34,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly IRespondToShiftTrade _respondToShiftTrade;
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly ITimeFilterHelper _timeFilterHelper;
-		private readonly IToggleManager _toggleManager;
 		private readonly IRequestsShiftTradeScheduleViewModelFactory _shiftTradeScheduleViewModelFactory;
 		private readonly ICancelAbsenceRequestCommandProvider _cancelAbsenceRequestCommandProvider;
 
@@ -45,7 +44,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			IRespondToShiftTrade respondToShiftTrade,
 			IPermissionProvider permissionProvider,
 			ITimeFilterHelper timeFilterHelper,
-			IToggleManager toggleManager,
 			IRequestsShiftTradeScheduleViewModelFactory shiftTradeScheduleViewModelFactory,
 			IAbsenceRequestDetailViewModelFactory absenceRequestDetailViewModelFactory,
 			ICancelAbsenceRequestCommandProvider cancelAbsenceRequestCommandProvider)
@@ -58,7 +56,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			_respondToShiftTrade = respondToShiftTrade;
 			_permissionProvider = permissionProvider;
 			_timeFilterHelper = timeFilterHelper;
-			_toggleManager = toggleManager;
 			_shiftTradeScheduleViewModelFactory = shiftTradeScheduleViewModelFactory;
 			_cancelAbsenceRequestCommandProvider = cancelAbsenceRequestCommandProvider;
 		}

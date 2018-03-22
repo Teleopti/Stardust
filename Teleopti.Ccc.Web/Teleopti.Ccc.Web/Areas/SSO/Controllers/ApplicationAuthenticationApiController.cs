@@ -20,21 +20,18 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 		private readonly IApplicationUserQuery _applicationUserQuery;
 		private readonly ISsoAuthenticator _authenticator;
 		private readonly ILogLogonAttempt _logLogonAttempt;
-		private readonly MaximumSessionTimeProvider _maximumSessionTimeProvider;
 
 		public ApplicationAuthenticationApiController(IFormsAuthentication formsAuthentication,
 			IChangePersonPassword changePersonPassword,
 			IApplicationUserQuery applicationUserQuery,
 			ISsoAuthenticator authenticator,
-			ILogLogonAttempt logLogonAttempt, 
-			MaximumSessionTimeProvider maximumSessionTimeProvider)
+			ILogLogonAttempt logLogonAttempt)
 		{
 			_formsAuthentication = formsAuthentication;
 			_changePersonPassword = changePersonPassword;
 			_applicationUserQuery = applicationUserQuery;
 			_authenticator = authenticator;
 			_logLogonAttempt = logLogonAttempt;
-			_maximumSessionTimeProvider = maximumSessionTimeProvider;
 		}
 
 		[HttpPost, Route("SSO/ApplicationAuthenticationApi/Password")]

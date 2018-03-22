@@ -11,13 +11,11 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 	{
 		private readonly IGamificationSettingRepository _gamificationSettingRepository;
 		private readonly IGamificationSettingMapper _mapper;
-		private readonly IExternalPerformanceRepository _externalPerformanceRepository;
 
-		public GamificationSettingProvider(IGamificationSettingRepository gamificationSettingRepository, IGamificationSettingMapper mapper, IExternalPerformanceRepository externalPerformanceRepository)
+		public GamificationSettingProvider(IGamificationSettingRepository gamificationSettingRepository, IGamificationSettingMapper mapper)
 		{
 			_gamificationSettingRepository = gamificationSettingRepository;
 			_mapper = mapper;
-			_externalPerformanceRepository = externalPerformanceRepository;
 		}
 
 		public GamificationSettingViewModel GetGamificationSetting(Guid id)

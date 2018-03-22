@@ -31,7 +31,6 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 	{
 		private TeamScheduleProjectionProvider target;
 		private readonly Scenario scenario = new Scenario("d");
-		private FakeToggleManager _toggleManager;
 		private CommonAgentNameProvider _commonAgentNameProvider;
 
 		[SetUp]
@@ -42,11 +41,10 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			var fakeGlobalSettingRepo = new FakeGlobalSettingDataRepository();
 			fakeGlobalSettingRepo.PersistSettingValue("CommonNameDescription", new CommonNameDescriptionSetting("{FirstName}{LastName}"));
 			_commonAgentNameProvider = new CommonAgentNameProvider(fakeGlobalSettingRepo);
-			_toggleManager = new FakeToggleManager();
 			var nameFormatSettingsPersisterAndProvider = new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository());
 			nameFormatSettingsPersisterAndProvider.Persist(
 				new NameFormatSettings {NameFormatId = (int) NameFormatSetting.LastNameThenFirstName});
-			target = new TeamScheduleProjectionProvider(projectionProvider, loggonUser, _toggleManager,
+			target = new TeamScheduleProjectionProvider(projectionProvider, loggonUser,
 				new ScheduleProjectionHelper(), new ProjectionSplitter(projectionProvider, new ScheduleProjectionHelper()),
 				new FakeIanaTimeZoneProvider(), new PersonNameProvider(nameFormatSettingsPersisterAndProvider));
 		}
@@ -54,7 +52,6 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 		[Test]
 		public void ShouldMakeViewModelForAgent()
 		{
-
 			var date = new DateOnly(2015, 01, 01);
 			var timezoneChina = TimeZoneInfoFactory.ChinaTimeZoneInfo();
 			

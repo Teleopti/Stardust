@@ -5,7 +5,6 @@ using System.Web.Http.Results;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
@@ -33,9 +32,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 			var authenticator = MockRepository.GenerateMock<ISsoAuthenticator>();
 			var dataSource = new FakeDataSource{DataSourceName = RandomName.Make()};
 			var result = new ApplicationUserAuthenticateResult { Successful = true, DataSource = dataSource};
-			var tenantByNameWithEnsuredTransaction = new FindTenantByNameWithEnsuredTransactionFake();
-			tenantByNameWithEnsuredTransaction.Has(new Tenant(dataSource.DataSourceName));
-			var target = new ApplicationAuthenticationApiController(formsAuthentication, null, null, authenticator, shouldBeLogged("user", result), new MaximumSessionTimeProvider(tenantByNameWithEnsuredTransaction));
+			var target = new ApplicationAuthenticationApiController(formsAuthentication, null, null, authenticator, shouldBeLogged("user", result));
 			var authenticationModel = new ApplicationAuthenticationModel
 			{
 				UserName = "user",
@@ -58,11 +55,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 			var authenticator = MockRepository.GenerateMock<ISsoAuthenticator>();
 			var dataSource = new FakeDataSource { DataSourceName = RandomName.Make() };
 			var result = new ApplicationUserAuthenticateResult { Successful = true, DataSource = dataSource };
-			var tenantByNameWithEnsuredTransaction = new FindTenantByNameWithEnsuredTransactionFake();
-			var tenant = new Tenant(dataSource.DataSourceName);
-			tenant.SetApplicationConfig(TenantApplicationConfigKey.MaximumSessionTimeInMinutes.ToString(), "480");
-			tenantByNameWithEnsuredTransaction.Has(tenant);
-			var target = new ApplicationAuthenticationApiController(formsAuthentication, null, null, authenticator, shouldBeLogged("user", result), new MaximumSessionTimeProvider(tenantByNameWithEnsuredTransaction));
+			var target = new ApplicationAuthenticationApiController(formsAuthentication, null, null, authenticator, shouldBeLogged("user", result));
 			var authenticationModel = new ApplicationAuthenticationModel
 			{
 				UserName = "user",
@@ -84,7 +77,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 			const string message = "test";
 			var authenticator = MockRepository.GenerateMock<ISsoAuthenticator>();
 			var authResult = new ApplicationUserAuthenticateResult {Successful = false, Message = message};
-			var target = new ApplicationAuthenticationApiController(null, null, null, authenticator, shouldBeLogged(null, authResult), new MaximumSessionTimeProvider(new FindTenantByNameWithEnsuredTransactionFake()));
+			var target = new ApplicationAuthenticationApiController(null, null, null, authenticator, shouldBeLogged(null, authResult));
 			var authenticationModel = new ApplicationAuthenticationModel();
 			authenticator.Stub(x => x.AuthenticateApplicationUser(authenticationModel.UserName, authenticationModel.Password)).Return(authResult);
 
@@ -99,7 +92,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 		{
 			const string message = "test";
 			var authenticator = MockRepository.GenerateMock<ISsoAuthenticator>();
-			var target = new ApplicationAuthenticationApiController(null, null, null, authenticator, shouldNotBeLogged(), new MaximumSessionTimeProvider(new FindTenantByNameWithEnsuredTransactionFake()));
+			var target = new ApplicationAuthenticationApiController(null, null, null, authenticator, shouldNotBeLogged());
 			var authenticationModel = new ApplicationAuthenticationModel();
 			authenticator.Stub(x => x.AuthenticateApplicationUser(authenticationModel.UserName,authenticationModel.Password))
 				.Return(new ApplicationUserAuthenticateResult { Successful = false, Message = message, PasswordExpired = true });
@@ -120,7 +113,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 			var authResult = new ApplicationUserAuthenticateResult { Successful = true, HasMessage = true, Message = message, DataSource = dataSource };
 			var findTenantByNameWithEnsuredTransaction = new FindTenantByNameWithEnsuredTransactionFake();
 			findTenantByNameWithEnsuredTransaction.Has(new Tenant(dataSource.DataSourceName));
-			var target = new ApplicationAuthenticationApiController(MockRepository.GenerateMock<IFormsAuthentication>(), null, null, authenticator, shouldBeLogged(null, authResult), new MaximumSessionTimeProvider(findTenantByNameWithEnsuredTransaction));
+			var target = new ApplicationAuthenticationApiController(MockRepository.GenerateMock<IFormsAuthentication>(), null, null, authenticator, shouldBeLogged(null, authResult));
 			var authenticationModel = new ApplicationAuthenticationModel();
 			authenticator.Stub(x => x.AuthenticateApplicationUser(authenticationModel.UserName,authenticationModel.Password))
 				.Return(authResult);
@@ -137,7 +130,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 		{
 			var authenticator = MockRepository.GenerateMock<ISsoAuthenticator>();
 			const string message = "test";
-			var target = new ApplicationAuthenticationApiController(null, null, null, authenticator, shouldNotBeLogged(), new MaximumSessionTimeProvider(new FindTenantByNameWithEnsuredTransactionFake()));
+			var target = new ApplicationAuthenticationApiController(null, null, null, authenticator, shouldNotBeLogged());
 			var authenticationModel = new ApplicationAuthenticationModel();
 			authenticator.Stub(x => x.AuthenticateApplicationUser(authenticationModel.UserName, authenticationModel.Password))
 				.Return(new ApplicationUserAuthenticateResult { Successful = false, HasMessage = true, Message = message, PasswordExpired = true });
@@ -154,9 +147,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 			var authenticator = MockRepository.GenerateMock<ISsoAuthenticator>();
 			var dataSource = new FakeDataSource { DataSourceName = RandomName.Make() };
 			var authResult = new ApplicationUserAuthenticateResult { Successful = true, HasMessage = false, DataSource = dataSource };
-			var findTenantByNameWithEnsuredTransaction = new FindTenantByNameWithEnsuredTransactionFake();
-			findTenantByNameWithEnsuredTransaction.Has(new Tenant(dataSource.DataSourceName));
-			var target = new ApplicationAuthenticationApiController(MockRepository.GenerateMock<IFormsAuthentication>(), null, null, authenticator, shouldBeLogged(null, authResult), new MaximumSessionTimeProvider(findTenantByNameWithEnsuredTransaction));
+			var target = new ApplicationAuthenticationApiController(MockRepository.GenerateMock<IFormsAuthentication>(), null, null, authenticator, shouldBeLogged(null, authResult));
 			var authenticationModel = new ApplicationAuthenticationModel();
 			authenticator.Stub(x => x.AuthenticateApplicationUser(authenticationModel.UserName, authenticationModel.Password)).Return(authResult);
 
@@ -173,9 +164,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 			var authenticator = MockRepository.GenerateMock<ISsoAuthenticator>();
 			var dataSource = new FakeDataSource { DataSourceName = RandomName.Make() };
 			var result = new ApplicationUserAuthenticateResult { Successful = true, DataSource = dataSource };
-			var findTenantByNameWithEnsuredTransaction = new FindTenantByNameWithEnsuredTransactionFake();
-			findTenantByNameWithEnsuredTransaction.Has(new Tenant(dataSource.DataSourceName));
-			var target = new ApplicationAuthenticationApiController(formsAuthentication, null, null, authenticator, shouldBeLogged("user", result), new MaximumSessionTimeProvider(findTenantByNameWithEnsuredTransaction));
+			var target = new ApplicationAuthenticationApiController(formsAuthentication, null, null, authenticator, shouldBeLogged("user", result));
 			var authenticationModel = new ApplicationAuthenticationModel
 			{
 				UserName = "user",
@@ -204,7 +193,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 			var personInfo = new PersonInfo(new Tenant(string.Empty), Guid.NewGuid());
 			applicationUserQuery.Expect(x => x.Find(input.UserName)).Return(personInfo);
 
-			var target = new ApplicationAuthenticationApiController(MockRepository.GenerateMock<IFormsAuthentication>(), changePassword, applicationUserQuery, null, null, new MaximumSessionTimeProvider(new FindTenantByNameWithEnsuredTransactionFake()));
+			var target = new ApplicationAuthenticationApiController(MockRepository.GenerateMock<IFormsAuthentication>(), changePassword, applicationUserQuery, null, null);
 
 			target.ChangePassword(input);
 			changePassword.AssertWasCalled(x => x.Modify(personInfo.Id, input.OldPassword, input.NewPassword));
@@ -228,7 +217,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 			changePassword.Expect(x => x.Modify(personInfo.Id, input.OldPassword, input.NewPassword))
 				.Throw(new HttpException(403, string.Empty));
 
-			var target = new ApplicationAuthenticationApiController(MockRepository.GenerateMock<IFormsAuthentication>(), changePassword, applicationUserQuery, null, null, new MaximumSessionTimeProvider(new FindTenantByNameWithEnsuredTransactionFake()));
+			var target = new ApplicationAuthenticationApiController(MockRepository.GenerateMock<IFormsAuthentication>(), changePassword, applicationUserQuery, null, null);
 
 			var result = (InvalidModelStateResult)target.ChangePassword(input);
 			result.ModelState.Single().Value.Errors.Single().ErrorMessage.Should().Be(Resources.InvalidUserNameOrPassword);

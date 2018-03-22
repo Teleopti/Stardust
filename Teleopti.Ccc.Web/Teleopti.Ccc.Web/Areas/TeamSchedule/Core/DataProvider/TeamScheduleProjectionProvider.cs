@@ -21,19 +21,17 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 	{
 		private readonly IProjectionProvider _projectionProvider;
 		private readonly ILoggedOnUser _loggedOnUser;
-		private readonly IToggleManager _toggleManager;
 		private readonly IScheduleProjectionHelper _projectionHelper;
 		private readonly IProjectionSplitter _projectionSplitter;
 		private readonly IIanaTimeZoneProvider _ianaTimeZoneProvider;
 		private readonly IPersonNameProvider _personNameProvider;
 
 		public TeamScheduleProjectionProvider(IProjectionProvider projectionProvider, ILoggedOnUser loggedOnUser,
-			IToggleManager toggleManager, IScheduleProjectionHelper projectionHelper, IProjectionSplitter projectionSplitter,
+			IScheduleProjectionHelper projectionHelper, IProjectionSplitter projectionSplitter,
 			IIanaTimeZoneProvider ianaTimeZoneProvider, IPersonNameProvider personNameProvider)
 		{
 			_projectionProvider = projectionProvider;
 			_loggedOnUser = loggedOnUser;
-			_toggleManager = toggleManager;
 			_projectionHelper = projectionHelper;
 			_projectionSplitter = projectionSplitter;
 			_ianaTimeZoneProvider = ianaTimeZoneProvider;

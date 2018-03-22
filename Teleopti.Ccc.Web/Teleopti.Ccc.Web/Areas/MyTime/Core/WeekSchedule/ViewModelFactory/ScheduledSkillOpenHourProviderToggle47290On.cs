@@ -13,18 +13,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 	public class ScheduledSkillOpenHourProviderToggle47290On : ScheduledSkillOpenHourProvider
 	{
 		private readonly ILoggedOnUser _loggedOnUser;
-		private readonly INow _now;
 		private readonly ISkillTypeRepository _skillTypeRepository;
 		private readonly IOvertimeRequestOpenPeriodProvider _overtimeRequestOpenPeriodProvider;
 
 		public ScheduledSkillOpenHourProviderToggle47290On(ILoggedOnUser loggedOnUser,
 			ISupportedSkillsInIntradayProvider supportedSkillsInIntradayProvider,
-			IStaffingDataAvailablePeriodProvider staffingDataAvailablePeriodProvider, INow now,
+			IStaffingDataAvailablePeriodProvider staffingDataAvailablePeriodProvider,
 			ISkillTypeRepository skillTypeRepository, IOvertimeRequestOpenPeriodProvider overtimeRequestOpenPeriodProvider) :
 			base(loggedOnUser, supportedSkillsInIntradayProvider, staffingDataAvailablePeriodProvider)
 		{
 			_loggedOnUser = loggedOnUser;
-			_now = now;
 			_skillTypeRepository = skillTypeRepository;
 			_overtimeRequestOpenPeriodProvider = overtimeRequestOpenPeriodProvider;
 		}

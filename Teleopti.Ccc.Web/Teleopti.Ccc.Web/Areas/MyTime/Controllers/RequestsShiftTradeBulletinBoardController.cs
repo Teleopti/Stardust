@@ -20,15 +20,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 	{
 		private readonly IRequestsShiftTradeBulletinViewModelFactory _requestsShiftTradeBulletinViewModelFactory;
 		private readonly ITimeFilterHelper _timeFilterHelper;
-		private readonly IToggleManager _toggleManager;
-
+		
 		public RequestsShiftTradeBulletinBoardController(
 			IRequestsShiftTradeBulletinViewModelFactory requestsShiftTradeBulletinViewModelFactory,
-			ITimeFilterHelper timeFilterHelper, IToggleManager toggleManager)
+			ITimeFilterHelper timeFilterHelper)
 		{
 			_requestsShiftTradeBulletinViewModelFactory = requestsShiftTradeBulletinViewModelFactory;
 			_timeFilterHelper = timeFilterHelper;
-			_toggleManager = toggleManager;
 		}
 
 		[UnitOfWork]

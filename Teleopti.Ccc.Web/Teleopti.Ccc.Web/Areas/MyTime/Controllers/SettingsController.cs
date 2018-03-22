@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly ISettingsPersisterAndProvider<CalendarLinkSettings> _calendarLinkSettingsPersisterAndProvider;
 		private readonly ICalendarLinkViewModelFactory _calendarLinkViewModelFactory;
 		private readonly IChangePersonPassword _changePersonPassword;
-		private readonly ICurrentHttpContext _httpContext;
 		private readonly ICurrentTenant _currentTenant;
 		private readonly ISettingsViewModelFactory _settingsViewModelFactory;
 		private readonly ISettingsPersisterAndProvider<NameFormatSettings> _nameFormatSettingsPersisterAndProvider;
@@ -39,7 +38,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 											ISettingsPersisterAndProvider<NameFormatSettings> nameFormatSettingsPersisterAndProvider,
 											ICalendarLinkViewModelFactory calendarLinkViewModelFactory,
 											IChangePersonPassword changePersonPassword,
-											ICurrentHttpContext httpContext,
 											ICurrentTenant currentTenant)
 		{
 			_loggedOnUser = loggedOnUser;
@@ -50,7 +48,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			_nameFormatSettingsPersisterAndProvider = nameFormatSettingsPersisterAndProvider;
 			_calendarLinkViewModelFactory = calendarLinkViewModelFactory;
 			_changePersonPassword = changePersonPassword;
-			_httpContext = httpContext;
 			_currentTenant = currentTenant;
 		}
 

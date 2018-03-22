@@ -18,15 +18,12 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 	{
 		private readonly IPersonRepository personRepository;
 		private readonly IApplicationRoleRepository roleRepository;
-		private readonly ILoggedOnUser loggedOnUser;
 
 		public RoleManager(IPersonRepository personRepository,
-			IApplicationRoleRepository roleRepository,
-			ILoggedOnUser loggedOnUser)
+			IApplicationRoleRepository roleRepository)
 		{
 			this.roleRepository = roleRepository;
 			this.personRepository = personRepository;
-			this.loggedOnUser = loggedOnUser;
 		}
 
 		[AuditPerson]

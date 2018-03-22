@@ -11,7 +11,6 @@ using Microsoft.VisualBasic.Devices;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -32,20 +31,18 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 		private readonly IEtlJobStatusRepository _etlJobStatusRepository;
 		private readonly IEtlLogObjectRepository _etlLogObjectRepository;
 		private readonly IStardustSender _stardustSender;
-		private readonly IToggleManager _toggleManager;
 		private readonly HangfireUtilities _hangfireUtilities;
 		private readonly IReadModelValidator _readModelValidator;
 		private readonly IStardustRepository _stardustRepository;
 		private readonly IncomingTrafficViewModelCreator _incomingTrafficViewModelCreator;
 
 		public HealthCheckApiController(IEtlJobStatusRepository etlJobStatusRepository, IEtlLogObjectRepository etlLogObjectRepository,
-												  IStardustSender stardustSender, IToggleManager toggleManager, HangfireUtilities hangfireUtilities, IReadModelValidator readModelValidator,
+												  IStardustSender stardustSender, HangfireUtilities hangfireUtilities, IReadModelValidator readModelValidator,
 												  IStardustRepository stardustRepository, IncomingTrafficViewModelCreator incomingTrafficViewModelCreator)
 		{
 			_etlJobStatusRepository = etlJobStatusRepository;
 			_etlLogObjectRepository = etlLogObjectRepository;
 			_stardustSender = stardustSender;
-			_toggleManager = toggleManager;
 			_hangfireUtilities = hangfireUtilities;
 			_readModelValidator = readModelValidator;
 			_stardustRepository = stardustRepository;

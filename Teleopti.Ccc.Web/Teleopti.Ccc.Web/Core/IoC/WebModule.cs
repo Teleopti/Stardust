@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterType<ClearScheduleEvents>().As<IClearScheduleEvents>().SingleInstance();
 			builder.RegisterModule(new AuthenticationCachedModule(_configuration));
 
-			builder.RegisterModule(new RtaAreaModule(_configuration));
+			builder.RegisterModule<RtaAreaModule>();
 			builder.RegisterModule(new MartAreaModule(_configuration));
 
 			builder.RegisterModule<NotificationModule>();
