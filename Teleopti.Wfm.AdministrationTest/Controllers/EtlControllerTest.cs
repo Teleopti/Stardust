@@ -42,7 +42,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 		public FakeTenants AllTenants;
 		public FakeBaseConfigurationRepository BaseConfigurationRepository;
 		public FakeGeneralInfrastructure GeneralInfrastructure;
-		public IConfigurationHandler ConfigurationHandler;
+		public FakeConfigurationHandler ConfigurationHandler;
 		public FakeConfigReader ConfigReader;
 		public FakePmInfoProvider PmInfoProvider;
 		public FakeJobScheduleRepository JobScheduleRepository;
@@ -52,13 +52,14 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.AddService<EtlController>();
+			system.UseTestDouble<FakeConfigurationHandler>().For<IConfigurationHandler>();
 		}
 
 		[Test]
 		public void ShouldReturnJobCollection()
 		{
-			BaseConfigurationRepository.SaveBaseConfiguration(connectionString, new BaseConfiguration(1053, 15, "UTC", false));
 			AllTenants.HasWithAnalyticsConnectionString(testTenantName, connectionString);
+			ConfigurationHandler.AddBaseConfiguration(connectionString, new BaseConfiguration(1053, 15, "UTC", false));
 			var result = (OkNegotiatedContentResult<IList<JobCollectionModel>>) Target.Jobs(testTenantName);
 			result.Content.Count.Should().Be.GreaterThanOrEqualTo(13);
 		}
@@ -75,8 +76,8 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 		[Test]
 		public void ShouldReturnIfJobNeedsParameterDataSource()
 		{
-			BaseConfigurationRepository.SaveBaseConfiguration(connectionString, new BaseConfiguration(1053, 15, "UTC", false));
 			AllTenants.HasWithAnalyticsConnectionString(testTenantName, connectionString);
+			ConfigurationHandler.AddBaseConfiguration(connectionString, new BaseConfiguration(1053, 15, "UTC", false));
 			var result = (OkNegotiatedContentResult<IList<JobCollectionModel>>) Target.Jobs(testTenantName);
 
 			result.Content.First(x => x.JobName == "Initial").NeedsParameterDataSource.Should().Be(false);
@@ -86,8 +87,8 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 		[Test]
 		public void ShouldReturnDatePeriodCollectionRequiredForJobs()
 		{
-			BaseConfigurationRepository.SaveBaseConfiguration(connectionString, new BaseConfiguration(1053, 15, "UTC", false));
 			AllTenants.HasWithAnalyticsConnectionString(testTenantName, connectionString);
+			ConfigurationHandler.AddBaseConfiguration(connectionString, new BaseConfiguration(1053, 15, "UTC", false));
 			var result = (OkNegotiatedContentResult<IList<JobCollectionModel>>) Target.Jobs(testTenantName);
 
 			result.Content.First(x => x.JobName == "Initial").NeededDatePeriod.Count.Should().Be(1);
@@ -216,7 +217,77 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 									  && x.RelativePeriod.Maximum == 0)
 				.Should().Be.True();
 		}
+		[Test]
+		public void ShouldCheckThatMasterTenantIsConfigured()
+		{
+			FakeConfigReader.FakeConnectionString("Hangfire", connectionString);
+			BaseConfigurationRepository.SaveBaseConfiguration(connectionString,
+				new BaseConfiguration(1053, 15, timezoneName, false));
+			var result = (OkNegotiatedContentResult<TenantConfigurationModel>)Target.IsBaseConfigurationAvailable();
+			result.Content.IsBaseConfigured.Should().Be(true);
+			result.Content.ConnectionString.Should().Be(connectionString);
+		}
 
+		[Test]
+		public void ShouldCheckThatMasterTenantIsNotConfigured()
+		{
+			FakeConfigReader.FakeConnectionString("Hangfire", connectionString);
+			var result = (OkNegotiatedContentResult<TenantConfigurationModel>)Target.IsBaseConfigurationAvailable();
+			result.Content.IsBaseConfigured.Should().Be(false);
+			result.Content.ConnectionString.Should().Be(connectionString);
+		}
+
+		[Test]
+		public void ShouldSaveBaseConfigurationForTenant()
+		{
+			AllTenants.HasWithAnalyticsConnectionString(testTenantName, connectionString);
+			var baseConfig = new BaseConfiguration(1053, 15, timezoneName, false);
+			var tenantConfig = new TenantConfigurationModel()
+			{
+				ConnectionString = connectionString,
+				BaseConfig = baseConfig
+			};
+			Target.SaveConfigurationForTenant(tenantConfig);
+			var savedConfig = BaseConfigurationRepository.LoadBaseConfiguration(connectionString);
+			savedConfig.IntervalLength.Should().Be(baseConfig.IntervalLength);
+			savedConfig.CultureId.Should().Be(baseConfig.CultureId);
+			savedConfig.TimeZoneCode.Should().Be(baseConfig.TimeZoneCode);
+		}
+
+		[Test]
+		public void ShouldReturnAllTenants()
+		{
+			var masterTenant = new Tenant(RandomName.Make());
+			masterTenant.DataSourceConfiguration.SetAnalyticsConnectionString(string.Format("Initial Catalog={0}", RandomName.Make()));
+			var childTenant = new Tenant(RandomName.Make());
+			childTenant.DataSourceConfiguration.SetAnalyticsConnectionString(string.Format("Initial Catalog={0}", RandomName.Make()));
+
+			AllTenants.HasWithAnalyticsConnectionString(masterTenant.Name, masterTenant.DataSourceConfiguration.AnalyticsConnectionString);
+			AllTenants.HasWithAnalyticsConnectionString(childTenant.Name, childTenant.DataSourceConfiguration.AnalyticsConnectionString);
+
+			var baseConfig = new BaseConfiguration(1053, 15, timezoneName, false);
+			ConfigurationHandler.AddBaseConfiguration(masterTenant.DataSourceConfiguration.AnalyticsConnectionString, baseConfig);
+
+			var result = (OkNegotiatedContentResult<List<TenantConfigurationModel>>)Target.GetTenants();
+			result.Should().Be.OfType<OkNegotiatedContentResult<List<TenantConfigurationModel>>>();
+
+			var mTenant = result.Content.Single(x => x.TenantName == masterTenant.Name);
+			var cTenant = result.Content.Single(x => x.TenantName == childTenant.Name);
+
+			mTenant.TenantName.Should().Be(masterTenant.Name);
+			mTenant.ConnectionString.Should().Be(masterTenant.DataSourceConfiguration.AnalyticsConnectionString);
+			mTenant.BaseConfig.IntervalLength.Should().Be(baseConfig.IntervalLength);
+			mTenant.BaseConfig.CultureId.Should().Be(baseConfig.CultureId);
+			mTenant.BaseConfig.TimeZoneCode.Should().Be(baseConfig.TimeZoneCode);
+			mTenant.IsBaseConfigured.Should().Be(true);
+
+			cTenant.TenantName.Should().Be(childTenant.Name);
+			cTenant.ConnectionString.Should().Be(childTenant.DataSourceConfiguration.AnalyticsConnectionString);
+			cTenant.BaseConfig.IntervalLength.Should().Be(null);
+			cTenant.BaseConfig.CultureId.Should().Be(null);
+			cTenant.BaseConfig.TimeZoneCode.Should().Be(null);
+			cTenant.IsBaseConfigured.Should().Be(false);
+		}
 		[TestCase(true, true)]
 		[TestCase(true, false)]
 		[TestCase(false, true)]
@@ -256,8 +327,8 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 		{
 			ConfigReader.FakeConnectionString("Hangfire", connectionString);
 
-			BaseConfigurationRepository.SaveBaseConfiguration(connectionString,
-				new BaseConfiguration(1053, 15, timezoneName, false));
+
+			ConfigurationHandler.AddBaseConfiguration(connectionString, new BaseConfiguration(1053, 15, timezoneName, false));
 			AllTenants.HasWithAnalyticsConnectionString(testTenantName, connectionString);
 
 			var localToday = new DateTime(2017, 12, 11);
@@ -288,74 +359,6 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			return jobs;
 		}
 
-		[Test]
-		public void ShouldCheckThatMasterTenantIsConfigured()
-		{
-			FakeConfigReader.FakeConnectionString("Hangfire", connectionString);
-			BaseConfigurationRepository.SaveBaseConfiguration(connectionString,
-				new BaseConfiguration(1053, 15, timezoneName, false));
-			var result = (OkNegotiatedContentResult<bool>)Target.IsBaseConfigurationAvailable();
-			result.Content.Should().Be(true);
-		}
-
-		[Test]
-		public void ShouldCheckThatMasterTenantIsNotConfigured()
-		{
-			FakeConfigReader.FakeConnectionString("Hangfire", connectionString);
-			var result = (OkNegotiatedContentResult<bool>)Target.IsBaseConfigurationAvailable();
-			result.Content.Should().Be(false);
-		}
-
-		[Test]
-		public void ShouldSaveBaseConfigurationForTenant()
-		{
-			AllTenants.HasWithAnalyticsConnectionString(testTenantName, connectionString);
-			var baseConfig = new BaseConfiguration(1053, 15, timezoneName, false);
-			var tenantConfig = new TenantConfigurationModel()
-			{
-				ConnectionString = connectionString,
-				BaseConfig = baseConfig
-			};
-			Target.SaveConfigurationForTenant(tenantConfig);
-			var savedConfig = BaseConfigurationRepository.LoadBaseConfiguration(connectionString);
-			savedConfig.IntervalLength.Should().Be(baseConfig.IntervalLength);
-			savedConfig.CultureId.Should().Be(baseConfig.CultureId);
-			savedConfig.TimeZoneCode.Should().Be(baseConfig.TimeZoneCode);
-		}
-
-		[Test]
-		public void ShouldReturnAllTenants()
-		{
-			var masterTenant = new Tenant(RandomName.Make());
-			masterTenant.DataSourceConfiguration.SetAnalyticsConnectionString(string.Format("Initial Catalog={0}", RandomName.Make()));
-			var childTenant = new Tenant(RandomName.Make());
-			childTenant.DataSourceConfiguration.SetAnalyticsConnectionString(string.Format("Initial Catalog={0}", RandomName.Make()));
-
-			AllTenants.HasWithAnalyticsConnectionString(masterTenant.Name, masterTenant.DataSourceConfiguration.AnalyticsConnectionString);
-			AllTenants.HasWithAnalyticsConnectionString(childTenant.Name, childTenant.DataSourceConfiguration.AnalyticsConnectionString);
-
-			var baseConfig = new BaseConfiguration(1053, 15, timezoneName, false);
-			BaseConfigurationRepository.SaveBaseConfiguration(masterTenant.DataSourceConfiguration.AnalyticsConnectionString, baseConfig);
-
-			var result = (OkNegotiatedContentResult<List<TenantConfigurationModel>>)Target.GetTenants();
-			result.Should().Be.OfType<OkNegotiatedContentResult<List<TenantConfigurationModel>>>();
-
-			var mTenant = result.Content.Single(x => x.TenantName == masterTenant.Name);
-			var cTenant = result.Content.Single(x => x.TenantName == childTenant.Name);
-
-			mTenant.TenantName.Should().Be(masterTenant.Name);
-			mTenant.ConnectionString.Should().Be(masterTenant.DataSourceConfiguration.AnalyticsConnectionString);
-			mTenant.BaseConfig.IntervalLength.Should().Be(baseConfig.IntervalLength);
-			mTenant.BaseConfig.CultureId.Should().Be(baseConfig.CultureId);
-			mTenant.BaseConfig.TimeZoneCode.Should().Be(baseConfig.TimeZoneCode);
-			mTenant.IsBaseConfigured.Should().Be(true);
-
-			cTenant.TenantName.Should().Be(childTenant.Name);
-			cTenant.ConnectionString.Should().Be(childTenant.DataSourceConfiguration.AnalyticsConnectionString);
-			cTenant.BaseConfig.IntervalLength.Should().Be(null);
-			cTenant.BaseConfig.CultureId.Should().Be(null);
-			cTenant.BaseConfig.TimeZoneCode.Should().Be(null);
-			cTenant.IsBaseConfigured.Should().Be(false);
-		}
+		
 	}
 }

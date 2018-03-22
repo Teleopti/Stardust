@@ -72,6 +72,7 @@
     <Compile Include="AdministrationTestAttribute.cs" />
     <Compile Include="Controllers\EtlControllerTest.cs" />
     <Compile Include="FakeData\FakeBaseConfigurationRepository.cs" />
+    <Compile Include="FakeData\FakeConfigurationHandler.cs" />
     <Compile Include="FakeData\FakeJobScheduleRepository.cs" />
     <Compile Include="FakeData\FakePmInfoProvider.cs" />
     <Compile Include="FakeData\FakeGeneralInfrastructure.cs" />

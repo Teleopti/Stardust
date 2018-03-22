@@ -52,6 +52,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 		public void SetConnectionString(string dataMartConnectionString)
 		{
 			_generalFunctions.SetConnectionString(dataMartConnectionString);
+			_baseConfiguration = null;
 		}
 
 		private bool isCultureValid(int? uiCultureId)

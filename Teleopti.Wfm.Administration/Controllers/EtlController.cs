@@ -5,6 +5,8 @@ using System.Linq;
 using System.Net;
 using System.Web.Http;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
+using Teleopti.Analytics.Etl.Common.Interfaces.Common;
+using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.MultiTenancy;
@@ -26,13 +28,14 @@ namespace Teleopti.Wfm.Administration.Controllers
 		private readonly IConfigReader _configReader;
 		private readonly IBaseConfigurationRepository _baseConfigurationRepository;
 		private readonly ILoadAllTenants _loadAllTenants;
+		private readonly IConfigurationHandler _configurationHandler;
 
 		public EtlController(IToggleManager toggleManager, 
 			JobCollectionModelProvider jobCollectionModelProvider,
 			TenantLogDataSourcesProvider tenantLogDataSourcesProvider,
 			EtlJobScheduler etlJobScheduler,
 			IConfigReader configReader,
-			IBaseConfigurationRepository baseConfigurationRepository, ILoadAllTenants loadAllTenants)
+			IBaseConfigurationRepository baseConfigurationRepository, ILoadAllTenants loadAllTenants, IConfigurationHandler configurationHandler)
 		{
 			_toggleManager = toggleManager;
 			_jobCollectionModelProvider = jobCollectionModelProvider;
@@ -41,6 +44,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			_configReader = configReader;
 			_baseConfigurationRepository = baseConfigurationRepository;
 			_loadAllTenants = loadAllTenants;
+			_configurationHandler = configurationHandler;
 		}
 
 		[HttpGet, Route("Etl/ShouldEtlToolBeVisible")]
@@ -99,7 +103,11 @@ namespace Teleopti.Wfm.Administration.Controllers
 			var connectionString = _configReader.ConnectionString("Hangfire");
 			var baseConfig = _baseConfigurationRepository.LoadBaseConfiguration(connectionString);
 			var isConfig = baseConfig.IntervalLength.HasValue;
-			return Ok(isConfig);
+			return Ok(new TenantConfigurationModel()
+			{
+				ConnectionString = connectionString,
+				IsBaseConfigured = isConfig
+			});
 		}
 
 		[TenantUnitOfWork]
@@ -119,13 +127,15 @@ namespace Teleopti.Wfm.Administration.Controllers
 			{
 				var analyticsConnectionString =
 					new SqlConnectionStringBuilder(tenant.DataSourceConfiguration.AnalyticsConnectionString).ToString();
-				var baseConfig = _baseConfigurationRepository.LoadBaseConfiguration(analyticsConnectionString);
+				
+				_configurationHandler.SetConnectionString(analyticsConnectionString);
+				var baseConfig = _configurationHandler.BaseConfiguration;
 				tenants.Add(new TenantConfigurationModel()
 				{
 					TenantName = tenant.Name,
 					ConnectionString = analyticsConnectionString,
 					BaseConfig = baseConfig,
-					IsBaseConfigured = baseConfig.IntervalLength.HasValue
+					IsBaseConfigured = _configurationHandler.IsConfigurationValid
 				});
 			}
 
