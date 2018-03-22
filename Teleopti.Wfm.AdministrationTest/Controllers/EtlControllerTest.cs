@@ -307,6 +307,15 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			cTenant.IsBaseConfigured.Should().Be(false);
 		}
 
+		[Test]
+		public void ShouldReturnConfigurationOption()
+		{
+			var models = (OkNegotiatedContentResult<TenantConfigurationOption>)Target.GetConfigurationModel();
+			models.Content.CultureList.Should().Not.Be.Empty();
+			models.Content.IntervalLengthList.Should().Not.Be.Empty();
+			models.Content.TimeZoneList.Should().Not.Be.Empty();
+		}
+
 		[TestCase(true, true)]
 		[TestCase(true, false)]
 		[TestCase(false, true)]

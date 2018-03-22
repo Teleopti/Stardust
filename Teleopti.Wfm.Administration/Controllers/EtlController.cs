@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Web.Http;
+using Teleopti.Analytics.Etl.Common;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Ccc.Domain.Config;
@@ -34,7 +35,9 @@ namespace Teleopti.Wfm.Administration.Controllers
 			TenantLogDataSourcesProvider tenantLogDataSourcesProvider,
 			EtlJobScheduler etlJobScheduler,
 			IConfigReader configReader,
-			IBaseConfigurationRepository baseConfigurationRepository, ILoadAllTenants loadAllTenants, IConfigurationHandler configurationHandler)
+			IBaseConfigurationRepository baseConfigurationRepository,
+			ILoadAllTenants loadAllTenants,
+			IConfigurationHandler configurationHandler)
 		{
 			_toggleManager = toggleManager;
 			_jobCollectionModelProvider = jobCollectionModelProvider;
@@ -150,6 +153,18 @@ namespace Teleopti.Wfm.Administration.Controllers
 			return Ok(tenants);
 		}
 
+		[HttpGet, Route("Etl/GetConfigurationModel")]
+		public virtual IHttpActionResult GetConfigurationModel()
+		{
+			var configurationModel = new StartupConfigurationModel(_configurationHandler);
+			return Ok(new TenantConfigurationOption
+			{
+				CultureList = configurationModel.CultureList.ToList(),
+				IntervalLengthList = configurationModel.IntervalLengthList.ToList(),
+				TimeZoneList = configurationModel.TimeZoneList.ToList()
+			});
+		}
+
 		private string getMasterTenantName()
 		{
 			var appConnectionString = new SqlConnectionStringBuilder(_configReader.ConnectionString("Tenancy")).InitialCatalog;
@@ -158,6 +173,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 			return master?.Name;
 		}
+
 	}
 }
 

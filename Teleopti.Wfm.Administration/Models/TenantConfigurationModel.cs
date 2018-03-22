@@ -1,4 +1,6 @@
-﻿using Teleopti.Analytics.Etl.Common.Interfaces.Common;
+﻿using System.Collections.Generic;
+using Teleopti.Analytics.Etl.Common;
+using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 
 namespace Teleopti.Wfm.Administration.Models
 {
@@ -9,5 +11,12 @@ namespace Teleopti.Wfm.Administration.Models
 		public string TenantName { get; set; }
 
 		public bool IsBaseConfigured { get; set; }
+	}
+
+	public class TenantConfigurationOption
+	{
+		public List<LookupIntegerItem> CultureList { get; set; }
+		public List<LookupIntegerItem> IntervalLengthList { get; set; }
+		public List<LookupStringItem> TimeZoneList { get; set; }
 	}
 }
