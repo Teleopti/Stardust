@@ -19,9 +19,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.People
 		}
 
 		[Given("I searched for '(.*)'")]
+		[When("Searching for '(.*)'")]
 		public void ISearchedForX(string keyword)
 		{
-			Browser.Interactions.FillWith("[data-test-searchinput]", "a");
+			Browser.Interactions.FillWith("[data-test-searchinput]", keyword);
 			Browser.Interactions.PressEnter("[data-test-searchinput]");
 		}
 

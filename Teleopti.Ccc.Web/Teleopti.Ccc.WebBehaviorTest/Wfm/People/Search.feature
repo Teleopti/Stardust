@@ -18,23 +18,24 @@ Background:
 	And WA People exists
 	| Name		|
 	| Ashley	|
-	| John		|
 	| Pierre	|
+	| Urban     |
 	And Person 'Ashley' has role 'Agent'
-	And Person 'Ashley' has role 'TeamLeader'
-	And Person 'John' has role 'Agent'
-	And Person 'Pierre' has role 'Agent'
+	And Person 'Pierre' has role 'TeamLeader'
+	And Person 'Urban' has role 'Agent'
+	And I view people
 
-@Ignore
+
 Scenario: Search for a selection of users
-	Given I view people
-	When Searching for 'London'
-	Then I should see all matches for 'London'
+	When Searching for 'le'
+	Then I should see all matches for 'le'
 	And I should see columns
-	| Columns	|
-	| Ashley	|
-	| John		|
-	| Pierre	|
+	| Columns		|
+	| First name	|
+	| Last name		|
+	| Roles			|
+	| Site			|
+	| Team			|
 
 
 
