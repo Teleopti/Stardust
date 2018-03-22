@@ -29,16 +29,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			return getStaffingDataAvailablePeriod(date, forThisWeek);
 		}
 
-		public DateOnlyPeriod? GetPeriodForOvertime(DateOnly date, bool forThisWeek)
+		public List<DateOnlyPeriod> GetPeriodsForOvertime(DateOnly date, bool forThisWeek)
 		{
 			var person = _user.CurrentUser();
 			var workflowControlSet = person.WorkflowControlSet;
 			if (workflowControlSet == null)
-				return null;
+				return new List<DateOnlyPeriod>();
 
 			if (workflowControlSet.OvertimeRequestOpenPeriods.Count == 0)
 			{
-				return getStaffingDataAvailablePeriod(date, forThisWeek);
+				var staffingDataAvailablePeriod = getStaffingDataAvailablePeriod(date, forThisWeek);
+				return staffingDataAvailablePeriod.HasValue
+					? new List<DateOnlyPeriod> {staffingDataAvailablePeriod.Value}
+					: new List<DateOnlyPeriod>();
 			}
 
 			var period = date.ToDateOnlyPeriod();
@@ -57,18 +60,29 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 						day.ToDateTimePeriod(timezone));
 
 				if (overtimeRequestOpenPeriods != null && overtimeRequestOpenPeriods.Any(overtimeRequestOpenPeriod =>
-					overtimeRequestOpenPeriod.AutoGrantType != Domain.WorkflowControl.OvertimeRequestAutoGrantType.Deny))
+						overtimeRequestOpenPeriod.AutoGrantType != Domain.WorkflowControl.OvertimeRequestAutoGrantType.Deny))
 				{
 					availableDays.Add(day);
 				}
 			}
 			if (availableDays.Count == 0)
 			{
-				return null;
+				return new List<DateOnlyPeriod>();
 			}
 
-			var availablePeriod = new DateOnlyPeriod(availableDays.Min(), availableDays.Max());
-			return availablePeriod.Intersection(period);
+			var availablePeriods = availableDays.SplitToContinuousPeriods();
+			var returnPeriods = new List<DateOnlyPeriod>();
+
+			foreach (var availablePeriod in availablePeriods)
+			{
+				var intersectionPeriod = availablePeriod.Intersection(period);
+				if (intersectionPeriod.HasValue)
+				{
+					returnPeriods.Add(intersectionPeriod.Value);
+				}
+			}
+
+			return returnPeriods;
 		}
 
 		private DateOnlyPeriod? getStaffingDataAvailablePeriod(DateOnly date, bool forThisWeek)

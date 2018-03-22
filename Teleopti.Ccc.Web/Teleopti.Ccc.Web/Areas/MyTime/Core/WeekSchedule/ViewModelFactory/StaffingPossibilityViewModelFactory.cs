@@ -37,11 +37,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 
 		private IEnumerable<PeriodStaffingPossibilityViewModel> getOvertimePeriodStaffingPossibilityViewModels(DateOnly startDate, bool returnOneWeekData)
 		{
-			var period = _staffingDataAvailablePeriodProvider.GetPeriodForOvertime(startDate, returnOneWeekData);
-			if (period.HasValue)
+			var periods = _staffingDataAvailablePeriodProvider.GetPeriodsForOvertime(startDate, returnOneWeekData);
+			if (periods.Any())
 			{
-				var possibilityModels =
-					_scheduleStaffingPossibilityCalculator.CalculateIntradayOvertimeIntervalPossibilities(period.Value);
+				var possibilityModels = new List<CalculatedPossibilityModel>();
+				foreach (var period in periods)
+				{
+					possibilityModels.AddRange(
+						_scheduleStaffingPossibilityCalculator.CalculateIntradayOvertimeIntervalPossibilities(period));
+				}
 				return createPeriodStaffingPossibilityViewModels(possibilityModels);
 			}
 			return emptyResult();

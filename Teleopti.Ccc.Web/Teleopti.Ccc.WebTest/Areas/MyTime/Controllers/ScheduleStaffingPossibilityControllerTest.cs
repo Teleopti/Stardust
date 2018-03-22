@@ -610,6 +610,54 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
+		[Toggle(Toggles.OvertimeRequestPeriodSetting_46417)]
+		[Toggle(Toggles.OvertimeRequestPeriodSkillTypeSetting_47290)]
+		public void ShouldNotGetPossibilitiesForOvertimeWhenOneOfThePeriodIsDeny()
+		{
+			Now.Is(new DateTime(2018, 1, 31, 8, 0, 0, DateTimeKind.Utc));
+
+			var person = User.CurrentUser();
+
+			var chatSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Chat), ForecastSource.Chat).WithId();
+			var activity = createActivity();
+			var chatSkill = createSkill("chatSkill", new TimePeriod(TimeSpan.Zero, TimeSpan.FromDays(1)));
+			chatSkill.SkillType = chatSkillType;
+			var personChatSkill = createPersonSkill(activity, chatSkill);
+			setupIntradayStaffingForSkill(chatSkill, new double?[] { 10d, 10d }, new double?[] { 5d, 5d });
+
+			addPersonSkillsToPersonPeriod(personChatSkill);
+
+			createAssignment(person, activity);
+
+			var workflowControlSet = new WorkflowControlSet();
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.No,
+				BetweenDays = new MinMax<int>(0, 7),
+				SkillType = chatSkillType,
+				OrderIndex = 0
+			});
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.Deny,
+				BetweenDays = new MinMax<int>(1, 2),
+				SkillType = chatSkillType,
+				OrderIndex = 1
+			});
+			User.CurrentUser().WorkflowControlSet = workflowControlSet;
+
+			var possibilities = Target.GetPossibilityViewModels(new DateOnly(2018, 2, 1), StaffingPossiblityType.Overtime);
+
+			var possibilitiesOn1st = possibilities.Where(d => d.Date == new DateOnly(2018, 1, 31).ToFixedClientDateOnlyFormat()).ToList();
+			var possibilitiesOn2nd = possibilities.Where(d => d.Date == new DateOnly(2018, 2, 1).ToFixedClientDateOnlyFormat()).ToList();
+			var possibilitiesOn3rd = possibilities.Where(d => d.Date == new DateOnly(2018, 2, 2).ToFixedClientDateOnlyFormat()).ToList();
+
+			Assert.AreEqual(possibilitiesOn1st.Count, 96);
+			Assert.AreEqual(possibilitiesOn2nd.Count, 0);
+			Assert.AreEqual(possibilitiesOn3rd.Count, 0);
+		}
+
+		[Test]
 		public void ShouldGetGoodPossibilitiesForOvertimeWhenNotOverstaffing()
 		{
 			setupWorkFlowControlSet();

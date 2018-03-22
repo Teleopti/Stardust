@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
@@ -104,11 +105,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			}
 
 			var overTimeRequestOpenPeriod = getOvertimeRequestOpenPeriodBySkillType(personRequest, validateSkillsResult.Skills);
-			if (overTimeRequestOpenPeriod == null)
-			{
-				denyRequest(personRequest, "xxx");
-				return;
-			}
 
 			if (overTimeRequestOpenPeriod.AutoGrantType == OvertimeRequestAutoGrantType.Deny)
 			{
@@ -202,7 +198,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			ISkill[] skillTypes)
 		{
 			if (personRequest.Person.WorkflowControlSet == null)
-				return null;
+				return new OvertimeRequestOpenRollingPeriod
+				{
+					AutoGrantType = OvertimeRequestAutoGrantType.Deny,
+					DenyReason = Resources.MissingWorkflowControlSet
+				};
 
 			var defaultSkillType = getDefaultSkillType();
 			var skillTypeFilteredOvertimeRequestOpenPeriods =

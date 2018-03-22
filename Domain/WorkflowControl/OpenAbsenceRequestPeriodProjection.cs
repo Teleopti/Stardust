@@ -276,26 +276,8 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			{
 				dayCollection.Remove(denyDay);
 			}
-			var periods = splitToContinuousPeriods(dayCollection);
+			var periods = dayCollection.SplitToContinuousPeriods();
 			return string.Join(",", periods.Select(p => p.ToShortDateString(_dateCultureInfo)));
-		}
-
-		private IList<DateOnlyPeriod> splitToContinuousPeriods(IList<DateOnly> dayCollection)
-		{
-			var periodList = new List<DateOnlyPeriod>();
-			DateOnly? startDate = null;
-			for (var i = 0; i < dayCollection.Count; i++)
-			{
-				if (!startDate.HasValue)
-				{
-					startDate = dayCollection[i];
-				}
-				var nextDate = dayCollection[i].AddDays(1);
-				if (dayCollection.Contains(nextDate)) continue;
-				periodList.Add(new DateOnlyPeriod(startDate.Value, nextDate.AddDays(-1)));
-				startDate = null;
-			}
-			return periodList;
 		}
 
 		private class DateOnlyPeriodWithAbsenceRequestPeriod

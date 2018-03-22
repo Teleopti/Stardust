@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
@@ -35,11 +36,29 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			var personSkillTypeDescriptions = personPeriod.SelectMany(p => _personalSkills.PersonSkills(p)).Select(p => p.Skill.SkillType.Description).ToList();
 
 			var defaultSkillType = getDefaultSkillType();
-			var skillTypeFilteredOvertimeRequestOpenPeriods =
-				person.WorkflowControlSet.OvertimeRequestOpenPeriods.Where(x =>
-					personSkillTypeDescriptions.Contains((x.SkillType ?? defaultSkillType).Description) && isPeriodMatched(x, person, dateOnlyPeriod)).ToList();
 
-			return skillTypeFilteredOvertimeRequestOpenPeriods;
+			var overtimeRequestOpenPeriodSkillTypeGroups =
+				person.WorkflowControlSet.OvertimeRequestOpenPeriods
+					.Where(x => personSkillTypeDescriptions.Contains((x.SkillType ?? defaultSkillType).Description) &&
+								isPeriodMatched(x, person, dateOnlyPeriod))
+					.GroupBy(o => o.SkillType ?? defaultSkillType);
+
+			var skllTypeMergedOvertimeRequestOpenPeriods = new List<IOvertimeRequestOpenPeriod>();
+			var overtimeRequestOpenPeriodMerger = new OvertimeRequestOpenPeriodMerger();
+			foreach (var overtimeRequestOpenPeriodSkillTypeGroup in overtimeRequestOpenPeriodSkillTypeGroups)
+			{
+				if (overtimeRequestOpenPeriodSkillTypeGroup.Count() > 1)
+				{
+					skllTypeMergedOvertimeRequestOpenPeriods.Add(
+						overtimeRequestOpenPeriodMerger.Merge(overtimeRequestOpenPeriodSkillTypeGroup));
+				}
+				else
+				{
+					skllTypeMergedOvertimeRequestOpenPeriods.AddRange(overtimeRequestOpenPeriodSkillTypeGroup);
+				}
+			}
+
+			return skllTypeMergedOvertimeRequestOpenPeriods;
 		}
 
 		private bool isPeriodMatched(IOvertimeRequestOpenPeriod overtimeRequestOpenPeriod, IPerson person,
