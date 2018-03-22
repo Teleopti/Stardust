@@ -10,12 +10,12 @@
       </div>
       <div class="con-flex x3">
         <button mat-raised-button color="primary" data-test-grant-button [disabled]="!workspaceService.isAnySelected()" (click)="nav.navToGrant()">
-          <i class="mdi mdi-plus"></i> Grant role</button>
+          Grant role</button>
         <button mat-raised-button color="primary" data-test-revoke-button [disabled]="!workspaceService.isAnySelected()" (click)="nav.navToRevoke()">
-          <i class="mdi mdi-close"></i>Revoke role</button>
+          Revoke role</button>
         <button mat-raised-button color="primary" data-test-applicationlogon-button [disabled]="!workspaceService.isAnySelected()"
           (click)="nav.navToApplicationLogon()">
-          <i class="mdi mdi-close"></i>Application logon</button>
+          Application logon</button>
       </div>
     </div>
   </div>
@@ -26,8 +26,6 @@
         <!-- Checkbox Column -->
         <ng-container matColumnDef="select">
           <mat-header-cell *matHeaderCellDef>
-            <mat-checkbox>
-            </mat-checkbox>
           </mat-header-cell>
           <mat-cell *matCellDef="let row">
             <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? toggleSelectedPerson(row.Id) : null" [checked]="workspaceService.isPersonSelected(row.Id)">
