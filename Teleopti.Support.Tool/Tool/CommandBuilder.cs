@@ -81,7 +81,7 @@ namespace Teleopti.Support.Tool.Tool
 					if (argument.Equals("-RC"))
 						command = restoreCommand;
 
-					if (argument.Equals("-TC"))
+					if (argument.StartsWith("-TC"))
 						command = new SetToggleModeCommand(argument.Remove(0, 3));
 					if (argument.Equals("-SET"))
 						command = new SetSettingCommand(args.ElementAt(1), args.ElementAt(2));
