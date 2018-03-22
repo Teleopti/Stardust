@@ -1,7 +1,8 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { WorkspaceService, RolesService, SearchService, NavigationService, PeopleSearchQuery } from '../../services';
-import { Role, Person } from '../../types';
-import { MatSort, PageEvent, MatTableDataSource } from '@angular/material';
+import { Component, OnInit } from '@angular/core';
+import { MatTableDataSource, PageEvent } from '@angular/material';
+
+import { NavigationService, PeopleSearchQuery, RolesService, SearchService, WorkspaceService } from '../../services';
+import { Person, Role } from '../../types';
 
 @Component({
 	selector: 'people-search-page',
@@ -15,8 +16,6 @@ export class SearchPageComponent implements OnInit {
 		public rolesService: RolesService,
 		public searchService: SearchService
 	) {}
-
-	@ViewChild(MatSort) sort: MatSort;
 
 	roles: Array<Role> = [];
 
@@ -36,11 +35,7 @@ export class SearchPageComponent implements OnInit {
 				this.dataSource.data = people;
 			}
 		});
-		this.searchPeople();
-	}
-
-	ngAfterViewInit() {
-		this.dataSource.sort = this.sort;
+		// this.searchPeople();
 	}
 
 	onSearch() {

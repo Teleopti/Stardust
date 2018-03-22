@@ -21,7 +21,7 @@
   </div>
   <div class="con-row">
     <div class="con-flex">
-      <mat-table #table [dataSource]="dataSource" matSort data-test-search>
+      <mat-table #table [dataSource]="dataSource" data-test-search>
 
         <!-- Checkbox Column -->
         <ng-container matColumnDef="select">
@@ -34,28 +34,28 @@
         </ng-container>
 
         <ng-container matColumnDef="FirstName">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> First name </mat-header-cell>
+          <mat-header-cell *matHeaderCellDef> First name </mat-header-cell>
           <mat-cell *matCellDef="let person" data-test-person-firstname> {{person.FirstName}} </mat-cell>
         </ng-container>
 
         <!-- Name Column -->
         <ng-container matColumnDef="LastName">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Last name </mat-header-cell>
+          <mat-header-cell *matHeaderCellDef> Last name </mat-header-cell>
           <mat-cell *matCellDef="let person" data-test-person-lastname> {{person.LastName}} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="Roles">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Roles </mat-header-cell>
+          <mat-header-cell *matHeaderCellDef> Roles </mat-header-cell>
           <mat-cell *matCellDef="let person" data-test-person-role> {{personToRoles(person)}} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="Site">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Site </mat-header-cell>
+          <mat-header-cell *matHeaderCellDef> Site </mat-header-cell>
           <mat-cell *matCellDef="let person" data-test-person-site> {{person.Site}} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="Team">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Team </mat-header-cell>
+          <mat-header-cell *matHeaderCellDef> Team </mat-header-cell>
           <mat-cell *matCellDef="let person" data-test-person-team> {{person.Team}}</mat-cell>
         </ng-container>
 
