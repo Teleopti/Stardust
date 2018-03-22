@@ -119,9 +119,6 @@
     <Compile Include="Code\Gui\DataSourceConfiguration\IDataSourceConfigurationView.cs" />
     <Compile Include="Code\Gui\DataSourceConfiguration\MessageBoxProperties.cs" />
     <Compile Include="Code\Gui\StartupConfiguration\IStartupConfigurationView.cs" />
-    <Compile Include="Code\Gui\StartupConfiguration\LookupIntegerItem.cs" />
-    <Compile Include="Code\Gui\StartupConfiguration\LookupStringItem.cs" />
-    <Compile Include="Code\Gui\StartupConfiguration\StartupConfigurationModel.cs" />
     <Compile Include="Code\Gui\StartupConfiguration\StartupConfigurationPresenter.cs" />
     <Compile Include="Gui\DataSourceConfiguration\DataSourceConfigurationView.cs">
       <SubType>Form</SubType>

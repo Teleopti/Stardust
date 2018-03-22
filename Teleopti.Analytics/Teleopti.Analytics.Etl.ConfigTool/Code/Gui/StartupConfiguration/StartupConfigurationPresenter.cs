@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using System.Linq;
 using log4net;
+using Teleopti.Analytics.Etl.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 

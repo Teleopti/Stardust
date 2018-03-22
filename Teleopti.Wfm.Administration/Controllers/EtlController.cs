@@ -96,6 +96,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			}
 		}
 
+		[TenantUnitOfWork]
 		[HttpGet, Route("Etl/IsBaseConfigurationAvailable")]
 		public virtual IHttpActionResult IsBaseConfigurationAvailable()
 		{

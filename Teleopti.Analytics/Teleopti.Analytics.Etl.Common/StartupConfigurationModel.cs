@@ -5,7 +5,7 @@ using System.Globalization;
 using System.Linq;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 
-namespace Teleopti.Analytics.Etl.ConfigTool.Code.Gui.StartupConfiguration
+namespace Teleopti.Analytics.Etl.Common
 {
 	public class StartupConfigurationModel
 	{

@@ -1,4 +1,4 @@
-namespace Teleopti.Analytics.Etl.ConfigTool.Code.Gui.StartupConfiguration
+namespace Teleopti.Analytics.Etl.Common
 {
 	public class LookupIntegerItem
 	{
