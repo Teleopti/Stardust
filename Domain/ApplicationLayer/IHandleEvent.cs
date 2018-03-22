@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer
 {
 	public interface IHandleEvent<TEvent> where TEvent : IEvent
 	{
+		[TestLog]
 		void Handle(TEvent @event);
 	}
 
