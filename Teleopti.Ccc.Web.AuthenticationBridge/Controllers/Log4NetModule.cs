@@ -81,6 +81,10 @@ namespace Teleopti.Ccc.Web.AuthenticationBridge.Controllers
 			{
 				// ignore “The remote host closed the connection” exception
 			}
+			else if (httpException != null && httpException.ErrorCode == unchecked((int) 0x80004005))
+			{
+				// ignore “Server cannot set status after HTTP headers have been sent.” exception
+			}
 			else
 				_logger.Error(LogMessageException, exception);
 		}
