@@ -31,7 +31,7 @@
 			return {
 				organization: organization,
 				skills: skills,
-				skillAreas
+				skillAreas: skillAreas
 			}
 		});
 
