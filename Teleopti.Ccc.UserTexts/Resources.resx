@@ -7519,6 +7519,10 @@ Updated on: {1}</value>
     <value>The schedule has changed. This request must be accepted again.</value>
     <comment>The schedule has changed. This request must be accepted again.</comment>
   </data>
+  <data name="ShiftTradeResendMessage" xml:space="preserve">
+    <value>Request was resent for schedule changes.</value>
+    <comment>Default message after resending shift trade request</comment>
+  </data>
   <data name="SelectMultipleDates" xml:space="preserve">
     <value>Select multiple dates</value>
     <comment>Select multiple dates</comment>

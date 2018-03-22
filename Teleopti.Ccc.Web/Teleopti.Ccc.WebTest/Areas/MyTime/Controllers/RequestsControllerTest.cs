@@ -498,6 +498,40 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
+		public void ShouldChangeMessageWhenResendRequest()
+		{
+			var personFrom = PersonFactory.CreatePersonWithId(Guid.NewGuid());
+			personFrom.SetName(new Name("xxx", "personFrom"));
+			PersonRepository.Add(personFrom);
+			LoggedOnUser.SetFakeLoggedOnUser(personFrom);
+
+			var personTo = PersonFactory.CreatePersonWithId(Guid.NewGuid());
+			personTo.SetName(new Name("yyy", "personTo"));
+			var applicationRole = ApplicationRoleFactory.CreateRole("test", "test");
+			applicationRole.AddApplicationFunction(ApplicationFunctionFactory.CreateApplicationFunction(DefinedRaptorApplicationFunctionPaths.ViewSchedules));
+			applicationRole.AddApplicationFunction(ApplicationFunctionFactory.CreateApplicationFunction(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb));
+			applicationRole.AvailableData = new AvailableData { AvailableDataRange = AvailableDataRangeOption.Everyone }; ;
+			personTo.PermissionInformation.AddApplicationRole(applicationRole);
+			PersonRepository.Add(personTo);
+
+			var form = new ShiftTradeRequestForm
+			{
+				Message = "test",
+				Dates = new List<DateOnly> { DateOnly.Today },
+				PersonToId = personTo.Id.Value
+			};
+			var result = Target.ShiftTradeRequest(form);
+			var data = result.Data as RequestViewModel;
+
+			var shiftTradeRequest = PersonRequestRepository.Find(Guid.Parse(data.Id));
+			(shiftTradeRequest.Request as IShiftTradeRequest).Refer(new PersonRequestAuthorizationCheckerForTest());
+
+			var resendResult = Target.ResendShiftTrade(Guid.Parse(data.Id));
+			
+			(resendResult.Data as RequestViewModel).Text.Should().Be(Resources.ShiftTradeResendMessage);
+		}
+
+		[Test]
 		public void ShouldReturnPersonalAccountPermission()
 		{
 			var result = Target.PersonalAccountPermission();
@@ -526,7 +560,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldAllowCancelAbsenceRequest()
 		{
-			Now.Is(new DateTime(2016,3,1,0,0,0,DateTimeKind.Utc));
+			Now.Is(new DateTime(2016, 3, 1, 0, 0, 0, DateTimeKind.Utc));
 
 			var person = PersonFactory.CreatePerson("Bill", "Bloggins").WithId();
 			var data = doCancelAbsenceRequestMyTimeSpecificValidation(person, new DateTimePeriod(2016, 03, 02, 2016, 03, 03));
@@ -550,7 +584,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			var person = PersonFactory.CreatePerson("Bill", "Bloggins").WithId();
 
-			var data = doCancelAbsenceRequestMyTimeSpecificValidation(person, new DateTimePeriod(today, today.AddDays(1)),true,10);
+			var data = doCancelAbsenceRequestMyTimeSpecificValidation(person, new DateTimePeriod(today, today.AddDays(1)), true, 10);
 
 			var workflowControlSet = person.WorkflowControlSet;
 			data.ErrorMessages.Should()
@@ -571,7 +605,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			shouldHandleTeamIdsCorrectly(teamIds);
 		}
 
-		private  void shouldHandleTeamIdsCorrectly(string teamIds)
+		private void shouldHandleTeamIdsCorrectly(string teamIds)
 		{
 			//var timeFilterHelper = MockRepository.GenerateMock<ITimeFilterHelper>();
 			//timeFilterHelper.Stub(x => x.GetFilter(new DateOnly(), "", "", false, false))
@@ -606,7 +640,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			}
 
 			var workflowControlSet =
-				new WorkflowControlSet {AbsenceRequestCancellationThreshold = absenceRequestCancellationThreshold};
+				new WorkflowControlSet { AbsenceRequestCancellationThreshold = absenceRequestCancellationThreshold };
 			var absence = AbsenceFactory.CreateAbsence("Holiday").WithId();
 			AbsenceRepository.Add(absence);
 			workflowControlSet.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenRollingPeriod
@@ -637,7 +671,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var data = result.Data as RequestViewModel;
 			var requestId = Guid.Parse(data.Id);
 
-			CommandHandlingProvider.ApproveRequests(new[] {requestId}, string.Empty);
+			CommandHandlingProvider.ApproveRequests(new[] { requestId }, string.Empty);
 
 			var cancelRequestResult = Target.CancelRequest(requestId);
 			return (RequestCommandHandlingResult)cancelRequestResult.Data;

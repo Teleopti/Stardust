@@ -31889,6 +31889,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Request was resent for schedule changes..
+        /// </summary>
+        public static string ShiftTradeResendMessage {
+            get {
+                return ResourceManager.GetString("ShiftTradeResendMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Shift trade denied because your skills did not match with other person..
         /// </summary>
         public static string ShiftTradeSkillDenyReason {
