@@ -7259,9 +7259,6 @@
   <data name="ScheduledTimePerActivity" xml:space="preserve">
     <value>活動ごとの予定時間</value>
   </data>
-  <data name="RequestDenyReasonAutodeny" xml:space="preserve">
-    <value>管理者が設定したルールにより、欠勤要求が自動的に拒否されました。</value>
-  </data>
   <data name="RequestDenyReasonClosedPeriod" xml:space="preserve">
     <value>欠勤要求を承認できません。現時点では一部の日付にて要求が受け付けられません。</value>
   </data>

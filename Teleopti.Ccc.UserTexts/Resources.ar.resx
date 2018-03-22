@@ -7674,9 +7674,6 @@
   <data name="DateColon" xml:space="preserve">
     <value>اتاريخ:</value>
   </data>
-  <data name="RequestDenyReasonAutodeny" xml:space="preserve">
-    <value>لقد تم رفض طلبك للتغيب تلقائيا نظرا الى قاعده وضعها مدير النظام</value>
-  </data>
   <data name="RequestDenyReasonClosedPeriod" xml:space="preserve">
     <value>لم يستطع منح طلبك للتغيبز بعض التواريخ غير متاحه فى هذا الوقت</value>
   </data>

@@ -8235,9 +8235,6 @@ Periode: {3}</value>
   <data name="RequestDenyReasonNoWorkflow" xml:space="preserve">
     <value>Ihre Abwesenheitsanfrage kann nicht genehmigt werden. Ihr Konto ist mit keinem Workflow verbunden.</value>
   </data>
-  <data name="RequestDenyReasonAutodeny" xml:space="preserve">
-    <value>Ihre Abwesenheitsanfrage wurde aufgrund einer vom Administrator gesetzten Regel automatisch abgelehnt.</value>
-  </data>
   <data name="ActivityTime" xml:space="preserve">
     <value>Zeit der Aktivität</value>
   </data>

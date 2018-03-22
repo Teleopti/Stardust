@@ -2334,9 +2334,6 @@
   <data name="ScheduledTimePerActivity" xml:space="preserve">
     <value>Waktu Terjadwal per Aktivitas</value>
   </data>
-  <data name="RequestDenyReasonAutodeny" xml:space="preserve">
-    <value>Permintaan absen anda ditolak secara otomatis, karena aturan yang telah ditetapkan oleh administrator.</value>
-  </data>
   <data name="RequestDenyReasonClosedPeriod" xml:space="preserve">
     <value>Permintaan absen anda tidak dikabulkan. Beberapa tanggal tidak terbuka untuk permintaan saat ini.</value>
   </data>

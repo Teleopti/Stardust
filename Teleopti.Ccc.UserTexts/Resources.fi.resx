@@ -8332,9 +8332,6 @@ Jakso: {3}</value>
   <data name="ScheduledTimePerActivity" xml:space="preserve">
     <value>Työvuoroaika per aktiviteetti</value>
   </data>
-  <data name="RequestDenyReasonAutodeny" xml:space="preserve">
-    <value>Poissaolopyyntösi on evätty automaattisesti, järjestelmävalvojan tekemien asetusten vuoksi. Tämä voi olla esimerkiksi, että olet tehnyt poissaolopyyntösi liian kauaksi tulevaisuuteen. </value>
-  </data>
   <data name="RequestDenyReasonClosedPeriod" xml:space="preserve">
     <value>Poissaolopyyntöä ei voida myöntää. Päivämäärä, jolle teit poissaolopyynnön ei ole avoinna pyynnöille tällä hetkellä.</value>
   </data>

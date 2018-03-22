@@ -6451,9 +6451,6 @@ Periode: {3}</value>
   <data name="DateColon" xml:space="preserve">
     <value>Dato:</value>
   </data>
-  <data name="RequestDenyReasonAutodeny" xml:space="preserve">
-    <value>Din fraværsforespørsel er automatisk avslått pga. regel satt opp av administrator.</value>
-  </data>
   <data name="RequestDenyReasonClosedPeriod" xml:space="preserve">
     <value>Din fraværsforespørsel kan ikke innvilges. Enkelte datoer er ikke åpne for forespørsler på denne tiden.</value>
   </data>
@@ -12162,9 +12159,6 @@ Denne informasjonen vil sikre at du atomatisk vil være pålogget til Teleopti C
   </data>
   <data name="NumberOfRowsExceedsTheMaximum" xml:space="preserve">
     <value>Antall rader overstiger maksimumet ({0}).</value>
-  </data>
-  <data name="OvertimeRequestDenyReasonAutodeny" xml:space="preserve">
-    <value>Øvertidsforespørselen din er automatisk nektet på grunn av en regel som er opprettet av administratoren.</value>
   </data>
   <data name="OvertimeRequestDenyReasonExpired" xml:space="preserve">
     <value>Øvertidsforespørselen din er automatisk nektet. Starttiden for denne forespørselen er {0}, den må være minst {1} minutter senere enn nåværende tidspunkt</value>

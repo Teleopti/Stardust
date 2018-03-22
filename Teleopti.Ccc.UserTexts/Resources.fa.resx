@@ -8358,9 +8358,6 @@
   <data name="RequestDenyReasonClosedPeriod" xml:space="preserve">
     <value>درخواست مرخصی شما قابل واگذاری نیست .بعضی از تاریخ ها  برای درخواست شما در این لحظه باز نیستند</value>
   </data>
-  <data name="RequestDenyReasonAutodeny" xml:space="preserve">
-    <value>درخواست مرخصی شما در طی راه اندازی  یک قاعده توسط مدیر سیستم .بصورت خودکار رد شده است</value>
-  </data>
   <data name="AddGroupingAbsence" xml:space="preserve">
     <value>افزودن گروه بندی مرخصی</value>
   </data>
@@ -12668,9 +12665,6 @@ Teleopti R&amp;D</value>
   </data>
   <data name="OvertimeRequestDenyReasonClosedPeriod" xml:space="preserve">
     <value>درخواست اضافه کاری نمیتواند تایید شود. برخی از تاریخها برای ثبت درخواست باز نشده است</value>
-  </data>
-  <data name="OvertimeRequestDenyReasonAutodeny" xml:space="preserve">
-    <value>درخواست اضافه کاری بخاطر تنظیمات سرپرست بطور خودکار رد  شد</value>
   </data>
   <data name="StartTimeNotMatchingShiftBag" xml:space="preserve">
     <value>زمان شروع {0} در {1:d} در کیسه شیفت شما وجود ندارد {2}</value>

@@ -7829,9 +7829,6 @@ Teleopti R&amp;D</value>
   <data name="DateColon" xml:space="preserve">
     <value>日期：</value>
   </data>
-  <data name="RequestDenyReasonAutodeny" xml:space="preserve">
-    <value>您的缺勤申请由于管理员设置的一条规则，被自动拒绝。</value>
-  </data>
   <data name="RequestDenyReasonClosedPeriod" xml:space="preserve">
     <value>您的缺勤申请被系统自动拒绝。某些日期当前未开放申请。</value>
   </data>
@@ -14165,9 +14162,6 @@ Teleopti R&amp;D</value>
   </data>
   <data name="OvertimeRequestDenyReasonNoPeriod" xml:space="preserve">
     <value>您的加班申请已被拒绝. 申请周期内的某些日期还没有开放申请. 您可以发送申请在以下周期范围: {0}.</value>
-  </data>
-  <data name="OvertimeRequestDenyReasonAutodeny" xml:space="preserve">
-    <value>根据规则设定, 您的加班申请已被自动拒绝.</value>
   </data>
   <data name="ExportSchedulesMaximumDays" xml:space="preserve">
     <value>最多可选择31天</value>

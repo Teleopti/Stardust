@@ -2598,9 +2598,6 @@
   <data name="FreeWeekendRule" xml:space="preserve">
     <value>Filtrar por limitações de finais de semana livres</value>
   </data>
-  <data name="RequestDenyReasonAutodeny" xml:space="preserve">
-    <value>Sua solicitação de ausência foi negada automaticamente, devido a uma regra definida pelo administrador.</value>
-  </data>
   <data name="BusinessRuleNoSkillsOpenErrorMessage" xml:space="preserve">
     <value>Não há nenhum Skill aberto conectado à atividade: {0} encontrada na: {1} - {2}</value>
   </data>

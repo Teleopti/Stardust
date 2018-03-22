@@ -8289,9 +8289,6 @@ Období: {3}</value>
   <data name="DateColon" xml:space="preserve">
     <value>Datum:</value>
   </data>
-  <data name="RequestDenyReasonAutodeny" xml:space="preserve">
-    <value>Váž požadavek na absenci byl automaticky zamítnut z důvodu nastavení pravidel administrátorem.</value>
-  </data>
   <data name="RequestDenyReasonClosedPeriod" xml:space="preserve">
     <value>Váš požadavek na absenci nemůže být schválen. Některá data nejsou nyní otevřena pro požadavky.</value>
   </data>

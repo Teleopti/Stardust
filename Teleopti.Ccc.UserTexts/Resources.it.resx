@@ -3885,9 +3885,6 @@ Periodo: {3}</value>
   <data name="SchedulingResult" xml:space="preserve">
     <value>Risultato pianificazione</value>
   </data>
-  <data name="RequestDenyReasonAutodeny" xml:space="preserve">
-    <value>La tua richiesta di assenza è stata rifiutata automaticamente per una regola impostata dall'amministratore.</value>
-  </data>
   <data name="RequestDenyReasonNoWorkflow" xml:space="preserve">
     <value>La tua richiesta di assenza non può essere garantita. Non risulta un Workflow associato al tuo account.</value>
   </data>

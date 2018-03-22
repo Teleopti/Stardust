@@ -7562,9 +7562,6 @@ Période: {3}</value>
   <data name="FreeWeekendRule" xml:space="preserve">
     <value>Filtre sur limitations de weekend libre</value>
   </data>
-  <data name="RequestDenyReasonAutodeny" xml:space="preserve">
-    <value>Votre demande d'absence a été automatiquement refusée, dû à une règle établie par l'administrateur.</value>
-  </data>
   <data name="RequestDenyReasonClosedPeriod" xml:space="preserve">
     <value>Votre demande d'absence ne peut pas être autorisée. Des dates ne sont pas ouvertes aux demandes actuellement.</value>
   </data>

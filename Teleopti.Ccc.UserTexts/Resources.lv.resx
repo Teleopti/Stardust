@@ -6584,9 +6584,6 @@ Periods: {3}</value>
   <data name="DateColon" xml:space="preserve">
     <value>Datums:</value>
   </data>
-  <data name="RequestDenyReasonAutodeny" xml:space="preserve">
-    <value>Jūsu prombūtnes pieprasījums ir noraidīts automātiski, pamatojoties uz administratora noteikumu uzstādījumiem.</value>
-  </data>
   <data name="RequestDenyReasonClosedPeriod" xml:space="preserve">
     <value>Jūsu prombūtnes pieprasījums nevar tikt apstiprināts. Daži datumi nav atvērti pieprasījumiem šajā laikā.</value>
   </data>

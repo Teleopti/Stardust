@@ -8467,9 +8467,6 @@ Periode: {3}</value>
   <data name="DateColon" xml:space="preserve">
     <value>Dato:</value>
   </data>
-  <data name="RequestDenyReasonAutodeny" xml:space="preserve">
-    <value>Din fraværs forespørgelse er blevet afvis automatisk, på grund af en forretningsregel.</value>
-  </data>
   <data name="RequestDenyReasonClosedPeriod" xml:space="preserve">
     <value>Din fraværs forespørgelse kan ikke behandles, nogle af de indtastede datoer er endnu ikke åbne for forespørelser. </value>
   </data>
@@ -14839,9 +14836,6 @@ Vil du deltage?</value>
   </data>
   <data name="OvertimeRequestDenyReasonClosedPeriod" xml:space="preserve">
     <value>Din overtidsforespörgsel kan ikke tildeles. Nogle datoer er ikke åbne for forespörgsler på nuvärende tidspunkt</value>
-  </data>
-  <data name="OvertimeRequestDenyReasonAutodeny" xml:space="preserve">
-    <value>Din overtidsforespörgsel er blevet automatisk afvist, på grund af en reglse som er opsat af administratoren</value>
   </data>
   <data name="StartTimeNotMatchingShiftBag" xml:space="preserve">
     <value>Starttiden {0:HH:mm} på {1:d} eksisterer ikke i vagtsamlingen {2}</value>

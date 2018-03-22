@@ -6442,9 +6442,6 @@ Período: {3}</value>
   <data name="DateColon" xml:space="preserve">
     <value>Fecha:</value>
   </data>
-  <data name="RequestDenyReasonAutodeny" xml:space="preserve">
-    <value>Su solicitud de ausencia ha sido denegada automáticamente, debido a regla aplicada por el administrador.</value>
-  </data>
   <data name="RequestDenyReasonClosedPeriod" xml:space="preserve">
     <value>Su solicitud de ausencia no puede ser aprobada. Algunas fechas no están abiertas para solicitudes en este momento.</value>
   </data>
@@ -11554,9 +11551,6 @@ Detalles del error:
   </data>
   <data name="OvertimeRequestDenyReasonClosedPeriod" xml:space="preserve">
     <value>Tu solicitud de tiempo extra no pudo ser aprobada. Alguno de los días incluidos no están abiertos para solicitudes en este momento.</value>
-  </data>
-  <data name="OvertimeRequestDenyReasonAutodeny" xml:space="preserve">
-    <value>Tu solicitud de tiempo extra fue denegada automáticamente debido a una regla establecida por el administrador.</value>
   </data>
   <data name="OvertimeRequestDenyReasonOutOfSiteOpenHour" xml:space="preserve">
     <value>Tu solicitud de tiempo extra fue denegada automáticamente. El periodo solicitado es {0}, pero los horarios de apertura del site son {1}</value>

@@ -6282,9 +6282,6 @@
   <data name="DateColon" xml:space="preserve">
     <value>Tarih:</value>
   </data>
-  <data name="RequestDenyReasonAutodeny" xml:space="preserve">
-    <value>Devamsızlık isteğiniz kural gereği otomatik olarak reddedilmiştir.</value>
-  </data>
   <data name="RequestDenyReasonClosedPeriod" xml:space="preserve">
     <value>Devamsızlık isteğiniz kabul edilememiştir. İstenen tarih istekler için açık değildir.</value>
   </data>

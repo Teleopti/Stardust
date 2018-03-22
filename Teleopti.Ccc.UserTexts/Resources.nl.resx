@@ -7265,9 +7265,6 @@ Teleopti R &amp; D</value>
   <data name="AgentColon" xml:space="preserve">
     <value>Agent:</value>
   </data>
-  <data name="RequestDenyReasonAutodeny" xml:space="preserve">
-    <value>Uw afwezigheid aanvraag is automatisch geweigerd, vanwege een regel ingesteld door de administrator.</value>
-  </data>
   <data name="Basic" xml:space="preserve">
     <value>Basisch</value>
   </data>

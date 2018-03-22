@@ -6452,9 +6452,6 @@ Okres: {3}</value>
   <data name="DateColon" xml:space="preserve">
     <value>Data:</value>
   </data>
-  <data name="RequestDenyReasonAutodeny" xml:space="preserve">
-    <value>Prośba o nieobecność odrzucona automatycznie przez regułę zdefiniowaną przez administratora.</value>
-  </data>
   <data name="RequestDenyReasonClosedPeriod" xml:space="preserve">
     <value>Prośba o nieobecność nie może zostać zaakceptowana. Niektóre daty nie są otwarte na żądania.</value>
   </data>

@@ -8142,9 +8142,6 @@ Teleopti R&amp;D</value>
   <data name="DateColon" xml:space="preserve">
     <value>Дата:</value>
   </data>
-  <data name="RequestDenyReasonAutodeny" xml:space="preserve">
-    <value>Ваш запрос на отсутствие был отклонен автоматически ввиду правил, установленных администратором.</value>
-  </data>
   <data name="RequestDenyReasonClosedPeriod" xml:space="preserve">
     <value>Ваш запрос на отсутствие не может быть подтвержден, т.к. выбранные даты недоступны для запросов в настоящий момент.</value>
   </data>

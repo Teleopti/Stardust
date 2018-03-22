@@ -8361,9 +8361,6 @@ Period: {3}</value>
   <data name="ScheduledTimePerActivityReport" xml:space="preserve">
     <value>Schemalagd tid per aktivitet</value>
   </data>
-  <data name="RequestDenyReasonAutodeny" xml:space="preserve">
-    <value>Din frånvaroförfrågan har nekats automatiskt, på grund av en regel uppsatt av administratören.</value>
-  </data>
   <data name="RequestDenyReasonClosedPeriod" xml:space="preserve">
     <value>Din förfrågan kunde inte behandlas. Några datum är i dagsläget inte öppna för förfrågningar.</value>
   </data>
@@ -14955,7 +14952,7 @@ Vill du registrera dig?</value>
     <value>Din övertidsförfrågan kan inte godkännas. Vissa datum är för närvarande inte öppna för förfrågningar. </value>
   </data>
   <data name="OvertimeRequestDenyReasonAutodeny" xml:space="preserve">
-    <value>Din övertidsförfrågan har avslagits automatiskt, pga. en regel som administratören satt upp. </value>
+    <value>Godkännande av övertidsförfrågningar är inte aktiverat av administratören för hela eller delar av den period förfrågan gäller.</value>
   </data>
   <data name="StartTimeNotMatchingShiftBag" xml:space="preserve">
     <value>Starttiden {0:HH:mm} den {1:d} finns inte i skiftpåsen {2}.</value>
@@ -15431,5 +15428,29 @@ Applikationen kommer nu att stängas. </value>
   </data>
   <data name="OpenPlansPage" xml:space="preserve">
     <value>Planer</value>
+  </data>
+  <data name="RecordedOutOfAdherence" xml:space="preserve">
+    <value>Ursprunglig avvikelse</value>
+  </data>
+  <data name="ApprovedAsInAdherence" xml:space="preserve">
+    <value>Godkänt som schemaföljsamhet</value>
+  </data>
+  <data name="DoYouWantToSaveChangesWithTerminalDate" xml:space="preserve">
+    <value>Slutdatumet för en eller flera agenter har ändrats. Agentrelaterad schemadata efter detta datum kommer att tas bort genast. Vill du spara?</value>
+  </data>
+  <data name="BadgeCalculation" xml:space="preserve">
+    <value>Medaljberäkning</value>
+  </data>
+  <data name="NoGamificationDataForThePeriod" xml:space="preserve">
+    <value>Det finns ingen gamificationdata för vissa eller alla dagar i den valda perioden. </value>
+  </data>
+  <data name="BadgeCalculationIsAlreadyInProgressWithinTheSelectedPeriod" xml:space="preserve">
+    <value>Medaljberäkning pågår redan inom den valda perioden.</value>
+  </data>
+  <data name="AddSkillGroup" xml:space="preserve">
+    <value>Lägg till kompetensgrupp</value>
+  </data>
+  <data name="RequestDenyReasonAutodeny" xml:space="preserve">
+    <value>Godkännande av frånvaroförfrågningar är inte aktiverat av administratören för hela eller delar av den period förfrågan gäller.</value>
   </data>
 </root>
