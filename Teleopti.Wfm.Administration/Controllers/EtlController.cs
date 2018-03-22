@@ -6,7 +6,6 @@ using System.Net;
 using System.Web.Http;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
-using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.MultiTenancy;
@@ -103,9 +102,11 @@ namespace Teleopti.Wfm.Administration.Controllers
 			var connectionString = _configReader.ConnectionString("Hangfire");
 			var baseConfig = _baseConfigurationRepository.LoadBaseConfiguration(connectionString);
 			var isConfig = baseConfig.IntervalLength.HasValue;
+			var tenantName = getMasterTenantName();
+
 			return Ok(new TenantConfigurationModel()
 			{
-				ConnectionString = connectionString,
+				TenantName = tenantName,
 				IsBaseConfigured = isConfig
 			});
 		}
@@ -114,7 +115,14 @@ namespace Teleopti.Wfm.Administration.Controllers
 		[HttpPost, Route("Etl/SaveConfigurationForTenant")]
 		public virtual IHttpActionResult SaveConfigurationForTenant(TenantConfigurationModel tenantConfigurationModel)
 		{
-			_baseConfigurationRepository.SaveBaseConfiguration(tenantConfigurationModel.ConnectionString, tenantConfigurationModel.BaseConfig);
+			var tenant = _loadAllTenants.Tenants().SingleOrDefault(x => x.Name == tenantConfigurationModel.TenantName);
+			if (tenant == null)
+			{
+				return Content(HttpStatusCode.NotFound, $"Tenant with name {tenantConfigurationModel.TenantName} does not exists");
+			}
+
+			var connectionString = tenant.DataSourceConfiguration.AnalyticsConnectionString;
+			_baseConfigurationRepository.SaveBaseConfiguration(connectionString, tenantConfigurationModel.BaseConfig);
 			return Ok();
 		}
 
@@ -133,13 +141,21 @@ namespace Teleopti.Wfm.Administration.Controllers
 				tenants.Add(new TenantConfigurationModel()
 				{
 					TenantName = tenant.Name,
-					ConnectionString = analyticsConnectionString,
 					BaseConfig = (BaseConfiguration)baseConfig,
 					IsBaseConfigured = _configurationHandler.IsConfigurationValid
 				});
 			}
 
 			return Ok(tenants);
+		}
+
+		private string getMasterTenantName()
+		{
+			var appConnectionString = new SqlConnectionStringBuilder(_configReader.ConnectionString("Tenancy")).InitialCatalog;
+			var master = _loadAllTenants.Tenants().SingleOrDefault(x =>
+				new SqlConnectionStringBuilder(x.DataSourceConfiguration.ApplicationConnectionString).InitialCatalog.Equals(appConnectionString));
+
+			return master?.Name;
 		}
 	}
 }

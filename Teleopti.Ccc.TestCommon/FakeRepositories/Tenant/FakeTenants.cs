@@ -80,11 +80,26 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Tenant
 			Has(new Infrastructure.MultiTenancy.Server.Tenant(tenant) {RtaKey = rtaKey});
 		}
 
-		public void HasWithAnalyticsConnectionString(string tenant, string analyticsConnectionString)
+		public void HasWithAnalyticsConnectionString(string tenantName, string analyticsConnectionString)
 		{
-			var newTenant = new Infrastructure.MultiTenancy.Server.Tenant(tenant);
-			newTenant.DataSourceConfiguration.SetAnalyticsConnectionString(analyticsConnectionString);
-			Has(newTenant);
+			var tenant = _data.FirstOrDefault(x => x.Name == tenantName);
+			if (tenant == null)
+			{
+				tenant = new Infrastructure.MultiTenancy.Server.Tenant(tenantName);
+				Has(tenant);
+			}
+			tenant.DataSourceConfiguration.SetAnalyticsConnectionString(analyticsConnectionString);
+		}
+
+		public void HasWithAppConnectionString(string tenantName, string appConnectionString)
+		{
+			var tenant = _data.FirstOrDefault(x => x.Name == tenantName);
+			if (tenant == null)
+			{
+				tenant = new Infrastructure.MultiTenancy.Server.Tenant(tenantName);
+				Has(tenant);
+			}
+			tenant.DataSourceConfiguration.SetApplicationConnectionString(appConnectionString);
 		}
 
 		public void WasRemoved(string tenant)
