@@ -588,6 +588,25 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			return skill;
 		}
 
+		private ISkill createSkillWithDifferentOpenHourPeriod(string name, IDictionary<DayOfWeek, TimePeriod> days, TimeZoneInfo timeZone = null, ISkillType skillType = null)
+		{
+			var skill = SkillFactory.CreateSkill(name, timeZone).WithId();
+			if (skillType != null)
+			{
+				skill.SkillType = skillType;
+			}
+			else
+			{
+				skill.SkillType.Description = new Description(SkillTypeIdentifier.Phone);
+				skill.SkillType.SetId(new Guid());
+			}
+
+			skill.StaffingThresholds = createStaffingThresholds();
+			WorkloadFactory.CreateWorkloadWithOpenHoursOnDays(skill, days);
+			SkillRepository.Has(skill);
+			return skill;
+		}
+
 		private ISkill setupPersonSkill(TimePeriod? skillOpenHourPeriod = null, TimeZoneInfo timeZone = null, ISkillType skillType = null)
 		{
 			if (timeZone == null) timeZone = LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();

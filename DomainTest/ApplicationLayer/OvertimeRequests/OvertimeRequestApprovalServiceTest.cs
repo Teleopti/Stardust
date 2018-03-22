@@ -40,6 +40,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		public FakeWorkflowControlSetRepository WorkflowControlSetRepository;
 		public FakeMultiplicatorDefinitionSetRepository MultiplicatorDefinitionSetRepository;
 		public MutableNow Now;
+		public IRequestApprovalServiceFactory RequestApprovalServiceFactory;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -78,9 +79,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var personRequest = createOvertimeRequest(person, requestPeriod);
 
-			var target = new OvertimeRequestApprovalService(
-				OvertimeRequestUnderStaffingSkillProvider, OvertimeRequestSkillProvider,
-				CommandDispatcher, null);
+			var target = RequestApprovalServiceFactory.MakeOvertimeRequestApprovalService(null);
 
 			var result = target.Approve(personRequest.Request);
 
@@ -124,9 +123,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var personRequest = createOvertimeRequest(person, requestPeriod);
 
-			var target = new OvertimeRequestApprovalService(
-				OvertimeRequestUnderStaffingSkillProvider, OvertimeRequestSkillProvider,
-				CommandDispatcher, null);
+			var target = RequestApprovalServiceFactory.MakeOvertimeRequestApprovalService(null);
 
 			var result = target.Approve(personRequest.Request);
 
@@ -180,9 +177,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var personRequest = createOvertimeRequest(person, requestPeriod);
 
-			var target = new OvertimeRequestApprovalService(
-				OvertimeRequestUnderStaffingSkillProvider, OvertimeRequestSkillProvider,
-				CommandDispatcher, null);
+			var target = RequestApprovalServiceFactory.MakeOvertimeRequestApprovalService(null);
 
 			var result = target.Approve(personRequest.Request);
 
@@ -237,9 +232,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var personRequest = createOvertimeRequest(person, requestPeriod);
 
-			var target = new OvertimeRequestApprovalService(
-				OvertimeRequestUnderStaffingSkillProvider, OvertimeRequestSkillProvider,
-				CommandDispatcher, null);
+			var target = RequestApprovalServiceFactory.MakeOvertimeRequestApprovalService(null);
 
 			var result = target.Approve(personRequest.Request);
 
@@ -285,9 +278,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var personRequest = createOvertimeRequest(person, requestPeriod);
 
-			var target = new OvertimeRequestApprovalService(
-				OvertimeRequestUnderStaffingSkillProvider, OvertimeRequestSkillProvider,
-				CommandDispatcher, null);
+			var target = RequestApprovalServiceFactory.MakeOvertimeRequestApprovalService(null);
 
 			var result = target.Approve(personRequest.Request);
 
@@ -334,9 +325,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var personRequest = createOvertimeRequest(person, requestPeriod);
 
-			var target = new OvertimeRequestApprovalService(
-				OvertimeRequestUnderStaffingSkillProvider, OvertimeRequestSkillProvider,
-				CommandDispatcher, null);
+			var target = RequestApprovalServiceFactory.MakeOvertimeRequestApprovalService(null);
 
 			var result = target.Approve(personRequest.Request);
 
@@ -391,9 +380,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var personRequest = createOvertimeRequest(person, requestPeriod);
 
-			var target = new OvertimeRequestApprovalService(
-				OvertimeRequestUnderStaffingSkillProvider, OvertimeRequestSkillProvider,
-				CommandDispatcher, null);
+			var target = RequestApprovalServiceFactory.MakeOvertimeRequestApprovalService(null);
 
 			var result = target.Approve(personRequest.Request);
 
@@ -447,9 +434,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var personRequest = createOvertimeRequest(person, requestPeriod);
 
-			var target = new OvertimeRequestApprovalService(
-				OvertimeRequestUnderStaffingSkillProvider, OvertimeRequestSkillProvider,
-				CommandDispatcher, null);
+			var target = RequestApprovalServiceFactory.MakeOvertimeRequestApprovalService(null);
 
 			var result = target.Approve(personRequest.Request);
 
@@ -493,9 +478,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var personRequest = createOvertimeRequest(person, requestPeriod);
 
-			var target = new OvertimeRequestApprovalService(
-				OvertimeRequestUnderStaffingSkillProvider, OvertimeRequestSkillProvider,
-				CommandDispatcher, null);
+			var target = RequestApprovalServiceFactory.MakeOvertimeRequestApprovalService(null);
 
 			var result = target.Approve(personRequest.Request);
 
@@ -523,9 +506,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var personRequest = createOvertimeRequest(person, requestPeriod);
 
-			var target = new OvertimeRequestApprovalService(
-				OvertimeRequestUnderStaffingSkillProvider, OvertimeRequestSkillProvider,
-				CommandDispatcher, null);
+			var target = RequestApprovalServiceFactory.MakeOvertimeRequestApprovalService(null);
 
 			var result = target.Approve(personRequest.Request);
 
@@ -570,9 +551,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var personRequest = createOvertimeRequest(person, requestPeriod);
 
-			var target = new OvertimeRequestApprovalService(
-				OvertimeRequestUnderStaffingSkillProvider, OvertimeRequestSkillProvider,
-				CommandDispatcher, null);
+			var target = RequestApprovalServiceFactory.MakeOvertimeRequestApprovalService(null);
 
 			var result = target.Approve(personRequest.Request);
 
@@ -613,9 +592,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var personRequest = createOvertimeRequest(person, requestPeriod);
 
-			var target = new OvertimeRequestApprovalService(
-				OvertimeRequestUnderStaffingSkillProvider, OvertimeRequestSkillProvider,
-				CommandDispatcher, null);
+			var target = RequestApprovalServiceFactory.MakeOvertimeRequestApprovalService(null);
 
 			var result = target.Approve(personRequest.Request);
 

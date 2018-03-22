@@ -16,15 +16,17 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		private readonly IOvertimeRequestSkillProvider _overtimeRequestSkillProvider;
 		private readonly ICommandDispatcher _commandDispatcher;
 		private readonly ISkill[] _validatedSkills;
+		private readonly ISkillOpenHourFilter _skillOpenHourFilter;
 
 		public OvertimeRequestApprovalService(
 			IOvertimeRequestUnderStaffingSkillProvider overtimeRequestUnderStaffingSkillProvider,
-			IOvertimeRequestSkillProvider overtimeRequestSkillProvider, ICommandDispatcher commandDispatcher, ISkill[] validatedSkills)
+			IOvertimeRequestSkillProvider overtimeRequestSkillProvider, ICommandDispatcher commandDispatcher, ISkill[] validatedSkills, ISkillOpenHourFilter skillOpenHourFilter)
 		{
 			_overtimeRequestUnderStaffingSkillProvider = overtimeRequestUnderStaffingSkillProvider;
 			_overtimeRequestSkillProvider = overtimeRequestSkillProvider;
 			_commandDispatcher = commandDispatcher;
 			_validatedSkills = validatedSkills;
+			_skillOpenHourFilter = skillOpenHourFilter;
 		}
 
 		public IEnumerable<IBusinessRuleResponse> Approve(IRequest request)
@@ -47,6 +49,12 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			if (!skills.Any())
 			{
 				return getBusinessRuleResponses(Resources.ThereIsNoAvailableSkillForOvertime, period, person);
+			}
+
+			skills = _skillOpenHourFilter.Filter(period, skills).ToList();
+			if (!skills.Any())
+			{
+				return getBusinessRuleResponses(Resources.PeriodIsOutOfSkillOpenHours, period, person);
 			}
 
 			Guid activityId;

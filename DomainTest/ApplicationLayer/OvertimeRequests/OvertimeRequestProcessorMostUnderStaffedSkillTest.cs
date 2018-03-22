@@ -13,6 +13,8 @@ using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.TestCommon.Services;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
@@ -798,7 +800,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var personRequest = createOvertimeRequest(11, 1);
 			getTarget().Process(personRequest);
-			 
+
 			var schedule = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(LoggedOnUser.CurrentUser(),
 				new ScheduleDictionaryLoadOptions(false, false), personRequest.Request.Period, Scenario.Current());
 			var personAssignment = schedule[LoggedOnUser.CurrentUser()].ScheduledDay(new DateOnly(personRequest.Request.Period.StartDateTime))
@@ -881,6 +883,179 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			personRequest.IsDenied.Should().Be.True();
 		}
 
+		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSkillTypeSetting_47290)]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestUseMostUnderStaffedSkill_47853)]
+		public void ShouldCheckSkillOpenHourWhenApprovingByAdministrator()
+		{
+			Now.Is(new DateTime(2017, 7, 13, 11, 0, 0, DateTimeKind.Utc));
+			setupPerson();
+
+			var phoneSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony).WithId();
+			var chatSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Chat), ForecastSource.Chat).WithId();
+
+			var workflowControlSet = new WorkflowControlSet();
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
+				BetweenDays = new MinMax<int>(0, 48),
+				SkillType = phoneSkillType,
+				OrderIndex = 0
+			});
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.No,
+				BetweenDays = new MinMax<int>(0, 48),
+				SkillType = chatSkillType,
+				OrderIndex = 1
+			});
+			LoggedOnUser.CurrentUser().WorkflowControlSet = workflowControlSet;
+
+			var chatActivity = createActivity("chatActivity");
+			var phoneActivity = createActivity("phoneActivity");
+
+			var timeZone = LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
+
+			var days = new Dictionary<DayOfWeek, TimePeriod>();
+			for (var i = 1; i < 6; i++)
+			{
+				days.Add((DayOfWeek)i, new TimePeriod(8, 18));
+			}
+
+			var phoneSkill = createSkillWithDifferentOpenHourPeriod("phoneSkill", days, timeZone);
+			phoneSkill.SkillType = phoneSkillType;
+
+			days.Clear();
+			for (var i = 0; i < 7; i++)
+			{
+				days.Add((DayOfWeek)i, new TimePeriod(TimeSpan.Zero, TimeSpan.FromDays(1)));
+			}
+			var chatSkill = createSkillWithDifferentOpenHourPeriod("chatSkill", days, timeZone);
+			chatSkill.SkillType = chatSkillType;
+
+			var personChatSkill = createPersonSkill(chatActivity, chatSkill);
+			var personPhoneSkill = createPersonSkill(phoneActivity, phoneSkill);
+
+			var date = new DateOnly(2017, 7, 15);
+			var period = new DateTimePeriod(2017, 7, 15, 11, 2017, 7, 15, 12);
+
+			setupIntradayStaffingForSkill(chatSkill, date, new List<StaffingPeriodData>
+			{
+				new StaffingPeriodData {ForecastedStaffing = 10d, ScheduledStaffing = 2d, Period = period},
+			});
+
+			addPersonSkillsToPersonPeriod(personPhoneSkill, personChatSkill);
+
+			var requestStartTime = new DateTime(2017, 7, 15, 11, 0, 0, DateTimeKind.Utc);
+			var personRequest = createOvertimeRequest(requestStartTime, 1);
+
+			getTarget().Process(personRequest);
+
+			personRequest.IsPending.Should().Be.True();
+
+			personRequest.Approve(RequestApprovalServiceFactory.MakeOvertimeRequestApprovalService(null), new PersonRequestAuthorizationCheckerForTest());
+
+			var schedule = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(LoggedOnUser.CurrentUser(),
+				new ScheduleDictionaryLoadOptions(false, false), personRequest.Request.Period, Scenario.Current());
+			var personAssignment = schedule[LoggedOnUser.CurrentUser()].ScheduledDay(new DateOnly(personRequest.Request.Period.StartDateTime))
+				.PersonAssignment();
+
+			personRequest.IsApproved.Should().Be.True();
+
+			personAssignment.OvertimeActivities().First().Payload.Should().Be(chatActivity);
+
+		}
+
+		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSkillTypeSetting_47290)]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestUseMostUnderStaffedSkill_47853)]
+		public void ShouldFailIfNoSkillIsMatchedWithSkillOpenHourWhenApprovingByAdministrator()
+		{
+			Now.Is(new DateTime(2017, 7, 13, 11, 0, 0, DateTimeKind.Utc));
+			setupPerson();
+
+			var phoneSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony).WithId();
+			var chatSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Chat), ForecastSource.Chat).WithId();
+
+			var workflowControlSet = new WorkflowControlSet();
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.No,
+				BetweenDays = new MinMax<int>(0, 48),
+				SkillType = phoneSkillType,
+				OrderIndex = 0
+			});
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.No,
+				BetweenDays = new MinMax<int>(0, 48),
+				SkillType = chatSkillType,
+				OrderIndex = 1
+			});
+			LoggedOnUser.CurrentUser().WorkflowControlSet = workflowControlSet;
+
+			var chatActivity = createActivity("chatActivity");
+			var phoneActivity = createActivity("phoneActivity");
+
+			var timeZone = LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
+
+			var phoneSkill = createSkill("phoneSkill", new TimePeriod(8, 18), timeZone);
+			phoneSkill.SkillType = phoneSkillType;
+
+			var chatSkill = createSkill("chatSkill", new TimePeriod(8, 18), timeZone);
+			chatSkill.SkillType = chatSkillType;
+
+			var personChatSkill = createPersonSkill(chatActivity, chatSkill);
+			var personPhoneSkill = createPersonSkill(phoneActivity, phoneSkill);
+
+			var date = new DateOnly(2017, 7, 15);
+			var period = new DateTimePeriod(2017, 7, 15, 11, 2017, 7, 15, 12);
+
+			setupIntradayStaffingForSkill(phoneSkill, date, new List<StaffingPeriodData>
+			{
+				new StaffingPeriodData {ForecastedStaffing = 10d, ScheduledStaffing = 2d, Period = period},
+			});
+
+			setupIntradayStaffingForSkill(chatSkill, date, new List<StaffingPeriodData>
+			{
+				new StaffingPeriodData {ForecastedStaffing = 10d, ScheduledStaffing = 2d, Period = period},
+			});
+
+			addPersonSkillsToPersonPeriod(personPhoneSkill, personChatSkill);
+
+			var requestStartTime = new DateTime(2017, 7, 15, 11, 0, 0, DateTimeKind.Utc);
+			var personRequest = createOvertimeRequest(requestStartTime, 1);
+
+			getTarget().Process(personRequest);
+
+			personRequest.IsPending.Should().Be.True();
+
+			clearOpenHours(phoneSkill);
+			clearOpenHours(chatSkill);
+
+			var responses = personRequest.Approve(RequestApprovalServiceFactory.MakeOvertimeRequestApprovalService(null), new PersonRequestAuthorizationCheckerForTest());
+
+			var schedule = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(LoggedOnUser.CurrentUser(),
+				new ScheduleDictionaryLoadOptions(false, false), personRequest.Request.Period, Scenario.Current());
+			var personAssignment = schedule[LoggedOnUser.CurrentUser()].ScheduledDay(new DateOnly(personRequest.Request.Period.StartDateTime))
+				.PersonAssignment();
+
+			responses.Count.Should().Be(1);
+			responses[0].Message.Should().Be(Resources.PeriodIsOutOfSkillOpenHours);
+			personRequest.IsPending.Should().Be.True();
+			personAssignment.Should().Be(null);
+		}
+
+		private static void clearOpenHours(ISkill skill)
+		{
+			foreach (var workload in skill.WorkloadCollection)
+			{
+				workload.TemplateWeekCollection.ForEach(x => x.Value.ChangeOpenHours(new List<TimePeriod>()));
+			}
+		}
+
 		private void setupIntradayStaffingForSkill(ISkill skill, DateOnly date, IEnumerable<StaffingPeriodData> staffingPeriodDatas)
 		{
 			var skillCombinationResources = new List<SkillCombinationResource>();
@@ -927,7 +1102,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 						StartDateTime = intervals[i].StartDateTime,
 						EndDateTime = intervals[i].EndDateTime,
 						Resource = scheduledStaffing,
-						SkillCombination = new[] {skill.Id.Value}
+						SkillCombination = new[] { skill.Id.Value }
 					}
 				);
 			}
