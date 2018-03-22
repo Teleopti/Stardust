@@ -1,5 +1,5 @@
 ﻿using System.Collections.ObjectModel;
-using Teleopti.Analytics.Etl.Common;
+using Teleopti.Analytics.Etl.Common.Configuration;
 
 namespace Teleopti.Analytics.Etl.ConfigTool.Code.Gui.StartupConfiguration
 {

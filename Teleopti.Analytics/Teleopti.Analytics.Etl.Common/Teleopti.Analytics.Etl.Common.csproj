@@ -123,10 +123,10 @@
     <Compile Include="Infrastructure\BaseConfigurationRepository.cs" />
     <Compile Include="Infrastructure\JobScheduleRepository.cs" />
     <Compile Include="ITenants.cs" />
-    <Compile Include="LookupIntegerItem.cs" />
-    <Compile Include="LookupStringItem.cs" />
+    <Compile Include="Configuration\LookupIntegerItem.cs" />
+    <Compile Include="Configuration\LookupStringItem.cs" />
     <Compile Include="Service\PmInfoProvider.cs" />
-    <Compile Include="StartupConfigurationModel.cs" />
+    <Compile Include="Configuration\StartupConfigurationModel.cs" />
     <Compile Include="TenantInfo.cs" />
     <Compile Include="Tenants.cs" />
     <Compile Include="TenantsOld.cs" />

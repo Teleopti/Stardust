@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Teleopti.Analytics.Etl.Common;
+using Teleopti.Analytics.Etl.Common.Configuration;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 
 namespace Teleopti.Wfm.Administration.Models

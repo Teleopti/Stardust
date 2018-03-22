@@ -1,4 +1,4 @@
-namespace Teleopti.Analytics.Etl.Common
+namespace Teleopti.Analytics.Etl.Common.Configuration
 {
 	public class LookupStringItem
 	{
