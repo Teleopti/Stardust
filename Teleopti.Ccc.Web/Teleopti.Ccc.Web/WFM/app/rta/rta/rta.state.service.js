@@ -154,12 +154,12 @@
 			$state.go($state.current.name, buildState(), {notify: false});
 		}
 
-		function selectSkillArea(skillAreaOrId) {
+		function selectSkillArea(skillAreaOrId, goOptions) {
 			if (skillAreaOrId && skillAreaOrId.Id)
 				skillAreaOrId = skillAreaOrId.Id;
 			var previousSkillAreaId = state.skillAreaId ? state.skillAreaId : null;
 			if (skillAreaOrId != previousSkillAreaId)
-				$state.go($state.current.name, buildState({skillIds: undefined, skillAreaId: skillAreaOrId}), {notify: false});
+				$state.go($state.current.name, buildState({skillIds: undefined, skillAreaId: skillAreaOrId}), goOptions || {notify: false});
 		}
 
 		function selectTeam(id, selected) {
@@ -192,12 +192,12 @@
 			})
 		}
 
-		function selectSkill(skillOrId) {
+		function selectSkill(skillOrId, goOptions) {
 			if (skillOrId && skillOrId.Id)
 				skillOrId = skillOrId.Id;
 			var previousSkillId = state.skillIds.length > 0 ? state.skillIds[0] : null;
 			if (skillOrId != previousSkillId)
-				$state.go($state.current.name, buildState({skillIds: skillOrId, skillAreaId: undefined}), {notify: false});
+				$state.go($state.current.name, buildState({skillIds: skillOrId, skillAreaId: undefined}), goOptions || {notify: false});
 		}
 
 		function selectedSkillArea() {

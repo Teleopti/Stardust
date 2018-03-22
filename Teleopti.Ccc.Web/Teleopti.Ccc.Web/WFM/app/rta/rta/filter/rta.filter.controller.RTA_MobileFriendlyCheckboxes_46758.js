@@ -169,16 +169,16 @@
 
 		function selectedSkillChange(skill) {
 			if (!skill && vm.showOrganization)
-				rtaStateService.selectSkillArea(skillAreaId);
+				rtaStateService.selectSkillArea(skillAreaId, { });
 			else if ((skill.Id != skillIds || $stateParams.skillAreaId) && vm.showOrganization)
-				rtaStateService.selectSkill(skill.Id);
+				rtaStateService.selectSkill(skill.Id, { });
 		}
 
 		function selectedSkillAreaChange(skillArea) {
 			if (!skillArea && vm.showOrganization)
-				rtaStateService.selectSkill($stateParams.skillIds);
+				rtaStateService.selectSkill($stateParams.skillIds, { });
 			else if (!(skillArea.Id == $stateParams.skillAreaId) && vm.showOrganization)
-				rtaStateService.selectSkillArea(skillArea.Id);
+				rtaStateService.selectSkillArea(skillArea.Id, { });
 		}
 
 		function clearSelection() {
