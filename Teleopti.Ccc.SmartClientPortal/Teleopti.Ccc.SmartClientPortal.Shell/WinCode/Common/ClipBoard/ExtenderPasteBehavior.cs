@@ -54,8 +54,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ClipBoard
                 int selectedColCount = (gridRange.Right - gridRange.Left);
                 selectedColCount = (selectedColCount == 0) ? 1 : (selectedColCount + 1);
 
-                int remainder;
-                int rowsToBePasted = Math.DivRem(selectedRowCount, copiedRowCount, out remainder);
+				int rowsToBePasted = Math.DivRem(selectedRowCount, copiedRowCount, out _);
                 rowsToBePasted = (rowsToBePasted == 0) ? 1 : rowsToBePasted;
 
                 rowsToBePasted *= copiedRowCount;
@@ -63,7 +62,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ClipBoard
                 if (selectedRowCount == copiedRowCount)
                     rowsToBePasted = copiedRowCount;
 
-                int colsToBePasted = Math.DivRem(selectedColCount, copiedColCount, out remainder);
+                int colsToBePasted = Math.DivRem(selectedColCount, copiedColCount, out _);
                 colsToBePasted = (colsToBePasted == 0) ? 1 : colsToBePasted;
 
                 colsToBePasted *= copiedColCount;

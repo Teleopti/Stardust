@@ -136,8 +136,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void removeVirtualSkill(string key)
 		{
-			VirtualSkill virtualSkill;
-			if (_currentSetting.VirtualSkills.TryGetValue(key, out virtualSkill))
+			if (_currentSetting.VirtualSkills.TryGetValue(key, out _))
 				_currentSetting.VirtualSkills.Remove(key);
 		}
 	}

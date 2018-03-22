@@ -213,9 +213,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls
         {
             if (!_formatFromCulture)
             {
-                TimeSpan? timeOfDay;
-                string timeAsText;
-                if (!GetTimeInformation(out timeAsText, out timeOfDay))
+				if (!GetTimeInformation(out _, out var timeOfDay))
                 {
                     if (_enableNull)
                         timeOfDay = null;

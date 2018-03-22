@@ -165,7 +165,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		private int getNextActivityId()
 		{
 			var activities = (IList<IActivity>)_sourceList[GridType.Activity];
-			int parsedValue;
 			var sortedArray = (from q in
 									 ((from p in activities
 									   where p.Description.Name.Contains(_newActivityName)
@@ -174,7 +173,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 									   .Replace(greaterThanChar, string.Empty)
 									   .Replace(_newActivityName, string.Empty)
 									   .Replace(spaceChar, string.Empty)).ToList())
-							   where string.IsNullOrEmpty(q) == false && Int32.TryParse(q, NumberStyles.Integer, CultureInfo.CurrentCulture, out parsedValue)
+							   where string.IsNullOrEmpty(q) == false && Int32.TryParse(q, NumberStyles.Integer, CultureInfo.CurrentCulture, out _)
 								 select Int32.Parse(q, CultureInfo.CurrentCulture)).ToArray();
 
 			return getNextId(sortedArray);

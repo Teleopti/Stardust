@@ -18,9 +18,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 		{
 			if(scheduleDay == null) throw new ArgumentNullException("scheduleDay");
 
-			bool startTimeError;
-			bool endTimeError;
-			if (!CanCreate(startTime, endTime, out startTimeError, out endTimeError)) return null;
+			if (!CanCreate(startTime, endTime, out _, out _)) return null;
 
 			var restriction = new StudentAvailabilityRestriction();
 			restriction.StartTimeLimitation = new StartTimeLimitation(startTime, null);

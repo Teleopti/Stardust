@@ -85,9 +85,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping.Commands
             var nodeDictionary = new Dictionary<Guid, TreeNodeAdv>();
             foreach (var personSelectorUserDefined in toNodes)
             {
-                TreeNodeAdv tryNode;
-                //the parent has to come before the child otherwise we got problems in this implementation
-                if (!personSelectorUserDefined.ParentId.HasValue && !nodeDictionary.TryGetValue(personSelectorUserDefined.NodeId, out tryNode))
+				//the parent has to come before the child otherwise we got problems in this implementation
+                if (!personSelectorUserDefined.ParentId.HasValue && !nodeDictionary.TryGetValue(personSelectorUserDefined.NodeId, out _))
                 {
                     root.Text = personSelectorUserDefined.Node;
                     root.TagObject = personSelectorUserDefined.NodeId;
@@ -96,7 +95,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping.Commands
                 else
                 {
                     
-                    if ((Guid)currNode.TagObject != personSelectorUserDefined.NodeId && !nodeDictionary.TryGetValue(personSelectorUserDefined.NodeId, out tryNode))
+                    if ((Guid)currNode.TagObject != personSelectorUserDefined.NodeId && !nodeDictionary.TryGetValue(personSelectorUserDefined.NodeId, out _))
                     {
                         currNode = new TreeNodeAdv(personSelectorUserDefined.Node)
                                        {

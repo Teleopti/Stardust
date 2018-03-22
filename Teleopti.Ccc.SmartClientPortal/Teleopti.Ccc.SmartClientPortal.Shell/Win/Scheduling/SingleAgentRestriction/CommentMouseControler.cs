@@ -87,9 +87,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SingleAgentRestric
                 Point pt = new Point(e.X, e.Y);
 
                 owner.PointToRowCol(pt, out rowIndex, out colIndex, -1);
-                bool hidden;
-                int clientRow = owner.ViewLayout.RowIndexToVisibleClient(rowIndex, out hidden);
-                int clientCol = owner.ViewLayout.ColIndexToVisibleClient(colIndex, out hidden);
+				int clientRow = owner.ViewLayout.RowIndexToVisibleClient(rowIndex, out _);
+                int clientCol = owner.ViewLayout.ColIndexToVisibleClient(colIndex, out _);
                 pt = owner.ViewLayout.ClientRowColToPoint(clientRow, clientCol, GridCellSizeKind.ActualSize);
 
                 pt.X += owner.Model.ColWidths[colIndex];

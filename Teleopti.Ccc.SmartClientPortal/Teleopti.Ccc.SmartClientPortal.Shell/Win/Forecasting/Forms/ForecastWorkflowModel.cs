@@ -302,8 +302,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 
         public void AddOrUpdate(DateOnly dateOnly, bool included)
         {
-            bool value;
-            if (_filteredDates.TryGetValue(dateOnly, out value))
+			if (_filteredDates.TryGetValue(dateOnly, out _))
             {
                 _filteredDates[dateOnly] = included;
             }

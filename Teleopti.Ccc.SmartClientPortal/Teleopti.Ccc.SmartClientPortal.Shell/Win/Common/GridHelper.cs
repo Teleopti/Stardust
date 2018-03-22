@@ -161,8 +161,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
                             break;
                         case "MultiSitePercentCell":
                         case "ServicePercentCell":
-                            Percent result;
-                            var t = Percent.TryParse(list[i].ToString(CultureInfo.CurrentCulture), out result);
+							var t = Percent.TryParse(list[i].ToString(CultureInfo.CurrentCulture), out _);
                             if (t && (list[i] <= 100 && list[i] > 0))
                                 currentCell.CellModel.ApplyFormattedText(cellStyleInfo, list[i].ToString(CultureInfo.CurrentCulture), -1);
                             break;
@@ -192,8 +191,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
         {
             var currentCell = grid[top, left + i];
             var cellStyleInfo = grid.Model[top, left + i];
-            Percent result;
-            var t = Percent.TryParse(list[i].ToString(CultureInfo.CurrentCulture), out result);
+			var t = Percent.TryParse(list[i].ToString(CultureInfo.CurrentCulture), out _);
             if (t)
                 currentCell.CellModel.ApplyFormattedText(cellStyleInfo, list[i].ToString(CultureInfo.CurrentCulture), -1);
 

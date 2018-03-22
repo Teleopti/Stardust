@@ -96,9 +96,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls
         /// </remarks>
         private void FormatTextAsTime()
         {
-            TimeSpan timeOfDay;
-            string timeAsText;
-            if (GetTimeInformation(out timeAsText, out timeOfDay))
+			if (GetTimeInformation(out var timeAsText, out _))
                 Text = timeAsText;
         }
 
@@ -134,9 +132,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls
         /// </remarks>
         public TimeSpan TimeValue()
         {
-            TimeSpan timeOfDay;
-            string timeAsText;
-            if (!GetTimeInformation(out timeAsText, out timeOfDay))
+			if (!GetTimeInformation(out _, out var timeOfDay))
                 throw new ArgumentException("You must specify a valid time!");
             return timeOfDay;
         }

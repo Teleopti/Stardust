@@ -122,8 +122,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 
         public IList<double> Result()
         {
-            int result;
-            return Int32.TryParse(_view.InputSmoothValue, out result) ? _model.SmoothenedValues : _model.ModifiedValues;
+			return Int32.TryParse(_view.InputSmoothValue, out _) ? _model.SmoothenedValues : _model.ModifiedValues;
         }
         
         public IList<double> OriginalResult()

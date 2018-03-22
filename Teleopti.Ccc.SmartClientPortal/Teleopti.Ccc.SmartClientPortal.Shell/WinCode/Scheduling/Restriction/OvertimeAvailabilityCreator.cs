@@ -16,9 +16,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Restriction
         {
             if (scheduleDay == null) throw new ArgumentNullException("scheduleDay");
 
-            bool startTimeError;
-            bool endTimeError;
-            if (!CanCreate(startTime, endTime, out startTimeError, out endTimeError)) return null;
+			if (!CanCreate(startTime, endTime, out _, out _)) return null;
 
 
             var overtimeAvailability = new OvertimeAvailability(scheduleDay.Person,

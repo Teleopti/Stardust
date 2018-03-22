@@ -73,14 +73,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls
         private void FormatTextAsTime()
         {
 			if (!Disposing && !IsDisposed)
-            {
-                TimeSpan timeOfDay;
-                string timeAsText;
-                if (getTimeInformation(out timeAsText, out timeOfDay))
-                    Text = timeAsText;
-                else
-                    Text = string.Empty;
-            }
+			{
+				Text = getTimeInformation(out var timeAsText, out _) ? timeAsText : string.Empty;
+			}
         }
 
         /// <summary>

@@ -150,8 +150,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IEnumerable<IPersonRequest> FindAbsenceAndTextRequests(RequestFilter filter)
 		{
-			int count;
-			return FindAbsenceAndTextRequests(filter, out count, true);
+			return FindAbsenceAndTextRequests(filter, out _, true);
 		}
 
 		public IEnumerable<IPersonRequest> FindAbsenceAndTextRequests(RequestFilter filter, out int count, bool ignoreCount = false)

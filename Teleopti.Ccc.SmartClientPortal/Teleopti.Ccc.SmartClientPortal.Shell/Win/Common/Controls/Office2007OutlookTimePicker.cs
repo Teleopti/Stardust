@@ -146,9 +146,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls
         /// </remarks>
         public TimeSpan TimeValue()
         {
-            TimeSpan timeOfDay;
-            string timeAsText;
-            if (!GetTimeInformation(out timeAsText, out timeOfDay))
+			if (!GetTimeInformation(out _, out var timeOfDay))
             {
                 return TimeSpan.Zero;
             }
