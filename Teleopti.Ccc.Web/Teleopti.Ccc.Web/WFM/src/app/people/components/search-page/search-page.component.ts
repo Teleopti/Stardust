@@ -19,7 +19,7 @@ export class SearchPageComponent implements OnInit {
 
 	roles: Array<Role> = [];
 
-	displayedColumns = ['select', 'FirstName', 'LastName', 'Roles', 'Site', 'Team'];
+	displayedColumns = ['select', 'FirstName', 'LastName', 'Site', 'Team', 'Roles'];
 	dataSource = new MatTableDataSource<Person>([]);
 	searchQuery = '';
 
