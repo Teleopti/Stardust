@@ -19,6 +19,8 @@ Background:
 	| Access to everyone     | true             |
 	And there is an activity named 'Phone'
 	And there is a skill named 'Phone' with activity 'Phone'
+	And there is queue statistics for 'Queue1'
+	And there is a workload 'Workload' with skill 'Phone' and queue 'Queue1'
 	And 'Ashley Andeen' has a person period with 
 	| Field      | Value      |
 	| Start date | 2018-02-01 |
