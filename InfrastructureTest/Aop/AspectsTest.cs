@@ -41,6 +41,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 
 			Aspect1.AfterInvoked.Should().Be.True();
 		}
+		
+		[Test]
+		public void ShouldInvokeAspectOnInterface()
+		{
+			Target.AspectedInterfaceMethod();
+
+			Aspect1.BeforeInvoked.Should().Be.True();
+		}
 
 		[Test]
 		public void ShouldInvokeOriginalMethod()
@@ -128,7 +136,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 			Aspect3.AfterInvoked.Should().Be.True();
 		}
 
-		public class AspectedService
+		public class AspectedService : IAspectedService
 		{
 			public bool Invoked;
 			public Exception FailsWith;
@@ -153,6 +161,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 				if (FailsWith != null)
 					throw FailsWith;
 			}
+
+			public virtual void AspectedInterfaceMethod() //when fixed, virtual shouldn't be needed
+			{
+			}
+		}
+
+		public interface IAspectedService
+		{
+			[Aspect1]
+			void AspectedInterfaceMethod();
 		}
 
 		public class AnAttribute : Attribute

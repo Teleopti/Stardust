@@ -22,15 +22,15 @@ namespace Teleopti.Ccc.Infrastructure.Aop
 		[DebuggerStepThrough]
 		public void Intercept(IInvocation invocation)
 		{
-			var attributes = invocation.Method.GetCustomAttributes<AspectAttribute>(false);
+			var allAttributes = aspectAttributesOnMethod(invocation);
 
-			if (!attributes.Any())
+			if (!allAttributes.Any())
 			{
 				invocation.Proceed();
 				return;
 			}
 
-			var aspects = attributes
+			var aspects = allAttributes
 					.OrderBy(x => x.Order)
 					.Select(a => a.AspectType)
 					.Select(t => _aspects.Value.Single(t.IsInstanceOfType))
@@ -47,6 +47,20 @@ namespace Teleopti.Ccc.Infrastructure.Aop
 			runAfters(invocationInfo, aspects);
 
 			throwAny(invocationInfo);
+		}
+
+		private static IEnumerable<AspectAttribute> aspectAttributesOnMethod(IInvocation invocation)
+		{
+			var methodInfos = new List<MethodInfo>();
+			var methodOnClass = invocation.Method;
+			var paramsOnMethod = methodOnClass.GetParameters().Select(x => x.ParameterType).ToArray();
+			var type = methodOnClass.DeclaringType;
+			var interfaces = type.GetInterfaces();
+			methodInfos.Add(methodOnClass);
+			methodInfos.AddRange(interfaces.Select(@interface => @interface.GetMethod(methodOnClass.Name, paramsOnMethod))
+				.Where(methodOnInterface => methodOnInterface != null));
+			var allAttributes = methodInfos.SelectMany(x => x.GetCustomAttributes<AspectAttribute>(false));
+			return allAttributes;
 		}
 
 		private void runBefores(InvocationInfo invocation, IEnumerable<IAspect> aspects)
