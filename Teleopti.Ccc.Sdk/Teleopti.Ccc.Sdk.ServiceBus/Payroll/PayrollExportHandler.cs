@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Sdk.Logic.MultiTenancy;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Payroll;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -21,14 +24,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 		private readonly IPayrollPeopleLoader _payrollPeopleLoader;
 		private readonly IDomainAssemblyResolver _domainAssemblyResolver;
 		private readonly ITenantPeopleLoader _tenantPeopleLoader;
-		private readonly IStardustJobFeedback _stardustJobFeedback;		
+		private readonly IStardustJobFeedback _stardustJobFeedback;
+		private readonly IBusinessUnitScope _businessUnitScope;
+		private readonly IBusinessUnitRepository _businessUnitRepository;
 
 		public PayrollExportHandler(ICurrentUnitOfWork currentUnitOfWork,
 			IPayrollExportRepository payrollExportRepository, IPayrollResultRepository payrollResultRepository,
 			IPayrollDataExtractor payrollDataExtractor, IPersonBusAssembler personBusAssembler,
 			IServiceBusPayrollExportFeedback serviceBusPayrollExportFeedback,
 			IPayrollPeopleLoader payrollPeopleLoader, IDomainAssemblyResolver domainAssemblyResolver,
-			ITenantPeopleLoader tenantPeopleLoader, IStardustJobFeedback stardustJobFeedback)
+			ITenantPeopleLoader tenantPeopleLoader, IStardustJobFeedback stardustJobFeedback, IBusinessUnitScope businessUnitScope, IBusinessUnitRepository businessUnitRepository)
 		{
 			_currentUnitOfWork = currentUnitOfWork;
 			_payrollExportRepository = payrollExportRepository;
@@ -40,7 +45,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 			_domainAssemblyResolver = domainAssemblyResolver;
 			_tenantPeopleLoader = tenantPeopleLoader;
 			_stardustJobFeedback = stardustJobFeedback;
-			
+			_businessUnitScope = businessUnitScope;
+			_businessUnitRepository = businessUnitRepository;
 		}
 
 		public void Handle(RunPayrollExportEvent @event)
@@ -59,7 +65,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 
 			_serviceBusPayrollExportFeedback.ReportProgress(1, "Payroll export initiated.");
 
-			var people = _payrollPeopleLoader.GetPeopleForExport(@event, origPeriod, _currentUnitOfWork.Current());
+			IEnumerable<IPerson> people;
+			var bu = _businessUnitRepository.Get(@event.LogOnBusinessUnitId);
+			using (_businessUnitScope.OnThisThreadUse(bu))
+			{
+				people = _payrollPeopleLoader.GetPeopleForExport(@event, origPeriod, _currentUnitOfWork.Current());
+			}
+				
 			var personDtos = _personBusAssembler.CreatePersonDto(people, _tenantPeopleLoader);
 			try
 			{

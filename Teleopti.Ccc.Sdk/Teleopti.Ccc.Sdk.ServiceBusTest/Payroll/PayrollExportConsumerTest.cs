@@ -15,6 +15,7 @@ using Teleopti.Ccc.Sdk.ServiceBus.Payroll;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
@@ -35,7 +36,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
 		private IServiceBusPayrollExportFeedback serviceBusReportProgress;
 		private IDomainAssemblyResolver _resolver;
 		private ITenantPeopleLoader _tenantPeopleLoader;
-
+		private IBusinessUnit _currentBusinessUnit;
 		[SetUp]
 		public void Setup()
 		{
@@ -50,12 +51,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
 			_resolver = mock.DynamicMock<IDomainAssemblyResolver>();
 			_tenantPeopleLoader = mock.DynamicMock<ITenantPeopleLoader>();
 			exportingPerson = new Person().WithName(new Name("Ex", "Porter"));
+			_currentBusinessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit().WithId();
+			var fakeBuRepo = new FakeBusinessUnitRepository();
+
+			fakeBuRepo.Has(_currentBusinessUnit);
 			target = new PayrollExportHandler(currentUnitOfWork, payrollExportRepository, payrollResultRepository,
 				payrollDataExtractor, personBusAssembler, serviceBusReportProgress, payrollPeopleLoader, _resolver,
-				_tenantPeopleLoader, new FakeStardustJobFeedback());
+				_tenantPeopleLoader, new FakeStardustJobFeedback(), new FakeCurrentBusinessUnit(), fakeBuRepo);
 		}
 
-		[Test] //Dont know what I am testing here anymore
+		[Test] 
 		public void ShouldConsumePayrollExport()
 		{
 			var payrollGuid = Guid.NewGuid();
@@ -72,7 +77,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
 			payrollResult.SetId(resultId);
 
 			var exportMessage = GetExportMessage(payrollGuid, buGuid, ownerGuid, resultId);
-
+			exportMessage.LogOnBusinessUnitId = _currentBusinessUnit.Id.GetValueOrDefault();
 			var persons = new Collection<IPerson> { PersonFactory.CreatePerson(), PersonFactory.CreatePerson() };
 			var assembler = new PersonBusAssembler();
 			var personDtos = assembler.CreatePersonDto(persons, _tenantPeopleLoader);

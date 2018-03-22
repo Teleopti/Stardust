@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using Autofac;
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.Payroll;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Payroll;
@@ -226,7 +227,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll
 					ExportEndDate = payrollExport.Period.EndDate.Date,
 					PayrollExportFormatId = payrollExport.PayrollFormatId,
 					PayrollResultId = payrollResultId,
-					InitiatorId = personId
+					InitiatorId = personId,
+					LogOnBusinessUnitId = ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.GetValueOrDefault()
 				};
 				if (payrollExport.Persons == null || payrollExport.Persons.Count == 0)
 				{
