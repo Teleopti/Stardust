@@ -68,30 +68,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			system.UseTestDouble<FakeLicensedFunctionProvider>().For<ILicensedFunctionsProvider>();
 		}
 
-		public void ShouldReturnRequestsPartialView()
-		{
-			//var target = new RequestsController(MockRepository.GenerateMock<IRequestsViewModelFactory>(), null, null, null, null,
-			//	new FakePermissionProvider(), null, null, null, null, null);
-
-			//var result = target.Index();
-
-			//result.ViewName.Should().Be.EqualTo("RequestsPartial");
-		}
-
-		public void ShouldReturnViewModelForIndex()
-		{
-			//var viewModelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
-			//var target = new RequestsController(viewModelFactory, null, null, null, null, new FakePermissionProvider(), null,
-			//	null, null, null, null);
-
-			//viewModelFactory.Stub(x => x.CreatePageViewModel()).Return(new RequestsViewModel());
-
-			//var result = target.Index();
-			//var model = result.Model as RequestsViewModel;
-
-			//model.Should().Not.Be.Null();
-		}
-
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldReturnViewModelForPaging()
 		{
@@ -204,7 +180,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			absenceRequest.IsApproved.Should().Be(true);
 			absenceRequest.Persisted();
 
-			// update period
 			form.EntityId = absenceRequest.Id;
 			form.Period = new DateTimePeriodForm
 			{
@@ -241,7 +216,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldReturnErrorMessageOnInvalidModelFromTextRequest()
 		{
 			var sb = new StringBuilder(2001);
-			for (int i = 0; i < 2001; i++)
+			for (var i = 0; i < 2001; i++)
 			{
 				sb.Append("1");
 			}
@@ -262,7 +237,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldReturnErrorMessageOnInvalidModelFromShiftTradeRequest()
 		{
 			var sb = new StringBuilder(2001);
-			for (int i = 0; i < 2001; i++)
+			for (var i = 0; i < 2001; i++)
 			{
 				sb.Append("1");
 			}
@@ -490,10 +465,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var data = result.Data as RequestViewModel;
 
 			var shiftTradeRequest = PersonRequestRepository.Find(Guid.Parse(data.Id));
-			(shiftTradeRequest.Request as IShiftTradeRequest).Refer(new PersonRequestAuthorizationCheckerForTest());
+			((IShiftTradeRequest) shiftTradeRequest.Request).Refer(new PersonRequestAuthorizationCheckerForTest());
 
 			Target.ResendShiftTrade(Guid.Parse(data.Id));
-			(shiftTradeRequest.Request as IShiftTradeRequest).GetShiftTradeStatus(new EmptyShiftTradeRequestChecker()).Should()
+			((IShiftTradeRequest) shiftTradeRequest.Request).GetShiftTradeStatus(new EmptyShiftTradeRequestChecker()).Should()
 				.Be(ShiftTradeStatus.OkByMe);
 		}
 
@@ -524,11 +499,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var data = result.Data as RequestViewModel;
 
 			var shiftTradeRequest = PersonRequestRepository.Find(Guid.Parse(data.Id));
-			(shiftTradeRequest.Request as IShiftTradeRequest).Refer(new PersonRequestAuthorizationCheckerForTest());
+			((IShiftTradeRequest) shiftTradeRequest.Request).Refer(new PersonRequestAuthorizationCheckerForTest());
 
 			var resendResult = Target.ResendShiftTrade(Guid.Parse(data.Id));
 			
-			(resendResult.Data as RequestViewModel).Text.Should().Be(Resources.ShiftTradeResendMessage);
+			((RequestViewModel) resendResult.Data).Text.Should().Be(Resources.ShiftTradeResendMessage);
 		}
 
 		[Test]
@@ -607,19 +582,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 		private void shouldHandleTeamIdsCorrectly(string teamIds)
 		{
-			//var timeFilterHelper = MockRepository.GenerateMock<ITimeFilterHelper>();
-			//timeFilterHelper.Stub(x => x.GetFilter(new DateOnly(), "", "", false, false))
-			//	.IgnoreArguments().Return(null);
-
-			//var viewModelFactory = MockRepository.GenerateMock<IRequestsShiftTradeScheduleViewModelFactory>();
-			//viewModelFactory.Stub(x => x.CreateViewModel(new ShiftTradeScheduleViewModelData()))
-			//	.IgnoreArguments().Return(new ShiftTradeScheduleViewModel());
-
-			//var toggleManager = new TrueToggleManager();
-
-			//using (var target = new RequestsController(null, null, null, null, null, null,
-			//	timeFilterHelper, toggleManager, viewModelFactory, null, null))
-			//{
 			var filter = new ScheduleFilter
 			{
 				TeamIds = teamIds
@@ -676,6 +638,5 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var cancelRequestResult = Target.CancelRequest(requestId);
 			return (RequestCommandHandlingResult)cancelRequestResult.Data;
 		}
-
 	}
 }
