@@ -1,7 +1,6 @@
 ﻿using System.Data;
 using System.Drawing;
 using System.Globalization;
-using System.Resources;
 using Syncfusion.Drawing;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Grid.Grouping;
