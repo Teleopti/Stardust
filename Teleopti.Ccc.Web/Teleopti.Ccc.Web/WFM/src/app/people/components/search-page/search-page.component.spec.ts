@@ -40,7 +40,7 @@ describe('SearchPageComponent', () => {
 			fixture.whenStable().then(() => {
 				fixture.detectChanges();
 
-				expect(component.searchService.getPeople().length).toBeGreaterThan(0);
+				expect(component.searchService.getPeople().getValue().length).toBeGreaterThan(0);
 
 				let debugElements = fixture.debugElement.queryAll(By.css(SEARCH_PERSON_QUERY));
 				expect(debugElements.length).toBeGreaterThan(0);

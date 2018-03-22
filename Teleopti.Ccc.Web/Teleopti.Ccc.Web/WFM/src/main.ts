@@ -3,12 +3,16 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { downgradeModule, downgradeComponent } from '@angular/upgrade/static';
 
 import { PeopleModule } from './app/people/people.module';
-import { PeopleComponent } from './app/people/people.component';
 import { environment } from './environments/environment';
 import { IRootScopeService, IControllerConstructor } from 'angular';
 
 import { MainController } from './main.controller';
-import { SearchPageComponent, GrantPageComponent, RevokePageComponent, AppLogonPageComponent } from './app/people/components';
+import {
+	SearchPageComponent,
+	GrantPageComponent,
+	RevokePageComponent,
+	AppLogonPageComponent
+} from './app/people/components';
 import { TitleBarComponent } from './app/people/components/title-bar/title-bar.component';
 
 export interface IWfmRootScopeService extends IRootScopeService {

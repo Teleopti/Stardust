@@ -1,36 +1,32 @@
 import { NgModule } from '@angular/core';
-import { UpgradeModule, downgradeComponent } from '@angular/upgrade/static';
+import {
+	MatButtonModule,
+	MatCheckboxModule,
+	MatDialogModule,
+	MatDividerModule,
+	MatInputModule,
+	MatPaginatorModule,
+	MatProgressSpinnerModule,
+	MatSortModule,
+	MatTableModule
+} from '@angular/material';
 
 import { SharedModule } from '../shared/shared.module';
-
 import {
-	MatInputModule,
-	MatDialogModule,
-	MatProgressSpinnerModule,
-	MatButtonModule,
-	MatDialog,
-	MatDialogRef,
-	MatCheckboxModule,
-	MatPaginatorModule,
-	MatDividerModule,
-	MatTableModule,
-	MatSortModule
-} from '@angular/material';
-import {
-	RolePage,
-	ChipComponent,
+	AppLogonPageComponent,
 	ChipAddComponent,
+	ChipComponent,
 	ChipRemoveComponent,
 	GrantPageComponent,
+	PageContainerComponent,
 	RevokePageComponent,
+	RolePage,
 	SearchPageComponent,
-	WorkspaceComponent,
 	TitleBarComponent,
-	AppLogonPageComponent,
-	PageContainerComponent
+	WorkspaceComponent
 } from './components';
-import { RolesService, WorkspaceService, SearchService, NavigationService } from './services';
 import { FormFieldInputComponent } from './components/form-field-input/form-field-input.component';
+import { NavigationService, RolesService, SearchService, WorkspaceService } from './services';
 
 @NgModule({
 	declarations: [

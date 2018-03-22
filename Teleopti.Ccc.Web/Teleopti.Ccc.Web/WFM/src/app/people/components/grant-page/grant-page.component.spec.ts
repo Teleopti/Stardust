@@ -57,7 +57,7 @@ describe('GrantPage', () => {
 
 		expect(getChipCount()).toEqual(2);
 
-		component.workspaceService.deselectPerson(component.workspaceService.getSelectedPeople()[0]);
+		component.workspaceService.deselectPerson(component.workspaceService.getSelectedPeople().getValue()[0]);
 		fixture.detectChanges();
 
 		expect(getChipCount()).toEqual(1);

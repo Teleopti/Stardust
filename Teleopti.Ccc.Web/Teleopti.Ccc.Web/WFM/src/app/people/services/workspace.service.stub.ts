@@ -1,8 +1,9 @@
 import { WorkspaceService } from './workspace.service';
 import { Person } from '../types';
+import { BehaviorSubject } from 'rxjs';
 
 export class WorkspaceServiceStub extends WorkspaceService {
-	protected people: Array<Person> = [
+	protected people$ = new BehaviorSubject<Array<Person>>([
 		{
 			Id: 'id1',
 			FirstName: 'First1',
@@ -40,5 +41,5 @@ export class WorkspaceServiceStub extends WorkspaceService {
 				}
 			]
 		}
-	];
+	]);
 }
