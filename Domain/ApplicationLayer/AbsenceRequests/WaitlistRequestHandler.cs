@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Resources;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Aop;
@@ -160,9 +159,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				{
 					continue;
 				}
-
-				var startDateTimeInPersonTimeZone = TimeZoneHelper.ConvertFromUtc(pRequest.RequestedDate,
-					pRequest.Person.PermissionInformation.DefaultTimeZone());
 
 				var period = pRequest.Request.Period.ChangeEndTime(TimeSpan.FromDays(1));
 				var dateOnlyPeriod = period.ToDateOnlyPeriod(pRequest.Person.PermissionInformation.DefaultTimeZone());

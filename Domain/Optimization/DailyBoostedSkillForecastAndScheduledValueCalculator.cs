@@ -35,8 +35,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         public ForecastScheduleValuePair[] CalculateIntradayForecastAndScheduleDataForSkill(ISkill skill, DateOnly scheduleDay)
         {
-            IList<ForecastScheduleValuePair> result = new List<ForecastScheduleValuePair>();
-
             DateTimePeriod dateTimePeriod = CreateDateTimePeriodFromScheduleDay(scheduleDay);
 
             IList<ISkillStaffPeriod> skillStaffPeriods =
