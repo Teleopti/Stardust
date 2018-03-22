@@ -1,9 +1,12 @@
 {
-	"folders": [
-		{
-			"path": "Teleopti.Ccc.Web"
-		}
-	],
+    "folders": [
+        {
+            "path": "Teleopti.Ccc.Web"
+        },
+        {
+            "path": "D:\\Repo\\styleguide"
+        }
+    ],
 	"settings": {
 		"terminal.integrated.cwd": "Teleopti.Ccc.Web/WFM/",
 		"typescript.tsdk": "./Teleopti.Ccc.Web/Teleopti.Ccc.Web/WFM/node_modules/typescript/lib"

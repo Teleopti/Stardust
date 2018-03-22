@@ -17,7 +17,7 @@
                 <div class="con-row layout-align-center-center">
                     <span class="con-flex ">
                         <skill-picker skills="vm.skills" skill-areas="vm.skillAreas" item-to-return="vm.selectSkillOrSkillArea" preselected-item="vm.preselectedItem"></skill-picker>
-                        <i class="mdi mdi-close pointer ie-cross grow-out" ng-show="vm.selectedSkillArea" ng-click="vm.clearSkillAreaHelper()">
+                        <i class="mdi mdi-close pointer ie-cross grow-out" ng-show="!vm.isSkill(vm.selectedItem)" ng-click="vm.clearSkillAreaHelper()">
                             <md-tooltip>{{'Clear'|translate}}</md-tooltip>
                         </i>
                     </span>
@@ -51,15 +51,15 @@
                         {{vm.getLocalDate(vm.chosenOffset.value)}}
                         <span ng-if="vm.showGroupInfo">
                             ,
-                            <b>{{ vm.selectedSkillArea.Name }}</b>:
+                            <b>{{ vm.selectedItem.Name }}</b>:
                             <span ng-if="vm.filterSkills.length > 0">{{vm.filterSkills.length}} {{'IntraDayChipNumberOf' | translate}} </span>
-                            {{vm.selectedSkillArea.Skills.length}} {{'PersonSkill'|translate}}
+                            {{vm.selectedItem.Skills.length}} {{'PersonSkill'|translate}}
                             <span ng-if="vm.skillAreaMessage">({{vm.skillAreaMessage}})</span>
                         </span>
                     </h2>
-                    <div ng-hide="vm.showIncluded" class="animate-show con-row">
+                    <div ng-show="vm.showIncluded" class="animate-show con-row">
                         <div class="con-flex">
-                            <div class="wfm-chip-wrap" ng-repeat="skill in vm.selectedSkillArea.Skills | orderBy : Name" ng-class="{'chip-disabled':!skill.DoDisplayData}">
+                            <div class="wfm-chip-wrap" ng-repeat="skill in vm.currentArea.Skills | orderBy : Name" ng-class="{'chip-disabled':!skill.DoDisplayData}">
                                 <span class="wfm-chip" ng-click="vm.openSkillFromArea(skill)">
                                     <span class="chip-handle" ng-class="vm.chipClass(skill)">
                                         <i ng-class="vm.checkIfFilterSkill(skill)"></i>
@@ -87,12 +87,12 @@
                                             <md-tooltip ng-if="!vm.exporting">{{'ExportToExcel'|translate}}</md-tooltip>
                                             <md-tooltip ng-if="vm.exporting">{{'WorkingThreeDots'|translate}}</md-tooltip>
                                         </li>
-                                        <li ng-if="vm.selectedSkillArea.Name" ng-click="vm.showIncluded=!vm.showIncluded">
+                                        <li ng-if="vm.selectedItem.Name" ng-click="vm.showIncluded=!vm.showIncluded">
                                             <i ng-hide="vm.showIncluded" class="mdi mdi-eye"></i>
                                             <i ng-show="vm.showIncluded" class="mdi mdi-eye-off"></i>
                                             {{'IncludedSkills'|translate}}
                                         </li>
-                                        <li ng-show="!vm.toggles['WFM_Modify_Skill_Groups_43727'] && vm.selectedSkillArea.Name" ng-click='vm.toggleModal()'>
+                                        <li ng-show="!vm.toggles['WFM_Modify_Skill_Groups_43727'] && vm.selectedItem.Name" ng-click='vm.toggleModal()'>
                                             <i class="skill-area-delete mdi mdi-delete"></i>{{'Delete'|translate}}</li>
                                     </ul>
                                 </span>
@@ -281,14 +281,14 @@
                     <div class="modalbg">
                         <div class="dialog-mini">
                             <div class="modal-inner-content">
-                                <h3>{{vm.selectedSkillArea.Name}}</h3> {{'AreYouSureYouWantToDelete'|translate}}
+                                <h3>{{vm.selectedItem.Name}}</h3> {{'AreYouSureYouWantToDelete'|translate}}
                             </div>
                             <div class="modal-actions">
                                 <aside>
                                     <button ng-click="vm.toggleModal()" class="wfm-btn wfm-btn-invis-default">
                                         {{'Cancel'|translate}}
                                     </button>
-                                    <button ng-click='vm.deleteSkillArea(vm.selectedSkillArea)' class="skill-area-delete-confirm wfm-btn wfm-btn-invis-default">
+                                    <button ng-click='vm.deleteSkillArea(vm.selectedItem)' class="skill-area-delete-confirm wfm-btn wfm-btn-invis-default">
                                         {{'Delete'|translate}}
                                     </button>
                                 </aside>
