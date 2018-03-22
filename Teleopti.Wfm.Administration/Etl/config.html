@@ -5,12 +5,12 @@
 		<div class="panel-body text-container">
 			<table class="table">
 				<thead>
-				<tr>
-					<th scope="col"><b>Tenant name</b></th>
-					<th scope="col"><b>Base config</b></th>
-					<!-- <th scope="col"><b>Log data config</b></th> -->
-					<!-- <th scope="col"><b>Actions</b></th> -->
-				</tr>
+					<tr>
+						<th scope="col"><b>Tenant name</b></th>
+						<th scope="col"><b>Base config</b></th>
+						<!-- <th scope="col"><b>Log data config</b></th> -->
+						<th scope="col"><b>Actions</b></th>
+					</tr>
 				</thead>
 				<tbody>
 					<tr ng-repeat="tenant in vm.tenants">
@@ -20,6 +20,14 @@
 								{{tenant.IsBaseConfigured}}
 							</button>
 						</td>
+						<td>
+							<a ng-href="/#/details/{{tenant.Url}}">
+								<button type="button" class="btn btn-default">
+									More...
+								</button>
+							</a>
+						</td>
+						<!-- http://localhost:56187/#/details/Teleopti%20WFM -->
 						<!-- <td>{{tenant}}</td> -->
 					</tr>
 				</tbody>
@@ -43,32 +51,32 @@
 				<div class="modal-body">
 					<table class="table">
 						<thead>
-						<tr>
-							<th scope="col">Status</th>
-							<th scope="col">Name</th>
-							<th scope="col">Time zone</th>
-							<th scope="col">Interval length</th>
-						</tr>
+							<tr>
+								<th scope="col">Status</th>
+								<th scope="col">Name</th>
+								<th scope="col">Time zone</th>
+								<th scope="col">Interval length</th>
+							</tr>
 						</thead>
 						<tbody>
-						<tr>
-							<th scope="row">✓</th>
-							<td>Internal Agg: My zoom log</td>
-							<td>(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm...</td>
-							<td>15</td>
-						</tr>
-						<tr>
-							<th scope="row">✓</th>
-							<td>Teleopti CCC: Agg: ACD</td>
-							<td>(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm...</td>
-							<td>15</td>
-						</tr>
-						<tr>
-							<th scope="row">✗</th>
-							<td>Teleopti CCC: Agg: LTF log object</td>
-							<td>(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm...</td>
-							<td>15</td>
-						</tr>
+							<tr>
+								<th scope="row">✓</th>
+								<td>Internal Agg: My zoom log</td>
+								<td>(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm...</td>
+								<td>15</td>
+							</tr>
+							<tr>
+								<th scope="row">✓</th>
+								<td>Teleopti CCC: Agg: ACD</td>
+								<td>(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm...</td>
+								<td>15</td>
+							</tr>
+							<tr>
+								<th scope="row">✗</th>
+								<td>Teleopti CCC: Agg: LTF log object</td>
+								<td>(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm...</td>
+								<td>15</td>
+							</tr>
 						</tbody>
 					</table>
 				</div>
