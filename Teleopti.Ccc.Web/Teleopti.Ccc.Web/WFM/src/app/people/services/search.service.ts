@@ -3,6 +3,7 @@ import { Person, Role } from '../types';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs';
+import { SearchOverridesService, PeopleOverride } from './search-overrides.service';
 
 export interface PeopleSearchResult {
 	People: Array<Person>;
@@ -19,11 +20,21 @@ export interface PeopleSearchQuery {
 export class SearchService {
 	private peopleCache$ = new BehaviorSubject<Array<Person>>([]);
 
+	// people observable
+	// 	peopleCache:Person[]
+	// 	overrides:Person[]
+
 	public keyword: string = '';
 	public pageIndex: number = 0;
 	public pageSize: number = 20;
 
-	constructor(private http: HttpClient) {}
+	constructor(private http: HttpClient, private overridesService: SearchOverridesService) {
+		overridesService.getOverrides().subscribe({
+			next: (overrides: PeopleOverride) => {
+				this.peopleCache$.next(overridesService.applyOverrides(this.peopleCache$));
+			}
+		});
+	}
 
 	public getPerson(id: string): Person {
 		return this.peopleCache$.getValue().find(p => p.Id === id);

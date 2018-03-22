@@ -19,6 +19,17 @@ export class RevokePageComponent extends RolePage {
 	save() {
 		this.revokeRoles(this.selectedRoles).then(ok => {
 			this.workspaceService.update();
+			const people = this.workspaceService
+				.getSelectedPeople()
+				.getValue()
+				.map(person => {
+					const roles = person.Roles.filter(r => !this.selectedRoles.includes(r.Id));
+					return {
+						...person,
+						Roles: roles
+					};
+				});
+			this.searchOverridesService.mergeOptimistic(people, ['Roles']);
 			super.save();
 		});
 	}

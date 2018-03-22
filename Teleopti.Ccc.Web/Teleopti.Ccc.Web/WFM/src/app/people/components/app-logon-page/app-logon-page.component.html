@@ -13,7 +13,7 @@
         </ng-container>
 
         <ng-container matColumnDef="ApplicationLogon">
-          <mat-header-cell *matHeaderCellDef> Application Logon </mat-header-cell>
+          <mat-header-cell *matHeaderCellDef> Logon name </mat-header-cell>
           <mat-cell *matCellDef="let person" data-test-person-logon>
             <people-form-field-input [value]="person.ApplicationLogon" (onValueChange)="person.ApplicationLogon=$event"></people-form-field-input>
           </mat-cell>

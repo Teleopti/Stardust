@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter, ViewChild, OnInit } from '@angular/core';
 import { Person, Role } from '../../../types';
 import { WorkspaceService, RolesService, NavigationService } from '../../../services';
+import { SearchOverridesService } from '../../../services/search-overrides.service';
 
 @Component({
 	template: '<div>Override me</div>'
@@ -9,7 +10,8 @@ export class RolePage implements OnInit {
 	constructor(
 		public nav: NavigationService,
 		public workspaceService: WorkspaceService,
-		public rolesService: RolesService
+		public rolesService: RolesService,
+		public searchOverridesService: SearchOverridesService
 	) {}
 
 	@ViewChild('saveBtn') saveButton: HTMLElement;

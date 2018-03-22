@@ -27,6 +27,18 @@ export class GrantPageComponent extends RolePage implements OnInit {
 	save() {
 		this.grantRoles(this.selectedRoles).then(() => {
 			this.workspaceService.update();
+			const selectedRoles = this.selectedRoles.map(id => this.getRole(id));
+			const people = this.workspaceService
+				.getSelectedPeople()
+				.getValue()
+				.map(person => {
+					const roles = person.Roles.filter(r => !this.selectedRoles.includes(r.Id)).concat(selectedRoles);
+					return {
+						...person,
+						Roles: roles
+					};
+				});
+			this.searchOverridesService.mergeOptimistic(people, ['Roles']);
 			super.save();
 		});
 	}

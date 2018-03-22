@@ -35,7 +35,6 @@ export class SearchPageComponent implements OnInit {
 				this.dataSource.data = people;
 			}
 		});
-		this.searchPeople();
 	}
 
 	onSearch() {

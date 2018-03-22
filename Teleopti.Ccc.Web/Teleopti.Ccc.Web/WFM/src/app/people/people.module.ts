@@ -27,6 +27,7 @@ import {
 } from './components';
 import { FormFieldInputComponent } from './components/form-field-input/form-field-input.component';
 import { NavigationService, RolesService, SearchService, WorkspaceService } from './services';
+import { SearchOverridesService } from './services/search-overrides.service';
 
 @NgModule({
 	declarations: [
@@ -55,7 +56,7 @@ import { NavigationService, RolesService, SearchService, WorkspaceService } from
 		MatProgressSpinnerModule,
 		MatInputModule
 	],
-	providers: [WorkspaceService, RolesService, SearchService, NavigationService],
+	providers: [WorkspaceService, RolesService, SearchService, SearchOverridesService, NavigationService],
 	exports: [],
 	entryComponents: [
 		TitleBarComponent,

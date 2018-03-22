@@ -37,6 +37,8 @@ describe('SearchPageComponent', () => {
 		async(() => {
 			fixture.detectChanges();
 
+			component.searchPeople();
+
 			fixture.whenStable().then(() => {
 				fixture.detectChanges();
 
@@ -52,6 +54,8 @@ describe('SearchPageComponent', () => {
 		'selected people should be shown in workspace',
 		async(() => {
 			fixture.detectChanges();
+
+			component.searchPeople();
 
 			fixture.whenStable().then(() => {
 				let debugElements;
