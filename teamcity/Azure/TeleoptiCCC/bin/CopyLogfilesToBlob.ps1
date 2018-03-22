@@ -122,7 +122,7 @@ Try
 
         #Create zip logfiles
         $toZip = gci $sourceFolder\* -Include *.txt,*.log -exclude CopyLogfilesToBlob.txt
-        Compress-Archive -Path $toZip -DestinationPath LogFiles.zip -Force
+        Compress-Archive -Path $toZip -DestinationPath "LogFiles_$env:computername.zip" -Force
 
         CopyFileToBlobStorage -SourceFolder "$sourceFolder" -destinationFolder "$destinationFolder" -filename "LogFiles.zip"  
     }
