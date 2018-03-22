@@ -191,7 +191,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 		private bool isRequestUsingStaffingValidation(IPersonRequest pRequest)
 		{
-			var mergedPeriod = pRequest.Request.Person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod((IAbsenceRequest)pRequest.Request);
+			var wfc = pRequest.Request.Person.WorkflowControlSet;
+			if (wfc == null) return false;
+			var mergedPeriod = wfc.GetMergedAbsenceRequestOpenPeriod((IAbsenceRequest)pRequest.Request);
 			var validators = _absenceRequestValidatorProvider.GetValidatorList(mergedPeriod);
 			var useStaffing = validators.OfType<StaffingThresholdValidator>().Any();
 
