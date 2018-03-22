@@ -134,7 +134,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 				{
 					TenantName = tenant.Name,
 					ConnectionString = analyticsConnectionString,
-					BaseConfig = baseConfig,
+					BaseConfig = (BaseConfiguration)baseConfig,
 					IsBaseConfigured = _configurationHandler.IsConfigurationValid
 				});
 			}
