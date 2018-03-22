@@ -6,14 +6,16 @@ using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
-namespace Teleopti.Analytics.Etl.ConfigTool.Code.Gui.DataSourceConfiguration
+namespace Teleopti.Analytics.Etl.Common.Configuration
 {
 	public class DataSourceConfigurationModel
 	{
 		private readonly IGeneralFunctions _generalFunctions;
 		private readonly IBaseConfiguration _baseConfiguration;
 
-		private DataSourceConfigurationModel() { }
+		private DataSourceConfigurationModel()
+		{
+		}
 
 		public DataSourceConfigurationModel(IGeneralFunctions generalFunctions, IBaseConfiguration baseConfiguration)
 			: this()
@@ -28,8 +30,8 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Code.Gui.DataSourceConfiguration
 			allDataSources.AddRange(_generalFunctions.DataSourceValidList);
 
 			var dataSourceRows = new List<DataSourceRow>();
-			int rowCount = 0;
-			foreach (IDataSourceEtl dataSource in allDataSources)
+			var rowCount = 0;
+			foreach (var dataSource in allDataSources)
 			{
 				var dataSourceRow = new DataSourceRow(dataSource, rowCount);
 				dataSourceRows.Add(dataSourceRow);
@@ -47,7 +49,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Code.Gui.DataSourceConfiguration
 			timeZoneList.Add(timeZoneNoSelected);
 			var defaultTimeZone = TimeZoneInfo.FindSystemTimeZoneById(_baseConfiguration.TimeZoneCode);
 
-			foreach (TimeZoneInfo timeZoneInfo in TimeZoneInfo.GetSystemTimeZones())
+			foreach (var timeZoneInfo in TimeZoneInfo.GetSystemTimeZones())
 			{
 
 				timeZoneList.Add(new TimeZoneDim(timeZoneInfo, timeZoneInfo.Id == defaultTimeZone.Id, false));
@@ -56,18 +58,12 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Code.Gui.DataSourceConfiguration
 			return timeZoneList;
 		}
 
-		public IList<ITimeZoneDim> TimeZonesFromMart
-		{
-			get
-			{
-				return _generalFunctions.GetTimeZoneList();
-			}
-		}
+		public IList<ITimeZoneDim> TimeZonesFromMart => _generalFunctions.GetTimeZoneList();
 
 		public void SaveDataSource(DataSourceRow dataSourceRow)
 		{
 			_generalFunctions.SaveDataSource(dataSourceRow.Id,
-													  int.Parse(dataSourceRow.TimeZoneId, CultureInfo.InvariantCulture));
+				int.Parse(dataSourceRow.TimeZoneId, CultureInfo.InvariantCulture));
 		}
 
 		public void SaveUtcTimeZoneOnRaptorDataSource()
@@ -75,19 +71,10 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Code.Gui.DataSourceConfiguration
 			_generalFunctions.SetUtcTimeZoneOnRaptorDataSource();
 		}
 
-		public EtlToolStateType InitialLoadState
-		{
-			get { return _generalFunctions.GetInitialLoadState(); }
-		}
+		public EtlToolStateType InitialLoadState => _generalFunctions.GetInitialLoadState();
 
-		public TimeZoneInfo DefaultTimeZone
-		{
-			get { return TimeZoneInfo.FindSystemTimeZoneById(_baseConfiguration.TimeZoneCode); }
-		}
+		public TimeZoneInfo DefaultTimeZone => TimeZoneInfo.FindSystemTimeZoneById(_baseConfiguration.TimeZoneCode);
 
-		public int IntervalLengthMinutes
-		{
-			get { return _baseConfiguration.IntervalLength.Value; }
-		}
+		public int IntervalLengthMinutes => _baseConfiguration.IntervalLength.Value;
 	}
 }

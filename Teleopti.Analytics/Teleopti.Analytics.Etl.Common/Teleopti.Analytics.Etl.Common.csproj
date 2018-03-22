@@ -115,6 +115,9 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AllTenantEtlSettings.cs" />
+    <Compile Include="Configuration\DataSourceConfigurationModel.cs" />
+    <Compile Include="Configuration\DataSourceRow.cs" />
+    <Compile Include="Configuration\DataSourceState.cs" />
     <Compile Include="Entity\BusinessUnitItem.cs" />
     <Compile Include="EtlAppModule.cs" />
     <Compile Include="Infrastructure\BaseConfigurationRepository.cs" />

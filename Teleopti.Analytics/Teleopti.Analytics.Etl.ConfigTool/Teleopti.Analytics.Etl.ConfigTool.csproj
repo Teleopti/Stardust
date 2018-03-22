@@ -112,10 +112,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Code\Gui\DataSourceConfiguration\DataSourceConfigurationModel.cs" />
     <Compile Include="Code\Gui\DataSourceConfiguration\DataSourceConfigurationPresenter.cs" />
-    <Compile Include="Code\Gui\DataSourceConfiguration\DataSourceRow.cs" />
-    <Compile Include="Code\Gui\DataSourceConfiguration\DataSourceState.cs" />
     <Compile Include="Code\Gui\DataSourceConfiguration\IDataSourceConfigurationView.cs" />
     <Compile Include="Code\Gui\DataSourceConfiguration\MessageBoxProperties.cs" />
     <Compile Include="Code\Gui\StartupConfiguration\IStartupConfigurationView.cs" />
