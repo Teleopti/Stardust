@@ -24,12 +24,8 @@
     vm.selectedTenantChanged = selectedTenantChanged;
     vm.selectJob = selectJob;
     vm.encueueJob = encueueJob;
-    vm.sendBaseConfig = sendBaseConfig;
-
-
 
     var today = new Date();
-
     vm.dataSources = [];
 
     //manual inputs
@@ -155,7 +151,6 @@
       .success(function (data) {
         vm.masterTenant  = {
           IsBaseConfigured: data.IsBaseConfigured,
-          ConnectionString: data.ConnectionString,
           TenantName: data.TenantName
         };
       });
@@ -171,28 +166,6 @@
       $http.post("./Etl/TenantLogDataSources", JSON.stringify(data), tokenHeaderService.getHeaders())
       .success(function (data) {
         vm.dataSources = data;
-      });
-    }
-
-    function sendBaseConfig(nonMasterConnectionString) {
-      var baseObj = {
-        ConnectionString: '',
-        BaseConfig: {
-          CultureId: vm.baseConfig.culture,
-          IntervalLength: vm.baseConfig.interval,
-          TimeZoneCode: vm.baseConfig.timezone
-        }
-      }
-
-      if (nonMasterConnectionString) {
-        baseObj.ConnectionString = nonMasterConnectionString;
-      } else if(vm.masterTenant.ConnectionString){
-        baseObj.ConnectionString = vm.masterTenant.ConnectionString
-      }
-
-      $http.post("./Etl/SaveConfigurationForTenant", baseObj, tokenHeaderService.getHeaders())
-      .success(function (data) {
-        vm.masterTenant.IsBaseConfigured = true;
       });
     }
 

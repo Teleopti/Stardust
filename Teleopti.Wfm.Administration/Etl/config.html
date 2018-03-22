@@ -8,7 +8,7 @@
 					<tr>
 						<th scope="col"><b>Tenant name</b></th>
 						<th scope="col"><b>Base config</b></th>
-						<!-- <th scope="col"><b>Log data config</b></th> -->
+						<th scope="col"><b>Log data config</b></th>
 						<th scope="col"><b>Actions</b></th>
 					</tr>
 				</thead>
@@ -16,8 +16,13 @@
 					<tr ng-repeat="tenant in vm.tenants">
 						<td>{{tenant.TenantName}}</td>
 						<td>
-							<button type="button" class="btn btn-default" ng-class="{'btn-success':tenant.IsBaseConfigured}" data-toggle="modal" data-target="#exampleModal">
+							<button type="button" class="btn btn-default" ng-class="{'btn-success':tenant.IsBaseConfigured}">
 								{{tenant.IsBaseConfigured}}
+							</button>
+						</td>
+						<td>
+							<button type="button" class="btn btn-default" data-toggle="modal" data-target="#exampleModal">
+								Configure
 							</button>
 						</td>
 						<td>
@@ -27,16 +32,11 @@
 								</button>
 							</a>
 						</td>
-						<!-- http://localhost:56187/#/details/Teleopti%20WFM -->
-						<!-- <td>{{tenant}}</td> -->
 					</tr>
 				</tbody>
 			</table>
 		</div>
 	</div>
-
-	<!-- Button trigger modal -->
-
 
 	<!-- Modal -->
 	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

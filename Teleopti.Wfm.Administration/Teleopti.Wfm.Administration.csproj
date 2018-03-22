@@ -181,6 +181,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Etl\config.html" />
+    <Content Include="Etl\etlBaseConfigModal.component.js" />
     <Content Include="Etl\etlConfigController.js" />
     <Content Include="firstuser.html" />
     <Content Include="App_Data\RtaStates.xml">

@@ -1,11 +1,11 @@
-<form ng-submit="vm.sendBaseConfig();" Name="baseForm">
+<form ng-submit="ctrl.sendBaseConfig();" Name="baseForm">
 	<h2>Tenant base configuration</h2>
 	<div class="panel panel-default">
 		<div class="panel-heading">
-			<span ng-if="vm.masterTenant.TenantName">
+			<span ng-if="ctrl.tenant.TenantName">
 				{{vm.masterTenant.TenantName}}
 			</span>
-			<span ng-if="!vm.masterTenant.TenantName">
+			<span ng-if="!ctrl.tenant.TenantName">
 				ETL initial configuration
 			</span>
 		</div>
@@ -20,25 +20,26 @@
 			<div class="row">
 				<div class="col-md-12">
 					<div class="form-group">
+						{{ctrl.baseConfig}}
 						<label for="baseInterval">Interval length:</label>
-						<select class="form-control" id="baseInterval" ng-model="vm.baseConfig.interval">
-							<option>15</option>
+						<select class="form-control" id="baseInterval" ng-options="interval.Id as interval.Text for interval in ctrl.configData.IntervalLengthList" ng-model="ctrl.baseConfig.interval">
+  						<option ng-show="!ctrl.baseConfig.interval" value="">- select Interval length</option>
 						</select>
 					</div>
 				</div>
 				<div class="col-md-12">
 					<div class="form-group">
 						<label for="baseCulture">Culture:</label>
-						<select class="form-control" id="baseCulture" ng-model="vm.baseConfig.culture">
-							<option>1053</option>
+						<select class="form-control" id="baseCulture" ng-options="culture.Id as culture.Text for culture in ctrl.configData.CultureList" ng-model="ctrl.baseConfig.culture">
+							<option ng-show="!ctrl.baseConfig.culture" value="">- Select culture</option>
 						</select>
 					</div>
 				</div>
 				<div class="col-md-12">
 					<div class="form-group">
 						<label for="baseTimezone">Time zone:</label>
-						<select class="form-control" id="baseTimezone" ng-model="vm.baseConfig.timezone">
-							<option>(UTC + 01:00) Belgrade, Bratislava, Budapest, Ljubljana, Prague</option>
+						<select class="form-control" id="baseTimezone" ng-options="timezone.Id as timezone.Text for timezone in ctrl.configData.TimeZoneList" ng-model="ctrl.baseConfig.timezone">
+							<option ng-show="!ctrl.baseConfig.culture" value="">- Select time zone</option>
 						</select>
 					</div>
 				</div>
