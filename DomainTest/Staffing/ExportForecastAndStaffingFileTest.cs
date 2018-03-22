@@ -33,18 +33,72 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 		public FakeSkillCombinationResourceRepository SkillCombinationResourceRepository;
 		public MutableNow Now;
 		public FakeUserTimeZone UserTimeZone;
-		public FakeLoggedOnUser FakeLoggedOnUser;
+		public FakeStaffingSettingsReader StaffingSettingsReader;
+		public FakeUserUiCulture FakeUserUiCulture;
+		public FakeUserCulture FakeUserCulture;
 
-		
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+			system.UseTestDouble<FakeStaffingSettingsReader>().For<IStaffingSettingsReader>();
+			system.UseTestDouble<FakeUserUiCulture>().For<IUserUiCulture>();
+			system.UseTestDouble<FakeUserCulture>().For<IUserCulture>();
 		}
-		
+
+		[Test]
+		public void ShouldHandleWhenSkillIsMissing()
+		{
+			StaffingSettingsReader.StaffingSettings.Add(KeyNames.StaffingReadModelHistoricalHours, 8 * 24);
+			Now.Is(new DateTime(2017, 8, 18));
+			FakeUserCulture.Is(new CultureInfo("en-US"));
+			var skill = createSkill(15, "skillname", new TimePeriod(8, 0, 8, 30));
+			skill.SetId(Guid.NewGuid());
+			SkillSetupHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository);
+			SkillRepository.Add(skill);
+
+			var period = new DateOnlyPeriod(new DateOnly(2017, 8, 18), new DateOnly(2017, 8, 19));
+			var exportStaffingReturnObject = Target.ExportForecastAndStaffing(new Guid(), period.StartDate.Date, period.EndDate.Date, false);
+			exportStaffingReturnObject.ErrorMessage.Should().Contain("Cannot find skill with id");
+		}
+
+		[Test]
+		//[SetUICulture("sv-SE")]
+		public void ShouldReturnErrorWhenUsingDatesEarlierThanReadModel()
+		{
+			StaffingSettingsReader.StaffingSettings.Add(KeyNames.StaffingReadModelHistoricalHours, 8 * 24);
+			Now.Is(new DateTime(2017, 8, 18));
+			FakeUserCulture.IsSwedish();
+			FakeUserUiCulture.IsSwedish();
+			var skill = createSkill(15, "skillname", new TimePeriod(8, 0, 8, 30));
+			skill.SetId(Guid.NewGuid());
+			SkillSetupHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository);
+			SkillRepository.Add(skill);
+
+			var period = new DateOnlyPeriod(new DateOnly(2017, 8, 9), new DateOnly(2017, 8, 16));
+			var exportStaffingReturnObject = Target.ExportForecastAndStaffing(skill.Id.GetValueOrDefault(), period.StartDate.Date, period.EndDate.Date, false);
+			exportStaffingReturnObject.ErrorMessage.Should().Contain("datumintervallet 2017-08-10 - 2017-09-01");
+		}
+
+		[Test]
+		public void ShouldHandleDatesInPast()
+		{
+			StaffingSettingsReader.StaffingSettings.Add(KeyNames.StaffingReadModelHistoricalHours, 3 * 24);
+			Now.Is(new DateTime(2017, 8, 18));
+			FakeUserCulture.Is(new CultureInfo("en-US"));
+			var skill = createSkill(15, "skillname", new TimePeriod(8, 0, 8, 30));
+			skill.SetId(Guid.NewGuid());
+			SkillSetupHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository);
+			SkillRepository.Add(skill);
+
+			var period = new DateOnlyPeriod(new DateOnly(2017, 8, 15), new DateOnly(2017, 8, 16));
+			var exportStaffingReturnObject = Target.ExportForecastAndStaffing(skill.Id.GetValueOrDefault(), period.StartDate.Date, period.EndDate.Date, false);
+			exportStaffingReturnObject.ErrorMessage.Should().Be.Empty();
+		}
+
 		[Test]
 		public void ShouldHandleNoForecastAndNoStaffing()
 		{
-			FakeLoggedOnUser.CurrentUser().PermissionInformation.SetCulture(new CultureInfo("en-US"));
+			FakeUserCulture.Is(new CultureInfo("en-US"));
 			var skill = createSkill(15, "skillname", new TimePeriod(8, 0, 8, 30));
 			skill.SetId(Guid.NewGuid());
 			SkillSetupHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository);
@@ -60,7 +114,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 		[Test]
 		public void ShouldHandleNoStaffing()
 		{
-			FakeLoggedOnUser.CurrentUser().PermissionInformation.SetCulture(new CultureInfo("en-US"));
+			FakeUserCulture.Is(new CultureInfo("en-US"));
 			var skill = createSkill(15, "skillname", new TimePeriod(8, 0, 8, 30));
 			skill.SetId(Guid.NewGuid());
 			var scenario = SkillSetupHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository);
@@ -80,7 +134,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 		[Test]
 		public void ShouldReturnInternalStaffingUsCulture()
 		{
-			FakeLoggedOnUser.CurrentUser().PermissionInformation.SetCulture(new CultureInfo("en-US"));
+			FakeUserCulture.Is(new CultureInfo("en-US"));
 			var skill = createSkill(15, "skillname", new TimePeriod(8, 0, 8, 30));
 			skill.SetId(Guid.NewGuid());
 			var scenario = SkillSetupHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository);
@@ -135,7 +189,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 		[Test]
 		public void ShouldReturnInternalStaffingSweCulture()
 		{
-			FakeLoggedOnUser.CurrentUser().PermissionInformation.SetCulture(new CultureInfo("sv-SE"));
+			FakeUserCulture.Is(new CultureInfo("sv-SE"));
 			var skill = createSkill(15, "skillname", new TimePeriod(8, 0, 8, 30));
 			skill.SetId(Guid.NewGuid());
 			var scenario = SkillSetupHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository);
@@ -189,7 +243,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 		[Test]
 		public void ShouldReturnInternalStaffingAndBpos()
 		{
-			FakeLoggedOnUser.CurrentUser().PermissionInformation.SetCulture(new CultureInfo("sv-SE"));
+			FakeUserCulture.Is(new CultureInfo("sv-SE"));
 			var skill = createSkill(15, "skillname", new TimePeriod(8, 0, 8, 30));
 			skill.SetId(Guid.NewGuid());
 			var scenario = SkillSetupHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository);
@@ -265,7 +319,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 		[Test]
 		public void ShouldReturnInternalStaffingAndSeveralBpos()
 		{
-			FakeLoggedOnUser.CurrentUser().PermissionInformation.SetCulture(new CultureInfo("sv-SE"));
+			FakeUserCulture.Is(new CultureInfo("sv-SE"));
 			var skill = createSkill(15, "skillname", new TimePeriod(8, 0, 8, 30));
 			skill.SetId(Guid.NewGuid());
 			var scenario = SkillSetupHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository);
@@ -348,7 +402,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 		[Test]
 		public void ShouldReturnStaffingWithOnlyBpos()
 		{
-			FakeLoggedOnUser.CurrentUser().PermissionInformation.SetCulture(new CultureInfo("sv-SE"));
+			FakeUserCulture.Is(new CultureInfo("sv-SE"));
 			var skill = createSkill(15, "skillname", new TimePeriod(8, 0, 8, 30));
 			skill.SetId(Guid.NewGuid());
 			var scenario = SkillSetupHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository);
@@ -414,7 +468,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 		[Test]
 		public void ShouldReturnPositiveWhenOverstaffed()
 		{
-			FakeLoggedOnUser.CurrentUser().PermissionInformation.SetCulture(new CultureInfo("sv-SE"));
+			FakeUserCulture.Is(new CultureInfo("sv-SE"));
 			var skill = createSkill(15, "skillname", new TimePeriod(8, 0, 8, 30));
 			skill.SetId(Guid.NewGuid());
 			var scenario = SkillSetupHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository);
@@ -497,7 +551,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 		[Test]
 		public void ShouldHandleShrinkage()
 		{
-			FakeLoggedOnUser.CurrentUser().PermissionInformation.SetCulture(new CultureInfo("en-US"));
+			FakeUserCulture.Is(new CultureInfo("en-US"));
 			var skill = createSkill(15, "skillname", new TimePeriod(8, 0, 8, 30));
 			skill.SetId(Guid.NewGuid());
 			

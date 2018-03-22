@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Staffing
         {
 		    var updateResourceReadModelIntervalMinutes =
 			    _requestStrategySettingsReader.GetIntSetting("UpdateResourceReadModelIntervalMinutes", 60);
-			var numberOfDays = _staffingSettingsReader.GetIntSetting("StaffingReadModelNumberOfDays", 14);
+			var numberOfDays = _staffingSettingsReader.GetIntSetting(KeyNames.StaffingReadModelNumberOfDays, 14);
 			var businessUnits = _businessUnitRepository.LoadAll();
 	        using (_updatedBySystemUser.Context())
 	        {

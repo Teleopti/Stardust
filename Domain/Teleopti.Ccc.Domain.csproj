@@ -645,6 +645,7 @@
     <Compile Include="Scheduling\WebLegacy\MoveSchedulesToOriginalStateHolderAfterIsland.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiWfmBpoExchangeLicenseOption.cs" />
     <Compile Include="SkillGroupManagement\ModifySkillGroupInput.cs" />
+    <Compile Include="Staffing\ExportStaffingReturnObject.cs" />
     <Compile Include="Staffing\ExportBpoFile.cs" />
     <Compile Include="Staffing\ExportBpoFileOld.cs" />
     <Compile Include="Staffing\ExportForecastAndStaffingFile.cs" />

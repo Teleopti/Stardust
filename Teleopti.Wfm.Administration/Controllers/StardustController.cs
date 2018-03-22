@@ -135,7 +135,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 				_stardustSender.Send(
 					new UpdateStaffingLevelReadModelEvent
 					{
-						Days = _staffingSettingsReader.GetIntSetting("StaffingReadModelNumberOfDays", 14),
+						Days = _staffingSettingsReader.GetIntSetting(KeyNames.StaffingReadModelNumberOfDays, 14),
 						LogOnDatasource = logOnModel.Tenant,
 						LogOnBusinessUnitId = bu
 					});

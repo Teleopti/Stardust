@@ -43,8 +43,8 @@ namespace Teleopti.Ccc.Domain.Staffing
 		{
 			var snapshot = ((ScheduleRange)scheduleRange).Snapshot;
 			var skillCombinationResourceDeltas = new List<SkillCombinationResource>();
-			var staffingReadModelNumberOfDays = _staffingSettingsReader.GetIntSetting("StaffingReadModelNumberOfDays", 14);
-			var staffingReadModelHistoricalHours = _staffingSettingsReader.GetIntSetting("StaffingReadModelHistoricalHours", 8*24);
+			var staffingReadModelNumberOfDays = _staffingSettingsReader.GetIntSetting(KeyNames.StaffingReadModelNumberOfDays, 14);
+			var staffingReadModelHistoricalHours = _staffingSettingsReader.GetIntSetting(KeyNames.StaffingReadModelHistoricalHours, 8*24);
 			var readModelPeriod = new DateTimePeriod(_now.UtcDateTime().AddHours(-staffingReadModelHistoricalHours), _now.UtcDateTime().AddDays(staffingReadModelNumberOfDays).AddHours(1));
 			foreach (var snapShotDay in snapshot.ScheduledDayCollection(scheduleRange.Period.ToDateOnlyPeriod(scheduleRange.Person.PermissionInformation.DefaultTimeZone()).Inflate(1)).Where(x => readModelPeriod.Contains(x.DateOnlyAsPeriod.DateOnly.Date)))  //inflate to handle midnight shift
 			{
