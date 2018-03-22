@@ -32,12 +32,13 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		private readonly IAbsencePersister _absencePersister;
 		private readonly ISettingsPersisterAndProvider<AgentsPerPageSetting> _agentsPerPagePersisterAndProvider;
 		private readonly ISwapMainShiftForTwoPersonsCommandHandler _swapMainShiftForTwoPersonsHandler;
+		private IAuditSettingRepository _auditSettingRepo;
 
 		public TeamScheduleController(ITeamScheduleViewModelFactory teamScheduleViewModelFactory,
 			ILoggedOnUser loggonUser,
 			IAuthorization authorization, IAbsencePersister absencePersister,
 			ISettingsPersisterAndProvider<AgentsPerPageSetting> agentsPerPagePersisterAndProvider,
-			ISwapMainShiftForTwoPersonsCommandHandler swapMainShiftForTwoPersonsHandler)
+			ISwapMainShiftForTwoPersonsCommandHandler swapMainShiftForTwoPersonsHandler, IAuditSettingRepository auditSettingRepo)
 		{
 			_teamScheduleViewModelFactory = teamScheduleViewModelFactory;
 			_loggonUser = loggonUser;
@@ -46,6 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			_absencePersister = absencePersister;
 			_agentsPerPagePersisterAndProvider = agentsPerPagePersisterAndProvider;
 			_swapMainShiftForTwoPersonsHandler = swapMainShiftForTwoPersonsHandler;
+			_auditSettingRepo = auditSettingRepo;
 		}
 
 		[UnitOfWork, HttpGet, Route("api/TeamSchedule/GetPermissions")]
@@ -76,6 +78,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			};
 
 			return Json(permissions);
+		}
+
+		[UnitOfWork, HttpGet, Route("api/TeamSchedule/ScheduleAuditTrailSetting")]
+		public virtual JsonResult<bool> GetScheduleAuditTrailSetting()
+		{
+			return Json(_auditSettingRepo.Read().IsScheduleEnabled);
 		}
 
 		[UnitOfWork, HttpPost, Route("api/TeamSchedule/SearchSchedules")]

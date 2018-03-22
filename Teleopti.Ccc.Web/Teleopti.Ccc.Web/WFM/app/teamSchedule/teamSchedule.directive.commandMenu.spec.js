@@ -5,6 +5,7 @@
 		personSelectionSvc,
 		validateRulesService,
 		permissions,
+		bootstrapDataService,
 		toggles,
 		overlappedWarningPersonId = ['12345'],
 		noneOverlappedWarningPersonId = ['67890'];
@@ -21,7 +22,6 @@
 		validateRulesService = new FakeValidateRulesService();
 		permissions = new FakePermissions();
 		toggles = new FakeToggles();
-
 
 		module(function ($provide) {
 			$provide.value('ShortCuts', function () {
@@ -42,10 +42,11 @@
 
 	});
 
-	beforeEach(inject(function (_$rootScope_, _$compile_, _$httpBackend_) {
+	beforeEach(inject(function (_$rootScope_, _$compile_, _$httpBackend_, _teamsBootstrapData_) {
 		$compile = _$compile_;
 		$rootScope = _$rootScope_;
 		$httpBackend = _$httpBackend_;
+		bootstrapDataService = _teamsBootstrapData_;
 
 		$httpBackend.expectGET("../ToggleHandler/AllToggles").respond(200, 'mock');
 	}));
@@ -836,6 +837,59 @@
 		expect(menu.length).toBe(1);
 		expect(menuListItem.length).toBe(1);
 		expect(menuListItem[0].disabled).toBe(true);
+	});
+
+
+	it("should undo menu item unclickable when schedule audit trail is disabled", function () {
+		bootstrapDataService.setScheduleAuditTrailSetting(false);
+		var date = "2018-01-16";
+		var html = '<teamschedule-command-menu selected-date="vm.selectedDate"></teamschedule-command-menu>';
+		var scope = $rootScope.$new();
+		scope.vm = {
+			toggleCurrentSidenav: function () { },
+			selectedDate: date
+		};
+		var element = $compile(html)(scope);
+		scope.$apply();
+
+		var selectedAgents = [
+			{
+				PersonId: 'agent1',
+				Name: 'agent1',
+				Checked: true,
+				SelectedDayOffs: [{ Date: date }]
+			}];
+		personSelectionSvc.setFakeCheckedPersonInfoList(selectedAgents);
+		scope.$apply();
+
+		var menuListItemForUndo = angular.element(element[0].querySelector('.wfm-list #menuItemUndo'));
+		expect(menuListItemForUndo[0].disabled).toEqual(true);
+	});
+
+	it("should undo menu item clickable when schedule audit trail is enabled", function () {
+		bootstrapDataService.setScheduleAuditTrailSetting(true);
+		var date = "2018-01-16";
+		var html = '<teamschedule-command-menu selected-date="vm.selectedDate"></teamschedule-command-menu>';
+		var scope = $rootScope.$new();
+		scope.vm = {
+			toggleCurrentSidenav: function () { },
+			selectedDate: date
+		};
+		var element = $compile(html)(scope);
+		scope.$apply();
+
+		var selectedAgents = [
+			{
+				PersonId: 'agent1',
+				Name: 'agent1',
+				Checked: true,
+				SelectedDayOffs: [{ Date: date }]
+			}];
+		personSelectionSvc.setFakeCheckedPersonInfoList(selectedAgents);
+		scope.$apply();
+
+		var menuListItemForUndo = angular.element(element[0].querySelector('.wfm-list #menuItemUndo'));
+		expect(menuListItemForUndo[0].disabled).toEqual(false);
 	});
 
 	// Don't check this, as it performs badly when select all agents on every page is set.

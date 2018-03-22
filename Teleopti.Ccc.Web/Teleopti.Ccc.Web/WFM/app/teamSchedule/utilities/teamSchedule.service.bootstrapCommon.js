@@ -3,13 +3,14 @@
 
 	angular.module('wfm.teamSchedule').service('bootstrapCommon', bootstrapCommon);
 
-	bootstrapCommon.$inject = ['$q', 'TeamSchedule', 'teamsPermissions'];
+	bootstrapCommon.$inject = ['$q', 'TeamSchedule', 'teamsPermissions', 'teamsBootstrapData'];
 
-	function bootstrapCommon($q, teamScheduleSvc, teamsPermissions) {
+	function bootstrapCommon($q, teamScheduleSvc, teamsPermissions, teamsBootstrapData) {
 		var self = this;
 
 		var tasks = {
-			permissions: teamScheduleSvc.PromiseForloadedPermissions()
+			permissions: teamScheduleSvc.PromiseForloadedPermissions(),
+			scheduleAuditTrailSetting: teamScheduleSvc.getScheduleAuditTrailSetting()
 		};
 
 		var readyDefer = $q.defer();
@@ -19,7 +20,8 @@
 
 		$q.all(tasks)
 			.then(function (data) {
-				teamsPermissions.set(data.permissions);				
+				teamsPermissions.set(data.permissions);
+				teamsBootstrapData.setScheduleAuditTrailSetting(data.scheduleAuditTrailSetting);
 				readyDefer.resolve();
 			});
 	}

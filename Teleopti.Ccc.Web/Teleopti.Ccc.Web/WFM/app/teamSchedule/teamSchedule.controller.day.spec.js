@@ -452,12 +452,18 @@ describe("teamschedule controller tests", function () {
 		}
 
 		teamScheduleService.getAgentsPerPageSetting = {
-			post: function () {
+			post: function() {
 				var queryDeferred = $q.defer();
 				queryDeferred.resolve({ Agents: 50 });
 				return { $promise: queryDeferred.promise };
 			}
-		};
+		}
+
+		teamScheduleService.getScheduleAuditTrailSetting = function() {
+			return {
+				then: function() {}
+			};
+		}
 	};
 
 	function setupMockLocale() {

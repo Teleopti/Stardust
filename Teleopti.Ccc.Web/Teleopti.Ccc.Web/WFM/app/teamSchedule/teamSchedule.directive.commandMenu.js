@@ -19,6 +19,7 @@
 				'teamsPermissions',
 				'teamsToggles',
 				'serviceDateFormatHelper',
+				'teamsBootstrapData',
 				teamscheduleCommandMenuCtrl
 			],
 			controllerAs: 'vm',
@@ -35,7 +36,8 @@
 		keyCodes,
 		teamsPermissions,
 		teamsToggles,
-		serviceDateFormatHelper
+		serviceDateFormatHelper,
+		teamsBootstrapData
 	) {
 		var vm = this;
 
@@ -329,7 +331,7 @@
 		};
 
 		vm.canUndoSchedule = function() {
-			return personSelectionSvc.anyAgentChecked();
+			return teamsBootstrapData.isScheduleAuditTrailEnabled() && personSelectionSvc.anyAgentChecked();
 		};
 
 		vm.canRemoveDayOff = function () {

@@ -15,6 +15,7 @@
 		} else {
 			hierarchyUrl = '../api/TeamScheduleData/FetchPermittedTeamHierachy';
 		}
+		var settingForScheduleAuditTrailUrl = '../api/TeamSchedule/ScheduleAuditTrailSetting';
 
 		service.searchSchedules = searchSchedule;
 
@@ -44,6 +45,16 @@
 			return deferred.promise;
 		}
 
+		service.getScheduleAuditTrailSetting = function() {
+			return $q(function(resolve, reject) {
+				$http.get(settingForScheduleAuditTrailUrl).then(function(response) {
+						resolve(response.data);
+					},
+				function(error) {
+					reject(error);
+				});
+			});
+		}
 
 		service.getPermissions = $resource("../api/TeamSchedule/GetPermissions", {
 
@@ -92,6 +103,7 @@
 			});
 		};
 
+		
 		function getOrganizations(params) {
 			return $q(function (resolve, reject) {
 				$http.get(hierarchyUrl, { params: params })

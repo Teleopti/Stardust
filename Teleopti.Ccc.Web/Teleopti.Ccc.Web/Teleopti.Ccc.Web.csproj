@@ -1778,6 +1778,7 @@
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.staffing.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.staffingChart.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.staffingChart.spec.js" />
+    <Content Include="WFM\app\teamSchedule\utilities\teamSchedule.service.bootstrapData.js" />
     <Content Include="WFM\app\teapot\controller.js" />
     <Content Include="WFM\app\teapot\view.html" />
     <Content Include="WFM\app\teapot\teapot.state.provider.js" />
