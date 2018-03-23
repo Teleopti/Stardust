@@ -647,6 +647,7 @@
     <Compile Include="Scheduler\WorkShiftMasterActivityCheckerTest.cs" />
     <Compile Include="Settings\AbsenceViewTest.cs" />
     <Compile Include="Settings\PageHelperTest.cs" />
+    <Compile Include="Shifts\RuleSetBagUsedSorterTest.cs" />
     <Compile Include="Shifts\WorkShiftAddCallbackTest.cs" />
     <Compile Include="Shifts\AbsolutePositionViewModelTest.cs">
       <SubType>Code</SubType>

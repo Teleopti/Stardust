@@ -1238,6 +1238,7 @@
     <Compile Include="WinCode\Shifts\Presenters\NavigationPresenter.cs" />
     <Compile Include="WinCode\Shifts\Presenters\ShiftInClip.cs" />
     <Compile Include="WinCode\Shifts\Presenters\VisualizePresenter.cs" />
+    <Compile Include="WinCode\Shifts\RuleSetBagUsedSorter.cs" />
     <Compile Include="WinCode\Shifts\ShiftCreatorViewType.cs" />
     <Compile Include="WinCode\Shifts\ShiftsDataHelper.cs" />
     <Compile Include="WinCode\Shifts\Views\IExplorerView.cs" />
