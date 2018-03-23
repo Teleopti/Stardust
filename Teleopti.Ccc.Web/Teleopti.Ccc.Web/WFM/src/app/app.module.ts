@@ -4,23 +4,15 @@ import { UpgradeModule, downgradeComponent } from '@angular/upgrade/static';
 
 import { AppComponent } from './app.component';
 import { PeopleModule } from './people/people.module';
-import { MAT_RIPPLE_GLOBAL_OPTIONS } from '@angular/material';
-import { globalRippleConfig } from '../themes/material-config';
 import { HttpClientModule } from '@angular/common/http';
+import { CoreModule } from './core/core.module';
 
 @NgModule({
 	declarations: [AppComponent],
-	imports: [BrowserModule, UpgradeModule, PeopleModule, HttpClientModule],
-	providers: [
-		{
-			provide: MAT_RIPPLE_GLOBAL_OPTIONS,
-			useValue: globalRippleConfig
-		}
-	],
+	imports: [CoreModule, BrowserModule, UpgradeModule, PeopleModule, HttpClientModule],
 	entryComponents: [AppComponent]
 })
 export class AppModule {
-	constructor(private upgrade: UpgradeModule) { }
-	ngDoBootstrap() {
-	}
+	constructor(private upgrade: UpgradeModule) {}
+	ngDoBootstrap() {}
 }
