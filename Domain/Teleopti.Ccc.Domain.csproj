@@ -182,6 +182,8 @@
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestOpenPeriodProvider.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestOpenPeriodProviderToggle47290On.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestProcessorToggle47290On.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\IAnalyticsScheduleChangeUpdaterFilter.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\UpdateFactSchedules.cs" />
     <Compile Include="ApplicationLayer\TerminatePersonHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\RemoveDayOffCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\RemoveShiftCommand.cs" />

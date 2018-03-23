@@ -150,6 +150,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<DoNotNotify>().As<INotificationValidationCheck>().SingleInstance();
 
+			builder.RegisterType<UpdateFactSchedules>().SingleInstance();
+
 			builder.RegisterType<ScheduleProjectionReadOnlyPersister>()
 				.As<IScheduleProjectionReadOnlyPersister>()
 				.SingleInstance();
