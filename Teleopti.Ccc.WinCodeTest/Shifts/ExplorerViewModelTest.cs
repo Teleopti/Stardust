@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
@@ -128,5 +129,12 @@ namespace Teleopti.Ccc.WinCodeTest.Shifts
             _target.RemoveBag(_bagCollection[0]);
             Assert.AreEqual(1, _target.RuleSetBagCollection.Count);
         }
-    }
+
+		[Test]
+		public void ShouldInitializeVisualizeGridColumnCount()
+		{
+			_target = new ExplorerViewModel();
+			_target.VisualizeGridColumnCount.Should().Be.EqualTo(1);
+		}
+	}
 }

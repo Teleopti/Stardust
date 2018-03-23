@@ -14,6 +14,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Models
         private IList<IWorkShiftRuleSet> _ruleSets;
         private IList<IRuleSetBag> _ruleSetbags;
 
+		public ExplorerViewModel()
+		{
+			VisualizeGridColumnCount = 1;
+		}
+
         public int DefaultSegment{ get; set;}
 
         public TimePeriod DefaultStartPeriod
