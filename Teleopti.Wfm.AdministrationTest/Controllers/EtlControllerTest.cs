@@ -316,6 +316,133 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			models.Content.TimeZoneList.Should().Not.Be.Empty();
 		}
 
+		[Test]
+		public void ShouldPersistDataSourceConfiguration()
+		{
+			const int dataSourceId = 3;
+			var masterTenant = new Tenant(testTenantName);
+			masterTenant.DataSourceConfiguration.SetAnalyticsConnectionString($"Initial Catalog={RandomName.Make()}");
+			AllTenants.HasWithAnalyticsConnectionString(masterTenant.Name, masterTenant.DataSourceConfiguration.AnalyticsConnectionString);
+			BaseConfigurationRepository.SaveBaseConfiguration(masterTenant.DataSourceConfiguration.AnalyticsConnectionString,
+				new BaseConfiguration(1053, 15, "UTC", false));
+			GeneralInfrastructure.HasDataSources(new DataSourceEtl(dataSourceId, "myDs", 1, "UTC", 15, false));
+
+			var tenantDataSource = new TenantDataSourceModel
+			{
+				TenantName = testTenantName,
+				DataSource = new DataSourceModel
+				{
+					Id = dataSourceId,
+					TimeZoneId = 13
+				}
+			};
+			Target.PersistDataSource(tenantDataSource);
+			var dataSources = (OkNegotiatedContentResult<IList<DataSourceModel>>)Target.TenantLogDataSources(testTenantName);
+			dataSources.Content.Single().TimeZoneId.Should().Be(tenantDataSource.DataSource.TimeZoneId);
+
+			var scheduledJob = JobScheduleRepository.GetEtlJobSchedules().First();
+			var scheduledPeriods = JobScheduleRepository.GetEtlJobSchedulePeriods(1);
+			scheduledJob.JobName.Should().Be("Initial");
+			scheduledJob.ScheduleName.Should().Be("Manual ETL");
+			scheduledJob.DataSourceId.Should().Be(1);
+			scheduledJob.Enabled.Should().Be(true);
+			scheduledJob.ScheduleId.Should().Be(1);
+			scheduledJob.ScheduleType.Should().Be(JobScheduleType.Manual);
+			scheduledJob.Description.Should().Be("Manual ETL");
+			scheduledJob.TenantName.Should().Be(testTenantName);
+			scheduledPeriods.Count.Should().Be(1);
+			scheduledPeriods.First().JobCategoryName.Should().Be("Initial");
+			scheduledPeriods.First().RelativePeriod.Minimum.Should().Be(-1);
+			scheduledPeriods.First().RelativePeriod.Maximum.Should().Be(1);
+		}
+
+		[Test]
+		public void NotAllowToChangeDefaultDataSource()
+		{
+			var masterTenant = new Tenant(testTenantName);
+			masterTenant.DataSourceConfiguration.SetAnalyticsConnectionString($"Initial Catalog={RandomName.Make()}");
+			AllTenants.HasWithAnalyticsConnectionString(masterTenant.Name, masterTenant.DataSourceConfiguration.AnalyticsConnectionString);
+			GeneralInfrastructure.HasDataSources(new DataSourceEtl(-1, "Not Defined", -1, null, 15, false));
+
+			var tenantDataSource = new TenantDataSourceModel
+			{
+				TenantName = testTenantName,
+				DataSource = new DataSourceModel
+				{
+					Id = -1,
+					TimeZoneId = 13
+				}
+			};
+			var result = (NegotiatedContentResult<string>)Target.PersistDataSource(tenantDataSource);
+			result.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+		}
+
+		[Test]
+		public void NotAllowToChangeInternalDataSource()
+		{
+			var masterTenant = new Tenant(testTenantName);
+			masterTenant.DataSourceConfiguration.SetAnalyticsConnectionString($"Initial Catalog={RandomName.Make()}");
+			AllTenants.HasWithAnalyticsConnectionString(masterTenant.Name, masterTenant.DataSourceConfiguration.AnalyticsConnectionString);
+			GeneralInfrastructure.HasDataSources(new DataSourceEtl(3, $"Raptor{RandomName.Make()}", -1, null, 15, false));
+
+			var tenantDataSource = new TenantDataSourceModel
+			{
+				TenantName = testTenantName,
+				DataSource = new DataSourceModel
+				{
+					Id = 3,
+					TimeZoneId = 13
+				}
+			};
+			var result = (NegotiatedContentResult<string>)Target.PersistDataSource(tenantDataSource);
+			result.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+		}
+
+		[Test]
+		public void ShouldReturnErrorMessageWhenDataSourceNotFound()
+		{
+			var masterTenant = new Tenant(testTenantName);
+			masterTenant.DataSourceConfiguration.SetAnalyticsConnectionString($"Initial Catalog={RandomName.Make()}");
+			AllTenants.HasWithAnalyticsConnectionString(masterTenant.Name, masterTenant.DataSourceConfiguration.AnalyticsConnectionString);
+
+			var tenantDataSource = new TenantDataSourceModel
+			{
+				TenantName = testTenantName,
+				DataSource = new DataSourceModel
+				{
+					Id = 3,
+					TimeZoneId = 13
+				}
+			};
+			var result = (NegotiatedContentResult<string>)Target.PersistDataSource(tenantDataSource);
+			result.StatusCode.Should().Be(HttpStatusCode.NotFound);
+		}
+
+		[Test]
+		public void ShouldDoNothingIfNotChangeTimeZoneOfDataSource()
+		{
+			const int dataSourceId = 3;
+			var masterTenant = new Tenant(testTenantName);
+			masterTenant.DataSourceConfiguration.SetAnalyticsConnectionString($"Initial Catalog={RandomName.Make()}");
+			AllTenants.HasWithAnalyticsConnectionString(masterTenant.Name, masterTenant.DataSourceConfiguration.AnalyticsConnectionString);
+			BaseConfigurationRepository.SaveBaseConfiguration(masterTenant.DataSourceConfiguration.AnalyticsConnectionString,
+				new BaseConfiguration(1053, 15, "UTC", false));
+			GeneralInfrastructure.HasDataSources(new DataSourceEtl(dataSourceId, "myDs", 1, "UTC", 15, false));
+
+			var tenantDataSource = new TenantDataSourceModel
+			{
+				TenantName = testTenantName,
+				DataSource = new DataSourceModel
+				{
+					Id = dataSourceId,
+					TimeZoneId = 15
+				}
+			};
+			Target.PersistDataSource(tenantDataSource);
+			var result = (NegotiatedContentResult<string>)Target.PersistDataSource(tenantDataSource);
+			result.StatusCode.Should().Be(HttpStatusCode.NotModified);
+		}
+
 		[TestCase(true, true)]
 		[TestCase(true, false)]
 		[TestCase(false, true)]

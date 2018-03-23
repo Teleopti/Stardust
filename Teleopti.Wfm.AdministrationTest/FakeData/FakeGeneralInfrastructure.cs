@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Wfm.AdministrationTest.FakeData
 {
@@ -39,7 +38,9 @@ namespace Teleopti.Wfm.AdministrationTest.FakeData
 
 		public void SaveDataSource(int dataSourceId, int timeZoneId)
 		{
-			throw new NotImplementedException();
+			var dataSource = dataSourceEtls.Single(x => x.DataSourceId == dataSourceId);
+			dataSource.TimeZoneId = timeZoneId;
+			dataSource.Inactive = false;
 		}
 
 		public void SetUtcTimeZoneOnRaptorDataSource()

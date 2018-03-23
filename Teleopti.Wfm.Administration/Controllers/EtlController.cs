@@ -4,10 +4,11 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Web.Http;
-using Teleopti.Analytics.Etl.Common;
+using log4net;
 using Teleopti.Analytics.Etl.Common.Configuration;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
+using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.MultiTenancy;
@@ -22,6 +23,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 	[TenantTokenAuthentication]
 	public class EtlController : ApiController
 	{
+		private static readonly ILog logger = LogManager.GetLogger(typeof(EtlController));
 		private readonly IToggleManager _toggleManager;
 		private readonly JobCollectionModelProvider _jobCollectionModelProvider;
 		private readonly TenantLogDataSourcesProvider _tenantLogDataSourcesProvider;
@@ -30,6 +32,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 		private readonly IBaseConfigurationRepository _baseConfigurationRepository;
 		private readonly ILoadAllTenants _loadAllTenants;
 		private readonly IConfigurationHandler _configurationHandler;
+		private readonly IGeneralFunctions _generalFunctions;
 
 		public EtlController(IToggleManager toggleManager, 
 			JobCollectionModelProvider jobCollectionModelProvider,
@@ -38,7 +41,8 @@ namespace Teleopti.Wfm.Administration.Controllers
 			IConfigReader configReader,
 			IBaseConfigurationRepository baseConfigurationRepository,
 			ILoadAllTenants loadAllTenants,
-			IConfigurationHandler configurationHandler)
+			IConfigurationHandler configurationHandler,
+			IGeneralFunctions generalFunctions)
 		{
 			_toggleManager = toggleManager;
 			_jobCollectionModelProvider = jobCollectionModelProvider;
@@ -48,6 +52,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			_baseConfigurationRepository = baseConfigurationRepository;
 			_loadAllTenants = loadAllTenants;
 			_configurationHandler = configurationHandler;
+			_generalFunctions = generalFunctions;
 		}
 
 		[HttpGet, Route("Etl/ShouldEtlToolBeVisible")]
@@ -166,6 +171,67 @@ namespace Teleopti.Wfm.Administration.Controllers
 			});
 		}
 
+		[TenantUnitOfWork]
+		[HttpPost, Route("Etl/PersistDataSource")]
+		public virtual IHttpActionResult PersistDataSource(TenantDataSourceModel tenantDataSourceModel)
+		{
+			var tenantName = tenantDataSourceModel.TenantName;
+			var dataSourceId = tenantDataSourceModel.DataSource.Id;
+			if (dataSourceId < 0)
+			{
+				return Content(HttpStatusCode.Forbidden,
+					$"Datasource with id {dataSourceId} for Tenant \"{tenantName}\" is not allowed to modify");
+			}
+
+			var dataSource = _tenantLogDataSourcesProvider.Load(tenantName).SingleOrDefault(x => x.Id == dataSourceId);
+			if (dataSource == null)
+			{
+				return Content(HttpStatusCode.NotFound, $"Datasource with id {dataSourceId} for Tenant \"{tenantName}\" not found");
+			}
+
+			if (dataSource.Name.StartsWith("Raptor"))
+			{
+				return Content(HttpStatusCode.Forbidden,
+					$"Datasource \"{dataSource.Name}\" with id {dataSourceId} for Tenant \"{tenantName}\" is not allowed to modify");
+			}
+
+			if (dataSource.TimeZoneId == tenantDataSourceModel.DataSource.TimeZoneId)
+			{
+				return Content(HttpStatusCode.NotModified,
+					$"No change was made to datasource \"{dataSource.Name}\" with id {dataSourceId} for Tenant \"{tenantName}\" since timezone is not changed.");
+			}
+
+			try
+			{
+				_generalFunctions.SaveDataSource(dataSourceId, tenantDataSourceModel.DataSource.TimeZoneId);
+
+				var utcToday = DateTime.UtcNow.Date;
+				var jobEnqueModel = new JobEnqueModel
+				{
+					JobName = "Initial",
+					JobPeriods = new List<JobPeriod>
+					{
+						new JobPeriod
+						{
+							Start = utcToday.AddDays(-1),
+							End = utcToday.AddDays(1),
+							JobCategoryName = "Initial",
+						}
+					},
+					LogDataSourceId = 1,
+					TenantName = tenantName
+				};
+				_etlJobScheduler.ScheduleJob(jobEnqueModel);
+			}
+			catch (Exception ex)
+			{
+				logger.Error($"Error occurred on save changes for Datasource with id {dataSourceId} for Tenant \"{tenantName}\"", ex);
+				return Content(HttpStatusCode.NotFound, "Error occurred on save data source changes.");
+			}
+
+			return Ok();
+		}
+
 		private string getMasterTenantName()
 		{
 			var appConnectionString = new SqlConnectionStringBuilder(_configReader.ConnectionString("Tenancy")).InitialCatalog;
@@ -174,7 +240,6 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 			return master?.Name;
 		}
-
 	}
 }
 
