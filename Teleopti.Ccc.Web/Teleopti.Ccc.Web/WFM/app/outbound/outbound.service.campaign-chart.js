@@ -143,14 +143,15 @@
 			});
 		}
 
-		function mapGraphData(data) {
+		function mapGraphData(data, shouldShowNothing) {
 			var returnData = {
 				dates: null,
 				rawBacklogs: null,
 				unscheduledPlans: null,
 				schedules: null,
 				progress: null,
-				overStaff: null
+				overStaff: null,
+				shouldShowNothing:false
 			};
 
 			returnData.dates = moment(data.Dates).format("YYYY-MM-DD");
@@ -159,12 +160,15 @@
 			returnData.schedules = data.ScheduledPersonHours;
 			returnData.progress = data.BacklogPersonHours;
 			returnData.overStaff = data.OverstaffPersonHours;
+			returnData.shouldShowNothing = shouldShowNothing;
 
 			if (returnData.schedules > 0) {
 				returnData.unscheduledPlans = 0;
-				returnData.schedules -= returnData.overStaff;
+				if (returnData.overStaff > 0) returnData.shouldShowNothing = true;
+				returnData.overStaff = 0;
 			} else {
 				returnData.unscheduledPlans -= returnData.overStaff;
+				if (returnData.shouldShowNothing) returnData.overStaff = 0;
 			}
 
 			return returnData;
@@ -182,8 +186,11 @@
 		}
 
 		function buildGraphDataSeqs(data) {
-			var graphDataSeq = zip(data).map(function(d) {
-				return mapGraphData(d);
+			var shouldShowNothing = false;
+			var graphDataSeq = zip(data).map(function (d) {
+				var ret = mapGraphData(d, shouldShowNothing);
+				shouldShowNothing = ret.shouldShowNothing;
+				return ret;
 			});
 
 			if (!graphDataSeq || graphDataSeq <= 0) return;

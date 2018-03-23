@@ -74,10 +74,28 @@ describe('Outbound Chart Service Test', function() {
 		var resultData = target.coreMapGraphData(input);
 		expect(resultData.dates).toEqual('2015-07-31');
 		expect(resultData.unscheduledPlans).toEqual(0);
-		expect(resultData.schedules).toEqual(40);
+		expect(resultData.schedules).toEqual(50);
 		expect(resultData.rawBacklogs).toEqual(0);
 		expect(resultData.progress).toEqual(0);
+		expect(resultData.overStaff).toEqual(0);
+	});
 
+	it('Graph data with overstaff should be mapped to 0', function () {
+		var input = {
+			Dates: '2015-07-31',
+			ScheduledPersonHours: 0,
+			BacklogPersonHours: 0,
+			PlannedPersonHours: 30,
+			OverstaffPersonHours: 30
+		};
+
+		var resultData = target.coreMapGraphData(input, true);
+		expect(resultData.dates).toEqual('2015-07-31');
+		expect(resultData.unscheduledPlans).toEqual(0);
+		expect(resultData.schedules).toEqual(0);
+		expect(resultData.rawBacklogs).toEqual(0);
+		expect(resultData.progress).toEqual(0);
+		expect(resultData.overStaff).toEqual(0);
 	});
 
     it('Build graph data seqs should provide seqs with labels', function () {
