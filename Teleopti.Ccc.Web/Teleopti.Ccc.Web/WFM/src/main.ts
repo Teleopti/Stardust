@@ -2,7 +2,6 @@ import { enableProdMode, StaticProvider } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { downgradeModule, downgradeComponent } from '@angular/upgrade/static';
 
-import { PeopleModule } from './app/people/people.module';
 import { environment } from './environments/environment';
 import { IRootScopeService, IControllerConstructor } from 'angular';
 
@@ -14,6 +13,7 @@ import {
 	AppLogonPageComponent
 } from './app/people/components';
 import { TitleBarComponent } from './app/people/components/title-bar/title-bar.component';
+import { AppModule } from './app/app.module';
 
 export interface IWfmRootScopeService extends IRootScopeService {
 	_: any;
@@ -26,11 +26,11 @@ if (environment.production) {
 	enableProdMode();
 }
 
-const bootstrapFnPeople = (extraProviders: StaticProvider[]) =>
-	platformBrowserDynamic(extraProviders).bootstrapModule(PeopleModule);
+const bootstrapFnAngularApp = (extraProviders: StaticProvider[]) =>
+	platformBrowserDynamic(extraProviders).bootstrapModule(AppModule);
 
 const wfm = angular.module('wfm', [
-	downgradeModule(bootstrapFnPeople),
+	downgradeModule(bootstrapFnAngularApp),
 	'externalModules',
 	'currentUserInfoService',
 	'toggleService',
