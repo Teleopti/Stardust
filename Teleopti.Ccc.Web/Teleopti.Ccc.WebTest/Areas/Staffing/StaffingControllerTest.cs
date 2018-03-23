@@ -4,7 +4,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Staffing
 		public void ShouldHandleSkillNotFound()
 		{
 			ScenarioRepository.Has("Default");
-			var result = (OkNegotiatedContentResult<StaffingController.exportReturnObject>)Target.ExportBpo(Guid.NewGuid(), Now.UtcDateTime(), Now.UtcDateTime().AddDays(1));
+			var result = (OkNegotiatedContentResult<ExportStaffingReturnObject>)Target.ExportBpo(Guid.NewGuid(), Now.UtcDateTime(), Now.UtcDateTime().AddDays(1));
 
 			result.Content.ErrorMessage.Should().Contain("skill");
 		}
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Staffing
 		public void ShouldHandleEndDateBeforeStartDate()
 		{
 			ScenarioRepository.Has("Default");
-			var result = (OkNegotiatedContentResult<StaffingController.exportReturnObject>)Target.ExportBpo(Guid.NewGuid(), Now.UtcDateTime(), Now.UtcDateTime().AddDays(-1));
+			var result = (OkNegotiatedContentResult<ExportStaffingReturnObject>)Target.ExportBpo(Guid.NewGuid(), Now.UtcDateTime(), Now.UtcDateTime().AddDays(-1));
 
 			result.Content.ErrorMessage.Should().Contain(Resources.BpoExportPeriodStartDateBeforeEndDate);
 		}
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Staffing
 		public void ShouldHandlePeriodBeingOutside()
 		{
 			ScenarioRepository.Has("Default");
-			var result = (OkNegotiatedContentResult<StaffingController.exportReturnObject>)Target.ExportBpo(Guid.NewGuid(), Now.UtcDateTime(), Now.UtcDateTime().AddDays(365));
+			var result = (OkNegotiatedContentResult<ExportStaffingReturnObject>)Target.ExportBpo(Guid.NewGuid(), Now.UtcDateTime(), Now.UtcDateTime().AddDays(365));
 
 			result.Content.ErrorMessage.Should().Contain(Resources.BpoOnlyExportPeriodBetweenDates.Substring(0,20));
 		}
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Staffing
 			ScenarioRepository.Has("Default");
 			var activity = ActivityRepository.Has("Activity");
 			var skill = SkillRepository.Has("Phone", activity);
-			var result = (OkNegotiatedContentResult<StaffingController.exportReturnObject>)Target.ExportBpo(skill.Id.GetValueOrDefault(), Now.UtcDateTime(), Now.UtcDateTime().AddDays(1));
+			var result = (OkNegotiatedContentResult<ExportStaffingReturnObject>)Target.ExportBpo(skill.Id.GetValueOrDefault(), Now.UtcDateTime(), Now.UtcDateTime().AddDays(1));
 
 			result.Content.ErrorMessage.Should().Be.Empty();
 			result.Content.Content.Should().Be.Empty();
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Staffing
 			ScenarioRepository.Has("Default");
 			var activity = ActivityRepository.Has("Activity");
 			var skill = SkillRepository.Has("Phone", activity);
-			var result = (OkNegotiatedContentResult<StaffingController.exportReturnObject>)Target.ExportBpo(skill.Id.GetValueOrDefault(), Now.UtcDateTime(), Now.UtcDateTime().AddDays(1));
+			var result = (OkNegotiatedContentResult<ExportStaffingReturnObject>)Target.ExportBpo(skill.Id.GetValueOrDefault(), Now.UtcDateTime(), Now.UtcDateTime().AddDays(1));
 
 			result.Content.ErrorMessage.Should().Be.Empty();
 			result.Content.Content.Should().Be.Empty();
