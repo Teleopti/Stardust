@@ -3,7 +3,7 @@ import { MatTableDataSource, PageEvent } from '@angular/material';
 
 import { NavigationService, PeopleSearchQuery, RolesService, SearchService, WorkspaceService } from '../../services';
 import { Person, Role } from '../../types';
-import { TogglesService } from '../../../core/services';
+// import { TogglesService } from '../../../core/services';
 
 @Component({
 	selector: 'people-search-page',
