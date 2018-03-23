@@ -4,6 +4,7 @@ namespace Teleopti.Support.Tool.Tool
 {
 	internal class SetSettingCommand : ISupportCommand
 	{
+		private readonly SettingsFileManager fileManager = new SettingsFileManager();
 		private readonly string _searchFor;
 		private readonly string _replaceWith;
 
@@ -15,7 +16,7 @@ namespace Teleopti.Support.Tool.Tool
 
 		public void Execute()
 		{
-			new SettingsFileManager().UpdateFile(_searchFor, _replaceWith);
+			fileManager.UpdateFile(_searchFor, _replaceWith);
 		}
 	}
 }

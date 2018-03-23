@@ -10,12 +10,13 @@ namespace Teleopti.Support.Library.Config
 		private readonly string settingsFileName = "settings.txt";
 		private string _settingsFile;
 
-		public SearchReplaceCollection ReadFile()
+		public void LoadFile(string file) => SaveFile(readFileAndFixSomeMagicStuff(file).ForDisplay());
+
+		public SearchReplaceCollection ReadFile() => readFileAndFixSomeMagicStuff(settingsFile());
+
+		private static SearchReplaceCollection readFileAndFixSomeMagicStuff(string file)
 		{
-			var collection = new Parser()
-				.ParseText(
-					File.ReadAllText(settingsFile())
-				);
+			var collection = new Parser().ParseText(File.ReadAllText(file));
 			// this cant be good, but I wont change the behavior
 			collection.FixSomeValuesAfterReading();
 			return collection;
@@ -25,9 +26,7 @@ namespace Teleopti.Support.Library.Config
 		{
 			var text = "";
 			foreach (var searchReplace in collection)
-			{
 				text = text + searchReplace.SearchFor + "|" + searchReplace.ReplaceWith + Environment.NewLine;
-			}
 			File.WriteAllText(settingsFile(), text);
 		}
 
@@ -76,8 +75,6 @@ namespace Teleopti.Support.Library.Config
 				.Select(x => Path.Combine(x, fileName))
 				.First(File.Exists);
 			return Path.GetFullPath(found);
-
 		}
-
 	}
 }

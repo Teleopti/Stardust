@@ -79,6 +79,7 @@ namespace Teleopti.Support.Tool.Tool
 						command = backupCommand;
 					});
 					matchSwitch(argument, "-RC", () => { command = restoreCommand; });
+					matchSwitch(argument, "-LOAD", () => { command = new LoadSettingsCommand(args.ElementAt(1)); });
 					matchSwitch(argument, "-SET", () => { command = new SetSettingCommand(args.ElementAt(1), args.ElementAt(2)); });
 					matchSwitch(argument, "-CS", () => { command = command = new ConfigServerCommand(args.ElementAt(1)); });
 					matchSwitch(argument, "-PM", () => { command = new SavePmConfigurationCommand(args.ElementAt(1)); });
@@ -114,4 +115,5 @@ namespace Teleopti.Support.Tool.Tool
 			return true;
 		}
 	}
+
 }

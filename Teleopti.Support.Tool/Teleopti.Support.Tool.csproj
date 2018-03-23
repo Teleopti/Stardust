@@ -240,6 +240,7 @@
     <Compile Include="Tool\FrameAncestorsUpdator.cs" />
     <Compile Include="Tool\ISupportCommand.cs" />
     <Compile Include="Tool\ConfigFiles.cs" />
+    <Compile Include="Tool\LoadSettingsCommand.cs" />
     <Compile Include="Tool\MoveCustomReportsCommand.cs" />
     <Compile Include="Tool\RefreshConfigsRunner.cs" />
     <Compile Include="Tool\SetSettingCommand.cs" />
