@@ -109,14 +109,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 			}
 			_analyticsScheduleRepository.DeleteFactSchedules(dateIds, person.Id.GetValueOrDefault(), scenarioId);
 			foreach (var date in dates)
-			{
-				if (!_factScheduleDateMapper.MapDateId(date, out var dateId2))
-				{
-					logger.Warn($"Date {date} could not be mapped to Analytics date_id. Schedule changes for " +
-								$"agent {person.Id.GetValueOrDefault()} is not saved into Analytics database.");
-					continue;
-				}
-				
+			{		
 				var scheduleDay = schedule.SchedulesForDay(date).FirstOrDefault();
 				if (scheduleDay == null)
 				{
@@ -206,6 +199,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 			return cat.ShiftCategoryId;
 		}
 	}
+	
+	
+	
+	
+	
 
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_SpeedUpEvents_48769)]
 	public interface IUpdateFactSchedules
