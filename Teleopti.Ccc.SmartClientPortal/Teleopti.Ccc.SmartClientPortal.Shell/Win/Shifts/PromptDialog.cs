@@ -85,15 +85,17 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts
 
 		private void createRuleSetBagNodes(IEnumerable<IRuleSetBag> ruleSetBags)
 		{
-			treeViewAdvLoV.SortWithChildNodes = true; //Remove and set in designer
 			treeViewAdvLoV.Nodes.Clear();
 			treeViewAdvLoV.BeginUpdate();
-			foreach (IRuleSetBag ruleSetBag in ruleSetBags)
+			var sortedRuleSetBags = _ruleSetBagUsedSorter.SortRuleSetBagsUsedFirst(ruleSetBags, _ruleSet);
+			foreach (var ruleSetBag in sortedRuleSetBags)
 			{
-				TreeNodeAdv node = createNode(ruleSetBag.Description.ToString(), ruleSetBag);
+				var node = createNode(ruleSetBag.Description.ToString(), ruleSetBag);
 				node.ShowPlusMinus = false;
 				if (_ruleSet.RuleSetBagCollection.Contains(ruleSetBag))
+				{
 					node.CheckState = CheckState.Checked;
+				}
 				treeViewAdvLoV.Nodes.Add(node);
 			}
 			treeViewAdvLoV.EndUpdate();
@@ -101,10 +103,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts
 
 		private void createRuleSetNodes(IEnumerable<IWorkShiftRuleSet> ruleSets)
 		{
-			treeViewAdvLoV.SortWithChildNodes = false; //Remove and set in designer
 			treeViewAdvLoV.Nodes.Clear();
 			treeViewAdvLoV.BeginUpdate();
-
 			var sortedRuleSets = _ruleSetBagUsedSorter.SortRuleSetsUsedFirst(ruleSets, _ruleSetBag);
 			foreach (var ruleSet in sortedRuleSets)
 			{
@@ -114,10 +114,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts
 				{
 					node.CheckState = CheckState.Checked;
 				}
-
 				treeViewAdvLoV.Nodes.Add(node);
 			}
-
 			treeViewAdvLoV.EndUpdate();
 		}
 

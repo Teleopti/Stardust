@@ -92,7 +92,6 @@
 			this.treeViewAdvLoV.ShowFocusRect = false;
 			this.treeViewAdvLoV.ShowPlusMinus = false;
 			this.treeViewAdvLoV.Size = new System.Drawing.Size(581, 650);
-			this.treeViewAdvLoV.SortWithChildNodes = true;
 			this.treeViewAdvLoV.Style = Syncfusion.Windows.Forms.Tools.TreeStyle.Metro;
 			this.treeViewAdvLoV.TabIndex = 33;
 			this.treeViewAdvLoV.Text = "yytreeViewAdv1";
