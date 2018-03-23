@@ -15,7 +15,7 @@
                     </div>
 
                     <wfm-popup show="toggleSchedule" class="datepicker-popup">
-                        <wfm-calendar-picker ng-model="$ctrl.dateRange" custom-validate="$ctrl.validate($ctrl.dateRange)"></wfm-calendar-picker>
+                        <wfm-calendar-picker ng-model="$ctrl.dateRange" custom-validate="$ctrl.validate($ctrl.dateRange)" ng-if="toggleSchedule"></wfm-calendar-picker>
                     </wfm-popup>
                 </div>
             </div>

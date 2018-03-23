@@ -42,7 +42,7 @@
 							</div>
 
 							<wfm-popup show="toggleSchedule" class="datepicker-popup">
-							    <wfm-calendar-picker ng-model="vm.dateModifyRange" ng-change="vm.getOrgData()"></wfm-calendar-picker>
+							    <wfm-calendar-picker ng-model="vm.dateModifyRange" ng-if="toggleSchedule" ng-change="vm.getOrgData()"></wfm-calendar-picker>
 							</wfm-popup>
 						</div>
 
@@ -61,7 +61,7 @@
 							</div>
 
 							<wfm-popup show="toggleChange" class="datepicker-popup">
-							    <wfm-calendar-picker ng-model="vm.dateChangeRange"></wfm-calendar-picker>
+							    <wfm-calendar-picker ng-model="vm.dateChangeRange" ng-if="toggleChange"></wfm-calendar-picker>
 							</wfm-popup>
 						</div>
 						<div class="form-input-wrap" ng-class="{'non-pointer': vm.orgData.Children.length<1}">

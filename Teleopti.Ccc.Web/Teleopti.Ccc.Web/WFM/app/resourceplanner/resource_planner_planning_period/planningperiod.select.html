@@ -174,8 +174,8 @@
 									</div>
 									<div class="con-row pp-calendar-wrapper">
 										<div class="con-flex ">
-											<wfm-calendar-picker custom-validate="vm.intervalLengthValid()" disable="all" ng-model="vm.selectedSuggestion" interval-rule="week" ng-show="vm.intervalType == 'Week'"></wfm-calendar-picker>
-											<wfm-calendar-picker custom-validate="vm.intervalLengthValid()" disable="all" ng-model="vm.selectedSuggestion" interval-rule="month" ng-show="vm.intervalType == 'Month'"></wfm-calendar-picker>
+											<wfm-calendar-picker custom-validate="vm.intervalLengthValid()" disable="all" ng-model="vm.selectedSuggestion" interval-rule="week" ng-if="vm.intervalType == 'Week'"></wfm-calendar-picker>
+											<wfm-calendar-picker custom-validate="vm.intervalLengthValid()" disable="all" ng-model="vm.selectedSuggestion" interval-rule="month" ng-if="vm.intervalType == 'Month'"></wfm-calendar-picker>
 										</div>
 									</div>
 								</md-content>
@@ -209,9 +209,9 @@
 									<div class="con-row pp-calendar-wrapper">
 										<div class="con-flex ">
 											<wfm-calendar-picker ng-model="vm.selectedSuggestion" ng-change="vm.isSelectedChanged()" interval-rule="week" disable="end-date"
-											custom-validate="vm.intervalLengthValid()" ng-show="vm.intervalType == 'Week'"></wfm-calendar-picker>
+											custom-validate="vm.intervalLengthValid()" ng-if="vm.intervalType == 'Week'"></wfm-calendar-picker>
 											<wfm-calendar-picker ng-model="vm.selectedSuggestion" ng-change="vm.isSelectedChanged()" interval-rule="month" disable="end-date"
-											custom-validate="vm.intervalLengthValid()" ng-show="vm.intervalType == 'Month'"></wfm-calendar-picker>
+											custom-validate="vm.intervalLengthValid()" ng-if="vm.intervalType == 'Month'"></wfm-calendar-picker>
 										</div>
 									</div>
 								</md-content>

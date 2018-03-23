@@ -25,10 +25,6 @@
         };
 
         $ctrl.validate = function () {
-            if (moment($ctrl.dateRange.startDate).toDate() > moment($ctrl.dateRange.endDate).toDate()) {
-                $ctrl.isValid = false;
-                return $translate.instant('StartDateMustBeEqualToOrEarlierThanEndDate');
-            }
             if (moment($ctrl.dateRange.startDate).toDate() < moment.utc().subtract(30, 'days').toDate()) {
                 $ctrl.isValid = false;
                 return $translate.instant('NoGamificationDataForThePeriod');

@@ -29,7 +29,7 @@
 							<div ng-if="!vm.selectedPeriod.endDate && !vm.selectedPeriod.startDate" class="text-warning"> No selected date</div>
 						</div>
 						<wfm-popup show="toggleRange" class="datepicker-popup">
-							<wfm-calendar-picker ng-model="vm.selectedPeriod" ng-change="vm.afterSelectedDateChange()" ng-change="vm.getOrgData()"></wfm-calendar-picker>
+							<wfm-calendar-picker ng-model="vm.selectedPeriod" ng-change="vm.afterSelectedDateChange()" ng-if="toggleRange" ng-change="vm.getOrgData()"></wfm-calendar-picker>
 						</wfm-popup>
 					</div>
 				</div>
