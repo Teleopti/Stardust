@@ -10,7 +10,7 @@ import { FormControl, Validators, FormGroup, FormBuilder } from '@angular/forms'
 	styleUrls: ['./app-logon-page.component.scss']
 })
 export class AppLogonPageComponent implements OnInit {
-	constructor(protected nav: NavigationService, protected workspaceService: WorkspaceService) {}
+	constructor(public nav: NavigationService, protected workspaceService: WorkspaceService) {}
 
 	displayedColumns = ['Name', 'ApplicationLogon'];
 	dataSource = new MatTableDataSource<Person>([]);

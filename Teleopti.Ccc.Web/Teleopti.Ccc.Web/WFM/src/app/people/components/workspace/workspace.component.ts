@@ -7,7 +7,7 @@ import { WorkspaceService } from '../../services';
 	styleUrls: ['./workspace.component.scss']
 })
 export class WorkspaceComponent implements OnInit {
-	constructor(protected workspaceService: WorkspaceService) {}
+	constructor(public workspaceService: WorkspaceService) {}
 
 	ngOnInit() {}
 
