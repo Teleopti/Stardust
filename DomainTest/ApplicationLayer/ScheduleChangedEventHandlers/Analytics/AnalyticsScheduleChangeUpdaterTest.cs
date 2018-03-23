@@ -22,7 +22,13 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.Analytics
 {
-	[TestFixture]
+	[Toggle(Toggles.ResourcePlanner_SpeedUpEvents_48769)]
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_SpeedUpEvents_48769)]
+	public class AnalyticsScheduleChangeUpdaterTestToggleOn : AnalyticsScheduleChangeUpdaterTest
+	{
+	}
+	
+	
 	[DomainTest]
 	public class AnalyticsScheduleChangeUpdaterTest : ISetup
 	{

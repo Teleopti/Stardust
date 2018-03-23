@@ -150,7 +150,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<DoNotNotify>().As<INotificationValidationCheck>().SingleInstance();
 
-			builder.RegisterType<UpdateFactSchedules>().SingleInstance();
+			if (_config.Toggle(Toggles.ResourcePlanner_SpeedUpEvents_48769))
+			{
+				builder.RegisterType<UpdateFactSchedules>().SingleInstance();				
+			}
+			else
+			{
+				builder.RegisterType<UpdateFactSchedulesOLD>().SingleInstance();	
+			}
 
 			builder.RegisterType<ScheduleProjectionReadOnlyPersister>()
 				.As<IScheduleProjectionReadOnlyPersister>()
