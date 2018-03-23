@@ -82,9 +82,9 @@ function CopyFileToBlobStorage {
         throw "AzCopy generated an error!"
     }
 }
-##===========
-## Main
-##===========
+
+# Main
+
 $directory = Get-ScriptDirectory
 $computer = $env:computername
 
@@ -112,10 +112,9 @@ Try
 
     [Reflection.Assembly]::LoadWithPartialName("Microsoft.WindowsAzure.ServiceRuntime")
 
+	$DataSourceName = TeleoptiDriveMapProperty-get -name "DataSourceName"
     $SettingContainer = "teleopticcc/Settings" + "/" + $DataSourceName
     $destinationFolder = $SettingContainer
-
-    $DataSourceName = TeleoptiDriveMapProperty-get -name "DataSourceName"
 
     if ($DataSourceName -match "teleoptirnd")
     {
