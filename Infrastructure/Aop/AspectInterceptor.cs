@@ -51,16 +51,29 @@ namespace Teleopti.Ccc.Infrastructure.Aop
 
 		private static IEnumerable<AspectAttribute> aspectAttributesOnMethod(IInvocation invocation)
 		{
-			var methodInfos = new List<MethodInfo>();
 			var methodOnClass = invocation.Method;
 			var paramsOnMethod = methodOnClass.GetParameters().Select(x => x.ParameterType).ToArray();
 			var type = methodOnClass.DeclaringType;
-			var interfaces = type.GetInterfaces();
-			methodInfos.Add(methodOnClass);
-			methodInfos.AddRange(interfaces.Select(@interface => @interface.GetMethod(methodOnClass.Name, paramsOnMethod))
-				.Where(methodOnInterface => methodOnInterface != null));
-			var allAttributes = methodInfos.SelectMany(x => x.GetCustomAttributes<AspectAttribute>(false));
-			return allAttributes;
+			var attributesOnClass = methodOnClass.GetCustomAttributes<AspectAttribute>(false);
+			var attributesOnClassTypes = attributesOnClass.Select(x => x.GetType());
+			var attributesOnInterfaces = new List<AspectAttribute>();
+			foreach (var @interface in type.GetInterfaces())
+			{
+				var methodOnInterface = @interface.GetMethod(methodOnClass.Name, paramsOnMethod);
+				if (methodOnInterface != null)
+				{
+					var attributesOnInterface = methodOnInterface.GetCustomAttributes<AspectAttribute>(false);
+					foreach (var attributeOnInterface in attributesOnInterface)
+					{
+						if (!attributesOnClassTypes.Contains(attributesOnInterface.GetType())) //not really correct but good enough for now
+						{
+							attributesOnInterfaces.Add(attributeOnInterface);
+						}
+					}
+				}
+			}
+			
+			return attributesOnClass.Union(attributesOnInterfaces);
 		}
 
 		private void runBefores(InvocationInfo invocation, IEnumerable<IAspect> aspects)

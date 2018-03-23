@@ -51,6 +51,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 		}
 
 		[Test]
+		public void ShouldNotInvokeTwiceIfOnBothInterfaceAndClass()
+		{
+			Target.AspectedInterfaceAndClassMethod();
+
+			Aspect1.BeforeInvokedCalls.Should().Be.EqualTo(1);
+		}
+
+		[Test]
 		public void ShouldInvokeOriginalMethod()
 		{
 			Target.AspectedMethod();
@@ -162,7 +170,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 					throw FailsWith;
 			}
 
-			public virtual void AspectedInterfaceMethod() //when fixed, virtual shouldn't be needed
+			public virtual void AspectedInterfaceMethod()
+			{
+			}
+
+			[Aspect1]
+			public virtual void AspectedInterfaceAndClassMethod()
 			{
 			}
 		}
@@ -171,6 +184,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 		{
 			[Aspect1]
 			void AspectedInterfaceMethod();
+			[Aspect1]
+			void AspectedInterfaceAndClassMethod();
 		}
 
 		public class AnAttribute : Attribute
@@ -213,7 +228,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 
 		public class FakeAspect : IAspect
 		{
-			public bool BeforeInvoked;
+			public int BeforeInvokedCalls;
+			public bool BeforeInvoked => BeforeInvokedCalls > 0;
+
 			public bool AfterInvoked;
 			public Exception BeforeFailsWith;
 			public Exception AfterFailsWith;
@@ -221,7 +238,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 
 			public void OnBeforeInvocation(IInvocationInfo invocation)
 			{
-				BeforeInvoked = true;
+				BeforeInvokedCalls++;
 				if (BeforeFailsWith != null)
 					throw BeforeFailsWith;
 			}
