@@ -5,6 +5,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure.Analytics;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
@@ -313,12 +314,23 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			analyticsDataFactory.Setup(new DimDayOff(-1, new Guid("00000000-0000-0000-0000-000000000000"), "Not Defined", _datasource, -1));
 		}
 
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_SpeedUpEvents_48769)]
 		[Test]
 		public void ShouldBeAbleToDeleteADay()
 		{
 			WithAnalyticsUnitOfWork.Do(() =>
 			{
 				Target.DeleteFactSchedule(1, Guid.NewGuid(), 1);
+			});
+		}
+		
+		[Test]
+		public void ShouldBeAbleToDeleteADays()
+		{
+			//not much of a test, but do it like it was before
+			WithAnalyticsUnitOfWork.Do(() =>
+			{
+				Target.DeleteFactSchedules(new[]{1}, Guid.NewGuid(), 1);
 			});
 		}
 

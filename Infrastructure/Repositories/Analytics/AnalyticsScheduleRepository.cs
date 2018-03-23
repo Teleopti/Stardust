@@ -7,6 +7,7 @@ using System.Data.SqlTypes;
 using NHibernate.SqlAzure;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure.Analytics;
 using Teleopti.Ccc.Domain.Repositories;
@@ -158,6 +159,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				.ExecuteUpdate();
 		}
 
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_SpeedUpEvents_48769)]
 		public void DeleteFactSchedule(int dateId, Guid personCode, int scenarioId)
 		{
 			_analyticsUnitOfWork.Current().Session().CreateSQLQuery($@"mart.etl_fact_schedule_delete 
@@ -168,6 +170,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				.SetParameter(nameof(personCode), personCode)
 				.SetParameter(nameof(scenarioId), scenarioId)
 				.ExecuteUpdate();
+		}
+
+		public void DeleteFactSchedules(IEnumerable<int> dateIds, Guid personCode, int scenarioId)
+		{
+			//should be using another sproc
+			foreach (var dateId in dateIds)
+			{
+				DeleteFactSchedule(dateId, personCode, scenarioId);
+			}
 		}
 
 		public void InsertStageScheduleChangedServicebus(DateOnly date, Guid personId, Guid scenarioId, Guid businessUnitId, DateTime datasourceUpdateDate)

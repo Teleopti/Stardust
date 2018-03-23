@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NHibernate.Exceptions;
 using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure.Analytics;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -36,7 +37,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			FactScheduleDayCountRows.Add(dayCount);
 		}
 
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_SpeedUpEvents_48769)]
 		public void DeleteFactSchedule(int dateId, Guid personCode, int scenarioId)
+		{
+			deleteFactSchedule(dateId, personCode, scenarioId);
+		}
+
+		private void deleteFactSchedule(int dateId, Guid personCode, int scenarioId)
 		{
 			var periods = _personPeriodRepository.GetPersonPeriods(personCode);
 			FactScheduleRows.RemoveAll(x => x.PersonPart != null
@@ -47,8 +54,16 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 											&& x.TimePart.ScenarioId == scenarioId);
 
 			FactScheduleDayCountRows.RemoveAll(x => periods.Any(period => period.PersonId == x.PersonId)
-													&& x.ShiftStartDateLocalId == dateId 
+													&& x.ShiftStartDateLocalId == dateId
 													&& x.ScenarioId == scenarioId);
+		}
+
+		public void DeleteFactSchedules(IEnumerable<int> dateIds, Guid personCode, int scenarioId)
+		{
+			foreach (var dateId in dateIds)
+			{
+				deleteFactSchedule(dateId, personCode, scenarioId);
+			}
 		}
 
 		public IList<IAnalyticsShiftLength> ShiftLengths()

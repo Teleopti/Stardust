@@ -152,11 +152,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			if (_config.Toggle(Toggles.ResourcePlanner_SpeedUpEvents_48769))
 			{
-				builder.RegisterType<UpdateFactSchedules>().SingleInstance();				
+				builder.RegisterType<UpdateFactSchedules>().As<IUpdateFactSchedules>().SingleInstance();				
 			}
 			else
 			{
-				builder.RegisterType<UpdateFactSchedulesOLD>().SingleInstance();	
+				builder.RegisterType<UpdateFactSchedulesOLD>().As<IUpdateFactSchedules>().SingleInstance();	
 			}
 
 			builder.RegisterType<ScheduleProjectionReadOnlyPersister>()

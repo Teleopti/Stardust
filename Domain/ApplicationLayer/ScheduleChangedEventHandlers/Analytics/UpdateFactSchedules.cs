@@ -89,18 +89,28 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 			updateForDates(dates(person), person, scenario, analyticsScenario.ScenarioId, businessUnitId, timestamp);
 		}
 
-		private void updateForDates(IEnumerable<DateTime> dates, IPerson person, IScenario scenario, int scenarioId,
+		private void updateForDates(IEnumerable<DateTime> dateTimes, IPerson person, IScenario scenario, int scenarioId,
 			Guid businessUnitId, DateTime timestamp)
 		{
-			if (!dates.Any()) return;
+			if (!dateTimes.Any()) return;
 
-			var dateOnly = dates.Select(d => new DateOnly(d)).ToArray();
+			var dates = dateTimes.Select(d => new DateOnly(d)).ToArray();
 			var dayOffs = _analyticsDayOffRepository.DayOffs();
 			var schedule = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
-				new ScheduleDictionaryLoadOptions(true, true, true), new DateOnlyPeriod(dateOnly.Min(), dateOnly.Max()), scenario);
-			foreach (var date in dateOnly)
+				new ScheduleDictionaryLoadOptions(true, true, true), new DateOnlyPeriod(dates.Min(), dates.Max()), scenario);
+
+			var dateIds = new List<int>();
+			foreach (var date in dates)
 			{
-				if (!_factScheduleDateMapper.MapDateId(date, out var dateId))
+				if (_factScheduleDateMapper.MapDateId(date, out var dateId))
+				{
+					dateIds.Add(dateId);
+				}
+			}
+			_analyticsScheduleRepository.DeleteFactSchedules(dateIds, person.Id.GetValueOrDefault(), scenarioId);
+			foreach (var date in dates)
+			{
+				if (!_factScheduleDateMapper.MapDateId(date, out var dateId2))
 				{
 					logger.Warn($"Date {date} could not be mapped to Analytics date_id. Schedule changes for " +
 								$"agent {person.Id.GetValueOrDefault()} is not saved into Analytics database.");
@@ -110,7 +120,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 				var scheduleDay = schedule.SchedulesForDay(date).FirstOrDefault();
 				if (scheduleDay == null)
 				{
-					_analyticsScheduleRepository.DeleteFactSchedule(dateId, person.Id.GetValueOrDefault(), scenarioId);
 					continue;
 				}
 
@@ -128,8 +137,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 								$"changes for agent {person.Id.GetValueOrDefault()} is not saved into Analytics database.");
 					throw new PersonPeriodMissingInAnalyticsException(currentEventScheduleDay.PersonPeriodId);
 				}
-
-				_analyticsScheduleRepository.DeleteFactSchedule(dateId, person.Id.GetValueOrDefault(), scenarioId);
 
 				if (!currentEventScheduleDay.NotScheduled)
 				{
