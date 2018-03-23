@@ -174,11 +174,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 
 		public void DeleteFactSchedules(IEnumerable<int> dateIds, Guid personCode, int scenarioId)
 		{
-			//should be using another sproc
-			foreach (var dateId in dateIds)
-			{
-				DeleteFactSchedule(dateId, personCode, scenarioId);
-			}
+			_analyticsUnitOfWork.Current().Session().CreateSQLQuery($@"mart.etl_fact_schedule_delete_days
+												@dateIds=:{nameof(dateIds)}, 
+												@person_code=:{nameof(personCode)}, 
+												@scenario_id=:{nameof(scenarioId)}")
+				.SetParameter(nameof(dateIds), string.Join(",", dateIds))
+				.SetParameter(nameof(personCode), personCode)
+				.SetParameter(nameof(scenarioId), scenarioId)
+				.ExecuteUpdate();
 		}
 
 		public void InsertStageScheduleChangedServicebus(DateOnly date, Guid personId, Guid scenarioId, Guid businessUnitId, DateTime datasourceUpdateDate)
