@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest.Infrastructure
 			WithUnitOfWork.Do(() =>
 			{
 				var scenario = Scenarios.LoadDefaultScenario();
-				var persons = Persons.LoadAll().Where(p => p.Period(startDate) != null).Take(2000).ToArray();
+				var persons = Persons.LoadAll().Where(p => p.Period(startDate) != null).ToArray();
 
 				schedules = Schedules.FindSchedulesForPersons(scenario, persons,
 					new ScheduleDictionaryLoadOptions(false, false),
