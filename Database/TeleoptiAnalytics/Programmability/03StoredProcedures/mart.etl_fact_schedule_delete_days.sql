@@ -11,6 +11,11 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
+	DECLARE @TempDateIdArray TABLE (id int NOT NULL)
+
+	INSERT INTO @TempDateIdArray
+	SELECT * FROM mart.SplitStringInt(@dateIds)
+
 	CREATE TABLE #DimPerson (
 		person_id INT NOT NULL
 	)
@@ -23,13 +28,13 @@ BEGIN
 	DELETE s
 	  FROM mart.fact_schedule s
 	 INNER JOIN #DimPerson p ON s.person_id = p.person_id
-	 WHERE shift_startdate_local_id in (SELECT id from mart.SplitStringInt(@dateIds))
+	 WHERE shift_startdate_local_id in (SELECT id from @TempDateIdArray)
 	   AND scenario_id = @scenario_id
 
 	DELETE dc
 	  FROM mart.fact_schedule_day_count dc
 	 INNER JOIN #DimPerson p ON dc.person_id = p.person_id
-	 WHERE shift_startdate_local_id in (SELECT id from mart.SplitStringInt(@dateIds))
+	 WHERE shift_startdate_local_id in (SELECT id from @TempDateIdArray)
 	   AND scenario_id = @scenario_id
 END
 
