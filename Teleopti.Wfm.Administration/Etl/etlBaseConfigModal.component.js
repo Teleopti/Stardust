@@ -9,7 +9,8 @@
     controllerAs: 'ctrl',
     bindings: {
       tenant: '<',
-      output: '='
+      output: '=',
+      callback: '='
     }
   });
 
@@ -22,8 +23,7 @@
     (function getConfigurationModel() {
       $http.get("./Etl/GetConfigurationModel", tokenHeaderService.getHeaders())
       .success(function (data) {
-          ctrl.configData = data;
-          console.log(ctrl.configData);
+        ctrl.configData = data;
       });
     })();
 
@@ -40,7 +40,7 @@
       $http.post("./Etl/SaveConfigurationForTenant", baseObj, tokenHeaderService.getHeaders())
       .success(function (data) {
         ctrl.output = true;
-        console.log('done');
+        ctrl.callback();
       });
     }
 

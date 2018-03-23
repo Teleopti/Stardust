@@ -39,7 +39,7 @@
 					<div class="form-group">
 						<label for="baseTimezone">Time zone:</label>
 						<select class="form-control" id="baseTimezone" ng-options="timezone.Id as timezone.Text for timezone in ctrl.configData.TimeZoneList" ng-model="ctrl.baseConfig.timezone">
-							<option ng-show="!ctrl.baseConfig.culture" value="">- Select time zone</option>
+							<option ng-show="!ctrl.baseConfig.timezone" value="">- Select time zone</option>
 						</select>
 					</div>
 				</div>

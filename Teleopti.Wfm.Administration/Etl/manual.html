@@ -21,10 +21,7 @@
 				<form>
 					<div class="form-group">
 						<label for="exampleFormControlSelect2">Tenant</label>
-						{{vm.selectedTenant}}
-						<select class="form-control" id="exampleFormControlSelect2" ng-model="vm.selectedTenant" ng-change="vm.selectedTenantChanged()">
-							<option ng-repeat="tenant in vm.tenants">{{tenant.Name}}</option>
-						</select>
+						<select class="form-control" id="exampleFormControlSelect2" ng-options="tenant.TenantName for tenant in vm.tenants" ng-model="vm.selectedTenant" ng-change="vm.selectedTenantChanged()"></select>
 					</div>
 				</form>
 			</div>

@@ -1,23 +1,31 @@
-(function () {
-  'use strict';
+(function() {
+  "use strict";
 
   angular
-  .module('adminApp')
-  .controller('etlConfigController', etlConfigController, ['$http', '$timeout']);
+  .module("adminApp")
+  .controller("etlConfigController", etlConfigController, [
+    "$http",
+    "$timeout"
+  ]);
 
   function etlConfigController($http, tokenHeaderService, $timeout) {
     var vm = this;
 
     vm.tenants = [];
+    vm.tenantLogData = null;
+    vm.TimeZoneCodes = null;
 
-    (function init(){
+    vm.getLogDataForATenant = getLogDataForATenant;
+
+    (function init() {
       getTenants();
     })();
 
     function getTenants() {
-      $http.get("./Etl/GetTenants", tokenHeaderService.getHeaders())
-      .success(function (data) {
-        vm.tenants  = data;
+      $http
+      .get("./Etl/GetTenants", tokenHeaderService.getHeaders())
+      .success(function(data) {
+        vm.tenants = data;
         addUrl();
       });
     }
@@ -28,5 +36,25 @@
       }
     }
     
+    function getLogDataForATenant(tenant) {
+      tenant.loading = true;
+      $http
+      .post(
+        "./Etl/TenantLogDataSources",
+        JSON.stringify(tenant.TenantName),
+        tokenHeaderService.getHeaders()
+      )
+      .success(function(data) {
+        vm.tenantLogData = data;
+
+        $http
+        .get("./Etl/GetConfigurationModel", tokenHeaderService.getHeaders())
+        .success(function(timezones) {
+          vm.TimeZoneCodes = timezones.TimeZoneList;
+          tenant.loading = null;
+          vm.showModal = true;
+        });
+      });
+    }
   }
 })();

@@ -21,14 +21,18 @@
 							</button>
 						</td>
 						<td>
-							<button type="button" class="btn btn-default" data-toggle="modal" data-target="#exampleModal">
+							<button type="button" class="btn btn-default" ng-click="vm.getLogDataForATenant(tenant)" >
+								<svg class="spin" style="width:14px;height:14px" viewBox="0 0 24 24"  ng-if="tenant.loading">
+									<path fill="#000000" d="M12,4V2A10,10 0 0,0 2,12H4A8,8 0 0,1 12,4Z" />
+								</svg>
 								Configure
+
 							</button>
 						</td>
 						<td>
 							<a ng-href="/#/details/{{tenant.Url}}">
 								<button type="button" class="btn btn-default">
-									More...
+									Details
 								</button>
 							</a>
 						</td>
@@ -38,53 +42,46 @@
 		</div>
 	</div>
 
-	<!-- Modal -->
-	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">Datasource configuration</h5>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
+	<div class="custom-modal" ng-if="vm.showModal">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Datasource configuration</h5>
+				<button type="button" class="close" ng-click="vm.showModal = false;" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<table class="table" ng-if="vm.tenantLogData.length > 0">
+					<thead>
+						<tr>
+							<th scope="col">Status</th>
+							<th scope="col">Name</th>
+							<th scope="col">Time zone</th>
+							<th scope="col">Interval length</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="logData in vm.tenantLogData">
+							<th scope="row">✓</th>
+							<td>{{logData.Name}}</td>
+							<td>
+								<select ng-if="!logData.timezone" class="form-control" id="baseTimezone" ng-options="timezone.Id as timezone.Text for timezone in vm.TimeZoneCodes" ng-model="logData.selectedTimezone">
+									<option ng-show="!logData.selectedTimezone" value="">- Select time zone</option>
+								</select>
+							</td>
+							<td>15</td>
+						</tr>
+					</tbody>
+				</table>
+				<div ng-if="vm.tenantLogData.length <= 0">
+					No log data sources found
 				</div>
-				<div class="modal-body">
-					<table class="table">
-						<thead>
-							<tr>
-								<th scope="col">Status</th>
-								<th scope="col">Name</th>
-								<th scope="col">Time zone</th>
-								<th scope="col">Interval length</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<th scope="row">✓</th>
-								<td>Internal Agg: My zoom log</td>
-								<td>(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm...</td>
-								<td>15</td>
-							</tr>
-							<tr>
-								<th scope="row">✓</th>
-								<td>Teleopti CCC: Agg: ACD</td>
-								<td>(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm...</td>
-								<td>15</td>
-							</tr>
-							<tr>
-								<th scope="row">✗</th>
-								<td>Teleopti CCC: Agg: LTF log object</td>
-								<td>(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm...</td>
-								<td>15</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-primary">Ok</button>
-				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" ng-click="vm.showModal = false;">Close</button>
+				<button type="button" class="btn btn-primary">Ok</button>
 			</div>
 		</div>
 	</div>
+
 </div>

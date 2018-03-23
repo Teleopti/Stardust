@@ -1,6 +1,6 @@
 <div class="container body-content" ng-controller="etlController as vm">
 
-	<etl-modal ng-cloak ng-if="!vm.masterTenant.IsBaseConfigured" tenant="vm.masterTenant" output="vm.masterTenant.IsBaseConfigured"></etl-modal>
+	<etl-modal ng-cloak ng-if="!vm.masterTenant.IsBaseConfigured" tenant="vm.masterTenant" callback="vm.getTenants" output="vm.masterTenant.IsBaseConfigured"></etl-modal>
 
 	<div ng-cloak ng-if="vm.masterTenant.IsBaseConfigured">
 		<h2 >
@@ -41,6 +41,24 @@
 		.subrow {
 			padding-left: 25px;
 		}
+
+		.custom-modal{
+			position: fixed;
+			top: 10%;
+			left: 10%;
+			right: 10%;
+			z-index: 1001;
+			outline: 1400px solid rgba(0,0,0,0.3);
+		}
+
+		.spin {
+		    -webkit-animation:spin 4s linear infinite;
+		    -moz-animation:spin 4s linear infinite;
+		    animation:spin 4s linear infinite;
+		}
+		@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+		@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+		@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
 
 	</style>
 	</div>
