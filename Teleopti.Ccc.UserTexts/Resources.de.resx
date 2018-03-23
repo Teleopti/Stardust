@@ -5202,7 +5202,7 @@ Periods</comment>
     <comment>Select availability:</comment>
   </data>
   <data name="SelectColor" xml:space="preserve">
-    <value>Wählen Sie eine Farbe</value>
+    <value>Farbe</value>
     <comment>Select color</comment>
   </data>
   <data name="SelectedDate" xml:space="preserve">
