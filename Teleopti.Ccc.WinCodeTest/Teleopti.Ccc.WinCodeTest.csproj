@@ -475,6 +475,7 @@
     <Compile Include="PeopleAdmin\PersonFinderPresenterTest.cs" />
     <Compile Include="PeopleAdmin\PersonFinderPreviousCommandTest.cs" />
     <Compile Include="PeopleAdmin\PersonFinderSettingsTest.cs" />
+    <Compile Include="PeopleAdmin\PersonSkillModelSorterTest.cs" />
     <Compile Include="PeopleAdmin\PersonSkillStringParserTest.cs" />
     <Compile Include="PeopleAdmin\SendInstantMessageCommandTest.cs" />
     <Compile Include="PeopleAdmin\SendInstantMessageEnableCommandTest.cs" />

@@ -920,6 +920,7 @@
     <Compile Include="WinCode\PeopleAdmin\PeopleNavigatorPresenter.cs" />
     <Compile Include="WinCode\PeopleAdmin\PeopleSaved.cs" />
     <Compile Include="WinCode\PeopleAdmin\PersonFinderPresenter.cs" />
+    <Compile Include="WinCode\PeopleAdmin\PersonSkillModelSorter.cs" />
     <Compile Include="WinCode\PeopleAdmin\PersonSkillStringParser.cs" />
     <Compile Include="WinCode\PeopleAdmin\RoleCollectionParser.cs" />
     <Compile Include="WinCode\PeopleAdmin\RoleDisplay.cs" />
