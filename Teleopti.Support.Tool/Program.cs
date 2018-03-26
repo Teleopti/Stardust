@@ -24,7 +24,7 @@ namespace Teleopti.Support.Tool
 			}
 			else
 			{
-				CommandBuilder
+				new CommandBuilder()
 					.ParseCommandLine(args)
 					.Execute();
 			}
