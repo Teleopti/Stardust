@@ -130,6 +130,9 @@
     <Reference Include="NHibernate.SqlAzure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\packages\NHibernate.SqlAzure.TeleoptiInternal.5.0.0\lib\NET45\NHibernate.SqlAzure.dll</HintPath>
     </Reference>
+    <Reference Include="numl, Version=0.8.26.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\numl.0.8.26.0\lib\net40\numl.dll</HintPath>
+    </Reference>
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
       <Private>True</Private>
@@ -253,6 +256,9 @@
     <Compile Include="Hangfire\IgnoreRetryWarningsFromSpecifiedPrimaryKeys.cs" />
     <Compile Include="Hangfire\QueueFromArgumentAttribute.cs" />
     <Compile Include="Hangfire\JobExpirationTimeAttribute.cs" />
+    <Compile Include="MachineLearning\Model.cs" />
+    <Compile Include="MachineLearning\PredictCategory.cs" />
+    <Compile Include="MachineLearning\ShiftCategoryPredictorModel.cs" />
     <Compile Include="MultiTenancy\Admin\CheckTenantUserExists.cs" />
     <Compile Include="MultiTenancy\Server\ExternalApplicationAccess.cs" />
     <Compile Include="MultiTenancy\Server\HashFromToken.cs" />
