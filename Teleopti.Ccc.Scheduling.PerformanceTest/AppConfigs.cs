@@ -10,8 +10,14 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 			UserName = ConfigurationManager.AppSettings["UserName"];
 			Password = ConfigurationManager.AppSettings["Password"];
 			BusinessUnitName = ConfigurationManager.AppSettings["BusinessUnitName"];
-			PlanningGroupId = new Guid(ConfigurationManager.AppSettings["PlanningGroupId"]);
-			PlanningPeriodId = new Guid(ConfigurationManager.AppSettings["PlanningPeriodId"]);
+			if(Guid.TryParse(ConfigurationManager.AppSettings["PlanningGroupId"], out var planningGroupId))
+			{
+				PlanningGroupId = planningGroupId;
+			}
+			if(Guid.TryParse(ConfigurationManager.AppSettings["PlanningPeriodId"], out var planningPeriodId))
+			{
+				PlanningPeriodId = planningPeriodId;
+			}
 		}
 
 		public static Guid PlanningGroupId { get; }
