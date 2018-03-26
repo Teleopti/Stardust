@@ -15,13 +15,13 @@ namespace Teleopti.Support.Tool.Tool
 		private CompositeCommand modeDefaultCommand;
 		private CompositeCommand modeDeployCommand;
 		private ConfigurationBackupCommand backupCommand;
-		private ISupportCommand restoreCommand;
+		private ConfigurationRestoreCommand restoreCommand;
 
 		public CommandBuilder()
 		{
 			var configFilePathReader = new ConfigFilePathReader();
 			var customSection = new CustomSection();
-			var restoreCommand = new ConfigurationRestoreCommand(customSection, configFilePathReader, () => configFiles);
+			restoreCommand = new ConfigurationRestoreCommand(customSection, configFilePathReader, () => configFiles);
 			backupCommand = new ConfigurationBackupCommand(customSection, configFilePathReader, () => configFiles);
 			var refreshConfigFile = new RefreshConfigFile();
 			var refreshConfigsRunner = new RefreshConfigsRunner(refreshConfigFile, () => configFiles);
