@@ -325,7 +325,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			AllTenants.HasWithAnalyticsConnectionString(masterTenant.Name, masterTenant.DataSourceConfiguration.AnalyticsConnectionString);
 			BaseConfigurationRepository.SaveBaseConfiguration(masterTenant.DataSourceConfiguration.AnalyticsConnectionString,
 				new BaseConfiguration(1053, 15, "UTC", false));
-			GeneralInfrastructure.HasDataSources(new DataSourceEtl(dataSourceId, "myDs", 1, "UTC", 15, false));
+			GeneralInfrastructure.HasDataSources(new DataSourceEtl(dataSourceId, "myDs", 12, "UTC", 15, false));
 
 			var tenantDataSource = new TenantDataSourceModel
 			{
@@ -356,46 +356,28 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			scheduledPeriods.First().RelativePeriod.Maximum.Should().Be(1);
 		}
 
-		[Test]
-		public void NotAllowToChangeDefaultDataSource()
+		[TestCase(1)]
+		[TestCase(-1)]
+		public void NotAllowToChangeDefaultDataSource(int dataSourceId)
 		{
 			var masterTenant = new Tenant(testTenantName);
 			masterTenant.DataSourceConfiguration.SetAnalyticsConnectionString($"Initial Catalog={RandomName.Make()}");
 			AllTenants.HasWithAnalyticsConnectionString(masterTenant.Name, masterTenant.DataSourceConfiguration.AnalyticsConnectionString);
-			GeneralInfrastructure.HasDataSources(new DataSourceEtl(-1, "Not Defined", -1, null, 15, false));
+			GeneralInfrastructure.HasDataSources(new DataSourceEtl(dataSourceId, "Not Defined", -1, null, 15, false));
 
 			var tenantDataSource = new TenantDataSourceModel
 			{
 				TenantName = testTenantName,
 				DataSource = new DataSourceModel
 				{
-					Id = -1,
+					Id = dataSourceId,
 					TimeZoneId = 13
 				}
 			};
+
 			var result = (NegotiatedContentResult<string>)Target.PersistDataSource(tenantDataSource);
 			result.StatusCode.Should().Be(HttpStatusCode.Forbidden);
-		}
-
-		[Test]
-		public void NotAllowToChangeInternalDataSource()
-		{
-			var masterTenant = new Tenant(testTenantName);
-			masterTenant.DataSourceConfiguration.SetAnalyticsConnectionString($"Initial Catalog={RandomName.Make()}");
-			AllTenants.HasWithAnalyticsConnectionString(masterTenant.Name, masterTenant.DataSourceConfiguration.AnalyticsConnectionString);
-			GeneralInfrastructure.HasDataSources(new DataSourceEtl(3, $"Raptor{RandomName.Make()}", -1, null, 15, false));
-
-			var tenantDataSource = new TenantDataSourceModel
-			{
-				TenantName = testTenantName,
-				DataSource = new DataSourceModel
-				{
-					Id = 3,
-					TimeZoneId = 13
-				}
-			};
-			var result = (NegotiatedContentResult<string>)Target.PersistDataSource(tenantDataSource);
-			result.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+			JobScheduleRepository.GetEtlJobSchedules().Should().Be.Empty();
 		}
 
 		[Test]
@@ -414,8 +396,10 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 					TimeZoneId = 13
 				}
 			};
+
 			var result = (NegotiatedContentResult<string>)Target.PersistDataSource(tenantDataSource);
 			result.StatusCode.Should().Be(HttpStatusCode.NotFound);
+			JobScheduleRepository.GetEtlJobSchedules().Should().Be.Empty();
 		}
 
 		[Test]
@@ -427,7 +411,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			AllTenants.HasWithAnalyticsConnectionString(masterTenant.Name, masterTenant.DataSourceConfiguration.AnalyticsConnectionString);
 			BaseConfigurationRepository.SaveBaseConfiguration(masterTenant.DataSourceConfiguration.AnalyticsConnectionString,
 				new BaseConfiguration(1053, 15, "UTC", false));
-			GeneralInfrastructure.HasDataSources(new DataSourceEtl(dataSourceId, "myDs", 1, "UTC", 15, false));
+			GeneralInfrastructure.HasDataSources(new DataSourceEtl(dataSourceId, "myDs", 13, "UTC", 15, false));
 
 			var tenantDataSource = new TenantDataSourceModel
 			{
@@ -435,12 +419,13 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 				DataSource = new DataSourceModel
 				{
 					Id = dataSourceId,
-					TimeZoneId = 15
+					TimeZoneId = 13
 				}
 			};
-			Target.PersistDataSource(tenantDataSource);
+
 			var result = (NegotiatedContentResult<string>)Target.PersistDataSource(tenantDataSource);
 			result.StatusCode.Should().Be(HttpStatusCode.NotModified);
+			JobScheduleRepository.GetEtlJobSchedules().Should().Be.Empty();
 		}
 
 		[TestCase(true, true)]

@@ -177,7 +177,9 @@ namespace Teleopti.Wfm.Administration.Controllers
 		{
 			var tenantName = tenantDataSourceModel.TenantName;
 			var dataSourceId = tenantDataSourceModel.DataSource.Id;
-			if (dataSourceId < 0)
+
+			// To exclude default data source
+			if (dataSourceId <= 1)
 			{
 				return Content(HttpStatusCode.Forbidden,
 					$"Datasource with id {dataSourceId} for Tenant \"{tenantName}\" is not allowed to modify");
@@ -187,12 +189,6 @@ namespace Teleopti.Wfm.Administration.Controllers
 			if (dataSource == null)
 			{
 				return Content(HttpStatusCode.NotFound, $"Datasource with id {dataSourceId} for Tenant \"{tenantName}\" not found");
-			}
-
-			if (dataSource.Name.StartsWith("Raptor"))
-			{
-				return Content(HttpStatusCode.Forbidden,
-					$"Datasource \"{dataSource.Name}\" with id {dataSourceId} for Tenant \"{tenantName}\" is not allowed to modify");
 			}
 
 			if (dataSource.TimeZoneId == tenantDataSourceModel.DataSource.TimeZoneId)
