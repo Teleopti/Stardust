@@ -160,5 +160,23 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 
 			result.OutOfAdherences().Should().Be.Empty();
 		}
+		
+		[Test]
+		public void ShouldNotHaveOutOfAdherencesWithNanoSecondResolution()
+		{
+			Now.Is("2018-03-26 23:00");
+			var person = Guid.NewGuid();
+			Database
+				.WithAgent(person)
+				.WithAdherenceOut("2018-03-26 08:00:00")
+				.WithAdherenceIn("2018-03-26 09:00:00.2706")
+				.WithApprovedPeriod(person, "2018-03-26 08:00:00", "2018-03-26 09:00:00")
+				;
+
+			var result = Target.Load(person, "2018-03-26".Date());
+
+			result.OutOfAdherences().Should().Be.Empty();
+		}
+		
 	}
 }
