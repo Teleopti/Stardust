@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 
 namespace Teleopti.Ccc.Scheduling.PerformanceTest
 {
@@ -9,14 +10,14 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 			UserName = ConfigurationManager.AppSettings["UserName"];
 			Password = ConfigurationManager.AppSettings["Password"];
 			BusinessUnitName = ConfigurationManager.AppSettings["BusinessUnitName"];
-			PlanningGroupId = ConfigurationManager.AppSettings["PlanningGroupId"];
-			PlanningPeriodId = ConfigurationManager.AppSettings["PlanningPeriodId"];
+			PlanningGroupId = new Guid(ConfigurationManager.AppSettings["PlanningGroupId"]);
+			PlanningPeriodId = new Guid(ConfigurationManager.AppSettings["PlanningPeriodId"]);
 		}
 
-		public static string PlanningGroupId { get; private set; }
-		public static string PlanningPeriodId { get; private set; }
-		public static string BusinessUnitName { get; private set; }
-		public static string Password { get; private set; }
-		public static string UserName { get; private set; }
+		public static Guid PlanningGroupId { get; }
+		public static Guid PlanningPeriodId { get; }
+		public static string BusinessUnitName { get; }
+		public static string Password { get; }
+		public static string UserName { get; }
 	}
 }

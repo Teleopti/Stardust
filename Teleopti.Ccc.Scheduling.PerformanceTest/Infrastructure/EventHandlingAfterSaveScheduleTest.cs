@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -35,6 +37,7 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest.Infrastructure
 		public IScheduleDictionaryPersister Persister;
 		public IDayOffTemplateRepository DayOffTemplateRepository;
 		public IAbsenceRepository AbsenceRepository;
+		public IPlanningPeriodRepository PlanningPeriodRepository;
 
 		public HangfireUtilities Hangfire;
 		public TestLog TestLog;
@@ -51,29 +54,28 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest.Infrastructure
 				businessUnitId = WithUnitOfWork.Get(() => BusinessUnits.LoadAll().First()).Id.GetValueOrDefault();
 			AsSystem.Logon(logOnDatasource, businessUnitId);
 
-			var startDate = new DateOnly(2018, 3, 1);
-			var period = new DateOnlyPeriod(startDate, startDate.AddDays(60));
+			var periodPlanningPeriod = PlanningPeriodRepository.Get(AppConfigs.PlanningPeriodId).Range;
 
 			IScheduleDictionary schedules = null;
 			WithUnitOfWork.Do(() =>
 			{
 				var scenario = Scenarios.LoadDefaultScenario();
-				var persons = Persons.LoadAll().Where(p => p.Period(startDate) != null).ToArray();
+				var persons = Persons.LoadAll().Where(p => p.Period(periodPlanningPeriod.StartDate) != null).ToArray();
 
 				schedules = Schedules.FindSchedulesForPersons(scenario, persons,
 					new ScheduleDictionaryLoadOptions(false, false),
-					period.ToDateTimePeriod(TimeZoneInfo.Utc), persons, false);
+					periodPlanningPeriod.ToDateTimePeriod(TimeZoneInfo.Utc), persons, false);
 				var activities = Activities.LoadAll().OrderBy(x => x.Description.Name).ToArray();
 				var inWorkTimeActivities = activities.Where(x => x.InWorkTime).ToArray();
 				var notInWorkTimeActivity = activities.First(x => !x.InWorkTime);
 				var dayoffTempate = DayOffTemplateRepository.FindActivedDayOffsSortByDescription().First();
 				var absence = AbsenceRepository.LoadAllSortByName().First();
 
-				TestLog.Debug($"Creating data for {persons.Length} people for {period.DayCount()} dates.");
+				TestLog.Debug($"Creating data for {persons.Length} people for {periodPlanningPeriod.DayCount()} dates.");
 
 				foreach (var person in persons)
 				{
-					foreach (var date in period.DayCollection())
+					foreach (var date in periodPlanningPeriod.DayCollection())
 					{
 						var scheduledDay = schedules[person].ScheduledDay(date);
 

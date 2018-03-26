@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest.Domain
 			}
 		}
 
-		private static void scheduleAndOptimize(IBrowserInteractions browserInteractions, string planningPeriodId)
+		private static void scheduleAndOptimize(IBrowserInteractions browserInteractions, Guid planningPeriodId)
 		{
 			browserInteractions.GoTo(string.Concat(TestSiteConfigurationSetup.URL, "wfm/#/resourceplanner/planningperiod/", planningPeriodId, "?runForTest=true"));
 			browserInteractions.Click(".test-schedule-button:enabled");
