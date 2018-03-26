@@ -206,6 +206,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 		private static SearchReplaceCollection searchReplaces()
 		{
 			// behavior test
+			settingsFile.UpdateFileByName("MachineKey", CryptoCreator.MachineKeyCreator.StaticMachineKeyForBehaviorTest());
 			settingsFile.UpdateFileByName("TestLogConfiguration", "<logger name='Teleopti.TestLog'><level value='DEBUG'/></logger><logger name='NHibernate'><level value='WARN'/></logger>");
 			settingsFile.UpdateFileByName("CheckNewJobIntervalSeconds", "<add key='CheckNewJobIntervalSeconds' value='5'/>");
 			settingsFile.UpdateFileByName("BehaviorTestServer", "true");
@@ -230,8 +231,6 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 			settingsFile.UpdateFileByName("WindowsClaimProvider", TestSiteConfigurationSetup.WindowsClaimProvider);
 			settingsFile.UpdateFileByName("TeleoptiClaimProvider", TestSiteConfigurationSetup.TeleoptiClaimProvider);
 			settingsFile.UpdateFileByName("URL_WINDOWS_IDENTITY_PROVIDER", TestSiteConfigurationSetup.UrlWindowsIdentityProvider);
-			settingsFile.UpdateFileByName("machineKey.validationKey", "754534E815EF6164CE788E521F845BA4953509FA45E321715FDF5B92C5BD30759C1669B4F0DABA17AC7BBF729749CE3E3203606AB49F20C19D342A078A3903D1");
-			settingsFile.UpdateFileByName("machineKey.decryptionKey", "3E1AD56713339011EB29E98D1DF3DBE1BADCF353938C3429");
 
 			return settingsFile.ReadFile();
 		}

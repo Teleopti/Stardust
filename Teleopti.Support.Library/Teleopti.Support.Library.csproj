@@ -46,6 +46,7 @@
     <Compile Include="Config\FileConfigurator.cs" />
     <Compile Include="Config\CryptoCreator.cs" />
     <Compile Include="Config\Extensions.cs" />
+    <Compile Include="Config\MachineKeyChecker.cs" />
     <Compile Include="Config\SettingsFileManager.cs" />
     <Compile Include="Config\SearchReplaceCollection.cs" />
     <Compile Include="Config\Parser.cs" />

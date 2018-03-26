@@ -36,5 +36,3 @@ $(SIGNALR_BACKPLANE_PREFIX)|
 $(HSTS_HEADER)|
 $(CSP_PARENT_URL)|
 $(DNS_ALIAS)|http://localhost:52858/
-$(machineKey.decryptionKey)|
-$(machineKey.validationKey)|
