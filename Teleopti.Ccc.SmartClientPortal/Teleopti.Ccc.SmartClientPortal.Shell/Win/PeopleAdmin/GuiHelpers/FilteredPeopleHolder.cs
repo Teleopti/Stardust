@@ -24,6 +24,7 @@ using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views;
+using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models;
 using Teleopti.Interfaces.Domain;
 
@@ -70,9 +71,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 		private readonly List<RolesModel> _rolesViewAdapterCollection = new List<RolesModel>();
 		private ReadOnlyCollection<PersonGeneralModel> _selectedPeopleGeneralGridData;
 		private IList<ExternalLogOnModel> _filteredExternalLogOnCollection;
-
 		private readonly IList<Guid> toBeRemovedList = new List<Guid>();
 		private IEnumerable<LogonInfoModel> _logonData;
+		private PersonSkillModelSorter _personSkillModelSorter = new PersonSkillModelSorter();
 
 		public FilteredPeopleHolder(ITraceableRefreshService refreshService,
 				IDictionary<IPerson, IPersonAccountCollection> allAccounts,
@@ -950,7 +951,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 
 					skillModel.ActiveTriState = skillModel.ActiveSkillsInPersonPeriodCount == personPeriods.Count ? 1 : 2;			
 				}
-			}		
+			}
+
+			var sortedPersonSkillModels = _personSkillModelSorter.Sort(_personSkillAdapterCollection);
+			_personSkillAdapterCollection.Clear();
+			_personSkillAdapterCollection.AddRange(sortedPersonSkillModels);
 		}
 
 		public void ResetPersonSkillAdapterCollection()
