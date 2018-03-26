@@ -139,6 +139,7 @@
 		}
 
 		function getTenants() {
+			vm.tenants = [];
       $http
       .get("./Etl/GetTenants", tokenHeaderService.getHeaders())
       .success(function(data) {
