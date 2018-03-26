@@ -9,6 +9,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
+using NHibernate.SqlAzure;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -167,6 +168,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			using (IStatelessUnitOfWork uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
 				IDbConnection dbConnection = ((NHibernateStatelessUnitOfWork)uow).Session.Connection;
+
+				if (dbConnection is ReliableSqlDbConnection)
+				{
+					dbConnection = ((ReliableSqlDbConnection) dbConnection).ReliableConnection.Current;
+				}
 
 				using (SqlBulkCopy bulkCopy = new SqlBulkCopy((SqlConnection)dbConnection))
 				{
