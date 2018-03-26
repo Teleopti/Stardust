@@ -32,16 +32,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		public void Handle(FixNotOverwriteLayerCommand command)
 		{
 			var person = _personForId.Load(command.PersonId);
-			var dict = _scheduleStorage.FindSchedulesForPersons(_currentScenario.Current(), new[] {person},
+			var dict = _scheduleStorage.FindSchedulesForPersons(_currentScenario.Current(), new[] { person },
 				new ScheduleDictionaryLoadOptions(false, false),
-				command.Date.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone()), new[] {person}, false);
+				command.Date.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone()), new[] { person }, false);
 			var rule = new NotOverwriteLayerRule();
 			var scheduleRange = dict[person];
 			var scheduledDay = scheduleRange.ScheduledDay(command.Date);
 			var personAss = scheduledDay.PersonAssignment();
 			var overlappingLayers = rule.GetOverlappingLayerses(dict, scheduledDay);
 
-			if (overlappingLayers.Count == 0) return;
+			if (overlappingLayers.Count == 0)
+			{
+				command.ErrorMessages = new List<string> { Resources.NoNonOverwritableActivities };
+				return;
+			}
 
 			var overlappedGroups = overlappingLayers.GroupBy(l => new layerRepresentation
 			{
@@ -60,7 +64,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 					personAss.MoveActivityAndKeepOriginalPriority(targetLayer,
 						targetLayer.Period.StartDateTime.Add(movingDistance), command.TrackedCommandInfo, false);
 					dict.Modify(scheduledDay, NewBusinessRuleCollection.Minimum());
-					
+
 				}
 				else
 				{
@@ -69,7 +73,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			}
 			var diff = scheduleRange.DifferenceSinceSnapshot(new DifferenceEntityCollectionService<IPersistableScheduleData>());
 			_scheduleDifferenceSaver.SaveChanges(diff, (ScheduleRange)scheduleRange);
-			command.ErrorMessages = !isFixed ? new List<string> { Resources.OverlappedNonoverwritableActivitiesExist } : new List<string>();	
+			command.ErrorMessages = !isFixed ? new List<string> { Resources.OverlappedNonoverwritableActivitiesExist } : new List<string>();
 		}
 	}
 

@@ -17269,4 +17269,7 @@ The application will now exit.</value>
     <value>Add skill group</value>
     <comment>label for adding a new skill group in skill-group-manager</comment>
   </data>
+  <data name="NoNonOverwritableActivities" xml:space="preserve">
+    <value>No non-overwritable activities</value>
+  </data>
 </root>

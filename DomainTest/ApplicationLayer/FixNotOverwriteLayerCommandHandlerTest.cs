@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			pa.AddActivity(meetingActivity, new DateTimePeriod(2013, 11, 14, 13, 2013, 11, 14, 15));
 			pa.ShiftLayers.ForEach(l => l.WithId());
 			PersonAssignmentRepository.Add(pa);
-			
+
 			var command = new FixNotOverwriteLayerCommand
 			{
 				PersonId = person.Id.GetValueOrDefault(),
@@ -204,7 +204,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			pa.AddActivity(meetingActivity, new DateTimePeriod(2013, 11, 14, 13, 2013, 11, 14, 15));
 			pa.ShiftLayers.ForEach(l => l.WithId());
 			PersonAssignmentRepository.Add(pa);
-			
+
 			var command = new FixNotOverwriteLayerCommand
 			{
 				PersonId = person.Id.GetValueOrDefault(),
@@ -246,7 +246,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			pa.AddActivity(meetingActivity, new DateTimePeriod(2013, 11, 14, 10, 2013, 11, 14, 14));
 			pa.ShiftLayers.ForEach(l => l.WithId());
 			PersonAssignmentRepository.Add(pa);
-			
+
 			var command = new FixNotOverwriteLayerCommand
 			{
 				PersonId = person.Id.GetValueOrDefault(),
@@ -387,12 +387,55 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		}
 
 		[Test]
+		public void ShouldReturnErrorMessageWhenNoAgentsShiftWithOverlappedActivities()
+		{
+			var scenario = CurrentScenario.Has("Default");
+			var person = PersonFactory.CreatePersonWithId();
+			PersonRepository.Has(person);
+
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day");
+			ShiftCategoryRepository.Add(shiftCategory);
+			var mainActivity = ActivityFactory.CreateActivity("Phone").WithId();
+			var lunchActivity = ActivityFactory.CreateActivity("Lunch").WithId();
+			var meetingActivity = ActivityFactory.CreateActivity("Meeting").WithId();
+
+			mainActivity.AllowOverwrite = true;
+			meetingActivity.AllowOverwrite = true;
+			lunchActivity.AllowOverwrite = false;
+
+			ActivityRepository.Add(lunchActivity);
+			ActivityRepository.Add(mainActivity);
+			ActivityRepository.Add(meetingActivity);
+
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
+				person, scenario, mainActivity, new DateTimePeriod(2018, 03, 26, 8, 2018, 03, 26, 18),
+				shiftCategory);
+
+			pa.AddActivity(lunchActivity, new DateTimePeriod(2018, 03, 26, 10, 2018, 03, 26, 12));
+			pa.AddActivity(meetingActivity, new DateTimePeriod(2013, 11, 14, 12, 2013, 11, 14, 17));
+
+			pa.ShiftLayers.ForEach(l => l.WithId());
+			PersonAssignmentRepository.Add(pa);
+
+
+			var command = new FixNotOverwriteLayerCommand
+			{
+				PersonId = person.Id.GetValueOrDefault(),
+				Date = new DateOnly(2018, 03, 26)
+			};
+			Target.Handle(command);
+
+
+			command.ErrorMessages.Single().Should().Be.EqualTo(Resources.NoNonOverwritableActivities);
+		}
+
+		[Test]
 		public void ShouldPersistDeltas()
 		{
 			IntervalLengthFetcher.Has(15);
 			Now.Is(new DateTime(2013, 11, 14, 0, 0, 0, DateTimeKind.Utc));
 			var skill = SkillFactory.CreateSkillWithId("skill", 15);
-			
+
 			SkillRepository.Add(skill);
 
 			var scenario = CurrentScenario.Has("Default");
@@ -411,7 +454,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			lunchActivity.AllowOverwrite = false;
 			meetingActivity.AllowOverwrite = true;
-			shortBreakActivity.AllowOverwrite = false; 
+			shortBreakActivity.AllowOverwrite = false;
 
 			ActivityRepository.Add(meetingActivity);
 			ActivityRepository.Add(mainActivity);

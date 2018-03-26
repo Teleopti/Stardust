@@ -20951,6 +20951,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No non-overwritable activities.
+        /// </summary>
+        public static string NoNonOverwritableActivities {
+            get {
+                return ResourceManager.GetString("NoNonOverwritableActivities", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Non Working Days.
         /// </summary>
         public static string NonWorkingDays {
