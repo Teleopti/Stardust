@@ -20,6 +20,7 @@
 
 		var calculate;
 		var timelineStart;
+		var timelineEnd;
 
 		loadData();
 
@@ -58,7 +59,7 @@
 
 				vm.fullTimeline = buildTimeline(data);
 				timelineStart = data.Timeline.StartTime;
-
+				timelineEnd = data.Timeline.EndTime;
 				vm.cards = mapChanges(data.Changes, data.Schedules);
 
 				vm.diamonds = buildDiamonds(data);
@@ -115,8 +116,8 @@
 						vm.openApprovedPeriods = true;
 						vm.openApproveForm = true;
 
-						vm.approveStartTime = moment(interval.StartTime).toDate();
-						vm.approveEndTime = moment(interval.EndTime).toDate();
+						vm.approveStartTime = putTimeBetween(moment(interval.StartTime), moment(timelineStart), moment(timelineEnd)).toDate();
+						vm.approveEndTime = putTimeBetween(moment(interval.EndTime), moment(timelineStart), moment(timelineEnd)).toDate();
 
 						startTime = moment(vm.approveStartTime).format("HH:mm:ss");
 						endTime = moment(vm.approveEndTime).format("HH:mm:ss");
@@ -158,7 +159,7 @@
 			},
 			function (newValue, oldValue) {
 				if (timelineStart && timeChanged(newValue, oldValue))
-					vm.approveStartTime = putTimeAfter(newValue, timelineStart);
+					vm.approveStartTime = adjustDate(newValue, timelineStart, timelineEnd);
 				updateApprovePositioning();
 			}
 		);
@@ -167,8 +168,11 @@
 				return vm.approveEndTime
 			},
 			function (newValue, oldValue) {
-				if (timelineStart && timeChanged(newValue, oldValue))
-					vm.approveEndTime = putTimeAfter(newValue, vm.approveStartTime || timelineStart);
+				if (timelineStart && timeChanged(newValue, oldValue)) {
+					newValue = adjustDate(newValue, timelineStart, timelineEnd);
+					newValue = adjustDate(newValue, vm.approveStartTime, timelineEnd);
+					vm.approveEndTime = newValue;
+				}
 				updateApprovePositioning();
 			}
 		);
@@ -189,23 +193,35 @@
 			return newTimestamp != oldTimestamp;
 		}
 
-		function putTimeAfter(time, putAfter) {
+		function adjustDate(time, start) {
 			if (!time)
 				return undefined;
-			var result = intoTimeline(time);
-			if (result.isBefore(putAfter))
-				result = result.add(1, "days");
-			result = result.toDate();
+			if (!start)
+				return time;
+
+			start = moment(start);
+
+			var timeToAdd = moment(time);
+			var attempt = start.clone()
+				.set('hour', timeToAdd.hour())
+				.set('minute', timeToAdd.minute())
+				.set('second', timeToAdd.second());
+
+			var result = attempt.isSameOrAfter(start) ?
+				attempt.toDate() :
+				attempt.add(1, "days").toDate();
 
 			if (timeChanged(result, time))
 				return result;
 			return time;
 		}
 
-		function intoTimeline(time) {
-			var time = moment(time);
-			var daysToTimeline = moment(timelineStart).diff(time, "days");
-			return time.add(daysToTimeline, "days");
+		function putTimeBetween(time, start, end) {
+			if (time.isBefore(start))
+				return start;
+			if (time.isAfter(end))
+				return end;
+			return time;
 		}
 
 		vm.cancelApprove = function () {
@@ -236,7 +252,7 @@
 						vm.openApprovedPeriods = true;
 					};
 					o.remove = function () {
-						$http.post('../api/HistoricalAdherence/RemoveApprovedPeriod', 
+						$http.post('../api/HistoricalAdherence/RemoveApprovedPeriod',
 							{
 								PersonId: $stateParams.personId,
 								StartDateTime: moment(interval.StartTime).format("YYYY-MM-DD HH:mm:ss"),
@@ -293,7 +309,6 @@
 		}
 
 		function mapChanges(changes, schedules) {
-
 			var makeCard = function (header, color, startTime, endTime) {
 				return {
 					Header: header,
@@ -330,8 +345,6 @@
 				.filter(function (card) {
 					return card.Items.length > 0;
 				});
-
 		}
-
 	}
 })();

@@ -289,6 +289,31 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 		expect(vm.approveStartTime).toEqual(moment('2018-02-06T08:00:00').toDate());
 	});
 
+	it('should fix end time - future recorded out of adherence end', function (t) {
+		t.stateParams.personId = '1';
+		t.backend.with.historicalAdherence({
+			Timeline: {
+				StartTime: '2018-02-06T08:00:00',
+				EndTime: '2018-02-06T18:00:00'
+			},
+			RecordedOutOfAdherences: [{
+				StartTime: '2018-02-05T03:00:00',
+				EndTime: '2018-02-07T12:00:00'
+			}],
+			Schedules: [{
+				StartTime: '2018-02-06T07:00:00',
+				EndTime: '2018-02-06T17:00:00'
+			}]
+		});
+		var vm = t.createController();
+
+		t.apply(function () {
+			vm.recordedOutOfAdherences[0].click();
+		});
+
+		expect(vm.approveEndTime).toEqual(moment('2018-02-06T18:00:00').toDate());
+	});
+
 	it('should display period to be approved', function (t) {
 		t.stateParams.personId = '1';
 		t.backend.with.historicalAdherence({
@@ -383,5 +408,5 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 		expect(vm.approveStartTime === startTime).toBe(true);
 		expect(vm.approveEndTime === endTime).toBe(true);
 	});
-
+	
 });
