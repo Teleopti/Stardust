@@ -83,15 +83,6 @@ Scenario: Create preference template
 	| template1     |
 	| test template |
 
-@ignore
-Scenario: Display preference template name
-	Given I am viewing preferences for date '2013-03-07'
-	When I select day '2013-03-07'
-	And I click the add extended preference button
-	And I select preference template with 'template1'
-	And I click the apply extended preferences button
-	Then I should see the preference template1 on '2013-03-07'
-
 Scenario: Delete preference template
 	Given I am viewing preferences
 	When I click the add extended preference button

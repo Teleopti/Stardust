@@ -45,28 +45,6 @@ Scenario: Open Jalaali Time Picker
 	When I open the time picker
 	Then I should see a jalaali time picker with '02','15'
 
-@Ignore
-Scenario: Show Correctly Formatted Text Request Date
-	Given I am an agent
-	And I have an existing text request with
-	| Field     | Value            |
-	| StartTime | 2015-05-17 10:00 |
-	| End Time  | 2015-05-17 14:00 |
-	And I am viewing requests
-	Then I should see request page
-	And I should see a request with date period '1394/02/27 10:00 - 14:00'
-		
-@Ignore
-Scenario: Show Correctly Formatted Absence Request Date
-	Given I am an agent
-	And I have an existing absence request with
-	| Field     | Value            |
-	| StartTime | 2015-05-17 10:00 |
-	| End Time  | 2015-05-17 14:00 |
-	And I am viewing requests
-	Then I should see request page
-	And I should see a request with date period '1394/02/27 10:00 - 14:00'
-
 Scenario: Open Schedule 
 	Given I am an agent
 	When I view my week schedule for date '2015-05-17'
@@ -79,30 +57,6 @@ Scenario: Open Preference
 	When I view preferences
 	Then I should see the period to be '1394/02/11 - 1394/02/11'
 
-@Ignore
-Scenario: Show correctly formatted Text Request Date From Schedule
-	Given I am an agent
-	And I have an existing text request with
-	| Field     | Value            |
-	| StartTime | 2015-05-17 10:00 |
-	| End Time  | 2015-05-17 14:00 |
-	When I view my week schedule for date '2015-05-17'
-	And I click the request symbol for date '2015-05-17'
-	Then I should see request page
-	And I should see a request with date period '1394/02/27 10:00 - 14:00'
-
-@Ignore
-Scenario: Show correctly formatted Absence Request Date From Schedule
-	Given I am an agent
-	And I have an existing absence request with
-	| Field     | Value            |
-	| StartTime | 2015-05-17 10:00 |
-	| End Time  | 2015-05-17 14:00 |
-	When I view my week schedule for date '2015-05-17'
-	And I click the request symbol for date '2015-05-17'
-	Then I should see request page
-	And I should see a request with date period '1394/02/27 10:00 - 14:00'
-	
 Scenario: Show correctly formatted Overtime Availability dates
 	Given I am an agent
 	And I have the role 'Access to overtime availability'

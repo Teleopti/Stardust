@@ -167,18 +167,8 @@
       <DependentUpon>OvertimeRequests.feature</DependentUpon>
     </Compile>
     <Compile Include="MyTime\OvertimeRequestsStepDefinitions.cs" />
-    <Compile Include="MyTime\WeekScheduleStaffingProbability.feature.cs">
-      <DependentUpon>WeekScheduleStaffingProbability.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <Compile Include="SetupFixtureForAssembly.cs" />
     <Compile Include="UpgradeTest.cs" />
-    <Compile Include="Wfm\Forecasting\Forecaster.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Forecaster.feature</DependentUpon>
-    </Compile>
     <Compile Include="Wfm\Forecasting\ForecasterStepDefinition.cs" />
     <Compile Include="HealthCheck\HealthCheck.feature.cs">
       <AutoGen>True</AutoGen>
@@ -270,11 +260,6 @@
     <Compile Include="MyTime\WeekScheduleOnMobileStepDefinitions.cs" />
     <Compile Include="MyTime\WeekScheduleOnMobile.feature.cs">
       <DependentUpon>WeekScheduleOnMobile.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="MessageBrokerTool\MessageBrokerTool.feature.cs">
-      <DependentUpon>MessageBrokerTool.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
@@ -1040,14 +1025,6 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>OvertimeRequests.feature.cs</LastGenOutput>
     </None>
-    <None Include="MyTime\WeekScheduleStaffingProbability.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>WeekScheduleStaffingProbability.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Wfm\Forecasting\Forecaster.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Forecaster.feature.cs</LastGenOutput>
-    </None>
     <None Include="HealthCheck\HealthCheck.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>HealthCheck.feature.cs</LastGenOutput>
@@ -1107,10 +1084,6 @@
     <None Include="MyTime\WeekScheduleOnMobile.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>WeekScheduleOnMobile.feature.cs</LastGenOutput>
-    </None>
-    <None Include="MessageBrokerTool\MessageBrokerTool.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>MessageBrokerTool.feature.cs</LastGenOutput>
     </None>
     <None Include="SignOut.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

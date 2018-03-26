@@ -180,16 +180,6 @@ Scenario: Validate preference times
 	And I click the apply extended preferences button
 	Then I should see add extended preferences panel with error 'Invalid time startTime'
 
-@ignore
-Scenario: Hide all time fields when absence preference is selected
-	Given I have the role 'Access to extended preferences'
-	And I am viewing preferences
-	When I click the add extended preference button
-	And I input extended preference fields with
-	| Field      | Value   |
-	| Preference | Illness |
-	Then I should not see the edit time fields
-
 Scenario: Hide all time fields, when day off is selected
 	Given I have the role 'Access to extended preferences'
 	And I am viewing preferences

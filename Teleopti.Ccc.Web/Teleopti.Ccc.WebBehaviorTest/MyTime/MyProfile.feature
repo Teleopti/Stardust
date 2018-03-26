@@ -8,22 +8,6 @@ Feature: My Profile
 		be able to change language
 		be able to change my password
 
-@ignore
-Scenario: See my profile
-	Given I am an agent
-	And I am american
-	When I view my regional settings
-	Then I should see my culture
-	And I should see my language
-
-@ignore
-Scenario: Change my culture
-	Given I am an agent
-	And I am swedish
-	When I view my regional settings
-	And I change culture to US
-	Then I should see US date format
-
 Scenario: Change my language
 	Given I am an agent
 	And I am swedish

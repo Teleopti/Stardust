@@ -178,14 +178,6 @@ Scenario: Show timeline with no schedule
 	| end timeline				| 23:00 |
 	| number of timeline labels	| 24    |
 
-@ignore
-Scenario: Show calender according to the users culture
-	Given I have the role 'Full access to mytime'
-	And I am swedish
-	When I view my week schedule for date '2013-10-03'
-	And I open the weekschedule date-picker
-	Then I should see 'Mo' as the first day in the calender
-
 Scenario: Show timeline with schedule 
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Published schedule'
@@ -287,17 +279,6 @@ Scenario: Update schedule when schedule has changed
 	And My schedule between '2013-08-28 12:00' to '2013-08-28 15:00' reloads
 	Then I should see activities on date '2012-08-28'
 
-@ignore
-#Ignored for now. See TextRequestFromSchedule.feature. /Maria S
-Scenario: Keep user request input when schedules are refreshed
-	Given I have the role 'Full access to mytime'
-	And I have the workflow control set 'Published schedule'
-	And I view my week schedule for date '2013-10-03'
-	When I click on the day symbol area for date '2013-10-03'
-	And I input text request values with subject 'request subject' for date '2013-10-03'
-	And My schedule between '2013-10-03 12:00' to '2013-10-03 15:00' reloads
-	Then I should see request form with subject 'request subject'
-
 Scenario: Show black day summary text when background color is white 
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Published schedule'
@@ -365,28 +346,6 @@ Scenario: Show black absence text when absence background color is white
 	| Date          | 2013-01-01 |
 	When I view my week schedule for date '2013-01-01'
 	Then I should see the text for date '2013-01-01' in 'black'
-
-@ignore
-Scenario: Keep selected probability when switching back from month view
-	Given I have the role 'Full access to mytime'
-	And I am englishspeaking swede
-	And I have the workflow control set 'Intraday staffing check'
-	When I view my week schedule for date '2013-01-01'
-	And I select 'Show absence probability' as probability value
-	And I click the month button
-	When I click the current week button
-	Then I should see the selected value for probability is 'Show absence probability'
-
-@ignore
-Scenario: Keep selected probability when switching back from non current week view
-	Given I have the role 'Full access to mytime'
-	And I am englishspeaking swede
-	And I have the workflow control set 'Intraday staffing check'
-	When I view my week schedule for date '2013-01-01'
-	And I select 'Show absence probability' as probability value
-	And I click the next week button
-	When I click the current week button
-	Then I should see the selected value for probability is 'Show absence probability'
 
 Scenario: Should not show absence probability option when staffing check is not intraday staffing check
 	Given I have the role 'Full access to mytime'

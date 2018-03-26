@@ -171,129 +171,6 @@ Scenario: Navigate to the previous day
 	When I click the previous day button in datepicker
 	Then I should see the previous day
 
-@ignore 
-Scenario: Sort late shifts after early shifts
-	Given I am an agent in a team
-	And I have an assigned shift with
-	| Field      | Value      |
-	| Date      | 2014-05-02 |
-	| StartTime | 9:00       |
-	| EndTime   | 17:00      |
-	And I have a colleague
-	And My colleague has an assigned shift with 
-	| Field      | Value      |
-	| Date      | 2014-05-02 |
-	| StartTime | 8:00       |
-	| EndTime   | 18:00      |
-	When I view group schedule for '2014-05-02'
-	Then I should see my colleague before myself
-
-@ignore
-Scenario: Sort shifts by time sorting filter
-	Given I am an agent in a team
-	And I have an assigned shift with
-	| Field     | Value      |
-	| Date      | 2014-05-02 |
-	| StartTime | 9:00       |
-	| EndTime   | 17:00      |
-	And I have a colleague
-	And My colleague has an assigned shift with 
-	| Field     | Value      |
-	| Date      | 2014-05-02 |
-	| StartTime | 8:00       |
-	| EndTime   | 18:00      |
-	When I view group schedule for '2014-05-02'
-	Then I should see my colleague before myself
-	Then I click sort by end time asc at end time drop down button
-	And I should see myself before my colleague
-
-@ignore
-Scenario: Sort full-day absences after shifts
-	Given I am an agent in a team
-	And I have an assigned shift with
-	| Field     | Value      |
-	| Date      | 2014-05-02 |
-	| StartTime | 8:00       |
-	| EndTime   | 16:00      |
-	And I have an absence with
-	| Field     | Value            |
-	| Name      | Vacation         |
-	| StartTime | 2014-05-02 00:00 |
-	| EndTime   | 2014-05-02 23:59 |
-	And I have a colleague
-	And My colleague has an assigned shift with
-	| Field     | Value      |
-	| Date      | 2014-05-02 |
-	| StartTime | 9:00       |
-	| EndTime   | 17:00      |
-	When I view group schedule for '2014-05-02'
-	Then I should see my colleague before myself
-@ignore
-Scenario: Sort intra-day absences like there are no absences
-	Given I am an agent in a team
-	And I have an assigned shift with
-	| Field     | Value      |
-	| Date      | 2014-05-02 |
-	| StartTime | 9:00       |
-	| EndTime   | 16:00      |
-	And I have an absence with
-	| Field     | Value            |
-	| Name      | Vacation         |
-	| StartTime | 2014-05-02 10:00 |
-	| EndTime   | 2014-05-02 23:59 |
-	And I have a colleague
-	And My colleague has an assigned shift with
-	| Field     | Value      |
-	| Date      | 2014-05-02 |
-	| StartTime | 8:00       |
-	| EndTime   | 17:00      |
-	When I view group schedule for '2014-05-02'
-	Then I should see my colleague before myself
-@ignore
-Scenario: Sort the absences after day off
-	Given I am an agent in a team
-	And I have an assigned shift with
-	| Field     | Value      |
-	| Date      | 2014-05-02 |
-	| StartTime | 8:00       |
-	| EndTime   | 16:00      |
-	And I have an absence with
-	| Field     | Value            |
-	| Name      | Vacation         |
-	| StartTime | 2014-05-02 00:00 |
-	| EndTime   | 2014-05-02 23:59 |
-	And I have a colleague
-	And My colleague has an assigned dayoff with
-	| Field | Value      |
-	| Name  | DayOff     |
-	| Date  | 2014-05-02 |
-	When I view group schedule for '2014-05-02'
-	Then I should see my colleague before myself
-@ignore
-Scenario: Sort no schedule last
-	Given I am an agent in a team
-	And I have a colleague
-	And My colleague has an assigned dayoff with
-	| Field | Value      |
-	| Name  | DayOff     |
-	| Date  | 2014-05-02 |
-	When I view group schedule for '2014-05-02'
-	Then I should see my colleague before myself
-@ignore
-Scenario: Show tooltip with activity times
-	Given I am an agent in a team
-	And there is an activity named 'Phone'
-	And I have an assigned shift with
-	| Field     | Value      |
-	| Date      | 2014-05-02 |
-	| StartTime | 8:00       |
-	| EndTime   | 12:00      |
-	| Activity  | Phone      |
-	| WithLunch | false      |
-	When I view group schedule for '2014-05-02'
-	Then The layer's start time attibute value should be 08:00 - 12:00
-	
-
 Scenario: Show team-picker with multiple teams
 	Given I am an agent in a team with access to the whole site
 	And the site has another team
@@ -302,32 +179,6 @@ Scenario: Show team-picker with multiple teams
 	Then I should see the team-picker with both teams
 	And the teams should be sorted alphabetically
 	
-@ignore
-Scenario: Show other team's schedule
-	Given I am an agent in a team with access to the whole site
-	And I have a colleague in another team
-	And I am viewing team schedule
-	When I select the other team in the team picker
-	Then I should see my colleague
-	And I should not see myself
-
-@ignore
-Scenario: Keep selected date when changing team
-	Given I am an agent in a team with access to the whole site
-	And the site has another team
-	And I am viewing team schedule for '2014-05-03'
-	When I select the other team in the team picker
-	Then I should see tomorrow
-
-@ignore
-Scenario: Show team-picker with teams for my site for another day
-	Given I am an agent in a team with access to the whole site
-	And I belong to another site's team on '2014-05-03'
-	And the other site has 2 teams
-	And I am viewing team schedule for '2014-05-02'
-	When I click the next day button in datepicker
-	Then I should see the team-picker with the other site's team
-
 Scenario: Show default team when no access to a team on a date
 	Given I am an agent in a team with access to the whole site
 	And I belong to another site's team on '2014-05-03'
@@ -335,13 +186,6 @@ Scenario: Show default team when no access to a team on a date
 	And I am viewing team schedule for '2014-05-02'
 	When I click the next day button in datepicker
 	Then I should see the other site's team
-
-@ignore
-Scenario: Default to my team
-	Given I am an agent in a team with access to the whole site
-	And the site has another team
-	And I am viewing team schedule
-	Then the team-picker should have my team selected
 
 Scenario: Don't show team-picker with no team access
 	Given I have a role with

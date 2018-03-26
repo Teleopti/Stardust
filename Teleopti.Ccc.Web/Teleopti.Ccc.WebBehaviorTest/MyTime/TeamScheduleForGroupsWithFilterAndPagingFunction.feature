@@ -66,54 +66,6 @@ Scenario: View available custom group options
 	| Kontraktsschema/A contract schedule   |
 	| Deltidsprocent/A part time percentage |
 
-@ignore
-Scenario: View group schedule
-	Given I have the role 'Access to view all group pages'
-	And I have a shift with
-	| Field          | Value            |
-	| StartTime      | 2013-03-25 09:00 |
-	| EndTime        | 2013-03-25 18:00 |
-	| Shift category | Day              |
-	And John Smith has a shift with
-	| Field          | Value            |
-	| StartTime      | 2013-03-25 10:00 |
-	| EndTime        | 2013-03-25 19:00 |
-	| Shift category | Day              |
-	And Pierre Baldi has a shift with
-	| Field          | Value            |
-	| StartTime      | 2013-03-25 11:00 |
-	| EndTime        | 2013-03-25 20:00 |
-	| Shift category | Day              |
-	When I view group schedule for '2013-03-25'
-	And The schedules have been populated
-	And I select 'Kontrakt/A contract' in the team picker
-	Then I should see my schedule in team schedule 
-	And I should see 'John Smith' schedule in team schedule 
-	And I should not see 'Pierre Baldi' schedule
-@ignore
-Scenario: Sort late shifts after early shifts
-	Given I have the role 'Access to view all group pages'
-	And I have a shift with
-	| Field          | Value            |
-	| StartTime      | 2013-03-25 09:00 |
-	| EndTime        | 2013-03-25 18:00 |
-	| Shift category | Day              |
-	And Pierre Baldi has a shift with
-	| Field          | Value            |
-	| StartTime      | 2013-03-25 08:00 |
-	| EndTime        | 2013-03-25 17:00 |
-	| Shift category | Day              |
-	When I view group schedule for '2013-03-25'
-	And The schedules have been populated
-	Then I should see my schedule in team schedule 
-	And I should see 'Pierre Baldi' before myself
-
-@ignore
-Scenario: Default to my team
-	Given I have the role 'Access to view all group pages'
-	When I view group schedule for '2013-03-25'
-	Then The team picker should have 'The site/Team green' selected
-
 Scenario: Keep selected group when changing date
 	Given I have the role 'Access to view all group pages'
 	And I have a shift with
