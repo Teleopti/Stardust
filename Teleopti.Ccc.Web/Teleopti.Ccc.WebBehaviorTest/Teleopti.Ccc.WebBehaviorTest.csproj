@@ -660,22 +660,6 @@
       <DependentUpon>OutboundCampaignBasicOperations.feature</DependentUpon>
     </Compile>
     <Compile Include="Wfm\Outbound\OutboundCampaignStepDefinitions.cs" />
-    <Compile Include="Wfm\People\old\AdjustSkillsAfterTraining.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AdjustSkillsAfterTraining.feature</DependentUpon>
-    </Compile>
-    <Compile Include="Wfm\People\old\ImportUsers.feature.cs">
-      <DependentUpon>ImportUsers.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Wfm\People\old\AdvancedSearch.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AdvancedSearch.feature</DependentUpon>
-    </Compile>
-    <Compile Include="Wfm\People\old\PeopleListStepDefinitions.cs" />
     <Compile Include="Wfm\People\Search.feature.cs">
       <DependentUpon>Search.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -685,11 +669,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Roles.feature</DependentUpon>
-    </Compile>
-    <Compile Include="Wfm\People\old\ShowBasicInformation.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ShowBasicInformation.feature</DependentUpon>
     </Compile>
     <Compile Include="Wfm\People\SearchStepDefinition.cs" />
     <Compile Include="Wfm\Permissions\PermissionsNew.feature.cs">
@@ -814,11 +793,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Wfm\RealTimeAdherence\PauseButton_39144.feature.cs">
-      <DependentUpon>PauseButton_39144.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <Compile Include="Wfm\RealTimeAdherence\DeletedPersons_36041.feature.cs">
       <DependentUpon>DeletedPersons_36041.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -874,33 +848,8 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Wfm\Reports\ReportItems.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ReportItems.feature</DependentUpon>
-    </Compile>
     <Compile Include="Wfm\Reports\ReportsStepsDefinition.cs" />
-    <Compile Include="Wfm\Requests\Basic.feature.cs">
-      <DependentUpon>Basic.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Wfm\Requests\Filtering.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Filtering.feature</DependentUpon>
-    </Compile>
     <Compile Include="Wfm\Requests\RequestsStepDefinitions.cs" />
-    <Compile Include="Wfm\Requests\RunWaitlist.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>RunWaitlist.feature</DependentUpon>
-    </Compile>
-    <Compile Include="Wfm\Requests\ShiftTradeRequests.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ShiftTradeRequests.feature</DependentUpon>
-    </Compile>
     <Compile Include="Wfm\ResourcePlanner\PlanningGroup.feature.cs">
       <DependentUpon>PlanningGroup.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -913,11 +862,6 @@
     </Compile>
     <Compile Include="Wfm\ResourcePlanner\ManageScheduleStepDefinition.cs" />
     <Compile Include="Wfm\ResourcePlanner\PlanningPeriodStepDefinitions.cs" />
-    <Compile Include="Wfm\Seat Management\SeatMap.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>SeatMap.feature</DependentUpon>
-    </Compile>
     <Compile Include="Wfm\Seat Management\SeatMapBookingView.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1190,18 +1134,6 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Intraday.feature.cs</LastGenOutput>
     </None>
-    <None Include="Wfm\People\old\AdjustSkillsAfterTraining.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>AdjustSkillsAfterTraining.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Wfm\People\old\ImportUsers.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>ImportUsers.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Wfm\People\old\AdvancedSearch.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>AdvancedSearch.feature.cs</LastGenOutput>
-    </None>
     <None Include="Wfm\Outbound\OutboundCampaignBasicOperations.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>OutboundCampaignBasicOperations.feature.cs</LastGenOutput>
@@ -1213,10 +1145,6 @@
     <None Include="Wfm\People\Roles.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Roles.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Wfm\People\old\ShowBasicInformation.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>ShowBasicInformation.feature.cs</LastGenOutput>
     </None>
     <None Include="Wfm\Permissions\PermissionsNew.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
@@ -1314,10 +1242,6 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>RecentOutOfAdherences_39145.feature.cs</LastGenOutput>
     </None>
-    <None Include="Wfm\RealTimeAdherence\PauseButton_39144.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>PauseButton_39144.feature.cs</LastGenOutput>
-    </None>
     <None Include="Wfm\RealTimeAdherence\DeletedPersons_36041.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>DeletedPersons_36041.feature.cs</LastGenOutput>
@@ -1362,26 +1286,6 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>TimeZone.feature.cs</LastGenOutput>
     </None>
-    <None Include="Wfm\Reports\ReportItems.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>ReportItems.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Wfm\Requests\Basic.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Basic.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Wfm\Requests\Filtering.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Filtering.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Wfm\Requests\RunWaitlist.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>RunWaitlist.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Wfm\Requests\ShiftTradeRequests.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>ShiftTradeRequests.feature.cs</LastGenOutput>
-    </None>
     <None Include="Wfm\ResourcePlanner\PlanningGroup.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PlanningGroup.feature.cs</LastGenOutput>
@@ -1389,10 +1293,6 @@
     <None Include="Wfm\ResourcePlanner\ManageSchedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ManageSchedule.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Wfm\Seat Management\SeatMap.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>SeatMap.feature.cs</LastGenOutput>
     </None>
     <None Include="Wfm\Seat Management\SeatMapBookingView.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

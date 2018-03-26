@@ -25,14 +25,3 @@ Background:
 		| Field		| Value			|
 		| Name		| Location1	|
 	And I am englishspeaking swede
-
-@Ignore
-Scenario: display seat plan status for day
-	When I view Seat plan on "2015-05-02"
-	Then I should see a Seat plan status of "All chosen agents were allocated seats"
-
-@Ignore
-Scenario: select planning period to begin seat planning
-	When I view Seat plan on "2015-05-01"
-	And I choose the planning period beginning on '2015-05-10' for seat planning
-	Then I should be able to initiate seat planning for location "Location1"

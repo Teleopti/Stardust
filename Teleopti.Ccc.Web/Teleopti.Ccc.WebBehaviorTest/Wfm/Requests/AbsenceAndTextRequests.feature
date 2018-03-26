@@ -38,15 +38,3 @@ Scenario: Should view absence and text requests
 	And I select all the team
 	And I click button for search requests
 	Then I should see a absence and text request from 'Ashley Andeen' in the list
-
-@ignore
-Scenario: Should keep selected requests when navigating to different page
-	When I view wfm requests
-	And I select to go to absence and text requests view
-	And I select date range from '2015-10-01' to '2015-10-20'
-	And I select all the team
-	And I click button for search requests
-	And I select all requests in the first page
-	And I change to the second page
-	And I change to the first page
-	Then I should see all requests should be selected

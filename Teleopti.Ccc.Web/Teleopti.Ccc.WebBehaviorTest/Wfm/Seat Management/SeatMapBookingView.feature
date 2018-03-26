@@ -53,87 +53,8 @@ Scenario: be able to open the seat map booking view
 	When I view Seat plan on "2015-01-01"
 	And I press seat map booking view button
 	Then the seat map booking should be opened
-@ignore
-Scenario: be able to go back to seat plan
-	When I view Seat plan on "2015-01-01"
-	And I press seat map booking view button
-	And I press back button on seat booking view
-	Then I should go back to seat plan
 
 Scenario: the date is the same with I chose
 	When I view Seat plan on "2015-01-01"
 	And I press seat map booking view button
 	Then the date of datepicker should be correct
-@ignore
-Scenario: be able to view booking detail of selected seat
-	Given there is a seat booking for me
-		| Field         | Value            |
-		| BelongsToDate | 2015-01-01       |
-		| StartDateTime | 2015-01-01 8:00  |
-		| EndDateTime   | 2015-01-01 16:00 |
-		| SeatName      | 1                |
-	When I view Seat plan on "2015-01-01"
-	And I press seat map booking view button
-	Then I am able to view booking detail of selected seat
-@ignore
-Scenario: be able to delete seat booking for the first seat
-	Given there is a seat booking for me
-		| Field         | Value            |
-		| BelongsToDate | 2015-01-01       |
-		| StartDateTime | 2015-01-01 8:00  |
-		| EndDateTime   | 2015-01-01 16:00 |
-		| SeatName      | 1                |
-	When I view Seat plan on "2015-01-01"
-	And I press seat map booking view button
-	Then I delete the first record under the seat booking details
-@ignore
-Scenario: be able to open people search list
-	When I view Seat plan on "2015-01-01"
-	And I press seat map booking view button
-	And I click add agents to seat button
-	Then I should see people search list
-@ignore
-Scenario: the action button of people is invisible
-	When I view Seat plan on "2015-01-01"
-	And I press seat map booking view button
-	And I click add agents to seat button
-	Then I should not see the action buttons of people
-@ignore
-Scenario: be able to close people list
-	When I view Seat plan on "2015-01-01"
-	And I press seat map booking view button
-	And I click add agents to seat button
-	And I click cancel button after open people search list
-	Then I should not see people search list
-@ignore
-Scenario: be able to assign agent to selected seat
-	When I view Seat plan on "2015-01-01"
-	And I navigate to seat map view
-	And I see advanced search
-	And I search people with keyword 'I'
-	And I select agent 'I' from search list
-	And I click assign button
-	Then I should see 'I' in the result of seat plan
-
-@ignore
-Scenario: be able to select multiple seats
-	Given there are '3' more seats at root location
-	When I view Seat plan on "2015-01-01"
-	And I press seat map booking view button
-	And I select first '2' seats
-	Then I should see occupancy detail of two seats in occupancy detail panel
-
-@ignore
-Scenario: be able to delete seatBooking from multiple selection
-	Given there is a seat booking for me
-		| Field         | Value            |
-		| BelongsToDate | 2015-01-01       |
-		| StartDateTime | 2015-01-01 8:00  |
-		| EndDateTime   | 2015-01-01 16:00 |
-		| SeatName      | 1                |
-	And there are '2' more seats at root location
-	When I view Seat plan on "2015-01-01"
-	And I press seat map booking view button
-	And I select first '2' seats
-	Then I delete the first record under the seat booking details
-	And I should not see any seat booking details

@@ -17,17 +17,3 @@ Background:
 	| Field      | Value      |
 	| Team       | My Team    |
 	| Start date | 2013-09-26 |
-
-@ignore
-Scenario: Can see page size dropdown box
-	Given I have the role 'TeamLeader'
-	When I view wfm team schedules
-	Then I can see page size picker
-
-@ignore
-Scenario: Can change page size
-	Given I have the role 'TeamLeader'
-	And I have page size '50' in personal setting
-	When I view wfm team schedules
-	Then I can see page size picker
-	And page size picker is filled with '50'

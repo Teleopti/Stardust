@@ -88,34 +88,6 @@ Scenario: Should see enabled add personal activity button
 	And I selected agent 'John Smith'
 	And I open menu in team schedule
 	Then I should see 'AddPersonalActivity' menu is enabled
-	
-#just keep it as information, already cover it by unit test.
-@ignore 
-Scenario: Should be able to add personal activity
-	Given 'John Smith' has a shift with
-	| Field            | Value            |
-	| Shift category   | Day              |
-	| Activity         | Phone            |
-	| StartTime        | 2016-10-10 09:00 |
-	| EndTime          | 2016-10-10 17:00 |
-	When I view wfm team schedules
-	And I set schedule date to '2016-10-10'
-	And I searched schedule with keyword 'John Smith'
-	And I click button to search for schedules
-	And I selected agent 'John Smith'
-	And I open menu in team schedule
-	And I click menu item 'AddPersonalActivity' in team schedule
-	And I set new activity as
-	| Field        | Value            |
-	| Activity     | Training         |
-	| SelectedDate | 2016-10-10       |
-	| StartTime    | 2016-10-10 12:00 |
-	| EndTime      | 2016-10-10 13:00 |
-	| Is next day  | false            |
-	Then I should see 'AddPersonalActivity' menu is enabled
-	When I apply add personal activity
-	Then I should see a successful notice
-
 
 Scenario: Should see disabled remove activity button when no activity is selected
 	Given 'John Smith' has a shift with
@@ -171,23 +143,6 @@ Scenario: Should be able to remove multiple activities
 	And I selected activity 'Sales'
 	And I apply remove activity
 	Then I should see a successful notice
-
-#just keep it as information
-@ignore 
-Scenario: Should not be able to remove basic activity
-	Given 'John Smith' has a shift with
-	| Field            | Value            |
-	| Shift category   | Day              |
-	| Activity         | Phone            |
-	| StartTime        | 2016-10-10 09:00 |
-	| EndTime          | 2016-10-10 17:00 |
-	When I view wfm team schedules
-	And I set schedule date to '2016-10-10'
-	And I searched schedule with keyword 'John Smith'
-	And I click button to search for schedules
-	And I selected activity 'Phone'
-	And I apply remove activity
-	Then I should see an error notice
 
 Scenario: Should be able to move activity
 	Given 'John Smith' has a shift with

@@ -82,27 +82,6 @@ Scenario: Can swap shifts when selected 2 agents' schedule
 	And I click menu item 'SwapShifts' in team schedule
 	Then I should see a successful notice
 
-@ignore
-Scenario: Could not do shift swap when no permission
-	Given 'John Smith' has an absence with
-	| Field      | Value            |
-	| Name       | Vacation         |
-	| Start time | 2016-10-10 08:00 |
-	| End time   | 2016-10-10 17:00 |
-	And 'Bill Gates' has an absence with
-	| Field      | Value            |
-	| Name       | Illness          |
-	| Start time | 2016-10-10 08:00 |
-	| End time   | 2016-10-10 17:00 |
-	When I view wfm team schedules
-	And I set schedule date to '2016-10-10'
-	And I searched schedule with keyword 'Team green'
-	And I click button to search for schedules
-	And I selected agent 'John Smith'
-	And I selected agent 'Bill Gates'
-	And I open menu in team schedule
-	Then I should not see 'SwapShifts' menu item
-
 Scenario: Schedule with full day absence is not allowed to swap
 	Given 'John Smith' has a full day absence named 'Vacation' on '2016-10-10'	
 	And 'Bill Gates' has a full day absence named 'Illness' on '2016-10-10'
