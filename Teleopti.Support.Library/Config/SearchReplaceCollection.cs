@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Xml;
 
@@ -22,7 +24,6 @@ namespace Teleopti.Support.Library.Config
 
 	public class SearchReplaceCollection
 	{
-		
 		private readonly IList<SearchReplace> _searchReplaces = new List<SearchReplace>();
 
 		public void Set(string searchFor, string replaceWith)
@@ -34,7 +35,7 @@ namespace Teleopti.Support.Library.Config
 		{
 			set($"$({name})", replaceWith);
 		}
-		
+
 		private void set(string searchFor, string replaceWith)
 		{
 			var existing = _searchReplaces.FirstOrDefault(x => x.SearchFor == searchFor);
@@ -54,6 +55,12 @@ namespace Teleopti.Support.Library.Config
 			foreach (var searchReplace in _searchReplaces)
 			{
 				var replaceWith = searchReplace.ReplaceWith;
+
+				// load files for these values
+				if (searchReplace.SearchFor == "$(machineKey.decryptionKey)" && string.IsNullOrEmpty(searchReplace.ReplaceWith))
+					searchReplace.ReplaceWith = decryptionKey();
+				if (searchReplace.SearchFor == "$(machineKey.validationKey)" && string.IsNullOrEmpty(searchReplace.ReplaceWith))
+					searchReplace.ReplaceWith = validationKey();
 
 				//replace appsetting and xml comment before "normal" tags
 				var name = searchReplace.SearchFor.Replace("$(", "").Replace(")", "");
@@ -82,6 +89,30 @@ namespace Teleopti.Support.Library.Config
 			return new SearchReplace(searchFor, replaceWith);
 		}
 
+		private static string decryptionKey()
+		{
+			var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "decryption.key");
+			if (File.Exists(path))
+				return File.ReadAllText(path)
+					.Trim(Environment.NewLine.ToCharArray());
+
+			var key = CryptoCreator.GetCryptoBytes(24);
+			File.WriteAllText(path, key);
+			return key;
+		}
+
+		private static string validationKey()
+		{
+			var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "validation.key");
+			if (File.Exists(path))
+				return File.ReadAllText(path)
+					.Trim(Environment.NewLine.ToCharArray());
+
+			var key = CryptoCreator.GetCryptoBytes(64);
+			File.WriteAllText(path, key);
+			return key;
+		}
+
 		private static string xmlEscape(string replaceWith)
 		{
 			var doc = new XmlDocument();
@@ -106,9 +137,9 @@ namespace Teleopti.Support.Library.Config
 				if (stardust != null)
 					stardust.ReplaceWith = stardust.ReplaceWith.Replace(stardust.ReplaceWith, dnsAlias.ReplaceWith);
 			}
+
 			if (stardust != null)
 				stardust.ReplaceWith = stardust.ReplaceWith.TrimEnd('/');
 		}
-
 	}
 }
