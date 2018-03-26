@@ -46,6 +46,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 	function asmViewModel(yesterday) {
 		var self = this;
 		self.intervalPointer = null;
+		self.dstAdjustmentInMinutes = 0;
 
 		function setCurrentTime() {
 			self.now(new Date(new Date(getUtcNowString()).getTime() + userTimeZoneMinuteOffset * 60000));
@@ -64,6 +65,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 				//pass as string to make sure no time included due to time zone stuff
 				data: { asmZeroLocal: Teleopti.MyTimeWeb.Common.FormatServiceDate(self.yesterday()) },
 				success: function (data) {
+					self.dstAdjustmentInMinutes = data.DSTAdjustmentInMinutes;
 					self.hours(data.Hours);
 					self._createLayers(data.Layers);
 					self.unreadMessageCount(data.UnreadMessageCount);
@@ -94,10 +96,10 @@ Teleopti.MyTimeWeb.Asm = (function () {
 
 		self.visibleLayers.subscribe(function (newVisualLayers) {
 			var currentLayer = newVisualLayers[0];
-			var currentLayerDesc = currentLayer != undefined && currentLayer.active() ? currentLayer.title() : null;
+			var currentLayerDesc = currentLayer !== undefined && currentLayer.active() ? currentLayer.title() : null;
 
-			var nextLayer = currentLayerDesc == null ? newVisualLayers[0] : newVisualLayers[1];
-			var nextLayerDesc = nextLayer != undefined ? nextLayer.title() : null;
+			var nextLayer = currentLayerDesc === null ? newVisualLayers[0] : newVisualLayers[1];
+			var nextLayerDesc = nextLayer !== undefined ? nextLayer.title() : null;
 
 			self.currentLayerString(currentLayerDesc);
 			self.nextLayerString(nextLayerDesc);
@@ -108,7 +110,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		self.unreadMessageCount = ko.observable(0);
 		self.canvasPosition = ko.computed(function () {
 			var now = new Date(self.now());
-			var msSinceStart = (now.getHours() * 60 * 60 + now.getMinutes() * 60 + now.getSeconds() + 24 * 60 * 60) * 1000;
+			var msSinceStart = (now.getHours() * 60 * 60 + now.getMinutes() * 60 + self.dstAdjustmentInMinutes * 60 + now.getSeconds() + 24 * 60 * 60) * 1000;
 			var hoursSinceStart = msSinceStart / 1000 / 60 / 60;
 			return - (pixelPerHours * hoursSinceStart) + 'px';
 		});
@@ -235,7 +237,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 	}
 
 	function _validateNotificationSource(notification) {
-		if (notification.TrackId != null && _notificationTrackIdList.indexOf(notification.TrackId) > -1) {
+		if (notification.TrackId !== null && _notificationTrackIdList.indexOf(notification.TrackId) > -1) {
 			return false;
 		}
 
@@ -265,6 +267,9 @@ Teleopti.MyTimeWeb.Asm = (function () {
 			_settings = settings;
 			_showAsm();
 			_startPollingToAvoidLogOut();
+		},
+		Vm: function() {
+			return vm;
 		},
 		ListenForScheduleChanges: _listenForScheduleChanges,
 		UpdateNotificationDisplayTimeSetting: _updateNotificationDisplayTimeSetting,

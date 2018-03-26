@@ -7,7 +7,9 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping;
@@ -21,6 +23,7 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 		private StubFactory scheduleFactory;
 		private IProjectionProvider projectionProvider;
 		private IAsmViewModelMapper target;
+		public MutableNow Now;
 		private TimeZoneInfo timeZone;
 
 		[SetUp]
@@ -29,7 +32,8 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 			projectionProvider = MockRepository.GenerateStub<IProjectionProvider>();
 			scheduleFactory = new StubFactory();
 			timeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
-			target = new AsmViewModelMapper(projectionProvider, new FakeUserTimeZone(timeZone), new ThisCulture(CultureInfo.GetCultureInfo("sv-SE")));
+			target = new AsmViewModelMapper(projectionProvider, new FakeUserTimeZone(timeZone), new ThisCulture(CultureInfo.GetCultureInfo("sv-SE")), new MutableNow());
+			Now = new MutableNow();
 		}
 
 		[Test]
@@ -185,13 +189,74 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 			));
 
 			var asmZore = new DateTime(2015, 3, 28, 0, 0, 0);
-			var stockholmTarget = new AsmViewModelMapper(projectionProvider, new FakeUserTimeZone(timeZone), new ThisCulture(CultureInfo.GetCultureInfo("sv-SE")));
+			var stockholmTarget = new AsmViewModelMapper(projectionProvider, new FakeUserTimeZone(timeZone), new ThisCulture(CultureInfo.GetCultureInfo("sv-SE")), new MutableNow());
 
 			var res = stockholmTarget.Map(asmZore, new[] { scheduleDay }, 0);
 
 			res.Layers.First().StartMinutesSinceAsmZero.Should().Be.EqualTo(TimeZoneInfo.ConvertTimeFromUtc(layerOneStartTime, timeZone).Subtract(asmZore).TotalMinutes);
 			res.Layers.Second().StartMinutesSinceAsmZero.Should().Be.EqualTo(TimeZoneInfo.ConvertTimeFromUtc(layerTwoStartTime, timeZone).Subtract(asmZore).TotalMinutes-60);
 
+		}
+		
+		[Test]
+		public void ShouldReturnDstAjustmentWhenDstStartWithinUpComing10Hours()
+		{
+			var asmZeroYesterdayLocal = new DateTime(2018, 3, 10, 0, 0, 0);
+			var centralStandardTimeZone = TimeZoneInfoFactory.CentralStandardTime();
+			Now.Is(TimeZoneHelper.ConvertToUtc(asmZeroYesterdayLocal.AddDays(1), centralStandardTimeZone));
+
+			var stockholmTarget = new AsmViewModelMapper(new ProjectionProvider(), new FakeUserTimeZone(centralStandardTimeZone), new ThisCulture(CultureInfo.GetCultureInfo("sv-SE")), new MutableNow(Now.UtcDateTime()));
+
+			var daylightSavingAdjustment = TimeZoneHelper.GetDaylightChanges(centralStandardTimeZone, asmZeroYesterdayLocal.Year);
+
+			var res = stockholmTarget.Map(asmZeroYesterdayLocal, new IScheduleDay[] { }, 0);
+
+			res.DSTAdjustmentInMinutes.Should().Be(daylightSavingAdjustment.Delta.TotalMinutes);
+		}
+
+		[Test]
+		public void ShouldNotReturnDstAjustmentWhenDstStartNotWithinUpComing10HoursAndNowIsToday()
+		{
+			var asmZeroYesterdayLocal = new DateTime(2018, 3, 10, 4, 15, 0);
+			var centralStandardTimeZone = TimeZoneInfoFactory.CentralStandardTime();
+			Now.Is(TimeZoneHelper.ConvertToUtc(asmZeroYesterdayLocal.AddDays(1), centralStandardTimeZone));
+
+			var stockholmTarget = new AsmViewModelMapper(new ProjectionProvider(), new FakeUserTimeZone(centralStandardTimeZone), new ThisCulture(CultureInfo.GetCultureInfo("sv-SE")), new MutableNow(Now.UtcDateTime()));
+
+			var res = stockholmTarget.Map(asmZeroYesterdayLocal, new IScheduleDay[] { }, 0);
+
+			res.DSTAdjustmentInMinutes.Should().Be(0);
+		}
+
+		[Test]
+		public void ShouldReturnDstAjustmentWhenNowIsDstStartTime()
+		{
+			var asmZeroYesterdayLocal = new DateTime(2018, 3, 10, 3, 0, 0);
+			var centralStandardTimeZone = TimeZoneInfoFactory.CentralStandardTime();
+			Now.Is(TimeZoneHelper.ConvertToUtc(asmZeroYesterdayLocal.AddDays(1), centralStandardTimeZone));
+
+			var stockholmTarget = new AsmViewModelMapper(new ProjectionProvider(), new FakeUserTimeZone(centralStandardTimeZone), new ThisCulture(CultureInfo.GetCultureInfo("sv-SE")), new MutableNow(Now.UtcDateTime()));
+			var daylightSavingAdjustment = TimeZoneHelper.GetDaylightChanges(centralStandardTimeZone, asmZeroYesterdayLocal.Year);
+
+			var res = stockholmTarget.Map(asmZeroYesterdayLocal, new IScheduleDay[] { }, 0);
+
+			res.DSTAdjustmentInMinutes.Should().Be(daylightSavingAdjustment.Delta.TotalMinutes);
+		}
+
+		[Test]
+		public void ShouldReturnDstAjustmentWhenDstStartWithinUpComing10HoursAndNowIsNotDstDay()
+		{
+			var asmZeroYesterdayLocal = new DateTime(2018, 3, 9, 23, 0, 0);
+			var centralStandardTimeZone = TimeZoneInfoFactory.CentralStandardTime();
+			Now.Is(TimeZoneHelper.ConvertToUtc(asmZeroYesterdayLocal.AddDays(1), centralStandardTimeZone));
+
+			var stockholmTarget = new AsmViewModelMapper(new ProjectionProvider(), new FakeUserTimeZone(centralStandardTimeZone), new ThisCulture(CultureInfo.GetCultureInfo("sv-SE")), new MutableNow(Now.UtcDateTime()));
+
+			var daylightSavingAdjustment = TimeZoneHelper.GetDaylightChanges(centralStandardTimeZone, asmZeroYesterdayLocal.Year);
+
+			var res = stockholmTarget.Map(asmZeroYesterdayLocal, new IScheduleDay[] { }, 0);
+
+			res.DSTAdjustmentInMinutes.Should().Be(daylightSavingAdjustment.Delta.TotalMinutes);
 		}
 
 		[Test]
@@ -208,7 +273,7 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 			));
 			
 			var asmZore = new DateTime(2015, 10, 24, 0, 0, 0);
-			var stockholmTarget = new AsmViewModelMapper(projectionProvider, new FakeUserTimeZone(timeZone), new ThisCulture(CultureInfo.GetCultureInfo("sv-SE")));
+			var stockholmTarget = new AsmViewModelMapper(projectionProvider, new FakeUserTimeZone(timeZone), new ThisCulture(CultureInfo.GetCultureInfo("sv-SE")), new MutableNow());
 			var res = stockholmTarget.Map(asmZore, new[] { scheduleDay }, 0);
 
 			res.Layers.First().StartMinutesSinceAsmZero.Should().Be.EqualTo(TimeZoneInfo.ConvertTimeFromUtc(layerOneStartTime, timeZone).Subtract(asmZore).TotalMinutes);
