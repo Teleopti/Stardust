@@ -255,9 +255,25 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			};
 			Target.SaveConfigurationForTenant(tenantConfig);
 			var savedConfig = BaseConfigurationRepository.LoadBaseConfiguration(connectionString);
+			var scheduledJob = JobScheduleRepository.GetEtlJobSchedules().Single();
+			var scheduledPeriods = JobScheduleRepository.GetEtlJobSchedulePeriods(1);
+
 			savedConfig.IntervalLength.Should().Be(baseConfig.IntervalLength);
 			savedConfig.CultureId.Should().Be(baseConfig.CultureId);
 			savedConfig.TimeZoneCode.Should().Be(baseConfig.TimeZoneCode);
+
+			scheduledJob.JobName.Should().Be("Initial");
+			scheduledJob.ScheduleName.Should().Be("Manual ETL");
+			scheduledJob.DataSourceId.Should().Be(1);
+			scheduledJob.Enabled.Should().Be(true);
+			scheduledJob.ScheduleId.Should().Be(1);
+			scheduledJob.ScheduleType.Should().Be(JobScheduleType.Manual);
+			scheduledJob.Description.Should().Be("Manual ETL");
+			scheduledJob.TenantName.Should().Be(testTenantName);
+			scheduledPeriods.Count.Should().Be(1);
+			scheduledPeriods.First().JobCategoryName.Should().Be("Initial");
+			scheduledPeriods.First().RelativePeriod.Minimum.Should().Be(-1);
+			scheduledPeriods.First().RelativePeriod.Maximum.Should().Be(1);
 		}
 
 		[Test]

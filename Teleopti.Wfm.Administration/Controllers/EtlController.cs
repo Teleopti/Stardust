@@ -132,7 +132,17 @@ namespace Teleopti.Wfm.Administration.Controllers
 			}
 
 			var connectionString = tenant.DataSourceConfiguration.AnalyticsConnectionString;
-			_baseConfigurationRepository.SaveBaseConfiguration(connectionString, tenantConfigurationModel.BaseConfig);
+			try
+			{
+				_baseConfigurationRepository.SaveBaseConfiguration(connectionString, tenantConfigurationModel.BaseConfig);
+				enqueueInitialJob(tenantConfigurationModel.TenantName);
+			}
+			catch (Exception ex)
+			{
+				logger.Error($"Error occurred on save changes for Base Configuration for tenant \"{tenantConfigurationModel.TenantName}\"", ex);
+				return Content(HttpStatusCode.InternalServerError, "Error occurred on save base configuration.");
+			}
+
 			return Ok();
 		}
 
@@ -201,31 +211,36 @@ namespace Teleopti.Wfm.Administration.Controllers
 			{
 				_generalFunctions.SaveDataSource(dataSourceId, tenantDataSourceModel.DataSource.TimeZoneId);
 
-				var utcToday = DateTime.UtcNow.Date;
-				var jobEnqueModel = new JobEnqueModel
-				{
-					JobName = "Initial",
-					JobPeriods = new List<JobPeriod>
-					{
-						new JobPeriod
-						{
-							Start = utcToday.AddDays(-1),
-							End = utcToday.AddDays(1),
-							JobCategoryName = "Initial",
-						}
-					},
-					LogDataSourceId = 1,
-					TenantName = tenantName
-				};
-				_etlJobScheduler.ScheduleJob(jobEnqueModel);
+				enqueueInitialJob(tenantName);
 			}
 			catch (Exception ex)
 			{
 				logger.Error($"Error occurred on save changes for Datasource with id {dataSourceId} for Tenant \"{tenantName}\"", ex);
-				return Content(HttpStatusCode.NotFound, "Error occurred on save data source changes.");
+				return Content(HttpStatusCode.InternalServerError, "Error occurred on save data source changes.");
 			}
 
 			return Ok();
+		}
+
+		private void enqueueInitialJob(string tenantName)
+		{
+			var utcToday = DateTime.UtcNow.Date;
+			var jobEnqueModel = new JobEnqueModel
+			{
+				JobName = "Initial",
+				JobPeriods = new List<JobPeriod>
+				{
+					new JobPeriod
+					{
+						Start = utcToday.AddDays(-1),
+						End = utcToday.AddDays(1),
+						JobCategoryName = "Initial",
+					}
+				},
+				LogDataSourceId = 1,
+				TenantName = tenantName
+			};
+			_etlJobScheduler.ScheduleJob(jobEnqueModel);
 		}
 
 		private string getMasterTenantName()
