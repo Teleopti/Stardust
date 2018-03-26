@@ -4,16 +4,18 @@ using System.Linq;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Wfm.AdministrationTest.FakeData
 {
 	public class FakeGeneralInfrastructure : IGeneralInfrastructure
 	{
+		public const int NullTimeZoneId = -9999;
 		private readonly IList<IDataSourceEtl> dataSourceEtls = new List<IDataSourceEtl>();
 		public IList<IDataSourceEtl> GetDataSourceList(bool getValidDataSources, bool includeOptionAll)
 		{
-			return dataSourceEtls;
+			return getValidDataSources
+				? dataSourceEtls.Where(x => x.TimeZoneId != NullTimeZoneId).ToList()
+				: dataSourceEtls;
 		}
 
 		public void HasDataSources(IDataSourceEtl dataSource)

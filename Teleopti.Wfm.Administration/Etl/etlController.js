@@ -179,7 +179,7 @@
 		function sendTenant(tenant) {
 			$http
 			.post(
-				"./Etl/TenantLogDataSources",
+				"./Etl/TenantValidLogDataSources",
 				JSON.stringify(tenant),
 				tokenHeaderService.getHeaders()
 			)

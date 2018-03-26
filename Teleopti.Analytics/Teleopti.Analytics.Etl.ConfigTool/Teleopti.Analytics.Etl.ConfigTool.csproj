@@ -157,7 +157,6 @@
     <Compile Include="Gui\StartupConfiguration\StartupConfigurationView.Designer.cs">
       <DependentUpon>StartupConfigurationView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Transformer\DataSourceInvalidCollection.cs" />
     <Compile Include="Gui\Control\ManualControl.xaml.cs">
       <DependentUpon>ManualControl.xaml</DependentUpon>
     </Compile>

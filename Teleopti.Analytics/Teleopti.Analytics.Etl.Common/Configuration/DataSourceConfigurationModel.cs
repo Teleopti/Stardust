@@ -26,7 +26,7 @@ namespace Teleopti.Analytics.Etl.Common.Configuration
 
 		public IList<DataSourceRow> LoadDataSources()
 		{
-			var allDataSources = new List<IDataSourceEtl>(_generalFunctions.DataSourceInvalidList);
+			var allDataSources = new List<IDataSourceEtl>(_generalFunctions.DataSourceList);
 			allDataSources.AddRange(_generalFunctions.DataSourceValidList);
 
 			var dataSourceRows = new List<DataSourceRow>();

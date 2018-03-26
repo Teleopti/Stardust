@@ -72,7 +72,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Gui.DataSourceConfiguration
 		{
 			IDataSourceEtl etlDataSource = new DataSourceEtl(1, "name", 2, "UTC", 15, false);
 
-			_generalFunctions.Stub(x => x.DataSourceInvalidList).Return(new List<IDataSourceEtl>());
+			_generalFunctions.Stub(x => x.DataSourceList).Return(new List<IDataSourceEtl>());
 			_generalFunctions.Stub(x => x.DataSourceValidList).Return(new List<IDataSourceEtl> { etlDataSource });
 			_view.Stub(x => x.SetTimeZoneDataSource(_model.LoadTimeZones()));
 

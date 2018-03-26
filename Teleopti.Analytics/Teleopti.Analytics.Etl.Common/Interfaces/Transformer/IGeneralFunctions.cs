@@ -7,7 +7,7 @@ namespace Teleopti.Analytics.Etl.Common.Interfaces.Transformer
 	public interface IGeneralFunctions
 	{
 		IList<IDataSourceEtl> DataSourceValidList { get; }
-		IList<IDataSourceEtl> DataSourceInvalidList { get; }
+		IList<IDataSourceEtl> DataSourceList { get; }
 		IList<IDataSourceEtl> DataSourceValidListIncludedOptionAll { get; }
 
 		EtlToolStateType GetInitialLoadState();

@@ -77,12 +77,26 @@ namespace Teleopti.Wfm.Administration.Controllers
 		}
 
 		[TenantUnitOfWork]
-		[HttpPost, Route("Etl/TenantLogDataSources")]
-		public virtual IHttpActionResult TenantLogDataSources([FromBody] string tenantName)
+		[HttpPost, Route("Etl/TenantValidLogDataSources")]
+		public virtual IHttpActionResult TenantValidLogDataSources([FromBody] string tenantName)
 		{
 			try
 			{
 				return Ok(_tenantLogDataSourcesProvider.Load(tenantName));
+			}
+			catch (ArgumentException e)
+			{
+				return Content(HttpStatusCode.NotFound, e.Message);
+			}
+		}
+		
+		[TenantUnitOfWork]
+		[HttpPost, Route("Etl/TenantAllLogDataSources")]
+		public virtual IHttpActionResult TenantAllLogDataSources([FromBody] string tenantName)
+		{
+			try
+			{
+				return Ok(_tenantLogDataSourcesProvider.Load(tenantName, true));
 			}
 			catch (ArgumentException e)
 			{
@@ -195,7 +209,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 					$"Datasource with id {dataSourceId} for Tenant \"{tenantName}\" is not allowed to modify");
 			}
 
-			var dataSource = _tenantLogDataSourcesProvider.Load(tenantName).SingleOrDefault(x => x.Id == dataSourceId);
+			var dataSource = _tenantLogDataSourcesProvider.Load(tenantName, true).SingleOrDefault(x => x.Id == dataSourceId);
 			if (dataSource == null)
 			{
 				return Content(HttpStatusCode.NotFound, $"Datasource with id {dataSourceId} for Tenant \"{tenantName}\" not found");

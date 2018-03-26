@@ -17,7 +17,7 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 			_generalFunctions = generalFunctions;
 		}
 
-		public IList<DataSourceModel> Load(string tenantName)
+		public IList<DataSourceModel> Load(string tenantName, bool includeInvalidDataSource = false)
 		{
 			if (Tenants.IsAllTenants(tenantName))
 			{
@@ -32,7 +32,10 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 			}
 
 			_generalFunctions.SetConnectionString(_analyticsConnectionsStringExtractor.Extract(tenantName));
-			var logDataSources = _generalFunctions.DataSourceValidListIncludedOptionAll;
+			var logDataSources = includeInvalidDataSource
+				? _generalFunctions.DataSourceList.ToList()
+				: _generalFunctions.DataSourceValidListIncludedOptionAll.ToList();
+
 			return logDataSources.Select(x => new DataSourceModel
 				{
 					Id = x.DataSourceId,

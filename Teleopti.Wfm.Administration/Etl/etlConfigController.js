@@ -40,7 +40,7 @@
       tenant.loading = true;
       $http
       .post(
-        "./Etl/TenantLogDataSources",
+        "./Etl/TenantAllLogDataSources",
         JSON.stringify(tenant.TenantName),
         tokenHeaderService.getHeaders()
       )
