@@ -117,5 +117,20 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.ApprovePeriodAsInAdhe
 			result.Select(x => x.StartTime).Should().Have.SameSequenceAs(new[] {"2018-03-09 08:00:00".Utc(), "2018-03-09 08:00:00".Utc()});
 			result.Select(x => x.EndTime).Should().Have.SameSequenceAs(new[] {"2018-03-09 09:05:00".Utc(), "2018-03-09 09:05:00".Utc()});
 		}
+		
+		[Test]
+		public void ShouldRemoveApprovedPeriodWithDuplicateRemovals()
+		{
+			var person = Guid.NewGuid();
+			Database
+				.WithPerson(person)
+				.WithApprovedPeriod("2018-03-09 08:00:00", "2018-03-09 08:05:00")
+				.WithRemovedApprovedPeriod("2018-03-09 08:00:00", "2018-03-09 08:05:00")
+				.WithRemovedApprovedPeriod("2018-03-09 08:00:00", "2018-03-09 08:05:00");
+
+			var result = Target.Load(person, "2018-03-09".Date());
+
+			result.ApprovedPeriods().Should().Be.Empty();
+		}
 	}
 }

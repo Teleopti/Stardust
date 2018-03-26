@@ -78,17 +78,17 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay
 		private static IEnumerable<DateTimePeriod> buildApprovedPeriods(IEnumerable<IEvent> events) =>
 			events
 				.Where(e => e.GetType() == typeof(PeriodApprovedAsInAdherenceEvent) || e.GetType() == typeof(ApprovedPeriodRemovedEvent))
-				.Aggregate(new List<DateTimePeriod>(), (acc, @event) =>
+				.Aggregate(new List<DateTimePeriod>(), (approvedPeriods, @event) =>
 				{
 					var eventData = ((IRtaStoredEvent) @event).QueryData();
 					var period = new DateTimePeriod(eventData.StartTime.Value, eventData.EndTime.Value);
 
 					if (@event is ApprovedPeriodRemovedEvent)
-						acc.Remove(acc.First(a => a.Equals(period)));
+						approvedPeriods.Remove(approvedPeriods.FirstOrDefault(a => a.Equals(period)));
 					else
-						acc.Add(period);
+						approvedPeriods.Add(period);
 
-					return acc;
+					return approvedPeriods;
 				});
 
 		private class periodAccumulator
