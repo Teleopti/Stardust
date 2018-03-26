@@ -19,8 +19,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public IDisposable OnThisThread()
 		{
-			if (!_toggleManager.IsEnabled(Toggles.WFM_WebScheduling_LowPriority_44320) ||
-				_toggleManager.IsEnabled(Toggles.ResourcePlanner_RunPerfTestWithoutEvents_47256))
+			if (!_toggleManager.IsEnabled(Toggles.WFM_WebScheduling_LowPriority_44320))
 				return new GenericDisposable(() => { });
 			_threadOldPriority.Value = Thread.CurrentThread.Priority;
 			Thread.CurrentThread.Priority = ThreadPriority.Lowest;
