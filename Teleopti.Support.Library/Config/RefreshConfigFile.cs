@@ -6,20 +6,22 @@ namespace Teleopti.Support.Library.Config
 	public class RefreshConfigFile
 	{
 		private readonly FileConfigurator _fileConfigurator;
+		private readonly MachineKeyChecker _machineKeyChecker;
 
 		public RefreshConfigFile()
 		{
 			_fileConfigurator = new FileConfigurator();
+			_machineKeyChecker = new MachineKeyChecker();
 		}
 
-		public void ReplaceFile(string destinationAndSource, SearchReplaceCollection searchReplaces)
+		public void ReplaceFile(string destinationAndSource, SearchReplaceCollection searchReplaceCollection)
 		{
 			var files = destinationAndSource.Split(',');
 			if (files.Length.Equals(2))
-				ReplaceFile(files[0], files[1], searchReplaces);
+				ReplaceFile(files[0], files[1], searchReplaceCollection);
 		}
 
-		public void ReplaceFile(string destinationFile, string sourceFile, SearchReplaceCollection searchReplaces)
+		public void ReplaceFile(string destinationFile, string sourceFile, SearchReplaceCollection searchReplaceCollection)
 		{
 			destinationFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, destinationFile);
 			sourceFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, sourceFile);
@@ -28,7 +30,8 @@ namespace Teleopti.Support.Library.Config
 			if (!Directory.Exists(dir))
 				Directory.CreateDirectory(dir);
 
-			_fileConfigurator.Configure(sourceFile, destinationFile, searchReplaces);
+			_fileConfigurator.Configure(sourceFile, destinationFile, searchReplaceCollection);
+			_machineKeyChecker.CheckForMachineKey(destinationFile);
 		}
 
 		public string GetDirectories(string fullPath)
