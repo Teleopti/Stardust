@@ -91,6 +91,7 @@ Scenario: Upcoming activity time period starting after midnight should be indica
 	When I view ASM
 	Then I should see next activity time as '08:00+1-11:00'
 
+@ignore
 Scenario: Agent should from ASM popup be notified when current shift has changed
 	Given I have the role 'Full access to mytime'
 	And the time is '2030-01-01 00:00'
