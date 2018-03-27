@@ -17,6 +17,8 @@
 		vm.masterTenantConfigured = false;
 		vm.selectDataSource = null;
 
+
+		// manual and setup
 		vm.getConfigStatus = getConfigStatus;
 		vm.getJobs = getJobs;
 		vm.getTenants = getTenants;
@@ -24,6 +26,9 @@
 		vm.selectedTenantChanged = selectedTenantChanged;
 		vm.selectJob = selectJob;
 		vm.encueueJob = encueueJob;
+		// scheduled
+		vm.toggleFrequencyType = toggleFrequencyType;
+
 
 		var today = new Date();
 		vm.dataSources = [];
@@ -140,21 +145,21 @@
 
 		function getTenants() {
 			vm.tenants = [];
-      $http
-      .get("./Etl/GetTenants", tokenHeaderService.getHeaders())
-      .success(function(data) {
+			$http
+			.get("./Etl/GetTenants", tokenHeaderService.getHeaders())
+			.success(function(data) {
 				for (var i = 0; i < data.length; i++) {
 					if (data[i].IsBaseConfigured) {
 						vm.tenants.push(data[i]);
 					}
 				}
-        vm.selectedTenant = vm.tenants[0];
+				vm.selectedTenant = vm.tenants[0];
 				if (angular.isDefined(vm.selectedTenant) && vm.selectedTenant.TenantName) {
 					vm.sendTenant(vm.selectedTenant.TenantName);
 					vm.getJobs(vm.selectedTenant.TenantName);
 				}
-      });
-    }
+			});
+		}
 
 		function getConfigStatus() {
 			$http
@@ -253,17 +258,39 @@
 
 		//schedule inputs
 		vm.scheduleNameEnabled = true;
+		vm.editingSchedule;
+		vm.frequencyType = false;
+
+		function toggleFrequencyType() {
+			if (vm.frequencyType) {
+				//startEnd
+				console.log('startEnd');
+				vm.editingSchedule.onceTime = null;
+			} else {
+				// today
+				console.log('today');
+				vm.editingSchedule.onceTime = '15:00';
+
+				vm.editingSchedule.everyTime = null;
+				vm.editingSchedule.everyStartTime = null;
+				vm.editingSchedule.everyEndTime = null;
+			}
+		}
 
 		vm.schedules = [
 			{
 				Name: "My main job",
 				Jname: "Nightly",
+				TenantName: 'WFM Teleopti',
+				Frequency: 'hourly',
 				Enabled: true,
 				Description: "Occurs every day at 15:58. Using the log data"
 			},
 			{
 				Name: "My secondary job",
 				Jname: "Nightly",
+				TenantName: 'WFM Teleopti',
+				Frequency: 'hourly',
 				Enabled: true,
 				Description: "Occurs some days at 15:58. Who knows?"
 			}
