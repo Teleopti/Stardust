@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Messages;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
@@ -25,13 +24,15 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		private readonly IUpdatedBy _updatedBy;
 		private readonly IConfigReader _configReader;
 		private readonly ICurrentDataSource _currentDataSource;
+		private readonly ICurrentBusinessUnit _currentBusinessUnit;
 		
-		public StardustSender(IPostHttpRequest postHttpRequest, IUpdatedBy updatedBy, IConfigReader configReader, ICurrentDataSource currentDataSource)
+		public StardustSender(IPostHttpRequest postHttpRequest, IUpdatedBy updatedBy, IConfigReader configReader, ICurrentDataSource currentDataSource, ICurrentBusinessUnit currentBusinessUnit)
 		{
 			_postHttpRequest = postHttpRequest;
 			_updatedBy = updatedBy;
 			_configReader = configReader;
 			_currentDataSource = currentDataSource;
+			_currentBusinessUnit = currentBusinessUnit;
 		}
 
 		public Guid Send(IEvent @event)
@@ -67,6 +68,9 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 					datasource = _currentDataSource.CurrentName();
 
 				raptorDomainMessage.LogOnDatasource = datasource;
+				if(raptorDomainMessage.LogOnBusinessUnitId == Guid.Empty)
+					raptorDomainMessage.LogOnBusinessUnitId = _currentBusinessUnit.Current().Id.GetValueOrDefault();
+
 				if (logger.IsDebugEnabled)
 				{
 					logger.Debug(string.Format(CultureInfo.InvariantCulture,
@@ -85,9 +89,6 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 				Policy = policy
 			};
 			var mess = JsonConvert.SerializeObject(jobModel);
-			
-				
-
 			
 
 			var managerLocation = _configReader.AppConfig("ManagerLocation");
