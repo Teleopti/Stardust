@@ -1,54 +1,57 @@
 <div class="group-picker-wrapper">
-	<md-select-value role="button" required class="md-select-value" ng-click="$ctrl.openMenu($event)" ng-class="{'none-selected': $ctrl.selectedGroups.groupIds.length == 0, 'invalid':$ctrl.required && $ctrl.selectedGroups.groupIds.length == 0}">
-		<span class="selected-text">{{ $ctrl.groupPagesSelectedText() }}</span>
-		<span class="md-select-icon" aria-hidden="true"></span>
-	</md-select-value>
+	<form>
+		<md-select-value role="button" required class="md-select-value" ng-click="$ctrl.openMenu($event)" ng-class="{'none-selected': $ctrl.selectedGroups.groupIds.length == 0, 'invalid':$ctrl.required && $ctrl.selectedGroups.groupIds.length == 0}">
+			<span class="selected-text">{{ $ctrl.groupPagesSelectedText() }}</span>
+			<span class="md-select-icon" aria-hidden="true"></span>
+		</md-select-value>
+	</form>
 	<div class="_off-screen">
 		<group-pages-panel class="group-page-picker-menu wfm-slide-tabs tabbed-panel">
-
 			<div class="longest-name">{{$ctrl.longestName}}</div>
-			<md-content>
-				<md-tabs md-selected="$ctrl.selectedIndex" md-dynamic-height md-no-pagination="true">
-					<md-tab ng-repeat="tab in $ctrl.tabs">
-						<md-tab-label><i title="{{tab.title|translate}}" class="mdi mdi-{{tab.icon}} group-pages-icon"></i></md-tab-label>
-						<md-tab-body>
-							<md-progress-linear md-mode="indeterminate" ng-if="!$ctrl.isDataAvailable"></md-progress-linear>
-							<div class="header">
-								<i class="mdi mdi-magnify"></i>
-								<input type="text" md-autofocus class="search md-text" ng-change="$ctrl.onSearchTextChanged()" placeholder="{{ 'Search' | translate}}" ng-model="$ctrl.searchText"/>
-							</div>
-							<md-virtual-repeat-container class="virtual-repeat">
-								<div md-virtual-repeat="o in $ctrl.groupsInView[tab.title]" class="repeated-item" flex>
-									<div ng-if="o.origin.isParent" ng-class="{focused: o.isFocused}" class="group md-button-toggle md-button md-ink-ripple">
-										<label class="clickable-area" tabindex="-1">
-											<div flex layout="row">
-												<md-checkbox id="group-{{o.id}}" aria-label="Checkbox" ng-class="{'indeterminate': o.isIndeterminate()}" ng-click="$ctrl.toggleGroup(o)" ng-checked="o.isChecked()"
-															 ng-focus="$ctrl.groupFocused(o)" ng-blur="$ctrl.groupBlurred(o)"></md-checkbox>
-												<span class="md-checkbox-label" ng-bind-html="o.name | searchFilter:$ctrl.searchText" ng-click="$ctrl.toggleGroup(o)"></span>
-												<div id="toggle-{{o.id}}" class="group-toggle"
-													 ng-click="$ctrl.collapseGroup(o)" ng-focus="$ctrl.groupFocused(o)" ng-blur="$ctrl.groupBlurred(o)">
-													<span class="md-toggle-icon">
-														<i class="mdi" ng-class=" o.collapsed ? 'mdi-chevron-down' : 'mdi-chevron-up' "></i>
-													</span>
-												</div>
-											</div>
-										</label>
-									</div>
-									<div ng-if=" !o.origin.isParent " ng-class="{focused: o.isFocused}" class="child md-button md-ink-ripple">
-										<label class="clickable-area" tabindex="-1">
-											<div flex layout="row">
-												<md-checkbox id="group-{{o.id}}" aria-label="Checkbox" ng-click="$ctrl.toggleSubGroup(o)" ng-checked="o.isChecked()"
-															 ng-focus="$ctrl.groupFocused(o)" ng-blur="$ctrl.groupBlurred(o)"></md-checkbox>
-												<span class="md-checkbox-label" ng-bind-html="o.name | searchFilter:$ctrl.searchText" ng-click="$ctrl.toggleSubGroup(o)"></span>
-											</div>
-										</label>
-									</div>
+			<form>
+				<md-content>
+					<md-tabs md-selected="$ctrl.selectedIndex" md-dynamic-height md-no-pagination="true">
+						<md-tab ng-repeat="tab in $ctrl.tabs">
+							<md-tab-label><i title="{{tab.title|translate}}" class="mdi mdi-{{tab.icon}} group-pages-icon"></i></md-tab-label>
+							<md-tab-body>
+								<md-progress-linear md-mode="indeterminate" ng-if="!$ctrl.isDataAvailable"></md-progress-linear>
+								<div class="header">
+									<i class="mdi mdi-magnify"></i>
+									<input type="text" md-autofocus class="search md-text" ng-change="$ctrl.onSearchTextChanged()" placeholder="{{ 'Search' | translate}}" ng-model="$ctrl.searchText" />
 								</div>
-							</md-virtual-repeat-container>
-						</md-tab-body>
-					</md-tab>
-				</md-tabs>
-			</md-content>
+								<md-virtual-repeat-container class="virtual-repeat">
+									<div md-virtual-repeat="o in $ctrl.groupsInView[tab.title]" class="repeated-item" flex>
+										<div ng-if="o.origin.isParent" ng-class="{focused: o.isFocused}" class="group md-button-toggle md-button md-ink-ripple">
+											<label class="clickable-area" tabindex="-1">
+												<div flex layout="row">
+													<md-checkbox id="group-{{o.id}}" aria-label="Checkbox" ng-class="{'indeterminate': o.isIndeterminate()}" ng-click="$ctrl.toggleGroup(o)" ng-checked="o.isChecked()"
+																 ng-focus="$ctrl.groupFocused(o)" ng-blur="$ctrl.groupBlurred(o)"></md-checkbox>
+													<span class="md-checkbox-label" ng-bind-html="o.name | searchFilter:$ctrl.searchText" ng-click="$ctrl.toggleGroup(o)"></span>
+													<div id="toggle-{{o.id}}" class="group-toggle"
+														 ng-click="$ctrl.collapseGroup(o)" ng-focus="$ctrl.groupFocused(o)" ng-blur="$ctrl.groupBlurred(o)">
+														<span class="md-toggle-icon">
+															<i class="mdi" ng-class=" o.collapsed ? 'mdi-chevron-down' : 'mdi-chevron-up' "></i>
+														</span>
+													</div>
+												</div>
+											</label>
+										</div>
+										<div ng-if=" !o.origin.isParent " ng-class="{focused: o.isFocused}" class="child md-button md-ink-ripple">
+											<label class="clickable-area" tabindex="-1">
+												<div flex layout="row">
+													<md-checkbox id="group-{{o.id}}" aria-label="Checkbox" ng-click="$ctrl.toggleSubGroup(o)" ng-checked="o.isChecked()"
+																 ng-focus="$ctrl.groupFocused(o)" ng-blur="$ctrl.groupBlurred(o)"></md-checkbox>
+													<span class="md-checkbox-label" ng-bind-html="o.name | searchFilter:$ctrl.searchText" ng-click="$ctrl.toggleSubGroup(o)"></span>
+												</div>
+											</label>
+										</div>
+									</div>
+								</md-virtual-repeat-container>
+							</md-tab-body>
+						</md-tab>
+					</md-tabs>
+				</md-content>
+			</form>
 			<div class="footer">
 				<button ng-click="$ctrl.clearAll()" class="wfm-btn wfm-btn-invis-default selection-clear">{{'Clear'|translate}}</button>
 				<button ng-click="$ctrl.menuRef.close()" title="{{'PressEscToClose'|translate}}" class="wfm-btn wfm-btn-invis-default selection-done">{{'Close'|translate}}</button>
