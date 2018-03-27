@@ -263,6 +263,9 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			FakeConfigReader.FakeConnectionString("Tenancy", masterTenant.DataSourceConfiguration.ApplicationConnectionString);
 			BaseConfigurationRepository.SaveBaseConfiguration(masterTenant.DataSourceConfiguration.AnalyticsConnectionString,
 				new BaseConfiguration(1053, 15, timezoneName, false));
+
+			var baseConfig = new BaseConfiguration(1053, 15, timezoneName, false);
+			ConfigurationHandler.AddBaseConfiguration(masterTenant.DataSourceConfiguration.AnalyticsConnectionString, baseConfig);
 			var result = (OkNegotiatedContentResult<TenantConfigurationModel>)Target.IsBaseConfigurationAvailable();
 			result.Content.IsBaseConfigured.Should().Be(true);
 			result.Content.TenantName.Should().Be(masterTenant.Name);

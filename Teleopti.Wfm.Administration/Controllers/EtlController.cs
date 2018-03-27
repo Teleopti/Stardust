@@ -124,14 +124,13 @@ namespace Teleopti.Wfm.Administration.Controllers
 		public virtual IHttpActionResult IsBaseConfigurationAvailable()
 		{
 			var connectionString = _configReader.ConnectionString("Hangfire");
-			var baseConfig = _baseConfigurationRepository.LoadBaseConfiguration(connectionString);
-			var isConfig = baseConfig.IntervalLength.HasValue;
+			_configurationHandler.SetConnectionString(connectionString);
 			var tenantName = getMasterTenantName();
 
 			return Ok(new TenantConfigurationModel
 			{
 				TenantName = tenantName,
-				IsBaseConfigured = isConfig
+				IsBaseConfigured = _configurationHandler.IsConfigurationValid
 			});
 		}
 
