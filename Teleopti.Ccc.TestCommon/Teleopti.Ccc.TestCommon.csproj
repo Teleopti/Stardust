@@ -761,7 +761,6 @@
     <Compile Include="Web\WebInteractions\BrowserDriver\NoBrowserActivator.cs" />
     <Compile Include="Web\WebInteractions\BrowserDriver\NoBrowserInteractions.cs" />
     <Compile Include="Web\WebInteractions\BrowserDriver\TimeoutScope.cs" />
-    <Compile Include="Web\WebInteractions\CryptoCreator.cs" />
     <Compile Include="Web\WebInteractions\Http.cs" />
     <Compile Include="Web\WebInteractions\Paths.cs" />
     <Compile Include="Web\WebInteractions\PingWeb.cs" />
