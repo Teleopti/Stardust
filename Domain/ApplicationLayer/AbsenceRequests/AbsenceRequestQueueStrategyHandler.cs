@@ -100,8 +100,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 						var multiAbsenceRequestsEvent = new NewMultiAbsenceRequestsCreatedEvent
 			            {
 							PersonRequestIds = absenceRequests.Select(x => x.PersonRequest).ToList(),
-							Sent = sent
-			            };
+							Sent = sent,
+							LogOnBusinessUnitId = businessUnit.Id.GetValueOrDefault()
+						};
 						multiAbsenceRequestsEvents.Add(multiAbsenceRequestsEvent);
 						
 						sent = sent.AddSeconds(1);
