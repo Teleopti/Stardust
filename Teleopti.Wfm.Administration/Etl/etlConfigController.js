@@ -40,13 +40,12 @@
       tenant.loading = true;
       $http
       .post(
-        "./Etl/TenantValidLogDataSources",
+        "./Etl/TenantAllLogDataSources",
         JSON.stringify(tenant.TenantName),
         tokenHeaderService.getHeaders()
       )
       .success(function(data) {
         vm.tenantLogData = data;
-        console.log(data);
 
         $http
         .get("./Etl/GetConfigurationModel", tokenHeaderService.getHeaders())
