@@ -65,7 +65,6 @@ namespace Teleopti.Wfm.Administration.Controllers
 		[HttpPost, Route("Etl/Jobs")]
 		public virtual IHttpActionResult Jobs([FromBody] string tenantName)
 		{
-			
 			try
 			{
 				return Ok(_jobCollectionModelProvider.Create(tenantName));
@@ -96,6 +95,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 		{
 			try
 			{
+				_generalFunctions.LoadNewDataSources();
 				return Ok(_tenantLogDataSourcesProvider.Load(tenantName, true));
 			}
 			catch (ArgumentException e)
@@ -128,7 +128,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			var isConfig = baseConfig.IntervalLength.HasValue;
 			var tenantName = getMasterTenantName();
 
-			return Ok(new TenantConfigurationModel()
+			return Ok(new TenantConfigurationModel
 			{
 				TenantName = tenantName,
 				IsBaseConfigured = isConfig

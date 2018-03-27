@@ -126,6 +126,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 		{
 			BaseConfigurationRepository.SaveBaseConfiguration(connectionString, new BaseConfiguration(1053, 15, "UTC", false));
 			AllTenants.HasWithAnalyticsConnectionString(testTenantName, connectionString);
+
 			var result = (NegotiatedContentResult<string>) Target.TenantValidLogDataSources("TenantNotFound");
 			result.StatusCode.Should().Be(HttpStatusCode.NotFound);
 		}
@@ -142,6 +143,24 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			result.Content.Count.Should().Be(2);
 			result.Content.Any(x => x.Id == 3 && x.Name == "myDs").Should().Be.True();
 			result.Content.Any(x => x.Id == 4 && x.Name == "anotherDs").Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldImportMissingDataSourceAndReturnAllTenantLogDataSources()
+		{
+			AllTenants.HasWithAnalyticsConnectionString(testTenantName, connectionString);
+			GeneralInfrastructure.HasDataSources(new DataSourceEtl(3, "myDs", 1, "UTC", 15, false));
+			GeneralInfrastructure.HasDataSources(new DataSourceEtl(4, "anotherDs", FakeGeneralInfrastructure.NullTimeZoneId,
+				null, 15, false));
+			GeneralInfrastructure.HasAggDataSources(new DataSourceEtl(4, "anotherDs", 2, null, 15, false));
+			GeneralInfrastructure.HasAggDataSources(new DataSourceEtl(89, "newDs", 2, timezoneName, 15, false));
+
+			var result = (OkNegotiatedContentResult<IList<DataSourceModel>>)Target.TenantAllLogDataSources(testTenantName);
+			result.Content.Count.Should().Be(3);
+			result.Content.Any(x => x.Id == 3 && x.Name == "myDs").Should().Be.True();
+			result.Content.Any(x => x.Id == 4 && x.Name == "anotherDs" && x.TimeZoneId == FakeGeneralInfrastructure.NullTimeZoneId)
+				.Should().Be.True();
+			result.Content.Any(x => x.Name == "newDs" && x.TimeZoneId == FakeGeneralInfrastructure.NullTimeZoneId).Should().Be.True();
 		}
 
 		[Test]
