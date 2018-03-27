@@ -8,6 +8,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 	{
 		IList<CalculatedPossibilityModel> CalculateIntradayAbsenceIntervalPossibilities(DateOnlyPeriod period);
 
-		IList<CalculatedPossibilityModel> CalculateIntradayOvertimeIntervalPossibilities(DateOnlyPeriod period);
+		IList<CalculatedPossibilityModel> CalculateIntradayOvertimeIntervalPossibilities(DateOnlyPeriod period, bool satisfyAllSkills);
 	}
 }

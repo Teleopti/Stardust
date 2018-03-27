@@ -277,7 +277,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			Assert.AreEqual(2, possibilities.Count);
 		}
 
-
 		[Test]
 		public void ShouldNotGetPossibilitiesForNotSupportedSkill()
 		{
@@ -707,6 +706,33 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			Assert.AreEqual(2, possibilities.Count);
 			Assert.AreEqual(0, possibilities.ElementAt(0).Possibility);
 			Assert.AreEqual(0, possibilities.ElementAt(1).Possibility);
+		}
+
+		[Test]
+		[Toggle(Toggles.OvertimeRequestAtLeastOneCriticalUnderStaffedSkill_74944)]
+		public void ShouldGetGoodPossibilitiesForOvertimeWhenOneOfSkillIsNotCriticalUnderStaffing()
+		{
+			setupWorkFlowControlSet();
+			var person = User.CurrentUser();
+			var activity1 = createActivity();
+			var skill1 = createSkill("skill1");
+			var personSkill1 = createPersonSkill(activity1, skill1);
+			setupIntradayStaffingForSkill(skill1, new double?[] { 10d, 10d }, new double?[] { 15d, 15d });
+
+			var activity2 = createActivity();
+			var criticalUnderStaffingSkill = createSkill("criticalUnderStaffingSkill");
+			var personSkill2 = createPersonSkill(activity2, criticalUnderStaffingSkill);
+			setupIntradayStaffingForSkill(criticalUnderStaffingSkill, new double?[] { 10d, 10d }, new double?[] { 15d, 5d });
+
+			addPersonSkillsToPersonPeriod(personSkill1, personSkill2);
+
+			createAssignment(person, activity1, activity2);
+
+			var possibilities = getPossibilityViewModels(null, StaffingPossiblityType.Overtime)
+				.Where(d => d.Date == Now.ServerDate_DontUse().ToFixedClientDateOnlyFormat()).ToList();
+			Assert.AreEqual(2, possibilities.Count);
+			Assert.AreEqual(0, possibilities.ElementAt(0).Possibility);
+			Assert.AreEqual(1, possibilities.ElementAt(1).Possibility);
 		}
 
 		[Test]

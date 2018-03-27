@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.ScheduleStaffingPossibility;
 using Teleopti.Interfaces.Domain;
 
@@ -12,13 +13,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 	{
 		private readonly IScheduleStaffingPossibilityCalculator _scheduleStaffingPossibilityCalculator;
 		private readonly IStaffingDataAvailablePeriodProvider _staffingDataAvailablePeriodProvider;
+		private readonly IToggleManager _toggleManager;
 
 		public StaffingPossibilityViewModelFactory(
 			IScheduleStaffingPossibilityCalculator scheduleStaffingPossibilityCalculator,
-			IStaffingDataAvailablePeriodProvider staffingDataAvailablePeriodProvider)
+			IStaffingDataAvailablePeriodProvider staffingDataAvailablePeriodProvider,
+			IToggleManager toggleManager)
 		{
 			_scheduleStaffingPossibilityCalculator = scheduleStaffingPossibilityCalculator;
 			_staffingDataAvailablePeriodProvider = staffingDataAvailablePeriodProvider;
+			_toggleManager = toggleManager;
 		}
 
 		public IEnumerable<PeriodStaffingPossibilityViewModel> CreatePeriodStaffingPossibilityViewModels(DateOnly startDate,
@@ -41,10 +45,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			if (periods.Any())
 			{
 				var possibilityModels = new List<CalculatedPossibilityModel>();
+				var satisfyAllSkills = !_toggleManager.IsEnabled(Domain.FeatureFlags.Toggles
+					.OvertimeRequestAtLeastOneCriticalUnderStaffedSkill_74944);
 				foreach (var period in periods)
 				{
 					possibilityModels.AddRange(
-						_scheduleStaffingPossibilityCalculator.CalculateIntradayOvertimeIntervalPossibilities(period));
+						_scheduleStaffingPossibilityCalculator.CalculateIntradayOvertimeIntervalPossibilities(period, satisfyAllSkills));
 				}
 				return createPeriodStaffingPossibilityViewModels(possibilityModels);
 			}

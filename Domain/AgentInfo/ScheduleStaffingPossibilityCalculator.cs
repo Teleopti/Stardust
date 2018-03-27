@@ -53,10 +53,10 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			var skillStaffingDatas = _skillStaffingDataLoader.Load(skills, period, useShrinkage, isCheckingIntradayStaffing);
 			Func<ISkill, IValidatePeriod, bool> isSatisfied =
 				(skill, validatePeriod) => new IntervalHasUnderstaffing(skill).IsSatisfiedBy(validatePeriod);
-			return calculatePossibilities(skillStaffingDatas, isSatisfied, scheduleDictionary, true);
+			return calculatePossibilities(skillStaffingDatas, isSatisfied, scheduleDictionary, true, true);
 		}
 
-		public IList<CalculatedPossibilityModel> CalculateIntradayOvertimeIntervalPossibilities(DateOnlyPeriod period)
+		public IList<CalculatedPossibilityModel> CalculateIntradayOvertimeIntervalPossibilities(DateOnlyPeriod period, bool satisfyAllSkills)
 		{
 			var scheduleDictionary = loadScheduleDictionary(period);
 
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 			Func<ISkill, IValidatePeriod, bool> isSatisfied =
 			(skill, validatePeriod) => !new IntervalHasSeriousUnderstaffing(skill).IsSatisfiedBy(validatePeriod);
-			return calculatePossibilities(filteredSkillStaffingDatas, isSatisfied, scheduleDictionary);
+			return calculatePossibilities(filteredSkillStaffingDatas, isSatisfied, scheduleDictionary, satisfyAllSkills);
 		}
 
 		private bool isShrinkageValidatorEnabled()
@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 		private IList<CalculatedPossibilityModel> calculatePossibilities(
 			IList<SkillStaffingData> skillStaffingDatas,
-			Func<ISkill, IValidatePeriod, bool> isSatisfied, IScheduleDictionary scheduleDictionary, bool ignoreCurrentUsersSchedule = false)
+			Func<ISkill, IValidatePeriod, bool> isSatisfied, IScheduleDictionary scheduleDictionary, bool satisfyAllSkills, bool ignoreCurrentUsersSchedule = false)
 		{
 			var resolution = skillStaffingDatas.FirstOrDefault()?.Resolution ?? 15;
 			var calculatedPossibilityModels = new List<CalculatedPossibilityModel>();
@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 				calculatedPossibilityModels.Add(new CalculatedPossibilityModel
 				{
 					Date = skillStaffingDataGroup.Key,
-					IntervalPossibilies = calculateIntervalPossibilities(skillStaffingDataGroup, isSatisfied, scheduleDictionary, ignoreCurrentUsersSchedule),
+					IntervalPossibilies = calculateIntervalPossibilities(skillStaffingDataGroup, isSatisfied, scheduleDictionary, satisfyAllSkills, ignoreCurrentUsersSchedule),
 					Resolution = resolution
 				});
 			}
@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		}
 
 		private Dictionary<DateTime, int> calculateIntervalPossibilities(IEnumerable<SkillStaffingData> skillStaffingDatas,
-			Func<ISkill, IValidatePeriod, bool> isSatisfied, IScheduleDictionary scheduleDictionary, bool ignoreCurrentUsersSchedule = false)
+			Func<ISkill, IValidatePeriod, bool> isSatisfied, IScheduleDictionary scheduleDictionary, bool satisfyAllSkills, bool ignoreCurrentUsersSchedule = false)
 		{
 			var intervalPossibilities = new Dictionary<DateTime, int>();
 			var personAssignmentDictionary = skillStaffingDatas.Select(s => s.Date).Distinct()
@@ -144,8 +144,18 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			{
 				if (!staffingDataHasValue(skillStaffingData)) continue;
 
-				if (hasFairPossibilityInThisInterval(intervalPossibilities, skillStaffingData.Time))
-					continue;
+				if (satisfyAllSkills)
+				{
+					if (hasFairPossibilityInThisInterval(intervalPossibilities, skillStaffingData.Time))
+						continue;
+				}
+				else
+				{
+					if (hasGoodPossibilityInThisInterval(intervalPossibilities, skillStaffingData.Time))
+					{
+						continue;
+					}
+				}
 
 				if (ignoreCurrentUsersSchedule)
 				{
@@ -217,6 +227,12 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		{
 			int possibility;
 			return intervalPossibilities.TryGetValue(time, out possibility) && possibility == ScheduleStaffingPossibilityConsts.FairPossibility;
+		}
+
+		private static bool hasGoodPossibilityInThisInterval(Dictionary<DateTime, int> intervalPossibilities, DateTime time)
+		{
+			int possibility;
+			return intervalPossibilities.TryGetValue(time, out possibility) && possibility == ScheduleStaffingPossibilityConsts.GoodPossibility;
 		}
 
 		private static bool staffingDataHasValue(SkillStaffingData skillStaffingData)
