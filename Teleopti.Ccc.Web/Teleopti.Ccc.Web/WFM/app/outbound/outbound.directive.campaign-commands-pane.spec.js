@@ -108,7 +108,7 @@ describe('Outbound campaign commands pane tests ', function() {
 		toggleSvc.Wfm_Outbound_IgnoreScheduleForReplan_43752 = true;
 		target.vm.selectedDates = ['2017-06-09'];
 		var index = target.vm.campaign.graphData.dates.indexOf(target.vm.selectedDates[0]);
-		target.vm.campaign.graphData.schedules[index] = 0;
+		target.vm.campaign.graphData.hasSchedule[index] = false;
 		target.scope.$apply();
 		expect(target.container[0].querySelectorAll('.btn-ignore-schedules:disabled').length).toEqual(1);
 	});
@@ -200,7 +200,7 @@ describe('Outbound campaign commands pane tests ', function() {
 		toggleSvc.Wfm_Outbound_IgnoreScheduleForReplan_43752 = true;
 		for(var i = 0; i < target.vm.campaign.graphData.schedules.length; i++){
 			if(!isNaN(target.vm.campaign.graphData.schedules[i]))
-				target.vm.campaign.graphData.schedules[i] = 0;
+				target.vm.campaign.graphData.hasSchedule[i] = false;
 		}
 
 		target.vm.ignoreSchedules();
@@ -309,7 +309,8 @@ describe('Outbound campaign commands pane tests ', function() {
 				dates: ['x', '2017-06-07', '2017-06-08', '2017-06-09'],
 				rawBacklogs: ['Backlog', 80, 60, 40],
 				schedules: ['Scheduled', 20, 20, 0],
-				unscheduledPlans: ['Planned', 0, 0, 20]
+				unscheduledPlans: ['Planned', 0, 0, 20],
+				hasSchedule: ['hasSchedule', true, true, false]
 			},
 			selectedDates: ['2017-06-07', '2017-06-08'],
 			selectedDatesClosed: []

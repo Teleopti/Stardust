@@ -62,7 +62,7 @@
 			var graphData = vm.campaign.graphData;
 			return vm.selectedDates.some(function (selectedDate) {
 				var index = graphData.dates.indexOf(selectedDate);
-				return graphData.schedules[index] != 0;
+				return graphData.hasSchedule[index];
 			});
 		};
 
@@ -81,11 +81,11 @@
 
 		function getIgnoredDates() {
 			var graphData = vm.campaign.graphData;
-			return vm.selectedDates.filter(function(date) {
-				var index = graphData.dates.indexOf(date);
-				return graphData.schedules[index] > 0;
-			});
-		}
+			return vm.selectedDates.filter(function (date) {
+					var index = graphData.dates.indexOf(date);
+					return graphData.hasSchedule[index];
+				});
+		};
 
 		vm.showAllSchedules = function () {
 			vm.ignoreScheduleSwitched = false;

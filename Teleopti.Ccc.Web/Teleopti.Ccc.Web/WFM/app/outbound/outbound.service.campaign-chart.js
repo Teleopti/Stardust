@@ -143,7 +143,7 @@
 			});
 		}
 
-		function mapGraphData(data, shouldShowNothing) {
+		function mapGraphData(data, shouldShowPlan) {
 			var returnData = {
 				dates: null,
 				rawBacklogs: null,
@@ -151,7 +151,8 @@
 				schedules: null,
 				progress: null,
 				overStaff: null,
-				shouldShowNothing:false
+				hasSchedule: false,
+				shouldShowPlan: false
 			};
 
 			returnData.dates = moment(data.Dates).format("YYYY-MM-DD");
@@ -160,15 +161,21 @@
 			returnData.schedules = data.ScheduledPersonHours;
 			returnData.progress = data.BacklogPersonHours;
 			returnData.overStaff = data.OverstaffPersonHours;
-			returnData.shouldShowNothing = shouldShowNothing;
+			returnData.shouldShowPlan = shouldShowPlan;
 
 			if (returnData.schedules > 0) {
+				returnData.hasSchedule = true;
 				returnData.unscheduledPlans = 0;
-				if (returnData.overStaff > 0) returnData.shouldShowNothing = true;
-				returnData.overStaff = 0;
-			} else {
-				returnData.unscheduledPlans -= returnData.overStaff;
-				if (returnData.shouldShowNothing) returnData.overStaff = 0;
+				returnData.schedules -= returnData.overStaff;
+				if (returnData.overStaff > 0) returnData.shouldShowPlan = true;
+			}
+			else
+			{
+				if (returnData.shouldShowPlan) {
+					returnData.overStaff = 0;
+				} else {
+					returnData.unscheduledPlans -= returnData.overStaff;
+				}
 			}
 
 			return returnData;
@@ -181,15 +188,16 @@
 				unscheduledPlans: self.dictionary['Planned'],
 				schedules: self.dictionary['Scheduled'],
 				progress: self.dictionary['Progress'],
-				overStaff: self.dictionary['Overstaffing']
+				overStaff: self.dictionary['Overstaffing'],
+				hasSchedule: self.dictionary['HasSchedule']
 			};
 		}
 
 		function buildGraphDataSeqs(data) {
-			var shouldShowNothing = false;
+			var shouldShowPlan = false;
 			var graphDataSeq = zip(data).map(function (d) {
-				var ret = mapGraphData(d, shouldShowNothing);
-				shouldShowNothing = ret.shouldShowNothing;
+				var ret = mapGraphData(d, shouldShowPlan);
+				shouldShowPlan = ret.shouldShowPlan;
 				return ret;
 			});
 
