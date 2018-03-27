@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 				diff.Where(x => !solved.Contains(x)).ForEach(x => unsavedWithoutConflicts.Add(x));
 
 				_clearScheduleEvents.Execute(diff);
-				_scheduleDifferenceSaver.SaveChanges(unsavedWithoutConflicts, (IUnvalidatedScheduleRangeUpdate) scheduleRange, true);
+				_scheduleDifferenceSaver.SaveChanges(unsavedWithoutConflicts, (IUnvalidatedScheduleRangeUpdate) scheduleRange);
 				var modifiedRoots = uow.PersistAll(_initiatorIdentifier);
 
 				return new SchedulePersistResult

@@ -9,31 +9,20 @@ namespace Teleopti.Ccc.TestCommon
 	public class FakeScheduleDifferenceSaver_DoNotUse : IScheduleDifferenceSaver
 	{
 		private IScheduleStorage _scheduleStorage;
-		private readonly IScheduleDayDifferenceSaver _scheduleDayDifferenceSaver;
 
-		public FakeScheduleDifferenceSaver_DoNotUse(IScheduleStorage scheduleStorage, IScheduleDayDifferenceSaver scheduleDayDifferenceSaver)
+		public FakeScheduleDifferenceSaver_DoNotUse(IScheduleStorage scheduleStorage)
 		{
 			_scheduleStorage = scheduleStorage;
-			_scheduleDayDifferenceSaver = scheduleDayDifferenceSaver;
 		}
 
-		public FakeScheduleDifferenceSaver_DoNotUse()
-		{			
-		}
 
 		public void SetScheduleStorage(IScheduleStorage scheduleStorage)
 		{
 			_scheduleStorage = scheduleStorage;
 		}
 
-		public void SaveChanges(IDifferenceCollection<IPersistableScheduleData> scheduleChanges, IUnvalidatedScheduleRangeUpdate stateInMemoryUpdater, bool fromPlans = false)
+		public void SaveChanges(IDifferenceCollection<IPersistableScheduleData> scheduleChanges, IUnvalidatedScheduleRangeUpdate stateInMemoryUpdater)
 		{
-			if (!fromPlans)
-			{
-				var scheduleRange = stateInMemoryUpdater as IScheduleRange;
-				_scheduleDayDifferenceSaver.SaveDifferences(scheduleRange);
-			}
-			
 
 			foreach (var scheduleChange in scheduleChanges)
 			{

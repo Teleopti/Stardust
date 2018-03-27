@@ -12,12 +12,13 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
-	public class SchedulePersistModule : Module
+	internal class SchedulePersistModule : Module
 	{		
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<ScheduleDictionaryPersister>().As<IScheduleDictionaryPersister>().SingleInstance().ApplyAspects();
 			builder.RegisterType<ScheduleRangePersisterWithConflictSolve>().As<IScheduleRangePersister>().SingleInstance();
+			builder.RegisterType<NoUpdateResourceCalculationReadmodel>().As<IUpdateResourceCalculationReadmodel>().SingleInstance();
 			builder.RegisterType<KeepScheduleEvents>().As<IClearScheduleEvents>().SingleInstance();
 			builder.RegisterGeneric(typeof (DifferenceEntityCollectionService<>)).As(typeof (IDifferenceCollectionService<>)).SingleInstance();
 			builder.RegisterType<ScheduleRangeConflictCollector>().As<IScheduleRangeConflictCollector>().SingleInstance();

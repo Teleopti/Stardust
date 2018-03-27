@@ -1,6 +1,5 @@
 ﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Domain.Staffing;
 
 namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 {
@@ -8,24 +7,19 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 	{
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
-		private readonly IScheduleDayDifferenceSaver _scheduleDayDifferenceSaver;
+		private readonly IUpdateResourceCalculationReadmodel _updateResourceCalculationReadmodel;
 
 		public ScheduleDifferenceSaver(IScheduleStorage scheduleStorage, ICurrentUnitOfWork currentUnitOfWork,
-			IScheduleDayDifferenceSaver scheduleDayDifferenceSaver)
+			IUpdateResourceCalculationReadmodel updateResourceCalculationReadmodel)
 		{
 			_scheduleStorage = scheduleStorage;
 			_currentUnitOfWork = currentUnitOfWork;
-			_scheduleDayDifferenceSaver = scheduleDayDifferenceSaver;
+			_updateResourceCalculationReadmodel = updateResourceCalculationReadmodel;
 		}
 
-		public void SaveChanges(IDifferenceCollection<IPersistableScheduleData> scheduleChanges,
-			IUnvalidatedScheduleRangeUpdate stateInMemoryUpdater, bool fromPlans = false)
+		public void SaveChanges(IDifferenceCollection<IPersistableScheduleData> scheduleChanges, IUnvalidatedScheduleRangeUpdate stateInMemoryUpdater)
 		{
-			if (!fromPlans)
-			{
-				var scheduleRange = stateInMemoryUpdater as IScheduleRange;
-				_scheduleDayDifferenceSaver.SaveDifferences(scheduleRange);
-			}
+			_updateResourceCalculationReadmodel.Execute((IScheduleRange)stateInMemoryUpdater);
 
 			foreach (var scheduleChange in scheduleChanges)
 			{
@@ -52,4 +46,4 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 
 		}
 	}
-}
+} 

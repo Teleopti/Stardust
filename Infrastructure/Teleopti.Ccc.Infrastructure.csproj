@@ -266,8 +266,11 @@
     <Compile Include="MultiTenancy\Server\Queries\FindExternalApplicationAccess.cs" />
     <Compile Include="MultiTenancy\Server\Queries\IPersistExternalApplicationAccess.cs" />
     <Compile Include="MultiTenancy\Server\Queries\PersistExternalApplicationAccess.cs" />
+    <Compile Include="Persisters\Schedules\IUpdateResourceCalculationReadmodel.cs" />
+    <Compile Include="Persisters\Schedules\NoUpdateResourceCalculationReadmodel.cs" />
     <Compile Include="Persisters\Schedules\ScheduleRangePersisterWithConflictSolve.cs" />
     <Compile Include="MultiTenancy\Server\Queries\TenantPersonLogonQuerier.cs" />
+    <Compile Include="Persisters\Schedules\UpdateResourceCalculationReadmodel.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\AgentStateReadModelPersister.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\AgentStateReadModelQueryBuilder.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\AgentStateReadModelReader.cs" />

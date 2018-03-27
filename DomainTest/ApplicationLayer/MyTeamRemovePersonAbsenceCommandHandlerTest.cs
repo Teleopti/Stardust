@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var personAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
 			_businessRulesForAccountUpdate = new BusinessRulesForPersonalAccountUpdate(personAbsenceAccountRepository, new SchedulingResultStateHolder());
 			_scheduleStorage = new FakeScheduleStorage_DoNotUse();
-			var scheduleDifferenceSaver = new ScheduleDifferenceSaver(_scheduleStorage, CurrentUnitOfWork.Make(), new EmptyScheduleDayDifferenceSaver());
+			var scheduleDifferenceSaver = new ScheduleDifferenceSaver(_scheduleStorage, CurrentUnitOfWork.Make(), new NoUpdateResourceCalculationReadmodel());
 			_saveSchedulePartService = new SaveSchedulePartService(scheduleDifferenceSaver, personAbsenceAccountRepository,
 				new DoNothingScheduleDayChangeCallBack());
 		}
