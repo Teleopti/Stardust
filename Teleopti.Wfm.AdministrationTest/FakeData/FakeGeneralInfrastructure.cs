@@ -19,7 +19,7 @@ namespace Teleopti.Wfm.AdministrationTest.FakeData
 		{
 			return getValidDataSources
 				? dataSourceEtls.Where(x => x.TimeZoneId != NullTimeZoneId).ToList()
-				: dataSourceEtls;
+				: dataSourceEtls.Where(x => x.TimeZoneId == NullTimeZoneId).ToList();
 		}
 
 		public void HasAggDataSources(IDataSourceEtl dataSource)

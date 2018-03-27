@@ -2,6 +2,7 @@
 using System.Linq;
 using Teleopti.Analytics.Etl.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Wfm.Administration.Core.EtlTool
 {
@@ -32,9 +33,17 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 			}
 
 			_generalFunctions.SetConnectionString(_analyticsConnectionsStringExtractor.Extract(tenantName));
-			var logDataSources = includeInvalidDataSource
-				? _generalFunctions.DataSourceInvalidList.ToList()
-				: _generalFunctions.DataSourceValidListIncludedOptionAll.ToList();
+
+			List<IDataSourceEtl> logDataSources;
+			if (includeInvalidDataSource)
+			{
+				logDataSources = _generalFunctions.DataSourceValidList.ToList();
+				logDataSources.AddRange(_generalFunctions.DataSourceInvalidList);
+			}
+			else
+			{
+				logDataSources = _generalFunctions.DataSourceValidListIncludedOptionAll.ToList();
+			}
 
 			return logDataSources.Select(x => new DataSourceModel
 				{
@@ -42,6 +51,7 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 					Name = x.DataSourceName,
 					TimeZoneId = x.TimeZoneId
 				})
+				.OrderBy(x => x.Name)
 				.ToList();
 		}
 	}
