@@ -1,31 +1,38 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NavigationService, WorkspaceService, AppLogonService } from '../../services';
 import { MatTableDataSource } from '@angular/material';
 import { Person } from '../../types';
-import { FormControl, Validators, FormGroup, FormBuilder } from '@angular/forms';
+import { Subject } from 'rxjs';
 
 @Component({
 	selector: 'people-app-logon-page',
 	templateUrl: './app-logon-page.component.html',
 	styleUrls: ['./app-logon-page.component.scss']
 })
-export class AppLogonPageComponent implements OnInit {
+export class AppLogonPageComponent implements OnInit, OnDestroy {
 	constructor(
 		public nav: NavigationService,
 		public workspaceService: WorkspaceService,
 		public appLogonService: AppLogonService
 	) {}
 
+	private componentDestroyed: Subject<any> = new Subject();
+
 	displayedColumns = ['Name', 'ApplicationLogon'];
 	dataSource = new MatTableDataSource<Person>([]);
 
 	ngOnInit() {
-		this.workspaceService.getSelectedPeople().subscribe({
+		this.workspaceService.people$.takeUntil(this.componentDestroyed).subscribe({
 			next: (people: Person[]) => {
 				this.dataSource.data = people;
 				if (people.length === 0) this.nav.navToSearch();
 			}
 		});
+	}
+
+	ngOnDestroy() {
+		this.componentDestroyed.next();
+		this.componentDestroyed.complete();
 	}
 
 	isValid(): boolean {
