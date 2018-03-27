@@ -10,8 +10,4 @@ export class WorkspaceComponent implements OnInit {
 	constructor(public workspaceService: WorkspaceService) {}
 
 	ngOnInit() {}
-
-	getSelectedPeopleCount(): number {
-		return this.workspaceService.getSelectedPeople().getValue().length;
-	}
 }

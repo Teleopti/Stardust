@@ -1,16 +1,19 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormControl, AsyncValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
 import { AppLogonService } from '../../services';
-import { map, debounceTime, flatMap, switchMap, takeWhile, filter, distinctUntilChanged } from 'rxjs/operators';
+import { map, flatMap, filter, distinctUntilChanged, first } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
 export function duplicateNameValidator(appLogonService: AppLogonService): AsyncValidatorFn {
+	const stateToErrorMessage = state => ({ duplicateNameValidator: state });
+
 	return (control: AbstractControl): Observable<ValidationErrors> => {
 		return Observable.timer(300).pipe(
+			first(),
 			filter(() => control.value != null && control.value.length > 0),
 			flatMap(() => appLogonService.logonNameExists(control.value)),
-			takeWhile(exists => exists === true),
-			map(exists => ({ duplicateNameValidator: control.value }))
+			filter(exists => exists === true),
+			map(exists => stateToErrorMessage(exists))
 		);
 	};
 }

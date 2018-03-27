@@ -1,10 +1,10 @@
 <div class="panel material-depth-1 workspace" data-test-workspace>
   <h2>
     <i class="mdi mdi-account-switch"></i> Workspace
-    <span *ngIf="getSelectedPeopleCount() > 0">({{getSelectedPeopleCount()}})</span>
+    <span *ngIf="(workspaceService.people$ | async).length as peopleCount">({{peopleCount}})</span>
   </h2>
   <ul>
-    <li *ngFor="let person of workspaceService.getSelectedPeople() | async" class="" data-test-person>
+    <li *ngFor="let person of workspaceService.people$ | async" data-test-person>
       <div class="con-flex">
         <i class="mdi mdi-close" (click)="workspaceService.deselectPerson(person)" data-test-person-remove></i>
         <span data-test-person-name>
