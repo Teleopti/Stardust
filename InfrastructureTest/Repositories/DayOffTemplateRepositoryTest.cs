@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -17,24 +16,17 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		private IDayOffTemplate _dayOff;
 		private IDayOffTemplate _dayOff2;
 		private IDayOffTemplate _dayOff3;
-		private Description _description;
-		private TimeSpan _timeSpanTargetLength;
-		private TimeSpan _timeSpanFlexibility;
-		private TimeSpan _timeSpanAnchor;
-		private DayOffTemplateRepository _dayOffRepo;
+		private readonly Description _description = new Description("Day Off Test");
+		private readonly TimeSpan _timeSpanTargetLength = new TimeSpan(1, 1, 1, 1);
+		private readonly TimeSpan _timeSpanFlexibility = new TimeSpan(2, 2, 2, 2);
+		private readonly TimeSpan _timeSpanAnchor = new TimeSpan(3, 3, 3, 3);
 
 		/// <summary>
 		/// Runs every test. Implemented by repository's concrete implementation.
 		/// </summary>
 		protected override void ConcreteSetup()
 		{
-			_timeSpanTargetLength = new TimeSpan(1, 1, 1, 1);
-			_timeSpanFlexibility = new TimeSpan(2, 2, 2, 2);
-			_timeSpanAnchor = new TimeSpan(3, 3, 3, 3);
-
-			_description = new Description("Day Off Test");
 			_dayOff = DayOffFactory.CreateDayOff();
-			_dayOffRepo = new DayOffTemplateRepository(UnitOfWork);
 		}
 
 		/// <summary>
@@ -70,30 +62,29 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			return new DayOffTemplateRepository(currentUnitOfWork);
 		}
-
-
+		
 		[Test]
 		public void VerifyCanLoadDayOffsSortedByDescription()
 		{
-			AddFewDayOffs();
-			IList<IDayOffTemplate> _dayOffList = _dayOffRepo.FindAllDayOffsSortByDescription();
-			Assert.AreEqual("AAA", _dayOffList[0].Description.Name);
+			addFewDayOffs();
+			var dayOffList = new DayOffTemplateRepository(UnitOfWork).FindAllDayOffsSortByDescription();
+			Assert.AreEqual("AAA", dayOffList[0].Description.Name);
 		}
 
 		[Test]
 		public void ShouldOnlyReturnActivedDayOffsAndSortedByDescription()
 		{
-			AddFewDayOffs();
+			addFewDayOffs();
 			((IDeleteTag)_dayOff).SetDeleted();
 			PersistAndRemoveFromUnitOfWork(_dayOff);
 
-			var _dayOffList = _dayOffRepo.FindActivedDayOffsSortByDescription();
-			_dayOffList.Count.Should().Be.EqualTo(2);
-			_dayOffList[0].Description.Name.Should().Be.EqualTo("AAA");
-			_dayOffList[1].Description.Name.Should().Be.EqualTo("CCC");
+			var dayOffList = new DayOffTemplateRepository(UnitOfWork).FindActivedDayOffsSortByDescription();
+			dayOffList.Count.Should().Be.EqualTo(2);
+			dayOffList[0].Description.Name.Should().Be.EqualTo("AAA");
+			dayOffList[1].Description.Name.Should().Be.EqualTo("CCC");
 		}
 
-		private void AddFewDayOffs()
+		private void addFewDayOffs()
 		{
 			_dayOff = new DayOffTemplate(new Description("BBB"));
 			_dayOff2 = new DayOffTemplate(new Description("AAA"));

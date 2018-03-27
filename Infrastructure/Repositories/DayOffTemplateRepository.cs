@@ -27,7 +27,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public DayOffTemplateRepository(ICurrentUnitOfWork currentUnitOfWork)
 			: base(currentUnitOfWork)
 		{
-
 		}
 
 		/// <summary>

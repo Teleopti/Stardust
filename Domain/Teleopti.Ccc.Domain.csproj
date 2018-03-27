@@ -595,10 +595,12 @@
     <Compile Include="ResourcePlanner\Hints\HintInput.cs" />
     <Compile Include="ResourcePlanner\IBlockPreferenceProviderForPlanningPeriod.cs" />
     <Compile Include="Scheduling\AdvancedAgentsFilter.cs" />
+    <Compile Include="Scheduling\IShiftCategorySelection.cs" />
     <Compile Include="Scheduling\Restrictions\RestrictionNotAbleToBeScheduledReport.cs" />
     <Compile Include="ResourcePlanner\DayOffOptimizationPreferenceProviderForPlanningPeriod.cs" />
     <Compile Include="ResourcePlanner\IDayOffOptimizationPreferenceProviderForPlanningPeriod.cs" />
     <Compile Include="Scheduling\Restrictions\RestrictionsAbleToBeScheduled.cs" />
+    <Compile Include="Scheduling\ShiftCategorySelection.cs" />
     <Compile Include="Scheduling\SuccessfulScheduledAgents.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccOvertimeRequestsLicenseOption.cs" />
     <Compile Include="SkillGroupManagement\ModifySkillGroup.cs" />
@@ -4097,6 +4099,9 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Scheduling\ShiftCategorySelection.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="WorkflowControl\OvertimeRequestOpenRollingPeriod.hbm.xml" />
     <EmbeddedResource Include="WorkflowControl\OvertimeRequestOpenDatePeriod.hbm.xml" />
     <EmbeddedResource Include="WorkflowControl\OvertimeRequestOpenPeriod.hbm.xml">

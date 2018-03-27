@@ -307,6 +307,7 @@
     <Compile Include="Repositories\PersonAccessAuditRepository.cs" />
     <Compile Include="Repositories\PersonLoadAllWithPeriodAndExternalLogOn.cs" />
     <Compile Include="Repositories\RequestPeriod.cs" />
+    <Compile Include="Repositories\ShiftCategorySelectionRepository.cs" />
     <Compile Include="Repositories\SkillCombinationResourceRepository.cs" />
     <Compile Include="Repositories\SkillCombinationResourceRepositoryOld.cs" />
     <Compile Include="Repositories\Stardust\IStardustRepository.cs" />
