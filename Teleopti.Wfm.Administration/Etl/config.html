@@ -62,7 +62,7 @@
 					</thead>
 					<tbody>
 						<tr ng-repeat="logData in vm.tenantLogData">
-							<th scope="row">✓</th>
+							<th scope="row">?</th>
 							<td>{{logData.Name}}</td>
 							<td>
 								<select ng-if="!logData.timezone" class="form-control" id="baseTimezone" ng-options="timezone.Id as timezone.Text for timezone in vm.TimeZoneCodes" ng-model="logData.selectedTimezone">

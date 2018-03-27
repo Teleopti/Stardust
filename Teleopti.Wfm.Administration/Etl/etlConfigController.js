@@ -35,17 +35,18 @@
         vm.tenants[i].Url = encodeURIComponent(vm.tenants[i].TenantName)
       }
     }
-    
+
     function getLogDataForATenant(tenant) {
       tenant.loading = true;
       $http
       .post(
-        "./Etl/TenantAllLogDataSources",
+        "./Etl/TenantValidLogDataSources",
         JSON.stringify(tenant.TenantName),
         tokenHeaderService.getHeaders()
       )
       .success(function(data) {
         vm.tenantLogData = data;
+        console.log(data);
 
         $http
         .get("./Etl/GetConfigurationModel", tokenHeaderService.getHeaders())
@@ -56,5 +57,22 @@
         });
       });
     }
+
+    // vm.sendAllLogDataForATenant = sendAllLogDataForATenant;
+    // function sendAllLogDataForATenant(tenant) {
+    //   $http
+    //   .post(
+    //     "./Etl/Jobs",
+    //     JSON.stringify(tenant),
+    //     tokenHeaderService.getHeaders()
+    //   )
+    //   .success(function(data) {
+    //
+    //   })
+    //   .error(function(data) {
+    //
+    //   });
+    // }
+
   }
 })();
