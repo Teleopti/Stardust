@@ -339,8 +339,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			updater.RegisterType<SchedulingScreenPersister>().As<ISchedulingScreenPersister>().InstancePerLifetimeScope();
 			updater.RegisterType<ScheduleDictionaryPersister>().As<IScheduleDictionaryPersister>().InstancePerLifetimeScope();
 			updater.RegisterType<ScheduleRangePersister>().As<IScheduleRangePersister>().InstancePerLifetimeScope();
-			updater.RegisterType<UpdateResourceCalculationReadmodel>().As<IUpdateResourceCalculationReadmodel>()
-				.InstancePerLifetimeScope();
 			updater.RegisterType<ScheduleRangeConflictCollector>()
 				.As<IScheduleRangeConflictCollector>()
 				.InstancePerLifetimeScope();

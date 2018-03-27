@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
+using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
@@ -45,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				new SchedulingResultStateHolder());
 			_scheduleStorage = new FakeScheduleStorage_DoNotUse();
 			var scheduleDifferenceSaver = new ScheduleDifferenceSaver(_scheduleStorage,
-				new FromFactory(() => new FakeCurrentUnitOfWorkFactory(new FakeStorage()).Current()), new NoUpdateResourceCalculationReadmodel());
+				new FromFactory(() => new FakeCurrentUnitOfWorkFactory(new FakeStorage()).Current()), new EmptyScheduleDayDifferenceSaver());
 			_saveSchedulePartService = new SaveSchedulePartService(scheduleDifferenceSaver,personAbsenceAccountRepository,
 				new DoNothingScheduleDayChangeCallBack());
 

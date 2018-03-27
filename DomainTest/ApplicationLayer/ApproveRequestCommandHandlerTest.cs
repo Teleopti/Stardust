@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			_personAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
 
 			_fakeScheduleStorage = new FakeScheduleStorage_DoNotUse();
-			_scheduleDifferenceSaver = new FakeScheduleDifferenceSaver_DoNotUse(_fakeScheduleStorage);
+			_scheduleDifferenceSaver = new FakeScheduleDifferenceSaver_DoNotUse(_fakeScheduleStorage, new EmptyScheduleDayDifferenceSaver());
 
 			var businessRules = new BusinessRulesForPersonalAccountUpdate(_personAbsenceAccountRepository, new SchedulingResultStateHolder());
 

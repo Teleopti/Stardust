@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -61,7 +62,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			_scheduleStorage = new FakeScheduleStorage_DoNotUse();
 			_swapAndModifyServiceNew = MockRepository.GenerateMock<ISwapAndModifyServiceNew>();
 
-			_scheduleDifferenceSaver = new FakeScheduleDifferenceSaver_DoNotUse(_scheduleStorage);
+			_scheduleDifferenceSaver = new FakeScheduleDifferenceSaver_DoNotUse(_scheduleStorage, new EmptyScheduleDayDifferenceSaver());
 			_differenceService = new DifferenceEntityCollectionService<IPersistableScheduleData>();
 		}
 

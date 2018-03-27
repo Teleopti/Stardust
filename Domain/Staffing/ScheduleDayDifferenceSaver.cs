@@ -10,7 +10,8 @@ namespace Teleopti.Ccc.Domain.Staffing
 {
 	public interface IScheduleDayDifferenceSaver
 	{
-		void SaveDifferences(IScheduleRange scheduleRange);
+		IEnumerable<SkillCombinationResource> SaveDifferences(IScheduleRange scheduleRange);
+		IEnumerable<SkillCombinationResource> GetDifferences(IScheduleRange scheduleRange);
 	}
 
 	
@@ -31,13 +32,14 @@ namespace Teleopti.Ccc.Domain.Staffing
 			_staffingSettingsReader = staffingSettingsReader;
 		}
 
-		public void SaveDifferences(IScheduleRange scheduleRange)
+		public IEnumerable<SkillCombinationResource> SaveDifferences(IScheduleRange scheduleRange)
 		{
-			var skillCombinationResourceDeltas = getDifferences(scheduleRange).ToList();
+			var skillCombinationResourceDeltas = GetDifferences(scheduleRange).ToList();
 			_skillCombinationResourceRepository.PersistChanges(skillCombinationResourceDeltas);
+			return skillCombinationResourceDeltas;
 		}
 
-		private IEnumerable<SkillCombinationResource> getDifferences(IScheduleRange scheduleRange)
+		public IEnumerable<SkillCombinationResource> GetDifferences(IScheduleRange scheduleRange)
 		{
 			var snapshot = ((ScheduleRange)scheduleRange).Snapshot;
 			var skillCombinationResourceDeltas = new List<SkillCombinationResource>();
@@ -52,10 +54,32 @@ namespace Teleopti.Ccc.Domain.Staffing
 		}
 	}
 
+	public class FakeScheduleDayDifferenceSaver : IScheduleDayDifferenceSaver
+	{
+		public bool InvokeSave;
+
+		public IEnumerable<SkillCombinationResource> SaveDifferences(IScheduleRange scheduleRange)
+		{
+			InvokeSave = true;
+			return new List<SkillCombinationResource>();
+		}
+
+		public IEnumerable<SkillCombinationResource> GetDifferences(IScheduleRange scheduleRange)
+		{
+			throw new System.NotImplementedException();
+		}
+	}
+
 	public class EmptyScheduleDayDifferenceSaver : IScheduleDayDifferenceSaver
 	{
-		public void SaveDifferences(IScheduleRange scheduleRange)
+		public IEnumerable<SkillCombinationResource> SaveDifferences(IScheduleRange scheduleRange)
 		{
+			return new List<SkillCombinationResource>(); //do nothing
+		}
+
+		public IEnumerable<SkillCombinationResource> GetDifferences(IScheduleRange scheduleRange)
+		{
+			return new List<SkillCombinationResource>();
 		}
 	}
 }
