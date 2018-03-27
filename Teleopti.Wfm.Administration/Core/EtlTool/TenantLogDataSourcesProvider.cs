@@ -33,7 +33,7 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 
 			_generalFunctions.SetConnectionString(_analyticsConnectionsStringExtractor.Extract(tenantName));
 			var logDataSources = includeInvalidDataSource
-				? _generalFunctions.DataSourceList.ToList()
+				? _generalFunctions.DataSourceInvalidList.ToList()
 				: _generalFunctions.DataSourceValidListIncludedOptionAll.ToList();
 
 			return logDataSources.Select(x => new DataSourceModel

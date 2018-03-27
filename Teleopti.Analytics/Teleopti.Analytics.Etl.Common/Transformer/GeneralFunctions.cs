@@ -25,7 +25,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 			}
 		}
 
-		public IList<IDataSourceEtl> DataSourceList
+		public IList<IDataSourceEtl> DataSourceInvalidList
 		{
 			get
 			{
