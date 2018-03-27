@@ -36,7 +36,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new StageScheduleJobStep(jobParameters));
 			Add(new StageScheduleDayOffCountJobStep(jobParameters));
 			Add(new StageScheduleForecastSkillJobStep(jobParameters));
-			Add(new StageScheduleForecastSkillJobStep(jobParameters));
 			Add(new StageSchedulePreferenceJobStep(jobParameters));
 			Add(new StageAvailabilityJobStep(jobParameters));
 			Add(new StageSkillJobStep(jobParameters));
