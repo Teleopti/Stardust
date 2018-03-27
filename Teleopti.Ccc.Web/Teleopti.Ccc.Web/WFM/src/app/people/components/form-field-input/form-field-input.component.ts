@@ -1,5 +1,19 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Validators, FormControl } from '@angular/forms';
+import { FormControl, AsyncValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
+import { AppLogonService } from '../../services';
+import { map, debounceTime, flatMap, switchMap, takeWhile, filter, distinctUntilChanged } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+
+export function duplicateNameValidator(appLogonService: AppLogonService): AsyncValidatorFn {
+	return (control: AbstractControl): Observable<ValidationErrors> => {
+		return Observable.timer(300).pipe(
+			filter(() => control.value != null && control.value.length > 0),
+			flatMap(() => appLogonService.logonNameExists(control.value)),
+			takeWhile(exists => exists === true),
+			map(exists => ({ duplicateNameValidator: control.value }))
+		);
+	};
+}
 
 @Component({
 	selector: 'people-form-field-input',
@@ -7,22 +21,20 @@ import { Validators, FormControl } from '@angular/forms';
 	styleUrls: ['./form-field-input.component.scss']
 })
 export class FormFieldInputComponent implements OnInit {
-	constructor() {}
+	constructor(private appLogonService: AppLogonService) {}
 
 	@Input() value: string;
-	@Input() inputMinLength? = 3;
 	@Output() onValueChange = new EventEmitter<string>();
 
 	formControl: FormControl;
 
 	ngOnInit() {
-		this.formControl = new FormControl(this.value, [
-			Validators.required,
-			Validators.minLength(this.inputMinLength)
-		]);
-	}
-
-	updateValue(value) {
-		this.onValueChange.emit(value);
+		this.formControl = new FormControl(this.value);
+		this.formControl.setAsyncValidators([duplicateNameValidator(this.appLogonService)]);
+		this.formControl.valueChanges.pipe(distinctUntilChanged()).subscribe({
+			next: value => {
+				this.onValueChange.emit(value);
+			}
+		});
 	}
 }

@@ -1,6 +1,6 @@
 <mat-form-field>
-  <input matInput [ngModel]="value" (ngModelChange)="updateValue($event)" [formControl]="formControl">
-  <mat-error *ngIf="formControl.hasError('minlength') || formControl.hasError('required')">
-    Length must be at least {{inputMinLength}}
+  <input matInput [formControl]="formControl">
+  <mat-error *ngIf="formControl.hasError('duplicateNameValidator')">
+    Username is already in use
   </mat-error>
 </mat-form-field>

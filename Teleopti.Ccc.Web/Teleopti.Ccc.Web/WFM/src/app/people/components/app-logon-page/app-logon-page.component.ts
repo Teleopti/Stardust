@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavigationService, WorkspaceService } from '../../services';
+import { NavigationService, WorkspaceService, AppLogonService } from '../../services';
 import { MatTableDataSource } from '@angular/material';
 import { Person } from '../../types';
 import { FormControl, Validators, FormGroup, FormBuilder } from '@angular/forms';
@@ -10,7 +10,11 @@ import { FormControl, Validators, FormGroup, FormBuilder } from '@angular/forms'
 	styleUrls: ['./app-logon-page.component.scss']
 })
 export class AppLogonPageComponent implements OnInit {
-	constructor(public nav: NavigationService, protected workspaceService: WorkspaceService) {}
+	constructor(
+		public nav: NavigationService,
+		public workspaceService: WorkspaceService,
+		public appLogonService: AppLogonService
+	) {}
 
 	displayedColumns = ['Name', 'ApplicationLogon'];
 	dataSource = new MatTableDataSource<Person>([]);
@@ -24,13 +28,8 @@ export class AppLogonPageComponent implements OnInit {
 		});
 	}
 
-	private filterMissingAppLogon(person: Person) {
-		return !person.ApplicationLogon || person.ApplicationLogon.length < 3;
-	}
-
 	isValid(): boolean {
-		const invalidConfigs = this.dataSource.data.filter(this.filterMissingAppLogon);
-		return invalidConfigs.length === 0;
+		return true;
 	}
 
 	getName(person: Person): string {

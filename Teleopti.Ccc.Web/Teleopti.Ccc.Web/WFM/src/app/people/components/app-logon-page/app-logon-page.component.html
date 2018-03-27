@@ -1,4 +1,4 @@
-<people-page-container>
+<people-page-container data-test-application-logon>
   <div class="con-row">
     <div class="blue-box con-flex">
       <h2>Application logon</h2>
@@ -6,7 +6,7 @@
   </div>
   <div class="con-row">
     <div class="con-flex">
-      <mat-table [dataSource]="dataSource" data-test-applogon>
+      <mat-table [dataSource]="dataSource">
         <ng-container matColumnDef="Name">
           <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
           <mat-cell *matCellDef="let person" data-test-person-name> {{getName(person)}} </mat-cell>
