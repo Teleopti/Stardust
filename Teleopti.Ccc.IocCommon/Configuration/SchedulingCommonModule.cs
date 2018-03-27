@@ -375,6 +375,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<RestrictionRetrievalOperation>().As<IRestrictionRetrievalOperation>().SingleInstance();
 			builder.RegisterType<ExtendReduceDaysOffHelper>().InstancePerLifetimeScope();
 			builder.RegisterType<ExtendReduceTimeHelper>().InstancePerLifetimeScope();
+			builder.RegisterType<ReplaceActivityService>().SingleInstance();
 
 			if (_configuration.Toggle(Toggles.ResourcePlanner_BreakPreferenceStartTimeByMax_46002))
 			{

@@ -601,6 +601,7 @@
     <Compile Include="ResourcePlanner\IBlockPreferenceProviderForPlanningPeriod.cs" />
     <Compile Include="Scheduling\AdvancedAgentsFilter.cs" />
     <Compile Include="Scheduling\IShiftCategorySelection.cs" />
+    <Compile Include="Scheduling\Assignment\ReplaceActivityService.cs" />
     <Compile Include="Scheduling\Restrictions\RestrictionNotAbleToBeScheduledReport.cs" />
     <Compile Include="ResourcePlanner\DayOffOptimizationPreferenceProviderForPlanningPeriod.cs" />
     <Compile Include="ResourcePlanner\IDayOffOptimizationPreferenceProviderForPlanningPeriod.cs" />
