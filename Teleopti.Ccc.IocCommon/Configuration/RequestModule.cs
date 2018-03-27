@@ -132,6 +132,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ShiftEndTimeProvider>().As<IShiftEndTimeProvider>().SingleInstance();
 			builder.RegisterType<ShiftStartTimeProvider>().As<IShiftStartTimeProvider>().SingleInstance();
 			builder.RegisterType<OvertimeRequestDefaultStartTimeProvider>().As<IOvertimeRequestDefaultStartTimeProvider>().SingleInstance();
+			builder.RegisterType<AbsenceStaffingPossibilityCalculator>().As<IAbsenceStaffingPossibilityCalculator>().SingleInstance();
+			builder.RegisterType<OvertimeStaffingPossibilityCalculator>().As<IOvertimeStaffingPossibilityCalculator>().SingleInstance();
 
 			registerType<IOvertimeRequestCriticalUnderStaffedSpecification,
 				OvertimeRequestCriticalUnderStaffedSpecificationToggle74944On, OvertimeRequestCriticalUnderStaffedSpecification>(

@@ -129,6 +129,7 @@
     <Compile Include="AbsenceWaitlisting\AbsenceRequestWaitlistProviderFor46301.cs" />
     <Compile Include="AbsenceWaitlisting\ArrangeRequestsByProcessOrder.cs" />
     <Compile Include="AbsenceWaitlisting\QueuedAbsenceRequest.cs" />
+    <Compile Include="AgentInfo\AbsenceStaffingPossibilityCalculator.cs" />
     <Compile Include="AgentInfo\IOvertimeRequestCriticalUnderStaffedSpecification.cs" />
     <Compile Include="AgentInfo\IOvertimeRequestUnderStaffingSkillProvider.cs" />
     <Compile Include="AgentInfo\IPrimaryPersonSkillFilter.cs" />
@@ -138,6 +139,7 @@
     <Compile Include="AgentInfo\OvertimeRequestCriticalUnderStaffedSpecification.cs" />
     <Compile Include="AgentInfo\OvertimeRequestUnderStaffingSkillProvider.cs" />
     <Compile Include="AgentInfo\OvertimeRequestUnderStaffingSkillProviderToggle47853On.cs" />
+    <Compile Include="AgentInfo\OvertimeStaffingPossibilityCalculator.cs" />
     <Compile Include="AgentInfo\PersonExternalLogonInfo.cs" />
     <Compile Include="AgentInfo\PersonIdentityInfo.cs" />
     <Compile Include="AgentInfo\PlanningGroupStaffLoader.cs" />
@@ -266,7 +268,6 @@
     <Compile Include="AgentInfo\Requests\ShiftTradeRequestIsAfterLoadedPeriodSpecification.cs" />
     <Compile Include="AgentInfo\Requests\ShiftTradeStatusExtensions.cs" />
     <Compile Include="AgentInfo\Requests\ShiftTradeSwapScheduleDetailsMapper.cs" />
-    <Compile Include="AgentInfo\ScheduleStaffingPossibilityCalculator.cs" />
     <Compile Include="Analytics\AnalyticBusinessUnit.cs" />
     <Compile Include="Analytics\AnalyticsActivity.cs" />
     <Compile Include="Analytics\AnalyticsBridgeQueueWorkload.cs" />
@@ -386,11 +387,13 @@
     <Compile Include="Infrastructure\Events\RequeueHangfireEvent.cs" />
     <Compile Include="Infrastructure\PublishInitializeReadModelEventHandler.cs" />
     <Compile Include="Infrastructure\RequeueHangfireEventHandler.cs" />
+    <Compile Include="InterfaceLegacy\Domain\IAbsenceStaffingPossibilityCalculator.cs" />
     <Compile Include="InterfaceLegacy\Domain\IBadgeSetting.cs" />
     <Compile Include="InterfaceLegacy\Domain\IExternalPerformance.cs" />
     <Compile Include="InterfaceLegacy\Domain\IOvertimeRequestOpenPeriod.cs" />
     <Compile Include="InterfaceLegacy\Domain\IOvertimeRequest.cs" />
     <Compile Include="InterfaceLegacy\Domain\IOvertimeRequestProcessor.cs" />
+    <Compile Include="InterfaceLegacy\Domain\IOvertimeStaffingPossibilityCalculator.cs" />
     <Compile Include="InterfaceLegacy\Domain\IUserDevice.cs" />
     <Compile Include="InterfaceLegacy\Domain\PersonIdentityMatchResult.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\IRequeueHangfireRepository.cs" />
@@ -1169,7 +1172,6 @@
     <Compile Include="InterfaceLegacy\Domain\IScheduleResultDataExtractor.cs" />
     <Compile Include="InterfaceLegacy\Domain\ISchedulerRangeToLoadCalculator.cs" />
     <Compile Include="InterfaceLegacy\Domain\IScheduleService.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IScheduleStaffingPossibilityCalculator.cs" />
     <Compile Include="InterfaceLegacy\Domain\IScheduleStorage.cs" />
     <Compile Include="InterfaceLegacy\Domain\IScheduleTag.cs" />
     <Compile Include="InterfaceLegacy\Domain\IScheduleTagSetter.cs" />

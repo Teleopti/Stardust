@@ -56,7 +56,8 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 		public ICurrentScenario CurrentScenario;
 		public IIntervalLengthFetcher IntervalLengthFetcher;
 		public IUserTimeZone UserTimeZone;
-		public ScheduleStaffingPossibilityCalculator Target;
+		public AbsenceStaffingPossibilityCalculator AbsenceStaffingPossibilityCalculator;
+		public OvertimeStaffingPossibilityCalculator OvertimeStaffingPossibilityCalculator;
 		public FakeLoggedOnUser LoggedOnUser;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
@@ -64,7 +65,8 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 			var fakeIntervalLengthFetcher = new FakeIntervalLengthFetcher();
 			fakeIntervalLengthFetcher.Has(15);
 			system.UseTestDouble(fakeIntervalLengthFetcher).For<IIntervalLengthFetcher>();
-			system.UseTestDouble<ScheduleStaffingPossibilityCalculator>().For<IScheduleStaffingPossibilityCalculator>();
+			system.UseTestDouble<AbsenceStaffingPossibilityCalculator>().For<IAbsenceStaffingPossibilityCalculator>();
+			system.UseTestDouble<OvertimeStaffingPossibilityCalculator>().For<IOvertimeStaffingPossibilityCalculator>();
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 		}
 
@@ -156,8 +158,8 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 				var stopwatch = new Stopwatch();
 				stopwatch.Start();
 				var possibilities = staffingPossiblityType == StaffingPossiblityType.Absence
-					? Target.CalculateIntradayAbsenceIntervalPossibilities(datePeriod)
-					: Target.CalculateIntradayOvertimeIntervalPossibilities(datePeriod);
+					? AbsenceStaffingPossibilityCalculator.CalculateIntradayIntervalPossibilities(datePeriod)
+					: OvertimeStaffingPossibilityCalculator.CalculateIntradayIntervalPossibilities(datePeriod, true);
 				stopwatch.Stop();
 				totalElapsedMilliseconds += stopwatch.ElapsedMilliseconds;
 				if (!possibilities.Any())

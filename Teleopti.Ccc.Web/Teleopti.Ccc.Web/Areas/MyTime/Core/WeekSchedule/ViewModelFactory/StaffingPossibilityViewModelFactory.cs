@@ -11,18 +11,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 {
 	public class StaffingPossibilityViewModelFactory : IStaffingPossibilityViewModelFactory
 	{
-		private readonly IScheduleStaffingPossibilityCalculator _scheduleStaffingPossibilityCalculator;
+		private readonly IAbsenceStaffingPossibilityCalculator _absenceStaffingPossibilityCalculator;
+		private readonly IOvertimeStaffingPossibilityCalculator _overtimeStaffingPossibilityCalculator;
 		private readonly IStaffingDataAvailablePeriodProvider _staffingDataAvailablePeriodProvider;
 		private readonly IToggleManager _toggleManager;
 
 		public StaffingPossibilityViewModelFactory(
-			IScheduleStaffingPossibilityCalculator scheduleStaffingPossibilityCalculator,
 			IStaffingDataAvailablePeriodProvider staffingDataAvailablePeriodProvider,
-			IToggleManager toggleManager)
+			IToggleManager toggleManager, IAbsenceStaffingPossibilityCalculator absenceStaffingPossibilityCalculator,
+			IOvertimeStaffingPossibilityCalculator overtimeStaffingPossibilityCalculator)
 		{
-			_scheduleStaffingPossibilityCalculator = scheduleStaffingPossibilityCalculator;
 			_staffingDataAvailablePeriodProvider = staffingDataAvailablePeriodProvider;
 			_toggleManager = toggleManager;
+			_absenceStaffingPossibilityCalculator = absenceStaffingPossibilityCalculator;
+			_overtimeStaffingPossibilityCalculator = overtimeStaffingPossibilityCalculator;
 		}
 
 		public IEnumerable<PeriodStaffingPossibilityViewModel> CreatePeriodStaffingPossibilityViewModels(DateOnly startDate,
@@ -50,7 +52,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 				foreach (var period in periods)
 				{
 					possibilityModels.AddRange(
-						_scheduleStaffingPossibilityCalculator.CalculateIntradayOvertimeIntervalPossibilities(period, satisfyAllSkills));
+						_overtimeStaffingPossibilityCalculator.CalculateIntradayIntervalPossibilities(period, satisfyAllSkills));
 				}
 				return createPeriodStaffingPossibilityViewModels(possibilityModels);
 			}
@@ -62,8 +64,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			var period = _staffingDataAvailablePeriodProvider.GetPeriodForAbsence(startDate, returnOneWeekData);
 			if (period.HasValue)
 			{
-				var possibilityModels =
-					_scheduleStaffingPossibilityCalculator.CalculateIntradayAbsenceIntervalPossibilities(period.Value);
+				var possibilityModels = _absenceStaffingPossibilityCalculator.CalculateIntradayIntervalPossibilities(period.Value);
 				return createPeriodStaffingPossibilityViewModels(possibilityModels);
 			}
 			return emptyResult();
