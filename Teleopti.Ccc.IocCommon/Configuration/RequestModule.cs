@@ -132,6 +132,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ShiftEndTimeProvider>().As<IShiftEndTimeProvider>().SingleInstance();
 			builder.RegisterType<ShiftStartTimeProvider>().As<IShiftStartTimeProvider>().SingleInstance();
 			builder.RegisterType<OvertimeRequestDefaultStartTimeProvider>().As<IOvertimeRequestDefaultStartTimeProvider>().SingleInstance();
+
+			registerType<IOvertimeRequestCriticalUnderStaffedSpecification,
+				OvertimeRequestCriticalUnderStaffedSpecificationToggle74944On, OvertimeRequestCriticalUnderStaffedSpecification>(
+				builder, Toggles.OvertimeRequestAtLeastOneCriticalUnderStaffedSkill_74944);
 		}
 
 		private void registerType<T, TToggleOn, TToggleOff>(ContainerBuilder builder, Toggles toggle)

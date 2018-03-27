@@ -14,23 +14,27 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 	public class OvertimeRequestUnderStaffingSkillProvider : IOvertimeRequestUnderStaffingSkillProvider
 	{
 		private readonly ISkillStaffingDataLoader _skillStaffingDataLoader;
+		private readonly IOvertimeRequestCriticalUnderStaffedSpecification _overtimeRequestCriticalUnderStaffedSpecification;
 
-		public OvertimeRequestUnderStaffingSkillProvider(ISkillStaffingDataLoader skillStaffingReadModelDataLoader)
+		public OvertimeRequestUnderStaffingSkillProvider(ISkillStaffingDataLoader skillStaffingReadModelDataLoader, IOvertimeRequestCriticalUnderStaffedSpecification overtimeRequestCriticalUnderStaffedSpecification)
 		{
 			_skillStaffingDataLoader = skillStaffingReadModelDataLoader;
+			_overtimeRequestCriticalUnderStaffedSpecification = overtimeRequestCriticalUnderStaffedSpecification;
 		}
 
-		public IList<ISkill> GetSeriousUnderstaffingSkills(DateTimePeriod dateTimePeriod, IEnumerable<ISkill> skills, TimeZoneInfo timeZoneInfo)
+		public IList<ISkill> GetSeriousUnderstaffingSkills(DateTimePeriod dateTimePeriod, IEnumerable<ISkill> skills,
+			TimeZoneInfo timeZoneInfo)
 		{
 			var resolution = skills.Min(s => s.DefaultResolution);
 			dateTimePeriod = convertToClosestPeriod(dateTimePeriod, resolution);
-			var skillStaffingDatas = _skillStaffingDataLoader.Load(skills.ToList(), dateTimePeriod.ToDateOnlyPeriod(timeZoneInfo), true);
+			var skillStaffingDatas =
+				_skillStaffingDataLoader.Load(skills.ToList(), dateTimePeriod.ToDateOnlyPeriod(timeZoneInfo), true);
 			skillStaffingDatas = skillStaffingDatas.Where(x =>
 				x.Time >= dateTimePeriod.StartDateTimeLocal(timeZoneInfo) &&
 				x.Time.AddMinutes(x.Resolution) <= dateTimePeriod.EndDateTimeLocal(timeZoneInfo)).ToList();
 
 			if (!skillStaffingDatas.Any())
-				return new ISkill[]{};
+				return new ISkill[] { };
 
 			skillStaffingDatas.ForEach(y => y.SkillStaffingInterval = new SkillStaffingInterval
 			{
@@ -53,7 +57,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 				seriousUnderstaffingSkills.Add(skillStaffingDataGroup.Key);
 			}
 
-			if (seriousUnderstaffingSkills.Count == skillStaffingDataGroups.Count)
+			if (_overtimeRequestCriticalUnderStaffedSpecification.IsSatisfiedBy(
+					new OvertimeRequestValidatedSkillCount(seriousUnderstaffingSkills.Count, skillStaffingDataGroups.Count)))
 			{
 				return seriousUnderstaffingSkills;
 			}

@@ -129,11 +129,13 @@
     <Compile Include="AbsenceWaitlisting\AbsenceRequestWaitlistProviderFor46301.cs" />
     <Compile Include="AbsenceWaitlisting\ArrangeRequestsByProcessOrder.cs" />
     <Compile Include="AbsenceWaitlisting\QueuedAbsenceRequest.cs" />
+    <Compile Include="AgentInfo\IOvertimeRequestCriticalUnderStaffedSpecification.cs" />
     <Compile Include="AgentInfo\IOvertimeRequestUnderStaffingSkillProvider.cs" />
     <Compile Include="AgentInfo\IPrimaryPersonSkillFilter.cs" />
     <Compile Include="AgentInfo\ISkillStaffingDataLoader.cs" />
     <Compile Include="AgentInfo\ISkillStaffingDataSkillTypeFilter.cs" />
     <Compile Include="AgentInfo\ISkillStaffingReadModelDataLoader.cs" />
+    <Compile Include="AgentInfo\OvertimeRequestCriticalUnderStaffedSpecification.cs" />
     <Compile Include="AgentInfo\OvertimeRequestUnderStaffingSkillProvider.cs" />
     <Compile Include="AgentInfo\OvertimeRequestUnderStaffingSkillProviderToggle47853On.cs" />
     <Compile Include="AgentInfo\PersonExternalLogonInfo.cs" />

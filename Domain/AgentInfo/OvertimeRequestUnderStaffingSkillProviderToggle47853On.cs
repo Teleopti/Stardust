@@ -14,10 +14,12 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 	public class OvertimeRequestUnderStaffingSkillProviderToggle47853On : IOvertimeRequestUnderStaffingSkillProvider
 	{
 		private readonly ISkillStaffingDataLoader _skillStaffingDataLoader;
+		private readonly IOvertimeRequestCriticalUnderStaffedSpecification _overtimeRequestCriticalUnderStaffedSpecification;
 
-		public OvertimeRequestUnderStaffingSkillProviderToggle47853On(ISkillStaffingDataLoader skillStaffingDataLoader)
+		public OvertimeRequestUnderStaffingSkillProviderToggle47853On(ISkillStaffingDataLoader skillStaffingDataLoader, IOvertimeRequestCriticalUnderStaffedSpecification overtimeRequestCriticalUnderStaffedSpecification)
 		{
 			_skillStaffingDataLoader = skillStaffingDataLoader;
+			_overtimeRequestCriticalUnderStaffedSpecification = overtimeRequestCriticalUnderStaffedSpecification;
 		}
 
 		public IList<ISkill> GetSeriousUnderstaffingSkills(DateTimePeriod dateTimePeriod, IEnumerable<ISkill> skills, TimeZoneInfo timeZoneInfo)
@@ -62,17 +64,12 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 				seriousUnderstaffingSkills.Add(skillStaffingDataGroup.Key);
 			}
 
-			if (isAllSkillsCriticalUnderStaffed(seriousUnderstaffingSkills, skillStaffingDataGroups))
+			if (_overtimeRequestCriticalUnderStaffedSpecification.IsSatisfiedBy(new OvertimeRequestValidatedSkillCount(seriousUnderstaffingSkills.Count, skillStaffingDataGroups.Count)))
 			{
 				return new [] { mostUnderStaffedSkill };
 			}
 
 			return new ISkill [] { };
-		}
-
-		private static bool isAllSkillsCriticalUnderStaffed(List<ISkill> seriousUnderstaffingSkills, List<IGrouping<ISkill, SkillStaffingData>> skillStaffingDataGroups)
-		{
-			return seriousUnderstaffingSkills.Count == skillStaffingDataGroups.Count;
 		}
 
 		private bool hasSeriousUnderstaffing(ISkill skill, SkillStaffingData skillStaffingData)
