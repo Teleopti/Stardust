@@ -97,16 +97,14 @@ namespace Teleopti.Ccc.InfrastructureTest.MachineLearning
 			var p = new PredictCategory();
 			var m = p.Train(data);
 
-			var fileName = Path.GetRandomFileName();
-			m.Store(fileName);
-
-			var fromStoredModel = Model.Load(fileName);
-
-			Guid.Parse(fromStoredModel.Predict(5.0, 14.0)).Should().Be.EqualTo(shiftCategories[2]);
-
-			if (File.Exists(fileName))
+			using (var storage = new MemoryStream())
 			{
-				File.Delete(fileName);
+				m.Store(storage);
+
+				storage.Position = 0;
+				var fromStoredModel = Model.Load(storage);
+				
+				Guid.Parse(fromStoredModel.Predict(5.0, 14.0)).Should().Be.EqualTo(shiftCategories[2]);
 			}
 		}
 

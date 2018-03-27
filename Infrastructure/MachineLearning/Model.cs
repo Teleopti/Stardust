@@ -1,4 +1,5 @@
-﻿using numl.Supervised;
+﻿using System.IO;
+using numl.Supervised;
 
 namespace Teleopti.Ccc.Infrastructure.MachineLearning
 {
@@ -23,15 +24,15 @@ namespace Teleopti.Ccc.Infrastructure.MachineLearning
 			return Predict(new ShiftCategoryPredictorModel {StartTime = start, EndTime = end});
 		}
 
-		public void Store(string fileName)
+		public void Store(Stream file)
 		{
-			_model.Save(fileName);
+			_model.Save(file);
 		}
 
-		public static Model Load(string fileName)
+		public static Model Load(Stream file)
 		{
 			var model = new numl.Supervised.DecisionTree.DecisionTreeModel();
-			return new Model(model.Load(fileName));
+			return new Model(model.Load(file));
 		}
 	}
 }
