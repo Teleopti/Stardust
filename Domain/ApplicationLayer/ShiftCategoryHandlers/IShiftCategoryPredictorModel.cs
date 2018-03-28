@@ -1,6 +1,6 @@
 using System;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftCategoryHandlers
+namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftCategory
 {
 	public interface IShiftCategoryPredictorModel
 	{
