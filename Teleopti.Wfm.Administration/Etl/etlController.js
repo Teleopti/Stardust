@@ -81,6 +81,7 @@
 		vm.getManualData = function() {
 			vm.getTenants();
 			vm.getConfigStatus();
+			vm.language = navigator.language || navigator.userLanguage;
 		};
 		vm.getManualData();
 
@@ -252,8 +253,8 @@
 
 		//history inputs
 		vm.historyWorkPeriod = {
-			StartDate: new Date().toLocaleDateString("sv-se"),
-			EndDate: new Date().toLocaleDateString("sv-se")
+			StartDate: new Date().toLocaleDateString(vm.language),
+			EndDate: new Date().toLocaleDateString(vm.language)
 		};
 
 		//schedule inputs
