@@ -183,8 +183,8 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 				{
 					new JobPeriod
 					{
-						Start = utcToday.AddDays(-1),
-						End = utcToday.AddDays(1),
+						Start = localToday.AddDays(-1),
+						End = localToday.AddDays(1),
 						JobCategoryName = "Initial",
 					}
 				},
