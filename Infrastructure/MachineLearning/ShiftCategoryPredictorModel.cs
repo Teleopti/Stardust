@@ -1,9 +1,10 @@
 ﻿using System;
 using numl.Model;
+using Teleopti.Ccc.Domain.ApplicationLayer.ShiftCategory;
 
 namespace Teleopti.Ccc.Infrastructure.MachineLearning
 {
-	public class ShiftCategoryPredictorModel
+	public class ShiftCategoryPredictorModel : IShiftCategoryPredictorModel
 	{
 		[Feature]
 		public double StartTime { get; set; }

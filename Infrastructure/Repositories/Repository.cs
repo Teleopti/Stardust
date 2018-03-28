@@ -35,7 +35,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return Session.CreateCriteria(typeof(T)).List<T>();
         }
 
-
         /// <summary>
         /// Loads an entity with the specified id.
         /// </summary>
@@ -52,10 +51,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         /// </summary>
         /// <param name="id">The id.</param>
         /// <returns></returns>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-02-06
-        /// </remarks>
         public virtual T Get(Guid id)
         {
             return Session.Get<T>(id);
@@ -80,8 +75,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         /// </summary>
         public virtual void Remove(T root)
         {
-			var delRootInfo = root as IDeleteTag;
-			if (delRootInfo == null)
+			if (!(root is IDeleteTag delRootInfo))
 			{
 				Session.Delete(root);
 			}
@@ -97,21 +91,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			}
 		}
 
-		public IUnitOfWork UnitOfWork
-		{
-			get
-			{
-				return _currentUnitOfWork.Current();
-			}
-		}
+		public IUnitOfWork UnitOfWork => _currentUnitOfWork.Current();
 
-		protected ISession Session
-		{
-			get
-			{
-				return UnitOfWork.Session();
-			}
-		}
-		
+		protected ISession Session => UnitOfWork.Session();
 	}
 }

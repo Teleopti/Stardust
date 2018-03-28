@@ -253,6 +253,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				system.UseTestDouble<SeatBookingRequestAssembler>().For<ISeatBookingRequestAssembler>();
 				system.UseTestDouble<SeatFrequencyCalculator>().For<ISeatFrequencyCalculator>();
 				system.UseTestDouble<FakeOptionalColumnRepository>().For<IOptionalColumnRepository>();
+				system.UseTestDouble<FakeShiftCategorySelectionRepository>().For<IRepository<IShiftCategorySelection>>();
 			}
 
 			system.UseTestDouble<ScheduleStorageRepositoryWrapper>().For<IScheduleStorageRepositoryWrapper>();

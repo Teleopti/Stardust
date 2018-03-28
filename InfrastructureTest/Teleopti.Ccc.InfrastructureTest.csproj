@@ -308,6 +308,7 @@
     <Compile Include="Repositories\PersonRequestRepositoryOvertimeTest.cs" />
     <Compile Include="Repositories\RequeueHangfireRepositoryTest.cs" />
     <Compile Include="Repositories\ShiftCategorySelectionRepositoryTest.cs" />
+    <Compile Include="Repositories\ShiftCategoryUsageFinderTest.cs" />
     <Compile Include="Repositories\SkillCombinationResourceReaderTest.cs" />
     <Compile Include="Repositories\SkillCombinationResourceRepositoryTest.cs" />
     <Compile Include="Logon\ImpersonateSystemTest.cs" />

@@ -281,6 +281,7 @@
     <Compile Include="FakeRepositories\FakeScheduleAuditTrailReport.cs" />
     <Compile Include="FakeRepositories\FakeScheduleHistoryRepository.cs" />
     <Compile Include="FakeRepositories\FakeScheduleProjectionReadOnlyActivityProvider.cs" />
+    <Compile Include="FakeRepositories\FakeShiftCategorySelectionRepository.cs" />
     <Compile Include="FakeRepositories\FakeSiteOpenHourRepository.cs" />
     <Compile Include="FakeRepositories\FakePersonalSettingDataRepository.cs" />
     <Compile Include="FakeRepositories\FakeSkillCombinationResourceReader.cs" />
