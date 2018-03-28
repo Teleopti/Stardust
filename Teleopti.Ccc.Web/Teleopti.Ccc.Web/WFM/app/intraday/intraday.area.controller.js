@@ -321,8 +321,7 @@
 				}
 			}
 			if (item.UnsupportedSkills.length > 0) {
-				vm.skillAreaMessage = $translate
-					.instant('UnsupportedSkills')
+				vm.skillAreaMessage = $translate.instant('UnsupportedSkills')
 					.replace('{0}', item.UnsupportedSkills.length);
 			} else {
 				vm.skillAreaMessage = '';
