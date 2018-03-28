@@ -22,9 +22,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			var result = _currentUnitOfWork.Current().Session().CreateSQLQuery(@"SELECT p.ShiftCategory
 					,[BelongsToDate]
-				, CAST(DATEDIFF(mi, BelongsToDate, StartDateTime) as decimal(6, 2)) / 60.0 as [StartTime]
-				, CAST(DATEDIFF(mi, BelongsToDate, EndDateTime) as decimal(6, 2)) / 60.0 as [EndTime]
-			FROM[ReadModel].[ScheduleDay] s WITH(NOLOCK)
+				, CAST(DATEDIFF(mi, BelongsToDate, StartDateTime) as decimal(8, 2)) / 60.0 as [StartTime]
+				, CAST(DATEDIFF(mi, BelongsToDate, EndDateTime) as decimal(8, 2)) / 60.0 as [EndTime]
+			FROM [ReadModel].[ScheduleDay] s WITH(NOLOCK)
 			INNER JOIN[dbo].PersonAssignment p WITH(NOLOCK) ON p.Date = s.BelongsToDate AND p.Person = s.PersonId
 			INNER JOIN[dbo].ShiftCategory sc WITH(NOLOCK) ON sc.id = p.ShiftCategory
 			INNER JOIN[dbo].Scenario scenario WITH(NOLOCK) ON scenario.Id = p.Scenario

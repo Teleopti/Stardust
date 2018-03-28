@@ -255,6 +255,11 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				system.UseTestDouble<FakeOptionalColumnRepository>().For<IOptionalColumnRepository>();
 				system.UseTestDouble<FakeShiftCategorySelectionRepository>().For<IRepository<IShiftCategorySelection>>();
 				system.UseTestDouble<FakeShiftCategoryUsageFinder>().For<IShiftCategoryUsageFinder>();
+				system.UseTestDouble<FakeAgentBadgeWithRankTransactionRepository>().For<IAgentBadgeWithRankTransactionRepository>();
+				system.UseTestDouble<FakeAgentBadgeTransactionRepository>().For<IAgentBadgeTransactionRepository>();
+				system.UseTestDouble<FakeExternalPerformanceDataRepository>().For<IExternalPerformanceDataRepository>();
+				system.UseTestDouble<FakeTeamGamificationSettingRepository>().For<ITeamGamificationSettingRepository>();
+				system.UseTestDouble<FakeAgentBadgeRepository>().For<IAgentBadgeRepository>();
 			}
 
 			system.UseTestDouble<ScheduleStorageRepositoryWrapper>().For<IScheduleStorageRepositoryWrapper>();

@@ -5,6 +5,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ShiftCategoryHandlers;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -12,7 +13,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftCategoryHandlers
 {
 	[DomainTest]
-	public class ShiftCategorySelectionUpdaterTest
+	public class ShiftCategorySelectionUpdaterTest : ISetup
 	{
 		public ShiftCategorySelectionModelUpdater Target;
 		public FakeShiftCategorySelectionRepository ShiftCategorySelectionRepository;
@@ -70,6 +71,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftCategoryHandlers
 			Target.Handle(new ShiftCategoryDeletedEvent());
 
 			ShiftCategorySelectionRepository.LoadAll().First().Model.Should().Not.Be.Empty();
+		}
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.UseTestDouble<ShiftCategorySelectionModelUpdater>().For<ShiftCategorySelectionModelUpdater>();
 		}
 	}
 }

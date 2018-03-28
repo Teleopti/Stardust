@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NHibernate.Util;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Interfaces.Domain;
@@ -10,7 +9,6 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public class FakeAgentBadgeWithRankTransactionRepository :IAgentBadgeWithRankTransactionRepository
 	{
-
 		private IList<IAgentBadgeWithRankTransaction> _agentBadgeWithRankTransactions = new List<IAgentBadgeWithRankTransaction>();
 
 		public void Add(IAgentBadgeWithRankTransaction root)
