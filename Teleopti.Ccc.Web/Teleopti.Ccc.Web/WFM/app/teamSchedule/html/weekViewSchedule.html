@@ -42,8 +42,8 @@
 
 	<div class="con-row teamschedule-body">
 		<div class="big-table-wrapper">
-			<div class="alert-warning notice-spacer" ng-if="vm.total > 500">
-				<i class='mdi mdi-alert'></i>{{'TooManyResultsForSearchKeywords'|translate}}
+			<div class="alert-warning notice-spacer" ng-if="vm.isResultTooMany()">
+				<i class='mdi mdi-alert'></i>{{vm.warningMessageForTooManyResuts()}}
 			</div>
 			<md-progress-linear ng-if="vm.isLoading" md-mode="indeterminate"></md-progress-linear>
 			<table ng-show="vm.scheduleFullyLoaded && vm.total <= 500">

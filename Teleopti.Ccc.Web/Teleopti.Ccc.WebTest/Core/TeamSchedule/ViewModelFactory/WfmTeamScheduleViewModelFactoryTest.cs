@@ -2576,7 +2576,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		}
 
 		[Test]
-		public void ShouldAllowOnlyMaximum750AgentsForScheduleSearch()
+		public void ShouldAllowOnlyMaximum750AgentsForScheduleSearchForDayView()
 		{
 			var date = new DateTime(2017, 12, 18, 00, 00, 00, DateTimeKind.Utc);
 			var scheduleDate = new DateOnly(date);
@@ -2603,6 +2603,36 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			viewModel.Total.Should().Be.EqualTo(800);
 			viewModel.Schedules.Count().Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldAllowOnlyMaximum750AgentsForScheduleSearchForWeekView()
+		{
+			var date = new DateTime(2017, 12, 18, 00, 00, 00, DateTimeKind.Utc);
+			var scheduleDate = new DateOnly(date);
+			var team1 = TeamFactory.CreateSimpleTeam().WithId();
+			for (var i = 1; i <= 800; i++)
+			{
+
+				var person = PersonFactory.CreatePerson($"Person{i}", "Fake").WithId();
+				var contract = ContractFactory.CreateContract("Contract");
+				IPersonContract personContract = PersonContractFactory.CreatePersonContract(contract);
+				IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(scheduleDate, personContract, team1);
+
+				person.AddPersonPeriod(personPeriod);
+				PeopleSearchProvider.Add(person);
+				PersonRepository.Has(person);
+			}
+			var viewModel = Target.CreateWeekScheduleViewModel(new SearchDaySchedulesInput
+			{
+				DateInUserTimeZone = scheduleDate,
+				GroupIds = new[] { team1.Id.Value },
+				PageSize = 500,
+				CurrentPageIndex = 0
+			});
+
+			viewModel.Total.Should().Be.EqualTo(800);
+			viewModel.PersonWeekSchedules.Count().Should().Be.EqualTo(0);
 		}
 
 		public void Setup(ISystem system, IIocConfiguration configuration)

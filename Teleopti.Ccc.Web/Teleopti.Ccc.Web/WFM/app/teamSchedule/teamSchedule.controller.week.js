@@ -89,6 +89,17 @@
 			totalPages: 0
 		};
 
+		vm.isResultTooMany = function () {
+			return (toggles.WfmTeamSchedule_IncreaseLimitionTo750ForScheduleQuery_74871 && vm.total > 750)
+				|| (!toggles.WfmTeamSchedule_IncreaseLimitionTo750ForScheduleQuery_74871 && vm.total > 500)
+		};
+
+		vm.warningMessageForTooManyResuts = function () {
+			var toggle = toggles.WfmTeamSchedule_IncreaseLimitionTo750ForScheduleQuery_74871;
+			var max = toggle ? 750 : 500;
+			return $translate.instant('TooManyResultsForSearchKeywords').replace('{0}', max);
+		};
+
 		vm.loadSchedules = function () {
 			vm.isLoading = true;
 			var inputForm = getParamsForLoadingSchedules();

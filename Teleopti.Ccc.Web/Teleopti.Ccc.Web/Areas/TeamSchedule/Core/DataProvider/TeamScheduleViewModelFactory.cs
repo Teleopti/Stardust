@@ -277,11 +277,11 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			var week = new DateOnlyPeriod(input.DateInUserTimeZone, input.DateInUserTimeZone.AddDays(6));
 			var weekDays = week.DayCollection();
 			var people = new List<IPerson>();
-			foreach (var batch in personIds.Batch(501))
+			foreach (var batch in personIds.Batch(251))
 			{
 				var batchPermittedPersons = getPermittedPersons(batch.ToArray(), input.DateInUserTimeZone);
 				people.AddRange(batchPermittedPersons);
-				if (people.Count > 500)
+				if (people.Count > 750)
 				{
 					return new GroupWeekScheduleViewModel
 					{
