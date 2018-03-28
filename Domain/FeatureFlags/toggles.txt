@@ -121,7 +121,7 @@ Wfm_WebPlan_Pilot_46815 = RC #Switch this on to try out the new web based schedu
 ResourcePlanner_HideSkillPrioSliders_41312 = RC
 ResourcePlanner_BlockSchedulingValidation_46092 = true
 ResourcePlanner_UseErlangAWithInfinitePatience_45845 = true
-ResourcePlanner_SpeedUpEvents_48769 = false #Anders - don't set this to true until our new perftest works!
+ResourcePlanner_SpeedUpEvents_48769 = RC #Anders - don't set this to true until our new perftest works!
 
 # Bugs&Roses #
 ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don't turn on in production
