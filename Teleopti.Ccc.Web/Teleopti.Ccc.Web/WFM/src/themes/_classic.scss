@@ -36,3 +36,11 @@ $theme: mat-light-theme($candy-app-primary, $candy-app-accent, $candy-app-warn);
 	font-family: Roboto, 'Helvetica Neue', sans-serif !important;
 	text-transform: uppercase;
 }
+
+/** FIX FOR CHECKBOX RIPPLE EFFECT
+https://github.com/angular/material2/issues/8600
+**/
+mat-cell.mat-cell,
+mat-header-cell.mat-header-cell {
+	overflow: visible;
+}
