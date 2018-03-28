@@ -28,15 +28,15 @@
       .get("./Etl/GetTenants", tokenHeaderService.getHeaders())
       .success(function(data) {
         vm.tenants = data;
-        addUrl();
+        // addUrl();
       });
     }
 
-    function addUrl() {
-      for (var i = 0; i < vm.tenants.length; i++) {
-        vm.tenants[i].Url = encodeURIComponent(vm.tenants[i].TenantName)
-      }
-    }
+    // function addUrl() {
+    //   for (var i = 0; i < vm.tenants.length; i++) {
+    //     vm.tenants[i].Url = encodeURIComponent(vm.tenants[i].TenantName)
+    //   }
+    // }
 
     function getLogDataForATenant(tenant) {
       vm.selectedTenant = tenant;
