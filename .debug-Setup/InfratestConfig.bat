@@ -7,55 +7,60 @@ SET DriveLetter=%ROOTDIR:~0,2%
 SET CCC7DB=%~1
 SET AnalyticsDB=%~2
 SET ToggleMode=%~3
-SET configuration=%~4
-SET sqlAuthString=%~5
+set configuration=%~4
+set sqlAuthString=%~5
 
-CALL "%~dp0CheckMsbuildPath.bat"
+call "%~dp0CheckMsbuildPath.bat"
 IF %ERRORLEVEL% NEQ 0 GOTO :error
 
-IF "%configuration%"=="" (
-	SET configuration=Debug
+if "%configuration%"=="" (
+set configuration=Debug
 )
 
-IF "%CCC7DB%" == "" (
-	SET CCC7DB=Infratest_CCC7
+if "%CCC7DB%" == "" (
+SET CCC7DB=Infratest_CCC7
 )
 
-IF "%AnalyticsDB%" == "" (
-	SET AnalyticsDB=Infratest_Analytics
-)
- 
-IF "%ToggleMode%" == "" (
-	CHOICE /C drc /M "Do you want to run (d)ev, (r)c or (c)ustomer toggle settings"
-	IF ERRORLEVEL 1 SET ToggleMode=ALL
-	IF ERRORLEVEL 2 SET ToggleMode=RC
-	IF ERRORLEVEL 3 SET ToggleMode=R
+if "%AnalyticsDB%" == "" (
+SET AnalyticsDB=Infratest_Analytics
 )
 
-:: This fails locally because there's not server specified (the -S switch is empty)
+if "%sqlAuthString%" == "" (
+SET sqlAuthString=Data Source=.;Integrated Security=SSPI
+)
+
+if "%ToggleMode%" == "" (
+CHOICE /C drc /M "Do you want to run (d)ev, (r)c or (c)ustomer toggle settings"
+IF ERRORLEVEL 1 SET ToggleMode=ALL
+IF ERRORLEVEL 2 SET ToggleMode=RC
+IF ERRORLEVEL 3 SET ToggleMode=R
+)
+
+SET SourceSettings=%ROOTDIR%\.debug-setup\config\settings.txt
+SET AppliedSettings=%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\settings.txt
+
+::Build Teleopti.Support.Tool.exe if source files are available (they aren't in pipeline)
+if exist "%ROOTDIR%\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj" %MSBUILD% /t:build "%ROOTDIR%\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj" /p:Configuration=%configuration%
+
+::get a fresh Settings.txt
+COPY "%SourceSettings%" "%AppliedSettings%"
+
 set splitsub=;
 for /f "tokens=1* delims=%splitsub%" %%A in ("%sqlAuthString%") do set part1=%%A & set part2=%%B
 set splitsub==
 for /f "tokens=1* delims=%splitsub%" %%A in ("%part1%") do set part1=%%A & set SRV=%%B
-IF NOT "%SRV%" == "" (
-	SQLCMD -S%SRV% -E -d"%CCC7DB%" -i"%ROOTDIR%\.debug-setup\database\tsql\AddUserForTest.sql"
-)
+::echo SRV  = %SRV%
+SQLCMD -S%SRV% -E -d"%CCC7DB%" -i"%ROOTDIR%\.debug-setup\database\tsql\AddUserForTest.sql"
 
-IF EXIST "%ROOTDIR%\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj" (
-	IF NOT EXIST "%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\Teleopti.Support.Tool.exe" (
-		%MSBUILD% /t:build "%ROOTDIR%\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj" /p:Configuration=%configuration%
-	)
-)
+::Run supportTool to replace all config
 %DriveLetter%
 CD "%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\"
-Teleopti.Support.Tool.exe -LOAD "%ROOTDIR%\.debug-setup\config\settings.txt"
 Teleopti.Support.Tool.exe -SET $(DB_CCC7) "%CCC7DB%"
 Teleopti.Support.Tool.exe -SET $(DB_ANALYTICS) "%AnalyticsDB%"
 Teleopti.Support.Tool.exe -SET $(AS_DATABASE) "%AnalyticsDB%"
 Teleopti.Support.Tool.exe -SET $(ToggleMode) "%ToggleMode%"
-IF NOT "%sqlAuthString%" == "" (
-	Teleopti.Support.Tool.exe -SET "$(SQL_AUTH_STRING)" "%sqlAuthString%"
-)
+Teleopti.Support.Tool.exe -SET $(SQL_AUTH_STRING) "%sqlAuthString%"
 Teleopti.Support.Tool.exe -MOTEST
-
 ENDLOCAL
+goto:eof
+
