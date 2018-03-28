@@ -508,6 +508,4 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		}
 
 	}
-
-
 }

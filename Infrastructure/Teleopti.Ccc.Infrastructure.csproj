@@ -259,6 +259,7 @@
     <Compile Include="MachineLearning\ShiftCategoryPredictionModel.cs" />
     <Compile Include="MachineLearning\PredictShiftCategory.cs" />
     <Compile Include="MachineLearning\ShiftCategoryExampleForTraining.cs" />
+    <Compile Include="MachineLearning\ShiftCategoryPredictionModelLoader.cs" />
     <Compile Include="MultiTenancy\Admin\CheckTenantUserExists.cs" />
     <Compile Include="MultiTenancy\Server\ExternalApplicationAccess.cs" />
     <Compile Include="MultiTenancy\Server\HashFromToken.cs" />

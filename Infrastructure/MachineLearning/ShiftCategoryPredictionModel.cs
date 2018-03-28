@@ -1,6 +1,6 @@
 ﻿using System.IO;
 using numl.Supervised;
-using Teleopti.Ccc.Domain.ApplicationLayer.ShiftCategoryHandlers;
+using Teleopti.Ccc.Domain.Scheduling;
 
 namespace Teleopti.Ccc.Infrastructure.MachineLearning
 {
@@ -23,12 +23,6 @@ namespace Teleopti.Ccc.Infrastructure.MachineLearning
 		public void Store(Stream file)
 		{
 			_model.Save(file);
-		}
-
-		public static ShiftCategoryPredictionModel Load(Stream file)
-		{
-			var model = new numl.Supervised.DecisionTree.DecisionTreeModel();
-			return new ShiftCategoryPredictionModel(model.Load(file));
 		}
 	}
 }

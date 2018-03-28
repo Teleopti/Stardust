@@ -1,6 +1,5 @@
 using Autofac;
 using Teleopti.Ccc.Domain.Config;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Toggle;
@@ -65,7 +64,7 @@ namespace Teleopti.Ccc.IocCommon
 			builder.RegisterModule<ReadModelUnitOfWorkModule>();
 			builder.RegisterModule<MessageBrokerUnitOfWorkModule>();
 			builder.RegisterModule(new BadgeCalculationModule(_configuration));
-			builder.RegisterModule<WebModule>();
+			builder.RegisterModule(new WebModule(_configuration));
 			builder.RegisterModule<ServiceBusModule>();
 			builder.RegisterModule(new InitializeModule(_configuration));
 			builder.RegisterModule(new TenantModule(_configuration));

@@ -3,6 +3,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 {
@@ -16,7 +17,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			_shiftCategoryRepository = shiftCategoryRepository;
 		}
 
-		public IShiftCategory Get()
+		public IShiftCategory Get(IPerson person, DateOnly date, DateTimePeriod shiftPeriod)
 		{
 			var shiftCategories = _shiftCategoryRepository.FindAll().ToArray();
 			Array.Sort(shiftCategories, shiftCategorySorter);

@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftCategoryHandlers
+namespace Teleopti.Ccc.Domain.Scheduling
 {
 	public interface IShiftCategoryPredictionModel
 	{

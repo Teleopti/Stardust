@@ -2,7 +2,7 @@
 using System.IO;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.ApplicationLayer.ShiftCategoryHandlers;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.MachineLearning;
 
 namespace Teleopti.Ccc.InfrastructureTest.MachineLearning
@@ -101,11 +101,16 @@ namespace Teleopti.Ccc.InfrastructureTest.MachineLearning
 			using (var storage = new MemoryStream())
 			{
 				m.Store(storage);
-
 				storage.Position = 0;
-				var fromStoredModel = ShiftCategoryPredictionModel.Load(storage);
-				
-				Guid.Parse(fromStoredModel.Predict(new ShiftCategoryExample { StartTime = 5.0, EndTime = 14.0})).Should().Be.EqualTo(shiftCategories[2]);
+				using (var reader = new StreamReader(storage))
+				{
+					var str = reader.ReadToEnd();
+
+					var fromStoredModel = new ShiftCategoryPredictionModelLoader().Load(str);
+
+					Guid.Parse(fromStoredModel.Predict(new ShiftCategoryExample {StartTime = 5.0, EndTime = 14.0})).Should().Be
+						.EqualTo(shiftCategories[2]);
+				}
 			}
 		}
 

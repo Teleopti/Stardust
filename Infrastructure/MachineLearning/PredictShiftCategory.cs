@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using numl.Model;
-using Teleopti.Ccc.Domain.ApplicationLayer.ShiftCategoryHandlers;
+using Teleopti.Ccc.Domain.Scheduling;
 
 namespace Teleopti.Ccc.Infrastructure.MachineLearning
 {

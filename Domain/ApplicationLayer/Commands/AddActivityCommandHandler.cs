@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			var personAssignment = scheduleDay.PersonAssignment();
 			if (personAssignment == null)
 			{
-				var shiftCategory = _shiftCategorySelector.Get();
+				var shiftCategory = _shiftCategorySelector.Get(person,command.Date,period);
 				if (shiftCategory != null)
 				{
 					scheduleDay.CreateAndAddActivity(activity, period, shiftCategory);
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			{
 				personAssignment.AddActivity(activity, period, command.TrackedCommandInfo);
 
-				var shiftCategory = _shiftCategorySelector.Get();
+				var shiftCategory = _shiftCategorySelector.Get(person, command.Date, period);
 				if (shiftCategory != null)
 					personAssignment.SetShiftCategory(shiftCategory);
 				dic.Modify(scheduleDay, NewBusinessRuleCollection.Minimum());
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				personAssignment.AddActivity(activity, period, command.TrackedCommandInfo);
 				if (personAssignment.ShiftCategory == null)
 				{
-					var shiftCategory = _shiftCategorySelector.Get();
+					var shiftCategory = _shiftCategorySelector.Get(person, command.Date, period);
 					if (shiftCategory != null)
 						personAssignment.SetShiftCategory(shiftCategory);
 				}

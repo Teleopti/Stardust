@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.ApplicationLayer.ShiftCategoryHandlers;
+using Teleopti.Ccc.Domain.Scheduling;
 
 namespace Teleopti.Ccc.Domain.Repositories
 {
