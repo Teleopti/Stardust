@@ -1,17 +1,14 @@
-<div class="rta-view agents prototype">
-
+<div class="rta-view agents">
 	<div class="view-header with-fab with-desc" ng-cloak>
 		<div class="view-title">
 			<div class="pull-left">
 				<h1><i class="mdi mdi-alarm"></i> {{'Agents'|translate}}</h1>
 			</div>
-			<div class="rta-top-buttons-wrapper pull-left">
-			<span>
+			<div class="pull-left">
 				<button class="wfm-btn wfm-btn-default" ng-click="vm.goToOverview()">{{'Dashboard'|translate}}</button>
-				<button class="wfm-btn wfm-btn-primary rta-default-cursor">{{'Agents'|translate}}</button>
-			</span>
-				<span class="rta-paused-message-wrapper" ng-if="vm.pausedAt">
-				{{'PausedAt'|translate}} {{vm.pausedAt}}
+				<button class="wfm-btn wfm-btn-primary non-pointer">{{'Agents'|translate}}</button>
+				<span style="vertical-align: middle;" ng-if="vm.pausedAt">
+					{{'PausedAt'|translate}} {{vm.pausedAt}}
 				</span>
 			</div>
 		</div>
@@ -29,13 +26,13 @@
 			<div class="con-flex wfm-form organization-picker" outside-click="vm.organizationPickerOpen = false">
 				<div class="form-input-wrap">
 					<input type="text"
-						   placeholder="Select sites / teams"
+						   placeholder="{{'SelectSitesTeams'|translate}}"
 						   ng-click="vm.organizationPickerOpen = !vm.organizationPickerOpen"
 						   ng-value="vm.organizationPickerSelectionText"/>
 				</div>
 
 				<div style="position: relative">
-					<div class="wfm-dropdown-panel panel material-depth-1"
+					<div class="wfm-dropdown-panel panel material-depth-1 full-padding"
 						 style="z-index: 999; position: absolute; width: 100%"
 						 ng-show="vm.organizationPickerOpen">
 
@@ -55,43 +52,40 @@
 									ng-click="vm.organizationPickerOpen = false">{{'Close'|translate}}
 							</button>
 						</div>
+
 						<div ng-repeat="site in vm.sites | filter:vm.organizationPickerSearchTerm">
 							<div>
-								<span ng-click="site.isExpanded = !site.isExpanded" class="rta-options-prepend">
+								<span ng-click="site.isExpanded = !site.isExpanded">
 									<i class="mdi"
 									   ng-class="site.isExpanded ? 'mdi-chevron-up' : 'mdi-chevron-down'"></i>
 								</span>
-								<label>
-									<md-checkbox ng-checked="site.isChecked"
-												 aria-label="Checkbox"
-												 ng-class="site.isMarked ? 'rta-marked-checkbox' : ''"
-												 ng-click="site.toggle()">
-										<span>{{site.Name}}</span>
-									</md-checkbox>
-								</label>
+								<md-checkbox style="display: inline-block"
+											 ng-checked="site.isChecked"
+											 aria-label="Checkbox"
+											 ng-class="site.isMarked ? 'marked' : ''"
+											 ng-click="site.toggle()">
+									<span>{{site.Name}}</span>
+								</md-checkbox>
 							</div>
 							<div style="margin-left: 50px"
 								 ng-show="site.isExpanded"
 								 ng-repeat="team in site.Teams">
-								<label>
-									<md-checkbox ng-checked="team.isChecked"
-												 aria-label="Checkbox"
-												 ng-click="team.toggle()">
-										<span>{{team.Name}}</span>
-									</md-checkbox>
-								</label>
+								<md-checkbox ng-checked="team.isChecked"
+											 aria-label="Checkbox"
+											 ng-click="team.toggle()">
+									<span>{{team.Name}}</span>
+								</md-checkbox>
 							</div>
 						</div>
+
 					</div>
 				</div>
 			</div>
 
 			<div class="con-flex">
-				<md-autocomplete id="skill-id"
-								 ng-disabled="vm.loading"
+				<md-autocomplete ng-disabled="vm.loading"
 								 ng-attr-skillsLoaded="{{!vm.loading}}"
 								 class="autocomplete-skill"
-								 md-input-id="skill-input"
 								 md-selected-item="vm.selectedSkillNew"
 								 md-search-text="searchSkillText"
 								 md-items="skill in vm.filterSkills(searchSkillText, vm.skills)"
@@ -99,8 +93,7 @@
 								 md-min-length="0"
 								 placeholder="{{'SelectSkill'|translate}}">
 					<md-item-template>
-						<span class="rta-skill-item"
-							  md-highlight-text="searchSkillText"
+						<span md-highlight-text="searchSkillText"
 							  md-highlight-flags="^i">{{skill.Name}}</span>
 					</md-item-template>
 					<md-not-found>
@@ -115,11 +108,9 @@
 			</div>
 
 			<div class="con-flex">
-				<md-autocomplete id="skill-area-id"
-								 ng-disabled="vm.loading"
+				<md-autocomplete ng-disabled="vm.loading"
 								 ng-attr-skillAreasLoaded="{{!vm.loading}}"
 								 class="autocomplete-skillarea"
-								 md-input-id="skill-area-input"
 								 md-selected-item="vm.selectedSkillArea"
 								 md-search-text="searchSkillAreaText"
 								 md-items="skillArea in vm.filterSkills(searchSkillAreaText, vm.skillAreas)"
@@ -127,8 +118,7 @@
 								 md-min-length="0"
 								 placeholder="{{'SelectSkillGroup'|translate}}">
 					<md-item-template>
-						<span class="rta-skill-area-item"
-							  md-highlight-text="searchSkillText"
+						<span md-highlight-text="searchSkillText"
 							  md-highlight-flags="^i">{{skillArea.Name}}</span>
 					</md-item-template>
 					<md-not-found>
@@ -168,17 +158,15 @@
 				</div>
 
 				<div class="relative">
-					<div class="wfm-dropdown-panel panel material-depth-2"
+					<div class="wfm-dropdown-panel panel material-depth-1 full-padding"
 						 style="z-index: 999; position: absolute; width: 100%"
 						 ng-show="vm.open">
-						<div class="full-padding">
-							<md-checkbox
-									ng-repeat="state in vm.states"
-									aria-label="Checkbox"
-									ng-model="state.Selected">
-								{{state.Name}}
-							</md-checkbox>
-						</div>
+						<md-checkbox
+								ng-repeat="state in vm.states"
+								aria-label="Checkbox"
+								ng-model="state.Selected">
+							{{state.Name}}
+						</md-checkbox>
 					</div>
 				</div>
 			</div>
@@ -263,10 +251,8 @@
 					<td>
 						{{agentState.SiteAndTeamName}}
 					</td>
-					<td style="border-right: none; background-color: transparent; padding: 0">
-
+					<td class="shift-column">
 						<div class="shift" style="height: 100%">
-
 							<div ng-repeat="outOfAdherence in agentState.OutOfAdherences"
 								 class="out-of-adherence"
 								 ng-attr-style="left: {{outOfAdherence.Offset}}; width: {{outOfAdherence.Width}};">
@@ -274,7 +260,7 @@
 									{{outOfAdherence.StartTime}} - {{outOfAdherence.EndTime}}
 								</md-tooltip>
 							</div>
-
+							
 							<div class="current-time" style="left: 25%"></div>
 
 							<div ng-repeat="activity in agentState.Shift"
@@ -286,9 +272,7 @@
 									<div>{{activity.Time}}</div>
 								</md-tooltip>
 							</div>
-
 						</div>
-
 					</td>
 					<td style="border-left: none">
 						<a href="{{vm.changeScheduleUrl(agentState.PersonId)}}" target="_blank"

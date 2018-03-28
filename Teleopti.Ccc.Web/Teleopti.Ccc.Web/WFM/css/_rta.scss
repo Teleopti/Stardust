@@ -18,6 +18,7 @@
 
   $out-of-adherence-color: darkred;
   $in-adherence-color: darkgreen;
+  $out-of-adherence-height: 4px;
 
   // con padding/margin reset
   .con-row {
@@ -43,20 +44,103 @@
   @mixin positioned {
 	position: absolute;
   }
+  @mixin out-of-adherence-line {
+	@include positioned;
+	z-index: 20;
+	background-color: $out-of-adherence-color;
+	height: $out-of-adherence-height;
+	opacity: 0.6;
+	min-width: 1px;
+  }
+  @mixin activity-layer {
+	@include positioned;
+	z-index: 10;
+	height: 100%;
+  }
+  @mixin current-time-line {
+	@include positioned;
+	z-index: 30;
+	width: 2px;
+	height: 100%;
+	background-color: red;
+  }
 
-  .wfm-table td {
-	&.label {
-	  font-size: 12px;
-	  font-weight: 100;
-	  padding: 5px;
+  .wfm-table {
+
+	th.blank-header {
+	  background-color: $white;
 	}
-	.mdi:before {
-	  font-size: 14px !important;
+
+	td {
+	  overflow: hidden;
+	  white-space: nowrap;
+	  text-overflow: ellipsis;
+
+	  &.shift-column {
+		border-right: none;
+		background-color: transparent;
+		padding: 0
+	  }
+	  &.label {
+		font-size: 12px;
+		font-weight: 100;
+		padding: 5px;
+	  }
+	  .mdi:before {
+		font-size: 14px !important;
+	  }
+	}
+	
+	a.mdi {
+	  text-decoration: none;
 	}
   }
 
   .highlight > td {
 	background-color: $green-100;
+  }
+
+  &.agents {
+
+	.organization-picker {
+	  .filter {
+		padding-left: $full-padding;
+		padding-right: $full-padding;
+	  }
+	}
+
+	md-checkbox.marked .md-icon {
+	  background-color: #66c2ff;
+	}
+
+	.timeline {
+	  @include container;
+	  .time {
+		@include positioned;
+		top: 20%;
+		transform: translateX(-50%);
+	  }
+	}
+
+	.shift {
+	  @include container;
+
+	  .current-time {
+		@include current-time-line;
+	  }
+
+	  .out-of-adherence {
+		@include out-of-adherence-line;
+		top: 50%;
+		transform: translateY(-50%);
+	  }
+
+	  .activity {
+		@include activity-layer;
+	  }
+
+	}
+
   }
 
   &.historical {
@@ -75,7 +159,6 @@
 	}
 
 	$shift-height: 40px;
-	$out-of-adherence-height: 4px;
 	$layer-row-height: 20px;
 	$diamond-size: 8px;
 
@@ -115,27 +198,16 @@
 	  height: $shift-height;
 
 	  .current-time {
-		@include positioned;
-		z-index: 30;
-		width: 2px;
-		height: 100%;
-		background-color: red;
+		@include current-time-line;
 	  }
 
 	  .out-of-adherence {
-		@include positioned;
-		z-index: 20;
-		background-color: $out-of-adherence-color;
-		height: $out-of-adherence-height;
-		opacity: 0.6;
-		min-width: 1px;
+		@include out-of-adherence-line;
 		top: ($shift-height - $out-of-adherence-height) / 2;
 	  }
 
 	  .activity {
-		@include positioned;
-		z-index: 10;
-		height: 100%;
+		@include activity-layer;
 	  }
 
 	}

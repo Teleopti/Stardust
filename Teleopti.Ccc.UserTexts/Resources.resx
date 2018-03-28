@@ -17276,4 +17276,8 @@ The application will now exit.</value>
     <value>Select states</value>
     <comment>label for selecting states in real time adherence agents view</comment>
   </data>
+	<data name="SelectSitesTeams" xml:space="preserve">
+    <value>Select sites / teams</value>
+    <comment>label for selecting sites and teams in real time adherence agents view</comment>
+  </data>
 </root>
