@@ -286,7 +286,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 		{
 			AllTenants.HasWithAnalyticsConnectionString(testTenantName, connectionString);
 			var baseConfig = new BaseConfiguration(1053, 15, timezoneName, false);
-			var tenantConfig = new TenantConfigurationModel()
+			var tenantConfig = new TenantConfigurationModel
 			{
 				TenantName = testTenantName,
 				BaseConfig = baseConfig
@@ -380,19 +380,21 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			BaseConfigurationRepository.SaveBaseConfiguration(masterTenant.DataSourceConfiguration.AnalyticsConnectionString,
 				new BaseConfiguration(1053, 15, "UTC", false));
 			GeneralInfrastructure.HasDataSources(new DataSourceEtl(dataSourceId, "myDs", 12, timezoneName, 15, false));
-			
-			var tenantDataSource = new TenantDataSourceModel
+
+			var myDsModel = new DataSourceModel
+			{
+				Id = dataSourceId,
+				TimeZoneCode = "UTC"
+			};
+			var tenantDataSources = new TenantDataSourceModel
 			{
 				TenantName = testTenantName,
-				DataSource = new DataSourceModel
-				{
-					Id = dataSourceId,
-					TimeZoneCode = "UTC"
-				}
+				DataSources = new List<DataSourceModel> {myDsModel}
 			};
-			Target.PersistDataSource(tenantDataSource);
+
+			Target.PersistDataSource(tenantDataSources);
 			var dataSources = (OkNegotiatedContentResult<IList<DataSourceModel>>)Target.TenantValidLogDataSources(testTenantName);
-			dataSources.Content.Single().TimeZoneCode.Should().Be(tenantDataSource.DataSource.TimeZoneCode);
+			dataSources.Content.Single().TimeZoneCode.Should().Be(myDsModel.TimeZoneCode);
 
 			var scheduledJob = JobScheduleRepository.GetEtlJobSchedules().First();
 			var scheduledPeriods = JobScheduleRepository.GetEtlJobSchedulePeriods(1);
@@ -420,21 +422,36 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			BaseConfigurationRepository.SaveBaseConfiguration(masterTenant.DataSourceConfiguration.AnalyticsConnectionString,
 				new BaseConfiguration(1053, 15, "UTC", false));
 			GeneralInfrastructure.HasDataSources(new DataSourceEtl(dataSourceId, "myDs", 12, null, 15, false));
+			GeneralInfrastructure.HasDataSources(new DataSourceEtl(dataSourceId + 1, "anotherDs", 12, null, 15, false));
 
-			var tenantDataSource = new TenantDataSourceModel
+			var myDsModel = new DataSourceModel
+			{
+				Id = dataSourceId,
+				TimeZoneCode = "UTC"
+			};
+			var anotherDsModel = new DataSourceModel
+			{
+				Id = dataSourceId + 1,
+				TimeZoneCode = timezoneName
+			};
+
+			var tenantDataSources = new TenantDataSourceModel
 			{
 				TenantName = testTenantName,
-				DataSource = new DataSourceModel
-				{
-					Id = dataSourceId,
-					TimeZoneCode = "UTC"
-				}
+				DataSources = new List<DataSourceModel> {myDsModel, anotherDsModel}
 			};
-			Target.PersistDataSource(tenantDataSource);
+
+			var result = (OkResult)Target.PersistDataSource(tenantDataSources);
+			result.Should().Not.Be.Null();
 
 			var dataSources = (OkNegotiatedContentResult<IList<DataSourceModel>>)Target.TenantValidLogDataSources(testTenantName);
-			dataSources.Content.Single().TimeZoneCode.Should().Be(tenantDataSource.DataSource.TimeZoneCode);
-			TimeZoneRepository.GetAll().SingleOrDefault(x => x.TimeZoneCode == timezoneName).Should().Not.Be.Null();
+			dataSources.Content.Single(x=>x.Id == myDsModel.Id).TimeZoneCode.Should().Be(myDsModel.TimeZoneCode);
+			dataSources.Content.Single(x => x.Id == anotherDsModel.Id).TimeZoneCode.Should().Be(myDsModel.TimeZoneCode);
+
+			var allTimeZones = TimeZoneRepository.GetAll();
+			allTimeZones.Count.Should().Be(2);
+			allTimeZones.SingleOrDefault(x => x.TimeZoneCode == timezoneName).Should().Not.Be.Null();
+			allTimeZones.SingleOrDefault(x => x.TimeZoneCode == "UTC").Should().Not.Be.Null();
 		}
 
 		[TestCase(1)]
@@ -446,18 +463,28 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			AllTenants.HasWithAnalyticsConnectionString(masterTenant.Name, masterTenant.DataSourceConfiguration.AnalyticsConnectionString);
 			GeneralInfrastructure.HasDataSources(new DataSourceEtl(dataSourceId, "Not Defined", -1, null, 15, false));
 
-			var tenantDataSource = new TenantDataSourceModel
+			var defaultDsModel = new DataSourceModel
 			{
-				TenantName = testTenantName,
-				DataSource = new DataSourceModel
-				{
-					Id = dataSourceId,
-					TimeZoneCode = "UTC"
-				}
+				Id = dataSourceId,
+				Name = RandomName.Make(),
+				TimeZoneCode = "UTC"
+			};
+			var anotherDsModel = new DataSourceModel
+			{
+				Id = dataSourceId + 1,
+				Name = RandomName.Make(),
+				TimeZoneCode = timezoneName
 			};
 
-			var result = (NegotiatedContentResult<string>)Target.PersistDataSource(tenantDataSource);
-			result.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+			var tenantDataSources = new TenantDataSourceModel
+			{
+				TenantName = testTenantName,
+				DataSources = new List<DataSourceModel> {defaultDsModel, anotherDsModel}
+			};
+
+			var result = (NegotiatedContentResult<string>)Target.PersistDataSource(tenantDataSources);
+			result.StatusCode.Should().Be(HttpStatusCode.Ambiguous);
+			result.Content.Should().Contain(defaultDsModel.Name);
 			JobScheduleRepository.GetEtlJobSchedules().Should().Be.Empty();
 		}
 
@@ -468,18 +495,21 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			masterTenant.DataSourceConfiguration.SetAnalyticsConnectionString($"Initial Catalog={RandomName.Make()}");
 			AllTenants.HasWithAnalyticsConnectionString(masterTenant.Name, masterTenant.DataSourceConfiguration.AnalyticsConnectionString);
 
+			var dataSourceModel = new DataSourceModel
+			{
+				Id = 3,
+				Name = RandomName.Make(),
+				TimeZoneCode = "UTC"
+			};
 			var tenantDataSource = new TenantDataSourceModel
 			{
 				TenantName = testTenantName,
-				DataSource = new DataSourceModel
-				{
-					Id = 3,
-					TimeZoneCode = "UTC"
-				}
+				DataSources = new List<DataSourceModel> {dataSourceModel}
 			};
 
-			var result = (NegotiatedContentResult<string>)Target.PersistDataSource(tenantDataSource);
-			result.StatusCode.Should().Be(HttpStatusCode.NotFound);
+			var result = (NegotiatedContentResult<string>) Target.PersistDataSource(tenantDataSource);
+			result.StatusCode.Should().Be(HttpStatusCode.Ambiguous);
+			result.Content.Should().Contain(dataSourceModel.Name);
 			JobScheduleRepository.GetEtlJobSchedules().Should().Be.Empty();
 		}
 
@@ -494,18 +524,21 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 				new BaseConfiguration(1053, 15, "UTC", false));
 			GeneralInfrastructure.HasDataSources(new DataSourceEtl(dataSourceId, "myDs", 13, "UTC", 15, false));
 
+			var dataSourceModel = new DataSourceModel
+			{
+				Id = dataSourceId,
+				Name = RandomName.Make(),
+				TimeZoneCode = "UTC"
+			};
 			var tenantDataSource = new TenantDataSourceModel
 			{
 				TenantName = testTenantName,
-				DataSource = new DataSourceModel
-				{
-					Id = dataSourceId,
-					TimeZoneCode = "UTC"
-				}
+				DataSources = new List<DataSourceModel> {dataSourceModel}
 			};
 
 			var result = (NegotiatedContentResult<string>)Target.PersistDataSource(tenantDataSource);
-			result.StatusCode.Should().Be(HttpStatusCode.NotModified);
+			result.StatusCode.Should().Be(HttpStatusCode.Ambiguous);
+			result.Content.Should().Contain(dataSourceModel.Name);
 			JobScheduleRepository.GetEtlJobSchedules().Should().Be.Empty();
 		}
 

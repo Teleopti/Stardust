@@ -171,7 +171,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 				
 				_configurationHandler.SetConnectionString(analyticsConnectionString);
 				var baseConfig = _configurationHandler.BaseConfiguration;
-				tenants.Add(new TenantConfigurationModel()
+				tenants.Add(new TenantConfigurationModel
 				{
 					TenantName = tenant.Name,
 					BaseConfig = (BaseConfiguration)baseConfig,
@@ -199,46 +199,59 @@ namespace Teleopti.Wfm.Administration.Controllers
 		public virtual IHttpActionResult PersistDataSource(TenantDataSourceModel tenantDataSourceModel)
 		{
 			var tenantName = tenantDataSourceModel.TenantName;
-			var dataSourceId = tenantDataSourceModel.DataSource.Id;
+			var dataSourceNotPersisted = new List<string>();
 
-			// To exclude default data source
-			if (dataSourceId <= 1)
+			foreach (var dataSourceModel in tenantDataSourceModel.DataSources)
 			{
-				return Content(HttpStatusCode.Forbidden,
-					$"Datasource with id {dataSourceId} for Tenant \"{tenantName}\" is not allowed to modify");
+				var dataSourceId = dataSourceModel.Id;
+
+				// To exclude default data source
+				if (dataSourceId <= 1)
+				{
+					dataSourceNotPersisted.Add(dataSourceModel.Name);
+					logger.Info($"Datasource with id {dataSourceId} for Tenant \"{tenantName}\" is not allowed to modify");
+					continue;
+				}
+
+				var dataSource = _tenantLogDataSourcesProvider.Load(tenantName, true).SingleOrDefault(x => x.Id == dataSourceId);
+				if (dataSource == null)
+				{
+					dataSourceNotPersisted.Add(dataSourceModel.Name);
+					logger.Info($"Datasource with id {dataSourceId} for Tenant \"{tenantName}\" not found");
+					continue;
+				}
+
+				if (dataSource.TimeZoneCode == dataSourceModel.TimeZoneCode)
+				{
+					dataSourceNotPersisted.Add(dataSourceModel.Name);
+					logger.Info($"No change was made to datasource \"{dataSource.Name}\" with id {dataSourceId} for Tenant \"{tenantName}\" "
+						+ "since timezone is not changed.");
+					continue;
+				}
+
+				try
+				{
+					var tenant = _loadAllTenants.Tenants().Single(x => x.Name == tenantName);
+					var analyticsConnectionString = tenant.DataSourceConfiguration.AnalyticsConnectionString;
+					_generalFunctions.SetConnectionString(analyticsConnectionString);
+
+					var timeZondeId = _generalFunctions.GetTimeZoneDim(dataSourceModel.TimeZoneCode).MartId;
+					_generalFunctions.SaveDataSource(dataSourceId, timeZondeId);
+
+					enqueueInitialJob(tenantName);
+				}
+				catch (Exception ex)
+				{
+					dataSourceNotPersisted.Add(dataSourceModel.Name);
+					logger.Error($"Error occurred on save changes for Datasource with id {dataSourceId} for Tenant \"{tenantName}\"", ex);
+				}
 			}
 
-			var dataSource = _tenantLogDataSourcesProvider.Load(tenantName, true).SingleOrDefault(x => x.Id == dataSourceId);
-			if (dataSource == null)
-			{
-				return Content(HttpStatusCode.NotFound, $"Datasource with id {dataSourceId} for Tenant \"{tenantName}\" not found");
-			}
-
-			if (dataSource.TimeZoneCode == tenantDataSourceModel.DataSource.TimeZoneCode)
-			{
-				return Content(HttpStatusCode.NotModified,
-					$"No change was made to datasource \"{dataSource.Name}\" with id {dataSourceId} for Tenant \"{tenantName}\" since timezone is not changed.");
-			}
-
-			try
-			{
-				var tenant = _loadAllTenants.Tenants().Single(x => x.Name == tenantName);
-				var analyticsConnectionString = tenant.DataSourceConfiguration.AnalyticsConnectionString;
-				_generalFunctions.SetConnectionString(analyticsConnectionString);
-
-				logger.Warn($"analyticsConnectionString: {analyticsConnectionString}");
-				var timeZondeId = _generalFunctions.GetTimeZoneDim(tenantDataSourceModel.DataSource.TimeZoneCode).MartId;
-				_generalFunctions.SaveDataSource(dataSourceId, timeZondeId);
-
-				enqueueInitialJob(tenantName);
-			}
-			catch (Exception ex)
-			{
-				logger.Error($"Error occurred on save changes for Datasource with id {dataSourceId} for Tenant \"{tenantName}\"", ex);
-				return Content(HttpStatusCode.InternalServerError, "Error occurred on save data source changes.");
-			}
-
-			return Ok();
+			return dataSourceNotPersisted.Any()
+				? (IHttpActionResult) Content(HttpStatusCode.Ambiguous,
+					$"Failed to save {dataSourceNotPersisted.Count} of {tenantDataSourceModel.DataSources.Count} data source(s): "
+					+ $"{string.Join(", ", dataSourceNotPersisted)}.")
+				: Ok();
 		}
 
 		private void enqueueInitialJob(string tenantName)
@@ -256,7 +269,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 						JobCategoryName = "Initial",
 					}
 				},
-				LogDataSourceId = 1,
+				LogDataSourceId = 1, // Always initialize for default data source
 				TenantName = tenantName
 			};
 			_etlJobScheduler.ScheduleJob(jobEnqueModel);

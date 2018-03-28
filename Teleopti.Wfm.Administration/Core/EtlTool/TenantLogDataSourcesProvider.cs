@@ -66,6 +66,6 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 	public class TenantDataSourceModel
 	{
 		public string TenantName { get; set; }
-		public DataSourceModel DataSource { get; set; }
+		public List<DataSourceModel> DataSources { get; set; }
 	}
 }
