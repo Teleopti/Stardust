@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ShiftCategoryHandlers;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.MachineLearning;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
@@ -19,7 +18,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			_currentUnitOfWork = currentUnitOfWork;
 		}
 
-		public IEnumerable<IShiftCategoryPredictorModel> Find()
+		public IEnumerable<ShiftCategoryExample> Find()
 		{
 			var result = _currentUnitOfWork.Current().Session().CreateSQLQuery(@"SELECT p.ShiftCategory
 					,[BelongsToDate]
@@ -37,7 +36,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetResultTransformer(new AliasToBeanResultTransformer(typeof(shiftCategoryPredictIntermediateResult)))
 				.List<shiftCategoryPredictIntermediateResult>();
 
-			return result.Select(s => new ShiftCategoryPredictorModel
+			return result.Select(s => new ShiftCategoryExample
 			{
 				DayOfWeek = s.BelongsToDate.DayOfWeek,
 				StartTime = (double) s.StartTime,

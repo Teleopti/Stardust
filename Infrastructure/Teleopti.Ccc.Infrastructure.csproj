@@ -256,9 +256,9 @@
     <Compile Include="Hangfire\IgnoreRetryWarningsFromSpecifiedPrimaryKeys.cs" />
     <Compile Include="Hangfire\QueueFromArgumentAttribute.cs" />
     <Compile Include="Hangfire\JobExpirationTimeAttribute.cs" />
-    <Compile Include="MachineLearning\ShiftCategorySelectionModel.cs" />
-    <Compile Include="MachineLearning\PredictCategory.cs" />
-    <Compile Include="MachineLearning\ShiftCategoryPredictorModel.cs" />
+    <Compile Include="MachineLearning\ShiftCategoryPredictionModel.cs" />
+    <Compile Include="MachineLearning\PredictShiftCategory.cs" />
+    <Compile Include="MachineLearning\ShiftCategoryExampleForTraining.cs" />
     <Compile Include="MultiTenancy\Admin\CheckTenantUserExists.cs" />
     <Compile Include="MultiTenancy\Server\ExternalApplicationAccess.cs" />
     <Compile Include="MultiTenancy\Server\HashFromToken.cs" />

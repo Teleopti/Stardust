@@ -2,6 +2,7 @@
 using System.IO;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.ShiftCategoryHandlers;
 using Teleopti.Ccc.Infrastructure.MachineLearning;
 
 namespace Teleopti.Ccc.InfrastructureTest.MachineLearning
@@ -14,21 +15,21 @@ namespace Teleopti.Ccc.InfrastructureTest.MachineLearning
 			var shiftCategories = new[] { Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid() };
 			var data = new[]
 			{
-				new ShiftCategoryPredictorModel {StartTime = 8.0, EndTime = 16.0, ShiftCategory = shiftCategories[0].ToString()},
-				new ShiftCategoryPredictorModel {StartTime = 8.5, EndTime = 16.5, ShiftCategory = shiftCategories[0].ToString()},
-				new ShiftCategoryPredictorModel {StartTime = 8.5, EndTime = 16.5, ShiftCategory = shiftCategories[0].ToString()},
-				new ShiftCategoryPredictorModel {StartTime = 14.0, EndTime = 22.0, ShiftCategory = shiftCategories[1].ToString()},
-				new ShiftCategoryPredictorModel {StartTime = 14.25, EndTime = 22.0, ShiftCategory = shiftCategories[1].ToString()},
-				new ShiftCategoryPredictorModel {StartTime = 14.25, EndTime = 22.0, ShiftCategory = shiftCategories[1].ToString()},
-				new ShiftCategoryPredictorModel {StartTime = 5.0, EndTime = 14.0, ShiftCategory = shiftCategories[2].ToString()},
-				new ShiftCategoryPredictorModel {StartTime = 5.5, EndTime = 13.5, ShiftCategory = shiftCategories[2].ToString()},
-				new ShiftCategoryPredictorModel {StartTime = 5.5, EndTime = 13.5, ShiftCategory = shiftCategories[2].ToString()},
+				new ShiftCategoryExample {StartTime = 8.0, EndTime = 16.0, ShiftCategory = shiftCategories[0].ToString()},
+				new ShiftCategoryExample {StartTime = 8.5, EndTime = 16.5, ShiftCategory = shiftCategories[0].ToString()},
+				new ShiftCategoryExample {StartTime = 8.5, EndTime = 16.5, ShiftCategory = shiftCategories[0].ToString()},
+				new ShiftCategoryExample {StartTime = 14.0, EndTime = 22.0, ShiftCategory = shiftCategories[1].ToString()},
+				new ShiftCategoryExample {StartTime = 14.25, EndTime = 22.0, ShiftCategory = shiftCategories[1].ToString()},
+				new ShiftCategoryExample {StartTime = 14.25, EndTime = 22.0, ShiftCategory = shiftCategories[1].ToString()},
+				new ShiftCategoryExample {StartTime = 5.0, EndTime = 14.0, ShiftCategory = shiftCategories[2].ToString()},
+				new ShiftCategoryExample {StartTime = 5.5, EndTime = 13.5, ShiftCategory = shiftCategories[2].ToString()},
+				new ShiftCategoryExample {StartTime = 5.5, EndTime = 13.5, ShiftCategory = shiftCategories[2].ToString()},
 			};
 
-			var p = new PredictCategory();
+			var p = new PredictShiftCategory();
 			var m = p.Train(data);
 
-			Guid.Parse(m.Predict(14.0, 22.0)).Should().Be.EqualTo(shiftCategories[1]);
+			Guid.Parse(m.Predict(new ShiftCategoryExample{StartTime = 14.0, EndTime = 22.0})).Should().Be.EqualTo(shiftCategories[1]);
 		}
 
 		[Test]
@@ -37,21 +38,21 @@ namespace Teleopti.Ccc.InfrastructureTest.MachineLearning
 			var shiftCategories = new[] { Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid() };
 			var data = new[]
 			{
-				new ShiftCategoryPredictorModel {StartTime = 8.0, EndTime = 16.0, ShiftCategory = shiftCategories[0].ToString()},
-				new ShiftCategoryPredictorModel {StartTime = 8.5, EndTime = 16.5, ShiftCategory = shiftCategories[0].ToString()},
-				new ShiftCategoryPredictorModel {StartTime = 8.5, EndTime = 16.5, ShiftCategory = shiftCategories[0].ToString()},
-				new ShiftCategoryPredictorModel {StartTime = 14.0, EndTime = 22.0, ShiftCategory = shiftCategories[1].ToString()},
-				new ShiftCategoryPredictorModel {StartTime = 14.25, EndTime = 22.0, ShiftCategory = shiftCategories[1].ToString()},
-				new ShiftCategoryPredictorModel {StartTime = 14.25, EndTime = 22.0, ShiftCategory = shiftCategories[1].ToString()},
-				new ShiftCategoryPredictorModel {StartTime = 5.0, EndTime = 14.0, ShiftCategory = shiftCategories[2].ToString()},
-				new ShiftCategoryPredictorModel {StartTime = 5.5, EndTime = 13.5, ShiftCategory = shiftCategories[2].ToString()},
-				new ShiftCategoryPredictorModel {StartTime = 5.5, EndTime = 13.5, ShiftCategory = shiftCategories[2].ToString()},
+				new ShiftCategoryExample {StartTime = 8.0, EndTime = 16.0, ShiftCategory = shiftCategories[0].ToString()},
+				new ShiftCategoryExample {StartTime = 8.5, EndTime = 16.5, ShiftCategory = shiftCategories[0].ToString()},
+				new ShiftCategoryExample {StartTime = 8.5, EndTime = 16.5, ShiftCategory = shiftCategories[0].ToString()},
+				new ShiftCategoryExample {StartTime = 14.0, EndTime = 22.0, ShiftCategory = shiftCategories[1].ToString()},
+				new ShiftCategoryExample {StartTime = 14.25, EndTime = 22.0, ShiftCategory = shiftCategories[1].ToString()},
+				new ShiftCategoryExample {StartTime = 14.25, EndTime = 22.0, ShiftCategory = shiftCategories[1].ToString()},
+				new ShiftCategoryExample {StartTime = 5.0, EndTime = 14.0, ShiftCategory = shiftCategories[2].ToString()},
+				new ShiftCategoryExample {StartTime = 5.5, EndTime = 13.5, ShiftCategory = shiftCategories[2].ToString()},
+				new ShiftCategoryExample {StartTime = 5.5, EndTime = 13.5, ShiftCategory = shiftCategories[2].ToString()},
 			};
 
-			var p = new PredictCategory();
+			var p = new PredictShiftCategory();
 			var m = p.Train(data);
 
-			Guid.Parse(m.Predict(7.0, 15.0)).Should().Be.EqualTo(shiftCategories[0]);
+			Guid.Parse(m.Predict(new ShiftCategoryExample { StartTime = 7.0, EndTime = 15.0})).Should().Be.EqualTo(shiftCategories[0]);
 		}
 
 		[Test]
@@ -60,21 +61,21 @@ namespace Teleopti.Ccc.InfrastructureTest.MachineLearning
 			var shiftCategories = new[] { Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid() };
 			var data = new[]
 			{
-				new ShiftCategoryPredictorModel {StartTime = 8.0, EndTime = 16.0, ShiftCategory = shiftCategories[0].ToString()},
-				new ShiftCategoryPredictorModel {StartTime = 8.5, EndTime = 16.5, ShiftCategory = shiftCategories[0].ToString()},
-				new ShiftCategoryPredictorModel {StartTime = 8.5, EndTime = 16.5, ShiftCategory = shiftCategories[0].ToString()},
-				new ShiftCategoryPredictorModel {StartTime = 14.0, EndTime = 22.0, ShiftCategory = shiftCategories[1].ToString()},
-				new ShiftCategoryPredictorModel {StartTime = 14.25, EndTime = 22.0, ShiftCategory = shiftCategories[1].ToString()},
-				new ShiftCategoryPredictorModel {StartTime = 14.25, EndTime = 22.0, ShiftCategory = shiftCategories[1].ToString()},
-				new ShiftCategoryPredictorModel {StartTime = 5.0, EndTime = 14.0, ShiftCategory = shiftCategories[2].ToString()},
-				new ShiftCategoryPredictorModel {StartTime = 5.5, EndTime = 13.5, ShiftCategory = shiftCategories[2].ToString()},
-				new ShiftCategoryPredictorModel {StartTime = 5.5, EndTime = 13.5, ShiftCategory = shiftCategories[2].ToString()},
+				new ShiftCategoryExample {StartTime = 8.0, EndTime = 16.0, ShiftCategory = shiftCategories[0].ToString()},
+				new ShiftCategoryExample {StartTime = 8.5, EndTime = 16.5, ShiftCategory = shiftCategories[0].ToString()},
+				new ShiftCategoryExample {StartTime = 8.5, EndTime = 16.5, ShiftCategory = shiftCategories[0].ToString()},
+				new ShiftCategoryExample {StartTime = 14.0, EndTime = 22.0, ShiftCategory = shiftCategories[1].ToString()},
+				new ShiftCategoryExample {StartTime = 14.25, EndTime = 22.0, ShiftCategory = shiftCategories[1].ToString()},
+				new ShiftCategoryExample {StartTime = 14.25, EndTime = 22.0, ShiftCategory = shiftCategories[1].ToString()},
+				new ShiftCategoryExample {StartTime = 5.0, EndTime = 14.0, ShiftCategory = shiftCategories[2].ToString()},
+				new ShiftCategoryExample {StartTime = 5.5, EndTime = 13.5, ShiftCategory = shiftCategories[2].ToString()},
+				new ShiftCategoryExample {StartTime = 5.5, EndTime = 13.5, ShiftCategory = shiftCategories[2].ToString()},
 			};
 
-			var p = new PredictCategory();
+			var p = new PredictShiftCategory();
 			var m = p.Train(data);
 
-			Guid.Parse(m.Predict(5.0, 14.0)).Should().Be.EqualTo(shiftCategories[2]);
+			Guid.Parse(m.Predict(new ShiftCategoryExample { StartTime = 5.0, EndTime = 14.0})).Should().Be.EqualTo(shiftCategories[2]);
 		}
 
 		[Test]
@@ -83,18 +84,18 @@ namespace Teleopti.Ccc.InfrastructureTest.MachineLearning
 			var shiftCategories = new[] { Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid() };
 			var data = new[]
 			{
-				new ShiftCategoryPredictorModel {StartTime = 8.0, EndTime = 16.0, ShiftCategory = shiftCategories[0].ToString()},
-				new ShiftCategoryPredictorModel {StartTime = 8.5, EndTime = 16.5, ShiftCategory = shiftCategories[0].ToString()},
-				new ShiftCategoryPredictorModel {StartTime = 8.5, EndTime = 16.5, ShiftCategory = shiftCategories[0].ToString()},
-				new ShiftCategoryPredictorModel {StartTime = 14.0, EndTime = 22.0, ShiftCategory = shiftCategories[1].ToString()},
-				new ShiftCategoryPredictorModel {StartTime = 14.25, EndTime = 22.0, ShiftCategory = shiftCategories[1].ToString()},
-				new ShiftCategoryPredictorModel {StartTime = 14.25, EndTime = 22.0, ShiftCategory = shiftCategories[1].ToString()},
-				new ShiftCategoryPredictorModel {StartTime = 5.0, EndTime = 14.0, ShiftCategory = shiftCategories[2].ToString()},
-				new ShiftCategoryPredictorModel {StartTime = 5.5, EndTime = 13.5, ShiftCategory = shiftCategories[2].ToString()},
-				new ShiftCategoryPredictorModel {StartTime = 5.5, EndTime = 13.5, ShiftCategory = shiftCategories[2].ToString()},
+				new ShiftCategoryExample {StartTime = 8.0, EndTime = 16.0, ShiftCategory = shiftCategories[0].ToString()},
+				new ShiftCategoryExample {StartTime = 8.5, EndTime = 16.5, ShiftCategory = shiftCategories[0].ToString()},
+				new ShiftCategoryExample {StartTime = 8.5, EndTime = 16.5, ShiftCategory = shiftCategories[0].ToString()},
+				new ShiftCategoryExample {StartTime = 14.0, EndTime = 22.0, ShiftCategory = shiftCategories[1].ToString()},
+				new ShiftCategoryExample {StartTime = 14.25, EndTime = 22.0, ShiftCategory = shiftCategories[1].ToString()},
+				new ShiftCategoryExample {StartTime = 14.25, EndTime = 22.0, ShiftCategory = shiftCategories[1].ToString()},
+				new ShiftCategoryExample {StartTime = 5.0, EndTime = 14.0, ShiftCategory = shiftCategories[2].ToString()},
+				new ShiftCategoryExample {StartTime = 5.5, EndTime = 13.5, ShiftCategory = shiftCategories[2].ToString()},
+				new ShiftCategoryExample {StartTime = 5.5, EndTime = 13.5, ShiftCategory = shiftCategories[2].ToString()},
 			};
 
-			var p = new PredictCategory();
+			var p = new PredictShiftCategory();
 			var m = p.Train(data);
 
 			using (var storage = new MemoryStream())
@@ -102,9 +103,9 @@ namespace Teleopti.Ccc.InfrastructureTest.MachineLearning
 				m.Store(storage);
 
 				storage.Position = 0;
-				var fromStoredModel = ShiftCategorySelectionModel.Load(storage);
+				var fromStoredModel = ShiftCategoryPredictionModel.Load(storage);
 				
-				Guid.Parse(fromStoredModel.Predict(5.0, 14.0)).Should().Be.EqualTo(shiftCategories[2]);
+				Guid.Parse(fromStoredModel.Predict(new ShiftCategoryExample { StartTime = 5.0, EndTime = 14.0})).Should().Be.EqualTo(shiftCategories[2]);
 			}
 		}
 
@@ -114,22 +115,22 @@ namespace Teleopti.Ccc.InfrastructureTest.MachineLearning
 			var shiftCategories = new[] { Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid() };
 			var data = new[]
 			{
-				new ShiftCategoryPredictorModel {StartTime = 8.0, EndTime = 16.0,   DayOfWeek = DayOfWeek.Monday, ShiftCategory = shiftCategories[0].ToString()},
-				new ShiftCategoryPredictorModel {StartTime = 8.5, EndTime = 16.5,   DayOfWeek = DayOfWeek.Monday, ShiftCategory = shiftCategories[0].ToString()},
-				new ShiftCategoryPredictorModel {StartTime = 8.5, EndTime = 16.5,   DayOfWeek = DayOfWeek.Monday, ShiftCategory = shiftCategories[0].ToString()},
-				new ShiftCategoryPredictorModel {StartTime = 14.0, EndTime = 22.0,  DayOfWeek = DayOfWeek.Monday, ShiftCategory = shiftCategories[1].ToString()},
-				new ShiftCategoryPredictorModel {StartTime = 14.25, EndTime = 22.0, DayOfWeek = DayOfWeek.Monday, ShiftCategory = shiftCategories[1].ToString()},
-				new ShiftCategoryPredictorModel {StartTime = 14.25, EndTime = 22.0, DayOfWeek = DayOfWeek.Monday, ShiftCategory = shiftCategories[1].ToString()},
-				new ShiftCategoryPredictorModel {StartTime = 5.0, EndTime = 14.0,   DayOfWeek = DayOfWeek.Monday, ShiftCategory = shiftCategories[2].ToString()},
-				new ShiftCategoryPredictorModel {StartTime = 5.5, EndTime = 13.5,   DayOfWeek = DayOfWeek.Monday, ShiftCategory = shiftCategories[2].ToString()},
-				new ShiftCategoryPredictorModel {StartTime = 5.5, EndTime = 13.5,   DayOfWeek = DayOfWeek.Saturday, ShiftCategory = shiftCategories[3].ToString()},
+				new ShiftCategoryExample {StartTime = 8.0, EndTime = 16.0,   DayOfWeek = DayOfWeek.Monday, ShiftCategory = shiftCategories[0].ToString()},
+				new ShiftCategoryExample {StartTime = 8.5, EndTime = 16.5,   DayOfWeek = DayOfWeek.Monday, ShiftCategory = shiftCategories[0].ToString()},
+				new ShiftCategoryExample {StartTime = 8.5, EndTime = 16.5,   DayOfWeek = DayOfWeek.Monday, ShiftCategory = shiftCategories[0].ToString()},
+				new ShiftCategoryExample {StartTime = 14.0, EndTime = 22.0,  DayOfWeek = DayOfWeek.Monday, ShiftCategory = shiftCategories[1].ToString()},
+				new ShiftCategoryExample {StartTime = 14.25, EndTime = 22.0, DayOfWeek = DayOfWeek.Monday, ShiftCategory = shiftCategories[1].ToString()},
+				new ShiftCategoryExample {StartTime = 14.25, EndTime = 22.0, DayOfWeek = DayOfWeek.Monday, ShiftCategory = shiftCategories[1].ToString()},
+				new ShiftCategoryExample {StartTime = 5.0, EndTime = 14.0,   DayOfWeek = DayOfWeek.Monday, ShiftCategory = shiftCategories[2].ToString()},
+				new ShiftCategoryExample {StartTime = 5.5, EndTime = 13.5,   DayOfWeek = DayOfWeek.Monday, ShiftCategory = shiftCategories[2].ToString()},
+				new ShiftCategoryExample {StartTime = 5.5, EndTime = 13.5,   DayOfWeek = DayOfWeek.Saturday, ShiftCategory = shiftCategories[3].ToString()},
 			};
 
-			var p = new PredictCategory();
+			var p = new PredictShiftCategory();
 			var m = p.Train(data);
 
-			Guid.Parse(m.Predict(new ShiftCategoryPredictorModel{StartTime = 5.0,EndTime = 13.5,DayOfWeek = DayOfWeek.Saturday})).Should().Be.EqualTo(shiftCategories[3]);
-			Guid.Parse(m.Predict(new ShiftCategoryPredictorModel{StartTime = 5.0,EndTime = 13.5,DayOfWeek = DayOfWeek.Monday})).Should().Be.EqualTo(shiftCategories[2]);
+			Guid.Parse(m.Predict(new ShiftCategoryExample{StartTime = 5.0,EndTime = 13.5,DayOfWeek = DayOfWeek.Saturday})).Should().Be.EqualTo(shiftCategories[3]);
+			Guid.Parse(m.Predict(new ShiftCategoryExample{StartTime = 5.0,EndTime = 13.5,DayOfWeek = DayOfWeek.Monday})).Should().Be.EqualTo(shiftCategories[2]);
 		}
 	}
 }

@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftCategoryHandlers
 		public void ShouldUpdateModelWhenPreviousExists()
 		{
 			BusinessUnitRepository.Add(BusinessUnitFactory.BusinessUnitUsedInTest);
-			ShiftCategoryUsageFinder.Has(new testModel
+			ShiftCategoryUsageFinder.Has(new ShiftCategoryExample
 			{
 				DayOfWeek = DayOfWeek.Wednesday,
 				StartTime = 8.0,
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftCategoryHandlers
 		[Test]
 		public void ShouldUpdateModelWhenPreviousExistsOnShiftCategoryDeleted()
 		{
-			ShiftCategoryUsageFinder.Has(new testModel
+			ShiftCategoryUsageFinder.Has(new ShiftCategoryExample
 			{
 				DayOfWeek = DayOfWeek.Wednesday,
 				StartTime = 8.0,
@@ -70,14 +70,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftCategoryHandlers
 			Target.Handle(new ShiftCategoryDeletedEvent());
 
 			ShiftCategorySelectionRepository.LoadAll().First().Model.Should().Not.Be.Empty();
-		}
-
-		private class testModel : IShiftCategoryPredictorModel
-		{
-			public double StartTime { get; set; }
-			public double EndTime { get; set; }
-			public DayOfWeek DayOfWeek { get; set; }
-			public string ShiftCategory { get; set; }
 		}
 	}
 }

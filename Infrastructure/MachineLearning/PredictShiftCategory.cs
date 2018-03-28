@@ -5,15 +5,15 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ShiftCategoryHandlers;
 
 namespace Teleopti.Ccc.Infrastructure.MachineLearning
 {
-	public class PredictCategory : IPredictCategory
+	public class PredictShiftCategory : IPredictShiftCategory
 	{
-		public IShiftCategorySelectionModel Train(IEnumerable<IShiftCategoryPredictorModel> data)
+		public IShiftCategoryPredictionModel Train(IEnumerable<ShiftCategoryExample> data)
 		{
-			var descriptor = Descriptor.Create<ShiftCategoryPredictorModel>();
+			var descriptor = Descriptor.Create<ShiftCategoryExampleForTraining>();
 			
 			var generator = new numl.Supervised.DecisionTree.DecisionTreeGenerator();
 			generator.Descriptor = descriptor;
-			var result = generator.Generate(data.Select(d => new ShiftCategoryPredictorModel
+			var result = generator.Generate(data.Select(d => new ShiftCategoryExampleForTraining
 			{
 				DayOfWeek = d.DayOfWeek,
 				StartTime = d.StartTime,
@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Infrastructure.MachineLearning
 				ShiftCategory = d.ShiftCategory
 			}));
 
-			return new ShiftCategorySelectionModel(result);
+			return new ShiftCategoryPredictionModel(result);
 		}
 	}
 }

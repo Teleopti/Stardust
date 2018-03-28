@@ -6,16 +6,16 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeShiftCategoryUsageFinder : IShiftCategoryUsageFinder
 	{
-		private List<IShiftCategoryPredictorModel> storage = new List<IShiftCategoryPredictorModel>();
+		private List<ShiftCategoryExample> storage = new List<ShiftCategoryExample>();
 
-		public IEnumerable<IShiftCategoryPredictorModel> Find()
+		public IEnumerable<ShiftCategoryExample> Find()
 		{
 			return storage;
 		}
 
-		public void Has(params IShiftCategoryPredictorModel[] shiftCategoryPredictorModels)
+		public void Has(params ShiftCategoryExample[] shiftCategoryExamples)
 		{
-			storage.AddRange(shiftCategoryPredictorModels);
+			storage.AddRange(shiftCategoryExamples);
 		}
 	}
 }

@@ -5,6 +5,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 {
 	public interface IShiftCategoryUsageFinder
 	{
-		IEnumerable<IShiftCategoryPredictorModel> Find();
+		IEnumerable<ShiftCategoryExample> Find();
 	}
 }

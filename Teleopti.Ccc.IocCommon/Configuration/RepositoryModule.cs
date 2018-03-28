@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<PeopleForShiftTradeFinder>().As<IPeopleForShiftTradeFinder>().SingleInstance();
 			builder.RegisterType<PersonInRoleQuerier>().As<IPersonInRoleQuerier>().SingleInstance();
 			builder.RegisterType<ShiftCategoryUsageFinder>().As<IShiftCategoryUsageFinder>().SingleInstance();
-			builder.RegisterType<PredictCategory>().As<IPredictCategory>().SingleInstance();
+			builder.RegisterType<PredictShiftCategory>().As<IPredictShiftCategory>().SingleInstance();
 
 			builder.Register(c => new StardustRepository(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)).As<IStardustRepository>().SingleInstance();
 		}

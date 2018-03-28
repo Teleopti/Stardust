@@ -15,19 +15,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftCategoryHandlers
 	{
 		private readonly IRepository<IShiftCategorySelection> _shiftCategorySelectionRepository;
 		private readonly IShiftCategoryUsageFinder _shiftCategoryUsageFinder;
-		private readonly IPredictCategory _predictCategory;
+		private readonly IPredictShiftCategory _predictShiftCategory;
 		private readonly IBusinessUnitRepository _businessUnitRepository;
 		private readonly IUpdatedBySystemUser _updatedBySystemUser;
 		private readonly IBusinessUnitScope _businessUnitScope;
 
 		public ShiftCategorySelectionModelUpdater(IRepository<IShiftCategorySelection> shiftCategorySelectionRepository,
-			IShiftCategoryUsageFinder shiftCategoryUsageFinder, IPredictCategory predictCategory,
+			IShiftCategoryUsageFinder shiftCategoryUsageFinder, IPredictShiftCategory predictShiftCategory,
 			IBusinessUnitRepository businessUnitRepository, IUpdatedBySystemUser updatedBySystemUser,
 			IBusinessUnitScope businessUnitScope)
 		{
 			_shiftCategorySelectionRepository = shiftCategorySelectionRepository;
 			_shiftCategoryUsageFinder = shiftCategoryUsageFinder;
-			_predictCategory = predictCategory;
+			_predictShiftCategory = predictShiftCategory;
 			_businessUnitRepository = businessUnitRepository;
 			_updatedBySystemUser = updatedBySystemUser;
 			_businessUnitScope = businessUnitScope;
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftCategoryHandlers
 			var history = _shiftCategoryUsageFinder.Find();
 			if (history.Any())
 			{
-				var result = _predictCategory.Train(history);
+				var result = _predictShiftCategory.Train(history);
 				using (var ms = new MemoryStream())
 				{
 					result.Store(ms);

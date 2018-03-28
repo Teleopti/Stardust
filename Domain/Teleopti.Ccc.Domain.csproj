@@ -188,9 +188,9 @@
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestProcessorToggle47290On.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\IAnalyticsScheduleChangeUpdaterFilter.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\UpdateFactSchedules.cs" />
-    <Compile Include="ApplicationLayer\ShiftCategoryHandlers\IPredictCategory.cs" />
-    <Compile Include="ApplicationLayer\ShiftCategoryHandlers\IShiftCategoryPredictorModel.cs" />
-    <Compile Include="ApplicationLayer\ShiftCategoryHandlers\IShiftCategorySelectionModel.cs" />
+    <Compile Include="ApplicationLayer\ShiftCategoryHandlers\IPredictShiftCategory.cs" />
+    <Compile Include="ApplicationLayer\ShiftCategoryHandlers\ShiftCategoryExample.cs" />
+    <Compile Include="ApplicationLayer\ShiftCategoryHandlers\IShiftCategoryPredictionModel.cs" />
     <Compile Include="ApplicationLayer\ShiftCategoryHandlers\ShiftCategorySelectionModelUpdater.cs" />
     <Compile Include="ApplicationLayer\Skill\AnalyticsSkillUpdater.cs" />
     <Compile Include="ApplicationLayer\Skill\SkillViewModelBuilder.cs" />
