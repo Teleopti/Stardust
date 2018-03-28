@@ -11,6 +11,7 @@ using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.Toggle;
@@ -33,6 +34,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 		private readonly ILoadAllTenants _loadAllTenants;
 		private readonly IConfigurationHandler _configurationHandler;
 		private readonly IGeneralFunctions _generalFunctions;
+		private readonly INow _now;
 
 		public EtlController(IToggleManager toggleManager, 
 			JobCollectionModelProvider jobCollectionModelProvider,
@@ -42,7 +44,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			IBaseConfigurationRepository baseConfigurationRepository,
 			ILoadAllTenants loadAllTenants,
 			IConfigurationHandler configurationHandler,
-			IGeneralFunctions generalFunctions)
+			IGeneralFunctions generalFunctions, INow now)
 		{
 			_toggleManager = toggleManager;
 			_jobCollectionModelProvider = jobCollectionModelProvider;
@@ -53,6 +55,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			_loadAllTenants = loadAllTenants;
 			_configurationHandler = configurationHandler;
 			_generalFunctions = generalFunctions;
+			_now = now;
 		}
 
 		[HttpGet, Route("Etl/ShouldEtlToolBeVisible")]
@@ -256,7 +259,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 		private void enqueueInitialJob(string tenantName)
 		{
-			var utcToday = DateTime.UtcNow.Date;
+			var utcToday = _now.UtcDateTime();
 			var jobEnqueModel = new JobEnqueModel
 			{
 				JobName = "Initial",

@@ -48,6 +48,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 		public FakePmInfoProvider PmInfoProvider;
 		public FakeJobScheduleRepository JobScheduleRepository;
 		public MutableNow Now;
+		public FakeUserTimeZone TimeZone;
 		public FakeConfigReader FakeConfigReader;
 		public FakeAnalyticsTimeZoneRepository TimeZoneRepository;
 
@@ -284,9 +285,13 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 		[Test]
 		public void ShouldSaveBaseConfigurationForTenant()
 		{
+			TimeZone.IsNewYork();
 			AllTenants.HasWithAnalyticsConnectionString(testTenantName, connectionString);
-			var baseConfig = new BaseConfiguration(1053, 15, timezoneName, false);
-			var tenantConfig = new TenantConfigurationModel
+			var localNow = new DateTime(2018, 3, 28, 1, 0, 0);
+			Now.Is(TimeZoneHelper.ConvertToUtc(localNow, TimeZone.TimeZone()));
+
+			var baseConfig = new BaseConfiguration(1053, 15, TimeZone.TimeZone().Id, false);
+			var tenantConfig = new TenantConfigurationModel()
 			{
 				TenantName = testTenantName,
 				BaseConfig = baseConfig
