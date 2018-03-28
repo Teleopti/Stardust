@@ -541,9 +541,8 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 				DataSources = new List<DataSourceModel> {dataSourceModel}
 			};
 
-			var result = (NegotiatedContentResult<string>)Target.PersistDataSource(tenantDataSource);
-			result.StatusCode.Should().Be(HttpStatusCode.Ambiguous);
-			result.Content.Should().Contain(dataSourceModel.Name);
+			var result = (OkResult)Target.PersistDataSource(tenantDataSource);
+			result.Should().Not.Be(null);
 			JobScheduleRepository.GetEtlJobSchedules().Should().Be.Empty();
 		}
 

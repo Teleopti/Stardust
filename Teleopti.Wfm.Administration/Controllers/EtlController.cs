@@ -203,7 +203,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 		{
 			var tenantName = tenantDataSourceModel.TenantName;
 			var dataSourceNotPersisted = new List<string>();
-
+			var shouldEnqueueInitialJob = false;
 			foreach (var dataSourceModel in tenantDataSourceModel.DataSources)
 			{
 				var dataSourceId = dataSourceModel.Id;
@@ -226,7 +226,6 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 				if (dataSource.TimeZoneCode == dataSourceModel.TimeZoneCode)
 				{
-					dataSourceNotPersisted.Add(dataSourceModel.Name);
 					logger.Info($"No change was made to datasource \"{dataSource.Name}\" with id {dataSourceId} for Tenant \"{tenantName}\" "
 						+ "since timezone is not changed.");
 					continue;
@@ -240,8 +239,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 					var timeZondeId = _generalFunctions.GetTimeZoneDim(dataSourceModel.TimeZoneCode).MartId;
 					_generalFunctions.SaveDataSource(dataSourceId, timeZondeId);
-
-					enqueueInitialJob(tenantName);
+					shouldEnqueueInitialJob = true;
 				}
 				catch (Exception ex)
 				{
@@ -249,6 +247,9 @@ namespace Teleopti.Wfm.Administration.Controllers
 					logger.Error($"Error occurred on save changes for Datasource with id {dataSourceId} for Tenant \"{tenantName}\"", ex);
 				}
 			}
+
+			if(shouldEnqueueInitialJob)
+				enqueueInitialJob(tenantName);
 
 			return dataSourceNotPersisted.Any()
 				? (IHttpActionResult) Content(HttpStatusCode.Ambiguous,
