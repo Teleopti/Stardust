@@ -16,28 +16,6 @@
 
 .rta-view {
 
-  .approve-form {
-
-	input {
-	  margin-left: 10px;
-	  margin-right: 30px;
-	  width: 115px;
-	  border: none;
-	  border-bottom: 1px solid lightgrey;
-	  background: transparent;
-	  line-height: 20px;
-	}
-
-	&.non-ie {
-	  display: inline;
-	}
-
-	&.ie {
-	  display: none;
-	}
-
-  }
-
   $out-of-adherence-color: darkred;
   $in-adherence-color: darkgreen;
 
@@ -100,6 +78,28 @@
 	$out-of-adherence-height: 4px;
 	$layer-row-height: 20px;
 	$diamond-size: 8px;
+
+	.approve-form {
+
+	  input {
+		margin-left: 10px;
+		margin-right: 30px;
+		width: 115px;
+		border: none;
+		border-bottom: 1px solid lightgrey;
+		background: transparent;
+		line-height: 20px;
+	  }
+
+	  &.non-ie {
+		display: inline;
+	  }
+
+	  &.ie {
+		display: none;
+	  }
+
+	}
 
 	.timeline {
 	  @include container;
