@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 export class NavigationService {
 	private go(hash: string): void {
 		location.hash = hash;
+		this.resetScroll();
 	}
 
 	public navToSearch() {
@@ -20,5 +21,9 @@ export class NavigationService {
 
 	public navToApplicationLogon() {
 		this.go('#/people/access/applicationlogon');
+	}
+
+	private resetScroll() {
+		document.getElementById('materialcontainer').scrollTop = 0;
 	}
 }
