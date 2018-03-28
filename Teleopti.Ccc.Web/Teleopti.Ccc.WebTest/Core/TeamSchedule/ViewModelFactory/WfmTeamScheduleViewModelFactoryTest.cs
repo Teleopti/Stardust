@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var scenario = CurrentScenario.Has("Default");
 			var scheduleDate = new DateOnly(2020, 1, 1);
 			setUpPersonAndCulture(true);
-			
+
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc,
 				scenario,
 				new DateTimePeriod(new DateTime(2020, 1, 1, 8, 0, 0, DateTimeKind.Utc), new DateTime(2020, 1, 1, 17, 0, 0, DateTimeKind.Utc)), ShiftCategoryFactory.CreateShiftCategory("Day", "blue"));
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var pa2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInHongKong,
 				scenario,
 				new DateTimePeriod(new DateTime(2020, 1, 1, 4, 0, 0, DateTimeKind.Utc), new DateTime(2020, 1, 1, 13, 0, 0, DateTimeKind.Utc)), ShiftCategoryFactory.CreateShiftCategory("Day", "blue"));
-			
+
 			ScheduleStorage.Add(pa);
 			ScheduleStorage.Add(pa2);
 
@@ -1202,7 +1202,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		}
 
 		[Test]
-		public void ShouldReturnEmptyProjectionForPeopleWithWrongDate() {
+		public void ShouldReturnEmptyProjectionForPeopleWithWrongDate()
+		{
 			var scheduleDate = new DateTime(2015, 01, 01, 00, 00, 00, DateTimeKind.Utc);
 			var scheduleDateOnly = new DateOnly(scheduleDate);
 			setUpPersonAndCulture(true);
@@ -2492,7 +2493,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			team = TeamFactory.CreateSimpleTeam().WithId();
 			IPersonContract personContract = PersonContractFactory.CreatePersonContract(contract);
 			IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2010, 1, 1), personContract, team);
-			
+
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 			var person1 = PersonFactory.CreatePersonWithGuid("p1", "p1");
 			PeopleSearchProvider.Add(person1);
@@ -2572,6 +2573,36 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			schedules.First().Projection.First().Description.Should().Be("activity");
 			schedules[1].Projection.First().Description.Should().Be("activity for previous day");
 			schedules[2].Projection.First().Description.Should().Be("activity for next day");
+		}
+
+		[Test]
+		public void ShouldAllowOnlyMaximum750AgentsForScheduleSearch()
+		{
+			var date = new DateTime(2017, 12, 18, 00, 00, 00, DateTimeKind.Utc);
+			var scheduleDate = new DateOnly(date);
+			var team1 = TeamFactory.CreateSimpleTeam().WithId();
+			for (var i = 1; i <= 800; i++)
+			{
+
+				var person = PersonFactory.CreatePerson($"Person{i}", "Fake").WithId();
+				var contract = ContractFactory.CreateContract("Contract");
+				IPersonContract personContract = PersonContractFactory.CreatePersonContract(contract);
+				IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(scheduleDate, personContract, team1);
+
+				person.AddPersonPeriod(personPeriod);
+				PeopleSearchProvider.Add(person);
+				PersonRepository.Has(person);
+			}
+			var viewModel = Target.CreateViewModel(new SearchDaySchedulesInput
+			{
+				DateInUserTimeZone = scheduleDate,
+				GroupIds = new[] { team1.Id.Value },
+				PageSize = 500,
+				CurrentPageIndex = 0
+			});
+
+			viewModel.Total.Should().Be.EqualTo(800);
+			viewModel.Schedules.Count().Should().Be.EqualTo(0);
 		}
 
 		public void Setup(ISystem system, IIocConfiguration configuration)

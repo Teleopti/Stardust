@@ -35644,7 +35644,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Search result of the keyword(s) will exceed 500, please refine your search..
+        ///   Looks up a localized string similar to Search result of the keyword(s) will exceed {0}, please refine your search..
         /// </summary>
         public static string TooManyResultsForSearchKeywords {
             get {

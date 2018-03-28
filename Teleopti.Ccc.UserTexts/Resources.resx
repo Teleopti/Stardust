@@ -13839,7 +13839,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>Label in permissions</comment>
   </data>
   <data name="TooManyResultsForSearchKeywords" xml:space="preserve">
-    <value>Search result of the keyword(s) will exceed 500, please refine your search.</value>
+    <value>Search result of the keyword(s) will exceed {0}, please refine your search.</value>
     <comment>Notice in team schedules under WFM, when the search results are greater than 500.</comment>
   </data>
   <data name="ValidationforFilter" xml:space="preserve">

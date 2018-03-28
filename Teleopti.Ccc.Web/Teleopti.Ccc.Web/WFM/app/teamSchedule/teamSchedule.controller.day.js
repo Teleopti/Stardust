@@ -17,6 +17,7 @@
 		'CommandCheckService',
 		'ScheduleNoteManagementService',
 		'teamsToggles',
+		'Toggle',
 		'bootstrapCommon',
 		'groupPageService',
 		'TeamsStaffingConfigurationStorageService',
@@ -25,7 +26,7 @@
 
 	function TeamScheduleController($scope, $q, $translate, $stateParams, $state, $mdSidenav, $mdComponentRegistry, $document,
 		teamScheduleSvc, personSelectionSvc, scheduleMgmtSvc, NoticeService, ValidateRulesService,
-		CommandCheckService, ScheduleNoteManagementService, teamsToggles, bootstrapCommon, groupPageService,
+		CommandCheckService, ScheduleNoteManagementService, teamsToggles, toggleSvc, bootstrapCommon, groupPageService,
 		StaffingConfigStorageService, serviceDateFormatHelper) {
 		var vm = this;
 		vm.isLoading = false;
@@ -495,6 +496,7 @@
 		};
 
 		vm.toggles = teamsToggles.all();
+		vm.toggles.WfmTeamSchedule_IncreaseLimitionTo750ForScheduleQuery_74871 = toggleSvc.WfmTeamSchedule_IncreaseLimitionTo750ForScheduleQuery_74871;
 
 		vm.scheduleDate = $stateParams.selectedDate || new Date();
 
@@ -598,6 +600,17 @@
 		};
 		if (!vm.toggles.Wfm_GroupPages_45057)
 			vm.getSitesAndTeamsAsync();
+
+		vm.isResultTooMany = function () {
+			vm.total = 600;
+			var toggle = vm.toggles.WfmTeamSchedule_IncreaseLimitionTo750ForScheduleQuery_74871;
+			return (toggle && vm.total > 750) || (!toggle && vm.total > 500);
+		}
+		vm.warningMessageForTooManyResults = function () {
+			var toggle = vm.toggles.WfmTeamSchedule_IncreaseLimitionTo750ForScheduleQuery_74871;
+			var max = toggle ? 750 : 500;
+			return $translate.instant('TooManyResultsForSearchKeywords').replace('{0}', max);
+		}
 
 		function showReleaseNotification() {
 			var template = $translate.instant('WFMReleaseNotificationWithoutOldModuleLink');

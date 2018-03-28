@@ -189,7 +189,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		private GroupScheduleViewModel createViewModelForPeople(IList<Guid> targetIds, SearchDaySchedulesInput input)
 		{
 			var permittedPersons = new List<IPerson>();
-			foreach (var batch in targetIds.Batch(501))
+			foreach (var batch in targetIds.Batch(251))
 			{
 				var batchPermittedPersons = getPermittedPersons(batch.ToArray(), input.DateInUserTimeZone);
 				if (input.IsOnlyAbsences)
@@ -197,7 +197,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 					batchPermittedPersons = _searchProvider.SearchPermittedPeopleWithAbsence(batchPermittedPersons, input.DateInUserTimeZone).ToList();
 				}
 				permittedPersons.AddRange(batchPermittedPersons);
-				if (permittedPersons.Count > 500)
+				if (permittedPersons.Count > 750)
 				{
 					return new GroupScheduleViewModel
 					{
