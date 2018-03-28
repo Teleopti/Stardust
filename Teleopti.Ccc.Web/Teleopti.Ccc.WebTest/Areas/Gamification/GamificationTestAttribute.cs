@@ -45,7 +45,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification
 			system.UseTestDouble<FakeExternalPerformanceDataRepository>().For<IExternalPerformanceDataRepository>();
 			system.UseTestDouble<FakeJobResultRepository>().For<IJobResultRepository>();
 			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
-			system.UseTestDouble<FakePurgeSettingRepository>().For<IPurgeSettingRepository>();
 		}
 	}
 }

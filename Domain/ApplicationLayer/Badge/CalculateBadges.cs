@@ -20,14 +20,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 		private readonly IGlobalSettingDataRepository _globalSettingRep;
 		private readonly IPersonRepository _personRepository;
 		private readonly IPushMessageSender _pushMessageSender;
-		private readonly IPurgeSettingRepository _purgeSettingRepository;
 
 		public CalculateBadges(
 			ITeamGamificationSettingRepository teamSettingsRepository,
 			IAgentBadgeCalculator calculator,
 			IAgentBadgeWithRankCalculator badgeWithRankCalculator,
 			IGlobalSettingDataRepository globalSettingRep,
-			IPersonRepository personRepository, IPushMessageSender pushMessageSender, IPurgeSettingRepository purgeSettingRepository)
+			IPersonRepository personRepository, IPushMessageSender pushMessageSender)
 		{
 			_teamSettingsRepository = teamSettingsRepository;
 			_calculator = calculator;
@@ -35,7 +34,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 			_globalSettingRep = globalSettingRep;
 			_personRepository = personRepository;
 			_pushMessageSender = pushMessageSender;
-			_purgeSettingRepository = purgeSettingRepository;
 		}
 
 		public bool ResetBadge()
@@ -87,13 +85,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 				calculateAhtBadge(message, setting, isRuleWithDifferentThreshold, agentsWithSetting, calculateDate);
 				calculateAnsweredCallsBadge(message, setting, isRuleWithDifferentThreshold, agentsWithSetting, calculateDate);
 			}
-		}
-
-		public int GetExternalPerformanceDataPurgeDays()
-		{
-			var setting = _purgeSettingRepository.FindAllPurgeSettings()
-				.FirstOrDefault(s => s.Key == "DaysToKeepExternalPerformanceData");
-			return setting?.Value ?? 30;
 		}
 
 		[EnabledBy(Toggles.WFM_Gamification_Calculate_Badges_47250)]

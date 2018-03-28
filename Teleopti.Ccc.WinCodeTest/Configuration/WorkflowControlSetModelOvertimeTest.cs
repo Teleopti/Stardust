@@ -1,6 +1,5 @@
 ﻿using System;
 using NUnit.Framework;
-using Syncfusion.XPS;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration;

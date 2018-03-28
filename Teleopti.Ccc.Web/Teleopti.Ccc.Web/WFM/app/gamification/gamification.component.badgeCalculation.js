@@ -12,11 +12,9 @@
     function badgeCalculationController($translate, locale, dataService, userInfo) {
         var $ctrl = this;
         var currentTimezone = userInfo.CurrentUserInfo().DefaultTimeZone;
-        var dataPurgeDays = 30;
 
         $ctrl.$onInit = function () {
             fetchJobs();
-            fetchPurgeDays();
 
             $ctrl.dateTimeFormat = locale.DATETIME_FORMATS.short;
             $ctrl.dateFormat = locale.DATETIME_FORMATS.shortDate;
@@ -27,7 +25,7 @@
         };
 
         $ctrl.validate = function () {
-            if (moment($ctrl.dateRange.startDate).toDate() < moment.utc().subtract(dataPurgeDays, 'days').toDate()) {
+            if (moment($ctrl.dateRange.startDate).toDate() < moment.utc().subtract(30, 'days').toDate()) {
                 $ctrl.isValid = false;
                 return $translate.instant('NoGamificationDataForThePeriod');
             }
@@ -51,12 +49,6 @@
                 $ctrl.intersected = $ctrl.hasIntersection();
                 return !$ctrl.intersected;
             }
-        }
-
-        function fetchPurgeDays() {
-            dataService.fetchPurgeDays().then(function (days) {
-                dataPurgeDays = days;
-            })
         }
 
         function fetchJobs() {
