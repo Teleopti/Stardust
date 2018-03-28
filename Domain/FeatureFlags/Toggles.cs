@@ -60,6 +60,7 @@
 		WfmTeamSchedule_AddNDeleteDayOff_40555,
 		WfmTeamSchedule_RemoveShift_46322,
 		WfmTeamSchedule_IncreaseLimitionTo750ForScheduleQuery_74871,
+		WfmTeamSchedule_SuggestShiftCategory_152,
 
 		WebByPassDefaultPermissionCheck_37984,
 
