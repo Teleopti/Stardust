@@ -64,6 +64,11 @@ describe('HttpTest', function () {
 		reactHttp(419, done);
 	});
 
+	it('Should react to http error 409',
+		function(done) {
+			reactHttp(409, done);
+		});
+
 	xit('Should reload on 418', function (done) {
 	});
 

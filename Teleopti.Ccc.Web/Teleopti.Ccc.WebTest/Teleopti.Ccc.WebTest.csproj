@@ -565,6 +565,7 @@
     <Compile Include="Filters\LicenseAttributeTest.cs" />
     <Compile Include="Areas\MyTime\Core\HtmlHelperExtensionTest.cs" />
     <Compile Include="Areas\Start\Core\HtmlHelperExtensionTest.cs" />
+    <Compile Include="Filters\OptimisticLockExceptionFilterAttributeTest.cs" />
     <Compile Include="PreserveStackTest.cs" />
     <Compile Include="TestHelper\FirstAvailableMockFactory.cs" />
     <Compile Include="TestHelper\HttpActionResultExtensions.cs" />

@@ -5,6 +5,7 @@ using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
+using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 {
@@ -42,6 +43,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		}
 
 		[UnitOfWork, HttpPost, Route("api/TeamScheduleCommand/EditScheduleNote")]
+		[OptimisticLockExceptionFilter]
 		public virtual IList<ActionResult> EditScheduleNote([FromBody] EditScheduleNoteFormData input)
 		{
 			return _commandHandlingProvider.EditScheduleNote(input);
