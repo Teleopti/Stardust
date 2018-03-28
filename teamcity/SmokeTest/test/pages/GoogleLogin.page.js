@@ -4,7 +4,7 @@ var GoogleLoginPage = Object.create(Page, {
 
     username: { get: function () { return browser.element('input[type=email]'); } },
     next: { get: function () { return browser.element('#identifierNext'); } },
-    password: { get: function () { return browser.element('input[type=password]'); } },
+    password: { get: function () { return browser.element('#password input'); } },
     signinButton: { get: function () { return browser.element('#passwordNext'); } },
 	
 	signin: { value: function() {
