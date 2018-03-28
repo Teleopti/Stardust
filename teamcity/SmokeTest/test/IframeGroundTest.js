@@ -7,6 +7,7 @@ describe('Iframe ground all', function() {
 	
 	
 	it('should be able to iframe asmwidget', function () {
+		browser.url(process.env.UrlToTest);
 		browser.deleteCookie();
 		browser.url('http://tcbuildmonitor:8000/iframeGroundTest.html');
 		browser.waitForExist('iframe');

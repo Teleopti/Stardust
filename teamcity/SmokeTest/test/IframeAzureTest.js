@@ -7,6 +7,7 @@ describe('Iframe azure', function() {
 	
 	
 	it('should be able to iframe asmwidget', function () {
+		browser.url(process.env.UrlToTest);
 		browser.deleteCookie();
 		browser.url('http://tcbuildmonitor:8000/iframeAzureTest.html');
 		browser.waitForExist('iframe');
