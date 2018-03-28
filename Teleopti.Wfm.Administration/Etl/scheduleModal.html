@@ -27,7 +27,7 @@
 								<label class="form-check-label" for="scheduleName">
 									Name
 								</label>
-								<input type="text" class="form-control" ng-model="vm.editingSchedule.Name" id="scheduleName" aria-describedby="emailHelp" placeholder="New Name">
+								<input type="text" class="form-control" ng-model="vm.editingSchedule.Name" aria-describedby="emailHelp" placeholder="New Name">
 							</div>
 						</div>
 					</div>
@@ -38,7 +38,7 @@
 								<label class="form-check-label" for="scheduleDesc">
 									Description
 								</label>
-								<input type="text" class="form-control" ng-model="vm.editingSchedule.Description" id="scheduleDesc" aria-describedby="emailHelp" placeholder="Name">
+								<input type="text" class="form-control" ng-model="vm.editingSchedule.Description" aria-describedby="emailHelp" placeholder="Name">
 							</div>
 						</div>
 					</div>
@@ -47,8 +47,8 @@
 						<div class="col-md-6">
 							<div class="form-group">
 								<div class="form-group">
-									<label for="jobs">Job</label>
-									<select class="form-control" id="jobs">
+									<label>Job</label>
+									<select class="form-control">
 										<option>Teleopti WFM</option>
 										<option>2</option>
 										<option>3</option>
@@ -61,8 +61,8 @@
 						<div class="col-md-6">
 							<div class="form-group">
 								<div class="form-group">
-									<label for="jobs">Tenant</label>
-									<select class="form-control" id="jobs">
+									<label>Tenant</label>
+									<select class="form-control">
 										<option>Teleopti WFM</option>
 										<option>2</option>
 										<option>3</option>
@@ -87,7 +87,7 @@
 						<div class="form-group">
 							<div class="col-md-12">
 								<div class="center-flex">
-									<input class="switch" ng-model="vm.frequencyType" id="frequency" ng-click="vm.toggleFrequencyType()" type="checkbox">
+									<input class="switch" ng-model="vm.frequencyType" ng-click="vm.toggleFrequencyType()" type="checkbox">
 									&nbsp; Occurs &nbsp;
 									<span ng-if="!vm.frequencyType">once</span>
 									<span ng-if="vm.frequencyType">repeatedly</span>
@@ -95,8 +95,8 @@
 							</div>
 							<div class="col-md-12" ng-show="!vm.frequencyType">
 								<div class="form-group">
-									<label class="form-check-label" for="occursOnce1">Occur at:</label>
-									<input type="time" ng-model="vm.editingSchedule.onceTime" class="form-control" id="occursOnce1" aria-describedby="emailHelp" value="00:00">
+									<label class="form-check-label">Occur at:</label>
+									<input type="time" ng-model="vm.editingSchedule.onceTime" class="form-control" aria-describedby="emailHelp" value="00:00">
 								</div>
 							</div>
 
@@ -104,26 +104,26 @@
 								<div class="row">
 									<div class="col-md-4">
 										<div class="form-group">
-											<label class="form-check-label" for="startingAt">
+											<label class="form-check-label">
 												Occurs every:
 											</label>
-											<input type="number" ng-model="vm.editingSchedule.everyTime" class="form-control" id="startingAt" placeholder="Minutes">
+											<input type="number" ng-model="vm.editingSchedule.everyTime" class="form-control" placeholder="Minutes">
 										</div>
 									</div>
 									<div class="col-md-4">
 										<div class="form-group">
-											<label class="form-check-label" for="startingAt">
+											<label class="form-check-label">
 												Starting at:
 											</label>
-											<input type="time" ng-model="vm.editingSchedule.everyStartTime" class="form-control" id="startingAt" placeholder="Start time">
+											<input type="time" ng-model="vm.editingSchedule.everyStartTime" class="form-control" placeholder="Start time">
 										</div>
 									</div>
 									<div class="col-md-4">
 										<div class="form-group">
-											<label class="form-check-label" for="endingAt">
+											<label class="form-check-label">
 												Ending at:
 											</label>
-											<input type="time" ng-model="vm.editingSchedule.everyEndTime" class="form-control" id="endingAt" placeholder="End time">
+											<input type="time" ng-model="vm.editingSchedule.everyEndTime" class="form-control" placeholder="End time">
 										</div>
 									</div>
 								</div>
@@ -145,7 +145,7 @@
 							<div class="form-group">
 								<div class="form-group">
 									<label for="jobs">Log data source</label>
-									<select class="form-control" id="jobs">
+									<select class="form-control">
 										<option>Teleopti WFM</option>
 										<option>2</option>
 										<option>3</option>
@@ -162,16 +162,16 @@
 										<div class="row">
 											<div class="col-md-12">
 												<div class="form-group">
-													<label class="form-check-label" for="today1">
-														<input class="form-check-input" type="radio" name="exampleRadios" id="today1" value="option2">
+													<label class="form-check-label">
+														<input class="form-check-input" type="radio" name="exampleRadios" value="option2">
 														Today
 													</label>
-													<label class="form-check-label" for="startEnd1">
-														<input class="form-check-input" type="radio" name="exampleRadios" id="startEnd1" value="option2">
+													<label class="form-check-label">
+														<input class="form-check-input" type="radio" name="exampleRadios" value="option2">
 														Start/end
 													</label>
-													<input type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-													<input type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+													<input type="number" class="form-control" aria-describedby="emailHelp">
+													<input type="number" class="form-control" aria-describedby="emailHelp">
 												</div>
 											</div>
 										</div>
@@ -183,16 +183,16 @@
 										<div class="row">
 											<div class="col-md-12">
 												<div class="form-group">
-													<label class="form-check-label" for="today2">
-														<input class="form-check-input" type="radio" name="exampleRadios" id="today2" value="option2">
+													<label class="form-check-label">
+														<input class="form-check-input" type="radio" name="exampleRadios" value="option2">
 														Today
 													</label>
-													<label class="form-check-label" for="startEnd2">
-														<input class="form-check-input" type="radio" name="exampleRadios" id="startEnd2" value="option2">
+													<label class="form-check-label">
+														<input class="form-check-input" type="radio" name="exampleRadios" value="option2">
 														Start/end
 													</label>
-													<input type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-													<input type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+													<input type="number" class="form-control" aria-describedby="emailHelp">
+													<input type="number" class="form-control" aria-describedby="emailHelp">
 												</div>
 											</div>
 										</div>
@@ -204,16 +204,16 @@
 										<div class="row">
 											<div class="col-md-12">
 												<div class="form-group">
-													<label class="form-check-label" for="today3">
-														<input class="form-check-input" type="radio" name="exampleRadios" id="today3" value="option2">
+													<label class="form-check-label">
+														<input class="form-check-input" type="radio" name="exampleRadios" value="option2">
 														Today
 													</label>
-													<label class="form-check-label" for="startEnd3">
-														<input class="form-check-input" type="radio" name="exampleRadios" id="startEnd3" value="option2">
+													<label class="form-check-label">
+														<input class="form-check-input" type="radio" name="exampleRadios" value="option2">
 														Start/end
 													</label>
-													<input type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-													<input type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+													<input type="number" class="form-control" aria-describedby="emailHelp">
+													<input type="number" class="form-control" aria-describedby="emailHelp">
 												</div>
 											</div>
 										</div>
@@ -227,16 +227,16 @@
 										<div class="row">
 											<div class="col-md-12">
 												<div class="form-group">
-													<label class="form-check-label" for="today4">
-														<input class="form-check-input" type="radio" name="exampleRadios" id="today4" value="option2">
+													<label class="form-check-label">
+														<input class="form-check-input" type="radio" name="exampleRadios" value="option2">
 														Today
 													</label>
-													<label class="form-check-label" for="startEnd4">
-														<input class="form-check-input" type="radio" name="exampleRadios" id="startEnd4" value="option2">
+													<label class="form-check-label">
+														<input class="form-check-input" type="radio" name="exampleRadios" value="option2">
 														Start/end
 													</label>
-													<input type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-													<input type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+													<input type="number" class="form-control" aria-describedby="emailHelp">
+													<input type="number" class="form-control" aria-describedby="emailHelp">
 												</div>
 											</div>
 										</div>
@@ -248,16 +248,16 @@
 										<div class="row">
 											<div class="col-md-12">
 												<div class="form-group">
-													<label class="form-check-label" for="today5">
-														<input class="form-check-input" type="radio" name="exampleRadios" id="today5" value="option2">
+													<label class="form-check-label">
+														<input class="form-check-input" type="radio" name="exampleRadios" value="option2">
 														Today
 													</label>
-													<label class="form-check-label" for="startEnd5">
-														<input class="form-check-input" type="radio" name="exampleRadios" id="startEnd5" value="option2">
+													<label class="form-check-label">
+														<input class="form-check-input" type="radio" name="exampleRadios" value="option2">
 														Start/end
 													</label>
-													<input type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-													<input type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+													<input type="number" class="form-control" aria-describedby="emailHelp">
+													<input type="number" class="form-control" aria-describedby="emailHelp">
 												</div>
 											</div>
 										</div>

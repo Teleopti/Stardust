@@ -42,7 +42,7 @@
 		</div>
 	</div>
 
-	<div class="custom-modal" ng-if="vm.showModal">
+	<form class="custom-modal" ng-if="vm.showModal" ng-submit="vm.sendLogDataConfiguration()">
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title">Datasource configuration</h5>
@@ -51,6 +51,12 @@
 				</button>
 			</div>
 			<div class="modal-body">
+				<small style="color:tomato;" ng-cloak ng-if="vm.tenantLogData.Error">
+					<svg style="width:16px;height:16px" viewBox="0 0 24 24">
+						<path fill="tomato" d="M13,14H11V10H13M13,18H11V16H13M1,21H23L12,2L1,21Z" />
+					</svg>
+					{{vm.tenantLogData.Error}}
+				</small>
 				<table class="table" ng-if="vm.tenantLogData.length > 0">
 					<thead>
 						<tr>
@@ -62,10 +68,11 @@
 					</thead>
 					<tbody>
 						<tr ng-repeat="logData in vm.tenantLogData">
-							<th scope="row">?</th>
+							<th scope="row" ng-if="logData.TimeZoneCode">✓</th>
+							<th scope="row" ng-if="!logData.TimeZoneCode">✗</th>
 							<td>{{logData.Name}}</td>
 							<td>
-								<select ng-if="!logData.timezone" class="form-control" id="baseTimezone" ng-options="timezone.Id as timezone.Text for timezone in vm.TimeZoneCodes" ng-model="logData.TimeZoneId">
+								<select ng-if="!logData.timezone" class="form-control" ng-options="timezone.Id as timezone.Text for timezone in vm.TimeZoneCodes" ng-model="logData.TimeZoneCode">
 									<option ng-show="!logData.selectedTimezone" value="">- Select time zone</option>
 								</select>
 							</td>
@@ -78,10 +85,15 @@
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" ng-click="vm.showModal = false;">Close</button>
-				<button type="button" class="btn btn-primary">Ok</button>
+				<button type="button" class="btn btn-default pull-left" ng-if="vm.logDataSending" name="button">
+					<svg class="spin" style="width:14px;height:14px" viewBox="0 0 24 24">
+						<path fill="#000000" d="M12,4V2A10,10 0 0,0 2,12H4A8,8 0 0,1 12,4Z" />
+					</svg> Running... This might take several minutes
+				</button>
+				<button type="button" class="btn btn-secondary" ng-disabled="vm.logDataSending" ng-click="vm.showModal = false; vm.selectedTenant = null;">Close</button>
+				<button type="submit" class="btn btn-primary" ng-disabled="vm.logDataSending">Ok</button>
 			</div>
 		</div>
-	</div>
+	</form>
 
 </div>

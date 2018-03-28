@@ -14,7 +14,9 @@
     vm.tenants = [];
     vm.tenantLogData = null;
     vm.TimeZoneCodes = null;
+    vm.selectedTenant = null;
 
+    vm.sendLogDataConfiguration = sendLogDataConfiguration;
     vm.getLogDataForATenant = getLogDataForATenant;
 
     (function init() {
@@ -37,6 +39,7 @@
     }
 
     function getLogDataForATenant(tenant) {
+      vm.selectedTenant = tenant;
       tenant.loading = true;
       $http
       .post(
@@ -46,6 +49,7 @@
       )
       .success(function(data) {
         vm.tenantLogData = data;
+        console.log(data);
 
         $http
         .get("./Etl/GetConfigurationModel", tokenHeaderService.getHeaders())
@@ -57,21 +61,30 @@
       });
     }
 
-    // vm.sendAllLogDataForATenant = sendAllLogDataForATenant;
-    // function sendAllLogDataForATenant(tenant) {
-    //   $http
-    //   .post(
-    //     "./Etl/Jobs",
-    //     JSON.stringify(tenant),
-    //     tokenHeaderService.getHeaders()
-    //   )
-    //   .success(function(data) {
-    //
-    //   })
-    //   .error(function(data) {
-    //
-    //   });
-    // }
+    function sendLogDataConfiguration() {
+      vm.tenantLogData.Error = null;
+      var logDataObject = {
+        TenantName: vm.selectedTenant.TenantName,
+        DataSources: vm.tenantLogData
+      }
+      vm.logDataSending = true;
+      $http
+      .post(
+        "./Etl/PersistDataSource",
+        JSON.stringify(logDataObject),
+        tokenHeaderService.getHeaders()
+      )
+      .success(function(data) {
+        vm.tenantLogData = null;
+        vm.showModal = false;
+        vm.selectedTenant = null;
+        vm.logDataSending = false;
+      })
+      .error(function(data) {
+        vm.logDataSending = false;
+        vm.tenantLogData.Error = data;
+      });
+    }
 
   }
 })();
