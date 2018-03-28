@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Teleopti.Support.Library.Config
 {
 	public class SettingsFileManager
 	{
+		private readonly string settingsFileName = "settings.txt";
+		private string _settingsFile;
+
 		public void LoadFile(string file) => SaveFile(readFileAndFixSomeMagicStuff(file).ForDisplay());
 
 		public SearchReplaceCollection ReadFile() => readFileAndFixSomeMagicStuff(settingsFile());
@@ -25,9 +29,7 @@ namespace Teleopti.Support.Library.Config
 				text = text + searchReplace.SearchFor + "|" + searchReplace.ReplaceWith + Environment.NewLine;
 			File.WriteAllText(settingsFile(), text);
 		}
-		
-		private static string settingsFile() => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "settings.txt");
-		
+
 		public void UpdateFileByName(string name, string replaceWith)
 		{
 			var collection = ReadFile();
@@ -42,6 +44,37 @@ namespace Teleopti.Support.Library.Config
 			SaveFile(collection.ForDisplay());
 		}
 
-		
+		private string settingsFile()
+		{
+			if (_settingsFile != null)
+				return _settingsFile;
+			return _settingsFile = findSettingsFileByBlackMagic(settingsFileName);
+		}
+
+		private static string findSettingsFileByBlackMagic(string fileName)
+		{
+			var paths = new[]
+			{
+				@".\",
+				@"..\",
+				@"..\..\",
+				@"..\..\..\",
+				@"..\..\..\..\",
+				@".\Teleopti.Support.Tool\bin\Debug\",
+				@"..\Teleopti.Support.Tool\bin\Debug\",
+				@"..\..\Teleopti.Support.Tool\bin\Debug\",
+				@"..\..\..\Teleopti.Support.Tool\bin\Debug\",
+				@"..\..\..\..\Teleopti.Support.Tool\bin\Debug\",
+				@".\Teleopti.Support.Tool\bin\Release\",
+				@"..\Teleopti.Support.Tool\bin\Release\",
+				@"..\..\Teleopti.Support.Tool\bin\Release\",
+				@"..\..\..\Teleopti.Support.Tool\bin\Release\",
+				@"..\..\..\..\Teleopti.Support.Tool\bin\Release\",
+			};
+			var found = paths
+				.Select(x => Path.Combine(x, fileName))
+				.First(File.Exists);
+			return Path.GetFullPath(found);
+		}
 	}
 }
