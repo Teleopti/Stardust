@@ -1,3 +1,79 @@
 .rta-view.prototype {
-  
+
+  .wfm-table {
+	th.blank-header {
+	  background-color: $white;
+	}
+
+	td {
+	  overflow: hidden;
+	  white-space: nowrap;
+	  text-overflow: ellipsis;
+	}
+
+	a.mdi {
+	  text-decoration: none;
+	}
+  }
+
+  &.agents {
+
+	.organization-picker {
+	  .filter {
+		padding-left: $full-padding;
+		padding-right: $full-padding;
+	  }
+	}
+
+	@mixin container {
+	  position: relative;
+	}
+	@mixin positioned {
+	  position: absolute;
+	}
+	$out-of-adherence-color: darkred;
+	$out-of-adherence-height: 4px;
+
+	.timeline {
+	  @include container;
+	  .time {
+		@include positioned;
+		top: 20%;
+		transform: translateX(-50%);
+	  }
+	}
+
+	.shift {
+	  @include container;
+	  //height: 100%;
+
+	  .current-time {
+		@include positioned;
+		z-index: 30;
+		width: 2px;
+		height: 100%;
+		background-color: red;
+	  }
+
+	  .out-of-adherence {
+		@include positioned;
+		z-index: 20;
+		background-color: $out-of-adherence-color;
+		height: $out-of-adherence-height;
+		opacity: 0.6;
+		min-width: 1px;
+		top: 50%;
+		transform: translateY(-50%);
+	  }
+
+	  .activity {
+		@include positioned;
+		z-index: 10;
+		height: 100%;
+	  }
+
+	}
+
+  }
+
 } 

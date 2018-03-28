@@ -17272,4 +17272,8 @@ The application will now exit.</value>
   <data name="NoNonOverwritableActivities" xml:space="preserve">
     <value>No non-overwritable activities</value>
   </data>
+  <data name="SelectStates" xml:space="preserve">
+    <value>Select states</value>
+    <comment>label for selecting states in real time adherence agents view</comment>
+  </data>
 </root>
