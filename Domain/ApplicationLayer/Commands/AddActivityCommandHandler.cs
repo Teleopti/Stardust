@@ -5,8 +5,6 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.UserTexts;
@@ -19,7 +17,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		private readonly IProxyForId<IActivity> _activityForId;
 		private readonly ICurrentScenario _currentScenario;
 		private readonly IUserTimeZone _timeZone;
-		private readonly IShiftCategoryRepository _shiftCategoryRepository;
+		private readonly IShiftCategorySelector _shiftCategorySelector;
 		private readonly INonoverwritableLayerMovabilityChecker _movabilityChecker;
 		private readonly INonoverwritableLayerMovingHelper _movingHelper;
 		private readonly IScheduleStorage _scheduleStorage;
@@ -29,7 +27,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		public AddActivityCommandHandler(ICurrentScenario currentScenario,
 			IProxyForId<IActivity> activityForId,
 			IUserTimeZone timeZone,
-			IShiftCategoryRepository shiftCategoryRepository,
+			IShiftCategorySelector shiftCategorySelector,
 			INonoverwritableLayerMovabilityChecker movabilityChecker,
 			INonoverwritableLayerMovingHelper movingHelper, IScheduleStorage scheduleStorage, 
 			IScheduleDifferenceSaver scheduleDifferenceSaver)
@@ -37,7 +35,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			_activityForId = activityForId;
 			_currentScenario = currentScenario;
 			_timeZone = timeZone;
-			_shiftCategoryRepository = shiftCategoryRepository;
+			_shiftCategorySelector = shiftCategorySelector;
 			_movabilityChecker = movabilityChecker;
 			_movingHelper = movingHelper;
 			_scheduleStorage = scheduleStorage;
@@ -69,9 +67,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			var personAssignment = scheduleDay.PersonAssignment();
 			if (personAssignment == null)
 			{
-				var shiftCategories = _shiftCategoryRepository.FindAll().ToList();
-				shiftCategories.Sort(new ShiftCategorySorter());
-				var shiftCategory = shiftCategories.FirstOrDefault();
+				var shiftCategory = _shiftCategorySelector.Get();
 				if (shiftCategory != null)
 				{
 					scheduleDay.CreateAndAddActivity(activity, period, shiftCategory);
@@ -83,9 +79,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			{
 				personAssignment.AddActivity(activity, period, command.TrackedCommandInfo);
 
-				var shiftCategories = _shiftCategoryRepository.FindAll().ToList();
-				shiftCategories.Sort(new ShiftCategorySorter());
-				var shiftCategory = shiftCategories.FirstOrDefault();
+				var shiftCategory = _shiftCategorySelector.Get();
 				if (shiftCategory != null)
 					personAssignment.SetShiftCategory(shiftCategory);
 				dic.Modify(scheduleDay, NewBusinessRuleCollection.Minimum());
@@ -120,9 +114,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				personAssignment.AddActivity(activity, period, command.TrackedCommandInfo);
 				if (personAssignment.ShiftCategory == null)
 				{
-					var shiftCategories = _shiftCategoryRepository.FindAll().ToList();
-					shiftCategories.Sort(new ShiftCategorySorter());
-					var shiftCategory = shiftCategories.FirstOrDefault();
+					var shiftCategory = _shiftCategorySelector.Get();
 					if (shiftCategory != null)
 						personAssignment.SetShiftCategory(shiftCategory);
 				}

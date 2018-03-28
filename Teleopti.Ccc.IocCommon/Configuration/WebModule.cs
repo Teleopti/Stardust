@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<NonoverwritableLayerChecker>().As<INonoverwritableLayerChecker>().SingleInstance();
 			builder.RegisterType<NonoverwritableLayerMovabilityChecker>().As<INonoverwritableLayerMovabilityChecker>().SingleInstance();
 			builder.RegisterType<NonoverwritableLayerMovingHelper>().As<INonoverwritableLayerMovingHelper>().SingleInstance();
+			builder.RegisterType<ShiftCategorySelector>().As<IShiftCategorySelector>().SingleInstance();
 			builder.RegisterType<ScheduleProjectionHelper>().As<IScheduleProjectionHelper>().SingleInstance();
 			builder.RegisterType<OrganizationSelectionProvider>().SingleInstance();
 		}
