@@ -26,7 +26,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			get
 			{
 				if (_connectionString == null)
-					throw new ArgumentException("You need to set the datamart connection string before using it.",
+					throw new ArgumentException(@"You need to set the datamart connection string before using it.",
 						nameof(_connectionString));
 
 				return _connectionString;
@@ -36,22 +36,19 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		public IList<IDataSourceEtl> GetDataSourceList(bool getValidDataSources, bool includeOptionAll)
 		{
-			DataSet dataSet = getDatasources(getValidDataSources, includeOptionAll);
-			IList<IDataSourceEtl> dataSourceList = new List<IDataSourceEtl>();
+			var dataSet = getDatasources(getValidDataSources, includeOptionAll);
+			var dataSourceList = new List<IDataSourceEtl>();
+			if (dataSet?.Tables[0] == null) return dataSourceList;
 
-			if (dataSet != null && dataSet.Tables[0] != null)
+			foreach (DataRow row in dataSet.Tables[0].Rows)
 			{
-				foreach (DataRow row in dataSet.Tables[0].Rows)
-				{
-					IDataSourceEtl dataSourceEtl =
-						new DataSourceEtl(Convert.ToInt32(row["datasource_id"], CultureInfo.InvariantCulture),
-										row["datasource_name"].ToString(),
-										Convert.ToInt32(row["time_zone_id"], CultureInfo.InvariantCulture),
-										row["time_zone_code"].ToString(),
-										Convert.ToInt32(row["interval_length"], CultureInfo.InvariantCulture),
-										(bool)row["inactive"]);
-					dataSourceList.Add(dataSourceEtl);
-				}
+				var dataSourceEtl = new DataSourceEtl(Convert.ToInt32(row["datasource_id"], CultureInfo.InvariantCulture),
+					row["datasource_name"].ToString(),
+					Convert.ToInt32(row["time_zone_id"], CultureInfo.InvariantCulture),
+					row["time_zone_code"].ToString(),
+					Convert.ToInt32(row["interval_length"], CultureInfo.InvariantCulture),
+					(bool) row["inactive"]);
+				dataSourceList.Add(dataSourceEtl);
 			}
 
 			return dataSourceList;
@@ -73,25 +70,48 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		{
 			IList<ITimeZoneDim> timeZoneList = new List<ITimeZoneDim>();
 
-			DataSet dataSet = HelperFunctions.ExecuteDataSet(CommandType.StoredProcedure, "mart.etl_dim_time_zone_get",
-															 null, dataMartConnectionString);
-			if (dataSet != null && dataSet.Tables.Count == 1)
+			var dataSet = HelperFunctions.ExecuteDataSet(CommandType.StoredProcedure, "mart.etl_dim_time_zone_get", null,
+				dataMartConnectionString);
+			if (dataSet == null || dataSet.Tables.Count != 1) return timeZoneList;
+
+			foreach (DataRow dataRow in dataSet.Tables[0].Rows)
 			{
-				foreach (DataRow dataRow in dataSet.Tables[0].Rows)
-				{
-					ITimeZoneDim timeZoneDim = new TimeZoneDim((short)dataRow["time_zone_id"],
-														(string)dataRow["time_zone_code"],
-														(string)dataRow["time_zone_name"],
-														handleDbNullValue<bool>(dataRow["default_zone"]),
-														handleDbNullValue<int>(dataRow["utc_conversion"]),
-														handleDbNullValue<int>(dataRow["utc_conversion_dst"]),
-														handleDbNullValue<bool>(dataRow["utc_in_use"])
-														);
-					timeZoneList.Add(timeZoneDim);
-				}
+				var timeZoneDim = new TimeZoneDim((short) dataRow["time_zone_id"],
+					(string) dataRow["time_zone_code"],
+					(string) dataRow["time_zone_name"],
+					handleDbNullValue<bool>(dataRow["default_zone"]),
+					handleDbNullValue<int>(dataRow["utc_conversion"]),
+					handleDbNullValue<int>(dataRow["utc_conversion_dst"]),
+					handleDbNullValue<bool>(dataRow["utc_in_use"])
+				);
+				timeZoneList.Add(timeZoneDim);
 			}
 
 			return timeZoneList;
+		}
+
+		public ITimeZoneDim GetTimeZoneDim(string timeZoneCode)
+		{
+			var timeZone = GetTimeZonesFromMart().SingleOrDefault(tz => tz.TimeZoneCode == timeZoneCode);
+			if (timeZone != null)
+			{
+				return timeZone;
+			}
+
+			var timeZoneDim = new TimeZoneDim(TimeZoneInfo.FindSystemTimeZoneById(timeZoneCode), timeZoneCode == "UTC", false);
+
+			var parameterList = new[]
+			{
+				new SqlParameter("time_zone_code", timeZoneDim.TimeZoneCode),
+				new SqlParameter("time_zone_name", timeZoneDim.TimeZoneName),
+				new SqlParameter("default_zone", timeZoneDim.IsDefaultTimeZone),
+				new SqlParameter("utc_conversion", timeZoneDim.UtcConversion),
+				new SqlParameter("utc_conversion_dst", timeZoneDim.UtcConversionDst)
+			};
+
+			HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_dim_time_zone_insert", parameterList,
+				dataMartConnectionString);
+			return GetTimeZonesFromMart().SingleOrDefault(tz => tz.TimeZoneCode == timeZoneCode);
 		}
 
 		public ITimeZoneDim DefaultTimeZone
@@ -99,7 +119,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			get
 			{
 				var timeZones = GetTimeZonesFromMart();
-				ITimeZoneDim utc = timeZones.FirstOrDefault(f => f.TimeZoneCode == "UTC");
+				var utc = timeZones.FirstOrDefault(f => f.TimeZoneCode == "UTC");
 
 				foreach (var timeZoneDim in timeZones)
 				{
@@ -120,16 +140,16 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 				new SqlParameter("time_zone_id", timeZoneId)
 			};
 
-			HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.sys_datasource_save",
-											parameterList, dataMartConnectionString);
+			HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.sys_datasource_save", parameterList,
+				dataMartConnectionString);
 			HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_job_intraday_settings_load", null,
 				dataMartConnectionString);
 		}
 
 		public void SetUtcTimeZoneOnRaptorDataSource()
 		{
-			HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.sys_datasource_set_raptor_time_zone",
-											null, dataMartConnectionString);
+			HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.sys_datasource_set_raptor_time_zone", null,
+				dataMartConnectionString);
 		}
 
 		public IBaseConfiguration LoadBaseConfiguration()
@@ -144,7 +164,8 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		public int LoadRowsInDimIntervalTable()
 		{
-			return (int)HelperFunctions.ExecuteScalar(CommandType.StoredProcedure, "mart.etl_dim_interval_check", dataMartConnectionString);
+			return (int) HelperFunctions.ExecuteScalar(CommandType.StoredProcedure, "mart.etl_dim_interval_check",
+				dataMartConnectionString);
 		}
 
 		public void SetDataMartConnectionString(string connectionString)
@@ -163,14 +184,13 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		private DataSet getDatasources(bool getValidDatasources, bool includeOptionAll)
 		{
 			var parameterList = new[]
-												{
-													 new SqlParameter("get_valid_datasource", getValidDatasources),
-													 new SqlParameter("include_option_all", includeOptionAll)
-												};
+			{
+				new SqlParameter("get_valid_datasource", getValidDatasources),
+				new SqlParameter("include_option_all", includeOptionAll)
+			};
 
 			return HelperFunctions.ExecuteDataSet(CommandType.StoredProcedure, "mart.sys_get_datasources", parameterList,
 				dataMartConnectionString);
 		}
 	}
-
 }

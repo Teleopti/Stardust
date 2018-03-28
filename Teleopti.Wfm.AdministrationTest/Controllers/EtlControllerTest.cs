@@ -14,6 +14,7 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
@@ -48,6 +49,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 		public FakeJobScheduleRepository JobScheduleRepository;
 		public MutableNow Now;
 		public FakeConfigReader FakeConfigReader;
+		public FakeAnalyticsTimeZoneRepository TimeZoneRepository;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -141,8 +143,8 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 
 			var result = (OkNegotiatedContentResult<IList<DataSourceModel>>)Target.TenantAllLogDataSources(testTenantName);
 			result.Content.Count.Should().Be(2);
-			result.Content.Any(x => x.Id == 3 && x.Name == "myDs").Should().Be.True();
-			result.Content.Any(x => x.Id == 4 && x.Name == "anotherDs").Should().Be.True();
+			result.Content.Single(x => x.Id == 3 && x.Name == "myDs").TimeZoneCode.Should().Be("UTC");
+			result.Content.Single(x => x.Id == 4 && x.Name == "anotherDs").TimeZoneCode.Should().Be(null);
 		}
 
 		[Test]
@@ -158,9 +160,9 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			var result = (OkNegotiatedContentResult<IList<DataSourceModel>>)Target.TenantAllLogDataSources(testTenantName);
 			result.Content.Count.Should().Be(3);
 			result.Content.Any(x => x.Id == 3 && x.Name == "myDs").Should().Be.True();
-			result.Content.Any(x => x.Id == 4 && x.Name == "anotherDs" && x.TimeZoneId == FakeGeneralInfrastructure.NullTimeZoneId)
+			result.Content.Any(x => x.Id == 4 && x.Name == "anotherDs" && x.TimeZoneCode == null)
 				.Should().Be.True();
-			result.Content.Any(x => x.Name == "newDs" && x.TimeZoneId == FakeGeneralInfrastructure.NullTimeZoneId).Should().Be.True();
+			result.Content.Any(x => x.Name == "newDs" && x.TimeZoneCode == null).Should().Be.True();
 		}
 
 		[Test]
@@ -377,20 +379,20 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			AllTenants.HasWithAnalyticsConnectionString(masterTenant.Name, masterTenant.DataSourceConfiguration.AnalyticsConnectionString);
 			BaseConfigurationRepository.SaveBaseConfiguration(masterTenant.DataSourceConfiguration.AnalyticsConnectionString,
 				new BaseConfiguration(1053, 15, "UTC", false));
-			GeneralInfrastructure.HasDataSources(new DataSourceEtl(dataSourceId, "myDs", 12, "UTC", 15, false));
-
+			GeneralInfrastructure.HasDataSources(new DataSourceEtl(dataSourceId, "myDs", 12, timezoneName, 15, false));
+			
 			var tenantDataSource = new TenantDataSourceModel
 			{
 				TenantName = testTenantName,
 				DataSource = new DataSourceModel
 				{
 					Id = dataSourceId,
-					TimeZoneId = 13
+					TimeZoneCode = "UTC"
 				}
 			};
 			Target.PersistDataSource(tenantDataSource);
 			var dataSources = (OkNegotiatedContentResult<IList<DataSourceModel>>)Target.TenantValidLogDataSources(testTenantName);
-			dataSources.Content.Single().TimeZoneId.Should().Be(tenantDataSource.DataSource.TimeZoneId);
+			dataSources.Content.Single().TimeZoneCode.Should().Be(tenantDataSource.DataSource.TimeZoneCode);
 
 			var scheduledJob = JobScheduleRepository.GetEtlJobSchedules().First();
 			var scheduledPeriods = JobScheduleRepository.GetEtlJobSchedulePeriods(1);
@@ -408,6 +410,33 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			scheduledPeriods.First().RelativePeriod.Maximum.Should().Be(1);
 		}
 
+		[Test]
+		public void ShouldPersistTimezoneNotExistsInAnalyticsDb()
+		{
+			const int dataSourceId = 3;
+			var masterTenant = new Tenant(testTenantName);
+			masterTenant.DataSourceConfiguration.SetAnalyticsConnectionString($"Initial Catalog={RandomName.Make()}");
+			AllTenants.HasWithAnalyticsConnectionString(masterTenant.Name, masterTenant.DataSourceConfiguration.AnalyticsConnectionString);
+			BaseConfigurationRepository.SaveBaseConfiguration(masterTenant.DataSourceConfiguration.AnalyticsConnectionString,
+				new BaseConfiguration(1053, 15, "UTC", false));
+			GeneralInfrastructure.HasDataSources(new DataSourceEtl(dataSourceId, "myDs", 12, null, 15, false));
+
+			var tenantDataSource = new TenantDataSourceModel
+			{
+				TenantName = testTenantName,
+				DataSource = new DataSourceModel
+				{
+					Id = dataSourceId,
+					TimeZoneCode = "UTC"
+				}
+			};
+			Target.PersistDataSource(tenantDataSource);
+
+			var dataSources = (OkNegotiatedContentResult<IList<DataSourceModel>>)Target.TenantValidLogDataSources(testTenantName);
+			dataSources.Content.Single().TimeZoneCode.Should().Be(tenantDataSource.DataSource.TimeZoneCode);
+			TimeZoneRepository.GetAll().SingleOrDefault(x => x.TimeZoneCode == timezoneName).Should().Not.Be.Null();
+		}
+
 		[TestCase(1)]
 		[TestCase(-1)]
 		public void NotAllowToChangeDefaultDataSource(int dataSourceId)
@@ -423,7 +452,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 				DataSource = new DataSourceModel
 				{
 					Id = dataSourceId,
-					TimeZoneId = 13
+					TimeZoneCode = "UTC"
 				}
 			};
 
@@ -445,7 +474,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 				DataSource = new DataSourceModel
 				{
 					Id = 3,
-					TimeZoneId = 13
+					TimeZoneCode = "UTC"
 				}
 			};
 
@@ -471,7 +500,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 				DataSource = new DataSourceModel
 				{
 					Id = dataSourceId,
-					TimeZoneId = 13
+					TimeZoneCode = "UTC"
 				}
 			};
 

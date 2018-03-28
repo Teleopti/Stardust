@@ -17,42 +17,24 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 			_generalInfrastructure = generalInfrastructure;
 		}
 
-		public IList<IDataSourceEtl> DataSourceValidList
-		{
-			get
-			{
-				return getDatasourceList(true, false);
-			}
-		}
+		public IList<IDataSourceEtl> DataSourceValidList => getDatasourceList(true, false);
 
-		public IList<IDataSourceEtl> DataSourceInvalidList
-		{
-			get
-			{
-				return getDatasourceList(false, false);
-			}
-		}
+		public IList<IDataSourceEtl> DataSourceInvalidList => getDatasourceList(false, false);
 
-		public IList<IDataSourceEtl> DataSourceValidListIncludedOptionAll
-		{
-			get
-			{
-				return getDatasourceList(true, true);
-			}
-		}
+		public IList<IDataSourceEtl> DataSourceValidListIncludedOptionAll => getDatasourceList(true, true);
 
 		private IList<IDataSourceEtl> getDatasourceList(bool getValidDatasources, bool includeOptionAll)
 		{
-			IList<IDataSourceEtl> origList = _generalInfrastructure.GetDataSourceList(getValidDatasources, includeOptionAll);
+			var origList = _generalInfrastructure.GetDataSourceList(getValidDatasources, includeOptionAll);
 			var retList = new List<IDataSourceEtl>();
-			foreach (IDataSourceEtl source in origList)
+			foreach (var source in origList)
 			{
-				string name = source.DataSourceName;
+				var name = source.DataSourceName;
 				if (includeOptionAll && name.Equals("ResourceKeyAliasForAll"))
 					name = Resources.AllSelection;
 
-				IDataSourceEtl newSource = new DataSourceEtl(source.DataSourceId, name, source.TimeZoneId,
-																							 source.TimeZoneCode, source.IntervalLength, source.Inactive);
+				var newSource = new DataSourceEtl(source.DataSourceId, name, source.TimeZoneId, source.TimeZoneCode,
+					source.IntervalLength, source.Inactive);
 				retList.Add(newSource);
 			}
 			return retList;
@@ -61,7 +43,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
 		public EtlToolStateType GetInitialLoadState()
 		{
-			int state = _generalInfrastructure.GetInitialLoadState();
+			var state = _generalInfrastructure.GetInitialLoadState();
 			return (EtlToolStateType)state;
 		}
 
@@ -74,6 +56,11 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 		public IList<ITimeZoneDim> GetTimeZoneList()
 		{
 			return _generalInfrastructure.GetTimeZonesFromMart();
+		}
+
+		public ITimeZoneDim GetTimeZoneDim(string timeZoneCode)
+		{
+			return _generalInfrastructure.GetTimeZoneDim(timeZoneCode);
 		}
 
 		public void SaveDataSource(int dataSourceId, int timeZoneId)
@@ -97,12 +84,8 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 
 		public int? LoadIntervalLengthInUse()
 		{
-			int dimIntervalRowCount = _generalInfrastructure.LoadRowsInDimIntervalTable();
-
-			if (dimIntervalRowCount == 0)
-				return null;
-
-			return 1440 / dimIntervalRowCount;
+			var dimIntervalRowCount = _generalInfrastructure.LoadRowsInDimIntervalTable();
+			return dimIntervalRowCount == 0 ? (int?) null : 1440 / dimIntervalRowCount;
 		}
 
 		public void SetConnectionString(string dataMartConnectionString)

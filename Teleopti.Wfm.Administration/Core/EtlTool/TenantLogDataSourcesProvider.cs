@@ -27,7 +27,7 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 					new DataSourceModel {
 						Id = -2,
 						Name = "< All >",
-						TimeZoneId = -1
+						TimeZoneCode = "All"
 					}
 				};
 			}
@@ -49,7 +49,7 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 				{
 					Id = x.DataSourceId,
 					Name = x.DataSourceName,
-					TimeZoneId = x.TimeZoneId
+					TimeZoneCode = x.TimeZoneCode
 				})
 				.OrderBy(x => x.Name)
 				.ToList();
@@ -60,7 +60,7 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 	{
 		public int Id { get; set; }
 		public string Name { get; set; }
-		public int TimeZoneId { get; set; }
+		public string TimeZoneCode { get; set; }
 	}
 
 	public class TenantDataSourceModel

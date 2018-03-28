@@ -16,6 +16,8 @@ namespace Teleopti.Analytics.Etl.Common.Interfaces.Transformer
 
 		IList<ITimeZoneDim> GetTimeZoneList();
 
+		ITimeZoneDim GetTimeZoneDim(string timeZoneCode);
+
 		void SaveDataSource(int dataSourceId, int timeZoneId);
 		void SetUtcTimeZoneOnRaptorDataSource();
 		IBaseConfiguration LoadBaseConfiguration();

@@ -214,7 +214,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 				return Content(HttpStatusCode.NotFound, $"Datasource with id {dataSourceId} for Tenant \"{tenantName}\" not found");
 			}
 
-			if (dataSource.TimeZoneId == tenantDataSourceModel.DataSource.TimeZoneId)
+			if (dataSource.TimeZoneCode == tenantDataSourceModel.DataSource.TimeZoneCode)
 			{
 				return Content(HttpStatusCode.NotModified,
 					$"No change was made to datasource \"{dataSource.Name}\" with id {dataSourceId} for Tenant \"{tenantName}\" since timezone is not changed.");
@@ -222,7 +222,13 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 			try
 			{
-				_generalFunctions.SaveDataSource(dataSourceId, tenantDataSourceModel.DataSource.TimeZoneId);
+				var tenant = _loadAllTenants.Tenants().Single(x => x.Name == tenantName);
+				var analyticsConnectionString = tenant.DataSourceConfiguration.AnalyticsConnectionString;
+				_generalFunctions.SetConnectionString(analyticsConnectionString);
+
+				logger.Warn($"analyticsConnectionString: {analyticsConnectionString}");
+				var timeZondeId = _generalFunctions.GetTimeZoneDim(tenantDataSourceModel.DataSource.TimeZoneCode).MartId;
+				_generalFunctions.SaveDataSource(dataSourceId, timeZondeId);
 
 				enqueueInitialJob(tenantName);
 			}

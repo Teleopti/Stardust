@@ -14,12 +14,13 @@ namespace Teleopti.Wfm.AdministrationTest.FakeData
 
 		private readonly List<IDataSourceEtl> aggDataSources = new List<IDataSourceEtl>();
 		private readonly List<IDataSourceEtl> dataSourceEtls = new List<IDataSourceEtl>();
+		private readonly List<ITimeZoneDim> timeZoneDims = new List<ITimeZoneDim>();
 
 		public IList<IDataSourceEtl> GetDataSourceList(bool getValidDataSources, bool includeOptionAll)
 		{
 			return getValidDataSources
-				? dataSourceEtls.Where(x => x.TimeZoneId != NullTimeZoneId).ToList()
-				: dataSourceEtls.Where(x => x.TimeZoneId == NullTimeZoneId).ToList();
+				? dataSourceEtls.Where(x => x.TimeZoneCode != null).ToList()
+				: dataSourceEtls.Where(x => x.TimeZoneCode == null).ToList();
 		}
 
 		public void HasAggDataSources(IDataSourceEtl dataSource)
@@ -43,7 +44,7 @@ namespace Teleopti.Wfm.AdministrationTest.FakeData
 			var newDataSources = aggDataSources.Where(x => dataSourceEtls.All(y => y.DataSourceName != x.DataSourceName));
 			foreach (var newDataSource in newDataSources)
 			{
-				dataSourceEtls.Add(new DataSourceEtl(newDataSourceId, newDataSource.DataSourceName, NullTimeZoneId, "Not Defined",
+				dataSourceEtls.Add(new DataSourceEtl(newDataSourceId, newDataSource.DataSourceName, NullTimeZoneId, null,
 					newDataSource.IntervalLength, false));
 				newDataSourceId++;
 			}
@@ -51,13 +52,23 @@ namespace Teleopti.Wfm.AdministrationTest.FakeData
 
 		public IList<ITimeZoneDim> GetTimeZonesFromMart()
 		{
-			throw new NotImplementedException();
+			return timeZoneDims;
+		}
+
+		public ITimeZoneDim GetTimeZoneDim(string timeZoneCode)
+		{
+			var timeZoneDim = timeZoneDims.SingleOrDefault(x => x.TimeZoneCode == timeZoneCode);
+			if (timeZoneDim != null) return timeZoneDim;
+
+			timeZoneDims.Add(new TimeZoneDim(TimeZoneInfo.FindSystemTimeZoneById(timeZoneCode), timeZoneCode == "UTC", false));
+			return timeZoneDims.Single(x => x.TimeZoneCode == timeZoneCode);
 		}
 
 		public void SaveDataSource(int dataSourceId, int timeZoneId)
 		{
 			var dataSource = dataSourceEtls.Single(x => x.DataSourceId == dataSourceId);
 			dataSource.TimeZoneId = timeZoneId;
+			dataSource.TimeZoneCode = "UTC";
 			dataSource.Inactive = false;
 		}
 
@@ -83,7 +94,6 @@ namespace Teleopti.Wfm.AdministrationTest.FakeData
 
 		public void SetDataMartConnectionString(string dataMartConnectionString)
 		{
-			
 		}
 	}
 }

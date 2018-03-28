@@ -12,6 +12,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		void LoadNewDataSourcesFromAggregationDatabase();
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
 		IList<ITimeZoneDim> GetTimeZonesFromMart();
+		ITimeZoneDim GetTimeZoneDim(string timeZoneCode);
 		void SaveDataSource(int dataSourceId, int timeZoneId);
 		void SetUtcTimeZoneOnRaptorDataSource();
 		IBaseConfiguration LoadBaseConfiguration();
