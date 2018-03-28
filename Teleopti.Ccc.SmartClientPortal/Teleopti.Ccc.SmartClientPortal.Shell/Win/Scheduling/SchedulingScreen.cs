@@ -721,6 +721,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				TestMode.Micke = !TestMode.Micke;
 				toolStripMenuItemFindMatching.Visible = TestMode.Micke;
 				toolStripMenuItemFindMatching2.Visible = TestMode.Micke;
+				replaceActivityToolStripMenuItem.Visible = TestMode.Micke;
 				Refresh();
 				drawSkillGrid();
 				if (TestMode.Micke)
@@ -7054,6 +7055,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			var url = $"{wfmPath}WFM/#/resourceplanner/{what}";
 			if (url.IsAnUrl())
 				Process.Start(url);
+		}
+
+		private void replaceActivityToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			//
 		}
 	}
 }
