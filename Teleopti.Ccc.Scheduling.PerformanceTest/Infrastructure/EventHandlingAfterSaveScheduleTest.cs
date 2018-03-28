@@ -54,11 +54,10 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest.Infrastructure
 				businessUnitId = WithUnitOfWork.Get(() => BusinessUnits.LoadAll().First()).Id.GetValueOrDefault();
 			AsSystem.Logon(logOnDatasource, businessUnitId);
 
-			var periodPlanningPeriod = PlanningPeriodRepository.Get(AppConfigs.PlanningPeriodId).Range;
-
 			IScheduleDictionary schedules = null;
 			WithUnitOfWork.Do(() =>
 			{
+				var periodPlanningPeriod = PlanningPeriodRepository.Get(AppConfigs.PlanningPeriodId).Range;
 				var scenario = Scenarios.LoadDefaultScenario();
 				var persons = Persons.LoadAll().Where(p => p.Period(periodPlanningPeriod.StartDate) != null).ToArray();
 
