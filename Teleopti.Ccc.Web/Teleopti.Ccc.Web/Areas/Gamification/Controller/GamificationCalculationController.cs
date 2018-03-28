@@ -39,5 +39,11 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
 		{
 			return _recalculateBadgeJobService.GetJobsForCurrentBusinessUnit();
 		}
+
+		[Route("api/gamification/RecalcualteBadges/purge-days"), HttpGet, UnitOfWork]
+		public virtual int GetPrugeDays()
+		{
+			return _calculateBadges.GetExternalPerformanceDataPurgeDays();
+		}
 	}
 }

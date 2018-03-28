@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification
 		public FakeAgentBadgeWithRankTransactionRepository AgentBadgeWithRankTransactionRepository;
 		public FakeAgentBadgeTransactionRepository AgentBadgeTransactionRepository;
 		public FakeJobResultRepository JobResultRepository;
+		public FakePurgeSettingRepository PurgeSettingRepository;
 
 		[Test]
 		public void ShouldResetAgentBadges()
@@ -128,6 +129,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification
 			result[0].Status.Should().Be.EqualTo(GamificationJobStatus.Failed.ToString().ToLower());
 			result[0].HasError.Should().Be.EqualTo(true);
 			result[0].ErrorMessage.Should().Be.EqualTo("detailError");
+		}
+
+		[Test]
+		public void ShouldGetExternalPerformanceDataPurgeDays()
+		{
+			var days = Target.GetPrugeDays();
+			days.Should().Be.EqualTo(60);
 		}
 	}
 }

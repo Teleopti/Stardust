@@ -306,6 +306,7 @@
     <Compile Include="Repositories\ExternalPerformanceRepository.cs" />
     <Compile Include="Repositories\PersonAccessAuditRepository.cs" />
     <Compile Include="Repositories\PersonLoadAllWithPeriodAndExternalLogOn.cs" />
+    <Compile Include="Repositories\PurgeSettingRepository.cs" />
     <Compile Include="Repositories\RequestPeriod.cs" />
     <Compile Include="Repositories\ShiftCategorySelectionRepository.cs" />
     <Compile Include="Repositories\SkillCombinationResourceRepository.cs" />

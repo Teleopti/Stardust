@@ -94,6 +94,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<PeopleForShiftTradeFinder>().As<IPeopleForShiftTradeFinder>().SingleInstance();
 			builder.RegisterType<PersonInRoleQuerier>().As<IPersonInRoleQuerier>().SingleInstance();
 
+			builder.RegisterType<PurgeSettingRepository>().As<IPurgeSettingRepository>().SingleInstance();
+
 			builder.Register(c => new StardustRepository(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)).As<IStardustRepository>().SingleInstance();
 		}
 

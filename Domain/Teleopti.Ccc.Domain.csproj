@@ -362,6 +362,7 @@
     <Compile Include="Common\ExternalPerformance.cs" />
     <Compile Include="Common\JobResultArtifact.cs" />
     <Compile Include="Common\OrganizationSelectionProvider.cs" />
+    <Compile Include="Common\PurgeSetting.cs" />
     <Compile Include="Common\TimeSpanExtensions.cs" />
     <Compile Include="Common\Time\IUserNow.cs" />
     <Compile Include="Common\Time\TimePassingSimulator.cs" />
@@ -577,6 +578,7 @@
     <Compile Include="Repositories\IExternalPerformanceDataRepository.cs" />
     <Compile Include="Repositories\IExternalPerformanceRepository.cs" />
     <Compile Include="Repositories\IPersonLoadAllWithPeriodAndExternalLogOn.cs" />
+    <Compile Include="Repositories\IPurgeSettingRepository.cs" />
     <Compile Include="Repositories\PersonBudgetGroupName.cs" />
     <Compile Include="Reports\IScheduleAnalysisProvider.cs" />
     <Compile Include="Reports\ScheduleAnalysisAuditTrailProvider.cs" />
@@ -3868,7 +3870,7 @@
     <EmbeddedResource Include="AgentInfo\PersonAvailability.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Common\RootPersonGroup.hbm.xml" />
+    <EmbeddedResource Include="Common\RootPersonGroup.hbm.xml" />     
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Common\PersonGroupBase.hbm.xml" />
