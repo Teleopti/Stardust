@@ -1,22 +1,23 @@
 ﻿using System.IO;
 using numl.Supervised;
+using Teleopti.Ccc.Domain.ApplicationLayer.ShiftCategoryHandlers;
 
 namespace Teleopti.Ccc.Infrastructure.MachineLearning
 {
-	public class Model
+	public class ShiftCategorySelectionModel : IShiftCategorySelectionModel
 	{
 		private readonly IModel _model;
 
 #pragma warning disable CS3001 // Argument type is not CLS-compliant
-		public Model(IModel model)
+		public ShiftCategorySelectionModel(IModel model)
 #pragma warning restore CS3001 // Argument type is not CLS-compliant
 		{
 			_model = model;
 		}
 
-		public string Predict(ShiftCategoryPredictorModel model)
+		public string Predict(IShiftCategoryPredictorModel model)
 		{
-			return _model.Predict(model).ShiftCategory;
+			return _model.Predict((ShiftCategoryPredictorModel)model).ShiftCategory;
 		}
 
 		public string Predict(double start, double end)
@@ -29,10 +30,10 @@ namespace Teleopti.Ccc.Infrastructure.MachineLearning
 			_model.Save(file);
 		}
 
-		public static Model Load(Stream file)
+		public static ShiftCategorySelectionModel Load(Stream file)
 		{
 			var model = new numl.Supervised.DecisionTree.DecisionTreeModel();
-			return new Model(model.Load(file));
+			return new ShiftCategorySelectionModel(model.Load(file));
 		}
 	}
 }

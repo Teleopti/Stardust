@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using NHibernate.Transform;
-using Teleopti.Ccc.Domain.ApplicationLayer.ShiftCategory;
+using Teleopti.Ccc.Domain.ApplicationLayer.ShiftCategoryHandlers;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.MachineLearning;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-	public class ShiftCategoryUsageFinder
+	public class ShiftCategoryUsageFinder : IShiftCategoryUsageFinder
 	{
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 

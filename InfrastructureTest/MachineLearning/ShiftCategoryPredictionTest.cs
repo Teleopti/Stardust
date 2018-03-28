@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MachineLearning
 				m.Store(storage);
 
 				storage.Position = 0;
-				var fromStoredModel = Model.Load(storage);
+				var fromStoredModel = ShiftCategorySelectionModel.Load(storage);
 				
 				Guid.Parse(fromStoredModel.Predict(5.0, 14.0)).Should().Be.EqualTo(shiftCategories[2]);
 			}

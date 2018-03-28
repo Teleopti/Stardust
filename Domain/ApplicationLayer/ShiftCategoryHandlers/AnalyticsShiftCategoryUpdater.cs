@@ -8,7 +8,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftCategory
+namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftCategoryHandlers
 {
 	public class AnalyticsShiftCategoryUpdater :
 		IHandleEvent<ShiftCategoryChangedEvent>,

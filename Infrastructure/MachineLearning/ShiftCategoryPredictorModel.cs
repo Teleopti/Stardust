@@ -1,6 +1,6 @@
 ﻿using System;
 using numl.Model;
-using Teleopti.Ccc.Domain.ApplicationLayer.ShiftCategory;
+using Teleopti.Ccc.Domain.ApplicationLayer.ShiftCategoryHandlers;
 
 namespace Teleopti.Ccc.Infrastructure.MachineLearning
 {

@@ -10,10 +10,10 @@ using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-    /// <summary>
-    /// Repository for contracts
-    /// </summary>
-    public class ContractRepository : Repository<IContract>, IContractRepository
+	/// <summary>
+	/// Repository for contracts
+	/// </summary>
+	public class ContractRepository : Repository<IContract>, IContractRepository
     {
         public ContractRepository(IUnitOfWork unitOfWork)
 #pragma warning disable 618

@@ -1,19 +1,27 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using numl.Model;
+using Teleopti.Ccc.Domain.ApplicationLayer.ShiftCategoryHandlers;
 
 namespace Teleopti.Ccc.Infrastructure.MachineLearning
 {
-	public class PredictCategory
+	public class PredictCategory : IPredictCategory
 	{
-		public Model Train(IEnumerable<ShiftCategoryPredictorModel> data)
+		public IShiftCategorySelectionModel Train(IEnumerable<IShiftCategoryPredictorModel> data)
 		{
-			var d = Descriptor.Create<ShiftCategoryPredictorModel>();
+			var descriptor = Descriptor.Create<ShiftCategoryPredictorModel>();
 			
 			var generator = new numl.Supervised.DecisionTree.DecisionTreeGenerator();
-			generator.Descriptor = d;
-			var result = generator.Generate(data);
+			generator.Descriptor = descriptor;
+			var result = generator.Generate(data.Select(d => new ShiftCategoryPredictorModel
+			{
+				DayOfWeek = d.DayOfWeek,
+				StartTime = d.StartTime,
+				EndTime = d.EndTime,
+				ShiftCategory = d.ShiftCategory
+			}));
 
-			return new Model(result);
+			return new ShiftCategorySelectionModel(result);
 		}
 	}
 }

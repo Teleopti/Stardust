@@ -166,7 +166,7 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\WaitlistRequestHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\SkillSetupHelper.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestProcessorAtLeastOneCriticalUnderStaffedSkillTest.cs" />
-    <Compile Include="ApplicationLayer\ShiftCategoryHandlers\ShiftCategorySelectionTest.cs" />
+    <Compile Include="ApplicationLayer\ShiftCategoryHandlers\ShiftCategorySelectionUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\TerminatePersonHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AddActivityCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\Gamification\RecalculateBadgeEventHandlerTest.cs" />
@@ -445,7 +445,7 @@
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleDayReadModelsCreatorTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ShiftExchangeOfferHandlerTest.cs" />
     <Compile Include="ApplicationLayer\SettingsForPersonPeriodChangedEventHandlers\SettingsForPersonPeriodChangedEventTest.cs" />
-    <Compile Include="ApplicationLayer\ShiftCategoryTests\AnalyticsShiftCategoryUpdaterTests.cs" />
+    <Compile Include="ApplicationLayer\ShiftCategoryHandlers\AnalyticsShiftCategoryUpdaterTests.cs" />
     <Compile Include="ApplicationLayer\Activities\ActivityChangedHandlerTests.cs" />
     <Compile Include="ApplicationLayer\AddIntradayAbsenceCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AddPersonalActivityCommandHandlerTest.cs" />
@@ -483,7 +483,7 @@
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsPersonPeriodUpdaterTests.cs" />
     <Compile Include="ApplicationLayer\RunWaitlistCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\Absences\AnalyticsAbsenceUpdaterTests.cs" />
-    <Compile Include="ApplicationLayer\ScenarioTests\Analytics\AnalyticsScenarioUpdaterTests.cs" />
+    <Compile Include="ApplicationLayer\Scenario\Analytics\AnalyticsScenarioUpdaterTests.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleProjectionReadOnlyUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\SettingsForPersonPeriodChangedEventHandlers\BuildInGroupsAnalyticsUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\SettingsForPersonPeriodChangedEventHandlers\GroupingReadModelDataUpdaterTest.cs" />

@@ -254,6 +254,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				system.UseTestDouble<SeatFrequencyCalculator>().For<ISeatFrequencyCalculator>();
 				system.UseTestDouble<FakeOptionalColumnRepository>().For<IOptionalColumnRepository>();
 				system.UseTestDouble<FakeShiftCategorySelectionRepository>().For<IRepository<IShiftCategorySelection>>();
+				system.UseTestDouble<FakeShiftCategoryUsageFinder>().For<IShiftCategoryUsageFinder>();
 			}
 
 			system.UseTestDouble<ScheduleStorageRepositoryWrapper>().For<IScheduleStorageRepositoryWrapper>();
