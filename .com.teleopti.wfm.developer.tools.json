@@ -2,5 +2,6 @@
 	RestoreToLocalFlow: true,
 	EtlEnsureRecurringJobs: true,
 	EtlEnsureRecurringJobsWithRetries: true,
-	NpmRunRtaTest: true
+	NpmRunRtaTest: true,
+	ToolsFlowWithoutSQLCMD: true
 }
