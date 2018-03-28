@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using NHibernate.Transform;
-using Teleopti.Ccc.Domain.ApplicationLayer.ShiftCategoryHandlers;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
@@ -32,7 +31,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			WHERE sc.IsDeleted = 0
 			AND scenario.DefaultScenario = 1
 			AND scenario.BusinessUnit = :businessUnit
-			AND s.BelongsToDate > DATEADD(d, -180, GETDATE())")
+			AND s.BelongsToDate > DATEADD(d, -30, GETDATE())")
 				.SetGuid("businessUnit", ServiceLocatorForEntity.CurrentBusinessUnit.CurrentId().GetValueOrDefault())
 				.SetResultTransformer(new AliasToBeanResultTransformer(typeof(shiftCategoryPredictIntermediateResult)))
 				.List<shiftCategoryPredictIntermediateResult>();

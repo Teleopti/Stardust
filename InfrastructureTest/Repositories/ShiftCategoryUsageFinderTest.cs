@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var act = new Activity("phone");
 			Session.Save(act);
 
-			var pa = new PersonAssignment(LoggedOnPerson, scenario, DateOnly.Today.AddDays(-182));
+			var pa = new PersonAssignment(LoggedOnPerson, scenario, DateOnly.Today.AddDays(-32));
 			pa.SetShiftCategory(cat);
 			pa.AddActivity(act, new TimePeriod(10, 14));
 			Session.Save(pa);
