@@ -82,8 +82,13 @@
 			vm.getTenants();
 			vm.getConfigStatus();
 			vm.language = navigator.language || navigator.userLanguage;
+			vm.unconfigured = vm.tenants.some(checkIfAnyTenantsAreUnconfigured);
 		};
 		vm.getManualData();
+
+		function checkIfAnyTenantsAreUnconfigured(element) {
+			return element === false;
+		}
 
 		function selectJob(job) {
 			vm.selectedJob = job;
