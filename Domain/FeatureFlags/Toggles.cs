@@ -146,6 +146,7 @@
 		WfmStaffing_AddOvertime_42524,
 		OvertimeRequestUseMostUnderStaffedSkill_47853,
 		OvertimeRequestAtLeastOneCriticalUnderStaffedSkill_74944,
+		OvertimeRequestSupportMultiSelectionSkillTypes_74945,
 		ETL_SpeedUpNightlyDayOff_38213,
 		MyTimeWeb_MobileResponsive_43826,
 		Wfm_Intraday_SupportSkillTypeEmail_44002,
