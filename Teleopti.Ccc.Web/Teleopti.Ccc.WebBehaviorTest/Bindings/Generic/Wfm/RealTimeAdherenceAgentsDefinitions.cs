@@ -2,6 +2,8 @@ using System;
 using System.Drawing;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
+using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
@@ -32,6 +34,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			if (status.AlarmColor != null)
 				Browser.Interactions.AssertExistsUsingJQuery("tr[style*='background-color: {0}'] .agent-name:contains('{1}')", toRGBA(status.AlarmColor, "0.6"), name);
 		}
+
 
 		[Then(@"I should see agent status")]
 		public void ThenIShouldSeeAgentDetailsFor(Table table)
@@ -66,14 +69,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[Then(@"I should see agent status for '(.*)?'")]
 		public void ThenIShouldSeeAgentStatusFor(string name)
 		{
-			var status = new RealTimeAdherenceAgentState() { Name = name };
+			var status = new RealTimeAdherenceAgentState() {Name = name};
 			assertAgentStatus(status);
 		}
 
 		[Then(@"I should see agent '(.*)' with state '(.*)'")]
 		public void ThenIShouldSeeAgentStatusForWithState(string name, string stateCode)
 		{
-			var status = new RealTimeAdherenceAgentState() { Name = name, State = stateCode };
+			var status = new RealTimeAdherenceAgentState() {Name = name, State = stateCode};
 			assertAgentStatus(status);
 		}
 
@@ -108,22 +111,41 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 				else
 					Browser.Interactions.AssertExists(selector + " .previous-activity[name='{0}']", state.PreviousActivity);
 			}
+
 			if (state.Activity != null)
 				Browser.Interactions.AssertExists(selector + " .current-activity[name='{0}']", state.Activity);
 			if (state.NextActivity != null)
 				Browser.Interactions.AssertExists(selector + " .next-activity[name='{0}']", state.NextActivity);
-			if (state.AlarmColor != null)
-				Browser.Interactions.AssertExists(selector + " [style*='background-color: " + toRGBA(state.AlarmColor, "0.6") + "']");
-			if (state.Color != null)
-				Browser.Interactions.AssertExists(selector + " [style*='background-color: " + toRGBA(state.Color, "0.6") + "']");
 			if (state.OutOfAdherenceTimeFormatted() != null)
 				Browser.Interactions.AssertAnyContains(selector, state.OutOfAdherenceTimeFormatted());
+
+
+			if (LocalSystem.Toggles.IsEnabled(Toggles.RTA_ImprovedStateGroupFilter_48724))
+			{
+				if (state.AlarmColor != null)
+					Browser.Interactions.AssertExists(selector + " [style*='background-color: " + toHex(state.AlarmColor) + "']");
+				if (state.Color != null)
+					Browser.Interactions.AssertExists(selector + " [style*='background-color: " + toHex(state.Color) + "']");
+			}
+			else
+			{
+				if (state.AlarmColor != null)
+					Browser.Interactions.AssertExists(selector + " [style*='background-color: " + toRGBA(state.AlarmColor, "0.6") + "']");
+				if (state.Color != null)
+					Browser.Interactions.AssertExists(selector + " [style*='background-color: " + toRGBA(state.Color, "0.6") + "']");
+			}
 		}
 
 		private static string toRGBA(string colorName, string transparency)
 		{
 			var color = Color.FromName(colorName);
 			return $"rgba({color.R}, {color.G}, {color.B}, {transparency})";
+		}
+
+		private static string toHex(string colorName)
+		{
+			var c = Color.FromName(colorName);
+			return "#" + c.R.ToString("X2") + c.G.ToString("X2") + c.B.ToString("X2");
 		}
 	}
 
