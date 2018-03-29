@@ -176,6 +176,7 @@
 		WFM_Gamification_Setting_With_External_Quality_Values_45003,
 		WFM_Gamification_Calculate_Badges_47250,
 		WFM_Gamification_Recalculate_Badges_Within_Period_48403,
+		WFM_Gamification_Create_Rolling_Periods_74866,
 		Report_Remove_Realtime_AuditTrail_44006,
 		ETL_Show_Web_Based_ETL_Tool_46880,
 		WFM_Remember_My_Selection_In_Intraday_47254,
