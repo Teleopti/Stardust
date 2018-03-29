@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
@@ -25,7 +26,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
                 if (value != ContainedEntity.StartDate)
                 {
 					Parent.ChangePersonPeriodStartDate(value,ContainedEntity);
-					addPersonEmployementChangedEvent();
+					addPersonEmployementChangedEvent(true);
                 }
             }
         }
@@ -72,12 +73,19 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
             }
         }
 
-		private void addPersonEmployementChangedEvent()
+		private void addPersonEmployementChangedEvent(bool getFromPreviousPeriod = false)
 		{
+			var startDate = ContainedEntity.StartDate;
+			if (getFromPreviousPeriod)
+			{
+				var previousPeriod = ((Person) ContainedEntity.Parent).PreviousPeriod(ContainedEntity);
+				if (previousPeriod != null)
+					startDate = previousPeriod.StartDate;
+			}
 			Parent.AddPersonEmployementChangeEvent(new PersonEmployementChangedEvent
 			{
 				PersonId = ContainedEntity.Parent.Id.GetValueOrDefault(),
-				FromDate = ContainedEntity.StartDate
+				FromDate = startDate
 			});
 		}
 

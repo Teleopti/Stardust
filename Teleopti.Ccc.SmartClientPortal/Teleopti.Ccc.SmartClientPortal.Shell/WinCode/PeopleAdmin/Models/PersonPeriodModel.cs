@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
                 if (value != _currentPeriod.StartDate)
                 {
 	                Parent.ChangePersonPeriodStartDate(value.Value, _currentPeriod);
-					addPersonEmployementChangedEvent();
+					addPersonEmployementChangedEvent(true);
                 }
             }
         }
@@ -104,12 +104,19 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
             }
         }
 
-		private void addPersonEmployementChangedEvent()
+		private void addPersonEmployementChangedEvent(bool getFromPreviousPeriod = false)
 		{
+			var startDate = _currentPeriod.StartDate;
+			if (getFromPreviousPeriod)
+			{
+				var prev =_containedEntity.PreviousPeriod(_currentPeriod);
+				if (prev != null)
+					startDate = prev.StartDate;
+			}
 			Parent.AddPersonEmployementChangeEvent(new PersonEmployementChangedEvent
 			{
 				PersonId = _containedEntity.Id.GetValueOrDefault(),
-				FromDate = _currentPeriod.StartDate
+				FromDate = startDate
 			});
 		}
 

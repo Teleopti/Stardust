@@ -93,6 +93,43 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 		}
 
 		[Test]
+		public void ShouldReturnPreviousStartDateIfCurrentPeriodStartDateIsChanged()
+		{
+			DateOnly dateOnly = new DateOnly(2018, 03, 28);
+			var previousStartDate = new DateOnly(2017, 12, 15);
+			Person person = (Person)PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2018, 1, 1)).WithId();
+			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2017,12,15)));
+
+			var target = new PersonPeriodModel(dateOnly, person, new List<IPersonSkill>(), new List<IExternalLogOn>(), new List<SiteTeamModel>(), new CommonNameDescriptionSetting());
+
+			person.PopAllEvents();
+
+			target.PeriodDate = new DateOnly(2018, 04, 01);
+			var @event = person.PopAllEvents().OfType<PersonEmployementChangedEvent>().First();
+			@event.PersonId.Should().Be.EqualTo(person.Id.GetValueOrDefault());
+			@event.FromDate.Should().Be.EqualTo(previousStartDate);
+		}
+
+		[Test]
+		public void ShouldReturnPreviousStartDateIfCurrentPeriodStartDateIsChangedChild()
+		{
+			//DateOnly dateOnly = new DateOnly(2018, 03, 28);
+			var previousStartDate = new DateOnly(2017, 12, 15);
+			Person person = (Person)PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2018, 1, 1)).WithId();
+			var latestPeriod = person.PersonPeriodCollection.First();
+			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2017, 12, 15)));
+
+			var childTarget = EntityConverter.ConvertToOther<IPersonPeriod, PersonPeriodChildModel>(latestPeriod);
+
+			person.PopAllEvents();
+
+			childTarget.PeriodDate = new DateOnly(2018, 04, 01);
+			var @event = person.PopAllEvents().OfType<PersonEmployementChangedEvent>().First();
+			@event.PersonId.Should().Be.EqualTo(person.Id.GetValueOrDefault());
+			@event.FromDate.Should().Be.EqualTo(previousStartDate);
+		}
+
+		[Test]
 		public void ShouldReturnEmploymentChangedEventWhenContractIsChangedOnChild()
 		{
 			Person person = (Person)PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2018, 1, 1));
