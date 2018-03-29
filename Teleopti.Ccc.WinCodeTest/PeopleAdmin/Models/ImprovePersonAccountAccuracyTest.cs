@@ -11,6 +11,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models;
 using Teleopti.Ccc.TestCommon.IoC;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 {
@@ -76,6 +77,22 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 		}
 
 		[Test]
+		public void ShouldReturnEventDetailsWhenContractIsChanged()
+		{
+			DateOnly dateOnly = new DateOnly(2018, 03, 28);
+			var fromDate = new DateOnly(2018, 1, 1);
+			Person person = (Person)PersonFactory.CreatePersonWithPersonPeriod(fromDate).WithId();
+			var target = new PersonPeriodModel(dateOnly, person, new List<IPersonSkill>(), new List<IExternalLogOn>(), new List<SiteTeamModel>(), new CommonNameDescriptionSetting());
+
+			person.PopAllEvents();
+
+			target.Contract = ContractFactory.CreateContract("new name");
+			var @event = person.PopAllEvents().OfType<PersonEmployementChangedEvent>().First();
+			@event.PersonId.Should().Be.EqualTo(person.Id.GetValueOrDefault());
+			@event.FromDate.Should().Be.EqualTo(fromDate);
+		}
+
+		[Test]
 		public void ShouldReturnEmploymentChangedEventWhenContractIsChangedOnChild()
 		{
 			Person person = (Person)PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2018, 1, 1));
@@ -127,6 +144,23 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 			childTarget.PeriodDate = new DateOnly(2018,04,01);
 
 			person.PopAllEvents().OfType<PersonEmployementChangedEvent>().Should().Not.Be.Empty();
+		}
+
+		[Test]
+		public void ShouldReturnEventDetailsWhenContractIsChangedOnChild()
+		{
+			var fromDate = new DateOnly(2018, 1, 1);
+			Person person = (Person)PersonFactory.CreatePersonWithPersonPeriod(fromDate);
+			var childTarget = EntityConverter.ConvertToOther<IPersonPeriod, PersonPeriodChildModel>(person.PersonPeriodCollection.First());
+
+			person.PopAllEvents();
+
+			childTarget.Contract = ContractFactory.CreateContract("new name");
+
+			var @event = person.PopAllEvents().OfType<PersonEmployementChangedEvent>().First();
+			@event.PersonId.Should().Be.EqualTo(person.Id.GetValueOrDefault());
+			
+			@event.FromDate.Should().Be.EqualTo(fromDate);
 		}
 	}
 }
