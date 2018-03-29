@@ -660,6 +660,11 @@
       <DependentUpon>OutboundCampaignBasicOperations.feature</DependentUpon>
     </Compile>
     <Compile Include="Wfm\Outbound\OutboundCampaignStepDefinitions.cs" />
+    <Compile Include="Wfm\People\ApplicationLogon.feature.cs">
+      <DependentUpon>ApplicationLogon.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Wfm\People\Search.feature.cs">
       <DependentUpon>Search.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -670,6 +675,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Roles.feature</DependentUpon>
     </Compile>
+    <Compile Include="Wfm\People\ApplicationLogonStepDefinition.cs" />
     <Compile Include="Wfm\People\SearchStepDefinition.cs" />
     <Compile Include="Wfm\Permissions\PermissionsNew.feature.cs">
       <DependentUpon>PermissionsNew.feature</DependentUpon>
@@ -1137,6 +1143,10 @@
     <None Include="Wfm\Outbound\OutboundCampaignBasicOperations.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>OutboundCampaignBasicOperations.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Wfm\People\ApplicationLogon.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ApplicationLogon.feature.cs</LastGenOutput>
     </None>
     <None Include="Wfm\People\Search.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
