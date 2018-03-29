@@ -5,6 +5,7 @@ using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.Common.Transformer
 {
@@ -91,6 +92,16 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 		public void SetConnectionString(string dataMartConnectionString)
 		{
 			_generalInfrastructure.SetDataMartConnectionString(dataMartConnectionString);
+		}
+
+		public DateOnlyPeriod GetFactQueueAvailblePeriod(int datasourceId)
+		{
+			return _generalInfrastructure.GetFactQueuePeriod(datasourceId);
+		}
+
+		public DateOnlyPeriod GetFactAgentAvailblePeriod(int dataSourceId)
+		{
+			return _generalInfrastructure.GetFactAgentPeriod(dataSourceId);
 		}
 	}
 }

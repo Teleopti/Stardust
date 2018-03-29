@@ -15,6 +15,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Wfm.Administration.Core;
 using Teleopti.Wfm.Administration.Core.EtlTool;
 using Teleopti.Wfm.Administration.Models;
@@ -36,7 +37,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 		private readonly IGeneralFunctions _generalFunctions;
 		private readonly INow _now;
 
-		public EtlController(IToggleManager toggleManager, 
+		public EtlController(IToggleManager toggleManager,
 			JobCollectionModelProvider jobCollectionModelProvider,
 			TenantLogDataSourcesProvider tenantLogDataSourcesProvider,
 			EtlJobScheduler etlJobScheduler,
@@ -91,7 +92,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 				return Content(HttpStatusCode.NotFound, e.Message);
 			}
 		}
-		
+
 		[TenantUnitOfWork]
 		[HttpPost, Route("Etl/TenantAllLogDataSources")]
 		public virtual IHttpActionResult TenantAllLogDataSources([FromBody] string tenantName)
@@ -151,11 +152,13 @@ namespace Teleopti.Wfm.Administration.Controllers
 			try
 			{
 				_baseConfigurationRepository.SaveBaseConfiguration(connectionString, tenantConfigurationModel.BaseConfig);
-				enqueueInitialJob(tenantConfigurationModel.TenantName);
+				_etlJobScheduler.ScheduleJob(createJobToEnqueue(tenantConfigurationModel.TenantName, "Initial",
+					JobCategoryType.Initial, 1, _now.UtcDateTime().AddDays(-1), _now.UtcDateTime().AddDays(1)));
 			}
 			catch (Exception ex)
 			{
-				logger.Error($"Error occurred on save changes for Base Configuration for tenant \"{tenantConfigurationModel.TenantName}\"", ex);
+				logger.Error(
+					$"Error occurred on save changes for Base Configuration for tenant \"{tenantConfigurationModel.TenantName}\"", ex);
 				return Content(HttpStatusCode.InternalServerError, "Error occurred on save base configuration.");
 			}
 
@@ -171,13 +174,13 @@ namespace Teleopti.Wfm.Administration.Controllers
 			{
 				var analyticsConnectionString =
 					new SqlConnectionStringBuilder(tenant.DataSourceConfiguration.AnalyticsConnectionString).ToString();
-				
+
 				_configurationHandler.SetConnectionString(analyticsConnectionString);
 				var baseConfig = _configurationHandler.BaseConfiguration;
 				tenants.Add(new TenantConfigurationModel
 				{
 					TenantName = tenant.Name,
-					BaseConfig = (BaseConfiguration)baseConfig,
+					BaseConfig = (BaseConfiguration) baseConfig,
 					IsBaseConfigured = _configurationHandler.IsConfigurationValid
 				});
 			}
@@ -203,7 +206,9 @@ namespace Teleopti.Wfm.Administration.Controllers
 		{
 			var tenantName = tenantDataSourceModel.TenantName;
 			var dataSourceNotPersisted = new List<string>();
-			var shouldEnqueueInitialJob = false;
+			var initialJobEnqueued = false;
+			var etlJobsToEnque = new List<JobEnqueModel>();
+
 			foreach (var dataSourceModel in tenantDataSourceModel.DataSources)
 			{
 				var dataSourceId = dataSourceModel.Id;
@@ -226,7 +231,8 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 				if (dataSource.TimeZoneCode == dataSourceModel.TimeZoneCode)
 				{
-					logger.Info($"No change was made to datasource \"{dataSource.Name}\" with id {dataSourceId} for Tenant \"{tenantName}\" "
+					logger.Info(
+						$"No change was made to datasource \"{dataSource.Name}\" with id {dataSourceId} for Tenant \"{tenantName}\" "
 						+ "since timezone is not changed.");
 					continue;
 				}
@@ -239,17 +245,36 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 					var timeZondeId = _generalFunctions.GetTimeZoneDim(dataSourceModel.TimeZoneCode).MartId;
 					_generalFunctions.SaveDataSource(dataSourceId, timeZondeId);
-					shouldEnqueueInitialJob = true;
+
+					if (!initialJobEnqueued)
+					{
+						etlJobsToEnque.Add(createJobToEnqueue(tenantName, "Initial", JobCategoryType.Initial, 1,
+							_now.UtcDateTime().AddDays(-1), _now.UtcDateTime().AddDays(1)));
+						initialJobEnqueued = true;
+					}
+
+					var queuePeriod = _generalFunctions.GetFactQueueAvailblePeriod(dataSourceId);
+					if (queuePeriod.EndDate != DateOnly.MinValue)
+						etlJobsToEnque.Add(createJobToEnqueue(tenantName, "Queue Statistics", JobCategoryType.QueueStatistics,
+							dataSourceId, queuePeriod.StartDate.Date, queuePeriod.EndDate.Date));
+
+					var agentPeriod = _generalFunctions.GetFactAgentAvailblePeriod(dataSourceId);
+					if (agentPeriod.EndDate != DateOnly.MinValue)
+						etlJobsToEnque.Add(createJobToEnqueue(tenantName, "Agent Statistics", JobCategoryType.AgentStatistics,
+							dataSourceId, agentPeriod.StartDate.Date, agentPeriod.EndDate.Date));
 				}
 				catch (Exception ex)
 				{
 					dataSourceNotPersisted.Add(dataSourceModel.Name);
-					logger.Error($"Error occurred on save changes for Datasource with id {dataSourceId} for Tenant \"{tenantName}\"", ex);
+					logger.Error($"Error occurred on save changes for Datasource with id {dataSourceId} for Tenant \"{tenantName}\"",
+						ex);
 				}
 			}
 
-			if(shouldEnqueueInitialJob)
-				enqueueInitialJob(tenantName);
+			foreach (var job in etlJobsToEnque)
+			{
+				_etlJobScheduler.ScheduleJob(job);
+			}
 
 			return dataSourceNotPersisted.Any()
 				? (IHttpActionResult) Content(HttpStatusCode.Ambiguous,
@@ -258,35 +283,34 @@ namespace Teleopti.Wfm.Administration.Controllers
 				: Ok();
 		}
 
-		private void enqueueInitialJob(string tenantName)
+		private JobEnqueModel createJobToEnqueue(string tenantName, string jobName, JobCategoryType jobCategoryName,
+			int datasourceId, DateTime startDate, DateTime endDate)
 		{
-			var utcToday = _now.UtcDateTime();
-			var jobEnqueModel = new JobEnqueModel
+			return new JobEnqueModel
 			{
-				JobName = "Initial",
+				JobName = jobName,
 				JobPeriods = new List<JobPeriod>
 				{
 					new JobPeriod
 					{
-						Start = utcToday.AddDays(-1),
-						End = utcToday.AddDays(1),
-						JobCategoryName = "Initial",
+						Start = startDate,
+						End = endDate,
+						JobCategoryName = jobCategoryName.ToString(),
 					}
 				},
-				LogDataSourceId = 1, // Always initialize for default data source
+				LogDataSourceId = datasourceId,
 				TenantName = tenantName
 			};
-			_etlJobScheduler.ScheduleJob(jobEnqueModel);
 		}
 
 		private string getMasterTenantName()
 		{
 			var appConnectionString = new SqlConnectionStringBuilder(_configReader.ConnectionString("Tenancy")).InitialCatalog;
 			var master = _loadAllTenants.Tenants().SingleOrDefault(x =>
-				new SqlConnectionStringBuilder(x.DataSourceConfiguration.ApplicationConnectionString).InitialCatalog.Equals(appConnectionString));
+				new SqlConnectionStringBuilder(x.DataSourceConfiguration.ApplicationConnectionString).InitialCatalog.Equals(
+					appConnectionString));
 
 			return master?.Name;
 		}
 	}
 }
-

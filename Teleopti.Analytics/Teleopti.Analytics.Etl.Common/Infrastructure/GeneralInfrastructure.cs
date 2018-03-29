@@ -8,11 +8,15 @@ using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.Common.Infrastructure
 {
 	public class GeneralInfrastructure : IGeneralInfrastructure
 	{
+		private const string minDateColumn = "MinDate";
+		private const string maxDateColumn = "MaxDate";
+
 		private readonly IBaseConfigurationRepository _baseConfigurationRepository;
 		private string _connectionString;
 
@@ -154,6 +158,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		public IBaseConfiguration LoadBaseConfiguration()
 		{
+
 			return _baseConfigurationRepository.LoadBaseConfiguration(dataMartConnectionString);
 		}
 
@@ -171,6 +176,48 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		public void SetDataMartConnectionString(string connectionString)
 		{
 			dataMartConnectionString = connectionString;
+		}
+
+		public DateOnlyPeriod GetFactQueuePeriod(int dataSourceId)
+		{
+			var sql
+				= "SELECT MIN(d.date_date) as " + minDateColumn + ", MAX(d.date_date) as " + maxDateColumn + " "
+				  + "FROM mart.fact_queue fq "
+				  + "INNER JOIN mart.dim_date d ON fq.date_id = d.date_id "
+				  + "WHERE fq.date_id > 0 "
+				  + $"AND fq.datasource_id = @{nameof(dataSourceId)}";
+
+			var sqlParameters = new[] {new SqlParameter(nameof(dataSourceId), dataSourceId)};
+			var dates = HelperFunctions.ExecuteDataSet(CommandType.Text, sql, sqlParameters,
+				dataMartConnectionString);
+
+			if(dates?.Tables[0] == null) return new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue);
+
+			var dateRow = dates.Tables[0].Rows[0];
+			var minDate = getDateOnlyValue(dateRow, minDateColumn);
+			var maxDate = getDateOnlyValue(dateRow, maxDateColumn);
+			return new DateOnlyPeriod(minDate, maxDate);
+		}
+
+		public DateOnlyPeriod GetFactAgentPeriod(int dataSourceId)
+		{
+			var sql
+				= "SELECT MIN(d.date_date) as " + minDateColumn + ", MAX(d.date_date) as " + maxDateColumn + " "
+				  + "FROM mart.fact_agent fq "
+				  + "INNER JOIN mart.dim_date d ON fq.date_id = d.date_id "
+				  + "WHERE fq.date_id > 0 "
+				  + $"AND fq.datasource_id = @{nameof(dataSourceId)}";
+
+			var sqlParameters = new[] { new SqlParameter(nameof(dataSourceId), dataSourceId) };
+			var dates = HelperFunctions.ExecuteDataSet(CommandType.Text, sql, sqlParameters,
+				dataMartConnectionString);
+
+			if (dates?.Tables[0] == null) return new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue);
+
+			var dateRow = dates.Tables[0].Rows[0];
+			var minDate = getDateOnlyValue(dateRow, minDateColumn);
+			var maxDate = getDateOnlyValue(dateRow, maxDateColumn);
+			return new DateOnlyPeriod(minDate, maxDate);
 		}
 
 		private static T handleDbNullValue<T>(object value)
@@ -191,6 +238,11 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 			return HelperFunctions.ExecuteDataSet(CommandType.StoredProcedure, "mart.sys_get_datasources", parameterList,
 				dataMartConnectionString);
+		}
+
+		private DateOnly getDateOnlyValue(DataRow row, string columnName)
+		{
+			return DBNull.Value.Equals(row[columnName]) ? DateOnly.MinValue : new DateOnly((DateTime)row[columnName]);
 		}
 	}
 }

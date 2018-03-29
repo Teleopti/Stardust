@@ -418,6 +418,135 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 		}
 
 		[Test]
+		public void ShouldEnqueInitialJobFirst()
+		{
+			const int dataSourceId = 3;
+			var masterTenant = new Tenant(testTenantName);
+			masterTenant.DataSourceConfiguration.SetAnalyticsConnectionString($"Initial Catalog={RandomName.Make()}");
+			AllTenants.HasWithAnalyticsConnectionString(masterTenant.Name, masterTenant.DataSourceConfiguration.AnalyticsConnectionString);
+			BaseConfigurationRepository.SaveBaseConfiguration(masterTenant.DataSourceConfiguration.AnalyticsConnectionString,
+				new BaseConfiguration(1053, 15, "UTC", false));
+			GeneralInfrastructure.HasDataSources(new DataSourceEtl(dataSourceId, "myDs", 12, timezoneName, 15, false));
+
+			var period = new DateOnlyPeriod(DateOnly.Today.AddDays(-100), DateOnly.Today.AddDays(200));
+			GeneralInfrastructure.HasFactQueuePeriod(dataSourceId, period);
+			GeneralInfrastructure.HasFactAgentPeriod(dataSourceId, period);
+
+			var myDsModel = new DataSourceModel
+			{
+				Id = dataSourceId,
+				TimeZoneCode = "UTC"
+			};
+			var tenantDataSources = new TenantDataSourceModel
+			{
+				TenantName = testTenantName,
+				DataSources = new List<DataSourceModel> { myDsModel }
+			};
+
+			Target.PersistDataSource(tenantDataSources);
+
+			var scheduledJobs = JobScheduleRepository.GetEtlJobSchedules();
+			scheduledJobs.Count.Should().Be(3);
+			scheduledJobs.First().JobName.Should().Be("Initial");
+		}
+
+		[Test]
+		public void ShouldEnqueueQueueStatisticsJobWhenTimeZoneOfDataSourceChanged()
+		{
+			const int dataSourceId = 3;
+			var masterTenant = new Tenant(testTenantName);
+			masterTenant.DataSourceConfiguration.SetAnalyticsConnectionString($"Initial Catalog={RandomName.Make()}");
+			AllTenants.HasWithAnalyticsConnectionString(masterTenant.Name, masterTenant.DataSourceConfiguration.AnalyticsConnectionString);
+			BaseConfigurationRepository.SaveBaseConfiguration(masterTenant.DataSourceConfiguration.AnalyticsConnectionString,
+				new BaseConfiguration(1053, 15, "UTC", false));
+			GeneralInfrastructure.HasDataSources(new DataSourceEtl(dataSourceId, "myDs", 12, timezoneName, 15, false));
+
+			var period = new DateOnlyPeriod(DateOnly.Today.AddDays(-100), DateOnly.Today.AddDays(200));
+			GeneralInfrastructure.HasFactQueuePeriod(dataSourceId, period);
+
+			var myDsModel = new DataSourceModel
+			{
+				Id = dataSourceId,
+				TimeZoneCode = "UTC"
+			};
+			var tenantDataSources = new TenantDataSourceModel
+			{
+				TenantName = testTenantName,
+				DataSources = new List<DataSourceModel> { myDsModel }
+			};
+
+			Target.PersistDataSource(tenantDataSources);
+
+			var scheduledJobs = JobScheduleRepository.GetEtlJobSchedules();
+			scheduledJobs.Count.Should().Be(2);
+
+			scheduledJobs.Any(x => x.JobName == "Initial").Should().Be.True();
+			scheduledJobs.Any(x => x.JobName == "Agent Statistics").Should().Be.False();
+
+			var queueStatisticsJob = scheduledJobs.Single(x=>x.JobName == "Queue Statistics");
+			queueStatisticsJob.ScheduleName.Should().Be("Manual ETL");
+			queueStatisticsJob.DataSourceId.Should().Be(dataSourceId);
+			queueStatisticsJob.Enabled.Should().Be(true);
+			queueStatisticsJob.ScheduleType.Should().Be(JobScheduleType.Manual);
+			queueStatisticsJob.Description.Should().Be("Manual ETL");
+			queueStatisticsJob.TenantName.Should().Be(testTenantName);
+			
+			var scheduledPeriod = JobScheduleRepository.GetEtlJobSchedules().Single(x=>x.JobName == "Queue Statistics")
+				.RelativePeriodCollection.Single();
+			scheduledPeriod.JobCategoryName.Should().Be("Queue Statistics");
+			scheduledPeriod.RelativePeriod.Minimum.Should().Be(-100);
+			scheduledPeriod.RelativePeriod.Maximum.Should().Be(200);
+		}
+
+		[Test]
+		public void ShouldEnqueueAgentStatisticsJobWhenTimeZoneOfDataSourceChanged()
+		{
+			const int dataSourceId = 3;
+			var masterTenant = new Tenant(testTenantName);
+			masterTenant.DataSourceConfiguration.SetAnalyticsConnectionString($"Initial Catalog={RandomName.Make()}");
+			AllTenants.HasWithAnalyticsConnectionString(masterTenant.Name, masterTenant.DataSourceConfiguration.AnalyticsConnectionString);
+			BaseConfigurationRepository.SaveBaseConfiguration(masterTenant.DataSourceConfiguration.AnalyticsConnectionString,
+				new BaseConfiguration(1053, 15, "UTC", false));
+			GeneralInfrastructure.HasDataSources(new DataSourceEtl(dataSourceId, "myDs", 12, timezoneName, 15, false));
+
+			var period = new DateOnlyPeriod(DateOnly.Today.AddDays(-100), DateOnly.Today.AddDays(200));
+			GeneralInfrastructure.HasFactAgentPeriod(dataSourceId, period);
+
+			var myDsModel = new DataSourceModel
+			{
+				Id = dataSourceId,
+				TimeZoneCode = "UTC"
+			};
+			var tenantDataSources = new TenantDataSourceModel
+			{
+				TenantName = testTenantName,
+				DataSources = new List<DataSourceModel> { myDsModel }
+			};
+
+			Target.PersistDataSource(tenantDataSources);
+
+			var scheduledJobs = JobScheduleRepository.GetEtlJobSchedules();
+			scheduledJobs.Count.Should().Be(2);
+
+			scheduledJobs.Any(x => x.JobName == "Initial").Should().Be.True();
+			scheduledJobs.Any(x => x.JobName == "Queue Statistics").Should().Be.False();
+
+			var agentStatisticsJob = scheduledJobs.Single(x => x.JobName == "Agent Statistics");
+			agentStatisticsJob.ScheduleName.Should().Be("Manual ETL");
+			agentStatisticsJob.DataSourceId.Should().Be(dataSourceId);
+			agentStatisticsJob.Enabled.Should().Be(true);
+			agentStatisticsJob.ScheduleType.Should().Be(JobScheduleType.Manual);
+			agentStatisticsJob.Description.Should().Be("Manual ETL");
+			agentStatisticsJob.TenantName.Should().Be(testTenantName);
+
+			var scheduledPeriod = JobScheduleRepository.GetEtlJobSchedules().Single(x => x.JobName == "Agent Statistics")
+				.RelativePeriodCollection.Single();
+			scheduledPeriod.JobCategoryName.Should().Be("Agent Statistics");
+			scheduledPeriod.RelativePeriod.Minimum.Should().Be(-100);
+			scheduledPeriod.RelativePeriod.Maximum.Should().Be(200);
+		}
+
+		[Test]
 		public void ShouldPersistTimezoneNotExistsInAnalyticsDb()
 		{
 			const int dataSourceId = 3;

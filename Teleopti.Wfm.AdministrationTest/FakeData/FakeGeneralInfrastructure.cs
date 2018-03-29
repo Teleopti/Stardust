@@ -5,6 +5,7 @@ using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Wfm.AdministrationTest.FakeData
 {
@@ -15,6 +16,8 @@ namespace Teleopti.Wfm.AdministrationTest.FakeData
 		private readonly List<IDataSourceEtl> aggDataSources = new List<IDataSourceEtl>();
 		private readonly List<IDataSourceEtl> dataSourceEtls = new List<IDataSourceEtl>();
 		private readonly List<ITimeZoneDim> timeZoneDims = new List<ITimeZoneDim>();
+		private readonly Dictionary<int, DateOnlyPeriod> factQueuePeriods = new Dictionary<int, DateOnlyPeriod>();
+		private readonly Dictionary<int, DateOnlyPeriod> factAgentPeriods = new Dictionary<int, DateOnlyPeriod>();
 
 		public IList<IDataSourceEtl> GetDataSourceList(bool getValidDataSources, bool includeOptionAll)
 		{
@@ -94,6 +97,30 @@ namespace Teleopti.Wfm.AdministrationTest.FakeData
 
 		public void SetDataMartConnectionString(string dataMartConnectionString)
 		{
+		}
+
+		public DateOnlyPeriod GetFactQueuePeriod(int dataSourceId)
+		{
+			return factQueuePeriods.ContainsKey(dataSourceId)
+				? factQueuePeriods[dataSourceId]
+				: new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue);
+		}
+
+		public DateOnlyPeriod GetFactAgentPeriod(int dataSourceId)
+		{
+			return factAgentPeriods.ContainsKey(dataSourceId)
+				? factAgentPeriods[dataSourceId]
+				: new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue);
+		}
+
+		public void HasFactQueuePeriod(int dataSourceId, DateOnlyPeriod period)
+		{
+			factQueuePeriods[dataSourceId] = period;
+		}
+
+		public void HasFactAgentPeriod(int dataSourceId, DateOnlyPeriod period)
+		{
+			factAgentPeriods[dataSourceId] = period;
 		}
 	}
 }
