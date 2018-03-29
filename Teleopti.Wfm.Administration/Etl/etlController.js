@@ -203,7 +203,7 @@
 			var data = {
 				JobName: job.JobName,
 				JobPeriods: [],
-				LogDataSourceId: vm.selectDataSource,
+				LogDataSourceId: vm.selectDataSource.Id,
 				TenantName: vm.selectedTenant.TenantName
 			};
 
