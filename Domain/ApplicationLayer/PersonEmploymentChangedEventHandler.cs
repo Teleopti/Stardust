@@ -2,9 +2,9 @@
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer
 {
-	public class PersonEmploymentChangedEventEmptyHandler  : IHandleEvent<PersonEmployementChangedEvent>, IRunOnHangfire
+	public class PersonEmploymentChangedEventEmptyHandler  : IHandleEvent<PersonEmploymentChangedEvent>, IRunOnHangfire
 	{
-		public virtual void Handle(PersonEmployementChangedEvent @event)
+		public virtual void Handle(PersonEmploymentChangedEvent @event)
 		{
 			
 		}

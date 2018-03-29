@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
 				if (previousPeriod != null)
 					startDate = previousPeriod.StartDate;
 			}
-			Parent.AddPersonEmployementChangeEvent(new PersonEmployementChangedEvent
+			Parent.AddPersonEmployementChangeEvent(new PersonEmploymentChangedEvent
 			{
 				PersonId = ContainedEntity.Parent.Id.GetValueOrDefault(),
 				FromDate = startDate

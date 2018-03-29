@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 
 			target.Contract = ContractFactory.CreateContract("new name");
 
-			person.PopAllEvents().OfType<PersonEmployementChangedEvent>().Should().Not.Be.Empty();
+			person.PopAllEvents().OfType<PersonEmploymentChangedEvent>().Should().Not.Be.Empty();
 		}
 
 		[Test]
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 
 			target.ContractSchedule = ContractScheduleFactory.CreateContractSchedule("new name");
 
-			person.PopAllEvents().OfType<PersonEmployementChangedEvent>().Should().Not.Be.Empty();
+			person.PopAllEvents().OfType<PersonEmploymentChangedEvent>().Should().Not.Be.Empty();
 		}
 
 		[Test]
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 
 			target.PartTimePercentage = PartTimePercentageFactory.CreatePartTimePercentage("new name");
 
-			person.PopAllEvents().OfType<PersonEmployementChangedEvent>().Should().Not.Be.Empty();
+			person.PopAllEvents().OfType<PersonEmploymentChangedEvent>().Should().Not.Be.Empty();
 		}
 
 		[Test]
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 
 			target.PeriodDate = new DateOnly(2018,04,01);
 
-			person.PopAllEvents().OfType<PersonEmployementChangedEvent>().Should().Not.Be.Empty();
+			person.PopAllEvents().OfType<PersonEmploymentChangedEvent>().Should().Not.Be.Empty();
 		}
 
 		[Test]
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 			person.PopAllEvents();
 
 			target.Contract = ContractFactory.CreateContract("new name");
-			var @event = person.PopAllEvents().OfType<PersonEmployementChangedEvent>().First();
+			var @event = person.PopAllEvents().OfType<PersonEmploymentChangedEvent>().First();
 			@event.PersonId.Should().Be.EqualTo(person.Id.GetValueOrDefault());
 			@event.FromDate.Should().Be.EqualTo(fromDate);
 		}
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 			person.PopAllEvents();
 
 			target.PeriodDate = new DateOnly(2018, 04, 01);
-			var @event = person.PopAllEvents().OfType<PersonEmployementChangedEvent>().First();
+			var @event = person.PopAllEvents().OfType<PersonEmploymentChangedEvent>().First();
 			@event.PersonId.Should().Be.EqualTo(person.Id.GetValueOrDefault());
 			@event.FromDate.Should().Be.EqualTo(previousStartDate);
 		}
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 			person.PopAllEvents();
 
 			childTarget.PeriodDate = new DateOnly(2018, 04, 01);
-			var @event = person.PopAllEvents().OfType<PersonEmployementChangedEvent>().First();
+			var @event = person.PopAllEvents().OfType<PersonEmploymentChangedEvent>().First();
 			@event.PersonId.Should().Be.EqualTo(person.Id.GetValueOrDefault());
 			@event.FromDate.Should().Be.EqualTo(previousStartDate);
 		}
@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 
 			childTarget.Contract = ContractFactory.CreateContract("new name");
 
-			person.PopAllEvents().OfType<PersonEmployementChangedEvent>().Should().Not.Be.Empty();
+			person.PopAllEvents().OfType<PersonEmploymentChangedEvent>().Should().Not.Be.Empty();
 		}
 
 		[Test]
@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 
 			childTarget.ContractSchedule = ContractScheduleFactory.CreateContractSchedule("new name");
 
-			person.PopAllEvents().OfType<PersonEmployementChangedEvent>().Should().Not.Be.Empty();
+			person.PopAllEvents().OfType<PersonEmploymentChangedEvent>().Should().Not.Be.Empty();
 		}
 
 		[Test]
@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 
 			childTarget.PartTimePercentage = PartTimePercentageFactory.CreatePartTimePercentage("new name");
 
-			person.PopAllEvents().OfType<PersonEmployementChangedEvent>().Should().Not.Be.Empty();
+			person.PopAllEvents().OfType<PersonEmploymentChangedEvent>().Should().Not.Be.Empty();
 		}
 
 		[Test]
@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 
 			childTarget.PeriodDate = new DateOnly(2018,04,01);
 
-			person.PopAllEvents().OfType<PersonEmployementChangedEvent>().Should().Not.Be.Empty();
+			person.PopAllEvents().OfType<PersonEmploymentChangedEvent>().Should().Not.Be.Empty();
 		}
 
 		[Test]
@@ -194,7 +194,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 
 			childTarget.Contract = ContractFactory.CreateContract("new name");
 
-			var @event = person.PopAllEvents().OfType<PersonEmployementChangedEvent>().First();
+			var @event = person.PopAllEvents().OfType<PersonEmploymentChangedEvent>().First();
 			@event.PersonId.Should().Be.EqualTo(person.Id.GetValueOrDefault());
 			
 			@event.FromDate.Should().Be.EqualTo(fromDate);

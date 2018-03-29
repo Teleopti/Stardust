@@ -18,11 +18,13 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override void Load(ContainerBuilder builder)
 		{
             builder.RegisterType<TraceableRefreshService>().As<ITraceableRefreshService>();
+            builder.RegisterType<CalculatePersonAccount>();
 			builder.RegisterType<PersonAccountUpdater>().As<IPersonAccountUpdater>();
 			if (!_configuration.Toggle(Toggles.WFM_Clear_Data_After_Leaving_Date_47768))
 			{
 				builder.RegisterType<ClearPersonRelatedInformation>().As<IPersonLeavingUpdater>().SingleInstance();
 			}
+
 		}
 	}
 }

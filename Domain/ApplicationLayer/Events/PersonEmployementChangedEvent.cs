@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 {
-	public class PersonEmployementChangedEvent : IEvent
+	public class PersonEmploymentChangedEvent : IEvent
 	{
 		public Guid PersonId { get; set; }
 		public DateOnly FromDate { get; set; }
