@@ -115,5 +115,11 @@ describe('badgeCalculation', function () {
                 ]);
             });
         };
+
+        this.fetchPurgeDays = function () {
+            return $q(function (resolve, reject) {
+                resolve(30);
+            });
+        }
     }
 }); 
