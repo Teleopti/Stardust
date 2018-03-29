@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
@@ -14,16 +15,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
         private ExternalLogOnParser _externalLogOnParser;
     	private PersonSkillStringParser _personSkillStringParser;
 
-    	/// <summary>
-        /// Gets or sets the full name.
-        /// </summary>
-        /// <value>The full name.</value>
         public string FullName { get; set; }
 
-        /// <summary>
-        /// Gets or sets the period date.
-        /// </summary>
-        /// <value>The period date.</value>
         public DateOnly PeriodDate
         {
             get => ContainedEntity.StartDate;
@@ -32,16 +25,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
                 if (value != ContainedEntity.StartDate)
                 {
 					Parent.ChangePersonPeriodStartDate(value,ContainedEntity);
+					addPersonEmployementChangedEvent();
                 }
             }
         }
 
         public IPerson Parent => (IPerson)ContainedEntity.Root();
 
-	    /// <summary>
-        /// Gets or sets the current person contract.
-        /// </summary>
-        /// <value>The current person contract.</value>
         public IPersonContract PersonContract
         {
             get => ContainedEntity.PersonContract;
@@ -54,10 +44,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
             }
         }
 
-        /// <summary>
-        /// Gets or sets the current part time percentage.
-        /// </summary>
-        /// <value>The current part time percentage.</value>
         public IPartTimePercentage PartTimePercentage
         {
             get => ContainedEntity.PersonContract?.PartTimePercentage;
@@ -66,14 +52,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
                 if (ContainedEntity.PersonContract?.PartTimePercentage != null && !ContainedEntity.PersonContract.PartTimePercentage.Equals(value))
                 {
                     ContainedEntity.PersonContract.PartTimePercentage = value;
-                }
+					addPersonEmployementChangedEvent();
+
+				}
             }
         }
 
-        /// <summary>
-        /// Gets or sets the current contract.
-        /// </summary>
-        /// <value>The current contract.</value>
         public IContract Contract
         {
             get => ContainedEntity.PersonContract?.Contract;
@@ -82,15 +66,18 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
                 if (ContainedEntity.PersonContract?.Contract != null && !ContainedEntity.PersonContract.Contract.Equals(value))
                 {
                     ContainedEntity.PersonContract.Contract = value;
-                }
+					addPersonEmployementChangedEvent();
+
+				}
             }
         }
 
-        /// <summary>
-        /// Gets or sets the current contract schedule.
-        /// </summary>
-        /// <value>The current contract schedule.</value>
-        public IContractSchedule ContractSchedule
+		private void addPersonEmployementChangedEvent()
+		{
+			Parent.AddPersonEmployementChangeEvent(new PersonEmployementChangedEvent());
+		}
+
+		public IContractSchedule ContractSchedule
         {
             get => ContainedEntity.PersonContract?.ContractSchedule;
 			set
@@ -98,14 +85,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
                 if (ContainedEntity.PersonContract?.ContractSchedule != null && !ContainedEntity.PersonContract.ContractSchedule.Equals(value))
                 {
                     ContainedEntity.PersonContract.ContractSchedule = value;
-                }
+					addPersonEmployementChangedEvent();
+
+				}
             }
         }
 
-        /// <summary>
-        /// Gets or sets the person skills.
-        /// </summary>
-        /// <value>The person skills.</value>
         public string PersonSkills
         {
             get => getPersonSkills();
@@ -116,10 +101,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
             }
         }
 
-        /// <summary>
-        /// Sets the person skill collection.
-        /// </summary>
-        /// <value>The person skill collection.</value>
         public void SetPersonSkillCollection(IList<IPersonSkill> personSkillCollection)
         {
             InParameter.NotNull("personSkillCollection", personSkillCollection);
@@ -127,10 +108,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
 			_personSkillStringParser = new PersonSkillStringParser(_personSkillCollection);
         }
 
-        /// <summary>
-        /// Sets the person skill.
-        /// </summary>
-        /// <param name="value">The value.</param>
+
         private void SetPersonSkill(string value)
         {
 			if (ContainedEntity == null) return;
@@ -141,10 +119,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
 			}
         }
 
-        /// <summary>
-        /// Gets the person skills.
-        /// </summary>
-        /// <returns></returns>
         private string getPersonSkills()
         {
 	        if (ContainedEntity?.PersonSkillCollection == null) return string.Empty;
@@ -152,10 +126,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
 			return string.Join(", ", ContainedEntity.PersonSkillCollection.Select(s => s.Skill.Name).OrderBy(s => s));
 		}
 
-        /// <summary>
-        /// Gets or sets the current rule set bag.
-        /// </summary>
-        /// <value>The current rule set bag.</value>
         public IRuleSetBag RuleSetBag
         {
             get => ContainedEntity.RuleSetBag;
@@ -166,16 +136,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
             }
         }
 
-        /// <summary>
-        /// Gets a value indicating whether this instance can gray.
-        /// </summary>
-        /// <value><c>true</c> if this instance can gray; otherwise, <c>false</c>.</value>
         public bool CanGray => false;
 
-	    /// <summary>
-        /// Gets or sets the person external log on names.
-        /// </summary>
-        /// <value>The person external log on names.</value>
         public string ExternalLogOnNames
         {
             get => ContainedEntity == null ? string.Empty : _externalLogOnParser.GetExternalLogOnsDisplayText(ContainedEntity.ExternalLogOnCollection);
@@ -193,45 +155,27 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
             }
         }
 
-        /// <summary>
-        /// Gets or sets the note.
-        /// </summary>
-        /// <value>The note.</value>
         public string Note
         {
             get => ContainedEntity.Note;
 			set => ContainedEntity.Note = value;
 		}
 
-        /// <summary>
-        /// Sets the person external log on collection.
-        /// </summary>
-        /// <param name="externalLogOnCollection">The external log on collection.</param>
         public void SetPersonExternalLogOnCollection(IList<IExternalLogOn> externalLogOnCollection)
         {
             InParameter.NotNull("externalLogOnCollection", externalLogOnCollection);
             _externalLogOnParser = new ExternalLogOnParser(externalLogOnCollection,_externalLogOnDisplay);
         }
 
-        /// <summary>
-        /// Sets the site team adapter collection.
-        /// </summary>
+
         public void SetSiteTeamAdapterCollection(IList<SiteTeamModel> siteTeamAdapterCollection)
         {
             InParameter.NotNull("siteTeamAdapterCollection", siteTeamAdapterCollection);
             _siteTeamAdapterCollection = siteTeamAdapterCollection;
         }
 
-        /// <summary>
-        /// Gets the period.
-        /// </summary>
-        /// <value>The period.</value>
         public IPersonPeriod Period => ContainedEntity;
 
-	    /// <summary>
-        /// Gets or sets the site team.
-        /// </summary>
-        /// <value>The site team.</value>
         public SiteTeamModel SiteTeam
         {
             get

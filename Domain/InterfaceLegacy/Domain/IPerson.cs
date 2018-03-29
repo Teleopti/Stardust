@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
@@ -276,5 +277,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		ISiteOpenHour SiteOpenHour(DateOnly dateOnly);
 		void RemoveAllPeriodsAfter(DateOnly date);
 		bool IsExternalAgent { get; }
+		void AddPersonEmployementChangeEvent(PersonEmployementChangedEvent personEmployementChangedEvent);
 	}
 }

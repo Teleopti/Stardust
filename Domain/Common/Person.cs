@@ -810,5 +810,10 @@ namespace Teleopti.Ccc.Domain.Common
 			return null;
 		}
 
+	    public virtual void AddPersonEmployementChangeEvent(PersonEmployementChangedEvent @event)
+	    {
+			AddEvent(()=>@event);
+	    }
+
     }
 }

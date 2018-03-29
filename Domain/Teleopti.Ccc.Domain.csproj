@@ -183,12 +183,14 @@
     <Compile Include="ApplicationLayer\Badge\PerformAllBadgeCalculation.cs" />
     <Compile Include="ApplicationLayer\Badge\PushMessageSender.cs" />
     <Compile Include="ApplicationLayer\Commands\IShiftCategorySelector.cs" />
+    <Compile Include="ApplicationLayer\Events\PersonEmployementChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Commands\ShiftCategorySelector.cs" />
     <Compile Include="ApplicationLayer\Commands\ShiftCategorySelectorWithPrediction.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\IOvertimeRequestOpenPeriodProvider.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestOpenPeriodProvider.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestOpenPeriodProviderToggle47290On.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestProcessorToggle47290On.cs" />
+    <Compile Include="ApplicationLayer\PersonEmploymentChangedEventHandler.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\IAnalyticsScheduleChangeUpdaterFilter.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\UpdateFactSchedules.cs" />
     <Compile Include="Scheduling\IPredictShiftCategory.cs" />
@@ -3879,7 +3881,7 @@
     <EmbeddedResource Include="AgentInfo\PersonAvailability.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Common\RootPersonGroup.hbm.xml" />     
+    <EmbeddedResource Include="Common\RootPersonGroup.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Common\PersonGroupBase.hbm.xml" />

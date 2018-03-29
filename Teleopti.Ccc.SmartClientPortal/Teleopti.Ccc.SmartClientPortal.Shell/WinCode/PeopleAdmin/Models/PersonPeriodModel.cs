@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Interfaces.Domain;
 
@@ -35,28 +37,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
         	_personSkillStringParser = new PersonSkillStringParser(_personSkillCollection);
         }
 
-        /// <summary>
-        /// Gets or sets the grid control.
-        /// </summary>
-        /// <value>The grid control.</value>
         public GridControl GridControl { get; set; }
 
-        /// <summary>
-        /// Gets the parent.
-        /// </summary>
-        /// <value>The parent.</value>
         public IPerson Parent => _containedEntity;
 
-		/// <summary>
-        /// Gets the full name.
-        /// </summary>
-        /// <value>The full name.</value>
         public string FullName => _commonNameDescription == null ? _containedEntity.Name.ToString() : _commonNameDescription.BuildFor(_containedEntity);
 
-		/// <summary>
-        /// Gets or sets the period date.
-        /// </summary>
-        /// <value>The period date.</value>
         public DateOnly? PeriodDate
         {
             get => _currentPeriod?.StartDate;
@@ -68,14 +54,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
                 if (value != _currentPeriod.StartDate)
                 {
 	                Parent.ChangePersonPeriodStartDate(value.Value, _currentPeriod);
+					addPersonEmployementChangedEvent();
                 }
             }
         }
 
-        /// <summary>
-        /// Gets or sets the current person contract.
-        /// </summary>
-        /// <value>The current person contract.</value>
         public IPersonContract PersonContract
         {
             get => _currentPeriod?.PersonContract;
@@ -85,10 +68,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
             }
         }
 
-        /// <summary>
-        /// Gets or sets the current part time percentage.
-        /// </summary>
-        /// <value>The current part time percentage.</value>
         public IPartTimePercentage PartTimePercentage
         {
             get => _currentPeriod?.PersonContract?.PartTimePercentage;
@@ -97,14 +76,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
                 if (value != null && _currentPeriod?.PersonContract?.PartTimePercentage != null)
                 {
                     _currentPeriod.PersonContract.PartTimePercentage = value;
+					addPersonEmployementChangedEvent();
                 }
             }
         }
 
-        /// <summary>
-        /// Gets or sets the current rule set bag.
-        /// </summary>
-        /// <value>The current rule set bag.</value>
         public IRuleSetBag RuleSetBag
         {
             get => _currentPeriod?.RuleSetBag;
@@ -115,10 +91,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
             }
         }
 
-        /// <summary>
-        /// Gets or sets the current contract.
-        /// </summary>
-        /// <value>The current contract.</value>
         public IContract Contract
         {
             get => _currentPeriod?.PersonContract?.Contract;
@@ -127,14 +99,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
                 if (value != null && _currentPeriod?.PersonContract?.Contract != null)
                 {
                     _currentPeriod.PersonContract.Contract = value;
-                }
+					addPersonEmployementChangedEvent();
+				}
             }
         }
 
-        /// <summary>
-        /// Gets or sets the current contract schedule.
-        /// </summary>
-        /// <value>The current contract schedule.</value>
+		private void addPersonEmployementChangedEvent()
+		{
+			Parent.AddPersonEmployementChangeEvent(new PersonEmployementChangedEvent());
+		}
+
         public IContractSchedule ContractSchedule
         {
             get => _currentPeriod?.PersonContract?.ContractSchedule;
@@ -143,20 +117,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
                 if (value != null && _currentPeriod?.PersonContract?.ContractSchedule != null)
                 {
                     _currentPeriod.PersonContract.ContractSchedule = value;
-                }
+					addPersonEmployementChangedEvent();
+				}
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether [expand state].
-        /// </summary>
-        /// <value><c>true</c> if [expand state]; otherwise, <c>false</c>.</value>
         public bool ExpandState { get; set; }
 
-		/// <summary>
-        /// Gets or sets the person skills.
-        /// </summary>
-        /// <value>The person skills.</value>
         public string PersonSkills
         {
             get => getPersonSkills();
@@ -170,10 +137,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
             }
         }
 
-        /// <summary>
-        /// Sets the person skills.
-        /// </summary>
-        /// <param name="value">The value.</param>
         private void SetPersonSkills(string value)
         {
             if (_currentPeriod == null) return;
@@ -184,10 +147,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
         	}
         }
 
-        /// <summary>
-        /// Gets the person skills.
-        /// </summary>
-        /// <returns></returns>
         private string getPersonSkills()
         {
 			if (_currentPeriod?.PersonSkillCollection != null)
@@ -199,29 +158,17 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
 			return String.Empty;
         }
 
-        /// <summary>
-        /// Gets the current person period by date.
-        /// </summary>
-        /// <param name="selectedDate">The selected date.</param>
-        /// <returns></returns>
         public IPersonPeriod GetCurrentPersonPeriodByDate(DateOnly selectedDate)
         {
             _currentPeriod = _containedEntity.Period(selectedDate);
             return _currentPeriod;
         }
 
-        /// <summary>
-        /// Gets a value indicating whether this instance can gray.
-        /// </summary>
-        /// <value><c>true</c> if this instance can gray; otherwise, <c>false</c>.</value>
+
         public bool CanGray => _currentPeriod == null;
 
 		public IPersonPeriod Period => _currentPeriod;
 
-		/// <summary>
-        /// Gets the period count.
-        /// </summary>
-        /// <value>The period count.</value>
         public int PeriodCount
         {
             get
@@ -232,10 +179,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
             }
         }
 
-        /// <summary>
-        /// Gets or sets the person external log on names.
-        /// </summary>
-        /// <value>The person external log on names.</value>
         public string ExternalLogOnNames
         {
             get
@@ -258,10 +201,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
             }
         }
 
-        /// <summary>
-        /// Gets or sets the site team adapter.
-        /// </summary>
-        /// <value>The site team adapter.</value>
         public SiteTeamModel SiteTeam
         {
             get
@@ -283,10 +222,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
             }
         }
 
-        /// <summary>
-        /// Gets or sets the note.
-        /// </summary>
-        /// <value>The note.</value>
         public String Note
         {
             get
@@ -306,9 +241,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
             }
         }
 
-        /// <summary>
-        /// Resets the can bold property of child adapters.
-        /// </summary>
         public void ResetCanBoldPropertyOfChildAdapters()
         {
             if (GridControl != null)

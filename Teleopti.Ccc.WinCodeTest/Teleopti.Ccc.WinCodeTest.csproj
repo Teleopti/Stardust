@@ -468,6 +468,7 @@
     <Compile Include="PeopleAdmin\Comparers\SchedulePeriodTimeOverrideComparerTest.cs" />
     <Compile Include="PeopleAdmin\Comparers\WorkflowControlSetComparerTest.cs" />
     <Compile Include="PeopleAdmin\DayOfWeekDisplayTest.cs" />
+    <Compile Include="PeopleAdmin\Models\ImprovePersonAccountAccuracyTest.cs" />
     <Compile Include="PeopleAdmin\Models\PersonFinderDisplayRowTest.cs" />
     <Compile Include="PeopleAdmin\Models\PersonFinderModelTest.cs" />
     <Compile Include="PeopleAdmin\PersonFinderFindCommandTest.cs" />
