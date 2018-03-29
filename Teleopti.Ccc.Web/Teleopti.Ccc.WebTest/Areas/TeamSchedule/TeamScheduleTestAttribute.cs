@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.IocCommon;
@@ -39,6 +40,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			system.UseTestDouble<FakePeopleSearchProvider>().For<IPeopleSearchProvider>();
 			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
 			system.UseTestDouble<SyncCommandDispatcher>().For<ICommandDispatcher>();
+			system.UseTestDouble<FakeTimeZoneGuard>().For<ITimeZoneGuard>();
 
 			var fakeCommandHandler = new FakeCommandHandler();
 			system.UseTestDouble(fakeCommandHandler).For<IHandleCommand<BackoutScheduleChangeCommand>>();

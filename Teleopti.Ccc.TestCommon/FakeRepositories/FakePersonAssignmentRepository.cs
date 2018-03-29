@@ -38,19 +38,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void Has(IPerson agent, IScenario scenario, IActivity activity, DateOnlyPeriod period, TimePeriod timePeriod, string source = null)
 		{
-			foreach (var date in period.DayCollection())
-			{
-				var ass = new PersonAssignment(agent, scenario, date).WithId();
-				ass.AddActivity(activity, timePeriod);
-				ass.SetShiftCategory(new ShiftCategory().WithId());
-				ass.Source = source;
-				_storage.Add(ass);
-			}
+			Has(agent, scenario, activity, new ShiftCategory().WithId(), period, timePeriod, source);
 		}
 
 		public void Has(IPerson agent, IScenario scenario, IActivity activity, IShiftCategory shiftCategory, DateOnly date, TimePeriod timePeriod, string source = null)
 		{
-			Has(agent, scenario, activity, shiftCategory, new DateOnlyPeriod(date, date), timePeriod, source);
+			Has(agent, scenario, activity, shiftCategory, date.ToDateOnlyPeriod(), timePeriod, source);
 		}
 
 		public void Has(IPerson agent, IScenario scenario, IDayOffTemplate dayOffTemplate, DateOnly date)
@@ -68,7 +61,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			}
 			if (!entity.Id.HasValue)
 			{
-				entity = entity.WithId(Guid.NewGuid());
+				entity = entity.WithId();
 			}
 			_storage.Add(entity);
 		}
@@ -95,7 +88,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IPersonAssignment LoadAggregate(Guid id)
 		{
-			return _storage.LoadAll<IPersonAssignment>().First(x => x.Id == id);
+			return _storage.Get<IPersonAssignment>(id);
 		}
 
 		public ICollection<IPersonAssignment> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario)

@@ -1,113 +1,88 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
-using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling.Rules;
-using Teleopti.Ccc.Domain.Staffing;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 {
 	[TestFixture]
-	internal class SwapMainShiftForTwoPersonsCommandHandlerTest
+	[TeamScheduleTest]
+	public class SwapMainShiftForTwoPersonsCommandHandlerTest : ISetup
 	{
-		private IPersonRepository _personRepository;
-		private IScheduleStorage _scheduleStorage;
-		private IScenarioRepository _scenarioRepository;
-		private ISwapAndModifyServiceNew _swapAndModifyServiceNew;
-		private IScheduleDifferenceSaver _scheduleDifferenceSaver;
-		private IDifferenceCollectionService<IPersistableScheduleData> _differenceService;
-
-		private ISwapMainShiftForTwoPersonsCommandHandler _target;
-
-		private readonly Guid personIdFrom = Guid.NewGuid();
-		private IPerson personFrom;
-
-		private readonly Guid personIdTo = Guid.NewGuid();
-		private IPerson personTo;
+		public SwapMainShiftForTwoPersonsCommandHandler Target;
+		public FakePersonRepository PersonRepository;
+		public FakeScenarioRepository ScenarioRepository;
+		public FakePersonAssignmentRepository PersonAssignmentRepository;
+		public FakeActivityRepository ActivityRepository;
+		
 		private readonly DateTime scheduleDate = new DateTime(2016, 01, 01);
 		
-		[SetUp]
-		public void SetUp()
-		{
-			personFrom = PersonFactory.CreatePerson();
-			personFrom.SetId(personIdFrom);
-			personFrom.WithName(new Name("Abc", "123"));
-
-			personTo = PersonFactory.CreatePerson();
-			personTo.SetId(personIdTo);
-			
-			_personRepository = new FakePersonRepositoryLegacy(personFrom, personTo);
-
-			var defaultScenario = new Scenario("Test Scenario")
-			{
-				DefaultScenario = true
-			};
-			defaultScenario.SetId(Guid.NewGuid());
-			_scenarioRepository = new FakeScenarioRepository(defaultScenario);
-
-			_scheduleStorage = new FakeScheduleStorage_DoNotUse();
-			_swapAndModifyServiceNew = MockRepository.GenerateMock<ISwapAndModifyServiceNew>();
-
-			_scheduleDifferenceSaver = new FakeScheduleDifferenceSaver_DoNotUse(_scheduleStorage, new EmptyScheduleDayDifferenceSaver());
-			_differenceService = new DifferenceEntityCollectionService<IPersistableScheduleData>();
-		}
-
-		[Test, Ignore("Reason mandatory for NUnit 3")]
+		[Test]
 		public void ShouldSwapShiftsAndPersistSchedules()
 		{
-			_swapAndModifyServiceNew.Stub(x => x.Swap(personFrom, personTo, null, null, null, null, null))
-				.Return(new List<BusinessRuleResponse>())
-				.IgnoreArguments();
+			Guid personIdFrom = Guid.NewGuid();
+			Guid personIdTo = Guid.NewGuid();
 
-			_target = new SwapMainShiftForTwoPersonsCommandHandler(_personRepository, _scheduleStorage, _scenarioRepository, _swapAndModifyServiceNew, _differenceService, _scheduleDifferenceSaver, new FakeUserTimeZone());
+			var personFrom = PersonFactory.CreatePerson().WithId(personIdFrom);
+			personFrom.WithName(new Name("Abc", "123"));
 
-			var result = _target.SwapShifts(new SwapMainShiftForTwoPersonsCommand
+			var personTo = PersonFactory.CreatePerson().WithId(personIdTo);
+
+			PersonRepository.Add(personFrom);
+			PersonRepository.Add(personTo);
+
+			var defaultScenario = ScenarioRepository.Has("Default");
+
+			var act = ActivityRepository.Has("Phone");
+			PersonAssignmentRepository.Has(personFrom, defaultScenario, act, new ShiftCategory(), new DateOnly(scheduleDate),
+				new TimePeriod(10, 11));
+
+			var result = Target.SwapShifts(new SwapMainShiftForTwoPersonsCommand
 			{
 				PersonIdFrom = personIdFrom,
 				PersonIdTo = personIdTo,
 				ScheduleDate = scheduleDate
 			});
 
-			_swapAndModifyServiceNew.AssertWasCalled(x => x.Swap(
-				Arg<IPerson>.Matches(a => (a.Id == personIdFrom)),
-				Arg<IPerson>.Matches(a => (a.Id == personIdTo)),
-				Arg<IList<DateOnly>>.Matches(a => (a.Count == 1 && a.Contains(new DateOnly(scheduleDate)))),
-				Arg<IList<DateOnly>>.Matches(a => (a.Count == 0)),
-				Arg<IScheduleDictionary>.Matches(a => (a != null)),
-				Arg<INewBusinessRuleCollection>.Matches(a => (a != null)),
-				Arg<IScheduleTagSetter>.Matches(a => (a != null))));
-			
 			result.Count().Should().Be.EqualTo(0);
 		}
 
 		[Test]
 		public void ShouldReturnErrorsWhenBrokenBusinessRules()
 		{
-			const string errorMessage = "Test error message";
-			_swapAndModifyServiceNew.Stub(x => x.Swap(personFrom, personTo, null, null, null, null, null))
-				.Return(new List<BusinessRuleResponse>
-				{
-					new BusinessRuleResponse(null, errorMessage, true, true, new DateTimePeriod(), personFrom,
-						new DateOnlyPeriod(), "tjillevippen")
-				}).IgnoreArguments();
+			Guid personIdFrom = Guid.NewGuid();
+			Guid personIdTo = Guid.NewGuid();
 
-			_target = new SwapMainShiftForTwoPersonsCommandHandler(_personRepository, _scheduleStorage, _scenarioRepository, _swapAndModifyServiceNew, _differenceService, _scheduleDifferenceSaver, new FakeUserTimeZone());
+			var personFrom = PersonFactory.CreatePerson().WithId(personIdFrom);
+			personFrom.WithName(new Name("Abc", "123"));
 
-			var result = _target.SwapShifts(new SwapMainShiftForTwoPersonsCommand
+			var personTo = PersonFactory.CreatePerson().WithId(personIdTo);
+			personTo.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.ChinaTimeZoneInfo());
+
+			PersonRepository.Add(personFrom);
+			PersonRepository.Add(personTo);
+
+			var defaultScenario = ScenarioRepository.Has("Default");
+
+			var act = ActivityRepository.Has("Phone");
+			var shiftCategory = new ShiftCategory();
+			var date = new DateOnly(scheduleDate);
+			PersonAssignmentRepository.Has(personTo, defaultScenario, act, shiftCategory, date,
+				new TimePeriod(3, 9));
+			PersonAssignmentRepository.Has(personFrom, defaultScenario, act, shiftCategory, date,
+				new TimePeriod(3, 8));
+
+			var result = Target.SwapShifts(new SwapMainShiftForTwoPersonsCommand
 			{
 				PersonIdFrom = personIdFrom,
 				PersonIdTo = personIdTo,
@@ -119,7 +94,12 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			error.PersonId.Should().Be.EqualTo(personIdFrom);
 			error.ErrorMessages.Count.Should().Be.EqualTo(1);
-			error.ErrorMessages[0].Should().Be.EqualTo(errorMessage);
+			error.ErrorMessages[0].Should().Not.Be.Empty();
+		}
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.AddService<SwapMainShiftForTwoPersonsCommandHandler>();
 		}
 	}
 }

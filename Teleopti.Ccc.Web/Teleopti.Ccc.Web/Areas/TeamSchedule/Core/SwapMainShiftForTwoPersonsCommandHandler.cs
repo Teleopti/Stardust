@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 		private IScheduleDictionary getScheduleDictionary(IScenario scenario, DateOnly date, IPerson[] people)
 		{
 			var period = date.ToDateTimePeriod(_timeZone.TimeZone());
-			var options = new ScheduleDictionaryLoadOptions(true, true);
+			var options = new ScheduleDictionaryLoadOptions(false, false);
 
 			return _scheduleStorage.FindSchedulesForPersons(scenario, people, options, period, people, false);
 		}

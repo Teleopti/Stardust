@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			ForDelete = true;
 		}
 
-		public bool IsMandatory { get; private set; }
+		public bool IsMandatory { get; }
 		public bool HaltModify { get; set; }
 		public bool Configurable => false;
 		public bool ForDelete { get; set; }
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 				var assignmentPeriod = assignment.Period;
 				var dateOnly = assignment.Date;
-				var dateOnlyPeriod = new DateOnlyPeriod(dateOnly, dateOnly);
+				var dateOnlyPeriod = dateOnly.ToDateOnlyPeriod();
 				//don't want dep to person here...
 				var agentTimeZone = scheduleDay.Person.PermissionInformation.DefaultTimeZone();
 

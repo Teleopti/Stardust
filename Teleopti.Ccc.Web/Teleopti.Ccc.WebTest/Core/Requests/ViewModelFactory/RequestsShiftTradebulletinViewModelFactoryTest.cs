@@ -31,7 +31,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			base.Setup(system, configuration);
 			system.AddService<FakeStorage>();
 			system.UseTestDouble<FakeCommonAgentNameProvider>().For<ICommonAgentNameProvider>();
-			system.UseTestDouble<FakeScheduleStorage_DoNotUse>().For<IScheduleStorage>();
 			system.UseTestDouble<Areas.Global.FakePermissionProvider>().For<IPermissionProvider>();
 			system.UseTestDouble<FakePersonAbsenceRepository>().For<IPersonAbsenceRepository>();
 			system.UseTestDouble<FakePersonRequestRepository>().For<IPersonRequestRepository>();

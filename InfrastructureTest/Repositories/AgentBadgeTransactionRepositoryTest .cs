@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Session.Evict(agentBadgeTransaction);
 
 			var target = new AgentBadgeTransactionRepository(UnitOfWork);
-			var result = target.Find(new List<IPerson> { agentBadgeTransaction.Person }, new DateOnlyPeriod(new DateOnly(new DateTime(2018, 1, 31)), new DateOnly(new DateTime(2018, 2, 2)))).FirstOrDefault();
+			var result = target.Find(new List<IPerson> { agentBadgeTransaction.Person }, new DateOnlyPeriod(2018, 1, 31, 2018, 2, 2)).FirstOrDefault();
 			result.Should().Not.Be.Null();
 			result.IsExternal.Should().Be.EqualTo(true);
 			result.BadgeType.Should().Be.EqualTo(8);

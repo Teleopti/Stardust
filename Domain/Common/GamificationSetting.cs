@@ -229,7 +229,7 @@ namespace Teleopti.Ccc.Domain.Common
 			return enabledBadgeTypes;
 		}
 
-		public virtual string GetExternalBadgeTypeName(int badgeType) => BadgeSettings.Where(bs => bs.QualityId == badgeType).FirstOrDefault()?.Name;
+		public virtual string GetExternalBadgeTypeName(int badgeType) => BadgeSettings.FirstOrDefault(bs => bs.QualityId == badgeType)?.Name;
 
 	}
 }
