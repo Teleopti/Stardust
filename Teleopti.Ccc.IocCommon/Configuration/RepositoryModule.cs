@@ -99,6 +99,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<PredictShiftCategory>().As<IPredictShiftCategory>().SingleInstance();
 			builder.RegisterType<ShiftCategoryPredictionModelLoader>().As<IShiftCategoryPredictionModelLoader>().SingleInstance();
 
+			builder.RegisterType<PurgeSettingRepository>().As<IPurgeSettingRepository>().SingleInstance();
+
 			builder.Register(c => new StardustRepository(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)).As<IStardustRepository>().SingleInstance();
 		}
 

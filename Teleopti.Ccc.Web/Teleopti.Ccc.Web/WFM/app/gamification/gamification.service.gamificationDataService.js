@@ -143,6 +143,21 @@
 			console.log("Start to calculate for period", startDate, endDate);
 		};
 
+		svc.fetchPurgeDays = function () {
+			return $q(function (resolve, reject) {
+				$http({
+					method: 'GET',
+					url: '../api/gamification/RecalcualteBadges/purge-days'
+				}).then(function (response) {
+					var days = response.data;
+					resolve(days);
+				}, function (response) {
+					$log.error('Badge Calculation: failed to fetch purge days');
+					reject(response);
+				})
+			})
+		}
+
 		svc.fetchCalculationJobs = function () {
 			return $q(function (resolve, reject) {
 				$http({
