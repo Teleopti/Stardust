@@ -24,6 +24,7 @@ export class NavigationService {
 	}
 
 	private resetScroll() {
-		document.getElementById('materialcontainer').scrollTop = 0;
+		var element = document.getElementById('materialcontainer');
+		if (element) element.scrollTop = 0;
 	}
 }
