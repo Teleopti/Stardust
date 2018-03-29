@@ -602,7 +602,6 @@
 			vm.getSitesAndTeamsAsync();
 
 		vm.isResultTooMany = function () {
-			vm.total = 600;
 			var toggle = vm.toggles.WfmTeamSchedule_IncreaseLimitionTo750ForScheduleQuery_74871;
 			return (toggle && vm.total > 750) || (!toggle && vm.total > 500);
 		}
