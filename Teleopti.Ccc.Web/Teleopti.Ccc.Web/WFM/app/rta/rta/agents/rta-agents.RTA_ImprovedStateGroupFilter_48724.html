@@ -207,7 +207,7 @@
 						   ng-class="{'mdi-sort-ascending': vm.direction === 'asc', 'mdi-sort-descending': vm.direction === 'desc'}"></i>
 					</th>
 					<th class="blank-header" style="border-right: none">
-						<div class="timeline" style="height: 100%">
+						<div class="timeline" style="height: 20px">
 							<div class="label label-info time"
 								 ng-repeat="time in vm.timeline"
 								 ng-attr-style="left: {{time.Offset}};">
@@ -252,7 +252,7 @@
 						{{agentState.SiteAndTeamName}}
 					</td>
 					<td class="shift-column">
-						<div class="shift" style="height: 100%">
+						<div class="shift" style="height: 31px">
 							<div ng-repeat="outOfAdherence in agentState.OutOfAdherences"
 								 class="out-of-adherence"
 								 ng-attr-style="left: {{outOfAdherence.Offset}}; width: {{outOfAdherence.Width}};">
