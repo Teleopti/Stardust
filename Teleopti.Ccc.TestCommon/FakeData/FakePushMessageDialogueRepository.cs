@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public IEnumerable<IPushMessageDialogue> LoadAll()
 		{
-			throw new NotImplementedException();
+			return storage;
 		}
 
 		public IList<IPushMessageDialogue> Find(IPushMessage pushMessage)

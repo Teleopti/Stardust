@@ -15,8 +15,8 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 			system.UseTestDouble<FakeStorageSimple>().For<IFakeStorage>();
 			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
-			system.UseTestDouble<FakePushMessagePersister>().For<IPushMessagePersister>();
 			system.UseTestDouble<FakeTeamGamificationSettingRepository>().For<ITeamGamificationSettingRepository>();
+			system.UseTestDouble<FakePushMessageRepository>().For<IPushMessageRepository>();
 			system.UseTestDouble<AgentBadgeCalculator>().For<IAgentBadgeCalculator>();
 			system.UseTestDouble<AgentBadgeWithRankCalculator>().For<IAgentBadgeWithRankCalculator>();
 			system.UseTestDouble<FakeAgentBadgeRepository>().For<IAgentBadgeRepository>();

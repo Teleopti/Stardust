@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Gamification
 		public FakePersonRepository PersonRepository;
 		public FakeTeamGamificationSettingRepository TeamGamificationSettingRepository;
 		public FakeCurrentBusinessUnit CurrentBusinessUnit;
-		public FakePushMessagePersister PushMessagePersister;
+		public FakePushMessageDialogueRepository PushMessageDialogueRepository;
 
 		private IPerson _agent;
 		private ITeam _team;
@@ -50,7 +50,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Gamification
 		{
 			system.UseTestDouble<RecalculateBadgeEventHandler>().For<IHandleEvent<RecalculateBadgeEvent>>();
 			system.UseTestDouble<FakeCurrentBusinessUnit>().For<ICurrentBusinessUnit>();
-			system.UseTestDouble<FakePushMessagePersister>().For<IPushMessagePersister>();
+			system.UseTestDouble<FakePushMessageDialogueRepository>().For<IPushMessageDialogueRepository>();
+			system.UseTestDouble<FakePushMessageRepository>().For<IPushMessageRepository>();
 			system.UseTestDouble<PerformAllBadgeCalculation>().For<IPerformBadgeCalculation>();
 		}
 
@@ -233,8 +234,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Gamification
 			var formmater = new NoFormatting();
 			var date = _calculatedate.Date.ToString(_agent.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern,
 				_agent.PermissionInformation.Culture());
-			var resultMessage = PushMessagePersister.GetMessage();
-			PushMessagePersister.GetReceivers().First().Id.Should().Be.EqualTo(_agent.Id.GetValueOrDefault());
+			var dialogue = PushMessageDialogueRepository.LoadAll().First();
+			var resultMessage = dialogue.PushMessage;
+			dialogue.Receiver.Id.Should().Be.EqualTo(_agent.Id.GetValueOrDefault());
 			resultMessage.AllowDialogueReply.Should().Be.False();
 			resultMessage.GetTitle(formmater).Should().Be.EqualTo(Resources.Congratulations);
 			resultMessage.GetMessage(formmater).Should().Be.EqualTo(
@@ -258,8 +260,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Gamification
 
 			Target.Handle(badgeEvent);
 
-			PushMessagePersister.GetMessage().Should().Be.Null();
-			PushMessagePersister.GetReceivers().Count.Should().Be.EqualTo(0);
+			PushMessageDialogueRepository.LoadAll().Should().Be.Empty();
 		}
 
 		[Test]
@@ -282,8 +283,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Gamification
 			var formmater = new NormalizeText();
 			var date = _calculatedate.Date.ToString(_agent.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern,
 				_agent.PermissionInformation.Culture());
-			var resultMessage = PushMessagePersister.GetMessage();
-			PushMessagePersister.GetReceivers().First().Id.Should().Be.EqualTo(_agent.Id.GetValueOrDefault());
+			var dialogue = PushMessageDialogueRepository.LoadAll().First();
+			var resultMessage = dialogue.PushMessage;
+			dialogue.Receiver.Id.Should().Be.EqualTo(_agent.Id.GetValueOrDefault());
 			resultMessage.AllowDialogueReply.Should().Be.False();
 			resultMessage.GetTitle(formmater).Should().Be.EqualTo(Resources.Congratulations);
 			resultMessage.GetMessage(formmater).Should().Be.EqualTo(
@@ -310,8 +312,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Gamification
 			var formmater = new NormalizeText();
 			var date = _calculatedate.Date.ToString(_agent.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern,
 				_agent.PermissionInformation.Culture());
-			var resultMessage = PushMessagePersister.GetMessage();
-			PushMessagePersister.GetReceivers().First().Id.Should().Be.EqualTo(_agent.Id.GetValueOrDefault());
+			var dialogue = PushMessageDialogueRepository.LoadAll().First();
+			var resultMessage = dialogue.PushMessage;
+			dialogue.Receiver.Id.Should().Be.EqualTo(_agent.Id.GetValueOrDefault());
 			resultMessage.AllowDialogueReply.Should().Be.False();
 			resultMessage.GetTitle(formmater).Should().Be.EqualTo(Resources.Congratulations);
 			resultMessage.GetMessage(formmater).Should().Be.EqualTo(
@@ -338,8 +341,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Gamification
 			var formmater = new NormalizeText();
 			var date = _calculatedate.Date.ToString(_agent.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern,
 				_agent.PermissionInformation.Culture());
-			var resultMessage = PushMessagePersister.GetMessage();
-			PushMessagePersister.GetReceivers().First().Id.Should().Be.EqualTo(_agent.Id.GetValueOrDefault());
+			var dialogue = PushMessageDialogueRepository.LoadAll().First();
+			var resultMessage = dialogue.PushMessage;
+			dialogue.Receiver.Id.Should().Be.EqualTo(_agent.Id.GetValueOrDefault());
 			resultMessage.AllowDialogueReply.Should().Be.False();
 			resultMessage.GetTitle(formmater).Should().Be.EqualTo(Resources.Congratulations);
 			resultMessage.GetMessage(formmater).Should().Be.EqualTo(
@@ -363,8 +367,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Gamification
 
 			Target.Handle(badgeEvent);
 
-			PushMessagePersister.GetReceivers().Count.Should().Be.EqualTo(0);
-			PushMessagePersister.GetMessage().Should().Be.Null();
+			PushMessageDialogueRepository.LoadAll().Should().Be.Empty();
 		}
 
 		private void createExistingBadgeAndNewData(int gold, int silver, int bronze, DateOnlyPeriod period, int newScore)

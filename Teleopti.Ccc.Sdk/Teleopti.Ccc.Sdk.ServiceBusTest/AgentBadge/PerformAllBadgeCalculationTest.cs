@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		public FakeAgentBadgeWithRankTransactionRepository AgentBadgeWithRankTransactionRepository;
 		public FakeAgentBadgeTransactionRepository AgentBadgeTransactionRepository;
 		public FakeExternalPerformanceDataRepository ExternalPerformanceDataRepository;
-		public FakePushMessagePersister PushMessagePersister;
+		public FakePushMessageDialogueRepository PushMessageDialogueRepository;
 		public FakeAgentBadgeRepository AgentBadgeRepository;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 		public FakeAgentBadgeWithRankRepository AgentBadgeWithRankRepository;
@@ -47,6 +47,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		{
 			system.UseTestDouble<PerformAllBadgeCalculation>().For<IPerformBadgeCalculation>();
 			system.UseTestDouble<FakeExternalPerformanceDataRepository>().For<IExternalPerformanceDataRepository>();
+			system.UseTestDouble<FakePushMessageDialogueRepository>().For<IPushMessageDialogueRepository>();
 			system.UseTestDouble<FakeAgentBadgeWithRankTransactionRepository>().For<IAgentBadgeWithRankTransactionRepository>();
 			system.UseTestDouble<FakeAgentBadgeTransactionRepository>().For<IAgentBadgeTransactionRepository>();
 			system.UseTestDouble<FakeBusinessUnitRepository>().For<IBusinessUnitRepository>();
@@ -136,8 +137,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			var formmater = new NormalizeText();
 			var date = _systemCalculateDate.Date.ToString(_agent.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern,
 				_agent.PermissionInformation.Culture());
-			var resultMessage = PushMessagePersister.GetMessage();
-			PushMessagePersister.GetReceivers().First().Id.Should().Be.EqualTo(_agent.Id.GetValueOrDefault());
+			var dialogue = PushMessageDialogueRepository.LoadAll().First();
+			var resultMessage = dialogue.PushMessage;
+			dialogue.Receiver.Id.Should().Be.EqualTo(_agent.Id.GetValueOrDefault());
 			resultMessage.AllowDialogueReply.Should().Be.False();
 			resultMessage.GetTitle(formmater).Should().Be.EqualTo(Resources.Congratulations);
 			resultMessage.GetMessage(formmater).Should().Be.EqualTo(
@@ -156,8 +158,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			var formmater = new NormalizeText();
 			var date = _systemCalculateDate.Date.ToString(_agent.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern,
 				_agent.PermissionInformation.Culture());
-			var resultMessage = PushMessagePersister.GetMessage();
-			PushMessagePersister.GetReceivers().First().Id.Should().Be.EqualTo(_agent.Id.GetValueOrDefault());
+			var dialogue = PushMessageDialogueRepository.LoadAll().First();
+			var resultMessage = dialogue.PushMessage;
+			dialogue.Receiver.Id.Should().Be.EqualTo(_agent.Id.GetValueOrDefault());
 			resultMessage.AllowDialogueReply.Should().Be.False();
 			resultMessage.GetTitle(formmater).Should().Be.EqualTo(Resources.Congratulations);
 			resultMessage.GetMessage(formmater).Should().Be.EqualTo(
@@ -176,8 +179,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			var formmater = new NormalizeText();
 			var date = _systemCalculateDate.Date.ToString(_agent.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern,
 				_agent.PermissionInformation.Culture());
-			var resultMessage = PushMessagePersister.GetMessage();
-			PushMessagePersister.GetReceivers().First().Id.Should().Be.EqualTo(_agent.Id.GetValueOrDefault());
+			var dialogue = PushMessageDialogueRepository.LoadAll().First();
+			var resultMessage = dialogue.PushMessage;
+			dialogue.Receiver.Id.Should().Be.EqualTo(_agent.Id.GetValueOrDefault());
 			resultMessage.AllowDialogueReply.Should().Be.False();
 			resultMessage.GetTitle(formmater).Should().Be.EqualTo(Resources.Congratulations);
 			resultMessage.GetMessage(formmater).Should().Be.EqualTo(
@@ -192,9 +196,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			addExternalPerformanceData(79);
 
 			Target.Calculate(Guid.NewGuid(), DateTime.Today);
-
-			PushMessagePersister.GetReceivers().Count.Should().Be.EqualTo(0);
-			PushMessagePersister.GetMessage().Should().Be.Null();
+			PushMessageDialogueRepository.LoadAll().Should().Be.Empty();
 		}
 
 		[Test]
@@ -250,8 +252,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			var formmater = new NoFormatting();
 			var date = _systemCalculateDate.Date.ToString(_agent.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern,
 				_agent.PermissionInformation.Culture());
-			var resultMessage = PushMessagePersister.GetMessage();
-			PushMessagePersister.GetReceivers().First().Id.Should().Be.EqualTo(_agent.Id.GetValueOrDefault());
+			var dialogue = PushMessageDialogueRepository.LoadAll().First();
+			var resultMessage = dialogue.PushMessage;
+			dialogue.Receiver.Id.Should().Be.EqualTo(_agent.Id.GetValueOrDefault());
 			resultMessage.AllowDialogueReply.Should().Be.False();
 			resultMessage.GetTitle(formmater).Should().Be.EqualTo(Resources.Congratulations);
 			resultMessage.GetMessage(formmater).Should().Be.EqualTo(
@@ -271,8 +274,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			var formmater = new NoFormatting();
 			var date = _systemCalculateDate.Date.ToString(_agent.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern,
 				_agent.PermissionInformation.Culture());
-			var resultMessage = PushMessagePersister.GetMessage();
-			PushMessagePersister.GetReceivers().First().Id.Should().Be.EqualTo(_agent.Id.GetValueOrDefault());
+			var dialogue = PushMessageDialogueRepository.LoadAll().First();
+			var resultMessage = dialogue.PushMessage;
+			dialogue.Receiver.Id.Should().Be.EqualTo(_agent.Id.GetValueOrDefault());
 			resultMessage.AllowDialogueReply.Should().Be.False();
 			resultMessage.GetTitle(formmater).Should().Be.EqualTo(Resources.Congratulations);
 			resultMessage.GetMessage(formmater).Should().Be.EqualTo(
@@ -292,8 +296,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			var formmater = new NoFormatting();
 			var date = _systemCalculateDate.Date.ToString(_agent.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern,
 				_agent.PermissionInformation.Culture());
-			var resultMessage = PushMessagePersister.GetMessage();
-			PushMessagePersister.GetReceivers().First().Id.Should().Be.EqualTo(_agent.Id.GetValueOrDefault());
+			var dialogue = PushMessageDialogueRepository.LoadAll().First();
+			var resultMessage = dialogue.PushMessage;
+			dialogue.Receiver.Id.Should().Be.EqualTo(_agent.Id.GetValueOrDefault());
 			resultMessage.AllowDialogueReply.Should().Be.False();
 			resultMessage.GetTitle(formmater).Should().Be.EqualTo(Resources.Congratulations);
 			resultMessage.GetMessage(formmater).Should().Be.EqualTo(
@@ -309,8 +314,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 
 			Target.Calculate(Guid.NewGuid(), DateTime.Today);
 
-			PushMessagePersister.GetMessage().Should().Be.Null();
-			PushMessagePersister.GetReceivers().Count.Should().Be.EqualTo(0);
+			PushMessageDialogueRepository.LoadAll().Should().Be.Empty();
 		}
 
 		[Test]
@@ -482,8 +486,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			Target.Calculate(Guid.NewGuid(), _systemCalculateDate);
 
 			var formmater = new NoFormatting();
-			var resultMessage = PushMessagePersister.GetMessage();
-			PushMessagePersister.GetReceivers().First().Id.Should().Be.EqualTo(_agent.Id.GetValueOrDefault());
+			var dialogue = PushMessageDialogueRepository.LoadAll().First();
+			var resultMessage = dialogue.PushMessage;
+			dialogue.Receiver.Id.Should().Be.EqualTo(_agent.Id.GetValueOrDefault());
 			resultMessage.AllowDialogueReply.Should().Be.False();
 			resultMessage.GetTitle(formmater).Should().Be.EqualTo(Resources.Congratulations);
 			resultMessage.GetMessage(formmater).Should().Be.EqualTo(
@@ -508,8 +513,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			Target.Calculate(Guid.NewGuid(), _systemCalculateDate);
 
 			var formmater = new NoFormatting();
-			var resultMessage = PushMessagePersister.GetMessage();
-			PushMessagePersister.GetReceivers().First().Id.Should().Be.EqualTo(_agent.Id.GetValueOrDefault());
+			var dialogue = PushMessageDialogueRepository.LoadAll().First();
+			var resultMessage = dialogue.PushMessage;
+			dialogue.Receiver.Id.Should().Be.EqualTo(_agent.Id.GetValueOrDefault());
 			resultMessage.AllowDialogueReply.Should().Be.False();
 			resultMessage.GetTitle(formmater).Should().Be.EqualTo(Resources.Congratulations);
 			resultMessage.GetMessage(formmater).Should().Be.EqualTo(

@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Collection;
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Common.Messaging
@@ -9,16 +9,13 @@ namespace Teleopti.Ccc.Domain.Common.Messaging
         public ISendPushMessageReceipt Create(IPushMessage pushMessage, IEnumerable<IPerson> receivers)
         {
             CreatedPushMessage = pushMessage;
-            CreatedDialogues = new List<IPushMessageDialogue>();
-            receivers.ForEach(p => CreatedDialogues.Add(new PushMessageDialogue(pushMessage, p)));
+			CreatedDialogues = receivers.Select(p => (IPushMessageDialogue)new PushMessageDialogue(pushMessage, p)).ToList();
             return this;
         }
 
         public IList<IAggregateRoot> AddedRoots()
         {
-            IList<IAggregateRoot> addedRoots = new List<IAggregateRoot> {CreatedPushMessage};
-            CreatedDialogues.ForEach(addedRoots.Add);
-            return addedRoots;
+            return new IAggregateRoot[] {CreatedPushMessage}.Concat(CreatedDialogues).ToList();
         }
 
         public IPushMessage CreatedPushMessage { get; private set; }
