@@ -180,44 +180,12 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		public DateOnlyPeriod GetFactQueuePeriod(int dataSourceId)
 		{
-			var sql
-				= "SELECT MIN(d.date_date) as " + minDateColumn + ", MAX(d.date_date) as " + maxDateColumn + " "
-				  + "FROM mart.fact_queue fq "
-				  + "INNER JOIN mart.dim_date d ON fq.date_id = d.date_id "
-				  + "WHERE fq.date_id > 0 "
-				  + $"AND fq.datasource_id = @{nameof(dataSourceId)}";
-
-			var sqlParameters = new[] {new SqlParameter(nameof(dataSourceId), dataSourceId)};
-			var dates = HelperFunctions.ExecuteDataSet(CommandType.Text, sql, sqlParameters,
-				dataMartConnectionString);
-
-			if(dates?.Tables[0] == null) return new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue);
-
-			var dateRow = dates.Tables[0].Rows[0];
-			var minDate = getDateOnlyValue(dateRow, minDateColumn);
-			var maxDate = getDateOnlyValue(dateRow, maxDateColumn);
-			return new DateOnlyPeriod(minDate, maxDate);
+			return getFactTablePeriod(dataSourceId, "mart.fact_queue");
 		}
 
 		public DateOnlyPeriod GetFactAgentPeriod(int dataSourceId)
 		{
-			var sql
-				= "SELECT MIN(d.date_date) as " + minDateColumn + ", MAX(d.date_date) as " + maxDateColumn + " "
-				  + "FROM mart.fact_agent fq "
-				  + "INNER JOIN mart.dim_date d ON fq.date_id = d.date_id "
-				  + "WHERE fq.date_id > 0 "
-				  + $"AND fq.datasource_id = @{nameof(dataSourceId)}";
-
-			var sqlParameters = new[] { new SqlParameter(nameof(dataSourceId), dataSourceId) };
-			var dates = HelperFunctions.ExecuteDataSet(CommandType.Text, sql, sqlParameters,
-				dataMartConnectionString);
-
-			if (dates?.Tables[0] == null) return new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue);
-
-			var dateRow = dates.Tables[0].Rows[0];
-			var minDate = getDateOnlyValue(dateRow, minDateColumn);
-			var maxDate = getDateOnlyValue(dateRow, maxDateColumn);
-			return new DateOnlyPeriod(minDate, maxDate);
+			return getFactTablePeriod(dataSourceId, "mart.fact_agent");
 		}
 
 		private static T handleDbNullValue<T>(object value)
@@ -238,6 +206,27 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 			return HelperFunctions.ExecuteDataSet(CommandType.StoredProcedure, "mart.sys_get_datasources", parameterList,
 				dataMartConnectionString);
+		}
+
+		private DateOnlyPeriod getFactTablePeriod(int dataSourceId, string tableName)
+		{
+			var sql
+				= "SELECT MIN(d.date_date) as " + minDateColumn + ", MAX(d.date_date) as " + maxDateColumn + " "
+				  + "FROM " + tableName + " f "
+				  + "INNER JOIN mart.dim_date d ON f.date_id = d.date_id "
+				  + "WHERE f.date_id > 0 "
+				  + $"AND f.datasource_id = @{nameof(dataSourceId)}";
+
+			var sqlParameters = new[] { new SqlParameter(nameof(dataSourceId), dataSourceId) };
+			var dates = HelperFunctions.ExecuteDataSet(CommandType.Text, sql, sqlParameters,
+				dataMartConnectionString);
+
+			if (dates?.Tables[0] == null) return new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue);
+
+			var dateRow = dates.Tables[0].Rows[0];
+			var minDate = getDateOnlyValue(dateRow, minDateColumn);
+			var maxDate = getDateOnlyValue(dateRow, maxDateColumn);
+			return new DateOnlyPeriod(minDate, maxDate);
 		}
 
 		private DateOnly getDateOnlyValue(DataRow row, string columnName)

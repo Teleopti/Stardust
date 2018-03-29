@@ -209,6 +209,12 @@ namespace Teleopti.Wfm.Administration.Controllers
 			var initialJobEnqueued = false;
 			var etlJobsToEnque = new List<JobEnqueModel>();
 
+			if (logger.IsDebugEnabled)
+			{
+				logger.Debug($"Persist changes for data source {string.Join(", ", tenantDataSourceModel.DataSources.Select(x=>x.Id))} "
+							 + "of tenant \"{tenantDataSourceModel.TenantName}\"");
+			}
+
 			foreach (var dataSourceModel in tenantDataSourceModel.DataSources)
 			{
 				var dataSourceId = dataSourceModel.Id;
@@ -248,6 +254,11 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 					if (!initialJobEnqueued)
 					{
+						if (logger.IsDebugEnabled)
+						{
+							logger.Debug("Enqueue ETL job \"Initial\" since timezone chaned.");
+						}
+
 						etlJobsToEnque.Add(createJobToEnqueue(tenantName, "Initial", JobCategoryType.Initial, 1,
 							_now.UtcDateTime().AddDays(-1), _now.UtcDateTime().AddDays(1)));
 						initialJobEnqueued = true;
@@ -255,13 +266,29 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 					var queuePeriod = _generalFunctions.GetFactQueueAvailblePeriod(dataSourceId);
 					if (queuePeriod.EndDate != DateOnly.MinValue)
+					{
+						if (logger.IsDebugEnabled)
+						{
+							logger.Debug(
+								$"Enqueue ETL job \"Queue Statistics\" from {queuePeriod.StartDate.Date:yyyy-MM-dd} to "
+								+ $"{queuePeriod.EndDate.Date:yyyy-MM-dd} for data source with Id=\"{dataSourceId}\" and tenant=\"{tenantName}\".");
+						}
 						etlJobsToEnque.Add(createJobToEnqueue(tenantName, "Queue Statistics", JobCategoryType.QueueStatistics,
 							dataSourceId, queuePeriod.StartDate.Date, queuePeriod.EndDate.Date));
+					}
 
 					var agentPeriod = _generalFunctions.GetFactAgentAvailblePeriod(dataSourceId);
 					if (agentPeriod.EndDate != DateOnly.MinValue)
+					{
+						if (logger.IsDebugEnabled)
+						{
+							logger.Debug(
+								$"Enqueue ETL job \"Agent Statistics\" from {agentPeriod.StartDate.Date:yyyy-MM-dd} to "
+								+ $"{agentPeriod.EndDate.Date:yyyy-MM-dd} for data source with Id=\"{dataSourceId}\" and tenant=\"{tenantName}\".");
+						}
 						etlJobsToEnque.Add(createJobToEnqueue(tenantName, "Agent Statistics", JobCategoryType.AgentStatistics,
 							dataSourceId, agentPeriod.StartDate.Date, agentPeriod.EndDate.Date));
+					}
 				}
 				catch (Exception ex)
 				{
