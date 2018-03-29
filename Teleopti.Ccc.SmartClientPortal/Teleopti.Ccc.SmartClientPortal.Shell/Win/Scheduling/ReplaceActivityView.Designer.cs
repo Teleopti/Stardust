@@ -33,23 +33,23 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		{
 			this.components = new System.ComponentModel.Container();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+			this.checkBoxAdvNextDay = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.outlookTimePickerTo = new Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.OutlookTimePicker();
 			this.labelTo = new System.Windows.Forms.Label();
 			this.outlookTimePickerFrom = new Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.OutlookTimePicker();
 			this.labelFrom = new System.Windows.Forms.Label();
-			this.buttonAdvOk = new Syncfusion.Windows.Forms.ButtonAdv();
-			this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
 			this.buttonAdvCancel = new Syncfusion.Windows.Forms.ButtonAdv();
-			this.checkBoxAdvNextDay = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
+			this.buttonAdvOk = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.labelActivity = new System.Windows.Forms.Label();
 			this.labelReplaceWithActivity = new System.Windows.Forms.Label();
 			this.comboBox1 = new System.Windows.Forms.ComboBox();
 			this.comboBox2 = new System.Windows.Forms.ComboBox();
+			this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
 			this.tableLayoutPanel1.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvNextDay)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.outlookTimePickerTo)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.outlookTimePickerFrom)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvNextDay)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// tableLayoutPanel1
@@ -81,6 +81,21 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(355, 188);
 			this.tableLayoutPanel1.TabIndex = 1;
+			// 
+			// checkBoxAdvNextDay
+			// 
+			this.checkBoxAdvNextDay.BeforeTouchSize = new System.Drawing.Size(114, 24);
+			this.checkBoxAdvNextDay.DrawFocusRectangle = false;
+			this.checkBoxAdvNextDay.Location = new System.Drawing.Point(238, 115);
+			this.checkBoxAdvNextDay.Margin = new System.Windows.Forms.Padding(3, 10, 3, 3);
+			this.checkBoxAdvNextDay.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
+			this.checkBoxAdvNextDay.Name = "checkBoxAdvNextDay";
+			this.checkBoxAdvNextDay.Size = new System.Drawing.Size(114, 24);
+			this.checkBoxAdvNextDay.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
+			this.checkBoxAdvNextDay.TabIndex = 3;
+			this.checkBoxAdvNextDay.Text = "xxNextDay";
+			this.checkBoxAdvNextDay.ThemesEnabled = false;
+			this.checkBoxAdvNextDay.CheckedChanged += new System.EventHandler(this.checkBoxAdvNextDayCheckedChanged);
 			// 
 			// outlookTimePickerTo
 			// 
@@ -136,29 +151,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.labelFrom.TabIndex = 2;
 			this.labelFrom.Text = "xxFromColon";
 			// 
-			// buttonAdvOk
-			// 
-			this.buttonAdvOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.buttonAdvOk.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
-			this.buttonAdvOk.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
-			this.buttonAdvOk.BeforeTouchSize = new System.Drawing.Size(87, 23);
-			this.tableLayoutPanel1.SetColumnSpan(this.buttonAdvOk, 2);
-			this.buttonAdvOk.ForeColor = System.Drawing.Color.White;
-			this.buttonAdvOk.IsBackStageButton = false;
-			this.buttonAdvOk.Location = new System.Drawing.Point(138, 155);
-			this.buttonAdvOk.Margin = new System.Windows.Forms.Padding(3, 3, 10, 10);
-			this.buttonAdvOk.Name = "buttonAdvOk";
-			this.buttonAdvOk.Size = new System.Drawing.Size(87, 23);
-			this.buttonAdvOk.TabIndex = 4;
-			this.buttonAdvOk.Text = "xxOk";
-			this.buttonAdvOk.UseVisualStyle = true;
-			this.buttonAdvOk.Click += new System.EventHandler(this.buttonAdvOkClick);
-			// 
-			// errorProvider1
-			// 
-			this.errorProvider1.BlinkStyle = System.Windows.Forms.ErrorBlinkStyle.NeverBlink;
-			this.errorProvider1.ContainerControl = this;
-			// 
 			// buttonAdvCancel
 			// 
 			this.buttonAdvCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -177,20 +169,23 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.buttonAdvCancel.UseVisualStyle = true;
 			this.buttonAdvCancel.Click += new System.EventHandler(this.buttonAdvCancelClick);
 			// 
-			// checkBoxAdvNextDay
+			// buttonAdvOk
 			// 
-			this.checkBoxAdvNextDay.BeforeTouchSize = new System.Drawing.Size(114, 24);
-			this.checkBoxAdvNextDay.DrawFocusRectangle = false;
-			this.checkBoxAdvNextDay.Location = new System.Drawing.Point(238, 115);
-			this.checkBoxAdvNextDay.Margin = new System.Windows.Forms.Padding(3, 10, 3, 3);
-			this.checkBoxAdvNextDay.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
-			this.checkBoxAdvNextDay.Name = "checkBoxAdvNextDay";
-			this.checkBoxAdvNextDay.Size = new System.Drawing.Size(114, 24);
-			this.checkBoxAdvNextDay.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
-			this.checkBoxAdvNextDay.TabIndex = 3;
-			this.checkBoxAdvNextDay.Text = "xxNextDay";
-			this.checkBoxAdvNextDay.ThemesEnabled = false;
-			this.checkBoxAdvNextDay.CheckedChanged += new System.EventHandler(this.checkBoxAdvNextDayCheckedChanged);
+			this.buttonAdvOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.buttonAdvOk.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+			this.buttonAdvOk.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.buttonAdvOk.BeforeTouchSize = new System.Drawing.Size(87, 23);
+			this.tableLayoutPanel1.SetColumnSpan(this.buttonAdvOk, 2);
+			this.buttonAdvOk.ForeColor = System.Drawing.Color.White;
+			this.buttonAdvOk.IsBackStageButton = false;
+			this.buttonAdvOk.Location = new System.Drawing.Point(138, 155);
+			this.buttonAdvOk.Margin = new System.Windows.Forms.Padding(3, 3, 10, 10);
+			this.buttonAdvOk.Name = "buttonAdvOk";
+			this.buttonAdvOk.Size = new System.Drawing.Size(87, 23);
+			this.buttonAdvOk.TabIndex = 4;
+			this.buttonAdvOk.Text = "xxOk";
+			this.buttonAdvOk.UseVisualStyle = true;
+			this.buttonAdvOk.Click += new System.EventHandler(this.buttonAdvOkClick);
 			// 
 			// labelActivity
 			// 
@@ -219,6 +214,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.comboBox1.Name = "comboBox1";
 			this.comboBox1.Size = new System.Drawing.Size(121, 23);
 			this.comboBox1.TabIndex = 8;
+			this.comboBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.comboBox1_KeyDown);
 			// 
 			// comboBox2
 			// 
@@ -227,6 +223,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.comboBox2.Name = "comboBox2";
 			this.comboBox2.Size = new System.Drawing.Size(121, 23);
 			this.comboBox2.TabIndex = 9;
+			this.comboBox2.KeyDown += new System.Windows.Forms.KeyEventHandler(this.comboBox2_KeyDown);
+			// 
+			// errorProvider1
+			// 
+			this.errorProvider1.BlinkStyle = System.Windows.Forms.ErrorBlinkStyle.NeverBlink;
+			this.errorProvider1.ContainerControl = this;
 			// 
 			// ReplaceActivityView
 			// 
@@ -251,10 +253,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.Text = "xxReplaceActivity";
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvNextDay)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.outlookTimePickerTo)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.outlookTimePickerFrom)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvNextDay)).EndInit();
 			this.ResumeLayout(false);
 
 		}

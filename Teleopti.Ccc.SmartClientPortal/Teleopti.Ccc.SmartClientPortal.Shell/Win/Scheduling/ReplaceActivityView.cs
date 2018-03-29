@@ -134,5 +134,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			clearTimeErrorMessages();
 			validateTimes();
 		}
+
+		private void comboBox1_KeyDown(object sender, KeyEventArgs e)
+		{
+			e.SuppressKeyPress = true;
+		}
+
+		private void comboBox2_KeyDown(object sender, KeyEventArgs e)
+		{
+			e.SuppressKeyPress = true;
+		}
 	}
 }
