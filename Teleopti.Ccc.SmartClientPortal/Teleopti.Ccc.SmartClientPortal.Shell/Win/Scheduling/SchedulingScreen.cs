@@ -7059,7 +7059,34 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void replaceActivityToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			//
+			replaceActivity();
+		}
+
+		private void replaceActivity()
+		{
+			if (!TestMode.Micke) return;
+			var schedules = _scheduleView.SelectedSchedules();
+			if (schedules.IsEmpty()) return;
+			var replaceActivityService = _container.Resolve<ReplaceActivityService>();
+			var defaultPeriod = AddActivityCommand.GetDefaultPeriodFromPart(schedules[0]);
+
+			using (var view = new ReplaceActivityView(_schedulerState.CommonStateHolder.Activities.ToList(), defaultPeriod.TimePeriod(TimeZoneGuard.Instance.CurrentTimeZone())))
+			{
+				var result = view.ShowDialog(this);
+				if (result != DialogResult.OK) return;
+				var activity = view.Activity;
+				var replaceWithActivity = view.ReplaceWithActivity;
+				var timePeriod = new TimePeriod(view.FromTimeSpan, view.ToTimeSpan);
+				replaceActivityService.Replace(schedules, activity, replaceWithActivity, timePeriod);
+				_scheduleView.Presenter.ModifySchedulePart(schedules);
+				foreach (var part in schedules)
+				{
+					_scheduleView.RefreshRangeForAgentPeriod(part.Person, defaultPeriod);
+				}
+
+				RecalculateResources();
+				RunActionWithDelay(updateShiftEditor, 50);
+			}	
 		}
 	}
 }

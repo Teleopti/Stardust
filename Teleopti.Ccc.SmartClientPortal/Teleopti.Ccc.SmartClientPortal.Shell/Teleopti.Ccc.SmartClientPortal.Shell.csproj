@@ -3039,6 +3039,12 @@
     </Compile>
     <Compile Include="Win\Reporting\ViewerFoldingChangedEvent.cs" />
     <Compile Include="Win\Scheduling\AddScheduleLayers.cs" />
+    <Compile Include="Win\Scheduling\ReplaceActivityView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Win\Scheduling\ReplaceActivityView.Designer.cs">
+      <DependentUpon>ReplaceActivityView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Win\Scheduling\AgentOvertimeAvailabilityView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -4827,6 +4833,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Win\Reporting\SchedulerReportsViewer.resx">
       <DependentUpon>SchedulerReportsViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Win\Scheduling\ReplaceActivityView.resx">
+      <DependentUpon>ReplaceActivityView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Win\Scheduling\AgentOvertimeAvailabilityView.resx">
       <DependentUpon>AgentOvertimeAvailabilityView.cs</DependentUpon>
