@@ -45,12 +45,12 @@ Teleopti.MyTimeWeb.PollScheduleUpdates = (function ($) {
 	}
 
 
-	function _subscribeToMessageBroker() {
+	function _subscribeToMessageBroker(ajax) {
 		Teleopti.MyTimeWeb.Common.SubscribeToMessageBroker({
 			successCallback: _resetInterval,
 			domainType: "IScheduleChangedInDefaultScenario",
 			page: "Teleopti.MyTimeWeb.PollSchedueUpdates"
-		});
+		}, ajax);
 	}
 
 	function _clearInterval() {
@@ -116,7 +116,7 @@ Teleopti.MyTimeWeb.PollScheduleUpdates = (function ($) {
 		var noticeListeningStartDate = moment(new Date(new Date().getTeleoptiTime())).add('hours', -1).toDate();
 
 		_setUpInterval();
-		_subscribeToMessageBroker();
+		_subscribeToMessageBroker(ajax);
 	}
 
 	function _destroy() {

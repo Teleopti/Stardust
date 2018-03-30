@@ -44,7 +44,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		return dateStr;
 	};
 
-	function asmViewModel(yesterday) {
+	function asmViewModel(yesterday, enableIntervalUpdate) {
 		var self = this;
 		self.intervalPointer = null;
 
@@ -71,9 +71,12 @@ Teleopti.MyTimeWeb.Asm = (function () {
 					$('.asm-outer-canvas').show();
 					userTimeZoneMinuteOffset = data.UserTimeZoneMinuteOffset;
 					setCurrentTime();
-					self.intervalPointer = setInterval(function () {
-						setCurrentTime();
-					}, 1000 * refreshSeconds);
+
+					if(enableIntervalUpdate) {
+						self.intervalPointer = setInterval(function () {
+							setCurrentTime();
+						}, 1000 * refreshSeconds);
+					}
 				}
 			});
 		};
@@ -104,7 +107,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 			self.nextLayerString(nextLayerDesc);
 		});
 
-		self.now = ko.observable(moment(new Date().getTeleoptiTime()));
+		self.now = ko.observable(moment(new Date().getTeleoptiTimeInUserTimezone()));
 		self.yesterday = ko.observable(yesterday);
 		self.unreadMessageCount = ko.observable(0);
 		self.canvasPosition = ko.computed(function () {
@@ -114,8 +117,10 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		});
 
 		self.now.subscribe(function (currentMs) {
-			var yesterdayPlus2Days = moment(new Date(self.yesterday().getTime())).add('days', 2).toDate();
-			if (currentMs > yesterdayPlus2Days.getTime()) {
+			var yesterdayPlus2Days = moment(new Date(self.yesterday().getTime())).add('days', 2);
+			var nowString = currentMs.year() + '-' + (currentMs.month() + 1) + '-' + currentMs.date() + ' '+ currentMs.hour() + ':' + currentMs.minute() + ':' + currentMs.second();
+
+			if (moment(nowString) > yesterdayPlus2Days) {
 				var todayMinus1 = moment(new Date(currentMs)).add('days', -1).startOf('day').toDate();
 				self.yesterday(todayMinus1);
 			}
@@ -170,7 +175,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		});
 	}
 
-	function _showAsm() {
+	function _showAsm(enableIntervalUpdate) {
 		_setFixedElementAttributes();
 
 		if (navigator.userAgent.toLowerCase().indexOf('chrome') > -1) {
@@ -182,7 +187,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		}
 
 		var yesterDayFromNow = moment(new Date(new Date().getTeleoptiTimeInUserTimezone())).add('days', -1).startOf('day').toDate();
-		vm = new asmViewModel(yesterDayFromNow);
+		vm = new asmViewModel(yesterDayFromNow, enableIntervalUpdate);
 		var elementToBind = $('.asm-outer-canvas')[0];
 		ko.applyBindings(vm, elementToBind);
 		vm.loadViewModel();
@@ -260,10 +265,10 @@ Teleopti.MyTimeWeb.Asm = (function () {
 	}
 
 	return {
-		ShowAsm: function (settings) {
+		ShowAsm: function (settings, enableIntervalUpdate) {
 			Teleopti.MyTimeWeb.Common.Init(settings, ajax);
 			_settings = settings;
-			_showAsm();
+			_showAsm(enableIntervalUpdate);
 			_startPollingToAvoidLogOut();
 		},
 		ListenForScheduleChanges: _listenForScheduleChanges,

@@ -120,8 +120,8 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 		});
 	};
 
-	function _subscribeToMessageBroker(options) {
-		_ajax = _ajax || new Teleopti.MyTimeWeb.Ajax();
+	function _subscribeToMessageBroker(options, ajax) {
+		_ajax = ajax || _ajax || new Teleopti.MyTimeWeb.Ajax();
 
 		if (_userData == null) {
 			var onSuccessCallback = function (data) {

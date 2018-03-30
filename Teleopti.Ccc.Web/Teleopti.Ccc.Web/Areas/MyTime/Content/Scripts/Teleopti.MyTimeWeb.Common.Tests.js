@@ -18,6 +18,10 @@ $(document).ready(function () {
 
 	test("should throw error when there is no initialization before get toggle info", function () {
 		try {
+			//Extra step to reset _settings cause Asm will init it 
+			//and the tests run order is not ensured.
+			Teleopti.MyTimeWeb.Common.Init({baseUrl: undefined}, null);
+
 			Teleopti.MyTimeWeb.Common.IsToggleEnabled("my_toggle");
 
 			// To fix the problem "Expected at least one assertion"
