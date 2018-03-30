@@ -17,19 +17,19 @@ $(document).ready(function() {
 		fakeDefaultStartTimeFromBackend = {
 			"IsShiftStartTime": false,
 			"IsShiftEndTime": false,
-			"DefaultStartTime":"\/Date(1516870800000)\/"
+			"DefaultStartTimeString":"2018-01-25 10:00"
 		},
 		hasFetchDefaultStartTime = false,
 		dateOnlyFormat = Teleopti.MyTimeWeb.Common.Constants.serviceDateTimeFormat.dateOnly,
 		requestDate = moment().format(dateOnlyFormat),
-		toggleFnTemp, enabledTogglesList = [];
+		toggleFnTemp, tempFn1, tempFn2, enabledTogglesList = [];
 
 	module('Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel', {
 		setup: function() {
 			setup();
 		},
 		teardown: function () {
-			restoreToggleFn();
+			restoreFn();
 		}
 	});
 
@@ -39,6 +39,16 @@ $(document).ready(function() {
 		requestFormClosed = false;
 		addedOvertimeRequest = undefined;
 		hasFetchDefaultStartTime = false;
+
+		tempFn1 = Date.prototype.getTeleoptiTime;
+		Date.prototype.getTeleoptiTime = function() {
+			return new Date("2018-03-05T02:30:00Z").getTime();
+		};
+
+		tempFn2 = Date.prototype.getTeleoptiTimeInUserTimezone;
+		Date.prototype.getTeleoptiTimeInUserTimezone = function() {
+			return "2018-03-04";
+		};		
 
 		toggleFnTemp = Teleopti.MyTimeWeb.Common.IsToggleEnabled;
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(toggle) {
@@ -52,7 +62,10 @@ $(document).ready(function() {
 		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
 	}
 
-	function restoreToggleFn() {
+	function restoreFn() {
+		Date.prototype.getTeleoptiTime = tempFn1;
+		Date.prototype.getTeleoptiTimeInUserTimezone = tempFn2;
+
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = toggleFnTemp;
 	}
 
@@ -432,7 +445,7 @@ $(document).ready(function() {
 
 		var tomorrow = moment().add(1, 'days').hours(17).minutes(0);
 
-		fakeDefaultStartTimeFromBackend.DefaultStartTime = "/Date(" + tomorrow.unix() * 1000 + ")/";
+		fakeDefaultStartTimeFromBackend.DefaultStartTimeString = tomorrow.format('YYYY-MM-DD HH:mm');
 
 		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
 		var requestVm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, function(){}, fakeRequestDetailViewModel, null, false);
@@ -449,8 +462,7 @@ $(document).ready(function() {
 		enabledTogglesList = ['OvertimeRequestPeriodSetting_46417', 'MyTimeWeb_OvertimeRequestDefaultStartTime_47513'];
 
 		var tomorrow = moment().add(1, 'days').hours(17).minutes(0);
-
-		fakeDefaultStartTimeFromBackend.DefaultStartTime = "/Date(" + tomorrow.unix() * 1000 + ")/";
+		fakeDefaultStartTimeFromBackend.DefaultStartTimeString = tomorrow.format('YYYY-MM-DD HH:mm');
 
 		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
 		var requestVm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, function () { }, fakeRequestDetailViewModel, null, true, true);
@@ -505,7 +517,7 @@ $(document).ready(function() {
 		enabledTogglesList = ['OvertimeRequestPeriodSetting_46417', 'MyTimeWeb_OvertimeRequestDefaultStartTime_47513'];
 
 		var tomorrow = moment().add(1, 'days').hours(17).minutes(0);
-		fakeDefaultStartTimeFromBackend.DefaultStartTime = "/Date(" + tomorrow.unix() * 1000 + ")/";
+		fakeDefaultStartTimeFromBackend.DefaultStartTimeString = tomorrow.format('YYYY-MM-DD HH:mm');
 
 
 		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
@@ -522,7 +534,7 @@ $(document).ready(function() {
 		enabledTogglesList = ['OvertimeRequestPeriodSetting_46417', 'MyTimeWeb_OvertimeRequestDefaultStartTime_47513'];
 
 		var tomorrow = moment().add(1, 'days').hours(17).minutes(0);
-		fakeDefaultStartTimeFromBackend.DefaultStartTime = "/Date(" + tomorrow.unix() * 1000 + ")/";
+		fakeDefaultStartTimeFromBackend.DefaultStartTimeString = tomorrow.format('YYYY-MM-DD HH:mm');
 		fakeDefaultStartTimeFromBackend.IsShiftStartTime = true;
 		fakeDefaultStartTimeFromBackend.IsShiftEndTime = false;
 
@@ -547,7 +559,7 @@ $(document).ready(function() {
 		enabledTogglesList = ['OvertimeRequestPeriodSetting_46417', 'MyTimeWeb_OvertimeRequestDefaultStartTime_47513'];
 
 		var tomorrow = moment().add(1, 'days').hours(7).minutes(0);
-		fakeDefaultStartTimeFromBackend.DefaultStartTime = "/Date(" + tomorrow.unix() * 1000 + ")/";
+		fakeDefaultStartTimeFromBackend.DefaultStartTimeString = tomorrow.format('YYYY-MM-DD HH:mm');
 		fakeDefaultStartTimeFromBackend.IsShiftStartTime = false;
 		fakeDefaultStartTimeFromBackend.IsShiftEndTime = true;
 
@@ -568,7 +580,7 @@ $(document).ready(function() {
 		enabledTogglesList = ['OvertimeRequestPeriodSetting_46417', 'MyTimeWeb_OvertimeRequestDefaultStartTime_47513'];
 
 		var tomorrow = moment().add(1, 'days').hours(7).minutes(0);
-		fakeDefaultStartTimeFromBackend.DefaultStartTime = "/Date(" + tomorrow.unix() * 1000 + ")/";
+		fakeDefaultStartTimeFromBackend.DefaultStartTimeString = tomorrow.format('YYYY-MM-DD HH:mm');
 		fakeDefaultStartTimeFromBackend.IsShiftStartTime = true;
 		fakeDefaultStartTimeFromBackend.IsShiftEndTime = false;
 
@@ -592,7 +604,7 @@ $(document).ready(function() {
 		enabledTogglesList = ['OvertimeRequestPeriodSetting_46417', 'MyTimeWeb_OvertimeRequestDefaultStartTime_47513'];
 
 		var tomorrow = moment('2018-01-31').add(1, 'days').hours(7).minutes(0);
-		fakeDefaultStartTimeFromBackend.DefaultStartTime = "/Date(" + tomorrow.unix() * 1000 + ")/";
+		fakeDefaultStartTimeFromBackend.DefaultStartTimeString = tomorrow.format('YYYY-MM-DD HH:mm');
 		fakeDefaultStartTimeFromBackend.IsShiftStartTime = true;
 		fakeDefaultStartTimeFromBackend.IsShiftEndTime = false;
 

@@ -185,15 +185,25 @@ $(document).ready(function () {
 	});
 
 	test("should increase request count after creating an overtime request", function () {
+		var tempTogglFn = Teleopti.MyTimeWeb.Common.IsToggleEnabled 
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
 			if (x === "MyTimeWeb_OvertimeRequest_44558") return true;
 			return false;
 		};
 
+		var tempFn1 = Date.prototype.getTeleoptiTime;
+		Date.prototype.getTeleoptiTime = function() {
+			return new Date("2018-03-05T02:30:00Z").getTime();
+		};
+
+		var tempFn2 = Date.prototype.getTeleoptiTimeInUserTimezone;
+		Date.prototype.getTeleoptiTimeInUserTimezone = function() {
+			return "2018-03-04";
+		};
 
 		Teleopti.MyTimeWeb.UserInfo.WhenLoaded = function (callback) {
 			callback({ WeekStart: 1 });
-		}
+		};
 
 		var requestDate = moment().format(Teleopti.MyTimeWeb.Common.Constants.serviceDateTimeFormat.dateOnly);
 		var responseData = {}
@@ -237,5 +247,10 @@ $(document).ready(function () {
 		overtimeRequestViewModel.AddRequest();
 
 		equal(scheduleDayViewModel.requestsCount(), 1);
+
+		Date.prototype.getTeleoptiTime = tempFn1;
+		Date.prototype.getTeleoptiTimeInUserTimezone = tempFn2;
+
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = tempTogglFn;
 	});
 });

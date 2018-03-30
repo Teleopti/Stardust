@@ -188,11 +188,10 @@
 	}
 
 	function updateDateFromAndStartTime(startDateTimeData) {
-		if(!startDateTimeData || !startDateTimeData.DefaultStartTime)
+		if(!startDateTimeData || !startDateTimeData.DefaultStartTimeString)
 			return;
 
-		var datetime = new Date(parseInt(startDateTimeData.DefaultStartTime.replace(/\/Date\((-?\d+)\)\//, '$1')));
-		defaultStartDateTime = moment(datetime);
+		defaultStartDateTime = moment(startDateTimeData.DefaultStartTimeString);
 		isShiftStartTime = startDateTimeData.IsShiftStartTime;
 
 		if (defaultStartDateTime.format('YYYY-MM-DD') !== self.DateFrom().format('YYYY-MM-DD')) {
