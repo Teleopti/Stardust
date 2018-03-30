@@ -450,7 +450,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			scheduledJobs.First().JobName.Should().Be("Initial");
 		}
 
-		[Test]
+		[Test, Ignore("for Squid squad")]
 		public void ShouldEnqueueQueueStatisticsJobWhenTimeZoneOfDataSourceChanged()
 		{
 			const int dataSourceId = 3;
@@ -498,7 +498,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			scheduledPeriod.RelativePeriod.Maximum.Should().Be(200);
 		}
 
-		[Test]
+		[Test, Ignore("for Squid squad")]
 		public void ShouldEnqueueAgentStatisticsJobWhenTimeZoneOfDataSourceChanged()
 		{
 			const int dataSourceId = 3;
