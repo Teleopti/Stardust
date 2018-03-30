@@ -33,6 +33,9 @@
 	  </component>
 						
 	<property name="GamificationSettingRuleSet"
+				not-null="true" />	
+	
+	<property name="RollingPeriodSet"
 				not-null="true" />
 
 	<property name="AnsweredCallsBadgeEnabled"

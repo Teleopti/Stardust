@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.Domain.Common
 	{
 		private Description _description;
 		private GamificationSettingRuleSet _gamificationSettingRuleSet;
+		private GamificationRollingPeriodSet _rollingPeriodSet;
 
 		private bool _answeredCallsBadgeEnabled;
 		private bool _aHTBadgeEnabled;
@@ -48,6 +49,7 @@ namespace Teleopti.Ccc.Domain.Common
         public GamificationSetting(string name) : this()
         {
 			_gamificationSettingRuleSet = GamificationSettingRuleSet.RuleWithDifferentThreshold;
+			_rollingPeriodSet = GamificationRollingPeriodSet.OnGoing;
             _description = new Description(name);
 		}
 		
@@ -150,6 +152,12 @@ namespace Teleopti.Ccc.Domain.Common
 		{
 			get => _goldToSilverBadgeRate;
 			set => _goldToSilverBadgeRate = value;
+		}
+
+		public virtual GamificationRollingPeriodSet RollingPeriodSet
+		{
+			get => _rollingPeriodSet;
+			set => _rollingPeriodSet = value;
 		}
 
 		public virtual bool AnsweredCallsBadgeEnabled

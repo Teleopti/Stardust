@@ -14,4 +14,11 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// </summary>
 		RuleWithDifferentThreshold = 1,
 	}
+
+	public enum GamificationRollingPeriodSet
+	{
+		OnGoing = 0,
+		Weekly,
+		Monthly
+	}
 }

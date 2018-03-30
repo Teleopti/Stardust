@@ -204,6 +204,12 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
 			return _gamificationSettingPersister.PersistRuleChange(input);
 		}
 
+		[HttpPost, Route("api/Gamification/ModifyRollingPeriod"), UnitOfWork]
+		public virtual GamificationSettingViewModel GamificationModifyRollingPeriod([FromBody]GamificationModifyRollingPeriodForm input)
+		{
+			return _gamificationSettingPersister.PersistRollingPeriodChange(input);
+		}
+
 		[HttpPost, Route("api/Gamification/ModifyAnsweredCalls"), UnitOfWork]
 		public virtual GamificationAnsweredCallsThresholdViewModel GamificationAnsweredCalls([FromBody]GamificationAnsweredCallsThresholdViewModel input)
 		{

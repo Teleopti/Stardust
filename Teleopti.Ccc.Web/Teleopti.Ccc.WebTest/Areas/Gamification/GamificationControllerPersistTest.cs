@@ -573,6 +573,24 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification
 		}
 
 		[Test]
+		public void ShouldPersistGamificationRollingPeriodChange()
+		{
+			var expectedResult = GamificationRollingPeriodSet.Monthly;
+
+			var gamificationSetting = createDefaultGamificationSetting();
+			GamificationSettingRepository.Add(gamificationSetting);
+
+			var result = Target.GamificationModifyRollingPeriod(new GamificationModifyRollingPeriodForm
+			{
+				GamificationSettingId = gamificationSetting.Id.Value,
+				RollingPeriodSet = expectedResult
+			});
+
+			result.Id.Should().Be.EqualTo(gamificationSetting.Id);
+			result.RollingPeriodSet.Should().Be.EqualTo(expectedResult);
+		}
+
+		[Test]
 		public void ShouldReturnNullWhenCannotFindGamificationSettingForPersistRuleChange()
 		{
 			var result = Target.GamificationChangeRule(new GamificationChangeRuleForm

@@ -1,10 +1,6 @@
 ﻿using NUnit.Framework;
 using SharpTestsEx;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
@@ -155,6 +151,15 @@ namespace Teleopti.Ccc.WebTest.Core.Gamification
 		}
 
 		[Test]
+		public void ShouldPersistRollingPeriodChange()
+		{
+			var id = createGamificationSettingWithId();
+			Target.PersistRollingPeriodChange(new GamificationModifyRollingPeriodForm { GamificationSettingId = id, RollingPeriodSet = GamificationRollingPeriodSet.Monthly });
+			var setting = GamificationSettingRepository.Get(id);
+			setting.RollingPeriodSet.Should().Be.EqualTo(GamificationRollingPeriodSet.Monthly);
+		}
+
+		[Test]
 		public void ShouldPersistAnsweredCallsThreshold()
 		{
 			var id = createGamificationSettingWithId();
@@ -269,6 +274,7 @@ namespace Teleopti.Ccc.WebTest.Core.Gamification
 			var id = Guid.NewGuid();
 			var aSetting = new GamificationSetting(description)
 			{
+				RollingPeriodSet = GamificationRollingPeriodSet.Weekly,
 				GamificationSettingRuleSet = GamificationSettingRuleSet.RuleWithDifferentThreshold,
 				AnsweredCallsBadgeEnabled = false,
 				AHTBadgeEnabled = false,

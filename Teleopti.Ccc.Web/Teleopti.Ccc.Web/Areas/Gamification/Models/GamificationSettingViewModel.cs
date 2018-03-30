@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Models
 		public string Name { get; set; }
 		public string UpdatedBy { get; set; }
 		public DateTime? UpdatedOn { get; set; }
+		public GamificationRollingPeriodSet RollingPeriodSet { get; set; }
 		public GamificationSettingRuleSet GamificationSettingRuleSet { get; set; }
 		public bool AnsweredCallsBadgeEnabled { get; set; }
 		public bool AHTBadgeEnabled { get; set; }
@@ -74,6 +75,12 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Models
 	{
 		public Guid GamificationSettingId;
 		public GamificationSettingRuleSet Rule;
+	}
+
+	public class GamificationModifyRollingPeriodForm
+	{
+		public Guid GamificationSettingId;
+		public GamificationRollingPeriodSet RollingPeriodSet;
 	}
 
 	public class TeamGamificationSettingViewModel

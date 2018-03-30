@@ -214,6 +214,14 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 			return _mapper.Map(gamificationSetting);
 		}
 
+		public GamificationSettingViewModel PersistRollingPeriodChange(GamificationModifyRollingPeriodForm input)
+		{
+			var gamificationSetting = getGamificationSetting(input.GamificationSettingId);
+			if (gamificationSetting == null) return null;
+			gamificationSetting.RollingPeriodSet = input.RollingPeriodSet;
+			return _mapper.Map(gamificationSetting);
+		}
+
 		public GamificationBadgeConversRateViewModel PersistGoldToSilverRate(GamificationBadgeConversRateViewModel input)
 		{
 			var gamificationSetting = getGamificationSetting(input.GamificationSettingId);

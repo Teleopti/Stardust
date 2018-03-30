@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 
 		int SilverToBronzeBadgeRate { get; set; }
 		int GoldToSilverBadgeRate { get; set; }
+		GamificationRollingPeriodSet RollingPeriodSet { get; set; }
 
 		void AddBadgeSetting(IBadgeSetting newBadgeSetting);
 		IEnumerable<BadgeTypeInfo> EnabledBadgeTypes();

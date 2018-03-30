@@ -43,6 +43,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Mapping
 				Name = setting.Description.Name,
 				UpdatedBy = setting.UpdatedBy?.Name.ToString() ?? string.Empty,
 				UpdatedOn = setting.UpdatedOn,
+				RollingPeriodSet = setting.RollingPeriodSet,
 				GamificationSettingRuleSet = setting.GamificationSettingRuleSet,
 				ExternalBadgeSettings = externalBadgeSetting,
 

@@ -155,6 +155,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification
 			return new GamificationSetting("Default Gamification Setting")
 			{
 				GamificationSettingRuleSet = GamificationSettingRuleSet.RuleWithDifferentThreshold,
+				RollingPeriodSet = GamificationRollingPeriodSet.OnGoing,
 				AnsweredCallsBadgeEnabled = true,
 				AHTBadgeEnabled = false,
 				AdherenceBadgeEnabled = true,
@@ -183,6 +184,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification
 		{
 			Assert.AreEqual(rawSetting.Description.Name, vm.Name);
 			Assert.AreEqual(rawSetting.GamificationSettingRuleSet, vm.GamificationSettingRuleSet);
+			Assert.AreEqual(rawSetting.RollingPeriodSet, vm.RollingPeriodSet);
 			Assert.AreEqual(rawSetting.AnsweredCallsBadgeEnabled, vm.AnsweredCallsBadgeEnabled);
 			Assert.AreEqual(rawSetting.AHTBadgeEnabled, vm.AHTBadgeEnabled);
 			Assert.AreEqual(rawSetting.AdherenceBadgeEnabled, vm.AdherenceBadgeEnabled);
