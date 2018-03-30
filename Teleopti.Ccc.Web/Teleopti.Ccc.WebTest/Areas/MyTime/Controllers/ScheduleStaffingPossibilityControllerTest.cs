@@ -736,6 +736,64 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
+		[Toggle(Toggles.OvertimeRequestAtLeastOneCriticalUnderStaffedSkill_74944)]
+		[Toggle(Toggles.OvertimeRequestPeriodSkillTypeSetting_47290)]
+		public void ShouldMergePeriodsWithSameSkillType()
+		{
+			var person = User.CurrentUser();
+
+			var phoneSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony).WithId();
+			SkillTypeRepository.Add(phoneSkillType);
+
+			var chatSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Chat), ForecastSource.Chat).WithId();
+			SkillTypeRepository.Add(chatSkillType);
+
+			var workFlowControlSet = new WorkflowControlSet();
+			workFlowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod
+			{
+				BetweenDays = new MinMax<int>(0, 7),
+				SkillType = phoneSkillType,
+				AutoGrantType = OvertimeRequestAutoGrantType.No
+			});
+			workFlowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod
+			{
+				BetweenDays = new MinMax<int>(1, 4),
+				SkillType = phoneSkillType,
+				AutoGrantType = OvertimeRequestAutoGrantType.Deny
+			});
+			workFlowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod
+			{
+				BetweenDays = new MinMax<int>(0, 48),
+				SkillType = chatSkillType,
+				AutoGrantType = OvertimeRequestAutoGrantType.No
+			});
+			person.WorkflowControlSet = workFlowControlSet;
+			
+			var activity1 = createActivity();
+			var channelSupportSkill = createSkill("channelSupportCriticalUnderStaffedSkill");
+			channelSupportSkill.SkillType = phoneSkillType;
+			var personSkill1 = createPersonSkill(activity1, channelSupportSkill);
+			setupIntradayStaffingForSkill(channelSupportSkill, new double?[] { 10d, 10d }, new double?[] { 5d, 5d });
+
+			var activity2 = createActivity();
+			var webChatSkill = createSkill("webChatSkill not cricical understaffed at first");
+			webChatSkill.SkillType = chatSkillType;
+			var personSkill2 = createPersonSkill(activity2, webChatSkill);
+			setupIntradayStaffingForSkill(webChatSkill, new double?[] { 10d, 10d }, new double?[] { 15d, 5d});
+
+			addPersonSkillsToPersonPeriod(personSkill1, personSkill2);
+
+			createAssignment(person, activity1, activity2);
+
+			var possibilities = getPossibilityViewModels(null, StaffingPossiblityType.Overtime)
+				.Where(d => d.Date == Now.ServerDate_DontUse().AddDays(1).ToFixedClientDateOnlyFormat()).ToList();
+			Assert.AreEqual(2, possibilities.Count);
+			Assert.AreEqual(0, possibilities.ElementAt(0).Possibility);
+			Assert.AreEqual(1, possibilities.ElementAt(1).Possibility);
+		}
+
+
+		[Test]
 		public void ShouldGetPossibilitiesForOvertimeWithDayOff()
 		{
 			setupWorkFlowControlSet();

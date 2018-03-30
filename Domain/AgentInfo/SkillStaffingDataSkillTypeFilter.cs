@@ -29,20 +29,21 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			var filteredSkillStaffingDatas = new List<SkillStaffingData>();
 			foreach (var skillStaffingDataGroup in skillStaffingDataGroups)
 			{
-				var overtimeRequestOpenPeriods = person.WorkflowControlSet.OvertimeRequestOpenPeriods.Where(o =>
-					!isDeniedPeriod(o) && isPeriodMatched(o, person, skillStaffingDataGroup.Key.ToDateOnlyPeriod()));
+				var overtimeRequestOpenPeriodGroups =
+					person.WorkflowControlSet.OvertimeRequestOpenPeriods
+						.Where(x =>isPeriodMatched(x, person, skillStaffingDataGroup.Key.ToDateOnlyPeriod()))
+						.GroupBy(o => o.SkillType ?? phoneSkillType);
 
-				var skillTypeNames = overtimeRequestOpenPeriods.Select(o => (o.SkillType ?? phoneSkillType).Description.Name);
+				var mergedOvertimeRequestOpenPeriods = overtimeRequestOpenPeriodGroups.Select(overtimeRequestOpenPeriodGroup => 
+														new OvertimeRequestOpenPeriodMerger().Merge(overtimeRequestOpenPeriodGroup))
+														.Where(mergedOpenPeriod => mergedOpenPeriod.AutoGrantType != OvertimeRequestAutoGrantType.Deny);
+
+				var skillTypeNames = mergedOvertimeRequestOpenPeriods.Select(o => (o.SkillType ?? phoneSkillType).Description.Name);
 
 				filteredSkillStaffingDatas.AddRange(
 					skillStaffingDataGroup.Where(x => skillTypeNames.Contains(x.Skill.SkillType.Description.Name)));
 			}
 			return filteredSkillStaffingDatas;
-		}
-
-		private bool isDeniedPeriod(IOvertimeRequestOpenPeriod overtimeRequestOpenPeriod)
-		{
-			return overtimeRequestOpenPeriod.AutoGrantType == OvertimeRequestAutoGrantType.Deny;
 		}
 
 		private bool isPeriodMatched(IOvertimeRequestOpenPeriod overtimeRequestOpenPeriod, IPerson person,
