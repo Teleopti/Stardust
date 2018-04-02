@@ -36,6 +36,7 @@
 				ctrl.ruleSet = data.GamificationSettingRuleSet;
 				ctrl.silverRate = data.SilverToBronzeBadgeRate;
 				ctrl.goldRate = data.GoldToSilverBadgeRate;
+				ctrl.RollingPeriod = data.RollingPeriodSet;
 				ctrl.builtinMeasureConfigs = makeBuiltinMeasureConfigs(data);
 				ctrl.externalMeasureConfigs = makeExternalMeasureConfigs(data);
 
@@ -164,6 +165,17 @@
 				numOfEnabledMeasures++;
 			});
 		};
+
+		ctrl.updateRollingPeriodSet = function () {
+			dataService.saveData('RollingPeriodSet', {
+				GamificationSettingId: ctrl.id,
+				RollingPeriodSet: ctrl.RollingPeriod
+			}).then(function () {
+				$log.log('updated rolling period successfully');
+			}, function () {
+				$log.log('failed to update rolling period')
+			});
+		}
 
 		ctrl.updateRuleSet = function () {
 			dataService.saveData('ModifyChangeRule', {

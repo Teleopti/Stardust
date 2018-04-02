@@ -107,6 +107,10 @@
 		id: 'ExternalBadgeSettingEnabled',
 		url: '../api/Gamification/Update/ExternalBadgeSettingEnabled',
 		method: 'post'
+	}, {
+		id: 'RollingPeriodSet',
+		url: '../api/Gamification/ModifyRollingPeriod',
+		method: 'post'
 	}];
 
 	function GamificationSettingService($http, $q) {

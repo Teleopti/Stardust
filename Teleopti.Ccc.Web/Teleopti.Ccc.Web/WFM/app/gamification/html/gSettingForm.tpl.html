@@ -9,7 +9,14 @@
 				<div ng-if="form.settingname.$error.maxlength">{{'TextIsTooLong'|translate}}</div>
 			</div>
 		</div>
-
+		<div class="form-input-wrap">
+			<label>{{'CampaignPeriod'|translate}}</label>
+			<md-select ng-model="$ctrl.RollingPeriod" aria-label="Campaign Period" ng-change="$ctrl.updateRollingPeriodSet()">
+				<md-option value="0">{{"OnGoing"|translate}}</md-option>
+				<md-option value="1">{{"Weekly"|translate}}</md-option>
+				<md-option value="2">{{"Monthly"|translate}}</md-option>
+			</md-select>
+		</div>
 		<div class="form-input-wrap">
 			<label>{{'Rule'|translate}}</label>
 			<md-select ng-model="$ctrl.ruleSet" aria-label="Select Rule Set" ng-change="$ctrl.updateRuleSet()">
