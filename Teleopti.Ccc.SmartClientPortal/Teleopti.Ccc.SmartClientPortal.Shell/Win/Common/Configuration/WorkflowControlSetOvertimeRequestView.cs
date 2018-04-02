@@ -143,8 +143,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 		private void setOvertimeRequestVisibility()
 		{
-			if (!_toggleManager.IsEnabled(Toggles.Wfm_Requests_OvertimeRequestHandling_45177) 
-				|| _toggleManager.IsEnabled(Toggles.OvertimeRequestPeriodSetting_46417))
+			if (_toggleManager.IsEnabled(Toggles.OvertimeRequestPeriodSetting_46417))
 			{
 				checkBoxAdvAutoGrantOvertimeRequest.Visible = false;
 				tableLayoutPanelETOTRequest.RowStyles[tableLayoutPanelETOTRequest.Controls.IndexOf(checkBoxAdvAutoGrantOvertimeRequest)].Height = 0;

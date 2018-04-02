@@ -109,10 +109,8 @@
 		}
 
 		function getSelectedRequestIds() {
-			if (toggleSvc.Wfm_Requests_OvertimeRequestHandling_45177) {
-				if($state.current.name.indexOf(REQUESTS_TAB_NAMES.overtime) > -1){
-					return requestCommandParamsHolder.getOvertimeSelectedRequestIds();
-				}
+			if($state.current.name.indexOf(REQUESTS_TAB_NAMES.overtime) > -1){
+				return requestCommandParamsHolder.getOvertimeSelectedRequestIds();
 			}
 
 			return requestCommandParamsHolder ?
@@ -312,7 +310,7 @@
 		}
 
 		function isCommandEnabledWithoutShiftTradeView(commandName) {
-			if (toggleSvc.Wfm_Requests_OvertimeRequestHandling_45177 && $state.current.name.split('.').length == 2) {
+			if ($state.current.name.split('.').length == 2) {
 				return requestsCommandsConfigurationsSvc.configurations[$state.current.name.split('.')[1]][commandName];
 			}
 
@@ -320,7 +318,7 @@
 		}
 
 		function isCommandEnabled(commandName) {
-			if (toggleSvc.Wfm_Requests_OvertimeRequestHandling_45177 && $state.current.name.split('.').length == 2) {
+			if ($state.current.name.split('.').length == 2) {
 				return requestsCommandsConfigurationsSvc.configurations[$state.current.name.split('.')[1]][commandName];
 			}
 

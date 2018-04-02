@@ -63,7 +63,6 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 				return fakeState;
 			});
 		});
-		toggles.Wfm_Requests_OvertimeRequestHandling_45177 = false;
 	});
 
 	beforeEach(inject(function (_$rootScope_, _$controller_, _$compile_, _requestCommandParamsHolder_, _$q_) {
@@ -73,6 +72,10 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 		requestCommandParamsHolder = _requestCommandParamsHolder_;
 		$q = _$q_;
 	}));
+
+	afterEach(function(){
+		fakeState.current.name = '';
+	});
 
 	it('approve requests success, should notify the result', function () {
 		var test = setUpTarget();
@@ -135,7 +138,6 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 	});
 
 	it('should hide approve base on budget command in overtime tab', function () {
-		toggles.Wfm_Requests_OvertimeRequestHandling_45177 = true;
 		fakeState.current.name = 'requests.overtime';
 
 		var test = setUpTarget();
@@ -275,7 +277,6 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 	});
 
 	it('should hide cancel command in overtime tab', function () {
-		toggles.Wfm_Requests_OvertimeRequestHandling_45177 = true;
 		fakeState.current.name = 'requests.overtime';
 
 		var test = setUpTarget();
@@ -288,7 +289,6 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 	});
 
 	it('should hide processWaitlistedRequests command in overtime tab', function () {
-		toggles.Wfm_Requests_OvertimeRequestHandling_45177 = true;
 		fakeState.current.name = 'requests.overtime';
 
 		var test = setUpTarget();
@@ -374,7 +374,6 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 	});
 
 	it('should hide reply command in overtime tab', function () {
-		toggles.Wfm_Requests_OvertimeRequestHandling_45177 = true;
 		fakeState.current.name = 'requests.overtime';
 
 		var test = setUpTarget();
@@ -499,7 +498,6 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 	});
 
 	it('should show siteopenhour command in overtime tab', function () {
-		toggles.Wfm_Requests_OvertimeRequestHandling_45177 = true;
 		fakeState.current.name = 'requests.overtime';
 
 		var test = setUpTarget();
@@ -517,7 +515,6 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 	});
 
 	it('should hide viewAllowance command in overtime tab', function () {
-		toggles.Wfm_Requests_OvertimeRequestHandling_45177 = true;
 		fakeState.current.name = 'requests.overtime';
 
 		var test = setUpTarget();

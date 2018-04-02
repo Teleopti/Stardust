@@ -90,8 +90,6 @@
 			});
 
 			it('should show correct selected overtime requests info with selected requests ids number', function() {
-				toggles.Wfm_Requests_OvertimeRequestHandling_45177 = true;
-
 				fakeState.current.name = REQUESTS_TAB_NAMES.overtime;
 
 				var test = setUpTarget(false);

@@ -90,7 +90,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			addOvertimeActivityCommand?.Period.Should().Be.EqualTo(requestPeriod);
 		}
 
-		[Toggle(Toggles.Wfm_Requests_OvertimeRequestHandling_45177)]
 		[Test]
 		public void ShouldAddActivityOfSkillWhenAutoGrantoIsOnAndApproved()
 		{
@@ -188,7 +187,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			addOvertimeActivityCommand?.Period.Should().Be.EqualTo(requestPeriod);
 		}
 
-		[Toggle(Toggles.Wfm_Requests_OvertimeRequestHandling_45177)]
 		[Test]
 		public void ShouldAddActivityOfTheFirstSkillWhenAutoGrantoIsOnAndApproved()
 		{
@@ -289,7 +287,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			addOvertimeActivityCommand?.Period.Should().Be.EqualTo(requestPeriod);
 		}
 
-		[Toggle(Toggles.Wfm_Requests_OvertimeRequestHandling_45177)]
 		[Test]  //This test makes no sence, there is only one activity and it is the same for both primary and secondary skill??
 		public void ShouldAddActivityOfPrimarySkillWhennAutoGrantoIsOnAndApproved() 
 		{
@@ -336,7 +333,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			addOvertimeActivityCommand?.Period.Should().Be.EqualTo(requestPeriod);
 		}
 
-		[Toggle(Toggles.Wfm_Requests_OvertimeRequestHandling_45177)]
 		[Test] 
 		public void ShouldAddActivityOfPrimarySkillWhenAutoGrantoIsOnAndApproved_ThisIsProbablyWhatYourAreTryingToDo()
 		{

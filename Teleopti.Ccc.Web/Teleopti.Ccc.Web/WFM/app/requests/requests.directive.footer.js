@@ -49,7 +49,7 @@
 		}
 
 		function showSelectedRequestsInfo() {
-			if (toggleSvc.Wfm_Requests_OvertimeRequestHandling_45177 && $state.current.name.indexOf(REQUESTS_TAB_NAMES.overtime) > -1) {
+			if ($state.current.name.indexOf(REQUESTS_TAB_NAMES.overtime) > -1) {
 					vm.selectedRequestsCount = requestCommandParamsHolder.getOvertimeSelectedRequestIds().length;
 			} else {
 				vm.selectedRequestsCount = requestCommandParamsHolder.getSelectedRequestsIds(vm.isShiftTradeViewActive).length;

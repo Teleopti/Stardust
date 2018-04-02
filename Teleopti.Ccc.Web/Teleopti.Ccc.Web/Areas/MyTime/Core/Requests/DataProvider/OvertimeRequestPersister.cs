@@ -68,7 +68,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider {
 
 		private bool getGlobalIsAutoGrant()
 		{
-			if (!_toggleManager.IsEnabled(Toggles.Wfm_Requests_OvertimeRequestHandling_45177)) return true;
 			var currentUser = _logonUser.CurrentUser();
 			if (currentUser.WorkflowControlSet == null) return true;
 

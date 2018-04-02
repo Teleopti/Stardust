@@ -85,7 +85,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldChangeStatusToPendingWhenPersistOvertimeRequest()
 		{
-			ToggleManager.Enable(Toggles.Wfm_Requests_OvertimeRequestHandling_45177);
 			_person.WorkflowControlSet = new WorkflowControlSet
 			{
 				AutoGrantOvertimeRequest = false
