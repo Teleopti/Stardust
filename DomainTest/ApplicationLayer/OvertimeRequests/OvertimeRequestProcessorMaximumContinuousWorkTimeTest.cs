@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -16,7 +15,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 	public partial class OvertimeRequestProcessorTest
 	{
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestMaxContinuousWorkTime_47964)]
 		public void ShouldApproveWhenOvertimeRequestMaximumContinuousWorkTimeIsDisabled()
 		{
 			setupPerson(8, 21);
@@ -37,7 +35,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestMaxContinuousWorkTime_47964)]
 		public void ShouldDenyWhenOvertimeRequestMaximumContinuousWorkTimeIsNull()
 		{
 			setupPerson(8, 21);
@@ -62,7 +59,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestMaxContinuousWorkTime_47964)]
 		public void ShouldPendingWhenOvertimeRequestMaximumContinuousWorkTimeFailOptionIsSendToAdmin()
 		{
 			setupPerson(8, 21);
@@ -90,7 +86,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestMaxContinuousWorkTime_47964)]
 		public void ShouldPendingWhenContinuousWorkTimeExceedsMaximumContinuousWorkTimeWithShiftBefore()
 		{
 			setupPerson(8, 21);
@@ -123,7 +118,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestMaxContinuousWorkTime_47964)]
 		public void ShouldDenyWhenContinuousWorkTimeExceedsMaximumContinuousWorkTimeWithShiftBefore()
 		{
 			setupPerson(8, 21);
@@ -154,7 +148,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestMaxContinuousWorkTime_47964)]
 		public void ShouldApproveWhenContinuousWorkTimeEqualsMaximumContinuousWorkTimeWithShiftBefore()
 		{
 			setupPerson(8, 21);
@@ -181,7 +174,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestMaxContinuousWorkTime_47964)]
 		public void ShouldApproveWhenContinuousWorkTimeLessThenMaximumContinuousWorkTimeOnFullDayAbsence()
 		{
 			setupPerson(8, 21);
@@ -208,7 +200,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestMaxContinuousWorkTime_47964)]
 		public void ShouldApproveWhenContinuousWorkTimeLessThenMaximumContinuousWorkTimeWithShiftContainingAbsenceBefore()
 		{
 			setupPerson(8, 21);
@@ -239,7 +230,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestMaxContinuousWorkTime_47964)]
 		public void ShouldApproveWhenContinuousWorkTimeLessThenMaximumContinuousWorkTimeOnDayOff()
 		{
 			setupPerson(8, 21);
@@ -266,7 +256,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestMaxContinuousWorkTime_47964)]
 		public void ShouldApproveWhenContinuousWorkTimeLessThenMaximumContinuousWorkTimeWithOvertimeBeforeOnDayOff()
 		{
 			setupPerson(8, 21);
@@ -294,7 +283,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestMaxContinuousWorkTime_47964)]
 		public void ShouldDenyWhenOvertimeExceedsMaximumContinuousWorkTimeOnEmptyDay()
 		{
 			setupPerson(8, 21);
@@ -325,7 +313,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestMaxContinuousWorkTime_47964)]
 		public void ShouldDenyWhenContinuousWorkTimeExceedsMaximumContinuousWorkTimeWithOvernightShiftBefore()
 		{
 			setupPerson(0, 24);
@@ -356,7 +343,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestMaxContinuousWorkTime_47964)]
 		public void ShouldDenyWhenContinuousWorkTimeExceedsMaximumContinuousWorkTimeWithShiftAfter()
 		{
 			setupPerson(8, 21);
@@ -387,7 +373,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestMaxContinuousWorkTime_47964)]
 		public void ShouldDenyWhenContinuousWorkTimeExceedsMaximumContinuousWorkTimeWithOvernightShiftAfter()
 		{
 			setupPerson(8, 21);
@@ -418,7 +403,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestMaxContinuousWorkTime_47964)]
 		public void ShouldDenyWhenContinuousWorkTimeExceedsMaximumContinuousWorkTimeWithOvernightOvertime()
 		{
 			setupPerson(0, 24);
@@ -449,7 +433,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestMaxContinuousWorkTime_47964)]
 		public void ShouldDenyWhenContinuousWorkTimeExceedsMaximumContinuousWorkTimeWithShiftBeforeAndAfter()
 		{
 			setupPerson(0, 24);
@@ -484,7 +467,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestMaxContinuousWorkTime_47964)]
 		public void ShouldDenyWhenRestTimeIsLessThanMinimumRestTimeWithMultipleActivitiesBeforeAndAfter()
 		{
 			setupPerson(8, 21);
@@ -525,7 +507,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestMaxContinuousWorkTime_47964)]
 		public void ShouldDenyWhenContinuousWorkTimeExceedsMaximumContinuousWorkTimeWithOvernightShiftBeforeAndAfter()
 		{
 			setupPerson(0, 24);
@@ -560,7 +541,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestMaxContinuousWorkTime_47964)]
 		public void ShouldApproveWhenRestTimeSatisfysMinimumRestTimeWithShiftBefore()
 		{
 			setupPerson(8, 21);
@@ -588,7 +568,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestMaxContinuousWorkTime_47964)]
 		public void ShouldApproveWhenRestTimeSatisfysMinimumRestTimeWithShiftAndLunchBefore()
 		{
 			setupPerson(8, 21);
@@ -619,7 +598,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestMaxContinuousWorkTime_47964)]
 		public void ShouldDenyWhenContinuousWorkTimeExceedsMaximumContinuousWorkTimeWithShiftAndLunchBefore()
 		{
 			setupPerson(8, 21);
@@ -659,7 +637,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestMaxContinuousWorkTime_47964)]
 		public void ShouldApproveWhenRestTimeSatisfysMinimumRestTimeWithShiftAndShortBreakBefore()
 		{
 			setupPerson(8, 21);
@@ -691,7 +668,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestMaxContinuousWorkTime_47964)]
 		public void ShouldDenyWhenContinuousWorkTimeExceedsMaximumContinuousWorkTimeWithShiftAndShortBreakBefore()
 		{
 			setupPerson(8, 21);
@@ -728,7 +704,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestMaxContinuousWorkTime_47964)]
 		public void ShouldDenyWhenRestTimeIsLessThanMinimumRestTimeWithShiftBefore()
 		{
 			setupPerson(8, 21);
@@ -760,7 +735,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestMaxContinuousWorkTime_47964)]
 		public void ShouldDenyWhenRestTimeIsLessThanMinimumRestTimeWithMultipleActivitiesBefore()
 		{
 			setupPerson(8, 21);
@@ -801,7 +775,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestMaxContinuousWorkTime_47964)]
 		public void ShouldDenyWhenRestTimeIsLessThanMinimumRestTimeWithOverNightShiftBefore()
 		{
 			setupPerson(8, 21);
@@ -840,7 +813,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestMaxContinuousWorkTime_47964)]
 		public void ShouldApproveWhenRestTimeSatisfysMinimumRestTimeWithShiftAfter()
 		{
 			setupPerson(8, 21);
@@ -868,7 +840,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestMaxContinuousWorkTime_47964)]
 		public void ShouldApproveWhenRestTimeSatisfysMinimumRestTimeWithShiftAndLunchAfter()
 		{
 			setupPerson(8, 21);
@@ -899,7 +870,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestMaxContinuousWorkTime_47964)]
 		public void ShouldApproveWhenRestTimeSatisfysMinimumRestTimeWithShiftAndShortBreakAfter()
 		{
 			setupPerson(8, 21);
@@ -930,7 +900,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestMaxContinuousWorkTime_47964)]
 		public void ShouldDenyWhenRestTimeIsLessThanMinimumRestTimeWithShiftAfter()
 		{
 			setupPerson(8, 21);
@@ -962,7 +931,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestMaxContinuousWorkTime_47964)]
 		public void ShouldDenyWhenRestTimeIsLessThanMinimumRestTimeWithMultipleActivitiesAfter()
 		{
 			setupPerson(8, 21);
@@ -1005,7 +973,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestMaxContinuousWorkTime_47964)]
 		public void ShouldDenyWhenRestTimeIsLessThanMinimumRestTimeWithOverNightShiftAfter()
 		{
 			setupPerson(8, 21);
