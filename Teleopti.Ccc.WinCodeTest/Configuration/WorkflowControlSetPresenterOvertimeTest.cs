@@ -66,7 +66,6 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		{
 			Toggles.Wfm_Staffing_StaffingReadModel49DaysStep2_45109,
 			Toggles.Wfm_Staffing_StaffingReadModel28DaysStep1_45109,
-			Toggles.OvertimeRequestPeriodSetting_46417
 		};
 
 		[Theory]
@@ -279,8 +278,6 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		[Test]
 		public void ShouldNotChangeDatePeriodWhenSetOvertimeRequestPeriodSkillType()
 		{
-			ToggleManager.Enable(Toggles.OvertimeRequestPeriodSetting_46417);
-
 			initializeWithDefaultWorkflowControlSet();
 			SkillTypeRepository.AddRange(_skillTypes);
 

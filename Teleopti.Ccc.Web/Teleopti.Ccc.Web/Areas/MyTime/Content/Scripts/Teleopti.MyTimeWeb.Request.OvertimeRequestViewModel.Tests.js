@@ -244,8 +244,7 @@ $(document).ready(function() {
 		equal(vm.ErrorMessage(), 'Missing duration');
 	});
 
-	test('should set PeriodEndDate according to available days when toggle OvertimeRequestPeriodSetting_46417 is on', function() {
-		enabledTogglesList = ['OvertimeRequestPeriodSetting_46417'];
+	test('should set PeriodEndDate according to available days', function() {
 
 		var vm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, function(data) {
 			addedOvertimeRequest = data;
@@ -441,7 +440,7 @@ $(document).ready(function() {
 	});
 
 	test('should use default start time from backend as default start date when UseDefaultStartTime toggle is toggled on', function() {
-		enabledTogglesList = ['OvertimeRequestPeriodSetting_46417', 'MyTimeWeb_OvertimeRequestDefaultStartTime_47513'];
+		enabledTogglesList = ['MyTimeWeb_OvertimeRequestDefaultStartTime_47513'];
 
 		var tomorrow = moment().add(1, 'days').hours(17).minutes(0);
 
@@ -459,7 +458,7 @@ $(document).ready(function() {
 	});
 
 	test('should not fetch default start time when viewing overtime request detail', function () {
-		enabledTogglesList = ['OvertimeRequestPeriodSetting_46417', 'MyTimeWeb_OvertimeRequestDefaultStartTime_47513'];
+		enabledTogglesList = ['MyTimeWeb_OvertimeRequestDefaultStartTime_47513'];
 
 		var tomorrow = moment().add(1, 'days').hours(17).minutes(0);
 		fakeDefaultStartTimeFromBackend.DefaultStartTimeString = tomorrow.format('YYYY-MM-DD HH:mm');
@@ -514,7 +513,7 @@ $(document).ready(function() {
 	});
 
 	test('should use selected day as default start time when UseDefaultStartTime toggle is toggled off', function() {
-		enabledTogglesList = ['OvertimeRequestPeriodSetting_46417', 'MyTimeWeb_OvertimeRequestDefaultStartTime_47513'];
+		enabledTogglesList = ['MyTimeWeb_OvertimeRequestDefaultStartTime_47513'];
 
 		var tomorrow = moment().add(1, 'days').hours(17).minutes(0);
 		fakeDefaultStartTimeFromBackend.DefaultStartTimeString = tomorrow.format('YYYY-MM-DD HH:mm');
@@ -531,7 +530,7 @@ $(document).ready(function() {
 	});
 
 	test('should use shift start time subtracting duration for default start time', function() {
-		enabledTogglesList = ['OvertimeRequestPeriodSetting_46417', 'MyTimeWeb_OvertimeRequestDefaultStartTime_47513'];
+		enabledTogglesList = ['MyTimeWeb_OvertimeRequestDefaultStartTime_47513'];
 
 		var tomorrow = moment().add(1, 'days').hours(17).minutes(0);
 		fakeDefaultStartTimeFromBackend.DefaultStartTimeString = tomorrow.format('YYYY-MM-DD HH:mm');
@@ -556,7 +555,7 @@ $(document).ready(function() {
 	});
 
 	test('should not subtract duration from shift end time when setting default start time', function() {
-		enabledTogglesList = ['OvertimeRequestPeriodSetting_46417', 'MyTimeWeb_OvertimeRequestDefaultStartTime_47513'];
+		enabledTogglesList = ['MyTimeWeb_OvertimeRequestDefaultStartTime_47513'];
 
 		var tomorrow = moment().add(1, 'days').hours(7).minutes(0);
 		fakeDefaultStartTimeFromBackend.DefaultStartTimeString = tomorrow.format('YYYY-MM-DD HH:mm');
@@ -577,7 +576,7 @@ $(document).ready(function() {
 	});
 
 	test('should re-calculate start time when changing duration', function() {
-		enabledTogglesList = ['OvertimeRequestPeriodSetting_46417', 'MyTimeWeb_OvertimeRequestDefaultStartTime_47513'];
+		enabledTogglesList = ['MyTimeWeb_OvertimeRequestDefaultStartTime_47513'];
 
 		var tomorrow = moment().add(1, 'days').hours(7).minutes(0);
 		fakeDefaultStartTimeFromBackend.DefaultStartTimeString = tomorrow.format('YYYY-MM-DD HH:mm');
@@ -601,7 +600,7 @@ $(document).ready(function() {
 	});
 
 	test('should not show UseDefaultStartTime toggle when viewing an overtime request', function () {
-		enabledTogglesList = ['OvertimeRequestPeriodSetting_46417', 'MyTimeWeb_OvertimeRequestDefaultStartTime_47513'];
+		enabledTogglesList = ['MyTimeWeb_OvertimeRequestDefaultStartTime_47513'];
 
 		var tomorrow = moment('2018-01-31').add(1, 'days').hours(7).minutes(0);
 		fakeDefaultStartTimeFromBackend.DefaultStartTimeString = tomorrow.format('YYYY-MM-DD HH:mm');

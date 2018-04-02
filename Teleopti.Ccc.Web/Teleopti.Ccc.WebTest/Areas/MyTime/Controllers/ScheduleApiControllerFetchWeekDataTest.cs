@@ -198,7 +198,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		[Toggle(Toggles.OvertimeRequestPeriodSetting_46417)]
 		[Toggle(Toggles.OvertimeRequestPeriodSkillTypeSetting_47290)]
 		public void ShouldReturnTrueForOvertimeProbabilityEnabledWhenMatchedSkillTypeIsNotDeny()
 		{

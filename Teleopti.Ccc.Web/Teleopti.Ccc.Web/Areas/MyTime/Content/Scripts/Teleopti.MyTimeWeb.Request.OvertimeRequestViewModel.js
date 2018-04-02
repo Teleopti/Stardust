@@ -360,9 +360,8 @@
 		self.CancelAddRequest = parentViewModel.CancelAddingNewRequest;
 		self.showUseDefaultStartTimeToggle(self.isDefaultStartTimeToggleEnabled);
 
-		if (Teleopti.MyTimeWeb.Common.IsToggleEnabled('OvertimeRequestPeriodSetting_46417')) {
-			setAvailableDays();
-		}
+		setAvailableDays();
+		
 		if (self.isDefaultStartTimeToggleEnabled && !disableGetDefaultStartTime) {
 			setDateFromSubscription();
 			setUseDefaultStartTimeToggleSubscription();

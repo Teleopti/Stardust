@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 	public partial class OvertimeRequestProcessorTest
 	{
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
 		public void ShouldDenyWhenThereIsNoOvertimeRequestOpenPeriod()
 		{
 			setupPerson(8, 21);
@@ -29,7 +28,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
 		public void ShouldPendingWhenAutoGrantOfOpenPeriodIsNo()
 		{
 			setupPerson(8, 21);
@@ -49,7 +47,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
 		public void ShouldApproveAndChangeUpdatedByToSystemUserWhenAutoGrantOfOpenPeriodIsYes()
 		{
 			PersonRepository.Add(PersonFactory.CreatePerson().WithId(SystemUser.Id));
@@ -72,7 +69,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
 		public void ShouldApproveWhenRequestPeriodIsWithinAnOpenPeriod()
 		{
 			setupPerson(8, 21);
@@ -92,7 +88,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
 		public void ShouldApproveWhenRequestPeriodIsWithinAllOpenPeriods()
 		{
 			setupPerson(8, 21);
@@ -118,7 +113,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
 		public void ShouldDenyWhenStaffingDataOfRequestPeriodIsNotAvailable()
 		{
 			setupPerson(8, 21);
@@ -139,7 +133,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
 		public void ShouldDenyWhenRequestPeriodIsOutsideAnOpenPeriod()
 		{
 			setupPerson(8, 21);
@@ -160,7 +153,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
 		public void ShouldDenyWhenRequestPeriodIsOutsideAllOpenPeriods()
 		{
 			setupPerson(8, 21);
@@ -186,7 +178,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
 		public void ShouldDenyWhenRequestPeriodIsWithinOpenPeriodWithLargerOrderIndexAndAutoGrantIsDeny()
 		{
 			setupPerson(8, 21);
@@ -221,7 +212,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
 		public void ShouldApproveWhenRequestPeriodIsWithinOpenPeriodWithLargerOrderIndexAndAutoGrantIsYes()
 		{
 			setupPerson(8, 21);
@@ -255,7 +245,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
 		public void ShouldDenyWhenRequestPeriodIsWithinRollingOpenPeriodWithLargerOrderIndexAndAutoGrantIsDeny()
 		{
 			setupPerson(8, 21);
@@ -290,7 +279,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
 		public void ShouldApproveWhenRequestPeriodIsWithinRollingOpenPeriodWithLargerOrderIndexAndAutoGrantIsYes()
 		{
 			setupPerson(8, 21);
@@ -324,7 +312,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
 		public void ShouldDenyWhenRequestPeriodEndDateIsNotInOpenPeriod()
 		{
 			setupPerson(8, 21);
@@ -345,7 +332,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
 		public void ShouldSuggestMultiplePeriodsExcludeDenyPeriods()
 		{
 			setupPerson(8, 21);
@@ -371,7 +357,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
 		public void ShouldSuggestMultiplePeriods()
 		{
 			setupPerson(8, 21);
@@ -397,7 +382,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
 		public void ShouldSuggestMultiplePeriodsNoEarlierThanToday()
 		{
 			setupPerson(8, 21);
@@ -423,7 +407,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
 		public void ShouldNotSuggestPeriodsWhenExpired()
 		{
 			setupPerson(8, 21);
@@ -444,7 +427,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSetting_46417)]
 		public void ShouldSuggestMergedPeriods()
 		{
 			setupPerson(8, 21);

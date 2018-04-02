@@ -111,7 +111,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[SetCulture("en-US")]
 		public void ShouldReProcessWhenRequestPeriodIsChanged()
 		{
-			ToggleManager.Enable(Toggles.OvertimeRequestPeriodSetting_46417);
 			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 8d);
 			var now = new DateOnly(_currentDateTime);
 			var workflowControlSet = new WorkflowControlSet();

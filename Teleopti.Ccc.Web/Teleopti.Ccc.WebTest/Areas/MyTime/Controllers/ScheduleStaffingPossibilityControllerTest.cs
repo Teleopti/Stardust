@@ -366,7 +366,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		[Toggle(Toggles.OvertimeRequestPeriodSetting_46417)]
 		[Toggle(Toggles.OvertimeRequestPeriodSkillTypeSetting_47290)]
 		public void ShouldNotGetPossibilitiesForOvertimeWhenOverstaffingAndNoSkillTypeIsMatched()
 		{
@@ -396,7 +395,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		[Toggle(Toggles.OvertimeRequestPeriodSetting_46417)]
 		[Toggle(Toggles.OvertimeRequestPeriodSkillTypeSetting_47290)]
 		public void ShouldGetFairPossibilitiesForOvertimeWhenOverstaffingAndSkillTypeIsMatched()
 		{
@@ -427,7 +425,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		[Toggle(Toggles.OvertimeRequestPeriodSetting_46417)]
 		[Toggle(Toggles.OvertimeRequestPeriodSkillTypeSetting_47290)]
 		public void ShouldGetFairPossibilitiesForOvertimeWhenOverstaffingAndSkillTypeIsNotSet()
 		{
@@ -458,7 +455,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		[Toggle(Toggles.OvertimeRequestPeriodSetting_46417)]
 		[Toggle(Toggles.OvertimeRequestPeriodSkillTypeSetting_47290)]
 		public void ShouldGetPossibilitiesForOvertimeBasedOnSkillTypeSetInOpenPeriod()
 		{
@@ -499,7 +495,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		[Toggle(Toggles.OvertimeRequestPeriodSetting_46417)]
 		[Toggle(Toggles.OvertimeRequestPeriodSkillTypeSetting_47290)]
 		public void ShouldGetPossibilitiesForOvertimeBasedOnSkillTypeOfEachDaySetInOpenPeriod()
 		{
@@ -556,7 +551,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		[Toggle(Toggles.OvertimeRequestPeriodSetting_46417)]
 		[Toggle(Toggles.OvertimeRequestPeriodSkillTypeSetting_47290)]
 		public void ShouldGetPossibilitiesForOvertimeBasedOnSkillTypeOfOneDaySetInOpenPeriod()
 		{
@@ -609,7 +603,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		[Toggle(Toggles.OvertimeRequestPeriodSetting_46417)]
 		[Toggle(Toggles.OvertimeRequestPeriodSkillTypeSetting_47290)]
 		public void ShouldNotGetPossibilitiesForOvertimeWhenOneOfThePeriodIsDeny()
 		{

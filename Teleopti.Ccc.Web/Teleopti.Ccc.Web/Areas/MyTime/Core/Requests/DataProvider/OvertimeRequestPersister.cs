@@ -47,20 +47,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider {
 				}
 				personRequest = _mapper.Map(form, personRequest);
 
-				if (_toggleManager.IsEnabled(Toggles.OvertimeRequestPeriodSetting_46417))
-					_overtimeRequestProcessor.Process(personRequest);
-				else
-					_overtimeRequestProcessor.CheckAndProcessDeny(personRequest);
+				
+				_overtimeRequestProcessor.Process(personRequest);
 			}
 			else
 			{
 				personRequest = _mapper.Map(form, null);
 				_personRequestRepository.Add(personRequest);
 
-				if (_toggleManager.IsEnabled(Toggles.OvertimeRequestPeriodSetting_46417))
-					_overtimeRequestProcessor.Process(personRequest);
-				else
-					_overtimeRequestProcessor.Process(personRequest, getGlobalIsAutoGrant());
+				_overtimeRequestProcessor.Process(personRequest);
 			}
 
 			return _requestsMapper.Map(personRequest);

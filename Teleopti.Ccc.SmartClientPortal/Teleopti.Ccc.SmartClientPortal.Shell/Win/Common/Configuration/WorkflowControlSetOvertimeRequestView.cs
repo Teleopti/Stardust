@@ -143,17 +143,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 		private void setOvertimeRequestVisibility()
 		{
-			if (_toggleManager.IsEnabled(Toggles.OvertimeRequestPeriodSetting_46417))
-			{
-				checkBoxAdvAutoGrantOvertimeRequest.Visible = false;
-				tableLayoutPanelETOTRequest.RowStyles[tableLayoutPanelETOTRequest.Controls.IndexOf(checkBoxAdvAutoGrantOvertimeRequest)].Height = 0;
-			}
-
-			if (!_toggleManager.IsEnabled(Toggles.OvertimeRequestPeriodSetting_46417))
-			{
-				tableLayoutPanelOpenForOvertimeRequests.Visible = false;
-				gridControlOvertimeRequestOpenPeriods.Visible = false;
-			}
+			
+			checkBoxAdvAutoGrantOvertimeRequest.Visible = false;
+			tableLayoutPanelETOTRequest.RowStyles[tableLayoutPanelETOTRequest.Controls.IndexOf(checkBoxAdvAutoGrantOvertimeRequest)].Height = 0;
 
 			if (!_toggleManager.IsEnabled(Toggles.OvertimeRequestCheckCalendarMonthMaximumOvertime_47024))
 			{

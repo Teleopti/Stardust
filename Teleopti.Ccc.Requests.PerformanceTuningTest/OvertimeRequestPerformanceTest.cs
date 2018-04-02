@@ -99,7 +99,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 		}
 
 		[Test]
-		[Toggle(Toggles.OvertimeRequestPeriodSetting_46417)]
 		[Toggle(Toggles.OvertimeRequestPeriodWorkRuleSetting_46638)]
 		public void Run200RequestsWithRequestPeriodSetting()
 		{
