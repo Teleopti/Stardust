@@ -126,16 +126,16 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 			var list = new List<GroupScheduleShiftViewModel>();
 			var agentNameSetting = _commonAgentNameProvider.CommonAgentNameSettings;
-			var dates = new[] {scheduleDate, previousDay, nextDay};
+			var dates = new[] { scheduleDate, previousDay, nextDay };
 			foreach (var person in people)
 			{
 				var personScheduleRange = schedulesDictionary[person];
 				var canViewConfidential = peopleCanSeeConfidentialAbsencesFor.Contains(person.Id.GetValueOrDefault());
 				list.AddRange(from date in dates
-					let scheduleDay = personScheduleRange.ScheduledDay(date)
-					where scheduleDay != null
-					select _teamScheduleProjectionProvider.MakeViewModel(person, date, scheduleDay, canViewConfidential,
-						canSeeUnpublishedSchedules, date == scheduleDate, agentNameSetting));
+							  let scheduleDay = personScheduleRange.ScheduledDay(date)
+							  where scheduleDay != null
+							  select _teamScheduleProjectionProvider.MakeViewModel(person, date, scheduleDay, canViewConfidential,
+								  canSeeUnpublishedSchedules, date == scheduleDate, agentNameSetting));
 			}
 
 			return new GroupScheduleViewModel
@@ -197,7 +197,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 					batchPermittedPersons = _searchProvider.SearchPermittedPeopleWithAbsence(batchPermittedPersons, input.DateInUserTimeZone).ToList();
 				}
 				permittedPersons.AddRange(batchPermittedPersons);
-				if (permittedPersons.Count > 750)
+				if (isResultTooMany(permittedPersons))
 				{
 					return new GroupScheduleViewModel
 					{
@@ -281,7 +281,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			{
 				var batchPermittedPersons = getPermittedPersons(batch.ToArray(), input.DateInUserTimeZone);
 				people.AddRange(batchPermittedPersons);
-				if (people.Count > 750)
+				if (isResultTooMany(people))
 				{
 					return new GroupWeekScheduleViewModel
 					{
@@ -410,7 +410,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			};
 		}
 
+		private bool isResultTooMany(IList<IPerson> people)
+		{
+			var max = _toggleManager.IsEnabled(Toggles.WfmTeamSchedule_IncreaseLimitionTo750ForScheduleQuery_74871) ? 750 : 500;
+			return people.Count > max;
 
+		}
 
 		private struct PersonDate
 		{
