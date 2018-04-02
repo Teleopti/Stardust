@@ -70,7 +70,6 @@
 		Wfm_Requests_Approve_Based_On_Budget_Allotment_39626,
 		Wfm_Requests_Approve_Based_On_Intraday_39868,
 		Wfm_Requests_Approve_Based_On_Minimum_Approval_Time_40274,
-		Wfm_Requests_OvertimeBrokenRules_47673,
 		Wfm_Requests_ProcessWaitlistBefore24hRequests_45767,
 		Wfm_Requests_HandleFourteenDaysFast_43390,
 		Wfm_Requests_DenyRequestWhenAllSkillsClosed_46384,

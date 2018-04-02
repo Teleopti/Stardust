@@ -161,17 +161,15 @@
 				if (columns.length === 0) {
 					setupColumns();
 
-					if (toggleSvc.Wfm_Requests_OvertimeBrokenRules_47673) {
-						var brokenRulesColumn = {
-							displayName: 'BrokenRules',
-							field: 'GetBrokenRules()',
-							headerCellFilter: 'translate',
-							cellTooltip: true,
-							visible: true,
-							minWidth: 111
-						};
-						columns.splice(11, 0, brokenRulesColumn);
-					}
+					var brokenRulesColumn = {
+						displayName: 'BrokenRules',
+						field: 'GetBrokenRules()',
+						headerCellFilter: 'translate',
+						cellTooltip: true,
+						visible: true,
+						minWidth: 111
+					};
+					columns.splice(11, 0, brokenRulesColumn);
 				}
 				// since upgrading to ui-grid 3.2.6, require copy of columns array
 				return angular.copy(columns);
