@@ -4,6 +4,7 @@ using System.Linq;
 using DotNetOpenAuth.Messaging;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -21,6 +22,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 		private readonly IPersonRepository _personRepository;
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly IDayOffTemplateRepository _dayOffTemplateRepository;
+		private readonly ICurrentScenario _currentScenario;
+		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IDictionary<string, string> _permissionDic = new Dictionary<string, string>
 		{
 			{DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, Resources.YouDoNotHavePermissionsToViewTeamSchedules},
@@ -35,13 +38,17 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			ILoggedOnUser loggedOnUser,
 			IPersonRepository personRepository,
 			IPermissionProvider permissionProvider,
-			IDayOffTemplateRepository dayOffTemplateRepository)
+			IDayOffTemplateRepository dayOffTemplateRepository,
+			ICurrentScenario currentScenario,
+			IScheduleStorage scheduleStorage)
 		{
 			_commandDispatcher = commandDispatcher;
 			_loggedOnUser = loggedOnUser;
 			_personRepository = personRepository;
 			_permissionProvider = permissionProvider;
 			_dayOffTemplateRepository = dayOffTemplateRepository;
+			_currentScenario = currentScenario;
+			_scheduleStorage = scheduleStorage;
 		}
 
 		public IEnumerable<Guid> CheckWriteProtectedAgents(DateOnly date, IEnumerable<Guid> agentIds)
@@ -59,20 +66,28 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			{
 				var absenceDateGroups = selectedPersonAbsence.AbsenceDates.GroupBy(absenceDate => absenceDate.Date, absenceDate => absenceDate.PersonAbsenceId);
 				var person = people[selectedPersonAbsence.PersonId];
+				
+				
 
 				foreach (var absenceGroup in absenceDateGroups)
 				{
 					var actionResult = new ActionResult(selectedPersonAbsence.PersonId);
 					var date = absenceGroup.Key;
+					var loadOptions = new ScheduleDictionaryLoadOptions(false, false);
+					var period = date.ToDateOnlyPeriod();
+					var currentScenario = _currentScenario.Current();
+					var dictionary = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, loadOptions, period, currentScenario);
+					var scheduleRange = dictionary?[person];
 
 					if (checkFunctionPermission(DefinedRaptorApplicationFunctionPaths.RemoveAbsence, date, person, actionResult.ErrorMessages))
 					{
 						var command = new RemoveSelectedPersonAbsenceCommand
 						{
-							PersonId = selectedPersonAbsence.PersonId,
+							Person = person,
 							Date = date,
 							TrackedCommandInfo =
-								input.TrackedCommandInfo ?? new TrackedCommandInfo { OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value }
+								input.TrackedCommandInfo ?? new TrackedCommandInfo { OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value },
+							ScheduleRange = scheduleRange
 						};
 
 						foreach (var personAbsenceId in absenceGroup)

@@ -5,8 +5,8 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
@@ -33,7 +33,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		private PersonAbsenceCreator _personAbsenceCreator;
 		private PersonAbsenceRemover _personAbsenceRemover;
 		private IPerson _person;
-		public ICurrentUnitOfWork _currentUnitOfWork;
 
 		[SetUp]
 		public void Setup()
@@ -46,14 +45,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				new SchedulingResultStateHolder());
 			_scheduleStorage = new FakeScheduleStorage_DoNotUse();
 			var scheduleDifferenceSaver = new ScheduleDifferenceSaver(_scheduleStorage,
-				new FromFactory(() => new FakeCurrentUnitOfWorkFactory(new FakeStorage()).Current()), new EmptyScheduleDayDifferenceSaver());
-			_saveSchedulePartService = new SaveSchedulePartService(scheduleDifferenceSaver,personAbsenceAccountRepository,
+				new FromFactory(() => new FakeCurrentUnitOfWorkFactory(new FakeStorage()).Current()),
+				new EmptyScheduleDayDifferenceSaver());
+			_saveSchedulePartService = new SaveSchedulePartService(scheduleDifferenceSaver, personAbsenceAccountRepository,
 				new DoNothingScheduleDayChangeCallBack());
 
 			_personRepository = new FakePersonRepositoryLegacy2();
 
 			_personAbsenceRepository = new FakePersonAbsenceRepository(new FakeStorage());
-			_personAbsenceCreator = new PersonAbsenceCreator(_saveSchedulePartService,_businessRulesForAccountUpdate);
+			_personAbsenceCreator = new PersonAbsenceCreator(_saveSchedulePartService, _businessRulesForAccountUpdate);
 
 
 			_person = PersonFactory.CreatePersonWithApplicationRolesAndFunctions();
@@ -62,9 +62,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(_person);
-			_personAbsenceRemover = new PersonAbsenceRemover(_businessRulesForAccountUpdate,_saveSchedulePartService,
-				_personAbsenceCreator,loggedOnUser
-				,new CheckingPersonalAccountDaysProvider(new FakePersonAbsenceAccountRepository()));
+			_personAbsenceRemover = new PersonAbsenceRemover(_businessRulesForAccountUpdate, _saveSchedulePartService,
+				_personAbsenceCreator, loggedOnUser
+				, new CheckingPersonalAccountDaysProvider(new FakePersonAbsenceAccountRepository()));
 
 
 		}
@@ -73,12 +73,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public void ShouldRemoveSelectedPersonAbsenceFromShiftDay()
 		{
 
-			var periodForSelectedAbsence = new DateTimePeriod(2016,10,1,10,2016,10,1,11);
-			var periodForNotSelectedAbsence = new DateTimePeriod(2016,10,1,14,2016,10,1,15);
+			var periodForSelectedAbsence = new DateTimePeriod(2016, 10, 1, 10, 2016, 10, 1, 11);
+			var periodForNotSelectedAbsence = new DateTimePeriod(2016, 10, 1, 14, 2016, 10, 1, 15);
+			var date = new DateOnly(2016, 10, 1);
 
-
-			var selectedPersonAbsence = new PersonAbsence(_person,_scenario.Current(),new AbsenceLayer(new Absence(),periodForSelectedAbsence));
-			var notSelectedPersonAbsence = new PersonAbsence(_person,_scenario.Current(),new AbsenceLayer(new Absence(),periodForNotSelectedAbsence));
+			var selectedPersonAbsence = new PersonAbsence(_person, _scenario.Current(),
+				new AbsenceLayer(new Absence(), periodForSelectedAbsence));
+			var notSelectedPersonAbsence = new PersonAbsence(_person, _scenario.Current(),
+				new AbsenceLayer(new Absence(), periodForNotSelectedAbsence));
 			selectedPersonAbsence.WithId();
 			notSelectedPersonAbsence.WithId();
 			_personAbsenceRepository.Has(selectedPersonAbsence);
@@ -87,22 +89,25 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var mainActivity = ActivityFactory.CreateActivity("Phone");
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(
 				_person,
-				mainActivity, new DateTimePeriod(2016,10,1,8,2016,10,1,17));
+				mainActivity, new DateTimePeriod(2016, 10, 1, 8, 2016, 10, 1, 17));
 
 
 			_scheduleStorage.Add(selectedPersonAbsence);
 			_scheduleStorage.Add(notSelectedPersonAbsence);
 			_scheduleStorage.Add(personAssignment);
 
+			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(_person,
+				new ScheduleDictionaryLoadOptions(false, false), date.ToDateOnlyPeriod(), _scenario.Current());
+
 			var command = new RemoveSelectedPersonAbsenceCommand
 			{
-				PersonId = _person.Id.Value,
+				Person = _person,
 				PersonAbsenceId = selectedPersonAbsence.Id.Value,
-				Date = new DateOnly(2016,10,1)
+				Date = date,
+				ScheduleRange = scheduleDictionary?[_person]
 			};
 
-			var target = new RemoveSelectedPersonAbsenceCommandHandler(_scenario,_personAbsenceRepository,_scheduleStorage,
-				_personRepository,_personAbsenceRemover, _currentUnitOfWork);
+			var target = new RemoveSelectedPersonAbsenceCommandHandler(_personAbsenceRepository, _personAbsenceRemover);
 
 			target.Handle(command);
 
@@ -111,7 +116,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var allPersonAbsences = _scheduleStorage.LoadAll().Where(s => s is PersonAbsence).ToList();
 
-			allPersonAbsences.Single().Period.Should().Be.EqualTo(new DateTimePeriod(2016,10,1,14,2016,10,1,15));
+			allPersonAbsences.Single().Period.Should().Be.EqualTo(new DateTimePeriod(2016, 10, 1, 14, 2016, 10, 1, 15));
 
 		}
 
@@ -119,25 +124,28 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldRemoveSelectedPersonAbsenceFromEmptyDay()
 		{
-			var periodForSelectedAbsence = new DateTimePeriod(2016,10,1,8,2016,10,1,17);
-
-			var selectedPersonAbsence = new PersonAbsence(_person,_scenario.Current(),new AbsenceLayer(new Absence(),periodForSelectedAbsence));
+			var periodForSelectedAbsence = new DateTimePeriod(2016, 10, 1, 8, 2016, 10, 1, 17);
+			var date = new DateOnly(2016, 10, 1);
+			var selectedPersonAbsence = new PersonAbsence(_person, _scenario.Current(),
+				new AbsenceLayer(new Absence(), periodForSelectedAbsence));
 
 			selectedPersonAbsence.WithId();
 
 			_personAbsenceRepository.Has(selectedPersonAbsence);
 			_scheduleStorage.Add(selectedPersonAbsence);
+			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(_person,
+				new ScheduleDictionaryLoadOptions(false, false), date.ToDateOnlyPeriod(), _scenario.Current());
 
 			var command = new RemoveSelectedPersonAbsenceCommand
 			{
-				PersonId = _person.Id.Value,
+				Person = _person,
 				PersonAbsenceId = selectedPersonAbsence.Id.Value,
-				Date = new DateOnly(2016,10,1)
+				Date = date,
+				ScheduleRange = scheduleDictionary?[_person]
 			};
 
 
-			var target = new RemoveSelectedPersonAbsenceCommandHandler(_scenario,_personAbsenceRepository,_scheduleStorage,
-				_personRepository,_personAbsenceRemover, _currentUnitOfWork);
+			var target = new RemoveSelectedPersonAbsenceCommandHandler(_personAbsenceRepository, _personAbsenceRemover);
 
 			target.Handle(command);
 
@@ -154,31 +162,33 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public void ShouldRemoveAbsenceThatCoversOvernightShift()
 		{
 
-			var periodForAbsence = new DateTimePeriod(2016,10,1,0,2016,10,4,0);
-
-			var absenceLayer = new AbsenceLayer(new Absence(),periodForAbsence);
-			var personAbsence = new PersonAbsence(_person,_scenario.Current(),absenceLayer);
+			var periodForAbsence = new DateTimePeriod(2016, 10, 1, 0, 2016, 10, 4, 0);
+			var date = new DateOnly(2016, 10, 2);
+			var absenceLayer = new AbsenceLayer(new Absence(), periodForAbsence);
+			var personAbsence = new PersonAbsence(_person, _scenario.Current(), absenceLayer);
 			personAbsence.WithId();
 			_personAbsenceRepository.Has(personAbsence);
 
 			var mainActivity = ActivityFactory.CreateActivity("Phone");
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(
 				_person,
-				mainActivity, new DateTimePeriod(2016,10,2,22,2016,10,3,6));
+				mainActivity, new DateTimePeriod(2016, 10, 2, 22, 2016, 10, 3, 6));
 
 
 			_scheduleStorage.Add(personAbsence);
 			_scheduleStorage.Add(personAssignment);
+			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(_person,
+				new ScheduleDictionaryLoadOptions(false, false), date.ToDateOnlyPeriod(), _scenario.Current());
 
 			var command = new RemoveSelectedPersonAbsenceCommand
 			{
-				PersonId = _person.Id.Value,
+				Person = _person,
 				PersonAbsenceId = personAbsence.Id.Value,
-				Date = new DateOnly(2016,10,2)
+				Date = date,
+				ScheduleRange = scheduleDictionary?[_person]
 			};
 
-			var target = new RemoveSelectedPersonAbsenceCommandHandler(_scenario,_personAbsenceRepository,_scheduleStorage,
-				_personRepository,_personAbsenceRemover, _currentUnitOfWork);
+			var target = new RemoveSelectedPersonAbsenceCommandHandler(_personAbsenceRepository, _personAbsenceRemover);
 
 			target.Handle(command);
 
@@ -188,18 +198,21 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var allPersonAbsences = _scheduleStorage.LoadAll().Where(s => s is PersonAbsence).ToList();
 			allPersonAbsences.Count.Should().Be.EqualTo(2);
 
-			allPersonAbsences.First().Period.Should().Be.EqualTo(new DateTimePeriod(2016,10,1,0,2016,10,2,0));
-			allPersonAbsences.Last().Period.Should().Be.EqualTo(new DateTimePeriod(2016,10,3,0,2016,10,4,0));
+			allPersonAbsences.First().Period.Should().Be.EqualTo(new DateTimePeriod(2016, 10, 1, 0, 2016, 10, 2, 0));
+			allPersonAbsences.Last().Period.Should().Be.EqualTo(new DateTimePeriod(2016, 10, 3, 0, 2016, 10, 4, 0));
 		}
 
 		[Test]
 		public void ShouldRemoveMultipleAbsencesWithinAShiftDay()
 		{
-			var periodForAbsence1 = new DateTimePeriod(2016,10,1,10,2016,10,1,11);
-			var periodForAbsence2 = new DateTimePeriod(2016,10,1,14,2016,10,1,15);
+			var periodForAbsence1 = new DateTimePeriod(2016, 10, 1, 10, 2016, 10, 1, 11);
+			var periodForAbsence2 = new DateTimePeriod(2016, 10, 1, 14, 2016, 10, 1, 15);
+			var date = new DateOnly(2016, 10, 1);
 
-			var selectedPersonAbsence = new PersonAbsence(_person,_scenario.Current(),new AbsenceLayer(new Absence(),periodForAbsence1));
-			var selectedPersonAbsence2 = new PersonAbsence(_person,_scenario.Current(),new AbsenceLayer(new Absence(),periodForAbsence2));
+			var selectedPersonAbsence =
+				new PersonAbsence(_person, _scenario.Current(), new AbsenceLayer(new Absence(), periodForAbsence1));
+			var selectedPersonAbsence2 =
+				new PersonAbsence(_person, _scenario.Current(), new AbsenceLayer(new Absence(), periodForAbsence2));
 			selectedPersonAbsence.WithId();
 			selectedPersonAbsence2.WithId();
 			_personAbsenceRepository.Has(selectedPersonAbsence);
@@ -208,22 +221,23 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var mainActivity = ActivityFactory.CreateActivity("Phone");
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(
 				_person,
-				mainActivity, new DateTimePeriod(2016,10,1,8,2016,10,1,17));
+				mainActivity, new DateTimePeriod(2016, 10, 1, 8, 2016, 10, 1, 17));
 
 
 			_scheduleStorage.Add(selectedPersonAbsence);
 			_scheduleStorage.Add(selectedPersonAbsence2);
 			_scheduleStorage.Add(personAssignment);
+			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(_person,
+				new ScheduleDictionaryLoadOptions(false, false), date.ToDateOnlyPeriod(), _scenario.Current());
 
-
-			var target = new RemoveSelectedPersonAbsenceCommandHandler(_scenario,_personAbsenceRepository,_scheduleStorage,
-				_personRepository,_personAbsenceRemover, _currentUnitOfWork);
+			var target = new RemoveSelectedPersonAbsenceCommandHandler(_personAbsenceRepository, _personAbsenceRemover);
 
 			var command = new RemoveSelectedPersonAbsenceCommand
 			{
-				PersonId = _person.Id.Value,
+				Person = _person,
 				PersonAbsenceId = selectedPersonAbsence.Id.Value,
-				Date = new DateOnly(2016, 10, 1)
+				Date = date,
+				ScheduleRange = scheduleDictionary[_person]
 			};
 
 			target.Handle(command);
@@ -241,6 +255,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldRemoveByDayWithTimezoneAwarenessWhenRemovingOnMultidayAbsence()
 		{
+			var date = new DateOnly(2017, 2, 21);
 			_person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time"));
 			var periodForAbsence = new DateTimePeriod(2017, 2, 20, 0, 2017, 2, 23, 8);
 
@@ -255,16 +270,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			_scheduleStorage.Add(personAbsence);
 			_scheduleStorage.Add(personAssignment);
+			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(_person,
+				new ScheduleDictionaryLoadOptions(false, false), date.ToDateOnlyPeriod(), _scenario.Current());
 
 			var command = new RemoveSelectedPersonAbsenceCommand
 			{
-				PersonId = _person.Id.Value,
+				Person = _person,
 				PersonAbsenceId = personAbsence.Id.Value,
-				Date = new DateOnly(2017, 2, 21)
+				Date = date,
+				ScheduleRange = scheduleDictionary[_person]
 			};
 
-			var target = new RemoveSelectedPersonAbsenceCommandHandler(_scenario, _personAbsenceRepository, _scheduleStorage,
-				_personRepository, _personAbsenceRemover, _currentUnitOfWork);
+			var target = new RemoveSelectedPersonAbsenceCommandHandler(_personAbsenceRepository, _personAbsenceRemover);
 
 			target.Handle(command);
 
