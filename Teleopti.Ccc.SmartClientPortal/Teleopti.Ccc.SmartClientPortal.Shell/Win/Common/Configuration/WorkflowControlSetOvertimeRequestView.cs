@@ -89,13 +89,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled_CheckStateChanged(this, EventArgs.Empty);
 		}
 
-		public void SetAutoGrantOvertimeRequest(bool autoGrantOvertimeRequest)
-		{
-			checkBoxAdvAutoGrantOvertimeRequest.CheckStateChanged -= checkBoxAdvAutoGrantOvertimeRequest_CheckStateChanged;
-			checkBoxAdvAutoGrantOvertimeRequest.Checked = autoGrantOvertimeRequest;
-			checkBoxAdvAutoGrantOvertimeRequest.CheckStateChanged += checkBoxAdvAutoGrantOvertimeRequest_CheckStateChanged;
-		}
-
 		public void SetOverTimeRequestMaximumTimeHandleType(
 			OvertimeRequestValidationHandleOptionView overtimeRequestValidationHandleOptionView)
 		{
@@ -127,30 +120,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			var hasLicense = _licenseAvailability.IsLicenseEnabled(DefinedLicenseOptionPaths.TeleoptiWfmOvertimeRequests);
 
 			var visible = hasLicense && toggleEnabled;
-			if (visible)
+			if (!visible)
 			{
-				setOvertimeRequestVisibility();
-			}
-			else
-			{
-				checkBoxAdvAutoGrantOvertimeRequest.Visible = false;
 				tableLayoutPanelOvertimeMaximumSetting.Visible = false;
 				tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.Visible = false;
 				tableLayoutPanelOpenForOvertimeRequests.Visible = false;
 				gridControlOvertimeRequestOpenPeriods.Visible = false;
-			}
-		}
-
-		private void setOvertimeRequestVisibility()
-		{
-			
-			checkBoxAdvAutoGrantOvertimeRequest.Visible = false;
-			tableLayoutPanelETOTRequest.RowStyles[tableLayoutPanelETOTRequest.Controls.IndexOf(checkBoxAdvAutoGrantOvertimeRequest)].Height = 0;
-
-			if (!_toggleManager.IsEnabled(Toggles.OvertimeRequestMaxContinuousWorkTime_47964))
-			{
-				tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.Visible = false;
-				tableLayoutPanelETOTRequest.RowStyles[tableLayoutPanelETOTRequest.Controls.IndexOf(tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting)].Height = 0;
 			}
 		}
 
@@ -277,11 +252,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		private void checkBoxAdvOvertimeProbability_CheckStateChanged(object sender, EventArgs e)
 		{
 			_presenter.SetOvertimeProbability(checkBoxAdvOvertimeProbability.Checked);
-		}
-
-		private void checkBoxAdvAutoGrantOvertimeRequest_CheckStateChanged(object sender, EventArgs e)
-		{
-			_presenter.SetAutoGrantOvertimeRequest(checkBoxAdvAutoGrantOvertimeRequest.Checked);
 		}
 
 		private void CheckBoxAdvOvertimeMaximumEnabled_CheckStateChanged(object sender, EventArgs e)

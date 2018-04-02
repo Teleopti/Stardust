@@ -196,7 +196,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.panelOvertimeRequestHeaderBasic = new System.Windows.Forms.Panel();
 			this.labelOvertimeRequestBasic = new System.Windows.Forms.Label();
 			this.checkBoxAdvOvertimeProbability = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
-			this.checkBoxAdvAutoGrantOvertimeRequest = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.checkBoxAdvOvertimeMaximumEnabled = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -273,7 +272,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.tableLayoutPanelETOTRequest.SuspendLayout();
 			this.panelOvertimeRequestHeaderBasic.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvOvertimeProbability)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvAutoGrantOvertimeRequest)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvOvertimeMaximumEnabled)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
@@ -2622,18 +2620,17 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.tableLayoutPanelETOTRequest.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanelETOTRequest.Controls.Add(this.panelOvertimeRequestHeaderBasic, 0, 0);
 			this.tableLayoutPanelETOTRequest.Controls.Add(this.checkBoxAdvOvertimeProbability, 0, 1);
-			this.tableLayoutPanelETOTRequest.Controls.Add(this.checkBoxAdvAutoGrantOvertimeRequest, 0, 2);
-			this.tableLayoutPanelETOTRequest.Controls.Add(this.tableLayoutPanelOvertimeMaximumSetting, 0, 3);
-			this.tableLayoutPanelETOTRequest.Controls.Add(this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting, 0, 4);
-			this.tableLayoutPanelETOTRequest.Controls.Add(this.tableLayoutPanelOpenForOvertimeRequests, 0, 5);
-			this.tableLayoutPanelETOTRequest.Controls.Add(this.gridControlOvertimeRequestOpenPeriods, 0, 6);
+			this.tableLayoutPanelETOTRequest.Controls.Add(this.tableLayoutPanelOvertimeMaximumSetting, 0, 2);
+			this.tableLayoutPanelETOTRequest.Controls.Add(this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting, 0, 3);
+			this.tableLayoutPanelETOTRequest.Controls.Add(this.tableLayoutPanelOpenForOvertimeRequests, 0, 4);
+			this.tableLayoutPanelETOTRequest.Controls.Add(this.gridControlOvertimeRequestOpenPeriods, 0, 5);
+
 			this.tableLayoutPanelETOTRequest.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanelETOTRequest.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanelETOTRequest.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanelETOTRequest.Name = "tableLayoutPanelETOTRequest";
-			this.tableLayoutPanelETOTRequest.RowCount = 8;
+			this.tableLayoutPanelETOTRequest.RowCount = 7;
 			this.tableLayoutPanelETOTRequest.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-			this.tableLayoutPanelETOTRequest.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
 			this.tableLayoutPanelETOTRequest.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
 			this.tableLayoutPanelETOTRequest.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanelETOTRequest.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
@@ -2681,20 +2678,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.checkBoxAdvOvertimeProbability.TabIndex = 0;
 			this.checkBoxAdvOvertimeProbability.Text = "xxEnableOvertimeProbability";
 			this.checkBoxAdvOvertimeProbability.ThemesEnabled = false;
-			// 
-			// checkBoxAdvAutoGrantOvertimeRequest
-			// 
-			this.checkBoxAdvAutoGrantOvertimeRequest.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.checkBoxAdvAutoGrantOvertimeRequest.BeforeTouchSize = new System.Drawing.Size(460, 24);
-			this.checkBoxAdvAutoGrantOvertimeRequest.ImageCheckBoxSize = new System.Drawing.Size(26, 26);
-			this.checkBoxAdvAutoGrantOvertimeRequest.Location = new System.Drawing.Point(3, 73);
-			this.checkBoxAdvAutoGrantOvertimeRequest.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
-			this.checkBoxAdvAutoGrantOvertimeRequest.Name = "checkBoxAdvAutoGrantOvertimeRequest";
-			this.checkBoxAdvAutoGrantOvertimeRequest.Size = new System.Drawing.Size(460, 24);
-			this.checkBoxAdvAutoGrantOvertimeRequest.TabIndex = 17;
-			this.checkBoxAdvAutoGrantOvertimeRequest.Text = "xxAutoGrant";
-			this.checkBoxAdvAutoGrantOvertimeRequest.ThemesEnabled = false;
-			this.checkBoxAdvAutoGrantOvertimeRequest.CheckStateChanged += new System.EventHandler(this.checkBoxAdvAutoGrantOvertimeRequest_CheckStateChanged);
 			// 
 			// checkBoxAdvOvertimeMaximumEnabled
 			// 
@@ -2843,7 +2826,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.panelOvertimeRequestHeaderBasic.ResumeLayout(false);
 			this.panelOvertimeRequestHeaderBasic.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvOvertimeProbability)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvAutoGrantOvertimeRequest)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvOvertimeMaximumEnabled)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
@@ -2999,7 +2981,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		private TableLayoutPanel tableLayoutPanelAbsenceProbability;
 		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxEnableAbsenceProbability;
 		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdvOvertimeProbability;
-		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdvAutoGrantOvertimeRequest;
 		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdvOvertimeMaximumEnabled;
 		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled;
 		private Panel panelOvertimeRequestHeaderBasic;

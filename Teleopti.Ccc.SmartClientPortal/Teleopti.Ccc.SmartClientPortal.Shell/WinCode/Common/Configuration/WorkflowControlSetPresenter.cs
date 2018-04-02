@@ -96,7 +96,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			_view.SetAbsenceRequestExpiration(_selectedModel);
 			_view.SetAbsenceProbability(_selectedModel.AbsenceProbabilityEnabled);
 			_view.SetOvertimeProbability(_selectedModel.IsOvertimeProbabilityEnabled);
-			_view.SetAutoGrantOvertimeRequest(_selectedModel.AutoGrantOvertimeRequest);
 			_view.SetOverTimeRequestMaximumTimeHandleType(_selectedModel.OvertimeRequestMaximumOvertimeValidationHandleOptionView);
 			_view.SetOverTimeRequestMaximumTime(_selectedModel.OvertimeRequestMaximumTime);
 			_view.SetOvertimeRequestMaximumTimeEnabled(_selectedModel.OvertimeRequestMaximumTimeEnabled);
