@@ -3,6 +3,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.BadgeLeaderBoardReport;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.BadgeLeaderBoardReport.ViewModelFactory
 {
@@ -18,6 +19,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.BadgeLeaderBoardReport.ViewModelFac
 
 		public BadgeLeaderBoardReportViewModel CreateBadgeLeaderBoardReportViewModel(LeaderboardQuery query)
 		{
+			DateOnlyPeriod? period = null;
+			if (query.StartDate.HasValue && query.EndDate.HasValue) period = new DateOnlyPeriod(query.StartDate.Value, query.EndDate.Value);
+
 			var personList = new List<AgentBadgeOverview>();
 			switch (query.Type)
 			{
@@ -25,19 +29,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.BadgeLeaderBoardReport.ViewModelFac
 				case LeadboardQueryType.MyOwn:
 					personList =
 						_leaderboardSettingBasedBadgeProvider.PermittedAgentBadgeOverviewsForEveryoneOrMyOwn(
-							DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard, query).ToList();
+							DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard, query, period).ToList();
 					break;
 
 				case LeadboardQueryType.Site:
 					personList =
 						_leaderboardSettingBasedBadgeProvider.PermittedAgentBadgeOverviewsForSite(
-							DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard, query).ToList();
+							DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard, query, period).ToList();
 					break;
 
 				case LeadboardQueryType.Team:
 					personList =
 						_leaderboardSettingBasedBadgeProvider.PermittedAgentBadgeOverviewsForTeam(
-							DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard, query).ToList();
+							DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard, query, period).ToList();
 					break;
 			}
 

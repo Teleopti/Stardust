@@ -8,6 +8,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.BadgeLeaderBoardReport
 		public DateOnly Date { get; set; }
 		public LeadboardQueryType Type { get; set; }
 		public Guid SelectedId { get; set; }
+
+		public DateOnly? StartDate { get; set; }
+		public DateOnly? EndDate { get; set; }
 	}
 	public enum LeadboardQueryType
 	{

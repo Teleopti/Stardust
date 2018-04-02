@@ -16,6 +16,30 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.BadgeLeaderBoard.ViewModelFacto
 	public class BadgeLeaderBoardReportViewModelFactoryTest
 	{
 		[Test]
+		public void ShouldGetLeaderBoardWithinPeriod()
+		{
+			var option = new LeaderboardQuery
+			{
+				Date = DateOnly.Today,
+				SelectedId = Guid.NewGuid(),
+				Type = LeadboardQueryType.Team,
+				StartDate = new DateOnly(2017,10,1),
+				EndDate = new DateOnly(2017,10,31)
+			};
+			var period = new DateOnlyPeriod(option.StartDate.Value, option.EndDate.Value);
+			var leaderboardSettingBasedBadgeProvider = MockRepository.GenerateMock<ILeaderboardSettingBasedBadgeProvider>();
+			leaderboardSettingBasedBadgeProvider.Stub(
+					x => x.PermittedAgentBadgeOverviewsForTeam(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard, option, period))
+				.Return(new List<AgentBadgeOverview>(){new AgentBadgeOverview(){AgentName = "aa", Bronze = 0, Silver = 1, Gold = 0}});
+
+			var target = new BadgeLeaderBoardReportViewModelFactory(leaderboardSettingBasedBadgeProvider);
+
+			var result = target.CreateBadgeLeaderBoardReportViewModel(option);
+			result.Agents.First().AgentName.Should().Be.EqualTo("aa");
+			result.Agents.First().Silver.Should().Be.EqualTo(1);
+		}
+
+		[Test]
 		public void ShouldReturnBadgeLeaderBoardViewModel()
 		{
 			var option = new LeaderboardQuery
