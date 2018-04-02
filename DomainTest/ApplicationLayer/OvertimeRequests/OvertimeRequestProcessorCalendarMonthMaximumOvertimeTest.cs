@@ -16,7 +16,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 	public partial class OvertimeRequestProcessorTest
 	{
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestCheckCalendarMonthMaximumOvertime_47024)]
 		public void ShouldApproveWhenOvertimeRequestMaximumTimeIsDisabled()
 		{
 			setupPerson(8, 21);
@@ -37,7 +36,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestCheckCalendarMonthMaximumOvertime_47024)]
 		public void ShouldDenyWhenOvertimeRequestMaximumTimeIsZero()
 		{
 			setupPerson(8, 21);
@@ -63,7 +61,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestCheckCalendarMonthMaximumOvertime_47024)]
 		public void ShouldApproveWhenRequestTimeIsLessThanMaximumTime()
 		{
 			setupPerson(8, 21);
@@ -86,7 +83,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestCheckCalendarMonthMaximumOvertime_47024)]
 		public void ShouldApproveWhenRequestTimeEqualToMaximumTime()
 		{
 			setupPerson(8, 21);
@@ -109,7 +105,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestCheckCalendarMonthMaximumOvertime_47024)]
 		public void ShouldDenyWhenViolateOvertimeRequestMaximumTime()
 		{
 			setupPerson(8, 21);
@@ -135,7 +130,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestCheckCalendarMonthMaximumOvertime_47024)]
 		public void ShouldNotDenyWhenOvertimeRequestMaximumTimeHandleTypeIsSendToAdministrator()
 		{
 			setupPerson(8, 21);
@@ -162,7 +156,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestCheckCalendarMonthMaximumOvertime_47024)]
 		public void ShouldDenyWhenTotalOvertimeOfMonthExceedsMaximumTime()
 		{
 			setupPerson(8, 21);
@@ -195,7 +188,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestCheckCalendarMonthMaximumOvertime_47024)]
 		public void ShouldApproveWhenRequestTimeIsCrossMonth()
 		{
 			Now.Is(new DateTime(2017, 7, 30, 22, 0, 0, DateTimeKind.Utc));
@@ -226,7 +218,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestCheckCalendarMonthMaximumOvertime_47024)]
 		public void ShouldDenyWhenOvertimeOfSecondMonthExceedsMaximumTime()
 		{
 			Now.Is(new DateTime(2017, 7, 30, 22, 0, 0, DateTimeKind.Utc));
@@ -261,7 +252,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestCheckCalendarMonthMaximumOvertime_47024)]
 		public void ShouldDenyWhenOvertimeOfBothMonthsExceedsMaximumTime()
 		{
 			Now.Is(new DateTime(2017, 7, 30, 22, 0, 0, DateTimeKind.Utc));
@@ -298,7 +288,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestCheckCalendarMonthMaximumOvertime_47024)]
 		public void ShouldAddCrossMonthOvertimeStartsFromLastMonth()
 		{
 			Now.Is(new DateTime(2017, 12, 25, 08, 0, 0, DateTimeKind.Utc));
@@ -332,7 +321,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestCheckCalendarMonthMaximumOvertime_47024)]
 		public void ShouldSubtractCrossMonthOvertimeEndsInNextMonth()
 		{
 			Now.Is(new DateTime(2017, 12, 25, 08, 0, 0, DateTimeKind.Utc));

@@ -143,7 +143,6 @@
 		Staffing_Info_Configuration_44687,
 		WfmStaffing_AddOvertime_42524,
 		OvertimeRequestPeriodSkillTypeSetting_47290,
-		OvertimeRequestCheckCalendarMonthMaximumOvertime_47024,
 		OvertimeRequestUseMostUnderStaffedSkill_47853,
 		OvertimeRequestMaxContinuousWorkTime_47964,
 		OvertimeRequestAtLeastOneCriticalUnderStaffedSkill_74944,
