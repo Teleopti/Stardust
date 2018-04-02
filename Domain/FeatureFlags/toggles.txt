@@ -71,7 +71,6 @@ Wfm_FetchBusinessHierarchyFromReadModel_45275 = RC
 Wfm_Requests_Approve_Based_On_Budget_Allotment_39626 = RC # can not use it until function 'Approve based on business rules' is ready
 Wfm_Requests_Approve_Based_On_Intraday_39868 = RC # can not use it until function 'Approve based on business rules' is ready
 Wfm_Requests_Approve_Based_On_Minimum_Approval_Time_40274 = RC # can not use it until function 'Approve based on business rules' is ready
-OvertimeRequestPeriodWorkRuleSetting_46638 = true
 OvertimeRequestPeriodSkillTypeSetting_47290 = true
 OvertimeRequestCheckCalendarMonthMaximumOvertime_47024 = true
 OvertimeRequestUseMostUnderStaffedSkill_47853 = RC

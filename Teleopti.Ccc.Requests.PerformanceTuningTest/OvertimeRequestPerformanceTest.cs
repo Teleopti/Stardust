@@ -99,7 +99,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 		}
 
 		[Test]
-		[Toggle(Toggles.OvertimeRequestPeriodWorkRuleSetting_46638)]
 		public void Run200RequestsWithRequestPeriodSetting()
 		{
 			Now.Is("2016-01-16 07:01");

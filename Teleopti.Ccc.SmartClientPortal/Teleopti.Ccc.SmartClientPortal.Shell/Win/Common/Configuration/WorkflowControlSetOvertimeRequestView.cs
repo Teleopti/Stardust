@@ -222,17 +222,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 					"AutoGrantType");
 
 			columnList.Add(autoGrantColumn);
-
-			if (_toggleManager.IsEnabled(Toggles.OvertimeRequestPeriodWorkRuleSetting_46638))
-			{
-				columnList.Add(new SFGridCheckBoxColumn<OvertimeRequestPeriodModel>("EnableWorkRuleValidation", Resources.Enabled,
-					Resources.ContractWorkRuleValidation));
-				columnList.Add(new SFGridDropDownColumn<OvertimeRequestPeriodModel, OvertimeRequestValidationHandleOptionView>(
-					"WorkRuleValidationHandleType",
-					Resources.WhenValidationFails, Resources.ContractWorkRuleValidation,
-					OvertimeRequestPeriodModel.OvertimeRequestWorkRuleValidationHandleOptionViews.Values.ToList(), "Description",
-					typeof(OvertimeRequestValidationHandleOptionView)));
-			}
+			columnList.Add(new SFGridCheckBoxColumn<OvertimeRequestPeriodModel>("EnableWorkRuleValidation", Resources.Enabled,
+				Resources.ContractWorkRuleValidation));
+			columnList.Add(new SFGridDropDownColumn<OvertimeRequestPeriodModel, OvertimeRequestValidationHandleOptionView>(
+				"WorkRuleValidationHandleType",
+				Resources.WhenValidationFails, Resources.ContractWorkRuleValidation,
+				OvertimeRequestPeriodModel.OvertimeRequestWorkRuleValidationHandleOptionViews.Values.ToList(), "Description",
+				typeof(OvertimeRequestValidationHandleOptionView)));
 
 			if (_toggleManager.IsEnabled(Toggles.OvertimeRequestPeriodSkillTypeSetting_47290))
 			{
@@ -275,11 +271,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			gridControlOvertimeRequestOpenPeriods.Model.Options.SelectCellsMouseButtonsMask = MouseButtons.Left;
 			gridControlOvertimeRequestOpenPeriods.Model.Options.ExcelLikeCurrentCell = true;
 
-			if (_toggleManager.IsEnabled(Toggles.OvertimeRequestPeriodWorkRuleSetting_46638))
-			{
-				gridControlOvertimeRequestOpenPeriods.CheckBoxClick += gridControlOvertimeRequestOpenPeriods_CheckBoxClick;
-				gridControlOvertimeRequestOpenPeriods.QueryCellInfo += gridControlOvertimeRequestOpenPeriods_QueryCellInfo;
-			}
+			gridControlOvertimeRequestOpenPeriods.CheckBoxClick += gridControlOvertimeRequestOpenPeriods_CheckBoxClick;
+			gridControlOvertimeRequestOpenPeriods.QueryCellInfo += gridControlOvertimeRequestOpenPeriods_QueryCellInfo;
+
 			gridControlOvertimeRequestOpenPeriods.CurrentCellCloseDropDown +=
 				gridControlOvertimeRequestOpenPeriods_CurrentCellCloseDropDown;
 			gridControlOvertimeRequestOpenPeriods.KeyDown += gridControlOvertimeRequestOpenPeriods_KeyDown;

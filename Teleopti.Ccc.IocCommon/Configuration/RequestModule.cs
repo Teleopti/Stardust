@@ -53,9 +53,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<OvertimeRequestSiteOpenHourValidator>().As<IOvertimeRequestValidator>().SingleInstance();
 			builder.RegisterType<OvertimeRequestAlreadyHasScheduleValidator>().As<IOvertimeRequestValidator>().SingleInstance();
 			builder.RegisterType<OvertimeRequestPeriodValidator>().As<IOvertimeRequestValidator>().SingleInstance();
-
-			if (_configuration.Toggle(Toggles.OvertimeRequestPeriodWorkRuleSetting_46638))
-				builder.RegisterType<OvertimeRequestContractWorkRulesValidator>().As<IOvertimeRequestValidator>().SingleInstance();
+			builder.RegisterType<OvertimeRequestContractWorkRulesValidator>().As<IOvertimeRequestValidator>().SingleInstance();
 
 			if (_configuration.Toggle(Toggles.OvertimeRequestCheckCalendarMonthMaximumOvertime_47024))
 				builder.RegisterType<OvertimeRequestMaximumtimeValidator>().As<IOvertimeRequestValidator>().SingleInstance();

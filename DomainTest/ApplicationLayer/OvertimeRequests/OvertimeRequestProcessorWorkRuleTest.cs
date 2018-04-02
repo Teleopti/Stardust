@@ -5,7 +5,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.WorkflowControl;
-using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
@@ -13,7 +12,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 	public partial class OvertimeRequestProcessorTest
 	{
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodWorkRuleSetting_46638)]
 		public void ShouldDenyWhenViolateMaxWeekWorkTimeRule()
 		{
 			setupPerson(8, 21);
@@ -46,7 +44,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodWorkRuleSetting_46638)]
 		public void ShouldNotDenyWhenViolateMaxWeekWorkTimeRuleAndHandleTypeIsPending()
 		{
 			setupPerson(8, 21);
@@ -78,7 +75,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodWorkRuleSetting_46638)]
 		public void ShouldPendingWhenViolateMaxWeekWorkTimeRuleAndHandleTypeIsPendingAndAutoGrantIsYes()
 		{
 			setupPerson(8, 21);
@@ -111,7 +107,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodWorkRuleSetting_46638)]
 		public void ShouldApproveWhenSatisfyMaxWeekWorkTimeRule()
 		{
 			setupPerson(8, 21);
@@ -146,7 +141,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodWorkRuleSetting_46638)]
 		public void ShouldDenyWhenViolateNightlyRestTimeRule()
 		{
 			setupPerson(8, 21);
@@ -181,7 +175,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodWorkRuleSetting_46638)]
 		public void ShouldDenyWhenViolateNightlyRestTimeRuleOnDayOff()
 		{
 			setupPerson(8, 21);
@@ -214,7 +207,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodWorkRuleSetting_46638)]
 		public void ShouldApproveWhenSatisfyNightlyRestTimeRule()
 		{
 			setupPerson(8, 21);
@@ -247,7 +239,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodWorkRuleSetting_46638)]
 		public void ShouldShowPeriodUsingAgentTimezoneWhenViolateNightlyRestTimeRule()
 		{
 			setupPerson(8, 21);
@@ -292,7 +283,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodWorkRuleSetting_46638)]
 		public void ShouldDenyWhenViolateWeeklyRestTimeRule()
 		{
 			setupPerson(0, 24);
@@ -322,7 +312,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodWorkRuleSetting_46638)]
 		public void ShouldShowFirstDenyReasonWhenViolateMaxtimePerWeekAndNightlyRestTimeRule()
 		{
 			setupPerson(8, 21);
