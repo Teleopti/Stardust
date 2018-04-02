@@ -89,6 +89,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			{
 				AutoGrantOvertimeRequest = false
 			};
+			_person.WorkflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.No,
+				BetweenDays = new MinMax<int>(0, 13)
+			});
 			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 8d);
 
 			var overtimeRequestForm = new OvertimeRequestForm
