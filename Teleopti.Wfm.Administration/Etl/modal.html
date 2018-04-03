@@ -1,9 +1,8 @@
 <form ng-submit="ctrl.sendBaseConfig();" Name="baseForm">
-	<h2>Tenant base configuration</h2>
 	<div class="panel panel-default">
 		<div class="panel-heading">
 			<span ng-if="ctrl.tenant.TenantName">
-				{{vm.masterTenant.TenantName}}
+				{{ctrl.tenant.TenantName}}
 			</span>
 			<span ng-if="!ctrl.tenant.TenantName">
 				ETL initial configuration
@@ -20,17 +19,16 @@
 			<div class="row">
 				<div class="col-md-12">
 					<div class="form-group">
-						{{ctrl.baseConfig}}
 						<label for="baseInterval">Interval length:</label>
-						<select class="form-control" id="baseInterval" ng-options="interval.Id as interval.Text for interval in ctrl.configData.IntervalLengthList" ng-model="ctrl.baseConfig.interval">
-  						<option ng-show="!ctrl.baseConfig.interval" value="">- select Interval length</option>
+						<select class="form-control" id="baseInterval" ng-disabled="ctrl.tenant.IsBaseConfigured" ng-options="interval.Id as interval.Text for interval in ctrl.configData.IntervalLengthList" ng-model="ctrl.baseConfig.interval">
+							<option ng-show="!ctrl.baseConfig.interval" value="">- Select Interval length</option>
 						</select>
 					</div>
 				</div>
 				<div class="col-md-12">
 					<div class="form-group">
 						<label for="baseCulture">Culture:</label>
-						<select class="form-control" id="baseCulture" ng-options="culture.Id as culture.Text for culture in ctrl.configData.CultureList" ng-model="ctrl.baseConfig.culture">
+						<select class="form-control" id="baseCulture" ng-disabled="ctrl.tenant.IsBaseConfigured" ng-options="culture.Id as culture.Text for culture in ctrl.configData.CultureList" ng-model="ctrl.baseConfig.culture">
 							<option ng-show="!ctrl.baseConfig.culture" value="">- Select culture</option>
 						</select>
 					</div>
@@ -38,7 +36,7 @@
 				<div class="col-md-12">
 					<div class="form-group">
 						<label for="baseTimezone">Time zone:</label>
-						<select class="form-control" id="baseTimezone" ng-options="timezone.Id as timezone.Text for timezone in ctrl.configData.TimeZoneList" ng-model="ctrl.baseConfig.timezone">
+						<select class="form-control" id="baseTimezone" ng-disabled="ctrl.tenant.IsBaseConfigured" ng-options="timezone.Id as timezone.Text for timezone in ctrl.configData.TimeZoneList" ng-model="ctrl.baseConfig.timezone">
 							<option ng-show="!ctrl.baseConfig.timezone" value="">- Select time zone</option>
 						</select>
 					</div>
@@ -46,7 +44,7 @@
 			</div>
 		</div>
 		<div class="panel-footer">
-			<button class="btn btn-primary" type="submit">
+			<button class="btn btn-primary" type="submit" ng-disabled="ctrl.tenant.IsBaseConfigured">
 				<md-icon style="padding-right: 5px" md-svg-src="Content/images/ic_forward_black_24px.svg" aria-hidden="true">
 					<svg fill="#000000" height="100%" viewBox="0 0 24 24" width="100%" xmlns="http://www.w3.org/2000/svg" fit="" preserveAspectRatio="xMidYMid meet" focusable="false">
 						<path d="M12 8V4l8 8-8 8v-4H4V8z"></path>

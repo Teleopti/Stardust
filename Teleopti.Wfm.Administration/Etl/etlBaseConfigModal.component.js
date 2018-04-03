@@ -4,7 +4,7 @@
   angular.module('adminApp')
   .component('etlModal',
   {
-    templateUrl: '/Etl/modal.html',
+    templateUrl: './Etl/modal.html',
     controller: ['$http', 'tokenHeaderService', ModalCtrl],
     controllerAs: 'ctrl',
     bindings: {
@@ -18,7 +18,15 @@
     var ctrl = this;
 
     ctrl.baseConfig = null;
-    ctrl.configData = null;
+	ctrl.configData = null;
+
+	  if (ctrl.tenant) {
+		  ctrl.baseConfig = {
+			  culture: ctrl.tenant.BaseConfig.CultureId,
+			  interval: ctrl.tenant.BaseConfig.IntervalLength,
+			  timezone: ctrl.tenant.BaseConfig.TimeZoneCode
+		  }
+	  }
 
     (function getConfigurationModel() {
       $http.get("./Etl/GetConfigurationModel", tokenHeaderService.getHeaders())

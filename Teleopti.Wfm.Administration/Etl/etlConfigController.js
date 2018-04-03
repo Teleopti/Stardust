@@ -17,7 +17,8 @@
     vm.selectedTenant = null;
 
     vm.sendLogDataConfiguration = sendLogDataConfiguration;
-    vm.getLogDataForATenant = getLogDataForATenant;
+	  vm.getLogDataForATenant = getLogDataForATenant;
+	  vm.getTenants = getTenants;
 
     (function init() {
       getTenants();
