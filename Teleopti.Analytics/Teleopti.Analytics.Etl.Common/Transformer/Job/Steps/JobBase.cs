@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
+using log4net;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -15,6 +16,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 		private string _name;
 		private IJobResult _jobResult;
 		private bool _enabled;
+		private static readonly ILog _log = LogManager.GetLogger(typeof(JobBase));
 
 		public event EventHandler<AlarmEventArgs> JobExecutionReady;
 		public void NotifyJobExecutionReady()
@@ -79,7 +81,9 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 
 			foreach (var step in StepList)
 			{
+				_log.InfoFormat("Before running job step '{0}' for business unit '{1}'.", step.Name, businessUnit.Name);
 				var jobStepResult = step.Run(jobStepsNotToRun, businessUnit, jobResultCollection, isLastBusinessUnitRun);
+				_log.InfoFormat("After running job step '{0}' for business unit '{1}'.", step.Name, businessUnit.Name);
 
 				Result.JobStepResultCollection.Add(jobStepResult);
 				update();
