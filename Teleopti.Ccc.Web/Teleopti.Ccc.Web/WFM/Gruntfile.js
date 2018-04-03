@@ -493,7 +493,7 @@ module.exports = function(grunt) {
 		'ngtemplates',
 		'exec:webpackDevDist',
 		// 'copy:devCss', // just renames files from x.css to x.min.css
-		'generateIndexDev',
+		// 'generateIndexDev', // processhtml:dev is mimicked
 		'exec:ngbuild_dev'
 	]);
 	grunt.registerTask('devDist', [

@@ -4,6 +4,14 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const ConcatPlugin = require('webpack-concat-plugin');
 const ExtraneousFileCleanupPlugin = require('webpack-extraneous-file-cleanup-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+const htmlPlugin = new HtmlWebpackPlugin({
+	message: 'this is a dev template :D',
+	template: 'index.webpack.tpl.html',
+	// chunks: [] // no chunks
+	inject: false
+});
 
 const extractSass = new ExtractTextPlugin({
 	filename: '[name].css'
@@ -66,7 +74,7 @@ const concatJsModules = new ConcatPlugin({
 		'./node_modules/lodash/lodash.min.js'
 	],
 	attributes: {
-		async: true
+		async: false
 	}
 });
 const concatDevJs = new ConcatPlugin({
@@ -85,7 +93,7 @@ const concatDevJs = new ConcatPlugin({
 		]
 	],
 	attributes: {
-		async: true
+		async: false
 	}
 });
 const concatDistCss = new ConcatPlugin({
@@ -108,7 +116,7 @@ const concatDistCss = new ConcatPlugin({
 		'./node_modules/teleopti-styleguide/styleguide/dist/main.min.css'
 	],
 	attributes: {
-		async: true
+		async: false
 	}
 });
 const concatDistDarkCss = new ConcatPlugin({
@@ -131,7 +139,7 @@ const concatDistDarkCss = new ConcatPlugin({
 		'./node_modules/teleopti-styleguide/styleguide/dist/main_dark.min.css'
 	],
 	attributes: {
-		async: true
+		async: false
 	}
 });
 
@@ -165,8 +173,8 @@ const cleanUpPlugin = new ExtraneousFileCleanupPlugin({
 const config = {
 	entry: {
 		// ignore_entry: './webpack-entry.js',
-		style_classic: './css/style.scss',
-		style_dark: './css/darkstyle.scss'
+		'style_classic.min': './css/style.scss',
+		'style_dark.min': './css/darkstyle.scss'
 	},
 	output: {
 		path: __dirname + '/dist',
@@ -205,7 +213,16 @@ const config = {
 			}
 		]
 	},
-	plugins: [cleanUpPlugin, concatJsModules, concatDevJs, concatDistCss, concatDistDarkCss, extractSass, copyPlugin]
+	plugins: [
+		cleanUpPlugin,
+		concatJsModules,
+		concatDevJs,
+		concatDistCss,
+		concatDistDarkCss,
+		extractSass,
+		copyPlugin,
+		htmlPlugin
+	]
 };
 
 module.exports = config;
