@@ -75,17 +75,19 @@
 		};
 
 		//init
+		function checkIfAnyTenantsAreUnconfigured(element) {
+			return element.IsBaseConfigured === false;
+		}
+
 		vm.getManualData = function() {
 			vm.getTenants();
 			vm.getConfigStatus();
 			vm.language = navigator.language || navigator.userLanguage;
-			vm.unconfigured = vm.tenants.some(checkIfAnyTenantsAreUnconfigured);
+			vm.unconfigured = vm.tenants.find(checkIfAnyTenantsAreUnconfigured);
 		};
 		vm.getManualData();
 
-		function checkIfAnyTenantsAreUnconfigured(element) {
-			return element === false;
-		}
+
 
 		function selectJob(job) {
 			vm.selectedJob = job;
