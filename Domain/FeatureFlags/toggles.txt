@@ -72,7 +72,6 @@ WfmTeamSchedule_ShowInformationForUnderlyingSchedule_74952 = DEV
 Wfm_Requests_Approve_Based_On_Budget_Allotment_39626 = RC # can not use it until function 'Approve based on business rules' is ready
 Wfm_Requests_Approve_Based_On_Intraday_39868 = RC # can not use it until function 'Approve based on business rules' is ready
 Wfm_Requests_Approve_Based_On_Minimum_Approval_Time_40274 = RC # can not use it until function 'Approve based on business rules' is ready
-OvertimeRequestPeriodSkillTypeSetting_47290 = true
 OvertimeRequestUseMostUnderStaffedSkill_47853 = RC
 OvertimeRequestAtLeastOneCriticalUnderStaffedSkill_74944 = RC
 

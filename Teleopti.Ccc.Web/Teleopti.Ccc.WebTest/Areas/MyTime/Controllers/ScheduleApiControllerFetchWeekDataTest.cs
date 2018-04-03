@@ -52,14 +52,34 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public FakePersonRequestRepository PersonRequestRepository;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeMeetingRepository MeetingRepository;
+		public FakeSkillTypeRepository SkillTypeRepository;
 		public ICurrentDataSource CurrentDataSource;
 		public FakeToggleManager ToggleManager;
 		public FakeActivityRepository ActivityRepository;
 		public FakeSkillRepository SkillRepository;
 
+		readonly ISkillType skillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony)
+			.WithId();
+
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<FakeSkillRepository>().For<ISkillRepository>();
+			var person = PersonFactory.CreatePersonWithId();
+			var skill = new Skill("test1").WithId();
+			skill.SkillType = skillType;
+			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriodWithSkills(new DateOnly(2014,1,1),skill));
+			var workflowControlSet = new WorkflowControlSet("test");
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod()
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
+				BetweenDays = new MinMax<int>(0, 13)
+			});
+			person.WorkflowControlSet = workflowControlSet;
+
+			system.UseTestDouble(new FakeLoggedOnUser(person)).For<ILoggedOnUser>();
+
+			system.UseTestDouble(new FakeSkillTypeRepository(skillType)).For<ISkillTypeRepository>();
+
 		}
 
 		[Test]
@@ -77,12 +97,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldReturnOvertimeProbabilityEnabledTrueWhenItHasBeenToggledOnInFatClient()
 		{
-			var workFlowControlSet = new WorkflowControlSet {OvertimeProbabilityEnabled = true};
-			workFlowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod()
-			{
-				BetweenDays = new MinMax<int>(0, 13)
-			});
-			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
+			User.CurrentUser().WorkflowControlSet.OvertimeProbabilityEnabled = true;
 
 			var result = Target.FetchWeekData(null);
 			result.OvertimeProbabilityEnabled.Should().Be(true);
@@ -91,12 +106,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldReturnOvertimeProbabilityEnabledFalseWhenItHasBeenToggledOffInFatClient()
 		{
-			var workFlowControlSet = new WorkflowControlSet
-			{
-				OvertimeProbabilityEnabled = false
-			};
-			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
-
+			User.CurrentUser().WorkflowControlSet.OvertimeProbabilityEnabled = false;
 			var result = Target.FetchWeekData(null);
 			result.OvertimeProbabilityEnabled.Should().Be(false);
 		}
@@ -107,8 +117,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var licenseActivator = LicenseProvider.GetLicenseActivator(new OvertimeFakeLicenseService(false, false));
 			DefinedLicenseDataFactory.SetLicenseActivator(CurrentDataSource.CurrentName(), licenseActivator);
 
-			var workFlowControlSet = new WorkflowControlSet { OvertimeProbabilityEnabled = true };
-			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
+			User.CurrentUser().WorkflowControlSet.OvertimeProbabilityEnabled = true;
 
 			var result = Target.FetchWeekData(null);
 			result.OvertimeProbabilityEnabled.Should().Be(false);
@@ -120,12 +129,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var licenseActivator = LicenseProvider.GetLicenseActivator(new OvertimeFakeLicenseService(true, false));
 			DefinedLicenseDataFactory.SetLicenseActivator(CurrentDataSource.CurrentName(), licenseActivator);
 
-			var workFlowControlSet = new WorkflowControlSet { OvertimeProbabilityEnabled = true };
-			workFlowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod()
-			{
-				BetweenDays = new MinMax<int>(0, 13)
-			});
-			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
+			User.CurrentUser().WorkflowControlSet.OvertimeProbabilityEnabled = true;
 
 			var result = Target.FetchWeekData(null);
 			result.OvertimeProbabilityEnabled.Should().Be(true);
@@ -137,12 +141,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var licenseActivator = LicenseProvider.GetLicenseActivator(new OvertimeFakeLicenseService(false, true));
 			DefinedLicenseDataFactory.SetLicenseActivator(CurrentDataSource.CurrentName(), licenseActivator);
 
-			var workFlowControlSet = new WorkflowControlSet { OvertimeProbabilityEnabled = true };
-			workFlowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod()
-			{
-				BetweenDays = new MinMax<int>(0, 13)
-			});
-			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
+			User.CurrentUser().WorkflowControlSet.OvertimeProbabilityEnabled = true;
 
 			var result = Target.FetchWeekData(null);
 			result.OvertimeProbabilityEnabled.Should().Be(true);
@@ -154,12 +153,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var licenseActivator = LicenseProvider.GetLicenseActivator(new OvertimeFakeLicenseService(true, true));
 			DefinedLicenseDataFactory.SetLicenseActivator(CurrentDataSource.CurrentName(), licenseActivator);
 
-			var workFlowControlSet = new WorkflowControlSet { OvertimeProbabilityEnabled = true };
-			workFlowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod()
-			{
-				BetweenDays = new MinMax<int>(0, 13)
-			});
-			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
+			User.CurrentUser().WorkflowControlSet.OvertimeProbabilityEnabled = true;
 
 			var result = Target.FetchWeekData(null);
 			result.OvertimeProbabilityEnabled.Should().Be(true);
@@ -170,12 +164,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			ToggleManager.Enable(Toggles.Wfm_Staffing_StaffingReadModel28DaysStep1_45109);
 
-			var workFlowControlSet = new WorkflowControlSet {OvertimeProbabilityEnabled = true};
-			workFlowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod()
-			{
-				BetweenDays = new MinMax<int>(0, 13)
-			});
-			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
+			User.CurrentUser().WorkflowControlSet.OvertimeProbabilityEnabled = true;
 
 			var result = Target.FetchWeekData(Now.ServerDate_DontUse().AddWeeks(3));
 			result.OvertimeProbabilityEnabled.Should().Be(false);
@@ -187,7 +176,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			ToggleManager.Enable(Toggles.Wfm_Staffing_StaffingReadModel28DaysStep1_45109);
 
 			var workFlowControlSet = new WorkflowControlSet { OvertimeProbabilityEnabled = true };
-			workFlowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod()
+			workFlowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod
 			{
 				BetweenDays = new MinMax<int>(0, 19)
 			});
@@ -198,7 +187,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		[Toggle(Toggles.OvertimeRequestPeriodSkillTypeSetting_47290)]
 		public void ShouldReturnTrueForOvertimeProbabilityEnabledWhenMatchedSkillTypeIsNotDeny()
 		{
 			var phoneSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony).WithId();
@@ -471,7 +459,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				InContractTime = true,
 				DisplayColor = Color.Purple
 			};
-			
+
 			assignment.AddActivity(emailActivity, period2);
 			assignment.SetShiftCategory(new ShiftCategory("sc"));
 			ScheduleData.Add(assignment);
@@ -1068,7 +1056,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				IsClosed = false,
 				WeekDay = DayOfWeek.Thursday
 			});
-			User.CurrentUser().AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(Now.ServerDate_DontUse(), team));
+
+			User.CurrentUser().PersonPeriods(Now.ServerDate_DontUse().ToDateOnlyPeriod()).FirstOrDefault().Team = team;
 
 			var result = Target.FetchWeekData(null, StaffingPossiblityType.Overtime).Days.ElementAt(3);
 			result.OpenHourPeriod.Equals(timePeriod).Should().Be.True();
@@ -1104,7 +1093,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				TimePeriod = new TimePeriod(10, 0, 11, 0),
 				WeekDay = DayOfWeek.Friday
 			});
-			User.CurrentUser().AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(date, team));
+			User.CurrentUser().PersonPeriods(date.ToDateOnlyPeriod()).FirstOrDefault().Team = team;
+
 			var result = Target.FetchWeekData(null, StaffingPossiblityType.Overtime);
 			result.Days.ElementAt(3).OpenHourPeriod.Value.StartTime.Should().Be(TimeSpan.FromHours(9));
 			result.Days.ElementAt(3).OpenHourPeriod.Value.EndTime.Should().Be(TimeSpan.FromHours(10));
@@ -1115,6 +1105,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldGetSkillOpenHourPeriodForDayView()
 		{
+			var date = new DateOnly(2014, 12, 18);
+			var team = TeamFactory.CreateTeam("team1", "site1");
+			User.CurrentUser().PersonPeriods(date.ToDateOnlyPeriod()).FirstOrDefault().Team = team;
+
 			var skill = addSkill();
 			var period = new DateTimePeriod(new DateTime(2014, 12, 18, 9, 15, 0, DateTimeKind.Utc),
 				new DateTime(2014, 12, 18, 9, 45, 0, DateTimeKind.Utc));
@@ -1128,6 +1122,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldGetSkillOpenHourPeriodInUsersTimeZoneForDayView()
 		{
+			var date = new DateOnly(2014, 12, 18);
+			var team = TeamFactory.CreateTeam("team1", "site1");
+			User.CurrentUser().PersonPeriods(date.ToDateOnlyPeriod()).FirstOrDefault().Team = team;
+
 			var skill = addSkill();
 			skill.TimeZone = TimeZoneInfoFactory.MountainTimeZoneInfo();
 
@@ -1144,6 +1142,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldGetSkillOpenHourPeriodInUsersTimeZoneWhenSkillOpenHourIsCrossDay()
 		{
+			var date = new DateOnly(2014, 12, 18);
+			var team = TeamFactory.CreateTeam("team1", "site1");
+			User.CurrentUser().PersonPeriods(date.ToDateOnlyPeriod()).FirstOrDefault().Team = team;
+
 			var skill = addSkill();
 			skill.TimeZone = TimeZoneInfoFactory.MountainTimeZoneInfo();
 
@@ -1214,12 +1216,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			ScheduleData.Add(assignment);
 		}
 
-		private static ISkill createSkillWithOpenHours(TimeSpan start, TimeSpan end)
+		private ISkill createSkillWithOpenHours(TimeSpan start, TimeSpan end)
 		{
 			var skill = SkillFactory.CreateSkillWithWorkloadAndSources().WithId();
 			skill.Activity.InWorkTime = true;
 			skill.Activity.RequiresSkill = true;
-			skill.SkillType.Description = new Description("SkillTypeInboundTelephony");
+			skill.SkillType = skillType;
 
 			foreach (var workload in skill.WorkloadCollection)
 			{
@@ -1290,6 +1292,19 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			{
 				personPeriod.AddPersonSkill(personSkill);
 			}
+		}
+
+		private void initData()
+		{
+			var workFlowControlSet = new WorkflowControlSet();
+			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
+			//var person = User.CurrentUser();
+			var skillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony)
+				.WithId();
+			
+			//person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriodWithSkills(new DateOnly(Now.UtcDateTime()), skill));
+
+			SkillTypeRepository.Add(skillType);
 		}
 	}
 }

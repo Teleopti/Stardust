@@ -140,13 +140,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod()
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
-				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(13)))
+				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(13))),
+				SkillType = _phoneSkillType
 			});
 			LoggedOnUser.CurrentUser().WorkflowControlSet = workflowControlSet;
 			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 5d);
 
 			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 26, 8, 0, 0, DateTimeKind.Utc), 1);
-			getTarget().Process(personRequest);
+			getTarget(27).Process(personRequest);
 
 			personRequest.IsDenied.Should().Be.True();
 			personRequest.DenyReason.Should().Be.EqualTo("Your overtime request has been denied. Some days in the requested period are not open for requests. You can send requests for the following period: 7/12/2017 - 7/25/2017.");
@@ -334,23 +335,25 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		[Test]
 		public void ShouldSuggestMultiplePeriodsExcludeDenyPeriods()
 		{
-			setupPerson(8, 21);
+			setupPerson(0, 24);
 			var workflowControlSet = new WorkflowControlSet();
 			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod()
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.No,
-				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(4)))
+				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(4))),
+				SkillType = _phoneSkillType
 			});
 			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod()
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Deny,
-				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()).AddDays(1), new DateOnly(Now.UtcDateTime().AddDays(1)))
+				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()).AddDays(1), new DateOnly(Now.UtcDateTime().AddDays(1))),
+				SkillType = _phoneSkillType
 			});
 			LoggedOnUser.CurrentUser().WorkflowControlSet = workflowControlSet;
 			setupIntradayStaffingForSkill(setupPersonSkill(new TimePeriod(TimeSpan.Zero, TimeSpan.FromDays(1))), 10d, 5d);
 
 			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 17, 21, 0, 0, DateTimeKind.Utc), 6);
-			getTarget().Process(personRequest);
+			getTarget(27).Process(personRequest);
 
 			personRequest.IsDenied.Should().Be.True();
 			personRequest.DenyReason.Should().Be("Your overtime request has been denied. Some days in the requested period are not open for requests. You can send requests for the following period: 7/12/2017 - 7/12/2017,7/14/2017 - 7/16/2017.");
@@ -364,12 +367,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.No,
-				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(2)))
+				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(2))),
+				SkillType = _phoneSkillType
 			});
 			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.No,
-				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()).AddDays(4), new DateOnly(Now.UtcDateTime().AddDays(6)))
+				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()).AddDays(4), new DateOnly(Now.UtcDateTime().AddDays(6))),
+				SkillType = _phoneSkillType
 			});
 			LoggedOnUser.CurrentUser().WorkflowControlSet = workflowControlSet;
 			setupIntradayStaffingForSkill(setupPersonSkill(new TimePeriod(TimeSpan.Zero, TimeSpan.FromDays(1))), 10d, 5d);
@@ -434,12 +439,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.No,
-				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(5)))
+				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(5))),
+				SkillType = _phoneSkillType
 			});
 			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.No,
-				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(2)))
+				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(2))),
+				SkillType = _phoneSkillType
 			});
 			LoggedOnUser.CurrentUser().WorkflowControlSet = workflowControlSet;
 			setupIntradayStaffingForSkill(setupPersonSkill(new TimePeriod(TimeSpan.Zero, TimeSpan.FromDays(1))), 10d, 5d);

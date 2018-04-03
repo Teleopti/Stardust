@@ -20,16 +20,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			setupPerson(8, 21);
 			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 8d);
 
-			var workflowControlSet =
-				new WorkflowControlSet
-				{
-					OvertimeRequestMaximumContinuousWorkTimeEnabled = false
-				};
 			var person = LoggedOnUser.CurrentUser();
-			person.WorkflowControlSet = workflowControlSet;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeEnabled = false;
 
 			var personRequest = createOvertimeRequest(18, 3);
-			getTarget().Process(personRequest, true);
+			getTarget().Process(personRequest);
 
 			personRequest.IsApproved.Should().Be.True();
 		}
@@ -49,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			person.WorkflowControlSet = workflowControlSet;
 
 			var personRequest = createOvertimeRequest(18, 3);
-			getTarget().Process(personRequest, true);
+			getTarget().Process(personRequest);
 
 			var expectedDenyReason = buildDenyReason("7/17/2017 6:00:00 PM - 7/17/2017 9:00:00 PM", TimeSpan.FromHours(3),
 				TimeSpan.Zero);
@@ -64,17 +59,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			setupPerson(8, 21);
 			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 8d);
 
-			var workflowControlSet =
-				new WorkflowControlSet
-				{
-					OvertimeRequestMaximumContinuousWorkTimeEnabled = true,
-					OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Pending
-				};
 			var person = LoggedOnUser.CurrentUser();
-			person.WorkflowControlSet = workflowControlSet;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeEnabled = true;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Pending;
 
 			var personRequest = createOvertimeRequest(18, 3);
-			getTarget().Process(personRequest, true);
+			getTarget(27).Process(personRequest);
 
 			var expectedDenyReason = buildDenyReason("7/17/2017 6:00:00 PM - 7/17/2017 9:00:00 PM", TimeSpan.FromHours(3),
 				TimeSpan.Zero);
@@ -107,7 +97,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var personRequest = createOvertimeRequest(16, 3);
 			personRequest.ForcePending();
-			getTarget().Process(personRequest, true);
+			getTarget().Process(personRequest);
 
 			var expectedDenyReason = buildDenyReason("7/17/2017 9:00:00 AM - 7/17/2017 7:00:00 PM", TimeSpan.FromHours(10),
 				TimeSpan.FromHours(8));
@@ -138,7 +128,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			person.WorkflowControlSet = workflowControlSet;
 
 			var personRequest = createOvertimeRequest(16, 3);
-			getTarget().Process(personRequest, true);
+			getTarget().Process(personRequest);
 
 			var expectedDenyReason = buildDenyReason("7/17/2017 9:00:00 AM - 7/17/2017 7:00:00 PM", TimeSpan.FromHours(10),
 				TimeSpan.FromHours(8));
@@ -158,17 +148,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var pa = createMainPersonAssignment(person, period);
 			ScheduleStorage.Add(pa);
 
-			var workflowControlSet =
-				new WorkflowControlSet
-				{
-					OvertimeRequestMaximumContinuousWorkTimeEnabled = true,
-					OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(10),
-					OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny
-				};
-			person.WorkflowControlSet = workflowControlSet;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeEnabled = true;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(10);
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny;
 
 			var personRequest = createOvertimeRequest(16, 3);
-			getTarget().Process(personRequest, true);
+			getTarget().Process(personRequest);
 
 			personRequest.IsApproved.Should().Be.True();
 		}
@@ -184,17 +169,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var fullDayAbsence = new PersonAbsence(person, Scenario.Current(), new AbsenceLayer(new Absence(), period));
 			ScheduleStorage.Add(fullDayAbsence);
 
-			var workflowControlSet =
-				new WorkflowControlSet
-				{
-					OvertimeRequestMaximumContinuousWorkTimeEnabled = true,
-					OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(10),
-					OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny
-				};
-			person.WorkflowControlSet = workflowControlSet;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeEnabled = true;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(10);
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny;
 
 			var personRequest = createOvertimeRequest(16, 3);
-			getTarget().Process(personRequest, true);
+			getTarget().Process(personRequest);
 
 			personRequest.IsApproved.Should().Be.True();
 		}
@@ -214,17 +194,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var absence = new PersonAbsence(person, Scenario.Current(), new AbsenceLayer(new Absence(), absencePeriod));
 			ScheduleStorage.Add(absence);
 
-			var workflowControlSet =
-				new WorkflowControlSet
-				{
-					OvertimeRequestMaximumContinuousWorkTimeEnabled = true,
-					OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(10),
-					OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny
-				};
-			person.WorkflowControlSet = workflowControlSet;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeEnabled = true;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(10);
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny;
 
 			var personRequest = createOvertimeRequest(17, 2);
-			getTarget().Process(personRequest, true);
+			getTarget().Process(personRequest);
 
 			personRequest.IsApproved.Should().Be.True();
 		}
@@ -240,17 +215,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 				new DayOffTemplate(new Description("for", "test")));
 			ScheduleStorage.Add(pa);
 
-			var workflowControlSet =
-				new WorkflowControlSet
-				{
-					OvertimeRequestMaximumContinuousWorkTimeEnabled = true,
-					OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(10),
-					OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny
-				};
-			person.WorkflowControlSet = workflowControlSet;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeEnabled = true;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(10);
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny;
 
 			var personRequest = createOvertimeRequest(16, 3);
-			getTarget().Process(personRequest, true);
+			getTarget().Process(personRequest);
 
 			personRequest.IsApproved.Should().Be.True();
 		}
@@ -267,17 +237,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			pa.AddOvertimeActivity(new Activity(), overtimePeriod, new MultiplicatorDefinitionSet("test", MultiplicatorType.Overtime));
 			ScheduleStorage.Add(pa);
 
-			var workflowControlSet =
-				new WorkflowControlSet
-				{
-					OvertimeRequestMaximumContinuousWorkTimeEnabled = true,
-					OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(10),
-					OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny
-				};
-			person.WorkflowControlSet = workflowControlSet;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeEnabled = true;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(10);
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny;
 
 			var personRequest = createOvertimeRequest(16, 3);
-			getTarget().Process(personRequest, true);
+			getTarget().Process(personRequest);
 
 			personRequest.IsApproved.Should().Be.True();
 		}
@@ -293,17 +258,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var pa = PersonAssignmentFactory.CreateEmptyAssignment(person, Scenario.Current(), period);
 			ScheduleStorage.Add(pa);
 
-			var workflowControlSet =
-				new WorkflowControlSet
-				{
-					OvertimeRequestMaximumContinuousWorkTimeEnabled = true,
-					OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(2),
-					OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny
-				};
-			person.WorkflowControlSet = workflowControlSet;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeEnabled = true;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(2);
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny;
 
 			var personRequest = createOvertimeRequest(16, 3);
-			getTarget().Process(personRequest, true);
+			getTarget().Process(personRequest);
 
 			var expectedDenyReason = buildDenyReason("7/17/2017 4:00:00 PM - 7/17/2017 7:00:00 PM", TimeSpan.FromHours(3),
 				TimeSpan.FromHours(2));
@@ -323,17 +283,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var pa = createMainPersonAssignment(person, period);
 			ScheduleStorage.Add(pa);
 
-			var workflowControlSet =
-				new WorkflowControlSet
-				{
-					OvertimeRequestMaximumContinuousWorkTimeEnabled = true,
-					OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(4),
-					OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny
-				};
-			person.WorkflowControlSet = workflowControlSet;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeEnabled = true;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(4);
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny;
 
 			var personRequest = createOvertimeRequest(1, 2);
-			getTarget().Process(personRequest, true);
+			getTarget().Process(personRequest);
 
 			var expectedDenyReason = buildDenyReason("7/16/2017 10:00:00 PM - 7/17/2017 3:00:00 AM", TimeSpan.FromHours(5),
 				TimeSpan.FromHours(4));
@@ -353,17 +308,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var pa = createMainPersonAssignment(person, period);
 			ScheduleStorage.Add(pa);
 
-			var workflowControlSet =
-				new WorkflowControlSet
-				{
-					OvertimeRequestMaximumContinuousWorkTimeEnabled = true,
-					OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(8),
-					OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny
-				};
-			person.WorkflowControlSet = workflowControlSet;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeEnabled = true;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(8);
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny;
 
 			var personRequest = createOvertimeRequest(8, 2);
-			getTarget().Process(personRequest, true);
+			getTarget().Process(personRequest);
 
 			var expectedDenyReason = buildDenyReason("7/17/2017 8:00:00 AM - 7/17/2017 5:00:00 PM", TimeSpan.FromHours(9),
 				TimeSpan.FromHours(8));
@@ -383,17 +333,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var pa = createMainPersonAssignment(person, period);
 			ScheduleStorage.Add(pa);
 
-			var workflowControlSet =
-				new WorkflowControlSet
-				{
-					OvertimeRequestMaximumContinuousWorkTimeEnabled = true,
-					OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(8),
-					OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny
-				};
-			person.WorkflowControlSet = workflowControlSet;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeEnabled = true;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(8);
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny;
 
 			var personRequest = createOvertimeRequest(16, 2);
-			getTarget().Process(personRequest, true);
+			getTarget().Process(personRequest);
 
 			var expectedDenyReason = buildDenyReason("7/17/2017 4:00:00 PM - 7/18/2017 1:00:00 AM", TimeSpan.FromHours(9),
 				TimeSpan.FromHours(8));
@@ -413,17 +358,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var pa = createMainPersonAssignment(person, period);
 			ScheduleStorage.Add(pa);
 
-			var workflowControlSet =
-				new WorkflowControlSet
-				{
-					OvertimeRequestMaximumContinuousWorkTimeEnabled = true,
-					OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(8),
-					OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny
-				};
-			person.WorkflowControlSet = workflowControlSet;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeEnabled = true;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(8);
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny;
 
 			var personRequest = createOvertimeRequest(23, 2);
-			getTarget().Process(personRequest, true);
+			getTarget().Process(personRequest);
 
 			var expectedDenyReason = buildDenyReason("7/17/2017 11:00:00 PM - 7/18/2017 8:00:00 AM", TimeSpan.FromHours(9),
 				TimeSpan.FromHours(8));
@@ -447,17 +387,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			pa1.AddActivity(activity, period2);
 			ScheduleStorage.Add(pa1);
 
-			var workflowControlSet =
-				new WorkflowControlSet
-				{
-					OvertimeRequestMaximumContinuousWorkTimeEnabled = true,
-					OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(8),
-					OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny
-				};
-			person.WorkflowControlSet = workflowControlSet;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeEnabled = true;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(8);
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny;
 
 			var personRequest = createOvertimeRequest(2, 1);
-			getTarget().Process(personRequest, true);
+			getTarget().Process(personRequest);
 
 			var expectedDenyReason = buildDenyReason("7/17/2017 1:00:00 AM - 7/17/2017 10:00:00 AM", TimeSpan.FromHours(9),
 				TimeSpan.FromHours(8));
@@ -486,18 +421,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			ScheduleStorage.Add(pa);
 
-			var workflowControlSet =
-				new WorkflowControlSet
-				{
-					OvertimeRequestMaximumContinuousWorkTimeEnabled = true,
-					OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(9),
-					OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny,
-					OvertimeRequestMinimumRestTimeThreshold = TimeSpan.FromMinutes(30)
-				};
-			person.WorkflowControlSet = workflowControlSet;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeEnabled = true;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(9);
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny;
+			person.WorkflowControlSet.OvertimeRequestMinimumRestTimeThreshold = TimeSpan.FromMinutes(30);
 
 			var personRequest = createOvertimeRequestInMinutes(17, 60);
-			getTarget().Process(personRequest, true);
+			getTarget().Process(personRequest);
 
 			var expectedDenyReason = buildDenyReason("7/17/2017 8:00:00 AM - 7/17/2017 6:00:00 PM", TimeSpan.FromHours(9).Add(TimeSpan.FromMinutes(2)),
 				TimeSpan.FromHours(9));
@@ -521,17 +451,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			ScheduleStorage.Add(pa1);
 			ScheduleStorage.Add(pa2);
 
-			var workflowControlSet =
-				new WorkflowControlSet
-				{
-					OvertimeRequestMaximumContinuousWorkTimeEnabled = true,
-					OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(24),
-					OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny
-				};
-			person.WorkflowControlSet = workflowControlSet;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeEnabled = true;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(24);
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny;
 
 			var personRequest = createOvertimeRequest(0, 10);
-			getTarget().Process(personRequest, true);
+			getTarget().Process(personRequest);
 
 			var expectedDenyReason = buildDenyReason("7/16/2017 11:00:00 PM - 7/18/2017 12:00:00 AM", TimeSpan.FromHours(25),
 				TimeSpan.FromHours(24));
@@ -550,19 +475,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var period = new DateTimePeriod(2017, 7, 17, 8, 2017, 7, 17, 16);
 			var pa = createMainPersonAssignment(person, period);
 			ScheduleStorage.Add(pa);
-
-			var workflowControlSet =
-				new WorkflowControlSet
-				{
-					OvertimeRequestMaximumContinuousWorkTimeEnabled = true,
-					OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(10),
-					OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny,
-					OvertimeRequestMinimumRestTimeThreshold = TimeSpan.FromHours(1)
-				};
-			person.WorkflowControlSet = workflowControlSet;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeEnabled = true;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(10);
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny;
+			person.WorkflowControlSet.OvertimeRequestMinimumRestTimeThreshold = TimeSpan.FromHours(1);
 
 			var personRequest = createOvertimeRequest(17, 3);
-			getTarget().Process(personRequest, true);
+			getTarget().Process(personRequest);
 
 			personRequest.IsApproved.Should().Be.True();
 		}
@@ -581,18 +500,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			pa.AddActivity(lunch, new DateTimePeriod(2017, 7, 17, 10, 2017, 7, 17, 11));
 			ScheduleStorage.Add(pa);
 
-			var workflowControlSet =
-				new WorkflowControlSet
-				{
-					OvertimeRequestMaximumContinuousWorkTimeEnabled = true,
-					OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(10),
-					OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny,
-					OvertimeRequestMinimumRestTimeThreshold = TimeSpan.FromHours(1)
-				};
-			person.WorkflowControlSet = workflowControlSet;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeEnabled = true;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(10);
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny;
+			person.WorkflowControlSet.OvertimeRequestMinimumRestTimeThreshold = TimeSpan.FromHours(1);
 
 			var personRequest = createOvertimeRequest(11, 1);
-			getTarget().Process(personRequest, true);
+			getTarget().Process(personRequest);
 
 			personRequest.IsApproved.Should().Be.True();
 		}
@@ -615,18 +529,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			ScheduleStorage.Add(pa);
 
-			var workflowControlSet =
-				new WorkflowControlSet
-				{
-					OvertimeRequestMaximumContinuousWorkTimeEnabled = true,
-					OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(10),
-					OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny,
-					OvertimeRequestMinimumRestTimeThreshold = TimeSpan.FromHours(1)
-				};
-			person.WorkflowControlSet = workflowControlSet;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeEnabled = true;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(10);
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny;
+			person.WorkflowControlSet.OvertimeRequestMinimumRestTimeThreshold = TimeSpan.FromHours(1);
 
 			var personRequest = createOvertimeRequest(11, 1);
-			getTarget().Process(personRequest, true);
+			getTarget().Process(personRequest);
 
 			personRequest.IsDenied.Should().Be.True();
 
@@ -650,18 +559,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			pa.AddActivity(shortBreak, new DateTimePeriod(2017, 7, 17, 10, 2017, 7, 17, 20));
 			ScheduleStorage.Add(pa);
 
-			var workflowControlSet =
-				new WorkflowControlSet
-				{
-					OvertimeRequestMaximumContinuousWorkTimeEnabled = true,
-					OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(10),
-					OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny,
-					OvertimeRequestMinimumRestTimeThreshold = TimeSpan.FromHours(1)
-				};
-			person.WorkflowControlSet = workflowControlSet;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeEnabled = true;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(10);
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny;
+			person.WorkflowControlSet.OvertimeRequestMinimumRestTimeThreshold = TimeSpan.FromHours(1);
 
 			var personRequest = createOvertimeRequest(20, 1);
-			getTarget().Process(personRequest, true);
+			getTarget().Process(personRequest);
 
 			personRequest.IsApproved.Should().Be.True();
 		}
@@ -682,18 +586,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 				new DateTime(2017, 7, 17, 12, 30, 0, DateTimeKind.Utc)));
 			ScheduleStorage.Add(pa);
 
-			var workflowControlSet =
-				new WorkflowControlSet
-				{
-					OvertimeRequestMaximumContinuousWorkTimeEnabled = true,
-					OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(4),
-					OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny,
-					OvertimeRequestMinimumRestTimeThreshold = TimeSpan.FromHours(1).Add(TimeSpan.FromMinutes(1))
-				};
-			person.WorkflowControlSet = workflowControlSet;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeEnabled = true;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(4);
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny;
+			person.WorkflowControlSet.OvertimeRequestMinimumRestTimeThreshold = TimeSpan.FromHours(1).Add(TimeSpan.FromMinutes(1));
 
 			var personRequest = createOvertimeRequest(13, 1);
-			getTarget().Process(personRequest, true);
+			getTarget().Process(personRequest);
 
 			personRequest.IsDenied.Should().Be.True();
 
@@ -714,18 +613,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var pa = createMainPersonAssignment(person, period);
 			ScheduleStorage.Add(pa);
 
-			var workflowControlSet =
-				new WorkflowControlSet
-				{
-					OvertimeRequestMaximumContinuousWorkTimeEnabled = true,
-					OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(10),
-					OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny,
-					OvertimeRequestMinimumRestTimeThreshold = TimeSpan.FromHours(2)
-				};
-			person.WorkflowControlSet = workflowControlSet;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeEnabled = true;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(10);
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny;
+			person.WorkflowControlSet.OvertimeRequestMinimumRestTimeThreshold = TimeSpan.FromHours(2);
 
 			var personRequest = createOvertimeRequest(17, 3);
-			getTarget().Process(personRequest, true);
+			getTarget().Process(personRequest);
 
 			var expectedDenyReason = buildDenyReason("7/17/2017 8:00:00 AM - 7/17/2017 8:00:00 PM", TimeSpan.FromHours(11),
 				TimeSpan.FromHours(10));
@@ -754,18 +648,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			ScheduleStorage.Add(pa);
 
-			var workflowControlSet =
-				new WorkflowControlSet
-				{
-					OvertimeRequestMaximumContinuousWorkTimeEnabled = true,
-					OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(10),
-					OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny,
-					OvertimeRequestMinimumRestTimeThreshold = TimeSpan.FromMinutes(30)
-				};
-			person.WorkflowControlSet = workflowControlSet;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeEnabled = true;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(10);
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny;
+			person.WorkflowControlSet.OvertimeRequestMinimumRestTimeThreshold = TimeSpan.FromMinutes(30);
 
 			var personRequest = createOvertimeRequestInMinutes(17, 90);
-			getTarget().Process(personRequest, true);
+			getTarget().Process(personRequest);
 
 			var expectedDenyReason = buildDenyReason("7/17/2017 8:00:00 AM - 7/17/2017 6:30:00 PM", TimeSpan.FromHours(10).Add(TimeSpan.FromMinutes(1)),
 				TimeSpan.FromHours(10));
@@ -792,18 +681,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			pa.AddActivity(shortBreak, new DateTimePeriod(2017, 7, 17, 9, 2017, 7, 17, 10));
 			ScheduleStorage.Add(pa);
 
-			var workflowControlSet =
-				new WorkflowControlSet
-				{
-					OvertimeRequestMaximumContinuousWorkTimeEnabled = true,
-					OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(10),
-					OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny,
-					OvertimeRequestMinimumRestTimeThreshold = TimeSpan.FromHours(2)
-				};
-			person.WorkflowControlSet = workflowControlSet;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeEnabled = true;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(10);
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny;
+			person.WorkflowControlSet.OvertimeRequestMinimumRestTimeThreshold = TimeSpan.FromHours(2);
 
 			var personRequest = createOvertimeRequest(10, 1);
-			getTarget().Process(personRequest, true);
+			getTarget().Process(personRequest);
 
 			var expectedDenyReason = buildDenyReason("7/16/2017 11:00:00 PM - 7/17/2017 11:00:00 AM", TimeSpan.FromHours(11),
 				TimeSpan.FromHours(10));
@@ -823,18 +707,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var pa = createMainPersonAssignment(person, period);
 			ScheduleStorage.Add(pa);
 
-			var workflowControlSet =
-				new WorkflowControlSet
-				{
-					OvertimeRequestMaximumContinuousWorkTimeEnabled = true,
-					OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(10),
-					OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny,
-					OvertimeRequestMinimumRestTimeThreshold = TimeSpan.FromHours(1)
-				};
-			person.WorkflowControlSet = workflowControlSet;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeEnabled = true;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(10);
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny;
+			person.WorkflowControlSet.OvertimeRequestMinimumRestTimeThreshold = TimeSpan.FromHours(1);
 
 			var personRequest = createOvertimeRequest(8, 1);
-			getTarget().Process(personRequest, true);
+			getTarget().Process(personRequest);
 
 			personRequest.IsApproved.Should().Be.True();
 		}
@@ -853,18 +732,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			pa.AddActivity(lunch, new DateTimePeriod(2017, 7, 17, 9, 2017, 7, 17, 10));
 			ScheduleStorage.Add(pa);
 
-			var workflowControlSet =
-				new WorkflowControlSet
-				{
-					OvertimeRequestMaximumContinuousWorkTimeEnabled = true,
-					OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(10),
-					OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny,
-					OvertimeRequestMinimumRestTimeThreshold = TimeSpan.FromHours(1)
-				};
-			person.WorkflowControlSet = workflowControlSet;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeEnabled = true;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(10);
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny;
+			person.WorkflowControlSet.OvertimeRequestMinimumRestTimeThreshold = TimeSpan.FromHours(1);
 
 			var personRequest = createOvertimeRequest(8, 1);
-			getTarget().Process(personRequest, true);
+			getTarget().Process(personRequest);
 
 			personRequest.IsApproved.Should().Be.True();
 		}
@@ -883,18 +757,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			pa.AddActivity(shortBreak, new DateTimePeriod(2017, 7, 17, 9, 2017, 7, 17, 10));
 			ScheduleStorage.Add(pa);
 
-			var workflowControlSet =
-				new WorkflowControlSet
-				{
-					OvertimeRequestMaximumContinuousWorkTimeEnabled = true,
-					OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(10),
-					OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny,
-					OvertimeRequestMinimumRestTimeThreshold = TimeSpan.FromHours(1)
-				};
-			person.WorkflowControlSet = workflowControlSet;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeEnabled = true;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(10);
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny;
+			person.WorkflowControlSet.OvertimeRequestMinimumRestTimeThreshold = TimeSpan.FromHours(1);
 
 			var personRequest = createOvertimeRequest(8, 1);
-			getTarget().Process(personRequest, true);
+			getTarget().Process(personRequest);
 
 			personRequest.IsApproved.Should().Be.True();
 		}
@@ -910,18 +779,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var pa = createMainPersonAssignment(person, period);
 			ScheduleStorage.Add(pa);
 
-			var workflowControlSet =
-				new WorkflowControlSet
-				{
-					OvertimeRequestMaximumContinuousWorkTimeEnabled = true,
-					OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(10),
-					OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny,
-					OvertimeRequestMinimumRestTimeThreshold = TimeSpan.FromHours(2)
-				};
-			person.WorkflowControlSet = workflowControlSet;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeEnabled = true;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(10);
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny;
+			person.WorkflowControlSet.OvertimeRequestMinimumRestTimeThreshold = TimeSpan.FromHours(2);
 
 			var personRequest = createOvertimeRequest(8, 1);
-			getTarget().Process(personRequest, true);
+			getTarget().Process(personRequest);
 
 			var expectedDenyReason = buildDenyReason("7/17/2017 8:00:00 AM - 7/17/2017 8:00:00 PM", TimeSpan.FromHours(11),
 				TimeSpan.FromHours(10));
@@ -952,18 +816,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			ScheduleStorage.Add(pa);
 
-			var workflowControlSet =
-				new WorkflowControlSet
-				{
-					OvertimeRequestMaximumContinuousWorkTimeEnabled = true,
-					OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(10),
-					OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny,
-					OvertimeRequestMinimumRestTimeThreshold = TimeSpan.FromMinutes(30)
-				};
-			person.WorkflowControlSet = workflowControlSet;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeEnabled = true;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(10);
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny;
+			person.WorkflowControlSet.OvertimeRequestMinimumRestTimeThreshold = TimeSpan.FromMinutes(30);
 
 			var personRequest = createOvertimeRequest(8, 1);
-			getTarget().Process(personRequest, true);
+			getTarget().Process(personRequest);
 
 			var expectedDenyReason = buildDenyReason("7/17/2017 8:00:00 AM - 7/17/2017 8:00:00 PM", TimeSpan.FromHours(11).Add(TimeSpan.FromMinutes(31)),
 				TimeSpan.FromHours(10));
@@ -990,18 +849,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			pa.AddActivity(shortBreak, new DateTimePeriod(2017, 7, 17, 20, 2017, 7, 17, 21));
 			ScheduleStorage.Add(pa);
 
-			var workflowControlSet =
-				new WorkflowControlSet
-				{
-					OvertimeRequestMaximumContinuousWorkTimeEnabled = true,
-					OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(10),
-					OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny,
-					OvertimeRequestMinimumRestTimeThreshold = TimeSpan.FromHours(2)
-				};
-			person.WorkflowControlSet = workflowControlSet;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeEnabled = true;
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTime = TimeSpan.FromHours(10);
+			person.WorkflowControlSet.OvertimeRequestMaximumContinuousWorkTimeHandleType = OvertimeValidationHandleType.Deny;
+			person.WorkflowControlSet.OvertimeRequestMinimumRestTimeThreshold = TimeSpan.FromHours(2);
 
 			var personRequest = createOvertimeRequest(19, 1);
-			getTarget().Process(personRequest, true);
+			getTarget().Process(personRequest);
 
 			var expectedDenyReason = buildDenyReason("7/17/2017 7:00:00 PM - 7/18/2017 7:00:00 AM", TimeSpan.FromHours(11),
 				TimeSpan.FromHours(10));

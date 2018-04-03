@@ -4,14 +4,13 @@ using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
-using Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -45,6 +44,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakeSkillCombinationResourceRepository CombinationRepository;
 		public FakePersonRequestRepository PersonRequestRepository;
+		public FakeSkillTypeRepository SkillTypeRepository;
 		public ICurrentScenario Scenario;
 		public FakeToggleManager ToggleManager;
 
@@ -53,7 +53,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		private readonly IMultiplicatorDefinitionSet _multiplicatorDefinitionSet 
 			= new MultiplicatorDefinitionSet("test", MultiplicatorType.Overtime).WithId();
 		private TimeSpan[] _intervals;
-
+		readonly ISkillType skillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony)
+			.WithId();
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			_person = PersonFactory.CreatePerson();
@@ -85,6 +86,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldChangeStatusToPendingWhenPersistOvertimeRequest()
 		{
+			SkillTypeRepository.Add(new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony).WithId());
 			_person.WorkflowControlSet = new WorkflowControlSet
 			{
 				AutoGrantOvertimeRequest = false
@@ -92,7 +94,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			_person.WorkflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.No,
-				BetweenDays = new MinMax<int>(0, 13)
+				BetweenDays = new MinMax<int>(0, 13),
+				SkillType = skillType
 			});
 			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 8d);
 
@@ -116,6 +119,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[SetCulture("en-US")]
 		public void ShouldReProcessWhenRequestPeriodIsChanged()
 		{
+			SkillTypeRepository.Add(new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony).WithId());
 			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 8d);
 			var now = new DateOnly(_currentDateTime);
 			var workflowControlSet = new WorkflowControlSet();
@@ -123,13 +127,15 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.No,
 				Period = new DateOnlyPeriod(now, now.AddDays(8)),
-				OrderIndex = 0
+				OrderIndex = 0,
+				SkillType = skillType
 			});
 			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Deny,
 				BetweenDays = new MinMax<int>(0, 2),
-				OrderIndex = 1
+				OrderIndex = 1,
+				SkillType = skillType
 			});
 			LoggedOnUser.CurrentUser().WorkflowControlSet = workflowControlSet;
 
@@ -232,7 +238,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		private ISkill createSkill(string name)
 		{
 			var skill = SkillFactory.CreateSkill(name).WithId();
-			skill.SkillType.Description = new Description("SkillTypeInboundTelephony");
+			skill.SkillType = skillType;
 			skill.StaffingThresholds = new StaffingThresholds(new Percent(-0.3), new Percent(-0.1), new Percent(0.1));
 			WorkloadFactory.CreateWorkloadWithOpenHours(skill, new TimePeriod(8, 00, 21, 00));
 			SkillRepository.Has(skill);

@@ -45,14 +45,13 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<MultiAbsenceRequestsUpdater>().As<IMultiAbsenceRequestsUpdater>().InstancePerLifetimeScope();
 			builder.RegisterType<AbsenceRequestProcessor>().As<IAbsenceRequestProcessor>().SingleInstance();
 			builder.RegisterType<SiteOpenHoursSpecification>().As<ISiteOpenHoursSpecification>();
-			registerType
-				<IOvertimeRequestProcessor, OvertimeRequestProcessorToggle47290On, OvertimeRequestProcessor>(builder,
-					Toggles.OvertimeRequestPeriodSkillTypeSetting_47290);
+			builder.RegisterType<OvertimeRequestProcessorToggle47290On>().As<IOvertimeRequestProcessor>();
 
 			builder.RegisterType<OvertimeRequestStartTimeValidator>().As<IOvertimeRequestValidator>().SingleInstance();
+			builder.RegisterType<OvertimeRequestOpenPeriodValidator>().As<IOvertimeRequestValidator>().SingleInstance();
 			builder.RegisterType<OvertimeRequestSiteOpenHourValidator>().As<IOvertimeRequestValidator>().SingleInstance();
 			builder.RegisterType<OvertimeRequestAlreadyHasScheduleValidator>().As<IOvertimeRequestValidator>().SingleInstance();
-			builder.RegisterType<OvertimeRequestPeriodValidator>().As<IOvertimeRequestValidator>().SingleInstance();
+			builder.RegisterType<OvertimeRequestStaffingAvailablePeriodValidator>().As<IOvertimeRequestValidator>().SingleInstance();
 			builder.RegisterType<OvertimeRequestContractWorkRulesValidator>().As<IOvertimeRequestValidator>().SingleInstance();
 			builder.RegisterType<OvertimeRequestMaximumtimeValidator>().As<IOvertimeRequestValidator>().SingleInstance();
 			builder.RegisterType<OvertimeRequestMaximumContinuousWorkTimeValidator>().As<IOvertimeRequestValidator>().SingleInstance();
@@ -99,18 +98,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				OvertimeRequestUnderStaffingSkillProvider>(builder, Toggles.OvertimeRequestUseMostUnderStaffedSkill_47853);
 
 			builder.RegisterType<SkillStaffingReadModelDataLoader>().As<ISkillStaffingReadModelDataLoader>();
-
-			registerType
-				<IOvertimeRequestOpenPeriodProvider, OvertimeRequestOpenPeriodProviderToggle47290On, OvertimeRequestOpenPeriodProvider>(builder,
-					Toggles.OvertimeRequestPeriodSkillTypeSetting_47290);
-
-			registerType
-				<IOvertimeRequestSkillProvider, OvertimeRequestSkillProviderToggle47290On, OvertimeRequestSkillProvider>(builder,
-					Toggles.OvertimeRequestPeriodSkillTypeSetting_47290);
-
-			registerType
-				<ISkillStaffingDataSkillTypeFilter, SkillStaffingDataSkillTypeFilter, SkillStaffingDataSkillTypeFilterToggle47290Off>(builder,
-					Toggles.OvertimeRequestPeriodSkillTypeSetting_47290);
+			builder.RegisterType<OvertimeRequestOpenPeriodProviderToggle47290On>().As<IOvertimeRequestOpenPeriodProvider>();
+			builder.RegisterType<OvertimeRequestSkillProviderToggle47290On>().As<IOvertimeRequestSkillProvider>();
+			builder.RegisterType<SkillStaffingDataSkillTypeFilter>().As<ISkillStaffingDataSkillTypeFilter>();
 
 			builder.RegisterType<SkillOpenHourFilter>().As<ISkillOpenHourFilter>();
 			builder.RegisterType<WaitlistPreloadService>().AsSelf().InstancePerLifetimeScope();

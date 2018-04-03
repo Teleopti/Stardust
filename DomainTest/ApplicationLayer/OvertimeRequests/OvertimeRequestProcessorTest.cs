@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.SiteOpenHours;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Intraday;
@@ -59,6 +60,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 		private readonly IMultiplicatorDefinitionSet _multiplicatorDefinitionSet
 			= new MultiplicatorDefinitionSet("name", MultiplicatorType.Overtime).WithId();
+		private readonly ISkillType _phoneSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony).WithId();
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -585,8 +587,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			}
 			else
 			{
-				skill.SkillType.Description = new Description(SkillTypeIdentifier.Phone);
-				skill.SkillType.SetId(new Guid());
+				skill.SkillType = _phoneSkillType;
 			}
 			
 			skill.StaffingThresholds = createStaffingThresholds();
@@ -689,9 +690,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
-				BetweenDays = new MinMax<int>(0, 30)
+				BetweenDays = new MinMax<int>(0, 30),
+				SkillType = _phoneSkillType
 			});
 			LoggedOnUser.CurrentUser().WorkflowControlSet = workflowControlSet;
+			SkillTypeRepository.Add(_phoneSkillType);
 		}
 
 		private IPersonRequest createOvertimeRequest(int startHour, int hours)
@@ -726,9 +729,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			return personRequest;
 		}
 
-		private IOvertimeRequestProcessor getTarget()
+		private IOvertimeRequestProcessor getTarget(int staffingDataAvailableDays = 13)
 		{
-			Target.StaffingDataAvailableDays = 13;
+			Target.StaffingDataAvailableDays = staffingDataAvailableDays;
 			return Target;
 		}
 	}

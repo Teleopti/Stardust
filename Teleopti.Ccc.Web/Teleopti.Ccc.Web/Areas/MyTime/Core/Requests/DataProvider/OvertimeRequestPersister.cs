@@ -1,5 +1,4 @@
 using System;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Requests;
@@ -13,25 +12,21 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider {
 		private readonly IPersonRequestRepository _personRequestRepository;
 		private readonly OvertimeRequestFormMapper _mapper;
 		private readonly RequestsViewModelMapper _requestsMapper;
-		private readonly IToggleManager _toggleManager;
 		private readonly IOvertimeRequestProcessor _overtimeRequestProcessor;
-		private readonly ILoggedOnUser _logonUser;
 
 		public OvertimeRequestPersister(IPersonRequestRepository personRequestRepository, OvertimeRequestFormMapper mapper,
-			RequestsViewModelMapper requestsMapper, IOvertimeRequestProcessor overtimeRequestProcessor, IToggleManager toggleManager, ILoggedOnUser logonUser)
+			RequestsViewModelMapper requestsMapper, IOvertimeRequestProcessor overtimeRequestProcessor, IToggleManager toggleManager)
 		{
 			_personRequestRepository = personRequestRepository;
 			_mapper = mapper;
 			_requestsMapper = requestsMapper;
-			_toggleManager = toggleManager;
 			_overtimeRequestProcessor = overtimeRequestProcessor;
-			_overtimeRequestProcessor.StaffingDataAvailableDays = StaffingInfoAvailableDaysProvider.GetDays(_toggleManager);
-			_logonUser = logonUser;
+			_overtimeRequestProcessor.StaffingDataAvailableDays = StaffingInfoAvailableDaysProvider.GetDays(toggleManager);
 		}
 
 		public RequestViewModel Persist(OvertimeRequestForm form)
 		{
-			IPersonRequest personRequest = null;
+			IPersonRequest personRequest;
 			if (form.Id.HasValue)
 			{
 				personRequest = _personRequestRepository.Get(form.Id.Value);
@@ -47,7 +42,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider {
 				}
 				personRequest = _mapper.Map(form, personRequest);
 
-				
 				_overtimeRequestProcessor.Process(personRequest);
 			}
 			else
@@ -59,14 +53,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider {
 			}
 
 			return _requestsMapper.Map(personRequest);
-		}
-
-		private bool getGlobalIsAutoGrant()
-		{
-			var currentUser = _logonUser.CurrentUser();
-			if (currentUser.WorkflowControlSet == null) return true;
-
-			return currentUser.WorkflowControlSet.AutoGrantOvertimeRequest;
 		}
 	}
 }

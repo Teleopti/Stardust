@@ -8,8 +8,10 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Intraday;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
@@ -42,9 +44,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		public MutableNow Now;
 		public IRequestApprovalServiceFactory RequestApprovalServiceFactory;
 
+		readonly ISkillType skillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony)
+			.WithId();
+
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<FakeCommandDispatcher>().For<ICommandDispatcher>();
+			system.UseTestDouble(new FakeSkillTypeRepository(skillType)).For<ISkillTypeRepository>();
 		}
 
 		[Test]
@@ -53,11 +59,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var scenario = ScenarioRepository.Has("scenario");
 			var activity = ActivityRepository.Has("activity");
 			var skill = SkillRepository.Has("skill", activity).WithId().DefaultResolution(60);
-			var person = PersonRepository.Has(skill);
+			var person = createPerson(skill);
 
-			var workflowControlSet = new WorkflowControlSet().WithId();
-			workflowControlSet.AutoGrantOvertimeRequest = true;
-			person.WorkflowControlSet = workflowControlSet;
+			person.WorkflowControlSet.AutoGrantOvertimeRequest = true;
 
 			var assignmentPeriod = new DateTimePeriod(2018, 01, 01, 8, 2018, 01, 01, 9);
 			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity,
@@ -75,6 +79,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			});
 			
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(assignmentPeriod.StartDateTime), 10));
+			Now.Is(new DateTime(2018, 01, 01));
 			var requestPeriod = new DateTimePeriod(2018, 01, 01, 9, 2018, 01, 01, 10);
 
 			var personRequest = createOvertimeRequest(person, requestPeriod);
@@ -96,11 +101,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var scenario = ScenarioRepository.Has("scenario");
 			var activity = ActivityRepository.Has("activity");
 			var skill = SkillRepository.Has("skill", activity).WithId().DefaultResolution(60);
-			var person = PersonRepository.Has(skill);
+			var person = createPerson(skill);
 
-			var workflowControlSet = new WorkflowControlSet().WithId();
-			workflowControlSet.AutoGrantOvertimeRequest = true;
-			person.WorkflowControlSet = workflowControlSet;
+			person.WorkflowControlSet.AutoGrantOvertimeRequest = true;
 
 			var assignmentPeriod = new DateTimePeriod(2018, 01, 01, 8, 2018, 01, 01, 9);
 			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity,
@@ -118,6 +121,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			});
 
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(assignmentPeriod.StartDateTime), 10));
+			Now.Is(new DateTime(2018, 01, 01));
 			var requestPeriod = new DateTimePeriod(2018, 01, 01, 9, 2018, 01, 01, 10);
 
 			var personRequest = createOvertimeRequest(person, requestPeriod);
@@ -141,11 +145,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var activity2 = ActivityRepository.Has("activity2");
 			var skill = SkillRepository.Has("skill", activity).WithId().DefaultResolution(60);
 			var skill2 = SkillRepository.Has("skill2", activity2).WithId().DefaultResolution(60);
-			var person = PersonRepository.Has(skill, skill2);
+			var person = createPerson(skill, skill2);
 
-			var workflowControlSet = new WorkflowControlSet().WithId();
-			workflowControlSet.AutoGrantOvertimeRequest = true;
-			person.WorkflowControlSet = workflowControlSet;
+			person.WorkflowControlSet.AutoGrantOvertimeRequest = true;
 
 			var assignmentPeriod = new DateTimePeriod(2018, 01, 01, 8, 2018, 01, 01, 9);
 			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity,
@@ -172,6 +174,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(assignmentPeriod.StartDateTime), 10));
 			SkillDayRepository.Has(skill2.CreateSkillDayWithDemand(scenario, new DateOnly(assignmentPeriod.StartDateTime), 10));
 
+			Now.Is(new DateTime(2018, 01, 01));
 			var requestPeriod = new DateTimePeriod(2018, 01, 01, 9, 2018, 01, 01, 10);
 
 			var personRequest = createOvertimeRequest(person, requestPeriod);
@@ -195,11 +198,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var activity2 = ActivityRepository.Has("activity2");
 			var skill = SkillRepository.Has("skill", activity).WithId().DefaultResolution(60);
 			var skill2 = SkillRepository.Has("skill2", activity2).WithId().DefaultResolution(60);
-			var person = PersonRepository.Has(skill, skill2);
+			var person = createPerson(skill, skill2);
 
-			var workflowControlSet = new WorkflowControlSet().WithId();
-			workflowControlSet.AutoGrantOvertimeRequest = true;
-			person.WorkflowControlSet = workflowControlSet;
+			person.WorkflowControlSet.AutoGrantOvertimeRequest = true;
 
 			var assignmentPeriod = new DateTimePeriod(2018, 01, 01, 8, 2018, 01, 01, 9);
 			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity,
@@ -226,6 +227,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(assignmentPeriod.StartDateTime), 10));
 			SkillDayRepository.Has(skill2.CreateSkillDayWithDemand(scenario, new DateOnly(assignmentPeriod.StartDateTime), 10));
 
+			Now.Is(new DateTime(2018, 01, 01));
 			var requestPeriod = new DateTimePeriod(2018, 01, 01, 9, 2018, 01, 01, 10);
 
 			var personRequest = createOvertimeRequest(person, requestPeriod);
@@ -241,21 +243,31 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			addOvertimeActivityCommand?.Period.Should().Be.EqualTo(requestPeriod);
 		}
 		
-		[Test]  //This test makes no sence, there is only one activity and it is the same for both primary and secondary skill??
+		[Test]
 		public void ShouldAddActivityOfPrimarySkillWhenApproved()
 		{
 			var scenario = ScenarioRepository.Has("scenario");
-			var activity = ActivityRepository.Has("activity");
-			var primarySkill = SkillRepository.Has("skill", activity).WithId().DefaultResolution(60).CascadingIndex(1);
-			var secondarySkill = SkillRepository.Has("skill2", activity).WithId().DefaultResolution(60).CascadingIndex(2);
+			var primaryActivity = ActivityRepository.Has("activity");
+			var secondaryActivity = ActivityRepository.Has("activity");
+			var primarySkill = SkillRepository.Has("skill", primaryActivity).WithId().DefaultResolution(60).CascadingIndex(1);
+			primarySkill.SkillType = skillType;
+			var secondarySkill = SkillRepository.Has("skill2", secondaryActivity).WithId().DefaultResolution(60).CascadingIndex(2);
+			secondarySkill.SkillType = skillType;
 			var person = PersonRepository.Has(primarySkill, secondarySkill);
+			person.AddPersonPeriod(
+				PersonPeriodFactory.CreatePersonPeriodWithSkills(new DateOnly(2018, 01, 01), primarySkill, secondarySkill));
 
 			var workflowControlSet = new WorkflowControlSet().WithId();
 			workflowControlSet.AutoGrantOvertimeRequest = true;
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod()
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
+				BetweenDays = new MinMax<int>(0, 13)
+			});
 			person.WorkflowControlSet = workflowControlSet;
 
 			var assignmentPeriod = new DateTimePeriod(2018, 01, 01, 8, 2018, 01, 01, 9);
-			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity,
+			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, primaryActivity,
 				assignmentPeriod, new ShiftCategory("category")));
 
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
@@ -272,6 +284,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			SkillDayRepository.Has(primarySkill.CreateSkillDayWithDemand(scenario, new DateOnly(assignmentPeriod.StartDateTime), 10));
 			SkillDayRepository.Has(secondarySkill.CreateSkillDayWithDemand(scenario, new DateOnly(assignmentPeriod.StartDateTime), 10));
 
+			Now.Is(new DateTime(2018, 01, 01));
 			var requestPeriod = new DateTimePeriod(2018, 01, 01, 9, 2018, 01, 01, 10);
 
 			var personRequest = createOvertimeRequest(person, requestPeriod);
@@ -283,7 +296,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			result.Count().Should().Be(0);
 			var addOvertimeActivityCommand = CommandDispatcher.LatestCommand as AddOvertimeActivityCommand;
 			addOvertimeActivityCommand.Should().Not.Be.Null();
-			addOvertimeActivityCommand?.ActivityId.Should().Be.EqualTo(activity.Id.GetValueOrDefault());
+			addOvertimeActivityCommand?.ActivityId.Should().Be.EqualTo(primaryActivity.Id.GetValueOrDefault());
 			addOvertimeActivityCommand?.Period.Should().Be.EqualTo(requestPeriod);
 		}
 
@@ -294,11 +307,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var activity = ActivityRepository.Has("activity");
 			var primarySkill = SkillRepository.Has("skill", activity).WithId().DefaultResolution(60).CascadingIndex(1);
 			var secondarySkill = SkillRepository.Has("skill2", activity).WithId().DefaultResolution(60).CascadingIndex(2);
-			var person = PersonRepository.Has(primarySkill, secondarySkill);
+			var person = createPerson(primarySkill, secondarySkill);
 
-			var workflowControlSet = new WorkflowControlSet().WithId();
-			workflowControlSet.AutoGrantOvertimeRequest = true;
-			person.WorkflowControlSet = workflowControlSet;
+			person.WorkflowControlSet.AutoGrantOvertimeRequest = true;
 
 			var assignmentPeriod = new DateTimePeriod(2018, 01, 01, 8, 2018, 01, 01, 9);
 			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity,
@@ -318,6 +329,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			SkillDayRepository.Has(primarySkill.CreateSkillDayWithDemand(scenario, new DateOnly(assignmentPeriod.StartDateTime), 10));
 			SkillDayRepository.Has(secondarySkill.CreateSkillDayWithDemand(scenario, new DateOnly(assignmentPeriod.StartDateTime), 10));
 
+			Now.Is(new DateTime(2018, 01, 01));
 			var requestPeriod = new DateTimePeriod(2018, 01, 01, 9, 2018, 01, 01, 10);
 
 			var personRequest = createOvertimeRequest(person, requestPeriod);
@@ -341,11 +353,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var activity2 = ActivityRepository.Has("activity2");
 			var primarySkill = SkillRepository.Has("skill", activity).WithId().DefaultResolution(60).CascadingIndex(1);
 			var secondarySkill = SkillRepository.Has("skill2", activity2).WithId().DefaultResolution(60).CascadingIndex(2);
-			var person = PersonRepository.Has(primarySkill, secondarySkill);
+			var person = createPerson(primarySkill, secondarySkill);
 
-			var workflowControlSet = new WorkflowControlSet().WithId();
-			workflowControlSet.AutoGrantOvertimeRequest = true;
-			person.WorkflowControlSet = workflowControlSet;
+			person.WorkflowControlSet.AutoGrantOvertimeRequest = true;
 
 			var assignmentPeriod = new DateTimePeriod(2018, 01, 01, 8, 2018, 01, 01, 9);
 			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity2, //scheduled on the activity of the low priority skill
@@ -372,6 +382,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			SkillDayRepository.Has(primarySkill.CreateSkillDayWithDemand(scenario, new DateOnly(assignmentPeriod.StartDateTime), 10));
 			SkillDayRepository.Has(secondarySkill.CreateSkillDayWithDemand(scenario, new DateOnly(assignmentPeriod.StartDateTime), 10));
 
+			Now.Is(new DateTime(2018, 01, 01));
 			var requestPeriod = new DateTimePeriod(2018, 01, 01, 9, 2018, 01, 01, 10);
 
 			var personRequest = createOvertimeRequest(person, requestPeriod);
@@ -387,6 +398,28 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			addOvertimeActivityCommand?.Period.Should().Be.EqualTo(requestPeriod);
 		}
 
+		private IPerson createPerson(params ISkill[] skills)
+		{
+			foreach (var skill in skills)
+			{
+				skill.SkillType = skillType;
+			}
+
+			var workflowControlSet = new WorkflowControlSet().WithId();
+
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod()
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
+				BetweenDays = new MinMax<int>(0, 13)
+			});
+
+			var person = PersonRepository.Has(skills);
+			person.WorkflowControlSet = workflowControlSet;
+			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriodWithSkills(new DateOnly(2014, 1, 1), skills));
+
+			return person;
+		}
+
 		[Test]
 		public void ShouldAddActivityOfPrimarySkillWhenApproved_ThisIsProbablyWhatYourAreTryingToDo()
 		{
@@ -395,11 +428,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var activity2 = ActivityRepository.Has("activity2");
 			var primarySkill = SkillRepository.Has("skill", activity).WithId().DefaultResolution(60).CascadingIndex(1);
 			var secondarySkill = SkillRepository.Has("skill2", activity2).WithId().DefaultResolution(60).CascadingIndex(2);
-			var person = PersonRepository.Has(primarySkill, secondarySkill);
+			var person = createPerson(primarySkill, secondarySkill);
 
-			var workflowControlSet = new WorkflowControlSet().WithId();
-			workflowControlSet.AutoGrantOvertimeRequest = true;
-			person.WorkflowControlSet = workflowControlSet;
+			person.WorkflowControlSet.AutoGrantOvertimeRequest = true;
 
 			var assignmentPeriod = new DateTimePeriod(2018, 01, 01, 8, 2018, 01, 01, 9);
 			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity2, //scheduled on the activity of the low priority skill
@@ -426,6 +457,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			SkillDayRepository.Has(primarySkill.CreateSkillDayWithDemand(scenario, new DateOnly(assignmentPeriod.StartDateTime), 10));
 			SkillDayRepository.Has(secondarySkill.CreateSkillDayWithDemand(scenario, new DateOnly(assignmentPeriod.StartDateTime), 10));
 
+			Now.Is(new DateTime(2018, 1, 1));
 			var requestPeriod = new DateTimePeriod(2018, 01, 01, 9, 2018, 01, 01, 10);
 
 			var personRequest = createOvertimeRequest(person, requestPeriod);
@@ -447,11 +479,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var scenario = ScenarioRepository.Has("scenario");
 			var activity = ActivityRepository.Has("activity");
 			var skill = SkillRepository.Has("skill", activity).WithId().DefaultResolution(60);
-			var person = PersonRepository.Has(skill);
+			var person = createPerson(skill);
 
-			var workflowControlSet = new WorkflowControlSet().WithId();
-			workflowControlSet.AutoGrantOvertimeRequest = true;
-			person.WorkflowControlSet = workflowControlSet;
+			person.WorkflowControlSet.AutoGrantOvertimeRequest = true;
 
 			var assignmentPeriod = new DateTimePeriod(2018, 01, 01, 22, 2018, 01, 01, 23);
 			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity,
@@ -470,6 +500,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(assignmentPeriod.StartDateTime), 10));
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(assignmentPeriod.StartDateTime.AddDays(1)), 10));
+
+			Now.Is(new DateTime(2018, 01, 01));
 			var requestPeriod = new DateTimePeriod(2018, 01, 01, 23, 2018, 01, 02, 01);
 
 			var personRequest = createOvertimeRequest(person, requestPeriod);
@@ -491,13 +523,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var scenario = ScenarioRepository.Has("scenario");
 			var activity = ActivityRepository.Has("activity");
 			var skill = SkillRepository.Has("skill", activity).WithId().DefaultResolution(60);
-			var person = PersonRepository.Has(skill);
+			var person = createPerson(skill);
 
-			var workflowControlSet = new WorkflowControlSet().WithId();
-			workflowControlSet.AutoGrantOvertimeRequest = true;
-			person.WorkflowControlSet = workflowControlSet;
+			person.WorkflowControlSet.AutoGrantOvertimeRequest = true;
 
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(2018, 01, 01), 10));
+
+			Now.Is(new DateTime(2018, 01, 01));
 			var requestPeriod = new DateTimePeriod(2018, 01, 01, 9, 2018, 01, 01, 10);
 
 			var personRequest = createOvertimeRequest(person, requestPeriod);
@@ -513,7 +545,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			addOvertimeActivityCommand?.Period.Should().Be.EqualTo(requestPeriod);
 		}
 
-		[Test] //Looks like you mean agen't has no person period for the request period? Or at least no skills for that period
+		[Test]
 		public void ShouldNotApproveWhenAgentSkillIsOutOfPersonPeriod()  
 		{
 			var scenario = ScenarioRepository.Has("scenario");
@@ -561,12 +593,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var scenario = ScenarioRepository.Has("scenario");
 			var activity = ActivityRepository.Has("activity");
 			var skill = SkillRepository.Has("skill", activity).WithId().DefaultResolution(60);
-			var person = PersonRepository.Has(skill);
+			var person = createPerson(skill);
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));  // better to not use WET since that is UTC+0..
 
-			var workflowControlSet = new WorkflowControlSet().WithId();
-			workflowControlSet.AutoGrantOvertimeRequest = true;
-			person.WorkflowControlSet = workflowControlSet;
+			person.WorkflowControlSet.AutoGrantOvertimeRequest = true;
 
 			var assignmentPeriod = new DateTimePeriod(2018, 01, 01, 8, 2018, 01, 01, 9);
 			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity,
@@ -584,6 +614,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			});
 
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(assignmentPeriod.StartDateTime), 10));
+
+			Now.Is(new DateTime(2018, 01, 01));
 			var requestPeriod = new DateTimePeriod(2018, 01, 01, 9, 2018, 01, 01, 10);
 
 			var personRequest = createOvertimeRequest(person, requestPeriod);

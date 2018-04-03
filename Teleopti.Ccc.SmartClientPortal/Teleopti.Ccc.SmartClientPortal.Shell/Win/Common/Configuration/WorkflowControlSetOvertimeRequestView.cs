@@ -199,15 +199,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 				OvertimeRequestPeriodModel.OvertimeRequestWorkRuleValidationHandleOptionViews.Values.ToList(), "Description",
 				typeof(OvertimeRequestValidationHandleOptionView)));
 
-			if (_toggleManager.IsEnabled(Toggles.OvertimeRequestPeriodSkillTypeSetting_47290))
-			{
-				var skillTypeColumn =
-					new SFGridDropDownColumn
-						<OvertimeRequestPeriodModel, OvertimeRequestPeriodSkillTypeModel>(
-							"SkillType", Resources.SkillType, " ", WorkflowControlSetModel.DefaultOvertimeRequestSkillTypeAdapters,
-							"DisplayText", null);
-				columnList.Add(skillTypeColumn);
-			}
+			var skillTypeColumn =
+				new SFGridDropDownColumn
+					<OvertimeRequestPeriodModel, OvertimeRequestPeriodSkillTypeModel>(
+						"SkillType", Resources.SkillType, " ", WorkflowControlSetModel.DefaultOvertimeRequestSkillTypeAdapters,
+						"DisplayText", null);
+			columnList.Add(skillTypeColumn);
 
 			columnList.Add(new DateOnlyColumn<OvertimeRequestPeriodModel>("PeriodStartDate", Resources.Start, Resources.Period)
 			{

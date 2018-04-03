@@ -8,8 +8,10 @@ using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
@@ -50,6 +52,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public FakePersonRequestRepository PersonRequestRepository;
 		public FakePushMessageDialogueRepository PushMessageDialogueRepository;
 		public ICurrentDataSource CurrentDataSource;
+		public FakeSkillTypeRepository SkillTypeRepository;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -951,6 +954,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldReturnTrueForOvertimeProbabilityEnabledAfterItHasBeenToggledOnAtFatClient()
 		{
+			initData();
 			var workFlowControlSet = new WorkflowControlSet {OvertimeProbabilityEnabled = true};
 			workFlowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod()
 			{
@@ -988,6 +992,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldReturnTrueForOvertimeProbabilityEnabledWhenOvertimeAvailabilityLicenseIsAvailable()
 		{
+			initData();
 			var licenseActivator = LicenseProvider.GetLicenseActivator(new OvertimeFakeLicenseService(true, false));
 			DefinedLicenseDataFactory.SetLicenseActivator(CurrentDataSource.CurrentName(), licenseActivator);
 
@@ -1005,6 +1010,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldReturnTrueForOvertimeProbabilityEnabledWhenOvertimeRequestsLicenseIsAvailable()
 		{
+			initData();
 			var licenseActivator = LicenseProvider.GetLicenseActivator(new OvertimeFakeLicenseService(false, true));
 			DefinedLicenseDataFactory.SetLicenseActivator(CurrentDataSource.CurrentName(), licenseActivator);
 
@@ -1022,6 +1028,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldReturnTrueForOvertimeProbabilityEnabledWhenOvertimeAvailabilityAndOvertimeRequestsLicenseAreBothAvailable()
 		{
+			initData();
 			var licenseActivator = LicenseProvider.GetLicenseActivator(new OvertimeFakeLicenseService(true, true));
 			DefinedLicenseDataFactory.SetLicenseActivator(CurrentDataSource.CurrentName(), licenseActivator);
 
@@ -1093,6 +1100,18 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			var result = Target.FetchDayData(Now.ServerDate_DontUse());
 			result.CheckStaffingByIntraday.Should().Be(true);
+		}
+
+		private void initData()
+		{
+			var person = User.CurrentUser();
+			var skillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony)
+				.WithId();
+			var skill = new Skill("test1").WithId();
+			skill.SkillType = skillType;
+			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriodWithSkills(new DateOnly(Now.UtcDateTime()), skill));
+
+			SkillTypeRepository.Add(skillType);
 		}
 	}
 }

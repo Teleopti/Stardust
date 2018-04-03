@@ -7,13 +7,13 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 {
-	public class OvertimeRequestSkillProvider : IOvertimeRequestSkillProvider
+	public class OvertimeRequestSkillProvider47290Off : IOvertimeRequestSkillProvider
 	{
 		private readonly IPrimaryPersonSkillFilter _primaryPersonSkillFilter;
 		private readonly ISupportedSkillsInIntradayProvider _supportedSkillsInIntradayProvider;
 		private readonly PersonalSkills _personalSkills = new PersonalSkills();
 
-		public OvertimeRequestSkillProvider(IPrimaryPersonSkillFilter primaryPersonSkillFilter, ISupportedSkillsInIntradayProvider supportedSkillsInIntradayProvider)
+		public OvertimeRequestSkillProvider47290Off(IPrimaryPersonSkillFilter primaryPersonSkillFilter, ISupportedSkillsInIntradayProvider supportedSkillsInIntradayProvider)
 		{
 			_primaryPersonSkillFilter = primaryPersonSkillFilter;
 			_supportedSkillsInIntradayProvider = supportedSkillsInIntradayProvider;

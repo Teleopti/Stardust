@@ -11,6 +11,16 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	{
 		private readonly List<ISkillType> _skillTypes = new List<ISkillType>();
 
+		public FakeSkillTypeRepository()
+		{
+
+		}
+
+		public FakeSkillTypeRepository(ISkillType skillType)
+		{
+			_skillTypes.Add(skillType);
+		}
+
 		public void Add(ISkillType root)
 		{
 			_skillTypes.Add(root);

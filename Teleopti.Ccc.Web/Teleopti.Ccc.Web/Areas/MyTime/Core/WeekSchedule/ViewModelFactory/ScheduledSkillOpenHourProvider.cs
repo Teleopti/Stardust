@@ -1,9 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DotNetOpenAuth.Messaging;
+using Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
@@ -11,14 +15,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 	public class ScheduledSkillOpenHourProvider : IScheduledSkillOpenHourProvider
 	{
 		private readonly ILoggedOnUser _loggedOnUser;
-		private readonly ISupportedSkillsInIntradayProvider _supportedSkillsInIntradayProvider;
 		private readonly IStaffingDataAvailablePeriodProvider _staffingDataAvailablePeriodProvider;
+		private readonly ISkillTypeRepository _skillTypeRepository;
+		private readonly IOvertimeRequestOpenPeriodProvider _overtimeRequestOpenPeriodProvider;
 
-		public ScheduledSkillOpenHourProvider(ILoggedOnUser loggedOnUser, ISupportedSkillsInIntradayProvider supportedSkillsInIntradayProvider, IStaffingDataAvailablePeriodProvider staffingDataAvailablePeriodProvider)
+		public ScheduledSkillOpenHourProvider(ILoggedOnUser loggedOnUser, IStaffingDataAvailablePeriodProvider staffingDataAvailablePeriodProvider, ISkillTypeRepository skillTypeRepository, IOvertimeRequestOpenPeriodProvider overtimeRequestOpenPeriodProvider)
 		{
 			_loggedOnUser = loggedOnUser;
-			_supportedSkillsInIntradayProvider = supportedSkillsInIntradayProvider;
 			_staffingDataAvailablePeriodProvider = staffingDataAvailablePeriodProvider;
+			_skillTypeRepository = skillTypeRepository;
+			_overtimeRequestOpenPeriodProvider = overtimeRequestOpenPeriodProvider;
 		}
 
 		public TimePeriod? GetSkillOpenHourPeriod(IScheduleDay scheduleDay)
@@ -62,27 +68,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			return new TimePeriod(startTime.Value, endTime.Value);
 		}
 
-		private  IPersonSkill[] getPersonSkills(DateOnlyPeriod period)
-		{
-			var person = _loggedOnUser.CurrentUser();
-			var personPeriod = person.PersonPeriods(period).ToArray();
-			if (!personPeriod.Any())
-				return null;
-
-			var personSkills = filterPersonSkills(personPeriod.SelectMany(p => new PersonalSkills().PersonSkills(p)),period);
-
-			if (!personSkills.Any())
-				return null;
-
-			return personSkills;
-		}
-
-		protected virtual IPersonSkill[] filterPersonSkills(IEnumerable<IPersonSkill> personSkills, DateOnlyPeriod period)
-		{
-			return personSkills.Where(p => _supportedSkillsInIntradayProvider.CheckSupportedSkill(p.Skill)).ToArray();
-		}
-
-		
 		public TimePeriod? GetSkillOpenHourPeriodByDate(IPersonSkill[] personSkills, IScheduleDay scheduleDay)
 		{
 			if (personSkills == null || !personSkills.Any())
@@ -111,6 +96,55 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			var startTime = openHourList.Min(a => a.StartTime);
 			var endTime = openHourList.Max(a => a.EndTime);
 			return new TimePeriod(startTime, endTime);
+		}
+
+		private IPersonSkill[] getPersonSkills(DateOnlyPeriod period)
+		{
+			var person = _loggedOnUser.CurrentUser();
+			var personPeriod = person.PersonPeriods(period).ToArray();
+			if (!personPeriod.Any())
+				return null;
+
+			var personSkills = filterPersonSkills(personPeriod.SelectMany(p => new PersonalSkills().PersonSkills(p)), period);
+
+			if (!personSkills.Any())
+				return null;
+
+			return personSkills;
+		}
+
+		private IPersonSkill[] filterPersonSkills(IEnumerable<IPersonSkill> personSkills, DateOnlyPeriod period)
+		{
+			var skillTypes = getSkillTypesInRequestOpenPeriod(period);
+
+			return personSkills.Where(p => isSkillTypeMatchedInOpenPeriod(p, skillTypes)).ToArray();
+		}
+
+		private HashSet<ISkillType> getSkillTypesInRequestOpenPeriod(DateOnlyPeriod period)
+		{
+			var person = _loggedOnUser.CurrentUser();
+			var permissionInformation = person.PermissionInformation;
+			var personTimeZone = permissionInformation.DefaultTimeZone();
+
+			var skillTypes = new HashSet<ISkillType>();
+			var phoneSkillType = _skillTypeRepository.LoadAll()
+				.FirstOrDefault(s => s.Description.Name.Equals(SkillTypeIdentifier.Phone));
+			var days = period.DayCollection();
+
+			foreach (var day in days)
+			{
+				var skillTypesInPeriod = _overtimeRequestOpenPeriodProvider.GetOvertimeRequestOpenPeriods(person,
+						day.ToDateTimePeriod(personTimeZone)).Where(o => o.AutoGrantType != OvertimeRequestAutoGrantType.Deny)
+					.Select(o => o.SkillType ?? phoneSkillType);
+				skillTypes.AddRange(skillTypesInPeriod);
+			}
+
+			return skillTypes;
+		}
+
+		private bool isSkillTypeMatchedInOpenPeriod(IPersonSkill personSkill, HashSet<ISkillType> skillTypes)
+		{
+			return skillTypes.Contains(personSkill.Skill.SkillType);
 		}
 
 		private static TimePeriod toAgentTimeZonePeriod(DateOnly date, TimePeriod openHourPeriod,

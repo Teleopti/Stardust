@@ -53,12 +53,4 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 				person.PermissionInformation.DefaultTimeZone()))).Contains(requestPeriod);
 		}
 	}
-
-	public class SkillStaffingDataSkillTypeFilterToggle47290Off : ISkillStaffingDataSkillTypeFilter
-	{
-		public IList<SkillStaffingData> Filter(IEnumerable<SkillStaffingData> skillStaffingDatas)
-		{
-			return skillStaffingDatas.ToList();
-		}
-	}
 }

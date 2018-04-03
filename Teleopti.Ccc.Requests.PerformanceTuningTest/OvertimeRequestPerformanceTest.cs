@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			{
 				WithUnitOfWork.Do(() =>
 				{
-					OvertimeRequestProcessor.Process(request, true);
+					OvertimeRequestProcessor.Process(request);
 				});
 			}
 			WithUnitOfWork.Do(() =>

@@ -19,8 +19,10 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
@@ -33,7 +35,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 	[TestFixture]
 	[MyTimeWebTest]
 	[SetCulture("sv-SE")]
-	public class ScheduleApiControllerTimeLineTest
+	public class ScheduleApiControllerTimeLineTest:ISetup
 	{
 		public ScheduleApiController Target;
 		public ICurrentScenario Scenario;
@@ -43,6 +45,33 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public IPushMessageProvider PushMessageProvider;
 		public IPushMessageDialogueRepository PushMessageDialogueRepository;
 		public FakeUserTimeZone UserTimeZone;
+		readonly ISkillType skillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony)
+			.WithId();
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.UseTestDouble<FakeSkillRepository>().For<ISkillRepository>();
+			var person = PersonFactory.CreatePersonWithId();
+			var skill = new Skill("test1").WithId();
+			skill.SkillType = skillType;
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriodWithSkills(new DateOnly(2014, 1, 1), skill);
+			personPeriod.Team = TeamFactory.CreateTeam("team1", "site1");
+			person.AddPersonPeriod(personPeriod);
+			var workflowControlSet = new WorkflowControlSet("test");
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod()
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
+				BetweenDays = new MinMax<int>(0, 13),
+				SkillType = skillType
+			});
+			person.WorkflowControlSet = workflowControlSet;
+
+			system.UseTestDouble(new FakeLoggedOnUser(person)).For<ILoggedOnUser>();
+
+			system.UseTestDouble(new FakeSkillTypeRepository(skillType)).For<ISkillTypeRepository>();
+
+		}
+
 
 		[Test]
 		public void ShouldAdjustTimelineForOverTimeWhenSiteOpenHourPeriodContainsSchedulePeriod()
@@ -121,7 +150,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 		[Test]
 		[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
-		[Toggle(Toggles.OvertimeRequestPeriodSkillTypeSetting_47290)]
 		public void ShouldAdjustTimelineAccordingOpenPeriodSkillTypeOpenHourDaySchedule()
 		{
 			var skillType = new SkillTypeEmail(new Description(SkillTypeIdentifier.Email), ForecastSource.Email).WithId();
@@ -149,7 +177,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 		[Test]
 		[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
-		[Toggle(Toggles.OvertimeRequestPeriodSkillTypeSetting_47290)]
 		public void ShouldAdjustTimelineForDayScheduleWithMultipleSkillTypesMatched()
 		{
 			var phoneSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony).WithId();
@@ -187,7 +214,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 		[Test]
 		[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
-		[Toggle(Toggles.OvertimeRequestPeriodSkillTypeSetting_47290)]
 		public void ShouldAdjustTimelineForDayScheduleWithNotDenySkillType()
 		{
 			var phoneSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony).WithId();
@@ -225,7 +251,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 		[Test]
 		[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
-		[Toggle(Toggles.OvertimeRequestPeriodSkillTypeSetting_47290)]
 		public void ShouldAdjustTimelineForWeekScheduleWithMultipleSkillTypesMatched()
 		{
 			Now.Is(new DateTime(2018, 2, 1, 8, 0, 0, DateTimeKind.Utc));
@@ -275,7 +300,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 		[Test]
 		[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
-		[Toggle(Toggles.OvertimeRequestPeriodSkillTypeSetting_47290)]
 		public void ShouldAdjustTimelineAccordingOpenPeriodSkillTypeOpenHourWeekSchedule()
 		{
 			var skillType = new SkillTypeEmail(new Description(SkillTypeIdentifier.Email), ForecastSource.Email).WithId();
@@ -623,6 +647,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		
 		public void ShouldAdjustTimeLineByFullDaySkillOpenHourWhenSiteOpenHourIsNotAvailableWeekSchedule()
 		{
+
 			var skill = addSkill(TimeSpan.Zero, TimeSpan.FromDays(1));
 			var period = new DateTimePeriod(new DateTime(2014, 12, 18, 9, 15, 0, DateTimeKind.Utc),
 				new DateTime(2014, 12, 18, 9, 45, 0, DateTimeKind.Utc));
@@ -634,7 +659,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		
 		public void ShouldAdjustTimeLineByMultipleDaySkillOpenHoursWhenSiteOpenHourIsNotAvailableWeekSchedule()
 		{
 			var skill1 = addSkill(TimeSpan.FromHours(7), TimeSpan.FromHours(15));
@@ -652,11 +676,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		
 		public void ShouldNotAdjustTimeLineByNonInBoundPhoneSkillOpenHoursWhenSiteOpenHourIsNotAvailableWeekSchedule()
 		{
+			var personPeriod = (PersonPeriod)User.CurrentUser().PersonPeriods(Now.ServerDate_DontUse().ToDateOnlyPeriod()).FirstOrDefault();
+			personPeriod.ResetPersonSkill();
+
 			var skill = addSkill(TimeSpan.FromHours(7), TimeSpan.FromHours(15));
-			skill.SkillType.Description = new Description("test");
+			skill.SkillType = new SkillTypeEmail(new Description("test"), ForecastSource.Email);
 			var period = new DateTimePeriod(new DateTime(2014, 12, 18, 9, 15, 0, DateTimeKind.Utc),
 				new DateTime(2014, 12, 18, 9, 45, 0, DateTimeKind.Utc));
 			addAssignment(period);
@@ -872,12 +898,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			timeLine.Last().Time.Minutes.Should().Be.EqualTo(endMinute); 
 		}
 
-		private static ISkill createSkillWithOpenHours(TimeSpan start, TimeSpan end)
+		private ISkill createSkillWithOpenHours(TimeSpan start, TimeSpan end)
 		{
 			var skill = SkillFactory.CreateSkillWithWorkloadAndSources().WithId();
 			skill.Activity.InWorkTime = true;
 			skill.Activity.RequiresSkill = true;
-			skill.SkillType.Description = new Description("SkillTypeInboundTelephony");
+			skill.SkillType = skillType;
 
 			foreach (var workload in skill.WorkloadCollection)
 			{
@@ -972,5 +998,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			}
 		}
 
+		
 	}
 }

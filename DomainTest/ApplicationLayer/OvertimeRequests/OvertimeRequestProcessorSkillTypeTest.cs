@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting;
@@ -15,7 +16,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 	public partial class OvertimeRequestProcessorTest
 	{
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSkillTypeSetting_47290)]
 		public void ShouldDenyWhenNoSkillTypeIsMatched()
 		{
 			setupPerson(8, 21);
@@ -38,7 +38,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSkillTypeSetting_47290)]
 		public void ShouldDenyWhenNoSkillTypeIsMatchedWithTwoOpenPeriods()
 		{
 			Now.Is(new DateTime(2018, 2, 1, 8, 0, 0, DateTimeKind.Utc));
@@ -73,7 +72,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSkillTypeSetting_47290)]
 		public void ShouldApproveWhenSkillTypeIsMatched()
 		{
 			setupPerson(8, 21);
@@ -97,7 +95,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSkillTypeSetting_47290)]
 		public void ShouldGetAutoDenyReasonWhenOneSkillTypeIsMatchedButAutoGrantIsDeny()
 		{
 			setupPerson(8, 21);
@@ -123,7 +120,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSkillTypeSetting_47290)]
 		public void ShouldGetAutoDenyReasonWhenMultipleSkillTypesAreMatchedButAllAutoGrantIsDeny()
 		{
 			setupPerson(8, 21);
@@ -174,7 +170,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSkillTypeSetting_47290)]
 		public void ShouldApproveWhenExistsASkillTypeWithAutoGrantIsYes()
 		{
 			setupPerson(8, 21);
@@ -223,22 +218,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestPeriodSkillTypeSetting_47290)]
 		public void ShouldApproveWhenSkillTypeIsNotSet()
 		{
 			setupPerson(8, 21);
 
-			var workflowControlSet = new WorkflowControlSet();
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
-			{
-				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
-				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(13)))
-			});
-			var phoneSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony);
-			SkillTypeRepository.Add(phoneSkillType);
-
-			LoggedOnUser.CurrentUser().WorkflowControlSet = workflowControlSet;
-			setupIntradayStaffingForSkill(setupPersonSkill(skillType: phoneSkillType), 10d, 5d);
+			LoggedOnUser.CurrentUser().WorkflowControlSet.OvertimeRequestOpenPeriods.First().SkillType = null;
+			setupIntradayStaffingForSkill(setupPersonSkill(skillType: _phoneSkillType), 10d, 5d);
 
 			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 25, 8, 0, 0, DateTimeKind.Utc), 1);
 			getTarget().Process(personRequest);

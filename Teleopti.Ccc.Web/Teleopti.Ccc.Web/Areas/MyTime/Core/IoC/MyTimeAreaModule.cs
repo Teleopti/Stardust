@@ -253,14 +253,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<StaffingPossibilityViewModelFactory>().As<IStaffingPossibilityViewModelFactory>().SingleInstance();
 			builder.RegisterType<ScheduleMinMaxTimeCalculator>().As<IScheduleMinMaxTimeCalculator>().SingleInstance();
 			builder.RegisterType<SiteOpenHourProvider>().As<ISiteOpenHourProvider>().SingleInstance();
-			if (_config.Toggle(Toggles.OvertimeRequestPeriodSkillTypeSetting_47290))
-			{
-				builder.RegisterType<ScheduledSkillOpenHourProviderToggle47290On>().As<IScheduledSkillOpenHourProvider>().SingleInstance();
-			}
-			else
-			{
-				builder.RegisterType<ScheduledSkillOpenHourProvider>().As<IScheduledSkillOpenHourProvider>().SingleInstance();
-			}
+			builder.RegisterType<ScheduledSkillOpenHourProvider>().As<IScheduledSkillOpenHourProvider>().SingleInstance();
 
 			builder.RegisterType<StaffingDataAvailablePeriodProvider>().As<IStaffingDataAvailablePeriodProvider>().SingleInstance();
 			builder.RegisterType<IntradayScheduleEdgeTimeCalculator>().As<IIntradayScheduleEdgeTimeCalculator>();

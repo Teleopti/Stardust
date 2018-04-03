@@ -52,6 +52,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public FakeToggleManager ToggleManager;
 
 		private readonly TimeSpan[] intervals = { TimeSpan.FromMinutes(495), TimeSpan.FromMinutes(510) };
+		readonly ISkillType skillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony)
+			.WithId();
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -366,7 +368,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		[Toggle(Toggles.OvertimeRequestPeriodSkillTypeSetting_47290)]
 		public void ShouldNotGetPossibilitiesForOvertimeWhenOverstaffingAndNoSkillTypeIsMatched()
 		{
 			setupSiteOpenHour();
@@ -395,7 +396,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		[Toggle(Toggles.OvertimeRequestPeriodSkillTypeSetting_47290)]
 		public void ShouldGetFairPossibilitiesForOvertimeWhenOverstaffingAndSkillTypeIsMatched()
 		{
 			setupSiteOpenHour();
@@ -425,7 +425,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		[Toggle(Toggles.OvertimeRequestPeriodSkillTypeSetting_47290)]
 		public void ShouldGetFairPossibilitiesForOvertimeWhenOverstaffingAndSkillTypeIsNotSet()
 		{
 			setupSiteOpenHour();
@@ -455,7 +454,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		[Toggle(Toggles.OvertimeRequestPeriodSkillTypeSetting_47290)]
 		public void ShouldGetPossibilitiesForOvertimeBasedOnSkillTypeSetInOpenPeriod()
 		{
 			var emailSkillType = new SkillTypeEmail(new Description(SkillTypeIdentifier.Email), ForecastSource.Email).WithId();
@@ -495,7 +493,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		[Toggle(Toggles.OvertimeRequestPeriodSkillTypeSetting_47290)]
 		public void ShouldGetPossibilitiesForOvertimeBasedOnSkillTypeOfEachDaySetInOpenPeriod()
 		{
 			Now.Is(new DateTime(2018, 2, 1, 8, 0, 0, DateTimeKind.Utc));
@@ -551,7 +548,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		[Toggle(Toggles.OvertimeRequestPeriodSkillTypeSetting_47290)]
 		public void ShouldGetPossibilitiesForOvertimeBasedOnSkillTypeOfOneDaySetInOpenPeriod()
 		{
 			Now.Is(new DateTime(2018, 2, 1, 8, 0, 0, DateTimeKind.Utc));
@@ -603,7 +599,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		[Toggle(Toggles.OvertimeRequestPeriodSkillTypeSetting_47290)]
 		public void ShouldNotGetPossibilitiesForOvertimeWhenOneOfThePeriodIsDeny()
 		{
 			Now.Is(new DateTime(2018, 1, 31, 8, 0, 0, DateTimeKind.Utc));
@@ -730,7 +725,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 		[Test]
 		[Toggle(Toggles.OvertimeRequestAtLeastOneCriticalUnderStaffedSkill_74944)]
-		[Toggle(Toggles.OvertimeRequestPeriodSkillTypeSetting_47290)]
 		public void ShouldMergePeriodsWithSameSkillType()
 		{
 			var person = User.CurrentUser();
@@ -1094,6 +1088,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			SkillTypeRepository.Add(phoneSkillType);
 
 			var workFlowControlSet = new WorkflowControlSet();
+			workFlowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod
+			{
+				BetweenDays = new MinMax<int>(0, 13),
+				SkillType = skillType
+			});
 			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
 
 			var result = getPossibilityViewModels(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime).ToList();
@@ -1105,6 +1104,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			TimeZone.Is(TimeZoneInfoFactory.CentralStandardTime());
 			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(TimeZone.TimeZone());
+			
 			Now.Is("2018-03-11 6:00");
 
 			var personPeriod = getOrAddPersonPeriod();
@@ -1130,6 +1130,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			setupIntradayStaffingForSkill(skill, date, staffingPeriodData);
 
 			var workFlowControlSet = new WorkflowControlSet();
+			workFlowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod
+			{
+				BetweenDays = new MinMax<int>(0, 13),
+				SkillType = skillType
+			});
 			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
 
 			var result = Target.GetPossibilityViewModels(date, StaffingPossiblityType.Overtime, false).ToList();
@@ -1147,7 +1152,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			};
 			var overtimeRequestOpenDatePeriod = new OvertimeRequestOpenRollingPeriod
 			{
-				BetweenDays = new MinMax<int>(0, 13)
+				BetweenDays = new MinMax<int>(0, 13),
+				SkillType = skillType
 			};
 			var workFlowControlSet = new WorkflowControlSet();
 			workFlowControlSet.AddOpenAbsenceRequestPeriod(absenceRequestOpenDatePeriod);

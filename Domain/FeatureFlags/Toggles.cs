@@ -143,7 +143,6 @@
 
 		Staffing_Info_Configuration_44687,
 		WfmStaffing_AddOvertime_42524,
-		OvertimeRequestPeriodSkillTypeSetting_47290,
 		OvertimeRequestUseMostUnderStaffedSkill_47853,
 		OvertimeRequestAtLeastOneCriticalUnderStaffedSkill_74944,
 		ETL_SpeedUpNightlyDayOff_38213,

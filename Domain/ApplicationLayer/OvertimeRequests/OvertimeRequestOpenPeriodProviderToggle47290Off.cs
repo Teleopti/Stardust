@@ -4,11 +4,11 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 {
-	public class OvertimeRequestOpenPeriodProvider : IOvertimeRequestOpenPeriodProvider
+	public class OvertimeRequestOpenPeriodProviderToggle47290Off : IOvertimeRequestOpenPeriodProvider
 	{
 		private  readonly INow _now;
 
-		public OvertimeRequestOpenPeriodProvider(INow now)
+		public OvertimeRequestOpenPeriodProviderToggle47290Off(INow now)
 		{
 			_now = now;
 		}

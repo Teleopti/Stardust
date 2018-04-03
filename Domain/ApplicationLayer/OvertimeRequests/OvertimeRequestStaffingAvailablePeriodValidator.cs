@@ -4,11 +4,11 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 {
-	public class OvertimeRequestPeriodValidator : IOvertimeRequestValidator
+	public class OvertimeRequestStaffingAvailablePeriodValidator : IOvertimeRequestValidator
 	{
 		private readonly INow _now;
 
-		public OvertimeRequestPeriodValidator(INow now)
+		public OvertimeRequestStaffingAvailablePeriodValidator(INow now)
 		{
 			_now = now;
 		}

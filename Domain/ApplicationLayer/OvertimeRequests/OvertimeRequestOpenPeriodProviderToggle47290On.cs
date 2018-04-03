@@ -43,22 +43,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 								isPeriodMatched(x, person, dateOnlyPeriod))
 					.GroupBy(o => o.SkillType ?? defaultSkillType);
 
-			var skllTypeMergedOvertimeRequestOpenPeriods = new List<IOvertimeRequestOpenPeriod>();
+			var skillTypeMergedOvertimeRequestOpenPeriods = new List<IOvertimeRequestOpenPeriod>();
 			var overtimeRequestOpenPeriodMerger = new OvertimeRequestOpenPeriodMerger();
 			foreach (var overtimeRequestOpenPeriodSkillTypeGroup in overtimeRequestOpenPeriodSkillTypeGroups)
 			{
 				if (overtimeRequestOpenPeriodSkillTypeGroup.Count() > 1)
 				{
-					skllTypeMergedOvertimeRequestOpenPeriods.Add(
+					skillTypeMergedOvertimeRequestOpenPeriods.Add(
 						overtimeRequestOpenPeriodMerger.Merge(overtimeRequestOpenPeriodSkillTypeGroup));
 				}
 				else
 				{
-					skllTypeMergedOvertimeRequestOpenPeriods.AddRange(overtimeRequestOpenPeriodSkillTypeGroup);
+					skillTypeMergedOvertimeRequestOpenPeriods.AddRange(overtimeRequestOpenPeriodSkillTypeGroup);
 				}
 			}
 
-			return skllTypeMergedOvertimeRequestOpenPeriods;
+			return skillTypeMergedOvertimeRequestOpenPeriods;
 		}
 
 		private bool isPeriodMatched(IOvertimeRequestOpenPeriod overtimeRequestOpenPeriod, IPerson person,

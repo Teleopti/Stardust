@@ -11,7 +11,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 {
-	public class OvertimeRequestProcessor : IOvertimeRequestProcessor
+	public class OvertimeRequestProcessor47290Off : IOvertimeRequestProcessor
 	{
 		private readonly ICommandDispatcher _commandDispatcher;
 		private readonly IEnumerable<IOvertimeRequestValidator> _overtimeRequestValidators;
@@ -23,9 +23,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 		private readonly IPersonRepository _personRepository;
 		private readonly ISkillTypeRepository _skillTypeRepository;
 
-		private static readonly ILog logger = LogManager.GetLogger(typeof(OvertimeRequestProcessor));
+		private static readonly ILog logger = LogManager.GetLogger(typeof(OvertimeRequestProcessor47290Off));
 
-		public OvertimeRequestProcessor(ICommandDispatcher commandDispatcher,
+		public OvertimeRequestProcessor47290Off(ICommandDispatcher commandDispatcher,
 			IEnumerable<IOvertimeRequestValidator> overtimeRequestValidators, IActivityRepository activityRepository,
 			ISkillRepository skillRepository, ISkillTypeRepository skillTypeRepository,
 			IOvertimeRequestAvailableSkillsValidator overtimeRequestAvailableSkillsValidator,
@@ -43,22 +43,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 		}
 
 		public int StaffingDataAvailableDays { get; set; }
-
-		public void CheckAndProcessDeny(IPersonRequest personRequest)
-		{
-			var validateRulesResult = validateRules(personRequest);
-			if (!validateRulesResult.IsValid)
-			{
-				handleOvertimeRequestValidationResult(personRequest, validateRulesResult);
-				return;
-			}
-
-			var validateSkillsResult = validateSkills(personRequest);
-			if (!validateSkillsResult.IsValid)
-			{
-				handleOvertimeRequestValidationResult(personRequest, validateSkillsResult);
-			}
-		}
 
 		public void Process(IPersonRequest personRequest, bool isAutoGrant)
 		{
