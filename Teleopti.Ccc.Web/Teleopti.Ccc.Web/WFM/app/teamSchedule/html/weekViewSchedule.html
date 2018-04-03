@@ -46,7 +46,7 @@
 				<i class='mdi mdi-alert'></i>{{vm.warningMessageForTooManyResuts()}}
 			</div>
 			<md-progress-linear ng-if="vm.isLoading" md-mode="indeterminate"></md-progress-linear>
-			<table ng-show="vm.scheduleFullyLoaded && vm.total <= 500">
+			<table ng-show="vm.scheduleFullyLoaded && !vm.isResultTooMany()">
 				<thead head-width-helper>
 					<tr class="weekview-thead">
 						<th class="agent-name-colomn"></th>
