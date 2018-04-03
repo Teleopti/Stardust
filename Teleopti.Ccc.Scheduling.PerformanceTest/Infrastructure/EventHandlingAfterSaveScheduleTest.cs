@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Logon;
@@ -82,10 +81,6 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest.Infrastructure
 						{
 							scheduledDay.CreateAndAddDayOff(dayoffTempate);
 						}
-						else if (date.DayOfWeek == DayOfWeek.Wednesday)
-						{
-							scheduledDay.CreateAndAddAbsence(new AbsenceLayer(absence, date.ToDateTimePeriod(TimeZoneInfo.Utc)));
-						}
 						else
 						{
 							var assignment = new PersonAssignment(person, scenario, date)
@@ -96,6 +91,18 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest.Infrastructure
 							scheduledDay.Add(assignment);
 						}
 
+						schedules.Modify(scheduledDay, new DoNothingScheduleDayChangeCallBack());
+					}
+
+					const int absDayLength = 3;
+					const int absEveryXDay = 40;
+					for (var i = 0; i < periodPlanningPeriod.DayCount(); i++)
+					{
+						var absDate = periodPlanningPeriod.StartDate.AddDays(i);
+						var scheduledDay = schedules[person].ScheduledDay(absDate);
+						var startDate = TimeZoneHelper.ConvertToUtc(absDate.Date, TimeZoneInfo.Utc);
+						scheduledDay.CreateAndAddAbsence(new AbsenceLayer(absence, new DateTimePeriod(startDate, startDate.AddDays(absDayLength))));
+						i = i + absEveryXDay;
 						schedules.Modify(scheduledDay, new DoNothingScheduleDayChangeCallBack());
 					}
 				}
