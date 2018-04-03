@@ -6,6 +6,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 	public class PersistPersonInfoFake : IPersistPersonInfo
 	{
 		private bool _rollbacked = false;
+
 		public void Persist(PersonInfo personInfo)
 		{
 			LastPersist = personInfo;
@@ -19,6 +20,11 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 		public void RollBackPersonInfo(Guid personInfoId, string tenantName)
 		{
 			_rollbacked = true;
+		}
+
+		public string PersistEx(PersonInfo personInfo)
+		{
+			throw new NotImplementedException();
 		}
 
 		public bool RollBacked => _rollbacked;

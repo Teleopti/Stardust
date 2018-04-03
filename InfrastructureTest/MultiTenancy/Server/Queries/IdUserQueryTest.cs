@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 		private IIdUserQuery target;
 		private TenantUnitOfWorkManager _tenantUnitOfWorkManager;
 		private PersonInfo existingPerson;
+		private PersonInfoPersister _personInfoPersister;
 
 		[Test]
 		public void ShouldFindPersonId()
@@ -46,7 +47,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 			_tenantUnitOfWorkManager.CurrentSession().Save(tenant);
 			existingPerson = new PersonInfo(tenant, Guid.NewGuid());
 			existingPerson.SetIdentity(RandomName.Make());
-			var personInfoPersister = new PersistPersonInfo(_tenantUnitOfWorkManager);
+			var personInfoPersister = new PersistPersonInfo(_tenantUnitOfWorkManager, _personInfoPersister);
 			personInfoPersister.Persist(existingPerson);
 			target = new IdUserQuery(_tenantUnitOfWorkManager);
 		}

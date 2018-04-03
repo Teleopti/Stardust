@@ -267,6 +267,8 @@
     <Compile Include="MultiTenancy\Server\Queries\FindExternalApplicationAccess.cs" />
     <Compile Include="MultiTenancy\Server\Queries\IPersistExternalApplicationAccess.cs" />
     <Compile Include="MultiTenancy\Server\Queries\PersistExternalApplicationAccess.cs" />
+    <Compile Include="MultiTenancy\Server\Queries\PersonInfoPersister.cs" />
+    <Compile Include="MultiTenancy\Server\Queries\PersonInfoPersisterFake.cs" />
     <Compile Include="Persisters\Schedules\ScheduleRangePersisterWithConflictSolve.cs" />
     <Compile Include="MultiTenancy\Server\Queries\TenantPersonLogonQuerier.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\AgentStateReadModelPersister.cs" />

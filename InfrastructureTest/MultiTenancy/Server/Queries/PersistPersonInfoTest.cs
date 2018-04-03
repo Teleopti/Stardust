@@ -16,6 +16,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 		private Tenant tenant;
 		private TenantUnitOfWorkManager _tenantUnitOfWorkManager;
 		private IPersistPersonInfo target;
+		private PersonInfoPersister _personInfoPersister;
 
 		[SetUp]
 		public void InsertPreState()
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 			_tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(InfraTestConfigReader.ConnectionString);
 			_tenantUnitOfWorkManager.EnsureUnitOfWorkIsStarted();
 
-			target = new PersistPersonInfo(_tenantUnitOfWorkManager);
+			target = new PersistPersonInfo(_tenantUnitOfWorkManager, _personInfoPersister);
 
 			tenant = new Tenant(RandomName.Make());
 			_tenantUnitOfWorkManager.CurrentSession().Save(tenant);
