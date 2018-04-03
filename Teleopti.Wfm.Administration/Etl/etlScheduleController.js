@@ -11,25 +11,7 @@
 	function etlScheduleController($http, tokenHeaderService, $timeout) {
 		var vm = this;
 
-		vm.schedules = [
-			{
-				Name: "My main job",
-				Jname: "Nightly",
-				TenantName: 'WFM Teleopti',
-				Frequency: 'hourly',
-				Enabled: true,
-				Description: "Occurs every day at 15:58. Using the log data"
-			},
-			{
-				Name: "My secondary job",
-				Jname: "Nightly",
-				TenantName: 'WFM Teleopti',
-				Frequency: 'hourly',
-				Enabled: true,
-				Description: "Occurs some days at 15:58. Who knows?"
-			}
-		];
-
+		vm.schedules = null;
 		vm.scheduleNameEnabled = true;
 		vm.scheduleToEdit;
 		vm.frequencyType = false;
@@ -37,8 +19,17 @@
 		vm.toggleFrequencyType = toggleFrequencyType;
 
 		(function init() {
-		
+			//getScheduledJobs();
 		})();
+
+		//function getScheduledJobs() {
+		//	vm.schedules = null;
+		//	$http
+		//		.get("./Etl/ScheduledJobs", tokenHeaderService.getHeaders())
+		//		.success(function (data) {
+		//			vm.schedules = data;
+		//		});
+		//}
 
 		function toggleFrequencyType() {
 			if (vm.frequencyType) {

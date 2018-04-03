@@ -25,7 +25,7 @@
 		vm.sendTenant = sendTenant;
 		vm.selectedTenantChanged = selectedTenantChanged;
 		vm.selectJob = selectJob;
-		vm.encueueJob = encueueJob;
+		vm.enqueueJob = enqueueJob;
 
 		var today = new Date();
 		vm.dataSources = [];
@@ -196,7 +196,7 @@
 			});
 		}
 
-		function encueueJob(job) {
+		function enqueueJob(job) {
 
 			if (vm.selectDataSource == null && job.NeedsParameterDataSource) {
 				vm.selectDataSource = { Id: -2 };
