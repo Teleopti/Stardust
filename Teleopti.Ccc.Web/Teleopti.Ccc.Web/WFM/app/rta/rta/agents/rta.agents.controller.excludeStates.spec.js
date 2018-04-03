@@ -354,8 +354,7 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 			expect(vm.agentStates[0].PersonId).toEqual("person1");
 		});
 
-		// fix
-		xit('should update url when deselecting state for ' + selection.name, function () {
+		it('should update url when deselecting state for ' + selection.name, function (t) {
 			t.stateParams[selection.type] = [selection.id];
 			t.backend
 				.withPhoneState({
@@ -434,6 +433,7 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 						return s.Id === 'PhoneGuid';
 					})[0].Selected = false;
 				});
+			
 			t.wait(5000);
 
 			expect(c.agentStates.length).toEqual(2);
@@ -590,8 +590,7 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 		expect(vm.agentStates[0].PersonId).toEqual("person1");
 	});
 
-	// fix
-	xit('should update url when deselecting state for skill area', function (t) {
+	it('should update url when deselecting state for skill area', function (t) {
 		t.stateParams.skillAreaId = "skillAreaGuid";
 		t.backend
 			.withPhoneState({Id: "TrainingGuid"})

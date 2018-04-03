@@ -81,6 +81,12 @@
 			},
 
 
+			isStateSelected: isStateSelected,
+			selectState: selectState,
+			// because angular cant handle an array of null in stateparams
+			nullStateId: "noState",
+
+
 			hasSelection: function () {
 				return state.siteIds.length > 0 || state.teamIds.length > 0 || state.skillIds.length > 0 || state.skillAreaId;
 			},
@@ -109,6 +115,12 @@
 					r.siteIds = state.siteIds;
 				if (o.teamIds)
 					r.teamIds = state.teamIds;
+				if (o.excludedStateIds)
+					r.excludedStateIds = state.es.map(function (s) {
+						if (s === "noState")
+							return null;
+						return s;
+					});
 				return r
 			},
 
@@ -245,12 +257,29 @@
 			return false;
 		}
 
+		function isStateSelected(id) {
+			return !state.es.some(function (stateId) {
+				return stateId == id
+			});
+		}
+
+		function selectState(id, selected) {
+			if (selected)
+				state.es = state.es.filter(function (s) {
+					return s != id
+				});
+			else
+				state.es.push(id);
+			$state.go($state.current.name, buildState(), {notify: false});
+		}
+
 		function cleanState() {
 			state.open = state.open === true || state.open === "true";
 			state.siteIds = state.siteIds || [];
 			state.siteIds = angular.isArray(state.siteIds) ? state.siteIds : [state.siteIds];
 			state.teamIds = state.teamIds || [];
 			state.teamIds = angular.isArray(state.teamIds) ? state.teamIds : [state.teamIds];
+			state.es = state.es || [];
 
 			// remove duplicate sites n teams
 			state.siteIds = state.siteIds.filter(function (item, pos) {
@@ -278,7 +307,7 @@
 					state.siteIds.push(site.Id);
 			});
 
-            //
+			//
 			// var nonPermittedSites = data.organization.filter(function (site){
 			// 	return state.siteIds.indexOf(site.Id) >-1 && site.FullPermission === false;
 			// });
@@ -403,8 +432,10 @@
 				skillAreaId: undefined,
 				skillIds: undefined,
 				siteIds: undefined,
-				teamIds: undefined
+				teamIds: undefined,
+				es: undefined
 			};
+
 			if (state.siteIds.length > 0)
 				gotoState.siteIds = state.siteIds;
 			if (state.teamIds.length > 0)
@@ -413,6 +444,8 @@
 				gotoState.skillAreaId = state.skillAreaId;
 			else if (state.skillIds.length > 0)
 				gotoState.skillIds = state.skillIds;
+			if (state.es)
+				gotoState.es = state.es;
 			if (state.open)
 				gotoState.open = true;
 
