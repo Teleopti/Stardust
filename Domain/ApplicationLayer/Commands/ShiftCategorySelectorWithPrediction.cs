@@ -32,14 +32,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				var localPeriod = shiftPeriod.TimePeriod(person.PermissionInformation.DefaultTimeZone());
 
 				var m = _predictionModelLoader.Load(model.Model);
-				var category = m.Predict(new ShiftCategoryExample
+				try
 				{
-					DayOfWeek = date.DayOfWeek,
-					StartTime = localPeriod.StartTime.TotalHours,
-					EndTime = localPeriod.EndTime.TotalHours
-				});
-				if (Guid.TryParse(category, out var id))
-					return _shiftCategoryRepository.Get(id);
+					var category = m.Predict(new ShiftCategoryExample
+					{
+						DayOfWeek = date.DayOfWeek,
+						StartTime = localPeriod.StartTime.TotalHours,
+						EndTime = localPeriod.EndTime.TotalHours
+					});
+					if (Guid.TryParse(category, out var id))
+						return _shiftCategoryRepository.Get(id);
+				}
+				catch(InvalidOperationException)
+				{ }
 			}
 
 			return _shiftCategorySelector.Get(person, date, shiftPeriod);
