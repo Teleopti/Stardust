@@ -197,6 +197,13 @@
 		}
 
 		function encueueJob(job) {
+
+			if (vm.selectDataSource == null && job.NeedsParameterDataSource) {
+				vm.selectDataSource = { Id: -2 };
+			} else if (vm.selectDataSource == null && !job.NeedsParameterDataSource) {
+				vm.selectDataSource = { Id: null };
+			}
+
 			var data = {
 				JobName: job.JobName,
 				JobPeriods: [],
