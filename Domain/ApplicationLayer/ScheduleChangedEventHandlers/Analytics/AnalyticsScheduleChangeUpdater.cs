@@ -25,7 +25,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 		[UnitOfWork]
 		[AnalyticsUnitOfWork]
 		[Attempts(10)]
-		[TestLog]
 		public virtual void Handle(ScheduleChangedEvent @event)
 		{
 			Func<IPerson, IEnumerable<DateTime>> period = p =>
