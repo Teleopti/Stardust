@@ -4,28 +4,38 @@
             <h1>
                 <i class="mdi mdi-compass-outline"></i> {{'Intraday'|translate}}</h1>
         </div>
-        <div class="fab-wrapper" ng-if="vm.HasPermissionToModifySkillArea && !vm.toggles['WFM_Unified_Skill_Group_Management_45417']">
-            <button class="skill-area-create wfm-fab grow-out material-depth-1" ng-click="vm.configMode()">
+        <div class="fab-wrapper"
+             ng-if="vm.HasPermissionToModifySkillArea && !vm.toggles['WFM_Unified_Skill_Group_Management_45417']">
+            <button class="skill-area-create wfm-fab grow-out material-depth-1"
+                    ng-click="vm.configMode()">
                 <i class="mdi mdi-plus"></i>
                 <md-tooltip>{{'CreateSkillArea'|translate}}</md-tooltip>
             </button>
         </div>
     </div>
     <div class="con-row">
-        <div class="con-flex" style="flex: 2 1 0">
+        <div class="con-flex"
+             style="flex: 2 1 0">
             <div class="panel con-flex material-depth-1">
                 <div class="con-row layout-align-center-center">
                     <span class="con-flex ">
-                        <skill-picker skills="vm.skills" skill-areas="vm.skillAreas" item-to-return="vm.selectSkillOrSkillArea" preselected-item="vm.preselectedItem"></skill-picker>
-                        <i class="mdi mdi-close pointer ie-cross grow-out" ng-show="!vm.isSkill(vm.selectedItem)" ng-click="vm.clearSkillAreaHelper()">
+                        <skill-picker skills="vm.skills"
+                                      skill-areas="vm.moduleState.skillAreas"
+                                      item-to-return="vm.selectSkillOrSkillArea"
+                                      preselected-item="vm.moduleState.preselectedItem"></skill-picker>
+                        <i class="mdi mdi-close pointer ie-cross grow-out"
+                           ng-show="!vm.isSkill(vm.moduleState.selectedItem)"
+                           ng-click="vm.clearSkillAreaHelper()">
                             <md-tooltip>{{'Clear'|translate}}</md-tooltip>
                         </i>
                     </span>
-                    <div class="line-right last-time cursor-pointer" ng-show="chosenOffset.value === 0">
+                    <div class="line-right last-time cursor-pointer"
+                         ng-show="chosenOffset.value === 0">
                         <span ng-show="latestActualInterval && latestActualInterval !== 'undefined - undefined'">
                             {{vm.latestActualInterval}}
                         </span>
-                        <span ng-cloak ng-show="!vm.latestActualInterval || vm.latestActualInterval == 'undefined - undefined'">--:-- - --:--</span>
+                        <span ng-cloak
+                              ng-show="!vm.latestActualInterval || vm.latestActualInterval == 'undefined - undefined'">--:-- - --:--</span>
                         <i class="mdi mdi-clock"></i>
                         <md-tooltip>{{'LatestActualInterval'|translate}}</md-tooltip>
                     </div>
@@ -36,32 +46,42 @@
                         <skill-group-button on-click="vm.configMode()" />
                     </div>
                     <div style="border-left: 1px solid #e0e0e0; margin-left: 10px; height: 100%;">&nbsp;</div>
-                    <div class="showOtherDay" ng-if="vm.toggles['WFM_Intraday_Show_For_Other_Days_43504']">
-                        <date-offset on-date-change="vm.changeChosenOffset(value)" chosen-offset="vm.chosenOffset"></date-offset>
+                    <div class="showOtherDay"
+                         ng-if="vm.toggles['WFM_Intraday_Show_For_Other_Days_43504']">
+                        <date-offset on-date-change="vm.changeChosenOffset(value)"
+                                     chosen-offset="vm.moduleState.chosenOffset"></date-offset>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div id="chartPanel" class="con-row intraday-monitor-item" ng-if="vm.selectedItem.Name">
+    <div id="chartPanel"
+         class="con-row intraday-monitor-item"
+         ng-if="vm.moduleState.selectedItem.Name">
         <div class="con-flex">
             <div class="panel material-depth-1">
-                <div class="sub-header" ng-if="vm.toggles['WFM_Intraday_Show_For_Other_Days_43504']">
+                <div class="sub-header"
+                     ng-if="vm.toggles['WFM_Intraday_Show_For_Other_Days_43504']">
                     <h2 id="viewingDate">
-                        {{vm.getLocalDate(vm.chosenOffset.value)}}
-                        <span ng-if="vm.showGroupInfo">
+                        {{vm.getLocalDate(vm.moduleState.chosenOffset.value)}}
+                        <span ng-if="vm.moduleState.showGroupInfo">
                             ,
-                            <b>{{ vm.selectedItem.Name }}</b>:
-                            <span ng-if="vm.filterSkills.length > 0">{{vm.filterSkills.length}} {{'IntraDayChipNumberOf' | translate}} </span>
-                            {{vm.selectedItem.Skills.length}} {{'PersonSkill'|translate}}
+                            <b>{{ vm.moduleState.selectedItem.Name }}</b>:
+                            <span ng-if="vm.moduleState.filterSkills.length > 0">{{vm.moduleState.filterSkills.length}} {{'IntraDayChipNumberOf' | translate}} </span>
+                            {{vm.moduleState.selectedItem.Skills.length}} {{'PersonSkill'|translate}}
                             <span ng-if="vm.skillAreaMessage">({{vm.skillAreaMessage}})</span>
                         </span>
                     </h2>
-                    <div ng-show="vm.showIncluded" class="animate-show con-row">
+                    <div ng-show="vm.moduleState.showIncluded"
+                         class="animate-show con-row">
                         <div class="con-flex">
-                            <div class="wfm-chip-wrap" ng-repeat="skill in vm.currentArea.Skills | orderBy : Name" ng-class="{'chip-disabled':!skill.DoDisplayData}">
-                                <span class="wfm-chip" ng-click="vm.openSkillFromArea(skill)">
-                                    <span class="chip-handle" ng-class="vm.chipClass(skill)">
+                            <div class="wfm-chip-wrap"
+                                 ng-repeat="skill in vm.moduleState.currentArea.Skills | orderBy : Name"
+                                 ng-class="{'chip-disabled':!skill.DoDisplayData}">
+                                <span class="wfm-chip"
+                                      ng-click="vm.openSkillFromArea(skill)">
+                                    <span class="chip-handle"
+                                          ng-class="vm.chipClass(skill)">
                                         <i ng-class="vm.checkIfFilterSkill(skill)"></i>
                                     </span>
                                     <md-tooltip>
@@ -74,25 +94,34 @@
                             </div>
                         </div>
                     </div>
-                    <div class="head-actions panel-menu" ng-show="vm.toggles['WFM_Intraday_Export_To_Excel_44892']">
+                    <div class="head-actions panel-menu"
+                         ng-show="vm.toggles['WFM_Intraday_Export_To_Excel_44892']">
                         <div class="head-actions panel-menu">
-                            <div tabindex=0 class="context-menu card-context">
+                            <div tabindex=0
+                                 class="context-menu card-context">
                                 <i class="skill-area-options mdi mdi-dots-vertical"></i>
                                 <span class="context-menu-left">
                                     <ul class="wfm-list">
-                                        <li ng-click="vm.exportIntradayData()" ng-show="!vm.exporting">
+                                        <li ng-click="vm.exportIntradayData()"
+                                            ng-show="!vm.exporting">
                                             <i class="mdi mdi-file-excel"></i>
                                             {{'ExportToExcel' | translate}}
-                                            <md-progress-circular md-mode="indeterminate" md-diameter="18" ng-show="vm.exporting"></md-progress-circular>
+                                            <md-progress-circular md-mode="indeterminate"
+                                                                  md-diameter="18"
+                                                                  ng-show="vm.exporting"></md-progress-circular>
                                             <md-tooltip ng-if="!vm.exporting">{{'ExportToExcel'|translate}}</md-tooltip>
                                             <md-tooltip ng-if="vm.exporting">{{'WorkingThreeDots'|translate}}</md-tooltip>
                                         </li>
-                                        <li ng-if="vm.selectedItem.Name" ng-click="vm.showIncluded=!vm.showIncluded">
-                                            <i ng-hide="vm.showIncluded" class="mdi mdi-eye"></i>
-                                            <i ng-show="vm.showIncluded" class="mdi mdi-eye-off"></i>
+                                        <li ng-if="vm.moduleState.selectedItem.Name"
+                                            ng-click="vm.moduleState.showIncluded=!vm.moduleState.showIncluded">
+                                            <i ng-hide="vm.moduleState.showIncluded"
+                                               class="mdi mdi-eye"></i>
+                                            <i ng-show="vm.moduleState.showIncluded"
+                                               class="mdi mdi-eye-off"></i>
                                             {{'IncludedSkills'|translate}}
                                         </li>
-                                        <li ng-show="!vm.toggles['WFM_Modify_Skill_Groups_43727'] && vm.selectedItem.Name" ng-click='vm.toggleModal()'>
+                                        <li ng-show="!vm.toggles['WFM_Modify_Skill_Groups_43727'] && vm.moduleState.selectedItem.Name"
+                                            ng-click='vm.toggleModal()'>
                                             <i class="skill-area-delete mdi mdi-delete"></i>{{'Delete'|translate}}</li>
                                     </ul>
                                 </span>
@@ -103,22 +132,31 @@
                 <div class="wfm-slide-tabs tabbed-panel">
                     <div class="con-row">
                         <div class="con-flex">
-                            <md-tabs md-dynamic-height md-selected="vm.activeTab">
-                                <md-tab label="{{'IncomingTraffic'|translate}}" ng-click="vm.pollActiveTabDataHelper(vm.activeTab)">
-                                    <md-content ng-cloak class="md-padding">
+                            <md-tabs md-dynamic-height
+                                     md-selected="vm.moduleState.activeTab"
+                                     ng-click="vm.saveState()">
+                                <md-tab label="{{'IncomingTraffic'|translate}}"
+                                        ng-click="vm.pollActiveTabDataHelper(vm.moduleState.activeTab)">
+                                    <md-content ng-cloak
+                                                class="md-padding">
                                         <div class="con-row">
-                                            <div class="con-flex" style="height: 15px">
-                                                <md-progress-linear ng-if="vm.viewObj.waitingForData" md-mode="indeterminate"></md-progress-linear>
+                                            <div class="con-flex"
+                                                 style="height: 15px">
+                                                <md-progress-linear ng-if="vm.viewObj.waitingForData"
+                                                                    md-mode="indeterminate"></md-progress-linear>
                                             </div>
                                         </div>
                                     </md-content>
-                                    <md-content ng-cloak class="md-padding" ng-show="vm.viewObj.hasMonitorData">
+                                    <md-content ng-cloak
+                                                class="md-padding"
+                                                ng-show="vm.viewObj.hasMonitorData">
                                         <div class="con-row">
                                             <div class="con-flex">
                                                 <p ng-if="vm.viewObj.hasEmailSkill && !vm.toggles['WFM_Intraday_SupportOtherSkillsLikeEmail_44026']">
                                                     <i class="mdi mdi-alert"></i> {{'UnavailableSeries'|translate}}
                                                 </p>
-                                                <div class="wfm-chart intraday-chart" id="trafficChart"></div>
+                                                <div class="wfm-chart intraday-chart"
+                                                     id="trafficChart"></div>
                                             </div>
                                         </div>
                                         <div class="con-row full-padding">
@@ -165,30 +203,42 @@
                                             <div class="con-flex"></div>
                                         </div>
                                     </md-content>
-                                    <md-content ng-cloak class="md-padding" style="overflow: hidden" ng-show="!vm.viewObj.hasMonitorData">
-                                        <span class="con-flex no-data-available" ng-show="!vm.viewObj.waitingForData && !vm.viewObj.hasMonitorData">
+                                    <md-content ng-cloak
+                                                class="md-padding"
+                                                style="overflow: hidden"
+                                                ng-show="!vm.viewObj.hasMonitorData">
+                                        <span class="con-flex no-data-available"
+                                              ng-show="!vm.viewObj.waitingForData && !vm.viewObj.hasMonitorData">
                                             {{'NoDataAvailable'|translate}}
                                         </span>
                                     </md-content>
                                 </md-tab>
-                                <md-tab label="{{'Performance'|translate}}" ng-click="vm.pollActiveTabDataHelper(vm.activeTab)">
-                                    <md-content ng-cloak class="md-padding">
+                                <md-tab label="{{'Performance'|translate}}"
+                                        ng-click="vm.pollActiveTabDataHelper(vm.moduleState.activeTab)">
+                                    <md-content ng-cloak
+                                                class="md-padding">
                                         <div class="con-row">
-                                            <div class="con-flex" style="height: 15px">
-                                                <md-progress-linear ng-if="vm.viewObj.waitingForData" md-mode="indeterminate"></md-progress-linear>
+                                            <div class="con-flex"
+                                                 style="height: 15px">
+                                                <md-progress-linear ng-if="vm.viewObj.waitingForData"
+                                                                    md-mode="indeterminate"></md-progress-linear>
                                             </div>
                                         </div>
                                     </md-content>
-                                    <md-content ng-cloak class="md-padding" ng-show="vm.viewObj.hasMonitorData">
+                                    <md-content ng-cloak
+                                                class="md-padding"
+                                                ng-show="vm.viewObj.hasMonitorData">
                                         <div class="con-row">
                                             <div class="con-flex">
                                                 <p ng-if="vm.viewObj.hasEmailSkill && !vm.toggles['WFM_Intraday_SupportOtherSkillsLikeEmail_44026']">
                                                     <i class="mdi mdi-alert"></i> {{'UnavailableSeries'|translate}}
                                                 </p>
-                                                <p ng-if="!vm.viewObj.showAbandonRate" id="noAbandonRate">
+                                                <p ng-if="!vm.viewObj.showAbandonRate"
+                                                   id="noAbandonRate">
                                                     <i class="mdi mdi-alert"></i> {{'NotShowingAbandonRate'|translate}}
                                                 </p>
-                                                <div class="wfm-chart intraday-chart" id="performanceChart"></div>
+                                                <div class="wfm-chart intraday-chart"
+                                                     id="performanceChart"></div>
                                             </div>
                                         </div>
 
@@ -234,37 +284,54 @@
                                             <div class="con-flex"></div>
                                         </div>
                                     </md-content>
-                                    <md-content ng-cloak class="md-padding" style="overflow: hidden" ng-show="!vm.viewObj.hasMonitorData">
-                                        <span class="con-flex no-data-available" ng-show="!vm.viewObj.waitingForData && !vm.viewObj.hasMonitorData">
+                                    <md-content ng-cloak
+                                                class="md-padding"
+                                                style="overflow: hidden"
+                                                ng-show="!vm.viewObj.hasMonitorData">
+                                        <span class="con-flex no-data-available"
+                                              ng-show="!vm.viewObj.waitingForData && !vm.viewObj.hasMonitorData">
                                             {{'NoDataAvailable'|translate}}
                                         </span>
                                     </md-content>
                                 </md-tab>
-                                <md-tab label="{{'Staffing'|translate}}" ng-click="vm.pollActiveTabDataHelper(vm.activeTab)">
-                                    <md-content ng-cloak class="md-padding">
+                                <md-tab label="{{'Staffing'|translate}}"
+                                        ng-click="vm.pollActiveTabDataHelper(vm.moduleState.activeTab)">
+                                    <md-content ng-cloak
+                                                class="md-padding">
                                         <div class="con-row">
-                                            <div class="con-flex" style="height: 15px">
-                                                <md-progress-linear ng-if="vm.viewObj.waitingForData" md-mode="indeterminate"></md-progress-linear>
+                                            <div class="con-flex"
+                                                 style="height: 15px">
+                                                <md-progress-linear ng-if="vm.viewObj.waitingForData"
+                                                                    md-mode="indeterminate"></md-progress-linear>
                                             </div>
                                         </div>
 
                                     </md-content>
-                                    <md-content ng-cloak class="md-padding" ng-show="vm.viewObj.hasMonitorData">
+                                    <md-content ng-cloak
+                                                class="md-padding"
+                                                ng-show="vm.viewObj.hasMonitorData">
                                         <div class="con-row">
                                             <div class="con-flex">
                                                 <p ng-if="vm.viewObj.hasEmailSkill && !vm.toggles['WFM_Intraday_SupportOtherSkillsLikeEmail_44026']">
                                                     <i class="mdi mdi-alert"></i> {{'UnavailableSeries'|translate}}
                                                 </p>
-                                                <p ng-if="!vm.viewObj.showReforecastedAgents" id="noReforcastedAgents">
+                                                <p ng-if="!vm.viewObj.showReforecastedAgents"
+                                                   id="noReforcastedAgents">
                                                     <i class="mdi mdi-alert"></i>
                                                     {{'NotShowingReforcastedAgents'|translate}}
                                                 </p>
-                                                <div class="wfm-chart intraday-chart" id="staffingChart" ng-show="vm.viewObj.hasMonitorData"></div>
+                                                <div class="wfm-chart intraday-chart"
+                                                     id="staffingChart"
+                                                     ng-show="vm.viewObj.hasMonitorData"></div>
                                             </div>
                                         </div>
                                     </md-content>
-                                    <md-content ng-cloak class="md-padding" style="overflow: hidden" ng-show="!vm.viewObj.hasMonitorData">
-                                        <span class="con-flex no-data-available" ng-show="!vm.viewObj.waitingForData && !vm.viewObj.hasMonitorData">
+                                    <md-content ng-cloak
+                                                class="md-padding"
+                                                style="overflow: hidden"
+                                                ng-show="!vm.viewObj.hasMonitorData">
+                                        <span class="con-flex no-data-available"
+                                              ng-show="!vm.viewObj.waitingForData && !vm.viewObj.hasMonitorData">
                                             {{'NoDataAvailable'|translate}}
                                         </span>
                                     </md-content>
@@ -276,19 +343,23 @@
                 </div>
             </div>
 
-            <div ng-cloak class="modal-box">
-                <div ng-cloak ng-show="vm.DeleteSkillAreaModal">
+            <div ng-cloak
+                 class="modal-box">
+                <div ng-cloak
+                     ng-show="vm.moduleState.DeleteSkillAreaModal">
                     <div class="modalbg">
                         <div class="dialog-mini">
                             <div class="modal-inner-content">
-                                <h3>{{vm.selectedItem.Name}}</h3> {{'AreYouSureYouWantToDelete'|translate}}
+                                <h3>{{vm.moduleState.selectedItem.Name}}</h3> {{'AreYouSureYouWantToDelete'|translate}}
                             </div>
                             <div class="modal-actions">
                                 <aside>
-                                    <button ng-click="vm.toggleModal()" class="wfm-btn wfm-btn-invis-default">
+                                    <button ng-click="vm.toggleModal()"
+                                            class="wfm-btn wfm-btn-invis-default">
                                         {{'Cancel'|translate}}
                                     </button>
-                                    <button ng-click='vm.deleteSkillArea(vm.selectedItem)' class="skill-area-delete-confirm wfm-btn wfm-btn-invis-default">
+                                    <button ng-click='vm.deleteSkillArea(vm.moduleState.selectedItem)'
+                                            class="skill-area-delete-confirm wfm-btn wfm-btn-invis-default">
                                         {{'Delete'|translate}}
                                     </button>
                                 </aside>
