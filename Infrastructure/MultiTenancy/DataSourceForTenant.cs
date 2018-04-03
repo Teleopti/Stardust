@@ -62,8 +62,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 
 		private IDataSource findTenant(string tenantName)
 		{
-			IDataSource found;
-			return DataSources.TryGetValue(tenantName, out found) ? found : null;
+			return DataSources.TryGetValue(tenantName, out var found) ? found : null;
 		}
 
 		private readonly object dataSourceListLocker = new object();
