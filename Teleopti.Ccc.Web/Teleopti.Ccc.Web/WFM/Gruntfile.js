@@ -491,13 +491,8 @@ module.exports = function(grunt) {
 	grunt.registerTask('devTest', ['ngtemplates', 'karma:dev']);
 	grunt.registerTask('devDistWebpack', [
 		'ngtemplates',
-		'sass',
-		'imageEmbed',
 		'exec:webpackDevDist',
-		'newer:concat:distCss',
-		'newer:concat:distDarkCss',
-		'copy:devCss',
-		'newer:copy',
+		// 'copy:devCss', // just renames files from x.css to x.min.css
 		'generateIndexDev',
 		'exec:ngbuild_dev'
 	]);
