@@ -215,6 +215,8 @@
 				});
 			if (!skillArea)
 				return [];
+			if (!skillArea.Skills)
+				return [];
 			return skillArea.Skills.map(function (skill) {
 				return skill.Id;
 			});
@@ -276,6 +278,36 @@
 					state.siteIds.push(site.Id);
 			});
 
+            //
+			// var nonPermittedSites = data.organization.filter(function (site){
+			// 	return state.siteIds.indexOf(site.Id) >-1 && site.FullPermission === false;
+			// });
+			//
+			// if(nonPermittedSites.length > 0){
+			// 	var selectedSiteIds = nonPermittedSites.map(function (s) {
+			// 		return s.Id;
+			// 	});
+			//	
+			// 	//remove selected sites if they don't have full permission
+			// 	state.siteIds = state.siteIds.filter(function (s) {
+			// 		return selectedSiteIds.indexOf(s) == -1;
+			// 	});
+			//	
+			// 	var teamIdsForSite = nonPermittedSites
+			// 		.map(function (site) {
+			// 			return site.Teams || [];
+			// 		})
+			// 		.reduce(function (flat, toFlatten) {
+			// 			return flat.concat(toFlatten);
+			// 		}, [])
+			// 		.map(function (team) {
+			// 			return team.Id
+			// 		});
+			//	
+			// 	//add teams for the site 
+			// 	state.teamIds = state.teamIds.concat(teamIdsForSite);
+			// }
+			//	
 			// remove teams where site is selected
 			var teamIdsSelectedBySite = data.organization
 				.filter(function (site) {

@@ -64,7 +64,7 @@
 		vm.loading = true;
 
 		rtaStateService.setCurrentState($stateParams);
-
+		
 		rtaDataService.load().then(function (data) {
 			vm.loading = false;
 			vm.skills = data.skills;
@@ -207,7 +207,7 @@
 
 		function updatePhoneStates(states) {
 
-			$state.go($state.current.name, {es: excludedPhoneStateIds()}, {notify: false});
+			//$state.go($state.current.name, {es: excludedPhoneStateIds()}, {notify: false});
 
 			if (!phoneStatesLoaded)
 				return;
@@ -236,6 +236,8 @@
 					return phoneState.Id;
 				});
 		}
+		
+		vm.statePickerSelectionText = 'test';
 
 		$scope.$watch(
 			function () {

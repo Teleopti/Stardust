@@ -1,58 +1,12 @@
 'use strict';
-describe('RtaAgentsController', function () {
-	var $interval,
-		$httpBackend,
-		$state,
-		scope,
-		$fakeBackend,
-		$controllerBuilder,
-		$timeout,
-		vm;
+rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
+													$state,
+													$controllerBuilder,
+													stateParams) {
+	var vm;
 
-	var stateParams = {};
-	var skills = [{
-		Id: "5f15b334-22d1-4bc1-8e41-72359805d30f",
-		Name: "skill x"
-	}, {
-		Id: "4f15b334-22d1-4bc1-8e41-72359805d30c",
-		Name: "skill y"
-	}];
-	var skills2 = [{
-		Id: "1f15b334-22d1-4bc1-8e41-72359805d30f",
-		Name: "skill a"
-	}, {
-		Id: "3f15b334-22d1-4bc1-8e41-72359805d30c",
-		Name: "skill b"
-	}];
-
-	beforeEach(module('wfm.rta'));
-	beforeEach(module('wfm.rtaTestShared'));
-
-	beforeEach(function () {
-		module(function ($provide) {
-			$provide.factory('$stateParams', function () {
-				stateParams = {};
-				return stateParams;
-			});
-		});
-	});
-
-	beforeEach(inject(function (_$httpBackend_, _$interval_, _$state_, _FakeRtaBackend_, _ControllerBuilder_, _$timeout_) {
-		$interval = _$interval_;
-		$state = _$state_;
-		$httpBackend = _$httpBackend_;
-		$fakeBackend = _FakeRtaBackend_;
-		$controllerBuilder = _ControllerBuilder_;
-		$timeout = _$timeout_;
-
-		scope = $controllerBuilder.setup('RtaFilterController46758');
-
-		$fakeBackend.clear.all();
-
-	}));
-
-	it('should display skill', function () {
-		$fakeBackend.withSkill({
+	it('should display skill', function (t) {
+		t.backend.withSkill({
 			Name: "Channel Sales",
 			Id: "f08d75b3-fdb4-484a-ae4c-9f0800e2f753"
 		});
@@ -63,8 +17,8 @@ describe('RtaAgentsController', function () {
 		expect(vm.skills[0].Id).toEqual("f08d75b3-fdb4-484a-ae4c-9f0800e2f753");
 	});
 
-	it('should filter on skill name', function () {
-		$fakeBackend
+	it('should filter on skill name', function (t) {
+		t.backend
 			.withSkill({
 				Name: "Channel Sales",
 				Id: "f08d75b3-fdb4-484a-ae4c-9f0800e2f753"
@@ -76,14 +30,14 @@ describe('RtaAgentsController', function () {
 
 		vm = $controllerBuilder.createController().vm;
 
-		var result = vm.querySearch("Email", vm.skills);
+		var result = vm.filterSkills("Email", vm.skills);
 
 		expect(result.length).toEqual(1);
 		expect(result[0].Name).toEqual("Email");
 	});
 
-	it('should filter on lowercased skill name', function () {
-		$fakeBackend
+	it('should filter on lowercased skill name', function (t) {
+		t.backend
 			.withSkill({
 				Name: "Channel Sales",
 				Id: "f08d75b3-fdb4-484a-ae4c-9f0800e2f753"
@@ -94,22 +48,33 @@ describe('RtaAgentsController', function () {
 			});
 
 		vm = $controllerBuilder.createController().vm;
-		var result = vm.querySearch("EmAiL", vm.skills);
+		var result = vm.filterSkills("EmAiL", vm.skills);
 
 		expect(result.length).toEqual(1);
 		expect(result[0].Name).toEqual("Email");
 	});
 
-	it('should display skill areas', function () {
-		$fakeBackend.withSkillAreas([{
+	it('should display skill areas', function (t) {
+		t.backend.withSkillAreas([{
 			Id: "fa9b5393-ef48-40d1-b7cc-09e797589f81",
 			Name: "my skill area 1",
-			Skills: skills
-		},
-		{
+			Skills: [{
+				Id: "5f15b334-22d1-4bc1-8e41-72359805d30f",
+				Name: "skill x"
+			}, {
+				Id: "4f15b334-22d1-4bc1-8e41-72359805d30c",
+				Name: "skill y"
+			}]
+		}, {
 			Id: "836cebb6-cee8-41a1-bb62-729f4b3a63f4",
 			Name: "my skill area 2",
-			Skills: skills
+			Skills: [{
+				Id: "5f15b334-22d1-4bc1-8e41-72359805d30f",
+				Name: "skill x"
+			}, {
+				Id: "4f15b334-22d1-4bc1-8e41-72359805d30c",
+				Name: "skill y"
+			}]
 		}
 		]);
 
@@ -121,45 +86,65 @@ describe('RtaAgentsController', function () {
 		expect(vm.skillAreas[0].Skills[0].Name).toEqual("skill x");
 	});
 
-	it('should filter on skill area name', function () {
-		$fakeBackend
+	it('should filter on skill area name', function (t) {
+		t.backend
 			.withSkillAreas([{
 				Id: "fa9b5393-ef48-40d1-b7cc-09e797589f81",
 				Name: "my skill area 1",
-				Skills: skills
-			},
-			{
+				Skills: [{
+					Id: "5f15b334-22d1-4bc1-8e41-72359805d30f",
+					Name: "skill x"
+				}, {
+					Id: "4f15b334-22d1-4bc1-8e41-72359805d30c",
+					Name: "skill y"
+				}]
+			}, {
 				Id: "836cebb6-cee8-41a1-bb62-729f4b3a63f4",
 				Name: "my skill area 2",
-				Skills: skills
+				Skills: [{
+					Id: "5f15b334-22d1-4bc1-8e41-72359805d30f",
+					Name: "skill x"
+				}, {
+					Id: "4f15b334-22d1-4bc1-8e41-72359805d30c",
+					Name: "skill y"
+				}]
 			}
 			]);
 
 		vm = $controllerBuilder.createController().vm;
 
-		var result = vm.querySearch("my skill area 1", vm.skillAreas);
+		var result = vm.filterSkills("my skill area 1", vm.skillAreas);
 
 		expect(result.length).toEqual(1);
 		expect(result[0].Name).toEqual("my skill area 1");
 	});
 
-	it('should filter on lowercased skill area name', function () {
-
-		$fakeBackend
+	it('should filter on lowercased skill area name', function (t) {
+		t.backend
 			.withSkillAreas([{
 				Id: "fa9b5393-ef48-40d1-b7cc-09e797589f81",
 				Name: "my skill area 1",
-				Skills: skills
-			},
-			{
+				Skills: [{
+					Id: "5f15b334-22d1-4bc1-8e41-72359805d30f",
+					Name: "skill x"
+				}, {
+					Id: "4f15b334-22d1-4bc1-8e41-72359805d30c",
+					Name: "skill y"
+				}]
+			}, {
 				Id: "836cebb6-cee8-41a1-bb62-729f4b3a63f4",
 				Name: "my skill area 2",
-				Skills: skills
-			}
-			]);
+				Skills: [{
+					Id: "5f15b334-22d1-4bc1-8e41-72359805d30f",
+					Name: "skill x"
+				}, {
+					Id: "4f15b334-22d1-4bc1-8e41-72359805d30c",
+					Name: "skill y"
+				}]
+			}]);
 
 		vm = $controllerBuilder.createController().vm;
-		var result = vm.querySearch("my SKill Area 1", vm.skillAreas);
+		var result = vm.filterSkills("my SKill Area 1", vm.skillAreas);
 
 		expect(result.length).toEqual(1);
 		expect(result[0].Name).toEqual("my skill area 1");

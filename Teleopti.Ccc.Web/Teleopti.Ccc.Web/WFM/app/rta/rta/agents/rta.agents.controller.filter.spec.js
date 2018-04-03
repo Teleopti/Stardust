@@ -1,44 +1,13 @@
 'use strict';
-describe('RtaAgentsController', function () {
-	var $interval,
-		$httpBackend,
-		$state,
-		scope,
-		$fakeBackend,
-		$controllerBuilder,
-		$timeout,
-		vm;
 
-	var stateParams = {};
+rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
+													 $fakeBackend,
+													 $controllerBuilder) {
+	var vm;
 
-	beforeEach(module('wfm.rta'));
-	beforeEach(module('wfm.rtaTestShared'));
-
-	beforeEach(function () {
-		module(function ($provide) {
-			$provide.factory('$stateParams', function () {
-				stateParams = {};
-				return stateParams;
-			});
-		});
-	});
-
-	beforeEach(inject(function (_$httpBackend_, _$interval_, _$state_, _FakeRtaBackend_, _ControllerBuilder_, _$timeout_) {
-		$interval = _$interval_;
-		$state = _$state_;
-		$httpBackend = _$httpBackend_;
-		$fakeBackend = _FakeRtaBackend_;
-		$controllerBuilder = _ControllerBuilder_;
-		$timeout = _$timeout_;
-
-		scope = $controllerBuilder.setup('RtaFilterController46758');
-		$fakeBackend.clear.all();
-		spyOn($state, 'go');
-	}));
-
-	it('should have preselected skill in field for sites', function () {
-		stateParams.skillIds = "phoneGuid";
-		$fakeBackend
+	it('should have preselected skill in field for sites', function (t) {
+		t.stateParams.skillIds = "phoneGuid";
+		t.backend
 			.withSiteAdherence({
 				Id: "londonGuid",
 				InAlarmCount: 3,
@@ -51,13 +20,13 @@ describe('RtaAgentsController', function () {
 
 		vm = $controllerBuilder.createController().vm;
 
-		expect(vm.selectedSkill.Id).toEqual('phoneGuid');
-		expect(vm.selectedSkill.Name).toEqual('Phone');
+		expect(vm.selectedSkillNew.Id).toEqual('phoneGuid');
+		expect(vm.selectedSkillNew.Name).toEqual('Phone');
 	});
 
-	it('should have preselected skill area in field for sites', function () {
-		stateParams.skillAreaId = "emailAndPhoneGuid";
-		$fakeBackend
+	it('should have preselected skill area in field for sites', function (t) {
+		t.stateParams.skillAreaId = "emailAndPhoneGuid";
+		t.backend
 			.withSiteAdherence({
 				Id: "londonGuid",
 				InAlarmCount: 3,
@@ -79,10 +48,10 @@ describe('RtaAgentsController', function () {
 		expect(vm.selectedSkillArea.Name).toEqual('Email and phone');
 	});
 
-	it('should have preselected skill in field for teams', function () {
-		stateParams.skillIds = "phoneGuid";
-		stateParams.siteIds = "parisGuid";
-		$fakeBackend
+	it('should have preselected skill in field for teams', function (t) {
+		t.stateParams.skillIds = "phoneGuid";
+		t.stateParams.siteIds = "parisGuid";
+		t.backend
 			.withTeamAdherence({
 				SiteId: "parisGuid",
 				Id: "parisTeamGreenGuid",
@@ -96,14 +65,14 @@ describe('RtaAgentsController', function () {
 
 		vm = $controllerBuilder.createController().vm;
 
-		expect(vm.selectedSkill.Id).toEqual('phoneGuid');
-		expect(vm.selectedSkill.Name).toEqual('Phone');
+		expect(vm.selectedSkillNew.Id).toEqual('phoneGuid');
+		expect(vm.selectedSkillNew.Name).toEqual('Phone');
 	});
 
-	it('should have preselected skill area in field for teams', function () {
-		stateParams.skillAreaId = "emailAndPhoneGuid";
-		stateParams.siteIds = ["parisGuid"];
-		$fakeBackend
+	it('should have preselected skill area in field for teams', function (t) {
+		t.stateParams.skillAreaId = "emailAndPhoneGuid";
+		t.stateParams.siteIds = ["parisGuid"];
+		t.backend
 			.withTeamAdherence({
 				SiteId: "parisGuid",
 				Id: "parisTeamGreenGuid",
