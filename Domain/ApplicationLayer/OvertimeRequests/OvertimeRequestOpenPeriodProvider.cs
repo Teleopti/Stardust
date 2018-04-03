@@ -9,13 +9,13 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 {
-	public class OvertimeRequestOpenPeriodProviderToggle47290On : IOvertimeRequestOpenPeriodProvider
+	public class OvertimeRequestOpenPeriodProvider : IOvertimeRequestOpenPeriodProvider
 	{
 		private readonly INow _now;
 		private readonly ISkillTypeRepository _skillTypeRepository;
 		private readonly PersonalSkills _personalSkills = new PersonalSkills();
 
-		public OvertimeRequestOpenPeriodProviderToggle47290On(INow now, ISkillTypeRepository skillTypeRepository)
+		public OvertimeRequestOpenPeriodProvider(INow now, ISkillTypeRepository skillTypeRepository)
 		{
 			_now = now;
 			_skillTypeRepository = skillTypeRepository;

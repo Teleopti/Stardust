@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<MultiAbsenceRequestsUpdater>().As<IMultiAbsenceRequestsUpdater>().InstancePerLifetimeScope();
 			builder.RegisterType<AbsenceRequestProcessor>().As<IAbsenceRequestProcessor>().SingleInstance();
 			builder.RegisterType<SiteOpenHoursSpecification>().As<ISiteOpenHoursSpecification>();
-			builder.RegisterType<OvertimeRequestProcessorToggle47290On>().As<IOvertimeRequestProcessor>();
+			builder.RegisterType<OvertimeRequestProcessor>().As<IOvertimeRequestProcessor>();
 
 			builder.RegisterType<OvertimeRequestStartTimeValidator>().As<IOvertimeRequestValidator>().SingleInstance();
 			builder.RegisterType<OvertimeRequestOpenPeriodValidator>().As<IOvertimeRequestValidator>().SingleInstance();
@@ -98,8 +98,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				OvertimeRequestUnderStaffingSkillProvider>(builder, Toggles.OvertimeRequestUseMostUnderStaffedSkill_47853);
 
 			builder.RegisterType<SkillStaffingReadModelDataLoader>().As<ISkillStaffingReadModelDataLoader>();
-			builder.RegisterType<OvertimeRequestOpenPeriodProviderToggle47290On>().As<IOvertimeRequestOpenPeriodProvider>();
-			builder.RegisterType<OvertimeRequestSkillProviderToggle47290On>().As<IOvertimeRequestSkillProvider>();
+			builder.RegisterType<OvertimeRequestOpenPeriodProvider>().As<IOvertimeRequestOpenPeriodProvider>();
+			builder.RegisterType<OvertimeRequestSkillProvider>().As<IOvertimeRequestSkillProvider>();
 			builder.RegisterType<SkillStaffingDataSkillTypeFilter>().As<ISkillStaffingDataSkillTypeFilter>();
 
 			builder.RegisterType<SkillOpenHourFilter>().As<ISkillOpenHourFilter>();

@@ -8,14 +8,14 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 {
-	public class OvertimeRequestSkillProviderToggle47290On : IOvertimeRequestSkillProvider
+	public class OvertimeRequestSkillProvider : IOvertimeRequestSkillProvider
 	{
 		private readonly IPrimaryPersonSkillFilter _primaryPersonSkillFilter;
 		private readonly PersonalSkills _personalSkills = new PersonalSkills();
 		private readonly ISkillTypeRepository _skillTypeRepository;
 		private readonly INow _now;
 
-		public OvertimeRequestSkillProviderToggle47290On(IPrimaryPersonSkillFilter primaryPersonSkillFilter, ISkillTypeRepository skillTypeRepository, INow now)
+		public OvertimeRequestSkillProvider(IPrimaryPersonSkillFilter primaryPersonSkillFilter, ISkillTypeRepository skillTypeRepository, INow now)
 		{
 			_primaryPersonSkillFilter = primaryPersonSkillFilter;
 			_skillTypeRepository = skillTypeRepository;

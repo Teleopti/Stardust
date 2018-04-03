@@ -14,7 +14,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 {
-	public class OvertimeRequestProcessorToggle47290On : IOvertimeRequestProcessor
+	public class OvertimeRequestProcessor : IOvertimeRequestProcessor
 	{
 		private readonly ICommandDispatcher _commandDispatcher;
 		private readonly IEnumerable<IOvertimeRequestValidator> _overtimeRequestValidators;
@@ -26,9 +26,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 		private readonly IPersonRepository _personRepository;
 		private readonly ISkillTypeRepository _skillTypeRepository;
 
-		private static readonly ILog logger = LogManager.GetLogger(typeof(OvertimeRequestProcessorToggle47290On));
+		private static readonly ILog logger = LogManager.GetLogger(typeof(OvertimeRequestProcessor));
 
-		public OvertimeRequestProcessorToggle47290On(ICommandDispatcher commandDispatcher,
+		public OvertimeRequestProcessor(ICommandDispatcher commandDispatcher,
 			IEnumerable<IOvertimeRequestValidator> overtimeRequestValidators, IActivityRepository activityRepository,
 			ISkillRepository skillRepository, ISkillTypeRepository skillTypeRepository,
 			IOvertimeRequestAvailableSkillsValidator overtimeRequestAvailableSkillsValidator,

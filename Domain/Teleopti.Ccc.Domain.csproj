@@ -161,8 +161,7 @@
     <Compile Include="AgentInfo\Requests\OvertimeRequest.cs" />
     <Compile Include="AgentInfo\Requests\OvertimeRequestDefaultStartTimeProvider.cs" />
     <Compile Include="AgentInfo\Requests\NotOvertimeRequestSpecification.cs" />
-    <Compile Include="AgentInfo\Requests\OvertimeRequestSkillProvider47290Off.cs" />
-    <Compile Include="AgentInfo\Requests\OvertimeRequestSkillProviderToggle47290On.cs" />
+    <Compile Include="AgentInfo\Requests\OvertimeRequestSkillProvider.cs" />
     <Compile Include="AgentInfo\Requests\ShiftStartTimeProvider.cs" />
     <Compile Include="AgentInfo\Requests\ShiftEndTimeProvider.cs" />
     <Compile Include="AgentInfo\Requests\SkillOpenHourFilter.cs" />
@@ -187,11 +186,9 @@
     <Compile Include="ApplicationLayer\Commands\ShiftCategorySelector.cs" />
     <Compile Include="ApplicationLayer\Commands\ShiftCategorySelectorWithPrediction.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\IOvertimeRequestOpenPeriodProvider.cs" />
-    <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestOpenPeriodProviderToggle47290Off.cs" />
-    <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestOpenPeriodProviderToggle47290On.cs" />
+    <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestOpenPeriodProvider.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestOpenPeriodValidator.cs" />
-    <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestProcessor47290Off.cs" />
-    <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestProcessorToggle47290On.cs" />
+    <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestProcessor.cs" />
     <Compile Include="ApplicationLayer\PersonEmploymentChangedEventHandler.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\IAnalyticsScheduleChangeUpdaterFilter.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\UpdateFactSchedules.cs" />
