@@ -1,8 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Threading;
+using Teleopti.Analytics.Etl.Common.Entity;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
+using Teleopti.Analytics.Etl.Common.JobSchedule;
 using Teleopti.Interfaces.Domain;
 using IJobResult = Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResult;
 
@@ -11,46 +14,41 @@ namespace Teleopti.Analytics.Etl.CommonTest.Infrastructure
 	internal class RepositoryStub : IJobScheduleRepository, IJobLogRepository, IJobHistoryRepository
 	{
 		private readonly DataTable _logTable;
-		private readonly DataTable _scheduleTable;
-		private readonly DataTable _schedulePeriodsTable;
+		private readonly IList<IEtlJobSchedule> _jobSchedules;
 
 		public RepositoryStub()
 		{
-			_scheduleTable = NewScheduleDataTable();
 			_logTable = NewLogDataTable();
-			_schedulePeriodsTable = NewSchedulePeriodsDataTable();
+			_jobSchedules = new List<IEtlJobSchedule>();
 		}
 
-		#region IRepository Members
-
-		public DataTable GetSchedules()
+		public IList<IEtlJobSchedule> GetSchedules(IEtlJobLogCollection etlJobLogCollection, DateTime serverStartTime)
 		{
-			AddSchedule(1, 60);
-			AddSchedule(2, 15, 180, 1430);
-			AddSchedule(-1, 240); // -1 indicates new item not yet or newly persisted
+			AddSchedule(1, 60, etlJobLogCollection);
+			AddSchedule(2, 15, 180, 1430, etlJobLogCollection);
+			AddSchedule(-1, 240, etlJobLogCollection); // -1 indicates new item not yet or newly persisted
 			AddSchedule(3);
-			return _scheduleTable;
+			return _jobSchedules;
 		}
 
-		public DataTable GetSchedulePeriods(int scheduleId)
+		public IList<IEtlJobRelativePeriod> GetSchedulePeriods(int scheduleId)
 		{
-			_schedulePeriodsTable.Rows.Clear();
-
+			var jobPeriods = new List<IEtlJobRelativePeriod>();
 			if (scheduleId == 1)
 			{
 				//Main job
-				AddSchedulePeriod(scheduleId, "Schedule", new MinMax<int>(-7, 7));
-				AddSchedulePeriod(scheduleId, "Forecast", new MinMax<int>(0, 14));
-				AddSchedulePeriod(scheduleId, "Queue Statistics", new MinMax<int>(-3, 0));
-				AddSchedulePeriod(scheduleId, "Agent Statistics", new MinMax<int>(-4, -1));
+				jobPeriods.Add(AddSchedulePeriod(JobCategoryType.Schedule, new MinMax<int>(-7, 7)));
+				jobPeriods.Add(AddSchedulePeriod(JobCategoryType.Forecast, new MinMax<int>(0, 14)));
+				jobPeriods.Add(AddSchedulePeriod(JobCategoryType.QueueStatistics, new MinMax<int>(-3, 0)));
+				jobPeriods.Add(AddSchedulePeriod(JobCategoryType.AgentStatistics, new MinMax<int>(-4, -1)));
 			}
 			else
 			{
 				//Forecast job
-				AddSchedulePeriod(scheduleId, "Forecast", new MinMax<int>(0, 14));
+				jobPeriods.Add(AddSchedulePeriod(JobCategoryType.Forecast, new MinMax<int>(0, 14)));
 			}
 			
-			return _schedulePeriodsTable;
+			return jobPeriods;
 		}
 
 		public void SaveSchedulePeriods(IEtlJobSchedule etlJobSchedule)
@@ -100,47 +98,6 @@ namespace Teleopti.Analytics.Etl.CommonTest.Infrastructure
 			get { throw new NotImplementedException(); }
 		}
 
-		#endregion
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-		private static DataTable NewScheduleDataTable()
-		{
-			var scheduleTable = new DataTable {Locale = Thread.CurrentThread.CurrentCulture};
-
-			scheduleTable.Columns.Add("schedule_id", typeof(int));
-			scheduleTable.Columns.Add("schedule_name", typeof(string));
-			scheduleTable.Columns.Add("enabled", typeof(bool));
-			scheduleTable.Columns.Add("schedule_type", typeof(int));
-			scheduleTable.Columns.Add("occurs_daily_at", typeof(int));
-			scheduleTable.Columns.Add("occurs_every_minute", typeof(int));
-			scheduleTable.Columns.Add("recurring_starttime", typeof(int));
-			scheduleTable.Columns.Add("recurring_endtime", typeof(int));
-			scheduleTable.Columns.Add("etl_job_name", typeof(string));
-			scheduleTable.Columns.Add("etl_relative_period_start", typeof(int));
-			scheduleTable.Columns.Add("etl_relative_period_end", typeof(int));
-			scheduleTable.Columns.Add("etl_datasource_id", typeof(int));
-			scheduleTable.Columns.Add("description", typeof(string));
-			scheduleTable.Columns.Add("insert_date", typeof(DateTime));
-			scheduleTable.Columns.Add("tenant_name", typeof(string));
-
-			return scheduleTable;
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-		private static DataTable NewSchedulePeriodsDataTable()
-		{
-			var schedulePeriodsTable = new DataTable {Locale = Thread.CurrentThread.CurrentCulture};
-
-			schedulePeriodsTable.Columns.Add("schedule_id", typeof(int));
-			schedulePeriodsTable.Columns.Add("job_id", typeof(int));
-			schedulePeriodsTable.Columns.Add("job_name", typeof(string));
-			schedulePeriodsTable.Columns.Add("relative_period_start", typeof(int));
-			schedulePeriodsTable.Columns.Add("relative_period_end", typeof(int));
-
-			return schedulePeriodsTable;
-		}
-
-
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		private static DataTable NewLogDataTable()
 		{
@@ -153,73 +110,61 @@ namespace Teleopti.Analytics.Etl.CommonTest.Infrastructure
 			return logTable;
 		}
 
-		private void AddSchedulePeriod(int scheduleId, string jobName, MinMax<int> relativePeriod)
+		private IEtlJobRelativePeriod AddSchedulePeriod(JobCategoryType jobCategoryType, MinMax<int> relativePeriod)
 		{
-			DataRow dr = _schedulePeriodsTable.NewRow();
-			dr["schedule_id"] = scheduleId;
-			dr["job_id"] = 1;
-			dr["job_name"] = jobName;
-			dr["relative_period_start"] = relativePeriod.Minimum;
-			dr["relative_period_end"] = relativePeriod.Maximum;
-			_schedulePeriodsTable.Rows.Add(dr);
+			return new EtlJobRelativePeriod(relativePeriod, jobCategoryType);
 		}
 
-		public void AddSchedule(int scheduleId, int occursDailyAt)
+		public void AddSchedule(int scheduleId, int occursDailyAt, IEtlJobLogCollection etlJobLogCollection)
 		{
-			DataRow dr = _scheduleTable.NewRow();
-			dr["schedule_id"] = scheduleId;
-			dr["schedule_name"] = "OccursDaily";
-			dr["enabled"] = true;
-			dr["schedule_type"] = JobScheduleType.OccursDaily;
-			dr["occurs_daily_at"] = occursDailyAt;
-			dr["occurs_every_minute"] = 0;
-			dr["recurring_starttime"] = 0;
-			dr["recurring_endtime"] = 0;
-			dr["etl_job_name"] = "Intraday";
-			dr["etl_relative_period_start"] = -14;
-			dr["etl_relative_period_end"] = 14;
-			dr["etl_datasource_id"] = 1;
-			dr["description"] = "Occurs daily at x.";
-			dr["tenant_name"] = "Teleopti WFM";
-			_scheduleTable.Rows.Add(dr);
+			_jobSchedules.Add(new EtlJobSchedule(
+				scheduleId,
+				"OccursDaily",
+				true,
+				occursDailyAt,
+				"Intraday",
+				-14,
+				14,
+				1,
+				"Occurs daily at x.",
+				etlJobLogCollection,
+				GetSchedulePeriods(scheduleId),
+				"Teleopti WFM"));
 		}
 
-		public void AddSchedule(int scheduleId, int occursEveryMinute, int start, int end)
+		public void AddSchedule(int scheduleId, int occursEveryMinute, int start, int end, IEtlJobLogCollection etlJobLogCollection)
 		{
-			DataRow dr = _scheduleTable.NewRow();
-			dr["schedule_id"] = scheduleId;
-			dr["schedule_name"] = "Periodic";
-			dr["enabled"] = true;
-			dr["schedule_type"] = JobScheduleType.Periodic;
-			dr["occurs_daily_at"] = 0;
-			dr["occurs_every_minute"] = occursEveryMinute;
-			dr["recurring_starttime"] = start;
-			dr["recurring_endtime"] = end;
-			dr["etl_job_name"] = "Forecast";
-			dr["etl_relative_period_start"] = -7;
-			dr["etl_relative_period_end"] = 7;
-			dr["etl_datasource_id"] = 1;
-			dr["description"] = "Occurs daily every x minute.";
-			dr["tenant_name"] = "Teleopti WFM";
-
-			_scheduleTable.Rows.Add(dr);
+			_jobSchedules.Add(new EtlJobSchedule(
+				scheduleId,
+				"Periodic",
+				true,
+				occursEveryMinute,
+				start,
+				end,
+				"Forecast",
+				-7,
+				7,
+				1,
+				"Occurs daily every x minute.",
+				etlJobLogCollection,
+				DateTime.Now,
+				GetSchedulePeriods(scheduleId),
+				"Teleopti WFM"));
 		}
 
 		public void AddSchedule(int scheduleId)
 		{
-			DataRow dr = _scheduleTable.NewRow();
-			dr["schedule_id"] = scheduleId;
-			dr["schedule_name"] = "Manual ETL";
-			dr["enabled"] = true;
-			dr["schedule_type"] = JobScheduleType.Manual;
-			dr["etl_job_name"] = "Intraday";
-			dr["etl_datasource_id"] = 1;
-			dr["description"] = "Manual ETL";
-			dr["insert_date"] = "2017-12-12 15:33:00";
-			dr["tenant_name"] = "Teleopti WFM";
-			_scheduleTable.Rows.Add(dr);
+			_jobSchedules.Add(new EtlJobSchedule(
+				scheduleId,
+				"Manual ETL",
+				"Intraday",
+				true,
+				1,
+				"Manual ETL",
+				new DateTime(2017, 12, 12, 15, 33, 0),
+				null,
+				"Teleopti WFM"));
 		}
-
 
 		public void AddLog(int id, int start)
 		{
@@ -236,7 +181,6 @@ namespace Teleopti.Analytics.Etl.CommonTest.Infrastructure
 		}
 
 		#region IRepository Members
-
 
 		public int SaveSchedule(IEtlJobSchedule etlJobScheduleItem)
 		{

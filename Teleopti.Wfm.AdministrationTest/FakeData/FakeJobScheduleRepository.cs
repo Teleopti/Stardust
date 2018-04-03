@@ -10,11 +10,12 @@ namespace Teleopti.Wfm.AdministrationTest.FakeData
 {
 	public class FakeJobScheduleRepository : IJobScheduleRepository
 	{
-		private IList<IEtlJobSchedule> _etlJobSchedules = new List<IEtlJobSchedule>();
-		private IDictionary<int, List<IEtlJobRelativePeriod>> _etlJobSchedulePeriods = new Dictionary<int, List<IEtlJobRelativePeriod>>();
-		public DataTable GetSchedules()
+		private readonly IList<IEtlJobSchedule> _etlJobSchedules = new List<IEtlJobSchedule>();
+		private readonly IDictionary<int, List<IEtlJobRelativePeriod>> _etlJobSchedulePeriods = new Dictionary<int, List<IEtlJobRelativePeriod>>();
+
+		public IList<IEtlJobSchedule> GetSchedules(IEtlJobLogCollection etlJobLogCollection, DateTime serverStartTime)
 		{
-			throw new NotImplementedException();
+			return _etlJobSchedules;
 		}
 
 		public int SaveSchedule(IEtlJobSchedule etlJobScheduleItem)
@@ -28,9 +29,9 @@ namespace Teleopti.Wfm.AdministrationTest.FakeData
 			throw new NotImplementedException();
 		}
 
-		public DataTable GetSchedulePeriods(int scheduleId)
+		public IList<IEtlJobRelativePeriod> GetSchedulePeriods(int scheduleId)
 		{
-			throw new NotImplementedException();
+			return _etlJobSchedulePeriods[scheduleId];
 		}
 
 		public void SaveSchedulePeriods(IEtlJobSchedule etlJobScheduleItem)
@@ -47,16 +48,6 @@ namespace Teleopti.Wfm.AdministrationTest.FakeData
 		public void DisableScheduleJob(int scheduleId)
 		{
 			throw new NotImplementedException();
-		}
-
-		public IList<IEtlJobSchedule> GetEtlJobSchedules()
-		{
-			return _etlJobSchedules;
-		}
-
-		public IList<IEtlJobRelativePeriod> GetEtlJobSchedulePeriods(int scheduleId)
-		{
-			return _etlJobSchedulePeriods[scheduleId];
 		}
 	}
 }

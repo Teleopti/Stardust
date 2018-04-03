@@ -7,6 +7,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Analytics.Etl.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
+using Teleopti.Analytics.Etl.Common.JobSchedule;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -194,8 +195,8 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			};
 			var result = (OkResult) Target.EnqueueJob(jobToEnqueue);
 
-			var scheduledJob = JobScheduleRepository.GetEtlJobSchedules().First();
-			var scheduledPeriods = JobScheduleRepository.GetEtlJobSchedulePeriods(1);
+			var scheduledJob = JobScheduleRepository.GetSchedules(null, DateTime.Now).First();
+			var scheduledPeriods = JobScheduleRepository.GetSchedulePeriods(1);
 			result.Should().Be.OfType<OkResult>();
 			scheduledJob.JobName.Should().Be("Initial");
 			scheduledJob.ScheduleName.Should().Be("Manual ETL");
@@ -241,7 +242,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			};
 			var result = (OkResult) Target.EnqueueJob(jobToEnqueue);
 
-			var scheduledPeriods = JobScheduleRepository.GetEtlJobSchedulePeriods(1);
+			var scheduledPeriods = JobScheduleRepository.GetSchedulePeriods(1);
 			result.Should().Be.OfType<OkResult>();
 			scheduledPeriods.Count.Should().Be(2);
 			scheduledPeriods.Any(x => x.JobCategoryName == "Agent Statistics"
@@ -401,8 +402,8 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			var dataSources = (OkNegotiatedContentResult<IList<DataSourceModel>>)Target.TenantValidLogDataSources(testTenantName);
 			dataSources.Content.Single().TimeZoneCode.Should().Be(myDsModel.TimeZoneCode);
 
-			var scheduledJob = JobScheduleRepository.GetEtlJobSchedules().First();
-			var scheduledPeriods = JobScheduleRepository.GetEtlJobSchedulePeriods(1);
+			var scheduledJob = JobScheduleRepository.GetSchedules(null, DateTime.Now).First();
+			var scheduledPeriods = JobScheduleRepository.GetSchedulePeriods(1);
 			scheduledJob.JobName.Should().Be("Initial");
 			scheduledJob.ScheduleName.Should().Be("Manual ETL");
 			scheduledJob.DataSourceId.Should().Be(1);
@@ -708,6 +709,42 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 					step.DependsOnTenant.Should().Be(shouldDependsOnTenant);
 				}
 			}
+		}
+
+		[Test]
+		public void ShouldGetScheduledJobs()
+		{
+			var dailyOneTimeJob = new EtlJobSchedule(1, "My Nightly job", true, 60, "Nightly", 0, 0, 1, "Desc", null, null, "tenant A");
+			var dailyPeriodicJob = new EtlJobSchedule(2, "My Intraday job", true, 30, 120, 1320, "Intraday", 0, 0, 1, "Run Intraday job", null, DateTime.Now, null, "tenant A");
+			var manualJobNotToBeLoaded = new EtlJobSchedule(3, "Manual ETL", "Schedule", true, 1, "Manually enqueued job", DateTime.Now, null, "tenant A");
+			JobScheduleRepository.SaveSchedule(dailyOneTimeJob);
+			JobScheduleRepository.SaveSchedule(dailyPeriodicJob);
+			JobScheduleRepository.SaveSchedule(manualJobNotToBeLoaded);
+
+			var scheduledJobs = (OkNegotiatedContentResult<List<EtlScheduleJobModel>>)Target.ScheduledJobs();
+
+			scheduledJobs.Should().Be.OfType<OkNegotiatedContentResult<List<EtlScheduleJobModel>>>();
+			scheduledJobs.Content.Count.Should().Be(2);
+
+			var oneTimeJob = scheduledJobs.Content.First();
+			oneTimeJob.ScheduleName.Should().Be(dailyOneTimeJob.ScheduleName);
+			oneTimeJob.Description.Should().Be(dailyOneTimeJob.Description);
+			oneTimeJob.JobName.Should().Be(dailyOneTimeJob.JobName);
+			oneTimeJob.Enabled.Should().Be(dailyOneTimeJob.Enabled);
+			oneTimeJob.Tenant.Should().Be(dailyOneTimeJob.TenantName);
+			oneTimeJob.DailyFrequencyStart.Should().Be(DateTime.MinValue.AddMinutes(dailyOneTimeJob.OccursOnceAt));
+			oneTimeJob.DailyFrequencyEnd.Should().Be(DateTime.MinValue);
+			oneTimeJob.DailyFrequencyMinute.Should().Be(string.Empty);
+
+			var periodicJob = scheduledJobs.Content.Last();
+			periodicJob.ScheduleName.Should().Be(dailyPeriodicJob.ScheduleName);
+			periodicJob.Description.Should().Be(dailyPeriodicJob.Description);
+			periodicJob.JobName.Should().Be(dailyPeriodicJob.JobName);
+			periodicJob.Enabled.Should().Be(dailyPeriodicJob.Enabled);
+			periodicJob.Tenant.Should().Be(dailyPeriodicJob.TenantName);
+			periodicJob.DailyFrequencyStart.Should().Be(DateTime.MinValue.AddMinutes(dailyPeriodicJob.OccursEveryMinuteStartingAt));
+			periodicJob.DailyFrequencyEnd.Should().Be(DateTime.MinValue.AddMinutes(dailyPeriodicJob.OccursEveryMinuteEndingAt));
+			periodicJob.DailyFrequencyMinute.Should().Be(dailyPeriodicJob.OccursEveryMinute.ToString());
 		}
 
 		private IEnumerable<JobCollectionModel> getJobs(string tenantName, bool toggle38131Enabled, bool pmInstalled)

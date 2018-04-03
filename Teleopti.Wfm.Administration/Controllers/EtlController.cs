@@ -330,6 +330,30 @@ namespace Teleopti.Wfm.Administration.Controllers
 			};
 		}
 
+		[TenantUnitOfWork]
+		[HttpGet, Route("Etl/ScheduledJobs")]
+		public virtual IHttpActionResult ScheduledJobs()
+		{
+			var scheduledJobs = _etlJobScheduler.LoadScheduledJobs();
+			var jobs = scheduledJobs
+				.Where(x => x.ScheduleType != JobScheduleType.Manual)
+				.Select(job => new EtlScheduleJobModel
+					{
+						ScheduleName = job.ScheduleName,
+						Description = job.Description,
+						JobName = job.JobName,
+						Enabled = job.Enabled,
+						Tenant = job.TenantName,
+						DailyFrequencyStart = DateTime.MinValue.AddMinutes(job.ScheduleType == JobScheduleType.OccursDaily ? job.OccursOnceAt : job.OccursEveryMinuteStartingAt),
+						DailyFrequencyEnd = DateTime.MinValue.AddMinutes(job.ScheduleType == JobScheduleType.OccursDaily ? 0 : job.OccursEveryMinuteEndingAt),
+						DailyFrequencyMinute = job.ScheduleType == JobScheduleType.OccursDaily ? string.Empty : job.OccursEveryMinute.ToString()
+					}
+				)
+				.ToList();
+
+			return Ok(jobs);
+		}
+
 		private string getMasterTenantName()
 		{
 			var appConnectionString = new SqlConnectionStringBuilder(_configReader.ConnectionString("Tenancy")).InitialCatalog;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Analytics.Etl.Common;
@@ -85,6 +86,11 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 			}
 
 			return ret;
+		}
+
+		public IList<IEtlJobSchedule> LoadScheduledJobs()
+		{
+			return _jobScheduleRepository.GetSchedules(null, DateTime.Now);
 		}
 	}
 }
