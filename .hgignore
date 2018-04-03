@@ -129,3 +129,4 @@ Teleopti.Ccc.Web/Teleopti.Ccc.Web/.node/WfmFileHash.txt
 *.tmp_proj
 
 # stop just adding things at the bottom and organize?
+Teleopti.Ccc.Web/Teleopti.Ccc.Web/WFM/build-webpack
