@@ -241,6 +241,7 @@
 			this.ExtraShifts = [];
 			this.Timezone = schedule.Timezone;
 			this.ViewRange = timeLine.MaximumViewRange;
+			this.UnderlyingScheduleSummary = schedule.UnderlyingScheduleSummary;
 		}
 
 		PersonSchedule.prototype.AbsenceCount = function () {

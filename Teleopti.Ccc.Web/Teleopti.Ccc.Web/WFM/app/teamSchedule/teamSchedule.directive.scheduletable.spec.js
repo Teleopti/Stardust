@@ -402,6 +402,20 @@ describe('teamschedule schedule table controller tests', function () {
 		expect(controller.toggleAllInCurrentPage).toEqual(true);
 	}));
 
+	it("should show icon if schedules has underlying schedule summaries", function () {
+		var underlyingScheduleSummary = {
+			PersonalActivities: [{ Description: 'Personal activity 1', Timespan: '10:00 - 11:00' }]
+		};
+		var schedules = [createSchedule('personId1', '2018-04-03', null, [{ startHour: 8, endHour: 16 }], underlyingScheduleSummary)];
+
+		scheduleManagement.groupScheduleVm = { Schedules: schedules };
+		controller.init();
+
+		scope.$apply();
+
+		expect(controller.hasUnderlyingSchedules(schedules[0])).not.toBeNull();
+	});
+
 	function setupParent(schedule) {
 		if (schedule.Shifts) {
 			schedule.Shifts.forEach(function (s) {
@@ -421,7 +435,7 @@ describe('teamschedule schedule table controller tests', function () {
 		return $controller('ScheduleTableController', { $scope: scope, personSelectionSvc: personSelection });
 	}
 
-	function createSchedule(personId, belongsToDate, dayOff, projectionInfoArray) {
+	function createSchedule(personId, belongsToDate, dayOff, projectionInfoArray, underlyingScheduleSummary) {
 
 		var dateMoment = moment(belongsToDate);
 		var projections = [];
@@ -438,7 +452,8 @@ describe('teamschedule schedule table controller tests', function () {
 			}],
 			ScheduleStartTime: function () { return dateMoment.startOf('day') },
 			ScheduleEndTime: function () { return dateMoment.endOf('day') },
-			AllowSwap: function () { return false; }
+			AllowSwap: function () { return false; },
+			UnderlyingScheduleSummary: underlyingScheduleSummary
 		};
 
 		function createProjection() {

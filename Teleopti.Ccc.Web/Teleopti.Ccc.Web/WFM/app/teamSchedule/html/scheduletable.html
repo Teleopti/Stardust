@@ -59,6 +59,22 @@
 			</td>
 			<td class="schedule schedule-column">
 				<div class="relative time-line-for">
+					<span ng-if="vm.hasUnderlyingSchedules(personSchedule)" class="info">
+						<i class="mdi mdi-information mdi-alert"></i>
+						<md-tooltip class="multiline-tooltip" md-direction="left">
+							<div ng-if="!!personSchedule.UnderlyingScheduleSummary.PersonalActivities">{{'PersonalActivity' | translate}}</div>
+							<div ng-repeat="info in personSchedule.UnderlyingScheduleSummary.PersonalActivities" style="margin-left:10px;">
+								{{ info.Description }}: {{ info.Timespan }}
+							</div>
+							<div ng-if="!!personSchedule.UnderlyingScheduleSummary.PersonAbsences" ng-repeat="info in personSchedule.UnderlyingScheduleSummary.PersonAbsences">
+								{{ info.Description }}: {{ info.Timespan }}
+							</div>
+							<div ng-if="!!personSchedule.UnderlyingScheduleSummary.PersonMeetings" ng-repeat="info in personSchedule.UnderlyingScheduleSummary.PersonMeetings">
+								{{ info.Description }}: {{ info.Timespan }}
+							</div>
+						</md-tooltip>
+					</span>
+
 					<span class="dayoff absolute" ng-repeat="dayOff in ::personSchedule.DayOffs" ng-if="personSchedule.DayOffs.length > 0 && dayOff.Length > 0"
 						  ng-style="{left: dayOff.StartPosition + '%', width: dayOff.Length + '%'}">
 						<md-tooltip ng-if="dayOff.DayOffName !=''">{{::dayOff.DayOffName}}</md-tooltip>

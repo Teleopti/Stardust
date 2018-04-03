@@ -23,8 +23,8 @@
 		};
 	}
 
-	ScheduleTableController.$inject = ['$scope', 'PersonSelection', 'ScheduleManagement', 'ValidateRulesService', 'ScheduleNoteManagementService','teamsToggles', 'teamsPermissions'];
-	function ScheduleTableController($scope, personSelectionSvc, ScheduleMgmt, ValidateRulesService, ScheduleNoteMgmt, teamsToggles, teamsPermissions) {
+	ScheduleTableController.$inject = ['$scope', 'PersonSelection', 'ScheduleManagement', 'ValidateRulesService', 'ScheduleNoteManagementService','Toggle', 'teamsPermissions'];
+	function ScheduleTableController($scope, personSelectionSvc, ScheduleMgmt, ValidateRulesService, ScheduleNoteMgmt, toggleSvc, teamsPermissions) {
 		var vm = this;
 
 		vm.updateAllSelectionInCurrentPage = function (isAllSelected) {
@@ -141,6 +141,10 @@
 			};
 		};
 
+		vm.hasUnderlyingSchedules = function (personSchedule) {
+			return toggleSvc.WfmTeamSchedule_ShowInformationForUnderlyingSchedule_74952 && !!personSchedule.UnderlyingScheduleSummary;
+		}
+	
 		function isAllInCurrentPageSelected() {
 			var isAllSelected = true;
 			var selectedPeople = personSelectionSvc.personInfo;
@@ -161,8 +165,7 @@
 		vm.init = function () {
 			vm.toggleAllInCurrentPage = isAllInCurrentPageSelected();
 			vm.scheduleVm = ScheduleMgmt.groupScheduleVm;
-
-			vm.toggles = teamsToggles.all();
+			
 			vm.permissions = teamsPermissions.all();
 		};
 
