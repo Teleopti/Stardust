@@ -299,8 +299,8 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			};
 			Target.SaveConfigurationForTenant(tenantConfig);
 			var savedConfig = BaseConfigurationRepository.LoadBaseConfiguration(connectionString);
-			var scheduledJob = JobScheduleRepository.GetEtlJobSchedules().Single();
-			var scheduledPeriods = JobScheduleRepository.GetEtlJobSchedulePeriods(1);
+			var scheduledJob = JobScheduleRepository.GetSchedules(null, DateTime.MinValue).Single();
+			var scheduledPeriods = JobScheduleRepository.GetSchedulePeriods(1);
 
 			savedConfig.IntervalLength.Should().Be(baseConfig.IntervalLength);
 			savedConfig.CultureId.Should().Be(baseConfig.CultureId);
@@ -446,7 +446,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 
 			Target.PersistDataSource(tenantDataSources);
 
-			var scheduledJobs = JobScheduleRepository.GetEtlJobSchedules();
+			var scheduledJobs = JobScheduleRepository.GetSchedules(null, DateTime.MinValue);
 			scheduledJobs.Count.Should().Be(3);
 			scheduledJobs.First().JobName.Should().Be("Initial");
 		}
@@ -478,7 +478,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 
 			Target.PersistDataSource(tenantDataSources);
 
-			var scheduledJobs = JobScheduleRepository.GetEtlJobSchedules();
+			var scheduledJobs = JobScheduleRepository.GetSchedules(null, DateTime.MinValue);
 			scheduledJobs.Count.Should().Be(2);
 
 			scheduledJobs.Any(x => x.JobName == "Initial").Should().Be.True();
@@ -492,7 +492,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			queueStatisticsJob.Description.Should().Be("Manual ETL");
 			queueStatisticsJob.TenantName.Should().Be(testTenantName);
 			
-			var scheduledPeriod = JobScheduleRepository.GetEtlJobSchedules().Single(x=>x.JobName == "Queue Statistics")
+			var scheduledPeriod = JobScheduleRepository.GetSchedules(null, DateTime.MinValue).Single(x=>x.JobName == "Queue Statistics")
 				.RelativePeriodCollection.Single();
 			scheduledPeriod.JobCategoryName.Should().Be("Queue Statistics");
 			scheduledPeriod.RelativePeriod.Minimum.Should().Be(-100);
@@ -526,7 +526,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 
 			Target.PersistDataSource(tenantDataSources);
 
-			var scheduledJobs = JobScheduleRepository.GetEtlJobSchedules();
+			var scheduledJobs = JobScheduleRepository.GetSchedules(null, DateTime.MinValue);
 			scheduledJobs.Count.Should().Be(2);
 
 			scheduledJobs.Any(x => x.JobName == "Initial").Should().Be.True();
@@ -540,7 +540,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			agentStatisticsJob.Description.Should().Be("Manual ETL");
 			agentStatisticsJob.TenantName.Should().Be(testTenantName);
 
-			var scheduledPeriod = JobScheduleRepository.GetEtlJobSchedules().Single(x => x.JobName == "Agent Statistics")
+			var scheduledPeriod = JobScheduleRepository.GetSchedules(null, DateTime.MinValue).Single(x => x.JobName == "Agent Statistics")
 				.RelativePeriodCollection.Single();
 			scheduledPeriod.JobCategoryName.Should().Be("Agent Statistics");
 			scheduledPeriod.RelativePeriod.Minimum.Should().Be(-100);
@@ -620,7 +620,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			var result = (NegotiatedContentResult<string>)Target.PersistDataSource(tenantDataSources);
 			result.StatusCode.Should().Be(HttpStatusCode.Ambiguous);
 			result.Content.Should().Contain(defaultDsModel.Name);
-			JobScheduleRepository.GetEtlJobSchedules().Should().Be.Empty();
+			JobScheduleRepository.GetSchedules(null, DateTime.MinValue).Should().Be.Empty();
 		}
 
 		[Test]
@@ -645,7 +645,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			var result = (NegotiatedContentResult<string>) Target.PersistDataSource(tenantDataSource);
 			result.StatusCode.Should().Be(HttpStatusCode.Ambiguous);
 			result.Content.Should().Contain(dataSourceModel.Name);
-			JobScheduleRepository.GetEtlJobSchedules().Should().Be.Empty();
+			JobScheduleRepository.GetSchedules(null, DateTime.MinValue).Should().Be.Empty();
 		}
 
 		[Test]
@@ -673,7 +673,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 
 			var result = (OkResult)Target.PersistDataSource(tenantDataSource);
 			result.Should().Not.Be(null);
-			JobScheduleRepository.GetEtlJobSchedules().Should().Be.Empty();
+			JobScheduleRepository.GetSchedules(null, DateTime.MinValue).Should().Be.Empty();
 		}
 
 		[TestCase(true, true)]
