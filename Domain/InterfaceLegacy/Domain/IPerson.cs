@@ -277,6 +277,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		ISiteOpenHour SiteOpenHour(DateOnly dateOnly);
 		void RemoveAllPeriodsAfter(DateOnly date);
 		bool IsExternalAgent { get; }
-		void AddPersonEmployementChangeEvent(PersonEmploymentChangedEvent personEmploymentChangedEvent);
+		void AddPersonEmploymentChangeEvent(PersonEmploymentChangedEvent personEmploymentChangedEvent);
 	}
 }

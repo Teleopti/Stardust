@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
                 if (value != ContainedEntity.StartDate)
                 {
 					Parent.ChangePersonPeriodStartDate(value,ContainedEntity);
-					addPersonEmployementChangedEvent(true);
+					addPersonEmploymentChangedEvent(true);
                 }
             }
         }
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
                 if (ContainedEntity.PersonContract?.PartTimePercentage != null && !ContainedEntity.PersonContract.PartTimePercentage.Equals(value))
                 {
                     ContainedEntity.PersonContract.PartTimePercentage = value;
-					addPersonEmployementChangedEvent();
+					addPersonEmploymentChangedEvent();
 
 				}
             }
@@ -67,13 +67,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
                 if (ContainedEntity.PersonContract?.Contract != null && !ContainedEntity.PersonContract.Contract.Equals(value))
                 {
                     ContainedEntity.PersonContract.Contract = value;
-					addPersonEmployementChangedEvent();
+					addPersonEmploymentChangedEvent();
 
 				}
             }
         }
 
-		private void addPersonEmployementChangedEvent(bool getFromPreviousPeriod = false)
+		private void addPersonEmploymentChangedEvent(bool getFromPreviousPeriod = false)
 		{
 			var startDate = ContainedEntity.StartDate;
 			if (getFromPreviousPeriod)
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
 				if (previousPeriod != null)
 					startDate = previousPeriod.StartDate;
 			}
-			Parent.AddPersonEmployementChangeEvent(new PersonEmploymentChangedEvent
+			Parent.AddPersonEmploymentChangeEvent(new PersonEmploymentChangedEvent
 			{
 				PersonId = ContainedEntity.Parent.Id.GetValueOrDefault(),
 				FromDate = startDate
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
                 if (ContainedEntity.PersonContract?.ContractSchedule != null && !ContainedEntity.PersonContract.ContractSchedule.Equals(value))
                 {
                     ContainedEntity.PersonContract.ContractSchedule = value;
-					addPersonEmployementChangedEvent();
+					addPersonEmploymentChangedEvent();
 
 				}
             }

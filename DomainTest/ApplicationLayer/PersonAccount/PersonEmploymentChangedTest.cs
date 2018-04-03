@@ -60,8 +60,135 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAccount
 			PersonAbsenceRepository.Has(personAbsence);
 
 			Target.Calculate(new PersonEmploymentChangedEvent {FromDate = fromDate, PersonId = person.Id.GetValueOrDefault()});
-			//acc.CalculateUsed(ScheduleStorage,scenario);
-			//acc.LatestCalculatedBalance.Should().Be.EqualTo(TimeSpan.FromHours(11));
+			acc.LatestCalculatedBalance.Should().Be.EqualTo(TimeSpan.FromHours(9));
+			acc.Remaining.Should().Be.EqualTo(TimeSpan.FromHours(11));
+		}
+
+		[Test]
+		public void ShouldCalculatePersonAccountWithAbsenceOnEmptyDay()
+		{
+			var bu = new Domain.Common.BusinessUnit("bu").WithId();
+			BusinessUnitRepository.Has(bu);
+			var scenario = new Scenario("scenarioName").WithId();
+			scenario.DefaultScenario = true;
+			scenario.SetBusinessUnit(bu);
+			ScenarioRepository.Has(scenario);
+
+			DateOnly fromDate = new DateOnly(2018, 03, 01);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(fromDate).WithId();
+			PersonRepository.Has(person);
+			var absence = new Absence();
+			absence.Tracker = Tracker.CreateTimeTracker();
+			absence.InContractTime = true;
+			AbsenceRepository.Has(absence);
+
+			var absAcc = new PersonAbsenceAccount(person, AbsenceRepository.LoadAll().First());
+			var acc = new AccountTime(fromDate);
+			acc.Accrued = TimeSpan.FromHours(20);
+			absAcc.Add(acc);
+			PersonAbsenceAccountRepository.Add(absAcc);
+			
+			var fullDayAbsence = new AbsenceLayer(absence,
+				new DateTimePeriod(new DateTime(2018, 03, 01, 0, 0, 0, DateTimeKind.Utc),
+					new DateTime(2018, 03, 1, 23, 59, 0, DateTimeKind.Utc)));
+			var personAbsence = new PersonAbsence(person, scenario, fullDayAbsence);
+			PersonAbsenceRepository.Has(personAbsence);
+
+			Target.Calculate(new PersonEmploymentChangedEvent { FromDate = fromDate, PersonId = person.Id.GetValueOrDefault() });
+			acc.LatestCalculatedBalance.Should().Be.EqualTo(TimeSpan.FromHours(8));
+			acc.Remaining.Should().Be.EqualTo(TimeSpan.FromHours(12));
+		}
+
+		[Test]
+		public void ShouldCalculatePersonAccountWithPartTimePercentage50()
+		{
+			var bu = new Domain.Common.BusinessUnit("bu").WithId();
+			BusinessUnitRepository.Has(bu);
+			var scenario = new Scenario("scenarioName").WithId();
+			scenario.DefaultScenario = true;
+			scenario.SetBusinessUnit(bu);
+			ScenarioRepository.Has(scenario);
+
+			DateOnly fromDate = new DateOnly(2018, 03, 01);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(fromDate).WithId();
+			PersonRepository.Has(person);
+			var absence = new Absence();
+			absence.Tracker = Tracker.CreateTimeTracker();
+			absence.InContractTime = true;
+			AbsenceRepository.Has(absence);
+
+			var absAcc = new PersonAbsenceAccount(person, AbsenceRepository.LoadAll().First());
+			var acc = new AccountTime(fromDate);
+			acc.Accrued = TimeSpan.FromHours(20);
+			acc.LatestCalculatedBalance = TimeSpan.FromHours(8);
+			absAcc.Add(acc);
+			PersonAbsenceAccountRepository.Add(absAcc);
+
+			var fullDayAbsence = new AbsenceLayer(absence,
+				new DateTimePeriod(new DateTime(2018, 03, 01, 0, 0, 0, DateTimeKind.Utc),
+					new DateTime(2018, 03, 1, 23, 59, 0, DateTimeKind.Utc)));
+			var personAbsence = new PersonAbsence(person, scenario, fullDayAbsence);
+			PersonAbsenceRepository.Has(personAbsence);
+
+			person.PersonPeriodCollection.First().PersonContract.PartTimePercentage.Percentage = new Percent(0.5);
+
+			Target.Calculate(new PersonEmploymentChangedEvent { FromDate = fromDate, PersonId = person.Id.GetValueOrDefault() });
+			acc.LatestCalculatedBalance.Should().Be.EqualTo(TimeSpan.FromHours(4));
+			acc.Remaining.Should().Be.EqualTo(TimeSpan.FromHours(16));
+		}
+
+		[Test]
+		public void ShouldCalculatePersonAccountWithTwoPersonAccountperiod()
+		{
+			var bu = new Domain.Common.BusinessUnit("bu").WithId();
+			BusinessUnitRepository.Has(bu);
+			var scenario = new Scenario("scenarioName").WithId();
+			scenario.DefaultScenario = true;
+			scenario.SetBusinessUnit(bu);
+			ScenarioRepository.Has(scenario);
+
+			DateOnly fromDate = new DateOnly(2018, 03, 01);
+			var previousFromDate = new DateOnly(2018, 01, 01);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(previousFromDate).WithId();
+			PersonRepository.Has(person);
+			var absence = new Absence();
+			absence.Tracker = Tracker.CreateTimeTracker();
+			absence.InContractTime = true;
+			AbsenceRepository.Has(absence);
+
+			var personAcc = new PersonAbsenceAccount(person, AbsenceRepository.LoadAll().First());
+			var acc1 = new AccountTime(previousFromDate);
+			acc1.Accrued = TimeSpan.FromHours(20);
+			
+			var acc2 = new AccountTime(fromDate);
+			acc2.Accrued = TimeSpan.FromHours(30);
+
+			personAcc.Add(acc1);
+			personAcc.Add(acc2);
+
+			PersonAbsenceAccountRepository.Add(personAcc);
+
+			var previousAbsence = new AbsenceLayer(absence,
+				new DateTimePeriod(new DateTime(2018, 01, 01, 0, 0, 0, DateTimeKind.Utc),
+					new DateTime(2018, 01, 1, 23, 59, 0, DateTimeKind.Utc)));
+			var previousPersonAbsence = new PersonAbsence(person, scenario, previousAbsence);
+			PersonAbsenceRepository.Has(previousPersonAbsence);
+
+			var fullDayAbsence = new AbsenceLayer(absence,
+				new DateTimePeriod(new DateTime(2018, 03, 01, 0, 0, 0, DateTimeKind.Utc),
+					new DateTime(2018, 03, 1, 23, 59, 0, DateTimeKind.Utc)));
+			var nextPersonAbsence = new PersonAbsence(person, scenario, fullDayAbsence);
+			PersonAbsenceRepository.Has(nextPersonAbsence);
+
+			person.PersonPeriodCollection.First().PersonContract.PartTimePercentage.Percentage = new Percent(0.5);
+
+			Target.Calculate(new PersonEmploymentChangedEvent { FromDate = previousFromDate, PersonId = person.Id.GetValueOrDefault() });
+
+			acc1.LatestCalculatedBalance.Should().Be.EqualTo(TimeSpan.FromHours(4));
+			acc1.Remaining.Should().Be.EqualTo(TimeSpan.FromHours(16));
+
+			acc2.LatestCalculatedBalance.Should().Be.EqualTo(TimeSpan.FromHours(4));
+			acc2.Remaining.Should().Be.EqualTo(TimeSpan.FromHours(26));
 		}
 	}
 

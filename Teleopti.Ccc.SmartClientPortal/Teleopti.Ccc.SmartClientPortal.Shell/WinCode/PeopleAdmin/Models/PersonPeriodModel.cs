@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
                 if (value != _currentPeriod.StartDate)
                 {
 	                Parent.ChangePersonPeriodStartDate(value.Value, _currentPeriod);
-					addPersonEmployementChangedEvent(true);
+					addPersonEmploymentChangedEvent(true);
                 }
             }
         }
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
                 if (value != null && _currentPeriod?.PersonContract?.PartTimePercentage != null)
                 {
                     _currentPeriod.PersonContract.PartTimePercentage = value;
-					addPersonEmployementChangedEvent();
+					addPersonEmploymentChangedEvent();
                 }
             }
         }
@@ -99,12 +99,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
                 if (value != null && _currentPeriod?.PersonContract?.Contract != null)
                 {
                     _currentPeriod.PersonContract.Contract = value;
-					addPersonEmployementChangedEvent();
+					addPersonEmploymentChangedEvent();
 				}
             }
         }
 
-		private void addPersonEmployementChangedEvent(bool getFromPreviousPeriod = false)
+		private void addPersonEmploymentChangedEvent(bool getFromPreviousPeriod = false)
 		{
 			var startDate = _currentPeriod.StartDate;
 			if (getFromPreviousPeriod)
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
 				if (prev != null)
 					startDate = prev.StartDate;
 			}
-			Parent.AddPersonEmployementChangeEvent(new PersonEmploymentChangedEvent
+			Parent.AddPersonEmploymentChangeEvent(new PersonEmploymentChangedEvent
 			{
 				PersonId = _containedEntity.Id.GetValueOrDefault(),
 				FromDate = startDate
@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
                 if (value != null && _currentPeriod?.PersonContract?.ContractSchedule != null)
                 {
                     _currentPeriod.PersonContract.ContractSchedule = value;
-					addPersonEmployementChangedEvent();
+					addPersonEmploymentChangedEvent();
 				}
             }
         }
