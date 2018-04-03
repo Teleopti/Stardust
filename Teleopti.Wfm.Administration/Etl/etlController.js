@@ -26,9 +26,6 @@
 		vm.selectedTenantChanged = selectedTenantChanged;
 		vm.selectJob = selectJob;
 		vm.encueueJob = encueueJob;
-		// scheduled
-		vm.toggleFrequencyType = toggleFrequencyType;
-
 
 		var today = new Date();
 		vm.dataSources = [];
@@ -262,44 +259,5 @@
 			EndDate: new Date().toLocaleDateString(vm.language)
 		};
 
-		//schedule inputs
-		vm.scheduleNameEnabled = true;
-		vm.editingSchedule;
-		vm.frequencyType = false;
-
-		function toggleFrequencyType() {
-			if (vm.frequencyType) {
-				//startEnd
-				console.log('startEnd');
-				vm.editingSchedule.onceTime = null;
-			} else {
-				// today
-				console.log('today');
-				vm.editingSchedule.onceTime = '15:00';
-
-				vm.editingSchedule.everyTime = null;
-				vm.editingSchedule.everyStartTime = null;
-				vm.editingSchedule.everyEndTime = null;
-			}
-		}
-
-		vm.schedules = [
-			{
-				Name: "My main job",
-				Jname: "Nightly",
-				TenantName: 'WFM Teleopti',
-				Frequency: 'hourly',
-				Enabled: true,
-				Description: "Occurs every day at 15:58. Using the log data"
-			},
-			{
-				Name: "My secondary job",
-				Jname: "Nightly",
-				TenantName: 'WFM Teleopti',
-				Frequency: 'hourly',
-				Enabled: true,
-				Description: "Occurs some days at 15:58. Who knows?"
-			}
-		];
 	}
 })();
