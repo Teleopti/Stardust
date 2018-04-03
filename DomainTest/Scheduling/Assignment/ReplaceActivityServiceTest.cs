@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Scheduling;
 using Teleopti.Interfaces.Domain;
@@ -29,9 +30,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var scheduleDictionary =  ScheduleDictionaryCreator.WithData(scenario, dateOnly.ToDateOnlyPeriod(), new []{ass}, new []{agent});
 			var scheduleDays = scheduleDictionary[agent].ScheduledDayCollection(dateOnly.ToDateOnlyPeriod()).ToList();
 
-			Target.Replace(scheduleDays, activity, replaceWithActivity, ass.Period.TimePeriod(TimeZoneInfo.Utc));
+			Target.Replace(scheduleDays, activity, replaceWithActivity, ass.Period.TimePeriod(TimeZoneInfo.Utc), TimeZoneInfo.Utc);
 
 			var shiftLayers = scheduleDays.First().PersonAssignment().ShiftLayers.ToList();
+			shiftLayers.Count.Should().Be.EqualTo(2);
 			foreach (var layer in shiftLayers)
 			{
 				layer.Payload.Should().Be.EqualTo(layer.OrderIndex.Equals(0) ? activity : replaceWithActivity);
@@ -52,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var scheduleDictionary = ScheduleDictionaryCreator.WithData(scenario, period, new[] { ass1, ass2 }, new[] { agent });
 			var scheduleDays = scheduleDictionary[agent].ScheduledDayCollection(period).ToList();
 
-			Target.Replace(scheduleDays, activity, replaceWithActivity, ass1.Period.TimePeriod(TimeZoneInfo.Utc));
+			Target.Replace(scheduleDays, activity, replaceWithActivity, ass1.Period.TimePeriod(TimeZoneInfo.Utc), TimeZoneInfo.Utc);
 
 			foreach (var scheduleDay in scheduleDays)
 			{
@@ -80,8 +82,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var scheduleDictionary = ScheduleDictionaryCreator.WithData(scenario, dateOnly.ToDateOnlyPeriod(), new[] { ass }, new[] { agent });
 			var scheduleDays = scheduleDictionary[agent].ScheduledDayCollection(dateOnly.ToDateOnlyPeriod()).ToList();
 
-			Target.Replace(scheduleDays, activity1, replaceWithActivity, ass.Period.TimePeriod(TimeZoneInfo.Utc));
+			Target.Replace(scheduleDays, activity1, replaceWithActivity, ass.Period.TimePeriod(TimeZoneInfo.Utc), TimeZoneInfo.Utc);
 			var shiftLayers = scheduleDays.First().PersonAssignment().ShiftLayers.ToList();
+			shiftLayers.Count.Should().Be.EqualTo(3);
 			foreach (var layer in shiftLayers)
 			{
 				switch (layer.OrderIndex)
@@ -111,7 +114,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var scheduleDictionary = ScheduleDictionaryCreator.WithData(scenario, dateOnly.ToDateOnlyPeriod(), new[] { ass }, new[] { agent });
 			var scheduleDays = scheduleDictionary[agent].ScheduledDayCollection(dateOnly.ToDateOnlyPeriod()).ToList();
 
-			Target.Replace(scheduleDays, activity, replaceWithActivity, ass.Period.MovePeriod(TimeSpan.FromHours(1)).TimePeriod(TimeZoneInfo.Utc));
+			Target.Replace(scheduleDays, activity, replaceWithActivity, ass.Period.MovePeriod(TimeSpan.FromHours(1)).TimePeriod(TimeZoneInfo.Utc), TimeZoneInfo.Utc);
 
 			var shiftLayers = scheduleDays.First().PersonAssignment().ShiftLayers.ToList();
 			shiftLayers.Count.Should().Be.EqualTo(1);
@@ -132,8 +135,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var scheduleDictionary = ScheduleDictionaryCreator.WithData(scenario, dateOnly.ToDateOnlyPeriod(), new[] { ass }, new[] { agent });
 			var scheduleDays = scheduleDictionary[agent].ScheduledDayCollection(dateOnly.ToDateOnlyPeriod()).ToList();
 
-			Target.Replace(scheduleDays, activity1, replaceWithActivity, ass.Period.ChangeStartTime(TimeSpan.FromHours(5)).TimePeriod(TimeZoneInfo.Utc));
+			Target.Replace(scheduleDays, activity1, replaceWithActivity, ass.Period.ChangeStartTime(TimeSpan.FromHours(5)).TimePeriod(TimeZoneInfo.Utc), TimeZoneInfo.Utc);
 			var shiftLayers = scheduleDays.First().PersonAssignment().ShiftLayers.ToList();
+			shiftLayers.Count.Should().Be.EqualTo(3);
 			foreach (var layer in shiftLayers)
 			{
 				switch (layer.OrderIndex)
@@ -150,6 +154,29 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 						layer.Payload.Should().Be.EqualTo(replaceWithActivity);
 						break;
 				}
+			}
+		}
+
+		[Test]
+		public void ShouldWorkDifferentTimeZones([Values("Taipei Standard Time", "UTC", "Mountain Standard Time")] string userTimeZone)
+		{
+			var dateOnly = new DateOnly(2018, 03, 26);
+			var activity = new Activity().WithId();
+			var replaceWithActivity = new Activity().WithId();
+			var agent = new Person().InTimeZone(TimeZoneInfo.Utc);
+			var scenario = new Scenario();
+			var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(new ShiftCategory().WithId()).WithLayer(activity, new TimePeriod(8, 16));
+			var scheduleDictionary = ScheduleDictionaryCreator.WithData(scenario, dateOnly.ToDateOnlyPeriod(), new[] { ass }, new[] { agent });
+			var scheduleDays = scheduleDictionary[agent].ScheduledDayCollection(dateOnly.ToDateOnlyPeriod()).ToList();
+			var timeZone = (TimeZoneInfo.FindSystemTimeZoneById(userTimeZone));
+
+			Target.Replace(scheduleDays, activity, replaceWithActivity, ass.Period.TimePeriod(timeZone), timeZone);
+
+			var shiftLayers = scheduleDays.First().PersonAssignment().ShiftLayers.ToList();
+			shiftLayers.Count.Should().Be.EqualTo(2);
+			foreach (var layer in shiftLayers)
+			{
+				layer.Payload.Should().Be.EqualTo(layer.OrderIndex.Equals(0) ? activity : replaceWithActivity);
 			}
 		}
 	}
