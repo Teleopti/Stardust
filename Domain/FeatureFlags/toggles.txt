@@ -50,7 +50,7 @@ RTA_ReloadUIOnSystemVersionChanged_48196 = true
 RTA_ModifySkillGroup_48191 = true
 RTA_StoreEvents_47721 = true
 RTA_RemoveApprovedOOA_47721 = RC
-RTA_ImprovedStateGroupFilter_48724 = false
+RTA_ImprovedStateGroupFilter_48724 = DEV
 
 # Dumplings, can any of these be removed? #
 WfmTeamSchedule_ShowStaffingInfo_45206 = true
