@@ -273,6 +273,34 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			schedulerStateHolder.Schedules[agent].ScheduledDay(date.AddDays(6)).IsScheduled().Should().Be.True();
 		}
 
+		[Test]
+		[Ignore("#75170 - to be fixed")]
+		public void ShouldNotPlaceMissingDayOffsOnPartlySelectedSchedulePeriod()
+		{
+			var period = new DateOnlyPeriod(new DateOnly(2018, 2, 1), new DateOnly(2018, 3, 4));
+			var skill = new Skill().For(new Activity().WithId()).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(new ContractWithMaximumTolerance(), skill).WithSchedulePeriodOneMonth(new DateOnly(2018, 1, 1));
+			var contractSchedule = new ContractSchedule("_");
+			var contractScheduleWeek = new ContractScheduleWeek();
+			contractScheduleWeek.Add(DayOfWeek.Monday, true);
+			contractScheduleWeek.Add(DayOfWeek.Tuesday, true);
+			contractScheduleWeek.Add(DayOfWeek.Wednesday, true);
+			contractScheduleWeek.Add(DayOfWeek.Thursday, true);
+			contractScheduleWeek.Add(DayOfWeek.Friday, true);
+			contractScheduleWeek.Add(DayOfWeek.Saturday, false);
+			contractScheduleWeek.Add(DayOfWeek.Sunday, false);
+			contractSchedule.AddContractScheduleWeek(contractScheduleWeek);
+			agent.Period(period.StartDate).PersonContract.ContractSchedule = contractSchedule;
+			var schedulerStateHolder = SchedulerStateHolderFrom.Fill(new Scenario(), period, new[] { agent }, Enumerable.Empty<IPersonAssignment>(), Enumerable.Empty<ISkillDay>());
+
+			Target.Execute(new NoSchedulingCallback(), new SchedulingOptions(), new NoSchedulingProgress(), new[] { agent }, period);
+
+			schedulerStateHolder.Schedules[agent].ScheduledDayCollection(new DateOnlyPeriod(2018, 2, 1, 2018, 2, 28))
+				.Count(x => x.HasDayOff()).Should().Be.EqualTo(8);
+			schedulerStateHolder.Schedules[agent].ScheduledDayCollection(new DateOnlyPeriod(2018, 3, 1, 2018, 3, 4))
+				.Count(x => x.HasDayOff()).Should().Be.EqualTo(2);
+		}
+
 		public SchedulingDesktopTest(SeperateWebRequest seperateWebRequest) : base(seperateWebRequest)
 		{
 		}
