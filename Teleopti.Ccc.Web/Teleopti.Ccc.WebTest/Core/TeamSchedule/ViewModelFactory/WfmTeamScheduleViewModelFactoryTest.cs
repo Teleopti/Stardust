@@ -8,10 +8,13 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -20,12 +23,276 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider;
+using Teleopti.Ccc.Web.Areas.TeamSchedule.IoC;
+using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Ccc.WebTest.Areas.Global;
 using Teleopti.Ccc.WebTest.Areas.TeamSchedule;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 {
+	[TestFixture, DomainTest]
+	public class WfmTeamScheduleViewModelFactoryTestNotUseFakeScheduleStorage : ISetup
+	{
+		public ITeamScheduleViewModelFactory Target;
+		public FakeScenarioRepository CurrentScenario;
+		public FakePersonRepository PersonRepo;
+		public FakeMeetingRepository MeetingRepo;
+		public FakePersonFinderReadOnlyRepository PersonFinderReadOnlyRepository;
+		public FakePersonAssignmentRepository PersonAssignmentRepository;
+		public FakePersonAbsenceRepository PersonAbsenceRepository;
+		public Areas.Global.FakePermissionProvider PermissionProvider;
+		public FakeLoggedOnUser FakeLoggedOnUser;
+
+
+		private IPerson logonUser;
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.AddModule(new WebModule(configuration, null));
+			system.AddModule(new TeamScheduleAreaModule());
+			system.UseTestDouble<FakePersonFinderReadOnlyRepository>().For<IPersonFinderReadOnlyRepository>();
+			system.UseTestDouble<Areas.Global.FakePermissionProvider>().For<IPermissionProvider>();
+			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+
+
+		}
+
+		private void setUpLogon()
+		{
+			logonUser = PersonFactory.CreatePerson("Admin", "Admin").WithId();
+			FakeLoggedOnUser.SetDefaultTimeZone(TimeZoneInfoFactory.ChinaTimeZoneInfo());
+			FakeLoggedOnUser.SetFakeLoggedOnUser(logonUser);
+
+		}
+
+		[Test, SetCulture("zh-CN")]
+		public void ShouldReturnUnderlyingScheduleSummaryForPersonMeeting()
+		{
+			var scenario = CurrentScenario.Has("Default");
+			var date = new DateOnly(2018, 04, 03);
+			var personInUtc = PersonFactory.CreatePerson("Sherlock", "Holmes").WithId();
+			var team = TeamFactory.CreateSimpleTeam().WithId();
+			PersonRepo.Has(personInUtc);
+			PersonFinderReadOnlyRepository.Has(personInUtc);
+
+			var activity = ActivityFactory.CreateActivity("person meeting");
+
+			MeetingPerson meetingPerson = new MeetingPerson(personInUtc, false);
+			var meeting = new Meeting(personInUtc, new List<IMeetingPerson>() { meetingPerson }, "test meeting", "location", "description", activity, scenario);
+			meeting.StartDate = date;
+			meeting.EndDate = date;
+			meeting.StartTime = new TimeSpan(10, 0, 0);
+			meeting.EndTime = new TimeSpan(11, 0, 0);
+			MeetingRepo.Has(meeting);
+
+
+			var viewModel = Target.CreateViewModel(new SearchDaySchedulesInput
+			{
+				DateInUserTimeZone = date,
+				GroupIds = new[] { team.Id.Value },
+				CurrentPageIndex = 1,
+				PageSize = 20,
+				IsOnlyAbsences = false,
+				CriteriaDictionary = new Dictionary<PersonFinderField, string>()
+			});
+			var meetingActivity = viewModel.Schedules.FirstOrDefault().UnderlyingScheduleSummary.PersonMeetings.Single();
+			meetingActivity.Description.Should().Be.EqualTo("test meeting");
+			meetingActivity.Start.Should().Be.EqualTo("2018-04-03 10:00");
+			meetingActivity.End.Should().Be.EqualTo("2018-04-03 11:00");
+		}
+
+		[Test, SetCulture("zh-CN")]
+		public void ShouldReturnUnderlyingScheduleSummaryForPersonalActivities()
+		{
+			var personInUtc = PersonFactory.CreatePerson("Sherlock", "Holmes").WithId();
+			var scenario = CurrentScenario.Has("Default");
+			var date = new DateOnly(2018, 04, 03);
+			var team = TeamFactory.CreateSimpleTeam().WithId();
+			PersonRepo.Has(personInUtc);
+			PersonFinderReadOnlyRepository.Has(personInUtc);
+
+			var period = new DateTimePeriod(new DateTime(2018, 04, 03, 10, 0, 0, DateTimeKind.Utc), new DateTime(2018, 04, 03, 11, 0, 0, DateTimeKind.Utc));
+			var activity = ActivityFactory.CreateActivity("activity");
+			var pa = PersonAssignmentFactory.CreateEmptyAssignment(personInUtc, scenario, period);
+			pa.AddPersonalActivity(activity, period);
+			PersonAssignmentRepository.Has(pa);
+
+			var viewModel = Target.CreateViewModel(new SearchDaySchedulesInput
+			{
+				DateInUserTimeZone = date,
+				GroupIds = new[] { team.Id.Value },
+				CurrentPageIndex = 1,
+				PageSize = 20,
+				IsOnlyAbsences = false
+
+			});
+			var personalActivity = viewModel.Schedules.FirstOrDefault().UnderlyingScheduleSummary.PersonalActivities.Single();
+			personalActivity.Description.Should().Be.EqualTo("activity");
+			personalActivity.Start.Should().Be.EqualTo("2018-04-03 10:00");
+			personalActivity.End.Should().Be.EqualTo("2018-04-03 11:00");
+		}
+
+
+		[Test, SetCulture("zh-CN")]
+		public void ShouldReturnUnderlyingScheduleSummaryForPartTimePersonalAbsences()
+		{
+			var personInUtc = PersonFactory.CreatePerson("Sherlock", "Holmes").WithId();
+			var scenario = CurrentScenario.Has("Default");
+			var date = new DateOnly(2018, 04, 03);
+			var team = TeamFactory.CreateSimpleTeam().WithId();
+			PersonRepo.Has(personInUtc);
+			PersonFinderReadOnlyRepository.Has(personInUtc);
+
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc, scenario, new DateTimePeriod(new DateTime(2018, 04, 03, 8, 0, 0, DateTimeKind.Utc), new DateTime(2018, 04, 03, 17, 0, 0, DateTimeKind.Utc)));
+			PersonAssignmentRepository.Has(pa);
+
+			var absencePeriod = new DateTimePeriod(new DateTime(2018, 04, 03, 10, 0, 0, DateTimeKind.Utc), new DateTime(2018, 04, 03, 11, 0, 0, DateTimeKind.Utc));
+			var activity = ActivityFactory.CreateActivity("activity");
+			var absence = AbsenceFactory.CreateAbsence("absence");
+			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(personInUtc, scenario, absencePeriod, absence);
+			PersonAbsenceRepository.Has(personAbsence);
+
+			var viewModel = Target.CreateViewModel(new SearchDaySchedulesInput
+			{
+				DateInUserTimeZone = date,
+				GroupIds = new[] { team.Id.Value },
+				CurrentPageIndex = 1,
+				PageSize = 20,
+				IsOnlyAbsences = false
+
+			});
+			var personalAbsence = viewModel.Schedules.FirstOrDefault().UnderlyingScheduleSummary.PersonPartTimeAbsences.Single();
+			personalAbsence.Description.Should().Be.EqualTo("absence");
+			personalAbsence.Start.Should().Be.EqualTo("2018-04-03 10:00");
+			personalAbsence.End.Should().Be.EqualTo("2018-04-03 11:00");
+		}
+
+		[Test, SetCulture("zh-CN")]
+		public void ShouldNotReturnUnderlyingScheduleSummaryForFullDayAbsence()
+		{
+			var personInUtc = PersonFactory.CreatePerson("Sherlock", "Holmes").WithId();
+			var scenario = CurrentScenario.Has("Default");
+			var date = new DateOnly(2018, 04, 03);
+			var team = TeamFactory.CreateSimpleTeam().WithId();
+			
+			PersonRepo.Has(personInUtc);
+			PersonFinderReadOnlyRepository.Has(personInUtc);
+
+			var period = new DateTimePeriod(new DateTime(2018, 04, 03, 8, 0, 0, DateTimeKind.Utc), new DateTime(2018, 04, 04, 17, 0, 0, DateTimeKind.Utc));
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc, scenario, period);
+			PersonAssignmentRepository.Has(pa);
+
+
+			var absence = AbsenceFactory.CreateAbsence("absence");
+			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(personInUtc, scenario, period, absence);
+			PersonAbsenceRepository.Has(personAbsence);
+
+			var viewModel = Target.CreateViewModel(new SearchDaySchedulesInput
+			{
+				DateInUserTimeZone = date,
+				GroupIds = new[] { team.Id.Value },
+				CurrentPageIndex = 1,
+				PageSize = 20,
+				IsOnlyAbsences = false
+
+			});
+			viewModel.Schedules.FirstOrDefault().UnderlyingScheduleSummary.Should().Be.Null();
+		}
+
+		[Test]
+		public void ShouldReturnUnderlyingScheduleSummaryWithCorrectDescriptionIfAbsenceIsConfidential()
+		{
+			PermissionProvider.Enable();
+
+			var date = new DateOnly(2018, 04, 03);
+			var scenario = CurrentScenario.Has("Default");
+			setUpLogon();
+
+			var site = SiteFactory.CreateSiteWithOneTeam().WithId();
+			var team = site.TeamCollection.First().WithId();
+			var personInUtc = PersonFactory.CreatePerson("Sherlock", "Holmes").WithId();
+			personInUtc.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(date, team));
+			personInUtc.WorkflowControlSet = new WorkflowControlSet();
+			personInUtc.WorkflowControlSet.SchedulePublishedToDate = new DateTime(2018, 4, 10);
+
+			PersonRepo.Has(personInUtc);
+			PersonFinderReadOnlyRepository.Has(personInUtc);
+
+			PermissionProvider.PermitGroup(DefinedRaptorApplicationFunctionPaths.ViewSchedules, date, new PersonAuthorization {
+				SiteId = team.Site.Id.GetValueOrDefault(),
+				TeamId = team.Id.GetValueOrDefault() });
+
+
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc, scenario, new DateTimePeriod(new DateTime(2018, 04, 03, 8, 0, 0, DateTimeKind.Utc), new DateTime(2018, 04, 03, 17, 0, 0, DateTimeKind.Utc)));
+			PersonAssignmentRepository.Has(pa);
+
+			var absencePeriod = new DateTimePeriod(new DateTime(2018, 04, 03, 10, 0, 0, DateTimeKind.Utc), new DateTime(2018, 04, 03, 11, 0, 0, DateTimeKind.Utc));
+			var activity = ActivityFactory.CreateActivity("activity");
+			var absence = AbsenceFactory.CreateAbsence("confidential absence");
+			absence.Confidential = true;
+
+			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(personInUtc, scenario, absencePeriod, absence);
+			PersonAbsenceRepository.Has(personAbsence);
+
+			var viewModel = Target.CreateViewModel(new SearchDaySchedulesInput
+			{
+				DateInUserTimeZone = date,
+				GroupIds = new[] { team.Id.Value },
+				CurrentPageIndex = 1,
+				PageSize = 20,
+				IsOnlyAbsences = false
+
+			});
+			var personalAbsence = viewModel.Schedules.FirstOrDefault().UnderlyingScheduleSummary.PersonPartTimeAbsences.Single();
+			personalAbsence.Description.Should().Be.EqualTo(ConfidentialPayloadValues.Description.Name);
+			personalAbsence.Start.Should().Be.EqualTo("2018-04-03 10:00");
+			personalAbsence.End.Should().Be.EqualTo("2018-04-03 11:00");
+		}
+
+		[Test]
+		public void ShouldReturnNullUnderlyingSchedulesSummaryIfScheduleIsUnpublished() {
+			PermissionProvider.Enable();
+			var personInUtc = PersonFactory.CreatePerson("Sherlock", "Holmes").WithId();
+
+			personInUtc.WorkflowControlSet = new WorkflowControlSet();
+			personInUtc.WorkflowControlSet.SchedulePublishedToDate = new DateTime(2018, 4, 1);
+
+			
+			var scenario = CurrentScenario.Has("Default");
+			var date = new DateOnly(2018, 04, 03);
+			var site = SiteFactory.CreateSiteWithOneTeam().WithId();
+			var team = site.TeamCollection.First().WithId();
+			personInUtc.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(date, team));
+			PersonRepo.Has(personInUtc);
+			PersonFinderReadOnlyRepository.Has(personInUtc);
+
+			var period = new DateTimePeriod(new DateTime(2018, 04, 03, 10, 0, 0, DateTimeKind.Utc), new DateTime(2018, 04, 03, 11, 0, 0, DateTimeKind.Utc));
+			var activity = ActivityFactory.CreateActivity("activity");
+			var pa = PersonAssignmentFactory.CreateEmptyAssignment(personInUtc, scenario, period);
+			pa.AddPersonalActivity(activity, period);
+			PersonAssignmentRepository.Has(pa);
+			PermissionProvider.PermitGroup(DefinedRaptorApplicationFunctionPaths.ViewSchedules, date, new PersonAuthorization
+			{
+				SiteId = team.Site.Id.GetValueOrDefault(),
+				TeamId = team.Id.GetValueOrDefault()
+			});
+
+			var viewModel = Target.CreateViewModel(new SearchDaySchedulesInput
+			{
+				DateInUserTimeZone = date,
+				GroupIds = new[] { team.Id.Value },
+				CurrentPageIndex = 1,
+				PageSize = 20,
+				IsOnlyAbsences = false
+
+			});
+			var summary = viewModel.Schedules.FirstOrDefault().UnderlyingScheduleSummary;
+			summary.Should().Be.Null();
+		}
+	}
+
+
 	[TestFixture, TeamScheduleTest]
 	public class WfmTeamScheduleViewModelFactoryTest : ISetup
 	{
@@ -38,6 +305,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		public Areas.Global.FakePermissionProvider PermissionProvider;
 		public FakeGroupingReadOnlyRepository GroupingReadOnlyRepository;
 		public FakeUserUiCulture UserUiCulture;
+		public FakeUserCulture UserCulture;
+		public FakeMeetingRepository MeetingRepository;
 
 		private ITeam team;
 		private IPerson personInUtc;
@@ -107,6 +376,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			result.Total.Should().Be(2);
 			result.Schedules.First().Name.Should().Be.EqualTo("A@Detective");
 		}
+
 
 		[Test]
 		public void ShouldReturnCorrectProjectionWhenThereIsNoScheduleForScheduleSearch()

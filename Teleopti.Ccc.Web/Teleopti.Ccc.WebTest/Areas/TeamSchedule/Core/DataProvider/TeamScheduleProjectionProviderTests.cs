@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			_commonAgentNameProvider = new CommonAgentNameProvider(fakeGlobalSettingRepo);
 			var nameFormatSettingsPersisterAndProvider = new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository());
 			nameFormatSettingsPersisterAndProvider.Persist(
-				new NameFormatSettings {NameFormatId = (int) NameFormatSetting.LastNameThenFirstName});
+				new NameFormatSettings { NameFormatId = (int)NameFormatSetting.LastNameThenFirstName });
 			target = new TeamScheduleProjectionProvider(projectionProvider, loggonUser,
 				new ScheduleProjectionHelper(), new ProjectionSplitter(projectionProvider, new ScheduleProjectionHelper()),
 				new FakeIanaTimeZoneProvider(), new PersonNameProvider(nameFormatSettingsPersisterAndProvider));
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 		{
 			var date = new DateOnly(2015, 01, 01);
 			var timezoneChina = TimeZoneInfoFactory.ChinaTimeZoneInfo();
-			
+
 			var contract = ContractFactory.CreateContract("Contract");
 			contract.WithId();
 			var mds = MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("mds", MultiplicatorType.Overtime).WithId();
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 
 			var contract = ContractFactory.CreateContract("Contract");
 			contract.WithId();
-			
+
 			ITeam team = TeamFactory.CreateSimpleTeam();
 			IPersonContract personContract = PersonContractFactory.CreatePersonContract(contract);
 			IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(date, personContract, team);
@@ -174,7 +174,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 
 			var viewModel = target.MakeViewModel(person, date, scheduleDay, false, false, true,
 				_commonAgentNameProvider.CommonAgentNameSettings);
-			
+
 			viewModel.PublicNotes.Should().Be.EqualTo("Oh my God");
 		}
 
@@ -282,7 +282,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			var phoneActivityPeriod = new DateTimePeriod(date.AddHours(8), date.AddHours(15));
 			var overTimePhoneActivityPeriod = new DateTimePeriod(date.AddHours(14), date.AddHours(16));
 			var phoneActivity = ActivityFactory.CreateActivity("Phone", Color.Blue);
-			
+
 			phoneActivity.InContractTime = true;
 			phoneActivity.InWorkTime = true;
 
@@ -513,7 +513,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			assignment1Person1.AddActivity(phoneActivity, phoneActivityPeriod);
 			assignment1Person1.AddPersonalActivity(meetingActivity, personalMeetingPeriod);
 			assignment1Person1.AddActivity(meetingActivity, normalMeetingPeriod);
-			
+
 			assignment1Person1.ShiftLayers.ForEach(l => l.WithId());
 			scheduleDayOnePerson1.Add(assignment1Person1);
 
@@ -561,7 +561,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			assignment1Person1.AddActivity(phoneActivity, phoneActivityPeriod);
 			assignment1Person1.AddActivity(meetingActivity, normalMeetingPeriod);
 			assignment1Person1.AddPersonalActivity(meetingActivity, personalMeetingPeriod);
-			assignment1Person1.AddPersonalActivity(meetingActivity, new DateTimePeriod(new DateTime(2015, 1, 1,9, 30, 0, DateTimeKind.Utc), new DateTime(2015, 1, 1, 10, 30, 0, DateTimeKind.Utc)));
+			assignment1Person1.AddPersonalActivity(meetingActivity, new DateTimePeriod(new DateTime(2015, 1, 1, 9, 30, 0, DateTimeKind.Utc), new DateTime(2015, 1, 1, 10, 30, 0, DateTimeKind.Utc)));
 			assignment1Person1.ShiftLayers.ForEach(l => l.WithId());
 			scheduleDayOnePerson1.Add(assignment1Person1);
 
@@ -740,7 +740,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 				start.ToShortTimeString(), end.ToShortTimeString());
 		}
 
-		
+
 
 		[Test]
 		public void ShouldShowCorrectDescriptionNameForConfidentialAbsenceBasedOnUICulture()
@@ -760,7 +760,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			var absenceLayer = new AbsenceLayer(testAbsence, new DateTimePeriod(date.AddHours(12), date.AddHours(13)));
 			absenceLayer.Payload.Confidential = true;
 			var personAbsence = scheduleDayOnePerson1.CreateAndAddAbsence(absenceLayer);
-			
+
 			personAbsence.SetId(Guid.NewGuid());
 
 			Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
@@ -775,6 +775,6 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 
 		}
 
-		
+
 	}
 }

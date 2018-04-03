@@ -13,6 +13,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.Data;
+using Teleopti.Ccc.Web.Core.Extensions;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
@@ -57,9 +58,11 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 					: null
 			};
 
+			var isPublished = false;
+
 			if (scheduleDay != null)
 			{
-				var isPublished = isSchedulePublished(scheduleDay.DateOnlyAsPeriod.DateOnly, person);
+				isPublished = isSchedulePublished(scheduleDay.DateOnlyAsPeriod.DateOnly, person);
 				if (isPublished || canViewUnpublished)
 				{
 					vm = Projection(scheduleDay, canViewConfidential, agentNameSetting);
@@ -76,8 +79,50 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 					vm.PublicNotes = publicNotes != null ? publicNotes.GetScheduleNote(new NormalizeText()) : String.Empty;
 
 				}
+
 			}
 
+			var pa = scheduleDay.PersonAssignment();
+			var personalActivities = pa?.PersonalActivities();
+
+			var isFullDayAbsence = scheduleDay.IsFullDayAbsence();
+			var hasUnderlyingSchedules = (isPublished || canViewUnpublished) &&  (!scheduleDay.IsFullDayAbsence()
+				|| (scheduleDay.PersonAssignment()?.PersonalActivities()?.Any() ?? false)
+				|| (scheduleDay.PersonMeetingCollection()?.Any() ?? false));
+
+			if (hasUnderlyingSchedules)
+			{
+				var loggedOnUser = _loggedOnUser.CurrentUser();
+				var timezone = loggedOnUser.PermissionInformation.DefaultTimeZone();
+				vm.UnderlyingScheduleSummary = new UnderlyingScheduleSummary
+				{
+					PersonalActivities = scheduleDay.PersonAssignment()?.PersonalActivities()?.Select(personalActivity =>
+						new Summary
+						{
+							Description = personalActivity.Payload.Description.Name,
+							Start = TimeZoneInfo.ConvertTimeFromUtc(personalActivity.Period.StartDateTime, timezone).ToFixedDateTimeFormat(),
+							End = TimeZoneInfo.ConvertTimeFromUtc(personalActivity.Period.EndDateTime, timezone).ToFixedDateTimeFormat()
+						}).ToArray(),
+					PersonMeetings = scheduleDay.PersonMeetingCollection()?.Select(personMeeting =>
+						new Summary
+						{
+							Description = personMeeting.BelongsToMeeting.GetSubject(new NoFormatting()),
+							Start = TimeZoneInfo.ConvertTimeFromUtc(personMeeting.Period.StartDateTime, timezone).ToFixedDateTimeFormat(),
+							End = TimeZoneInfo.ConvertTimeFromUtc(personMeeting.Period.EndDateTime, timezone).ToFixedDateTimeFormat()
+						}
+					).ToArray(),
+					PersonPartTimeAbsences = !isFullDayAbsence ? scheduleDay.PersonAbsenceCollection()?.Select(personAbsence =>
+					{
+						var isAbsenceConfidential = (personAbsence.Layer.Payload as IAbsence).Confidential;
+						return new Summary
+						{
+							Description = !canViewConfidential && isAbsenceConfidential ? ConfidentialPayloadValues.Description.Name : personAbsence.Layer.Payload.Description.Name,
+							Start = TimeZoneInfo.ConvertTimeFromUtc(personAbsence.Period.StartDateTime, timezone).ToFixedDateTimeFormat(),
+							End = TimeZoneInfo.ConvertTimeFromUtc(personAbsence.Period.EndDateTime, timezone).ToFixedDateTimeFormat()
+						};
+					}).ToArray() : null
+				};
+			}
 			vm.Timezone = new TimeZoneViewModel
 			{
 				IanaId = _ianaTimeZoneProvider.WindowsToIana(person.PermissionInformation.DefaultTimeZone().Id),
