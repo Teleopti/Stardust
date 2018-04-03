@@ -462,7 +462,8 @@ module.exports = function(grunt) {
 		// },
 		exec: {
 			ngbuild_dev: 'npm run ng build',
-			ngbuild_prod: 'npm run ng build --prod'
+			ngbuild_prod: 'npm run ng build --prod',
+			webpackDevDist: 'webpack'
 		}
 	});
 
@@ -488,6 +489,18 @@ module.exports = function(grunt) {
 	grunt.registerTask('default', ['devDist', 'test', 'watch:dev']); // this task run the main task and then watch for file changes
 	grunt.registerTask('test', ['ngtemplates', 'karma:unit']);
 	grunt.registerTask('devTest', ['ngtemplates', 'karma:dev']);
+	grunt.registerTask('devDistWebpack', [
+		'ngtemplates',
+		'sass',
+		'imageEmbed',
+		'exec:webpackDevDist',
+		'newer:concat:distCss',
+		'newer:concat:distDarkCss',
+		'copy:devCss',
+		'newer:copy',
+		'generateIndexDev',
+		'exec:ngbuild_dev'
+	]);
 	grunt.registerTask('devDist', [
 		'ngtemplates',
 		'sass',
