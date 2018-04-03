@@ -45,6 +45,9 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest.Infrastructure
 		[RealHangfire]
 		public void MeasurePerformance()
 		{
+			const int absDayLength = 3;
+			const int absEveryXDay = 40;
+			
 			PingWeb.Execute();
 			
 			Guid businessUnitId;
@@ -70,9 +73,10 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest.Infrastructure
 				var absence = AbsenceRepository.LoadAllSortByName().First();
 
 				TestLog.Debug($"Creating data for {persons.Length} people for {periodPlanningPeriod.DayCount()} dates.");
-
+				
 				foreach (var person in persons)
 				{
+					var day = 0;
 					foreach (var date in periodPlanningPeriod.DayCollection())
 					{
 						var scheduledDay = schedules[person].ScheduledDay(date);
@@ -91,19 +95,15 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest.Infrastructure
 							scheduledDay.Add(assignment);
 						}
 
-						schedules.Modify(scheduledDay, new DoNothingScheduleDayChangeCallBack());
-					}
+						if (day % absEveryXDay == 0)
+						{
+							var absDate = periodPlanningPeriod.StartDate.AddDays(day);
+							var startDate = TimeZoneHelper.ConvertToUtc(absDate.Date, TimeZoneInfo.Utc);
+							scheduledDay.CreateAndAddAbsence(new AbsenceLayer(absence, new DateTimePeriod(startDate, startDate.AddDays(absDayLength))));
+						}
 
-					const int absDayLength = 3;
-					const int absEveryXDay = 40;
-					for (var i = 0; i < periodPlanningPeriod.DayCount(); i++)
-					{
-						var absDate = periodPlanningPeriod.StartDate.AddDays(i);
-						var scheduledDay = schedules[person].ScheduledDay(absDate);
-						var startDate = TimeZoneHelper.ConvertToUtc(absDate.Date, TimeZoneInfo.Utc);
-						scheduledDay.CreateAndAddAbsence(new AbsenceLayer(absence, new DateTimePeriod(startDate, startDate.AddDays(absDayLength))));
-						i = i + absEveryXDay;
 						schedules.Modify(scheduledDay, new DoNothingScheduleDayChangeCallBack());
+						day++;
 					}
 				}
 			});
