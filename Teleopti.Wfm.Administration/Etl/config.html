@@ -90,11 +90,11 @@
 									<option ng-show="!logData.selectedTimezone" value="">- Select time zone</option>
 								</select>
 							</td>
-							<td>15</td>
+							<td>{{vm.selectedTenant.BaseConfig.IntervalLength}}</td>
 						</tr>
 					</tbody>
 				</table>
-				<div ng-if="vm.tenantLogData.length <= 0">
+				<div ng-cloak ng-if="vm.tenantLogData.length <= 0">
 					No log data sources found
 				</div>
 			</div>
