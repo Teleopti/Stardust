@@ -137,7 +137,16 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<CommonAgentNameProvider>().As<ICommonAgentNameProvider>().SingleInstance();
 			builder.RegisterType<TrackingMessageSender>().As<ITrackingMessageSender>().SingleInstance();
 			builder.RegisterType<IntervalLengthFetcher>().As<IIntervalLengthFetcher>().SingleInstance();
-			builder.RegisterType<AnalyticsFactScheduleTimeMapper>().As<IAnalyticsFactScheduleTimeMapper>().SingleInstance();
+			if (_config.Toggle(Toggles.ResourcePlanner_SpeedUpEvents_74996))
+			{
+				builder.CacheByInterfaceProxy<AnalyticsFactScheduleTimeMapper, IAnalyticsFactScheduleTimeMapper>().SingleInstance();
+				_config.Cache().This<IAnalyticsFactScheduleTimeMapper>(b => b
+						.CacheMethod(m => m.MapAbsenceId(Guid.Empty)));
+			}
+			else
+			{
+				builder.RegisterType<AnalyticsFactScheduleTimeMapper>().As<IAnalyticsFactScheduleTimeMapper>().SingleInstance();				
+			}
 			builder.RegisterType<AnalyticsFactScheduleDateMapper>().As<IAnalyticsFactScheduleDateMapper>().SingleInstance();
 			builder.RegisterType<AnalyticsFactSchedulePersonMapper>().As<IAnalyticsFactSchedulePersonMapper>().SingleInstance();
 			builder.RegisterType<AnalyticsFactScheduleMapper>().As<IAnalyticsFactScheduleMapper>().SingleInstance();
@@ -152,11 +161,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			if (_config.Toggle(Toggles.ResourcePlanner_SpeedUpEvents_48769))
 			{
-				builder.RegisterType<UpdateFactSchedules>().As<IUpdateFactSchedules>().SingleInstance().ApplyAspects();				
+				builder.RegisterType<UpdateFactSchedules>().As<IUpdateFactSchedules>().SingleInstance();				
 			}
 			else
 			{
-				builder.RegisterType<UpdateFactSchedulesOLD>().As<IUpdateFactSchedules>().SingleInstance().ApplyAspects();	
+				builder.RegisterType<UpdateFactSchedulesOLD>().As<IUpdateFactSchedules>().SingleInstance();	
 			}
 
 			builder.RegisterType<ScheduleProjectionReadOnlyPersister>()

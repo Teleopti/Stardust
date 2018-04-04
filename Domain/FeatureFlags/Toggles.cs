@@ -100,6 +100,7 @@
 		ResourcePlanner_PrepareToRemoveExportSchedule_46576,
 		ResourcePlanner_Deadlock_48170,
 		ResourcePlanner_SpeedUpEvents_48769,
+		ResourcePlanner_SpeedUpEvents_74996,
 
 		Wfm_DisplayOnlineHelp_39402,
 
