@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 				"iisexpress.config",
 				runningConfig,
 				searchReplaces()
-				);
+			);
 
 			var parameters = new Parameters
 			{
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 				//sometimes throws "Process window not found" - don't make that exception bubble up in this teardown...
 				//https://github.com/ElemarJR/IISExpress.Automation/blob/master/src/IISExpress.Automation/ProcessEnvelope.cs
 			}
-			
+
 			killProcess("killAllIISExpress", "iisexpress");
 			waitToBeKilled("waittobekilled", "iisexpress");
 			killProcess("killStardustConsoleHost", "Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost");
@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 			writeWebConfig("web.AuthenticationBridge.web.config", Paths.WebAuthenticationBridgePath());
 			writeWebConfig("web.WindowsIdentityProvider.web.config", Paths.WebWindowsIdentityProviderPath());
 		}
-		
+
 		private static void writeWebConfig(string sourceFileName, string targetFolder)
 		{
 			WriteConfig(sourceFileName, targetFolder, "web.config");
@@ -205,6 +205,17 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 
 		private static SearchReplaceCollection searchReplaces()
 		{
+			// infra test config
+			var file = Path.Combine(Paths.FindProjectPath(@".debug-Setup\config\"), "settings.txt");
+			settingsFile.LoadFile(file);
+			settingsFile.UpdateFileByName("machineKey.validationKey", "754534E815EF6164CE788E521F845BA4953509FA45E321715FDF5B92C5BD30759C1669B4F0DABA17AC7BBF729749CE3E3203606AB49F20C19D342A078A3903D1");
+			settingsFile.UpdateFileByName("machineKey.decryptionKey", "3E1AD56713339011EB29E98D1DF3DBE1BADCF353938C3429");
+			settingsFile.UpdateFileByName("DB_CCC7", InfraTestConfigReader.DatabaseName);
+			settingsFile.UpdateFileByName("DB_ANALYTICS", InfraTestConfigReader.AnalyticsDatabaseName);
+			settingsFile.UpdateFileByName("AS_DATABASE", InfraTestConfigReader.AnalyticsDatabaseName);
+			settingsFile.UpdateFileByName("sqlAuthString", InfraTestConfigReader.SqlAuthString);
+			settingsFile.UpdateFileByName("ToggleMode", InfraTestConfigReader.ToggleMode);
+
 			// behavior test
 			settingsFile.UpdateFileByName("TestLogConfiguration", "<logger name='Teleopti.TestLog'><level value='DEBUG'/></logger><logger name='NHibernate'><level value='WARN'/></logger>");
 			settingsFile.UpdateFileByName("CheckNewJobIntervalSeconds", "<add key='CheckNewJobIntervalSeconds' value='5'/>");
@@ -217,25 +228,21 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 			settingsFile.UpdateFile("<customErrors mode=\"On\" defaultRedirect=\"~/content/error/error.htm\">", "<customErrors mode=\"Off\" defaultRedirect=\"~/content/error/error.htm\">");
 
 			// iisexpress
-			settingsFile.UpdateFileByName("Port", TestSiteConfigurationSetup.Port.ToString());
-			settingsFile.UpdateFileByName("PortAuthenticationBridge", TestSiteConfigurationSetup.PortAuthenticationBridge.ToString());
-			settingsFile.UpdateFileByName("PortWindowsIdentityProvider", TestSiteConfigurationSetup.PortWindowsIdentityProvider.ToString());
+			settingsFile.UpdateFileByName("Port", Port.ToString());
+			settingsFile.UpdateFileByName("PortAuthenticationBridge", PortAuthenticationBridge.ToString());
+			settingsFile.UpdateFileByName("PortWindowsIdentityProvider", PortWindowsIdentityProvider.ToString());
 			settingsFile.UpdateFileByName("SitePath", Paths.WebPath());
 			settingsFile.UpdateFileByName("SitePathAuthenticationBridge", Paths.WebAuthenticationBridgePath());
 			settingsFile.UpdateFileByName("SitePathWindowsIdentityProvider", Paths.WebWindowsIdentityProviderPath());
 
-			// settings.txt
-			settingsFile.UpdateFileByName("URL", TestSiteConfigurationSetup.URL.ToString());
-			settingsFile.UpdateFileByName("UrlAuthenticationBridge", TestSiteConfigurationSetup.UrlAuthenticationBridge.ToString());
-			settingsFile.UpdateFileByName("WindowsClaimProvider", TestSiteConfigurationSetup.WindowsClaimProvider);
-			settingsFile.UpdateFileByName("TeleoptiClaimProvider", TestSiteConfigurationSetup.TeleoptiClaimProvider);
-			settingsFile.UpdateFileByName("URL_WINDOWS_IDENTITY_PROVIDER", TestSiteConfigurationSetup.UrlWindowsIdentityProvider);
-			settingsFile.UpdateFileByName("machineKey.validationKey", "754534E815EF6164CE788E521F845BA4953509FA45E321715FDF5B92C5BD30759C1669B4F0DABA17AC7BBF729749CE3E3203606AB49F20C19D342A078A3903D1");
-			settingsFile.UpdateFileByName("machineKey.decryptionKey", "3E1AD56713339011EB29E98D1DF3DBE1BADCF353938C3429");
+			// urls?
+			settingsFile.UpdateFileByName("URL", URL.ToString());
+			settingsFile.UpdateFileByName("UrlAuthenticationBridge", UrlAuthenticationBridge.ToString());
+			settingsFile.UpdateFileByName("WindowsClaimProvider", WindowsClaimProvider);
+			settingsFile.UpdateFileByName("TeleoptiClaimProvider", TeleoptiClaimProvider);
+			settingsFile.UpdateFileByName("URL_WINDOWS_IDENTITY_PROVIDER", UrlWindowsIdentityProvider);
 
 			return settingsFile.ReadFile();
 		}
-
 	}
-
 }
