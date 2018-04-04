@@ -90,6 +90,7 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 
 		public IList<IEtlJobSchedule> LoadScheduledJobs()
 		{
+			_jobScheduleRepository.SetDataMartConnectionString(_configReader.ConnectionString("Hangfire"));
 			return _jobScheduleRepository.GetSchedules(null, DateTime.Now);
 		}
 	}
