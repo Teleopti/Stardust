@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Drawing;
-using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -11,6 +9,7 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
@@ -18,6 +17,7 @@ using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -542,6 +542,44 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
 				Assert.AreEqual(UserTexts.Resources.NA, style.CellValue);
 			}	
+		}
+
+		[Test]
+		[Ignore("75323 - to be fixed")]
+		public void ShouldSetCellValueTargetTimeToNaWhenHourlyEmployee()
+		{
+			var scenario = new Scenario();
+			var date = new DateOnly(2018, 04, 04);
+			var period = new DateOnlyPeriod(date, date);
+			var contract = new Contract("_") {EmploymentType = EmploymentType.HourlyStaff};
+			var person = new Person().WithPersonPeriod(contract).WithSchedulePeriodOneDay(date);
+			var checker = new PersistableScheduleDataPermissionChecker();
+			var scheduleDictionary = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(period.ToDateTimePeriod(TimeZoneInfo.Utc), new[] {person},new SchedulerRangeToLoadCalculator(period.ToDateTimePeriod(TimeZoneInfo.Utc))), checker);
+			var scheduleRange = new ScheduleRange(scheduleDictionary, new ScheduleParameters(scenario, person, period.ToDateTimePeriod(TimeZoneInfo.Utc)), checker);
+			using (var style = new GridStyleInfo())
+			{
+				ViewBaseHelper.StyleTargetScheduleContractTimeCell(style, person, period, new SchedulingResultStateHolder(), scheduleRange);
+				Assert.AreEqual(UserTexts.Resources.NA, style.CellValue);
+			}
+		}
+
+		[Test]
+		[Ignore("75323 - to be fixed")]
+		public void ShouldSetCellValueTargetDayOffToNaWhenHourlyEmployee()
+		{
+			var scenario = new Scenario();
+			var date = new DateOnly(2018, 04, 04);
+			var period = new DateOnlyPeriod(date, date);
+			var contract = new Contract("_") { EmploymentType = EmploymentType.HourlyStaff };
+			var person = new Person().WithPersonPeriod(contract).WithSchedulePeriodOneDay(date);
+			var checker = new PersistableScheduleDataPermissionChecker();
+			var scheduleDictionary = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(period.ToDateTimePeriod(TimeZoneInfo.Utc), new[] { person }, new SchedulerRangeToLoadCalculator(period.ToDateTimePeriod(TimeZoneInfo.Utc))), checker);
+			var scheduleRange = new ScheduleRange(scheduleDictionary, new ScheduleParameters(scenario, person, period.ToDateTimePeriod(TimeZoneInfo.Utc)), checker);
+			using (var style = new GridStyleInfo())
+			{
+				ViewBaseHelper.StyleTargetScheduleDaysOffCell(style, person, period, scheduleRange);
+				Assert.AreEqual(UserTexts.Resources.NA, style.CellValue);
+			}
 		}
 		       
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
