@@ -153,7 +153,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			{
 				_baseConfigurationRepository.SaveBaseConfiguration(connectionString, tenantConfigurationModel.BaseConfig);
 				_etlJobScheduler.ScheduleJob(createJobToEnqueue(tenantConfigurationModel.TenantName, "Initial",
-					JobCategoryType.Initial, 1, _now.UtcDateTime().AddDays(-1), _now.UtcDateTime().AddDays(1)));
+					JobCategoryType.Initial, 1, _now.UtcDateTime().AddDays(-1), _now.UtcDateTime().AddDays(1)).First());
 			}
 			catch (Exception ex)
 			{
@@ -260,7 +260,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 						}
 
 						etlJobsToEnque.Add(createJobToEnqueue(tenantName, "Initial", JobCategoryType.Initial, 1,
-							_now.UtcDateTime().AddDays(-1), _now.UtcDateTime().AddDays(1)));
+							_now.UtcDateTime().AddDays(-1), _now.UtcDateTime().AddDays(1)).First());
 						initialJobEnqueued = true;
 					}
 
@@ -273,7 +273,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 								$"Enqueue ETL job \"Queue Statistics\" from {queuePeriod.StartDate.Date:yyyy-MM-dd} to "
 								+ $"{queuePeriod.EndDate.Date:yyyy-MM-dd} for data source with Id=\"{dataSourceId}\" and tenant=\"{tenantName}\".");
 						}
-						etlJobsToEnque.Add(createJobToEnqueue(tenantName, "Queue Statistics", JobCategoryType.QueueStatistics,
+						etlJobsToEnque.AddRange(createJobToEnqueue(tenantName, "Queue Statistics", JobCategoryType.QueueStatistics,
 							dataSourceId, queuePeriod.StartDate.Date, queuePeriod.EndDate.Date));
 					}
 
@@ -286,7 +286,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 								$"Enqueue ETL job \"Agent Statistics\" from {agentPeriod.StartDate.Date:yyyy-MM-dd} to "
 								+ $"{agentPeriod.EndDate.Date:yyyy-MM-dd} for data source with Id=\"{dataSourceId}\" and tenant=\"{tenantName}\".");
 						}
-						etlJobsToEnque.Add(createJobToEnqueue(tenantName, "Agent Statistics", JobCategoryType.AgentStatistics,
+						etlJobsToEnque.AddRange(createJobToEnqueue(tenantName, "Agent Statistics", JobCategoryType.AgentStatistics,
 							dataSourceId, agentPeriod.StartDate.Date, agentPeriod.EndDate.Date));
 					}
 				}
@@ -310,24 +310,31 @@ namespace Teleopti.Wfm.Administration.Controllers
 				: Ok();
 		}
 
-		private JobEnqueModel createJobToEnqueue(string tenantName, string jobName, JobCategoryType jobCategoryName,
+		private List<JobEnqueModel> createJobToEnqueue(string tenantName, string jobName, JobCategoryType jobCategoryName,
 			int datasourceId, DateTime startDate, DateTime endDate)
 		{
-			return new JobEnqueModel
+			var jobs = new List<JobEnqueModel>();
+			for (var start = startDate; start < endDate; start= start.AddDays(30))
 			{
-				JobName = jobName,
-				JobPeriods = new List<JobPeriod>
-				{
-					new JobPeriod
+				jobs.Add(
+					new JobEnqueModel
 					{
-						Start = startDate,
-						End = endDate,
-						JobCategoryName = jobCategoryName.ToString(),
+						JobName = jobName,
+						JobPeriods = new List<JobPeriod>
+						{
+							new JobPeriod
+							{
+								Start = start,
+								End = start.AddDays(30) > endDate ? endDate: start.AddDays(30),
+								JobCategoryName = jobCategoryName.ToString(),
+							}
+						},
+						LogDataSourceId = datasourceId,
+						TenantName = tenantName
 					}
-				},
-				LogDataSourceId = datasourceId,
-				TenantName = tenantName
-			};
+				);
+			}
+			return jobs;
 		}
 
 		[TenantUnitOfWork]

@@ -9,6 +9,7 @@ using Teleopti.Analytics.Etl.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.JobSchedule;
 using Teleopti.Ccc.Domain.Analytics;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
@@ -437,7 +438,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 				new BaseConfiguration(1053, 15, "UTC", false));
 			GeneralInfrastructure.HasDataSources(new DataSourceEtl(dataSourceId, "myDs", 12, timezoneName, 15, false));
 
-			var period = new DateOnlyPeriod(DateOnly.Today.AddDays(-100), DateOnly.Today.AddDays(200));
+			var period = new DateOnlyPeriod(DateOnly.Today.AddDays(-5), DateOnly.Today.AddDays(15));
 			GeneralInfrastructure.HasFactQueuePeriod(dataSourceId, period);
 			GeneralInfrastructure.HasFactAgentPeriod(dataSourceId, period);
 
@@ -460,6 +461,61 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 		}
 
 		[Test]
+		public void ShouldSplitJobsInOneMonthPeriod()
+		{
+			const int dataSourceId = 3;
+			var masterTenant = new Tenant(testTenantName);
+			masterTenant.DataSourceConfiguration.SetAnalyticsConnectionString($"Initial Catalog={RandomName.Make()}");
+			AllTenants.HasWithAnalyticsConnectionString(masterTenant.Name, masterTenant.DataSourceConfiguration.AnalyticsConnectionString);
+			BaseConfigurationRepository.SaveBaseConfiguration(masterTenant.DataSourceConfiguration.AnalyticsConnectionString,
+				new BaseConfiguration(1053, 15, "UTC", false));
+			GeneralInfrastructure.HasDataSources(new DataSourceEtl(dataSourceId, "myDs", 12, timezoneName, 15, false));
+
+			var period = new DateOnlyPeriod(DateOnly.Today.AddDays(-40), DateOnly.Today.AddDays(40));
+			GeneralInfrastructure.HasFactQueuePeriod(dataSourceId, period);
+			GeneralInfrastructure.HasFactAgentPeriod(dataSourceId, period);
+
+			var myDsModel = new DataSourceModel
+			{
+				Id = dataSourceId,
+				TimeZoneCode = "UTC"
+			};
+			var tenantDataSources = new TenantDataSourceModel
+			{
+				TenantName = testTenantName,
+				DataSources = new List<DataSourceModel> { myDsModel }
+			};
+
+			Target.PersistDataSource(tenantDataSources);
+
+			var scheduledJobs = JobScheduleRepository.GetSchedules(null, DateTime.MinValue);
+			var agentJobs = scheduledJobs.Where(x => x.JobName == "Agent Statistics").ToList();
+			var queueJobs = scheduledJobs.Where(x => x.JobName == "Queue Statistics").ToList(); ;
+
+			scheduledJobs.Count.Should().Be(7);
+			agentJobs.Count.Should().Be(3);
+			queueJobs.Count.Should().Be(3);
+
+			var agentScheduledPeriod = JobScheduleRepository.GetSchedules(null, DateTime.MinValue)
+				.Where(x => x.JobName == "Agent Statistics").ToList();
+			agentScheduledPeriod.First().RelativePeriodCollection.First().RelativePeriod.Minimum.Should().Be(-40);
+			agentScheduledPeriod.First().RelativePeriodCollection.First().RelativePeriod.Maximum.Should().Be(-10);
+			agentScheduledPeriod.Second().RelativePeriodCollection.First().RelativePeriod.Minimum.Should().Be(-10);
+			agentScheduledPeriod.Second().RelativePeriodCollection.First().RelativePeriod.Maximum.Should().Be(20);
+			agentScheduledPeriod.Last().RelativePeriodCollection.First().RelativePeriod.Minimum.Should().Be(20);
+			agentScheduledPeriod.Last().RelativePeriodCollection.First().RelativePeriod.Maximum.Should().Be(40);
+
+			var queueScheduledPeriod = JobScheduleRepository.GetSchedules(null, DateTime.MinValue)
+				.Where(x => x.JobName == "Queue Statistics").ToList();
+			queueScheduledPeriod.First().RelativePeriodCollection.First().RelativePeriod.Minimum.Should().Be(-40);
+			queueScheduledPeriod.First().RelativePeriodCollection.First().RelativePeriod.Maximum.Should().Be(-10);
+			queueScheduledPeriod.Second().RelativePeriodCollection.First().RelativePeriod.Minimum.Should().Be(-10);
+			queueScheduledPeriod.Second().RelativePeriodCollection.First().RelativePeriod.Maximum.Should().Be(20);
+			queueScheduledPeriod.Last().RelativePeriodCollection.First().RelativePeriod.Minimum.Should().Be(20);
+			queueScheduledPeriod.Last().RelativePeriodCollection.First().RelativePeriod.Maximum.Should().Be(40);
+		}
+
+		[Test]
 		public void ShouldEnqueueQueueStatisticsJobWhenTimeZoneOfDataSourceChanged()
 		{
 			TimeZone.IsChina();
@@ -474,7 +530,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 				new BaseConfiguration(1053, 15, "UTC", false));
 			GeneralInfrastructure.HasDataSources(new DataSourceEtl(dataSourceId, "myDs", 12, timezoneName, 15, false));
 
-			var period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()).AddDays(-100), (new DateOnly(Now.UtcDateTime()).AddDays(200)));
+			var period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()).AddDays(-5), (new DateOnly(Now.UtcDateTime()).AddDays(15)));
 			GeneralInfrastructure.HasFactQueuePeriod(dataSourceId, period);
 
 			var myDsModel = new DataSourceModel
@@ -507,8 +563,8 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			var scheduledPeriod = JobScheduleRepository.GetSchedules(null, DateTime.MinValue).Single(x=>x.JobName == "Queue Statistics")
 				.RelativePeriodCollection.Single();
 			scheduledPeriod.JobCategoryName.Should().Be("Queue Statistics");
-			scheduledPeriod.RelativePeriod.Minimum.Should().Be(-100);
-			scheduledPeriod.RelativePeriod.Maximum.Should().Be(200);
+			scheduledPeriod.RelativePeriod.Minimum.Should().Be(-5);
+			scheduledPeriod.RelativePeriod.Maximum.Should().Be(15);
 		}
 
 		[Test]
@@ -526,7 +582,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 				new BaseConfiguration(1053, 15, "UTC", false));
 			GeneralInfrastructure.HasDataSources(new DataSourceEtl(dataSourceId, "myDs", 12, timezoneName, 15, false));
 
-			var period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()).AddDays(-100), new DateOnly(Now.UtcDateTime()).AddDays(200));
+			var period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()).AddDays(-5), new DateOnly(Now.UtcDateTime()).AddDays(15));
 			GeneralInfrastructure.HasFactAgentPeriod(dataSourceId, period);
 
 			var myDsModel = new DataSourceModel
@@ -559,8 +615,8 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			var scheduledPeriod = JobScheduleRepository.GetSchedules(null, DateTime.MinValue).Single(x => x.JobName == "Agent Statistics")
 				.RelativePeriodCollection.Single();
 			scheduledPeriod.JobCategoryName.Should().Be("Agent Statistics");
-			scheduledPeriod.RelativePeriod.Minimum.Should().Be(-100);
-			scheduledPeriod.RelativePeriod.Maximum.Should().Be(200);
+			scheduledPeriod.RelativePeriod.Minimum.Should().Be(-5);
+			scheduledPeriod.RelativePeriod.Maximum.Should().Be(15);
 		}
 
 		[Test]
