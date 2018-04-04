@@ -11,6 +11,21 @@ namespace Teleopti.Ccc.Domain.Common
         private int _weekOrder;
         private readonly IDictionary<DayOfWeek, bool> workDays = new Dictionary<DayOfWeek, bool>(7);
 
+		public virtual void SetWorkdaysExcept(params DayOfWeek[] notWorkdays)
+		{
+			Add(DayOfWeek.Monday, true);
+			Add(DayOfWeek.Tuesday, true);
+			Add(DayOfWeek.Wednesday, true);
+			Add(DayOfWeek.Thursday, true);
+			Add(DayOfWeek.Friday, true);
+			Add(DayOfWeek.Saturday, true);
+			Add(DayOfWeek.Sunday, true);
+			foreach (var notWorkday in notWorkdays)
+			{
+				Add(notWorkday, false);
+			}
+		}
+		
         /// <summary>
         /// Sort order for Week
         /// </summary>

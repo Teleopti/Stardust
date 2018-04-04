@@ -117,21 +117,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var contract = new ContractWithMaximumTolerance();
 			var contractSchedule = new ContractSchedule("_");
 			var contractScheduleWeek1 = new ContractScheduleWeek();
+			contractScheduleWeek1.SetWorkdaysExcept(DayOfWeek.Sunday);
 			var contractScheduleWeek2 = new ContractScheduleWeek();
-			contractScheduleWeek1.Add(DayOfWeek.Monday, true);
-			contractScheduleWeek1.Add(DayOfWeek.Tuesday, true);
-			contractScheduleWeek1.Add(DayOfWeek.Wednesday, true);
-			contractScheduleWeek1.Add(DayOfWeek.Thursday, true);
-			contractScheduleWeek1.Add(DayOfWeek.Friday, true);
-			contractScheduleWeek1.Add(DayOfWeek.Saturday, true);
-			contractScheduleWeek1.Add(DayOfWeek.Sunday, false);	//<-
-			contractScheduleWeek2.Add(DayOfWeek.Monday, true);
-			contractScheduleWeek2.Add(DayOfWeek.Tuesday, false); //<-
-			contractScheduleWeek2.Add(DayOfWeek.Wednesday, true);
-			contractScheduleWeek2.Add(DayOfWeek.Thursday, true);
-			contractScheduleWeek2.Add(DayOfWeek.Friday, true);
-			contractScheduleWeek2.Add(DayOfWeek.Saturday, true);
-			contractScheduleWeek2.Add(DayOfWeek.Sunday, true);
+			contractScheduleWeek2.SetWorkdaysExcept(DayOfWeek.Tuesday);
 			contractSchedule.AddContractScheduleWeek(contractScheduleWeek1);
 			contractSchedule.AddContractScheduleWeek(contractScheduleWeek2);	
 			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
@@ -281,13 +269,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(new ContractWithMaximumTolerance(), skill).WithSchedulePeriodOneMonth(new DateOnly(2018, 1, 1));
 			var contractSchedule = new ContractSchedule("_");
 			var contractScheduleWeek = new ContractScheduleWeek();
-			contractScheduleWeek.Add(DayOfWeek.Monday, true);
-			contractScheduleWeek.Add(DayOfWeek.Tuesday, true);
-			contractScheduleWeek.Add(DayOfWeek.Wednesday, true);
-			contractScheduleWeek.Add(DayOfWeek.Thursday, true);
-			contractScheduleWeek.Add(DayOfWeek.Friday, true);
-			contractScheduleWeek.Add(DayOfWeek.Saturday, false);
-			contractScheduleWeek.Add(DayOfWeek.Sunday, false);
+			contractScheduleWeek.SetWorkdaysExcept(DayOfWeek.Saturday, DayOfWeek.Sunday);
 			contractSchedule.AddContractScheduleWeek(contractScheduleWeek);
 			agent.Period(period.StartDate).PersonContract.ContractSchedule = contractSchedule;
 			var schedulerStateHolder = SchedulerStateHolderFrom.Fill(new Scenario(), period, new[] { agent }, Enumerable.Empty<IPersonAssignment>(), Enumerable.Empty<ISkillDay>());
