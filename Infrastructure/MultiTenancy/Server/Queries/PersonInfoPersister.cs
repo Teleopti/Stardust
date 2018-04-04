@@ -2,6 +2,13 @@
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 {
+	public interface IPersonInfoPersister
+	{
+		void Persist(PersonInfo personInfo);
+		bool ValidateApplicationLogonNameIsUnique(PersonInfo personInfo);
+		bool ValidateIdenitityIsUnique(PersonInfo personInfo);
+	}
+
 	public class PersonInfoPersister : IPersonInfoPersister
 	{
 		private readonly ICurrentTenantSession _currentTenantSession;

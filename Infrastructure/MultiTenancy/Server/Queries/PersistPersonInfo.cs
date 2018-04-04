@@ -26,39 +26,19 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 			if (!string.IsNullOrEmpty(personInfo.ApplicationLogonInfo.LogonName))
 			{
 				//if already exists
-				var existing = session.GetNamedQuery("applicationLogonNameUQCheck")
-					.SetGuid("id", personInfo.Id)
-					.SetString("applicationLogonName", personInfo.ApplicationLogonInfo.LogonName)
-					.UniqueResult<PersonInfo>();
-				if (existing != null)
-					throw new DuplicateApplicationLogonNameException(existing.Id);
+				var isUnique = _personInfoPersister.ValidateApplicationLogonNameIsUnique(personInfo);
+				if (!isUnique)
+					throw new DuplicateApplicationLogonNameException(personInfo.Id);
 			}
 			if (!string.IsNullOrEmpty(personInfo.Identity))
 			{
 				//if already exists
-				var existing = session.GetNamedQuery("identityUQCheck")
-					.SetGuid("id", personInfo.Id)
-					.SetString("identity", personInfo.Identity)
-					.UniqueResult<PersonInfo>();
-				if (existing != null)
-					throw new DuplicateIdentityException(existing.Id);
+				var isUnique = _personInfoPersister.ValidateIdenitityIsUnique(personInfo);
+				if (!isUnique)
+					throw new DuplicateIdentityException(personInfo.Id);
 			}
 
-			//throw 
-			//else do next
-			var oldPersonInfo = session.Get<PersonInfo>(personInfo.Id);
-			if (oldPersonInfo == null)
-			{
-				session.Save(personInfo);
-			}
-			else
-			{
-				personInfo.ReuseTenantPassword(oldPersonInfo);
-				// if we save an old we must reuse the old password if we get an logonname and no new password
-				personInfo.ApplicationLogonInfo.SetEncryptedPasswordIfLogonNameExistButNoPassword(oldPersonInfo.ApplicationLogonInfo
-					.LogonPassword);
-				session.Merge(personInfo);
-			}
+			_personInfoPersister.Persist(personInfo);
 		}
 
 		public string PersistEx(PersonInfo personInfo)
@@ -104,11 +84,5 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 				session.Delete(personInfo);
 			}
 		}
-	}
-	public interface IPersonInfoPersister
-	{
-		void Persist(PersonInfo personInfo);
-		bool ValidateApplicationLogonNameIsUnique(PersonInfo personInfo);
-		bool ValidateIdenitityIsUnique(PersonInfo personInfo);
 	}
 }
