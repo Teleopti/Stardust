@@ -451,7 +451,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			scheduledJobs.First().JobName.Should().Be("Initial");
 		}
 
-		[Test, Ignore("for Squid squad")]
+		[Test]
 		public void ShouldEnqueueQueueStatisticsJobWhenTimeZoneOfDataSourceChanged()
 		{
 			TimeZone.IsChina();
@@ -466,7 +466,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 				new BaseConfiguration(1053, 15, "UTC", false));
 			GeneralInfrastructure.HasDataSources(new DataSourceEtl(dataSourceId, "myDs", 12, timezoneName, 15, false));
 
-			var period = new DateOnlyPeriod(new DateOnly(TimeZoneInfo.ConvertTimeToUtc(localNow.Date)).AddDays(-100), (new DateOnly(TimeZoneInfo.ConvertTimeToUtc(localNow.Date)).AddDays(200)));
+			var period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()).AddDays(-100), (new DateOnly(Now.UtcDateTime()).AddDays(200)));
 			GeneralInfrastructure.HasFactQueuePeriod(dataSourceId, period);
 
 			var myDsModel = new DataSourceModel
@@ -503,7 +503,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			scheduledPeriod.RelativePeriod.Maximum.Should().Be(200);
 		}
 
-		[Test, Ignore("for Squid squad")]
+		[Test]
 		public void ShouldEnqueueAgentStatisticsJobWhenTimeZoneOfDataSourceChanged()
 		{
 			TimeZone.IsChina();
@@ -518,7 +518,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 				new BaseConfiguration(1053, 15, "UTC", false));
 			GeneralInfrastructure.HasDataSources(new DataSourceEtl(dataSourceId, "myDs", 12, timezoneName, 15, false));
 
-			var period = new DateOnlyPeriod(new DateOnly(TimeZoneInfo.ConvertTimeToUtc(localNow.Date)).AddDays(-100), new DateOnly(TimeZoneInfo.ConvertTimeToUtc(localNow.Date)).AddDays(200));
+			var period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()).AddDays(-100), new DateOnly(Now.UtcDateTime()).AddDays(200));
 			GeneralInfrastructure.HasFactAgentPeriod(dataSourceId, period);
 
 			var myDsModel = new DataSourceModel
