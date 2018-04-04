@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 
 				if (!string.IsNullOrEmpty(persistResult))
 				{
-					resultModel.ResultList.Add(new PersonInfoGenericModel { MessageId = persistResult, PersonId = person.PersonId });
+					resultModel.ResultList.Add(new PersonInfoGenericModel { Message = persistResult, PersonId = person.PersonId });
 				}
 			}
 

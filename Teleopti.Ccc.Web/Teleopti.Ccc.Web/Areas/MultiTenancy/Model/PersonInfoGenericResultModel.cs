@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Model
 	public class PersonInfoGenericModel
 	{
 		public Guid PersonId { get; set; }
-		public string MessageId { get; set; }
+		public string Message { get; set; }
 		
 	}
 }

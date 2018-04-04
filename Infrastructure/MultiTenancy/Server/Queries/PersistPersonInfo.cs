@@ -1,6 +1,7 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
+using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 {
@@ -82,13 +83,13 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 			{
 				var isUnique = _personInfoPersister.ValidateApplicationLogonNameIsUnique(personInfo);
 				if (!isUnique)
-					return "DuplicateApplicationLogonNameExistValidation"; 
+					return string.Format(Resources.ApplicationLogonExists, personInfo.ApplicationLogonInfo.LogonName);
 			}
 			if (!string.IsNullOrEmpty(personInfo.Identity))
 			{
 				var isUnique = _personInfoPersister.ValidateIdenitityIsUnique(personInfo);
 				if (!isUnique)
-					return "DuplicateIdenityLogonNameExistValidation"; 
+					return string.Format(Resources.IdentityLogonExists, personInfo.Identity);
 			}
 
 			return null;
