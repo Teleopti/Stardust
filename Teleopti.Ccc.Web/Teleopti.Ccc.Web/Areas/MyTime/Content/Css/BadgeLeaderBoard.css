@@ -26,3 +26,12 @@
 .site-option {font-weight: bold}
 
 li.team-option {padding-left: 25px;}
+
+.datepicker-style {
+	width: 350px !important;
+}
+
+.date-input-style {
+	padding: 10px 1px;
+	font-size:13px;
+}

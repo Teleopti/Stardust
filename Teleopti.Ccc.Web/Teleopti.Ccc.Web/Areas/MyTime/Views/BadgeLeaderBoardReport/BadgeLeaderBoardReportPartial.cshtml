@@ -8,10 +8,33 @@
 	<div class="navbar navbar-teleopti subnavbar">
 		<div class="container">
 			<ul class="nav navbar-nav navbar-teleopti row submenu">
-				<li class="ie8style col-xs-12 col-sm-3" data-bind="if: showOptions">
-					<select id="Hierarchy-Picker" data-bind="foreach: availableOptions, select2: { value: selectedOptionId }, disable:isLoading ">
-						<option data-bind="text: text, value: id, css:{'site-option':  type == 2, 'team-option': type == 1}"></option>
-					</select>
+
+				<li class="col-xs-12 col-sm-4" data-bind="if: showOptions">
+					<span class="input-group">
+						<select id="Hierarchy-Picker" data-bind="foreach: availableOptions, select2: { value: selectedOptionId }, disable:isLoading ">
+							<option data-bind="text: text, value: id, css:{'site-option':  type == 2, 'team-option': type == 1}"></option>
+						</select>
+					</span>
+				</li>
+				<li class="col-xs-12 col-sm-4 mobile-datepicker datepicker-style" data-bind="if:showCalendar && rollingPeriodToggleEnabled">
+					<span class="input-group">
+						<input type="hidden" class="format-field" value="@ViewBag.DatePickerFormat">
+						<input type="hidden" class="rolling-type-field" value="@ViewBag.GamificationRollingPeriodSet">
+						<span class="input-group-btn">
+							<button class="btn btn-default" data-bind="click: previous" type="button">
+								<i class="glyphicon glyphicon-chevron-left"></i>
+							</button>
+						</span>
+						<input class="form-control text-center date-input-style" data-bind="value: displayDate" type="text" readonly="readonly" />
+						<span class="input-group-btn">
+							<span class="btn btn-default moment-datepicker" type="button">
+								<i class="glyphicon glyphicon-calendar"></i>
+							</span>
+							<button class="btn btn-default" data-bind="click: next" type="button">
+								<i class="glyphicon glyphicon-chevron-right"></i>
+							</button>
+						</span>
+					</span>
 				</li>
 			</ul>
 		</div>

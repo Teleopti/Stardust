@@ -4,26 +4,87 @@
 
 	function BadgeLeaderBoardReportViewModel() {
 		var self = this;
+
+		self.rollingPeriodToggleEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled("WFM_Gamification_Create_Rolling_Periods_74866");
 		
 		self.currentDate = ko.observable(getDate());
 		self.agentBadges = ko.observableArray();
 		self.availableOptions = ko.observableArray();
 		self.selectedOptionId = ko.observable();
-		self.selectedOptionType = -1;
+		self.selectedOptionType = -1;		
+
 		self.showOptions = ko.observable(false);
 		self.isLoading = ko.observable(false);
+		self.showCalendar = false;
+		
+		if (self.rollingPeriodToggleEnabled) {
+			self.dateFormat = $('.format-field')[0].value;
+			self.rollingPeriod = $('.rolling-type-field')[0].value
+			self.showCalendar = self.rollingPeriod && self.rollingPeriod !== '0';
+			self.selectedDate = ko.observable(moment().startOf("day"));
+			self.displayDate = ko.dependentObservable(function () {
+				if (self.rollingPeriod === '0' || !self.rollingPeriod) return;
+				var periodName = '';
+				if (self.rollingPeriod === '1') {
+					periodName = 'week';
+				} else if (self.rollingPeriod === '2') {
+					periodName = 'month';
+				}
+
+				return this.selectedDate().startOf(periodName).format(this.dateFormat) + '-' + this.selectedDate().endOf(periodName).format(this.dateFormat);
+
+			}, self);
+
+			self.previous = function () {
+				if (self.rollingPeriod === '1') {
+					self.selectedDate(self.selectedDate().add('days', -7));
+				} else
+					if (self.rollingPeriod === '2') {
+						self.selectedDate(self.selectedDate().add('month', -1));
+					}
+			}
+
+			self.next = function () {
+				if (self.rollingPeriod === '1') {
+					self.selectedDate(self.selectedDate().add('days', 7));
+				} else
+					if (self.rollingPeriod === '2') {
+						self.selectedDate(self.selectedDate().add('month', 1));
+					}
+			}
+
+			self.selectedDate.subscribe(function (value) {
+				if (value) {
+					self.loadData();
+				}
+			});
+		}
+		
 		
 		self.loadData = function () {
 			self.agentBadges([]);
 			self.isLoading(true);
+			var data = {
+				Date: self.currentDate().clone().utc().toDate().toJSON(),
+				Type: self.selectedOptionType,
+				SelectedId: self.selectedOptionId()
+			};
+
+			if (self.rollingPeriodToggleEnabled) {
+				if (self.rollingPeriod === '1') {
+					data.StartDate = self.selectedDate().clone().startOf('week').utc().toDate().toJSON();
+					data.EndDate = self.selectedDate().clone().endOf('week').utc().toDate().toJSON();
+				} else if (self.rollingPeriod === '2') {
+					data.StartDate = self.selectedDate().clone().startOf('month').utc().toDate().toJSON();
+					data.EndDate = self.selectedDate().clone().endOf('month').utc().toDate().toJSON();
+				}
+			}
+			
+
 			ajax.Ajax({
 				url: 'BadgeLeaderBoardReport/Overview',
 				dataType: 'json',
-				data: {
-					Date: self.currentDate().clone().utc().toDate().toJSON(),
-					Type: self.selectedOptionType,
-					SelectedId: self.selectedOptionId()
-				},
+				data: data,
 				success: function(data) {
 					self.isLoading(false);
 
@@ -46,6 +107,8 @@
 				}
 			});
 		}
+
+		
 
 		self.loadOptions = function() {
 			self.isLoading(true);
@@ -76,7 +139,6 @@
 			if (value)
 				self.loadData();
 		});
-
 	}
 
 
@@ -97,6 +159,7 @@
 	function bindData() {
 		vm = new BadgeLeaderBoardReportViewModel();
 		var elementToBind = $('.BadgeLeaderBoardReport')[0];
+		$(".moment-datepicker").attr("data-bind", "datepicker: selectedDate, datepickerOptions: { autoHide: true}");
 		ko.applyBindings(vm, elementToBind);
 	}
 	
@@ -121,6 +184,8 @@
 			bindData();
 			vm.loadOptions();
 
+			//$(".moment-datepicker").attr("data-bind", "datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart: " + data.WeekStart + " }");
+			
 		},
 		BadgeLeaderBoardReportPartialDispose: function () {
 			ajax.AbortAll();

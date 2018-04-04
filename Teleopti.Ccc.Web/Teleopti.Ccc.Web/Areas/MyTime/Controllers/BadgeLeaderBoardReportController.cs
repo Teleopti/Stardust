@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			if (_gamificationSettingProvider.GetGamificationSetting() != null)
 				rollingPeriodSet = _gamificationSettingProvider.GetGamificationSetting().RollingPeriodSet;
 			ViewBag.DatePickerFormat = culture.DateTimeFormat.ShortDatePattern.ToUpper();
-			ViewBag.GamificationRollingPeriodSet = rollingPeriodSet;
+			ViewBag.GamificationRollingPeriodSet = (int)rollingPeriodSet;
 			return View("BadgeLeaderBoardReportPartial");
 		}
 
