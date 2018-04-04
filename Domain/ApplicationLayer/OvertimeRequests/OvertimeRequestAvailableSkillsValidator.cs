@@ -42,8 +42,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 				};
 			}
 
-			var seriousUnderstaffingSkills = _overtimeRequestUnderStaffingSkillProvider.GetSeriousUnderstaffingSkills(period, skills, personRequest.Person.PermissionInformation.DefaultTimeZone());
-			if (seriousUnderstaffingSkills.Count == 0)
+			var seriousUnderstaffingSkillDictionary = _overtimeRequestUnderStaffingSkillProvider.GetSeriousUnderstaffingSkills(period, skills, personRequest.Person.PermissionInformation.DefaultTimeZone());
+			if (seriousUnderstaffingSkillDictionary.Count == 0)
 			{
 				return new OvertimeRequestAvailableSkillsValidationResult
 				{
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			return new OvertimeRequestAvailableSkillsValidationResult
 			{
 				IsValid = true,
-				Skills = seriousUnderstaffingSkills.ToArray()
+				SkillDictionary = seriousUnderstaffingSkillDictionary
 			};
 		}
 	}

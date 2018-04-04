@@ -1,6 +1,8 @@
-﻿using Rhino.Mocks;
+﻿using System.Collections.Generic;
+using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon
 {
@@ -32,12 +34,12 @@ namespace Teleopti.Ccc.TestCommon
 					   MockRepository.GenerateMock<ShiftTradeRequestApprovalService, IRequestApprovalService>(null, null, null, null));
 		}
 
-		public IRequestApprovalService MakeOvertimeRequestApprovalService(ISkill[] validatedSkills)
+		public IRequestApprovalService MakeOvertimeRequestApprovalService(IDictionary<DateTimePeriod,IList<ISkill>> validatedSkillDictionary)
 		{
 			return _approvalService ??
 				   (_approvalService =
 					   MockRepository.GenerateMock<OvertimeRequestApprovalService, IRequestApprovalService>(null, null, null,
-						   validatedSkills));
+						   validatedSkillDictionary));
 		}
 	}
 }

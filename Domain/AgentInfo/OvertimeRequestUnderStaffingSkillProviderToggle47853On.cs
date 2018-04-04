@@ -22,17 +22,19 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			_overtimeRequestCriticalUnderStaffedSpecification = overtimeRequestCriticalUnderStaffedSpecification;
 		}
 
-		public IList<ISkill> GetSeriousUnderstaffingSkills(DateTimePeriod dateTimePeriod, IEnumerable<ISkill> skills, TimeZoneInfo timeZoneInfo)
+		public IDictionary<DateTimePeriod,IList<ISkill>> GetSeriousUnderstaffingSkills(DateTimePeriod dateTimePeriod,
+			IEnumerable<ISkill> skills, TimeZoneInfo timeZoneInfo)
 		{
 			var resolution = skills.Min(s => s.DefaultResolution);
 			dateTimePeriod = convertToClosestPeriod(dateTimePeriod, resolution);
-			var skillStaffingDatas = _skillStaffingDataLoader.Load(skills.ToList(), dateTimePeriod.ToDateOnlyPeriod(timeZoneInfo), true);
+			var skillStaffingDatas =
+				_skillStaffingDataLoader.Load(skills.ToList(), dateTimePeriod.ToDateOnlyPeriod(timeZoneInfo), true);
 			skillStaffingDatas = skillStaffingDatas.Where(x =>
-					x.Time >= dateTimePeriod.StartDateTimeLocal(timeZoneInfo) &&
-					x.Time.AddMinutes(x.Resolution) <= dateTimePeriod.EndDateTimeLocal(timeZoneInfo)).ToList();
-			
+				x.Time >= dateTimePeriod.StartDateTimeLocal(timeZoneInfo) &&
+				x.Time.AddMinutes(x.Resolution) <= dateTimePeriod.EndDateTimeLocal(timeZoneInfo)).ToList();
+
 			if (!skillStaffingDatas.Any())
-				return new ISkill[] { };
+				return new Dictionary<DateTimePeriod,IList<ISkill>>();
 
 			skillStaffingDatas.ForEach(y => y.SkillStaffingInterval = new SkillStaffingInterval
 			{
@@ -64,12 +66,16 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 				seriousUnderstaffingSkills.Add(skillStaffingDataGroup.Key);
 			}
 
-			if (_overtimeRequestCriticalUnderStaffedSpecification.IsSatisfiedBy(new OvertimeRequestValidatedSkillCount(seriousUnderstaffingSkills.Count, skillStaffingDataGroups.Count)))
+			if (_overtimeRequestCriticalUnderStaffedSpecification.IsSatisfiedBy(
+				new OvertimeRequestValidatedSkillCount(seriousUnderstaffingSkills.Count, skillStaffingDataGroups.Count)))
 			{
-				return new [] { mostUnderStaffedSkill };
+				return new Dictionary<DateTimePeriod,IList<ISkill>>
+				{
+					{dateTimePeriod, new List<ISkill> {mostUnderStaffedSkill}}
+				};
 			}
 
-			return new ISkill [] { };
+			return new Dictionary<DateTimePeriod,IList<ISkill>>();
 		}
 
 		private bool hasSeriousUnderstaffing(ISkill skill, SkillStaffingData skillStaffingData)

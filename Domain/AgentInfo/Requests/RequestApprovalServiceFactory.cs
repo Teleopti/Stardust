@@ -1,7 +1,9 @@
-﻿using Teleopti.Ccc.Domain.ApplicationLayer;
+﻿using System.Collections.Generic;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 {
@@ -70,10 +72,10 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		}
 
 
-		public IRequestApprovalService MakeOvertimeRequestApprovalService(ISkill[] validatedSkills)
+		public IRequestApprovalService MakeOvertimeRequestApprovalService(IDictionary<DateTimePeriod,IList<ISkill>> validatedSkillDictionary)
 		{
 			return new OvertimeRequestApprovalService(_overtimeRequestUnderStaffingSkillProvider, _overtimeRequestSkillProvider,
-				_commandDispatcher, validatedSkills, _skillOpenHourFilter);
+				_commandDispatcher, validatedSkillDictionary, _skillOpenHourFilter);
 		}
 	}
 }

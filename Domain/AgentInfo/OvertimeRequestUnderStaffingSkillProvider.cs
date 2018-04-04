@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			_overtimeRequestCriticalUnderStaffedSpecification = overtimeRequestCriticalUnderStaffedSpecification;
 		}
 
-		public IList<ISkill> GetSeriousUnderstaffingSkills(DateTimePeriod dateTimePeriod, IEnumerable<ISkill> skills,
+		public IDictionary<DateTimePeriod,IList<ISkill>> GetSeriousUnderstaffingSkills(DateTimePeriod dateTimePeriod, IEnumerable<ISkill> skills,
 			TimeZoneInfo timeZoneInfo)
 		{
 			var resolution = skills.Min(s => s.DefaultResolution);
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 				x.Time.AddMinutes(x.Resolution) <= dateTimePeriod.EndDateTimeLocal(timeZoneInfo)).ToList();
 
 			if (!skillStaffingDatas.Any())
-				return new ISkill[] { };
+				return new Dictionary<DateTimePeriod,IList<ISkill>>();
 
 			skillStaffingDatas.ForEach(y => y.SkillStaffingInterval = new SkillStaffingInterval
 			{
@@ -58,12 +58,16 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			}
 
 			if (_overtimeRequestCriticalUnderStaffedSpecification.IsSatisfiedBy(
-					new OvertimeRequestValidatedSkillCount(seriousUnderstaffingSkills.Count, skillStaffingDataGroups.Count)))
+				new OvertimeRequestValidatedSkillCount(seriousUnderstaffingSkills.Count, skillStaffingDataGroups.Count)))
 			{
-				return seriousUnderstaffingSkills;
+				//return seriousUnderstaffingSkills;
+				return new Dictionary<DateTimePeriod,IList<ISkill>>
+				{
+					{dateTimePeriod, seriousUnderstaffingSkills}
+				};
 			}
 
-			return new ISkill[] { };
+			return new Dictionary<DateTimePeriod,IList<ISkill>>();
 		}
 
 		private bool hasSeriousUnderstaffing(ISkill skill, SkillStaffingData skillStaffingData)

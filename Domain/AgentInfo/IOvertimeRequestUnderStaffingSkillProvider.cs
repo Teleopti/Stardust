@@ -7,6 +7,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 {
 	public interface IOvertimeRequestUnderStaffingSkillProvider
 	{
-		IList<ISkill> GetSeriousUnderstaffingSkills(DateTimePeriod period, IEnumerable<ISkill> skills, TimeZoneInfo timeZoneInfo);
+		IDictionary<DateTimePeriod,IList<ISkill>> GetSeriousUnderstaffingSkills(DateTimePeriod period, IEnumerable<ISkill> skills, TimeZoneInfo timeZoneInfo);
 	}
 }

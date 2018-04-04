@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 {
@@ -14,6 +15,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		public IList<string> ErrorMessages { get; set; }
 		public string ReplyMessage { get; set; }
 		public bool IsReplySuccess { get; set; }
-		public ISkill[] OvertimeValidatedSkills { get; set; }
+		public IDictionary<DateTimePeriod,IList<ISkill>> OvertimeValidatedSkillDictionary { get; set; }
 	}
 }

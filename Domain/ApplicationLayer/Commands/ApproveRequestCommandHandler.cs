@@ -204,7 +204,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 					return _requestApprovalServiceFactory.MakeShiftTradeRequestApprovalService(scheduleDictionary,
 						personRequest.Person);
 				case RequestType.OvertimeRequest:
-					return _requestApprovalServiceFactory.MakeOvertimeRequestApprovalService(command.OvertimeValidatedSkills);
+					return _requestApprovalServiceFactory.MakeOvertimeRequestApprovalService(command.OvertimeValidatedSkillDictionary);
 			}
 			return null;
 		}

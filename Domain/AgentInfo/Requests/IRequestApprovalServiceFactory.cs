@@ -1,4 +1,6 @@
-﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+﻿using System.Collections.Generic;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 {
@@ -9,6 +11,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 		IRequestApprovalService MakeShiftTradeRequestApprovalService(IScheduleDictionary scheduleDictionary, IPerson person);
 
-		IRequestApprovalService MakeOvertimeRequestApprovalService(ISkill[] validatedSkills);
+		IRequestApprovalService MakeOvertimeRequestApprovalService(IDictionary<DateTimePeriod,IList<ISkill>> validatedSkillDictionary);
 	}
 }

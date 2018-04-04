@@ -65,7 +65,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 				return;
 			}
 
-			var overTimeRequestOpenPeriod = getOvertimeRequestOpenPeriodBySkillType(personRequest, validateSkillsResult.Skills);
+			var skills = validateSkillsResult.SkillDictionary.SelectMany(x => x.Value).Distinct().ToArray();
+			var overTimeRequestOpenPeriod = getOvertimeRequestOpenPeriodBySkillType(personRequest, skills);
 
 			if (overTimeRequestOpenPeriod.AutoGrantType == OvertimeRequestAutoGrantType.Deny)
 			{
@@ -79,7 +80,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			var person = _personRepository.Get(SystemUser.Id);
 			_updatedByScope.OnThisThreadUse(person);
 
-			executeApproveCommand(personRequest, validateSkillsResult.Skills);
+			executeApproveCommand(personRequest, validateSkillsResult.SkillDictionary);
 		}
 
 		private ISkillType getDefaultSkillType()
@@ -90,13 +91,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			return phoneSkillType;
 		}
 
-		private void executeApproveCommand(IPersonRequest personRequest, ISkill[] skills)
+		private void executeApproveCommand(IPersonRequest personRequest, IDictionary<DateTimePeriod,IList<ISkill>> skillDictionary)
 		{
 			var command = new ApproveRequestCommand
 			{
 				PersonRequestId = personRequest.Id.GetValueOrDefault(),
 				IsAutoGrant = true,
-				OvertimeValidatedSkills = skills
+				OvertimeValidatedSkillDictionary = skillDictionary
 			};
 			_commandDispatcher.Execute(command);
 
