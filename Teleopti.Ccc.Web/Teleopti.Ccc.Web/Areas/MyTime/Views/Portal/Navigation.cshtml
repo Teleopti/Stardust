@@ -89,9 +89,40 @@
 						</a>
 						@if (Model.Badges != null && Model.Badges.Any())
 						{
-							<ul class="dropdown-menu show-outside-toolbar">
-								@foreach (var badge in Model.Badges)
+							<ul class="dropdown-menu show-outside-toolbar" id="badge-counts" data-period-type=@Model.BadgeRollingPeriodSet>
+								@if (Model.BadgeRollingPeriodSet.ToString() != "OnGoing")
 								{
+								<li id="badge-period-navigator">
+									<button class="period-arrow" data-bind="click: clickPrev">
+										<i class="glyphicon glyphicon-chevron-left"></i>
+									</button>
+									<div class="period-text" data-bind="text: periodText"></div>
+									<button class="period-arrow" data-bind="click: clickNext">
+										<i class="glyphicon glyphicon-chevron-right"></i>
+									</button>
+								</li>
+								<li>
+									<div class="badge-detail" data-bind="foreach: badgeCounts">
+										<div class="badge-type" data-bind="text: $data.Name"></div>
+										<span class="gold-badge">
+											<i class="glyphicon glyphicon-star" style="color: gold"></i>
+											<span data-bind="text: $data.GoldBadge"></span>
+										</span>
+										<span class="silver-badge">
+											<i class="glyphicon glyphicon-star" style="color: silver"></i>
+											<span data-bind="text: $data.SilverBadge"></span>
+										</span>
+										<span class="bronze-badge">
+											<i class="glyphicon glyphicon-star" style="color: brown"></i>
+											<span data-bind="text: $data.BronzeBadge"></span>
+										</span>
+									</div>
+								</li>
+								}
+								else
+								{
+									foreach (var badge in Model.Badges)
+									{
 									<li>
 										<div class="badge-detail">
 											<div class="badge-type">@badge.Name</div>
@@ -109,6 +140,7 @@
 											</span>
 										</div>
 									</li>
+									}
 								}
 							</ul>
 						}

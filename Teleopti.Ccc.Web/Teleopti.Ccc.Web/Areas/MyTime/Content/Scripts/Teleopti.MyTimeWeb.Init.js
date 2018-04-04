@@ -33,4 +33,5 @@ $(function() {
 	Teleopti.MyTimeWeb.Common.Layout.Init();
 
 	_initMomentLanguageWithFallback();
+	Teleopti.MyTimeWeb.BadgeCountsDropdown.Init(); // !! Must be after _initMomentLanguageWithFallback
 });

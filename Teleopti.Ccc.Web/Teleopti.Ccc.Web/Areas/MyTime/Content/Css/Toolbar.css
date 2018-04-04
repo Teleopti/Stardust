@@ -379,3 +379,21 @@ End override dropdown-menu style on mobile
 		color: white;
 	}
 }
+
+#badge-period-navigator {
+	white-space: nowrap;
+	font-size: 12px;
+	text-align: center;
+	padding: 0 4px;
+}
+
+#badge-period-navigator .period-arrow {
+	background-color: transparent;
+	border: none;
+	padding: .8em;
+}
+
+#badge-period-navigator .period-text {
+	min-width: 130px;
+	display: inline-block;
+}
