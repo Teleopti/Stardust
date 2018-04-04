@@ -109,13 +109,22 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Concurrency
 				.For<IAnalyticsScheduleRepository, IIntervalLengthFetcher, IAnalyticsPersonPeriodRepository, IAnalyticsScenarioRepository>();
 		}
 
-		private class fakeAwayAnalyticsStuffTooHardToSetItUp : IAnalyticsScheduleRepository, 
+
+		private class fakeAwayAnalyticsStuffTooHardToSetItUp : IAnalyticsScheduleRepository,
 			IIntervalLengthFetcher,
 			IAnalyticsPersonPeriodRepository,
 			IAnalyticsScenarioRepository
 		{
+			private readonly ICurrentAnalyticsUnitOfWork _currentAnalyticsUnitOfWork;
+
+			public fakeAwayAnalyticsStuffTooHardToSetItUp(ICurrentAnalyticsUnitOfWork currentAnalyticsUnitOfWork)
+			{
+				_currentAnalyticsUnitOfWork = currentAnalyticsUnitOfWork;
+			}
+			
 			public void PersistFactScheduleBatch(IList<IFactScheduleRow> factScheduleRows)
 			{
+				throwIfUowDoesntExist();
 			}
 
 			public void PersistFactScheduleDayCountRow(IAnalyticsFactScheduleDayCount dayCount)
@@ -125,19 +134,24 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Concurrency
 
 			public void DeleteFactSchedule(int dateId, Guid personCode, int scenarioId)
 			{
+				throwIfUowDoesntExist();
 			}
 
 			public void DeleteFactSchedules(IEnumerable<int> dateIds, Guid personCode, int scenarioId)
 			{
+				throwIfUowDoesntExist();
 			}
 
 			public int ShiftLengthId(int shiftLength)
 			{
-				return 0;
+				throwIfUowDoesntExist();
+				return 10;
 			}
 
-			public void InsertStageScheduleChangedServicebus(DateOnly date, Guid personId, Guid scenarioId, Guid businessUnitId, DateTime datasourceUpdateDate)
+			public void InsertStageScheduleChangedServicebus(DateOnly date, Guid personId, Guid scenarioId, Guid businessUnitId,
+				DateTime datasourceUpdateDate)
 			{
+				throwIfUowDoesntExist();
 			}
 
 			public void UpdateUnlinkedPersonids(int[] personPeriodIds)
@@ -223,6 +237,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Concurrency
 
 			public IAnalyticsPersonBusinessUnit PersonAndBusinessUnit(Guid personPeriodCode)
 			{
+				throwIfUowDoesntExist();
 				return new AnalyticsPersonBusinessUnit();
 			}
 
@@ -258,7 +273,14 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Concurrency
 
 			public AnalyticsScenario Get(Guid scenarioCode)
 			{
+				throwIfUowDoesntExist();
 				return new AnalyticsScenario();
+			}
+
+			private void throwIfUowDoesntExist()
+			{
+				if(_currentAnalyticsUnitOfWork.Current() == null)
+					throw new NullReferenceException();
 			}
 		}
 	}
