@@ -16,6 +16,7 @@ using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs;
 using Teleopti.Analytics.Etl.ConfigTool.Transformer;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
@@ -33,6 +34,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 		private readonly ObservableCollection<IEtlJobSchedule> _observableCollection;
 		private readonly IBaseConfiguration _baseConfiguration;
 		private readonly bool _selectDataSourceIsPossible;
+		private bool _isWebBasedEtlToolInUse;
 
 		public JobSchedule(IEtlJobSchedule etlJobSchedule, ObservableCollection<IEtlJobSchedule> observableCollection, IBaseConfiguration baseConfiguration, bool selectDataSourceIsPossible)
 		{
@@ -64,6 +66,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 		private void fillJobCombo()
 		{
 			var pmInfoProvider = App.Container.Resolve<PmInfoProvider>();
+			var container = new IocContainerHolder(App.Container);
 			var jobCollection =
 				 new JobCollection(
 					new JobParameters(
@@ -73,13 +76,14 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 						pmInfoProvider.Cube(),
 						pmInfoProvider.PmInstallation(),
 						CultureInfo.CurrentCulture,
-						new IocContainerHolder(App.Container), 
+						container, 
 						_baseConfiguration.RunIndexMaintenance
 						)
 					);
 			comboBoxJob.DataSource = jobCollection;
 			comboBoxJob.DisplayMember = "Name";
 			comboBoxJob.ValueMember = "Name";
+			_isWebBasedEtlToolInUse =container.ToggleManager.IsEnabled(Toggles.ETL_Show_Web_Based_ETL_Tool_46880);
 		}
 
 		private void fillDataSourceCombo()
@@ -579,6 +583,12 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 
 		private void updateDescription()
 		{
+			if (_isWebBasedEtlToolInUse)
+			{
+				labelDescription.Text = _isNewSchedule ? string.Empty : _etlJobSchedule.Description;
+				return;
+			}
+
 			string description;
 
 			if (radioButtonOccursOnce.Checked)
@@ -596,19 +606,6 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 			{
 				if (_selectedJob.NeedsParameterDatePeriod)
 				{
-					//TODO: Fix description of relative data period
-					//description += " Handles data within the relative period of ";
-
-					//if (radioButtonRelativePeriodTodayInitial.Checked)
-					//{
-					//    description += "Today";
-					//}
-					//else
-					//{
-					//    description += numericUpDownRelativePeriodStartInitial.Value + " to " +
-					//                   numericUpDownRelativePeriodEndInitial.Value + " days";
-					//}
-
 					if (_selectedJob.NeedsParameterDataSource && comboBoxDataSource.SelectedIndex > -1)
 					{
 						description += " Using the log data source '" + ((IDataSourceEtl)comboBoxDataSource.SelectedItem).DataSourceName + "'.";
