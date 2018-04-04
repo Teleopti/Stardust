@@ -112,12 +112,12 @@ wfm
 			tmhDynamicLocaleProvider
 		) {
 			$urlRouterProvider.otherwise('/#');
-			
+
 			$stateProvider.state('main', {
 				url: '/',
 				templateUrl: '../html/main.html'
 			});
-			
+
 			$translateProvider.useSanitizeValueStrategy('sanitizeParameters');
 			$translateProvider.useUrlLoader('../api/Global/Language');
 

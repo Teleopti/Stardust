@@ -125,21 +125,18 @@
 	<script src="dist/resources/modules.js"></script>
 	<script src="dist/templates.js"></script>
 	<script src="dist/main.js"></script>
+	<% } else { %>
+	<script src="dist/resources/modules.min.js"></script>
+	<script src="dist/templates.min.js"></script>
+	<script src="dist/main.min.js"></script>
+	<% } %>
+	/build -->
+
 	<script src="dist/ng2/inline.bundle.js"></script>
 	<script src="dist/ng2/polyfills.bundle.js"></script>
 	<script src="dist/ng2/styles.bundle.js"></script>
 	<script src="dist/ng2/vendor.bundle.js"></script>
 	<script src="dist/ng2/main.bundle.js"></script>
-	<% } else { %>
-	<script src="dist/resources/modules.js"></script>
-	<script src="dist/templates.min.js"></script>
-	<script src="dist/main.min.js"></script>
-	<script src="dist/ng2/inline.bundle.js"></script>
-	<script src="dist/ng2/polyfills.bundle.js"></script>
-	<link rel="stylesheet" href="dist/ng2/styles.bundle.css">
-	<script src="dist/ng2/main.bundle.js"></script>
-	<% } %>
-	/build -->
 
 	<!--dummy links to disable IE default alt-key shortcuts-->
 	<div class="shortcut-trick-ie">

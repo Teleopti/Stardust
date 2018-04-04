@@ -462,48 +462,8 @@ module.exports = function(grunt) {
 		// },
 		exec: {
 			ngbuild_dev: 'npm run ng build',
-			ngbuild_prod: 'npm run ng build -- --prod -env=prod --output-hashing none',
+			ngbuild_prod: 'npm run ng build --prod',
 			webpackDevDist: 'webpack'
-		},
-		'string-replace': {
-			dist: {
-				files: [
-					{
-						src: 'src/main.ts',
-						dest: 'src/main.ts'
-					}
-				],
-				options: {
-					saveUnchanged: false,
-					replacements: [
-						{
-							pattern: '../html/main.html',
-							replacement: 'html/main.html'
-						}
-					]
-				}
-			},
-			devDist: {
-				files: [
-					{
-						src: 'src/main.ts',
-						dest: 'src/main.ts'
-					}
-				],
-				options: {
-					saveUnchanged: false,
-					replacements: [
-						{
-							pattern: '../html/main.html',
-							replacement: 'html/main.html'
-						},
-						{
-							pattern: 'html/main.html',
-							replacement: '../html/main.html'
-						}
-					]
-				}
-			}
 		}
 	});
 
@@ -524,7 +484,6 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-image-embed');
 	grunt.loadNpmTasks('grunt-webpack');
 	grunt.loadNpmTasks('grunt-exec');
-	grunt.loadNpmTasks('grunt-string-replace');
 
 	// Default task(s).
 	grunt.registerTask('default', ['devDist', 'test', 'watch:dev']); // this task run the main task and then watch for file changes
@@ -548,7 +507,6 @@ module.exports = function(grunt) {
 		'copy:devCss',
 		'newer:copy',
 		'generateIndexDev',
-		'string-replace:devDist',
 		'exec:ngbuild_dev'
 	]);
 	grunt.registerTask('devDistRta', [
@@ -591,7 +549,6 @@ module.exports = function(grunt) {
 		'copy:extras',
 		'copy:bootstrap',
 		'generateIndex',
-		'string-replace:dist',
 		'exec:ngbuild_prod'
 	]); // this task should only be used by the build. It's kind of packaging for production.
 
