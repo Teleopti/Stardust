@@ -129,7 +129,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Concurrency
 
 			public void DeleteFactSchedules(IEnumerable<int> dateIds, Guid personCode, int scenarioId)
 			{
-				throw new NotImplementedException();
 			}
 
 			public int ShiftLengthId(int shiftLength)
