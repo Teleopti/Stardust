@@ -2,7 +2,7 @@
 
 namespace Teleopti.Wfm.Administration.Models
 {
-	public class JobPeriod
+	public class JobPeriodDate
 	{
 		public string JobCategoryName { get; set; }
 		public DateTime Start { get; set; }

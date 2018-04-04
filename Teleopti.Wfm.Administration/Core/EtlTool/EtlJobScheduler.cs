@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Analytics.Etl.Common;
@@ -36,14 +35,14 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 			_analyticsConnectionsStringExtractor = analyticsConnectionsStringExtractor;
 		}
 
-		public void ScheduleJob(JobEnqueModel jobEnqueModel)
+		public void ScheduleManualJob(EtlJobEnqueModel jobEnqueModel)
 		{
 			var connectionString = Tenants.IsAllTenants(jobEnqueModel.TenantName)
 				? _configReader.ConnectionString("Hangfire")
 				: _analyticsConnectionsStringExtractor.Extract(jobEnqueModel.TenantName);
 
 			var baseConfig = _baseConfigurationRepository.LoadBaseConfiguration(connectionString);
-			var relativePeriodCollection = GetRelativePeriods(jobEnqueModel, baseConfig.TimeZoneCode);
+			var relativePeriodCollection = getSchedulePeriodsForEnqueuedJob(jobEnqueModel, baseConfig.TimeZoneCode);
 
 			var etlJobSchedule = new EtlJobSchedule(
 				-1,
@@ -61,8 +60,38 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 			etlJobSchedule.SetScheduleIdOnPersistedItem(scheduleId);
 			_jobScheduleRepository.SaveSchedulePeriods(etlJobSchedule);
 		}
+		
+		public IList<IEtlJobSchedule> LoadScheduledJobs()
+		{
+			_jobScheduleRepository.SetDataMartConnectionString(_configReader.ConnectionString("Hangfire"));
+			return _jobScheduleRepository.GetSchedules(null, DateTime.Now);
+		}
 
-		public IList<IEtlJobRelativePeriod> GetRelativePeriods(JobEnqueModel job, string timeZoneId)
+		public void ScheduleDailyJob(EtlScheduleJobModel scheduleModel)
+		{
+			var relativePeriodCollection = getSchedulePeriods(scheduleModel);
+
+			var etlJobSchedule = new EtlJobSchedule(
+				-1,
+				scheduleModel.ScheduleName,
+				true,
+				(int) scheduleModel.DailyFrequencyStart.TimeOfDay.TotalMinutes,
+				scheduleModel.JobName,
+				0,
+				0,
+				scheduleModel.LogDataSourceId,
+				scheduleModel.Description,
+				null,
+				relativePeriodCollection,
+				scheduleModel.Tenant);
+
+			_jobScheduleRepository.SetDataMartConnectionString(_configReader.ConnectionString("Hangfire"));
+			var scheduleId = _jobScheduleRepository.SaveSchedule(etlJobSchedule);
+			etlJobSchedule.SetScheduleIdOnPersistedItem(scheduleId);
+			_jobScheduleRepository.SaveSchedulePeriods(etlJobSchedule);
+		}
+
+		private IList<IEtlJobRelativePeriod> getSchedulePeriodsForEnqueuedJob(EtlJobEnqueModel job, string timeZoneId)
 		{
 			var ret = new List<IEtlJobRelativePeriod>();
 			if (job.JobName == "Intraday")
@@ -88,10 +117,50 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 			return ret;
 		}
 
-		public IList<IEtlJobSchedule> LoadScheduledJobs()
+		private static IList<IEtlJobRelativePeriod> getSchedulePeriods(EtlScheduleJobModel scheduleModel)
 		{
+			var ret = new List<IEtlJobRelativePeriod>();
+			if (scheduleModel.JobName == "Intraday")
+			{
+				ret.Add(new EtlJobRelativePeriod(new MinMax<int>(0, 0), JobCategoryType.AgentStatistics));
+				ret.Add(new EtlJobRelativePeriod(new MinMax<int>(0, 0), JobCategoryType.QueueStatistics));
+				return ret;
+			}
+
+			foreach (var period in scheduleModel.RelativePeriods)
+			{
+				var jobCategory = Enum.GetValues(typeof(JobCategoryType)).Cast<JobCategoryType>()
+					.First(x => x.ToString() == period.JobCategoryName);
+				ret.Add(new EtlJobRelativePeriod(new MinMax<int>(period.Start, period.End), jobCategory));	
+			}
+			return ret;
+		}
+
+		public void SchedulePeriodicJob(EtlScheduleJobModel scheduleModel)
+		{
+			var relativePeriodCollection = getSchedulePeriods(scheduleModel);
+
+			var etlJobSchedule = new EtlJobSchedule(
+				-1,
+				scheduleModel.ScheduleName,
+				true,
+				Convert.ToInt32(scheduleModel.DailyFrequencyMinute),
+				(int)scheduleModel.DailyFrequencyStart.TimeOfDay.TotalMinutes,
+				(int)scheduleModel.DailyFrequencyEnd.TimeOfDay.TotalMinutes,
+				scheduleModel.JobName,
+				0,
+				0,
+				scheduleModel.LogDataSourceId,
+				scheduleModel.Description,
+				null,
+				DateTime.MinValue, 
+				relativePeriodCollection,
+				scheduleModel.Tenant);
+
 			_jobScheduleRepository.SetDataMartConnectionString(_configReader.ConnectionString("Hangfire"));
-			return _jobScheduleRepository.GetSchedules(null, DateTime.Now);
+			var scheduleId = _jobScheduleRepository.SaveSchedule(etlJobSchedule);
+			etlJobSchedule.SetScheduleIdOnPersistedItem(scheduleId);
+			_jobScheduleRepository.SaveSchedulePeriods(etlJobSchedule);
 		}
 	}
 }

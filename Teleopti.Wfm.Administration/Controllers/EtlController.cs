@@ -110,11 +110,11 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 		[TenantUnitOfWork]
 		[HttpPost, Route("Etl/EnqueueJob")]
-		public virtual IHttpActionResult EnqueueJob(JobEnqueModel jobEnqueModel)
+		public virtual IHttpActionResult EnqueueJob(EtlJobEnqueModel jobEnqueModel)
 		{
 			try
 			{
-				_etlJobScheduler.ScheduleJob(jobEnqueModel);
+				_etlJobScheduler.ScheduleManualJob(jobEnqueModel);
 				return Ok();
 			}
 			catch (ArgumentException e)
@@ -152,7 +152,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			try
 			{
 				_baseConfigurationRepository.SaveBaseConfiguration(connectionString, tenantConfigurationModel.BaseConfig);
-				_etlJobScheduler.ScheduleJob(createJobToEnqueue(tenantConfigurationModel.TenantName, "Initial",
+				_etlJobScheduler.ScheduleManualJob(createJobToEnqueue(tenantConfigurationModel.TenantName, "Initial",
 					JobCategoryType.Initial, 1, _now.UtcDateTime().AddDays(-1), _now.UtcDateTime().AddDays(1)).First());
 			}
 			catch (Exception ex)
@@ -207,7 +207,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			var tenantName = tenantDataSourceModel.TenantName;
 			var dataSourceNotPersisted = new List<string>();
 			var initialJobEnqueued = false;
-			var etlJobsToEnque = new List<JobEnqueModel>();
+			var etlJobsToEnque = new List<EtlJobEnqueModel>();
 
 			if (logger.IsDebugEnabled)
 			{
@@ -300,7 +300,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 			foreach (var job in etlJobsToEnque)
 			{
-				_etlJobScheduler.ScheduleJob(job);
+				_etlJobScheduler.ScheduleManualJob(job);
 			}
 
 			return dataSourceNotPersisted.Any()
@@ -309,7 +309,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 					+ $"{string.Join(", ", dataSourceNotPersisted)}.")
 				: Ok();
 		}
-
+		
 		private List<JobEnqueModel> createJobToEnqueue(string tenantName, string jobName, JobCategoryType jobCategoryName,
 			int datasourceId, DateTime startDate, DateTime endDate)
 		{
@@ -359,6 +359,43 @@ namespace Teleopti.Wfm.Administration.Controllers
 				.ToList();
 
 			return Ok(jobs);
+		}
+
+		[TenantUnitOfWork]
+		[HttpPost, Route("Etl/ScheduleJob")]
+		public virtual IHttpActionResult ScheduleJob(EtlScheduleJobModel scheduleModel)
+		{
+			if (string.IsNullOrEmpty(scheduleModel.DailyFrequencyMinute))
+			{
+				_etlJobScheduler.ScheduleDailyJob(scheduleModel);
+			}
+			else
+			{
+				_etlJobScheduler.SchedulePeriodicJob(scheduleModel);
+			}
+			
+			return Ok();
+		}
+
+
+		private EtlJobEnqueModel createJobToEnqueue(string tenantName, string jobName, JobCategoryType jobCategoryName,
+			int datasourceId, DateTime startDate, DateTime endDate)
+		{
+			return new EtlJobEnqueModel
+			{
+				JobName = jobName,
+				JobPeriods = new List<JobPeriodDate>
+				{
+					new JobPeriodDate
+					{
+						Start = startDate,
+						End = endDate,
+						JobCategoryName = jobCategoryName.ToString(),
+					}
+				},
+				LogDataSourceId = datasourceId,
+				TenantName = tenantName
+			};
 		}
 
 		private string getMasterTenantName()

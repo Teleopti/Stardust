@@ -334,9 +334,10 @@
     <Compile Include="Controllers\EtlController.cs" />
     <Compile Include="Controllers\LicenseController.cs" />
     <Compile Include="Models\EtlScheduleJobModel.cs" />
+    <Compile Include="Models\JobPeriodRelative.cs" />
     <Compile Include="Models\TenantConfigurationModel.cs" />
-    <Compile Include="Models\JobPeriod.cs" />
-    <Compile Include="Models\JobEnqueModel.cs" />
+    <Compile Include="Models\JobPeriodDate.cs" />
+    <Compile Include="Models\EtlJobEnqueModel.cs" />
     <Compile Include="Core\EtlTool\EtlJobScheduler.cs" />
     <Compile Include="Core\EtlTool\AnalyticsConnectionsStringExtractor.cs" />
     <Compile Include="Core\EtlTool\JobCollectionModelProvider.cs" />

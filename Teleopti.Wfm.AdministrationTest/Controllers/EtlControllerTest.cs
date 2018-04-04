@@ -7,6 +7,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Analytics.Etl.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
+using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.JobSchedule;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Collection;
@@ -187,12 +188,12 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			var utcToday = TimeZoneHelper.ConvertToUtc(localToday, TimeZoneInfo.FindSystemTimeZoneById(timezoneName));
 			Now.Is(utcToday);
 
-			var jobToEnqueue = new JobEnqueModel
+			var jobToEnqueue = new EtlJobEnqueModel
 			{
 				JobName = "Initial",
-				JobPeriods = new List<JobPeriod>
+				JobPeriods = new List<JobPeriodDate>
 				{
-					new JobPeriod
+					new JobPeriodDate
 					{
 						Start = localToday.AddDays(-1),
 						End = localToday.AddDays(1),
@@ -226,7 +227,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 		{
 			BaseConfigurationRepository.SaveBaseConfiguration(connectionString, new BaseConfiguration(1053, 15, "UTC", false));
 			AllTenants.HasWithAnalyticsConnectionString(testTenantName, connectionString);
-			var result = (NegotiatedContentResult<string>) Target.EnqueueJob(new JobEnqueModel {TenantName = "TenantNotFound"});
+			var result = (NegotiatedContentResult<string>) Target.EnqueueJob(new EtlJobEnqueModel {TenantName = "TenantNotFound"});
 			result.StatusCode.Should().Be(HttpStatusCode.NotFound);
 		}
 
@@ -242,10 +243,10 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 				TimeZoneHelper.ConvertToUtc(localToday, TimeZoneInfo.FindSystemTimeZoneById(timezoneName));
 			Now.Is(utcToday);
 
-			var jobToEnqueue = new JobEnqueModel
+			var jobToEnqueue = new EtlJobEnqueModel
 			{
 				JobName = "Intraday",
-				JobPeriods = new List<JobPeriod>(),
+				JobPeriods = new List<JobPeriodDate>(),
 				LogDataSourceId = -2,
 				TenantName = testTenantName
 			};
@@ -822,6 +823,125 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			periodicJob.DailyFrequencyEnd.Should().Be(DateTime.MinValue.AddMinutes(dailyPeriodicJob.OccursEveryMinuteEndingAt));
 			periodicJob.DailyFrequencyMinute.Should().Be(dailyPeriodicJob.OccursEveryMinute.ToString());
 		}
+
+		[Test]
+		public void ShouldAddPeriodicScheduledJob()
+		{
+			var scheduleModel = new EtlScheduleJobModel
+			{
+				ScheduleName = "My Schedule data Job",
+				Description = "desc",
+				JobName = "Schedule",
+				Enabled = true,
+				DailyFrequencyMinute = "15",
+				DailyFrequencyStart = new DateTime(2018, 4, 4, 6, 0, 0),
+				DailyFrequencyEnd = new DateTime(2018, 4, 4, 16, 0, 0),
+				Tenant = "My tenant",
+				LogDataSourceId = 1,
+				RelativePeriods = new[]
+				{
+					new JobPeriodRelative
+					{
+						JobCategoryName = JobCategoryType.Schedule.ToString(),
+						Start = -1,
+						End = 1
+					}
+				}
+			};
+
+			var result = Target.ScheduleJob(scheduleModel);
+			result.Should().Be.OfType<OkResult>();
+
+			var savedSchedule = JobScheduleRepository.GetSchedules(null, DateTime.MinValue).Single();
+			var savedSchedulePeriod = JobScheduleRepository.GetSchedulePeriods(savedSchedule.ScheduleId).Single();
+
+			savedSchedule.ScheduleName.Should().Be(scheduleModel.ScheduleName);
+			savedSchedule.Description.Should().Be(scheduleModel.Description);
+			savedSchedule.JobName.Should().Be(scheduleModel.JobName);
+			savedSchedule.Enabled.Should().Be(scheduleModel.Enabled);
+			savedSchedule.OccursEveryMinute.Should().Be(scheduleModel.DailyFrequencyMinute);
+			savedSchedule.OccursEveryMinuteStartingAt.Should().Be(scheduleModel.DailyFrequencyStart.TimeOfDay.TotalMinutes);
+			savedSchedule.OccursEveryMinuteEndingAt.Should().Be(scheduleModel.DailyFrequencyEnd.TimeOfDay.TotalMinutes);
+			savedSchedule.TenantName.Should().Be(scheduleModel.Tenant);
+			savedSchedule.ScheduleType.Should().Be(JobScheduleType.Periodic);
+			savedSchedule.DataSourceId.Should().Be(scheduleModel.LogDataSourceId);
+
+			savedSchedulePeriod.JobCategoryName.Should().Be(scheduleModel.RelativePeriods.Single().JobCategoryName);
+			savedSchedulePeriod.RelativePeriod.Minimum.Should().Be(scheduleModel.RelativePeriods.Single().Start);
+			savedSchedulePeriod.RelativePeriod.Maximum.Should().Be(scheduleModel.RelativePeriods.Single().End);
+		}
+
+
+		[Test]
+		public void ShouldAddDailyScheduledJob()
+		{
+			var scheduleModel = new EtlScheduleJobModel
+			{
+				ScheduleName = "My Schedule data Job",
+				Description = "desc",
+				JobName = "Schedule",
+				Enabled = true,
+				DailyFrequencyStart = new DateTime(2018, 4, 4, 6, 0, 0),
+				Tenant = "My tenant",
+				LogDataSourceId = 1,
+				RelativePeriods = new []
+				{
+					new JobPeriodRelative
+					{
+						JobCategoryName = JobCategoryType.Schedule.ToString(),
+						Start = -1,
+						End = 1
+					}
+				}
+			};
+
+			var result = Target.ScheduleJob(scheduleModel);
+			result.Should().Be.OfType<OkResult>();
+
+			var savedSchedule = JobScheduleRepository.GetSchedules(null, DateTime.MinValue).Single();
+			var savedSchedulePeriod = JobScheduleRepository.GetSchedulePeriods(savedSchedule.ScheduleId).Single();
+
+			savedSchedule.ScheduleName.Should().Be(scheduleModel.ScheduleName);
+			savedSchedule.Description.Should().Be(scheduleModel.Description);
+			savedSchedule.JobName.Should().Be(scheduleModel.JobName);
+			savedSchedule.Enabled.Should().Be(scheduleModel.Enabled);
+			savedSchedule.OccursOnceAt.Should().Be(scheduleModel.DailyFrequencyStart.TimeOfDay.TotalMinutes);
+			savedSchedule.TenantName.Should().Be(scheduleModel.Tenant);
+			savedSchedule.ScheduleType.Should().Be(JobScheduleType.OccursDaily);
+			savedSchedule.DataSourceId.Should().Be(scheduleModel.LogDataSourceId);
+
+			savedSchedulePeriod.JobCategoryName.Should().Be(scheduleModel.RelativePeriods.Single().JobCategoryName);
+			savedSchedulePeriod.RelativePeriod.Minimum.Should().Be(scheduleModel.RelativePeriods.Single().Start);
+			savedSchedulePeriod.RelativePeriod.Maximum.Should().Be(scheduleModel.RelativePeriods.Single().End);
+		}
+
+		[Test]
+		public void ShouldSaveIntradayJobWithPeriodsForAgentAndQueueStatistics()
+		{
+			var scheduleModel = new EtlScheduleJobModel
+			{
+				JobName = "Intraday"
+			};
+
+			var result = Target.ScheduleJob(scheduleModel);
+			result.Should().Be.OfType<OkResult>();
+
+			var savedSchedule = JobScheduleRepository.GetSchedules(null, DateTime.MinValue).Single();
+			var savedPeriods = JobScheduleRepository.GetSchedulePeriods(savedSchedule.ScheduleId);
+
+			savedPeriods.Count.Should().Be(2);
+			savedPeriods
+				.Any(x => x.JobCategory.ToString() == JobCategoryType.AgentStatistics.ToString())
+				.Should().Be.True();
+			savedPeriods
+				.Any(x => x.JobCategory.ToString() == JobCategoryType.QueueStatistics.ToString())
+				.Should().Be.True();
+			savedPeriods.All(x => x.RelativePeriod.Minimum == 0)
+				.Should().Be.True();
+			savedPeriods.All(x => x.RelativePeriod.Maximum == 0)
+				.Should().Be.True();
+		}
+
 
 		private IEnumerable<JobCollectionModel> getJobs(string tenantName, bool toggle38131Enabled, bool pmInstalled)
 		{

@@ -14,5 +14,7 @@ namespace Teleopti.Wfm.Administration.Models
 		public DateTime DailyFrequencyStart { get; set; }
 		public DateTime DailyFrequencyEnd { get; set; }
 		public string DailyFrequencyMinute { get; set; }
+		public JobPeriodRelative[] RelativePeriods { get; set; }
+		public int LogDataSourceId { get; set; }
 	}
 }
