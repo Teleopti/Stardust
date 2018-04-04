@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.Gamification.Mapping;
 using Teleopti.Ccc.Web.Areas.Gamification.Models;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 {
@@ -11,11 +14,15 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 	{
 		private readonly IGamificationSettingRepository _gamificationSettingRepository;
 		private readonly IGamificationSettingMapper _mapper;
+		private readonly ILoggedOnUser _loggedOnUser;
+		private readonly ITeamGamificationSettingRepository _teamGamificationSettingRepository;
 
-		public GamificationSettingProvider(IGamificationSettingRepository gamificationSettingRepository, IGamificationSettingMapper mapper)
+		public GamificationSettingProvider(IGamificationSettingRepository gamificationSettingRepository, IGamificationSettingMapper mapper, ILoggedOnUser loggedOnUser, ITeamGamificationSettingRepository teamGamificationSettingRepository)
 		{
 			_gamificationSettingRepository = gamificationSettingRepository;
 			_mapper = mapper;
+			_loggedOnUser = loggedOnUser;
+			_teamGamificationSettingRepository = teamGamificationSettingRepository;
 		}
 
 		public GamificationSettingViewModel GetGamificationSetting(Guid id)
@@ -42,6 +49,17 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 						GamificationSettingId = setting.Id.Value,
 						Value = setting.Description
 					}).ToList();
+		}
+
+		
+		public IGamificationSetting GetGamificationSetting()
+		{
+			var person = _loggedOnUser.CurrentUser();
+			var myTeam = person.MyTeam(DateOnly.Today);
+			if (myTeam == null) return null;
+
+			var teamGamificationSetting = _teamGamificationSettingRepository.FindTeamGamificationSettingsByTeam(myTeam);
+			return teamGamificationSetting?.GamificationSetting;
 		}
 	}
 }

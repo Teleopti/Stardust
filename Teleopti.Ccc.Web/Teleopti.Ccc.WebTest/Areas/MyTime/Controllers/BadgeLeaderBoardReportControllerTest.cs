@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.BadgeLeaderBoardReport.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var viewModelFactory = MockRepository.GenerateMock<IBadgeLeaderBoardReportViewModelFactory>();
 			var timezone = new FakeUserTimeZone();
-			var target = new BadgeLeaderBoardReportController(viewModelFactory, null, null, null, timezone);
+			var target = new BadgeLeaderBoardReportController(viewModelFactory, null, null, null, timezone, null);
 			var model = new BadgeLeaderBoardReportViewModel();
 			var option = new LeaderboardQuery
 			{
@@ -46,7 +47,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void IndexShouldReturnPartialView()
 		{
-			var controller = new BadgeLeaderBoardReportController(null, null, null, null, new FakeUserTimeZone());
+			var gamificationSettingProvider = MockRepository.GenerateMock<IGamificationSettingProvider>();
+			var controller = new BadgeLeaderBoardReportController(null, null, null, null, new FakeUserTimeZone(), gamificationSettingProvider);
 			controller.Index().Should().Be.OfType<ViewResult>();
 		}
 
@@ -161,7 +163,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				var currentLoggedOnUser = new FakeLoggedOnUser(CurrentUser(team)); 
 				var factory = new BadgeLeaderBoardReportOptionFactory(teamProvider, principalAuthorization, currentLoggedOnUser);
 
-				return new BadgeLeaderBoardReportController(null, factory, null, now, new FakeUserTimeZone());
+				return new BadgeLeaderBoardReportController(null, factory, null, now, new FakeUserTimeZone(), null);
 			}
 
 			private static Team createTeam()

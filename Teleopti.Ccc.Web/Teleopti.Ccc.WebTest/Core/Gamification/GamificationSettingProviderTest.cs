@@ -1,14 +1,13 @@
 ﻿using NUnit.Framework;
 using SharpTestsEx;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider;
 using Teleopti.Ccc.WebTest.Areas.Gamification;
 using Teleopti.Interfaces.Domain;
@@ -19,14 +18,17 @@ namespace Teleopti.Ccc.WebTest.Core.Gamification
 	public class GamificationSettingProviderTest
 	{
 		public IGamificationSettingProvider Target;
-		public IGamificationSettingRepository GamificationSettingRepository;		
+		public IGamificationSettingRepository GamificationSettingRepository;
+		public FakeTeamGamificationSettingRepository TeamGamificationSettingRepository;
+		public FakeLoggedOnUser LoggedOnUser;
+		public FakeTeamRepository TeamRepository;
 
 		[Test]
 		public void ShouldGetGamificationSettingByIdAndSortExternalBadgeSettingsById()
 		{
-			var settingId = createGamificationSettingWithId();
+			var gamificationSetting = createGamificationSettingWithId();
 
-			var setting = Target.GetGamificationSetting(settingId);
+			var setting = Target.GetGamificationSetting(gamificationSetting.Id.GetValueOrDefault());
 			setting.Should().Not.Be.Null();
 			setting.ExternalBadgeSettings[0].QualityId.Should().Be.EqualTo(1);
 			setting.ExternalBadgeSettings[1].QualityId.Should().Be.EqualTo(2);
@@ -35,18 +37,53 @@ namespace Teleopti.Ccc.WebTest.Core.Gamification
 		[Test]
 		public void ShouldGetSettingDescriptionList()
 		{
-			var setting1 = createGamificationSettingWithId("1");
-			var setting2 = createGamificationSettingWithId("2");
+			var expectedDescription1 = "1";
+			var expectedDescription2 = "2";
+			createGamificationSettingWithId(expectedDescription1);
+			createGamificationSettingWithId(expectedDescription2);
 
 			var list = Target.GetGamificationList();
 
-			list.Count().Should().Be.EqualTo(2);
-			list[0].Value.Name.Should().Be.EqualTo("1");
-			list[1].Value.Name.Should().Be.EqualTo("2");
+			list.Count.Should().Be.EqualTo(2);
+			list[0].Value.Name.Should().Be.EqualTo(expectedDescription1);
+			list[1].Value.Name.Should().Be.EqualTo(expectedDescription2);
 		}
 
+		[Test]
+		public void ShouldGetLoggedOnUserGamificationSetting()
+		{
+			var expectedGamificationSetting = createGamificationSettingWithId();
+			createTeamGamificationSetting(expectedGamificationSetting);
 
-		private Guid createGamificationSettingWithId(string description = "Default Gamification Setting")
+			var result = Target.GetGamificationSetting();
+			result.Should().Be.EqualTo(expectedGamificationSetting);
+		}
+
+		[Test]
+		public void ShouldNotGetGamificationSettingWhenThereWasNoGamificationTeamSetting()
+		{
+			createTeamGamificationSetting();
+
+			var result = Target.GetGamificationSetting();
+			result.Should().Be.Null();
+		}
+
+		private void createTeamGamificationSetting(IGamificationSetting gamificationSetting = null)
+		{
+			var team = TeamFactory.CreateTeamWithId("myTeam");
+			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(DateOnly.MinValue, team);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+			if (gamificationSetting == null) return;
+
+			var teamGamificationSetting = new TeamGamificationSetting
+			{
+				Team = LoggedOnUser.CurrentUser().MyTeam(DateOnly.Today),
+				GamificationSetting = gamificationSetting
+			};
+			TeamGamificationSettingRepository.Add(teamGamificationSetting);
+		}
+
+		private IGamificationSetting createGamificationSettingWithId(string description = "Default Gamification Setting")
 		{
 			var id = Guid.NewGuid();
 			var aSetting = new GamificationSetting(description)
@@ -73,7 +110,7 @@ namespace Teleopti.Ccc.WebTest.Core.Gamification
 
 				SilverToBronzeBadgeRate = 5,
 				GoldToSilverBadgeRate = 2,
-				
+				RollingPeriodSet = GamificationRollingPeriodSet.Monthly
 			};
 
 			aSetting.BadgeSettings.Add(new BadgeSetting { QualityId = 2, DataType = ExternalPerformanceDataType.Numeric });
@@ -83,7 +120,7 @@ namespace Teleopti.Ccc.WebTest.Core.Gamification
 
 			GamificationSettingRepository.Add(aSetting);
 
-			return id;
+			return aSetting;
 		}
 	}
 }
