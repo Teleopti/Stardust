@@ -95,7 +95,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 
 			var badgeFeatureEnabled = (teamSetting != null);
 			var showBadge = badgeFeatureEnabled && hasBadgePermission;
-
+			IEnumerable<BadgeViewModel> badges = null;
+			var rollingPeriodSet = GamificationRollingPeriodSet.OnGoing;
+			if (showBadge)
+			{
+				var period = getDefaultPeriod(teamSetting.GamificationSetting);
+				badges = _badgeProvider.GetBadges(period);
+				rollingPeriodSet = teamSetting.GamificationSetting.RollingPeriodSet;
+			}
+			
 			return new PortalViewModel
 			{
 				ReportNavigationItems = reportsList,
@@ -114,10 +122,34 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 				TimeFormat = culture.DateTimeFormat.ShortTimePattern,
 				AMDesignator = culture.DateTimeFormat.AMDesignator,
 				PMDesignator = culture.DateTimeFormat.PMDesignator,
-				Badges = showBadge ? _badgeProvider.GetBadges() : null,
+				Badges = badges,
+				BadgeRollingPeriodSet = rollingPeriodSet,
 				DateTimeDefaultValues = getDateTimeDefaultValues(culture),
 				ShowBadge = showBadge
 			};
+		}
+
+		private DateOnlyPeriod getDefaultPeriod(IGamificationSetting gamificationSetting)
+		{
+			var firstDayOfWeek = _loggedOnUser.CurrentUser().FirstDayOfWeek;
+			DateOnly start, end;
+
+			switch (gamificationSetting.RollingPeriodSet)
+			{
+				case GamificationRollingPeriodSet.Weekly:
+					var diff = DateTime.Today.DayOfWeek - firstDayOfWeek;
+					start = diff == 0 ? DateOnly.Today : DateOnly.Today.AddDays(-diff);
+					end = start.AddDays(7);
+					return new DateOnlyPeriod(start, end);
+				case GamificationRollingPeriodSet.Monthly:
+					var year = DateTime.Today.Year;
+					var month = DateTime.Today.Month;
+					start = new DateOnly(year, month, 1);
+					end = new DateOnly(year, month, DateTime.DaysInMonth(year, month));
+					return new DateOnlyPeriod(start, end);
+
+				default: return new DateOnlyPeriod(new DateOnly(1900, 1, 1), DateOnly.Today);
+			}
 		}
 
 		private IEnumerable<ReportNavigationItem> setupNavigationItems(ICollection<NavigationItem> navigationItems,

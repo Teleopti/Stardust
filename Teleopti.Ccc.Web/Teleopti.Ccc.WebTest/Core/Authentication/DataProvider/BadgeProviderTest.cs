@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 
 		private readonly Guid currentUserId = Guid.NewGuid();
 		private ITeamGamificationSettingRepository teamSettingRepository;
+		private readonly DateOnlyPeriod period = new DateOnlyPeriod(DateOnly.MinValue, DateOnly.Today);
 
 		[SetUp]
 		public void Setup()
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 
 		private void mockAgentBadgeRepository(Person currentUser)
 		{
-			badgeRepository.Stub(x => x.Find(currentUser, BadgeType.Adherence, false)).Return(
+			badgeRepository.Stub(x => x.Find(currentUser, BadgeType.Adherence, false, period)).Return(
 				new AgentBadge
 				{
 					Person = currentUserId,
@@ -51,7 +52,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 					IsExternal = false,
 					TotalAmount = 12 // 1 gold, 0 silver, 2 bronze
 				});
-			badgeRepository.Stub(x => x.Find(currentUser, BadgeType.AnsweredCalls, false)).Return(
+			badgeRepository.Stub(x => x.Find(currentUser, BadgeType.AnsweredCalls, false, period)).Return(
 				new AgentBadge
 				{
 					Person = currentUserId,
@@ -59,7 +60,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 					IsExternal = false,
 					TotalAmount = 6 // 0 gold, 1 silver, 1 bronze
 				});
-			badgeRepository.Stub(x => x.Find(currentUser, BadgeType.AverageHandlingTime, false)).Return(
+			badgeRepository.Stub(x => x.Find(currentUser, BadgeType.AverageHandlingTime, false, period)).Return(
 				new AgentBadge
 				{
 					Person = currentUserId,
@@ -69,7 +70,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 				});
 			
 			// Returns an external-measure Badge
-			badgeRepository.Stub(x => x.Find(currentUser, 0, true)).Return(
+			badgeRepository.Stub(x => x.Find(currentUser, 0, true, period)).Return(
 				new AgentBadge
 				{
 					Person = currentUserId,
@@ -81,7 +82,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 
 		private void mockAgentBadgeWithRankRepository(Person currentUser)
 		{
-			badgeWithRankRepository.Stub(x => x.Find(currentUser, BadgeType.Adherence, false)).Return(
+			badgeWithRankRepository.Stub(x => x.Find(currentUser, BadgeType.Adherence, false, period)).Return(
 				new AgentBadgeWithRank
 				{
 					Person = currentUserId,
@@ -91,7 +92,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 					SilverBadgeAmount = 1,
 					BronzeBadgeAmount = 7
 				});
-			badgeWithRankRepository.Stub(x => x.Find(currentUser, BadgeType.AnsweredCalls, false)).Return(
+			badgeWithRankRepository.Stub(x => x.Find(currentUser, BadgeType.AnsweredCalls, false, period)).Return(
 				new AgentBadgeWithRank
 				{
 					Person = currentUserId,
@@ -101,7 +102,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 					SilverBadgeAmount = 0,
 					BronzeBadgeAmount = 3
 				});
-			badgeWithRankRepository.Stub(x => x.Find(currentUser, BadgeType.AverageHandlingTime, false)).Return(
+			badgeWithRankRepository.Stub(x => x.Find(currentUser, BadgeType.AverageHandlingTime, false, period)).Return(
 				new AgentBadgeWithRank
 				{
 					Person = currentUserId,
@@ -113,7 +114,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 				});
 
 			// Returns an external-measure Badge
-			badgeWithRankRepository.Stub(x => x.Find(currentUser, 0, true)).Return(
+			badgeWithRankRepository.Stub(x => x.Find(currentUser, 0, true, period)).Return(
 				new AgentBadgeWithRank
 				{
 					Person = currentUserId,
@@ -146,7 +147,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 
 			target = new BadgeProvider(loggedOnUser, badgeRepository, badgeWithRankRepository, teamSettingRepository);
 
-			var result = target.GetBadges().ToList();
+			var result = target.GetBadges(period).ToList();
 
 			var adherenceBadge = result.Single(x => (x.BadgeType == BadgeType.Adherence));
 			Assert.AreEqual(adherenceBadge.GoldBadge, 3);
@@ -185,7 +186,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 
 			target = new BadgeProvider(loggedOnUser, badgeRepository, badgeWithRankRepository, teamSettingRepository);
 
-			var result = target.GetBadges().ToList();
+			var result = target.GetBadges(period).ToList();
 
 			Assert.AreEqual(result.Count(), 3);
 

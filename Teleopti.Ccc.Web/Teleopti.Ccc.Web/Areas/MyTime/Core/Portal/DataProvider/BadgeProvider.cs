@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			_teamGamificationSettingRepo = teamGamificationSettingRepo;
 		}
 
-		public IEnumerable<BadgeViewModel> GetBadges()
+		public IEnumerable<BadgeViewModel> GetBadges(DateOnlyPeriod period)
 		{
 			var currentUser = _loggedOnUser.CurrentUser();
 			if (currentUser == null) return new List<BadgeViewModel>();
@@ -37,19 +37,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 
 			var enabledBadgeTypes = _teamGamificationSetting.GamificationSetting.EnabledBadgeTypes();
 
-			var allBadges = getBadgesWithoutRank(currentUser, enabledBadgeTypes);
-			var allBadgesWithRank = getBadgesWithRank(currentUser, enabledBadgeTypes);
+			var allBadges = getBadgesWithoutRank(currentUser, enabledBadgeTypes, period);
+			var allBadgesWithRank = getBadgesWithRank(currentUser, enabledBadgeTypes, period);
 
 			return mergeBadges(allBadges, allBadgesWithRank);
 		}
 
-		private IList<BadgeViewModel> getBadgesWithRank(IPerson p, IEnumerable<BadgeTypeInfo> badgeTypes)
+		private IList<BadgeViewModel> getBadgesWithRank(IPerson p, IEnumerable<BadgeTypeInfo> badgeTypes, DateOnlyPeriod period)
 		{
 			if (_teamGamificationSetting == null || p == null)
 				return new List<BadgeViewModel>();
 
 			return badgeTypes
-				.Select(bt => findBadgesWithRank(p, bt.Id, bt.IsExternal) ?? new AgentBadgeWithRank
+				.Select(bt => findBadgesWithRank(p, bt.Id, bt.IsExternal, period) ?? new AgentBadgeWithRank
 				{
 					BadgeType = bt.Id,
 					IsExternal = bt.IsExternal,
@@ -65,11 +65,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 					GoldBadge = b.GoldBadgeAmount,
 					SilverBadge = b.SilverBadgeAmount,
 					BronzeBadge = b.BronzeBadgeAmount
-				})
-				.ToList();
+				}).ToList();
 		}
 
-		private IList<BadgeViewModel> getBadgesWithoutRank(IPerson p, IEnumerable<BadgeTypeInfo> badgeTypes)
+		private IList<BadgeViewModel> getBadgesWithoutRank(IPerson p, IEnumerable<BadgeTypeInfo> badgeTypes, DateOnlyPeriod period)
 		{
 			if (_teamGamificationSetting == null || p == null)
 				return new List<BadgeViewModel>();
@@ -79,7 +78,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			var goldToSilverBadgeRate = setting.GoldToSilverBadgeRate;
 
 			return badgeTypes
-				.Select(bt => findBadgesWithoutRank(p, bt.Id, bt.IsExternal) ?? new AgentBadge
+				.Select(bt => findBadgesWithoutRank(p, bt.Id, bt.IsExternal, period) ?? new AgentBadge
 				{
 					BadgeType = bt.Id,
 					IsExternal = bt.IsExternal,
@@ -93,12 +92,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 					GoldBadge = b.GetGoldBadge(silverToBronzeBadgeRate, goldToSilverBadgeRate),
 					SilverBadge = b.GetSilverBadge(silverToBronzeBadgeRate, goldToSilverBadgeRate),
 					BronzeBadge = b.GetBronzeBadge(silverToBronzeBadgeRate, goldToSilverBadgeRate)
-				})
-				.ToList();
+				}).ToList();
 		}
 
-		private IAgentBadgeWithRank findBadgesWithRank(IPerson p, int badgeType, bool isExternal) => _badgeWithRankRepository.Find(p, badgeType, isExternal);
-		private AgentBadge findBadgesWithoutRank(IPerson p, int badgeType, bool isExternal) => _badgeRepository.Find(p, badgeType, isExternal);
+		private IAgentBadgeWithRank findBadgesWithRank(IPerson p, int badgeType, bool isExternal, DateOnlyPeriod period) => _badgeWithRankRepository.Find(p, badgeType, isExternal, period);
+		private AgentBadge findBadgesWithoutRank(IPerson p, int badgeType, bool isExternal, DateOnlyPeriod period) => _badgeRepository.Find(p, badgeType, isExternal, period);
 
 		private string findBadgeTypeName(int badgeType, bool isExternal)
 		{

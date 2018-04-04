@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
@@ -58,6 +59,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _agentBadges.FirstOrDefault(x => x.Person == person.Id.Value 
 			                                        && x.BadgeType == badgeType
 			                                        && x.IsExternal == isExternal);
+		}
+
+		public AgentBadge Find(IPerson person, int badgeType, bool isExternal, DateOnlyPeriod period)
+		{
+			throw new NotImplementedException();
 		}
 
 		public int FindByPersonListCalledTimes()

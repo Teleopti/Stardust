@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
@@ -35,5 +36,15 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// <param name="isExternal">Indicates whether the badge type is external.</param>
 		/// <returns></returns>
 		IAgentBadgeWithRank Find(IPerson person, int badgeType, bool isExternal);
+
+		/// <summary>
+		/// Find badge for the agent and specific with in period
+		/// </summary>
+		/// <param name="person">The agent to get badge.</param>
+		/// <param name="badgeType">Badge type.</param>
+		/// <param name="isExternal">Indicates whether the badge type is external.</param>
+		/// <param name="period">with in this period</param>
+		/// <returns></returns>
+		IAgentBadgeWithRank Find(IPerson person, int badgeType, bool isExternal, DateOnlyPeriod period);
 	}
 }

@@ -86,5 +86,23 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.UniqueResult<AgentBadge>();
 			return result;
 		}
+
+		public AgentBadge Find(IPerson person, int badgeType, bool isExternal, DateOnlyPeriod period)
+		{
+			InParameter.NotNull(nameof(person), person);
+			InParameter.NotNull(nameof(badgeType), badgeType);
+			const string query = @"select Person, BadgeType, IsExternal, TotalAmount, LastCalculatedDate "
+								 + "from AgentBadge where Person = :person and BadgeType=:badgeType and IsExternal=:isExternal and LastCalculatedDate between :startDate and :endDate";
+			var result = _currentUnitOfWork.Current().Session().CreateSQLQuery(query)
+				.SetGuid("person", person.Id.GetValueOrDefault())
+				.SetInt32("badgeType", badgeType)
+				.SetBoolean("isExternal", isExternal)
+				.SetDateOnly("startDate", period.StartDate)
+				.SetDateOnly("endDate", period.EndDate)
+				.SetResultTransformer(Transformers.AliasToBean(typeof(AgentBadge)))
+				.SetReadOnly(true)
+				.UniqueResult<AgentBadge>();
+			return result;
+		}
 	}
 }
