@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.Analytics;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Exceptions;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -17,7 +18,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 	public class UpdateFactSchedules : IUpdateFactSchedules
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(UpdateFactSchedules));
-		
+
 		private readonly IAnalyticsFactScheduleMapper _factScheduleMapper;
 		private readonly IAnalyticsFactScheduleDateMapper _factScheduleDateMapper;
 		private readonly IAnalyticsFactSchedulePersonMapper _factSchedulePersonMapper;
@@ -60,9 +61,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 			_projectionChangedEventBuilder = projectionChangedEventBuilder;
 			_analyticsDayOffRepository = analyticsDayOffRepository;
 		}
-		
-		public void Execute(Guid personId, Guid scenarioId, Guid businessUnitId, Func<IPerson,IEnumerable<DateTime>> dates,
-			DateTime timestamp)
+
+		public void Execute(Guid personId, Guid scenarioId, Guid businessUnitId, Func<IPerson, IEnumerable<DateTime>> dates, DateTime timestamp)
 		{
 			var scenario = _scenarioRepository.Get(scenarioId);
 			if (scenario == null)
@@ -74,42 +74,50 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 			if (!_analyticsScheduleChangeUpdaterFilter.ContinueProcessingEvent(scenario.DefaultScenario, scenarioId))
 				return;
 
-			var analyticsScenario = _analyticsScenarioRepository.Get(scenarioId);
-			if (analyticsScenario == null)
-			{
-				logger.Warn($"Scenario with code {scenarioId} has not been inserted in analytics yet. Schedule changes for " +
-							$"agent {personId} is not saved into Analytics database.");
-				throw new ScenarioMissingInAnalyticsException();
-			}
-
 			var person = _personRepository.Get(personId);
 			if (person == null)
 				throw new PersonNotFoundException($"Could not load person {personId} from application database.");
 
-			updateForDates(dates(person), person, scenario, analyticsScenario.ScenarioId, businessUnitId, timestamp);
+			updateForDates(dates(person), person, scenario, businessUnitId, timestamp);
 		}
 
-		private void updateForDates(IEnumerable<DateTime> dateTimes, IPerson person, IScenario scenario, int scenarioId,
-			Guid businessUnitId, DateTime timestamp)
+		private void updateForDates(IEnumerable<DateTime> dateTimes, IPerson person, IScenario scenario, Guid businessUnitId, DateTime timestamp)
 		{
 			if (!dateTimes.Any()) return;
 
 			var dates = dateTimes.Select(d => new DateOnly(d)).ToArray();
-			var dayOffs = _analyticsDayOffRepository.DayOffs();
-			var schedule = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
-				new ScheduleDictionaryLoadOptions(true, true, true), new DateOnlyPeriod(dates.Min(), dates.Max()), scenario);
 
 			var dateIds = new List<int>();
 			foreach (var date in dates)
 			{
-				if (_factScheduleDateMapper.MapDateId(date, out var dateId))
-				{
-					dateIds.Add(dateId);
-				}
+				MapDate(date, dateIds);
 			}
-			_analyticsScheduleRepository.DeleteFactSchedules(dateIds, person.Id.GetValueOrDefault(), scenarioId);
+
+			DoWork(person, scenario, businessUnitId, timestamp, dateIds, dates);
+		}
+
+		[AnalyticsUnitOfWork]
+		protected virtual void DoWork(IPerson person, IScenario scenario, Guid businessUnitId, DateTime timestamp, IEnumerable<int> dateIds, IEnumerable<DateOnly> dates)
+		{
+			var analyticsScenario = _analyticsScenarioRepository.Get(scenario.Id.Value);
+			if (analyticsScenario == null)
+			{
+				logger.Warn(
+					$"Scenario with code {scenario.Id.Value} has not been inserted in analytics yet. Schedule changes for " +
+					$"agent {person.Id.Value} is not saved into Analytics database.");
+				throw new ScenarioMissingInAnalyticsException();
+			}
+
+			_analyticsScheduleRepository.DeleteFactSchedules(dateIds, person.Id.GetValueOrDefault(),
+				analyticsScenario.ScenarioId);
+
+
+			var schedule = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
+				new ScheduleDictionaryLoadOptions(true, true, true), new DateOnlyPeriod(dates.Min(), dates.Max()), scenario);
+
+			IList<AnalyticsDayOff> dayOffs = null;
 			foreach (var date in dates)
-			{		
+			{
 				var scheduleDay = schedule.SchedulesForDay(date).FirstOrDefault();
 				if (scheduleDay == null)
 				{
@@ -136,9 +144,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 					var shiftCategoryId = -1;
 					if (currentEventScheduleDay.Shift != null)
 						shiftCategoryId = getCategory(currentEventScheduleDay.ShiftCategoryId);
-					var dayCount = _factScheduleDayCountMapper.Map(currentEventScheduleDay, personPart, scenarioId, shiftCategoryId);
+					var dayCount = _factScheduleDayCountMapper.Map(currentEventScheduleDay, personPart, analyticsScenario.ScenarioId, shiftCategoryId);
 					var agentDaySchedule = _factScheduleMapper.AgentDaySchedule(currentEventScheduleDay, scheduleDay, personPart,
-						timestamp, shiftCategoryId, scenarioId, scenario.Id.GetValueOrDefault(), person.Id.GetValueOrDefault());
+						timestamp, shiftCategoryId, analyticsScenario.ScenarioId, scenario.Id.GetValueOrDefault(),
+						person.Id.GetValueOrDefault());
 
 					if (agentDaySchedule == null)
 					{
@@ -149,6 +158,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 					{
 						if (dayCount.DayOffName != null)
 						{
+							if (dayOffs == null)
+							{
+								dayOffs = _analyticsDayOffRepository.DayOffs();
+							}
+
 							var dayOff = scheduleDay.PersonAssignment().DayOff();
 
 							if (dayOffs.All(x => x.DayOffCode != dayOff.DayOffTemplateId))
@@ -190,7 +204,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 				}
 			}
 		}
-		
+
+		[AnalyticsUnitOfWork]
+		protected virtual void MapDate(DateOnly date, List<int> dateIds)
+		{
+			if (_factScheduleDateMapper.MapDateId(date, out var dateId))
+			{
+				dateIds.Add(dateId);
+			}
+		}
+
 		private int getCategory(Guid shiftCategoryCode)
 		{
 			var cat = _analyticsShiftCategoryRepository.ShiftCategory(shiftCategoryCode);
@@ -199,24 +222,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 			return cat.ShiftCategoryId;
 		}
 	}
-	
-	
-	
-	
-	
+
 
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_SpeedUpEvents_48769)]
 	public interface IUpdateFactSchedules
 	{
-		void Execute(Guid personId, Guid scenarioId, Guid businessUnitId, Func<IPerson,IEnumerable<DateTime>> dates,
+		void Execute(Guid personId, Guid scenarioId, Guid businessUnitId, Func<IPerson, IEnumerable<DateTime>> dates,
 			DateTime timestamp);
 	}
-	
+
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_SpeedUpEvents_48769)]
 	public class UpdateFactSchedulesOLD : IUpdateFactSchedules
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(UpdateFactSchedules));
-		
+
 		private readonly IAnalyticsFactScheduleMapper _factScheduleMapper;
 		private readonly IAnalyticsFactScheduleDateMapper _factScheduleDateMapper;
 		private readonly IAnalyticsFactSchedulePersonMapper _factSchedulePersonMapper;
@@ -259,33 +278,41 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 			_projectionChangedEventBuilder = projectionChangedEventBuilder;
 			_analyticsDayOffRepository = analyticsDayOffRepository;
 		}
-		
-		public void Execute(Guid personId, Guid scenarioId, Guid businessUnitId, Func<IPerson,IEnumerable<DateTime>> dates,
+
+		public void Execute(Guid personId, Guid scenarioCode, Guid businessUnitId, Func<IPerson, IEnumerable<DateTime>> dates,
 			DateTime timestamp)
 		{
-			var scenario = _scenarioRepository.Get(scenarioId);
+			var scenario = _scenarioRepository.Get(scenarioCode);
 			if (scenario == null)
 			{
-				logger.Warn($"Could not load scenario {scenarioId} from application database.");
+				logger.Warn($"Could not load scenario {scenarioCode} from application database.");
 				return;
 			}
 
-			if (!_analyticsScheduleChangeUpdaterFilter.ContinueProcessingEvent(scenario.DefaultScenario, scenarioId))
+			if (!_analyticsScheduleChangeUpdaterFilter.ContinueProcessingEvent(scenario.DefaultScenario, scenarioCode))
 				return;
 
-			var analyticsScenario = _analyticsScenarioRepository.Get(scenarioId);
-			if (analyticsScenario == null)
-			{
-				logger.Warn($"Scenario with code {scenarioId} has not been inserted in analytics yet. Schedule changes for " +
-							$"agent {personId} is not saved into Analytics database.");
-				throw new ScenarioMissingInAnalyticsException();
-			}
+			var analyticsScenarioId = GetScenario(personId, scenarioCode);
 
 			var person = _personRepository.Get(personId);
 			if (person == null)
 				throw new PersonNotFoundException($"Could not load person {personId} from application database.");
 
-			updateForDates(dates(person), person, scenario, analyticsScenario.ScenarioId, businessUnitId, timestamp);
+			updateForDates(dates(person), person, scenario, analyticsScenarioId, businessUnitId, timestamp);
+		}
+
+		[AnalyticsUnitOfWork]
+		protected virtual int GetScenario(Guid personId, Guid scenarioCode)
+		{
+			var analyticsScenario = _analyticsScenarioRepository.Get(scenarioCode);
+			if (analyticsScenario == null)
+			{
+				logger.Warn($"Scenario with code {scenarioCode} has not been inserted in analytics yet. Schedule changes for " +
+							$"agent {personId} is not saved into Analytics database.");
+				throw new ScenarioMissingInAnalyticsException();
+			}
+
+			return analyticsScenario.ScenarioId;
 		}
 
 		private void updateForDates(IEnumerable<DateTime> dates, IPerson person, IScenario scenario, int scenarioId,
@@ -294,102 +321,117 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 			if (!dates.Any()) return;
 
 			var dateOnly = dates.Select(d => new DateOnly(d)).ToArray();
-			var dayOffs = _analyticsDayOffRepository.DayOffs();
+			IList<AnalyticsDayOff> dayOffs = null;
 			var schedule = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
 				new ScheduleDictionaryLoadOptions(true, true, true), new DateOnlyPeriod(dateOnly.Min(), dateOnly.Max()), scenario);
 			foreach (var date in dateOnly)
 			{
-				if (!_factScheduleDateMapper.MapDateId(date, out var dateId))
-				{
-					logger.Warn($"Date {date} could not be mapped to Analytics date_id. Schedule changes for " +
-								$"agent {person.Id.GetValueOrDefault()} is not saved into Analytics database.");
-					continue;
-				}
-				
-				var scheduleDay = schedule.SchedulesForDay(date).FirstOrDefault();
-				if (scheduleDay == null)
-				{
-					_analyticsScheduleRepository.DeleteFactSchedule(dateId, person.Id.GetValueOrDefault(), scenarioId);
-					continue;
-				}
-
-				var currentEventScheduleDay = _projectionChangedEventBuilder.BuildEventScheduleDay(scheduleDay);
-				if (currentEventScheduleDay == null)
-				{
-					logger.Warn($"No schedule found for {person.Id.GetValueOrDefault()} {date.Date:yyyy-MM-dd}");
-					continue;
-				}
-
-				var personPart = _factSchedulePersonMapper.Map(currentEventScheduleDay.PersonPeriodId);
-				if (personPart.PersonId == -1)
-				{
-					logger.Warn($"PersonPeriodId {currentEventScheduleDay.PersonPeriodId} could not be found. Schedule " +
-								$"changes for agent {person.Id.GetValueOrDefault()} is not saved into Analytics database.");
-					throw new PersonPeriodMissingInAnalyticsException(currentEventScheduleDay.PersonPeriodId);
-				}
-
-				_analyticsScheduleRepository.DeleteFactSchedule(dateId, person.Id.GetValueOrDefault(), scenarioId);
-
-				if (!currentEventScheduleDay.NotScheduled)
-				{
-					var shiftCategoryId = -1;
-					if (currentEventScheduleDay.Shift != null)
-						shiftCategoryId = getCategory(currentEventScheduleDay.ShiftCategoryId);
-					var dayCount = _factScheduleDayCountMapper.Map(currentEventScheduleDay, personPart, scenarioId, shiftCategoryId);
-					var agentDaySchedule = _factScheduleMapper.AgentDaySchedule(currentEventScheduleDay, scheduleDay, personPart,
-						timestamp, shiftCategoryId, scenarioId, scenario.Id.GetValueOrDefault(), person.Id.GetValueOrDefault());
-
-					if (agentDaySchedule == null)
-					{
-						continue;
-					}
-
-					if (dayCount != null)
-					{
-						if (dayCount.DayOffName != null)
-						{
-							var dayOff = scheduleDay.PersonAssignment().DayOff();
-
-							if (dayOffs.All(x => x.DayOffCode != dayOff.DayOffTemplateId))
-							{
-								_analyticsDayOffRepository.AddOrUpdate(new AnalyticsDayOff
-								{
-									DayOffCode = dayOff.DayOffTemplateId,
-									BusinessUnitId = dayCount.BusinessUnitId,
-									DayOffName = dayOff.Description.Name,
-									DayOffShortname = dayOff.Description.ShortName,
-									DisplayColor = dayOff.DisplayColor.ToArgb(),
-									DisplayColorHtml = ColorTranslator.ToHtml(dayOff.DisplayColor),
-									DatasourceUpdateDate = DateHelper.GetSmallDateTime(DateTime.UtcNow),
-									DatasourceId = 1
-								});
-							}
-
-							dayOffs = _analyticsDayOffRepository.DayOffs();
-							dayCount.DayOffId = dayOffs.Single(x => x.DayOffCode == dayOff.DayOffTemplateId).DayOffId;
-						}
-						else
-						{
-							dayCount.DayOffId = -1;
-						}
-
-						_analyticsScheduleRepository.PersistFactScheduleDayCountRow(dayCount);
-					}
-
-					_analyticsScheduleRepository.PersistFactScheduleBatch(agentDaySchedule);
-				}
-
-				if (scenario.DefaultScenario)
-				{
-					if (currentEventScheduleDay.Date < DateTime.Now.AddDays(1))
-					{
-						_analyticsScheduleRepository.InsertStageScheduleChangedServicebus(date, person.Id.GetValueOrDefault(),
-							scenario.Id.GetValueOrDefault(), businessUnitId, DateTime.Now);
-					}
-				}
+				dayOffs = UpdateForDate(person, scenario, scenarioId, businessUnitId, timestamp, date, schedule, dayOffs);
 			}
 		}
-		
+
+		[AnalyticsUnitOfWork]
+		protected virtual IList<AnalyticsDayOff> UpdateForDate(IPerson person, IScenario scenario, int scenarioId,
+			Guid businessUnitId, DateTime timestamp,
+			DateOnly date, IScheduleDictionary schedule, IList<AnalyticsDayOff> dayOffs)
+		{
+			if (!_factScheduleDateMapper.MapDateId(date, out var dateId))
+			{
+				logger.Warn($"Date {date} could not be mapped to Analytics date_id. Schedule changes for " +
+							$"agent {person.Id.GetValueOrDefault()} is not saved into Analytics database.");
+				return dayOffs;
+			}
+
+			var scheduleDay = schedule.SchedulesForDay(date).FirstOrDefault();
+			if (scheduleDay == null)
+			{
+				_analyticsScheduleRepository.DeleteFactSchedule(dateId, person.Id.GetValueOrDefault(), scenarioId);
+				return dayOffs;
+			}
+
+			var currentEventScheduleDay = _projectionChangedEventBuilder.BuildEventScheduleDay(scheduleDay);
+			if (currentEventScheduleDay == null)
+			{
+				logger.Warn($"No schedule found for {person.Id.GetValueOrDefault()} {date.Date:yyyy-MM-dd}");
+				return dayOffs;
+			}
+
+			var personPart = _factSchedulePersonMapper.Map(currentEventScheduleDay.PersonPeriodId);
+			if (personPart.PersonId == -1)
+			{
+				logger.Warn($"PersonPeriodId {currentEventScheduleDay.PersonPeriodId} could not be found. Schedule " +
+							$"changes for agent {person.Id.GetValueOrDefault()} is not saved into Analytics database.");
+				throw new PersonPeriodMissingInAnalyticsException(currentEventScheduleDay.PersonPeriodId);
+			}
+
+			_analyticsScheduleRepository.DeleteFactSchedule(dateId, person.Id.GetValueOrDefault(), scenarioId);
+
+			if (!currentEventScheduleDay.NotScheduled)
+			{
+				var shiftCategoryId = -1;
+				if (currentEventScheduleDay.Shift != null)
+					shiftCategoryId = getCategory(currentEventScheduleDay.ShiftCategoryId);
+				var dayCount = _factScheduleDayCountMapper.Map(currentEventScheduleDay, personPart, scenarioId, shiftCategoryId);
+				var agentDaySchedule = _factScheduleMapper.AgentDaySchedule(currentEventScheduleDay, scheduleDay, personPart,
+					timestamp, shiftCategoryId, scenarioId, scenario.Id.GetValueOrDefault(), person.Id.GetValueOrDefault());
+
+				if (agentDaySchedule == null)
+				{
+					return dayOffs;
+				}
+
+				if (dayCount != null)
+				{
+					if (dayCount.DayOffName != null)
+					{
+						if (dayOffs == null)
+						{
+							dayOffs = _analyticsDayOffRepository.DayOffs();
+						}
+
+						var dayOff = scheduleDay.PersonAssignment().DayOff();
+
+						if (dayOffs.All(x => x.DayOffCode != dayOff.DayOffTemplateId))
+						{
+							_analyticsDayOffRepository.AddOrUpdate(new AnalyticsDayOff
+							{
+								DayOffCode = dayOff.DayOffTemplateId,
+								BusinessUnitId = dayCount.BusinessUnitId,
+								DayOffName = dayOff.Description.Name,
+								DayOffShortname = dayOff.Description.ShortName,
+								DisplayColor = dayOff.DisplayColor.ToArgb(),
+								DisplayColorHtml = ColorTranslator.ToHtml(dayOff.DisplayColor),
+								DatasourceUpdateDate = DateHelper.GetSmallDateTime(DateTime.UtcNow),
+								DatasourceId = 1
+							});
+						}
+
+						dayOffs = _analyticsDayOffRepository.DayOffs();
+						dayCount.DayOffId = dayOffs.Single(x => x.DayOffCode == dayOff.DayOffTemplateId).DayOffId;
+					}
+					else
+					{
+						dayCount.DayOffId = -1;
+					}
+
+					_analyticsScheduleRepository.PersistFactScheduleDayCountRow(dayCount);
+				}
+
+				_analyticsScheduleRepository.PersistFactScheduleBatch(agentDaySchedule);
+			}
+
+			if (scenario.DefaultScenario)
+			{
+				if (currentEventScheduleDay.Date < DateTime.Now.AddDays(1))
+				{
+					_analyticsScheduleRepository.InsertStageScheduleChangedServicebus(date, person.Id.GetValueOrDefault(),
+						scenario.Id.GetValueOrDefault(), businessUnitId, DateTime.Now);
+				}
+			}
+
+			return dayOffs;
+		}
+
 		private int getCategory(Guid shiftCategoryCode)
 		{
 			var cat = _analyticsShiftCategoryRepository.ShiftCategory(shiftCategoryCode);

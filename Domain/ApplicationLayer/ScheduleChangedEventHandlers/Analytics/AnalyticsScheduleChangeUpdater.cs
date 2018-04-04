@@ -23,7 +23,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 
 		[ImpersonateSystem]
 		[UnitOfWork]
-		[AnalyticsUnitOfWork]
 		[Attempts(10)]
 		public virtual void Handle(ScheduleChangedEvent @event)
 		{
@@ -36,7 +35,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 
 		[ImpersonateSystem]
 		[UnitOfWork]
-		[AnalyticsUnitOfWork]
 		[Attempts(2)]
 		public virtual void Handle(ReloadSchedules @event)
 		{
