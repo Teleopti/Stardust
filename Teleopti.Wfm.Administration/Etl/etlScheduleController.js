@@ -1,12 +1,12 @@
-﻿(function () {
+(function () {
 	"use strict";
 
 	angular
-		.module("adminApp")
-		.controller("etlScheduleController", etlScheduleController, [
-			"$http",
-			"$timeout"
-		]);
+	.module("adminApp")
+	.controller("etlScheduleController", etlScheduleController, [
+		"$http",
+		"$timeout"
+	]);
 
 	function etlScheduleController($http, tokenHeaderService, $timeout) {
 		var vm = this;
@@ -15,21 +15,22 @@
 		vm.scheduleNameEnabled = true;
 		vm.scheduleToEdit;
 		vm.frequencyType = false;
+		vm.language = navigator.language || navigator.userLanguage;
 
 		vm.toggleFrequencyType = toggleFrequencyType;
 
 		(function init() {
-			//getScheduledJobs();
+			getScheduledJobs();
 		})();
 
-		//function getScheduledJobs() {
-		//	vm.schedules = null;
-		//	$http
-		//		.get("./Etl/ScheduledJobs", tokenHeaderService.getHeaders())
-		//		.success(function (data) {
-		//			vm.schedules = data;
-		//		});
-		//}
+		function getScheduledJobs() {
+			vm.schedules = null;
+			$http
+			.get("./Etl/ScheduledJobs", tokenHeaderService.getHeaders())
+			.success(function (data) {
+				vm.schedules = data;
+			});
+		}
 
 		function toggleFrequencyType() {
 			if (vm.frequencyType) {
@@ -48,6 +49,3 @@
 		}
 	}
 })();
-
-
-
