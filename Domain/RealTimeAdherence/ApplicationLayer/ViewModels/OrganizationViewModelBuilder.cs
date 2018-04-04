@@ -54,7 +54,6 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels
 				{
 					Id = s.SiteId,
 					Name = s.SiteName,
-					FullPermission = isPermittedSite,
 					Teams =
 						from t in teams
 						orderby t.TeamName
@@ -71,9 +70,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels
 	public class OrganizationSiteViewModel
 	{
 		public Guid Id { get; set; }
-		public bool FullPermission { get; set; }
 		public string Name { get; set; }
-	
 
 		public IEnumerable<OrganizationTeamViewModel> Teams;
 	}
