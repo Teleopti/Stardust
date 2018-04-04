@@ -49,10 +49,18 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 				{
 					Id = x.DataSourceId,
 					Name = x.DataSourceName,
-					TimeZoneCode = x.TimeZoneCode
-				})
+					TimeZoneCode = x.TimeZoneCode,
+					IntervalLength = x.IntervalLength,
+					IsIntervalLengthSameAsTenant = isIntervalLengthValid(x.IntervalLength)
+			})
 				.OrderBy(x => x.Name)
 				.ToList();
+		}
+
+		private bool isIntervalLengthValid(int argIntervalLength)
+		{
+			var baseConfiguration = _generalFunctions.LoadBaseConfiguration();
+			return argIntervalLength == baseConfiguration.IntervalLength;
 		}
 	}
 
@@ -61,6 +69,8 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 		public int Id { get; set; }
 		public string Name { get; set; }
 		public string TimeZoneCode { get; set; }
+		public int IntervalLength { get; set; }
+		public bool IsIntervalLengthSameAsTenant { get; set; }
 	}
 
 	public class TenantDataSourceModel

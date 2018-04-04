@@ -138,15 +138,23 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 		[Test]
 		public void ShouldReturnAllTenantLogDataSources()
 		{
+			BaseConfigurationRepository.SaveBaseConfiguration(connectionString,
+				new BaseConfiguration(1053, 15, timezoneName, false));
 			AllTenants.HasWithAnalyticsConnectionString(testTenantName, connectionString);
-			GeneralInfrastructure.HasDataSources(new DataSourceEtl(3, "myDs", 1, "UTC", 15, false));
+			GeneralInfrastructure.HasDataSources(new DataSourceEtl(3, "myDs", 1, "UTC", 60, false));
 			GeneralInfrastructure.HasDataSources(new DataSourceEtl(4, "anotherDs", FakeGeneralInfrastructure.NullTimeZoneId,
 				null, 15, false));
 
 			var result = (OkNegotiatedContentResult<IList<DataSourceModel>>)Target.TenantAllLogDataSources(testTenantName);
+			var myds = result.Content.Single(x => x.Id == 3 && x.Name == "myDs");
+			var anotherDs = result.Content.Single(x => x.Id == 4 && x.Name == "anotherDs");
 			result.Content.Count.Should().Be(2);
-			result.Content.Single(x => x.Id == 3 && x.Name == "myDs").TimeZoneCode.Should().Be("UTC");
-			result.Content.Single(x => x.Id == 4 && x.Name == "anotherDs").TimeZoneCode.Should().Be(null);
+			myds.TimeZoneCode.Should().Be("UTC");
+			myds.IntervalLength.Should().Be(60);
+			myds.IsIntervalLengthSameAsTenant.Should().Be(false);
+			anotherDs.TimeZoneCode.Should().Be(null);
+			anotherDs.IntervalLength.Should().Be(15);
+			anotherDs.IsIntervalLengthSameAsTenant.Should().Be(true);
 		}
 
 		[Test]
