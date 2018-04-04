@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 			var selectedMatrixes = new List<IScheduleMatrixPro>();
 			foreach (var scheduleMatrixPro in matrixes)
 			{
-				if(selectedPersons.Contains(scheduleMatrixPro.Person) && scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod.Intersection(selectedPeriod).HasValue)
+				if (selectedPersons.Contains(scheduleMatrixPro.Person) && selectedPeriod.Contains(scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod))
 					selectedMatrixes.Add(scheduleMatrixPro);
 			}
 			_missingDayOffHandling.Execute(schedulingCallback, selectedMatrixes, schedulingOptions, rollbackService);

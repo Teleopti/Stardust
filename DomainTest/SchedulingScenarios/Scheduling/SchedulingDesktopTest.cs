@@ -274,7 +274,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 
 		[Test]
-		[Ignore("#75170 - to be fixed")]
 		public void ShouldNotPlaceMissingDayOffsOnPartlySelectedSchedulePeriod()
 		{
 			var period = new DateOnlyPeriod(new DateOnly(2018, 2, 1), new DateOnly(2018, 3, 4));
