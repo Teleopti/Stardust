@@ -81,16 +81,16 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr ng-repeat="logData in vm.tenantLogData">
-							<th scope="row" ng-if="logData.TimeZoneCode">✓</th>
-							<th scope="row" ng-if="!logData.TimeZoneCode">✗</th>
+						<tr ng-repeat="logData in vm.tenantLogData" ng-class="{'unmatched':!logData.IsIntervalLengthSameAsTenant}">
+							<th scope="row" ng-if="logData.TimeZoneCode">✓ <span ng-if="!logData.IsIntervalLengthSameAsTenant">Interval length not matching with tenant interval length.</span></th>
+							<th scope="row" ng-if="!logData.TimeZoneCode">✗ <span ng-if="!logData.IsIntervalLengthSameAsTenant">Interval length not matching with tenant interval length.</span></th>
 							<td>{{logData.Name}}</td>
 							<td>
-								<select ng-if="!logData.timezone" class="form-control" ng-options="timezone.Id as timezone.Text for timezone in vm.TimeZoneCodes" ng-model="logData.TimeZoneCode">
+								<select ng-if="!logData.timezone" ng-disabled="!logData.IsIntervalLengthSameAsTenant" class="form-control" ng-options="timezone.Id as timezone.Text for timezone in vm.TimeZoneCodes" ng-model="logData.TimeZoneCode">
 									<option ng-show="!logData.selectedTimezone" value="">- Select time zone</option>
 								</select>
 							</td>
-							<td>{{vm.selectedTenant.BaseConfig.IntervalLength}}</td>
+							<td>{{logData.IntervalLength}}</td>
 						</tr>
 					</tbody>
 				</table>

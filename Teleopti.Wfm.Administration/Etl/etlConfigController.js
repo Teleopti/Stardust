@@ -50,7 +50,6 @@
       )
       .success(function(data) {
         vm.tenantLogData = data;
-        console.log(data);
 
         $http
         .get("./Etl/GetConfigurationModel", tokenHeaderService.getHeaders())
