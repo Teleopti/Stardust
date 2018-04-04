@@ -17,6 +17,7 @@ using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
@@ -31,7 +32,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Concurrency
 	[Toggle(Toggles.ETL_EventbasedDate_39562)]
 	[TestFixture(true)]
 	[TestFixture(false)]
-	public class AnalyticsScheduleChangeUpdaterTest : ISetup
+	public class AnalyticsScheduleChangeUpdaterTest : ISetup, IConfigureToggleManager
 	{
 		private readonly bool _resourcePlannerSpeedUpEvents48769;
 		public AnalyticsScheduleChangeUpdater Target;
@@ -54,7 +55,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Concurrency
 		
 		[Test]
 		[Timeout(7000)]
-		[Ignore("FAiling test for #75053")]
+		[Ignore("Failing test for #75053")]
 		public void ShouldNotHangWhenMultipleThreadsCallingMultipleDates()
 		{
 			var targetDate = new DateTime(2010, 1, 5, 0,0,0,DateTimeKind.Utc);
@@ -94,15 +95,16 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Concurrency
 				}));
 
 			Task.WaitAll(tasksToRunInParallell.ToArray());
-			
+		}
+		
+		public void Configure(FakeToggleManager toggleManager)
+		{
+			if (_resourcePlannerSpeedUpEvents48769)
+				toggleManager.Enable(Toggles.ResourcePlanner_SpeedUpEvents_48769);
 		}
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			if (_resourcePlannerSpeedUpEvents48769)
-			{
-				configuration.Toggle(Toggles.ResourcePlanner_SpeedUpEvents_48769);				
-			}
 			system.UseTestDouble<fakeAwayAnalyticsStuffTooHardToSetItUp>()
 				.For<IAnalyticsScheduleRepository, IIntervalLengthFetcher, IAnalyticsPersonPeriodRepository, IAnalyticsScenarioRepository>();
 		}
