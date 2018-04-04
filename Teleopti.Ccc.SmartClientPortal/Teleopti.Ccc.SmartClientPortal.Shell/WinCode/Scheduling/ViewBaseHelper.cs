@@ -430,6 +430,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 				return;
 			}
 
+			var employmentType = person?.Period(openPeriod.StartDate).PersonContract.Contract.EmploymentType;
+			if (employmentType != null && employmentType.Equals(EmploymentType.HourlyStaff))
+			{
+				setCellNotApplicable(style);
+				return;
+			}
+
 			style.CellType = "TotalTimeCell";
 			style.CellValue = wholeRange.CalculatedTargetTimeHolder(openPeriod);
 
@@ -452,6 +459,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 			}
 
 			if (!CheckOverrideDayOffAndLoadedAndScheduledPeriod(person, openPeriod))
+			{
+				setCellNotApplicable(style);
+				return;
+			}
+
+			if (person.Period(openPeriod.StartDate).PersonContract.Contract.EmploymentType.Equals(EmploymentType.HourlyStaff))
 			{
 				setCellNotApplicable(style);
 				return;

@@ -545,7 +545,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		}
 
 		[Test]
-		[Ignore("75323 - to be fixed")]
 		public void ShouldSetCellValueTargetTimeToNaWhenHourlyEmployee()
 		{
 			var scenario = new Scenario();
@@ -564,7 +563,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		}
 
 		[Test]
-		[Ignore("75323 - to be fixed")]
 		public void ShouldSetCellValueTargetDayOffToNaWhenHourlyEmployee()
 		{
 			var scenario = new Scenario();
