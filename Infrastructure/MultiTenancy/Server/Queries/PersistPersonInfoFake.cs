@@ -7,24 +7,28 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 	{
 		private bool _rollbacked = false;
 
-		public void Persist(PersonInfo personInfo)
+		public string Persist(PersonInfo personInfo, bool throwOnError)
 		{
 			LastPersist = personInfo;
 			if (personInfo.ApplicationLogonInfo.LogonName == "existingId@teleopti.com")
 			{
-				throw new DuplicateApplicationLogonNameException(Guid.NewGuid());
+				if (throwOnError)
+				{
+					throw new DuplicateApplicationLogonNameException(Guid.NewGuid());
+				}
+				else
+				{
+					return "ErrorMessageString";
+				}
 			}
+			return null;
 		}
 
 		public PersonInfo LastPersist { get; private set; }
+
 		public void RollBackPersonInfo(Guid personInfoId, string tenantName)
 		{
 			_rollbacked = true;
-		}
-
-		public string PersistEx(PersonInfo personInfo)
-		{
-			throw new NotImplementedException();
 		}
 
 		public bool RollBacked => _rollbacked;

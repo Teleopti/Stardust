@@ -4,8 +4,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 {
 	public interface IPersistPersonInfo
 	{
-		void Persist(PersonInfo personInfo);
-		string PersistEx(PersonInfo personInfo);
+		string Persist(PersonInfo personInfo, bool throwOnError = true);
 		void RollBackPersonInfo(Guid personInfoId, string tenantName);
 	}
 }

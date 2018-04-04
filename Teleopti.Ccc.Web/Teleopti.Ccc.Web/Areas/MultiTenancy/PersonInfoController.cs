@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 			var ret = new PersistPersonInfoResult();
 			try
 			{
-				PersistInternal(personInfoModel);
+				PersistInternal(personInfoModel); 
 			}
 			catch (PasswordStrengthException)
 			{
@@ -62,11 +62,10 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 		public virtual IHttpActionResult PersistApplicationLogonNames(PersonApplicationLogonInputModel personApplicationLogonInputModel)
 		{
 			var resultModel = new PersonInfoGenericResultModel();
-			// If locking db will be a problem here we might have to do some prevalidation, instead of validating on each update in the transaction.
 			foreach (var person in personApplicationLogonInputModel.People)
 			{
 				var personObj = new PersonInfoModel { PersonId = person.PersonId, ApplicationLogonName = person.ApplicationLogonName };
-				var persistResult = _persister.PersistEx(_mapper.Map(personObj));
+				var persistResult = _persister.Persist(_mapper.Map(personObj), throwOnError: false);
 
 				if (!string.IsNullOrEmpty(persistResult))
 				{

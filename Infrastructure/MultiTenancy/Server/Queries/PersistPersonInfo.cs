@@ -16,34 +16,9 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 			_personInfoPersister = personInfoPersister;
 		}
 
-		public void Persist(PersonInfo personInfo)
+		public string Persist(PersonInfo personInfo, bool throwOnError = true)
 		{
-			if (personInfo.Id == Guid.Empty)
-				throw new ArgumentException("Missing explicitly set id on personInfo object.");
-
-			var session = _currentTenantSession.CurrentSession();
-
-			if (!string.IsNullOrEmpty(personInfo.ApplicationLogonInfo.LogonName))
-			{
-				//if already exists
-				var isUnique = _personInfoPersister.ValidateApplicationLogonNameIsUnique(personInfo);
-				if (!isUnique)
-					throw new DuplicateApplicationLogonNameException(personInfo.Id);
-			}
-			if (!string.IsNullOrEmpty(personInfo.Identity))
-			{
-				//if already exists
-				var isUnique = _personInfoPersister.ValidateIdenitityIsUnique(personInfo);
-				if (!isUnique)
-					throw new DuplicateIdentityException(personInfo.Id);
-			}
-
-			_personInfoPersister.Persist(personInfo);
-		}
-
-		public string PersistEx(PersonInfo personInfo)
-		{
-			var res = ValidatePersonInfo(personInfo);
+			var res = ValidatePersonInfo(personInfo, throwOnError);
 
 			if (!string.IsNullOrEmpty(res))
 			{
@@ -54,7 +29,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 			return null;
 		}
 
-		private string ValidatePersonInfo(PersonInfo personInfo)
+		private string ValidatePersonInfo(PersonInfo personInfo, bool throwOnError = false)
 		{
 			if (personInfo.Id == Guid.Empty)
 				throw new ArgumentException("Missing explicitly set id on personInfo object.");
@@ -63,13 +38,19 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 			{
 				var isUnique = _personInfoPersister.ValidateApplicationLogonNameIsUnique(personInfo);
 				if (!isUnique)
+				{
+					if (throwOnError) throw new DuplicateApplicationLogonNameException(personInfo.Id);
 					return string.Format(Resources.ApplicationLogonExists, personInfo.ApplicationLogonInfo.LogonName);
+				}
 			}
 			if (!string.IsNullOrEmpty(personInfo.Identity))
 			{
 				var isUnique = _personInfoPersister.ValidateIdenitityIsUnique(personInfo);
 				if (!isUnique)
+				{
+					if (throwOnError) throw new DuplicateIdentityException(personInfo.Id);
 					return string.Format(Resources.IdentityLogonExists, personInfo.Identity);
+				}
 			}
 
 			return null;
