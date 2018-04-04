@@ -190,7 +190,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAccount
 			acc2.LatestCalculatedBalance.Should().Be.EqualTo(TimeSpan.FromHours(4));
 			acc2.Remaining.Should().Be.EqualTo(TimeSpan.FromHours(26));
 		}
+		
 	}
-
 
 }
