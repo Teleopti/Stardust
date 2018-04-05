@@ -319,6 +319,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 				.Where(x => x.ScheduleType != JobScheduleType.Manual)
 				.Select(job => new EtlScheduleJobModel
 					{
+						ScheduleId = job.ScheduleId,
 						ScheduleName = job.ScheduleName,
 						Description = job.Description,
 						JobName = job.JobName,

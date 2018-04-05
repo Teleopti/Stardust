@@ -791,37 +791,39 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 		[Test]
 		public void ShouldGetScheduledJobs()
 		{
-			var dailyOneTimeJob = new EtlJobSchedule(1, "My Nightly job", true, 60, "Nightly", 1, "Desc", null, null, "tenant A");
-			var dailyPeriodicJob = new EtlJobSchedule(2, "My Intraday job", true, 30, 120, 1320, "Intraday", 1, "Run Intraday job", null, DateTime.Now, null, "tenant A");
+			var dailyJob = new EtlJobSchedule(1, "My Nightly job", true, 60, "Nightly", 1, "Desc", null, null, "tenant A");
+			var periodicJob = new EtlJobSchedule(2, "My Intraday job", true, 30, 120, 1320, "Intraday", 1, "Run Intraday job", null, DateTime.Now, null, "tenant A");
 			var manualJobNotToBeLoaded = new EtlJobSchedule(3, "Manual ETL", "Schedule", true, 1, "Manually enqueued job", DateTime.Now, null, "tenant A");
-			JobScheduleRepository.SaveSchedule(dailyOneTimeJob);
-			JobScheduleRepository.SaveSchedule(dailyPeriodicJob);
+			JobScheduleRepository.SaveSchedule(dailyJob);
+			JobScheduleRepository.SaveSchedule(periodicJob);
 			JobScheduleRepository.SaveSchedule(manualJobNotToBeLoaded);
 
-			var scheduledJobs = (OkNegotiatedContentResult<List<EtlScheduleJobModel>>)Target.ScheduledJobs();
+			var savedScheduledJobs = (OkNegotiatedContentResult<List<EtlScheduleJobModel>>)Target.ScheduledJobs();
 
-			scheduledJobs.Should().Be.OfType<OkNegotiatedContentResult<List<EtlScheduleJobModel>>>();
-			scheduledJobs.Content.Count.Should().Be(2);
+			savedScheduledJobs.Should().Be.OfType<OkNegotiatedContentResult<List<EtlScheduleJobModel>>>();
+			savedScheduledJobs.Content.Count.Should().Be(2);
 
-			var oneTimeJob = scheduledJobs.Content.First();
-			oneTimeJob.ScheduleName.Should().Be(dailyOneTimeJob.ScheduleName);
-			oneTimeJob.Description.Should().Be(dailyOneTimeJob.Description);
-			oneTimeJob.JobName.Should().Be(dailyOneTimeJob.JobName);
-			oneTimeJob.Enabled.Should().Be(dailyOneTimeJob.Enabled);
-			oneTimeJob.Tenant.Should().Be(dailyOneTimeJob.TenantName);
-			oneTimeJob.DailyFrequencyStart.Should().Be(DateTime.MinValue.AddMinutes(dailyOneTimeJob.OccursOnceAt));
-			oneTimeJob.DailyFrequencyEnd.Should().Be(DateTime.MinValue);
-			oneTimeJob.DailyFrequencyMinute.Should().Be(string.Empty);
+			var savedDailyJob = savedScheduledJobs.Content.First();
+			savedDailyJob.ScheduleId.Should().Be(dailyJob.ScheduleId);
+			savedDailyJob.ScheduleName.Should().Be(dailyJob.ScheduleName);
+			savedDailyJob.Description.Should().Be(dailyJob.Description);
+			savedDailyJob.JobName.Should().Be(dailyJob.JobName);
+			savedDailyJob.Enabled.Should().Be(dailyJob.Enabled);
+			savedDailyJob.Tenant.Should().Be(dailyJob.TenantName);
+			savedDailyJob.DailyFrequencyStart.Should().Be(DateTime.MinValue.AddMinutes(dailyJob.OccursOnceAt));
+			savedDailyJob.DailyFrequencyEnd.Should().Be(DateTime.MinValue);
+			savedDailyJob.DailyFrequencyMinute.Should().Be(string.Empty);
 
-			var periodicJob = scheduledJobs.Content.Last();
-			periodicJob.ScheduleName.Should().Be(dailyPeriodicJob.ScheduleName);
-			periodicJob.Description.Should().Be(dailyPeriodicJob.Description);
-			periodicJob.JobName.Should().Be(dailyPeriodicJob.JobName);
-			periodicJob.Enabled.Should().Be(dailyPeriodicJob.Enabled);
-			periodicJob.Tenant.Should().Be(dailyPeriodicJob.TenantName);
-			periodicJob.DailyFrequencyStart.Should().Be(DateTime.MinValue.AddMinutes(dailyPeriodicJob.OccursEveryMinuteStartingAt));
-			periodicJob.DailyFrequencyEnd.Should().Be(DateTime.MinValue.AddMinutes(dailyPeriodicJob.OccursEveryMinuteEndingAt));
-			periodicJob.DailyFrequencyMinute.Should().Be(dailyPeriodicJob.OccursEveryMinute.ToString());
+			var savedPeriodicJob = savedScheduledJobs.Content.Last();
+			savedPeriodicJob.ScheduleId.Should().Be(periodicJob.ScheduleId);
+			savedPeriodicJob.ScheduleName.Should().Be(periodicJob.ScheduleName);
+			savedPeriodicJob.Description.Should().Be(periodicJob.Description);
+			savedPeriodicJob.JobName.Should().Be(periodicJob.JobName);
+			savedPeriodicJob.Enabled.Should().Be(periodicJob.Enabled);
+			savedPeriodicJob.Tenant.Should().Be(periodicJob.TenantName);
+			savedPeriodicJob.DailyFrequencyStart.Should().Be(DateTime.MinValue.AddMinutes(periodicJob.OccursEveryMinuteStartingAt));
+			savedPeriodicJob.DailyFrequencyEnd.Should().Be(DateTime.MinValue.AddMinutes(periodicJob.OccursEveryMinuteEndingAt));
+			savedPeriodicJob.DailyFrequencyMinute.Should().Be(periodicJob.OccursEveryMinute.ToString());
 		}
 
 		[Test]
