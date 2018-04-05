@@ -158,5 +158,11 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 			etlJobSchedule.SetScheduleIdOnPersistedItem(scheduleId);
 			_jobScheduleRepository.SaveSchedulePeriods(etlJobSchedule);
 		}
+
+		public void ToggleScheduleJobEnabledState(int scheduleId)
+		{
+			_jobScheduleRepository.SetDataMartConnectionString(_configReader.ConnectionString("Hangfire"));
+			_jobScheduleRepository.ToggleScheduleJobEnabledState(scheduleId);
+		}
 	}
 }

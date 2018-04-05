@@ -25,5 +25,6 @@ namespace Teleopti.Analytics.Etl.Common.Interfaces.Common
 		DateTime InsertDate { get; }
 		string TenantName { get; set; }
 		void SetScheduleIdOnPersistedItem(int scheduleId);
-    }
+		void SetEnabled(bool value);
+	}
 }

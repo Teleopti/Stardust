@@ -172,11 +172,11 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			dataMartConnectionString = connectionString;
 		}
 
-		public void DisableScheduleJob(int scheduleId)
+		public void ToggleScheduleJobEnabledState(int scheduleId)
 		{
 			var parameterList = new[] { new SqlParameter("schedule_id", scheduleId) };
 
-			HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_job_disable_schedule", parameterList,
+			HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_job_schedule_toggle_enable_state", parameterList,
 				dataMartConnectionString);
 		}
 		private static JobCategoryType getJobCategory(string jobName)

@@ -1,0 +1,1 @@
+DROP PROCEDURE [Mart].[etl_job_disable_schedule]

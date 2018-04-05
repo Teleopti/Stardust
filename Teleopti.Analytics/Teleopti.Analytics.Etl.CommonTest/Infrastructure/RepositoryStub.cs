@@ -61,7 +61,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Infrastructure
 			throw new NotImplementedException();
 		}
 
-		public void DisableScheduleJob(int scheduleId)
+		public void ToggleScheduleJobEnabledState(int scheduleId)
 		{
 			throw new NotImplementedException();
 		}

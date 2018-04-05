@@ -31,5 +31,10 @@ namespace Teleopti.Analytics.Etl.CommonTest.Service
 		{
 			throw new NotImplementedException();
 		}
+
+		public void SetEnabled(bool value)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

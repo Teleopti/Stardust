@@ -52,9 +52,10 @@ namespace Teleopti.Wfm.AdministrationTest.FakeData
 			
 		}
 
-		public void DisableScheduleJob(int scheduleId)
+		public void ToggleScheduleJobEnabledState(int scheduleId)
 		{
-			throw new NotImplementedException();
+			var scheduleToToggle = _etlJobSchedules.FirstOrDefault(x => x.ScheduleId == scheduleId);
+			scheduleToToggle?.SetEnabled(!scheduleToToggle.Enabled);
 		}
 	}
 }

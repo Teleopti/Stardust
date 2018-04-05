@@ -171,7 +171,7 @@ namespace Teleopti.Analytics.Etl.Common.Service
 
 					if (scheduleJob.ScheduleType == JobScheduleType.Manual)
 					{
-						jobScheduleRepository.DisableScheduleJob(scheduleJob.ScheduleId);
+						jobScheduleRepository.ToggleScheduleJobEnabledState(scheduleJob.ScheduleId);
 					}
 				}
 			}

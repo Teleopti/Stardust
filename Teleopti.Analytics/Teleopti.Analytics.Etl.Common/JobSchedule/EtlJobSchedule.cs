@@ -208,5 +208,10 @@ namespace Teleopti.Analytics.Etl.Common.JobSchedule
         public string Description { get; private set; }
 		public DateTime InsertDate { get; }
 		public string TenantName { get; set; }
+
+		public void SetEnabled(bool value)
+		{
+			Enabled = value;
+		}
 	}
 }

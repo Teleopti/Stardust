@@ -1006,6 +1006,29 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			savedSchedulePeriod.RelativePeriod.Maximum.Should().Be(editedScheduleModel.RelativePeriods.Single().End);
 		}
 
+		[Test]
+		public void ShouldDisableScheduledJob()
+		{
+			var existingSchedule = new EtlJobSchedule(
+				3,
+				"My Schedule data Job",
+				true,
+				360,
+				"My job",
+				1,
+				"Desc",
+				null,
+				null,
+				"My tenant");
+			JobScheduleRepository.SaveSchedule(existingSchedule);
+
+			var result = Target.ToggleScheduleJob(existingSchedule.ScheduleId);
+
+			result.Should().Be.OfType<OkResult>();
+
+			var savedSchedule = JobScheduleRepository.GetSchedules(null, DateTime.MinValue).Single();
+			savedSchedule.Enabled.Should().Be.False();
+		}
 
 		private IEnumerable<JobCollectionModel> getJobs(string tenantName, bool toggle38131Enabled, bool pmInstalled)
 		{

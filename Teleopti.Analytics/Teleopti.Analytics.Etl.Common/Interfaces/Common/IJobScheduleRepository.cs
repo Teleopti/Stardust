@@ -12,7 +12,7 @@ namespace Teleopti.Analytics.Etl.Common.Interfaces.Common
         IList<IEtlJobRelativePeriod> GetSchedulePeriods(int scheduleId);
         void SaveSchedulePeriods(IEtlJobSchedule etlJobScheduleItem);
 		void SetDataMartConnectionString(string connectionString);
-		void DisableScheduleJob(int scheduleId);
+		void ToggleScheduleJobEnabledState(int scheduleId);
 	}
 
 	
