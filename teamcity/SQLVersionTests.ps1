@@ -410,17 +410,53 @@ function global:ScriptedTestsRunOnAllDBs () {
     
     if (!($global:SQLEdition -eq $SQLAzure)) {
 
+		#Check MartDB
 		$ConnectionString = "Data Source=$global:SQLServerInstance;Initial Catalog=$MartDB;User Id=$global:AdminSqlLogin;Password=$global:AdminSqlPwd"
-		$query = Get-Content "$WorkingDirectory\..\Database\Tools\PK-namingStandard.sql"
-    
+		$query = Get-Content "$WorkingDirectory\..\Database\Tools\PK-namingStandard.sql" | Out-String
+        
 		Log "Running script: [PK-namingStandard.sql] on [$MartDB]" 
-		RunAndRetryNonQuery $ConnectionString $query
+		$PkResults = RunAndRetrySqlQuery $ConnectionString $query
 
+        if (!($PkResults -eq $null))
+        {
+            Log "The following issue where found on [$MartDB]:"
+            Log "$pkresults.resultline"
+            #exit 1
+        }
+		
+		#Check AppDB 
 		$ConnectionString = "Data Source=$global:SQLServerInstance;Initial Catalog=$AppDB;User Id=$global:AdminSqlLogin;Password=$global:AdminSqlPwd"
-		$query = Get-Content "$WorkingDirectory\..\Database\Tools\NoHeapsCheck.sql"
+		$query = Get-Content "$WorkingDirectory\..\Database\Tools\PK-namingStandard.sql" | Out-String
+		
+		Log "Running script: [PK-namingStandard.sql] on [$AppDB]"
+		$PkResults = RunAndRetrySqlQuery $ConnectionString $query
+		
+		if (!($PkResults -eq $null))
+        {
+            Log "The following issue where found on [$AppDB]:"
+            Log "$pkresults.resultline"
+            #exit 1
+        }
+		
+		#Check AggDB
+		$ConnectionString = "Data Source=$global:SQLServerInstance;Initial Catalog=$global:AggDB;User Id=$global:AdminSqlLogin;Password=$global:AdminSqlPwd"
+		$query = Get-Content "$WorkingDirectory\..\Database\Tools\PK-namingStandard.sql" | Out-String
+		
+		Log "Running script: [PK-namingStandard.sql] on [$global:AggDB]"
+		$PkResults = RunAndRetrySqlQuery $ConnectionString $query
+		
+		if (!($PkResults -eq $null))
+        {
+            Log "The following issue where found on [$global:AggDB]:"
+            Log "$pkresults.resultline"
+            #exit 1
+        }
+		
+		$ConnectionString = "Data Source=$global:SQLServerInstance;Initial Catalog=$AppDB;User Id=$global:AdminSqlLogin;Password=$global:AdminSqlPwd"
+		$query = Get-Content "$WorkingDirectory\..\Database\Tools\NoHeapsCheck.sql" | Out-String
     
 		Log "Running script: [NoHeapsCheck.sql] on [$AppDB]"
-		RunAndRetryNonQuery $ConnectionString $query
+		RunAndRetrySqlQuery $ConnectionString $query
     }
 }
 
