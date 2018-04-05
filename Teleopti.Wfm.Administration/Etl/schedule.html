@@ -1,4 +1,5 @@
 <br/>
+<b>Scheduled jobs</b>
 <div ng-controller="etlScheduleController as vm">
 	<div class="panel panel-default">
 		<div class="panel-heading" style="display: inline-flex;">
@@ -19,17 +20,41 @@
 					<table class="table">
 						<thead>
 							<tr>
-								<th scope="col">Schedule name</th>
-								<th scope="col">Description</th>
-								<th scope="col">Job name</th>
-								<th scope="col">Tenant</th>
-								<th scope="col">Daily frequency</th>
-								<th scope="col">Enabled</th>
+								<th scope="col" ng-click="sortType = 'ScheduleName'; sortReverse = !sortReverse">
+										Schedule name
+										<span ng-show="sortType == 'ScheduleName' && !sortReverse">▾</span>
+										<span ng-show="sortType == 'ScheduleName' && sortReverse">▴</span>
+								</th>
+								<th scope="col" ng-click="sortType = 'Description'; sortReverse = !sortReverse">
+										Description
+										<span ng-show="sortType == 'Description' && !sortReverse">▾</span>
+										<span ng-show="sortType == 'Description' && sortReverse">▴</span>
+								</th>
+								<th scope="col" ng-click="sortType = 'JobName'; sortReverse = !sortReverse">
+										Job name
+										<span ng-show="sortType == 'JobName' && !sortReverse">▾</span>
+										<span ng-show="sortType == 'JobName' && sortReverse">▴</span>
+								</th>
+								<th scope="col" ng-click="sortType = 'Tenant'; sortReverse = !sortReverse">
+										Tenant
+										<span ng-show="sortType == 'Tenant' && !sortReverse">▾</span>
+										<span ng-show="sortType == 'Tenant' && sortReverse">▴</span>
+								</th>
+								<th scope="col" ng-click="sortType = 'DailyFrequencyStart'; sortReverse = !sortReverse">
+										Daily frequency
+										<span ng-show="sortType == 'DailyFrequencyStart' && !sortReverse">▾</span>
+										<span ng-show="sortType == 'DailyFrequencyStart' && sortReverse">▴</span>
+								</th>
+								<th scope="col" ng-click="sortType = 'Enabled'; sortReverse = !sortReverse">
+										Enabled
+										<span ng-show="sortType == 'Enabled' && !sortReverse">▾</span>
+										<span ng-show="sortType == 'Enabled' && sortReverse">▴</span>
+								</th>
 								<th scope="col">Actions</th>
 							</tr>
 						</thead>
 
-						<tbody ng-repeat="job in vm.schedules | filter: scheduleFilter ">
+						<tbody ng-repeat="job in vm.schedules | filter: scheduleFilter | orderBy:sortType:sortReverse ">
 							<tr>
 								<td>
 									<!-- {{job}} -->
@@ -47,7 +72,6 @@
 								<td>
 									<span ng-if="job.DailyFrequencyMinute">Occurs every {{job.DailyFrequencyMinute}} minute(s) between {{job.DailyFrequencyStart | date: 'shortTime'}} and {{job.DailyFrequencyEnd | date: 'shortTime'}}</span>
 									<span ng-if="!job.DailyFrequencyMinute">Occurs every day between {{job.DailyFrequencyStart  | date: 'shortTime'}} and {{job.DailyFrequencyEnd  | date: 'shortTime'}}</span>
-
 								</td>
 								<td>
 									<span ng-click="job.Enabled = !job.Enabled">
