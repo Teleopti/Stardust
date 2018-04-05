@@ -309,33 +309,6 @@ namespace Teleopti.Wfm.Administration.Controllers
 					+ $"{string.Join(", ", dataSourceNotPersisted)}.")
 				: Ok();
 		}
-		
-		private List<JobEnqueModel> createJobToEnqueue(string tenantName, string jobName, JobCategoryType jobCategoryName,
-			int datasourceId, DateTime startDate, DateTime endDate)
-		{
-			var jobs = new List<JobEnqueModel>();
-			for (var start = startDate; start < endDate; start= start.AddDays(30))
-			{
-				jobs.Add(
-					new JobEnqueModel
-					{
-						JobName = jobName,
-						JobPeriods = new List<JobPeriod>
-						{
-							new JobPeriod
-							{
-								Start = start,
-								End = start.AddDays(30) > endDate ? endDate: start.AddDays(30),
-								JobCategoryName = jobCategoryName.ToString(),
-							}
-						},
-						LogDataSourceId = datasourceId,
-						TenantName = tenantName
-					}
-				);
-			}
-			return jobs;
-		}
 
 		[TenantUnitOfWork]
 		[HttpGet, Route("Etl/ScheduledJobs")]
@@ -376,26 +349,32 @@ namespace Teleopti.Wfm.Administration.Controllers
 			
 			return Ok();
 		}
-
-
-		private EtlJobEnqueModel createJobToEnqueue(string tenantName, string jobName, JobCategoryType jobCategoryName,
+		
+		private static List<EtlJobEnqueModel> createJobToEnqueue(string tenantName, string jobName, JobCategoryType jobCategoryName,
 			int datasourceId, DateTime startDate, DateTime endDate)
 		{
-			return new EtlJobEnqueModel
+			var jobs = new List<EtlJobEnqueModel>();
+			for (var start = startDate; start < endDate; start = start.AddDays(30))
 			{
-				JobName = jobName,
-				JobPeriods = new List<JobPeriodDate>
-				{
-					new JobPeriodDate
+				jobs.Add(
+					new EtlJobEnqueModel
 					{
-						Start = startDate,
-						End = endDate,
-						JobCategoryName = jobCategoryName.ToString(),
+						JobName = jobName,
+						JobPeriods = new List<JobPeriodDate>
+						{
+							new JobPeriodDate
+							{
+								Start = start,
+								End = start.AddDays(30) > endDate ? endDate: start.AddDays(30),
+								JobCategoryName = jobCategoryName.ToString(),
+							}
+						},
+						LogDataSourceId = datasourceId,
+						TenantName = tenantName
 					}
-				},
-				LogDataSourceId = datasourceId,
-				TenantName = tenantName
-			};
+				);
+			}
+			return jobs;
 		}
 
 		private string getMasterTenantName()
