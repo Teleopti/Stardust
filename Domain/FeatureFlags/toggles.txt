@@ -177,6 +177,7 @@ Forecast_FileImport_UnifiedFormat_46585 = true
 Wfm_Requests_ProcessWaitlistBefore24hRequests_45767 = true
 Wfm_Requests_DenyRequestWhenAllSkillsClosed_46384 = true
 AddOrRemoveTenantsWithoutRestart_43635 = RC
+People_ImprovePersonAccountAccuracy_74914 = RC
 
 # Squids #
 WFM_Forecaster_Refact_44480 = true
