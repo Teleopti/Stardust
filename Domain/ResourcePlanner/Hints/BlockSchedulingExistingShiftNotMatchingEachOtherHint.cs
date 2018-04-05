@@ -22,9 +22,11 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 			var people = input.People;
 			var period = input.Period;
 			var blockPreferenceProvider = input.BlockPreferenceProvider;
-			
+
 			foreach (var schedule in input.Schedules)
 			{
+				var personPeriods = schedule.Key.PersonPeriods(input.Period);
+				if (personPeriods.Any(x => x.PersonContract.Contract.EmploymentType == EmploymentType.HourlyStaff)) continue;
 				var person = schedule.Key;
 				if (!people.Contains(person)) continue;
 				var blockOption = blockPreferenceProvider.ForAgent(person, period.StartDate);

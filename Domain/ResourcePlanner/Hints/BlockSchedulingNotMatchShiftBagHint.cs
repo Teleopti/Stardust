@@ -3,6 +3,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 {
@@ -25,6 +26,9 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 			
 			foreach (var schedule in input.Schedules)
 			{
+				var personPeriods = schedule.Key.PersonPeriods(input.Period);
+				if (personPeriods.Any(x => x.PersonContract.Contract.EmploymentType == EmploymentType.HourlyStaff)) continue;
+
 				var person = schedule.Key;
 				if (!people.Contains(person)) continue;
 				var blockOption = blockPreferenceProvider.ForAgent(person, period.StartDate);

@@ -26,6 +26,9 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 			foreach (var item in schedules)
 			{
 				if (!agents.Contains(item.Key)) continue;
+				var personPeriods = item.Key.PersonPeriods(input.Period);
+				if (personPeriods.Any(x => x.PersonContract.Contract.EmploymentType == EmploymentType.HourlyStaff)) continue;
+
 				if (validationResult.InvalidResources.Any(x => item.Key.Id != null && x.ResourceId == item.Key.Id.Value)) continue;
 
 				var targetSummary = new TargetScheduleSummaryCalculator().GetTargets(item.Value, period);

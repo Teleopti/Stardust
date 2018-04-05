@@ -1,6 +1,8 @@
 ﻿using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourcePlanner.Hints;
@@ -54,6 +56,25 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			validationError.ResourceId.Should().Be.EqualTo(person.Id);
 			validationError.ResourceName.Should().Be.EqualTo(person.Name.ToString());
 			validationError.ValidationErrors.Should().Not.Be.Null().And.Not.Be.Empty();
+		}
+
+		[Test]
+		public void ShouldNotReturnHintsForHourlyEmployees()
+		{
+			var startDate = new DateOnly(2017, 01, 23);
+			var endDate = new DateOnly(2017, 01, 29);
+			var planningPeriod = new DateOnlyPeriod(startDate, endDate);
+
+			var person = PersonFactory.CreatePerson().WithId();
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(startDate);
+			personPeriod.PersonContract = new PersonContract(new Contract("_"){EmploymentType = EmploymentType.HourlyStaff},new PartTimePercentage("_"), new ContractSchedule("_") );
+			((IDeleteTag)personPeriod.PersonContract.ContractSchedule).SetDeleted();
+			person.AddPersonPeriod(personPeriod);
+
+			var result = Target.Execute(new HintInput(null, new[] { person }, planningPeriod, null, false)).InvalidResources
+				.Where(x => x.ValidationTypes.Contains(typeof(PersonContractScheduleHint)));
+
+			result.Should().Be.Empty();
 		}
 
 		public void Setup(ISystem system, IIocConfiguration configuration)

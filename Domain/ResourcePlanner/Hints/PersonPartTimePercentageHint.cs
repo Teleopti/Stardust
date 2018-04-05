@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 {
@@ -13,6 +14,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 			foreach (var person in people)
 			{
 				var periods = person.PersonPeriods(range);
+				if (periods.Any(x => x.PersonContract.Contract.EmploymentType == EmploymentType.HourlyStaff)) continue;
 				foreach (var period in periods.Where(x => ((IDeleteTag)x.PersonContract.PartTimePercentage).IsDeleted))
 				{
 					hintResult.Add(new PersonHintError(person)

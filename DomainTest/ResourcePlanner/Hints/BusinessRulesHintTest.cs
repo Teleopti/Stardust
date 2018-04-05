@@ -4,6 +4,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourcePlanner.Hints;
@@ -270,6 +271,33 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 
 			result.Count.Should().Be.EqualTo(1);
 			result.First().ResourceId.Should().Be.EqualTo(id);
+		}
+
+		[Test]
+		public void ShouldNotReturnHintsForHourlyEmployees()
+		{
+			var scenario = new Scenario();
+			var activity = new Activity();
+			var shiftCategory = new ShiftCategory();
+			var startDate = new DateOnly(2017, 01, 23);
+			var endDate = new DateOnly(2017, 01, 29);
+			var planningPeriod = new DateOnlyPeriod(startDate, endDate);
+
+			var person = PersonFactory.CreatePerson().WithId();
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriodWithSkills(startDate, new Skill("_"));
+			personPeriod.PersonContract = new PersonContract(
+				new Contract("_") { EmploymentType = EmploymentType.HourlyStaff }, new PartTimePercentage("_"),
+				new ContractSchedule("_"));
+			personPeriod.RuleSetBag = new RuleSetBag();
+			person.AddPersonPeriod(personPeriod);
+			person.AddSchedulePeriod(new SchedulePeriod(startDate, SchedulePeriodType.Week, 1));
+
+			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, planningPeriod.ToDateTimePeriod(TimeZoneInfo.Utc));
+			scheduleDictionary.AddPersonAssignment(new PersonAssignment(person, scenario, startDate).WithLayer(activity, new TimePeriod(8, 16)).ShiftCategory(shiftCategory));
+
+			var result = Target.Execute(new HintInput(scheduleDictionary, new[] { person }, planningPeriod, null, false)).InvalidResources;
+
+			result.Should().Be.Empty();
 		}
 
 

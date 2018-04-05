@@ -1,6 +1,7 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 {
@@ -16,6 +17,8 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 			var blockPreferenceProvider = input.BlockPreferenceProvider;
 			foreach (var person in people)
 			{
+				var personPeriods = person.PersonPeriods(input.Period);
+				if (personPeriods.Any(x => x.PersonContract.Contract.EmploymentType == EmploymentType.HourlyStaff)) continue;
 				var blockOption = blockPreferenceProvider.ForAgent(person, period.StartDate);
 				if (!blockOption.UseTeamBlockOption) continue;
 				var scheduleForPerson = input.Schedules[person];
