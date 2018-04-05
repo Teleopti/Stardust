@@ -85,37 +85,30 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 		{
 			var p1 = PersonFactory.CreatePersonWithGuid("Kalle", "Anka");
 			var p2 = PersonFactory.CreatePersonWithGuid("Joakim", "Anka");
-			var p3 = PersonFactory.CreatePersonWithGuid("Knatte", "Anka");
-			var p4 = PersonFactory.CreatePersonWithGuid("Fnatte", "Anka");
 
 			var inputModel = new PersonApplicationLogonInputModel
 			{
 				People = new List<PersonApplicationLogonModel>
 				{
-					new PersonApplicationLogonModel {PersonId = p1.Id.GetValueOrDefault(), ApplicationLogonName = "aaa1"},
-					new PersonApplicationLogonModel {PersonId = p2.Id.GetValueOrDefault(), ApplicationLogonName = "aaa2"},
-					new PersonApplicationLogonModel {PersonId = p3.Id.GetValueOrDefault(), ApplicationLogonName = "aaa3"}
+					new PersonApplicationLogonModel {PersonId = p1.Id.GetValueOrDefault(), ApplicationLogonName = "aaa1"}
 				}
 			};
 			var result = Target.PersistApplicationLogonNames(inputModel);
 			result.Should().Be.OfType<OkResult>();
-			PersonInfoPersisterFake.PersistedData.Count.Should().Be.EqualTo(3);
+			PersonInfoPersisterFake.PersistedData.Count.Should().Be.EqualTo(1);
 
 			var inputModelRoundTwo = new PersonApplicationLogonInputModel
 			{
 				People = new List<PersonApplicationLogonModel>
 				{
-					new PersonApplicationLogonModel {PersonId = p4.Id.GetValueOrDefault(), ApplicationLogonName = "aaa1"}, // Should Fail, same as p1
-					new PersonApplicationLogonModel {PersonId = p3.Id.GetValueOrDefault(), ApplicationLogonName = "aaa3"}, // Should Succeed, same as before
-					new PersonApplicationLogonModel {PersonId = p2.Id.GetValueOrDefault(), ApplicationLogonName = "aaa3"}, // Should Fail, same as p3
-					new PersonApplicationLogonModel {PersonId = p1.Id.GetValueOrDefault(), ApplicationLogonName = "aaa4"}  // Should Succeed
+					new PersonApplicationLogonModel {PersonId = p2.Id.GetValueOrDefault(), ApplicationLogonName = "aaa1"}//, // Should Fail, same as p1
 				}
 			};
 			var result2 = Target.PersistApplicationLogonNames(inputModelRoundTwo);
-			PersonInfoPersisterFake.PersistedData.Count.Should().Be.EqualTo(4);
+			PersonInfoPersisterFake.PersistedData.Count.Should().Be.EqualTo(1);
 			var contentResult = result2 as NegotiatedContentResult<PersonInfoGenericResultModel>;
 			contentResult.StatusCode.Should().Be.EqualTo(HttpStatusCode.BadRequest);
-			contentResult.Content.ResultList.Count.Should().Be.EqualTo(2);
+			contentResult.Content.ResultList.Count.Should().Be.EqualTo(1);
 		}
 	}
 }

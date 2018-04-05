@@ -61,17 +61,17 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 		[TenantUnitOfWork, HttpPost, Route("PersonInfo/PersistApplicationLogonNames")]
 		public virtual IHttpActionResult PersistApplicationLogonNames(PersonApplicationLogonInputModel personApplicationLogonInputModel)
 		{
-			var resultModel = new PersonInfoGenericResultModel();
-			foreach (var person in personApplicationLogonInputModel.People)
+			var resultModel = new PersonInfoGenericResultModel
 			{
-				var personObj = new PersonInfoModel { PersonId = person.PersonId, ApplicationLogonName = person.ApplicationLogonName };
-				var persistResult = _persister.Persist(_mapper.Map(personObj), throwOnError: false);
-
-				if (!string.IsNullOrEmpty(persistResult))
-				{
-					resultModel.ResultList.Add(new PersonInfoGenericModel { Message = persistResult, PersonId = person.PersonId });
-				}
-			}
+				ResultList = personApplicationLogonInputModel.People
+								.Select(p =>
+								{
+									var model = new PersonInfoModel { PersonId = p.PersonId, ApplicationLogonName = p.ApplicationLogonName };
+									return new { PersistResult = _persister.Persist(_mapper.Map(model), throwOnError: false), p.PersonId };
+								})
+								.Where(r => !string.IsNullOrEmpty(r.PersistResult))
+								.Select(r => new PersonInfoGenericModel { Message = r.PersistResult, PersonId = r.PersonId }).ToList()
+			};
 
 			if (resultModel.ResultList.Any())
 			{
