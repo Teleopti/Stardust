@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Owin;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Infrastructure.Web;
+using Teleopti.Ccc.Web.Auth;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
 
 namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
@@ -40,7 +41,7 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 
 		private string ApplicationRootUrl()
 		{
-			var url = _currentHttpContext.Current().Request.Url;
+			var url = _currentHttpContext.Current().Request.UrlConsideringLoadBalancerHeaders();
 			var urlString = new StringBuilder();
 			urlString.Append(url.Scheme);
 			urlString.Append("://");

@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
+using Teleopti.Ccc.Web.Auth;
 using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.Start.Controllers
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		public ActionResult Index()
 		{
 			var currentHttp = _currentHttpContext.Current();
-			var url = new Uri(currentHttp.Request.Url, currentHttp.Response.ApplyAppPathModifier("~/")).ToString();
+			var url = new Uri(currentHttp.Request.UrlConsideringLoadBalancerHeaders(), currentHttp.Response.ApplyAppPathModifier("~/")).ToString();
 			var result = _signatureCreator.Create(url);
 
 			return Json(new {Url = url, Signature = result}, JsonRequestBehavior.AllowGet);
@@ -49,7 +50,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			var signIn = new SignInRequestMessage(new Uri(issuer), _authenticationModule.Realm)
 			{
 				Context =
-					"ru=" + _currentHttpContext.Current().Request.Url.AbsoluteUri.Replace("start/Url/RedirectToWebLogin", ""),
+					"ru=" + _currentHttpContext.Current().Request.UrlConsideringLoadBalancerHeaders().AbsoluteUri.Replace("start/Url/RedirectToWebLogin", ""),
 				HomeRealm = "urn:"
 			};
 

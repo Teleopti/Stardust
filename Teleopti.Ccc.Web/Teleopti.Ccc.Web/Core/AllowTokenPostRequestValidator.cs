@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Web.Core
 			if (requestValidationSource == RequestValidationSource.Form &&
 			    collectionKey.Equals(WSFederationConstants.Parameters.Result, StringComparison.Ordinal))
 			{
-				var baseUrl = WSFederationMessage.GetBaseUrl(context.Request.Url);
+				var baseUrl = WSFederationMessage.GetBaseUrl(context.Request.UrlConsideringLoadBalancerHeaders());
 				Func<NameValueCollection> formGetter, queryStringGetter;
 				Microsoft.Web.Infrastructure.DynamicValidationHelper.ValidationUtility.GetUnvalidatedCollections(context, out formGetter, out queryStringGetter);
 				if (WSFederationMessage.CreateFromNameValueCollection(baseUrl, formGetter()) is SignInResponseMessage)

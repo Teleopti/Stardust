@@ -1,7 +1,8 @@
-﻿@{
+﻿@using Teleopti.Ccc.Web.Auth
+@{
 	Layout = null;
 	Response.ContentType = "application/xrds+xml";
-	var uri = new Uri(Request.Url, Response.ApplyAppPathModifier("~/OpenId/Provider")).ToString();
+	var uri = new Uri(Request.UrlConsideringLoadBalancerHeaders(), Response.ApplyAppPathModifier("~/OpenId/Provider")).ToString();
 }<?xml version="1.0" encoding="UTF-8"?>
 <xrds:XRDS
 	xmlns:xrds="xri://$xrds"

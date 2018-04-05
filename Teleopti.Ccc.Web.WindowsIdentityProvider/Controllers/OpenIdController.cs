@@ -13,6 +13,7 @@ using log4net;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.Util;
+using Teleopti.Ccc.Web.Auth;
 using Teleopti.Ccc.Web.WindowsIdentityProvider.Core;
 
 namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Controllers
@@ -119,7 +120,7 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Controllers
 					currentHttp.Response.ApplyAppPathModifier("~/OpenId/AskUser/" +
 					                                          Uri.EscapeDataString(windowsAccount.DomainName + "#" +
 					                                                               windowsAccount.UserName.Replace(".", "$$$")));
-				var identifier = new Uri(currentHttp.Request.Url, userIdentifier);
+				var identifier = new Uri(currentHttp.Request.UrlConsideringLoadBalancerHeaders(), userIdentifier);
 				idrequest.LocalIdentifier = identifier;
 				idrequest.IsAuthenticated = true;
 				idrequest.AddResponseExtension(createIsPersistentClaim());
@@ -182,7 +183,7 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Controllers
 					currentHttp.Response.ApplyAppPathModifier("~/OpenId/AskUser/" +
 					                                          Uri.EscapeDataString(windowsAccount.DomainName + "#" +
 					                                                               windowsAccount.UserName.Replace(".", "$$$")));
-				var identifier = new Uri(currentHttp.Request.Url, userIdentifier);
+				var identifier = new Uri(currentHttp.Request.UrlConsideringLoadBalancerHeaders(), userIdentifier);
 				identifier = new Uri(new Uri(ConfigurationManager.AppSettings["CustomEndpointHost"] ?? "http://localhost/"),
 					new Uri(identifier.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped)).MakeRelativeUri(identifier));
 				idrequest.LocalIdentifier = identifier;

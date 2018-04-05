@@ -21,6 +21,7 @@ using Teleopti.Ccc.Web.Areas.Start.Core.Shared;
 using Teleopti.Ccc.Web.Core;
 using log4net;
 using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.Web.Auth;
 
 namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 {
@@ -293,7 +294,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 			var currentHttp = _currentHttpContext.Current();
 
 			var userIdentifier = currentHttp.Response.ApplyAppPathModifier("~/SSO/OpenId/AskUser/" + userName);
-			var identifier = new Uri(currentHttp.Request.Url, userIdentifier);
+			var identifier = new Uri(currentHttp.Request.UrlConsideringLoadBalancerHeaders(), userIdentifier);
 			if (useLocalhostIdentifier)
 			{
 				identifier = new Uri(new Uri(ConfigurationManager.AppSettings["CustomEndpointHost"] ?? "http://localhost/"),

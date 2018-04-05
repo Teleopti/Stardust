@@ -4,6 +4,7 @@ using System.IdentityModel.Services;
 using System.Web;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Web.Auth;
 
 namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 {
@@ -35,7 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		{
 			var wsFederationMessage =
 				WSFederationMessage.CreateFromNameValueCollection(
-					WSFederationMessage.GetBaseUrl(ControllerContext.HttpContext.Request.Url),
+					WSFederationMessage.GetBaseUrl(ControllerContext.HttpContext.Request.UrlConsideringLoadBalancerHeaders()),
 					ControllerContext.HttpContext.Request.Form);
 			if (wsFederationMessage == null || wsFederationMessage.Context == null) return null;
 

@@ -10,6 +10,7 @@ using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.Web.Auth;
 using Teleopti.Ccc.Web.Core.RequestContext.Initialize;
 using Teleopti.Ccc.Web.Core.Startup;
 
@@ -88,7 +89,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 
 		private static bool requestMatching(IEnumerable<string> patterns)
 		{
-			var url = HttpContext.Current.Request.Url.AbsolutePath.ToLowerInvariant();
+			var url = HttpContext.Current.Request.UrlConsideringLoadBalancerHeaders().AbsolutePath.ToLowerInvariant();
 			return patterns.Any(url.Contains);
 		}
 

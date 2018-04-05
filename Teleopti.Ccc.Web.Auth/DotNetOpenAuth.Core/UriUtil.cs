@@ -4,6 +4,8 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
+using Teleopti.Ccc.Web.Auth;
+
 namespace DotNetOpenAuth {
 	using System;
 	using System.Collections.Specialized;
@@ -100,7 +102,7 @@ namespace DotNetOpenAuth {
 				string relativeUrl = page.ResolveUrl(value);
 				Contract.Assume(page.Request.Url != null);
 				Contract.Assume(relativeUrl != null);
-				new Uri(page.Request.Url, relativeUrl); // throws an exception on failure.
+				new Uri(page.Request.UrlConsideringLoadBalancerHeaders(), relativeUrl); // throws an exception on failure.
 			} else {
 				// We can't fully test it, but it should start with either ~/ or a protocol.
 				if (Regex.IsMatch(value, @"^https?://")) {

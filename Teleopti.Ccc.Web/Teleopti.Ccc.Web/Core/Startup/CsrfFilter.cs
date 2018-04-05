@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http.Controllers;
 using System.Web.Mvc;
+using Teleopti.Ccc.Web.Auth;
 
 namespace Teleopti.Ccc.Web.Core.Startup
 {
@@ -50,7 +51,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			var referer = filterContext.HttpContext.Request.Headers["Origin"] ??
 						  filterContext.HttpContext.Request.Headers["Referer"];
  
-			var url = filterContext.HttpContext.Request.Url;
+			var url = filterContext.HttpContext.Request.UrlConsideringLoadBalancerHeaders();
 			if (!string.IsNullOrEmpty(referer) && url!=null)
 			{
 				var refererUri = new Uri(referer, UriKind.RelativeOrAbsolute);

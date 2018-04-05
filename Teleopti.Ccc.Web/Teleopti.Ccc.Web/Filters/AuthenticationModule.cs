@@ -2,6 +2,7 @@
 using System.IdentityModel.Services;
 using System.Web;
 using System.Web.Mvc;
+using Teleopti.Ccc.Web.Auth;
 
 namespace Teleopti.Ccc.Web.Filters
 {
@@ -19,17 +20,13 @@ namespace Teleopti.Ccc.Web.Filters
 		public Uri Issuer(HttpContextBase request)
 		{
 			var helper = new UrlHelper(request.Request.RequestContext);
-			Uri issuerUrl;
-			if (!Uri.TryCreate(_authenticationModule.Issuer,UriKind.Absolute,out issuerUrl))
+			if (!Uri.TryCreate(_authenticationModule.Issuer,UriKind.Absolute,out var issuerUrl))
 			{
-				issuerUrl = new Uri(new Uri(request.Request.Url.GetLeftPart(UriPartial.Authority)), _authenticationModule.Issuer);
+				issuerUrl = new Uri(new Uri(request.Request.UrlConsideringLoadBalancerHeaders().GetLeftPart(UriPartial.Authority)), _authenticationModule.Issuer);
 			}
 			return issuerUrl;
 		}
 
-		public string Realm
-		{
-			get { return _authenticationModule.Realm; }
-		}
+		public string Realm => _authenticationModule.Realm;
 	}
 }

@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.Web.Areas.Start.Core.Shared;
+using Teleopti.Ccc.Web.Auth;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 using Teleopti.Ccc.Web.Filters;
@@ -53,7 +54,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			_sessionSpecificWfmCookieProvider.RemoveCookie();
 			_formsAuthentication.SignOut();
 
-			var url = Request.Url;
+			var url = Request.UrlConsideringLoadBalancerHeaders();
 			var issuerUrl = _authenticationModule.Issuer(_currentHttpContext.Current());
 
 			var signInReply = new SignInRequestMessage(issuerUrl, _authenticationModule.Realm)
