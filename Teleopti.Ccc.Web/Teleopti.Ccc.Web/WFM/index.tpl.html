@@ -45,18 +45,18 @@
 		}
 	</style>
 	<script type="text/javascript">
-		var appInsights=window.appInsights||
-			function(a) {
+		var appInsights = window.appInsights ||
+			function (a) {
 				function b(a) {
-					c[a] = function() {
+					c[a] = function () {
 						var b = arguments;
-						c.queue.push(function() { c[a].apply(c, b) })
+						c.queue.push(function () { c[a].apply(c, b) })
 					}
 				}
 
 				var c = { config: a }, d = document, e = window;
 				setTimeout(
-					function() {
+					function () {
 						var b = d.createElement("script");
 						console.log('before');
 						b.src = a.url || "https://az416426.vo.msecnd.net/scripts/a/ai.0.js";
@@ -74,16 +74,16 @@
 					b("startTrackPage"), b("stopTrackPage"), b("flush"), !a.disableExceptionTracking) {
 					f = "onerror", b("_" + f);
 					var g = e[f];
-					e[f] = function(a, b, d, e, h) {
+					e[f] = function (a, b, d, e, h) {
 						var i = g && g(a, b, d, e, h);
 						return !0 !== i && c["_" + f](a, b, d, e, h), i
 					}
 				}
 				return c
 			}({
-				instrumentationKey:"00000000-0000-0000-0000-000000000000"
+				instrumentationKey: "00000000-0000-0000-0000-000000000000"
 			});
-		window.appInsights=appInsights,appInsights.queue&&0===appInsights.queue.length&&appInsights.trackPageView();
+		window.appInsights = appInsights, appInsights.queue && 0 === appInsights.queue.length && appInsights.trackPageView();
 	</script>
 </head>
 
@@ -125,18 +125,21 @@
 	<script src="dist/resources/modules.js"></script>
 	<script src="dist/templates.js"></script>
 	<script src="dist/main.js"></script>
-	<% } else { %>
-	<script src="dist/resources/modules.min.js"></script>
-	<script src="dist/templates.min.js"></script>
-	<script src="dist/main.min.js"></script>
-	<% } %>
-	/build -->
-
 	<script src="dist/ng2/inline.bundle.js"></script>
 	<script src="dist/ng2/polyfills.bundle.js"></script>
 	<script src="dist/ng2/styles.bundle.js"></script>
 	<script src="dist/ng2/vendor.bundle.js"></script>
 	<script src="dist/ng2/main.bundle.js"></script>
+	<% } else { %>
+	<script src="dist/resources/modules.js"></script>
+	<script src="dist/templates.min.js"></script>
+	<script src="dist/main.min.js"></script>
+	<script src="dist/ng2/inline.bundle.js"></script>
+	<script src="dist/ng2/polyfills.bundle.js"></script>
+	<link rel="stylesheet" href="dist/ng2/styles.bundle.css">
+	<script src="dist/ng2/main.bundle.js"></script>
+	<% } %>
+	/build -->
 
 	<!--dummy links to disable IE default alt-key shortcuts-->
 	<div class="shortcut-trick-ie">

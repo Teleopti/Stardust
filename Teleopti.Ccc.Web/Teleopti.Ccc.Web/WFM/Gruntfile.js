@@ -266,7 +266,6 @@ module.exports = function(grunt) {
 						'!app/**/*.fortest.js',
 						'!app/app_desktop_client.js'
 					],
-					'dist/resources/modules.min.js': ['dist/resources/modules.js'],
 					'dist/templates.min.js': ['dist/templates.js']
 				},
 				options: {
@@ -462,9 +461,56 @@ module.exports = function(grunt) {
 		// },
 		exec: {
 			ngbuild_dev: 'npm run ng build',
-			ngbuild_prod: 'npm run ng build --prod',
+			ngbuild_prod: 'npm run ng build -- --prod -env=prod --output-hashing none',
 			webpackDevDist: 'webpack'
-		}
+		},
+		'string-replace': {
+			dist: {
+				files: [
+					{
+						src: 'src/main.ts',
+						dest: 'src/main.ts'
+					}
+				],
+				options: {
+					saveUnchanged: false,
+					replacements: [
+						{
+							pattern: '../html/main.html',
+							replacement: 'html/main.html'
+						}
+					]
+				}
+			},
+			devDist: {
+				files: [
+					{
+						src: 'src/main.ts',
+						dest: 'src/main.ts'
+					}
+				],
+				options: {
+					saveUnchanged: false,
+					replacements: [
+						{
+							pattern: '../html/main.html',
+							replacement: 'html/main.html'
+						},
+						{
+							pattern: 'html/main.html',
+							replacement: '../html/main.html'
+						}
+					]
+				}
+			}
+		},
+		clean: [
+			'dist/*.map',
+			'dist/resources/*.map',
+			'dist/resources/modulesForDesktop.js',
+			'dist/templates.js',
+			'!dist/*.min.js'
+		]
 	});
 
 	grunt.loadNpmTasks('grunt-contrib-watch');
@@ -484,6 +530,8 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-image-embed');
 	grunt.loadNpmTasks('grunt-webpack');
 	grunt.loadNpmTasks('grunt-exec');
+	grunt.loadNpmTasks('grunt-string-replace');
+	grunt.loadNpmTasks('grunt-contrib-clean');
 
 	// Default task(s).
 	grunt.registerTask('default', ['devDist', 'test', 'watch:dev']); // this task run the main task and then watch for file changes
@@ -507,6 +555,7 @@ module.exports = function(grunt) {
 		'copy:devCss',
 		'newer:copy',
 		'generateIndexDev',
+		'string-replace:devDist',
 		'exec:ngbuild_dev'
 	]);
 	grunt.registerTask('devDistRta', [
@@ -549,7 +598,9 @@ module.exports = function(grunt) {
 		'copy:extras',
 		'copy:bootstrap',
 		'generateIndex',
-		'exec:ngbuild_prod'
+		'string-replace:dist',
+		'exec:ngbuild_prod',
+		'clean'
 	]); // this task should only be used by the build. It's kind of packaging for production.
 
 	// for desktop client
