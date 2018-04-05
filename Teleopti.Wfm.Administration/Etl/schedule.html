@@ -8,7 +8,7 @@
 						<path fill="#000000" d="M3,2H21V2H21V4H20.92L15,9.92V22.91L9,16.91V9.91L3.09,4H3V2M11,16.08L13,18.08V9H13.09L18.09,4H5.92L10.92,9H11V16.08Z" />
 					</svg>
 				</span>
-				<input type="text" class="form-control" ng-model="scheduleFilter" placeholder="Filter" aria-label="Username" aria-describedby="basic-addon1">
+				<input type="text" class="form-control" ng-model="scheduleFilter.ScheduleName" placeholder="Filter" aria-label="Username" aria-describedby="basic-addon1">
 				<button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#exampleModal2">New</button>
 			</div>
 		</div>
@@ -29,7 +29,7 @@
 							</tr>
 						</thead>
 
-						<tbody ng-repeat="job in vm.schedules | filter: scheduleFilter">
+						<tbody ng-repeat="job in vm.schedules | filter: scheduleFilter ">
 							<tr>
 								<td>
 									<!-- {{job}} -->
