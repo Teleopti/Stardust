@@ -406,57 +406,54 @@ function global:DataModifications () {
     	}
 }
 
+function global:CheckPKAndIndex
+{
+	param
+	(
+		$DatabaseName
+	)
+
+	$ConnectionString = "Data Source=$global:SQLServerInstance;Initial Catalog=$DatabaseName;User Id=$global:AdminSqlLogin;Password=$global:AdminSqlPwd"
+
+	$query = Get-Content "$WorkingDirectory\..\Database\Tools\PK-namingStandard.sql" | Out-String
+	Log "Running script: [PK-namingStandard.sql] on [$DatabaseName]" 
+	$PkResults = RunAndRetrySqlQuery $ConnectionString $query
+	if (!($PkResults -eq $null))
+	{
+		Log "The following issue where found on [$DatabaseName]:"
+		Log "$pkresults.resultline"
+		#exit 1
+	}
+
+	$query = Get-Content "$WorkingDirectory\..\Database\Tools\PKExistsCheck.sql" | Out-String
+	Log "Running script: [PKExistsCheck.sql] on [$DatabaseName]" 
+	$PkResults = RunAndRetrySqlQuery $ConnectionString $query
+	if (!($PkResults -eq $null))
+	{
+		Log "The following issue where found on [$DatabaseName]:"
+		Log "$pkresults.resultline"
+		#exit 1
+	}
+
+	$query = Get-Content "$WorkingDirectory\..\Database\Tools\NoHeapsCheck.sql" | Out-String
+	Log "Running script: [NoHeapsCheck.sql] on [$DatabaseName]" 
+	$PkResults = RunAndRetrySqlQuery $ConnectionString $query
+	if (!($PkResults -eq $null))
+	{
+		Log "The following issue where found on [$DatabaseName]:"
+		Log "$pkresults.resultline"
+		#exit 1
+	}
+}
+
 function global:ScriptedTestsRunOnAllDBs () {
     
     if (!($global:SQLEdition -eq $SQLAzure)) {
 
-		#Check MartDB
-		$ConnectionString = "Data Source=$global:SQLServerInstance;Initial Catalog=$MartDB;User Id=$global:AdminSqlLogin;Password=$global:AdminSqlPwd"
-		$query = Get-Content "$WorkingDirectory\..\Database\Tools\PK-namingStandard.sql" | Out-String
-        
-		Log "Running script: [PK-namingStandard.sql] on [$MartDB]" 
-		$PkResults = RunAndRetrySqlQuery $ConnectionString $query
-
-        if (!($PkResults -eq $null))
-        {
-            Log "The following issue where found on [$MartDB]:"
-            Log "$pkresults.resultline"
-            #exit 1
-        }
+		CheckPKAndIndex $MartDB
+		CheckPKAndIndex $AppDB
+		CheckPKAndIndex $global:AggDB
 		
-		#Check AppDB 
-		$ConnectionString = "Data Source=$global:SQLServerInstance;Initial Catalog=$AppDB;User Id=$global:AdminSqlLogin;Password=$global:AdminSqlPwd"
-		$query = Get-Content "$WorkingDirectory\..\Database\Tools\PK-namingStandard.sql" | Out-String
-		
-		Log "Running script: [PK-namingStandard.sql] on [$AppDB]"
-		$PkResults = RunAndRetrySqlQuery $ConnectionString $query
-		
-		if (!($PkResults -eq $null))
-        {
-            Log "The following issue where found on [$AppDB]:"
-            Log "$pkresults.resultline"
-            #exit 1
-        }
-		
-		#Check AggDB
-		$ConnectionString = "Data Source=$global:SQLServerInstance;Initial Catalog=$global:AggDB;User Id=$global:AdminSqlLogin;Password=$global:AdminSqlPwd"
-		$query = Get-Content "$WorkingDirectory\..\Database\Tools\PK-namingStandard.sql" | Out-String
-		
-		Log "Running script: [PK-namingStandard.sql] on [$global:AggDB]"
-		$PkResults = RunAndRetrySqlQuery $ConnectionString $query
-		
-		if (!($PkResults -eq $null))
-        {
-            Log "The following issue where found on [$global:AggDB]:"
-            Log "$pkresults.resultline"
-            #exit 1
-        }
-		
-		$ConnectionString = "Data Source=$global:SQLServerInstance;Initial Catalog=$AppDB;User Id=$global:AdminSqlLogin;Password=$global:AdminSqlPwd"
-		$query = Get-Content "$WorkingDirectory\..\Database\Tools\NoHeapsCheck.sql" | Out-String
-    
-		Log "Running script: [NoHeapsCheck.sql] on [$AppDB]"
-		RunAndRetrySqlQuery $ConnectionString $query
     }
 }
 
