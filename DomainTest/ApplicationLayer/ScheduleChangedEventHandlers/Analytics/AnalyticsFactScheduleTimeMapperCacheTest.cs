@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 	[Toggle(Toggles.ResourcePlanner_SpeedUpEvents_74996)]
 	public class AnalyticsFactScheduleTimeMapperCacheTest : ISetup
 	{
-		public IAnalyticsFactScheduleTimeMapper Target;
+		public AnalyticsAbsenceMapper Target;
 		public AnalyticsAbsenceRepositoryCountNumberOfCalls AnalyticsAbsenceRepository;
 
 		[Test]
@@ -23,8 +23,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		{
 			var absenceCode = Guid.NewGuid();
 			
-			Target.MapAbsenceId(absenceCode);
-			Target.MapAbsenceId(absenceCode);
+			Target.Map(absenceCode);
+			Target.Map(absenceCode);
 
 			AnalyticsAbsenceRepository.NumberOfCalls
 				.Should().Be.EqualTo(1);
@@ -36,10 +36,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			var absenceCode1 = Guid.NewGuid();
 			var absenceCode2 = Guid.NewGuid();
 			
-			Target.MapAbsenceId(absenceCode1);
-			Target.MapAbsenceId(absenceCode2);
-			Target.MapAbsenceId(absenceCode1);
-			Target.MapAbsenceId(absenceCode2);
+			Target.Map(absenceCode1);
+			Target.Map(absenceCode2);
+			Target.Map(absenceCode1);
+			Target.Map(absenceCode2);
 
 			AnalyticsAbsenceRepository.NumberOfCalls
 				.Should().Be.EqualTo(2);

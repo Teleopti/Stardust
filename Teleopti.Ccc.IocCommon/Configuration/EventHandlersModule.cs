@@ -139,14 +139,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<IntervalLengthFetcher>().As<IIntervalLengthFetcher>().SingleInstance();
 			if (_config.Toggle(Toggles.ResourcePlanner_SpeedUpEvents_74996))
 			{
-				builder.CacheByInterfaceProxy<AnalyticsFactScheduleTimeMapper, IAnalyticsFactScheduleTimeMapper>().SingleInstance();
-				_config.Cache().This<IAnalyticsFactScheduleTimeMapper>(b => b
-						.CacheMethod(m => m.MapAbsenceId(Guid.Empty)));
+				builder.CacheByClassProxy<AnalyticsAbsenceMapper>().SingleInstance();
+				_config.Cache().This<AnalyticsAbsenceMapper>(b => b.CacheMethod(m => m.Map(Guid.Empty)));
 			}
 			else
 			{
-				builder.RegisterType<AnalyticsFactScheduleTimeMapper>().As<IAnalyticsFactScheduleTimeMapper>().SingleInstance();				
+				builder.RegisterType<AnalyticsAbsenceMapper>().SingleInstance();
 			}
+			builder.RegisterType<AnalyticsFactScheduleTimeMapper>().As<IAnalyticsFactScheduleTimeMapper>().SingleInstance();				
 			builder.RegisterType<AnalyticsFactScheduleDateMapper>().As<IAnalyticsFactScheduleDateMapper>().SingleInstance();
 			builder.RegisterType<AnalyticsFactSchedulePersonMapper>().As<IAnalyticsFactSchedulePersonMapper>().SingleInstance();
 			builder.RegisterType<AnalyticsFactScheduleMapper>().As<IAnalyticsFactScheduleMapper>().SingleInstance();

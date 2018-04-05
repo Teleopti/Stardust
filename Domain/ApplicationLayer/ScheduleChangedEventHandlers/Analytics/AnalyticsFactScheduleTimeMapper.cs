@@ -17,17 +17,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 	public class AnalyticsFactScheduleTimeMapper : IAnalyticsFactScheduleTimeMapper
 	{
 		private readonly IAnalyticsScheduleRepository _analyticsScheduleRepository;
-		private readonly IAnalyticsAbsenceRepository _analyticsAbsenceRepository;
+		private readonly AnalyticsAbsenceMapper _analyticsAbsenceMapper;
 		private readonly IAnalyticsActivityRepository _analyticsActivityRepository;
 		private readonly IAnalyticsOvertimeRepository _analyticsOvertimeRepository;
 
 		public AnalyticsFactScheduleTimeMapper(IAnalyticsScheduleRepository analyticsScheduleRepository, 
-			IAnalyticsAbsenceRepository analyticsAbsenceRepository, 
+			AnalyticsAbsenceMapper analyticsAbsenceMapper, 
 			IAnalyticsOvertimeRepository analyticsOvertimeRepository,
 			IAnalyticsActivityRepository analyticsActivityRepository)
 		{
 			_analyticsScheduleRepository = analyticsScheduleRepository;
-			_analyticsAbsenceRepository = analyticsAbsenceRepository;
+			_analyticsAbsenceMapper = analyticsAbsenceMapper;
 			_analyticsActivityRepository = analyticsActivityRepository;
 			_analyticsOvertimeRepository = analyticsOvertimeRepository;
 		}
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 
 		public AnalyticsAbsence MapAbsenceId(Guid absenceCode)
 		{
-			return _analyticsAbsenceRepository.Absence(absenceCode);
+			return _analyticsAbsenceMapper.Map(absenceCode);
 		}
 
 		public int MapOvertimeId(Guid overtimeCode)
