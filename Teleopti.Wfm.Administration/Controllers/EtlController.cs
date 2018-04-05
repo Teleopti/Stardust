@@ -211,8 +211,8 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 			if (logger.IsDebugEnabled)
 			{
-				logger.Debug($"Persist changes for data source {string.Join(", ", tenantDataSourceModel.DataSources.Select(x=>x.Id))} "
-							 + "of tenant \"{tenantDataSourceModel.TenantName}\"");
+				logger.Debug($"Persist changes for data source {string.Join(", ", tenantDataSourceModel.DataSources.Select(x => x.Id))} "
+					+ "of tenant \"{tenantDataSourceModel.TenantName}\"");
 			}
 
 			foreach (var dataSourceModel in tenantDataSourceModel.DataSources)
@@ -273,6 +273,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 								$"Enqueue ETL job \"Queue Statistics\" from {queuePeriod.StartDate.Date:yyyy-MM-dd} to "
 								+ $"{queuePeriod.EndDate.Date:yyyy-MM-dd} for data source with Id=\"{dataSourceId}\" and tenant=\"{tenantName}\".");
 						}
+
 						etlJobsToEnque.AddRange(createJobToEnqueue(tenantName, "Queue Statistics", JobCategoryType.QueueStatistics,
 							dataSourceId, queuePeriod.StartDate.Date, queuePeriod.EndDate.Date));
 					}
@@ -286,6 +287,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 								$"Enqueue ETL job \"Agent Statistics\" from {agentPeriod.StartDate.Date:yyyy-MM-dd} to "
 								+ $"{agentPeriod.EndDate.Date:yyyy-MM-dd} for data source with Id=\"{dataSourceId}\" and tenant=\"{tenantName}\".");
 						}
+
 						etlJobsToEnque.AddRange(createJobToEnqueue(tenantName, "Agent Statistics", JobCategoryType.AgentStatistics,
 							dataSourceId, agentPeriod.StartDate.Date, agentPeriod.EndDate.Date));
 					}
@@ -317,7 +319,15 @@ namespace Teleopti.Wfm.Administration.Controllers
 			var scheduledJobs = _etlJobScheduler.LoadScheduledJobs();
 			var jobs = scheduledJobs
 				.Where(x => x.ScheduleType != JobScheduleType.Manual)
-				.Select(job => new EtlScheduleJobModel
+				.Select(job =>
+				{
+					var isScheduledDaily = job.ScheduleType == JobScheduleType.OccursDaily;
+					var dailyFrequencyStart =
+						DateTime.MinValue.AddMinutes(isScheduledDaily ? job.OccursOnceAt : job.OccursEveryMinuteStartingAt);
+					var dailyFrequencyEnd = DateTime.MinValue.AddMinutes(isScheduledDaily ? 0 : job.OccursEveryMinuteEndingAt);
+					var dailyFrequencyMinute = isScheduledDaily ? string.Empty : job.OccursEveryMinute.ToString();
+
+					return new EtlScheduleJobModel
 					{
 						ScheduleId = job.ScheduleId,
 						ScheduleName = job.ScheduleName,
@@ -325,11 +335,11 @@ namespace Teleopti.Wfm.Administration.Controllers
 						JobName = job.JobName,
 						Enabled = job.Enabled,
 						Tenant = job.TenantName,
-						DailyFrequencyStart = DateTime.MinValue.AddMinutes(job.ScheduleType == JobScheduleType.OccursDaily ? job.OccursOnceAt : job.OccursEveryMinuteStartingAt),
-						DailyFrequencyEnd = DateTime.MinValue.AddMinutes(job.ScheduleType == JobScheduleType.OccursDaily ? 0 : job.OccursEveryMinuteEndingAt),
-						DailyFrequencyMinute = job.ScheduleType == JobScheduleType.OccursDaily ? string.Empty : job.OccursEveryMinute.ToString()
-					}
-				)
+						DailyFrequencyStart = dailyFrequencyStart,
+						DailyFrequencyEnd = dailyFrequencyEnd,
+						DailyFrequencyMinute = dailyFrequencyMinute
+					};
+				})
 				.ToList();
 
 			return Ok(jobs);
@@ -365,39 +375,44 @@ namespace Teleopti.Wfm.Administration.Controllers
 			}
 		}
 
-		private static List<EtlJobEnqueModel> createJobToEnqueue(string tenantName, string jobName, JobCategoryType jobCategoryName,
-			int datasourceId, DateTime startDate, DateTime endDate)
+		private static IEnumerable<EtlJobEnqueModel> createJobToEnqueue(string tenantName, string jobName,
+			JobCategoryType jobCategoryName, int datasourceId, DateTime startDate, DateTime endDate)
 		{
+			const int periodLengthInDay = 30;
+
 			var jobs = new List<EtlJobEnqueModel>();
-			for (var start = startDate; start < endDate; start = start.AddDays(30))
+			for (var start = startDate; start < endDate; start = start.AddDays(periodLengthInDay))
 			{
-				jobs.Add(
-					new EtlJobEnqueModel
-					{
-						JobName = jobName,
-						JobPeriods = new List<JobPeriodDate>
-						{
-							new JobPeriodDate
-							{
-								Start = start,
-								End = start.AddDays(30) > endDate ? endDate: start.AddDays(30),
-								JobCategoryName = jobCategoryName.ToString(),
-							}
-						},
-						LogDataSourceId = datasourceId,
-						TenantName = tenantName
-					}
-				);
+				var nextStart = start.AddDays(periodLengthInDay);
+				var jobPeriodDate = new JobPeriodDate
+				{
+					Start = start,
+					End = nextStart > endDate ? endDate : nextStart,
+					JobCategoryName = jobCategoryName.ToString()
+				};
+				var jobEnqueueModel = new EtlJobEnqueModel
+				{
+					JobName = jobName,
+					JobPeriods = new List<JobPeriodDate> {jobPeriodDate},
+					LogDataSourceId = datasourceId,
+					TenantName = tenantName
+				};
+				jobs.Add(jobEnqueueModel);
 			}
+
 			return jobs;
 		}
 
 		private string getMasterTenantName()
 		{
-			var appConnectionString = new SqlConnectionStringBuilder(_configReader.ConnectionString("Tenancy")).InitialCatalog;
+			var masterTenantInitialCatalog =
+				new SqlConnectionStringBuilder(_configReader.ConnectionString("Tenancy")).InitialCatalog;
 			var master = _loadAllTenants.Tenants().SingleOrDefault(x =>
-				new SqlConnectionStringBuilder(x.DataSourceConfiguration.ApplicationConnectionString).InitialCatalog.Equals(
-					appConnectionString));
+			{
+				var tenantInitialCatalog = new SqlConnectionStringBuilder(x.DataSourceConfiguration.ApplicationConnectionString)
+					.InitialCatalog;
+				return tenantInitialCatalog.Equals(masterTenantInitialCatalog);
+			});
 
 			return master?.Name;
 		}
