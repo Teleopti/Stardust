@@ -184,6 +184,7 @@
     <Content Include="Etl\etlBaseConfigModal.component.js" />
     <Content Include="Etl\etlConfigController.js" />
     <Content Include="Etl\etlScheduleController.js" />
+    <Content Include="Etl\etlScheduleFormgModal.component.js" />
     <Content Include="firstuser.html" />
     <Content Include="App_Data\RtaStates.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

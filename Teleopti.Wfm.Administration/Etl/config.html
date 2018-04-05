@@ -10,7 +10,7 @@
 					</svg>
 				</span>
 				<input type="text" class="form-control" ng-model="configFilter.TenantName" placeholder="Filter" aria-label="Username" aria-describedby="basic-addon1">
-				<button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#exampleModal2">New</button>
+				<!-- <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#exampleModal2">New</button> -->
 			</div>
 		</div>
 		<div class="panel-body text-container">
@@ -118,7 +118,7 @@
 					No log data sources found
 				</div>
 			</div>
-			<div class="modal-footer">
+			<div class="modal-footer" style="text-align:right;">
 				<button type="button" class="btn btn-default pull-left" ng-if="vm.logDataSending" name="button">
 					<svg class="spin" style="width:14px;height:14px" viewBox="0 0 24 24">
 						<path fill="#000000" d="M12,4V2A10,10 0 0,0 2,12H4A8,8 0 0,1 12,4Z" />

@@ -10,7 +10,7 @@
 					</svg>
 				</span>
 				<input type="text" class="form-control" ng-model="scheduleFilter.ScheduleName" placeholder="Filter" aria-label="Username" aria-describedby="basic-addon1">
-				<button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#exampleModal2">New</button>
+				<button type="button" class="btn btn-primary pull-right" ng-click="vm.showAddScheduleJobModal = true">New</button>
 			</div>
 		</div>
 		<div class="panel-body text-container">
@@ -88,12 +88,6 @@
 									</span>
 								</td>
 								<td>
-									<div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-										<div class="modal-dialog" role="document">
-											<div ng-include="'/Etl/scheduleModal.html'"></div>
-										</div>
-									</div>
-
 									<button type="button" class="btn btn-default" data-toggle="modal" data-target="#exampleModal2" ng-click="vm.scheduleToEdit = job">
 										<svg style="width:24px;height:24px" viewBox="0 0 24 24">
 											<path fill="#000000" d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z" />
@@ -111,6 +105,19 @@
 						</tbody>
 
 					</table>
+					<div class="custom-modal" ng-if="vm.showAddScheduleJobModal">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title">New Schedule</h5>
+								<button type="button" class="close" ng-click="vm.showAddScheduleJobModal = false" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body">
+								<etl-schedule-modal ng-cloak job="" callback="vm.addScheduleJob"></etl-schedule-modal>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
