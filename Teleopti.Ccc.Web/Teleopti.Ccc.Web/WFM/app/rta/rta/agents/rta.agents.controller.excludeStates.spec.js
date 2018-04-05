@@ -952,5 +952,22 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 
 		expect(vm.states[0].Name).toEqual('translated no state');
 	});
+	
+	it('should not display phone state if agents state not belongs to it', function (t) {
+		t.backend
+			.withPhoneState({Id: "state", Name: "State"})
+			.withAgentState({
+				PersonId: "person",
+				StateId: null,
+			});
+
+		vm = t.createController();
+		t.apply(function () {
+			vm.showInAlarm = false;
+		});
+
+		expect(vm.states.length).toEqual(1);
+		expect(vm.states[0].Name).toEqual('NoState');
+	});
 
 });

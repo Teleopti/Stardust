@@ -22,7 +22,9 @@
 			skillAreas: [],
 			states: []
 		};
-
+		
+		var nullId = "noState";
+		
 		return {
 
 			gotoLastState: function () {
@@ -41,7 +43,7 @@
 					.then(function (d) {
 						data = d;
 						// because angular cant handle an array of null in stateparams
-						data.states.push({Id: "noState", Name: $translate.instant('NoState')});
+						data.states.push({Id: nullId, Name: $translate.instant('NoState')});
 					})
 					.then(updateOpenedSites);
 			},
@@ -86,6 +88,8 @@
 
 			isStateSelected: isStateSelected,
 			selectState: selectState,
+			// because angular cant handle an array of null in stateparams
+			nullStateId: nullId,
 			
 			statePickerSelectionText: statePickerSelectionText,
 

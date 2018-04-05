@@ -182,7 +182,7 @@
 
 			vm.states = phoneStates.filter(function (phoneState) {
 				var stateInView = states.States.some(function (agentState) {
-					if (agentState.StateId === null)
+					if (agentState.StateId === null && phoneState.Id === "noState")
 						return true;
 					return agentState.StateId === phoneState.Id;
 				});
