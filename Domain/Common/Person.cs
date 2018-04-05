@@ -379,9 +379,18 @@ namespace Teleopti.Ccc.Domain.Common
 	    public virtual void DeletePersonPeriod(IPersonPeriod period)
 	    {
 		    InParameter.NotNull(nameof(period), period);
-		    _personPeriodCollection.Remove(period.StartDate);
 
+			var previousPeriod = PreviousPeriod(period);
+			
+			AddPersonEmploymentChangeEvent(new PersonEmploymentChangedEvent()
+			{
+				PersonId = Id.GetValueOrDefault(),
+				FromDate = previousPeriod?.StartDate ?? period.StartDate
+			});
+			
+		    _personPeriodCollection.Remove(period.StartDate);			
 			addPersonPeriodChangedEvent();
+			
 		}
 
 	    public virtual void ChangePersonPeriodStartDate(DateOnly startDate, IPersonPeriod personPeriod)
