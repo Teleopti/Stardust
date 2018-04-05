@@ -72,9 +72,9 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 			var relativePeriodCollection = getSchedulePeriods(scheduleModel);
 
 			var etlJobSchedule = new EtlJobSchedule(
-				-1,
+				scheduleModel.ScheduleId,
 				scheduleModel.ScheduleName,
-				true,
+				scheduleModel.Enabled,
 				(int) scheduleModel.DailyFrequencyStart.TimeOfDay.TotalMinutes,
 				scheduleModel.JobName,
 				scheduleModel.LogDataSourceId,
@@ -139,9 +139,9 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 			var relativePeriodCollection = getSchedulePeriods(scheduleModel);
 
 			var etlJobSchedule = new EtlJobSchedule(
-				-1,
+				scheduleModel.ScheduleId,
 				scheduleModel.ScheduleName,
-				true,
+				scheduleModel.Enabled,
 				Convert.ToInt32(scheduleModel.DailyFrequencyMinute),
 				(int)scheduleModel.DailyFrequencyStart.TimeOfDay.TotalMinutes,
 				(int)scheduleModel.DailyFrequencyEnd.TimeOfDay.TotalMinutes,

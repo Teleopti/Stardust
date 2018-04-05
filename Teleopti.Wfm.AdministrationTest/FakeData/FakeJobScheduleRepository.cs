@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 
 namespace Teleopti.Wfm.AdministrationTest.FakeData
@@ -18,15 +15,25 @@ namespace Teleopti.Wfm.AdministrationTest.FakeData
 			return _etlJobSchedules;
 		}
 
-		public int SaveSchedule(IEtlJobSchedule etlJobScheduleItem)
+		public int SaveSchedule(IEtlJobSchedule jobSchedule)
 		{
-			_etlJobSchedules.Add(etlJobScheduleItem);
-			return _etlJobSchedules.Count;
+			DeleteSchedule(jobSchedule.ScheduleId);
+			if (jobSchedule.ScheduleId == -1)
+			{
+				jobSchedule.SetScheduleIdOnPersistedItem(_etlJobSchedules.Any() ? _etlJobSchedules.Max(x => x.ScheduleId) + 1 : 1);
+			}
+			_etlJobSchedules.Add(jobSchedule);
+			return jobSchedule.ScheduleId;
 		}
 
 		public void DeleteSchedule(int scheduleId)
 		{
-			throw new NotImplementedException();
+			var scheduleToDelete = _etlJobSchedules.FirstOrDefault(x => x.ScheduleId == scheduleId);
+			if (scheduleToDelete == null)
+				return;
+
+			_etlJobSchedulePeriods.Remove(scheduleId);
+			_etlJobSchedules.Remove(scheduleToDelete);
 		}
 
 		public IList<IEtlJobRelativePeriod> GetSchedulePeriods(int scheduleId)

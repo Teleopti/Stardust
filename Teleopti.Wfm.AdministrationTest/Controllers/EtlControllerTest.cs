@@ -6,6 +6,7 @@ using System.Web.Http.Results;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Analytics.Etl.Common;
+using Teleopti.Analytics.Etl.Common.Entity;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.JobSchedule;
@@ -495,7 +496,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 
 			var scheduledJobs = JobScheduleRepository.GetSchedules(null, DateTime.MinValue);
 			var agentJobs = scheduledJobs.Where(x => x.JobName == "Agent Statistics").ToList();
-			var queueJobs = scheduledJobs.Where(x => x.JobName == "Queue Statistics").ToList(); ;
+			var queueJobs = scheduledJobs.Where(x => x.JobName == "Queue Statistics").ToList();
 
 			scheduledJobs.Count.Should().Be(7);
 			agentJobs.Count.Should().Be(3);
@@ -857,6 +858,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			var savedSchedule = JobScheduleRepository.GetSchedules(null, DateTime.MinValue).Single();
 			var savedSchedulePeriod = JobScheduleRepository.GetSchedulePeriods(savedSchedule.ScheduleId).Single();
 
+			savedSchedule.ScheduleId.Should().Be.GreaterThan(0);
 			savedSchedule.ScheduleName.Should().Be(scheduleModel.ScheduleName);
 			savedSchedule.Description.Should().Be(scheduleModel.Description);
 			savedSchedule.JobName.Should().Be(scheduleModel.JobName);
@@ -903,6 +905,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			var savedSchedule = JobScheduleRepository.GetSchedules(null, DateTime.MinValue).Single();
 			var savedSchedulePeriod = JobScheduleRepository.GetSchedulePeriods(savedSchedule.ScheduleId).Single();
 
+			savedSchedule.ScheduleId.Should().Be.GreaterThan(0);
 			savedSchedule.ScheduleName.Should().Be(scheduleModel.ScheduleName);
 			savedSchedule.Description.Should().Be(scheduleModel.Description);
 			savedSchedule.JobName.Should().Be(scheduleModel.JobName);
@@ -942,6 +945,65 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 				.Should().Be.True();
 			savedPeriods.All(x => x.RelativePeriod.Maximum == 0)
 				.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldEditDailyScheduledJob()
+		{
+			var existingSchedule = new EtlJobSchedule(
+				3,
+				"My Schedule data Job",
+				true,
+				360,
+				"Schedule",
+				1,
+				"Desc",
+				null,
+				new List<IEtlJobRelativePeriod>{new EtlJobRelativePeriod(new MinMax<int>(-1, 1), JobCategoryType.Schedule)}, 
+				"My tenant");
+			JobScheduleRepository.SaveSchedule(existingSchedule);
+			JobScheduleRepository.SaveSchedulePeriods(existingSchedule);
+
+			var editedScheduleModel = new EtlScheduleJobModel
+			{
+				ScheduleId = 3,
+				ScheduleName = "name",
+				Description = "d",
+				JobName = "Forecast",
+				Enabled = false,
+				DailyFrequencyStart = new DateTime(2018, 4, 4, 10, 0, 0),
+				Tenant = "your tenant",
+				LogDataSourceId = 2,
+				RelativePeriods = new[]
+				{
+					new JobPeriodRelative
+					{
+						JobCategoryName = JobCategoryType.Forecast.ToString(),
+						Start = -2,
+						End = 2
+					}
+				}
+			};
+
+			var result = Target.EditScheduleJob(editedScheduleModel);
+			result.Should().Be.OfType<OkResult>();
+
+			var savedSchedule = JobScheduleRepository.GetSchedules(null, DateTime.MinValue).Single();
+			var savedSchedulePeriod = JobScheduleRepository.GetSchedulePeriods(savedSchedule.ScheduleId).Single();
+
+			savedSchedule.ScheduleId.Should().Be(editedScheduleModel.ScheduleId);
+			savedSchedule.ScheduleName.Should().Be(editedScheduleModel.ScheduleName);
+			savedSchedule.Description.Should().Be(editedScheduleModel.Description);
+			savedSchedule.JobName.Should().Be(editedScheduleModel.JobName);
+			savedSchedule.Enabled.Should().Be(editedScheduleModel.Enabled);
+			savedSchedule.OccursOnceAt.Should().Be(editedScheduleModel.DailyFrequencyStart.TimeOfDay.TotalMinutes);
+			savedSchedule.TenantName.Should().Be(editedScheduleModel.Tenant);
+			savedSchedule.ScheduleType.Should().Be(JobScheduleType.OccursDaily);
+			savedSchedule.DataSourceId.Should().Be(editedScheduleModel.LogDataSourceId);
+
+			savedSchedulePeriod.JobCategoryName.Should().Be(editedScheduleModel.RelativePeriods.Single().JobCategoryName);
+			savedSchedulePeriod.RelativePeriod.Minimum.Should().Be(editedScheduleModel.RelativePeriods.Single().Start);
+			savedSchedulePeriod.RelativePeriod.Maximum.Should().Be(editedScheduleModel.RelativePeriods.Single().End);
 		}
 
 

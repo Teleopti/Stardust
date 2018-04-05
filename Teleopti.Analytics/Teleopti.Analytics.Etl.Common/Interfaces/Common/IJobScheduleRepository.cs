@@ -7,7 +7,7 @@ namespace Teleopti.Analytics.Etl.Common.Interfaces.Common
     public interface IJobScheduleRepository
     {
 		IList<IEtlJobSchedule> GetSchedules(IEtlJobLogCollection etlJobLogCollection, DateTime serverStartTime);
-        int SaveSchedule(IEtlJobSchedule etlJobScheduleItem);
+        int SaveSchedule(IEtlJobSchedule jobSchedule);
         void DeleteSchedule(int scheduleId);
         IList<IEtlJobRelativePeriod> GetSchedulePeriods(int scheduleId);
         void SaveSchedulePeriods(IEtlJobSchedule etlJobScheduleItem);

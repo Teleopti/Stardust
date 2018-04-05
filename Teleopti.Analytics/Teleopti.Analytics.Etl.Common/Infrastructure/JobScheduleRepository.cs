@@ -92,22 +92,22 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			return etlScheduleJobs;
 		}
 
-		public int SaveSchedule(IEtlJobSchedule etlJobScheduleItem)
+		public int SaveSchedule(IEtlJobSchedule jobSchedule)
 		{
 			var parameterList = new[]
 			{
-				new SqlParameter("schedule_id", etlJobScheduleItem.ScheduleId),
-				new SqlParameter("schedule_name", etlJobScheduleItem.ScheduleName),
-				new SqlParameter("enabled", etlJobScheduleItem.Enabled),
-				new SqlParameter("schedule_type", etlJobScheduleItem.ScheduleType),
-				new SqlParameter("occurs_daily_at", etlJobScheduleItem.OccursOnceAt),
-				new SqlParameter("occurs_every_minute", etlJobScheduleItem.OccursEveryMinute),
-				new SqlParameter("recurring_starttime", etlJobScheduleItem.OccursEveryMinuteStartingAt),
-				new SqlParameter("recurring_endtime", etlJobScheduleItem.OccursEveryMinuteEndingAt),
-				new SqlParameter("etl_job_name", etlJobScheduleItem.JobName),
-				new SqlParameter("etl_datasource_id", etlJobScheduleItem.DataSourceId),
-				new SqlParameter("description", etlJobScheduleItem.Description),
-				new SqlParameter("tenant_name", etlJobScheduleItem.TenantName)
+				new SqlParameter("schedule_id", jobSchedule.ScheduleId),
+				new SqlParameter("schedule_name", jobSchedule.ScheduleName),
+				new SqlParameter("enabled", jobSchedule.Enabled),
+				new SqlParameter("schedule_type", jobSchedule.ScheduleType),
+				new SqlParameter("occurs_daily_at", jobSchedule.OccursOnceAt),
+				new SqlParameter("occurs_every_minute", jobSchedule.OccursEveryMinute),
+				new SqlParameter("recurring_starttime", jobSchedule.OccursEveryMinuteStartingAt),
+				new SqlParameter("recurring_endtime", jobSchedule.OccursEveryMinuteEndingAt),
+				new SqlParameter("etl_job_name", jobSchedule.JobName),
+				new SqlParameter("etl_datasource_id", jobSchedule.DataSourceId),
+				new SqlParameter("description", jobSchedule.Description),
+				new SqlParameter("tenant_name", jobSchedule.TenantName)
 			};
 
 			return

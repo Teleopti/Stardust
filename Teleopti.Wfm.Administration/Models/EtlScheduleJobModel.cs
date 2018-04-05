@@ -6,6 +6,7 @@ namespace Teleopti.Wfm.Administration.Models
 {
 	public class EtlScheduleJobModel
 	{
+		public int ScheduleId { get; set; }
 		public string ScheduleName { get; set; }
 		public string Description { get; set; }
 		public string JobName { get; set; }
@@ -16,6 +17,5 @@ namespace Teleopti.Wfm.Administration.Models
 		public string DailyFrequencyMinute { get; set; }
 		public JobPeriodRelative[] RelativePeriods { get; set; }
 		public int LogDataSourceId { get; set; }
-		public int ScheduleId { get; set; }
 	}
 }

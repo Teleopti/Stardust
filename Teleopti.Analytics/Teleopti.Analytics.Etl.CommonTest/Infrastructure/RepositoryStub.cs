@@ -178,7 +178,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Infrastructure
 
 		#region IRepository Members
 
-		public int SaveSchedule(IEtlJobSchedule etlJobScheduleItem)
+		public int SaveSchedule(IEtlJobSchedule jobSchedule)
 		{
 			return 1;
 		}

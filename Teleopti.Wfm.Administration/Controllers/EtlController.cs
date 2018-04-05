@@ -339,6 +339,22 @@ namespace Teleopti.Wfm.Administration.Controllers
 		[HttpPost, Route("Etl/ScheduleJob")]
 		public virtual IHttpActionResult ScheduleJob(EtlScheduleJobModel scheduleModel)
 		{
+			scheduleModel.ScheduleId = -1;
+			saveScheduleJob(scheduleModel);
+
+			return Ok();
+		}
+
+		[TenantUnitOfWork]
+		[HttpPost, Route("Etl/EditScheduleJob")]
+		public virtual IHttpActionResult EditScheduleJob(EtlScheduleJobModel scheduleModel)
+		{
+			saveScheduleJob(scheduleModel);
+			return Ok();
+		}
+
+		private void saveScheduleJob(EtlScheduleJobModel scheduleModel)
+		{
 			if (string.IsNullOrEmpty(scheduleModel.DailyFrequencyMinute))
 			{
 				_etlJobScheduler.ScheduleDailyJob(scheduleModel);
@@ -347,10 +363,8 @@ namespace Teleopti.Wfm.Administration.Controllers
 			{
 				_etlJobScheduler.SchedulePeriodicJob(scheduleModel);
 			}
-			
-			return Ok();
 		}
-		
+
 		private static List<EtlJobEnqueModel> createJobToEnqueue(string tenantName, string jobName, JobCategoryType jobCategoryName,
 			int datasourceId, DateTime startDate, DateTime endDate)
 		{
