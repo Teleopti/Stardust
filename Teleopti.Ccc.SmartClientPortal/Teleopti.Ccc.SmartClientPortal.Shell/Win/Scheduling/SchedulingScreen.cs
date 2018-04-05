@@ -2223,7 +2223,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			}
 			releaseUserInterface(canceled);
 
-			if (_schedulingOptions.ShowTroubleshot)
+			if (_schedulingOptions.ShowTroubleshot && _schedulingOptions.ScheduleEmploymentType == ScheduleEmploymentType.FixedStaff)
 			{
 				var scheduleDays = _scheduleView.SelectedSchedules();
 				if (scheduleDays.Any())
