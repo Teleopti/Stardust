@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.Web.Auth
 		{
 			var uri = request?.Url;
 			if (uri == null) return null;
-			if (uri.IsTransportSecure()) return uri;
 
 			var headers = request.Headers;
 			return considerLoadBalancerHeadersForScheme(headers, uri);
@@ -24,7 +23,6 @@ namespace Teleopti.Ccc.Web.Auth
 		{
 			var uri = request?.Url;
 			if (uri == null) return null;
-			if (uri.IsTransportSecure()) return uri;
 
 			var headers = request.Headers;
 			return considerLoadBalancerHeadersForScheme(headers, uri);
@@ -32,6 +30,7 @@ namespace Teleopti.Ccc.Web.Auth
 
 		private static Uri considerLoadBalancerHeadersForScheme(NameValueCollection headers, Uri uri)
 		{
+			if (uri.IsTransportSecure()) return uri;
 			if (headers == null) return uri;
 			var forwardedProto = headers["X-Forwarded-Proto"];
 			var frontEndHttps = headers["Front-End-Https"];
