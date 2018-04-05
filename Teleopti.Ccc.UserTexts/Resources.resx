@@ -17280,4 +17280,8 @@ The application will now exit.</value>
     <value>Select sites / teams</value>
     <comment>label for selecting sites and teams in real time adherence agents view</comment>
   </data>
+	<data name="ExcludedColon" xml:space="preserve">
+    <value>Excluded: </value>
+    <comment>text in the excluded states input field in rta</comment>
+  </data>
 </root>

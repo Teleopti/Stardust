@@ -57,6 +57,7 @@
 		vm.pause = false;
 		vm.pausedAt = null;
 		vm.loading = true;
+		var phoneStates = [];
 
 		rtaStateService.setCurrentState($stateParams);
 
@@ -65,6 +66,7 @@
 			vm.skills = data.skills;
 			vm.skillAreas = data.skillAreas;
 			buildSites(data.organization);
+			buildPhoneStates(data.states);
 		});
 
 		var defaultSorting = function () {
@@ -86,11 +88,7 @@
 		};
 		vm.goToOverview = rtaRouteService.goToOverview;
 
-		var phoneStates = [];
-		var phoneStatesLoaded;
-		loadPhoneStates();
 
-		
 		var poller;
 
 		$scope.$watch(
@@ -156,56 +154,33 @@
 			return states;
 		}
 
-		function loadPhoneStates() {
-			
-			var excludedStates = $stateParams.es || [];
-			
-			phoneStates.push(makeState(rtaStateService.nullStateId, "No State"));
-
-			excludedStates
-				.filter(function (id) {
-					return id !== rtaStateService.nullStateId
-				})
-				.forEach(function (id) {
-					phoneStates.push(makeState(id, '<unknown>'));
-				});
-
-			$http.get('../api/PhoneStates')
-				.then(function (response) {
-					response.data.forEach(function (phoneState) {
-						var existing = phoneStates.find(function (s) {
-							return s.Id === phoneState.Id;
-						});
-						if (existing)
-							existing.Name = phoneState.Name;
-						else
-							phoneStates.push(makeState(phoneState.Id, phoneState.Name));
-					});
-					phoneStatesLoaded = true;
-				});
-
-		}
-
-		function makeState(id, name) {
-			return {
-				Id: id,
-				Name: name,
-				get Selected() {
-					return rtaStateService.isStateSelected(id);
-				},
-				set Selected(value) {
-					rtaStateService.selectState(id, value);
-					forcePoll();
-				},
-			};
-		}
-
 		vm.statePickerSelectionText = undefined;
 
-		function updatePhoneStates(states) {
+		function buildPhoneStates(data) {
 
-			if (!phoneStatesLoaded)
-				return;
+			var makeState = function (id, name) {
+				return {
+					Id: id,
+					Name: name,
+					get Selected() {
+						return rtaStateService.isStateSelected(id);
+					},
+					set Selected(value) {
+						rtaStateService.selectState(id, value);
+						vm.statePickerSelectionText = rtaStateService.statePickerSelectionText();
+						forcePoll();
+					},
+				};
+			};
+
+			phoneStates.push(makeState(rtaStateService.nullStateId, "No State"));
+
+			data.forEach(function (phoneState) {
+				phoneStates.push(makeState(phoneState.Id, phoneState.Name));
+			});
+		}
+
+		function updatePhoneStates(states) {
 
 			vm.states = phoneStates.filter(function (phoneState) {
 				var stateInView = states.States.some(function (agentState) {
@@ -219,7 +194,6 @@
 			vm.states = $filter('orderBy')(vm.states, function (state) {
 				return state.Name;
 			});
-
 		}
 
 		$scope.$watch(

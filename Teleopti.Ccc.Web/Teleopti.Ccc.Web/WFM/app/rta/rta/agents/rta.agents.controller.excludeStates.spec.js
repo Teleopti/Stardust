@@ -1,9 +1,9 @@
 'use strict';
 rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
-													 $state,
-													 $fakeBackend,
-													 $controllerBuilder,
-													 stateParams) {
+													$state,
+													$fakeBackend,
+													$controllerBuilder,
+													stateParams) {
 	var vm;
 
 	it('should include state of agents in view', function () {
@@ -433,7 +433,7 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 						return s.Id === 'PhoneGuid';
 					})[0].Selected = false;
 				});
-			
+
 			t.wait(5000);
 
 			expect(c.agentStates.length).toEqual(2);
@@ -773,6 +773,138 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 
 		expect(c.states.length).toEqual(1);
 		expect(c.states[0].Id).toEqual('state');
+	});
+
+	it('should display excluded state name', function (t) {
+		t.backend
+			.withPhoneState({Id: "state", Name: "State"})
+			.withAgentState({
+				PersonId: "person",
+				StateId: 'state'
+			});
+		var c = t.createController();
+		t.apply(function () {
+			c.showInAlarm = false;
+		});
+
+		t.apply(function () {
+			c.states[0].Selected = false;
+		});
+
+		expect(c.statePickerSelectionText).toContain("State");
+	});
+
+	it('should display 2 excluded states names', function (t) {
+		t.backend
+			.withPhoneState({Id: "state", Name: "State"})
+			.withPhoneState({Id: "anotherState", Name: "AnotherState"})
+			.withAgentState({
+				PersonId: "person",
+				StateId: 'state'
+			})
+			.withAgentState({
+				PersonId: "anotherPerson",
+				StateId: 'anotherState'
+			});
+		var c = t.createController();
+		t.apply(function () {
+			c.showInAlarm = false;
+		});
+
+		t.apply(function () {
+			c.states[0].Selected = false;
+		}).apply(function () {
+			c.states[1].Selected = false;
+		});
+
+		expect(c.statePickerSelectionText).toContain("AnotherState");
+		expect(c.statePickerSelectionText).toContain("State");
+	});
+
+	it('should not display included state name', function (t) {
+		t.backend
+			.withPhoneState({Id: "state", Name: "State"})
+			.withAgentState({
+				PersonId: "person",
+				StateId: 'state'
+			});
+		var c = t.createController();
+		t.apply(function () {
+			c.showInAlarm = false;
+		});
+
+		t.apply(function () {
+			c.states[0].Selected = true;
+		});
+
+		expect(c.statePickerSelectionText).toBe(undefined);
+	});
+
+	it('should not display previous excluded state name', function (t) {
+		t.backend
+			.withPhoneState({Id: "state", Name: "State"})
+			.withAgentState({
+				PersonId: "person",
+				StateId: 'state'
+			});
+		var c = t.createController();
+		t.apply(function () {
+			c.showInAlarm = false;
+		});
+
+		t.apply(function () {
+			c.states[0].Selected = false;
+		});
+		t.apply(function () {
+			c.states[0].Selected = true;
+		});
+
+		expect(c.statePickerSelectionText).toBe(undefined);
+	});
+
+	it('should not display max 10 state names', function (t) {
+		for (var i = 0; i < 11; i++)
+			t.backend
+				.withPhoneState({Id: i, Name: i})
+				.withAgentState({
+					PersonId: "person" + i,
+					StateId: i
+				});
+		var c = t.createController();
+		t.apply(function () {
+			c.showInAlarm = false;
+		});
+
+		for (var i = 0; i < 11; i++)
+			t.apply(function () {
+				c.states[i].Selected = false;
+			});
+
+		expect(c.statePickerSelectionText).not.toContain("10");
+	});
+
+	it('should display translated text', function (t) {
+		t.backend
+			.withPhoneState({Id: "state", Name: "State"})
+			.withAgentState({
+				PersonId: "person",
+				StateId: 'state'
+			})
+			.with.translation({
+				Name: 'ExcludedColon',
+				Value: 'Excluded: '
+			})
+		;
+		var c = t.createController();
+		t.apply(function () {
+			c.showInAlarm = false;
+		});
+
+		t.apply(function () {
+			c.states[0].Selected = false;
+		});
+
+		expect(c.statePickerSelectionText).toContain('Excluded: ');
 	});
 
 });

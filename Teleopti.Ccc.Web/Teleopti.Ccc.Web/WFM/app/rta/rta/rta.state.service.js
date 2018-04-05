@@ -5,7 +5,7 @@
 		.module('wfm.rta')
 		.service('rtaStateService', rtaStateService);
 
-	function rtaStateService($state, rtaService, $q, $sessionStorage, rtaDataService) {
+	function rtaStateService($state, rtaService, $q, $sessionStorage, $translate, rtaDataService) {
 
 		var state = {
 			open: undefined,
@@ -20,6 +20,7 @@
 			organization: [],
 			skills: [],
 			skillAreas: [],
+			states: []
 		};
 
 		return {
@@ -85,7 +86,7 @@
 			selectState: selectState,
 			// because angular cant handle an array of null in stateparams
 			nullStateId: "noState",
-
+			statePickerSelectionText: statePickerSelectionText,
 
 			hasSelection: function () {
 				return state.siteIds.length > 0 || state.teamIds.length > 0 || state.skillIds.length > 0 || state.skillAreaId;
@@ -129,6 +130,25 @@
 			},
 
 		};
+
+		function statePickerSelectionText() {
+			var exludedStates = state.es
+				.map(function (id) {
+					var state = data.states.find(function (s) {
+						return s.Id == id;
+					});
+					if (state)
+						return state.Name;
+				})
+				.filter(function (x) {
+					return x;
+				})
+				.slice(0, 9)
+				.join(', ');
+			if (exludedStates === '')
+				return undefined;
+			return $translate.instant('ExcludedColon') + exludedStates;
+		}
 
 		function organizationSelectionText() {
 			return data.organization
@@ -304,7 +324,7 @@
 					}))
 					state.siteIds.push(site.Id);
 			});
-			
+
 			// remove teams where site is selected
 			var teamIdsSelectedBySite = data.organization
 				.filter(function (site) {

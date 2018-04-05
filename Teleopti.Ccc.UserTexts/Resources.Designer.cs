@@ -11441,6 +11441,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Excluded: .
+        /// </summary>
+        public static string ExcludedColon {
+            get {
+                return ResourceManager.GetString("ExcludedColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The shift on {0:d} does not match the shift on {1:d}..
         /// </summary>
         public static string ExistingShiftNotMatchShift {

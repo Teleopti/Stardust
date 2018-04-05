@@ -5,11 +5,12 @@
 		.module('wfm.rta')
 		.service('rtaDataService', rtaDataService);
 
-	function rtaDataService($state, rtaService, $q) {
+	function rtaDataService($state, rtaService, $q, $http) {
 
 		var organization = [];
 		var skills = [];
 		var skillAreas = [];
+		var states = [];
 
 		var loaded = $q.all([
 			rtaService.getOrganization()
@@ -26,12 +27,17 @@
 			rtaService.getSkillAreas()
 				.then(function (data) {
 					skillAreas = data;
-				})
+				}),
+			$http.get('../api/PhoneStates')
+				.then(function (response) {
+				states = response.data;
+			})
 		]).then(function () {
 			return {
 				organization: organization,
 				skills: skills,
-				skillAreas: skillAreas
+				skillAreas: skillAreas,
+				states: states
 			}
 		});
 

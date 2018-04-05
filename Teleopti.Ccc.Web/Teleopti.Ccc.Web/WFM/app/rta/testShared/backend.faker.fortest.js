@@ -101,7 +101,7 @@
 
 		service.fake({
 			name: 'translation',
-			url: /Global\/Language\/NotReallyUsed/,
+			url: /Global\/Language?lang=en/,
 			clear: function () {
 				return {}
 			},
