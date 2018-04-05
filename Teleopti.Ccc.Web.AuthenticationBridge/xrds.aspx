@@ -1,5 +1,5 @@
 ﻿<%@ Page Language="C#" Inherits="AuthBridge.Web.xrds, Authbridge.Web" %>
-<%@ Import Namespace="Teleopti.Ccc.Web.Auth" %>
+<%@ Import Namespace="AuthBridge.Utilities" %>
 <%
 	var baseUri = Request.UrlConsideringLoadBalancerHeaders();
 	var uri = new Uri(baseUri, Response.ApplyAppPathModifier("~/response"));
