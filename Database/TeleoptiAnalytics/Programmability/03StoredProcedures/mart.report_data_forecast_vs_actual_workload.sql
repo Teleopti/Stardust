@@ -1,4 +1,4 @@
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[report_data_forecast_vs_actual_workload]') AND type in (N'P', N'PC'))
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[report_data_forecast_vs_actual_workload]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [mart].[report_data_forecast_vs_actual_workload]
 GO
 
@@ -22,7 +22,7 @@ GO
 --exec report_data_forecast_vs_actual_workload @scenario_id=N'0', @skill_set=N'4',@workload_set=N'5',@interval_type=N'7',@date_from='2006-01-15 00:00:00:000',@date_to='2006-02-10 00:00:00:000',@interval_from=N'96',@interval_to=N'143',@person_code='10bbde88-ffc3-4f55-8396-9ab60024b7a9',@report_id=10,=1053
 --exec mart.report_data_forecast_vs_actual_workload @scenario_id=N'0',@skill_set=N'0,3',@workload_set=N'5,0',@interval_type=N'5',@date_from='2006-01-01 00:00:00:000',@date_to='2006-01-14 00:00:00:000',@interval_from=N'0',@interval_to=N'287',@time_zone_id=N'1',@person_code='79C90699-C7C0-4D17-ADBF-9B2F0012C85A',@report_id=10,@language_id=1053,@business_unit_code='79C90699-C7C0-4D17-ADBF-9B2F0012C85A'
 
-CREATE PROCEDURE [mart].[report_data_forecast_vs_actual_workload] 
+CREATE PROCEDURE [mart].[report_data_forecast_vs_actual_workload]
 @scenario_id int,
 @skill_set nvarchar(max),
 @workload_set nvarchar(max),
@@ -45,7 +45,7 @@ CREATE TABLE #skills(id int)
 CREATE TABLE #workloads(id int)
 CREATE TABLE #pre_result(
 	date_id int,
-	date smalldatetime,
+	[date] smalldatetime,
 	year_month int,
 	year_week nvarchar(6),
 	weekday_resource_key nvarchar(100),
@@ -90,7 +90,7 @@ CREATE TABLE #bridge_time_zone(
 CREATE TABLE #bridge_queue_workload(
 	queue_id int,
 	workload_id int,
-	skill_id int) 
+	skill_id int)
 /*Split string of skill id:s*/
 INSERT INTO #skills
 SELECT * FROM mart.SplitStringInt(@skill_set)
@@ -116,19 +116,19 @@ SELECT
 	interval_id,
 	local_date_id,
 	local_interval_id
-FROM 
+FROM
 	mart.bridge_time_zone
-WHERE 
-	time_zone_id = @time_zone_id AND 
-	date_id BETWEEN @date_from_id AND @date_to_id
+WHERE
+	time_zone_id = @time_zone_id AND
+	local_date_id BETWEEN @date_from_id AND @date_to_id
 
 /* Get the interesting part of mart.bridge_queue_workload to join on later */
 INSERT INTO #bridge_queue_workload
-SELECT 
+SELECT
 	queue_id,
 	workload_id,
 	skill_id
-FROM 
+FROM
 	mart.bridge_queue_workload
 WHERE
 	skill_id IN (select id from #skills) AND
@@ -145,12 +145,12 @@ INSERT INTO #pre_result (
 	interval_name,
 	halfhour_name,
 	hour_name,
-	calculated_calls, 
+	calculated_calls,
 	offered_calls,
 	answered_calls,
 	talk_time_s,
 	acw_s)
-SELECT 
+SELECT
 	d.date_id,
 	d.date_date as [date],
 	d.year_month,
@@ -183,7 +183,7 @@ INNER JOIN #bridge_queue_workload bqw
 INNER JOIN #bridge_time_zone b
 	ON	fq.interval_id= b.interval_id
 	AND fq.date_id= b.date_id
-INNER JOIN mart.dim_date d 
+INNER JOIN mart.dim_date d
 	ON b.local_date_id = d.date_id
 INNER JOIN mart.dim_interval i
 	ON b.local_interval_id = i.interval_id	
@@ -191,8 +191,8 @@ INNER JOIN mart.dim_workload w
 	ON bqw.workload_id = w.workload_id
 WHERE d.date_date BETWEEN @date_from AND @date_to
 	AND i.interval_id BETWEEN @interval_from AND @interval_to
-ORDER BY 
-		CASE @interval_type 
+ORDER BY
+		CASE @interval_type
 		WHEN 1 THEN i.interval_name
 		WHEN 2 THEN i.halfhour_name
 		WHEN 3 THEN i.hour_name
@@ -201,7 +201,6 @@ ORDER BY
 		WHEN 6 THEN convert(varchar(10),left(d.year_month,4) + '-' + right(d.year_month,2))
 		WHEN 7 THEN d.weekday_resource_key
 		END
-
 
 /* GET FORECAST DATA */
 INSERT INTO #pre_result(date_id,date,year_month,year_week,weekday_resource_key,
@@ -221,16 +220,16 @@ SELECT	d.date_id,
 		forecasted_after_call_work_s,
 		@hide_time_zone as hide_time_zone,
 		@interval_type
-FROM  
+FROM
 	mart.fact_forecast_workload fw
-INNER JOIN 
+INNER JOIN
 	mart.bridge_time_zone b
 	ON	fw.interval_id= b.interval_id
 	AND fw.date_id= b.date_id
-INNER JOIN 
-	mart.dim_date d 
+INNER JOIN
+	mart.dim_date d
 	ON b.local_date_id = d.date_id
-INNER JOIN 
+INNER JOIN
 	mart.dim_interval i
 	ON b.local_interval_id = i.interval_id
 WHERE d.date_date BETWEEN @date_from AND @date_to
@@ -238,9 +237,9 @@ AND i.interval_id BETWEEN @interval_from AND @interval_to
 AND b.time_zone_id = @time_zone_id
 AND fw.skill_id IN (select id from #skills)
 AND fw.workload_id IN (select id from #workloads)
-AND fw.scenario_id=@scenario_id 
-ORDER BY 
-		CASE @interval_type 
+AND fw.scenario_id=@scenario_id
+ORDER BY
+		CASE @interval_type
 		WHEN 1 THEN i.interval_name
 		WHEN 2 THEN i.halfhour_name
 		WHEN 3 THEN i.hour_name
@@ -249,7 +248,6 @@ ORDER BY
 		WHEN 6 THEN convert(varchar(10),left(d.year_month,4) + '-' + right(d.year_month,2))
 		WHEN 7 THEN d.weekday_resource_key
 		END
-
 
 /* GROUP RESULT DATA */
 INSERT INTO #result (period,
@@ -268,7 +266,7 @@ INSERT INTO #result (period,
 				hide_time_zone,
 				interval_type,
 				[date])
-SELECT CASE @interval_type 
+SELECT CASE @interval_type
 		WHEN 1 THEN interval_name
 		WHEN 2 THEN halfhour_name
 		WHEN 3 THEN hour_name
@@ -306,7 +304,7 @@ SELECT CASE @interval_type
 		min([date]) as [date]
 FROM #pre_result
 GROUP BY
-	CASE @interval_type 
+	CASE @interval_type
 	WHEN 1 THEN interval_name
 		WHEN 2 THEN halfhour_name
 		WHEN 3 THEN hour_name
@@ -315,8 +313,8 @@ GROUP BY
 		WHEN 6 THEN convert(varchar(10),left(year_month,4) + '-' + right(year_month,2))
 		WHEN 7 THEN weekday_resource_key
 	END
-ORDER BY 
-		CASE @interval_type 
+ORDER BY
+		CASE @interval_type
 		WHEN 1 THEN interval_name
 		WHEN 2 THEN halfhour_name
 		WHEN 3 THEN hour_name
@@ -326,8 +324,6 @@ ORDER BY
 		WHEN 7 THEN weekday_resource_key
 		END
 
-
-
 IF @interval_type=7
 BEGIN
 	UPDATE #result
@@ -336,11 +332,10 @@ BEGIN
 	
 	UPDATE #result
 	SET period=term_language
-	FROM mart.language_translation l 
+	FROM mart.language_translation l
 	INNER JOIN #result r ON l.term_english=substring(r.period,13,len(r.period)) COLLATE database_default
 	AND l.language_id=@language_id
 END
-
 
 SELECT * FROM #result order by weekday_number, period
 
