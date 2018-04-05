@@ -1464,6 +1464,8 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="WFM\ai.js" />
+    <Content Include="WFM\appInsights.js" />
     <Content Include="WFM\app\gamification\gamification.component.badgeCalculation.js" />
     <Content Include="WFM\app\gamification\gamification.component.badgeCalculation.spec.js" />
     <Content Include="WFM\app\gamification\gamification.component.gamification.js" />
@@ -1626,6 +1628,7 @@
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.ProbabilityOptionViewModel.js" />
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Areas\MyTime\Views\Schedule\MobileDayPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Schedule\MobileMonthPartial.cshtml" />
