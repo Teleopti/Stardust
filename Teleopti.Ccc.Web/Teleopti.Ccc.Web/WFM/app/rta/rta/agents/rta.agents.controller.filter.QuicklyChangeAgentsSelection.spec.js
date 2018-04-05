@@ -921,4 +921,18 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 		expect(t.lastGoParams.skillAreaId).toEqual('phoneAndEmailGuid');
 	});
 
+
+	it('should not state go while creating controller??', function (t) {
+		t.backend.withPhoneState({Id: "state"})
+			.withAgentState({
+				PersonId: "person",
+				StateId: 'state'
+			});
+
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+
+		expect(t.lastGoParams).toEqual(undefined);
+	});
+
 });

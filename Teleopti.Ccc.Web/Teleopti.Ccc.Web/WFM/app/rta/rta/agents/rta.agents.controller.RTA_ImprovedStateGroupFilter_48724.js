@@ -90,6 +90,7 @@
 		var phoneStatesLoaded;
 		loadPhoneStates();
 
+		
 		var poller;
 
 		$scope.$watch(
@@ -156,13 +157,10 @@
 		}
 
 		function loadPhoneStates() {
-
+			
 			var excludedStates = $stateParams.es || [];
-
-			var nullStateSelected = !excludedStates.some(function (id) {
-				return id === rtaStateService.nullStateId
-			});
-			phoneStates.push(makeState(rtaStateService.nullStateId, "No State", nullStateSelected));
+			
+			phoneStates.push(makeState(rtaStateService.nullStateId, "No State"));
 
 			excludedStates
 				.filter(function (id) {
@@ -188,9 +186,7 @@
 
 		}
 
-		function makeState(id, name, selected) {
-			if (selected)
-				rtaStateService.selectState(id, true);
+		function makeState(id, name) {
 			return {
 				Id: id,
 				Name: name,
@@ -204,7 +200,7 @@
 			};
 		}
 
-		vm.statePickerSelectionText = 'test';
+		vm.statePickerSelectionText = undefined;
 
 		function updatePhoneStates(states) {
 
