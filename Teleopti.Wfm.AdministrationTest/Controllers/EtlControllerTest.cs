@@ -463,6 +463,10 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 		[Test]
 		public void ShouldSplitJobsInOneMonthPeriod()
 		{
+			TimeZone.IsNewYork();
+			var localNow = new DateTime(2018, 04, 05, 01, 0, 0);
+			Now.Is(TimeZoneHelper.ConvertToUtc(localNow, TimeZone.TimeZone()));
+
 			const int dataSourceId = 3;
 			var masterTenant = new Tenant(testTenantName);
 			masterTenant.DataSourceConfiguration.SetAnalyticsConnectionString($"Initial Catalog={RandomName.Make()}");
@@ -471,7 +475,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 				new BaseConfiguration(1053, 15, "UTC", false));
 			GeneralInfrastructure.HasDataSources(new DataSourceEtl(dataSourceId, "myDs", 12, timezoneName, 15, false));
 
-			var period = new DateOnlyPeriod(DateOnly.Today.AddDays(-40), DateOnly.Today.AddDays(40));
+			var period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()).AddDays(-40), (new DateOnly(Now.UtcDateTime()).AddDays(40)));
 			GeneralInfrastructure.HasFactQueuePeriod(dataSourceId, period);
 			GeneralInfrastructure.HasFactAgentPeriod(dataSourceId, period);
 
