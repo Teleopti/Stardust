@@ -39,6 +39,31 @@ function global:RunAndRetryNonQuery
 	Write-Output "$(Get-Date -f $timeStampFormat) - Running query... Done."
 }
 
+function RunAndRetrySqlQuery
+{
+    Param
+    (
+        $ConnectionString,
+        $Query
+    )
+        
+    $Datatable = New-Object System.Data.DataTable
+    
+    $retryPolicy = [Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling.RetryPolicy]::DefaultFixed
+    $arguments = "$ConnectionString",$retryPolicy,$retryPolicy
+    $connection = New-Object -TypeName Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling.ReliableSqlConnection -ArgumentList $arguments
+
+	$connection.Open() | Out-Null
+	$command = $connection.CreateCommand()
+	$command.CommandTimeout = $CommandTimeout
+	$command.CommandText = $query
+    $Reader = $Command.ExecuteReader()
+    $Datatable.Load($Reader)
+    $Connection.Close()    
+
+    return $Datatable
+}
+
 function global:RunAndRetryScalar {
     
     param (
