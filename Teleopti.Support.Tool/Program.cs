@@ -1,4 +1,5 @@
 ﻿using System;
+using log4net;
 using log4net.Config;
 using Teleopti.Support.Tool.Tool;
 
@@ -24,9 +25,17 @@ namespace Teleopti.Support.Tool
 			}
 			else
 			{
-				new CommandBuilder()
-					.ParseCommandLine(args)
-					.Execute();
+				try
+				{
+					new CommandBuilder()
+						.ParseCommandLine(args)
+						.Execute();
+				}
+				catch (Exception e)
+				{
+					LogManager.GetLogger(typeof(Program)).Error(e);
+					throw;
+				}
 			}
 		}
 	}

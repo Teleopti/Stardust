@@ -10,7 +10,10 @@ namespace Teleopti.Ccc.TestCommon
 		public static string AnalyticsConnectionString => ConfigurationManager.AppSettings["InfraTest.AnalyticsConnectionString"];
 		public static string AggConnectionString => getAggConnectionString("Infratest_Agg", AnalyticsConnectionString);
 		public static string SqlServerName => ConfigurationManager.AppSettings["InfraTest.SqlServerName"];
+		public static string SqlAuthString => ConfigurationManager.AppSettings["InfraTest.SqlAuthString"];
 		public static string DatabaseName => ConfigurationManager.AppSettings["InfraTest.DatabaseName"];
+		public static string ToggleMode => ConfigurationManager.AppSettings["InfraTest.ToggleMode"];
+		public static string AnalyticsDatabaseName => ConfigurationManager.AppSettings["InfraTest.AnalyticsDatabaseName"];
 		public static string DatabaseBackupLocation => ConfigurationManager.AppSettings["InfraTest.DatabaseBackupLocation"];
 
 		// Using this before we change the way we have information about where agg database. This works for tests.
