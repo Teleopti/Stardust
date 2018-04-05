@@ -75,19 +75,13 @@
 		};
 
 		//init
-		function checkIfAnyTenantsAreUnconfigured(element) {
-			return element.IsBaseConfigured === false;
-		}
 
 		vm.getManualData = function() {
 			vm.getTenants();
 			vm.getConfigStatus();
 			vm.language = navigator.language || navigator.userLanguage;
-			vm.unconfigured = vm.tenants.find(checkIfAnyTenantsAreUnconfigured);
 		};
 		vm.getManualData();
-
-
 
 		function selectJob(job) {
 			vm.selectedJob = job;
@@ -152,10 +146,12 @@
 			vm.tenants = [];
 			$http
 			.get("./Etl/GetTenants", tokenHeaderService.getHeaders())
-			.success(function(data) {
+				.success(function (data) {
 				for (var i = 0; i < data.length; i++) {
 					if (data[i].IsBaseConfigured) {
 						vm.tenants.push(data[i]);
+					} else {
+						vm.unconfigured = true;
 					}
 				}
 				vm.selectedTenant = vm.tenants[0];
