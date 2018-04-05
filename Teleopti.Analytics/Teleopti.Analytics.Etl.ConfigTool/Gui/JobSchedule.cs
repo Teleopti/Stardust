@@ -445,19 +445,6 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 				tenantName = _etlJobSchedule.TenantName;
 			}
 
-			int relativePeriodStart, relativePeriodEnd;
-			if (radioButtonRelativePeriodTodayInitial.Checked)
-			{
-				relativePeriodStart = 0;
-				relativePeriodEnd = 0;
-			}
-			else
-			{
-				relativePeriodStart = (int) numericUpDownRelativePeriodStartInitial.Value;
-				relativePeriodEnd = (int) numericUpDownRelativePeriodEndInitial.Value;
-			}
-
-
 			if (radioButtonOccursOnce.Checked)
 			{
 				_etlJobSchedule = new Common.JobSchedule.EtlJobSchedule(
@@ -466,8 +453,6 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 					checkBoxEnabled.Checked,
 					(int) dateTimePickerOccursOnce.Value.TimeOfDay.TotalMinutes,
 					(string) comboBoxJob.SelectedValue,
-					relativePeriodStart,
-					relativePeriodEnd,
 					logDataSource,
 					labelDescription.Text,
 					null,
@@ -484,8 +469,6 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 					(int) dateTimePickerStartingAt.Value.TimeOfDay.TotalMinutes,
 					(int) dateTimePickerEndingAt.Value.TimeOfDay.TotalMinutes,
 					(string) comboBoxJob.SelectedValue,
-					relativePeriodStart,
-					relativePeriodEnd,
 					logDataSource,
 					labelDescription.Text,
 					null,

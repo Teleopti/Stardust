@@ -33,8 +33,6 @@ namespace Teleopti.Analytics.Etl.CommonTest.JobSchedule
             Assert.AreEqual(JobScheduleType.OccursDaily, jobSchedule.ScheduleType);
             Assert.AreEqual(60, jobSchedule.OccursOnceAt);
             Assert.AreEqual("Intraday", jobSchedule.JobName);
-            Assert.AreEqual(-14, jobSchedule.RelativePeriodStart);
-            Assert.AreEqual(14, jobSchedule.RelativePeriodEnd);
             Assert.AreEqual(1, jobSchedule.DataSourceId);
             Assert.AreEqual("Occurs daily at x.", jobSchedule.Description);
 
@@ -48,8 +46,6 @@ namespace Teleopti.Analytics.Etl.CommonTest.JobSchedule
             Assert.AreEqual(180, jobSchedule.OccursEveryMinuteStartingAt);
             Assert.AreEqual(1430, jobSchedule.OccursEveryMinuteEndingAt);
             Assert.AreEqual("Forecast", jobSchedule.JobName);
-            Assert.AreEqual(-7, jobSchedule.RelativePeriodStart);
-            Assert.AreEqual(7, jobSchedule.RelativePeriodEnd);
             Assert.AreEqual(1, jobSchedule.DataSourceId);
             Assert.AreEqual("Occurs daily every x minute.", jobSchedule.Description);
 

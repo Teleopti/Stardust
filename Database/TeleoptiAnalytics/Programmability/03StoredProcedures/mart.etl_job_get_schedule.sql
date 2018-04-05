@@ -23,8 +23,6 @@ BEGIN
 		,[recurring_starttime]
 		,[recurring_endtime]
 		,[etl_job_name]
-		,[etl_relative_period_start]
-		,[etl_relative_period_end]
 		,[etl_datasource_id]
 		,[description]
 	FROM [mart].[etl_job_schedule]

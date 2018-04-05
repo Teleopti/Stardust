@@ -73,8 +73,8 @@ INSERT [mart].[etl_jobstep] ([jobstep_id], [jobstep_name]) VALUES (59, N'aspnet_
 
 /****** Object:  Table [mart].[etl_job_schedule]    Script Date: 02/09/2009 14:14:54 ******/
 SET IDENTITY_INSERT [mart].[etl_job_schedule] ON
-INSERT [mart].[etl_job_schedule] ([schedule_id], [schedule_name], [enabled], [schedule_type], [occurs_daily_at], [occurs_every_minute], [recurring_starttime], [recurring_endtime], [etl_job_name], [etl_relative_period_start], [etl_relative_period_end], [etl_datasource_id], [description])
-VALUES (-1, N'Manual', 1, 0, 0, 0, 0, 0, N'Not Defined', NULL, NULL, -1, NULL)
+INSERT [mart].[etl_job_schedule] ([schedule_id], [schedule_name], [enabled], [schedule_type], [occurs_daily_at], [occurs_every_minute], [recurring_starttime], [recurring_endtime], [etl_job_name], [etl_datasource_id], [description])
+VALUES (-1, N'Manual', 1, 0, 0, 0, 0, 0, N'Not Defined', -1, NULL)
 SET IDENTITY_INSERT [mart].[etl_job_schedule] OFF
 
 /****** Object:  Table [mart].[service_level_calculation]    Script Date: 02/11/2009 11:00:50 ******/

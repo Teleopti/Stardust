@@ -18,8 +18,6 @@ namespace Teleopti.Analytics.Etl.Common.Interfaces.Common
         DateTime PeriodicStartingTodayAt { get; }
         DateTime PeriodicEndingTodayAt { get; }
         string JobName { get; }
-        int RelativePeriodStart { get; }
-        int RelativePeriodEnd { get; }
         ReadOnlyCollection<IEtlJobRelativePeriod> RelativePeriodCollection { get; }
         int DataSourceId { get; }
         string Description { get;  }

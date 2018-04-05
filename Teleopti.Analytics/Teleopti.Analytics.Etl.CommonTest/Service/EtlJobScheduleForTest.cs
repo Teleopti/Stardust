@@ -20,8 +20,6 @@ namespace Teleopti.Analytics.Etl.CommonTest.Service
 		public DateTime PeriodicStartingTodayAt { get; set; }
 		public DateTime PeriodicEndingTodayAt { get; set; }
 		public string JobName { get; set; }
-		public int RelativePeriodStart { get; set; }
-		public int RelativePeriodEnd { get; set; }
 		public ReadOnlyCollection<IEtlJobRelativePeriod> RelativePeriodCollection { get; set; }
 		public int DataSourceId { get; set; }
 		public string Description { get; set; }

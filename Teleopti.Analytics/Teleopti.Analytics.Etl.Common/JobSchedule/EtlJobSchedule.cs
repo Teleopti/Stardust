@@ -39,7 +39,7 @@ namespace Teleopti.Analytics.Etl.Common.JobSchedule
 		}
 
 		public EtlJobSchedule(int scheduleId, String scheduleName, bool enabled, int occursDailyAt,
-            string jobName, int relativePeriodStart, int relativePeriodEnd, int dataSourceId,
+            string jobName, int dataSourceId,
             string description, IEtlJobLogCollection etlJobLogCollection, 
             IList<IEtlJobRelativePeriod> relativePeriodCollection,
 			string tenantName)
@@ -56,8 +56,6 @@ namespace Teleopti.Analytics.Etl.Common.JobSchedule
             Enabled = enabled;
             OccursOnceAt = occursDailyAt;
             JobName = jobName;
-            RelativePeriodStart = relativePeriodStart;
-            RelativePeriodEnd = relativePeriodEnd;
             DataSourceId = dataSourceId;
             Description = description;
 			TenantName = tenantName;
@@ -65,7 +63,7 @@ namespace Teleopti.Analytics.Etl.Common.JobSchedule
         }
 
         public EtlJobSchedule(int scheduleId, String scheduleName, bool enabled, int cyclicInterval, int startTime, int endTime,
-            string jobName, int relativePeriodStart, int relativePeriodEnd, int dataSourceId,
+            string jobName, int dataSourceId,
             string description, IEtlJobLogCollection etlJobLogCollection, DateTime serverStartTime, 
             IList<IEtlJobRelativePeriod> relativePeriodCollection,
 			string tenantName)
@@ -90,8 +88,6 @@ namespace Teleopti.Analytics.Etl.Common.JobSchedule
             OccursEveryMinuteStartingAt = startTime;
             OccursEveryMinuteEndingAt = endTime;
             JobName = jobName;
-            RelativePeriodStart = relativePeriodStart;
-            RelativePeriodEnd = relativePeriodEnd;
             DataSourceId = dataSourceId;
             Description = description;
 			TenantName = tenantName;
@@ -203,8 +199,6 @@ namespace Teleopti.Analytics.Etl.Common.JobSchedule
         }
 
         public string JobName { get; private set; }
-        public int RelativePeriodStart { get; private set; }
-        public int RelativePeriodEnd { get; private set; }
         public ReadOnlyCollection<IEtlJobRelativePeriod> RelativePeriodCollection
         {
             get { return new ReadOnlyCollection<IEtlJobRelativePeriod>(_relativePeriodCollection); }

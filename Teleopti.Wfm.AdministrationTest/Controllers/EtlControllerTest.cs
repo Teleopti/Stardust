@@ -791,8 +791,8 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 		[Test]
 		public void ShouldGetScheduledJobs()
 		{
-			var dailyOneTimeJob = new EtlJobSchedule(1, "My Nightly job", true, 60, "Nightly", 0, 0, 1, "Desc", null, null, "tenant A");
-			var dailyPeriodicJob = new EtlJobSchedule(2, "My Intraday job", true, 30, 120, 1320, "Intraday", 0, 0, 1, "Run Intraday job", null, DateTime.Now, null, "tenant A");
+			var dailyOneTimeJob = new EtlJobSchedule(1, "My Nightly job", true, 60, "Nightly", 1, "Desc", null, null, "tenant A");
+			var dailyPeriodicJob = new EtlJobSchedule(2, "My Intraday job", true, 30, 120, 1320, "Intraday", 1, "Run Intraday job", null, DateTime.Now, null, "tenant A");
 			var manualJobNotToBeLoaded = new EtlJobSchedule(3, "Manual ETL", "Schedule", true, 1, "Manually enqueued job", DateTime.Now, null, "tenant A");
 			JobScheduleRepository.SaveSchedule(dailyOneTimeJob);
 			JobScheduleRepository.SaveSchedule(dailyPeriodicJob);

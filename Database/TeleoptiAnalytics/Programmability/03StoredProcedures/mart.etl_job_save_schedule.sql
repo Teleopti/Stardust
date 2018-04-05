@@ -18,8 +18,6 @@ CREATE PROCEDURE [mart].[etl_job_save_schedule]
 @recurring_starttime int,
 @recurring_endtime int,
 @etl_job_name nvarchar(150),
-@etl_relative_period_start int,
-@etl_relative_period_end int,
 @etl_datasource_id int,
 @description nvarchar(500),
 @tenant_name nvarchar(255)
@@ -38,8 +36,6 @@ BEGIN
 			,[recurring_starttime]
 			,[recurring_endtime]
 			,[etl_job_name]
-			,[etl_relative_period_start]
-			,[etl_relative_period_end]
 			,[etl_datasource_id]
 			,[description]
 			,[tenant_name])
@@ -52,8 +48,6 @@ BEGIN
 			,@recurring_starttime
 			,@recurring_endtime
 			,@etl_job_name
-			,@etl_relative_period_start
-			,@etl_relative_period_end
 			,@etl_datasource_id
 			,@description
 			,@tenant_name)
@@ -71,8 +65,6 @@ BEGIN
 			,[recurring_starttime] = @recurring_starttime
 			,[recurring_endtime] = @recurring_endtime
 			,[etl_job_name] = @etl_job_name
-			,[etl_relative_period_start] = @etl_relative_period_start
-			,[etl_relative_period_end] = @etl_relative_period_end
 			,[etl_datasource_id] = @etl_datasource_id
 			,[description] = @description
 			,[tenant_name] = @tenant_name
