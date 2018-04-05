@@ -172,9 +172,7 @@
 					},
 				};
 			};
-
-			phoneStates.push(makeState(rtaStateService.nullStateId, "No State"));
-
+			
 			data.forEach(function (phoneState) {
 				phoneStates.push(makeState(phoneState.Id, phoneState.Name));
 			});
@@ -184,7 +182,7 @@
 
 			vm.states = phoneStates.filter(function (phoneState) {
 				var stateInView = states.States.some(function (agentState) {
-					if (agentState.StateId === null && phoneState.Id === rtaStateService.nullStateId)
+					if (agentState.StateId === null)
 						return true;
 					return agentState.StateId === phoneState.Id;
 				});

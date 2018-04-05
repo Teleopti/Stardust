@@ -40,6 +40,8 @@
 					.load()
 					.then(function (d) {
 						data = d;
+						// because angular cant handle an array of null in stateparams
+						data.states.push({Id: "noState", Name: $translate.instant('NoState')});
 					})
 					.then(updateOpenedSites);
 			},
@@ -84,8 +86,7 @@
 
 			isStateSelected: isStateSelected,
 			selectState: selectState,
-			// because angular cant handle an array of null in stateparams
-			nullStateId: "noState",
+			
 			statePickerSelectionText: statePickerSelectionText,
 
 			hasSelection: function () {

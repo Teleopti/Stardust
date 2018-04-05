@@ -116,7 +116,7 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 		c.apply(vm.showInAlarm = true);
 
 		expect(vm.states.length).toEqual(1);
-		expect(vm.states[0].Name).toEqual("No State");
+		expect(vm.states[0].Name).toEqual("NoState");
 	});
 
 	it('should have empty state if excluded', function () {
@@ -130,7 +130,7 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 
 		vm = $controllerBuilder.createController().vm;
 
-		expect(vm.states[0].Name).toEqual('No State');
+		expect(vm.states[0].Name).toEqual('NoState');
 		expect(vm.states[0].Selected).toEqual(false);
 	});
 
@@ -862,7 +862,7 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 		expect(c.statePickerSelectionText).toBe(undefined);
 	});
 
-	it('should not display max 10 state names', function (t) {
+	it('should display max 10 excluded state names', function (t) {
 		for (var i = 0; i < 11; i++)
 			t.backend
 				.withPhoneState({Id: i, Name: i})
@@ -883,14 +883,15 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 		expect(c.statePickerSelectionText).not.toContain("10");
 	});
 
-	it('should display translated text', function (t) {
+	it('should display excluded states description text', function (t) {
 		t.backend
 			.withPhoneState({Id: "state", Name: "State"})
 			.withAgentState({
 				PersonId: "person",
 				StateId: 'state'
 			})
-			.with.translation({
+			.with
+			.translation({
 				Name: 'ExcludedColon',
 				Value: 'Excluded: '
 			})
@@ -905,6 +906,51 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 		});
 
 		expect(c.statePickerSelectionText).toContain('Excluded: ');
+	});
+
+	it('should display excluded No State', function (t) {
+		t.stateParams.es = ["noState"];
+		t.backend
+			.withAgentState({
+				PersonId: "person",
+				StateId: null
+			})
+			.with
+			.translation({
+				Name: 'NoState',
+				Value: 'translated no state'
+			});
+		
+		var c = t.createController();
+		t.apply(function () {
+			c.showInAlarm = false;
+		});
+
+		t.apply(function () {
+			c.states[0].Selected = false;
+		});
+
+		expect(c.statePickerSelectionText).toContain('translated no state');
+	});
+
+	it('should include "no state"', function (t) {
+		t.backend
+			.withAgentState({
+				PersonId: "person",
+				StateId: null,
+			})
+			.with
+			.translation({
+				Name: 'NoState',
+				Value: 'translated no state'
+			});
+
+		vm = t.createController();
+		t.apply(function () {
+			vm.showInAlarm = false;
+		});
+
+		expect(vm.states[0].Name).toEqual('translated no state');
 	});
 
 });
