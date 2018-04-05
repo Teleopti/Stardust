@@ -362,11 +362,20 @@ namespace Teleopti.Wfm.Administration.Controllers
 			saveScheduleJob(scheduleModel);
 			return Ok();
 		}
+
 		[TenantUnitOfWork]
 		[HttpPost, Route("Etl/ToggleScheduleJob")]
 		public virtual IHttpActionResult ToggleScheduleJob(int scheduleId)
 		{
 			_etlJobScheduler.ToggleScheduleJobEnabledState(scheduleId);
+			return Ok();
+		}
+
+		[TenantUnitOfWork]
+		[HttpPost, Route("Etl/DeleteScheduleJob")]
+		public virtual IHttpActionResult DeleteScheduleJob(int scheduleId)
+		{
+			_etlJobScheduler.DeleteScheduleJob(scheduleId);
 			return Ok();
 		}
 

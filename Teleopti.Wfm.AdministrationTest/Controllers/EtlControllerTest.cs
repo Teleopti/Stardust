@@ -1030,6 +1030,30 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			savedSchedule.Enabled.Should().Be.False();
 		}
 
+		[Test]
+		public void ShouldDeleteScheduledJob()
+		{
+			var existingSchedule = new EtlJobSchedule(
+				3,
+				"My Schedule data Job",
+				true,
+				360,
+				"My job",
+				1,
+				"Desc",
+				null,
+				null,
+				"My tenant");
+			JobScheduleRepository.SaveSchedule(existingSchedule);
+
+			var result = Target.DeleteScheduleJob(existingSchedule.ScheduleId);
+
+			result.Should().Be.OfType<OkResult>();
+			JobScheduleRepository.GetSchedules(null, DateTime.MinValue)
+				.Any()
+				.Should().Be.False();
+		}
+
 		private IEnumerable<JobCollectionModel> getJobs(string tenantName, bool toggle38131Enabled, bool pmInstalled)
 		{
 			ConfigReader.FakeConnectionString("Hangfire", connectionString);

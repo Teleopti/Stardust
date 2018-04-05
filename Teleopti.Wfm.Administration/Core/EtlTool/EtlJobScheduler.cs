@@ -164,5 +164,11 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 			_jobScheduleRepository.SetDataMartConnectionString(_configReader.ConnectionString("Hangfire"));
 			_jobScheduleRepository.ToggleScheduleJobEnabledState(scheduleId);
 		}
+
+		public void DeleteScheduleJob(int scheduleId)
+		{
+			_jobScheduleRepository.SetDataMartConnectionString(_configReader.ConnectionString("Hangfire"));
+			_jobScheduleRepository.DeleteSchedule(scheduleId);
+		}
 	}
 }
