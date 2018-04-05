@@ -1,4 +1,16 @@
 'use strict';
+var defaultToggles = {
+	Wfm_Intraday_OptimalStaffing_40921: true,
+	Wfm_Intraday_ScheduledStaffing_41476: true,
+	Wfm_Intraday_ESL_41827: true,
+	WFM_Intraday_Show_For_Other_Days_43504: false,
+	WFM_Remember_My_Selection_In_Intraday_47254: false,
+	togglesLoaded: {
+		then: function(cb) {
+			cb();
+		}
+	}
+};
 describe('IntradayAreaController', function() {
 	var $httpBackend,
 		$controller,
@@ -26,29 +38,17 @@ describe('IntradayAreaController', function() {
 
 	beforeEach(function() {
 		module('wfm.intraday');
-
 		module(function($provide) {
 			$provide.service('Toggle', function() {
-				return {
-					Wfm_Intraday_OptimalStaffing_40921: true,
-					Wfm_Intraday_ScheduledStaffing_41476: true,
-					Wfm_Intraday_ESL_41827: true,
-					WFM_Intraday_Show_For_Other_Days_43504: false,
-					WFM_Remember_My_Selection_In_Intraday_47254: false,
-					togglesLoaded: {
-						then: function(cb) {
-							cb();
-						}
-					}
-				};
+				return defaultToggles;
 			});
 		});
-
 		module(function($provide) {
 			$provide.service('CurrentUserInfo', function() {
 				return currentUserInfo;
 			});
 		});
+		window.localStorage.clear();
 	});
 
 	beforeEach(function() {
@@ -807,9 +807,9 @@ describe('IntradayAreaController', function() {
 		};
 	}
 
-	var createController = function(isNewlyCreatedSkillArea) {
+	var createController = function(isNewlyCreatedSkillArea, toggleObj) {
 		vm = $controller('IntradayAreaController', { $scope: scope, $translate: $translate });
-
+		vm.toggles = Object.assign(defaultToggles, toggleObj);
 		vm.onStateChanged(undefined, { name: 'intraday.area' }, { isNewSkillArea: isNewlyCreatedSkillArea });
 		scope.$digest();
 		$httpBackend.flush();
@@ -827,10 +827,10 @@ describe('IntradayAreaController', function() {
 	it('should display list of skill areas', function() {
 		createController(false);
 
-		expect(vm.moduleState.skillAreas[0].Id).toEqual('fa9b5393-ef48-40d1-b7cc-09e797589f81');
-		expect(vm.moduleState.skillAreas[0].Name).toEqual('my skill area 1');
-		expect(vm.moduleState.skillAreas[0].Skills[0].Id).toEqual('5f15b334-22d1-4bc1-8e41-72359805d30f');
-		expect(vm.moduleState.skillAreas[0].Skills[0].Name).toEqual('skill x');
+		expect(vm.skillAreas[0].Id).toEqual('fa9b5393-ef48-40d1-b7cc-09e797589f81');
+		expect(vm.skillAreas[0].Name).toEqual('my skill area 1');
+		expect(vm.skillAreas[0].Skills[0].Id).toEqual('5f15b334-22d1-4bc1-8e41-72359805d30f');
+		expect(vm.skillAreas[0].Skills[0].Name).toEqual('skill x');
 	});
 
 	it('should display list of skills', function() {
@@ -841,16 +841,16 @@ describe('IntradayAreaController', function() {
 	});
 
 	it('should delete selected skill area when toggle is disabled', function() {
+		vm.toggles['WFM_Modify_Skill_Groups_43727'] = false;
 		createController(false);
 
-		vm.toggles['WFM_Modify_Skill_Groups_43727'] = false;
-		vm.deleteSkillArea(vm.moduleState.skillAreas[1]);
+		vm.deleteSkillArea(vm.skillAreas[1]);
 
-		expect(vm.moduleState.skillAreas.length).toEqual(3);
+		expect(vm.skillAreas.length).toEqual(3);
 		$httpBackend.flush();
 
 		expect(vm.moduleState.selectedItem).toEqual(null);
-		expect(vm.moduleState.skillAreas.length).toEqual(2);
+		expect(vm.skillAreas.length).toEqual(2);
 	});
 
 	// Removed due to new behaviour: Anders Sjöberg 2018-03-20
@@ -865,9 +865,9 @@ describe('IntradayAreaController', function() {
 	it('should monitor first skill area if there are any', function() {
 		createController(false);
 
-		vm.selectSkillOrSkillArea(vm.moduleState.skillAreas[0]);
+		vm.selectSkillOrSkillArea(vm.skillAreas[0]);
 
-		expect(vm.moduleState.selectedItem).toEqual(vm.moduleState.skillAreas[0]);
+		expect(vm.moduleState.selectedItem).toEqual(vm.skillAreas[0]);
 	});
 
 	it('should have permission to modify skill area', function() {
@@ -888,7 +888,7 @@ describe('IntradayAreaController', function() {
 	it('should poll data for skill area when selecting that area', function() {
 		createController(false);
 		vm.moduleState.activeTab = 0;
-		vm.selectSkillOrSkillArea(vm.moduleState.skillAreas[0]);
+		vm.selectSkillOrSkillArea(vm.skillAreas[0]);
 		$httpBackend.flush();
 
 		expect(vm.viewObj.hasMonitorData).toEqual(true);
@@ -939,7 +939,7 @@ describe('IntradayAreaController', function() {
 		createController(false);
 		vm.moduleState.activeTab = 0;
 
-		vm.selectSkillOrSkillArea(vm.moduleState.skillAreas[0]);
+		vm.selectSkillOrSkillArea(vm.skillAreas[0]);
 		$httpBackend.flush();
 
 		expect(vm.viewObj.forecastedCallsObj.series.length).toBeGreaterThan(5);
@@ -949,7 +949,7 @@ describe('IntradayAreaController', function() {
 		createController(false);
 		vm.moduleState.activeTab = 1;
 
-		vm.selectSkillOrSkillArea(vm.moduleState.skillAreas[0]);
+		vm.selectSkillOrSkillArea(vm.skillAreas[0]);
 		$httpBackend.flush();
 
 		expect(vm.viewObj.serviceLevelObj.series.length).toBeGreaterThan(5);
@@ -959,115 +959,47 @@ describe('IntradayAreaController', function() {
 		createController(false);
 		vm.moduleState.activeTab = 2;
 
-		vm.selectSkillOrSkillArea(vm.moduleState.skillAreas[0]);
+		vm.selectSkillOrSkillArea(vm.skillAreas[0]);
 		$httpBackend.flush();
 
 		expect(vm.viewObj.forecastedStaffing.series.length).toBeGreaterThan(3);
 	});
 
-	// it('should return no staffing when no supported skills in skill area', function() {
-	// 	isUnsupportedSkillTest = true;
-	// 	createController(false);
-	// 	vm.moduleState.activeTab = 2;
-
-	// 	vm.selectSkillOrSkillArea(vm.moduleState.skillAreas[3]);
-	// 	$httpBackend.flush();
-
-	// 	expect(vm.viewObj.forecastedStaffing.series.length).toEqual(0);
-	// });
-
-	it('should show optimal staffing when toggle is enabled', function() {
-		createController(false);
+	it('should show optimal staffing', function() {
 		vm.moduleState.activeTab = 2;
 
-		vm.toggles['Wfm_Intraday_OptimalStaffing_40921'] = true;
-
-		vm.selectSkillOrSkillArea(vm.moduleState.skillAreas[0]);
-		$httpBackend.flush();
+		vm.selectSkillOrSkillArea(vm.skillAreas[0]);
+		// $httpBackend.flush();
 
 		expect(vm.viewObj.actualStaffingSeries.length).toBeGreaterThan(3);
 	});
 
-	it('should not show optimal staffing when toggle is disabled', function() {
-		createController(false);
+	it('should show scheduled staffing', function() {
 		vm.moduleState.activeTab = 2;
 
-		vm.toggles['Wfm_Intraday_OptimalStaffing_40921'] = false;
-
-		vm.selectSkillOrSkillArea(vm.moduleState.skillAreas[0]);
-		$httpBackend.flush();
-
-		expect(vm.viewObj.actualStaffingSeries.length).toEqual(1);
-	});
-
-	it('should show scheduled staffing when toggle is enabled', function() {
-		createController(false);
-		vm.moduleState.activeTab = 2;
-
-		vm.toggles['Wfm_Intraday_ScheduledStaffing_41476'] = true;
-
-		vm.selectSkillOrSkillArea(vm.moduleState.skillAreas[0]);
-		$httpBackend.flush();
+		vm.selectSkillOrSkillArea(vm.skillAreas[0]);
+		// $httpBackend.flush();
 
 		expect(vm.viewObj.scheduledStaffing.length).toBeGreaterThan(3);
 	});
 
-	it('should not show scheduled staffing when toggle is disabled', function() {
-		createController(false);
-		vm.moduleState.activeTab = 2;
-
-		vm.toggles['Wfm_Intraday_ScheduledStaffing_41476'] = false;
-
-		vm.selectSkillOrSkillArea(vm.moduleState.skillAreas[0]);
-		$httpBackend.flush();
-
-		expect(vm.viewObj.scheduledStaffing.length).toEqual(1);
-	});
-
-	it('should show ESL in performance view when toggle is enabled', function() {
+	it('should show ESL in performance', function() {
 		createController(false);
 		vm.moduleState.activeTab = 1;
 
-		vm.toggles['Wfm_Intraday_ESL_41827'] = true;
-
-		vm.selectSkillOrSkillArea(vm.moduleState.skillAreas[0]);
+		vm.selectSkillOrSkillArea(vm.skillAreas[0]);
 		$httpBackend.flush();
 
 		expect(vm.viewObj.estimatedServiceLevelObj.series.length).toBeGreaterThan(0);
 		expect(vm.viewObj.summary.summaryEstimatedServiceLevel).toBeGreaterThan(0);
 	});
 
-	it('should show ESL in performance view when toggle is disabled', function() {
-		createController(false);
-		vm.moduleState.activeTab = 1;
-
-		vm.toggles['Wfm_Intraday_ESL_41827'] = false;
-
-		vm.selectSkillOrSkillArea(vm.moduleState.skillAreas[0]);
-		$httpBackend.flush();
-
-		expect(vm.viewObj.estimatedServiceLevelObj.series.length).toEqual(1);
-		expect(vm.viewObj.summary.summaryEstimatedServiceLevel).toEqual(undefined);
-	});
-
-	// Removed due to new behaviour: Anders Sjöberg 2018-03-20
-	// it('should monitor first skill that is supported', function() {
-	// 	skillAreaInfo.SkillAreas = [];
-	// 	isUnsupportedSkillTest = true;
-	// 	createController(false);
-
-	// 	vm.selectSkillOrSkillArea(skillsWithFirstUnsupported[0]);
-
-	// 	expect(vm.moduleState.selectedItem).toEqual(vm.skills[1]);
-	// });
-
 	it('should get traffic data corresponding to chosenOffset', function() {
 		skillAreaInfo.SkillAreas = [];
 		isUnsupportedSkillTest = false;
 
-		createController(false);
+		createController(false, { WFM_Intraday_Show_For_Other_Days_43504: true });
 		vm.moduleState.activeTab = 0;
-		vm.toggles['toggleSvc.WFM_Intraday_Show_For_Other_Days_43504'] = true;
 		vm.selectSkillOrSkillArea(skills[0]);
 
 		vm.changeChosenOffset(1);
@@ -1081,9 +1013,8 @@ describe('IntradayAreaController', function() {
 		skillAreaInfo.SkillAreas = [];
 		isUnsupportedSkillTest = false;
 
-		createController(false);
+		createController(false, { WFM_Intraday_Show_For_Other_Days_43504: true });
 		vm.moduleState.activeTab = 1;
-		vm.toggles['toggleSvc.WFM_Intraday_Show_For_Other_Days_43504'] = true;
 		vm.selectSkillOrSkillArea(skills[0]);
 		vm.changeChosenOffset(1);
 		$httpBackend.flush();
@@ -1096,9 +1027,8 @@ describe('IntradayAreaController', function() {
 		skillAreaInfo.SkillAreas = [];
 		isUnsupportedSkillTest = false;
 
-		createController(false);
+		createController(false, { WFM_Intraday_Show_For_Other_Days_43504: true });
 		vm.moduleState.activeTab = 2;
-		vm.toggles['toggleSvc.WFM_Intraday_Show_For_Other_Days_43504'] = true;
 		vm.selectSkillOrSkillArea(skills[0]);
 		vm.changeChosenOffset(1);
 		$httpBackend.flush();
@@ -1108,9 +1038,8 @@ describe('IntradayAreaController', function() {
 	});
 
 	it('should get traffic data for skillarea corresponding to chosenOffset', function() {
-		createController(false);
+		createController(false, { WFM_Intraday_Show_For_Other_Days_43504: true });
 		vm.moduleState.activeTab = 0;
-		vm.toggles['toggleSvc.WFM_Intraday_Show_For_Other_Days_43504'] = true;
 		vm.selectSkillOrSkillArea(skillAreas[0]);
 		vm.changeChosenOffset(1);
 		$httpBackend.flush();
@@ -1120,9 +1049,8 @@ describe('IntradayAreaController', function() {
 	});
 
 	it('should get staffing data for skillarea corresponding to chosenOffset', function() {
-		createController(false);
+		createController(false, { WFM_Intraday_Show_For_Other_Days_43504: true });
 		vm.moduleState.activeTab = 2;
-		vm.toggles['toggleSvc.WFM_Intraday_Show_For_Other_Days_43504'] = true;
 		vm.selectSkillOrSkillArea(skillAreas[0]);
 		vm.changeChosenOffset(1);
 		$httpBackend.flush();
@@ -1133,9 +1061,8 @@ describe('IntradayAreaController', function() {
 	});
 
 	it('should get traffic data for skillarea corresponding to chosenOffset', function() {
-		createController(false);
+		createController(false, { WFM_Intraday_Show_For_Other_Days_43504: true });
 		vm.moduleState.activeTab = 0;
-		vm.toggles['toggleSvc.WFM_Intraday_Show_For_Other_Days_43504'] = true;
 		vm.selectSkillOrSkillArea(skillAreas[0]);
 
 		var today = moment('0001-01-01T15:45:00').toDate();
@@ -1149,9 +1076,8 @@ describe('IntradayAreaController', function() {
 	});
 
 	it('should get performance data for skillarea corresponding to chosenOffset', function() {
-		createController(false);
+		createController(false, { WFM_Intraday_Show_For_Other_Days_43504: true });
 		vm.moduleState.activeTab = 1;
-		vm.toggles['toggleSvc.WFM_Intraday_Show_For_Other_Days_43504'] = true;
 		vm.selectSkillOrSkillArea(skillAreas[0]);
 
 		var today = moment('0001-01-01T15:45:00').toDate();
@@ -1165,9 +1091,8 @@ describe('IntradayAreaController', function() {
 	});
 
 	it('should get staffing data for skillarea corresponding to chosenOffset', function() {
-		createController(false);
+		createController(false, { WFM_Intraday_Show_For_Other_Days_43504: true });
 		vm.moduleState.activeTab = 2;
-		vm.toggles['toggleSvc.WFM_Intraday_Show_For_Other_Days_43504'] = true;
 		vm.selectSkillOrSkillArea(skillAreas[0]);
 
 		var today = moment('0001-01-01T15:45:00').toDate();
@@ -1180,9 +1105,8 @@ describe('IntradayAreaController', function() {
 	});
 
 	it('should not show abandon rate data when toggle is enabled and email-like skill chosen', function() {
-		createController(false);
+		createController(false, { WFM_Intraday_SupportOtherSkillsLikeEmail_44026: true });
 		vm.moduleState.activeTab = 1;
-		vm.toggles['WFM_Intraday_SupportOtherSkillsLikeEmail_44026'] = true;
 
 		vm.selectSkillOrSkillArea(skills[1]);
 
@@ -1193,9 +1117,8 @@ describe('IntradayAreaController', function() {
 	});
 
 	it('should not show reforcasted agents data when toggle is enabled and email-like skill chosen', function() {
-		createController(false);
+		createController(false, { WFM_Intraday_SupportOtherSkillsLikeEmail_44026: true });
 		vm.moduleState.activeTab = 2;
-		vm.toggles['WFM_Intraday_SupportOtherSkillsLikeEmail_44026'] = true;
 		vm.selectSkillOrSkillArea(skills[1]);
 		$httpBackend.flush();
 		expect(vm.viewObj.forecastedStaffing.updatedSeries.length).toEqual(1);
@@ -1226,9 +1149,8 @@ describe('IntradayAreaController', function() {
 		expect(forcastedAhtSeries[forcastedAhtSeries.length - 1]).toEqual(201.4);
 	});
 
-	it('should remember selected tab when exiting if toggle is on', function() {
-		createController(false);
-		vm.toggles['WFM_Remember_My_Selection_In_Intraday_47254'] = true;
+	it('should remember selected tab if toggle is on', function() {
+		createController(false, { WFM_Remember_My_Selection_In_Intraday_47254: true });
 		vm.moduleState.activeTab = 1;
 		vm.saveState();
 		vm.moduleState.activeTab = 0;
@@ -1237,24 +1159,18 @@ describe('IntradayAreaController', function() {
 		expect(vm.moduleState.activeTab).toEqual(1);
 	});
 
-	it('should remember selected day offset when exiting if toggle is on', function() {
-		createController(false);
-		vm.toggles['WFM_Remember_My_Selection_In_Intraday_47254'] = true;
+	it('should remember selected day offset if toggle is on', function() {
+		createController(false, { WFM_Remember_My_Selection_In_Intraday_47254: false });
 		vm.changeChosenOffset(-5, true);
-		vm.moduleState.selectedItem = {};
-		vm.saveState();
-		vm.changeChosenOffset(0, true);
+		vm.moduleState.chosenOffset.value = 0;
 		vm.loadState();
 
 		expect(vm.moduleState.chosenOffset.value).toEqual(-5);
 	});
 
-	it('should NOT remember selected day offset when exiting if toggle is off', function() {
-		createController(false);
-		vm.toggles['WFM_Remember_My_Selection_In_Intraday_47254'] = false;
+	it('should NOT remember selected day offset if toggle is off', function() {
+		createController(false, { WFM_Remember_My_Selection_In_Intraday_47254: false });
 		vm.changeChosenOffset(-5, true);
-		vm.moduleState.selectedItem = {};
-		vm.saveState();
 		vm.changeChosenOffset(0, true);
 		vm.loadState();
 

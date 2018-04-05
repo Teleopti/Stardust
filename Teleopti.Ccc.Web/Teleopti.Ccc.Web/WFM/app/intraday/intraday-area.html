@@ -155,8 +155,7 @@
                                                 <p ng-if="vm.viewObj.hasEmailSkill && !vm.toggles['WFM_Intraday_SupportOtherSkillsLikeEmail_44026']">
                                                     <i class="mdi mdi-alert"></i> {{'UnavailableSeries'|translate}}
                                                 </p>
-                                                <div class="wfm-chart intraday-chart"
-                                                     id="trafficChart"></div>
+                                                <intraday-craffic-chart chartData="vm.viewObj"></intraday-craffic-chart>
                                             </div>
                                         </div>
                                         <div class="con-row full-padding">
@@ -237,8 +236,7 @@
                                                    id="noAbandonRate">
                                                     <i class="mdi mdi-alert"></i> {{'NotShowingAbandonRate'|translate}}
                                                 </p>
-                                                <div class="wfm-chart intraday-chart"
-                                                     id="performanceChart"></div>
+                                                <intraday-performance-chart chart-data="vm.viewObj"></intraday-performance-chart>
                                             </div>
                                         </div>
 
@@ -305,7 +303,6 @@
                                                                     md-mode="indeterminate"></md-progress-linear>
                                             </div>
                                         </div>
-
                                     </md-content>
                                     <md-content ng-cloak
                                                 class="md-padding"
@@ -320,9 +317,10 @@
                                                     <i class="mdi mdi-alert"></i>
                                                     {{'NotShowingReforcastedAgents'|translate}}
                                                 </p>
-                                                <div class="wfm-chart intraday-chart"
+                                                <intraday-staffing-chart chart-data="vm.viewObj"></intraday-staffing-chart>
+                                                <!-- <div class="wfm-chart intraday-chart"
                                                      id="staffingChart"
-                                                     ng-show="vm.viewObj.hasMonitorData"></div>
+                                                     ng-show="vm.viewObj.hasMonitorData"></div> -->
                                             </div>
                                         </div>
                                     </md-content>

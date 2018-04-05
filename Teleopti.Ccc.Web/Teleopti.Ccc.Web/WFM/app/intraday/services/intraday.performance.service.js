@@ -199,39 +199,6 @@
 			);
 		};
 
-		service.pollSkillAreaData = function(selectedItem, toggles) {
-			performanceData.waitingForData = true;
-			service.checkMixedArea(selectedItem);
-
-			var showAbandonRate =
-				selectedItem.Skills.every(function(element) {
-					return element.ShowAbandonRate === true;
-				}) || !toggles['WFM_Intraday_SupportOtherSkillsLikeEmail_44026'];
-
-			cancelPendingRequest();
-
-			request = intradayService.getSkillAreaMonitorPerformance.query({
-				id: selectedItem.Id
-			});
-
-			request.$promise.then(
-				function(result) {
-					performanceData.waitingForData = false;
-					service.setPerformanceData(
-						result,
-						toggles['Wfm_Intraday_ESL_41827'],
-						toggles['Wfm_Intraday_SupportSkillTypeEmail_44002'] &&
-							!toggles['WFM_Intraday_SupportOtherSkillsLikeEmail_44026'],
-						true,
-						showAbandonRate
-					);
-				},
-				function() {
-					performanceData.hasMonitorData = false;
-				}
-			);
-		};
-
 		service.pollSkillAreaDataByDayOffset = function(selectedItem, toggles, dayOffset) {
 			performanceData.waitingForData = true;
 			service.checkMixedArea(selectedItem);

@@ -138,36 +138,6 @@
 			);
 		};
 
-		service.pollSkillAreaData = function(selectedItem, toggles) {
-			staffingData.waitingForData = true;
-			service.checkMixedArea(selectedItem);
-			var showReforecastedAgents =
-				selectedItem.Skills.every(function(element) {
-					return element.ShowReforecastedAgents === true;
-				}) || !toggles['WFM_Intraday_SupportOtherSkillsLikeEmail_44026'];
-
-			cancelPendingRequest();
-			request = intradayService.getSkillAreaStaffingData.query({
-				id: selectedItem.Id
-			});
-
-			request.$promise.then(
-				function(result) {
-					staffingData.waitingForData = false;
-					return service.setStaffingData(
-						result,
-						toggles['Wfm_Intraday_OptimalStaffing_40921'],
-						toggles['Wfm_Intraday_ScheduledStaffing_41476'],
-						toggles['Wfm_Intraday_SupportSkillTypeEmail_44002'],
-						showReforecastedAgents
-					);
-				},
-				function() {
-					staffingData.hasMonitorData = false;
-				}
-			);
-		};
-
 		service.pollSkillDataByDayOffset = function(selectedItem, toggles, dayOffset) {
 			staffingData.waitingForData = true;
 			service.checkMixedArea(selectedItem);
@@ -238,7 +208,7 @@
 				mixedArea = selectedItem.SkillType === 'SkillTypeEmail';
 			}
 		};
-		//9020de4a-13f8-465b-a3ae-995caf390fb8
+
 		service.initStaffingChart = function() {
 			service.staffingChart = c3.generate({
 				bindto: '#staffingChart',

@@ -51,6 +51,7 @@
 		vm.viewObj;
 		vm.getSkillIcon = skillIconService.get;
 		vm.toggles = {};
+		vm.skillAreas = [];
 
 		vm.changeChosenOffset = function(value, dontPoll) {
 			$interval.cancel(polling);
@@ -86,10 +87,6 @@
 			return;
 		};
 
-		vm.clearSkillAreaHelper = function() {
-			clearSkillAreaSelection();
-		};
-
 		vm.moduleState = function() {
 			$state.go('intraday.skill-area-config', { isNewSkillArea: false });
 		};
@@ -97,12 +94,11 @@
 		vm.deleteSkillArea = function(skillArea) {
 			cancelTimeout();
 			SkillGroupSvc.deleteSkillGroup({ Id: skillArea.Id }).then(function() {
-				vm.moduleState.skillAreas.splice(vm.moduleState.skillAreas.indexOf(skillArea), 1);
+				vm.skillAreas.splice(vm.skillAreas.indexOf(skillArea), 1);
 				setModuleState({
 					selectedItem: null,
 					hasMonitorData: false
 				});
-				clearSkillAreaSelection();
 			});
 			vm.toggleModal();
 		};
@@ -151,7 +147,6 @@
 		};
 
 		vm.onStateChanged = function(evt, to, params, from) {
-			$log.warn('onStateChanged');
 			if (to.name !== 'intraday.area') return;
 			if (params.isNewSkillArea === true) {
 				reloadSkillAreas(true);
@@ -206,10 +201,6 @@
 				return;
 			}
 
-			//showSkillChips is undefined coming from the html component
-
-			$log.warn('showSkillChips', showSkillChips);
-
 			if (showSkillChips && vm.moduleState.filterSkills.length === 0) {
 				item = vm.moduleState.currentArea;
 			}
@@ -223,27 +214,38 @@
 				if (showSkillChips === false) {
 					vm.moduleState.currentArea = null;
 				}
-				vm.moduleState.preselectedItem = { skillIds: [vm.moduleState.selectedItem.Id] };
-				if (item.DoDisplayData) {
-					vm.moduleState.selectedItem = item;
-					pollActiveTabDataByDayOffset(vm.moduleState.activeTab, vm.moduleState.chosenOffset.value);
-				} else {
-					UnsupportedSkillNotice();
-				}
+				vm.setSkill(item);
 			} else {
-				//It's a skillgroup
-				setModuleState({
-					showIncluded: true,
-					showGroupInfo: true,
-					currentArea: item,
-					selectedItem: item
-				});
-				pollActiveTabDataByDayOffset(vm.moduleState.activeTab, vm.moduleState.chosenOffset.value);
-				vm.moduleState.preselectedItem = { skillAreaId: vm.moduleState.selectedItem.Id };
-				// item.UnsupportedSkills = [];
-				// checkUnsupported(item);
+				vm.setSkillGroup(item);
 			}
 			vm.saveState();
+		};
+
+		vm.setSkill = function(skill) {
+			if (angular.isUndefined(skill) || skill === null) return;
+
+			vm.moduleState.preselectedItem = { skillIds: [skill.Id] };
+			if (skill.DoDisplayData) {
+				vm.moduleState.selectedItem = skill;
+				pollActiveTabDataByDayOffset(vm.moduleState.activeTab, vm.moduleState.chosenOffset.value);
+			} else {
+				UnsupportedSkillNotice();
+			}
+		};
+
+		vm.setSkillGroup = function(skillGroup) {
+			if (angular.isUndefined(skillGroup) || skillGroup === null) return;
+
+			setModuleState({
+				showIncluded: true,
+				showGroupInfo: true,
+				currentArea: skillGroup,
+				selectedItem: skillGroup
+			});
+			pollActiveTabDataByDayOffset(vm.moduleState.activeTab, vm.moduleState.chosenOffset.value);
+			vm.moduleState.preselectedItem = { skillAreaId: skillGroup.Id };
+			// skillGroup.UnsupportedSkills = [];
+			// checkUnsupported(skillGroup);
 		};
 
 		vm.toggleModal = function() {
@@ -268,15 +270,20 @@
 				resetModuleState();
 			}
 			if (!vm.moduleState) return;
-			if (vm.moduleState.currentArea && vm.moduleState.currentArea !== null) {
-				vm.selectSkillOrSkillArea(vm.moduleState.selectedItem, true);
-				vm.openSkillFromArea(vm.moduleState.selectedItem);
-			} else {
-				vm.selectSkillOrSkillArea(vm.moduleState.selectedItem, false);
-			}
 			if (vm.moduleState.chosenOffset) {
 				vm.changeChosenOffset(vm.moduleState.chosenOffset.value, vm.moduleState.chosenOffset.value !== 0);
 			}
+			if (vm.isSkill(vm.moduleState.selectedItem)) {
+				vm.setSkill(vm.moduleState.selectedItem);
+			} else {
+				vm.setSkillGroup(vm.moduleState.selectedItem);
+			}
+			if (vm.moduleState.currentArea && vm.moduleState.currentArea !== null) {
+				vm.openSkillFromArea(vm.moduleState.selectedItem);
+			}
+			// else {
+			// 	vm.selectSkillOrSkillArea(vm.moduleState.selectedItem, false);
+			// }
 		};
 
 		function cancelTimeout() {
@@ -299,7 +306,8 @@
 				}
 			}
 			if (item.UnsupportedSkills.length > 0) {
-				vm.skillAreaMessage = $translate.instant('UnsupportedSkills')
+				vm.skillAreaMessage = $translate
+					.instant('UnsupportedSkills')
 					.replace('{0}', item.UnsupportedSkills.length);
 			} else {
 				vm.skillAreaMessage = '';
@@ -327,28 +335,6 @@
 			polling = $interval(function() {
 				pollData(vm.moduleState.activeTab);
 			}, pollingTimeout);
-		}
-
-		function pollActiveTabData(activeTab) {
-			if (angular.isUndefined(activeTab)) return;
-
-			var services = [intradayTrafficService, intradayPerformanceService, intradayMonitorStaffingService];
-			if (vm.moduleState.selectedItem !== null && angular.isDefined(vm.moduleState.selectedItem)) {
-				if (vm.moduleState.selectedItem.Skills) {
-					services[activeTab].pollSkillAreaData(vm.moduleState.selectedItem, vm.toggles);
-					var timeData = intradayLatestTimeService.getLatestTime(vm.moduleState.selectedItem);
-				} else {
-					services[activeTab].pollSkillData(vm.moduleState.selectedItem, vm.toggles);
-					var timeData = intradayLatestTimeService.getLatestTime(vm.moduleState.selectedItem);
-				}
-				vm.viewObj = services[activeTab].getData();
-				vm.latestActualInterval = timeData;
-				vm.moduleState.hasMonitorData = vm.viewObj.hasMonitorData;
-			} else {
-				timeoutPromise = $timeout(function() {
-					pollActiveTabData(vm.moduleState.activeTab);
-				}, 1000);
-			}
 		}
 
 		function pollActiveTabDataByDayOffset(activeTab, dayOffset) {
@@ -386,13 +372,13 @@
 			if (vm.toggles['WFM_Intraday_Show_For_Other_Days_43504']) {
 				pollActiveTabDataByDayOffset(activeTab, vm.moduleState.chosenOffset.value);
 			} else {
-				pollActiveTabData(activeTab);
+				pollActiveTabDataByDayOffset(activeTab, 0);
 			}
 		}
 
 		function reloadSkillAreas(isNew) {
 			SkillGroupSvc.getSkillGroups().then(function(result) {
-				vm.moduleState.skillAreas = $filter('orderBy')(result.data.SkillAreas, 'Name');
+				vm.skillAreas = $filter('orderBy')(result.data.SkillAreas, 'Name');
 				if (isNew) {
 					vm.latest = $filter('orderBy')(result.data.SkillAreas, 'created_at', true);
 					vm.latest = $filter('orderBy')(result.data.SkillAreas, 'Name');
@@ -401,14 +387,14 @@
 
 				SkillGroupSvc.getSkills().then(function(result) {
 					vm.skills = result.data;
-					if (vm.moduleState.skillAreas.length === 0) {
+					if (vm.skillAreas.length === 0) {
 						vm.moduleState.selectedItem = vm.skills.find(isSupported);
 					}
-					if (vm.moduleState.skillAreas.length > 0) {
+					if (vm.skillAreas.length > 0) {
 						if (isNew) {
 							vm.moduleState.selectedItem = vm.latest[0];
 						} else {
-							vm.moduleState.selectedItem = vm.moduleState.skillAreas[0];
+							vm.moduleState.selectedItem = vm.skillAreas[0];
 						}
 					}
 					vm.loadState();
@@ -444,7 +430,6 @@
 				showGroupInfo: false,
 				showIncluded: false,
 				currentArea: null,
-				skillAreas: [],
 				selectedItem: null,
 				hasMonitorData: false,
 				preselectedItem: null
