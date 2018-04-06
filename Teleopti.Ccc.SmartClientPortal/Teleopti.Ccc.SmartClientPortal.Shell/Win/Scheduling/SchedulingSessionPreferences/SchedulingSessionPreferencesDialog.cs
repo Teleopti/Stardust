@@ -141,7 +141,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 				_schedulingOptions.TeamSameEndTime = false;
 				_schedulingOptions.TeamSameShiftCategory = false;
 				schedulingSessionPreferencesTabPanel1.HideTeamAndBlockSchedulingOptions();
-				schedulingSessionPreferencesTabPanel1.HideTroubleShoot();	
 			}
 
 			ActiveControl = schedulingSessionPreferencesTabPanel1;
