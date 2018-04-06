@@ -41,7 +41,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Config
 				MessageBrokerMailboxExpirationInSeconds =
 					Convert.ToInt32(_configReader.AppConfig("MessageBrokerMailboxExpirationInSeconds")),
 				InstrumentationKey = instrumentationKey
-					//Encryption.EncryptStringToBase64(instrumentationKey, EncryptionConstants.Image1, EncryptionConstants.Image2)
 			};
 		}
 	}
