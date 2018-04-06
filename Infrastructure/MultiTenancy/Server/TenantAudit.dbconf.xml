@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Teleopti.Ccc.Infrastructure"
+                   namespace="Teleopti.Ccc.Infrastructure.MultiTenancy.Server"
+				   schema="Tenant">
+	
+	<class name="TenantAudit" table="Audit">
+		<!--IEntity-->
+		<id name="Id" type="guid" unsaved-value="null">
+			<generator class="guid.comb" />
+		</id>
+
+		<!--IEntity-->
+		<property name="TimeStamp"
+				  access="property"
+				  not-null="true"
+				  type="UtcDateTime" />
+
+		<property name="Action"
+				  access="property"
+				  not-null="true"
+				  length="255"
+				  type="string" />
+
+		<property name="ActionResult"
+				  access="property"
+				  not-null="true"
+				  length="128"
+				  type="string" />
+
+		<property name="Data"
+				  access="property"
+				  not-null="true"
+				  length="8001"
+				  type="string" />
+
+		<property name="Correlation"
+				  access="property"
+				  not-null="true"
+				  type="guid" />
+
+		<property name="ActionPerformedBy"
+				  access="property"
+				  not-null="true"
+				  type="guid" />
+
+		<property name="ActionPerformedOn"
+				  access="property"
+				  not-null="true"
+				  type="guid" />
+	</class>
+</hibernate-mapping>

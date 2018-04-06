@@ -261,12 +261,14 @@
     <Compile Include="MachineLearning\ShiftCategoryExampleForTraining.cs" />
     <Compile Include="MachineLearning\ShiftCategoryPredictionModelLoader.cs" />
     <Compile Include="MultiTenancy\Admin\CheckTenantUserExists.cs" />
+    <Compile Include="MultiTenancy\Server\TenantAudit.cs" />
     <Compile Include="MultiTenancy\Server\ExternalApplicationAccess.cs" />
     <Compile Include="MultiTenancy\Server\HashFromToken.cs" />
     <Compile Include="MultiTenancy\Server\ITenantLogonInfoLoader.cs" />
     <Compile Include="MultiTenancy\Server\Queries\FindExternalApplicationAccess.cs" />
     <Compile Include="MultiTenancy\Server\Queries\IPersistExternalApplicationAccess.cs" />
     <Compile Include="MultiTenancy\Server\Queries\PersistExternalApplicationAccess.cs" />
+    <Compile Include="MultiTenancy\Server\Queries\TenantAuditPersister.cs" />
     <Compile Include="MultiTenancy\Server\Queries\PersonInfoPersister.cs" />
     <Compile Include="MultiTenancy\Server\Queries\PersonInfoPersisterFake.cs" />
     <Compile Include="Persisters\Schedules\ScheduleRangePersisterWithConflictSolve.cs" />
@@ -854,6 +856,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="MultiTenancy\Server\TenantAudit.dbconf.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="MultiTenancy\Server\ExternalApplicationAccess.dbconf.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
