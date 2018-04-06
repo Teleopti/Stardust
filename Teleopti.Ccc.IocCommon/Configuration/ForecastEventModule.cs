@@ -54,8 +54,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ExportMultisiteSkillProcessor>().As<IExportMultisiteSkillProcessor>();
 			if (_configuration.Toggle(Toggles.ResourcePlanner_UseErlangAWithInfinitePatience_45845))
 			{
-				builder.RegisterType<StaffingCalculatorServiceFacadeErlangA>().As<IStaffingCalculatorServiceFacade>()
-					.SingleInstance();
+				if (_configuration.Toggle(Toggles.ResourcePlanner_UseErlangAWithInfinitePatienceEsl_74899))
+				{
+					builder.RegisterType<StaffingCalculatorServiceFacadeErlangAWithEsl>().As<IStaffingCalculatorServiceFacade>().SingleInstance();
+				}
+				else
+				{
+					builder.RegisterType<StaffingCalculatorServiceFacadeErlangA>().As<IStaffingCalculatorServiceFacade>().SingleInstance();
+				}		
 			}
 			else
 			{

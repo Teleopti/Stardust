@@ -63,6 +63,12 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		}
 	}
 
+	[RemoveMeWithToggle("Move ServiceLevelAchievedOcc to StaffingCalculatorServiceFacadeErlangA", Toggles.ResourcePlanner_UseErlangAWithInfinitePatienceEsl_74899)]
+	public class StaffingCalculatorServiceFacadeErlangAWithEsl : StaffingCalculatorServiceFacadeErlangA
+	{
+		
+	}
+
 	public class StaffingCalculatorServiceFacadeErlangA : StaffingCalculatorServiceFacade
 	{
 		private readonly NumberOfAgentsNeeded _agentsNeeded;
@@ -78,5 +84,5 @@ namespace Teleopti.Ccc.Domain.Forecasting
 				(int)periodLength.TotalSeconds, minOcc, maxOcc);
 			return result.NumberOfAgentsNeeded;
 		}
-	}
+	}	
 }
