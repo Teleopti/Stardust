@@ -81,7 +81,7 @@
 							} else {
 								hiddenArray.push(id);
 							}
-							ctrl.initTrafficChart();
+							ctrl.initChart(ctrl.chartData);
 						}
 					}
 				},

@@ -7,10 +7,12 @@
 			'intradayService',
 			'SkillGroupSvc',
 			'$translate',
+			'$q',
+			'$log',
 			intradayMonitorStaffingService
 		]);
 
-	function intradayMonitorStaffingService($filter, intradayService, SkillGroupSvc, $translate) {
+	function intradayMonitorStaffingService($filter, intradayService, SkillGroupSvc, $translate, $q, $log) {
 		var service = {
 			staffingChart: {}
 		};
@@ -34,7 +36,7 @@
 		var hiddenArray = [];
 		var mixedArea = false;
 
-		service.setStaffingData = function(
+		var setStaffingData = function(
 			result,
 			showOptimalStaffing,
 			showScheduledStaffing,
@@ -87,12 +89,6 @@
 			staffingData.actualStaffingSeries.splice(0, 0, 'Actual_staffing');
 			staffingData.scheduledStaffing.splice(0, 0, 'Scheduled_staffing');
 
-			service.initStaffingChart();
-
-			return staffingData;
-		};
-
-		service.getData = function() {
 			return staffingData;
 		};
 
@@ -124,7 +120,7 @@
 			request.$promise.then(
 				function(result) {
 					staffingData.waitingForData = false;
-					return service.setStaffingData(
+					return setStaffingData(
 						result,
 						toggles['Wfm_Intraday_OptimalStaffing_40921'],
 						toggles['Wfm_Intraday_ScheduledStaffing_41476'],
@@ -148,21 +144,25 @@
 				dayOffset: dayOffset
 			});
 
-			request.$promise.then(
-				function(result) {
-					staffingData.waitingForData = false;
-					return service.setStaffingData(
-						result,
-						toggles['Wfm_Intraday_OptimalStaffing_40921'] && dayOffset <= 0,
-						toggles['Wfm_Intraday_ScheduledStaffing_41476'],
-						toggles['Wfm_Intraday_SupportSkillTypeEmail_44002'],
-						selectedItem.ShowReforecastedAgents
-					);
-				},
-				function() {
-					staffingData.hasMonitorData = false;
-				}
-			);
+			return $q(function(resolve) {
+				request.$promise.then(
+					function(result) {
+						staffingData.waitingForData = false;
+						setStaffingData(
+							result,
+							toggles['Wfm_Intraday_OptimalStaffing_40921'] && dayOffset <= 0,
+							toggles['Wfm_Intraday_ScheduledStaffing_41476'],
+							toggles['Wfm_Intraday_SupportSkillTypeEmail_44002'],
+							selectedItem.ShowReforecastedAgents
+						);
+						resolve(staffingData);
+					},
+					function() {
+						staffingData.hasMonitorData = false;
+						resolve(staffingData);
+					}
+				);
+			});
 		};
 
 		service.pollSkillAreaDataByDayOffset = function(selectedItem, toggles, dayOffset) {
@@ -181,21 +181,25 @@
 				dayOffset: dayOffset
 			});
 
-			request.$promise.then(
-				function(result) {
-					staffingData.waitingForData = false;
-					return service.setStaffingData(
-						result,
-						toggles['Wfm_Intraday_OptimalStaffing_40921'] && dayOffset <= 0,
-						toggles['Wfm_Intraday_ScheduledStaffing_41476'],
-						toggles['Wfm_Intraday_SupportSkillTypeEmail_44002'],
-						showReforecastedAgents
-					);
-				},
-				function() {
-					staffingData.hasMonitorData = false;
-				}
-			);
+			return $q(function(resolve, reject) {
+				request.$promise.then(
+					function(result) {
+						staffingData.waitingForData = false;
+						setStaffingData(
+							result,
+							toggles['Wfm_Intraday_OptimalStaffing_40921'] && dayOffset <= 0,
+							toggles['Wfm_Intraday_ScheduledStaffing_41476'],
+							toggles['Wfm_Intraday_SupportSkillTypeEmail_44002'],
+							showReforecastedAgents
+						);
+						resolve(staffingData);
+					},
+					function() {
+						staffingData.hasMonitorData = false;
+						resolve(staffingData);
+					}
+				);
+			});
 		};
 
 		service.checkMixedArea = function(selectedItem) {
@@ -208,85 +212,6 @@
 				mixedArea = selectedItem.SkillType === 'SkillTypeEmail';
 			}
 		};
-
-		service.initStaffingChart = function() {
-			service.staffingChart = c3.generate({
-				bindto: '#staffingChart',
-				data: {
-					x: 'x',
-					columns: [
-						staffingData.timeSeries,
-						staffingData.forecastedStaffing.series,
-						staffingData.forecastedStaffing.updatedSeries,
-						staffingData.actualStaffingSeries,
-						staffingData.scheduledStaffing
-					],
-					type: 'line',
-					hide: hiddenArray,
-					names: {
-						Forecasted_staffing: $translate.instant('ForecastedStaff') + ' ←',
-						Updated_forecasted_staffing: $translate.instant('ReforecastedStaff') + ' ←',
-						Actual_staffing: $translate.instant('RequiredStaff') + ' ←',
-						Scheduled_staffing: $translate.instant('ScheduledStaff') + ' ←'
-					},
-					colors: {
-						Forecasted_staffing: '#0099FF',
-						Updated_forecasted_staffing: '#E91E63',
-						Actual_staffing: '#FB8C00',
-						Scheduled_staffing: '#F488C8'
-					}
-				},
-				axis: {
-					x: {
-						label: {
-							text: $translate.instant('SkillTypeTime'),
-							position: 'outer-center'
-						},
-						type: 'category',
-						tick: {
-							culling: {
-								max: 24
-							},
-							fit: true,
-							centered: true,
-							multiline: false
-						}
-					},
-					y: {
-						label: {
-							text: $translate.instant('Agents'),
-							position: 'outer-middle'
-						},
-						tick: {
-							format: d3.format('.1f')
-						}
-					},
-					y2: {
-						show: true,
-						tick: {
-							format: d3.format('.1f')
-						}
-					}
-				},
-				legend: {
-					item: {
-						onclick: function(id) {
-							if (hiddenArray.indexOf(id) > -1) {
-								hiddenArray.splice(hiddenArray.indexOf(id), 1);
-							} else {
-								hiddenArray.push(id);
-							}
-							service.initStaffingChart();
-						}
-					}
-				},
-				transition: {
-					duration: 500
-				}
-			});
-		};
-
-		service.initStaffingChart();
 
 		return service;
 	}

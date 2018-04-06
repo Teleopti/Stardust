@@ -70,7 +70,7 @@
 								} else {
 									hiddenArray.push(id);
 								}
-								ctrl.initStaffingChart();
+								ctrl.initChart(ctrl.chartData);
 							}
 						}
 					},
@@ -84,6 +84,7 @@
 		};
 
 		ctrl.$onChanges = function(changesObj) {
+			$log.log('intradayStaffingChart');
 			initChart(changesObj.chartData.currentValue);
 		};
 	}

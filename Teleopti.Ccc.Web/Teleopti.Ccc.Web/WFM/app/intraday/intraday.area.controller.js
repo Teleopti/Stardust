@@ -342,14 +342,19 @@
 
 			var services = [intradayTrafficService, intradayPerformanceService, intradayMonitorStaffingService];
 			var timeData;
+			var promise;
 			if (vm.moduleState.selectedItem !== null && angular.isDefined(vm.moduleState.selectedItem)) {
 				if (vm.isSkill(vm.moduleState.selectedItem)) {
-					services[activeTab].pollSkillDataByDayOffset(vm.moduleState.selectedItem, vm.toggles, dayOffset);
+					promise = services[activeTab].pollSkillDataByDayOffset(
+						vm.moduleState.selectedItem,
+						vm.toggles,
+						dayOffset
+					);
 					if (dayOffset === 0) {
 						timeData = intradayLatestTimeService.getLatestTime(vm.moduleState.selectedItem);
 					}
 				} else {
-					services[activeTab].pollSkillAreaDataByDayOffset(
+					promise = services[activeTab].pollSkillAreaDataByDayOffset(
 						vm.moduleState.selectedItem,
 						vm.toggles,
 						dayOffset
@@ -358,9 +363,13 @@
 						timeData = intradayLatestTimeService.getLatestTime(vm.moduleState.selectedItem);
 					}
 				}
-				vm.viewObj = services[activeTab].getData();
-				vm.latestActualInterval = timeData;
-				vm.moduleState.hasMonitorData = vm.viewObj.hasMonitorData;
+
+				promise.then(function(data) {
+					vm.viewObj = Object.assign({}, data);
+					vm.moduleState.hasMonitorData = vm.viewObj.hasMonitorData;
+					vm.latestActualInterval = timeData;
+					$log.log('vm.viewObj', vm.viewObj);
+				});
 			} else {
 				timeoutPromise = $timeout(function() {
 					pollActiveTabDataByDayOffset(vm.moduleState.activeTab, dayOffset);

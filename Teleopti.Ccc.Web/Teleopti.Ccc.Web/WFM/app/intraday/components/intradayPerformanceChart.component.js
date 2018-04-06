@@ -83,7 +83,7 @@
 							} else {
 								hiddenArray.push(id);
 							}
-							ctrl.initPerformanceChart();
+							ctrl.initChart(ctrl.chartData);
 						}
 					}
 				},
