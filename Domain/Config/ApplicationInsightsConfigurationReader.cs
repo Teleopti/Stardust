@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Config
 				var doc = XDocument.Load(config);
 				var iKey = doc.Descendants(doc.Root.GetDefaultNamespace() + "InstrumentationKey").Select(t => t.Value).FirstOrDefault();
 
-				return Guid.TryParse(iKey, out _) ? iKey : Guid.Empty.ToString();
+				return Guid.TryParse(iKey, out _) ? iKey : "NA";
 			}
 			catch (Exception)
 			{
