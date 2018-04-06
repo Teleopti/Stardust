@@ -48,6 +48,11 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Concurrency
 			var tasks = new[] {taskToRunInParallell(), taskToRunInParallell()};
 
 			Task.WaitAll(tasks);
+
+			WithUnitOfWork.Do(() =>
+			{
+				PersonRepository.HardRemove(person);
+			});
 		}
 	}
 }

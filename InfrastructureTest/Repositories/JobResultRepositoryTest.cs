@@ -93,8 +93,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		    savedArtifact.Content.Should().Have.SameSequenceAs(Encoding.ASCII.GetBytes("test"));
 		    savedArtifact.Category.Should().Be(JobResultArtifactCategory.Input);
 	    }
-
-
+		
         protected override Repository<IJobResult> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
             return new JobResultRepository(currentUnitOfWork);
