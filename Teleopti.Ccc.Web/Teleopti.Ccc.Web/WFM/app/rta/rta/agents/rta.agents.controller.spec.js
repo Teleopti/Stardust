@@ -12,6 +12,19 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 
 	var vm;
 
+	it('should not state go while creating controller - angular state.go with notify: false cant handle it', function (t) {
+		t.backend.withPhoneState({Id: "state"})
+			.withAgentState({
+				PersonId: "person",
+				StateId: 'state'
+			});
+
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+
+		expect(t.lastGoParams).toEqual(undefined);
+	});
+	
 	it('should get agent states', function () {
 		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend.withAgentState({

@@ -59,7 +59,10 @@
 		vm.loading = true;
 		var phoneStates = [];
 
-		rtaStateService.setCurrentState($stateParams);
+		rtaStateService.setCurrentState($stateParams)
+			.then(function () {
+				vm.statePickerSelectionText = rtaStateService.statePickerSelectionText();
+			});
 
 		rtaDataService.load().then(function (data) {
 			vm.loading = false;
@@ -154,13 +157,12 @@
 			return states;
 		}
 
-		vm.statePickerSelectionText = undefined;
-
 		function buildPhoneStates(data) {
-			var makeState = function (id, name) {
-				return {
+			data.forEach(function (phoneState) {
+				var id = phoneState.Id;
+				phoneStates.push({
 					Id: id,
-					Name: name,
+					Name: phoneState.Name,
 					get Selected() {
 						return rtaStateService.isStateSelected(id);
 					},
@@ -169,16 +171,12 @@
 						vm.statePickerSelectionText = rtaStateService.statePickerSelectionText();
 						forcePoll();
 					},
-				};
-			};
-			
-			data.forEach(function (phoneState) {
-				phoneStates.push(makeState(phoneState.Id, phoneState.Name));
+				});
 			});
 		}
 
 		function updatePhoneStates(states) {
-			
+
 			vm.states = phoneStates.filter(function (phoneState) {
 				var stateInView = states.States.some(function (agentState) {
 					return agentState.StateId === phoneState.Id;
@@ -189,6 +187,7 @@
 			vm.states = $filter('orderBy')(vm.states, function (state) {
 				return state.Name;
 			});
+
 		}
 
 		$scope.$watch(

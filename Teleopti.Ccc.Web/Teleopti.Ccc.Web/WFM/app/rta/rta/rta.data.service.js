@@ -5,7 +5,7 @@
 		.module('wfm.rta')
 		.service('rtaDataService', rtaDataService);
 
-	function rtaDataService($state, rtaService, $q, $http) {
+	function rtaDataService($state, rtaService, $q, $http, $translate) {
 
 		var organization = [];
 		var skills = [];
@@ -30,8 +30,9 @@
 				}),
 			$http.get('../api/PhoneStates')
 				.then(function (response) {
-				states = response.data;
-			})
+					states = response.data;
+					states.push({Id: null, Name: $translate.instant('NoState')});
+				})
 		]).then(function () {
 			return {
 				organization: organization,

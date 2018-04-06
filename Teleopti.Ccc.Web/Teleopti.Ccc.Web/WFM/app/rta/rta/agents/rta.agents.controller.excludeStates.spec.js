@@ -1,9 +1,9 @@
 'use strict';
 rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
-													 $state,
-													 $fakeBackend,
-													 $controllerBuilder,
-													 stateParams) {
+													$state,
+													$fakeBackend,
+													$controllerBuilder,
+													stateParams) {
 	var vm;
 
 	it('should include state of agents in view', function () {
@@ -975,14 +975,10 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 		expect(vm.states[0].Name).toEqual('No state');
 	});
 
-	xit('should display excluded state name on reload', function (t) {
+	it('should display excluded state name from url', function (t) {
 		stateParams.es = ["state"];
 		t.backend
-			.withPhoneState({Id: "state", Name: "State"})
-			.withAgentState({
-				PersonId: "person",
-				StateId: 'state'
-			});
+			.withPhoneState({Id: "state", Name: "State"});
 		var c = t.createController();
 
 		expect(c.statePickerSelectionText).toContain("State");

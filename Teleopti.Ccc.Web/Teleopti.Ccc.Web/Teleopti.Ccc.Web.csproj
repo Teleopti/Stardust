@@ -1650,7 +1650,7 @@
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.RTA_ViewHistoricalAhderenceForRecentShifts_46786.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.filter.skillSelection.spec.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.filter.spec.js" />
-    <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.filter.QuicklyChangeAgentsSelection.spec.js" />
+    <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.organization.selection.spec.js" />
     <Content Include="WFM\app\rta\rta\filter\filter-template_RTA_MobileFriendlyCheckboxes_46758.html" />
     <Content Include="WFM\app\rta\rta\filter\filter-template_RTA_ModifySkillGroup_48191.html" />
     <Content Include="WFM\app\rta\rta\filter\rta.filter.controller.RTA_MobileFriendlyCheckboxes_46758.js" />
@@ -1700,11 +1700,11 @@
     <Content Include="WFM\app\rta\tracer\_modules.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.build.service.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.alarmcontext.spec.js" />
-    <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.byOrganizationAndSkills.spec.js" />
+    <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.organization.skill.selection.spec.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.excludeStates.spec.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.inalarm.spec.js" />
-    <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.monitorBySkills.spec.js" />
-    <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.multipleOrganizationSelection.spec.js" />
+    <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.skill.selection.spec.js" />
+    <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.organization.multi.selection.spec.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.pauseButton.spec.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.recentOutOfAdherences.spec.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.spec.js" />

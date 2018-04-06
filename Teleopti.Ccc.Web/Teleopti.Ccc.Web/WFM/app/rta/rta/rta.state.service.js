@@ -40,7 +40,6 @@
 					.load()
 					.then(function (d) {
 						data = d;
-						data.states.push({Id: null, Name: $translate.instant('NoState')});
 					})
 					.then(updateOpenedSites);
 			},
