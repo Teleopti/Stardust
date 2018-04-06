@@ -4,8 +4,8 @@ var url = "../Start/Config/SharedSettings";
 
 xmlhttp.onreadystatechange = function () {
 	if (this.readyState == 4 && this.status == 200) {
-		var sharedSettings = JSON.parse(this.responseText);
-		var instrumentationKey = sharedSettings.InstrumentationKey;
+		var instrumentationKey = JSON.parse(this.responseText).InstrumentationKey;
+		if (instrumentationKey === "00000000-0000-0000-0000-000000000000") return;
 		var iKey =
 			{
 				instrumentationKey: instrumentationKey
