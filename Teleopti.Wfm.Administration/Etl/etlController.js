@@ -154,6 +154,11 @@
 						vm.unconfigured = true;
 					}
 				}
+				if (vm.tenants.length>1) {
+					vm.tenants.unshift({
+						TenantName: '<All>'
+					})
+				}
 				vm.selectedTenant = vm.tenants[0];
 				if (angular.isDefined(vm.selectedTenant) && vm.selectedTenant.TenantName) {
 					vm.sendTenant(vm.selectedTenant.TenantName);
