@@ -365,7 +365,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 		[TenantUnitOfWork]
 		[HttpPost, Route("Etl/ToggleScheduleJob")]
-		public virtual IHttpActionResult ToggleScheduleJob(int scheduleId)
+		public virtual IHttpActionResult ToggleScheduleJob([FromBody]  int scheduleId)
 		{
 			_etlJobScheduler.ToggleScheduleJobEnabledState(scheduleId);
 			return Ok();
@@ -373,7 +373,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 		[TenantUnitOfWork]
 		[HttpPost, Route("Etl/DeleteScheduleJob")]
-		public virtual IHttpActionResult DeleteScheduleJob(int scheduleId)
+		public virtual IHttpActionResult DeleteScheduleJob([FromBody] int scheduleId)
 		{
 			_etlJobScheduler.DeleteScheduleJob(scheduleId);
 			return Ok();

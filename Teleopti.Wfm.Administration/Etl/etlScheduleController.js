@@ -20,6 +20,8 @@
 		vm.language = navigator.language || navigator.userLanguage;
 
 		vm.addScheduleJob = addScheduleJob;
+		vm.toggleScheduleJob = toggleScheduleJob;
+		vm.deleteScheduleJob = deleteScheduleJob;
 
 		(function init() {
 			getScheduledJobs();
@@ -31,6 +33,30 @@
 			.get("./Etl/ScheduledJobs", tokenHeaderService.getHeaders())
 			.success(function (data) {
 				vm.schedules = data;
+			});
+		}
+
+		function toggleScheduleJob(scheduleId) {
+			$http
+			.post("./Etl/ToggleScheduleJob",
+				JSON.stringify(scheduleId),
+				tokenHeaderService.getHeaders()
+			)
+			.success(function(data) {
+				console.log(data);
+				getScheduledJobs();
+			});
+		}
+
+		function deleteScheduleJob(scheduleId) {
+			$http
+			.post("./Etl/DeleteScheduleJob",
+				JSON.stringify(scheduleId),
+				tokenHeaderService.getHeaders()
+			)
+			.success(function(data) {
+				console.log(data);
+				getScheduledJobs();
 			});
 		}
 
@@ -92,8 +118,6 @@
 				LogDataSourceId: logdataId,
 				ScheduleId: -1
 			}
-
-			console.log(postObj);
 
 			$http
 			.post(
