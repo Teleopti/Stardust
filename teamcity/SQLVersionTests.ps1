@@ -470,12 +470,12 @@ function global:ScriptedTestsRunOnAllDBs () {
 
 function global:AnalyticsReportsTest () {
     
-    $path = "$WorkingDirectory\..\Database\Tools\AnalyticsReportsCompile.sql"
-    $word = "BEGIN TRY"
-    $replacement = ""
-    $text = get-content $path 
-    $newText = $text -replace $word,$replacement
-    $newText > $path
+    #$path = "$WorkingDirectory\..\Database\Tools\AnalyticsReportsCompile.sql"
+    #$word = "BEGIN TRY"
+    #$replacement = ""
+    #$text = get-content $path 
+    #$newText = $text -replace $word,$replacement
+    #$newText > $path
     
     $query = Get-Content "$WorkingDirectory\..\Database\Tools\AnalyticsReportsCompile.sql" | Out-String
     $ConnectionString = "Data Source=$global:SQLServerInstance;Initial Catalog=$MartDB;User Id=$global:ApplicationDbLogin;Password=$global:ApplicationDbPwd"

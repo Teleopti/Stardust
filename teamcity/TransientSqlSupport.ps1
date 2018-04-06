@@ -76,16 +76,19 @@ $conn = New-Object System.Data.SqlClient.SqlConnection "$ConnectionString";
 $conn.Open();
 
 ## Attach the InfoMessage Event Handler to the connection to write out the messages 
-$handler = [System.Data.SqlClient.SqlInfoMessageEventHandler] {param($sender, $event) Write-Host $event.Message }; 
+$global:res = $null
+$handler = [System.Data.SqlClient.SqlInfoMessageEventHandler] {param($sender, $event) $global:res = $event.Message }; 
 $conn.add_InfoMessage($handler); 
 $conn.FireInfoMessageEventOnUserErrors = $true;
 $cmd = $conn.CreateCommand(); 
 
 $cmd.CommandText = $query;  
 $res = $cmd.ExecuteNonQuery(); 
+
+Start-sleep -s 2
 $conn.Close();
 
-return $res
+return $global:res
 
 }
 function global:RunAndRetryScalar {
