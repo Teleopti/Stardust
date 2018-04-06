@@ -453,9 +453,17 @@ function global:ScriptedTestsRunOnAllDBs () {
     
     if (!($global:SQLEdition -eq $SQLAzure)) {
 
+		Write-Output "##teamcity[blockOpened name='<$MartDB>']"
 		CheckPKAndIndex $MartDB
+		Write-Output "##teamcity[blockClosed name='<$MartDB>']"
+		
+		Write-Output "##teamcity[blockOpened name='<$AppDB>']"
 		CheckPKAndIndex $AppDB
+		Write-Output "##teamcity[blockClosed name='<$AppDB>']"
+		
+		Write-Output "##teamcity[blockOpened name='<$global:AggDB>']"
 		CheckPKAndIndex $global:AggDB
+		Write-Output "##teamcity[blockClosed name='<$global:AggDB>']"
 		
     }
 }
