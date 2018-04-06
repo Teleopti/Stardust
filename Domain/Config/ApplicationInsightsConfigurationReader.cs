@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Config
 			catch (Exception)
 			{
 				//log blah blah
-				return "NA";
+				return Guid.Empty.ToString();
 			}
 		}
 	}
