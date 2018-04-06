@@ -157,7 +157,6 @@
 		vm.statePickerSelectionText = undefined;
 
 		function buildPhoneStates(data) {
-
 			var makeState = function (id, name) {
 				return {
 					Id: id,
@@ -179,11 +178,9 @@
 		}
 
 		function updatePhoneStates(states) {
-
+			
 			vm.states = phoneStates.filter(function (phoneState) {
 				var stateInView = states.States.some(function (agentState) {
-					if (agentState.StateId === null && phoneState.Id === "noState")
-						return true;
 					return agentState.StateId === phoneState.Id;
 				});
 				return stateInView || !phoneState.Selected;

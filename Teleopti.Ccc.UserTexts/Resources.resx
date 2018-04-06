@@ -17284,4 +17284,8 @@ The application will now exit.</value>
     <value>Excluded: </value>
     <comment>text in the excluded states input field in rta</comment>
   </data>
+	<data name="NoState" xml:space="preserve">
+    <value>No state</value>
+    <comment>text in the excluded states input for no state</comment>
+  </data>
 </root>

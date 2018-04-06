@@ -1,9 +1,9 @@
 'use strict';
 rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
-													$state,
-													$fakeBackend,
-													$controllerBuilder,
-													stateParams) {
+													 $state,
+													 $fakeBackend,
+													 $controllerBuilder,
+													 stateParams) {
 	var vm;
 
 	it('should include state of agents in view', function () {
@@ -465,7 +465,7 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 			c.apply(vm.showInAlarm = true)
 				.apply(function () {
 					vm.states.filter(function (s) {
-						return s.Id === "noState";
+						return !s.Id;
 					})[0].Selected = false;
 				});
 			c.wait(5000);
@@ -499,7 +499,7 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 			c.apply(vm.showInAlarm = true)
 				.apply(function () {
 					vm.states.filter(function (s) {
-						return s.Id === "noState";
+						return !s.Id;
 					})[0].Selected = true;
 				});
 			c.wait(5000);
@@ -715,7 +715,7 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 		c.apply(vm.showInAlarm = true)
 			.apply(function () {
 				vm.states.filter(function (s) {
-					return s.Id === "noState";
+					return !s.Id;
 				})[0].Selected = false;
 			});
 		c.wait(5000);
@@ -756,7 +756,7 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 		c.apply(vm.showInAlarm = true)
 			.apply(function () {
 				vm.states.filter(function (s) {
-					return s.Id === "noState";
+					return !s.Id;
 				})[0].Selected = true;
 			});
 		c.wait(5000);
@@ -920,7 +920,7 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 				Name: 'NoState',
 				Value: 'translated no state'
 			});
-		
+
 		var c = t.createController();
 		t.apply(function () {
 			c.showInAlarm = false;
@@ -952,13 +952,18 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 
 		expect(vm.states[0].Name).toEqual('translated no state');
 	});
-	
-	it('should not display phone state if agents state not belongs to it', function (t) {
+
+	it('should exclude state not on screen when "no state" in on screen', function (t) {
 		t.backend
 			.withPhoneState({Id: "state", Name: "State"})
 			.withAgentState({
 				PersonId: "person",
 				StateId: null,
+			})
+			.with
+			.translation({
+				Name: 'NoState',
+				Value: 'No state'
 			});
 
 		vm = t.createController();
@@ -967,7 +972,20 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 		});
 
 		expect(vm.states.length).toEqual(1);
-		expect(vm.states[0].Name).toEqual('NoState');
+		expect(vm.states[0].Name).toEqual('No state');
+	});
+
+	xit('should display excluded state name on reload', function (t) {
+		stateParams.es = ["state"];
+		t.backend
+			.withPhoneState({Id: "state", Name: "State"})
+			.withAgentState({
+				PersonId: "person",
+				StateId: 'state'
+			});
+		var c = t.createController();
+
+		expect(c.statePickerSelectionText).toContain("State");
 	});
 
 });

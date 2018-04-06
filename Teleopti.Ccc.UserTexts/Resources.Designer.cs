@@ -21473,6 +21473,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No state.
+        /// </summary>
+        public static string NoState {
+            get {
+                return ResourceManager.GetString("NoState", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No state group present.
         /// </summary>
         public static string NoStateGroupPresent {

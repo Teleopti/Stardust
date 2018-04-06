@@ -22,9 +22,7 @@
 			skillAreas: [],
 			states: []
 		};
-		
-		var nullId = "noState";
-		
+
 		return {
 
 			gotoLastState: function () {
@@ -42,8 +40,7 @@
 					.load()
 					.then(function (d) {
 						data = d;
-						// because angular cant handle an array of null in stateparams
-						data.states.push({Id: nullId, Name: $translate.instant('NoState')});
+						data.states.push({Id: null, Name: $translate.instant('NoState')});
 					})
 					.then(updateOpenedSites);
 			},
@@ -88,9 +85,6 @@
 
 			isStateSelected: isStateSelected,
 			selectState: selectState,
-			// because angular cant handle an array of null in stateparams
-			nullStateId: nullId,
-			
 			statePickerSelectionText: statePickerSelectionText,
 
 			hasSelection: function () {
@@ -304,7 +298,11 @@
 			state.siteIds = angular.isArray(state.siteIds) ? state.siteIds : [state.siteIds];
 			state.teamIds = state.teamIds || [];
 			state.teamIds = angular.isArray(state.teamIds) ? state.teamIds : [state.teamIds];
-			state.es = state.es || [];
+			state.es = (state.es || []).map(function (es) {
+				if (es === "noState")
+					return null;
+				return es;
+			});
 
 			// remove duplicate sites n teams
 			state.siteIds = state.siteIds.filter(function (item, pos) {
@@ -437,8 +435,11 @@
 				gotoState.skillAreaId = state.skillAreaId;
 			else if (state.skillIds.length > 0)
 				gotoState.skillIds = state.skillIds;
-			if (state.es)
-				gotoState.es = state.es;
+			if (state.es.length > 0) {
+				gotoState.es = state.es.map(function (es) {
+					return es || "noState";
+				})
+			}
 			if (state.open)
 				gotoState.open = true;
 
