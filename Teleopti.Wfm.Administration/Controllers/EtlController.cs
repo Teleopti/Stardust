@@ -337,7 +337,15 @@ namespace Teleopti.Wfm.Administration.Controllers
 						Tenant = job.TenantName,
 						DailyFrequencyStart = dailyFrequencyStart,
 						DailyFrequencyEnd = dailyFrequencyEnd,
-						DailyFrequencyMinute = dailyFrequencyMinute
+						DailyFrequencyMinute = dailyFrequencyMinute,
+						RelativePeriods = job.RelativePeriodCollection
+							.Select(x => new JobPeriodRelative
+							{
+								JobCategoryName = x.JobCategory.ToString(),
+								Start = x.RelativePeriod.Minimum,
+								End = x.RelativePeriod.Maximum
+							})
+							.ToArray()
 					};
 				})
 				.ToList();

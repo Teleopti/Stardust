@@ -792,9 +792,17 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 		[Test]
 		public void ShouldGetScheduledJobs()
 		{
-			var dailyJob = new EtlJobSchedule(1, "My Nightly job", true, 60, "Nightly", 1, "Desc", null, null, "tenant A");
-			var periodicJob = new EtlJobSchedule(2, "My Intraday job", true, 30, 120, 1320, "Intraday", 1, "Run Intraday job", null, DateTime.Now, null, "tenant A");
-			var manualJobNotToBeLoaded = new EtlJobSchedule(3, "Manual ETL", "Schedule", true, 1, "Manually enqueued job", DateTime.Now, null, "tenant A");
+			var dailyJob = new EtlJobSchedule(1, "My Nightly job", true, 60, "Nightly", 1, "Desc", null, 
+				new List<IEtlJobRelativePeriod>
+				{
+					new EtlJobRelativePeriod(new MinMax<int>(-5, 5), JobCategoryType.AgentStatistics),
+					new EtlJobRelativePeriod(new MinMax<int>(-4, 4), JobCategoryType.QueueStatistics)
+				}
+				, "tenant A");
+			var periodicJob = new EtlJobSchedule(2, "My Intraday job", true, 30, 120, 1320, "Intraday", 1, "Run Intraday job",
+				null, DateTime.Now, new List<IEtlJobRelativePeriod>(), "tenant A");
+			var manualJobNotToBeLoaded = new EtlJobSchedule(3, "Manual ETL", "Schedule", true, 1, "Manually enqueued job",
+				DateTime.Now, new List<IEtlJobRelativePeriod>(), "tenant A");
 			JobScheduleRepository.SaveSchedule(dailyJob);
 			JobScheduleRepository.SaveSchedule(periodicJob);
 			JobScheduleRepository.SaveSchedule(manualJobNotToBeLoaded);
@@ -814,6 +822,14 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			savedDailyJob.DailyFrequencyStart.Should().Be(DateTime.MinValue.AddMinutes(dailyJob.OccursOnceAt));
 			savedDailyJob.DailyFrequencyEnd.Should().Be(DateTime.MinValue);
 			savedDailyJob.DailyFrequencyMinute.Should().Be(string.Empty);
+			savedDailyJob.RelativePeriods.Length.Should().Be(2);
+			savedDailyJob.RelativePeriods.First().JobCategoryName.Should().Be(dailyJob.RelativePeriodCollection.First().JobCategory.ToString());
+			savedDailyJob.RelativePeriods.First().Start.Should().Be(dailyJob.RelativePeriodCollection.First().RelativePeriod.Minimum);
+			savedDailyJob.RelativePeriods.First().End.Should().Be(dailyJob.RelativePeriodCollection.First().RelativePeriod.Maximum);
+			savedDailyJob.RelativePeriods.Last().JobCategoryName.Should().Be(dailyJob.RelativePeriodCollection.Last().JobCategory.ToString());
+			savedDailyJob.RelativePeriods.Last().Start.Should().Be(dailyJob.RelativePeriodCollection.Last().RelativePeriod.Minimum);
+			savedDailyJob.RelativePeriods.Last().End.Should().Be(dailyJob.RelativePeriodCollection.Last().RelativePeriod.Maximum);
+
 
 			var savedPeriodicJob = savedScheduledJobs.Content.Last();
 			savedPeriodicJob.ScheduleId.Should().Be(periodicJob.ScheduleId);
@@ -825,6 +841,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			savedPeriodicJob.DailyFrequencyStart.Should().Be(DateTime.MinValue.AddMinutes(periodicJob.OccursEveryMinuteStartingAt));
 			savedPeriodicJob.DailyFrequencyEnd.Should().Be(DateTime.MinValue.AddMinutes(periodicJob.OccursEveryMinuteEndingAt));
 			savedPeriodicJob.DailyFrequencyMinute.Should().Be(periodicJob.OccursEveryMinute.ToString());
+			savedPeriodicJob.RelativePeriods.Should().Be.Empty();
 		}
 
 		[Test]
