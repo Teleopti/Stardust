@@ -477,17 +477,20 @@ function global:AnalyticsReportsTest () {
     #$newText = $text -replace $word,$replacement
     #$newText > $path
     
-    $query = Get-Content "$WorkingDirectory\..\Database\Tools\AnalyticsReportsCompile.sql" | Out-String
-    $ConnectionString = "Data Source=$global:SQLServerInstance;Initial Catalog=$MartDB;User Id=$global:ApplicationDbLogin;Password=$global:ApplicationDbPwd"
-    
-    Log "Running script: [AnalyticsReportsCompile.sql] on [$MartDB]"
-    $result = RunSQLQuery $ConnectionString $query
-	
-		if (!($result -eq $null))
+    if (!($global:SQLEdition -eq $SQLAzure)) 
 	{
-		Log "The following issue where found on [$MartDB]:"
-		Log "$result"
-		#exit 1
+		$query = Get-Content "$WorkingDirectory\..\Database\Tools\AnalyticsReportsCompile.sql" | Out-String
+		$ConnectionString = "Data Source=$global:SQLServerInstance;Initial Catalog=$MartDB;User Id=$global:ApplicationDbLogin;Password=$global:ApplicationDbPwd"
+    
+		Log "Running script: [AnalyticsReportsCompile.sql] on [$MartDB]"
+		$result = RunSQLQuery $ConnectionString $query
+	
+			if (!($result -eq $null))
+			{
+				Log "The following issue where found on [$MartDB]:"
+				Log "$result"
+				#exit 1
+			}
 	}
 }
 
