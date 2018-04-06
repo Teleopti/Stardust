@@ -96,6 +96,9 @@ var rtaTester = (function () {
 				get stateParams() {
 					return sharedTestState.stateParams;
 				},
+				get lastGoState() {
+					return sharedTestState.lastGoState;
+				},
 				get lastGoParams() {
 					return sharedTestState.lastGoParams;
 				},
@@ -217,7 +220,8 @@ var rtaTester = (function () {
 					state.$state.current.name = stateName;
 					state.scope = state.$controllerBuilder.setup(controllerName);
 
-					spyOn($state, 'go').and.callFake(function (_, params) {
+					spyOn($state, 'go').and.callFake(function (stateName, params) {
+						state.lastGoState = stateName;
 						state.lastGoParams = params;
 					});
 

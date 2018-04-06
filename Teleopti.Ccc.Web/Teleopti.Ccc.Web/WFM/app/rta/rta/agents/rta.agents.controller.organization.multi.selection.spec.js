@@ -164,29 +164,28 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 			expect(vm.agentStates[0].PersonId).toEqual("6b693b41-e2ca-4ef0-af0b-9e06008d969b");
 		});
 
-		it('should go back to sites when business unit is changed', function () {
-			stateParams[selection.type] = selection.ids
-			$sessionStorage.buid = "928dd0bc-bf40-412e-b970-9b5e015aadea";
-			var c = $controllerBuilder.createController();
-			$state.go.calls.reset();
+		it('should go back to sites when business unit is changed', function (t) {
+			t.stateParams[selection.type] = selection.ids
+			t.sessionStorage.buid = "928dd0bc-bf40-412e-b970-9b5e015aadea";
+			var vm = t.createController();
 
-			c.apply(function () {
-				$sessionStorage.buid = "99a4b091-eb7a-4c2f-b5a6-a54100d88e8e";
+			t.apply(function () {
+				t.sessionStorage.buid = "99a4b091-eb7a-4c2f-b5a6-a54100d88e8e";
 			});
 
-			expect($state.go).toHaveBeenCalledWith('rta');
+			expect(t.lastGoState).toEqual('rta');
 		});
 
-		it('should not go back to sites overview when business unit is not initialized yet', function () {
-			stateParams[selection.type] = selection.ids
-			$sessionStorage.buid = undefined;
+		it('should not go back to sites overview when business unit is not initialized yet', function (t) {
+			t.stateParams[selection.type] = selection.ids
+			t.sessionStorage.buid = undefined;
+			var vm = t.createController();
 
-			$controllerBuilder.createController()
-				.apply(function () {
-					$sessionStorage.buid = "99a4b091-eb7a-4c2f-b5a6-a54100d88e8e";
-				});
+			t.apply(function () {
+				t.sessionStorage.buid = "99a4b091-eb7a-4c2f-b5a6-a54100d88e8e";
+			});
 
-			expect($state.go).not.toHaveBeenCalledWith('rta');
+			expect(t.lastGoState).toEqual('rta');
 		});
 
 	});

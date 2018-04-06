@@ -17,12 +17,10 @@
 		'rtaPollingService',
 		'rtaFormatService',
 		'rtaAgentsBuildService',
-		'rtaRouteService',
 		'rtaStateService',
 		'rtaDataService',
 		'NoticeService',
-		'rtaConfigurationValidator',
-		'rtaNamesFormatService'
+		'rtaConfigurationValidator'
 	];
 
 	function RtaAgentsController($scope,
@@ -36,7 +34,6 @@
 								 rtaPollingService,
 								 rtaFormatService,
 								 rtaAgentsBuildService,
-								 rtaRouteService,
 								 rtaStateService,
 								 rtaDataService,
 								 NoticeService,
@@ -84,12 +81,12 @@
 		vm.displayNoAgentsForSkillMessage = rtaStateService.hasSkillSelection;
 
 		vm.changeScheduleUrl = function (personId) {
-			return rtaRouteService.urlForChangingSchedule(personId);
+			return $state.href('teams.for', {personId: personId});
 		};
 		vm.historicalAdherenceUrl = function (personId) {
-			return rtaRouteService.urlForHistoricalAdherence(personId);
+			return $state.href('rta-historical-without-date', {personId: personId});
 		};
-		vm.goToOverview = rtaRouteService.goToOverview;
+		vm.goToOverview = rtaStateService.goToOverview;
 
 
 		var poller;
@@ -220,7 +217,7 @@
 			},
 			function (newValue, oldValue) {
 				if (angular.isDefined(oldValue) && newValue !== oldValue)
-					rtaRouteService.goToOverview();
+					rtaStateService.goToOverview();
 			}
 		);
 

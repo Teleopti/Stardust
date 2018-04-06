@@ -127,6 +127,9 @@
 				$state.go('rta-agents', buildState());
 			},
 
+			goToOverview: function () {
+				$state.go('rta', buildState());
+			},
 		};
 
 		function statePickerSelectionText() {
