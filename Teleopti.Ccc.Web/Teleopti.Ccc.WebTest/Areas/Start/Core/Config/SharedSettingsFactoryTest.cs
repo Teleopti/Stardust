@@ -113,9 +113,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Core.Config
 			var target = new SharedSettingsFactory(new FakeConfigReader(), passwordPolicyService, appInsightConfigReader);
 
 			var result = target.Create();
-			var decryptedResult = Encryption.DecryptStringFromBase64(result.InstrumentationKey, EncryptionConstants.Image1,
-				EncryptionConstants.Image2);
-			decryptedResult.Should().Be.EqualTo(iKey);
+			result.InstrumentationKey.Should().Be.EqualTo(iKey);
 		}
 	}
 }
