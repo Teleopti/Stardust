@@ -99,6 +99,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 			set { checkBoxTeamSameActivity.Checked = value; }
 		}
 
+		public void HideTroubleShoot()
+		{
+			checkBoxShowTroubleShot.Visible = false;
+			checkBoxShowTroubleShot.Checked = false;	
+		}
+
 		#region IDataExchange Members
 
 		public bool ValidateData(ExchangeDataOption direction)
