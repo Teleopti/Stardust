@@ -420,8 +420,9 @@ function global:CheckPKAndIndex
 	$PkResults = RunAndRetrySqlQuery $ConnectionString $query
 	if (!($PkResults -eq $null))
 	{
+		$PkResults = $PkResults.resultline
 		Log "The following issue where found on [$DatabaseName]:"
-		Log "$pkresults.resultline"
+		Log "$pkresults"
 		#exit 1
 	}
 
@@ -430,8 +431,9 @@ function global:CheckPKAndIndex
 	$PkResults = RunAndRetrySqlQuery $ConnectionString $query
 	if (!($PkResults -eq $null))
 	{
+		$PkResults = $PkResults.resultline
 		Log "The following issue where found on [$DatabaseName]:"
-		Log "$pkresults.resultline"
+		Log "$pkresults"
 		#exit 1
 	}
 
@@ -440,8 +442,9 @@ function global:CheckPKAndIndex
 	$PkResults = RunAndRetrySqlQuery $ConnectionString $query
 	if (!($PkResults -eq $null))
 	{
+		$PkResults = $PkResults.resultline
 		Log "The following issue where found on [$DatabaseName]:"
-		Log "$pkresults.resultline"
+		Log "$pkresults"
 		#exit 1
 	}
 }
