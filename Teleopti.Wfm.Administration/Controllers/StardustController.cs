@@ -168,7 +168,8 @@ namespace Teleopti.Wfm.Administration.Controllers
 					return Ok($"Node {node.Url} does not respond. Make sure that the Teleopti Service Bus service is running. Is the firewall configured so the worker server allows incoming traffic on ports 14100-14199?");
 			}
 
-			var id = _stardustSender.Send(new StardustHealthCheckEvent { JobName = "Stardust Health Check", UserName = "Stardust", LogOnDatasource = "Health Check"});
+			var dummyBUId = Guid.NewGuid();
+			var id = _stardustSender.Send(new StardustHealthCheckEvent { JobName = "Stardust Health Check", UserName = "Stardust", LogOnDatasource = "Health Check",LogOnBusinessUnitId = dummyBUId});
 			var waiting = true;
 			var healthCheckJob = new Job();
 			var stopwatch = new Stopwatch();
