@@ -64,6 +64,30 @@ function RunAndRetrySqlQuery
     return $Datatable
 }
 
+function RunSQLQuery
+{
+    Param
+    (
+        $ConnectionString,
+        $Query
+    )
+
+$conn = New-Object System.Data.SqlClient.SqlConnection "$ConnectionString"; 
+$conn.Open();
+
+## Attach the InfoMessage Event Handler to the connection to write out the messages 
+$handler = [System.Data.SqlClient.SqlInfoMessageEventHandler] {param($sender, $event) Write-Host $event.Message }; 
+$conn.add_InfoMessage($handler); 
+$conn.FireInfoMessageEventOnUserErrors = $true;
+$cmd = $conn.CreateCommand(); 
+
+$cmd.CommandText = $query;  
+$res = $cmd.ExecuteNonQuery(); 
+$conn.Close();
+
+return $res
+
+}
 function global:RunAndRetryScalar {
     
     param (

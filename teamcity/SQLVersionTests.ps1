@@ -481,7 +481,14 @@ function global:AnalyticsReportsTest () {
     $ConnectionString = "Data Source=$global:SQLServerInstance;Initial Catalog=$MartDB;User Id=$global:ApplicationDbLogin;Password=$global:ApplicationDbPwd"
     
     Log "Running script: [AnalyticsReportsCompile.sql] on [$MartDB]"
-    RunAndRetryNonQuery $ConnectionString $query
+    $result = RunSQLQuery $ConnectionString $query
+	
+		if (!($result -eq $null))
+	{
+		Log "The following issue where found on [$MartDB]:"
+		Log "$result"
+		#exit 1
+	}
 }
 
 function global:CleanUpLog () {
