@@ -1,8 +1,8 @@
 'use strict';
 rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
-													 $state,
-													 $controllerBuilder,
-													 stateParams) {
+													$state,
+													$controllerBuilder,
+													stateParams) {
 	var vm;
 
 	it('should get organization', function (t) {
@@ -921,5 +921,16 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 		expect(t.lastGoParams.skillAreaId).toEqual('phoneAndEmailGuid');
 	});
 
+	it('should display site name from url', function (t) {
+		stateParams.siteIds = ['id'];
+		t.backend.withOrganization({
+			Id: 'id',
+			Name: 'Site',
+		});
+
+		var vm = t.createController();
+
+		expect(vm.organizationPickerSelectionText).toContain("Site");
+	});
 
 });
