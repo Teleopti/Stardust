@@ -692,11 +692,7 @@ team-schedule-datepicker {
 			}
 		}
 
-		.schedule-column {
-			.info {
-				margin-left: 5px;
-			}
-		}
+
 
 		th.right-border-empty, td.right-border-empty {
 			width: 2%;
@@ -740,9 +736,19 @@ team-schedule-datepicker {
 		td.shift-category-cell {
 			text-align: center;
 			border-left: 1px solid $gray012;
+			position: relative;
+			padding: 10px 0 0 0;
+
+			.info {
+				position: absolute;
+				top: -7px;
+				right: -3px;
+				transform: scale(0.6)
+			}
 
 			& > span {
 				width: 20px;
+				display: inline-block;
 			}
 		}
 		//Week view table

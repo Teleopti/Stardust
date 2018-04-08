@@ -148,7 +148,6 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			PersonAssignmentRepository.Has(pa);
 
 			var absencePeriod = new DateTimePeriod(new DateTime(2018, 04, 03, 10, 0, 0, DateTimeKind.Utc), new DateTime(2018, 04, 03, 11, 0, 0, DateTimeKind.Utc));
-			var activity = ActivityFactory.CreateActivity("activity");
 			var absence = AbsenceFactory.CreateAbsence("absence");
 			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(personInUtc, scenario, absencePeriod, absence);
 			PersonAbsenceRepository.Has(personAbsence);
@@ -175,7 +174,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var scenario = CurrentScenario.Has("Default");
 			var date = new DateOnly(2018, 04, 03);
 			var team = TeamFactory.CreateSimpleTeam().WithId();
-			
+
 			PersonRepo.Has(personInUtc);
 			PersonFinderReadOnlyRepository.Has(personInUtc);
 
@@ -187,6 +186,11 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var absence = AbsenceFactory.CreateAbsence("absence");
 			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(personInUtc, scenario, period, absence);
 			PersonAbsenceRepository.Has(personAbsence);
+
+			var partTimePeriod = new DateTimePeriod(new DateTime(2018, 04, 03, 8, 0, 0, DateTimeKind.Utc), new DateTime(2018, 04, 04, 10, 0, 0, DateTimeKind.Utc));
+			var partTimeAbsence = AbsenceFactory.CreateAbsence("parttime absence");
+			var personPartTimeAbsence = PersonAbsenceFactory.CreatePersonAbsence(personInUtc, scenario, partTimePeriod, partTimeAbsence);
+			PersonAbsenceRepository.Has(personPartTimeAbsence);
 
 			var viewModel = Target.CreateViewModel(new SearchDaySchedulesInput
 			{
@@ -219,9 +223,11 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			PersonRepo.Has(personInUtc);
 			PersonFinderReadOnlyRepository.Has(personInUtc);
 
-			PermissionProvider.PermitGroup(DefinedRaptorApplicationFunctionPaths.ViewSchedules, date, new PersonAuthorization {
+			PermissionProvider.PermitGroup(DefinedRaptorApplicationFunctionPaths.ViewSchedules, date, new PersonAuthorization
+			{
 				SiteId = team.Site.Id.GetValueOrDefault(),
-				TeamId = team.Id.GetValueOrDefault() });
+				TeamId = team.Id.GetValueOrDefault()
+			});
 
 
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc, scenario, new DateTimePeriod(new DateTime(2018, 04, 03, 8, 0, 0, DateTimeKind.Utc), new DateTime(2018, 04, 03, 17, 0, 0, DateTimeKind.Utc)));
@@ -251,14 +257,15 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		}
 
 		[Test]
-		public void ShouldReturnNullUnderlyingSchedulesSummaryIfScheduleIsUnpublished() {
+		public void ShouldReturnNullUnderlyingSchedulesSummaryIfScheduleIsUnpublished()
+		{
 			PermissionProvider.Enable();
 			var personInUtc = PersonFactory.CreatePerson("Sherlock", "Holmes").WithId();
 
 			personInUtc.WorkflowControlSet = new WorkflowControlSet();
 			personInUtc.WorkflowControlSet.SchedulePublishedToDate = new DateTime(2018, 4, 1);
 
-			
+
 			var scenario = CurrentScenario.Has("Default");
 			var date = new DateOnly(2018, 04, 03);
 			var site = SiteFactory.CreateSiteWithOneTeam().WithId();
@@ -290,6 +297,41 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var summary = viewModel.Schedules.FirstOrDefault().UnderlyingScheduleSummary;
 			summary.Should().Be.Null();
 		}
+
+		[Test]
+		public void ShouldReturnNullUnderlyingScheduleSummaryIfNoUnderlyingSchedules()
+		{
+			var personInUtc = PersonFactory.CreatePerson("Sherlock", "Holmes").WithId();
+
+			personInUtc.WorkflowControlSet = new WorkflowControlSet();
+			personInUtc.WorkflowControlSet.SchedulePublishedToDate = new DateTime(2018, 4, 1);
+
+
+			var scenario = CurrentScenario.Has("Default");
+			var date = new DateOnly(2018, 04, 03);
+			var site = SiteFactory.CreateSiteWithOneTeam().WithId();
+			var team = site.TeamCollection.First().WithId();
+			personInUtc.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(date, team));
+
+			PersonRepo.Has(personInUtc);
+			PersonFinderReadOnlyRepository.Has(personInUtc);
+
+			var period = new DateTimePeriod(new DateTime(2018, 04, 03, 10, 0, 0, DateTimeKind.Utc), new DateTime(2018, 04, 03, 11, 0, 0, DateTimeKind.Utc));
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc, scenario, period);
+			PersonAssignmentRepository.Has(pa);
+			var viewModel = Target.CreateViewModel(new SearchDaySchedulesInput
+			{
+				DateInUserTimeZone = date,
+				GroupIds = new[] { team.Id.Value },
+				CurrentPageIndex = 1,
+				PageSize = 20,
+				IsOnlyAbsences = false
+
+			});
+			var summary = viewModel.Schedules.FirstOrDefault().UnderlyingScheduleSummary;
+			summary.Should().Be.Null();
+		}
+		
 	}
 
 

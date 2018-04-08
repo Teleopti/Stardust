@@ -18,6 +18,64 @@ describe("teamschedule person schedule tests", function () {
 		target = PersonSchedule;
 	}));
 
+	it('Should get correct formatted underlying schedule timespan', function () {
+		var queryDate = "2015-10-30";
+		var timeLineStart = 0;
+		var timeLineEnd = 1440;
+
+		var timeLine = {
+			Offset: moment(queryDate),
+			StartMinute: timeLineStart,
+			EndMinute: timeLineEnd,
+			LengthPercentPerMinute: 100 / (timeLineEnd - timeLineStart)
+		};
+		var scheduleToday = {
+			"PersonId": "221B-Baker-Street",
+			"Name": "Sherlock Holmes",
+			"Date": queryDate,
+			"ContractTimeMinutes": 480,
+			"Projection": [
+				{
+					"ShiftLayerIds": ["222"],
+					"Color": "#80FF80",
+					"Description": "Email",
+					"Start": queryDate + " 07:00",
+					"End": queryDate + " 11:00",
+					"Minutes": 240
+				},
+				{
+					"ShiftLayerIds": ["333"],
+					"Color": "#80FF80",
+					"Description": "Email",
+					"Start": queryDate + " 11:00",
+					"End": queryDate + " 07:30",
+					"Minutes": 1230
+				}],
+			"DayOff": null,
+			"UnderlyingScheduleSummary": {
+				"PersonalActivities": [{
+					"Description": "personal activity",
+					"Start": queryDate + ' 10:00',
+					"End": queryDate + ' 11:00'
+				}],
+				"PersonPartTimeAbsences": [{
+					"Description": "holiday",
+					"Start": queryDate + ' 11:30',
+					"End": queryDate + ' 12:00'
+				}],
+				"PersonMeetings": [{
+					"Description": "administration",
+					"Start": queryDate + ' 14:00',
+					"End": queryDate + ' 15:00'
+				}]
+			}
+		};
+		var personSchedule = target.Create(scheduleToday, timeLine);
+		expect(personSchedule.GetSummaryTimeSpan(personSchedule.UnderlyingScheduleSummary.PersonalActivities[0])).toEqual("10:00 AM - 11:00 AM");
+		expect(personSchedule.GetSummaryTimeSpan(personSchedule.UnderlyingScheduleSummary.PersonPartTimeAbsences[0])).toEqual("11:30 AM - 12:00 PM");
+		expect(personSchedule.GetSummaryTimeSpan(personSchedule.UnderlyingScheduleSummary.PersonMeetings[0])).toEqual("2:00 PM - 3:00 PM");
+	});
+
 	function commonTestsInDifferentLocale() {
 
 		it("Can get correct projection", inject(function () {
@@ -379,6 +437,8 @@ describe("teamschedule person schedule tests", function () {
 			expect(personSchedule.Shifts[1].ActivityCount()).toEqual(1);
 		});
 
+		
+
 		it('Should get correct formatted contact time', function () {
 			var queryDate = "2015-10-30";
 			var timeLineStart = 0;
@@ -470,6 +530,64 @@ describe("teamschedule person schedule tests", function () {
 		});
 
 		commonTestsInDifferentLocale();
+
+		it('Should get correct formatted underlying schedule timespan', function () {
+			var queryDate = "2015-10-30";
+			var timeLineStart = 0;
+			var timeLineEnd = 1440;
+
+			var timeLine = {
+				Offset: moment(queryDate),
+				StartMinute: timeLineStart,
+				EndMinute: timeLineEnd,
+				LengthPercentPerMinute: 100 / (timeLineEnd - timeLineStart)
+			};
+			var scheduleToday = {
+				"PersonId": "221B-Baker-Street",
+				"Name": "Sherlock Holmes",
+				"Date": queryDate,
+				"ContractTimeMinutes": 480,
+				"Projection": [
+					{
+						"ShiftLayerIds": ["222"],
+						"Color": "#80FF80",
+						"Description": "Email",
+						"Start": queryDate + " 07:00",
+						"End": queryDate + " 11:00",
+						"Minutes": 240
+					},
+					{
+						"ShiftLayerIds": ["333"],
+						"Color": "#80FF80",
+						"Description": "Email",
+						"Start": queryDate + " 11:00",
+						"End": queryDate + " 07:30",
+						"Minutes": 1230
+					}],
+				"DayOff": null,
+				"UnderlyingScheduleSummary": {
+					"PersonalActivities": [{
+						"Description": "personal activity",
+						"Start": queryDate + ' 10:00',
+						"End": queryDate + ' 11:00'
+					}],
+					"PersonPartTimeAbsences": [{
+						"Description": "holiday",
+						"Start": queryDate + ' 11:30',
+						"End": queryDate + ' 12:00'
+					}],
+					"PersonMeetings": [{
+						"Description": "administration",
+						"Start": queryDate + ' 14:00',
+						"End": queryDate + ' 15:00'
+					}]
+				}
+			};
+			var personSchedule = target.Create(scheduleToday, timeLine);
+			expect(personSchedule.GetSummaryTimeSpan(personSchedule.UnderlyingScheduleSummary.PersonalActivities[0])).toEqual("10:00 AM - 11:00 AM");
+			expect(personSchedule.GetSummaryTimeSpan(personSchedule.UnderlyingScheduleSummary.PersonPartTimeAbsences[0])).toEqual("11:30 AM - 12:00 PM");
+			expect(personSchedule.GetSummaryTimeSpan(personSchedule.UnderlyingScheduleSummary.PersonMeetings[0])).toEqual("2:00 PM - 3:00 PM");
+		});
 	});
 
 	describe('in locale fa-IR', function () {
@@ -482,6 +600,64 @@ describe("teamschedule person schedule tests", function () {
 		});
 
 		commonTestsInDifferentLocale();
+
+		it('Should get correct formatted underlying schedule timespan', function () {
+			var queryDate = "2015-10-30";
+			var timeLineStart = 0;
+			var timeLineEnd = 1440;
+
+			var timeLine = {
+				Offset: moment(queryDate),
+				StartMinute: timeLineStart,
+				EndMinute: timeLineEnd,
+				LengthPercentPerMinute: 100 / (timeLineEnd - timeLineStart)
+			};
+			var scheduleToday = {
+				"PersonId": "221B-Baker-Street",
+				"Name": "Sherlock Holmes",
+				"Date": queryDate,
+				"ContractTimeMinutes": 480,
+				"Projection": [
+					{
+						"ShiftLayerIds": ["222"],
+						"Color": "#80FF80",
+						"Description": "Email",
+						"Start": queryDate + " 07:00",
+						"End": queryDate + " 11:00",
+						"Minutes": 240
+					},
+					{
+						"ShiftLayerIds": ["333"],
+						"Color": "#80FF80",
+						"Description": "Email",
+						"Start": queryDate + " 11:00",
+						"End": queryDate + " 07:30",
+						"Minutes": 1230
+					}],
+				"DayOff": null,
+				"UnderlyingScheduleSummary": {
+					"PersonalActivities": [{
+						"Description": "personal activity",
+						"Start": queryDate + ' 10:00',
+						"End": queryDate + ' 11:00'
+					}],
+					"PersonPartTimeAbsences": [{
+						"Description": "holiday",
+						"Start": queryDate + ' 11:30',
+						"End": queryDate + ' 12:00'
+					}],
+					"PersonMeetings": [{
+						"Description": "administration",
+						"Start": queryDate + ' 14:00',
+						"End": queryDate + ' 15:00'
+					}]
+				}
+			};
+			var personSchedule = target.Create(scheduleToday, timeLine);
+			expect(personSchedule.GetSummaryTimeSpan(personSchedule.UnderlyingScheduleSummary.PersonalActivities[0])).toEqual("10:00 AM - 11:00 AM");
+			expect(personSchedule.GetSummaryTimeSpan(personSchedule.UnderlyingScheduleSummary.PersonPartTimeAbsences[0])).toEqual("11:30 AM - 12:00 PM");
+			expect(personSchedule.GetSummaryTimeSpan(personSchedule.UnderlyingScheduleSummary.PersonMeetings[0])).toEqual("2:00 PM - 3:00 PM");
+		});
 	});
 
 

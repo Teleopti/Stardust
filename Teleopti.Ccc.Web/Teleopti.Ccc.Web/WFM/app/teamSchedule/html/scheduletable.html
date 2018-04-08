@@ -40,9 +40,7 @@
 				<div class="person-name-text inline-block" ng-hide="::vm.selectMode">{{::personSchedule.Name}}</div>
 
 				<span class="validate-warning" ng-if="vm.showWarnings">
-					<span ng-if="vm.checkIsLoadedValidationForPerson(personSchedule.PersonId) &&
-						  vm.checkBusinessRulesWarningMessage(personSchedule.PersonId).length>
-						0">
+					<span ng-if="vm.checkIsLoadedValidationForPerson(personSchedule.PersonId) && vm.checkBusinessRulesWarningMessage(personSchedule.PersonId).length > 0">
 						<span class="warning-icon"><i class="mdi mdi-account-alert"></i></span>
 						<md-tooltip class="multiline-tooltip max-width-600" md-direction="right">
 							<span ng-bind-html="vm.checkBusinessRulesWarningMessage(personSchedule.PersonId) | br"></span>
@@ -52,29 +50,28 @@
 				</span>
 			</td>
 			<td class="shift-category-cell" ng-click="personSchedule.ShiftCategory.Name && vm.modifyShiftCategoryForAgent($event, personSchedule)" ng-style="{cursor: (personSchedule.ShiftCategory.Name ? 'pointer' : 'default')}">
-				<span id="name" class="inline-block" ng-if="::personSchedule.ShiftCategory.Name" ng-style="{background: personSchedule.ShiftCategory.DisplayColor, color: personSchedule.ShiftCategory.ContrastColor}">
+				<i class="mdi mdi-information mdi-alert info" ng-if="vm.hasUnderlyingSchedules(personSchedule)"></i>
+				<span id="name" ng-if="::personSchedule.ShiftCategory.Name" ng-style="{background: personSchedule.ShiftCategory.DisplayColor, color: personSchedule.ShiftCategory.ContrastColor}">
 					{{::personSchedule.ShiftCategory.ShortName}}
 				</span>
-				<md-tooltip md-direction="right" ng-if="::personSchedule.ShiftCategory.Name">{{::personSchedule.ShiftCategory.Name}}</md-tooltip>
+				<md-tooltip class="multiline-tooltip" md-direction="right">
+					<div ng-if="::personSchedule.ShiftCategory.Name">{{::personSchedule.ShiftCategory.Name}}</div>
+					<div ng-if="vm.hasUnderlyingSchedules(personSchedule)">
+						<div ng-if="!!personSchedule.UnderlyingScheduleSummary.PersonalActivities">{{'PersonalActivity' | translate}}</div>
+						<div ng-repeat="info in personSchedule.UnderlyingScheduleSummary.PersonalActivities" style="margin-left:10px;">
+							{{ info.Description }}: {{ personSchedule.GetSummaryTimeSpan(info) }}
+						</div>
+						<div ng-if="!!personSchedule.UnderlyingScheduleSummary.PersonPartTimeAbsences" ng-repeat="info in personSchedule.UnderlyingScheduleSummary.PersonPartTimeAbsences">
+							{{ info.Description }}: {{ personSchedule.GetSummaryTimeSpan(info) }}
+						</div>
+						<div ng-if="!!personSchedule.UnderlyingScheduleSummary.PersonMeetings" ng-repeat="info in personSchedule.UnderlyingScheduleSummary.PersonMeetings">
+							{{ info.Description }}: {{ personSchedule.GetSummaryTimeSpan(info) }}
+						</div>
+					</div>
+				</md-tooltip>
 			</td>
 			<td class="schedule schedule-column">
 				<div class="relative time-line-for">
-					<span ng-if="vm.hasUnderlyingSchedules(personSchedule)" class="info">
-						<i class="mdi mdi-information mdi-alert"></i>
-						<md-tooltip class="multiline-tooltip" md-direction="left">
-							<div ng-if="!!personSchedule.UnderlyingScheduleSummary.PersonalActivities">{{'PersonalActivity' | translate}}</div>
-							<div ng-repeat="info in personSchedule.UnderlyingScheduleSummary.PersonalActivities" style="margin-left:10px;">
-								{{ info.Description }}: {{ info.Timespan }}
-							</div>
-							<div ng-if="!!personSchedule.UnderlyingScheduleSummary.PersonAbsences" ng-repeat="info in personSchedule.UnderlyingScheduleSummary.PersonAbsences">
-								{{ info.Description }}: {{ info.Timespan }}
-							</div>
-							<div ng-if="!!personSchedule.UnderlyingScheduleSummary.PersonMeetings" ng-repeat="info in personSchedule.UnderlyingScheduleSummary.PersonMeetings">
-								{{ info.Description }}: {{ info.Timespan }}
-							</div>
-						</md-tooltip>
-					</span>
-
 					<span class="dayoff absolute" ng-repeat="dayOff in ::personSchedule.DayOffs" ng-if="personSchedule.DayOffs.length > 0 && dayOff.Length > 0"
 						  ng-style="{left: dayOff.StartPosition + '%', width: dayOff.Length + '%'}">
 						<md-tooltip ng-if="dayOff.DayOffName !=''">{{::dayOff.DayOffName}}</md-tooltip>

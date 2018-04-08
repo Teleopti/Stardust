@@ -42,6 +42,22 @@
 					p.Start = $filter('timezone')(p.Start, timezone);
 					p.End = $filter('timezone')(p.End, timezone);
 				});
+				var underlyingScheduleSummary = copiedSchedule.UnderlyingScheduleSummary;
+				if (!!underlyingScheduleSummary) {
+					angular.forEach(underlyingScheduleSummary.PersonalActivities, function (p) {
+						p.Start = $filter('timezone')(p.Start, timezone);
+						p.End = $filter('timezone')(p.End, timezone);
+					});
+					angular.forEach(underlyingScheduleSummary.PersonPartTimeAbsences, function (p) {
+						p.Start = $filter('timezone')(p.Start, timezone);
+						p.End = $filter('timezone')(p.End, timezone);
+					});
+					angular.forEach(underlyingScheduleSummary.PersonMeetings, function (p) {
+						p.Start = $filter('timezone')(p.Start, timezone);
+						p.End = $filter('timezone')(p.End, timezone);
+					});
+				}
+				
 				if (copiedSchedule.DayOff) {
 					copiedSchedule.DayOff.Start = $filter('timezone')(copiedSchedule.DayOff.Start, timezone);
 					copiedSchedule.DayOff.End = $filter('timezone')(copiedSchedule.DayOff.End, timezone);

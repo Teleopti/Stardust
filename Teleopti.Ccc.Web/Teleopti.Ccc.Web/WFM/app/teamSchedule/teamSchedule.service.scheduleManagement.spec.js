@@ -95,7 +95,24 @@
 			}
 		],
 		"IsFullDayAbsence": false,
-		"DayOff": null
+		"DayOff": null,
+		"UnderlyingScheduleSummary": {
+			"PersonalActivities": [{
+				"Description": "personal activity",
+				"Start": scheduleDate + ' 10:00',
+				"End": scheduleDate + ' 11:00'
+			}],
+			"PersonPartTimeAbsences": [{
+				"Description": "holiday",
+				"Start": scheduleDate + ' 11:30',
+				"End": scheduleDate + ' 12:00'
+			}],
+			"PersonMeetings": [{
+				"Description": "administration",
+				"Start": scheduleDate + ' 14:00',
+				"End": scheduleDate + ' 15:00'
+			}]
+		}
 	};
 	var schedule2 = {
 		"PersonId": "221B-Sherlock",
@@ -139,7 +156,14 @@
 		var schedule = target.groupScheduleVm.Schedules[0];
 
 		expect(schedule.Shifts[0].Projections[0].Start).toEqual(scheduleDate + "T04:00");
+		expect(schedule.UnderlyingScheduleSummary.PersonalActivities[0].Start).toEqual(scheduleDate + "T03:00");
+		expect(schedule.UnderlyingScheduleSummary.PersonalActivities[0].End).toEqual(scheduleDate + "T04:00");
+		expect(schedule.UnderlyingScheduleSummary.PersonPartTimeAbsences[0].Start).toEqual(scheduleDate + "T04:30");
+		expect(schedule.UnderlyingScheduleSummary.PersonPartTimeAbsences[0].End).toEqual(scheduleDate + "T05:00");
+		expect(schedule.UnderlyingScheduleSummary.PersonMeetings[0].Start).toEqual(scheduleDate + "T07:00");
+		expect(schedule.UnderlyingScheduleSummary.PersonMeetings[0].End).toEqual(scheduleDate + "T08:00");
 	});
+	
 
 	it("Can create group schedule", inject(function () {
 		target.resetSchedules([schedule1, schedule2], scheduleDateMoment);

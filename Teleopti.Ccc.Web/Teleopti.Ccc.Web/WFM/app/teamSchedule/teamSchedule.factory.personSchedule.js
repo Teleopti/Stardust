@@ -242,6 +242,14 @@
 			this.Timezone = schedule.Timezone;
 			this.ViewRange = timeLine.MaximumViewRange;
 			this.UnderlyingScheduleSummary = schedule.UnderlyingScheduleSummary;
+			this.GetSummaryTimeSpan = function (summary) {
+				var start = moment(summary.Start);
+				var end = moment(summary.End);
+				if (!start.isSame(end, 'day')) {
+					return $filter('date')(start.toDate(), 'short') + ' - ' + $filter('date')(end.toDate(), 'short');
+				}
+				return $filter('date')(start.toDate(), 'shortTime') + ' - ' + $filter('date')(end.toDate(), 'shortTime');
+			}
 		}
 
 		PersonSchedule.prototype.AbsenceCount = function () {

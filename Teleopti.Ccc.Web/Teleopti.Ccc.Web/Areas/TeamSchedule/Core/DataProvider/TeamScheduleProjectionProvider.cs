@@ -85,10 +85,14 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			var pa = scheduleDay.PersonAssignment();
 			var personalActivities = pa?.PersonalActivities();
 
-			var isFullDayAbsence = scheduleDay.IsFullDayAbsence();
-			var hasUnderlyingSchedules = (isPublished || canViewUnpublished) &&  (!scheduleDay.IsFullDayAbsence()
-				|| (scheduleDay.PersonAssignment()?.PersonalActivities()?.Any() ?? false)
-				|| (scheduleDay.PersonMeetingCollection()?.Any() ?? false));
+			var hasPartTimeAbsence = !scheduleDay.IsFullDayAbsence() && (scheduleDay.PersonAbsenceCollection()?.Any() ?? false);
+			var hasPersonalActivities = scheduleDay.PersonAssignment()?.PersonalActivities()?.Any() ?? false;
+			var hasPersonMeetings = scheduleDay.PersonMeetingCollection()?.Any() ?? false;
+
+			var hasUnderlyingSchedules = (isPublished || canViewUnpublished) &&
+				(hasPartTimeAbsence
+				|| hasPersonalActivities
+				|| hasPersonMeetings);
 
 			if (hasUnderlyingSchedules)
 			{
@@ -96,22 +100,22 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				var timezone = loggedOnUser.PermissionInformation.DefaultTimeZone();
 				vm.UnderlyingScheduleSummary = new UnderlyingScheduleSummary
 				{
-					PersonalActivities = scheduleDay.PersonAssignment()?.PersonalActivities()?.Select(personalActivity =>
-						new Summary
-						{
-							Description = personalActivity.Payload.Description.Name,
-							Start = TimeZoneInfo.ConvertTimeFromUtc(personalActivity.Period.StartDateTime, timezone).ToFixedDateTimeFormat(),
-							End = TimeZoneInfo.ConvertTimeFromUtc(personalActivity.Period.EndDateTime, timezone).ToFixedDateTimeFormat()
-						}).ToArray(),
-					PersonMeetings = scheduleDay.PersonMeetingCollection()?.Select(personMeeting =>
+					PersonalActivities = hasPersonalActivities ? scheduleDay.PersonAssignment().PersonalActivities().Select(personalActivity =>
+						 new Summary
+						 {
+							 Description = personalActivity.Payload.Description.Name,
+							 Start = TimeZoneInfo.ConvertTimeFromUtc(personalActivity.Period.StartDateTime, timezone).ToFixedDateTimeFormat(),
+							 End = TimeZoneInfo.ConvertTimeFromUtc(personalActivity.Period.EndDateTime, timezone).ToFixedDateTimeFormat()
+						 }).ToArray() : null,
+					PersonMeetings = hasPersonMeetings ? scheduleDay.PersonMeetingCollection().Select(personMeeting =>
 						new Summary
 						{
 							Description = personMeeting.BelongsToMeeting.GetSubject(new NoFormatting()),
 							Start = TimeZoneInfo.ConvertTimeFromUtc(personMeeting.Period.StartDateTime, timezone).ToFixedDateTimeFormat(),
 							End = TimeZoneInfo.ConvertTimeFromUtc(personMeeting.Period.EndDateTime, timezone).ToFixedDateTimeFormat()
 						}
-					).ToArray(),
-					PersonPartTimeAbsences = !isFullDayAbsence ? scheduleDay.PersonAbsenceCollection()?.Select(personAbsence =>
+					).ToArray() : null,
+					PersonPartTimeAbsences = hasPartTimeAbsence ? scheduleDay.PersonAbsenceCollection().Select(personAbsence =>
 					{
 						var isAbsenceConfidential = (personAbsence.Layer.Payload as IAbsence).Confidential;
 						return new Summary
