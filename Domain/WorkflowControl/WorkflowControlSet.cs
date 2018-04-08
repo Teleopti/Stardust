@@ -490,16 +490,6 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			return getMergedOpenPeriods(absenceRequest, absenceRequest.Period.ToDateOnlyPeriod(agentTimeZone));
 		}
 
-		public virtual IOvertimeRequestOpenPeriod GetMergedOvertimeRequestOpenPeriod(IOvertimeRequest overtimeRequest, DateOnly viewpointDate)
-		{
-			return getMergedOvertimeRequestOpenPeriod(overtimeRequest, viewpointDate);
-		}
-
-		public virtual IOvertimeRequestOpenPeriod GetMergedOvertimeRequestOpenPeriod(DateTimePeriod period, DateOnly viewpointDate, IPermissionInformation permissionInformation)
-		{
-			return getMergedOvertimeRequestOpenPeriod(viewpointDate, permissionInformation, period);
-		}
-
 		public virtual bool IsAbsenceRequestValidatorEnabled<T>(TimeZoneInfo timeZone)
 			where T : IAbsenceRequestValidator
 		{
@@ -546,28 +536,6 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			var openPeriods = extractor.Projection.GetProjectedPeriods(dateOnlyPeriod,
 				absenceRequest.Person.PermissionInformation.Culture(), absenceRequest.Person.PermissionInformation.UICulture());
 			return new AbsenceRequestOpenPeriodMerger().Merge(openPeriods);
-		}
-
-		private IOvertimeRequestOpenPeriod getMergedOvertimeRequestOpenPeriod(IOvertimeRequest overtimeRequest, DateOnly viewpointDate)
-		{
-			var permissionInformation = overtimeRequest.Person.PermissionInformation;
-			var period = overtimeRequest.Period;
-
-			return getMergedOvertimeRequestOpenPeriod(viewpointDate, permissionInformation, period);
-		}
-
-		private IOvertimeRequestOpenPeriod getMergedOvertimeRequestOpenPeriod(DateOnly viewpointDate,
-			IPermissionInformation permissionInformation, DateTimePeriod period)
-		{
-			var overtimePeriodProjection = new OvertimeRequestPeriodProjection(OvertimeRequestOpenPeriods,
-				permissionInformation.Culture(),
-				permissionInformation.UICulture(),
-				viewpointDate);
-
-			var agentTimeZone = permissionInformation.DefaultTimeZone();
-			var dateOnlyPeriod = period.ToDateOnlyPeriod(agentTimeZone);
-			var openPeriods = overtimePeriodProjection.GetProjectedOvertimeRequestsOpenPeriods(dateOnlyPeriod);
-			return new OvertimeRequestOpenPeriodMerger().Merge(openPeriods);
 		}
 	}
 }

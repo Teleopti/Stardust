@@ -30,21 +30,28 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 		private static readonly ILog logger = LogManager.GetLogger(typeof(OvertimeRequestProcessor));
 
 		public OvertimeRequestProcessor(ICommandDispatcher commandDispatcher,
-			IEnumerable<IOvertimeRequestValidator> overtimeRequestValidators, IActivityRepository activityRepository,
-			ISkillRepository skillRepository, ISkillTypeRepository skillTypeRepository,
+			IEnumerable<IOvertimeRequestValidator> overtimeRequestValidators,
+			IOvertimeRequestContractWorkRulesValidator overtimeRequestContractWorkRulesValidator,
 			IOvertimeRequestAvailableSkillsValidator overtimeRequestAvailableSkillsValidator,
-			INow now, IPersonRepository personRepository, IUpdatedByScope updatedByScope, IOvertimeRequestContractWorkRulesValidator overtimeRequestContractWorkRulesValidator)
+			INow now,
+			IActivityRepository activityRepository,
+			ISkillRepository skillRepository,
+			ISkillTypeRepository skillTypeRepository,
+			IPersonRepository personRepository,
+			IUpdatedByScope updatedByScope)
 		{
 			_commandDispatcher = commandDispatcher;
 			_overtimeRequestValidators = overtimeRequestValidators;
+			_overtimeRequestContractWorkRulesValidator = overtimeRequestContractWorkRulesValidator;
+			_overtimeRequestAvailableSkillsValidator = overtimeRequestAvailableSkillsValidator;
+			_now = now;
+
 			_activityRepository = activityRepository;
 			_skillRepository = skillRepository;
 			_skillTypeRepository = skillTypeRepository;
-			_overtimeRequestAvailableSkillsValidator = overtimeRequestAvailableSkillsValidator;
-			_now = now;
 			_personRepository = personRepository;
+
 			_updatedByScope = updatedByScope;
-			_overtimeRequestContractWorkRulesValidator = overtimeRequestContractWorkRulesValidator;
 		}
 
 		public int StaffingDataAvailableDays { get; set; }
@@ -67,8 +74,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 				return;
 			}
 
-			var skills = validateSkillsResult.SkillDictionary.SelectMany(x => x.Value).Distinct().ToArray();
-			var overTimeRequestOpenPeriod = getOvertimeRequestOpenPeriodBySkillType(personRequest, skills);
+			var overTimeRequestOpenPeriod = getOvertimeRequestOpenPeriod(validateSkillsResult, personRequest);
+
+			var workRuleValidationResult = validateWorkRules(personRequest, overTimeRequestOpenPeriod);
+			if (!workRuleValidationResult.IsValid)
+			{
+				handleOvertimeRequestValidationResult(personRequest, workRuleValidationResult);
+				return;
+			}
 
 			if (overTimeRequestOpenPeriod.AutoGrantType == OvertimeRequestAutoGrantType.Deny)
 			{
@@ -76,45 +89,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 				return;
 			}
 
-			var workRuleValidationResult = _overtimeRequestContractWorkRulesValidator.Validate(new OvertimeRequestValidationContext(personRequest), overTimeRequestOpenPeriod);
-			if (!workRuleValidationResult.IsValid)
-			{
-				handleOvertimeRequestValidationResult(personRequest, workRuleValidationResult);
-				return;
-			}
-
 			if (overTimeRequestOpenPeriod.AutoGrantType == OvertimeRequestAutoGrantType.No)
 				return;
 
-			var person = _personRepository.Get(SystemUser.Id);
-			_updatedByScope.OnThisThreadUse(person);
-
 			executeApproveCommand(personRequest, validateSkillsResult.SkillDictionary);
-		}
-
-		private ISkillType getDefaultSkillType()
-		{
-			ISkillType phoneSkillType;
-			phoneSkillType = _skillTypeRepository.LoadAll()
-				.FirstOrDefault(s => s.Description.Name.Equals(SkillTypeIdentifier.Phone));
-			return phoneSkillType;
-		}
-
-		private void executeApproveCommand(IPersonRequest personRequest, IDictionary<DateTimePeriod,IList<ISkill>> skillDictionary)
-		{
-			var command = new ApproveRequestCommand
-			{
-				PersonRequestId = personRequest.Id.GetValueOrDefault(),
-				IsAutoGrant = true,
-				OvertimeValidatedSkillDictionary = skillDictionary
-			};
-			_commandDispatcher.Execute(command);
-
-			if (command.ErrorMessages.Any())
-			{
-				logger.Warn(command.ErrorMessages);
-				denyRequest(personRequest, command.ErrorMessages.FirstOrDefault());
-			}
 		}
 
 		private void denyRequest(IPersonRequest personRequest, string denyReason)
@@ -150,6 +128,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			return _overtimeRequestAvailableSkillsValidator.Validate(personRequest);
 		}
 
+		private OvertimeRequestValidationResult validateWorkRules(IPersonRequest personRequest, IOvertimeRequestOpenPeriod overTimeRequestOpenPeriod)
+		{
+			return _overtimeRequestContractWorkRulesValidator.Validate(personRequest, overTimeRequestOpenPeriod);
+		}
+
 		private void handleOvertimeRequestValidationResult(IPersonRequest personRequest,
 			OvertimeRequestValidationResult overtimeRequestValidationResult)
 		{
@@ -165,9 +148,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			personRequest.TrySetBrokenBusinessRule(overtimeRequestValidationResult.BrokenBusinessRules);
 		}
 
-		private IOvertimeRequestOpenPeriod getOvertimeRequestOpenPeriodBySkillType(IPersonRequest personRequest,
-			ISkill[] skillTypes)
+		private IOvertimeRequestOpenPeriod getOvertimeRequestOpenPeriod(OvertimeRequestAvailableSkillsValidationResult validateSkillsResult, IPersonRequest personRequest)
 		{
+			var skillTypes = validateSkillsResult.SkillDictionary.SelectMany(x => x.Value).Distinct().ToArray();
 			if (personRequest.Person.WorkflowControlSet == null)
 				return new OvertimeRequestOpenRollingPeriod
 				{
@@ -198,6 +181,39 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 				overtimePeriodProjection.GetProjectedOvertimeRequestsOpenPeriods(dateOnlyPeriod);
 
 			return new OvertimeRequestOpenPeriodMerger().Merge(projectedOvertimeRequestsOpenPeriods);
+		}
+
+		private ISkillType getDefaultSkillType()
+		{
+			ISkillType phoneSkillType;
+			phoneSkillType = _skillTypeRepository.LoadAll()
+				.FirstOrDefault(s => s.Description.Name.Equals(SkillTypeIdentifier.Phone));
+			return phoneSkillType;
+		}
+
+		private void executeApproveCommand(IPersonRequest personRequest, IDictionary<DateTimePeriod, IList<ISkill>> skillDictionary)
+		{
+			setUpdateScope();
+
+			var command = new ApproveRequestCommand
+			{
+				PersonRequestId = personRequest.Id.GetValueOrDefault(),
+				IsAutoGrant = true,
+				OvertimeValidatedSkillDictionary = skillDictionary
+			};
+			_commandDispatcher.Execute(command);
+
+			if (command.ErrorMessages.Any())
+			{
+				logger.Warn(command.ErrorMessages);
+				denyRequest(personRequest, command.ErrorMessages.FirstOrDefault());
+			}
+		}
+
+		private void setUpdateScope()
+		{
+			var person = _personRepository.Get(SystemUser.Id);
+			_updatedByScope.OnThisThreadUse(person);
 		}
 	}
 }
