@@ -1435,6 +1435,7 @@
     <Compile Include="Win\Common\Configuration\Columns\SFGridHourMinutesOrEmptyColumn.cs" />
     <Compile Include="Win\Common\Configuration\Columns\SFGridIntegerCellColumn.cs" />
     <Compile Include="Win\Common\Configuration\Columns\SFGridIntegerCellWithIgnoreColumn.cs" />
+    <Compile Include="Win\Common\Configuration\Columns\SFGridMultiSelectDropDownColumn.cs" />
     <Compile Include="Win\Common\Configuration\Columns\SFGridNullableIntegerCellColumn.cs" />
     <Compile Include="Win\Common\Configuration\Columns\SFGridNumericCellColumn.cs" />
     <Compile Include="Win\Common\Configuration\Columns\SFGridReadOnlyEnumColumn.cs" />
@@ -1643,6 +1644,7 @@
     <Compile Include="Win\Common\Controls\Cells\DropDownCultureCellModel.cs" />
     <Compile Include="Win\Common\Controls\Cells\GridCellModelConstants.cs" />
     <Compile Include="Win\Common\Controls\Cells\GridDropDownMonthCalendarAdvCellModel.cs" />
+    <Compile Include="Win\Common\Controls\Cells\GridDropDownMultiSelectCellModel.cs" />
     <Compile Include="Win\Common\Controls\Cells\GridInCellModel.cs" />
     <Compile Include="Win\Common\Controls\Cells\IgnoreCellModel.cs" />
     <Compile Include="Win\Common\Controls\Cells\IntegerCellModel.cs" />

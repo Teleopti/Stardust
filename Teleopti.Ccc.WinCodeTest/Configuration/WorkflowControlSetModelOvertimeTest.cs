@@ -1,6 +1,8 @@
 ﻿using System;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration;
 using Teleopti.Ccc.UserTexts;
@@ -149,6 +151,45 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			Assert.AreEqual(_target.OvertimeRequestMaximumTime, TimeSpan.FromHours(10));
 			Assert.AreEqual(_target.OvertimeRequestMaximumOvertimeValidationHandleOptionView.WorkRuleValidationHandleType, OvertimeValidationHandleType.Deny);
 			Assert.AreEqual(_target.OvertimeRequestMaximumTimeEnabled, true);
+		}
+
+		[Test]
+		public void VerifyCanGetAndSetSkillTypesFromModel()
+		{
+			var phoneSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony);
+			var chatSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Chat), ForecastSource.Chat);
+			var emailSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Email), ForecastSource.Email);
+
+			_target.DomainEntity.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
+			{
+				Period = new DateOnlyPeriod(2010, 6, 1, 2010, 8, 31),
+				EnableWorkRuleValidation = true,
+				WorkRuleValidationHandleType = OvertimeValidationHandleType.Deny,
+				SkillTypes = new ISkillType[] {phoneSkillType, chatSkillType, emailSkillType}
+			});
+
+			var overtimeRequestPeriodList = _target.OvertimeRequestPeriodModels;
+			var datePeriod = overtimeRequestPeriodList[0];
+
+			Assert.AreEqual(datePeriod.SkillTypes,
+				string.Join(",", Resources.SkillTypeInboundTelephony, Resources.SkillTypeChat, Resources.SkillTypeEmail));
+		}
+
+		[Test]
+		public void VerifyCanGetDefaultSkillTypesFromModel()
+		{
+			_target.DomainEntity.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
+			{
+				Period = new DateOnlyPeriod(2010, 6, 1, 2010, 8, 31),
+				EnableWorkRuleValidation = true,
+				WorkRuleValidationHandleType = OvertimeValidationHandleType.Deny,
+				SkillTypes = null
+			});
+
+			var overtimeRequestPeriodList = _target.OvertimeRequestPeriodModels;
+			var datePeriod = overtimeRequestPeriodList[0];
+
+			Assert.AreEqual(datePeriod.SkillTypes, Resources.SkillTypeInboundTelephony);
 		}
 	}
 }

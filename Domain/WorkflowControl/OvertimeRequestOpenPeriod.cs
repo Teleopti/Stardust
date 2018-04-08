@@ -31,6 +31,8 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			set => _workRuleValidationHandleType = value;
 		}
 
+		public virtual ISkillType[] SkillTypes { get; set; }
+
 		public virtual int OrderIndex
 		{
 			get

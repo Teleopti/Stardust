@@ -16,6 +16,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		private OvertimeRequestPeriodTypeModel _periodType;
 		private OvertimeRequestPeriodSkillTypeModel _periodSkillType;
 		private OvertimeRequestValidationHandleOptionView _workRuleValidationHandleType;
+		private string _skillTypes;
 
 		internal static readonly HandleOptionViewDictionary
 			OvertimeRequestWorkRuleValidationHandleOptionViews
@@ -42,6 +43,21 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 
 		public OvertimeRequestPeriodTypeModel PeriodType => _periodType;
 		public OvertimeRequestPeriodSkillTypeModel SkillType => _periodSkillType;
+
+		public string SkillTypes
+		{
+			get => _skillTypes;
+			set
+			{
+				_skillTypes = value;
+				var supportedSkillTypes = WorkflowControlSetModel.GetSupportedSkillTypes();
+				_overtimeRequestOpenPeriod.SkillTypes = _skillTypes.Split(',')
+					.Select(skillType => supportedSkillTypes.FirstOrDefault(s => Resources.ResourceManager.GetString(s.Description.Name).Equals(skillType)))
+					.Where(s => s != null)
+					.ToArray();
+				Owner.IsDirty = true;
+			}
+		}
 
 		public OvertimeRequestAutoGrantType AutoGrantType
 		{
@@ -170,6 +186,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		{
 			_overtimeRequestOpenPeriod = overtimeRequestOpenPeriod;
 			_periodType = new OvertimeRequestPeriodTypeModel(_overtimeRequestOpenPeriod, string.Empty);
+
+			_skillTypes = overtimeRequestOpenPeriod.SkillTypes != null
+				? string.Join(",", overtimeRequestOpenPeriod.SkillTypes.Select(s => Resources.ResourceManager.GetString(s.Description.Name)))
+				: Resources.SkillTypeInboundTelephony;
+			
 			foreach (var periodType in WorkflowControlSetModel.DefaultOvertimeRequestPeriodAdapters)
 			{
 				if (_periodType.Equals(periodType))

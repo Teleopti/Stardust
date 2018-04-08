@@ -13,5 +13,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		ISkillType SkillType { get; set; }
 
 		OvertimeValidationHandleType? WorkRuleValidationHandleType { get; set; }
+
+		ISkillType[] SkillTypes { get; set; }
 	}
 }

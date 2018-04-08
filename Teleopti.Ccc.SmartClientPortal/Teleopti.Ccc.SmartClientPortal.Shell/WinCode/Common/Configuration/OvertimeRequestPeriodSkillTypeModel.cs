@@ -1,4 +1,5 @@
 using System;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
@@ -35,6 +36,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 				return ((_skillType != null ? _skillType.GetHashCode() : 0) * 397) ^
 					   (DisplayText != null ? DisplayText.GetHashCode() : 0);
 			}
+		}
+
+		public override string ToString()
+		{
+			return Resources.ResourceManager.GetString(_skillType.Description.Name);
 		}
 	}
 }
