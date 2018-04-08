@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 		private readonly ICommandDispatcher _commandDispatcher;
 		private readonly IEnumerable<IOvertimeRequestValidator> _overtimeRequestValidators;
 		private readonly IOvertimeRequestAvailableSkillsValidator _overtimeRequestAvailableSkillsValidator;
+		private readonly IOvertimeRequestContractWorkRulesValidator _overtimeRequestContractWorkRulesValidator;
 		private readonly INow _now;
 		private readonly IActivityRepository _activityRepository;
 		private readonly ISkillRepository _skillRepository;
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			IEnumerable<IOvertimeRequestValidator> overtimeRequestValidators, IActivityRepository activityRepository,
 			ISkillRepository skillRepository, ISkillTypeRepository skillTypeRepository,
 			IOvertimeRequestAvailableSkillsValidator overtimeRequestAvailableSkillsValidator,
-			INow now, IPersonRepository personRepository, IUpdatedByScope updatedByScope)
+			INow now, IPersonRepository personRepository, IUpdatedByScope updatedByScope, IOvertimeRequestContractWorkRulesValidator overtimeRequestContractWorkRulesValidator)
 		{
 			_commandDispatcher = commandDispatcher;
 			_overtimeRequestValidators = overtimeRequestValidators;
@@ -43,6 +44,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			_now = now;
 			_personRepository = personRepository;
 			_updatedByScope = updatedByScope;
+			_overtimeRequestContractWorkRulesValidator = overtimeRequestContractWorkRulesValidator;
 		}
 
 		public int StaffingDataAvailableDays { get; set; }
@@ -71,6 +73,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			if (overTimeRequestOpenPeriod.AutoGrantType == OvertimeRequestAutoGrantType.Deny)
 			{
 				denyRequest(personRequest, overTimeRequestOpenPeriod.DenyReason);
+				return;
+			}
+
+			var workRuleValidationResult = _overtimeRequestContractWorkRulesValidator.Validate(new OvertimeRequestValidationContext(personRequest), overTimeRequestOpenPeriod);
+			if (!workRuleValidationResult.IsValid)
+			{
+				handleOvertimeRequestValidationResult(personRequest, workRuleValidationResult);
 				return;
 			}
 

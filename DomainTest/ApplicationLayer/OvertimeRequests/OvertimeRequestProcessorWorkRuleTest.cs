@@ -2,6 +2,7 @@
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.WorkflowControl;
@@ -177,9 +178,24 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		[Test]
 		public void ShouldDenyWhenViolateNightlyRestTimeRuleOnDayOff()
 		{
-			setupPerson(8, 21);
+			setupPerson(0, 24);
+			var dateTime = new DateTime(2017, 7, 15, 0, 0, 0, DateTimeKind.Utc);
 			var person = LoggedOnUser.CurrentUser();
 			var personPeriod = person.PersonPeriods(_periodStartDate.ToDateOnlyPeriod()).FirstOrDefault();
+			personPeriod.Team.Site.AddOpenHour(new SiteOpenHour
+			{
+				Parent = personPeriod.Team.Site,
+				TimePeriod = new TimePeriod(0, 0, 24, 0),
+				WeekDay = dateTime.DayOfWeek,
+				IsClosed = false
+			});
+			personPeriod.Team.Site.AddOpenHour(new SiteOpenHour
+			{
+				Parent = personPeriod.Team.Site,
+				TimePeriod = new TimePeriod(0, 0, 24, 0),
+				WeekDay = dateTime.AddDays(1).DayOfWeek,
+				IsClosed = false
+			});
 			personPeriod.PersonContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(40),
 				TimeSpan.FromHours(60), TimeSpan.FromHours(20), TimeSpan.FromHours(10));
 
@@ -195,10 +211,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			setupIntradayStaffingForSkill(setupPersonSkill(new TimePeriod(TimeSpan.Zero, TimeSpan.FromDays(1))), 10d, 8d);
 
-			ScheduleStorage.Add(createMainPersonAssignmenDayoff(person, new DateOnly(2017, 7, 15)));
-			ScheduleStorage.Add(createMainPersonAssignment(person, new DateTimePeriod(2017, 7, 16, 8, 2017, 7, 16, 16)));
+			ScheduleStorage.Add(createMainPersonAssignmenDayoff(person, new DateOnly(dateTime)));
+			ScheduleStorage.Add(createMainPersonAssignment(person, new DateTimePeriod(dateTime.AddDays(1).AddHours(8), dateTime.AddDays(1).AddHours(16))));
 
-			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 15, 0, 0, 0, DateTimeKind.Utc), 48);
+			var personRequest = createOvertimeRequest(dateTime, 48);
 			getTarget().Process(personRequest);
 
 			personRequest.IsDenied.Should().Be.True();

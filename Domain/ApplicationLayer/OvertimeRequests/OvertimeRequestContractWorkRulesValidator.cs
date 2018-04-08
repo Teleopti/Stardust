@@ -11,36 +11,30 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 {
-	public class OvertimeRequestContractWorkRulesValidator : IOvertimeRequestValidator
+	public class OvertimeRequestContractWorkRulesValidator : IOvertimeRequestContractWorkRulesValidator
 	{
 		private readonly ICurrentScenario _scenarioRepository;
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private readonly ILoadSchedulesForRequestWithoutResourceCalculation
 			_loadSchedulingDataForRequestWithoutResourceCalculation;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
-		private readonly INow _now;
 
 		public OvertimeRequestContractWorkRulesValidator(ICurrentScenario scenarioRepository,
 			ISchedulingResultStateHolder schedulingResultStateHolder,
 			ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulingDataForRequestWithoutResourceCalculation,
-			IScheduleDayChangeCallback scheduleDayChangeCallback,
-			INow now)
+			IScheduleDayChangeCallback scheduleDayChangeCallback)
 		{
 			_scenarioRepository = scenarioRepository;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_loadSchedulingDataForRequestWithoutResourceCalculation = loadSchedulingDataForRequestWithoutResourceCalculation;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
-			_now = now;
 		}
 
-		public OvertimeRequestValidationResult Validate(OvertimeRequestValidationContext context)
+		public OvertimeRequestValidationResult Validate(OvertimeRequestValidationContext context, IOvertimeRequestOpenPeriod overtimeRequestOpenPeriod)
 		{
 			var personRequest = context.PersonRequest;
 			var person = personRequest.Person;
 			var timeZone = person.PermissionInformation.DefaultTimeZone();
-			var overtimeRequestOpenPeriod = personRequest.Person.WorkflowControlSet.GetMergedOvertimeRequestOpenPeriod(
-				personRequest.Request as IOvertimeRequest,
-				new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), timeZone)));
 
 			if (!overtimeRequestOpenPeriod.EnableWorkRuleValidation)
 				return new OvertimeRequestValidationResult { IsValid = true };

@@ -1022,6 +1022,69 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			personAssignment.Should().Be(null);
 		}
 
+		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestUseMostUnderStaffedSkill_47853)]
+		public void ShouldCheckContractRuleBasedOnAvailableSkillType()
+		{
+			setupPerson(8, 21);
+
+			var phoneSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony).WithId();
+			var chatSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Chat), ForecastSource.Chat).WithId();
+
+			var person = LoggedOnUser.CurrentUser();
+			var personPeriod = person.PersonPeriods(_periodStartDate.ToDateOnlyPeriod()).FirstOrDefault();
+			personPeriod.PersonContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(40),
+				TimeSpan.FromHours(60), TimeSpan.FromHours(10), TimeSpan.FromHours(10));
+
+			var workflowControlSet = new WorkflowControlSet();
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
+				EnableWorkRuleValidation = true,
+				WorkRuleValidationHandleType = OvertimeValidationHandleType.Deny,
+				SkillType = chatSkillType,
+				BetweenDays = new MinMax<int>(0, 7)
+			});
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.No,
+				EnableWorkRuleValidation = true,
+				WorkRuleValidationHandleType = OvertimeValidationHandleType.Pending,
+				SkillType = phoneSkillType,
+				BetweenDays = new MinMax<int>(0, 48)
+			});
+			person.WorkflowControlSet = workflowControlSet;
+
+			var channelSupportActivity = createActivity("activity1");
+			var webChatActivity = createActivity("activity2");
+
+			var timeZone = LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
+			var channelSupportSkill = createSkill("channel support", new TimePeriod(8, 18), timeZone);
+			channelSupportSkill.SkillType = phoneSkillType;
+			var webChatSkill = createSkill("web chat", new TimePeriod(0, 24), timeZone);
+			webChatSkill.SkillType = chatSkillType;
+
+			var channelSupportPersonSkill = createPersonSkill(channelSupportActivity, channelSupportSkill);
+			var webChatPersonSkill = createPersonSkill(webChatActivity, webChatSkill);
+
+			setupIntradayStaffingForSkill(channelSupportSkill, 10d, 8d);
+			setupIntradayStaffingForSkill(webChatSkill, 10d, 8d);
+
+			addPersonSkillsToPersonPeriod(channelSupportPersonSkill, webChatPersonSkill);
+
+			var scheduleDataOne = createMainPersonAssignment(person, new DateTimePeriod(2017, 7, 13, 8, 2017, 7, 13, 20));
+			var scheduleDataTwo = createMainPersonAssignment(person, new DateTimePeriod(2017, 7, 14, 8, 2017, 7, 14, 16));
+			ScheduleStorage.Add(scheduleDataOne);
+			ScheduleStorage.Add(scheduleDataTwo);
+
+			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 13, 20, 0, 0, DateTimeKind.Utc), 5);
+			getTarget().Process(personRequest);
+
+			personRequest.IsDenied.Should().Be.True();
+			personRequest.DenyReason.Trim().Should().Be("There must be a daily rest of at least 10:00 hours between 2 shifts. Between 7/13/2017 and 7/14/2017 there are only 7:00 hours.");
+			personRequest.BrokenBusinessRules.Should().Be(BusinessRuleFlags.NewNightlyRestRule);
+		}
+
 		private static void clearOpenHours(ISkill skill)
 		{
 			foreach (var workload in skill.WorkloadCollection)
