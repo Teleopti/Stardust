@@ -1,4 +1,5 @@
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.WorkflowControl;
@@ -50,11 +51,17 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			set
 			{
 				_skillTypes = value;
+				_overtimeRequestOpenPeriod.ClearSkillType();
 				var supportedSkillTypes = WorkflowControlSetModel.GetSupportedSkillTypes();
-				_overtimeRequestOpenPeriod.SkillTypes = _skillTypes.Split(',')
-					.Select(skillType => supportedSkillTypes.FirstOrDefault(s => Resources.ResourceManager.GetString(s.Description.Name).Equals(skillType)))
+				var originSkillTypes = _skillTypes.Split(',')
+					.Select(skillType =>
+						supportedSkillTypes.FirstOrDefault(s =>
+							Resources.ResourceManager.GetString(s.Description.Name).Equals(skillType)))
 					.Where(s => s != null)
-					.ToArray();
+					.Select(s => new OvertimeRequestOpenPeriodSkillType(s));
+
+				originSkillTypes.ForEach(_overtimeRequestOpenPeriod.AddSkillType);
+
 				Owner.IsDirty = true;
 			}
 		}
@@ -187,8 +194,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			_overtimeRequestOpenPeriod = overtimeRequestOpenPeriod;
 			_periodType = new OvertimeRequestPeriodTypeModel(_overtimeRequestOpenPeriod, string.Empty);
 
-			_skillTypes = overtimeRequestOpenPeriod.SkillTypes != null
-				? string.Join(",", overtimeRequestOpenPeriod.SkillTypes.Select(s => Resources.ResourceManager.GetString(s.Description.Name)))
+			_skillTypes = overtimeRequestOpenPeriod.PeriodSkillTypes != null && overtimeRequestOpenPeriod.PeriodSkillTypes.Any()
+				? string.Join(",", overtimeRequestOpenPeriod.PeriodSkillTypes.Select(s => Resources.ResourceManager.GetString(s.SkillType.Description.Name)))
 				: Resources.SkillTypeInboundTelephony;
 			
 			foreach (var periodType in WorkflowControlSetModel.DefaultOvertimeRequestPeriodAdapters)

@@ -51,11 +51,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells
 			{
 				SelectionMode = SelectionMode.MultiSimple,
 				Dock = DockStyle.Fill,
-				DataSource = CurrentStyle.DataSource,
 				DisplayMember = CurrentStyle.DisplayMember
 			};
 
-			listBox.SelectedIndexChanged += listBoxSelectedIndexChanged;
+			foreach (var item in (IEnumerable<object>) CurrentStyle.DataSource)
+			{
+				listBox.Items.Add(item);
+			}
+
+			setSelectedValues();
 
 			DropDownContainer.Size = listBox.Size;
 			DropDownContainer.Controls.Add(listBox);
@@ -78,19 +82,25 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells
 			else
 			{
 				listBox.SelectedIndexChanged -= listBoxSelectedIndexChanged;
-				if (!string.IsNullOrEmpty(TextBox.Text))
-				{
-					for (var index = 0; index < listBox.Items.Count; index++)
-					{
-						listBox.SetSelected(index, TextBox.Text.Contains(listBox.Items[index].ToString()));
-					}
-				}
-				else
-				{
-					listBox.SelectedItems.Clear();
-				}
+				setSelectedValues();
 				listBox.SelectedIndexChanged += listBoxSelectedIndexChanged;
 				DropDownContainer.Size = args.Size;
+			}
+		}
+
+		private void setSelectedValues()
+		{
+			if (!string.IsNullOrEmpty(TextBox.Text))
+			{
+				var values = TextBox.Text.Split(',');
+				for (var index = 0; index < listBox.Items.Count; index++)
+				{
+					listBox.SetSelected(index, values.Contains(listBox.Items[index].ToString()));
+				}
+			}
+			else
+			{
+				listBox.SelectedItems.Clear();
 			}
 		}
 

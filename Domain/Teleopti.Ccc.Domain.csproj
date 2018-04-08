@@ -3590,6 +3590,7 @@
     <Compile Include="WorkflowControl\AbsenceRequestNoneValidator.cs" />
     <Compile Include="WorkflowControl\AbsenceRequestOpenDatePeriod.cs" />
     <Compile Include="WorkflowControl\AbsenceRequestOpenPeriod.cs" />
+    <Compile Include="WorkflowControl\IOvertimeRequestOpenPeriodSkillType.cs" />
     <Compile Include="WorkflowControl\OvertimeRequestOpenPeriodMerger.cs" />
     <Compile Include="WorkflowControl\AbsenceRequestOpenPeriodMerger.cs" />
     <Compile Include="WorkflowControl\AnyPersonSkillsOpenValidator.cs" />
@@ -3605,6 +3606,7 @@
     <Compile Include="WorkflowControl\BudgetGroupAllowanceValidator.cs" />
     <Compile Include="WorkflowControl\BudgetGroupHeadCountValidator.cs" />
     <Compile Include="WorkflowControl\ExpiredRequestValidator.cs" />
+    <Compile Include="WorkflowControl\OvertimeRequestOpenPeriodSkillType.cs" />
     <Compile Include="WorkflowControl\OvertimeRequestPeriodProjection.cs" />
     <Compile Include="WorkflowControl\OvertimeRequestOpenPeriod.cs" />
     <Compile Include="WorkflowControl\OvertimeValidationHandleType.cs" />
@@ -3910,7 +3912,9 @@
     <EmbeddedResource Include="Scheduling\ShiftCreator\WorkShiftLimiter.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="AgentInfo\Requests\ShiftTradeRequest.hbm.xml" />
+    <EmbeddedResource Include="AgentInfo\Requests\ShiftTradeRequest.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Forecasting\ForecastProcessReport.hbm.xml">
@@ -3968,7 +3972,9 @@
     <EmbeddedResource Include="SystemSetting\GlobalSettingData.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="AgentInfo\Requests\ShiftTradeSwapDetail.hbm.xml" />
+    <EmbeddedResource Include="AgentInfo\Requests\ShiftTradeSwapDetail.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Scheduling\Restriction\Rotation.hbm.xml" />
@@ -4121,6 +4127,10 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="WorkflowControl\OvertimeRequestOpenPeriodSkillType.hbm.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\ShiftCategorySelection.hbm.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>

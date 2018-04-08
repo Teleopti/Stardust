@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 	{
 		private WorkflowControlSetModel _target;
 		private IWorkflowControlSet _domainEntity;
-
+		
 		[SetUp]
 		public void Setup()
 		{
@@ -160,13 +160,16 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			var chatSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Chat), ForecastSource.Chat);
 			var emailSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Email), ForecastSource.Email);
 
-			_target.DomainEntity.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
+			var openPeriod = new OvertimeRequestOpenDatePeriod
 			{
 				Period = new DateOnlyPeriod(2010, 6, 1, 2010, 8, 31),
 				EnableWorkRuleValidation = true,
-				WorkRuleValidationHandleType = OvertimeValidationHandleType.Deny,
-				SkillTypes = new ISkillType[] {phoneSkillType, chatSkillType, emailSkillType}
-			});
+				WorkRuleValidationHandleType = OvertimeValidationHandleType.Deny
+			};
+			openPeriod.AddSkillType(new OvertimeRequestOpenPeriodSkillType { SkillType = phoneSkillType });
+			openPeriod.AddSkillType(new OvertimeRequestOpenPeriodSkillType { SkillType = chatSkillType });
+			openPeriod.AddSkillType(new OvertimeRequestOpenPeriodSkillType { SkillType = emailSkillType });
+			_target.DomainEntity.AddOpenOvertimeRequestPeriod(openPeriod);
 
 			var overtimeRequestPeriodList = _target.OvertimeRequestPeriodModels;
 			var datePeriod = overtimeRequestPeriodList[0];
@@ -183,7 +186,6 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 				Period = new DateOnlyPeriod(2010, 6, 1, 2010, 8, 31),
 				EnableWorkRuleValidation = true,
 				WorkRuleValidationHandleType = OvertimeValidationHandleType.Deny,
-				SkillTypes = null
 			});
 
 			var overtimeRequestPeriodList = _target.OvertimeRequestPeriodModels;

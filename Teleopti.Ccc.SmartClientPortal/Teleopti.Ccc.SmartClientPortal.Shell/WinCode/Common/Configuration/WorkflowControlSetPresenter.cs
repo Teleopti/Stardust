@@ -297,10 +297,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 						var updatedWorkflowControlSet = uow.Merge(workflowControlSetModel.DomainEntity);
 						LazyLoadingManager.Initialize(updatedWorkflowControlSet.AllowedPreferenceActivity);
 						LazyLoadingManager.Initialize(updatedWorkflowControlSet.UpdatedBy);
+
 						foreach (var absenceRequestOpenPeriod in updatedWorkflowControlSet.AbsenceRequestOpenPeriods)
 						{
 							LazyLoadingManager.Initialize(absenceRequestOpenPeriod.Absence);
 						}
+
+						updatedWorkflowControlSet.OvertimeRequestOpenPeriods.ForEach(p =>
+							p.PeriodSkillTypes.ForEach(LazyLoadingManager.Initialize));
 						workflowControlSetModel.UpdateAfterMerge(updatedWorkflowControlSet);
 						toBeUpdatedAfterPersist.Add(workflowControlSetModel);
 					}

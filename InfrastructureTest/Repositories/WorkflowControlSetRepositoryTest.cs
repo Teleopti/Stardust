@@ -244,6 +244,40 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
+		public void ShouldSaveOvertimeRequestWithMultiSkillTypes()
+		{
+			var skillType1 = SkillTypeFactory.CreateSkillType();
+			var skillType2 = SkillTypeFactory.CreateSkillType();
+			PersistAndRemoveFromUnitOfWork(skillType1);
+			PersistAndRemoveFromUnitOfWork(skillType2);
+
+			var org = CreateAggregateWithCorrectBusinessUnit();
+			var openPeriod = new OvertimeRequestOpenDatePeriod
+			{
+				Period = new DateOnlyPeriod(DateOnly.Today
+					, DateOnly.Today.AddDays(3)),
+				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
+				EnableWorkRuleValidation = true,
+				WorkRuleValidationHandleType = OvertimeValidationHandleType.Deny
+			};
+			openPeriod.AddSkillType(new OvertimeRequestOpenPeriodSkillType{SkillType = skillType1});
+			openPeriod.AddSkillType(new OvertimeRequestOpenPeriodSkillType{SkillType = skillType2});
+
+			org.AddOpenOvertimeRequestPeriod(openPeriod);
+			PersistAndRemoveFromUnitOfWork(org);
+
+			IWorkflowControlSetRepository repository = new WorkflowControlSetRepository(UnitOfWork);
+			var result = repository.LoadAllSortByName();
+
+			var skillTypes = result[0].OvertimeRequestOpenPeriods[0].PeriodSkillTypes.Select(x => x.SkillType).ToArray();
+
+			Assert.That(result.Count, Is.EqualTo(1));
+			Assert.That(result[0].OvertimeRequestOpenPeriods[0].PeriodSkillTypes.Count, Is.EqualTo(2));
+			Assert.That(skillTypes.Contains(skillType1));
+			Assert.That(skillTypes.Contains(skillType2));
+		}
+
+		[Test]
 		public void ShouldSaveOvertimeRequestMaximumContinuousWorkTimeSettings()
 		{
 			var skillType = SkillTypeFactory.CreateSkillType();

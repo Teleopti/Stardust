@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Interfaces.Domain;
 
@@ -14,6 +15,10 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 
 		OvertimeValidationHandleType? WorkRuleValidationHandleType { get; set; }
 
-		ISkillType[] SkillTypes { get; set; }
+		IReadOnlyCollection<IOvertimeRequestOpenPeriodSkillType> PeriodSkillTypes { get; }
+
+		void AddSkillType(IOvertimeRequestOpenPeriodSkillType skillType);
+
+		void ClearSkillType();
 	}
-}
+} 

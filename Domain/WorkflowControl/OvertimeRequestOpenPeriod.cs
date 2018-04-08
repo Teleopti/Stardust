@@ -1,4 +1,6 @@
-﻿using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
@@ -11,6 +13,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		private bool _enableWorkRuleValidation;
 		private OvertimeValidationHandleType? _workRuleValidationHandleType;
 		private ISkillType _skillType;
+		private IList<IOvertimeRequestOpenPeriodSkillType> _periodSkillTypes = new List<IOvertimeRequestOpenPeriodSkillType>();
 		public abstract DateOnlyPeriod GetPeriod(DateOnly viewpointDateOnly);
 
 		public virtual OvertimeRequestAutoGrantType AutoGrantType
@@ -31,7 +34,8 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			set => _workRuleValidationHandleType = value;
 		}
 
-		public virtual ISkillType[] SkillTypes { get; set; }
+		public virtual IReadOnlyCollection<IOvertimeRequestOpenPeriodSkillType> PeriodSkillTypes =>
+			new ReadOnlyCollection<IOvertimeRequestOpenPeriodSkillType>(_periodSkillTypes);
 
 		public virtual int OrderIndex
 		{
@@ -61,13 +65,54 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		{
 			var clone = (OvertimeRequestOpenPeriod)MemberwiseClone();
 			clone.SetId(null);
+			var originPeriodSkillTypes = clone.PeriodSkillTypes;
+
+			clone.resetPeriodSkillTypes();
+			foreach (var openPeriodSkillType in originPeriodSkillTypes)
+			{
+				var periodSkillTypeClone = openPeriodSkillType.NoneEntityClone();
+				periodSkillTypeClone.SetParent(clone);
+				clone.AddSkillType(periodSkillTypeClone);
+			}
+
 			return clone;
 		}
 
 		public virtual IOvertimeRequestOpenPeriod EntityClone()
 		{
 			var clone = (OvertimeRequestOpenPeriod)MemberwiseClone();
+			var originPeriodSkillTypes = clone.PeriodSkillTypes;
+
+			clone.resetPeriodSkillTypes();
+			foreach (var openPeriodSkillType in originPeriodSkillTypes)
+			{
+				var periodSkillTypeClone = openPeriodSkillType.EntityClone();
+				periodSkillTypeClone.SetParent(clone);
+				clone.AddSkillType(periodSkillTypeClone);
+			}
+
 			return clone;
+		}
+
+		public virtual void AddSkillType(IOvertimeRequestOpenPeriodSkillType skillType)
+		{
+			skillType.SetParent(this);
+			_periodSkillTypes.Add(skillType);
+		}
+
+		public virtual void ClearSkillType()
+		{
+			while (_periodSkillTypes.Count > 0)
+			{
+				_periodSkillTypes.RemoveAt(0);
+			}
+			_periodSkillTypes = null;
+			_periodSkillTypes = new List<IOvertimeRequestOpenPeriodSkillType>();
+		}
+
+		private void resetPeriodSkillTypes()
+		{
+			_periodSkillTypes = new List<IOvertimeRequestOpenPeriodSkillType>();
 		}
 	}
 
