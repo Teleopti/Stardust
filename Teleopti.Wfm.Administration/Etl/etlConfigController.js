@@ -5,10 +5,11 @@
   .module("adminApp")
   .controller("etlConfigController", etlConfigController, [
     "$http",
-    "$timeout"
+    "$timeout",
+    "$window"
   ]);
 
-  function etlConfigController($http, tokenHeaderService, $timeout) {
+  function etlConfigController($http, tokenHeaderService, $timeout, $window) {
     var vm = this;
 
     vm.tenants = [];
@@ -50,14 +51,20 @@
       )
       .success(function(data) {
         vm.tenantLogData = data;
-
-        $http
-        .get("./Etl/GetConfigurationModel", tokenHeaderService.getHeaders())
-        .success(function(timezones) {
-          vm.TimeZoneCodes = timezones.TimeZoneList;
+        if ($window.sessionStorage.configData) {
+          var temp = angular.fromJson($window.sessionStorage.configData);
+          vm.TimeZoneCodes = temp.TimeZoneList;
           tenant.loading = null;
           vm.showModal = true;
-        });
+        } else {
+          $http.get("./Etl/GetConfigurationModel", tokenHeaderService.getHeaders())
+          .success(function (data) {
+            vm.TimeZoneCodes = timezones.TimeZoneList;
+            tenant.loading = null;
+            vm.showModal = true;
+            $window.sessionStorage.configData = angular.toJson(data);
+          });
+        }
       });
     }
 

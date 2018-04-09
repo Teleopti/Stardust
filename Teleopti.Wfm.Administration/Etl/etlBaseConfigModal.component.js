@@ -5,7 +5,7 @@
   .component('etlModal',
   {
     templateUrl: './Etl/modal.html',
-    controller: ['$http', 'tokenHeaderService', ModalCtrl],
+    controller: ['$http', 'tokenHeaderService', '$window', ModalCtrl],
     controllerAs: 'ctrl',
     bindings: {
       tenant: '<',
@@ -14,13 +14,13 @@
     }
   });
 
-  function ModalCtrl($http, tokenHeaderService) {
+  function ModalCtrl($http, tokenHeaderService, $window) {
     var ctrl = this;
 
     ctrl.baseConfig = null;
-	ctrl.configData = null;
+	  ctrl.configData = null;
 
-	  if (ctrl.tenant) {
+	  if (ctrl.tenant.IsBaseConfigured === true) {
 		  ctrl.baseConfig = {
 			  culture: ctrl.tenant.BaseConfig.CultureId,
 			  interval: ctrl.tenant.BaseConfig.IntervalLength,
@@ -29,10 +29,15 @@
 	  }
 
     (function getConfigurationModel() {
-      $http.get("./Etl/GetConfigurationModel", tokenHeaderService.getHeaders())
-      .success(function (data) {
-        ctrl.configData = data;
-      });
+      if ($window.sessionStorage.configData) {
+        ctrl.configData = angular.fromJson($window.sessionStorage.configData);
+      } else {
+        $http.get("./Etl/GetConfigurationModel", tokenHeaderService.getHeaders())
+        .success(function (data) {
+          ctrl.configData = data;
+          $window.sessionStorage.configData = angular.toJson(data);
+        });
+      }
     })();
 
     ctrl.sendBaseConfig = function () {
