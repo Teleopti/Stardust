@@ -39,10 +39,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		private IContainer _sharedContainer;
 		private static readonly ILog logger = LogManager.GetLogger(typeof(ServiceBusRunner));
 
-		public ServiceBusRunner(Action<int> requestAdditionalTime, IConfigReader configReader = null)
+		public ServiceBusRunner(Action<int> requestAdditionalTime )
 		{
 			_requestAdditionalTime = requestAdditionalTime;
-			_configReader = configReader ?? new ConfigReader();
+			_configReader = new ConfigReader();
 			Nodes = new List<NodeStarter>();
 		}
 
