@@ -129,7 +129,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="iisexpress.config" />
+    <Content Include="iisexpress.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Teleopti_RD.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

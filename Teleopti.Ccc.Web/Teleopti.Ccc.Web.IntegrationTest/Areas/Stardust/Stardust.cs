@@ -10,7 +10,7 @@ using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 
 namespace Teleopti.Ccc.Web.IntegrationTest.Areas.Stardust
 {
-	[StardustTest, Ignore("WIP")]
+	[StardustTest]
 	public class Stardust
 	{
 		public DataCreator DataCreator;
@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Web.IntegrationTest.Areas.Stardust
 			startServiceBus();
 		}
 		
-		[Test]
+		[Ignore("WIP"), Test]
 		public void TestDataCreator()
 		{
 			DataCreator.Create();
