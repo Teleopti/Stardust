@@ -1,6 +1,17 @@
 (function() {
+	angular.module('wfm.intraday').component('intradayPerformanceChart', {
+		templateUrl: 'app/intraday/components/intradayPerformanceChart.html',
+		controller: theComponent,
+		bindings: {
+			chartData: '<'
+		}
+	});
+
+	theComponent.$inject = ['$translate', '$log'];
+
 	function theComponent($translate, $log) {
 		var ctrl = this;
+
 		var initChart = function(inData) {
 			var hiddenArray = [];
 			if (
@@ -104,14 +115,4 @@
 			initChart(changesObj.chartData.currentValue);
 		};
 	}
-
-	angular.module('wfm.intraday').component('intradayPerformanceChart', {
-		templateUrl: 'app/intraday/components/intradayPerformanceChart.html',
-		controller: theComponent,
-		bindings: {
-			chartData: '<'
-		}
-	});
-
-	theComponent.$inject = ['$translate', '$log'];
 })();

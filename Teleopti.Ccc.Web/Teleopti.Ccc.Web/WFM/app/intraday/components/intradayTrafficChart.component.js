@@ -1,4 +1,14 @@
 (function() {
+	angular.module('wfm.intraday').component('intradayTrafficChart', {
+		templateUrl: 'app/intraday/components/intradayTrafficChart.html',
+		controller: theComponent,
+		bindings: {
+			chartData: '<'
+		}
+	});
+
+	theComponent.$inject = ['$translate', '$log'];
+
 	function theComponent($translate, $log) {
 		var ctrl = this;
 
@@ -103,14 +113,4 @@
 			initChart(changesObj.chartData.currentValue);
 		};
 	}
-
-	angular.module('wfm.intraday').component('intradayTrafficChart', {
-		templateUrl: 'app/intraday/components/intradayTrafficChart.html',
-		controller: theComponent,
-		bindings: {
-			chartData: '<'
-		}
-	});
-
-	theComponent.$inject = ['$translate', '$log'];
 })();

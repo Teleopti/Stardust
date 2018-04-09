@@ -1,5 +1,15 @@
 (function() {
-	function theComponent($translate, $log) {
+	angular.module('wfm.intraday').component('intradayStaffingChart', {
+		templateUrl: 'app/intraday/components/intradayStaffingChart.html',
+		controller: theComponent,
+		bindings: {
+			chartData: '<'
+		}
+	});
+
+	theComponent.$inject = ['$translate'];
+
+	function theComponent($translate) {
 		var ctrl = this;
 
 		var initChart = function(inData) {
@@ -86,14 +96,4 @@
 			initChart(changesObj.chartData.currentValue);
 		};
 	}
-
-	angular.module('wfm.intraday').component('intradayStaffingChart', {
-		templateUrl: 'app/intraday/components/intradayStaffingChart.html',
-		controller: theComponent,
-		bindings: {
-			chartData: '<'
-		}
-	});
-
-	theComponent.$inject = ['$translate', '$log'];
 })();
