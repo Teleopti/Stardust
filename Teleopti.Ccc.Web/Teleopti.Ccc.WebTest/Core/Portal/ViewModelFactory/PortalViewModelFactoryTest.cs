@@ -6,6 +6,7 @@ using SharpTestsEx;
 using System.Linq;
 using System.Threading;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Security;
@@ -15,6 +16,7 @@ using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.Security;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -40,11 +42,13 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		public FakeGamificationSettingRepository GamificationSettingRepository;
 		public FakeAgentBadgeRepository AgentBadgeRepository;
 		public FakeAgentBadgeWithRankRepository AgentBadgeWithRankRepository;
+		public FakeToggleManager ToggleManager;
+		public FakePermissionProvider PermissionProvider;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<PrincipalAuthorization>().For<IAuthorization>();
-			system.UseTestDouble<PermissionProvider>().For<IPermissionProvider>();
+			system.UseTestDouble<FakePermissionProvider>().For<IPermissionProvider>();
 			system.UseTestDouble<CurrentTenantUserFake>().For<ICurrentTenantUser>();
 			system.UseTestDouble(new FakeCurrentUnitOfWorkFactory(null).WithCurrent(new FakeUnitOfWorkFactory(null, null, null, null) { Name = MyTimeWebTestAttribute.DefaultTenantName })).For<ICurrentUnitOfWorkFactory>();
 		}
@@ -187,6 +191,44 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		public void ShouldMapGamificationRollingPeriodSet()
 		{
 			Target.CreatePortalViewModel().BadgeRollingPeriodSet.Should().Be.EqualTo(GamificationRollingPeriodSet.OnGoing);
+		}
+
+		[Test]
+		public void ShouldGetOngoingPeriodAgentBadgesWhenToggleOff()
+		{
+			ToggleManager.Disable(Toggles.WFM_Gamification_Create_Rolling_Periods_74866);
+			var calculatedDate = new DateOnly(2017, 4, 9);
+			var gamificationSetting = createGamificationSetting();
+			createTeamGamificationSetting(gamificationSetting);
+			setAgentBadge(gamificationSetting, calculatedDate.Date);
+			setAgentBadgeWithRank(gamificationSetting, calculatedDate.Date);
+
+			var result = Target.CreatePortalViewModel().Badges;
+			result.ToList()[0].BronzeBadge.Should().Be.EqualTo(1);
+			result.ToList()[0].SilverBadge.Should().Be.EqualTo(0);
+			result.ToList()[0].GoldBadge.Should().Be.EqualTo(0);
+			result.ToList()[1].BronzeBadge.Should().Be.EqualTo(5);
+			result.ToList()[1].SilverBadge.Should().Be.EqualTo(0);
+			result.ToList()[1].GoldBadge.Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldGetDefaultSettingPeriodAgentBadgesWhenToggleOn()
+		{
+			ToggleManager.Enable(Toggles.WFM_Gamification_Create_Rolling_Periods_74866);
+			var calculatedDate = new DateOnly(2017, 4, 9);
+			var gamificationSetting = createGamificationSetting();
+			createTeamGamificationSetting(gamificationSetting);
+			setAgentBadge(gamificationSetting, calculatedDate.Date);
+			setAgentBadgeWithRank(gamificationSetting, calculatedDate.Date);
+
+			var result = Target.CreatePortalViewModel().Badges;
+			result.ToList()[0].BronzeBadge.Should().Be.EqualTo(0);
+			result.ToList()[0].SilverBadge.Should().Be.EqualTo(0);
+			result.ToList()[0].GoldBadge.Should().Be.EqualTo(0);
+			result.ToList()[1].BronzeBadge.Should().Be.EqualTo(0);
+			result.ToList()[1].SilverBadge.Should().Be.EqualTo(0);
+			result.ToList()[1].GoldBadge.Should().Be.EqualTo(0);
 		}
 
 		[Test]

@@ -136,6 +136,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 
 		private DateOnlyPeriod getDefaultPeriod(IGamificationSetting gamificationSetting)
 		{
+			var onGoingPeriod = new DateOnlyPeriod(new DateOnly(1900, 1, 1), DateOnly.Today.AddDays(-1));
+			if (!_toggleManager.IsEnabled(Toggles.WFM_Gamification_Create_Rolling_Periods_74866)) return onGoingPeriod;
+
 			var firstDayOfWeek = _loggedOnUser.CurrentUser().FirstDayOfWeek;
 			DateOnly start, end;
 
@@ -153,7 +156,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 					end = new DateOnly(year, month, DateTime.DaysInMonth(year, month));
 					return new DateOnlyPeriod(start, end);
 
-				default: return new DateOnlyPeriod(new DateOnly(1900, 1, 1), DateOnly.Today);
+				default: return onGoingPeriod;
 			}
 		}
 
