@@ -31,32 +31,38 @@
 					periodName = 'month';
 				}
 
-				return this.selectedDate().startOf(periodName).format(this.dateFormat) + '-' + this.selectedDate().endOf(periodName).format(this.dateFormat);
-
+				return this.selectedDate().clone().startOf(periodName).format(this.dateFormat) + '-' + this.selectedDate().clone().endOf(periodName).format(this.dateFormat);
 			}, self);
 
 			self.previous = function () {
+				var aDate = self.selectedDate().clone();				
 				if (self.rollingPeriod === '1') {
-					self.selectedDate(self.selectedDate().add('days', -7));
+					self.selectedDate(aDate.add('days', -7));
 				} else
 					if (self.rollingPeriod === '2') {
-						self.selectedDate(self.selectedDate().add('month', -1));
-					}
+						self.selectedDate(aDate.clone().add('month', -1));
+				}
 			}
 
 			self.next = function () {
 				if (self.rollingPeriod === '1') {
-					self.selectedDate(self.selectedDate().add('days', 7));
+					self.selectedDate(self.selectedDate().clone().add('days', 7));
 				} else
-					if (self.rollingPeriod === '2') {
-						self.selectedDate(self.selectedDate().add('month', 1));
-					}
+				if (self.rollingPeriod === '2') {
+					self.selectedDate(self.selectedDate().clone().add('month', 1));
+				}
 			}
 
 			self.selectedDate.subscribe(function (value) {
-				if (value) {
+				if (!self.oldValue) {
+					if (value) {
+						self.loadData();
+						self.oldValue = value;
+					}
+				} else if (self.oldValue.format('YYMMDD') != value.format('YYMMDD')) {
 					self.loadData();
-				}
+					self.oldValue = value;
+				}				
 			});
 		}
 		
