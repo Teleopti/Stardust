@@ -42,7 +42,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 		}
 
 		[Test]
-		[Ignore("#74899 to be fixed")]
 		public void EslCalculationOnLargerVolymesShouldNotUseLinear()
 		{
 			var tasks = 40d;
