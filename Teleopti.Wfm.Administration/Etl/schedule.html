@@ -87,7 +87,7 @@
 									</span>
 								</td>
 								<td>
-									<button type="button" class="btn btn-default" data-toggle="modal" data-target="#exampleModal2" ng-click="vm.scheduleToEdit = job">
+									<button type="button" class="btn btn-default" data-toggle="modal" data-target="#exampleModal2" ng-click="vm.scheduleToEdit = job; vm.showEditScheduleJobModal = true;">
 										<svg style="width:24px;height:24px" viewBox="0 0 24 24">
 											<path fill="#000000" d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z" />
 										</svg>
@@ -114,6 +114,19 @@
 							</div>
 							<div class="modal-body">
 								<etl-schedule-modal ng-cloak job="" callback="vm.addScheduleJob"></etl-schedule-modal>
+							</div>
+						</div>
+					</div>
+					<div class="custom-modal" ng-if="vm.showEditScheduleJobModal">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title">Edit {{vm.scheduleToEdit.ScheduleName}}</h5>
+								<button type="button" class="close" ng-click="vm.showEditScheduleJobModal = false" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body">
+								<etl-schedule-modal ng-cloak job="vm.scheduleToEdit" callback="vm.editScheduleJob"></etl-schedule-modal>
 							</div>
 						</div>
 					</div>

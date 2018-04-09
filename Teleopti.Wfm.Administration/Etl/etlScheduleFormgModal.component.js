@@ -21,9 +21,6 @@
     ctrl.toggleFrequencyType = toggleFrequencyType;
     ctrl.selectedjobChanged= selectedjobChanged;
     ctrl.isRelativePeriodNeeded = isRelativePeriodNeeded;
-
-
-
     ctrl.frequencyType = false;
     ctrl.tenantLogData = [];
 
@@ -56,12 +53,20 @@
             ctrl.tenants.push(data[i]);
           }
         }
+        ctrl.tenants.unshift({
+          TenantName: '<All>'
+        })
+
         ctrl.selectedTenant = ctrl.tenants[0];
         selectedTenantChanged(ctrl.selectedTenant);
+        if (ctrl.job) {
+          editHandler();
+        }
       });
     }
 
     function toggleFrequencyType(form) {
+
       if (ctrl.frequencyType) {
         form.DailyFrequencyStart = null;
       }
@@ -101,6 +106,77 @@
       }
 
       return !arr.includes(name);
+    }
+
+    function getItemBasedOnName(arr, name, prop) {
+      for (var i = 0; i < arr.length; i++) {
+        if (arr[i][prop] === name) {
+          return arr[i];
+        }
+      }
+    }
+
+    function handleDynamicEditValues () {
+      ctrl.form.ScheduleName = ctrl.job.ScheduleName;
+      ctrl.form.Tenant = getItemBasedOnName(ctrl.tenants, ctrl.job.Tenant, 'TenantName');
+      $http
+      .post(
+        "./Etl/Jobs",
+        JSON.stringify(ctrl.form.Tenant.TenantName),
+        tokenHeaderService.getHeaders()
+      )
+      .success(function(data) {
+        ctrl.jobs = data;
+        ctrl.form.JobName = getItemBasedOnName(ctrl.jobs, ctrl.job.JobName, 'JobName');
+      });
+
+      $http
+      .post(
+        "./Etl/TenantAllLogDataSources",
+        JSON.stringify(ctrl.form.Tenant.TenantName),
+        tokenHeaderService.getHeaders()
+      )
+      .success(function(data) {
+        ctrl.tenantLogData = data;
+        ctrl.tenantLogData.unshift({
+          Name: '<All>',
+          Id: 0
+        })
+        ctrl.form.LogDataSourceId = getItemBasedOnName(ctrl.tenantLogData, ctrl.job.LogDataSourceId, 'Id');
+        handleRelativePeriods();
+      });
+    }
+
+    function handleRelativePeriods() {
+      ctrl.form.Schedule =  getItemBasedOnName(ctrl.job.RelativePeriods, "Schedule", 'JobCategoryName');
+      ctrl.form.QueueStats =  getItemBasedOnName(ctrl.job.RelativePeriods, "QueueStatistics", 'JobCategoryName');
+      ctrl.form.Forecast =  getItemBasedOnName(ctrl.job.RelativePeriods, "Forecast", 'JobCategoryName');
+      ctrl.form.AgentStats =  getItemBasedOnName(ctrl.job.RelativePeriods, "AgentStatistics", 'JobCategoryName');
+      ctrl.form.InitialPeriod =  getItemBasedOnName(ctrl.job.RelativePeriods, "Initial", 'JobCategoryName');
+    }
+
+    function editHandler() {
+      console.log(ctrl.job);
+      ctrl.form = {
+        DailyFrequencyEnd: new Date(ctrl.job.DailyFrequencyEnd),
+        DailyFrequencyMinute: angular.fromJson(ctrl.job.DailyFrequencyMinute),
+        DailyFrequencyStart: new Date(ctrl.job.DailyFrequencyStart),
+        Description: ctrl.job.Description,
+        JobName: ctrl.job.jobName,
+        LogDataSourceId: null,
+        Enabled: ctrl.job.Enabled,
+        Id: ctrl.job.ScheduleId,
+        QueueStats: {},
+        Schedule: {},
+        InitialPeriod: {},
+        Forecast: {},
+        AgentStats: {}
+      }
+      handleDynamicEditValues();
+      if (ctrl.job.DailyFrequencyMinute) {
+        ctrl.frequencyType = true;
+      }
+      console.log(ctrl.form);
     }
 
   }
