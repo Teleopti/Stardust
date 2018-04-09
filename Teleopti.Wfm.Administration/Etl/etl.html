@@ -1,6 +1,6 @@
 <div class="container body-content" ng-controller="etlController as vm">
 
-	<etl-modal ng-cloak ng-if="!vm.masterTenant.IsBaseConfigured" tenant="vm.masterTenant" callback="vm.getTenants" output="vm.masterTenant.IsBaseConfigured"></etl-modal>
+	<etl-modal ng-cloak ng-if="vm.masterTenant.IsBaseConfigured === false" tenant="vm.masterTenant" callback="vm.getTenants" output="vm.masterTenant.IsBaseConfigured"></etl-modal>
 
 	<div ng-cloak ng-if="vm.masterTenant.IsBaseConfigured">
 		<h2 >
