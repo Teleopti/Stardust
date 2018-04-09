@@ -54,7 +54,7 @@
 				<span id="name" ng-if="::personSchedule.ShiftCategory.Name" ng-style="{background: personSchedule.ShiftCategory.DisplayColor, color: personSchedule.ShiftCategory.ContrastColor}">
 					{{::personSchedule.ShiftCategory.ShortName}}
 				</span>
-				<md-tooltip class="multiline-tooltip" md-direction="right">
+				<md-tooltip ng-if="!!personSchedule.ShiftCategory.Name ||  vm.hasUnderlyingSchedules(personSchedule)" class="multiline-tooltip" md-direction="right">
 					<div ng-if="::personSchedule.ShiftCategory.Name">{{::personSchedule.ShiftCategory.Name}}</div>
 					<div ng-if="vm.hasUnderlyingSchedules(personSchedule)">
 						<div ng-if="!!personSchedule.UnderlyingScheduleSummary.PersonalActivities">{{'PersonalActivity' | translate}}</div>
