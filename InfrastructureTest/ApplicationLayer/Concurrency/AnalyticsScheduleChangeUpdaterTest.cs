@@ -28,7 +28,7 @@ using Scenario = Teleopti.Ccc.Domain.Common.Scenario;
 namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Concurrency
 {
 	[Category("BucketB")]
-	[AnalyticsDatabaseTest]
+	[MultiDatabaseTest]
 	[Toggle(Toggles.ETL_EventbasedDate_39562)]
 	[TestFixture(true)]
 	[TestFixture(false)]
