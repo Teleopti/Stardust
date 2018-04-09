@@ -59,13 +59,13 @@
 					<div ng-if="vm.hasUnderlyingSchedules(personSchedule)">
 						<div ng-if="!!personSchedule.UnderlyingScheduleSummary.PersonalActivities">{{'PersonalActivity' | translate}}</div>
 						<div ng-repeat="info in personSchedule.UnderlyingScheduleSummary.PersonalActivities" style="margin-left:10px;">
-							{{ info.Description }}: {{ personSchedule.GetSummaryTimeSpan(info) }}
+							{{ info.Description }}: {{ personSchedule.GetSummaryTimeSpan(info, vm.selectedDate) }}
 						</div>
 						<div ng-if="!!personSchedule.UnderlyingScheduleSummary.PersonPartTimeAbsences" ng-repeat="info in personSchedule.UnderlyingScheduleSummary.PersonPartTimeAbsences">
-							{{ info.Description }}: {{ personSchedule.GetSummaryTimeSpan(info) }}
+							{{ info.Description }}: {{ personSchedule.GetSummaryTimeSpan(info, vm.selectedDate) }}
 						</div>
 						<div ng-if="!!personSchedule.UnderlyingScheduleSummary.PersonMeetings" ng-repeat="info in personSchedule.UnderlyingScheduleSummary.PersonMeetings">
-							{{ info.Description }}: {{ personSchedule.GetSummaryTimeSpan(info) }}
+							{{ info.Description }}: {{ personSchedule.GetSummaryTimeSpan(info, vm.selectedDate) }}
 						</div>
 					</div>
 				</md-tooltip>
