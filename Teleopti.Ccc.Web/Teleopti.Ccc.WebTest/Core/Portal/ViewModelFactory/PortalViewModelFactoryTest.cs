@@ -202,7 +202,12 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			var period = new DateOnlyPeriod(DateOnly.MinValue, calculatedDate);
 			var result = Target.GetBadges(period);
 
-			result.Count().Should().Be.EqualTo(2);
+			result.ToList()[0].BronzeBadge.Should().Be.EqualTo(1);
+			result.ToList()[0].SilverBadge.Should().Be.EqualTo(0);
+			result.ToList()[0].GoldBadge.Should().Be.EqualTo(0);
+			result.ToList()[1].BronzeBadge.Should().Be.EqualTo(5);
+			result.ToList()[1].SilverBadge.Should().Be.EqualTo(0);
+			result.ToList()[1].GoldBadge.Should().Be.EqualTo(1);
 		}
 
 		[Test]
@@ -217,7 +222,12 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			var period = new DateOnlyPeriod(DateOnly.MinValue, calculatedDate.AddDays(-1));
 			var result = Target.GetBadges(period);
 
-			result.Count().Should().Be.EqualTo(0);
+			result.ToList()[0].BronzeBadge.Should().Be.EqualTo(0);
+			result.ToList()[0].SilverBadge.Should().Be.EqualTo(0);
+			result.ToList()[0].GoldBadge.Should().Be.EqualTo(0);
+			result.ToList()[1].BronzeBadge.Should().Be.EqualTo(0);
+			result.ToList()[1].SilverBadge.Should().Be.EqualTo(0);
+			result.ToList()[1].GoldBadge.Should().Be.EqualTo(0);
 		}
 
 		private void setAgentBadge(IGamificationSetting gamificationSetting, DateTime calculatedDate)
@@ -269,9 +279,9 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			var gSetting =  new GamificationSetting("bla")
 			{
 				GamificationSettingRuleSet = GamificationSettingRuleSet.RuleWithDifferentThreshold,
-				AnsweredCallsBadgeEnabled = true,
+				AnsweredCallsBadgeEnabled = false,
 				AHTBadgeEnabled = false,
-				AdherenceBadgeEnabled = true,
+				AdherenceBadgeEnabled = false,
 
 				AnsweredCallsThreshold = 30,
 				AnsweredCallsBronzeThreshold = 30,
@@ -293,8 +303,8 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 				RollingPeriodSet = GamificationRollingPeriodSet.Monthly
 			};
 
-			gSetting.BadgeSettings.Add(new BadgeSetting { QualityId = 2, DataType = ExternalPerformanceDataType.Numeric });
-			gSetting.BadgeSettings.Add(new BadgeSetting { QualityId = 1, DataType = ExternalPerformanceDataType.Percent });
+			gSetting.BadgeSettings.Add(new BadgeSetting { QualityId = 2, DataType = ExternalPerformanceDataType.Numeric, Enabled = true});
+			gSetting.BadgeSettings.Add(new BadgeSetting { QualityId = 1, DataType = ExternalPerformanceDataType.Percent, Enabled = true});
 
 			gSetting.WithId(Guid.NewGuid());
 
