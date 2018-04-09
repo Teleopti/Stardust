@@ -16,13 +16,18 @@
 			'localeLanguageSortingService',
 			'wfm.helpingDirectives'
 		])
-		.run(function ($rootScope, rtaStateService, Toggle) {
+		.run(function ($rootScope, $injector) {
 
-			$rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams, options) {
-					if (toState.name == 'rta' && fromState.name != 'rta')
-						rtaStateService.gotoLastState();
-			})
+				$rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams, options) {
+					if (toState.name == 'rta' && fromState.name != 'rta') {
+						// Invoke to delay service creation
+						$injector.invoke(function (rtaStateService) {
+							rtaStateService.gotoLastState();
+						})
+					}
+				})
 
-		});
+			}
+		);
 
 })();
