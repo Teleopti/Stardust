@@ -31,7 +31,7 @@
 					periodName = 'month';
 				}
 
-				return this.selectedDate().clone().startOf(periodName).format(this.dateFormat) + '-' + this.selectedDate().clone().endOf(periodName).format(this.dateFormat);
+				return this.selectedDate().clone().startOf(periodName).format(this.dateFormat) + ' - ' + this.selectedDate().clone().endOf(periodName).format(this.dateFormat);
 			}, self);
 
 			self.previous = function () {
