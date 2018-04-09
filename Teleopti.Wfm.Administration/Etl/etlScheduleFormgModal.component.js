@@ -159,7 +159,6 @@
       console.log(ctrl.job);
       ctrl.form = {
         DailyFrequencyEnd: new Date(ctrl.job.DailyFrequencyEnd),
-        DailyFrequencyMinute: angular.fromJson(ctrl.job.DailyFrequencyMinute),
         DailyFrequencyStart: new Date(ctrl.job.DailyFrequencyStart),
         Description: ctrl.job.Description,
         JobName: ctrl.job.jobName,
@@ -174,7 +173,10 @@
       }
       handleDynamicEditValues();
       if (ctrl.job.DailyFrequencyMinute) {
+         ctrl.form.DailyFrequencyMinute = angular.fromJson(ctrl.job.DailyFrequencyMinute)
         ctrl.frequencyType = true;
+      } else{
+         ctrl.form.DailyFrequencyMinute = null;
       }
       console.log(ctrl.form);
     }
