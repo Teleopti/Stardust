@@ -189,7 +189,7 @@
 			);
 		};
 
-		service.pollSkillAreaDataByDayOffset = function(selectedItem, toggles, dayOffset) {
+		service.pollSkillAreaDataByDayOffset = function(selectedItem, toggles, dayOffset, gotData) {
 			trafficData.waitingForData = true;
 			cancelPendingRequest();
 
@@ -200,12 +200,11 @@
 			request.$promise.then(
 				function(result) {
 					trafficData.waitingForData = false;
-					setTrafficData(result, dayOffset === 0);
-					gotData(setTrafficData);
+					gotData(setTrafficData(result, dayOffset === 0));
 				},
 				function(error) {
 					trafficData.hasMonitorData = false;
-					gotData(setTrafficData);
+					gotData(trafficData);
 				}
 			);
 		};

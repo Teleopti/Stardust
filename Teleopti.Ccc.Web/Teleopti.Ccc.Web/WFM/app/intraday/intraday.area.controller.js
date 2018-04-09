@@ -91,18 +91,6 @@
 			$state.go('intraday.skill-area-config', { isNewSkillArea: false });
 		};
 
-		vm.deleteSkillArea = function(skillArea) {
-			cancelTimeout();
-			SkillGroupSvc.deleteSkillGroup({ Id: skillArea.Id }).then(function() {
-				vm.skillAreas.splice(vm.skillAreas.indexOf(skillArea), 1);
-				setModuleState({
-					selectedItem: null,
-					hasMonitorData: false
-				});
-			});
-			vm.toggleModal();
-		};
-
 		vm.exportIntradayData = function() {
 			if (
 				vm.moduleState.selectedItem !== null &&
@@ -178,7 +166,7 @@
 		};
 
 		vm.pollActiveTabDataHelper = function(activeTab) {
-			pollData(activeTab);
+			pollActiveTabDataByDayOffset(activeTab, vm.moduleState.chosenOffset.value);
 			if (vm.moduleState.chosenOffset.value === 0) {
 				poll();
 			}
@@ -337,7 +325,7 @@
 		function poll() {
 			$interval.cancel(polling);
 			polling = $interval(function() {
-				pollData(vm.moduleState.activeTab);
+				pollActiveTabDataByDayOffset(vm.moduleState.activeTab, vm.moduleState.chosenOffset.value);
 			}, pollingTimeout);
 		}
 
@@ -353,6 +341,7 @@
 
 		function pollActiveTabDataByDayOffset(activeTab, dayOffset) {
 			if (angular.isUndefined(activeTab)) return;
+			if (angular.isUndefined(dayOffset)) dayOffset = 0;
 
 			var services = [intradayTrafficService, intradayPerformanceService, intradayMonitorStaffingService];
 			if (vm.moduleState.selectedItem !== null && angular.isDefined(vm.moduleState.selectedItem)) {
@@ -382,10 +371,6 @@
 					pollActiveTabDataByDayOffset(vm.moduleState.activeTab, dayOffset);
 				}, 10000);
 			}
-		}
-
-		function pollData(activeTab) {
-			pollActiveTabDataByDayOffset(activeTab, vm.moduleState.chosenOffset.value);
 		}
 
 		function reloadSkillAreas(isNew) {
