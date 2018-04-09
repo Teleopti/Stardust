@@ -11,16 +11,19 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.Forecasting
 {
 	[DomainTest]
-	[TestFixture(true)]
-	[TestFixture(false)]
+	[TestFixture(true, true)]
+	//[TestFixture(true, false)]
+	//[TestFixture(false, false)]
 	public class StaffingCalculatorServiceFacadeTest:IConfigureToggleManager
 	{
 		public IStaffingCalculatorServiceFacade Target;
 		private readonly bool _useErlangA;
+		private readonly bool _useErlangAWithEsl;
 
-		public StaffingCalculatorServiceFacadeTest(bool useErlangA)
+		public StaffingCalculatorServiceFacadeTest(bool useErlangA, bool useErlangAWithEsl)
 		{
 			_useErlangA = useErlangA;
+			_useErlangAWithEsl = useErlangAWithEsl;
 		}
 
 		[Test]
@@ -136,7 +139,14 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 		{
 			if (_useErlangA)
 			{
-				toggleManager.Enable(Toggles.ResourcePlanner_UseErlangAWithInfinitePatience_45845);
+				if (_useErlangAWithEsl)
+				{
+					toggleManager.Enable(Toggles.ResourcePlanner_UseErlangAWithInfinitePatienceEsl_74899);
+				}
+				else
+				{
+					toggleManager.Enable(Toggles.ResourcePlanner_UseErlangAWithInfinitePatience_45845);
+				}
 			}
 			else
 			{
