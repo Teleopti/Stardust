@@ -28,6 +28,20 @@ namespace Teleopti.Analytics.Etl.Common.Configuration
 				{
 					CultureInfo[] cultureInfos = CultureInfo.GetCultures(CultureTypes.SpecificCultures);
 					var list = cultureInfos.Select(cultureInfo => new LookupIntegerItem(cultureInfo.LCID, cultureInfo.DisplayName)).ToList();
+					var inValidList = new List<LookupIntegerItem>();
+					foreach (var item in list)
+					{
+						try
+						{
+							CultureInfo.GetCultureInfo(item.Id);
+							
+						}
+						catch
+						{
+							inValidList.Add(item);
+						}
+					}
+					list.RemoveAll(v => inValidList.Exists(i => i.Id == v.Id));
 					list.Sort((c1, c2) => string.Compare(c1.Text, c2.Text, StringComparison.CurrentCulture));
 					_cultureList = new ReadOnlyCollection<LookupIntegerItem>(list);
 				}
