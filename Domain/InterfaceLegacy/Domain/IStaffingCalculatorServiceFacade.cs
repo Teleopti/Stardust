@@ -10,5 +10,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 
 		double AgentsUseOccupancy(double serviceLevel, int serviceTime, double tasks, double aht, TimeSpan periodLength, double minOcc, double maxOcc,
 			int maxParallelTasks);
+
+		double LinearEsl(double forecastedAgents, double agents, double sla);
 	}
 }

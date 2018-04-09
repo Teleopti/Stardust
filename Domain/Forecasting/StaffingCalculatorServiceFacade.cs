@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			return esl < 0 ? 0 : esl > 1 ? 1 : esl;
 		}
 
-		public double ServiceLevelAchievedOcc(double agents, double serviceTime, double calls, double aht, TimeSpan intervalLength, double sla, double forecastedAgents, int maxParellelTasks)
+		public virtual double ServiceLevelAchievedOcc(double agents, double serviceTime, double calls, double aht, TimeSpan intervalLength, double sla, double forecastedAgents, int maxParellelTasks)
 		{
 			if (calls/maxParellelTasks <= 2)
 			{
@@ -66,7 +66,21 @@ namespace Teleopti.Ccc.Domain.Forecasting
 	[RemoveMeWithToggle("Move ServiceLevelAchievedOcc to StaffingCalculatorServiceFacadeErlangA", Toggles.ResourcePlanner_UseErlangAWithInfinitePatienceEsl_74899)]
 	public class StaffingCalculatorServiceFacadeErlangAWithEsl : StaffingCalculatorServiceFacadeErlangA
 	{
-		
+		private readonly EstimatedServiceLevel _estimatedServiceLevel;
+		public StaffingCalculatorServiceFacadeErlangAWithEsl()
+		{
+			_estimatedServiceLevel = new EstimatedServiceLevel();
+		}
+
+		public override double ServiceLevelAchievedOcc(double agents, double serviceTime, double calls, double aht, TimeSpan intervalLength, double sla, double forecastedAgents, int maxParellelTasks)
+		{
+			if (calls / maxParellelTasks <= 2)
+			{
+				return LinearEsl(forecastedAgents, agents, sla);
+			}
+
+			return _estimatedServiceLevel.CalculateEstimatedServiceLevel(agents, calls / maxParellelTasks, serviceTime, 100000, (int) sla, (int) intervalLength.TotalSeconds);
+		}
 	}
 
 	public class StaffingCalculatorServiceFacadeErlangA : StaffingCalculatorServiceFacade
