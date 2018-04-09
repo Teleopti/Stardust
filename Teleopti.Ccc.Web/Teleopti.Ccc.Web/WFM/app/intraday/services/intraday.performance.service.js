@@ -43,7 +43,8 @@
 		var hiddenArray = [];
 		var intervalStart;
 		var mixedArea = false;
-		service.setPerformanceData = function(result, showEsl, showEmailSkill, isToday, showAbandonRate) {
+
+		var setPerformanceData = function(result, showEsl, showEmailSkill, isToday, showAbandonRate) {
 			clearData();
 			performanceData.averageSpeedOfAnswerObj.series = result.DataSeries.AverageSpeedOfAnswer;
 			performanceData.showAbandonRate = showAbandonRate;
@@ -111,7 +112,6 @@
 			if (isToday) {
 				getCurrent();
 			}
-			service.initPerformanceChart();
 			return performanceData;
 		};
 
@@ -158,7 +158,7 @@
 			request.$promise.then(
 				function(result) {
 					performanceData.waitingForData = false;
-					service.setPerformanceData(
+					setPerformanceData(
 						result,
 						toggles['Wfm_Intraday_ESL_41827'], //.showEsl,
 						toggles['Wfm_Intraday_SupportSkillTypeEmail_44002'], //.showEmailSkill,
@@ -172,7 +172,7 @@
 			);
 		};
 
-		service.pollSkillDataByDayOffset = function(selectedItem, toggles, dayOffset) {
+		service.pollSkillDataByDayOffset = function(selectedItem, toggles, dayOffset, gotData) {
 			performanceData.waitingForData = true;
 			service.checkMixedArea(selectedItem);
 			cancelPendingRequest();
@@ -185,21 +185,23 @@
 			request.$promise.then(
 				function(result) {
 					performanceData.waitingForData = false;
-					service.setPerformanceData(
+					setPerformanceData(
 						result,
 						toggles['Wfm_Intraday_ESL_41827'],
 						toggles['Wfm_Intraday_SupportSkillTypeEmail_44002'],
 						dayOffset === 0,
 						selectedItem.ShowAbandonRate
 					);
+					gotData(performanceData);
 				},
 				function() {
 					performanceData.hasMonitorData = false;
+					gotData(performanceData);
 				}
 			);
 		};
 
-		service.pollSkillAreaDataByDayOffset = function(selectedItem, toggles, dayOffset) {
+		service.pollSkillAreaDataByDayOffset = function(selectedItem, toggles, dayOffset, gotData) {
 			performanceData.waitingForData = true;
 			service.checkMixedArea(selectedItem);
 
@@ -216,7 +218,7 @@
 			request.$promise.then(
 				function(result) {
 					performanceData.waitingForData = false;
-					service.setPerformanceData(
+					setPerformanceData(
 						result,
 						toggles['Wfm_Intraday_ESL_41827'],
 						toggles['Wfm_Intraday_SupportSkillTypeEmail_44002'] &&
@@ -224,9 +226,11 @@
 						dayOffset === 0,
 						showAbandonRate
 					);
+					gotData(performanceData);
 				},
 				function() {
 					performanceData.hasMonitorData = false;
+					gotData(performanceData);
 				}
 			);
 		};
@@ -241,98 +245,6 @@
 				mixedArea = selectedItem.SkillType === 'SkillTypeEmail';
 			}
 		};
-
-		service.initPerformanceChart = function() {
-			service.performanceChart = c3.generate({
-				bindto: '#performanceChart',
-				data: {
-					x: 'x',
-					columns: [
-						performanceData.timeSeries,
-						performanceData.averageSpeedOfAnswerObj.series,
-						performanceData.abandonedRateObj.series,
-						performanceData.serviceLevelObj.series,
-						performanceData.estimatedServiceLevelObj.series,
-						performanceData.currentInterval
-					],
-					hide: hiddenArray,
-					type: 'line',
-					types: {
-						Current: 'bar'
-					},
-					colors: {
-						ASA: '#0099FF',
-						Abandoned_rate: '#E91E63',
-						Service_level: '#FB8C00',
-						ESL: '#F488C8'
-					},
-					names: {
-						ASA: $translate.instant('AverageSpeedOfAnswer') + ' ←',
-						Abandoned_rate: $translate.instant('AbandonedRate') + ' →',
-						Service_level: $translate.instant('ServiceLevel') + ' →',
-						ESL: $translate.instant('ESL') + ' →'
-					},
-					axes: {
-						Service_level: 'y2',
-						Abandoned_rate: 'y2',
-						ESL: 'y2'
-					}
-				},
-				axis: {
-					x: {
-						label: {
-							text: $translate.instant('SkillTypeTime'),
-							position: 'outer-center'
-						},
-						type: 'category',
-						tick: {
-							culling: {
-								max: 24
-							},
-							fit: true,
-							centered: true,
-							multiline: false
-						}
-					},
-					y: {
-						label: {
-							text: $translate.instant('SecondShort'),
-							position: 'outer-middle'
-						},
-						tick: {
-							format: d3.format('.1f')
-						}
-					},
-					y2: {
-						label: {
-							text: $translate.instant('%'),
-							position: 'outer-middle'
-						},
-						show: true,
-						tick: {
-							format: d3.format('.1f')
-						}
-					}
-				},
-				legend: {
-					item: {
-						onclick: function(id) {
-							if (hiddenArray.indexOf(id) > -1) {
-								hiddenArray.splice(hiddenArray.indexOf(id), 1);
-							} else {
-								hiddenArray.push(id);
-							}
-							service.initPerformanceChart();
-						}
-					}
-				},
-				transition: {
-					duration: 500
-				}
-			});
-		};
-
-		service.initPerformanceChart();
 
 		return service;
 	}

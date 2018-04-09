@@ -169,7 +169,7 @@
 			);
 		};
 
-		service.pollSkillDataByDayOffset = function(selectedItem, toggles, dayOffset) {
+		service.pollSkillDataByDayOffset = function(selectedItem, toggles, dayOffset, gotData) {
 			trafficData.waitingForData = true;
 			cancelPendingRequest();
 
@@ -182,9 +182,11 @@
 				function(result) {
 					trafficData.waitingForData = false;
 					setTrafficData(result, dayOffset === 0);
+					gotData(setTrafficData);
 				},
 				function(error) {
 					trafficData.hasMonitorData = false;
+					gotData(setTrafficData);
 				}
 			);
 		};
@@ -201,9 +203,11 @@
 				function(result) {
 					trafficData.waitingForData = false;
 					setTrafficData(result, dayOffset === 0);
+					gotData(setTrafficData);
 				},
 				function(error) {
 					trafficData.hasMonitorData = false;
+					gotData(setTrafficData);
 				}
 			);
 		};

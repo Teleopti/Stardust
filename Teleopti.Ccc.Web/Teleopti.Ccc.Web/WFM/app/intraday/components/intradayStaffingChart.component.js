@@ -1,9 +1,11 @@
 (function() {
 	function theComponent($translate, $log) {
 		var ctrl = this;
+		ctrl.showChart = false;
 		var initChart = function(inData) {
 			var hiddenArray = [];
 			try {
+				ctrl.showChart = inData.hasMonitorData;
 				ctrl.staffingChart = c3.generate({
 					bindto: '#staffingChart',
 					data: {

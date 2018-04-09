@@ -134,7 +134,7 @@
 			);
 		};
 
-		service.pollSkillDataByDayOffset = function(selectedItem, toggles, dayOffset) {
+		service.pollSkillDataByDayOffset = function(selectedItem, toggles, dayOffset, gotData) {
 			staffingData.waitingForData = true;
 			service.checkMixedArea(selectedItem);
 
@@ -144,28 +144,26 @@
 				dayOffset: dayOffset
 			});
 
-			return $q(function(resolve) {
-				request.$promise.then(
-					function(result) {
-						staffingData.waitingForData = false;
-						setStaffingData(
-							result,
-							toggles['Wfm_Intraday_OptimalStaffing_40921'] && dayOffset <= 0,
-							toggles['Wfm_Intraday_ScheduledStaffing_41476'],
-							toggles['Wfm_Intraday_SupportSkillTypeEmail_44002'],
-							selectedItem.ShowReforecastedAgents
-						);
-						resolve(staffingData);
-					},
-					function() {
-						staffingData.hasMonitorData = false;
-						resolve(staffingData);
-					}
-				);
-			});
+			request.$promise.then(
+				function(result) {
+					staffingData.waitingForData = false;
+					setStaffingData(
+						result,
+						toggles['Wfm_Intraday_OptimalStaffing_40921'] && dayOffset <= 0,
+						toggles['Wfm_Intraday_ScheduledStaffing_41476'],
+						toggles['Wfm_Intraday_SupportSkillTypeEmail_44002'],
+						selectedItem.ShowReforecastedAgents
+					);
+					gotData(staffingData);
+				},
+				function() {
+					staffingData.hasMonitorData = false;
+					gotData(staffingData);
+				}
+			);
 		};
 
-		service.pollSkillAreaDataByDayOffset = function(selectedItem, toggles, dayOffset) {
+		service.pollSkillAreaDataByDayOffset = function(selectedItem, toggles, dayOffset, gotData) {
 			staffingData.waitingForData = true;
 			service.checkMixedArea(selectedItem);
 
@@ -181,25 +179,23 @@
 				dayOffset: dayOffset
 			});
 
-			return $q(function(resolve, reject) {
-				request.$promise.then(
-					function(result) {
-						staffingData.waitingForData = false;
-						setStaffingData(
-							result,
-							toggles['Wfm_Intraday_OptimalStaffing_40921'] && dayOffset <= 0,
-							toggles['Wfm_Intraday_ScheduledStaffing_41476'],
-							toggles['Wfm_Intraday_SupportSkillTypeEmail_44002'],
-							showReforecastedAgents
-						);
-						resolve(staffingData);
-					},
-					function() {
-						staffingData.hasMonitorData = false;
-						resolve(staffingData);
-					}
-				);
-			});
+			request.$promise.then(
+				function(result) {
+					staffingData.waitingForData = false;
+					setStaffingData(
+						result,
+						toggles['Wfm_Intraday_OptimalStaffing_40921'] && dayOffset <= 0,
+						toggles['Wfm_Intraday_ScheduledStaffing_41476'],
+						toggles['Wfm_Intraday_SupportSkillTypeEmail_44002'],
+						showReforecastedAgents
+					);
+					gotData(staffingData);
+				},
+				function() {
+					staffingData.hasMonitorData = false;
+					gotData(staffingData);
+				}
+			);
 		};
 
 		service.checkMixedArea = function(selectedItem) {

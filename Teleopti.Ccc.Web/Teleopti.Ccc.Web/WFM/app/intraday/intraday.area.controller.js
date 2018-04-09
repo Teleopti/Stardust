@@ -242,7 +242,11 @@
 				currentArea: skillGroup,
 				selectedItem: skillGroup
 			});
-			pollActiveTabDataByDayOffset(vm.moduleState.activeTab, vm.moduleState.chosenOffset.value);
+			pollActiveTabDataByDayOffset(
+				vm.moduleState.activeTab,
+				vm.moduleState.chosenOffset.value,
+				gotDataFromService
+			);
 			vm.moduleState.preselectedItem = { skillAreaId: skillGroup.Id };
 			// skillGroup.UnsupportedSkills = [];
 			// checkUnsupported(skillGroup);
@@ -337,39 +341,42 @@
 			}, pollingTimeout);
 		}
 
+		function gotDataFromService(data) {
+			vm.viewObj = Object.assign({}, data);
+			vm.moduleState.hasMonitorData = vm.viewObj.hasMonitorData;
+			$log.log('vm.viewObj', vm.viewObj);
+		}
+
+		function gotTimeData(data) {
+			vm.latestActualInterval = data;
+		}
+
 		function pollActiveTabDataByDayOffset(activeTab, dayOffset) {
 			if (angular.isUndefined(activeTab)) return;
 
 			var services = [intradayTrafficService, intradayPerformanceService, intradayMonitorStaffingService];
-			var timeData;
-			var promise;
 			if (vm.moduleState.selectedItem !== null && angular.isDefined(vm.moduleState.selectedItem)) {
 				if (vm.isSkill(vm.moduleState.selectedItem)) {
-					promise = services[activeTab].pollSkillDataByDayOffset(
+					services[activeTab].pollSkillDataByDayOffset(
 						vm.moduleState.selectedItem,
 						vm.toggles,
-						dayOffset
+						dayOffset,
+						gotDataFromService
 					);
 					if (dayOffset === 0) {
-						timeData = intradayLatestTimeService.getLatestTime(vm.moduleState.selectedItem);
+						intradayLatestTimeService(vm.moduleState.selectedItem, gotTimeData);
 					}
 				} else {
-					promise = services[activeTab].pollSkillAreaDataByDayOffset(
+					services[activeTab].pollSkillAreaDataByDayOffset(
 						vm.moduleState.selectedItem,
 						vm.toggles,
-						dayOffset
+						dayOffset,
+						gotDataFromService
 					);
 					if (dayOffset === 0) {
-						timeData = intradayLatestTimeService.getLatestTime(vm.moduleState.selectedItem);
+						intradayLatestTimeService(vm.moduleState.selectedItem, gotTimeData);
 					}
 				}
-
-				promise.then(function(data) {
-					vm.viewObj = Object.assign({}, data);
-					vm.moduleState.hasMonitorData = vm.viewObj.hasMonitorData;
-					vm.latestActualInterval = timeData;
-					$log.log('vm.viewObj', vm.viewObj);
-				});
 			} else {
 				timeoutPromise = $timeout(function() {
 					pollActiveTabDataByDayOffset(vm.moduleState.activeTab, dayOffset);
@@ -378,11 +385,7 @@
 		}
 
 		function pollData(activeTab) {
-			if (vm.toggles['WFM_Intraday_Show_For_Other_Days_43504']) {
-				pollActiveTabDataByDayOffset(activeTab, vm.moduleState.chosenOffset.value);
-			} else {
-				pollActiveTabDataByDayOffset(activeTab, 0);
-			}
+			pollActiveTabDataByDayOffset(activeTab, vm.moduleState.chosenOffset.value);
 		}
 
 		function reloadSkillAreas(isNew) {
