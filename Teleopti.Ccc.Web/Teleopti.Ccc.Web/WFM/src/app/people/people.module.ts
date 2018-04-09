@@ -8,7 +8,9 @@ import {
 	MatPaginatorModule,
 	MatProgressSpinnerModule,
 	MatSortModule,
-	MatTableModule
+	MatTableModule,
+	MatListModule,
+	MatGridListModule
 } from '@angular/material';
 
 import { SharedModule } from '../shared/shared.module';
@@ -25,7 +27,6 @@ import {
 	TitleBarComponent,
 	WorkspaceComponent
 } from './components';
-import { FormFieldInputComponent } from './components/form-field-input/form-field-input.component';
 import { NavigationService, RolesService, SearchService, WorkspaceService, AppLogonService } from './services';
 import { SearchOverridesService } from './services/search-overrides.service';
 
@@ -41,8 +42,7 @@ import { SearchOverridesService } from './services/search-overrides.service';
 		WorkspaceComponent,
 		TitleBarComponent,
 		PageContainerComponent,
-		AppLogonPageComponent,
-		FormFieldInputComponent
+		AppLogonPageComponent
 	],
 	imports: [
 		SharedModule,
@@ -54,7 +54,9 @@ import { SearchOverridesService } from './services/search-overrides.service';
 		MatTableModule,
 		MatSortModule,
 		MatProgressSpinnerModule,
-		MatInputModule
+		MatInputModule,
+		MatListModule,
+		MatGridListModule
 	],
 	providers: [
 		WorkspaceService,
@@ -70,8 +72,7 @@ import { SearchOverridesService } from './services/search-overrides.service';
 		SearchPageComponent,
 		GrantPageComponent,
 		RevokePageComponent,
-		AppLogonPageComponent,
-		FormFieldInputComponent
+		AppLogonPageComponent
 	]
 })
 export class PeopleModule {
