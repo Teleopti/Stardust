@@ -13,7 +13,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Concurrency
 {
 	[Category("BucketB")]
-	[AnalyticsDatabaseTest]
+	[MultiDatabaseTestAttribute]
 	[Toggle(Toggles.ETL_EventbasedDate_39562)]
 	public class AnalyticsAvailabilityUpdaterTest
 	{
