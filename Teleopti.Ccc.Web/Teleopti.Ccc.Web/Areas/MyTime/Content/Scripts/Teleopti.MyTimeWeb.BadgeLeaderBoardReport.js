@@ -11,7 +11,7 @@
 		self.agentBadges = ko.observableArray();
 		self.availableOptions = ko.observableArray();
 		self.selectedOptionId = ko.observable();
-		self.selectedOptionType = -1;		
+		self.selectedOptionType = -1;
 
 		self.showOptions = ko.observable(false);
 		self.isLoading = ko.observable(false);
@@ -35,21 +35,21 @@
 			}, self);
 
 			self.previous = function () {
-				var aDate = self.selectedDate().clone();				
+				var aDate = self.selectedDate();
 				if (self.rollingPeriod === '1') {
 					self.selectedDate(aDate.add('days', -7));
 				} else
 					if (self.rollingPeriod === '2') {
-						self.selectedDate(aDate.clone().add('month', -1));
+						self.selectedDate(aDate.add('month', -1));
 				}
 			}
 
 			self.next = function () {
 				if (self.rollingPeriod === '1') {
-					self.selectedDate(self.selectedDate().clone().add('days', 7));
+					self.selectedDate(self.selectedDate().add('days', 7));
 				} else
 				if (self.rollingPeriod === '2') {
-					self.selectedDate(self.selectedDate().clone().add('month', 1));
+					self.selectedDate(self.selectedDate().add('month', 1));
 				}
 			}
 
