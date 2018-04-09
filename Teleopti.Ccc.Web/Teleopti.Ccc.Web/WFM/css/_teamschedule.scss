@@ -735,14 +735,15 @@ team-schedule-datepicker {
 
 		td.shift-category-cell {
 			text-align: center;
+			font-size: 12px;
 			border-left: 1px solid $gray012;
 			position: relative;
 			padding: 10px 0 0 0;
 
 			.info {
 				position: absolute;
-				top: -7px;
-				right: -3px;
+				top: -8px;
+				right: -2px;
 				transform: scale(0.6)
 			}
 
