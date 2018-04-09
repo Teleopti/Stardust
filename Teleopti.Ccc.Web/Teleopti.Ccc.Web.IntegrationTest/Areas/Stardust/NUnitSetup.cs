@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Web.IntegrationTest.Areas.Stardust
 			IntegrationIoCTest.Setup(builder =>
 			{
 //				builder.RegisterType<TestConfiguration>().SingleInstance();
-				builder.RegisterType<DataCreator>().SingleInstance().ApplyAspects();
+//				builder.RegisterType<DataCreator>().SingleInstance().ApplyAspects();
 //				builder.RegisterType<StatesSender>().SingleInstance().ApplyAspects();
 //				builder.RegisterType<ScheduleInvalidator>().SingleInstance().ApplyAspects();
 				
