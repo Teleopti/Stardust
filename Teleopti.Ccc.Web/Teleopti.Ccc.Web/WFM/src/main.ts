@@ -78,7 +78,8 @@ const wfm = angular.module('wfm', [
 	'wfm.calendarPicker',
 	'wfm.popup',
 	'wfm.gamification',
-	'wfm.btnGroup'
+	'wfm.btnGroup',
+	'wfm.ai'
 ]);
 
 wfm.controller('MainController', MainController as IControllerConstructor);
