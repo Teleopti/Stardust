@@ -63,7 +63,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public AgentBadge Find(IPerson person, int badgeType, bool isExternal, DateOnlyPeriod period)
 		{
-			throw new NotImplementedException();
+			return _agentBadges.FirstOrDefault(x => x.Person == person.Id.Value
+													&& x.BadgeType == badgeType
+													&& x.IsExternal == isExternal
+													&& period.Contains(new DateOnly(x.LastCalculatedDate)));
 		}
 
 		public int FindByPersonListCalledTimes()

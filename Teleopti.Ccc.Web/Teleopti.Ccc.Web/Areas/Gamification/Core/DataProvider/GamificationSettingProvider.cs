@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.Gamification.Mapping;
@@ -50,7 +49,6 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider
 						Value = setting.Description
 					}).ToList();
 		}
-
 		
 		public IGamificationSetting GetGamificationSetting()
 		{

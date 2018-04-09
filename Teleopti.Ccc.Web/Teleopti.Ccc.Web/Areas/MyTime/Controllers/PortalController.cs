@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 {
@@ -26,6 +27,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 			var portalViewModel = _viewModelFactory.CreatePortalViewModel();
 			return View(portalViewModel);
+		}
+
+		[HttpGet]
+		[UnitOfWork]
+		public virtual JsonResult GetBadges(DateOnly from, DateOnly to)
+		{
+			return  Json(_viewModelFactory.GetBadges(new DateOnlyPeriod(from, to)), JsonRequestBehavior.AllowGet);
 		}
 	}
 }

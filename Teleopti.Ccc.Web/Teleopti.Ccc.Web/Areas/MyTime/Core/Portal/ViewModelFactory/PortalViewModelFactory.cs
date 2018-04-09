@@ -129,6 +129,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			};
 		}
 
+		public IEnumerable<BadgeViewModel> GetBadges(DateOnlyPeriod period)
+		{
+			return  _badgeProvider.GetBadges(period);
+		}
+
 		private DateOnlyPeriod getDefaultPeriod(IGamificationSetting gamificationSetting)
 		{
 			var firstDayOfWeek = _loggedOnUser.CurrentUser().FirstDayOfWeek;

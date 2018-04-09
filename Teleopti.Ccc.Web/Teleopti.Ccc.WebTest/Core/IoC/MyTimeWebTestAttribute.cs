@@ -25,6 +25,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory;
 using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider;
@@ -102,7 +103,12 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			system.UseTestDouble<ScheduleMinMaxTimeCalculator>().For<IScheduleMinMaxTimeCalculator>();
 			system.UseTestDouble<SiteOpenHourProvider>().For<ISiteOpenHourProvider>();
 			system.UseTestDouble<StaffingDataAvailablePeriodProvider>().For<IStaffingDataAvailablePeriodProvider>();
-			system.UseTestDouble<FakeSkillTypeRepository>().For<ISkillTypeRepository>();
+			system.UseTestDouble<FakeSkillTypeRepository>().For<ISkillTypeRepository>(); 
+			system.UseTestDouble<BadgeProvider>().For<IBadgeProvider>(); 
+			system.UseTestDouble<FakeGamificationSettingRepository>().For<IGamificationSettingRepository>(); 
+			system.UseTestDouble<FakeTeamGamificationSettingRepository>().For<ITeamGamificationSettingRepository>();
+			system.UseTestDouble<FakeAgentBadgeRepository>().For<IAgentBadgeRepository>();
+			system.UseTestDouble<FakeAgentBadgeWithRankRepository>().For<IAgentBadgeWithRankRepository>();
 
 			// Tenant (and datasource) stuff
 			var tenants = new FakeTenants();

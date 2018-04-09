@@ -78,7 +78,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IAgentBadgeWithRank Find(IPerson person, int badgeType, bool isExternal, DateOnlyPeriod period)
 		{
-			throw new NotImplementedException();
+			return _agentBadgeWithRanks.FirstOrDefault(x => x.Person == person.Id.Value
+															&& x.BadgeType == badgeType
+															&& x.IsExternal == isExternal
+															&& period.Contains(new DateOnly(x.LastCalculatedDate)));
 		}
 	}
 }
