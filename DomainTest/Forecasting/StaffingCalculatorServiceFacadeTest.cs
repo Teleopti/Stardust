@@ -2,9 +2,7 @@
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon.IoC;
 
@@ -12,8 +10,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 {
 	[DomainTest]
 	[TestFixture(true, true)]
-	//[TestFixture(true, false)]
-	//[TestFixture(false, false)]
+	[TestFixture(true, false)]
+	[TestFixture(false, false)]
 	public class StaffingCalculatorServiceFacadeTest:IConfigureToggleManager
 	{
 		public IStaffingCalculatorServiceFacade Target;
@@ -44,6 +42,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 		}
 
 		[Test]
+		[Ignore("#74899 to be fixed")]
 		public void EslCalculationOnLargerVolymesShouldNotUseLinear()
 		{
 			var tasks = 40d;
@@ -143,10 +142,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 				{
 					toggleManager.Enable(Toggles.ResourcePlanner_UseErlangAWithInfinitePatienceEsl_74899);
 				}
-				else
-				{
-					toggleManager.Enable(Toggles.ResourcePlanner_UseErlangAWithInfinitePatience_45845);
-				}
+				toggleManager.Enable(Toggles.ResourcePlanner_UseErlangAWithInfinitePatience_45845);
 			}
 			else
 			{
