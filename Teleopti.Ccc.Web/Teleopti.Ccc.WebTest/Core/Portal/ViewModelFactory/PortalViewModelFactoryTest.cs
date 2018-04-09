@@ -15,6 +15,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.Security;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
@@ -43,14 +44,14 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		public FakeAgentBadgeRepository AgentBadgeRepository;
 		public FakeAgentBadgeWithRankRepository AgentBadgeWithRankRepository;
 		public FakeToggleManager ToggleManager;
-		public FakePermissionProvider PermissionProvider;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<PrincipalAuthorization>().For<IAuthorization>();
-			system.UseTestDouble<FakePermissionProvider>().For<IPermissionProvider>();
+			system.UseTestDouble<PermissionProvider>().For<IPermissionProvider>();
 			system.UseTestDouble<CurrentTenantUserFake>().For<ICurrentTenantUser>();
 			system.UseTestDouble(new FakeCurrentUnitOfWorkFactory(null).WithCurrent(new FakeUnitOfWorkFactory(null, null, null, null) { Name = MyTimeWebTestAttribute.DefaultTenantName })).For<ICurrentUnitOfWorkFactory>();
+			system.UseTestDouble<FakeToggleManager>().For<IToggleManager>();
 		}
 
 		[Test]
@@ -196,6 +197,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		[Test]
 		public void ShouldGetOngoingPeriodAgentBadgesWhenToggleOff()
 		{
+			setPermissions();
 			ToggleManager.Disable(Toggles.WFM_Gamification_Create_Rolling_Periods_74866);
 			var calculatedDate = new DateOnly(2017, 4, 9);
 			var gamificationSetting = createGamificationSetting();
@@ -215,6 +217,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		[Test]
 		public void ShouldGetDefaultSettingPeriodAgentBadgesWhenToggleOn()
 		{
+			setPermissions();
 			ToggleManager.Enable(Toggles.WFM_Gamification_Create_Rolling_Periods_74866);
 			var calculatedDate = new DateOnly(2017, 4, 9);
 			var gamificationSetting = createGamificationSetting();
@@ -376,7 +379,10 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 					, new AuthorizeEveryone(), Rights.PossessProperty),
 				new Claim(
 					string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace,
-						"/AvailableData"), new AuthorizeEveryone(), Rights.PossessProperty)
+						"/AvailableData"), new AuthorizeEveryone(), Rights.PossessProperty),
+				new Claim(string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace
+					, "/", DefinedRaptorApplicationFunctionPaths.ViewBadge)
+					, new AuthorizeEveryone(), Rights.PossessProperty)
 			};
 
 			if (asmPermission)
