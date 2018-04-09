@@ -364,7 +364,7 @@
 						gotDataFromService
 					);
 					if (dayOffset === 0) {
-						intradayLatestTimeService(vm.moduleState.selectedItem, gotTimeData);
+						intradayLatestTimeService.pollTime(vm.moduleState.selectedItem, gotTimeData);
 					}
 				} else {
 					services[activeTab].pollSkillAreaDataByDayOffset(
@@ -374,7 +374,7 @@
 						gotDataFromService
 					);
 					if (dayOffset === 0) {
-						intradayLatestTimeService(vm.moduleState.selectedItem, gotTimeData);
+						intradayLatestTimeService.pollTime(vm.moduleState.selectedItem, gotTimeData);
 					}
 				}
 			} else {

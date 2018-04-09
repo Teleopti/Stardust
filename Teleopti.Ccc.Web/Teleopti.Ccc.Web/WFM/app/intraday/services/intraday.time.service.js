@@ -4,14 +4,14 @@
 		.module('wfm.intraday')
 		.service('intradayLatestTimeService', ['$filter', 'intradayService', intradayLatestTimeService]);
 
-	function intradayLatestTimeService($filter, intradayService, gotData) {
+	function intradayLatestTimeService($filter, intradayService) {
 		var service = {};
 
 		var getTimeString = function(startTime, endTime) {
 			return $filter('date')(startTime, 'shortTime') + ' - ' + $filter('date')(endTime, 'shortTime');
 		};
 
-		var pollTime = function(selectedItem) {
+		service.pollTime = function(selectedItem, gotData) {
 			if (selectedItem.Skills) {
 				intradayService.getLatestStatisticsTimeForSkillArea
 					.query({
@@ -42,11 +42,6 @@
 						function(error) {}
 					);
 			}
-		};
-
-		service.getLatestTime = function(selectedItem) {
-			pollTime(selectedItem);
-			return startTime + ' - ' + endTime;
 		};
 
 		return service;

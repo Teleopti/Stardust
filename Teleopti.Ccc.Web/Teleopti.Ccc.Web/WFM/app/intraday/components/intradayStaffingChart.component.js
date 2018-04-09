@@ -1,11 +1,10 @@
 (function() {
 	function theComponent($translate, $log) {
 		var ctrl = this;
-		ctrl.showChart = false;
+
 		var initChart = function(inData) {
 			var hiddenArray = [];
-			try {
-				ctrl.showChart = inData.hasMonitorData;
+			if (angular.isDefined(inData) && angular.isDefined(inData.forecastedStaffing)) {
 				ctrl.staffingChart = c3.generate({
 					bindto: '#staffingChart',
 					data: {
@@ -80,13 +79,10 @@
 						duration: 500
 					}
 				});
-			} catch (error) {
-				$log.log('error', error);
 			}
 		};
 
 		ctrl.$onChanges = function(changesObj) {
-			$log.log('intradayStaffingChart');
 			initChart(changesObj.chartData.currentValue);
 		};
 	}
