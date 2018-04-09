@@ -22,6 +22,11 @@ namespace Teleopti.Ccc.Domain.Helper
 			return teleoptiAgents(sla, serviceTime, calls, averageHandlingTime, periodLength);
         }
 
+		public double LinearEsl(double forecastedAgents, double agents, double sla)
+		{
+			throw new NotImplementedException();
+		}
+
 
 		public double ServiceLevelAchievedOcc(double agents, double serviceTime, double calls, double aht, TimeSpan intervalLength,
 			double sla, double forecastedAgents, int maxParellelTasks)
