@@ -40,6 +40,12 @@
     <Reference Include="Iesi.Collections, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4">
       <HintPath>..\..\packages\Iesi.Collections.4.0.2\lib\net461\Iesi.Collections.dll</HintPath>
     </Reference>
+    <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a">
+      <HintPath>..\..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.HttpListener, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <HintPath>..\..\packages\Microsoft.Owin.Host.HttpListener.3.1.0\lib\net45\Microsoft.Owin.Host.HttpListener.dll</HintPath>
+    </Reference>
     <Reference Include="NHibernate, Version=5.0.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4">
       <HintPath>..\..\packages\NHibernate.5.0.2\lib\net461\NHibernate.dll</HintPath>
     </Reference>
@@ -73,6 +79,9 @@
   <ItemGroup>
     <Compile Include="Areas\Reporting\Core\AnalyticsPermissionsUpdaterConcurrencyTest.cs" />
     <Compile Include="Areas\Reporting\Core\ReportGeneratorTests.cs" />
+    <Compile Include="Areas\Stardust\NUnitSetup.cs" />
+    <Compile Include="Areas\Stardust\StardustTestAttribute.cs" />
+    <Compile Include="Areas\Stardust\Stardust.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SetUpFixtureForAssembly.cs" />
   </ItemGroup>
@@ -92,6 +101,10 @@
     <ProjectReference Include="..\..\Teleopti.Ccc.IocCommon\Teleopti.Ccc.IocCommon.csproj">
       <Project>{DB42D973-9889-4D51-9FC5-BE66AA7F117C}</Project>
       <Name>Teleopti.Ccc.IocCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus\Teleopti.Ccc.Sdk.ServiceBus.csproj">
+      <Project>{9DF2D12C-4895-42D9-A365-6B9F97E787B5}</Project>
+      <Name>Teleopti.Ccc.Sdk.ServiceBus</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Teleopti.Ccc.TestCommon\Teleopti.Ccc.TestCommon.csproj">
       <Project>{68A028B6-864C-4969-8830-9C3C6BD56A98}</Project>
