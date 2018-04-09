@@ -13,7 +13,6 @@ describe("teamschedule person schedule tests", function () {
 		});
 	});
 
-
 	beforeEach(inject(function (PersonSchedule) {
 		target = PersonSchedule;
 	}));
@@ -71,9 +70,50 @@ describe("teamschedule person schedule tests", function () {
 			}
 		};
 		var personSchedule = target.Create(scheduleToday, timeLine);
-		expect(personSchedule.GetSummaryTimeSpan(personSchedule.UnderlyingScheduleSummary.PersonalActivities[0])).toEqual("10:00 AM - 11:00 AM");
-		expect(personSchedule.GetSummaryTimeSpan(personSchedule.UnderlyingScheduleSummary.PersonPartTimeAbsences[0])).toEqual("11:30 AM - 12:00 PM");
-		expect(personSchedule.GetSummaryTimeSpan(personSchedule.UnderlyingScheduleSummary.PersonMeetings[0])).toEqual("2:00 PM - 3:00 PM");
+		expect(personSchedule.GetSummaryTimeSpan(personSchedule.UnderlyingScheduleSummary.PersonalActivities[0], queryDate)).toEqual("10:00 AM - 11:00 AM");
+		expect(personSchedule.GetSummaryTimeSpan(personSchedule.UnderlyingScheduleSummary.PersonPartTimeAbsences[0], queryDate)).toEqual("11:30 AM - 12:00 PM");
+		expect(personSchedule.GetSummaryTimeSpan(personSchedule.UnderlyingScheduleSummary.PersonMeetings[0], queryDate)).toEqual("2:00 PM - 3:00 PM");
+	});
+
+	it('Should get correct formatted underlying schedule timespan when timespan date is different from quering date', function () {
+		var queryDate = "2015-10-30";
+		var timeLineStart = 0;
+		var timeLineEnd = 1440;
+
+		var timeLine = {
+			Offset: moment(queryDate),
+			StartMinute: timeLineStart,
+			EndMinute: timeLineEnd,
+			LengthPercentPerMinute: 100 / (timeLineEnd - timeLineStart)
+		};
+		var scheduleToday = {
+			"PersonId": "221B-Baker-Street",
+			"Name": "Sherlock Holmes",
+			"Date": queryDate,
+			"ContractTimeMinutes": 480,
+			"DayOff": null,
+			"UnderlyingScheduleSummary": {
+				"PersonalActivities": [{
+					"Description": "personal activity",
+					"Start": '2015-10-29 19:00',
+					"End": '2015-10-29 20:00'
+				}],
+				"PersonPartTimeAbsences": [{
+					"Description": "holiday",
+					"Start": '2015-10-29 19:30',
+					"End": '2015-10-29 20:00'
+				}],
+				"PersonMeetings": [{
+					"Description": "administration",
+					"Start": '2015-10-29 21:00',
+					"End": '2015-10-29 22:00'
+				}]
+			}
+		};
+		var personSchedule = target.Create(scheduleToday, timeLine);
+		expect(personSchedule.GetSummaryTimeSpan(personSchedule.UnderlyingScheduleSummary.PersonalActivities[0], queryDate)).toEqual("10/29/15 7:00 PM - 10/29/15 8:00 PM");
+		expect(personSchedule.GetSummaryTimeSpan(personSchedule.UnderlyingScheduleSummary.PersonPartTimeAbsences[0], queryDate)).toEqual("10/29/15 7:30 PM - 10/29/15 8:00 PM");
+		expect(personSchedule.GetSummaryTimeSpan(personSchedule.UnderlyingScheduleSummary.PersonMeetings[0], queryDate)).toEqual("10/29/15 9:00 PM - 10/29/15 10:00 PM");
 	});
 
 	function commonTestsInDifferentLocale() {
@@ -146,12 +186,12 @@ describe("teamschedule person schedule tests", function () {
 				"Date": queryDate,
 				"Projection": [],
 				"DayOff":
-				{
-					"DayOffName": "Day off",
-					"Start": "2015-10-26 00:00",
-					"End": tomorrow + " 00:00",
-					"Minutes": 1440
-				}
+					{
+						"DayOffName": "Day off",
+						"Start": "2015-10-26 00:00",
+						"End": tomorrow + " 00:00",
+						"Minutes": 1440
+					}
 			};
 
 			var personSchedule = target.Create(schedule, timeLine);
@@ -253,12 +293,12 @@ describe("teamschedule person schedule tests", function () {
 				"Date": yesterday,
 				"Projection": [],
 				"DayOff":
-				{
-					"DayOffName": "Day off",
-					"Start": yesterday + " 00:00",
-					"End": queryDate + " 00:00",
-					"Minutes": 1440
-				}
+					{
+						"DayOffName": "Day off",
+						"Start": yesterday + " 00:00",
+						"End": queryDate + " 00:00",
+						"Minutes": 1440
+					}
 			};
 
 			var schedule4Today = {
@@ -267,12 +307,12 @@ describe("teamschedule person schedule tests", function () {
 				"Date": queryDate,
 				"Projection": [],
 				"DayOff":
-				{
-					"DayOffName": "Shoft DayOff",
-					"Start": queryDate + " 00:00",
-					"End": tomorrow + "00:00",
-					"Minutes": 1440
-				}
+					{
+						"DayOffName": "Shoft DayOff",
+						"Start": queryDate + " 00:00",
+						"End": tomorrow + "00:00",
+						"Minutes": 1440
+					}
 			};
 
 			var personSchedule = target.Create(schedule4Yesterday, timeLine);
@@ -306,12 +346,12 @@ describe("teamschedule person schedule tests", function () {
 				"Date": new Date('2015-10-29T00:00:00Z'),
 				"Projection": [],
 				"DayOff":
-				{
-					"DayOffName": "Day off",
-					"Start": "2015-10-30T07:00:00",
-					"End": tomorrow + "00:00",
-					"Minutes": 1440
-				}
+					{
+						"DayOffName": "Day off",
+						"Start": "2015-10-30T07:00:00",
+						"End": tomorrow + "00:00",
+						"Minutes": 1440
+					}
 			};
 
 			var scheduleToday = {
@@ -351,12 +391,12 @@ describe("teamschedule person schedule tests", function () {
 				"Date": new Date('2015-10-29T00:00:00'),
 				"Projection": [],
 				"DayOff":
-				{
-					"DayOffName": "Day off",
-					"Start": '2015-10-29T08:00:00',
-					"End": '2015-10-30T08:00:00',
-					"Minutes": 1440
-				}
+					{
+						"DayOffName": "Day off",
+						"Start": '2015-10-29T08:00:00',
+						"End": '2015-10-30T08:00:00',
+						"Minutes": 1440
+					}
 			};
 
 			var scheduleToday = {
@@ -436,8 +476,6 @@ describe("teamschedule person schedule tests", function () {
 			expect(personSchedule.Shifts[0].ActivityCount()).toEqual(2);
 			expect(personSchedule.Shifts[1].ActivityCount()).toEqual(1);
 		});
-
-		
 
 		it('Should get correct formatted contact time', function () {
 			var queryDate = "2015-10-30";
@@ -530,64 +568,6 @@ describe("teamschedule person schedule tests", function () {
 		});
 
 		commonTestsInDifferentLocale();
-
-		it('Should get correct formatted underlying schedule timespan', function () {
-			var queryDate = "2015-10-30";
-			var timeLineStart = 0;
-			var timeLineEnd = 1440;
-
-			var timeLine = {
-				Offset: moment(queryDate),
-				StartMinute: timeLineStart,
-				EndMinute: timeLineEnd,
-				LengthPercentPerMinute: 100 / (timeLineEnd - timeLineStart)
-			};
-			var scheduleToday = {
-				"PersonId": "221B-Baker-Street",
-				"Name": "Sherlock Holmes",
-				"Date": queryDate,
-				"ContractTimeMinutes": 480,
-				"Projection": [
-					{
-						"ShiftLayerIds": ["222"],
-						"Color": "#80FF80",
-						"Description": "Email",
-						"Start": queryDate + " 07:00",
-						"End": queryDate + " 11:00",
-						"Minutes": 240
-					},
-					{
-						"ShiftLayerIds": ["333"],
-						"Color": "#80FF80",
-						"Description": "Email",
-						"Start": queryDate + " 11:00",
-						"End": queryDate + " 07:30",
-						"Minutes": 1230
-					}],
-				"DayOff": null,
-				"UnderlyingScheduleSummary": {
-					"PersonalActivities": [{
-						"Description": "personal activity",
-						"Start": queryDate + ' 10:00',
-						"End": queryDate + ' 11:00'
-					}],
-					"PersonPartTimeAbsences": [{
-						"Description": "holiday",
-						"Start": queryDate + ' 11:30',
-						"End": queryDate + ' 12:00'
-					}],
-					"PersonMeetings": [{
-						"Description": "administration",
-						"Start": queryDate + ' 14:00',
-						"End": queryDate + ' 15:00'
-					}]
-				}
-			};
-			var personSchedule = target.Create(scheduleToday, timeLine);
-			expect(personSchedule.GetSummaryTimeSpan(personSchedule.UnderlyingScheduleSummary.PersonalActivities[0])).toEqual("10:00 AM - 11:00 AM");
-			expect(personSchedule.GetSummaryTimeSpan(personSchedule.UnderlyingScheduleSummary.PersonPartTimeAbsences[0])).toEqual("11:30 AM - 12:00 PM");
-			expect(personSchedule.GetSummaryTimeSpan(personSchedule.UnderlyingScheduleSummary.PersonMeetings[0])).toEqual("2:00 PM - 3:00 PM");
-		});
 	});
 
 	describe('in locale fa-IR', function () {
@@ -601,65 +581,7 @@ describe("teamschedule person schedule tests", function () {
 
 		commonTestsInDifferentLocale();
 
-		it('Should get correct formatted underlying schedule timespan', function () {
-			var queryDate = "2015-10-30";
-			var timeLineStart = 0;
-			var timeLineEnd = 1440;
-
-			var timeLine = {
-				Offset: moment(queryDate),
-				StartMinute: timeLineStart,
-				EndMinute: timeLineEnd,
-				LengthPercentPerMinute: 100 / (timeLineEnd - timeLineStart)
-			};
-			var scheduleToday = {
-				"PersonId": "221B-Baker-Street",
-				"Name": "Sherlock Holmes",
-				"Date": queryDate,
-				"ContractTimeMinutes": 480,
-				"Projection": [
-					{
-						"ShiftLayerIds": ["222"],
-						"Color": "#80FF80",
-						"Description": "Email",
-						"Start": queryDate + " 07:00",
-						"End": queryDate + " 11:00",
-						"Minutes": 240
-					},
-					{
-						"ShiftLayerIds": ["333"],
-						"Color": "#80FF80",
-						"Description": "Email",
-						"Start": queryDate + " 11:00",
-						"End": queryDate + " 07:30",
-						"Minutes": 1230
-					}],
-				"DayOff": null,
-				"UnderlyingScheduleSummary": {
-					"PersonalActivities": [{
-						"Description": "personal activity",
-						"Start": queryDate + ' 10:00',
-						"End": queryDate + ' 11:00'
-					}],
-					"PersonPartTimeAbsences": [{
-						"Description": "holiday",
-						"Start": queryDate + ' 11:30',
-						"End": queryDate + ' 12:00'
-					}],
-					"PersonMeetings": [{
-						"Description": "administration",
-						"Start": queryDate + ' 14:00',
-						"End": queryDate + ' 15:00'
-					}]
-				}
-			};
-			var personSchedule = target.Create(scheduleToday, timeLine);
-			expect(personSchedule.GetSummaryTimeSpan(personSchedule.UnderlyingScheduleSummary.PersonalActivities[0])).toEqual("10:00 AM - 11:00 AM");
-			expect(personSchedule.GetSummaryTimeSpan(personSchedule.UnderlyingScheduleSummary.PersonPartTimeAbsences[0])).toEqual("11:30 AM - 12:00 PM");
-			expect(personSchedule.GetSummaryTimeSpan(personSchedule.UnderlyingScheduleSummary.PersonMeetings[0])).toEqual("2:00 PM - 3:00 PM");
-		});
 	});
-
 
 	function verifyShift(timeLine, shift, rawSchedule) {
 		shift.Projections.forEach(function (projection, index) {
