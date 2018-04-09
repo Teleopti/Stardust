@@ -79,6 +79,7 @@
   <ItemGroup>
     <Compile Include="Areas\Reporting\Core\AnalyticsPermissionsUpdaterConcurrencyTest.cs" />
     <Compile Include="Areas\Reporting\Core\ReportGeneratorTests.cs" />
+    <Compile Include="Areas\Stardust\DataCreator.cs" />
     <Compile Include="Areas\Stardust\NUnitSetup.cs" />
     <Compile Include="Areas\Stardust\StardustTestAttribute.cs" />
     <Compile Include="Areas\Stardust\Stardust.cs" />
@@ -93,6 +94,10 @@
     <ProjectReference Include="..\..\Domain\Teleopti.Ccc.Domain.csproj">
       <Project>{ADD1BCDC-CFBB-4632-8FB5-4FF3BD04F666}</Project>
       <Name>Teleopti.Ccc.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\InfrastructureTest\Teleopti.Ccc.InfrastructureTest.csproj">
+      <Project>{9BF4E24B-6110-4B87-841D-48580164BBF9}</Project>
+      <Name>Teleopti.Ccc.InfrastructureTest</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Infrastructure\Teleopti.Ccc.Infrastructure.csproj">
       <Project>{AA4A5374-77AF-44F0-85C1-6CABC6701352}</Project>
@@ -124,6 +129,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="iisexpress.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Teleopti_RD.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

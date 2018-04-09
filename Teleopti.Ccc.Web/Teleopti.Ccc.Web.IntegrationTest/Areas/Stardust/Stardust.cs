@@ -4,6 +4,7 @@ using System.Threading;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.InfrastructureTest;
 using Teleopti.Ccc.Sdk.ServiceBus;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 
@@ -12,11 +13,18 @@ namespace Teleopti.Ccc.Web.IntegrationTest.Areas.Stardust
 	[StardustTest]
 	public class Stardust
 	{
+		public DataCreator DataCreator;
 		
-		[Ignore("WIP"),Test]
+		[Ignore("WIP"), Test]
 		public void StardustEx()
 		{
 			startServiceBus();
+		}
+		
+		[Ignore("WIP"), Test]
+		public void TestDataCreator()
+		{
+			DataCreator.Create();
 		}
 
 		private void startServiceBus()
