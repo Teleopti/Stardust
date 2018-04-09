@@ -17,8 +17,8 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 
 		IReadOnlyCollection<IOvertimeRequestOpenPeriodSkillType> PeriodSkillTypes { get; }
 
-		void AddSkillType(IOvertimeRequestOpenPeriodSkillType skillType);
+		void AddPeriodSkillType(IOvertimeRequestOpenPeriodSkillType periodSkillType);
 
-		void ClearSkillType();
+		void ClearPeriodSkillType();
 	}
 } 

@@ -1,3 +1,8 @@
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[OvertimeRequestOpenPeriodSkillType]') AND type in (N'U'))
+   DROP TABLE [dbo].[OvertimeRequestOpenPeriodSkillType]
+
+GO
+
 CREATE TABLE [dbo].[OvertimeRequestOpenPeriodSkillType](
 	[Id] [uniqueidentifier] NOT NULL ,
 	[Parent] [uniqueidentifier] NOT NULL,
@@ -5,15 +10,9 @@ CREATE TABLE [dbo].[OvertimeRequestOpenPeriodSkillType](
 	PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, FILLFACTOR = 90) ON [PRIMARY],
- CONSTRAINT [PK_OvertimeRequestOpenPeriodSkillType] UNIQUE NONCLUSTERED 
-(
-	[Parent] ASC,
-	[SkillType] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, FILLFACTOR = 90) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-
 
 ALTER TABLE  [dbo].[OvertimeRequestOpenPeriodSkillType]  WITH CHECK ADD  CONSTRAINT [FK_OvertimeRequestOpenPeriodSkillType_OvertimeRequestOpenPeriod] FOREIGN KEY([Parent])
 REFERENCES [dbo].[OvertimeRequestOpenPeriod] ([Id])

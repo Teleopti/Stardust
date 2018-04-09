@@ -260,8 +260,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				EnableWorkRuleValidation = true,
 				WorkRuleValidationHandleType = OvertimeValidationHandleType.Deny
 			};
-			openPeriod.AddSkillType(new OvertimeRequestOpenPeriodSkillType{SkillType = skillType1});
-			openPeriod.AddSkillType(new OvertimeRequestOpenPeriodSkillType{SkillType = skillType2});
+			openPeriod.AddPeriodSkillType(new OvertimeRequestOpenPeriodSkillType{SkillType = skillType1});
+			openPeriod.AddPeriodSkillType(new OvertimeRequestOpenPeriodSkillType{SkillType = skillType2});
 
 			org.AddOpenOvertimeRequestPeriod(openPeriod);
 			PersistAndRemoveFromUnitOfWork(org);

@@ -166,9 +166,9 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 				EnableWorkRuleValidation = true,
 				WorkRuleValidationHandleType = OvertimeValidationHandleType.Deny
 			};
-			openPeriod.AddSkillType(new OvertimeRequestOpenPeriodSkillType { SkillType = phoneSkillType });
-			openPeriod.AddSkillType(new OvertimeRequestOpenPeriodSkillType { SkillType = chatSkillType });
-			openPeriod.AddSkillType(new OvertimeRequestOpenPeriodSkillType { SkillType = emailSkillType });
+			openPeriod.AddPeriodSkillType(new OvertimeRequestOpenPeriodSkillType { SkillType = phoneSkillType });
+			openPeriod.AddPeriodSkillType(new OvertimeRequestOpenPeriodSkillType { SkillType = chatSkillType });
+			openPeriod.AddPeriodSkillType(new OvertimeRequestOpenPeriodSkillType { SkillType = emailSkillType });
 			_target.DomainEntity.AddOpenOvertimeRequestPeriod(openPeriod);
 
 			var overtimeRequestPeriodList = _target.OvertimeRequestPeriodModels;

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
@@ -65,54 +66,29 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		{
 			var clone = (OvertimeRequestOpenPeriod)MemberwiseClone();
 			clone.SetId(null);
-			var originPeriodSkillTypes = clone.PeriodSkillTypes;
-
-			clone.resetPeriodSkillTypes();
-			foreach (var openPeriodSkillType in originPeriodSkillTypes)
-			{
-				var periodSkillTypeClone = openPeriodSkillType.NoneEntityClone();
-				periodSkillTypeClone.SetParent(clone);
-				clone.AddSkillType(periodSkillTypeClone);
-			}
-
+			clone._periodSkillTypes = new List<IOvertimeRequestOpenPeriodSkillType>(_periodSkillTypes);
 			return clone;
 		}
 
 		public virtual IOvertimeRequestOpenPeriod EntityClone()
 		{
 			var clone = (OvertimeRequestOpenPeriod)MemberwiseClone();
-			var originPeriodSkillTypes = clone.PeriodSkillTypes;
-
-			clone.resetPeriodSkillTypes();
-			foreach (var openPeriodSkillType in originPeriodSkillTypes)
-			{
-				var periodSkillTypeClone = openPeriodSkillType.EntityClone();
-				periodSkillTypeClone.SetParent(clone);
-				clone.AddSkillType(periodSkillTypeClone);
-			}
-
+			clone._periodSkillTypes = new List<IOvertimeRequestOpenPeriodSkillType>(_periodSkillTypes);
 			return clone;
 		}
 
-		public virtual void AddSkillType(IOvertimeRequestOpenPeriodSkillType skillType)
+		public virtual void AddPeriodSkillType(IOvertimeRequestOpenPeriodSkillType periodSkillType)
 		{
-			skillType.SetParent(this);
-			_periodSkillTypes.Add(skillType);
+			periodSkillType.SetParent(this);
+			_periodSkillTypes.Add(periodSkillType);
 		}
 
-		public virtual void ClearSkillType()
+		public virtual void ClearPeriodSkillType()
 		{
-			while (_periodSkillTypes.Count > 0)
+			while(_periodSkillTypes.Count > 0)
 			{
-				_periodSkillTypes.RemoveAt(0);
+				_periodSkillTypes.Remove(_periodSkillTypes.First());
 			}
-			_periodSkillTypes = null;
-			_periodSkillTypes = new List<IOvertimeRequestOpenPeriodSkillType>();
-		}
-
-		private void resetPeriodSkillTypes()
-		{
-			_periodSkillTypes = new List<IOvertimeRequestOpenPeriodSkillType>();
 		}
 	}
 

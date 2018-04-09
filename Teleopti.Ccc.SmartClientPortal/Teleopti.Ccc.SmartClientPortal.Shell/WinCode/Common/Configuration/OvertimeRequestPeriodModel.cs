@@ -50,19 +50,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			get => _skillTypes;
 			set
 			{
+				if (_skillTypes.Equals(value))
+				{
+					return;
+				}
 				_skillTypes = value;
-				_overtimeRequestOpenPeriod.ClearSkillType();
-				var supportedSkillTypes = WorkflowControlSetModel.GetSupportedSkillTypes();
-				var originSkillTypes = _skillTypes.Split(',')
-					.Select(skillType =>
-						supportedSkillTypes.FirstOrDefault(s =>
-							Resources.ResourceManager.GetString(s.Description.Name).Equals(skillType)))
-					.Where(s => s != null)
-					.Select(s => new OvertimeRequestOpenPeriodSkillType(s));
-
-				originSkillTypes.ForEach(_overtimeRequestOpenPeriod.AddSkillType);
-
-				Owner.IsDirty = true;
+				updatePeriodSkillTypes();
 			}
 		}
 
@@ -231,6 +224,22 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			{
 				_workRuleValidationHandleType = null;
 			}
+		}
+
+		private void updatePeriodSkillTypes()
+		{
+			_overtimeRequestOpenPeriod.ClearPeriodSkillType();
+
+			var supportedSkillTypes = WorkflowControlSetModel.GetSupportedSkillTypes();
+			var originSkillTypes = _skillTypes.Split(',')
+				.Select(skillType =>
+					supportedSkillTypes.FirstOrDefault(s =>
+						Resources.ResourceManager.GetString(s.Description.Name).Equals(skillType)))
+				.Where(s => s != null)
+				.Select(s => new OvertimeRequestOpenPeriodSkillType(s));
+			originSkillTypes.ForEach(_overtimeRequestOpenPeriod.AddPeriodSkillType);
+
+			Owner.IsDirty = true;
 		}
 	}
 }
