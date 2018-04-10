@@ -5,13 +5,13 @@
 		.module('wfm.ai')
 		.controller('AppInsightsController', AppInsightsController);
 
-	AppInsightsController.$inject = ['$scope', '$rootScope', '$state'];
+	AppInsightsController.$inject = ['$scope', '$rootScope', '$state', '$window'];
 
-	function AppInsightsController($scope, $rootScope, $state) {
+	function AppInsightsController($scope, $rootScope, $state, $window) {
 		$rootScope.$on('$stateChangeSuccess',
 			function() {
-				if (appInsights)
-					appInsights.trackPageView($state.current.name);
+				if ($window.appInsights)
+					$window.appInsights.trackPageView($state.current.name);
 			});
 	}
 })();
