@@ -65,8 +65,7 @@
 				}				
 			});
 		}
-		
-		
+
 		self.loadData = function () {
 			self.agentBadges([]);
 			self.isLoading(true);
@@ -163,10 +162,15 @@
 	}
 
 	function bindData() {
-		vm = new BadgeLeaderBoardReportViewModel();
-		var elementToBind = $('.BadgeLeaderBoardReport')[0];
-		$(".moment-datepicker").attr("data-bind", "datepicker: selectedDate, datepickerOptions: { autoHide: true}");
-		ko.applyBindings(vm, elementToBind);
+		Teleopti.MyTimeWeb.UserInfo.WhenLoaded(function (data) {
+			vm = new BadgeLeaderBoardReportViewModel();
+			var elementToBind = $('.BadgeLeaderBoardReport')[0];
+			if (Teleopti.MyTimeWeb.Common.IsToggleEnabled("WFM_Gamification_Create_Rolling_Periods_74866")) {
+				$(".moment-datepicker").attr("data-bind", "datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart:" + data.WeekStart + "}");
+			}
+
+			ko.applyBindings(vm, elementToBind);
+		});
 	}
 	
 	function getDate() {
@@ -183,15 +187,12 @@
 			Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('BadgeLeaderBoardReport/Index',
 									Teleopti.MyTimeWeb.BadgeLeaderBoardReport.BadgeLeaderBoardReportPartialInit, Teleopti.MyTimeWeb.BadgeLeaderBoardReport.BadgeLeaderBoardReportPartialDispose);
 		},
-		BadgeLeaderBoardReportPartialInit: function () {			
+		BadgeLeaderBoardReportPartialInit: function () {
 			if (!$('.BadgeLeaderBoardReport').length) {
 				return;
 			}
 			bindData();
 			vm.loadOptions();
-
-			//$(".moment-datepicker").attr("data-bind", "datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart: " + data.WeekStart + " }");
-			
 		},
 		BadgeLeaderBoardReportPartialDispose: function () {
 			ajax.AbortAll();
