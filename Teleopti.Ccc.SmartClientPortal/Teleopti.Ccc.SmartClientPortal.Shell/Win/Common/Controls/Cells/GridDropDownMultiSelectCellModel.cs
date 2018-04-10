@@ -2,17 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Globalization;
 using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using Syncfusion.Diagnostics;
-using Syncfusion.Styles;
 using Syncfusion.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
-using Syncfusion.Windows.Forms.Tools;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells
 {
@@ -35,7 +29,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells
 
 	public class GridDropDownMultiSelectCellRenderer : GridDropDownCellRenderer
 	{
-		private ListBox listBox;
+		private CheckedListBox checkedListBox;
 
 		public GridDropDownMultiSelectCellRenderer(GridControlBase grid, GridCellModelBase cellModel) : base(grid, cellModel)
 		{
@@ -47,32 +41,34 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells
 		{
 			base.InitializeDropDownContainer();
 
-			listBox = new ListBox
+			checkedListBox = new CheckedListBox
 			{
-				SelectionMode = SelectionMode.MultiSimple,
+				CheckOnClick = true,
 				Dock = DockStyle.Fill,
 				DisplayMember = CurrentStyle.DisplayMember
 			};
 
 			foreach (var item in (IEnumerable<object>) CurrentStyle.DataSource)
 			{
-				listBox.Items.Add(item);
+				checkedListBox.Items.Add(item);
 			}
+
+			checkedListBox.Size = new Size(checkedListBox.Size.Width, (checkedListBox.Items.Count + 1) * checkedListBox.ItemHeight);
 
 			setSelectedValues();
 
-			DropDownContainer.Size = listBox.Size;
-			DropDownContainer.Controls.Add(listBox);
+			DropDownContainer.Size = new Size(Grid.Model.ColWidths[ColIndex], checkedListBox.Size.Height);
+			DropDownContainer.Controls.Add(checkedListBox);
 		}
 
-		private void listBoxSelectedIndexChanged(object sender, EventArgs e)
+		private void listBoxItemCheck(object sender, EventArgs e)
 		{
 			setCurrentCellText();
 		}
 
 		public override void DropDownContainerShowingDropDown(object sender, CancelEventArgs e)
 		{
-			var size = listBox.Size;
+			var size = checkedListBox.Size;
 			var args = new GridCurrentCellShowingDropDownEventArgs(size);
 			Grid.RaiseCurrentCellShowingDropDown(args);
 			if (args.Cancel)
@@ -81,10 +77,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells
 			}
 			else
 			{
-				listBox.SelectedIndexChanged -= listBoxSelectedIndexChanged;
+				checkedListBox.SelectedIndexChanged -= listBoxItemCheck;
 				setSelectedValues();
-				listBox.SelectedIndexChanged += listBoxSelectedIndexChanged;
-				DropDownContainer.Size = args.Size;
+				checkedListBox.SelectedIndexChanged += listBoxItemCheck;
+				DropDownContainer.Size = new Size(Grid.Model.ColWidths[ColIndex], checkedListBox.Size.Height);
 			}
 		}
 
@@ -93,14 +89,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells
 			if (!string.IsNullOrEmpty(TextBox.Text))
 			{
 				var values = TextBox.Text.Split(',');
-				for (var index = 0; index < listBox.Items.Count; index++)
+				for (var index = 0; index < checkedListBox.Items.Count; index++)
 				{
-					listBox.SetSelected(index, values.Contains(listBox.Items[index].ToString()));
+					checkedListBox.SetItemChecked(index, values.Contains(checkedListBox.Items[index].ToString()));
 				}
 			}
 			else
 			{
-				listBox.SelectedItems.Clear();
+				checkedListBox.SelectedItems.Clear();
 			}
 		}
 
@@ -133,7 +129,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells
 		private string getText()
 		{
 			var selectedValues = string.Empty;
-			foreach (var listBoxSelectedItem in listBox.SelectedItems)
+			foreach (var listBoxSelectedItem in checkedListBox.CheckedItems)
 			{
 				selectedValues += listBoxSelectedItem + ",";
 			}

@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration.Columns
 			UseDisablePropertyCheck = false;
 		}
 
-		public override int PreferredWidth => 150;
+		public override int PreferredWidth => 200;
 
 		public event EventHandler<GridQueryCellInfoEventArgs> QueryComboItems;
 
