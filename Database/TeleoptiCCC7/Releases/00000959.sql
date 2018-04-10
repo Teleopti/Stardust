@@ -3,7 +3,7 @@
 -- Date: 2018-04-09
 -- Desc: Fixing PK's with auto generated names. VSTS #75391 
 -----------------------------------------------------------
-EXQUERY nvarchar(MAX)
+DECLARE @DROPINDEXQUERY nvarchar(MAX)
 DECLARE @INDEXNAME nvarchar(MAX)
 
 set @INDEXNAME = (
