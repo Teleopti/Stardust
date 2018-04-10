@@ -1644,7 +1644,7 @@
     <Compile Include="Win\Common\Controls\Cells\DropDownCultureCellModel.cs" />
     <Compile Include="Win\Common\Controls\Cells\GridCellModelConstants.cs" />
     <Compile Include="Win\Common\Controls\Cells\GridDropDownMonthCalendarAdvCellModel.cs" />
-    <Compile Include="Win\Common\Controls\Cells\GridDropDownMultiSelectCellModel.cs" />
+    <Compile Include="Win\Common\Controls\Cells\GridDropDownAdvComboBoxCellModel.cs" />
     <Compile Include="Win\Common\Controls\Cells\GridInCellModel.cs" />
     <Compile Include="Win\Common\Controls\Cells\IgnoreCellModel.cs" />
     <Compile Include="Win\Common\Controls\Cells\IntegerCellModel.cs" />

@@ -169,8 +169,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			cellModel.HideTodayButton();
 			gridControlOvertimeRequestOpenPeriods.CellModels.Add(GridCellModelConstants.CellTypeDatePickerCell, cellModel);
 
-			var multiSelectCellModel = new GridDropDownMultiSelectCellModel(gridControlOvertimeRequestOpenPeriods.Model);
-			gridControlOvertimeRequestOpenPeriods.CellModels.Add("MultiSelectCellModel", multiSelectCellModel);
+			
 
 			var cell = new NullableIntegerCellModel(gridControlOvertimeRequestOpenPeriods.Model)
 			{
@@ -204,26 +203,18 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 				OvertimeRequestPeriodModel.OvertimeRequestWorkRuleValidationHandleOptionViews.Values.ToList(), "Description",
 				typeof(OvertimeRequestValidationHandleOptionView)));
 
-			if (_toggleManager.IsEnabled(Toggles.OvertimeRequestSupportMultiSelectionSkillTypes_74945))
-			{
-				var skillTypeColumn =
-					new SFGridMultiSelectDropDownColumn
-						<OvertimeRequestPeriodModel, OvertimeRequestPeriodSkillTypeModel>(
-							"SkillTypes", Resources.SkillType, " ", WorkflowControlSetModel.DefaultOvertimeRequestSkillTypeAdapters,
-							"DisplayText", null);
+			var enabledMultiSelect = _toggleManager.IsEnabled(Toggles.OvertimeRequestSupportMultiSelectionSkillTypes_74945);
+			var comboBoxCellModel = new GridDropDownAdvComboBoxCellModel(gridControlOvertimeRequestOpenPeriods.Model, enabledMultiSelect);
 
-				columnList.Add(skillTypeColumn);
-			}
-			else
-			{
-				var skillTypeColumn =
-					new SFGridDropDownColumn
-						<OvertimeRequestPeriodModel, OvertimeRequestPeriodSkillTypeModel>(
-							"SkillType", Resources.SkillType, " ", WorkflowControlSetModel.DefaultOvertimeRequestSkillTypeAdapters,
-							"DisplayText", null);
+			gridControlOvertimeRequestOpenPeriods.CellModels.Add("MultiSelectCellModel", comboBoxCellModel);
 
-				columnList.Add(skillTypeColumn);
-			}
+			var skillTypeColumn =
+				new SFGridMultiSelectDropDownColumn
+					<OvertimeRequestPeriodModel, OvertimeRequestPeriodSkillTypeModel>(
+						"SkillTypes", Resources.SkillType, " ", WorkflowControlSetModel.DefaultOvertimeRequestSkillTypeAdapters,
+						"DisplayText", null);
+
+			columnList.Add(skillTypeColumn);
 
 			columnList.Add(new DateOnlyColumn<OvertimeRequestPeriodModel>("PeriodStartDate", Resources.Start, Resources.Period)
 			{
