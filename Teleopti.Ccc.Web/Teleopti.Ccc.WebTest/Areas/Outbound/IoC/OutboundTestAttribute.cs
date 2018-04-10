@@ -11,8 +11,10 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider;
 using Teleopti.Ccc.Web.Areas.Outbound.core.IoC;
 using Teleopti.Ccc.Web.Core.IoC;
+using Teleopti.Ccc.WebTest.Areas.Outbound.Core;
 
 namespace Teleopti.Ccc.WebTest.Areas.Outbound.IoC
 {
@@ -30,6 +32,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.IoC
 			system.UseTestDouble(new FakeScenarioRepository(new Scenario("Default") {DefaultScenario = true}))
 				.For<IScenarioRepository>();
 			system.UseTestDouble<FakeSkillRepository>().For<ISkillRepository>();
+			system.UseTestDouble<FakeWorkloadRepository>().For<IWorkloadRepository>();
 			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
 			system.UseTestDouble<FakeSkillDayRepository>().For<ISkillDayRepository>();
 			system.UseTestDouble<FakeActivityRepository>().For<IActivityRepository>();
@@ -48,6 +51,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.IoC
 			system.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
 			system.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
 			system.UseTestDouble<FakeTimeZoneGuard>().For<ITimeZoneGuard>();
+			system.UseTestDouble<FakeSkillTypeRepository>().For<ISkillTypeRepository>();
+			system.UseTestDouble<FakeOutboundScheduledResourcesCacher>().For<IOutboundScheduledResourcesCacher>();
 		}
 	}
 }

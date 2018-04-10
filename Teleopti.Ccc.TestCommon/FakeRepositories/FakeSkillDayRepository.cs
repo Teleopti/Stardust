@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IEnumerable<ISkillDay> LoadAll()
 		{
-			throw new NotImplementedException();
+			return _skillDays;
 		}
 
 		public ISkillDay Load(Guid id)

@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Domain.Outbound
 			foreach (var skillDay in skillDays)
 			{
 				var workloadDay = skillDay.WorkloadDayCollection.First();
-				if(workloadDay.TemplateReference.TemplateId == Guid.Empty)
+				if (workloadDay.TemplateReference.TemplateId == Guid.Empty)
 				{
 					var dayOfWeek = skillDay.CurrentDate.DayOfWeek;
 					var template = workload.TemplateWeekCollection[(int) dayOfWeek];
@@ -85,6 +85,13 @@ namespace Teleopti.Ccc.Domain.Outbound
 				forecastingTargets.Add(forecastingTarget);
 			}
 			_forecastingTargetMerger.Merge(forecastingTargets, workLoadDays);
+			foreach (var skillDay in skillDays)
+			{
+				var workloadDay = skillDay.WorkloadDayCollection.First();
+				var dayOfWeek = skillDay.CurrentDate.DayOfWeek;
+				var template = workload.TemplateWeekCollection[(int)dayOfWeek];
+				workloadDay.ApplyTemplate(template, day => { }, day => { });
+			}
 			_skillDayRepository.AddRange(skillDays);
 			return forecasts;
 		}
