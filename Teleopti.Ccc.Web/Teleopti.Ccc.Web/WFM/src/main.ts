@@ -116,7 +116,9 @@ wfm
 
 			$stateProvider.state('main', {
 				url: '/',
-				templateUrl: '../html/main.html'
+				templateProvider: ['$templateRequest', function(templateRequest){
+					return templateRequest(environment.mainHtml);
+				}]
 			});
 
 			$translateProvider.useSanitizeValueStrategy('sanitizeParameters');

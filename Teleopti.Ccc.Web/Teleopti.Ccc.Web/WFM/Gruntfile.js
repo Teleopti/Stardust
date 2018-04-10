@@ -313,8 +313,7 @@ module.exports = function(grunt) {
 		processhtml: {
 			dev: {
 				options: {
-					process: true,
-					enviroment: 'dev'
+					process: true
 				},
 				files: {
 					'index.html': ['index.tpl.html']
@@ -464,46 +463,6 @@ module.exports = function(grunt) {
 			ngbuild_prod: 'npm run ng build -- --prod -env=prod --output-hashing none',
 			webpackDevDist: 'webpack'
 		},
-		'string-replace': {
-			dist: {
-				files: [
-					{
-						src: 'src/main.ts',
-						dest: 'src/main.ts'
-					}
-				],
-				options: {
-					saveUnchanged: false,
-					replacements: [
-						{
-							pattern: '../html/main.html',
-							replacement: 'html/main.html'
-						}
-					]
-				}
-			},
-			devDist: {
-				files: [
-					{
-						src: 'src/main.ts',
-						dest: 'src/main.ts'
-					}
-				],
-				options: {
-					saveUnchanged: false,
-					replacements: [
-						{
-							pattern: '../html/main.html',
-							replacement: 'html/main.html'
-						},
-						{
-							pattern: 'html/main.html',
-							replacement: '../html/main.html'
-						}
-					]
-				}
-			}
-		},
 		clean: [
 			'dist/*.map',
 			'dist/resources/*.map',
@@ -530,7 +489,6 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-image-embed');
 	grunt.loadNpmTasks('grunt-webpack');
 	grunt.loadNpmTasks('grunt-exec');
-	grunt.loadNpmTasks('grunt-string-replace');
 	grunt.loadNpmTasks('grunt-contrib-clean');
 
 	// Default task(s).
@@ -555,7 +513,6 @@ module.exports = function(grunt) {
 		'copy:devCss',
 		'newer:copy',
 		'generateIndexDev',
-		'string-replace:devDist',
 		'exec:ngbuild_dev'
 	]);
 	grunt.registerTask('devDistRta', [
@@ -598,7 +555,6 @@ module.exports = function(grunt) {
 		'copy:extras',
 		'copy:bootstrap',
 		'generateIndex',
-		'string-replace:dist',
 		'exec:ngbuild_prod',
 		'clean'
 	]); // this task should only be used by the build. It's kind of packaging for production.
