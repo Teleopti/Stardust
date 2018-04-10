@@ -2,6 +2,7 @@
 
 describe("teamschedule controller tests", function () {
 	var $q,
+		$mdSidenav,
 		rootScope,
 		controller,
 		searchScheduleCalledTimes,
@@ -25,19 +26,21 @@ describe("teamschedule controller tests", function () {
 			$provide.service('$stateParams', function () { return fakeStateParams });
 			$provide.service('Toggle', setupMockAllTrueToggleService);
 			$provide.service('groupPageService', setUpMockGroupPagesService);
+			$provide.service('$mdSidenav', setUpMockMdSideNav);
 		});
 	});
 
-	beforeEach(inject(function (_$q_, _$rootScope_, _$controller_, _TeamSchedule_, _PersonSelection_,
+	beforeEach(inject(function (_$q_, _$mdSidenav_, _$rootScope_, _$controller_, _TeamSchedule_, _PersonSelection_,
 		_ScheduleManagement_, _TeamsStaffingConfigurationStorageService_) {
 		$q = _$q_;
+		$mdSidenav = _$mdSidenav_;
 		rootScope = _$rootScope_.$new();
 		personSelection = _PersonSelection_;
 		scheduleMgmt = _ScheduleManagement_;
 		setupMockTeamScheduleService(_TeamSchedule_);
 		teamScheduleService = _TeamSchedule_;
 		$controller = _$controller_;
-		
+
 		staffingConfigStorageService = _TeamsStaffingConfigurationStorageService_;
 		staffingConfigStorageService.clearConfig();
 		controller = setUpController(_$controller_);
@@ -57,6 +60,21 @@ describe("teamschedule controller tests", function () {
 		expect(schedules[0].IsSelected).toEqual(false);
 	}));
 
+	it("should be hide the select all people on every page link if the command panel is active", function () {
+		controller.scheduleDate = new Date("2018-04-10");
+		rootScope.$digest();
+
+		personSelection.personInfo['person-emptySchedule'] = {
+			Checked: true
+		};
+		controller.loadSchedules();
+		rootScope.$digest();
+
+		controller.triggerCommand('addAbsence', true);
+		rootScope.$digest();
+
+		expect(controller.commandPanelClosed()).toBe(false);
+	});
 
 	it("should keep the activity selection when schedule reloaded", function () {
 		controller.scheduleDate = new Date("2015-10-26");
@@ -316,11 +334,10 @@ describe("teamschedule controller tests", function () {
 			expect(controller.selectedGroups.groupIds).toEqual(fakeStateParams.selectedGroupPage.groupIds);
 		}
 		expect(controller.staffingEnabled).toEqual(fakeStateParams.staffingEnabled);
-		
+
 		expect(!!controller.preselectedSkills.skillIds).toEqual(false);
 		expect(controller.preselectedSkills.skillAreaId).toEqual('groupPage');
 	});
-
 
 	function setUpController($controller) {
 		return $controller("TeamScheduleController", {
@@ -452,16 +469,16 @@ describe("teamschedule controller tests", function () {
 		}
 
 		teamScheduleService.getAgentsPerPageSetting = {
-			post: function() {
+			post: function () {
 				var queryDeferred = $q.defer();
 				queryDeferred.resolve({ Agents: 50 });
 				return { $promise: queryDeferred.promise };
 			}
 		}
 
-		teamScheduleService.getScheduleAuditTrailSetting = function() {
+		teamScheduleService.getScheduleAuditTrailSetting = function () {
 			return {
-				then: function() {}
+				then: function () { }
 			};
 		}
 	};
@@ -483,6 +500,22 @@ describe("teamschedule controller tests", function () {
 			selectedTeamIds: [],
 			selectedGroupPage: { pageId: '', groupIds: [] },
 			staffingEnabled: true
+		};
+	}
+
+	function setUpMockMdSideNav() {
+		return function () {
+			return {
+				open: function () {
+					return $q.resolve();
+				},
+				isOpen: function () {
+					return true;
+				},
+				close: function () {
+					return $q.resolve();
+				}
+			};
 		};
 	}
 

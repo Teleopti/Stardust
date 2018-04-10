@@ -143,9 +143,11 @@
 				$mdSidenav(commandContainerId).close().then(function () {
 					initCommand(command, needToOpenSidePanel);
 				});
-			} else
+			} else {
 				initCommand(command, needToOpenSidePanel);
+			}		
 		};
+
 		function initCommand(command, needToOpenSidePanel) {
 			vm.onCommandContainerReady = function () {
 				$scope.$applyAsync(function () {
@@ -477,9 +479,14 @@
 			vm.hasSelectedAllPeopleInEveryPage = false;
 		};
 
+		vm.commandPanelClosed = function () {
+			return !$mdSidenav(commandContainerId).isOpen();
+		};
+
 		vm.selectAllVisible = function () {
 			var selectedPersonIdList = personSelectionSvc.getSelectedPersonIdList();
-			return (vm.paginationOptions.totalPages > 1 && selectedPersonIdList.length < vm.total) && !vm.hasSelectedAllPeopleInEveryPage;
+			return (vm.paginationOptions.totalPages > 1 && selectedPersonIdList.length < vm.total)
+				&& !vm.hasSelectedAllPeopleInEveryPage;
 		};
 
 		vm.hasSelectedAllPeople = function () {

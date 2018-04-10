@@ -125,12 +125,14 @@
 			</md-sidenav>
 
 		</div>
-		<div class="teamschedule-footer" ng-class="{'flex-end':!vm.selectAllVisible() && !vm.hasSelectedAllPeople()}">
-			<div class="select-all" ng-show="vm.selectAllVisible()" ng-click="vm.selectAllForAllPages()">
-				<a href="javascript: void(0);"> {{'SelectAllPeopleInEveryPage' | translate}}</a>
-			</div>
-			<div class="select-all" ng-show="vm.hasSelectedAllPeople()" ng-click="vm.unselectAllForAllPages()">
-				<a href="javascript: void(0);"> {{'UnselectAllPeopleInEveryPage' | translate}}</a>
+		<div class="teamschedule-footer">
+			<div ng-if="vm.commandPanelClosed()">
+				<div class="select-all" ng-show="vm.selectAllVisible()" ng-click="vm.selectAllForAllPages()">
+					<a ng-href="javascript: void(0);"> {{'SelectAllPeopleInEveryPage' | translate}}</a>
+				</div>
+				<div class="select-all" ng-show="vm.hasSelectedAllPeople()" ng-click="vm.unselectAllForAllPages()">
+					<a ng-href="javascript: void(0);"> {{'UnselectAllPeopleInEveryPage' | translate}}</a>
+				</div>
 			</div>
 
 			<div class="pagination-navigator" ng-if="vm.paginationOptions.totalPages > 0">
