@@ -43,7 +43,8 @@ CREATE TABLE #full_absence_days(
 	[person_code] [uniqueidentifier] NULL,
 	[date_date] [smalldatetime] NOT NULL,
 	[absence_id] [int] NOT NULL,
-	[day_count] [int] NULL
+	[day_count] [int] NULL,
+	[day_off_id] [int] NULL
 )
 CREATE TABLE #result(
 	person_code uniqueidentifier,
@@ -164,7 +165,7 @@ END
 
 /*part day or full day?*/
 INSERT INTO #full_absence_days
-SELECT p.person_code,d.date_date, absence_id,day_count
+SELECT p.person_code,d.date_date, absence_id,day_count,day_off_id
 FROM mart.fact_schedule_day_count f WITH (NOLOCK)
 INNER JOIN mart.dim_person p WITH (NOLOCK)
       ON f.person_id=p.person_id
@@ -177,9 +178,9 @@ AND p.person_id in (SELECT right_id FROM #rights_agents)--check permissions
 AND f.absence_id IN (SELECT id FROM #absences)--only selected absences
 AND f.absence_id<>-1 --ej activity
 
-/*set those absences counted as full day absence*/
+/*set those absences counted as full day absence except dayoff days*/
 UPDATE #result
-SET full_day_count=day_count, 
+SET full_day_count= CASE WHEN f.day_off_id = -1 THEN day_count ELSE 0 END,
 	part_day_count=0
 FROM 
 	#full_absence_days f
