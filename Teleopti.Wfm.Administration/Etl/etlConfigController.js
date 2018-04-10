@@ -58,7 +58,7 @@
           vm.showModal = true;
         } else {
           $http.get("./Etl/GetConfigurationModel", tokenHeaderService.getHeaders())
-          .success(function (data) {
+          .success(function (timezones) {
             vm.TimeZoneCodes = timezones.TimeZoneList;
             tenant.loading = null;
             vm.showModal = true;

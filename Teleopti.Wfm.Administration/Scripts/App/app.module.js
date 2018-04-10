@@ -69,6 +69,15 @@
 				.when('/ETL', {
 					templateUrl: 'Etl/etl.html'
 				})
+				.when('/ETL/history', {
+					templateUrl: 'Etl/history.html'
+				})
+				.when('/ETL/schedule', {
+					templateUrl: 'Etl/schedule.html'
+				})
+				.when('/ETL/config', {
+					templateUrl: 'Etl/config.html'
+				})
 
 				.when('/HangfireDashboard', {
 					templateUrl: 'HangfireDashboard.html'

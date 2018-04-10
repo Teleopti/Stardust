@@ -8,99 +8,18 @@
 		</h2>
 		<div class="row">
 			<div class="col-md-12">
-				<button type="button" class="btn" ng-class="{'btn-primary':vm.state==='manual'}" ng-click="vm.state = 'manual'; vm.getManualData();"> Manual</button>
-				<button type="button" class="btn" ng-class="{'btn-primary':vm.state==='schedule'}" ng-click="vm.state = 'schedule'">Schedule</button>
-				<button type="button" class="btn" ng-class="{'btn-primary':vm.state==='history'}" ng-click="vm.state = 'history'">ETL job history</button>
-				<button type="button" class="btn pull-right" ng-class="{'btn-primary':vm.state==='config'}" ng-click="vm.state = 'config'">
+				<a type="button" class="btn btn-default" href="./#/ETL">Manual</a>
+				<a type="button" class="btn btn-default" href="./#/ETL/schedule">Schedule</a>
+				<a type="button" class="btn btn-default" href="./#/ETL/history">ETL job history</a>
+				<a type="button" class="btn btn-default pull-right" href="./#/ETL/config">
 					<svg style="width:16px; height: 16px; cursor: pointer;" viewBox="0 0 24 24">
 						<path fill="#000" d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.67 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z" />
 					</svg>
-				</button>
+				</a>
 			</div>
 		</div>
 
-		<div ng-if="vm.state === 'manual'">
-			<div ng-include="'Etl/manual.html'"></div>
-		</div>
+		<div ng-include="'Etl/manual.html'"></div>
 
-		<div ng-if="vm.state === 'schedule'">
-			<div ng-include="'Etl/schedule.html'"></div>
-		</div>
-
-		<div ng-if="vm.state === 'history'">
-			<div ng-include="'Etl/history.html'"></div>
-		</div>
-
-		<div ng-if="vm.state === 'config'">
-			<div ng-include="'Etl/config.html'"></div>
-		</div>
 	</div>
-
-	<style>
-
-	.subrow {
-		padding-left: 25px;
-	}
-
-	.custom-modal{
-		position: fixed;
-		top: 10%;
-		left: 10%;
-		right: 10%;
-		z-index: 1001;
-		max-height: 75vh;
-		overflow-y: auto;
-		outline: 1400px solid rgba(0,0,0,0.3);
-	}
-
-	.spin {
-		-webkit-animation:spin 4s linear infinite;
-		-moz-animation:spin 4s linear infinite;
-		animation:spin 4s linear infinite;
-	}
-	@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
-	@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
-	@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
-
-	input.switch {
-		-moz-appearance: none;
-		-webkit-appearance: none;
-		-o-appearance: none;
-		position: relative;
-		height: 20px;
-		width: 40px;
-		border-radius: 10px;
-		box-shadow: inset -20px 0px 0px 1px rgba(192, 192, 192, 0.5);
-		background-color: white;
-		border: 1px solid rgba(192, 192, 192, 1);
-		outline: none;
-		-webkit-transition: 0.2s;
-		transition: 0.2s;
-		cursor: pointer;
-	}
-
-	input.switch:checked {
-		box-shadow: inset 20px 0px 0px 1px #337ab7;
-		border: 1px solid rgba(33, 150, 243, 1);
-	}
-
-	input.switch::-ms-check {
-		-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)"; /* IE 8 */
-		filter: alpha(opacity=0); /* IE 5-7 */
-		opacity: 0;
-	}
-
-	.center-flex{
-		display: flex;
-		align-items: center;
-	}
-
-	.unmatched{
-		background: orange!important;
-	}
-
-	[ng\:cloak], [ng-cloak], .ng-cloak {
-		display: none !important;
-	}
-	</style>
 </div>

@@ -3,12 +3,12 @@
 
 	angular
 	.module("adminApp")
-	.controller("etlController", etlController, ["$http", "$timeout"]);
+		.controller("etlController", etlController, ["$http", "$timeout"]);
 
 	function etlController($http, tokenHeaderService, $timeout) {
 		var vm = this;
 
-		vm.state = "manual";
+		vm.state = null;
 		vm.jobs = [];
 		vm.tenants = [];
 		vm.selectedTenant = "";
@@ -17,8 +17,6 @@
 		vm.masterTenantConfigured = false;
 		vm.selectDataSource = null;
 
-
-		// manual and setup
 		vm.getConfigStatus = getConfigStatus;
 		vm.getJobs = getJobs;
 		vm.getTenants = getTenants;
@@ -30,7 +28,6 @@
 		var today = new Date();
 		vm.dataSources = [];
 
-		//manual inputs
 		vm.manualInitial = {
 			StartDate: null,
 			EndDate: null
@@ -73,8 +70,6 @@
 				vm.manualForecast[param] = input;
 			}
 		};
-
-		//init
 
 		vm.getManualData = function() {
 			vm.getTenants();
@@ -262,12 +257,6 @@
 				}, 5000);
 			});
 		}
-
-		//history inputs
-		vm.historyWorkPeriod = {
-			StartDate: new Date().toLocaleDateString(vm.language),
-			EndDate: new Date().toLocaleDateString(vm.language)
-		};
 
 	}
 })();
