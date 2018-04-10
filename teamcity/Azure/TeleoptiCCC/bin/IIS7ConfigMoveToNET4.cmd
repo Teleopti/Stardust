@@ -21,6 +21,7 @@ Call :ChangeAppPoolVersion Client v4.0
 Call :ChangeAppPoolVersion AuthenticationBridge v4.0
 Call :ChangeAppPoolVersion WindowsIdentityProvider v4.0
 Call :ChangeAppPoolVersion Administration v4.0
+Call :ChangeAppPoolVersion API v4.0
 ECHO ..\Tools\SupportTools\FixServerConfiguration.bat >> %FILE%.log
 ..\Tools\SupportTools\FixServerConfiguration.bat
 goto :eof

@@ -13,6 +13,7 @@
 ..\TeleoptiCCC\Web\Web.config,BuildArtifacts\Web.Root.Web.config
 ..\TeleoptiCCC\Web.config,BuildArtifacts\Web.StartPage.Web.config
 ..\TeleoptiCCC\Administration\web.config,BuildArtifacts\Web.Administration.Web.config
+..\TeleoptiCCC\API\web.config,BuildArtifacts\Web.Api.Web.config
 ..\TeleoptiCCC\AuthenticationBridge\Web.config,BuildArtifacts\Web.AuthenticationBridge.Web.config
 ..\TeleoptiCCC\WindowsIdentityProvider\Web.config,BuildArtifacts\Web.WindowsIdentityProvider.Web.config
 ..\TeleoptiCCC\RuntimeEnvironment\Teleopti.exe.config,BuildArtifacts\Runtime.Environment.config

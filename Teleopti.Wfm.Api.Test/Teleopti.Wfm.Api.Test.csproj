@@ -11,7 +11,7 @@
     <AssemblyName>Teleopti.Wfm.Api.Test</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-	  <RestorePackages>true</RestorePackages>
+    <RestorePackages>true</RestorePackages>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -105,6 +105,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Teleopti.Ccc.TestCommon\Teleopti.Ccc.TestCommon.csproj">
+      <Project>{68a028b6-864c-4969-8830-9c3c6bd56a98}</Project>
+      <Name>Teleopti.Ccc.TestCommon</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Teleopti.Wfm.Api\Teleopti.Wfm.Api.csproj">
       <Project>{98a1ceaf-a22c-4e04-8a5e-9969ceea7776}</Project>
       <Name>Teleopti.Wfm.Api</Name>

@@ -16,6 +16,7 @@
 ..\..\..\sitesroot\6\ApplicationInsights.config,BuildArtifacts\WebApplicationInsights.config
 ..\..\..\sitesroot\7\web.config,BuildArtifacts\Web.WindowsIdentityProvider.Web.config
 ..\..\..\sitesroot\8\web.config,BuildArtifacts\Web.Administration.Web.config
+..\..\..\sitesroot\9\web.config,BuildArtifacts\Web.Api.Web.config
 ..\..\Web.config,BuildArtifacts\Web.StartPage.Web.config
 ..\..\Services\ETL\Service\Teleopti.Analytics.Etl.ServiceHost.exe.config,BuildArtifacts\AppETLService.config
 ..\..\Services\ETL\Service\ApplicationInsights.config,BuildArtifacts\AppApplicationInsights.config
