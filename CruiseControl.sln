@@ -12,6 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.debug-Setup\FixMyConfigFlow.bat = .debug-Setup\FixMyConfigFlow.bat
 		GlobalAssemblyInfo.cs = GlobalAssemblyInfo.cs
 		.debug-Setup\InfratestConfig.bat = .debug-Setup\InfratestConfig.bat
+		BuildArtifacts\PerformanceTest.config = BuildArtifacts\PerformanceTest.config
 		.debug-Setup\Restore to Local.bat = .debug-Setup\Restore to Local.bat
 		BuildArtifacts\SDKApplicationInsights.config = BuildArtifacts\SDKApplicationInsights.config
 		BuildArtifacts\SDKWeb.config = BuildArtifacts\SDKWeb.config
@@ -28,7 +29,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		BuildArtifacts\Web.Start.Web.config = BuildArtifacts\Web.Start.Web.config
 		BuildArtifacts\Web.WindowsIdentityProvider.Web.config = BuildArtifacts\Web.WindowsIdentityProvider.Web.config
 		BuildArtifacts\WebApplicationInsights.config = BuildArtifacts\WebApplicationInsights.config
-		BuildArtifacts\PerformanceTest.config = BuildArtifacts\PerformanceTest.config
 	EndProjectSection
 	ProjectSection(FolderStartupServices) = postProject
 		{B4F97281-0DBD-4835-9ED8-7DFB966E87FF} = {B4F97281-0DBD-4835-9ED8-7DFB966E87FF}
@@ -228,6 +228,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Wfm.Api.Test", "Teleopti.Wfm.Api.Test\Teleopti.Wfm.Api.Test.csproj", "{4A63DC5B-70BE-4F56-993D-B045C28ED438}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Wfm.Api", "Teleopti.Wfm.Api\Teleopti.Wfm.Api.csproj", "{98A1CEAF-A22C-4E04-8A5E-9969CEEA7776}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Wfm.Stardust.IntegrationTest", "Teleopti.Wfm.Stardust.IntegrationTest\Teleopti.Wfm.Stardust.IntegrationTest.csproj", "{5914E02A-AA82-43A0-B4B7-F563E5C9482B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1285,6 +1287,22 @@ Global
 		{98A1CEAF-A22C-4E04-8A5E-9969CEEA7776}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{98A1CEAF-A22C-4E04-8A5E-9969CEEA7776}.Release|x86.ActiveCfg = Release|Any CPU
 		{98A1CEAF-A22C-4E04-8A5E-9969CEEA7776}.Release|x86.Build.0 = Release|Any CPU
+		{5914E02A-AA82-43A0-B4B7-F563E5C9482B}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{5914E02A-AA82-43A0-B4B7-F563E5C9482B}.Debug|.NET.Build.0 = Debug|Any CPU
+		{5914E02A-AA82-43A0-B4B7-F563E5C9482B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5914E02A-AA82-43A0-B4B7-F563E5C9482B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5914E02A-AA82-43A0-B4B7-F563E5C9482B}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{5914E02A-AA82-43A0-B4B7-F563E5C9482B}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{5914E02A-AA82-43A0-B4B7-F563E5C9482B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5914E02A-AA82-43A0-B4B7-F563E5C9482B}.Debug|x86.Build.0 = Debug|Any CPU
+		{5914E02A-AA82-43A0-B4B7-F563E5C9482B}.Release|.NET.ActiveCfg = Release|Any CPU
+		{5914E02A-AA82-43A0-B4B7-F563E5C9482B}.Release|.NET.Build.0 = Release|Any CPU
+		{5914E02A-AA82-43A0-B4B7-F563E5C9482B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5914E02A-AA82-43A0-B4B7-F563E5C9482B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5914E02A-AA82-43A0-B4B7-F563E5C9482B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{5914E02A-AA82-43A0-B4B7-F563E5C9482B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{5914E02A-AA82-43A0-B4B7-F563E5C9482B}.Release|x86.ActiveCfg = Release|Any CPU
+		{5914E02A-AA82-43A0-B4B7-F563E5C9482B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1329,13 +1347,14 @@ Global
 		{164DFD25-24EE-47E2-B5A6-B7AA7B122731} = {5AC253DA-DE38-4EB4-8ECB-4E5E332D6011}
 		{D164065C-2F33-431B-80A4-A4F59CE77486} = {DF7B23CB-0FDA-4C03-93EA-3A136C6D7A7B}
 		{4A63DC5B-70BE-4F56-993D-B045C28ED438} = {5AC253DA-DE38-4EB4-8ECB-4E5E332D6011}
+		{5914E02A-AA82-43A0-B4B7-F563E5C9482B} = {FEFF4A24-4851-4A21-BF0F-68A36655E0E7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {11E3E7A7-5B00-4514-9B17-892CE32AD321}
-		RESX_MoveToResources = {"Items":[{"Extensions":".cs,.vb","Patterns":"$File.$Key|$File.$Key|StringResourceKey.$Key|$Namespace.StringResourceKey.$Key"},{"Extensions":".cshtml,.vbhtml","Patterns":"@$Namespace.$File.$Key|@$File.$Key|@StringResourceKey.$Key|@$Namespace.StringResourceKey.$Key"},{"Extensions":".cpp,.c,.hxx,.h","Patterns":"$File::$Key"},{"Extensions":".aspx,.ascx","Patterns":"<%$ Resources:$File,$Key %>"},{"Extensions":".xaml","Patterns":"\"{x:Static properties:$File.$Key}\""},{"Extensions":".cs","Patterns":""}]}
-		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.0\lib\NET35
-		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8;packages\EnterpriseLibrary.TransientFaultHandling.Data.6.0.1304.1\lib\NET45;packages\EnterpriseLibrary.TransientFaultHandling.WindowsAzure.Storage.6.0.1304.0\lib\NET45
 		RESX_CodeReferences = {"Items":[{"Expression":"\\W($File.$Key)\\W","Extensions":".xaml,.cshtml","IsCaseSensitive":true,"SingleLineComment":"\/\/"},{"Expression":"ResourceManager.GetString\\(\"$Key\"(,.*)?\\)|\\\"xx(x)?($Key)\\\"|StringResourceKey\\.($Key)","Extensions":".cs","IsCaseSensitive":true,"SingleLineComment":"\/\/"},{"Expression":"typeof\\((\\w+\\.)*($File)\\).+\"($Key)\"|\"($Key)\".+typeof\\((\\w+\\.)*($File)\\)","Extensions":".cs12","IsCaseSensitive":true,"SingleLineComment":"\/\/"},{"Expression":"\\W($Key)\\W","Extensions":".vb","IsCaseSensitive":false,"SingleLineComment":"'"},{"Expression":"\\W($File::$Key)\\W","Extensions":".cpp,.c,.hxx,.h","IsCaseSensitive":true,"SingleLineComment":"\/\/"},{"Expression":"&lt;%\\$\\s+Resources:\\s*($File)\\s*,\\s*($Key)\\s*%&gt;","Extensions":".aspx,.ascx,.master","IsCaseSensitive":true,"SingleLineComment":null},{"Expression":"{{'$Key'[\\s]*\\|[\\s]*translate}}","Extensions":".html","IsCaseSensitive":false,"SingleLineComment":null}]}
+		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8;packages\EnterpriseLibrary.TransientFaultHandling.Data.6.0.1304.1\lib\NET45;packages\EnterpriseLibrary.TransientFaultHandling.WindowsAzure.Storage.6.0.1304.0\lib\NET45
+		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.0\lib\NET35
+		RESX_MoveToResources = {"Items":[{"Extensions":".cs,.vb","Patterns":"$File.$Key|$File.$Key|StringResourceKey.$Key|$Namespace.StringResourceKey.$Key"},{"Extensions":".cshtml,.vbhtml","Patterns":"@$Namespace.$File.$Key|@$File.$Key|@StringResourceKey.$Key|@$Namespace.StringResourceKey.$Key"},{"Extensions":".cpp,.c,.hxx,.h","Patterns":"$File::$Key"},{"Extensions":".aspx,.ascx","Patterns":"<%$ Resources:$File,$Key %>"},{"Extensions":".xaml","Patterns":"\"{x:Static properties:$File.$Key}\""},{"Extensions":".cs","Patterns":""}]}
+		SolutionGuid = {11E3E7A7-5B00-4514-9B17-892CE32AD321}
 	EndGlobalSection
 	GlobalSection(TextTemplating) = postSolution
 		TextTemplating = 1

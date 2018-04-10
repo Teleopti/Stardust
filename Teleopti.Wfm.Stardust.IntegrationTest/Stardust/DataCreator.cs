@@ -18,7 +18,7 @@ using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
 
-namespace Teleopti.Ccc.Web.IntegrationTest.Areas.Stardust
+namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 {
 	public class DataCreator
 	{
@@ -82,14 +82,7 @@ namespace Teleopti.Ccc.Web.IntegrationTest.Areas.Stardust
 			PublisRecurringEvents();
 		}
 
-		//		[TestLog]
-		//		protected virtual void CreateAnalyticsData()
-		//		{
-		//			_analytics
-		//				.WithDataSource(_testConfiguration.DataSourceId, _testConfiguration.SourceId)
-		//				;
-		//		}
-
+		
 		[UnitOfWork]
 		[TestLog]
 		protected virtual void CreateCommonData()

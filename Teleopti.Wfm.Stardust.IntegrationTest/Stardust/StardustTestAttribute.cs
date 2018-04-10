@@ -14,7 +14,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 
-namespace Teleopti.Ccc.Web.IntegrationTest.Areas.Stardust
+namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 {
 	public class StardustTestAttribute : IntegrationIoCTestAttribute
 	{
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Web.IntegrationTest.Areas.Stardust
 				DataSourceHelper.TryRestoreApplicationDatabaseBySql(path, dataHash) &&
 				DataSourceHelper.TryRestoreAnalyticsDatabaseBySql(path, dataHash);
 			if (!haveDatabases)
-				DataSourceHelper.CreateDatabases();
+			DataSourceHelper.CreateDatabases();
 
 			if (!haveDatabases)
 			{
@@ -53,8 +53,8 @@ namespace Teleopti.Ccc.Web.IntegrationTest.Areas.Stardust
 
 				DefaultDataCreator.Create();
 				//DefaultAnalyticsDataCreator.OneTimeSetup();
-				//DataSourceHelper.ClearAnalyticsData();
-				//DefaultAnalyticsDataCreator.Create();
+				DataSourceHelper.ClearAnalyticsData();
+				DefaultAnalyticsDataCreator.Create();
 				DataCreator.Create();
 
 				//DataSourceHelper.BackupApplicationDatabaseBySql(path, dataHash);

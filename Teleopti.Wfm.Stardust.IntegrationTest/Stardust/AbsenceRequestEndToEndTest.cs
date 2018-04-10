@@ -5,7 +5,7 @@ using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Sdk.ServiceBus;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 
-namespace Teleopti.Ccc.Web.IntegrationTest.Areas.Stardust
+namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 {
 	[StardustTest]
 	public class AbsenceRequestEndToEndTest

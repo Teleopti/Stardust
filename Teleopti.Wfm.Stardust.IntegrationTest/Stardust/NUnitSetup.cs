@@ -9,7 +9,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 using Teleopti.Messaging.Client;
 
-namespace Teleopti.Ccc.Web.IntegrationTest.Areas.Stardust
+namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 {
 	[SetUpFixture]
 	public class NUnitSetup
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Web.IntegrationTest.Areas.Stardust
 			Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
 			XmlConfigurator.Configure();
 
-			DataSourceHelper.CreateDatabases();
+			//DataSourceHelper.CreateDatabases();
 
 			TestSiteConfigurationSetup.Setup();
 

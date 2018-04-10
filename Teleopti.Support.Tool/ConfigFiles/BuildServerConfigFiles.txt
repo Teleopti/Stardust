@@ -4,6 +4,9 @@
 ..\..\..\Teleopti.Ccc.Web\Teleopti.Ccc.Web.IntegrationTest\App.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
 ..\..\..\Teleopti.Ccc.Web\Teleopti.Ccc.Web.IntegrationTest\bin\Debug\Teleopti.Ccc.Web.IntegrationTest.dll.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
 ..\..\..\Teleopti.Ccc.Web\Teleopti.Ccc.Web.IntegrationTest\bin\Release\Teleopti.Ccc.Web.IntegrationTest.dll.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
+..\..\..\Teleopti.Wfm.Stardust.IntegrationTest\App.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
+..\..\..\Teleopti.Wfm.Stardust.IntegrationTest\bin\Debug\Teleopti.Wfm.Stardust.IntegrationTest.dll.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
+..\..\..\Teleopti.Wfm.Stardust.IntegrationTest\bin\Release\Teleopti.Wfm.Stardust.IntegrationTest.dll.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
 ..\..\..\InfrastructureTest\App.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
 ..\..\..\InfrastructureTest\bin\Debug\Teleopti.Ccc.InfrastructureTest.dll.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
 ..\..\..\InfrastructureTest\bin\Release\Teleopti.Ccc.InfrastructureTest.dll.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
