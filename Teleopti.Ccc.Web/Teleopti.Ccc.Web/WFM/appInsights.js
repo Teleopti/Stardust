@@ -47,7 +47,7 @@ xmlhttp.onreadystatechange = function () {
 
 				return c
 			}(iKey);
-		window.appInsights = appInsights, appInsights.queue && 0 === appInsights.queue.length && appInsights.trackPageView();
+		window.appInsights = appInsights, appInsights && appInsights.queue && 0 === appInsights.queue.length && appInsights.trackPageView();
 	}
 };
 
