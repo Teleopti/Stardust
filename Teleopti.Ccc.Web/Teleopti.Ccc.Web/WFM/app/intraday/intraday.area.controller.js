@@ -177,6 +177,14 @@
 			return results;
 		};
 
+		vm.resetFilter = function() {
+			setModuleState({
+				showIncluded: false,
+				selectedSubSkill: null,
+				currentArea: null
+			});
+		};
+
 		vm.selectSkillOrSkillArea = function(item) {
 			if (!item) {
 				vm.moduleState.selectedItem = null;

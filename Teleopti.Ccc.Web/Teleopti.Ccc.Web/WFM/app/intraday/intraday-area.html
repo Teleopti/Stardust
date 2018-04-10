@@ -19,7 +19,8 @@
             <div class="panel con-flex material-depth-1">
                 <div class="con-row layout-align-center-center">
                     <span class="con-flex ">
-                        <skill-picker skills="vm.skills"
+                        <skill-picker ng-click="vm.resetFilter()"
+                                      skills="vm.skills"
                                       skill-areas="vm.skillAreas"
                                       item-to-return="vm.selectSkillOrSkillArea"
                                       preselected-item="vm.moduleState.preselectedItem"></skill-picker>
