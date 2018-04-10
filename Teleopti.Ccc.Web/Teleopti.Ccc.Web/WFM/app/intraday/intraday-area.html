@@ -64,11 +64,10 @@
                      ng-if="vm.toggles['WFM_Intraday_Show_For_Other_Days_43504']">
                     <h2 id="viewingDate">
                         {{vm.getLocalDate(vm.moduleState.chosenOffset.value)}}
-                        <span ng-if="vm.moduleState.showGroupInfo">
+                        <span ng-if="vm.moduleState.showIncluded">
                             ,
-                            <b>{{ vm.moduleState.selectedItem.Name }}</b>:
-                            <span ng-if="vm.moduleState.filterSkills.length > 0">{{vm.moduleState.filterSkills.length}} {{'IntraDayChipNumberOf' | translate}} </span>
-                            {{vm.moduleState.selectedItem.Skills.length}} {{'PersonSkill'|translate}}
+                            <b>{{ vm.moduleState.currentArea.Name }}</b>:
+                            <span ng-if="vm.moduleState.selectedSubSkill !== null">{{vm.moduleState.selectedSubSkill.Name}}</span>
                             <span ng-if="vm.skillAreaMessage">({{vm.skillAreaMessage}})</span>
                         </span>
                     </h2>

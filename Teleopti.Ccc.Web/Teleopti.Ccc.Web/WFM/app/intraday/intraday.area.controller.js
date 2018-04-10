@@ -69,7 +69,7 @@
 		};
 
 		vm.checkIfFilterSkill = function(skill) {
-			if (vm.moduleState.filterSkills.indexOf(skill) !== -1) {
+			if (vm.moduleState.selectedSubSkill !== null && vm.moduleState.selectedSubSkill.Id === skill.Id) {
 				return 'mdi mdi-check';
 			}
 			return vm.getSkillIcon(skill);
@@ -80,7 +80,7 @@
 				return 'chip-warning';
 			}
 
-			if (vm.moduleState.filterSkills.indexOf(skill) !== -1) {
+			if (vm.moduleState.selectedSubSkill !== null && vm.moduleState.selectedSubSkill.Id === skill.Id) {
 				return 'chip-success';
 			}
 
@@ -143,14 +143,13 @@
 
 		vm.openSkillFromArea = function(skill) {
 			if (skill.DoDisplayData) {
-				var skillIndex = vm.moduleState.filterSkills.indexOf(skill);
-				if (skillIndex === -1) {
-					vm.moduleState.filterSkills = [skill];
-					vm.selectSkillOrSkillArea(skill, true);
+				//Clicked a new skill
+				if (vm.moduleState.selectedSubSkill !== skill) {
+					vm.moduleState.selectedSubSkill = skill;
+					vm.setSkill(skill);
 				} else {
-					vm.moduleState.filterSkills = [];
-					vm.selectSkillOrSkillArea(skill, true);
-					vm.moduleState.filterSkills.splice(skillIndex, 1);
+					vm.moduleState.selectedSubSkill = null;
+					vm.setSkillGroup(vm.moduleState.currentArea);
 				}
 			} else {
 				UnsupportedSkillNotice();
@@ -178,7 +177,7 @@
 			return results;
 		};
 
-		vm.selectSkillOrSkillArea = function(item, showSkillChips) {
+		vm.selectSkillOrSkillArea = function(item) {
 			if (!item) {
 				vm.moduleState.selectedItem = null;
 				return;
@@ -188,23 +187,23 @@
 				vm.moduleState.selectedItem = null;
 				return;
 			}
-
-			if (showSkillChips && vm.moduleState.filterSkills.length === 0) {
-				item = vm.moduleState.currentArea;
-			}
-
 			if (vm.isSkill(item)) {
-				setModuleState({
-					showIncluded: showSkillChips,
-					showGroupInfo: showSkillChips,
-					filterSkills: []
-				});
-				if (showSkillChips === false) {
-					vm.moduleState.currentArea = null;
-				}
 				vm.setSkill(item);
 			} else {
 				vm.setSkillGroup(item);
+			}
+
+			if (vm.moduleState.currentArea === null) {
+				setModuleState({
+					showIncluded: false,
+					showGroupInfo: false
+				});
+			}
+			if (vm.moduleState.currentArea !== null) {
+				setModuleState({
+					showIncluded: true,
+					showGroupInfo: true
+				});
 			}
 			vm.saveState();
 		};
@@ -332,7 +331,6 @@
 		function gotDataFromService(data) {
 			vm.viewObj = Object.assign({}, data);
 			vm.moduleState.hasMonitorData = vm.viewObj.hasMonitorData;
-			$log.log('vm.viewObj', vm.viewObj);
 		}
 
 		function gotTimeData(data) {
@@ -423,13 +421,13 @@
 				DeleteSkillAreaModal: false,
 				activeTab: 0,
 				chosenOffset: { value: 0 },
-				filterSkills: [],
 				showGroupInfo: false,
 				showIncluded: false,
 				currentArea: null,
 				selectedItem: null,
 				hasMonitorData: false,
-				preselectedItem: null
+				preselectedItem: null,
+				selectedSubSkill: null
 			};
 		}
 
