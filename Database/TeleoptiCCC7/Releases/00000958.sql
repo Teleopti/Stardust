@@ -29,14 +29,6 @@ GO
 -- Desc: Fixing PK's with auto generated names. VSTS #75391 
 -----------------------------------------------------------
 
-ALTER TABLE  [dbo].[OvertimeRequestOpenPeriodSkillType]  WITH CHECK ADD  CONSTRAINT [FK_OvertimeRequestOpenPeriodSkillType_OvertimeRequestOpenPeriod] FOREIGN KEY([Parent])
-REFERENCES [dbo].[OvertimeRequestOpenPeriod] ([Id])
-GO
-
-ALTER TABLE  [dbo].[OvertimeRequestOpenPeriodSkillType]  WITH CHECK ADD  CONSTRAINT [FK_OvertimeRequestOpenPeriodSkillType_SkillType] FOREIGN KEY([SkillType])
-REFERENCES [dbo].[SkillType] ([Id])
-GO
-
 DECLARE @DROPINDEXQUERY nvarchar(MAX)
 DECLARE @INDEXNAME nvarchar(MAX)
 
