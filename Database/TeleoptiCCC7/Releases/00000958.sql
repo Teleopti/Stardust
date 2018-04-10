@@ -23,36 +23,3 @@ REFERENCES [dbo].[SkillType] ([Id])
 GO 
 
 
------------------------------------------------------------  
--- Name: DevOops
--- Date: 2018-04-09
--- Desc: Fixing PK's with auto generated names. VSTS #75391 
------------------------------------------------------------
-
-DECLARE @DROPINDEXQUERY nvarchar(MAX)
-DECLARE @INDEXNAME nvarchar(MAX)
-
-set @INDEXNAME = (
-	SELECT name FROM sys.objects 
-	WHERE parent_object_id = OBJECT_ID(N'[ExternalLogOnCollection]') 
-	AND type in (N'UQ')
-	and name like 'UQ%[_][_]%%' -- Look for UQ__ExternalLogOnCol__XXXXXXX
-	)
-
-select @INDEXNAME
-
-if (@INDEXNAME <> '')
-begin
-	SET @DROPINDEXQUERY = N'alter table dbo.ExternalLogOnCollection drop constraint [' + @INDEXNAME + ']'
-	print 'Dropping index with auto-generated name: ' + @INDEXNAME
-	EXEC sp_executeSQL @DROPINDEXQUERY;
-end
-
-ALTER TABLE dbo.ExternalLogOnCollection ADD CONSTRAINT
-	PK_ExternalLogOnCollection PRIMARY KEY CLUSTERED 
-	(
-		PersonPeriod,
-		ExternalLogOn
-	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-
-GO
