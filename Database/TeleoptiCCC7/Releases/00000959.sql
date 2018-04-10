@@ -61,6 +61,8 @@ begin
 	ALTER TABLE [dbo].[SkillCollection]  WITH CHECK ADD  CONSTRAINT [FK_SkillCollection_Skill] FOREIGN KEY([Skill])
 	REFERENCES [dbo].[Skill] ([Id])
 	ALTER TABLE [dbo].[SkillCollection] CHECK CONSTRAINT [FK_SkillCollection_Skill]
+
+	drop table #SaveData
 end
 
 ALTER TABLE dbo.SkillCollection ADD CONSTRAINT
