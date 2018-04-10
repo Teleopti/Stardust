@@ -22,14 +22,14 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 {
 	public class DataCreator
 	{
-		private readonly MutableNow _now;
+		//private readonly MutableNow _now;
 		//private readonly TestConfiguration _testConfiguration;
 		private readonly IEventPublisher _eventPublisher;
-		private readonly AnalyticsDatabase _analytics;
+		//private readonly AnalyticsDatabase _analytics;
 		private readonly WithUnitOfWork _withUnitOfWork;
 		private readonly ITeamRepository _teams;
 		private readonly IPersonRepository _persons;
-		private readonly IExternalLogOnRepository _externalLogOns;
+		//private readonly IExternalLogOnRepository _externalLogOns;
 		private readonly IContractRepository _contracts;
 		private readonly IPartTimePercentageRepository _partTimePercentages;
 		private readonly IContractScheduleRepository _contractSchedules;
@@ -39,13 +39,13 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 		private readonly TestDataFactory _data;
 
 		public DataCreator(
-			MutableNow now,
+			//MutableNow now,
 			IEventPublisher eventPublisher,
-			AnalyticsDatabase analytics,
+			//AnalyticsDatabase analytics,
 			WithUnitOfWork withUnitOfWork,
 			ITeamRepository teams,
 			IPersonRepository persons,
-			IExternalLogOnRepository externalLogOns,
+			//IExternalLogOnRepository externalLogOns,
 			IContractRepository contracts,
 			IPartTimePercentageRepository partTimePercentages,
 			IContractScheduleRepository contractSchedules,
@@ -55,13 +55,13 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 			TestDataFactory data
 		)
 		{
-			_now = now;
+			//_now = now;
 			_eventPublisher = eventPublisher;
-			_analytics = analytics;
+			//_analytics = analytics;
 			_withUnitOfWork = withUnitOfWork;
 			_teams = teams;
 			_persons = persons;
-			_externalLogOns = externalLogOns;
+			//_externalLogOns = externalLogOns;
 			_contracts = contracts;
 			_partTimePercentages = partTimePercentages;
 			_contractSchedules = contractSchedules;
@@ -74,12 +74,13 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 		[TestLog]
 		public virtual void Create()
 		{
-			_now.Is("2016-02-25 08:00".Utc());
+			//_now.Is("2016-02-25 08:00".Utc());
 
 			//CreateAnalyticsData();
 			CreateCommonData();
 			CreateSchedules(CreatePersons());
 			PublisRecurringEvents();
+
 		}
 
 		
@@ -101,6 +102,30 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 			data.Apply(new ContractScheduleConfigurable { Name = "contractSchedule" });
 			data.Apply(new SiteConfigurable { Name = "site", BusinessUnit = businessUnit.Name });
 			data.Apply(new TeamConfigurable { Name = "team", Site = "site" });
+
+			data.Apply(new AbsenceConfigurable(){Name = "Holiday",InContractTime = true,Requestable = true});
+			data.Apply(new WorkflowControlSetConfigurable()
+			{
+				AbsenceRequestOpenPeriodStart = "2016-02-25 08:00",
+				AbsenceRequestOpenPeriodEnd = "2026-02-25 08:00",
+				AbsenceRequestWaitlistEnabled = true,
+				AutoGrant = "true",
+				AvailableAbsence = "Holiday"
+			});
+			data.Apply(new SkillConfigurable()
+			{
+				Activity = "Phone",
+				Name = "callcenter",
+				Resolution = 15,
+				SkillType = "SkillTypePhone"
+			});
+			data.Apply(new WorkloadConfigurable(){Open24Hours = true,SkillName = "callcenter",WorkloadName = "WLN"});
+			
+			data.Apply(new ForecastConfigurable("callcenter", new DateTime(2016, 02, 25)));
+			data.Apply(new ForecastConfigurable("callcenter", new DateTime(2016, 02, 26)));
+			data.Apply(new ForecastConfigurable("callcenter", new DateTime(2016, 02, 27)));
+
+			
 		}
 
 		[UnitOfWork]
@@ -173,16 +198,16 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 			_eventPublisher.Publish(new TenantDayTickEvent(), new TenantHourTickEvent(), new TenantMinuteTickEvent());
 		}
 
-		public IEnumerable<string> LoggedOffStates()
-		{
-			yield return "LoggedOff";
-		}
+		//public IEnumerable<string> LoggedOffStates()
+		//{
+		//	yield return "LoggedOff";
+		//}
 
-		public IEnumerable<string> PhoneStates()
-		{
-			yield return "Ready";
-			yield return "Phone";
-		}
+		//public IEnumerable<string> PhoneStates()
+		//{
+		//	yield return "Ready";
+		//	yield return "Phone";
+		//}
 
 		//		public IEnumerable<ExternalLogon> Logons()
 		//		{
