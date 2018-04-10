@@ -62,11 +62,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			};
 		}
 
-		private List<IOvertimeRequestOpenPeriod> getMergedOvertimeRequestOpenPeriods(
-			IEnumerable<IGrouping<ISkillType, IOvertimeRequestOpenPeriod>> overtimeRequestOpenPeriodSkillTypeGroups,
+		private List<OvertimeRequestSkillTypeFlatOpenPeriod> getMergedOvertimeRequestOpenPeriods(
+			IEnumerable<IGrouping<ISkillType, OvertimeRequestSkillTypeFlatOpenPeriod>> overtimeRequestOpenPeriodSkillTypeGroups,
 			IPermissionInformation permissionInformation, DateOnlyPeriod dateOnlyPeriod)
 		{
-			var mergedOvertimeRequestOpenPeriods = new List<IOvertimeRequestOpenPeriod>();
+			var mergedOvertimeRequestOpenPeriods = new List<OvertimeRequestSkillTypeFlatOpenPeriod>();
 			foreach (var overtimeRequestOpenPeriodSkillTypeGroup in overtimeRequestOpenPeriodSkillTypeGroups)
 			{
 				var overtimePeriodProjection = new OvertimeRequestPeriodProjection(
@@ -80,8 +80,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			return mergedOvertimeRequestOpenPeriods;
 		}
 
-		private IEnumerable<IGrouping<ISkillType, IOvertimeRequestOpenPeriod>> getOvertimeRequestOpenPeriodSkillTypeGroups(
-			IEnumerable<IOvertimeRequestOpenPeriod> overtimeRequestOpenPeriods, IPerson person, DateOnlyPeriod dateOnlyPeriod)
+		private IEnumerable<IGrouping<ISkillType, OvertimeRequestSkillTypeFlatOpenPeriod>>
+			getOvertimeRequestOpenPeriodSkillTypeGroups(
+				IEnumerable<IOvertimeRequestOpenPeriod> overtimeRequestOpenPeriods, IPerson person, DateOnlyPeriod dateOnlyPeriod)
 		{
 			var personPeriod = person.PersonPeriods(dateOnlyPeriod).ToArray();
 			var defaultSkillType = getDefaultSkillType();
@@ -89,7 +90,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 				.Select(p => p.Skill.SkillType.Description).ToList();
 
 			var overtimeRequestOpenPeriodSkillTypeGroups =
-				overtimeRequestOpenPeriods
+				new SkillTypeFlatOvertimeOpenPeriodMapper().Map(overtimeRequestOpenPeriods, defaultSkillType)
 					.Where(x => personSkillTypeDescriptions.Contains((x.SkillType ?? defaultSkillType).Description))
 					.GroupBy(o => o.SkillType ?? defaultSkillType);
 			return overtimeRequestOpenPeriodSkillTypeGroups;

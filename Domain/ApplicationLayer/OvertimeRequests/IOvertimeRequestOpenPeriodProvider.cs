@@ -6,6 +6,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 {
 	public interface IOvertimeRequestOpenPeriodProvider
 	{
-		IList<IOvertimeRequestOpenPeriod> GetOvertimeRequestOpenPeriods(IPerson person, DateTimePeriod period);
+		IList<OvertimeRequestSkillTypeFlatOpenPeriod> GetOvertimeRequestOpenPeriods(IPerson person, DateTimePeriod period);
 	}
 }

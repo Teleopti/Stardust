@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			_skillTypeRepository = skillTypeRepository;
 		}
 
-		public IList<IOvertimeRequestOpenPeriod> GetOvertimeRequestOpenPeriods(IPerson person, DateTimePeriod period)
+		public IList<OvertimeRequestSkillTypeFlatOpenPeriod> GetOvertimeRequestOpenPeriods(IPerson person, DateTimePeriod period)
 		{
 			if (person.WorkflowControlSet == null)
 				return null;
@@ -38,12 +38,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			var defaultSkillType = getDefaultSkillType();
 
 			var overtimeRequestOpenPeriodSkillTypeGroups =
-				person.WorkflowControlSet.OvertimeRequestOpenPeriods
-					.Where(x => personSkillTypeDescriptions.Contains((x.SkillType ?? defaultSkillType).Description) &&
+				new SkillTypeFlatOvertimeOpenPeriodMapper().Map(person.WorkflowControlSet.OvertimeRequestOpenPeriods, defaultSkillType)
+					.Where(x => personSkillTypeDescriptions.Contains((x.SkillType).Description) &&
 								isPeriodMatched(x, person, dateOnlyPeriod))
 					.GroupBy(o => o.SkillType ?? defaultSkillType);
 
-			var skillTypeMergedOvertimeRequestOpenPeriods = new List<IOvertimeRequestOpenPeriod>();
+			var skillTypeMergedOvertimeRequestOpenPeriods = new List<OvertimeRequestSkillTypeFlatOpenPeriod>();
 			var overtimeRequestOpenPeriodMerger = new OvertimeRequestOpenPeriodMerger();
 			foreach (var overtimeRequestOpenPeriodSkillTypeGroup in overtimeRequestOpenPeriodSkillTypeGroups)
 			{
@@ -61,10 +61,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			return skillTypeMergedOvertimeRequestOpenPeriods;
 		}
 
-		private bool isPeriodMatched(IOvertimeRequestOpenPeriod overtimeRequestOpenPeriod, IPerson person,
+		private bool isPeriodMatched(OvertimeRequestSkillTypeFlatOpenPeriod overtimeRequestOpenPeriod, IPerson person,
 			DateOnlyPeriod requestPeriod)
 		{
-			return overtimeRequestOpenPeriod.GetPeriod(new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(),
+			return overtimeRequestOpenPeriod.OriginPeriod.GetPeriod(new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(),
 				person.PermissionInformation.DefaultTimeZone()))).Contains(requestPeriod);
 		}
 

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
@@ -30,7 +31,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			foreach (var skillStaffingDataGroup in skillStaffingDataGroups)
 			{
 				var overtimeRequestOpenPeriodGroups =
-					person.WorkflowControlSet.OvertimeRequestOpenPeriods
+					new SkillTypeFlatOvertimeOpenPeriodMapper().Map(person.WorkflowControlSet.OvertimeRequestOpenPeriods, phoneSkillType)
 						.Where(x =>isPeriodMatched(x, person, skillStaffingDataGroup.Key.ToDateOnlyPeriod()))
 						.GroupBy(o => o.SkillType ?? phoneSkillType);
 
@@ -46,10 +47,10 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			return filteredSkillStaffingDatas;
 		}
 
-		private bool isPeriodMatched(IOvertimeRequestOpenPeriod overtimeRequestOpenPeriod, IPerson person,
+		private bool isPeriodMatched(OvertimeRequestSkillTypeFlatOpenPeriod overtimeRequestOpenPeriod, IPerson person,
 			DateOnlyPeriod requestPeriod)
 		{
-			return overtimeRequestOpenPeriod.GetPeriod(new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(),
+			return overtimeRequestOpenPeriod.OriginPeriod.GetPeriod(new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(),
 				person.PermissionInformation.DefaultTimeZone()))).Contains(requestPeriod);
 		}
 	}

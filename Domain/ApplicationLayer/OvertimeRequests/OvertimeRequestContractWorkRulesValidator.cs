@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 		}
 
-		public OvertimeRequestValidationResult Validate(IPersonRequest personRequest, IOvertimeRequestOpenPeriod overtimeRequestOpenPeriod)
+		public OvertimeRequestValidationResult Validate(IPersonRequest personRequest, OvertimeRequestSkillTypeFlatOpenPeriod overtimeRequestOpenPeriod)
 		{
 			var person = personRequest.Person;
 			var timeZone = person.PermissionInformation.DefaultTimeZone();

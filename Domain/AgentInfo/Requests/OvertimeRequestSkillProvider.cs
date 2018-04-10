@@ -50,7 +50,15 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			IEnumerable<IOvertimeRequestOpenPeriod> overtimeRequestOpenPeriods, ISkillType defaultSkillType)
 		{
 			return overtimeRequestOpenPeriods.Any(o =>
-				(o.SkillType ?? defaultSkillType).Description.Name.Equals(personSkill.Skill.SkillType.Description.Name));
+				{
+					if (o.PeriodSkillTypes != null && o.PeriodSkillTypes.Any())
+					{
+						return o.PeriodSkillTypes.Any(p =>
+							p.SkillType.Equals(personSkill.Skill.SkillType));
+					}
+					return defaultSkillType.Equals(personSkill.Skill.SkillType);
+				}
+			);
 		}
 
 		private bool isPeriodMatched(IOvertimeRequestOpenPeriod overtimeRequestOpenPeriod, IPerson person,

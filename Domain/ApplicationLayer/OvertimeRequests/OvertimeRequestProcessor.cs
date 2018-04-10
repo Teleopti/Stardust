@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			return _overtimeRequestAvailableSkillsValidator.Validate(personRequest);
 		}
 
-		private OvertimeRequestValidationResult validateWorkRules(IPersonRequest personRequest, IOvertimeRequestOpenPeriod overTimeRequestOpenPeriod)
+		private OvertimeRequestValidationResult validateWorkRules(IPersonRequest personRequest, OvertimeRequestSkillTypeFlatOpenPeriod overTimeRequestOpenPeriod)
 		{
 			return _overtimeRequestContractWorkRulesValidator.Validate(personRequest, overTimeRequestOpenPeriod);
 		}
@@ -148,11 +148,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			personRequest.TrySetBrokenBusinessRule(overtimeRequestValidationResult.BrokenBusinessRules);
 		}
 
-		private IOvertimeRequestOpenPeriod getOvertimeRequestOpenPeriod(OvertimeRequestAvailableSkillsValidationResult validateSkillsResult, IPersonRequest personRequest)
+		private OvertimeRequestSkillTypeFlatOpenPeriod getOvertimeRequestOpenPeriod(OvertimeRequestAvailableSkillsValidationResult validateSkillsResult, IPersonRequest personRequest)
 		{
 			var skillTypes = validateSkillsResult.SkillDictionary.SelectMany(x => x.Value).Distinct().ToArray();
 			if (personRequest.Person.WorkflowControlSet == null)
-				return new OvertimeRequestOpenRollingPeriod
+				return new OvertimeRequestSkillTypeFlatOpenPeriod
 				{
 					AutoGrantType = OvertimeRequestAutoGrantType.Deny,
 					DenyReason = Resources.MissingWorkflowControlSet
@@ -160,9 +160,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 
 			var defaultSkillType = getDefaultSkillType();
 			var skillTypeFilteredOvertimeRequestOpenPeriods =
-				personRequest.Person.WorkflowControlSet.OvertimeRequestOpenPeriods.Where(x =>
+				new SkillTypeFlatOvertimeOpenPeriodMapper().Map(personRequest.Person.WorkflowControlSet.OvertimeRequestOpenPeriods, defaultSkillType).Where(x =>
 				{
-					var skillType = x.SkillType ?? defaultSkillType;
+					var skillType = x.SkillType;
 					var matchedSkillTypes = skillTypes.Where(s => s.SkillType == skillType).ToList();
 					return matchedSkillTypes.Any();
 				}).ToList();
