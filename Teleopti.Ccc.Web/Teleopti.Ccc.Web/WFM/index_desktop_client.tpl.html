@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html ng-app="wfm">
+
 <head lang="en">
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,9 +9,41 @@
 	<link id="themeModules" rel="stylesheet" href="">
 	<link id="themeStyle" rel="stylesheet" href="">
 	<style>
-		.loader{width:75px;height:75px;margin:5% auto 0;border:6px solid transparent;border-top:6px solid #09f;animation-name:spin;animation-duration:1s;animation-iteration-count:infinite;border-radius:50%;transform:rotate(0);overflow:hidden}@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}.backdrop{position:fixed;z-index:999999;left:0;right:0;bottom:0;top:0;background:#fff}
+		.loader {
+			width: 75px;
+			height: 75px;
+			margin: 5% auto 0;
+			border: 6px solid transparent;
+			border-top: 6px solid #09f;
+			animation-name: spin;
+			animation-duration: 1s;
+			animation-iteration-count: infinite;
+			border-radius: 50%;
+			transform: rotate(0);
+			overflow: hidden
+		}
+
+		@keyframes spin {
+			from {
+				transform: rotate(0)
+			}
+			to {
+				transform: rotate(360deg)
+			}
+		}
+
+		.backdrop {
+			position: fixed;
+			z-index: 999999;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			top: 0;
+			background: #fff
+		}
 	</style>
 </head>
+
 <body ng-show="isAuthenticated" ng-cloak ng-controller="MainController as main">
 	<div class="backdrop" ng-if="!main.styleIsFullyLoaded">
 		<div class="loader"></div>
@@ -32,17 +65,17 @@
 			var request = new XMLHttpRequest();
 			request.open('GET', '../api/Global/User/CurrentUser', true);
 			request.setRequestHeader("Accept", "application/json");
-		    request.onload = function() {
-		        if (request.status >= 200 && request.status < 400) {
-		            return true;
-		        } else {
-		            errorStayingAlive();
-		        }
-		    };
+			request.onload = function () {
+				if (request.status >= 200 && request.status < 400) {
+					return true;
+				} else {
+					errorStayingAlive();
+				}
+			};
 			request.send();
 		}
 
-		window.onerror = function(errorMessage, url, line) {
+		window.onerror = function (errorMessage, url, line) {
 			var req = new XMLHttpRequest();
 			req.open('POST', '../api/Logging/LogError', true);
 			req.setRequestHeader("Content-type", "application/json");
@@ -58,11 +91,22 @@
 	<script src="dist/resources/modulesForDesktop.min.js"></script>
 	<script src="dist/templatesForDesktop.min.js"></script>
 	<script src="dist/mainForDesktop.min.js"></script>
+
+
+	<!-- build:template
+	<% if (environment === 'dev') { %>
 	<script src="dist/ng2/inline.bundle.js"></script>
 	<script src="dist/ng2/polyfills.bundle.js"></script>
 	<script src="dist/ng2/styles.bundle.js"></script>
 	<script src="dist/ng2/vendor.bundle.js"></script>
 	<script src="dist/ng2/main.bundle.js"></script>
+	<% } else { %>
+	<script src="dist/ng2/inline.bundle.js"></script>
+	<script src="dist/ng2/polyfills.bundle.js"></script>
+	<link rel="stylesheet" href="dist/ng2/styles.bundle.css">
+	<script src="dist/ng2/main.bundle.js"></script>
+	<% } %>
+	/build -->
 </body>
 
 </html>

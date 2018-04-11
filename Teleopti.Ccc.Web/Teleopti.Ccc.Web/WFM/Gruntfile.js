@@ -327,6 +327,14 @@ module.exports = function(grunt) {
 					'index.html': ['index.tpl.html']
 				}
 			},
+			devForDesktop: {
+				options: {
+					environment: 'dev'
+				},
+				files: {
+					'index_desktop_client.html': ['index_desktop_client.tpl.html']
+				}
+			},
 			distForDesktop: {
 				files: {
 					'index_desktop_client.html': ['index_desktop_client.tpl.html']
@@ -538,7 +546,12 @@ module.exports = function(grunt) {
 		'processhtml:distForDesktop',
 		'cacheBust:distForDesktop'
 	]);
-	grunt.registerTask('generateIndexDev', ['processhtml:dev', 'cacheBust:dist']);
+	grunt.registerTask('generateIndexDev', [
+		'processhtml:dev',
+		'cacheBust:dist',
+		'processhtml:devForDesktop',
+		'cacheBust:distForDesktop'
+	]);
 	grunt.registerTask('eslint-beta', ['eslint']);
 	grunt.registerTask('devDistWatch', ['devDist', 'watch:dev']);
 	grunt.registerTask('dist', [
