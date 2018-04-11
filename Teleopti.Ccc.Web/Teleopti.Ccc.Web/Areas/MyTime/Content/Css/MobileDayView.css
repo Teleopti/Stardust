@@ -94,6 +94,13 @@
 	padding-bottom: 50px;
 	overflow-y: auto;
 	cursor: pointer;
+	position: relative;
+}
+.mobile-start-day-body .mobile-foot {
+	position: absolute;
+	right: 0;
+	left: 0;
+	bottom: 0;
 }
 .mobile-start-day .mobile-summary-content {
 	border-radius: 3px;

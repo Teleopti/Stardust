@@ -437,6 +437,12 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 		fillRequestFormData(requestViewModel);
 	};
 
+	self.desktop = function () {
+		var date = self.selectedDate();
+		Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" +
+			Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(date.format("YYYY-MM-DD")));
+	};
+
 	function resetProbabilityOption() {
 		self.selectedProbabilityOptionValue(constants.probabilityType.none);
 		self.showingAbsenceProbability(false);
