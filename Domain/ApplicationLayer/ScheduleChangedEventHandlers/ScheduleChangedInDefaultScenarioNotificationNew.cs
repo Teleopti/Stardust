@@ -5,28 +5,30 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
+using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 {
-	[RemoveMeWithToggle(Toggles.ResourcePlanner_SpeedUpEvents_75415)]
-	[DisabledBy(Toggles.ResourcePlanner_SpeedUpEvents_75415)]
-	public class ScheduleChangedInDefaultScenarioNotification : 
-		IHandleEvent<ProjectionChangedEvent>, 
+	[RemoveMeWithToggle("Rename this", Toggles.ResourcePlanner_SpeedUpEvents_75415)]
+	[EnabledBy(Toggles.ResourcePlanner_SpeedUpEvents_75415)]
+	public class ScheduleChangedInDefaultScenarioNotificationNew : 
+		IHandleEvent<ScheduleChangedEvent>, 
 		IRunOnHangfire
 	{
 		private readonly IMessageBrokerComposite _messageBroker;
+		private readonly IScenarioRepository _scenarioRepository;
 
-		public ScheduleChangedInDefaultScenarioNotification(IMessageBrokerComposite messageBroker)
+		public ScheduleChangedInDefaultScenarioNotificationNew(IMessageBrokerComposite messageBroker, IScenarioRepository scenarioRepository)
 		{
 			_messageBroker = messageBroker;
+			_scenarioRepository = scenarioRepository;
 		}
 
-		public void Handle(ProjectionChangedEvent message)
+		public void Handle(ScheduleChangedEvent message)
 		{
-			if (!message.ScheduleDays.Any() || !message.IsDefaultScenario)
-				return;
-			var firstDate = message.ScheduleDays.Min(d => d.Date).AddDays(1);
-			var lastDate = message.ScheduleDays.Max(d => d.Date);
+			if (!_scenarioRepository.Get(message.ScenarioId).DefaultScenario) return;
+			var firstDate = message.StartDateTime;
+			var lastDate = message.EndDateTime;
 			_messageBroker.Send(
 				message.LogOnDatasource, 
 				message.LogOnBusinessUnitId, 
