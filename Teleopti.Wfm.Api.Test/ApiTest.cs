@@ -33,9 +33,14 @@ namespace Teleopti.Wfm.Api.Test
 
 		protected HttpClient Client { get; }
 
+		protected IContainer Container { get; private set; }
+
 		protected ApiTest()
 		{
-			var startup = new Startup(testRegistrations);
+			var startup = new Startup(testRegistrations, c =>
+			{
+				Container = c;
+			});
 			_server = TestServer.Create(x => startup.Configuration(x));
 			Client = _server.HttpClient;
 		}
@@ -68,7 +73,6 @@ namespace Teleopti.Wfm.Api.Test
 			personRepository.Has(person);
 
 			builder.RegisterInstance(fakeStorage).As<IFakeStorage>();
-			builder.RegisterType<FakeRepositoryFactory>().As<IRepositoryFactory>();
 			builder.RegisterType<FakeRepositoryFactory>().As<IRepositoryFactory>();
 			builder.RegisterType<FakeLicenseRepository>().As<ILicenseRepository>().As<ILicenseRepositoryForLicenseVerifier>();
 			builder.RegisterInstance(personRepository).As<IPersonRepository>().As<IProxyForId<IPerson>>().As<IPersonLoadAllWithPeriodAndExternalLogOn>();

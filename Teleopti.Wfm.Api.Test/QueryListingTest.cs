@@ -17,7 +17,7 @@ namespace Teleopti.Wfm.Api.Test
 
 			var content = await result.Content.ReadAsStringAsync();
 			var obj = JToken.Parse(content);
-			obj["Result"].Children().Should().Be.Empty();
+			obj["Result"].Children().Should().Not.Be.Empty();
 		}
 	}
 }

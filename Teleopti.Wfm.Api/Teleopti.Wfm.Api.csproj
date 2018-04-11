@@ -271,6 +271,8 @@
     <Compile Include="QueryDtoProvider.cs" />
     <Compile Include="QueryHandlerProvider.cs" />
     <Compile Include="QueryResultDto.cs" />
+    <Compile Include="Query\UserByEmailHandler.cs" />
+    <Compile Include="Query\UserDto.cs" />
     <Compile Include="ResultDto.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="CustomSwaggerMiddlewareExtensions.cs" />

@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
+using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Config;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
@@ -23,20 +24,23 @@ namespace Teleopti.Wfm.Api
 {
 	public class Startup
 	{
+		private readonly Action<IContainer> _afterContainerBuild;
 		private readonly Action<ContainerBuilder> _optionalRegistrations;
 
-		public Startup() : this(null)
+		public Startup() : this(null,null)
 		{
 		}
 
-		public Startup(Action<ContainerBuilder> optionalRegistrations)
+		public Startup(Action<ContainerBuilder> optionalRegistrations, Action<IContainer> afterContainerBuild)
 		{
+			_afterContainerBuild = afterContainerBuild ?? (_ => {});
 			_optionalRegistrations = optionalRegistrations ?? (_ => {});
 		}
 
 		public void Configuration(IAppBuilder app)
 		{
 			var container = configureContainer();
+			_afterContainerBuild.Invoke(container);
 
 			if (!StateHolderReader.IsInitialized)
 			{
@@ -98,6 +102,8 @@ namespace Teleopti.Wfm.Api
 			builder.RegisterType<QueryHandlerProvider>();
 			builder.RegisterType<TokenVerifier>().As<ITokenVerifier>();
 			builder.RegisterApiControllers(typeof(Startup).Assembly);
+			builder.RegisterAssemblyTypes(typeof(Startup).Assembly).AsClosedTypesOf(typeof(IQueryHandler<,>)).ApplyAspects();
+			builder.RegisterAssemblyTypes(typeof(Startup).Assembly).AsClosedTypesOf(typeof(ICommandHandler<>)).ApplyAspects();
 
 			_optionalRegistrations.Invoke(builder);
 

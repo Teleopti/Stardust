@@ -103,6 +103,7 @@
     <Compile Include="CommandListingTest.cs" />
     <Compile Include="FakeTokenVerifier.cs" />
     <Compile Include="QueryListingTest.cs" />
+    <Compile Include="Query\UserByEmailTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
