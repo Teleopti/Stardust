@@ -4,6 +4,8 @@ using System.Threading;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Helper;
@@ -25,8 +27,9 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 		public IPersonRequestRepository PersonRequestRepository;
 		public MutableNow Now;
 		public IQueuedAbsenceRequestRepository QueuedAbsenceRequestRepository;
+		public IEventPublisher EventPublisher;
 
-		[Ignore("WIP"),Test]
+	   [Ignore("WIP"),Test]
 		public void StardustEx()
 		{
 			startServiceBus();
@@ -56,6 +59,8 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 				QueuedAbsenceRequestRepository.Add(queuedReq);
 
 			});
+			EventPublisher.Publish(new TenantMinuteTickEvent());
+			Thread.Sleep(600000);
 		}
 
 		private void startServiceBus()
@@ -81,9 +86,6 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 			return value ?? base.AppConfig(name);
 		}
 
-		public override string ConnectionString(string name)
-		{
-			throw new System.NotImplementedException();
-		}
+		
 	}
 }

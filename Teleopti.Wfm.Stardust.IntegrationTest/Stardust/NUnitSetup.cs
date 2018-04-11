@@ -2,6 +2,7 @@
 using Autofac;
 using log4net.Config;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.TestCommon;
@@ -26,7 +27,7 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 
 			IntegrationIoCTest.Setup(builder =>
 			{
-//				builder.RegisterType<TestConfiguration>().SingleInstance();
+				builder.RegisterType<TestConfigReader>().As<IConfigReader>().SingleInstance();
 				builder.RegisterType<DataCreator>().SingleInstance().ApplyAspects();
 //				builder.RegisterType<StatesSender>().SingleInstance().ApplyAspects();
 //				builder.RegisterType<ScheduleInvalidator>().SingleInstance().ApplyAspects();

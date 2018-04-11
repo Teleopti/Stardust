@@ -79,7 +79,7 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 			//CreateAnalyticsData();
 			CreateCommonData();
 			CreateSchedules(CreatePersons());
-			PublisRecurringEvents();
+			//PublisRecurringEvents();
 
 		}
 
@@ -190,13 +190,13 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 				});
 		}
 
-		[TestLog]
-		protected virtual void PublisRecurringEvents()
-		{
-			// to create/update any data that is periodically kept up to date
-			// like the rule mappings
-			_eventPublisher.Publish(new TenantDayTickEvent(), new TenantHourTickEvent(), new TenantMinuteTickEvent());
-		}
+		//[TestLog]
+		//protected virtual void PublisRecurringEvents()
+		//{
+		//	// to create/update any data that is periodically kept up to date
+		//	// like the rule mappings
+		//	_eventPublisher.Publish(new TenantDayTickEvent(), new TenantHourTickEvent(), new TenantMinuteTickEvent());
+		//}
 
 		//public IEnumerable<string> LoggedOffStates()
 		//{

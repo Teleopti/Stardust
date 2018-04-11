@@ -4,6 +4,7 @@ using System.Linq;
 using Autofac;
 using NUnit.Framework.Interfaces;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
@@ -29,12 +30,13 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 		public HangfireClientStarter HangfireClientStarter;
 		public HangfireUtilities Hangfire;
 		public StateQueueUtilities StateQueue;
+		public IConfigReader ConfigReader;
 
 		public override void BeforeTest(ITest testDetails)
 		{
 			base.BeforeTest(testDetails);
 
-			var dataHash = DefaultDataCreator.HashValue;// ^ TestConfiguration.HashValue;
+				var dataHash = DefaultDataCreator.HashValue;// ^ TestConfiguration.HashValue;
 			var path = Path.Combine(InfraTestConfigReader.DatabaseBackupLocation, "Stardust");
 
 			var haveDatabases =
@@ -71,6 +73,10 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 			Impersonate.Impersonate(DataSourceHelper.TestTenantName, businessUnitId);
 
 			TestSiteConfigurationSetup.Setup();
+			((TestConfigReader)ConfigReader).ConfigValues.Add("ManagerLocation", TestSiteConfigurationSetup.URL.AbsoluteUri + @"StardustDashboard/");
+			((TestConfigReader)ConfigReader).ConfigValues.Add("NumberOfNodes", "1");
+			//ConfigReader.
+			//"ManagerLocation", TestSiteConfigurationSetup.URL.AbsoluteUri + @"StardustDashboard/"
 		}
 
 		public override void AfterTest(ITest testDetails)

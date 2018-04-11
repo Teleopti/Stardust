@@ -9,16 +9,17 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		private readonly HangfireAsSyncEventPublisher _hangfireAsSyncEventPublisher;
 		private readonly SyncEventPublisher _syncEventPublisher;
 		private readonly IRtaEventPublisher _rtaEventPublisher;
+		private readonly StardustEventPublisher _stardustEventPublisher;
 
 		public SyncAllEventPublisher(
 			HangfireAsSyncEventPublisher hangfireAsSyncEventPublisher,
 			SyncEventPublisher syncEventPublisher,
-			IRtaEventPublisher rtaEventPublisher
-			)
+			IRtaEventPublisher rtaEventPublisher, StardustEventPublisher stardustEventPublisher)
 		{
 			_hangfireAsSyncEventPublisher = hangfireAsSyncEventPublisher;
 			_syncEventPublisher = syncEventPublisher;
 			_rtaEventPublisher = rtaEventPublisher;
+			_stardustEventPublisher = stardustEventPublisher;
 		}
 
 		public void Publish(params IEvent[] events)
@@ -26,6 +27,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			_hangfireAsSyncEventPublisher.Publish(events);
 			_syncEventPublisher.Publish(events);
 			_rtaEventPublisher.Publish(events);
+			_stardustEventPublisher.Publish(events);
 		}
 	}
 }
