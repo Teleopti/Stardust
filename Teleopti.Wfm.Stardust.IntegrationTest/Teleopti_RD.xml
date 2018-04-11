@@ -25,7 +25,9 @@
     <MyTeam>true</MyTeam>
     <VNext>true</VNext>
     <Outbound>true</Outbound>
+    <OvertimeRequests>true</OvertimeRequests>
     <SeatPlanner>true</SeatPlanner>
+    <BPOExchange>true</BPOExchange>
   </TeleoptiWFM>
   <Agreement>Teleopti.Ccc.Infrastructure.Licensing.Agreements.TeleoptiLic_En_Sw_St.txt</Agreement>
   <Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
@@ -37,9 +39,9 @@
           <Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" />
         </Transforms>
         <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <DigestValue>Z1q45CHufKl2WxZEzWD4vKmi6bk=</DigestValue>
+        <DigestValue>ju5cZ/yjQrk/BIF7eUL7Fk47ze8=</DigestValue>
       </Reference>
     </SignedInfo>
-    <SignatureValue>nmEvny+RepVlVCDssany5YEu1yKNj8xGy8Zzz+0FRKQZPRiK5B4dOAqSurHyGEBvnQ1l9MS7xZbxMygsTt2R1+TsGlazMNGkC9Qv0n6fpjkAeBw/GbsM7qFOdK1qGWjuZb8Qn6Osd80erOucscmLb196fiuBArCEaEXXbjHjo8I=</SignatureValue>
+    <SignatureValue>ALnrXTX7zpCoUg+Ncz/dcpOPp7bXOPZd8yK3XCqsis+ZKbJCcPYb+qyZl6cbz7iVVnkbQ3QnE1cMRMWvw/doC68ax/lWTqCEz9shqyXen3kSwI9gWLeek5HPh9437INsCCw3hj0OprYVvFvfEvM2NVFFYzkcVoqEPPlopbvCS7I=</SignatureValue>
   </Signature>
 </License>
