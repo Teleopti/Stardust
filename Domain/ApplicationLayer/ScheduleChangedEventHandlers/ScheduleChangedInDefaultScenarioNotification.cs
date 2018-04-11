@@ -2,14 +2,11 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 {
-	[RemoveMeWithToggle(Toggles.ResourcePlanner_SpeedUpEvents_75415)]
-	[DisabledBy(Toggles.ResourcePlanner_SpeedUpEvents_75415)]
 	public class ScheduleChangedInDefaultScenarioNotification : 
 		IHandleEvent<ProjectionChangedEvent>, 
 		IRunOnHangfire

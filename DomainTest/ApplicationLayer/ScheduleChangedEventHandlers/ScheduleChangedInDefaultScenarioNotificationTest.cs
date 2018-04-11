@@ -1,11 +1,8 @@
 using System;
-using Autofac;
-using Autofac.Core.Registration;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon;
@@ -15,21 +12,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 {
 	[TestFixture]
 	[DomainTest]
-	[RemoveMeWithToggle(Toggles.ResourcePlanner_SpeedUpEvents_75415)]
 	public class ScheduleChangedInDefaultScenarioNotificationTest
 	{
 		public ScheduleChangedInDefaultScenarioNotification Target;
 		public FakeMessageSender Sender;
 
-		public IComponentContext TempContainer;
-		[Test]
-		[ToggleOff(Toggles.ResourcePlanner_SpeedUpEvents_75415)]
-		public void MustNotUseNewHandler()
-		{
-			Assert.Throws<ComponentNotRegisteredException>(() =>
-				TempContainer.Resolve<ScheduleChangedInDefaultScenarioNotificationNew>());
-		}
-		
 		[Test]
 		public void ShouldSendMessageInDefaultScenario()
 		{

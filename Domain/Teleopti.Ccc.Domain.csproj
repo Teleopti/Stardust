@@ -198,7 +198,6 @@
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsAbsenceMapper.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\IAnalyticsScheduleChangeUpdaterFilter.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\UpdateFactSchedules.cs" />
-    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleChangedInDefaultScenarioNotificationNew.cs" />
     <Compile Include="Common\CalculatePersonAccount.cs" />
     <Compile Include="Scheduling\IPredictShiftCategory.cs" />
     <Compile Include="Scheduling\IShiftCategoryPredictionModelLoader.cs" />
