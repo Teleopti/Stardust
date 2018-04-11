@@ -1,12 +1,24 @@
 ﻿using System;
+using System.Configuration;
 using System.Web.Http;
+using System.Xml.Linq;
 using Autofac;
 using Autofac.Integration.WebApi;
 using NSwag.AspNet.Owin;
 using Owin;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Logon;
+using Teleopti.Ccc.Domain.MessageBroker.Client;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Authentication;
+using Teleopti.Ccc.Infrastructure.Config;
+using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Wfm.Api
 {
@@ -22,7 +34,27 @@ namespace Teleopti.Wfm.Api
 		public void Configuration(IAppBuilder app)
 		{
 			var container = configureContainer();
-			
+
+			if (!StateHolderReader.IsInitialized)
+			{
+				var webSettings = new WebSettings
+				{
+					Settings = container.Resolve<ISharedSettingsQuerier>()
+						.GetSharedSettings()
+						.AddToAppSettings(ConfigurationManager.AppSettings.ToDictionary())
+				};
+				var settings = new WebConfigReader(() => webSettings);
+				var messageBroker = container.Resolve<IMessageBrokerComposite>();
+				var policy = settings.AppConfig("PasswordPolicy");
+				var passwordPolicyService =
+					new LoadPasswordPolicyService(string.IsNullOrEmpty(policy)
+						? XDocument.Parse("<Root />")
+						: XDocument.Parse(policy));
+				var initializeApplication = new InitializeApplication(messageBroker);
+				initializeApplication.Start(new State(), passwordPolicyService, webSettings.Settings);
+				new InitializeMessageBroker(messageBroker).Start(webSettings.Settings);
+			}
+
 			var swaggerUiSettings = new SwaggerUi3Settings
 			{
 				DefaultPropertyNameHandling = NJsonSchema.PropertyNameHandling.CamelCase,
@@ -40,7 +72,9 @@ namespace Teleopti.Wfm.Api
 
 			app.UseSwaggerUi3(swaggerUiSettings);
 
-			app.UseCustomToken(container.Resolve<ITokenVerifier>());
+			app.UseCustomToken(container.Resolve<ITokenVerifier>(), container.Resolve<IDataSourceForTenant>(),
+				container.Resolve<ILoadUserUnauthorized>(), container.Resolve<IRepositoryFactory>(),
+				container.Resolve<ILogOnOff>());
 
 			app.UseWebApi(httpConfiguration);
 		}

@@ -12,7 +12,7 @@ namespace Teleopti.Wfm.Api
 
 		public TokenVerifier(IConfigReader configReader)
 		{
-			_url = configReader.AppConfig("Web") + "api/token/verify";
+			_url = configReader.AppConfig("TenantServer") + "api/token/verify";
 		}
 
 		public bool TryGetUser(string token, out UserIdWithTenant user)
@@ -35,11 +35,5 @@ namespace Teleopti.Wfm.Api
 			};
 			return true;
 		}
-	}
-
-	public struct UserIdWithTenant
-	{
-		public Guid UserId { get; set; }
-		public string Tenant { get; set; }
 	}
 }

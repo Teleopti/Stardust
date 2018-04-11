@@ -278,6 +278,7 @@
     <Compile Include="SwaggerHandler.cs" />
     <Compile Include="TokenHandler.cs" />
     <Compile Include="TokenVerifier.cs" />
+    <Compile Include="UserIdWithTenant.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -303,6 +304,10 @@
     <ProjectReference Include="..\Teleopti.Ccc.IocCommon\Teleopti.Ccc.IocCommon.csproj">
       <Project>{db42d973-9889-4d51-9fc5-be66aa7f117c}</Project>
       <Name>Teleopti.Ccc.IocCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Messaging\Teleopti.Interfaces\Teleopti.Interfaces.csproj">
+      <Project>{8D2565F2-7C44-45B7-96AD-2CD900E033A1}</Project>
+      <Name>Teleopti.Interfaces</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

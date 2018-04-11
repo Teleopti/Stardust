@@ -88,8 +88,8 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 			var messageBroker = container.Resolve<IMessageBrokerComposite>();
 			
 			var settings = container.Resolve<WebConfigReader>();
-			var passwordPolicyDocument = XDocument.Parse(settings.AppConfig("PasswordPolicy"));
-			var passwordPolicyService = new LoadPasswordPolicyService(passwordPolicyDocument);
+			var policy = settings.AppConfig("PasswordPolicy");
+			var passwordPolicyService = new LoadPasswordPolicyService(string.IsNullOrEmpty(policy) ? XDocument.Parse("<Root />") : XDocument.Parse(policy));
 			var initializeApplication = new InitializeApplication(messageBroker);
 			initializeApplication.Start(new SdkState(), passwordPolicyService, settings.WebSettings_DontUse);
 			new InitializeMessageBroker(messageBroker).Start(settings.WebSettings_DontUse);
