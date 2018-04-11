@@ -29,7 +29,8 @@ namespace Teleopti.Wfm.Api
 				return Task.FromResult(false);
 			}
 
-			context.Request.User = new ClaimsPrincipal(new ClaimsIdentity("token", "nameidentifier", user));
+
+			context.Request.User = new ClaimsPrincipal(new ClaimsIdentity("token", "nameidentifier", user.UserId.ToString()));
 
 			// Call the next delegate/middleware in the pipeline
 			return Next.Invoke(context);

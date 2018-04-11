@@ -1,21 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Teleopti.Wfm.Api.Test
 {
 	public class FakeTokenVerifier : ITokenVerifier
 	{
-		readonly HashWrapper hash;
-		public Dictionary<string, string> hashUsers = new Dictionary<string, string> { { "$2a$10$WbJpBWPWsrVOlMze27m0neJ0PLXBKVYS/y5tnMpuOY174/H1byvwC", "asdf" } };
+		public static Guid UserId = new Guid("{A16223F1-CF2B-4815-A4F6-CF40B192C66E}");
 
-		public FakeTokenVerifier(HashWrapper hash)
-		{
-			this.hash = hash;
-		}
+		private readonly Dictionary<string, UserIdWithTenant> hashUsers =
+			new Dictionary<string, UserIdWithTenant> {{ "afdsafasdf", new UserIdWithTenant {Tenant = "asdf", UserId = UserId}}};
 
-		public bool TryGetUser(string token, out string user)
+		public bool TryGetUser(string token, out UserIdWithTenant user)
 		{
-			string v = hash.Hash(token);
-			return hashUsers.TryGetValue(v, out user);
+			return hashUsers.TryGetValue(token, out user);
 		}
 	}
 }

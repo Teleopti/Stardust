@@ -1,4 +1,6 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
+using Newtonsoft.Json.Linq;
 using Teleopti.Ccc.Domain.Config;
 
 namespace Teleopti.Wfm.Api
@@ -13,7 +15,7 @@ namespace Teleopti.Wfm.Api
 			_url = configReader.AppConfig("Web") + "api/token/verify";
 		}
 
-		public bool TryGetUser(string token, out string user)
+		public bool TryGetUser(string token, out UserIdWithTenant user)
 		{
 			var result = client.PostAsJsonAsync(_url, token);
 			var content = result.Result.EnsureSuccessStatusCode()
@@ -21,12 +23,23 @@ namespace Teleopti.Wfm.Api
 				.ReadAsStringAsync().Result;
 			if (string.IsNullOrWhiteSpace(content))
 			{
-				user = null;
+				user = new UserIdWithTenant();
 				return false;
 			}
 
-			user = content;
+			var x = JObject.Parse(content);
+			user = new UserIdWithTenant
+			{
+				UserId = Guid.Parse(x["PersonId"].Value<string>()),
+				Tenant = x["Tenant"].Value<string>()
+			};
 			return true;
 		}
+	}
+
+	public struct UserIdWithTenant
+	{
+		public Guid UserId { get; set; }
+		public string Tenant { get; set; }
 	}
 }

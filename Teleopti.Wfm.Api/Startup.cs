@@ -60,7 +60,6 @@ namespace Teleopti.Wfm.Api
 			builder.RegisterType<QueryDtoProvider>();
 			builder.RegisterType<DtoProvider>();
 			builder.RegisterType<QueryHandlerProvider>();
-			builder.RegisterType<HashWrapper>();
 			builder.RegisterType<TokenVerifier>().As<ITokenVerifier>();
 			builder.RegisterApiControllers(typeof(Startup).Assembly);
 

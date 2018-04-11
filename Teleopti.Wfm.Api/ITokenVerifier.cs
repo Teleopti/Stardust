@@ -2,6 +2,6 @@
 {
 	public interface ITokenVerifier
 	{
-		bool TryGetUser(string token, out string user);
+		bool TryGetUser(string token, out UserIdWithTenant user);
 	}
 }

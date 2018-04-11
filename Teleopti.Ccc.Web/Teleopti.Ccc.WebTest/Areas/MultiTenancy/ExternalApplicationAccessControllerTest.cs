@@ -4,6 +4,7 @@ using System.Web.Http.Results;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Ccc.Web.Areas.MultiTenancy;
 
@@ -15,6 +16,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 		public ExternalApplicationAccessController Target;
 		public FakePersistExternalApplicationAccess Persister;
 		public FakeFindExternalApplicationAccess Finder;
+		public FindPersonInfoFake PersonInfoFinder;
 		public CurrentTenantUserFake CurrentTenantUser;
 
 		[Test]
@@ -34,12 +36,49 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 		public void ShouldGetToPersonIdFromToken()
 		{
 			var personId = Guid.NewGuid();
-			CurrentTenantUser.Set(new PersonInfo(new Tenant("asdf"), personId));
+			var personInfo = new PersonInfo(new Tenant("asdf"), personId);
+			personInfo.RegenerateTenantPassword();
+
+			PersonInfoFinder.Add(personInfo);
+			CurrentTenantUser.Set(personInfo);
+
 			var model = new NewExternalApplicationModel { Name = "HR system" };
 			var addResult = (OkNegotiatedContentResult<NewExternalApplicationResponseModel>)Target.Add(model);
 
-			var result = (OkNegotiatedContentResult<Guid>)Target.Verify(addResult.Content.Token);
-			result.Content.Should().Be.EqualTo(personId);
+			var result = (OkNegotiatedContentResult<VerifiedExternalApplicationAccessToken>)Target.Verify(addResult.Content.Token);
+			result.Content.PersonId.Should().Be.EqualTo(personId);
+			result.Content.Tenant.Should().Be.EqualTo("asdf");
+			result.Content.TenantPassword.Should().Be.EqualTo(personInfo.TenantPassword);
+		}
+
+		[Test]
+		public void ShouldReturnEmptyResponseWhenTokenNotFound()
+		{
+			var personId = Guid.NewGuid();
+			var personInfo = new PersonInfo(new Tenant("asdf"), personId);
+			personInfo.RegenerateTenantPassword();
+
+			PersonInfoFinder.Add(personInfo);
+			CurrentTenantUser.Set(personInfo);
+
+			var result = (OkResult)Target.Verify("asdf");
+			result.Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldReturnEmptyResponseWhenPersonInfoNotFound()
+		{
+			var personId = Guid.NewGuid();
+			var personInfo = new PersonInfo(new Tenant("asdf"), personId);
+			personInfo.RegenerateTenantPassword();
+
+			CurrentTenantUser.Set(personInfo);
+
+			var model = new NewExternalApplicationModel { Name = "HR system" };
+			var addResult = (OkNegotiatedContentResult<NewExternalApplicationResponseModel>)Target.Add(model);
+
+			var result = (OkResult)Target.Verify(addResult.Content.Token);
+			result.Should().Not.Be.Null();
 		}
 
 		[Test]

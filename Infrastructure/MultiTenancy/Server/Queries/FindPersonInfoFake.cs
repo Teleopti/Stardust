@@ -9,8 +9,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 
 		public PersonInfo GetById(Guid id)
 		{
-			PersonInfo ret;
-			return data.TryGetValue(id, out ret) ? ret : null;
+			return data.TryGetValue(id, out var ret) ? ret : null;
 		}
 
 		public void Add(PersonInfo personInfo)

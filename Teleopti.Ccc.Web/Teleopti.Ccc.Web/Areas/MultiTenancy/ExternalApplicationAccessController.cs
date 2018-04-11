@@ -15,13 +15,15 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 		private readonly IPersistExternalApplicationAccess _persistExternalApplicationAccess;
 		private readonly ICurrentTenantUser _currentTenantUser;
 		private readonly IFindExternalApplicationAccess _findExternalApplicationAccess;
+		private readonly IFindPersonInfo _findPersonInfo;
 		private readonly HashFromToken _hashFromToken;
 
-		public ExternalApplicationAccessController(IPersistExternalApplicationAccess persistExternalApplicationAccess, ICurrentTenantUser currentTenantUser, IFindExternalApplicationAccess findExternalApplicationAccess, HashFromToken hashFromToken)
+		public ExternalApplicationAccessController(IPersistExternalApplicationAccess persistExternalApplicationAccess, ICurrentTenantUser currentTenantUser, IFindExternalApplicationAccess findExternalApplicationAccess, IFindPersonInfo findPersonInfo, HashFromToken hashFromToken)
 		{
 			_persistExternalApplicationAccess = persistExternalApplicationAccess;
 			_currentTenantUser = currentTenantUser;
 			_findExternalApplicationAccess = findExternalApplicationAccess;
+			_findPersonInfo = findPersonInfo;
 			_hashFromToken = hashFromToken;
 		}
 
@@ -49,7 +51,14 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 			{
 				return Ok();
 			}
-			return Ok(found.PersonId);
+
+			var info = _findPersonInfo.GetById(found.PersonId);
+			if (info == null)
+			{
+				return Ok();
+			}
+
+			return Ok(new VerifiedExternalApplicationAccessToken{PersonId = found.PersonId, Tenant = info.Tenant.Name, TenantPassword = info.TenantPassword});
 		}
 
 		[HttpGet]
@@ -68,5 +77,12 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 		{
 			_persistExternalApplicationAccess.Remove(id,_currentTenantUser.CurrentUser().Id);
 		}
+	}
+
+	public class VerifiedExternalApplicationAccessToken
+	{
+		public Guid PersonId { get; set; }
+		public string Tenant { get; set; }
+		public string TenantPassword { get; set; }
 	}
 }
