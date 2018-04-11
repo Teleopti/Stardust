@@ -60,6 +60,10 @@
           editHandler();
           return;
         }
+        ctrl.form = {
+          DailyFrequencyStart: moment().format("HH:mm")
+        };
+
         ctrl.selectedTenant = ctrl.tenants[0];
         selectedTenantChanged(ctrl.selectedTenant);
       });
@@ -68,6 +72,10 @@
     function toggleFrequencyType(form) {
       if (ctrl.frequencyType) {
         form.DailyFrequencyStart = null;
+        ctrl.form = {
+          DailyFrequencyStart: moment().format("HH:mm"),
+          DailyFrequencyEnd: moment().add(1, 'hours').format("HH:mm")
+        };
       }
       else{
         form.DailyFrequencyMinute = null;
@@ -86,6 +94,10 @@
       )
       .success(function(data) {
         ctrl.tenantLogData = data;
+        ctrl.tenantLogData.unshift({
+          Name: '<All>',
+          Id: 0
+        })
       });
     }
 
