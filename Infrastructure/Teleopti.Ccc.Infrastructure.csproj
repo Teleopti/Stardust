@@ -195,6 +195,7 @@
     <Compile Include="ApplicationLayer\HangfireEventProcessor.cs" />
     <Compile Include="ApplicationLayer\HangfireEventPublisher.cs" />
     <Compile Include="ApplicationLayer\ISyncEventProcessingExceptionHandler.cs" />
+    <Compile Include="ApplicationLayer\SyncAllEventPublisherWithStardust.cs" />
     <Compile Include="ApplicationLayer\SyncEventPublisher.cs" />
     <Compile Include="ApplicationLayer\MultiEventPublisher.cs" />
     <Compile Include="ApplicationLayer\IHangfireEventClient.cs" />

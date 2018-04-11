@@ -114,6 +114,7 @@
     <Compile Include="Stardust\DataCreator.cs" />
     <Compile Include="Stardust\NUnitSetup.cs" />
     <Compile Include="Stardust\StardustTestAttribute.cs" />
+    <Compile Include="Stardust\TestConfigReader.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Domain\Teleopti.Ccc.Domain.csproj">
@@ -143,7 +144,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />

@@ -13,6 +13,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.UnitOfWork;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
@@ -37,6 +38,7 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 		private readonly IPersonAssignmentRepository _assignments;
 		private readonly IActivityRepository _activities;
 		private readonly TestDataFactory _data;
+		private readonly IWorkflowControlSetRepository _workflowControlSetRepository;
 
 		public DataCreator(
 			//MutableNow now,
@@ -52,8 +54,7 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 			ICurrentScenario scenario,
 			IPersonAssignmentRepository assignments,
 			IActivityRepository activities,
-			TestDataFactory data
-		)
+			TestDataFactory data, IWorkflowControlSetRepository workflowControlSetRepository)
 		{
 			//_now = now;
 			_eventPublisher = eventPublisher;
@@ -69,6 +70,7 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 			_assignments = assignments;
 			_activities = activities;
 			_data = data;
+			_workflowControlSetRepository = workflowControlSetRepository;
 		}
 
 		[TestLog]
@@ -141,6 +143,7 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 
 			var person = new Person().WithName(new Name("Ola", "Wedmark"));
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			person.WorkflowControlSet = _workflowControlSetRepository.LoadAll().FirstOrDefault();
 			_persons.Add(person);
 			workingRogers.Add(person);
 

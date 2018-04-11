@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain.Service;
+using Teleopti.Ccc.Sdk.ServiceBus;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
@@ -63,6 +64,7 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 				//DataSourceHelper.BackupAnalyticsDatabaseBySql(path, dataHash);
 
 				StateHolderProxyHelper.Logout();
+				StateHolderProxyHelper.ClearStateHolder();
 			}
 
 			HangfireClientStarter.Start();
@@ -75,8 +77,7 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 			TestSiteConfigurationSetup.Setup();
 			((TestConfigReader)ConfigReader).ConfigValues.Add("ManagerLocation", TestSiteConfigurationSetup.URL.AbsoluteUri + @"StardustDashboard/");
 			((TestConfigReader)ConfigReader).ConfigValues.Add("NumberOfNodes", "1");
-			//ConfigReader.
-			//"ManagerLocation", TestSiteConfigurationSetup.URL.AbsoluteUri + @"StardustDashboard/"
+			
 		}
 
 		public override void AfterTest(ITest testDetails)

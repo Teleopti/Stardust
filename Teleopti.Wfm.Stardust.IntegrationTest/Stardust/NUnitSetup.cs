@@ -2,9 +2,11 @@
 using Autofac;
 using log4net.Config;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Infrastructure.Aop;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
@@ -30,8 +32,9 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 				builder.RegisterType<TestConfigReader>().As<IConfigReader>().SingleInstance();
 				builder.RegisterType<DataCreator>().SingleInstance().ApplyAspects();
 //				builder.RegisterType<StatesSender>().SingleInstance().ApplyAspects();
-//				builder.RegisterType<ScheduleInvalidator>().SingleInstance().ApplyAspects();
-				
+				builder.RegisterType<SyncAllEventPublisherWithStardust>().As<IEventPublisher>().SingleInstance();
+
+
 				builder.RegisterType<FakeEventPublisher>().SingleInstance();
 				builder.RegisterType<NoMessageSender>().As<IMessageSender>().SingleInstance();
 			}, this);
