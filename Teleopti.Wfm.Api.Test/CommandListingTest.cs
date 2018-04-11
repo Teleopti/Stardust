@@ -12,7 +12,7 @@ namespace Teleopti.Wfm.Api.Test
 		{
 			Authorize();
 
-			var result = await Client.GetAsync("/api/wfm/command");
+			var result = await Client.GetAsync("/command");
 			result.EnsureSuccessStatusCode();
 
 			var content = await result.Content.ReadAsStringAsync();

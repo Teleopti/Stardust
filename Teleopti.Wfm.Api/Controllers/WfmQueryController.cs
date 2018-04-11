@@ -5,7 +5,6 @@ using Autofac;
 
 namespace Teleopti.Wfm.Api.Controllers
 {
-    [Route("api/wfm/query")]
     public class WfmQueryController : ApiController
     {
         readonly IComponentContext services;
@@ -21,7 +20,7 @@ namespace Teleopti.Wfm.Api.Controllers
             this.services = services;
         }
 
-        [HttpGet]
+        [HttpGet, Route("query")]
         public IHttpActionResult AvailableQueries()
         {
 	        return Json(new QueryResultDto<string>
@@ -34,24 +33,24 @@ namespace Teleopti.Wfm.Api.Controllers
 	        });
         }
 
-        [HttpPost,Route("{queryType}/{query}")]
+        [HttpPost,Route("query/{queryType}/{query}")]
         public IHttpActionResult Post(string queryType, string query)
 		{
 			using (var scope = services.Resolve<ILifetimeScope>())
 			{
 				if (!queryDtoProvider.TryFindType(query + "Dto", out var kindOfQuery))
 				{
-					return BadRequest("Issue a GET to api/wfm/query to list available queries");
+					return BadRequest("Issue a GET to /query to list available queries");
 				}
 
 				if (!dtoProvider.TryFindType(queryType + "Dto", out var type))
 				{
-					return BadRequest("Issue a GET to api/wfm/query to list available queries");
+					return BadRequest("Issue a GET to /query to list available queries");
 				}
 
 				string text = Request.Content.ReadAsStringAsync().Result;
 				var value = Newtonsoft.Json.JsonConvert.DeserializeObject(text, kindOfQuery);
-				var handler = services.Resolve(typeof(IQueryHandler<,>).MakeGenericType(kindOfQuery, type));
+				var handler = scope.Resolve(typeof(IQueryHandler<,>).MakeGenericType(kindOfQuery, type));
 				var method = handler.GetType().GetMethod("Handle");
 				var result = method.Invoke(handler, new[] {value});
 				return Json(result);

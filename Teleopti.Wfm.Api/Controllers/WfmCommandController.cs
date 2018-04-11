@@ -5,7 +5,6 @@ using Autofac;
 
 namespace Teleopti.Wfm.Api.Controllers
 {
-    [Route("api/wfm/command")]
     public class WfmCommandController : ApiController
     {
         readonly IComponentContext services;
@@ -17,7 +16,7 @@ namespace Teleopti.Wfm.Api.Controllers
             this.services = services;
         }
 
-	    [HttpGet]
+	    [HttpGet, Route("command")]
 	    public IHttpActionResult AvailableCommands()
 	    {
 		    return Json(new QueryResultDto<string>
@@ -28,14 +27,14 @@ namespace Teleopti.Wfm.Api.Controllers
 		    });
 	    }
 
-	    [HttpPost,Route("{commandType}")]
+	    [HttpPost,Route("command/{commandType}")]
         public IHttpActionResult Post(string commandType)
         {
 			using (var scope = services.Resolve<ILifetimeScope>())
 			{
 				if (!dtoProvider.TryFindType(commandType + "Dto", out var type))
 				{
-					return BadRequest("Issue a GET to api/wfm/command to list available commands");
+					return BadRequest("Issue a GET to /command to list available commands");
 				}
 
 				string text = Request.Content.ReadAsStringAsync().Result;
