@@ -17276,16 +17276,20 @@ The application will now exit.</value>
     <value>Select states</value>
     <comment>label for selecting states in real time adherence agents view</comment>
   </data>
-	<data name="SelectSitesTeams" xml:space="preserve">
+  <data name="SelectSitesTeams" xml:space="preserve">
     <value>Select sites / teams</value>
     <comment>label for selecting sites and teams in real time adherence agents view</comment>
   </data>
-	<data name="ExcludedColon" xml:space="preserve">
+  <data name="ExcludedColon" xml:space="preserve">
     <value>Excluded: </value>
     <comment>text in the excluded states input field in rta</comment>
   </data>
-	<data name="NoState" xml:space="preserve">
+  <data name="NoState" xml:space="preserve">
     <value>No state</value>
     <comment>text in the excluded states input for no state</comment>
+  </data>
+  <data name="GamingPeriod" xml:space="preserve">
+    <value>Gaming Period</value>
+    <comment>Gaming Period</comment>
   </data>
 </root>
