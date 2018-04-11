@@ -101,10 +101,10 @@
 			}
 
 			var logdataId;
-			if (form.LogDataSourceId.Id) {
+			if (form.LogDataSourceId) {
 				logdataId = form.LogDataSourceId.Id;
-			} else{
-				logdataId = null
+			} else {
+				logdataId = null;
 			}
 
 			var postObj = {
@@ -134,7 +134,7 @@
 		}
 
 		function editScheduleJob(form) {
-			vm.showEditScheduleJobModal = false
+			vm.showEditScheduleJobModal = false;
 			form.RelativePeriods = [];
 
 			if (angular.isDefined(form.InitialPeriod)) {
@@ -158,7 +158,7 @@
 			}
 
 			var logdataId;
-			if (form.LogDataSourceId.Id) {
+			if (form.LogDataSourceId) {
 				logdataId = form.LogDataSourceId.Id;
 			} else{
 				logdataId = null

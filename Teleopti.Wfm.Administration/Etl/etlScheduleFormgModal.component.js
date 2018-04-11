@@ -56,17 +56,16 @@
         ctrl.tenants.unshift({
           TenantName: '<All>'
         })
-
-        ctrl.selectedTenant = ctrl.tenants[0];
-        selectedTenantChanged(ctrl.selectedTenant);
         if (ctrl.job) {
           editHandler();
+          return;
         }
+        ctrl.selectedTenant = ctrl.tenants[0];
+        selectedTenantChanged(ctrl.selectedTenant);
       });
     }
 
     function toggleFrequencyType(form) {
-
       if (ctrl.frequencyType) {
         form.DailyFrequencyStart = null;
       }
@@ -98,13 +97,17 @@
 
     function selectedjobChanged(form){
       form.LogDataSourceId = null;
+      form.QueueStats = {};
+      form.Schedule = {};
+      form.InitialPeriod = {};
+      form.Forecast = {};
+      form.AgentStats = {};
     }
 
     function isRelativePeriodNeeded(name, arr) {
       if (!arr) {
         return true;
       }
-
       return !arr.includes(name);
     }
 
@@ -156,10 +159,9 @@
     }
 
     function editHandler() {
-      console.log(ctrl.job);
       ctrl.form = {
-        DailyFrequencyEnd: new Date(ctrl.job.DailyFrequencyEnd),
-        DailyFrequencyStart: new Date(ctrl.job.DailyFrequencyStart),
+        DailyFrequencyEnd: moment(ctrl.job.DailyFrequencyEnd).format("HH:mm"),
+        DailyFrequencyStart: moment(ctrl.job.DailyFrequencyStart).format("HH:mm"),
         Description: ctrl.job.Description,
         JobName: ctrl.job.jobName,
         LogDataSourceId: null,
@@ -173,12 +175,11 @@
       }
       handleDynamicEditValues();
       if (ctrl.job.DailyFrequencyMinute) {
-         ctrl.form.DailyFrequencyMinute = angular.fromJson(ctrl.job.DailyFrequencyMinute)
+        ctrl.form.DailyFrequencyMinute = angular.fromJson(ctrl.job.DailyFrequencyMinute);
         ctrl.frequencyType = true;
       } else{
-         ctrl.form.DailyFrequencyMinute = null;
+        ctrl.form.DailyFrequencyMinute = null;
       }
-      console.log(ctrl.form);
     }
 
   }
