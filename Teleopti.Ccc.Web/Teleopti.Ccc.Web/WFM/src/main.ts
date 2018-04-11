@@ -117,7 +117,7 @@ wfm
 			$stateProvider.state('main', {
 				url: '/',
 				templateProvider: ['$templateRequest', function(templateRequest){
-					return templateRequest(environment.mainHtml);
+					return templateRequest("html/main.html");
 				}]
 			});
 
