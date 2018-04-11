@@ -351,21 +351,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			_selectedModel.IsDirty = true;
 		}
 
-		public void SetOvertimeRequestPeriodSkillType(OvertimeRequestPeriodModel overtimeRequestPeriodModel, OvertimeRequestPeriodSkillTypeModel chosenOvertimeRequestPeriodSkillTypeModel)
-		{
-			int currentIndex =
-				_selectedModel.DomainEntity.OvertimeRequestOpenPeriods.IndexOf(overtimeRequestPeriodModel.DomainEntity);
-			_selectedModel.DomainEntity.RemoveOpenOvertimeRequestPeriod(overtimeRequestPeriodModel.DomainEntity);
-
-			var newOvertimeRequestOpenPeriod = overtimeRequestPeriodModel.DomainEntity;
-			//newOvertimeRequestOpenPeriod.SkillType = chosenOvertimeRequestPeriodSkillTypeModel.SkillType;
-
-			_selectedModel.DomainEntity.InsertOvertimePeriod(newOvertimeRequestOpenPeriod, currentIndex);
-			overtimeRequestPeriodModel.SetDomainEntity(newOvertimeRequestOpenPeriod);
-
-			_selectedModel.IsDirty = true;
-		}
-
 		public void AddOpenDatePeriod()
 		{
 			addNewOpenPeriod(WorkflowControlSetModel.DefaultAbsenceRequestPeriodAdapters[0].Item);

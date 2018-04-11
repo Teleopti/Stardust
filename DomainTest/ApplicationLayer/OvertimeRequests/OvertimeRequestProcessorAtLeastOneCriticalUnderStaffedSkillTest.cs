@@ -4,12 +4,8 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.WorkflowControl;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
@@ -93,8 +89,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			setupPerson();
 
 			var workflowControlSet = new WorkflowControlSet();
-			var emailSkillType = new SkillTypeEmail(new Description(SkillTypeIdentifier.Email), ForecastSource.Email).WithId();
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { emailSkillType })
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { _emailSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
 				BetweenDays = new MinMax<int>(0, 24)
@@ -106,10 +101,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var activity2 = createActivity("activity2");
 			var timeZone = LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 			var underStaffingSkill1 = createSkill("criticalUnderStaffingSkill 1", null, timeZone);
-			underStaffingSkill1.SkillType = emailSkillType;
+			underStaffingSkill1.SkillType = _emailSkillType;
 
 			var underStaffingSkill2 = createSkill("criticalUnderStaffingSkill 2", null, timeZone);
-			underStaffingSkill2.SkillType = emailSkillType;
+			underStaffingSkill2.SkillType = _emailSkillType;
 
 			var personSkill1 = createPersonSkill(activity1, underStaffingSkill1);
 			var personSkill2 = createPersonSkill(activity2, underStaffingSkill2);
@@ -140,7 +135,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var overtimeActivities = getOvertimeActivities(date);
 
-			overtimeActivities.Count().Should().Be(2);
+			overtimeActivities.Length.Should().Be(2);
 			var firstOvertimeActivity = overtimeActivities[0];
 			firstOvertimeActivity.Payload.Should().Be(activity1);
 			firstOvertimeActivity.Period.StartDateTime.Should().Be(new DateTime(2017, 7, 17, 11, 00, 00, DateTimeKind.Utc));
@@ -159,8 +154,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			setupPerson();
 
 			var workflowControlSet = new WorkflowControlSet();
-			var emailSkillType = new SkillTypeEmail(new Description(SkillTypeIdentifier.Email), ForecastSource.Email).WithId();
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { emailSkillType })
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { _emailSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
 				BetweenDays = new MinMax<int>(0, 24)
@@ -172,10 +166,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var activity2 = createActivity("activity2");
 			var timeZone = LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 			var underStaffingSkill1 = createSkill("criticalUnderStaffingSkill 1", null, timeZone);
-			underStaffingSkill1.SkillType = emailSkillType;
+			underStaffingSkill1.SkillType = _emailSkillType;
 
 			var underStaffingSkill2 = createSkill("criticalUnderStaffingSkill 2", null, timeZone);
-			underStaffingSkill2.SkillType = emailSkillType;
+			underStaffingSkill2.SkillType = _emailSkillType;
 
 			var personSkill1 = createPersonSkill(activity1, underStaffingSkill1);
 			var personSkill2 = createPersonSkill(activity2, underStaffingSkill2);
@@ -206,7 +200,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var overtimeActivities = getOvertimeActivities(date);
 
-			overtimeActivities.Count().Should().Be(2);
+			overtimeActivities.Length.Should().Be(2);
 			var firstOvertimeActivity = overtimeActivities[0];
 			firstOvertimeActivity.Payload.Should().Be(activity1);
 			firstOvertimeActivity.Period.StartDateTime.Should().Be(new DateTime(2017, 7, 17, 11, 10, 00, DateTimeKind.Utc));
@@ -225,8 +219,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			setupPerson();
 
 			var workflowControlSet = new WorkflowControlSet();
-			var emailSkillType = new SkillTypeEmail(new Description(SkillTypeIdentifier.Email), ForecastSource.Email).WithId();
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { emailSkillType })
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { _emailSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
 				BetweenDays = new MinMax<int>(0, 24)
@@ -238,10 +231,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var activity2 = createActivity("activity2");
 			var timeZone = LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 			var underStaffingSkill1 = createSkill("criticalUnderStaffingSkill 1", null, timeZone);
-			underStaffingSkill1.SkillType = emailSkillType;
+			underStaffingSkill1.SkillType = _emailSkillType;
 
 			var underStaffingSkill2 = createSkill("criticalUnderStaffingSkill 2", null, timeZone);
-			underStaffingSkill2.SkillType = emailSkillType;
+			underStaffingSkill2.SkillType = _emailSkillType;
 
 			var personSkill1 = createPersonSkill(activity1, underStaffingSkill1);
 			var personSkill2 = createPersonSkill(activity2, underStaffingSkill2);
@@ -272,7 +265,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var overtimeActivities = getOvertimeActivities(date);
 
-			overtimeActivities.Count().Should().Be(2);
+			overtimeActivities.Length.Should().Be(2);
 			var firstOvertimeActivity = overtimeActivities[0];
 			firstOvertimeActivity.Payload.Should().Be(activity1);
 			firstOvertimeActivity.Period.StartDateTime.Should().Be(new DateTime(2017, 7, 17, 11, 00, 00, DateTimeKind.Utc));
@@ -291,8 +284,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			setupPerson();
 
 			var workflowControlSet = new WorkflowControlSet();
-			var emailSkillType = new SkillTypeEmail(new Description(SkillTypeIdentifier.Email), ForecastSource.Email).WithId();
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { emailSkillType })
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { _emailSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
 				BetweenDays = new MinMax<int>(0, 24)
@@ -304,10 +296,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var activity2 = createActivity("activity2");
 			var timeZone = LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 			var underStaffingSkill1 = createSkill("criticalUnderStaffingSkill 1", null, timeZone);
-			underStaffingSkill1.SkillType = emailSkillType;
+			underStaffingSkill1.SkillType = _emailSkillType;
 
 			var underStaffingSkill2 = createSkill("criticalUnderStaffingSkill 2", null, timeZone);
-			underStaffingSkill2.SkillType = emailSkillType;
+			underStaffingSkill2.SkillType = _emailSkillType;
 
 			var personSkill1 = createPersonSkill(activity1, underStaffingSkill1);
 			var personSkill2 = createPersonSkill(activity2, underStaffingSkill2);

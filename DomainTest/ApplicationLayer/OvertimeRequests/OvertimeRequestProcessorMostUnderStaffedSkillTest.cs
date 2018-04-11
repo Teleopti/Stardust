@@ -5,9 +5,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon;
@@ -214,10 +212,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		{
 			setupPerson();
 
-			var phoneSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony).WithId();
-
 			var workflowControlSet = new WorkflowControlSet();
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod(new[] {phoneSkillType})
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod(new[] {_phoneSkillType})
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
 				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(13)))
@@ -229,11 +225,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var timeZone = LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 			var criticalUnderStaffedPhoneSkill = createSkill("criticalUnderStaffedPhoneSkill", null, timeZone);
-			criticalUnderStaffedPhoneSkill.SkillType = phoneSkillType;
+			criticalUnderStaffedPhoneSkill.SkillType = _phoneSkillType;
 			var moreCriticalUnderStaffedPhoneSkill = createSkill("moreCriticalUnderStaffedPhoneSkill", null, timeZone);
-			moreCriticalUnderStaffedPhoneSkill.SkillType = phoneSkillType;
+			moreCriticalUnderStaffedPhoneSkill.SkillType = _phoneSkillType;
 			var mostCriticalUnderStaffedEmailSkill = createSkill("mostCriticalUnderStaffedEmailSkill", null, timeZone);
-			mostCriticalUnderStaffedEmailSkill.SkillType = phoneSkillType;
+			mostCriticalUnderStaffedEmailSkill.SkillType = _phoneSkillType;
 			mostCriticalUnderStaffedEmailSkill.DefaultResolution = 60;
 
 			var personSkill1 = createPersonSkill(phoneActivity, criticalUnderStaffedPhoneSkill);
@@ -276,11 +272,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		public void ShouldUsePhoneActivityAsOvertimeActivityWhenPhoneSKillIsMoreCriticalUnderStaffed()
 		{
 			setupPerson();
-
-			var phoneSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony).WithId();
-
+			
 			var workflowControlSet = new WorkflowControlSet();
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod(new[] { phoneSkillType })
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod(new[] { _phoneSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
 				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(13)))
@@ -292,14 +286,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var timeZone = LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 			var criticalUnderStaffedPhoneSkill = createSkill("criticalUnderStaffedPhoneSkill", null, timeZone);
-			criticalUnderStaffedPhoneSkill.SkillType = phoneSkillType;
+			criticalUnderStaffedPhoneSkill.SkillType = _phoneSkillType;
 
 			var moreCriticalUnderStaffedEmailSkill = createSkill("moreCriticalUnderStaffedEmailSkill", null, timeZone);
-			moreCriticalUnderStaffedEmailSkill.SkillType = phoneSkillType;
+			moreCriticalUnderStaffedEmailSkill.SkillType = _phoneSkillType;
 			moreCriticalUnderStaffedEmailSkill.DefaultResolution = 60;
 
 			var mostCriticalUnderStaffedPhoneSkill = createSkill("mostCriticalUnderStaffedPhoneSkill", null, timeZone);
-			mostCriticalUnderStaffedPhoneSkill.SkillType = phoneSkillType;
+			mostCriticalUnderStaffedPhoneSkill.SkillType = _phoneSkillType;
 
 			var personSkill1 = createPersonSkill(phoneActivity, criticalUnderStaffedPhoneSkill);
 			var personSkill2 = createPersonSkill(emailActivity, moreCriticalUnderStaffedEmailSkill);
@@ -344,10 +338,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			LoggedOnUser.SetDefaultTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 			UserTimeZone.Is(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 
-			var phoneSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony).WithId();
-
 			var workflowControlSet = new WorkflowControlSet();
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod(new[] { phoneSkillType })
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod(new[] { _phoneSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
 				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(13)))
@@ -359,11 +351,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var timeZone = LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 			var criticalUnderStaffedPhoneSkill = createSkill("criticalUnderStaffedPhoneSkill", null, timeZone);
-			criticalUnderStaffedPhoneSkill.SkillType = phoneSkillType;
+			criticalUnderStaffedPhoneSkill.SkillType = _phoneSkillType;
 			var moreCriticalUnderStaffedPhoneSkill = createSkill("moreCriticalUnderStaffedPhoneSkill", null, timeZone);
-			moreCriticalUnderStaffedPhoneSkill.SkillType = phoneSkillType;
+			moreCriticalUnderStaffedPhoneSkill.SkillType = _phoneSkillType;
 			var mostCriticalUnderStaffedEmailSkill = createSkill("mostCriticalUnderStaffedEmailSkill", null, timeZone);
-			mostCriticalUnderStaffedEmailSkill.SkillType = phoneSkillType;
+			mostCriticalUnderStaffedEmailSkill.SkillType = _phoneSkillType;
 			mostCriticalUnderStaffedEmailSkill.DefaultResolution = 60;
 
 			var personSkill1 = createPersonSkill(phoneActivity, criticalUnderStaffedPhoneSkill);
@@ -406,11 +398,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		public void ShouldUseEmailActivityAsOvertimeActivityWhenEmailSKillIsMoreCriticalUnderStaffedIn30MinutesWhenToggle47853IsOff()
 		{
 			setupPerson();
-
-			var phoneSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony).WithId();
-
+			
 			var workflowControlSet = new WorkflowControlSet();
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod(new[] { phoneSkillType })
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod(new[] { _phoneSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
 				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(13)))
@@ -422,11 +412,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var timeZone = LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 			var criticalUnderStaffedPhoneSkill = createSkill("criticalUnderStaffedPhoneSkill", null, timeZone);
-			criticalUnderStaffedPhoneSkill.SkillType = phoneSkillType;
+			criticalUnderStaffedPhoneSkill.SkillType = _phoneSkillType;
 			var moreCriticalUnderStaffedPhoneSkill = createSkill("moreCriticalUnderStaffedPhoneSkill", null, timeZone);
-			moreCriticalUnderStaffedPhoneSkill.SkillType = phoneSkillType;
+			moreCriticalUnderStaffedPhoneSkill.SkillType = _phoneSkillType;
 			var mostCriticalUnderStaffedEmailSkill = createSkill("mostCriticalUnderStaffedEmailSkill", null, timeZone);
-			mostCriticalUnderStaffedEmailSkill.SkillType = phoneSkillType;
+			mostCriticalUnderStaffedEmailSkill.SkillType = _phoneSkillType;
 			mostCriticalUnderStaffedEmailSkill.DefaultResolution = 60;
 
 			var personSkill1 = createPersonSkill(emailActivity, mostCriticalUnderStaffedEmailSkill);
@@ -470,17 +460,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		{
 			setupPerson();
 
-			var phoneSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony).WithId();
-			var emailSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Email), ForecastSource.Email).WithId();
-
 			var workflowControlSet = new WorkflowControlSet();
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { emailSkillType })
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { _emailSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
 				BetweenDays = new MinMax<int>(0, 13),
 				OrderIndex = 0
 			});
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { phoneSkillType })
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { _phoneSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
 				BetweenDays = new MinMax<int>(0, 13),
@@ -493,9 +480,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var timeZone = LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 			var moreCriticalUnderStaffedPhoneSkill = createSkill("moreCriticalUnderStaffedPhoneSkill", null, timeZone);
-			moreCriticalUnderStaffedPhoneSkill.SkillType = phoneSkillType;
+			moreCriticalUnderStaffedPhoneSkill.SkillType = _phoneSkillType;
 			var mostCriticalUnderStaffedEmailSkill = createSkill("mostCriticalUnderStaffedEmailSkill", null, timeZone);
-			mostCriticalUnderStaffedEmailSkill.SkillType = emailSkillType;
+			mostCriticalUnderStaffedEmailSkill.SkillType = _emailSkillType;
 			mostCriticalUnderStaffedEmailSkill.DefaultResolution = 60;
 
 			var personSkill2 = createPersonSkill(phoneActivity, moreCriticalUnderStaffedPhoneSkill);
@@ -533,19 +520,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		public void ShouldSupportDiffrentSkillTypesWithTwoPartialOverlappedPeriods()
 		{
 			setupPerson();
-
-			var phoneSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony).WithId();
-			var emailSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Email), ForecastSource.Email).WithId();
-
+			
 			var workflowControlSet = new WorkflowControlSet();
-			var emailTypeRollingPeriodStartsFromToday = new OvertimeRequestOpenRollingPeriod(new[] { emailSkillType })
+			var emailTypeRollingPeriodStartsFromToday = new OvertimeRequestOpenRollingPeriod(new[] { _emailSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
 				BetweenDays = new MinMax<int>(0, 13),
 				OrderIndex = 0
 			};
 			workflowControlSet.AddOpenOvertimeRequestPeriod(emailTypeRollingPeriodStartsFromToday);
-			var phoneTypeRollingPeriodStartsFromTomorrow = new OvertimeRequestOpenRollingPeriod(new[] { phoneSkillType })
+			var phoneTypeRollingPeriodStartsFromTomorrow = new OvertimeRequestOpenRollingPeriod(new[] { _phoneSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
 				BetweenDays = new MinMax<int>(1, 13),
@@ -559,9 +543,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var timeZone = LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 			var moreCriticalUnderStaffedPhoneSkill = createSkill("moreCriticalUnderStaffedPhoneSkill", null, timeZone);
-			moreCriticalUnderStaffedPhoneSkill.SkillType = phoneSkillType;
+			moreCriticalUnderStaffedPhoneSkill.SkillType = _phoneSkillType;
 			var mostCriticalUnderStaffedEmailSkill = createSkill("mostCriticalUnderStaffedEmailSkill", null, timeZone);
-			mostCriticalUnderStaffedEmailSkill.SkillType = emailSkillType;
+			mostCriticalUnderStaffedEmailSkill.SkillType = _emailSkillType;
 			mostCriticalUnderStaffedEmailSkill.DefaultResolution = 60;
 
 			var personSkill2 = createPersonSkill(phoneActivity, moreCriticalUnderStaffedPhoneSkill);
@@ -601,18 +585,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		{
 			setupPerson();
 
-			var phoneSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony).WithId();
-			var emailSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Email), ForecastSource.Email).WithId();
-
 			var workflowControlSet = new WorkflowControlSet();
-			var emailTypeRollingPeriodStartsFromToday = new OvertimeRequestOpenRollingPeriod(new[] { emailSkillType })
+			var emailTypeRollingPeriodStartsFromToday = new OvertimeRequestOpenRollingPeriod(new[] { _emailSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
 				BetweenDays = new MinMax<int>(0, 13),
 				OrderIndex = 0
 			};
 			workflowControlSet.AddOpenOvertimeRequestPeriod(emailTypeRollingPeriodStartsFromToday);
-			var phoneTypeRollingPeriodStartsFromTomorrow = new OvertimeRequestOpenRollingPeriod(new[] { phoneSkillType })
+			var phoneTypeRollingPeriodStartsFromTomorrow = new OvertimeRequestOpenRollingPeriod(new[] { _phoneSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
 				BetweenDays = new MinMax<int>(1, 13),
@@ -626,9 +607,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var timeZone = LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 			var moreCriticalUnderStaffedPhoneSkill = createSkill("moreCriticalUnderStaffedPhoneSkill", null, timeZone);
-			moreCriticalUnderStaffedPhoneSkill.SkillType = phoneSkillType;
+			moreCriticalUnderStaffedPhoneSkill.SkillType = _phoneSkillType;
 			var mostCriticalUnderStaffedEmailSkill = createSkill("mostCriticalUnderStaffedEmailSkill", null, timeZone);
-			mostCriticalUnderStaffedEmailSkill.SkillType = emailSkillType;
+			mostCriticalUnderStaffedEmailSkill.SkillType = _emailSkillType;
 			mostCriticalUnderStaffedEmailSkill.DefaultResolution = 60;
 
 			var personSkill2 = createPersonSkill(phoneActivity, moreCriticalUnderStaffedPhoneSkill);
@@ -721,17 +702,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		{
 			setupPerson();
 
-			var phoneSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony).WithId();
-			var emailSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Email), ForecastSource.Email).WithId();
-
 			var workflowControlSet = new WorkflowControlSet();
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { emailSkillType })
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { _emailSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
 				BetweenDays = new MinMax<int>(0, 13),
 				OrderIndex = 0
 			});
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { phoneSkillType })
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { _phoneSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Deny,
 				BetweenDays = new MinMax<int>(0, 13),
@@ -744,9 +722,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var timeZone = LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 			var moreCriticalUnderStaffedEmailSkill = createSkill("moreCriticalUnderStaffedPhoneSkill", null, timeZone);
-			moreCriticalUnderStaffedEmailSkill.SkillType = phoneSkillType;
+			moreCriticalUnderStaffedEmailSkill.SkillType = _phoneSkillType;
 			var mostCriticalUnderStaffedPhoneSkill = createSkill("mostCriticalUnderStaffedEmailSkill", null, timeZone);
-			mostCriticalUnderStaffedPhoneSkill.SkillType = emailSkillType;
+			mostCriticalUnderStaffedPhoneSkill.SkillType = _emailSkillType;
 			mostCriticalUnderStaffedPhoneSkill.DefaultResolution = 60;
 
 			var personEmailSkill = createPersonSkill(phoneActivity, moreCriticalUnderStaffedEmailSkill);
@@ -785,23 +763,20 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		{
 			setupPerson();
 
-			var phoneSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony).WithId();
-			var emailSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Email), ForecastSource.Email).WithId();
-
 			var workflowControlSet = new WorkflowControlSet();
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { phoneSkillType })
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { _phoneSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
 				BetweenDays = new MinMax<int>(0, 1),
 				OrderIndex = 0
 			});
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { emailSkillType })
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { _emailSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Deny,
 				BetweenDays = new MinMax<int>(0, 1),
 				OrderIndex = 0
 			});
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { emailSkillType })
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { _emailSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
 				BetweenDays = new MinMax<int>(1, 2),
@@ -815,10 +790,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var timeZone = LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 
 			var criticalUnderStaffedPhoneSkill = createSkill("criticalUnderStaffedPhoneSkill", null, timeZone);
-			criticalUnderStaffedPhoneSkill.SkillType = phoneSkillType;
+			criticalUnderStaffedPhoneSkill.SkillType = _phoneSkillType;
 
 			var mostCriticalUnderStaffedEmailSkill = createSkill("mostCriticalUnderStaffedEmailSkill", null, timeZone);
-			mostCriticalUnderStaffedEmailSkill.SkillType = emailSkillType;
+			mostCriticalUnderStaffedEmailSkill.SkillType = _emailSkillType;
 			mostCriticalUnderStaffedEmailSkill.DefaultResolution = 60;
 
 			var personEmailSkill = createPersonSkill(emailActivity, mostCriticalUnderStaffedEmailSkill);
@@ -853,17 +828,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			Now.Is(new DateTime(2017, 7, 13, 11, 0, 0, DateTimeKind.Utc));
 			setupPerson();
 
-			var phoneSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony).WithId();
-			var chatSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Chat), ForecastSource.Chat).WithId();
-
 			var workflowControlSet = new WorkflowControlSet();
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { phoneSkillType })
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { _phoneSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
 				BetweenDays = new MinMax<int>(0, 48),
 				OrderIndex = 0
 			});
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { chatSkillType })
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { _chatSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.No,
 				BetweenDays = new MinMax<int>(0, 48),
@@ -883,7 +855,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			}
 
 			var phoneSkill = createSkillWithDifferentOpenHourPeriod("phoneSkill", days, timeZone);
-			phoneSkill.SkillType = phoneSkillType;
+			phoneSkill.SkillType = _phoneSkillType;
 
 			days.Clear();
 			for (var i = 0; i < 7; i++)
@@ -891,7 +863,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 				days.Add((DayOfWeek)i, new TimePeriod(TimeSpan.Zero, TimeSpan.FromDays(1)));
 			}
 			var chatSkill = createSkillWithDifferentOpenHourPeriod("chatSkill", days, timeZone);
-			chatSkill.SkillType = chatSkillType;
+			chatSkill.SkillType = _chatSkillType;
 
 			var personChatSkill = createPersonSkill(chatActivity, chatSkill);
 			var personPhoneSkill = createPersonSkill(phoneActivity, phoneSkill);
@@ -933,17 +905,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			Now.Is(new DateTime(2017, 7, 13, 11, 0, 0, DateTimeKind.Utc));
 			setupPerson();
 
-			var phoneSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony).WithId();
-			var chatSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Chat), ForecastSource.Chat).WithId();
-
 			var workflowControlSet = new WorkflowControlSet();
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { phoneSkillType })
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { _phoneSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.No,
 				BetweenDays = new MinMax<int>(0, 48),
 				OrderIndex = 0
 			});
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { chatSkillType })
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { _chatSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.No,
 				BetweenDays = new MinMax<int>(0, 48),
@@ -957,10 +926,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var timeZone = LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 
 			var phoneSkill = createSkill("phoneSkill", new TimePeriod(8, 18), timeZone);
-			phoneSkill.SkillType = phoneSkillType;
+			phoneSkill.SkillType = _phoneSkillType;
 
 			var chatSkill = createSkill("chatSkill", new TimePeriod(8, 18), timeZone);
-			chatSkill.SkillType = chatSkillType;
+			chatSkill.SkillType = _chatSkillType;
 
 			var personChatSkill = createPersonSkill(chatActivity, chatSkill);
 			var personPhoneSkill = createPersonSkill(phoneActivity, phoneSkill);
@@ -1009,23 +978,20 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		{
 			setupPerson(8, 21);
 
-			var phoneSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony).WithId();
-			var chatSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Chat), ForecastSource.Chat).WithId();
-
 			var person = LoggedOnUser.CurrentUser();
 			var personPeriod = person.PersonPeriods(_periodStartDate.ToDateOnlyPeriod()).FirstOrDefault();
 			personPeriod.PersonContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(40),
 				TimeSpan.FromHours(60), TimeSpan.FromHours(10), TimeSpan.FromHours(10));
 
 			var workflowControlSet = new WorkflowControlSet();
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { chatSkillType })
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { _chatSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
 				EnableWorkRuleValidation = true,
 				WorkRuleValidationHandleType = OvertimeValidationHandleType.Deny,
 				BetweenDays = new MinMax<int>(0, 7)
 			});
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { phoneSkillType })
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { _phoneSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.No,
 				EnableWorkRuleValidation = true,
@@ -1039,9 +1005,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var timeZone = LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 			var channelSupportSkill = createSkill("channel support", new TimePeriod(8, 18), timeZone);
-			channelSupportSkill.SkillType = phoneSkillType;
+			channelSupportSkill.SkillType = _phoneSkillType;
 			var webChatSkill = createSkill("web chat", new TimePeriod(0, 24), timeZone);
-			webChatSkill.SkillType = chatSkillType;
+			webChatSkill.SkillType = _chatSkillType;
 
 			var channelSupportPersonSkill = createPersonSkill(channelSupportActivity, channelSupportSkill);
 			var webChatPersonSkill = createPersonSkill(webChatActivity, webChatSkill);

@@ -61,6 +61,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		private readonly IMultiplicatorDefinitionSet _multiplicatorDefinitionSet
 			= new MultiplicatorDefinitionSet("name", MultiplicatorType.Overtime).WithId();
 		private readonly ISkillType _phoneSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony).WithId();
+		private readonly ISkillType _emailSkillType = new SkillTypeEmail(new Description(SkillTypeIdentifier.Email), ForecastSource.Email).WithId();
+		private readonly ISkillType _chatSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Chat), ForecastSource.Chat).WithId();
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{

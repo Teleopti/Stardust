@@ -275,24 +275,6 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			Assert.AreEqual(openRollingPeriod, _target.SelectedModel.OvertimeRequestPeriodModels[1].DomainEntity);
 		}
 
-		[Test]
-		public void ShouldNotChangeDatePeriodWhenSetOvertimeRequestPeriodSkillType()
-		{
-			initializeWithDefaultWorkflowControlSet();
-			SkillTypeRepository.AddRange(_skillTypes);
-
-			Assert.AreEqual(0, _target.SelectedModel.OvertimeRequestPeriodModels.Count);
-			_target.AddOvertimeRequestOpenDatePeriod();
-
-			var overtimeRequestPeriodModel = _target.SelectedModel.OvertimeRequestPeriodModels[0];
-			var orginalStartDate = overtimeRequestPeriodModel.PeriodStartDate;
-			overtimeRequestPeriodModel.PeriodStartDate = orginalStartDate.Value.AddDays(1);
-
-			_target.SetOvertimeRequestPeriodSkillType(overtimeRequestPeriodModel, new OvertimeRequestPeriodSkillTypeModel(_skillTypes.FirstOrDefault(), "Phone"));
-
-			Assert.AreEqual(overtimeRequestPeriodModel.PeriodStartDate, orginalStartDate.Value.AddDays(1));
-		}
-
 		private void initialize()
 		{
 			_target = new WorkflowControlSetPresenter(null, UnitOfWorkFactory, RepositoryFactory, ToggleManager);

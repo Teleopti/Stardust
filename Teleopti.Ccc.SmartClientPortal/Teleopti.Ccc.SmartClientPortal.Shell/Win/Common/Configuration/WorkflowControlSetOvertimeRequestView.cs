@@ -329,14 +329,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 				_presenter.SetOvertimeRequestPeriodType(overtimeRequestPeriodModel, chosenOvertimeRequestPeriodTypeModel);
 			}
 
-			if (chosenOvertimeRequestPeriodSkillTypeModel != null)
-			{
-				if (overtimeRequestPeriodModel.SkillType != null &&
-					overtimeRequestPeriodModel.SkillType.Equals(chosenOvertimeRequestPeriodSkillTypeModel))
-					return;
-				_presenter.SetOvertimeRequestPeriodSkillType(overtimeRequestPeriodModel, chosenOvertimeRequestPeriodSkillTypeModel);
-			}
-
 			gridControlOvertimeRequestOpenPeriods.Invalidate();
 		}
 
