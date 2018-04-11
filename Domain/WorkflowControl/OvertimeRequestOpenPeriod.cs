@@ -13,10 +13,22 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		private OvertimeRequestAutoGrantType _autoGrantType;
 		private bool _enableWorkRuleValidation;
 		private OvertimeValidationHandleType? _workRuleValidationHandleType;
-		private ISkillType _skillType;
 		private IList<IOvertimeRequestOpenPeriodSkillType> _periodSkillTypes = new List<IOvertimeRequestOpenPeriodSkillType>();
-		public abstract DateOnlyPeriod GetPeriod(DateOnly viewpointDateOnly);
 
+		protected OvertimeRequestOpenPeriod()
+		{
+		}
+
+		protected OvertimeRequestOpenPeriod(IEnumerable<ISkillType> skillTypes)
+		{
+			foreach (var skillType in skillTypes)
+			{
+				AddPeriodSkillType(new OvertimeRequestOpenPeriodSkillType(skillType));
+			}
+		}
+
+		public abstract DateOnlyPeriod GetPeriod(DateOnly viewpointDateOnly);
+		
 		public virtual OvertimeRequestAutoGrantType AutoGrantType
 		{
 			get => _autoGrantType;
@@ -50,12 +62,6 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		}
 
 		public virtual string DenyReason { get; set; }
-
-		public virtual ISkillType SkillType
-		{
-			get => _skillType;
-			set => _skillType = value;
-		}
 
 		public virtual object Clone()
 		{
@@ -102,6 +108,15 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 	public class OvertimeRequestOpenRollingPeriod : OvertimeRequestOpenPeriod
 	{
 		private MinMax<int> _betweenDays;
+
+		public OvertimeRequestOpenRollingPeriod()
+		{
+		}
+
+		public OvertimeRequestOpenRollingPeriod(IEnumerable<ISkillType> skillTypes) : base(skillTypes)
+		{
+		}
+
 		public override DateOnlyPeriod GetPeriod(DateOnly viewpointDateOnly)
 		{
 			return new DateOnlyPeriod(viewpointDateOnly.AddDays(_betweenDays.Minimum), viewpointDateOnly.AddDays(_betweenDays.Maximum));
@@ -117,6 +132,15 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 	public class OvertimeRequestOpenDatePeriod : OvertimeRequestOpenPeriod
 	{
 		private DateOnlyPeriod _period;
+
+		public OvertimeRequestOpenDatePeriod()
+		{
+		}
+
+		public OvertimeRequestOpenDatePeriod(IEnumerable<ISkillType> skillTypes) : base(skillTypes)
+		{
+		}
+
 		public override DateOnlyPeriod GetPeriod(DateOnly viewpointDateOnly)
 		{
 			return _period;

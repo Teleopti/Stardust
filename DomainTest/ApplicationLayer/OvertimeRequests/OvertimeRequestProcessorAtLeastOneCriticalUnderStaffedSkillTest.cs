@@ -94,11 +94,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var workflowControlSet = new WorkflowControlSet();
 			var emailSkillType = new SkillTypeEmail(new Description(SkillTypeIdentifier.Email), ForecastSource.Email).WithId();
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { emailSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
-				BetweenDays = new MinMax<int>(0, 24),
-				SkillType = emailSkillType
+				BetweenDays = new MinMax<int>(0, 24)
 			});
 
 			LoggedOnUser.CurrentUser().WorkflowControlSet = workflowControlSet;
@@ -161,11 +160,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var workflowControlSet = new WorkflowControlSet();
 			var emailSkillType = new SkillTypeEmail(new Description(SkillTypeIdentifier.Email), ForecastSource.Email).WithId();
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { emailSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
-				BetweenDays = new MinMax<int>(0, 24),
-				SkillType = emailSkillType
+				BetweenDays = new MinMax<int>(0, 24)
 			});
 
 			LoggedOnUser.CurrentUser().WorkflowControlSet = workflowControlSet;
@@ -228,11 +226,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var workflowControlSet = new WorkflowControlSet();
 			var emailSkillType = new SkillTypeEmail(new Description(SkillTypeIdentifier.Email), ForecastSource.Email).WithId();
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { emailSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
-				BetweenDays = new MinMax<int>(0, 24),
-				SkillType = emailSkillType
+				BetweenDays = new MinMax<int>(0, 24)
 			});
 
 			LoggedOnUser.CurrentUser().WorkflowControlSet = workflowControlSet;
@@ -295,11 +292,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var workflowControlSet = new WorkflowControlSet();
 			var emailSkillType = new SkillTypeEmail(new Description(SkillTypeIdentifier.Email), ForecastSource.Email).WithId();
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { emailSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
-				BetweenDays = new MinMax<int>(0, 24),
-				SkillType = emailSkillType
+				BetweenDays = new MinMax<int>(0, 24)
 			});
 
 			LoggedOnUser.CurrentUser().WorkflowControlSet = workflowControlSet;

@@ -137,11 +137,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		{
 			setupPerson(8, 21);
 			var workflowControlSet = new WorkflowControlSet();
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod()
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod(new[] { _phoneSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
-				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(13))),
-				SkillType = _phoneSkillType
+				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(13)))
 			});
 			LoggedOnUser.CurrentUser().WorkflowControlSet = workflowControlSet;
 			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 5d);
@@ -337,17 +336,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		{
 			setupPerson(0, 24);
 			var workflowControlSet = new WorkflowControlSet();
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod()
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod(new[] { _phoneSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.No,
-				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(4))),
-				SkillType = _phoneSkillType
+				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(4)))
 			});
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod()
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod(new[] { _phoneSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Deny,
-				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()).AddDays(1), new DateOnly(Now.UtcDateTime().AddDays(1))),
-				SkillType = _phoneSkillType
+				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()).AddDays(1), new DateOnly(Now.UtcDateTime().AddDays(1)))
 			});
 			LoggedOnUser.CurrentUser().WorkflowControlSet = workflowControlSet;
 			setupIntradayStaffingForSkill(setupPersonSkill(new TimePeriod(TimeSpan.Zero, TimeSpan.FromDays(1))), 10d, 5d);
@@ -364,17 +361,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		{
 			setupPerson(8, 21);
 			var workflowControlSet = new WorkflowControlSet();
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod(new[] { _phoneSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.No,
-				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(2))),
-				SkillType = _phoneSkillType
+				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(2)))
 			});
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod(new[] { _phoneSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.No,
-				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()).AddDays(4), new DateOnly(Now.UtcDateTime().AddDays(6))),
-				SkillType = _phoneSkillType
+				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()).AddDays(4), new DateOnly(Now.UtcDateTime().AddDays(6)))
 			});
 			LoggedOnUser.CurrentUser().WorkflowControlSet = workflowControlSet;
 			setupIntradayStaffingForSkill(setupPersonSkill(new TimePeriod(TimeSpan.Zero, TimeSpan.FromDays(1))), 10d, 5d);
@@ -436,17 +431,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		{
 			setupPerson(8, 21);
 			var workflowControlSet = new WorkflowControlSet();
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod(new[] { _phoneSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.No,
-				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(5))),
-				SkillType = _phoneSkillType
+				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(5)))
 			});
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod(new[] { _phoneSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.No,
-				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(2))),
-				SkillType = _phoneSkillType
+				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(2)))
 			});
 			LoggedOnUser.CurrentUser().WorkflowControlSet = workflowControlSet;
 			setupIntradayStaffingForSkill(setupPersonSkill(new TimePeriod(TimeSpan.Zero, TimeSpan.FromDays(1))), 10d, 5d);

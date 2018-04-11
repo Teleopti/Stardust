@@ -91,11 +91,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			{
 				AutoGrantOvertimeRequest = false
 			};
-			_person.WorkflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod
+			_person.WorkflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { skillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.No,
-				BetweenDays = new MinMax<int>(0, 13),
-				SkillType = skillType
+				BetweenDays = new MinMax<int>(0, 13)
 			});
 			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 8d);
 
@@ -123,19 +122,17 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 8d);
 			var now = new DateOnly(_currentDateTime);
 			var workflowControlSet = new WorkflowControlSet();
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod(new[] { skillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.No,
 				Period = new DateOnlyPeriod(now, now.AddDays(8)),
-				OrderIndex = 0,
-				SkillType = skillType
+				OrderIndex = 0
 			});
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { skillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Deny,
 				BetweenDays = new MinMax<int>(0, 2),
-				OrderIndex = 1,
-				SkillType = skillType
+				OrderIndex = 1
 			});
 			LoggedOnUser.CurrentUser().WorkflowControlSet = workflowControlSet;
 

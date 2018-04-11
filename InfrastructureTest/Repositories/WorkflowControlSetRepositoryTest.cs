@@ -220,29 +220,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.That(result[0].OvertimeRequestMaximumTimeEnabled, Is.EqualTo(true));
 		}
 
-		//[Test]
-		//public void ShouldSaveOvertimeRequestSkillTypeSettings()
-		//{
-		//	var skillType = SkillTypeFactory.CreateSkillType();
-		//	PersistAndRemoveFromUnitOfWork(skillType);
-
-		//	var org = CreateAggregateWithCorrectBusinessUnit();
-		//	org.AddOpenOvertimeRequestPeriod(
-		//		new OvertimeRequestOpenDatePeriod { Period = new DateOnlyPeriod(DateOnly.Today
-		//		, DateOnly.Today.AddDays(3)), AutoGrantType = OvertimeRequestAutoGrantType.Yes, EnableWorkRuleValidation = true
-		//		, WorkRuleValidationHandleType = OvertimeValidationHandleType.Deny
-		//		, SkillType = skillType
-		//		});
-		//	PersistAndRemoveFromUnitOfWork(org);
-
-		//	IWorkflowControlSetRepository repository = new WorkflowControlSetRepository(UnitOfWork);
-		//	var result = repository.LoadAllSortByName();
-
-		//	Assert.That(result.Count, Is.EqualTo(1));
-		//	Assert.That(result[0].OvertimeRequestOpenPeriods.Count, Is.EqualTo(1));
-		//	Assert.That(result[0].OvertimeRequestOpenPeriods[0].SkillType, Is.EqualTo(skillType));
-		//}
-
 		[Test]
 		public void ShouldSaveOvertimeRequestWithMultiSkillTypes()
 		{

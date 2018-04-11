@@ -23,9 +23,6 @@
         <property name="AutoGrantType" not-null ="true" />
         <property name="EnableWorkRuleValidation" not-null ="true" />
         <property name="WorkRuleValidationHandleType"/>
-        <many-to-one name="SkillType"
-                     class="Teleopti.Ccc.Domain.Forecasting.SkillType"
-                     foreign-key="FK_OvertimeRequestOpenPeriod_SkillType"/>
     <bag name="PeriodSkillTypes" cascade="all-delete-orphan"
         inverse="true" lazy="false">
         <key column="Parent"  foreign-key="FK_OvertimeRequestOpenPeriodSkillType_OvertimeRequestOpenPeriod"/>

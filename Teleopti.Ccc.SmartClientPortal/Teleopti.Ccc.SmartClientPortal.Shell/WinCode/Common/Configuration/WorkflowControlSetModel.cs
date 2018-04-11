@@ -336,21 +336,17 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		{
 			if (_defaultOvertimeRequestPeriodAdapters != null) return;
 
-			var phoneSkillType = _supportedSkillTypes.FirstOrDefault(s => s.Description.Name.Equals(SkillTypeIdentifier.Phone));
-
-			var overtimeOpenDatePeriod = new OvertimeRequestOpenDatePeriod
+			IOvertimeRequestOpenPeriod overtimeOpenDatePeriod = new OvertimeRequestOpenDatePeriod
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.No,
 				Period = getCurrentMonthPeriod(new DateOnly(DateOnly.Today.Date.AddMonths(1)))
 			};
-			overtimeOpenDatePeriod.AddPeriodSkillType(new OvertimeRequestOpenPeriodSkillType(phoneSkillType));
 
-			var overtimeOpenRollingPeriod = new OvertimeRequestOpenRollingPeriod
+			IOvertimeRequestOpenPeriod overtimeOpenRollingPeriod = new OvertimeRequestOpenRollingPeriod
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.No,
 				BetweenDays = new MinMax<int>(2, 15)
 			};
-			overtimeOpenRollingPeriod.AddPeriodSkillType(new OvertimeRequestOpenPeriodSkillType(phoneSkillType));
 
 			_defaultOvertimeRequestPeriodAdapters = new List<OvertimeRequestPeriodTypeModel>
 			{

@@ -193,18 +193,16 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var emailSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Email), ForecastSource.Email).WithId();
 
 			var workFlowControlSet = new WorkflowControlSet { OvertimeProbabilityEnabled = true };
-			workFlowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod
+			workFlowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { emailSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
 				BetweenDays = new MinMax<int>(0, 13),
-				SkillType = emailSkillType,
 				OrderIndex = 0
 			});
-			workFlowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod
+			workFlowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { phoneSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Deny,
 				BetweenDays = new MinMax<int>(0, 13),
-				SkillType = phoneSkillType,
 				OrderIndex = 1
 			});
 			User.CurrentUser().WorkflowControlSet = workFlowControlSet;

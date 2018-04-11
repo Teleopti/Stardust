@@ -1,7 +1,6 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Settings;
 using Teleopti.Ccc.UserTexts;
@@ -188,7 +187,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			_periodType = new OvertimeRequestPeriodTypeModel(_overtimeRequestOpenPeriod, string.Empty);
 
 			_skillTypes = overtimeRequestOpenPeriod.PeriodSkillTypes != null && overtimeRequestOpenPeriod.PeriodSkillTypes.Any()
-				? string.Join(",", overtimeRequestOpenPeriod.PeriodSkillTypes.Select(s => Resources.ResourceManager.GetString(s.SkillType.Description.Name)))
+				? string.Join(",", overtimeRequestOpenPeriod.PeriodSkillTypes.Select(s => Resources.ResourceManager.GetString(s.SkillType.Description.Name)).Distinct())
 				: Resources.SkillTypeInboundTelephony;
 			
 			foreach (var periodType in WorkflowControlSetModel.DefaultOvertimeRequestPeriodAdapters)
@@ -196,24 +195,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 				if (_periodType.Equals(periodType))
 					_periodType.DisplayText = periodType.DisplayText;
 			}
-
-			//if (_overtimeRequestOpenPeriod.SkillType != null)
-			//{
-			//	_periodSkillType = new OvertimeRequestPeriodSkillTypeModel(_overtimeRequestOpenPeriod.SkillType, string.Empty);
-			//	foreach (var periodType in WorkflowControlSetModel.DefaultOvertimeRequestSkillTypeAdapters)
-			//	{
-			//		if (_periodSkillType.Equals(periodType))
-			//			_periodSkillType.DisplayText = periodType.DisplayText;
-			//	}
-			//}
-			//else
-			//{
-			//	_overtimeRequestOpenPeriod.SkillType = WorkflowControlSetModel.GetSupportedSkillTypes()
-			//		.FirstOrDefault(a => a.Description.Name.Equals(SkillTypeIdentifier.Phone));
-			//	_periodSkillType = new OvertimeRequestPeriodSkillTypeModel(_overtimeRequestOpenPeriod.SkillType
-			//		, Resources.ResourceManager.GetString(SkillTypeIdentifier.Phone));
-			//	Owner.IsDirty = true;
-			//}
 
 			if (overtimeRequestOpenPeriod.WorkRuleValidationHandleType.HasValue)
 			{
@@ -231,7 +212,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			_overtimeRequestOpenPeriod.ClearPeriodSkillType();
 
 			var supportedSkillTypes = WorkflowControlSetModel.GetSupportedSkillTypes();
-			var originSkillTypes = _skillTypes.Split(',')
+			var originSkillTypes = _skillTypes.Split(',').Distinct()
 				.Select(skillType =>
 					supportedSkillTypes.FirstOrDefault(s =>
 						Resources.ResourceManager.GetString(s.Description.Name).Equals(skillType)))

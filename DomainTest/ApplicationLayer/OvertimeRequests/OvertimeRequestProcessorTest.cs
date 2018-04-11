@@ -687,11 +687,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			LoggedOnUser.SetFakeLoggedOnUser(person);
 			LoggedOnUser.SetDefaultTimeZone(TimeZoneInfo.Utc);
 			var workflowControlSet = new WorkflowControlSet();
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { _phoneSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
-				BetweenDays = new MinMax<int>(0, 30),
-				SkillType = _phoneSkillType
+				BetweenDays = new MinMax<int>(0, 30)
 			});
 			LoggedOnUser.CurrentUser().WorkflowControlSet = workflowControlSet;
 			SkillTypeRepository.Add(_phoneSkillType);

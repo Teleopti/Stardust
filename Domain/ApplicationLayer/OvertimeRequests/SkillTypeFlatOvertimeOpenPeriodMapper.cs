@@ -6,7 +6,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 {
 	public class SkillTypeFlatOvertimeOpenPeriodMapper
 	{
-		public IList<OvertimeRequestSkillTypeFlatOpenPeriod> Map(IEnumerable<IOvertimeRequestOpenPeriod> overtimeRequestOpenPeriods, ISkillType defaultSkillType)
+		public IList<OvertimeRequestSkillTypeFlatOpenPeriod> Map(
+			IEnumerable<IOvertimeRequestOpenPeriod> overtimeRequestOpenPeriods, ISkillType defaultSkillType)
 		{
 			var overtimeRequestSkillTypeFlatOpenPeriods = new List<OvertimeRequestSkillTypeFlatOpenPeriod>();
 			foreach (var overtimeRequestOpenPeriod in overtimeRequestOpenPeriods)
@@ -14,13 +15,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 				if (overtimeRequestOpenPeriod.PeriodSkillTypes.Any())
 					foreach (var overtimeRequestOpenPeriodSkillType in overtimeRequestOpenPeriod.PeriodSkillTypes)
 					{
-						overtimeRequestSkillTypeFlatOpenPeriods.Add(createSkillTypeFlatOpenPeriod(overtimeRequestOpenPeriodSkillType.SkillType,
+						overtimeRequestSkillTypeFlatOpenPeriods.Add(createSkillTypeFlatOpenPeriod(
+							overtimeRequestOpenPeriodSkillType.SkillType,
 							overtimeRequestOpenPeriod));
 					}
 				else
-					overtimeRequestSkillTypeFlatOpenPeriods.Add(createSkillTypeFlatOpenPeriod(defaultSkillType, overtimeRequestOpenPeriod));
+					overtimeRequestSkillTypeFlatOpenPeriods.Add(createSkillTypeFlatOpenPeriod(defaultSkillType,
+						overtimeRequestOpenPeriod));
 			}
-			return overtimeRequestSkillTypeFlatOpenPeriods;
+			return overtimeRequestSkillTypeFlatOpenPeriods.OrderBy(x => x.OrderIndex).ToList();
 		}
 
 		private OvertimeRequestSkillTypeFlatOpenPeriod createSkillTypeFlatOpenPeriod(ISkillType skillType,
@@ -33,7 +36,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 				EnableWorkRuleValidation = overtimeRequestOpenPeriod.EnableWorkRuleValidation,
 				WorkRuleValidationHandleType = overtimeRequestOpenPeriod.WorkRuleValidationHandleType,
 				SkillType = skillType,
-				OriginPeriod = overtimeRequestOpenPeriod
+				OriginPeriod = overtimeRequestOpenPeriod,
 			};
 		}
 

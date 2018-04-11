@@ -358,7 +358,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			_selectedModel.DomainEntity.RemoveOpenOvertimeRequestPeriod(overtimeRequestPeriodModel.DomainEntity);
 
 			var newOvertimeRequestOpenPeriod = overtimeRequestPeriodModel.DomainEntity;
-			newOvertimeRequestOpenPeriod.SkillType = chosenOvertimeRequestPeriodSkillTypeModel.SkillType;
+			//newOvertimeRequestOpenPeriod.SkillType = chosenOvertimeRequestPeriodSkillTypeModel.SkillType;
 
 			_selectedModel.DomainEntity.InsertOvertimePeriod(newOvertimeRequestOpenPeriod, currentIndex);
 			overtimeRequestPeriodModel.SetDomainEntity(newOvertimeRequestOpenPeriod);

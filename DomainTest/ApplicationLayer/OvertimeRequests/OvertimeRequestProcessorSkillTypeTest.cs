@@ -20,11 +20,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		{
 			setupPerson(8, 21);
 			var workflowControlSet = new WorkflowControlSet();
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
+			var emailSkillType = new SkillTypeEmail(new Description(SkillTypeIdentifier.Email), ForecastSource.Email).WithId();
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod(new[] { emailSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
-				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(13))),
-				SkillType = new SkillTypeEmail(new Description(SkillTypeIdentifier.Email), ForecastSource.Email).WithId()
+				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(13)))
 			});
 			LoggedOnUser.CurrentUser().WorkflowControlSet = workflowControlSet;
 			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 5d);
@@ -46,18 +46,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			setupPerson(8, 21);
 			var workflowControlSet = new WorkflowControlSet();
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { chatSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Deny,
 				BetweenDays = new MinMax<int>(0, 48),
-				SkillType = chatSkillType,
 				OrderIndex = 1
 			});
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod(new[] { chatSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
 				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(5))),
-				SkillType = chatSkillType,
 				OrderIndex = 2
 			});
 			LoggedOnUser.CurrentUser().WorkflowControlSet = workflowControlSet;
@@ -79,11 +77,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 				.WithId();
 
 			var workflowControlSet = new WorkflowControlSet();
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod(new[] { phoneSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
-				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(13))),
-				SkillType = phoneSkillType
+				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(13)))
 			});
 			LoggedOnUser.CurrentUser().WorkflowControlSet = workflowControlSet;
 			setupIntradayStaffingForSkill(setupPersonSkill(skillType: phoneSkillType), 10d, 5d);
@@ -102,11 +99,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 				.WithId();
 
 			var workflowControlSet = new WorkflowControlSet();
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod(new[] { phoneSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Deny,
-				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(13))),
-				SkillType = phoneSkillType
+				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(13)))
 			});
 
 			LoggedOnUser.CurrentUser().WorkflowControlSet = workflowControlSet;
@@ -129,19 +125,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var emailSkillType = new SkillTypeEmail(new Description(SkillTypeIdentifier.Email), ForecastSource.Email).WithId();
 
 			var workflowControlSet = new WorkflowControlSet();
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod(new[] { phoneSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Deny,
 				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(13))),
-				SkillType = phoneSkillType,
 				OrderIndex = 1
 			});
 
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod(new[] { emailSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Deny,
 				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(13))),
-				SkillType = emailSkillType,
 				OrderIndex = 2
 			});
 			LoggedOnUser.CurrentUser().WorkflowControlSet = workflowControlSet;
@@ -179,18 +173,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var emailSkillType = new SkillTypeEmail(new Description(SkillTypeIdentifier.Email), ForecastSource.Email).WithId();
 
 			var workflowControlSet = new WorkflowControlSet();
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod(new[] { phoneSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Deny,
 				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(13))),
-				SkillType = phoneSkillType,
 				OrderIndex = 1
 			});
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod(new[] { emailSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
 				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(13))),
-				SkillType = emailSkillType,
 				OrderIndex = 2
 			});
 			LoggedOnUser.CurrentUser().WorkflowControlSet = workflowControlSet;
@@ -222,7 +214,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		{
 			setupPerson(8, 21);
 
-			LoggedOnUser.CurrentUser().WorkflowControlSet.OvertimeRequestOpenPeriods.First().SkillType = null;
+			LoggedOnUser.CurrentUser().WorkflowControlSet.OvertimeRequestOpenPeriods.First().ClearPeriodSkillType();
 			setupIntradayStaffingForSkill(setupPersonSkill(skillType: _phoneSkillType), 10d, 5d);
 
 			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 25, 8, 0, 0, DateTimeKind.Utc), 1);
