@@ -37,9 +37,7 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 
 		public void ScheduleManualJob(EtlJobEnqueModel jobEnqueModel)
 		{
-			var connectionString = Tenants.IsAllTenants(jobEnqueModel.TenantName)
-				? _configReader.ConnectionString("Hangfire")
-				: _analyticsConnectionsStringExtractor.Extract(jobEnqueModel.TenantName);
+			var connectionString = _configReader.ConnectionString("Hangfire");
 
 			var baseConfig = _baseConfigurationRepository.LoadBaseConfiguration(connectionString);
 			var relativePeriodCollection = getSchedulePeriodsForEnqueuedJob(jobEnqueModel, baseConfig.TimeZoneCode);

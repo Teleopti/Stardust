@@ -184,6 +184,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			BaseConfigurationRepository.SaveBaseConfiguration(connectionString,
 				new BaseConfiguration(1053, 15, timezoneName, false));
 			AllTenants.HasWithAnalyticsConnectionString(testTenantName, connectionString);
+			ConfigReader.FakeConnectionString("Hangfire", connectionString);
 
 			var localToday = new DateTime(2017, 12, 11);
 			var utcToday = TimeZoneHelper.ConvertToUtc(localToday, TimeZoneInfo.FindSystemTimeZoneById(timezoneName));
@@ -238,6 +239,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			BaseConfigurationRepository.SaveBaseConfiguration(connectionString,
 				new BaseConfiguration(1053, 15, timezoneName, false));
 			AllTenants.HasWithAnalyticsConnectionString(testTenantName, connectionString);
+			ConfigReader.FakeConnectionString("Hangfire", connectionString);
 
 			var localToday = new DateTime(2017, 12, 11);
 			var utcToday =
@@ -299,6 +301,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 		{
 			TimeZone.IsNewYork();
 			AllTenants.HasWithAnalyticsConnectionString(testTenantName, connectionString);
+			ConfigReader.FakeConnectionString("Hangfire", connectionString);
 			var localNow = new DateTime(2018, 3, 28, 1, 0, 0);
 			Now.Is(TimeZoneHelper.ConvertToUtc(localNow, TimeZone.TimeZone()));
 
@@ -396,6 +399,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			AllTenants.HasWithAnalyticsConnectionString(masterTenant.Name, masterTenant.DataSourceConfiguration.AnalyticsConnectionString);
 			BaseConfigurationRepository.SaveBaseConfiguration(masterTenant.DataSourceConfiguration.AnalyticsConnectionString,
 				new BaseConfiguration(1053, 15, "UTC", false));
+			ConfigReader.FakeConnectionString("Hangfire", masterTenant.DataSourceConfiguration.AnalyticsConnectionString);
 			GeneralInfrastructure.HasDataSources(new DataSourceEtl(dataSourceId, "myDs", 12, timezoneName, 15, false));
 
 			var myDsModel = new DataSourceModel
@@ -438,6 +442,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			AllTenants.HasWithAnalyticsConnectionString(masterTenant.Name, masterTenant.DataSourceConfiguration.AnalyticsConnectionString);
 			BaseConfigurationRepository.SaveBaseConfiguration(masterTenant.DataSourceConfiguration.AnalyticsConnectionString,
 				new BaseConfiguration(1053, 15, "UTC", false));
+			ConfigReader.FakeConnectionString("Hangfire", masterTenant.DataSourceConfiguration.AnalyticsConnectionString);
 			GeneralInfrastructure.HasDataSources(new DataSourceEtl(dataSourceId, "myDs", 12, timezoneName, 15, false));
 
 			var period = new DateOnlyPeriod(DateOnly.Today.AddDays(-5), DateOnly.Today.AddDays(15));
@@ -475,6 +480,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			AllTenants.HasWithAnalyticsConnectionString(masterTenant.Name, masterTenant.DataSourceConfiguration.AnalyticsConnectionString);
 			BaseConfigurationRepository.SaveBaseConfiguration(masterTenant.DataSourceConfiguration.AnalyticsConnectionString,
 				new BaseConfiguration(1053, 15, "UTC", false));
+			ConfigReader.FakeConnectionString("Hangfire", masterTenant.DataSourceConfiguration.AnalyticsConnectionString);
 			GeneralInfrastructure.HasDataSources(new DataSourceEtl(dataSourceId, "myDs", 12, timezoneName, 15, false));
 
 			var period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()).AddDays(-40), (new DateOnly(Now.UtcDateTime()).AddDays(40)));
@@ -534,6 +540,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			AllTenants.HasWithAnalyticsConnectionString(masterTenant.Name, masterTenant.DataSourceConfiguration.AnalyticsConnectionString);
 			BaseConfigurationRepository.SaveBaseConfiguration(masterTenant.DataSourceConfiguration.AnalyticsConnectionString,
 				new BaseConfiguration(1053, 15, "UTC", false));
+			ConfigReader.FakeConnectionString("Hangfire", masterTenant.DataSourceConfiguration.AnalyticsConnectionString);
 			GeneralInfrastructure.HasDataSources(new DataSourceEtl(dataSourceId, "myDs", 12, timezoneName, 15, false));
 
 			var period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()).AddDays(-5), (new DateOnly(Now.UtcDateTime()).AddDays(15)));
@@ -586,6 +593,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			AllTenants.HasWithAnalyticsConnectionString(masterTenant.Name, masterTenant.DataSourceConfiguration.AnalyticsConnectionString);
 			BaseConfigurationRepository.SaveBaseConfiguration(masterTenant.DataSourceConfiguration.AnalyticsConnectionString,
 				new BaseConfiguration(1053, 15, "UTC", false));
+			ConfigReader.FakeConnectionString("Hangfire", masterTenant.DataSourceConfiguration.AnalyticsConnectionString);
 			GeneralInfrastructure.HasDataSources(new DataSourceEtl(dataSourceId, "myDs", 12, timezoneName, 15, false));
 
 			var period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()).AddDays(-5), new DateOnly(Now.UtcDateTime()).AddDays(15));
@@ -634,6 +642,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			AllTenants.HasWithAnalyticsConnectionString(masterTenant.Name, masterTenant.DataSourceConfiguration.AnalyticsConnectionString);
 			BaseConfigurationRepository.SaveBaseConfiguration(masterTenant.DataSourceConfiguration.AnalyticsConnectionString,
 				new BaseConfiguration(1053, 15, "UTC", false));
+			ConfigReader.FakeConnectionString("Hangfire", masterTenant.DataSourceConfiguration.AnalyticsConnectionString);
 			GeneralInfrastructure.HasDataSources(new DataSourceEtl(dataSourceId, "myDs", 12, null, 15, false));
 			GeneralInfrastructure.HasDataSources(new DataSourceEtl(dataSourceId + 1, "anotherDs", 12, null, 15, false));
 
