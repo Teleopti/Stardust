@@ -393,8 +393,8 @@ namespace Teleopti.Wfm.Administration.Controllers
 		}
 
 		[TenantUnitOfWork]
-		[HttpGet, Route("Etl/BusinessUnits")]
-		public virtual IHttpActionResult BusinessUnits(string tenantName)
+		[HttpPost, Route("Etl/BusinessUnits")]
+		public virtual IHttpActionResult BusinessUnits([FromBody] string tenantName)
 		{
 			if (tenantName == "<All>")
 			{
