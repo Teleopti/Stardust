@@ -86,8 +86,6 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 
 			Assert.AreEqual(DateOnly.Today, overtimeRequestPeriod.PeriodStartDate);
 			Assert.AreEqual(DateOnly.Today.AddDays(staffingInfoAvailableDays), overtimeRequestPeriod.PeriodEndDate);
-			Assert.IsNotNull(overtimeRequestPeriod.SkillType);
-			Assert.AreEqual(Resources.ResourceManager.GetString(SkillTypeIdentifier.Phone), overtimeRequestPeriod.SkillType.DisplayText);
 		}
 
 		[Theory]
@@ -115,7 +113,6 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod());
 
 			SkillTypeRepository.AddRange(_skillTypes);
-			var skillPhone = _skillTypes.FirstOrDefault(s => s.Description.Name.Equals(SkillTypeIdentifier.Phone));
 
 			_target = new WorkflowControlSetPresenter(null, UnitOfWorkFactory, RepositoryFactory, ToggleManager);
 			_view = new FixConfirmResultWorkflowControlSetView(ToggleManager, _target, true);
@@ -125,10 +122,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			_target.SetSelectedWorkflowControlSetModel(_target.WorkflowControlSetModelCollection.First());
 
 			Assert.AreEqual(1, _target.SelectedModel.OvertimeRequestPeriodModels.Count);
-			var skillType = _target.SelectedModel.OvertimeRequestPeriodModels[0].SkillType;
-			Assert.IsNotNull(skillType);
-			Assert.AreEqual(Resources.ResourceManager.GetString(SkillTypeIdentifier.Phone), skillType.DisplayText);
-			Assert.AreEqual(skillType.Item, skillPhone.Id);
+			Assert.AreEqual(Resources.SkillTypeInboundTelephony, _target.SelectedModel.OvertimeRequestPeriodModels.First().SkillTypes);
 		}
 
 		[Test]

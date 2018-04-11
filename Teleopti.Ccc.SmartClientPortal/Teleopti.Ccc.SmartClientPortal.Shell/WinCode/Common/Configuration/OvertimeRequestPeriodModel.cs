@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		public WorkflowControlSetModel Owner { get; set; }
 		private IOvertimeRequestOpenPeriod _overtimeRequestOpenPeriod;
 		private OvertimeRequestPeriodTypeModel _periodType;
-		private OvertimeRequestPeriodSkillTypeModel _periodSkillType;
 		private OvertimeRequestValidationHandleOptionView _workRuleValidationHandleType;
 		private string _skillTypes;
 
@@ -42,7 +41,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		public IOvertimeRequestOpenPeriod DomainEntity => _overtimeRequestOpenPeriod;
 
 		public OvertimeRequestPeriodTypeModel PeriodType => _periodType;
-		public OvertimeRequestPeriodSkillTypeModel SkillType => _periodSkillType;
 
 		public string SkillTypes
 		{
