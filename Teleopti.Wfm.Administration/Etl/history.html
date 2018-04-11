@@ -36,15 +36,15 @@
 								<h5>Date to:</h5>
 								<md-datepicker ng-model="vm.historyWorkPeriod.EndDate" md-placeholder="N/A" md-open-on-focus></md-datepicker>
 							</div>
-							<div class="col-md-3">
-								<h5>Business unit:</h5>
-								<select class="form-control" ng-model="vm.selectedBu">
-									<option value="">- Select time zone</option>
-									<option value="">- Select time zone</option>
-									<option value="">- Select time zone</option>
-								</select>
+							<div class="col-md-2">
+								<h5>Tenant:</h5>
+								<select class="form-control" id="exampleFormControlSelect2" ng-options="tenant.TenantName for tenant in vm.tenants" ng-model="vm.selectedTenant" ng-change="vm.selectedTenantChanged()"></select>
 							</div>
-							<div class="col-md-1">
+							<div class="col-md-2">
+								<h5>Business unit:</h5>
+								<select class="form-control" ng-options="bu.Name for bu in vm.businessUnits" ng-model="vm.selectedBu"></select>
+							</div>
+							<div class="col-md-2">
 								<h5>Only errors:</h5>
 								<input class="switch" ng-model="vm.errorsOnly" type="checkbox">
 							</div>

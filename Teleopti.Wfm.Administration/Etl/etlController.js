@@ -3,9 +3,9 @@
 
 	angular
 	.module("adminApp")
-		.controller("etlController", etlController, ["$http", "$timeout"]);
+	.controller("etlController", etlController, ["$http", "$timeout", "$window"]);
 
-	function etlController($http, tokenHeaderService, $timeout) {
+	function etlController($http, tokenHeaderService, $timeout, $window) {
 		var vm = this;
 
 		vm.state = null;
@@ -141,7 +141,7 @@
 			vm.tenants = [];
 			$http
 			.get("./Etl/GetTenants", tokenHeaderService.getHeaders())
-				.success(function (data) {
+			.success(function (data) {
 				for (var i = 0; i < data.length; i++) {
 					if (data[i].IsBaseConfigured) {
 						vm.tenants.push(data[i]);
@@ -149,16 +149,11 @@
 						vm.unconfigured = true;
 					}
 				}
-				if (vm.tenants.length>1) {
-					vm.tenants.unshift({
-						TenantName: '<All>'
-					})
-				}
+				vm.tenants.unshift({
+					TenantName: '<All>'
+				})
 				vm.selectedTenant = vm.tenants[0];
-				if (angular.isDefined(vm.selectedTenant) && vm.selectedTenant.TenantName) {
-					vm.sendTenant(vm.selectedTenant.TenantName);
-					vm.getJobs(vm.selectedTenant.TenantName);
-				}
+				selectedTenantChanged();
 			});
 		}
 
@@ -177,6 +172,7 @@
 		}
 
 		function selectedTenantChanged() {
+			$window.sessionStorage.tenant = vm.selectedTenant.TenantName;
 			vm.sendTenant(vm.selectedTenant.TenantName);
 			vm.getJobs(vm.selectedTenant.TenantName);
 			vm.selectDataSource = null;
