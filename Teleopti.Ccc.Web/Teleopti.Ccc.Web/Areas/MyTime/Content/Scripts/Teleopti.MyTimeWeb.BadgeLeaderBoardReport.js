@@ -58,8 +58,10 @@
 			}
 
 			function getStartDate() {
+				var locale = Teleopti.MyTimeWeb.Common.DateFormatLocale;
+
 				if (self.rollingPeriod === '1') {
-					return self.selectedDate().clone().startOf('week');
+					return self.selectedDate().clone().locale(locale).startOf('week');
 				}
 
 				if (self.rollingPeriod === '2') {
@@ -68,8 +70,9 @@
 			}
 
 			function getEndDate() {
+				var locale = Teleopti.MyTimeWeb.Common.DateFormatLocale;
 				if (self.rollingPeriod === '1') {
-					return self.selectedDate().clone().endOf('week');
+					return self.selectedDate().clone().locale(locale).endOf('week');
 				}
 
 				if (self.rollingPeriod === '2') {
