@@ -2,7 +2,6 @@
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Dialect;
-using NHibernate.Impl;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 
@@ -58,12 +57,6 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 			if (session == null)
 				throw new HibernateException("No session bound to the current context");
 			return session;
-		}
-
-		public Guid CurrentSessionId()
-		{
-			var sessionImpl = CurrentSession() as SessionImpl;
-			return sessionImpl.SessionId;
 		}
 
 		public bool HasCurrentSession()

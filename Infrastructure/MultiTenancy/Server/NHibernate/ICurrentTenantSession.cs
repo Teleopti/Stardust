@@ -6,6 +6,5 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 	public interface ICurrentTenantSession : IDisposable
 	{
 		ISession CurrentSession();
-		Guid CurrentSessionId();
 	}
 }

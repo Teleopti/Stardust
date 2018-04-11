@@ -2,12 +2,12 @@
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 {
-	public interface ITenantAuditPersister
+	public interface IAuditPersister
 	{
 		void Persist(TenantAudit tenantAuditInfo);
 	}
 
-	public class TenantAuditPersister : ITenantAuditPersister
+	public class TenantAuditPersister : IAuditPersister
 	{
 		private readonly ICurrentTenantSession _currentTenantSession;
 
@@ -18,8 +18,8 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 
 		public void Persist(TenantAudit tenantAuditInfo)
 		{
+			//tenantAuditInfo.Correlation = _currentTenantSession.GetSessionId();
 			var session = _currentTenantSession.CurrentSession();
-			tenantAuditInfo.Correlation = _currentTenantSession.CurrentSessionId();	
 			session.Save(tenantAuditInfo);
 		}
 	}
