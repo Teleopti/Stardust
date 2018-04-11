@@ -1,6 +1,8 @@
-﻿using System;
+﻿using NHibernate.Impl;
 using NUnit.Framework;
 using SharpTestsEx;
+using System;
+using System.Linq;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
@@ -16,14 +18,20 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 		private Tenant tenant;
 		private TenantUnitOfWorkManager _tenantUnitOfWorkManager;
 		private IPersistPersonInfo target;
+		private CurrentTenantUserFake currentTenant;
+		private TenantAuditPersister tenantAuditPersister;
 
 		[SetUp]
 		public void InsertPreState()
 		{
 			_tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(InfraTestConfigReader.ConnectionString);
 			_tenantUnitOfWorkManager.EnsureUnitOfWorkIsStarted();
-
-			target = new PersistPersonInfo(_tenantUnitOfWorkManager, new PersonInfoPersister(_tenantUnitOfWorkManager));
+			tenantAuditPersister = new TenantAuditPersister(_tenantUnitOfWorkManager);
+			currentTenant = new CurrentTenantUserFake();
+			target = new PersistPersonInfo(_tenantUnitOfWorkManager
+				, new PersonInfoPersister(_tenantUnitOfWorkManager)
+				, tenantAuditPersister
+				, currentTenant);
 
 			tenant = new Tenant(RandomName.Make());
 			_tenantUnitOfWorkManager.CurrentSession().Save(tenant);
@@ -46,6 +54,28 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 			session.Flush();
 			session.Clear();
 			session.Get<PersonInfo>(personInfo.Id).Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldAddAuditRecordsWhenPersistingPersonInfo()
+		{
+			var session = _tenantUnitOfWorkManager.CurrentSession();
+			var currentUser = new PersonInfo(tenant, Guid.NewGuid());
+			var personInfo = new PersonInfo(tenant, Guid.NewGuid());
+			currentTenant.Set(currentUser);
+			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), "ashl10", "Pa$$w0rd", new OneWayEncryption());
+			target.Persist(personInfo, PersistActionIntent.AppLogonChange);
+
+			session.Flush();
+			session.Get<PersonInfo>(personInfo.Id).Should().Not.Be.Null();
+
+			var auditEntries = session.Query<TenantAudit>().ToList();
+			auditEntries.Count.Should().Be.EqualTo(1);
+			var theEntry = auditEntries.Single();
+			theEntry.Action.Should().Be.EqualTo(PersistActionIntent.AppLogonChange.ToString());
+			theEntry.Correlation.Should().Be.EqualTo(((SessionImpl)session).SessionId);
+			theEntry.ActionPerformedOn.Should().Be.EqualTo(personInfo.Id);
+			theEntry.ActionPerformedBy.Should().Be.EqualTo(currentUser.Id);
 		}
 
 		[Test]

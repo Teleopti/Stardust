@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 	{
 		private bool _rollbacked = false;
 
-		public string Persist(PersonInfo personInfo, bool throwOnError)
+		public string Persist(PersonInfo personInfo, PersistActionIntent intent, bool throwOnError)
 		{
 			LastPersist = personInfo;
 			if (personInfo.ApplicationLogonInfo.LogonName == "existingId@teleopti.com")

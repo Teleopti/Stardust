@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 	public class TenantAuditTest
 	{
 		private TenantUnitOfWorkManager _tenantUnitOfWorkManager;
-		private IAuditPersister target;
+		private ITenantAuditPersister target;
 
 		[SetUp]
 		public void Setup()

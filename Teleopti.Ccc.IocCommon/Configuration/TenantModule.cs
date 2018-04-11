@@ -114,6 +114,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<PersistLogonAttempt>().As<IPersistLogonAttempt>().SingleInstance();
 			builder.RegisterType<PersistPersonInfo>().As<IPersistPersonInfo>().SingleInstance();
 			builder.RegisterType<PersonInfoPersister>().As<IPersonInfoPersister>().SingleInstance();
+			builder.RegisterType<TenantAuditPersister>().As<ITenantAuditPersister>().SingleInstance();
 			builder.RegisterType<PersonInfoCreator>().As<IPersonInfoCreator>().SingleInstance();
 			builder.RegisterType<PersonInfoHelper>().As<IPersonInfoHelper>().SingleInstance();
 			builder.RegisterType<DeletePersonInfo>().As<IDeletePersonInfo>().SingleInstance();
