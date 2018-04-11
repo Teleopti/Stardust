@@ -1,18 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IdentityModel.Claims;
 using NUnit.Framework;
 using SharpTestsEx;
 using System.Linq;
-using System.Threading;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.Security;
 using Teleopti.Ccc.Infrastructure.Toggle;
@@ -25,7 +20,6 @@ using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory;
 using Teleopti.Ccc.WebTest.Core.IoC;
 using Teleopti.Interfaces.Domain;
-using Claim = System.IdentityModel.Claims.Claim;
 
 namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 {
@@ -33,7 +27,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 	[TestFixture]
 	public class PortalViewModelFactoryTest : ISetup
 	{
-		public ICurrentDataSource CurrentDataSource;
+		public FakeCurrentDatasource CurrentDataSource;
 		public IPortalViewModelFactory Target;
 		public FakeCurrentUnitOfWorkFactory CurrentUnitOfWorkFactory;
 		public CurrentTenantUserFake CurrentTenantUser;
@@ -44,20 +38,27 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		public FakeAgentBadgeRepository AgentBadgeRepository;
 		public FakeAgentBadgeWithRankRepository AgentBadgeWithRankRepository;
 		public FakeToggleManager ToggleManager;
+		public FakeCurrentTeleoptiPrincipal CurrentTeleoptiPrincipal;
+		public FakePermissionProvider PermissionProvider;
+		public FakePermissions Authorization;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<PrincipalAuthorization>().For<IAuthorization>();
-			system.UseTestDouble<PermissionProvider>().For<IPermissionProvider>();
+			system.UseTestDouble<FakePermissionProvider>().For<IPermissionProvider>();
 			system.UseTestDouble<CurrentTenantUserFake>().For<ICurrentTenantUser>();
 			system.UseTestDouble(new FakeCurrentUnitOfWorkFactory(null).WithCurrent(new FakeUnitOfWorkFactory(null, null, null, null) { Name = MyTimeWebTestAttribute.DefaultTenantName })).For<ICurrentUnitOfWorkFactory>();
 			system.UseTestDouble<FakeToggleManager>().For<IToggleManager>();
+			system.UseTestDouble<FakeCurrentTeleoptiPrincipal>().For<ICurrentTeleoptiPrincipal>();
+			system.UseTestDouble<FakeCurrentDatasource>().For<ICurrentDataSource>();
+			system.UseTestDouble<FakePermissions>().For<IAuthorization>();
 		}
 
 		[Test]
 		public void ShouldHaveNavigationItems()
 		{
-			setPermissions();
+			setupLoggedOnUser();
+			Authorization.HasPermission(DefinedRaptorApplicationFunctionPaths.MyReportWeb);
 
 			var result = Target.CreatePortalViewModel();
 
@@ -81,13 +82,11 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		[Test]
 		public void ShouldHaveMessageNavigationItemsWhenHavingBothLicenseAndPermission()
 		{
-			setPermissions();
+			setupLoggedOnUser();
 
-			var licenseActivator = LicenseProvider.GetLicenseActivator(new AsmFakeLicenseService(true));
-			DefinedLicenseDataFactory.SetLicenseActivator(CurrentDataSource.CurrentName(), licenseActivator);
 			var result = Target.CreatePortalViewModel();
 
-			result.NavigationItems.Should().Have.Count.EqualTo(7);
+			result.NavigationItems.Should().Have.Count.EqualTo(6);
 			result.NavigationItems.ElementAt(5).Action.Should().Be("Index");
 			result.NavigationItems.ElementAt(5).Controller.Should().Be("Message");
 		}
@@ -95,6 +94,9 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		[Test]
 		public void ShouldHaveCustomerName()
 		{
+			setupLoggedOnUser();
+			setLicense("default");
+
 			var result = Target.CreatePortalViewModel();
 
 			result.CustomerName.Should().Be.EqualTo("Teleopti_RD");
@@ -103,6 +105,8 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		[Test]
 		public void ShouldHaveLogonAgentName()
 		{
+			setupLoggedOnUser();
+
 			var result = Target.CreatePortalViewModel();
 
 			result.CurrentLogonAgentName.Should().Be.EqualTo("arne arne");
@@ -111,6 +115,8 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		[Test]
 		public void ShouldHideChangePasswordIfNoApplicationLogonExists()
 		{
+			setupLoggedOnUser();
+
 			var res = Target.CreatePortalViewModel();
 			res.ShowChangePassword.Should().Be.False();
 		}
@@ -118,6 +124,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		[Test]
 		public void ShouldShowChangePasswordIfApplicationLogonExists()
 		{
+			setupLoggedOnUser();
 			var tenant = new Tenant("Tenn");
 			var personInfo = new PersonInfo(tenant, Guid.NewGuid());
 			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), "Perra", "passadej", new OneWayEncryption());
@@ -130,9 +137,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		[Test]
 		public void ShouldMapAsmEnabledToTrueWhenHavingBothLicenseAndPermission()
 		{
-			setPermissions();
-			var licenseActivator = LicenseProvider.GetLicenseActivator(new AsmFakeLicenseService(true));
-			DefinedLicenseDataFactory.SetLicenseActivator(CurrentDataSource.CurrentName(), licenseActivator);
+			setupLoggedOnUser();
 
 			var res = Target.CreatePortalViewModel();
 
@@ -142,9 +147,8 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		[Test]
 		public void ShouldMapAsmEnabledToFalseWhenNoAsmLicense()
 		{
-			setPermissions();
-			var licenseActivator = LicenseProvider.GetLicenseActivator(new AsmFakeLicenseService(false));
-			DefinedLicenseDataFactory.SetLicenseActivator(CurrentDataSource.CurrentName(), licenseActivator);
+			setupLoggedOnUser();
+			setLicense("");
 
 			var res = Target.CreatePortalViewModel();
 
@@ -154,10 +158,9 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		[Test]
 		public void ShouldMapAsmEnabledToFalseWhenNoAsmPermission()
 		{
-			setPermissions(false);
-
-			var licenseActivator = LicenseProvider.GetLicenseActivator(new AsmFakeLicenseService(true));
-			DefinedLicenseDataFactory.SetLicenseActivator(CurrentDataSource.CurrentName(), licenseActivator);
+			PermissionProvider.SetApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger, false);
+			setupLoggedOnUser();
+			setLicense("default");
 
 			var res = Target.CreatePortalViewModel();
 
@@ -167,37 +170,49 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		[Test]
 		public void ShouldNotShowBadgeIfNoPermission()
 		{
+			setupLoggedOnUser();
 			Assert.That(Target.CreatePortalViewModel().ShowBadge, Is.False);
 		}
 
 		[Test, SetCulture("en-US")]
 		public void ShouldShowMeridianWhenUsCulture()
 		{
+			setupLoggedOnUser();
 			Target.CreatePortalViewModel().ShowMeridian.Should().Be.True();
 		}
 
 		[Test, SetCulture("sv-SE")]
 		public void ShouldShowMeridianWhenSwedishCulture()
 		{
+			setupLoggedOnUser();
 			Target.CreatePortalViewModel().ShowMeridian.Should().Be.False();
 		}
 
 		[Test, SetCulture("en-GB")]
 		public void ShouldShowMeridianWhenBritishCulture()
 		{
+			setupLoggedOnUser();
 			Target.CreatePortalViewModel().ShowMeridian.Should().Be.False();
 		}
 
 		[Test]
 		public void ShouldMapGamificationRollingPeriodSet()
 		{
+			setupLoggedOnUser();
 			Target.CreatePortalViewModel().BadgeRollingPeriodSet.Should().Be.EqualTo(GamificationRollingPeriodSet.OnGoing);
+		}
+
+		[Test]
+		public void ShouldMapDateFormatLocale()
+		{
+			setupLoggedOnUser();
+			
+			Target.CreatePortalViewModel().DateFormatLocale.Should().Be.EqualTo("zh-CN");
 		}
 
 		[Test]
 		public void ShouldGetOngoingPeriodAgentBadgesWhenToggleOff()
 		{
-			setPermissions();
 			ToggleManager.Disable(Toggles.WFM_Gamification_Create_Rolling_Periods_74866);
 			var calculatedDate = new DateOnly(2017, 4, 9);
 			var gamificationSetting = createGamificationSetting();
@@ -217,7 +232,6 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		[Test]
 		public void ShouldGetDefaultSettingPeriodAgentBadgesWhenToggleOn()
 		{
-			setPermissions();
 			ToggleManager.Enable(Toggles.WFM_Gamification_Create_Rolling_Periods_74866);
 			var calculatedDate = new DateOnly(2017, 4, 9);
 			var gamificationSetting = createGamificationSetting();
@@ -275,6 +289,11 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			result.ToList()[1].GoldBadge.Should().Be.EqualTo(0);
 		}
 
+		private void setLicense(string name)
+		{
+			CurrentDataSource.FakeName(name);
+		}
+
 		private void setAgentBadge(IGamificationSetting gamificationSetting, DateTime calculatedDate)
 		{
 			var agentBadge = new AgentBadge
@@ -304,11 +323,22 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			AgentBadgeWithRankRepository.Add(agentBadgeWithRank);
 		}
 
-		private void createTeamGamificationSetting(IGamificationSetting gamificationSetting = null)
+		private void setupLoggedOnUser()
 		{
+			CurrentDataSource.FakeName("default");
 			var team = TeamFactory.CreateTeamWithId("myTeam");
 			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(DateOnly.MinValue, team);
+			person.SetName(new Name("arne", "arne"));
+			var culture = CultureInfoFactory.CreateChineseCulture();
+			person.PermissionInformation.SetCulture(culture);
 			LoggedOnUser.SetFakeLoggedOnUser(person);
+			var principal = new TeleoptiPrincipal(new TeleoptiIdentity("Pelle", null, null, null, null), person);
+			CurrentTeleoptiPrincipal.Fake(principal);
+		}
+
+		private void createTeamGamificationSetting(IGamificationSetting gamificationSetting = null)
+		{
+			setupLoggedOnUser();
 			if (gamificationSetting == null) return;
 		
 			var teamGamificationSetting = new TeamGamificationSetting
@@ -355,42 +385,6 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 
 			GamificationSettingRepository.Add(gSetting);
 			return gSetting;
-		}
-
-		private static void setPermissions(bool asmPermission = true)
-		{
-			var principal = Thread.CurrentPrincipal as ITeleoptiPrincipal;
-			var claims = new List<Claim>
-			{
-				new Claim(string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace
-						, "/", DefinedRaptorApplicationFunctionPaths.MyReportWeb)
-					, new AuthorizeEveryone(), Rights.PossessProperty),
-				new Claim(string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace
-						, "/", DefinedRaptorApplicationFunctionPaths.TeamSchedule)
-					, new AuthorizeEveryone(), Rights.PossessProperty),
-				new Claim(string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace
-						, "/", DefinedRaptorApplicationFunctionPaths.StudentAvailability)
-					, new AuthorizeEveryone(), Rights.PossessProperty),
-				new Claim(string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace
-						, "/", DefinedRaptorApplicationFunctionPaths.StandardPreferences)
-					, new AuthorizeEveryone(), Rights.PossessProperty),
-				new Claim(string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace
-						, "/", DefinedRaptorApplicationFunctionPaths.TextRequests)
-					, new AuthorizeEveryone(), Rights.PossessProperty),
-				new Claim(
-					string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace,
-						"/AvailableData"), new AuthorizeEveryone(), Rights.PossessProperty),
-				new Claim(string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace
-					, "/", DefinedRaptorApplicationFunctionPaths.ViewBadge)
-					, new AuthorizeEveryone(), Rights.PossessProperty)
-			};
-
-			if (asmPermission)
-				claims.Add(new Claim(string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace
-						, "/", DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger)
-					, new AuthorizeEveryone(), Rights.PossessProperty));
-
-			principal.AddClaimSet(new DefaultClaimSet(ClaimSet.System, claims));
 		}
 	}
 }

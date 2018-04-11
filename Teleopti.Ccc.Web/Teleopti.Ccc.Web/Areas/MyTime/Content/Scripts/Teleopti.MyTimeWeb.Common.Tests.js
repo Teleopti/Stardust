@@ -195,6 +195,21 @@ $(document).ready(function () {
 		resetLocale();
 	});
 
+	test("should format date format locale", function() {
+		common.IsToggleEnabled = function (x) { return true; };
+		common.SetupCalendar({
+			UseJalaaliCalendar: false,
+			DateFormat: 'DD/MM/YYYY',
+			TimeFormat: 'HH:mm tt',
+			AMDesignator: 'AM',
+			PMDesignator: 'PM',
+			DateFormatLocale: 'zh-CN'
+		});
+		var formattedDateLocale = common.DateFormatLocale;
+
+		equal(formattedDateLocale, "zh-CN");
+	});
+
 	test("Should return service safe date format for date", function() {
 
 		var serviceDateFormat = common.FormatServiceDate(new Date(2015, 12-1, 25));

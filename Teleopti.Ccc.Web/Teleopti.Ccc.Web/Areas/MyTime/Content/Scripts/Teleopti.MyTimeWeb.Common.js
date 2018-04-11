@@ -150,6 +150,7 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 		Teleopti.MyTimeWeb.Common.TimeFormat = timeFormat;
 		Teleopti.MyTimeWeb.Common.Meridiem = { AM: options.AMDesignator, PM: options.PMDesignator };
 		Teleopti.MyTimeWeb.Common.DateTimeFormat = Teleopti.MyTimeWeb.Common.DateFormat + " " + Teleopti.MyTimeWeb.Common.TimeFormat;
+		Teleopti.MyTimeWeb.Common.DateFormatLocale = options.DateFormatLocale;
 
 		Teleopti.MyTimeWeb.Common.DateTimeDefaultValues = options.DateTimeDefaultValues;
 

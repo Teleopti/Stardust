@@ -11,6 +11,7 @@ namespace Teleopti.Ccc.WebTest
 	{
 		private bool _canSeeUnpublishedSchedule;
 		private readonly IList<PersonPermissionData> _personPermissionDatas = new List<PersonPermissionData>();
+		private Dictionary<string, bool> _applicationFunctionPermission = new Dictionary<string, bool>();
 
 		public FakePermissionProvider()
 		{
@@ -27,11 +28,20 @@ namespace Teleopti.Ccc.WebTest
 			_personPermissionDatas.Add(new PersonPermissionData(applicationFunctionPath, date, person));
 		}
 
+		public void SetApplicationFunctionPermission(string applicationFunctionPath, bool hasPermission)
+		{
+			_applicationFunctionPermission.Add(applicationFunctionPath, hasPermission);
+		}
+
 		public bool HasApplicationFunctionPermission(string applicationFunctionPath)
 		{
+			if (_applicationFunctionPermission.ContainsKey(applicationFunctionPath))
+			{
+				_applicationFunctionPermission.TryGetValue(applicationFunctionPath, out var hasPermission);
+				return hasPermission;
+			}
 
-			return _canSeeUnpublishedSchedule ||
-				   applicationFunctionPath != DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules;
+			return _canSeeUnpublishedSchedule || applicationFunctionPath != DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules;
 
 		}
 

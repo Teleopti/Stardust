@@ -125,13 +125,22 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 				Badges = badges,
 				BadgeRollingPeriodSet = rollingPeriodSet,
 				DateTimeDefaultValues = getDateTimeDefaultValues(culture),
-				ShowBadge = showBadge
+				ShowBadge = showBadge,
+				DateFormatLocale = getLocale()
 			};
 		}
 
 		public IEnumerable<BadgeViewModel> GetBadges(DateOnlyPeriod period)
 		{
 			return  _badgeProvider.GetBadges(period);
+		}
+
+		private string getLocale()
+		{
+			var principal = _currentIdentity.Current();
+			var principalCacheable = principal as TeleoptiPrincipalCacheable;
+			var regionnal = principalCacheable != null ? principalCacheable.Regional : principal.Regional;
+			return regionnal.Culture.Name;
 		}
 
 		private DateOnlyPeriod getDefaultPeriod(IGamificationSetting gamificationSetting)

@@ -23,5 +23,10 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 			return CultureInfo.GetCultureInfo("en-US");
 		}
+
+		public static CultureInfo CreateChineseCulture()
+		{
+			return CultureInfo.GetCultureInfo("zh-CN");
+		}
 	}
 }

@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 
 		public string AMDesignator { get; set; }
 		public string PMDesignator { get; set; }
+		public string DateFormatLocale { get; set; }
 	}
 
 	public class NavigationItem
