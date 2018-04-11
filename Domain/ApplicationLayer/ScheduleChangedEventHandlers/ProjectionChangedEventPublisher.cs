@@ -50,7 +50,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		[UnitOfWork]
 		public virtual void Handle(ScheduleChangedEvent @event)
 		{
-			publishEvent<ProjectionChangedEvent>(@event);
+			var projectionChangedEvents = publishEvent<ProjectionChangedEvent>(@event);
+			publishProjectChangedEventForShiftExchangeOffer(projectionChangedEvents);
+		}
+
+		//put here for perf reasons
+		private void publishProjectChangedEventForShiftExchangeOffer(IEnumerable<ProjectionChangedEvent> projectionChangedEvents)
+		{
+			projectionChangedEvents.ForEach(e =>
+			{
+				_publisher.Publish(new ProjectionChangedEventForShiftExchangeOffer());
+			});
 		}
 
 		[ImpersonateSystem]
@@ -75,17 +85,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		}
 
 
-		private void publishEvent<T>(ScheduleChangedEventBase @event) where T : ProjectionChangedEventBase, new()
+		private IEnumerable<T> publishEvent<T>(ScheduleChangedEventBase @event) where T : ProjectionChangedEventBase, new()
 		{
 			var data = getData(@event);
-			if (data == null) return;
-			_projectionChangedEventBuilder.Build<T>(@event, data.ScheduleRange, data.RealPeriod, data.Versions)
-				.ForEach(e =>
+			if (data == null) return new T[]{};
+			var events = _projectionChangedEventBuilder.Build<T>(@event, data.ScheduleRange, data.RealPeriod, data.Versions);
+			events.ForEach(e =>
 				{
 
 					e.ScheduleLoadTimestamp = data.ScheduleLoadedTime;
 					_publisher.Publish(e);
 				});
+			return events;
 		}
 
 		private class range
