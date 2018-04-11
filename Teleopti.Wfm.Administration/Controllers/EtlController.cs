@@ -6,6 +6,7 @@ using System.Net;
 using System.Web.Http;
 using log4net;
 using Teleopti.Analytics.Etl.Common.Configuration;
+using Teleopti.Analytics.Etl.Common.Entity;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
@@ -36,6 +37,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 		private readonly IConfigurationHandler _configurationHandler;
 		private readonly IGeneralFunctions _generalFunctions;
 		private readonly INow _now;
+		private readonly IJobHistoryRepository _jobHistoryRepository;
 
 		public EtlController(IToggleManager toggleManager,
 			JobCollectionModelProvider jobCollectionModelProvider,
@@ -45,7 +47,9 @@ namespace Teleopti.Wfm.Administration.Controllers
 			IBaseConfigurationRepository baseConfigurationRepository,
 			ILoadAllTenants loadAllTenants,
 			IConfigurationHandler configurationHandler,
-			IGeneralFunctions generalFunctions, INow now)
+			IGeneralFunctions generalFunctions, 
+			INow now,
+			IJobHistoryRepository jobHistoryRepository)
 		{
 			_toggleManager = toggleManager;
 			_jobCollectionModelProvider = jobCollectionModelProvider;
@@ -57,6 +61,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			_configurationHandler = configurationHandler;
 			_generalFunctions = generalFunctions;
 			_now = now;
+			_jobHistoryRepository = jobHistoryRepository;
 		}
 
 		[HttpGet, Route("Etl/ShouldEtlToolBeVisible")]
@@ -385,6 +390,27 @@ namespace Teleopti.Wfm.Administration.Controllers
 		{
 			_etlJobScheduler.DeleteScheduleJob(scheduleId);
 			return Ok();
+		}
+
+		[TenantUnitOfWork]
+		[HttpGet, Route("Etl/BusinessUnits")]
+		public virtual IHttpActionResult BusinessUnits(string tenantName)
+		{
+			if (tenantName == "<All>")
+			{
+				IList<BusinessUnitItem> allBuList = new List<BusinessUnitItem>
+				{
+					new BusinessUnitItem
+					{
+						Id = new Guid("00000000-0000-0000-0000-000000000002"),
+						Name = "<All>"
+					}
+				};
+				return Ok(allBuList);
+			}
+
+			var tenant = _loadAllTenants.Tenants().Single(x => x.Name == tenantName);
+			return Ok(_jobHistoryRepository.GetBusinessUnitsIncludingAll(tenant.DataSourceConfiguration.AnalyticsConnectionString));
 		}
 
 		private void saveScheduleJob(EtlScheduleJobModel scheduleModel)

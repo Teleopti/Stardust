@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading;
 using Teleopti.Analytics.Etl.Common.Entity;
+using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
@@ -53,7 +54,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.ViewModel
 			if (_baseConfiguration.JobHelper != null)
 				connectionString = _baseConfiguration.JobHelper.SelectedDataSource.Analytics.ConnectionString;
 			var previousSelectedItem = SelectedBusinessUnit;
-			BusinessUnitCollection = BusinessUnitItemMapper.Map(connectionString);
+			BusinessUnitCollection = new JobHistoryRepository().GetBusinessUnitsIncludingAll(connectionString);
 			SelectedBusinessUnit = BusinessUnitCollection.FirstOrDefault(bu => previousSelectedItem != null && bu.Id == previousSelectedItem.Id);
 			if(SelectedBusinessUnit == null)
 				SetFirstBusinessUnitAsSelected();

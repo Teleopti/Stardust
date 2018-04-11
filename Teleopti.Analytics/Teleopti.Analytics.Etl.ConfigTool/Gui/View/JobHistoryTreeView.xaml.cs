@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using Teleopti.Analytics.Etl.Common.Entity;
+using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.ConfigTool.Gui.ViewModel;
 
 namespace Teleopti.Analytics.Etl.ConfigTool.Gui.View

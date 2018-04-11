@@ -8,7 +8,7 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 
 namespace Teleopti.Analytics.Etl.Common.Infrastructure
 {
-	public class Repository : IJobLogRepository, IRunControllerRepository, IJobHistoryRepository
+	public class Repository : IJobLogRepository, IRunControllerRepository
 	{
 		private readonly string _connectionString;
 
@@ -16,9 +16,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		{
 			_connectionString = connectionString;
 		}
-
 		
-
 		public DataTable GetLog()
 		{
 			DataSet ds = HelperFunctions.ExecuteDataSet(CommandType.StoredProcedure, "mart.etl_log_get_today", null,
@@ -83,26 +81,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 											_connectionString);
 
 		}
-
-
-		public DataTable GetEtlJobHistory(DateTime startDate, DateTime endDate, Guid businessUnitId, bool showOnlyErrors)
-		{
-			var parameterList = new[]
-									{
-										new SqlParameter("start_date", startDate),
-										new SqlParameter("end_date", endDate),
-										new SqlParameter("business_unit_id", businessUnitId),
-										new SqlParameter("show_only_errors", showOnlyErrors)
-									};
-
-
-			var ds = HelperFunctions.ExecuteDataSet(CommandType.StoredProcedure, "mart.etl_job_execution_history", parameterList, _connectionString);
-			return ds.Tables[0];
-		}
-
-
-
-
+		
 		public bool IsAnotherEtlRunningAJob(out IEtlRunningInformation etlRunningInformation)
 		{
 			etlRunningInformation = null;
@@ -125,16 +104,6 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 				}
 			}
 			return false;
-		}
-
-		public DataTable BusinessUnitsIncludingAllItem
-		{
-			get
-			{
-				var ds = HelperFunctions.ExecuteDataSet(CommandType.StoredProcedure, "mart.sys_business_unit_all_get", null,
-														_connectionString);
-				return ds.Tables[0];
-			}
 		}
 	}
 }

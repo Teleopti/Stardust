@@ -29,6 +29,7 @@ namespace Teleopti.Wfm.Administration.Core.Modules
 			builder.RegisterType<EtlJobScheduler>().SingleInstance();
 			builder.RegisterType<JobScheduleRepository>().As<IJobScheduleRepository>().SingleInstance();
 			builder.RegisterType<Now>().As<INow>().SingleInstance();
+			builder.RegisterType<JobHistoryRepository>().As<IJobHistoryRepository>().SingleInstance();
 		}
 	}
 }

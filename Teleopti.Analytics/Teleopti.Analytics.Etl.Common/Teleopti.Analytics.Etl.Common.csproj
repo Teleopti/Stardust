@@ -122,9 +122,13 @@
     <Compile Include="EtlAppModule.cs" />
     <Compile Include="Infrastructure\BaseConfigurationRepository.cs" />
     <Compile Include="Infrastructure\JobScheduleRepository.cs" />
+    <Compile Include="Infrastructure\JobHistoryRepository.cs" />
+    <Compile Include="Interfaces\Common\IJobHistory.cs" />
     <Compile Include="ITenants.cs" />
     <Compile Include="Configuration\LookupIntegerItem.cs" />
     <Compile Include="Configuration\LookupStringItem.cs" />
+    <Compile Include="JobHistory\JobHistoryViewModel.cs" />
+    <Compile Include="JobHistory\JobStepHistoryViewModel.cs" />
     <Compile Include="Service\PmInfoProvider.cs" />
     <Compile Include="Configuration\StartupConfigurationModel.cs" />
     <Compile Include="TenantInfo.cs" />

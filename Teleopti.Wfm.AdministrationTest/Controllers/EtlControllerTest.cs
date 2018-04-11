@@ -55,6 +55,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 		public FakeUserTimeZone TimeZone;
 		public FakeConfigReader FakeConfigReader;
 		public FakeAnalyticsTimeZoneRepository TimeZoneRepository;
+		public FakeJobHistoryRepository JobHistoryRepository;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -1078,6 +1079,32 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			JobScheduleRepository.GetSchedules(null, DateTime.MinValue)
 				.Any()
 				.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldGetBusinessUnitsForOneTenant()
+		{
+			var bu = new BusinessUnitItem
+			{
+				Id = Guid.NewGuid(),
+				Name = "bu A"
+			};
+			JobHistoryRepository.AddBusinessUnits(new List<BusinessUnitItem>{bu}, connectionString);
+			AllTenants.HasWithAnalyticsConnectionString(testTenantName, connectionString);
+
+			var result = (OkNegotiatedContentResult<IList<BusinessUnitItem>>)Target.BusinessUnits(testTenantName);
+
+			result.Content.Single().Id.Should().Be(bu.Id);
+			result.Content.Single().Name.Should().Be(bu.Name);
+		}
+
+		[Test]
+		public void ShouldGetOnlyAllOptionForBusinessUnitsWhenAllTenants()
+		{
+			var result = (OkNegotiatedContentResult<IList<BusinessUnitItem>>)Target.BusinessUnits("<All>");
+
+			result.Content.Single().Id.Should().Be(new Guid("00000000-0000-0000-0000-000000000002"));
+			result.Content.Single().Name.Should().Be("<All>");
 		}
 
 		private IEnumerable<JobCollectionModel> getJobs(string tenantName, bool toggle38131Enabled, bool pmInstalled)

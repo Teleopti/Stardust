@@ -131,15 +131,11 @@
     </Compile>
     <Compile Include="Gui\SpinningProgress\ToolStripSpinningProgressControl.cs" />
     <Compile Include="Gui\Converter\IsServiceRunningJobBooleanToStringConverter.cs" />
-    <Compile Include="Gui\ViewModel\BusinessUnitItemMapper.cs" />
     <Compile Include="Gui\ViewModel\CopyErrorCommand.cs" />
-    <Compile Include="Gui\ViewModel\IJobHistory.cs" />
     <Compile Include="Gui\ViewModel\JobHistoryMapper.cs" />
     <Compile Include="Gui\ViewModel\JobHistorySelectionEventArgs.cs" />
     <Compile Include="Gui\ViewModel\JobHistorySelectionViewModel.cs" />
     <Compile Include="Gui\ViewModel\JobHistoryTreeViewModel.cs" />
-    <Compile Include="Gui\ViewModel\JobHistoryViewModel.cs" />
-    <Compile Include="Gui\ViewModel\JobStepHistoryViewModel.cs" />
     <Compile Include="Gui\ViewModel\RunningStatusRepository.cs" />
     <Compile Include="Gui\Converter\VisibilityOnNullConverter.cs" />
     <Compile Include="Gui\View\JobHistoryMain.xaml.cs">

@@ -11,7 +11,7 @@ using IJobResult = Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResu
 
 namespace Teleopti.Analytics.Etl.CommonTest.Infrastructure
 {
-	internal class RepositoryStub : IJobScheduleRepository, IJobLogRepository, IJobHistoryRepository
+	internal class RepositoryStub : IJobScheduleRepository, IJobLogRepository
 	{
 		private readonly DataTable _logTable;
 		private readonly IList<IEtlJobSchedule> _jobSchedules;
@@ -86,16 +86,6 @@ namespace Teleopti.Analytics.Etl.CommonTest.Infrastructure
 		public void SaveLogStepPost(IEtlJobLog etlJobLogItem, IJobStepResult jobStepResult)
 		{
 			throw new NotImplementedException();
-		}
-
-		public DataTable GetEtlJobHistory(DateTime startDate, DateTime endDate, Guid businessUnitId, bool showOnlyErrors)
-		{
-			throw new NotImplementedException();
-		}
-
-		public DataTable BusinessUnitsIncludingAllItem
-		{
-			get { throw new NotImplementedException(); }
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]

@@ -25,6 +25,7 @@ namespace Teleopti.Wfm.AdministrationTest
 			system.UseTestDouble<FakeGeneralInfrastructure>().For<IGeneralInfrastructure>();
 			system.UseTestDouble<MutableNow>().For<INow>();
 			system.UseTestDouble<FakeJobScheduleRepository>().For<IJobScheduleRepository>();
+			system.UseTestDouble<FakeJobHistoryRepository>().For<IJobHistoryRepository>();
 		}
 	}
 }

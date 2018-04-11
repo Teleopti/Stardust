@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Analytics.Etl.Common.Interfaces.Common;
+using Teleopti.Analytics.Etl.Common.JobHistory;
 
 namespace Teleopti.Analytics.Etl.ConfigTool.Gui.ViewModel
 {
