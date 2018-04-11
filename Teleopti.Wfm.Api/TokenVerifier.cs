@@ -1,21 +1,32 @@
-﻿using System.Collections.Generic;
+﻿using System.Net.Http;
+using Teleopti.Ccc.Domain.Config;
 
 namespace Teleopti.Wfm.Api
 {
-	public class TokenVerifier
+	public class TokenVerifier : ITokenVerifier
 	{
-		readonly HashWrapper hash;
-		public Dictionary<string, string> hashUsers = new Dictionary<string, string> { { "$2a$10$WbJpBWPWsrVOlMze27m0neJ0PLXBKVYS/y5tnMpuOY174/H1byvwC", "asdf" } };
+		private readonly HttpClient client = new HttpClient();
+		private readonly string _url;
 
-		public TokenVerifier(HashWrapper hash)
+		public TokenVerifier(IConfigReader configReader)
 		{
-			this.hash = hash;
+			_url = configReader.AppConfig("Web") + "api/token/verify";
 		}
 
 		public bool TryGetUser(string token, out string user)
 		{
-			string v = hash.Hash(token);
-			return hashUsers.TryGetValue(v, out user);
+			var result = client.PostAsJsonAsync(_url, token);
+			var content = result.Result.EnsureSuccessStatusCode()
+				.Content
+				.ReadAsStringAsync().Result;
+			if (string.IsNullOrWhiteSpace(content))
+			{
+				user = null;
+				return false;
+			}
+
+			user = content;
+			return true;
 		}
 	}
 }

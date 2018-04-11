@@ -1,7 +1,6 @@
 using System;
 using Autofac;
 using Teleopti.Ccc.Domain.Config;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 

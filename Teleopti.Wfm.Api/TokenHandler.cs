@@ -6,9 +6,9 @@ namespace Teleopti.Wfm.Api
 {
 	public class TokenHandler : OwinMiddleware
 	{
-		private readonly TokenVerifier hash;
+		private readonly ITokenVerifier hash;
 
-		public TokenHandler(OwinMiddleware next, TokenVerifier hash) : base(next)
+		public TokenHandler(OwinMiddleware next, ITokenVerifier hash) : base(next)
 		{
 			this.hash = hash;
 		}

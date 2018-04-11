@@ -1,24 +1,27 @@
-﻿using System.Web.Http;
+﻿using System;
+using System.Web.Http;
 using Autofac;
 using Autofac.Integration.WebApi;
 using NSwag.AspNet.Owin;
 using Owin;
+using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
+using Teleopti.Ccc.IocCommon;
 
 namespace Teleopti.Wfm.Api
 {
 	public class Startup
 	{
+		private readonly Action<ContainerBuilder> _optionalRegistrations;
+
+		public Startup(Action<ContainerBuilder> optionalRegistrations = null)
+		{
+			_optionalRegistrations = optionalRegistrations ?? (_ => {});
+		}
+
 		public void Configuration(IAppBuilder app)
 		{
-			var x = new ContainerBuilder();
-			x.RegisterType<CommandDtoProvider>();
-			x.RegisterType<QueryDtoProvider>();
-			x.RegisterType<DtoProvider>();
-			x.RegisterType<QueryHandlerProvider>();
-			x.RegisterType<HashWrapper>();
-			x.RegisterType<TokenVerifier>();
-			x.RegisterApiControllers(typeof(Startup).Assembly);
-			var container = x.Build();
+			var container = configureContainer();
 			
 			var swaggerUiSettings = new SwaggerUi3Settings
 			{
@@ -37,9 +40,33 @@ namespace Teleopti.Wfm.Api
 
 			app.UseSwaggerUi3(swaggerUiSettings);
 
-			app.UseCustomToken();
+			app.UseCustomToken(container.Resolve<ITokenVerifier>());
 
 			app.UseWebApi(httpConfiguration);
+		}
+
+		private IContainer configureContainer()
+		{
+			var builder = new ContainerBuilder();
+
+			var args = new IocArgs(new ConfigReader())
+			{
+				DataSourceConfigurationSetter = DataSourceConfigurationSetter.ForApi()
+			};
+			var configuration = new IocConfiguration(args, CommonModule.ToggleManagerForIoc(args));
+
+			builder.RegisterModule(new CommonModule(configuration));
+			builder.RegisterType<CommandDtoProvider>();
+			builder.RegisterType<QueryDtoProvider>();
+			builder.RegisterType<DtoProvider>();
+			builder.RegisterType<QueryHandlerProvider>();
+			builder.RegisterType<HashWrapper>();
+			builder.RegisterType<TokenVerifier>().As<ITokenVerifier>();
+			builder.RegisterApiControllers(typeof(Startup).Assembly);
+
+			_optionalRegistrations.Invoke(builder);
+
+			return builder.Build();
 		}
 	}
 }

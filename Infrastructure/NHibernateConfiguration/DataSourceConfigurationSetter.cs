@@ -30,6 +30,10 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		{
 			return new DataSourceConfigurationSetter("Teleopti.Wfm.Web", new ConfigReader());
 		}
+		public static IDataSourceConfigurationSetter ForApi()
+		{
+			return new DataSourceConfigurationSetter("Teleopti.Wfm.Api", new ConfigReader());
+		}
 		public static IDataSourceConfigurationSetter ForDesktop()
 		{
 			return new DataSourceConfigurationSetter("Teleopti.Wfm.SmartClientPortal.Shell", new ConfigReader());

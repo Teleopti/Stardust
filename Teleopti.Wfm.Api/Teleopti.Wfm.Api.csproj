@@ -271,6 +271,7 @@
     <Compile Include="ICommandHandler.cs" />
     <Compile Include="IQueryDto.cs" />
     <Compile Include="IQueryHandler.cs" />
+    <Compile Include="ITokenVerifier.cs" />
     <Compile Include="QueryDtoProvider.cs" />
     <Compile Include="QueryHandlerProvider.cs" />
     <Compile Include="QueryResultDto.cs" />

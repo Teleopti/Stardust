@@ -1,4 +1,5 @@
 ﻿using System.Net.Http;
+using Autofac;
 using Microsoft.Owin.Testing;
 
 namespace Teleopti.Wfm.Api.Test
@@ -11,9 +12,14 @@ namespace Teleopti.Wfm.Api.Test
 
 		protected ApiTest()
 		{
-			// Arrange
-			_server = TestServer.Create<Startup>();
+			var startup = new Startup(testRegistrations);
+			_server = TestServer.Create(x => startup.Configuration(x));
 			Client = _server.HttpClient;
+		}
+
+		private void testRegistrations(ContainerBuilder obj)
+		{
+			obj.RegisterType<FakeTokenVerifier>().As<ITokenVerifier>();
 		}
 
 		protected void Authorize()
@@ -21,6 +27,4 @@ namespace Teleopti.Wfm.Api.Test
 			Client.DefaultRequestHeaders.Add("Authorization", "bearer afdsafasdf");
 		}
 	}
-
-
 }
