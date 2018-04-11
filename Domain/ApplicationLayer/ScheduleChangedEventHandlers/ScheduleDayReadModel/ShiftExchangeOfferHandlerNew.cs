@@ -6,27 +6,23 @@ using Teleopti.Ccc.Domain.Logon;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel
 {
-	[RemoveMeWithToggle(Toggles.ResourcePlanner_SpeedUpEvents_75415)]
-	[DisabledBy(Toggles.ResourcePlanner_SpeedUpEvents_75415)]
-	public class ShiftExchangeOfferHandlerHangfire :
-		IHandleEvent<ProjectionChangedEvent>,
+	[EnabledBy(Toggles.ResourcePlanner_SpeedUpEvents_75415)]
+	public class ShiftExchangeOfferHandlerNew :
+		IHandleEvent<ProjectionChangedEventForShiftExchangeOffer>,
 		IRunOnHangfire
 	{
 		private readonly ShiftExchangeOfferThingy _shiftExchangeOfferThingy;
 
-		public ShiftExchangeOfferHandlerHangfire(ShiftExchangeOfferThingy shiftExchangeOfferThingy)
+		public ShiftExchangeOfferHandlerNew(ShiftExchangeOfferThingy shiftExchangeOfferThingy)
 		{
 			_shiftExchangeOfferThingy = shiftExchangeOfferThingy;
 		}
 
 		[ImpersonateSystem]
 		[UnitOfWork]
-		public virtual void Handle(ProjectionChangedEvent @event)
+		public virtual void Handle(ProjectionChangedEventForShiftExchangeOffer @event)
 		{
-			if (!@event.IsDefaultScenario)
-				return;
-
-			var dateAndChecksums = @event.ScheduleDays.Select(x => (Date: x.Date, CheckSum: x.CheckSum));
+			var dateAndChecksums = @event.Days.Select(x => (Date: x.Date, CheckSum: x.Checksum));
 			_shiftExchangeOfferThingy.Execute(@event.PersonId, dateAndChecksums);
 		}
 	}

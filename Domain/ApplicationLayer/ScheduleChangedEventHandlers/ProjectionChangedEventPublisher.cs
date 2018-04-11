@@ -59,7 +59,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		{
 			projectionChangedEvents.ForEach(e =>
 			{
-				_publisher.Publish(new ProjectionChangedEventForShiftExchangeOffer());
+				if (e.IsDefaultScenario)
+				{
+					_publisher.Publish(
+					new ProjectionChangedEventForShiftExchangeOffer
+					{
+						PersonId = e.PersonId,
+						Days =  e.ScheduleDays.Select(x => new ProjectionChangedEventForShiftExchangeOfferDateAndChecksums { Date = x.Date, Checksum = x.CheckSum })
+						
+					});	
+				}
 			});
 		}
 
