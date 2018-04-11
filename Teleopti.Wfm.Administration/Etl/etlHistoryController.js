@@ -76,6 +76,7 @@
 
 		function selectedTenantChanged() {
 			$window.sessionStorage.tenant = vm.selectedTenant.TenantName;
+			getBusinessUnits(vm.selectedTenant.TenantName);
 			if (vm.selectedTenant.TenantName === "<All>") {
 				vm.selectedBu = getItemBasedOnName(vm.businessUnits, "<All>", "Name");
 			}

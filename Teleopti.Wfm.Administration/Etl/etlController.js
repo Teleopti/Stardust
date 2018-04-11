@@ -152,10 +152,22 @@
 				vm.tenants.unshift({
 					TenantName: '<All>'
 				})
-				vm.selectedTenant = vm.tenants[0];
-				selectedTenantChanged();
+				if (!$window.sessionStorage.tenant) {
+					vm.selectedTenant = vm.tenants[0];
+					selectedTenantChanged();
+				} else {
+					vm.selectedTenant = getItemBasedOnName(vm.tenants, $window.sessionStorage.tenant, "TenantName");
+				}
 			});
 		}
+
+		function getItemBasedOnName(arr, name, prop) {
+      for (var i = 0; i < arr.length; i++) {
+        if (arr[i][prop] === name) {
+          return arr[i];
+        }
+      }
+    }
 
 		function getConfigStatus() {
 			$http
