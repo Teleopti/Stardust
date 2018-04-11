@@ -26,7 +26,11 @@ namespace Teleopti.Wfm.Api
 	{
 		private readonly Action<ContainerBuilder> _optionalRegistrations;
 
-		public Startup(Action<ContainerBuilder> optionalRegistrations = null)
+		public Startup() : this(null)
+		{
+		}
+
+		public Startup(Action<ContainerBuilder> optionalRegistrations)
 		{
 			_optionalRegistrations = optionalRegistrations ?? (_ => {});
 		}
