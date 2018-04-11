@@ -8,11 +8,10 @@ using NSwag.AspNet.Owin;
 using Owin;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Authentication;
+using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.Config;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
@@ -76,9 +75,8 @@ namespace Teleopti.Wfm.Api
 
 			app.UseSwaggerUi3(swaggerUiSettings);
 
-			app.UseCustomToken(container.Resolve<ITokenVerifier>(), container.Resolve<IDataSourceForTenant>(),
-				container.Resolve<ILoadUserUnauthorized>(), container.Resolve<IRepositoryFactory>(),
-				container.Resolve<ILogOnOff>());
+			app.UseCustomToken(container.Resolve<ITokenVerifier>(), container.Resolve<IRepositoryFactory>(),
+				container.Resolve<ILogOnOff>(), container.Resolve<IAuthenticationQuerier>());
 
 			app.UseWebApi(httpConfiguration);
 		}

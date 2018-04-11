@@ -1,17 +1,16 @@
 ﻿using Owin;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Authentication;
+using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 
 namespace Teleopti.Wfm.Api
 {
 	public static class CustomTokenMiddlewareExtensions
 	{
 		public static IAppBuilder UseCustomToken(
-			this IAppBuilder builder, ITokenVerifier tokenVerifier, IDataSourceForTenant dataSourceForTenant, ILoadUserUnauthorized loadUserUnauthorized, IRepositoryFactory repositoryFactory, ILogOnOff logOnOff)
+			this IAppBuilder builder, ITokenVerifier tokenVerifier, IRepositoryFactory repositoryFactory, ILogOnOff logOnOff, IAuthenticationQuerier authenticationQuerier)
 		{
-			return builder.Use(typeof(TokenHandler), tokenVerifier, dataSourceForTenant, loadUserUnauthorized, repositoryFactory, logOnOff);
+			return builder.Use(typeof(TokenHandler), tokenVerifier, repositoryFactory, logOnOff, authenticationQuerier);
 		}
 	}
 }

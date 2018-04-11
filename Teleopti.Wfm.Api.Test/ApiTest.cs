@@ -6,7 +6,9 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.Authentication;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
@@ -73,6 +75,16 @@ namespace Teleopti.Wfm.Api.Test
 			builder.RegisterInstance(businessUnitRepository).As<IBusinessUnitRepository>();
 
 			builder.RegisterInstance(new sharedSettingsQuerierFake()).As<ISharedSettingsQuerier>();
+			var requestFake = new PostHttpRequestFake();
+			var nhibDecryption = new DataSourceConfigDecryption();
+			requestFake.SetReturnValue(new AuthenticationInternalQuerierResult
+			{
+				Success = true,
+				PersonId = FakeTokenVerifier.UserId,
+				Tenant = DomainTestAttribute.DefaultTenantName,
+				DataSourceConfiguration = nhibDecryption.EncryptConfigJustForTest(new DataSourceConfig { AnalyticsConnectionString = "", ApplicationConnectionString = "" })
+			});
+			builder.RegisterInstance(requestFake).As<IPostHttpRequest>();
 		}
 
 		protected void Authorize()
