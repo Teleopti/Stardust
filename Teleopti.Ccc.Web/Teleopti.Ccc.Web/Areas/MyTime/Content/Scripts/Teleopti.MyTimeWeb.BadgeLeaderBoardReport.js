@@ -22,25 +22,6 @@
 			self.rollingPeriod = $('.rolling-type-field')[0].value
 			self.showCalendar = self.rollingPeriod && self.rollingPeriod !== '0';
 			self.selectedDate = ko.observable(moment().startOf("day"));
-			var getStartDate = function () {
-				if (self.rollingPeriod === '1') {
-					return self.selectedDate().clone().startOf('week');
-				}
-
-				if (self.rollingPeriod === '2') {
-					return self.selectedDate().clone().startOf('month');
-				}
-			}
-
-			var getEndDate = function () {
-				if (self.rollingPeriod === '1') {
-					return self.selectedDate().clone().endOf('week');
-				}
-
-				if (self.rollingPeriod === '2') {
-					return self.selectedDate().clone().endOf('month');
-				}
-			}
 
 			self.displayDate = ko.computed(function () {
 				if (self.rollingPeriod === '0' || !self.rollingPeriod) return;
@@ -68,11 +49,31 @@
 				}
 			});
 
-			var increasePeriod = function (num) {
+			function increasePeriod(num) {
 				if (self.rollingPeriod === '1') {
 					self.selectedDate(self.selectedDate().add(num, 'week'));
 				} else if (self.rollingPeriod === '2') {
 					self.selectedDate(self.selectedDate().add(num, 'month'));
+				}
+			}
+
+			function getStartDate() {
+				if (self.rollingPeriod === '1') {
+					return self.selectedDate().clone().startOf('week');
+				}
+
+				if (self.rollingPeriod === '2') {
+					return self.selectedDate().clone().startOf('month');
+				}
+			}
+
+			function getEndDate() {
+				if (self.rollingPeriod === '1') {
+					return self.selectedDate().clone().endOf('week');
+				}
+
+				if (self.rollingPeriod === '2') {
+					return self.selectedDate().clone().endOf('month');
 				}
 			}
 		}
