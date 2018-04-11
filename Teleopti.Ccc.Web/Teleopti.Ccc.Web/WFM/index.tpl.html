@@ -49,7 +49,7 @@
 </head>
 
 <body ng-app="wfm" ng-show="isAuthenticated" ng-cloak ng-controller="MainController as main">
-<div class="backdrop" ng-if="!main.styleIsFullyLoaded">
+	<div class="backdrop" ng-if="!main.styleIsFullyLoaded">
 		<div class="loader"></div>
 	</div>
 	<div id="nav" ng-include="'html/nav.html'" class="material-depth-1 navbar navbar-default navbar-static-top " role="navigation"></div>
