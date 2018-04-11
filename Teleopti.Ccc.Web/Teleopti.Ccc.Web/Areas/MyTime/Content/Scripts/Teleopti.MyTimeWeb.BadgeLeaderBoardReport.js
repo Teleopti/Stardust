@@ -51,9 +51,9 @@
 
 			function increasePeriod(num) {
 				if (self.rollingPeriod === '1') {
-					self.selectedDate(self.selectedDate().add(num, 'week'));
+					self.selectedDate(self.selectedDate().clone().add(num, 'week'));
 				} else if (self.rollingPeriod === '2') {
-					self.selectedDate(self.selectedDate().add(num, 'month'));
+					self.selectedDate(self.selectedDate().clone().add(num, 'month'));
 				}
 			}
 
