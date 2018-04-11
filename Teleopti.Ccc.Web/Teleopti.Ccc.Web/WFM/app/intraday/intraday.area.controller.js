@@ -280,6 +280,9 @@
 			if (vm.moduleState.currentArea && vm.moduleState.currentArea !== null) {
 				vm.openSkillFromArea(vm.moduleState.selectedItem);
 			}
+			if (vm.moduleState.selectedSubSkill !== null) {
+				vm.checkIfFilterSkill(vm.moduleState.selectedSubSkill);
+			}
 			// else {
 			// 	vm.selectSkillOrSkillArea(vm.moduleState.selectedItem, false);
 			// }

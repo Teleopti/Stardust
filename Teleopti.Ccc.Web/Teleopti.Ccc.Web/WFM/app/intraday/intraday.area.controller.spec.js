@@ -840,28 +840,6 @@ describe('IntradayAreaController', function() {
 		expect(vm.skills[0].Name).toEqual('skill x');
 	});
 
-	it('should delete selected skill area when toggle is disabled', function() {
-		vm.toggles['WFM_Modify_Skill_Groups_43727'] = false;
-		createController(false);
-
-		vm.deleteSkillArea(vm.skillAreas[1]);
-
-		expect(vm.skillAreas.length).toEqual(3);
-		$httpBackend.flush();
-
-		expect(vm.moduleState.selectedItem).toEqual(null);
-		expect(vm.skillAreas.length).toEqual(2);
-	});
-
-	// Removed due to new behaviour: Anders Sjöberg 2018-03-20
-	// it('should monitor first skill if no skill areas', function() {
-	// 	skillAreaInfo.SkillAreas = [];
-	// 	createController(false);
-
-	// 	vm.skillSelected(vm.skills[0]);
-	// 	expect(vm.moduleState.selectedItem).toEqual(vm.skills[0]);
-	// });
-
 	it('should monitor first skill area if there are any', function() {
 		createController(false);
 
@@ -1160,7 +1138,7 @@ describe('IntradayAreaController', function() {
 	});
 
 	it('should remember selected day offset if toggle is on', function() {
-		createController(false, { WFM_Remember_My_Selection_In_Intraday_47254: false });
+		createController(false, { WFM_Remember_My_Selection_In_Intraday_47254: true });
 		vm.changeChosenOffset(-5, true);
 		vm.moduleState.chosenOffset.value = 0;
 		vm.loadState();
