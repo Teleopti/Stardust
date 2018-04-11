@@ -20,6 +20,9 @@ Teleopti.MyTimeWeb.BadgeCountsDropdown = (function ($) {
 		Init: function () {
 			Teleopti.MyTimeWeb.UserInfo.WhenLoaded(function (userInfo) {
 				var el = $('#badge-counts')[0];
+
+				if (!el) return;
+
 				var periodType = el.dataset.periodType;
 
 				if (periodType === 'OnGoing') return;
