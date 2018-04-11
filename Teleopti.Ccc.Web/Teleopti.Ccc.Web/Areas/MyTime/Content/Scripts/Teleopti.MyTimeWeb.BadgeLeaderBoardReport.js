@@ -22,35 +22,38 @@
 			self.rollingPeriod = $('.rolling-type-field')[0].value
 			self.showCalendar = self.rollingPeriod && self.rollingPeriod !== '0';
 			self.selectedDate = ko.observable(moment().startOf("day"));
-			self.displayDate = ko.dependentObservable(function () {
-				if (self.rollingPeriod === '0' || !self.rollingPeriod) return;
-				var periodName = '';
+			var getStartDate = function () {
 				if (self.rollingPeriod === '1') {
-					periodName = 'week';
-				} else if (self.rollingPeriod === '2') {
-					periodName = 'month';
+					return self.selectedDate().clone().startOf('week');
 				}
 
-				return this.selectedDate().clone().startOf(periodName).format(this.dateFormat) + ' - ' + this.selectedDate().clone().endOf(periodName).format(this.dateFormat);
-			}, self);
-
-			self.previous = function () {
-				var aDate = self.selectedDate();
-				if (self.rollingPeriod === '1') {
-					self.selectedDate(aDate.add('days', -7));
-				} else
-					if (self.rollingPeriod === '2') {
-						self.selectedDate(aDate.add('month', -1));
+				if (self.rollingPeriod === '2') {
+					return self.selectedDate().clone().startOf('month');
 				}
 			}
 
-			self.next = function () {
+			var getEndDate = function () {
 				if (self.rollingPeriod === '1') {
-					self.selectedDate(self.selectedDate().add('days', 7));
-				} else
-				if (self.rollingPeriod === '2') {
-					self.selectedDate(self.selectedDate().add('month', 1));
+					return self.selectedDate().clone().endOf('week');
 				}
+
+				if (self.rollingPeriod === '2') {
+					return self.selectedDate().clone().endOf('month');
+				}
+			}
+
+			self.displayDate = ko.computed(function () {
+				if (self.rollingPeriod === '0' || !self.rollingPeriod) return;
+
+				return getStartDate().format(self.dateFormat) + ' - ' + getEndDate().format(self.dateFormat);
+			}, self);
+
+			self.previous = function () {
+				increasePeriod(-1);
+			}
+
+			self.next = function () {
+				increasePeriod(1);
 			}
 
 			self.selectedDate.subscribe(function (value) {
@@ -62,8 +65,16 @@
 				} else if (self.oldValue.format('YYMMDD') != value.format('YYMMDD')) {
 					self.loadData();
 					self.oldValue = value;
-				}				
+				}
 			});
+
+			var increasePeriod = function (num) {
+				if (self.rollingPeriod === '1') {
+					self.selectedDate(self.selectedDate().add(num, 'week'));
+				} else if (self.rollingPeriod === '2') {
+					self.selectedDate(self.selectedDate().add(num, 'month'));
+				}
+			}
 		}
 
 		self.loadData = function () {
@@ -75,16 +86,10 @@
 				SelectedId: self.selectedOptionId()
 			};
 
-			if (self.rollingPeriodToggleEnabled) {
-				if (self.rollingPeriod === '1') {
-					data.StartDate = self.selectedDate().clone().startOf('week').utc().toDate().toJSON();
-					data.EndDate = self.selectedDate().clone().endOf('week').utc().toDate().toJSON();
-				} else if (self.rollingPeriod === '2') {
-					data.StartDate = self.selectedDate().clone().startOf('month').utc().toDate().toJSON();
-					data.EndDate = self.selectedDate().clone().endOf('month').utc().toDate().toJSON();
-				}
+			if (self.rollingPeriodToggleEnabled && self.rollingPeriod !== '0') {
+				data.StartDate = getStartDate().utc().toDate().toJSON();
+				data.EndDate = getEndDate().utc().toDate().toJSON();
 			}
-			
 
 			ajax.Ajax({
 				url: 'BadgeLeaderBoardReport/Overview',
