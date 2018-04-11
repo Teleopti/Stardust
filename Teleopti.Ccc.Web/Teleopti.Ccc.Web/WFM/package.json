@@ -130,8 +130,9 @@
 		"webpack-extraneous-file-cleanup-plugin": "1.0.5"
 	},
 	"scripts": {
-		"pretest": "..\\.node\\grunt.cmd devDist",
+		"pretest": "..\\.node\\grunt.cmd dist",
 		"test": "karma start karma.conf.js",
+		"predevTest": "..\\.node\\grunt.cmd devDist",
 		"devTest": "npm test -- --reporters dots --no-single-run --auto-watch --autoWatchBatchDelay 1000 --",
 		"pretestRta": "..\\.node\\grunt.cmd devDistRta",
 		"testRta": "karma start karma.conf.js",
