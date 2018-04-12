@@ -15,6 +15,7 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Wfm.Administration.Core;
@@ -413,6 +414,18 @@ namespace Teleopti.Wfm.Administration.Controllers
 			return Ok(_jobHistoryRepository.GetBusinessUnitsIncludingAll(tenant.DataSourceConfiguration.AnalyticsConnectionString));
 		}
 
+		[TenantUnitOfWork]
+		[HttpPost, Route("Etl/GetJobHistory")]
+		public virtual IHttpActionResult GetJobHistory(JobHistoryCriteria jobHistoryCriteria)
+		{
+			var connectionString = _configReader.ConnectionString("Hangfire");
+			var businessUnitIds =  getBusinessUnitIds(jobHistoryCriteria.TenantName, jobHistoryCriteria.BusinessUnitId);
+			if(businessUnitIds.Any())
+				return Ok(_jobHistoryRepository.GetEtlJobHistory(jobHistoryCriteria.StartDate, jobHistoryCriteria.EndDate,
+				businessUnitIds, jobHistoryCriteria.ShowOnlyErrors, connectionString));
+			return Ok();
+		}
+
 		private void saveScheduleJob(EtlScheduleJobModel scheduleModel)
 		{
 			if (string.IsNullOrEmpty(scheduleModel.DailyFrequencyMinute))
@@ -466,5 +479,42 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 			return master?.Name;
 		}
+
+		private List<Guid> getBusinessUnitIds(string tenantName, Guid businessUnitId)
+		{
+
+			if (businessUnitId == new Guid("00000000-0000-0000-0000-000000000002"))
+			{
+				var bunitIds = new List<Guid>();
+				var tenants = new List<Tenant>();
+				if (tenantName != "All")
+				{
+					tenants = new List<Tenant>() { _loadAllTenants.Tenants().Single(x => x.Name == tenantName) };
+					foreach (var tenant in tenants)
+					{
+						var businessUnits =
+							_jobHistoryRepository.GetBusinessUnitsIncludingAll(tenant.DataSourceConfiguration.AnalyticsConnectionString)
+								.Where(x => x.Id != new Guid("00000000-0000-0000-0000-000000000002"))
+								.Select(x => x.Id);
+						foreach (var businessUnit in businessUnits)
+						{
+							bunitIds.Add(businessUnit);
+						}
+					}
+					return bunitIds;
+				}	
+			}
+
+			return new List<Guid>() { businessUnitId };
+		}
+	}
+
+	public class JobHistoryCriteria
+	{
+		public DateTime StartDate { get; set; }
+		public DateTime EndDate { get; set; }
+		public Guid BusinessUnitId { get; set; }
+		public bool ShowOnlyErrors { get; set; }
+		public string TenantName { get; set; }
 	}
 }

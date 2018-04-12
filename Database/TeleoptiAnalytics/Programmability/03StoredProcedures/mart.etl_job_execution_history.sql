@@ -80,7 +80,7 @@ BEGIN
 										AND
 										(je.job_end_time < @end_date)
 										AND
-										(je.business_unit_code = @business_unit_id 
+										(je.business_unit_code in (SELECT * FROM mart.SplitStringGuid(@business_unit_id))
 										Or
 										@business_unit_id = '00000000-0000-0000-0000-000000000002')
 										AND 
@@ -137,7 +137,7 @@ BEGIN
 			AND
 			(je.job_end_time < @end_date)
 			AND
-			(je.business_unit_code = @business_unit_id 
+			(je.business_unit_code in (SELECT * FROM mart.SplitStringGuid(@business_unit_id))
 			Or
 			@business_unit_id = '00000000-0000-0000-0000-000000000002')
 		ORDER BY 

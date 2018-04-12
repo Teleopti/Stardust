@@ -7,7 +7,7 @@ namespace Teleopti.Analytics.Etl.Common.Interfaces.Common
 {
 	public interface IJobHistoryRepository
 	{
-		IList<JobHistoryViewModel> GetEtlJobHistory(DateTime startDate, DateTime endDate, Guid businessUnitId, bool showOnlyErrors, string connectionString);
+		IList<JobHistoryViewModel> GetEtlJobHistory(DateTime startDate, DateTime endDate, List<Guid> businessUnitIds, bool showOnlyErrors, string connectionString);
 		IList<BusinessUnitItem> GetBusinessUnitsIncludingAll(string connectionString);
 	}
 }

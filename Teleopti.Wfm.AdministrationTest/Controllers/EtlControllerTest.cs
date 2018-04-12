@@ -9,6 +9,7 @@ using Teleopti.Analytics.Etl.Common;
 using Teleopti.Analytics.Etl.Common.Entity;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
+using Teleopti.Analytics.Etl.Common.JobHistory;
 using Teleopti.Analytics.Etl.Common.JobSchedule;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Collection;
@@ -1105,6 +1106,112 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 
 			result.Content.Single().Id.Should().Be(new Guid("00000000-0000-0000-0000-000000000002"));
 			result.Content.Single().Name.Should().Be("<All>");
+		}
+
+		[Test]
+		public void ShouldGetJobHistoryForOneBusinessUnit()
+		{
+			var buName = Guid.NewGuid();
+			var bu = new BusinessUnitItem
+			{
+				Id = buName,
+				Name = buName.ToString()
+			};
+			JobHistoryRepository.AddJobHistory(new JobHistoryViewModel()
+			{
+				BusinessUnitName = bu.Name,
+				StartTime = new DateTime(2018,04,11),
+			});
+			var result = (OkNegotiatedContentResult<IList<JobHistoryViewModel>>)Target.GetJobHistory(new JobHistoryCriteria()
+			{
+				BusinessUnitId = bu.Id,
+				StartDate = new DateTime(2018, 04, 11),
+				EndDate = new DateTime(2018, 04, 11),
+				ShowOnlyErrors = false,
+				TenantName = "tenant"
+			});
+			result.Content.Count.Should().Be(1);
+			result.Content.First().BusinessUnitName.Should().Be(bu.Name);
+		}
+
+		[Test]
+		public void ShouldGetJobHistoryForAllBusinessUnitsForAGivenTenant()
+		{
+			var bu1 = Guid.NewGuid();
+			var bu2 = Guid.NewGuid();
+			var bunit1 = new BusinessUnitItem
+			{
+				Id = bu1,
+				Name = bu1.ToString()
+			};
+			var bunit2 = new BusinessUnitItem
+			{
+				Id = bu2,
+				Name = bu2.ToString()
+			};
+			JobHistoryRepository.AddBusinessUnits(new List<BusinessUnitItem> { bunit1, bunit2 }, connectionString);
+			AllTenants.HasWithAnalyticsConnectionString(testTenantName, connectionString);
+			JobHistoryRepository.AddJobHistory(new JobHistoryViewModel()
+			{
+				BusinessUnitName = bunit1.Name,
+				StartTime = new DateTime(2018, 04, 11),
+			});
+			JobHistoryRepository.AddJobHistory(new JobHistoryViewModel()
+			{
+				BusinessUnitName = bunit2.Name,
+				StartTime = new DateTime(2018, 04, 11),
+			});
+			var result = (OkNegotiatedContentResult<IList<JobHistoryViewModel>>)Target.GetJobHistory(new JobHistoryCriteria()
+			{
+				BusinessUnitId = new Guid("00000000-0000-0000-0000-000000000002"),
+				StartDate = new DateTime(2018, 04, 11),
+				EndDate = new DateTime(2018, 04, 11),
+				ShowOnlyErrors = false,
+				TenantName = testTenantName
+			});
+			result.Content.Count.Should().Be(2);
+			result.Content.First().BusinessUnitName.Should().Be(bunit1.Name);
+			result.Content.Last().BusinessUnitName.Should().Be(bunit2.Name);
+		}
+
+		[Test]
+		public void ShouldGetJobHistoryForAllTenants()
+		{
+			var bu1 = Guid.NewGuid();
+			var bu2 = Guid.NewGuid();
+			var bunit1 = new BusinessUnitItem
+			{
+				Id = bu1,
+				Name = bu1.ToString()
+			};
+			var bunit2 = new BusinessUnitItem
+			{
+				Id = bu2,
+				Name = bu2.ToString()
+			};
+			JobHistoryRepository.AddBusinessUnits(new List<BusinessUnitItem> { bunit1, bunit2 }, connectionString);
+			AllTenants.HasWithAnalyticsConnectionString(testTenantName, connectionString);
+			JobHistoryRepository.AddJobHistory(new JobHistoryViewModel()
+			{
+				BusinessUnitName = bunit1.Name,
+				StartTime = new DateTime(2018, 04, 11),
+			});
+			JobHistoryRepository.AddJobHistory(new JobHistoryViewModel()
+			{
+				BusinessUnitName = bunit2.Name,
+				StartTime = new DateTime(2018, 04, 11),
+			});
+			var result = (OkNegotiatedContentResult<IList<JobHistoryViewModel>>)Target.GetJobHistory(new JobHistoryCriteria()
+			{
+				BusinessUnitId = new Guid("00000000-0000-0000-0000-000000000002"),
+				StartDate = new DateTime(2018, 04, 11),
+				EndDate = new DateTime(2018, 04, 11),
+				ShowOnlyErrors = false,
+				TenantName = "All"
+			});
+			result.Content.Count.Should().Be(2);
+			result.Content.First().BusinessUnitName.Should().Be(bunit1.Name);
+			result.Content.Last().BusinessUnitName.Should().Be(bunit2.Name);
 		}
 
 		private IEnumerable<JobCollectionModel> getJobs(string tenantName, bool toggle38131Enabled, bool pmInstalled)

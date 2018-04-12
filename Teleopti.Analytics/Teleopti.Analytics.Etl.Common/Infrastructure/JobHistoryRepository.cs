@@ -13,13 +13,13 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 {
 	public class JobHistoryRepository : IJobHistoryRepository
 	{
-		public IList<JobHistoryViewModel> GetEtlJobHistory(DateTime startDate, DateTime endDate, Guid businessUnitId, bool showOnlyErrors, string connectionString)
+		public IList<JobHistoryViewModel> GetEtlJobHistory(DateTime startDate, DateTime endDate, List<Guid> businessUnitIds, bool showOnlyErrors, string connectionString)
 		{
 			var parameterList = new[]
 									{
 										new SqlParameter("start_date", startDate),
 										new SqlParameter("end_date", endDate),
-										new SqlParameter("business_unit_id", businessUnitId),
+										new SqlParameter("business_unit_id", string.Join(",", businessUnitIds)),
 										new SqlParameter("show_only_errors", showOnlyErrors)
 									};
 
