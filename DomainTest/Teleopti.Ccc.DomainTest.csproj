@@ -170,6 +170,7 @@
     <Compile Include="ApplicationLayer\PersonAccount\PersonEmploymentChangedTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsFactScheduleTimeMapperCacheTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ProjectionChangedEventForShiftExchangeOfferTest.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleChangedInDefaultScenarioNotificationNewTest.cs" />
     <Compile Include="ApplicationLayer\ShiftCategoryHandlers\ShiftCategorySelectionUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\TerminatePersonHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AddActivityCommandHandlerTest.cs" />
