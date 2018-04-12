@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.AgentInfo
@@ -35,12 +33,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 			if (!skillStaffingDatas.Any())
 				return new Dictionary<DateTimePeriod,IList<ISkill>>();
-
-			skillStaffingDatas.ForEach(y => y.SkillStaffingInterval = new SkillStaffingInterval
-			{
-				CalculatedResource = y.ScheduledStaffing.GetValueOrDefault(),
-				FStaff = y.ForecastedStaffing.GetValueOrDefault()
-			});
 
 			var skillStaffingDataGroups = skillStaffingDatas.GroupBy(s => s.Skill).ToList();
 			var seriousUnderstaffingSkills = new List<ISkill>();

@@ -4,7 +4,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.AgentInfo
@@ -97,12 +96,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 		private static int calculatePossibility(SkillStaffingData skillStaffingData)
 		{
-			var staffingInterval = new SkillStaffingInterval
-			{
-				CalculatedResource = skillStaffingData.ScheduledStaffing.Value,
-				FStaff = skillStaffingData.ForecastedStaffing.Value
-			};
-			var isSatisfied = !new IntervalHasSeriousUnderstaffing(skillStaffingData.Skill).IsSatisfiedBy(staffingInterval);
+			var isSatisfied = !new IntervalHasSeriousUnderstaffing(skillStaffingData.Skill).IsSatisfiedBy(skillStaffingData.SkillStaffingInterval);
 			return isSatisfied ? ScheduleStaffingPossibilityConsts.FairPossibility : ScheduleStaffingPossibilityConsts.GoodPossibility;
 		}
 

@@ -120,12 +120,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 		private static int calculatePossibility(SkillStaffingData skillStaffingData)
 		{
-			var staffingInterval = new SkillStaffingInterval
-			{
-				CalculatedResource = skillStaffingData.ScheduledStaffing.Value,
-				FStaff = skillStaffingData.ForecastedStaffing.Value
-			};
-			var isSatisfied = new IntervalHasUnderstaffing(skillStaffingData.Skill).IsSatisfiedBy(staffingInterval);
+			var isSatisfied = new IntervalHasUnderstaffing(skillStaffingData.Skill).IsSatisfiedBy(skillStaffingData.SkillStaffingInterval);
 			return isSatisfied ? ScheduleStaffingPossibilityConsts.FairPossibility : ScheduleStaffingPossibilityConsts.GoodPossibility;
 		}
 

@@ -13,6 +13,10 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		public double? ForecastedStaffing { get; set; }
 		public double? ScheduledStaffing { get; set; }
 		public int Resolution { get; set; }
-		public SkillStaffingInterval SkillStaffingInterval { get; set; }
+		public SkillStaffingInterval SkillStaffingInterval => new SkillStaffingInterval
+		{
+			CalculatedResource = ScheduledStaffing.GetValueOrDefault(),
+			FStaff = ForecastedStaffing.GetValueOrDefault()
+		};
 	}
 }
