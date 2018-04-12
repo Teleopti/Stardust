@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells
 	[Serializable]
 	public class GridDropDownAdvComboBoxCellModel : GridDropDownCellModel
 	{
-		private bool _enabledMultiSelect;
+		private readonly bool _enabledMultiSelect;
 		public bool EnabledMultiSelect => _enabledMultiSelect;
 		public GridDropDownAdvComboBoxCellModel(GridModel grid, bool enabledMultiSelect) : base(grid)
 		{
@@ -109,6 +109,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells
 		private void selectedIndexChanged(object sender, EventArgs e)
 		{
 			setCurrentCellText();
+
+			if (!isMultiSelectEnabled())
+				CurrentCell.CloseDropDown(PopupCloseType.Canceled);
 		}
 
 		private bool isMultiSelectEnabled()
@@ -132,7 +135,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells
 				{
 					for (var index = 0; index < listBox.Items.Count; index++)
 					{
-						listBox.SetSelected(index, values.Contains(listBox.Items[index].ToString()));
+						if (values.Contains(listBox.Items[index].ToString()))
+						{
+							listBox.SetSelected(index, true);
+							break;
+						}
 					}
 				}
 			}
