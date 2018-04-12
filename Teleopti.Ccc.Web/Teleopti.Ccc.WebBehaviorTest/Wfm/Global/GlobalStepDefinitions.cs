@@ -53,7 +53,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm
 		[Then(@"I select all skills on group page picker")]
 		public void ThenISelectAllSkillsOnGroupPagePicker()
 		{
-			Browser.Interactions.ClickContaining(".group-page-picker-menu .virtual-repeat .repeated-item .md-button", Resources.Skill);
+			Browser.Interactions.WaitScopeCondition(".group-page-picker-menu md-tabs-content-wrapper", "$parent.$ctrl.isDataAvailable", true,
+				() =>
+				{
+					Browser.Interactions.ClickContaining(".group-page-picker-menu .virtual-repeat .repeated-item .md-button",
+						Resources.Skill);
+				}
+			);
 		}
 
 		public class BusinessUnitData
