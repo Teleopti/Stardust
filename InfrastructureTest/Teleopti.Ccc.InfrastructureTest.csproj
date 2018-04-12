@@ -195,7 +195,7 @@
     <Compile Include="ApplicationLayer\ScheduleDayReadModel\ScheduleDayReadModelUpdaterHangfireConcurrencyTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleProjectionReadOnly\ScheduleProjectionReadOnlyPersisterConcurrencyTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleProjectionReadOnly\ScheduleProjectionReadOnlyPersisterTest.cs" />
-    <Compile Include="ApplicationLayer\ScheduleProjectionReadOnly\ScheduleProjectionReadOnlyUpdaterTest.cs" />
+    <Compile Include="ApplicationLayer\ScheduleProjectionReadOnly\ScheduleProjectionReadOnlyCheckerTest.cs" />
     <Compile Include="ApplicationLayer\Staffing\SendUpdateStaffingReadModelHandlerTest.cs" />
     <Compile Include="ApplicationLayer\SyncCommandDispatcherContextBug48226Test.cs" />
     <Compile Include="Auditing\AuditSettingTest.cs" />

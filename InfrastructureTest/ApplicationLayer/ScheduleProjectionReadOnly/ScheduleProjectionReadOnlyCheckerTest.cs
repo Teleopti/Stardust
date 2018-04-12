@@ -1,5 +1,4 @@
 using System;
-using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -17,7 +16,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.ScheduleProjectionRea
 		public ScheduleProjectionReadOnlyChecker Target;
 		public IScheduleProjectionReadOnlyPersister Persister;
 		public WithUnitOfWork WithUnitOfWork;
-		public IComponentContext TempContainer;
 
 		[Test]
 		public void ShouldNotPersistOldSchedule()
