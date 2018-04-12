@@ -54,7 +54,6 @@
 		vm.filterText = null;
 		vm.pause = false;
 		vm.pausedAt = null;
-		vm.loading = true;
 		var phoneStates = [];
 		var skills = [];
 		var skillGroups = [];
@@ -67,7 +66,6 @@
 			});
 
 		rtaDataService.load().then(function (data) {
-			vm.loading = false;
 			buildSkills(data.skills);
 			buildSkillGroups(data.skillAreas);
 			buildSites(data.organization);
