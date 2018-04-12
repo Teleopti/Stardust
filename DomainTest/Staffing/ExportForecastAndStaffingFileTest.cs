@@ -557,10 +557,12 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			
 			var scenario = SkillSetupHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository);			
 			var skillDay = SkillSetupHelper.CreateSkillDayWithDemand(skill, scenario, new DateTime(2017, 8, 15), new TimePeriod(8, 0, 8, 30), 15);
-			skillDay.CompleteSkillStaffPeriodCollection.ForEach(ssp => ssp.Payload.Shrinkage = new Percent(0.5));
+			skillDay.SkillStaffPeriodCollection.ForEach(ssp => ssp.Payload.Shrinkage = new Percent(0.25));
 			
 			SkillRepository.Add(skill);
 			SkillDayRepository.Add(skillDay);
+			SkillDayRepository.JustGiveMeMySkillDays = true;
+
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
 			{
 				new SkillCombinationResource
@@ -602,8 +604,8 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			var rows = forecastedData.Split(new[] { "\r\n" }, StringSplitOptions.None);
 			rows.Length.Should().Be(3);
 			rows[0].Should().Be("skill,startdatetime,enddatetime,forecasted agents,total scheduled agents,total diff,total scheduled heads");
-			rows[1].Should().Be.EqualTo("skillname,8/15/2017 8:00 AM,8/15/2017 8:15 AM,22.5,8,-14.5,8");
-			rows[2].Should().Be.EqualTo("skillname,8/15/2017 8:15 AM,8/15/2017 8:30 AM,22.5,6,-16.5,6");
+			rows[1].Should().Be.EqualTo("skillname,8/15/2017 8:00 AM,8/15/2017 8:15 AM,20,8,-12,8");
+			rows[2].Should().Be.EqualTo("skillname,8/15/2017 8:15 AM,8/15/2017 8:30 AM,20,6,-14,6");
 		}
 		
 		private static ISkill createSkill(int intervalLength, string skillName, TimePeriod openHours)

@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 
 				var startDateTime = skillStaffPeriod.Period.StartDateTimeLocal(_userTimeZone.TimeZone()).ToString("g",userCulture);
 				var endDateTime = skillStaffPeriod.Period.EndDateTimeLocal(_userTimeZone.TimeZone()).ToString("g", userCulture);
-				var demand = useShrinkage?skillStaffPeriod.ForecastedDistributedDemandWithShrinkage:skillStaffPeriod.FStaff;
+				var demand = skillStaffPeriod.FStaff;
 			
 				var bpoResourceTuple = createBpoResourcesString(bpoNames, resourcesByBpo, ssiStartDate, ssiEndDate, separator, userCulture);
 				var totalDiff = staffing - demand;
