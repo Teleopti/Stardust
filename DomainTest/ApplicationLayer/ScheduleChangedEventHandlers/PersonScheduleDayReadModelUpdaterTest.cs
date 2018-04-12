@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		{
 			var repository = new FakePersonScheduleDayReadModelPersister();
 			var personRepository = new FakePersonRepositoryLegacy();
-			var target = new PersonScheduleDayReadModelUpdaterHangfire(new PersonScheduleDayReadModelsCreator(personRepository, new NewtonsoftJsonSerializer()), repository, null);
+			var target = new PersonScheduleDayReadModelUpdaterHangfire(new PersonScheduleDayReadModelUpdaterPersister(new PersonScheduleDayReadModelsCreator(personRepository, new NewtonsoftJsonSerializer()), repository, null));
 
 			target.Handle(new ProjectionChangedEvent
 				{
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		{
 			var repository = new FakePersonScheduleDayReadModelPersister();
 			var personRepository = new FakePersonRepositoryLegacy();
-			var target = new PersonScheduleDayReadModelUpdaterHangfire(new PersonScheduleDayReadModelsCreator(personRepository, new NewtonsoftJsonSerializer()), repository, null);
+			var target = new PersonScheduleDayReadModelUpdaterHangfire(new PersonScheduleDayReadModelUpdaterPersister(new PersonScheduleDayReadModelsCreator(personRepository, new NewtonsoftJsonSerializer()), repository, null));
 
 			target.Handle(new ProjectionChangedEvent
 			{
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		{
 			var repository = new FakePersonScheduleDayReadModelPersister();
 			var personRepository = new FakePersonRepositoryLegacy();
-			var target = new PersonScheduleDayReadModelUpdaterHangfire(new PersonScheduleDayReadModelsCreator(personRepository, new NewtonsoftJsonSerializer()), repository, null);
+			var target = new PersonScheduleDayReadModelUpdaterHangfire(new PersonScheduleDayReadModelUpdaterPersister(new PersonScheduleDayReadModelsCreator(personRepository, new NewtonsoftJsonSerializer()), repository, null));
 
 			target.Handle(new ProjectionChangedEvent
 			{
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		{
 			var repository = new FakePersonScheduleDayReadModelPersister();
 			var personRepository = new FakePersonRepositoryLegacy();
-			var target = new PersonScheduleDayReadModelUpdaterHangfire(new PersonScheduleDayReadModelsCreator(personRepository, new NewtonsoftJsonSerializer()), repository, null);
+			var target = new PersonScheduleDayReadModelUpdaterHangfire(new PersonScheduleDayReadModelUpdaterPersister(new PersonScheduleDayReadModelsCreator(personRepository, new NewtonsoftJsonSerializer()), repository, null));
 
 			target.Handle(new ProjectionChangedEvent
 			{
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		{
 			var repository = MockRepository.GenerateMock<IPersonScheduleDayReadModelPersister>();
 			var eventTracker = MockRepository.GenerateMock<ITrackingMessageSender>();
-			var target = new PersonScheduleDayReadModelUpdaterHangfire(null, repository, eventTracker);
+			var target = new PersonScheduleDayReadModelUpdaterHangfire(new PersonScheduleDayReadModelUpdaterPersister(null, repository, eventTracker));
 
 			var initiatorId = Guid.NewGuid();
 			var businessUnitId = Guid.NewGuid();
@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		{
 			var repository = new FakePersonScheduleDayReadModelPersister();
 			var personRepository = new FakePersonRepositoryLegacy();
-			var target = new PersonScheduleDayReadModelUpdaterHangfire(new PersonScheduleDayReadModelsCreator(personRepository, new NewtonsoftJsonSerializer()), repository, null);
+			var target = new PersonScheduleDayReadModelUpdaterHangfire(new PersonScheduleDayReadModelUpdaterPersister(new PersonScheduleDayReadModelsCreator(personRepository, new NewtonsoftJsonSerializer()), repository, null));
 
 			target.Handle(new ProjectionChangedEvent
 			{
@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		{
 			var repository = new FakePersonScheduleDayReadModelPersister();
 			var personRepository = new FakePersonRepositoryLegacy();
-			var target = new PersonScheduleDayReadModelUpdaterHangfire(new PersonScheduleDayReadModelsCreator(personRepository, new NewtonsoftJsonSerializer()), repository, null);
+			var target = new PersonScheduleDayReadModelUpdaterHangfire(new PersonScheduleDayReadModelUpdaterPersister(new PersonScheduleDayReadModelsCreator(personRepository, new NewtonsoftJsonSerializer()), repository, null));
 
 			target.Handle(new ProjectionChangedEvent
 			{
@@ -195,7 +195,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		{
 			var repository = new FakePersonScheduleDayReadModelPersister();
 			var personRepository = new FakePersonRepositoryLegacy();
-			var target = new PersonScheduleDayReadModelUpdaterHangfire(new PersonScheduleDayReadModelsCreator(personRepository, new NewtonsoftJsonSerializer()), repository, null);
+			var target = new PersonScheduleDayReadModelUpdaterHangfire(new PersonScheduleDayReadModelUpdaterPersister(new PersonScheduleDayReadModelsCreator(personRepository, new NewtonsoftJsonSerializer()), repository, null));
 
 			var scheduleLoadTimestamp = DateTime.UtcNow;
 
