@@ -97,10 +97,10 @@
 	position: relative;
 }
 .mobile-start-day-body .mobile-foot {
-	position: absolute;
+	position: fixed;
 	right: 0;
 	left: 0;
-	bottom: 0;
+	bottom: 20px;
 }
 .mobile-start-day .mobile-summary-content {
 	border-radius: 3px;
