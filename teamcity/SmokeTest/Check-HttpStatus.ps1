@@ -26,6 +26,7 @@ function Check-URL ($UrlToCheck)
 		Write-Output "Checking if $UrlToCheck is accessible..."
         # Ignore SSL cert 
         [System.Net.ServicePointManager]::ServerCertificateValidationCallback = {$true}
+		[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
         # Create the request.
         $HTTP_Request = [System.Net.WebRequest]::Create($UrlToCheck)
