@@ -41,11 +41,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			_notificationValidationCheck = MockRepository.GenerateMock<INotificationValidationCheck>();
 			_scheduleDayReadModelsCreator = MockRepository.GenerateMock<IScheduleDayReadModelsCreator>();
 			_scheduleDayReadModelRepository = MockRepository.GenerateMock<IScheduleDayReadModelRepository>();
-			var handler = new ScheduleDayReadModelHandlerHangfire(new ScheduleDayReadModelPersister(_personRepository,
-				_notificationValidationCheck, _scheduleDayReadModelsCreator, _scheduleDayReadModelRepository));
+			var persister = new ScheduleDayReadModelPersister(_personRepository,
+				_notificationValidationCheck, _scheduleDayReadModelsCreator, _scheduleDayReadModelRepository);
 			_target = _toggle75415
-				? (IScheduleDayReadModelHandlerHangfire) new ScheduleReadModelWrapperHandler(handler)
-				: handler;
+				? (IScheduleDayReadModelHandlerHangfire) new ScheduleReadModelWrapperHandler(persister, null)
+				: new ScheduleDayReadModelHandlerHangfire(persister);
 			_person = PersonFactory.CreatePerson();
 			_person.SetId(Guid.NewGuid());
 		}
