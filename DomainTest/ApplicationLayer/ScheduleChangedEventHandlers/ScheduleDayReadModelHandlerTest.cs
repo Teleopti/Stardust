@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			_scheduleDayReadModelsCreator = MockRepository.GenerateMock<IScheduleDayReadModelsCreator>();
 			_scheduleDayReadModelRepository = MockRepository.GenerateMock<IScheduleDayReadModelRepository>();
 
-			_target = new ScheduleDayReadModelHandlerHangfire(_personRepository, _notificationValidationCheck, _scheduleDayReadModelsCreator, _scheduleDayReadModelRepository);
+			_target = new ScheduleDayReadModelHandlerHangfire(new ScheduleDayReadModelPersister(_personRepository, _notificationValidationCheck, _scheduleDayReadModelsCreator, _scheduleDayReadModelRepository));
 
 			_person = PersonFactory.CreatePerson();
 			_person.SetId(Guid.NewGuid());
