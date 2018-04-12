@@ -65,8 +65,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 					new ProjectionChangedEventForShiftExchangeOffer
 					{
 						PersonId = e.PersonId,
-						Days =  e.ScheduleDays.Select(x => new ProjectionChangedEventForShiftExchangeOfferDateAndChecksums { Date = x.Date, Checksum = x.CheckSum })
-						
+						Days =  e.ScheduleDays.Select(x => new ProjectionChangedEventForShiftExchangeOfferDateAndChecksums { Date = x.Date, Checksum = x.CheckSum }).ToList()			
 					});	
 				}
 			});
