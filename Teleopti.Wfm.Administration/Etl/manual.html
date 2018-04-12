@@ -1,8 +1,9 @@
 ﻿<br />
 <b>Manual job</b>
-<div ng-if="vm.unconfigured" class="alert alert-warning pointer" role="alert" ng-click="vm.state = 'config'">	<!-- if unconfigured tenants-->
+<a href="./#/ETL/config" ng-if="vm.unconfigured">
+<div class="alert alert-warning pointer" role="alert">	<!-- if unconfigured tenants  --> 
 	Click here to review unconfigured tenants
-</div>
+</div></a>
 <div class="panel panel-default">
 	<div class="panel-heading">Settings</div>
 	<div class="panel-body text-container">
