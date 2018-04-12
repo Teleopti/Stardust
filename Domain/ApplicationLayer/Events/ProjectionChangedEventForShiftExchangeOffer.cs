@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 	public class ProjectionChangedEventForShiftExchangeOffer : EventWithLogOnContext
 	{
 		public Guid PersonId { get; set; }
-		public IEnumerable<ProjectionChangedEventForShiftExchangeOfferDateAndChecksums> Days { get; set; }
+		public ICollection<ProjectionChangedEventForShiftExchangeOfferDateAndChecksums> Days { get; set; }
 	}
 
 	public class ProjectionChangedEventForShiftExchangeOfferDateAndChecksums
