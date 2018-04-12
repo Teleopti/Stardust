@@ -2,6 +2,7 @@
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Logon;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel
 {
@@ -23,6 +24,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 			_personScheduleDayReadModelUpdaterPersister = personScheduleDayReadModelUpdaterPersister;
 		}
 
+		[ImpersonateSystem]
 		[UnitOfWork]
 		public void Handle(ProjectionChangedEvent @event)
 		{
@@ -30,12 +32,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 			_personScheduleDayReadModelUpdaterPersister?.Execute(@event);
 		}
 
+		[ImpersonateSystem]
 		[UnitOfWork]
 		public void Handle(ProjectionChangedEventForPersonScheduleDay @event)
 		{
 			_personScheduleDayReadModelUpdaterPersister.Execute(@event);
 		}
 
+		[ImpersonateSystem]
 		[UnitOfWork]
 		public void Handle(ProjectionChangedEventForScheduleDay @event)
 		{
