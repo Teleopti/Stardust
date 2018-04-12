@@ -218,6 +218,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private IDaysOffPreferences _daysOffPreferences;
 		private IEnumerable<IOptionalColumn> _optionalColumns;
 		private ExternalStaffProvider _externalStaffProvider;
+		private ReplaceActivityParameters _replaceActivityParameters;
 
 		#region Constructors
 
@@ -7069,13 +7070,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			if (schedules.IsEmpty()) return;
 			var replaceActivityService = _container.Resolve<ReplaceActivityService>();
 			var defaultPeriod = AddActivityCommand.GetDefaultPeriodFromPart(schedules[0]);
-			using (var view = new ReplaceActivityView(_schedulerState.CommonStateHolder.Activities.ToList(), defaultPeriod.TimePeriod(TimeZoneGuard.Instance.CurrentTimeZone())))
+			using (var view = new ReplaceActivityView(_schedulerState.CommonStateHolder.Activities.ToList(), defaultPeriod.TimePeriod(TimeZoneGuard.Instance.CurrentTimeZone()), _replaceActivityParameters))
 			{
 				var result = view.ShowDialog(this);
-				if (result != DialogResult.OK) return;
-				var activity = view.Activity;
-				var replaceWithActivity = view.ReplaceWithActivity;
-				var timePeriod = new TimePeriod(view.FromTimeSpan, view.ToTimeSpan);
+				if (result != DialogResult.OK)
+					return;
+
+				_replaceActivityParameters = view.ActivityParameters;
+				var activity = view.ActivityParameters.Activity;
+				var replaceWithActivity = view.ActivityParameters.ReplaceWithActivity;
+				var timePeriod = new TimePeriod(view.ActivityParameters.FromTimeSpan, view.ActivityParameters.ToTimeSpan);
 				replaceActivityService.Replace(schedules, activity, replaceWithActivity, timePeriod, TimeZoneGuard.Instance.CurrentTimeZone());
 				_scheduleView.Presenter.ModifySchedulePart(schedules);
 				foreach (var part in schedules)

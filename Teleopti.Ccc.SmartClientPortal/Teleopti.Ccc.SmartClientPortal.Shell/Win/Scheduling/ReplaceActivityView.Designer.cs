@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.tableLayoutPanel1.ColumnCount = 3;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 107F));
 			this.tableLayoutPanel1.Controls.Add(this.checkBoxAdvNextDay, 2, 3);
 			this.tableLayoutPanel1.Controls.Add(this.outlookTimePickerTo, 1, 3);
 			this.tableLayoutPanel1.Controls.Add(this.labelTo, 0, 3);
@@ -84,13 +84,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			// 
 			// checkBoxAdvNextDay
 			// 
-			this.checkBoxAdvNextDay.BeforeTouchSize = new System.Drawing.Size(114, 24);
+			this.checkBoxAdvNextDay.BeforeTouchSize = new System.Drawing.Size(101, 24);
 			this.checkBoxAdvNextDay.DrawFocusRectangle = false;
-			this.checkBoxAdvNextDay.Location = new System.Drawing.Point(238, 115);
+			this.checkBoxAdvNextDay.Location = new System.Drawing.Point(251, 115);
 			this.checkBoxAdvNextDay.Margin = new System.Windows.Forms.Padding(3, 10, 3, 3);
 			this.checkBoxAdvNextDay.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxAdvNextDay.Name = "checkBoxAdvNextDay";
-			this.checkBoxAdvNextDay.Size = new System.Drawing.Size(114, 24);
+			this.checkBoxAdvNextDay.Size = new System.Drawing.Size(101, 24);
 			this.checkBoxAdvNextDay.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxAdvNextDay.TabIndex = 3;
 			this.checkBoxAdvNextDay.Text = "xxNextDay";
@@ -178,7 +178,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.tableLayoutPanel1.SetColumnSpan(this.buttonAdvOk, 2);
 			this.buttonAdvOk.ForeColor = System.Drawing.Color.White;
 			this.buttonAdvOk.IsBackStageButton = false;
-			this.buttonAdvOk.Location = new System.Drawing.Point(138, 155);
+			this.buttonAdvOk.Location = new System.Drawing.Point(151, 155);
 			this.buttonAdvOk.Margin = new System.Windows.Forms.Padding(3, 3, 10, 10);
 			this.buttonAdvOk.Name = "buttonAdvOk";
 			this.buttonAdvOk.Size = new System.Drawing.Size(87, 23);
@@ -212,7 +212,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.comboBox1.FormattingEnabled = true;
 			this.comboBox1.Location = new System.Drawing.Point(103, 3);
 			this.comboBox1.Name = "comboBox1";
-			this.comboBox1.Size = new System.Drawing.Size(121, 23);
+			this.comboBox1.Size = new System.Drawing.Size(141, 23);
 			this.comboBox1.TabIndex = 8;
 			this.comboBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.comboBox1_KeyDown);
 			// 
@@ -221,7 +221,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.comboBox2.FormattingEnabled = true;
 			this.comboBox2.Location = new System.Drawing.Point(103, 37);
 			this.comboBox2.Name = "comboBox2";
-			this.comboBox2.Size = new System.Drawing.Size(121, 23);
+			this.comboBox2.Size = new System.Drawing.Size(141, 23);
 			this.comboBox2.TabIndex = 9;
 			this.comboBox2.KeyDown += new System.Windows.Forms.KeyEventHandler(this.comboBox2_KeyDown);
 			// 

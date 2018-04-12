@@ -12,17 +12,25 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 {
 	public partial class ReplaceActivityView : BaseDialogForm
 	{
-		public TimeSpan FromTimeSpan { get; private set; }
-		public TimeSpan ToTimeSpan { get; private set; }
-		public IActivity Activity { get; private set; }
-		public IActivity ReplaceWithActivity { get; private set; }
+		private ReplaceActivityParameters _replaceActivityParameters;
 
-	    public ReplaceActivityView(IList<IActivity> activities, TimePeriod defaultTimePeriod)
+	    public ReplaceActivityView(IList<IActivity> activities, TimePeriod defaultTimePeriod, ReplaceActivityParameters replaceActivityParameters)
 		{
-	        InitializeComponent();
+			
+			InitializeComponent();
 			SetTexts();
-			update(defaultTimePeriod.StartTime, defaultTimePeriod.EndTime, activities);
+			_replaceActivityParameters = replaceActivityParameters;
+			if (_replaceActivityParameters == null)
+			{
+				update(defaultTimePeriod.StartTime, defaultTimePeriod.EndTime, activities);
+			}
+			else
+			{
+				update(_replaceActivityParameters.FromTimeSpan, _replaceActivityParameters.ToTimeSpan, activities);
+			}
 		}
+
+		public ReplaceActivityParameters ActivityParameters => _replaceActivityParameters;
 
 		private void update(TimeSpan? startTime, TimeSpan? endTime, IList<IActivity> activities)
 		{
@@ -42,19 +50,28 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			}
 
 			outlookTimePickerTo.SetTimeValue(endTime);
+			if(_replaceActivityParameters == null)
+				return;
+
+			comboBox1.SelectedIndex = activities.Where(x => !x.IsDeleted).ToList().IndexOf(_replaceActivityParameters.Activity);
+			comboBox2.SelectedIndex = activities.Where(x => !x.IsDeleted).ToList().IndexOf(_replaceActivityParameters.ReplaceWithActivity);
 		}
 
 		private void buttonAdvOkClick(object sender, EventArgs e)
 		{
+			if(_replaceActivityParameters == null)
+				_replaceActivityParameters = new ReplaceActivityParameters();
 			clearTimeErrorMessages();
 			var startTime = outlookTimePickerFrom.TimeValue();
 			var endTime = outlookTimePickerTo.TimeValue();
 			if (checkBoxAdvNextDay.Checked) endTime = endTime?.Add(TimeSpan.FromDays(1));
             if (!validateTimes()) return;
-			if(startTime.HasValue)FromTimeSpan = startTime.Value;
-			if(endTime.HasValue)ToTimeSpan = endTime.Value;
-			Activity = (Activity) comboBox1.SelectedItem;
-			ReplaceWithActivity = (Activity) comboBox2.SelectedItem;
+			if(startTime.HasValue)
+				ActivityParameters.FromTimeSpan = startTime.Value;
+			if(endTime.HasValue)
+				ActivityParameters.ToTimeSpan = endTime.Value;
+			ActivityParameters.Activity = (Activity) comboBox1.SelectedItem;
+			ActivityParameters.ReplaceWithActivity = (Activity) comboBox2.SelectedItem;
 			DialogResult = DialogResult.OK;
 			Close();
 		}
@@ -144,5 +161,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		{
 			e.SuppressKeyPress = true;
 		}
+	}
+
+	public class ReplaceActivityParameters
+	{
+		public TimeSpan FromTimeSpan { get; set; }
+		public TimeSpan ToTimeSpan { get; set; }
+		public IActivity Activity { get; set; }
+		public IActivity ReplaceWithActivity { get; set; }
 	}
 }

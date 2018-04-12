@@ -393,7 +393,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.SetShortcut(this.toolStripSpinningProgressControl1, System.Windows.Forms.Keys.None);
 			this.toolStripSpinningProgressControl1.Size = new System.Drawing.Size(25, 24);
 			this.toolStripSpinningProgressControl1.Text = "toolStripSpinningProgressControl1";
-			this.toolStripSpinningProgressControl1.TransitionSegment = 1;
+			this.toolStripSpinningProgressControl1.TransitionSegment = 5;
 			this.toolStripSpinningProgressControl1.TransitionSegmentColor = System.Drawing.Color.SkyBlue;
 			this.toolStripSpinningProgressControl1.Visible = false;
 			// 
@@ -517,6 +517,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
             this.toolStripMenuItemPasteShiftFromShifts,
             this.toolStripMenuItemDeleteSpecial,
             this.toolStripMenuItem1,
+            this.replaceActivityToolStripMenuItem,
             this.ToolStripMenuItemAddActivity,
             this.ToolStripMenuItemAddPersonalActivity,
             this.toolStripMenuItemAddOverTime,
@@ -538,11 +539,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
             this.xxExportToolStripMenuItem,
             this.toolStripMenuItemChangeTagRM,
             this.toolStripMenuItemPublish,
-            this.toolStripMenuItemNotifyAgent,
-            this.replaceActivityToolStripMenuItem});
+            this.toolStripMenuItemNotifyAgent});
 			this.contextMenuViews.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(204)))), ((int)(((byte)(236)))), ((int)(((byte)(249)))));
 			this.contextMenuViews.Name = "contextMenuStrip1";
-			this.contextMenuViews.Size = new System.Drawing.Size(306, 688);
+			this.contextMenuViews.Size = new System.Drawing.Size(306, 666);
 			this.contextMenuViews.Style = Syncfusion.Windows.Forms.Tools.ContextMenuStripEx.ContextMenuStyle.Metro;
 			this.contextMenuViews.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuViewsOpening);
 			// 
@@ -1314,7 +1314,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.replaceActivityToolStripMenuItem.Name = "replaceActivityToolStripMenuItem";
 			this.SetShortcut(this.replaceActivityToolStripMenuItem, System.Windows.Forms.Keys.None);
 			this.replaceActivityToolStripMenuItem.Size = new System.Drawing.Size(305, 22);
-			this.replaceActivityToolStripMenuItem.Text = "xxReplaceActivity";
+			this.replaceActivityToolStripMenuItem.Text = "xxReplaceActivity...";
 			this.replaceActivityToolStripMenuItem.Visible = false;
 			this.replaceActivityToolStripMenuItem.Click += new System.EventHandler(this.replaceActivityToolStripMenuItem_Click);
 			// 
