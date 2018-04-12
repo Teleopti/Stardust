@@ -287,7 +287,7 @@ rtaTester.describe('RtaAgentsController', function(it, fit, xit, _,
 				SkillId: "invoiceGuid",
 				TeamId: "teamRedGuid"
 			})
-			.withSkillAreas([{
+			.withSkillGroups([{
 				Id: "emailAndPhoneGuid",
 				Skills: [{
 					Id: "phoneGuid"
@@ -330,7 +330,7 @@ rtaTester.describe('RtaAgentsController', function(it, fit, xit, _,
 				SkillId: "invoiceGuid",
 				SiteId: "siteLondonGuid"
 			})
-			.withSkillAreas([{
+			.withSkillGroups([{
 				Id: "emailAndPhoneGuid",
 				Skills: [{
 					Id: "phoneGuid"

@@ -46,6 +46,7 @@
 		vm.agentStates = [];
 		vm.sites = [];
 		vm.states = [];
+		vm.skills = [];
 		vm.showInAlarm = !$stateParams.showAllAgents;
 
 		var lastUpdate;
@@ -55,16 +56,20 @@
 		vm.pausedAt = null;
 		vm.loading = true;
 		var phoneStates = [];
+		var skills = [];
+		var skillGroups = [];
 
 		rtaStateService.setCurrentState($stateParams)
 			.then(function () {
 				vm.statePickerSelectionText = rtaStateService.statePickerSelectionText();
+				updateSkillPicker();
+				updateSkillGroupPicker();
 			});
 
 		rtaDataService.load().then(function (data) {
 			vm.loading = false;
-			vm.skills = data.skills;
-			vm.skillAreas = data.skillAreas;
+			buildSkills(data.skills);
+			buildSkillGroups(data.skillAreas);
 			buildSites(data.organization);
 			buildPhoneStates(data.states);
 		});
@@ -288,34 +293,74 @@
 			});
 		}
 
-		Object.defineProperty(vm, 'selectedSkillNew', {
+
+		vm.skillPickerOpen = false;
+
+		$scope.$watch(
+			function () {
+				return vm.skillPickerText;
+			},
+			function (newValue, oldValue) {
+				buildSkills(skills);
+			}
+		);
+
+		Object.defineProperty(vm, 'selectedSkill', {
 			get: function () {
 				return rtaStateService.selectedSkill();
 			},
 			set: function (value) {
+				vm.skillGroupPickerText = undefined;
+				vm.skillPickerOpen = false;
 				rtaStateService.selectSkill(value);
+				updateSkillPicker();
 				forcePoll();
 			}
 		});
 
-		Object.defineProperty(vm, 'selectedSkillArea', {
+		function buildSkills(s) {
+			skills = s;
+			vm.skills = $filter('filter')(s, vm.skillPickerText);
+		}
+
+		function updateSkillPicker() {
+			vm.skillPickerText = rtaStateService.skillPickerSelectionText();
+		}
+
+
+		vm.skillGroupPickerOpen = false;
+
+		$scope.$watch(
+			function () {
+				return vm.skillGroupPickerText;
+			},
+			function (newValue, oldValue) {
+				buildSkillGroups(skillGroups);
+			}
+		);
+
+		Object.defineProperty(vm, 'selectedSkillGroup', {
 			get: function () {
 				return rtaStateService.selectedSkillArea();
 			},
 			set: function (value) {
+				vm.skillPickerText = undefined;
+				vm.skillGroupPickerOpen = false;
 				rtaStateService.selectSkillArea(value);
+				updateSkillGroupPicker();
 				forcePoll();
 			}
 		});
 
-		vm.filterSkills = function (query, data) {
-			if (!query)
-				return data;
-			var q = angular.lowercase(query);
-			return data.filter(function (item) {
-				return angular.lowercase(item.Name).indexOf(q) === 0;
-			});
-		};
+		function buildSkillGroups(s) {
+			skillGroups = s;
+			vm.skillGroups = $filter('filter')(s, vm.skillGroupPickerText);
+		}
+
+		function updateSkillGroupPicker() {
+			vm.skillGroupPickerText = rtaStateService.skillGroupPickerSelectionText();
+		}
+
 
 		vm.clearSkillSelection = rtaStateService.deselectSkillAndSkillArea
 	}

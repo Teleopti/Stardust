@@ -517,7 +517,7 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 		$fakeBackend
 			.withPhoneState({Id: "TrainingGuid"})
 			.withPhoneState({Id: "LoggedOutGuid"})
-			.withSkillAreas([{
+			.withSkillGroups([{
 				Id: "skillAreaGuid",
 				Skills: [{
 					Id: "phoneGuid",
@@ -559,7 +559,7 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 		$fakeBackend
 			.withPhoneState({Id: "StateGuid1"})
 			.withPhoneState({Id: "StateGuid2"})
-			.withSkillAreas([{
+			.withSkillGroups([{
 				Id: "skillAreaGuid",
 				Skills: [{
 					Id: "phoneGuid",
@@ -595,7 +595,7 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 		t.backend
 			.withPhoneState({Id: "TrainingGuid"})
 			.withPhoneState({Id: "LoggedOutGuid"})
-			.withSkillAreas([{
+			.withSkillGroups([{
 				Id: "skillAreaGuid",
 				Skills: [{
 					Id: "phoneGuid",
@@ -636,7 +636,7 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 			.withPhoneState({Id: "TrainingGuid"})
 			.withPhoneState({Id: "LoggedOutGuid"})
 			.withPhoneState({Id: "PhoneGuid"})
-			.withSkillAreas([{
+			.withSkillGroups([{
 				Id: "skillAreaGuid",
 				Skills: [{
 					Id: "phoneGuid",
@@ -688,7 +688,7 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 		stateParams.skillAreaId = "skillAreaGuid";
 		$fakeBackend
 			.withPhoneState({Id: "TrainingGuid"})
-			.withSkillAreas([{
+			.withSkillGroups([{
 				Id: "skillAreaGuid",
 				Skills: [{
 					Id: "phoneGuid",
@@ -729,7 +729,7 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 		stateParams.es = ["noState"];
 		$fakeBackend
 			.withPhoneState({Id: "TrainingGuid"})
-			.withSkillAreas([{
+			.withSkillGroups([{
 				Id: "skillAreaGuid",
 				Skills: [{
 					Id: "phoneGuid",

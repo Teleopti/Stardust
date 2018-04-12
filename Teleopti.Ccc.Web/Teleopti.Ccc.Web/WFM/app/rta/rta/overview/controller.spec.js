@@ -85,7 +85,7 @@ rtaTester.describe('RtaOverviewController', function (it, fit, xit) {
 	});
 
 	it('should get skill areas', function (t) {
-		t.backend.withSkillAreas(skillAreas);
+		t.backend.withSkillGroups(skillAreas);
 		var vm = t.createController();
 
 		expect(vm.skillAreas.length).toEqual(2);
@@ -263,7 +263,7 @@ rtaTester.describe('RtaOverviewController', function (it, fit, xit) {
 	it('should build site card view model when preselected skill area', function (t) {
 		t.stateParams.skillAreaId = 'skillArea1Id';
 		t.backend
-			.withSkillAreas(skillAreas)
+			.withSkillGroups(skillAreas)
 			.withSiteAdherence({
 				Id: 'londonId',
 				SkillId: 'channelSalesId',
@@ -400,7 +400,7 @@ rtaTester.describe('RtaOverviewController', function (it, fit, xit) {
 	it('should update adherence for site with preselected skill area', function (t) {
 		t.stateParams.skillAreaId = 'skillArea1Id';
 		t.backend
-			.withSkillAreas(skillAreas)
+			.withSkillGroups(skillAreas)
 			.withSiteAdherence({
 				Id: 'londonId',
 				SkillId: 'channelSalesId',

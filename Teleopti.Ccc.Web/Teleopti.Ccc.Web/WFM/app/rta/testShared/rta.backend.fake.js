@@ -15,7 +15,7 @@
 		var siteAdherences = [];
 		var teamAdherences = [];
 		var skills = [];
-		var skillAreas = [];
+		var skillGroups = [];
 		var phoneStates = [];
 
 		service.withTime = withTime;
@@ -29,7 +29,8 @@
 		service.clearTeamAdherences = clearTeamAdherences;
 
 		service.withSkill = withSkill;
-		service.withSkillAreas = withSkillAreas;
+		service.withSkillGroup = withSkillGroup;
+		service.withSkillGroups = withSkillGroups;
 
 		service.withPhoneState = withPhoneState;
 		service.withOrganization = withOrganization;
@@ -43,7 +44,7 @@
 		});
 		Object.defineProperty(service, 'skillAreas', {
 			get: function () {
-				return skillAreas;
+				return skillGroups;
 			}
 		});
 
@@ -53,7 +54,7 @@
 			serverTime = null;
 			siteAdherences = [];
 			teamAdherences = [];
-			skillAreas = [];
+			skillGroups = [];
 			phoneStates = [];
 
 			service.traceCalledForUserCode = null;
@@ -74,7 +75,7 @@
 			name: 'approvePeriod',
 			url: /\.\.\/api\/HistoricalAdherence\/ApprovePeriod/
 		});
-		
+
 		service.fake({
 			name: 'removeApprovedPeriod',
 			url: /\.\.\/api\/HistoricalAdherence\/RemoveApprovedPeriod/
@@ -137,7 +138,7 @@
 
 		service.fake(/\.\.\/api\/SkillArea\/For(.*)/,
 			function (params) {
-				var result = skillAreas
+				var result = skillGroups
 					.filter(function (s) {
 						return params.skillAreaId === s.Id
 					});
@@ -146,7 +147,7 @@
 
 		service.fake(/\.\.\/api\/SkillGroups(.*)/,
 			function () {
-				return [200, skillAreas];
+				return [200, skillGroups];
 			});
 
 		service.fake(/\.\.\/api\/Skills(.*)/,
@@ -280,9 +281,14 @@
 			return this;
 		}
 
-		function withSkillAreas(newSkillAreas) {
-			newSkillAreas.forEach(function (e) {
-				skillAreas.push(e)
+		function withSkillGroup(skillGroup) {
+			skillGroups.push(skillGroup);
+			return this;
+		}
+
+		function withSkillGroups(newSkillGroups) {
+			newSkillGroups.forEach(function (e) {
+				skillGroups.push(e)
 			});
 			return this;
 		}
@@ -301,7 +307,7 @@
 			sitesWithTeams = [];
 			return this;
 		}
-		
+
 		function withSite(site) {
 			sitesWithTeams.push(site);
 			return this;

@@ -161,7 +161,7 @@ rtaTester.describe('RtaOverviewController', function (it, fit, xit) {
 	it('should go to agents for selected site with  skill area', function (t) {
 		t.stateParams.skillAreaId = 'skillArea1Id';
 		t.backend
-			.withSkillAreas([{
+			.withSkillGroups([{
 				Id: 'skillArea1Id',
 				Name: 'SkillArea1',
 				Skills: [{
@@ -333,7 +333,7 @@ rtaTester.describe('RtaOverviewController', function (it, fit, xit) {
 	it('should go to agents for selected team with selected skill area', function (t) {
 		t.stateParams.skillAreaId = 'skillArea1Id';
 		t.backend
-			.withSkillAreas([{
+			.withSkillGroups([{
 				Id: 'skillArea1Id',
 				Name: 'SkillArea1',
 				Skills: [{
@@ -395,7 +395,7 @@ rtaTester.describe('RtaOverviewController', function (it, fit, xit) {
 
 	it('should go to agents for selected team with preselected skill area', function (t) {
 		t.stateParams.skillAreaId = 'skillArea1Id';
-		t.backend.withSkillAreas([
+		t.backend.withSkillGroups([
 			{
 				Id: 'skillArea1Id',
 				Name: 'SkillArea1',

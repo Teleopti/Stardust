@@ -81,55 +81,70 @@
 					</div>
 				</div>
 			</div>
-
+			
 			<div class="con-flex">
-				<md-autocomplete ng-disabled="vm.loading"
-								 ng-attr-skillsLoaded="{{!vm.loading}}"
-								 class="autocomplete-skill"
-								 md-selected-item="vm.selectedSkillNew"
-								 md-search-text="searchSkillText"
-								 md-items="skill in vm.filterSkills(searchSkillText, vm.skills)"
-								 md-item-text="skill.Name"
-								 md-min-length="0"
-								 placeholder="{{'SelectSkill'|translate}}">
-					<md-item-template>
-						<span md-highlight-text="searchSkillText"
-							  md-highlight-flags="^i">{{skill.Name}}</span>
-					</md-item-template>
-					<md-not-found>
-						{{'RepViewerNoMoreMatches'|translate}}
-					</md-not-found>
-				</md-autocomplete>
-				<i class="mdi mdi-close pointer ie-cross grow-out"
-				   ng-show="vm.selectedSkill"
-				   ng-click="vm.clearSkillSelection()">
-					<md-tooltip>{{'Clear'|translate}}</md-tooltip>
-				</i>
+				<div class="wfm-form" outside-click="vm.skillPickerOpen = false">
+					<div class="form-input-wrap">
+						<div style="position: relative">
+							<input type="text"
+								   placeholder="{{'SelectSkill'|translate}}"
+								   ng-click="vm.skillPickerOpen = !vm.skillPickerOpen"
+								   ng-model="vm.skillPickerText"
+							/>
+							<i class="mdi mdi-close pointer"
+							   ng-show="vm.selectedSkill"
+							   ng-click="vm.clearSkillSelection()"
+							   style="position: absolute; top: 0%; left: 97%;">
+								<md-tooltip>{{'Clear'|translate}}</md-tooltip>
+							</i>
+						</div>
+					</div>
+					<div style="position: relative">
+						<div class="wfm-dropdown-panel panel material-depth-1 full-padding"
+							 style="z-index: 999; position: absolute; width: 100%; overflow-y: scroll; max-height: 200px"
+							 ng-show="vm.skillPickerOpen">
+							<ul>
+								<li ng-repeat="skill in vm.skills"
+									ng-click="vm.selectedSkill = skill"
+									style="padding: 10px 0px; cursor: pointer">
+									{{skill.Name}}
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
 			</div>
 
 			<div class="con-flex">
-				<md-autocomplete ng-disabled="vm.loading"
-								 ng-attr-skillAreasLoaded="{{!vm.loading}}"
-								 class="autocomplete-skillarea"
-								 md-selected-item="vm.selectedSkillArea"
-								 md-search-text="searchSkillAreaText"
-								 md-items="skillArea in vm.filterSkills(searchSkillAreaText, vm.skillAreas)"
-								 md-item-text="skillArea.Name"
-								 md-min-length="0"
-								 placeholder="{{'SelectSkillGroup'|translate}}">
-					<md-item-template>
-						<span md-highlight-text="searchSkillText"
-							  md-highlight-flags="^i">{{skillArea.Name}}</span>
-					</md-item-template>
-					<md-not-found>
-						{{'RepViewerNoMoreMatches'|translate}}
-					</md-not-found>
-				</md-autocomplete>
-				<i class="mdi mdi-close pointer ie-cross grow-out"
-				   ng-show="vm.selectedSkillArea"
-				   ng-click="vm.clearSkillSelection()">
-					<md-tooltip>{{'Clear'|translate}}</md-tooltip>
-				</i>
+				<div class="wfm-form" outside-click="vm.skillGroupPickerOpen = false">
+					<div class="form-input-wrap">
+						<div style="position: relative">
+							<input type="text"
+								   placeholder="{{'SelectSkill'|translate}}"
+								   ng-click="vm.skillGroupPickerOpen = !vm.skillGroupPickerOpen"
+								   ng-model="vm.skillGroupPickerText"/>
+							<i class="mdi mdi-close pointer"
+							   ng-show="vm.selectedSkillGroup"
+							   ng-click="vm.clearSkillSelection()"
+							   style="position: absolute; top: 0%; left: 97%;">
+								<md-tooltip>{{'Clear'|translate}}</md-tooltip>
+							</i>
+						</div>
+					</div>
+					<div style="position: relative">
+						<div class="wfm-dropdown-panel panel material-depth-1 full-padding"
+							 style="z-index: 999; position: absolute; width: 100%; overflow-y: scroll; max-height: 200px"
+							 ng-show="vm.skillGroupPickerOpen">
+							<ul>
+								<li ng-repeat="skillGroup in vm.skillGroups"
+									ng-click="vm.selectedSkillGroup = skillGroup"
+									style="padding: 10px 0px; cursor: pointer">
+									{{skillGroup.Name}}
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
 			</div>
 
 			<div style="min-width: 150px">
@@ -261,7 +276,7 @@
 									{{outOfAdherence.StartTime}} - {{outOfAdherence.EndTime}}
 								</md-tooltip>
 							</div>
-							
+
 							<div class="current-time" style="left: 25%"></div>
 
 							<div ng-repeat="activity in agentState.Shift"

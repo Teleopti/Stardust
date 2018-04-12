@@ -37,8 +37,11 @@ var rtaTester = (function () {
 				withPhoneState: function (a) {
 					return sharedTestState.$fakeBackend.withPhoneState(a);
 				},
-				withSkillAreas: function (a) {
-					return sharedTestState.$fakeBackend.withSkillAreas(a);
+				withSkillGroup: function (a) {
+					return sharedTestState.$fakeBackend.withSkillGroup(a);
+				},
+				withSkillGroups: function (a) {
+					return sharedTestState.$fakeBackend.withSkillGroups(a);
 				},
 				clearAgentStates: function (a) {
 					return sharedTestState.$fakeBackend.clearAgentStates(a);

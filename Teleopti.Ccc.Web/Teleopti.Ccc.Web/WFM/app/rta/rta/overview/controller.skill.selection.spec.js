@@ -73,7 +73,7 @@ rtaTester.describe('RtaOverviewController', function (it, fit, xit) {
 	});
 
 	it('should go to sites by skill area state', function (t) {
-		t.backend.withSkillAreas(skillAreas);
+		t.backend.withSkillGroups(skillAreas);
 		var vm = t.createController();
 
 		vm.selectSkillOrSkillArea(vm.skillAreas[0]);
@@ -86,7 +86,7 @@ rtaTester.describe('RtaOverviewController', function (it, fit, xit) {
 		allSkills.forEach(function (skill) {
 			t.backend.withSkill(skill);
 		});
-		t.backend.withSkillAreas(skillAreas);
+		t.backend.withSkillGroups(skillAreas);
 		var vm = t.createController();
 
 		t.apply(function () {
@@ -102,7 +102,7 @@ rtaTester.describe('RtaOverviewController', function (it, fit, xit) {
 		allSkills.forEach(function (skill) {
 			t.backend.withSkill(skill);
 		});
-		t.backend.withSkillAreas(skillAreas);
+		t.backend.withSkillGroups(skillAreas);
 		var vm = t.createController();
 
 		t.apply(function () {
@@ -118,7 +118,7 @@ rtaTester.describe('RtaOverviewController', function (it, fit, xit) {
 		allSkills.forEach(function (skill) {
 			t.backend.withSkill(skill);
 		});
-		t.backend.withSkillAreas(skillAreas);
+		t.backend.withSkillGroups(skillAreas);
 		var vm = t.createController();
 
 		t.apply(function () {

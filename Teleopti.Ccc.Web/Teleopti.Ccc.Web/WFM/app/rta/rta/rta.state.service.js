@@ -48,6 +48,16 @@
 			selectSkillArea: selectSkillArea,
 			selectedSkill: selectedSkill,
 			selectedSkillArea: selectedSkillArea,
+			skillPickerSelectionText: function () {
+				var skill = selectedSkill();
+				if (skill)
+					return skill.Name;
+			},
+			skillGroupPickerSelectionText: function () {
+				var skillArea = selectedSkillArea();
+				if (skillArea)
+					return skillArea.Name;
+			},
 			deselectSkillAndSkillArea: function () {
 				$state.go($state.current.name, buildState({skillIds: undefined, skillAreaId: undefined}));
 			},
