@@ -18,8 +18,8 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 
 		public void Persist(TenantAudit tenantAuditInfo)
 		{
-			//tenantAuditInfo.Correlation = _currentTenantSession.GetSessionId();
 			var session = _currentTenantSession.CurrentSession();
+			tenantAuditInfo.Correlation = _currentTenantSession.CurrentSessionId();	
 			session.Save(tenantAuditInfo);
 		}
 	}
