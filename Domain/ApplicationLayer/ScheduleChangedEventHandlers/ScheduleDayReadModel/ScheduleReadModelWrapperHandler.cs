@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 
 		[ImpersonateSystem]
 		[UnitOfWork]
-		public void Handle(ProjectionChangedEvent @event)
+		public virtual void Handle(ProjectionChangedEvent @event)
 		{
 			_scheduleDayReadModelPersister?.Execute(@event);
 			_personScheduleDayReadModelUpdaterPersister?.Execute(@event);
@@ -34,14 +34,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 
 		[ImpersonateSystem]
 		[UnitOfWork]
-		public void Handle(ProjectionChangedEventForPersonScheduleDay @event)
+		public virtual void Handle(ProjectionChangedEventForPersonScheduleDay @event)
 		{
 			_personScheduleDayReadModelUpdaterPersister.Execute(@event);
 		}
 
 		[ImpersonateSystem]
 		[UnitOfWork]
-		public void Handle(ProjectionChangedEventForScheduleDay @event)
+		public virtual void Handle(ProjectionChangedEventForScheduleDay @event)
 		{
 			_scheduleDayReadModelPersister.Execute(@event);
 		}
