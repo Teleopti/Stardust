@@ -47,7 +47,11 @@ function Check-URL ($UrlToCheck)
 
         Write-Output "[$UrlToCheck]`tReturned status $HTTP_Status"
 
-        if ($TimeNow -ge $TimeEnd) {Write-Output "Running for $BailoutTime minutes, quitting";exit 1}
+        if ($TimeNow -ge $TimeEnd) 
+		{
+			Write-Output "Running for $BailoutTime minutes, quitting"
+			exit 1
+		}
 
         if ($HTTP_Status -eq 200)
         {
