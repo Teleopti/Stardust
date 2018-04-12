@@ -45,6 +45,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 			_scheduleProjectionReadOnlyChecker.Execute(@event);
 		}
 
+		[ImpersonateSystem]
 		[UnitOfWork]
 		public virtual void Handle(ProjectionChangedEventForPersonScheduleDay @event)
 		{
