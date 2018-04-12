@@ -104,7 +104,7 @@
 			ev.stopPropagation();
 			var clone = _.cloneDeep(skillGroup);
 			clone.Name = ($translate.instant('CopyOf') + ' ' + skillGroup.Name).substr(0, vm.skillNameMaxLength);
-			clone.Id = 'Copy' + skillGroup.Id + '-' + getRandom();
+			clone.Id = 'Copy' + skillGroup.Id + '-' + _.uniqueId();
 			clone.Saved = false;
 			vm.skillGroups.push(clone);
 			vm.skillGroups = _.sortBy(vm.skillGroups, function(item) {
@@ -114,12 +114,15 @@
 		};
 
 		vm.createSkillGroup = function(ev) {
-			vm.newGroup = {
-				Name: '',
-				Id: 'New' + getRandom(),
-				Skills: [],
-				Saved: false
-			};
+			vm.newGroup = Object.assign(
+				{},
+				{
+					Name: '',
+					Id: _.uniqueId(),
+					Skills: [],
+					Saved: false
+				}
+			);
 			isNew = true;
 			vm.editGroupNameBox = true;
 			ev.stopPropagation();
@@ -221,7 +224,7 @@
 					vm.newGroup.Name = vm.newGroupName;
 					vm.skills = vm.allSkills.slice();
 					vm.skillGroups.push(vm.newGroup);
-					vm.skillGroups[vm.selectedGroupIndex] = vm.newGroup;
+					vm.selectedGroupIndex = vm.skillGroups.indexOf(vm.newGroup);
 					vm.newGroup = null;
 				}
 			} else {
@@ -316,10 +319,6 @@
 					vm.selectSkillGroup(vm.selectedGroupIndex);
 				}
 			});
-		}
-
-		function getRandom() {
-			return Math.ceil(Math.random() * (1000000 - 1) + 1) + '';
 		}
 
 		function isNumeric(n) {
