@@ -59,7 +59,7 @@
 					return skillArea.Name;
 			},
 			deselectSkillAndSkillArea: function () {
-				$state.go($state.current.name, buildState({skillIds: undefined, skillAreaId: undefined}));
+				$state.go($state.current.name, buildState({skillIds: undefined, skillAreaId: undefined}), {notify: false});
 			},
 			skillPickerPreselectedItem: function () {
 				return state.skillPickerPreselectedItem;

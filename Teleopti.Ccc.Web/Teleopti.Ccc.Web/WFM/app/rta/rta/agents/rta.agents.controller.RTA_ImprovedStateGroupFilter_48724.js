@@ -361,7 +361,12 @@
 			vm.skillGroupPickerText = rtaStateService.skillGroupPickerSelectionText();
 		}
 
-
-		vm.clearSkillSelection = rtaStateService.deselectSkillAndSkillArea
+		
+		vm.clearSkillSelection = function () {
+			rtaStateService.deselectSkillAndSkillArea();
+			updateSkillPicker();
+			updateSkillGroupPicker();
+			forcePoll();
+		}
 	}
 })();

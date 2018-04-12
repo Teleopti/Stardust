@@ -711,5 +711,43 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 		});
 
 		expect(vm.skillGroupPickerText).toBeUndefined();
+	});	
+	
+	it('should not display selected skill on clear', function (t) {
+		var skill = {
+			Id: "skill",
+			Name: "skill"
+		};
+		t.backend
+			.withSkill(skill);
+		var vm = t.createController();
+
+		t.apply(function () {
+			vm.selectedSkill = skill;
+		});
+		t.apply(function () {
+			vm.clearSkillSelection()
+		});
+
+		expect(vm.skillPickerText).toBeUndefined();
+	});
+	
+	it('should not display selected skillGroup on clear', function (t) {
+		var skillGroup = {
+			Id: "group",
+			Name: "group"
+		};
+		t.backend
+			.withSkillGroup(skillGroup);
+		var vm = t.createController();
+
+		t.apply(function () {
+			vm.selectedSkillGroup = skillGroup;
+		});
+		t.apply(function () {
+			vm.clearSkillSelection()
+		});
+
+		expect(vm.skillGroupPickerText).toBeUndefined();
 	});
 });
