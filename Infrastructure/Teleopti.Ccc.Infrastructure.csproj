@@ -261,6 +261,7 @@
     <Compile Include="MachineLearning\ShiftCategoryExampleForTraining.cs" />
     <Compile Include="MachineLearning\ShiftCategoryPredictionModelLoader.cs" />
     <Compile Include="MultiTenancy\Admin\CheckTenantUserExists.cs" />
+    <Compile Include="MultiTenancy\Server\Queries\TenantAuditPersisterFake.cs" />
     <Compile Include="MultiTenancy\Server\TenantAudit.cs" />
     <Compile Include="MultiTenancy\Server\ExternalApplicationAccess.cs" />
     <Compile Include="MultiTenancy\Server\HashFromToken.cs" />

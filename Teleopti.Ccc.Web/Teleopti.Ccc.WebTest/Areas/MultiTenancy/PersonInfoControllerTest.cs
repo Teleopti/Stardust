@@ -52,13 +52,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 		public PersonInfoController Target;
 		public FindLogonInfoFake FindLogonInfo;
 		public TenantAuthenticationFake TenantAuthentication;
-		public TenantUnitOfWorkFake TenantUnitOfWork;
 		public PersonInfoPersisterFake PersonInfoPersisterFake;
-
+		
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<PersistPersonInfo>().For<IPersistPersonInfo>();
 			system.UseTestDouble<PersonInfoPersisterFake>().For<IPersonInfoPersister>();
+			system.UseTestDouble<TenantAuditPersisterFake>().For<ITenantAuditPersister>();
 		}
 
 		[Test]

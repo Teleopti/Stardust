@@ -2,12 +2,12 @@
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 {
-	public interface IAuditPersister
+	public interface ITenantAuditPersister
 	{
 		void Persist(TenantAudit tenantAuditInfo);
 	}
 
-	public class TenantAuditPersister : IAuditPersister
+	public class TenantAuditPersister : ITenantAuditPersister
 	{
 		private readonly ICurrentTenantSession _currentTenantSession;
 
