@@ -4,7 +4,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 {
-	public class ProjectionChangedEventForShiftExchangeOffer : EventWithLogOnContext
+	public class ProjectionChangedEventForShiftExchangeOffer : EventWithInfrastructureContext
 	{
 		public Guid PersonId { get; set; }
 		public ICollection<ProjectionChangedEventForShiftExchangeOfferDateAndChecksums> Days { get; set; }

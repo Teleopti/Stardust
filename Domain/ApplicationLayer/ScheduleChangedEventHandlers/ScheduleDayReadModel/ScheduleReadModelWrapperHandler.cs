@@ -9,6 +9,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 {
 	[EnabledBy(Toggles.ResourcePlanner_SpeedUpEvents_75415)]
 	public class ScheduleReadModelWrapperHandler :
+		IHandleEvent<ProjectionChangedEventForScheduleProjection>,
+		IHandleEvent<ProjectionChangedEventForPersonScheduleDay>,
 		IHandleEvent<ProjectionChangedEvent>,
 		IHandleEvent<ProjectionChangedEventForScheduleDay>,
 		IRunOnHangfire,
