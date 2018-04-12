@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 {
 	[RemoveMeWithToggle("rename", Toggles.ResourcePlanner_SpeedUpEvents_75415)]
 	[DomainTest]
+	[DefaultData]
 	[Toggle(Toggles.ResourcePlanner_SpeedUpEvents_75415)]
 	public class ScheduleChangedInDefaultScenarioNotificationNewTest
 	{
@@ -42,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			ScenarioRepository.Has(scenario);
 			var personId = Guid.NewGuid();
 
-			Target.Handle(new ScheduleChangedEvent
+			Target.Handle(new ScheduleChangedEventForTest
 			{
 				ScenarioId = scenario.Id.Value,
 				PersonId = personId
@@ -59,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			ScenarioRepository.Has(scenario);
 			var person = Guid.NewGuid();
 
-			Target.Handle(new ScheduleChangedEvent
+			Target.Handle(new ScheduleChangedEventForTest
 			{
 				ScenarioId = scenario.Id.Value,
 				PersonId = person
