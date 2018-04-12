@@ -3,7 +3,7 @@ import { Person } from '../types';
 import { BehaviorSubject } from 'rxjs';
 
 export class WorkspaceServiceStub extends WorkspaceService {
-	protected _people$ = new BehaviorSubject<Array<Person>>([
+	people$ = new BehaviorSubject<Array<Person>>([
 		{
 			Id: 'id1',
 			FirstName: 'First1',

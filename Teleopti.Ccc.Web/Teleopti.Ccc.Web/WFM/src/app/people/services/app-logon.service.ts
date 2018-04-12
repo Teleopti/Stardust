@@ -33,9 +33,23 @@ interface PersistApplicationLogonNamesResponse {
 
 interface LogonInfoSucess {}
 
+export interface LogonInfo {
+	PersonId: string;
+	LogonName: string;
+	Identity: string;
+}
+
+export interface LogonInfoFromGuidsResponse extends Array<LogonInfo> {}
+
 @Injectable()
 export class AppLogonService {
 	constructor(private http: HttpClient) {}
+
+	getLogonInfo(personIdsToGet: string[]): Observable<LogonInfoFromGuidsResponse> {
+		return this.http.post('../PersonInfo/LogonInfoFromGuids', personIdsToGet) as Observable<
+			LogonInfoFromGuidsResponse
+		>;
+	}
 
 	logonNameExists(logonName: string): Observable<boolean> {
 		const params = new HttpParams().set('LogonName', logonName);

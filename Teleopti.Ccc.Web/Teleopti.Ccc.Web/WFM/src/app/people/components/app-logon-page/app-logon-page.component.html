@@ -4,29 +4,37 @@
       <h2>Application logon</h2>
     </div>
   </div>
-  <div class="con-row">
-    <div class="con-flex">
-      <form [formGroup]="logonForm">
-        <form formArrayName="logons">
-          <mat-grid-list cols="2" rowHeight="10:1" class="form-group" *ngFor="let logonControl of logons.controls; let i=index" [formGroupName]="i">
-            <mat-grid-tile>
-              Name
-            </mat-grid-tile>
-
-            <mat-grid-tile>
-              <mat-form-field class="center-block">Application logon:
-                <input matInput formControlName="ApplicationLogon">
-                <mat-error *ngIf="logonControl.get('ApplicationLogon').hasError('duplicateNameValidator')">
-                  Username is already in use
-                </mat-error>
-              </mat-form-field>
-            </mat-grid-tile>
-          </mat-grid-list>
-        </form>
-      </form>
-      <div *ngIf="duplicationError">You have duplicate values</div>
-    </div>
-  </div>
+  <form [formGroup]="logonForm">
+    <form formArrayName="logons">
+      <ng-container *ngFor="let logonControl of logons.controls; let i=index" [formGroupName]="i">
+        <div class="con-row">
+          <div class="con-flex">
+            <mat-form-field class="full-width">
+              <input matInput formControlName="FullName" placeholder="Full name">
+            </mat-form-field>
+          </div>
+          <div class="con-flex">
+            <mat-form-field class="full-width">
+              <input matInput formControlName="ApplicationLogon" placeholder="Application logon">
+              <mat-error *ngIf="logonControl.get('ApplicationLogon').hasError('duplicateNameValidator')">
+                Username is already in use
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="con-row">
+          <div class="con-flex">
+            <mat-divider></mat-divider>
+          </div>
+        </div>
+      </ng-container>
+      <div class="con-row" *ngIf="duplicationError">
+        <div class="con-flex">
+          You have entered duplicate logon names
+        </div>
+      </div>
+    </form>
+  </form>
   <div class="con-row">
     <div class="con-flex">
       <aside class="action-buttons">
