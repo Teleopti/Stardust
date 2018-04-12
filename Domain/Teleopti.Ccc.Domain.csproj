@@ -170,7 +170,6 @@
     <Compile Include="AgentInfo\SkillStaffingData.cs" />
     <Compile Include="AgentInfo\SkillStaffingDataLoader.cs" />
     <Compile Include="AgentInfo\SkillStaffingDataSkillTypeFilter.cs" />
-    <Compile Include="AgentInfo\SkillStaffingReadModelDataLoader.cs" />
     <Compile Include="Analytics\AnalyticsSite.cs" />
     <Compile Include="Aop\IUnitOfWorkNoCommitAspect.cs" />
     <Compile Include="Aop\ReadonlyUnitOfWorkAttribute.cs" />
