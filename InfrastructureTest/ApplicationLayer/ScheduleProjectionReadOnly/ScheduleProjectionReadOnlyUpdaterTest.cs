@@ -1,4 +1,5 @@
 using System;
+using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -11,71 +12,76 @@ using Teleopti.Ccc.TestCommon;
 namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.ScheduleProjectionReadOnly
 {
 	[DatabaseTest]
-	public class ScheduleProjectionReadOnlyUpdaterTest
+	public class ScheduleProjectionReadOnlyCheckerTest
 	{
-		public ScheduleProjectionReadOnlyUpdater Target;
+		public ScheduleProjectionReadOnlyChecker Target;
 		public IScheduleProjectionReadOnlyPersister Persister;
 		public WithUnitOfWork WithUnitOfWork;
+		public IComponentContext TempContainer;
 
 		[Test]
 		public void ShouldNotPersistOldSchedule()
 		{
 			var person = Guid.NewGuid();
-			Target.Handle(new ProjectionChangedEvent
+			WithUnitOfWork.Do(() =>
 			{
-				PersonId = person,
-				ScheduleDays = new[]
+				Target.Execute(new ProjectionChangedEvent
 				{
-					new ProjectionChangedEventScheduleDay
+					PersonId = person,
+					ScheduleDays = new[]
 					{
-						Date = "2016-04-29".Utc(),
-						Version = 2,
-						Shift = new ProjectionChangedEventShift
+						new ProjectionChangedEventScheduleDay
 						{
-							Layers = new[]
+							Date = "2016-04-29".Utc(),
+							Version = 2,
+							Shift = new ProjectionChangedEventShift
 							{
-								new ProjectionChangedEventLayer
+								Layers = new[]
 								{
-									Name = "Phone",
-									StartDateTime = "2016-04-29 08:00".Utc(),
-									EndDateTime = "2016-04-29 12:00".Utc()
-								},
-								new ProjectionChangedEventLayer
-								{
-									Name = "Admin",
-									StartDateTime = "2016-04-29 12:00".Utc(),
-									EndDateTime = "2016-04-29 17:00".Utc()
+									new ProjectionChangedEventLayer
+									{
+										Name = "Phone",
+										StartDateTime = "2016-04-29 08:00".Utc(),
+										EndDateTime = "2016-04-29 12:00".Utc()
+									},
+									new ProjectionChangedEventLayer
+									{
+										Name = "Admin",
+										StartDateTime = "2016-04-29 12:00".Utc(),
+										EndDateTime = "2016-04-29 17:00".Utc()
+									}
 								}
 							}
 						}
 					}
-				}
-			});
+				});
 
-			Target.Handle(new ProjectionChangedEvent
-			{
-				PersonId = person,
-				ScheduleDays = new[]
+				Target.Execute(new ProjectionChangedEvent
 				{
-					new ProjectionChangedEventScheduleDay
+					PersonId = person,
+					ScheduleDays = new[]
 					{
-						Date = "2016-04-29".Utc(),
-						Version = 1,
-						Shift = new ProjectionChangedEventShift
+						new ProjectionChangedEventScheduleDay
 						{
-							Layers = new[]
+							Date = "2016-04-29".Utc(),
+							Version = 1,
+							Shift = new ProjectionChangedEventShift
 							{
-								new ProjectionChangedEventLayer
+								Layers = new[]
 								{
-									Name = "Phone",
-									StartDateTime = "2016-04-29 08:00".Utc(),
-									EndDateTime = "2016-04-29 17:00".Utc()
+									new ProjectionChangedEventLayer
+									{
+										Name = "Phone",
+										StartDateTime = "2016-04-29 08:00".Utc(),
+										EndDateTime = "2016-04-29 17:00".Utc()
+									}
 								}
 							}
 						}
 					}
-				}
+				});
 			});
+			
 
 			WithUnitOfWork.Get(() => Persister.ForPerson("2016-04-29".Date(), person, Guid.Empty))
 				.Should().Have.Count.EqualTo(2);

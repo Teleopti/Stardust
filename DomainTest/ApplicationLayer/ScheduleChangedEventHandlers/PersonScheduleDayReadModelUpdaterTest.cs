@@ -245,7 +245,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		private IPersonScheduleDayReadModelUpdaterHangfire createTarget(PersonScheduleDayReadModelUpdaterPersister persister)
 		{
 			return _toggle75415
-				? (IPersonScheduleDayReadModelUpdaterHangfire) new ScheduleReadModelWrapperHandler(null, persister)
+				? (IPersonScheduleDayReadModelUpdaterHangfire) new ScheduleReadModelWrapperHandler(null, persister, null)
 				: new PersonScheduleDayReadModelUpdaterHangfire(persister);
 		}
 		

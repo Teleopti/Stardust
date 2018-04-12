@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			var persister = new ScheduleDayReadModelPersister(_personRepository,
 				_notificationValidationCheck, _scheduleDayReadModelsCreator, _scheduleDayReadModelRepository);
 			_target = _toggle75415
-				? (IScheduleDayReadModelHandlerHangfire) new ScheduleReadModelWrapperHandler(persister, null)
+				? (IScheduleDayReadModelHandlerHangfire) new ScheduleReadModelWrapperHandler(persister, null, null)
 				: new ScheduleDayReadModelHandlerHangfire(persister);
 			_person = PersonFactory.CreatePerson();
 			_person.SetId(Guid.NewGuid());
