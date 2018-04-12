@@ -103,6 +103,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 				badges = _badgeProvider.GetBadges(period);
 				rollingPeriodSet = teamSetting.GamificationSetting.RollingPeriodSet;
 			}
+
+			var showBadgePeriodNavigator = _toggleManager.IsEnabled(Toggles.WFM_Gamification_Create_Rolling_Periods_74866);
 			
 			return new PortalViewModel
 			{
@@ -126,6 +128,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 				BadgeRollingPeriodSet = rollingPeriodSet,
 				DateTimeDefaultValues = getDateTimeDefaultValues(culture),
 				ShowBadge = showBadge,
+				ShowBadgePeriodNavigator = showBadgePeriodNavigator,
 				DateFormatLocale = getLocale()
 			};
 		}

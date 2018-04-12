@@ -90,7 +90,7 @@
 						@if (Model.Badges != null && Model.Badges.Any())
 						{
 							<ul class="dropdown-menu show-outside-toolbar" id="badge-counts" data-period-type=@Model.BadgeRollingPeriodSet>
-								@if (Model.BadgeRollingPeriodSet.ToString() != "OnGoing")
+								@if (Model.ShowBadgePeriodNavigator && Model.BadgeRollingPeriodSet.ToString() != "OnGoing")
 								{
 								<li id="badge-period-navigator">
 									<button class="period-arrow" data-bind="click: clickPrev">
