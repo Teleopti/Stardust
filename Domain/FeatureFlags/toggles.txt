@@ -74,7 +74,7 @@ Wfm_Requests_Approve_Based_On_Intraday_39868 = RC # can not use it until functio
 Wfm_Requests_Approve_Based_On_Minimum_Approval_Time_40274 = RC # can not use it until function 'Approve based on business rules' is ready
 OvertimeRequestUseMostUnderStaffedSkill_47853 = RC
 OvertimeRequestAtLeastOneCriticalUnderStaffedSkill_74944 = RC
-OvertimeRequestSupportMultiSelectionSkillTypes_74945 = DEV
+OvertimeRequestSupportMultiSelectionSkillTypes_74945 = RC
 
 Wfm_People_ImportAndCreateAgentFromFile_42528 = true
 Wfm_People_SetFallbackValuesForImporting_43289 = true
