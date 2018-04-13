@@ -81,7 +81,7 @@ namespace Teleopti.Analytics.Etl.Common
 					var existing = _tenants.FirstOrDefault(x => x.Name.Equals(tenant.Name));
 					if (existing != null) continue;
 
-					var configurationHandler = new ConfigurationHandler(new GeneralFunctions(new GeneralInfrastructure(_baseConfigurationRepository)));
+					var configurationHandler = new ConfigurationHandler(new GeneralFunctions(new GeneralInfrastructure(_baseConfigurationRepository)), new BaseConfigurationValidator());
 					configurationHandler.SetConnectionString(tenant.DataSourceConfiguration.AnalyticsConnectionString);
 					IBaseConfiguration baseConfiguration = null;
 					if (configurationHandler.IsConfigurationValid)

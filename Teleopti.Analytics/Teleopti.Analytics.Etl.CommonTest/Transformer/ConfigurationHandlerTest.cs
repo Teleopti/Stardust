@@ -17,7 +17,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 		public void Setup()
 		{
 			_generalFunctions = MockRepository.GenerateMock<IGeneralFunctions>();
-			_target = new ConfigurationHandler(_generalFunctions);
+			_target = new ConfigurationHandler(_generalFunctions, new BaseConfigurationValidator());
 		}
 
 		[Test]

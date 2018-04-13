@@ -41,7 +41,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.DataSourceConfiguration
             _showForm = true;
             _closeApplication = false;
 
-			var configurationHandler = new ConfigurationHandler(new GeneralFunctions(new GeneralInfrastructure(new BaseConfigurationRepository())));
+			var configurationHandler = new ConfigurationHandler(new GeneralFunctions(new GeneralInfrastructure(new BaseConfigurationRepository())), new BaseConfigurationValidator());
 			configurationHandler.SetConnectionString(_connectionString);
 
 			if (!configurationHandler.IsConfigurationValid)

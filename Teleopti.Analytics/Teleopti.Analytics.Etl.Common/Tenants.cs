@@ -67,7 +67,7 @@ namespace Teleopti.Analytics.Etl.Common
 				var loaded = _loadAllTenants.Tenants().ToList();
 				foreach (var tenant in loaded)
 				{
-					var configurationHandler = new ConfigurationHandler(new GeneralFunctions(new GeneralInfrastructure(_baseConfigurationRepository)));
+					var configurationHandler = new ConfigurationHandler(new GeneralFunctions(new GeneralInfrastructure(_baseConfigurationRepository)), new BaseConfigurationValidator());
 					configurationHandler.SetConnectionString(tenant.DataSourceConfiguration.AnalyticsConnectionString);
 					IBaseConfiguration baseConfiguration = null;
 					if (configurationHandler.IsConfigurationValid)

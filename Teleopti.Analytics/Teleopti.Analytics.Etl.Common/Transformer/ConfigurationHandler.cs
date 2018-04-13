@@ -7,11 +7,12 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 	{
 		private readonly IGeneralFunctions _generalFunctions;
 		private IBaseConfiguration _baseConfiguration;
-		private BaseConfigurationValidator _baseConfigurationValidator;
+		private readonly BaseConfigurationValidator _baseConfigurationValidator;
 
-		public ConfigurationHandler(IGeneralFunctions generalFunctions)
+		public ConfigurationHandler(IGeneralFunctions generalFunctions, BaseConfigurationValidator baseConfigurationValidator)
 		{
 			_generalFunctions = generalFunctions;
+			_baseConfigurationValidator = baseConfigurationValidator;
 		}
 
 		public bool IsConfigurationValid => _baseConfigurationValidator.isCultureValid(BaseConfiguration.CultureId) &&

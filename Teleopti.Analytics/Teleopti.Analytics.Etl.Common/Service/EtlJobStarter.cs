@@ -62,7 +62,7 @@ namespace Teleopti.Analytics.Etl.Common.Service
 		{
 			log.Debug("Checking configuration");
 			var configHandler =
-				new ConfigurationHandler(new GeneralFunctions(new GeneralInfrastructure(_baseConfigurationRepository)));
+				new ConfigurationHandler(new GeneralFunctions(new GeneralInfrastructure(_baseConfigurationRepository)), new BaseConfigurationValidator());
 			configHandler.SetConnectionString(_connectionString);
 			if (!configHandler.IsConfigurationValid)
 			{
