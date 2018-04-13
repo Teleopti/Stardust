@@ -2,7 +2,7 @@
 	var vm;
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
 
-	function BadgeLeaderBoardReportViewModel() {
+	function BadgeLeaderBoardReportViewModel(weekStart) {
 		var self = this;
 
 		self.rollingPeriodToggleEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled("WFM_Gamification_Create_Rolling_Periods_74866");
@@ -26,7 +26,9 @@
 			self.displayDate = ko.computed(function () {
 				if (self.rollingPeriod === '0' || !self.rollingPeriod) return;
 
-				return getStartDate().format(self.dateFormat) + ' - ' + getEndDate().format(self.dateFormat);
+				return Teleopti.MyTimeWeb.Common.FormatDatePeriod(
+					getStartDate(),
+					getEndDate());
 			}, self);
 
 			self.previous = function () {
@@ -57,11 +59,21 @@
 				}
 			}
 
+			function getWeekStartDate(current) {
+				var currentDayOfWeek = current.day();
+				var differenceAsDays = currentDayOfWeek - parseInt(weekStart);
+				if (differenceAsDays < 0) {
+					differenceAsDays += 7;
+				}
+
+				return current.add('days', -differenceAsDays);
+			}
+
 			function getStartDate() {
-				var locale = Teleopti.MyTimeWeb.Common.DateFormatLocale;
 
 				if (self.rollingPeriod === '1') {
-					return self.selectedDate().clone().locale(locale).startOf('week');
+					var currentDate = self.selectedDate().clone();
+					return getWeekStartDate(currentDate);
 				}
 
 				if (self.rollingPeriod === '2') {
@@ -70,9 +82,9 @@
 			}
 
 			function getEndDate() {
-				var locale = Teleopti.MyTimeWeb.Common.DateFormatLocale;
+				
 				if (self.rollingPeriod === '1') {
-					return self.selectedDate().clone().locale(locale).endOf('week');
+					return getStartDate(self.selectedDate().clone()).add('days', 6);
 				}
 
 				if (self.rollingPeriod === '2') {
@@ -172,7 +184,7 @@
 
 	function bindData() {
 		Teleopti.MyTimeWeb.UserInfo.WhenLoaded(function (data) {
-			vm = new BadgeLeaderBoardReportViewModel();
+			vm = new BadgeLeaderBoardReportViewModel(data.WeekStart);
 			var elementToBind = $('.BadgeLeaderBoardReport')[0];
 			if (Teleopti.MyTimeWeb.Common.IsToggleEnabled("WFM_Gamification_Create_Rolling_Periods_74866")) {
 				$(".moment-datepicker").attr("data-bind", "datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart:" + data.WeekStart + "}");
