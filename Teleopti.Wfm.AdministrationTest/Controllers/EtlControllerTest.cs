@@ -1207,7 +1207,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 				StartDate = new DateTime(2018, 04, 11),
 				EndDate = new DateTime(2018, 04, 11),
 				ShowOnlyErrors = false,
-				TenantName = "All"
+				TenantName = "<All>"
 			});
 			result.Content.Count.Should().Be(2);
 			result.Content.First().BusinessUnitName.Should().Be(bunit1.Name);
