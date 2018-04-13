@@ -113,7 +113,7 @@ ResourcePlanner_BlockSchedulingValidation_46092 = true
 ResourcePlanner_UseErlangAWithInfinitePatience_45845 = true
 ResourcePlanner_SpeedUpEvents_48769 = false #lets see if we should keep this one
 ResourcePlanner_SpeedUpEvents_74996 = false #lets see if we should keep this one
-ResourcePlanner_SpeedUpEvents_75415 = RC
+ResourcePlanner_SpeedUpEvents_75415 = DEV
 
 # Bugs&Roses #
 ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don't turn on in production
