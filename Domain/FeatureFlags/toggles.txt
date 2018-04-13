@@ -98,7 +98,6 @@ MyTimeWeb_PollToCheckScheduleChanges_46595 = true
 
 # China, can any of these be removed? #
 QRCodeForMobileApps_42695 = true
-MobileApps_EnableMobileNotifications_44476 = true
 MyTimeWeb_MobileResponsive_43826 = true
 Staffing_Info_Configuration_44687 = true
 

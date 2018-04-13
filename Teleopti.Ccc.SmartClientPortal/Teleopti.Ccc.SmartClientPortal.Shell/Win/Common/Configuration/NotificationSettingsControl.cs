@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.UserTexts;
@@ -18,7 +16,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 {
 	public partial class NotificationSettingsControl : BaseUserControl, ISettingPage
 	{
-		private readonly IToggleManager _toggleManager;
 		private List<IOptionalColumn> _optionalColumnList;
 		public OptionalColumnRepository Repository { get; private set; }
 		public IUnitOfWork UnitOfWork { get; private set; }
@@ -29,9 +26,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			get { return comboBoxOptionalColumns.SelectedItem as IOptionalColumn; }
 		}
 
-		public NotificationSettingsControl(IToggleManager toggleManager)
+		public NotificationSettingsControl()
 		{
-			_toggleManager = toggleManager;
 			InitializeComponent();
 			if (!DefinedLicenseDataFactory.GetLicenseActivator(UnitOfWorkFactory.Current.Name)
 				.EnabledLicenseOptionPaths.Contains(DefinedLicenseOptionPaths.TeleoptiCccSmsLink))
@@ -59,12 +55,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 				textBoxEmailFrom.Visible = false;
 				tableLayoutPanel1.Visible = false;
 				tableLayoutPanel3.Visible = false;
-			}
-			if (!_toggleManager.IsEnabled(Toggles.MobileApps_EnableMobileNotifications_44476))
-			{
-				tableLayoutSubHeaderMobileNotification.Hide();
-				checkBoxEnableMobileNotification.Hide();
-				labelSubHeaderMobileNotificationSettings.Hide();
 			}
 		}
 

@@ -125,7 +125,6 @@
 		ETL_SpeedUpNightlyBusinessUnit_38932,
 
 		QRCodeForMobileApps_42695,
-		MobileApps_EnableMobileNotifications_44476,
 
 		ETL_EventbasedDate_39562,
 		NewPasswordHash_40460,
