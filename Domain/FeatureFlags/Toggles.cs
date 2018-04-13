@@ -34,7 +34,6 @@
 		MyTimeWeb_PreferenceForJalaliCalendar_42965,
 		MyTimeWeb_DayScheduleForStartPage_43446,
 		MyTimeWeb_DayScheduleForStartPage_Command_44209,
-		MyTimeWeb_ViewWFMAppGuide_43848,
 		MyTimeWeb_CalculateOvertimeProbabilityByPrimarySkill_44686,
 		MyTimeWeb_OvertimeRequest_44558,
 		MyTimeWeb_OvertimeRequestDefaultStartTime_47513,
@@ -124,7 +123,6 @@
 		ETL_SpeedUpIntradayBusinessUnit_38932,
 		ETL_SpeedUpNightlyBusinessUnit_38932,
 
-		QRCodeForMobileApps_42695,
 
 		ETL_EventbasedDate_39562,
 		NewPasswordHash_40460,

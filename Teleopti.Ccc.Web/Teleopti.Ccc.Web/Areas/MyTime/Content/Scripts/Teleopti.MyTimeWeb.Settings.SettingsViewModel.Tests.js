@@ -62,7 +62,7 @@ $(document).ready(function() {
 
 	test("should get correct url for QRcode", function () {
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (toggleName) {
-			return toggleName == 'QRCodeForMobileApps_42695';
+			return false;
 		};
 
 		var fakeQRcodeContainer = document.createElement('div');
