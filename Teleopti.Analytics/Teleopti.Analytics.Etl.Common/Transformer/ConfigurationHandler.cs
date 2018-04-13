@@ -15,9 +15,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 			_baseConfigurationValidator = baseConfigurationValidator;
 		}
 
-		public bool IsConfigurationValid => _baseConfigurationValidator.isCultureValid(BaseConfiguration.CultureId) &&
-											_baseConfigurationValidator.isIntervalLengthValid(BaseConfiguration.IntervalLength) &&
-											_baseConfigurationValidator.isTimeZoneValid(BaseConfiguration.TimeZoneCode);
+		public bool IsConfigurationValid => _baseConfigurationValidator.IsConfigurationValid(BaseConfiguration);
 
 		public IBaseConfiguration BaseConfiguration
 		{

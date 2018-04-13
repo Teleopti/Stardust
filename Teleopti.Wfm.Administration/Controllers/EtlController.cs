@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Web.Http;
 using log4net;
+using Teleopti.Analytics.Etl.Common;
 using Teleopti.Analytics.Etl.Common.Configuration;
 using Teleopti.Analytics.Etl.Common.Entity;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
@@ -16,7 +17,6 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Wfm.Administration.Core;
@@ -41,6 +41,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 		private readonly INow _now;
 		private readonly IJobHistoryRepository _jobHistoryRepository;
 		private readonly BaseConfigurationValidator _baseConfigurationValidator;
+		private const string allBusinessUnitId = "00000000-0000-0000-0000-000000000002";
 
 
 		public EtlController(IToggleManager toggleManager,
@@ -139,9 +140,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 		{
 			var connectionString = _configReader.ConnectionString("Hangfire");
 			var baseConfiguration = _baseConfigurationRepository.LoadBaseConfiguration(connectionString);
-			var isValid  = _baseConfigurationValidator.isCultureValid(baseConfiguration.CultureId) &&
-						   _baseConfigurationValidator.isIntervalLengthValid(baseConfiguration.IntervalLength) &&
-						   _baseConfigurationValidator.isTimeZoneValid(baseConfiguration.TimeZoneCode);
+			var isValid = _baseConfigurationValidator.IsConfigurationValid(baseConfiguration);
 
 			var tenantName = getMasterTenantName();
 
@@ -190,9 +189,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 					new SqlConnectionStringBuilder(tenant.DataSourceConfiguration.AnalyticsConnectionString).ToString();
 
 				var baseConfig = _baseConfigurationRepository.LoadBaseConfiguration(analyticsConnectionString);
-				var isValid = _baseConfigurationValidator.isCultureValid(baseConfig.CultureId) &&
-							  _baseConfigurationValidator.isIntervalLengthValid(baseConfig.IntervalLength) &&
-							  _baseConfigurationValidator.isTimeZoneValid(baseConfig.TimeZoneCode);
+				var isValid = _baseConfigurationValidator.IsConfigurationValid(baseConfig);
 
 				tenants.Add(new TenantConfigurationModel
 				{
@@ -408,14 +405,14 @@ namespace Teleopti.Wfm.Administration.Controllers
 		[HttpPost, Route("Etl/BusinessUnits")]
 		public virtual IHttpActionResult BusinessUnits([FromBody] string tenantName)
 		{
-			if (tenantName == "<All>")
+			if (Tenants.IsAllTenants(tenantName))
 			{
 				IList<BusinessUnitItem> allBuList = new List<BusinessUnitItem>
 				{
 					new BusinessUnitItem
 					{
-						Id = new Guid("00000000-0000-0000-0000-000000000002"),
-						Name = "<All>"
+						Id = new Guid(allBusinessUnitId),
+						Name = Tenants.AllTenantName
 					}
 				};
 				return Ok(allBuList);
@@ -501,30 +498,12 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 		private List<Guid> getBusinessUnitIds(string tenantName, Guid businessUnitId)
 		{
-
-			if (businessUnitId == new Guid("00000000-0000-0000-0000-000000000002"))
-			{
-				var bunitIds = new List<Guid>();
-				var tenants = new List<Tenant>();
-				if (tenantName != "<All>")
-				{
-					tenants = new List<Tenant>() { _loadAllTenants.Tenants().Single(x => x.Name == tenantName) };
-					foreach (var tenant in tenants)
-					{
-						var businessUnits =
-							_jobHistoryRepository.GetBusinessUnitsIncludingAll(tenant.DataSourceConfiguration.AnalyticsConnectionString)
-								.Where(x => x.Id != new Guid("00000000-0000-0000-0000-000000000002"))
-								.Select(x => x.Id);
-						foreach (var businessUnit in businessUnits)
-						{
-							bunitIds.Add(businessUnit);
-						}
-					}
-					return bunitIds;
-				}	
-			}
-
-			return new List<Guid>() { businessUnitId };
+			if (businessUnitId != new Guid(allBusinessUnitId) || Tenants.IsAllTenants(tenantName))
+				return new List<Guid>() {businessUnitId};
+			var tenant = _loadAllTenants.Tenants().Single(x => x.Name == tenantName);
+			return _jobHistoryRepository.GetBusinessUnitsIncludingAll(tenant.DataSourceConfiguration.AnalyticsConnectionString)
+				.Where(x => x.Id != new Guid(allBusinessUnitId))
+				.Select(x => x.Id).ToList();
 		}
 	}
 

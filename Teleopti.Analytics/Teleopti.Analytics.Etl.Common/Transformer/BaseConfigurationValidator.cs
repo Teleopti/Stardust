@@ -1,18 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using log4net;
+using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 
 namespace Teleopti.Analytics.Etl.Common.Transformer
 {
 	public class BaseConfigurationValidator
 	{
-		readonly ILog _logger = LogManager.GetLogger(typeof(ConfigurationHandler));
+		readonly ILog _logger = LogManager.GetLogger(typeof(BaseConfigurationValidator));
 
-		public bool isCultureValid(int? uiCultureId)
+		private bool isCultureValid(int? uiCultureId)
 		{
 			if (!uiCultureId.HasValue)
 			{
@@ -36,7 +33,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 			return true;
 		}
 
-		public bool isIntervalLengthValid(int? intervalLength)
+		private bool isIntervalLengthValid(int? intervalLength)
 		{
 			if (!intervalLength.HasValue)
 			{
@@ -53,7 +50,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 			return true;
 		}
 
-		public bool isTimeZoneValid(string timeZone)
+		private bool isTimeZoneValid(string timeZone)
 		{
 			if (string.IsNullOrEmpty(timeZone))
 			{
@@ -75,6 +72,12 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 			}
 
 			return true;
+		}
+
+		public bool IsConfigurationValid(IBaseConfiguration baseConfiguration)
+		{
+			return isCultureValid(baseConfiguration.CultureId) && isIntervalLengthValid(baseConfiguration.IntervalLength) &&
+				   isTimeZoneValid(baseConfiguration.TimeZoneCode);
 		}
 	}
 }
