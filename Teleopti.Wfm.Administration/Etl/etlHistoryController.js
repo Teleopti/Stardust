@@ -3,9 +3,9 @@
 
 	angular
 	.module("adminApp")
-	.controller("etlHistoryController", etlHistoryController, ["$http", "$window"]);
+	.controller("etlHistoryController", etlHistoryController, ["$http", "$window", "$timeout"]);
 
-	function etlHistoryController($http, tokenHeaderService, $window) {
+	function etlHistoryController($http, tokenHeaderService, $window, $timeout) {
 		var vm = this;
 
 		var date = new Date();
@@ -23,6 +23,7 @@
 
 		vm.selectedTenantChanged = selectedTenantChanged;
 		vm.getHistoryForTenant = getHistoryForTenant;
+		vm.copy = copy;
 
 		(function init() {
 			getTenants();
@@ -116,6 +117,13 @@
 				vm.history = [];
 				vm.error = "No history found";
 			});
+		}
+
+		function copy(root){
+			root.Copied = true;
+			$timeout( function(){
+					root.Copied = false;
+			}, 5000 );
 		}
 
 	}

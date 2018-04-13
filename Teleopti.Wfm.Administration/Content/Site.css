@@ -365,3 +365,8 @@ input.switch::-ms-check {
 	top:50px;
 	z-index: 100;
 }
+
+.cop {
+	display: flex;
+	align-items: center;
+}

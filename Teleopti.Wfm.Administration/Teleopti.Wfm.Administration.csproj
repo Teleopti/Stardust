@@ -257,6 +257,7 @@
     <Content Include="Scripts\App\configurationDetailsController.js" />
     <Content Include="Scripts\Chart.js" />
     <Content Include="Scripts\Chart.min.js" />
+    <Content Include="Scripts\clipboard.min.js" />
     <Content Include="Scripts\Hangfire\hangfireController.js" />
     <Content Include="Scripts\angular.min.js.map" />
     <Content Include="Scripts\angular-cookies.min.js.map" />
@@ -268,6 +269,7 @@
     <Content Include="Scripts\jquery-3.1.0.slim.js" />
     <Content Include="Scripts\jquery-3.1.0.slim.min.js" />
     <Content Include="Scripts\moment.min.js" />
+    <Content Include="Scripts\ngclipboard.min.js" />
     <Content Include="Scripts\StardustApp\jobController.js" />
     <Content Include="Scripts\StardustApp\jobQueueDetailsController.js" />
     <Content Include="Scripts\StardustApp\jobQueueController.js" />
