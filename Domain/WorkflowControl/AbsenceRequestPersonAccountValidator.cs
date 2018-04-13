@@ -13,10 +13,12 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 	public class AbsenceRequestPersonAccountValidator : IAbsenceRequestPersonAccountValidator
 	{
 		private readonly IPersonAbsenceAccountProvider _personAbsenceAccountProvider;
+		private readonly IHasContractDayOffDefinition _hasContractDayOffDefinition;
 
-		public AbsenceRequestPersonAccountValidator(IPersonAbsenceAccountProvider personAbsenceAccountProvider)
+		public AbsenceRequestPersonAccountValidator(IPersonAbsenceAccountProvider personAbsenceAccountProvider, IHasContractDayOffDefinition hasContractDayOffDefinition)
 		{
 			_personAbsenceAccountProvider = personAbsenceAccountProvider;
+			_hasContractDayOffDefinition = hasContractDayOffDefinition;
 		}
 
 		public IValidatedRequest Validate(IPersonRequest personRequest, IScheduleRange scheduleRange)
@@ -37,7 +39,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			return ValidatedRequestWithPersonAccount(personRequest, scheduleRange, personAbsenceAccount);
 		}
 
-		public static IValidatedRequest ValidatedRequestWithPersonAccount(IPersonRequest personRequest, IScheduleRange scheduleRange,
+		public IValidatedRequest ValidatedRequestWithPersonAccount(IPersonRequest personRequest, IScheduleRange scheduleRange,
 			IPersonAbsenceAccount personAbsenceAccount)
 		{
 			var person = personRequest.Person;
@@ -121,10 +123,12 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			return day.PersonAbsenceCollection().Any(x => x.Layer.Payload == absenceRequest.Absence);
 		}
 
-		private static int calculateDays(IScheduleDay day, int numberDays)
+		private int calculateDays(IScheduleDay day, int numberDays)
 		{
 			var significantPart = day.SignificantPart();
-			if (significantPart != SchedulePartView.DayOff && significantPart != SchedulePartView.ContractDayOff)
+			var isContractDayOff = _hasContractDayOffDefinition.IsDayOff(day);
+			
+			if (significantPart != SchedulePartView.DayOff && !isContractDayOff)
 				numberDays++;
 			return numberDays;
 		}

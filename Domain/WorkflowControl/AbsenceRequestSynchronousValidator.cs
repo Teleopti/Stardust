@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 				return ValidatedRequest.Valid;
 			}
 
-			var personAccountValidateResult = AbsenceRequestPersonAccountValidator.ValidatedRequestWithPersonAccount(personRequest, scheduleRange, personAbsenceAccount);
+			var personAccountValidateResult = _absenceRequestPersonAccountValidator.ValidatedRequestWithPersonAccount(personRequest, scheduleRange, personAbsenceAccount);
 			if (!personAccountValidateResult.IsValid)
 				return new ValidatedRequest { IsValid = false, ValidationErrors = nameof(Resources.RequestDenyReasonPersonAccount)
 					, DenyOption = PersonRequestDenyOption.InsufficientPersonAccount };

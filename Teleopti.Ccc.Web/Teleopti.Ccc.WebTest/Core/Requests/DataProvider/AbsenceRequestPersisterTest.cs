@@ -61,6 +61,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			_person = PersonFactory.CreatePersonWithPersonPeriod(_today.AddDays(-5)).WithId();
+			_person.PersonPeriodCollection[0].PersonContract.ContractSchedule = new ContractScheduleWorkingMondayToFriday();
 			_person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
 			_workflowControlSet = new WorkflowControlSet().WithId();
 			_person.WorkflowControlSet = _workflowControlSet;
@@ -381,6 +382,43 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			request.IsDenied.Should().Be.True();
 			request.IsWaitlisted.Should().Be.False();
 			request.DenyReason.Should().Be(Resources.RequestDenyReasonPersonAccount);
+		}
+		
+		[Test]
+		public void ShouldNotCountDaysDisabledInContractScheduleButUnscheduled()
+		{
+			var friday = _today.AddDays(4);
+			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
+				, CurrentScenario.Current(), friday.ToDateTimePeriod(UserTimeZone.TimeZone())));
+			_absence = createAbsence();
+
+			var isWaitlisted = true;
+
+			setWorkflowControlSet(usePersonAccountValidator: true, autoGrant: true, absenceRequestWaitlistEnabled: isWaitlisted);
+
+			var accountDay = new AccountDay(_today)
+			{
+				Accrued = TimeSpan.FromDays(0)
+			};
+			createPersonAbsenceAccount(_person, _absence, accountDay);
+
+			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			{
+				StartDate = friday,
+				EndDate = friday,
+				StartTime = new TimeOfDay(TimeSpan.FromHours(0)),
+				EndTime = new TimeOfDay(new TimeSpan(8,0,0))
+			});
+
+			var personRequest = Persister.Persist(form);
+			var request = PersonRequestRepository.Get(Guid.Parse(personRequest.Id));
+
+			request.Should().Not.Be(null);
+			request.DenyReason.Should().Be.Empty();
+			request.IsDenied.Should().Be.False();
+			request.IsWaitlisted.Should().Be.False();
+			request.IsApproved.Should().Be.False();
+			request.IsPending.Should().Be.True();
 		}
 
 		[Test]
