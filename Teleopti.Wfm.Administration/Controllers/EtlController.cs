@@ -42,6 +42,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 		private readonly IJobHistoryRepository _jobHistoryRepository;
 		private readonly BaseConfigurationValidator _baseConfigurationValidator;
 
+
 		public EtlController(IToggleManager toggleManager,
 			JobCollectionModelProvider jobCollectionModelProvider,
 			TenantLogDataSourcesProvider tenantLogDataSourcesProvider,
@@ -434,6 +435,14 @@ namespace Teleopti.Wfm.Administration.Controllers
 				return Ok(_jobHistoryRepository.GetEtlJobHistory(jobHistoryCriteria.StartDate, jobHistoryCriteria.EndDate,
 				businessUnitIds, jobHistoryCriteria.ShowOnlyErrors, connectionString));
 			return Ok();
+		}
+
+		[HttpGet, Route("Etl/GetjobRunning")]
+		public virtual IHttpActionResult GetjobRunning()
+		{
+			var connectionString = _configReader.ConnectionString("Hangfire");
+			var runningStatus = new RunningStatusRepository(connectionString);
+			return Ok(runningStatus.GetRunningJob());
 		}
 
 		private void saveScheduleJob(EtlScheduleJobModel scheduleModel)

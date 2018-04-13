@@ -136,7 +136,6 @@
     <Compile Include="Gui\ViewModel\JobHistorySelectionEventArgs.cs" />
     <Compile Include="Gui\ViewModel\JobHistorySelectionViewModel.cs" />
     <Compile Include="Gui\ViewModel\JobHistoryTreeViewModel.cs" />
-    <Compile Include="Gui\ViewModel\RunningStatusRepository.cs" />
     <Compile Include="Gui\Converter\VisibilityOnNullConverter.cs" />
     <Compile Include="Gui\View\JobHistoryMain.xaml.cs">
       <DependentUpon>JobHistoryMain.xaml</DependentUpon>

@@ -123,6 +123,7 @@
     <Compile Include="Infrastructure\BaseConfigurationRepository.cs" />
     <Compile Include="Infrastructure\JobScheduleRepository.cs" />
     <Compile Include="Infrastructure\JobHistoryRepository.cs" />
+    <Compile Include="Infrastructure\RunningStatusRepository.cs" />
     <Compile Include="Interfaces\Common\IJobHistory.cs" />
     <Compile Include="ITenants.cs" />
     <Compile Include="Configuration\LookupIntegerItem.cs" />
