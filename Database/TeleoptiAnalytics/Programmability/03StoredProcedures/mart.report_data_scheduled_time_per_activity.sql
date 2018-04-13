@@ -1,4 +1,4 @@
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[report_data_scheduled_time_per_activity]') AND type in (N'P', N'PC'))
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[report_data_scheduled_time_per_activity]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [mart].[report_data_scheduled_time_per_activity]
 GO
 
@@ -8,15 +8,32 @@ GO
 -- Last Update date:2009-03-02
 -- 20090302 Excluded timezone UTC from time_zone check KJ
 --	2009-02-11 Added new mart schema KJ
---	2011-01-25 Use agent_code instead of 
---	2011-06-22 Azure fix DJ 
+--	2011-01-25 Use agent_code instead of
+--	2011-06-22 Azure fix DJ
 --	2012-01-09 Pass BU to ReportAgents ME
 -- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
--- Description:	Used by report Scheduled Time per Activity 
+-- Description:	Used by report Scheduled Time per Activity
 -- =============================================
--- exec mart.report_data_scheduled_time_per_activity @scenario_id=N'0',@date_from='2009-02-02 00:00:00',@date_to='2009-02-08 00:00:00',@interval_from=N'0',@interval_to=N'95',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_id=NULL,@site_id=N'0',@team_set=N'7',@agent_id=N'00000000-0000-0000-0000-000000000002',@activity_set=N'',@time_zone_id=N'2',@person_code='10957AD5-5489-48E0-959A-9B5E015B2B5C',@report_id=18,@language_id=1053
+/*
+exec mart.report_data_scheduled_time_per_activity @scenario_id=N'0',
+     @date_from='2009-02-02 00:00:00',
+     @date_to='2009-02-08 00:00:00',
+     @interval_from=N'0',
+     @interval_to=N'95',
+     @group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',
+     @group_page_group_set=NULL,
+     @group_page_agent_id=NULL,
+     @site_id=N'0',
+     @team_set=N'7',
+     @agent_id=N'00000000-0000-0000-0000-000000000002',
+     @activity_set=N'',
+     @time_zone_id=N'2',
+     @person_code='10957AD5-5489-48E0-959A-9B5E015B2B5C',
+     @report_id=18,
+     @language_id=1053
+*/
 
-CREATE PROCEDURE [mart].[report_data_scheduled_time_per_activity] 
+CREATE PROCEDURE [mart].[report_data_scheduled_time_per_activity]
 @scenario_id int,
 @date_from datetime,
 @date_to datetime,
@@ -36,12 +53,12 @@ CREATE PROCEDURE [mart].[report_data_scheduled_time_per_activity]
 @business_unit_code uniqueidentifier
 AS
 SET NOCOUNT ON
-CREATE TABLE  #rights_agents (right_id int)
+CREATE TABLE #rights_agents (right_id int)
 CREATE TABLE #rights_teams (right_id int)
 CREATE TABLE #activities(id int)
 CREATE TABLE #result(
 	date_id int,
-	date smalldatetime,
+	[date] smalldatetime,
 	activity_name nvarchar(100),
 	scheduled_time_m int,
 	hide_time_zone bit
@@ -55,6 +72,12 @@ CREATE TABLE #fact_schedule(
 	[activity_id] [int] NULL,
 	[scheduled_time_m] [int] NULL
 )
+CREATE TABLE #permitted_person (
+	team_id int,
+	person_id int,
+	valid_from_date_id_local int,
+	valid_to_date_id_local int
+)
 
 /* Check if time zone will be hidden (if only one exist then hide) */
 DECLARE @hide_time_zone bit
@@ -65,10 +88,18 @@ ELSE
 
 /* Get the agents to report on */
 INSERT INTO #rights_agents
-EXEC mart.report_get_AgentsMultipleTeams @date_from, @date_to, @group_page_code, @group_page_group_set, @group_page_agent_code, @site_id, @team_set, @agent_code, @person_code, @report_id, @business_unit_code
+EXEC mart.report_get_AgentsMultipleTeams @date_from, @date_to, @group_page_code, @group_page_group_set,
+	@group_page_agent_code, @site_id, @team_set, @agent_code, @person_code, @report_id, @business_unit_code
 
 /*Get all teams that user has permission to see. */
 INSERT INTO #rights_teams SELECT * FROM mart.PermittedTeamsMultipleTeams(@person_code, @report_id, @site_id, @team_set)
+
+-- Get all permitted person, refer to VSTS bug #75504
+INSERT INTO #permitted_person
+SELECT team_id, person_id, valid_from_date_id_local, valid_to_date_id_local
+  FROM mart.dim_person p
+ WHERE p.team_id IN (select right_id from #rights_teams)
+   AND p.person_id IN (SELECT right_id FROM #rights_agents)--check permissions
 
 INSERT INTO #activities
 SELECT * FROM mart.SplitStringInt(@activity_set)
@@ -77,13 +108,11 @@ SELECT * FROM mart.SplitStringInt(@activity_set)
 INSERT INTO #fact_schedule
 SELECT shift_startdate_local_id,schedule_date_id, fs.person_id, interval_id, scenario_id, activity_id, scheduled_time_m
 FROM mart.fact_schedule fs WITH (NOLOCK)
-INNER JOIN mart.dim_person p WITH (NOLOCK)
+INNER JOIN #permitted_person p WITH (NOLOCK)
 	ON fs.person_id=p.person_id
 	AND shift_startdate_local_id between p.valid_from_date_id_local AND p.valid_to_date_id_local
-WHERE shift_startdate_local_id in (select d.date_id from mart.dim_date d where d.date_date BETWEEN  dateadd(dd, -1, @date_from) AND dateadd(dd,1,@date_to))
+WHERE shift_startdate_local_id in (select d.date_id from mart.dim_date d where d.date_date BETWEEN dateadd(dd, -1, @date_from) AND dateadd(dd,1,@date_to))
 AND fs.scenario_id=@scenario_id
-AND p.team_id IN (select right_id from #rights_teams)
-AND p.person_id IN (SELECT right_id FROM #rights_agents)--check permissions
 
 INSERT #result(date_id,date,activity_name,scheduled_time_m,hide_time_zone)
 SELECT	d.date_id,
@@ -91,14 +120,14 @@ SELECT	d.date_id,
 		act.activity_name,
 		sum(ISNULL(f.scheduled_time_m,0)),
 		@hide_time_zone
-FROM 
+FROM
 	#fact_schedule f
 INNER JOIN mart.dim_activity act
 	ON act.activity_id=f.activity_id
 INNER JOIN mart.bridge_time_zone b
 	ON	f.interval_id= b.interval_id
 	AND f.schedule_date_id= b.date_id
-INNER JOIN mart.dim_date d 
+INNER JOIN mart.dim_date d
 	ON b.local_date_id = d.date_id
 INNER JOIN mart.dim_interval i
 	ON b.local_interval_id = i.interval_id
@@ -109,6 +138,6 @@ AND act.activity_id IN (SELECT id FROM #activities)
 AND act.activity_id<>-1 --ej absence_time
 GROUP BY d.date_id,	d.date_date,act.activity_name
 
-SELECT * FROM #result 
+SELECT * FROM #result
 ORDER BY activity_name, date_id
 GO
