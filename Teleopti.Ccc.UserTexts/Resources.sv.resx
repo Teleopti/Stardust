@@ -12735,7 +12735,7 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Alla dagar är stängda</value>
   </data>
   <data name="TooManyResultsForSearchKeywords" xml:space="preserve">
-    <value>Sökresultatet för dessa sökord överstiger 500, var god förfina din sökning. </value>
+    <value>Sökresultatet för dessa sökord överstiger {0}, var god förfina din sökning. </value>
   </data>
   <data name="PageSize" xml:space="preserve">
     <value>Sidstorlek</value>
@@ -15452,5 +15452,23 @@ Applikationen kommer nu att stängas. </value>
   </data>
   <data name="RequestDenyReasonAutodeny" xml:space="preserve">
     <value>Godkännande av frånvaroförfrågningar är inte aktiverat av administratören för hela eller delar av den period förfrågan gäller.</value>
+  </data>
+  <data name="NoNonOverwritableActivities" xml:space="preserve">
+    <value>Inga icke överskrivningsbara aktiviteter</value>
+  </data>
+  <data name="SelectStates" xml:space="preserve">
+    <value>Välj status</value>
+  </data>
+  <data name="SelectSitesTeams" xml:space="preserve">
+    <value>Välj enheter/team</value>
+  </data>
+  <data name="NoState" xml:space="preserve">
+    <value>Ingen status</value>
+  </data>
+  <data name="GamingPeriod" xml:space="preserve">
+    <value>Game-period</value>
+  </data>
+  <data name="ExcludedColon" xml:space="preserve">
+    <value>Exkluderade:</value>
   </data>
 </root>
