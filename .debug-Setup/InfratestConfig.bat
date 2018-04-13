@@ -32,7 +32,6 @@ IF "%ToggleMode%" == "" (
 	IF ERRORLEVEL 3 SET ToggleMode=R
 )
 
-:: This fails locally because there's not server specified (the -S switch is empty)
 set splitsub=;
 for /f "tokens=1* delims=%splitsub%" %%A in ("%sqlAuthString%") do set part1=%%A & set part2=%%B
 set splitsub==
