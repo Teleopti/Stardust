@@ -59,6 +59,24 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			}
 		}
 
+		[Then(@"I should see the ranks with badges are")]
+		public void ThenIShouldSeeTheRanksWithBadgesAre(Table table)
+		{
+			var ranks = table.CreateSet<RankInfo>();
+			foreach (var rankInfo in ranks)
+			{
+				Browser.Interactions.AssertExistsUsingJQuery(
+					string.Format(".agent-rank:contains('{0}')+.agent-name:contains('{1}')"+
+								  "+#gold-badge-num:contains('{2}')+#silver-badge-num:contains('{3}')+#bronze-badge-num:contains('{4}')", 
+						rankInfo.Rank,
+						rankInfo.Agent,
+						rankInfo.Gold,
+						rankInfo.Silver,
+						rankInfo.Bronze));
+			}
+		}
+
+
 		[When(@"I select '(.*)' in the hierarchy-picker")]
 		public void WhenISelectInTheHierarchy_Picker(string optionText)
 		{
@@ -71,10 +89,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			public string Value { get; set; }
 		}
+
 		private class RankInfo
 		{
 			public string Rank { get; set; }
 			public string Agent { get; set; }
+			public int Gold { get; set; }
+			public int Silver { get; set; }
+			public int Bronze { get; set; }
 		}
 
 	}

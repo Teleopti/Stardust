@@ -30,7 +30,7 @@
 							<span class="btn btn-default moment-datepicker" type="button">
 								<i class="glyphicon glyphicon-calendar"></i>
 							</span>
-							<button class="btn btn-default" data-bind="click: next" type="button">
+							<button id="period-navigator-next" class="btn btn-default" data-bind="click: next" type="button">
 								<i class="glyphicon glyphicon-chevron-right"></i>
 							</button>
 						</span>
@@ -58,9 +58,9 @@
 				<tr class="agent-badge">
 					<td data-bind="text:rank" class="agent-rank"></td>
 					<td data-bind="text:name" class="agent-name"></td>
-					<td class="agent-badge-num" data-bind="text: gold"></td>
-					<td class="agent-badge-num" data-bind="text: silver"></td>
-					<td class="agent-badge-num" data-bind="text: bronze"></td>
+					<td id ="gold-badge-num" class="agent-badge-num" data-bind="text: gold"></td>
+					<td id ="silver-badge-num" class="agent-badge-num" data-bind="text: silver"></td>
+					<td id ="bronze-badge-num" class="agent-badge-num" data-bind="text: bronze"></td>
 				</tr>
 				<!-- /ko -->
 			</tbody>

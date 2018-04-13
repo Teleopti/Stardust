@@ -28,21 +28,22 @@ Background:
 		| AdherenceUsed         | True    |
 		| Silver to bronze rate | 5       |
 		| Gold to silver rate   | 5       |
+		| RollingPeriodSet      | Weekly  |
 	And There are teams applied with settings with
 		| Team        | GamificationSetting |
 		| Team red    | setting             |
 		| Team orange | setting             |
 		| Team green  | setting             |
-	And I have badges based on the specific setting with
-		| Badge type          | Bronze | Silver | Gold | LastCalculatedDate |
-		| AnsweredCalls       | 4      | 1      | 2    | 2014-08-11         |
-		| AverageHandlingTime | 2      | 1      | 1    | 2014-08-11         |
-		| Adherence           | 3      | 0      | 3    | 2014-08-11         |
-	And Pierre Baldi has badges based on the specific setting with
-		| Badge type          | Bronze | Silver | Gold | LastCalculatedDate |
-		| AnsweredCalls       | 4      | 1      | 2    | 2014-08-11         |
-		| AverageHandlingTime | 2      | 1      | 1    | 2014-08-11         |
-		| Adherence           | 3      | 0      | 0    | 2014-08-11         |
+	And I have today badges with
+		| Badge type          | Bronze | Silver | Gold |
+		| AnsweredCalls       | 4      | 1      | 2    |
+		| AverageHandlingTime | 2      | 1      | 1    |
+		| Adherence           | 3      | 0      | 3    |
+	And Pierre Baldi has today badges with
+		  | Badge type          | Bronze | Silver | Gold |
+		  | AnsweredCalls       | 4      | 1      | 2    |
+		  | AverageHandlingTime | 2      | 1      | 1    |
+		  | Adherence           | 3      | 0      | 0    |
 	And I am american
 
 Scenario: View available business hierarchy when data available is set to Site
@@ -93,11 +94,11 @@ Scenario: The rank is the same when the Gold/Silver/Bronze badge are totally the
 		| Field                 | Value |
 		| Access to Leaderboard | true  |
 		| Access to my site     | true  |
-	And Ashley Andeen has badges based on the specific setting with
-		| Badge type          | Bronze | Silver | Gold | LastCalculatedDate |
-		| AnsweredCalls       | 4      | 1      | 2    | 2014-08-11         |
-		| AverageHandlingTime | 2      | 1      | 1    | 2014-08-11         |
-		| Adherence           | 3      | 0      | 3    | 2014-08-11         |
+	And Ashley Andeen has today badges with
+		  | Badge type          | Bronze | Silver | Gold |
+		  | AnsweredCalls       | 4      | 1      | 2    |
+		  | AverageHandlingTime | 2      | 1      | 1    |
+		  | Adherence           | 3      | 0      | 3    |
 	When I am viewing leaderboard report
 	And I select 'Everyone' in the hierarchy-picker
 	Then I should see the ranks are
@@ -105,3 +106,17 @@ Scenario: The rank is the same when the Gold/Silver/Bronze badge are totally the
 		| 1    | I             |
 		| 1    | Ashley Andeen |
 		| 3    | Pierre Baldi  |
+
+@OnlyRunIfEnabled('WFM_Gamification_Create_Rolling_Periods_74866')
+Scenario: Show my badge on leader board report
+Given I have a role with
+		| Field                 | Value |
+		| Access to Leaderboard | true  |
+		| Access to my site     | true  |
+ When I am viewing leaderboard report
+ Then I should see the ranks with badges are
+		| Rank | Agent | Gold | Silver | Bronze |
+		| 1    | I     | 6    | 2      | 9      |
+ When I nevigate to next week
+ Then I should see the ranks with badges are
+	| Rank | Agent | Gold | Silver | Bronze |

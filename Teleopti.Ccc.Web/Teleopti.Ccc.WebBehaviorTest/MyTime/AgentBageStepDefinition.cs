@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Domain.Collection;
@@ -20,6 +21,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			var agentBadges = table.CreateSet<BadgeBasedOnSettingConfigurable>();
 			agentBadges.ForEach(a => DataMaker.Person(userName).Apply(a));
+		}
+
+		[Given(@"(.*) (has|have) today badges with")]
+		public void GivenIHaveBadgesWith(string userName, string hasHave, Table table)
+		{
+			var agentBadges = table.CreateSet<BadgeBasedOnSettingConfigurable>();
+			agentBadges.ForEach(ab =>
+			{
+				ab.LastCalculatedDate = DateTime.Today;
+				DataMaker.Person(userName).Apply(ab);
+			});
 		}
 
 		[Then(@"I should see I have (\d*) bronze badge, (\d*) silver badge and (\d*) gold badge")]
@@ -86,5 +98,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			var teamSettings = table.CreateSet<TeamGamificationSettingConfigurable>();
 			teamSettings.ForEach(ts => DataMaker.Data().Apply(ts));
 		}
+
+		[When(@"I nevigate to next week")]
+		public void WhenINevigateToNextWeek()
+		{
+			Browser.Interactions.Click("#period-navigator-next");
+		}
+
 	}
 }

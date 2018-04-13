@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public bool AnsweredCallsUsed { get; set; }
 		public bool AdherenceUsed { get; set; }
 		public bool AHTUsed { get; set; }
+		public GamificationRollingPeriodSet RollingPeriodSet { get; set; }
 
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
@@ -24,7 +25,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 				GoldToSilverBadgeRate = GoldToSilverRate,
 				AdherenceBadgeEnabled = AdherenceUsed,
 				AHTBadgeEnabled = AHTUsed,
-				AnsweredCallsBadgeEnabled = AnsweredCallsUsed
+				AnsweredCallsBadgeEnabled = AnsweredCallsUsed,
+				RollingPeriodSet = RollingPeriodSet
 			};
 
 			var rep = new GamificationSettingRepository(currentUnitOfWork);
