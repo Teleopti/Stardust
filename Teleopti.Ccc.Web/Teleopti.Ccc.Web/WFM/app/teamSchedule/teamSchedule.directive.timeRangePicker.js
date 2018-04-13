@@ -3,7 +3,7 @@
 	'use strict';
 
 	angular.module('wfm.teamSchedule')
-		   .directive('activityTimeRangePicker', ['$filter', timeRangePicker]);
+		.directive('activityTimeRangePicker', ['$filter', timeRangePicker]);
 
 	var defaultTemplate = 'app/teamSchedule/html/addActivityTimeRangePicker.tpl.html';
 
@@ -15,7 +15,8 @@
 			scope: {
 				disableNextDay: '=?',
 				referenceDay: '=?',
-				isNextDay: '=?'
+				isNextDay: '=?',
+				timezone: '<?'
 			},
 			controller: ['$scope', '$element', '$attrs', '$locale', timeRangePickerCtrl],
 			require: ['ngModel', 'activityTimeRangePicker'],
@@ -49,7 +50,6 @@
 			ngModel.$parsers.push(parseView);
 			ngModel.$formatters.push(formatModel);
 			ngModel.$render = render;
-
 			elem.removeAttr('tabindex');
 
 			addFocusListenerToInputs(elem.find('input'));
@@ -58,6 +58,7 @@
 				if (!modelValue) {
 					return undefined;
 				}
+
 				scope.disableNextDay =
 					!timeRangeCtrl.sameDate(modelValue.startTime, modelValue.endTime);
 
@@ -71,11 +72,37 @@
 				if (!viewValue) {
 					return undefined;
 				}
-				return {
-					startTime: viewValue.startTime.toDate(),
-					endTime: viewValue.endTime.toDate()
+
+				var mStartDate = (scope.referenceDay ? moment(scope.referenceDay()) : moment()).locale('en');
+				var mEndDate = angular.copy(mStartDate);
+				if (viewValue.endTime.isAfter(viewValue.startTime, 'day')) {
+					mEndDate.add(1, 'days');
+				}
+				if (scope.isNextDay) {
+					mStartDate.add(1, 'days');
+					mEndDate.add(1, 'days');
+				}
+				var value = {
+					startTime: getValidDateTimeInTimezone(mStartDate, viewValue.startTime, scope.timezone),
+					endTime: getValidDateTimeInTimezone(mEndDate, viewValue.endTime, scope.timezone)
 				};
+
+				if (!value.startTime || !value.endTime) {
+					return undefined;
+				}
+
+				return value;
 			}
+
+			function getValidDateTimeInTimezone(mDate, mTime, timezone) {
+				var date = mDate.locale('en').format('YYYY-MM-DD');
+				var time = mTime.locale('en').format('HH:mm');
+				var dateTime = date + ' ' + time;
+				var dateTimeInTimeZone = moment.tz(dateTime, timezone).locale('en').format('YYYY-MM-DD HH:mm');
+				if (dateTimeInTimeZone === dateTime)
+					return dateTimeInTimeZone;
+			}
+
 
 			function render() {
 				if (!ngModel.$viewValue) {
@@ -92,27 +119,18 @@
 			}
 
 			function makeViewValue(startTime, endTime, nextDay) {
-				var viewValue;
-
-				if (angular.isDefined(scope.referenceDay)) {
-					viewValue = {
-						startTime: moment(scope.referenceDay()),
-						endTime: moment(scope.referenceDay())
-					};
-				} else {
-					viewValue = {
-						startTime: moment(),
-						endTime: moment()
-					};
-				}
+				var viewValue = {
+					startTime: moment('1900-01-01'),
+					endTime: moment('1900-01-01')
+				};
 				if (angular.isDefined(scope.isNextDay)) {
 					scope.isNextDay = nextDay;
 				}
 
-				timeRangeCtrl.mutateMoment(viewValue.startTime, startTime);
-				timeRangeCtrl.mutateMoment(viewValue.endTime, endTime);
+				timeRangeCtrl.mutateMoment(viewValue.startTime, moment(startTime));
+				timeRangeCtrl.mutateMoment(viewValue.endTime, moment(endTime));
 				if (viewValue.startTime >= viewValue.endTime) {
-					viewValue.endTime = viewValue.endTime.add(1, 'day');
+					viewValue.endTime = viewValue.endTime.add(1, 'days');
 				}
 				if (nextDay) {
 					viewValue.startTime = viewValue.startTime.add(1, 'days');
@@ -155,7 +173,7 @@
 			});
 		});
 	}
-	
+
 	function timeRangePickerCtrl($scope, $element, $attrs, $locale) {
 		var vm = this;
 		var meridianInfo = getMeridiemInfoFromMoment($locale);
@@ -188,8 +206,8 @@
 		}
 
 		function mutateMoment(mDate, date) {
-			var hour = date.getHours(),
-				minute = date.getMinutes();
+			var hour = date.hours(),
+				minute = date.minutes();
 
 			mDate.set('hour', hour).set('minute', minute);
 		}

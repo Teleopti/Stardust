@@ -1,7 +1,6 @@
 ﻿'use strict';
 describe('teamschedule activity-time-range-picker directive tests', function () {
-	var elementCompileFn, $templateCache, $compile, element,
-        scope;
+	var $templateCache, $compile, element, scope;
 
 	beforeEach(module('wfm.templates'));
 	beforeEach(module('wfm.teamSchedule'));
@@ -10,27 +9,30 @@ describe('teamschedule activity-time-range-picker directive tests', function () 
 		$templateCache = _$templateCache_;
 		$compile = _$compile_;
 		scope = _$rootScope_.$new();
+		moment.locale('sv');
+	}));
+
+	function setUp(timezone, selectedDate) {
 		var startTime = moment({ hour: 8, minute: 30 }).toDate();
 		var endTime = moment({ hour: 17, minute: 30 }).toDate();
-		moment.locale('sv');
 		scope.timeRange = {
 			startTime: startTime,
 			endTime: endTime
 		};
 		scope.isNextDay = false;
-		var date = new Date("2016-04-08");
-		scope.date = function() {
-			return date;
+		scope.timeZone = !!timezone ? timezone : "";
+		scope.date = function () {
+			return selectedDate || "2016-04-08";
 		};
 
-		elementCompileFn = function () {
-			return $compile('<activity-time-range-picker ng-model="timeRange" xdisable-next-day="disableNextDay" is-next-day="isNextDay" reference-day="date"></activity-time-range-picker>');
-		};
-	}));
+		var el = $compile('<activity-time-range-picker ng-model="timeRange" timezone="timeZone" xdisable-next-day="disableNextDay" is-next-day="isNextDay" reference-day="date"></activity-time-range-picker>')(scope);
+
+		scope.$apply();
+		return el;
+	}
 
 	it('Directive compilation should work', function () {
-		var element = elementCompileFn()(scope);
-		scope.$apply();
+		var element = setUp();
 		expect(element).toBeDefined();
 	});
 
@@ -45,108 +47,102 @@ describe('teamschedule activity-time-range-picker directive tests', function () 
 	});
 
 	it('Should show timepickers for start-time and end-time', function () {
-		var element = elementCompileFn()(scope);
-		scope.$apply();
+		var element = setUp();
 		var timepickers = element[0].querySelectorAll('.wfm-timepicker-wrap');
 		expect(timepickers.length).toEqual(2);
 	});
 
 
 	it('Should show error when time is invalid', function () {
-		var element = elementCompileFn()(scope);
-		scope.$apply();
-		var divs = element.children();
-		var validityDiv = angular.element(divs[0]);
+		var element = setUp();
+		var isolateScope = element.isolateScope();
 
-		validityDiv.scope().startTime = "";
-		validityDiv.scope().endTime = moment({ hour: 8, minute: 30 }).toDate();
+		isolateScope.startTime = "";
+		isolateScope.endTime = moment({ hour: 8, minute: 30 }).toDate();
+		scope.$apply();
+
+		expect(element.hasClass('ng-invalid')).toBeTruthy();
+	});
+
+	it('Should show error when time is invalid because of DST', function () {
+		var element = setUp('Europe/Berlin', '2018-03-25');
+
+		var isolateScope = element.isolateScope();
+		isolateScope.startTime = moment({ hour: 2, minute: 30 }).toDate();
+		isolateScope.endTime = moment({ hour: 2, minute: 30 }).toDate();
 		scope.$apply();
 
 		expect(element.hasClass('ng-invalid')).toBeTruthy();
 	});
 
 	it('Should set next day to false and disable the next day switch when start-time is greater than end-time', function () {
-		var element = elementCompileFn()(scope);
-		scope.$apply();
-		var divs = element.children();
-		var validityDiv = angular.element(divs[0]);
+		var element = setUp();
+		var isolateScope = element.isolateScope();
+		expect(isolateScope.disableNextDay).toBeFalsy();
 
-		expect(validityDiv.scope().disableNextDay).toBeFalsy();
+		isolateScope.isNextDay = true;
+		isolateScope.startTime = moment({ hour: 10, minute: 30 }).toDate();
+		isolateScope.endTime = moment({ hour: 8, minute: 30 }).toDate();
 
-		validityDiv.scope().isNextDay = true;
-		validityDiv.scope().startTime = moment({ hour: 10, minute: 30 }).toDate();
-		validityDiv.scope().endTime = moment({ hour: 8, minute: 30 }).toDate();
 		scope.$apply();
 
-		expect(validityDiv.scope().isNextDay).toBeFalsy();
-		expect(validityDiv.scope().disableNextDay).toBeTruthy();
-		expect(scope.timeRange.startTime).toEqual(new Date("2016-04-08 10:30"));
-		expect(scope.timeRange.endTime).toEqual(new Date("2016-04-09 08:30"));
+		expect(isolateScope.isNextDay).toBeFalsy();
+		expect(isolateScope.disableNextDay).toBeTruthy();
+		expect(scope.timeRange.startTime).toEqual("2016-04-08 10:30");
+		expect(scope.timeRange.endTime).toEqual("2016-04-09 08:30");
 
 	});
 
 	it('Should set next day to false and disable the next day switch when start-time equals end-time', function () {
-		var element = elementCompileFn()(scope);
-		scope.$apply();
-		var divs = element.children();
-		var validityDiv = angular.element(divs[0]);
+		var element = setUp();
+		var isolateScope = element.isolateScope();
 
-		expect(validityDiv.scope().disableNextDay).toBeFalsy();
+		expect(isolateScope.disableNextDay).toBeFalsy();
 
-		validityDiv.scope().isNextDay = true;
-		validityDiv.scope().startTime = moment({ hour: 10, minute: 30 }).toDate();
-		validityDiv.scope().endTime = moment({ hour: 10, minute: 30 }).toDate();
+		isolateScope.isNextDay = true;
+		isolateScope.startTime = moment({ hour: 10, minute: 30 }).toDate();
+		isolateScope.endTime = moment({ hour: 10, minute: 30 }).toDate();
 		scope.$apply();
 
-		expect(validityDiv.scope().isNextDay).toBeFalsy();
-		expect(validityDiv.scope().disableNextDay).toBeTruthy();
-		expect(scope.timeRange.startTime).toEqual(new Date("2016-04-08 10:30"));
-		expect(scope.timeRange.endTime).toEqual(new Date("2016-04-09 10:30"));
+		expect(isolateScope.isNextDay).toBeFalsy();
+		expect(isolateScope.disableNextDay).toBeTruthy();
+		expect(scope.timeRange.startTime).toEqual("2016-04-08 10:30");
+		expect(scope.timeRange.endTime).toEqual("2016-04-09 10:30");
 	});
 
 	it('Should set date to next day when next switch is true and start is smaller than end', function () {
-		var element = elementCompileFn()(scope);
-		scope.$apply();
+		var element = setUp();
+		var isolateScope = element.isolateScope();
 
-		var divs = element.children();
-		var validityDiv = angular.element(divs[0]);
-
-		validityDiv.scope().isNextDay = true;
-		validityDiv.scope().startTime = moment({ hour: 10, minute: 30 }).toDate();
-		validityDiv.scope().endTime = moment({ hour: 11, minute: 30 }).toDate();
+		isolateScope.isNextDay = true;
+		isolateScope.startTime = moment({ hour: 10, minute: 30 }).toDate();
+		isolateScope.endTime = moment({ hour: 11, minute: 30 }).toDate();
 
 		scope.$apply();
 
-		expect(scope.timeRange.startTime).toEqual(new Date("2016-04-09 10:30"));
-		expect(scope.timeRange.endTime).toEqual(new Date("2016-04-09 11:30"));
+		expect(scope.timeRange.startTime).toEqual("2016-04-09 10:30");
+		expect(scope.timeRange.endTime).toEqual("2016-04-09 11:30");
 
 	});
 
 	it('Should set date to reference day when next switch is false and start is smaller than end', function () {
-		var element = elementCompileFn()(scope);
+		var element = setUp();
+		var isolateScope = element.isolateScope();
+
+		isolateScope.isNextDay = false;
+		isolateScope.startTime = moment({ hour: 10, minute: 30 }).toDate();
+		isolateScope.endTime = moment({ hour: 11, minute: 30 }).toDate();
 		scope.$apply();
 
-		var divs = element.children();
-		var validityDiv = angular.element(divs[0]);
-
-		validityDiv.scope().isNextDay = false;
-		validityDiv.scope().startTime = moment({ hour: 10, minute: 30 }).toDate();
-		validityDiv.scope().endTime = moment({ hour: 11, minute: 30 }).toDate();
-
-		scope.$apply();
-
-		expect(scope.timeRange.startTime).toEqual(new Date("2016-04-08 10:30"));
-		expect(scope.timeRange.endTime).toEqual(new Date("2016-04-08 11:30"));
+		expect(scope.timeRange.startTime).toEqual("2016-04-08 10:30");
+		expect(scope.timeRange.endTime).toEqual("2016-04-08 11:30");
 
 	});
 
-
 });
 
-
 describe('custom locale sv', function () {
-	var elementCompileFn, $templateCache, $compile, element,
-	scope;
+	var $templateCache, $compile, element, scope;
 
 	beforeEach(module('wfm.templates'));
 	beforeEach(module('wfm.teamSchedule'));
@@ -169,6 +165,17 @@ describe('custom locale sv', function () {
 		$templateCache = _$templateCache_;
 		$compile = _$compile_;
 		scope = _$rootScope_.$new();
+	}));
+
+	it('Should not show meridian in Swedish time-format', function () {
+		element = setUp();
+		var timepicker = angular.element(element[0].querySelector('.wfm-timepicker-wrap'));
+		expect(timepicker.scope().showMeridian).toBeFalsy();
+
+	});
+
+	function setUp() {
+		var date = new Date("2016-04-08");
 		var startTime = moment({ hour: 8, minute: 30 }).toDate();
 		var endTime = moment({ hour: 17, minute: 30 }).toDate();
 		scope.timeRange = {
@@ -176,28 +183,74 @@ describe('custom locale sv', function () {
 			endTime: endTime
 		};
 		scope.isNextDay = false;
-		var date = new Date("2016-04-08");
+
 		scope.date = function () {
 			return date;
 		};
-
-		elementCompileFn = function () {
-			return $compile('<activity-time-range-picker ng-model="timeRange" is-next-day="isNextDay" reference-day="date"></activity-time-range-picker>');
-		};
-	}));
-
-	it('Should not show meridian in Swedish time-format', function () {
-		element = elementCompileFn()(scope);
+		var el = $compile('<activity-time-range-picker ng-model="timeRange" is-next-day="isNextDay" reference-day="date"></activity-time-range-picker>')(scope);
 		scope.$apply();
-		var timepicker = angular.element(element[0].querySelector('.wfm-timepicker-wrap'));
-		expect(timepicker.scope().showMeridian).toBeFalsy();
 
-	});
+		return el;
+	}
 });
 
 describe('custom locale en', function () {
-	var elementCompileFn, $templateCache, $compile, element,
-	scope;
+	var $templateCache, $compile, element, scope;
+
+	beforeEach(module('wfm.templates'));
+	describe('custom locale sv', function () {
+		var $templateCache, $compile, element, scope;
+
+		beforeEach(module('wfm.templates'));
+		beforeEach(module('wfm.teamSchedule'));
+
+		beforeEach(function () {
+			module(function ($provide) {
+				$provide.service('$locale', function () {
+					return {
+						id: 'sv-se',
+						DATETIME_FORMATS: {
+							AMPMS: ['fm', 'em'],
+							shortTime: 'HH:mm'
+						}
+					};
+				});
+			});
+		});
+
+		beforeEach(inject(function (_$compile_, _$rootScope_, _$templateCache_) {
+			$templateCache = _$templateCache_;
+			$compile = _$compile_;
+			scope = _$rootScope_.$new();
+		}));
+
+		it('Should not show meridian in Swedish time-format', function () {
+			element = setUp();
+			var timepicker = angular.element(element[0].querySelector('.wfm-timepicker-wrap'));
+			expect(timepicker.scope().showMeridian).toBeFalsy();
+		});
+
+		function setUp() {
+			var date = new Date("2016-04-08");
+			var startTime = moment({ hour: 8, minute: 30 }).toDate();
+			var endTime = moment({ hour: 17, minute: 30 }).toDate();
+			scope.timeRange = {
+				startTime: startTime,
+				endTime: endTime
+			};
+			scope.isNextDay = false;
+			scope.date = function () {
+				return date;
+			};
+			var el = $compile('<activity-time-range-picker ng-model="timeRange" is-next-day="isNextDay" reference-day="date"></activity-time-range-picker>')(scope);
+			scope.$apply();
+
+			return el;
+		}
+	});
+});
+describe('custom locale en', function () {
+	var $templateCache, $compile, element, scope;
 
 	beforeEach(module('wfm.templates'));
 	beforeEach(module('wfm.teamSchedule'));
@@ -220,28 +273,30 @@ describe('custom locale en', function () {
 		$templateCache = _$templateCache_;
 		$compile = _$compile_;
 		scope = _$rootScope_.$new();
+	}));
+
+	function setUp() {
+		var date = new Date("2016-04-08");
 		var startTime = moment({ hour: 8, minute: 30 }).toDate();
 		var endTime = moment({ hour: 17, minute: 30 }).toDate();
+
+		scope.date = function () {
+			return date;
+		};
 		scope.timeRange = {
 			startTime: startTime,
 			endTime: endTime
 		};
 		scope.isNextDay = false;
-		var date = new Date("2016-04-08");
-		scope.date = function () {
-			return date;
-		};
+		var el = $compile('<activity-time-range-picker ng-model="timeRange" xdisable-next-day="disableNextDay" is-next-day="isNextDay" reference-day="date"></activity-time-range-picker>')(scope);
+		scope.$apply();
 
-		elementCompileFn = function () {
-			return $compile('<activity-time-range-picker ng-model="timeRange" xdisable-next-day="disableNextDay" is-next-day="isNextDay" reference-day="date"></activity-time-range-picker>');
-		};
-	}));
+		return el;
+	}
 
 	it('Should show meridian in US time-format', function () {
-		element = elementCompileFn()(scope);
-		scope.$apply();
+		element = setUp();
 		var timepicker = angular.element(element[0].querySelector('.wfm-timepicker-wrap'));
 		expect(timepicker.scope().showMeridian).toBeTruthy();
-
 	});
 });
