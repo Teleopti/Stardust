@@ -247,6 +247,7 @@
     <Compile Include="Transformer\AbsenceTransformer.cs" />
     <Compile Include="Transformer\ActivityTransformer.cs" />
     <Compile Include="Transformer\AgentSkillTransform.cs" />
+    <Compile Include="Transformer\BaseConfigurationValidator.cs" />
     <Compile Include="Transformer\BusinessUnitTransformer.cs" />
     <Compile Include="Transformer\CommonStateHolder.cs" />
     <Compile Include="Transformer\ConfigurationHandler.cs" />

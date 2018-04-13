@@ -10,6 +10,7 @@ using Teleopti.Analytics.Etl.Common.Entity;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
+using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -39,6 +40,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 		private readonly IGeneralFunctions _generalFunctions;
 		private readonly INow _now;
 		private readonly IJobHistoryRepository _jobHistoryRepository;
+		private readonly BaseConfigurationValidator _baseConfigurationValidator;
 
 		public EtlController(IToggleManager toggleManager,
 			JobCollectionModelProvider jobCollectionModelProvider,
@@ -50,7 +52,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			IConfigurationHandler configurationHandler,
 			IGeneralFunctions generalFunctions, 
 			INow now,
-			IJobHistoryRepository jobHistoryRepository)
+			IJobHistoryRepository jobHistoryRepository, BaseConfigurationValidator baseConfigurationValidator)
 		{
 			_toggleManager = toggleManager;
 			_jobCollectionModelProvider = jobCollectionModelProvider;
@@ -63,6 +65,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			_generalFunctions = generalFunctions;
 			_now = now;
 			_jobHistoryRepository = jobHistoryRepository;
+			_baseConfigurationValidator = baseConfigurationValidator;
 		}
 
 		[HttpGet, Route("Etl/ShouldEtlToolBeVisible")]
@@ -134,13 +137,17 @@ namespace Teleopti.Wfm.Administration.Controllers
 		public virtual IHttpActionResult IsBaseConfigurationAvailable()
 		{
 			var connectionString = _configReader.ConnectionString("Hangfire");
-			_configurationHandler.SetConnectionString(connectionString);
+			var baseConfiguration = _baseConfigurationRepository.LoadBaseConfiguration(connectionString);
+			var isValid  = _baseConfigurationValidator.isCultureValid(baseConfiguration.CultureId) &&
+						   _baseConfigurationValidator.isIntervalLengthValid(baseConfiguration.IntervalLength) &&
+						   _baseConfigurationValidator.isTimeZoneValid(baseConfiguration.TimeZoneCode);
+
 			var tenantName = getMasterTenantName();
 
 			return Ok(new TenantConfigurationModel
 			{
 				TenantName = tenantName,
-				IsBaseConfigured = _configurationHandler.IsConfigurationValid
+				IsBaseConfigured = isValid
 			});
 		}
 
@@ -181,13 +188,16 @@ namespace Teleopti.Wfm.Administration.Controllers
 				var analyticsConnectionString =
 					new SqlConnectionStringBuilder(tenant.DataSourceConfiguration.AnalyticsConnectionString).ToString();
 
-				_configurationHandler.SetConnectionString(analyticsConnectionString);
-				var baseConfig = _configurationHandler.BaseConfiguration;
+				var baseConfig = _baseConfigurationRepository.LoadBaseConfiguration(analyticsConnectionString);
+				var isValid = _baseConfigurationValidator.isCultureValid(baseConfig.CultureId) &&
+							  _baseConfigurationValidator.isIntervalLengthValid(baseConfig.IntervalLength) &&
+							  _baseConfigurationValidator.isTimeZoneValid(baseConfig.TimeZoneCode);
+
 				tenants.Add(new TenantConfigurationModel
 				{
 					TenantName = tenant.Name,
 					BaseConfig = (BaseConfiguration) baseConfig,
-					IsBaseConfigured = _configurationHandler.IsConfigurationValid
+					IsBaseConfigured = isValid
 				});
 			}
 

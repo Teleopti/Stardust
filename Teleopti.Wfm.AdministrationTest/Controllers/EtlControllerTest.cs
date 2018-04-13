@@ -362,7 +362,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			AllTenants.HasWithAnalyticsConnectionString(childTenant.Name, childTenant.DataSourceConfiguration.AnalyticsConnectionString);
 
 			var baseConfig = new BaseConfiguration(1053, 15, timezoneName, false);
-			ConfigurationHandler.AddBaseConfiguration(masterTenant.DataSourceConfiguration.AnalyticsConnectionString, baseConfig);
+			BaseConfigurationRepository.SaveBaseConfiguration(masterTenant.DataSourceConfiguration.AnalyticsConnectionString, baseConfig);
 
 			var result = (OkNegotiatedContentResult<List<TenantConfigurationModel>>)Target.GetTenants();
 			result.Should().Be.OfType<OkNegotiatedContentResult<List<TenantConfigurationModel>>>();
