@@ -24,7 +24,7 @@ function Check-URL ($UrlToCheck)
         $username = 'toptinet\tfsintegration'
 		$password = 'm8kemew0rk'
 		Write-Output "Checking if $UrlToCheck is accessible..."
-         # Ignore SSL cert 
+        # Ignore SSL cert 
         [System.Net.ServicePointManager]::ServerCertificateValidationCallback = {$true}
 		[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
