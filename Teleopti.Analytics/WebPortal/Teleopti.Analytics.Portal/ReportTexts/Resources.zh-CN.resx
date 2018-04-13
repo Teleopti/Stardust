@@ -1116,10 +1116,4 @@
   <data name="ResPlannedOvertimeH" xml:space="preserve">
     <value>已排定的加班 (hh:mm)</value>
   </data>
-  <data name="ResESLInclShrinkagePercent" xml:space="preserve">
-    <value>包含损耗的预估服务水平(%)</value>
-  </data>
-  <data name="ResESLPercent" xml:space="preserve">
-    <value>预估服务水平(%)</value>
-  </data>
 </root>

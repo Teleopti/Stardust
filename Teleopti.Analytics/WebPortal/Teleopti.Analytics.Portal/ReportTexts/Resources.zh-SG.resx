@@ -139,7 +139,7 @@
     <value>放弃率</value>
   </data>
   <data name="ResAgentName" xml:space="preserve">
-    <value>座席代表</value>
+    <value>普通员工</value>
   </data>
   <data name="ResAnsweredCalls" xml:space="preserve">
     <value>应答的电话量</value>
@@ -325,10 +325,10 @@
     <value>预测工作量与实际工作量对比</value>
   </data>
   <data name="ResAgentsReady" xml:space="preserve">
-    <value>就绪状态的座席代表</value>
+    <value>就绪状态的普通员工</value>
   </data>
   <data name="ResAgentsScheduled" xml:space="preserve">
-    <value>排定的座席代表</value>
+    <value>排定的普通员工</value>
   </data>
   <data name="ResForecastedTimeH" xml:space="preserve">
     <value>预测的时间 (小时:分钟 )</value>
@@ -379,7 +379,7 @@
     <value>按天的偏好</value>
   </data>
   <data name="ResReportPreferencesPerAgent" xml:space="preserve">
-    <value>每个座席代表的偏好</value>
+    <value>每个普通员工的偏好</value>
   </data>
   <data name="ResReportImprove" xml:space="preserve">
     <value>改进</value>
@@ -475,22 +475,22 @@
     <value>呼入电话量</value>
   </data>
   <data name="ResOfferedCallsPerAgentReady" xml:space="preserve">
-    <value>呼入电话量 / 状态就绪的座席代表</value>
+    <value>呼入电话量 / 状态就绪的普通员工</value>
   </data>
   <data name="ResOfferedCallsPerScheduledAgent" xml:space="preserve">
-    <value>呼入电话量 / 排定的状态就绪的座席代表</value>
+    <value>呼入电话量 / 排定的状态就绪的普通员工</value>
   </data>
   <data name="ResReportForecastvsScheduledHours" xml:space="preserve">
     <value>预测小时数与排班小时数对比</value>
   </data>
   <data name="ResReportServiceLevelAndAgentsReady" xml:space="preserve">
-    <value>服务水平与状态就绪的座席代表</value>
+    <value>服务水平与状态就绪的普通员工</value>
   </data>
   <data name="ResScheduledReadyTime" xml:space="preserve">
     <value>已排定的就绪时间</value>
   </data>
   <data name="ResScheduledvsReady" xml:space="preserve">
-    <value>已排班的座席代表数 vs 状态就绪的座席代表数</value>
+    <value>已排班的普通员工数 vs 状态就绪的普通员工数</value>
   </data>
   <data name="ResSmoothnessPercent" xml:space="preserve">
     <value>平滑率 (%)</value>
@@ -499,22 +499,22 @@
     <value>工作日 / 技能</value>
   </data>
   <data name="ResAgentCategoryColon" xml:space="preserve">
-    <value>座席代表的类别：</value>
+    <value>普通员工的类别：</value>
   </data>
   <data name="ResAgentCategoryTypeColon" xml:space="preserve">
-    <value>座席代表类别的类型：</value>
+    <value>普通员工类别的类型：</value>
   </data>
   <data name="ResAgentsColon" xml:space="preserve">
-    <value>座席代表：</value>
+    <value>普通员工：</value>
   </data>
   <data name="ResReportAgentScheduleResult" xml:space="preserve">
-    <value>座席代表测量指标</value>
+    <value>普通员工测量指标</value>
   </data>
   <data name="ResAdherencePercent" xml:space="preserve">
     <value>遵时率 (%)</value>
   </data>
   <data name="ResAgentDate" xml:space="preserve">
-    <value>座席代表/日期</value>
+    <value>普通员工/日期</value>
   </data>
   <data name="ResAnsweredCallsPerScheduledHour" xml:space="preserve">
     <value>应答电话量 / 排定的状态就绪小时数</value>
@@ -532,7 +532,7 @@
     <value>遵时率计算：</value>
   </data>
   <data name="ResOfferedCallsPerAgent" xml:space="preserve">
-    <value>呼入电话量 / 座席代表</value>
+    <value>呼入电话量 / 普通员工</value>
   </data>
   <data name="ResServiceLevel" xml:space="preserve">
     <value>服务水平</value>
@@ -541,7 +541,7 @@
     <value>服务水平统计：</value>
   </data>
   <data name="ResReportAgentScheduleAdherence" xml:space="preserve">
-    <value>座席代表—遵时率</value>
+    <value>普通员工—遵时率</value>
   </data>
   <data name="ResSortByColon" xml:space="preserve">
     <value>排序：</value>
@@ -550,7 +550,7 @@
     <value>就绪时间 / 排定的就绪时间 (%)</value>
   </data>
   <data name="ResScheduledAgentsReady" xml:space="preserve">
-    <value>已排定的状态就绪的座席代表</value>
+    <value>已排定的状态就绪的普通员工</value>
   </data>
   <data name="ResDeviationMinute" xml:space="preserve">
     <value>偏差（分钟）</value>
@@ -613,10 +613,10 @@
     <value>Acd 登录名</value>
   </data>
   <data name="ResReportAgentQueueStatistics" xml:space="preserve">
-    <value>座席代表队列统计数据</value>
+    <value>普通员工队列统计数据</value>
   </data>
   <data name="ResReportAgentStatistics" xml:space="preserve">
-    <value>座席代表统计数据</value>
+    <value>普通员工统计数据</value>
   </data>
   <data name="ResAdminTime" xml:space="preserve">
     <value>管理时间</value>
@@ -667,7 +667,7 @@
     <value>周：</value>
   </data>
   <data name="ResReportScheduledTimePerAgent" xml:space="preserve">
-    <value>按座席代表的排班时间</value>
+    <value>按普通员工的排班时间</value>
   </data>
   <data name="ResScheduledAbsenceTime" xml:space="preserve">
     <value>排定的缺勤时间 (小时:分钟 )</value>
@@ -700,13 +700,13 @@
     <value>班次类别：</value>
   </data>
   <data name="ResReportShiftCategoryAndDayAbsencePerAgent" xml:space="preserve">
-    <value>按座席代表的班次类别与全天缺勤</value>
+    <value>按普通员工的班次类别与全天缺勤</value>
   </data>
   <data name="ResReportScheduledAgentsPerIntervalAndTeam" xml:space="preserve">
-    <value>按间隔与小组的排定座席代表数</value>
+    <value>按间隔与小组的排定普通员工数</value>
   </data>
   <data name="ResReportAgentScorecard" xml:space="preserve">
-    <value>座席代表记分卡</value>
+    <value>普通员工记分卡</value>
   </data>
   <data name="ResAbsencePaidTimeH" xml:space="preserve">
     <value>付薪时间</value>
@@ -718,7 +718,7 @@
     <value>工作时间</value>
   </data>
   <data name="ResReportAbsenceTimePerAgent" xml:space="preserve">
-    <value>每个座席代表的缺勤时间</value>
+    <value>每个普通员工的缺勤时间</value>
   </data>
   <data name="ResAbsenceDayCount" xml:space="preserve">
     <value>全天</value>
@@ -841,7 +841,7 @@
     <value>工作日</value>
   </data>
   <data name="ResAgentColon" xml:space="preserve">
-    <value>座席代表</value>
+    <value>普通员工</value>
   </data>
   <data name="ResNoScorecardAvailable" xml:space="preserve">
     <value>无可用记分卡</value>
@@ -877,7 +877,7 @@
     <value>技能</value>
   </data>
   <data name="ResReportScheduledOvertimePerAgent" xml:space="preserve">
-    <value>按座席代表的排定加班</value>
+    <value>按普通员工的排定加班</value>
   </data>
   <data name="ResOvertimeColon" xml:space="preserve">
     <value>加班：</value>
@@ -895,10 +895,10 @@
     <value>平均通话时间</value>
   </data>
   <data name="ResReportAgentQueueMetrics" xml:space="preserve">
-    <value>座席代表队列测量指标</value>
+    <value>普通员工队列测量指标</value>
   </data>
   <data name="ResReportActivityTimePerAgent" xml:space="preserve">
-    <value>每个座席代表的活动时间</value>
+    <value>每个普通员工的活动时间</value>
   </data>
   <data name="ResOvertimeH" xml:space="preserve">
     <value>加班 (小时:分钟)</value>
@@ -919,7 +919,7 @@
     <value>文本</value>
   </data>
   <data name="ResReportRequestsPerAgent" xml:space="preserve">
-    <value>每个座席代表的申请</value>
+    <value>每个普通员工的申请</value>
   </data>
   <data name="ResRequestStatusApproved" xml:space="preserve">
     <value>已批准</value>
@@ -964,7 +964,7 @@
     <value>您的会话由于未活动超时已经过期，您会马上被再次重定向至登录页面。</value>
   </data>
   <data name="ResReportScheduledAgentsPerActivity" xml:space="preserve">
-    <value>按活动的排定座席代表数</value>
+    <value>按活动的排定普通员工数</value>
   </data>
   <data name="ResTotals" xml:space="preserve">
     <value>合计</value>
@@ -982,7 +982,7 @@
     <value>截止日期(班次开始)：</value>
   </data>
   <data name="ResReportAdherencePerAgent" xml:space="preserve">
-    <value>按座席代表的遵时率</value>
+    <value>按普通员工的遵时率</value>
   </data>
   <data name="ResReportAdherencePerDay" xml:space="preserve">
     <value>按天的遵时率</value>
@@ -1072,7 +1072,7 @@
     <value>与数据库的链接超时，请限制你的搜索条件</value>
   </data>
   <data name="ResReportAvailabilityPerAgent" xml:space="preserve">
-    <value>每个座席代表的可用性</value>
+    <value>每个普通员工的可用性</value>
   </data>
   <data name="ResAvailableDays" xml:space="preserve">
     <value>可用天数</value>
@@ -1090,7 +1090,7 @@
     <value>仅激活的技能</value>
   </data>
   <data name="ResReportAgentSkills" xml:space="preserve">
-    <value>座席代表技能</value>
+    <value>普通员工技能</value>
   </data>
   <data name="ResOnlyActiveSkillColon" xml:space="preserve">
     <value>仅激活的技能</value>
@@ -1099,7 +1099,7 @@
     <value>状态分组：</value>
   </data>
   <data name="ResReportTimeInStatePerAgent" xml:space="preserve">
-    <value>按座席代表的状态时间</value>
+    <value>按普通员工的状态时间</value>
   </data>
   <data name="ResIncludeDetails" xml:space="preserve">
     <value>包含详细信息：</value>
@@ -1115,11 +1115,5 @@
   </data>
   <data name="ResPlannedOvertimeH" xml:space="preserve">
     <value>已排定的加班 (hh:mm)</value>
-  </data>
-  <data name="ResESLInclShrinkagePercent" xml:space="preserve">
-    <value>包含损耗的预估服务水平(%)</value>
-  </data>
-  <data name="ResESLPercent" xml:space="preserve">
-    <value>预估服务水平(%)</value>
   </data>
 </root>
