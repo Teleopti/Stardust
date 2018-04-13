@@ -95,7 +95,7 @@
 				TenantName: vm.selectedTenant.TenantName,
 				StartDate: vm.historyWorkPeriod.StartDate,
 				EndDate: vm.historyWorkPeriod.EndDate,
-				ShowOnlyErrors: false
+				ShowOnlyErrors: vm.errorsOnly
 			};
 
 			$http

@@ -62,7 +62,7 @@
 		<div class="row">
 			<div class="col-md-12">
 				<div class="panel panel-default ">
-					<div class="panel-heading">
+					<div class="panel-heading follow-filter">
 						<div class="input-group ">
 							<span class="input-group-addon" id="basic-addon1">
 								<svg style="width:14px;height:14px" viewBox="0 0 24 24">
@@ -76,19 +76,51 @@
 						<table class="table" ng-if="!vm.error">
 							<thead>
 								<tr>
-									<th>Job name</th>
-									<th>Business unit</th>
-									<th>Start</th>
-									<th>End</th>
-									<th>Duration</th>
-									<th>Affected rows</th>
-									<th>Job schedule name</th>
-									<th>Error message</th>
+									<th scope="col" ng-click="sortType = 'Name'; sortReverse = !sortReverse">
+										Job name
+										<span ng-show="sortType == 'Name' && !sortReverse">▾</span>
+										<span ng-show="sortType == 'Name' && sortReverse">▴</span>
+									</th>
+									<th scope="col" ng-click="sortType = 'BusinessUnitName'; sortReverse = !sortReverse">
+										Business unit
+										<span ng-show="sortType == 'BusinessUnitName' && !sortReverse">▾</span>
+										<span ng-show="sortType == 'BusinessUnitName' && sortReverse">▴</span>
+									</th>
+									<th scope="col" ng-click="sortType = 'StartTime'; sortReverse = !sortReverse">
+										Start time
+										<span ng-show="sortType == 'StartTime' && !sortReverse">▾</span>
+										<span ng-show="sortType == 'StartTime' && sortReverse">▴</span>
+									</th>
+									<th scope="col" ng-click="sortType = 'EndTime'; sortReverse = !sortReverse">
+										End time
+										<span ng-show="sortType == 'EndTime' && !sortReverse">▾</span>
+										<span ng-show="sortType == 'EndTime' && sortReverse">▴</span>
+									</th>
+									<th scope="col" ng-click="sortType = 'Duration'; sortReverse = !sortReverse">
+										Duration
+										<span ng-show="sortType == 'Duration' && !sortReverse">▾</span>
+										<span ng-show="sortType == 'Duration' && sortReverse">▴</span>
+									</th>
+									<th scope="col" ng-click="sortType = 'RowsAfffected'; sortReverse = !sortReverse">
+										Afffected rows
+										<span ng-show="sortType == 'RowsAfffected' && !sortReverse">▾</span>
+										<span ng-show="sortType == 'RowsAfffected' && sortReverse">▴</span>
+									</th>
+									<th scope="col" ng-click="sortType = 'ScheduleName'; sortReverse = !sortReverse">
+										Schedule
+										<span ng-show="sortType == 'ScheduleName' && !sortReverse">▾</span>
+										<span ng-show="sortType == 'ScheduleName' && sortReverse">▴</span>
+									</th>
+									<th scope="col" ng-click="sortType = 'ErrorMessage'; sortReverse = !sortReverse">
+										Errors
+										<span ng-show="sortType == 'ErrorMessage' && !sortReverse">▾</span>
+										<span ng-show="sortType == 'ErrorMessage' && sortReverse">▴</span>
+									</th>
 								</tr>
 							</thead>
 
 
-							<tbody ng-repeat="job in vm.history | filter: historyFilter">
+							<tbody ng-repeat="job in vm.history | filter: historyFilter | orderBy:sortType:sortReverse ">
 								<tr ng-click="job.Open = !job.Open">
 
 									<td class="center-row">
@@ -122,7 +154,7 @@
 										{{job.RowsAfffected}}
 									</td>
 									<td>
-										{{job.scheduleName}}
+										{{job.ScheduleName}}
 									</td>
 									<td style="color:tomato;" ng-click="$event.stopPropagation()">
 										{{job.ErrorMessage}}

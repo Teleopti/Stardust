@@ -359,3 +359,9 @@ input.switch::-ms-check {
 	align-items: baseline;
 	justify-content: space-between;
 }
+
+.follow-filter {
+	position: sticky !important;
+	top:50px;
+	z-index: 100;
+}
