@@ -25,7 +25,7 @@ Background:
 	And There are teams applied with settings with
 		| Team       | GamificationSetting |
 		| Team green | setting             |
-
+@ignore
 Scenario: Show my badge
 Given I have today badges with
   | Badge type          | Bronze | Silver | Gold |
