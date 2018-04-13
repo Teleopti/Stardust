@@ -188,7 +188,17 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			var container = builder.Build();
 
 			var messageBroker = container.Resolve<IMessageBrokerComposite>();
-			new InitializeMessageBroker(messageBroker).Start(ConfigurationManager.AppSettings.ToDictionary());
+			string messageBrokerConnection;
+			var configurationAppSettings = ConfigurationManager.AppSettings.ToDictionary();
+			if (!configurationAppSettings.TryGetValue("MessageBroker", out messageBrokerConnection) )
+			{
+				var configvalues = new Dictionary<string,string>();
+				configvalues.Add("MessageBroker",_configReader.AppConfig("MessageBroker"));
+				new InitializeMessageBroker(messageBroker).Start(configvalues);
+			}
+			else
+				new InitializeMessageBroker(messageBroker).Start(configurationAppSettings);
+
 
 			var nodeStarter = new NodeStarter();
 			Nodes.Add(nodeStarter);

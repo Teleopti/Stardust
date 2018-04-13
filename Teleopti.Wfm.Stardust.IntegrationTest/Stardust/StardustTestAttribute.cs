@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain.Service;
-using Teleopti.Ccc.Sdk.ServiceBus;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
@@ -37,15 +36,15 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 		{
 			base.BeforeTest(testDetails);
 
-				var dataHash = DefaultDataCreator.HashValue;// ^ TestConfiguration.HashValue;
-			var path = Path.Combine(InfraTestConfigReader.DatabaseBackupLocation, "Stardust");
+			var dataHash = DefaultDataCreator.HashValue;// ^ TestConfiguration.HashValue;
 
+			DataSourceHelper.CreateDatabases();
+
+			var path = Path.Combine(InfraTestConfigReader.DatabaseBackupLocation, "Stardust");
 			var haveDatabases =
 				DataSourceHelper.TryRestoreApplicationDatabaseBySql(path, dataHash) &&
 				DataSourceHelper.TryRestoreAnalyticsDatabaseBySql(path, dataHash);
-			if (!haveDatabases)
-			DataSourceHelper.CreateDatabases();
-
+			
 			if (!haveDatabases)
 			{
 				StateHolderProxyHelper.SetupFakeState(
@@ -55,17 +54,18 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 				);
 
 				DefaultDataCreator.Create();
-				//DefaultAnalyticsDataCreator.OneTimeSetup();
 				DataSourceHelper.ClearAnalyticsData();
 				DefaultAnalyticsDataCreator.Create();
 				DataCreator.Create();
 
-				//DataSourceHelper.BackupApplicationDatabaseBySql(path, dataHash);
-				//DataSourceHelper.BackupAnalyticsDatabaseBySql(path, dataHash);
-
+				
+				DataSourceHelper.BackupApplicationDatabaseBySql(path, dataHash);
+				DataSourceHelper.BackupAnalyticsDatabaseBySql(path, dataHash);
+				
 				StateHolderProxyHelper.Logout();
 				StateHolderProxyHelper.ClearStateHolder();
 			}
+
 
 			HangfireClientStarter.Start();
 
@@ -76,6 +76,7 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 
 			TestSiteConfigurationSetup.Setup();
 			((TestConfigReader)ConfigReader).ConfigValues.Add("ManagerLocation", TestSiteConfigurationSetup.URL.AbsoluteUri + @"StardustDashboard/");
+			((TestConfigReader)ConfigReader).ConfigValues.Add("MessageBroker", TestSiteConfigurationSetup.URL.AbsoluteUri );
 			((TestConfigReader)ConfigReader).ConfigValues.Add("NumberOfNodes", "1");
 			
 		}
