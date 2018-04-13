@@ -1165,3 +1165,9 @@ note-editor {
 		}
 	}
 }
+
+teams-time-picker.ng-invalid {
+	.hours > input {
+		border: 2px solid $red-600;
+	}
+}
