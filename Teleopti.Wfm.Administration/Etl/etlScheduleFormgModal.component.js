@@ -72,10 +72,8 @@
     function toggleFrequencyType(form) {
       if (ctrl.frequencyType) {
         form.DailyFrequencyStart = null;
-        ctrl.form = {
-          DailyFrequencyStart: moment().format("HH:mm"),
-          DailyFrequencyEnd: moment().add(1, 'hours').format("HH:mm")
-        };
+        ctrl.form.DailyFrequencyStart = moment().format("HH:mm");
+        ctrl.form.DailyFrequencyEnd = moment().add(1, 'hours').format("HH:mm");
       }
       else{
         form.DailyFrequencyMinute = null;

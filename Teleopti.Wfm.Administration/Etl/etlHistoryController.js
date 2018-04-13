@@ -18,8 +18,11 @@
 		vm.selectedTenant = null;
 		vm.selectedBu = null;
 		vm.businessUnits = [];
+		vm.history = [];
+		vm.error = null;
 
 		vm.selectedTenantChanged = selectedTenantChanged;
+		vm.getHistoryForTenant = getHistoryForTenant;
 
 		(function init() {
 			getTenants();
@@ -82,6 +85,38 @@
 			}
 		}
 
+		function getHistoryForTenant() {
+			if (!vm.selectedTenant || !vm.selectedBu) {
+				return;
+			}
+
+			var	JobHistoryCriteria = {
+				BusinessUnitId: vm.selectedBu.Id,
+				TenantName: vm.selectedTenant.TenantName,
+				StartDate: vm.historyWorkPeriod.StartDate,
+				EndDate: vm.historyWorkPeriod.EndDate,
+				ShowOnlyErrors: false
+			};
+
+			$http
+			.post(
+				"./Etl/GetJobHistory",
+				JSON.stringify(JobHistoryCriteria),
+				tokenHeaderService.getHeaders()
+			)
+			.success(function(data) {
+				if (data.length < 1) {
+					vm.error = "No history found";
+				} else {
+					vm.history = data;
+					vm.error = null;
+				}
+			})
+			.error(function(data) {
+				vm.history = [];
+				vm.error = "No history found";
+			});
+		}
 
 	}
 })();

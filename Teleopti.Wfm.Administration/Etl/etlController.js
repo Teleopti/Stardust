@@ -157,6 +157,7 @@
 					selectedTenantChanged();
 				} else {
 					vm.selectedTenant = getItemBasedOnName(vm.tenants, $window.sessionStorage.tenant, "TenantName");
+					selectedTenantChanged();
 				}
 			});
 		}

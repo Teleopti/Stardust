@@ -497,7 +497,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			{
 				var bunitIds = new List<Guid>();
 				var tenants = new List<Tenant>();
-				if (tenantName != "All")
+				if (tenantName != "<All>")
 				{
 					tenants = new List<Tenant>() { _loadAllTenants.Tenants().Single(x => x.Name == tenantName) };
 					foreach (var tenant in tenants)

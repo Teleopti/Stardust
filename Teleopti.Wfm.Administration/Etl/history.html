@@ -26,7 +26,6 @@
 			<div class="panel-body text-container">
 				<div class="row">
 					<div class="col-md-12">
-
 						<div class="row toolbar">
 							<div class="col-md-3">
 								<h5>Date from:</h5>
@@ -49,9 +48,15 @@
 								<input class="switch" ng-model="vm.errorsOnly" type="checkbox">
 							</div>
 						</div>
-					</div>
 				</div>
 			</div>
+			<hr/>
+			<div class="row">
+				<div class="col-md-12 ">
+					<button type="button" class="btn btn-primary pull-right" name="button" ng-click="vm.getHistoryForTenant()">Find history</button>
+				</div>
+			</div>
+		</div>
 		</div>
 
 		<div class="row">
@@ -64,16 +69,15 @@
 									<path fill="#000000" d="M3,2H21V2H21V4H20.92L15,9.92V22.91L9,16.91V9.91L3.09,4H3V2M11,16.08L13,18.08V9H13.09L18.09,4H5.92L10.92,9H11V16.08Z" />
 								</svg>
 							</span>
-							<input type="text" ng-model="historyFilter" class="form-control" placeholder="Filter" aria-label="Username" aria-describedby="basic-addon1">
+							<input type="text" ng-model="historyFilter.Name" class="form-control" placeholder="Filter" aria-label="Username" aria-describedby="basic-addon1">
 						</div>
 					</div>
 					<div class="panel-body">
-						<table class="table">
+						<table class="table" ng-if="!vm.error">
 							<thead>
 								<tr>
 									<th>Job name</th>
 									<th>Business unit</th>
-									<th>Tenant</th>
 									<th>Start</th>
 									<th>End</th>
 									<th>Duration</th>
@@ -84,23 +88,66 @@
 							</thead>
 
 
-							<tbody ng-repeat="job in vm.jobs | filter: historyFilter">
+							<tbody ng-repeat="job in vm.history | filter: historyFilter">
 								<tr ng-click="job.Open = !job.Open">
-									<td>
+
+									<td class="center-row">
+										<span ng-click="job.Open = !job.Open; $event.stopPropagation()" style="outline: none;">
+											<span ng-if="job.Open">
+												<svg style="width: 18px; height: 18px; margin: 5px;" viewBox="0 0 24 24">
+													<path fill="#000000" d="M19,19V5H5V19H19M19,3A2,2 0 0,1 21,5V19A2,2 0 0,1 19,21H5A2,2 0 0,1 3,19V5C3,3.89 3.9,3 5,3H19M17,11V13H7V11H17Z"/>
+												</svg>
+											</span>
+											<span ng-if="!job.Open">
+												<svg style="width: 18px; height: 18px; margin: 5px;" viewBox="0 0 24 24">
+													<path fill="#000000" d="M19,19V5H5V19H19M19,3A2,2 0 0,1 21,5V19A2,2 0 0,1 19,21H5A2,2 0 0,1 3,19V5C3,3.89 3.9,3 5,3H19M11,7H13V11H17V13H13V17H11V13H7V11H11V7Z"/>
+												</svg>
+											</span>
+										</span>
 										{{job.Name}}
+									</td>
+									<td>
+										{{job.BusinessUnitName}}
+									</td>
+									<td>
+										{{job.StartTime}}
+									</td>
+									<td>
+										{{job.EndTime}}
+									</td>
+									<td>
+										{{job.Duration}}
+									</td>
+									<td>
+										{{job.RowsAfffected}}
+									</td>
+									<td>
+										{{job.scheduleName}}
+									</td>
+									<td style="color:tomato;" ng-click="$event.stopPropagation()">
+										{{job.ErrorMessage}}
+									</td>
+								</tr>
+								<tr ng-if="job.Open" ng-repeat="step in job.JobStepsHistory track by $index">
+									<td class="subrow">
+										<span>{{step.Name}}</span>
+										<span class="pull-right" style="color: tomato" ng-if="step.DependsOnTenant">(Depends on configuration of tenant)</span>
 									</td>
 									<td></td>
 									<td></td>
 									<td></td>
+									<td>{{step.Duration}}</td>
+									<td>{{step.RowsAffected}}</td>
 									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
+									<td style="color:tomato;" ng-click="$event.stopPropagation()">{{step.ErrorMessage}}
+									</td>
 								</tr>
 							</tbody>
 
 						</table>
-
+						<div ng-if="vm.error" class="alert alert-warning pointer" role="alert">	<!-- if unconfigured tenants  -->
+							{{vm.error}}
+						</div>
 					</div>
 				</div>
 			</div>
