@@ -50,7 +50,7 @@ Teleopti.MyTimeWeb.BadgeCountsDropdown = (function ($) {
 
 				var startMoment = findStartDateOfPeriod(moment(), periodType, userInfo.WeekStart);
 
-				var vm = new Teleopti.MyTimeWeb.BadgeCountsDropdownViewModel(startMoment, periodType, userInfo.DateFormatForMoment);
+				var vm = new Teleopti.MyTimeWeb.BadgeCountsDropdownViewModel(startMoment, periodType, Teleopti.MyTimeWeb.Common.DateFormat);
 				ko.applyBindings(vm, el);
 				vm.fetchBadgeCounts();
 

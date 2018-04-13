@@ -31,9 +31,7 @@ Teleopti.MyTimeWeb.BadgeCountsDropdownViewModel = function BadgeCountsDropdownVi
 	self.endMoment = ko.observable( getEndMoment(startMoment, periodType) );
 
 	self.periodText = ko.computed(function () {
-		return self.startMoment().format(dateFormat) +
-			' – ' +
-			self.endMoment().format(dateFormat);
+		return Teleopti.MyTimeWeb.Common.FormatDatePeriod(self.startMoment(), self.endMoment(), false);
 	});
 
 	var incPeriod = function (n) {
