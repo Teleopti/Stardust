@@ -8,7 +8,7 @@ if (typeof (Teleopti) === 'undefined') {
 	}
 }
 
-Teleopti.MyTimeWeb.BadgeCountsDropdownViewModel = function BadgeCountsDropdownViewModel(startMoment, periodType, dateFormat) {
+Teleopti.MyTimeWeb.BadgeCountsDropdownViewModel = function BadgeCountsDropdownViewModel(startMoment, periodType) {
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	var getEndMoment = function (startMoment, periodType) {
 		var m = startMoment.clone();
