@@ -23,6 +23,17 @@ namespace Teleopti.Ccc.DBManager.Library
 					}),
 					x => matchSwitch(x, "-T", "-TRUNK", () => command.UpgradeDatabase = true),
 					x => matchSwitch(x, "-R", () => command.CreatePermissions = true),
+
+
+					x => matchSwitchWithAdjacentValue(x, "-RESTORETRUNK", v =>
+					{
+						command.RestoreBackupIfNotExistsOrNewer = v;
+						command.UpgradeDatabase = true;
+					}),
+					x => matchSwitchWithAdjacentValue(x, "-RESTORE", v => command.RestoreBackup = v),
+					x => matchSwitchWithAdjacentValue(x, "-DATAFOLDER", v => command.DataFolder = v),
+
+
 					x => matchSwitchWithAdjacentValue(x, "-S", v => command.ServerName = v),
 					x => matchSwitchWithAdjacentValue(x, "-D", v => command.DatabaseName = v),
 					x => matchSwitchWithAdjacentValue(x, "-U", v => command.UserName = v),
@@ -48,12 +59,6 @@ namespace Teleopti.Ccc.DBManager.Library
 						command.IsWindowsGroupName = true;
 					}),
 					x => matchSwitchWithAdjacentValue(x, "-F", v => command.DbManagerFolderPath = v),
-					x => matchSwitchWithAdjacentValue(x, "-RESTORETRUNK", v =>
-					{
-						command.RestoreBackupIfNotExistsOrNewer = v;
-						command.UpgradeDatabase = true;
-					}),
-					x => matchSwitchWithAdjacentValue(x, "-RESTORE", v => command.RestoreBackup = v),
 				}.Any(matcher => matcher(s));
 			}
 
@@ -109,5 +114,6 @@ namespace Teleopti.Ccc.DBManager.Library
 		public bool UpgradeDatabase { get; set; }
 		public string RestoreBackup { get; private set; }
 		public string RestoreBackupIfNotExistsOrNewer { get; set; }
+		public string DataFolder { get; set; }
 	}
 }

@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.DBManager
 			else if (args.Any(a => a.Contains("-O" + DatabaseType.TeleoptiCCCAgg.GetName())))
 				loggerSuffix = "Agg";
 
-			var command = PatchCommand.ParseCommandLine(args);
 			var log = new FileLogger(loggerSuffix);
 			try
 			{

@@ -66,7 +66,9 @@ namespace Teleopti.Ccc.DBManager.Library
 
 		public void Restore(PatchCommand command)
 		{
-			restore(command.DatabaseType, command.DatabaseName, command.RestoreBackup ?? command.RestoreBackupIfNotExistsOrNewer);
+			var bakFile = command.RestoreBackup ?? command.RestoreBackupIfNotExistsOrNewer;
+			var dataFolder = command.DataFolder ?? new FileInfo(bakFile).Directory.FullName;
+			restore(command.DatabaseType, command.DatabaseName, bakFile, dataFolder);
 			createLoginDropUsers(command.DatabaseName, command.AppUserName, command.AppUserPassword);
 			if (command.DatabaseType == DatabaseType.TeleoptiCCC7)
 				_configureSystem.ActivateAllTenants();
@@ -78,6 +80,16 @@ namespace Teleopti.Ccc.DBManager.Library
 			}
 		}
 
+		private void restore(DatabaseType databaseType, string databaseName, string bakFile, string dataFolder)
+		{
+			var file = Path.Combine(_debugDbFolder.Path(), @"tsql\DemoDatabase\RestoreDatabase.sql");
+			if (databaseType == DatabaseType.TeleoptiAnalytics)
+				file = Path.Combine(_debugDbFolder.Path(), @"tsql\DemoDatabase\RestoreAnalytics.sql");
+			var script = File.ReadAllText(file);
+			script = replaceVariables(script, bakFile, dataFolder, databaseName, null, null, null);
+			_masterSql.ExecuteTransactionlessNonQuery(script, Timeouts.CommandTimeout);
+		}
+
 		private void addLicence(DatabaseType databaseType)
 		{
 			if (databaseType != DatabaseType.TeleoptiCCC7)
@@ -85,31 +97,23 @@ namespace Teleopti.Ccc.DBManager.Library
 			var file = Path.Combine(_debugDbFolder.Path(), @"tsql\AddLic.sql");
 			var script = File.ReadAllText(file);
 			var licenseFile = Path.GetFullPath(Path.Combine(_repoFolder.Path(), @"LicenseFiles\Teleopti_RD.xml"));
-			script = replaceVariables(script, null, null, null, null, licenseFile);
+			script = replaceVariables(script, null, null, null, null, null, licenseFile);
 			_sql.ExecuteTransactionlessNonQuery(script, Timeouts.CommandTimeout);
 		}
 
-		private void restore(DatabaseType databaseType, string databaseName, string bakFile)
-		{
-			var file = Path.Combine(_debugDbFolder.Path(), @"tsql\DemoDatabase\RestoreDatabase.sql");
-			if (databaseType == DatabaseType.TeleoptiAnalytics)
-				file = Path.Combine(_debugDbFolder.Path(), @"tsql\DemoDatabase\RestoreAnalytics.sql");
-			var script = File.ReadAllText(file);
-			script = replaceVariables(script, bakFile, databaseName, null, null, null);
-			_masterSql.ExecuteTransactionlessNonQuery(script, Timeouts.CommandTimeout);
-		}
 
 		private void createLoginDropUsers(string databaseName, string user, string password)
 		{
 			var file = Path.Combine(_debugDbFolder.Path(), @"tsql\DemoDatabase\CreateLoginDropUsers.sql");
 			var script = File.ReadAllText(file);
-			script = replaceVariables(script, null, databaseName, user, password, null);
+			script = replaceVariables(script, null, null, databaseName, user, password, null);
 			_sql.ExecuteTransactionlessNonQuery(script, Timeouts.CommandTimeout);
 		}
 
 		private string replaceVariables(
 			string script,
 			string bakFile,
+			string dataFolder,
 			string databaseName,
 			string user,
 			string password,
@@ -124,7 +128,7 @@ namespace Teleopti.Ccc.DBManager.Library
 			script = script.Replace("$(DATABASENAME)", databaseName);
 			script = script.Replace("$(BAKFILE)", bakFile);
 			script = script.Replace("$(LicFile)", licenseFile);
-			script = script.Replace("$(DATAFOLDER)", Path.Combine(_repoFolder.Path(), @".com.teleopti.wfm.developer.tools"));
+			script = script.Replace("$(DATAFOLDER)", dataFolder);
 			return script;
 		}
 	}
