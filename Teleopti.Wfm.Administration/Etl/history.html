@@ -21,7 +21,8 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				Settings
-				<span class="pull-right">No jobs running</span>
+				<span class="pull-right" ng-if="vm.status == null">No jobs running</span>
+				<span class="pull-right" ng-if="vm.status !== null">{{vm.status}} running</span>
 			</div>
 			<div class="panel-body text-container">
 				<div class="row">

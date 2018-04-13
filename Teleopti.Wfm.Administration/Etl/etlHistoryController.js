@@ -20,6 +20,7 @@
 		vm.businessUnits = [];
 		vm.history = [];
 		vm.error = null;
+		vm.status = null;
 
 		vm.selectedTenantChanged = selectedTenantChanged;
 		vm.getHistoryForTenant = getHistoryForTenant;
@@ -27,6 +28,7 @@
 
 		(function init() {
 			getTenants();
+			pollStatus();
 		})();
 
 		function getTenants() {
@@ -55,12 +57,12 @@
 		}
 
 		function getItemBasedOnName(arr, name, prop) {
-      for (var i = 0; i < arr.length; i++) {
-        if (arr[i][prop] === name) {
-          return arr[i];
-        }
-      }
-    }
+			for (var i = 0; i < arr.length; i++) {
+				if (arr[i][prop] === name) {
+					return arr[i];
+				}
+			}
+		}
 
 		function getBusinessUnits(tenant) {
 			$http
@@ -84,6 +86,17 @@
 			if (vm.selectedTenant.TenantName === "<All>") {
 				vm.selectedBu = getItemBasedOnName(vm.businessUnits, "<All>", "Name");
 			}
+		}
+
+		function pollStatus() {
+			$timeout( function(){
+				$http
+				.get("./Etl/GetjobRunning", tokenHeaderService.getHeaders())
+				.success(function (data) {
+					vm.status = data;
+					pollStatus();
+				});
+			}, 30000 );
 		}
 
 		function getHistoryForTenant() {
@@ -122,7 +135,7 @@
 		function copy(root){
 			root.Copied = true;
 			$timeout( function(){
-					root.Copied = false;
+				root.Copied = false;
 			}, 5000 );
 		}
 
