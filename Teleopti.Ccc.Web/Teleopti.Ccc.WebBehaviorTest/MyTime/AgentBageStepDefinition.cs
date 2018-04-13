@@ -117,5 +117,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.Click("#period-navigator-next");
 		}
 
+		[When(@"I nevigate to previous week")]
+		public void WhenINevigateToPreviousWeek()
+		{
+			Browser.Interactions.Click("#period-navigator-previous");
+		}
+
 	}
 }

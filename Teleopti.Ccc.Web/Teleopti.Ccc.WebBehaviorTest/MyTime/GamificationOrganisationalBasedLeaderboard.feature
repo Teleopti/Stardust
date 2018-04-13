@@ -117,6 +117,25 @@ Given I have a role with
  Then I should see the ranks with badges are
 		| Rank | Agent | Gold | Silver | Bronze |
 		| 1    | I     | 6    | 2      | 9      |
- When I nevigate to next week
+	
+@OnlyRunIfEnabled('WFM_Gamification_Create_Rolling_Periods_74866')
+Scenario: Show my badge on leader board report for next period
+Given I have a role with
+		| Field                 | Value |
+		| Access to Leaderboard | true  |
+		| Access to my site     | true  |
+ When I am viewing leaderboard report
+ And I nevigate to next week
+ Then I should see the ranks with badges are
+	| Rank | Agent | Gold | Silver | Bronze |
+	
+@OnlyRunIfEnabled('WFM_Gamification_Create_Rolling_Periods_74866')
+Scenario: Show my badge on leader board report for previous period
+Given I have a role with
+		| Field                 | Value |
+		| Access to Leaderboard | true  |
+		| Access to my site     | true  |
+ When I am viewing leaderboard report
+ And I nevigate to previous week
  Then I should see the ranks with badges are
 	| Rank | Agent | Gold | Silver | Bronze |
