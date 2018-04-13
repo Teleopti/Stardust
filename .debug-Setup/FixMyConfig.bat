@@ -6,44 +6,36 @@ SET CCC7DB=%1
 SET AnalyticsDB=%2
 SET Configuration=%3
 
-call "%~dp0CheckMsbuildPath.bat"
+CALL "%~dp0CheckMsbuildPath.bat"
 IF %ERRORLEVEL% NEQ 0 GOTO :error
 
 IF "%Configuration%"=="" SET Configuration=Debug
 
-cd %ROOTDIR%
+CD %ROOTDIR%
 
-if "%1" == "" (
-SET /P CCC7DB=CCC7DB?
+IF "%1" == "" (
+	SET /P CCC7DB=CCC7DB?
 )
 
-if "%2" == "" (
-SET /P AnalyticsDB=AnalyticsDB?
+IF "%2" == "" (
+	SET /P AnalyticsDB=AnalyticsDB?
 )
 
-SET SourceSettings=%ROOTDIR%\config\settings.txt
-SET AppliedSettings=%ROOTDIR%\..\Teleopti.Support.Tool\bin\%Configuration%\settings.txt
+SET probablyStardustPorts=%WORKING_DIRECTORY%SetUrlAcl.ps1
+PowerShell.exe -NoProfile -Command "& {Start-Process PowerShell.exe -ArgumentList '-NoProfile -ExecutionPolicy Bypass -File ""%probablyStardustPorts%""' -Verb RunAs}"
 
-COPY "%SourceSettings%" "%AppliedSettings%" >> NUL
-
-::Replace some config values
-cscript .\common\replace.vbs "TeleoptiAnalytics_Demo" "%AnalyticsDB%" "%AppliedSettings%" > NUL
-cscript .\common\replace.vbs "TeleoptiApp_Demo" "%CCC7DB%" "%AppliedSettings%" > NUL
-
-:: Build Teleopti.Support.Tool.exe if not built and source files are available 
 IF NOT EXIST "%ROOTDIR%\..\Teleopti.Support.Tool\bin\%Configuration%\Teleopti.Support.Tool.exe" (
 	IF EXIST "%ROOTDIR%\..\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj" (
 		%MSBUILD% /property:Configuration=%Configuration% /t:rebuild "%ROOTDIR%\..\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj" > "%ROOTDIR%\Teleopti.Support.Tool.build.log"
 	)
 )
 
-SET Kommandompigg=%WORKING_DIRECTORY%SetUrlAcl.ps1
-::powershell.exe -ExecutionPolicy Bypass -File "%Kommandompigg%"
-PowerShell.exe -NoProfile -Command "& {Start-Process PowerShell.exe -ArgumentList '-NoProfile -ExecutionPolicy Bypass -File ""%Kommandompigg%""' -Verb RunAs}"
-
-::Run supportTool to replace all config
+"%ROOTDIR%\..\Teleopti.Support.Tool\bin\%Configuration%\Teleopti.Support.Tool.exe" -LOAD "%ROOTDIR%\config\settings.txt"
 "%ROOTDIR%\..\Teleopti.Support.Tool\bin\%Configuration%\Teleopti.Support.Tool.exe" -SET $(machineKey.validationKey) "754534E815EF6164CE788E521F845BA4953509FA45E321715FDF5B92C5BD30759C1669B4F0DABA17AC7BBF729749CE3E3203606AB49F20C19D342A078A3903D1"
 "%ROOTDIR%\..\Teleopti.Support.Tool\bin\%Configuration%\Teleopti.Support.Tool.exe" -SET $(machineKey.decryptionKey) "3E1AD56713339011EB29E98D1DF3DBE1BADCF353938C3429"
+"%ROOTDIR%\..\Teleopti.Support.Tool\bin\%Configuration%\Teleopti.Support.Tool.exe" -SET $(DB_CCC7) "%CCC7DB%"
+"%ROOTDIR%\..\Teleopti.Support.Tool\bin\%Configuration%\Teleopti.Support.Tool.exe" -SET $(DB_ANALYTICS) "%AnalyticsDB%"
+"%ROOTDIR%\..\Teleopti.Support.Tool\bin\%Configuration%\Teleopti.Support.Tool.exe" -SET $(AS_DATABASE) "%AnalyticsDB%"
 "%ROOTDIR%\..\Teleopti.Support.Tool\bin\%Configuration%\Teleopti.Support.Tool.exe" -MODebug
 
 ECHO Done!
