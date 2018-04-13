@@ -1,17 +1,17 @@
 #Searching for the words fit & fdescribe in all spec.js files under web project. 
 #To be sure that all tests is beeing run and no one accidentally commited it
 
-$fit = gci "$env:WorkingDirectory\Teleopti.Ccc.Web\Teleopti.Ccc.Web\WFM\app\*.spec.js" -recurse | Select-String -pattern "\bfit\s*\(" 
-$describe = gci "$env:WorkingDirectory\Teleopti.Ccc.Web\Teleopti.Ccc.Web\WFM\app\*.spec.js" -recurse | Select-String -pattern "\bfdescribe\b" 
+$WFMRepoWebPath = "$env:WorkingDirectory\Teleopti.Ccc.Web\Teleopti.Ccc.Web\WFM"
 
-if ($fit.count -gt "0") { 
+function fcheck {
+ $Matches = Get-ChildItem -Recurse -Filter *.spec.ts $WFMRepoWebPath |
+ Select-String -Pattern "fdescribe\(|fit\(" -List
+ $Paths = $Matches.Path
+ $Count = $Matches.Matches.Count
+ if($Count -gt 0) {
+ Write-Host "Found $Count matches for fdescribe/fit in the following files:" -ForegroundColor Red
+ Write-Host $Paths
+ exit 1
+ }
 
-    Write-Output "The word 'fit' has been found in the following file(s):`n "$fit.Path""
-    exit 1
-}
-
-if ($describe.count -gt "0") { 
-
-    Write-Output "The word 'fdescribe' has been found in the following file(s):`n "$describe.name""
-    exit 1
-}
+fcheck
