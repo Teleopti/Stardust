@@ -10,17 +10,25 @@ if (typeof (Teleopti) === 'undefined') {
 
 Teleopti.MyTimeWeb.BadgeCountsDropdownViewModel = function BadgeCountsDropdownViewModel(startMoment, periodType, dateFormat) {
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
+	var getEndMoment = function (startMoment, periodType) {
+		var m = startMoment.clone();
+		switch (periodType) {
+			case 'Weekly':
+				m.add('days', 6);
+				break;
+			case 'Monthly':
+				m.endOf('month');
+				break;
+		}
+		return m;
+	};
 
 	var self = this;
 
 	self.badgeCounts = ko.observableArray();
 	self.periodType = periodType;
 	self.startMoment = ko.observable(startMoment);
-
-	if (self.periodType === 'Weekly')
-		self.endMoment = ko.observable(self.startMoment().clone().endOf('week'));
-	else if (self.periodType === 'Monthly')
-		self.endMoment = ko.observable(self.startMoment().clone().endOf('month'));
+	self.endMoment = ko.observable( getEndMoment(startMoment, periodType) );
 
 	self.periodText = ko.computed(function () {
 		return self.startMoment().format(dateFormat) +
