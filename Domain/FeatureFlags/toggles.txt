@@ -40,7 +40,6 @@ Gamification_NewBadgeCalculation_31185 = true
 WfmReportPortal_Basic_38825 = true
 WfmReportPortal_LeaderBoard_39440 = true
 WebByPassDefaultPermissionCheck_37984 = true
-Wfm_Outbound_IgnoreScheduleForReplan_43752 = true
 
 # LevelUp #
 RTA_ViewHistoricalAhderence7DaysBack_46826 = true
