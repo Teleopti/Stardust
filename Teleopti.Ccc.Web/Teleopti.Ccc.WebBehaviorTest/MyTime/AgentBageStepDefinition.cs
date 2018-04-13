@@ -43,6 +43,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.AssertAnyContains("#BadgePanel .bronze-badge", bronzeBadgeCount.ToString(CultureInfo.InvariantCulture));
 		}
 
+		[When(@"I click next week")]
+		public void WhenIClickNextWeek()
+		{
+			Browser.Interactions.Click("#next-period");
+		}
+
+		[When(@"I click previous week")]
+		public void WhenIClickPreviousWeek()
+		{
+			Browser.Interactions.Click("#previous-period");
+		}
+
 		[When(@"I view badge details")]
 		public void WhenIViewBadgeDetails()
 		{

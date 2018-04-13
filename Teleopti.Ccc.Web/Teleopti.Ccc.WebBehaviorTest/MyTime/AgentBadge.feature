@@ -21,16 +21,17 @@ Background:
 		| AdherenceUsed         | True    |
 		| Silver to bronze rate | 5       |
 		| Gold to silver rate   | 5       |
+		| RollingPeriodSet      | Weekly  |
 	And There are teams applied with settings with
 		| Team       | GamificationSetting |
 		| Team green | setting             |
 
 Scenario: Show my badge
-Given I have badges based on the specific setting with
-  | Badge type          | Bronze | Silver | Gold | LastCalculatedDate |
-  | AnsweredCalls       | 4      | 1      | 2    | 2014-08-11         |
-  | AverageHandlingTime | 2      | 1      | 1    | 2014-08-11         |
-  | Adherence           | 3      | 0      | 0    | 2014-08-11         |
+Given I have today badges with
+  | Badge type          | Bronze | Silver | Gold |
+  | AnsweredCalls       | 4      | 1      | 2    |
+  | AverageHandlingTime | 2      | 1      | 1    |
+  | Adherence           | 3      | 0      | 0    |
  When I am viewing week schedule
  Then I should see I have 9 bronze badge, 2 silver badge and 3 gold badge
  When I view badge details
@@ -43,3 +44,47 @@ Given I have badges based on the specific setting with
   | Badge type          | Bronze | Silver | Gold | LastCalculatedDate |
  When I am viewing week schedule
  Then I should see I have 0 bronze badge, 0 silver badge and 0 gold badge
+
+@OnlyRunIfEnabled('WFM_Gamification_Create_Rolling_Periods_74866')
+Scenario: Show my badge within period
+Given I have today badges with
+  | Badge type          | Bronze | Silver | Gold |
+  | AnsweredCalls       | 4      | 1      | 2    |
+  | AverageHandlingTime | 2      | 1      | 1    |
+  | Adherence           | 3      | 0      | 0    |
+ When I am viewing week schedule
+ Then I should see I have 9 bronze badge, 2 silver badge and 3 gold badge
+ When I view badge details
+  Then I should see I have 4 bronze badges, 1 silver badge and 2 gold badge for AnsweredCalls
+  And I should see I have 2 bronze badges, 1 silver badge and 1 gold badge for AverageHandlingTime
+  And I should see I have 3 bronze badges, 0 silver badge and 0 gold badge for Adherence
+
+@OnlyRunIfEnabled('WFM_Gamification_Create_Rolling_Periods_74866')
+Scenario: Show my badge in next period
+Given I have today badges with
+  | Badge type          | Bronze | Silver | Gold |
+  | AnsweredCalls       | 4      | 1      | 2    |
+  | AverageHandlingTime | 2      | 1      | 1    |
+  | Adherence           | 3      | 0      | 0    |
+When I am viewing week schedule
+Then I should see I have 9 bronze badge, 2 silver badge and 3 gold badge
+When I view badge details
+And I click next week
+Then I should see I have 0 bronze badges, 0 silver badge and 0 gold badge for AnsweredCalls
+And I should see I have 0 bronze badges, 0 silver badge and 0 gold badge for AverageHandlingTime
+And I should see I have 0 bronze badges, 0 silver badge and 0 gold badge for Adherence
+
+@OnlyRunIfEnabled('WFM_Gamification_Create_Rolling_Periods_74866')
+Scenario: Show my badge in previous period
+Given I have today badges with
+  | Badge type          | Bronze | Silver | Gold |
+  | AnsweredCalls       | 4      | 1      | 2    |
+  | AverageHandlingTime | 2      | 1      | 1    |
+  | Adherence           | 3      | 0      | 0    |
+When I am viewing week schedule
+Then I should see I have 9 bronze badge, 2 silver badge and 3 gold badge
+When I view badge details
+And I click previous week
+Then I should see I have 0 bronze badges, 0 silver badge and 0 gold badge for AnsweredCalls
+And I should see I have 0 bronze badges, 0 silver badge and 0 gold badge for AverageHandlingTime
+And I should see I have 0 bronze badges, 0 silver badge and 0 gold badge for Adherence

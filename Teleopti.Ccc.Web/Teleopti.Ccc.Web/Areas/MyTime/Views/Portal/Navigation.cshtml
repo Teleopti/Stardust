@@ -93,11 +93,11 @@
 								@if (Model.ShowBadgePeriodNavigator && Model.BadgeRollingPeriodSet.ToString() != "OnGoing")
 								{
 								<li id="badge-period-navigator">
-									<button class="period-arrow" data-bind="click: clickPrev">
+									<button id="previous-period" class="period-arrow" data-bind="click: clickPrev">
 										<i class="glyphicon glyphicon-chevron-left"></i>
 									</button>
 									<div class="period-text" data-bind="text: periodText"></div>
-									<button class="period-arrow" data-bind="click: clickNext">
+									<button id="next-period" class="period-arrow" data-bind="click: clickNext">
 										<i class="glyphicon glyphicon-chevron-right"></i>
 									</button>
 								</li>
