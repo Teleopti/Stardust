@@ -171,7 +171,8 @@ module.exports = env => {
 		}
 	]);
 
-	const preCleanUpPlugin = new CleanWebpackPlugin(['dist/*.map'], {
+	const preCleanFiles = isProd ? ['dist/*.map'] : [];
+	const preCleanUpPlugin = new CleanWebpackPlugin(preCleanFiles, {
 		verbose: false,
 		dry: false,
 		beforeEmit: true
