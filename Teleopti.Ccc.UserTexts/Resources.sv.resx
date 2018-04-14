@@ -15471,4 +15471,7 @@ Applikationen kommer nu att stängas. </value>
   <data name="ExcludedColon" xml:space="preserve">
     <value>Exkluderade:</value>
   </data>
+  <data name="NoAgentsWithIssuesFound" xml:space="preserve">
+    <value>Ingen agent med problem hittades</value>
+  </data>
 </root>

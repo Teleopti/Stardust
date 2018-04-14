@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
@@ -31,6 +32,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 			_blinker = new BlinkingToolStripButtonRenderer(toolStrip1);
 			if(!DesignMode)
 				SetTexts();
+			
 		}
 
 		public void InitAgentsNotPossibleToSchedule(RestrictionNotAbleToBeScheduledReport restrictionNotAbleToBeScheduledReport, SchedulerSplitters parent)
@@ -44,6 +46,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 			{
 				_translatedEnums.Add(keyValuePair);
 			}
+			
 		}
 
 		private void toolStripButtonRefreshClick(object sender, EventArgs e)
@@ -74,6 +77,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 
 		private void autoCreateIfNotToManyAgents()
 		{
+			toolStripLabelManySelected.Visible = false;
 			if (_selectedAgents.Count() <= 300)
 			{
 				toolStripLabelManySelected.Visible = false;
@@ -82,7 +86,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 			else
 			{
 				_blinker.BlinkButton(toolStripButtonRefresh, true);
-				toolStripLabelManySelected.Text = string.Format(toolStripLabelManySelected.Text, _selectedAgents.Count());
+				toolStripLabelManySelected.Text = string.Format(Resources.ManyAgentsAlert, _selectedAgents.Count());
 				toolStripLabelManySelected.Visible = true;
 			}
 		}
@@ -130,6 +134,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 			_parent.OnRestrictionsNotAbleToBeScheduledProgress(new ProgressChangedEventArgs(100, ""));
 			listViewResult.SuspendLayout();
 			listViewResult.Items.Clear();
+
+			if (!_result.Any())
+			{
+				toolStripLabelManySelected.Text = Resources.NoAgentsWithIssuesFound;
+				toolStripLabelManySelected.Visible = true;
+			}
 
 			foreach (var restrictionsAbleToBeScheduledResult in _result)
 			{

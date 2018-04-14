@@ -20663,6 +20663,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No agents with issues was found.
+        /// </summary>
+        public static string NoAgentsWithIssuesFound {
+            get {
+                return ResourceManager.GetString("NoAgentsWithIssuesFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No allowed business unit found in current database.
         /// </summary>
         public static string NoAllowedBusinessUnitFoundInCurrentDatabase {

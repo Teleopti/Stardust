@@ -17292,4 +17292,7 @@ The application will now exit.</value>
     <value>Gaming Period</value>
     <comment>Gaming Period</comment>
   </data>
+  <data name="NoAgentsWithIssuesFound" xml:space="preserve">
+    <value>No agents with issues was found</value>
+  </data>
 </root>
