@@ -6,7 +6,7 @@ import { of } from 'rxjs/observable/of';
 
 export interface PersonWithAppLogon {
 	Id: string;
-	FullName: string;
+	FullName?: string;
 	ApplicationLogon: string;
 }
 
@@ -20,6 +20,15 @@ export class AppLogonPageService {
 		map(people => this.mapPeopleWithFullName(people)),
 		flatMap(peopleWithName => this.joinPeopleWithAppLogon(peopleWithName))
 	);
+
+	public save(people: PeopleWithAppLogon) {
+		return this.appLogonService.persistLogonNames(
+			people.map(person => ({
+				ApplicationLogonName: person.ApplicationLogon,
+				PersonId: person.Id
+			}))
+		);
+	}
 
 	private joinPeopleWithAppLogon(peopleWithName) {
 		if (peopleWithName.length === 0) return of([]);

@@ -4,34 +4,14 @@ import { Person } from '../types';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-interface LogonFromNameQuery {
-	LogonName: string;
-}
-
-interface LogonFromNameResponse {
+interface PersonApplicationLogonModel {
+	ApplicationLogonName: string;
 	PersonId: string;
-	LogonName: string;
-	Identity: string;
-}
-
-interface LogonPerson {
-	PersonId: string;
-	ApplicationLogon: string;
 }
 
 interface PersistApplicationLogonNamesQuery {
-	People: LogonPerson[];
+	People: PersonApplicationLogonModel[];
 }
-
-interface ResListPerson {
-	PersonId: string;
-}
-
-interface PersistApplicationLogonNamesResponse {
-	ResultList: ResListPerson[];
-}
-
-interface LogonInfoSucess {}
 
 export interface LogonInfo {
 	PersonId: string;
@@ -44,6 +24,13 @@ export interface LogonInfoFromGuidsResponse extends Array<LogonInfo> {}
 @Injectable()
 export class AppLogonService {
 	constructor(private http: HttpClient) {}
+
+	persistLogonNames(people: PersonApplicationLogonModel[]) {
+		const body: PersistApplicationLogonNamesQuery = {
+			People: people
+		};
+		return this.http.post('../PersonInfo/PersistApplicationLogonNames', body);
+	}
 
 	getLogonInfo(personIdsToGet: string[]): Observable<LogonInfoFromGuidsResponse> {
 		return this.http.post('../PersonInfo/LogonInfoFromGuids', personIdsToGet) as Observable<

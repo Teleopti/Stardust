@@ -8,7 +8,7 @@ import {
 	ValidationErrors,
 	ValidatorFn
 } from '@angular/forms';
-import { AbstractControlOptions } from '@angular/forms/src/model';
+import { AbstractControlOptions, AbstractControl } from '@angular/forms/src/model';
 import { Observable, Subject } from 'rxjs';
 import { of } from 'rxjs/observable/of';
 import { first, map, switchMap, take, tap } from 'rxjs/operators';
@@ -138,9 +138,29 @@ export class AppLogonPageComponent implements OnDestroy, OnInit {
 		return this.logonForm.get('logons') as FormArray;
 	}
 
+	get appLogons(): AbstractControl[] {
+		return this.logons.controls.map(control => control.get('ApplicationLogon'));
+	}
+
+	revalidateLogons() {
+		this.appLogons.forEach(control => {
+			control.updateValueAndValidity();
+		});
+	}
+
 	isValid(): boolean {
 		return this.formValid && this.duplicationError === false;
 	}
 
-	save(): void {}
+	save(): void {
+		const people = this.logonForm.get('logons').value;
+		this.appLogonPageService.save(people).subscribe({
+			next: () => {
+				this.nav.navToSearch();
+			},
+			error: err => {
+				this.revalidateLogons();
+			}
+		});
+	}
 }
