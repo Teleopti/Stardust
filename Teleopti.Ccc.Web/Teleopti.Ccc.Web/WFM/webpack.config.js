@@ -216,6 +216,7 @@ module.exports = env => {
 							{
 								loader: 'sass-loader',
 								options: {
+									outputStyle: isProd ? 'compressed' : 'nested',
 									includePaths: ['node_modules/teleopti-styleguide/styleguide/sass']
 								}
 							}
