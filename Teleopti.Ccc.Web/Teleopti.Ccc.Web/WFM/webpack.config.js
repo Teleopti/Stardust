@@ -3,6 +3,7 @@ const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const ConcatPlugin = require('webpack-concat-plugin');
 const ExtraneousFileCleanupPlugin = require('webpack-extraneous-file-cleanup-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
@@ -170,7 +171,12 @@ module.exports = env => {
 		}
 	]);
 
-	const cleanUpPlugin = new ExtraneousFileCleanupPlugin({
+	const preCleanUpPlugin = new CleanWebpackPlugin(['dist/*.map'], {
+		verbose: false,
+		dry: false,
+		beforeEmit: true
+	});
+	const postCleanUpPlugin = new ExtraneousFileCleanupPlugin({
 		extensions: ['.js'],
 		paths: ['style_classic', 'style_dark'],
 		minBytes: 3500
@@ -220,7 +226,8 @@ module.exports = env => {
 			]
 		},
 		plugins: [
-			cleanUpPlugin,
+			preCleanUpPlugin,
+			postCleanUpPlugin,
 			concatJsModules,
 			concatJs,
 			concatDistCss,
