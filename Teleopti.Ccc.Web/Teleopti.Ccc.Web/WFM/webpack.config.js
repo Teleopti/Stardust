@@ -14,7 +14,8 @@ module.exports = env => {
 
 	const htmlPlugin = new HtmlWebpackPlugin({
 		message: 'this is a dev template :D',
-		template: isProd ? 'index.webpack.prod.html' : 'index.webpack.dev.html',
+		production: isProd,
+		template: './src/index.html',
 		filename: '../index.html',
 		// chunks: [] // no chunks
 		inject: false
