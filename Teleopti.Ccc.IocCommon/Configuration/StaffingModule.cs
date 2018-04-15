@@ -38,6 +38,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<SkillStaffingDataLoader>().As<ISkillStaffingDataLoader>().SingleInstance();
 			builder.RegisterType<ScheduledStaffingViewModelCreator>().SingleInstance();
+			builder.RegisterType<BacklogSkillTypesForecastCalculator>().SingleInstance();
 			builder.RegisterType<ImportBpoFile>().SingleInstance();
 			
 			if(_configuration.Toggle(Toggles.Forecast_FileImport_UnifiedFormat_46585))

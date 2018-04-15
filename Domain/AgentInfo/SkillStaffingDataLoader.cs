@@ -16,31 +16,51 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		private readonly ForecastedStaffingProvider _forecastedStaffingProvider;
 		private readonly ICurrentScenario _scenarioRepository;
 		private readonly ISkillDayRepository _skillDayRepository;
+		private readonly BacklogSkillTypesForecastCalculator _backlogSkillTypesForecastCalculator;
+		private readonly IUserTimeZone _userTimeZone;
 
 		public SkillStaffingDataLoader(ScheduledStaffingProvider scheduledStaffingProvider,
 			ForecastedStaffingProvider forecastedStaffingProvider,
-			ICurrentScenario scenarioRepository, ISkillDayRepository skillDayRepository)
+			ICurrentScenario scenarioRepository, ISkillDayRepository skillDayRepository, BacklogSkillTypesForecastCalculator backlogSkillTypesForecastCalculator, IUserTimeZone userTimeZone)
 		{
 			_scheduledStaffingProvider = scheduledStaffingProvider;
 			_forecastedStaffingProvider = forecastedStaffingProvider;
 			_scenarioRepository = scenarioRepository;
 			_skillDayRepository = skillDayRepository;
+			_backlogSkillTypesForecastCalculator = backlogSkillTypesForecastCalculator;
+			_userTimeZone = userTimeZone;
 		}
 
-		public IList<SkillStaffingData> Load(IList<ISkill> skills, DateOnlyPeriod period, bool useShrinkage, Func<DateOnly, bool> dayFilter = null)
+		public IList<SkillStaffingData> Load(IList<ISkill> skills, DateOnlyPeriod period, bool useShrinkage,
+			Func<DateOnly, bool> dayFilter = null)
 		{
 			var skillStaffingList = new List<SkillStaffingData>();
 			if (!skills.Any()) return skillStaffingList;
 
 			var resolution = skills.Min(s => s.DefaultResolution);
-			var skillDays = _skillDayRepository.FindReadOnlyRange(period.Inflate(1), skills,
-				_scenarioRepository.Current()).ToList();
-			var skillStaffingDatas = createSkillStaffingDatas(period, skills, resolution,
-				useShrinkage, skillDays, dayFilter);
+			var skillDays = _skillDayRepository.FindReadOnlyRange(period.Inflate(1), skills, _scenarioRepository.Current())
+				.ToList();
+
+			var skillDaysBySkills = new Dictionary<ISkill, IEnumerable<ISkillDay>>();
+			foreach (var skillDay in skillDays)
+			{
+				if (!skillDaysBySkills.ContainsKey(skillDay.Skill))
+				{
+					skillDaysBySkills.Add(skillDay.Skill, new List<ISkillDay>());
+				}
+
+				((List<ISkillDay>) skillDaysBySkills[skillDay.Skill]).Add(skillDay);
+			}
+
+			_backlogSkillTypesForecastCalculator.CalculateForecastedAgents(period.StartDate, useShrinkage, skillDaysBySkills, _userTimeZone.TimeZone());
+
+			var skillStaffingDatas = createSkillStaffingDatas(period, skills, resolution, useShrinkage,
+				skillDays, dayFilter);
 
 			skillStaffingList.AddRange(skillStaffingDatas);
 			return skillStaffingList;
 		}
+
 
 		private IEnumerable<SkillStaffingData> createSkillStaffingDatas(DateOnlyPeriod period, IList<ISkill> skills,
 			int resolution, bool useShrinkage, IList<ISkillDay> skillDays, Func<DateOnly, bool> dayFilter)

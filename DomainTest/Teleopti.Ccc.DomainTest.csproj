@@ -155,6 +155,7 @@
     <Compile Include="AgentInfo\Requests\OvertimeRequestDefaultStartTimeProviderTest.cs" />
     <Compile Include="AgentInfo\Requests\ShiftStartTimeProviderTest.cs" />
     <Compile Include="AgentInfo\Requests\ShiftEndTimeProviderTest.cs" />
+    <Compile Include="AgentInfo\SkillStaffingDataLoaderTest.cs" />
     <Compile Include="Aop\ThrowIfRepositoriesAreUsedOnTestFixtureTest.cs" />
     <Compile Include="Aop\ThrowIfRepositoriesAreUsedOnTestMethodTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IntradayRequestFilterWithNoValidatorTest.cs" />
