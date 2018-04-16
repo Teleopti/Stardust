@@ -81,8 +81,7 @@ $(document).ready(function() {
 		viewModel.hasPermissionToViewQRCode(false);
 		viewModel.featureCheck();
 		//let agent has view QRCode permission
-
-		equal(viewModel.isQRCodeForMobileAppsEnabled(), false);
+		
 		equal(viewModel.customMobileAppBaseUrl(), false);
 
 		viewModel.generateQRCode();

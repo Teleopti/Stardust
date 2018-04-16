@@ -7,7 +7,7 @@
 }
 <div class="container setting-padding">
 	<div id="settings" class="well well-sm row">
-		<div class="col-xs-12" data-bind="css: {'settings-input-border': isQRCodeForMobileAppsEnabled(),'col-sm-6': isQRCodeForMobileAppsEnabled(), 'col-sm-12': !isQRCodeForMobileAppsEnabled() }">
+		<div class="col-xs-12 col-sm-12">
 			<div class="clearfix">
 				<label for="CultureUi-Picker" class="col-xs-12 control-label">@Resources.Language</label>
 				<select id="CultureUi-Picker" class="col-xs-4 culture-setting" data-bind="foreach: cultures, select2: { value: selectedUiCulture }, enable: settingsLoaded ">
@@ -62,31 +62,5 @@
 				}
 			</div>
 		</div>
-		
-		<!-- ko if: isQRCodeForMobileAppsEnabled()-->
-		<div class="col-xs-12 col-sm-6 qrcode-container">
-			<label>@Resources.TeleoptiMobileApp</label>
-
-			<!-- ko if: customMobileAppBaseUrlError() -->
-			<p>@Resources.ErrorOccurredWhenGeneratingQrcode</p>
-			<!-- /ko -->
-
-			<!-- ko if: !customMobileAppBaseUrlError() -->
-			<div id="QRCodePlaceHolder"></div>
-
-			<h5>@Resources.UseTeleoptiMobileAppToScanThisQRCode 
-				<span dir="ltr">(
-				<a class="android-app-link" target="_blank" data-bind="attr:{href: androidAppLink()}"> Android
-					<div id="AndroidApp"></div>
-				</a>
-				 | 
-				<a class="ios-app-link" target="_blank" data-bind="attr:{href: iOSAppLink()}"> iOS
-					<div id="iOSApp"></div>
-				</a>
-				)</span>
-				</h5>
-			<!-- /ko -->
-		</div>
-		<!-- /ko -->
 	</div>
 </div>

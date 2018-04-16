@@ -34,7 +34,6 @@
 		MyTimeWeb_PreferenceForJalaliCalendar_42965,
 		MyTimeWeb_DayScheduleForStartPage_43446,
 		MyTimeWeb_DayScheduleForStartPage_Command_44209,
-		MyTimeWeb_ViewWFMAppGuide_43848,
 		MyTimeWeb_CalculateOvertimeProbabilityByPrimarySkill_44686,
 		MyTimeWeb_OvertimeRequest_44558,
 		MyTimeWeb_OvertimeRequestDefaultStartTime_47513,
