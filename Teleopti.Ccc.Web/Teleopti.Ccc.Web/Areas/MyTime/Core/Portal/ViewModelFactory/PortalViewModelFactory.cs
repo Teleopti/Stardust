@@ -113,7 +113,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 				CustomerName = customerName,
 				CurrentLogonAgentName = _personNameProvider.BuildNameFromSetting(person.Name),
 				ShowChangePassword = showChangePassword(),
-				ShowWFMAppGuide = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewQRCodeForConfiguration),
+				ShowWFMAppGuide = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewQRCodeForConfiguration)
+				&& _toggleManager.IsEnabled(Toggles.MyTimeWeb_ViewWFMAppGuide_43848),
 				AsmEnabled =
 					_permissionProvider.HasApplicationFunctionPermission(
 						DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger) && isAsmLicenseAvailable(),
