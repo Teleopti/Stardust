@@ -9,8 +9,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 	public class ScheduleProjectionReadOnlyUpdater :
 		IHandleEvent<ProjectionChangedEventForScheduleProjection>,
 		IHandleEvent<ProjectionChangedEvent>,
-		IRunOnHangfire,
-		IScheduleProjectionReadOnlyUpdater
+		IRunOnHangfire
 	{
 		private readonly ScheduleProjectionReadOnlyChecker _scheduleProjectionReadOnlyChecker;
 
@@ -30,12 +29,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 		{
 			_scheduleProjectionReadOnlyChecker.Execute(@event);
 		}
-	}
-
-	[RemoveMeWithToggle(Toggles.ResourcePlanner_SpeedUpEvents_75415)]
-	public interface IScheduleProjectionReadOnlyUpdater
-	{
-		void Handle(ProjectionChangedEvent @event);
-		void Handle(ProjectionChangedEventForScheduleProjection @event);
 	}
 }

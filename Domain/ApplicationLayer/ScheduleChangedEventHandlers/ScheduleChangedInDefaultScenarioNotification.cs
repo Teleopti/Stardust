@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.MessageBroker.Client;
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 {
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_SpeedUpEvents_75415)]
-	[DisabledBy(Toggles.ResourcePlanner_SpeedUpEvents_75415)]
 	public class ScheduleChangedInDefaultScenarioNotification : 
 		IHandleEvent<ProjectionChangedEvent>, 
 		IRunOnHangfire

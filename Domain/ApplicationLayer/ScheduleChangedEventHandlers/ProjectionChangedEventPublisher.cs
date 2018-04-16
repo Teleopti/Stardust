@@ -8,11 +8,29 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using log4net;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Logon;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 {
+	[RemoveMeWithToggle("Merge with base type", Toggles.ResourcePlanner_SpeedUpEvents_75415)]
+	[EnabledBy(Toggles.ResourcePlanner_SpeedUpEvents_75415)]
+	public class ProjectionChangedEventPublisherNew : ProjectionChangedEventPublisher
+	{
+		public ProjectionChangedEventPublisherNew(IEventPublisher publisher, IScenarioRepository scenarioRepository, IPersonRepository personRepository, IScheduleStorage scheduleStorage, IProjectionChangedEventBuilder projectionChangedEventBuilder, IProjectionVersionPersister projectionVersionPersister) : base(publisher, scenarioRepository, personRepository, scheduleStorage, projectionChangedEventBuilder, projectionVersionPersister)
+		{
+		}
+
+
+		public override void Handle(ScheduleChangedEvent @event)
+		{
+			var projectionChangedEvents = publishEvent<ProjectionChangedEventNew>(@event);
+			publishProjectChangedEventForShiftExchangeOffer(projectionChangedEvents);
+		}
+	}
+	
+	[DisabledBy(Toggles.ResourcePlanner_SpeedUpEvents_75415)]
 	public class ProjectionChangedEventPublisher : 
 		IHandleEvent<ScheduleChangedEvent>,
 		IHandleEvent<ScheduleInitializeTriggeredEventForScheduleProjection>,
@@ -55,7 +73,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		}
 
 		//put here for perf reasons
-		private void publishProjectChangedEventForShiftExchangeOffer(IEnumerable<ProjectionChangedEvent> projectionChangedEvents)
+		protected void publishProjectChangedEventForShiftExchangeOffer(IEnumerable<ProjectionChangedEventBase> projectionChangedEvents)
 		{
 			projectionChangedEvents.ForEach(e =>
 			{
@@ -95,7 +113,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		}
 
 
-		private IEnumerable<T> publishEvent<T>(ScheduleChangedEventBase @event) where T : ProjectionChangedEventBase, new()
+		protected IEnumerable<T> publishEvent<T>(ScheduleChangedEventBase @event) where T : ProjectionChangedEventBase, new()
 		{
 			var data = getData(@event);
 			if (data == null) return new T[]{};

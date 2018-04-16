@@ -8,7 +8,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 {
 	public class FakePersonScheduleDayReadModelPersister : IPersonScheduleDayReadModelPersister
 	{
-		public IEnumerable<PersonScheduleDayReadModel> Updated;
+		public IEnumerable<PersonScheduleDayReadModel> Updated = new List<PersonScheduleDayReadModel>();
+		public int NumberOfUpdatedCalls;
 
 		public bool IsInitialized()
 		{
@@ -18,6 +19,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		public void UpdateReadModels(DateOnlyPeriod period, Guid personId, Guid businessUnitId, IEnumerable<PersonScheduleDayReadModel> readModels, bool initialLoad)
 		{
 			Updated = readModels;
+			NumberOfUpdatedCalls++;
 		}
 
 		public int SaveReadModel(PersonScheduleDayReadModel model, bool initialLoad)

@@ -9,8 +9,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 	public class PersonScheduleDayReadModelUpdaterHangfire :
 		IHandleEvent<ProjectionChangedEvent>,
 		IHandleEvent<ProjectionChangedEventForPersonScheduleDay>,
-		IRunOnHangfire,
-		IPersonScheduleDayReadModelUpdaterHangfire
+		IRunOnHangfire
 	{
 		private readonly PersonScheduleDayReadModelUpdaterPersister _personScheduleDayReadModelUpdaterPersister;
 		
@@ -32,10 +31,4 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 		}
 	}
 
-	[RemoveMeWithToggle(Toggles.ResourcePlanner_SpeedUpEvents_75415)]
-	public interface IPersonScheduleDayReadModelUpdaterHangfire
-	{
-		void Handle(ProjectionChangedEvent @event);
-		void Handle(ProjectionChangedEventForPersonScheduleDay @event);
-	}
 }

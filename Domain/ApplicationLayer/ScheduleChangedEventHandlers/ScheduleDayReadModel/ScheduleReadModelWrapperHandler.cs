@@ -11,13 +11,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 	public class ScheduleReadModelWrapperHandler :
 		IHandleEvent<ProjectionChangedEventForScheduleProjection>,
 		IHandleEvent<ProjectionChangedEventForPersonScheduleDay>,
-		IHandleEvent<ProjectionChangedEvent>,
+		IHandleEvent<ProjectionChangedEventNew>,
 		IHandleEvent<ProjectionChangedEventForScheduleDay>,
-		IRunOnHangfire,
-		IScheduleDayReadModelHandlerHangfire,
-		IPersonScheduleDayReadModelUpdaterHangfire,
-		IScheduleProjectionReadOnlyUpdater,
-		IScheduleChangesPublisherHangfire
+		IRunOnHangfire
 	{
 		private readonly ScheduleDayReadModelPersister _scheduleDayReadModelPersister;
 		private readonly PersonScheduleDayReadModelUpdaterPersister _personScheduleDayReadModelUpdaterPersister;
@@ -37,7 +33,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 
 		[ImpersonateSystem]
 		[UnitOfWork]
-		public virtual void Handle(ProjectionChangedEvent @event)
+		public virtual void Handle(ProjectionChangedEventNew @event)
 		{
 			_scheduleDayReadModelPersister?.Execute(@event);
 			_personScheduleDayReadModelUpdaterPersister?.Execute(@event);

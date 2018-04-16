@@ -52,7 +52,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		
 		[Test]
 		[RemoveMeWithToggle(Toggles.ResourcePlanner_SpeedUpEvents_75415)]
-		[Ignore("#75415 Make sure old events/jobs in db works after upgrade")]
 		public void ShouldHandleScheduleChangedEventIfOldHangfireJobsExist()
 		{
 			var scenario = new Scenario{DefaultScenario = true}.WithId();

@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 			_signatureCreator = signatureCreator;
 		}
 
-		public void Send(ProjectionChangedEvent @event)
+		public void Send(ProjectionChangedEventBase @event)
 		{
 			if (!@event.IsDefaultScenario) return;
 

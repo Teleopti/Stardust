@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 			_trackingMessageSender = trackingMessageSender;
 		}
 
-		public void Execute(ProjectionChangedEvent @event)
+		public void Execute(ProjectionChangedEventBase @event)
 		{
 			createReadModel(@event);
 			if (_trackingMessageSender != null && @event.CommandId != Guid.Empty)
