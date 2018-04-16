@@ -25,10 +25,17 @@ import {
 	RolePage,
 	SearchPageComponent,
 	TitleBarComponent,
-	WorkspaceComponent
+	WorkspaceComponent,
+	PlaygroundComponent
 } from './components';
-import { NavigationService, RolesService, SearchService, WorkspaceService, AppLogonService } from './services';
-import { SearchOverridesService } from './services/search-overrides.service';
+import {
+	NavigationService,
+	RolesService,
+	SearchService,
+	WorkspaceService,
+	AppLogonService,
+	SearchOverridesService
+} from './services';
 
 @NgModule({
 	declarations: [
@@ -42,7 +49,8 @@ import { SearchOverridesService } from './services/search-overrides.service';
 		WorkspaceComponent,
 		TitleBarComponent,
 		PageContainerComponent,
-		AppLogonPageComponent
+		AppLogonPageComponent,
+		PlaygroundComponent
 	],
 	imports: [
 		SharedModule,
@@ -72,7 +80,8 @@ import { SearchOverridesService } from './services/search-overrides.service';
 		SearchPageComponent,
 		GrantPageComponent,
 		RevokePageComponent,
-		AppLogonPageComponent
+		AppLogonPageComponent,
+		PlaygroundComponent
 	]
 })
 export class PeopleModule {

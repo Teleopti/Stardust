@@ -10,9 +10,10 @@ import {
 	SearchPageComponent,
 	GrantPageComponent,
 	RevokePageComponent,
-	AppLogonPageComponent
+	AppLogonPageComponent,
+	PlaygroundComponent,
+	TitleBarComponent
 } from './app/people/components';
-import { TitleBarComponent } from './app/people/components/title-bar/title-bar.component';
 import { AppModule } from './app/app.module';
 
 export interface IWfmRootScopeService extends IRootScopeService {
@@ -95,6 +96,9 @@ wfm.directive('ng2PeopleRevokePage', downgradeComponent({
 wfm.directive('ng2PeopleAppLogonPage', downgradeComponent({
 	component: AppLogonPageComponent
 }) as angular.IDirectiveFactory);
+wfm.directive('ng2PeoplePlayground', downgradeComponent({
+	component: PlaygroundComponent
+}) as angular.IDirectiveFactory);
 
 wfm
 	.config([
@@ -116,9 +120,12 @@ wfm
 
 			$stateProvider.state('main', {
 				url: '/',
-				templateProvider: ['$templateRequest', function(templateRequest){
-					return templateRequest("html/main.html");
-				}]
+				templateProvider: [
+					'$templateRequest',
+					function(templateRequest) {
+						return templateRequest('html/main.html');
+					}
+				]
 			});
 
 			$translateProvider.useSanitizeValueStrategy('sanitizeParameters');
