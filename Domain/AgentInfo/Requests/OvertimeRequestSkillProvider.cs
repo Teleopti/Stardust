@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.AgentInfo.Requests
@@ -13,13 +15,13 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		private readonly IPrimaryPersonSkillFilter _primaryPersonSkillFilter;
 		private readonly PersonalSkills _personalSkills = new PersonalSkills();
 		private readonly ISkillTypeRepository _skillTypeRepository;
-		private readonly INow _now;
+		private readonly IOvertimeRequestOpenPeriodMerger _overtimeRequestOpenPeriodMerger;
 
-		public OvertimeRequestSkillProvider(IPrimaryPersonSkillFilter primaryPersonSkillFilter, ISkillTypeRepository skillTypeRepository, INow now)
+		public OvertimeRequestSkillProvider(IPrimaryPersonSkillFilter primaryPersonSkillFilter, ISkillTypeRepository skillTypeRepository, IOvertimeRequestOpenPeriodMerger overtimeRequestOpenPeriodMerger)
 		{
 			_primaryPersonSkillFilter = primaryPersonSkillFilter;
 			_skillTypeRepository = skillTypeRepository;
-			_now = now;
+			_overtimeRequestOpenPeriodMerger = overtimeRequestOpenPeriodMerger;
 		}
 
 		public IEnumerable<ISkill> GetAvailableSkillsBySkillType(IPerson person, DateTimePeriod requestPeriod)
@@ -35,38 +37,31 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			if (!personPeriod.Any())
 				return new IPersonSkill[] { };
 
-			var overtimeRequestOpenPeriods = person.WorkflowControlSet.OvertimeRequestOpenPeriods.Where(o => isPeriodMatched(o, person, period));
-
 			var phoneSkillType = _skillTypeRepository.LoadAll()
 				.FirstOrDefault(s => s.Description.Name.Equals(SkillTypeIdentifier.Phone));
 
+			var mergedOvertimeRequestOpenPeriods = _overtimeRequestOpenPeriodMerger
+				.GetMergedOvertimeRequestOpenPeriods(person.WorkflowControlSet.OvertimeRequestOpenPeriods,
+					person.PermissionInformation, period).Where(p => p.AutoGrantType != OvertimeRequestAutoGrantType.Deny);
+
 			var personSkills = personPeriod.SelectMany(p => _personalSkills.PersonSkills(p)).Where(p =>
-				isSkillTypeMatchedInOpenPeriods(p, overtimeRequestOpenPeriods, phoneSkillType)).ToList();
+				isSkillTypeMatchedInOpenPeriods(p, mergedOvertimeRequestOpenPeriods, phoneSkillType)).ToList();
 
 			return !personSkills.Any() ? new IPersonSkill[] { } : personSkills.Distinct();
 		}
 
 		private bool isSkillTypeMatchedInOpenPeriods(IPersonSkill personSkill,
-			IEnumerable<IOvertimeRequestOpenPeriod> overtimeRequestOpenPeriods, ISkillType defaultSkillType)
+			IEnumerable<OvertimeRequestSkillTypeFlatOpenPeriod> overtimeRequestOpenPeriods, ISkillType defaultSkillType)
 		{
 			return overtimeRequestOpenPeriods.Any(o =>
 				{
-					if (o.PeriodSkillTypes != null && o.PeriodSkillTypes.Any())
+					if (o.SkillType != null)
 					{
-						return o.PeriodSkillTypes.Any(p =>
-							p.SkillType.Equals(personSkill.Skill.SkillType));
+						return o.SkillType.Equals(personSkill.Skill.SkillType);
 					}
 					return defaultSkillType.Equals(personSkill.Skill.SkillType);
 				}
 			);
-		}
-
-		private bool isPeriodMatched(IOvertimeRequestOpenPeriod overtimeRequestOpenPeriod, IPerson person,
-			DateOnlyPeriod requestPeriod)
-		{
-			var openPeriod = overtimeRequestOpenPeriod.GetPeriod(new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(),
-				person.PermissionInformation.DefaultTimeZone())));
-			return requestPeriod.Intersection(openPeriod).HasValue;
 		}
 	}
 }

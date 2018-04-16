@@ -1,38 +1,48 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests;
-using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Intraday;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl
 {
-	public class OvertimeRequestOpenPeriodMerger
+	public class OvertimeRequestOpenPeriodMerger : IOvertimeRequestOpenPeriodMerger
 	{
-		public OvertimeRequestSkillTypeFlatOpenPeriod Merge(IEnumerable<OvertimeRequestSkillTypeFlatOpenPeriod> overtimeRequestOpenPeriods)
+		private readonly ISkillTypeRepository _skillTypeRepository;
+		private readonly INow _now;
+
+		public OvertimeRequestOpenPeriodMerger(ISkillTypeRepository skillTypeRepository, INow now)
 		{
-			if (overtimeRequestOpenPeriods.IsNullOrEmpty())
-				return null;
-
-			var mergedOvertimeRequestOpenPeriod = new OvertimeRequestSkillTypeFlatOpenPeriod
-			{
-				AutoGrantType = OvertimeRequestAutoGrantType.Yes
-			};
-
-			foreach (var overtimeRequestOpenPeriod in overtimeRequestOpenPeriods)
-			{
-				if (prioritizedAutoGrantTypes.IndexOf(overtimeRequestOpenPeriod.AutoGrantType) <=
-					prioritizedAutoGrantTypes.IndexOf(mergedOvertimeRequestOpenPeriod.AutoGrantType))
-				{
-					mergedOvertimeRequestOpenPeriod.AutoGrantType = overtimeRequestOpenPeriod.AutoGrantType;
-					mergedOvertimeRequestOpenPeriod.DenyReason = overtimeRequestOpenPeriod.DenyReason;
-					mergedOvertimeRequestOpenPeriod.EnableWorkRuleValidation = overtimeRequestOpenPeriod.EnableWorkRuleValidation;
-					mergedOvertimeRequestOpenPeriod.WorkRuleValidationHandleType = overtimeRequestOpenPeriod.WorkRuleValidationHandleType;
-					mergedOvertimeRequestOpenPeriod.SkillType = overtimeRequestOpenPeriod.SkillType;
-					mergedOvertimeRequestOpenPeriod.OriginPeriod = overtimeRequestOpenPeriod.OriginPeriod;
-				}
-			}
-			return mergedOvertimeRequestOpenPeriod;
+			_skillTypeRepository = skillTypeRepository;
+			_now = now;
 		}
 
-		private static IList<OvertimeRequestAutoGrantType> prioritizedAutoGrantTypes =>
-			new List<OvertimeRequestAutoGrantType> { OvertimeRequestAutoGrantType.Deny, OvertimeRequestAutoGrantType.No, OvertimeRequestAutoGrantType.Yes };
+		public List<OvertimeRequestSkillTypeFlatOpenPeriod> GetMergedOvertimeRequestOpenPeriods(IEnumerable<IOvertimeRequestOpenPeriod> overtimeRequestOpenPeriods,
+			IPermissionInformation permissionInformation, DateOnlyPeriod period)
+		{
+			var phoneSkillType = _skillTypeRepository.LoadAll()
+				.FirstOrDefault(s => s.Description.Name.Equals(SkillTypeIdentifier.Phone));
+
+			var overtimeRequestOpenPeriodGroups =
+				new SkillTypeFlatOvertimeOpenPeriodMapper().Map(overtimeRequestOpenPeriods, phoneSkillType)
+					.GroupBy(o => o.SkillType ?? phoneSkillType);
+
+			var mergedOvertimeRequestOpenPeriods = new List<OvertimeRequestSkillTypeFlatOpenPeriod>();
+			foreach (var overtimeRequestOpenPeriodSkillTypeGroup in overtimeRequestOpenPeriodGroups)
+			{
+				var overtimePeriodProjection = new OvertimeRequestPeriodProjection(
+					overtimeRequestOpenPeriodSkillTypeGroup.OrderBy(o => o.OrderIndex).ToList(),
+					permissionInformation.Culture(),
+					permissionInformation.UICulture(),
+					new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), permissionInformation.DefaultTimeZone())));
+				var openPeriods = overtimePeriodProjection.GetProjectedOvertimeRequestsOpenPeriods(period);
+
+				mergedOvertimeRequestOpenPeriods.Add(openPeriods.OrderBy(o => o.OrderIndex).Last());
+			}
+			return mergedOvertimeRequestOpenPeriods;
+		}
 	}
 }

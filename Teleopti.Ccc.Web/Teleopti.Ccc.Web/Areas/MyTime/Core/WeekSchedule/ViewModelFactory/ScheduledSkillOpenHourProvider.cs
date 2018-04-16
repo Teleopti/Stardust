@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
@@ -41,18 +40,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 				return null;
 			var validScheduleDays = scheduleDays.OrderBy(s => s.DateOnlyAsPeriod.DateOnly)
 				.Where(s => staffingDataAvailablePeriod.Value.Contains(s.DateOnlyAsPeriod.DateOnly)).ToList();
-			var days = validScheduleDays.Select(s => s.DateOnlyAsPeriod.DateOnly).ToArray();
-
-			var period = new DateOnlyPeriod(days.First(), days.Last());
-			var personSkills = getPersonSkills(period);
-			if (personSkills == null || !personSkills.Any())
-				return null;
 
 			TimeSpan? startTime = null;
 			TimeSpan? endTime = null;
 			foreach (var scheduleDay in validScheduleDays)
 			{
-				var result = GetSkillOpenHourPeriodByDate(personSkills, scheduleDay);
+				var result = GetSkillOpenHourPeriod(scheduleDay);
 				if (result == null) continue;
 
 				if (!startTime.HasValue || startTime.Value > result.Value.StartTime)
@@ -134,8 +127,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			foreach (var day in days)
 			{
 				var skillTypesInPeriod = _overtimeRequestOpenPeriodProvider.GetOvertimeRequestOpenPeriods(person,
-						day.ToDateTimePeriod(personTimeZone)).Where(o => o.AutoGrantType != OvertimeRequestAutoGrantType.Deny)
-					.Select(o => o.SkillType ?? phoneSkillType);
+						day.ToDateTimePeriod(personTimeZone)).Select(o => o.SkillType ?? phoneSkillType);
 				skillTypes.AddRange(skillTypesInPeriod);
 			}
 

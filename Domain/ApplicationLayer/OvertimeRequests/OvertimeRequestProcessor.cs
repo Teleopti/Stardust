@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			var projectedOvertimeRequestsOpenPeriods =
 				overtimePeriodProjection.GetProjectedOvertimeRequestsOpenPeriods(dateOnlyPeriod);
 
-			return new OvertimeRequestOpenPeriodMerger().Merge(projectedOvertimeRequestsOpenPeriods);
+			return projectedOvertimeRequestsOpenPeriods.OrderBy(o => o.OrderIndex).Last();
 		}
 
 		private ISkillType getDefaultSkillType()

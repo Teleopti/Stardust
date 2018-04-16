@@ -58,6 +58,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<OvertimeRequestContractWorkRulesValidator>().As<IOvertimeRequestContractWorkRulesValidator>().SingleInstance();
 			builder.RegisterType<OvertimeRequestAvailableSkillsValidator>().As<IOvertimeRequestAvailableSkillsValidator>().SingleInstance();
 			builder.RegisterType<FilterRequestsWithDifferentVersion>().As<IFilterRequestsWithDifferentVersion>().SingleInstance();
+			builder.RegisterType<OvertimeRequestOpenPeriodMerger>().As<IOvertimeRequestOpenPeriodMerger>().SingleInstance();
 
 			builder.RegisterType<AbsenceRequestStrategyProcessor>().As<IAbsenceRequestStrategyProcessor>().SingleInstance();
 			builder.RegisterType<DenyLongQueuedAbsenceRequests>().As<DenyLongQueuedAbsenceRequests>().SingleInstance();

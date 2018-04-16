@@ -818,7 +818,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			getTarget().Process(personRequest);
 
-			personRequest.IsDenied.Should().Be.True();
+			personRequest.IsApproved.Should().Be.True();
 		}
 
 		[Test]

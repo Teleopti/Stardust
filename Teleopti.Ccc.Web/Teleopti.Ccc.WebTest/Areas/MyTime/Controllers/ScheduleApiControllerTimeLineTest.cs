@@ -71,7 +71,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 		}
 
-
 		[Test]
 		public void ShouldAdjustTimelineForOverTimeWhenSiteOpenHourPeriodContainsSchedulePeriod()
 		{
@@ -289,6 +288,55 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			AssertTimeLine(result.TimeLine.ToList(), 0, 0, 23, 59);
 		}
+
+		[Test]
+		[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
+		[Toggle(Toggles.OvertimeRequestSupportMultiSelectionSkillTypes_74945)]
+		public void ShouldAdjustTimelineForWeekScheduleByNotDeniedSkillType()
+		{
+			Now.Is(new DateTime(2018, 2, 5, 8, 0, 0, DateTimeKind.Utc));
+
+			var phoneSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony)
+				.WithId();
+			var emailSkillType = new SkillTypeEmail(new Description(SkillTypeIdentifier.Email), ForecastSource.Email).WithId();
+
+			var workflowControlSet = new WorkflowControlSet();
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new ISkillType[] { phoneSkillType , emailSkillType })
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
+				BetweenDays = new MinMax<int>(0, 7),
+				OrderIndex = 1
+			});
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { emailSkillType })
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.Deny,
+				BetweenDays = new MinMax<int>(0, 7),
+				OrderIndex = 2
+			});
+			User.CurrentUser().WorkflowControlSet = workflowControlSet;
+
+			var phone = addSkill(TimeSpan.FromHours(8), TimeSpan.FromHours(17));
+			var email = addSkill(TimeSpan.Zero, TimeSpan.FromDays(1));
+			phone.SkillType = phoneSkillType;
+			email.SkillType = emailSkillType;
+
+			var day = DateHelper.GetFirstDateInWeek(Now.UtcDateTime().Date, CultureInfo.CurrentCulture);
+			for (var i = 0; i < 14; i++)
+			{
+				day = day.AddDays(i);
+				var period1 = new DateTimePeriod(day.AddHours(6).AddMinutes(15),
+					day.AddHours(9).AddMinutes(45));
+				var period2 = new DateTimePeriod(day.AddHours(10).AddMinutes(15),
+					day.AddHours(10).AddMinutes(45));
+				addAssignment(new DateOnly(day), period1, phone.Activity);
+				addAssignment(new DateOnly(day), period2, email.Activity);
+			}
+
+			var result = Target.FetchWeekData(new DateOnly(2018, 2, 5), StaffingPossiblityType.Overtime);
+
+			AssertTimeLine(result.TimeLine.ToList(), 6, 0, 17, 15);
+		}
+
 
 		[Test]
 		[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]

@@ -13,13 +13,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 	public class OvertimeRequestOpenPeriodValidator : IOvertimeRequestValidator
 	{
 		private readonly ISkillTypeRepository _skillTypeRepository;
-		private readonly INow _now;
+		private readonly IOvertimeRequestOpenPeriodMerger _overtimeRequestOpenPeriodMerger;
 		private readonly PersonalSkills _personalSkills = new PersonalSkills();
 
-		public OvertimeRequestOpenPeriodValidator(INow now, ISkillTypeRepository skillTypeRepository)
+		public OvertimeRequestOpenPeriodValidator(ISkillTypeRepository skillTypeRepository, IOvertimeRequestOpenPeriodMerger overtimeRequestOpenPeriodMerger)
 		{
-			_now = now;
 			_skillTypeRepository = skillTypeRepository;
+			_overtimeRequestOpenPeriodMerger = overtimeRequestOpenPeriodMerger;
 		}
 
 		public OvertimeRequestValidationResult Validate(OvertimeRequestValidationContext context)
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 					InvalidReasons = new[] {Resources.ThereIsNoAvailableSkillForOvertime}
 				};
 
-			var mergedOvertimeRequestOpenPeriods = getMergedOvertimeRequestOpenPeriods(overtimeRequestOpenPeriodSkillTypeGroups,
+			var mergedOvertimeRequestOpenPeriods = _overtimeRequestOpenPeriodMerger.GetMergedOvertimeRequestOpenPeriods(overtimeRequestOpenPeriods,
 				permissionInformation, dateOnlyPeriod);
 			if (mergedOvertimeRequestOpenPeriods.All(o => o.AutoGrantType == OvertimeRequestAutoGrantType.Deny))
 			{
@@ -60,24 +60,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			{
 				IsValid = true
 			};
-		}
-
-		private List<OvertimeRequestSkillTypeFlatOpenPeriod> getMergedOvertimeRequestOpenPeriods(
-			IEnumerable<IGrouping<ISkillType, OvertimeRequestSkillTypeFlatOpenPeriod>> overtimeRequestOpenPeriodSkillTypeGroups,
-			IPermissionInformation permissionInformation, DateOnlyPeriod dateOnlyPeriod)
-		{
-			var mergedOvertimeRequestOpenPeriods = new List<OvertimeRequestSkillTypeFlatOpenPeriod>();
-			foreach (var overtimeRequestOpenPeriodSkillTypeGroup in overtimeRequestOpenPeriodSkillTypeGroups)
-			{
-				var overtimePeriodProjection = new OvertimeRequestPeriodProjection(
-					overtimeRequestOpenPeriodSkillTypeGroup.OrderBy(o => o.OrderIndex).ToList(),
-					permissionInformation.Culture(),
-					permissionInformation.UICulture(),
-					new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), permissionInformation.DefaultTimeZone())));
-				var openPeriods = overtimePeriodProjection.GetProjectedOvertimeRequestsOpenPeriods(dateOnlyPeriod);
-				mergedOvertimeRequestOpenPeriods.Add(new OvertimeRequestOpenPeriodMerger().Merge(openPeriods));
-			}
-			return mergedOvertimeRequestOpenPeriods;
 		}
 
 		private IEnumerable<IGrouping<ISkillType, OvertimeRequestSkillTypeFlatOpenPeriod>>

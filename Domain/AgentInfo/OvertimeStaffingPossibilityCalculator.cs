@@ -29,13 +29,16 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		{
 			var person = _loggedOnUser.CurrentUser();
 			var defaultTimeZone = person.PermissionInformation.DefaultTimeZone();
-			var dateTimePeriod = period.ToDateTimePeriod(defaultTimeZone);
 
-			var skills = _overtimeRequestSkillProvider.GetAvailableSkillsBySkillType(person, dateTimePeriod).ToList();
+			var skills = new List<ISkill>();
+			foreach (var date in period.DayCollection())
+			{
+				skills.AddRange(_overtimeRequestSkillProvider.GetAvailableSkillsBySkillType(person, date.ToDateTimePeriod(defaultTimeZone)).ToList());
+			}
 
 			var useShrinkage = true;
 
-			var skillStaffingDatas = _skillStaffingDataLoader.Load(skills, period, useShrinkage, isSiteOpened);
+			var skillStaffingDatas = _skillStaffingDataLoader.Load(skills.Distinct().ToList(), period, useShrinkage, isSiteOpened);
 
 			var filteredSkillStaffingDatas = _skillStaffingDataSkillTypeFilter.Filter(skillStaffingDatas);
 
