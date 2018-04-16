@@ -73,7 +73,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 		[HttpGet, Route("Etl/ShouldEtlToolBeVisible")]
 		public IHttpActionResult ShouldEtlToolBeVisible()
 		{
-			return Json(_toggleManager.IsEnabled(Toggles.ETL_Show_Web_Based_ETL_Tool_46880));
+			return Json(_toggleManager.IsEnabled(Toggles.ETL_Show_Web_Based_ETL_Tool_75530));
 		}
 
 		[TenantUnitOfWork]

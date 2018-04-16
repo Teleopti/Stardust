@@ -83,7 +83,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 			comboBoxJob.DataSource = jobCollection;
 			comboBoxJob.DisplayMember = "Name";
 			comboBoxJob.ValueMember = "Name";
-			_isWebBasedEtlToolInUse =container.ToggleManager.IsEnabled(Toggles.ETL_Show_Web_Based_ETL_Tool_46880);
+			_isWebBasedEtlToolInUse =container.ToggleManager.IsEnabled(Toggles.ETL_Show_Web_Based_ETL_Tool_75530);
 		}
 
 		private void fillDataSourceCombo()
