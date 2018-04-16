@@ -4,7 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
+namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakePersonScheduleDayReadModelPersister : IPersonScheduleDayReadModelPersister
 	{

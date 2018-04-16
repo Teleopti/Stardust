@@ -59,7 +59,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<FakePersonScheduleDayReadModelPersister>().For<IPersonScheduleDayReadModelPersister>();
 			system.UseTestDouble<scheduleChangesSubscriptionPublisherDummy>().For<ScheduleChangesSubscriptionPublisher>();
 		}
 

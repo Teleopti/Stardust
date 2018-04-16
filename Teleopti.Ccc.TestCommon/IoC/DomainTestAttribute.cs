@@ -2,6 +2,7 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Collection;
@@ -262,6 +263,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				system.UseTestDouble<FakeTeamGamificationSettingRepository>().For<ITeamGamificationSettingRepository>();
 				system.UseTestDouble<FakeAgentBadgeRepository>().For<IAgentBadgeRepository>();
 				system.UseTestDouble<SkillIntradayStaffingFactory>().For<SkillIntradayStaffingFactory>();
+				system.UseTestDouble<FakePersonScheduleDayReadModelPersister>().For<IPersonScheduleDayReadModelPersister>();
 			}
 
 			system.UseTestDouble<ScheduleStorageRepositoryWrapper>().For<IScheduleStorageRepositoryWrapper>();
