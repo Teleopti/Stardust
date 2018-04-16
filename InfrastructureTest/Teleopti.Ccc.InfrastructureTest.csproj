@@ -245,7 +245,7 @@
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\AgentState\Reader\OrderNameTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\AgentState\Reader\OrderTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\AgentState\Reader\TextFilterTest.cs" />
-    <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\AgentState\Reader\WithNamestest.cs" />
+    <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\AgentState\Reader\WithNamesTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\AgentState\TeamCardReaderAgentsCountTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\AgentState\TeamCardReaderBusinessUnitTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\AgentState\TeamCardReaderNameTest.cs" />
