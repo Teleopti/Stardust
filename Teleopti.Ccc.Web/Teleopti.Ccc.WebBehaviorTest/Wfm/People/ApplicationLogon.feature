@@ -23,7 +23,7 @@ Background:
 	And I have selected person 'Anthony'
 	And I have selected person 'Abraham'
 
-@ignore
+
 Scenario: Change application logon for people
 	When I navigate to application logon page
 	Then The application logon page is shown

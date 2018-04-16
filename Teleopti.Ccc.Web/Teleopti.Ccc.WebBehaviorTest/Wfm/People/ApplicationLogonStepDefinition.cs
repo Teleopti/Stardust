@@ -4,10 +4,15 @@ using System.Linq;
 using System.Text;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
+using Teleopti.Ccc.Infrastructure.Security;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
+using PersonPeriodConfigurable = Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable.PersonPeriodConfigurable;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Wfm.People
 {
@@ -17,14 +22,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.People
 		[Given("Person '(.*)' has app logon name '(.*)'")]
 		public void PersonXHasAppLogonNameY(string name, string logonName)
 		{
-			DataMaker.Person(name).Set(logonName);
+			var person = DataMaker.Person(name);
+
+			using (LocalSystem.TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
+			{
+				var tenant = LocalSystem.CurrentTenantSession.CurrentSession().Query<Tenant>().FirstOrDefault();
+				var pi = new PersonInfo(tenant, person.Person.Id.GetValueOrDefault());
+				pi.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), logonName, "paZZwordz", new OneWayEncryption());
+				new PersistTenant(LocalSystem.CurrentTenantSession).Persist(pi);
+			}
 		}
 
 
 		[When("I navigate to application logon page")]
 		public void INavigateToApplicationLogon()
 		{
-			Browser.Interactions.AssertExists("[data-test-applicationlogon-button]");
+			Browser.Interactions.AssertExists("[data-test-applicationlogon-button]:not([disabled])");
 			Browser.Interactions.Javascript("document.querySelector('[data-test-applicationlogon-button]').click()");
 		}
 
@@ -34,8 +47,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.People
 		{
 			Browser.Interactions.Javascript($@"
 				Array.from(document.querySelectorAll('[data-test-person]'))
-				.find(r => r.textContent.includes('{name}'))
-				.value = '{appLogon}'	
+					.find(r => r.querySelector('[data-test-person-name]').value.includes('{name}'))
+					.querySelector('[data-test-person-logon]').value = '{appLogon}'
 			");
 		}
 
@@ -68,7 +81,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.People
 		[Then("I should not the see the application logon page")]
 		public void ApplicationLogonPageIsNotShown()
 		{
-			Browser.Interactions.AssertNotExists("", "[data-test-application-logon]");
+			Browser.Interactions.AssertUrlNotContains("","access/applicationlogon");
 		}
 
 	}

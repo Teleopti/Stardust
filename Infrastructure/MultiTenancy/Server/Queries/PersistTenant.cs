@@ -15,5 +15,10 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 		{
 			_currentTenantSession.CurrentSession().Save(tenant);
 		}
+
+		public void Persist(PersonInfo personInfo)
+		{
+			_currentTenantSession.CurrentSession().Save(personInfo);
+		}
 	}
 }
