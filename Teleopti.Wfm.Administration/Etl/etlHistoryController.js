@@ -23,6 +23,7 @@
 		vm.status = null;
 
 		vm.selectedTenantChanged = selectedTenantChanged;
+		vm.buildError = buildError;
 		vm.getHistoryForTenant = getHistoryForTenant;
 		vm.copy = copy;
 
@@ -94,9 +95,12 @@
 				.get("./Etl/GetjobRunning", tokenHeaderService.getHeaders())
 				.success(function (data) {
 					vm.status = data;
+					if (vm.status != null) {
+						vm.status.formatedTime = moment(vm.status.StartTime).local().format('HH:mm');
+					}
 					pollStatus();
 				});
-			}, 30000 );
+			}, 20000 );
 		}
 
 		function getHistoryForTenant() {
@@ -132,7 +136,27 @@
 			});
 		}
 
-		function copy(root){
+		function buildError(root) {
+			root.ConstructedError = null;
+			root.ConstructedError = `
+EXCEPTION MESSAGE
+` + root.ErrorMessage + `
+===========================
+EXCEPTION STACKTRACE
+` + root.ErrorStackTrace + `
+===========================
+INNER EXCEPTION MESSAGE
+` + root.InnerErrorMessage + `
+===========================
+INNER EXCEPTION STACKTRACE
+` + root.InnerErrorStackTrace + `
+===========================
+`;
+			console.log(root);
+		}
+
+		function copy(root) {
+			buildError(root);
 			root.Copied = true;
 			$timeout( function(){
 				root.Copied = false;

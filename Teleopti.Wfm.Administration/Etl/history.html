@@ -22,7 +22,7 @@
 			<div class="panel-heading">
 				Settings
 				<span class="pull-right" ng-if="vm.status == null">No jobs running</span>
-				<span class="pull-right" ng-if="vm.status !== null">{{vm.status}} running</span>
+				<span class="pull-right" ng-if="vm.status !== null">{{vm.status.JobName}} job started running at {{vm.status.formatedTime}}</span>
 			</div>
 			<div class="panel-body text-container">
 				<div class="row">
@@ -157,9 +157,9 @@
 									<td>
 										{{job.ScheduleName}}
 									</td>
-									<td style="color:tomato;" class="cop" ng-click="$event.stopPropagation()">
+									<td style="color:tomato;" class="cop" ng-click="$event.stopPropagation()" >
 
-										<div class="cop" ngclipboard data-clipboard-text="{{job.ErrorStackTrace}}" ng-if="job.ErrorMessage" ng-click="vm.copy(job);">
+										<div class="cop" ng-init="vm.buildError(job);" ngclipboard data-clipboard-text="{{job.ConstructedError}}"  ng-if="job.ErrorMessage" ng-click="vm.copy(job);">
 											<svg style="width:24px;height:24px" viewBox="0 0 24 24" ng-if="!job.Copied">
 												<path fill="#000000" d="M19,3H14.82C14.4,1.84 13.3,1 12,1C10.7,1 9.6,1.84 9.18,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M12,3A1,1 0 0,1 13,4A1,1 0 0,1 12,5A1,1 0 0,1 11,4A1,1 0 0,1 12,3M7,7H17V5H19V19H5V5H7V7Z" />
 											</svg>
@@ -185,28 +185,28 @@
 									<td>{{step.RowsAffected}}</td>
 									<td></td>
 									<td style="color:tomato;" class="cop" ng-click="$event.stopPropagation()">
-										<div class="cop" ngclipboard data-clipboard-text="{{step.ErrorStackTrace}}" ng-if="step.ErrorMessage" ng-click="vm.copy(step);">
-											<svg style="width:24px;height:24px" viewBox="0 0 24 24" ng-if="!step.Copied">
-												<path fill="#000000" d="M19,3H14.82C14.4,1.84 13.3,1 12,1C10.7,1 9.6,1.84 9.18,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M12,3A1,1 0 0,1 13,4A1,1 0 0,1 12,5A1,1 0 0,1 11,4A1,1 0 0,1 12,3M7,7H17V5H19V19H5V5H7V7Z" />
-											</svg>
-											<svg style="width:24px;height:24px" viewBox="0 0 24 24" ng-if="step.Copied">
-												<path fill="green" d="M19,3H14.82C14.4,1.84 13.3,1 12,1C10.7,1 9.6,1.84 9.18,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M12,3A1,1 0 0,1 13,4A1,1 0 0,1 12,5A1,1 0 0,1 11,4A1,1 0 0,1 12,3M7,7H17V5H19V19H5V5H7V7M7.5,13.5L9,12L11,14L15.5,9.5L17,11L11,17L7.5,13.5Z" />
-											</svg>
-											<span ng-if="step.Copied" style="color:green">Copied</span>
-										</div>
-										&nbsp;
-										{{step.ErrorMessage}}
-									</td>
-								</tr>
-							</tbody>
+										<div class="cop" ng-init="vm.buildError(step);" ngclipboard data-clipboard-text="{{step.ConstructedError}}" ng-if="step.ErrorMessage" ng-click="vm.copy(step);">
+										<svg style="width:24px;height:24px" viewBox="0 0 24 24" ng-if="!step.Copied">
+											<path fill="#000000" d="M19,3H14.82C14.4,1.84 13.3,1 12,1C10.7,1 9.6,1.84 9.18,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M12,3A1,1 0 0,1 13,4A1,1 0 0,1 12,5A1,1 0 0,1 11,4A1,1 0 0,1 12,3M7,7H17V5H19V19H5V5H7V7Z" />
+										</svg>
+										<svg style="width:24px;height:24px" viewBox="0 0 24 24" ng-if="step.Copied">
+											<path fill="green" d="M19,3H14.82C14.4,1.84 13.3,1 12,1C10.7,1 9.6,1.84 9.18,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M12,3A1,1 0 0,1 13,4A1,1 0 0,1 12,5A1,1 0 0,1 11,4A1,1 0 0,1 12,3M7,7H17V5H19V19H5V5H7V7M7.5,13.5L9,12L11,14L15.5,9.5L17,11L11,17L7.5,13.5Z" />
+										</svg>
+										<span ng-if="step.Copied" style="color:green">Copied</span>
+									</div>
+									&nbsp;
+									{{step.ErrorMessage}}
+								</td>
+							</tr>
+						</tbody>
 
-						</table>
-						<div ng-if="vm.error" class="alert alert-warning pointer" role="alert">	<!-- if unconfigured tenants  -->
-							{{vm.error}}
-						</div>
+					</table>
+					<div ng-if="vm.error" class="alert alert-warning pointer" role="alert">	<!-- if unconfigured tenants  -->
+						{{vm.error}}
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+</div>
 </div>
