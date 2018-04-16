@@ -61,7 +61,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		{
 			system.UseTestDouble<FakePersonScheduleDayReadModelPersister>().For<IPersonScheduleDayReadModelPersister>();
 			system.UseTestDouble<scheduleChangesSubscriptionPublisherDummy>().For<ScheduleChangesSubscriptionPublisher>();
-			system.UseTestDouble<FakeScheduleDayReadModelRepository>().For<IScheduleDayReadModelRepository>();
 		}
 
 		private class scheduleChangesSubscriptionPublisherDummy : ScheduleChangesSubscriptionPublisher

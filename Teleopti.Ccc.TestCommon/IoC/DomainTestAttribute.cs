@@ -2,6 +2,7 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -243,7 +244,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				system.UseTestDouble<FakeBudgetGroupRepository>().For<IBudgetGroupRepository>();
 				system.UseTestDouble<FakeBudgetDayRepository>().For<IBudgetDayRepository>();
 				system.UseTestDouble<FakePersonFinderReadOnlyRepository>().For<IPersonFinderReadOnlyRepository>();
-
+				system.UseTestDouble<FakeScheduleDayReadModelRepository>().For<IScheduleDayReadModelRepository>();
 				system.UseTestDouble<FakeSeatBookingRepository>().For<ISeatBookingRepository>();
 				system.UseTestDouble<FakeSeatMapRepository>().For<ISeatMapLocationRepository>();
 				system.UseTestDouble<FakeSeatPlanRepository>().For<ISeatPlanRepository>();
