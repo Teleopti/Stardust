@@ -134,7 +134,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 		}
 
 		[Test]
-		[Ignore("#74899 - maybe to be fixed")]
 		public void ErlangCErlangAComparison6()
 		{
 			const double tasks = 40d;
@@ -146,7 +145,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 		}
 
 		[Test]
-		[Ignore("#74899 - maybe to be fixed")]
 		public void ErlangCErlangAComparison7()
 		{
 			const double tasks = 40d;
