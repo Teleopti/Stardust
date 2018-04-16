@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
@@ -13,13 +14,17 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		private bool _isDeleted;
 		private IScorecard _scorecard;
 
+		public override IEnumerable<IEvent> PopAllEvents() =>
+			base.PopAllEvents()
+				.KeepLastOfType<TeamNameChangedEvent>();
+
 		public virtual bool IsChoosable => !IsDeleted;
 
 		public virtual Description Description => _description;
 
 		public virtual void SetDescription(Description value)
 		{
-			ReplaceEvent(nameof(TeamNameChangedEvent), () => new TeamNameChangedEvent
+			AddEvent(() => new TeamNameChangedEvent
 			{
 				TeamId = Id.GetValueOrDefault(),
 				Name = value.Name
@@ -48,6 +53,10 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 		public virtual IBusinessUnit BusinessUnitExplicit => _site?.BusinessUnit ?? ServiceLocatorForEntity.CurrentBusinessUnit.Current();
 
-		public virtual IScorecard Scorecard { get { return _scorecard; } set { _scorecard = value; } }
+		public virtual IScorecard Scorecard
+		{
+			get { return _scorecard; }
+			set { _scorecard = value; }
+		}
 	}
 }

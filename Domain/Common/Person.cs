@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
@@ -16,62 +17,68 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Domain.Common
 {
 	public class Person : VersionedAggregateRoot, IPerson, IDeleteTag, IAggregateRootWithEvents
-    {
-        private Name _name;
-        private readonly IPermissionInformation _permissionInformation;
-        private readonly IDictionary<DateOnly, IPersonPeriod> _personPeriodCollection;
-        private readonly IDictionary<DateOnly, ISchedulePeriod> _personSchedulePeriodCollection;
-        private string _email;
-        private string _note;
-        private string _employmentNumber;
-        private DateOnly? _terminalDate;
-        private readonly IPersonWriteProtectionInfo _personWriteProtection;
-        private bool _isDeleted;
-        private static readonly DateOnly MaxDate = new DateOnly(DateTime.MaxValue);
-        private IWorkflowControlSet _workflowControlSet;
-        private DayOfWeek _firstDayOfWeek;
+	{
+		private Name _name;
+		private readonly IPermissionInformation _permissionInformation;
+		private readonly IDictionary<DateOnly, IPersonPeriod> _personPeriodCollection;
+		private readonly IDictionary<DateOnly, ISchedulePeriod> _personSchedulePeriodCollection;
+		private string _email;
+		private string _note;
+		private string _employmentNumber;
+		private DateOnly? _terminalDate;
+		private readonly IPersonWriteProtectionInfo _personWriteProtection;
+		private bool _isDeleted;
+		private static readonly DateOnly MaxDate = new DateOnly(DateTime.MaxValue);
+		private IWorkflowControlSet _workflowControlSet;
+		private DayOfWeek _firstDayOfWeek;
 		private readonly IList<IOptionalColumnValue> _optionalColumnValueCollection = new List<IOptionalColumnValue>();
 		public static readonly DateOnly DefaultTerminalDate = new DateOnly(2059, 12, 31);
 
-	    public Person()
-        {
-            _permissionInformation = new PermissionInformation(this);
-            _personPeriodCollection = new SortedList<DateOnly, IPersonPeriod>();
-            _personSchedulePeriodCollection = new SortedList<DateOnly, ISchedulePeriod>();
-            _email = string.Empty;
-            _note = string.Empty;
-            _employmentNumber = string.Empty;
-            _terminalDate = null;
-            _personWriteProtection = new PersonWriteProtectionInfo(this);
-            _firstDayOfWeek = DayOfWeek.Monday; //1
-        }
+		public Person()
+		{
+			_permissionInformation = new PermissionInformation(this);
+			_personPeriodCollection = new SortedList<DateOnly, IPersonPeriod>();
+			_personSchedulePeriodCollection = new SortedList<DateOnly, ISchedulePeriod>();
+			_email = string.Empty;
+			_note = string.Empty;
+			_employmentNumber = string.Empty;
+			_terminalDate = null;
+			_personWriteProtection = new PersonWriteProtectionInfo(this);
+			_firstDayOfWeek = DayOfWeek.Monday; //1
+		}
 
-        public virtual ITeam MyTeam(DateOnly theDate)
-        {
-            var per = Period(theDate);
-            return per == null ? null : per.Team;
-        }
+		public override IEnumerable<IEvent> PopAllEvents() =>
+			base.PopAllEvents()
+				.KeepLastOfType<PersonNameChangedEvent>()
+				.KeepLastOfType<PersonPeriodChangedEvent>()
+				.KeepLastOfType<OptionalColumnValueChangedEvent>();
+
+		public virtual ITeam MyTeam(DateOnly theDate)
+		{
+			var per = Period(theDate);
+			return per == null ? null : per.Team;
+		}
 
 		public virtual void ActivatePerson(IPersonAccountUpdater personAccountUpdater)
-	    {
+		{
 			terminate(null);
 			personAccountUpdater.Update(this);
-	    }
+		}
 
 		public virtual void TerminatePerson(DateOnly terminalDate, IPersonAccountUpdater personAccountUpdater, IPersonLeavingUpdater personLeavingUpdater = null)
-	    {
+		{
 			terminate(terminalDate);
-			(personLeavingUpdater ?? new DummyPersonLeavingUpdater()).Execute(terminalDate,this);
+			(personLeavingUpdater ?? new DummyPersonLeavingUpdater()).Execute(terminalDate, this);
 			personAccountUpdater.Update(this);
-	    }
+		}
 
-	    public virtual DateOnly? TerminalDate => _terminalDate;
+		public virtual DateOnly? TerminalDate => _terminalDate;
 
 		private void terminate(DateOnly? value)
-	    {
-		    DateOnly? valueToSet = null;
-		    if (value != null)
-			    valueToSet = value.Value > DefaultTerminalDate ? DefaultTerminalDate : value;
+		{
+			DateOnly? valueToSet = null;
+			if (value != null)
+				valueToSet = value.Value > DefaultTerminalDate ? DefaultTerminalDate : value;
 			if (_terminalDate == valueToSet) return;
 
 			var valueBefore = _terminalDate?.Date;
@@ -127,6 +134,7 @@ namespace Teleopti.Ccc.Domain.Common
 					}
 				}
 			}
+
 			info.ExternalLogons =
 			(
 				period?.ExternalLogOnCollection
@@ -153,7 +161,7 @@ namespace Teleopti.Ccc.Domain.Common
 		{
 			AddSkill(new PersonSkill(skill, new Percent(1)), Period(personPeriodDate));
 		}
-		
+
 		public virtual void AddSkill(ISkill skill, IPersonPeriod personPeriod)
 		{
 			AddSkill(new PersonSkill(skill, new Percent(1)), personPeriod);
@@ -166,7 +174,7 @@ namespace Teleopti.Ccc.Domain.Common
 
 			if (!(personPeriod.PersonSkillCollection.FirstOrDefault(s => s.Skill.Equals(personSkill.Skill)) is IPersonSkillModify modify))
 			{
-				((IPersonPeriodModifySkills)personPeriod).AddPersonSkill(personSkill);
+				((IPersonPeriodModifySkills) personPeriod).AddPersonSkill(personSkill);
 			}
 			else
 			{
@@ -191,28 +199,28 @@ namespace Teleopti.Ccc.Domain.Common
 			addPersonPeriodChangedEvent();
 		}
 
-	    public virtual void ResetExternalLogOn(IPersonPeriod personPeriod)
-	    {
+		public virtual void ResetExternalLogOn(IPersonPeriod personPeriod)
+		{
 			if (!(personPeriod is IPersonPeriodModifyExternalLogon modify)) return;
 			modify.ResetExternalLogOn();
 
 			addPersonPeriodChangedEvent();
 		}
 
-	    public virtual void RemoveExternalLogOn(IExternalLogOn externalLogOn, IPersonPeriod personPeriod)
-	    {
+		public virtual void RemoveExternalLogOn(IExternalLogOn externalLogOn, IPersonPeriod personPeriod)
+		{
 			if (!(personPeriod is IPersonPeriodModifyExternalLogon modify)) return;
 			modify.RemoveExternalLogOn(externalLogOn);
 
 			addPersonPeriodChangedEvent();
 		}
 
-	    public virtual bool IsTerminated()
-	    {
-				return TerminalDate.HasValue && TerminalDate.Value < DateOnly.Today;
-	    }
-		
-	    public virtual void ActivateSkill(ISkill skill, IPersonPeriod personPeriod)
+		public virtual bool IsTerminated()
+		{
+			return TerminalDate.HasValue && TerminalDate.Value < DateOnly.Today;
+		}
+
+		public virtual void ActivateSkill(ISkill skill, IPersonPeriod personPeriod)
 		{
 			InParameter.NotNull(nameof(skill), skill);
 			InParameter.NotNull(nameof(personPeriod), personPeriod);
@@ -239,23 +247,23 @@ namespace Teleopti.Ccc.Domain.Common
 			InParameter.NotNull(nameof(personPeriod), personPeriod);
 			var personSkill = personPeriod.PersonSkillCollection.FirstOrDefault(s => skill.Equals(s.Skill));
 			if (personSkill != null)
-				((IPersonPeriodModifySkills)personPeriod).DeletePersonSkill(personSkill);
+				((IPersonPeriodModifySkills) personPeriod).DeletePersonSkill(personSkill);
 		}
 
 		public virtual void ChangeSkillProficiency(ISkill skill, Percent proficiency, IPersonPeriod personPeriod)
 		{
 			InParameter.NotNull(nameof(skill), skill);
 			InParameter.NotNull(nameof(personPeriod), personPeriod);
-			IPersonSkillModify personSkill = (IPersonSkillModify)personPeriod.PersonSkillCollection.FirstOrDefault(s => skill.Equals(s.Skill));
+			IPersonSkillModify personSkill = (IPersonSkillModify) personPeriod.PersonSkillCollection.FirstOrDefault(s => skill.Equals(s.Skill));
 			if (personSkill != null)
 				personSkill.SkillPercentage = proficiency;
 		}
 
-        public virtual Name Name => _name;
+		public virtual Name Name => _name;
 
 		public virtual void SetName(Name value)
 		{
-			ReplaceEvent(nameof(PersonNameChangedEvent), () => new PersonNameChangedEvent
+			AddEvent(() => new PersonNameChangedEvent
 			{
 				PersonId = Id.GetValueOrDefault(),
 				FirstName = value.FirstName,
@@ -267,50 +275,50 @@ namespace Teleopti.Ccc.Domain.Common
 
 		public virtual IPermissionInformation PermissionInformation => _permissionInformation;
 
-	    public virtual IList<IPersonPeriod> PersonPeriodCollection => new ReadOnlyCollection<IPersonPeriod>(InternalPersonPeriodCollection.ToList());
+		public virtual IList<IPersonPeriod> PersonPeriodCollection => new ReadOnlyCollection<IPersonPeriod>(InternalPersonPeriodCollection.ToList());
 
-	    private IEnumerable<IPersonPeriod> InternalPersonPeriodCollection
-        {
-            get
-            {
-                var terminalDateOrMax = TerminalDate.GetValueOrDefault(MaxDate);
-                return _personPeriodCollection.Values.Where(p => p.StartDate <= terminalDateOrMax);
-            }
-        }
+		private IEnumerable<IPersonPeriod> InternalPersonPeriodCollection
+		{
+			get
+			{
+				var terminalDateOrMax = TerminalDate.GetValueOrDefault(MaxDate);
+				return _personPeriodCollection.Values.Where(p => p.StartDate <= terminalDateOrMax);
+			}
+		}
 
-        private IEnumerable<ISchedulePeriod> InternalSchedulePeriodCollection => _personSchedulePeriodCollection.Values;
+		private IEnumerable<ISchedulePeriod> InternalSchedulePeriodCollection => _personSchedulePeriodCollection.Values;
 
-	    public virtual IList<ISchedulePeriod> PersonSchedulePeriodCollection => new ReadOnlyCollection<ISchedulePeriod>(InternalSchedulePeriodCollection.ToList());
+		public virtual IList<ISchedulePeriod> PersonSchedulePeriodCollection => new ReadOnlyCollection<ISchedulePeriod>(InternalSchedulePeriodCollection.ToList());
 
-	    public virtual string Email
-        {
-            get { return _email; }
-            set { _email = value; }
-        }
+		public virtual string Email
+		{
+			get { return _email; }
+			set { _email = value; }
+		}
 
-        public virtual string Note
-        {
-            get { return _note; }
-            set { _note = value.Trim(); }
-        }
+		public virtual string Note
+		{
+			get { return _note; }
+			set { _note = value.Trim(); }
+		}
 
-        public virtual bool IsAgent(DateOnly theDate)
-        {
-	        return !isTerminated(theDate) && _personPeriodCollection.Keys.Any(k => k <= theDate);
-        }
+		public virtual bool IsAgent(DateOnly theDate)
+		{
+			return !isTerminated(theDate) && _personPeriodCollection.Keys.Any(k => k <= theDate);
+		}
 
-	    public virtual void SetEmploymentNumber(string value)
-	    {
-		    ReplaceEvent(nameof(PersonEmploymentNumberChangedEvent), () => new PersonEmploymentNumberChangedEvent
-		    {
-			    PersonId = Id.GetValueOrDefault(),
-			    EmploymentNumber = _employmentNumber
-		    });
+		public virtual void SetEmploymentNumber(string value)
+		{
+			AddEvent(() => new PersonEmploymentNumberChangedEvent
+			{
+				PersonId = Id.GetValueOrDefault(),
+				EmploymentNumber = _employmentNumber
+			});
 
-		    _employmentNumber = value;
-	    }
+			_employmentNumber = value;
+		}
 
-	    public virtual string EmploymentNumber => _employmentNumber;
+		public virtual string EmploymentNumber => _employmentNumber;
 
 		public virtual void AddSchedulePeriod(ISchedulePeriod period)
 		{
@@ -337,6 +345,7 @@ namespace Teleopti.Ccc.Domain.Common
 			{
 				startDate = startDate.AddDays(1);
 			}
+
 			schedulePeriod.DateFrom = startDate;
 			_personSchedulePeriodCollection.Add(startDate, schedulePeriod);
 		}
@@ -358,10 +367,10 @@ namespace Teleopti.Ccc.Domain.Common
 			}
 		}
 
-	    private void addPersonPeriodChangedEvent()
-	    {
-		    ReplaceEvent(nameof(PersonPeriodChangedEvent),() =>
-		    {
+		private void addPersonPeriodChangedEvent()
+		{
+			AddEvent(() =>
+			{
 				var info = currentAssociationInfo(ServiceLocatorForEntity.Now);
 				return new PersonPeriodChangedEvent
 				{
@@ -373,36 +382,36 @@ namespace Teleopti.Ccc.Domain.Common
 					CurrentTeamName = info.TeamName,
 					ExternalLogons = info.ExternalLogons
 				};
-		    });
-	    }
+			});
+		}
 
-	    public virtual void DeletePersonPeriod(IPersonPeriod period)
-	    {
-		    InParameter.NotNull(nameof(period), period);
+		public virtual void DeletePersonPeriod(IPersonPeriod period)
+		{
+			InParameter.NotNull(nameof(period), period);
 
 			var previousPeriod = PreviousPeriod(period);
-			
+
 			AddPersonEmploymentChangeEvent(new PersonEmploymentChangedEvent()
 			{
 				PersonId = Id.GetValueOrDefault(),
 				FromDate = previousPeriod?.StartDate ?? period.StartDate
 			});
-			
-		    _personPeriodCollection.Remove(period.StartDate);			
+
+			_personPeriodCollection.Remove(period.StartDate);
 			addPersonPeriodChangedEvent();
-			
 		}
 
-	    public virtual void ChangePersonPeriodStartDate(DateOnly startDate, IPersonPeriod personPeriod)
+		public virtual void ChangePersonPeriodStartDate(DateOnly startDate, IPersonPeriod personPeriod)
 		{
 			InParameter.NotNull(nameof(personPeriod), personPeriod);
-			
+
 			var startDateBefore = personPeriod.StartDate;
 			_personPeriodCollection.Remove(startDateBefore);
 			while (_personPeriodCollection.ContainsKey(startDate))
 			{
 				startDate = startDate.AddDays(1);
 			}
+
 			personPeriod.StartDate = startDate;
 			_personPeriodCollection.Add(startDate, personPeriod);
 
@@ -435,93 +444,94 @@ namespace Teleopti.Ccc.Domain.Common
 			addPersonPeriodChangedEvent();
 		}
 
-	    public virtual IPersonPeriod Period(DateOnly dateOnly)
-        {
-            IPersonPeriod period = null;
+		public virtual IPersonPeriod Period(DateOnly dateOnly)
+		{
+			IPersonPeriod period = null;
 
-            if (isTerminated(dateOnly))
-                return null;
+			if (isTerminated(dateOnly))
+				return null;
 
-            foreach (IPersonPeriod personPeriod in InternalPersonPeriodCollection)
-            {
-                if (!(personPeriod.StartDate > dateOnly))
-                    period = personPeriod;
-                else
-                    break;
-            }
-            return period;
-        }
+			foreach (IPersonPeriod personPeriod in InternalPersonPeriodCollection)
+			{
+				if (!(personPeriod.StartDate > dateOnly))
+					period = personPeriod;
+				else
+					break;
+			}
 
-        public virtual IList<IPersonPeriod> PersonPeriods(DateOnlyPeriod datePeriod)
-        {
-            IList<IPersonPeriod> retList = new List<IPersonPeriod>();
-            
-            if (isTerminated(datePeriod.StartDate)) return retList;
+			return period;
+		}
 
-            IPersonPeriod period = null;
-            foreach (IPersonPeriod p in InternalPersonPeriodCollection.OrderBy(d => d.StartDate))
-            {
-                if (p.StartDate > datePeriod.EndDate) break;
-                
-                if (p.StartDate< datePeriod.StartDate)
-                {
-                    period = p;
-                    continue;
-                }
+		public virtual IList<IPersonPeriod> PersonPeriods(DateOnlyPeriod datePeriod)
+		{
+			IList<IPersonPeriod> retList = new List<IPersonPeriod>();
 
-                if (p.StartDate == datePeriod.StartDate)
-                {
-                    period = null;
-                    retList.Add(p);
-                }
+			if (isTerminated(datePeriod.StartDate)) return retList;
 
-                if (p.StartDate>datePeriod.StartDate)
-                {
-                    retList.Add(p);
-                }
-            }
+			IPersonPeriod period = null;
+			foreach (IPersonPeriod p in InternalPersonPeriodCollection.OrderBy(d => d.StartDate))
+			{
+				if (p.StartDate > datePeriod.EndDate) break;
 
-            if (period != null)
-            {
-                if (!retList.Contains(period))
-                    retList.Insert(0, period);
-            }
+				if (p.StartDate < datePeriod.StartDate)
+				{
+					period = p;
+					continue;
+				}
 
-            return retList;
-        }
+				if (p.StartDate == datePeriod.StartDate)
+				{
+					period = null;
+					retList.Add(p);
+				}
+
+				if (p.StartDate > datePeriod.StartDate)
+				{
+					retList.Add(p);
+				}
+			}
+
+			if (period != null)
+			{
+				if (!retList.Contains(period))
+					retList.Insert(0, period);
+			}
+
+			return retList;
+		}
 
 		public virtual ISchedulePeriod SchedulePeriod(DateOnly dateOnly)
-        {
-            ISchedulePeriod period = null;
+		{
+			ISchedulePeriod period = null;
 
-            if (isTerminated(dateOnly))
-                return null;
+			if (isTerminated(dateOnly))
+				return null;
 
-            //get list with periods where startdate is less than inparam date
-            IList<ISchedulePeriod> periods = PersonSchedulePeriodCollection.Where(s => s.DateFrom <= dateOnly).ToArray();
+			//get list with periods where startdate is less than inparam date
+			IList<ISchedulePeriod> periods = PersonSchedulePeriodCollection.Where(s => s.DateFrom <= dateOnly).ToArray();
 
-            //find period
-            foreach (ISchedulePeriod p in periods)
-            {
-                if ((p.DateFrom == dateOnly))
-                {
-                    // Latest period is startdate equal to given date.
-                    return p;
-                }
-            
-                if (period == null || period.DateFrom < p.DateFrom)
-                {
-                    period = p;
-                }
-            }
+			//find period
+			foreach (ISchedulePeriod p in periods)
+			{
+				if ((p.DateFrom == dateOnly))
+				{
+					// Latest period is startdate equal to given date.
+					return p;
+				}
 
-            return period;
-        }
+				if (period == null || period.DateFrom < p.DateFrom)
+				{
+					period = p;
+				}
+			}
+
+			return period;
+		}
 
 		public virtual DateOnly? SchedulePeriodStartDate(DateOnly requestDate)
 		{
 			ISchedulePeriod schedulePeriod = SchedulePeriod(requestDate);
-	
+
 			if (schedulePeriod == null)
 			{
 				IPersonPeriod personPeriod = Period(requestDate);
@@ -529,15 +539,16 @@ namespace Teleopti.Ccc.Domain.Common
 					return null;
 				return personPeriod.StartDate;
 			}
+
 			return schedulePeriod.DateFrom;
 		}
 
-        private bool isTerminated(DateOnly dateOnly)
-        {
-	        if (!_terminalDate.HasValue) return false;
+		private bool isTerminated(DateOnly dateOnly)
+		{
+			if (!_terminalDate.HasValue) return false;
 
-	        return dateOnly > _terminalDate;
-        }
+			return dateOnly > _terminalDate;
+		}
 
 		public virtual IList<ISchedulePeriod> PersonSchedulePeriods(DateOnlyPeriod timePeriod)
 		{
@@ -575,42 +586,41 @@ namespace Teleopti.Ccc.Domain.Common
 			}
 
 			return retList.OrderBy(s => s.DateFrom.Date).ToList();
-
 		}
 
-        public virtual IPersonPeriod NextPeriod(IPersonPeriod period)
-        {
-            return InternalPersonPeriodCollection.OrderBy(p => p.StartDate.Date).FirstOrDefault(p => p.StartDate > period.StartDate);
-        }
+		public virtual IPersonPeriod NextPeriod(IPersonPeriod period)
+		{
+			return InternalPersonPeriodCollection.OrderBy(p => p.StartDate.Date).FirstOrDefault(p => p.StartDate > period.StartDate);
+		}
 
-        public virtual IPersonPeriod PreviousPeriod(IPersonPeriod period)
-        {
-            return InternalPersonPeriodCollection.OrderByDescending(p => p.StartDate.Date).FirstOrDefault(p => p.StartDate < period.StartDate);
-        }
+		public virtual IPersonPeriod PreviousPeriod(IPersonPeriod period)
+		{
+			return InternalPersonPeriodCollection.OrderByDescending(p => p.StartDate.Date).FirstOrDefault(p => p.StartDate < period.StartDate);
+		}
 
-        public virtual IList<IRotationRestriction> GetPersonRotationDayRestrictions(IEnumerable<IPersonRotation> personRestrictions, DateOnly currentDate)
-        {
-            // filter on person
-            IEnumerable<IPersonRotation> filtered = personRestrictions.Where(r => r.Person.Equals(this));
-            // order on startdate, newest first
-            IOrderedEnumerable<IPersonRotation> sorted = filtered.OrderByDescending(n2 => n2.StartDate);
+		public virtual IList<IRotationRestriction> GetPersonRotationDayRestrictions(IEnumerable<IPersonRotation> personRestrictions, DateOnly currentDate)
+		{
+			// filter on person
+			IEnumerable<IPersonRotation> filtered = personRestrictions.Where(r => r.Person.Equals(this));
+			// order on startdate, newest first
+			IOrderedEnumerable<IPersonRotation> sorted = filtered.OrderByDescending(n2 => n2.StartDate);
 
-            foreach (var rotation in sorted)
-            {
-                if (rotation.StartDate <= currentDate)
-                {
-                    IRotationDay ret = rotation.GetRotationDay(currentDate);
-                    if(ret != null)
-                        return ret.RestrictionCollection;
-                }
+			foreach (var rotation in sorted)
+			{
+				if (rotation.StartDate <= currentDate)
+				{
+					IRotationDay ret = rotation.GetRotationDay(currentDate);
+					if (ret != null)
+						return ret.RestrictionCollection;
+				}
+			}
 
-            }
-            return new List<IRotationRestriction>();
-        }
+			return new List<IRotationRestriction>();
+		}
 
-    	public virtual IVirtualSchedulePeriod VirtualSchedulePeriodOrNext(DateOnly dateOnly)
-    	{
-    		var dateToUse = dateOnly;
+		public virtual IVirtualSchedulePeriod VirtualSchedulePeriodOrNext(DateOnly dateOnly)
+		{
+			var dateToUse = dateOnly;
 			if (!PersonSchedulePeriodCollection.IsEmpty())
 			{
 				var startOfFirstPeriod = PersonSchedulePeriodCollection[0].DateFrom;
@@ -619,80 +629,79 @@ namespace Teleopti.Ccc.Domain.Common
 					dateToUse = startOfFirstPeriod;
 				}
 			}
-    		return VirtualSchedulePeriod(dateToUse);
-    	}
 
-	    public virtual IVirtualSchedulePeriod VirtualSchedulePeriod(DateOnly dateOnly)
-	    {
-		    return innerVirtualSchedulePeriod(Period(dateOnly), SchedulePeriod(dateOnly), dateOnly);
-	    }
+			return VirtualSchedulePeriod(dateToUse);
+		}
 
-	    private IVirtualSchedulePeriod innerVirtualSchedulePeriod(IPersonPeriod personPeriod, ISchedulePeriod schedulePeriod, DateOnly date)
-	    {
+		public virtual IVirtualSchedulePeriod VirtualSchedulePeriod(DateOnly dateOnly)
+		{
+			return innerVirtualSchedulePeriod(Period(dateOnly), SchedulePeriod(dateOnly), dateOnly);
+		}
+
+		private IVirtualSchedulePeriod innerVirtualSchedulePeriod(IPersonPeriod personPeriod, ISchedulePeriod schedulePeriod, DateOnly date)
+		{
 			var splitChecker = new VirtualSchedulePeriodSplitChecker(this);
 			return new VirtualSchedulePeriod(this, date, personPeriod, schedulePeriod, splitChecker);
-	    }
+		}
 
-        public virtual int Seniority
-        {
-            get
-            {
-                int days = 0;
+		public virtual int Seniority
+		{
+			get
+			{
+				int days = 0;
 
 				var today = DateOnly.Today;
-                foreach (IPersonPeriod personPeriod in InternalPersonPeriodCollection)
-                {
-                    DateOnlyPeriod period = personPeriod.Period;
+				foreach (IPersonPeriod personPeriod in InternalPersonPeriodCollection)
+				{
+					DateOnlyPeriod period = personPeriod.Period;
 
-                    if (period.StartDate <= today)
-                    {
-                        if (period.EndDate >= today)
-                            period = new DateOnlyPeriod(period.StartDate, today);
+					if (period.StartDate <= today)
+					{
+						if (period.EndDate >= today)
+							period = new DateOnlyPeriod(period.StartDate, today);
 
-                        days += period.DayCount();
-                    }
-                }
+						days += period.DayCount();
+					}
+				}
 
-                return days / 30;
-            }
-        }
+				return days / 30;
+			}
+		}
 
-        public virtual IPersonWriteProtectionInfo PersonWriteProtection => _personWriteProtection;
+		public virtual IPersonWriteProtectionInfo PersonWriteProtection => _personWriteProtection;
 
-	    public virtual bool IsDeleted => _isDeleted;
+		public virtual bool IsDeleted => _isDeleted;
 
-	    public virtual IWorkflowControlSet WorkflowControlSet
-        {
-            get
-            {
-                var workflowControlSet = _workflowControlSet as IDeleteTag;
-                if (workflowControlSet != null && workflowControlSet.IsDeleted)
-                    return null;
-                return _workflowControlSet;
-            }
-            set {
-                _workflowControlSet = value;
-            }
-        }
+		public virtual IWorkflowControlSet WorkflowControlSet
+		{
+			get
+			{
+				var workflowControlSet = _workflowControlSet as IDeleteTag;
+				if (workflowControlSet != null && workflowControlSet.IsDeleted)
+					return null;
+				return _workflowControlSet;
+			}
+			set { _workflowControlSet = value; }
+		}
 
-        public virtual DayOfWeek FirstDayOfWeek
-        {
-            get { return _firstDayOfWeek; }
-            set { _firstDayOfWeek = value; }
-        }
+		public virtual DayOfWeek FirstDayOfWeek
+		{
+			get { return _firstDayOfWeek; }
+			set { _firstDayOfWeek = value; }
+		}
 
-	    public virtual void SetDeleted()
-	    {
-		    _isDeleted = true;
-		    AddEvent(new PersonDeletedEvent
-			    {
-				    PersonId = Id.GetValueOrDefault()
-			    });
-	    }
+		public virtual void SetDeleted()
+		{
+			_isDeleted = true;
+			AddEvent(new PersonDeletedEvent
+			{
+				PersonId = Id.GetValueOrDefault()
+			});
+		}
 
-	    public virtual ReadOnlyCollection<IOptionalColumnValue> OptionalColumnValueCollection => new ReadOnlyCollection<IOptionalColumnValue>(_optionalColumnValueCollection);
+		public virtual ReadOnlyCollection<IOptionalColumnValue> OptionalColumnValueCollection => new ReadOnlyCollection<IOptionalColumnValue>(_optionalColumnValueCollection);
 
-	    public virtual void SetOptionalColumnValue(IOptionalColumnValue value, IOptionalColumn column)
+		public virtual void SetOptionalColumnValue(IOptionalColumnValue value, IOptionalColumn column)
 		{
 			InParameter.NotNull(nameof(value), value);
 			InParameter.NotNull(nameof(column), column);
@@ -709,9 +718,9 @@ namespace Teleopti.Ccc.Domain.Common
 				colValue.Description = value.Description;
 			}
 
-			ReplaceEvent(nameof(OptionalColumnValueChangedEvent) + this.Id, () => new OptionalColumnValueChangedEvent()
+			AddEvent(() => new OptionalColumnValueChangedEvent
 			{
-				PersonId = this.Id.GetValueOrDefault()
+				PersonId = Id.GetValueOrDefault()
 			});
 		}
 
@@ -721,9 +730,9 @@ namespace Teleopti.Ccc.Domain.Common
 
 			_optionalColumnValueCollection.Remove(value);
 
-			ReplaceEvent(nameof(OptionalColumnValueChangedEvent) + this.Id, () => new OptionalColumnValueChangedEvent()
+			AddEvent(() => new OptionalColumnValueChangedEvent
 			{
-				PersonId = this.Id.GetValueOrDefault()
+				PersonId = Id.GetValueOrDefault()
 			});
 		}
 
@@ -733,41 +742,41 @@ namespace Teleopti.Ccc.Domain.Common
 			return result;
 		}
 
-	    public virtual PersonWorkDay[] AverageWorkTimes(DateOnlyPeriod period)
-	    {
-		    var personPeriods = PersonPeriods(period).Select(p => new {Period = new DateOnlyPeriod(p.StartDate, p.EndDate()), p});
-		    var schedulePeriods = PersonSchedulePeriods(period).Select(p => new {Period = new DateOnlyPeriod(p.DateFrom, p.RealDateTo()), p});
-		    var days = period.DayCollection();
+		public virtual PersonWorkDay[] AverageWorkTimes(DateOnlyPeriod period)
+		{
+			var personPeriods = PersonPeriods(period).Select(p => new {Period = new DateOnlyPeriod(p.StartDate, p.EndDate()), p});
+			var schedulePeriods = PersonSchedulePeriods(period).Select(p => new {Period = new DateOnlyPeriod(p.DateFrom, p.RealDateTo()), p});
+			var days = period.DayCollection();
 
-		    return days.Select(
-				    d =>
-					    new
-					    {
-						    Day = d,
-						    PersonPeriod = personPeriods.FirstOrDefault(p => p.Period.Contains(d))
-					    })
-				    .Select(
-					    m =>
-					    {
-							var schedulePeriod = schedulePeriods.FirstOrDefault(s => s.Period.Contains(m.Day));
-							if (m.PersonPeriod == null) return new PersonWorkDay(m.Day);
-							return new PersonWorkDay(m.Day,
-								new Lazy<TimeSpan>(()=>calculateAverageWorkTime(m.PersonPeriod.p, schedulePeriod != null ? schedulePeriod.p : null, m.Day)),
-								m.PersonPeriod.p.PersonContract.Contract.WorkTimeSource,
-								m.PersonPeriod.p.PersonContract.PartTimePercentage.Percentage,
-								isWorkDay(m.PersonPeriod.p.PersonContract.ContractSchedule, m.Day));
-							}).ToArray();
+			return days.Select(
+					d =>
+						new
+						{
+							Day = d,
+							PersonPeriod = personPeriods.FirstOrDefault(p => p.Period.Contains(d))
+						})
+				.Select(
+					m =>
+					{
+						var schedulePeriod = schedulePeriods.FirstOrDefault(s => s.Period.Contains(m.Day));
+						if (m.PersonPeriod == null) return new PersonWorkDay(m.Day);
+						return new PersonWorkDay(m.Day,
+							new Lazy<TimeSpan>(() => calculateAverageWorkTime(m.PersonPeriod.p, schedulePeriod != null ? schedulePeriod.p : null, m.Day)),
+							m.PersonPeriod.p.PersonContract.Contract.WorkTimeSource,
+							m.PersonPeriod.p.PersonContract.PartTimePercentage.Percentage,
+							isWorkDay(m.PersonPeriod.p.PersonContract.ContractSchedule, m.Day));
+					}).ToArray();
 		}
 
 
-	    private bool isWorkDay(IContractSchedule contractSchedule, DateOnly day)
-	    {
+		private bool isWorkDay(IContractSchedule contractSchedule, DateOnly day)
+		{
 			var schedulePeriodStartDate = SchedulePeriodStartDate(day);
-		    return contractSchedule != null && schedulePeriodStartDate.HasValue && contractSchedule.IsWorkday(schedulePeriodStartDate.Value, day, FirstDayOfWeek);
-	    }
+			return contractSchedule != null && schedulePeriodStartDate.HasValue && contractSchedule.IsWorkday(schedulePeriodStartDate.Value, day, FirstDayOfWeek);
+		}
 
-	    private TimeSpan calculateAverageWorkTime(IPersonPeriod personPeriod, ISchedulePeriod schedulePeriod, DateOnly day)
-	    {
+		private TimeSpan calculateAverageWorkTime(IPersonPeriod personPeriod, ISchedulePeriod schedulePeriod, DateOnly day)
+		{
 			var averageWorkTimePerDay = TimeSpan.Zero;
 			var contract = personPeriod.PersonContract.Contract;
 			switch (contract.WorkTimeSource)
@@ -782,30 +791,31 @@ namespace Teleopti.Ccc.Domain.Common
 						: virtualSchedulePeriod.AverageWorkTimePerDay;
 					break;
 			}
-		    return averageWorkTimePerDay;
-	    }
 
-	    public virtual PersonWorkDay AverageWorkTimeOfDay(DateOnly dateOnly)
-        {
-            var personPeriod = Period(dateOnly);
-            if (personPeriod == null) return new PersonWorkDay(dateOnly);
+			return averageWorkTimePerDay;
+		}
+
+		public virtual PersonWorkDay AverageWorkTimeOfDay(DateOnly dateOnly)
+		{
+			var personPeriod = Period(dateOnly);
+			if (personPeriod == null) return new PersonWorkDay(dateOnly);
 
 			var contract = personPeriod.PersonContract.Contract;
 			var contractSchedule = personPeriod.PersonContract.ContractSchedule;
 			var partTimePercentage = personPeriod.PersonContract.PartTimePercentage;
-		    return new PersonWorkDay(dateOnly, new Lazy<TimeSpan>(()=>calculateAverageWorkTime(personPeriod, SchedulePeriod(dateOnly), dateOnly)),
+			return new PersonWorkDay(dateOnly, new Lazy<TimeSpan>(() => calculateAverageWorkTime(personPeriod, SchedulePeriod(dateOnly), dateOnly)),
 				contract.WorkTimeSource,
 				partTimePercentage?.Percentage ?? new Percent(1d),
-				isWorkDay(contractSchedule,dateOnly));
-        }
+				isWorkDay(contractSchedule, dateOnly));
+		}
 
 		public override int GetHashCode()
 		{
 			return base.GetHashCode() ^ 431;
 		}
 
-	    public virtual ISiteOpenHour SiteOpenHour(DateOnly dateOnly)
-	    {
+		public virtual ISiteOpenHour SiteOpenHour(DateOnly dateOnly)
+		{
 			var myTeam = MyTeam(dateOnly);
 			if (myTeam != null)
 			{
@@ -816,13 +826,13 @@ namespace Teleopti.Ccc.Domain.Common
 						return siteOpenHour;
 				}
 			}
+
 			return null;
 		}
 
-	    public virtual void AddPersonEmploymentChangeEvent(PersonEmploymentChangedEvent @event)
-	    {
-			AddEvent(()=>@event);
-	    }
-
-    }
+		public virtual void AddPersonEmploymentChangeEvent(PersonEmploymentChangedEvent @event)
+		{
+			AddEvent(() => @event);
+		}
+	}
 }

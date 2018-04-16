@@ -29,11 +29,15 @@ namespace Teleopti.Ccc.Domain.Common
 			_description = new Description(name);
 		}
 
+		public override IEnumerable<IEvent> PopAllEvents() =>
+			base.PopAllEvents()
+				.KeepLastOfType<SiteNameChangedEvent>();
+
 		public virtual Description Description => _description;
 
 		public virtual void SetDescription(Description value)
 		{
-			ReplaceEvent(nameof(SiteNameChangedEvent), () => new SiteNameChangedEvent
+			AddEvent(() => new SiteNameChangedEvent
 			{
 				SiteId = Id.GetValueOrDefault(),
 				Name = value.Name
@@ -54,7 +58,11 @@ namespace Teleopti.Ccc.Domain.Common
 
 		public virtual bool IsDeleted => _isDeleted;
 
-		public virtual int? MaxSeats { get { return _maxSeats; } set { _maxSeats = value; } }
+		public virtual int? MaxSeats
+		{
+			get { return _maxSeats; }
+			set { _maxSeats = value; }
+		}
 
 		public virtual void AddTeam(ITeam team)
 		{
@@ -70,7 +78,6 @@ namespace Teleopti.Ccc.Domain.Common
 		{
 			InParameter.NotNull(nameof(team), team);
 			_teamCollection.Remove(team);
-
 		}
 
 		public virtual IEnumerable<ISiteOpenHour> OpenHourCollection => new ReadOnlyCollection<ISiteOpenHour>(_openHourCollection);
@@ -88,6 +95,7 @@ namespace Teleopti.Ccc.Domain.Common
 				siteOpenHour.Parent = this;
 				return true;
 			}
+
 			return false;
 		}
 
