@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			var rules = provider.GetBusinessRulesForShiftTradeRequest(
 				new FakeSchedulingResultStateHolder_DoNotUse(), true);
 
-			Assert.AreEqual(rules.Count, 12);
+			Assert.AreEqual(rules.Count, 13);
 
 			Assert.IsTrue(rules.Item(typeof(NewPersonAccountRule)) != null);
 			Assert.IsTrue(rules.Item(typeof(OpenHoursRule)) != null);
