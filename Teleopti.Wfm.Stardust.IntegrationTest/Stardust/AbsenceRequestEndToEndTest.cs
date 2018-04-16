@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System.Data.SqlClient;
+using System.Linq;
 using System.Threading;
+using Newtonsoft.Json;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
@@ -9,14 +11,16 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Sdk.ServiceBus;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 {
-	[StardustTest]
+	[Ignore("WIP"),StardustTest]
 	public class AbsenceRequestEndToEndTest
 	{
 		public WithUnitOfWork WithUnitOfWork;
@@ -27,6 +31,8 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 		public IQueuedAbsenceRequestRepository QueuedAbsenceRequestRepository;
 		public IEventPublisher EventPublisher;
 		public IConfigReader ConfigReader;
+		public ICurrentUnitOfWork CurrentUnitOfWork;
+			
 
 	  
 		[Test]
@@ -39,7 +45,6 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 				var absence = AbsenceRepository.LoadAll().FirstOrDefault();
 				var personRequest = new PersonRequest(person, new AbsenceRequest(absence, new DateTimePeriod(2016, 02, 26, 12, 2016, 02, 26, 13)));
 				personRequest.Subject = "I am going to have fun";
-				personRequest.TrySetMessage("A message");
 				personRequest.Pending();
 				PersonRequestRepository.Add(personRequest);
 				
@@ -55,10 +60,47 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 				QueuedAbsenceRequestRepository.Add(queuedReq);
 
 			});
-			startServiceBus();
-			Thread.Sleep(10000);
-			EventPublisher.Publish(new TenantMinuteTickEvent());
 
+			startServiceBusAndPublishTick();
+
+			performLevel1Assert();
+			
+			Thread.Sleep(600000);
+		}
+
+		private void performLevel1Assert()
+		{
+			////check in job queue
+			//var connectionString = InfraTestConfigReader.ConnectionString;
+			//using (var connection = new SqlConnection(connectionString))
+			//{
+			//	connection.Open();
+			//	using (var command = new SqlCommand("select serialized from Stardust.JobQueue", connection))
+			//	{
+			//		while (true)
+			//		{
+						
+			//			using (var reader = command.ExecuteReader())
+			//			{
+			//				if (reader.HasRows)
+			//				{
+			//					reader.Read();
+			//					var jsonData = reader.GetString(0);
+			//					NewMultiAbsenceRequestsCreatedEvent storedEvent = JsonConvert.DeserializeObject<NewMultiAbsenceRequestsCreatedEvent>(jsonData);
+			//					break;
+			//				}
+								
+			//			}
+			//			Thread.Sleep(1000);
+
+			//		}
+					
+			//	}
+			//}
+
+
+
+			
 			//while there is a not a job in stardust
 			// sleep for 1 sec
 			//when i have a job do level1 assert on the content of the job
@@ -69,16 +111,15 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 
 			//assert the personrequest as a level 3 assert on message and status
 
-
-
-
-			Thread.Sleep(600000);
 		}
 
-		private void startServiceBus()
+		private void startServiceBusAndPublishTick()
 		{
 			var host = new ServiceBusRunner(i => { }, ConfigReader);
 			host.Start();
+			Thread.Sleep(2000);
+
+			EventPublisher.Publish(new TenantMinuteTickEvent());
 		}
 	}
 }

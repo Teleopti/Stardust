@@ -120,10 +120,6 @@ namespace Teleopti.Ccc.TestCommon
 		public static bool TryRestoreApplicationDatabaseBySql(string path, int dataHash)
 		{
 			var database = application();
-			if(!database.Tasks().Exists(database.DatabaseName))
-			{
-				createDatabase(database);
-			}
 			return database.BackupBySql().TryRestore(path, database.BackupNameForRestore(dataHash));
 		}
 
@@ -152,10 +148,6 @@ namespace Teleopti.Ccc.TestCommon
 		public static bool TryRestoreAnalyticsDatabaseBySql(string path, int dataHash)
 		{
 			var database = analytics();
-			if (!database.Tasks().Exists(database.DatabaseName))
-			{
-				createDatabase(database);
-			}
 			return database.BackupBySql().TryRestore(path, database.BackupNameForRestore(dataHash));
 		}
 
