@@ -124,8 +124,6 @@
 		ETL_SpeedUpIntradayBusinessUnit_38932,
 		ETL_SpeedUpNightlyBusinessUnit_38932,
 
-		QRCodeForMobileApps_42695,
-
 		ETL_EventbasedDate_39562,
 		NewPasswordHash_40460,
 		Wfm_Intraday_OptimalStaffing_40921,

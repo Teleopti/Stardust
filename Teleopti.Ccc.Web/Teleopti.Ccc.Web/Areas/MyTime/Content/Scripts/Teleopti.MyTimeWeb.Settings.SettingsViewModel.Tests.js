@@ -62,7 +62,7 @@ $(document).ready(function() {
 
 	test("should get correct url for QRcode", function () {
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (toggleName) {
-			return toggleName == 'QRCodeForMobileApps_42695';
+			return false;
 		};
 
 		var fakeQRcodeContainer = document.createElement('div');
@@ -78,11 +78,11 @@ $(document).ready(function() {
 		document.body.appendChild(fakeiOSAppContainer);
 
 		var viewModel = new Teleopti.MyTimeWeb.Settings.SettingsViewModel();
-		viewModel.hasPermissionToViewQRCode(true);
+		viewModel.hasPermissionToViewQRCode(false);
 		viewModel.featureCheck();
 		//let agent has view QRCode permission
 
-		equal(viewModel.isQRCodeForMobileAppsEnabled(), true);
+		equal(viewModel.isQRCodeForMobileAppsEnabled(), false);
 		equal(viewModel.customMobileAppBaseUrl(), false);
 
 		viewModel.generateQRCode();
