@@ -1,12 +1,16 @@
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Logon;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 {
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_SpeedUpEvents_75415)]
+	[DisabledBy(Toggles.ResourcePlanner_SpeedUpEvents_75415)]
 	public class ScheduleChangesPublisherHangfire :
 		IHandleEvent<ProjectionChangedEvent>,
-		IRunOnHangfire
+		IRunOnHangfire,
+		IScheduleChangesPublisherHangfire
 	{
 		private readonly ScheduleChangesSubscriptionPublisher _scheduleChangesSubscriptionPublisher;
 
@@ -21,5 +25,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		{
 			_scheduleChangesSubscriptionPublisher.Send(@event);
 		}
+	}
+
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_SpeedUpEvents_75415)]
+	public interface IScheduleChangesPublisherHangfire
+	{
+		void Handle(ProjectionChangedEvent @event);
 	}
 }

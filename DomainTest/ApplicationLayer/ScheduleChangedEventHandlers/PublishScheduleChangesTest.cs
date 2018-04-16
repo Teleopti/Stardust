@@ -1,19 +1,63 @@
 ﻿using System;
 using System.Collections.Generic;
+using Autofac;
+using Autofac.Core.Registration;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 {
+	[DomainTest]
+	[TestFixture(true)]
+	[TestFixture(false)]
 	public class PublishScheduleChangesTest
 	{
+		private readonly bool _toggle75415;
+
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_SpeedUpEvents_75415)]
+		public PublishScheduleChangesTest(bool toggle75415)
+		{
+			_toggle75415 = toggle75415;
+		}
+
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_SpeedUpEvents_75415)]
+		private IScheduleChangesPublisherHangfire createTarget(ScheduleChangesSubscriptionPublisher publisher)
+		{
+			return _toggle75415
+				? (IScheduleChangesPublisherHangfire) new ScheduleReadModelWrapperHandler(null, null, null, publisher)
+				: new ScheduleChangesPublisherHangfire(publisher);
+		}
+
+		public IComponentContext TempContainer;
+
+		[Test]
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_SpeedUpEvents_75415)]
+		[Toggle(Toggles.ResourcePlanner_SpeedUpEvents_75415)]
+		public void MustNotUseOldHandler()
+		{
+			Assert.Throws<ComponentNotRegisteredException>(() =>
+				TempContainer.Resolve<ScheduleChangesPublisherHangfire>());
+		}
+
+		[Test]
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_SpeedUpEvents_75415)]
+		[ToggleOff(Toggles.ResourcePlanner_SpeedUpEvents_75415)]
+		public void MustNotUseNewHandler()
+		{
+			Assert.Throws<ComponentNotRegisteredException>(() =>
+				TempContainer.Resolve<ScheduleReadModelWrapperHandler>());
+		}
+
 		private readonly SignatureCreator signatureCreator =
 			new SignatureCreator(new FakeConfigReader(new Dictionary<string, string>
 			{
@@ -65,13 +109,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			var server = new FakeHttpServer();
 			var settingsRepository = new FakeGlobalSettingDataRepository();
 			var subscriptions = new ScheduleChangeSubscriptions();
-			subscriptions.Add(new ScheduleChangeListener {Uri = new Uri("/",UriKind.Relative)});
+			subscriptions.Add(new ScheduleChangeListener {Uri = new Uri("/", UriKind.Relative)});
 			settingsRepository.PersistSettingValue(ScheduleChangeSubscriptions.Key, subscriptions);
-			var handler = new ScheduleChangesPublisherHangfire(new ScheduleChangesSubscriptionPublisher(server, new ThisIsNow(utcTheTime), settingsRepository, signatureCreator));
-			handler.Handle(newSchedule);
+			var publisher =
+				new ScheduleChangesSubscriptionPublisher(server, new ThisIsNow(utcTheTime), settingsRepository, signatureCreator);
+			var target = createTarget(publisher);
+			target.Handle(newSchedule);
 
 			server.Requests.Count.Should().Be.EqualTo(1);
 		}
+
 
 		[Test]
 		public void ShouldIgnoreOtherScenariosThanDefault()
@@ -89,10 +136,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			var server = new FakeHttpServer();
 			var settingsRepository = new FakeGlobalSettingDataRepository();
 			var subscriptions = new ScheduleChangeSubscriptions();
-			subscriptions.Add(new ScheduleChangeListener { Uri = new Uri("/", UriKind.Relative) });
+			subscriptions.Add(new ScheduleChangeListener {Uri = new Uri("/", UriKind.Relative)});
 			settingsRepository.PersistSettingValue(ScheduleChangeSubscriptions.Key, subscriptions);
-			var handler = new ScheduleChangesPublisherHangfire(new ScheduleChangesSubscriptionPublisher(server, new ThisIsNow(new DateTime(2016, 3, 10, 5, 0, 0)), settingsRepository, signatureCreator));
-			handler.Handle(newSchedule);
+			var publisher = new ScheduleChangesSubscriptionPublisher(server, new ThisIsNow(new DateTime(2016, 3, 10, 5, 0, 0)),
+				settingsRepository, signatureCreator);
+			var target = createTarget(publisher);
+			target.Handle(newSchedule);
 
 			server.Requests.Count.Should().Be.EqualTo(0);
 		}
@@ -113,11 +162,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			var server = new FakeHttpServer();
 			var settingsRepository = new FakeGlobalSettingDataRepository();
 			var subscriptions = new ScheduleChangeSubscriptions();
-			subscriptions.Add(new ScheduleChangeListener { Name = "Facebook", RelativeDateRange = new MinMax<int>(-2, 7), Uri = new Uri("http://facebook") });
+			subscriptions.Add(new ScheduleChangeListener
+			{
+				Name = "Facebook",
+				RelativeDateRange = new MinMax<int>(-2, 7),
+				Uri = new Uri("http://facebook")
+			});
 			settingsRepository.PersistSettingValue(ScheduleChangeSubscriptions.Key, subscriptions);
 
-			var handler = new ScheduleChangesPublisherHangfire(new ScheduleChangesSubscriptionPublisher(server, new ThisIsNow(new DateTime(2016, 3, 10, 5, 0, 0)), settingsRepository, signatureCreator));
-			handler.Handle(newSchedule);
+			var publisher = new ScheduleChangesSubscriptionPublisher(server, new ThisIsNow(new DateTime(2016, 3, 10, 5, 0, 0)),
+				settingsRepository, signatureCreator);
+			var target = createTarget(publisher);
+			target.Handle(newSchedule);
 
 			server.Requests[0].Uri.Should().Be.EqualTo("http://facebook/");
 		}
@@ -138,12 +194,24 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			var server = new FakeHttpServer();
 			var settingsRepository = new FakeGlobalSettingDataRepository();
 			var subscriptions = new ScheduleChangeSubscriptions();
-			subscriptions.Add(new ScheduleChangeListener { Name = "Facebook", RelativeDateRange = new MinMax<int>(4, 7), Uri = new Uri("http://facebook") });
-			subscriptions.Add(new ScheduleChangeListener { Name = "Salesforce", RelativeDateRange = new MinMax<int>(-1, 1), Uri = new Uri("http://salesforce") });
+			subscriptions.Add(new ScheduleChangeListener
+			{
+				Name = "Facebook",
+				RelativeDateRange = new MinMax<int>(4, 7),
+				Uri = new Uri("http://facebook")
+			});
+			subscriptions.Add(new ScheduleChangeListener
+			{
+				Name = "Salesforce",
+				RelativeDateRange = new MinMax<int>(-1, 1),
+				Uri = new Uri("http://salesforce")
+			});
 			settingsRepository.PersistSettingValue(ScheduleChangeSubscriptions.Key, subscriptions);
 
-			var handler = new ScheduleChangesPublisherHangfire(new ScheduleChangesSubscriptionPublisher(server, new ThisIsNow(new DateTime(2016,3,10,5,0,0)), settingsRepository, signatureCreator));
-			handler.Handle(newSchedule);
+			var publisher = new ScheduleChangesSubscriptionPublisher(server, new ThisIsNow(new DateTime(2016, 3, 10, 5, 0, 0)),
+				settingsRepository, signatureCreator);
+			var target = createTarget(publisher);
+			target.Handle(newSchedule);
 
 			server.Requests[0].Uri.Should().Be.EqualTo("http://salesforce/");
 		}
@@ -164,13 +232,21 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			var server = new FakeHttpServer();
 			var settingsRepository = new FakeGlobalSettingDataRepository();
 			var subscriptions = new ScheduleChangeSubscriptions();
-			subscriptions.Add(new ScheduleChangeListener { Name = "Facebook", RelativeDateRange = new MinMax<int>(-1, 1), Uri = new Uri("http://facebook") });
+			subscriptions.Add(new ScheduleChangeListener
+			{
+				Name = "Facebook",
+				RelativeDateRange = new MinMax<int>(-1, 1),
+				Uri = new Uri("http://facebook")
+			});
 			settingsRepository.PersistSettingValue(ScheduleChangeSubscriptions.Key, subscriptions);
 
-			var handler = new ScheduleChangesPublisherHangfire(new ScheduleChangesSubscriptionPublisher(server, new ThisIsNow(new DateTime(2016, 3, 10, 5, 0, 0)), settingsRepository, signatureCreator));
-			handler.Handle(newSchedule);
+			var publisher = new ScheduleChangesSubscriptionPublisher(server, new ThisIsNow(new DateTime(2016, 3, 10, 5, 0, 0)),
+				settingsRepository, signatureCreator);
+			var target = createTarget(publisher);
+			target.Handle(newSchedule);
 
-			server.Requests[0].Headers["Signature"].Should().Be.EqualTo("QLX0n3ffldPGQteTvhzyRUEt4vT4ajiJkn6IRvmXV6YxInpuK3PnT2oIQDRHEl/khUM2pp7pmLcbOJMWwypKabLUPK3p27YbzLZ58aTadDQAaks8BJtXPPQHAgxjL5o2iNaNUfR8+Qqv5WXo8LjyTCE1nnyxCOc5X9AEaPTjHr5Izhe4ZWm/G8lUvSu9Xr4OSZRBpRM8ZsyLSCf3iE5olU3ThSBSIoZA4veYc+XriOYog6Kvcik8AjoduNz/t21Pdf+JqhwvU07VgnSkIXlf3RY63mgTs1P5/gOXVhzAwD0e62HMPxuckEN2d8GKYQKcku51CYjxPFhNmYXFR0Z3Ow==");
+			server.Requests[0].Headers["Signature"].Should().Be.EqualTo(
+				"QLX0n3ffldPGQteTvhzyRUEt4vT4ajiJkn6IRvmXV6YxInpuK3PnT2oIQDRHEl/khUM2pp7pmLcbOJMWwypKabLUPK3p27YbzLZ58aTadDQAaks8BJtXPPQHAgxjL5o2iNaNUfR8+Qqv5WXo8LjyTCE1nnyxCOc5X9AEaPTjHr5Izhe4ZWm/G8lUvSu9Xr4OSZRBpRM8ZsyLSCf3iE5olU3ThSBSIoZA4veYc+XriOYog6Kvcik8AjoduNz/t21Pdf+JqhwvU07VgnSkIXlf3RY63mgTs1P5/gOXVhzAwD0e62HMPxuckEN2d8GKYQKcku51CYjxPFhNmYXFR0Z3Ow==");
 		}
 	}
 }

@@ -16,19 +16,23 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 		IRunOnHangfire,
 		IScheduleDayReadModelHandlerHangfire,
 		IPersonScheduleDayReadModelUpdaterHangfire,
-		IScheduleProjectionReadOnlyUpdater
+		IScheduleProjectionReadOnlyUpdater,
+		IScheduleChangesPublisherHangfire
 	{
 		private readonly ScheduleDayReadModelPersister _scheduleDayReadModelPersister;
 		private readonly PersonScheduleDayReadModelUpdaterPersister _personScheduleDayReadModelUpdaterPersister;
 		private readonly ScheduleProjectionReadOnlyChecker _scheduleProjectionReadOnlyChecker;
+		private readonly ScheduleChangesSubscriptionPublisher _scheduleChangesSubscriptionPublisher;
 
 		public ScheduleReadModelWrapperHandler(ScheduleDayReadModelPersister scheduleDayReadModelPersister,
 			PersonScheduleDayReadModelUpdaterPersister personScheduleDayReadModelUpdaterPersister,
-			ScheduleProjectionReadOnlyChecker scheduleProjectionReadOnlyChecker)
+			ScheduleProjectionReadOnlyChecker scheduleProjectionReadOnlyChecker, 
+			ScheduleChangesSubscriptionPublisher scheduleChangesSubscriptionPublisher)
 		{
 			_scheduleDayReadModelPersister = scheduleDayReadModelPersister;
 			_personScheduleDayReadModelUpdaterPersister = personScheduleDayReadModelUpdaterPersister;
 			_scheduleProjectionReadOnlyChecker = scheduleProjectionReadOnlyChecker;
+			_scheduleChangesSubscriptionPublisher = scheduleChangesSubscriptionPublisher;
 		}
 
 		[ImpersonateSystem]
@@ -38,6 +42,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 			_scheduleDayReadModelPersister?.Execute(@event);
 			_personScheduleDayReadModelUpdaterPersister?.Execute(@event);
 			_scheduleProjectionReadOnlyChecker?.Execute(@event);
+			_scheduleChangesSubscriptionPublisher?.Send(@event);
 		}
 
 		[ImpersonateSystem]

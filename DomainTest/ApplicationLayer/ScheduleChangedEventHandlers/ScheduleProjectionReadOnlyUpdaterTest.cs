@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		[Toggle(Toggles.ResourcePlanner_SpeedUpEvents_75415)]
 		public void ShouldPersistScheduleProjection()
 		{
-			shouldPersistScheduleProjection(new ScheduleReadModelWrapperHandler(null, null, TempContainer.Resolve<ScheduleProjectionReadOnlyChecker>()));
+			shouldPersistScheduleProjection(new ScheduleReadModelWrapperHandler(null, null, TempContainer.Resolve<ScheduleProjectionReadOnlyChecker>(), null));
 		}
 
 		[Test]
