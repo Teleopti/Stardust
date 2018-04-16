@@ -22,7 +22,6 @@
 				</select>
 			</div>
 			<br />
-			<!-- ko if: isSetAgentDescriptionEnabled()-->
 			<div class="clearfix">
 				<label for="CommonAgentName-Picker" class="col-xs-12 control-label">@Resources.AgentDescription</label>
 				<select id="CommonAgentName-Picker" class="col-xs-4 culture-setting" data-bind="foreach: nameFormats, select2: { value: selectedNameFormat }, enable: settingsLoaded">
@@ -30,7 +29,6 @@
 				</select>
 			</div>
 			<br />
-			<!-- /ko -->
 
 			<div class="clearfix">
 				<!-- ko if: IsNotificationSupported -->

@@ -15,7 +15,6 @@
 		Forecast_CopySettingsToWorkflow_11112,
 		
 		Request_RecalculatePersonAccountBalanceOnRequestConsumer_36850,
-		Settings_SetAgentDescription_23257,
 
 		RTA_ViewHistoricalAhderence7DaysBack_46826,
 		RTA_ConfigurationValidationNotification_46933,
