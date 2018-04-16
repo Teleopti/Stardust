@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 				new SkillTypeFlatOvertimeOpenPeriodMapper().Map(personRequest.Person.WorkflowControlSet.OvertimeRequestOpenPeriods, defaultSkillType).Where(x =>
 				{
 					var skillType = x.SkillType;
-					var matchedSkillTypes = skillTypes.Where(s => s.SkillType == skillType).ToList();
+					var matchedSkillTypes = skillTypes.Where(s => s.SkillType.Equals(skillType)).ToList();
 					return matchedSkillTypes.Any();
 				}).ToList();
 
