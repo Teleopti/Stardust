@@ -137,13 +137,16 @@
 			</div>
 		</div>
 	</div>
+	<a href="/" style="display: none;" id="realPath"></a>
 	<script>
 		function fixSubDir() {
 			window.subDir = window.subDir.replace("$(TELEOPTIWFM_URL)", "/TeleoptiWFM");
 			var linksToFix = document.getElementsByClassName("addSubDir");
+			var realPath = document.getElementById("realPath").href;
+
 			var i;
 			for (i = 0; i < linksToFix.length; i++) {
-				linksToFix[i].href = window.subDir + linksToFix[i].href;
+				linksToFix[i].href = window.subDir + linksToFix[i].href.replace(realPath, "");
 			}
 		}
 		fixSubDir();
