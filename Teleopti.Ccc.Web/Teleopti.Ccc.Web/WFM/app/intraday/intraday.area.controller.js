@@ -142,6 +142,8 @@
 		};
 
 		vm.openSkillFromArea = function(skill) {
+			if (!vm.isSkill(skill)) return;
+
 			if (skill.DoDisplayData) {
 				//Clicked a new skill
 				if (vm.moduleState.selectedSubSkill !== skill) {
