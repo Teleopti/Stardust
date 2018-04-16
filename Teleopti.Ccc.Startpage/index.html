@@ -29,6 +29,7 @@
 			</div>
 		</div>
 		<script>
+			window.subDir = "$(TELEOPTIWFM_URL)";
 
 			function setCookieFromQueryString() {
 				var date = new Date();
@@ -48,38 +49,38 @@
 			}
 
 			window.onload = function () {
-
+				console.log(window.subDir);
 				document.getElementById("launcher").addEventListener("click", function (e) {
 					e.preventDefault();
-					window.location.href = "/TeleoptiWFM/Client/Teleopti.Ccc.SmartClientPortal.Shell.application?" + window.location.search.substring(1);
+					window.location.href = subDir + "/Client/Teleopti.Ccc.SmartClientPortal.Shell.application?" + window.location.search.substring(1);
 					return false;
 				});
 
-					var xmlhttp = new XMLHttpRequest();
-					xmlhttp.onreadystatechange = function () {
-						if (xmlhttp.readyState == 4) {
-							if (xmlhttp.status == 200) {
-								if (xmlhttp.responseText.length > 0) {
-									var result = JSON.parse(xmlhttp.responseText);
+				var xmlhttp = new XMLHttpRequest();
+				xmlhttp.onreadystatechange = function () {
+					if (xmlhttp.readyState == 4) {
+						if (xmlhttp.status == 200) {
+							if (xmlhttp.responseText.length > 0) {
+								var result = JSON.parse(xmlhttp.responseText);
 
-									if (result.IsEnabled === true) {
-										document.getElementById("webwfm").style.visibility = "visible";
-										document.getElementById("webwfm").style.display = "block";
-									} else {
-										console.log(result.IsEnabled, 'false');
-										document.getElementById("webwfm").style.display = "none";
-										document.getElementById("webwfm").style.visibility = "hidden";
-									}
-
+								if (result.IsEnabled === true) {
+									document.getElementById("webwfm").style.visibility = "visible";
+									document.getElementById("webwfm").style.display = "block";
 								} else {
-									console.log('fail', result);
+									console.log(result.IsEnabled, 'false');
+									document.getElementById("webwfm").style.display = "none";
+									document.getElementById("webwfm").style.visibility = "hidden";
 								}
+
+							} else {
+								console.log('fail', result);
 							}
 						}
-					};
-					xmlhttp.open("GET", "Web/ToggleHandler/IsEnabled?toggle=Wfm_MinimumScaffolding_32659", true);
-					xmlhttp.setRequestHeader("Accept", "application/json");
-					xmlhttp.send();
+					}
+				};
+				xmlhttp.open("GET", "Web/ToggleHandler/IsEnabled?toggle=Wfm_MinimumScaffolding_32659", true);
+				xmlhttp.setRequestHeader("Accept", "application/json");
+				xmlhttp.send();
 
 				setCookieFromQueryString();
 			};
@@ -90,31 +91,33 @@
 		<!-- Blocks -->
 		<div class="client-applications row">
 			<div class="col-md-3">
-				<a class="block blue" href="/TeleoptiWFM/Web/MyTime">
+				<a class="block blue addSubDir" href="/Web/MyTime">
 					<span>Agents</span>
 				</a>
 			</div>
 			<div class="col-md-3">
-				<a id="webteamschedule" class="block green" href="/TeleoptiWFM/Web/Wfm/#/teams">
+				<a id="webteamschedule" class="block green addSubDir" href="/Web/Wfm/#/teams">
 					<span>Team Leaders</span>
 				</a>
 			</div>
 			<div class="col-md-3">
-				<a id="webrta" class="block pink" href="/TeleoptiWFM/Web/Wfm/#/rta">
+				<a id="webrta" class="block pink addSubDir" href="/Web/Wfm/#/rta">
 					<span>Real-time Analysts</span>
 				</a>
 			</div>
 			<div class="col-md-3" style="overflow:hidden;">
 				<a class="block orange" href="javascript:void(0);" id="launcher">
 					<span>Resource Planners</span>
-					<a class="wfm-block-overlay" style="visibility: hidden" id="webwfm" href="/TeleoptiWFM/Web/wfm">
+					<a class="wfm-block-overlay addSubDir" style="visibility: hidden" id="webwfm" href="/Web/wfm">
 						<span>Web</span>
-						<p>Thank you for joining our pilot project. 
-						Your input and feedback is vital to us to ensure we develop functionality that makes a difference. Click here to access the pilot features.
-						<br />
-						<br />
-						If you only want to access our standard functionality, click the box as normal.
-						Any feedback, no matter how large or small, is appreciated. Thanks once again!</p>
+						<p>
+							Thank you for joining our pilot project.
+							Your input and feedback is vital to us to ensure we develop functionality that makes a difference. Click here to access the pilot features.
+							<br />
+							<br />
+							If you only want to access our standard functionality, click the box as normal.
+							Any feedback, no matter how large or small, is appreciated. Thanks once again!
+						</p>
 					</a>
 				</a>
 
@@ -124,8 +127,8 @@
 		<div class="row">
 			<div class="col-md-12">
 				<ul class="tools-services">
-					<li class="rta-service"><a href="/TeleoptiWFM/RTA/TeleoptiRtaService.svc">RTA Web Service</a></li>
-					<li class="sdk-service"><a href="/TeleoptiWFM/SDK/TeleoptiCCCSdkService.svc">SDK Web Service</a></li>
+					<li class="rta-service"><a href="/RTA/TeleoptiRtaService.svc" class="addSubDir">RTA Web Service</a></li>
+					<li class="sdk-service"><a href="/SDK/TeleoptiCCCSdkService.svc" class="addSubDir">SDK Web Service</a></li>
 				</ul>
 			</div>
 		</div>
@@ -135,6 +138,17 @@
 			</div>
 		</div>
 	</div>
+	<script>
+		function fixSubDir() {
+			window.subDir = window.subDir.replace("$(TELEOPTIWFM_URL)", "/TeleoptiWFM");
+			console.log(window.subDir);
+			var linksToFix = document.getElementsByClassName("addSubDir");
+			var i;
+			for (i = 0; i < linksToFix.length; i++) {
+				linksToFix[i].href = window.subDir + linksToFix[i].href;
+			}
+		}
+		fixSubDir();
+	</script>
 </body>
 </html>
-
