@@ -20,7 +20,7 @@ Background:
 	And I view people
 	And I searched for 'a'
 	And I have selected person 'Ashley'
-	And I have selected person 'I'
+	And I have selected person 'Anthony'
 	And I have selected person 'Abraham'
 
 @ignore
@@ -29,18 +29,8 @@ Scenario: Change application logon for people
 	Then The application logon page is shown
 	And I can see current application logons
 	| Name		| AppLogon			|
-	| Ashley	| 					|
 	| Anthony	| anthony@dish.com	|
 	| Abraham	| abraham			|
 	When I change Application logon for 'Ashley' into 'ashley'
 	And I press the save button
 	Then I should not the see the application logon page
-
-@ignore
-Scenario: Feedback from server when entering already taken logon
-	When I navigate to application logon page
-	Then The application logon page is shown
-	When I change Application logon for 'Ashley' into 'abraham'
-	Then I should see a validation error on 'Ashley'
-	And The save button should be disabled
-

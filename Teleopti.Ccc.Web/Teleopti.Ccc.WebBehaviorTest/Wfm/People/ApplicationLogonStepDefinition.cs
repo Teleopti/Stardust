@@ -44,6 +44,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.People
 		public void ApplicationLogonPageIsShown()
 		{
 			Browser.Interactions.AssertExists("[data-test-application-logon]");
+			Browser.Interactions.AssertUrlContains("access/applicationlogon");
 		}
 
 
@@ -57,8 +58,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.People
 
 				Browser.Interactions.AssertJavascriptResultContains($@"
 					return Array.from(document.querySelectorAll('[data-test-person]'))
-					.find(r => r.textContent.includes('{name}'))
-					.querySelector('[data-test-person-logon] input').value.includes('{logonName}')
+					.find(r => r.querySelector('[data-test-person-name]').value.includes('{name}'))
+					.querySelector('[data-test-person-logon]').value.includes('{logonName}')
 				", "True");
 			}
 		}
