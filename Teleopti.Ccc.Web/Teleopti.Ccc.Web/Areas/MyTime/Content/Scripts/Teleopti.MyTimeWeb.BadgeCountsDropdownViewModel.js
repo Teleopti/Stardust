@@ -54,8 +54,9 @@ Teleopti.MyTimeWeb.BadgeCountsDropdownViewModel = function BadgeCountsDropdownVi
 
 	self.fetchBadgeCounts = function () {
 		if (self.periodType === 'OnGoing') return;
-		var from = self.startMoment().toDate().toJSON();
-		var to = self.endMoment().toDate().toJSON();
+		var f = 'YYYY-MM-DD';
+		var from = self.startMoment().format(f);
+		var to = self.endMoment().format(f);
 		self.fetch(from, to);
 	};
 
