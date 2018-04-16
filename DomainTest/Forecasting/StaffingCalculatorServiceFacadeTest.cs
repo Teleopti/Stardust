@@ -166,6 +166,18 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 			esl.Should().Be.IncludedIn(.18, .20);
 		}
 
+		[Test]
+		[Ignore("74899 - maybe to be fixed")]
+		public void ErlangCErlangAComparison9()
+		{
+			const double tasks = 6d;
+			const double agents = 2d;
+			var forecasted = Target.AgentsUseOccupancy(.8, 20, tasks, 850, TimeSpan.FromMinutes(15), 0, 1, 3);	
+			var esl = Target.ServiceLevelAchievedOcc(agents, 20, tasks, 850, TimeSpan.FromMinutes(15), .8, forecasted, 3);
+
+			esl.Should().Be.IncludedIn(.80, .82);
+		}
+
 		public void Configure(FakeToggleManager toggleManager)
 		{
 			if (_useErlangA)
