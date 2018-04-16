@@ -138,20 +138,18 @@
 
 		function buildError(root) {
 			root.ConstructedError = null;
-			root.ConstructedError = `
-EXCEPTION MESSAGE
-` + root.ErrorMessage + `
-===========================
-EXCEPTION STACKTRACE
-` + root.ErrorStackTrace + `
-===========================
-INNER EXCEPTION MESSAGE
-` + root.InnerErrorMessage + `
-===========================
-INNER EXCEPTION STACKTRACE
-` + root.InnerErrorStackTrace + `
-===========================
-`;
+			root.ConstructedError = 'EXCEPTION MESSAGE \n' +
+root.ErrorMessage + '\n' +
+'=========================== \n' +
+'EXCEPTION STACKTRACE \n' +
+root.ErrorStackTrace + '\n' +
+'=========================== \n' +
+'INNER EXCEPTION MESSAGE \n' +
+root.InnerErrorMessage + '\n' +
+'=========================== \n' +
+'INNER EXCEPTION STACKTRACE \n' +
+root.InnerErrorStackTrace + '\n' +
+'=========================== \n';
 			console.log(root);
 		}
 
