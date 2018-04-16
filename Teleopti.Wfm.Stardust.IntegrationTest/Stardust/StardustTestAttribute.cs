@@ -86,7 +86,6 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 			base.AfterTest(testDetails);
 
 			Hangfire.WaitForQueue();
-			//StateQueue.WaitForQueue();
 
 			TestSiteConfigurationSetup.TearDown();
 

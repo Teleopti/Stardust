@@ -1,8 +1,11 @@
-﻿using System.Data.SqlClient;
+﻿using System;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading;
 using Newtonsoft.Json;
 using NUnit.Framework;
+using NUnit.Framework.Internal;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -20,7 +23,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 {
-	[Ignore("WIP"),StardustTest]
+	[StardustTest]
 	public class AbsenceRequestEndToEndTest
 	{
 		public WithUnitOfWork WithUnitOfWork;
@@ -32,18 +35,19 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 		public IEventPublisher EventPublisher;
 		public IConfigReader ConfigReader;
 		public ICurrentUnitOfWork CurrentUnitOfWork;
-			
+		public ICurrentBusinessUnit CurrentBusinessUnit;
+		
 
-	  
 		[Test]
 		public void ShouldRunEndToEndAbsenceRequest()
 		{
 			Now.Is("2016-02-25 08:00".Utc());
+			IPersonRequest personRequest = null;
 			WithUnitOfWork.Do(() =>
 			{
 				var person =  PersonRepository.LoadAll().FirstOrDefault(x => x.Name.FirstName.Equals("Ola"));
 				var absence = AbsenceRepository.LoadAll().FirstOrDefault();
-				var personRequest = new PersonRequest(person, new AbsenceRequest(absence, new DateTimePeriod(2016, 02, 26, 12, 2016, 02, 26, 13)));
+				personRequest = new PersonRequest(person, new AbsenceRequest(absence, new DateTimePeriod(2016, 02, 26, 12, 2016, 02, 26, 13)));
 				personRequest.Subject = "I am going to have fun";
 				personRequest.Pending();
 				PersonRequestRepository.Add(personRequest);
@@ -63,51 +67,121 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 
 			startServiceBusAndPublishTick();
 
-			performLevel1Assert();
+			performLevel1Assert(personRequest);
+
+			performLevel2Assert();
 			
-			Thread.Sleep(600000);
+			//adding a small delay an experinment may be we need to retry late
+			Thread.Sleep(2000);
+
+			performLevel3Assert(personRequest);
+
 		}
 
-		private void performLevel1Assert()
+		private void performLevel3Assert(IPersonRequest personRequest)
 		{
-			////check in job queue
-			//var connectionString = InfraTestConfigReader.ConnectionString;
-			//using (var connection = new SqlConnection(connectionString))
-			//{
-			//	connection.Open();
-			//	using (var command = new SqlCommand("select serialized from Stardust.JobQueue", connection))
-			//	{
-			//		while (true)
-			//		{
-						
-			//			using (var reader = command.ExecuteReader())
-			//			{
-			//				if (reader.HasRows)
-			//				{
-			//					reader.Read();
-			//					var jsonData = reader.GetString(0);
-			//					NewMultiAbsenceRequestsCreatedEvent storedEvent = JsonConvert.DeserializeObject<NewMultiAbsenceRequestsCreatedEvent>(jsonData);
-			//					break;
-			//				}
-								
-			//			}
-			//			Thread.Sleep(1000);
+			//check in job detail
+			var comandText = $@"select jobid from Stardust.JobDetail where detail like '%{ personRequest.Id.GetValueOrDefault() }%'";
+			var connectionString = InfraTestConfigReader.ConnectionString;
+			using (var connection = new SqlConnection(connectionString))
+			{
+				connection.Open();
+				using (var command = new SqlCommand(comandText, connection))
+				{
+					//while (true)
+					{
 
-			//		}
-					
-			//	}
-			//}
+						using (var reader = command.ExecuteReader())
+						{
+							if (reader.HasRows)
+							{
+								reader.Read();
+								if (reader.IsDBNull(0))
+									Assert.Fail("The request id is not in the stardust job detail. The proper request was not processed.");
+								else
+									Assert.Pass();
 
+							}
 
+						}
+						//Thread.Sleep(1000);
 
-			
-			//while there is a not a job in stardust
-			// sleep for 1 sec
-			//when i have a job do level1 assert on the content of the job
+					}
 
-			//while there is not an end date on the job
-			//sleep for 1 sec
-			//when i have an end date do the level2 assert to check the status of the job
+				}
+			}
+		}
+
+		
+		private void performLevel1Assert(IPersonRequest personRequest)
+		{
+			//check in job queue
+			var connectionString = InfraTestConfigReader.ConnectionString;
+			using (var connection = new SqlConnection(connectionString))
+			{
+				connection.Open();
+				using (var command = new SqlCommand("select serialized from Stardust.JobQueue", connection))
+				{
+					while (true)
+					{
+
+						using (var reader = command.ExecuteReader())
+						{
+							if (reader.HasRows)
+							{
+								reader.Read();
+								var jsonData = reader.GetString(0);
+								NewMultiAbsenceRequestsCreatedEvent storedEvent = JsonConvert.DeserializeObject<NewMultiAbsenceRequestsCreatedEvent>(jsonData);
+								storedEvent.PersonRequestIds.First().Should().Be.EqualTo(personRequest.Id.GetValueOrDefault());
+								storedEvent.LogOnDatasource.Should().Be.EqualTo("TestData");
+								storedEvent.LogOnBusinessUnitId.Should().Be.EqualTo(CurrentBusinessUnit.CurrentId().GetValueOrDefault());
+
+								break;
+							}
+
+						}
+						Thread.Sleep(1000);
+
+					}
+
+				}
+			}
+		}
+
+		private void performLevel2Assert()
+		{
+			//check in job 
+			var connectionString = InfraTestConfigReader.ConnectionString;
+			using (var connection = new SqlConnection(connectionString))
+			{
+				connection.Open();
+				using (var command = new SqlCommand("select Ended,result from Stardust.Job", connection))
+				{
+					while (true)
+					{
+
+						using (var reader = command.ExecuteReader())
+						{
+							if (reader.HasRows)
+							{
+								reader.Read();
+								if (!reader.IsDBNull(0))
+								{
+									DateTime? jobEndedDate = reader.GetDateTime(0);
+									var result = reader.GetString(1);
+									jobEndedDate.HasValue.Should().Be.True();
+									result.Should().Be.EqualTo("Success");
+									break;
+								}
+							}
+
+						}
+						Thread.Sleep(1000);
+
+					}
+
+				}
+			}
 
 			//assert the personrequest as a level 3 assert on message and status
 
