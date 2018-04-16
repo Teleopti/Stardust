@@ -132,6 +132,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ScheduleDayReadModelsCreator>().As<IScheduleDayReadModelsCreator>().SingleInstance();
 			builder.RegisterType<ScheduleDayReadModelPersister>().SingleInstance();
 			builder.RegisterType<ScheduleProjectionReadOnlyChecker>().SingleInstance();
+			builder.RegisterType<ScheduleChangesSubscriptionPublisher>().SingleInstance();
 			builder.RegisterType<PersonScheduleDayReadModelsCreator>().As<IPersonScheduleDayReadModelsCreator>().SingleInstance();
 			builder.RegisterType<ScheduleDayReadModelComparer>().As<IScheduleDayReadModelComparer>().SingleInstance();
 			builder.RegisterType<PersonScheduleDayReadModelPersister>().As<IPersonScheduleDayReadModelPersister>().SingleInstance();

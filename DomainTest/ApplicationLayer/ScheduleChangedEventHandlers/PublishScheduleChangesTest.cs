@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			var subscriptions = new ScheduleChangeSubscriptions();
 			subscriptions.Add(new ScheduleChangeListener {Uri = new Uri("/",UriKind.Relative)});
 			settingsRepository.PersistSettingValue(ScheduleChangeSubscriptions.Key, subscriptions);
-			var handler = new ScheduleChangesPublisherHangfire(server, new ThisIsNow(utcTheTime), settingsRepository, signatureCreator);
+			var handler = new ScheduleChangesPublisherHangfire(new ScheduleChangesSubscriptionPublisher(server, new ThisIsNow(utcTheTime), settingsRepository, signatureCreator));
 			handler.Handle(newSchedule);
 
 			server.Requests.Count.Should().Be.EqualTo(1);
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			var subscriptions = new ScheduleChangeSubscriptions();
 			subscriptions.Add(new ScheduleChangeListener { Uri = new Uri("/", UriKind.Relative) });
 			settingsRepository.PersistSettingValue(ScheduleChangeSubscriptions.Key, subscriptions);
-			var handler = new ScheduleChangesPublisherHangfire(server, new ThisIsNow(new DateTime(2016, 3, 10, 5, 0, 0)), settingsRepository, signatureCreator);
+			var handler = new ScheduleChangesPublisherHangfire(new ScheduleChangesSubscriptionPublisher(server, new ThisIsNow(new DateTime(2016, 3, 10, 5, 0, 0)), settingsRepository, signatureCreator));
 			handler.Handle(newSchedule);
 
 			server.Requests.Count.Should().Be.EqualTo(0);
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			subscriptions.Add(new ScheduleChangeListener { Name = "Facebook", RelativeDateRange = new MinMax<int>(-2, 7), Uri = new Uri("http://facebook") });
 			settingsRepository.PersistSettingValue(ScheduleChangeSubscriptions.Key, subscriptions);
 
-			var handler = new ScheduleChangesPublisherHangfire(server, new ThisIsNow(new DateTime(2016, 3, 10, 5, 0, 0)), settingsRepository, signatureCreator);
+			var handler = new ScheduleChangesPublisherHangfire(new ScheduleChangesSubscriptionPublisher(server, new ThisIsNow(new DateTime(2016, 3, 10, 5, 0, 0)), settingsRepository, signatureCreator));
 			handler.Handle(newSchedule);
 
 			server.Requests[0].Uri.Should().Be.EqualTo("http://facebook/");
@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			subscriptions.Add(new ScheduleChangeListener { Name = "Salesforce", RelativeDateRange = new MinMax<int>(-1, 1), Uri = new Uri("http://salesforce") });
 			settingsRepository.PersistSettingValue(ScheduleChangeSubscriptions.Key, subscriptions);
 
-			var handler = new ScheduleChangesPublisherHangfire(server, new ThisIsNow(new DateTime(2016,3,10,5,0,0)), settingsRepository, signatureCreator);
+			var handler = new ScheduleChangesPublisherHangfire(new ScheduleChangesSubscriptionPublisher(server, new ThisIsNow(new DateTime(2016,3,10,5,0,0)), settingsRepository, signatureCreator));
 			handler.Handle(newSchedule);
 
 			server.Requests[0].Uri.Should().Be.EqualTo("http://salesforce/");
@@ -167,7 +167,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			subscriptions.Add(new ScheduleChangeListener { Name = "Facebook", RelativeDateRange = new MinMax<int>(-1, 1), Uri = new Uri("http://facebook") });
 			settingsRepository.PersistSettingValue(ScheduleChangeSubscriptions.Key, subscriptions);
 
-			var handler = new ScheduleChangesPublisherHangfire(server, new ThisIsNow(new DateTime(2016, 3, 10, 5, 0, 0)), settingsRepository, signatureCreator);
+			var handler = new ScheduleChangesPublisherHangfire(new ScheduleChangesSubscriptionPublisher(server, new ThisIsNow(new DateTime(2016, 3, 10, 5, 0, 0)), settingsRepository, signatureCreator));
 			handler.Handle(newSchedule);
 
 			server.Requests[0].Headers["Signature"].Should().Be.EqualTo("QLX0n3ffldPGQteTvhzyRUEt4vT4ajiJkn6IRvmXV6YxInpuK3PnT2oIQDRHEl/khUM2pp7pmLcbOJMWwypKabLUPK3p27YbzLZ58aTadDQAaks8BJtXPPQHAgxjL5o2iNaNUfR8+Qqv5WXo8LjyTCE1nnyxCOc5X9AEaPTjHr5Izhe4ZWm/G8lUvSu9Xr4OSZRBpRM8ZsyLSCf3iE5olU3ThSBSIoZA4veYc+XriOYog6Kvcik8AjoduNz/t21Pdf+JqhwvU07VgnSkIXlf3RY63mgTs1P5/gOXVhzAwD0e62HMPxuckEN2d8GKYQKcku51CYjxPFhNmYXFR0Z3Ow==");
