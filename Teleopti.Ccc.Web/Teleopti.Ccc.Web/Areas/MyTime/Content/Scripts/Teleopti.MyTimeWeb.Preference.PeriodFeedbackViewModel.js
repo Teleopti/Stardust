@@ -168,8 +168,7 @@ Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (ajax, dayViewM
 			(self.PossibleResultContractTimeLower() !== self.PossibleResultContractTimeUpper())) {
 			count++;
 		}
-		var isWeeklyWorkTimeEnabled = $('#Preference-period-feedback-view').data('mytime-isweeklyworktimeenabled');
-		if (self.IsWeeklyWorkTimeBroken() && isWeeklyWorkTimeEnabled) {
+		if (self.IsWeeklyWorkTimeBroken()) {
 			count++;
 		}
 		return count;

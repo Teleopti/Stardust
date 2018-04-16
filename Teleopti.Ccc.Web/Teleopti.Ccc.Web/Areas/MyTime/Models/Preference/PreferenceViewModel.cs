@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 		public int MaxMustHave { get; set; }
 		public int CurrentMustHave { get; set; }
 		public bool ExtendedPreferencesPermission { get; set; }
-		public bool IsWeeklyWorkTimeEnabled { get; set; }
 
 		public PreferenceOptionsViewModel Options { get; set; }
 	}

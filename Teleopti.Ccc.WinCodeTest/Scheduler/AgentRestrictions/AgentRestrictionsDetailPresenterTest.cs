@@ -131,8 +131,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			_preferenceCellData.SchedulingOption.UseScheduling = true;
 			_model.DetailData().Add(0, _preferenceCellData);
 
-			_schedulingResultStateHolder.UseMinWeekWorkTime = true;
-
 			//because of constructor in SchedulePresenterBase
 			var period = _schedulerStateHolder.RequestedPeriod;
 
@@ -221,8 +219,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			_model.DetailData().Add(0, _preferenceCellData);
 			_preferenceCellData.WeeklyMax = TimeSpan.FromHours(10);
 			_preferenceCellData.WeeklyMin = TimeSpan.FromHours(9);
-
-			_schedulingResultStateHolder.UseMinWeekWorkTime = true;
 
 			_preferenceCellData.SchedulePart.AddMainShift(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, _scenario, new DateTimePeriod(2012, 1, 1, 8, 2012, 1, 1, 16)));
 

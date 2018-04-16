@@ -41,7 +41,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			throw new NotImplementedException();
 		}
 
-		public bool UseMinWeekWorkTime { get; set; }
 		public ISkillDay SkillDayOnSkillAndDateOnly(ISkill skill, DateOnly dateOnly)
 		{
 			throw new NotImplementedException();

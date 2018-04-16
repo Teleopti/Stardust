@@ -93,7 +93,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				PreferencePeriod = map(s.WorkflowControlSet),
 				ExtendedPreferencesPermission =
 					_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb),
-				IsWeeklyWorkTimeEnabled = _toggleManager.IsEnabled(Toggles.Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635),
 				Options = new PreferenceOptionsViewModel(PreferenceOptions(s.SelectedDate), ActivityOptions()),
 				MaxMustHave = s.MaxMustHave,
 				CurrentMustHave = s.CurrentMustHave

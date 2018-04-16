@@ -73,9 +73,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<AbsenceRequestSynchronousValidator>().As<IAbsenceRequestSynchronousValidator>()
 				.SingleInstance();
-			registerType
-				<IBusinessRuleConfigProvider, BusinessRuleConfigProvider, BusinessRuleConfigProvider25635ToggleOff>(builder,
-						Toggles.Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635);
+			builder.RegisterType<BusinessRuleConfigProvider>().As<IBusinessRuleConfigProvider>().SingleInstance();
 
 			registerType
 				<IFilterRequests, FilterOutRequestsHandledByReadmodel, NoFilterCheckRequests>(builder,

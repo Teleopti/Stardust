@@ -114,11 +114,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// </summary>
 		/// <returns></returns>
 		INewBusinessRuleCollection GetRulesToRun();
-		
-        /// <summary>
-        /// If rule for min week work time should be used
-        /// </summary>
-        bool UseMinWeekWorkTime { get; set; }
 
 	    ISkillDay SkillDayOnSkillAndDateOnly(ISkill skill, DateOnly dateOnly);
 

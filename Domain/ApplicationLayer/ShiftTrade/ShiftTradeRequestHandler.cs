@@ -155,7 +155,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 					((IShiftTradeRequest)personRequest.Request).Accept(acceptingPerson, checkSum, _authorization);
 					setUpdatedMessage(@event, personRequest);
 
-					_schedulingResultStateHolder.UseMinWeekWorkTime = @event.UseMinWeekWorkTime;
 					var allEnabledRules = getAllEnabledBusinessRules(personRequest.Person.PermissionInformation.UICulture(), @event);
 
 					if (!validationResult.IsOk)

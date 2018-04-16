@@ -39,7 +39,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.IsNotNull(target.Schedules);
             Assert.IsNotNull(target.SkillDays);
             Assert.IsNotNull(target.SkillStaffPeriodHolder);
-            Assert.IsFalse(target.UseMinWeekWorkTime);
 			Assert.IsNotNull(target.SeniorityWorkDayRanks);
         }
 
@@ -102,19 +101,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         [Test]
         public void ShouldGetRulesWithMinWeekWorkTimeActivated()
         {
-            var target = new SchedulingResultStateHolder {UseMinWeekWorkTime = true, UseValidation = true};
+            var target = new SchedulingResultStateHolder {UseValidation = true};
             var rules = target.GetRulesToRun();
             var rule = (MinWeekWorkTimeRule)rules.Item(typeof(MinWeekWorkTimeRule));
             Assert.IsNotNull(rule);
-        }
-
-        [Test]
-        public void ShouldGetRulesWithMinWeekWorkTimeDeActivated()
-        {
-            var target = new SchedulingResultStateHolder { UseValidation = true };
-            var rules = target.GetRulesToRun();
-            var rule = (MinWeekWorkTimeRule)rules.Item(typeof(MinWeekWorkTimeRule));
-            Assert.IsNull(rule);
         }
     }
 }

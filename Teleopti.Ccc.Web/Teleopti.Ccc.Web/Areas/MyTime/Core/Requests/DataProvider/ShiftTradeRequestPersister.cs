@@ -123,7 +123,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 						LogOnDatasource = _dataSourceProvider.Current().DataSourceName,
 						PersonRequestId = personRequest.Id.GetValueOrDefault(),
 						AcceptingPersonId = shiftTrade.PersonTo.Id.GetValueOrDefault(),
-						UseMinWeekWorkTime = _toggleManager.IsEnabled(Toggles.Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635),
 						UseSiteOpenHoursRule = true
 					};
 				}

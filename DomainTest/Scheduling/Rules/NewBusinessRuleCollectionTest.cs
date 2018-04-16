@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 	public class NewBusinessRuleCollectionTest
 	{
 		private INewBusinessRuleCollection _target;
-		private const int totalNumberOfRules = 10;
+		private const int totalNumberOfRules = 11;
 		private ISchedulingResultStateHolder _state;
 
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
@@ -187,11 +187,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			setup();
 			_state = new SchedulingResultStateHolder
 			{
-				UseMinWeekWorkTime = true,
 				UseValidation = true
 			};
 			var allForScheduling = NewBusinessRuleCollection.AllForScheduling(_state);
-			Assert.AreEqual(totalNumberOfRules + 1, allForScheduling.Count);
+			Assert.AreEqual(totalNumberOfRules, allForScheduling.Count);
 			Assert.IsTrue(collectionContainsType(allForScheduling, typeof(MinWeekWorkTimeRule)));
 		}
 

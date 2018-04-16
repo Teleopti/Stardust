@@ -1,5 +1,4 @@
 ﻿@MyTimePreferences
-@OnlyRunIfEnabled('Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635')
 Feature: Preference Alert When Broken Min Or Max Hours
          In order to not break min and max hours per week when I submit preference
          As an agent

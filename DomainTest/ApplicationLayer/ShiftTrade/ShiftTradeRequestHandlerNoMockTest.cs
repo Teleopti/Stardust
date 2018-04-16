@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		public void ShouldSetMinWeeklyWorkTimeBrokenRuleWhenUseMinWeekWorkTimeIsOn()
 		{
 			var businessRuleProvider = new BusinessRuleProvider();
-			var personRequest = doShiftTradeWithBrokenRules(businessRuleProvider, true);
+			var personRequest = doShiftTradeWithBrokenRules(businessRuleProvider);
 			Assert.IsTrue(personRequest.BrokenBusinessRules.Value.HasFlag(BusinessRuleFlags.MinWeekWorkTimeRule));
 		}
 
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 					HandleOptionOnFailed = RequestHandleOption.AutoDeny
 				}
 			);
-			var personRequest = doShiftTradeWithBrokenRules(businessRuleProvider, useMinWeekWorkTime: true);
+			var personRequest = doShiftTradeWithBrokenRules(businessRuleProvider);
 			Assert.IsTrue(personRequest.IsDenied);
 			Assert.IsTrue(personRequest.DenyReason.Contains("No open hours for"), personRequest.DenyReason);
 			Assert.IsTrue(personRequest.GetMessage(new NoFormatting()).Contains("The week contains too little work time"));
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 					HandleOptionOnFailed = RequestHandleOption.AutoDeny
 				}
 			);
-			var personRequest = doShiftTradeWithBrokenRules(businessRuleProvider, useMinWeekWorkTime: true);
+			var personRequest = doShiftTradeWithBrokenRules(businessRuleProvider);
 			Assert.IsTrue(personRequest.IsDenied);
 		}
 
@@ -120,6 +120,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 				new ShiftTradeBusinessRuleConfig
 				{
 					BusinessRuleType = typeof(SiteOpenHoursRule).FullName,
+					Enabled = false,
+					HandleOptionOnFailed = RequestHandleOption.AutoDeny
+				},				
+				new ShiftTradeBusinessRuleConfig
+				{
+					BusinessRuleType = typeof(MinWeekWorkTimeRule).FullName,
 					Enabled = false,
 					HandleOptionOnFailed = RequestHandleOption.AutoDeny
 				}
@@ -405,9 +411,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			principal.AddClaimSet(new DefaultClaimSet(ClaimSet.System, claims));
 		}
 
-		private IPersonRequest doShiftTradeWithBrokenRules(IBusinessRuleProvider businessRuleProvider
-			, bool useMinWeekWorkTime = false, bool autoGrantShiftTrade = true,
-			IShiftExchangeOffer offer = null)
+		private IPersonRequest doShiftTradeWithBrokenRules(IBusinessRuleProvider businessRuleProvider, bool autoGrantShiftTrade = true, IShiftExchangeOffer offer = null)
 		{
 			setPermissions();
 
@@ -439,8 +443,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 
 			var @event = _shiftTradeTestHelper.GetAcceptShiftTradeEvent(personTo, personRequest.Id.GetValueOrDefault());
 			@event.UseSiteOpenHoursRule = true;
-			@event.UseMinWeekWorkTime = useMinWeekWorkTime;
-			_schedulingResultStateHolder.UseMinWeekWorkTime = useMinWeekWorkTime;
 
 			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { personTo, personFrom }, null,
 				new DateOnlyPeriod(new DateOnly(scheduleDate), new DateOnly(scheduleDate.AddDays(7))), _currentScenario.Current());

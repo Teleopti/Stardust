@@ -34,7 +34,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			_businessRuleProvider = businessRuleProvider;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_shiftTradeSpecifications = shiftTradeSpecifications;
-			_schedulingResultStateHolder.UseMinWeekWorkTime = true;
 		}
 
 		public IEnumerable<IShiftTradeBusinessRuleConfig> GetDefaultConfigForShiftTradeRequest()
@@ -69,17 +68,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		private int getOrder(Type ruleType)
 		{
 			return ruleOrders.ContainsKey(ruleType) ? ruleOrders[ruleType] : int.MaxValue;
-		}
-	}
-
-	public class BusinessRuleConfigProvider25635ToggleOff : BusinessRuleConfigProvider
-	{
-		public BusinessRuleConfigProvider25635ToggleOff(IBusinessRuleProvider businessRuleProvider,
-			ISchedulingResultStateHolder schedulingResultStateHolder,
-			IEnumerable<IShiftTradeSpecification> shiftTradeSpecifications)
-			: base(businessRuleProvider, schedulingResultStateHolder, shiftTradeSpecifications)
-		{
-			schedulingResultStateHolder.UseMinWeekWorkTime = false;
 		}
 	}
 }

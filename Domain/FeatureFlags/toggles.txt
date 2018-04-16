@@ -34,7 +34,6 @@ Wfm_MinimumScaffolding_32659 = RC # Set this to true to enable first page link t
 
 # China, can any of these be removed? #
 Request_RecalculatePersonAccountBalanceOnRequestConsumer_36850 = true
-Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635 = true
 Settings_SetAgentDescription_23257 = true
 Gamification_NewBadgeCalculation_31185 = true
 WfmReportPortal_Basic_38825 = true

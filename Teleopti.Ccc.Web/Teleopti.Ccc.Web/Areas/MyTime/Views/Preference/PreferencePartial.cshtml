@@ -6,7 +6,7 @@
 @{
 	Layout = null;
 }
-<input id="showweeklyworktime" type="hidden" value="@Model.IsWeeklyWorkTimeEnabled.ToString()" />
+<input id="showweeklyworktime" type="hidden" value="MinMaxWorkingTime" />
 
 <div class="navbar navbar-teleopti subnavbar">
 	<div class="container">
@@ -120,7 +120,7 @@
 		</div>
 		<div class="phone-background" ></div>
 	</div>
-	<div id="Preference-period-feedback-view" class="m-b-10" data-bind="css:{'phone-warning-indicator':IsHostAMobile}" data-mytime-isweeklyworktimeenabled="@Model.IsWeeklyWorkTimeEnabled">
+	<div id="Preference-period-feedback-view" class="m-b-10" data-bind="css:{'phone-warning-indicator':IsHostAMobile}">
 		<div class="warning-indicator" data-bind="click: toggleWarningDetail"><span data-bind="css: PreferenceFeedbackClass,text:WarningCount" class="warning-count">!</span></div>
 		<div class="hide-at-start" data-bind="css:{warningDetail:shouldShowWarningDetail(), 'show-after-loaded': FeedbackLoaded()}">
 			<div class="alert alert-preference" data-bind="css: PreferenceFeedbackClass">
@@ -158,15 +158,12 @@
 						@Html.Raw(string.Format(Resources.BusinessRuleNightlyRestRuleErrorMessage, "<span data-bind='text:nightRestTimes'>-</span>", "<span data-bind='text:firstDay'>-</span>", "<span data-bind='text:sencondDay'>-</span>", "<span data-bind='text:hoursBetweenTwoDays'>-</span>"))
 					</div>
 				</div>
-				@if (Model.IsWeeklyWorkTimeEnabled)
-			{
 				<!-- ko if: IsWeeklyWorkTimeBroken() -->
 					<div id="weekly-work-time-broken">
 						<span>@Resources.WeeklyWorkTimeBroken</span>
 						<span class="glyphicon glyphicon-exclamation-sign"></span>
 					</div>
 				<!-- /ko -->
-			}
 				<p></p>
 				<div>
 					@if (Model.PreferencePeriod == null)
@@ -196,10 +193,7 @@
 
 		<div id="Preference-body-inner" class="well clearfix pd0 body-inner">
 			<ul class="weekdays">
-				@if (Model.IsWeeklyWorkTimeEnabled)
-				{
-					<li style="max-width: 55px;">&nbsp;</li>
-				}
+				<li style="max-width: 55px;">&nbsp;</li>
 				@foreach (WeekDayHeader weekDayName in Model.WeekDayHeaders)
 				{
 					<li class="header-week-day" data-date="@weekDayName.Date.Date.ToString("yyyy-MM-dd")"></li>
@@ -214,24 +208,21 @@
 
 						</div>
 					</li>
-					@if (Model.IsWeeklyWorkTimeEnabled)
-					{
-						<li data-mytime-week="week" style="width: 55px;" data-bind="css: { 'week-view-non-editable': !IsEditable() }">
-							<div class="day-header"></div>
-							<div class="day-content">
-								<!-- ko if: IsWeeklyWorkTimeVisible -->
-								<div class="min-hours-per-week" data-bind="css: {'weekly-work-time-alert-editable': IsMinHoursBroken() && IsEditable(), 'weekly-work-time-alert-noneditable': IsMinHoursBroken() && !IsEditable()}">
-									<span>></span>
-									<span data-bind="text:PossibleResultWeeklyContractTimeLower"></span>
-								</div>
-								<div class="max-hours-per-week" data-bind="css: {'weekly-work-time-alert-editable': IsMaxHoursBroken() && IsEditable(), 'weekly-work-time-alert-noneditable': IsMaxHoursBroken() && !IsEditable()}">
-									<span><</span>
-									<span data-bind="text:PossibleResultWeeklyContractTimeUpper"></span>
-								</div>
-								<!-- /ko -->
+					<li data-mytime-week="week" style="width: 55px;" data-bind="css: { 'week-view-non-editable': !IsEditable() }">
+						<div class="day-header"></div>
+						<div class="day-content">
+							<!-- ko if: IsWeeklyWorkTimeVisible -->
+							<div class="min-hours-per-week" data-bind="css: {'weekly-work-time-alert-editable': IsMinHoursBroken() && IsEditable(), 'weekly-work-time-alert-noneditable': IsMinHoursBroken() && !IsEditable()}">
+								<span>></span>
+								<span data-bind="text:PossibleResultWeeklyContractTimeLower"></span>
 							</div>
-						</li>
-					}
+							<div class="max-hours-per-week" data-bind="css: {'weekly-work-time-alert-editable': IsMaxHoursBroken() && IsEditable(), 'weekly-work-time-alert-noneditable': IsMaxHoursBroken() && !IsEditable()}">
+								<span><</span>
+								<span data-bind="text:PossibleResultWeeklyContractTimeUpper"></span>
+							</div>
+							<!-- /ko -->
+						</div>
+					</li>
 
 					@foreach (DayViewModel day in week.Days)
 					{

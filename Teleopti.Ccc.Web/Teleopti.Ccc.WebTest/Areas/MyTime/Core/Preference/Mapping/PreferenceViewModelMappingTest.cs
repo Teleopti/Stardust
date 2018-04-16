@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
@@ -394,15 +393,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			assertOption(shiftCategoriesGroup, Resources.ShiftCategory, shiftCategory.Description.Name, shiftCategory.Id.Value);
 			assertOption(dayOffsGroup, Resources.DayOff, dayOff.Description.Name, dayOff.Id.Value);
 			assertOption(absencesGroup, Resources.Absence, absence.Description.Name, absence.Id.Value);
-		}
-
-		[Test]
-		public void ShouldMapIsWeeklyWorkTimeEnabled()
-		{
-			toggleManager.Stub(x => x.IsEnabled(Toggles.Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635)).Return(true);
-			var result = target.Map(data);
-
-			Assert.That(result.IsWeeklyWorkTimeEnabled, Is.True);
 		}
 
 		private void assertOption(PreferenceOptionGroup optionGroup, string groupText, string firstItemName, Guid firstItemNameId)

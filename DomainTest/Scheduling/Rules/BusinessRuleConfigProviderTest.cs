@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		[Test]
 		public void ShouldReturnMinWeekWorkTimeRuleConfig()
 		{
-			var stateHolder = new FakeSchedulingResultStateHolder_DoNotUse { UseMinWeekWorkTime = true };
+			var stateHolder = new FakeSchedulingResultStateHolder_DoNotUse();
 			var businessRules = NewBusinessRuleCollection.All(stateHolder);
 
 			var businessRuleProvider = MockRepository.GenerateMock<IBusinessRuleProvider>();
@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		[Test(Description = "Verify solution for bug #43527: Strange order of shift trade request settings in Options")]
 		public void ShouldReturnDefaultBusinessRulesConfigInSpecifyOrder()
 		{
-			var stateHolder = new FakeSchedulingResultStateHolder_DoNotUse { UseMinWeekWorkTime = true };
+			var stateHolder = new FakeSchedulingResultStateHolder_DoNotUse();
 			var businessRules = NewBusinessRuleCollection.All(stateHolder);
 			businessRules.Add(new NonMainShiftActivityRule());
 

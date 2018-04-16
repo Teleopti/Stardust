@@ -223,12 +223,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 				throw new NotImplementedException();
 			}
 
-			public bool UseMinWeekWorkTime
-			{
-				get { throw new NotImplementedException(); }
-				set { throw new NotImplementedException(); }
-			}
-
 			public ISkillDay SkillDayOnSkillAndDateOnly(ISkill skill, DateOnly dateOnly)
 			{
 				throw new NotImplementedException();

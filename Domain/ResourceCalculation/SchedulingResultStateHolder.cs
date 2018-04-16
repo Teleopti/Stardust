@@ -38,7 +38,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public IDictionary<IPerson, IPersonAccountCollection> AllPersonAccounts { get; set; }
 		public IEnumerable<ExternalStaff> ExternalStaff { get; set; }
 		public bool TeamLeaderMode { get; set; }
-		public bool UseMinWeekWorkTime { get; set; }
 
 		public SchedulingResultStateHolder()
 		{

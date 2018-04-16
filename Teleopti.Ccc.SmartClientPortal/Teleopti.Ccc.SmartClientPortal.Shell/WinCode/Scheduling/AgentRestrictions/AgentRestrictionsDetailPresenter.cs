@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.AgentRestricti
 				weekNumber = DateHelper.WeekNumber(preferenceCellData.TheDate.Date, culture);
 			}
 			var weekIsLegal = minTime <= weekMax;
-            if (weekIsLegal && haveFullTimePersonPeriod &&  SchedulerState.SchedulingResultState.UseMinWeekWorkTime) weekIsLegal = maxTime >= weekMin;
+            if (weekIsLegal && haveFullTimePersonPeriod) weekIsLegal = maxTime >= weekMin;
 			IWeekHeaderCellData weekHeaderCell = new WeekHeaderCellData(minTime, maxTime, !weekIsLegal, weekNumber);
 
 			return weekHeaderCell;

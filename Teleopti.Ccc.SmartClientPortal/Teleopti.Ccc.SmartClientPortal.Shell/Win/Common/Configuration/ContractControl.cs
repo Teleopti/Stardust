@@ -180,15 +180,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 			timeSpanTextBoxPlanningMin.Validated += timeSpanTextBoxPlanningMinValidated;
 			timeSpanTextBoxPlanningMax.Validated += timeSpanTextBoxPlanningMaxValidated;
-
-
-			if (!toggleManager.IsEnabled(Toggles.Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635))
-			{
-				autoLabel13.Hide();
-				textBoxExtMinTimePerWeek.Hide();
-				var rowIndex = tableLayoutPanel6.GetRow(textBoxExtMinTimePerWeek);
-				tableLayoutPanel6.RowStyles[rowIndex].Height = 0;
-			}
 		}
 
 		void timeSpanTextBoxPlanningMaxValidated(object sender, EventArgs e)
