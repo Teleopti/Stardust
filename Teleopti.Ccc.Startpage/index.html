@@ -49,7 +49,6 @@
 			}
 
 			window.onload = function () {
-				console.log(window.subDir);
 				document.getElementById("launcher").addEventListener("click", function (e) {
 					e.preventDefault();
 					window.location.href = subDir + "/Client/Teleopti.Ccc.SmartClientPortal.Shell.application?" + window.location.search.substring(1);
@@ -141,7 +140,6 @@
 	<script>
 		function fixSubDir() {
 			window.subDir = window.subDir.replace("$(TELEOPTIWFM_URL)", "/TeleoptiWFM");
-			console.log(window.subDir);
 			var linksToFix = document.getElementsByClassName("addSubDir");
 			var i;
 			for (i = 0; i < linksToFix.length; i++) {
