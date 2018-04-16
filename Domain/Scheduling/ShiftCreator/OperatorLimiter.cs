@@ -1,5 +1,12 @@
 namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 {
+	// Used for translation auto search, DO NOT REMOVE!
+	// UserTexts.Resources.OperatorLimiterEquals
+	// UserTexts.Resources.OperatorLimiterGreaterThen
+	// UserTexts.Resources.OperatorLimiterGreaterThenEquals
+	// UserTexts.Resources.OperatorLimiterLessThen
+	// UserTexts.Resources.OperatorLimiterLessThenEquals
+	
 	/// <summary>
 	/// Operator enum
 	/// </summary>

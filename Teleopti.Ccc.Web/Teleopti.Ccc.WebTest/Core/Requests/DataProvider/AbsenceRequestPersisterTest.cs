@@ -419,6 +419,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			request.IsWaitlisted.Should().Be.False();
 			request.IsApproved.Should().Be.False();
 			request.IsPending.Should().Be.True();
+
+			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo<ApproveRequestCommand>();
 		}
 
 		[Test]

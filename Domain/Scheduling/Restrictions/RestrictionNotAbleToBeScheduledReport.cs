@@ -43,7 +43,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 		public DateOnlyPeriod Period { get; set; }
 		public IScheduleMatrixPro Matrix { get; set; }
 	}
-
+	
+	//  Used for translation auto search, DO NOT REMOVE!	
+	//	UserTexts.Resources.RestrictionNotAbleToBeScheduledReasonTooManyDaysOff
+	//	UserTexts.Resources.RestrictionNotAbleToBeScheduledReasonTooMuchWorkTimeInPeriod
+	//	UserTexts.Resources.RestrictionNotAbleToBeScheduledReasonTooLittleWorkTimeInPeriod
+	//	UserTexts.Resources.RestrictionNotAbleToBeScheduledReasonNightlyRestMightBeBroken
+	//	UserTexts.Resources.RestrictionNotAbleToBeScheduledReasonConflictingRestrictions
 	public enum RestrictionNotAbleToBeScheduledReason
 	{
 		TooManyDaysOff,

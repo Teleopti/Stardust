@@ -4,6 +4,21 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
+	// Used for translation auto search, DO NOT REMOVE!
+	// UserTexts.Resources.PersonFinderFieldAll
+	// UserTexts.Resources.PersonFinderFieldBudgetGroup
+	// UserTexts.Resources.PersonFinderFieldContract
+	// UserTexts.Resources.PersonFinderFieldContractSchedule
+	// UserTexts.Resources.PersonFinderFieldEmploymentNumber
+	// UserTexts.Resources.PersonFinderFieldFirstName
+	// UserTexts.Resources.PersonFinderFieldLastName
+	// UserTexts.Resources.PersonFinderFieldNote
+	// UserTexts.Resources.PersonFinderFieldOrganization
+	// UserTexts.Resources.PersonFinderFieldPartTimePercentage
+	// UserTexts.Resources.PersonFinderFieldRole
+	// UserTexts.Resources.PersonFinderFieldSkill
+	// UserTexts.Resources.PersonFinderFieldShiftBag
+	
 	/// <summary>
 	/// Enum for field to search in with PersonFinder
 	/// </summary>

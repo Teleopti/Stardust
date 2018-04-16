@@ -1,5 +1,10 @@
 namespace Teleopti.Interfaces.Domain
 {
+	// Used for translation auto search, DO NOT REMOVE!
+	// UserTexts.Resources.EmploymentTypeFixedStaffPeriodWorkTime
+	// UserTexts.Resources.EmploymentTypeHourlyStaff
+	// UserTexts.Resources.EmploymentTypeFixedStaffDayWorkTime
+
     /// <summary>
     /// Types of employments
     /// </summary>
