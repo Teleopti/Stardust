@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 				return LinearEsl(forecastedAgents, agents, sla);
 			}
 
-			return _estimatedServiceLevel.CalculateEstimatedServiceLevel(agents, calls / maxParellelTasks, aht, 100000, (int) serviceTime, (int) intervalLength.TotalSeconds, forecastedAgents,sla);
+			return _estimatedServiceLevel.CalculateEstimatedServiceLevel(agents, calls / maxParellelTasks, aht, 1000000, (int) serviceTime, (int) intervalLength.TotalSeconds, forecastedAgents,sla);
 		}
 	}
 
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		public override double AgentsUseOccupancy(double serviceLevel, int serviceTime, double tasks, double aht, TimeSpan periodLength,
 			double minOcc, double maxOcc, int maxParallelTasks)
 		{
-			var result = _agentsNeeded.CalculateNumberOfAgentsNeeded(tasks / maxParallelTasks, aht, 100000, serviceTime, serviceLevel,
+			var result = _agentsNeeded.CalculateNumberOfAgentsNeeded(tasks / maxParallelTasks, aht, 1000000, serviceTime, serviceLevel,
 				(int)periodLength.TotalSeconds, minOcc, maxOcc);
 			return result.NumberOfAgentsNeeded;
 		}

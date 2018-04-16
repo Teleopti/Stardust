@@ -156,7 +156,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 		}
 
 		[Test]
-		[Ignore("#74899 - to be fixed")]
 		public void ErlangCErlangAComparison8()
 		{
 			const double tasks = 40d;
