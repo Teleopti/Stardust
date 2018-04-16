@@ -39,8 +39,6 @@
 		MyTimeWeb_WaitListPositionEnhancement_46301,
 		MyTimeWeb_PollToCheckScheduleChanges_46595,
 
-		Gamification_NewBadgeCalculation_31185,
-
 		Wfm_MinimumScaffolding_32659,
 		Wfm_WebPlan_Pilot_46815,
 		WfmIntraday_MonitorActualvsForecasted_35176,
