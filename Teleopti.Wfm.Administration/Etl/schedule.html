@@ -111,11 +111,28 @@
 											</svg>
 										</button>
 
-										<button type="button" class="btn btn-danger" ng-click="vm.deleteScheduleJob(job.ScheduleId)">
+										<button type="button" class="btn btn-danger" ng-click="job.deleteWarnign = true">
 											<svg style="width:24px;height:24px" viewBox="0 0 24 24">
 												<path fill="#000000" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" />
 											</svg>
 										</button>
+										<div class="custom-modal" ng-if="job.deleteWarnign">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h5 class="modal-title">Confirm delete</h5>
+													<button type="button" class="close" ng-click="job.deleteWarnign = false" aria-label="Close">
+														<span aria-hidden="true">&times;</span>
+													</button>
+												</div>
+												<div class="modal-body">
+													Are your really sure that you want to delete {{job.ScheduleName}}?
+												</div>
+												<div class="modal-footer">
+													<button class="btn btn-default" ng-click="job.deleteWarnign = false">Cancel</button>
+													<button ng-click="vm.deleteScheduleJob(job.ScheduleId)" class="btn btn-danger">Delete</button>
+												</div>
+											</div>
+										</div>
 
 									</td>
 								</tr>
