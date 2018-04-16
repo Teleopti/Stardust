@@ -146,7 +146,7 @@
 
 			var i;
 			for (i = 0; i < linksToFix.length; i++) {
-				linksToFix[i].href = window.subDir + linksToFix[i].href.replace(realPath, "");
+				linksToFix[i].href = window.subDir + linksToFix[i].href.replace(realPath, "/");
 			}
 		}
 		fixSubDir();
