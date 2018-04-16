@@ -155,6 +155,18 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 			esl.Should().Be.EqualTo(0d);
 		}
 
+		[Test]
+		[Ignore("#74899 - to be fixed")]
+		public void ErlangCErlangAComparison8()
+		{
+			const double tasks = 40d;
+			const double agents = 7.5d;
+			const double forecasted = 10d;
+			var esl = Target.ServiceLevelAchievedOcc(agents, 20, tasks, 550, TimeSpan.FromMinutes(15), .8, forecasted, 3);
+
+			esl.Should().Be.IncludedIn(.18, .20);
+		}
+
 		public void Configure(FakeToggleManager toggleManager)
 		{
 			if (_useErlangA)
