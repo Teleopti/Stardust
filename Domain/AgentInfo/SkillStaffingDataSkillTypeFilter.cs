@@ -23,6 +23,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		public IList<SkillStaffingData> Filter(IEnumerable<SkillStaffingData> skillStaffingDatas)
 		{
 			var person = _loggedOnUser.CurrentUser();
+			if (!person.WorkflowControlSet.OvertimeRequestOpenPeriods.Any())
+			{
+				return skillStaffingDatas.ToList();
+			}
+
 			var phoneSkillType = _skillTypeRepository.LoadAll().FirstOrDefault(s => s.Description.Name.Equals(SkillTypeIdentifier.Phone));
 			var skillStaffingDataGroups = skillStaffingDatas.GroupBy(s => s.Date);
 			var filteredSkillStaffingDatas = new List<SkillStaffingData>();

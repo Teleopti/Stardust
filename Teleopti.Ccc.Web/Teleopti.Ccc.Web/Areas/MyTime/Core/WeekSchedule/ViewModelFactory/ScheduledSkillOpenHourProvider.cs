@@ -108,6 +108,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 
 		private IPersonSkill[] filterPersonSkills(IEnumerable<IPersonSkill> personSkills, DateOnlyPeriod period)
 		{
+			if (!_loggedOnUser.CurrentUser().WorkflowControlSet.OvertimeRequestOpenPeriods.Any())
+			{
+				return personSkills.ToArray();
+			}
+
 			var skillTypes = getSkillTypesInRequestOpenPeriod(period);
 
 			return personSkills.Where(p => isSkillTypeMatchedInOpenPeriod(p, skillTypes)).ToArray();

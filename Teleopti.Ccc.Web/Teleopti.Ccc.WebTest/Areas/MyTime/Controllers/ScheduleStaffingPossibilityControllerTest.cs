@@ -1068,11 +1068,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				.WithId();
 			SkillTypeRepository.Add(phoneSkillType);
 
-			var workFlowControlSet = new WorkflowControlSet();
-			workFlowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { this.phoneSkillType })
+			var workFlowControlSet = new WorkflowControlSet()
 			{
-				BetweenDays = new MinMax<int>(0, 13)
-			});
+				OvertimeProbabilityEnabled = true
+			};
 			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
 
 			var result = getPossibilityViewModels(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime).ToList();

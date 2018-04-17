@@ -37,15 +37,18 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			if (!personPeriod.Any())
 				return new IPersonSkill[] { };
 
-			var phoneSkillType = _skillTypeRepository.LoadAll()
-				.FirstOrDefault(s => s.Description.Name.Equals(SkillTypeIdentifier.Phone));
+			var personSkills = personPeriod.SelectMany(p => _personalSkills.PersonSkills(p));
 
-			var mergedOvertimeRequestOpenPeriods = _overtimeRequestOpenPeriodMerger
-				.GetMergedOvertimeRequestOpenPeriods(person.WorkflowControlSet.OvertimeRequestOpenPeriods,
-					person.PermissionInformation, period).Where(p => p.AutoGrantType != OvertimeRequestAutoGrantType.Deny);
+			if (person.WorkflowControlSet.OvertimeRequestOpenPeriods.Any())
+			{
+				var mergedOvertimeRequestOpenPeriods = _overtimeRequestOpenPeriodMerger
+					.GetMergedOvertimeRequestOpenPeriods(person.WorkflowControlSet.OvertimeRequestOpenPeriods,
+						person.PermissionInformation, period).Where(p => p.AutoGrantType != OvertimeRequestAutoGrantType.Deny);
 
-			var personSkills = personPeriod.SelectMany(p => _personalSkills.PersonSkills(p)).Where(p =>
-				isSkillTypeMatchedInOpenPeriods(p, mergedOvertimeRequestOpenPeriods, phoneSkillType)).ToList();
+				var phoneSkillType = _skillTypeRepository.LoadAll().FirstOrDefault(s => s.Description.Name.Equals(SkillTypeIdentifier.Phone));
+				personSkills.Where(p =>
+					isSkillTypeMatchedInOpenPeriods(p, mergedOvertimeRequestOpenPeriods, phoneSkillType)).ToList();
+			}
 
 			return !personSkills.Any() ? new IPersonSkill[] { } : personSkills.Distinct();
 		}
