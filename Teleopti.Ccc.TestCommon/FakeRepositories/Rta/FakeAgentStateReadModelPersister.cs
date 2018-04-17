@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public IEnumerable<AgentStateReadModel> Models => _data.Values.ToArray();
 
-		public void Update(AgentStateReadModel model)
+		public void UpdateState(AgentStateReadModel model)
 		{
 			if (_data.ContainsKey(model.PersonId))
 				_data.AddOrUpdate(model.PersonId, model.CopyBySerialization(), (g, m) => model);
@@ -77,7 +77,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 					model.TeamId = info.TeamId;
 					model.TeamName = info.TeamName;
 					model.BusinessUnitId = info.BusinessUnitId.GetValueOrDefault();
-					//model.HasAssociation = false;
 					return model;
 				});
 		}
@@ -89,8 +88,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				new AgentStateReadModel
 				{
 					PersonId = personId,
-					EmploymentNumber = employmentNumber,
-					//HasAssociation = true
+					EmploymentNumber = employmentNumber
 				},
 				(id, model) =>
 				{
@@ -107,8 +105,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				{
 					PersonId = personId,
 					FirstName = firstName,
-					LastName = lastName,
-					//HasAssociation = true
+					LastName = lastName
 				},
 				(id, model) =>
 				{
@@ -124,14 +121,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				personId,
 				new AgentStateReadModel
 				{
-					PersonId = personId,
-					//HasAssociation = true
+					PersonId = personId
 				},
-				(id, model) =>
-				{
-					//model.HasAssociation = true;
-					return model;
-				});
+				(id, model) => model);
 		}
 
 		public void UpdateTeamName(Guid teamId, string name)

@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 {
 	public static class AgentStateReadModelPersisterExtensions
 	{
-		public static void Upsert(this IAgentStateReadModelPersister instance, AgentStateReadModel model)
+		public static void UpsertToActive(this IAgentStateReadModelPersister instance, AgentStateReadModel model)
 		{
 			instance.UpsertAssociation(new AssociationInfo
 			{
@@ -17,9 +17,23 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 				TeamId = model.TeamId.GetValueOrDefault(),
 				TeamName = model.TeamName
 			});
-			// maybe remove this
 			instance.UpsertName(model.PersonId, model.FirstName, model.LastName);
-			instance.Update(model);
 		}
+		
+		public static void UpsertToActiveWithState(this IAgentStateReadModelPersister instance, AgentStateReadModel model)
+		{
+			instance.UpsertAssociation(new AssociationInfo
+			{
+				PersonId = model.PersonId,
+				BusinessUnitId = model.BusinessUnitId ?? ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.Value,
+				SiteId = model.SiteId,
+				SiteName = model.SiteName,
+				TeamId = model.TeamId.GetValueOrDefault(),
+				TeamName = model.TeamName
+			});
+			instance.UpsertName(model.PersonId, model.FirstName, model.LastName);
+			instance.UpdateState(model);
+		}
+
 	}
 }

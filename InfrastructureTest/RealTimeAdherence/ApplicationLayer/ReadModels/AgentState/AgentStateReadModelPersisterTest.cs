@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
@@ -20,7 +21,11 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 		{
 			var state = new AgentStateReadModelForTest();
 
-			Target.Upsert(state);
+			Target.UpsertAssociation(new AssociationInfoForTest
+			{
+				BusinessUnitId = state.BusinessUnitId,
+			});
+			Target.UpdateState(state);
 
 			Target.Load(state.PersonId)
 				.Should().Not.Be.Null();
@@ -44,7 +49,14 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 				AlarmColor = Color.Red.ToArgb(),
 			};
 
-			Target.Upsert(state);
+			Target.UpsertAssociation(new AssociationInfoForTest
+			{
+				PersonId = state.PersonId,
+				BusinessUnitId = state.BusinessUnitId,
+				SiteId = state.SiteId,
+				TeamId = state.TeamId.GetValueOrDefault(),
+			});
+			Target.UpdateState(state);
 
 			var model = Target.Load(personId);
 			model.BusinessUnitId.Should().Be(businessUnitId);
@@ -65,7 +77,11 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 				OutOfAdherenceStartTime = "2017-11-07 08:00".Utc(),
 			};
 
-			Target.Upsert(state);
+			Target.UpsertAssociation(new AssociationInfoForTest
+			{
+				PersonId = state.PersonId,
+			});
+			Target.UpdateState(state);
 
 			var model = Target.Load(personId);
 			model.OutOfAdherenceStartTime.Should().Be("2017-11-07 08:00".Utc());
@@ -76,7 +92,11 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 		{
 			var personId = Guid.NewGuid();
 
-			Target.Upsert(new AgentStateReadModelForTest
+			Target.UpsertAssociation(new AssociationInfoForTest
+			{
+				PersonId = personId,
+			});
+			Target.UpdateState(new AgentStateReadModelForTest
 			{
 				PersonId = personId,
 				Shift = new[]
@@ -103,14 +123,17 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 		{
 			var personId = Guid.NewGuid();
 			var teamId = Guid.NewGuid();
-			Target.Upsert(
-				new AgentStateReadModelForTest
-				{
-					PersonId = personId,
-					TeamId = teamId,
-				});
+			Target.UpsertAssociation(new AssociationInfoForTest
+			{
+				PersonId = personId,
+			});
+			Target.UpdateState(new AgentStateReadModelForTest
+			{
+				PersonId = personId,
+				TeamId = teamId,
+			});
 
-			Target.Upsert(new AgentStateReadModelForTest
+			Target.UpdateState(new AgentStateReadModelForTest
 			{
 				PersonId = personId,
 				TeamId = teamId,
@@ -132,14 +155,18 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 		{
 			var personId = Guid.NewGuid();
 			var teamId = Guid.NewGuid();
-			Target.Upsert(
-				new AgentStateReadModelForTest
-				{
-					PersonId = personId,
-					TeamId = teamId,
-				});
+			Target.UpsertAssociation(new AssociationInfoForTest
+			{
+				PersonId = personId,
+				TeamId = teamId,
+			});
+			Target.UpdateState(new AgentStateReadModelForTest
+			{
+				PersonId = personId,
+				TeamId = teamId,
+			});
 
-			Target.Upsert(new AgentStateReadModelForTest
+			Target.UpdateState(new AgentStateReadModelForTest
 			{
 				PersonId = personId,
 				TeamId = teamId,
@@ -159,10 +186,13 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 		{
 			var personId = Guid.NewGuid();
 
-			Target.Upsert(new AgentStateReadModel
+			Target.UpsertAssociation(new AssociationInfoForTest
 			{
 				PersonId = personId,
-				BusinessUnitId = Guid.NewGuid(),
+			});
+			Target.UpdateState(new AgentStateReadModelForTest
+			{
+				PersonId = personId,
 				SiteId = null,
 				SiteName = null,
 				TeamId = null,
@@ -205,8 +235,12 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 					}
 				}
 			};
+			Target.UpsertAssociation(new AssociationInfoForTest
+			{
+				PersonId = state.PersonId,
+			});
 
-			Target.Upsert(state);
+			Target.UpdateState(state);
 
 			var outOfAdherence = Target.Load(state.PersonId)
 				.OutOfAdherences.Single();
@@ -218,7 +252,11 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 		public void ShouldUpdateOutOfAdherences()
 		{
 			var personId = Guid.NewGuid();
-			Target.Upsert(new AgentStateReadModelForTest
+			Target.UpsertAssociation(new AssociationInfoForTest
+			{
+				PersonId = personId,
+			});
+			Target.UpdateState(new AgentStateReadModelForTest
 			{
 				PersonId = personId,
 				OutOfAdherences = new[]
@@ -231,7 +269,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 				}
 			});
 
-			Target.Upsert(new AgentStateReadModelForTest
+			Target.UpdateState(new AgentStateReadModelForTest
 			{
 				PersonId = personId,
 				OutOfAdherences = new[]
@@ -260,8 +298,12 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 		public void ShouldUpdateAlotOfOutOfAdherences()
 		{
 			var personId = Guid.NewGuid();
+			Target.UpsertAssociation(new AssociationInfoForTest
+			{
+				PersonId = personId,
+			});
 
-			Target.Upsert(new AgentStateReadModelForTest
+			Target.UpdateState(new AgentStateReadModelForTest
 			{
 				PersonId = personId,
 				OutOfAdherences = Enumerable.Range(0, 59)
@@ -280,8 +322,12 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 		{
 			var personId = Guid.NewGuid();
 			var stateGroupId = Guid.NewGuid();
+			Target.UpsertAssociation(new AssociationInfoForTest
+			{
+				PersonId = personId,
+			});
 
-			Target.Upsert(new AgentStateReadModelForTest
+			Target.UpdateState(new AgentStateReadModelForTest
 			{
 				PersonId = personId,
 				StateGroupId = stateGroupId
@@ -295,13 +341,17 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 		{
 			var personId = Guid.NewGuid();
 			var stateGroupId = Guid.NewGuid();
-			Target.Upsert(new AgentStateReadModelForTest
+			Target.UpsertAssociation(new AssociationInfoForTest
+			{
+				PersonId = personId,
+			});
+			Target.UpdateState(new AgentStateReadModelForTest
 			{
 				PersonId = personId,
 				StateGroupId = null
 			});
 
-			Target.Upsert(new AgentStateReadModelForTest
+			Target.UpdateState(new AgentStateReadModelForTest
 			{
 				PersonId = personId,
 				StateGroupId = stateGroupId
@@ -317,7 +367,10 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			var teamId = Guid.NewGuid();
 			var siteId = Guid.NewGuid();
 			var businessUnitId = Guid.NewGuid();
-			Target.Upsert(new AgentStateReadModelForTest {PersonId = personId});
+			Target.UpsertAssociation(new AssociationInfoForTest
+			{
+				PersonId = personId,
+			});
 
 			Target.UpsertAssociation(new AssociationInfo()
 			{
@@ -367,7 +420,10 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 		public void ShouldUpdateEmploymentNumber()
 		{
 			var personId = Guid.NewGuid();
-			Target.Upsert(new AgentStateReadModelForTest {PersonId = personId});
+			Target.UpsertAssociation(new AssociationInfoForTest
+			{
+				PersonId = personId,
+			});
 
 			Target.UpsertEmploymentNumber(personId, "abc");
 
@@ -401,12 +457,11 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 		public void ShouldUpdateFirstAndLastName()
 		{
 			var personId = Guid.NewGuid();
-			Target.Upsert(new AgentStateReadModelForTest()
+			Target.UpsertAssociation(new AssociationInfoForTest
 			{
 				PersonId = personId,
-				FirstName = "ashley",
-				LastName = "andeen"
 			});
+			Target.UpsertName(personId, "ashley", "andeen");
 
 			Target.UpsertName(personId, "bill", "gates");
 

@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.ApplicationLayer
 		}
 
 		[LogInfo]
-		public virtual void Update(AgentStateReadModel model)
+		public virtual void UpdateState(AgentStateReadModel model)
 		{
 			_unitOfWork.Current().Session()
 				.CreateSQLQuery(@"

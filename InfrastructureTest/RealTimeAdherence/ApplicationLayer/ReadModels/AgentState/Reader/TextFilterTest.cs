@@ -21,12 +21,12 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 		{
 			var personId1 = Guid.NewGuid();
 			var personId2 = Guid.NewGuid();
-			Persister.Upsert(new AgentStateReadModelForTest
+			Persister.UpsertToActiveWithState(new AgentStateReadModelForTest
 			{
 				PersonId = personId1,
 				Activity = "I am on the Phone and stuff"
 			});
-			Persister.Upsert(new AgentStateReadModelForTest
+			Persister.UpsertToActiveWithState(new AgentStateReadModelForTest
 			{
 				PersonId = personId2,
 				Activity = "I am out for lunch having tacos"
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 				BusinessUnitId = ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.Value
 			});
 			Persister.UpsertName(person, null, null);
-			Persister.Update(new AgentStateReadModelForTest
+			Persister.UpdateState(new AgentStateReadModelForTest
 			{
 				PersonId = person,
 				Activity = "Grounded"
@@ -75,12 +75,12 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 		{
 			var personId1 = Guid.NewGuid();
 			var personId2 = Guid.NewGuid();
-			Persister.Upsert(new AgentStateReadModelForTest
+			Persister.UpsertToActiveWithState(new AgentStateReadModelForTest
 			{
 				PersonId = personId1,
 				StateName = "A lot of Phone stuff"
 			});
-			Persister.Upsert(new AgentStateReadModelForTest
+			Persister.UpsertToActiveWithState(new AgentStateReadModelForTest
 			{
 				PersonId = personId2,
 				StateName = "A lot of food n stuff"
@@ -99,12 +99,12 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 		{
 			var personId1 = Guid.NewGuid();
 			var personId2 = Guid.NewGuid();
-			Persister.Upsert(new AgentStateReadModelForTest
+			Persister.UpsertToActiveWithState(new AgentStateReadModelForTest
 			{
 				PersonId = personId1,
 				RuleName = "I am not on the Phone but I should be"
 			});
-			Persister.Upsert(new AgentStateReadModelForTest
+			Persister.UpsertToActiveWithState(new AgentStateReadModelForTest
 			{
 				PersonId = personId2,
 				RuleName = "I am not on Lunch but I should be"
@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 				SiteName = "Lost in space"
 			});
 			Persister.UpsertName(person, null, null);
-			Persister.Update(new AgentStateReadModelForTest
+			Persister.UpdateState(new AgentStateReadModelForTest
 			{
 				PersonId = person,
 				Activity = "Grounded"
@@ -173,7 +173,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 				BusinessUnitId = ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.Value
 			});
 			Persister.UpsertName(person, null, null);
-			Persister.Update(new AgentStateReadModelForTest
+			Persister.UpdateState(new AgentStateReadModelForTest
 			{
 				PersonId = person,
 				Activity = "Grounded"
@@ -307,7 +307,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			});
 			Persister.UpsertName(person, "a", "b");
 			Persister.UpsertEmploymentNumber(person, "a");
-			Persister.Update(new AgentStateReadModelForTest
+			Persister.UpdateState(new AgentStateReadModelForTest
 			{
 				PersonId = person,
 				RuleName = "b",
@@ -326,13 +326,13 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 		{
 			var personId1 = Guid.NewGuid();
 			var personId2 = Guid.NewGuid();
-			Persister.Upsert(new AgentStateReadModelForTest
+			Persister.UpsertToActive(new AgentStateReadModelForTest
 			{
 				PersonId = personId1,
 				SiteName = "Hoth",
 				TeamName = "Rebels"
 			});
-			Persister.Upsert(new AgentStateReadModelForTest
+			Persister.UpsertToActive(new AgentStateReadModelForTest
 			{
 				PersonId = personId2,
 				SiteName = "Hoth",
@@ -352,13 +352,13 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 		{
 			var personId1 = Guid.NewGuid();
 			var personId2 = Guid.NewGuid();
-			Persister.Upsert(new AgentStateReadModelForTest
+			Persister.UpsertToActive(new AgentStateReadModelForTest
 			{
 				PersonId = personId1,
 				SiteName = "Hoth",
 				TeamName = "Rebels"
 			});
-			Persister.Upsert(new AgentStateReadModelForTest
+			Persister.UpsertToActive(new AgentStateReadModelForTest
 			{
 				PersonId = personId2,
 				SiteName = "Hoth",

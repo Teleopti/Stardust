@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
-using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.ReadModels.AgentState
 {
@@ -17,14 +16,13 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 		public ICurrentBusinessUnit BusinessUnit;
 		public IAgentStateReadModelPersister Persister;
 		public IOrganizationReader Target;
-		public Database Database;
 
 		[Test]
 		public void ShouldReadOrganization()
 		{
 			var team = Guid.NewGuid();
 			var site = Guid.NewGuid();
-			Persister.Upsert(new AgentStateReadModelForTest
+			Persister.UpsertToActive(new AgentStateReadModelForTest
 			{
 				BusinessUnitId = BusinessUnit.Current().Id.Value,
 				PersonId = Guid.NewGuid(),
@@ -48,7 +46,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			var team1 = Guid.NewGuid();
 			var team2 = Guid.NewGuid();
 			var site = Guid.NewGuid();
-			Persister.Upsert(new AgentStateReadModelForTest
+			Persister.UpsertToActive(new AgentStateReadModelForTest
 			{
 				BusinessUnitId = BusinessUnit.Current().Id.Value,
 				PersonId = Guid.NewGuid(),
@@ -57,7 +55,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 				SiteId = site,
 				SiteName = "Site"
 			});
-			Persister.Upsert(new AgentStateReadModelForTest
+			Persister.UpsertToActive(new AgentStateReadModelForTest
 			{
 				BusinessUnitId = BusinessUnit.Current().Id.Value,
 				PersonId = Guid.NewGuid(),

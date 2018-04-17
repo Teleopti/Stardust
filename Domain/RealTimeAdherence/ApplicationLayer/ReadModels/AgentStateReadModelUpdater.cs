@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels
 								.ToArray()
 							;
 
-					_persister.Update(model);
+					_persister.UpdateState(model);
 				});
 		}
 

@@ -17,32 +17,33 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 		public ICurrentBusinessUnit BusinessUnit;
 		public IAgentStateReadModelPersister Persister;
 		public IOrganizationReader Target;
-		public MutableNow Now;
-		public Database Database;
 
 		[Test]
 		public void ShouldFilterOnCurrentBusinessUnit()
 		{
+			var person1 = Guid.NewGuid();
+			var person2 = Guid.NewGuid();
 			var site = Guid.NewGuid();
 			var businessUnit = BusinessUnit.Current().Id.Value;
-			Persister.Upsert(new AgentStateReadModelForTest
+			Persister.UpsertAssociation(new AssociationInfoForTest
 			{
+				PersonId = person1,
 				BusinessUnitId = businessUnit,
-				PersonId = Guid.NewGuid(),
-				SiteId = site
+				SiteId = site,
 			});
-			Persister.Upsert(new AgentStateReadModelForTest
+			Persister.UpsertName(person1, null, null);
+			Persister.UpsertAssociation(new AssociationInfoForTest
 			{
+				PersonId = person2,
 				BusinessUnitId = Guid.NewGuid(),
-				PersonId = Guid.NewGuid(),
 				SiteId = Guid.NewGuid(),
 			});
+			Persister.UpsertName(person2, null, null);
 
 			var result = Target.Read().Single();
 
 			result.SiteId.Should().Be(site);
 			result.BusinessUnitId.Should().Be(businessUnit);
 		}
-		
 	}
 }

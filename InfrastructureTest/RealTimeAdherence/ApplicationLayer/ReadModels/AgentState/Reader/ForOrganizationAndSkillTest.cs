@@ -46,17 +46,17 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			WithUnitOfWork.Do(() =>
 			{
 				Groupings.UpdateGroupingReadModel(new[] {expected, wrongSkill, wrongSite});
-				StatePersister.Upsert(new AgentStateReadModelForTest
+				StatePersister.UpsertToActive(new AgentStateReadModelForTest
 				{
 					PersonId = expected,
 					SiteId = siteId
 				});
-				StatePersister.Upsert(new AgentStateReadModelForTest
+				StatePersister.UpsertToActive(new AgentStateReadModelForTest
 				{
 					PersonId = wrongSkill,
 					SiteId = siteId
 				});
-				StatePersister.Upsert(new AgentStateReadModelForTest
+				StatePersister.UpsertToActive(new AgentStateReadModelForTest
 				{
 					PersonId = wrongSite,
 					SiteId = Guid.NewGuid()
@@ -71,8 +71,6 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 					}))
 				.Single().PersonId.Should().Be(expected);
 		}
-
-
 
 		[Test]
 		public void ShouldExcludeDeletedAgentForSiteAndSkill()
@@ -98,22 +96,22 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			WithUnitOfWork.Do(() =>
 			{
 				Groupings.UpdateGroupingReadModel(new[] { expected, unexpected, wrongSkill, wrongSite });
-				StatePersister.Upsert(new AgentStateReadModelForTest
+				StatePersister.UpsertToActive(new AgentStateReadModelForTest
 				{
 					PersonId = expected,
 					SiteId = siteId
 				});
-				StatePersister.Upsert(new AgentStateReadModelForTest
+				StatePersister.UpsertToActive(new AgentStateReadModelForTest
 				{
 					PersonId = unexpected,
 					SiteId = siteId
 				});
-				StatePersister.Upsert(new AgentStateReadModelForTest
+				StatePersister.UpsertToActive(new AgentStateReadModelForTest
 				{
 					PersonId = wrongSkill,
 					SiteId = siteId
 				});
-				StatePersister.Upsert(new AgentStateReadModelForTest
+				StatePersister.UpsertToActive(new AgentStateReadModelForTest
 				{
 					PersonId = wrongSite,
 					SiteId = Guid.NewGuid()
@@ -154,22 +152,22 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			WithUnitOfWork.Do(() =>
 			{
 				Groupings.UpdateGroupingReadModel(new[] { expected, unexpected, wrongSkill, wrongSite });
-				StatePersister.Upsert(new AgentStateReadModelForTest
+				StatePersister.UpsertToActive(new AgentStateReadModelForTest
 				{
 					PersonId = expected,
 					SiteId = siteId
 				});
-				StatePersister.Upsert(new AgentStateReadModelForTest
+				StatePersister.UpsertToActive(new AgentStateReadModelForTest
 				{
 					PersonId = unexpected,
 					SiteId = siteId
 				});
-				StatePersister.Upsert(new AgentStateReadModelForTest
+				StatePersister.UpsertToActive(new AgentStateReadModelForTest
 				{
 					PersonId = wrongSkill,
 					SiteId = siteId
 				});
-				StatePersister.Upsert(new AgentStateReadModelForTest
+				StatePersister.UpsertToActive(new AgentStateReadModelForTest
 				{
 					PersonId = wrongSite,
 					SiteId = Guid.NewGuid()
@@ -202,7 +200,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			WithUnitOfWork.Do(() =>
 			{
 				Groupings.UpdateGroupingReadModel(new[] {expected});
-				StatePersister.Upsert(new AgentStateReadModelForTest
+				StatePersister.UpsertToActive(new AgentStateReadModelForTest
 				{
 					PersonId = expected,
 					SiteId = siteId
@@ -239,17 +237,17 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			WithUnitOfWork.Do(() =>
 			{
 				Groupings.UpdateGroupingReadModel(new[] {expected, wrongSkill, wrongTeam});
-				StatePersister.Upsert(new AgentStateReadModelForTest
+				StatePersister.UpsertToActive(new AgentStateReadModelForTest
 				{
 					PersonId = expected,
 					TeamId = teamId
 				});
-				StatePersister.Upsert(new AgentStateReadModelForTest
+				StatePersister.UpsertToActive(new AgentStateReadModelForTest
 				{
 					PersonId = wrongSkill,
 					TeamId = teamId
 				});
-				StatePersister.Upsert(new AgentStateReadModelForTest
+				StatePersister.UpsertToActive(new AgentStateReadModelForTest
 				{
 					PersonId = wrongTeam,
 					TeamId = Guid.NewGuid()
@@ -281,7 +279,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			WithUnitOfWork.Do(() =>
 			{
 				Groupings.UpdateGroupingReadModel(new[] {expected});
-				StatePersister.Upsert(new AgentStateReadModelForTest
+				StatePersister.UpsertToActive(new AgentStateReadModelForTest
 				{
 					PersonId = expected,
 					TeamId = teamId
@@ -322,28 +320,28 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			WithUnitOfWork.Do(() =>
 			{
 				Groupings.UpdateGroupingReadModel(new[] { expected, wrongSite, wrongSkill, notInAlarm });
-				StatePersister.Upsert(new AgentStateReadModelForTest
+				StatePersister.UpsertToActiveWithState(new AgentStateReadModelForTest
 				{
 					PersonId = expected,
 					SiteId = site,
 					AlarmStartTime = "2016-11-07 08:00".Utc(),
 					IsRuleAlarm = true
 				});
-				StatePersister.Upsert(new AgentStateReadModelForTest
+				StatePersister.UpsertToActiveWithState(new AgentStateReadModelForTest
 				{
 					PersonId = wrongSite,
 					SiteId = Guid.NewGuid(),
 					AlarmStartTime = "2016-11-07 08:00".Utc(),
 					IsRuleAlarm = true
 				});
-				StatePersister.Upsert(new AgentStateReadModelForTest
+				StatePersister.UpsertToActiveWithState(new AgentStateReadModelForTest
 				{
 					PersonId = wrongSkill,
 					SiteId = site,
 					AlarmStartTime = "2016-11-07 08:00".Utc(),
 					IsRuleAlarm = true
 				});
-				StatePersister.Upsert(new AgentStateReadModelForTest
+				StatePersister.UpsertToActiveWithState(new AgentStateReadModelForTest
 				{
 					PersonId = notInAlarm,
 					SiteId = site
@@ -378,7 +376,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 					WithUnitOfWork.Do(() =>
 					{
 						Groupings.UpdateGroupingReadModel(new[] { current });
-						StatePersister.Upsert(new AgentStateReadModelForTest
+						StatePersister.UpsertToActiveWithState(new AgentStateReadModelForTest
 						{
 							PersonId = current,
 							SiteId = site,
@@ -424,28 +422,28 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			WithUnitOfWork.Do(() =>
 			{
 				Groupings.UpdateGroupingReadModel(new[] { expected, wrongTeam, wrongSkill, notInAlarm });
-				StatePersister.Upsert(new AgentStateReadModelForTest
+				StatePersister.UpsertToActiveWithState(new AgentStateReadModelForTest
 				{
 					PersonId = expected,
 					TeamId = team,
 					AlarmStartTime = "2016-11-07 08:00".Utc(),
 					IsRuleAlarm = true
 				});
-				StatePersister.Upsert(new AgentStateReadModelForTest
+				StatePersister.UpsertToActiveWithState(new AgentStateReadModelForTest
 				{
 					PersonId = wrongTeam,
 					TeamId = Guid.NewGuid(),
 					AlarmStartTime = "2016-11-07 08:00".Utc(),
 					IsRuleAlarm = true
 				});
-				StatePersister.Upsert(new AgentStateReadModelForTest
+				StatePersister.UpsertToActiveWithState(new AgentStateReadModelForTest
 				{
 					PersonId = wrongSkill,
 					TeamId = team,
 					AlarmStartTime = "2016-11-07 08:00".Utc(),
 					IsRuleAlarm = true
 				});
-				StatePersister.Upsert(new AgentStateReadModelForTest
+				StatePersister.UpsertToActiveWithState(new AgentStateReadModelForTest
 				{
 					PersonId = notInAlarm,
 					TeamId = team,
@@ -480,7 +478,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 					WithUnitOfWork.Do(() =>
 					{
 						Groupings.UpdateGroupingReadModel(new[] { current });
-						StatePersister.Upsert(new AgentStateReadModelForTest
+						StatePersister.UpsertToActiveWithState(new AgentStateReadModelForTest
 						{
 							PersonId = current,
 							TeamId = teamId,
@@ -518,7 +516,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			WithUnitOfWork.Do(() =>
 			{
 				Groupings.UpdateGroupingReadModel(new[] { expected });
-				StatePersister.Upsert(new AgentStateReadModelForTest
+				StatePersister.UpsertToActiveWithState(new AgentStateReadModelForTest
 				{
 					PersonId = expected,
 					TeamId = teamId,
@@ -557,14 +555,14 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			WithUnitOfWork.Do(() =>
 			{
 				Groupings.UpdateGroupingReadModel(new[] { person1, person2 });
-				StatePersister.Upsert(new AgentStateReadModelForTest
+				StatePersister.UpsertToActiveWithState(new AgentStateReadModelForTest
 				{
 					PersonId = person1,
 					TeamId = teamA,
 					AlarmStartTime = "2016-11-07 08:00".Utc(),
 					IsRuleAlarm = true
 				});
-				StatePersister.Upsert(new AgentStateReadModelForTest
+				StatePersister.UpsertToActiveWithState(new AgentStateReadModelForTest
 				{
 					PersonId = person2,
 					TeamId = teamB,

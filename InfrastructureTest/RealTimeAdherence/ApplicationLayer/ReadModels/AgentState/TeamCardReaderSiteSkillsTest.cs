@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			WithUnitOfWork.Do(() =>
 			{
 				Groupings.UpdateGroupingReadModel(new[] {personId});
-				StatePersister.Upsert(new AgentStateReadModelForTest
+				StatePersister.UpsertToActive(new AgentStateReadModelForTest
 				{
 					PersonId = personId,
 					SiteId = siteId,
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			WithUnitOfWork.Do(() =>
 			{
 				Groupings.UpdateGroupingReadModel(new[] {personId});
-				StatePersister.Upsert(new AgentStateReadModelForTest
+				StatePersister.UpsertToActiveWithState(new AgentStateReadModelForTest
 				{
 					PersonId = personId,
 					SiteId = siteId,
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			WithUnitOfWork.Do(() =>
 			{
 				Groupings.UpdateGroupingReadModel(new[] {ashleyId, pierreId});
-				StatePersister.Upsert(new AgentStateReadModelForTest
+				StatePersister.UpsertToActiveWithState(new AgentStateReadModelForTest
 				{
 					PersonId = pierreId,
 					SiteId = siteId,
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 					IsRuleAlarm = true,
 					AlarmStartTime = "2016-10-17 08:00".Utc()
 				});
-				StatePersister.Upsert(new AgentStateReadModelForTest
+				StatePersister.UpsertToActiveWithState(new AgentStateReadModelForTest
 				{
 					PersonId = ashleyId,
 					SiteId = siteId,
@@ -137,14 +137,14 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			WithUnitOfWork.Do(() =>
 			{
 				Groupings.UpdateGroupingReadModel(new[] {ashleyId, pierreId});
-				StatePersister.Upsert(new AgentStateReadModelForTest
+				StatePersister.UpsertToActiveWithState(new AgentStateReadModelForTest
 				{
 					PersonId = pierreId,
 					SiteId = siteId,
 					TeamId = teamId,
 					IsRuleAlarm = false
 				});
-				StatePersister.Upsert(new AgentStateReadModelForTest
+				StatePersister.UpsertToActiveWithState(new AgentStateReadModelForTest
 				{
 					PersonId = ashleyId,
 					SiteId = siteId,
@@ -174,7 +174,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			WithUnitOfWork.Do(() =>
 			{
 				Groupings.UpdateGroupingReadModel(new[] {ashleyId});
-				StatePersister.Upsert(new AgentStateReadModelForTest
+				StatePersister.UpsertToActiveWithState(new AgentStateReadModelForTest
 				{
 					PersonId = ashleyId,
 					SiteId = siteId,
@@ -206,7 +206,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			{
 				Groupings.UpdateGroupingReadModel(new[] {personId});
 
-				StatePersister.Upsert(new AgentStateReadModelForTest
+				StatePersister.UpsertToActive(new AgentStateReadModelForTest
 				{
 					PersonId = personId,
 					SiteId = siteId,
@@ -236,7 +236,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			WithUnitOfWork.Do(() =>
 			{
 				Groupings.UpdateGroupingReadModel(new[] {personId});
-				StatePersister.Upsert(new AgentStateReadModelForTest
+				StatePersister.UpsertToActive(new AgentStateReadModelForTest
 				{
 					PersonId = personId,
 					SiteId = siteId,

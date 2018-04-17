@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 	public interface IAgentStateReadModelPersister
 	{
 		AgentStateReadModel Load(Guid personId);
-		void Update(AgentStateReadModel model);
+		void UpdateState(AgentStateReadModel model);
 		
 		void UpsertNoAssociation(Guid personId);
 		void UpsertAssociation(AssociationInfo info);

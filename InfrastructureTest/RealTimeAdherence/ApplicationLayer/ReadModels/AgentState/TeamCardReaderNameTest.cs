@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 		public void ShouldIncludeTeamName()
 		{
 			var team = Guid.NewGuid();
-			Persister.Upsert(new AgentStateReadModelForTest
+			Persister.UpsertToActive(new AgentStateReadModelForTest
 			{
 				BusinessUnitId = BusinessUnit.Current().Id.Value,
 				PersonId = Guid.NewGuid(),
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 		public void ShouldIncludeSiteName()
 		{
 			var site = Guid.NewGuid();
-			Persister.Upsert(new AgentStateReadModelForTest
+			Persister.UpsertToActive(new AgentStateReadModelForTest
 			{
 				BusinessUnitId = BusinessUnit.Current().Id.Value,
 				PersonId = Guid.NewGuid(),
