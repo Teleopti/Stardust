@@ -106,7 +106,7 @@ Wfm_WebPlan_Pilot_46815 = RC #Switch this on to try out the new web based schedu
 ResourcePlanner_HideSkillPrioSliders_41312 = RC
 ResourcePlanner_BlockSchedulingValidation_46092 = true
 ResourcePlanner_UseErlangAWithInfinitePatience_45845 = true
-ResourcePlanner_SpeedUpEvents_48769 = false #lets see if we should keep this one
+ResourcePlanner_SpeedUpEvents_48769 = DEV #lets see if we should keep this one
 ResourcePlanner_SpeedUpEvents_74996 = DEV #lets see if we should keep this one
 ResourcePlanner_SpeedUpEvents_75415 = DEV
 
