@@ -96,9 +96,11 @@ MERGE INTO [ReadModel].[AgentState] AS T
 		INSERT
 		(
 			PersonId,
-			HasAssociation
+			HasAssociation,
+			HasName
 		) VALUES (
 			S.PersonId,
+			0,
 			0
 		)
 	WHEN MATCHED THEN

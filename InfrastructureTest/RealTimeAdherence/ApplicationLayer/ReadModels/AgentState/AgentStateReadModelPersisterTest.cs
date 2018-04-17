@@ -503,5 +503,15 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 
 			Target.Load(personId).SiteName.Should().Be("paris");
 		}
+
+		[Test]
+		public void ShouldInsertOnNoAssociation()
+		{
+			var personId = Guid.NewGuid();
+			
+			Target.UpsertNoAssociation(personId);
+
+			Target.Load(personId).Should().Not.Be.Null();
+		}
 	}
 }
