@@ -232,7 +232,7 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 		{
 			return events.Aggregate(new List<IEvent>(), (result, e) =>
 			{
-				if (result.OfType<T>().Any())
+				if (e is T && result.OfType<T>().Any())
 					result.Remove(result.OfType<T>().Single());
 				result.Add(e);
 				return result;

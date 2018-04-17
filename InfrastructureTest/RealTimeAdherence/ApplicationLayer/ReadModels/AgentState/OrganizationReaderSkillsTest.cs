@@ -4,9 +4,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -20,8 +18,6 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 	[ExtendScope(typeof(UpdateGroupingReadModelHandler))]
 	public class OrganizationReaderSkillsTest
 	{
-		public ICurrentBusinessUnit BusinessUnit;
-		public IAgentStateReadModelPersister Persister;
 		public IOrganizationReader Target;
 		public Database Database;
 		public WithUnitOfWork UnitOfWork;
@@ -39,11 +35,13 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 				;
 			var team2 = Database.CurrentTeamId();
 			var phone = Database.SkillIdFor("phone");
-
+	
 			var result = UnitOfWork.Get(() => Target.Read(phone.AsArray()));
 
 			result.Single().Teams.Single().TeamId.Should().Be(team2);
 		}
 
 	}
+	
+
 }
