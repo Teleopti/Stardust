@@ -260,6 +260,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				system.UseTestDouble<FakeExternalPerformanceDataRepository>().For<IExternalPerformanceDataRepository>();
 				system.UseTestDouble<FakeTeamGamificationSettingRepository>().For<ITeamGamificationSettingRepository>();
 				system.UseTestDouble<FakeAgentBadgeRepository>().For<IAgentBadgeRepository>();
+				system.UseTestDouble<SkillIntradayStaffingFactory>().For<SkillIntradayStaffingFactory>();
 			}
 
 			system.UseTestDouble<ScheduleStorageRepositoryWrapper>().For<IScheduleStorageRepositoryWrapper>();

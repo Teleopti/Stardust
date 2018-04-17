@@ -53,6 +53,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		public ISchedulingResultStateHolder SchedulingResultStateHolder;
 		public FakeActivityRepository ActivityRepository;
 		public FakeUserTimeZone UserTimeZone;
+		public SkillIntradayStaffingFactory SkillIntradayStaffingFactory;
 
 		private readonly TimePeriod _defaultOpenPeriod = new TimePeriod(8, 00, 21, 00);
 		private readonly DateOnly _periodStartDate = new DateOnly(2016, 1, 1);
@@ -630,37 +631,24 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		private void setupIntradayStaffingForSkill(ISkill skill, double forecastedStaffing, double scheduledStaffing)
 		{
 			var period = getAvailablePeriod();
+			var timeZone = LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 			period.DayCollection().ToList().ForEach(day =>
 			{
-				var utcDate = TimeZoneHelper.ConvertToUtc(day.Date,
-					LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone());
-
+				var utcDate = TimeZoneHelper.ConvertToUtc(day.Date, timeZone);
+				var staffingPeriodList = new List<StaffingPeriodData>();
 				for (var i = 0; i < _intervals.Length; i++)
 				{
-					CombinationRepository.AddSkillCombinationResource(new DateTime(),
-						new[]
-						{
-							new SkillCombinationResource
-							{
-								StartDateTime = utcDate.Add(_intervals[i]),
-								EndDateTime = utcDate.Add(_intervals[i]).AddMinutes(15),
-								Resource = scheduledStaffing,
-								SkillCombination = new[] {skill.Id.Value}
-							}
-						});
+					staffingPeriodList.Add( new StaffingPeriodData
+					{
+						ForecastedStaffing = forecastedStaffing,
+						ScheduledStaffing = scheduledStaffing,
+						Period = new DateTimePeriod(utcDate.Add(_intervals[i]), utcDate.Add(_intervals[i]).AddMinutes(15))
+					});
 				}
 
-				var timePeriodTuples = new List<Tuple<TimePeriod, double>>();
-				for (var i = 0; i < _intervals.Length; i++)
-				{
-					timePeriodTuples.Add(new Tuple<TimePeriod, double>(
-						new TimePeriod(_intervals[i], _intervals[i].Add(TimeSpan.FromMinutes(15))),
-						forecastedStaffing));
-				}
-				var skillDay = skill.CreateSkillDayWithDemandOnInterval(Scenario.Current(), day, 0,
-					timePeriodTuples.ToArray());
-				skillDay.SkillDataPeriodCollection.ForEach(s => { s.Shrinkage = new Percent(0.5); });
-				SkillDayRepository.Has(skillDay);
+				SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(skill, new DateOnly(utcDate),
+					staffingPeriodList, timeZone);
+
 			});
 		}
 

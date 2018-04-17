@@ -6,14 +6,12 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Requests;
@@ -44,12 +42,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public FakeUserCulture Culture;
 		public FakeUserTimeZone TimeZone;
 		public FakePersonRequestRepository PersonRequestRepository;
-		public FakeSkillCombinationResourceRepository CombinationRepository;
-		public FakeSkillDayRepository SkillDayRepository;
 		public FakeSkillRepository SkillRepository;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeSkillTypeRepository SkillTypeRepository;
 		public FakeToggleManager ToggleManager;
+		public SkillIntradayStaffingFactory SkillIntradayStaffingFactory;
 
 		private readonly TimeSpan[] intervals = { TimeSpan.FromMinutes(495), TimeSpan.FromMinutes(510) };
 		readonly ISkillType phoneSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony)
@@ -247,7 +244,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 					ScheduledStaffing = 11d,
 					Period = new DateTimePeriod(utcDate.Date.Add(intervals[1]), utcDate.Date.Add(intervals[1]).AddMinutes(15))
 				};
-				setupIntradayStaffingForSkill(skill, new DateOnly(utcDate), new[] { staffingPeriodData1, staffingPeriodData2 });
+				SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(skill, new DateOnly(utcDate),
+					new[] {staffingPeriodData1, staffingPeriodData2}, User.CurrentUser().PermissionInformation.DefaultTimeZone());
 			});
 
 			setupWorkFlowControlSet();
@@ -1109,7 +1107,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var date = new DateOnly(2018, 3, 11);
 			var staffingPeriodData = new List<StaffingPeriodData>();
 			staffingPeriodData.Add(new StaffingPeriodData(){Period = date.ToDateTimePeriod(timePeriod, TimeZone.TimeZone()),ForecastedStaffing = 1,ScheduledStaffing = 2});
-			setupIntradayStaffingForSkill(skill, date, staffingPeriodData);
+			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(skill, date, staffingPeriodData, TimeZone.TimeZone());
 
 			var workFlowControlSet = new WorkflowControlSet();
 			workFlowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { phoneSkillType })
@@ -1261,84 +1259,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 					ScheduledStaffing = scheduledStaffings[1].Value,
 					Period = new DateTimePeriod(utcDate.Date.Add(intervals[1]), utcDate.Date.Add(intervals[1]).AddMinutes(15))
 				};
-				setupIntradayStaffingForSkill(skill, new DateOnly(utcDate), new[] { staffingPeriodData1, staffingPeriodData2 });
+				SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(skill, new DateOnly(utcDate),
+					new[] {staffingPeriodData1, staffingPeriodData2}, User.CurrentUser().PermissionInformation.DefaultTimeZone());
 			});
-		}
-
-		private void setupIntradayStaffingForSkill(ISkill skill, DateOnly date, IEnumerable<StaffingPeriodData> staffingPeriodDatas)
-		{
-			var skillCombinationResources = new List<SkillCombinationResource>();
-			var skillForecastedStaffings = new List<Tuple<TimePeriod, double>>();
-
-			foreach (var staffingPeriodData in staffingPeriodDatas)
-			{
-				skillCombinationResources.AddRange(createSkillCombinationResources(skill, staffingPeriodData.Period, staffingPeriodData.ScheduledStaffing));
-				skillForecastedStaffings.AddRange(createSkillForecastedStaffings(skill, staffingPeriodData.Period, staffingPeriodData.ForecastedStaffing));
-			}
-
-			setupIntradayStaffingForSkill(skill, date, skillCombinationResources, skillForecastedStaffings);
-		}
-
-		private void setupIntradayStaffingForSkill(ISkill skill, DateOnly date, IEnumerable<SkillCombinationResource> skillCombinationResources, IEnumerable<Tuple<TimePeriod, double>> skillForecastedStaffings)
-		{
-			foreach (var skillCombinationResource in skillCombinationResources)
-			{
-				CombinationRepository.AddSkillCombinationResource(new DateTime(),
-					new[]
-					{
-						skillCombinationResource
-					});
-			}
-
-			var skillDay = skill.CreateSkillDayWithDemandOnInterval(Scenario.Current(),
-				date, 0,
-				skillForecastedStaffings.ToArray());
-			skillDay.SkillDataPeriodCollection.ForEach(s => { s.Shrinkage = new Percent(0.5); });
-			SkillDayRepository.Has(skillDay);
-		}
-
-		private List<SkillCombinationResource> createSkillCombinationResources(ISkill skill, DateTimePeriod dateTimePeriod, double scheduledStaffing)
-		{
-			var skillCombinationResources = new List<SkillCombinationResource>();
-			var intervals = dateTimePeriod.Intervals(TimeSpan.FromMinutes(skill.DefaultResolution));
-			for (var i = 0; i < intervals.Count; i++)
-			{
-				skillCombinationResources.Add(
-					new SkillCombinationResource
-					{
-						StartDateTime = intervals[i].StartDateTime,
-						EndDateTime = intervals[i].EndDateTime,
-						Resource = scheduledStaffing,
-						SkillCombination = new[] { skill.Id.Value }
-					}
-				);
-			}
-			return skillCombinationResources;
-		}
-
-		private List<Tuple<TimePeriod, double>> createSkillForecastedStaffings(ISkill skill, DateTimePeriod dateTimePeriod, double forecastedStaffing)
-		{
-			var skillForecastedStaffings = new List<Tuple<TimePeriod, double>>();
-
-			var timezone = User.CurrentUser().PermissionInformation.DefaultTimeZone();
-			for (var time = dateTimePeriod.StartDateTimeLocal(timezone);
-				time < dateTimePeriod.EndDateTimeLocal(timezone);
-				time = time.AddMinutes(skill.DefaultResolution))
-			{
-				skillForecastedStaffings.Add(new Tuple<TimePeriod, double>(
-					new TimePeriod(time.TimeOfDay, time.AddMinutes(skill.DefaultResolution).TimeOfDay),
-					forecastedStaffing));
-			}
-			return skillForecastedStaffings;
-		}
-
-		private class StaffingPeriodData
-		{
-			public DateTimePeriod Period;
-
-			public double ForecastedStaffing;
-
-			public double ScheduledStaffing;
 		}
 	}
 }

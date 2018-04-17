@@ -109,6 +109,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			system.UseTestDouble<FakeTeamGamificationSettingRepository>().For<ITeamGamificationSettingRepository>();
 			system.UseTestDouble<FakeAgentBadgeRepository>().For<IAgentBadgeRepository>();
 			system.UseTestDouble<FakeAgentBadgeWithRankRepository>().For<IAgentBadgeWithRankRepository>();
+			system.UseTestDouble<SkillIntradayStaffingFactory>().For<SkillIntradayStaffingFactory>();
 
 			// Tenant (and datasource) stuff
 			var tenants = new FakeTenants();

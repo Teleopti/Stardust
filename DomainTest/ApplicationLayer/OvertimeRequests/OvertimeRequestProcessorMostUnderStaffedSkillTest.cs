@@ -6,9 +6,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.WorkflowControl;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Services;
@@ -178,17 +176,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var firstPeriod = new DateTimePeriod(2017, 7, 17, 11, 2017, 7, 17, 12);
 			var secondPeriod = new DateTimePeriod(2017, 7, 17, 12, 2017, 7, 17, 13);
 
-			setupIntradayStaffingForSkill(criticalUnderStaffedSkill1, date, new List<StaffingPeriodData>
+			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(criticalUnderStaffedSkill1, date, new List<StaffingPeriodData>
 			{
 				new StaffingPeriodData {ForecastedStaffing = 10d, ScheduledStaffing = 2d, Period = firstPeriod},
 				new StaffingPeriodData {ForecastedStaffing = 10d, ScheduledStaffing = 1d, Period = secondPeriod},
-			});
+			},timeZone);
 
-			setupIntradayStaffingForSkill(criticalUnderStaffedSkill2, date, new List<StaffingPeriodData>
+			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(criticalUnderStaffedSkill2, date, new List<StaffingPeriodData>
 			{
 				new StaffingPeriodData {ForecastedStaffing = 10d, ScheduledStaffing = 1d, Period = firstPeriod},
 				new StaffingPeriodData {ForecastedStaffing = 10d, ScheduledStaffing = 5d, Period = secondPeriod},
-			});
+			}, timeZone);
 
 			addPersonSkillsToPersonPeriod(personSkill1, personSkill2);
 
@@ -213,7 +211,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			setupPerson();
 
 			var workflowControlSet = new WorkflowControlSet();
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod(new[] {_phoneSkillType})
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod(new[] { _phoneSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
 				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(13)))
@@ -239,18 +237,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var date = new DateOnly(2017, 7, 17);
 			var period = new DateTimePeriod(2017, 7, 17, 11, 2017, 7, 17, 12);
 
-			setupIntradayStaffingForSkill(criticalUnderStaffedPhoneSkill, date, new List<StaffingPeriodData>
+			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(criticalUnderStaffedPhoneSkill, date, new List<StaffingPeriodData>
 			{
 				new StaffingPeriodData {ForecastedStaffing = 10d, ScheduledStaffing = 2d, Period = period},
-			});
-			setupIntradayStaffingForSkill(moreCriticalUnderStaffedPhoneSkill, date, new List<StaffingPeriodData>
+			}, timeZone);
+			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(moreCriticalUnderStaffedPhoneSkill, date, new List<StaffingPeriodData>
 			{
 				new StaffingPeriodData {ForecastedStaffing = 10d, ScheduledStaffing = 1d, Period = period},
-			});
-			setupIntradayStaffingForSkill(mostCriticalUnderStaffedEmailSkill, date, new List<StaffingPeriodData>
+			}, timeZone);
+			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(mostCriticalUnderStaffedEmailSkill, date, new List<StaffingPeriodData>
 			{
 				new StaffingPeriodData {ForecastedStaffing = 10d, ScheduledStaffing = 0d, Period = period},
-			});
+			}, timeZone);
 
 			addPersonSkillsToPersonPeriod(personSkill1, personSkill2, personSkill3);
 
@@ -272,7 +270,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		public void ShouldUsePhoneActivityAsOvertimeActivityWhenPhoneSKillIsMoreCriticalUnderStaffed()
 		{
 			setupPerson();
-			
+
 			var workflowControlSet = new WorkflowControlSet();
 			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod(new[] { _phoneSkillType })
 			{
@@ -302,18 +300,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var date = new DateOnly(2017, 7, 17);
 			var period = new DateTimePeriod(2017, 7, 17, 11, 2017, 7, 17, 13);
 
-			setupIntradayStaffingForSkill(criticalUnderStaffedPhoneSkill, date, new List<StaffingPeriodData>
+			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(criticalUnderStaffedPhoneSkill, date, new List<StaffingPeriodData>
 			{
 				new StaffingPeriodData {ForecastedStaffing = 10d, ScheduledStaffing = 2d, Period = period},
-			});
-			setupIntradayStaffingForSkill(moreCriticalUnderStaffedEmailSkill, date, new List<StaffingPeriodData>
+			},timeZone);
+			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(moreCriticalUnderStaffedEmailSkill, date, new List<StaffingPeriodData>
 			{
 				new StaffingPeriodData {ForecastedStaffing = 10d, ScheduledStaffing = 1d, Period = period},
-			});
-			setupIntradayStaffingForSkill(mostCriticalUnderStaffedPhoneSkill, date, new List<StaffingPeriodData>
+			}, timeZone);
+			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(mostCriticalUnderStaffedPhoneSkill, date, new List<StaffingPeriodData>
 			{
 				new StaffingPeriodData {ForecastedStaffing = 10d, ScheduledStaffing = 0d, Period = period},
-			});
+			}, timeZone);
 
 			addPersonSkillsToPersonPeriod(personSkill1, personSkill2, personSkill3);
 
@@ -366,18 +364,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var period = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(new DateTime(2017, 7, 17, 11, 00, 00), timeZone)
 				, TimeZoneHelper.ConvertToUtc(new DateTime(2017, 7, 17, 12, 00, 00), timeZone));
 
-			setupIntradayStaffingForSkill(criticalUnderStaffedPhoneSkill, date, new List<StaffingPeriodData>
+			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(criticalUnderStaffedPhoneSkill, date, new List<StaffingPeriodData>
 			{
 				new StaffingPeriodData {ForecastedStaffing = 10d, ScheduledStaffing = 2d, Period = period},
-			});
-			setupIntradayStaffingForSkill(moreCriticalUnderStaffedPhoneSkill, date, new List<StaffingPeriodData>
+			}, timeZone);
+			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(moreCriticalUnderStaffedPhoneSkill, date, new List<StaffingPeriodData>
 			{
 				new StaffingPeriodData {ForecastedStaffing = 10d, ScheduledStaffing = 1d, Period = period},
-			});
-			setupIntradayStaffingForSkill(mostCriticalUnderStaffedEmailSkill, date, new List<StaffingPeriodData>
+			}, timeZone);
+			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(mostCriticalUnderStaffedEmailSkill, date, new List<StaffingPeriodData>
 			{
 				new StaffingPeriodData {ForecastedStaffing = 10d, ScheduledStaffing = 0d, Period = period},
-			});
+			}, timeZone);
 
 			addPersonSkillsToPersonPeriod(personSkill1, personSkill2, personSkill3);
 
@@ -398,7 +396,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		public void ShouldUseEmailActivityAsOvertimeActivityWhenEmailSKillIsMoreCriticalUnderStaffedIn30MinutesWhenToggle47853IsOff()
 		{
 			setupPerson();
-			
+
 			var workflowControlSet = new WorkflowControlSet();
 			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod(new[] { _phoneSkillType })
 			{
@@ -426,18 +424,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var date = new DateOnly(2017, 7, 17);
 			var period = new DateTimePeriod(2017, 7, 17, 11, 2017, 7, 17, 12);
 
-			setupIntradayStaffingForSkill(criticalUnderStaffedPhoneSkill, date, new List<StaffingPeriodData>
+			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(criticalUnderStaffedPhoneSkill, date, new List<StaffingPeriodData>
 			{
 				new StaffingPeriodData {ForecastedStaffing = 10d, ScheduledStaffing = 2d, Period = period},
-			});
-			setupIntradayStaffingForSkill(moreCriticalUnderStaffedPhoneSkill, date, new List<StaffingPeriodData>
+			}, timeZone);
+			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(moreCriticalUnderStaffedPhoneSkill, date, new List<StaffingPeriodData>
 			{
 				new StaffingPeriodData {ForecastedStaffing = 10d, ScheduledStaffing = 1d, Period = period},
-			});
-			setupIntradayStaffingForSkill(mostCriticalUnderStaffedEmailSkill, date, new List<StaffingPeriodData>
+			}, timeZone);
+			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(mostCriticalUnderStaffedEmailSkill, date, new List<StaffingPeriodData>
 			{
 				new StaffingPeriodData {ForecastedStaffing = 10d, ScheduledStaffing = 0d, Period = period},
-			});
+			}, timeZone);
 
 			addPersonSkillsToPersonPeriod(personSkill1, personSkill2, personSkill3);
 
@@ -491,14 +489,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var date = new DateOnly(2017, 7, 17);
 			var period = new DateTimePeriod(2017, 7, 17, 11, 2017, 7, 17, 12);
 
-			setupIntradayStaffingForSkill(moreCriticalUnderStaffedPhoneSkill, date, new List<StaffingPeriodData>
+			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(moreCriticalUnderStaffedPhoneSkill, date, new List<StaffingPeriodData>
 			{
 				new StaffingPeriodData {ForecastedStaffing = 10d, ScheduledStaffing = 1d, Period = period},
-			});
-			setupIntradayStaffingForSkill(mostCriticalUnderStaffedEmailSkill, date, new List<StaffingPeriodData>
+			}, timeZone);
+			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(mostCriticalUnderStaffedEmailSkill, date, new List<StaffingPeriodData>
 			{
 				new StaffingPeriodData {ForecastedStaffing = 10d, ScheduledStaffing = 0d, Period = period},
-			});
+			}, timeZone);
 
 			addPersonSkillsToPersonPeriod(personSkill2, personSkill3);
 
@@ -520,7 +518,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		public void ShouldSupportDiffrentSkillTypesWithTwoPartialOverlappedPeriods()
 		{
 			setupPerson();
-			
+
 			var workflowControlSet = new WorkflowControlSet();
 			var emailTypeRollingPeriodStartsFromToday = new OvertimeRequestOpenRollingPeriod(new[] { _emailSkillType })
 			{
@@ -555,14 +553,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var tomorrow = new DateOnly(tomorrowDate);
 			var period = new DateTimePeriod(tomorrowDate.AddHours(11), tomorrowDate.AddHours(12));
 
-			setupIntradayStaffingForSkill(moreCriticalUnderStaffedPhoneSkill, tomorrow, new List<StaffingPeriodData>
+			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(moreCriticalUnderStaffedPhoneSkill, tomorrow, new List<StaffingPeriodData>
 			{
 				new StaffingPeriodData {ForecastedStaffing = 10d, ScheduledStaffing = 1d, Period = period},
-			});
-			setupIntradayStaffingForSkill(mostCriticalUnderStaffedEmailSkill, tomorrow, new List<StaffingPeriodData>
+			}, timeZone);
+			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(mostCriticalUnderStaffedEmailSkill, tomorrow, new List<StaffingPeriodData>
 			{
 				new StaffingPeriodData {ForecastedStaffing = 10d, ScheduledStaffing = 0d, Period = period},
-			});
+			}, timeZone);
 
 			addPersonSkillsToPersonPeriod(personSkill2, personSkill3);
 
@@ -619,14 +617,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var date = new DateOnly(nowDate);
 			var period = new DateTimePeriod(nowDate.AddHours(11), nowDate.AddHours(12));
 
-			setupIntradayStaffingForSkill(moreCriticalUnderStaffedPhoneSkill, date, new List<StaffingPeriodData>
+			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(moreCriticalUnderStaffedPhoneSkill, date, new List<StaffingPeriodData>
 			{
 				new StaffingPeriodData {ForecastedStaffing = 10d, ScheduledStaffing = 1d, Period = period},
-			});
-			setupIntradayStaffingForSkill(mostCriticalUnderStaffedEmailSkill, date, new List<StaffingPeriodData>
+			}, timeZone);
+			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(mostCriticalUnderStaffedEmailSkill, date, new List<StaffingPeriodData>
 			{
 				new StaffingPeriodData {ForecastedStaffing = 10d, ScheduledStaffing = 0d, Period = period},
-			});
+			}, timeZone);
 
 			addPersonSkillsToPersonPeriod(personSkill2, personSkill3);
 
@@ -664,11 +662,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var skill = setupPersonSkill();
 			skill.DefaultResolution = 60;
+			var timeZone = LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 			var period = new DateTimePeriod(2017, 7, 17, 18, 2017, 7, 17, 19);
-			setupIntradayStaffingForSkill(skill, new DateOnly(2017, 7, 17), new List<StaffingPeriodData>
+			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(skill, new DateOnly(2017, 7, 17), new List<StaffingPeriodData>
 			{
 				new StaffingPeriodData {ForecastedStaffing = 10d, ScheduledStaffing = 1d, Period = period},
-			});
+			}, timeZone);
 
 			var personRequest = createOvertimeRequestInMinutes(18, 15);
 			getTarget().Process(personRequest);
@@ -683,12 +682,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			setupPerson(8, 21);
 
 			var skill = setupPersonSkill();
+			var timeZone = LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 			skill.DefaultResolution = 60;
 			var period = new DateTimePeriod(2017, 7, 17, 18, 2017, 7, 17, 19);
-			setupIntradayStaffingForSkill(skill, new DateOnly(2017, 7, 17), new List<StaffingPeriodData>
+			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(skill, new DateOnly(2017, 7, 17), new List<StaffingPeriodData>
 			{
 				new StaffingPeriodData {ForecastedStaffing = 10d, ScheduledStaffing = 1d, Period = period},
-			});
+			}, timeZone);
 
 			var personRequest = createOvertimeRequestInMinutes(TimeSpan.FromHours(18).Add(TimeSpan.FromMinutes(45)), 15);
 			getTarget().Process(personRequest);
@@ -733,14 +733,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var date = new DateOnly(2017, 7, 17);
 			var period = new DateTimePeriod(2017, 7, 17, 11, 2017, 7, 17, 12);
 
-			setupIntradayStaffingForSkill(moreCriticalUnderStaffedEmailSkill, date, new List<StaffingPeriodData>
+			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(moreCriticalUnderStaffedEmailSkill, date, new List<StaffingPeriodData>
 			{
 				new StaffingPeriodData {ForecastedStaffing = 10d, ScheduledStaffing = 1d, Period = period},
-			});
-			setupIntradayStaffingForSkill(mostCriticalUnderStaffedPhoneSkill, date, new List<StaffingPeriodData>
+			}, timeZone);
+			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(mostCriticalUnderStaffedPhoneSkill, date, new List<StaffingPeriodData>
 			{
 				new StaffingPeriodData {ForecastedStaffing = 10d, ScheduledStaffing = 0d, Period = period},
-			});
+			}, timeZone);
 
 			addPersonSkillsToPersonPeriod(personEmailSkill, personPhoneSkill);
 
@@ -802,14 +802,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var date = new DateOnly(2017, 7, 13);
 			var period = new DateTimePeriod(2017, 7, 13, 11, 2017, 7, 13, 12);
 
-			setupIntradayStaffingForSkill(criticalUnderStaffedPhoneSkill, date, new List<StaffingPeriodData>
+			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(criticalUnderStaffedPhoneSkill, date, new List<StaffingPeriodData>
 			{
 				new StaffingPeriodData {ForecastedStaffing = 10d, ScheduledStaffing = 2d, Period = period},
-			});
-			setupIntradayStaffingForSkill(mostCriticalUnderStaffedEmailSkill, date, new List<StaffingPeriodData>
+			}, timeZone);
+			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(mostCriticalUnderStaffedEmailSkill, date, new List<StaffingPeriodData>
 			{
 				new StaffingPeriodData {ForecastedStaffing = 10d, ScheduledStaffing = 1d, Period = period},
-			});
+			}, timeZone);
 
 			addPersonSkillsToPersonPeriod(personPhoneSkill, personEmailSkill);
 
@@ -871,10 +871,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var date = new DateOnly(2017, 7, 15);
 			var period = new DateTimePeriod(2017, 7, 15, 11, 2017, 7, 15, 12);
 
-			setupIntradayStaffingForSkill(chatSkill, date, new List<StaffingPeriodData>
+			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(chatSkill, date, new List<StaffingPeriodData>
 			{
 				new StaffingPeriodData {ForecastedStaffing = 10d, ScheduledStaffing = 2d, Period = period},
-			});
+			}, timeZone);
 
 			addPersonSkillsToPersonPeriod(personPhoneSkill, personChatSkill);
 
@@ -937,15 +937,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var date = new DateOnly(2017, 7, 15);
 			var period = new DateTimePeriod(2017, 7, 15, 11, 2017, 7, 15, 12);
 
-			setupIntradayStaffingForSkill(phoneSkill, date, new List<StaffingPeriodData>
+			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(phoneSkill, date, new List<StaffingPeriodData>
 			{
 				new StaffingPeriodData {ForecastedStaffing = 10d, ScheduledStaffing = 2d, Period = period},
-			});
+			}, timeZone);
 
-			setupIntradayStaffingForSkill(chatSkill, date, new List<StaffingPeriodData>
+			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(chatSkill, date, new List<StaffingPeriodData>
 			{
 				new StaffingPeriodData {ForecastedStaffing = 10d, ScheduledStaffing = 2d, Period = period},
-			});
+			}, timeZone);
 
 			addPersonSkillsToPersonPeriod(personPhoneSkill, personChatSkill);
 
@@ -1036,84 +1036,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			{
 				workload.TemplateWeekCollection.ForEach(x => x.Value.ChangeOpenHours(new List<TimePeriod>()));
 			}
-		}
-
-		private void setupIntradayStaffingForSkill(ISkill skill, DateOnly date, IEnumerable<StaffingPeriodData> staffingPeriodDatas)
-		{
-			var skillCombinationResources = new List<SkillCombinationResource>();
-			var skillForecastedStaffings = new List<Tuple<TimePeriod, double>>();
-
-			foreach (var staffingPeriodData in staffingPeriodDatas)
-			{
-				skillCombinationResources.AddRange(createSkillCombinationResources(skill, staffingPeriodData.Period, staffingPeriodData.ScheduledStaffing));
-				skillForecastedStaffings.AddRange(createSkillForecastedStaffings(skill, staffingPeriodData.Period, staffingPeriodData.ForecastedStaffing));
-			}
-
-			setupIntradayStaffingForSkill(skill, date, skillCombinationResources, skillForecastedStaffings);
-		}
-
-		private void setupIntradayStaffingForSkill(ISkill skill, DateOnly date,
-			IEnumerable<SkillCombinationResource> skillCombinationResources
-			, IEnumerable<Tuple<TimePeriod, double>> skillForecastedStaffings)
-		{
-			foreach (var skillCombinationResource in skillCombinationResources)
-			{
-				CombinationRepository.AddSkillCombinationResource(new DateTime(),
-					new[]
-					{
-						skillCombinationResource
-					});
-			}
-
-			var skillDay = skill.CreateSkillDayWithDemandOnInterval(Scenario.Current(),
-				date, 0,
-				skillForecastedStaffings.ToArray());
-			skillDay.SkillDataPeriodCollection.ForEach(s => { s.Shrinkage = new Percent(0.5); });
-			SkillDayRepository.Has(skillDay);
-		}
-
-		private List<SkillCombinationResource> createSkillCombinationResources(ISkill skill, DateTimePeriod dateTimePeriod, double scheduledStaffing)
-		{
-			var skillCombinationResources = new List<SkillCombinationResource>();
-			var intervals = dateTimePeriod.Intervals(TimeSpan.FromMinutes(skill.DefaultResolution));
-			for (var i = 0; i < intervals.Count; i++)
-			{
-				skillCombinationResources.Add(
-					new SkillCombinationResource
-					{
-						StartDateTime = intervals[i].StartDateTime,
-						EndDateTime = intervals[i].EndDateTime,
-						Resource = scheduledStaffing,
-						SkillCombination = new[] { skill.Id.Value }
-					}
-				);
-			}
-			return skillCombinationResources;
-		}
-
-		private List<Tuple<TimePeriod, double>> createSkillForecastedStaffings(ISkill skill, DateTimePeriod dateTimePeriod, double forecastedStaffing)
-		{
-			var skillForecastedStaffings = new List<Tuple<TimePeriod, double>>();
-
-			var timezone = LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
-			for (var time = dateTimePeriod.StartDateTimeLocal(timezone);
-				time < dateTimePeriod.EndDateTimeLocal(timezone);
-				time = time.AddMinutes(skill.DefaultResolution))
-			{
-				skillForecastedStaffings.Add(new Tuple<TimePeriod, double>(
-					new TimePeriod(time.TimeOfDay, time.AddMinutes(skill.DefaultResolution).TimeOfDay),
-					forecastedStaffing));
-			}
-			return skillForecastedStaffings;
-		}
-
-		private class StaffingPeriodData
-		{
-			public DateTimePeriod Period;
-
-			public double ForecastedStaffing;
-
-			public double ScheduledStaffing;
 		}
 	}
 }
