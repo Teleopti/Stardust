@@ -15,8 +15,6 @@
 		var ctrl = this;
 		ctrl.label = 'MoveShift';
 		ctrl.processingCommand = false;
-		ctrl.showMeridian = /h:/.test($locale.DATETIME_FORMATS.shortTime);
-		ctrl.meridians = ctrl.showMeridian ? $locale.DATETIME_FORMATS.AMPMS : [];
 		ctrl.invalidAgents = [];
 		ctrl.agentsInDifferentTimeZone = [];
 
