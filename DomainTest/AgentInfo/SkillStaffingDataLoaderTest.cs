@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.AgentInfo;
@@ -46,39 +47,73 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 
 			var utcDate = Now.UtcDateTime().Date;
 
-			var staffingPeriodDataList = new List<StaffingPeriodData>
-			{
-				createStaffingPeriodData(1.25d, 0d, utcDate, 0, 1),
-				createStaffingPeriodData(1.25d, 0d, utcDate, 1, 2),
-				createStaffingPeriodData(1.25d, 0d, utcDate, 2, 3),
-				createStaffingPeriodData(1.25d, 0d, utcDate, 3, 4),
-				createStaffingPeriodData(0d, 0d, utcDate, 4, 5),
-				createStaffingPeriodData(0d, 0d, utcDate, 5, 6),
-				createStaffingPeriodData(0.012d, 0d, utcDate, 6, 7),
-				createStaffingPeriodData(0.036d, 0d, utcDate, 7, 8),
-				createStaffingPeriodData(0.093d, 1d, utcDate, 8, 9),
-				createStaffingPeriodData(0.185d, 1d, utcDate, 9, 10),
-				createStaffingPeriodData(0.286d, 0d, utcDate, 10, 11),
-				createStaffingPeriodData(0.379d, 0d, utcDate, 11, 12),
-				createStaffingPeriodData(0.421d, 1d, utcDate, 12, 13),
-				createStaffingPeriodData(0.42d, 1d, utcDate, 13, 14),
-				createStaffingPeriodData(0.39d, 1d, utcDate, 14, 15),
-				createStaffingPeriodData(0.375d, 1d, utcDate, 15, 16),
-				createStaffingPeriodData(0.343d, 1d, utcDate, 16, 17),
-				createStaffingPeriodData(0.335d, 0d, utcDate, 17, 18),
-				createStaffingPeriodData(0.33d, 0d, utcDate, 18, 19),
-				createStaffingPeriodData(0.323d, 0d, utcDate, 19, 20),
-				createStaffingPeriodData(0.315d, 0d, utcDate, 20, 21),
-				createStaffingPeriodData(0.307d, 0d, utcDate, 21, 22),
-				createStaffingPeriodData(0.23d, 0d, utcDate, 22, 23)
-			};
+			var staffingPeriodDataList = createStaffingPeriodDataForOneDay(utcDate);
 
 			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(skill1, new DateOnly(utcDate), staffingPeriodDataList,
 				User.CurrentUser().PermissionInformation.DefaultTimeZone(), ServiceAgreement.DefaultValuesEmail());
 
-			var skillStaffingDatas = Target.Load(new[] {skill1}, new DateOnly(utcDate).ToDateOnlyPeriod(), true);
+			var skillStaffingDatas = Target.Load(new[] { skill1 }, new DateOnly(utcDate).ToDateOnlyPeriod(), true);
 			Assert.AreEqual(0.030,
 				skillStaffingDatas.FirstOrDefault(p => p.Time.Equals(utcDate.AddHours(7))).ForecastedStaffing);
+		}
+
+		[Test]
+		public void ShouldRecalculateForecastedAgentsForEmailSkillForOneWeek()
+		{
+			var emailSkillType = new SkillTypeEmail(new Description(SkillTypeIdentifier.Email), ForecastSource.Email).WithId();
+
+			var skill1 = createSkill("skill1", new TimePeriod(0, 24));
+			skill1.DefaultResolution = 60;
+			skill1.SkillType = emailSkillType;
+
+			var utcDate = Now.UtcDateTime().Date;
+			var firstDayOfWeek = DateHelper.GetFirstDateInWeek(utcDate, CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek);
+			var weekPeriod = new DateOnlyPeriod(new DateOnly(firstDayOfWeek), new DateOnly(firstDayOfWeek.AddDays(6)));
+
+			foreach (var dateOnly in weekPeriod.DayCollection())
+			{
+				var staffingPeriodDataList = createStaffingPeriodDataForOneDay(utcDate);
+
+				SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(skill1, dateOnly, staffingPeriodDataList,
+					User.CurrentUser().PermissionInformation.DefaultTimeZone(), ServiceAgreement.DefaultValuesEmail());
+			}
+
+			var skillStaffingDatas = Target.Load(new[] { skill1 }, weekPeriod, true);
+			Assert.AreEqual(0.048,
+				skillStaffingDatas.FirstOrDefault(p => p.Time.Equals(firstDayOfWeek.AddHours(7))).ForecastedStaffing);
+			Assert.AreEqual(0.048,
+				skillStaffingDatas.FirstOrDefault(p => p.Time.Equals(firstDayOfWeek.AddDays(6).AddHours(7))).ForecastedStaffing);
+		}
+
+		private List<StaffingPeriodData> createStaffingPeriodDataForOneDay(DateTime date)
+		{
+			var staffingPeriodDataList = new List<StaffingPeriodData>
+			{
+				createStaffingPeriodData(1.25d, 0d, date, 0, 1),
+				createStaffingPeriodData(1.25d, 0d, date, 1, 2),
+				createStaffingPeriodData(1.25d, 0d, date, 2, 3),
+				createStaffingPeriodData(1.25d, 0d, date, 3, 4),
+				createStaffingPeriodData(0d, 0d, date, 4, 5),
+				createStaffingPeriodData(0d, 0d, date, 5, 6),
+				createStaffingPeriodData(0.012d, 0d, date, 6, 7),
+				createStaffingPeriodData(0.036d, 0d, date, 7, 8),
+				createStaffingPeriodData(0.093d, 1d, date, 8, 9),
+				createStaffingPeriodData(0.185d, 1d, date, 9, 10),
+				createStaffingPeriodData(0.286d, 0d, date, 10, 11),
+				createStaffingPeriodData(0.379d, 0d, date, 11, 12),
+				createStaffingPeriodData(0.421d, 1d, date, 12, 13),
+				createStaffingPeriodData(0.42d, 1d, date, 13, 14),
+				createStaffingPeriodData(0.39d, 1d, date, 14, 15),
+				createStaffingPeriodData(0.375d, 1d, date, 15, 16),
+				createStaffingPeriodData(0.343d, 1d, date, 16, 17),
+				createStaffingPeriodData(0.335d, 0d, date, 17, 18),
+				createStaffingPeriodData(0.33d, 0d, date, 18, 19),
+				createStaffingPeriodData(0.323d, 0d, date, 19, 20),
+				createStaffingPeriodData(0.315d, 0d, date, 20, 21),
+				createStaffingPeriodData(0.307d, 0d, date, 21, 22),
+				createStaffingPeriodData(0.23d, 0d, date, 22, 23)
+			};
+			return staffingPeriodDataList;
 		}
 
 		private ISkill createSkill(string name, TimePeriod? openHour = null)

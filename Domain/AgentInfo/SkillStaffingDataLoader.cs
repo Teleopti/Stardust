@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 				((List<ISkillDay>) skillDaysBySkills[skillDay.Skill]).Add(skillDay);
 			}
 
-			_backlogSkillTypesForecastCalculator.CalculateForecastedAgents(period.StartDate, useShrinkage, skillDaysBySkills, _userTimeZone.TimeZone());
+			_backlogSkillTypesForecastCalculator.CalculateForecastedAgents(skillDaysBySkills, _userTimeZone.TimeZone(), useShrinkage);
 
 			var skillStaffingDatas = createSkillStaffingDatas(period, skills, resolution, useShrinkage,
 				skillDays, dayFilter);
