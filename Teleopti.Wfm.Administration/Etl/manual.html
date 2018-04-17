@@ -168,7 +168,7 @@
 						</tr>
 						<tr ng-if="job.Open" ng-repeat="task in job.JobSteps track by $index">
 							<td class="subrow">
-								<span>{{task.Name}}</span>
+								<span>&nbsp; &nbsp;{{task.Name}}</span>
 								<span class="pull-right" style="color: tomato" ng-if="task.DependsOnTenant">(Depends on configuration of tenant)</span>
 							</td>
 							<td></td>

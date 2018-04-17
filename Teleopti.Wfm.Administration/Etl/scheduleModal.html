@@ -73,8 +73,8 @@
 								<div class="center-flex">
 									<input class="switch" ng-model="ctrl.frequencyType" ng-click="ctrl.toggleFrequencyType(ctrl.form)" type="checkbox">
 									&nbsp; Occurs &nbsp;
-									<span ng-if="!vm.frequencyType">once</span>
-									<span ng-if="vm.frequencyType">repeatedly</span>
+									<span ng-if="!ctrl.frequencyType">once</span>
+									<span ng-if="ctrl.frequencyType">repeatedly</span>
 								</div>
 							</div>
 							<div class="col-md-12" ng-if="!ctrl.frequencyType">

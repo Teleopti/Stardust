@@ -20,7 +20,7 @@
 		<b>Etl job history</b>
 		<div class="panel panel-default">
 			<div class="panel-heading">
-				Settings
+				Parameters
 				<span class="pull-right" ng-if="vm.status == null">No jobs running</span>
 				<span class="pull-right" ng-if="vm.status !== null">{{vm.status.JobName}} job started running at {{vm.status.formatedTime}}</span>
 			</div>
@@ -60,7 +60,7 @@
 			</div>
 		</div>
 
-		<div class="row">
+		<div class="row" ng-if="vm.history.length>0 || vm.error">
 			<div class="col-md-12">
 				<div class="panel panel-default ">
 					<div class="panel-heading follow-filter">
@@ -143,10 +143,10 @@
 										{{job.BusinessUnitName}}
 									</td>
 									<td>
-										{{job.StartTime}}
+										{{job.StartTime | date:'HH:mm on EEEE, MMMM d, y'}}
 									</td>
 									<td>
-										{{job.EndTime}}
+										{{job.EndTime  | date:'HH:mm on EEEE, MMMM d, y'}}
 									</td>
 									<td>
 										{{job.Duration}}
@@ -175,7 +175,7 @@
 								</tr>
 								<tr ng-if="job.Open" ng-repeat="step in job.JobStepsHistory track by $index">
 									<td class="subrow">
-										<span>{{step.Name}}</span>
+										<span>&nbsp; &nbsp;{{step.Name}}</span>
 										<span class="pull-right" style="color: tomato" ng-if="step.DependsOnTenant">(Depends on configuration of tenant)</span>
 									</td>
 									<td></td>
