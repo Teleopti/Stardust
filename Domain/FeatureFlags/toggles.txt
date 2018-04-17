@@ -34,7 +34,6 @@ Wfm_MinimumScaffolding_32659 = RC # Set this to true to enable first page link t
 
 # China, can any of these be removed? #
 Request_RecalculatePersonAccountBalanceOnRequestConsumer_36850 = true
-WfmReportPortal_LeaderBoard_39440 = true
 WebByPassDefaultPermissionCheck_37984 = true
 
 # LevelUp #

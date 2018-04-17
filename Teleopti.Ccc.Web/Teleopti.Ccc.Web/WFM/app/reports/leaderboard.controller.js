@@ -9,8 +9,6 @@
 		vm.isLoading = true;
 		vm.selectedDate = new Date();
 		vm.showInputTimeErrorMessage = false;
-		vm.isLeaderBoardEnabled = false;
-		vm.isLeaderBoardEnabled = ToggleSvc.WfmReportPortal_LeaderBoard_39440;
 
 		vm.searchOptions = {
 			keyword: '',

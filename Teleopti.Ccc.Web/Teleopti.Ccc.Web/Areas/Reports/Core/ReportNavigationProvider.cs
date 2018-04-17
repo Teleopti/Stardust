@@ -84,8 +84,7 @@ namespace Teleopti.Ccc.Web.Areas.Reports.Core
 
 		private bool isPermittedLeaderBoardUnderReports()
 		{
-			return _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboardUnderReports) &&
-				   _toggleManager.IsEnabled(Toggles.WfmReportPortal_LeaderBoard_39440);
+			return _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboardUnderReports);
 		}
 
 		private CategorizedReportItemViewModel createLeaderBoardReportItem()
