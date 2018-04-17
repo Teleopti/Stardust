@@ -218,8 +218,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			var target = new ScheduleReadModelWrapperHandler(null, null, null, publisher);
 			target.Handle(newSchedule);
 
-			server.Requests[0].Headers["Signature"].Should().Be.EqualTo(
-				"QLX0n3ffldPGQteTvhzyRUEt4vT4ajiJkn6IRvmXV6YxInpuK3PnT2oIQDRHEl/khUM2pp7pmLcbOJMWwypKabLUPK3p27YbzLZ58aTadDQAaks8BJtXPPQHAgxjL5o2iNaNUfR8+Qqv5WXo8LjyTCE1nnyxCOc5X9AEaPTjHr5Izhe4ZWm/G8lUvSu9Xr4OSZRBpRM8ZsyLSCf3iE5olU3ThSBSIoZA4veYc+XriOYog6Kvcik8AjoduNz/t21Pdf+JqhwvU07VgnSkIXlf3RY63mgTs1P5/gOXVhzAwD0e62HMPxuckEN2d8GKYQKcku51CYjxPFhNmYXFR0Z3Ow==");
+			server.Requests[0].Headers["Signature"].Length.Should().Be.GreaterThan(0);
 		}
 	}
 	
