@@ -296,6 +296,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 				return;
 
 			var workflowControlSetModel = (WorkflowControlSetModel)comboBoxAdvWorkflowControlSet.SelectedItem;
+
+			if (workflowControlSetModel.OvertimeRequestPeriodModels == null || !workflowControlSetModel.OvertimeRequestPeriodModels.Any())
+			{
+				return;
+			}
+
 			var overtimeRequestOpenPeriod = workflowControlSetModel.OvertimeRequestPeriodModels.ElementAt(e.RowIndex - _overtimeRequestOpenPeriodDataStartRowIndex);
 			e.Style.Enabled = overtimeRequestOpenPeriod.EnableWorkRuleValidation;
 		}
