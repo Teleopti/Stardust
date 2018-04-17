@@ -33,7 +33,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Gamification
 		{
 			try
 			{
-				HandleJob(@event);
+				var period = new DateOnlyPeriod(new DateOnly(@event.StartDate), new DateOnly(@event.EndDate));
+				RemoveExistingAgentBadges(period);
+				HandleJob(@event, period);
 			}
 			catch (Exception e)
 			{
@@ -50,10 +52,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Gamification
 		}
 
 		[UnitOfWork]
-		protected virtual void HandleJob(RecalculateBadgeEvent @event)
+		protected virtual void RemoveExistingAgentBadges(DateOnlyPeriod period)
 		{
-			var period = new DateOnlyPeriod(new DateOnly(@event.StartDate), new DateOnly(@event.EndDate));
 			_calculateBadges.RemoveAgentBadges(period);
+		}
+
+		[UnitOfWork]
+		protected virtual void HandleJob(RecalculateBadgeEvent @event, DateOnlyPeriod period)
+		{
 			foreach (var date in period.DayCollection())
 			{
 				_performBadgeCalculation.Calculate(@event.LogOnBusinessUnitId, date.Date);
