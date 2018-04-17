@@ -187,7 +187,7 @@
 
 		var defaultMoveToStartTime = vm.getDefaultMoveToStartTime();
 
-		expect(defaultMoveToStartTime.getHours()).toBe(11);
+		expect(moment(defaultMoveToStartTime).hours()).toBe(11);
 	});
 
 
