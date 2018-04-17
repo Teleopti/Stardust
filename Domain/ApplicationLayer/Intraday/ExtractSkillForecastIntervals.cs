@@ -13,11 +13,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 	{
 		private readonly ISkillDayRepository _skillDayRepository;
 		private readonly ICurrentScenario _currentScenario;
+		private readonly IStaffingCalculatorServiceFacade _staffingCalculatorServiceFacade;
 
-		public ExtractSkillForecastIntervals(ISkillDayRepository skillDayRepository, ICurrentScenario currentScenario)
+		public ExtractSkillForecastIntervals(ISkillDayRepository skillDayRepository, ICurrentScenario currentScenario, IStaffingCalculatorServiceFacade staffingCalculatorServiceFacade)
 		{
 			_skillDayRepository = skillDayRepository;
 			_currentScenario = currentScenario;
+			_staffingCalculatorServiceFacade = staffingCalculatorServiceFacade;
 		}
 
 		public IEnumerable<SkillStaffingInterval> GetBySkills(IList<ISkill> skills, DateTimePeriod period, bool useShrinkage)
@@ -26,6 +28,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 			var skillDays =  _skillDayRepository.FindReadOnlyRange(GetLongestPeriod(skills, period), skills, _currentScenario.Current());
 			foreach (var skillDay in skillDays)
 			{
+				skillDay.Skill.SkillType.StaffingCalculatorService = _staffingCalculatorServiceFacade;
+				skillDay.RecalculateDailyTasks();
+				
 				if (useShrinkage)
 				{
 					foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
@@ -33,6 +38,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 						skillStaffPeriod.Payload.UseShrinkage = true;
 					}
 				}
+				
+				
 				getSkillStaffingIntervals(skillDay).ForEach(i => returnList.Add(i));
 			}
 			return returnList.Where(x => period.Contains(x.StartDateTime) || x.DateTimePeriod.Contains(period.StartDateTime));

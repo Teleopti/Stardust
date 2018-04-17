@@ -128,8 +128,9 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			var significantPart = day.SignificantPart();
 			var isContractDayOff = _hasContractDayOffDefinition.IsDayOff(day);
 			
-			if (significantPart != SchedulePartView.DayOff && !isContractDayOff)
+			if (significantPart == SchedulePartView.MainShift || !isContractDayOff)
 				numberDays++;
+			
 			return numberDays;
 		}
 

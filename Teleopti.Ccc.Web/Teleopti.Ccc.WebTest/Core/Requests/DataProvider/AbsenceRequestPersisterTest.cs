@@ -385,11 +385,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		}
 		
 		[Test]
-		public void ShouldNotCountDaysDisabledInContractScheduleButUnscheduled()
+		public void ShouldNotCountDaysDisabledInContractScheduleAndUnscheduled()
 		{
-			var friday = _today.AddDays(4);
-			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
-				, CurrentScenario.Current(), friday.ToDateTimePeriod(UserTimeZone.TimeZone())));
+			var saturday = _today.AddDays(4);
+			setupPersonSkillAlwaysOpen(saturday);
 			_absence = createAbsence();
 
 			var isWaitlisted = true;
@@ -404,10 +403,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			var form = createAbsenceRequestForm(new DateTimePeriodForm
 			{
-				StartDate = friday,
-				EndDate = friday,
-				StartTime = new TimeOfDay(TimeSpan.FromHours(0)),
-				EndTime = new TimeOfDay(new TimeSpan(8,0,0))
+				StartDate = saturday,
+				EndDate = saturday,
+				StartTime = new TimeOfDay(TimeSpan.FromHours(8)),
+				EndTime = new TimeOfDay(new TimeSpan(18,0,0))
 			});
 
 			var personRequest = Persister.Persist(form);
@@ -421,6 +420,44 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			request.IsPending.Should().Be.True();
 
 			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo<ApproveRequestCommand>();
+		}
+		
+		[Test]
+		public void ShouldCountDaysDisabledInContractScheduleButScheduled()
+		{
+			setupPersonSkills();
+			var saturday = _today.AddDays(4);
+			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
+				, CurrentScenario.Current(), saturday.ToDateTimePeriod(UserTimeZone.TimeZone())));
+			_absence = createAbsence();
+
+			var isWaitlisted = false;
+
+			setWorkflowControlSet(usePersonAccountValidator: true, autoGrant: true, absenceRequestWaitlistEnabled: isWaitlisted);
+
+			var accountDay = new AccountDay(_today)
+			{
+				Accrued = TimeSpan.FromDays(0)
+			};
+			createPersonAbsenceAccount(_person, _absence, accountDay);
+
+			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			{
+				StartDate = saturday,
+				EndDate = saturday,
+				StartTime = new TimeOfDay(TimeSpan.FromHours(0)),
+				EndTime = new TimeOfDay(new TimeSpan(8,0,0))
+			});
+
+			var personRequest = Persister.Persist(form);
+			var request = PersonRequestRepository.Get(Guid.Parse(personRequest.Id));
+
+			request.Should().Not.Be(null);
+			request.DenyReason.Should().Not.Be.Empty();
+			request.IsDenied.Should().Be.True();
+			request.IsWaitlisted.Should().Be.False();
+			request.IsApproved.Should().Be.False();
+			request.IsPending.Should().Be.False();
 		}
 
 		[Test]
@@ -1045,8 +1082,14 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var timePeriods = Enumerable.Repeat(new TimePeriod(8, 18), 5).ToArray();
 			WorkloadFactory.CreateWorkloadClosedOnWeekendsWithOpenHours(skill, timePeriods);
 			var date = new DateOnly(2016, 10, 18);
-			//_person = PersonFactory.CreatePersonWithPersonPeriodTeamSite(date);
 			_person.AddSkill(skill, date);
+		}
+
+		private void setupPersonSkillAlwaysOpen(DateOnly personPeriodDate)
+		{
+			var skill = SkillFactory.CreateSkill("Phone");
+			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
+			_person.AddSkill(skill, personPeriodDate);
 		}
 	}
 }

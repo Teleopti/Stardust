@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday;
@@ -15,7 +17,6 @@ namespace Teleopti.Ccc.Domain.Staffing
 {
 	public class ExportForecastAndStaffingFile
 	{
-		private readonly ISkillDayRepository _skillDayRepository;
 		private readonly ICurrentScenario _currentScenario;
 		private readonly ScheduledStaffingProvider _scheduledStaffingProvider;
 		private readonly IUserTimeZone _userTimeZone;
@@ -25,14 +26,14 @@ namespace Teleopti.Ccc.Domain.Staffing
 		private readonly IUserUiCulture _userUiCulture;
 		private readonly ISkillRepository _skillRepository;
 		private readonly IUserCulture _userCulture;
+		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
 		private const int numberOfDecimals = 2;
 
-		public ExportForecastAndStaffingFile(ISkillDayRepository skillDayRepository, ICurrentScenario currentScenario, 
+		public ExportForecastAndStaffingFile(ICurrentScenario currentScenario, 
 			ScheduledStaffingProvider scheduledStaffingProvider, IUserTimeZone userTimeZone, 
 			ISkillCombinationResourceRepository skillCombinationResourceRepository, INow now, IStaffingSettingsReader staffingSettingsReader,
-			IUserUiCulture userUiCulture, ISkillRepository skillRepository, IUserCulture userCulture)
+			IUserUiCulture userUiCulture, ISkillRepository skillRepository, IUserCulture userCulture, ISkillDayLoadHelper skillDayLoadHelper)
 		{
-			_skillDayRepository = skillDayRepository;
 			_currentScenario = currentScenario;
 			_scheduledStaffingProvider = scheduledStaffingProvider;
 			_userTimeZone = userTimeZone;
@@ -42,6 +43,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 			_userUiCulture = userUiCulture;
 			_skillRepository = skillRepository;
 			_userCulture = userCulture;
+			_skillDayLoadHelper = skillDayLoadHelper;
 		}
 		public string GetExportPeriodMessageString()
 		{
@@ -100,20 +102,17 @@ namespace Teleopti.Ccc.Domain.Staffing
 			var userCulture = _userCulture.GetCulture();
 			var separator = userCulture.TextInfo.ListSeparator;
 			
-			var skillDays = _skillDayRepository.FindRange(period,skill, _currentScenario.Current());
-			var loadSkillSchedule = new Dictionary<ISkill, IEnumerable<ISkillDay>> { { skill, skillDays.ToList() } };
-			var skillStaffPeriodHolder = new SkillStaffPeriodHolder(loadSkillSchedule);
 			var forecastedData = new StringBuilder();
 			var allIntervals = new List<SkillStaffingInterval>();
 			var staffingPerSkill = _scheduledStaffingProvider.StaffingPerSkill(new List<ISkill> {skill},
 				period.Inflate(1).ToDateTimePeriod(TimeZoneInfo.Utc), useShrinkage, true);
-			//staffingPerSkill[0]
 			
 			allIntervals.AddRange(staffingPerSkill);
 
-			if (!skillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.TryGetValue(skill, out var skillStaffPeriods))
+			var usedIntervals = allIntervals.Where(i => period.Contains(new DateOnly(TimeZoneHelper.ConvertFromUtc(i.StartDateTime, _userTimeZone.TimeZone())))).ToList();
+			if(usedIntervals.IsEmpty())
 				return forecastedData.ToString().Trim();
-
+			
 			var bpoResources = _skillCombinationResourceRepository.BpoResourcesForSkill(skill.Id.GetValueOrDefault(), period).ToList();
 			var bpoNames = bpoResources.Select(r => r.Source).Distinct().ToList();
 			var resourcesByBpo = bpoResources.ToLookup(r => r.Source, r => r);
@@ -128,23 +127,26 @@ namespace Teleopti.Ccc.Domain.Staffing
 			forecastedData.AppendLine($"skill{separator}startdatetime{separator}enddatetime{separator}forecasted agents" +
 				$"{separator}total scheduled agents{separator}total diff{separator}total scheduled heads{bposString}");
 			
-			foreach (var skillStaffPeriod in skillStaffPeriods.Values)
+			foreach (var interval in usedIntervals)
 			{
-				var ssiStartDate = skillStaffPeriod.Period.StartDateTime;
-				var ssiEndDate = skillStaffPeriod.Period.EndDateTime;
-				var staffingInterval =
-					allIntervals.Where(
-						x => x.StartDateTime == ssiStartDate && x.EndDateTime == ssiEndDate && x.SkillId == skill.Id.GetValueOrDefault()).ToList();
-				var staffing = 0d;
-				if (staffingInterval.Any())
-				{
-					staffing = staffingInterval.First().StaffingLevel;
-				}
+				var ssiStartDate = interval.StartDateTime;
+				var ssiEndDate = interval.EndDateTime;
+				//var staffingInterval =
+				//	allIntervals.Where(
+				//		x => x.StartDateTime == ssiStartDate && x.EndDateTime == ssiEndDate && x.SkillId == skill.Id.GetValueOrDefault()).ToList();
+				//var staffing = 0d;
+				//var demand = 0d;
+				
+				//if (interval.Any())
+				
+				var staffing = interval.StaffingLevel;
+				var demand = interval.FStaff;
 
-				var startDateTime = skillStaffPeriod.Period.StartDateTimeLocal(_userTimeZone.TimeZone()).ToString("g",userCulture);
-				var endDateTime = skillStaffPeriod.Period.EndDateTimeLocal(_userTimeZone.TimeZone()).ToString("g", userCulture);
-				var demand = skillStaffPeriod.FStaff;
-			
+				//var startDateTime = interval.Period.StartDateTimeLocal(_userTimeZone.TimeZone()).ToString("g",userCulture);
+				//var endDateTime = interval.Period.EndDateTimeLocal(_userTimeZone.TimeZone()).ToString("g", userCulture);
+				var startDateTime = TimeZoneHelper.ConvertFromUtc(interval.StartDateTime, _userTimeZone.TimeZone()).ToString("g",userCulture);
+				var endDateTime = TimeZoneHelper.ConvertFromUtc(interval.EndDateTime, _userTimeZone.TimeZone()).ToString("g",userCulture);
+				
 				var bpoResourceTuple = createBpoResourcesString(bpoNames, resourcesByBpo, ssiStartDate, ssiEndDate, separator, userCulture);
 				var totalDiff = staffing - demand;
 

@@ -32,7 +32,6 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 		public FakeIntervalLengthFetcher IntervalLengthFetcher;
 		public FakeSkillCombinationResourceRepository SkillCombinationResourceRepository;
 		public MutableNow Now;
-		public FakeUserTimeZone UserTimeZone;
 		public FakeStaffingSettingsReader StaffingSettingsReader;
 		public FakeUserUiCulture FakeUserUiCulture;
 		public FakeUserCulture FakeUserCulture;
@@ -558,6 +557,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			var scenario = SkillSetupHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository);			
 			var skillDay = SkillSetupHelper.CreateSkillDayWithDemand(skill, scenario, new DateTime(2017, 8, 15), new TimePeriod(8, 0, 8, 30), 15);
 			skillDay.SkillStaffPeriodCollection.ForEach(ssp => ssp.Payload.Shrinkage = new Percent(0.25));
+			skillDay.SkillDataPeriodCollection.ForEach(sdpc => sdpc.Shrinkage = new Percent(0.25));
 			
 			SkillRepository.Add(skill);
 			SkillDayRepository.Add(skillDay);
@@ -580,7 +580,6 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 					SkillCombination = new[] { skill.Id.GetValueOrDefault() }
 				}
 			});
-
 
 			var heads = new List<ScheduledHeads>
 			{
