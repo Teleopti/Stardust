@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			target.Handle(@event);
 
 			eventTracker.AssertWasCalled(x => x.SendTrackingMessage(
-				Arg<ProjectionChangedEvent>.Matches(e => e.InitiatorId == initiatorId && e.LogOnBusinessUnitId == businessUnitId), 
+				Arg<ProjectionChangedEventNew>.Matches(e => e.InitiatorId == initiatorId && e.LogOnBusinessUnitId == businessUnitId), 
 				Arg<TrackingMessage>.Matches(m => m.TrackId == trackId)));
 
 		}
