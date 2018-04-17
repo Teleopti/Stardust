@@ -3,6 +3,8 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using Autofac;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
@@ -16,6 +18,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
 			_container = container;
 			InitializeComponent();
 			SetTexts();
+			toolStripButtonOldIntraday.Visible = !_container.Resolve<IToggleManager>().IsEnabled(Toggles.RTA_KillFattyIntradayUntilItDies_74939);
 		}
 
 		private string buildWfmUri(string relativePath)
@@ -40,7 +43,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Intraday
 			oldIntradayNavigator.Dock = DockStyle.Fill;
 			this.Parent.Controls.Add(oldIntradayNavigator);
 			oldIntradayNavigator.BringToFront();
-			((TableLayoutPanel)this.Parent.Parent).RowStyles[2].Height = 50F;
+			((TableLayoutPanel) this.Parent.Parent).RowStyles[2].Height = 50F;
 		}
 	}
 }
