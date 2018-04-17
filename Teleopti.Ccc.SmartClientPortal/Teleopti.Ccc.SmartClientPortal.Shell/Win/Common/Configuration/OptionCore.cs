@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 				new KpiSettings(),
 				new ScorecardSettings(),
 				new SetScorecardView(),
-				new ContractControl(_toggleManager),
+				new ContractControl(),
 				new ContractScheduleControl(),
 				new PartTimePercentageControl(),
 				new ActivityControl(),
@@ -229,18 +229,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 	public class PeopleSettingPagesProvider : ISettingPagesProvider
 	{
-		private readonly IToggleManager _toggleManager;
-
-		public PeopleSettingPagesProvider(IToggleManager toggleManager)
+		public PeopleSettingPagesProvider()
 		{
-			_toggleManager = toggleManager;
 		}
 
 		public IList<ISettingPage> CreateSettingPages()
 		{
 			var allSupportedPages = new List<ISettingPage>
 			{
-				new ContractControl(_toggleManager),
+				new ContractControl(),
 				new ContractScheduleControl(),
 				new PartTimePercentageControl()
 			};

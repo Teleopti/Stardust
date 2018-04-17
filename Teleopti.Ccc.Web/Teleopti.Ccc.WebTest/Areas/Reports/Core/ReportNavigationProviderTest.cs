@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.Reports;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider;
@@ -39,7 +38,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Reports.Core
 				new ScheduleAnalysisAuditTrailProvider());
 			_mocks = new MockRepository();
 
-			target = new ReportNavigationProvider(_reportProvider, _reportUrl, _authorizor, new TrueToggleManager(),
+			target = new ReportNavigationProvider(_reportProvider, _reportUrl, _authorizor,
 				_reportNavigationModel);
 		}
 

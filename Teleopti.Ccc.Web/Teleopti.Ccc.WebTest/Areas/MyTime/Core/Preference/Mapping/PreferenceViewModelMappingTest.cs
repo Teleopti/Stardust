@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.WorkflowControl;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
@@ -30,7 +29,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		private IPreferenceOptionsProvider preferenceOptionProvider;
 		private IVirtualSchedulePeriodProvider virtualSchedulePeriodProvider;
 		private ILoggedOnUser loggedOnUser;
-		private IToggleManager toggleManager;
 		private PreferenceViewModelMapper target;
 
 		[SetUp]
@@ -50,7 +48,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 						MaxMustHave = 8
 					};
 			preferenceOptionProvider = MockRepository.GenerateMock<IPreferenceOptionsProvider>();
-			toggleManager = MockRepository.GenerateMock<IToggleManager>();
 
 			virtualSchedulePeriodProvider = MockRepository.GenerateMock<IVirtualSchedulePeriodProvider>();
 			loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
@@ -88,7 +85,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 
-			target = new PreferenceViewModelMapper(new FakePermissionProvider(), preferenceOptionProvider, toggleManager,
+			target = new PreferenceViewModelMapper(new FakePermissionProvider(), preferenceOptionProvider,
 				new Now(), virtualSchedulePeriodProvider, loggedOnUser);
 		}
 		

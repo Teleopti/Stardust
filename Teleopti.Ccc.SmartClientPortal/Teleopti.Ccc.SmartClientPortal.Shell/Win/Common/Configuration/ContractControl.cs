@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		public void  SaveChanges()
 		{}
 
-		public ContractControl(IToggleManager toggleManager)
+		public ContractControl()
 		{
 			InitializeComponent();
 

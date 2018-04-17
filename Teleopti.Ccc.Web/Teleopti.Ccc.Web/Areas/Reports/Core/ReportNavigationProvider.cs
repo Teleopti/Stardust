@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Reports;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider;
 using Teleopti.Ccc.Web.Areas.Reports.Models;
 using Teleopti.Ccc.UserTexts;
@@ -19,16 +17,14 @@ namespace Teleopti.Ccc.Web.Areas.Reports.Core
 		private readonly IReportsProvider _reportsProvider;
 		private readonly IReportUrl _reportUrl;
 		private readonly IAuthorization _authorization;
-		private readonly IToggleManager _toggleManager;
 		private readonly IReportNavigationModel _reportNavigationModel;
 
-		public ReportNavigationProvider(IReportsProvider reportsProvider, IReportUrl reportUrl, IAuthorization authorization,
-			IToggleManager toggleManager, IReportNavigationModel reportNavigationModel)
+		public ReportNavigationProvider(IReportsProvider reportsProvider, IReportUrl reportUrl, IAuthorization authorization, 
+			IReportNavigationModel reportNavigationModel)
 		{
 			_reportsProvider = reportsProvider;
 			_reportUrl = reportUrl;
 			_authorization = authorization;
-			_toggleManager = toggleManager;
 			_reportNavigationModel = reportNavigationModel;
 		}
 

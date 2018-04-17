@@ -3,10 +3,8 @@ using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
@@ -23,17 +21,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 		private readonly IPreferenceOptionsProvider _preferenceOptionsProvider;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IVirtualSchedulePeriodProvider _virtualSchedulePeriodProvider;
-		private readonly IToggleManager _toggleManager;
 		private readonly INow _now;
 
 		public PreferenceViewModelMapper(IPermissionProvider permissionProvider,
 			IPreferenceOptionsProvider preferenceOptionsProvider,
-			IToggleManager toggleManager, INow now, IVirtualSchedulePeriodProvider virtualSchedulePeriodProvider,
+			INow now, IVirtualSchedulePeriodProvider virtualSchedulePeriodProvider,
 			ILoggedOnUser loggedOnUser)
 		{
 			_permissionProvider = permissionProvider;
 			_preferenceOptionsProvider = preferenceOptionsProvider;
-			_toggleManager = toggleManager;
 			_now = now;
 			_virtualSchedulePeriodProvider = virtualSchedulePeriodProvider;
 			_loggedOnUser = loggedOnUser;

@@ -703,7 +703,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin
             {
                 using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
                 {
-                    using (var optionDialog = new OptionDialog(new OptionCore(new PeopleSettingPagesProvider(_toggleManager))))
+                    using (var optionDialog = new OptionDialog(new OptionCore(new PeopleSettingPagesProvider())))
                     {
                         optionDialog.SetUnitOfWork(uow);
                         optionDialog.Page(typeof(ContractControl));
@@ -729,7 +729,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin
             {
                 using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
                 {
-                    using (var optionDialog = new OptionDialog(new OptionCore(new PeopleSettingPagesProvider(_toggleManager))))
+                    using (var optionDialog = new OptionDialog(new OptionCore(new PeopleSettingPagesProvider())))
                     {
                         optionDialog.SetUnitOfWork(uow);
                         optionDialog.Page(typeof(ContractScheduleControl));
@@ -755,7 +755,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin
             {
                 using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
                 {
-                    using (var optionDialog = new OptionDialog(new OptionCore(new PeopleSettingPagesProvider(_toggleManager))))
+                    using (var optionDialog = new OptionDialog(new OptionCore(new PeopleSettingPagesProvider())))
                     {
                         optionDialog.SetUnitOfWork(uow);
                         optionDialog.Page(typeof(PartTimePercentageControl));
