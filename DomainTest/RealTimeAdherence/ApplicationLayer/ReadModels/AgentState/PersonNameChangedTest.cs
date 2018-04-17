@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ReadModels.
 		public void ShouldSaveFirstAndLastName()
 		{
 			var personId = Guid.NewGuid();
-			Persister.Has(new AgentStateReadModel {PersonId = personId, IsDeleted = false});
+			Persister.Has(new AgentStateReadModel {PersonId = personId});
 			
 			Target.Handle(new PersonNameChangedEvent
 			{
@@ -33,42 +33,6 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ReadModels.
 
 			var model = Persister.Models.Single();
 			model.PersonId.Should().Be(personId);
-			model.FirstName.Should().Be("bill");
-			model.LastName.Should().Be("gates");
-			model.IsDeleted.Should().Be(false);
-		}
-
-		[Test]
-		public void ShouldNotSetAgentToActive()
-		{
-			var personId = Guid.NewGuid();
-			Persister.Has(new AgentStateReadModel { PersonId = personId, IsDeleted = true});
-			
-			Target.Handle(new PersonNameChangedEvent
-			{
-				PersonId = personId,
-				FirstName = "bill",
-				LastName = "gates"
-			});
-
-			Persister.Models.Single().IsDeleted.Should().Be(true);
-		}
-
-		[Test]
-		public void ShouldInsertNameAndSetToDeleted()
-		{
-			var personId = Guid.NewGuid();
-
-			Target.Handle(new PersonNameChangedEvent
-			{
-				PersonId = personId,
-				FirstName = "bill",
-				LastName = "gates",
-				Timestamp = "2017-02-14 08:00".Utc()
-			});
-
-			var model = Persister.Models.Single();
-			model.IsDeleted.Should().Be(true);
 			model.FirstName.Should().Be("bill");
 			model.LastName.Should().Be("gates");
 		}

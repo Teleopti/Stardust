@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.ApplicationLayer
 				.ExecuteUpdate();
 		}
 
-		public virtual void UpsertDeleted(Guid personId)
+		public virtual void UpsertNoAssociation(Guid personId)
 		{
 			_unitOfWork.Current().Session()
 				.CreateSQLQuery(@"
@@ -96,14 +96,14 @@ MERGE INTO [ReadModel].[AgentState] AS T
 		INSERT
 		(
 			PersonId,
-			IsDeleted
+			HasAssociation
 		) VALUES (
 			S.PersonId,
-			1
+			0
 		)
 	WHEN MATCHED THEN
 		UPDATE SET
-			IsDeleted = 1
+			HasAssociation = 0
 		;")
 				.SetParameter("PersonId", personId)
 				.ExecuteUpdate();
@@ -158,7 +158,8 @@ MERGE INTO [ReadModel].[AgentState] AS T
 			SiteName,
 			TeamId,
 			TeamName,
-			IsDeleted
+			HasAssociation,
+			HasName
 		) VALUES (
 			S.PersonId,
 			S.BusinessUnitId,
@@ -166,6 +167,7 @@ MERGE INTO [ReadModel].[AgentState] AS T
 			S.SiteName,
 			S.TeamId,
 			S.TeamName,
+			1,
 			0
 		)
 	WHEN MATCHED THEN
@@ -175,7 +177,8 @@ MERGE INTO [ReadModel].[AgentState] AS T
 			SiteName = S.SiteName,
 			TeamId = S.TeamId,
 			TeamName = S.TeamName,
-			IsDeleted = 0
+			HasAssociation = 1
+			
 		;")
 				.SetParameter("PersonId", info.PersonId)
 				.SetParameter("BusinessUnitId", info.BusinessUnitId)
@@ -208,11 +211,11 @@ MERGE INTO [ReadModel].[AgentState] AS T
 		(
 			PersonId,
 			EmploymentNumber,
-			IsDeleted
+			HasAssociation
 		) VALUES (
 			S.PersonId,
 			S.EmploymentNumber,
-			1
+			0
 		)
 	WHEN MATCHED THEN
 		UPDATE SET
@@ -249,17 +252,20 @@ MERGE INTO [ReadModel].[AgentState] AS T
 			PersonId,
 			FirstName,
 			LastName,
-			IsDeleted
+			HasAssociation,
+			HasName
 		) VALUES (
 			S.PersonId,
 			S.FirstName,
 			S.LastName,
+			0,
 			1
 		)
 	WHEN MATCHED THEN
 		UPDATE SET
 			FirstName = S.FirstName,
-			LastName = S.LastName
+			LastName = S.LastName,
+			HasName = 1
 			
 		;")
 				.SetParameter("PersonId", personId)

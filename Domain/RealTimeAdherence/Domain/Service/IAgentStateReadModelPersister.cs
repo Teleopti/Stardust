@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 		AgentStateReadModel Load(Guid personId);
 		void Update(AgentStateReadModel model);
 		
-		void UpsertDeleted(Guid personId);
+		void UpsertNoAssociation(Guid personId);
 		void UpsertAssociation(AssociationInfo info);
 		void UpsertEmploymentNumber(Guid personId, string employmentNumber);
 		void UpsertName(Guid personId, string firstName, string lastName);

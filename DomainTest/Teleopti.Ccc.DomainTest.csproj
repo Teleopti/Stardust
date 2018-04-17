@@ -266,7 +266,7 @@
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\AgentState\PersonEmploymentNumberChangedTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\AgentState\PersonNameChangedTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\AgentState\SiteNameChangedTest.cs" />
-    <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\AgentState\SoftDeleteTest.cs" />
+    <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\AgentState\DeleteTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\AgentState\TeamNameChangedTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\AgentState\UnorderedEventsTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\ExternalLogons\ExternalLogonReadModelUpdaterTest.cs" />
@@ -340,7 +340,6 @@
     <Compile Include="RealTimeAdherence\Domain\Service\BelongsToDateTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\CaseInsensitiveTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\CheckForActivityChangesTest.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\DontUpdateAgentStateReadModel.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\EmptyExistingStateTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\EventsOrderTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\EventsStreamTest.cs" />

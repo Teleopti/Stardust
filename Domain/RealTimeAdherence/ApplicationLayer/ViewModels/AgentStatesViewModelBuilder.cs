@@ -59,15 +59,15 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels
 
 	public class AgentStateFilter
 	{
-		public IEnumerable<Guid> SiteIds { get; set; }// include
-		public IEnumerable<Guid> TeamIds { get; set; }// include
+		public IEnumerable<Guid> SiteIds { get; set; } // include
+		public IEnumerable<Guid> TeamIds { get; set; } // include
 
 		public IEnumerable<Guid> SkillIds { get; set; } // filter
 		public IEnumerable<Guid?> ExcludedStateIds { get; set; } // filter
 		public string TextFilter { get; set; } // filter
-		
+
 		public bool InAlarm { get; set; } // filter and order
-		
+
 		public string OrderBy { get; set; }
 		public string Direction { get; set; }
 	}
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels
 		private readonly ICommonAgentNameProvider _nameDisplaySetting;
 		private readonly ICurrentAuthorization _authorization;
 		private readonly IUserNow _userNow;
-	    private readonly ILoggedOnUser _user;
+		private readonly ILoggedOnUser _user;
 
 		public AgentStatesViewModelBuilder(
 			INow now,
@@ -91,8 +91,8 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels
 			ProperAlarm appliedAlarm,
 			IAgentStateReadModelReader reader,
 			ICommonAgentNameProvider nameDisplaySetting,
-			ICurrentAuthorization authorization, 
-			IUserNow userNow, 
+			ICurrentAuthorization authorization,
+			IUserNow userNow,
 			ILoggedOnUser user)
 		{
 			_now = now;
@@ -103,14 +103,14 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels
 			_nameDisplaySetting = nameDisplaySetting;
 			_authorization = authorization;
 			_userNow = userNow;
-		    _user = user;
+			_user = user;
 		}
-		
+
 		public AgentStatesViewModel Build(AgentStateFilter filter)
 		{
-		    if (filter.SiteIds.EmptyIfNull().IsEmpty() && filter.TeamIds.EmptyIfNull().IsEmpty())
-		    {
-		        var userRoles = _user.CurrentUser().PermissionInformation.ApplicationRoleCollection.EmptyIfNull();
+			if (filter.SiteIds.EmptyIfNull().IsEmpty() && filter.TeamIds.EmptyIfNull().IsEmpty())
+			{
+				var userRoles = _user.CurrentUser().PermissionInformation.ApplicationRoleCollection.EmptyIfNull();
 				var team = _user.CurrentUser().Period(_userNow.Date())?.Team;
 
 				if (team != null)
@@ -118,18 +118,18 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels
 					if (userRoles
 						.All(x => x.AvailableData.AvailableDataRange == AvailableDataRangeOption.MySite))
 						filter.SiteIds = new[] {team.Site.Id.Value};
-		        
+
 					if (userRoles
 						.All(x => x.AvailableData.AvailableDataRange == AvailableDataRangeOption.MyTeam))
 						filter.TeamIds = new[] {team.Id.Value};
 				}
-		    }
+			}
 
-		    return new AgentStatesViewModel
-		    {
-		        Time = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone()),
-		        States = buildStates(_reader.Read(filter))
-		    };
+			return new AgentStatesViewModel
+			{
+				Time = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone()),
+				States = buildStates(_reader.Read(filter))
+			};
 		}
 
 		private IEnumerable<AgentStateViewModel> buildStates(IEnumerable<AgentStateReadModel> states)
@@ -137,56 +137,56 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels
 			var nameDisplayedAs = _nameDisplaySetting.CommonAgentNameSettings;
 			var auth = _authorization.Current();
 			return from state in states
-				   where !state.IsDeleted && (
-						auth.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, _userNow.Date(), new SiteAuthorization { BusinessUnitId = state.BusinessUnitId.GetValueOrDefault(), SiteId = state.SiteId.GetValueOrDefault() }) ||
-						auth.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, _userNow.Date(), new TeamAuthorization { BusinessUnitId = state.BusinessUnitId.GetValueOrDefault(), SiteId = state.SiteId.GetValueOrDefault(), TeamId = state.TeamId.GetValueOrDefault() })
-					)
-				   let timeInAlarm = calculateTimeInAlarm(state)
-				   select new AgentStateViewModel
-				   {
-					   PersonId = state.PersonId,
-					   Name = nameDisplayedAs.BuildFor(state.FirstName, state.LastName, state.EmploymentNumber),
-					   SiteId = state.SiteId.ToString(),
-					   SiteName = state.SiteName,
-					   TeamId = state.TeamId.ToString(),
-					   TeamName = state.TeamName,
-					   State = state.StateName,
-					   StateId = state.StateGroupId,
-					   Activity = state.Activity,
-					   NextActivity = state.NextActivity,
-					   NextActivityStartTime = formatTime(state.NextActivityStartTime),
-					   Rule = state.RuleName,
-					   Color = _appliedAlarm.ColorTransition(state, timeInAlarm),
-					   TimeInState = state.StateStartTime.HasValue ? (int)(_now.UtcDateTime() - state.StateStartTime.Value).TotalSeconds : 0,
-					   TimeInAlarm = timeInAlarm,
-					   TimeInRule = state.RuleStartTime.HasValue ? (int?)(_now.UtcDateTime() - state.RuleStartTime.Value).TotalSeconds : null,
-					   Shift = state.Shift?.Select(y => new AgentStateActivityViewModel
-					   {
-						   Color = ColorTranslator.ToHtml(Color.FromArgb(y.Color)),
-						   StartTime = TimeZoneHelper.ConvertFromUtc(y.StartTime, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss"),
-						   EndTime = TimeZoneHelper.ConvertFromUtc(y.EndTime, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss"),
-						   Name = y.Name
-					   }),
-					   OutOfAdherences = state.OutOfAdherences?.Select(y =>
-					   {
-						   string endTime = null;
-						   if (y.EndTime.HasValue)
-							   endTime = TimeZoneHelper.ConvertFromUtc(y.EndTime.Value, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss");
-						   return new AgentOutOfAdherenceViewModel
-						   {
-							   StartTime = TimeZoneHelper.ConvertFromUtc(y.StartTime, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss"),
-							   EndTime = endTime
-						   };
-					   })
-				   };
+				where
+					auth.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, _userNow.Date(), new SiteAuthorization {BusinessUnitId = state.BusinessUnitId.GetValueOrDefault(), SiteId = state.SiteId.GetValueOrDefault()}) ||
+					auth.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, _userNow.Date(), new TeamAuthorization {BusinessUnitId = state.BusinessUnitId.GetValueOrDefault(), SiteId = state.SiteId.GetValueOrDefault(), TeamId = state.TeamId.GetValueOrDefault()})
+				let timeInAlarm = calculateTimeInAlarm(state)
+				select new AgentStateViewModel
+				{
+					PersonId = state.PersonId,
+					Name = nameDisplayedAs.BuildFor(state.FirstName, state.LastName, state.EmploymentNumber),
+					SiteId = state.SiteId.ToString(),
+					SiteName = state.SiteName,
+					TeamId = state.TeamId.ToString(),
+					TeamName = state.TeamName,
+					State = state.StateName,
+					StateId = state.StateGroupId,
+					Activity = state.Activity,
+					NextActivity = state.NextActivity,
+					NextActivityStartTime = formatTime(state.NextActivityStartTime),
+					Rule = state.RuleName,
+					Color = _appliedAlarm.ColorTransition(state, timeInAlarm),
+					TimeInState = state.StateStartTime.HasValue ? (int) (_now.UtcDateTime() - state.StateStartTime.Value).TotalSeconds : 0,
+					TimeInAlarm = timeInAlarm,
+					TimeInRule = state.RuleStartTime.HasValue ? (int?) (_now.UtcDateTime() - state.RuleStartTime.Value).TotalSeconds : null,
+					Shift = state.Shift?.Select(y => new AgentStateActivityViewModel
+					{
+						Color = ColorTranslator.ToHtml(Color.FromArgb(y.Color)),
+						StartTime = TimeZoneHelper.ConvertFromUtc(y.StartTime, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss"),
+						EndTime = TimeZoneHelper.ConvertFromUtc(y.EndTime, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss"),
+						Name = y.Name
+					}),
+					OutOfAdherences = state.OutOfAdherences?.Select(y =>
+					{
+						string endTime = null;
+						if (y.EndTime.HasValue)
+							endTime = TimeZoneHelper.ConvertFromUtc(y.EndTime.Value, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss");
+						return new AgentOutOfAdherenceViewModel
+						{
+							StartTime = TimeZoneHelper.ConvertFromUtc(y.StartTime, _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss"),
+							EndTime = endTime
+						};
+					})
+				};
 		}
 
 		private int? calculateTimeInAlarm(AgentStateReadModel x)
 		{
 			if (x.AlarmStartTime.HasValue)
 			{
-				return _now.UtcDateTime() >= x.AlarmStartTime.Value ? (int?)(_now.UtcDateTime() - x.AlarmStartTime.Value).TotalSeconds : null;
+				return _now.UtcDateTime() >= x.AlarmStartTime.Value ? (int?) (_now.UtcDateTime() - x.AlarmStartTime.Value).TotalSeconds : null;
 			}
+
 			return null;
 		}
 
@@ -197,9 +197,9 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels
 			var today = TimeZoneInfo.ConvertTimeFromUtc(_now.UtcDateTime(), _timeZone.TimeZone()).Date;
 
 			return userTime < today.AddDays(1)
-				? userTime.ToString(_culture.GetCulture().DateTimeFormat.ShortTimePattern)
-				: userTime.ToString(_culture.GetCulture().DateTimeFormat.ShortDatePattern) + " " +
-				  userTime.ToString(_culture.GetCulture().DateTimeFormat.ShortTimePattern)
+					? userTime.ToString(_culture.GetCulture().DateTimeFormat.ShortTimePattern)
+					: userTime.ToString(_culture.GetCulture().DateTimeFormat.ShortDatePattern) + " " +
+					  userTime.ToString(_culture.GetCulture().DateTimeFormat.ShortTimePattern)
 				;
 		}
 	}

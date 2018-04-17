@@ -8,8 +8,8 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 		public Guid PersonId { get; set; }
 		public string FirstName { get; set; }
 		public string LastName { get; set; }
+		public string EmploymentNumber { get; set; }
 		public Guid? BusinessUnitId { get; set; }
-
 
 		public Guid? SiteId { get; set; }
 		public string SiteName { get; set; }
@@ -41,9 +41,6 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 		public IEnumerable<AgentStateActivityReadModel> Shift { get; set; }
 
 		public IEnumerable<AgentStateOutOfAdherenceReadModel> OutOfAdherences { get; set; }
-		public bool IsDeleted { get; set; }
-		public string EmploymentNumber { get; set; }
-
 
 		public override string ToString()
 		{

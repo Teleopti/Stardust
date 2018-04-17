@@ -233,6 +233,7 @@
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\AgentState\OrganizationReaderBusinessUnitTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\AgentState\OrganizationReaderSkillsTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\AgentState\OrganizationReaderTest.cs" />
+    <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\AgentState\Reader\ActiveTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\AgentState\Reader\EmptyCollectionsTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\AgentState\Reader\ForCombinationsTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\AgentState\Reader\ForEntireBusinessUnitTest.cs" />
@@ -245,7 +246,7 @@
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\AgentState\Reader\OrderNameTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\AgentState\Reader\OrderTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\AgentState\Reader\TextFilterTest.cs" />
-    <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\AgentState\Reader\WithNamesTest.cs" />
+    <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\AgentState\TeamCardReaderActive.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\AgentState\TeamCardReaderAgentsCountTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\AgentState\TeamCardReaderBusinessUnitTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\AgentState\TeamCardReaderNameTest.cs" />

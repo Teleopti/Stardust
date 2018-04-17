@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
@@ -73,25 +74,44 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 		}
 
 		[Test]
-		public void ShouldNotReadDeleted()
+		public void ShouldNotReadAgentsWithoutAssociation()
 		{
 			var team = Guid.NewGuid();
 			var site = Guid.NewGuid();
 			var person = Guid.NewGuid();
-			Persister.Upsert(new AgentStateReadModelForTest
+			Persister.UpsertAssociation(new AssociationInfo
 			{
-				BusinessUnitId = BusinessUnit.Current().Id.Value,
 				PersonId = person,
-				TeamId = team,
+				BusinessUnitId = ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.Value,
 				SiteId = site,
+				TeamId = team,
 			});
-			Persister.UpsertDeleted(person);
+			Persister.UpsertName(person, null, null);
+			Persister.UpsertNoAssociation(person);
 
 			var result = Target.Read();
 
 			result.Should().Be.Empty();
 		}
+		
+		[Test]
+		public void ShouldNotReadAgentsWithoutName()
+		{
+			var team = Guid.NewGuid();
+			var site = Guid.NewGuid();
+			var person = Guid.NewGuid();
+			Persister.UpsertAssociation(new AssociationInfo
+			{
+				PersonId = person,
+				BusinessUnitId = ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.Value,
+				SiteId = site,
+				TeamId = team,
+			});
 
+			var result = Target.Read();
+
+			result.Should().Be.Empty();
+		}
 	}
 
 }

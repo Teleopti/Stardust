@@ -56,8 +56,6 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels
 					var model = _persister.Load(eventsForPerson.Key.Value);
 					if (model == null)
 						return;
-					if (model.IsDeleted)
-						return;
 
 					eventsForPerson.ForEach(e => handle(model, (dynamic) e));
 

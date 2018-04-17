@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 				TeamId = teamId,
 				AlarmStartTime = "2016-08-18 08:05".Utc()
 			});
-			Persister.UpsertDeleted(personId);
+			Persister.UpsertNoAssociation(personId);
 
 			Target.Read(siteId).Single().InAlarmCount.Should().Be(1);
 		}

@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 				TeamId = teamId,
 				PersonId = personId2
 			});
-			Persister.UpsertDeleted(personId2);
+			Persister.UpsertNoAssociation(personId2);
 
 			var result = Target.Read(new AgentStateFilter {TeamIds = teamId.AsArray()});
 

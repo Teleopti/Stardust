@@ -34,12 +34,12 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels
 		{
 			if (!@event.TeamId.HasValue)
 			{
-				_persister.UpsertDeleted(@event.PersonId);
+				_persister.UpsertNoAssociation(@event.PersonId);
 				return;
 			}
 			if (@event.ExternalLogons.IsNullOrEmpty())
 			{
-				_persister.UpsertDeleted(@event.PersonId);
+				_persister.UpsertNoAssociation(@event.PersonId);
 				return;
 			}
 			_persister.UpsertAssociation(new AssociationInfo
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels
 		[UnitOfWork]
 		public virtual void Handle(PersonDeletedEvent @event)
 		{
-			_persister.UpsertDeleted(@event.PersonId);
+			_persister.UpsertNoAssociation(@event.PersonId);
 		}
 	}
 

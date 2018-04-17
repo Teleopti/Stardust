@@ -84,7 +84,8 @@ namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.ApplicationLayer
 					{(querySkills ? skillWhere : "")}
 					{(querySite ? siteWhere : "")}
 
-					a.IsDeleted = 0 AND
+					a.HasAssociation = 1 AND
+					a.HasName = 1 AND 
 
 					a.BusinessUnitId = :businessUnitId
 

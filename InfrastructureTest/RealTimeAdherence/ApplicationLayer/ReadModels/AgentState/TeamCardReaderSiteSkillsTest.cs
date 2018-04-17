@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels;
@@ -35,7 +36,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			var currentSkillId = Database.SkillIdFor("phone");
 			WithUnitOfWork.Do(() =>
 			{
-				Groupings.UpdateGroupingReadModel(new[] { personId });
+				Groupings.UpdateGroupingReadModel(new[] {personId});
 				StatePersister.Upsert(new AgentStateReadModelForTest
 				{
 					PersonId = personId,
@@ -45,7 +46,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.Read(siteId, new[] { currentSkillId }))
+			WithUnitOfWork.Get(() => Target.Read(siteId, new[] {currentSkillId}))
 				.Count().Should().Be(1);
 		}
 
@@ -62,7 +63,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			var teamId = Guid.NewGuid();
 			WithUnitOfWork.Do(() =>
 			{
-				Groupings.UpdateGroupingReadModel(new[] { personId });
+				Groupings.UpdateGroupingReadModel(new[] {personId});
 				StatePersister.Upsert(new AgentStateReadModelForTest
 				{
 					PersonId = personId,
@@ -73,8 +74,8 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 				});
 			});
 
-			var result = WithUnitOfWork.Get(() => Target.Read(siteId, new[] { currentSkillId })).Single();
-			
+			var result = WithUnitOfWork.Get(() => Target.Read(siteId, new[] {currentSkillId})).Single();
+
 			result.TeamId.Should().Be(teamId);
 			result.InAlarmCount.Should().Be(1);
 		}
@@ -96,12 +97,12 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			var phoneSkillId = Database.SkillIdFor("Phone");
 			WithUnitOfWork.Do(() =>
 			{
-				Groupings.UpdateGroupingReadModel(new[] { ashleyId, pierreId });
+				Groupings.UpdateGroupingReadModel(new[] {ashleyId, pierreId});
 				StatePersister.Upsert(new AgentStateReadModelForTest
 				{
 					PersonId = pierreId,
 					SiteId = siteId,
-					TeamId = teamId1, 
+					TeamId = teamId1,
 					IsRuleAlarm = true,
 					AlarmStartTime = "2016-10-17 08:00".Utc()
 				});
@@ -115,7 +116,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.Read(siteId, new[] { phoneSkillId }))
+			WithUnitOfWork.Get(() => Target.Read(siteId, new[] {phoneSkillId}))
 				.Single().InAlarmCount.Should().Be(1);
 		}
 
@@ -135,7 +136,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			var phoneSkillId = Database.SkillIdFor("Phone");
 			WithUnitOfWork.Do(() =>
 			{
-				Groupings.UpdateGroupingReadModel(new[] { ashleyId, pierreId });
+				Groupings.UpdateGroupingReadModel(new[] {ashleyId, pierreId});
 				StatePersister.Upsert(new AgentStateReadModelForTest
 				{
 					PersonId = pierreId,
@@ -153,7 +154,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.Read(siteId, new[] { phoneSkillId }))
+			WithUnitOfWork.Get(() => Target.Read(siteId, new[] {phoneSkillId}))
 				.Single().InAlarmCount.Should().Be(1);
 		}
 
@@ -172,7 +173,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			var emailSkillId = Database.SkillIdFor("Email");
 			WithUnitOfWork.Do(() =>
 			{
-				Groupings.UpdateGroupingReadModel(new[] { ashleyId });
+				Groupings.UpdateGroupingReadModel(new[] {ashleyId});
 				StatePersister.Upsert(new AgentStateReadModelForTest
 				{
 					PersonId = ashleyId,
@@ -183,7 +184,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.Read(siteId, new[] { phoneSkillId, emailSkillId }))
+			WithUnitOfWork.Get(() => Target.Read(siteId, new[] {phoneSkillId, emailSkillId}))
 				.Single().InAlarmCount.Should().Be(1);
 		}
 
@@ -203,8 +204,8 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			var email = Database.SkillIdFor("email");
 			WithUnitOfWork.Do(() =>
 			{
-				Groupings.UpdateGroupingReadModel(new[] { personId });
-				
+				Groupings.UpdateGroupingReadModel(new[] {personId});
+
 				StatePersister.Upsert(new AgentStateReadModelForTest
 				{
 					PersonId = personId,
@@ -214,7 +215,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.Read(siteId, new[] { email }))
+			WithUnitOfWork.Get(() => Target.Read(siteId, new[] {email}))
 				.Should().Be.Empty();
 		}
 
@@ -234,7 +235,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			var phoneId = Database.SkillIdFor("phone");
 			WithUnitOfWork.Do(() =>
 			{
-				Groupings.UpdateGroupingReadModel(new[] { personId });
+				Groupings.UpdateGroupingReadModel(new[] {personId});
 				StatePersister.Upsert(new AgentStateReadModelForTest
 				{
 					PersonId = personId,
@@ -244,49 +245,8 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.Read(siteId, new[] { phoneId }))
+			WithUnitOfWork.Get(() => Target.Read(siteId, new[] {phoneId}))
 				.Should().Be.Empty();
 		}
-
-		[Test]
-		public void ShouldNotCountDeletedAgents()
-		{
-			Now.Is("2016-10-17 08:10");
-			Database
-				.WithAgent("Ashley")
-				.WithSkill("Phone")
-				.WithAgent("Pierre")
-				.WithSkill("Phone");
-			var teamId = Guid.NewGuid();
-			var siteId = Guid.NewGuid();
-			var ashleyId = Database.PersonIdFor("Ashley");
-			var pierreId = Database.PersonIdFor("Pierre");
-			var phoneSkillId = Database.SkillIdFor("Phone");
-			WithUnitOfWork.Do(() =>
-			{
-				Groupings.UpdateGroupingReadModel(new[] { ashleyId, pierreId });
-				StatePersister.Upsert(new AgentStateReadModelForTest
-				{
-					PersonId = pierreId,
-					SiteId = siteId,
-					TeamId = teamId,
-					IsRuleAlarm = true,
-					AlarmStartTime = "2016-10-17 08:00".Utc()
-				});
-				StatePersister.Upsert(new AgentStateReadModelForTest
-				{
-					PersonId = ashleyId,
-					SiteId = siteId,
-					TeamId = teamId,
-					IsRuleAlarm = true,
-					AlarmStartTime = "2016-10-17 08:00".Utc()
-				});
-			});
-			WithUnitOfWork.Do(() => StatePersister.UpsertDeleted(ashleyId));
-
-			WithUnitOfWork.Get(() => Target.Read(siteId, new[] { phoneSkillId }))
-				.Single().InAlarmCount.Should().Be(1);
-		}
-
 	}
 }

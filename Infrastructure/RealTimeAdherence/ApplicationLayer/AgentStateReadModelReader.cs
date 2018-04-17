@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.ApplicationLayer
 		{
 			var builder =
 				new AgentStateReadModelQueryBuilder(_configuration)
-					.WithoutDeleted()
+					.IsActivated()
 					.WithBusinessUnit(_businessUnit.Current().Id.Value)
 					.WithSelection(filter.SiteIds, filter.TeamIds, filter.SkillIds, _now)
 					.WithTextFilter(filter.TextFilter);
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.ApplicationLayer
 			return personIds.Batch(400).SelectMany(personIdsInBatch =>
 					load(
 						new AgentStateReadModelQueryBuilder(_configuration)
-							.WithoutDeleted()
+							.IsActivated()
 							.WithBusinessUnit(_businessUnit.Current().Id.Value)
 							.WithMax(400)
 							.WithPersons(personIdsInBatch)

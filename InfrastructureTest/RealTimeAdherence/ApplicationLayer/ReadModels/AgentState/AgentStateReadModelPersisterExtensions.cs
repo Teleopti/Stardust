@@ -17,6 +17,8 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 				TeamId = model.TeamId.GetValueOrDefault(),
 				TeamName = model.TeamName
 			});
+			// maybe remove this
+			instance.UpsertName(model.PersonId, model.FirstName, model.LastName);
 			instance.Update(model);
 		}
 	}

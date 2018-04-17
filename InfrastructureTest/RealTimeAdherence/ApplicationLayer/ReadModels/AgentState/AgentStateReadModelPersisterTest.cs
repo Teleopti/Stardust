@@ -181,9 +181,9 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 				RuleStartTime = null,
 				RuleColor = null,
 				StaffingEffect = null,
-				
+
 				OutOfAdherenceStartTime = null,
-				
+
 				AlarmStartTime = null,
 			});
 
@@ -364,55 +364,14 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 		}
 
 		[Test]
-		public void ShouldUnSoftDeleteWhenUpdatingPersonAssociation()
-		{
-			var personId = Guid.NewGuid();
-			Target.Upsert(new AgentStateReadModelForTest {PersonId = personId});
-			Target.UpsertDeleted(personId);
-
-			Target.UpsertAssociation(new AssociationInfo()
-			{
-				PersonId = personId
-			});
-
-			var result = Target.Load(personId);
-			result.IsDeleted.Should().Be.False();
-		}
-
-		[Test]
-		public void ShouldUpdateDeleted()
-		{
-			var personId = Guid.NewGuid();
-			var model = new AgentStateReadModelForTest {PersonId = personId};
-			Target.Upsert(model);
-
-			Target.UpsertDeleted(personId);
-
-			var result = Target.Load(personId);
-			result.IsDeleted.Should().Be(true);
-		}
-
-		[Test]
-		public void ShouldInsertDeleted()
-		{
-			var personId = Guid.NewGuid();
-
-			Target.UpsertDeleted(personId);
-
-			var result = Target.Load(personId);
-			result.IsDeleted.Should().Be(true);
-		}
-
-		[Test]
 		public void ShouldUpdateEmploymentNumber()
 		{
 			var personId = Guid.NewGuid();
-			Target.Upsert(new AgentStateReadModelForTest() {PersonId = personId, IsDeleted = false});
+			Target.Upsert(new AgentStateReadModelForTest {PersonId = personId});
 
 			Target.UpsertEmploymentNumber(personId, "abc");
 
 			Target.Load(personId).EmploymentNumber.Should().Be("abc");
-			Target.Load(personId).IsDeleted.Should().Be(false);
 		}
 
 		[Test]
@@ -424,7 +383,6 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 
 			var model = Target.Load(personId);
 			model.EmploymentNumber.Should().Be("123");
-			model.IsDeleted.Should().Be(true);
 		}
 
 		[Test]
@@ -437,7 +395,6 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			var model = Target.Load(personId);
 			model.FirstName.Should().Be("bill");
 			model.LastName.Should().Be("gates");
-			model.IsDeleted.Should().Be(true);
 		}
 
 		[Test]
@@ -448,8 +405,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			{
 				PersonId = personId,
 				FirstName = "ashley",
-				LastName = "andeen",
-				IsDeleted = false
+				LastName = "andeen"
 			});
 
 			Target.UpsertName(personId, "bill", "gates");
@@ -457,7 +413,6 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			var model = Target.Load(personId);
 			model.FirstName.Should().Be("bill");
 			model.LastName.Should().Be("gates");
-			model.IsDeleted.Should().Be(false);
 		}
 
 		[Test]

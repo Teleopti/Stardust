@@ -49,6 +49,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 				PersonId = person,
 				BusinessUnitId = ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.Value
 			});
+			Persister.UpsertName(person, null, null);
 			Persister.Update(new AgentStateReadModelForTest
 			{
 				PersonId = person,
@@ -127,6 +128,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 				BusinessUnitId = ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.Value,
 				SiteName = "Lost in space"
 			});
+			Persister.UpsertName(person, null, null);
 			Persister.Update(new AgentStateReadModelForTest
 			{
 				PersonId = person,
@@ -151,6 +153,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 				BusinessUnitId = ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.Value,
 				SiteName = "Lost in space"
 			});
+			Persister.UpsertName(person, null, null);
 
 			var result = Target.Read(new AgentStateFilter
 			{
@@ -169,6 +172,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 				PersonId = person,
 				BusinessUnitId = ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.Value
 			});
+			Persister.UpsertName(person, null, null);
 			Persister.Update(new AgentStateReadModelForTest
 			{
 				PersonId = person,
@@ -236,6 +240,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 				PersonId = person,
 				BusinessUnitId = ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.Value
 			});
+			Persister.UpsertName(person, null, null);
 			Persister.UpsertEmploymentNumber(person, "fortytwo");
 
 			var result = Target.Read(new AgentStateFilter
@@ -256,6 +261,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 				BusinessUnitId = ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.Value,
 				TeamName = "A-team"
 			});
+			Persister.UpsertName(person, null, null);
 
 			var result = Target.Read(new AgentStateFilter
 			{
@@ -277,6 +283,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 				SiteId = siteId,
 				SiteName = ""
 			});
+			Persister.UpsertName(person, null, null);
 			Persister.UpdateSiteName(siteId, "somewhere");
 
 			var result = Target.Read(new AgentStateFilter

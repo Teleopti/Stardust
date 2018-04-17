@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 					TeamId = teamId
 				});
 
-				StatePersister.UpsertDeleted(personId1);
+				StatePersister.UpsertNoAssociation(personId1);
 			});
 
 			WithUnitOfWork.Get(() =>
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 					PersonId = personId2,
 					TeamId = teamId
 				});
-				StatePersister.UpsertDeleted(personId1);
+				StatePersister.UpsertNoAssociation(personId1);
 			});
 
 			WithUnitOfWork.Get(() =>

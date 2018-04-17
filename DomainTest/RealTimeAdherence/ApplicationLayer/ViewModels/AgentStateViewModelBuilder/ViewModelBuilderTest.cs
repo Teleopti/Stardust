@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 					SiteId = siteId2
 				});
 
-			var agentState = Target.Build(new AgentStateFilter {SiteIds = new[] { siteId1, siteId2 } }).States.ToArray();
+			var agentState = Target.Build(new AgentStateFilter {SiteIds = new[] {siteId1, siteId2}}).States.ToArray();
 
 			agentState.Select(x => x.PersonId).Should().Have.SameValuesAs(personId1, personId2);
 		}
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 			});
 			Now.Is("2015-10-22 08:30".Utc());
 
-			var agentState = Target.Build(new AgentStateFilter {SiteIds = new[] { siteId } }).States.Single();
+			var agentState = Target.Build(new AgentStateFilter {SiteIds = new[] {siteId}}).States.Single();
 
 			agentState.PersonId.Should().Be(personId);
 			agentState.State.Should().Be("state");
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 			});
 			Now.Is("2015-10-22 08:30".Utc());
 
-			var agentState = Target.Build(new AgentStateFilter {TeamIds = new[] { teamId } }).States.Single();
+			var agentState = Target.Build(new AgentStateFilter {TeamIds = new[] {teamId}}).States.Single();
 
 			agentState.PersonId.Should().Be(personId);
 			agentState.State.Should().Be("state");
@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 					IsRuleAlarm = false
 				});
 
-			var agentStates = Target.Build(new AgentStateFilter {SiteIds = new[] { siteId1, siteId2 }, InAlarm = true}).States.Single();
+			var agentStates = Target.Build(new AgentStateFilter {SiteIds = new[] {siteId1, siteId2}, InAlarm = true}).States.Single();
 
 			agentStates.PersonId.Should().Be(personId1);
 		}
@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 				}
 			});
 
-			var state = Target.Build(new AgentStateFilter {TeamIds = new[] { teamId } }).States.Single();
+			var state = Target.Build(new AgentStateFilter {TeamIds = new[] {teamId}}).States.Single();
 
 			state.Shift.Single().Color.Should().Be("#80FF80");
 			state.Shift.Single().StartTime.Should().Be("2016-05-29T12:00:00");
@@ -196,7 +196,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 			});
 			TimeZone.IsSweden();
 
-			var state = Target.Build(new AgentStateFilter { TeamIds = new[] { teamId } }).States.Single();
+			var state = Target.Build(new AgentStateFilter {TeamIds = new[] {teamId}}).States.Single();
 
 			state.Shift.Single().StartTime.Should().Be("2016-05-29T14:00:00");
 			state.Shift.Single().EndTime.Should().Be("2016-05-29T15:00:00");
@@ -207,7 +207,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 		{
 			Now.Is("2016-05-28 12:00");
 
-			Target.Build(new AgentStateFilter {TeamIds = new Guid[0] })
+			Target.Build(new AgentStateFilter {TeamIds = new Guid[0]})
 				.Time.Should().Be("2016-05-28 12:00".Utc());
 		}
 
@@ -216,7 +216,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 		{
 			Now.Is("2016-05-28 12:00");
 
-			Target.Build(new AgentStateFilter { SiteIds = new Guid[0] })
+			Target.Build(new AgentStateFilter {SiteIds = new Guid[0]})
 				.Time.Should().Be("2016-05-28 12:00".Utc());
 		}
 
@@ -226,7 +226,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 			Now.Is("2016-05-28 12:00");
 			TimeZone.IsSweden();
 
-			Target.Build(new AgentStateFilter { TeamIds = new Guid[0] })
+			Target.Build(new AgentStateFilter {TeamIds = new Guid[0]})
 				.Time.Should().Be("2016-05-28 14:00".Utc());
 		}
 
@@ -243,7 +243,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 			});
 			Now.Is("2016-06-08 08:02".Utc());
 
-			var agentState = Target.Build(new AgentStateFilter {TeamIds = new[] { teamId } }).States.Single();
+			var agentState = Target.Build(new AgentStateFilter {TeamIds = new[] {teamId}}).States.Single();
 
 			agentState.TimeInRule.Should().Be(120);
 		}
@@ -260,7 +260,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 			});
 			Now.Is("2016-06-08 08:02".Utc());
 
-			var agentState = Target.Build(new AgentStateFilter { TeamIds = new[] { teamId } }).States.Single();
+			var agentState = Target.Build(new AgentStateFilter {TeamIds = new[] {teamId}}).States.Single();
 
 			agentState.TimeInRule.Should().Be(null);
 		}
@@ -285,7 +285,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 			});
 			Now.Is("2016-06-16 08:00");
 
-			var outOfAdherence = Target.Build(new AgentStateFilter { TeamIds = new[] { teamId } }).States.Single()
+			var outOfAdherence = Target.Build(new AgentStateFilter {TeamIds = new[] {teamId}}).States.Single()
 				.OutOfAdherences.Single();
 
 			outOfAdherence.StartTime.Should().Be("2016-06-16T07:40:00");
@@ -312,7 +312,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 			});
 			Now.Is("2016-06-16 08:00");
 
-			var outOfAdherence = Target.Build(new AgentStateFilter { TeamIds = new[] { teamId } }).States.Single()
+			var outOfAdherence = Target.Build(new AgentStateFilter {TeamIds = new[] {teamId}}).States.Single()
 				.OutOfAdherences.Single();
 
 			outOfAdherence.StartTime.Should().Be("2016-06-16T07:40:00");
@@ -340,7 +340,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 			Now.Is("2016-06-16 12:30");
 			TimeZone.IsSweden();
 
-			var outOfAdherence = Target.Build(new AgentStateFilter { TeamIds = new[] { teamId } }).States.Single()
+			var outOfAdherence = Target.Build(new AgentStateFilter {TeamIds = new[] {teamId}}).States.Single()
 				.OutOfAdherences.Single();
 
 			outOfAdherence.StartTime.Should().Be("2016-06-16T14:00:00");
@@ -359,7 +359,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 					PersonId = person
 				});
 
-			var agentState = Target.Build(new AgentStateFilter {SkillIds = new[] { skill } }).States.Single();
+			var agentState = Target.Build(new AgentStateFilter {SkillIds = new[] {skill}}).States.Single();
 
 			agentState.PersonId.Should().Be(person);
 		}
@@ -373,12 +373,12 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 			var skill2 = Guid.NewGuid();
 			Database
 				.WithPersonSkill(person1, skill1)
-				.Has(new AgentStateReadModel { PersonId = person1 })
+				.Has(new AgentStateReadModel {PersonId = person1})
 				.WithPersonSkill(person2, skill2)
-				.Has(new AgentStateReadModel { PersonId = person2 })
+				.Has(new AgentStateReadModel {PersonId = person2})
 				;
 
-			var agentState = Target.Build(new AgentStateFilter { SkillIds = new[] { skill1, skill2 } }).States;
+			var agentState = Target.Build(new AgentStateFilter {SkillIds = new[] {skill1, skill2}}).States;
 
 			agentState.Select(x => x.PersonId).Should().Have.SameValuesAs(person1, person2);
 		}
@@ -407,38 +407,9 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 					AlarmStartTime = "2016-06-21 08:29".Utc()
 				});
 
-			var agentState = Target.Build(new AgentStateFilter {SkillIds = new[] { skill1, skill2 }, InAlarm = true}).States;
+			var agentState = Target.Build(new AgentStateFilter {SkillIds = new[] {skill1, skill2}, InAlarm = true}).States;
 
 			agentState.Select(x => x.PersonId).Should().Have.SameValuesAs(person1, person2);
-		}
-
-		[Test]
-		public void ShouldNotBuildForDeletedAgents()
-		{
-			Now.Is("2016-06-21 08:30");
-			var person = Guid.NewGuid();
-			var team = Guid.NewGuid();
-			var site = Guid.NewGuid();
-			var skill = Guid.NewGuid();
-			Database
-				.WithPersonSkill(person, skill)
-				.Has(new AgentStateReadModel
-				{
-					PersonId = person,
-					TeamId = team,
-					SiteId = site,
-					IsRuleAlarm = true,
-					AlarmStartTime = "2016-06-21 08:29".Utc(),
-					IsDeleted = true
-				});
-
-			Target.Build(new AgentStateFilter {SiteIds = new[] {site}}).States.Should().Be.Empty();
-			Target.Build(new AgentStateFilter {TeamIds = new[] {team}}).States.Should().Be.Empty();
-			Target.Build(new AgentStateFilter {SkillIds = new[] {skill}}).States.Should().Be.Empty();
-
-			Target.Build(new AgentStateFilter {SiteIds = new[] {site}, InAlarm = true}).States.Should().Be.Empty();
-			Target.Build(new AgentStateFilter {TeamIds = new[] {team}, InAlarm = true}).States.Should().Be.Empty();
-			Target.Build(new AgentStateFilter {SkillIds = new[] {skill}, InAlarm = true}).States.Should().Be.Empty();
 		}
 
 		[Test]
@@ -458,7 +429,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 				.WithPersonSkill(person, skill);
 			Now.Is("2016-09-22 08:10");
 
-			var agentState = Target.Build(new AgentStateFilter { SkillIds = new[] { skill }, InAlarm = true}).States;
+			var agentState = Target.Build(new AgentStateFilter {SkillIds = new[] {skill}, InAlarm = true}).States;
 
 			agentState.Single().StateId.Should().Be(phone);
 		}

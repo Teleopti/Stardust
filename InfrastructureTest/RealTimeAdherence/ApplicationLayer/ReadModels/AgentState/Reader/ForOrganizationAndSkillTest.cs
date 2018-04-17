@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 					SiteId = Guid.NewGuid()
 				});
 
-				StatePersister.UpsertDeleted(unexpected);
+				StatePersister.UpsertNoAssociation(unexpected);
 			});
 
 			WithUnitOfWork.Get(() => Target.Read(new AgentStateFilter
@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 					SiteId = Guid.NewGuid()
 				});
 
-				StatePersister.UpsertDeleted(unexpected);
+				StatePersister.UpsertNoAssociation(unexpected);
 			});
 
 			WithUnitOfWork.Get(() => Target.Read(new AgentStateFilter

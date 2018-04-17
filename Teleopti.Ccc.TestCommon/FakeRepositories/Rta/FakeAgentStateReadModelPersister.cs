@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 					model.TeamId = info.TeamId;
 					model.TeamName = info.TeamName;
 					model.BusinessUnitId = info.BusinessUnitId.GetValueOrDefault();
-					model.IsDeleted = false;
+					//model.HasAssociation = false;
 					return model;
 				});
 		}
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				{
 					PersonId = personId,
 					EmploymentNumber = employmentNumber,
-					IsDeleted = true
+					//HasAssociation = true
 				},
 				(id, model) =>
 				{
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 					PersonId = personId,
 					FirstName = firstName,
 					LastName = lastName,
-					IsDeleted = true
+					//HasAssociation = true
 				},
 				(id, model) =>
 				{
@@ -118,18 +118,18 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				});
 		}
 
-		public void UpsertDeleted(Guid personId)
+		public void UpsertNoAssociation(Guid personId)
 		{
 			_data.AddOrUpdate(
 				personId,
 				new AgentStateReadModel
 				{
 					PersonId = personId,
-					IsDeleted = true
+					//HasAssociation = true
 				},
 				(id, model) =>
 				{
-					model.IsDeleted = true;
+					//model.HasAssociation = true;
 					return model;
 				});
 		}

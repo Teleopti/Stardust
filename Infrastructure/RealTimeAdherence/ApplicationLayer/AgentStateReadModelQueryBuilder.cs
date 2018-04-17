@@ -71,9 +71,10 @@ namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.ApplicationLayer
 			_topCount = 50;
 		}
 
-		public AgentStateReadModelQueryBuilder WithoutDeleted()
+		public AgentStateReadModelQueryBuilder IsActivated()
 		{
-			_wheres.Add("IsDeleted = 0");
+			_wheres.Add("HasName = 1");
+			_wheres.Add("HasAssociation = 1");
 			return this;
 		}
 
@@ -111,6 +112,7 @@ namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.ApplicationLayer
 						_parameters.Add(s => s.SetParameter($"textFilter{x.index}", $"%{x.word}%"));
 					});
 			}
+
 			return this;
 		}
 
@@ -123,6 +125,7 @@ namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.ApplicationLayer
 				teamSiteWheres.Add("a.SiteId IN (:siteIds)");
 				_parameters.Add(s => s.SetParameterList("siteIds", siteIds));
 			}
+
 			if (!teamIds.IsNullOrEmpty())
 			{
 				teamSiteWheres.Add("a.TeamId IN (:teamIds)");
@@ -149,6 +152,7 @@ namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.ApplicationLayer
 					.SetParameter("skillGroupingPageId", HardcodedSkillGroupingPageId.Id)
 				);
 			}
+
 			return this;
 		}
 
@@ -177,6 +181,7 @@ namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.ApplicationLayer
 			{
 				_wheres.Add("StateGroupId IS NOT NULL ");
 			}
+
 			return this;
 		}
 
@@ -205,7 +210,6 @@ namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.ApplicationLayer
 					[OutOfAdherences], 
 					[OutOfAdherenceStartTime],
 					[StateGroupId], 
-					[IsDeleted], 
 					a.[FirstName], 
 					a.[LastName], 
 					a.[EmploymentNumber], 
