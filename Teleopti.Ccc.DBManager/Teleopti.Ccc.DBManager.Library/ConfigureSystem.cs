@@ -93,7 +93,7 @@ SELECT NEWID(),1, '3F0886AB-7B25-4E95-856A-0D726EDC2A67' , GETUTCDATE(), '{0}', 
 		{
 			_execute.ExecuteNonQuery(@" if not exists (select * from Tenant.AdminUser )
 										INSERT INTO Tenant.AdminUser(Name, Email, Password)
-										VALUES('FirstAdmin', 'first@admin.is', '###70D74A6BBA33B5972EADAD9DD449D273E1F4961D###')");
+										VALUES('FirstAdmin', 'first@admin.is', '###70D74A6BBA33B5972EADAD9DD449D273E1F4961D###')"); // password=demo
 		}
 
 		public void ConfigureSalesDemoDatabaseUserAsMe()
