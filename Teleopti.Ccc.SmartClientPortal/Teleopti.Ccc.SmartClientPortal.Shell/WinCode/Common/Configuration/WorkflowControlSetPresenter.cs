@@ -729,12 +729,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		{
 			_selectedModel.IsOvertimeProbabilityEnabled = overtimeProbability;
 		}
-
-		public void SetAutoGrantOvertimeRequest(bool autoGrantOvertimeRequest)
-		{
-			_selectedModel.AutoGrantOvertimeRequest = autoGrantOvertimeRequest;
-		}
-
 		public void SetOvertimeRequestMaximumTime(TimeSpan overtimeRequestMaximumTime)
 		{
 			_selectedModel.OvertimeRequestMaximumTime = overtimeRequestMaximumTime;

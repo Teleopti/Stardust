@@ -60,7 +60,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		bool AbsenceProbabilityEnabled { get; set; }
 
 		bool IsOvertimeProbabilityEnabled { get; set; }
-		bool AutoGrantOvertimeRequest { get; set; }
 
 		bool OvertimeRequestMaximumTimeEnabled { get; set; }
 		bool OvertimeRequestMaximumContinuousWorkTimeEnabled { get; set; }

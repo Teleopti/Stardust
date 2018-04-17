@@ -789,10 +789,8 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			var workflowControlSetModel = _target.WorkflowControlSetModelCollection.ElementAt(0);
 			_target.SetSelectedWorkflowControlSetModel(workflowControlSetModel);
 			_target.SetOvertimeProbability(true);
-			_target.SetAutoGrantOvertimeRequest(true);
 
 			Assert.AreEqual(true, workflowControlSetModel.IsOvertimeProbabilityEnabled);
-			Assert.AreEqual(true, workflowControlSetModel.AutoGrantOvertimeRequest);
 		}
 
 		[Test]

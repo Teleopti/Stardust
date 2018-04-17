@@ -311,8 +311,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 
 		bool OvertimeProbabilityEnabled { get; set; }
 
-		bool AutoGrantOvertimeRequest { get; set; }
-
 		TimeSpan? OvertimeRequestMaximumTime { get; set; }
 
 		OvertimeValidationHandleType? OvertimeRequestMaximumTimeHandleType { get; set; }

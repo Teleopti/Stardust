@@ -460,13 +460,10 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		public void VerifyCanSetOvertimeRequestConfigurations()
 		{
 			Assert.IsFalse(_target.OvertimeProbabilityEnabled);
-			Assert.IsFalse(_target.AutoGrantOvertimeRequest);
 
 			_target.OvertimeProbabilityEnabled = true;
-			_target.AutoGrantOvertimeRequest = true;
 
 			Assert.IsTrue(_target.OvertimeProbabilityEnabled);
-			Assert.IsTrue(_target.AutoGrantOvertimeRequest);
 		}
 
 		private bool checkingByIntradayWithSpecificValidator(IAbsenceRequestValidator absenceRequestValidator)

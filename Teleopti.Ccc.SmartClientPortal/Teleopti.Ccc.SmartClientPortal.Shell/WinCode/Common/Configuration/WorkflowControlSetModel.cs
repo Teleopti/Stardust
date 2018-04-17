@@ -503,17 +503,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			}
 		}
 
-		public bool AutoGrantOvertimeRequest
-		{
-			get => DomainEntity.AutoGrantOvertimeRequest;
-			set
-			{
-				if (DomainEntity.AutoGrantOvertimeRequest == value) return;
-				DomainEntity.AutoGrantOvertimeRequest = value;
-				IsDirty = true;
-			}
-		}
-
 		public bool AbsenceProbabilityEnabled
 		{
 			get => DomainEntity.AbsenceProbabilityEnabled;

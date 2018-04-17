@@ -84,10 +84,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		public void ShouldChangeStatusToPendingWhenPersistOvertimeRequest()
 		{
 			SkillTypeRepository.Add(new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony).WithId());
-			_person.WorkflowControlSet = new WorkflowControlSet
-			{
-				AutoGrantOvertimeRequest = false
-			};
+			_person.WorkflowControlSet = new WorkflowControlSet();
 			_person.WorkflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { skillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.No,

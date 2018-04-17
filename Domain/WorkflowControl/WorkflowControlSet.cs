@@ -45,7 +45,6 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		private IActivity _allowedPreferenceActivity;
 		private int fairnessTypeAsInt = (int)FairnessType.EqualNumberOfShiftCategory;
 		private bool _overtimeProbabilityEnabled;
-		private bool _autoGrantOvertimeRequest;
 		private IList<IOvertimeRequestOpenPeriod> _overtimeRequestOpenPeriods;
 		private TimeSpan? _overtimeRequestMaximumTime;
 		private OvertimeValidationHandleType? _overtimeRequestMaximumTimeHandleType;
@@ -427,12 +426,6 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		{
 			get { return _overtimeProbabilityEnabled; }
 			set { _overtimeProbabilityEnabled = value; }
-		}
-
-		public virtual bool AutoGrantOvertimeRequest
-		{
-			get { return _autoGrantOvertimeRequest; }
-			set { _autoGrantOvertimeRequest = value; }
 		}
 
 		public virtual ReadOnlyCollection<IOvertimeRequestOpenPeriod> OvertimeRequestOpenPeriods
