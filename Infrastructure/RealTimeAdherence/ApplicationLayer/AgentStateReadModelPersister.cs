@@ -211,10 +211,12 @@ MERGE INTO [ReadModel].[AgentState] AS T
 		(
 			PersonId,
 			EmploymentNumber,
-			HasAssociation
+			HasAssociation,
+			HasName
 		) VALUES (
 			S.PersonId,
 			S.EmploymentNumber,
+			0,
 			0
 		)
 	WHEN MATCHED THEN
