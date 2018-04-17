@@ -26,16 +26,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		public FakeMessageSender Sender;
 		public FakeScenarioRepository ScenarioRepository;
 
-		public IComponentContext TempContainer;
-		[Test]
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_SpeedUpEvents_75415)]
-		public void MustNotUseNewHandler()
-		{
-			Assert.Throws<ComponentNotRegisteredException>(() =>
-				TempContainer.Resolve<ScheduleChangedInDefaultScenarioNotification>());
-		}
-
-		
 		[Test]
 		public void ShouldSendMessageInDefaultScenario()
 		{
