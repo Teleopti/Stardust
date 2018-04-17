@@ -30,7 +30,8 @@
 			timeSeries: [],
 			actualStaffingSeries: [],
 			currentInterval: [],
-			scheduledStaffing: []
+			scheduledStaffing: [],
+			error: {}
 		};
 
 		var hiddenArray = [];
@@ -44,12 +45,6 @@
 			showReforecastedAgents
 		) {
 			clearData();
-
-			staffingData.timeSeries = [];
-			staffingData.forecastedStaffing.series = [];
-			staffingData.forecastedStaffing.updatedSeries = [];
-			staffingData.actualStaffingSeries = [];
-			staffingData.scheduledStaffing = [];
 
 			if (result.DataSeries === null) return staffingData;
 			staffingData.forecastedStaffing.series = result.DataSeries.ForecastedStaffing;
@@ -98,7 +93,10 @@
 			staffingData.forecastedStaffing.series = [];
 			staffingData.forecastedStaffing.updatedSeries = [];
 			staffingData.actualStaffingSeries = [];
+			staffingData.scheduledStaffing = [];
 			staffingData.scheduledStaffing.series = [];
+			staffingData.actualStaffingSeries = [];
+			staffingData.error = {};
 		};
 
 		var request;
@@ -107,32 +105,6 @@
 				request.$cancelRequest('cancel');
 			}
 		}
-
-		service.pollSkillData = function(selectedItem, toggles) {
-			staffingData.waitingForData = true;
-			cancelPendingRequest();
-
-			service.checkMixedArea(selectedItem);
-			request = intradayService.getSkillStaffingData.query({
-				id: selectedItem.Id
-			});
-
-			request.$promise.then(
-				function(result) {
-					staffingData.waitingForData = false;
-					return setStaffingData(
-						result,
-						toggles['Wfm_Intraday_OptimalStaffing_40921'],
-						toggles['Wfm_Intraday_ScheduledStaffing_41476'],
-						toggles['Wfm_Intraday_SupportSkillTypeEmail_44002'],
-						selectedItem.ShowReforecastedAgents
-					);
-				},
-				function() {
-					staffingData.hasMonitorData = false;
-				}
-			);
-		};
 
 		service.pollSkillDataByDayOffset = function(selectedItem, toggles, dayOffset, gotData) {
 			staffingData.waitingForData = true;
@@ -191,8 +163,9 @@
 					);
 					gotData(staffingData);
 				},
-				function() {
+				function(error) {
 					staffingData.hasMonitorData = false;
+					staffingData.error = error;
 					gotData(staffingData);
 				}
 			);

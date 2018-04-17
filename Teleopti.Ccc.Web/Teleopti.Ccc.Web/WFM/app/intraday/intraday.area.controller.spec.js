@@ -24,6 +24,7 @@ describe('IntradayAreaController', function() {
 	var vm;
 	var skillAreas = [];
 	var skills = [];
+	var skillRetError;
 	var skillsWithFirstUnsupported = [];
 	var skillAreaInfo;
 	var trafficAndPerformanceData;
@@ -68,6 +69,14 @@ describe('IntradayAreaController', function() {
 				ShowReforecastedAgents: false
 			}
 		];
+
+		skillRetError = {
+			Id: 'returnmockerror',
+			Name: 'errorskill',
+			DoDisplayData: true,
+			ShowAbandonRate: true,
+			ShowReforecastedAgents: true
+		};
 
 		skillsWithFirstUnsupported = [
 			{ Id: '63b0ac3d-06b5-42d7-bb0a-d7b2fd272196', Name: 'Unsupported skill1', DoDisplayData: false },
@@ -650,6 +659,14 @@ describe('IntradayAreaController', function() {
 
 	function initBackend() {
 		skillAreas.forEach(function(item) {
+			$httpBackend.whenGET('../api/intraday/monitorskillperformance/returnmockerror/0').respond(function() {
+				return [403, performanceData];
+			});
+
+			$httpBackend.whenGET('../api/intraday/lateststatisticstimeforskill/returnmockerror').respond(function() {
+				return [200, timeData];
+			});
+
 			$httpBackend.whenGET('../api/intraday/monitorskillareaperformance/' + item.Id + '/0').respond(function() {
 				return [200, performanceData];
 			});
@@ -1154,5 +1171,14 @@ describe('IntradayAreaController', function() {
 		vm.loadState();
 
 		expect(vm.moduleState.chosenOffset.value).toEqual(0);
+	});
+
+	it('should stop polling if API returns error', function() {
+		createController(false);
+		vm.moduleState.activeTab = 1;
+		vm.clickedSkillInPicker(skillRetError);
+		$httpBackend.flush();
+
+		expect(vm.timeoutPromise).toBeUndefined;
 	});
 });

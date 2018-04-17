@@ -37,7 +37,8 @@
 			showAbandonRate: true,
 			waitingForData: false,
 			timeSeries: [],
-			currentInterval: []
+			currentInterval: [],
+			error: {}
 		};
 
 		var hiddenArray = [];
@@ -137,6 +138,7 @@
 			performanceData.abandonedRateObj.series = [];
 			performanceData.serviceLevelObj.series = [];
 			performanceData.estimatedServiceLevelObj.series = [];
+			performanceData.error = {};
 		};
 
 		var request;
@@ -145,32 +147,6 @@
 				request.$cancelRequest('cancel');
 			}
 		}
-
-		service.pollSkillData = function(selectedItem, toggles) {
-			performanceData.waitingForData = true;
-			service.checkMixedArea(selectedItem);
-			cancelPendingRequest();
-
-			request = intradayService.getSkillMonitorPerformance.query({
-				id: selectedItem.Id
-			});
-
-			request.$promise.then(
-				function(result) {
-					performanceData.waitingForData = false;
-					setPerformanceData(
-						result,
-						toggles['Wfm_Intraday_ESL_41827'], //.showEsl,
-						toggles['Wfm_Intraday_SupportSkillTypeEmail_44002'], //.showEmailSkill,
-						true,
-						selectedItem.ShowAbandonRate
-					);
-				},
-				function() {
-					performanceData.hasMonitorData = false;
-				}
-			);
-		};
 
 		service.pollSkillDataByDayOffset = function(selectedItem, toggles, dayOffset, gotData) {
 			performanceData.waitingForData = true;
@@ -194,8 +170,9 @@
 					);
 					gotData(performanceData);
 				},
-				function() {
+				function(error) {
 					performanceData.hasMonitorData = false;
+					performanceData.error = error;
 					gotData(performanceData);
 				}
 			);
@@ -228,8 +205,10 @@
 					);
 					gotData(performanceData);
 				},
-				function() {
+				function(error) {
 					performanceData.hasMonitorData = false;
+					performanceData.error = error;
+
 					gotData(performanceData);
 				}
 			);

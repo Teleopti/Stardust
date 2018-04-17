@@ -30,7 +30,8 @@
 			hasMonitorData: false,
 			waitingForData: false,
 			timeSeries: [],
-			currentInterval: []
+			currentInterval: [],
+			error: {}
 		};
 
 		var hiddenArray = [];
@@ -122,6 +123,7 @@
 			trafficData.actualCallsObj.series = [];
 			trafficData.forecastedAverageHandleTimeObj.series = [];
 			trafficData.actualAverageHandleTimeObj.series = [];
+			trafficData.error = {};
 		};
 
 		var getCurrent = function() {
@@ -148,25 +150,6 @@
 			}
 		}
 
-		service.pollSkillData = function(selectedItem) {
-			trafficData.waitingForData = true;
-			cancelPendingRequest();
-
-			request = intradayService.getSkillMonitorStatistics.query({
-				id: selectedItem.Id
-			});
-
-			request.$promise.then(
-				function(result) {
-					trafficData.waitingForData = false;
-					setTrafficData(result, true);
-				},
-				function(error) {
-					trafficData.hasMonitorData = false;
-				}
-			);
-		};
-
 		service.pollSkillDataByDayOffset = function(selectedItem, toggles, dayOffset, gotData) {
 			trafficData.waitingForData = true;
 			cancelPendingRequest();
@@ -184,6 +167,7 @@
 				},
 				function(error) {
 					trafficData.hasMonitorData = false;
+					trafficData.error = error;
 					gotData(trafficData);
 				}
 			);

@@ -42,12 +42,12 @@
 		$rootScope
 	) {
 		var vm = this;
-		var timeoutPromise;
 		var polling;
 		var pollingTimeout = 60000;
 		var loadingSkill = true;
 		var loadingSkillArea = true;
 
+		vm.timeoutPromise = null;
 		vm.viewObj;
 		vm.getSkillIcon = skillIconService.get;
 		vm.toggles = {};
@@ -306,9 +306,9 @@
 		};
 
 		function cancelTimeout() {
-			if (timeoutPromise) {
-				$timeout.cancel(timeoutPromise);
-				timeoutPromise = undefined;
+			if (vm.timeoutPromise) {
+				$timeout.cancel(vm.timeoutPromise);
+				vm.timeoutPromise = undefined;
 			}
 		}
 
@@ -360,6 +360,7 @@
 			vm.viewObj = Object.assign({}, data);
 			vm.moduleState.hasMonitorData = vm.viewObj.hasMonitorData;
 			vm.waitingForData = false;
+			if (data.error) cancelTimeout();
 		}
 
 		function gotTimeData(data) {
@@ -396,7 +397,7 @@
 					}
 				}
 			} else {
-				timeoutPromise = $timeout(function() {
+				vm.timeoutPromise = $timeout(function() {
 					pollActiveTabDataByDayOffset(vm.moduleState.activeTab, dayOffset);
 				}, 10000);
 			}
