@@ -65,7 +65,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			// even though it may fail in some clients
 			// all services should be added to the 
 			// CommonModule !!
-			system.AddModule(new OutboundScheduledResourcesProviderModule());
 			system.AddService<UserDeviceService>();
 			//
 
