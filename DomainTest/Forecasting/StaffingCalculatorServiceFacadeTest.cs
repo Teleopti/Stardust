@@ -177,28 +177,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 			esl.Should().Be.IncludedIn(.80, .82);
 		}
 
-
-		[Test]
-		[Ignore("74899 - maybe to be fixed")]
-		public void ErlangCErlangAComparison10()
-		{
-			const double agents = 7.999999999999999d;
-			const double serviceTime = 20d;
-			const double calls = 37d;
-			const double aht = 185d;
-			var intervalLength = TimeSpan.FromMinutes(15);
-			const double sla = 0.8d;
-			const double forecasted = 11d;
-			const int maxParallelTasks = 1;
-
-			Target.ServiceLevelAchievedOcc(agents, serviceTime, calls, aht, intervalLength, sla, forecasted, maxParallelTasks);
-			
-			//what should be correct C/A?
-			//var esl = Target.ServiceLevelAchievedOcc(agents, serviceTime, calls, aht, intervalLength, sla, forecasted, maxParallelTasks);
-			//esl.Should().Be.IncludedIn(.34, .36); <- ErlangC
-			//esl.Should().Be.EqualTo(0d); <- ErlangA
-		}
-
 		public void Configure(FakeToggleManager toggleManager)
 		{
 			if (_useErlangA)
