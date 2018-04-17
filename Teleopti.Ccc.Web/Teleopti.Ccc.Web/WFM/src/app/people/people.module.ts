@@ -10,7 +10,9 @@ import {
 	MatSortModule,
 	MatTableModule,
 	MatListModule,
-	MatGridListModule
+	MatGridListModule,
+	MatDatepickerModule,
+	MatNativeDateModule
 } from '@angular/material';
 
 import { SharedModule } from '../shared/shared.module';
@@ -64,7 +66,9 @@ import {
 		MatProgressSpinnerModule,
 		MatInputModule,
 		MatListModule,
-		MatGridListModule
+		MatGridListModule,
+		MatDatepickerModule,
+		MatNativeDateModule
 	],
 	providers: [
 		WorkspaceService,

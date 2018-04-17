@@ -1,3 +1,150 @@
-<p>
-  playground works!
-</p>
+<div class="con-row">
+  <div class="con-flex">
+    <h1>View header</h1>
+    <h2>Panel header</h2>
+    <h3>Text header</h3>
+  </div>
+  <div class="con-flex material2 mat-typography">
+    <h1>View header</h1>
+    <h2>Panel header</h2>
+    <h3>Text header</h3>
+  </div>
+</div>
+<mat-divider></mat-divider>
+<div class="con-row">
+  <div class="con-flex">
+    <button class="wfm-btn wfm-btn-invis-default">Default</button>
+    <button class="wfm-btn wfm-btn-invis-primary">Primary</button>
+    <button class="wfm-btn wfm-btn-invis-disabled">Disabled</button>
+    <button class="wfm-btn wfm-btn-invis-default" disabled>Default disabled</button>
+    <button class="wfm-btn wfm-btn-invis-primary" disabled>Primary disabled</button>
+  </div>
+  <div class="con-flex material2">
+    <button mat-button>Default</button>
+    <button mat-button color="primary">Primary</button>
+    <button mat-button disabled>Disabled</button>
+    <button mat-button color="accent">Accent</button>
+    <button mat-button color="warn">Warn</button>
+  </div>
+</div>
+<mat-divider></mat-divider>
+<div class="con-row">
+  <div class="con-flex">
+    <button class="wfm-btn wfm-btn-default">Default</button>
+    <button class="wfm-btn wfm-btn-primary">Primary</button>
+    <button class="wfm-btn wfm-btn-primary-disabled">Disabled</button>
+    <button class="wfm-btn wfm-btn-default" disabled>Default disabled</button>
+    <button class="wfm-btn wfm-btn-primary" disabled>Primary disabled</button>
+  </div>
+  <div class="con-flex material2">
+    <button mat-raised-button>Default</button>
+    <button mat-raised-button color="primary">Primary</button>
+    <button mat-raised-button disabled>Disabled</button>
+    <button mat-raised-button color="accent">Accent</button>
+    <button mat-raised-button color="warn">Warn</button>
+  </div>
+</div>
+<mat-divider></mat-divider>
+<div class="con-row">
+  <div class="con-flex">
+    <button class="wfm-fab material-depth-1">
+      <i class="mdi mdi-account"></i>
+    </button>
+    <button class="wfm-fab material-depth-1 info">
+      <i class="mdi mdi-arrow-right"></i>
+    </button>
+    <button class="wfm-fab material-depth-1 success">
+      <i class="mdi mdi-plus"></i>
+    </button>
+  </div>
+  <div class="con-flex material2">
+    <button mat-fab color="primary">Primary</button>
+    <button mat-fab color="primary">
+      <i class="mdi mdi-account"></i>
+    </button>
+    <button mat-fab>Basic</button>
+    <button mat-fab color="accent">Accent</button>
+    <button mat-fab color="warn">Warn</button>
+  </div>
+</div>
+<mat-divider></mat-divider>
+<div class="con-row">
+  <div class="con-flex">
+    <div tabindex=0 class="context-menu card-context">
+      <i class="mdi mdi-cake"></i>
+    </div>
+  </div>
+  <div class="con-flex material2">
+    <button mat-icon-button>
+      <i class="mdi mdi-cake"></i>
+    </button>
+  </div>
+</div>
+<mat-divider></mat-divider>
+<div class="con-row">
+  <div class="con-flex">
+    <table class="wfm-table">
+      <thead>
+        <tr>
+          <th>Text</th>
+          <th>Number</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>text1</td>
+          <td class="number-cell">2135847</td>
+        </tr>
+        <tr>
+          <td>text1</td>
+          <td class="number-cell">2.3546</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="con-flex material2">
+    <mat-table #table [dataSource]="dataSource">
+
+      <ng-container matColumnDef="text">
+        <mat-header-cell *matHeaderCellDef> Text </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.text}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="number">
+        <mat-header-cell *matHeaderCellDef> Number </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.number}} </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+  </div>
+</div>
+<mat-divider></mat-divider>
+<div class="con-row">
+  <div class="con-flex">
+    <input type="text" placeholder="Favorite language" value="JavaScript" />
+    <input type="text" placeholder="Favorite language" />
+  </div>
+  <div class="con-flex material2">
+    <mat-form-field>
+      <input matInput placeholder="Favorite language" value="JavaScript">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Favorite language">
+    </mat-form-field>
+  </div>
+</div>
+<mat-divider></mat-divider>
+<div class="con-row">
+  <div class="con-flex">
+    AngularJS datepicker
+  </div>
+  <div class="con-flex material2">
+    <mat-form-field>
+      <input matInput [matDatepicker]="picker" placeholder="Choose a date">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+  </div>
+</div>

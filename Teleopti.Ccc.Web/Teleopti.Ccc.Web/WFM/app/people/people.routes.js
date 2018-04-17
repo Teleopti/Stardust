@@ -33,7 +33,7 @@
 				url: '/ui/playground',
 				views: {
 					header: { template: '<ng2-people-title-bar></ng2-people-title-bar>' },
-					content: { template: '<ng2-people-ui-playground></ng2-people-ui-playground>' }
+					content: { template: '<ng2-people-playground></ng2-people-playground>' }
 				}
 			})
 			.state('people.index', {

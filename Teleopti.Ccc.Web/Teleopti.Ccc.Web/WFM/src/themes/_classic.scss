@@ -25,18 +25,6 @@ $theme: mat-light-theme($candy-app-primary, $candy-app-accent, $candy-app-warn);
 // Include the theme styles for only specified components.
 @include angular-material-theme($theme);
 
-/** FIXES FOR MATERIAL2 **/
-.mat-button,
-.mat-raised-button,
-.mat-icon-button,
-.mat-stroked-button,
-.mat-flat-button,
-.mat-fab,
-.mat-mini-fab {
-	font-family: Roboto, 'Helvetica Neue', sans-serif !important;
-	text-transform: uppercase;
-}
-
 /** FIX FOR CHECKBOX RIPPLE EFFECT
 https://github.com/angular/material2/issues/8600
 **/
@@ -44,3 +32,7 @@ mat-cell.mat-cell,
 mat-header-cell.mat-header-cell {
 	overflow: visible;
 }
+
+// Overriding styleguide overrides
+// to make Material work properly
+@import './overrides_for_overrides';
