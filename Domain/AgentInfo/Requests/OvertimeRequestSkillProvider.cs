@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			if (!personPeriod.Any())
 				return new IPersonSkill[] { };
 
-			var personSkills = personPeriod.SelectMany(p => _personalSkills.PersonSkills(p));
+			var personSkills = personPeriod.SelectMany(p => _personalSkills.PersonSkills(p)).ToList();
 
 			if (person.WorkflowControlSet.OvertimeRequestOpenPeriods.Any())
 			{
@@ -45,8 +45,9 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 					.GetMergedOvertimeRequestOpenPeriods(person.WorkflowControlSet.OvertimeRequestOpenPeriods,
 						person.PermissionInformation, period).Where(p => p.AutoGrantType != OvertimeRequestAutoGrantType.Deny);
 
-				var phoneSkillType = _skillTypeRepository.LoadAll().FirstOrDefault(s => s.Description.Name.Equals(SkillTypeIdentifier.Phone));
-				personSkills.Where(p =>
+				var phoneSkillType = _skillTypeRepository.LoadAll()
+					.FirstOrDefault(s => s.Description.Name.Equals(SkillTypeIdentifier.Phone));
+				personSkills = personSkills.Where(p =>
 					isSkillTypeMatchedInOpenPeriods(p, mergedOvertimeRequestOpenPeriods, phoneSkillType)).ToList();
 			}
 
