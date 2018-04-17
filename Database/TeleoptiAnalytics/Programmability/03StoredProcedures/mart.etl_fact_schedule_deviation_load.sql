@@ -389,8 +389,8 @@ BEGIN
 			IF (@intervals_back IS NULL)
 			BEGIN
 				DECLARE @message nvarchar(120)
-				SELECT @message =CONCAT('@intervals_back for business_unit_id=', CONVERT(nvarchar(5), @business_unit_id), ' AND detail_id=' + CONVERT(nvarchar(5), @detail_id),
-				 ' not found. Transaction should be aborted by ADO.NET!')
+				SELECT @message ='@intervals_back for business_unit_id=' + CONVERT(nvarchar(5), @business_unit_id) + ' AND detail_id=' + CONVERT(nvarchar(5), @detail_id)
+				 + ' not found. Transaction should be aborted by ADO.NET!'
 				Raiserror (@message, 16, 1) WITH NOWAIT
 			END
 			
