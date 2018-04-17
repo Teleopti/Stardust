@@ -158,7 +158,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 				case GamificationRollingPeriodSet.Weekly:
 					var diff = DateTime.Today.DayOfWeek - firstDayOfWeek;
 					start = diff == 0 ? DateOnly.Today : DateOnly.Today.AddDays(-diff);
-					end = start.AddDays(7);
+					end = start.AddDays(6);
 					return new DateOnlyPeriod(start, end);
 				case GamificationRollingPeriodSet.Monthly:
 					var year = DateTime.Today.Year;
