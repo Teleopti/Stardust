@@ -23,7 +23,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 {
-	[StardustTest]
+	[Ignore("WIP"),StardustTest]
 	public class AbsenceRequestEndToEndTest
 	{
 		public WithUnitOfWork WithUnitOfWork;
@@ -104,7 +104,6 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 							}
 
 						}
-						//Thread.Sleep(1000);
 
 					}
 
