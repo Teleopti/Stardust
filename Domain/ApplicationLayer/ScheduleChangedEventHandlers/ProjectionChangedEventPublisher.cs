@@ -14,23 +14,22 @@ using Teleopti.Ccc.Domain.Logon;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 {
-	[RemoveMeWithToggle("Merge with base type", Toggles.ResourcePlanner_SpeedUpEvents_75415)]
-	[EnabledBy(Toggles.ResourcePlanner_SpeedUpEvents_75415)]
-	public class ProjectionChangedEventPublisherNew : ProjectionChangedEventPublisher
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_SpeedUpEvents_75415)]
+	public interface IResourcePlannerSpeedUpEvents75415
 	{
-		public ProjectionChangedEventPublisherNew(IEventPublisher publisher, IScenarioRepository scenarioRepository, IPersonRepository personRepository, IScheduleStorage scheduleStorage, IProjectionChangedEventBuilder projectionChangedEventBuilder, IProjectionVersionPersister projectionVersionPersister) : base(publisher, scenarioRepository, personRepository, scheduleStorage, projectionChangedEventBuilder, projectionVersionPersister)
-		{
-		}
-
-
-		public override void Handle(ScheduleChangedEvent @event)
-		{
-			var projectionChangedEvents = publishEvent<ProjectionChangedEventNew>(@event);
-			publishProjectChangedEventForShiftExchangeOffer(projectionChangedEvents);
-		}
+		bool IsTurnedOn { get; }
+	}
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_SpeedUpEvents_75415)]
+	public class ResourcePlannerSpeedUpEvents75415On : IResourcePlannerSpeedUpEvents75415
+	{
+		public bool IsTurnedOn { get; } = true;
+	}
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_SpeedUpEvents_75415)]
+	public class ResourcePlannerSpeedUpEvents75415Off : IResourcePlannerSpeedUpEvents75415
+	{
+		public bool IsTurnedOn { get; } = false;
 	}
 	
-	[DisabledBy(Toggles.ResourcePlanner_SpeedUpEvents_75415)]
 	public class ProjectionChangedEventPublisher : 
 		IHandleEvent<ScheduleChangedEvent>,
 		IHandleEvent<ScheduleInitializeTriggeredEventForScheduleProjection>,
@@ -47,6 +46,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IProjectionChangedEventBuilder _projectionChangedEventBuilder;
 		private readonly IProjectionVersionPersister _projectionVersionPersister;
+		private readonly IResourcePlannerSpeedUpEvents75415 _resourcePlannerSpeedUpEvents75415;
 
 		public ProjectionChangedEventPublisher(
 			IEventPublisher publisher,
@@ -54,7 +54,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 			IPersonRepository personRepository,
 			IScheduleStorage scheduleStorage,
 			IProjectionChangedEventBuilder projectionChangedEventBuilder,
-			IProjectionVersionPersister projectionVersionPersister)
+			IProjectionVersionPersister projectionVersionPersister,
+			IResourcePlannerSpeedUpEvents75415 resourcePlannerSpeedUpEvents75415)
 		{
 			_publisher = publisher;
 			_scenarioRepository = scenarioRepository;
@@ -62,14 +63,23 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 			_scheduleStorage = scheduleStorage;
 			_projectionChangedEventBuilder = projectionChangedEventBuilder;
 			_projectionVersionPersister = projectionVersionPersister;
+			_resourcePlannerSpeedUpEvents75415 = resourcePlannerSpeedUpEvents75415;
 		}
 
 		[ImpersonateSystem]
 		[UnitOfWork]
 		public virtual void Handle(ScheduleChangedEvent @event)
 		{
-			var projectionChangedEvents = publishEvent<ProjectionChangedEvent>(@event);
-			publishProjectChangedEventForShiftExchangeOffer(projectionChangedEvents);
+			if (_resourcePlannerSpeedUpEvents75415.IsTurnedOn)
+			{
+				var projectionChangedEvents = publishEvent<ProjectionChangedEventNew>(@event);
+				publishProjectChangedEventForShiftExchangeOffer(projectionChangedEvents);
+			}
+			else
+			{
+				var projectionChangedEvents = publishEvent<ProjectionChangedEvent>(@event);
+				publishProjectChangedEventForShiftExchangeOffer(projectionChangedEvents);	
+			}
 		}
 
 		//put here for perf reasons

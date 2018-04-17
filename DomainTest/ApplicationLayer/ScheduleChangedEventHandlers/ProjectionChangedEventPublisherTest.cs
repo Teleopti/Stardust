@@ -24,15 +24,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 	}
 	
 	[Toggle(Toggles.ResourcePlanner_SpeedUpEvents_75415)]
-	[Ignore("#75415 Still upgrade problems... fix this")]
 	public class ProjectionChangedEventPublisherNewTest : ProjectionChangedEventPublisherTest<ProjectionChangedEventNew>
 	{
-		
 	}
 
 	public class ProjectionChangedEventPublisherOldTest : ProjectionChangedEventPublisherTest<ProjectionChangedEvent>
 	{
-		
 	}
 
 	[TestFixture]

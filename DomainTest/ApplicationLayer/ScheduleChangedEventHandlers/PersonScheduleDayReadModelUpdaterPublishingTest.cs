@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 	[DomainTest]
 	[Toggle(Toggles.ResourcePlanner_SpeedUpEvents_75415)]
 	[ExtendScope(typeof(ScheduleReadModelWrapperHandler))]
-	[ExtendScope(typeof(ProjectionChangedEventPublisherNew))]
+	[ExtendScope(typeof(ProjectionChangedEventPublisher))]
 	public class PersonScheduleDayReadModelUpdaterPublishingTest : ISetup
 	{
 		public IEventPublisher EventPublisher;
