@@ -19,6 +19,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -32,74 +33,74 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 	[DomainTest]
 	public class OvertimeRequestApprovalServiceTest : ISetup
 	{
-		public IOvertimeRequestUnderStaffingSkillProvider OvertimeRequestUnderStaffingSkillProvider;
-		public IOvertimeRequestSkillProvider OvertimeRequestSkillProvider;
-		public FakeSkillCombinationResourceRepository SkillCombinationResourceRepository;
-		public FakeSkillDayRepository SkillDayRepository;
 		public FakeSkillRepository SkillRepository;
-		public FakeCommandDispatcher CommandDispatcher;
-		public FakePersonRepository PersonRepository;
-		public FakeActivityRepository ActivityRepository;
-		public FakePersonAssignmentRepository PersonAssignmentRepository;
-		public FakeScenarioRepository ScenarioRepository;
-		public FakeWorkflowControlSetRepository WorkflowControlSetRepository;
 		public FakeMultiplicatorDefinitionSetRepository MultiplicatorDefinitionSetRepository;
+		public FakeCommandDispatcher CommandDispatcher;
+		public FakeActivityRepository ActivityRepository;
 		public MutableNow Now;
 		public FakeLoggedOnUser LoggedOnUser;
 		public FakeSkillTypeRepository SkillTypeRepository;
-		public FakeSkillCombinationResourceRepository CombinationRepository;
 		public SkillIntradayStaffingFactory SkillIntradayStaffingFactory;
 		public IRequestApprovalServiceFactory RequestApprovalServiceFactory;
 		public ICurrentScenario Scenario;
-
-		readonly ISkillType skillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony)
-			.WithId();
 
 		private readonly ISkillType _phoneSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony).WithId();
 		private readonly ISkillType _emailSkillType = new SkillTypeEmail(new Description(SkillTypeIdentifier.Email), ForecastSource.Email).WithId();
 		private readonly ISkillType _chatSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Chat), ForecastSource.Chat).WithId();
 		private readonly TimePeriod _defaultOpenPeriod = new TimePeriod(8, 00, 21, 00);
 		private readonly DateOnly _periodStartDate = new DateOnly(2016, 1, 1);
+		private readonly int _defaultIntervalInMinutes = 15;
+		private readonly int _emailIntervalInMinutes = 60;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			system.UseTestDouble<FakeCommandDispatcher>().For<ICommandDispatcher>();
-			//system.UseTestDouble(new FakeSkillTypeRepository(skillType)).For<ISkillTypeRepository>();
-			system.UseTestDouble(new FakeScenarioRepository(new Scenario("default") {DefaultScenario = true}))
+			system.UseTestDouble(new FakeScenarioRepository(new Scenario("default") { DefaultScenario = true }))
 				.For<IScenarioRepository>();
 		}
 
 		[Test]
 		public void ShouldAddActivityOfSkillWhenApproved()
 		{
-			var scenario = ScenarioRepository.Has("scenario");
-			var activity = ActivityRepository.Has("activity");
-			var skill = SkillRepository.Has("skill", activity).WithId().DefaultResolution(60);
-			var person = createPerson(skill);
+			setupPerson(0, 24);
 
-			person.WorkflowControlSet.AutoGrantOvertimeRequest = true;
+			Now.Is(new DateTime(2018, 01, 01, 0, 0, 0, DateTimeKind.Utc));
 
-			var assignmentPeriod = new DateTimePeriod(2018, 01, 01, 8, 2018, 01, 01, 9);
-			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity,
-				assignmentPeriod, new ShiftCategory("category")));
+			var timeZone = TimeZoneInfoFactory.UtcTimeZoneInfo();
 
-			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
+			var period = new DateTimePeriod(Now.UtcDateTime().AddHours(8), Now.UtcDateTime().AddHours(9));
+
+			var workflowControlSet = new WorkflowControlSet();
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { _emailSkillType })
 			{
-				new SkillCombinationResource
-				{
-					StartDateTime = assignmentPeriod.StartDateTime,
-					EndDateTime = assignmentPeriod.EndDateTime,
-					Resource = 6,
-					SkillCombination = new[] {skill.Id.GetValueOrDefault()}
-				}
+				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
+				BetweenDays = new MinMax<int>(0, 5),
+				OrderIndex = 1
 			});
-			
-			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(assignmentPeriod.StartDateTime), 10));
-			Now.Is(new DateTime(2018, 01, 01));
-			var requestPeriod = new DateTimePeriod(2018, 01, 01, 9, 2018, 01, 01, 10);
+			LoggedOnUser.CurrentUser().WorkflowControlSet = workflowControlSet;
 
-			var personRequest = createOvertimeRequest(person, requestPeriod);
+
+			var criticalUnderStaffingSkillEmail = createSkill("criticalUnderStaffingSkillEmail", null, timeZone);
+			criticalUnderStaffingSkillEmail.SkillType = _emailSkillType;
+			criticalUnderStaffingSkillEmail.DefaultResolution = _emailIntervalInMinutes;
+
+			var emailActivity = createActivity("email activity");
+			var personSkillEmail = createPersonSkill(emailActivity, criticalUnderStaffingSkillEmail);
+			addPersonSkillsToPersonPeriod(personSkillEmail);
+
+			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(criticalUnderStaffingSkillEmail,
+				new DateOnly(period.StartDateTime), new List<StaffingPeriodData>
+				{
+					new StaffingPeriodData
+					{
+						ForecastedStaffing = 10d,
+						ScheduledStaffing = 1d,
+						Period = period
+					}
+				}, timeZone);
+
+			var personRequest = createOvertimeRequest(LoggedOnUser.CurrentUser(), period);
 
 			var target = RequestApprovalServiceFactory.MakeOvertimeRequestApprovalService(null);
 
@@ -108,93 +109,74 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			result.Count().Should().Be(0);
 			var addOvertimeActivityCommand = CommandDispatcher.LatestCommand as AddOvertimeActivityCommand;
 			addOvertimeActivityCommand.Should().Not.Be.Null();
-			addOvertimeActivityCommand?.ActivityId.Should().Be.EqualTo(activity.Id.GetValueOrDefault());
-			addOvertimeActivityCommand?.Period.Should().Be.EqualTo(requestPeriod);
-		}
-
-		[Test]
-		public void ShouldAddActivityOfSkillWhenAutoGrantoIsOnAndApproved()
-		{
-			var scenario = ScenarioRepository.Has("scenario");
-			var activity = ActivityRepository.Has("activity");
-			var skill = SkillRepository.Has("skill", activity).WithId().DefaultResolution(60);
-			var person = createPerson(skill);
-
-			person.WorkflowControlSet.AutoGrantOvertimeRequest = true;
-
-			var assignmentPeriod = new DateTimePeriod(2018, 01, 01, 8, 2018, 01, 01, 9);
-			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity,
-				assignmentPeriod, new ShiftCategory("category")));
-
-			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
-			{
-				new SkillCombinationResource
-				{
-					StartDateTime = assignmentPeriod.StartDateTime,
-					EndDateTime = assignmentPeriod.EndDateTime,
-					Resource = 6,
-					SkillCombination = new[] {skill.Id.GetValueOrDefault()}
-				}
-			});
-
-			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(assignmentPeriod.StartDateTime), 10));
-			Now.Is(new DateTime(2018, 01, 01));
-			var requestPeriod = new DateTimePeriod(2018, 01, 01, 9, 2018, 01, 01, 10);
-
-			var personRequest = createOvertimeRequest(person, requestPeriod);
-
-			var target = RequestApprovalServiceFactory.MakeOvertimeRequestApprovalService(null);
-
-			var result = target.Approve(personRequest.Request);
-
-			result.Count().Should().Be(0);
-			var addOvertimeActivityCommand = CommandDispatcher.LatestCommand as AddOvertimeActivityCommand;
-			addOvertimeActivityCommand.Should().Not.Be.Null();
-			addOvertimeActivityCommand?.ActivityId.Should().Be.EqualTo(activity.Id.GetValueOrDefault());
-			addOvertimeActivityCommand?.Period.Should().Be.EqualTo(requestPeriod);
+			addOvertimeActivityCommand?.ActivityId.Should().Be.EqualTo(emailActivity.Id.GetValueOrDefault());
+			addOvertimeActivityCommand?.Period.Should().Be.EqualTo(period);
 		}
 
 		[Test]
 		public void ShouldAddActivityOfTheFirstSkillWhenApproved()
 		{
-			var scenario = ScenarioRepository.Has("scenario");
-			var activity = ActivityRepository.Has("activity");
-			var activity2 = ActivityRepository.Has("activity2");
-			var skill = SkillRepository.Has("skill", activity).WithId().DefaultResolution(60);
-			var skill2 = SkillRepository.Has("skill2", activity2).WithId().DefaultResolution(60);
-			var person = createPerson(skill, skill2);
+			setupPerson(0, 24);
 
-			person.WorkflowControlSet.AutoGrantOvertimeRequest = true;
+			Now.Is(new DateTime(2018, 01, 01, 0, 0, 0, DateTimeKind.Utc));
 
-			var assignmentPeriod = new DateTimePeriod(2018, 01, 01, 8, 2018, 01, 01, 9);
-			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity,
-				assignmentPeriod, new ShiftCategory("category")));
+			var timeZone = TimeZoneInfoFactory.UtcTimeZoneInfo();
 
-			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
+			var period = new DateTimePeriod(Now.UtcDateTime().AddHours(8), Now.UtcDateTime().AddHours(9));
+
+			var workflowControlSet = new WorkflowControlSet();
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { _phoneSkillType })
 			{
-				new SkillCombinationResource
-				{
-					StartDateTime = assignmentPeriod.StartDateTime,
-					EndDateTime = assignmentPeriod.EndDateTime,
-					Resource = 6,
-					SkillCombination = new[] {skill.Id.GetValueOrDefault()}
-				},
-				new SkillCombinationResource
-				{
-					StartDateTime = assignmentPeriod.StartDateTime,
-					EndDateTime = assignmentPeriod.EndDateTime,
-					Resource = 6,
-					SkillCombination = new[] {skill2.Id.GetValueOrDefault()}
-				}
+				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
+				BetweenDays = new MinMax<int>(0, 5),
+				OrderIndex = 1
 			});
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { _emailSkillType })
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
+				BetweenDays = new MinMax<int>(0, 5),
+				OrderIndex = 2
+			});
+			LoggedOnUser.CurrentUser().WorkflowControlSet = workflowControlSet;
 
-			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(assignmentPeriod.StartDateTime), 10));
-			SkillDayRepository.Has(skill2.CreateSkillDayWithDemand(scenario, new DateOnly(assignmentPeriod.StartDateTime), 10));
+			var criticalUnderStaffingSkillPhone = createSkill("criticalUnderStaffingSkillEmail", null, timeZone);
+			criticalUnderStaffingSkillPhone.SkillType = _phoneSkillType;
+			criticalUnderStaffingSkillPhone.DefaultResolution = _defaultIntervalInMinutes;
 
-			Now.Is(new DateTime(2018, 01, 01));
-			var requestPeriod = new DateTimePeriod(2018, 01, 01, 9, 2018, 01, 01, 10);
+			var criticalUnderStaffingSkillEmail = createSkill("criticalUnderStaffingSkillPhone", null, timeZone);
+			criticalUnderStaffingSkillEmail.SkillType = _emailSkillType;
+			criticalUnderStaffingSkillEmail.DefaultResolution = _emailIntervalInMinutes;
 
-			var personRequest = createOvertimeRequest(person, requestPeriod);
+			var phoneActivity = createActivity("phone activity");
+			var emailActivity = createActivity("email activity");
+
+			var personSkillPhone = createPersonSkill(phoneActivity, criticalUnderStaffingSkillPhone);
+			var personSkillEmail = createPersonSkill(emailActivity, criticalUnderStaffingSkillEmail);
+			addPersonSkillsToPersonPeriod(personSkillPhone, personSkillEmail);
+
+			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(criticalUnderStaffingSkillPhone,
+				new DateOnly(period.StartDateTime), new List<StaffingPeriodData>
+				{
+					new StaffingPeriodData
+					{
+						ForecastedStaffing = 10d,
+						ScheduledStaffing = 1d,
+						Period = period
+					}
+				}, timeZone);
+
+			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(criticalUnderStaffingSkillEmail,
+				new DateOnly(period.StartDateTime), new List<StaffingPeriodData>
+				{
+					new StaffingPeriodData
+					{
+						ForecastedStaffing = 10d,
+						ScheduledStaffing = 1d,
+						Period = period
+					}
+				}, timeZone);
+
+			var personRequest = createOvertimeRequest(LoggedOnUser.CurrentUser(), period);
 
 			var target = RequestApprovalServiceFactory.MakeOvertimeRequestApprovalService(null);
 
@@ -203,108 +185,76 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			result.Count().Should().Be(0);
 			var addOvertimeActivityCommand = CommandDispatcher.LatestCommand as AddOvertimeActivityCommand;
 			addOvertimeActivityCommand.Should().Not.Be.Null();
-			addOvertimeActivityCommand?.ActivityId.Should().Be.EqualTo(activity.Id.GetValueOrDefault());
-			addOvertimeActivityCommand?.Period.Should().Be.EqualTo(requestPeriod);
+			addOvertimeActivityCommand?.ActivityId.Should().Be.EqualTo(phoneActivity.Id.GetValueOrDefault());
+			addOvertimeActivityCommand?.Period.Should().Be.EqualTo(period);
 		}
 
-		[Test]
-		public void ShouldAddActivityOfTheFirstSkillWhenAutoGrantoIsOnAndApproved()
-		{
-			var scenario = ScenarioRepository.Has("scenario");
-			var activity = ActivityRepository.Has("activity");
-			var activity2 = ActivityRepository.Has("activity2");
-			var skill = SkillRepository.Has("skill", activity).WithId().DefaultResolution(60);
-			var skill2 = SkillRepository.Has("skill2", activity2).WithId().DefaultResolution(60);
-			var person = createPerson(skill, skill2);
-
-			person.WorkflowControlSet.AutoGrantOvertimeRequest = true;
-
-			var assignmentPeriod = new DateTimePeriod(2018, 01, 01, 8, 2018, 01, 01, 9);
-			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity,
-				assignmentPeriod, new ShiftCategory("category")));
-
-			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
-			{
-				new SkillCombinationResource
-				{
-					StartDateTime = assignmentPeriod.StartDateTime,
-					EndDateTime = assignmentPeriod.EndDateTime,
-					Resource = 6,
-					SkillCombination = new[] {skill.Id.GetValueOrDefault()}
-				},
-				new SkillCombinationResource
-				{
-					StartDateTime = assignmentPeriod.StartDateTime,
-					EndDateTime = assignmentPeriod.EndDateTime,
-					Resource = 6,
-					SkillCombination = new[] {skill2.Id.GetValueOrDefault()}
-				}
-			});
-
-			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(assignmentPeriod.StartDateTime), 10));
-			SkillDayRepository.Has(skill2.CreateSkillDayWithDemand(scenario, new DateOnly(assignmentPeriod.StartDateTime), 10));
-
-			Now.Is(new DateTime(2018, 01, 01));
-			var requestPeriod = new DateTimePeriod(2018, 01, 01, 9, 2018, 01, 01, 10);
-
-			var personRequest = createOvertimeRequest(person, requestPeriod);
-
-			var target = RequestApprovalServiceFactory.MakeOvertimeRequestApprovalService(null);
-
-			var result = target.Approve(personRequest.Request);
-
-			result.Count().Should().Be(0);
-			var addOvertimeActivityCommand = CommandDispatcher.LatestCommand as AddOvertimeActivityCommand;
-			addOvertimeActivityCommand.Should().Not.Be.Null();
-			addOvertimeActivityCommand?.ActivityId.Should().Be.EqualTo(activity.Id.GetValueOrDefault());
-			addOvertimeActivityCommand?.Period.Should().Be.EqualTo(requestPeriod);
-		}
-		
 		[Test]
 		public void ShouldAddActivityOfPrimarySkillWhenApproved()
 		{
-			var scenario = ScenarioRepository.Has("scenario");
-			var primaryActivity = ActivityRepository.Has("activity");
-			var secondaryActivity = ActivityRepository.Has("activity");
-			var primarySkill = SkillRepository.Has("skill", primaryActivity).WithId().DefaultResolution(60).CascadingIndex(1);
-			primarySkill.SkillType = skillType;
-			var secondarySkill = SkillRepository.Has("skill2", secondaryActivity).WithId().DefaultResolution(60).CascadingIndex(2);
-			secondarySkill.SkillType = skillType;
-			var person = PersonRepository.Has(primarySkill, secondarySkill);
-			person.AddPersonPeriod(
-				PersonPeriodFactory.CreatePersonPeriodWithSkills(new DateOnly(2018, 01, 01), primarySkill, secondarySkill));
+			setupPerson(0, 24);
 
-			var workflowControlSet = new WorkflowControlSet().WithId();
-			workflowControlSet.AutoGrantOvertimeRequest = true;
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod()
+			Now.Is(new DateTime(2018, 01, 01, 0, 0, 0, DateTimeKind.Utc));
+
+			var timeZone = TimeZoneInfoFactory.UtcTimeZoneInfo();
+
+			var period = new DateTimePeriod(Now.UtcDateTime().AddHours(8), Now.UtcDateTime().AddHours(9));
+
+			var workflowControlSet = new WorkflowControlSet();
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { _phoneSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
-				BetweenDays = new MinMax<int>(0, 13)
+				BetweenDays = new MinMax<int>(0, 5),
+				OrderIndex = 1
 			});
-			person.WorkflowControlSet = workflowControlSet;
-
-			var assignmentPeriod = new DateTimePeriod(2018, 01, 01, 8, 2018, 01, 01, 9);
-			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, primaryActivity,
-				assignmentPeriod, new ShiftCategory("category")));
-
-			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { _emailSkillType })
 			{
-				new SkillCombinationResource
-				{
-					StartDateTime = assignmentPeriod.StartDateTime,
-					EndDateTime = assignmentPeriod.EndDateTime,
-					Resource = 6,
-					SkillCombination = new[] { primarySkill.Id.GetValueOrDefault(), secondarySkill.Id.GetValueOrDefault()}
-				}
+				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
+				BetweenDays = new MinMax<int>(0, 5),
+				OrderIndex = 2
 			});
+			LoggedOnUser.CurrentUser().WorkflowControlSet = workflowControlSet;
 
-			SkillDayRepository.Has(primarySkill.CreateSkillDayWithDemand(scenario, new DateOnly(assignmentPeriod.StartDateTime), 10));
-			SkillDayRepository.Has(secondarySkill.CreateSkillDayWithDemand(scenario, new DateOnly(assignmentPeriod.StartDateTime), 10));
+			var criticalUnderStaffingSkillPhone = createSkill("criticalUnderStaffingSkillEmail", null, timeZone);
+			criticalUnderStaffingSkillPhone.SkillType = _phoneSkillType;
+			criticalUnderStaffingSkillPhone.DefaultResolution = _defaultIntervalInMinutes;
+			criticalUnderStaffingSkillPhone.CascadingIndex(1);
 
-			Now.Is(new DateTime(2018, 01, 01));
-			var requestPeriod = new DateTimePeriod(2018, 01, 01, 9, 2018, 01, 01, 10);
+			var criticalUnderStaffingSkillEmail = createSkill("criticalUnderStaffingSkillPhone", null, timeZone);
+			criticalUnderStaffingSkillEmail.SkillType = _emailSkillType;
+			criticalUnderStaffingSkillEmail.DefaultResolution = _emailIntervalInMinutes;
+			criticalUnderStaffingSkillEmail.CascadingIndex(2);
 
-			var personRequest = createOvertimeRequest(person, requestPeriod);
+			var phoneActivity = createActivity("phone activity");
+			var emailActivity = createActivity("email activity");
+
+			var personSkillPhone = createPersonSkill(phoneActivity, criticalUnderStaffingSkillPhone);
+			var personSkillEmail = createPersonSkill(emailActivity, criticalUnderStaffingSkillEmail);
+			addPersonSkillsToPersonPeriod(personSkillPhone, personSkillEmail);
+
+			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(criticalUnderStaffingSkillPhone,
+				new DateOnly(period.StartDateTime), new List<StaffingPeriodData>
+				{
+					new StaffingPeriodData
+					{
+						ForecastedStaffing = 10d,
+						ScheduledStaffing = 1d,
+						Period = period
+					}
+				}, timeZone);
+
+			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(criticalUnderStaffingSkillEmail,
+				new DateOnly(period.StartDateTime), new List<StaffingPeriodData>
+				{
+					new StaffingPeriodData
+					{
+						ForecastedStaffing = 10d,
+						ScheduledStaffing = 1d,
+						Period = period
+					}
+				}, timeZone);
+
+			var personRequest = createOvertimeRequest(LoggedOnUser.CurrentUser(), period);
 
 			var target = RequestApprovalServiceFactory.MakeOvertimeRequestApprovalService(null);
 
@@ -313,193 +263,62 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			result.Count().Should().Be(0);
 			var addOvertimeActivityCommand = CommandDispatcher.LatestCommand as AddOvertimeActivityCommand;
 			addOvertimeActivityCommand.Should().Not.Be.Null();
-			addOvertimeActivityCommand?.ActivityId.Should().Be.EqualTo(primaryActivity.Id.GetValueOrDefault());
-			addOvertimeActivityCommand?.Period.Should().Be.EqualTo(requestPeriod);
-		}
-
-		[Test]  //This test makes no sence, there is only one activity and it is the same for both primary and secondary skill??
-		public void ShouldAddActivityOfPrimarySkillWhennAutoGrantoIsOnAndApproved() 
-		{
-			var scenario = ScenarioRepository.Has("scenario");
-			var activity = ActivityRepository.Has("activity");
-			var primarySkill = SkillRepository.Has("skill", activity).WithId().DefaultResolution(60).CascadingIndex(1);
-			var secondarySkill = SkillRepository.Has("skill2", activity).WithId().DefaultResolution(60).CascadingIndex(2);
-			var person = createPerson(primarySkill, secondarySkill);
-
-			person.WorkflowControlSet.AutoGrantOvertimeRequest = true;
-
-			var assignmentPeriod = new DateTimePeriod(2018, 01, 01, 8, 2018, 01, 01, 9);
-			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity,
-				assignmentPeriod, new ShiftCategory("category")));
-
-			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
-			{
-				new SkillCombinationResource
-				{
-					StartDateTime = assignmentPeriod.StartDateTime,
-					EndDateTime = assignmentPeriod.EndDateTime,
-					Resource = 6,
-					SkillCombination = new[] { primarySkill.Id.GetValueOrDefault(), secondarySkill.Id.GetValueOrDefault()}
-				}
-			});
-
-			SkillDayRepository.Has(primarySkill.CreateSkillDayWithDemand(scenario, new DateOnly(assignmentPeriod.StartDateTime), 10));
-			SkillDayRepository.Has(secondarySkill.CreateSkillDayWithDemand(scenario, new DateOnly(assignmentPeriod.StartDateTime), 10));
-
-			Now.Is(new DateTime(2018, 01, 01));
-			var requestPeriod = new DateTimePeriod(2018, 01, 01, 9, 2018, 01, 01, 10);
-
-			var personRequest = createOvertimeRequest(person, requestPeriod);
-
-			var target = RequestApprovalServiceFactory.MakeOvertimeRequestApprovalService(null);
-
-			var result = target.Approve(personRequest.Request);
-
-			result.Count().Should().Be(0);
-			var addOvertimeActivityCommand = CommandDispatcher.LatestCommand as AddOvertimeActivityCommand;
-			addOvertimeActivityCommand.Should().Not.Be.Null();
-			addOvertimeActivityCommand?.ActivityId.Should().Be.EqualTo(activity.Id.GetValueOrDefault());
-			addOvertimeActivityCommand?.Period.Should().Be.EqualTo(requestPeriod);
-		}
-
-		[Test] 
-		public void ShouldAddActivityOfPrimarySkillWhenAutoGrantoIsOnAndApproved_ThisIsProbablyWhatYourAreTryingToDo()
-		{
-			var scenario = ScenarioRepository.Has("scenario");
-			var activity = ActivityRepository.Has("activity");
-			var activity2 = ActivityRepository.Has("activity2");
-			var primarySkill = SkillRepository.Has("skill", activity).WithId().DefaultResolution(60).CascadingIndex(1);
-			var secondarySkill = SkillRepository.Has("skill2", activity2).WithId().DefaultResolution(60).CascadingIndex(2);
-			var person = createPerson(primarySkill, secondarySkill);
-
-			person.WorkflowControlSet.AutoGrantOvertimeRequest = true;
-
-			var assignmentPeriod = new DateTimePeriod(2018, 01, 01, 8, 2018, 01, 01, 9);
-			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity2, //scheduled on the activity of the low priority skill
-				assignmentPeriod, new ShiftCategory("category")));
-
-			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
-			{
-				new SkillCombinationResource
-				{
-					StartDateTime = assignmentPeriod.StartDateTime,
-					EndDateTime = assignmentPeriod.EndDateTime,
-					Resource = 6,
-					SkillCombination = new[] { primarySkill.Id.GetValueOrDefault()}
-				},
-				new SkillCombinationResource
-				{
-					StartDateTime = assignmentPeriod.StartDateTime,
-					EndDateTime = assignmentPeriod.EndDateTime,
-					Resource = 6,
-					SkillCombination = new[] {secondarySkill.Id.GetValueOrDefault()}
-				}
-			});
-
-			SkillDayRepository.Has(primarySkill.CreateSkillDayWithDemand(scenario, new DateOnly(assignmentPeriod.StartDateTime), 10));
-			SkillDayRepository.Has(secondarySkill.CreateSkillDayWithDemand(scenario, new DateOnly(assignmentPeriod.StartDateTime), 10));
-
-			Now.Is(new DateTime(2018, 01, 01));
-			var requestPeriod = new DateTimePeriod(2018, 01, 01, 9, 2018, 01, 01, 10);
-
-			var personRequest = createOvertimeRequest(person, requestPeriod);
-
-			var target = RequestApprovalServiceFactory.MakeOvertimeRequestApprovalService(null);
-
-			var result = target.Approve(personRequest.Request);
-
-			result.Count().Should().Be(0);
-			var addOvertimeActivityCommand = CommandDispatcher.LatestCommand as AddOvertimeActivityCommand;
-			addOvertimeActivityCommand.Should().Not.Be.Null();
-			addOvertimeActivityCommand?.ActivityId.Should().Be.EqualTo(activity.Id.GetValueOrDefault());  //should get OT on the primary skill activity
-			addOvertimeActivityCommand?.Period.Should().Be.EqualTo(requestPeriod);
-		}
-
-		[Test]
-		public void ShouldAddActivityOfPrimarySkillWhenApproved_ThisIsProbablyWhatYourAreTryingToDo()
-		{
-			var scenario = ScenarioRepository.Has("scenario");
-			var activity = ActivityRepository.Has("activity");
-			var activity2 = ActivityRepository.Has("activity2");
-			var primarySkill = SkillRepository.Has("skill", activity).WithId().DefaultResolution(60).CascadingIndex(1);
-			var secondarySkill = SkillRepository.Has("skill2", activity2).WithId().DefaultResolution(60).CascadingIndex(2);
-			var person = createPerson(primarySkill, secondarySkill);
-
-			person.WorkflowControlSet.AutoGrantOvertimeRequest = true;
-
-			var assignmentPeriod = new DateTimePeriod(2018, 01, 01, 8, 2018, 01, 01, 9);
-			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity2, //scheduled on the activity of the low priority skill
-				assignmentPeriod, new ShiftCategory("category")));
-
-			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
-			{
-				new SkillCombinationResource
-				{
-					StartDateTime = assignmentPeriod.StartDateTime,
-					EndDateTime = assignmentPeriod.EndDateTime,
-					Resource = 6,
-					SkillCombination = new[] { primarySkill.Id.GetValueOrDefault()}
-				},
-				new SkillCombinationResource
-				{
-					StartDateTime = assignmentPeriod.StartDateTime,
-					EndDateTime = assignmentPeriod.EndDateTime,
-					Resource = 6,
-					SkillCombination = new[] {secondarySkill.Id.GetValueOrDefault()}
-				}
-			});
-
-			SkillDayRepository.Has(primarySkill.CreateSkillDayWithDemand(scenario, new DateOnly(assignmentPeriod.StartDateTime), 10));
-			SkillDayRepository.Has(secondarySkill.CreateSkillDayWithDemand(scenario, new DateOnly(assignmentPeriod.StartDateTime), 10));
-
-			Now.Is(new DateTime(2018, 1, 1));
-			var requestPeriod = new DateTimePeriod(2018, 01, 01, 9, 2018, 01, 01, 10);
-
-			var personRequest = createOvertimeRequest(person, requestPeriod);
-
-			var target = RequestApprovalServiceFactory.MakeOvertimeRequestApprovalService(null);
-
-			var result = target.Approve(personRequest.Request);
-
-			result.Count().Should().Be(0);
-			var addOvertimeActivityCommand = CommandDispatcher.LatestCommand as AddOvertimeActivityCommand;
-			addOvertimeActivityCommand.Should().Not.Be.Null();
-			addOvertimeActivityCommand?.ActivityId.Should().Be.EqualTo(activity.Id.GetValueOrDefault());  //should get OT on the primary skill activity
-			addOvertimeActivityCommand?.Period.Should().Be.EqualTo(requestPeriod);
+			addOvertimeActivityCommand?.ActivityId.Should().Be.EqualTo(phoneActivity.Id.GetValueOrDefault());
+			addOvertimeActivityCommand?.Period.Should().Be.EqualTo(period);
 		}
 
 		[Test]
 		public void ShouldApproveCrossDayRequest()
 		{
-			var scenario = ScenarioRepository.Has("scenario");
-			var activity = ActivityRepository.Has("activity");
-			var skill = SkillRepository.Has("skill", activity).WithId().DefaultResolution(60);
-			var person = createPerson(skill);
+			setupPerson(0, 24);
 
-			person.WorkflowControlSet.AutoGrantOvertimeRequest = true;
+			Now.Is(new DateTime(2018, 01, 01, 0, 0, 0, DateTimeKind.Utc));
 
-			var assignmentPeriod = new DateTimePeriod(2018, 01, 01, 22, 2018, 01, 01, 23);
-			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity,
-				assignmentPeriod, new ShiftCategory("category")));
+			var timeZone = TimeZoneInfoFactory.UtcTimeZoneInfo();
 
-			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
+			var period = new DateTimePeriod(Now.UtcDateTime().AddHours(23), Now.UtcDateTime().AddDays(1).AddHours(1));
+
+			var workflowControlSet = new WorkflowControlSet();
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { _phoneSkillType })
 			{
-				new SkillCombinationResource
-				{
-					StartDateTime = assignmentPeriod.StartDateTime,
-					EndDateTime = assignmentPeriod.EndDateTime,
-					Resource = 6,
-					SkillCombination = new[] {skill.Id.GetValueOrDefault()}
-				}
+				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
+				BetweenDays = new MinMax<int>(0, 5),
+				OrderIndex = 1
 			});
+			LoggedOnUser.CurrentUser().WorkflowControlSet = workflowControlSet;
 
-			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(assignmentPeriod.StartDateTime), 10));
-			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(assignmentPeriod.StartDateTime.AddDays(1)), 10));
+			var criticalUnderStaffingSkillPhone = createSkill("criticalUnderStaffingSkillPhone", new TimePeriod(0, 24), timeZone);
+			criticalUnderStaffingSkillPhone.SkillType = _phoneSkillType;
+			criticalUnderStaffingSkillPhone.DefaultResolution = _defaultIntervalInMinutes;
 
-			Now.Is(new DateTime(2018, 01, 01));
-			var requestPeriod = new DateTimePeriod(2018, 01, 01, 23, 2018, 01, 02, 01);
+			var phoneActivity = createActivity("phone activity");
 
-			var personRequest = createOvertimeRequest(person, requestPeriod);
+			var personSkillPhone = createPersonSkill(phoneActivity, criticalUnderStaffingSkillPhone);
+			addPersonSkillsToPersonPeriod(personSkillPhone);
+
+			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(criticalUnderStaffingSkillPhone,
+				new DateOnly(period.StartDateTime), new List<StaffingPeriodData>
+				{
+					new StaffingPeriodData
+					{
+						ForecastedStaffing = 10d,
+						ScheduledStaffing = 1d,
+						Period = new DateTimePeriod(period.StartDateTime, period.StartDateTime.Date.AddDays(1).Subtract(TimeSpan.FromMinutes(1)))
+					}
+				}, timeZone);
+
+			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(criticalUnderStaffingSkillPhone,
+				new DateOnly(period.EndDateTime.Date), new List<StaffingPeriodData>
+				{
+					new StaffingPeriodData
+					{
+						ForecastedStaffing = 10d,
+						ScheduledStaffing = 1d,
+						Period = new DateTimePeriod(period.EndDateTime.Date, period.EndDateTime)
+					}
+				}, timeZone);
+
+			var personRequest = createOvertimeRequest(LoggedOnUser.CurrentUser(), period);
 
 			var target = RequestApprovalServiceFactory.MakeOvertimeRequestApprovalService(null);
 
@@ -508,71 +327,56 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			result.Count().Should().Be(0);
 			var addOvertimeActivityCommand = CommandDispatcher.LatestCommand as AddOvertimeActivityCommand;
 			addOvertimeActivityCommand.Should().Not.Be.Null();
-			addOvertimeActivityCommand?.ActivityId.Should().Be.EqualTo(activity.Id.GetValueOrDefault());
-			addOvertimeActivityCommand?.Period.Should().Be.EqualTo(requestPeriod);
+			addOvertimeActivityCommand?.ActivityId.Should().Be.EqualTo(phoneActivity.Id.GetValueOrDefault());
+			addOvertimeActivityCommand?.Period.Should().Be.EqualTo(period);
 		}
 
 		[Test]
-		public void ShouldApproveWhenScheduledAgentsIsZero()
+		public void ShouldNotApproveWhenAgentSkillIsOutOfPersonPeriod()
 		{
-			var scenario = ScenarioRepository.Has("scenario");
-			var activity = ActivityRepository.Has("activity");
-			var skill = SkillRepository.Has("skill", activity).WithId().DefaultResolution(60);
-			var person = createPerson(skill);
+			setupPerson(0, 24);
 
-			person.WorkflowControlSet.AutoGrantOvertimeRequest = true;
+			Now.Is(new DateTime(2018, 01, 01, 0, 0, 0, DateTimeKind.Utc));
 
-			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(2018, 01, 01), 10));
+			var timeZone = TimeZoneInfoFactory.UtcTimeZoneInfo();
 
-			Now.Is(new DateTime(2018, 01, 01));
-			var requestPeriod = new DateTimePeriod(2018, 01, 01, 9, 2018, 01, 01, 10);
+			var period = new DateTimePeriod(Now.UtcDateTime().AddHours(8), Now.UtcDateTime().AddHours(9));
 
-			var personRequest = createOvertimeRequest(person, requestPeriod);
-
-			var target = RequestApprovalServiceFactory.MakeOvertimeRequestApprovalService(null);
-
-			var result = target.Approve(personRequest.Request);
-
-			result.Count().Should().Be(0);
-			var addOvertimeActivityCommand = CommandDispatcher.LatestCommand as AddOvertimeActivityCommand;
-			addOvertimeActivityCommand.Should().Not.Be.Null();
-			addOvertimeActivityCommand?.ActivityId.Should().Be.EqualTo(activity.Id.GetValueOrDefault());
-			addOvertimeActivityCommand?.Period.Should().Be.EqualTo(requestPeriod);
-		}
-
-		[Test]
-		public void ShouldNotApproveWhenAgentSkillIsOutOfPersonPeriod()  
-		{
-			var scenario = ScenarioRepository.Has("scenario");
-			var activity = ActivityRepository.Has("activity");
-			var skill = SkillRepository.Has("skill", activity).WithId().DefaultResolution(60);
-
-			var person = new Person().WithId();
-			PersonRepository.Has(person);
-
-			var workflowControlSet = new WorkflowControlSet().WithId();
-			workflowControlSet.AutoGrantOvertimeRequest = true;
-			person.WorkflowControlSet = workflowControlSet;
-
-			var assignmentPeriod = new DateTimePeriod(2018, 01, 01, 8, 2018, 01, 01, 9);
-			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity,
-				assignmentPeriod, new ShiftCategory("category")));
-
-			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
+			var workflowControlSet = new WorkflowControlSet();
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { _phoneSkillType })
 			{
-				new SkillCombinationResource
-				{
-					StartDateTime = assignmentPeriod.StartDateTime,
-					EndDateTime = assignmentPeriod.EndDateTime,
-					Resource = 6,
-					SkillCombination = new[] {skill.Id.GetValueOrDefault()}
-				}
+				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
+				BetweenDays = new MinMax<int>(0, 5),
+				OrderIndex = 1
 			});
+			LoggedOnUser.CurrentUser().WorkflowControlSet = workflowControlSet;
 
-			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(assignmentPeriod.StartDateTime), 10));
-			var requestPeriod = new DateTimePeriod(2018, 01, 01, 9, 2018, 01, 01, 10);
+			var criticalUnderStaffingSkillPhone = createSkill("criticalUnderStaffingSkillEmail", null, timeZone);
+			criticalUnderStaffingSkillPhone.SkillType = _phoneSkillType;
+			criticalUnderStaffingSkillPhone.DefaultResolution = _defaultIntervalInMinutes;
+			criticalUnderStaffingSkillPhone.CascadingIndex(1);
 
-			var personRequest = createOvertimeRequest(person, requestPeriod);
+			var phoneActivity = createActivity("phone activity");
+			var personSkillPhone = createPersonSkill(phoneActivity, criticalUnderStaffingSkillPhone);
+
+			var team = TeamFactory.CreateTeam("team1", "site1");
+			var personPeriod = (PersonPeriod)PersonPeriodFactory.CreatePersonPeriod(new DateOnly(period.EndDateTime.AddDays(30)), PersonContractFactory.CreatePersonContract(), team);
+			LoggedOnUser.CurrentUser().AddPersonPeriod(personPeriod);
+
+			personPeriod.AddPersonSkill(personSkillPhone);
+
+			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(criticalUnderStaffingSkillPhone,
+				new DateOnly(period.StartDateTime), new List<StaffingPeriodData>
+				{
+					new StaffingPeriodData
+					{
+						ForecastedStaffing = 10d,
+						ScheduledStaffing = 1d,
+						Period = period
+					}
+				}, timeZone);
+
+			var personRequest = createOvertimeRequest(LoggedOnUser.CurrentUser(), period);
 
 			var target = RequestApprovalServiceFactory.MakeOvertimeRequestApprovalService(null);
 
@@ -580,50 +384,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			result.Count().Should().Be(1);
 			result.First().Message.Should().Be(Resources.ThereIsNoAvailableSkillForOvertime);
-		}
-
-		[Test]
-		public void ShouldAddActivityOnAgentTimezone()
-		{
-			var scenario = ScenarioRepository.Has("scenario");
-			var activity = ActivityRepository.Has("activity");
-			var skill = SkillRepository.Has("skill", activity).WithId().DefaultResolution(60);
-			var person = createPerson(skill);
-			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));  // better to not use WET since that is UTC+0..
-
-			person.WorkflowControlSet.AutoGrantOvertimeRequest = true;
-
-			var assignmentPeriod = new DateTimePeriod(2018, 01, 01, 8, 2018, 01, 01, 9);
-			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity,
-				assignmentPeriod, new ShiftCategory("category")));
-
-			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
-			{
-				new SkillCombinationResource
-				{
-					StartDateTime = assignmentPeriod.StartDateTime,
-					EndDateTime = assignmentPeriod.EndDateTime,
-					Resource = 6,
-					SkillCombination = new[] {skill.Id.GetValueOrDefault()}
-				}
-			});
-
-			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(assignmentPeriod.StartDateTime), 10));
-
-			Now.Is(new DateTime(2018, 01, 01));
-			var requestPeriod = new DateTimePeriod(2018, 01, 01, 9, 2018, 01, 01, 10);
-
-			var personRequest = createOvertimeRequest(person, requestPeriod);
-
-			var target = RequestApprovalServiceFactory.MakeOvertimeRequestApprovalService(null);
-
-			var result = target.Approve(personRequest.Request);
-
-			result.Count().Should().Be(0);
-			var addOvertimeActivityCommand = CommandDispatcher.LatestCommand as AddOvertimeActivityCommand;
-			addOvertimeActivityCommand.Should().Not.Be.Null();
-			addOvertimeActivityCommand?.ActivityId.Should().Be.EqualTo(activity.Id.GetValueOrDefault());
-			addOvertimeActivityCommand?.Period.Should().Be.EqualTo(requestPeriod);
 		}
 
 		[Test]
@@ -660,7 +420,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			addPersonSkillsToPersonPeriod(personSkillPhone, personSkillEmail, personSkillChat);
 
 			var workflowControlSet = new WorkflowControlSet();
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new []{ _emailSkillType, _phoneSkillType })
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { _emailSkillType, _phoneSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
 				BetweenDays = new MinMax<int>(0, 7),
@@ -683,14 +443,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			LoggedOnUser.CurrentUser().WorkflowControlSet = workflowControlSet;
 
 			var periodStartDateTime = new DateTime(2018, 01, 01, 08, 0, 0, 0, DateTimeKind.Utc);
-			var intervalInMinutes = 15;
-
 			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(partlyUnderStaffingSkillPhone, date, new List<StaffingPeriodData>
 			{
-				new StaffingPeriodData { ForecastedStaffing = 10d, ScheduledStaffing = 20d, Period = new DateTimePeriod(periodStartDateTime, periodStartDateTime.AddMinutes(intervalInMinutes))},
-				new StaffingPeriodData { ForecastedStaffing = 10d, ScheduledStaffing = 2d, Period = new DateTimePeriod(periodStartDateTime.AddMinutes(intervalInMinutes), periodStartDateTime.AddMinutes(intervalInMinutes * 2))},
-				new StaffingPeriodData { ForecastedStaffing = 10d, ScheduledStaffing = 2d, Period = new DateTimePeriod(periodStartDateTime.AddMinutes(intervalInMinutes * 2), periodStartDateTime.AddMinutes(intervalInMinutes * 3))},
-				new StaffingPeriodData { ForecastedStaffing = 10d, ScheduledStaffing = 20d, Period = new DateTimePeriod(periodStartDateTime.AddMinutes(intervalInMinutes * 3), periodStartDateTime.AddMinutes(intervalInMinutes * 4))},
+				new StaffingPeriodData { ForecastedStaffing = 10d, ScheduledStaffing = 20d, Period = new DateTimePeriod(periodStartDateTime, periodStartDateTime.AddMinutes(_defaultIntervalInMinutes))},
+				new StaffingPeriodData { ForecastedStaffing = 10d, ScheduledStaffing = 2d, Period = new DateTimePeriod(periodStartDateTime.AddMinutes(_defaultIntervalInMinutes), periodStartDateTime.AddMinutes(_defaultIntervalInMinutes * 2))},
+				new StaffingPeriodData { ForecastedStaffing = 10d, ScheduledStaffing = 2d, Period = new DateTimePeriod(periodStartDateTime.AddMinutes(_defaultIntervalInMinutes * 2), periodStartDateTime.AddMinutes(_defaultIntervalInMinutes * 3))},
+				new StaffingPeriodData { ForecastedStaffing = 10d, ScheduledStaffing = 20d, Period = new DateTimePeriod(periodStartDateTime.AddMinutes(_defaultIntervalInMinutes * 3), periodStartDateTime.AddMinutes(_defaultIntervalInMinutes * 4))},
 			}, timeZone);
 
 			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(notUnderStaffingSkillEmail, date, new List<StaffingPeriodData>
@@ -699,15 +457,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 				{
 					ForecastedStaffing = 10d,
 					ScheduledStaffing = 20d,
-					Period = new DateTimePeriod(periodStartDateTime, periodStartDateTime.AddMinutes(intervalInMinutes * 4))
+					Period = new DateTimePeriod(periodStartDateTime, periodStartDateTime.AddMinutes(_defaultIntervalInMinutes * 4))
 				}
 			}, timeZone);
 
 			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(underStaffingSkillChat, date, new List<StaffingPeriodData>{
-				new StaffingPeriodData { ForecastedStaffing = 10d, ScheduledStaffing = 1d, Period = new DateTimePeriod(periodStartDateTime, periodStartDateTime.AddMinutes(intervalInMinutes))},
-				new StaffingPeriodData { ForecastedStaffing = 10d, ScheduledStaffing = 1d, Period = new DateTimePeriod(periodStartDateTime.AddMinutes(intervalInMinutes), periodStartDateTime.AddMinutes(intervalInMinutes * 2))},
-				new StaffingPeriodData { ForecastedStaffing = 10d, ScheduledStaffing = 1d, Period = new DateTimePeriod(periodStartDateTime.AddMinutes(intervalInMinutes * 2), periodStartDateTime.AddMinutes(intervalInMinutes * 3))},
-				new StaffingPeriodData { ForecastedStaffing = 10d, ScheduledStaffing = 1d, Period = new DateTimePeriod(periodStartDateTime.AddMinutes(intervalInMinutes * 3), periodStartDateTime.AddMinutes(intervalInMinutes * 4))},
+				new StaffingPeriodData { ForecastedStaffing = 10d, ScheduledStaffing = 1d, Period = new DateTimePeriod(periodStartDateTime, periodStartDateTime.AddMinutes(_defaultIntervalInMinutes))},
+				new StaffingPeriodData { ForecastedStaffing = 10d, ScheduledStaffing = 1d, Period = new DateTimePeriod(periodStartDateTime.AddMinutes(_defaultIntervalInMinutes), periodStartDateTime.AddMinutes(_defaultIntervalInMinutes * 2))},
+				new StaffingPeriodData { ForecastedStaffing = 10d, ScheduledStaffing = 1d, Period = new DateTimePeriod(periodStartDateTime.AddMinutes(_defaultIntervalInMinutes * 2), periodStartDateTime.AddMinutes(_defaultIntervalInMinutes * 3))},
+				new StaffingPeriodData { ForecastedStaffing = 10d, ScheduledStaffing = 1d, Period = new DateTimePeriod(periodStartDateTime.AddMinutes(_defaultIntervalInMinutes * 3), periodStartDateTime.AddMinutes(_defaultIntervalInMinutes * 4))},
 			}, timeZone);
 
 			var requestPeriod = new DateTimePeriod(2018, 01, 01, 8, 2018, 01, 01, 9);
@@ -723,28 +481,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			addOvertimeActivityCommand.Should().Not.Be.Null();
 			addOvertimeActivityCommand?.ActivityId.Should().Be.EqualTo(chatActivity.Id.GetValueOrDefault());
 			addOvertimeActivityCommand?.Period.Should().Be.EqualTo(requestPeriod);
-		}
-
-		private IPerson createPerson(params ISkill[] skills)
-		{
-			foreach (var skill in skills)
-			{
-				skill.SkillType = skillType;
-			}
-
-			var workflowControlSet = new WorkflowControlSet().WithId();
-
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod()
-			{
-				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
-				BetweenDays = new MinMax<int>(0, 13)
-			});
-
-			var person = PersonRepository.Has(skills);
-			person.WorkflowControlSet = workflowControlSet;
-			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriodWithSkills(new DateOnly(2014, 1, 1), skills));
-
-			return person;
 		}
 
 		private void setupPerson(int siteOpenStartHour = 8, int siteOpenEndHour = 17, bool isOpenHoursClosed = false)
@@ -836,7 +572,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		{
 			var personRequestFactory = new PersonRequestFactory();
 			var multiplicatorDefinitionSet = new MultiplicatorDefinitionSet("name", MultiplicatorType.Overtime);
-				MultiplicatorDefinitionSetRepository.Has(multiplicatorDefinitionSet);
+			MultiplicatorDefinitionSetRepository.Has(multiplicatorDefinitionSet);
 
 			var personRequest = personRequestFactory.CreatePersonRequest(person);
 			var overTimeRequest = new OvertimeRequest(multiplicatorDefinitionSet, period);
