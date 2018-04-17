@@ -25,11 +25,12 @@
 		vm.selectedTenantChanged = selectedTenantChanged;
 		vm.buildError = buildError;
 		vm.getHistoryForTenant = getHistoryForTenant;
+		vm.getStatusRightNow = getStatusRightNow;
 		vm.copy = copy;
 
 		(function init() {
 			getTenants();
-			pollStatus();
+			vm.getStatusRightNow();
 		})();
 
 		function getTenants() {
@@ -100,7 +101,19 @@
 					}
 					pollStatus();
 				});
-			}, 20000 );
+			}, 10000 );
+		}
+
+		function getStatusRightNow() {
+				$http
+				.get("./Etl/GetjobRunning", tokenHeaderService.getHeaders())
+				.success(function (data) {
+					vm.status = data;
+					if (vm.status != null) {
+						vm.status.formatedTime = moment(vm.status.StartTime).local().format('HH:mm');
+					}
+					pollStatus();
+				});
 		}
 
 		function getHistoryForTenant() {
