@@ -18,18 +18,74 @@
              style="flex: 2 1 0">
             <div class="panel con-flex material-depth-1">
                 <div class="con-row layout-align-center-center">
-                    <span class="con-flex ">
-                        <skill-picker ng-click="vm.resetFilter()"
-                                      skills="vm.skills"
-                                      skill-areas="vm.skillAreas"
-                                      item-to-return="vm.selectSkillOrSkillArea"
-                                      preselected-item="vm.moduleState.preselectedItem"></skill-picker>
-                        <i class="mdi mdi-close pointer ie-cross grow-out"
-                           ng-show="!vm.isSkill(vm.moduleState.selectedItem)"
-                           ng-click="vm.clearSkillAreaHelper()">
-                            <md-tooltip>{{'Clear'|translate}}</md-tooltip>
-                        </i>
-                    </span>
+                    <div class="con-flex">
+                        <div class="wfm-form"
+                             outside-click="vm.skillPickerOpen = false">
+                            <div class="form-input-wrap">
+                                <div style="position: relative">
+                                    <input type="text"
+                                           placeholder="{{'SelectSkill'|translate}}"
+                                           ng-click="vm.skillPickerOpen = !vm.skillPickerOpen"
+                                           ng-model="vm.skillPickerText" />
+                                    <i class="mdi mdi-close pointer"
+                                       ng-show="vm.moduleState.selectedSkill"
+                                       ng-click="vm.clearSkillSelection()"
+                                       style="position: absolute; top: 0%; left: 97%;">
+                                        <md-tooltip>{{'Clear'|translate}}</md-tooltip>
+                                    </i>
+                                </div>
+                            </div>
+                            <div style="position: relative">
+                                <div class="wfm-dropdown-panel panel material-depth-1 full-padding"
+                                     style="z-index: 999; position: absolute; width: 100%; overflow-y: scroll; max-height: 200px"
+                            
+                                     ng-show="vm.skillPickerOpen">
+                                    <ul>
+                                        <li ng-repeat="skill in vm.skills"
+                                            ng-click="vm.clickedSkillInPicker(skill)"
+                                            style="padding: 10px 0px; cursor: pointer">
+                                            {{skill.Name}}
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="con-flex">
+                        <div class="wfm-form"
+                             outside-click="vm.skillGroupPickerOpen = false">
+                            <div class="form-input-wrap">
+                                <div style="position: relative">
+                                    <input type="text"
+                                           placeholder="{{'SelectSkillGroup'|translate}}"
+                                           ng-click="vm.skillGroupPickerOpen = !vm.skillGroupPickerOpen"
+                                           ng-model="vm.skillGroupPickerText" />
+                                    <i class="mdi mdi-close pointer"
+                                       ng-show="vm.moduleState.selectedSkillGroup"
+                                       ng-click="vm.clearSkillGroupSelection()"
+                                       style="position: absolute; top: 0%; left: 97%;">
+                                        <md-tooltip>{{'Clear'|translate}}</md-tooltip>
+                                    </i>
+                                </div>
+                            </div>
+                            <div style="position: relative">
+                                <div class="wfm-dropdown-panel panel material-depth-1 full-padding"
+                                     style="z-index: 999; position: absolute; width: 100%; overflow-y: scroll; max-height: 200px"
+                            
+                                     ng-show="vm.skillGroupPickerOpen">
+                                    <ul>
+                                        <li ng-repeat="skillGroup in vm.skillAreas"
+                                            ng-click="vm.clickedSkillGroupInPicker(skillGroup)"
+                                            style="padding: 10px 0px; cursor: pointer">
+                                            {{skillGroup.Name}}
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="line-right last-time cursor-pointer"
                          ng-show="chosenOffset.value === 0">
                         <span ng-show="latestActualInterval && latestActualInterval !== 'undefined - undefined'">
@@ -58,7 +114,7 @@
     </div>
     <div id="chartPanel"
          class="con-row intraday-monitor-item"
-         ng-if="vm.moduleState.selectedItem.Name">
+         ng-if="vm.moduleState.selectedSkill.Name || vm.moduleState.selectedSkillGroup.Name">
         <div class="con-flex">
             <div class="panel material-depth-1">
                 <div class="sub-header"
@@ -67,7 +123,7 @@
                         {{vm.getLocalDate(vm.moduleState.chosenOffset.value)}}
                         <span ng-if="vm.moduleState.showIncluded">
                             ,
-                            <b>{{ vm.moduleState.currentArea.Name }}</b>:
+                            <b>{{ vm.moduleState.selectedSkillGroup.Name }}</b>:
                             <span ng-if="vm.moduleState.selectedSubSkill !== null">{{vm.moduleState.selectedSubSkill.Name}}</span>
                             <span ng-if="vm.skillAreaMessage">({{vm.skillAreaMessage}})</span>
                         </span>
@@ -76,7 +132,7 @@
                          class="animate-show con-row">
                         <div class="con-flex">
                             <div class="wfm-chip-wrap"
-                                 ng-repeat="skill in vm.moduleState.currentArea.Skills | orderBy : Name"
+                                 ng-repeat="skill in vm.moduleState.selectedSkillGroup.Skills | orderBy : Name"
                                  ng-class="{'chip-disabled':!skill.DoDisplayData}">
                                 <span class="wfm-chip"
                                       ng-click="vm.openSkillFromArea(skill)">
@@ -112,7 +168,7 @@
                                             <md-tooltip ng-if="!vm.exporting">{{'ExportToExcel'|translate}}</md-tooltip>
                                             <md-tooltip ng-if="vm.exporting">{{'WorkingThreeDots'|translate}}</md-tooltip>
                                         </li>
-                                        <li ng-if="vm.moduleState.selectedItem.Name"
+                                        <li ng-if="vm.moduleState.selectedSkillGroup.Name"
                                             ng-click="vm.moduleState.showIncluded=!vm.moduleState.showIncluded">
                                             <i ng-hide="vm.moduleState.showIncluded"
                                                class="mdi mdi-eye"></i>
@@ -120,7 +176,7 @@
                                                class="mdi mdi-eye-off"></i>
                                             {{'IncludedSkills'|translate}}
                                         </li>
-                                        <li ng-show="!vm.toggles['WFM_Modify_Skill_Groups_43727'] && vm.moduleState.selectedItem.Name"
+                                        <li ng-show="!vm.toggles['WFM_Modify_Skill_Groups_43727'] && vm.moduleState.selectedSkillGroup.Name"
                                             ng-click='vm.toggleModal()'>
                                             <i class="skill-area-delete mdi mdi-delete"></i>{{'Delete'|translate}}</li>
                                     </ul>
@@ -142,7 +198,7 @@
                                         <div class="con-row">
                                             <div class="con-flex"
                                                  style="height: 15px">
-                                                <md-progress-linear ng-if="vm.viewObj.waitingForData"
+                                                <md-progress-linear ng-if="vm.waitingForData"
                                                                     md-mode="indeterminate"></md-progress-linear>
                                             </div>
                                         </div>
@@ -207,7 +263,7 @@
                                                 style="overflow: hidden"
                                                 ng-show="!vm.viewObj.hasMonitorData">
                                         <span class="con-flex no-data-available"
-                                              ng-show="!vm.viewObj.waitingForData && !vm.viewObj.hasMonitorData">
+                                              ng-show="!vm.waitingForData && !vm.viewObj.hasMonitorData">
                                             {{'NoDataAvailable'|translate}}
                                         </span>
                                     </md-content>
@@ -219,7 +275,7 @@
                                         <div class="con-row">
                                             <div class="con-flex"
                                                  style="height: 15px">
-                                                <md-progress-linear ng-if="vm.viewObj.waitingForData"
+                                                <md-progress-linear ng-if="vm.waitingForData"
                                                                     md-mode="indeterminate"></md-progress-linear>
                                             </div>
                                         </div>
@@ -287,7 +343,7 @@
                                                 style="overflow: hidden"
                                                 ng-show="!vm.viewObj.hasMonitorData">
                                         <span class="con-flex no-data-available"
-                                              ng-show="!vm.viewObj.waitingForData && !vm.viewObj.hasMonitorData">
+                                              ng-show="!vm.waitingForData && !vm.viewObj.hasMonitorData">
                                             {{'NoDataAvailable'|translate}}
                                         </span>
                                     </md-content>
@@ -299,7 +355,7 @@
                                         <div class="con-row">
                                             <div class="con-flex"
                                                  style="height: 15px">
-                                                <md-progress-linear ng-if="vm.viewObj.waitingForData"
+                                                <md-progress-linear ng-if="vm.waitingForData"
                                                                     md-mode="indeterminate"></md-progress-linear>
                                             </div>
                                         </div>
@@ -329,7 +385,7 @@
                                                 style="overflow: hidden"
                                                 ng-show="!vm.viewObj.hasMonitorData">
                                         <span class="con-flex no-data-available"
-                                              ng-show="!vm.viewObj.waitingForData && !vm.viewObj.hasMonitorData">
+                                              ng-show="!vm.waitingForData && !vm.viewObj.hasMonitorData">
                                             {{'NoDataAvailable'|translate}}
                                         </span>
                                     </md-content>
@@ -341,29 +397,6 @@
                 </div>
             </div>
 
-            <div ng-cloak
-                 class="modal-box">
-                <div ng-cloak
-                     ng-show="vm.moduleState.DeleteSkillAreaModal">
-                    <div class="modalbg">
-                        <div class="dialog-mini">
-                            <div class="modal-inner-content">
-                                <h3>{{vm.moduleState.selectedItem.Name}}</h3> {{'AreYouSureYouWantToDelete'|translate}}
-                            </div>
-                            <div class="modal-actions">
-                                <aside>
-                                    <button ng-click="vm.toggleModal()"
-                                            class="wfm-btn wfm-btn-invis-default">
-                                        {{'Cancel'|translate}}
-                                    </button>
-                                    <button ng-click='vm.deleteSkillArea(vm.moduleState.selectedItem)'
-                                            class="skill-area-delete-confirm wfm-btn wfm-btn-invis-default">
-                                        {{'Delete'|translate}}
-                                    </button>
-                                </aside>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
+    </div>
+</div>

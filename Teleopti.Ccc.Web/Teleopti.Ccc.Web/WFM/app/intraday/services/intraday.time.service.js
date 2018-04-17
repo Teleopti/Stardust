@@ -12,7 +12,18 @@
 		};
 
 		service.pollTime = function(selectedItem, gotData) {
-			if (selectedItem.Skills) {
+			if (selectedItem && !selectedItem.Skills) {
+				intradayService.getLatestStatisticsTimeForSkill
+					.query({
+						id: selectedItem.Id
+					})
+					.$promise.then(
+						function(result) {
+							gotData(getTimeString(result.StartTime, result.EndTime));
+						},
+						function(error) {}
+					);
+			} else {
 				intradayService.getLatestStatisticsTimeForSkillArea
 					.query({
 						id: selectedItem.Id
@@ -27,17 +38,6 @@
 									)
 								);
 							}
-						},
-						function(error) {}
-					);
-			} else {
-				intradayService.getLatestStatisticsTimeForSkill
-					.query({
-						id: selectedItem.Id
-					})
-					.$promise.then(
-						function(result) {
-							gotData(getTimeString(result.StartTime, result.EndTime));
 						},
 						function(error) {}
 					);

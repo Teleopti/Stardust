@@ -52,6 +52,7 @@
 		vm.getSkillIcon = skillIconService.get;
 		vm.toggles = {};
 		vm.skillAreas = [];
+		vm.waitingForData = false;
 
 		vm.changeChosenOffset = function(value, dontPoll) {
 			$interval.cancel(polling);
@@ -69,7 +70,9 @@
 		};
 
 		vm.checkIfFilterSkill = function(skill) {
-			if (vm.moduleState.selectedSubSkill !== null && vm.moduleState.selectedSubSkill.Id === skill.Id) {
+			if (!vm.moduleState.showIncluded || !skill) return;
+
+			if (vm.moduleState.selectedSkill !== null && vm.moduleState.selectedSkill.Id === skill.Id) {
 				return 'mdi mdi-check';
 			}
 			return vm.getSkillIcon(skill);
@@ -80,45 +83,54 @@
 				return 'chip-warning';
 			}
 
-			if (vm.moduleState.selectedSubSkill !== null && vm.moduleState.selectedSubSkill.Id === skill.Id) {
+			if (vm.moduleState.selectedSkill !== null && vm.moduleState.selectedSkill.Id === skill.Id) {
 				return 'chip-success';
 			}
 
 			return;
 		};
 
-		vm.moduleState = function() {
-			$state.go('intraday.skill-area-config', { isNewSkillArea: false });
-		};
+		// vm.moduleState = function() {
+		// 	$state.go('intraday.skill-area-config', { isNewSkillArea: false });
+		// };
+
+		function skillOrGroupIsSelected() {
+			return (
+				(vm.moduleState.selectedSkill !== null && angular.isDefined(vm.moduleState.selectedSkill)) ||
+				(vm.moduleState.selectedSkillGroup !== null && angular.isDefined(vm.moduleState.selectedSkillGroup))
+			);
+		}
 
 		vm.exportIntradayData = function() {
-			if (
-				vm.moduleState.selectedItem !== null &&
-				angular.isDefined(vm.moduleState.selectedItem) &&
-				!vm.exporting
-			) {
-				vm.exporting = true;
-
-				if (vm.moduleState.selectedItem.Skills) {
-					intradayService.getIntradayExportForSkillArea(
-						angular.toJson({
-							id: vm.moduleState.selectedItem.Id,
-							dayOffset: vm.moduleState.chosenOffset.value
-						}),
-						saveData,
-						errorSaveData
-					);
-				} else {
-					intradayService.getIntradayExportForSkill(
-						angular.toJson({
-							id: vm.moduleState.selectedItem.Id,
-							dayOffset: vm.moduleState.chosenOffset.value
-						}),
-						saveData,
-						errorSaveData
-					);
+			if (angular.isUnde)
+				if (skillOrGroupIsSelected() && !vm.exporting) {
+					vm.exporting = true;
+					if (
+						angular.isDefined(vm.moduleState.selectedSkillGroup) &&
+						vm.moduleState.selectedSkillGroup !== null
+					) {
+						intradayService.getIntradayExportForSkillArea(
+							angular.toJson({
+								id: vm.moduleState.selectedSkillGroup.Id,
+								dayOffset: vm.moduleState.chosenOffset.value
+							}),
+							saveData,
+							errorSaveData
+						);
+					} else if (
+						angular.isDefined(vm.moduleState.selectedSkill) &&
+						vm.moduleState.selectedSkill !== null
+					) {
+						intradayService.getIntradayExportForSkill(
+							angular.toJson({
+								id: vm.moduleState.selectedSkill.Id,
+								dayOffset: vm.moduleState.chosenOffset.value
+							}),
+							saveData,
+							errorSaveData
+						);
+					}
 				}
-			}
 		};
 
 		vm.getLocalDate = function(offset) {
@@ -145,13 +157,14 @@
 			if (!vm.isSkill(skill)) return;
 
 			if (skill.DoDisplayData) {
-				//Clicked a new skill
-				if (vm.moduleState.selectedSubSkill !== skill) {
-					vm.moduleState.selectedSubSkill = skill;
+				//Clicked another skill
+				if (vm.moduleState.selectedSkill === null || vm.moduleState.selectedSkill.Id !== skill.Id) {
 					vm.setSkill(skill);
 				} else {
-					vm.moduleState.selectedSubSkill = null;
-					vm.setSkillGroup(vm.moduleState.currentArea);
+					vm.moduleState.selectedSkill = null;
+					vm.skillPickerText = '';
+					vm.setSkillGroup(vm.moduleState.selectedSkillGroup);
+					pollActiveTabDataByDayOffset(vm.moduleState.activeTab, vm.moduleState.chosenOffset.value);
 				}
 			} else {
 				UnsupportedSkillNotice();
@@ -162,7 +175,7 @@
 		vm.openSkillGroupManager = function() {
 			$state.go('intraday.skill-area-manager', {
 				isNewSkillArea: false,
-				selectedGroup: vm.isSkill(vm.moduleState.selectedItem) ? null : vm.moduleState.selectedItem
+				selectedGroup: vm.moduleState.selectedSkillGroup
 			});
 		};
 
@@ -181,49 +194,45 @@
 
 		vm.resetFilter = function() {
 			setModuleState({
-				showIncluded: false,
-				selectedSubSkill: null,
-				currentArea: null
+				showIncluded: false
 			});
 		};
 
-		vm.selectSkillOrSkillArea = function(item) {
-			if (!item) {
-				vm.moduleState.selectedItem = null;
-				return;
-			}
+		vm.clickedSkillInPicker = function(skill) {
+			vm.setSkill(skill);
+			setModuleState({
+				showIncluded: false,
+				selectedSkillGroup: null
+			});
+			vm.skillGroupPickerText = '';
+		};
 
-			if (angular.isUndefined(item.Name) || angular.isUndefined(item)) {
-				vm.moduleState.selectedItem = null;
-				return;
-			}
-			if (vm.isSkill(item)) {
-				vm.setSkill(item);
-			} else {
-				vm.setSkillGroup(item);
-			}
-
-			if (vm.moduleState.currentArea === null) {
-				setModuleState({
-					showIncluded: false,
-					showGroupInfo: false
-				});
-			}
-			if (vm.moduleState.currentArea !== null) {
-				setModuleState({
-					showIncluded: true,
-					showGroupInfo: true
-				});
-			}
+		vm.clearSkillSelection = function() {
+			vm.skillPickerOpen = false;
+			vm.skillPickerText = '';
+			resetModuleState();
 			vm.saveState();
+		};
+
+		vm.clearSkillGroupSelection = function() {
+			vm.skillGroupPickerOpen = false;
+			vm.skillGroupPickerText = '';
+			resetModuleState();
+			vm.saveState();
+		};
+
+		vm.clickedSkillGroupInPicker = function(skillGroup) {
+			vm.skillPickerText = '';
+			vm.moduleState.selectedSkill = null;
+			vm.setSkillGroup(skillGroup);
 		};
 
 		vm.setSkill = function(skill) {
 			if (angular.isUndefined(skill) || skill === null) return;
-
-			vm.moduleState.preselectedItem = { skillIds: [skill.Id] };
+			vm.skillPickerOpen = false;
+			vm.skillPickerText = skill.Name;
 			if (skill.DoDisplayData) {
-				vm.moduleState.selectedItem = skill;
+				vm.moduleState.selectedSkill = skill;
 				pollActiveTabDataByDayOffset(vm.moduleState.activeTab, vm.moduleState.chosenOffset.value);
 			} else {
 				UnsupportedSkillNotice();
@@ -232,21 +241,18 @@
 
 		vm.setSkillGroup = function(skillGroup) {
 			if (angular.isUndefined(skillGroup) || skillGroup === null) return;
-
+			vm.skillGroupPickerOpen = false;
+			vm.skillGroupPickerText = skillGroup.Name;
 			setModuleState({
 				showIncluded: true,
 				showGroupInfo: true,
-				currentArea: skillGroup,
-				selectedItem: skillGroup
+				selectedSkillGroup: skillGroup
 			});
 			pollActiveTabDataByDayOffset(
 				vm.moduleState.activeTab,
 				vm.moduleState.chosenOffset.value,
 				gotDataFromService
 			);
-			vm.moduleState.preselectedItem = { skillAreaId: skillGroup.Id };
-			// skillGroup.UnsupportedSkills = [];
-			// checkUnsupported(skillGroup);
 		};
 
 		vm.toggleModal = function() {
@@ -274,20 +280,29 @@
 			if (vm.moduleState.chosenOffset) {
 				vm.changeChosenOffset(vm.moduleState.chosenOffset.value, vm.moduleState.chosenOffset.value !== 0);
 			}
-			if (vm.isSkill(vm.moduleState.selectedItem)) {
-				vm.setSkill(vm.moduleState.selectedItem);
-			} else {
-				vm.setSkillGroup(vm.moduleState.selectedItem);
+
+			if (vm.moduleState.showIncluded && vm.moduleState.selectedSkill && vm.moduleState.selectedSkillGroup) {
+				vm.setSkill(vm.moduleState.selectedSkill);
+				vm.checkIfFilterSkill(vm.moduleState.selectedSkill);
+				return;
 			}
-			if (vm.moduleState.currentArea && vm.moduleState.currentArea !== null) {
-				vm.openSkillFromArea(vm.moduleState.selectedItem);
+
+			if (
+				angular.isDefined(vm.moduleState.selectedSkillGroup) &&
+				vm.moduleState.selectedSkillGroup !== null &&
+				!vm.moduleState.selectedSkill
+			) {
+				vm.clickedSkillGroupInPicker(vm.moduleState.selectedSkillGroup);
+				return;
 			}
-			if (vm.moduleState.selectedSubSkill !== null) {
-				vm.checkIfFilterSkill(vm.moduleState.selectedSubSkill);
+			if (
+				angular.isDefined(vm.moduleState.selectedSkill) &&
+				vm.moduleState.selectedSkill !== null &&
+				!vm.moduleState.selectedSkillGroup
+			) {
+				vm.clickedSkillInPicker(vm.moduleState.selectedSkill);
+				return;
 			}
-			// else {
-			// 	vm.selectSkillOrSkillArea(vm.moduleState.selectedItem, false);
-			// }
 		};
 
 		function cancelTimeout() {
@@ -344,6 +359,7 @@
 		function gotDataFromService(data) {
 			vm.viewObj = Object.assign({}, data);
 			vm.moduleState.hasMonitorData = vm.viewObj.hasMonitorData;
+			vm.waitingForData = false;
 		}
 
 		function gotTimeData(data) {
@@ -355,26 +371,28 @@
 			if (angular.isUndefined(dayOffset)) dayOffset = 0;
 
 			var services = [intradayTrafficService, intradayPerformanceService, intradayMonitorStaffingService];
-			if (vm.moduleState.selectedItem !== null && angular.isDefined(vm.moduleState.selectedItem)) {
-				if (vm.isSkill(vm.moduleState.selectedItem)) {
+			if (skillOrGroupIsSelected()) {
+				if (vm.moduleState.selectedSkill) {
+					vm.waitingForData = true;
 					services[activeTab].pollSkillDataByDayOffset(
-						vm.moduleState.selectedItem,
+						vm.moduleState.selectedSkill,
 						vm.toggles,
 						dayOffset,
 						gotDataFromService
 					);
 					if (dayOffset === 0) {
-						intradayLatestTimeService.pollTime(vm.moduleState.selectedItem, gotTimeData);
+						intradayLatestTimeService.pollTime(vm.moduleState.selectedSkill, gotTimeData);
 					}
-				} else {
+				} else if (vm.moduleState.selectedSkillGroup) {
+					vm.waitingForData = true;
 					services[activeTab].pollSkillAreaDataByDayOffset(
-						vm.moduleState.selectedItem,
+						vm.moduleState.selectedSkillGroup,
 						vm.toggles,
 						dayOffset,
 						gotDataFromService
 					);
 					if (dayOffset === 0) {
-						intradayLatestTimeService.pollTime(vm.moduleState.selectedItem, gotTimeData);
+						intradayLatestTimeService.pollTime(vm.moduleState.selectedSkillGroup, gotTimeData);
 					}
 				}
 			} else {
@@ -395,16 +413,6 @@
 
 				SkillGroupSvc.getSkills().then(function(result) {
 					vm.skills = result.data;
-					if (vm.skillAreas.length === 0) {
-						vm.moduleState.selectedItem = vm.skills.find(isSupported);
-					}
-					if (vm.skillAreas.length > 0) {
-						if (isNew) {
-							vm.moduleState.selectedItem = vm.latest[0];
-						} else {
-							vm.moduleState.selectedItem = vm.skillAreas[0];
-						}
-					}
 					vm.loadState();
 				});
 			});
@@ -430,18 +438,16 @@
 		}
 
 		function resetModuleState() {
-			vm.moduleState = {
+			setModuleState({
 				DeleteSkillAreaModal: false,
 				activeTab: 0,
 				chosenOffset: { value: 0 },
 				showGroupInfo: false,
 				showIncluded: false,
-				currentArea: null,
-				selectedItem: null,
-				hasMonitorData: false,
-				preselectedItem: null,
-				selectedSubSkill: null
-			};
+				selectedSkill: null,
+				selectedSkillGroup: null,
+				hasMonitorData: false
+			});
 		}
 
 		$scope.$on('$destroy', function(event) {
