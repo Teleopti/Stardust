@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			}
 			if (path.Equals(DefinedRaptorApplicationFunctionPaths.AccessToReports))
 			{
-				return _toggleManager.IsEnabled(Toggles.WfmReportPortal_Basic_38825);
+				return true;
 			}
 			if (path.Equals(DefinedRaptorApplicationFunctionPaths.WebStaffing))
 			{

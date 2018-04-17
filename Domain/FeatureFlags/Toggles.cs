@@ -60,7 +60,6 @@
 
 		WebByPassDefaultPermissionCheck_37984,
 
-		WfmReportPortal_Basic_38825,
 		WfmReportPortal_LeaderBoard_39440,
 
 		Wfm_Requests_Approve_Based_On_Budget_Allotment_39626,
