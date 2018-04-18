@@ -9,7 +9,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 {
 	[DomainTest]
 	[Toggle(Toggles.ResourcePlanner_SpeedUpEvents_74996)]
-	[Ignore("#74996 Analytics scenarios should be cached")]
 	public class FetchAnalyticsScenariosCacheTest
 	{
 		public FetchAnalyticsScenarios Target;

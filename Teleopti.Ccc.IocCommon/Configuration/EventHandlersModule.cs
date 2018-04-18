@@ -145,12 +145,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			{
 				builder.CacheByClassProxy<AnalyticsAbsenceMapper>().SingleInstance();
 				_config.Cache().This<AnalyticsAbsenceMapper>(b => b.CacheMethod(m => m.Map(Guid.Empty)));
+				builder.CacheByClassProxy<FetchAnalyticsScenarios>().SingleInstance();
+				_config.Cache().This<FetchAnalyticsScenarios>(b => b.CacheMethod(m => m.Execute()));
 			}
 			else
 			{
 				builder.RegisterType<AnalyticsAbsenceMapper>().SingleInstance();
+				builder.RegisterType<FetchAnalyticsScenarios>().SingleInstance();
 			}
-			builder.RegisterType<FetchAnalyticsScenarios>().SingleInstance();
 			builder.RegisterType<AnalyticsFactScheduleTimeMapper>().As<IAnalyticsFactScheduleTimeMapper>().SingleInstance();				
 			builder.RegisterType<AnalyticsFactScheduleDateMapper>().As<IAnalyticsFactScheduleDateMapper>().SingleInstance();
 			builder.RegisterType<AnalyticsFactSchedulePersonMapper>().As<IAnalyticsFactSchedulePersonMapper>().SingleInstance();

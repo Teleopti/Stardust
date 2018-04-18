@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 			_analyticsScenarioRepository = analyticsScenarioRepository;
 		}
 		
-		public IEnumerable<AnalyticsScenario> Execute()
+		public virtual IEnumerable<AnalyticsScenario> Execute()
 		{
 			var scenarios = _analyticsScenarioRepository.Scenarios();
 			return scenarios.Where(x => !x.IsDeleted && x.ScenarioId != -1).ToList();
