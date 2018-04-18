@@ -160,7 +160,7 @@
 			request.$promise.then(
 				function(result) {
 					performanceData.waitingForData = false;
-					setPerformanceData(result, true, dayOffset === 0, selectedItem.ShowAbandonRate);
+					setPerformanceData(result, dayOffset === 0, selectedItem.ShowAbandonRate);
 					gotData(performanceData);
 				},
 				function(error) {
@@ -175,9 +175,10 @@
 			performanceData.waitingForData = true;
 			service.checkMixedArea(selectedItem);
 
-			var showAbandonRate = selectedItem.Skills.every(function(element) {
-				return element.ShowAbandonRate === true;
-			});
+			var showAbandonRate =
+				selectedItem.Skills.every(function(element) {
+					return element.ShowAbandonRate === true;
+				}) || false;
 
 			cancelPendingRequest();
 			request = intradayService.getSkillAreaMonitorPerformanceByDayOffset.query({
