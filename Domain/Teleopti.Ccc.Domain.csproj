@@ -4032,9 +4032,6 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Staffing\TenantAudit.hbm.xml">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Staffing\StaffingAudit.hbm.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
