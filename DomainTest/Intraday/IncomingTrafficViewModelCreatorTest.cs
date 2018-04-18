@@ -4,7 +4,6 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday;
@@ -478,8 +477,9 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			Target.Load(new[] { phoneSkill.Id.Value, multisiteSkill.Id.Value, emailSkill.Id.Value });
 
-			IntradayMonitorDataLoader.Skills.Count.Should().Be.EqualTo(1);
+			IntradayMonitorDataLoader.Skills.Count.Should().Be.EqualTo(2);
 			IntradayMonitorDataLoader.Skills.Should().Contain(phoneSkill.Id.Value);
+			IntradayMonitorDataLoader.Skills.Should().Contain(multisiteSkill.Id.Value);
 		}
 
 		[Test]

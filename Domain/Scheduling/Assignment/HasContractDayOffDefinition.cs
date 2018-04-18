@@ -14,19 +14,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var dateOnly = dateOnlyAsPeriod.DateOnly;
 
 			var person = scheduleDay.Person;
-			if (person == null)
-				return false;
 
-			var personPeriod = person.Period(dateOnly);
+			var personPeriod = person?.Period(dateOnly);
 
-			if (personPeriod == null)
-				return false;
+			var personContract = personPeriod?.PersonContract;
 
-			var personContract = personPeriod.PersonContract;
-			if (personContract == null)
-				return false;
-
-			var contract = personContract.Contract;
+			var contract = personContract?.Contract;
 			if (contract == null)
 				return false;
 
