@@ -161,8 +161,12 @@
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Payroll.DeployNew\PlaceHolder.txt" />
-    <Content Include="Payroll\PlaceHolder.txt" />
+    <Content Include="Payroll.DeployNew\PlaceHolder.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Payroll\PlaceHolder.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Teleopti_RD.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
