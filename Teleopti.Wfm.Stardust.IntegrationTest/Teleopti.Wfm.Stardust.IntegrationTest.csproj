@@ -134,6 +134,10 @@
       <Project>{aa4a5374-77af-44f0-85c1-6cabc6701352}</Project>
       <Name>Teleopti.Ccc.Infrastructure</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Ccc.IocCommon\Teleopti.Ccc.IocCommon.csproj">
+      <Project>{db42d973-9889-4d51-9fc5-be66aa7f117c}</Project>
+      <Name>Teleopti.Ccc.IocCommon</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus\Teleopti.Ccc.Sdk.ServiceBus.csproj">
       <Project>{9df2d12c-4895-42d9-a365-6b9f97e787b5}</Project>
       <Name>Teleopti.Ccc.Sdk.ServiceBus</Name>
