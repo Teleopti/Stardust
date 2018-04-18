@@ -139,7 +139,7 @@ function global:CorrectingURLinHTML {
 	#Add Msbuild to env path temporary
     #$env:Path = $env:Path + ";C:\Program Files (x86)\MSBuild\14.0\bin\amd64"
 	#Compile UpdateIndexHtml.msbuild
-    #exec { msbuild $IndexMSBuildFile /p:WorkingDirectory=$WorkingDir /toolsversion:14.0 }
+     #exec { msbuild $IndexMSBuildFile /p:WorkingDirectory=$WorkingDir /toolsversion:14.0 }
 	$word = "/TeleoptiWFM/"
 	$replacement = "/"
 	
