@@ -27,20 +27,25 @@ namespace Teleopti.Support.Security
 		private static readonly ILog log = LogManager.GetLogger(typeof(Program));
 		public IUpgradeLog Logger = new NullLog();
 
-		public void Upgrade(IDatabaseArguments databaseArguments)
+		public void Upgrade(UpgradeCommand command)
 		{
+			if (command.CheckTenantConnectionStrings)
+			{
+				var tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(command.TenantStoreConnectionString);
+				var checker = new CheckTenantConnectionStrings(tenantUnitOfWorkManager, tenantUnitOfWorkManager);
+				checker.CheckConnectionStrings(command.TenantStoreConnectionString);
+				log.Debug("Teleopti.Support.Security successful");
+				return;
+			}
+			
 			AppDomain.CurrentDomain.UnhandledException += appDomainUnhandledException;
 
 			XmlConfigurator.Configure();
-			//Console.WriteLine("Please be patient, don't close this window!");
-			//Console.WriteLine("");
-			//logToLog("Starting Teleopti.Support.Security");
-			//logToLog("Was called with args: " + string.Join(" ", args));
 
 			try
 			{
-				var tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(databaseArguments.ApplicationDbConnectionString);
-				UpgradeProcess(tenantUnitOfWorkManager, tenantUnitOfWorkManager, databaseArguments);
+				var tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(command.ApplicationDbConnectionString);
+				UpgradeProcess(tenantUnitOfWorkManager, tenantUnitOfWorkManager, command);
 			}
 			catch (Exception e)
 			{
@@ -55,7 +60,7 @@ namespace Teleopti.Support.Security
 		public void UpgradeProcess(
 			ITenantUnitOfWork tenantUnitOfWork,
 			ICurrentTenantSession currentTenantSession, 
-			IDatabaseArguments databaseArguments)
+			UpgradeCommand databaseArguments)
 		{
 			var updateTenantData = new UpdateTenantData(tenantUnitOfWork, currentTenantSession);
 			updateTenantData.UpdateTenantConnectionStrings(databaseArguments.ApplicationDbConnectionStringToStore, databaseArguments.AnalyticsDbConnectionStringToStore);
@@ -83,7 +88,7 @@ namespace Teleopti.Support.Security
 			AnalyticsReportableScenarioFixer.Execute(databaseArguments);
 		}
 
-		private void initAuditData(IDatabaseArguments commandLineArgument)
+		private void initAuditData(UpgradeCommand commandLineArgument)
 		{
 			const string proc = "[Auditing].[TryInitAuditTables]";
 			logToLog("Re-init Schedule history ...", Level.Debug);
@@ -91,7 +96,7 @@ namespace Teleopti.Support.Security
 			logToLog("Re-init Schedule history. Done!", Level.Debug);
 		}
 
-		private void convertDayOffToNewStructure(IDatabaseArguments commandLineArgument)
+		private void convertDayOffToNewStructure(UpgradeCommand commandLineArgument)
 		{
 			const string proc = "[dbo].[DayOffConverter]";
 			logToLog("Converting DayOffs ...", Level.Debug);
@@ -99,7 +104,7 @@ namespace Teleopti.Support.Security
 			logToLog("Converting DayOffs. Done!", Level.Debug);
 		}
 
-		private void removeDuplicateAssignments(IDatabaseArguments commandLineArgument)
+		private void removeDuplicateAssignments(UpgradeCommand commandLineArgument)
 		{
 			const string proc = "[dbo].[MergePersonAssignments]";
 			logToLog("RemoveDuplicateAssignments ...", Level.Debug);
@@ -107,7 +112,7 @@ namespace Teleopti.Support.Security
 			logToLog("RemoveDuplicateAssignments. Done!", Level.Debug);
 		}
 
-		private void callProcInSeparateTransaction(IDatabaseArguments commandLineArgument, string proc)
+		private void callProcInSeparateTransaction(UpgradeCommand commandLineArgument, string proc)
 		{
 			using (var conn = new SqlConnection(commandLineArgument.ApplicationDbConnectionString))
 			{
@@ -131,7 +136,7 @@ namespace Teleopti.Support.Security
 			logToLog(e.Message, Level.Debug);
 		}
 
-		private bool personAssignmentsConverted(IDatabaseArguments commandLineArgument)
+		private bool personAssignmentsConverted(UpgradeCommand commandLineArgument)
 		{
 			var numberOfNotConvertedCommand =
 				@"select COUNT(*) as cnt from dbo.PersonAssignment pa
@@ -154,7 +159,7 @@ namespace Teleopti.Support.Security
 			return true;
 		}
 
-		private void setPersonAssignmentDate(IDatabaseArguments commandLineArgument)
+		private void setPersonAssignmentDate(UpgradeCommand commandLineArgument)
 		{
 			if (personAssignmentsConverted(commandLineArgument))
 				return;

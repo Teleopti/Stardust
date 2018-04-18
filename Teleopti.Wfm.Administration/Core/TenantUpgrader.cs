@@ -62,7 +62,7 @@ namespace Teleopti.Wfm.Administration.Core
 			}
 
 			//security 
-			var dbArgs = new DatabaseArguments
+			var dbArgs = new UpgradeCommand
 			{
 				ApplicationDbConnectionString = appConnstring,
 				ApplicationDbConnectionStringToStore = appConnstring,

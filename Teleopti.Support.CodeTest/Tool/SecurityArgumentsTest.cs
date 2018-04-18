@@ -14,8 +14,8 @@ namespace Teleopti.Support.CodeTest.Tool
 		public void ShouldDeliverConnectionStringBasedOnBaseConnstring()
 		{
 			var argsArray = arguments.Split(' ');
-			var commandArgs = new CommandLineArgument(argsArray);
-			var dbArgs =  commandArgs.GetDatabaseArguments();
+			var commandArgs = UpgradeCommand.Parse(argsArray);
+			var dbArgs = commandArgs;
 			dbArgs.ApplicationDbConnectionString.Should().Not.Be.Empty();
 		}
 	}

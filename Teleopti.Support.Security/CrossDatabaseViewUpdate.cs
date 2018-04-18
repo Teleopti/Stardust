@@ -13,7 +13,7 @@ namespace Teleopti.Support.Security
 			_updateCrossDatabaseView = updateCrossDatabaseView;
 		}
 
-		public int Execute(IDatabaseArguments commandLineArgument)
+		public int Execute(UpgradeCommand commandLineArgument)
 		{
 			log.Debug("Link Analytics to Agg datatbase ...");
 

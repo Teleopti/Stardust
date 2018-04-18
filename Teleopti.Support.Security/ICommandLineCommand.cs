@@ -7,7 +7,7 @@ namespace Teleopti.Support.Security
 {
     internal interface ICommandLineCommand
     {
-        int Execute(IDatabaseArguments databaseArguments);
+        int Execute(UpgradeCommand databaseArguments);
     }
 
 	internal abstract class CommandLineCommandWithFixChecker : ICommandLineCommand
@@ -49,6 +49,6 @@ namespace Teleopti.Support.Security
 			command.ExecuteNonQuery();
 		}
 
-		public abstract int Execute(IDatabaseArguments databaseArguments);
+		public abstract int Execute(UpgradeCommand databaseArguments);
 	}
 }

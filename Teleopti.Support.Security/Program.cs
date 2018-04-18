@@ -22,18 +22,9 @@ namespace Teleopti.Support.Security
 
 			try
 			{
-				var commandLineArgument = new CommandLineArgument(args);
-				var arguments = commandLineArgument.GetDatabaseArguments();
-				if (arguments.CheckTenantConnectionStrings)
-				{
-					var tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(arguments.TenantStoreConnectionString);
-					var checker = new CheckTenantConnectionStrings(tenantUnitOfWorkManager, tenantUnitOfWorkManager);
-					checker.CheckConnectionStrings(arguments.TenantStoreConnectionString);
-					log.Debug("Teleopti.Support.Security successful");
-					return;
-				}
+				var command = UpgradeCommand.Parse(args);
 				var upgrade = new UpgradeRunner();
-				upgrade.Upgrade(arguments);
+				upgrade.Upgrade(command);
 			}
 			catch (Exception e)
 			{
@@ -46,7 +37,7 @@ namespace Teleopti.Support.Security
 
 		private static void appDomainUnhandledException(object sender, UnhandledExceptionEventArgs e)
 		{
-			handleError((Exception)e.ExceptionObject);
+			handleError((Exception) e.ExceptionObject);
 		}
 
 		private static void handleError(Exception e)

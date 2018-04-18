@@ -3,7 +3,7 @@ namespace Teleopti.Support.Security
 
 	public class ReportTextsCommand :ICommandLineCommand
 	{
-		public int Execute(IDatabaseArguments commandLineArgument)
+		public int Execute(UpgradeCommand commandLineArgument)
 		{
 			return TextLoader.LoadAllTextsToDatabase(commandLineArgument.AnalyticsDbConnectionString);
 		}

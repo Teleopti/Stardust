@@ -8,7 +8,7 @@ namespace Teleopti.Support.Security
 	{
 		private static readonly ILog log = LogManager.GetLogger(typeof(Program));
 
-		public int Execute(IDatabaseArguments commandLineArgument)
+		public int Execute(UpgradeCommand commandLineArgument)
 		{
 			//Select database version 
 			using (SqlConnection connection = new SqlConnection(commandLineArgument.AnalyticsDbConnectionString))

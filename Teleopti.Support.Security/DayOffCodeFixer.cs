@@ -16,7 +16,7 @@ namespace Teleopti.Support.Security
 		{
 		}
 		
-		public override int Execute(IDatabaseArguments databaseArguments)
+		public override int Execute(UpgradeCommand databaseArguments)
 		{
 			using (var appConnection = new SqlConnection(databaseArguments.ApplicationDbConnectionString))
 			using (var analyticsConnection = new SqlConnection(databaseArguments.AnalyticsDbConnectionString))
