@@ -21,10 +21,8 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Scheduling.PerformanceTest.Infrastructure
 {
 	[Category("EventHandlingAfterSaveSchedule")]
-	[Setting("OptimizeScheduleChangedEvents_DontUseFromWeb", true)]
-	[InfrastructureTest]
-	[UseWebToggles]
-	public class EventHandlingAfterSaveScheduleTest
+	[IntegrationIoCTest]
+	public class EventHandlingAfterSaveScheduleTest 
 	{
 		public IPersonRepository Persons;
 		public IBusinessUnitRepository BusinessUnits;
@@ -41,15 +39,16 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest.Infrastructure
 
 		public HangfireUtilities Hangfire;
 		public TestLog TestLog;
+		public HangfireClientStarter HangfireClientStarter;
 
 		[Test]
-		[RealHangfire]
 		public void MeasurePerformance()
 		{
 			const int absDayLength = 3;
 			const int absEveryXDay = 40;
 			
 			PingWeb.Execute();
+			HangfireClientStarter.Start();
 			
 			Guid businessUnitId;
 			const string logOnDatasource = "Teleopti WFM";

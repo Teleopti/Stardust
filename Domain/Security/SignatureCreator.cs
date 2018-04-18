@@ -7,27 +7,31 @@ namespace Teleopti.Ccc.Domain.Security
 {
 	public class SignatureCreator
 	{
-		private readonly RSACryptoServiceProvider provider;
+		private readonly Lazy<RSACryptoServiceProvider> provider;
 
 		public SignatureCreator(IConfigReader configReader)
 		{
-			provider = new RSACryptoServiceProvider();
-			provider.ImportParameters(new RSAParameters
+			provider = new Lazy<RSACryptoServiceProvider>(() =>
 			{
-				D = Convert.FromBase64String(configReader.AppConfig("CertificateD")),
-				DP = Convert.FromBase64String(configReader.AppConfig("CertificateDP")),
-				DQ = Convert.FromBase64String(configReader.AppConfig("CertificateDQ")),
-				Exponent = Convert.FromBase64String(configReader.AppConfig("CertificateExponent")),
-				InverseQ = Convert.FromBase64String(configReader.AppConfig("CertificateInverseQ")),
-				Modulus = Convert.FromBase64String(configReader.AppConfig("CertificateModulus")),
-				P = Convert.FromBase64String(configReader.AppConfig("CertificateP")),
-				Q = Convert.FromBase64String(configReader.AppConfig("CertificateQ"))
+				var ret = new RSACryptoServiceProvider();
+				ret.ImportParameters(new RSAParameters
+				{
+					D = Convert.FromBase64String(configReader.AppConfig("CertificateD")),
+					DP = Convert.FromBase64String(configReader.AppConfig("CertificateDP")),
+					DQ = Convert.FromBase64String(configReader.AppConfig("CertificateDQ")),
+					Exponent = Convert.FromBase64String(configReader.AppConfig("CertificateExponent")),
+					InverseQ = Convert.FromBase64String(configReader.AppConfig("CertificateInverseQ")),
+					Modulus = Convert.FromBase64String(configReader.AppConfig("CertificateModulus")),
+					P = Convert.FromBase64String(configReader.AppConfig("CertificateP")),
+					Q = Convert.FromBase64String(configReader.AppConfig("CertificateQ"))
+				});
+				return ret;
 			});
 		}
 
 		public string Create(string content)
 		{
-			return Convert.ToBase64String(provider.SignData(Encoding.UTF8.GetBytes(content), CryptoConfig.MapNameToOID("SHA1")));
+			return Convert.ToBase64String(provider.Value.SignData(Encoding.UTF8.GetBytes(content), CryptoConfig.MapNameToOID("SHA1")));
 		}
 	}
 }

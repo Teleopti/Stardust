@@ -3,7 +3,7 @@ using log4net.Config;
 using NUnit.Framework;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 
-namespace Teleopti.Ccc.Scheduling.PerformanceTest
+namespace Teleopti.Ccc.Scheduling.PerformanceTest.Domain
 {
 	[SetUpFixture]
 	public class NUnitSetup

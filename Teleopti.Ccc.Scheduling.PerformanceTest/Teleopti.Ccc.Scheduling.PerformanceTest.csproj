@@ -60,13 +60,13 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AppConfigs.cs" />
-    <Compile Include="AssertConfigurationTest.cs" />
+    <Compile Include="Domain\NUnitSetup.cs" />
     <Compile Include="Infrastructure\EventHandlingAfterSaveScheduleTest.cs" />
     <Compile Include="Domain\FullSchedulingStardustTest.cs" />
     <Compile Include="Domain\FullSchedulingTest.cs" />
     <Compile Include="Infrastructure\HangfireLogger.cs" />
     <Compile Include="Domain\IntradayOptTest.cs" />
-    <Compile Include="NUnitSetup.cs" />
+    <Compile Include="Infrastructure\NUnitSetup.cs" />
     <Compile Include="WebAction.cs" />
   </ItemGroup>
   <ItemGroup>

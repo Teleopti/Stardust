@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
-using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 
 namespace Teleopti.Ccc.TestCommon.IoC
 {
@@ -95,9 +94,8 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		private void setupBuilder(ISystem system)
 		{
 			var config = Config();
-
-			var toggles = createToggleManager();
-
+			var toggles = Toggles();
+			(_fixture as IConfigureToggleManager)?.Configure(toggles);
 			var args = new IocArgs(config);
 			if (QueryAllAttributes<UseIocForFatClientAttribute>().Any())
 				args.IsFatClient = true;
@@ -120,22 +118,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 			Setup(system, configuration);
 			(_fixture as ISetup)?.Setup(system, configuration);
-		}
-
-		private IToggleManager createToggleManager()
-		{
-			IToggleManager toggles;
-			if (QueryAllAttributes<UseWebTogglesAttribute>().Any())
-			{
-				toggles = new ToggleQuerier(TestSiteConfigurationSetup.URL?.ToString());
-			}
-			else
-			{
-				toggles = Toggles();
-				(_fixture as IConfigureToggleManager)?.Configure((FakeToggleManager) toggles);
-			}
-
-			return toggles;
 		}
 
 		private void disposeContainer()
