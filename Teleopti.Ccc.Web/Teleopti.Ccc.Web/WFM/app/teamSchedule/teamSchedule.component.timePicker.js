@@ -8,7 +8,8 @@
 			bindings: {
 				ngModel: "=?",
 				date: '<?',
-				timezone: '<?'
+				timezone: '<?',
+				minuteStep: '<?'
 			},
 			controller: timePickerCtrl
 		});
@@ -19,16 +20,16 @@
 		var ctrl = this;
 
 		ctrl.dateTimeObj = moment('1900-01-01 ' + serviceDateFormatHelper.getTimeOnly(ctrl.ngModel)).toDate();
+		var meridianInfo = getMeridiemInfoFromMoment($locale);
+		ctrl.showMeridian = meridianInfo.showMeridian;
+		ctrl.meridians = ctrl.showMeridian ? [meridianInfo.am, meridianInfo.pm] : [];
 
 		ctrl.$onChanges = function () {
 			ctrl.onTimeChange();
 		}
-
-		var meridianInfo = getMeridiemInfoFromMoment($locale);
-
-		ctrl.showMeridian = meridianInfo.showMeridian;
-		ctrl.meridians = ctrl.showMeridian ? [meridianInfo.am, meridianInfo.pm] : [];
-		ctrl.minuteStep = 5;
+		ctrl.$onInit = function () {
+			ctrl.minuteStep = ctrl.minuteStep || 1;
+		}
 
 		ctrl.onTimeChange = function () {
 			if (!ctrl.dateTimeObj) {
