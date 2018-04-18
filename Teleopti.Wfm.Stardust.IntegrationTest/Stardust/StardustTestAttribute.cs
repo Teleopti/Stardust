@@ -17,7 +17,7 @@ using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 
 namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 {
-	public class StardustTestAttribute : IntegrationIoCTestAttribute
+	public class StardustTestAttribute : IntegrationTestAttribute
 	{
 		public IComponentContext Container;
 		public DefaultDataCreator DefaultDataCreator;

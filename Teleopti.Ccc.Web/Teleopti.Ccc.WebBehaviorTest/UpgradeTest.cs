@@ -12,7 +12,7 @@ using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
 
 namespace Teleopti.Ccc.WebBehaviorTest
 {
-	public class FullIntegrationTestAttribute : IntegrationIoCTestAttribute
+	public class FullIntegrationTestAttribute : IntegrationTestAttribute
 	{
 		public override void BeforeTest(ITest testDetails)
 		{

@@ -410,7 +410,7 @@
     <Compile Include="IoC\ISetupConfiguration.cs" />
     <Compile Include="IoC\ISystem.cs" />
     <Compile Include="IoC\ITestDoubleFor.cs" />
-    <Compile Include="IoC\IntegrationIoCTestAttribute.cs" />
+    <Compile Include="IoC\IntegrationTestAttribute.cs" />
     <Compile Include="IoC\ITestInterceptor.cs" />
     <Compile Include="IoC\RealPermissionsAttribute.cs" />
     <Compile Include="IoC\RepositoriesMustNotBeUsedException.cs" />

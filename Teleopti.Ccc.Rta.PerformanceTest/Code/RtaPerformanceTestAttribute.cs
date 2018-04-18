@@ -17,7 +17,7 @@ using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 
 namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 {
-	public class RtaPerformanceTestAttribute : IntegrationIoCTestAttribute
+	public class RtaPerformanceTestAttribute : IntegrationTestAttribute
 	{
 		public IComponentContext Container;
 		public DefaultDataCreator DefaultDataCreator;

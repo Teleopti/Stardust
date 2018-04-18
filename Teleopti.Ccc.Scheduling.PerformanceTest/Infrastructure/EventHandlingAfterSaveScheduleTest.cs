@@ -21,7 +21,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Scheduling.PerformanceTest.Infrastructure
 {
 	[Category("EventHandlingAfterSaveSchedule")]
-	[IntegrationIoCTest]
+	[IntegrationTest]
 	public class EventHandlingAfterSaveScheduleTest 
 	{
 		public IPersonRepository Persons;

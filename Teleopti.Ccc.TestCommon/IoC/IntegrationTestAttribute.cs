@@ -8,7 +8,7 @@ using Teleopti.Ccc.Infrastructure.Toggle;
 namespace Teleopti.Ccc.TestCommon.IoC
 {
 	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface, AllowMultiple = false)]
-	public class IntegrationIoCTestAttribute : Attribute, ITestAction
+	public class IntegrationTestAttribute : Attribute, ITestAction
 	{
 		private IoCTestService _service;
 
