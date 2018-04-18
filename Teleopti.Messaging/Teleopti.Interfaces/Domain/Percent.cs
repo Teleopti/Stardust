@@ -198,15 +198,37 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: robink
         /// Created date: 2008-02-12
         /// </remarks>
-        public static bool TryParse(string value, out Percent result)
+        public static bool TryParse(string value, out Percent result, bool tryDifferentCultureForDoubleValue = false)
         {
             value = value.Replace(CultureInfo.CurrentCulture.NumberFormat.PercentSymbol, "");
-            double valueAsDouble;
-            if (double.TryParse(value, out valueAsDouble))
-            {
-                result = new Percent(valueAsDouble / 100d);
-                return true;
-            }
+            double valueAsDouble;			
+
+			if (tryDifferentCultureForDoubleValue)
+			{
+				CultureInfo CultureInfo = new CultureInfo("en-US");
+				var numberInfoFormat = (NumberFormatInfo)CultureInfo.NumberFormat.Clone();
+				if (double.TryParse(value, NumberStyles.AllowDecimalPoint, numberInfoFormat, out valueAsDouble))
+				{
+					result = new Percent(valueAsDouble / 100d);
+					return true;
+				}
+
+				numberInfoFormat.NumberDecimalSeparator = ",";
+				if (double.TryParse(value, NumberStyles.AllowDecimalPoint, numberInfoFormat, out valueAsDouble))
+				{
+					result = new Percent(valueAsDouble / 100d);
+					return true;
+				}
+
+			} else
+			{
+				if (double.TryParse(value, out valueAsDouble))
+				{
+					result = new Percent(valueAsDouble / 100d);
+					return true;
+				}
+			}
+			
             result = new Percent();
             return false;
         }

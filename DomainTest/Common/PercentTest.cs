@@ -93,14 +93,26 @@ namespace Teleopti.Ccc.DomainTest.Common
             Thread.CurrentThread.CurrentCulture = threadCulture;
         }
 
-        /// <summary>
-        /// Verifies to string with decimals work.
-        /// </summary>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-04-28
-        /// </remarks>
-        [Test]
+
+		[Test]
+		public void ShouldParseValueWhenDoubleValueWithComma()
+		{
+			string testValue = "82,53";
+
+			Percent result;
+			Assert.IsTrue(Percent.TryParse(testValue, out result, true));
+			Assert.AreEqual(0.8253, result.Value);
+		}
+
+
+		/// <summary>
+		/// Verifies to string with decimals work.
+		/// </summary>
+		/// <remarks>
+		/// Created by: robink
+		/// Created date: 2008-04-28
+		/// </remarks>
+		[Test]
         public void VerifyToStringWithDecimalsWork()
         {
             NumberFormatInfo nfi = new NumberFormatInfo();

@@ -495,6 +495,22 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		}
 
 		[Test]
+		public void ShouldSupportBothPointAndCommaSeperatorForDoubleValue()
+		{
+			setPerson(Guid.Empty);
+
+			const string the10thRecord = "20171120;1;Kalle;Pettersson;Quality Score;1;Percent;87,25";
+			const string the11thRecord = "20171120;1;Kalle;Pettersson;Quality Score;11;Percent;45.66";
+			var records = new List<string> { the10thRecord, the11thRecord };
+			var fileData = createFileData(records);
+			
+			var result = Target.Process(fileData);
+
+			result.HasError.Should().Be.False();
+			result.ValidRecords.Count.Should().Be.EqualTo(2);
+		}
+
+		[Test]
 		public void ShouldWorkInTheCaseOfMultipleValidRowsOfOneAgentAndDifferentMeasureTypes()
 		{
 			PerformanceRepository.Add(new ExternalPerformance {ExternalId = 1, DataType = ExternalPerformanceDataType.Percent});

@@ -158,12 +158,25 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 
 		private bool measureTypeIsValidDecimalNumber(string value, out double result)
 		{
-			return double.TryParse(value, out result);
+			CultureInfo CultureInfo = new CultureInfo("en-US");
+			var numberInfoFormat = (NumberFormatInfo)CultureInfo.NumberFormat.Clone();
+			if (double.TryParse(value, NumberStyles.AllowDecimalPoint, numberInfoFormat, out result))
+			{
+				return true;
+			}
+
+			numberInfoFormat.NumberDecimalSeparator = ",";
+			if (double.TryParse(value, NumberStyles.AllowDecimalPoint, numberInfoFormat, out result))
+			{
+				return true;
+			}
+
+			return false;
 		}
 
 		private bool measureTypeIsValidPercentage(string value, out Percent result)
 		{
-			return Percent.TryParse(value, out result);
+			return Percent.TryParse(value, out result, true);
 		}
 	}
 }
