@@ -3,7 +3,7 @@
     <div class="con-row">
       <div class="con-flex">
         <mat-form-field>
-          <input matInput placeholder="Search" [formControl]="searchControl" [(ngModel)]="searchQuery" (keyup.enter)="onSearch()" data-test-searchinput>
+          <input matInput placeholder="Search" [formControl]="searchControl" (keyup.enter)="onSearch()" data-test-searchinput>
           <span matPrefix>
             <i class="mdi mdi-magnify"></i>&nbsp;
           </span>
