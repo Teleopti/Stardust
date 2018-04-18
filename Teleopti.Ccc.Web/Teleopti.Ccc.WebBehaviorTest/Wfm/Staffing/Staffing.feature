@@ -32,7 +32,6 @@ Scenario: Show bpo exchange page
 	When I press the BPO exchange button 
 	Then I should see the bpo exchange page
 
-@OnlyRunIfEnabled('WFM_Unified_Skill_Group_Management_45417')
 Scenario: Show manage skill group page
 	Given I am viewing staffing page
 	When I press the create skill button 

@@ -13,18 +13,6 @@ I want to be able to monitor my part of the business
         And There is a skill to monitor called 'Skill B' with queue id '7' and queue name 'queue2' and activity 'activity2'
         And There is an email-like skill to monitor called 'Skill BackOffice' with queue id '3' and queue name 'queue3' and activity 'activity3'
 
-    @OnlyRunIfDisabled('WFM_Unified_Skill_Group_Management_45417')
-    Scenario: Create Skill Area
-        Given I am viewing intraday page
-        And Local storage is reset
-        And I select to create a new Skill Area
-        And I name the Skill Area 'my Area'
-        And I select the skill 'Skill A'
-        When I am done creating Skill Area
-        Then I select to monitor skill area 'my Area'
-        And I should monitor 'my Area'
-
-    @OnlyRunIfEnabled('WFM_Unified_Skill_Group_Management_45417')
     @OnlyRunIfDisabled('WFM_Modify_Skill_Groups_43727')
     Scenario: Create Skill Group
         Given I am viewing intraday page
@@ -37,7 +25,6 @@ I want to be able to monitor my part of the business
         And I should monitor 'my Area'
 
 @Ignore
-    @OnlyRunIfEnabled('WFM_Unified_Skill_Group_Management_45417')
     @OnlyRunIfEnabled('WFM_Modify_Skill_Groups_43727')
     Scenario: Create Skill Group in SGM
         Given I am viewing intraday page
@@ -52,7 +39,6 @@ I want to be able to monitor my part of the business
         Then I should monitor 'my Area'
 
 	@Ignore
-    @OnlyRunIfEnabled('WFM_Unified_Skill_Group_Management_45417')
     @OnlyRunIfEnabled('WFM_Modify_Skill_Groups_43727')
     Scenario: Rename Skill Group in SGM
         Given I am viewing intraday page
@@ -70,7 +56,6 @@ I want to be able to monitor my part of the business
         And I pick the skillgroup 'my Area 2'
         Then I should monitor 'my Area 2'
 
-    @OnlyRunIfEnabled('WFM_Unified_Skill_Group_Management_45417')
     @OnlyRunIfEnabled('WFM_Modify_Skill_Groups_43727')
     Scenario: Add Skill to Skill Group in SGM
         Given there is a Skill Area called 'SkillArea A' that monitors skills 'Skill B'
@@ -84,7 +69,6 @@ I want to be able to monitor my part of the business
         And I pick the skillgroup 'SkillArea A'
         Then I should see 'Skill A' as included skill
 
-    @OnlyRunIfEnabled('WFM_Unified_Skill_Group_Management_45417')
     @OnlyRunIfEnabled('WFM_Modify_Skill_Groups_43727')
     Scenario: Remove Skill from Skill Group in SGM
         Given there is a Skill Area called 'SkillArea A' that monitors skills 'Skill A, Skill B'
