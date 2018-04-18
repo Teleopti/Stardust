@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 		public UserDeviceService Target;
 		public FakeUserDeviceRepository UserDeviceRepository;
 		public FakeLoggedOnUser LogonUser;
+		
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();

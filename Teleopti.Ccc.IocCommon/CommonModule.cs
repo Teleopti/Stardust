@@ -87,6 +87,7 @@ namespace Teleopti.Ccc.IocCommon
 			builder.RegisterModule<GamificationAreaModule>();
 			builder.RegisterModule(new ReportModule(_configuration));
 			builder.RegisterModule(new ApplicationInsightsModule());
+			builder.RegisterModule<NotificationModule>();
 		}
 
 		public static IToggleManager ToggleManagerForIoc(IocArgs iocArgs)

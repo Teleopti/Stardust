@@ -856,7 +856,6 @@
     <Compile Include="Areas\HealthCheck\Controllers\ApplicationController.cs" />
     <Compile Include="Areas\HealthCheck\HealthCheckAreaRegistration.cs" />
     <Compile Include="Areas\Messages\Controllers\ApplicationController.cs" />
-    <Compile Include="Areas\Messages\Core\Ioc\NotificationModule.cs" />
     <Compile Include="Areas\Messages\Models\PersonViewModel.cs" />
     <Compile Include="Areas\Messages\Models\SendMessageViewModel.cs" />
     <Compile Include="Areas\Messages\MessagesAreaRegistration.cs" />

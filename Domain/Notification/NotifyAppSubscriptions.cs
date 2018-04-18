@@ -27,8 +27,13 @@ namespace Teleopti.Ccc.Domain.Notification
 		private readonly IConfigReader _configReader;
 		private readonly ICurrentDataSource _dataSource;
 		private readonly ICurrentBusinessUnit _currentBusinessUnit;
-		public NotifyAppSubscriptions(IHttpServer httpServer, UserDeviceService userDeviceService,
-			IConfigReader configReader, ICurrentDataSource dataSource, ICurrentBusinessUnit currentBusinessUnit)
+
+		public NotifyAppSubscriptions(
+			IHttpServer httpServer,
+			UserDeviceService userDeviceService,
+			IConfigReader configReader,
+			ICurrentDataSource dataSource,
+			ICurrentBusinessUnit currentBusinessUnit)
 		{
 			_httpServer = httpServer;
 			_userDeviceService = userDeviceService;
@@ -57,7 +62,7 @@ namespace Teleopti.Ccc.Domain.Notification
 				{
 					var logOnContext =
 						new InputWithLogOnContext(_dataSource.CurrentName(), _currentBusinessUnit.Current().Id.GetValueOrDefault());
-					var notification = new { title = messages.Subject, body = string.Join(" ", messages.Messages) };
+					var notification = new {title = messages.Subject, body = string.Join(" ", messages.Messages)};
 
 					dynamic requestBody = new ExpandoObject();
 					requestBody.registration_ids = tokens;
@@ -66,18 +71,20 @@ namespace Teleopti.Ccc.Domain.Notification
 					{
 						messages.Data = new ExpandoObject();
 					}
+
 					messages.Data.title = notification.title;
 					messages.Data.body = notification.body;
-					requestBody.data = (object)messages.Data;
+					requestBody.data = (object) messages.Data;
 					var responseMessage = await _httpServer.Post("https://fcm.googleapis.com/fcm/send",
-						(object)requestBody,
-						s => new NameValueCollection { { "Authorization", key } });
+						(object) requestBody,
+						s => new NameValueCollection {{"Authorization", key}});
 
 					var invalidTokens = await getUserDevicesInvalidTokenAsync(tokens, responseMessage);
 					if (invalidTokens.IsNullOrEmpty())
 					{
 						continue;
 					}
+
 					PersistUserDevicesSettingValue(logOnContext, person, invalidTokens);
 				}
 				catch (Exception e)
@@ -86,6 +93,7 @@ namespace Teleopti.Ccc.Domain.Notification
 					hasFail = true;
 				}
 			}
+
 			return !hasFail;
 		}
 
@@ -99,13 +107,13 @@ namespace Teleopti.Ccc.Domain.Notification
 			{
 				return invalidTokens;
 			}
+
 			var content = await responseMessage.Content.ReadAsStringAsync();
 			if (!content.IsNullOrEmpty())
 			{
 				var dsResponse = JsonConvert.DeserializeObject<FCMSendMessageResponse>(content);
 				if (dsResponse?.failure > 0)
 				{
-
 					var i = 0;
 					foreach (var mr in dsResponse.results)
 					{
@@ -113,12 +121,13 @@ namespace Teleopti.Ccc.Domain.Notification
 						{
 							invalidTokens.Add(tokens[i]);
 						}
+
 						i++;
 					}
 				}
 			}
-			return invalidTokens;
 
+			return invalidTokens;
 		}
 
 		[AsSystem, UnitOfWork]
@@ -127,6 +136,5 @@ namespace Teleopti.Ccc.Domain.Notification
 		{
 			_userDeviceService.Remove(invalidTokens);
 		}
-
 	}
 }

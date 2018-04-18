@@ -31,9 +31,6 @@ namespace Teleopti.Ccc.DomainTest.Notification
 		public FakeUserDeviceRepository UserDeviceRepository;
 		public FakeHttpServer Server;
 		public FakeConfigReader ConfigReader;
-		public ICurrentUnitOfWorkFactory CurrentUnitOfWorkFactory;
-		public FakeLoggedOnUser LoggedOnUser;
-
 
 		[Test]
 		public async Task ShouldNotNotifyWhenNoLicense()
@@ -47,12 +44,11 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			Sender.SentNotifications.Count.Should().Be.EqualTo(0);
 		}
 
-
 		[Test]
 		public async Task ShouldNotifyAndSetCustomerName()
 		{
 			GlobalSettingDataRepository.PersistSettingValue("SmsSettings",
-				new SmsSettings { EmailFrom = "sender@teleopti.com", NotificationSelection = NotificationType.Email });
+				new SmsSettings {EmailFrom = "sender@teleopti.com", NotificationSelection = NotificationType.Email});
 
 			var messages = new NotificationMessage();
 			var person = PersonFactory.CreatePersonWithGuid("a", "a");
@@ -68,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 		public async Task ShouldSendNotification()
 		{
 			GlobalSettingDataRepository.PersistSettingValue("SmsSettings",
-				new SmsSettings { EmailFrom = "sender@teleopti.com", NotificationSelection = NotificationType.Email });
+				new SmsSettings {EmailFrom = "sender@teleopti.com", NotificationSelection = NotificationType.Email});
 
 			var messages = new NotificationMessage();
 			var person = PersonFactory.CreatePersonWithGuid("a", "a");
@@ -90,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 		public async Task ShouldSendAppNotification()
 		{
 			GlobalSettingDataRepository.PersistSettingValue("SmsSettings",
-				new SmsSettings { EmailFrom = "sender@teleopti.com", NotificationSelection = NotificationType.Email, IsMobileNotificationEnabled = true });
+				new SmsSettings {EmailFrom = "sender@teleopti.com", NotificationSelection = NotificationType.Email, IsMobileNotificationEnabled = true});
 
 			var person = PersonFactory.CreatePersonWithGuid("a", "a");
 
@@ -103,7 +99,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			ConfigReader.FakeSetting("FCM", "asdf");
 
 			var messages = new NotificationMessage();
-			
+
 			person.Email = "aa@teleopti.com";
 			var notificationHeader = new NotificationHeader
 			{
@@ -123,7 +119,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 		public async Task ShouldSendNotificationForPersons()
 		{
 			GlobalSettingDataRepository.PersistSettingValue("SmsSettings",
-				new SmsSettings { EmailFrom = "sender@teleopti.com", NotificationSelection = NotificationType.Email });
+				new SmsSettings {EmailFrom = "sender@teleopti.com", NotificationSelection = NotificationType.Email});
 
 			var messages = new NotificationMessage();
 			var person1 = PersonFactory.CreatePersonWithGuid("a", "a");
@@ -158,16 +154,16 @@ namespace Teleopti.Ccc.DomainTest.Notification
 		public async Task ShouldRemoveUserDevicesInvalidTokensAfterFCMResponseResultWithError()
 		{
 			GlobalSettingDataRepository.PersistSettingValue("SmsSettings",
-				new SmsSettings { EmailFrom = "sender@teleopti.com", NotificationSelection = NotificationType.Email, IsMobileNotificationEnabled = true });
+				new SmsSettings {EmailFrom = "sender@teleopti.com", NotificationSelection = NotificationType.Email, IsMobileNotificationEnabled = true});
 
 			var person = PersonFactory.CreatePersonWithGuid("a", "a");
-			UserDeviceRepository.Add(new UserDevice{Token= "valid-id-token",Owner = person});
-			UserDeviceRepository.Add(new UserDevice { Token = "invalid-id-token", Owner = person });
+			UserDeviceRepository.Add(new UserDevice {Token = "valid-id-token", Owner = person});
+			UserDeviceRepository.Add(new UserDevice {Token = "invalid-id-token", Owner = person});
 
 			ConfigReader.FakeSetting("FCM", "asdf");
 
 			var messages = new NotificationMessage();
-			
+
 			person.Email = "aa@teleopti.com";
 
 			var responseMessage = new HttpResponseMessage(HttpStatusCode.OK);
@@ -196,7 +192,6 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			{
 				UserDeviceRepository.Find(person).Single().Token.Should().Be("valid-id-token");
 			}
-
 		}
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
@@ -213,7 +208,6 @@ namespace Teleopti.Ccc.DomainTest.Notification
 		}
 	}
 
-	
 
 	public class FakeNotificationSender : INotificationSender
 	{

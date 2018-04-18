@@ -4,14 +4,13 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Notification;
 using Teleopti.Ccc.Infrastructure.Aop;
 
-namespace Teleopti.Ccc.Web.Areas.Messages.Core.Ioc
+namespace Teleopti.Ccc.IocCommon.Configuration
 {
-	public class NotificationModule : Module
+	internal class NotificationModule : Module
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<SignificantChangeChecker>().As<ISignificantChangeChecker>();
-
 			builder.RegisterType<EmailSender>().As<INotificationSender>();
 			builder.RegisterType<NotificationValidationCheck>().As<INotificationValidationCheck>();
 			builder.RegisterType<EmailConfiguration>().As<IEmailConfiguration>();
