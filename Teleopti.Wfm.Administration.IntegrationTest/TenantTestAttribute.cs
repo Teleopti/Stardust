@@ -29,7 +29,8 @@ namespace Teleopti.Wfm.Administration.IntegrationTest
 			system.AddModule(new WfmAdminModule2(configuration));
 			system.UseTestDouble<ConsoleLogger>().For<IUpgradeLog>();
 			system.UseTestDouble<FakeHangfireCookie>().For<IHangfireCookie>();
-			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();			
+			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
+			system.UseTestDouble<CurrentTenantUserFake>().For<ICurrentTenantUser>();
 
 			_tenantUnitOfWorkManager = TenantUnitOfWorkForTest();
 			system.AddService(_tenantUnitOfWorkManager);
