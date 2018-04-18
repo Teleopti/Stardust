@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             Assert.That(org.ActivityCollection.Count, Is.EqualTo(loadedAggregateFromDatabase.ActivityCollection.Count));
 
-            Assert.That(org.ActivityCollection[0].Name, Is.EqualTo(loadedAggregateFromDatabase.ActivityCollection[0].Name));
+            Assert.That(org.ActivityCollection, Is.EquivalentTo(loadedAggregateFromDatabase.ActivityCollection));
         }
         [Test]
         public void VerifyCanPersistProperties()
