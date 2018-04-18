@@ -16,6 +16,12 @@ Teleopti.MyTimeWeb.BadgeCountsDropdown = (function ($) {
 		});
 	};
 
+	var resetPeriodOnDropdownHidden = function (viewModel) {
+		$('#BadgePanel').on('hidden.bs.dropdown', function (ev) {
+			viewModel.resetPeriod();
+		});
+	};
+
 	var findStartDateOfWeek = function (dateMoment, weekStart) {
 		var day = dateMoment.day();
 		var offset = day - weekStart;
@@ -55,6 +61,7 @@ Teleopti.MyTimeWeb.BadgeCountsDropdown = (function ($) {
 				vm.fetchBadgeCounts();
 
 				stopClosingOnClick();
+				resetPeriodOnDropdownHidden(vm);
 			});
 		},
 	};

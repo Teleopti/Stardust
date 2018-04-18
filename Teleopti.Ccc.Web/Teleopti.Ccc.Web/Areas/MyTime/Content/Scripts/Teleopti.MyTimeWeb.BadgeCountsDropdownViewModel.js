@@ -40,6 +40,19 @@ Teleopti.MyTimeWeb.BadgeCountsDropdownViewModel = function BadgeCountsDropdownVi
 		self.endMoment(self.startMoment().clone().endOf(type));
 	};
 
+	var getCurrentMoment = (function (m) {
+		var current = m.clone();
+		return function () {
+			return current.clone();
+		};
+	})(startMoment);
+
+	var resetPeriod = function () {
+		var type = self.periodType === 'Weekly' ? 'week' : 'month';
+		self.startMoment(getCurrentMoment());
+		self.endMoment(self.startMoment().clone().endOf(type));
+	};
+
 	self.fetch = function (from, to) {
 		ajax.Ajax({
 			url: 'Portal/GetBadges',
@@ -67,6 +80,11 @@ Teleopti.MyTimeWeb.BadgeCountsDropdownViewModel = function BadgeCountsDropdownVi
 
 	self.clickNext = function () {
 		incPeriod(1);
+		self.fetchBadgeCounts();
+	};
+
+	self.resetPeriod = function () {
+		resetPeriod();
 		self.fetchBadgeCounts();
 	};
 };
