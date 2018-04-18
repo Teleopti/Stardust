@@ -66,3 +66,4 @@ Teleopti.MyTimeWeb.BadgeCountsDropdown = (function ($) {
 		},
 	};
 })(jQuery);
+
