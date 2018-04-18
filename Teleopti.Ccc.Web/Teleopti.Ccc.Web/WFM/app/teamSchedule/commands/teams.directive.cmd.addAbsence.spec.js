@@ -1,4 +1,4 @@
-﻿describe('teamschedule add absence diretive test', function () {
+﻿fdescribe('teamschedule add absence diretive test', function () {
 	'use strict';
 
 	var fakeAbsenceService,
@@ -128,13 +128,13 @@
 
 			var result = setUp(moment('2015-01-01T00:00:00').toDate());
 
-			var startDateString = result.container[0].querySelectorAll('team-schedule-datepicker input')[0].value,
-				endDateString = result.container[0].querySelectorAll('team-schedule-datepicker input')[1].value,
-				startTimeString = result.container[0].querySelectorAll('.uib-timepicker input')[0].value
-					+ result.container[0].querySelectorAll('.uib-timepicker input')[1].value,
+			var startDateString = result.container[0].querySelectorAll('team-schedule-datepicker input')[0].value;
+			var endDateString = result.container[0].querySelectorAll('team-schedule-datepicker input')[1].value;
 
-				endTimeString = result.container[0].querySelectorAll('.uib-timepicker input')[2].value
-					+ result.container[0].querySelectorAll('.uib-timepicker input')[3].value;
+			var timePicker = result.container[0].querySelectorAll('.uib-timepicker input');
+			var startTimeString = timePicker[0].value + timePicker[1].value;
+
+			var endTimeString = timePicker[2].value + timePicker[3].value;
 
 			expect(serviceDateFormatHelper.getDateOnly(new Date(startDateString))).toBe('2015-01-01');
 			expect(serviceDateFormatHelper.getDateOnly(new Date(endDateString))).toBe('2015-01-01');
@@ -143,7 +143,7 @@
 			expect(endTimeString).toBe('1100');
 		});
 
-		it('should apply add fullday absence with correct data', function () {
+		fit('should apply add fullday absence with correct data', function () {
 
 			fakePermissions.setPermissions({ IsAddIntradayAbsenceAvailable: true, IsAddFullDayAbsenceAvailable: true });
 			var result = setUp(moment('2015-01-01T00:00:00').toDate());
@@ -267,16 +267,8 @@
 		var html = '<teamschedule-command-container date="curDate" configurations="configurations" timezone="timezone"></teamschedule-command-container>';
 		var scope = $rootScope.$new();
 
-		if (inputDate == null)
-			date = moment('2016-06-15').toDate();
-		else
-			date = inputDate;
-
-		if (inputConfigurations == null) {
-			configurations = {};
-		} else {
-			configurations = inputConfigurations;
-		}
+		date = inputDate || moment('2016-06-15').toDate();
+		configurations = inputConfigurations || {};
 
 		scope.curDate = date;
 		scope.configurations = configurations;
