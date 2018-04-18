@@ -20,7 +20,9 @@
 				});
 
 				scope.$watch(
-					function () { return scope.vm.getMoveToStartTimeStr(); },
+					function () {
+						return scope.vm.moveToTime;
+					},
 					function (newVal, oldVal) { scope.vm.updateInvalidAgents(); }, true);
 
 				var inputs = elem[0].querySelectorAll('input[type=text]');
@@ -60,13 +62,7 @@
 			return vm.nextDay ?
 				serviceDateFormatHelper.getDateOnly(moment(vm.selectedDate()).add(1, 'days')) : vm.selectedDate();
 		}
-
-		vm.getDefaultMoveToTime = function () {
-			return moment(vm.getDefaultMoveToStartTime()).format('HH:mm');
-		}
-		vm.setMoveToTime = function (date, time) {
-			vm.moveToTime = date + " " + time;
-		}
+		
 		vm.anyValidAgent = function () {
 			return vm.invalidAgents.length !== vm.selectedAgents.length;
 		}
@@ -77,7 +73,7 @@
 
 		vm.updateInvalidAgents = function () {
 			var currentTimezone = vm.getCurrentTimezone();
-			validator.validateMoveToTime(vm.scheduleMgtSvc, moment(vm.getMoveToStartTimeStr()), currentTimezone);
+			validator.validateMoveToTime(vm.scheduleMgtSvc, moment(vm.moveToTime), currentTimezone);
 			vm.invalidAgents = validator.getInvalidPeople();
 
 		};
@@ -86,13 +82,6 @@
 			var people = validator.getInvalidPeopleNameList().join(', ');
 			return people;
 		};
-
-		vm.getMoveToStartTimeStr = function () {
-			var dateStr = serviceDateFormatHelper.getDateOnly(vm.nextDay ? moment(vm.selectedDate()).add(1, 'days') : vm.selectedDate());
-			var timeStr = serviceDateFormatHelper.getTimeOnly(vm.moveToTime);
-			return dateStr + 'T' + timeStr;
-		};
-
 
 		vm.moveActivity = function () {
 			var requestData = getRequestData();
@@ -171,7 +160,7 @@
 
 			var requestData = {
 				PersonActivities: personActivities,
-				StartTime: vm.convertTime(vm.getMoveToStartTimeStr()),
+				StartTime: vm.convertTime(vm.moveToTime),
 				TrackedCommandInfo: { TrackId: vm.trackId }
 			};
 

@@ -5,9 +5,6 @@
 		.component('teamsTimePicker',
 		{
 			templateUrl: 'app/teamSchedule/html/teamsTimePicker.tpl.html',
-			//require: {
-			//	ngModelCtrl: "ngModel"
-			//},
 			bindings: {
 				ngModel: "=?",
 				date: '<?',
