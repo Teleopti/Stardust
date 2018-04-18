@@ -239,17 +239,23 @@
 			expect(activityData.TrackedCommandInfo.TrackId).toBe(vm.trackId);
 		});
 
-		it('should get correct move start time str', function () {
+		it('should get correct move start time when switch next day', function () {
 			var result = setUp('2018-03-05');
+			var timePickerCtrl = angular.element(result.commandElement[0].querySelector('teams-time-picker')).isolateScope().$ctrl;
 			var vm = result.commandControl;
 
-			vm.moveToTime = new Date('2018-03-05T10:30:00');
+			timePickerCtrl.dateTimeObj = moment(timePickerCtrl.dateTimeObj).hours(10).minutes(30);
 			vm.nextDay = false;
-			var startTimeStr = vm.getMoveToStartTimeStr();
-			expect(startTimeStr).toEqual('2018-03-05T10:30');
-			vm.nextDay = true;
-			startTimeStr = vm.getMoveToStartTimeStr();
-			expect(startTimeStr).toEqual('2018-03-06T10:30')
+			result.scope.$apply();
+
+			var nextDayEl = result.container[0].querySelector('md-switch');
+			nextDayEl.click();
+			result.scope.$apply();
+			expect(vm.moveToTime).toEqual('2018-03-06 10:30')
+
+			nextDayEl.click();
+			result.scope.$apply();
+			expect(vm.moveToTime).toEqual('2018-03-05 10:30')
 		});
 	}
 
@@ -279,7 +285,7 @@
 		commonTestsInDifferentLocale();
 	});
 
-	function setUp(inputDate) {
+	function setUp(inputDate ) {
 		var date;
 		var html = '<teamschedule-command-container date="curDate" timezone="timezone"></teamschedule-command-container>';
 		var scope = $rootScope.$new();
@@ -299,12 +305,13 @@
 		vm.setReady(true);
 		vm.setActiveCmd('MoveActivity');
 		scope.$apply();
-
-		var commandControl = angular.element(container[0].querySelector(".move-activity")).scope().vm;
+		var commandElement = angular.element(container[0].querySelector(".move-activity"));
+		var commandControl = commandElement.scope().vm;
 
 		var obj = {
 			container: container,
 			commandControl: commandControl,
+			commandElement: commandElement,
 			scope: scope
 		};
 
