@@ -68,9 +68,15 @@
 		};
 
 		vm.timeRange = {
-			startTime: moment(getDefaultAbsenceStartTime()).format('YYYY-MM-DD HH:mm'),
-			endTime: moment(getDefaultAbsenceEndTime()).format('YYYY-MM-DD HH:mm')
+			startTime: serviceDateFormatHelper.getDateTime(getDefaultAbsenceStartTime()),
+			endTime: serviceDateFormatHelper.getDateTime(getDefaultAbsenceEndTime())
 		};
+
+		vm.dateRange = {
+			startDate: moment(vm.timeRange.startTime).toDate(),
+			endDate: moment(vm.timeRange.endTime).toDate()
+		};
+
 		vm.isFullDayAbsence = vm.isAddFullDayAbsenceAvailable();
 
 		$scope.$watch(function() {

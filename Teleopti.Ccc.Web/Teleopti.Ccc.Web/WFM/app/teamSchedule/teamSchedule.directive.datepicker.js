@@ -37,12 +37,12 @@
 		};
 
 		vm.gotoPreviousDate = function () {
-			vm.selectedDate = moment(vm.selectedDate).add(-(vm.step), 'day').toDate();
+			vm.selectedDateObj = moment(vm.selectedDateObj).add(-(vm.step), 'day').toDate();
 			vm.onDateInputChange();
 		};
 
 		vm.gotoNextDate = function () {
-			vm.selectedDate = moment(vm.selectedDate).add(vm.step, 'day').toDate();
+			vm.selectedDateObj = moment(vm.selectedDateObj).add(vm.step, 'day').toDate();
 			vm.onDateInputChange();
 		};
 

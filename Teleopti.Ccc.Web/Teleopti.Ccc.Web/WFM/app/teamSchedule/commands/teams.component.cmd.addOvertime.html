@@ -18,12 +18,15 @@
 
 			<h3>{{'From'|translate}}: </h3>
 			<div class="con-row">
-				<teams-datetime-picker datetime="$ctrl.fromTime" on-update="$ctrl.updateFromTime(datetime)"></teams-datetime-picker>
+				<teams-datetime-picker ng-model="$ctrl.fromTime" timezone="$ctrl.containerCtrl.getCurrentTimezone()"
+									   ng-change="$ctrl.validateTimeRangeAndInput()"/>
 			</div>
 
 			<h3>{{'To'|translate}}: </h3>
 			<div class="con-row">
-				<teams-datetime-picker datetime="$ctrl.toTime" on-update="$ctrl.updateToTime(datetime)"></teams-datetime-picker>
+				<teams-datetime-picker ng-model="$ctrl.toTime" timezone="$ctrl.containerCtrl.getCurrentTimezone()"
+									   ng-change="$ctrl.validateTimeRangeAndInput()"/>
+
 			</div>
 		</form>
 		<div class="text-danger" ng-if="!$ctrl.timeRangeIsValid">

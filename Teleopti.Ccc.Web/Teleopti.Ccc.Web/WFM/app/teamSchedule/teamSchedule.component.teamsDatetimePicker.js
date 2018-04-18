@@ -1,32 +1,27 @@
-﻿(function() {
+﻿(function () {
 	'use strict';
 	angular.module('wfm.teamSchedule')
 		.component('teamsDatetimePicker',
 		{
 			templateUrl: 'app/teamSchedule/html/teamsDatetimePicker.tpl.html',
 			controller: TeamsDatetimePickerCtrl,
+			require: {
+				ngModelCtrl: 'ngModel'
+			},
 			bindings: {
-				datetime: '<',
-				onUpdate: '&'
+				ngModel: '=',
+				timezone: '<?',
+				minuteStep: '<?'
 			}
 		});
 
-	TeamsDatetimePickerCtrl.$inject = ['$locale'];
+	TeamsDatetimePickerCtrl.$inject = ['$scope', 'serviceDateFormatHelper'];
 
-	function TeamsDatetimePickerCtrl($locale) {
+	function TeamsDatetimePickerCtrl($scope, serviceDateFormatHelper) {
 		var ctrl = this;
-
-		ctrl.$onInit = function () {
-			ctrl.showMeridian = /h:/.test($locale.DATETIME_FORMATS.shortTime);
-			ctrl.meridians = $locale.DATETIME_FORMATS.AMPMS;
-		};
-
-		ctrl.onDateChange = function () {
-			ctrl.onUpdate({datetime: ctrl.datetime});
-		};
-
-		ctrl.onTimeChange = function () {
-			ctrl.onUpdate({datetime: ctrl.datetime});
+		ctrl.date = serviceDateFormatHelper.getDateOnly(ctrl.ngModel);
+		ctrl.ngModelChange = function () {
+			ctrl.ngModelCtrl.$setViewValue(ctrl.ngModel);
 		};
 	}
 })();

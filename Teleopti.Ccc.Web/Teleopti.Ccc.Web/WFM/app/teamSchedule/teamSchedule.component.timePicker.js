@@ -5,6 +5,9 @@
 		.component('teamsTimePicker',
 		{
 			templateUrl: 'app/teamSchedule/html/teamsTimePicker.tpl.html',
+			require: {
+				ngModelCtrl: 'ngModel'
+			},
 			bindings: {
 				ngModel: "=?",
 				date: '<?',
@@ -24,6 +27,8 @@
 		ctrl.showMeridian = meridianInfo.showMeridian;
 		ctrl.meridians = ctrl.showMeridian ? [meridianInfo.am, meridianInfo.pm] : [];
 
+
+
 		ctrl.$onChanges = function () {
 			ctrl.onTimeChange();
 		}
@@ -32,11 +37,8 @@
 		}
 
 		ctrl.onTimeChange = function () {
-			if (!ctrl.dateTimeObj) {
-				ctrl.ngModel = null;
-				return;
-			}
-			ctrl.ngModel = getValidDateTimeInTimezone(ctrl.dateTimeObj);
+			ctrl.ngModel = !!ctrl.dateTimeObj ? getValidDateTimeInTimezone(ctrl.dateTimeObj) : null;
+			ctrl.ngModelCtrl.$setViewValue(ctrl.ngModel);
 		}
 
 		function getValidDateTimeInTimezone(dateObj) {
@@ -44,7 +46,7 @@
 				return null;
 			var timezone = ctrl.timezone;
 			var time = serviceDateFormatHelper.getTimeOnly(dateObj);
-			var dateTime = ctrl.date + ' ' + time;
+			var dateTime = serviceDateFormatHelper.getDateOnly(ctrl.date) + ' ' + time;
 			var dateTimeInTimeZone = serviceDateFormatHelper.getDateTime(moment.tz(dateTime, timezone));
 			if (dateTimeInTimeZone === dateTime)
 				return dateTimeInTimeZone;

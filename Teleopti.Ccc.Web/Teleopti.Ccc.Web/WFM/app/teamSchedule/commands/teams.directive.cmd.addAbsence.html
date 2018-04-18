@@ -10,34 +10,34 @@
 				</md-select>
 			</div>
 
-			<h3>{{'From'|translate}}: </h3>
-			<div class="con-row">
-				<span class="col-sm-7 teamschedule-datepicker">
+			<div ng-if="vm.isFullDayAbsence">
+				<h3>{{'From'|translate}}: </h3>
+				<div class="con-row">
 					<team-schedule-datepicker selected-date="vm.timeRange.startTime" />
-				</span>
-				<span class="col-sm-5 uib-timepicker">
-					<teams-time-picker required ng-if="!vm.isFullDayAbsence && vm.isAddIntradayAbsenceAvailable()"
-									   ng-model="vm.timeRange.startTime"
-									   timezone="vm.getCurrentTimezone()"
-									   date="vm.getReferencedDate(vm.timeRange.startTime)"></teams-time-picker>
-				</span>
+				</div>
+				<h3>{{'To'|translate}}: </h3>
+				<div class="con-row">
+					<team-schedule-datepicker selected-date="vm.timeRange.endTime" />
+				</div>
 			</div>
 
-			<h3>{{'To'|translate}}: </h3>
-			<div class="con-row">
-				<span class="col-sm-7 teamschedule-datepicker">
-					<team-schedule-datepicker selected-date="vm.timeRange.endTime" />
-				</span>
-				<span class="col-sm-5 uib-timepicker">
-					<teams-time-picker required ng-if="!vm.isFullDayAbsence && vm.isAddIntradayAbsenceAvailable()"
-									   ng-model="vm.timeRange.endTime"
-									   timezone="vm.getCurrentTimezone()"
-									   date="vm.getReferencedDate(vm.timeRange.endTime)"></teams-time-picker>
-				</span>
+			<div ng-if="!vm.isFullDayAbsence && vm.isAddIntradayAbsenceAvailable()">
+				<h3>{{'From'|translate}}: </h3>
+				<div class="con-row">
+						<teams-datetime-picker required
+											   ng-model="vm.timeRange.startTime"
+											   timezone="vm.getCurrentTimezone()" />
+				</div>
+				<h3>{{'To'|translate}}: </h3>
+				<div class="con-row">
+					<teams-datetime-picker required
+										   ng-model="vm.timeRange.endTime"
+										   timezone="vm.getCurrentTimezone()" />
+				</div>
 			</div>
 
 			<md-checkbox ng-if="vm.isAddFullDayAbsenceAvailable()"
-						 ng-model="vm.isFullDayAbsence" 
+						 ng-model="vm.isFullDayAbsence"
 						 ng-disabled="vm.isAddFullDayAbsenceAvailable() && !vm.isAddIntradayAbsenceAvailable()"
 						 aria-label="Checkbox">
 				{{'FullDayAbsence'|translate}}

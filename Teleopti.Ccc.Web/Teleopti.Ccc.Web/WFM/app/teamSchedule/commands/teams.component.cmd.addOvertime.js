@@ -19,17 +19,12 @@
 		ctrl.label = 'AddOvertimeActivity';
 		ctrl.processingCommand = false;
 		ctrl.invalidAgents = [];
-		ctrl.updateFromTime = function(newTime) {
-			ctrl.fromTime = newTime;
-			ctrl.timeRangeIsValid = validateTimeRange(ctrl.fromTime, ctrl.toTime);
-			ctrl.validateInput();
-		};
 
-		ctrl.updateToTime = function(newTime) {
-			ctrl.toTime = newTime;
+		ctrl.validateTimeRangeAndInput = function () {
+			console.log('in adding overtime', ctrl.fromTime, ctrl.toTime);
 			ctrl.timeRangeIsValid = validateTimeRange(ctrl.fromTime, ctrl.toTime);
 			ctrl.validateInput();
-		};
+		}
 
 		ctrl.$onInit = function() {
 			ctrl.selectedAgents = personSelectionSvc.getSelectedPersonInfoList();
@@ -65,6 +60,7 @@
 				startTime: moment(ctrl.fromTime),
 				endTime: moment(ctrl.toTime)
 			};
+		
 			var timezone = ctrl.containerCtrl.getCurrentTimezone();
 			ctrl.invalidAgents = activityValidator.validateInputForOvertime(ctrl.containerCtrl.scheduleManagementSvc, timeRange, ctrl.selectedDefinitionSetId, timezone);
 		};
