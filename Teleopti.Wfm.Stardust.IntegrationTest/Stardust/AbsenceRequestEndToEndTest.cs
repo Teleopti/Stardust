@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading;
 using Newtonsoft.Json;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
@@ -23,7 +22,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 {
-	[Ignore("WIP"),StardustTest]
+	[StardustTest]
 	public class AbsenceRequestEndToEndTest
 	{
 		public WithUnitOfWork WithUnitOfWork;
@@ -88,25 +87,18 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 				connection.Open();
 				using (var command = new SqlCommand(comandText, connection))
 				{
-					//while (true)
+					using (var reader = command.ExecuteReader())
 					{
-
-						using (var reader = command.ExecuteReader())
+						if (reader.HasRows)
 						{
-							if (reader.HasRows)
-							{
-								reader.Read();
-								if (reader.IsDBNull(0))
-									Assert.Fail("The request id is not in the stardust job detail. The proper request was not processed.");
-								else
-									Assert.Pass();
-
-							}
+							reader.Read();
+							if (reader.IsDBNull(0))
+								Assert.Fail("The request id is not in the stardust job detail. The proper request was not processed.");
+							else
+								Assert.IsTrue(true);
 
 						}
-
 					}
-
 				}
 			}
 		}
@@ -181,9 +173,6 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 
 				}
 			}
-
-			//assert the personrequest as a level 3 assert on message and status
-
 		}
 
 		private void startServiceBusAndPublishTick()
