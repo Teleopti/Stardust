@@ -12,20 +12,10 @@ namespace Teleopti.Ccc.TestCommon.IoC
 	{
 		public static IContainer Container { get; private set; }
 
-		public static void Setup()
-		{
-			Setup(null, null);
-		}
-
-		public static void Setup(Action<ContainerBuilder> registrations, object injectTo)
+		public static void Setup(Action<ContainerBuilder> registrations, IocArgs iocArgs, object injectTo)
 		{
 			var builder = new ContainerBuilder();
-			var args = new IocArgs(new ConfigReader())
-			{
-				AllEventPublishingsAsSync = true,
-				FeatureToggle = TestSiteConfigurationSetup.URL.ToString()
-			};
-			var configuration = new IocConfiguration(args, CommonModule.ToggleManagerForIoc(args));
+			var configuration = new IocConfiguration(iocArgs, CommonModule.ToggleManagerForIoc(iocArgs));
 
 			builder.RegisterModule(new CommonModule(configuration));
 			builder.RegisterType<TenantAuthenticationAlwaysAuthenticated>().As<ITenantAuthentication>().SingleInstance();
@@ -37,6 +27,20 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 			if (injectTo != null)
 				IoCTestService.InjectTo(Container, injectTo);
+		}
+		
+		public static void Setup(Action<ContainerBuilder> registrations, IocArgs iocArgs)
+		{
+			Setup(registrations, iocArgs, null);
+		}
+
+		public static void Setup(Action<ContainerBuilder> registrations, object injectTo)
+		{
+			Setup(registrations, new IocArgs(new ConfigReader())
+			{
+				AllEventPublishingsAsSync = true,
+				FeatureToggle = TestSiteConfigurationSetup.URL.ToString()
+			}, injectTo);
 		}
 
 		public static void Dispose()
