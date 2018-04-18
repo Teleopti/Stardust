@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain
 		public void Add(IEvent @event)
 		{
 			var queryData = (@event as IRtaStoredEvent).QueryData();
+			var eventType = $"{@event.GetType().FullName}, {@event.GetType().Assembly.GetName().Name}";
 
 			_unitOfWork.Current().Session()
 				.CreateSQLQuery(@"
@@ -52,7 +53,7 @@ INSERT INTO [rta].[Events] (
 				.SetParameter("PersonId", queryData.PersonId)
 				.SetParameter("StartTime", queryData.StartTime == DateTime.MinValue ? null : queryData.StartTime)
 				.SetParameter("EndTime", queryData.EndTime == DateTime.MinValue ? null : queryData.EndTime)
-				.SetParameter("Type", @event.GetType().AssemblyQualifiedName)
+				.SetParameter("Type", eventType)
 				.SetParameter("Event", _serializer.SerializeEvent(@event))
 				.ExecuteUpdate();
 		}
@@ -102,25 +103,13 @@ WHERE
 ")
 					.SetParameterList("Types", new[]
 					{
-						typeof(PersonStateChangedEvent).AssemblyQualifiedName,
-						typeof(PersonRuleChangedEvent).AssemblyQualifiedName
+						$"{typeof(PersonStateChangedEvent).FullName}, {typeof(PersonStateChangedEvent).Assembly.GetName().Name}",
+						$"{typeof(PersonRuleChangedEvent).FullName}, {typeof(PersonRuleChangedEvent).Assembly.GetName().Name}"
 					})
 					.SetParameter("PersonId", personId)
 					.SetParameter("Timestamp", timestamp))
 				.SingleOrDefault();
 		}
-
-		public IEnumerable<IEvent> LoadAll() =>
-			load(
-				_unitOfWork.Current().Session()
-					.CreateSQLQuery(@"
-SELECT 
-	[Type],
-	[Event] 
-FROM 
-	[rta].[Events] 
-")
-			);
 
 		private IEnumerable<IEvent> load(IQuery query) =>
 			query
@@ -137,5 +126,13 @@ FROM
 			public string Event;
 #pragma warning restore 649
 		}
+
+
+		public IEnumerable<IEvent> LoadAll() =>
+			load(_unitOfWork.Current().Session().CreateSQLQuery(@"SELECT [Type], [Event] FROM [rta].[Events]"));
+
+		public IEnumerable<string> LoadAllEventTypes() => _unitOfWork.Current().Session()
+			.CreateSQLQuery(@"SELECT [Type] FROM [rta].[Events]")
+			.List<string>();
 	}
 }
