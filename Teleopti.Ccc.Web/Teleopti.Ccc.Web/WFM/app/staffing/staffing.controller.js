@@ -71,7 +71,6 @@
 				.add(6, 'days')
 				.toDate()
 		};
-		vm.unifiedSkillGroupManagement = false;
 		vm.HasPermissionToModifySkillArea = false;
 
 		var events = [];
@@ -94,7 +93,6 @@
 		getSkillAreas();
 		getCompensations();
 		getStaffingSettings();
-		isUnifiedSkillGroupManagementEnabled();
 
 		vm.onStateChanged = function(evt, to, params, from) {
 			getSkillAreas();
@@ -110,10 +108,6 @@
 
 		function isOvertimeSuggestionEnabled() {
 			return toggleService.WfmStaffing_AddOvertime_42524;
-		}
-
-		function isUnifiedSkillGroupManagementEnabled() {
-			vm.unifiedSkillGroupManagement = toggleService.WFM_Unified_Skill_Group_Management_45417;
 		}
 
 		function toggleOverstaffSettings() {
@@ -443,9 +437,9 @@
 			request.$promise.then(function(response) {
 				vm.ErrorMessage = response.ErrorMessage;
 				vm.exporting = false;
-				if (vm.ErrorMessage !== ''){
+				if (vm.ErrorMessage !== '') {
 					return;
-				} else{
+				} else {
 					var data = angular.toJson(response.Content);
 					vm.exportModal = false;
 					utilService.saveToFs(response.Content, vm.selectedSkill.Name + '.csv', 'text/csv');

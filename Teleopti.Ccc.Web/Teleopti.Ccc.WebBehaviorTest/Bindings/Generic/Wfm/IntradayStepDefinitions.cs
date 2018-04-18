@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		{
 			Browser.Interactions.TryUntil(
 				() => { Browser.Interactions.ClickContaining("#available_skill_groups_list", skillGroupName); },
-				() => Browser.Interactions.IsVisible("#available_skill_groups_list"), 
+				() => Browser.Interactions.IsVisible("#available_skill_groups_list"),
 				TimeSpan.FromSeconds(1));
 		}
 
@@ -429,22 +429,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 				"var sl = parseFloat(scope.vm.viewObj.serviceLevelObj.series[1]);" +
 				"return (sl >= 0);"
 				, "True");
-			var toggleQuerier = new ToggleQuerier(TestSiteConfigurationSetup.URL.ToString());
-			if (toggleQuerier.IsEnabled(Toggles.Wfm_Intraday_ESL_41827))
-				Browser.Interactions.AssertJavascriptResultContains(
-					"var scope = angular.element(document.querySelector('.c3')).scope();" +
-					"var esl = parseFloat(scope.vm.viewObj.estimatedServiceLevelObj.series[1]);" +
-					"return (esl >= 0) + ' |scopeViewObjSeries: ' + scope.vm.viewObj.estimatedServiceLevelObj.series[1] + ' |esl: ' + esl;"
-					, "true");
+			Browser.Interactions.AssertJavascriptResultContains(
+				"var scope = angular.element(document.querySelector('.c3')).scope();" +
+				"var esl = parseFloat(scope.vm.viewObj.estimatedServiceLevelObj.series[1]);" +
+				"return (esl >= 0) + ' |scopeViewObjSeries: ' + scope.vm.viewObj.estimatedServiceLevelObj.series[1] + ' |esl: ' + esl;"
+				, "true");
 		}
 
 		[Then(@"I should see a summary of today's performance")]
 		public void ThenIShouldSeeASummaryOfTodaySPerformance()
 		{
 			Browser.Interactions.AssertJavascriptResultContains("return $('.service-level').text().length > 0", "True");
-			var toggleQuerier = new ToggleQuerier(TestSiteConfigurationSetup.URL.ToString());
-			if (toggleQuerier.IsEnabled(Toggles.Wfm_Intraday_ESL_41827))
-				Browser.Interactions.AssertJavascriptResultContains("return $('.esl').text().length > 0", "True");
+			Browser.Interactions.AssertJavascriptResultContains("return $('.esl').text().length > 0", "True");
 			Browser.Interactions.AssertJavascriptResultContains("return $('.abandoned-rate').text().length > 0", "True");
 			Browser.Interactions.AssertJavascriptResultContains("return $('.average-speed-of-answer').text().length > 0",
 				"True");

@@ -140,12 +140,6 @@
 			return offset.charAt(0).toUpperCase() + offset.substr(1);
 		};
 
-		vm.getSkillGroupText = function() {
-			return vm.toggles['WFM_Unified_Skill_Group_Management_45417']
-				? $translate.instant('SelectSkillGroup')
-				: $translate.instant('SelectSkillArea');
-		};
-
 		vm.onStateChanged = function(evt, to, params, from) {
 			if (to.name !== 'intraday.area') return;
 			if (params.isNewSkillArea === true) {

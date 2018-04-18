@@ -27,9 +27,6 @@
 		vm.skills = [];
 		vm.skillAreaName = '';
 		vm.getSkillIcon = skillIconService.get;
-		vm.toggles = {
-			unifiedSkillGroupManagement: []
-		};
 
 		vm.exitConfigMode = function() {
 			$state.go('intraday', { isNewSkillArea: false });

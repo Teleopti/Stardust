@@ -1,9 +1,5 @@
 'use strict';
 var defaultToggles = {
-	Wfm_Intraday_OptimalStaffing_40921: true,
-	Wfm_Intraday_ScheduledStaffing_41476: true,
-	Wfm_Intraday_ESL_41827: true,
-	WFM_Intraday_Show_For_Other_Days_43504: false,
 	WFM_Remember_My_Selection_In_Intraday_47254: false,
 	togglesLoaded: {
 		then: function(cb) {
@@ -994,7 +990,7 @@ describe('IntradayAreaController', function() {
 		skillAreaInfo.SkillAreas = [];
 		isUnsupportedSkillTest = false;
 
-		createController(false, { WFM_Intraday_Show_For_Other_Days_43504: true });
+		createController(false);
 		vm.moduleState.activeTab = 0;
 		vm.clickedSkillInPicker(skills[0]);
 
@@ -1009,7 +1005,7 @@ describe('IntradayAreaController', function() {
 		skillAreaInfo.SkillAreas = [];
 		isUnsupportedSkillTest = false;
 
-		createController(false, { WFM_Intraday_Show_For_Other_Days_43504: true });
+		createController(false);
 		vm.moduleState.activeTab = 1;
 		vm.clickedSkillInPicker(skills[0]);
 		vm.changeChosenOffset(1);
@@ -1023,7 +1019,7 @@ describe('IntradayAreaController', function() {
 		skillAreaInfo.SkillAreas = [];
 		isUnsupportedSkillTest = false;
 
-		createController(false, { WFM_Intraday_Show_For_Other_Days_43504: true });
+		createController(false);
 		vm.moduleState.activeTab = 2;
 		vm.clickedSkillInPicker(skills[0]);
 		vm.changeChosenOffset(1);
@@ -1034,7 +1030,7 @@ describe('IntradayAreaController', function() {
 	});
 
 	it('should get traffic data for skillarea corresponding to chosenOffset', function() {
-		createController(false, { WFM_Intraday_Show_For_Other_Days_43504: true });
+		createController(false);
 		vm.moduleState.activeTab = 0;
 		vm.clickedSkillGroupInPicker(skillAreas[0]);
 		vm.changeChosenOffset(1);
@@ -1045,7 +1041,7 @@ describe('IntradayAreaController', function() {
 	});
 
 	it('should get staffing data for skillarea corresponding to chosenOffset', function() {
-		createController(false, { WFM_Intraday_Show_For_Other_Days_43504: true });
+		createController(false);
 		vm.moduleState.activeTab = 2;
 		vm.clickedSkillGroupInPicker(skillAreas[0]);
 		vm.changeChosenOffset(1);
@@ -1057,7 +1053,7 @@ describe('IntradayAreaController', function() {
 	});
 
 	it('should get traffic data for skillarea corresponding to chosenOffset', function() {
-		createController(false, { WFM_Intraday_Show_For_Other_Days_43504: true });
+		createController(false);
 		vm.moduleState.activeTab = 0;
 		vm.clickedSkillGroupInPicker(skillAreas[0]);
 
@@ -1072,7 +1068,7 @@ describe('IntradayAreaController', function() {
 	});
 
 	it('should get performance data for skillarea corresponding to chosenOffset', function() {
-		createController(false, { WFM_Intraday_Show_For_Other_Days_43504: true });
+		createController(false);
 		vm.moduleState.activeTab = 1;
 		vm.clickedSkillGroupInPicker(skillAreas[0]);
 
@@ -1087,7 +1083,7 @@ describe('IntradayAreaController', function() {
 	});
 
 	it('should get staffing data for skillarea corresponding to chosenOffset', function() {
-		createController(false, { WFM_Intraday_Show_For_Other_Days_43504: true });
+		createController(false);
 		vm.moduleState.activeTab = 2;
 		vm.clickedSkillGroupInPicker(skillAreas[0]);
 
@@ -1101,7 +1097,7 @@ describe('IntradayAreaController', function() {
 	});
 
 	it('should not show abandon rate data when toggle is enabled and email-like skill chosen', function() {
-		createController(false, { WFM_Intraday_SupportOtherSkillsLikeEmail_44026: true });
+		createController(false);
 		vm.moduleState.activeTab = 1;
 
 		vm.clickedSkillInPicker(skills[1]);
@@ -1113,7 +1109,7 @@ describe('IntradayAreaController', function() {
 	});
 
 	it('should not show reforcasted agents data when toggle is enabled and email-like skill chosen', function() {
-		createController(false, { WFM_Intraday_SupportOtherSkillsLikeEmail_44026: true });
+		createController(false);
 		vm.moduleState.activeTab = 2;
 		vm.clickedSkillInPicker(skills[1]);
 		$httpBackend.flush();

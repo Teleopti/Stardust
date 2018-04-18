@@ -1,61 +1,102 @@
 <div ui-view>
 
-  <div class="view-header with-fab">
-    <div class="view-title">
-      <h1><i class="mdi mdi-account-switch"></i> {{'Staffing' | translate}}</h1>
+    <div class="view-header with-fab">
+        <div class="view-title">
+            <h1>
+                <i class="mdi mdi-account-switch"></i> {{'Staffing' | translate}}</h1>
+        </div>
+        <div class="fab-wrapper"
+             ng-if="vm.showBpoInterface && vm.hasPermissionForBpoExchange">
+            <button class="wfm-fab grow-out material-depth-1"
+                    id="bpoExchangeBtn"
+                    ng-click="vm.goToImportExports()">
+                <i class="mdi mdi-source-fork"></i>
+                <md-tooltip>{{'BpoExchange' | translate}}</md-tooltip>
+            </button>
+        </div>
     </div>
-    <div class="fab-wrapper" ng-if="vm.showBpoInterface && vm.hasPermissionForBpoExchange">
-      <button class="wfm-fab grow-out material-depth-1" id="bpoExchangeBtn" ng-click="vm.goToImportExports()">
-        <i class="mdi mdi-source-fork"></i>
-        <md-tooltip>{{'BpoExchange' | translate}}</md-tooltip>
-      </button>
-    </div>
-  </div>
 
-  <div class="con-row">
-    <div class="con-flex">
-      <div class="panel material-depth-1">
-        <div class="con-row align-row-center staffing-toolbar" style="flex-wrap:wrap">
-          <div class="con-flex">
-            <md-autocomplete id="skill-id" class="autocomplete-skill" md-selected-item="vm.selectedSkill" md-search-text="searchSkillText" md-selected-item-change="vm.selectedSkillChange(vm.selectedSkill)" md-items="skill in vm.querySearchSkills(searchSkillText)" md-item-text="skill.Name" md-min-length="0" placeholder="{{'SelectSkill'|translate}}">
-              <md-item-template>
-                <i ng-class="vm.dynamicIcon(skill)"></i>
-                <span md-highlight-text="searchSkillText" md-highlight-flags="^i">{{skill.Name}}</span>
-                <md-tooltip id="skill-tooltip">
-                  <span ng-if="skill.DoDisplayData && skill.IsMultisiteSkill">{{skill.SkillType | translate}} - {{'MultisiteSkill' | translate}}</span>
-                  <span ng-if="skill.DoDisplayData && !skill.IsMultisiteSkill">{{skill.SkillType | translate}}</span>
-                  <span ng-if="!skill.DoDisplayData">{{'UnsupportedSkill' | translate}}</span>
-                </md-tooltip>
-              </md-item-template>
-              <md-not-found>
-                {{'RepViewerNoMoreMatches'|translate}}
-              </md-not-found>
-            </md-autocomplete>
-            <i class="mdi mdi-close pointer ie-cross grow-out" ng-show="vm.selectedSkill" ng-click="vm.selectedSkill=null">
-              <md-tooltip>{{'Clear'|translate}}</md-tooltip>
-            </i>
-          </div>
-          <div class="con-flex">
-            <md-autocomplete id="area-id" class="autocomplete-skill" md-selected-item="vm.selectedArea" md-search-text="searchSkillAreaText" md-selected-item-change="vm.selectedAreaChange(area)" md-items="area in vm.querySearchAreas(searchSkillAreaText)" md-item-text="area.Name" md-min-length="0" placeholder="{{'SelectSkillGroup'|translate}}">
-              <md-item-template>
-                <span md-highlight-text="searchSkillText" md-highlight-flags="^i">{{area.Name}}</span>
-              </md-item-template>
-              <md-not-found>
-                {{'RepViewerNoMoreMatches'|translate}}
-              </md-not-found>
-            </md-autocomplete>
-            <i class="mdi mdi-close pointer ie-cross grow-out" ng-show="vm.selectedSkill" ng-click="vm.selectedSkill=null">
-              <md-tooltip>{{'Clear'|translate}}</md-tooltip>
-            </i>
+    <div class="con-row">
+        <div class="con-flex">
+            <div class="panel material-depth-1">
+                <div class="con-row align-row-center staffing-toolbar"
+                     style="flex-wrap:wrap">
+                    <div class="con-flex">
+                        <md-autocomplete id="skill-id"
+                                         class="autocomplete-skill"
+                                         md-selected-item="vm.selectedSkill"
+                                         md-search-text="searchSkillText"
+                                         md-selected-item-change="vm.selectedSkillChange(vm.selectedSkill)"
+                                         md-items="skill in vm.querySearchSkills(searchSkillText)"
+                                         md-item-text="skill.Name"
+                                         md-min-length="0"
+                                         placeholder="{{'SelectSkill'|translate}}">
+                            <md-item-template>
+                                <i ng-class="vm.dynamicIcon(skill)"></i>
+                                <span md-highlight-text="searchSkillText"
+                                      md-highlight-flags="^i">{{skill.Name}}</span>
+                                <md-tooltip id="skill-tooltip">
+                                    <span ng-if="skill.DoDisplayData && skill.IsMultisiteSkill">{{skill.SkillType | translate}} - {{'MultisiteSkill' | translate}}</span>
+                                    <span ng-if="skill.DoDisplayData && !skill.IsMultisiteSkill">{{skill.SkillType | translate}}</span>
+                                    <span ng-if="!skill.DoDisplayData">{{'UnsupportedSkill' | translate}}</span>
+                                </md-tooltip>
+                            </md-item-template>
+                            <md-not-found>
+                                {{'RepViewerNoMoreMatches'|translate}}
+                            </md-not-found>
+                        </md-autocomplete>
+                        <i class="mdi mdi-close pointer ie-cross grow-out"
+                           ng-show="vm.selectedSkill"
+                           ng-click="vm.selectedSkill=null">
+                            <md-tooltip>{{'Clear'|translate}}</md-tooltip>
+                        </i>
+                    </div>
+                    <div class="con-flex">
+                        <md-autocomplete id="area-id"
+                                         class="autocomplete-skill"
+                                         md-selected-item="vm.selectedArea"
+                                         md-search-text="searchSkillAreaText"
+                                         md-selected-item-change="vm.selectedAreaChange(area)"
+                                         md-items="area in vm.querySearchAreas(searchSkillAreaText)"
+                                         md-item-text="area.Name"
+                                         md-min-length="0"
+                                         placeholder="{{'SelectSkillGroup'|translate}}">
+                            <md-item-template>
+                                <span md-highlight-text="searchSkillText"
+                                      md-highlight-flags="^i">{{area.Name}}</span>
+                            </md-item-template>
+                            <md-not-found>
+                                {{'RepViewerNoMoreMatches'|translate}}
+                            </md-not-found>
+                        </md-autocomplete>
+                        <i class="mdi mdi-close pointer ie-cross grow-out"
+                           ng-show="vm.selectedSkill"
+                           ng-click="vm.selectedSkill=null">
+                            <md-tooltip>{{'Clear'|translate}}</md-tooltip>
+                        </i>
+                    </div>
+
+                    <div class="con-flex"
+                         style="display:flex; justify-content:space-around;">
+                        <skill-group-manager-button id="manage_skill_group_button"
+                                                    &&
+                                                    vm.HasPermissionToModifySkillArea
+                                                    " ng-click="vm.configMode()
+                                                    "></skill-group-manager-button>
+            <team-schedule-datepicker style="margin-top:-5px
+                                                    " selected-date="vm.selectedDate
+                                                    " status="vm.showDatePicker
+                                                    " on-date-change="vm.navigateToNewDay()
+                                                    "></team-schedule-datepicker>
           </div>
 
-          <div class="con-flex" style="display:flex; justify-content:space-around;">
-            <skill-group-manager-button id="manage_skill_group_button" ng-if="vm.unifiedSkillGroupManagement && vm.HasPermissionToModifySkillArea" ng-click="vm.configMode()"></skill-group-manager-button>
-            <team-schedule-datepicker style="margin-top:-5px" selected-date="vm.selectedDate" status="vm.showDatePicker" on-date-change="vm.navigateToNewDay()"></team-schedule-datepicker>
-          </div>
-
-          <div class="con-flex">
-            <md-checkbox class="pull-right" ng-change="vm.useShrinkageForStaffing()" ng-model="vm.useShrinkage" aria-label="Checkbox">{{'UseShrinkage'| translate}}</md-checkbox>
+          <div class="con-flex
+                                                    ">
+            <md-checkbox class="pull-right
+                                                    " ng-change="vm.useShrinkageForStaffing()
+                                                    " ng-model="vm.useShrinkage
+                                                    " aria-label="Checkbox
+                                                    ">{{'UseShrinkage'| translate}}</md-checkbox>
           </div>
         </div>
       </div>
@@ -63,102 +104,218 @@
   </div>
 
   <modal-dialog show='vm.exportModal' ng-cloak>
-    <div ng-if="vm.showBpoInterface && vm.hasPermissionForBpoExchange">
-      <div class="con-row">
-        <div class="con-flex">
+    <div ng-if="vm.showBpoInterface
+                                                    &&
+                                                    vm.hasPermissionForBpoExchange
+                                                    ">
+      <div class="con-row
+                                                    ">
+        <div class="con-flex
+                                                    ">
           <b>{{'ExportToFile'|translate}}</b>
-          <p ng-if="vm.useShrinkage"><i class="mdi mdi-check"></i> {{'Shrinkage'|translate}}</p>
+          <p ng-if="vm.useShrinkage
+                                                    "><i class="mdi
+                                                    mdi-check
+                                                    "></i> {{'Shrinkage'|translate}}</p>
         </div>
       </div>
-      <div class="modal-inner-content" style="text-align:center;">
-        <wfm-calendar-picker ng-model="vm.exportStaffingDataDate"></wfm-calendar-picker>
-        <div ng-if="!vm.exporting && vm.ErrorMessage" class="text-danger">
+      <div class="modal-inner-content
+                                                    " style="text-align:center;
+                                                    ">
+        <wfm-calendar-picker ng-model="vm.exportStaffingDataDate
+                                                    "></wfm-calendar-picker>
+        <div ng-if="!vm.exporting
+                                                    &&
+                                                    vm.ErrorMessage
+                                                    " class="text-danger
+                                                    ">
           {{vm.ErrorMessage}}
         </div>
       </div>
-      <div class="modal-actions">
+      <div class="modal-actions
+                                                    ">
         <aside>
-          <button class="wfm-btn wfm-btn-invis-default" ng-click="vm.exportModal = false" >{{'Cancel'|translate}}</button>
-          <button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.exportStaffingData()">{{'Export'|translate}}</button>
+          <button class="wfm-btn
+                                                    wfm-btn-invis-default
+                                                    " ng-click="vm.exportModal=f
+                                                    alse
+                                                    " >{{'Cancel'|translate}}</button>
+          <button class="wfm-btn
+                                                    wfm-btn-invis-primary
+                                                    " ng-click="vm.exportStaffingData()
+                                                    ">{{'Export'|translate}}</button>
         </aside>
       </div>
-      <div ng-if="vm.exporting">
-        <md-progress-linear md-mode="indeterminate"></md-progress-linear>
+      <div ng-if="vm.exporting
+                                                    ">
+        <md-progress-linear md-mode="indeterminate
+                                                    "></md-progress-linear>
       </div>
     </div>
   </modal-dialog>
 
-  <div class="con-row" ng-show="vm.staffingDataAvailable">
-    <div class="con-flex">
-      <div class="panel material-depth-1">
-        <md-progress-linear ng-show="vm.isRunning()" md-mode="indeterminate"></md-progress-linear>
-        <div class="sub-header">
+  <div class="con-row
+                                                    " ng-show="vm.staffingDataAvailable
+                                                    ">
+    <div class="con-flex
+                                                    ">
+      <div class="panel
+                                                    material-depth-1
+                                                    ">
+        <md-progress-linear ng-show="vm.isRunning()
+                                                    " md-mode="indeterminate
+                                                    "></md-progress-linear>
+        <div class="sub-header
+                                                    ">
           <h2>{{'Staffing' | translate}} - {{vm.selectedDate | date:'yyyy-MM-dd'}} </h2>
-          <div class="head-actions panel-menu" ng-if="vm.showBpoInterface && vm.hasPermissionForBpoExchange && vm.selectedSkill">
-            <div tabindex=0 class="context-menu card-context" ng-click="vm.exportModal = true;">
-              <i class="mdi mdi-file-excel">
+          <div class="head-actions
+                                                    panel-menu
+                                                    " ng-if="vm.showBpoInterface
+                                                    &&
+                                                    vm.hasPermissionForBpoExchange
+                                                    &&
+                                                    vm.selectedSkill
+                                                    ">
+            <div tabindex=0 class="context-menu
+                                                    card-context
+                                                    " ng-click="vm.exportModal=t
+                                                    rue;
+                                                    ">
+              <i class="mdi
+                                                    mdi-file-excel
+                                                    ">
                 <md-tooltip>{{'ExportToFile'|translate}}</md-tooltip>
               </i>
             </div>
           </div>
-          <div class="wfm-chip-wrap" ng-show="vm.isNoSuggestion()">
-            <div class="wfm-chip-wrap">
-              <span class="wfm-chip">
-                <span class="chip-handle chip-warning">
-                  <i class="mdi mdi-alert"></i>
+          <div class="wfm-chip-wrap
+                                                    " ng-show="vm.isNoSuggestion()
+                                                    ">
+            <div class="wfm-chip-wrap
+                                                    ">
+              <span class="wfm-chip
+                                                    ">
+                <span class="chip-handle
+                                                    chip-warning
+                                                    ">
+                  <i class="mdi
+                                                    mdi-alert
+                                                    "></i>
                 </span>
-                <span class="chip-text">{{'NoSuggestionsFound' | translate}}</span>
+                <span class="chip-text
+                                                    ">{{'NoSuggestionsFound' | translate}}</span>
               </span>
             </div>
           </div>
         </div>
-        <div class="con-row">
-          <div class="con-flex">
-            <div class="wfm-chart intraday-chart" id="staffingChart"></div>
+        <div class="con-row
+                                                    ">
+          <div class="con-flex
+                                                    ">
+            <div class="wfm-chart
+                                                    intraday-chart
+                                                    " id="staffingChart
+                                                    "></div>
           </div>
         </div>
-        <div class="con-footer">
-          <button class="wfm-btn" id="overstaffBtn" ng-show="vm.isOvertimeSuggestionEnabled()" ng-class="vm.showOverstaffSettings ? 'wfm-btn-invis-default' : 'wfm-btn-invis-primary'"
-          ng-click="vm.toggleOverstaffSettings()">
-          <span ng-if="!vm.showOverstaffSettings">{{'GetSuggestionsForOvertime' | translate}}</span>
-          <span ng-if="vm.showOverstaffSettings">{{'CloseOvertimeSettings' | translate}}</span>
+        <div class="con-footer
+                                                    ">
+          <button class="wfm-btn
+                                                    " id="overstaffBtn
+                                                    " ng-show="vm.isOvertimeSuggestionEnabled()
+                                                    " ng-class="vm.showOverstaffSettings
+                                                    ?
+                                                    'wfm-btn-invis-default'
+                                                    :
+                                                    'wfm-btn-invis-primary'
+                                                    "
+          ng-click="vm.toggleOverstaffSettings()
+                                                    ">
+          <span ng-if="!vm.showOverstaffSettings
+                                                    ">{{'GetSuggestionsForOvertime' | translate}}</span>
+          <span ng-if="vm.showOverstaffSettings
+                                                    ">{{'CloseOvertimeSettings' | translate}}</span>
         </button>
       </div>
     </div>
   </div>
 </div>
 
-<div class="con-row">
-  <div class="con-flex">
-    <form novalidate ng-submit="vm.suggestOvertime(vm.overtimeForm)" name="vm.overtimeForm">
-      <div class="panel material-depth-1" ng-show="vm.showOverstaffSettings">
-        <div class="sub-header">
+<div class="con-row
+                                                    ">
+  <div class="con-flex
+                                                    ">
+    <form novalidate ng-submit="vm.suggestOvertime(vm.overtimeForm)
+                                                    " name="vm.overtimeForm
+                                                    ">
+      <div class="panel
+                                                    material-depth-1
+                                                    " ng-show="vm.showOverstaffSettings
+                                                    ">
+        <div class="sub-header
+                                                    ">
           <h2>{{'OvertimeSettings' | translate}}</h2>
         </div>
-        <div class="con-row">
-          <div class="con-flex">
+        <div class="con-row
+                                                    ">
+          <div class="con-flex
+                                                    ">
             <h3>{{'Compensations' | translate}}</h3>
-            <md-radio-group ng-model="vm.overtimeForm.Compensation">
-              <md-radio-button ng-repeat="comp in vm.compensations" ng-value="comp.Id" >
+            <md-radio-group ng-model="vm.overtimeForm.Compensation
+                                                    ">
+              <md-radio-button ng-repeat="comp
+                                                    in
+                                                    vm.compensations
+                                                    " ng-value="comp.Id
+                                                    " >
                 {{comp.Name}}
               </md-radio-button>
             </md-radio-group>
           </div>
-          <div class="con-flex">
+          <div class="con-flex
+                                                    ">
             <h3>{{'Duration' | translate}}</h3>
-            <div class="con-row">
-              <div uib-timepicker required ng-change="vm.validSettings(vm.overtimeForm)" ng-model="vm.overtimeForm.MinMinutesToAdd" show-meridian="false"></div>
+            <div class="con-row
+                                                    ">
+              <div uib-timepicker required ng-change="vm.validSettings(vm.overtimeForm)
+                                                    " ng-model="vm.overtimeForm.MinMinutesToAdd
+                                                    " show-meridian="false
+                                                    "></div>
               -
-              <div uib-timepicker required ng-change="vm.validSettings(vm.overtimeForm)" ng-model="vm.overtimeForm.MaxMinutesToAdd" show-meridian="false"></div>
+              <div uib-timepicker required ng-change="vm.validSettings(vm.overtimeForm)
+                                                    " ng-model="vm.overtimeForm.MaxMinutesToAdd
+                                                    " show-meridian="false
+                                                    "></div>
             </div>
           </div>
-          <div class="con-flex x3"></div>
+          <div class="con-flex
+                                                    x3
+                                                    "></div>
         </div>
-        <div class="con-footer">
-          <button class="wfm-btn" ng-class="!vm.overtimeForm.$valid||!vm.validSettings(vm.overtimeForm) ? 'wfm-btn-primary-disabled' : 'wfm-btn-primary'"
-          ng-disabled="!vm.overtimeForm.$valid || !vm.validSettings(vm.overtimeForm)" type="submit">{{'GetSuggestionsForOvertime' | translate}}</button>
-          <button class="wfm-btn" ng-class="vm.hasSuggestionData ? 'wfm-btn-invis-primary' : 'wfm-btn-invis-disabled'" ng-disabled="!vm.hasSuggestionData"
-          ng-click="vm.addOvertime()">{{'ApplySuggestion' | translate}}</button>
+        <div class="con-footer
+                                                    ">
+          <button class="wfm-btn
+                                                    " ng-class="!vm.overtimeForm.$valid||!vm.validSettings(vm.overtimeForm)
+                                                    ?
+                                                    'wfm-btn-primary-disabled'
+                                                    :
+                                                    'wfm-btn-primary'
+                                                    "
+          ng-disabled="!vm.overtimeForm.$valid
+                                                    ||
+                                                    !vm.validSettings(vm.overtimeForm)
+                                                    " type="submit
+                                                    ">{{'GetSuggestionsForOvertime' | translate}}</button>
+          <button class="wfm-btn
+                                                    " ng-class="vm.hasSuggestionData
+                                                    ?
+                                                    'wfm-btn-invis-primary'
+                                                    :
+                                                    'wfm-btn-invis-disabled'
+                                                    " ng-disabled="!vm.hasSuggestionData
+                                                    "
+          ng-click="vm.addOvertime()
+                                                    ">{{'ApplySuggestion' | translate}}</button>
         </div>
       </div>
     </form>

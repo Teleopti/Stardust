@@ -1319,7 +1319,6 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		}
 
 		[Test]
-		[Toggle(Toggles.WFM_Intraday_SupportMultisiteSkill_43874)]
 		public void ShouldDisplayScheduledStaffigForMultisiteSkill()
 		{
 			TimeZone.IsSweden();

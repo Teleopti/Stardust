@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		public ISkillTypeInfoProvider Target;
 
 		[Test]
-		[Toggle(Toggles.WFM_Intraday_SupportOtherSkillsLikeEmail_44026)]
 		public void ShouldReturnSupportAbandonRateAndReforcastedForPhoneTypeSkill()
 		{
 			var phoneSkill = SkillFactory.CreateSkill("Phone",
@@ -28,7 +27,6 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		}
 
 		[Test]
-		[Toggle(Toggles.WFM_Intraday_SupportOtherSkillsLikeEmail_44026)]
 		public void ShouldNotReturnSupportAbandonRateAndReforcastedForEmailTypeSkill()
 		{
 			var emailSkill = SkillFactory.CreateSkill("Email",

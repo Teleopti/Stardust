@@ -140,7 +140,6 @@ I want to be able to monitor my part of the business
         And I am navigating to intraday staffing view
         Then I should see staffing data in the chart
 
-    @OnlyRunIfEnabled('WFM_Intraday_Show_For_Other_Days_43504')
     Scenario: View incoming traffic for one skill for a provided day
         Given the time is '2016-12-21 14:00'
         And there is queue statistics for the skill 'Skill A' up until '2016-12-20 17:00'
@@ -154,7 +153,6 @@ I want to be able to monitor my part of the business
 
 
 	@Ignore
-    @OnlyRunIfEnabled('WFM_Intraday_Show_For_Other_Days_43504')
     Scenario: Switch tab when other day than today is selected
         Given the time is '2016-12-21 14:00'
         And there is queue statistics for the skill 'Skill A' up until '2016-12-22 17:00'
@@ -166,7 +164,6 @@ I want to be able to monitor my part of the business
         Then I should see forecasted staffing data in the chart
         And I should see the date
 
-    @OnlyRunIfEnabled('WFM_Intraday_Show_For_Other_Days_43504')
     Scenario: Switch skill when other day than today is selected
         Given the time is '2016-12-21 14:00'
         And there is queue statistics for the skill 'Skill B' up until '2016-12-22 17:00'
@@ -180,7 +177,6 @@ I want to be able to monitor my part of the business
         And I should see the date
 
 	@Ignore
-    @OnlyRunIfEnabled('WFM_Intraday_Export_To_Excel_44892')
     Scenario: If toggled we should see export to excel button
         Given the time is '2016-12-21 14:00'
         And there is queue statistics for the skill 'Skill A' up until '2016-12-21 17:00'
@@ -189,8 +185,6 @@ I want to be able to monitor my part of the business
         And Local storage is reset
         Then I should see the export to excel button
 
-
-    @OnlyRunIfEnabled('WFM_Intraday_SupportOtherSkillsLikeEmail_44026')
     Scenario: If toggled we should be able to select skill of type backoffice
         Given the time is '2016-12-21 14:00'
         And I am viewing intraday page
@@ -200,7 +194,6 @@ I want to be able to monitor my part of the business
         When I pick the skill 'Skill BackOffice'
         Then I should see incoming traffic data in the chart
 
-    @OnlyRunIfEnabled('WFM_Intraday_SupportOtherSkillsLikeEmail_44026')
     Scenario: If an email like skill is chosen a warning for no visible abandonrate should appear
         Given the time is '2016-12-21 14:00'
         And I am viewing intraday page
@@ -211,7 +204,6 @@ I want to be able to monitor my part of the business
         And I am navigating to intraday performance view
         Then I should see the no abandonrate warning
 
-    @OnlyRunIfEnabled('WFM_Intraday_SupportOtherSkillsLikeEmail_44026')
     Scenario: If an email like skill is chosen a warning for no visible reforcasted should appear
         Given the time is '2016-12-21 14:00'
         And I am viewing intraday page
@@ -222,7 +214,6 @@ I want to be able to monitor my part of the business
         And I am navigating to intraday staffing view
         Then I should see the no reforcasted warning
 
-    @OnlyRunIfEnabled('WFM_Intraday_SupportOtherSkillsLikeEmail_44026')
     Scenario: If and email like skill is chosen summary for abandonrate should not appear
         Given the time is '2016-12-21 14:00'
         And I am viewing intraday page

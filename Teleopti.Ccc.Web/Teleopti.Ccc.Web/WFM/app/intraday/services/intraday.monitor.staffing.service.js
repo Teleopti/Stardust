@@ -37,26 +37,20 @@
 		var hiddenArray = [];
 		var mixedArea = false;
 
-		var setStaffingData = function(
-			result,
-			showOptimalStaffing,
-			showScheduledStaffing,
-			showEmailSkill,
-			showReforecastedAgents
-		) {
+		var setStaffingData = function(result, showOptimalStaffing, showReforecastedAgents) {
 			clearData();
 
 			if (result.DataSeries === null) return staffingData;
 			staffingData.forecastedStaffing.series = result.DataSeries.ForecastedStaffing;
 
-			staffingData.hasEmailSkill = showEmailSkill && mixedArea;
+			staffingData.hasEmailSkill = mixedArea;
 			staffingData.showReforecastedAgents = showReforecastedAgents !== false;
-			if (showReforecastedAgents !== false && (!showEmailSkill || !mixedArea))
+			if (showReforecastedAgents !== false && !mixedArea)
 				staffingData.forecastedStaffing.updatedSeries = result.DataSeries.UpdatedForecastedStaffing;
 
 			if (showOptimalStaffing) staffingData.actualStaffingSeries = result.DataSeries.ActualStaffing;
 
-			if (showScheduledStaffing) staffingData.scheduledStaffing = result.DataSeries.ScheduledStaffing;
+			staffingData.scheduledStaffing = result.DataSeries.ScheduledStaffing;
 
 			angular.forEach(
 				result.DataSeries.Time,
@@ -119,13 +113,7 @@
 			request.$promise.then(
 				function(result) {
 					staffingData.waitingForData = false;
-					setStaffingData(
-						result,
-						toggles['Wfm_Intraday_OptimalStaffing_40921'] && dayOffset <= 0,
-						toggles['Wfm_Intraday_ScheduledStaffing_41476'],
-						toggles['Wfm_Intraday_SupportSkillTypeEmail_44002'],
-						selectedItem.ShowReforecastedAgents
-					);
+					setStaffingData(result, dayOffset <= 0, selectedItem.ShowReforecastedAgents);
 					gotData(staffingData);
 				},
 				function() {
@@ -139,10 +127,9 @@
 			staffingData.waitingForData = true;
 			service.checkMixedArea(selectedItem);
 
-			var showReforecastedAgents =
-				selectedItem.Skills.every(function(element) {
-					return element.ShowReforecastedAgents === true;
-				}) || !toggles['WFM_Intraday_SupportOtherSkillsLikeEmail_44026'];
+			var showReforecastedAgents = selectedItem.Skills.every(function(element) {
+				return element.ShowReforecastedAgents === true;
+			});
 
 			cancelPendingRequest();
 
@@ -154,13 +141,7 @@
 			request.$promise.then(
 				function(result) {
 					staffingData.waitingForData = false;
-					setStaffingData(
-						result,
-						toggles['Wfm_Intraday_OptimalStaffing_40921'] && dayOffset <= 0,
-						toggles['Wfm_Intraday_ScheduledStaffing_41476'],
-						toggles['Wfm_Intraday_SupportSkillTypeEmail_44002'],
-						showReforecastedAgents
-					);
+					setStaffingData(result, dayOffset <= 0, showReforecastedAgents);
 					gotData(staffingData);
 				},
 				function(error) {

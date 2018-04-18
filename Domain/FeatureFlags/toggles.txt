@@ -149,15 +149,6 @@ ETL_Show_Web_Based_ETL_Tool_75530 = RC
 
 # DeBockers #
 WfmIntraday_MonitorActualvsForecasted_35176 = true
-Wfm_Intraday_OptimalStaffing_40921 = true
-Wfm_Intraday_ScheduledStaffing_41476 = true
-Wfm_Intraday_ESL_41827 = true
-Wfm_Intraday_SupportSkillTypeEmail_44002 = true
-WFM_Intraday_Show_For_Other_Days_43504 = true
-WFM_Intraday_SupportMultisiteSkill_43874 = true
-WFM_Intraday_Export_To_Excel_44892 = true
-WFM_Intraday_SupportOtherSkillsLikeEmail_44026 = true
-WFM_Unified_Skill_Group_Management_45417 = true
 WFM_Modify_Skill_Groups_43727 = true
 WFM_Remember_My_Selection_In_Intraday_47254 = RC
 

@@ -483,7 +483,6 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		}
 
 		[Test]
-		[Toggle(Toggles.WFM_Intraday_SupportOtherSkillsLikeEmail_44026)]
 		public void ShouldLoadDataForSkillTypesLikeEmail()
 		{
 			var backOfficeSkill = SkillFactory.CreateSkill("backOffice",

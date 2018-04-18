@@ -47,7 +47,6 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		}
 
 		[Test]
-		[Toggle(Toggles.Wfm_Intraday_SupportSkillTypeEmail_44002)]
 		public void ShouldHandleActualStaffingForEmailSkillHavingStatsStartingBeforeOpenHour()
 		{
 			var userNow = new DateTime(2016, 8, 26, 8, 30, 0, DateTimeKind.Utc);
@@ -118,7 +117,6 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		}
 
 		[Test]
-		[Toggle(Toggles.Wfm_Intraday_SupportSkillTypeEmail_44002)]
 		public void ShouldHandleActualStaffingWithOutForecastedBacklog()
 		{
 			var userNow = new DateTime(2016, 8, 26, 8, 30, 0, DateTimeKind.Utc);
@@ -150,7 +148,6 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		}
 
 		[Test]
-		[Toggle(Toggles.Wfm_Intraday_SupportSkillTypeEmail_44002)]
 		public void ShouldReturnForecastedStaffingForEmailSkill()
 		{
 			var userNow = new DateTime(2016, 8, 26, 8, 0, 0, DateTimeKind.Utc);
@@ -204,7 +201,6 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		}
 
 		[Test]
-		[Toggle(Toggles.Wfm_Intraday_SupportSkillTypeEmail_44002)]
 		public void ShouldHandleForecastedStaffingWithDayBeforeScheduledAgents()
 		{ 
 			var userNow = new DateTime(2016, 8, 26, 8, 0, 0, DateTimeKind.Utc);
@@ -260,7 +256,6 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 
 		[Test]
-		[Toggle(Toggles.Wfm_Intraday_SupportSkillTypeEmail_44002)]
 		public void ShouldUseStatisticsBacklogForRequiredAgents()
 		{
 			var userNow = new DateTime(2016, 8, 26, 4, 15, 0, DateTimeKind.Utc);
@@ -298,8 +293,6 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		}
 
 		[Test]
-		[Toggle(Toggles.Wfm_Intraday_SupportSkillTypeEmail_44002)]
-		[Toggle(Toggles.WFM_Intraday_SupportOtherSkillsLikeEmail_44026)]
 		public void ShouldUseStatisticsBacklogForRequiredAgentsForBackofficeSkill()
 		{
 			var userNow = new DateTime(2016, 8, 26, 4, 15, 0, DateTimeKind.Utc);
@@ -337,7 +330,6 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		}
 
 		[Test]
-		[Toggle(Toggles.Wfm_Intraday_SupportSkillTypeEmail_44002), Toggle(Toggles.WFM_Intraday_SupportOtherSkillsLikeEmail_44026)]
 		public void ShouldHandleForecastedStaffingWithDayBeforeScheduledAgentsForBackofficeSkill()
 		{
 			var userNow = new DateTime(2016, 8, 26, 8, 0, 0, DateTimeKind.Utc);
@@ -392,7 +384,6 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		}
 
 		[Test]
-		[Toggle(Toggles.WFM_Intraday_SupportOtherSkillsLikeEmail_44026)]
 		public void ShouldNotShowReforecastedAgentsForSkillNotSupportingIt()
 		{
 			var userNow = new DateTime(2016, 8, 26, 4, 15, 0, DateTimeKind.Utc);

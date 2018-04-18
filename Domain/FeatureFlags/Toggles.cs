@@ -119,7 +119,6 @@
 
 		ETL_EventbasedDate_39562,
 		NewPasswordHash_40460,
-		Wfm_Intraday_OptimalStaffing_40921,
 		Wfm_SkillPriorityRoutingGUI_39885,
 		ETL_EventbasedTimeZone_40870,
 		ETL_RemoveTimeZoneAndDateNightly_40870,
@@ -127,9 +126,6 @@
 		ETL_FixScheduleForPersonPeriod_41393,
 		Wfm_ArchiveSchedule_41498,
 		Wfm_ImportSchedule_41247,
-		Wfm_Intraday_ScheduledStaffing_41476,
-		Wfm_Intraday_ESL_41827,
-
 
 		Staffing_Info_Configuration_44687,
 		WfmStaffing_AddOvertime_42524,
@@ -138,10 +134,6 @@
 		OvertimeRequestSupportMultiSelectionSkillTypes_74945,
 		ETL_SpeedUpNightlyDayOff_38213,
 		MyTimeWeb_MobileResponsive_43826,
-		Wfm_Intraday_SupportSkillTypeEmail_44002,
-		WFM_Intraday_Show_For_Other_Days_43504,
-		WFM_Intraday_SupportMultisiteSkill_43874,
-		WFM_Intraday_Export_To_Excel_44892,
 		WFM_Forecaster_Refact_44480,
 		WFM_Export_Forecast_44716,
 		Staffing_BPOExchangeImport_45202,
@@ -153,8 +145,6 @@
 		Wfm_Staffing_45411, //this is to enable staffing
 
 		WFM_WebScheduling_LowPriority_44320,
-		WFM_Intraday_SupportOtherSkillsLikeEmail_44026,
-		WFM_Unified_Skill_Group_Management_45417,
 		WFM_Modify_Skill_Groups_43727,
 		WFM_AuditTrail_44006,
 		Report_Show_Utc_In_Report_Selection_When_In_Use_45079,

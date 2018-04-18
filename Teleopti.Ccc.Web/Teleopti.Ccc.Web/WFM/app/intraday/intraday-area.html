@@ -4,14 +4,6 @@
             <h1>
                 <i class="mdi mdi-compass-outline"></i> {{'Intraday'|translate}}</h1>
         </div>
-        <div class="fab-wrapper"
-             ng-if="vm.HasPermissionToModifySkillArea && !vm.toggles['WFM_Unified_Skill_Group_Management_45417']">
-            <button class="skill-area-create wfm-fab grow-out material-depth-1"
-                    ng-click="vm.configMode()">
-                <i class="mdi mdi-plus"></i>
-                <md-tooltip>{{'CreateSkillArea'|translate}}</md-tooltip>
-            </button>
-        </div>
     </div>
     <div class="con-row">
         <div class="con-flex"
@@ -99,12 +91,11 @@
                     <div ng-if="vm.toggles['WFM_Modify_Skill_Groups_43727'] && vm.HasPermissionToModifySkillArea">
                         <skill-group-manager-button on-click="vm.openSkillGroupManager()" />
                     </div>
-                    <div ng-if="vm.toggles['WFM_Unified_Skill_Group_Management_45417'] && !vm.toggles['WFM_Modify_Skill_Groups_43727'] && vm.HasPermissionToModifySkillArea">
+                    <div ng-if="!vm.toggles['WFM_Modify_Skill_Groups_43727'] && vm.HasPermissionToModifySkillArea">
                         <skill-group-button on-click="vm.configMode()" />
                     </div>
                     <div style="border-left: 1px solid #e0e0e0; margin-left: 10px; height: 100%;">&nbsp;</div>
-                    <div class="showOtherDay"
-                         ng-if="vm.toggles['WFM_Intraday_Show_For_Other_Days_43504']">
+                    <div class="showOtherDay">
                         <date-offset on-date-change="vm.changeChosenOffset(value)"
                                      chosen-offset="vm.moduleState.chosenOffset"></date-offset>
                     </div>
@@ -117,8 +108,7 @@
          ng-if="vm.moduleState.selectedSkill.Name || vm.moduleState.selectedSkillGroup.Name">
         <div class="con-flex">
             <div class="panel material-depth-1">
-                <div class="sub-header"
-                     ng-if="vm.toggles['WFM_Intraday_Show_For_Other_Days_43504']">
+                <div class="sub-header">
                     <h2 id="viewingDate">
                         {{vm.getLocalDate(vm.moduleState.chosenOffset.value)}}
                         <span ng-if="vm.moduleState.showIncluded">
@@ -150,8 +140,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="head-actions panel-menu"
-                         ng-show="vm.toggles['WFM_Intraday_Export_To_Excel_44892']">
+                    <div class="head-actions panel-menu">
                         <div class="head-actions panel-menu">
                             <div tabindex=0
                                  class="context-menu card-context">
@@ -208,9 +197,6 @@
                                                 ng-show="vm.viewObj.hasMonitorData">
                                         <div class="con-row">
                                             <div class="con-flex">
-                                                <p ng-if="vm.viewObj.hasEmailSkill && !vm.toggles['WFM_Intraday_SupportOtherSkillsLikeEmail_44026']">
-                                                    <i class="mdi mdi-alert"></i> {{'UnavailableSeries'|translate}}
-                                                </p>
                                                 <intraday-traffic-chart chart-data="vm.viewObj"></intraday-traffic-chart>
                                             </div>
                                         </div>
@@ -285,9 +271,6 @@
                                                 ng-show="vm.viewObj.hasMonitorData">
                                         <div class="con-row">
                                             <div class="con-flex">
-                                                <p ng-if="vm.viewObj.hasEmailSkill && !vm.toggles['WFM_Intraday_SupportOtherSkillsLikeEmail_44026']">
-                                                    <i class="mdi mdi-alert"></i> {{'UnavailableSeries'|translate}}
-                                                </p>
                                                 <p ng-if="!vm.viewObj.showAbandonRate"
                                                    id="noAbandonRate">
                                                     <i class="mdi mdi-alert"></i> {{'NotShowingAbandonRate'|translate}}
@@ -314,7 +297,7 @@
                                                                 {{vm.viewObj.summary.summaryServiceLevel}} %
                                                             </td>
                                                         </tr>
-                                                        <tr ng-if="vm.toggles['Wfm_Intraday_ESL_41827']">
+                                                        <tr>
                                                             <td>{{'ESL'|translate}}</td>
                                                             <td class="number-cell esl">
                                                                 {{vm.viewObj.summary.summaryEstimatedServiceLevel}} %
@@ -365,9 +348,6 @@
                                                 ng-show="vm.viewObj.hasMonitorData">
                                         <div class="con-row">
                                             <div class="con-flex">
-                                                <p ng-if="vm.viewObj.hasEmailSkill && !vm.toggles['WFM_Intraday_SupportOtherSkillsLikeEmail_44026']">
-                                                    <i class="mdi mdi-alert"></i> {{'UnavailableSeries'|translate}}
-                                                </p>
                                                 <p ng-if="!vm.viewObj.showReforecastedAgents"
                                                    id="noReforcastedAgents">
                                                     <i class="mdi mdi-alert"></i>

@@ -45,7 +45,7 @@
 		var intervalStart;
 		var mixedArea = false;
 
-		var setPerformanceData = function(result, showEsl, showEmailSkill, isToday, showAbandonRate) {
+		var setPerformanceData = function(result, isToday, showAbandonRate) {
 			clearData();
 			performanceData.averageSpeedOfAnswerObj.series = result.DataSeries.AverageSpeedOfAnswer;
 			performanceData.showAbandonRate = showAbandonRate;
@@ -53,7 +53,7 @@
 				performanceData.abandonedRateObj.series = result.DataSeries.AbandonedRate;
 			}
 			performanceData.serviceLevelObj.series = result.DataSeries.ServiceLevel;
-			if (showEsl) performanceData.estimatedServiceLevelObj.series = result.DataSeries.EstimatedServiceLevels;
+			performanceData.estimatedServiceLevelObj.series = result.DataSeries.EstimatedServiceLevels;
 
 			performanceData.latestActualInterval =
 				$filter('date')(result.LatestActualIntervalStart, 'shortTime') +
@@ -84,13 +84,12 @@
 				summaryAverageSpeedOfAnswer: $filter('number')(result.Summary.AverageSpeedOfAnswer, 1)
 			};
 
-			if (showEsl)
-				performanceData.summary.summaryEstimatedServiceLevel = $filter('number')(
-					result.Summary.EstimatedServiceLevel,
-					1
-				);
+			performanceData.summary.summaryEstimatedServiceLevel = $filter('number')(
+				result.Summary.EstimatedServiceLevel,
+				1
+			);
 
-			if (showEmailSkill && mixedArea) {
+			if (mixedArea) {
 				performanceData.abandonedRateObj.series = [];
 				performanceData.hasEmailSkill = true;
 			}
@@ -161,13 +160,7 @@
 			request.$promise.then(
 				function(result) {
 					performanceData.waitingForData = false;
-					setPerformanceData(
-						result,
-						toggles['Wfm_Intraday_ESL_41827'],
-						toggles['Wfm_Intraday_SupportSkillTypeEmail_44002'],
-						dayOffset === 0,
-						selectedItem.ShowAbandonRate
-					);
+					setPerformanceData(result, true, dayOffset === 0, selectedItem.ShowAbandonRate);
 					gotData(performanceData);
 				},
 				function(error) {
@@ -182,10 +175,9 @@
 			performanceData.waitingForData = true;
 			service.checkMixedArea(selectedItem);
 
-			var showAbandonRate =
-				selectedItem.Skills.every(function(element) {
-					return element.ShowAbandonRate === true;
-				}) || !toggles['WFM_Intraday_SupportOtherSkillsLikeEmail_44026'];
+			var showAbandonRate = selectedItem.Skills.every(function(element) {
+				return element.ShowAbandonRate === true;
+			});
 
 			cancelPendingRequest();
 			request = intradayService.getSkillAreaMonitorPerformanceByDayOffset.query({
@@ -195,14 +187,7 @@
 			request.$promise.then(
 				function(result) {
 					performanceData.waitingForData = false;
-					setPerformanceData(
-						result,
-						toggles['Wfm_Intraday_ESL_41827'],
-						toggles['Wfm_Intraday_SupportSkillTypeEmail_44002'] &&
-							!toggles['WFM_Intraday_SupportOtherSkillsLikeEmail_44026'],
-						dayOffset === 0,
-						showAbandonRate
-					);
+					setPerformanceData(result, dayOffset === 0, showAbandonRate);
 					gotData(performanceData);
 				},
 				function(error) {

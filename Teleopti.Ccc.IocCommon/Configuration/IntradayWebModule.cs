@@ -35,21 +35,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SkillTypeInfoProvider>().As<ISkillTypeInfoProvider>();
 			builder.RegisterType<InboundPhoneSkillSupported>().As<ISupportedSkillCheck>();
 			builder.RegisterType<OtherSkillsLikePhoneSupported>().As<ISupportedSkillCheck>();
-			if (_configuration.Toggle(Toggles.Wfm_Intraday_SupportSkillTypeEmail_44002))
-				builder.RegisterType<EmailSkillSupported>().As<ISupportedSkillCheck>();
-			if (_configuration.Toggle(Toggles.WFM_Intraday_SupportMultisiteSkill_43874))
-				builder.RegisterType<MultisiteSkillSupportedCheckAlwaysTrue>().As<IMultisiteSkillSupportedCheck>();
-			else
-				builder.RegisterType<MultisiteSkillSupportedCheck>().As<IMultisiteSkillSupportedCheck>();
-			if (_configuration.Toggle(Toggles.WFM_Intraday_SupportOtherSkillsLikeEmail_44026))
-			{
-				builder.RegisterType<OtherSkillsLikeEmailSupported>().As<ISupportedSkillCheck>();
-				builder.RegisterType<SkillTypeInfoTypesLikePhone>().As<ISkillTypeInfo>();
-			}
-			else
-			{
-				builder.RegisterType<SkillTypeInfoSupportAll>().As<ISkillTypeInfo>();
-			}
+			builder.RegisterType<EmailSkillSupported>().As<ISupportedSkillCheck>();
+			builder.RegisterType<MultisiteSkillSupportedCheckAlwaysTrue>().As<IMultisiteSkillSupportedCheck>();
+			builder.RegisterType<OtherSkillsLikeEmailSupported>().As<ISupportedSkillCheck>();
+			builder.RegisterType<SkillTypeInfoTypesLikePhone>().As<ISkillTypeInfo>();
 			builder.RegisterType<TaskPeriodsProvider>().SingleInstance();
 			builder.RegisterType<FetchSkillInIntraday>().SingleInstance();
 			builder.RegisterType<SkillGroupViewModelBuilder>().SingleInstance();
@@ -62,13 +51,13 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<IncomingTrafficViewModelCreator>().SingleInstance();
 			builder.RegisterType<PerformanceViewModelCreator>().SingleInstance();
 			builder.RegisterType<EstimatedServiceLevelProvider>().SingleInstance();
-			
+
 			builder.RegisterType<LatestStatisticsTimeProvider>().SingleInstance();
 			builder.RegisterType<ExtractSkillForecastIntervals>().SingleInstance();
 			builder.RegisterType<IntradayQueueStatisticsLoader>().As<IIntradayQueueStatisticsLoader>().SingleInstance();
 			builder.RegisterType<SplitSkillStaffInterval>().As<SplitSkillStaffInterval>().SingleInstance();
 			builder.RegisterType<JobStartTimeRepository>().As<IJobStartTimeRepository>().SingleInstance();
-			
+
 			if (_configuration.Toggle(Toggles.Staffing_BPOExchangeImport_45202))
 			{
 				builder.RegisterType<SkillCombinationResourceRepository>().As<ISkillCombinationResourceRepository>()
