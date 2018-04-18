@@ -84,7 +84,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		self._createLayers = function (layers) {
 			var newLayers = new Array();
 			$.each(layers, function (key, layer) {
-				newLayers.push(new layerViewModel(layer, self.canvasPosition));
+				newLayers.push(new layerViewModel(layer, self.canvasPosition()));
 			});
 			self.layers(newLayers);
 		};
@@ -160,7 +160,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 			return layer.StartTimeText + nextDayAdder + '-' + layer.EndTimeText + ' ' + layer.Payload;
 		});
 		self.visible = ko.computed(function () {
-			var timelinePosition = timeLineMarkerWidth - parseFloat(canvasPosition());
+			var timelinePosition = timeLineMarkerWidth - parseFloat(canvasPosition);
 			var startPos = parseFloat(self.leftPx);
 			var endPos = startPos + parseFloat(self.paddingLeft);
 			return endPos > timelinePosition;
@@ -169,7 +169,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 			if (!self.visible)
 				return false;
 			var startPos = parseFloat(self.leftPx);
-			var timelinePosition = timeLineMarkerWidth - parseFloat(canvasPosition());
+			var timelinePosition = timeLineMarkerWidth - parseFloat(canvasPosition);
 			var isActive = startPos <= timelinePosition;
 			return isActive;
 		});
