@@ -4,6 +4,7 @@ using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Exceptions;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -18,27 +19,27 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Availability
 		private readonly IStudentAvailabilityDayRepository _availabilityDayRepository;
 		private readonly IAnalyticsPersonPeriodRepository _analyticsPersonPeriodRepository;
 		private readonly IAnalyticsDateRepository _analyticsDateRepository;
-		private readonly IAnalyticsScenarioRepository _analyticsScenarioRepository;
 		private readonly IPersonRepository _personRepository;
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IAnalyticsHourlyAvailabilityRepository _analyticsHourlyAvailabilityRepository;
 		private readonly IScenarioRepository _scenarioRepository;
+		private readonly FetchAnalyticsScenarios _fetchAnalyticsScenarios;
 		private static readonly ILog logger = LogManager.GetLogger(typeof(HandleOneAnalyticsAvailabilityDay));
 
 		public HandleOneAnalyticsAvailabilityDay(IStudentAvailabilityDayRepository availabilityDayRepository,
 			IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository, IAnalyticsDateRepository analyticsDateRepository,
-			IAnalyticsScenarioRepository analyticsScenarioRepository, IPersonRepository personRepository,
+			IPersonRepository personRepository,
 			IScheduleStorage scheduleStorage, IAnalyticsHourlyAvailabilityRepository analyticsHourlyAvailabilityRepository,
-			IScenarioRepository scenarioRepository)
+			IScenarioRepository scenarioRepository, FetchAnalyticsScenarios fetchAnalyticsScenarios)
 		{
 			_availabilityDayRepository = availabilityDayRepository;
 			_analyticsPersonPeriodRepository = analyticsPersonPeriodRepository;
 			_analyticsDateRepository = analyticsDateRepository;
-			_analyticsScenarioRepository = analyticsScenarioRepository;
 			_personRepository = personRepository;
 			_scheduleStorage = scheduleStorage;
 			_analyticsHourlyAvailabilityRepository = analyticsHourlyAvailabilityRepository;
 			_scenarioRepository = scenarioRepository;
+			_fetchAnalyticsScenarios = fetchAnalyticsScenarios;
 		}
 
 		[AnalyticsUnitOfWork]
@@ -52,7 +53,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Availability
 			}
 			var availabilityDays = _availabilityDayRepository.Find(date, person);
 			var analyticsDate = getAnalyticsDate(date);
-			var scenarios = getScenarios();
+			var scenarios = _fetchAnalyticsScenarios.Execute();
 
 			if (!availabilityDays.Any())
 			{
@@ -115,12 +116,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Availability
 			if (analyticsDate == null)
 				throw new DateMissingInAnalyticsException(date.Date);
 			return analyticsDate;
-		}
-
-		private IList<AnalyticsScenario> getScenarios()
-		{
-			var scenarios = _analyticsScenarioRepository.Scenarios();
-			return scenarios.Where(x => !x.IsDeleted && x.ScenarioId != -1).ToList();
 		}
 
 		private IScheduleDay getScheduledDay(IStudentAvailabilityDay availabilityDay, Guid scenarioId)
