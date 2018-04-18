@@ -48,16 +48,21 @@ CREATE TABLE dbo.Tmp_OutlierDates
 		Parent uniqueidentifier NOT NULL,
 		Date datetime NOT NULL
 	)  ON [PRIMARY]
+GO
 
 ALTER TABLE dbo.Tmp_OutlierDates SET (LOCK_ESCALATION = TABLE)
+GO
 
 IF EXISTS(SELECT * FROM dbo.OutlierDates)
 	 EXEC('INSERT INTO dbo.Tmp_OutlierDates (Parent, Date)
 		SELECT Parent, Date FROM dbo.OutlierDates WITH (HOLDLOCK TABLOCKX)');
+GO
 
 DROP TABLE dbo.OutlierDates
+GO
 
 EXECUTE sp_rename N'dbo.Tmp_OutlierDates', N'OutlierDates', 'OBJECT' 
+GO
 
 ALTER TABLE dbo.OutlierDates ADD CONSTRAINT
 	PK_OutlierDates PRIMARY KEY CLUSTERED 
