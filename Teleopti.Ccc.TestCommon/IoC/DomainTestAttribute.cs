@@ -59,15 +59,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			//TODO: move this to CommonModule
-			// Really, adding domain services here is a very bad idea
-			// because it will give false positives in the build
-			// even though it may fail in some clients
-			// all services should be added to the 
-			// CommonModule !!
-			system.AddService<UserDeviceService>();
-			//
-
+			// stuff?
 			system.UseTestDouble<FakeTimeZoneGuard>().For<ITimeZoneGuard>();
 			system.UseTestDouble<PersonRequestAuthorizationCheckerForTest>().For<IPersonRequestCheckAuthorization>();
 			system.UseTestDouble<FakeUserTimeZone>().For<IUserTimeZone>();
@@ -297,7 +289,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			base.BeforeTest();
 
 			extendScope();
-			
+
 			fakeSignin();
 
 			createDefaultData();
