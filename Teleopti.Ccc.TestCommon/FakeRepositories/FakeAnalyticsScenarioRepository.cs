@@ -31,8 +31,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<AnalyticsScenario> Scenarios()
 		{
+			NumberOfScenariosReads++;
 			return fakeScenarios;
 		}
+		public int NumberOfScenariosReads { get; private set; }
 
 		public AnalyticsScenario Get(Guid scenarioCode)
 		{
