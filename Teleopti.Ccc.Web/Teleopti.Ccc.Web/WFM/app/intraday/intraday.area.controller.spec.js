@@ -1172,13 +1172,4 @@ describe('IntradayAreaController', function() {
 
 		expect(vm.moduleState.chosenOffset.value).toEqual(0);
 	});
-
-	it('should stop polling if API returns error', function() {
-		createController(false);
-		vm.moduleState.activeTab = 1;
-		vm.clickedSkillInPicker(skillRetError);
-		$httpBackend.flush();
-
-		expect(vm.timeoutPromise).toBeUndefined;
-	});
 });

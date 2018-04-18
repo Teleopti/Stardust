@@ -360,7 +360,10 @@
 			vm.viewObj = Object.assign({}, data);
 			vm.moduleState.hasMonitorData = vm.viewObj.hasMonitorData;
 			vm.waitingForData = false;
-			if (data.error) cancelTimeout();
+			if (data.error) {
+				cancelTimeout();
+				if (data.error.status === 403) location.reload();
+			}
 		}
 
 		function gotTimeData(data) {
