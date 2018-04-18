@@ -35,11 +35,13 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 		public IConfigReader ConfigReader;
 		public ICurrentUnitOfWork CurrentUnitOfWork;
 		public ICurrentBusinessUnit CurrentBusinessUnit;
+		private AssertRetryStrategy _assertRetryStrategy;
 		
 
 		[Test]
 		public void ShouldRunEndToEndAbsenceRequest()
 		{
+			_assertRetryStrategy = new AssertRetryStrategy(10);
 			Now.Is("2016-02-25 08:00".Utc());
 			IPersonRequest personRequest = null;
 			WithUnitOfWork.Do(() =>
@@ -66,13 +68,14 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 
 			startServiceBusAndPublishTick();
 
+			_assertRetryStrategy.Reset();
 			performLevel1Assert(personRequest);
 
+			_assertRetryStrategy.Reset();
 			performLevel2Assert();
 			
 			//adding a small delay an experinment may be we need to retry late
 			Thread.Sleep(2000);
-
 			performLevel3Assert(personRequest);
 
 		}
@@ -96,7 +99,6 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 								Assert.Fail("The request id is not in the stardust job detail. The proper request was not processed.");
 							else
 								Assert.IsTrue(true);
-
 						}
 					}
 				}
@@ -113,9 +115,8 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 				connection.Open();
 				using (var command = new SqlCommand("select serialized from Stardust.JobQueue", connection))
 				{
-					while (true)
+					while (_assertRetryStrategy.TryAgain())
 					{
-
 						using (var reader = command.ExecuteReader())
 						{
 							if (reader.HasRows)
@@ -132,9 +133,9 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 
 						}
 						Thread.Sleep(1000);
-
 					}
-
+					if(!_assertRetryStrategy.WithinRetryStrategy())
+						Assert.Fail("Unable to perform Tier 1 Assertion. Exceeded the maximum number of reties.");
 				}
 			}
 		}
@@ -148,9 +149,8 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 				connection.Open();
 				using (var command = new SqlCommand("select Ended,result from Stardust.Job", connection))
 				{
-					while (true)
+					while (_assertRetryStrategy.TryAgain())
 					{
-
 						using (var reader = command.ExecuteReader())
 						{
 							if (reader.HasRows)
@@ -168,8 +168,9 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 
 						}
 						Thread.Sleep(1000);
-
 					}
+					if (!_assertRetryStrategy.WithinRetryStrategy())
+						Assert.Fail("Unable to perform Tier 2 Assertion. Exceeded the maximum number of reties.");
 
 				}
 			}
@@ -182,6 +183,38 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 			Thread.Sleep(2000);
 
 			EventPublisher.Publish(new TenantMinuteTickEvent());
+		}
+	}
+
+	public class AssertRetryStrategy
+	{
+		private readonly int _numberOfTries;
+		private int _currentTry;
+
+		public AssertRetryStrategy(int numberOfTries)
+		{
+			_numberOfTries = numberOfTries;
+			_currentTry = 0;
+		}
+
+		public void Reset()
+		{
+			_currentTry = 0;
+		}
+
+		public bool TryAgain()
+		{
+			_currentTry++;
+			if (_currentTry <= _numberOfTries)
+				return true;
+			return false;
+		}
+
+		public bool WithinRetryStrategy()
+		{
+			if (_currentTry <= _numberOfTries)
+				return true;
+			return false;
 		}
 	}
 }
