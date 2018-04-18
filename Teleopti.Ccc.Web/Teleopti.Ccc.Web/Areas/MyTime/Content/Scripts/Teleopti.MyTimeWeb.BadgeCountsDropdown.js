@@ -58,7 +58,7 @@ Teleopti.MyTimeWeb.BadgeCountsDropdown = (function ($) {
 
 				var vm = new Teleopti.MyTimeWeb.BadgeCountsDropdownViewModel(startMoment, periodType);
 				ko.applyBindings(vm, el);
-				vm.fetchBadgeCounts();
+				vm.init();
 
 				stopClosingOnClick();
 				resetPeriodOnDropdownHidden(vm);
