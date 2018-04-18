@@ -29,13 +29,8 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest.Infrastructure
 				config.FakeSetting("OptimizeScheduleChangedEvents_DontUseFromWeb", "true");
 				builder.Register(c => config).As<IConfigReader>().SingleInstance();
 
-
 				//is this something we should fake?!
 				builder.RegisterType<FakeMessageSender>().As<IMessageSender>().SingleInstance();
-
-			}, new IocArgs(new ConfigReader())
-			{
-				FeatureToggle = TestSiteConfigurationSetup.URL.ToString()
 			});
 		}
 

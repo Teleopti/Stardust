@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 
 			TestSiteConfigurationSetup.Setup();
 
-			IntegrationIoCTest.Setup(builder =>
+			IntegrationIoCTest.SetupWithSyncAllEventPublisher(builder =>
 			{
 				builder.RegisterType<TestConfiguration>().SingleInstance();
 				builder.RegisterType<DataCreator>().SingleInstance().ApplyAspects();

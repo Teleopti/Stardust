@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		public static void Setup()
 		{
-			IntegrationIoCTest.Setup(builder =>
+			IntegrationIoCTest.SetupWithSyncAllEventPublisher(builder =>
 			{
 				builder.RegisterTypes(typeof(LocalSystem).Assembly
 					.GetTypes()

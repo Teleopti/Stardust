@@ -27,7 +27,7 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 
 			TestSiteConfigurationSetup.Setup();
 
-			IntegrationIoCTest.Setup(builder =>
+			IntegrationIoCTest.SetupWithSyncAllEventPublisher(builder =>
 			{
 				builder.RegisterType<TestConfigReader>().As<IConfigReader>().SingleInstance();
 				builder.RegisterType<DataCreator>().SingleInstance().ApplyAspects();

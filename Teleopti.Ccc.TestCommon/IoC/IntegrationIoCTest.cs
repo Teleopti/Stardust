@@ -34,7 +34,16 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			Setup(registrations, iocArgs, null);
 		}
 
-		public static void Setup(Action<ContainerBuilder> registrations, object injectTo)
+		public static void Setup(Action<ContainerBuilder> registrations)
+		{
+			Setup(registrations, new IocArgs(new ConfigReader())
+			{
+				FeatureToggle = TestSiteConfigurationSetup.URL.ToString()
+			});
+		}
+
+		//should be deleted?
+		public static void SetupWithSyncAllEventPublisher(Action<ContainerBuilder> registrations, object injectTo)
 		{
 			Setup(registrations, new IocArgs(new ConfigReader())
 			{
