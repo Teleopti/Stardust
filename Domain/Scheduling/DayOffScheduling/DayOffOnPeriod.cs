@@ -7,34 +7,25 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 
 namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 {
-	
 	public class DayOffOnPeriod
 	{
 		private readonly IList<IScheduleDay> _scheduleDays;
-		private readonly DateOnlyPeriod _period;
-		private readonly int _daysOffcount;
- 
+
 		public DayOffOnPeriod(DateOnlyPeriod period, IList<IScheduleDay> scheduleDays, int dayOffsCount)
 		{
 			_scheduleDays = scheduleDays;
-			_period = period;
-			_daysOffcount = dayOffsCount;
+			Period = period;
+			DaysOffCount = dayOffsCount;
 		}
 
-		public DateOnlyPeriod Period
-		{
-			get { return _period; }
-		}
+		public DateOnlyPeriod Period { get; }
 
-		public int DaysOffCount
-		{
-			get { return _daysOffcount; }
-		}
+		public int DaysOffCount { get; }
 
 		public IScheduleDay FindBestSpotForDayOff(IHasContractDayOffDefinition hasContractDayOffDefinition, IScheduleDayAvailableForDayOffSpecification dayAvailableForDayOffSpecification, IEffectiveRestrictionCreator effectiveRestrictionCreator, SchedulingOptions schedulingOptions)
 		{
 			var contractDayOffs = new List<IScheduleDay>();
-			IList<KeyValuePair<IScheduleDay, int>> bestSpotList = new List<KeyValuePair<IScheduleDay, int>>();
+			var bestSpotList = new List<Tuple<IScheduleDay, int>>();
 
 			var allContractDayOffIsSatisfied = true;
 
@@ -65,14 +56,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 						minDiff = (int)diff;
 				}
 
-				var kvp = new KeyValuePair<IScheduleDay, int>(scheduleDay, minDiff);
+				var kvp = new Tuple<IScheduleDay, int>(scheduleDay, minDiff);
 				bestSpotList.Add(kvp);
 			}
 
 			if (bestSpotList.Count == 0) return null;
 
-			var bestKvp = bestSpotList.OrderBy(kvp => kvp.Value).ThenByDescending(kvp => kvp.Key.DateOnlyAsPeriod.DateOnly.Date).First();
-			return bestKvp.Key;
+			var bestKvp = bestSpotList.OrderBy(kvp => kvp.Item2).ThenByDescending(kvp => kvp.Item1.DateOnlyAsPeriod.DateOnly.Date).First();
+			return bestKvp.Item1;
 		}
 	}
 }

@@ -47,12 +47,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			IGroupPersonBuilderWrapper groupPersonBuilderForOptimization)
 		{
 			var matrixDataList = _matrixDataListCreator.Create(matrixes, schedulingOptions);
-			var matrixDataForSelectedPersons = new List<IMatrixData>();
-			foreach (var matrixData in matrixDataList)
-			{
-				if (selectedPersons.Contains(matrixData.Matrix.Person))
-					matrixDataForSelectedPersons.Add(matrixData);
-			}
+			var matrixDataForSelectedPersons =
+				matrixDataList.Where(matrixData => selectedPersons.Contains(matrixData.Matrix.Person)).ToList();
 
 			foreach (var matrixData in matrixDataForSelectedPersons)
 			{
@@ -79,40 +75,28 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			IPerson person, DateOnly scheduleDate,
 			out IEffectiveRestriction restriction)
 		{
-			var selectedMatrixesForOnePerson = new List<IScheduleMatrixPro>();
-
 			var group = groupPersonBuilderForOptimization.ForOptimization().BuildGroup(_schedulingResultStateHolder().LoadedAgents, person, scheduleDate);
 
 			restriction = getMatrixOfOneTeam(matrixes, schedulingOptions, group, scheduleDate, out List<IScheduleMatrixPro> matrixesOfOneTeam, person);
 
-			foreach (var scheduleMatrixPro in matrixesOfOneTeam)
-			{
-				var currentPerson = scheduleMatrixPro.Person;
-				if (currentPerson.Equals(person))
-				{
-					selectedMatrixesForOnePerson.Add(scheduleMatrixPro);
-				}
-			}
-
+			var selectedMatrixesForOnePerson =
+				matrixesOfOneTeam.Where(scheduleMatrixPro => scheduleMatrixPro.Person.Equals(person)).ToList();
 			return selectedMatrixesForOnePerson;
 		}
 
 		private IEffectiveRestriction getMatrixOfOneTeam(IEnumerable<IScheduleMatrixPro> matrixes, SchedulingOptions schedulingOptions, Group group, DateOnly scheduleDate, out List<IScheduleMatrixPro> matrixesOfOneTeam, IPerson person)
 		{
 			var scheduleDictionary = _schedulingResultStateHolder().Schedules;
-			var groupMembers = group.GroupMembers.ToList();
+			var groupMembers = group.GroupMembers.ToArray();
 			var restriction = _effectiveRestrictionCreator.GetEffectiveRestrictionForSinglePerson(person,
 				scheduleDate, schedulingOptions,
 				scheduleDictionary);
-			var matrixesOfOne = matrixes.Where(x => groupMembers.Contains(x.Person)).ToList();
-			matrixesOfOneTeam = new List<IScheduleMatrixPro>();
-
-			foreach (var scheduleMatrixPro in matrixesOfOne)
+			var matrixesOfOne = matrixes.Where(x => groupMembers.Contains(x.Person));
+			matrixesOfOneTeam = matrixesOfOne.Where(scheduleMatrixPro =>
 			{
 				var schedulePeriod = scheduleMatrixPro.SchedulePeriod;
-				if (schedulePeriod.IsValid && schedulePeriod.DateOnlyPeriod.Contains(scheduleDate))
-					matrixesOfOneTeam.Add(scheduleMatrixPro);
-			}
+				return schedulePeriod.IsValid && schedulePeriod.DateOnlyPeriod.Contains(scheduleDate);
+			}).ToList();
 
 			return restriction;
 		}
@@ -120,7 +104,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private static bool addDaysOffForTeam(ISchedulingCallback schedulingCallback, IEnumerable<IScheduleMatrixPro> matrixes, SchedulingOptions schedulingOptions,
 			ISchedulePartModifyAndRollbackService rollbackService, DateOnly scheduleDate, IEffectiveRestriction restriction)
 		{
-			if (restriction == null || restriction.DayOffTemplate == null)
+			if (restriction?.DayOffTemplate == null)
 				return false;
 			if (EffectiveRestrictionCreator.OptionsConflictWithRestrictions(schedulingOptions, restriction))
 				return false;
@@ -145,11 +129,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private void addContractDaysOffForTeam(ISchedulingCallback schedulingCallback, IEnumerable<IScheduleMatrixPro> matrixList, SchedulingOptions schedulingOptions,
 			ISchedulePartModifyAndRollbackService rollbackService)
 		{
+			var authorization = _authorization.Current();
+			var scheduleDictionary = _schedulingResultStateHolder().Schedules;
 			foreach (var matrix in matrixList)
 			{
-				int targetDaysOff;
-				IList<IScheduleDay> currentOffDaysList;
-				_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulingResultStateHolder().Schedules, matrix.SchedulePeriod, out targetDaysOff, out currentOffDaysList);
+				_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(scheduleDictionary, matrix.SchedulePeriod, out var targetDaysOff, out var currentOffDaysList);
 
 				var schedulePeriod = matrix.SchedulePeriod;
 				if (!schedulePeriod.IsValid)
@@ -159,9 +143,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				if (currentDaysOff >= targetDaysOff)
 					continue;
 
-				var unlockedDates = matrix.UnlockedDays.Select(sdp => sdp.Day).ToList();
+				var unlockedDates = matrix.UnlockedDays.Select(sdp => sdp.Day).ToArray();
 				var foundSpot = true;
-
+				
 				while (currentOffDaysList.Count < targetDaysOff && foundSpot)
 				{
 					var sortedWeeks = _dayOffsInPeriodCalculator.WeekPeriodsSortedOnDayOff(matrix);
@@ -180,7 +164,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 							bestScheduleDay.CreateAndAddDayOff(schedulingOptions.DayOffTemplate);
 
 							var personAssignment = bestScheduleDay.PersonAssignment();
-							if (!_authorization.Current().IsPermitted(personAssignment.FunctionPath, bestScheduleDay.DateOnlyAsPeriod.DateOnly, bestScheduleDay.Person)) continue;
+							if (!authorization.IsPermitted(personAssignment.FunctionPath, bestScheduleDay.DateOnlyAsPeriod.DateOnly, bestScheduleDay.Person)) continue;
 
 							rollbackService.Modify(bestScheduleDay);
 							foundSpot = true;
@@ -196,7 +180,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 						break;
 					}
 
-					_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulingResultStateHolder().Schedules, schedulePeriod, out targetDaysOff, out currentOffDaysList);
+					_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(scheduleDictionary, schedulePeriod, out targetDaysOff, out currentOffDaysList);
 				}
 			}
 		}
