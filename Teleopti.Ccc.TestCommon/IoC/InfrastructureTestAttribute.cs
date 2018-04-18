@@ -15,11 +15,8 @@ using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
-using Teleopti.Ccc.TestCommon.Web;
 
 namespace Teleopti.Ccc.TestCommon.IoC
 {
@@ -78,6 +75,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			// Tenant stuff
 			system.UseTestDouble<TenantAuthenticationFake>().For<ITenantAuthentication>();
 			system.AddService(TenantUnitOfWorkManager.Create(InfraTestConfigReader.ConnectionString));
+			system.UseTestDouble<CurrentTenantUserFake>().For<ICurrentTenantUser>();
 
 			// Hangfire bus maybe? ;)
 			if (QueryAllAttributes<RealHangfireAttribute>().IsEmpty())

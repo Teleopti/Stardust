@@ -1,5 +1,6 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.MultiTenancy;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Aspects;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.UserTexts;
 
@@ -9,25 +10,17 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 	{
 		private readonly ICurrentTenantSession _currentTenantSession;
 		private readonly IPersonInfoPersister _personInfoPersister;
-		private readonly ITenantAuditPersister _tenantAuditPersister;
-		private readonly ICurrentTenantUser _currentTenantUser;
 
 		public PersistPersonInfo(ICurrentTenantSession currentTenantSession
-			,IPersonInfoPersister personInfoPersister
-			,ITenantAuditPersister tenantAuditPersister
-			,ICurrentTenantUser currentTenantUser)
+			,IPersonInfoPersister personInfoPersister)
 		{
 			_currentTenantSession = currentTenantSession;
 			_personInfoPersister = personInfoPersister;
-			_tenantAuditPersister = tenantAuditPersister;
-			_currentTenantUser = currentTenantUser;
 		}
-
-		public string Persist(PersonInfo personInfo, PersistActionIntent actionIntent, bool throwOnError = true)
+		
+		[TenantAudit]
+		public virtual string Persist(PersonInfo personInfo, PersistActionIntent actionIntent, bool throwOnError = true)
 		{
-			/// Make ccc (aspect) of this later
-			AuditPersist(personInfo, actionIntent);
-			/// 
 			var res = ValidatePersonInfo(personInfo, throwOnError);
 
 			if (!string.IsNullOrEmpty(res))
@@ -37,21 +30,6 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 
 			_personInfoPersister.Persist(personInfo);
 			return null;
-		}
-
-		private void AuditPersist(PersonInfo personInfo, PersistActionIntent intent)
-		{
-			// break out inte aspect
-			var tenantUser = _currentTenantUser.CurrentUser();
-			var data = Newtonsoft.Json.JsonConvert.SerializeObject(new
-			{
-				Identity = personInfo.Identity,
-				AppLogonName = personInfo.ApplicationLogonInfo.LogonName,
-				AppLogonPwd = string.IsNullOrEmpty(personInfo.ApplicationLogonInfo.LogonPassword) ? string.Empty : "<pwd-hash-set>"
-			});
-			
-			var ta = new TenantAudit(tenantUser.Id, personInfo.Id, intent.ToString(), string.Empty, data);
-			_tenantAuditPersister.Persist(ta);
 		}
 
 		private string ValidatePersonInfo(PersonInfo personInfo, bool throwOnError = false)
@@ -92,6 +70,10 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 		}
 	}
 
+	public static class IntentTest
+	{
+		public const string NotSet = "NotSet";
+	}
 	public enum PersistActionIntent
 	{
 		NotSet,

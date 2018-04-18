@@ -9,14 +9,14 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 		{
 		}
 
-		public TenantAudit(Guid actionBy, Guid actionOn, string action, string actionResult, string actionData, Guid? correlation = null)
+		public TenantAudit(Guid actionBy, Guid actionOn, string action, string actionData, Guid? correlation = null)
 			: this()
 		{
 			this.Id = Guid.NewGuid();
 			ActionPerformedBy = actionBy;
 			ActionPerformedOn = actionOn;
 			Action = action;
-			ActionResult = actionResult;
+			ActionResult = string.Empty;
 			Data = actionData;
 			Correlation = correlation ?? Guid.NewGuid();
 			TimeStamp = DateTime.UtcNow;

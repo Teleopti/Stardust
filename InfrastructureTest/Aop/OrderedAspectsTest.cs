@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using SharpTestsEx;
+using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Aop.Core;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.IoC;

@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<PersonInfoHelper>().As<IPersonInfoHelper>().SingleInstance();
-			builder.RegisterType<PersistPersonInfo>().As<IPersistPersonInfo>().SingleInstance();
+			builder.RegisterType<PersistPersonInfo>().As<IPersistPersonInfo>().SingleInstance().ApplyAspects();
 			builder.RegisterType<ImportAgentFileValidator>().As<IImportAgentFileValidator>().SingleInstance();
 			builder.RegisterType<ImportAgentDataProvider>().As<IImportAgentDataProvider>().SingleInstance();
 			builder.RegisterType<AgentPersister>().As<IAgentPersister>().SingleInstance();
