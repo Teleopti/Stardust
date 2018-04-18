@@ -2,11 +2,12 @@
   <div class="sub-header">
     <div class="con-row">
       <div class="con-flex">
-        <label for="filter" class="input-icon">
-          <i class="mdi mdi-magnify">
-            <input type="text" placeholder="Search" [(ngModel)]="searchQuery" (keyup.enter)="onSearch()" data-test-searchinput>
-          </i>
-        </label>
+        <mat-form-field>
+          <input matInput placeholder="Search" [formControl]="searchControl" [(ngModel)]="searchQuery" (keyup.enter)="onSearch()" data-test-searchinput>
+          <span matPrefix>
+            <i class="mdi mdi-magnify"></i>&nbsp;
+          </span>
+        </mat-form-field>
       </div>
       <div class="con-flex x3">
         <button mat-raised-button color="primary" data-test-grant-button [disabled]="!workspaceService.isAnySelected()" (click)="nav.navToGrant()">

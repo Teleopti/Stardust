@@ -3,6 +3,8 @@ import { MatTableDataSource, PageEvent } from '@angular/material';
 
 import { NavigationService, PeopleSearchQuery, RolesService, SearchService, WorkspaceService } from '../../services';
 import { Person, Role } from '../../types';
+import { FormControl } from '@angular/forms';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
 	selector: 'people-search-page',
@@ -21,7 +23,7 @@ export class SearchPageComponent implements OnInit {
 
 	displayedColumns = ['select', 'FirstName', 'LastName', 'Site', 'Team', 'Roles'];
 	dataSource = new MatTableDataSource<Person>([]);
-	searchQuery = '';
+	searchControl = new FormControl('');
 
 	pagination = {
 		length: 0, // Get from API
@@ -29,16 +31,17 @@ export class SearchPageComponent implements OnInit {
 	};
 
 	ngOnInit() {
-		this.searchQuery = this.searchService.keyword;
+		this.searchControl.setValue(this.searchService.keyword);
 		this.searchService.getPeople().subscribe({
 			next: (people: Person[]) => {
 				this.dataSource.data = people;
 			}
 		});
+		this.searchControl.valueChanges.pipe(debounceTime(700)).subscribe({ next: () => this.onSearch() });
 	}
 
 	onSearch() {
-		this.searchService.keyword = this.searchQuery;
+		this.searchService.keyword = this.searchControl.value;
 		this.searchPeople();
 	}
 
