@@ -13,36 +13,34 @@
 				onDateChange: '&',
 				options: '=?'
 			},
-			controller: ['$timeout', '$locale', '$scope', teamScheduleDatePickerCtrl],
+			controller: ['$timeout', '$locale', teamScheduleDatePickerCtrl],
 			controllerAs: 'vm',
 			bindToController: true
 		};
 	}
 
-	function teamScheduleDatePickerCtrl($timeout, $locale, $scope) {
+	function teamScheduleDatePickerCtrl($timeout, $locale) {
 		var vm = this;
 		vm.dateFormat = $locale.DATETIME_FORMATS.shortDate;
 		vm.step = parseInt(vm.step) || 1;
-		vm.selectedDateObj = moment(vm.selectedDate).toDate();
 		var date = vm.selectedDate;
 
 		vm.onDateInputChange = function () {
-			if (!vm.selectedDateObj || !moment(vm.selectedDateObj).isValid()) {
+			if (!vm.selectedDate || !moment(vm.selectedDate).isValid()) {
 				vm.selectedDate = date;
 				return;
 			}
-			date = moment(vm.selectedDateObj).format('YYYY-MM-DD HH:mm');
-			vm.selectedDate = date;
-			vm.onDateChange && $timeout(function () { vm.onDateChange({ date: date }); });
+			date = vm.selectedDate;
+			vm.onDateChange && $timeout(function () { vm.onDateChange({ date: vm.selectedDate }); });
 		};
 
 		vm.gotoPreviousDate = function () {
-			vm.selectedDateObj = moment(vm.selectedDateObj).add(-(vm.step), 'day').toDate();
+			vm.selectedDate = moment(vm.selectedDate).add(-(vm.step), 'day').toDate();
 			vm.onDateInputChange();
 		};
 
 		vm.gotoNextDate = function () {
-			vm.selectedDateObj = moment(vm.selectedDateObj).add(vm.step, 'day').toDate();
+			vm.selectedDate = moment(vm.selectedDate).add(vm.step, 'day').toDate();
 			vm.onDateInputChange();
 		};
 

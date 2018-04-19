@@ -21,7 +21,6 @@
 		ctrl.invalidAgents = [];
 
 		ctrl.validateTimeRangeAndInput = function () {
-			console.log('in adding overtime', ctrl.fromTime, ctrl.toTime);
 			ctrl.timeRangeIsValid = validateTimeRange(ctrl.fromTime, ctrl.toTime);
 			ctrl.validateInput();
 		}

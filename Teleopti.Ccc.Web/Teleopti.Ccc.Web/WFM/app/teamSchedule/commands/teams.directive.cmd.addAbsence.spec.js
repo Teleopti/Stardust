@@ -1,4 +1,4 @@
-﻿fdescribe('teamschedule add absence diretive test', function () {
+﻿describe('teamschedule add absence diretive test', function () {
 	'use strict';
 
 	var fakeAbsenceService,
@@ -143,7 +143,7 @@
 			expect(endTimeString).toBe('1100');
 		});
 
-		fit('should apply add fullday absence with correct data', function () {
+		it('should apply add fullday absence with correct data', function () {
 
 			fakePermissions.setPermissions({ IsAddIntradayAbsenceAvailable: true, IsAddFullDayAbsenceAvailable: true });
 			var result = setUp(moment('2015-01-01T00:00:00').toDate());
