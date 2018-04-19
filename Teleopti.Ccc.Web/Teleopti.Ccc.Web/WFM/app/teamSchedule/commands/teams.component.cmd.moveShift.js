@@ -123,7 +123,7 @@
 		};
 
 		function getDefaultMoveToTime() {
-			return moment(ctrl.containerCtrl.getDate() + " 08:00").toDate();
+			return serviceDateFormatHelper.getDateTime(moment(ctrl.containerCtrl.getDate() + " 08:00"));
 		}
 
 		function getMoveToStartTimeStr() {

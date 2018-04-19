@@ -37,7 +37,6 @@
 
 	it('should output correct time value', function () {
 		var element = setUp("2018-04-13", "Europe/Berlin", "2018-04-13 01:30");
-		var ctrl = element.isolateScope().$ctrl;
 		var hoursEl = element[0].querySelector('.uib-time.hours input');
 		hoursEl.value = 8;
 		angular.element(hoursEl).triggerHandler('change');
@@ -63,8 +62,8 @@
 		expect(scope.dateTime).toBe(null);
 	});
 
-	xit('should not init time if dateTime is invalid in DST', function () {
-		var element = setUp("2018-03-25", 'Europe/Berlin', "2018-03-25 02:00");
+	it('should not init time if dateTime is invalid in DST', function () {
+		setUp("2018-03-25", 'Europe/Berlin', "2018-03-25 02:00");
 		expect(scope.dateTime).toBe(null);
 	});
 
@@ -122,7 +121,6 @@ describe('<teams-time-picker> in locale sv-SE', function () {
 
 	it('should not show meridian', function () {
 		element = setUp("2018-04-13");
-		//document.body.innerHTML  = element[0].innerHTML;
 		expect(element[0].querySelectorAll('.uib-time.am-pm.ng-hide').length).toEqual(1);
 	});
 

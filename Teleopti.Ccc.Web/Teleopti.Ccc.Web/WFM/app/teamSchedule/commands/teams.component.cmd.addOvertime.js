@@ -107,17 +107,17 @@
 		function getDefaultStartTime() {
 			var basedOnAgentInfo = getAgentInfoOnTheTop();
 			if (basedOnAgentInfo.IsDayOff || basedOnAgentInfo.IsEmptyDay || basedOnAgentInfo.IsFullDayAbsence) {
-				return moment(basedOnAgentInfo.ScheduleStartTime.split('T')[0]).hour(defaultWorkStartInHour).toDate();
+				return serviceDateFormatHelper.getDateTime(moment(basedOnAgentInfo.ScheduleStartTime.split('T')[0]).hour(defaultWorkStartInHour));
 			}
-			return moment(basedOnAgentInfo.ScheduleEndTime).toDate();
+			return serviceDateFormatHelper.getDateTime(basedOnAgentInfo.ScheduleEndTime);
 		}
 
 		function getEndTime() {
 			var basedOnAgentInfo = getAgentInfoOnTheTop();
 			if (basedOnAgentInfo.IsDayOff || basedOnAgentInfo.IsEmptyDay || basedOnAgentInfo.IsFullDayAbsence) {
-				return moment(basedOnAgentInfo.ScheduleStartTime.split('T')[0]).hour(defaultWorkEndInHour).toDate();
+				return serviceDateFormatHelper.getDateTime(moment(basedOnAgentInfo.ScheduleStartTime.split('T')[0]).hour(defaultWorkEndInHour));
 			}
-			return moment(basedOnAgentInfo.ScheduleEndTime).add(1, 'hours').toDate();
+			return serviceDateFormatHelper.getDateTime(moment(basedOnAgentInfo.ScheduleEndTime).add(1, 'hours'));
 		}
 
 		function getAgentInfoOnTheTop() {

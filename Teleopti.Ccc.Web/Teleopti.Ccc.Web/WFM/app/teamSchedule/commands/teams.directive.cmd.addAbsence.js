@@ -111,11 +111,11 @@
 			var curDateMoment = moment(vm.selectedDate());
 			var personIds = vm.selectedAgents.map(function (agent) { return agent.PersonId; });
 			var schedules = vm.containerCtrl.scheduleManagementSvc.schedules();
-			return scheduleHelper.getEarliestStartOfSelectedSchedules(schedules, curDateMoment, personIds);
+			return serviceDateFormatHelper.getDateTime(scheduleHelper.getEarliestStartOfSelectedSchedules(schedules, curDateMoment, personIds));
 		};
 
 		function getDefaultAbsenceEndTime() {
-			return moment(getDefaultAbsenceStartTime()).add(1, 'hour').toDate();
+			return serviceDateFormatHelper.getDateTime(moment(getDefaultAbsenceStartTime()).add(1, 'hour'));
 		};
 
 		function determineIsSameTimezoneForFullDayAbsence() {

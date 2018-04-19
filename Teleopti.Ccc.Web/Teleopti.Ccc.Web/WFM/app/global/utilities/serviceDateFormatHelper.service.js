@@ -22,8 +22,8 @@
 			return self.getDateByFormat(date, serviceDateFormat.dateOnly);
 		}
 
-		this.getTimeOnly = function (date) {
-			return self.getDateByFormat(date, serviceDateFormat.timeOnly);
+		this.getTimeOnly = function (dateTime) {
+			return self.getDateByFormat(dateTime, serviceDateFormat.timeOnly);
 		}
 
 		this.getDateTime = function (date) {

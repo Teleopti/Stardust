@@ -22,7 +22,9 @@
 	function timePickerCtrl($scope, $element, $attrs, $locale, serviceDateFormatHelper) {
 		var ctrl = this;
 
-		ctrl.dateTimeObj = moment('1900-01-01 ' + serviceDateFormatHelper.getTimeOnly(ctrl.ngModel)).toDate();
+		ctrl.dateTimeObj = (typeof ctrl.ngModel === 'string') && serviceDateFormatHelper.getDateTime(ctrl.ngModel) === ctrl.ngModel
+			? moment('1900-01-01 ' + serviceDateFormatHelper.getTimeOnly(ctrl.ngModel)).toDate()
+			: undefined;
 		var meridianInfo = getMeridiemInfoFromMoment($locale);
 		ctrl.showMeridian = meridianInfo.showMeridian;
 		ctrl.meridians = ctrl.showMeridian ? [meridianInfo.am, meridianInfo.pm] : [];
