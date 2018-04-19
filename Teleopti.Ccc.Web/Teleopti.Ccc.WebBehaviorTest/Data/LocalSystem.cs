@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		public static void Setup()
 		{
-			IntegrationIoCTest.SetupWithSyncAllEventPublisher(builder =>
+			IntegrationIoCTest.Setup(builder =>
 			{
 				builder.RegisterTypes(typeof(LocalSystem).Assembly
 					.GetTypes()
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				).SingleInstance();
 				builder.RegisterType<DataMakerImpl>().SingleInstance();
 				builder.RegisterType<ScenarioDataFactory>().InstancePerDependency();
-			}, null);
+			}, arguments => { arguments.AllEventPublishingsAsSync = true; }, null);
 			ContainerPlugin.UseContainer(IntegrationIoCTest.Container);
 
 			Toggles = IntegrationIoCTest.Container.Resolve<IToggleManager>();

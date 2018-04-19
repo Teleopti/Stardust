@@ -23,24 +23,19 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 			Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
 			XmlConfigurator.Configure();
 
-			//DataSourceHelper.CreateDatabases();
-
 			TestSiteConfigurationSetup.Setup();
 
-			IntegrationIoCTest.SetupWithSyncAllEventPublisher(builder =>
+			IntegrationIoCTest.Setup(builder =>
 			{
 				builder.RegisterType<TestConfigReader>().As<IConfigReader>().SingleInstance();
 				builder.RegisterType<DataCreator>().SingleInstance().ApplyAspects();
-//				builder.RegisterType<StatesSender>().SingleInstance().ApplyAspects();
 				builder.RegisterType<SyncAllEventPublisherWithStardust>().As<IEventPublisher>().SingleInstance();
-
 
 				builder.RegisterType<FakeEventPublisher>().SingleInstance();
 				builder.RegisterType<NoMessageSender>().As<IMessageSender>().SingleInstance();
-			}, this);
+			}, arguments => { arguments.AllEventPublishingsAsSync = true; }, this);
 
 			TestSiteConfigurationSetup.TearDown();
 		}
-		
 	}
 }

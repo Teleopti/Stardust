@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 
 			TestSiteConfigurationSetup.Setup();
 
-			IntegrationIoCTest.SetupWithSyncAllEventPublisher(builder =>
+			IntegrationIoCTest.Setup(builder =>
 			{
 				builder.RegisterType<TestConfiguration>().SingleInstance();
 				builder.RegisterType<DataCreator>().SingleInstance().ApplyAspects();
@@ -33,10 +33,9 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 				builder.RegisterType<ScheduleInvalidator>().SingleInstance().ApplyAspects();
 				builder.RegisterType<FakeEventPublisher>().SingleInstance();
 				builder.RegisterType<NoMessageSender>().As<IMessageSender>().SingleInstance();
-			}, this);
+			}, arguments => { arguments.AllEventPublishingsAsSync = true; }, this);
 
 			TestSiteConfigurationSetup.TearDown();
 		}
-		
 	}
 }
