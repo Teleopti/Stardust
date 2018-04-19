@@ -12,8 +12,8 @@
 	function theComponent($translate) {
 		var ctrl = this;
 
+		var hiddenArray = [];
 		var initChart = function(inData) {
-			var hiddenArray = [];
 			if (angular.isDefined(inData) && angular.isDefined(inData.forecastedStaffing)) {
 				ctrl.staffingChart = c3.generate({
 					bindto: '#staffingChart',
@@ -81,7 +81,7 @@
 								} else {
 									hiddenArray.push(id);
 								}
-								ctrl.initChart(ctrl.chartData);
+								initChart(ctrl.chartData);
 							}
 						}
 					},

@@ -11,9 +11,9 @@
 
 	function theComponent($translate, $log) {
 		var ctrl = this;
+		var hiddenArray = [];
 
 		var initChart = function(inData) {
-			var hiddenArray = [];
 			if (
 				angular.isDefined(inData) &&
 				angular.isDefined(inData.averageSpeedOfAnswerObj) &&
@@ -100,7 +100,7 @@
 								} else {
 									hiddenArray.push(id);
 								}
-								ctrl.initChart(ctrl.chartData);
+								initChart(ctrl.chartData);
 							}
 						}
 					},
