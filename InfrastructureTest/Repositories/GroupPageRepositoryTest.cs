@@ -14,19 +14,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
     [Category("BucketB")]
     public class GroupPageRepositoryTest : RepositoryTest<IGroupPage>
     {
-        private GroupPageRepository _groupPageRepository;
-
-        #region Default Testings
-        /// <summary>
+		/// <summary>
         /// Runs every test implemented by repositorie's concrete implementation
         /// </summary>
         protected override void ConcreteSetup()
         {
-            _groupPageRepository = new GroupPageRepository(UnitOfWork);
         }
-
-       
-
+		
         protected override IGroupPage CreateAggregateWithCorrectBusinessUnit()
         {
             IGroupPage ret = new GroupPage("GroupPage");
@@ -44,9 +38,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             return new GroupPageRepository(currentUnitOfWork.Current());
         }
-        #endregion
 
-	    [Test]
+		[Test]
 	    public void ShouldLoadRootGroupsForPersonOnTopLevel()
 	    {
 			IPerson person1 = PersonFactory.CreatePerson("Person1");
@@ -71,7 +64,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			sortOrder1.AddRootPersonGroup(root2);
 			PersistAndRemoveFromUnitOfWork(sortOrder1);
 
-		    var result = _groupPageRepository.GetGroupPagesForPerson(person1.Id.GetValueOrDefault());
+		    var result = new GroupPageRepository(UnitOfWork).GetGroupPagesForPerson(person1.Id.GetValueOrDefault());
 
 		    result.Should().Not.Be.Empty();
 			var groupPage = result.SingleOrDefault();
@@ -107,7 +100,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			sortOrder1.AddRootPersonGroup(root2);
 			PersistAndRemoveFromUnitOfWork(sortOrder1);
 
-			var result = _groupPageRepository.GetGroupPagesForPerson(person1.Id.GetValueOrDefault());
+			var result = new GroupPageRepository(UnitOfWork).GetGroupPagesForPerson(person1.Id.GetValueOrDefault());
 
 			result.Should().Not.Be.Empty();
 			var groupPage = result.SingleOrDefault();
@@ -143,7 +136,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			sortOrder1.AddRootPersonGroup(root2);
 			PersistAndRemoveFromUnitOfWork(sortOrder1);
 
-			var result = _groupPageRepository.GetGroupPagesForPerson(person1.Id.GetValueOrDefault());
+			var result = new GroupPageRepository(UnitOfWork).GetGroupPagesForPerson(person1.Id.GetValueOrDefault());
 
 			result.Should().Not.Be.Empty();
 			var groupPage = result.SingleOrDefault();
@@ -182,7 +175,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			sortOrder1.AddRootPersonGroup(root2);
 			PersistAndRemoveFromUnitOfWork(sortOrder1);
 
-			var result = _groupPageRepository.GetGroupPagesForPerson(person1.Id.GetValueOrDefault());
+			var result = new GroupPageRepository(UnitOfWork).GetGroupPagesForPerson(person1.Id.GetValueOrDefault());
 
 			result.Should().Not.Be.Empty();
 			var groupPage = result.SingleOrDefault();
@@ -231,7 +224,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			IGroupPage sortOrder1 = new GroupPage("AAA");
 
 			PersistAndRemoveFromUnitOfWork(sortOrder1);
-			IList<IGroupPage> groupPageCollection = _groupPageRepository.LoadGroupPagesByIds(new[] { sortOrder2.Id.Value});
+			IList<IGroupPage> groupPageCollection = new GroupPageRepository(UnitOfWork).LoadGroupPagesByIds(new[] { sortOrder2.Id.Value});
 
 			Assert.AreEqual(groupPageCollection[0], sortOrder2);
 
@@ -248,10 +241,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.AreEqual(person1, groupPageCollection[0].RootGroupCollection[0].PersonCollection[0]);
 
 			Assert.AreEqual(2, groupPageCollection[0].RootGroupCollection[0].ChildGroupCollection[0].PersonCollection.Count);
-			Assert.AreEqual(person3, groupPageCollection[0].RootGroupCollection[0].ChildGroupCollection[0].PersonCollection[1]);
+			groupPageCollection[0].RootGroupCollection[0].ChildGroupCollection[0].PersonCollection.Should().Contain(person3);
 
 			Assert.AreEqual(2, groupPageCollection[0].RootGroupCollection[0].ChildGroupCollection[0].ChildGroupCollection[0].PersonCollection.Count);
-			Assert.AreEqual(person5, groupPageCollection[0].RootGroupCollection[0].ChildGroupCollection[0].ChildGroupCollection[0].PersonCollection[1]);
+			groupPageCollection[0].RootGroupCollection[0].ChildGroupCollection[0].ChildGroupCollection[0].PersonCollection.Should().Contain(person5);
 	    }
 
 
@@ -293,7 +286,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IGroupPage sortOrder1 = new GroupPage("AAA");
 
             PersistAndRemoveFromUnitOfWork(sortOrder1);
-            IList<IGroupPage> groupPageCollection = _groupPageRepository.LoadAllGroupPageBySortedByDescription();
+            IList<IGroupPage> groupPageCollection = new GroupPageRepository(UnitOfWork).LoadAllGroupPageBySortedByDescription();
 
             Assert.AreEqual(groupPageCollection[0], sortOrder1);
             Assert.AreEqual(groupPageCollection[1], sortOrder2);
@@ -311,12 +304,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(person1, groupPageCollection[1].RootGroupCollection[0].PersonCollection[0]);
 
             Assert.AreEqual(2, groupPageCollection[1].RootGroupCollection[0].ChildGroupCollection[0].PersonCollection.Count);
-            Assert.AreEqual(person3, groupPageCollection[1].RootGroupCollection[0].ChildGroupCollection[0].PersonCollection[1]);
+			groupPageCollection[1].RootGroupCollection[0].ChildGroupCollection[0].PersonCollection.Should().Contain(person3);
 
             Assert.AreEqual(2, groupPageCollection[1].RootGroupCollection[0].ChildGroupCollection[0].ChildGroupCollection[0].PersonCollection.Count);
-            Assert.AreEqual(person5, groupPageCollection[1].RootGroupCollection[0].ChildGroupCollection[0].ChildGroupCollection[0].PersonCollection[1]);
-
-
+            groupPageCollection[1].RootGroupCollection[0].ChildGroupCollection[0].ChildGroupCollection[0].PersonCollection.Should().Contain(person5);
         }
 
 		[Test]
@@ -357,7 +348,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			IGroupPage sortOrder1 = new GroupPage("AAA");
 
 			PersistAndRemoveFromUnitOfWork(sortOrder1);
-			IList<IGroupPage> groupPageCollection = _groupPageRepository.LoadAllGroupPageWhenPersonCollectionReAssociated();
+			IList<IGroupPage> groupPageCollection = new GroupPageRepository(UnitOfWork).LoadAllGroupPageWhenPersonCollectionReAssociated();
 
             Assert.AreEqual(groupPageCollection[0], sortOrder1);
 			Assert.AreEqual(groupPageCollection[1], sortOrder2);
@@ -375,10 +366,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.AreEqual(person1, groupPageCollection[1].RootGroupCollection[0].PersonCollection[0]);
 
 			Assert.AreEqual(2, groupPageCollection[1].RootGroupCollection[0].ChildGroupCollection[0].PersonCollection.Count);
-			Assert.AreEqual(person3, groupPageCollection[1].RootGroupCollection[0].ChildGroupCollection[0].PersonCollection[1]);
+			groupPageCollection[1].RootGroupCollection[0].ChildGroupCollection[0].PersonCollection.Should().Contain(person3);
 
 			Assert.AreEqual(2, groupPageCollection[1].RootGroupCollection[0].ChildGroupCollection[0].ChildGroupCollection[0].PersonCollection.Count);
-			Assert.AreEqual(person5, groupPageCollection[1].RootGroupCollection[0].ChildGroupCollection[0].ChildGroupCollection[0].PersonCollection[1]);
+			groupPageCollection[1].RootGroupCollection[0].ChildGroupCollection[0].ChildGroupCollection[0].PersonCollection.Should().Contain(person5);
 		}
     }
 }
