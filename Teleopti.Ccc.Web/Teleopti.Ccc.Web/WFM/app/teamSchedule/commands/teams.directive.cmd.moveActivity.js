@@ -13,17 +13,10 @@
 			templateUrl: 'app/teamSchedule/commands/teams.directive.cmd.moveActivity.html',
 			require: ['^teamscheduleCommandContainer', 'moveActivity'],
 			link: function (scope, elem, attrs, ctrls) {
-
 				scope.$on('teamSchedule.command.focus.default', function () {
 					var focusTarget = elem[0].querySelector('.focus-default input');
 					if (focusTarget) angular.element(focusTarget).focus();
 				});
-
-				scope.$watch(
-					function () {
-						return scope.vm.moveToTime;
-					},
-					function (newVal, oldVal) { scope.vm.updateInvalidAgents(); }, true);
 
 				var inputs = elem[0].querySelectorAll('input[type=text]');
 				angular.forEach(inputs, function (input) {
@@ -75,14 +68,13 @@
 			var currentTimezone = vm.getCurrentTimezone();
 			validator.validateMoveToTime(vm.scheduleMgtSvc, moment(vm.moveToTime), currentTimezone);
 			vm.invalidAgents = validator.getInvalidPeople();
-
 		};
 
 		vm.invalidPeople = function () {
 			var people = validator.getInvalidPeopleNameList().join(', ');
 			return people;
 		};
-
+		 
 		vm.moveActivity = function () {
 			var requestData = getRequestData();
 			var multiActivitiesSelectedAgentsList = vm.selectedAgents.filter(function (x) {
@@ -100,6 +92,11 @@
 				moveActivity(data);
 			});
 		}
+
+		function init() {
+			vm.updateInvalidAgents();
+		}
+		init();
 
 		function moveActivity(requestData) {
 			if (requestData.PersonActivities.length > 0) {

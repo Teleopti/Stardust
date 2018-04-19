@@ -124,6 +124,7 @@
 				Name: 'agent2'
 			}
 		]);
+		vm.updateInvalidAgents();
 		result.scope.$apply();
 		var applyButton = angular.element(result.container[0].querySelector(".move-activity .form-submit"));
 
