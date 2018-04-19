@@ -15,9 +15,15 @@
           </div>
           <div class="con-flex">
             <mat-form-field class="full-width">
-              <input matInput formControlName="ApplicationLogon" placeholder="Application logon" data-test-person-logon>
+              <input matInput formControlName="ApplicationLogon" maxlength="50" placeholder="Application logon" data-test-person-logon>
               <mat-error *ngIf="logonControl.get('ApplicationLogon').hasError('duplicateNameValidator')">
                 Username is already in use
+              </mat-error>
+              <mat-error *ngIf="logonControl.get('ApplicationLogon').hasError('duplicateFormNameValidator')">
+                Duplicate username in form
+              </mat-error>
+              <mat-error *ngIf="logonControl.get('ApplicationLogon').hasError('maxLength')">
+                Username has a limit of 50 characters
               </mat-error>
             </mat-form-field>
           </div>

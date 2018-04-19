@@ -6,7 +6,8 @@ import {
 	FormControl,
 	FormGroup,
 	ValidationErrors,
-	ValidatorFn
+	ValidatorFn,
+	Validators
 } from '@angular/forms';
 import { AbstractControlOptions, AbstractControl } from '@angular/forms/src/model';
 import { Observable, Subject } from 'rxjs';
@@ -59,6 +60,25 @@ export class DuplicateNameValidator {
 	};
 }
 
+export class DuplicateFormNameValidator {
+	private appLogonPageComponent: AppLogonPageComponent;
+
+	constructor(appLogonPageComponent: AppLogonPageComponent) {
+		this.appLogonPageComponent = appLogonPageComponent;
+	}
+
+	validate = (control: FormControlWithInitial): ValidationErrors => {
+		const filterByExists = (appLogon: string) => appLogon && appLogon.length > 0;
+		const filterBySameAppLogon = appLogon => appLogon === control.value;
+		const countSameAppLogon = this.appLogonPageComponent.appLogons
+			.map(control => control.value)
+			.filter(filterByExists)
+			.filter(filterBySameAppLogon).length;
+		if (countSameAppLogon > 1) return { duplicateFormNameValidator: control.value };
+		return {};
+	};
+}
+
 @Component({
 	selector: 'people-app-logon-page',
 	templateUrl: './app-logon-page.component.html',
@@ -97,9 +117,9 @@ export class AppLogonPageComponent implements OnDestroy, OnInit {
 				this.rebuildForm(people);
 			}
 		});
-		this.logons.valueChanges.subscribe({
-			next: value => this.checkForDuplicates(value)
-		});
+		// this.logons.valueChanges.subscribe({
+		// 	next: value => this.checkForDuplicates(value)
+		// });
 		this.logons.statusChanges.subscribe({
 			next: status => {
 				this.formValid = status === 'VALID';
@@ -117,6 +137,7 @@ export class AppLogonPageComponent implements OnDestroy, OnInit {
 				});
 				formGroup.get('FullName').disable();
 				var appLogon = formGroup.get('ApplicationLogon') as FormControl;
+				appLogon.setValidators([Validators.maxLength(50), new DuplicateFormNameValidator(this).validate]);
 				appLogon.setAsyncValidators(this.duplicateNameValidator.validate);
 				return formGroup;
 			})
