@@ -31,6 +31,11 @@ li.team-option {padding-left: 25px;}
 	width: 350px !important;
 }
 
+.btn-default[disabled] {
+	border-color: #5ACDF9 !important;
+	background-color: #5ACDF9 !important;
+}
+
 .date-input-style {
 	padding: 10px 1px;
 	font-size:13px;

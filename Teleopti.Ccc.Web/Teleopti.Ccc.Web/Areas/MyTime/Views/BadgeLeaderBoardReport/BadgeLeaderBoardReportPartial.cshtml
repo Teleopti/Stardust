@@ -21,7 +21,7 @@
 						<input type="hidden" class="format-field" value="@ViewBag.DatePickerFormat">
 						<input type="hidden" class="rolling-type-field" value="@ViewBag.GamificationRollingPeriodSet">
 						<span class="input-group-btn">
-							<button id="period-navigator-previous" class="btn btn-default" data-bind="click: previous" type="button">
+							<button id="period-navigator-previous" class="btn btn-default" data-bind="click: previous, disable: isLoading" type="button">
 								<i class="glyphicon glyphicon-chevron-left"></i>
 							</button>
 						</span>
@@ -30,7 +30,7 @@
 							<span class="btn btn-default moment-datepicker" type="button">
 								<i class="glyphicon glyphicon-calendar"></i>
 							</span>
-							<button id="period-navigator-next" class="btn btn-default" data-bind="click: next" type="button">
+							<button id="period-navigator-next" class="btn btn-default" data-bind="click: next, disable: isLoading" type="button">
 								<i class="glyphicon glyphicon-chevron-right"></i>
 							</button>
 						</span>
