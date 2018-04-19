@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -26,6 +27,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		public PreferenceDayFeedbackViewModelMapper Target;
 		public FakeRuleSetBagRepository RuleSetBagRepository;
 		public FakeLoggedOnUser LoggedOnUser;
+		public FakePreferenceDayRepository PreferenceDayRepository;
 
 		[Test]
 		public void ShouldMapDate()
@@ -141,5 +143,82 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var result = Target.Map(DateOnly.Today);
 			result.FeedbackError.Should().Be(Resources.NoAvailableShifts);
 		}
+
+		[Test]
+		public void ShouldValidateNightlyRestBasedOnPossibleShifts()
+		{
+			var shiftCategory = new ShiftCategory("test").WithId();
+			var activity = new Activity("test");
+			var ruleSetBag = RuleSetBagRepository.Has(
+				new RuleSetBag(new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity,
+					new TimePeriodWithSegment(15, 0, 15, 0, 15), new TimePeriodWithSegment(22, 0, 22, 0, 15), shiftCategory)))
+				{
+					Description = new Description("_")
+				}.WithId());
+
+			var team = TeamFactory.CreateTeamWithId("test");
+			var personPeriod = new PersonPeriod(new DateOnly(2010, 7, 30)
+				, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), team)
+			{
+				RuleSetBag = ruleSetBag
+			};
+			LoggedOnUser.CurrentUser().AddPersonPeriod(personPeriod);
+
+			var preferenceDayOne = new PreferenceDay(LoggedOnUser.CurrentUser(), new DateOnly(2018, 7, 31),
+				new PreferenceRestriction {
+					StartTimeLimitation = new StartTimeLimitation(TimeSpan.FromHours(13),null),
+					EndTimeLimitation = new EndTimeLimitation(null,TimeSpan.FromHours(22)),
+					WorkTimeLimitation = new WorkTimeLimitation(TimeSpan.FromHours(1), TimeSpan.FromHours(8)) });
+			PreferenceDayRepository.Add(preferenceDayOne);
+
+			var preferenceDayTwo = new PreferenceDay(LoggedOnUser.CurrentUser(), new DateOnly(2018, 8, 1),
+				new PreferenceRestriction
+				{
+					StartTimeLimitation = new StartTimeLimitation(TimeSpan.FromHours(7), TimeSpan.FromHours(7)),
+					EndTimeLimitation = new EndTimeLimitation(TimeSpan.FromHours(16), TimeSpan.FromHours(16)),
+					WorkTimeLimitation = new WorkTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(8))
+				});
+			PreferenceDayRepository.Add(preferenceDayTwo);
+
+			var result = Target.Map(new DateOnly(2018, 7, 31));
+
+			result.HasNightRestViolationToNextDay.Should().Be(true);
+		}
+
+		[Test]
+		public void ShouldValidateNightlyRestBasedOnInputTimeWhenThereIsNoPossibleShift()
+		{
+			
+			var team = TeamFactory.CreateTeamWithId("test");
+			var personPeriod = new PersonPeriod(new DateOnly(2010, 7, 30)
+				, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), team)
+			{
+				RuleSetBag = null
+			};
+			LoggedOnUser.CurrentUser().AddPersonPeriod(personPeriod);
+
+			var preferenceDayOne = new PreferenceDay(LoggedOnUser.CurrentUser(), new DateOnly(2018, 7, 31),
+				new PreferenceRestriction
+				{
+					StartTimeLimitation = new StartTimeLimitation(TimeSpan.FromHours(13), null),
+					EndTimeLimitation = new EndTimeLimitation(TimeSpan.FromHours(22), TimeSpan.FromHours(22)),
+					WorkTimeLimitation = new WorkTimeLimitation(TimeSpan.FromHours(1), TimeSpan.FromHours(8))
+				});
+			PreferenceDayRepository.Add(preferenceDayOne);
+
+			var preferenceDayTwo = new PreferenceDay(LoggedOnUser.CurrentUser(), new DateOnly(2018, 8, 1),
+				new PreferenceRestriction
+				{
+					StartTimeLimitation = new StartTimeLimitation(TimeSpan.FromHours(7), TimeSpan.FromHours(7)),
+					EndTimeLimitation = new EndTimeLimitation(TimeSpan.FromHours(16), TimeSpan.FromHours(16)),
+					WorkTimeLimitation = new WorkTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(8))
+				});
+			PreferenceDayRepository.Add(preferenceDayTwo);
+
+			var result = Target.Map(new DateOnly(2018, 8, 1));
+
+			result.HasNightRestViolationToPreviousDay.Should().Be(true);
+		}
+
 	}
 }

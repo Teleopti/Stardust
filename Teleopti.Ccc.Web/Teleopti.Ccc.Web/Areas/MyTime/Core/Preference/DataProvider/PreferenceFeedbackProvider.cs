@@ -56,14 +56,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 			return result;
 		}
 
-		public PreferenceNightRestCheckResult CheckNightRestViolation(DateOnly date)
+		public IDictionary<DateOnly, PreferenceNightRestCheckResult> CheckNightRestViolation(
+			DateOnlyPeriod period, IDictionary<DateOnly, WorkTimeMinMaxCalculationResult> workTimeMinMaxCalculationResults)
 		{
-			return _perferenceNightRestChecker.CheckNightRestViolation(_loggedOnUser.CurrentUser(), date);
-		}
-
-		public IDictionary<DateOnly, PreferenceNightRestCheckResult> CheckNightRestViolation(DateOnlyPeriod period)
-		{
-			return _perferenceNightRestChecker.CheckNightRestViolation(_loggedOnUser.CurrentUser(), period);
+			return _perferenceNightRestChecker.CheckNightRestViolation(_loggedOnUser.CurrentUser(),
+				period, workTimeMinMaxCalculationResults);
 		}
 
 		private WorkTimeMinMaxCalculationResult calculateWorkTimeMinMax(DateOnly date, IRuleSetBag ruleSetBag,

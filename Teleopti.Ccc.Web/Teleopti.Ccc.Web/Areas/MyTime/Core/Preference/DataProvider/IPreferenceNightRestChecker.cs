@@ -17,6 +17,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 	public interface IPreferenceNightRestChecker
 	{
 		PreferenceNightRestCheckResult CheckNightRestViolation(IPerson person, DateOnly date);
-		IDictionary<DateOnly, PreferenceNightRestCheckResult> CheckNightRestViolation(IPerson person, DateOnlyPeriod period);
+		IDictionary<DateOnly, PreferenceNightRestCheckResult> CheckNightRestViolation(IPerson person, DateOnlyPeriod periods, IDictionary<DateOnly, WorkTimeMinMaxCalculationResult> workTimeMinMaxCalculationResult);
 	}
 }

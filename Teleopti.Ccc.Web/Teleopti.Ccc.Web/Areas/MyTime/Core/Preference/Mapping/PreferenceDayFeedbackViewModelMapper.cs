@@ -27,8 +27,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 		public IEnumerable<PreferenceDayFeedbackViewModel> Map(DateOnlyPeriod period)
 		{
 			var result = new List<PreferenceDayFeedbackViewModel>();
-			var nightResultResults = _preferenceFeedbackProvider.CheckNightRestViolation(period);
+			
 			var workTimeMinMaxCalculationResults = _preferenceFeedbackProvider.WorkTimeMinMaxForPeriod(period);
+			var nightResultResults = _preferenceFeedbackProvider.CheckNightRestViolation(period, workTimeMinMaxCalculationResults);
 
 			foreach (var date in period.DayCollection())
 			{
@@ -72,6 +73,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 
 				result.Add(mappedResult);
 			}
+
 
 			return result;
 		}

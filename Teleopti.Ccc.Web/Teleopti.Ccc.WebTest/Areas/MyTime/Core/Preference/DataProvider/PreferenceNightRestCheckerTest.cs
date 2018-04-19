@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 					{nextDate, createNormalDayOccupation()}
 				});
 
-			var result = target.CheckNightRestViolation(person, period);
+			var result = target.CheckNightRestViolation(person, period, new Dictionary<DateOnly, WorkTimeMinMaxCalculationResult>());
 
 			Assert.AreEqual(result.Count, 2);
 
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 					{nextDate, normalDayOccupation}
 				});
 
-			var result = target.CheckNightRestViolation(person, period);
+			var result = target.CheckNightRestViolation(person, period, new Dictionary<DateOnly, WorkTimeMinMaxCalculationResult>());
 
 			Assert.AreEqual(result.Count, 2);
 

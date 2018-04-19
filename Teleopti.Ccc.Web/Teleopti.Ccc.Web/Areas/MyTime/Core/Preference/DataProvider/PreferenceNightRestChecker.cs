@@ -16,17 +16,18 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 
 		public PreferenceNightRestCheckResult CheckNightRestViolation(IPerson person, DateOnly date)
 		{
-			return CheckNightRestViolation(person, date.ToDateOnlyPeriod())[date];
+			return CheckNightRestViolation(person, date.ToDateOnlyPeriod(), new Dictionary<DateOnly, WorkTimeMinMaxCalculationResult>())[date];
 		}
 
 		public IDictionary<DateOnly, PreferenceNightRestCheckResult> CheckNightRestViolation(IPerson person,
-			DateOnlyPeriod periods)
+			DateOnlyPeriod periods, IDictionary<DateOnly, WorkTimeMinMaxCalculationResult> workTimeMinMaxCalculationResult)
 		{
 			var result = new Dictionary<DateOnly, PreferenceNightRestCheckResult>();
 			var preferenceDayOccupations = _occupationFactory.GetPreferencePeriodOccupation(person, periods.Inflate(1));
 
 			foreach (var currentDate in periods.DayCollection())
 			{
+
 				var personPeriod = person.Period(currentDate);
 				var checkResult = initCheckResult(personPeriod);
 
@@ -42,6 +43,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 				var previousDayOccupation = preferenceDayOccupations[previousDate];
 				var nextDayOccupation = preferenceDayOccupations[nextDate];
 
+				updatePreferenceTimeLimitationWithWorkTimeLimitation(workTimeMinMaxCalculationResult, previousDayOccupation, previousDate);
+				updatePreferenceTimeLimitationWithWorkTimeLimitation(workTimeMinMaxCalculationResult, currentDayOccupation, currentDate);
+				updatePreferenceTimeLimitationWithWorkTimeLimitation(workTimeMinMaxCalculationResult, nextDayOccupation, nextDate);
+				
 				checkRestViolationForPreviousDay(previousDayOccupation, currentDayOccupation, currentDate, checkResult);
 				checkRestViolationForNextDay(currentDayOccupation, nextDayOccupation, currentDate, checkResult);
 
@@ -49,6 +54,23 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 			}
 			return result;
 		}
+
+		private static void updatePreferenceTimeLimitationWithWorkTimeLimitation(
+			IDictionary<DateOnly, WorkTimeMinMaxCalculationResult> workTimeMinMaxCalculationResult,
+			PersonPreferenceDayOccupation personPreferenceDayOccupation, DateOnly date)
+		{
+			if (personPreferenceDayOccupation == null) return;
+			if (workTimeMinMaxCalculationResult == null || !workTimeMinMaxCalculationResult.ContainsKey(date)) return;
+
+			var workTimeMinMax = workTimeMinMaxCalculationResult[date]?.WorkTimeMinMax;
+			if (workTimeMinMax == null) return;
+
+			personPreferenceDayOccupation.StartTimeLimitation =
+				workTimeMinMaxCalculationResult[date].WorkTimeMinMax.StartTimeLimitation;
+			personPreferenceDayOccupation.EndTimeLimitation =
+				workTimeMinMaxCalculationResult[date].WorkTimeMinMax.EndTimeLimitation;
+		}
+
 
 		private static void checkRestViolationForNextDay(PersonPreferenceDayOccupation currentDayOccupation,
 			PersonPreferenceDayOccupation nextDayOccupation, DateOnly currentDate,
