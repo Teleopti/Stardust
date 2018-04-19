@@ -1,4 +1,4 @@
-﻿fdescribe('teamschedule add overtime activity directive tests', function () {
+﻿describe('teamschedule add overtime activity directive tests', function () {
 	'use strict';
 
 	var $compile,
