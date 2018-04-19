@@ -25,19 +25,28 @@ Teleopti.MyTimeWeb.BadgeCountsDropdownViewModel = function BadgeCountsDropdownVi
 
 	var self = this;
 
+	self.isFetchingData = ko.observable(false);
 	self.badgeCounts = ko.observableArray();
 	self.periodType = periodType;
 	self.startMoment = ko.observable(startMoment);
 	self.endMoment = ko.observable( getEndMoment(startMoment, periodType) );
+	self.periodText = ko.observable();
 
-	self.periodText = ko.computed(function () {
-		return Teleopti.MyTimeWeb.Common.FormatDatePeriod(self.startMoment(), self.endMoment(), false);
-	});
+	var updatePeriodText = function () {
+		var t = Teleopti.MyTimeWeb.Common.FormatDatePeriod(self.startMoment(), self.endMoment(), false);
+		self.periodText(t);
+	};
 
+	var lastIncrement;
 	var incPeriod = function (n) {
+		lastIncrement = n;
 		var type = self.periodType === 'Weekly' ? 'week' : 'month';
 		self.startMoment(self.startMoment().add(n, type));
 		self.endMoment(self.startMoment().clone().endOf(type));
+	};
+
+	var revertPeriodChange = function () {
+		incPeriod(-lastIncrement);
 	};
 
 	var getCurrentMoment = (function (m) {
@@ -61,7 +70,14 @@ Teleopti.MyTimeWeb.BadgeCountsDropdownViewModel = function BadgeCountsDropdownVi
 			data: { from: from, to: to },
 			success: function (data) {
 				self.badgeCounts(data);
-			}
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+				revertPeriodChange();
+			},
+			complete: function (jqXHR, textStatus) {
+				self.isFetchingData(false);
+				updatePeriodText();
+			},
 		});
 	};
 
@@ -70,6 +86,7 @@ Teleopti.MyTimeWeb.BadgeCountsDropdownViewModel = function BadgeCountsDropdownVi
 		var f = 'YYYY-MM-DD';
 		var from = self.startMoment().format(f);
 		var to = self.endMoment().format(f);
+		self.isFetchingData(true);
 		fetch(from, to);
 	};
 

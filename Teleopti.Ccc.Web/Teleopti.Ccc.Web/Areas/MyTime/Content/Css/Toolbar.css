@@ -393,6 +393,11 @@ End override dropdown-menu style on mobile
 	padding: .8em;
 }
 
+#badge-period-navigator button[disabled],
+#badge-period-navigator .working {
+	color: darkgrey;
+}
+
 #badge-period-navigator .period-text {
 	min-width: 130px;
 	display: inline-block;
