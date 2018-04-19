@@ -16,6 +16,11 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		{
 			Setup(registrations, null, null);
 		}
+		
+		public static void Setup(Action<ContainerBuilder> registrations, Action<IocArgs> arguments)
+		{
+			Setup(registrations, arguments, null);
+		}
 
 		public static void Setup(Action<ContainerBuilder> registrations, Action<IocArgs> arguments, object injectTo)
 		{
