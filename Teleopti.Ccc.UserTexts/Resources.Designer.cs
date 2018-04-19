@@ -23427,6 +23427,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Overtime staffing check method:.
+        /// </summary>
+        public static string OvertimeStaffingCheckMethodSetting {
+            get {
+                return ResourceManager.GetString("OvertimeStaffingCheckMethodSetting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Overtime Type.
         /// </summary>
         public static string OvertimeType {

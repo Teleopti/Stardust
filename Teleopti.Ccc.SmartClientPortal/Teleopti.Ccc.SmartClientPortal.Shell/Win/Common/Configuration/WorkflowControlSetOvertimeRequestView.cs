@@ -97,6 +97,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 				comboBoxOvertimeRequestMaximumTimeHandleType.SelectedIndex = 0;
 		}
 
+		public void SetOverTimeRequestStaffingCheckMethod(
+			OvertimeRequestStaffingCheckMethodOptionView overtimeRequestStaffingCheckMethodOptionView)
+		{
+			comboBoxOvertimeRequestStaffingCheckMethod.SelectedItem = overtimeRequestStaffingCheckMethodOptionView;
+			if (comboBoxOvertimeRequestStaffingCheckMethod.SelectedItem == null)
+				comboBoxOvertimeRequestStaffingCheckMethod.SelectedIndex = 1;
+		}
+
 		public void SetOverTimeRequestMaximumTime(TimeSpan? selectedModelOvertimeRequestMaximumTime)
 		{
 			if (selectedModelOvertimeRequestMaximumTime.HasValue && selectedModelOvertimeRequestMaximumTime.Value != TimeSpan.Zero) { 
@@ -129,11 +137,28 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			}
 		}
 
+		private void checkOvertimeStaffingCheckMethodToggle()
+		{
+			if (!_toggleManager.IsEnabled(Toggles.OvertimeRequestStaffingCheckMethod_74949))
+			{
+				tableLayoutPanelOvertimeStaffingCheckMethodSetting.Visible = false;
+				var rowIndex = tableLayoutPanelETOTRequest.Controls.GetChildIndex(tableLayoutPanelOvertimeStaffingCheckMethodSetting);
+				tableLayoutPanelETOTRequest.RowStyles[rowIndex].Height = 0;
+			}
+		}
+
 		private void initOvertimeRequestMaximumTimeHandleType()
 		{
 			comboBoxOvertimeRequestMaximumTimeHandleType.DataSource =
 				WorkflowControlSetModel.OvertimeRequestWorkRuleValidationHandleOptionViews.Select(s => s.Value).ToList();
 			comboBoxOvertimeRequestMaximumTimeHandleType.DisplayMember = "Description";
+		}
+
+		private void initOvertimeRequestStaffingCheckMethod()
+		{
+			comboBoxOvertimeRequestStaffingCheckMethod.DataSource =
+				WorkflowControlSetModel.OvertimeRequestStaffingCheckMethodOptionViews.Select(s => s.Value).ToList();
+			comboBoxOvertimeRequestStaffingCheckMethod.DisplayMember = "Description";
 		}
 
 		private void initOvertimeRequestMaximumContinuousWorkTimeHandleType()
@@ -152,6 +177,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		{
 			_presenter.SetOvertimeRequestMaximumTimeHandleType(
 				(OvertimeRequestValidationHandleOptionView) comboBoxOvertimeRequestMaximumTimeHandleType.SelectedItem);
+		}
+
+		private void ComboBoxOvertimeRequestStaffingCheckMethod_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			_presenter.SetOvertimeRequestIntradayStaffingCheckMethod(
+				(OvertimeRequestStaffingCheckMethodOptionView) comboBoxOvertimeRequestStaffingCheckMethod.SelectedItem);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]

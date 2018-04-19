@@ -72,6 +72,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			studentAvailabilityPeriodToDate = new DateOnly(DateHelper.MaxSmallDateTime);
 			studentAvailabilityInputFromDate = new DateOnly(DateHelper.MinSmallDateTime);
 			studentAvailabilityInputToDate = new DateOnly(DateHelper.MaxSmallDateTime);
+			_overtimeRequestStaffingCheckMethod = OvertimeRequestStaffingCheckMethod.IntradayWithShrinkage;
 		}
 
 		public WorkflowControlSet(string description)

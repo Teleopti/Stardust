@@ -57,9 +57,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			dateOnlyPeriodsVisualizer1.Culture = TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture;
 			timeSpanTextBox1.TimeSpanBoxWidth = timeSpanTextBox1.Width;
 			dateTimePickerAdvViewpoint.SetCultureInfoSafe(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
-			setAbsenceRequestVisibilityOptions(toggleManager);
+			setAbsenceRequestVisibilityOptions(_toggleManager);
 			checkOvertimeProbabilityLicense();
 			checkOvertimeRequestsLicense();
+			checkOvertimeStaffingCheckMethodToggle();
 			loadOvertimeRequestAutoGrantTypeAdapterCollection();
 		}
 
@@ -514,6 +515,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			configureOvertimeRequestPeriodGrid();
 			configureProjectionGrid();
 			initOvertimeRequestMaximumTimeHandleType();
+			initOvertimeRequestStaffingCheckMethod();
 			initOvertimeRequestMaximumContinuousWorkTimeHandleType();
 		}
 

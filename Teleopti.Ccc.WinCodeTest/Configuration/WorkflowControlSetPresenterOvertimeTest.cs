@@ -269,6 +269,17 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			Assert.AreEqual(openRollingPeriod, _target.SelectedModel.OvertimeRequestPeriodModels[1].DomainEntity);
 		}
 
+		[Test]
+		public void VerifyCanSetOvertimeRequestStaffingCheckMethod()
+		{
+			initializeWithDefaultWorkflowControlSet();
+			_target.SetOvertimeRequestIntradayStaffingCheckMethod(
+				new OvertimeRequestStaffingCheckMethodOptionView(OvertimeRequestStaffingCheckMethod.Intraday, "Intraday"));
+
+			Assert.AreEqual(_target.SelectedModel.DomainEntity.OvertimeRequestStaffingCheckMethod,
+				_target.SelectedModel.OvertimeRequestStaffingCheckMethodOptionView.OvertimeRequestStaffingCheckMethod);
+		}
+
 		private void initialize()
 		{
 			_target = new WorkflowControlSetPresenter(null, UnitOfWorkFactory, RepositoryFactory, ToggleManager);

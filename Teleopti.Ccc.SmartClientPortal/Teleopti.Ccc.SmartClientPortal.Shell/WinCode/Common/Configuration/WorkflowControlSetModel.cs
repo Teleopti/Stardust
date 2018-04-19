@@ -9,6 +9,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Settings;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 using HandleOptionViewDictionary = System.Collections.Generic.Dictionary<Teleopti.Ccc.Domain.WorkflowControl.OvertimeValidationHandleType, Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Settings.OvertimeRequestValidationHandleOptionView>;
+using StaffingCheckMethodOptionViewDictionary = System.Collections.Generic.Dictionary<Teleopti.Ccc.Domain.InterfaceLegacy.Domain.OvertimeRequestStaffingCheckMethod, Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Settings.OvertimeRequestStaffingCheckMethodOptionView>;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 {
@@ -20,6 +21,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		private readonly List<AbsenceRequestPeriodModel> _absenceRequestPeriodModels = new List<AbsenceRequestPeriodModel>();
 		private readonly List<OvertimeRequestPeriodModel> _overtimeRequestPeriodModels = new List<OvertimeRequestPeriodModel>();
 		private static IList<ISkillType> _supportedSkillTypes = new List<ISkillType>();
+
 		internal static readonly HandleOptionViewDictionary
 			OvertimeRequestWorkRuleValidationHandleOptionViews
 				= new HandleOptionViewDictionary
@@ -32,6 +34,21 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 					{
 						OvertimeValidationHandleType.Deny,
 						new OvertimeRequestValidationHandleOptionView(OvertimeValidationHandleType.Deny, Resources.Deny)
+					}
+				};
+
+		internal static readonly StaffingCheckMethodOptionViewDictionary
+			OvertimeRequestStaffingCheckMethodOptionViews
+				= new StaffingCheckMethodOptionViewDictionary
+				{
+					{
+						OvertimeRequestStaffingCheckMethod.Intraday,
+						new OvertimeRequestStaffingCheckMethodOptionView(OvertimeRequestStaffingCheckMethod.Intraday,
+							Resources.Intraday)
+					},
+					{
+						OvertimeRequestStaffingCheckMethod.IntradayWithShrinkage,
+						new OvertimeRequestStaffingCheckMethodOptionView(OvertimeRequestStaffingCheckMethod.IntradayWithShrinkage, Resources.IntradayWithShrinkage)
 					}
 				};
 
@@ -565,6 +582,17 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			{
 				if (DomainEntity.OvertimeRequestMaximumContinuousWorkTimeHandleType == value?.WorkRuleValidationHandleType) return;
 				DomainEntity.OvertimeRequestMaximumContinuousWorkTimeHandleType = value?.WorkRuleValidationHandleType;
+				IsDirty = true;
+			}
+		}
+
+		public OvertimeRequestStaffingCheckMethodOptionView OvertimeRequestStaffingCheckMethodOptionView
+		{
+			get => OvertimeRequestStaffingCheckMethodOptionViews[DomainEntity.OvertimeRequestStaffingCheckMethod];
+			set
+			{
+				if (DomainEntity.OvertimeRequestStaffingCheckMethod == value.OvertimeRequestStaffingCheckMethod) return;
+				DomainEntity.OvertimeRequestStaffingCheckMethod = value.OvertimeRequestStaffingCheckMethod;
 				IsDirty = true;
 			}
 		}

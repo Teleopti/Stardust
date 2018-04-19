@@ -66,5 +66,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		TimeSpan? OvertimeRequestMinimumRestTimeThreshold { get; set; }
 		TimeSpan? OvertimeRequestMaximumContinuousWorkTime { get; set; }
 		OvertimeRequestValidationHandleOptionView OvertimeRequestMaximumContinuousWorkTimeValidationHandleOptionView { get; set; }
+		OvertimeRequestStaffingCheckMethodOptionView OvertimeRequestStaffingCheckMethodOptionView { get; set; }
 	}
 }

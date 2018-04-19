@@ -65,6 +65,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.autoLabel1 = new Syncfusion.Windows.Forms.Tools.AutoLabel();
 			this.comboBoxAdvWorkflowControlSet = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
 			this.comboBoxOvertimeRequestMaximumTimeHandleType = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
+			this.comboBoxOvertimeRequestStaffingCheckMethod = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
 			this.comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
 			this.textBoxDescription = new Syncfusion.Windows.Forms.Tools.TextBoxExt();
 			this.autoLabelInfoAboutChanges = new Syncfusion.Windows.Forms.Tools.AutoLabel();
@@ -146,6 +147,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.tableLayoutPanelOpenForAbsenceRequests = new System.Windows.Forms.TableLayoutPanel();
 			this.tableLayoutPanelOpenForOvertimeRequests = new System.Windows.Forms.TableLayoutPanel();
 			this.tableLayoutPanelOvertimeMaximumSetting = new System.Windows.Forms.TableLayoutPanel();
+			this.tableLayoutPanelOvertimeStaffingCheckMethodSetting = new System.Windows.Forms.TableLayoutPanel();
+			this.labelOvertimeStaffingCheckMethodSetting = new System.Windows.Forms.Label();
 			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting = new System.Windows.Forms.TableLayoutPanel();
 			this.labelOpenForAbsenceRequests = new System.Windows.Forms.Label();
 			this.labelOpenForOvertimeRequests = new System.Windows.Forms.Label();
@@ -210,6 +213,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvWorkflowControlSet)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.comboBoxOvertimeRequestMaximumTimeHandleType)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.comboBoxOvertimeRequestStaffingCheckMethod)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.textBoxDescription)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.tabControlAdvArea)).BeginInit();
@@ -251,8 +255,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.tableLayoutPanelOpenForAbsenceRequests.SuspendLayout();
 			this.tableLayoutPanelOpenForOvertimeRequests.SuspendLayout();
 			this.tableLayoutPanelOvertimeMaximumSetting.ResumeLayout(false);
+			this.tableLayoutPanelOvertimeStaffingCheckMethodSetting.ResumeLayout(false);
 			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.ResumeLayout(false);
 			this.tableLayoutPanelOvertimeMaximumSetting.PerformLayout();
+			this.tableLayoutPanelOvertimeStaffingCheckMethodSetting.PerformLayout();
 			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.gridControlAbsenceRequestOpenPeriods)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.gridControlOvertimeRequestOpenPeriods)).BeginInit();
@@ -1815,6 +1821,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.labelAbsenceRequestExpriedThreshold.Size = new System.Drawing.Size(396, 29);
 			this.labelAbsenceRequestExpriedThreshold.TabIndex = 1;
 			this.labelAbsenceRequestExpriedThreshold.Text = "xxAbsenceRequestExpiredThreshold";
+			//
+			// labelOvertimeStaffingCheckMethodSetting
+			this.labelOvertimeStaffingCheckMethodSetting.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.labelOvertimeStaffingCheckMethodSetting.AutoSize = true;
+			this.labelOvertimeStaffingCheckMethodSetting.Location = new System.Drawing.Point(3, 0);
+			this.labelOvertimeStaffingCheckMethodSetting.Name = "labelOvertimeStaffingCheckMethodSetting";
+			this.labelOvertimeStaffingCheckMethodSetting.Size = new System.Drawing.Size(396, 29);
+			this.labelOvertimeStaffingCheckMethodSetting.TabIndex = 1;
+			this.labelOvertimeStaffingCheckMethodSetting.Text = "xxOvertimeStaffingCheckMethodSetting";
+			//
 			// 
 			// tableLayoutPanelOpenForAbsenceRequests
 			// 
@@ -1924,6 +1940,22 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.tableLayoutPanelOvertimeMaximumSetting.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanelOvertimeMaximumSetting.Size = new System.Drawing.Size(959, 34);
 			this.tableLayoutPanelOvertimeMaximumSetting.TabIndex = 0;
+			//
+			//tableLayoutPanelOvertimeStaffingCheckMethodSetting
+			this.tableLayoutPanelOvertimeStaffingCheckMethodSetting.ColumnCount = 3;
+			this.tableLayoutPanelOvertimeStaffingCheckMethodSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle() { SizeType = SizeType.AutoSize });
+			this.tableLayoutPanelOvertimeStaffingCheckMethodSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanelOvertimeStaffingCheckMethodSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanelOvertimeStaffingCheckMethodSetting.Controls.Add(this.labelOvertimeStaffingCheckMethodSetting, 0, 0);
+			this.tableLayoutPanelOvertimeStaffingCheckMethodSetting.Controls.Add(this.comboBoxOvertimeRequestStaffingCheckMethod, 1, 0);
+			this.tableLayoutPanelOvertimeStaffingCheckMethodSetting.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanelOvertimeStaffingCheckMethodSetting.Location = new System.Drawing.Point(3, 103);
+			this.tableLayoutPanelOvertimeStaffingCheckMethodSetting.Name = "tableLayoutPanelOvertimeStaffingCheckMethodSetting";
+			this.tableLayoutPanelOvertimeStaffingCheckMethodSetting.RowCount = 1;
+			this.tableLayoutPanelOvertimeStaffingCheckMethodSetting.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tableLayoutPanelOvertimeStaffingCheckMethodSetting.Size = new System.Drawing.Size(959, 34);
+			this.tableLayoutPanelOvertimeStaffingCheckMethodSetting.TabIndex = 0;
+			//
 			// 
 			// tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting
 			// 
@@ -2051,6 +2083,19 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.comboBoxOvertimeRequestMaximumTimeHandleType.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.comboBoxOvertimeRequestMaximumTimeHandleType.TabIndex = 3;
 			this.comboBoxOvertimeRequestMaximumTimeHandleType.SelectedIndexChanged += ComboBoxOvertimeRequestMaximumTimeHandleType_SelectedIndexChanged;
+			//
+			// comboBoxOvertimeRequestStaffingCheckMethod
+			this.comboBoxOvertimeRequestStaffingCheckMethod.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.comboBoxOvertimeRequestStaffingCheckMethod.BackColor = System.Drawing.Color.White;
+			this.comboBoxOvertimeRequestStaffingCheckMethod.BeforeTouchSize = new System.Drawing.Size(150, 23);
+			this.comboBoxOvertimeRequestStaffingCheckMethod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBoxOvertimeRequestStaffingCheckMethod.Location = new System.Drawing.Point(545, 6);
+			this.comboBoxOvertimeRequestStaffingCheckMethod.Name = "comboBoxOvertimeRequestStaffingCheckMethod";
+			this.comboBoxOvertimeRequestStaffingCheckMethod.Size = new System.Drawing.Size(150, 23);
+			this.comboBoxOvertimeRequestStaffingCheckMethod.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
+			this.comboBoxOvertimeRequestStaffingCheckMethod.TabIndex = 3;
+			this.comboBoxOvertimeRequestStaffingCheckMethod.SelectedIndexChanged += ComboBoxOvertimeRequestStaffingCheckMethod_SelectedIndexChanged;
+			//
 			// 
 			// comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType
 			// 
@@ -2619,19 +2664,21 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.tableLayoutPanelETOTRequest.ColumnCount = 1;
 			this.tableLayoutPanelETOTRequest.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanelETOTRequest.Controls.Add(this.panelOvertimeRequestHeaderBasic, 0, 0);
-			this.tableLayoutPanelETOTRequest.Controls.Add(this.checkBoxAdvOvertimeProbability, 0, 1);
-			this.tableLayoutPanelETOTRequest.Controls.Add(this.tableLayoutPanelOvertimeMaximumSetting, 0, 2);
-			this.tableLayoutPanelETOTRequest.Controls.Add(this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting, 0, 3);
-			this.tableLayoutPanelETOTRequest.Controls.Add(this.tableLayoutPanelOpenForOvertimeRequests, 0, 4);
-			this.tableLayoutPanelETOTRequest.Controls.Add(this.gridControlOvertimeRequestOpenPeriods, 0, 5);
+			this.tableLayoutPanelETOTRequest.Controls.Add(this.tableLayoutPanelOvertimeStaffingCheckMethodSetting, 0, 1);
+			this.tableLayoutPanelETOTRequest.Controls.Add(this.checkBoxAdvOvertimeProbability, 0, 2);
+			this.tableLayoutPanelETOTRequest.Controls.Add(this.tableLayoutPanelOvertimeMaximumSetting, 0, 3);
+			this.tableLayoutPanelETOTRequest.Controls.Add(this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting, 0, 4);
+			this.tableLayoutPanelETOTRequest.Controls.Add(this.tableLayoutPanelOpenForOvertimeRequests, 0, 5);
+			this.tableLayoutPanelETOTRequest.Controls.Add(this.gridControlOvertimeRequestOpenPeriods, 0, 6);
 
 			this.tableLayoutPanelETOTRequest.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanelETOTRequest.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanelETOTRequest.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanelETOTRequest.Name = "tableLayoutPanelETOTRequest";
-			this.tableLayoutPanelETOTRequest.RowCount = 7;
+			this.tableLayoutPanelETOTRequest.RowCount = 8;
 			this.tableLayoutPanelETOTRequest.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-			this.tableLayoutPanelETOTRequest.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+			this.tableLayoutPanelETOTRequest.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+			this.tableLayoutPanelETOTRequest.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanelETOTRequest.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanelETOTRequest.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanelETOTRequest.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
@@ -2849,6 +2896,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabelChangeInfo;
 		private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdvWorkflowControlSet;
 		private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxOvertimeRequestMaximumTimeHandleType;
+		private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxOvertimeRequestStaffingCheckMethod;
 		private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType;
 		private Syncfusion.Windows.Forms.Tools.TextBoxExt textBoxDescription;
 		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabelInfoAboutChanges;
@@ -2864,6 +2912,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		private Syncfusion.Windows.Forms.Grid.GridControl gridControlOvertimeRequestOpenPeriods;
 		private TableLayoutPanel tableLayoutPanelOpenForAbsenceRequests;
 		private TableLayoutPanel tableLayoutPanelOpenForOvertimeRequests;
+		private TableLayoutPanel tableLayoutPanelOvertimeStaffingCheckMethodSetting;
 		private TableLayoutPanel tableLayoutPanelOvertimeMaximumSetting;
 		private TableLayoutPanel tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting;
 		private Label labelOpenForAbsenceRequests;
@@ -2976,6 +3025,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		private TableLayoutPanel tableLayoutPanelAbsenceRequestExpiration;
 		private NullableIntegerTextBox txtAbsenceRequestExpiredThreshold;
 		private Label labelAbsenceRequestExpriedThreshold;
+		private Label labelOvertimeStaffingCheckMethodSetting;
 		private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageAdvETOTRequest;
 		private TableLayoutPanel tableLayoutPanelETOTRequest;
 		private TableLayoutPanel tableLayoutPanelAbsenceProbability;

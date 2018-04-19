@@ -30,7 +30,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		private IList<IAbsence> _absences;
 		private IList<IDayOffTemplate> _dayOffTemplates;
 		private IList<ISkillType> _supportedSkillTypes;
-		private IToggleManager _toggleManager;
+		private readonly IToggleManager _toggleManager;
+		private IWorkflowControlSetModel _selectedModel;
+		private IList<IAbsence> _requestableAbsenceCollection;
+		private IList<ISkill> _skillCollection;
 
 		public WorkflowControlSetPresenter(IWorkflowControlSetView view,
 			IUnitOfWorkFactory unitOfWorkFactory,
@@ -56,10 +59,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		{
 			get { return _workflowControlSetModelCollection.Where(w => !w.ToBeDeleted); }
 		}
-
-		private IWorkflowControlSetModel _selectedModel;
-		private IList<IAbsence> _requestableAbsenceCollection;
-		private IList<ISkill> _skillCollection;
 
 		public bool DoRequestableAbsencesExist
 		{
@@ -97,6 +96,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			_view.SetAbsenceProbability(_selectedModel.AbsenceProbabilityEnabled);
 			_view.SetOvertimeProbability(_selectedModel.IsOvertimeProbabilityEnabled);
 			_view.SetOverTimeRequestMaximumTimeHandleType(_selectedModel.OvertimeRequestMaximumOvertimeValidationHandleOptionView);
+			_view.SetOverTimeRequestStaffingCheckMethod(_selectedModel.OvertimeRequestStaffingCheckMethodOptionView);
 			_view.SetOverTimeRequestMaximumTime(_selectedModel.OvertimeRequestMaximumTime);
 			_view.SetOvertimeRequestMaximumTimeEnabled(_selectedModel.OvertimeRequestMaximumTimeEnabled);
 
@@ -777,6 +777,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			var skillTypeNames = new[] { SkillTypeIdentifier.Phone, SkillTypeIdentifier.Chat, SkillTypeIdentifier.Email };
 			_supportedSkillTypes = skillTypeRepository.LoadAll()
 				.Where(a => skillTypeNames.Contains(a.Description.Name)).ToList();
+		}
+
+		public void SetOvertimeRequestIntradayStaffingCheckMethod(OvertimeRequestStaffingCheckMethodOptionView overtimeRequestStaffingCheckMethodOptionView)
+		{
+			if (_selectedModel != null)
+			{
+				_selectedModel.OvertimeRequestStaffingCheckMethodOptionView = overtimeRequestStaffingCheckMethodOptionView;
+			}
 		}
 	}
 }

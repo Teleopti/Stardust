@@ -17295,4 +17295,8 @@ The application will now exit.</value>
   <data name="NoAgentsWithIssuesFound" xml:space="preserve">
     <value>No agents with issues was found</value>
   </data>
+  <data name="OvertimeStaffingCheckMethodSetting" xml:space="preserve">
+    <value>Overtime staffing check method:</value>
+    <comment>Label name for overtime staffing check method setting</comment>
+  </data>
 </root>
