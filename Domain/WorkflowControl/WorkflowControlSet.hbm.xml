@@ -168,6 +168,8 @@
 		<property name="OvertimeRequestMinimumRestTimeThreshold" type="TimeSpan"/>
 		
 		<property name="OvertimeRequestMaximumContinuousWorkTimeEnabled" type="bool" not-null="true" />
+		
+		<property name="OvertimeRequestStaffingCheckMethod" not-null="true"/>
 
 		<filter name="businessUnitFilter"
                 condition=":businessUnitParameter = BusinessUnit" />

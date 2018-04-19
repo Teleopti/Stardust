@@ -277,6 +277,23 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.That(result[0].OvertimeRequestMinimumRestTimeThreshold, Is.EqualTo(TimeSpan.FromMinutes(30)));
 		}
 
+
+		[Test]
+		public void ShouldSaveOvertimeRequestStaffingCheckMethod()
+		{
+			var org = CreateAggregateWithCorrectBusinessUnit();
+			org.OvertimeRequestStaffingCheckMethod = OvertimeRequestStaffingCheckMethod.IntradayWithShrinkage;
+			PersistAndRemoveFromUnitOfWork(org);
+
+			IWorkflowControlSetRepository repository = new WorkflowControlSetRepository(UnitOfWork);
+			var result = repository.LoadAllSortByName();
+
+			var staffingCheckMethod = result[0].OvertimeRequestStaffingCheckMethod;
+
+			Assert.That(result.Count, Is.EqualTo(1));
+			Assert.That(staffingCheckMethod, Is.EqualTo(OvertimeRequestStaffingCheckMethod.IntradayWithShrinkage));
+		}
+
 		protected override Repository<IWorkflowControlSet> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
             return new WorkflowControlSetRepository(currentUnitOfWork);

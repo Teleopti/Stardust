@@ -53,6 +53,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		private TimeSpan? _overtimeRequestMinimumRestTimeThreshold;
 		private OvertimeValidationHandleType? _overtimeRequestMaximumContinuousWorkTimeHandleType;
 		private bool _overtimeRequestMaximumContinuousWorkTimeEnabled;
+		private OvertimeRequestStaffingCheckMethod _overtimeRequestStaffingCheckMethod;
 
 		public WorkflowControlSet()
 		{
@@ -455,6 +456,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		public virtual TimeSpan? OvertimeRequestMinimumRestTimeThreshold { get => _overtimeRequestMinimumRestTimeThreshold; set => _overtimeRequestMinimumRestTimeThreshold = value; }
 		public virtual OvertimeValidationHandleType? OvertimeRequestMaximumContinuousWorkTimeHandleType { get => _overtimeRequestMaximumContinuousWorkTimeHandleType; set => _overtimeRequestMaximumContinuousWorkTimeHandleType = value; }
 		public virtual bool OvertimeRequestMaximumContinuousWorkTimeEnabled { get => _overtimeRequestMaximumContinuousWorkTimeEnabled; set => _overtimeRequestMaximumContinuousWorkTimeEnabled = value; }
+		public virtual OvertimeRequestStaffingCheckMethod OvertimeRequestStaffingCheckMethod { get => _overtimeRequestStaffingCheckMethod; set => _overtimeRequestStaffingCheckMethod = value; }
 
 		public virtual void AddAllowedAbsenceForReport(IAbsence absence)
 		{
