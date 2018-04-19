@@ -22,7 +22,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 {
-	[StardustTest , Ignore("Fix build")]
+	[StardustTest]
 	public class AbsenceRequestEndToEndTest
 	{
 		public WithUnitOfWork WithUnitOfWork;
@@ -78,34 +78,10 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 			Thread.Sleep(2000);
 			performLevel3Assert(personRequest);
 
+			performLevel4Assert(personRequest);
+
 		}
 
-		private void performLevel3Assert(IPersonRequest personRequest)
-		{
-			//check in job detail
-			var comandText = $@"select jobid from Stardust.JobDetail where detail like '%{ personRequest.Id.GetValueOrDefault() }%'";
-			var connectionString = InfraTestConfigReader.ConnectionString;
-			using (var connection = new SqlConnection(connectionString))
-			{
-				connection.Open();
-				using (var command = new SqlCommand(comandText, connection))
-				{
-					using (var reader = command.ExecuteReader())
-					{
-						if (reader.HasRows)
-						{
-							reader.Read();
-							if (reader.IsDBNull(0))
-								Assert.Fail("The request id is not in the stardust job detail. The proper request was not processed.");
-							else
-								Assert.IsTrue(true);
-						}
-					}
-				}
-			}
-		}
-
-		
 		private void performLevel1Assert(IPersonRequest personRequest)
 		{
 			//check in job queue
@@ -134,7 +110,7 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 						}
 						Thread.Sleep(1000);
 					}
-					if(!_assertRetryStrategy.WithinRetryStrategy())
+					if (!_assertRetryStrategy.WithinRetryStrategy())
 						Assert.Fail("Unable to perform Tier 1 Assertion. Exceeded the maximum number of reties.");
 				}
 			}
@@ -176,6 +152,41 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 			}
 		}
 
+		private void performLevel3Assert(IPersonRequest personRequest)
+		{
+			//check in job detail
+			var comandText = $@"select jobid from Stardust.JobDetail where detail like '%{ personRequest.Id.GetValueOrDefault() }%'";
+			var connectionString = InfraTestConfigReader.ConnectionString;
+			using (var connection = new SqlConnection(connectionString))
+			{
+				connection.Open();
+				using (var command = new SqlCommand(comandText, connection))
+				{
+					using (var reader = command.ExecuteReader())
+					{
+						if (reader.HasRows)
+						{
+							reader.Read();
+							if (reader.IsDBNull(0))
+								Assert.Fail("The request id is not in the stardust job detail. The proper request was not processed.");
+							else
+								Assert.IsTrue(true);
+						}
+					}
+				}
+			}
+		}
+
+		private void performLevel4Assert(IPersonRequest personRequest)
+		{
+			WithUnitOfWork.Do(() =>
+			{
+				PersonRequestRepository.Load(personRequest.Id.GetValueOrDefault()).IsPending.Should().Be.False();
+			});
+		}
+
+		
+
 		private void startServiceBusAndPublishTick()
 		{
 			var host = new ServiceBusRunner(i => { }, ConfigReader);
@@ -183,38 +194,6 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 			Thread.Sleep(2000);
 
 			EventPublisher.Publish(new TenantMinuteTickEvent());
-		}
-	}
-
-	public class AssertRetryStrategy
-	{
-		private readonly int _numberOfTries;
-		private int _currentTry;
-
-		public AssertRetryStrategy(int numberOfTries)
-		{
-			_numberOfTries = numberOfTries;
-			_currentTry = 0;
-		}
-
-		public void Reset()
-		{
-			_currentTry = 0;
-		}
-
-		public bool TryAgain()
-		{
-			_currentTry++;
-			if (_currentTry <= _numberOfTries)
-				return true;
-			return false;
-		}
-
-		public bool WithinRetryStrategy()
-		{
-			if (_currentTry <= _numberOfTries)
-				return true;
-			return false;
 		}
 	}
 }

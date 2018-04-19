@@ -3,17 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.UnitOfWork;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
@@ -23,14 +19,9 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 {
 	public class DataCreator
 	{
-		//private readonly MutableNow _now;
-		//private readonly TestConfiguration _testConfiguration;
-		private readonly IEventPublisher _eventPublisher;
-		//private readonly AnalyticsDatabase _analytics;
 		private readonly WithUnitOfWork _withUnitOfWork;
 		private readonly ITeamRepository _teams;
 		private readonly IPersonRepository _persons;
-		//private readonly IExternalLogOnRepository _externalLogOns;
 		private readonly IContractRepository _contracts;
 		private readonly IPartTimePercentageRepository _partTimePercentages;
 		private readonly IContractScheduleRepository _contractSchedules;
@@ -41,13 +32,9 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 		private readonly IWorkflowControlSetRepository _workflowControlSetRepository;
 
 		public DataCreator(
-			//MutableNow now,
-			IEventPublisher eventPublisher,
-			//AnalyticsDatabase analytics,
 			WithUnitOfWork withUnitOfWork,
 			ITeamRepository teams,
 			IPersonRepository persons,
-			//IExternalLogOnRepository externalLogOns,
 			IContractRepository contracts,
 			IPartTimePercentageRepository partTimePercentages,
 			IContractScheduleRepository contractSchedules,
@@ -56,13 +43,9 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 			IActivityRepository activities,
 			TestDataFactory data, IWorkflowControlSetRepository workflowControlSetRepository)
 		{
-			//_now = now;
-			_eventPublisher = eventPublisher;
-			//_analytics = analytics;
 			_withUnitOfWork = withUnitOfWork;
 			_teams = teams;
 			_persons = persons;
-			//_externalLogOns = externalLogOns;
 			_contracts = contracts;
 			_partTimePercentages = partTimePercentages;
 			_contractSchedules = contractSchedules;
@@ -76,13 +59,8 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 		[TestLog]
 		public virtual void Create()
 		{
-			//_now.Is("2016-02-25 08:00".Utc());
-
-			//CreateAnalyticsData();
 			CreateCommonData();
 			CreateSchedules(CreatePersons());
-			//PublisRecurringEvents();
-
 		}
 
 		
@@ -192,44 +170,5 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 					});
 				});
 		}
-
-		//[TestLog]
-		//protected virtual void PublisRecurringEvents()
-		//{
-		//	// to create/update any data that is periodically kept up to date
-		//	// like the rule mappings
-		//	_eventPublisher.Publish(new TenantDayTickEvent(), new TenantHourTickEvent(), new TenantMinuteTickEvent());
-		//}
-
-		//public IEnumerable<string> LoggedOffStates()
-		//{
-		//	yield return "LoggedOff";
-		//}
-
-		//public IEnumerable<string> PhoneStates()
-		//{
-		//	yield return "Ready";
-		//	yield return "Phone";
-		//}
-
-		//		public IEnumerable<ExternalLogon> Logons()
-		//		{
-		//			return Enumerable.Range(0, _testConfiguration.NumberOfAgentsInSystem)
-		//				.Select(roger => new ExternalLogon
-		//				{
-		//					DataSourceId = _testConfiguration.DataSourceId,
-		//					UserCode = $"roger{roger}"
-		//				});
-		//		}
-
-		//		public IEnumerable<ExternalLogon> LogonsWorking()
-		//		{
-		//			return Enumerable.Range(0, _testConfiguration.NumberOfAgentsWorking)
-		//				.Select(roger => new ExternalLogon
-		//				{
-		//					DataSourceId = _testConfiguration.DataSourceId,
-		//					UserCode = $"roger{roger}"
-		//				});
-		//		}
 	}
 }

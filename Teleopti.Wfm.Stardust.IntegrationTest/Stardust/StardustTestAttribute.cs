@@ -23,7 +23,7 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 		public DefaultDataCreator DefaultDataCreator;
 		public DataCreator DataCreator;
 		public DefaultAnalyticsDataCreator DefaultAnalyticsDataCreator;
-		public ImpersonateSystem Impersonate;
+		public AsSystem AsSystem;
 		public IDataSourceScope DataSource;
 		public WithUnitOfWork WithUnitOfWork;
 		public IBusinessUnitRepository BusinessUnits;
@@ -36,11 +36,17 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 		{
 			base.BeforeTest(testDetails);
 
-			var dataHash = DefaultDataCreator.HashValue;// ^ TestConfiguration.HashValue;
+			var dataHash = DefaultDataCreator.HashValue;
 
 			DataSourceHelper.CreateDatabases();
+			var path = "";
+			#if DEBUG
+				path = "./";
+			#else
+				path = Path.Combine(InfraTestConfigReader.DatabaseBackupLocation, "Stardust");
+			#endif
 
-			var path = Path.Combine(InfraTestConfigReader.DatabaseBackupLocation, "Stardust");
+
 			var haveDatabases =
 				DataSourceHelper.TryRestoreApplicationDatabaseBySql(path, dataHash) &&
 				DataSourceHelper.TryRestoreAnalyticsDatabaseBySql(path, dataHash);
@@ -72,7 +78,7 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 			Guid businessUnitId;
 			using (DataSource.OnThisThreadUse(DataSourceHelper.TestTenantName))
 				businessUnitId = WithUnitOfWork.Get(() => BusinessUnits.LoadAll().First()).Id.Value;
-			Impersonate.Impersonate(DataSourceHelper.TestTenantName, businessUnitId);
+			AsSystem.Logon(DataSourceHelper.TestTenantName, businessUnitId);
 
 			TestSiteConfigurationSetup.Setup();
 			((TestConfigReader)ConfigReader).ConfigValues.Add("ManagerLocation", TestSiteConfigurationSetup.URL.AbsoluteUri + @"StardustDashboard/");
@@ -81,6 +87,8 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 			
 		}
 
+		
+
 		public override void AfterTest(ITest testDetails)
 		{
 			base.AfterTest(testDetails);
@@ -88,8 +96,6 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 			Hangfire.WaitForQueue();
 
 			TestSiteConfigurationSetup.TearDown();
-
-			Impersonate?.EndImpersonation();
 
 		}
 	}

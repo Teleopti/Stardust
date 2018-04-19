@@ -1,0 +1,215 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using NUnit.Framework;
+using SharpTestsEx;
+using Teleopti.Ccc.Domain.AbsenceWaitlisting;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.ApplicationLayer.Payroll;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Payroll;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.UnitOfWork;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
+using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Sdk.ServiceBus;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
+{
+	[StardustTest]
+	public class PayrollEndToEndTest
+	{
+		public IEventPublisher EventPublisher;
+		public IStardustSender StardustSender;
+		public IConfigReader ConfigReader;
+		public ICurrentBusinessUnit CurrentBusinessUnit;
+		public IPersonRepository PersonRepository;
+		public WithUnitOfWork WithUnitOfWork;
+		public IUpdatedBy UpdatedBy;
+		public IPayrollExportRepository PayrollExportRepository;
+		public IPayrollFormatRepository PayrollFormatRepository;
+		public IPayrollResultRepository PayrollResultRepository;
+
+
+		public IAbsenceRepository AbsenceRepository;
+		public IPersonRequestRepository PersonRequestRepository;
+		public IQueuedAbsenceRequestRepository QueuedAbsenceRequestRepository;
+		private AssertRetryStrategy _assertRetryStrategy;
+
+		[Test]
+		public void ShouldPublishAndProcessPayrollJob()
+		{
+			var period = new DateOnlyPeriod(2016, 02, 20, 2016, 02, 28);
+
+			StardustSender.Send(dataSetup(period));
+
+			performLevel1Assert(period);
+			_assertRetryStrategy.Reset();
+
+			startServuceBus();
+
+			performLevel2Assert();
+			_assertRetryStrategy.Reset();
+
+		}
+
+		private void performLevel2Assert()
+		{
+			//check in job 
+			var connectionString = InfraTestConfigReader.ConnectionString;
+			using (var connection = new SqlConnection(connectionString))
+			{
+				connection.Open();
+				using (var command = new SqlCommand("select Ended,result from Stardust.Job", connection))
+				{
+					while (_assertRetryStrategy.TryAgain())
+					{
+						using (var reader = command.ExecuteReader())
+						{
+							if (reader.HasRows)
+							{
+								reader.Read();
+								if (!reader.IsDBNull(0))
+								{
+									DateTime? jobEndedDate = reader.GetDateTime(0);
+									var result = reader.GetString(1);
+									jobEndedDate.HasValue.Should().Be.True();
+									result.Should().Be.EqualTo("Success");
+									break;
+								}
+							}
+
+						}
+						Thread.Sleep(1500);
+					}
+					if (!_assertRetryStrategy.WithinRetryStrategy())
+						Assert.Fail("Unable to perform Tier 2 Assertion. Exceeded the maximum number of reties.");
+
+				}
+			}
+		}
+
+		private void startServuceBus()
+		{
+			var host = new ServiceBusRunner(i => { }, ConfigReader);
+			host.Start();
+			Thread.Sleep(2000);
+		}
+
+		private RunPayrollExportEvent dataSetup(DateOnlyPeriod period)
+		{
+			_assertRetryStrategy = new AssertRetryStrategy(10);
+			RunPayrollExportEvent message = null;
+
+			WithUnitOfWork.Do(() =>
+			{
+
+				PayrollFormatRepository.Add(new PayrollFormat() { Name = "Teleopti", FormatId = Guid.NewGuid() });
+			});
+
+			WithUnitOfWork.Do(() =>
+			{
+
+				PayrollExportRepository.Add(createAggregateWithCorrectBusinessUnit(period));
+
+			});
+			IPayrollExport payrollExport = null;
+			IPerson person = null;
+			WithUnitOfWork.Do(() =>
+			{
+				person = PersonRepository.LoadAll().FirstOrDefault();
+				payrollExport = PayrollExportRepository.LoadAll().FirstOrDefault();
+				var payrollResult = new PayrollResult(payrollExport, person, DateTime.UtcNow);
+				payrollResult.PayrollExport = payrollExport;
+				PayrollResultRepository.Add(payrollResult);
+
+			});
+			WithUnitOfWork.Do(() =>
+			{
+				var payrollResult = PayrollResultRepository.LoadAll().FirstOrDefault();
+
+				message = new RunPayrollExportEvent
+				{
+					PayrollExportId = payrollExport.Id.GetValueOrDefault(Guid.Empty),
+					ExportStartDate = payrollExport.Period.StartDate.Date,
+					ExportEndDate = payrollExport.Period.EndDate.Date,
+					PayrollExportFormatId = payrollExport.PayrollFormatId,
+					PayrollResultId = payrollResult.Id.GetValueOrDefault(),
+					LogOnBusinessUnitId = CurrentBusinessUnit.CurrentId().GetValueOrDefault()
+				};
+
+			});
+			return message;
+		}
+
+		private  IPayrollExport createAggregateWithCorrectBusinessUnit(DateOnlyPeriod period)
+		{
+			IPayrollExport payrollExport = new PayrollExport();
+			payrollExport.FileFormat = ExportFormat.CommaSeparated;
+			payrollExport.Name = "TestPE";
+			payrollExport.Period = period;
+			var payrollFormat = PayrollFormatRepository.LoadAll().FirstOrDefault();
+			payrollExport.PayrollFormatId = payrollFormat.Id.GetValueOrDefault();
+			payrollExport.PayrollFormatName = payrollFormat.Name;
+			
+
+			IList<IPerson> persons = PersonRepository.LoadAll().ToList();
+			payrollExport.ClearPersons();
+			payrollExport.AddPersons(persons);
+			return payrollExport;
+		}
+
+		private void performLevel1Assert(DateOnlyPeriod period)
+		{
+			//check in job queue
+			var connectionString = InfraTestConfigReader.ConnectionString;
+			using (var connection = new SqlConnection(connectionString))
+			{
+				connection.Open();
+				using (var command = new SqlCommand("select serialized,type from Stardust.JobQueue", connection))
+				{
+					while (_assertRetryStrategy.TryAgain())
+					{
+						using (var reader = command.ExecuteReader())
+						{
+							if (reader.HasRows)
+							{
+								reader.Read();
+								var jsonData = reader.GetString(0);
+								var jobType = reader.GetString(1);
+								RunPayrollExportEvent storedEvent = JsonConvert.DeserializeObject<RunPayrollExportEvent>(jsonData);
+								storedEvent.LogOnDatasource.Should().Be.EqualTo("TestData");
+								storedEvent.LogOnBusinessUnitId.Should().Be.EqualTo(CurrentBusinessUnit.CurrentId().GetValueOrDefault());
+								storedEvent.ExportEndDate.Should().Be.EqualTo(period.EndDate.Date);
+								storedEvent.ExportStartDate.Should().Be.EqualTo(period.StartDate.Date);
+
+								jobType.Should().Be.EqualTo("Teleopti.Ccc.Domain.ApplicationLayer.Payroll.RunPayrollExportEvent");
+
+								break;
+							}
+
+						}
+						Thread.Sleep(1000);
+					}
+					if (!_assertRetryStrategy.WithinRetryStrategy())
+						Assert.Fail("Unable to perform Tier 1 Assertion. Exceeded the maximum number of reties.");
+				}
+			}
+		}
+
+
+	}
+}

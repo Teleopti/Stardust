@@ -120,8 +120,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Stardust\AbsenceRequestEndToEndTest.cs" />
+    <Compile Include="Stardust\AssertRetryStrategy.cs" />
     <Compile Include="Stardust\DataCreator.cs" />
     <Compile Include="Stardust\NUnitSetup.cs" />
+    <Compile Include="Stardust\PayrollEndToEndTest.cs" />
     <Compile Include="Stardust\StardustTestAttribute.cs" />
     <Compile Include="Stardust\TestConfigReader.cs" />
   </ItemGroup>
