@@ -1,4 +1,0 @@
-﻿namespace Teleopti.Support.Security
-{
-
-}

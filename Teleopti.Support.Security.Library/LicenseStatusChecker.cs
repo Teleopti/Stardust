@@ -8,7 +8,7 @@ namespace Teleopti.Support.Security
 {
     public class LicenseStatusChecker : ICommandLineCommand
     {
-		private static readonly ILog log = LogManager.GetLogger(typeof(Program));
+		private static readonly ILog log = LogManager.GetLogger(typeof(LicenseStatusChecker));
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Console.WriteLine(System.String,System.Object)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Console.WriteLine(System.String)")]
         public int Execute(UpgradeCommand commandLineArgument)
         {

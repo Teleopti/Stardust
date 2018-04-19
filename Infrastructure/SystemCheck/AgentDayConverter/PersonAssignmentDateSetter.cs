@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
@@ -8,6 +9,7 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 	public class PersonAssignmentDateSetter
 	{
 		public static readonly DateOnly DateOfUnconvertedSchedule = new DateOnly(1800, 1, 1);
+		public static readonly DateTime DateOfUnconvertedSchedule2 = new DateOnly(1800, 1, 1).Date;
 
 		private string numberOfNotConvertedCommand = 
 			@"select COUNT(*) as cnt from dbo.PersonAssignment pa

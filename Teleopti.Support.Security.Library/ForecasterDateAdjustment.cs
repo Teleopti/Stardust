@@ -9,7 +9,7 @@ namespace Teleopti.Support.Security
 {
     internal class ForecasterDateAdjustment : ICommandLineCommand
     {
-		private static readonly ILog log = LogManager.GetLogger(typeof(Program));
+		private static readonly ILog log = LogManager.GetLogger(typeof(ForecasterDateAdjustment));
 
         public int Execute(UpgradeCommand commandLineArgument)
         {

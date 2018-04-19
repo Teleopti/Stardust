@@ -11,7 +11,7 @@ namespace Teleopti.Support.Security
 {
 	public class TextLoader
 	{
-		private static readonly ILog log = LogManager.GetLogger(typeof(Program));
+		private static readonly ILog log = LogManager.GetLogger(typeof(TextLoader));
 
 		public static int LoadAllTextsToDatabase(string connectionString)
 		{

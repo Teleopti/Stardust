@@ -6,7 +6,7 @@ namespace Teleopti.Support.Security
 	internal class CrossDatabaseViewUpdate : ICommandLineCommand
 	{
 		private readonly IUpdateCrossDatabaseView _updateCrossDatabaseView;
-		private static readonly ILog log = LogManager.GetLogger(typeof(Program));
+		private static readonly ILog log = LogManager.GetLogger(typeof(CrossDatabaseViewUpdate));
 
 		public CrossDatabaseViewUpdate(IUpdateCrossDatabaseView updateCrossDatabaseView)
 		{

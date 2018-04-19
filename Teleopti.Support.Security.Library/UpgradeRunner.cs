@@ -21,7 +21,7 @@ namespace Teleopti.Support.Security
 		private static readonly ICommandLineCommand dayOffIndexFixer = new DayOffIndexFixer();
 		private static readonly ICommandLineCommand analyticsReportableScenarioFixer = new AnalyticsReportableScenarioFixer();
 
-		private static readonly ILog log = LogManager.GetLogger(typeof(Program));
+		private static readonly ILog log = LogManager.GetLogger(typeof(UpgradeRunner));
 		private IUpgradeLog _upgradeLog;
 
 		public UpgradeRunner(IUpgradeLog upgradeLog)
@@ -142,7 +142,7 @@ namespace Teleopti.Support.Security
 				conn.Open();
 				using (var cmd = new SqlCommand(numberOfNotConvertedCommand, conn))
 				{
-					cmd.Parameters.AddWithValue("@baseDate", PersonAssignmentDateSetter.DateOfUnconvertedSchedule.Date);
+					cmd.Parameters.AddWithValue("@baseDate", PersonAssignmentDateSetter.DateOfUnconvertedSchedule2);
 					if ((int) cmd.ExecuteScalar() > 0)
 					{
 						return false;

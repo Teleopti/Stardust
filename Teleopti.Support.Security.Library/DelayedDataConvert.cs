@@ -6,7 +6,7 @@ namespace Teleopti.Support.Security
 {
 	internal class DelayedDataConvert : ICommandLineCommand
 	{
-		private static readonly ILog log = LogManager.GetLogger(typeof(Program));
+		private static readonly ILog log = LogManager.GetLogger(typeof(DelayedDataConvert));
 
 		public int Execute(UpgradeCommand commandLineArgument)
 		{

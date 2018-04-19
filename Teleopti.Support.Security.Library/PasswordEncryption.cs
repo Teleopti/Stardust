@@ -6,7 +6,7 @@ namespace Teleopti.Support.Security
 {
 	internal class PasswordEncryption : ICommandLineCommand
 	{
-		private static readonly ILog log = LogManager.GetLogger(typeof(Program));
+		private static readonly ILog log = LogManager.GetLogger(typeof(PasswordEncryption));
 
 		public int Execute(UpgradeCommand commandLineArgument)
 		{

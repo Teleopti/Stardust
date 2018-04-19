@@ -65,42 +65,20 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="AnalyticsReportableScenarioFixer.cs" />
-    <Compile Include="DayOffCodeFixer.cs" />
-    <Compile Include="DayOffIndexFixer.cs" />
-    <Compile Include="DelayedDataConvert.cs" />
-    <Compile Include="IDatabaseArguments.cs" />
-    <Compile Include="UpdateCrossDatabaseView.cs" />
-    <Compile Include="CheckTenantConnectionStrings.cs" />
-    <Compile Include="UpgradeRunner.cs" />
-    <Compile Include="ReportTextsCommand.cs" />
-    <Compile Include="CrossDatabaseViewUpdate.cs" />
-    <Compile Include="UpgradeCommand.cs" />
-    <Compile Include="LicenseStatusChecker.cs" />
-    <Compile Include="PersonFirstDayOfWeekSetter.cs" />
-    <Compile Include="ForecasterDateAdjustment.cs" />
-    <Compile Include="ICommandLineCommand.cs" />
-    <Compile Include="PasswordEncryption.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="TextLoader.cs" />
-    <Compile Include="UpdateTenantData.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Domain\Teleopti.Ccc.Domain.csproj">
       <Project>{ADD1BCDC-CFBB-4632-8FB5-4FF3BD04F666}</Project>
       <Name>Teleopti.Ccc.Domain</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Infrastructure\Teleopti.Ccc.Infrastructure.csproj">
-      <Project>{AA4A5374-77AF-44F0-85C1-6CABC6701352}</Project>
-      <Name>Teleopti.Ccc.Infrastructure</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Portal\ReportTexts\Teleopti.Analytics.ReportTexts.csproj">
       <Project>{7c7067a8-c9ff-462e-8469-78e886c2e002}</Project>
       <Name>Teleopti.Analytics.ReportTexts</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Teleopti.Messaging\Teleopti.Interfaces\Teleopti.Interfaces.csproj">
-      <Project>{8D2565F2-7C44-45B7-96AD-2CD900E033A1}</Project>
-      <Name>Teleopti.Interfaces</Name>
+    <ProjectReference Include="..\Teleopti.Support.Security.Library\Teleopti.Support.Security.Library.csproj">
+      <Project>{930F7DED-B1F3-48A1-A966-B0156B3BF2AE}</Project>
+      <Name>Teleopti.Support.Security.Library</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
