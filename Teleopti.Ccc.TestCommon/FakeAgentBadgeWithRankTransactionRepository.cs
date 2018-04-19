@@ -37,10 +37,10 @@ namespace Teleopti.Ccc.TestCommon
 		}
 
 		public IUnitOfWork UnitOfWork { get; }
-		public IAgentBadgeWithRankTransaction Find(IPerson person, int badgeType, DateOnly calculateDate)
+		public IAgentBadgeWithRankTransaction Find(IPerson person, int badgeType, DateOnly calculateDate, bool isExternal)
 		{
 			return _agentBadgeWithRankTransactions
-				.FirstOrDefault(x => x.Person.Id == person.Id && x.BadgeType == badgeType && x.CalculatedDate == calculateDate);
+				.FirstOrDefault(x => x.Person.Id == person.Id && x.BadgeType == badgeType && x.CalculatedDate == calculateDate && x.IsExternal == isExternal);
 		}
 
 		public IList<IAgentBadgeWithRankTransaction> Find(IEnumerable<IPerson> personCollection, DateOnlyPeriod period)

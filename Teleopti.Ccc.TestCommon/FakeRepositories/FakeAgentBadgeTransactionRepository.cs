@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NHibernate.Util;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Interfaces.Domain;
@@ -38,10 +37,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		}
 
 		public IUnitOfWork UnitOfWork { get; }
-		public IAgentBadgeTransaction Find(IPerson person, int badgeType, DateOnly calculateDate)
+		public IAgentBadgeTransaction Find(IPerson person, int badgeType, DateOnly calculateDate, bool isExternal)
 		{
 			return _agentBadgeTransactions.FirstOrDefault(x =>
-				x.Person.Id == person.Id && x.BadgeType == badgeType && x.CalculatedDate == calculateDate);
+				x.Person.Id == person.Id && x.BadgeType == badgeType && x.CalculatedDate == calculateDate && x.IsExternal == isExternal);
 		}
 
 		public IList<IAgentBadgeTransaction> Find(IEnumerable<IPerson> personCollection, DateOnlyPeriod period)

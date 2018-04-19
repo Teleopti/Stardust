@@ -12,8 +12,8 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
 using Teleopti.Ccc.Web.Core;
@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 		private readonly IPushMessageProvider _pushMessageProvider;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IReportsNavigationProvider _reportsNavigationProvider;
-		private readonly IBadgeProvider _badgeProvider;
 		private readonly IPersonNameProvider _personNameProvider;
 		private readonly ITeamGamificationSettingRepository _teamGamificationSettingRepo;
 		private readonly ICurrentTenantUser _currentTenantUser;
@@ -36,24 +35,24 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 		private readonly ICurrentTeleoptiPrincipal _currentIdentity;
 		private readonly ILicenseAvailability _licenseAvailability;
 		private readonly IToggleManager _toggleManager;
+		private readonly IAgentBadgeWithinPeriodProvider _agentBadgeWithinPeriodProvider;
 
 		public PortalViewModelFactory(IPermissionProvider permissionProvider,
 			ILicenseActivatorProvider licenseActivatorProviderProvider,
 			IPushMessageProvider pushMessageProvider, ILoggedOnUser loggedOnUser,
 			IReportsNavigationProvider reportsNavigationProvider,
-			IBadgeProvider badgeProvider,
 			IPersonNameProvider personNameProvider,
 			ITeamGamificationSettingRepository teamGamificationSettingReop,
 			ICurrentTenantUser currentTenantUser,
 			IUserCulture userCulture,
-			ICurrentTeleoptiPrincipal currentIdentity, IToggleManager toggleManager, ILicenseAvailability licenseAvailability)
+			ICurrentTeleoptiPrincipal currentIdentity, IToggleManager toggleManager, ILicenseAvailability licenseAvailability, 
+			IAgentBadgeWithinPeriodProvider agentBadgeWithinPeriodProvider)
 		{
 			_permissionProvider = permissionProvider;
 			_licenseActivatorProvider = licenseActivatorProviderProvider;
 			_pushMessageProvider = pushMessageProvider;
 			_loggedOnUser = loggedOnUser;
 			_reportsNavigationProvider = reportsNavigationProvider;
-			_badgeProvider = badgeProvider;
 			_personNameProvider = personNameProvider;
 			_teamGamificationSettingRepo = teamGamificationSettingReop;
 			_currentTenantUser = currentTenantUser;
@@ -61,6 +60,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			_currentIdentity = currentIdentity;
 			_toggleManager = toggleManager;
 			_licenseAvailability = licenseAvailability;
+			_agentBadgeWithinPeriodProvider = agentBadgeWithinPeriodProvider;
 		}
 
 		public PortalViewModel CreatePortalViewModel()
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			if (showBadge)
 			{
 				var period = getDefaultPeriod(teamSetting.GamificationSetting);
-				badges = _badgeProvider.GetBadges(period);
+				badges = _agentBadgeWithinPeriodProvider.GetBadges(period);
 				rollingPeriodSet = teamSetting.GamificationSetting.RollingPeriodSet;
 			}
 
@@ -130,11 +130,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 				ShowBadgePeriodNavigator = showBadgePeriodNavigator,
 				DateFormatLocale = getLocale()
 			};
-		}
-
-		public IEnumerable<BadgeViewModel> GetBadges(DateOnlyPeriod period)
-		{
-			return  _badgeProvider.GetBadges(period);
 		}
 
 		private string getLocale()

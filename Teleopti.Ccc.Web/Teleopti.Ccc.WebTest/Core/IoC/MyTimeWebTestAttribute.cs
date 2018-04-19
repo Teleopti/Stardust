@@ -104,11 +104,10 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			system.UseTestDouble<SiteOpenHourProvider>().For<ISiteOpenHourProvider>();
 			system.UseTestDouble<StaffingDataAvailablePeriodProvider>().For<IStaffingDataAvailablePeriodProvider>();
 			system.UseTestDouble<FakeSkillTypeRepository>().For<ISkillTypeRepository>(); 
-			system.UseTestDouble<BadgeProvider>().For<IBadgeProvider>(); 
 			system.UseTestDouble<FakeGamificationSettingRepository>().For<IGamificationSettingRepository>(); 
 			system.UseTestDouble<FakeTeamGamificationSettingRepository>().For<ITeamGamificationSettingRepository>();
-			system.UseTestDouble<FakeAgentBadgeRepository>().For<IAgentBadgeRepository>();
-			system.UseTestDouble<FakeAgentBadgeWithRankRepository>().For<IAgentBadgeWithRankRepository>();
+			system.UseTestDouble<FakeAgentBadgeTransactionRepository>().For<IAgentBadgeTransactionRepository>();
+			system.UseTestDouble<FakeAgentBadgeWithRankTransactionRepository>().For<IAgentBadgeWithRankTransactionRepository>();
 			system.UseTestDouble<SkillIntradayStaffingFactory>().For<SkillIntradayStaffingFactory>();
 
 			// Tenant (and datasource) stuff

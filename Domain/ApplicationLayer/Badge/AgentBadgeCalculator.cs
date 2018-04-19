@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 					continue;
 				}
 
-				var badge = _transactionRepository.Find(person, badgeType, date);
+				var badge = _transactionRepository.Find(person, badgeType, date, isExternal);
 
 				if (badge == null)
 				{

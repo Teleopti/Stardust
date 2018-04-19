@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling;
 
 namespace Teleopti.Ccc.Domain.Common
 {
@@ -114,21 +115,21 @@ namespace Teleopti.Ccc.Domain.Common
 		}
 
 		#region Calculate badge count
-		private static int getGoldBadgeCount(int amount, int silverToBronzeRate, int goldToSilverRate)
+		public static int getGoldBadgeCount(int amount, int silverToBronzeRate, int goldToSilverRate)
 		{
 			return silverToBronzeRate != 0 && goldToSilverRate != 0
 				? amount / (silverToBronzeRate * goldToSilverRate)
 				: 0;
 		}
 
-		private static int getSilverBadgeCount(int amount, int silverToBronzeRate, int goldToSilverRate)
+		public static int getSilverBadgeCount(int amount, int silverToBronzeRate, int goldToSilverRate)
 		{
 			return silverToBronzeRate != 0 && goldToSilverRate != 0
 				? (amount / silverToBronzeRate) % goldToSilverRate
 				: 0;
 		}
 
-		private static int getBronzeBadgeCount(int amount, int silverToBronzeRate)
+		public static int getBronzeBadgeCount(int amount, int silverToBronzeRate)
 		{
 			return silverToBronzeRate != 0 ? amount % silverToBronzeRate : amount;
 		}

@@ -4,6 +4,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.LayoutBase;
@@ -18,6 +19,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		private MockRepository mocks;
 		private IPortalViewModelFactory viewModelFactory;
 		private ILayoutBaseViewModelFactory layoutBaseViewModelFactory;
+		private IAgentBadgeWithinPeriodProvider agentBadgeWithinPeriodProvider;
 
 		[SetUp]
 		public void Setup()
@@ -25,7 +27,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			mocks = new MockRepository();
 			viewModelFactory = mocks.DynamicMock<IPortalViewModelFactory>();
 	    	layoutBaseViewModelFactory = mocks.DynamicMock<ILayoutBaseViewModelFactory>();
-			target = new PortalController(viewModelFactory, layoutBaseViewModelFactory);
+			agentBadgeWithinPeriodProvider = mocks.DynamicMock<IAgentBadgeWithinPeriodProvider>();
+			target = new PortalController(viewModelFactory, layoutBaseViewModelFactory, agentBadgeWithinPeriodProvider);
 		}
 
 		[TearDown]

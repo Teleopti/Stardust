@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			_badgeCalculationRepository = MockRepository.GenerateMock<IBadgeCalculationRepository>();
 
 			_badgeTransactionRepository = MockRepository.GenerateMock<IAgentBadgeWithRankTransactionRepository>();
-			_badgeTransactionRepository.Stub(x => x.Find(person, BadgeType.Adherence, DateOnly.Today)).IgnoreArguments().Return(null);
+			_badgeTransactionRepository.Stub(x => x.Find(person, BadgeType.Adherence, DateOnly.Today, false)).IgnoreArguments().Return(null);
 
 			_now = MockRepository.GenerateMock<INow>();
 

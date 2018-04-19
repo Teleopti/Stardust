@@ -35,16 +35,15 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		public FakeTeamGamificationSettingRepository TeamGamificationSettingRepository;
 		public FakeLoggedOnUser LoggedOnUser;
 		public FakeGamificationSettingRepository GamificationSettingRepository;
-		public FakeAgentBadgeRepository AgentBadgeRepository;
-		public FakeAgentBadgeWithRankRepository AgentBadgeWithRankRepository;
 		public FakeToggleManager ToggleManager;
 		public FakeCurrentTeleoptiPrincipal CurrentTeleoptiPrincipal;
 		public FakePermissionProvider PermissionProvider;
 		public FakePermissions Authorization;
+		public FakeAgentBadgeTransactionRepository AgentBadgeTransactionRepository;
+		public FakeAgentBadgeWithRankTransactionRepository AgentBadgeWithRankTransactionRepository;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<PrincipalAuthorization>().For<IAuthorization>();
 			system.UseTestDouble<FakePermissionProvider>().For<IPermissionProvider>();
 			system.UseTestDouble<CurrentTenantUserFake>().For<ICurrentTenantUser>();
 			system.UseTestDouble(new FakeCurrentUnitOfWorkFactory(null).WithCurrent(new FakeUnitOfWorkFactory(null, null, null, null) { Name = MyTimeWebTestAttribute.DefaultTenantName })).For<ICurrentUnitOfWorkFactory>();
@@ -217,8 +216,8 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			var calculatedDate = new DateOnly(2017, 4, 9);
 			var gamificationSetting = createGamificationSetting();
 			createTeamGamificationSetting(gamificationSetting);
-			setAgentBadge(gamificationSetting, calculatedDate.Date);
-			setAgentBadgeWithRank(gamificationSetting, calculatedDate.Date);
+			setAgentBadge(gamificationSetting, calculatedDate);
+			setAgentBadgeWithRank(gamificationSetting, calculatedDate);
 
 			var result = Target.CreatePortalViewModel().Badges;
 			result.ToList()[0].BronzeBadge.Should().Be.EqualTo(1);
@@ -236,51 +235,10 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			var calculatedDate = new DateOnly(2017, 4, 9);
 			var gamificationSetting = createGamificationSetting();
 			createTeamGamificationSetting(gamificationSetting);
-			setAgentBadge(gamificationSetting, calculatedDate.Date);
-			setAgentBadgeWithRank(gamificationSetting, calculatedDate.Date);
+			setAgentBadge(gamificationSetting, calculatedDate);
+			setAgentBadgeWithRank(gamificationSetting, calculatedDate);
 
 			var result = Target.CreatePortalViewModel().Badges;
-			result.ToList()[0].BronzeBadge.Should().Be.EqualTo(0);
-			result.ToList()[0].SilverBadge.Should().Be.EqualTo(0);
-			result.ToList()[0].GoldBadge.Should().Be.EqualTo(0);
-			result.ToList()[1].BronzeBadge.Should().Be.EqualTo(0);
-			result.ToList()[1].SilverBadge.Should().Be.EqualTo(0);
-			result.ToList()[1].GoldBadge.Should().Be.EqualTo(0);
-		}
-
-		[Test]
-		public void ShouldGetBadgesWithinPeriod()
-		{
-			var calculatedDate = new DateOnly(2018, 4, 9);
-			var gamificationSetting = createGamificationSetting();
-			createTeamGamificationSetting(gamificationSetting);
-
-			setAgentBadge(gamificationSetting, calculatedDate.Date);
-			setAgentBadgeWithRank(gamificationSetting, calculatedDate.Date);
-
-			var period = new DateOnlyPeriod(DateOnly.MinValue, calculatedDate);
-			var result = Target.GetBadges(period);
-
-			result.ToList()[0].BronzeBadge.Should().Be.EqualTo(1);
-			result.ToList()[0].SilverBadge.Should().Be.EqualTo(0);
-			result.ToList()[0].GoldBadge.Should().Be.EqualTo(0);
-			result.ToList()[1].BronzeBadge.Should().Be.EqualTo(5);
-			result.ToList()[1].SilverBadge.Should().Be.EqualTo(0);
-			result.ToList()[1].GoldBadge.Should().Be.EqualTo(1);
-		}
-
-		[Test]
-		public void ShouldNotGetBadgesWithoutPeriod()
-		{
-			var calculatedDate = new DateOnly(2018, 4, 9);
-			var gamificationSetting = createGamificationSetting();
-			createTeamGamificationSetting(gamificationSetting);
-			setAgentBadge(gamificationSetting, calculatedDate.Date);
-			setAgentBadgeWithRank(gamificationSetting, calculatedDate.Date);
-
-			var period = new DateOnlyPeriod(DateOnly.MinValue, calculatedDate.AddDays(-1));
-			var result = Target.GetBadges(period);
-
 			result.ToList()[0].BronzeBadge.Should().Be.EqualTo(0);
 			result.ToList()[0].SilverBadge.Should().Be.EqualTo(0);
 			result.ToList()[0].GoldBadge.Should().Be.EqualTo(0);
@@ -294,33 +252,33 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			CurrentDataSource.FakeName(name);
 		}
 
-		private void setAgentBadge(IGamificationSetting gamificationSetting, DateTime calculatedDate)
+		private void setAgentBadge(IGamificationSetting gamificationSetting, DateOnly calculatedDate)
 		{
-			var agentBadge = new AgentBadge
+			var agentBadge = new AgentBadgeTransaction
 			{
 				BadgeType = gamificationSetting.BadgeSettings[0].QualityId,
 				IsExternal = true,
-				Person = LoggedOnUser.CurrentUser().Id.GetValueOrDefault(),
-				TotalAmount = 1,
-				LastCalculatedDate = calculatedDate.Date
+				Person = LoggedOnUser.CurrentUser(),
+				Amount = 1,
+				CalculatedDate = calculatedDate
 			};
-			AgentBadgeRepository.Add(agentBadge);
+			AgentBadgeTransactionRepository.Add(agentBadge);
 		}
 
-		private void setAgentBadgeWithRank(IGamificationSetting gamificationSetting, DateTime calculatedDate)
+		private void setAgentBadgeWithRank(IGamificationSetting gamificationSetting, DateOnly calculatedDate)
 		{
-			var agentBadgeWithRank = new AgentBadgeWithRank
+			var agentBadgeWithRank = new AgentBadgeWithRankTransaction
 			{
 				BadgeType = gamificationSetting.BadgeSettings[1].QualityId,
 				BronzeBadgeAmount = 5,
 				SilverBadgeAmount = 0,
 				GoldBadgeAmount = 1,
 				IsExternal = true,
-				LastCalculatedDate = calculatedDate.Date,
-				Person = LoggedOnUser.CurrentUser().Id.GetValueOrDefault()
+				CalculatedDate = calculatedDate,
+				Person = LoggedOnUser.CurrentUser()
 			};
 
-			AgentBadgeWithRankRepository.Add(agentBadgeWithRank);
+			AgentBadgeWithRankTransactionRepository.Add(agentBadgeWithRank);
 		}
 
 		private void setupLoggedOnUser()

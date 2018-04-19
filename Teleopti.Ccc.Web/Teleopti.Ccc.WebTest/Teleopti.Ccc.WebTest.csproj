@@ -299,6 +299,7 @@
     <Compile Include="Areas\TeamSchedule\FakeCommandHandler.cs" />
     <Compile Include="Areas\TeamSchedule\Core\TeamScheduleActivityCommandServiceTest.cs" />
     <Compile Include="Core\BlockOtherOriginFilterTests.cs" />
+    <Compile Include="Core\Common\DataProvider\AgentBadgeWithinPeriodProviderTest.cs" />
     <Compile Include="Core\Common\DataProvider\MultiplicatorDefinitionSetProviderTest.cs" />
     <Compile Include="Core\Gamification\GamificationSettingProviderTest.cs" />
     <Compile Include="Core\Gamification\GamificationSettingPersisterTest.cs" />

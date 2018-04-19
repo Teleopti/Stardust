@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 		}
 		
-		public IAgentBadgeTransaction Find(IPerson person, int badgeType, DateOnly calculateDate)
+		public IAgentBadgeTransaction Find(IPerson person, int badgeType, DateOnly calculateDate, bool isExternal)
 		{
 			InParameter.NotNull(nameof(person),person);
 			InParameter.NotNull(nameof(badgeType), badgeType);
@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.Add(Restrictions.Eq("Person", person))
 				.Add(Restrictions.Eq("BadgeType", badgeType))
 				.Add(Restrictions.Eq("CalculatedDate", calculateDate))
+				.Add(Restrictions.Eq("IsExternal", isExternal))
 				.UniqueResult<IAgentBadgeTransaction>();
 			return result;
 		}

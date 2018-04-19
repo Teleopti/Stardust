@@ -470,6 +470,7 @@
     <Compile Include="Areas\MultiTenancy\NewExternalApplicationModel.cs" />
     <Compile Include="Areas\MultiTenancy\NewExternalApplicationResponseModel.cs" />
     <Compile Include="Areas\MyTime\Controllers\OvertimeRequestsController.cs" />
+    <Compile Include="Areas\MyTime\Core\Common\DataProvider\AgentBadgeWithinPeriodProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\SingleOwnedPerson.cs" />
     <Compile Include="Areas\MyTime\Models\WeekSchedule\RequestLicense.cs" />
     <Compile Include="Areas\People\Controllers\RoleManager.cs" />

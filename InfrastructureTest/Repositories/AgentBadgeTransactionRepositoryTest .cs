@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var target = new AgentBadgeTransactionRepository(UnitOfWork);
 			target.ResetAgentBadges();
 
-			var result = target.Find(badge.Person, badge.BadgeType, badge.CalculatedDate);
+			var result = target.Find(badge.Person, badge.BadgeType, badge.CalculatedDate, false);
 			result.Should().Be.Null();
 		}
 

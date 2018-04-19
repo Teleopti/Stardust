@@ -98,11 +98,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Gamification
 			createGamificationSetting(GamificationSettingRuleSet.RuleWithDifferentThreshold, 90, 85, 80);
 			createExistingBadgeAndNewData(0, 0, 1, period, 87);
 
-			var oldData = AgentBadgeWithRankTransactionRepository.Find(_agent, _externalId, _calculatedate);
+			var oldData = AgentBadgeWithRankTransactionRepository.Find(_agent, _externalId, _calculatedate, true);
 			oldData.BronzeBadgeAmount.Should().Be.EqualTo(1);
 			Target.Handle(badgeEvent);
 
-			var newData = AgentBadgeWithRankTransactionRepository.Find(_agent, _externalId, _calculatedate);
+			var newData = AgentBadgeWithRankTransactionRepository.Find(_agent, _externalId, _calculatedate, true);
 			newData.BronzeBadgeAmount.Should().Be.EqualTo(0);
 			newData.SilverBadgeAmount.Should().Be.EqualTo(1);
 		}
@@ -122,11 +122,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Gamification
 			createGamificationSetting(GamificationSettingRuleSet.RuleWithDifferentThreshold, 90, 85, 80);
 			createExistingBadgeAndNewData(0, 0, 1, period, 70);
 
-			var oldData = AgentBadgeWithRankTransactionRepository.Find(_agent, _externalId, _calculatedate);
+			var oldData = AgentBadgeWithRankTransactionRepository.Find(_agent, _externalId, _calculatedate, true);
 			oldData.BronzeBadgeAmount.Should().Be.EqualTo(1);
 			Target.Handle(badgeEvent);
 
-			var newData = AgentBadgeWithRankTransactionRepository.Find(_agent, _externalId, _calculatedate);
+			var newData = AgentBadgeWithRankTransactionRepository.Find(_agent, _externalId, _calculatedate, true);
 			newData.Should().Be.Null();
 		}
 
@@ -145,11 +145,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Gamification
 			createGamificationSetting(GamificationSettingRuleSet.RuleWithDifferentThreshold, 90, 85, 80);
 			createExistingBadgeAndNewData(0, 0, 0, period, 80);
 
-			var oldData = AgentBadgeWithRankTransactionRepository.Find(_agent, _externalId, _calculatedate);
+			var oldData = AgentBadgeWithRankTransactionRepository.Find(_agent, _externalId, _calculatedate, true);
 			oldData.BronzeBadgeAmount.Should().Be.EqualTo(0);
 			Target.Handle(badgeEvent);
 
-			var newData = AgentBadgeWithRankTransactionRepository.Find(_agent, _externalId, _calculatedate);
+			var newData = AgentBadgeWithRankTransactionRepository.Find(_agent, _externalId, _calculatedate, true);
 			newData.BronzeBadgeAmount.Should().Be.EqualTo(1);
 		}
 

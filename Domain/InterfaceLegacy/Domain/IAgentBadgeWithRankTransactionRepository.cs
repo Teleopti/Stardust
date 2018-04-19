@@ -11,8 +11,9 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// <param name="person">The agent to get badge.</param>
 		/// <param name="badgeType">Badge type.</param>
 		/// <param name="calculateDate">The calculated date</param>
+		/// <param name="isExternal">to identify whether the gamification imported from outside or not</param>
 		/// <returns></returns>
-		IAgentBadgeWithRankTransaction Find(IPerson person, int badgeType, DateOnly calculateDate);
+		IAgentBadgeWithRankTransaction Find(IPerson person, int badgeType, DateOnly calculateDate, bool isExternal);
 
 		IList<IAgentBadgeWithRankTransaction> Find(IEnumerable<IPerson> personCollection, DateOnlyPeriod period);
 

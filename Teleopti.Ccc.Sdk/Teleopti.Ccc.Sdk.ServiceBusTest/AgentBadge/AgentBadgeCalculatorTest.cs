@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				.Return(new Dictionary<Guid, double> { { _lastPersonId, 120}});
 
 			_badgeTransactionRepository = MockRepository.GenerateMock<IAgentBadgeTransactionRepository>();
-			_badgeTransactionRepository.Stub(x => x.Find(lastPerson, BadgeType.Adherence, DateOnly.Today)).IgnoreArguments().Return(null);
+			_badgeTransactionRepository.Stub(x => x.Find(lastPerson, BadgeType.Adherence, DateOnly.Today, false)).IgnoreArguments().Return(null);
 
 			_now = MockRepository.GenerateMock<INow>();
 
