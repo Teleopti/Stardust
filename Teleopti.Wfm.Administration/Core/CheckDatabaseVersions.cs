@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Data.SqlClient;
 using Teleopti.Ccc.DBManager.Library;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Wfm.Administration.Models;
 
 namespace Teleopti.Wfm.Administration.Core

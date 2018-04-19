@@ -1,11 +1,7 @@
-﻿using System;
-using System.Data;
+﻿using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Threading;
 using log4net;
-using log4net.Config;
-using log4net.Core;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter;
@@ -14,110 +10,108 @@ namespace Teleopti.Support.Security
 {
 	public class UpgradeRunner
 	{
-		private static readonly ICommandLineCommand PasswordEncryption = new PasswordEncryption();
-		private static readonly ICommandLineCommand ForecasterDateAdjustment = new ForecasterDateAdjustment();
-		private static readonly ICommandLineCommand PersonFirstDayOfWeekSetter = new PersonFirstDayOfWeekSetter();
-		private static readonly ICommandLineCommand LicenseStatusChecker = new LicenseStatusChecker();
-		private static readonly ICommandLineCommand CrossDatabaseViewUpdate = new CrossDatabaseViewUpdate(new UpdateCrossDatabaseView());
-		private static readonly ICommandLineCommand DelayedDataConvert = new DelayedDataConvert();
+		private static readonly ICommandLineCommand passwordEncryption = new PasswordEncryption();
+		private static readonly ICommandLineCommand forecasterDateAdjustment = new ForecasterDateAdjustment();
+		private static readonly ICommandLineCommand personFirstDayOfWeekSetter = new PersonFirstDayOfWeekSetter();
+		private static readonly ICommandLineCommand licenseStatusChecker = new LicenseStatusChecker();
+		private static readonly ICommandLineCommand crossDatabaseViewUpdate = new CrossDatabaseViewUpdate(new UpdateCrossDatabaseView());
+		private static readonly ICommandLineCommand delayedDataConvert = new DelayedDataConvert();
 		private static readonly ICommandLineCommand reportTextCommand = new ReportTextsCommand();
-		private static readonly ICommandLineCommand DayOffCodeFixer = new DayOffCodeFixer();
-		private static readonly ICommandLineCommand DayOffIndexFixer = new DayOffIndexFixer();
-		private static readonly ICommandLineCommand AnalyticsReportableScenarioFixer = new AnalyticsReportableScenarioFixer();
+		private static readonly ICommandLineCommand dayOffCodeFixer = new DayOffCodeFixer();
+		private static readonly ICommandLineCommand dayOffIndexFixer = new DayOffIndexFixer();
+		private static readonly ICommandLineCommand analyticsReportableScenarioFixer = new AnalyticsReportableScenarioFixer();
+
 		private static readonly ILog log = LogManager.GetLogger(typeof(Program));
-		public IUpgradeLog Logger = new NullLog();
+		private IUpgradeLog _upgradeLog;
+
+		public UpgradeRunner(IUpgradeLog upgradeLog)
+		{
+			_upgradeLog = upgradeLog ?? new NullLog();
+		}
 
 		public void Upgrade(UpgradeCommand command)
 		{
 			if (command.CheckTenantConnectionStrings)
 			{
-				var tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(command.TenantStoreConnectionString);
-				var checker = new CheckTenantConnectionStrings(tenantUnitOfWorkManager, tenantUnitOfWorkManager);
-				checker.CheckConnectionStrings(command.TenantStoreConnectionString);
-				log.Debug("Teleopti.Support.Security successful");
+				onlyDoSomeTenantCheck(command);
 				return;
 			}
-			
-			AppDomain.CurrentDomain.UnhandledException += appDomainUnhandledException;
 
-			XmlConfigurator.Configure();
+			var currentTenantSession = TenantUnitOfWorkManager.Create(command.ApplicationDbConnectionString);
 
-			try
-			{
-				var tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(command.ApplicationDbConnectionString);
-				UpgradeProcess(tenantUnitOfWorkManager, tenantUnitOfWorkManager, command);
-			}
-			catch (Exception e)
-			{
-				handleError(e);
-			}
-
-			Thread.Sleep(TimeSpan.FromSeconds(3));
-			logToLog("Teleopti.Support.Security successful", Level.Debug);
-			Environment.ExitCode = 0;
+			Upgrade(command, currentTenantSession, currentTenantSession);
 		}
 
-		public void UpgradeProcess(
+		private static void onlyDoSomeTenantCheck(UpgradeCommand command)
+		{
+			var tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(command.TenantStoreConnectionString);
+			var checker = new CheckTenantConnectionStrings(tenantUnitOfWorkManager, tenantUnitOfWorkManager);
+			checker.CheckConnectionStrings(command.TenantStoreConnectionString);
+		}
+
+		public void Upgrade(
+			UpgradeCommand command,
 			ITenantUnitOfWork tenantUnitOfWork,
-			ICurrentTenantSession currentTenantSession, 
-			UpgradeCommand databaseArguments)
+			ICurrentTenantSession currentTenantSession)
 		{
 			var updateTenantData = new UpdateTenantData(tenantUnitOfWork, currentTenantSession);
-			updateTenantData.UpdateTenantConnectionStrings(databaseArguments.ApplicationDbConnectionStringToStore, databaseArguments.AnalyticsDbConnectionStringToStore);
+			updateTenantData.UpdateTenantConnectionStrings(command.ApplicationDbConnectionStringToStore, command.AnalyticsDbConnectionStringToStore);
 			updateTenantData.RegenerateTenantPasswords();
-			if (!string.IsNullOrEmpty(databaseArguments.AggDatabase))
+			if (!string.IsNullOrEmpty(command.AggDatabase))
 			{
 				//this if needs to be here to be able to run this from freemium (no anal db)
-				reportTextCommand.Execute(databaseArguments);
-				CrossDatabaseViewUpdate.Execute(databaseArguments);
-				DelayedDataConvert.Execute(databaseArguments);
+				reportTextCommand.Execute(command);
+				crossDatabaseViewUpdate.Execute(command);
+				delayedDataConvert.Execute(command);
 			}
-			if (!string.IsNullOrEmpty(databaseArguments.AnalyticsDbConnectionString))
+
+			if (!string.IsNullOrEmpty(command.AnalyticsDbConnectionString))
 			{
-				DayOffCodeFixer.Execute(databaseArguments);
-				DayOffIndexFixer.Execute(databaseArguments);
+				dayOffCodeFixer.Execute(command);
+				dayOffIndexFixer.Execute(command);
 			}
-			setPersonAssignmentDate(databaseArguments);
-			removeDuplicateAssignments(databaseArguments);
-			ForecasterDateAdjustment.Execute(databaseArguments);
-			PersonFirstDayOfWeekSetter.Execute(databaseArguments);
-			PasswordEncryption.Execute(databaseArguments);
-			LicenseStatusChecker.Execute(databaseArguments);
-			convertDayOffToNewStructure(databaseArguments);
-			initAuditData(databaseArguments);
-			AnalyticsReportableScenarioFixer.Execute(databaseArguments);
+
+			setPersonAssignmentDate(command);
+			removeDuplicateAssignments(command);
+			forecasterDateAdjustment.Execute(command);
+			personFirstDayOfWeekSetter.Execute(command);
+			passwordEncryption.Execute(command);
+			licenseStatusChecker.Execute(command);
+			convertDayOffToNewStructure(command);
+			initAuditData(command);
+			analyticsReportableScenarioFixer.Execute(command);
 		}
 
-		private void initAuditData(UpgradeCommand commandLineArgument)
+		private void initAuditData(UpgradeCommand command)
 		{
 			const string proc = "[Auditing].[TryInitAuditTables]";
-			logToLog("Re-init Schedule history ...", Level.Debug);
-			callProcInSeparateTransaction(commandLineArgument, proc);
-			logToLog("Re-init Schedule history. Done!", Level.Debug);
+			writeLog("Re-init Schedule history ...");
+			callProcInSeparateTransaction(command, proc);
+			writeLog("Re-init Schedule history. Done!");
 		}
 
-		private void convertDayOffToNewStructure(UpgradeCommand commandLineArgument)
+		private void convertDayOffToNewStructure(UpgradeCommand command)
 		{
 			const string proc = "[dbo].[DayOffConverter]";
-			logToLog("Converting DayOffs ...", Level.Debug);
-			callProcInSeparateTransaction(commandLineArgument, proc);
-			logToLog("Converting DayOffs. Done!", Level.Debug);
+			writeLog("Converting DayOffs ...");
+			callProcInSeparateTransaction(command, proc);
+			writeLog("Converting DayOffs. Done!");
 		}
 
-		private void removeDuplicateAssignments(UpgradeCommand commandLineArgument)
+		private void removeDuplicateAssignments(UpgradeCommand command)
 		{
 			const string proc = "[dbo].[MergePersonAssignments]";
-			logToLog("RemoveDuplicateAssignments ...", Level.Debug);
-			callProcInSeparateTransaction(commandLineArgument, proc);
-			logToLog("RemoveDuplicateAssignments. Done!", Level.Debug);
+			writeLog("RemoveDuplicateAssignments ...");
+			callProcInSeparateTransaction(command, proc);
+			writeLog("RemoveDuplicateAssignments. Done!");
 		}
 
-		private void callProcInSeparateTransaction(UpgradeCommand commandLineArgument, string proc)
+		private void callProcInSeparateTransaction(UpgradeCommand command, string proc)
 		{
-			using (var conn = new SqlConnection(commandLineArgument.ApplicationDbConnectionString))
+			using (var conn = new SqlConnection(command.ApplicationDbConnectionString))
 			{
 				conn.Open();
-				conn.InfoMessage += _sqlConnection_InfoMessage;
+				conn.InfoMessage += sqlConnectionInfoMessage;
 				using (var tx = conn.BeginTransaction())
 				{
 					using (var cmd = new SqlCommand(proc, conn, tx))
@@ -126,53 +120,53 @@ namespace Teleopti.Support.Security
 						cmd.CommandTimeout = 1800; //30 min timeout + an additional 30 min rollback = 1 h
 						cmd.ExecuteNonQuery();
 					}
+
 					tx.Commit();
 				}
 			}
 		}
 
-		private void _sqlConnection_InfoMessage(object sender, SqlInfoMessageEventArgs e)
+		private void sqlConnectionInfoMessage(object sender, SqlInfoMessageEventArgs e)
 		{
-			logToLog(e.Message, Level.Debug);
+			writeLog(e.Message);
 		}
 
-		private bool personAssignmentsConverted(UpgradeCommand commandLineArgument)
+		private bool personAssignmentsConverted(UpgradeCommand command)
 		{
 			var numberOfNotConvertedCommand =
 				@"select COUNT(*) as cnt from dbo.PersonAssignment pa
 							where pa.[Date]=@baseDate";
 
-			using (var conn = new SqlConnection(commandLineArgument.ApplicationDbConnectionString))
+			using (var conn = new SqlConnection(command.ApplicationDbConnectionString))
 			{
 				conn.Open();
 				using (var cmd = new SqlCommand(numberOfNotConvertedCommand, conn))
 				{
 					cmd.Parameters.AddWithValue("@baseDate", PersonAssignmentDateSetter.DateOfUnconvertedSchedule.Date);
-					if ((int)cmd.ExecuteScalar() > 0)
+					if ((int) cmd.ExecuteScalar() > 0)
 					{
 						return false;
 					}
 				}
 			}
 
-			logToLog("No person assignment conversion needed", Level.Debug);
+			writeLog("No person assignment conversion needed");
 			return true;
 		}
 
-		private void setPersonAssignmentDate(UpgradeCommand commandLineArgument)
+		private void setPersonAssignmentDate(UpgradeCommand command)
 		{
-			if (personAssignmentsConverted(commandLineArgument))
+			if (personAssignmentsConverted(command))
 				return;
 
 			//expects all schedules having thedate set to 1800-1-1
-			var allPersonAndTimeZone =
-				new FetchPersonIdAndTimeZone(commandLineArgument.ApplicationDbConnectionString).ForAllPersons();
+			var allPersonAndTimeZone = new FetchPersonIdAndTimeZone(command.ApplicationDbConnectionString).ForAllPersons();
 			int counter = allPersonAndTimeZone.Count();
 			int i = 0;
-			logToLog("Converting schedule data for " + counter + " agents", Level.Debug);
+			writeLog("Converting schedule data for " + counter + " agents");
 
 			var personAssignmentSetter = new PersonAssignmentDateSetter();
-			using (var conn = new SqlConnection(commandLineArgument.ApplicationDbConnectionString))
+			using (var conn = new SqlConnection(command.ApplicationDbConnectionString))
 			{
 				conn.Open();
 				foreach (var personAndTimeZone in allPersonAndTimeZone)
@@ -184,56 +178,28 @@ namespace Teleopti.Support.Security
 						personAssignmentSetter.Execute(tx, personId, timeZone);
 						tx.Commit();
 					}
+
 					i++;
 					;
-					if ((i%1000) == 0)
+					if ((i % 1000) == 0)
 					{
-						logToLog("   agents left: " + (counter - i), Level.Debug);
+						writeLog("   agents left: " + (counter - i));
 					}
 				}
 			}
-			logToLog("Converting schedule data. Done!", Level.Debug);
+
+			writeLog("Converting schedule data. Done!");
 		}
 
-		private void appDomainUnhandledException(object sender, UnhandledExceptionEventArgs e)
+		private void writeLog(string message)
 		{
-			handleError((Exception)e.ExceptionObject);
+			log.Debug(message);
+			_upgradeLog.Write(message); //, level.DisplayName);
 		}
 
-		private void handleError(Exception e)
+		public void SetLogger(IUpgradeLog upgradeLog)
 		{
-			logToLog("Teleopti.Support.Security has exited with fatal error: " + e.Message, Level.Fatal);
-			log.Fatal(e.Message);
-			log.Fatal(e.StackTrace);
-			Thread.Sleep(TimeSpan.FromSeconds(5));
-			Environment.Exit(1);
-		}
-
-		private void logToLog(string message, Level level)
-		{
-			if(level.Equals(Level.Debug))
-				log.Debug(message);
-			if (level.Equals(Level.Fatal))
-				log.Fatal(message);
-
-			Logger.Write(message,level.DisplayName);
-      }
-		internal class NullLog : IUpgradeLog
-		{
-			public void Write(string message)
-			{
-
-			}
-
-			public void Write(string message, string level)
-			{
-
-			}
-
-			public void Dispose()
-			{
-
-			}
+			_upgradeLog = upgradeLog;
 		}
 	}
 }

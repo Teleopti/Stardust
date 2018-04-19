@@ -7,4 +7,19 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure
 		void Write(string message);
 		void Write(string message, string level);
 	}
+
+	public class NullLog : IUpgradeLog
+	{
+		public void Write(string message)
+		{
+		}
+
+		public void Write(string message, string level)
+		{
+		}
+
+		public void Dispose()
+		{
+		}
+	}
 }

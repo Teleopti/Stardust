@@ -2,6 +2,7 @@
 using System.Threading;
 using log4net;
 using log4net.Config;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 
 namespace Teleopti.Support.Security
@@ -23,8 +24,9 @@ namespace Teleopti.Support.Security
 			try
 			{
 				var command = UpgradeCommand.Parse(args);
-				var upgrade = new UpgradeRunner();
+				var upgrade = new UpgradeRunner(null);
 				upgrade.Upgrade(command);
+				handleSuccess();
 			}
 			catch (Exception e)
 			{
@@ -32,6 +34,13 @@ namespace Teleopti.Support.Security
 			}
 
 			Thread.Sleep(TimeSpan.FromSeconds(3));
+			Environment.ExitCode = 0;
+		}
+
+		private static void handleSuccess()
+		{
+			Thread.Sleep(TimeSpan.FromSeconds(3));
+			log.Info("Teleopti.Support.Security successful");
 			Environment.ExitCode = 0;
 		}
 

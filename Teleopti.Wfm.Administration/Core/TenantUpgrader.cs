@@ -62,7 +62,7 @@ namespace Teleopti.Wfm.Administration.Core
 			}
 
 			//security 
-			var dbArgs = new UpgradeCommand
+			var upgradeCommand = new UpgradeCommand
 			{
 				ApplicationDbConnectionString = appConnstring,
 				ApplicationDbConnectionStringToStore = appConnstring,
@@ -70,9 +70,9 @@ namespace Teleopti.Wfm.Administration.Core
 				AnalyticsDbConnectionStringToStore = analConnstring,
 				AggDatabase = aggDB
 			};
-			_upgradeRunner.Logger = new TenantLogger(tenant.Name, tenant.Id);
+			_upgradeRunner.SetLogger(new TenantLogger(tenant.Name, tenant.Id));
 
-			_upgradeRunner.UpgradeProcess(_tenantUnitOfWork, _currentTenantSession, dbArgs);
+			_upgradeRunner.Upgrade(upgradeCommand, _tenantUnitOfWork, _currentTenantSession);
 		}
 
 		private bool isAzure()
