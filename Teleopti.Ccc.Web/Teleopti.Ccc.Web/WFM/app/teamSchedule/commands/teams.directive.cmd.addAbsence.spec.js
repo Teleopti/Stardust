@@ -127,6 +127,8 @@
 			fakePermissions.setPermissions({ IsAddIntradayAbsenceAvailable: true, IsAddFullDayAbsenceAvailable: true });
 
 			var result = setUp(moment('2015-01-01T00:00:00').toDate());
+			result.commandScope.vm.isFullDayAbsence = false;
+			result.scope.$apply();
 
 			var startDateString = result.container[0].querySelectorAll('team-schedule-datepicker input')[0].value;
 			var endDateString = result.container[0].querySelectorAll('team-schedule-datepicker input')[1].value;
@@ -290,7 +292,6 @@
 			commandScope: commandScope,
 			scope: scope
 		};
-		//document.body.append(container[0])
 
 		return obj;
 	}

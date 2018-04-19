@@ -19,7 +19,7 @@
 
 	function TeamsDatetimePickerCtrl($scope, serviceDateFormatHelper) {
 		var ctrl = this;
-		ctrl.date = serviceDateFormatHelper.getDateOnly(ctrl.ngModel);
+		ctrl.date = moment(serviceDateFormatHelper.getDateOnly(ctrl.ngModel)).toDate();
 		ctrl.ngModelChange = function () {
 			ctrl.ngModelCtrl.$setViewValue(ctrl.ngModel);
 		};

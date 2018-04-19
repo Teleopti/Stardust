@@ -13,46 +13,6 @@
 			templateUrl: 'app/teamSchedule/commands/teams.directive.cmd.addAbsence.html',
 			require: ['^teamscheduleCommandContainer', 'addAbsence'],
 			link: function (scope, elem, attrs, ctrls) {
-				var containerCtrl = ctrls[0],
-					selfCtrl = ctrls[1];
-
-				scope.vm.containerCtrl = containerCtrl;
-
-				scope.vm.selectedDate = containerCtrl.getDate;
-				scope.vm.trackId = containerCtrl.getTrackId();
-				scope.vm.convertTime = containerCtrl.getServiceTimeInCurrentUserTimezone;
-				scope.vm.getActionCb = containerCtrl.getActionCb;
-				scope.vm.getCurrentTimezone = containerCtrl.getCurrentTimezone;
-				scope.vm.isAddFullDayAbsenceAvailable = function () {
-					return containerCtrl.hasPermission('IsAddFullDayAbsenceAvailable');
-				};
-
-				scope.vm.isAddIntradayAbsenceAvailable = function () {
-					return containerCtrl.hasPermission('IsAddIntradayAbsenceAvailable');
-				};
-
-				scope.vm.timeRange = {
-					startTime: selfCtrl.getDefaultAbsenceStartTime(),
-					endTime: selfCtrl.getDefaultAbsenceEndTime()
-				};
-
-				scope.$watch(function () {
-					var format = scope.vm.isFullDayAbsence ? 'YYYY-MM-DD' : 'YYYY-MM-DD HH:mm';
-					return {
-						startTime: moment(scope.vm.timeRange.startTime).format(format),
-						endTime: moment(scope.vm.timeRange.endTime).format(format)
-					}
-				},
-					function (newValue, oldValue) {
-						scope.vm.updateInvalidAgents();
-					},
-					true);
-
-				scope.vm.isFullDayAbsence = scope.vm.isAddFullDayAbsenceAvailable();
-
-				selfCtrl.updateDateAndTimeFormat();
-				scope.$on('$localeChangeSuccess', selfCtrl.updateDateAndTimeFormat);
-
 				elem.find('team-schedule-datepicker').on('focus', function (e) {
 					e.target.querySelector('input').focus();
 				});
@@ -69,18 +29,55 @@
 		'ScheduleHelper',
 		'teamScheduleNotificationService',
 		'$locale',
+		'$scope',
 		'CommandCheckService',
 		'belongsToDateDecider',
 		'teamsToggles',
 		'serviceDateFormatHelper'];
 
-	function addAbsenceCtrl(PersonAbsenceSvc, personSelectionSvc, scheduleHelper, teamScheduleNotificationService, $locale, CommandCheckService, belongsToDateDecider, teamsToggles, serviceDateFormatHelper) {
+	function addAbsenceCtrl(PersonAbsenceSvc,
+		personSelectionSvc,
+		scheduleHelper,
+		teamScheduleNotificationService,
+		$locale,
+		$scope,
+		CommandCheckService,
+		belongsToDateDecider,
+		teamsToggles,
+		serviceDateFormatHelper) {
 		var vm = this;
+
+		var containerCtrl = $scope.$parent.vm;
+		vm.containerCtrl = containerCtrl;
 
 		vm.label = 'AddAbsence';
 		vm.runningCommand = false;
 		vm.selectedAgents = personSelectionSvc.getCheckedPersonInfoList();
 		vm.invalidAgents = [];
+
+		vm.selectedDate = containerCtrl.getDate;
+		vm.trackId = containerCtrl.getTrackId();
+		vm.convertTime = containerCtrl.getServiceTimeInCurrentUserTimezone;
+		vm.getActionCb = containerCtrl.getActionCb;
+		vm.getCurrentTimezone = containerCtrl.getCurrentTimezone;
+		vm.isAddFullDayAbsenceAvailable = function () {
+			return containerCtrl.hasPermission('IsAddFullDayAbsenceAvailable');
+		};
+
+		vm.isAddIntradayAbsenceAvailable = function () {
+			return containerCtrl.hasPermission('IsAddIntradayAbsenceAvailable');
+		};
+
+		vm.timeRange = {
+			startTime: getDefaultAbsenceStartTime(),
+			endTime: getDefaultAbsenceEndTime()
+		};
+
+		vm.isFullDayAbsence = vm.isAddFullDayAbsenceAvailable();
+
+		updateDateAndTimeFormat();
+		$scope.$on('$localeChangeSuccess', updateDateAndTimeFormat);
+
 		var toggles = teamsToggles.all();
 
 		PersonAbsenceSvc.loadAbsences().then(function (absences) {
@@ -110,17 +107,15 @@
 			return;
 		};
 
-
-
-		vm.getDefaultAbsenceStartTime = function () {
+		function getDefaultAbsenceStartTime() {
 			var curDateMoment = moment(vm.selectedDate());
 			var personIds = vm.selectedAgents.map(function (agent) { return agent.PersonId; });
 			var schedules = vm.containerCtrl.scheduleManagementSvc.schedules();
 			return scheduleHelper.getEarliestStartOfSelectedSchedules(schedules, curDateMoment, personIds);
 		};
 
-		vm.getDefaultAbsenceEndTime = function () {
-			return moment(vm.getDefaultAbsenceStartTime()).add(1, 'hour').toDate();
+		function getDefaultAbsenceEndTime() {
+			return moment(getDefaultAbsenceStartTime()).add(1, 'hour').toDate();
 		};
 
 		function determineIsSameTimezoneForFullDayAbsence() {
@@ -223,7 +218,7 @@
 
 		};
 
-		vm.updateDateAndTimeFormat = function () {
+		function updateDateAndTimeFormat() {
 			var timeFormat = $locale.DATETIME_FORMATS.shortTime;
 			vm.showMeridian = timeFormat.indexOf("h:") >= 0 || timeFormat.indexOf("h.") >= 0;
 		};

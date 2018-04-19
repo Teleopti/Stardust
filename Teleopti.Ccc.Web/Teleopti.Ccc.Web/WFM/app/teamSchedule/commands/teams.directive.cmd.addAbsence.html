@@ -10,26 +10,32 @@
 				</md-select>
 			</div>
 
-			<h3>{{'From'|translate}}: </h3>
-			<div class="con-row">
-				<span class="col-sm-7 teamschedule-datepicker">
+			<div ng-if="!vm.isFullDayAbsence && vm.isAddIntradayAbsenceAvailable()">
+				<h3>{{'From'|translate}}: </h3>
+				<div class="con-row">
+					<teams-datetime-picker ng-model="vm.timeRange.startTime"
+										   timezone="vm.getCurrentTimezone()"
+										   ng-change="vm.updateInvalidAgents()" />
+				</div>
+				<h3>{{'To'|translate}}: </h3>
+				<div class="con-row">
+					<teams-datetime-picker ng-model="vm.timeRange.endTime"
+										   timezone="vm.getCurrentTimezone()"
+										   ng-change="vm.updateInvalidAgents()" />
+				</div>
+			</div>
+
+			<div ng-if="vm.isFullDayAbsence">
+				<h3>{{'From'|translate}}: </h3>
+				<div class="con-row">
 					<team-schedule-datepicker selected-date="vm.timeRange.startTime" />
-				</span>
-				<span class="col-sm-5 uib-timepicker">
-					<div uib-timepicker show-meridian="vm.showMeridian" ng-show="!vm.isFullDayAbsence && vm.isAddIntradayAbsenceAvailable()" ng-model="vm.timeRange.startTime"></div>
-				</span>
-			</div>
-
-			<h3>{{'To'|translate}}: </h3>
-			<div class="con-row">
-				<span class="col-sm-7 teamschedule-datepicker">
+				</div>
+				<h3>{{'To'|translate}}: </h3>
+				<div class="con-row">
 					<team-schedule-datepicker selected-date="vm.timeRange.endTime" />
-				</span>
-				<span class="col-sm-5 uib-timepicker">
-					<div uib-timepicker show-meridian="vm.showMeridian" ng-show="!vm.isFullDayAbsence && vm.isAddIntradayAbsenceAvailable()" ng-model="vm.timeRange.endTime"></div>
-				</span>
+				</div>
 			</div>
-
+			
 			<md-checkbox ng-if="vm.isAddFullDayAbsenceAvailable()"
 						 ng-model="vm.isFullDayAbsence" 
 						 ng-disabled="vm.isAddFullDayAbsenceAvailable() && !vm.isAddIntradayAbsenceAvailable()"
