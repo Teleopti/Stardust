@@ -52,17 +52,18 @@
       .success(function(data) {
         vm.tenantLogData = data;
         if ($window.sessionStorage.configData) {
-          var temp = angular.fromJson($window.sessionStorage.configData);
-          vm.TimeZoneCodes = temp.TimeZoneList;
+          var stringifiedConfigData = angular.fromJson($window.sessionStorage.configData);
+          vm.TimeZoneCodes = stringifiedConfigData.TimeZoneList;
           tenant.loading = null;
           vm.showModal = true;
-        } else {
+        } else{
           $http.get("./Etl/GetConfigurationModel", tokenHeaderService.getHeaders())
           .success(function (timezones) {
-            vm.TimeZoneCodes = timezones.TimeZoneList;
-            tenant.loading = null;
-            vm.showModal = true;
-            $window.sessionStorage.configData = angular.toJson(data);
+           $window.sessionStorage.configData =  angular.toJson(timezones)
+           var stringifiedConfigData = angular.fromJson($window.sessionStorage.configData);
+           vm.TimeZoneCodes = stringifiedConfigData.TimeZoneList;
+           tenant.loading = null;
+           vm.showModal = true;
           });
         }
       });
