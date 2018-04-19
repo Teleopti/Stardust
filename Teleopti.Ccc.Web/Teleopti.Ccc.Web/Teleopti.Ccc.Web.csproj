@@ -1969,7 +1969,7 @@
     <Content Include="WFM\app\seatManagement\teampicker.controller.spec.js" />
     <Content Include="WFM\app\teamSchedule\commands\teams.directive.cmd.addAbsence.html" />
     <Content Include="WFM\app\teamSchedule\commands\teams.directive.cmd.addActivity.html" />
-    <Content Include="WFM\app\teamSchedule\html\addActivityTimeRangePicker.tpl.html" />
+    <Content Include="WFM\app\teamSchedule\html\teamsTimeRangePicker.tpl.html" />
     <Content Include="WFM\app\teamSchedule\commands\teams.directive.cmd.addPersonalActivity.html" />
     <Content Include="WFM\app\teamSchedule\commands\teams.directive.cmd.commandCheck.html" />
     <Content Include="WFM\app\teamSchedule\commands\teams.directive.cmd.settings.html" />
