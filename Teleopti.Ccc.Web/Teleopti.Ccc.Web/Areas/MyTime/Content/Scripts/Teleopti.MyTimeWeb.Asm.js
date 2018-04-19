@@ -35,12 +35,29 @@ Teleopti.MyTimeWeb.Asm = (function () {
 
 	function getUtcNowString() {
 		var now = new Date(new Date().getTeleoptiTime());
-		var dateStr = now.getUTCFullYear() + '-' +
-				(now.getUTCMonth() + 1) + '-' +
-				now.getUTCDate() + ' ' +
-				now.getUTCHours() + ':' +
-				now.getUTCMinutes() + ':' +
-				now.getUTCSeconds() + 'Z';
+
+		var dateList = [
+			now.getUTCFullYear().toString(),
+			(now.getUTCMonth() + 1).toString(),
+			now.getUTCDate().toString(),
+			now.getUTCHours().toString(),
+			now.getUTCMinutes().toString(),
+			now.getUTCSeconds().toString(),
+		];
+
+		dateList.forEach(function(item, i) {
+			if(item.toString().length == 1) {
+				dateList[i] = '0' + dateList[i];
+			}
+		});
+
+		dateStr = dateList[0] + '-' + 
+					dateList[1] + '-' + 
+					dateList[2] + 'T' +
+					dateList[3] + ':' + 
+					dateList[4] + ':' + 
+					dateList[5] + 'Z';
+
 		return dateStr;
 	};
 

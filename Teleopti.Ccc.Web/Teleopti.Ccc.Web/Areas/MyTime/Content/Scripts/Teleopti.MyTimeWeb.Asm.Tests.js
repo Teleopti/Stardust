@@ -48,4 +48,32 @@
 
 		equal(ajaxOption.data.asmZeroLocal, "2018-03-03");
 	});
+
+	test('should set now correctly on IE', function() {
+		var dateStr = '2018-03-04';
+		Date.prototype.getTeleoptiTime = function() {
+			return dateStr;
+		};
+
+		Date.prototype.getTeleoptiTimeInUserTimezone = function() {
+			return dateStr;
+		};
+
+		var target = Teleopti.MyTimeWeb.Asm;
+		var ajaxOption;
+		target._replaceAjax({
+			Ajax: function(option) {
+				ajaxOption = option;
+				option.success({ UserTimeZoneMinuteOffset: 0 });
+				return {
+					done: function() {}
+				};
+			}
+		});
+
+		var enableIntervalUpdate = false;
+		target.ShowAsm(null, enableIntervalUpdate);
+
+		equal(target.Vm().now().format('YYYY-MM-DDTHH:mm:ssZ'), '2018-03-04T00:00:00Z');
+	});
 });
