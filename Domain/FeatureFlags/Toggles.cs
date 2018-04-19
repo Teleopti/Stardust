@@ -25,6 +25,7 @@
 		RTA_StoreEvents_47721,
 		RTA_ImprovedStateGroupFilter_48724,
 		RTA_KillFattyIntradayUntilItDies_74939,
+		RTA_ApprovalPermission_74898,
 		
 		MyTimeWeb_SortRequestList_40711,
 		MyTimeWeb_ViewIntradayStaffingProbability_41608,
