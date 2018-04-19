@@ -564,6 +564,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
             if (tasks == 0)
             {
 	            var newPeriod = new SkillStaffPeriod(period, new Task(), ServiceAgreement.DefaultValues());
+				newPeriod.Payload.ManualAgents = skillStaffPeriods[0].Payload.ManualAgents;
+				if (newPeriod.Payload.ManualAgents.HasValue)
+					((SkillStaff)newPeriod.Payload).ForecastedIncomingDemand = newPeriod.Payload.ManualAgents.Value;
 				newPeriod.SetSkillDay(skillDay);
 				return newPeriod;
             }
@@ -576,8 +579,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
 	        var ret = new SkillStaffPeriod(period, retTask, retAgr) {IsAvailable = isAvail};
 	        ret.Payload.UseShrinkage = useShrinkage;
-            ret.SetCalculatedResource65(resource);
-			((SkillStaff)ret.Payload).ForecastedIncomingDemand = forecastedIncomingHours;
+			ret.Payload.ManualAgents = skillStaffPeriods[0].Payload.ManualAgents;
+			ret.SetCalculatedResource65(resource);
+			((SkillStaff)ret.Payload).ForecastedIncomingDemand = skillStaffPeriods[0].Payload.ManualAgents ?? forecastedIncomingHours;
 			ret.SetSkillDay(skillDay);
 			
             return ret;

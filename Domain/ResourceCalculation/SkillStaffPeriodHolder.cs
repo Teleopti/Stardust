@@ -419,7 +419,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				newShortPeriod.SetCalculatedResource65(skillStaffPeriod.Payload.CalculatedResource);
 				newShortPeriod.Payload.Shrinkage = skillStaffPeriod.Payload.Shrinkage;
 				newShortPeriod.Payload.SkillPersonData = skillStaffPeriod.Payload.SkillPersonData;
-				((SkillStaff)newShortPeriod.Payload).ForecastedIncomingDemand = skillStaffPeriod.Payload.ForecastedIncomingDemand;
+				((SkillStaff)newShortPeriod.Payload).ForecastedIncomingDemand = skillStaffPeriod.Payload.ManualAgents ?? skillStaffPeriod.Payload.ForecastedIncomingDemand;
+				newShortPeriod.Payload.ManualAgents = skillStaffPeriod.Payload.ManualAgents;
 
 				var aggregate = (IAggregateSkillStaffPeriod)newShortPeriod;
 				aggregate.IsAggregate = true;
@@ -437,3 +438,4 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		}
 	}
 }
+
