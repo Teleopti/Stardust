@@ -27,6 +27,8 @@
         <!-- Checkbox Column -->
         <ng-container matColumnDef="select">
           <mat-header-cell *matHeaderCellDef>
+            <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="isAllSelected()" [indeterminate]="isAnySelected() && !isAllSelected()">
+            </mat-checkbox>
           </mat-header-cell>
           <mat-cell *matCellDef="let row">
             <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? toggleSelectedPerson(row.Id) : null" [checked]="workspaceService.isPersonSelected(row.Id)">

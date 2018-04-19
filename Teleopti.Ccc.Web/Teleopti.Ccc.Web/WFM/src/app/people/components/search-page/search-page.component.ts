@@ -40,6 +40,22 @@ export class SearchPageComponent implements OnInit {
 		this.searchControl.valueChanges.pipe(debounceTime(700)).subscribe({ next: () => this.onSearch() });
 	}
 
+	isAllSelected() {
+		if (this.dataSource.data.length === 0) return false;
+		const numSelectedOnPage = this.dataSource.data.filter(person =>
+			this.workspaceService.isPersonSelected(person.Id)
+		).length;
+		const numRows = this.dataSource.data.length;
+		return numSelectedOnPage === numRows;
+	}
+
+	isAnySelected() {
+		const numSelectedOnPage = this.dataSource.data.filter(person =>
+			this.workspaceService.isPersonSelected(person.Id)
+		).length;
+		return numSelectedOnPage > 0;
+	}
+
 	onSearch() {
 		this.searchService.keyword = this.searchControl.value;
 		this.searchPeople();
@@ -82,5 +98,17 @@ export class SearchPageComponent implements OnInit {
 
 	toggleRow(row: Person) {
 		this.toggleSelectedPerson(row.Id);
+	}
+
+	masterToggle() {
+		if (this.isAllSelected()) {
+			this.dataSource.data.forEach(person => {
+				if (this.workspaceService.isPersonSelected(person.Id)) this.workspaceService.deselectPerson(person);
+			});
+		} else {
+			this.dataSource.data.forEach(person => {
+				if (!this.workspaceService.isPersonSelected(person.Id)) this.workspaceService.selectPerson(person);
+			});
+		}
 	}
 }
