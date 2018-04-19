@@ -127,9 +127,7 @@
 		}
 
 		function getMoveToStartTimeStr() {
-			var dateStr = ctrl.containerCtrl.getDate();
-			var timeStr = moment(ctrl.moveToTime).format('HH:mm');
-			return dateStr + ' ' + timeStr;
+			return serviceDateFormatHelper.getDateTime(moment(ctrl.containerCtrl.getDate() + " " + moment(ctrl.moveToTime).format('HH:mm')));
 		}
 
 		function updateInvalidAgents() {
