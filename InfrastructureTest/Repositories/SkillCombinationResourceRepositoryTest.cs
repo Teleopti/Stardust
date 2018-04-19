@@ -934,6 +934,83 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			}
 			bpoList.Count.Should().Be.EqualTo(1);
 		}
+		
+		[Test]
+		public void ShouldRemoveLeadingAndTrailingWhiteSpaceInSourceBpo()
+		{
+			Now.Is("2016-12-19 08:00");
+			var startDate = new DateTime(2016, 12, 20, 0, 0, 0);
+			var endDate = new DateTime(2016, 12, 20, 0, 15, 0);
+
+			var combinationResources = new List<ImportSkillCombinationResourceBpo>
+			{
+				new ImportSkillCombinationResourceBpo
+				{
+					StartDateTime = startDate,
+					EndDateTime = endDate,
+					Resources = 1,
+					SkillIds = new List<Guid>{persistSkill()},
+					Source = " TPBrazil "
+				},
+				new ImportSkillCombinationResourceBpo
+				{
+					StartDateTime = startDate.AddMinutes(15),
+					EndDateTime = endDate.AddMinutes(15),
+					Resources = 3.5,
+					SkillIds = new List<Guid>{persistSkill()},
+					Source = "TPBrazil"
+				}
+			};
+
+			Target.PersistSkillCombinationResourceBpo(combinationResources);
+
+			Dictionary<Guid, string> bpoList;
+			using (var connection = new SqlConnection(InfraTestConfigReader.ConnectionString))
+			{
+				connection.Open();
+				bpoList = Target.LoadSourceBpo(connection);
+			}
+			
+			bpoList.Single().Value.Should().Be.EqualTo("TPBrazil");
+		}
+		
+		[Test]
+		public void ShouldHandleSourceBpoAsCaseInsensitive()
+		{
+			Now.Is("2016-12-19 08:00");
+			var startDate = new DateTime(2016, 12, 20, 0, 0, 0);
+			var endDate = new DateTime(2016, 12, 20, 0, 15, 0);
+
+			var combinationResources = new List<ImportSkillCombinationResourceBpo>
+			{
+				new ImportSkillCombinationResourceBpo
+				{
+					StartDateTime = startDate,
+					EndDateTime = endDate,
+					Resources = 1,
+					SkillIds = new List<Guid>{persistSkill()},
+					Source = "tpbrazil"
+				},
+				new ImportSkillCombinationResourceBpo
+				{
+					StartDateTime = startDate.AddMinutes(15),
+					EndDateTime = endDate.AddMinutes(15),
+					Resources = 3.5,
+					SkillIds = new List<Guid>{persistSkill()},
+					Source = "TPBrazil"
+				}
+			};
+
+			Target.PersistSkillCombinationResourceBpo(combinationResources);
+
+			Dictionary<Guid, string> bpoList;
+			using (var connection = new SqlConnection(InfraTestConfigReader.ConnectionString))
+			{
+				connection.Open();
+				bpoList = Target.LoadSourceBpo(connection);
+			}
+			bpoList.Count.Should().Be.EqualTo(1);
+		}
 
 		[Test]
 		public void ShouldPersistDifferentBposSkillCombinationResource()

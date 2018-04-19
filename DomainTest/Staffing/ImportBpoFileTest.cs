@@ -378,6 +378,21 @@ TPBRZIL,Channel Sales|Direct Sales,2017-07-24 10:00,2017-07-24 10:15,10.5";
 			result.Success.Should().Be.False();
 			result.ErrorInformation.SingleOrDefault(e => e.Contains("Duplicate")).Should().Not.Be.Null();
 		}
+		
+		
+		[Test]
+		public void ShouldReturnFalseIfDuplicateRecordsButDifferentCaseInSourceAreFoundInTheFile()
+		{
+			SkillRepository.Has("Channel Sales", new Activity());
+			SkillRepository.Has("Direct Sales", new Activity());
+			var fileContents = @"source,skillcombination,startdatetime,enddatetime,agents
+TPBRZIL,Channel Sales|Direct Sales,2017-07-24 10:00,2017-07-24 10:15,10.5
+TPBrZIL,Channel Sales|Direct Sales,2017-07-24 10:00,2017-07-24 10:15,10.5";
+
+			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
+			result.Success.Should().Be.False();
+			result.ErrorInformation.SingleOrDefault(e => e.Contains("Duplicate")).Should().Not.Be.Null();
+		}
 
 		[Test]
 		public void ShouldVerifyThatObjectsAreNotSame()

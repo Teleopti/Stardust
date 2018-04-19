@@ -386,7 +386,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 		{
 			//not considering resource here 
 			if (other == null) return false;
-			return other.StartDateTime == StartDateTime && other.Source == Source && EndDateTime == other.EndDateTime &&
+			return other.StartDateTime == StartDateTime && string.Equals(other.Source, Source, StringComparison.OrdinalIgnoreCase) && EndDateTime == other.EndDateTime &&
 				   SkillIds.OrderBy(s=>s).SequenceEqual(other.SkillIds.OrderBy(s => s));
 		}
 	}

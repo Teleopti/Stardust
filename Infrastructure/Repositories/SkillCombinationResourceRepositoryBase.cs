@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			using (var connection = new SqlConnection(connectionString))
 			{
 				connection.Open();
-				var bpoList = LoadSourceBpo(connection);
+				var bpoDictionary = LoadSourceBpo(connection);
 
 				var dt = new DataTable();
 				dt.Columns.Add("SkillCombinationId", typeof(Guid));
@@ -156,12 +156,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					var skillCombinations = loadSkillCombination(connection, transaction);
 					foreach (var skillCombinationResourceBpo in combinationResources)
 					{
+						skillCombinationResourceBpo.Source = skillCombinationResourceBpo.Source.Trim();
 						var bpoCreated = false;
 						var skillCombCreated = false;
 						var key = keyFor(skillCombinationResourceBpo.SkillIds);
-						Guid id;
 
-						if (!skillCombinations.TryGetValue(key, out id))
+						if (!skillCombinations.TryGetValue(key, out var id))
 						{
 							skillCombCreated = true;
 							id = persistSkillCombination(skillCombinationResourceBpo.SkillIds, connection, transaction);
@@ -176,8 +176,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 						row["Resources"] = skillCombinationResourceBpo.Resources;
 
 						var bpoId = Guid.NewGuid();
-						if (bpoList.ContainsValue(skillCombinationResourceBpo.Source))
-							bpoId = bpoList.First(x => x.Value == skillCombinationResourceBpo.Source).Key;
+
+						var tuple = bpoDictionary.FirstOrDefault(x =>
+							string.Equals(x.Value, skillCombinationResourceBpo.Source, StringComparison.OrdinalIgnoreCase));
+						
+						if (tuple.Value != null)
+							bpoId = tuple.Key;
 						else
 						{
 							bpoCreated = true;
@@ -188,7 +192,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 								//set lock time to null
 								insertCommand.ExecuteNonQuery();
 							}
-							bpoList.Add(bpoId, skillCombinationResourceBpo.Source);
+							bpoDictionary.Add(bpoId, skillCombinationResourceBpo.Source);
 						}
 						row["SourceId"] = bpoId;
 						row["BusinessUnit"] = bu;
