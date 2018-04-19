@@ -257,7 +257,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!group_page_agent_code.Value</Value>
+                              <Value>=Parameters!group_page_agent_set.Value</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
@@ -464,7 +464,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!agent_code.Value</Value>
+                              <Value>=Parameters!agent_set.Value</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
@@ -797,7 +797,7 @@
             </TablixMember>
             <TablixMember>
               <Visibility>
-                <Hidden>=IIF(Parameters!group_page_agent_code.Value="",True,False)</Hidden>
+                <Hidden>=IIF(Parameters!group_page_agent_set.Value="",True,False)</Hidden>
               </Visibility>
               <KeepWithGroup>Before</KeepWithGroup>
             </TablixMember>
@@ -817,7 +817,7 @@
             </TablixMember>
             <TablixMember>
               <Visibility>
-                <Hidden>=IIF(Parameters!agent_code.Value="",True,False)</Hidden>
+                <Hidden>=IIF(Parameters!agent_set.Value="",True,False)</Hidden>
               </Visibility>
               <KeepWithGroup>Before</KeepWithGroup>
               <KeepTogether>true</KeepTogether>
@@ -1791,8 +1791,8 @@
           <QueryParameter Name="@team_set">
             <Value>=Parameters!team_set.Value</Value>
           </QueryParameter>
-          <QueryParameter Name="@agent_code">
-            <Value>=Parameters!agent_code.Value</Value>
+          <QueryParameter Name="@agent_set">
+            <Value>=Parameters!agent_set.Value</Value>
           </QueryParameter>
           <QueryParameter Name="@activity_set">
             <Value>=Parameters!activity_set.Value</Value>
@@ -1869,10 +1869,10 @@
       <AllowBlank>true</AllowBlank>
       <Prompt>team_set</Prompt>
     </ReportParameter>
-    <ReportParameter Name="agent_code">
+    <ReportParameter Name="agent_set">
       <DataType>String</DataType>
       <AllowBlank>true</AllowBlank>
-      <Prompt>agent_code</Prompt>
+      <Prompt>agent_set</Prompt>
     </ReportParameter>
     <ReportParameter Name="activity_set">
       <DataType>String</DataType>
@@ -1996,7 +1996,7 @@
       <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
-    <ReportParameter Name="group_page_agent_code">
+    <ReportParameter Name="group_page_agent_set">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>

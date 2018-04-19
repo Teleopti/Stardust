@@ -41,10 +41,10 @@ CREATE PROCEDURE [mart].[report_data_scheduled_time_per_activity]
 @interval_to int,
 @group_page_code uniqueidentifier,
 @group_page_group_set nvarchar(max),
-@group_page_agent_code uniqueidentifier,
+@group_page_agent_set nvarchar(max),
 @site_id int,
 @team_set nvarchar(max),
-@agent_code uniqueidentifier,
+@agent_set nvarchar(max),
 @activity_set nvarchar(max),
 @time_zone_id int,
 @person_code uniqueidentifier,
@@ -54,6 +54,7 @@ CREATE PROCEDURE [mart].[report_data_scheduled_time_per_activity]
 AS
 SET NOCOUNT ON
 CREATE TABLE #rights_agents (right_id int)
+CREATE TABLE #selected_agents (selected_id int)
 CREATE TABLE #rights_teams (right_id int)
 CREATE TABLE #activities(id int)
 CREATE TABLE #result(
@@ -79,6 +80,12 @@ CREATE TABLE #permitted_person (
 	valid_to_date_id_local int
 )
 
+--All Agent
+DECLARE @group_page_agent_code uniqueidentifier
+DECLARE @agent_person_code uniqueidentifier
+SELECT @group_page_agent_code = [mart].[specialGuid](2)
+SELECT @agent_person_code = [mart].[specialGuid](2)
+
 /* Check if time zone will be hidden (if only one exist then hide) */
 DECLARE @hide_time_zone bit
 IF (SELECT COUNT(*) FROM mart.dim_time_zone tz WHERE tz.time_zone_code<>'UTC') < 2
@@ -86,10 +93,25 @@ IF (SELECT COUNT(*) FROM mart.dim_time_zone tz WHERE tz.time_zone_code<>'UTC') <
 ELSE
 	SET @hide_time_zone = 0
 
-/* Get the agents to report on */
+IF mart.GroupPageCodeIsBusinessHierarchy(@group_page_code) = 0
+	BEGIN
+		-- Some Group Page was picked
+		-- Split the person codes
+		INSERT INTO #selected_agents
+		SELECT * FROM mart.TwolistPersonCodeToIdMultipleTeams(@group_page_agent_set, @date_from, @date_to, @site_id, @team_set)
+
+	END
+ELSE
+	BEGIN
+		-- Business Hierarchy picked
+		-- Split the person codes
+		INSERT INTO #selected_agents
+		SELECT * FROM mart.TwolistPersonCodeToIdMultipleTeams(@agent_set, @date_from, @date_to, @site_id, @team_set)
+	END
+
+-- Join the agents the user have the right to see with the selected
 INSERT INTO #rights_agents
-EXEC mart.report_get_AgentsMultipleTeams @date_from, @date_to, @group_page_code, @group_page_group_set,
-	@group_page_agent_code, @site_id, @team_set, @agent_code, @person_code, @report_id, @business_unit_code
+EXEC mart.report_get_AgentsMultipleTeams @date_from, @date_to, @group_page_code, @group_page_group_set, @group_page_agent_code, @site_id, @team_set, @agent_person_code, @person_code, @report_id, @business_unit_code
 
 /*Get all teams that user has permission to see. */
 INSERT INTO #rights_teams SELECT * FROM mart.PermittedTeamsMultipleTeams(@person_code, @report_id, @site_id, @team_set)
@@ -100,11 +122,12 @@ SELECT team_id, person_id, valid_from_date_id_local, valid_to_date_id_local
   FROM mart.dim_person p
  WHERE p.team_id IN (select right_id from #rights_teams)
    AND p.person_id IN (SELECT right_id FROM #rights_agents)--check permissions
+   AND p.person_id IN (SELECT selected_id FROM #selected_agents)
 
 INSERT INTO #activities
 SELECT * FROM mart.SplitStringInt(@activity_set)
 
-/*Snabba upp frǾga mot fact_schedule*/
+/*speed up query against fact_schedule*/
 INSERT INTO #fact_schedule
 SELECT shift_startdate_local_id,schedule_date_id, fs.person_id, interval_id, scenario_id, activity_id, scheduled_time_m
 FROM mart.fact_schedule fs WITH (NOLOCK)
@@ -138,6 +161,13 @@ AND act.activity_id IN (SELECT id FROM #activities)
 AND act.activity_id<>-1 --ej absence_time
 GROUP BY d.date_id,	d.date_date,act.activity_name
 
-SELECT * FROM #result
-ORDER BY activity_name, date_id
+SELECT 
+	date,
+	activity_name,
+	scheduled_time_m,
+	hide_time_zone
+FROM #result
+ORDER BY 
+	date, 
+	activity_name
 GO
