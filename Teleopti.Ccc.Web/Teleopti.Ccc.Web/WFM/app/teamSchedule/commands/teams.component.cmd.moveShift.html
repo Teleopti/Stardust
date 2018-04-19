@@ -7,6 +7,7 @@
 			<teams-time-picker date="$ctrl.containerCtrl.getDate()"
 							   timezone="$ctrl.containerCtrl.getCurrentTimezone()"
 							   ng-model="$ctrl.moveToTime"
+							   ng-change="$ctrl.updateInvalidAgents()"
 							   required
 							   md-autofocus="::$ctrl.containerCtrl.onReady()">
 			</teams-time-picker>

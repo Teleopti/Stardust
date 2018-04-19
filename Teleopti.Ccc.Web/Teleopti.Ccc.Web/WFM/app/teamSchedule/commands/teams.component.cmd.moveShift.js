@@ -23,40 +23,18 @@
 			ctrl.moveToTime = getDefaultMoveToTime();
 			ctrl.trackId = ctrl.containerCtrl.getTrackId();
 			findAgentsInDifferentTimezone();
-			$scope.$watch(function () {
-				return getMoveToStartTimeStr();
-			}, function (n, o) {
-				updateInvalidAgents();
-			});
 			addTabindexAndFocus();
+			ctrl.updateInvalidAgents();
 		};
 
-		function addTabindexAndFocus() {
-			var tabindex = angular.isDefined($element.attr.tabindex) ? $element.attr.tabindex : '0';
-			var addTabIndexTo = function() {
-				angular.forEach(arguments, function (arg) {
-					angular.forEach(arg, function (elem) {
-						elem.setAttribute('tabIndex', tabindex);
-					});
-				});
-			};
-
-			addTabIndexTo(
-				$element[0].querySelectorAll('div[uib-timepicker]'),
-				$element[0].querySelectorAll('button#applyMoveShift')
-			);
-
-			$scope.$on('teamSchedule.command.focus.default', function () {
-				var focusTarget = $element[0].querySelector('.focus-default input');
-				if (focusTarget) angular.element(focusTarget).focus();
-			});
-
-			var inputs = $element[0].querySelectorAll('input[type=text]');
-			angular.forEach(inputs, function (input) {
-				angular.element(input).on('focus', function (event) {
-					event.target.select();
-				});
-			});
+		ctrl.updateInvalidAgents = function () {
+			var currentTimezone = ctrl.containerCtrl.getCurrentTimezone();
+			validator.validateMoveToTimeForShift(ctrl.containerCtrl.scheduleManagementSvc, moment(getMoveToStartTimeStr()), currentTimezone);
+			var invalidAgents = validator.getInvalidPeople();
+			if (ctrl.agentsInDifferentTimeZone.length > 0) {
+				invalidAgents = invalidAgents.concat(ctrl.agentsInDifferentTimeZone);
+			}
+			ctrl.invalidAgents = filterAgentArray(invalidAgents);
 		}
 
 		ctrl.anyInvalidAgent = function () {
@@ -122,22 +100,40 @@
 			}
 		};
 
+		function addTabindexAndFocus() {
+			var tabindex = angular.isDefined($element.attr.tabindex) ? $element.attr.tabindex : '0';
+			var addTabIndexTo = function () {
+				angular.forEach(arguments, function (arg) {
+					angular.forEach(arg, function (elem) {
+						elem.setAttribute('tabIndex', tabindex);
+					});
+				});
+			};
+
+			addTabIndexTo(
+				$element[0].querySelectorAll('div[uib-timepicker]'),
+				$element[0].querySelectorAll('button#applyMoveShift')
+			);
+
+			$scope.$on('teamSchedule.command.focus.default', function () {
+				var focusTarget = $element[0].querySelector('.focus-default input');
+				if (focusTarget) angular.element(focusTarget).focus();
+			});
+
+			var inputs = $element[0].querySelectorAll('input[type=text]');
+			angular.forEach(inputs, function (input) {
+				angular.element(input).on('focus', function (event) {
+					event.target.select();
+				});
+			});
+		}
+
 		function getDefaultMoveToTime() {
 			return serviceDateFormatHelper.getDateTime(moment(ctrl.containerCtrl.getDate() + " 08:00"));
 		}
 
 		function getMoveToStartTimeStr() {
 			return serviceDateFormatHelper.getDateTime(moment(ctrl.containerCtrl.getDate() + " " + moment(ctrl.moveToTime).format('HH:mm')));
-		}
-
-		function updateInvalidAgents() {
-			var currentTimezone = ctrl.containerCtrl.getCurrentTimezone();
-			validator.validateMoveToTimeForShift(ctrl.containerCtrl.scheduleManagementSvc, moment(getMoveToStartTimeStr()), currentTimezone);
-			var invalidAgents = validator.getInvalidPeople();
-			if (ctrl.agentsInDifferentTimeZone.length > 0) {
-				invalidAgents = invalidAgents.concat(ctrl.agentsInDifferentTimeZone);
-			}
-			ctrl.invalidAgents = filterAgentArray(invalidAgents);
 		}
 
 		function filterAgentArray(arr) {
