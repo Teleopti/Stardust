@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Resources;
 using log4net;
 
-namespace Teleopti.Support.Security
+namespace Teleopti.Support.Security.Library
 {
 	public class TextLoader
 	{

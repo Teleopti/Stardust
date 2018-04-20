@@ -1,7 +1,7 @@
 ﻿using log4net;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 
-namespace Teleopti.Support.Security
+namespace Teleopti.Support.Security.Library
 {
 	internal class CrossDatabaseViewUpdate : ICommandLineCommand
 	{

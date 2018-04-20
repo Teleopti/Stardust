@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter;
 
-namespace Teleopti.Support.Security
+namespace Teleopti.Support.Security.Library
 {
 	public class UpgradeRunner
 	{

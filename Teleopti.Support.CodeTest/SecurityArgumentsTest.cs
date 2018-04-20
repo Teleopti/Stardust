@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Support.Security;
+using Teleopti.Support.Security.Library;
 
 namespace Teleopti.Support.CodeTest.Tool
 {

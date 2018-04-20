@@ -2,7 +2,7 @@ using System.Data;
 using System.Data.SqlClient;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 
-namespace Teleopti.Support.Security
+namespace Teleopti.Support.Security.Library
 {
 	public class UpdateCrossDatabaseView : IUpdateCrossDatabaseView
 	{

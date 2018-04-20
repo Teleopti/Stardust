@@ -2,7 +2,7 @@
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 
-namespace Teleopti.Support.Security
+namespace Teleopti.Support.Security.Library
 {
 	//This is just used to make sure that one tenant points to same server and database that the information is stored
 	//this is to prevent wrong use when restoring a copy to test a patching, and end up patching the original

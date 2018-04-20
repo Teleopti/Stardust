@@ -4,6 +4,7 @@ using Teleopti.Ccc.DBManager.Library;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Support.Security;
+using Teleopti.Support.Security.Library;
 
 namespace Teleopti.Wfm.Administration.Core
 {

@@ -2,7 +2,7 @@
 using System.Data.SqlClient;
 using log4net;
 
-namespace Teleopti.Support.Security
+namespace Teleopti.Support.Security.Library
 {
 	internal class DelayedDataConvert : ICommandLineCommand
 	{

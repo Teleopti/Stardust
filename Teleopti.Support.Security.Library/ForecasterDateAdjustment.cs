@@ -5,7 +5,7 @@ using System.Data.SqlClient;
 using System.Globalization;
 using log4net;
 
-namespace Teleopti.Support.Security
+namespace Teleopti.Support.Security.Library
 {
     internal class ForecasterDateAdjustment : ICommandLineCommand
     {

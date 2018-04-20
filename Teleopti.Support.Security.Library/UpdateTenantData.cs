@@ -3,7 +3,7 @@ using log4net;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 
-namespace Teleopti.Support.Security
+namespace Teleopti.Support.Security.Library
 {
 	//todo: tenant what should we do when/if multiple tenants?
 	public class UpdateTenantData

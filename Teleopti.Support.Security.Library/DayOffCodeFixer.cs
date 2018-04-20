@@ -6,7 +6,7 @@ using System.Globalization;
 using System.Linq;
 using log4net;
 
-namespace Teleopti.Support.Security
+namespace Teleopti.Support.Security.Library
 {
 	internal class DayOffCodeFixer : CommandLineCommandWithFixChecker
 	{

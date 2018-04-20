@@ -3,6 +3,7 @@ using System.Threading;
 using log4net;
 using log4net.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Support.Security.Library;
 
 namespace Teleopti.Support.Security
 {

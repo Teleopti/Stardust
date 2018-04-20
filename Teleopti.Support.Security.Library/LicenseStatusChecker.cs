@@ -1,10 +1,10 @@
 using System;
 using System.Data.SqlClient;
 using System.Globalization;
-using Teleopti.Ccc.Infrastructure.Licensing;
 using log4net;
+using Teleopti.Ccc.Infrastructure.Licensing;
 
-namespace Teleopti.Support.Security
+namespace Teleopti.Support.Security.Library
 {
     public class LicenseStatusChecker : ICommandLineCommand
     {

@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Globalization;
-using Teleopti.Ccc.Domain.ResourcePlanner.Hints;
 
-namespace Teleopti.Support.Security
+namespace Teleopti.Support.Security.Library
 {
 	public class UpgradeCommand
 	{
