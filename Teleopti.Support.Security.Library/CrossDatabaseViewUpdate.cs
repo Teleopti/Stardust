@@ -17,7 +17,7 @@ namespace Teleopti.Support.Security
 		{
 			log.Debug("Link Analytics to Agg datatbase ...");
 
-			_updateCrossDatabaseView.Execute(commandLineArgument.AnalyticsDbConnectionString, commandLineArgument.AggDatabase);
+			_updateCrossDatabaseView.Execute(commandLineArgument.AnalyticsConnectionString, commandLineArgument.AggDatabase);
             log.Debug("Link Analytics to Agg datatbase. Done!");
 			return 0;
 		}

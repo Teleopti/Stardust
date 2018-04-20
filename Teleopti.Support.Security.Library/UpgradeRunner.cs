@@ -33,16 +33,16 @@ namespace Teleopti.Support.Security
 		{
 			if (command.CheckTenantConnectionStrings)
 			{
-				onlyDoSomeTenantCheck(command);
+				onlyCheckTenantConnections(command);
 				return;
 			}
 
-			var currentTenantSession = TenantUnitOfWorkManager.Create(command.ApplicationDbConnectionString);
+			var currentTenantSession = TenantUnitOfWorkManager.Create(command.ApplicationConnectionString);
 
 			Upgrade(command, currentTenantSession, currentTenantSession);
 		}
 
-		private static void onlyDoSomeTenantCheck(UpgradeCommand command)
+		private static void onlyCheckTenantConnections(UpgradeCommand command)
 		{
 			var tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(command.TenantStoreConnectionString);
 			var checker = new CheckTenantConnectionStrings(tenantUnitOfWorkManager, tenantUnitOfWorkManager);
@@ -55,7 +55,7 @@ namespace Teleopti.Support.Security
 			ICurrentTenantSession currentTenantSession)
 		{
 			var updateTenantData = new UpdateTenantData(tenantUnitOfWork, currentTenantSession);
-			updateTenantData.UpdateTenantConnectionStrings(command.ApplicationDbConnectionStringToStore, command.AnalyticsDbConnectionStringToStore);
+			updateTenantData.UpdateTenantConnectionStrings(command.ApplicationConnectionStringToStore, command.AnalyticsConnectionStringToStore);
 			updateTenantData.RegenerateTenantPasswords();
 			if (!string.IsNullOrEmpty(command.AggDatabase))
 			{
@@ -65,7 +65,7 @@ namespace Teleopti.Support.Security
 				delayedDataConvert.Execute(command);
 			}
 
-			if (!string.IsNullOrEmpty(command.AnalyticsDbConnectionString))
+			if (!string.IsNullOrEmpty(command.AnalyticsConnectionString))
 			{
 				dayOffCodeFixer.Execute(command);
 				dayOffIndexFixer.Execute(command);
@@ -108,7 +108,7 @@ namespace Teleopti.Support.Security
 
 		private void callProcInSeparateTransaction(UpgradeCommand command, string proc)
 		{
-			using (var conn = new SqlConnection(command.ApplicationDbConnectionString))
+			using (var conn = new SqlConnection(command.ApplicationConnectionString))
 			{
 				conn.Open();
 				conn.InfoMessage += sqlConnectionInfoMessage;
@@ -137,7 +137,7 @@ namespace Teleopti.Support.Security
 				@"select COUNT(*) as cnt from dbo.PersonAssignment pa
 							where pa.[Date]=@baseDate";
 
-			using (var conn = new SqlConnection(command.ApplicationDbConnectionString))
+			using (var conn = new SqlConnection(command.ApplicationConnectionString))
 			{
 				conn.Open();
 				using (var cmd = new SqlCommand(numberOfNotConvertedCommand, conn))
@@ -160,13 +160,13 @@ namespace Teleopti.Support.Security
 				return;
 
 			//expects all schedules having thedate set to 1800-1-1
-			var allPersonAndTimeZone = new FetchPersonIdAndTimeZone(command.ApplicationDbConnectionString).ForAllPersons();
+			var allPersonAndTimeZone = new FetchPersonIdAndTimeZone(command.ApplicationConnectionString).ForAllPersons();
 			int counter = allPersonAndTimeZone.Count();
 			int i = 0;
 			writeLog("Converting schedule data for " + counter + " agents");
 
 			var personAssignmentSetter = new PersonAssignmentDateSetter();
-			using (var conn = new SqlConnection(command.ApplicationDbConnectionString))
+			using (var conn = new SqlConnection(command.ApplicationConnectionString))
 			{
 				conn.Open();
 				foreach (var personAndTimeZone in allPersonAndTimeZone)

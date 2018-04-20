@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Globalization;
+using Teleopti.Ccc.Domain.ResourcePlanner.Hints;
 
 namespace Teleopti.Support.Security
 {
@@ -18,28 +19,28 @@ namespace Teleopti.Support.Security
 				switch (switchType)
 				{
 					case "-DS": // Destination Server Name.
-						command._destinationServer = switchValue;
+						command.Server = switchValue;
 						break;
 					case "-AP": // Application db database name
-						command._destinationAppDbDatabase = switchValue;
+						command.ApplicationDatabase = switchValue;
 						break;
 					case "-AN": // Analytics db database name
-						command._destinationAnalDbDatabase = switchValue;
+						command.AnalyticsDatabase = switchValue;
 						break;
-					case "-DU": // Destination User Name.
-						command._destinationUserName = switchValue;
-						break;
-					case "-DP": // Destination Password.
-						command._destinationPassword = switchValue;
-						break;
-					case "-EE":
-						command._useIntegratedSecurity = true;
-						break;
-					case "-CD": // Cross Db Name
+					case "-CD": // Agg Db Name
 						command.AggDatabase = switchValue;
 						break;
+					case "-DU": // Destination User Name.
+						command.UserName = switchValue;
+						break;
+					case "-DP": // Destination Password.
+						command.Password = switchValue;
+						break;
+					case "-EE":
+						command.UseIntegratedSecurity = true;
+						break;
 					case "-CS": //Used by WISE to set conn string, _without_ initial catalog
-						command._baseConnstring = switchValue;
+						command.BaseConnectionString = switchValue;
 						break;
 					case "-CT":
 						command.CheckTenantConnectionStrings = true;
@@ -50,80 +51,85 @@ namespace Teleopti.Support.Security
 				}
 			}
 
-			command.AnalyticsDbConnectionString = command.analyticsDbConnectionString();
-			command.AnalyticsDbConnectionStringToStore = command.analyticsDbConnectionStringToStore();
-			command.ApplicationDbConnectionString = command.applicationDbConnectionString();
-			command.ApplicationDbConnectionStringToStore = command.applicationDbConnectionStringToStore();
-			command.CheckTenantConnectionStrings = command.CheckTenantConnectionStrings;
-			command.TenantStoreConnectionString = command.TenantStoreConnectionString;
-
 			return command;
 		}
 
-		public string _destinationServer;
-		public string _destinationUserName;
-		public string _destinationPassword;
-		public bool _useIntegratedSecurity;
-		public string _destinationAppDbDatabase;
-		public string _destinationAnalDbDatabase;
-		public string _baseConnstring;
-
+		public string Server { get; set; }
+		public string ApplicationDatabase { get; set; }
+		public string AnalyticsDatabase { get; set; }
 		public string AggDatabase { get; set; }
-		public string AnalyticsDbConnectionString { get; set; }
-		public string ApplicationDbConnectionString { get; set; }
-		public string AnalyticsDbConnectionStringToStore { get; set; }
-		public string ApplicationDbConnectionStringToStore { get; set; }
+		public string UserName { get; set; }
+		public string Password { get; set; }
+		public bool UseIntegratedSecurity { get; set; }
+
+		public string BaseConnectionString;
+
 		public string TenantStoreConnectionString { get; set; }
 		public bool CheckTenantConnectionStrings { get; set; }
 
-		public string analyticsDbConnectionString() => createConnectionString(_destinationAnalDbDatabase);
 
-		public string applicationDbConnectionString() => createConnectionString(_destinationAppDbDatabase);
+		private string _applicationConnectionString;
 
-		public string analyticsDbConnectionStringToStore() =>
-			_baseConnstring == null
-				? createConnectionString(_destinationAnalDbDatabase)
-				: createConnectionStringBasedOnBaseConnstring(_destinationAnalDbDatabase);
-
-		public string applicationDbConnectionStringToStore() =>
-			_baseConnstring == null
-				? createConnectionString(_destinationAppDbDatabase)
-				: createConnectionStringBasedOnBaseConnstring(_destinationAppDbDatabase);
-
-		private string createConnectionStringBasedOnBaseConnstring(string initialCatalog)
+		public string ApplicationConnectionString
 		{
-			if (_baseConnstring == null || initialCatalog == null)
-				return "";
-			return new SqlConnectionStringBuilder(_baseConnstring)
-			{
-				InitialCatalog = initialCatalog,
-				CurrentLanguage = "us_english"
-			}.ConnectionString;
+			get => _applicationConnectionString ?? (_applicationConnectionString = createConnectionString(null, ApplicationDatabase));
+			set => _applicationConnectionString = value;
 		}
 
-		private string createConnectionString(string initialCatalog)
+		private string _applicationConnectionStringToStore;
+
+		public string ApplicationConnectionStringToStore
 		{
-			if (_destinationServer == null || initialCatalog == null)
+			get => _applicationConnectionStringToStore ?? (_applicationConnectionStringToStore = createConnectionString(BaseConnectionString, ApplicationDatabase));
+			set => _applicationConnectionStringToStore = value;
+		}
+
+		private string _analyticsConnectionString;
+
+		public string AnalyticsConnectionString
+		{
+			get => _analyticsConnectionString ?? (_analyticsConnectionString = createConnectionString(null, AnalyticsDatabase));
+			set => _analyticsConnectionString = value;
+		}
+
+		private string _analyticsConnectionStringToStore;
+
+		public string AnalyticsConnectionStringToStore
+		{
+			get => _analyticsConnectionStringToStore ?? (_analyticsConnectionStringToStore = createConnectionString(BaseConnectionString, AnalyticsDatabase));
+			set => _analyticsConnectionStringToStore = value;
+		}
+
+		private string createConnectionString(string baseOnConnectionString, string database)
+		{
+			if (Server == null || database == null)
 				return "";
 
-			var sqlConnectionStringBuilder = new SqlConnectionStringBuilder
-			{
-				DataSource = _destinationServer,
-				InitialCatalog = initialCatalog,
-				CurrentLanguage = "us_english"
-			};
+			var builder = new SqlConnectionStringBuilder(baseOnConnectionString);
 
-			if (_useIntegratedSecurity)
+			if (baseOnConnectionString == null)
 			{
-				sqlConnectionStringBuilder.IntegratedSecurity = _useIntegratedSecurity;
+				builder.DataSource = Server;
+				builder.InitialCatalog = database;
+				builder.CurrentLanguage = "us_english";
+
+				if (UseIntegratedSecurity)
+				{
+					builder.IntegratedSecurity = UseIntegratedSecurity;
+				}
+				else
+				{
+					builder.UserID = UserName;
+					builder.Password = Password;
+				}
 			}
 			else
 			{
-				sqlConnectionStringBuilder.UserID = _destinationUserName;
-				sqlConnectionStringBuilder.Password = _destinationPassword;
+				builder.InitialCatalog = database;
+				builder.CurrentLanguage = "us_english";
 			}
 
-			return sqlConnectionStringBuilder.ConnectionString;
+			return builder.ConnectionString;
 		}
 	}
 }

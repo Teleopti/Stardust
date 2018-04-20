@@ -16,7 +16,7 @@ namespace Teleopti.Support.CodeTest.Tool
 			var argsArray = arguments.Split(' ');
 			var commandArgs = UpgradeCommand.Parse(argsArray);
 			var dbArgs = commandArgs;
-			dbArgs.ApplicationDbConnectionString.Should().Not.Be.Empty();
+			dbArgs.ApplicationConnectionString.Should().Not.Be.Empty();
 		}
 	}
 }

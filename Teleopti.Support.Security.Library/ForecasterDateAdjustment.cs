@@ -14,7 +14,7 @@ namespace Teleopti.Support.Security
         public int Execute(UpgradeCommand commandLineArgument)
         {
             //Select database version 
-					using (SqlConnection connection = new SqlConnection(commandLineArgument.ApplicationDbConnectionString))
+					using (SqlConnection connection = new SqlConnection(commandLineArgument.ApplicationConnectionString))
 	        {
 
 		        connection.Open();

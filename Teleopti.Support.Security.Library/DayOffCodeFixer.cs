@@ -18,8 +18,8 @@ namespace Teleopti.Support.Security
 		
 		public override int Execute(UpgradeCommand databaseArguments)
 		{
-			using (var appConnection = new SqlConnection(databaseArguments.ApplicationDbConnectionString))
-			using (var analyticsConnection = new SqlConnection(databaseArguments.AnalyticsDbConnectionString))
+			using (var appConnection = new SqlConnection(databaseArguments.ApplicationConnectionString))
+			using (var analyticsConnection = new SqlConnection(databaseArguments.AnalyticsConnectionString))
 			{
 				analyticsConnection.Open();
 

@@ -64,10 +64,10 @@ namespace Teleopti.Wfm.Administration.Core
 			//security 
 			var upgradeCommand = new UpgradeCommand
 			{
-				ApplicationDbConnectionString = appConnstring,
-				ApplicationDbConnectionStringToStore = appConnstring,
-				AnalyticsDbConnectionString = analConnstring,
-				AnalyticsDbConnectionStringToStore = analConnstring,
+				ApplicationConnectionString = appConnstring,
+				ApplicationConnectionStringToStore = appConnstring,
+				AnalyticsConnectionString = analConnstring,
+				AnalyticsConnectionStringToStore = analConnstring,
 				AggDatabase = aggDB
 			};
 			_upgradeRunner.SetLogger(new TenantLogger(tenant.Name, tenant.Id));
