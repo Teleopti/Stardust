@@ -29,32 +29,32 @@
             </div>
         </div>
     </div>
-    <div class="calculation-job-table ">
+    <div class="gamification-table">
         <header>
-            <div class="period ">{{'Period'|translate}}</div>
-            <div class="owner ">{{'Owner'|translate}}</div>
-            <div class="started ">{{'TimeStarted'|translate}}</div>
-            <div class="status ">{{'Status'|translate}}</div>
+            <div class="period">{{'Period'|translate}}</div>
+            <div class="owner">{{'Owner'|translate}}</div>
+            <div class="started">{{'TimeStarted'|translate}}</div>
+            <div class="status">{{'Status'|translate}}</div>
         </header>
-        <div ng-repeat="job in $ctrl.jobs " class="calculation-job ">
-            <div class="job ">
+        <div ng-repeat="job in $ctrl.jobs" class="table-row">
+            <div class="job">
                 <span>{{job.startDate|date:$ctrl.dateFormat}}--{{job.endDate|date:$ctrl.dateFormat}}</span>
             </div>
-            <div class="owner ">
+            <div class="owner">
                 <span>{{job.owner}}</span>
             </div>
-            <div class="started ">
+            <div class="started">
                 <span>{{job.startingTime | date: $ctrl.dateTimeFormat}}</span>
             </div>
-            <div class="status ">
-                <div ng-if="job.status=='inprogress' ">
+            <div class="status">
+                <div ng-if="job.status=='inprogress'">
                     <span>{{'InProgress'|translate}}</span>
                 </div>
-                <div ng-if="job.status=='failed' ">
-                    <i class="mdi mdi-alert-octagon "></i>
+                <div ng-if="job.status=='failed'">
+                    <i class="mdi mdi-alert-octagon"></i>
                     <span>{{'Failed'|translate}}</span>
                 </div>
-                <div ng-if="job.status=='finished' ">
+                <div ng-if="job.status=='finished'">
                     <span>{{'Finished'|translate}}</span>
                 </div>
             </div>

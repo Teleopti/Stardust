@@ -4,6 +4,16 @@
 	100% { background-color: transparent; }
 }
 
+@mixin override-vertical-margins {
+	margin-top: -5px;
+	margin-bottom: -5px;
+}
+
+@mixin override-horizontal-margins {
+	margin-left: -5px;
+	margin-right: -5px;
+}
+
 .gamification-wrapper {
 	$SEPARATOR: 1px solid $gray-300;
 	$PADDING: 24px;
@@ -45,6 +55,71 @@
 	}
 
 	.validation { height: 1em; }
+
+	.gamification-table {
+		$HEADER_HEIGHT: 54px;
+
+		@include override-horizontal-margins();
+		padding-bottom: $PADDING;
+
+		@mixin table-cell-default {
+			display: flex;
+			align-items: center;
+			flex: 1 1 300px;
+		}
+
+		header {
+			> * {
+				@include table-cell-default();
+				padding: $PADDING 0;
+			}
+			box-sizing: border-box;
+			display: flex;
+			padding: 0 $PADDING;
+			height: $HEADER_HEIGHT + 2px;
+			line-height: 18px;
+			border-top: $SEPARATOR;
+			border-bottom: $SEPARATOR;
+			font-weight: bold;
+			color: $text-color-standard;
+			background-color: $blue-300;
+		}
+
+		.table-row {
+			box-sizing: content-box;
+			padding: 0 $PADDING;
+			display: flex;
+			height: 48px;
+
+			&:hover {
+				background-color: $gray026;
+			}
+
+			&.selected {
+				background-color: $gray012;
+
+				&:hover {
+					background-color: $gray026;
+				}
+			}
+
+			&.ng-enter {
+				animation: 1s ease-in-out .3s justCreated;
+			}
+
+			+ .table-row {
+				border-top: $SEPARATOR;
+			}
+
+			&:last-child {
+				border-bottom: $SEPARATOR;
+			}
+
+			> * {
+				@include table-cell-default();
+			}
+		}
+	}
 
 	g-setting-form {
 		max-width: 900px;
@@ -134,26 +209,8 @@
 	}
 
 	gamification-targets-table {
-		$HEADER_HEIGHT: 54px;
-		margin: 0 -5px;
-
-		.header, gamification-target-row {
-			box-sizing: border-box;
-			display: flex;
-			padding: 0 $PADDING;
-
-			& > * {
-				padding: $PADDING 0;
-			}
-		}
-
-		.header {
-			height: $HEADER_HEIGHT + 1px;
-			line-height: 18px;
-			border-bottom: $SEPARATOR;
-			font-weight: bold;
-			color: $text-color-standard;
-			background-color: $blue-300;
+		&.gamification-table {
+			padding-bottom: 0;
 		}
 
 		md-virtual-repeat-container {
@@ -167,74 +224,40 @@
 			}
 		}
 
-		md-virtual-repeat-container {
-			gamification-target-row {
-				height: 48px + 1px;
-
-				&:hover {
-					background-color: $gray026;
-				}
-
-				&.selected {
-					background-color: $gray012;
-
-					&:hover {
-						background-color: $gray026;
-					}
-				}
-			}
-
-			gamification-target-row + gamification-target-row {
-				border-top: $SEPARATOR;
-			}
-
-			gamification-target-row:last-child {
-				border-bottom: $SEPARATOR;
-			}
-		}
-
 		.footer {
 			border-top: $SEPARATOR;
 			height: 100px;
 		}
 
-		.selection, .team, .setting {
-			display: flex;
-			align-items: center;
-		}
-
-		.selection {
-			flex: 0 0 50px;
-			// display: flex;
-			.wfm-checkbox {
-				padding: 0;
+		header, .table-row {
+			> .selection {
+				flex: 0 0 50px;
+				.wfm-checkbox {
+					padding: 0;
+				}
+				md-checkbox {
+					transform: scale(.9);
+				}
 			}
-			md-checkbox {
-				transform: scale(.9);
+
+			> .team {
+				flex: 1 1 300px;
 			}
-		}
 
-		.team {
-			flex: 1 1 300px;
-			// display: flex;
-			// align-items: center;
-		}
+			> .setting {
+				flex: 2 1 300px;
+				position: relative;
 
-		.setting {
-			flex: 2 1 300px;
-			position: relative;
-			display: flex;
-			align-items: center;
+				.mask {
+					position: absolute;
+					top: 0;
+					left: 0;
+					height: 100%;
+					width: 100%;
 
-			.mask {
-				position: absolute;
-				top: 0;
-				left: 0;
-				height: 100%;
-				width: 100%;
-
-				&.selected {
-					display: none;
+					&.selected {
+						display: none;
+					}
 				}
 			}
 		}
@@ -268,67 +291,6 @@
 				}
 			}
 		}
-
-		.import-job-table {
-			$HEADER_HEIGHT: 54px;
-			border-top: $SEPARATOR;
-			margin: 0 -5px;
-			padding-bottom: $PADDING;
-
-			header {
-				box-sizing: border-box;
-				display: flex;
-				padding: 0 $PADDING;
-				height: $HEADER_HEIGHT + 1px;
-				line-height: 18px;
-				border-bottom: $SEPARATOR;
-				font-weight: bold;
-				color: $text-color-standard;
-				background-color: $blue-300;
-
-				& > * {
-					padding: $PADDING 0;
-				}
-
-			}
-
-			.job, .owner, .started, .status {
-				display: flex;
-				align-items: center;
-				flex: 1 1 300px;
-			}
-
-			import-job + import-job {
-				border-top: $SEPARATOR;
-			}
-
-			import-job:last-child {
-				border-bottom: $SEPARATOR;
-			}
-		}
-
-		import-job {
-			box-sizing: border-box;
-			padding: 0 $PADDING;
-			display: flex;
-			height: 48px + 1px;
-
-			&:hover {
-				background-color: $gray026;
-			}
-
-			&.selected {
-				background-color: $gray012;
-
-				&:hover {
-					background-color: $gray026;
-				}
-			}
-
-			&.ng-enter {
-				animation: 1s ease-in-out .3s justCreated;
-			}
-		}
 	}
 
 	badge-calculation {
@@ -348,68 +310,6 @@
 			.period-error-box {
 				display: inline-block;
 			}
-		}
-
-		.calculation-job-table {
-			$HEADER_HEIGHT: 54px;
-			border-top: $SEPARATOR;
-			margin: 0 -5px;
-			padding-bottom: $PADDING;
-
-			header {
-				box-sizing: border-box;
-				display: flex;
-				padding: 0 $PADDING;
-				height: $HEADER_HEIGHT + 1px;
-				line-height: 18px;
-				border-bottom: $SEPARATOR;
-				font-weight: bold;
-				color: $text-color-standard;
-				background-color: $blue-300;
-
-				& > * {
-					padding: $PADDING 0;
-				}
-
-			}
-
-			.job, .owner, .started, .status, .period{
-				display: flex;
-				align-items: center;
-				flex: 1 1 300px;
-			}
-
-
-			.calculation-job {
-					box-sizing: border-box;
-					padding: 0 $PADDING;
-					display: flex;
-					height: 48px + 1px;
-
-					&:hover {
-						background-color: $gray026;
-					}
-
-					&.selected {
-						background-color: $gray012;
-
-						&:hover {
-							background-color: $gray026;
-						}
-					}
-
-					&.ng-enter {
-						animation: 1s ease-in-out .3s justCreated;
-					}
-			}
-
-			// import-job + import-job {
-			// 	border-top: $SEPARATOR;
-			// }
-
-			// import-job:last-child {
-			// 	border-bottom: $SEPARATOR;
-			// }
 		}
 	}
 }
