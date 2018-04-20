@@ -3,9 +3,20 @@
 -- Date: 2018-04-19
 -- Desc: Fixing PK's. VSTS #75391 
 -----------------------------------------------------------
+DECLARE @INDEXNAME nvarchar(MAX)
 
-DROP INDEX CIX_WorkflowControlSetAllowedAbsences_WorkflowControlSet ON dbo.WorkflowControlSetAllowedAbsences
+set @INDEXNAME = (
+	SELECT name FROM sys.indexes 
+	WHERE object_id = OBJECT_ID(N'[WorkflowControlSetAllowedAbsences]') 
+	and name = 'CIX_WorkflowControlSetAllowedAbsences_WorkflowControlSet'
+	)
+
+if (@INDEXNAME <> '')
+begin
+	DROP INDEX CIX_WorkflowControlSetAllowedAbsences_WorkflowControlSet ON dbo.WorkflowControlSetAllowedAbsences
+end
 GO
+
 ALTER TABLE dbo.WorkflowControlSetAllowedAbsences ADD CONSTRAINT
 	PK_WorkflowControlSetAllowedAbsences PRIMARY KEY CLUSTERED 
 	(
