@@ -3,7 +3,7 @@
 
 // // Teleopti classic theme colors
 // @import '~teleopti-styleguide/styleguide/sass/classicvariables';
-@import './classic-color-palette';
+@import './dark-color-palette';
 
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
@@ -20,8 +20,8 @@ $candy-app-accent: mat-palette($mat-pink, A200, A100, A400);
 $candy-app-warn: mat-palette($mat-red);
 
 // Create the theme object (a Sass map containing all of the palettes).
-$theme: mat-light-theme($candy-app-primary, $candy-app-accent, $candy-app-warn);
+$theme: mat-dark-theme($candy-app-primary, $candy-app-accent, $candy-app-warn);
 
-.angular-theme-classic {
+.angular-theme-dark {
 	@include angular-material-theme($theme);
 }

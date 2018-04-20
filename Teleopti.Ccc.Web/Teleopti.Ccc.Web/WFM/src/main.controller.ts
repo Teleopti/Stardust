@@ -1,5 +1,5 @@
-import { IAngularStatic, IControllerConstructor, IScope, IRootScopeService, IQService } from "angular";
-import { IWfmRootScopeService } from "./main";
+import { IAngularStatic, IControllerConstructor, IScope, IRootScopeService, IQService } from 'angular';
+import { IWfmRootScopeService } from './main';
 
 MainController.$inject = ['$scope', '$rootScope', 'ThemeService', '$q'];
 
@@ -18,6 +18,16 @@ export function MainController($scope: IScope, $rootScope: IWfmRootScopeService,
 		if (checkCurrentTheme() != theme) {
 			vm.styleIsFullyLoaded = false;
 			switchCssSrcRefs(theme);
+		}
+
+		// material2 theme
+		if (theme === 'dark' && document.body) {
+			document.body.classList.add('angular-theme-dark');
+			document.body.classList.remove('angular-theme-classic');
+		}
+		if (theme === 'classic' && document.body) {
+			document.body.classList.add('angular-theme-classic');
+			document.body.classList.remove('angular-theme-dark');
 		}
 	};
 

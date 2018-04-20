@@ -1,2 +1,15 @@
 /* Classic Teleopti theme for Material2 */
 @import './themes/classic';
+@import './themes/dark';
+
+/** FIX FOR CHECKBOX RIPPLE EFFECT
+https://github.com/angular/material2/issues/8600
+**/
+mat-cell.mat-cell,
+mat-header-cell.mat-header-cell {
+	overflow: visible;
+}
+
+// Overriding styleguide overrides
+// to make Material work properly
+@import './themes/overrides_for_overrides';
