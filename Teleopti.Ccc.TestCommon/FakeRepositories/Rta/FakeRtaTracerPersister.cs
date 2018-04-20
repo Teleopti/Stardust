@@ -3,6 +3,7 @@ using System.Linq;
 using Teleopti.Ccc.DBManager.Library;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Tracer;
+using Teleopti.Support.Library;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 {

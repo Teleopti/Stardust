@@ -1,4 +1,4 @@
-namespace Teleopti.Ccc.DBManager.Library
+namespace Teleopti.Support.Library.Folders
 {
 	public class DatabaseFolder
 	{

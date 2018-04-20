@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
+namespace Teleopti.Support.Library.Config
 {
 	public static class Extensions
 	{

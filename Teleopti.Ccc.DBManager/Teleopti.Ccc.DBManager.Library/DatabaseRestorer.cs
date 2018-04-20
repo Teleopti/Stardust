@@ -1,65 +1,27 @@
 ﻿using System.IO;
+using Teleopti.Support.Library;
+using Teleopti.Support.Library.Folders;
 
 namespace Teleopti.Ccc.DBManager.Library
 {
-	public class DebugSetupDatabaseFolder
-	{
-		private readonly RepoFolder _repoFolder;
-
-		public DebugSetupDatabaseFolder(RepoFolder repoFolder)
-		{
-			_repoFolder = repoFolder;
-		}
-
-		public string Path()
-		{
-			var path = System.IO.Path.Combine(_repoFolder.Path(), @".debug-Setup\database");
-			return System.IO.Path.GetFullPath(path);
-		}
-
-		public override string ToString() => Path();
-	}
-
-	public class RepoFolder
-	{
-		public string Path() => System.IO.Path.GetFullPath(locateFolderUsingBlackMagic());
-
-		private static string locateFolderUsingBlackMagic()
-		{
-			if (Directory.Exists(@"..\..\..\..\.debug-Setup"))
-				return @"..\..\..\..";
-			if (Directory.Exists(@"..\..\..\.debug-Setup"))
-				return @"..\..\..";
-			if (Directory.Exists(@"..\..\.debug-Setup"))
-				return @"..\..";
-			if (Directory.Exists(@"..\.debug-Setup"))
-				return @"..";
-			if (Directory.Exists(@".debug-Setup"))
-				return @".";
-			return null;
-		}
-
-		public override string ToString() => Path();
-	}
-
 	public class DatabaseRestorer
 	{
 		private readonly ExecuteSql _masterSql;
 		private readonly ExecuteSql _sql;
-		private readonly RepoFolder _repoFolder;
+		private readonly RepositoryRootFolder _repositoryRootFolder;
 		private readonly DebugSetupDatabaseFolder _debugDbFolder;
 		private readonly ConfigureSystem _configureSystem;
 
 		public DatabaseRestorer(
 			ExecuteSql masterSql,
 			ExecuteSql sql,
-			RepoFolder repoFolder,
+			RepositoryRootFolder repositoryRootFolder,
 			DebugSetupDatabaseFolder debugDbFolder,
 			ConfigureSystem configureSystem)
 		{
 			_masterSql = masterSql;
 			_sql = sql;
-			_repoFolder = repoFolder;
+			_repositoryRootFolder = repositoryRootFolder;
 			_debugDbFolder = debugDbFolder;
 			_configureSystem = configureSystem;
 		}
@@ -96,7 +58,7 @@ namespace Teleopti.Ccc.DBManager.Library
 				return;
 			var file = Path.Combine(_debugDbFolder.Path(), @"tsql\AddLic.sql");
 			var script = File.ReadAllText(file);
-			var licenseFile = Path.GetFullPath(Path.Combine(_repoFolder.Path(), @"LicenseFiles\Teleopti_RD.xml"));
+			var licenseFile = Path.GetFullPath(Path.Combine(_repositoryRootFolder.Path(), @"LicenseFiles\Teleopti_RD.xml"));
 			script = replaceVariables(script, null, null, null, null, null, licenseFile);
 			_sql.ExecuteTransactionlessNonQuery(script, Timeouts.CommandTimeout);
 		}

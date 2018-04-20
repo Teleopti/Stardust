@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Teleopti.Ccc.DBManager.Library
+namespace Teleopti.Support.Library
 {
 	public static class Extensions
 	{
@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.DBManager.Library
 		{
 			return Enum.GetName(typeof(DatabaseType), type);
 		}
+		
 		public static IEnumerable<T> ForEach<T>(this IEnumerable<T> source, Action<T> act)
 		{
 			foreach (T item in source)

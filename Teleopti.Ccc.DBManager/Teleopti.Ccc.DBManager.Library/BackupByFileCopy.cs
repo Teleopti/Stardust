@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using Teleopti.Support.Library;
 
 namespace Teleopti.Ccc.DBManager.Library
 {

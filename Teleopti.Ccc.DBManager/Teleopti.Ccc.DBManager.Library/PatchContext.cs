@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Support.Library;
+using Teleopti.Support.Library.Folders;
 
 namespace Teleopti.Ccc.DBManager.Library
 {
@@ -26,7 +28,7 @@ namespace Teleopti.Ccc.DBManager.Library
 		private ConfigureSystem _configureSystem;
 		private DatabaseRestorer _restorer;
 
-		private readonly RepoFolder _repoFolder = new RepoFolder();
+		private readonly RepositoryRootFolder _repositoryRootFolder = new RepositoryRootFolder();
 
 		public ExecuteSql MasterExecuteSql() => _masterExecuteSql ?? (_masterExecuteSql = new ExecuteSql(() => connectAndOpen(connectionStringToMaster()), _log));
 		public ExecuteSql ExecuteSql() => _executeSql ?? (_executeSql = new ExecuteSql(() => connectAndOpen(connectionString()), _log));
@@ -34,7 +36,7 @@ namespace Teleopti.Ccc.DBManager.Library
 		public DatabaseVersionInformation DatabaseVersionInformation() => _databaseVersionInformation ?? (_databaseVersionInformation = new DatabaseVersionInformation(DatabaseFolder(), ExecuteSql()));
 		public SchemaVersionInformation SchemaVersionInformation() => _schemaVersionInformation ?? (_schemaVersionInformation = new SchemaVersionInformation(DatabaseFolder()));
 		private ConfigureSystem appRelatedDatabaseTasks() => _configureSystem ?? (_configureSystem = new ConfigureSystem(ExecuteSql()));
-		public DatabaseRestorer Restorer() => _restorer ?? (_restorer = new DatabaseRestorer(MasterExecuteSql(), ExecuteSql(), _repoFolder, new DebugSetupDatabaseFolder(_repoFolder), appRelatedDatabaseTasks()));
+		public DatabaseRestorer Restorer() => _restorer ?? (_restorer = new DatabaseRestorer(MasterExecuteSql(), ExecuteSql(), _repositoryRootFolder, new DebugSetupDatabaseFolder(_repositoryRootFolder), appRelatedDatabaseTasks()));
 
 		public bool DatabaseExists()
 		{

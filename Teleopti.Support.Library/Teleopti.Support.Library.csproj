@@ -50,6 +50,12 @@
     <Compile Include="Config\SearchReplaceCollection.cs" />
     <Compile Include="Config\Parser.cs" />
     <Compile Include="Config\RefreshConfigFile.cs" />
+    <Compile Include="DatabaseType.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="Folders\DatabaseFolder.cs" />
+    <Compile Include="Folders\DbManagerFolder.cs" />
+    <Compile Include="Folders\DebugSetupDatabaseFolder.cs" />
+    <Compile Include="Folders\RepositoryRootFolder.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

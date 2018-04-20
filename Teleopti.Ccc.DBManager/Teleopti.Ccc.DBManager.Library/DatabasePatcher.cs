@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Threading;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Support.Library;
 
 namespace Teleopti.Ccc.DBManager.Library
 {

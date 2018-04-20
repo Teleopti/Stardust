@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Support.Library;
 
 namespace Teleopti.Ccc.DBManager.Library
 {

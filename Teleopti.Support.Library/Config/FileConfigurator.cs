@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 
 namespace Teleopti.Support.Library.Config
 {

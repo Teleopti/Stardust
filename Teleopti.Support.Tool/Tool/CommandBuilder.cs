@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using log4net;
-using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 using Teleopti.Support.Library.Config;
 
 namespace Teleopti.Support.Tool.Tool
