@@ -30,11 +30,20 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public FakeScenarioRepository ScenarioRepository;
 		public FakeActivityRepository ActivityRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
+
+		//Should not be needed here! It should default to "on" i web! Fix later
+		public OptimizationPreferencesDefaultValueProvider OptimizationPreferencesProvider;
+		//
 		
 		[Test]
 		[Ignore("75339 To be fixed")]
 		public void ShouldConsiderMinimumStaffing()
 		{
+			//Should not be needed here! It should default to "on" i web! Fix later
+			var optimizationPreferences = OptimizationPreferencesProvider.Fetch();
+			optimizationPreferences.Advanced.UseMinimumStaffing = true;
+			OptimizationPreferencesProvider.SetFromTestsOnly(optimizationPreferences);
+			//
 			var firstDay = new DateOnly(2015, 10, 12); //mon
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
@@ -55,17 +64,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				5)
 			);
 			skillDays.First().SetMinimumAgents(1);
-			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory,
-				new DateOnlyPeriod(firstDay, firstDay.AddDays(7)), new TimePeriod(8, 0, 16, 0));
-			PersonAssignmentRepository.GetSingle(skillDays[5].CurrentDate) 
-				.SetDayOff(new DayOffTemplate());
+			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, new DateOnlyPeriod(firstDay, firstDay.AddDays(7)), new TimePeriod(8, 0, 16, 0));
+			PersonAssignmentRepository.GetSingle(skillDays[5].CurrentDate).SetDayOff(new DayOffTemplate());
 
 			Target.Execute(planningPeriod.Id.Value);
 
-			PersonAssignmentRepository.GetSingle(skillDays[5].CurrentDate) //saturday no DO
-				.DayOff().Should().Be.Null();
-			PersonAssignmentRepository.GetSingle(skillDays[1].CurrentDate) //tuesday it is DO
-				.DayOff().Should().Not.Be.Null();
+			PersonAssignmentRepository.LoadAll().Single(x => x.DayOff() != null).Date
+				.Should().Be.EqualTo(skillDays[1].CurrentDate); //only DO is on tuesday
 		}
 
 		
