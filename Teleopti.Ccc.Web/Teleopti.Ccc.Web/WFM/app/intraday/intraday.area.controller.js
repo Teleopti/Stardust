@@ -193,6 +193,10 @@
 		};
 
 		vm.clickedSkillInPicker = function(skill) {
+			if (skill.Id === -1) {
+				vm.skillPickerOpen = false;
+				return;
+			}
 			vm.setSkill(skill);
 			setModuleState({
 				showIncluded: false,
@@ -218,6 +222,11 @@
 		vm.clickedSkillGroupInPicker = function(skillGroup) {
 			vm.skillPickerText = '';
 			vm.moduleState.selectedSkill = null;
+			if (skillGroup.Id === -1) {
+				vm.skillGroupPickerOpen = false;
+				return;
+			}
+
 			vm.setSkillGroup(skillGroup);
 		};
 
@@ -403,16 +412,32 @@
 		function reloadSkillAreas(isNew) {
 			SkillGroupSvc.getSkillGroups().then(function(result) {
 				vm.skillAreas = $filter('orderBy')(result.data.SkillAreas, 'Name');
+
 				if (isNew) {
 					vm.latest = $filter('orderBy')(result.data.SkillAreas, 'created_at', true);
 					vm.latest = $filter('orderBy')(result.data.SkillAreas, 'Name');
 				}
+
 				vm.HasPermissionToModifySkillArea = result.data.HasPermissionToModifySkillArea;
+
+				if (angular.isDefined(vm.skillAreas) && vm.skillAreas.length === 0) {
+					vm.skillAreas.push({
+						Name: $translate.instant('NoSkillGroupsFound'),
+						Id: -1
+					});
+				}
 
 				SkillGroupSvc.getSkills().then(function(result) {
 					vm.skills = result.data;
 					vm.loadState();
 				});
+
+				if (angular.isDefined(vm.skills) && vm.skills.length === 0) {
+					vm.skills.push({
+						Name: $translate.instant('NoSkillFound'),
+						Id: -1
+					});
+				}
 			});
 		}
 
