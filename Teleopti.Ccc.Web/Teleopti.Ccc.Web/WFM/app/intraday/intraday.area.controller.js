@@ -202,25 +202,19 @@
 				showIncluded: false,
 				selectedSkillGroup: null
 			});
-			vm.skillGroupPickerText = '';
 		};
 
 		vm.clearSkillSelection = function() {
-			vm.skillPickerOpen = false;
-			vm.skillPickerText = '';
 			resetModuleState();
 			vm.saveState();
 		};
 
 		vm.clearSkillGroupSelection = function() {
-			vm.skillGroupPickerOpen = false;
-			vm.skillGroupPickerText = '';
 			resetModuleState();
 			vm.saveState();
 		};
 
 		vm.clickedSkillGroupInPicker = function(skillGroup) {
-			vm.skillPickerText = '';
 			vm.moduleState.selectedSkill = null;
 			if (skillGroup.Id === -1) {
 				vm.skillGroupPickerOpen = false;
@@ -245,7 +239,6 @@
 		vm.setSkillGroup = function(skillGroup) {
 			if (angular.isUndefined(skillGroup) || skillGroup === null) return;
 			vm.skillGroupPickerOpen = false;
-			vm.skillGroupPickerText = skillGroup.Name;
 			setModuleState({
 				showIncluded: true,
 				showGroupInfo: true,
