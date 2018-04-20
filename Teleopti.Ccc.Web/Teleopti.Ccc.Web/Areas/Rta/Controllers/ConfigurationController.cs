@@ -7,9 +7,9 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 {
 	public class ConfigurationController : ApiController
 	{
-		private readonly IConfigurationValidator _validator;
+		private readonly ConfigurationValidator _validator;
 
-		public ConfigurationController(IConfigurationValidator validator)
+		public ConfigurationController(ConfigurationValidator validator)
 		{
 			_validator = validator;
 		}

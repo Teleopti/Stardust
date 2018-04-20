@@ -7,7 +7,7 @@ using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Configuration
 {
-	public class ConfigurationValidator : IConfigurationValidator
+	public class ConfigurationValidator
 	{
 		private readonly IRtaStateGroupRepository _stateGroups;
 		private readonly IBusinessUnitRepository _businessUnits;

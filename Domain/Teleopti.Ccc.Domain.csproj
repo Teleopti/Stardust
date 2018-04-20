@@ -509,9 +509,7 @@
     <Compile Include="RealTimeAdherence\Domain\Configuration\ConfigurationValidationViewModel.cs" />
     <Compile Include="RealTimeAdherence\Domain\Configuration\ConfigurationValidator.cs" />
     <Compile Include="RealTimeAdherence\Domain\Configuration\DefaultStateGroupException.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Configuration\IConfigurationValidator.cs" />
     <Compile Include="RealTimeAdherence\Domain\Configuration\IRtaStateHolder.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Configuration\NoConfigurationValidator.cs" />
     <Compile Include="RealTimeAdherence\Domain\Configuration\RtaMap.cs" />
     <Compile Include="RealTimeAdherence\Domain\Configuration\RtaRule.cs" />
     <Compile Include="RealTimeAdherence\Domain\Configuration\RtaState.cs" />

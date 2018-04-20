@@ -150,10 +150,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<RtaTracerConfigPersister>().As<IRtaTracerConfigPersister>().SingleInstance();
 			builder.RegisterType<RtaTracerSessionFactory>().SingleInstance();
 
-			if (_config.Toggle(Toggles.RTA_ConfigurationValidationNotification_46933))
-				builder.RegisterType<ConfigurationValidator>().As<IConfigurationValidator>().SingleInstance();
-			else
-				builder.RegisterType<NoConfigurationValidator>().As<IConfigurationValidator>().SingleInstance();
+			builder.RegisterType<ConfigurationValidator>().SingleInstance();
 		}
 	}
 }

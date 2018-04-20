@@ -9,11 +9,10 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Configuration
 {
 	[DomainTest]
-	[Toggle(Toggles.RTA_ConfigurationValidationNotification_46933)]
 	public class DefaultStateGroupMissingInConfigurationTest
 	{
 		public FakeDatabase Database;
-		public IConfigurationValidator Target;
+		public ConfigurationValidator Target;
 
 		[Test]
 		public void ShouldReturnMessageWhenInvalid()

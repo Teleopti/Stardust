@@ -9,11 +9,10 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Configuration
 {
 	[RtaTest]
-	[Toggle(Toggles.RTA_ConfigurationValidationNotification_46933)]
 	public class LoggedOutStateGroupMissingInRtaServiceTest
 	{
 		public FakeDatabase Database;
-		public IConfigurationValidator Target;
+		public ConfigurationValidator Target;
 
 		[Test]
 		public void ShouldReturnMessageWhenInvalid()

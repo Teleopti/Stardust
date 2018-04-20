@@ -16,7 +16,6 @@
 		
 		Request_RecalculatePersonAccountBalanceOnRequestConsumer_36850,
 
-		RTA_ConfigurationValidationNotification_46933,
 		RTA_ApprovePreviousOOA_47230,
 		RTA_ReloadUIOnSystemVersionChanged_48196,
 		RTA_ModifySkillGroup_48191,
