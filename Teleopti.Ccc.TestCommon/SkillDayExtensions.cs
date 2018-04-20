@@ -215,17 +215,14 @@ namespace Teleopti.Ccc.TestCommon
 			return skillDays;
 		}
 
-		public static IList<ISkillDay> SetMinimumAgents(this IList<ISkillDay> skillDays, int numberOfAgents)
+		public static ISkillDay SetMinimumAgents(this ISkillDay skillDay, int numberOfAgents)
 		{
-			foreach (var skillDay in skillDays)
+			foreach (var skillDataPeriod in skillDay.SkillDataPeriodCollection)
 			{
-				foreach (var skillDataPeriod in skillDay.SkillDataPeriodCollection)
-				{
-					skillDataPeriod.MinimumPersons = numberOfAgents;
-				}
+				skillDataPeriod.MinimumPersons = numberOfAgents;
 			}
 
-			return skillDays;
+			return skillDay;
 		}
 	}
 }

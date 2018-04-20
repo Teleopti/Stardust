@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Linq;
+using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
@@ -44,7 +45,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
 			var agent = PersonRepository.Has(new Contract("_"), new ContractSchedule("_"), new PartTimePercentage("_"), new Team {Site = new Site("site")}, schedulePeriod, ruleSet, skill);
-
 			var skillDays = SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
 				1, //minimum staffing
 				2, //DO should end up here
@@ -52,8 +52,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				5,
 				5,
 				25, //DO from beginning
-				5).SetMinimumAgents(1)
+				5)
 			);
+			skillDays.First().SetMinimumAgents(1);
 			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory,
 				new DateOnlyPeriod(firstDay, firstDay.AddDays(7)), new TimePeriod(8, 0, 16, 0));
 			PersonAssignmentRepository.GetSingle(skillDays[5].CurrentDate) 
@@ -61,9 +62,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 
 			Target.Execute(planningPeriod.Id.Value);
 
-			PersonAssignmentRepository.GetSingle(skillDays[5].CurrentDate) //saturday
+			PersonAssignmentRepository.GetSingle(skillDays[5].CurrentDate) //saturday no DO
 				.DayOff().Should().Be.Null();
-			PersonAssignmentRepository.GetSingle(skillDays[1].CurrentDate) //tuesday
+			PersonAssignmentRepository.GetSingle(skillDays[1].CurrentDate) //tuesday it is DO
 				.DayOff().Should().Not.Be.Null();
 		}
 
