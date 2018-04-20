@@ -173,7 +173,7 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 		[UnitOfWork, HttpGet, Route("api/staffing/exportforecastandstaffing")]
 		public virtual IHttpActionResult ExportForecastAndStaffing(Guid skillId, DateTime exportStartDate, DateTime exportEndDate, bool useShrinkage)
 		{
-			return Ok(_exportForecastAndStaffingFile.ExportForecastAndStaffing(skillId, exportStartDate, exportEndDate, useShrinkage));
+			return Ok(_exportForecastAndStaffingFile.ExportForecastAndStaffing(skillId, exportStartDate, exportEndDate.AddDays(1), useShrinkage));
 		}
 		
 		[HttpGet, Route("api/staffing/exportPeriodMessage")]
