@@ -509,11 +509,11 @@ TPBrZIL,Channel Sales|Direct Sales,2017-07-24 10:00,2017-07-24 10:15,10.5";
 		}
 		
 		[Test]
-		public void ShouldVerifyThatStartDateIsInTheFuture()
+		public void ShouldVerifyThatStartDateIsNotThePast()
 		{
 			Now.Is("2017-07-24 10:30");
 			var fileContents = @"source, skillcombination, startdatetime, enddatetime, agents
-								TPBRZIL, Directsales, 2017-07-24 10:29, 2017-07-24 10:45, 6.0";
+								TPBRZIL, Directsales, 2017-07-23 10:29, 2017-07-23 10:45, 6.0";
 
 			SkillRepository.Has("Directsales", new Activity());
 			

@@ -17015,10 +17015,6 @@ Do you want to participate?</value>
     <value>Number of agents cannot be less than 0.</value>
     <comment>Resource field in the text file has been given a negeative value.</comment>
   </data>
-  <data name="ImportBpoStartDateTimeMustBeInTheFuture" xml:space="preserve">
-    <value>The start date of the period must be a date after today.</value>
-    <comment>The peirod given has a start date that already occured.</comment>
-  </data>
   <data name="ImportBpoSkillNotFound" xml:space="preserve">
     <value>Could not match imported skill to existing skill.</value>
     <comment>The skill with specific skill id (given previously by the system) was no longer found in the system</comment>
@@ -17294,6 +17290,10 @@ The application will now exit.</value>
   </data>
   <data name="NoAgentsWithIssuesFound" xml:space="preserve">
     <value>No agents with issues was found</value>
+  </data>
+  <data name="IntervalStartMustBeTodaysDateOrLater" xml:space="preserve">
+    <value>Interval start must be todays date or later.</value>
+    <comment>Error message notify the user that a BPO import row has invalid data</comment>
   </data>
   <data name="OvertimeStaffingCheckMethodSetting" xml:space="preserve">
     <value>Overtime staffing check method:</value>

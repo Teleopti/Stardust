@@ -12116,9 +12116,6 @@ Quieres participar?</value>
   <data name="ImportBpoStartDateTimeMustBeBeforeEndDateTime" xml:space="preserve">
     <value>La fecha de inicio del período debe ser anterior a la fecha de finalización.</value>
   </data>
-  <data name="ImportBpoStartDateTimeMustBeInTheFuture" xml:space="preserve">
-    <value>La fecha de inicio del período debe ser una fecha posterior a hoy.</value>
-  </data>
   <data name="ImportBpoSourceNameTooLong" xml:space="preserve">
     <value>El nombre de la fuente es demasiado largo. Se permite un máximo de 100 caracteres.</value>
   </data>

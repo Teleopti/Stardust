@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -15,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 		private readonly ISkillRepository _skillRepository;
 		private readonly ISkillCombinationResourceRepository _skillCombinationResourceRepository;
 		private readonly IUserTimeZone _userTimeZone;
-		private readonly INow _now;
+		private readonly IUserNow _userNow;
 		private char _tokenSeparator = ',';
 		
 		private const string lineSeparator = "\r\n";
@@ -33,12 +34,12 @@ namespace Teleopti.Ccc.Domain.Staffing
 
 		private List<ISkill> _allSkills;
 
-		public ImportBpoFile(ISkillRepository skillRepository, ISkillCombinationResourceRepository skillCombinationResourceRepository, IUserTimeZone userTimeZone, INow now)
+		public ImportBpoFile(ISkillRepository skillRepository, ISkillCombinationResourceRepository skillCombinationResourceRepository, IUserTimeZone userTimeZone, IUserNow userNow)
 		{
 			_skillRepository = skillRepository;
 			_skillCombinationResourceRepository = skillCombinationResourceRepository;
 			_userTimeZone = userTimeZone;
-			_now = now;
+			_userNow = userNow;
 		}
 
 		public ImportBpoFileResult ImportFile(string fileContents, IFormatProvider importFormatProvider, char skillSeparator = '|')
@@ -161,10 +162,10 @@ namespace Teleopti.Ccc.Domain.Staffing
 				result.ErrorInformation.Add(Resources.ImportBpoResourcesCannotBeLessThanZero);
 			}
 
-			if (resourceBpo.StartDateTime < _now.UtcDateTime())
+			if (resourceBpo.StartDateTime.Date < _userNow.DateTime().Date)
 			{
 				result.Success = false;
-				result.ErrorInformation.Add(Resources.ImportBpoStartDateTimeMustBeInTheFuture);
+				result.ErrorInformation.Add(Resources.IntervalStartMustBeTodaysDateOrLater);
 			}
 
 			var resourceBpoIntervalLength = (int)resourceBpo.EndDateTime.Subtract(resourceBpo.StartDateTime).TotalMinutes;

@@ -15126,9 +15126,6 @@ Vill du registrera dig?</value>
   <data name="ImportBpoStartDateTimeMustBeBeforeEndDateTime" xml:space="preserve">
     <value>Startdatum för perioden måste vara tidigare än slutdatumet.</value>
   </data>
-  <data name="ImportBpoStartDateTimeMustBeInTheFuture" xml:space="preserve">
-    <value>Startdatum för perioden måste vara senare än idag.</value>
-  </data>
   <data name="AgentsAnalyzed" xml:space="preserve">
     <value>Analyserar restriktioner</value>
     <comment>Analyzing restrictions</comment>

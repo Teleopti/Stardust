@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.UserTexts {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -14619,15 +14619,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The start date of the period must be a date after today..
-        /// </summary>
-        public static string ImportBpoStartDateTimeMustBeInTheFuture {
-            get {
-                return ResourceManager.GetString("ImportBpoStartDateTimeMustBeInTheFuture", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The import file cannot be empty..
         /// </summary>
         public static string ImportBpoTheImportFileCannotBeEmpty {
@@ -15390,6 +15381,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string IntervalLOC {
             get {
                 return ResourceManager.GetString("IntervalLOC", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interval start must be todays date or later..
+        /// </summary>
+        public static string IntervalStartMustBeTodaysDateOrLater {
+            get {
+                return ResourceManager.GetString("IntervalStartMustBeTodaysDateOrLater", resourceCulture);
             }
         }
         
