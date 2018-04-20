@@ -32,35 +32,34 @@
 			ctrl.onTimeRangeChange();
 		}
 
-		ctrl.ngModelChange = function () {
-			ctrl.ngModelCtrl.$setViewValue(ctrl.ngModel);
-		};
-
 		ctrl.onTimeRangeChange = function () {
-			if (isSameOrBefore()) {
+			var isValidTime = ctrl.timeRange.startTime && ctrl.timeRange.endTime;
+			if (isValidTime && endEarlierThanStartOnTimeOnly()) {
 				ctrl.isNextDay = false;
-				ctrl.timeRange.endTime = moment(ctrl.timeRange.endTime).add(1, 'days').format('YYYY-MM-DD HH:mm');
+				ctrl.timeRange.startTime = serviceDateFormatHelper.getDateOnly(ctrl.date) + ' ' + serviceDateFormatHelper.getTimeOnly(ctrl.timeRange.startTime);
+				ctrl.timeRange.endTime = getNextDate() + ' ' + serviceDateFormatHelper.getTimeOnly(ctrl.timeRange.endTime);
 			}
+
+			ctrl.timeRange = angular.copy(ctrl.timeRange);
+			ctrl.ngModelCtrl.$setViewValue(ctrl.timeRange);
 		}
 
-		ctrl.disableNextDay = isSameDate;
+		ctrl.disableNextDay = endEarlierThanStartOnTimeOnly;
+		
 
 		ctrl.onIsNextDayChanged = function () {
 			if (ctrl.isNextDay) {
 				ctrl.startDate = getNextDate();
 				ctrl.endDate = getNextDate();
 			} else {
-				ctrl.startDate = ctrl.date;
-				ctrl.endDate = ctrl.date;
+				ctrl.startDate = angular.copy(ctrl.date);
+				ctrl.endDate = angular.copy(ctrl.date);
 			}
 		}
 
-		function isSameOrBefore() {
-			return moment(ctrl.timeRange.endTime).isSameOrBefore(ctrl.timeRange.startTime);
-		}
-
-		function isSameDate() {
-			return !moment(ctrl.timeRange.endTime).isSame(ctrl.timeRange.startTime, 'day');
+		function endEarlierThanStartOnTimeOnly() {
+			return moment('1900-01-01 ' + serviceDateFormatHelper.getTimeOnly(ctrl.timeRange.endTime))
+				.isSameOrBefore('1900-01-01 ' + serviceDateFormatHelper.getTimeOnly(ctrl.timeRange.startTime));
 		}
 
 		function getNextDate() {

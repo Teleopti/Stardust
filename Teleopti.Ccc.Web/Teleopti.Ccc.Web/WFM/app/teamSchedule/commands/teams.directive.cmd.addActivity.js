@@ -11,45 +11,13 @@
 			controllerAs: 'vm',
 			bindToController: true,
 			templateUrl: 'app/teamSchedule/commands/teams.directive.cmd.addActivity.html',
-			require: ['^teamscheduleCommandContainer', 'addActivity'],
-			link: function (scope, elem, attrs, ctrls) {
-				var containerCtrl = ctrls[0],
-					selfCtrl = ctrls[1];
-
-				scope.vm.containerCtrl = containerCtrl;
-
-				scope.vm.selectedDate = containerCtrl.getDate;
-				scope.vm.currentTimezone = containerCtrl.getCurrentTimezone;
-				scope.vm.convertTime = containerCtrl.getServiceTimeInCurrentUserTimezone;
-				scope.vm.trackId = containerCtrl.getTrackId();
-				scope.vm.getActionCb = containerCtrl.getActionCb;
-
-				scope.vm.timeRange = {
-					startTime: selfCtrl.getDefaultActvityStartTime(),
-					endTime: selfCtrl.getDefaultActvityEndTime()
-				};
-
-				scope.$watch(function () {
-					if (!scope.vm.timeRange) return null;
-
-					return {
-						startTime: serviceDateFormatHelper.getDateTime(scope.vm.timeRange.startTime),
-						endTime: serviceDateFormatHelper.getDateTime(scope.vm.timeRange.endTime)
-					};
-				},
-					function (newVal) {
-						if (newVal) {
-							scope.vm.updateInvalidAgents();
-						}
-					},
-					true);
-			}
+			require: ['^teamscheduleCommandContainer', 'addActivity']
 		};
 	}
 
-	addActivityCtrl.$inject = ['ActivityService', 'PersonSelection', 'UtilityService', 'ScheduleHelper', 'teamScheduleNotificationService', 'CommandCheckService', 'belongsToDateDecider', 'serviceDateFormatHelper'];
+	addActivityCtrl.$inject = ['$scope', 'ActivityService', 'PersonSelection', 'UtilityService', 'ScheduleHelper', 'teamScheduleNotificationService', 'CommandCheckService', 'belongsToDateDecider', 'serviceDateFormatHelper'];
 
-	function addActivityCtrl(activityService, personSelectionSvc, utility, scheduleHelper, teamScheduleNotificationService, CommandCheckService, belongsToDateDecider, serviceDateFormatHelper) {
+	function addActivityCtrl($scope, activityService, personSelectionSvc, utility, scheduleHelper, teamScheduleNotificationService, CommandCheckService, belongsToDateDecider, serviceDateFormatHelper) {
 		var vm = this;
 
 		vm.label = 'AddActivity';
@@ -61,6 +29,28 @@
 		vm.checkingCommand = false;
 		vm.selectedAgents = personSelectionSvc.getCheckedPersonInfoList();
 		vm.invalidAgents = [];
+
+		var containerCtrl = $scope.$parent.vm;
+
+		vm.containerCtrl = containerCtrl;
+
+		vm.selectedDate = containerCtrl.getDate;
+		vm.currentTimezone = containerCtrl.getCurrentTimezone;
+		vm.convertTime = containerCtrl.getServiceTimeInCurrentUserTimezone;
+		vm.trackId = containerCtrl.getTrackId();
+		vm.getActionCb = containerCtrl.getActionCb;
+
+		vm.getDefaultActvityStartTime = getDefaultActvityStartTime;
+		vm.getDefaultActvityEndTime = getDefaultActvityEndTime;
+
+		vm.timeRange = {
+			startTime: getDefaultActvityStartTime(),
+			endTime: getDefaultActvityEndTime()
+		};
+
+		vm.updateInvalidAgents = updateInvalidAgents;
+
+		updateInvalidAgents();
 
 		activityService.fetchAvailableActivities().then(function (activities) {
 			vm.availableActivities = activities;
@@ -88,7 +78,7 @@
 			return vm.invalidAgents.length != vm.selectedAgents.length;
 		};
 
-		vm.updateInvalidAgents = function () {
+		function updateInvalidAgents () {
 			var belongsToDates = decidePersonBelongsToDates(vm.selectedAgents, getTimeRangeMoment());
 			vm.invalidAgents = [];
 
@@ -176,7 +166,7 @@
 				});
 		};
 
-		vm.getDefaultActvityStartTime = function () {
+		function getDefaultActvityStartTime () {
 			var curDateMoment = moment(vm.selectedDate());
 			var personIds = vm.selectedAgents.map(function (agent) { return agent.PersonId; });
 			var schedules = vm.containerCtrl.scheduleManagementSvc.schedules();
@@ -203,11 +193,12 @@
 				}
 			}
 
-			return defaultStart;
+			return serviceDateFormatHelper.getDateTime(defaultStart);
 		}
 
-		vm.getDefaultActvityEndTime = function () {
-			return moment(vm.getDefaultActvityStartTime()).add(1, 'hour').toDate();
+		function getDefaultActvityEndTime () {
+			return serviceDateFormatHelper.getDateTime(moment(getDefaultActvityStartTime()).add(1, 'hour'));
 		};
+
 	}
 })();

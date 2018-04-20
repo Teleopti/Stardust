@@ -2074,8 +2074,8 @@
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.weekViewSchedule.js" />
     <Content Include="WFM\app\teamSchedule\utilities\teamSchedule.service.shiftHelpers.js" />
     <Content Include="WFM\app\teamSchedule\html\timeline.html" />
-    <Content Include="WFM\app\teamSchedule\teamSchedule.directive.timeRangePicker.js" />
-    <Content Include="WFM\app\teamSchedule\teamSchedule.directive.timeRangePicker.spec.js" />
+    <Content Include="WFM\app\teamSchedule\teamSchedule.component.timeRangePicker.js" />
+    <Content Include="WFM\app\teamSchedule\teamSchedule.component.timeRangePicker.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamShedule.routes.js" />
     <Content Include="WFM\app\teamSchedule\_modules.js" />
     <Content Include="Content\jalaali-calendar-datepicker\moment-jalaali-ext.js" />

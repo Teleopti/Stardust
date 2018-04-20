@@ -189,6 +189,7 @@
 			}]
 		});
 
+		vm.updateInvalidAgents();
 		result.scope.$apply();
 
 		var applyButton = angular.element(result.container[0].querySelector(".add-activity .form-submit"));
@@ -311,8 +312,8 @@
 		var vm = result.commandControl;
 		vm.selectedAgents = [];
 
-		var defaultStartTime = vm.getDefaultActvityStartTime();
-		var defaultEndTime = vm.getDefaultActvityEndTime();
+		var defaultStartTime = new Date(vm.getDefaultActvityStartTime());
+		var defaultEndTime = new Date(vm.getDefaultActvityEndTime());
 		expect(defaultStartTime.getHours()).toBe(8);
 		expect(defaultStartTime.getMinutes()).toBe(0);
 		expect(defaultEndTime.getHours()).toBe(9);
@@ -328,7 +329,7 @@
 		var result = setUp(date);
 		var vm = result.commandControl;
 
-		var defaultStartTime = vm.getDefaultActvityStartTime();
+		var defaultStartTime = new Date(vm.getDefaultActvityStartTime());
 		expect(defaultStartTime.getHours()).toBe(11);
 	});
 
