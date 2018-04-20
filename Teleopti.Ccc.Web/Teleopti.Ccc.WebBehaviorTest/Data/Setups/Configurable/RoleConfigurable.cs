@@ -20,6 +20,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 	/// Creates a role given by the Name propery and loads the application functions.
 	/// There is no check method for ungiven Name property. 
 	/// </remarks>
+
+	
+	// DONT default permissions to false!
+	// False is the edge case!
 	public class RoleConfigurable : IDataSetup
 	{
 		public string Name { get; set; }

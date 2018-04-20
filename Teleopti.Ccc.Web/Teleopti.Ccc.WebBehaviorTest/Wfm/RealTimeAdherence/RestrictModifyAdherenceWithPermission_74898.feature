@@ -1,7 +1,7 @@
 ﻿@RTA
-@OnlyRunIfEnabled('RTA_ApprovalPermission_74898')
+@OnlyRunIfEnabled('RTA_RestrictModifyAdherenceWithPermission_74898')
 
-Feature: Approve out of adherences if permitted
+Feature: Restrict modify adherence with permission
   As a Manager I need to define who is permitted to approve, and remove approval,
   so that all team leads can approve for their team members, but not for any others
   so that I can remove their approvals where I see fit for all agents.
@@ -25,34 +25,25 @@ Feature: Approve out of adherences if permitted
 	  | Activity    | Phone     |
 	  | Phone state | LoggedOff |
 	  | Adherence   | Out       |
+	And I have a role with
+	  | Field            | Value |
+	  | Modify Adherence | False |
 
-  Scenario: Can't approve as in adherence without permission
-	Given I have a role with
-	  | Field                         | Value       |
-	  | Name                          | Team leader |
-	  | Access to team                | Motorhead   |
-	  | Access to real time adherence | True        |
-	  | Modify Adherence              | False       |
+  Scenario: Approve as in adherence restricted by permission
 	And Mikkey Dee has a 'Phone' shift between '2018-04-19 09:00' and '17:00'
 	And today is '2018-04-19'
 	And at '09:00' 'Mikkey Dee' sets his phone state to 'Ready'
 	And at '16:30' 'Mikkey Dee' sets his phone state to 'LoggedOff'
-	And the time is '2018-04-19 17:15'
+	And the time is '17:15'
 	When I view historical adherence for 'Mikkey Dee' on '2018-04-19'
-	Then I should not see adherence approval action
+	Then I should not be able to approve out of adherences
 
-  Scenario: Can't remove approved adherence without permission
-	Given I have a role with
-	  | Field                         | Value       |
-	  | Name                          | Team leader |
-	  | Access to team                | Motorhead   |
-	  | Access to real time adherence | True        |
-	  | Modify Adherence              | False       |
+  Scenario: Remove approved out of adherences restricted by permission
 	And Mikkey Dee has a 'Phone' shift between '2018-04-19 09:00' and '17:00'
 	And today is '2018-04-19'
 	And at '09:00' 'Mikkey Dee' sets his phone state to 'Ready'
 	And at '16:30' 'Mikkey Dee' sets his phone state to 'LoggedOff'
-	And the time is '2018-04-19 17:15'
-	And Mikkey Dee has approved out of adherence between '16:30:00' and '17:00:00'
+	And the time is '17:15'
+	And Mikkey Dee has an approved period between '16:30' and '17:00'
 	When I view historical adherence for 'Mikkey Dee' on '2018-04-19'
-	Then I should not see adherence removal action
+	Then I should not be able to remove approved out of adherences

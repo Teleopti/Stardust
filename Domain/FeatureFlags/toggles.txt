@@ -46,7 +46,7 @@ RTA_StoreEvents_47721 = true
 RTA_RemoveApprovedOOA_47721 = true
 RTA_ImprovedStateGroupFilter_48724 = true
 RTA_KillFattyIntradayUntilItDies_74939 = RC
-RTA_ApprovalPermission_74898 = false
+RTA_RestrictModifyAdherenceWithPermission_74898 = false
 
 # Dumplings, can any of these be removed? #
 WfmTeamSchedule_ShowStaffingInfo_45206 = true
