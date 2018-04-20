@@ -10,8 +10,7 @@
 				</md-select>
 			</div>
 			
-			<activity-time-range-picker class="activity-time-range" ng-model="vm.timeRange" timezone="vm.currentTimezone()" reference-day="vm.selectedDate"
-										disable-next-day="vm.disableNextDay" is-next-day="vm.isNextDay"></activity-time-range-picker>
+			<teams-time-range-picker class="activity-time-range" ng-model="vm.timeRange" timezone="vm.currentTimezone()" date="vm.selectedDate"></teams-time-range-picker>
 		</form>
 		<div class="text-danger" ng-if="vm.notAllowedNameListString.length > 0">
 			<i class="mdi mdi-alert-octagon"></i>

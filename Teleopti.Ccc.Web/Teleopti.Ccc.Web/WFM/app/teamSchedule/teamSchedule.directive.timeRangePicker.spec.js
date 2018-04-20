@@ -1,5 +1,5 @@
 ﻿'use strict';
-fdescribe('<teams-time-range-picker>', function () {
+describe('<teams-time-range-picker>', function () {
 	var $templateCache, $compile, element, scope;
 
 	beforeEach(module('wfm.templates'));
@@ -12,10 +12,11 @@ fdescribe('<teams-time-range-picker>', function () {
 		moment.locale('sv');
 	}));
 
-	function setUp(date) {
+	function setUp(date, timeRange) {
 		scope.date = date || "2016-04-08";
-		scope.timeRange = {
-			startTime: scope.date +' 08:30',
+
+		scope.timeRange = timeRange || {
+			startTime: scope.date + ' 08:30',
 			endTime: scope.date + ' 09:30',
 		};
 		scope.timezone = 'Europe/Berlin';
@@ -72,7 +73,7 @@ fdescribe('<teams-time-range-picker>', function () {
 		expect(scope.timeRange.endTime).toEqual("2016-04-09 10:30");
 	});
 
-	fit('should set date to next day when next switch is true and start is smaller than end', function () {
+	it('should set date to next day when next switch is true and start is smaller than end', function () {
 		var element = setUp();
 		var ctrl = element.isolateScope().$ctrl;
 	
@@ -94,8 +95,12 @@ fdescribe('<teams-time-range-picker>', function () {
 		var isolateScope = element.isolateScope();
 
 		isolateScope.isNextDay = false;
-		isolateScope.startTime = moment({ hour: 10, minute: 30 }).toDate();
-		isolateScope.endTime = moment({ hour: 11, minute: 30 }).toDate();
+
+		var hoursEls = element[0].querySelectorAll('teams-time-picker .hours input');
+		hoursEls[0].value = 10;
+		angular.element(hoursEls[0]).triggerHandler('change');
+		hoursEls[1].value = 11;
+		angular.element(hoursEls[1]).triggerHandler('change');
 		scope.$apply();
 
 		expect(scope.timeRange.startTime).toEqual("2016-04-08 10:30");
@@ -103,5 +108,49 @@ fdescribe('<teams-time-range-picker>', function () {
 
 	});
 
+	it('should init correct status when start-time is greater than end-time', function () {
+		var timeRange = {
+			startTime: "2018-04-20 23:00",
+			endTime: "2018-04-21 01:00"
+		};
+		var element = setUp("2018-04-20", timeRange);
+
+		var isolateScope = element.isolateScope();
+		var hoursEls = element[0].querySelectorAll('teams-time-picker .hours input');
+		var minutesEls = element[0].querySelectorAll('teams-time-picker .minutes input');
+
+		expect(hoursEls[0].value).toBe("11");
+		expect(hoursEls[1].value).toBe("01");
+
+		expect(minutesEls[0].value).toBe("00");
+		expect(minutesEls[1].value).toBe("00");
+
+		expect(!!element[0].querySelectorAll('md-switch.md-checked').length).toBeFalsy();
+		expect(!!element[0].querySelector('md-switch').disabled).toBeTruthy();
+
+	});
+
+	it('should init correct status when start time and end time are next day', function () {
+		var timeRange = {
+			startTime: "2018-04-21 08:30",
+			endTime: "2018-04-21 09:15"
+		};
+		var element = setUp("2018-04-20", timeRange);
+
+		var isolateScope = element.isolateScope();
+		var hoursEls = element[0].querySelectorAll('teams-time-picker .hours input');
+		var minutesEls = element[0].querySelectorAll('teams-time-picker .minutes input');
+
+		expect(hoursEls[0].value).toBe("08");
+		expect(hoursEls[1].value).toBe("09");
+
+		expect(minutesEls[0].value).toBe("30");
+		expect(minutesEls[1].value).toBe("15");
+
+		expect(!!element[0].querySelectorAll('md-switch.md-checked').length).toBeTruthy();
+		expect(!!element[0].querySelector('md-switch').disabled).toBeFalsy();
+
+	});
+	
 });
 
