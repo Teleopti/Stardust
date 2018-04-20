@@ -83,7 +83,7 @@ namespace Teleopti.Wfm.Test
 			req.IsApproved.Should().Be.True();
 		}
 
-		[Test, Ignore("to investigate")]
+		[Test]
 		public void ShouldBeDeniedIfUnderstaffedSingleInterval()
 		{
 			var now = new DateTime(2017, 04, 06, 8, 0, 0).Utc();
@@ -100,6 +100,7 @@ namespace Teleopti.Wfm.Test
 			var personRequest = new PersonRequest(person, absenceRequest);
 			PersonRequestRepository.Add(personRequest);
 			uow.PersistAll();
+			uow.Clear();
 			AbsenceRequestProcessor.Process(personRequest);
 			var req = PersonRequestRepository.Load(personRequest.Id.GetValueOrDefault());
 			req.IsApproved.Should().Be.False();
@@ -129,7 +130,7 @@ namespace Teleopti.Wfm.Test
 			req.DenyReason.Should().StartWith(Resources.ResourceManager.GetString("InsufficientStaffingHours", person.PermissionInformation.Culture()).Substring(0, 10));
 		}
 
-		[Test, Ignore("to investigate")]
+		[Test]
 		public void ShouldBeDeniedIfUnderstaffedOnFirstHourAndOverstaffedOnSecond()
 		{
 			var now = new DateTime(2017, 04, 06, 8, 0, 0).Utc();
@@ -146,6 +147,7 @@ namespace Teleopti.Wfm.Test
 			var personRequest = new PersonRequest(person, absenceRequest);
 			PersonRequestRepository.Add(personRequest);
 			uow.PersistAll();
+			uow.Clear();
 			AbsenceRequestProcessor.Process(personRequest);
 			var req = PersonRequestRepository.Load(personRequest.Id.GetValueOrDefault());
 			req.IsApproved.Should().Be.False();

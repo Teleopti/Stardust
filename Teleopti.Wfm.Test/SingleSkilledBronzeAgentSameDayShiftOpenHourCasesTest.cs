@@ -103,7 +103,7 @@ namespace Teleopti.Wfm.Test
 			req.IsApproved.Should().Be.True();
 		}
 
-		[Test, Ignore("to investigate")]
+		[Test]
 		public void ShouldDenyAbsenceIfAppliedBeforeShiftAndEndsWitinShiftIsUnderstaffed()
 		{
 			var now = new DateTime(2017, 04, 06, 0, 0, 0, DateTimeKind.Utc);
@@ -121,6 +121,7 @@ namespace Teleopti.Wfm.Test
 			var personRequest = new PersonRequest(person, absenceRequest);
 			PersonRequestRepository.Add(personRequest);
 			uow.PersistAll();
+			uow.Clear();
 			AbsenceRequestProcessor.Process(personRequest);
 			var req = PersonRequestRepository.Load(personRequest.Id.GetValueOrDefault());
 			req.IsApproved.Should().Be.False();
