@@ -114,7 +114,6 @@ ResourcePlanner_SpeedUpEvents_75415 = RC #restructure of events - dont remove to
 
 # Bugs&Roses #
 ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don't turn on in production
-ResourcePlanner_BreakPreferenceStartTimeByMax_46002 = RC
 ResourcePlanner_DayOffOptimizationIslands_47208 = true
 ResourcePlanner_PrepareToRemoveExportSchedule_46576 = true
 ResourcePlanner_Deadlock_48170 = true
