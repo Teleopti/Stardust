@@ -9,7 +9,7 @@
         <div class="con-flex" style="flex: 2 1 0">
             <div class="panel con-flex material-depth-1">
                 <div class="con-row layout-align-center-center">
-                    <the-skill-picker class="con-flex" skills="vm.skills" skill-groups="vm.skillAreas" skill-picker-open="vm.skillPickerOpen" skill-group-picker-open="vm.skillGroupPickerOpen" on-skill-selected="vm.clickedSkillInPicker(skill)" on-skill-group-selected="vm.clickedSkillGroupInPicker(skillGroup)" preselected-skill="vm.moduleState.selectedSkill" preselected-skill-group="vm.moduleState.selectedSkillGroup" on-clear-skill-selection="vm.clearSkillSelection" on-clear-skill-group-selection="vm.clearSkillGroupSelection">
+                    <the-skill-picker class="con-flex" skills="vm.skills" skill-groups="vm.skillGroups" skill-picker-open="vm.skillPickerOpen" skill-group-picker-open="vm.skillGroupPickerOpen" on-skill-selected="vm.clickedSkillInPicker(skill)" on-skill-group-selected="vm.clickedSkillGroupInPicker(skillGroup)" preselected-skill="vm.moduleState.selectedSkill" preselected-skill-group="vm.moduleState.selectedSkillGroup" on-clear-skill-selection="vm.clearSkillSelection" on-clear-skill-group-selection="vm.clearSkillGroupSelection">
                     </the-skill-picker>
                     <div class="line-right last-time cursor-pointer" ng-show="chosenOffset.value === 0">
                         <span ng-show="latestActualInterval && latestActualInterval !== 'undefined - undefined'">
@@ -19,7 +19,7 @@
                         <i class="mdi mdi-clock"></i>
                         <md-tooltip>{{'LatestActualInterval'|translate}}</md-tooltip>
                     </div>
-                    <div ng-if="vm.HasPermissionToModifySkillArea">
+                    <div ng-if="vm.HasPermissionToModifySkillGroup">
                         <skill-group-manager-button on-click="vm.openSkillGroupManager()">
                     </skill-group-manager-button></div>
                     <div style="border-left: 1px solid #e0e0e0; margin-left: 10px; height: 100%;">&nbsp;</div>
@@ -40,7 +40,7 @@
                             ,
                             <b>{{ vm.moduleState.selectedSkillGroup.Name }}</b>:
                             <span ng-if="vm.moduleState.selectedSubSkill !== null">{{vm.moduleState.selectedSubSkill.Name}}</span>
-                            <span ng-if="vm.skillAreaMessage">({{vm.skillAreaMessage}})</span>
+                            <span ng-if="vm.skillGroupMessage">({{vm.skillGroupMessage}})</span>
                         </span>
                     </h2>
                     <div class="animate-show con-row" ng-show="vm.moduleState.showIncluded">

@@ -173,11 +173,11 @@
 			);
 		};
 
-		service.pollSkillAreaDataByDayOffset = function(selectedItem, toggles, dayOffset, gotData) {
+		service.pollSkillGroupDataByDayOffset = function(selectedItem, toggles, dayOffset, gotData) {
 			trafficData.waitingForData = true;
 			cancelPendingRequest();
 
-			request = intradayService.getSkillAreaMonitorStatisticsByDayOffset.query({
+			request = intradayService.getSkillGroupMonitorStatisticsByDayOffset.query({
 				id: selectedItem.Id,
 				dayOffset: dayOffset
 			});

@@ -7,7 +7,7 @@ var defaultToggles = {
 		}
 	}
 };
-describe('IntradayAreaController', function() {
+fdescribe('IntradayAreaController', function() {
 	var $httpBackend,
 		$controller,
 		$filter,
@@ -18,11 +18,11 @@ describe('IntradayAreaController', function() {
 		currentUserInfo = new FakeCurrentUserInfo();
 
 	var vm;
-	var skillAreas = [];
+	var skillGroups = [];
 	var skills = [];
 	var skillRetError;
 	var skillsWithFirstUnsupported = [];
-	var skillAreaInfo;
+	var skillGroupInfo;
 	var trafficAndPerformanceData;
 	var trafficAndPerformanceDataTomorrow;
 	var performanceData;
@@ -79,7 +79,7 @@ describe('IntradayAreaController', function() {
 			{ Id: '22b0ac3d-06b5-42d7-bb0a-d7b2fd272196', Name: 'Supported skill1', DoDisplayData: true }
 		];
 
-		skillAreas = [
+		skillGroups = [
 			{ Id: 'fa9b5393-ef48-40d1-b7cc-09e797589f81', Name: 'my skill area 1', Skills: skills },
 			{ Id: '836cebb6-cee8-41a1-bb62-729f4b3a63f4', Name: 'my skill area 2', Skills: skills },
 			{
@@ -90,7 +90,7 @@ describe('IntradayAreaController', function() {
 			}
 		];
 
-		skillAreaInfo = { HasPermissionToModifySkillArea: true, SkillAreas: skillAreas };
+		skillGroupInfo = { HasPermissionToModifySkillArea: true, SkillAreas: skillGroups };
 
 		trafficAndPerformanceData = {
 			LatestActualIntervalEnd: '0001-01-01T16:00:00',
@@ -654,7 +654,7 @@ describe('IntradayAreaController', function() {
 	});
 
 	function initBackend() {
-		skillAreas.forEach(function(item) {
+		skillGroups.forEach(function(item) {
 			$httpBackend.whenGET('../api/intraday/monitorskillperformance/returnmockerror/0').respond(function() {
 				return [403, performanceData];
 			});
@@ -737,7 +737,7 @@ describe('IntradayAreaController', function() {
 			$httpBackend.whenGET('../api/intraday/monitorskillareastatistics/' + item.Id).respond(function() {
 				return [200, trafficAndPerformanceData];
 			});
-			$httpBackend.whenDELETE('../api/skillgroup/delete/' + item.Id).respond(200, {});
+			$httpBackend.whenDELETE('../api/skillarea/delete/' + item.Id).respond(200, {});
 		});
 		skills.forEach(function(item) {
 			$httpBackend.whenGET('../api/intraday/monitorskillstatistics/' + item.Id + '/0').respond(function() {
@@ -798,8 +798,8 @@ describe('IntradayAreaController', function() {
 			$interval = _$interval_;
 			NoticeService = _NoticeService_;
 
-			$httpBackend.whenGET('../api/skillgroup/skillgroups').respond(function() {
-				return [200, skillAreaInfo];
+			$httpBackend.whenGET('../api/skillarea/skillareas').respond(function() {
+				return [200, skillGroupInfo];
 			});
 
 			$httpBackend.whenGET('../api/intraday/skills').respond(function() {
@@ -820,10 +820,10 @@ describe('IntradayAreaController', function() {
 		};
 	}
 
-	var createController = function(isNewlyCreatedSkillArea, toggleObj) {
+	var createController = function(isNewlyCreatedSkillGroup, toggleObj) {
 		vm = $controller('IntradayAreaController', { $scope: scope, $translate: $translate });
 		vm.toggles = Object.assign(defaultToggles, toggleObj);
-		vm.onStateChanged(undefined, { name: 'intraday.area' }, { isNewSkillArea: isNewlyCreatedSkillArea });
+		vm.onStateChanged(undefined, { name: 'intraday.area' }, { isNewSkillArea: isNewlyCreatedSkillGroup });
 		scope.$digest();
 		$httpBackend.flush();
 	};
@@ -840,10 +840,10 @@ describe('IntradayAreaController', function() {
 	it('should display list of skill areas', function() {
 		createController(false);
 
-		expect(vm.skillAreas[0].Id).toEqual('fa9b5393-ef48-40d1-b7cc-09e797589f81');
-		expect(vm.skillAreas[0].Name).toEqual('my skill area 1');
-		expect(vm.skillAreas[0].Skills[0].Id).toEqual('5f15b334-22d1-4bc1-8e41-72359805d30f');
-		expect(vm.skillAreas[0].Skills[0].Name).toEqual('skill x');
+		expect(vm.skillGroups[0].Id).toEqual('fa9b5393-ef48-40d1-b7cc-09e797589f81');
+		expect(vm.skillGroups[0].Name).toEqual('my skill area 1');
+		expect(vm.skillGroups[0].Skills[0].Id).toEqual('5f15b334-22d1-4bc1-8e41-72359805d30f');
+		expect(vm.skillGroups[0].Skills[0].Name).toEqual('skill x');
 	});
 
 	it('should display list of skills', function() {
@@ -856,15 +856,15 @@ describe('IntradayAreaController', function() {
 	it('should monitor first skill area if there are any', function() {
 		createController(false);
 
-		vm.clickedSkillGroupInPicker(vm.skillAreas[0]);
+		vm.clickedSkillGroupInPicker(vm.skillGroups[0]);
 
-		expect(vm.moduleState.selectedSkillGroup).toEqual(vm.skillAreas[0]);
+		expect(vm.moduleState.selectedSkillGroup).toEqual(vm.skillGroups[0]);
 	});
 
 	it('should have permission to modify skill area', function() {
 		createController(false);
 
-		expect(vm.HasPermissionToModifySkillArea).toEqual(true);
+		expect(vm.HasPermissionToModifySkillGroup).toEqual(true);
 	});
 
 	it('should poll data for skill when selecting that skill', function() {
@@ -879,8 +879,8 @@ describe('IntradayAreaController', function() {
 	it('should poll data for skill area when selecting that area', function() {
 		createController(false);
 		vm.moduleState.activeTab = 0;
-		vm.clickedSkillGroupInPicker(vm.skillAreas[0]);
-		vm.skillAreas[0];
+		vm.clickedSkillGroupInPicker(vm.skillGroups[0]);
+		vm.skillGroups[0];
 		$httpBackend.flush();
 
 		expect(vm.viewObj.hasMonitorData).toEqual(true);
@@ -931,7 +931,7 @@ describe('IntradayAreaController', function() {
 		createController(false);
 		vm.moduleState.activeTab = 0;
 
-		vm.clickedSkillGroupInPicker(vm.skillAreas[0]);
+		vm.clickedSkillGroupInPicker(vm.skillGroups[0]);
 		$httpBackend.flush();
 
 		expect(vm.viewObj.forecastedCallsObj.series.length).toBeGreaterThan(5);
@@ -941,7 +941,7 @@ describe('IntradayAreaController', function() {
 		createController(false);
 		vm.moduleState.activeTab = 1;
 
-		vm.clickedSkillGroupInPicker(vm.skillAreas[0]);
+		vm.clickedSkillGroupInPicker(vm.skillGroups[0]);
 		$httpBackend.flush();
 
 		expect(vm.viewObj.serviceLevelObj.series.length).toBeGreaterThan(5);
@@ -951,7 +951,7 @@ describe('IntradayAreaController', function() {
 		createController(false);
 		vm.moduleState.activeTab = 2;
 
-		vm.clickedSkillGroupInPicker(vm.skillAreas[0]);
+		vm.clickedSkillGroupInPicker(vm.skillGroups[0]);
 		$httpBackend.flush();
 
 		expect(vm.viewObj.forecastedStaffing.series.length).toBeGreaterThan(3);
@@ -960,7 +960,7 @@ describe('IntradayAreaController', function() {
 	it('should show optimal staffing', function() {
 		vm.moduleState.activeTab = 2;
 
-		vm.clickedSkillGroupInPicker(vm.skillAreas[0]);
+		vm.clickedSkillGroupInPicker(vm.skillGroups[0]);
 		// $httpBackend.flush();
 
 		expect(vm.viewObj.actualStaffingSeries.length).toBeGreaterThan(3);
@@ -969,7 +969,7 @@ describe('IntradayAreaController', function() {
 	it('should show scheduled staffing', function() {
 		vm.moduleState.activeTab = 2;
 
-		vm.clickedSkillGroupInPicker(vm.skillAreas[0]);
+		vm.clickedSkillGroupInPicker(vm.skillGroups[0]);
 		// $httpBackend.flush();
 
 		expect(vm.viewObj.scheduledStaffing.length).toBeGreaterThan(3);
@@ -979,7 +979,7 @@ describe('IntradayAreaController', function() {
 		createController(false);
 		vm.moduleState.activeTab = 1;
 
-		vm.clickedSkillGroupInPicker(vm.skillAreas[0]);
+		vm.clickedSkillGroupInPicker(vm.skillGroups[0]);
 		$httpBackend.flush();
 
 		expect(vm.viewObj.estimatedServiceLevelObj.series.length).toBeGreaterThan(0);
@@ -987,7 +987,7 @@ describe('IntradayAreaController', function() {
 	});
 
 	it('should get traffic data corresponding to chosenOffset', function() {
-		skillAreaInfo.SkillAreas = [];
+		skillGroupInfo.SkillGroups = [];
 		isUnsupportedSkillTest = false;
 
 		createController(false);
@@ -1002,7 +1002,7 @@ describe('IntradayAreaController', function() {
 	});
 
 	it('should get performance data corresponding to chosenOffset', function() {
-		skillAreaInfo.SkillAreas = [];
+		skillGroupInfo.SkillGroups = [];
 		isUnsupportedSkillTest = false;
 
 		createController(false);
@@ -1016,7 +1016,7 @@ describe('IntradayAreaController', function() {
 	});
 
 	it('should get staffing data corresponding to chosenOffset', function() {
-		skillAreaInfo.SkillAreas = [];
+		skillGroupInfo.SkillGroups = [];
 		isUnsupportedSkillTest = false;
 
 		createController(false);
@@ -1029,10 +1029,10 @@ describe('IntradayAreaController', function() {
 		expect(vm.viewObj.forecastedStaffing.series[1]).toEqual(3);
 	});
 
-	it('should get traffic data for skillarea corresponding to chosenOffset', function() {
+	it('should get traffic data for skillgroup corresponding to chosenOffset', function() {
 		createController(false);
 		vm.moduleState.activeTab = 0;
-		vm.clickedSkillGroupInPicker(skillAreas[0]);
+		vm.clickedSkillGroupInPicker(skillGroups[0]);
 		vm.changeChosenOffset(1);
 		$httpBackend.flush();
 
@@ -1040,10 +1040,10 @@ describe('IntradayAreaController', function() {
 		expect(vm.viewObj.summary.summaryCalculatedCalls).toEqual('1,337.0');
 	});
 
-	it('should get staffing data for skillarea corresponding to chosenOffset', function() {
+	it('should get staffing data for skillgroup corresponding to chosenOffset', function() {
 		createController(false);
 		vm.moduleState.activeTab = 2;
-		vm.clickedSkillGroupInPicker(skillAreas[0]);
+		vm.clickedSkillGroupInPicker(skillGroups[0]);
 		vm.changeChosenOffset(1);
 		$httpBackend.flush();
 
@@ -1052,10 +1052,10 @@ describe('IntradayAreaController', function() {
 		jasmine.clock().uninstall();
 	});
 
-	it('should get traffic data for skillarea corresponding to chosenOffset', function() {
+	it('should get traffic data for skillgroup corresponding to chosenOffset', function() {
 		createController(false);
 		vm.moduleState.activeTab = 0;
-		vm.clickedSkillGroupInPicker(skillAreas[0]);
+		vm.clickedSkillGroupInPicker(skillGroups[0]);
 
 		var today = moment('0001-01-01T15:45:00').toDate();
 		jasmine.clock().mockDate(today);
@@ -1067,10 +1067,10 @@ describe('IntradayAreaController', function() {
 		jasmine.clock().uninstall();
 	});
 
-	it('should get performance data for skillarea corresponding to chosenOffset', function() {
+	it('should get performance data for skillgroup corresponding to chosenOffset', function() {
 		createController(false);
 		vm.moduleState.activeTab = 1;
-		vm.clickedSkillGroupInPicker(skillAreas[0]);
+		vm.clickedSkillGroupInPicker(skillGroups[0]);
 
 		var today = moment('0001-01-01T15:45:00').toDate();
 		jasmine.clock().mockDate(today);
@@ -1082,10 +1082,10 @@ describe('IntradayAreaController', function() {
 		jasmine.clock().uninstall();
 	});
 
-	it('should get staffing data for skillarea corresponding to chosenOffset', function() {
+	it('should get staffing data for skillgroup corresponding to chosenOffset', function() {
 		createController(false);
 		vm.moduleState.activeTab = 2;
-		vm.clickedSkillGroupInPicker(skillAreas[0]);
+		vm.clickedSkillGroupInPicker(skillGroups[0]);
 
 		var today = moment('0001-01-01T15:45:00').toDate();
 		jasmine.clock().mockDate(today);

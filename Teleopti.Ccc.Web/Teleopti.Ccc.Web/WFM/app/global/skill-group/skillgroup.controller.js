@@ -24,7 +24,7 @@
 	) {
 		var vm = this;
 		vm.skills = [];
-		vm.skillAreaName = '';
+		vm.skillGroupName = '';
 		vm.getSkillIcon = skillIconService.get;
 
 		vm.exitConfigMode = function() {
@@ -47,7 +47,7 @@
 				return;
 			}
 			SkillGroupSvc.createSkillGroup({
-				Name: vm.skillAreaName,
+				Name: vm.skillGroupName,
 				Skills: selectedSkills.map(function(item) {
 					return item.Id;
 				})
@@ -58,7 +58,7 @@
 		};
 
 		var notifySkillAreaCreation = function() {
-			NoticeService.success($translate.instant('Created') + ' ' + vm.skillAreaName, 5000, false);
+			NoticeService.success($translate.instant('Created') + ' ' + vm.skillGroupName, 5000, false);
 		};
 
 		SkillGroupSvc.getSkills().then(function(response) {

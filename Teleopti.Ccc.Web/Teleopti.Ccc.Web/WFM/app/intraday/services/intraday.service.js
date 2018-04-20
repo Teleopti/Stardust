@@ -16,7 +16,7 @@
 			}
 		);
 
-		this.getSkillAreaMonitorStatistics = $resource(
+		this.getSkillGroupMonitorStatistics = $resource(
 			'../api/intraday/monitorskillareastatistics/:id',
 			{ id: '@id' },
 			{
@@ -58,7 +58,7 @@
 			}
 		);
 
-		this.getSkillAreaMonitorStatisticsByDayOffset = $resource(
+		this.getSkillGroupMonitorStatisticsByDayOffset = $resource(
 			'../api/intraday/monitorskillareastatistics/:id/:dayOffset',
 			{
 				id: '@id',
@@ -74,7 +74,7 @@
 			}
 		);
 
-		this.getSkillAreaMonitorPerformance = $resource(
+		this.getSkillGroupMonitorPerformance = $resource(
 			'../api/intraday/monitorskillareaperformance/:id',
 			{ id: '@id' },
 			{
@@ -116,7 +116,7 @@
 			}
 		);
 
-		this.getSkillAreaMonitorPerformanceByDayOffset = $resource(
+		this.getSkillGroupMonitorPerformanceByDayOffset = $resource(
 			'../api/intraday/monitorskillareaperformance/:id/:dayOffset',
 			{
 				id: '@id',
@@ -132,7 +132,7 @@
 			}
 		);
 
-		this.getSkillAreaStaffingData = $resource(
+		this.getSkillGroupStaffingData = $resource(
 			'../api/intraday/monitorskillareastaffing/:id',
 			{ id: '@id' },
 			{
@@ -174,7 +174,7 @@
 			}
 		);
 
-		this.getSkillAreaStaffingDataByDayOffset = $resource(
+		this.getSkillGroupStaffingDataByDayOffset = $resource(
 			'../api/intraday/monitorskillareastaffing/:id/:dayOffset',
 			{
 				id: '@id',
@@ -190,7 +190,7 @@
 			}
 		);
 
-		this.getLatestStatisticsTimeForSkillArea = $resource(
+		this.getLatestStatisticsTimeForSkillGroup = $resource(
 			'../api/intraday/lateststatisticstimeforskillarea/:id',
 			{ id: '@id' },
 			{
@@ -216,7 +216,7 @@
 			}
 		);
 
-		this.getIntradayExportForSkillArea = function(data, successCb, errorCb) {
+		this.getIntradayExportForSkillGroup = function(data, successCb, errorCb) {
 			$http({
 				url: '../api/intraday/exportskillareadatatoexcel',
 				method: 'POST',

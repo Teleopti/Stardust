@@ -24,7 +24,7 @@
 						function(error) {}
 					);
 			} else {
-				intradayService.getLatestStatisticsTimeForSkillArea
+				intradayService.getLatestStatisticsTimeForSkillGroup
 					.query({
 						id: selectedItem.Id
 					})

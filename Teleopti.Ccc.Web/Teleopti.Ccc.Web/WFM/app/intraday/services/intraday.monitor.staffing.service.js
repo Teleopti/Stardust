@@ -123,7 +123,7 @@
 			);
 		};
 
-		service.pollSkillAreaDataByDayOffset = function(selectedItem, toggles, dayOffset, gotData) {
+		service.pollSkillGroupDataByDayOffset = function(selectedItem, toggles, dayOffset, gotData) {
 			staffingData.waitingForData = true;
 			service.checkMixedArea(selectedItem);
 
@@ -133,7 +133,7 @@
 
 			cancelPendingRequest();
 
-			request = intradayService.getSkillAreaStaffingDataByDayOffset.query({
+			request = intradayService.getSkillGroupStaffingDataByDayOffset.query({
 				id: selectedItem.Id,
 				dayOffset: dayOffset
 			});

@@ -63,7 +63,7 @@
 		vm.allSkills = [];
 		vm.selectedSkills = [];
 		vm.selectedGroupSkills = [];
-		vm.skillAreaName = '';
+		vm.skillGroupName = '';
 		vm.getSkillIcon = skillIconService.get;
 		vm.canSave = false;
 		vm.newGroupName = '';
@@ -254,7 +254,7 @@
 
 			SkillGroupSvc.createSkillGroup
 				.query({
-					Name: vm.skillAreaName,
+					Name: vm.skillGroupName,
 					Skills: selectedSkillIds
 				})
 				.$promise.then(function(result) {
@@ -330,7 +330,7 @@
 		}
 
 		function notifySkillGroupCreation() {
-			NoticeService.success($translate.instant('Created') + ' ' + vm.skillAreaName, 5000, false);
+			NoticeService.success($translate.instant('Created') + ' ' + vm.skillGroupName, 5000, false);
 		}
 
 		function unselectAllSkills() {

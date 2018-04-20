@@ -25,7 +25,7 @@
 	) {
 		var vm = this;
 		vm.skills = [];
-		vm.skillAreaName = '';
+		vm.skillGroupName = '';
 		vm.getSkillIcon = skillIconService.get;
 
 		vm.exitConfigMode = function() {
@@ -40,7 +40,7 @@
 			return selectedSkillIds.length > 0;
 		};
 
-		vm.saveSkillArea = function(form) {
+		vm.saveSkillGroup = function(form) {
 			if (form.$invalid) {
 				return;
 			}
@@ -57,11 +57,11 @@
 
 			SkillGroupSvc.createSkillGroup
 				.query({
-					Name: vm.skillAreaName,
+					Name: vm.skillGroupName,
 					Skills: selectedSkillIds
 				})
 				.$promise.then(function() {
-					notifySkillAreaCreation();
+					notifySkillGroupCreation();
 					$state.go('intraday', { isNewSkillArea: true });
 				});
 		};
@@ -70,8 +70,8 @@
 			vm.toggles = toggleSvc;
 		});
 
-		var notifySkillAreaCreation = function() {
-			NoticeService.success($translate.instant('Created') + ' ' + vm.skillAreaName, 5000, false);
+		var notifySkillGroupCreation = function() {
+			NoticeService.success($translate.instant('Created') + ' ' + vm.skillGroupName, 5000, false);
 		};
 
 		SkillGroupSvc.getSkills().then(function(skills) {
