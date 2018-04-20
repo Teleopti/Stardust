@@ -78,9 +78,5 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			stateHolder.Schedules[agent].ScheduledDay(date).PersonAssignment().Period.StartDateTime.Hour
 				.Should().Be.EqualTo(8);
 		}
-
-		public IntradayCombinationDesktopTest(BreakPreferenceStartTimeByMax resourcePlannerBreakPreferenceStartTimeByMax46002) : base(resourcePlannerBreakPreferenceStartTimeByMax46002)
-		{
-		}
 	}
 }

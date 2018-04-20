@@ -403,10 +403,5 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 					new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
 			});
 		}
-		
-
-		public IntradayOptimizationTeamBlockDesktopTest(BreakPreferenceStartTimeByMax resourcePlannerBreakPreferenceStartTimeByMax46002) : base(resourcePlannerBreakPreferenceStartTimeByMax46002)
-		{
-		}
 	}
 }

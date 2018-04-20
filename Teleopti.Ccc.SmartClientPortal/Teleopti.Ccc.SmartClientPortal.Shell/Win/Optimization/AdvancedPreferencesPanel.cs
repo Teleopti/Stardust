@@ -1,6 +1,4 @@
-﻿using System;
-using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
@@ -8,7 +6,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
     public partial class AdvancedPreferencesPanel : BaseUserControl, IDataExchange
     {
         public IAdvancedPreferences Preferences { get; private set; }
-		private bool _showBreakPreferenceStartTimeByMax46002;
 
         public AdvancedPreferencesPanel()
         {
@@ -16,16 +13,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
             if (!DesignMode) SetTexts();
         }
 
-		[RemoveMeWithToggle("showBreakPreferenceStartTimeByMax46002",Toggles.ResourcePlanner_BreakPreferenceStartTimeByMax_46002)]
-        public void Initialize(IAdvancedPreferences preferences, bool showBreakPreferenceStartTimeByMax46002)
-		{
-			_showBreakPreferenceStartTimeByMax46002 = showBreakPreferenceStartTimeByMax46002;
+        public void Initialize(IAdvancedPreferences preferences)
+        {
             Preferences = preferences;
             ExchangeData(ExchangeDataOption.DataSourceToControls);
             setInitialControlStatus();
-			checkBoxAdvBreakPreferenceStartTimeByMax.Visible = showBreakPreferenceStartTimeByMax46002;
-			numericUpDownBreakByHours.Visible = showBreakPreferenceStartTimeByMax46002;
-			labelBreakByMaxHours.Visible = showBreakPreferenceStartTimeByMax46002;	
         }
 
         #region IDataExchange Members
@@ -70,12 +62,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
 					Preferences.UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.DoNotConsiderMaxSeats;
         	   Preferences.UseAverageShiftLengths = checkBoxUseAverageShiftLengths.Checked;
             Preferences.RefreshScreenInterval = (int)numericUpDownRefreshRate.Value;
-			
-			if(checkBoxAdvBreakPreferenceStartTimeByMax.Checked && _showBreakPreferenceStartTimeByMax46002)
-				Preferences.BreakPreferenceStartTimeByMax = TimeSpan.FromHours((int)numericUpDownBreakByHours.Value);
-			else
-				Preferences.BreakPreferenceStartTimeByMax = TimeSpan.Zero;
-			
         }
 
         private void setDataInControls()
@@ -116,11 +102,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
 	        checkBoxUseAverageShiftLengths.Checked = Preferences.UseAverageShiftLengths;
 
 	        numericUpDownRefreshRate.Value = Preferences.RefreshScreenInterval;
-
-			checkBoxAdvBreakPreferenceStartTimeByMax.Checked = Preferences.BreakPreferenceStartTimeByMax != TimeSpan.Zero;
-			numericUpDownBreakByHours.Enabled = checkBoxAdvBreakPreferenceStartTimeByMax.Checked;
-			numericUpDownBreakByHours.Value = Preferences.BreakPreferenceStartTimeByMax == TimeSpan.Zero ? 1 : Preferences.BreakPreferenceStartTimeByMax.Hours;
-		}
+        }
 
         private void checkBoxMaximumSeats_CheckedChanged(object sender, System.EventArgs e)
         {
@@ -135,12 +117,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
         private void setInitialControlStatus()
         {
             setCheckBoxDoNotBreakMaximumSeatsStatus();
-		}
-
-		private void checkBoxAdvBreakPreferenceStartTimeByMax_CheckStateChanged(object sender, System.EventArgs e)
-		{
-			numericUpDownBreakByHours.Enabled = checkBoxAdvBreakPreferenceStartTimeByMax.Checked;
-			if (!checkBoxAdvBreakPreferenceStartTimeByMax.Checked) numericUpDownBreakByHours.Value = 1;
-		}
-	}
+        }
+    }
 }

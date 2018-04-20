@@ -55,9 +55,5 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			stateHolder.Schedules[agent].ScheduledDay(date).PersonAssignment().ShiftCategory
 				.Should().Be.EqualTo(shiftCategoryAm);
 		}
-
-		public IntradayOptimizationTeamBlockForSingleAgentTeamAndSingleDayTest(BreakPreferenceStartTimeByMax resourcePlannerBreakPreferenceStartTimeByMax46002) : base(resourcePlannerBreakPreferenceStartTimeByMax46002)
-		{
-		}
 	}
 }

@@ -50,9 +50,5 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			jobResult.JobCategory.Should().Be.EqualTo(JobCategory.WebIntradayOptimiztion);
 			jobResult.Period.Should().Be.EqualTo(planningPeriod.Range);
 		}
-
-		public IntradayOptimizationFromWebTest(BreakPreferenceStartTimeByMax resourcePlannerBreakPreferenceStartTimeByMax46002) : base(resourcePlannerBreakPreferenceStartTimeByMax46002)
-		{
-		}
 	}
 }

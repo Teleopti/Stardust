@@ -99,9 +99,5 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			FakeSchedulingSourceScope.UsedToBe().ForEach(x => x.Should().Be.EqualTo(ScheduleSource.WebScheduling));
 		}
-
-		public WebIntradayOptimizationStardustHandlerTest(BreakPreferenceStartTimeByMax resourcePlannerBreakPreferenceStartTimeByMax46002) : base(resourcePlannerBreakPreferenceStartTimeByMax46002)
-		{
-		}
 	}
 }

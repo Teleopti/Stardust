@@ -81,9 +81,5 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				callbackTracker.UnSuccessfulOptimizations().Should().Be.EqualTo(10);
 			}
 		}
-
-		public IntradayOptimizationCallbackDesktopTest(BreakPreferenceStartTimeByMax resourcePlannerBreakPreferenceStartTimeByMax46002) : base(resourcePlannerBreakPreferenceStartTimeByMax46002)
-		{
-		}
 	}
 }

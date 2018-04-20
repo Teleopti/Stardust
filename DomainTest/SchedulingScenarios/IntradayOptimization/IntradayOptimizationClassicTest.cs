@@ -51,9 +51,5 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				Target.Execute(new NoSchedulingProgress(), stateHolder, new[]{agent}, dateOnly.ToDateOnlyPeriod(), optPreferences, null);
 			});
 		}
-
-		public IntradayOptimizationClassicTest(BreakPreferenceStartTimeByMax resourcePlannerBreakPreferenceStartTimeByMax46002) : base(resourcePlannerBreakPreferenceStartTimeByMax46002)
-		{
-		}
 	}
 }

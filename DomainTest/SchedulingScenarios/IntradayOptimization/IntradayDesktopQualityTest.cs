@@ -95,9 +95,5 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var skillDays = skill.CreateSkillDayWithDemandPerHour(scenario, date, TimeSpan.Zero, demands);
 			return SchedulerStateHolder.Fill(scenario, date, agentList, assesList, skillDays);
 		}
-
-		public IntradayDesktopQualityTest(BreakPreferenceStartTimeByMax resourcePlannerBreakPreferenceStartTimeByMax46002) : base(resourcePlannerBreakPreferenceStartTimeByMax46002)
-		{
-		}
 	}
 }

@@ -41,8 +41,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
 		private readonly int _resolution;
 		private readonly IScheduleDictionary _scheduleDictionary;
 		private readonly IEnumerable<IPerson> _selectedPersons;
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_BreakPreferenceStartTimeByMax_46002)]
-		private readonly bool _showBreakPreferenceStartTimeByMax46002;
 		private readonly IList<GroupPageLight> _groupPagesForTeamBlockPer;
 
 		public OptimizationPreferencesDialog(
@@ -53,8 +51,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
 			int resolution,
 			IScheduleDictionary scheduleDictionary,
 			IEnumerable<IPerson> selectedPersons, 
-			IDaysOffPreferences daysOffPreferences,
-			bool showBreakPreferenceStartTimeByMax46002)
+			IDaysOffPreferences daysOffPreferences)
 			: this()
 		{
 			Preferences = preferences;
@@ -69,7 +66,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
 			_resolution = resolution;
 			_scheduleDictionary = scheduleDictionary;
 			_selectedPersons = selectedPersons;
-			_showBreakPreferenceStartTimeByMax46002 = showBreakPreferenceStartTimeByMax46002;
 			_eventAggregator = new EventAggregator();
 		}
 
@@ -85,7 +81,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
 			generalPreferencesPanel1.Initialize(Preferences.General, _scheduleTags, _eventAggregator);
 			dayOffPreferencesPanel1.Initialize(DaysOffPreferences);
 			extraPreferencesPanel1.Initialize(Preferences.Extra, _groupPagesProvider, _availableActivity);
-			advancedPreferencesPanel1.Initialize(Preferences.Advanced, _showBreakPreferenceStartTimeByMax46002);
+			advancedPreferencesPanel1.Initialize(Preferences.Advanced);
 			shiftsPreferencesPanel1.Initialize(Preferences.Shifts, _availableActivity, _resolution);
 			Panels = new List<IDataExchange> { generalPreferencesPanel1, dayOffPreferencesPanel1, extraPreferencesPanel1, shiftsPreferencesPanel1, advancedPreferencesPanel1 };
 
