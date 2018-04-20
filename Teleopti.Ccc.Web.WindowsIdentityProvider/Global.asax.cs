@@ -86,6 +86,7 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider
 			var configuration = new IocConfiguration(args, new FalseToggleManager());
 			builder.RegisterModule(new CommonModule(configuration));
 			builder.RegisterType<WindowsIpTenantAuthentication>().As<ITenantAuthentication>().SingleInstance();
+			builder.RegisterType<CurrentTenantUserFake>().As<ICurrentTenantUser>().SingleInstance();
 			builder.RegisterType<CryptoKeyInfoRepository>().As<ICryptoKeyInfoRepository>().SingleInstance();
 			builder.RegisterType<NonceInfoRepository>().As<INonceInfoRepository>().SingleInstance();
 		}
