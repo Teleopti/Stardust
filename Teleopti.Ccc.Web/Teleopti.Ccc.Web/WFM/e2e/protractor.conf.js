@@ -6,7 +6,7 @@ const { join } = require('path');
 
 const baseUrl = 'http://localhost:52858';
 
-exports.config = {
+let config = {
 	allScriptsTimeout: 11000,
 	specs: ['./**/*.e2e-spec.ts'],
 	capabilities: {
@@ -40,3 +40,5 @@ exports.config = {
 		}, 10000);
 	}
 };
+
+module.exports = { config };
