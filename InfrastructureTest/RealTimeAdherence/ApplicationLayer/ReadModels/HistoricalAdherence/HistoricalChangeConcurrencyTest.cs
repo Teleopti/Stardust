@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 	[ReadModelUnitOfWorkTest]
 	[Explicit]
 	[Category("LongRunning")]
-	[Toggle(Toggles.RTA_ViewHistoricalAhderence7DaysBack_46826)]
 	public class HistoricalChangeConcurrencyTest
 	{
 		public HistoricalChangeUpdater Updater;

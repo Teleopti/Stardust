@@ -79,18 +79,14 @@ angular.module('wfm.rta').config(function ($stateProvider, ToggleProvider) {
 					return 'app/rta/rta/historical/rta-historical.removeApprovedOOA_47721.html';
 				if (toggles.RTA_ApprovePreviousOOA_47230)
 					return 'app/rta/rta/historical/rta-historical.approvePreviousOOA_47230.html';
-				if (toggles.RTA_ViewHistoricalAhderence7DaysBack_46826)
-					return 'app/rta/rta/historical/rta-historical.adherence7DaysBack_46826.html';
-				return 'app/rta/rta/historical/rta-historical.html';
+				return 'app/rta/rta/historical/rta-historical.adherence7DaysBack_46826.html';
 			},
 			controllerProvider: function () {
 				if (toggles.RTA_RemoveApprovedOOA_47721)
 					return 'RtaHistoricalController47721 as vm';
 				if (toggles.RTA_ApprovePreviousOOA_47230)
 					return 'RtaHistoricalController47230 as vm';
-				if (toggles.RTA_ViewHistoricalAhderence7DaysBack_46826)
-					return 'RtaHistoricalController46826 as vm';
-				return 'RtaHistoricalController as vm';
+				return 'RtaHistoricalController46826 as vm';
 			}
 		})
 		.state('rta-teams-legacy', {

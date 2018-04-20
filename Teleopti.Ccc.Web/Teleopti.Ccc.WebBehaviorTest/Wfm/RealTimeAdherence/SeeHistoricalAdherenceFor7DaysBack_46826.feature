@@ -1,5 +1,4 @@
 ﻿@RTA
-@OnlyRunIfEnabled('RTA_ViewHistoricalAhderence7DaysBack_46826')
 Feature: See historical adherence for 7 days back
   As an adherence analyst I need to see all OoA occurrences and the exact reason why for up to 7 days back,
   so that I have solid proof when I talk to team leads and agents about bad adherence.

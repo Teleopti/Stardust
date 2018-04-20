@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.ApprovePeriodAsInAdherence;
 
 namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels
 {
-	[EnabledBy(Toggles.RTA_ViewHistoricalAhderence7DaysBack_46826)]
 	public class HistoricalChangeMaintainer :
 		IHandleEvent<TenantDayTickEvent>,
 		IRunOnHangfire
@@ -72,34 +71,6 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels
 		protected virtual void purgeApprovedPeriods(DateTime removeUntil)
 		{
 			_approvedPeriodsPersister.Remove(removeUntil);
-		}
-	}
-
-	[DisabledBy(Toggles.RTA_ViewHistoricalAhderence7DaysBack_46826)]
-	public class HistoricalAdherenceMaintainerLegacy :
-		IHandleEvent<TenantDayTickEvent>,
-		IRunOnHangfire
-	{
-		private readonly IHistoricalChangeReadModelPersister _historicalChangePersister;
-		private readonly INow _now;
-
-		public HistoricalAdherenceMaintainerLegacy(
-			IHistoricalChangeReadModelPersister historicalChangePersister,
-			INow now)
-		{
-			_historicalChangePersister = historicalChangePersister;
-			_now = now;
-		}
-
-		public void Handle(TenantDayTickEvent tenantDayTickEvent)
-		{
-			purgeHistoricalChange();
-		}
-
-		[ReadModelUnitOfWork]
-		protected virtual void purgeHistoricalChange()
-		{
-			_historicalChangePersister.Remove(_now.UtcDateTime().Date.AddDays(-5));
 		}
 	}
 }
