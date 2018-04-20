@@ -7,9 +7,9 @@
 			<teams-time-picker date="vm.getMoveToDate()"
 							   ng-model="vm.moveToTime"
 							   ng-change="vm.updateInvalidAgents()"
-							   required 
+							   required
 							   timezone="vm.getCurrentTimezone()"
-							   md-autofocus="::vm.containerCtrl.onReady()"/>
+							   md-autofocus="::vm.containerCtrl.onReady()"></teams-time-picker>
 
 			<md-switch ng-model="vm.nextDay">
 				<span>{{'NextDay' | translate}}</span>
