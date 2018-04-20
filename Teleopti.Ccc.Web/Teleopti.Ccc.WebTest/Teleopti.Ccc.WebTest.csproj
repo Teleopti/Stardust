@@ -413,7 +413,6 @@
     <Compile Include="Areas\TeamSchedule\TeamScheduleControllerTest.cs" />
     <Compile Include="Areas\TeamSchedule\TeamScheduleTestAttribute.cs" />
     <Compile Include="Areas\Toggle\ToggleHandlerControllerTest.cs" />
-    <Compile Include="Core\Authentication\DataProvider\BadgeProviderTest.cs" />
     <Compile Include="Areas\SSO\SsoAuthenticatorTest.cs" />
     <Compile Include="Core\Common\DataProvider\DefaultScenarioForStudentAvailabilityScheduleProviderTest.cs" />
     <Compile Include="Core\Common\DataProvider\FakeCampaignWarningProvider.cs" />
