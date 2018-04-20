@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday;
@@ -33,7 +34,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 				return new OvertimeRequestValidationResult
 				{
 					IsValid = false,
-					InvalidReasons = new[] {Resources.OvertimeRequestDenyReasonClosedPeriod}
+					InvalidReasons = new[] { Resources.OvertimeRequestDenyReasonClosedPeriod }
 				};
 
 			var overtimeRequestOpenPeriodSkillTypeGroups =
@@ -42,17 +43,39 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 				return new OvertimeRequestValidationResult
 				{
 					IsValid = false,
-					InvalidReasons = new[] {Resources.ThereIsNoAvailableSkillForOvertime}
+					InvalidReasons = new[] { Resources.ThereIsNoAvailableSkillForOvertime }
 				};
 
 			var mergedOvertimeRequestOpenPeriods = _overtimeRequestOpenPeriodMerger.GetMergedOvertimeRequestOpenPeriods(overtimeRequestOpenPeriods,
 				permissionInformation, dateOnlyPeriod);
 			if (mergedOvertimeRequestOpenPeriods.All(o => o.AutoGrantType == OvertimeRequestAutoGrantType.Deny))
 			{
+				var dateList = new HashSet<DateOnly>();
+				var days = mergedOvertimeRequestOpenPeriods.Where(a => a.AvailableDays != null).SelectMany(a => a.AvailableDays);
+				foreach (var day in days)
+				{
+					dateList.Add(day);
+				}
+				var denyReason = string.Empty;
+				if (dateList.Count > 0)
+				{
+					var periods = dateList.OrderBy(a => a.Date).ToList().SplitToContinuousPeriods();
+					var dateCulture = permissionInformation.Culture();
+					var suggestedPeriodDateString = string.Join(",", periods.Select(p => p.ToShortDateString(dateCulture)));
+					var languageCulture = permissionInformation.UICulture();
+					denyReason = string.Format(languageCulture,
+						Resources.ResourceManager.GetString("OvertimeRequestDenyReasonNoPeriod", languageCulture),
+						suggestedPeriodDateString);
+				}
+				else
+				{
+					denyReason = mergedOvertimeRequestOpenPeriods.FirstOrDefault()?.DenyReason;
+				}
+
 				return new OvertimeRequestValidationResult
 				{
 					IsValid = false,
-					InvalidReasons = new[] {mergedOvertimeRequestOpenPeriods.FirstOrDefault()?.DenyReason}
+					InvalidReasons = new[] { denyReason }
 				};
 			}
 

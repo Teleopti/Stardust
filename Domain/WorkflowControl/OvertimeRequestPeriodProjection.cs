@@ -65,7 +65,8 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 							WorkRuleValidationHandleType = currentPeriod.WorkRuleValidationHandleType,
 							SkillType = currentPeriod.SkillType,
 							OriginPeriod = currentPeriod.OriginPeriod,
-							OrderIndex = currentPeriod.OrderIndex
+							OrderIndex = currentPeriod.OrderIndex,
+							AvailableDays = currentPeriod.AvailableDays
 						});
 
 						if (inverseLoopIndex < filteredPeriods.Count - 1 &&
@@ -84,6 +85,8 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		private OvertimeRequestSkillTypeFlatOpenPeriod createAutoDenyPeriod(IList<OvertimeRequestSkillTypeFlatOpenPeriod> overtimeRequestOpenPeriodList, IList<OvertimeRequestSkillTypeFlatOpenPeriod> filteredOvertimeRequestOpenPeriodList)
 		{
 			string denyReason = null;
+			IList<DateOnly> availableDays = new List<DateOnly>();
+
 			if (overtimeRequestOpenPeriodList.Count == 0)
 			{
 				denyReason = Resources.ResourceManager.GetString("OvertimeRequestDenyReasonClosedPeriod", _languageCulture);
@@ -91,7 +94,9 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 			if (filteredOvertimeRequestOpenPeriodList.Count == 0)
 			{
-				denyReason = getDenyReasonWithSuggestedPeriod(overtimeRequestOpenPeriodList);
+				var deniedResultOfOutOfOpenPeriod = getDeniedResultOfOutOfOpenPeriod(overtimeRequestOpenPeriodList);
+				denyReason = deniedResultOfOutOfOpenPeriod.DenyReason;
+				availableDays = deniedResultOfOutOfOpenPeriod.AvailableDays;
 			}
 			else
 			{
@@ -99,7 +104,17 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 				{
 					if (filteredOvertimeRequestOpenPeriod.AutoGrantType == OvertimeRequestAutoGrantType.Deny)
 					{
-						denyReason = Resources.ResourceManager.GetString("OvertimeRequestDenyReasonAutodeny", _languageCulture);
+						var deniedResultOfOutOfOpenPeriod = getDeniedResultOfOutOfOpenPeriod(overtimeRequestOpenPeriodList);
+						if (deniedResultOfOutOfOpenPeriod.AvailableDays != null && deniedResultOfOutOfOpenPeriod.AvailableDays.Any())
+						{
+							denyReason = deniedResultOfOutOfOpenPeriod.DenyReason;
+							availableDays = deniedResultOfOutOfOpenPeriod.AvailableDays;
+						}
+						else
+						{
+							denyReason = Resources.ResourceManager.GetString("OvertimeRequestDenyReasonAutodeny", _languageCulture);
+						}
+						filteredOvertimeRequestOpenPeriod.AvailableDays = availableDays;
 						filteredOvertimeRequestOpenPeriod.DenyReason = denyReason;
 					}
 				}
@@ -108,13 +123,14 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			return new OvertimeRequestSkillTypeFlatOpenPeriod
 			{
 				DenyReason = denyReason,
-				AutoGrantType = OvertimeRequestAutoGrantType.Deny
+				AutoGrantType = OvertimeRequestAutoGrantType.Deny,
+				AvailableDays = availableDays
 			};
 		}
 
-		private string getDenyReasonWithSuggestedPeriod(IList<OvertimeRequestSkillTypeFlatOpenPeriod> overtimeRequestOpenPeriodList)
+		private DeniedResultOfOutOfOpenPeriod getDeniedResultOfOutOfOpenPeriod(
+			IList<OvertimeRequestSkillTypeFlatOpenPeriod> overtimeRequestOpenPeriodList)
 		{
-			string denyReason;
 			var denyDays = getDenyDays(overtimeRequestOpenPeriodList);
 			var dayCollection = new List<DateOnly>();
 
@@ -129,16 +145,13 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 			if (dayCollection.Count > 0)
 			{
-				denyReason = string.Format(_languageCulture,
-					Resources.ResourceManager.GetString("OvertimeRequestDenyReasonNoPeriod", _languageCulture),
-					string.Join(",", getSuggestedPeriodDateString(dayCollection.Distinct().OrderBy(x => x.Date).ToList(), denyDays)));
-			}
-			else
-			{
-				denyReason = Resources.ResourceManager.GetString("OvertimeRequestDenyReasonClosedPeriod", _languageCulture);
+				return getDeniedResultOfOutOfOpenPeriod(dayCollection.Distinct().OrderBy(x => x.Date).ToList(), denyDays);
 			}
 
-			return denyReason;
+			return new DeniedResultOfOutOfOpenPeriod
+			{
+				DenyReason = Resources.ResourceManager.GetString("OvertimeRequestDenyReasonClosedPeriod", _languageCulture)
+			};
 		}
 
 		private IList<DateOnly> getDenyDays(IList<OvertimeRequestSkillTypeFlatOpenPeriod> overtimeRequestOpenPeriodList)
@@ -160,6 +173,28 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			}
 			var periods = dayCollection.SplitToContinuousPeriods();
 			return string.Join(",", periods.Select(p => p.ToShortDateString(_dateCulture)));
+		}
+
+		private DeniedResultOfOutOfOpenPeriod getDeniedResultOfOutOfOpenPeriod(List<DateOnly> dateCollection, IList<DateOnly> denyDays)
+		{
+			var dayCollection = dateCollection.Where(a => a.CompareTo(_viewpointDate) >= 0).ToList();
+			foreach (var denyDay in denyDays)
+			{
+				dayCollection.Remove(denyDay);
+			}
+
+			var periods = dayCollection.SplitToContinuousPeriods();
+			var suggestedPeriodDateString = string.Join(",", periods.Select(p => p.ToShortDateString(_dateCulture)));
+
+			var denyReason = string.Format(_languageCulture,
+				Resources.ResourceManager.GetString("OvertimeRequestDenyReasonNoPeriod", _languageCulture),
+				suggestedPeriodDateString);
+
+			return new DeniedResultOfOutOfOpenPeriod
+			{
+				DenyReason = denyReason,
+				AvailableDays = dayCollection
+			};
 		}
 
 		private bool isOvertimeRequestOpenPeriodAutoDeny(OvertimeRequestSkillTypeFlatOpenPeriod overtimeRequestOpenPeriod)
@@ -187,10 +222,12 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			}
 			return layerEndTime;
 		}
-	}
 
-	public interface IOvertimeRequestPeriodProjection
-	{
-		IList<OvertimeRequestSkillTypeFlatOpenPeriod> GetProjectedOvertimeRequestsOpenPeriods(DateOnlyPeriod requestPeriod);
+		private struct DeniedResultOfOutOfOpenPeriod
+		{
+			public string DenyReason { get; set; }
+
+			public IList<DateOnly> AvailableDays { get; set; }
+		}
 	}
 }

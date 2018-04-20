@@ -273,5 +273,113 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			personRequest.IsApproved.Should().Be.True();
 		}
+
+		[Test]
+		public void ShouldSuggestCorrectPeriodWithMultipleSkillTypesWhenRequestDateIsOutOfRange()
+		{
+			Now.Is(new DateTime(2018, 4, 20, 8, 0, 0, DateTimeKind.Utc));
+			setupPerson(8, 21);
+			var workflowControlSet = new WorkflowControlSet();
+			workflowControlSet.AddOpenOvertimeRequestPeriod(
+				new OvertimeRequestOpenRollingPeriod(new[] {_emailSkillType, _chatSkillType, _phoneSkillType})
+				{
+					AutoGrantType = OvertimeRequestAutoGrantType.Yes,
+					BetweenDays = new MinMax<int>(0, 9)
+				});
+			workflowControlSet.AddOpenOvertimeRequestPeriod(
+				new OvertimeRequestOpenRollingPeriod(new[] {_emailSkillType, _chatSkillType})
+				{
+					AutoGrantType = OvertimeRequestAutoGrantType.Deny,
+					BetweenDays = new MinMax<int>(0, 2)
+				});
+			LoggedOnUser.CurrentUser().WorkflowControlSet = workflowControlSet;
+			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 5d);
+
+			var personRequest = createOvertimeRequest(new DateTime(2018, 4, 30, 8, 0, 0, DateTimeKind.Utc), 1);
+			getTarget().Process(personRequest);
+
+			personRequest.IsApproved.Should().Be.False();
+			personRequest.IsDenied.Should().Be.True();
+			personRequest.DenyReason.Trim().Should()
+				.Be(string.Format(Resources.OvertimeRequestDenyReasonNoPeriod, "4/20/2018 - 4/29/2018"));
+		}
+
+		[Test]
+		public void ShouldSuggestMergedPeriodWithMultipleSkillTypesWhenRequestDateIsOutOfRange()
+		{
+			Now.Is(new DateTime(2018, 4, 20, 8, 0, 0, DateTimeKind.Utc));
+			setupPerson(8, 21);
+			var workflowControlSet = new WorkflowControlSet();
+			workflowControlSet.AddOpenOvertimeRequestPeriod(
+				new OvertimeRequestOpenRollingPeriod(new[] { _emailSkillType })
+				{
+					AutoGrantType = OvertimeRequestAutoGrantType.Yes,
+					BetweenDays = new MinMax<int>(0, 2)
+				});
+			workflowControlSet.AddOpenOvertimeRequestPeriod(
+				new OvertimeRequestOpenRollingPeriod(new[] { _chatSkillType })
+				{
+					AutoGrantType = OvertimeRequestAutoGrantType.Yes,
+					BetweenDays = new MinMax<int>(3, 4)
+				});
+			workflowControlSet.AddOpenOvertimeRequestPeriod(
+				new OvertimeRequestOpenRollingPeriod(new[] { _phoneSkillType })
+				{
+					AutoGrantType = OvertimeRequestAutoGrantType.Yes,
+					BetweenDays = new MinMax<int>(5, 6)
+				});
+			LoggedOnUser.CurrentUser().WorkflowControlSet = workflowControlSet;
+			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 5d);
+
+			var personRequest = createOvertimeRequest(new DateTime(2018, 4, 30, 8, 0, 0, DateTimeKind.Utc), 1);
+			getTarget().Process(personRequest);
+
+			personRequest.IsApproved.Should().Be.False();
+			personRequest.IsDenied.Should().Be.True();
+			personRequest.DenyReason.Trim().Should()
+				.Be(string.Format(Resources.OvertimeRequestDenyReasonNoPeriod, "4/20/2018 - 4/26/2018"));
+		}
+
+		[Test]
+		public void ShouldSuggestMergedPeriodWithMultipleSkillTypesWhenRequestDateIsPartlyOutOfRange()
+		{
+			Now.Is(new DateTime(2018, 4, 20, 8, 0, 0, DateTimeKind.Utc));
+			setupPerson(8, 21);
+			var workflowControlSet = new WorkflowControlSet();
+			workflowControlSet.AddOpenOvertimeRequestPeriod(
+				new OvertimeRequestOpenRollingPeriod(new[] { _emailSkillType })
+				{
+					AutoGrantType = OvertimeRequestAutoGrantType.Yes,
+					BetweenDays = new MinMax<int>(0, 2)
+				});
+			workflowControlSet.AddOpenOvertimeRequestPeriod(
+				new OvertimeRequestOpenRollingPeriod(new[] { _chatSkillType })
+				{
+					AutoGrantType = OvertimeRequestAutoGrantType.Yes,
+					BetweenDays = new MinMax<int>(3, 4)
+				});
+			workflowControlSet.AddOpenOvertimeRequestPeriod(
+				new OvertimeRequestOpenRollingPeriod(new[] { _phoneSkillType })
+				{
+					AutoGrantType = OvertimeRequestAutoGrantType.Deny,
+					BetweenDays = new MinMax<int>(5, 5)
+				});
+			workflowControlSet.AddOpenOvertimeRequestPeriod(
+				new OvertimeRequestOpenRollingPeriod(new[] { _phoneSkillType })
+				{
+					AutoGrantType = OvertimeRequestAutoGrantType.Yes,
+					BetweenDays = new MinMax<int>(6, 7)
+				});
+			LoggedOnUser.CurrentUser().WorkflowControlSet = workflowControlSet;
+			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 5d);
+
+			var personRequest = createOvertimeRequest(new DateTime(2018, 4, 25, 8, 0, 0, DateTimeKind.Utc), 1);
+			getTarget().Process(personRequest);
+
+			personRequest.IsApproved.Should().Be.False();
+			personRequest.IsDenied.Should().Be.True();
+			personRequest.DenyReason.Trim().Should()
+				.Be(string.Format(Resources.OvertimeRequestDenyReasonNoPeriod, "4/20/2018 - 4/24/2018,4/26/2018 - 4/27/2018"));
+		}
 	}
 }

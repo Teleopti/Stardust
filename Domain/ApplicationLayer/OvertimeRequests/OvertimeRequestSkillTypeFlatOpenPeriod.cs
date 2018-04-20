@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+﻿using System.Collections.Generic;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Interfaces.Domain;
 
@@ -14,5 +15,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 		public string DenyReason { get; set; }
 		public DateOnlyPeriod Period { get; set; }
 		public IOvertimeRequestOpenPeriod OriginPeriod { get; set; }
+		public IList<DateOnly> AvailableDays { get; set; }
+
+		public OvertimeRequestSkillTypeFlatOpenPeriod()
+		{
+			AvailableDays = new List<DateOnly>();
+		}
 	}
 }
