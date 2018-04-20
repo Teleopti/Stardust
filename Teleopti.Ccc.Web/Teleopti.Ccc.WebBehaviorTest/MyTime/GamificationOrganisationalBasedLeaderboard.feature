@@ -46,7 +46,7 @@ Background:
 		  | Adherence           | 3      | 0      | 0    |
 	And I am american
 
-@ignroe
+@ignore
 Scenario: View available business hierarchy when data available is set to Site
 	Given I have a role with
 		| Field                 | Value |
