@@ -32,6 +32,7 @@ export class SearchPageComponent implements OnInit {
 
 	ngOnInit() {
 		this.searchControl.setValue(this.searchService.keyword);
+		this.pagination.length = this.searchService.lastQuerySize;
 		this.searchService.getPeople().subscribe({
 			next: (people: Person[]) => {
 				this.dataSource.data = people;

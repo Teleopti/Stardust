@@ -27,6 +27,7 @@ export class SearchService {
 	public keyword: string = '';
 	public pageIndex: number = 0;
 	public pageSize: number = 20;
+	public lastQuerySize: number = 0;
 
 	constructor(private http: HttpClient, private overridesService: SearchOverridesService) {
 		overridesService.getOverrides().subscribe({
@@ -50,6 +51,7 @@ export class SearchService {
 		});
 		const res = (await this.http.post('../api/Search/FindPeople', query).toPromise()) as PeopleSearchResult;
 		this.peopleCache$.next(res.People);
+		this.lastQuerySize = res.TotalRows;
 		return res;
 	}
 
