@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public FakeActivityRepository ActivityRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 
+		
 		//Should not be needed here! It should default to "on" i web! Fix later
 		public OptimizationPreferencesDefaultValueProvider OptimizationPreferencesProvider;
 		//
