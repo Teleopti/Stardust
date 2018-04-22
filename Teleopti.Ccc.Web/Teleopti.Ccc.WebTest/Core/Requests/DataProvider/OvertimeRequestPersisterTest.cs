@@ -161,7 +161,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			var overtimeRequest = PersonRequestRepository.Get(overtimeRequestForm.Id.Value);
 			Assert.IsTrue(overtimeRequest.IsDenied);
-			Assert.AreEqual(overtimeRequest.DenyReason, Resources.OvertimeRequestDenyReasonAutodeny);
+			Assert.AreEqual(overtimeRequest.DenyReason, string.Format(Resources.OvertimeRequestDenyReasonNoPeriod, "11/10/2017 - 11/15/2017"));
 		}
 
 		private void setupIntradayStaffingForSkill(ISkill skill, double forecastedStaffing,
