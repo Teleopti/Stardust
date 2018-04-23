@@ -25,10 +25,13 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 {
 	[DomainTest]
+	[ExtendScope(typeof(WebDayoffOptimizationStardustHandler))]
+	[ExtendScope(typeof(DayOffOptimizationEventHandler))]
+	[ExtendScope(typeof(WebScheduleStardustHandler))]
+	[ExtendScope(typeof(SchedulingEventHandler))]
 	public class SchedulePlanningPeriodCommandHandlerHeatMapTest : DayOffOptimizationScenario
 	{
 		public SchedulePlanningPeriodCommandHandler Target;
-		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakeSkillRepository SkillRepository;
 		public FakeScenarioRepository ScenarioRepository;
@@ -42,6 +45,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 		public FakePersonRepository PersonRepository;
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
 
+		public SchedulePlanningPeriodCommandHandlerHeatMapTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerDayOffOptimizationIslands47208) : base(seperateWebRequest, resourcePlannerDayOffOptimizationIslands47208)
+		{
+		}
+
+		private void setup()
+		{
+			var teleoptiIdentity = AppDomainPrincipalContext.Current().Identity as TeleoptiIdentity;
+			BusinessUnitRepository.Has(teleoptiIdentity.BusinessUnit);
+			Tenants.Has(teleoptiIdentity.DataSource.DataSourceName);
+			var person = PersonFactory.CreatePerson().WithId(SystemUser.Id);
+			PersonRepository.Add(person);
+		}
 
 		[Test]
 		public void ShouldCalculateStaffingCorrectly()
@@ -92,19 +107,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 			dayCount[2].RelativeDifference.Should().Be.EqualTo(-1);
 			dayCount[5].RelativeDifference.Should().Be.EqualTo(-0.96);
 			dayCount[6].RelativeDifference.Should().Be.EqualTo(-0.96);
-		}
-
-		private void setup()
-		{
-			var teleoptiIdentity = AppDomainPrincipalContext.Current().Identity as TeleoptiIdentity;
-			BusinessUnitRepository.Has(teleoptiIdentity.BusinessUnit);
-			Tenants.Has(teleoptiIdentity.DataSource.DataSourceName);
-			var person = PersonFactory.CreatePerson().WithId(SystemUser.Id);
-			PersonRepository.Add(person);
-		}
-
-		public SchedulePlanningPeriodCommandHandlerHeatMapTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerDayOffOptimizationIslands47208) : base(seperateWebRequest, resourcePlannerDayOffOptimizationIslands47208)
-		{
 		}
 	}
 }
