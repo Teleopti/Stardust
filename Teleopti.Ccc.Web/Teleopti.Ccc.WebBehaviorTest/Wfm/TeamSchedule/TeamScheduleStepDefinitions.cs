@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 					Browser.Interactions.Click(".orgpicker-menu .selection-clear");
 
 					Browser.Interactions.ClickContaining(".repeated-item", $"{site}");
-						
+
 					Browser.Interactions.Click(".orgpicker-menu .selection-done");
 				}
 			);
@@ -274,7 +274,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 				});
 		}
 
-		
+
 		[When(@"I see a successful notice")]
 		public void WhenISeeASuccessfulNotice()
 		{
@@ -340,7 +340,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		{
 			var newStartTimeModel = new Dictionary<string, string>
 			{
-				{"vm.moveToTime", $"moment('{newStartTime}').toDate()"},
+				{"vm.moveToTime", '"'+ newStartTime+'"'},
 				{"vm.nextDay", isNextDay}
 			};
 			Browser.Interactions.ClickUsingJQuery("#scheduleContextMenuButton");
@@ -454,7 +454,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 			{
 				Browser.Interactions.Click(".team-schedule md-backdrop");
 			});
-			
+
 		}
 
 		[When(@"I choose not to view '(.*)' validation result")]
@@ -516,9 +516,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		private static Guid idForAbsence(string absenceName)
 		{
 			var activityId = (from a in DataMaker.Data().UserDatasOfType<AbsenceConfigurable>()
-					  let absence = a.Absence
-					  where absence.Name.Equals(absenceName)
-					  select absence.Id.GetValueOrDefault()).First();
+							  let absence = a.Absence
+							  where absence.Name.Equals(absenceName)
+							  select absence.Id.GetValueOrDefault()).First();
 			return activityId;
 		}
 	}
