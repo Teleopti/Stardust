@@ -7,7 +7,7 @@ var defaultToggles = {
 		}
 	}
 };
-fdescribe('IntradayAreaController', function() {
+describe('IntradayAreaController', function() {
 	var $httpBackend,
 		$controller,
 		$filter,
