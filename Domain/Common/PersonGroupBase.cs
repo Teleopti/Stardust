@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Common
     public abstract class PersonGroupBase : AggregateEntity
     {
         private string _name;
-	    private const int nameLength = 100;
+	    private const int nameLength = 255;
 		private readonly ISet<IPerson> _personCollection = new HashSet<IPerson>();
         private readonly IList<IChildPersonGroup> _childGroupCollection = new List<IChildPersonGroup>();
 
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.Domain.Common
 		    InParameter.NotStringEmptyOrWhiteSpace(nameof(name), name);
 
 		    if (name.Length > nameLength)
-			    throw new ArgumentOutOfRangeException(nameof(name), "String too long.");
+			    throw new ArgumentOutOfRangeException(nameof(name), $@"Length of name ""{0}"" exceeded limit ({nameLength})");
 	    }
 	}
 }

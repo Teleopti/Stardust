@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.GroupPageCreator
             _persons = new Collection<IPerson>();
 
             //Create datetime
-            DateOnly startDate = new DateOnly(2000, 1, 1);
+            var startDate = new DateOnly(2000, 1, 1);
 
             var businessUnit = BusinessUnitFactory.CreateBusinessUnitWithSitesAndTeams();
             var deletedSite = SiteFactory.CreateSimpleSite();
@@ -32,28 +32,29 @@ namespace Teleopti.Ccc.DomainTest.GroupPageCreator
             _businessUnits.Add(businessUnit);
             
             //Create new period.
-            IPersonPeriod pPeriod = PersonPeriodFactory.CreatePersonPeriod(startDate, businessUnit.SiteCollection[0].TeamCollection[0]);
+            var pPeriod = PersonPeriodFactory.CreatePersonPeriod(startDate, businessUnit.SiteCollection[0].TeamCollection[0]);
 
             //Create new person.
-            IPerson person = PersonFactory.CreatePerson("F","L");
+            var person = PersonFactory.CreatePerson("F","L");
             person.AddPersonPeriod(pPeriod);
             _persons.Add(person);
             
             //Create new person.
-            IPerson person1 = PersonFactory.CreatePerson("User1","User1");
+            var person1 = PersonFactory.CreatePerson("User1","User1");
             _persons.Add(person1);
             _target = new PersonGroupPage();
         }
 
         [Test]
         public void CheckCreateGroupPage()
-        {
-            IGroupPage gPage = _target.CreateGroupPage(_businessUnits,
-                                                       new GroupPageOptions(_persons)
-                                                           {
-                                                               CurrentGroupPageName = "Test Group Page",
-                                                               CurrentGroupPageNameKey = "TestGroupPageKey"
-                                                           });
+		{
+			var option = new GroupPageOptions(_persons)
+			{
+				CurrentGroupPageName = "Test Group Page",
+				CurrentGroupPageNameKey = "TestGroupPageKey"
+			};
+
+			var gPage = _target.CreateGroupPage(_businessUnits,option);
 
             Assert.AreEqual("Test Group Page",gPage.Description.Name);
             Assert.AreEqual(_businessUnits.First().Name, gPage.RootNodeName);

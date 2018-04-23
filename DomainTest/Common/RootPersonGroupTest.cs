@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.DomainTest.Common
     [TestFixture]
     public class RootPersonGroupTest
     {
+        private const int groupNameLengthLimit = 255;
         private IRootPersonGroup _root;
         private IChildPersonGroup _child1;
         private IChildPersonGroup _child2;
@@ -97,15 +98,15 @@ namespace Teleopti.Ccc.DomainTest.Common
 	    }
 
 		[Test]
-		public void ShouldThrowErrorWhenNameExceeds100Characters()
+		public void ShouldThrowErrorWhenNameExceedsLengthLimit()
 		{
-			Assert.Throws<ArgumentOutOfRangeException>(() => _root.Name = new String('n', 101));
+			Assert.Throws<ArgumentOutOfRangeException>(() => _root.Name = new string('n', groupNameLengthLimit + 1));
 		}
 
 	    [Test]
-	    public void ShouldThrowErrorFromConstructorWhenNameExceeds100Characters()
+	    public void ShouldThrowErrorFromConstructorWhenNameExceedsLengthLimit()
 	    {
-		    Assert.Throws<ArgumentOutOfRangeException>(() => _root = new RootPersonGroup(new String('n', 101)));
+		    Assert.Throws<ArgumentOutOfRangeException>(() => _root = new RootPersonGroup(new string('n', groupNameLengthLimit + 1)));
 	    }
 
 		[Test]
