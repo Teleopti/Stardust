@@ -131,6 +131,7 @@
 		OvertimeRequestAtLeastOneCriticalUnderStaffedSkill_74944,
 		OvertimeRequestSupportMultiSelectionSkillTypes_74945,
 		OvertimeRequestStaffingCheckMethod_74949,
+		OvertimeRequestChangeBelongsToDateForOverNightShift_74984,
 		ETL_SpeedUpNightlyDayOff_38213,
 		MyTimeWeb_MobileResponsive_43826,
 		WFM_Forecaster_Refact_44480,
