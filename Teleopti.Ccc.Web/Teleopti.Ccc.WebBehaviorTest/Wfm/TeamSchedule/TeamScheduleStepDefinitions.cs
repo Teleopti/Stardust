@@ -499,7 +499,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		[Then(@"I should see the start time to move to is '(.*)'")]
 		public void ThenIShouldSeeTheStartTimeToMoveToIs(string expected)
 		{
-			var moveToTime = "vm.getMoveToStartTimeStr()";
+			var moveToTime = "vm.moveToTime";
 			Browser.Interactions.AssertScopeValue("move-activity", moveToTime, expected, true);
 		}
 
