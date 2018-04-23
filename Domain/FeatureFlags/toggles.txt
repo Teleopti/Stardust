@@ -109,7 +109,7 @@ ResourcePlanner_UseErlangAWithInfinitePatienceEsl_74899 = RC
 ResourcePlanner_SpeedUpEvents_48769 = RC #batch deletes of dates - can be deleted early
 ResourcePlanner_SpeedUpEvents_74996 = RC #caching different data - can be deleted early
 ResourcePlanner_SpeedUpEvents_75415 = RC #restructure of events - dont remove toggle too early
-ResourcePlanner_DayOffUsePredictorEverywhere_75667 = false #we need to get further before we want to affect perf tests
+ResourcePlanner_DayOffUsePredictorEverywhere_75667 = RC
 
 # Bugs&Roses #
 ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don't turn on in production
