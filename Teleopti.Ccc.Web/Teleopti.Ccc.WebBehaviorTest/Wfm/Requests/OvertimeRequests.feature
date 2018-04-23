@@ -42,7 +42,7 @@ Scenario: Should view overtime requests
 	And I select all the team
 	And I click button for search requests
 	Then I should see a overtime request from 'Ashley Andeen' in the list
-
+@Ignore
 Scenario: Should approve overtime request
 	Given today is '2018-02-03'
 	When I select to go to overtime view
