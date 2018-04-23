@@ -13,6 +13,6 @@ export class FormControlWithInitial extends FormControl {
 	public initialValue: string;
 
 	get sameAsInitialValue() {
-		return this.initialValue === this.value.trim();
+		return this.initialValue === this.value;
 	}
 }

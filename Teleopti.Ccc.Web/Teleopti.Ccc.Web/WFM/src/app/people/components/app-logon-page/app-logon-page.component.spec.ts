@@ -7,13 +7,11 @@ describe('AppLogonPageComponent', () => {
 	let component: AppLogonPageComponent;
 	let fixture: ComponentFixture<AppLogonPageComponent>;
 
-	beforeEach(
-		async(() => {
-			TestBed.configureTestingModule({
-				imports: [PeopleModule]
-			}).compileComponents();
-		})
-	);
+	beforeEach(async(() => {
+		TestBed.configureTestingModule({
+			imports: [PeopleModule]
+		}).compileComponents();
+	}));
 
 	beforeEach(() => {
 		fixture = TestBed.createComponent(AppLogonPageComponent);

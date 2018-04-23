@@ -4,7 +4,8 @@ import { AbstractControl } from '@angular/forms/src/model';
 import { Subject } from 'rxjs';
 import { NavigationService } from '../../services';
 import { Person } from '../../types';
-import { DuplicateIdentityLogonValidator, FormControlWithInitial } from '../shared';
+import { FormControlWithInitial } from '../shared';
+import { DuplicateIdentityLogonValidator } from './duplicate-identity-logon.validator';
 import {
 	IdentityLogonPageService,
 	PersonWithIdentityLogon,
@@ -79,7 +80,7 @@ export class IdentityLogonPageComponent implements OnDestroy, OnInit {
 		while (this.logons.length > 0) this.logons.removeAt(0);
 		people
 			.map((person: PersonWithIdentityLogon) => {
-				console.log(person)
+				console.log(person);
 				var formGroup = this.formBuilder.group({
 					...person,
 					IdentityLogon: new FormControlWithInitial(person.Identity)

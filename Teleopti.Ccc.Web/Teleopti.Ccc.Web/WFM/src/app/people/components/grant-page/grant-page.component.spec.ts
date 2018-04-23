@@ -1,44 +1,35 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { GrantPageComponent } from './grant-page.component';
-import { PeopleModule } from '../../people.module';
-import { DebugElement, Component, OnInit, ViewChild } from '@angular/core';
-import { By } from '@angular/platform-browser';
-import { RolesService, WorkspaceService, WorkspaceServiceStub, SearchService } from '../../services';
-import { Person, Role } from '../../types';
-import { ROLES, fakeBackendProvider } from '../../services/fake-backend.provider';
 import { HttpClientModule } from '@angular/common/http';
+import { DebugElement } from '@angular/core';
+import { ComponentFixture, TestBed, async } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
+import { PeopleModule } from '../../people.module';
+import { WorkspaceService, WorkspaceServiceStub } from '../../services';
+import { ROLES, fakeBackendProvider } from '../../services/fake-backend.provider';
+import { GrantPageComponent } from './grant-page.component';
 
 describe('GrantPage', () => {
 	let component: GrantPageComponent;
 	let fixture: ComponentFixture<GrantPageComponent>;
-	const GRANT_CURRENT_CHIP_QUERY = '[data-test-grant-current] [data-test-chip]';
-	const GRANT_AVAILABLE_CHIP_QUERY = '[data-test-grant-available] [data-test-chip]';
-	const GRANT_SAVE_QUERY = '[data-test-save]';
-	const WORKSPACE_PERSON_QUERY = '[data-test-workspace] [data-test-person]';
-	const WORKSPACE_PERSON_REMOVE = '[data-test-workspace] [data-test-person] [data-test-person-remove]';
+	let page: Page;
 
-	beforeEach(
-		async(() => {
-			TestBed.configureTestingModule({
-				imports: [PeopleModule, HttpClientModule],
-				providers: [{ provide: WorkspaceService, useClass: WorkspaceServiceStub }, fakeBackendProvider]
-			}).compileComponents();
-		})
-	);
+	beforeEach(async(() => {
+		TestBed.configureTestingModule({
+			imports: [PeopleModule, HttpClientModule],
+			providers: [{ provide: WorkspaceService, useClass: WorkspaceServiceStub }, fakeBackendProvider]
+		}).compileComponents();
+	}));
 
-	beforeEach(
-		async(async () => {
-			fixture = TestBed.createComponent(GrantPageComponent);
-			component = fixture.componentInstance;
+	beforeEach(async(async () => {
+		fixture = TestBed.createComponent(GrantPageComponent);
+		component = fixture.componentInstance;
+		page = new Page(fixture);
 
-			fixture.whenStable().then(async () => {
-				component.roles = ROLES;
+		fixture.whenStable().then(async () => {
+			component.roles = ROLES;
 
-				fixture.detectChanges();
-			});
-		})
-	);
+			fixture.detectChanges();
+		});
+	}));
 
 	it('should create', () => {
 		expect(component).toBeTruthy();
@@ -46,20 +37,37 @@ describe('GrantPage', () => {
 
 	it('should show current roles', () => {
 		fixture.detectChanges();
-		let chipCount = fixture.debugElement.queryAll(By.css(GRANT_CURRENT_CHIP_QUERY)).length;
-
-		expect(chipCount).toEqual(2);
+		expect(page.currentChips.length).toEqual(2);
 	});
 
 	it('should only show chips from selected people', () => {
 		fixture.detectChanges();
-		const getChipCount = () => fixture.debugElement.queryAll(By.css(GRANT_CURRENT_CHIP_QUERY)).length;
+		expect(page.currentChips.length).toEqual(2);
 
-		expect(getChipCount()).toEqual(2);
-
-		component.workspaceService.deselectPerson(component.workspaceService.getSelectedPeople().getValue()[0]);
+		const firstPerson = component.workspaceService.getSelectedPeople().getValue()[0];
+		component.workspaceService.deselectPerson(firstPerson);
 		fixture.detectChanges();
 
-		expect(getChipCount()).toEqual(1);
+		expect(page.currentChips.length).toEqual(1);
 	});
 });
+
+class Page {
+	get currentChips() {
+		return this.queryAll('[data-test-grant-current] [data-test-chip]');
+	}
+
+	get availableChips() {
+		return this.queryAll('[data-test-grant-available] [data-test-chip]');
+	}
+
+	fixture: ComponentFixture<GrantPageComponent>;
+
+	constructor(fixture: ComponentFixture<GrantPageComponent>) {
+		this.fixture = fixture;
+	}
+
+	private queryAll(selector: string): DebugElement[] {
+		return this.fixture.debugElement.queryAll(By.css(selector));
+	}
+}
