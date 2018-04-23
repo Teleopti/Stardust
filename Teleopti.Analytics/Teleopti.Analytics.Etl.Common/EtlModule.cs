@@ -45,7 +45,6 @@ namespace Teleopti.Analytics.Etl.Common
 				builder.RegisterType<TenantsOld>().As<ITenants>().SingleInstance();
 			
 			builder.RegisterType<TenantsLoadedInEtl>().As<IAllTenantNames>().SingleInstance();
-			builder.RegisterType<AllTenantEtlSettings>().As<IAllTenantEtlSettings>().SingleInstance();
 			builder.RegisterType<BaseConfigurationRepository>().As<IBaseConfigurationRepository>().SingleInstance();
 			builder.RegisterType<BadgeCalculationRepository>().As<IBadgeCalculationRepository>().SingleInstance();
 

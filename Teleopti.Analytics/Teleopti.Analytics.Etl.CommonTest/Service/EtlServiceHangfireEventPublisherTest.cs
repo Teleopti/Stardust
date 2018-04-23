@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Infrastructure.Events;
-using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -23,11 +22,8 @@ namespace Teleopti.Analytics.Etl.CommonTest.Service
 	public class EtlServiceHangfireEventPublisherTest : ISetup
 	{
 		public FakeRecurringEventPublisher Publisher;
-		public FakeAllTenantEtlSettings FakeAllTenantEtlSettings;
 		public FakeTenants FakeTenants;
 		public MutableNow Now;
-		public ICurrentDataSource CurrentDataSource;
-		public IIoCTestContext Context;
 		public TenantTickEventPublisher TenantTickEventPublisher;
 		public IRecurringEventPublisher RecurringEventPublisher;
 
@@ -36,16 +32,10 @@ namespace Teleopti.Analytics.Etl.CommonTest.Service
 		{
 			system.AddModule(new EtlModule(configuration));
 			system.UseTestDouble<FakeBaseConfigurationRepository>().For<IBaseConfigurationRepository>();
-			
-			// same as domain test attribute does, sweet!
-			var tenants = new FakeAllTenantEtlSettings();
-			tenants.Has(DomainTestAttribute.DefaultTenantName);
-			system.UseTestDouble(tenants).For<IAllTenantEtlSettings>();
 		}
 		
 		private void hasTenant(string tenantName)
 		{
-			FakeAllTenantEtlSettings.Has(new Tenant(tenantName));
 			FakeTenants.Has(new Tenant(tenantName));
 		}
 
@@ -124,7 +114,6 @@ namespace Teleopti.Analytics.Etl.CommonTest.Service
 			Publisher.Publishings.Should().Not.Be.Empty();
 
 			Now.Is("2016-03-21 13:10");
-			FakeAllTenantEtlSettings.WasRemoved("t");
 			FakeTenants.WasRemoved("t");
 			target.EnsureTenantRecurringJobs();
 

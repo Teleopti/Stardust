@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.MultiTenancy;
@@ -8,48 +7,6 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories.Tenant
 {
-	public class FakeAllTenantEtlSettings: IAllTenantEtlSettings
-	{
-		private readonly List<Infrastructure.MultiTenancy.Server.Tenant> _data = new List<Infrastructure.MultiTenancy.Server.Tenant>();
-
-		public IEnumerable<TenantEtlSetting> All()
-		{
-			return _data.Select(x=>new TenantEtlSetting
-			{
-				Tenant = x.Name,
-				RunIndexMaintenance = true,
-				TimeZone = TimeZoneInfo.Utc
-			});
-		}
-
-		public TenantEtlSetting Get(string tenant)
-		{
-			var single = _data.Single(x => x.Name == tenant);
-			return new TenantEtlSetting
-			{
-				RunIndexMaintenance = true,
-				Tenant = single.Name,
-				TimeZone = TimeZoneInfo.Utc
-			};
-		}
-
-		public void Has(Infrastructure.MultiTenancy.Server.Tenant tenant)
-		{
-			_data.Add(tenant);
-		}
-
-		public void Has(string tenant)
-		{
-			Has(new Infrastructure.MultiTenancy.Server.Tenant(tenant));
-		}
-
-		public void WasRemoved(string tenant)
-		{
-			var existing = _data.Single(x => x.Name == tenant);
-			_data.Remove(existing);
-		}
-	}
-
 	public class FakeTenants : 
 		IFindTenantNameByRtaKey, 
 		ICountTenants, 

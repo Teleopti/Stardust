@@ -114,7 +114,6 @@
     <Compile Include="..\..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="AllTenantEtlSettings.cs" />
     <Compile Include="Configuration\DataSourceConfigurationModel.cs" />
     <Compile Include="Configuration\DataSourceRow.cs" />
     <Compile Include="Configuration\DataSourceState.cs" />
