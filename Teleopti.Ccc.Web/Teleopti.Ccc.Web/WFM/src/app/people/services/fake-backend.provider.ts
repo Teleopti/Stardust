@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Provider } from '@angular/core';
 import {
 	HttpRequest,
 	HttpResponse,
@@ -272,7 +272,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
 	}
 }
 
-export let fakeBackendProvider = {
+export let fakeBackendProvider: Provider = {
 	// use fake backend in place of Http service for backend-less development
 	provide: HTTP_INTERCEPTORS,
 	useClass: FakeBackendInterceptor,
