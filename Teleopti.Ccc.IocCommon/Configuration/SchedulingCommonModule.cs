@@ -298,7 +298,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<TeamBlockRestrictionOverLimitValidator>().As<ITeamBlockRestrictionOverLimitValidator>().SingleInstance();
 			builder.RegisterType<TeamBlockOptimizationLimits>().As<ITeamBlockOptimizationLimits>().SingleInstance();
 			builder.RegisterType<RestrictionOverLimitValidator>().SingleInstance();
-			builder.RegisterType<TeamBlockDayOffOptimizer>().InstancePerLifetimeScope().ApplyAspects();
 			builder.RegisterType<DayOffOptimization>().InstancePerLifetimeScope();
 			if (_configuration.Toggle(Toggles.ResourcePlanner_DayOffOptimizationIslands_47208))
 			{
@@ -310,7 +309,18 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<DayOffOptimizationWeb.DayOffOptimizationWebToggleOff>().As<DayOffOptimizationWeb>().InstancePerLifetimeScope().ApplyAspects();
 				builder.RegisterType<DayOffOptimizationDirectCallCommandHandler>().As<IDayOffOptimizationCommandHandler>().InstancePerLifetimeScope().ApplyAspects();
 			}
-			builder.RegisterType<DayOffOptimizerStandard>().InstancePerLifetimeScope();
+
+			if (_configuration.Toggle(Toggles.ResourcePlanner_DayOffUsePredictorEverywhere_75667))
+			{
+				builder.RegisterType<TeamBlockDayOffOptimizer>().As<ITeamBlockDayOffOptimizer>().InstancePerLifetimeScope().ApplyAspects();
+				builder.RegisterType<DayOffOptimizerStandard>().InstancePerLifetimeScope();
+			}
+			else
+			{
+				builder.RegisterType<TeamBlockDayOffOptimizerOLD>().As<ITeamBlockDayOffOptimizer>().InstancePerLifetimeScope().ApplyAspects();
+				builder.RegisterType<DayOffOptimizerStandardOLD>().InstancePerLifetimeScope();
+			}
+
 			builder.RegisterType<AffectedDayOffs>().SingleInstance();
 			builder.RegisterType<DayOffOptimizerPreMoveResultPredictor>().InstancePerLifetimeScope();
 

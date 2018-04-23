@@ -89,6 +89,7 @@
 		ResourcePlanner_SpeedUpEvents_74996,
 		ResourcePlanner_SpeedUpEvents_75415,
 		ResourcePlanner_UseErlangAWithInfinitePatienceEsl_74899,
+		ResourcePlanner_DayOffUsePredictorEverywhere_75667,
 
 		Wfm_DisplayOnlineHelp_39402,
 

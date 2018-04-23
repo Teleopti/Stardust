@@ -45,10 +45,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 		public FakePersonRepository PersonRepository;
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
 
-		public SchedulePlanningPeriodCommandHandlerHeatMapTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerDayOffOptimizationIslands47208) : base(seperateWebRequest, resourcePlannerDayOffOptimizationIslands47208)
-		{
-		}
-
 		private void setup()
 		{
 			var teleoptiIdentity = AppDomainPrincipalContext.Current().Identity as TeleoptiIdentity;
@@ -107,6 +103,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 			dayCount[2].RelativeDifference.Should().Be.EqualTo(-1);
 			dayCount[5].RelativeDifference.Should().Be.EqualTo(-0.96);
 			dayCount[6].RelativeDifference.Should().Be.EqualTo(-0.96);
+		}
+
+		public SchedulePlanningPeriodCommandHandlerHeatMapTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerDayOffOptimizationIslands47208, bool resourcePlannerDayOffUsePredictorEverywhere75667) : base(seperateWebRequest, resourcePlannerDayOffOptimizationIslands47208, resourcePlannerDayOffUsePredictorEverywhere75667)
+		{
 		}
 	}
 }

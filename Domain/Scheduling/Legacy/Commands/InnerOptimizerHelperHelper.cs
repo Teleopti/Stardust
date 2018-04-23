@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.DayOffPlanning;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.MatrixLockers;
@@ -84,6 +85,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			return allSkillsDataExtractor;
 		}
 
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_DayOffUsePredictorEverywhere_75667)]
 		public IScheduleResultDataExtractor CreateTeamBlockAllSkillsDataExtractor(
 			IAdvancedPreferences advancedPreferences,
 			DateOnlyPeriod selectedPeriod,

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -42,6 +43,296 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly ICurrentOptimizationCallback _currentOptimizationCallback;
 
 		public DayOffOptimizerStandard(
+			ILockableBitArrayFactory lockableBitArrayFactory,
+			TeamBlockScheduler teamBlockScheduler,
+			ITeamBlockInfoFactory teamBlockInfoFactory,
+			ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation,
+			ITeamDayOffModifier teamDayOffModifier,
+			ITeamBlockSteadyStateValidator teamBlockSteadyStateValidator,
+			TeamBlockClearer teamBlockClearer,
+			ITeamBlockOptimizationLimits teamBlockOptimizationLimits,
+			ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator,
+			ITeamBlockDayOffsInPeriodValidator teamBlockDayOffsInPeriodValidator,
+			IWorkShiftSelector workShiftSelector,
+			IGroupPersonSkillAggregator groupPersonSkillAggregator,
+			DayOffOptimizerPreMoveResultPredictor dayOffOptimizerPreMoveResultPredictor,
+			ITeamBlockDaysOffMoveFinder teamBlockDaysOffMoveFinder,
+			AffectedDayOffs affectedDayOffs,
+			IShiftCategoryLimitationChecker shiftCategoryLimitationChecker,
+			INightRestWhiteSpotSolverServiceFactory nightRestWhiteSpotSolverServiceFactory,
+			BlockPreferencesMapper blockPreferencesMapper,
+			ICurrentOptimizationCallback currentOptimizationCallback)
+		{
+			_lockableBitArrayFactory = lockableBitArrayFactory;
+			_teamBlockScheduler = teamBlockScheduler;
+			_teamBlockInfoFactory = teamBlockInfoFactory;
+			_safeRollbackAndResourceCalculation = safeRollbackAndResourceCalculation;
+			_teamDayOffModifier = teamDayOffModifier;
+			_teamBlockSteadyStateValidator = teamBlockSteadyStateValidator;
+			_teamBlockClearer = teamBlockClearer;
+			_teamBlockOptimizationLimits = teamBlockOptimizationLimits;
+			_teamBlockShiftCategoryLimitationValidator = teamBlockShiftCategoryLimitationValidator;
+			_teamBlockDayOffsInPeriodValidator = teamBlockDayOffsInPeriodValidator;
+			_workShiftSelector = workShiftSelector;
+			_groupPersonSkillAggregator = groupPersonSkillAggregator;
+			_dayOffOptimizerPreMoveResultPredictor = dayOffOptimizerPreMoveResultPredictor;
+			_teamBlockDaysOffMoveFinder = teamBlockDaysOffMoveFinder;
+			_affectedDayOffs = affectedDayOffs;
+			_shiftCategoryLimitationChecker = shiftCategoryLimitationChecker;
+			_nightRestWhiteSpotSolverServiceFactory = nightRestWhiteSpotSolverServiceFactory;
+			_blockPreferencesMapper = blockPreferencesMapper;
+			_currentOptimizationCallback = currentOptimizationCallback;
+		}
+
+		public IEnumerable<ITeamInfo> Execute(IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService rollbackService,
+			IEnumerable<ITeamInfo> remainingInfoList, SchedulingOptions schedulingOptions, IEnumerable<IPerson> selectedPersons,
+			IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder,
+			Action cancelAction,
+			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
+			IBlockPreferenceProvider blockPreferenceProvider,
+			ISchedulingProgress schedulingProgress)
+		{
+			var currentMatrixCounter = 0;
+			var allFailed = new Dictionary<ITeamInfo, bool>();
+			var matrixes = new List<Tuple<IScheduleMatrixPro, ITeamInfo>>();
+			var callback = _currentOptimizationCallback.Current();
+			foreach (var teamInfo in remainingInfoList)
+			{
+				allFailed[teamInfo] = true;
+				matrixes.AddRange(teamInfo.MatrixesForGroup().Select(scheduleMatrixPro => new Tuple<IScheduleMatrixPro, ITeamInfo>(scheduleMatrixPro, teamInfo)));
+			}
+
+			
+			foreach (var matrix in matrixes.Randomize())
+			{
+				if (callback.IsCancelled())
+					return null;
+				var blockPreference = blockPreferenceProvider.ForAgent(matrix.Item1.Person, matrix.Item1.EffectivePeriodDays.First().Day);
+				_blockPreferencesMapper.UpdateOptimizationPreferencesFromExtraPreferences(optimizationPreferences, blockPreference);
+				_blockPreferencesMapper.UpdateSchedulingOptionsFromOptimizationPreferences(schedulingOptions, optimizationPreferences);
+
+				currentMatrixCounter++;
+
+				if (!(optimizationPreferences.Extra.UseTeamBlockOption && optimizationPreferences.Extra.UseTeamSameDaysOff))
+				{
+					if (!selectedPersons.Contains(matrix.Item1.Person))
+						continue;
+				}
+				rollbackService.ClearModificationCollection();
+				var dayOffOptimizationPreference = dayOffOptimizationPreferenceProvider.ForAgent(matrix.Item1.Person, matrix.Item1.EffectivePeriodDays.First().Day);
+
+				var originalArray = _lockableBitArrayFactory.ConvertFromMatrix(dayOffOptimizationPreference.ConsiderWeekBefore, dayOffOptimizationPreference.ConsiderWeekAfter, matrix.Item1);
+				var resultingArray = _teamBlockDaysOffMoveFinder.TryFindMoves(matrix.Item1, originalArray, optimizationPreferences, dayOffOptimizationPreference, schedulingResultStateHolder);
+
+				var movedDaysOff = _affectedDayOffs.Execute(matrix.Item1, dayOffOptimizationPreference, originalArray, resultingArray);
+				if (movedDaysOff != null)
+				{
+					var predictorResult = _dayOffOptimizerPreMoveResultPredictor.IsPredictedBetterThanCurrent(matrix.Item1, resultingArray, originalArray, dayOffOptimizationPreference);
+					var previousPeriodValue = predictorResult.CurrentValue;
+					if (!predictorResult.IsBetter)
+					{
+						allFailed[matrix.Item2] = false;
+						matrix.Item2.LockDays(movedDaysOff.AddedDaysOff);
+						matrix.Item2.LockDays(movedDaysOff.RemovedDaysOff);
+						callback.Optimizing(new OptimizationCallbackInfo(matrix.Item2, false, matrixes.Count));
+						continue;
+					}
+
+					var currentPeriodValue = new Lazy<double>(() => _dayOffOptimizerPreMoveResultPredictor.CurrentValue(matrix.Item1));
+					var resCalcState = new UndoRedoContainer();
+					resCalcState.FillWith(schedulingResultStateHolder.SkillDaysOnDateOnly(movedDaysOff.ModifiedDays()));
+					var success = runOneMatrixOnly(optimizationPreferences, rollbackService, matrix.Item1, schedulingOptions, matrix.Item2,
+						resourceCalculateDelayer,
+						schedulingResultStateHolder,
+						currentPeriodValue,
+						previousPeriodValue,
+						movedDaysOff,
+						dayOffOptimizationPreferenceProvider);
+
+					if (success)
+					{
+						previousPeriodValue = currentPeriodValue.Value;
+						allFailed[matrix.Item2] = false;
+					}
+					else
+					{
+						resCalcState.UndoAll();
+						rollbackService.RollbackMinimumChecks();
+
+						if (!optimizationPreferences.Extra.IsClassic()) //removing this if makes bookingdb lot slower...
+						{
+							allFailed[matrix.Item2] = false;
+						}
+						matrix.Item2.LockDays(movedDaysOff.AddedDaysOff);
+						matrix.Item2.LockDays(movedDaysOff.RemovedDaysOff);
+					}
+
+					callback.Optimizing(new OptimizationCallbackInfo(matrix.Item2, success, matrixes.Count));
+					
+					if (onReportProgress(schedulingProgress, matrixes.Count, currentMatrixCounter, matrix.Item2, previousPeriodValue, optimizationPreferences.Advanced.RefreshScreenInterval))
+					{
+						cancelAction();
+						return null;
+					}
+				}
+			}
+
+			return from allFailedKeyValue in allFailed
+				where allFailedKeyValue.Value
+				select allFailedKeyValue.Key;
+		}
+
+		
+
+		private bool runOneMatrixOnly(IOptimizationPreferences optimizationPreferences,
+			ISchedulePartModifyAndRollbackService rollbackService, IScheduleMatrixPro matrix,
+			SchedulingOptions schedulingOptions, ITeamInfo teamInfo,
+			IResourceCalculateDelayer resourceCalculateDelayer,
+			ISchedulingResultStateHolder schedulingResultStateHolder,
+			Lazy<double> currentPeriodValue, double previousPeriodValue,
+			MovedDaysOff movedDaysOff,
+			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
+		{
+			if (optimizationPreferences.Extra.UseTeams && optimizationPreferences.Extra.UseTeamSameDaysOff)
+			{
+				movedDaysOff.RemovedDaysOff.ForEach(date => _teamDayOffModifier.RemoveDayOffForTeam(rollbackService, teamInfo, date));
+				movedDaysOff.AddedDaysOff.ForEach(date => _teamDayOffModifier.AddDayOffForTeamAndResourceCalculate(rollbackService, teamInfo, date, schedulingOptions.DayOffTemplate));
+			}
+			else
+			{
+				movedDaysOff.RemovedDaysOff.ForEach(date => _teamDayOffModifier.RemoveDayOffForMember(rollbackService, matrix.Person, date));
+				movedDaysOff.AddedDaysOff.ForEach(date => _teamDayOffModifier.AddDayOffForMember(rollbackService, matrix.Person, date, schedulingOptions.DayOffTemplate, true));
+			}
+
+			var personToSetShiftCategoryLimitationFor = optimizationPreferences.Extra.IsClassic() ? matrix.Person : null;
+			if (!reScheduleAllMovedDaysOff(schedulingOptions, teamInfo, movedDaysOff.RemovedDaysOff, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, personToSetShiftCategoryLimitationFor, matrix, optimizationPreferences))
+			{
+				return false;
+			}
+
+			if (!optimizationPreferences.General.OptimizationStepDaysOff && optimizationPreferences.General.OptimizationStepDaysOffForFlexibleWorkTime)
+			{
+				var flexibleDayOffvalidator = _teamBlockDayOffsInPeriodValidator;
+				if (!flexibleDayOffvalidator.Validate(teamInfo, schedulingResultStateHolder))
+				{
+					teamInfo.LockDays(movedDaysOff.AddedDaysOff);
+					teamInfo.LockDays(movedDaysOff.RemovedDaysOff);
+					return false;
+				}
+			}
+
+			if (!_teamBlockOptimizationLimits.ValidateMinWorkTimePerWeek(teamInfo))
+			{
+				_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
+				teamInfo.LockDays(movedDaysOff.AddedDaysOff);
+				return true;
+			}
+
+			if (!_teamBlockOptimizationLimits.Validate(teamInfo, optimizationPreferences, dayOffOptimizationPreferenceProvider))
+			{
+				_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
+				teamInfo.LockDays(movedDaysOff.AddedDaysOff);
+				return true;
+			}
+
+			if (!optimizationPreferences.Extra.IsClassic())
+			{
+				foreach (var dateOnly in movedDaysOff.RemovedDaysOff)
+				{
+					ITeamBlockInfo teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, dateOnly, schedulingOptions.BlockFinder());
+
+					if (!_teamBlockShiftCategoryLimitationValidator.Validate(teamBlockInfo, null, optimizationPreferences))
+					{
+						_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
+						teamInfo.LockDays(movedDaysOff.AddedDaysOff);
+						teamInfo.LockDays(movedDaysOff.RemovedDaysOff);
+					}
+				}
+			}
+
+			return currentPeriodValue.Value < previousPeriodValue;
+		}
+
+		private static bool onReportProgress(ISchedulingProgress schedulingProgress, int totalNumberOfTeamInfos, int teamInfoCounter, ITeamInfo currentTeamInfo, double periodValue, int screenRefreshRate)
+		{
+			if (schedulingProgress.CancellationPending)
+			{
+				return true;
+			}
+			var eventArgs = new ResourceOptimizerProgressEventArgs(0, 0,
+				Resources.OptimizingDaysOff + Resources.Colon + "(" + totalNumberOfTeamInfos.ToString("####") + ")(" +
+				teamInfoCounter.ToString("####") + ") " + currentTeamInfo.Name.DisplayString(20) + " (" + periodValue + ")", screenRefreshRate);
+			schedulingProgress.ReportProgress(1, eventArgs);
+			return false;
+		}
+
+		private bool reScheduleAllMovedDaysOff(SchedulingOptions schedulingOptions, ITeamInfo teamInfo,
+			IEnumerable<DateOnly> removedDaysOff,
+			ISchedulePartModifyAndRollbackService rollbackService,
+			IResourceCalculateDelayer resourceCalculateDelayer,
+			ISchedulingResultStateHolder schedulingResultStateHolder,
+			IPerson personToSetShiftCategoryLimitationFor,
+			IScheduleMatrixPro matrix,
+			IOptimizationPreferences optimizationPreferences)
+		{
+			var nightRestWhiteSpotSolver = _nightRestWhiteSpotSolverServiceFactory.Create(true); //keep some behavoir as in classic
+			foreach (DateOnly dateOnly in removedDaysOff)
+			{
+				if (personToSetShiftCategoryLimitationFor != null)
+				{
+					_shiftCategoryLimitationChecker.SetBlockedShiftCategories(schedulingOptions, personToSetShiftCategoryLimitationFor, dateOnly);
+				}
+				var teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, dateOnly, schedulingOptions.BlockFinder());
+				if (teamBlockInfo == null)
+					continue;
+				if (!_teamBlockSteadyStateValidator.IsTeamBlockInSteadyState(teamBlockInfo, schedulingOptions))
+					_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
+				var resCalcData =new ResourceCalculationData(schedulingResultStateHolder, schedulingOptions.ConsiderShortBreaks, false);
+				if (!_teamBlockScheduler.ScheduleTeamBlockDay(Enumerable.Empty<IPersonAssignment>(), new NoSchedulingCallback(), _workShiftSelector, teamBlockInfo, dateOnly, schedulingOptions,
+					rollbackService, resourceCalculateDelayer, schedulingResultStateHolder.SkillDays,
+					schedulingResultStateHolder.Schedules, resCalcData, new ShiftNudgeDirective(),
+					NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder), _groupPersonSkillAggregator))
+				{
+					if (optimizationPreferences.Extra.IsClassic())
+					{
+						if (!nightRestWhiteSpotSolver.Resolve(matrix, schedulingOptions, rollbackService))
+							return false;
+					}
+					else
+					{
+						return false;
+					}
+				}
+			}
+
+			return true;
+		}
+	}
+
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_DayOffUsePredictorEverywhere_75667)]
+	public class DayOffOptimizerStandardOLD
+	{
+		private readonly ILockableBitArrayFactory _lockableBitArrayFactory;
+		private readonly TeamBlockScheduler _teamBlockScheduler;
+		private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
+		private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
+		private readonly ITeamDayOffModifier _teamDayOffModifier;
+		private readonly ITeamBlockSteadyStateValidator _teamBlockSteadyStateValidator;
+		private readonly TeamBlockClearer _teamBlockClearer;
+		private readonly ITeamBlockOptimizationLimits _teamBlockOptimizationLimits;
+		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
+		private readonly ITeamBlockDayOffsInPeriodValidator _teamBlockDayOffsInPeriodValidator;
+		private readonly IWorkShiftSelector _workShiftSelector;
+		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
+		private readonly DayOffOptimizerPreMoveResultPredictor _dayOffOptimizerPreMoveResultPredictor;
+		private readonly ITeamBlockDaysOffMoveFinder _teamBlockDaysOffMoveFinder;
+		private readonly AffectedDayOffs _affectedDayOffs;
+		private readonly IShiftCategoryLimitationChecker _shiftCategoryLimitationChecker;
+		private readonly INightRestWhiteSpotSolverServiceFactory _nightRestWhiteSpotSolverServiceFactory;
+		private readonly BlockPreferencesMapper _blockPreferencesMapper;
+		private readonly ICurrentOptimizationCallback _currentOptimizationCallback;
+
+		public DayOffOptimizerStandardOLD(
 			ILockableBitArrayFactory lockableBitArrayFactory,
 			TeamBlockScheduler teamBlockScheduler,
 			ITeamBlockInfoFactory teamBlockInfoFactory,
