@@ -3,6 +3,8 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
+using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.TestCommon.Messaging;
 
 namespace Teleopti.MessagingTest.Http.Mailbox
 {

@@ -427,6 +427,9 @@
     <Compile Include="JobResultExtensions.cs" />
     <Compile Include="LegacyFakeEventPublisher.cs" />
     <Compile Include="MessageBrokerCompositeDummy.cs" />
+    <Compile Include="Messaging\FakeUrl.cs" />
+    <Compile Include="Messaging\MessageBrokerServerBridge.cs" />
+    <Compile Include="Messaging\MessagingTestAttribute.cs" />
     <Compile Include="MultisiteDayExtensions.cs" />
     <Compile Include="ObjectCopyExtension.cs" />
     <Compile Include="FakeRepositories\Rta\FakeRtaRuleRepository.cs" />

@@ -2,13 +2,16 @@
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
+using Teleopti.Ccc.Domain.MessageBroker.Server;
+using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.MessageBrokerUnitOfWork;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.MessagingTest
+namespace Teleopti.Ccc.TestCommon.Messaging
 {
-	public class MessagingTestAttribute : DomainTestAttribute
+	public class MessagingTestAttribute : IoCTestAttribute
 	{
 		protected override FakeConfigReader Config()
 		{
@@ -25,6 +28,10 @@ namespace Teleopti.MessagingTest
 			system.UseTestDouble<MessageBrokerServerBridge>().For<IHttpServer>();
 			system.UseTestDouble(new FakeCurrentDatasource(new DataSourceState())).For<ICurrentDataSource>();
 			system.UseTestDouble(new FakeCurrentBusinessUnit()).For<ICurrentBusinessUnit>();
+			
+			system.UseTestDouble<FakeMessageBrokerUnitOfWorkScope>().For<IMessageBrokerUnitOfWorkScope>();
+			system.UseTestDouble<FakeSignalR>().For<ISignalR>();
+			system.UseTestDouble<FakeMailboxRepository>().For<IMailboxRepository>();
 		}
 	}
 }

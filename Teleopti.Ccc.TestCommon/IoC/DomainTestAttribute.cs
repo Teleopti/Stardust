@@ -15,7 +15,6 @@ using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.MessageBroker.Server;
 using Teleopti.Ccc.Domain.MultiTenancy;
-using Teleopti.Ccc.Domain.Notification;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay;
@@ -41,7 +40,6 @@ using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
@@ -50,6 +48,7 @@ using Teleopti.Ccc.TestCommon.Services;
 
 namespace Teleopti.Ccc.TestCommon.IoC
 {
+	
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_StoreEvents_47721)]
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_RemoveApprovedOOA_47721)]
 	public class DomainTestAttribute : IoCTestAttribute
@@ -88,12 +87,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 			// Database stuff
 			system.UseTestDouble<FakeDistributedLockAcquirer>().For<IDistributedLockAcquirer>();
-			//
-
-			// Messaging ztuff 
-			system.UseTestDouble<FakeMessageBrokerUnitOfWorkScope>().For<IMessageBrokerUnitOfWorkScope>();
-			system.UseTestDouble<FakeSignalR>().For<ISignalR>();
-			system.UseTestDouble<FakeMailboxRepository>().For<IMailboxRepository>();
 			//
 
 			// Rta

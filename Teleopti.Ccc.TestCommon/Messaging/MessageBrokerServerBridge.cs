@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Net;
@@ -9,9 +9,8 @@ using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Domain.MessageBroker.Server;
-using Teleopti.Ccc.TestCommon;
 
-namespace Teleopti.MessagingTest
+namespace Teleopti.Ccc.TestCommon.Messaging
 {
 	public class MessageBrokerServerBridge : IHttpServer
 	{
@@ -81,12 +80,12 @@ namespace Teleopti.MessagingTest
 
 		public void Down()
 		{
-			Throws(new AggregateException(new HttpRequestException()));
+			Throws(new System.AggregateException(new HttpRequestException()));
 		}
 
 		public void IsSlow()
 		{
-			Throws(new AggregateException(new TaskCanceledException()));
+			Throws(new System.AggregateException(new TaskCanceledException()));
 		}
 
 		public void GivesError(HttpStatusCode httpCode)

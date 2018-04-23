@@ -7,6 +7,8 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.SystemCheck;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.TestCommon.Messaging;
 
 namespace Teleopti.MessagingTest.Http.Mailbox
 {

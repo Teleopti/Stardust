@@ -1,6 +1,6 @@
-using Teleopti.Ccc.Domain.MessageBroker.Client;
+﻿using Teleopti.Ccc.Domain.MessageBroker.Client;
 
-namespace Teleopti.MessagingTest
+namespace Teleopti.Ccc.TestCommon.Messaging
 {
 	public class FakeUrl : IMessageBrokerUrl
 	{

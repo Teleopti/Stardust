@@ -11,11 +11,12 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.TestCommon.Messaging;
 
 namespace Teleopti.Ccc.DomainTest.MessageBroker
 {
 	[TestFixture]
-	[DomainTest]
+	[MessagingTest]
 	[Setting("MessageBrokerMailboxExpirationInSeconds", "1800")]
 	public class MailboxPurgeTest
 	{
