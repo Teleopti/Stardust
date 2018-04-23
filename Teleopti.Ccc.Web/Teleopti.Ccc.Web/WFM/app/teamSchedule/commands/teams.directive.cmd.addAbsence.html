@@ -13,14 +13,14 @@
 			<div ng-if="!vm.isFullDayAbsence && vm.isAddIntradayAbsenceAvailable()">
 				<h3>{{'From'|translate}}: </h3>
 				<div class="con-row">
-					<teams-datetime-picker ng-model="vm.timeRange.startTime"
+					<teams-datetime-picker class="start-time" ng-model="vm.timeRange.startTime"
 										   timezone="vm.getCurrentTimezone()"
 										   ng-change="vm.updateInvalidAgents()">
 					</teams-datetime-picker>
 				</div>
 				<h3>{{'To'|translate}}: </h3>
 				<div class="con-row">
-					<teams-datetime-picker ng-model="vm.timeRange.endTime"
+					<teams-datetime-picker class="end-time" ng-model="vm.timeRange.endTime"
 										   timezone="vm.getCurrentTimezone()"
 										   ng-change="vm.updateInvalidAgents()">
 					</teams-datetime-picker>

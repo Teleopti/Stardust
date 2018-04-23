@@ -59,8 +59,6 @@ Background:
 	| Contract schedule    | A contract schedule  |
 	| Part time percentage | Part time percentage |
 	
-@ignore
-#Temp ignore for test failed
 Scenario: Can add intraday absence to agent in another time zone
 	Given 'John Smith' has a shift with
 	| Field          | Value            |
@@ -85,8 +83,8 @@ Scenario: Can add intraday absence to agent in another time zone
 	| Field        | Value            |
 	| Absence      | Vacation         |
 	| SelectedDate | 2017-04-17       |
-	| StartTime    | 2017-04-17 20:00 |
-	| EndTime      | 2017-04-17 21:00 |
+	| StartTime    | 2017-04-17 21:00 |
+	| EndTime      | 2017-04-17 22:00 |
 	| FullDay      | False            |
 	Then I should be able to apply my new absence
 	When I apply the new absence

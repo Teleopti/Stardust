@@ -159,19 +159,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		public void WhenISetANewAbsenceAs(Table table)
 		{
 			var values = table.CreateInstance<AddAbsenceForm>();
-			var startTime = $"new Date('{values.StartTime}')";
-			var endTime = $"new Date('{values.EndTime}')";
-			var timeRangeStr = $"{{startTime:{startTime}, endTime:{endTime}}}";
 			var selectedDate = $"function(){{return '{values.SelectedDate}';}}";
 			var selectedId = idForAbsence(values.Absence).ToString();
-			var timeRange = new Dictionary<string, string>
+			var absenceInput = new Dictionary<string, string>
 					{
 						{"vm.selectedDate", selectedDate},
-						{"vm.timeRange", timeRangeStr},
 						{"vm.selectedAbsenceId", $"'{selectedId}'" },
 						{"vm.isFullDayAbsence", $"{(values.FullDay ? "true" : "false")}"}
 					};
-			Browser.Interactions.SetScopeValues(".add-absence", timeRange);
+			Browser.Interactions.SetScopeValues(".add-absence", absenceInput);
+			Browser.Interactions.SetScopeValues(".add-absence .start-time teams-time-picker", new Dictionary<string, string>{{"$ctrl.dateTimeObj", $"new Date('{values.StartTime}')"}}, true);
+			Browser.Interactions.SetScopeValues(".add-absence .end-time teams-time-picker", new Dictionary<string, string>{{ "$ctrl.dateTimeObj", $"new Date('{values.EndTime}')"}}, true);
 		}
 
 		[Then(@"I should be able to apply my new activity")]
