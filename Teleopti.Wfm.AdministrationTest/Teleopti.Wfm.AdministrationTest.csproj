@@ -69,7 +69,6 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="AdministrationTestAttribute.cs" />
     <Compile Include="Controllers\EtlControllerTest.cs" />
     <Compile Include="FakeData\FakeBaseConfigurationRepository.cs" />
     <Compile Include="FakeData\FakeConfigurationHandler.cs" />

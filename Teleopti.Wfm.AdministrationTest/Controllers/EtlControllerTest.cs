@@ -7,15 +7,19 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Analytics.Etl.Common;
 using Teleopti.Analytics.Etl.Common.Entity;
+using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.JobHistory;
 using Teleopti.Analytics.Etl.Common.JobSchedule;
+using Teleopti.Analytics.Etl.Common.Service;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
@@ -26,12 +30,13 @@ using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Wfm.Administration.Controllers;
 using Teleopti.Wfm.Administration.Core.EtlTool;
+using Teleopti.Wfm.Administration.Core.Modules;
 using Teleopti.Wfm.Administration.Models;
 using Teleopti.Wfm.AdministrationTest.FakeData;
 
 namespace Teleopti.Wfm.AdministrationTest.Controllers
 {
-	[AdministrationTest]
+	[DomainTest]
 	public class EtlControllerTest : ISetup
 	{
 		private const string testTenantName = "Test Tenant";
@@ -62,6 +67,15 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 		{
 			system.AddService<EtlController>();
 			system.UseTestDouble<FakeConfigurationHandler>().For<IConfigurationHandler>();
+			
+			system.AddModule(new EtlToolModule());
+			system.UseTestDouble<FakeBaseConfigurationRepository>().For<IBaseConfigurationRepository>();
+			system.UseTestDouble<FakePmInfoProvider>().For<IPmInfoProvider>();
+			system.UseTestDouble<FakeToggleManager>().For<IToggleManager>();
+			system.UseTestDouble<FakeGeneralInfrastructure>().For<IGeneralInfrastructure>();
+			system.UseTestDouble<MutableNow>().For<INow>();
+			system.UseTestDouble<FakeJobScheduleRepository>().For<IJobScheduleRepository>();
+			system.UseTestDouble<FakeJobHistoryRepository>().For<IJobHistoryRepository>();
 		}
 
 		[Test]
