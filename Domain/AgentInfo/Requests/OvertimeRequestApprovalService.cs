@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.UserTexts;
@@ -10,6 +11,46 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 {
+	public interface IOvertimeActivityBelongsToDateProvider
+	{
+		DateOnly GetBelongsToDate(IPerson person, DateTimePeriod overtimeActivityPeriod);
+	}
+
+	public class OvertimeActivityBelongsToDateProvider : IOvertimeActivityBelongsToDateProvider
+	{
+		private readonly IScheduleStorage _scheduleStorage;
+		private readonly ICurrentScenario _currentScenario;
+
+		public OvertimeActivityBelongsToDateProvider(IScheduleStorage scheduleStorage, ICurrentScenario currentScenario)
+		{
+			_scheduleStorage = scheduleStorage;
+			_currentScenario = currentScenario;
+		}
+
+		public DateOnly GetBelongsToDate(IPerson person, DateTimePeriod overtimeActivityPeriod)
+		{
+			var timeZoneInfo = person.PermissionInformation.DefaultTimeZone();
+
+			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
+				new ScheduleDictionaryLoadOptions(false, false), overtimeActivityPeriod.ChangeStartTime(TimeSpan.FromDays(-1)), _currentScenario.Current());
+
+			var yesterday = overtimeActivityPeriod.ToDateOnlyPeriod(timeZoneInfo).StartDate.AddDays(-1);
+
+			var yesterdayPersonAssignment = scheduleDictionary[person].ScheduledDay(yesterday).PersonAssignment();
+
+			if (yesterdayPersonAssignment == null)
+				return new DateOnly(TimeZoneHelper.ConvertFromUtc(overtimeActivityPeriod.StartDateTime, timeZoneInfo));
+
+			var lastShitLayer = yesterdayPersonAssignment.ShiftLayers.LastOrDefault();
+			if (lastShitLayer != null && lastShitLayer.Period.EndDateTime.Equals(overtimeActivityPeriod.StartDateTime))
+			{
+				return yesterdayPersonAssignment.Date;
+			}
+
+			return new DateOnly(TimeZoneHelper.ConvertFromUtc(overtimeActivityPeriod.StartDateTime, timeZoneInfo));
+		}
+	}
+
 	public class OvertimeRequestApprovalService : IRequestApprovalService
 	{
 		private readonly IOvertimeRequestUnderStaffingSkillProvider _overtimeRequestUnderStaffingSkillProvider;
@@ -17,16 +58,19 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		private readonly ICommandDispatcher _commandDispatcher;
 		private readonly IDictionary<DateTimePeriod, IList<ISkill>> _validatedSkillDictionary;
 		private readonly ISkillOpenHourFilter _skillOpenHourFilter;
+		private readonly IOvertimeActivityBelongsToDateProvider _overtimeActivityBelongsToDateProvider;
 
 		public OvertimeRequestApprovalService(
 			IOvertimeRequestUnderStaffingSkillProvider overtimeRequestUnderStaffingSkillProvider,
-			IOvertimeRequestSkillProvider overtimeRequestSkillProvider, ICommandDispatcher commandDispatcher, IDictionary<DateTimePeriod, IList<ISkill>> validatedSkillDictionary, ISkillOpenHourFilter skillOpenHourFilter)
+			IOvertimeRequestSkillProvider overtimeRequestSkillProvider, ICommandDispatcher commandDispatcher, 
+			IDictionary<DateTimePeriod, IList<ISkill>> validatedSkillDictionary, ISkillOpenHourFilter skillOpenHourFilter, IOvertimeActivityBelongsToDateProvider overtimeActivityBelongsToDateProvider)
 		{
 			_overtimeRequestUnderStaffingSkillProvider = overtimeRequestUnderStaffingSkillProvider;
 			_overtimeRequestSkillProvider = overtimeRequestSkillProvider;
 			_commandDispatcher = commandDispatcher;
 			_validatedSkillDictionary = validatedSkillDictionary;
 			_skillOpenHourFilter = skillOpenHourFilter;
+			_overtimeActivityBelongsToDateProvider = overtimeActivityBelongsToDateProvider;
 		}
 
 		public IEnumerable<IBusinessRuleResponse> Approve(IRequest request)
@@ -84,11 +128,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 		private void addOvertimeActivity(Guid activityId, DateTimePeriod period, IOvertimeRequest overtimeRequest)
 		{
-			var agentDateTime = TimeZoneHelper.ConvertFromUtc(period.StartDateTime, overtimeRequest.Person.PermissionInformation.DefaultTimeZone());
+			var belongsToDate = _overtimeActivityBelongsToDateProvider.GetBelongsToDate(overtimeRequest.Person, period);
 			_commandDispatcher.Execute(new AddOvertimeActivityCommand
 			{
 				ActivityId = activityId,
-				Date = new DateOnly(agentDateTime),
+				Date = belongsToDate,
 				MultiplicatorDefinitionSetId = overtimeRequest.MultiplicatorDefinitionSet.Id.GetValueOrDefault(),
 				Period = period,
 				Person = overtimeRequest.Person

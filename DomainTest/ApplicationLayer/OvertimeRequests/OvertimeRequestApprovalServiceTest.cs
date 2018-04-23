@@ -13,6 +13,7 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.IocCommon;
@@ -32,6 +33,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		public FakeMultiplicatorDefinitionSetRepository MultiplicatorDefinitionSetRepository;
 		public FakeCommandDispatcher CommandDispatcher;
 		public FakeActivityRepository ActivityRepository;
+		public IScheduleStorage ScheduleStorage;
 		public MutableNow Now;
 		public FakeLoggedOnUser LoggedOnUser;
 		public FakeSkillTypeRepository SkillTypeRepository;
@@ -324,6 +326,64 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			addOvertimeActivityCommand.Should().Not.Be.Null();
 			addOvertimeActivityCommand?.ActivityId.Should().Be.EqualTo(phoneActivity.Id.GetValueOrDefault());
 			addOvertimeActivityCommand?.Period.Should().Be.EqualTo(period);
+		}
+
+		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestChangeBelongsToDateForOverNightShift_74984)]
+		public void ShouldChangeBelongsToDateForOvertimeWhenContinueWithOverNightShift()
+		{
+			Now.Is(new DateTime(2018, 01, 01, 0, 0, 0, DateTimeKind.Utc));
+
+			setupPerson(0, 24);
+
+			var overNightShiftPeriod = new DateTimePeriod(Now.UtcDateTime().AddHours(20), Now.UtcDateTime().AddHours(25));
+			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(LoggedOnUser.CurrentUser(), Scenario.Current(), new Activity("test").WithId(), overNightShiftPeriod, new ShiftCategory()));
+		
+			var timeZone = TimeZoneInfoFactory.UtcTimeZoneInfo();
+
+			var requestPeriod = new DateTimePeriod(overNightShiftPeriod.EndDateTime, overNightShiftPeriod.EndDateTime.AddHours(1));
+
+			var workflowControlSet = new WorkflowControlSet();
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { _phoneSkillType })
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
+				BetweenDays = new MinMax<int>(0, 5),
+				OrderIndex = 1
+			});
+			LoggedOnUser.CurrentUser().WorkflowControlSet = workflowControlSet;
+
+			var criticalUnderStaffingSkillPhone = createSkill("criticalUnderStaffingSkillPhone", new TimePeriod(0, 24), timeZone);
+			criticalUnderStaffingSkillPhone.SkillType = _phoneSkillType;
+			criticalUnderStaffingSkillPhone.DefaultResolution = _defaultIntervalInMinutes;
+
+			var phoneActivity = createActivity("phone activity");
+
+			var personSkillPhone = createPersonSkill(phoneActivity, criticalUnderStaffingSkillPhone);
+			addPersonSkillsToPersonPeriod(personSkillPhone);
+
+			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(criticalUnderStaffingSkillPhone,
+				new DateOnly(requestPeriod.EndDateTime), new List<StaffingPeriodData>
+				{
+					new StaffingPeriodData
+					{
+						ForecastedStaffing = 10d,
+						ScheduledStaffing = 1d,
+						Period = new DateTimePeriod(requestPeriod.EndDateTime.Date, requestPeriod.EndDateTime)
+					}
+				}, timeZone);
+
+			var personRequest = createOvertimeRequest(LoggedOnUser.CurrentUser(), requestPeriod);
+
+			var target = RequestApprovalServiceFactory.MakeOvertimeRequestApprovalService(null);
+
+			var result = target.Approve(personRequest.Request);
+
+			result.Count().Should().Be(0);
+			var addOvertimeActivityCommand = CommandDispatcher.LatestCommand as AddOvertimeActivityCommand;
+			addOvertimeActivityCommand.Should().Not.Be.Null();
+			addOvertimeActivityCommand?.ActivityId.Should().Be.EqualTo(phoneActivity.Id.GetValueOrDefault());
+			addOvertimeActivityCommand?.Period.Should().Be.EqualTo(requestPeriod);
+			addOvertimeActivityCommand?.Date.Should().Be.EqualTo(new DateOnly(overNightShiftPeriod.StartDateTime));
 		}
 
 		[Test]

@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		private readonly IOvertimeRequestSkillProvider _overtimeRequestSkillProvider;
 		private readonly IPersonRequestRepository _personRequestRepository;
 		private readonly ISkillOpenHourFilter _skillOpenHourFilter;
+		private readonly IOvertimeActivityBelongsToDateProvider _overtimeActivityBelongsToDateProvider;
 		private readonly ICommandDispatcher _commandDispatcher;
 
 		public RequestApprovalServiceFactory(ISwapAndModifyService swapAndModifyService,
@@ -29,7 +30,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			IPersonRequestCheckAuthorization personRequestCheckAuthorization,
 			IOvertimeRequestUnderStaffingSkillProvider overtimeRequestUnderStaffingSkillProvider,
 			IOvertimeRequestSkillProvider overtimeRequestSkillProvider,
-			ICommandDispatcher commandDispatcher, IPersonRequestRepository personRequestRepository, ISkillOpenHourFilter skillOpenHourFilter)
+			ICommandDispatcher commandDispatcher, IPersonRequestRepository personRequestRepository, ISkillOpenHourFilter skillOpenHourFilter,
+			IOvertimeActivityBelongsToDateProvider overtimeActivityBelongsToDateProvider)
 		{
 			_businessRulesForPersonalAccountUpdate = businessRulesForPersonalAccountUpdate;
 			_checkingPersonalAccountDaysProvider = checkingPersonalAccountDaysProvider;
@@ -40,6 +42,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			_commandDispatcher = commandDispatcher;
 			_personRequestRepository = personRequestRepository;
 			_skillOpenHourFilter = skillOpenHourFilter;
+			_overtimeActivityBelongsToDateProvider = overtimeActivityBelongsToDateProvider;
 			_swapAndModifyService = swapAndModifyService;
 			_globalSettingDataRepository = globalSettingDataRepository;
 		}
@@ -75,7 +78,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		public IRequestApprovalService MakeOvertimeRequestApprovalService(IDictionary<DateTimePeriod,IList<ISkill>> validatedSkillDictionary)
 		{
 			return new OvertimeRequestApprovalService(_overtimeRequestUnderStaffingSkillProvider, _overtimeRequestSkillProvider,
-				_commandDispatcher, validatedSkillDictionary, _skillOpenHourFilter);
+				_commandDispatcher, validatedSkillDictionary, _skillOpenHourFilter, _overtimeActivityBelongsToDateProvider);
 		}
 	}
 }
