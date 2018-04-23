@@ -37,7 +37,6 @@ Request_RecalculatePersonAccountBalanceOnRequestConsumer_36850 = true
 WebByPassDefaultPermissionCheck_37984 = true
 
 # LevelUp #
-RTA_ModifySkillGroup_48191 = true
 RTA_StoreEvents_47721 = true
 RTA_RemoveApprovedOOA_47721 = true
 RTA_ImprovedStateGroupFilter_48724 = true

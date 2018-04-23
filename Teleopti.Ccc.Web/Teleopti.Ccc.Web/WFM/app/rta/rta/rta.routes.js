@@ -20,9 +20,7 @@ angular.module('wfm.rta').config(function ($stateProvider, ToggleProvider) {
 				es: {array: true}
 			},
 			templateUrl: function () {
-				if (toggles.RTA_ModifySkillGroup_48191)
-					return 'app/rta/rta/overview/view.RTA_ModifySkillGroup_48191.html';
-				return 'app/rta/rta/overview/view.RTA_UnifiedSkillGroupManagement_45417.html';
+				return 'app/rta/rta/overview/view.RTA_ModifySkillGroup_48191.html';
 			},
 			controllerProvider: function () {
 				return 'RtaOverviewController46933 as vm';
@@ -47,9 +45,7 @@ angular.module('wfm.rta').config(function ($stateProvider, ToggleProvider) {
 			templateUrl: function () {
 				if (toggles.RTA_ImprovedStateGroupFilter_48724)
 					return 'app/rta/rta/agents/rta-agents.RTA_ImprovedStateGroupFilter_48724.html';
-				if (toggles.RTA_ModifySkillGroup_48191)
-					return 'app/rta/rta/agents/rta-agents.RTA_ModifySkillGroup_48191.html';
-				return 'app/rta/rta/agents/rta-agents.RTA_ViewHistoricalAhderenceForRecentShifts_46786.html';
+				return 'app/rta/rta/agents/rta-agents.RTA_ModifySkillGroup_48191.html';
 			},
 			controllerProvider: function () {
 				if (toggles.RTA_ImprovedStateGroupFilter_48724)
@@ -86,16 +82,6 @@ angular.module('wfm.rta').config(function ($stateProvider, ToggleProvider) {
 			controller: function ($state, $stateParams) {
 				$state.go('rta', $stateParams);
 			}
-		})
-		// remove with RTA_ModifySkillGroup_48191
-		.state("rta-skill-area-config", {
-			params: {
-				isNewSkillArea: false,
-				returnState: "rta-without-slash"
-			},
-			url: "/rta/skill-area-config",
-			templateUrl: "app/global/skill-group/skillgroup.html",
-			controller: "SkillGroupController as vm"
 		})
 		.state("rta-skill-area-manager", {
 			params: {
