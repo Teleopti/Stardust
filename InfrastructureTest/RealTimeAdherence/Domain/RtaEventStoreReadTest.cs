@@ -81,5 +81,26 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain
 
 			actual.Cast<PersonStateChangedEvent>().Single().Timestamp.Should().Be("2018-03-06 08:00".Utc());
 		}
+		
+		[Test]
+		public void ShouldOrderByStartTime()
+		{
+			var personId = Guid.NewGuid();
+			Publisher.Publish(new PersonStateChangedEvent
+			{
+				PersonId = personId,
+				Timestamp = "2018-03-06 10:00".Utc()
+			}, new PersonStateChangedEvent
+			{
+				PersonId = personId,
+				Timestamp = "2018-03-06 08:00".Utc()
+			});
+
+			var actual = WithUnitOfWork.Get(() => Events.Load(personId, "2018-03-06 08:00 - 2018-03-06 10:00".Period()));
+
+			actual.Cast<PersonStateChangedEvent>()
+				.Select(x => x.Timestamp)
+				.Should().Have.SameSequenceAs("2018-03-06 08:00".Utc(), "2018-03-06 10:00".Utc());
+		}
 	}
 }

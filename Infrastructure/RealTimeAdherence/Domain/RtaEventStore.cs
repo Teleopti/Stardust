@@ -80,6 +80,7 @@ WHERE
 	PersonId = :PersonId AND 
 	StartTime <= :EndTime AND 
 	EndTime >= :StartTime
+	ORDER BY [StartTime] ASC
 ")
 					.SetParameter("PersonId", personId)
 					.SetParameter("StartTime", period.StartDateTime)
