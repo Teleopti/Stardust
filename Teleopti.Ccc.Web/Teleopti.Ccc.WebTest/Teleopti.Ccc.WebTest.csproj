@@ -270,7 +270,8 @@
     <Compile Include="Areas\MyTime\Controllers\ScheduleApiControllerFetchMonthDataTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\ScheduleApiControllerGetIntradayScheduleEdgeTimeTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\ScheduleApiControllerTimeLineTest.cs" />
-    <Compile Include="Areas\MyTime\Controllers\ScheduleStaffingPossibilityControllerTest.cs" />
+    <Compile Include="Areas\MyTime\Controllers\ScheduleStaffingPossibilityControllerOvertimeTest.cs" />
+    <Compile Include="Areas\MyTime\Controllers\ScheduleStaffingPossibilityControllerAbsenceTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\ScheduleApiControllerFetchWeekDataTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\AppGuideControllerTest.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AbsenceTimeProviderCacheTest.cs" />

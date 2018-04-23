@@ -36,7 +36,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 				skills.AddRange(_overtimeRequestSkillProvider.GetAvailableSkillsBySkillType(person, date.ToDateTimePeriod(defaultTimeZone)).ToList());
 			}
 
-			var useShrinkage = true;
+			var useShrinkage = person.WorkflowControlSet.OvertimeRequestStaffingCheckMethod ==
+							OvertimeRequestStaffingCheckMethod.IntradayWithShrinkage;
 
 			var skillStaffingDatas = _skillStaffingDataLoader.Load(skills.Distinct().ToList(), period, useShrinkage, isSiteOpened);
 
