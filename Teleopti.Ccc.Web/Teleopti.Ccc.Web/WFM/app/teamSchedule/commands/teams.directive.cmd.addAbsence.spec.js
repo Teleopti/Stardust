@@ -146,15 +146,16 @@
 		});
 
 		it('should apply add fullday absence with correct data', function () {
-
 			fakePermissions.setPermissions({ IsAddIntradayAbsenceAvailable: true, IsAddFullDayAbsenceAvailable: true });
-			var result = setUp(moment('2015-01-01T00:00:00').toDate());
+			var result = setUp('2015-01-01 00:00:00');
+			var dateInputElements = result.container[0].querySelectorAll(".teamschedule-datepicker #teamschedule-datepicker-input");
+			dateInputElements[0].value = '1/1/15';
+			angular.element(dateInputElements[0]).triggerHandler('change');
+			dateInputElements[1].value = '1/1/15';
+			angular.element(dateInputElements[1]).triggerHandler('change');
 			var vm = result.commandScope.vm;
-			vm.timeRange = {};
-			vm.timeRange.startTime = new Date('2015-01-01');
-			vm.timeRange.endTime = new Date('2015-01-01');
 			vm.selectedAbsenceId = getAvailableAbsenceTypes()[0].Id;
-			vm.isFullDayAbsence = true;
+			//vm.isFullDayAbsence = true;
 			vm.selectedAgents = [
 				{
 					PersonId: 'agent1',
