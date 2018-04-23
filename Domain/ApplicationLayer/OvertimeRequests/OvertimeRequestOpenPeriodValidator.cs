@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday;
@@ -50,32 +49,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 				permissionInformation, dateOnlyPeriod);
 			if (mergedOvertimeRequestOpenPeriods.All(o => o.AutoGrantType == OvertimeRequestAutoGrantType.Deny))
 			{
-				var dateList = new HashSet<DateOnly>();
-				var days = mergedOvertimeRequestOpenPeriods.Where(a => a.AvailableDays != null).SelectMany(a => a.AvailableDays);
-				foreach (var day in days)
-				{
-					dateList.Add(day);
-				}
-				var denyReason = string.Empty;
-				if (dateList.Count > 0)
-				{
-					var periods = dateList.OrderBy(a => a.Date).ToList().SplitToContinuousPeriods();
-					var dateCulture = permissionInformation.Culture();
-					var suggestedPeriodDateString = string.Join(",", periods.Select(p => p.ToShortDateString(dateCulture)));
-					var languageCulture = permissionInformation.UICulture();
-					denyReason = string.Format(languageCulture,
-						Resources.ResourceManager.GetString("OvertimeRequestDenyReasonNoPeriod", languageCulture),
-						suggestedPeriodDateString);
-				}
-				else
-				{
-					denyReason = mergedOvertimeRequestOpenPeriods.FirstOrDefault()?.DenyReason;
-				}
+				var denyReason = existsAvailableDays(mergedOvertimeRequestOpenPeriods)
+					? mergeAvailableDaysForDenyReason(mergedOvertimeRequestOpenPeriods, permissionInformation)
+					: getDefaultDenyReason(mergedOvertimeRequestOpenPeriods);
 
 				return new OvertimeRequestValidationResult
 				{
 					IsValid = false,
-					InvalidReasons = new[] { denyReason }
+					InvalidReasons = new[] {denyReason}
 				};
 			}
 
@@ -83,6 +64,32 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			{
 				IsValid = true
 			};
+		}
+
+		private static string getDefaultDenyReason(List<OvertimeRequestSkillTypeFlatOpenPeriod> overtimeRequestSkillTypeFlatOpenPeriods)
+		{
+			return overtimeRequestSkillTypeFlatOpenPeriods.FirstOrDefault()?.DenyReason;
+		}
+
+		private static string mergeAvailableDaysForDenyReason(
+			IEnumerable<OvertimeRequestSkillTypeFlatOpenPeriod> overtimeRequestSkillTypeFlatOpenPeriods,
+			IPermissionInformation permissionInformation)
+		{
+			var dateList = new HashSet<DateOnly>(overtimeRequestSkillTypeFlatOpenPeriods.Where(a => a.AvailableDays != null)
+				.SelectMany(a => a.AvailableDays).OrderBy(a => a.Date));
+			var periods = dateList.ToList().SplitToContinuousPeriods();
+			var dateCulture = permissionInformation.Culture();
+			var suggestedPeriodDateString = string.Join(",", periods.Select(p => p.ToShortDateString(dateCulture)));
+			var languageCulture = permissionInformation.UICulture();
+			return string.Format(languageCulture,
+				Resources.ResourceManager.GetString("OvertimeRequestDenyReasonNoPeriod", languageCulture),
+				suggestedPeriodDateString);
+		}
+
+		private bool existsAvailableDays(
+			IEnumerable<OvertimeRequestSkillTypeFlatOpenPeriod> overtimeRequestSkillTypeFlatOpenPeriods)
+		{
+			return overtimeRequestSkillTypeFlatOpenPeriods.Any(a => a.AvailableDays != null && a.AvailableDays.Count > 0);
 		}
 
 		private IEnumerable<IGrouping<ISkillType, OvertimeRequestSkillTypeFlatOpenPeriod>>
