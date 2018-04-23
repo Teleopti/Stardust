@@ -17,11 +17,7 @@ namespace Teleopti.Ccc.Web.Areas.Global
 		}
 
 		[Route("api/Global/Version"), HttpGet]
-		public string Version()
-		{
-			if (_toggles.IsEnabled(Toggles.RTA_ReloadUIOnSystemVersionChanged_48196))
-				return _version.Version();
-			return null;
-		}
+		public string Version() => _version.Version();
+		
 	}
 }

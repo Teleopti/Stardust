@@ -16,7 +16,6 @@
 		
 		Request_RecalculatePersonAccountBalanceOnRequestConsumer_36850,
 
-		RTA_ReloadUIOnSystemVersionChanged_48196,
 		RTA_ModifySkillGroup_48191,
 		RTA_RemoveApprovedOOA_47721,
 		RTA_StoreEvents_47721,

@@ -43,7 +43,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 	public class UpgradeTest
 	{
 		[Test]
-		[OnlyRunIfEnabled(Toggles.RTA_ReloadUIOnSystemVersionChanged_48196)]
 		public void ShouldRefreshClientApplicationAfterUpgrade()
 		{
 			Navigation.GoToPage($"wfm/#/teapot");
