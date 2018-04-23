@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
@@ -21,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_personalSkillsProvider = personalSkillsProvider;
 		}
 
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_DayOffUsePredictorEverywhere_75667)]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public double CurrentValue(IScheduleMatrixPro matrix)
 		{
 			IVirtualSchedulePeriod schedulePeriod = matrix.SchedulePeriod;
@@ -32,7 +31,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			return result;
 		}
 
-		[RemoveMeWithToggle("return a simple bool here", Toggles.ResourcePlanner_DayOffUsePredictorEverywhere_75667)]
 		public PredictorResult IsPredictedBetterThanCurrent(IScheduleMatrixPro matrix, ILockableBitArray workingBitArray,
 									 ILockableBitArray originalBitArray, IDaysOffPreferences daysOffPreferences)
 		{
@@ -112,7 +110,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		}
 	}
 
-	[RemoveMeWithToggle(Toggles.ResourcePlanner_DayOffUsePredictorEverywhere_75667)]
 	public class PredictorResult
 	{
 		public bool IsBetter { get; set; }

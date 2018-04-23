@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				if (movedDaysOff != null)
 				{
 					var predictorResult = _dayOffOptimizerPreMoveResultPredictor.IsPredictedBetterThanCurrent(matrix.Item1, resultingArray, originalArray, dayOffOptimizationPreference);
-
+					var previousPeriodValue = predictorResult.CurrentValue;
 					if (!predictorResult.IsBetter)
 					{
 						allFailed[matrix.Item2] = false;
@@ -138,16 +138,20 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 						continue;
 					}
 
+					var currentPeriodValue = new Lazy<double>(() => _dayOffOptimizerPreMoveResultPredictor.CurrentValue(matrix.Item1));
 					var resCalcState = new UndoRedoContainer();
 					resCalcState.FillWith(schedulingResultStateHolder.SkillDaysOnDateOnly(movedDaysOff.ModifiedDays()));
 					var success = runOneMatrixOnly(optimizationPreferences, rollbackService, matrix.Item1, schedulingOptions, matrix.Item2,
 						resourceCalculateDelayer,
 						schedulingResultStateHolder,
+						currentPeriodValue,
+						previousPeriodValue,
 						movedDaysOff,
 						dayOffOptimizationPreferenceProvider);
 
 					if (success)
 					{
+						previousPeriodValue = currentPeriodValue.Value;
 						allFailed[matrix.Item2] = false;
 					}
 					else
@@ -165,7 +169,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 					callback.Optimizing(new OptimizationCallbackInfo(matrix.Item2, success, matrixes.Count));
 					
-					if (onReportProgress(schedulingProgress, matrixes.Count, currentMatrixCounter, matrix.Item2, optimizationPreferences.Advanced.RefreshScreenInterval))
+					if (onReportProgress(schedulingProgress, matrixes.Count, currentMatrixCounter, matrix.Item2, previousPeriodValue, optimizationPreferences.Advanced.RefreshScreenInterval))
 					{
 						cancelAction();
 						return null;
@@ -185,6 +189,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			SchedulingOptions schedulingOptions, ITeamInfo teamInfo,
 			IResourceCalculateDelayer resourceCalculateDelayer,
 			ISchedulingResultStateHolder schedulingResultStateHolder,
+			Lazy<double> currentPeriodValue, double previousPeriodValue,
 			MovedDaysOff movedDaysOff,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
@@ -245,10 +250,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				}
 			}
 
-			return true;
+			return currentPeriodValue.Value < previousPeriodValue;
 		}
 
-		private static bool onReportProgress(ISchedulingProgress schedulingProgress, int totalNumberOfTeamInfos, int teamInfoCounter, ITeamInfo currentTeamInfo, int screenRefreshRate)
+		private static bool onReportProgress(ISchedulingProgress schedulingProgress, int totalNumberOfTeamInfos, int teamInfoCounter, ITeamInfo currentTeamInfo, double periodValue, int screenRefreshRate)
 		{
 			if (schedulingProgress.CancellationPending)
 			{
@@ -256,7 +261,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			}
 			var eventArgs = new ResourceOptimizerProgressEventArgs(0, 0,
 				Resources.OptimizingDaysOff + Resources.Colon + "(" + totalNumberOfTeamInfos.ToString("####") + ")(" +
-				teamInfoCounter.ToString("####") + ") " + currentTeamInfo.Name.DisplayString(20), screenRefreshRate);
+				teamInfoCounter.ToString("####") + ") " + currentTeamInfo.Name.DisplayString(20) + " (" + periodValue + ")", screenRefreshRate);
 			schedulingProgress.ReportProgress(1, eventArgs);
 			return false;
 		}
@@ -304,12 +309,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		}
 	}
 
-	
-	
-	
-	
-	
-	
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_DayOffUsePredictorEverywhere_75667)]
 	public class DayOffOptimizerStandardOLD
 	{
