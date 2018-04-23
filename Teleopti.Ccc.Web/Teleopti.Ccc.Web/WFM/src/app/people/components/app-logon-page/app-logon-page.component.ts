@@ -1,66 +1,13 @@
-import { Component, Injectable, OnDestroy, OnInit } from '@angular/core';
-import {
-	AsyncValidatorFn,
-	FormArray,
-	FormBuilder,
-	FormControl,
-	FormGroup,
-	ValidationErrors,
-	ValidatorFn,
-	Validators
-} from '@angular/forms';
-import { AbstractControlOptions, AbstractControl } from '@angular/forms/src/model';
-import { Observable, Subject } from 'rxjs';
-import { of } from 'rxjs/observable/of';
-import { first, map, switchMap, take, tap } from 'rxjs/operators';
-import { AppLogonService, NavigationService } from '../../services';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { AbstractControl } from '@angular/forms/src/model';
+import { Subject } from 'rxjs';
+import { NavigationService } from '../../services';
 import { Person } from '../../types';
+import { DuplicateAppLogonValidator, FormControlWithInitial } from '../shared';
 import { AppLogonPageService, PeopleWithAppLogon, PersonWithAppLogon } from './app-logon-page.service';
 
-class FormControlWithInitial extends FormControl {
-	constructor(
-		formState?: any,
-		validatorOrOpts?: ValidatorFn | ValidatorFn[] | AbstractControlOptions | null,
-		asyncValidator?: AsyncValidatorFn | AsyncValidatorFn[] | null
-	) {
-		super(formState, validatorOrOpts, asyncValidator);
-		this.initialValue = formState;
-	}
-	public initialValue: string;
-
-	get sameAsInitialValue() {
-		return this.initialValue === this.value.trim();
-	}
-}
-
-@Injectable()
-export class DuplicateNameValidator {
-	constructor(private appLogonService: AppLogonService) {}
-
-	stateToErrorMessage = state => (state ? { duplicateNameValidator: state } : {});
-
-	/**
-	 * Override this to change the validation source
-	 * @param value the value to check
-	 */
-	nameExists(value: string) {
-		return this.appLogonService.logonNameExists(value);
-	}
-
-	validate = (control: FormControlWithInitial): Observable<ValidationErrors> => {
-		if (control.sameAsInitialValue) return of(this.stateToErrorMessage(false));
-
-		return Observable.timer(500).pipe(
-			switchMap(() => this.nameExists(control.value)),
-			take(1),
-			map(isDuplicate => this.stateToErrorMessage(isDuplicate)),
-			tap(() => control.markAsTouched()),
-			first()
-		);
-	};
-}
-
-export class DuplicateFormNameValidator {
+class DuplicateFormNameValidator {
 	private appLogonPageComponent: AppLogonPageComponent;
 
 	constructor(appLogonPageComponent: AppLogonPageComponent) {
@@ -83,14 +30,14 @@ export class DuplicateFormNameValidator {
 	selector: 'people-app-logon-page',
 	templateUrl: './app-logon-page.component.html',
 	styleUrls: ['./app-logon-page.component.scss'],
-	providers: [AppLogonPageService, DuplicateNameValidator]
+	providers: [AppLogonPageService, DuplicateAppLogonValidator]
 })
 export class AppLogonPageComponent implements OnDestroy, OnInit {
 	constructor(
 		public nav: NavigationService,
 		private formBuilder: FormBuilder,
 		private appLogonPageService: AppLogonPageService,
-		private duplicateNameValidator: DuplicateNameValidator
+		private duplicateNameValidator: DuplicateAppLogonValidator
 	) {}
 
 	private componentDestroyed: Subject<any> = new Subject();
@@ -117,9 +64,6 @@ export class AppLogonPageComponent implements OnDestroy, OnInit {
 				this.rebuildForm(people);
 			}
 		});
-		// this.logons.valueChanges.subscribe({
-		// 	next: value => this.checkForDuplicates(value)
-		// });
 		this.logons.statusChanges.subscribe({
 			next: status => {
 				this.formValid = status === 'VALID';
