@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.LicenseOptions;
 
 namespace Teleopti.Ccc.DomainTest.Security.LicenseOptions
 {
-    [TestFixture]
+	[TestFixture]
     public class TeleoptiCccRealTimeAdherenceLicenseOptionTest
     {
         private TeleoptiCccRealTimeAdherenceLicenseOption _target;
@@ -17,13 +20,27 @@ namespace Teleopti.Ccc.DomainTest.Security.LicenseOptions
         }
 
         [Test]
-        public void VerifyEnable()
-        {
-            IList<IApplicationFunction> inputList = new List<IApplicationFunction>();
-
-            _target.EnableApplicationFunctions(inputList);
-            IList<IApplicationFunction> resultList = _target.EnabledApplicationFunctions;
-            Assert.AreEqual(3, resultList.Count);
-        }
+        public void VerifyRealTimeAdherenceOverviewEnabled()
+		{
+            IList<IApplicationFunction> applicationFunctions = new DefinedRaptorApplicationFunctionFactory().ApplicationFunctions;
+		
+            _target.EnableApplicationFunctions(applicationFunctions);
+			
+            IList<IApplicationFunction> enabledFunctions = _target.EnabledApplicationFunctions;
+			enabledFunctions.Should().Contain(ApplicationFunction.FindByPath(applicationFunctions,
+				DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview));
+		}        
+		
+		[Test]
+        public void VerifyModifyAdherenceEnabled()
+		{
+            IList<IApplicationFunction> applicationFunctions = new DefinedRaptorApplicationFunctionFactory().ApplicationFunctions;
+		
+            _target.EnableApplicationFunctions(applicationFunctions);
+			
+            IList<IApplicationFunction> enabledFunctions = _target.EnabledApplicationFunctions;
+			enabledFunctions.Should().Contain(ApplicationFunction.FindByPath(applicationFunctions,
+				DefinedRaptorApplicationFunctionPaths.ModifyAdherence));
+		}
     }
 }

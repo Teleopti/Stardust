@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 	/// There is no check method for ungiven Name property. 
 	/// </remarks>
 
-	
 	// DONT default permissions to false!
 	// False is the edge case!
 	public class RoleConfigurable : IDataSetup
@@ -57,6 +56,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public bool AccessToMyReport { get; set; }
 		public bool AccessToPreferences { get; set; }
 		public bool AccessToRealTimeAdherenceOverview { get; set; }
+		public bool AccessToModifyAdherence { get; set; }
 		public bool AccessToTeamSchedule { get; set; }
 		public bool AccessToViewAllGroupPages { get; set; }
 		public bool AccessToMatrixReports { get; set; }
@@ -111,10 +111,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			AccessToSeatPlanner = false;
 			AccessToViewAllGroupPages = false;
 			AccessToCalendarLink = false;
-			AccessToOvertimeAvailability = false; 
+			AccessToOvertimeAvailability = false;
 			AccessToMyReport = true;
 			AccessToPreferences = true;
 			AccessToRealTimeAdherenceOverview = true;
+			AccessToModifyAdherence = true;
 			AccessToSeatPlanner = false;
 			AccessToTeamSchedule = true;
 			AccessToMatrixReports = true;
@@ -136,7 +137,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			AccessToWfmLeaderboard = true;
 		}
 
-		
 
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
@@ -189,7 +189,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 
 			applicationRoleRepository.Add(role);
 			availableDataRepository.Add(availableData);
-
 		}
 
 		private IEnumerable<IApplicationFunction> filterApplicationFunctions(IEnumerable<IApplicationFunction> allApplicationFunctions)
@@ -248,6 +247,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 
 			if (!AccessToRealTimeAdherenceOverview)
 				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview);
+			if (!AccessToModifyAdherence)
+				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.ModifyAdherence);
 
 			if (!AccessToResourcePlanner)
 				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.WebPlans);
@@ -276,7 +277,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.RemoveAbsence);
 			if (!AddActivity)
 				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.AddActivity);
-			if(!RemoveActivity)
+			if (!RemoveActivity)
 				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.RemoveActivity);
 			if (!MoveActivity)
 				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.MoveActivity);
@@ -294,7 +295,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 
 			if (!AccessToIntraday)
 				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.WebIntraday
-						  || f.FunctionPath == DefinedRaptorApplicationFunctionPaths.WebModifySkillGroup);
+																		|| f.FunctionPath == DefinedRaptorApplicationFunctionPaths.WebModifySkillGroup);
 
 			if (!AccessToPermissions)
 				applicationFunctions = applicationFunctions.Except(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.WebPermissions);

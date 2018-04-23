@@ -26,8 +26,8 @@ Feature: Restrict modify adherence with permission
 	  | Phone state | LoggedOff |
 	  | Adherence   | Out       |
 	And I have a role with
-	  | Field            | Value |
-	  | Modify Adherence | False |
+	  | Field                      | Value |
+	  | Access to modify adherence | False |
 
   Scenario: Approve as in adherence restricted by permission
 	And Mikkey Dee has a 'Phone' shift between '2018-04-19 09:00' and '17:00'

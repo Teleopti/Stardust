@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<IApplicationFunction> GetAllApplicationFunctionSortedByCode()
 		{
-			throw new NotImplementedException();
+			return _applicationFunctions.OrderBy(x => x.FunctionCode).ToArray();
 		}
 
 		public IEnumerable<IApplicationFunction> ExternalApplicationFunctions()
