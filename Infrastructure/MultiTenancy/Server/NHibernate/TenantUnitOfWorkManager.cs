@@ -66,6 +66,11 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 			return sessionImpl.SessionId;
 		}
 
+		public string GetSessionIntent()
+		{
+			return string.Empty;
+		}
+
 		public bool HasCurrentSession()
 		{
 			return _context.Get() != null;

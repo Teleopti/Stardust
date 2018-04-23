@@ -1,19 +1,22 @@
 ﻿using System;
 using System.Linq;
+using System.Web;
 using Teleopti.Ccc.Domain.Aop.Core;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
+using Teleopti.Ccc.Infrastructure.Web;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Aspects
 {
 	public class TenantAuditAspect : IAspect
 	{
 		private readonly ITenantAuditPersister _tenantAuditPersister;
-		private readonly ICurrentTenantUser _currentTenantUser;
+		private readonly ICurrentHttpContext _currentHttpContext;
 
-		public TenantAuditAspect(ITenantAuditPersister tenantAuditPersister, ICurrentTenantUser currentTenantUser)
+		public TenantAuditAspect(ITenantAuditPersister tenantAuditPersister, ICurrentHttpContext currentHttpContext)
 		{
 			_tenantAuditPersister = tenantAuditPersister;
-			_currentTenantUser = currentTenantUser;
+			_currentHttpContext = currentHttpContext;
 		}
 
 		public void OnBeforeInvocation(IInvocationInfo invocation)
@@ -28,7 +31,8 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Aspects
 
 		private void AuditPersist(PersonInfo personInfo, PersistActionIntent intent)
 		{
-			var tenantUser = _currentTenantUser.CurrentUser();
+			var tenantUser = _currentHttpContext.Current().Items[WebTenantAuthenticationConfiguration.PersonInfo] as PersonInfo;
+
 			var data = Newtonsoft.Json.JsonConvert.SerializeObject(new
 			{
 				Identity = personInfo.Identity ?? string.Empty,

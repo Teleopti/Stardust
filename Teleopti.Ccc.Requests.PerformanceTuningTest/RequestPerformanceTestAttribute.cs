@@ -40,7 +40,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			system.UseTestDouble<NoMessageSender>().For<IMessageSender>();
 			system.UseTestDouble<MultiAbsenceRequestsHandler>().For<MultiAbsenceRequestsHandler>();
 			system.UseTestDouble<MutableNow>().For<INow>();
-			system.UseTestDouble<CurrentTenantUserFake>().For<ICurrentTenantUser>();
 			system.AddService<Database>();
 			system.AddModule(new AnywhereAreaModule(configuration));
 			system.AddModule(new TeamScheduleAreaModule());

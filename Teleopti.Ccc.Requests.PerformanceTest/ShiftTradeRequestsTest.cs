@@ -263,7 +263,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 
 			system.UseTestDouble<NoMessageSender>().For<IMessageSender>();
 			system.UseTestDouble<StardustJobFeedback>().For<IStardustJobFeedback>();
-			system.UseTestDouble<CurrentTenantUserFake>().For<ICurrentTenantUser>();
 			system.UseTestDouble<ShiftTradeRequestHandler>().For<ShiftTradeRequestHandler>();
 
 			system.AddService<Database>();

@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.Infrastructure.Web;
@@ -11,7 +12,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 		private readonly ICurrentHttpContext _currentHttpContext;
 		private readonly IFindPersonInfoByCredentials _findPersonByCredentials;
 		private readonly ISessionSpecificWfmCookieProvider _sessionWfmCookieProvider;
-		public static string PersonInfoKey = "personinfo";
+		public static string PersonInfoKey = WebTenantAuthenticationConfiguration.PersonInfo;
 
 		public WebTenantAuthentication(ICurrentHttpContext currentHttpContext, IFindPersonInfoByCredentials findPersonByCredentials, ISessionSpecificWfmCookieProvider sessionWfmCookieProvider)
 		{

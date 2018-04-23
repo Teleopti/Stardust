@@ -60,7 +60,7 @@ namespace Teleopti.Wfm.Api.Test
 			builder.RegisterInstance(tenants).As<IFindTenantNameByRtaKey>().As<ICountTenants>().As<ILoadAllTenants>().As<IFindTenantByName>().As<IAllTenantNames>();
 			builder.RegisterType<TenantAuthenticationFake>().As<ITenantAuthentication>();
 			builder.RegisterType<TenantUnitOfWorkFake>().As<ITenantUnitOfWork>();
-			builder.RegisterType<CurrentTenantUserFake>().As<ICurrentTenantUser>();
+			//builder.RegisterType<CurrentTenantUserFake>().As<ICurrentTenantUser>();
 			builder.RegisterType<FakeDataSourceForTenant>().As<IDataSourceForTenant>();
 			builder.RegisterType<FakeDataSourcesFactory>().As<IDataSourcesFactory>();
 			builder.RegisterType<FakeAllLicenseActivatorProvider>().As<ILicenseActivatorProvider>();

@@ -65,7 +65,6 @@ namespace Teleopti.Wfm.Administration.Core.Modules
 			builder.RegisterType<GetImportUsers>().As<IGetImportUsers>().SingleInstance();
 			builder.RegisterType<LoadAllPersonInfos>().SingleInstance();
 			builder.RegisterType<LoadAllTenants>().As<ILoadAllTenants>().SingleInstance();
-			builder.RegisterType<CurrentTenantUserFake>().As<ICurrentTenantUser>().SingleInstance();
 			builder.RegisterType<Import>().SingleInstance();
 			builder.RegisterType<SaveTenant>().SingleInstance();
 			builder.RegisterType<CreateBusinessUnit>().As<ICreateBusinessUnit>().InstancePerDependency();
