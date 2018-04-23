@@ -1,9 +1,11 @@
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_DayOffUsePredictorEverywhere_75667)]
 	public class ScheduleMatrixesPrimarySkillExtractor : ISkillExtractor
 	{
 		private readonly PersonalSkillsProvider _personalSkillsProvider;

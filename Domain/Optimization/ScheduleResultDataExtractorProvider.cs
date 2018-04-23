@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
@@ -66,6 +67,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 allSkillExtractor);
         }
 
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_DayOffUsePredictorEverywhere_75667)]
 		public IScheduleResultDataExtractor CreatePrimarySkillsDataExtractor(DateOnlyPeriod selectedPeriod, ISchedulingResultStateHolder stateHolder, IAdvancedPreferences optimizerPreferences, IEnumerable<IScheduleMatrixPro> allScheduleMatrixPros)
 		{
 			ISkillExtractor primarySkillExtractor = new ScheduleMatrixesPrimarySkillExtractor(allScheduleMatrixPros, _personalSkillsProvider);
