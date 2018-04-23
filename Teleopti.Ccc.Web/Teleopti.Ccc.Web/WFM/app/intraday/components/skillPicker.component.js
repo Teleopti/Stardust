@@ -3,14 +3,14 @@
 		templateUrl: 'app/intraday/components/skillPicker.html',
 		controller: theComponent,
 		bindings: {
-			skills: '<',
-			skillGroups: '<',
-			preselectedSkill: '<',
-			preselectedSkillGroup: '<',
-			onSkillSelected: '&',
-			onSkillGroupSelected: '&',
-			onClearSkillSelection: '&',
-			onClearSkillGroupSelection: '&'
+			skills: '<', //The list of skills to display, each object should contain at least Name and Id.
+			skillGroups: '<', //The list of skillgroups to display, each object should contain at least Name and Id.
+			preselectedSkill: '<', //The skill to display as the component loads
+			preselectedSkillGroup: '<', //The skillgroups to display as the component loads
+			onSkillSelected: '&', //Function to execute when skill is selected
+			onSkillGroupSelected: '&', //Function to execute when skillgroup is selected
+			onClearSkillSelection: '&', //Function to execute when skill selection is cleared (x)
+			onClearSkillGroupSelection: '&' //Function to execute when skillgroup selection is cleared (x)
 		}
 	});
 

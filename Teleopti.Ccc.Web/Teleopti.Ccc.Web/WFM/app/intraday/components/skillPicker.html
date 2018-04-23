@@ -12,7 +12,7 @@
         <div style="position: relative">
             <div class="wfm-dropdown-panel panel material-depth-1 full-padding" ng-show="$ctrl.skillPickerOpen" style="z-index: 999; position: absolute; width: 100%; overflow-y: scroll; max-height: 200px">
                 <ul>
-                    <li ng-click="$ctrl.skillSelected(skill)" ng-repeat="skill in $ctrl.skills" style="padding: 10px 0px; cursor: pointer">
+                    <li ng-click="$ctrl.skillSelected(skill)" ng-repeat="skill in $ctrl.skills | filter:$ctrl.skillPickerText" style="padding: 10px 0px; cursor: pointer">
                         {{skill.Name}}
                     </li>
                 </ul>
@@ -34,7 +34,7 @@
         <div style="position: relative">
             <div class="wfm-dropdown-panel panel material-depth-1 full-padding" ng-show="$ctrl.skillGroupPickerOpen" style="z-index: 999; position: absolute; width: 100%; overflow-y: scroll; max-height: 200px">
                 <ul>
-                    <li ng-click="$ctrl.skillGroupSelected(skillGroup)" ng-repeat="skillGroup in $ctrl.skillGroups" style="padding: 10px 0px; cursor: pointer">
+                    <li ng-click="$ctrl.skillGroupSelected(skillGroup)" ng-repeat="skillGroup in $ctrl.skillGroups | filter:$ctrl.skillGroupPickerText" style="padding: 10px 0px; cursor: pointer">
                         {{skillGroup.Name}}
                     </li>
                 </ul>
