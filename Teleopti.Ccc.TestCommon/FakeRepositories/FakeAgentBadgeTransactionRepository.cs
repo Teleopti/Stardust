@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NHibernate.Transform;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Interfaces.Domain;
@@ -48,6 +49,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			var personIds = personCollection.Select(p => p.Id.GetValueOrDefault()).ToArray();
 
 			return _agentBadgeTransactions.Where(t => personIds.Contains(t.Person.Id.GetValueOrDefault()) && period.Contains(t.CalculatedDate)).ToList();
+		}
+
+		public IList<IAgentBadgeTransaction> Find(IPerson person, int badgeType, DateOnlyPeriod period, bool isExternal)
+		{
+			return _agentBadgeTransactions.Where(x => x.Person.Id == person.Id 
+													&& x.BadgeType == badgeType 
+													&& period.Contains(x.CalculatedDate) 
+													&& x.IsExternal == isExternal).ToList();
 		}
 
 		public void Remove(DateOnlyPeriod period)

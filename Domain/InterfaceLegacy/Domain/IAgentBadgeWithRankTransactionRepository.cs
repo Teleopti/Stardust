@@ -17,6 +17,8 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 
 		IList<IAgentBadgeWithRankTransaction> Find(IEnumerable<IPerson> personCollection, DateOnlyPeriod period);
 
+		IList<IAgentBadgeWithRankTransaction> Find(IPerson person, int badgeType, DateOnlyPeriod period, bool isExternal);
+
 		/// <summary>
 		/// remove all badges for all agents within period
 		/// </summary>

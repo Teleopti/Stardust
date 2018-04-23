@@ -49,6 +49,14 @@ namespace Teleopti.Ccc.TestCommon
 			return _agentBadgeWithRankTransactions.Where(x => personIds.Contains(x.Person.Id.GetValueOrDefault()) && period.Contains(x.CalculatedDate)).ToList();
 		}
 
+		public IList<IAgentBadgeWithRankTransaction> Find(IPerson person, int badgeType, DateOnlyPeriod period, bool isExternal)
+		{
+			return _agentBadgeWithRankTransactions.Where(x => x.Person.Id == person.Id 
+															  && x.BadgeType == badgeType 
+															  && period.Contains(x.CalculatedDate) 
+															  && x.IsExternal == isExternal).ToList();
+		}
+
 		public void Remove(DateOnlyPeriod period)
 		{
 			var existings = _agentBadgeWithRankTransactions.Where(x => period.Contains(x.CalculatedDate)).ToList();

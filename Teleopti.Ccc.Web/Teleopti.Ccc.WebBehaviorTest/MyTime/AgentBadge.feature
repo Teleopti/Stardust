@@ -26,7 +26,6 @@ Background:
 		| Team       | GamificationSetting |
 		| Team green | setting             |
 
-@ignore
 Scenario: Show my badge
 Given I have today badges with
   | Badge type          | Bronze | Silver | Gold |
@@ -40,7 +39,6 @@ Given I have today badges with
   And I should see I have 2 bronze badges, 1 silver badge and 1 gold badge for AverageHandlingTime
   And I should see I have 3 bronze badges, 0 silver badge and 0 gold badge for Adherence
 
-@ignore
 Scenario: Show zero badge when agent has no badge
 Given I have badges based on the specific setting with
   | Badge type          | Bronze | Silver | Gold | LastCalculatedDate |

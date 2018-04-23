@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using DotNetOpenAuth.Messaging;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
@@ -52,58 +51,32 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			var silverToBronzeBadgeRate = setting.SilverToBronzeBadgeRate;
 			var goldToSilverBadgeRate = setting.GoldToSilverBadgeRate;
 
-			IList<BadgeViewModel> allAgentBadge = new List<BadgeViewModel>();
-			foreach (var dateOnly in period.DayCollection())
-			{
-				var agentBadge = enabledBadgeTypes.Select(bt => _agentBadgeTransactionRepository.Find(currentUser, bt.Id, dateOnly, bt.IsExternal)??
-					new AgentBadgeTransaction
-					{
-						Amount = 0,
-						BadgeType = bt.Id,
-						IsExternal = bt.IsExternal
-					})
-					.Select(b => new BadgeViewModel
-					{
-						BadgeType = b.BadgeType,
-						GoldBadge = AgentBadge.getGoldBadgeCount(b.Amount, silverToBronzeBadgeRate, goldToSilverBadgeRate),
-						SilverBadge = AgentBadge.getSilverBadgeCount(b.Amount, silverToBronzeBadgeRate, goldToSilverBadgeRate),
-						BronzeBadge = AgentBadge.getBronzeBadgeCount(b.Amount, silverToBronzeBadgeRate),
-						IsExternal = b.IsExternal,
-						Name = findBadgeTypeName(b.BadgeType, b.IsExternal, teamGamificationSetting)
-					});
-				allAgentBadge.AddRange(agentBadge);
-			}
-
-			return allAgentBadge;
+			return (from badgeType in enabledBadgeTypes
+				let agentBadge = _agentBadgeTransactionRepository.Find(currentUser, badgeType.Id, period, badgeType.IsExternal)
+				select new BadgeViewModel
+				{
+					BadgeType = badgeType.Id,
+					GoldBadge = AgentBadge.getGoldBadgeCount(agentBadge.Sum(ab => ab.Amount), silverToBronzeBadgeRate, goldToSilverBadgeRate),
+					SilverBadge = AgentBadge.getSilverBadgeCount(agentBadge.Sum(ab => ab.Amount), silverToBronzeBadgeRate, goldToSilverBadgeRate),
+					BronzeBadge = AgentBadge.getBronzeBadgeCount(agentBadge.Sum(ab => ab.Amount), silverToBronzeBadgeRate),
+					IsExternal = badgeType.IsExternal,
+					Name = findBadgeTypeName(badgeType.Id, badgeType.IsExternal, teamGamificationSetting)
+				}).ToList();
 		}
 
 		private IList<BadgeViewModel> getAgentBadgeWithRank(IPerson currentUser, IEnumerable<BadgeTypeInfo> enabledBadgeTypes, DateOnlyPeriod period, ITeamGamificationSetting teamGamificationSetting)
 		{
-			IList<BadgeViewModel> allAgentBadgeWithRank = new List<BadgeViewModel>();
-			foreach (var dateOnly in period.DayCollection())
-			{
-				var withRank = enabledBadgeTypes.Select(bt => _agentBadgeWithRankTransactionRepository.Find(currentUser, bt.Id, dateOnly, bt.IsExternal)??
-					new AgentBadgeWithRankTransaction
-					{
-						BadgeType = bt.Id,
-						IsExternal = bt.IsExternal,
-						SilverBadgeAmount = 0,
-						GoldBadgeAmount = 0,
-						BronzeBadgeAmount = 0
-					})
-					.Select(b => new BadgeViewModel
-					{
-						BadgeType = b.BadgeType,
-						BronzeBadge = b.BronzeBadgeAmount,
-						SilverBadge = b.SilverBadgeAmount,
-						GoldBadge = b.GoldBadgeAmount,
-						IsExternal = b.IsExternal,
-						Name = findBadgeTypeName(b.BadgeType, b.IsExternal, teamGamificationSetting)
-					});
-				allAgentBadgeWithRank.AddRange(withRank);
-			}
-
-			return allAgentBadgeWithRank;
+			return (from badgeType in enabledBadgeTypes
+				let agentBadge = _agentBadgeWithRankTransactionRepository.Find(currentUser, badgeType.Id, period, badgeType.IsExternal)
+				select new BadgeViewModel
+				{
+					BadgeType = badgeType.Id,
+					BronzeBadge = agentBadge.Sum(ab => ab.BronzeBadgeAmount),
+					SilverBadge = agentBadge.Sum(ab => ab.SilverBadgeAmount),
+					GoldBadge = agentBadge.Sum(ab => ab.GoldBadgeAmount),
+					IsExternal = badgeType.IsExternal,
+					Name = findBadgeTypeName(badgeType.Id, badgeType.IsExternal, teamGamificationSetting)
+				}).ToList();
 		}
 
 		private IList<BadgeViewModel> mergeBadges(IEnumerable<BadgeViewModel> badgeVmList1,

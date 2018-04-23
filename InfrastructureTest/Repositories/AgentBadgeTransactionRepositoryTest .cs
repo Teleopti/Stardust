@@ -121,6 +121,40 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
+		public void ShouldFindWithinPeriod()
+		{
+			var badge1 = CreateAggregateWithCorrectBusinessUnit();
+			badge1.CalculatedDate = new DateOnly(2014, 9, 9);
+			PersistAndRemoveFromUnitOfWork(badge1);
+			var badge2 = CreateAggregateWithCorrectBusinessUnit();
+			badge2.CalculatedDate = new DateOnly(2014, 9, 15);
+			PersistAndRemoveFromUnitOfWork(badge2);
+
+			var target = new AgentBadgeTransactionRepository(UnitOfWork);
+
+			var badges = target.Find(badge1.Person, badge1.BadgeType, new DateOnlyPeriod(2014, 9, 9, 2014, 9, 15), badge1.IsExternal);
+
+			badges.Count.Should().Be.EqualTo(2);
+		}
+
+		[Test]
+		public void ShouldNotFindWithoutPeriod()
+		{
+			var badge1 = CreateAggregateWithCorrectBusinessUnit();
+			badge1.CalculatedDate = new DateOnly(2014, 9, 9);
+			PersistAndRemoveFromUnitOfWork(badge1);
+			var badge2 = CreateAggregateWithCorrectBusinessUnit();
+			badge2.CalculatedDate = new DateOnly(2014, 9, 15);
+			PersistAndRemoveFromUnitOfWork(badge2);
+
+			var target = new AgentBadgeTransactionRepository(UnitOfWork);
+
+			var badges = target.Find(badge1.Person, badge1.BadgeType, new DateOnlyPeriod(2014, 9, 1, 2014, 9, 8), badge1.IsExternal);
+
+			badges.Count.Should().Be.EqualTo(0);
+		}
+
+		[Test]
 		public void ShouldGetBadgeWithinGivenDatePeriod()
 		{
 			var badge1 = CreateAggregateWithCorrectBusinessUnit();

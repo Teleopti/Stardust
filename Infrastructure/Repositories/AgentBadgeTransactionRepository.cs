@@ -35,6 +35,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return result;
 		}
 
+		public IList<IAgentBadgeTransaction> Find(IPerson person, int badgeType, DateOnlyPeriod period, bool isExternal)
+		{
+			var result = Session.CreateCriteria(typeof(IAgentBadgeTransaction), "badge")
+				.Add(Restrictions.Eq("Person", person))
+				.Add(Restrictions.Eq("BadgeType", badgeType))
+				.Add(Restrictions.Between("CalculatedDate", period.StartDate, period.EndDate))
+				.Add(Restrictions.Eq("IsExternal", isExternal))
+				.List<IAgentBadgeTransaction>();
+			return result;
+		}
+
 		public IList<IAgentBadgeTransaction> Find(IEnumerable<IPerson> personCollection, DateOnlyPeriod period)
 		{
 			var retList = new List<IAgentBadgeTransaction>();
