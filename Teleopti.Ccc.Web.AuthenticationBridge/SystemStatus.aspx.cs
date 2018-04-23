@@ -32,21 +32,23 @@ namespace Teleopti.Ccc.Web.AuthenticationBridge
 			Response.StatusCode =  allOk ? 200: 202;
 		}
 
-		private static Dictionary<string, bool> visitProviderUrls()
+		private Dictionary<string, bool> visitProviderUrls()
 		{
 			var configurationRepository = DefaultConfigurationRepository.Instance;
-			var issuers = configurationRepository.RetrieveIssuers();
-
-			var result = tryVisitUrls(issuers);
+			var issuers = configurationRepository.RetrieveIssuers().Where(provider => provider.DisplayName.ToLower().Contains("teleopti"));
+			var result = tryVisitUrlsByIdentity(issuers);
 			return result;
 		}
 
-		private static Dictionary<string, bool> tryVisitUrls(IEnumerable<ClaimProvider> providers)
+		private Dictionary<string, bool> tryVisitUrlsByIdentity(IEnumerable<ClaimProvider> providers)
 		{
 			var result = new Dictionary<string, bool>();
 			foreach (var provider in providers)
-				result.Add(provider.DisplayName + " " + provider.Url, tryVisitUrl(provider.Url.AbsoluteUri));
-
+			{
+				var baseUrl = Request.Url.Scheme + "://" + Request.Url.Authority + Request.ApplicationPath.TrimEnd('/') + "/";
+				var authenticateUrl = baseUrl + "authenticate?whr=" + provider.Identifier;
+				result.Add(provider.DisplayName, tryVisitUrl(authenticateUrl));
+			}
 			return result;
 		}
 
