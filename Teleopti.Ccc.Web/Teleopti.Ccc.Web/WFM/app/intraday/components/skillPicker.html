@@ -4,7 +4,7 @@
         <div class="form-input-wrap">
             <div style="position: relative">
                 <input ng-click="$ctrl.skillPickerOpen = !$ctrl.skillPickerOpen" ng-model="$ctrl.skillPickerText" type="text" placeholder="{{'SelectSkill'|translate}}">
-                <i class="mdi mdi-close pointer" ng-click="$ctrl.onClearSkillSelection()" ng-show="$ctrl.selectedSkill" style="position: absolute; top: 0%; left: 97%;">
+                <i class="mdi mdi-close pointer" ng-click="$ctrl.clearSkillSelection()" style="position: absolute; top: 0%; left: 97%;">
                     <md-tooltip>{{'Clear'|translate}}</md-tooltip>
                     </i>
             </div>
@@ -26,7 +26,7 @@
         <div class="form-input-wrap">
             <div style="position: relative">
                 <input ng-click="$ctrl.skillGroupPickerOpen = !$ctrl.skillGroupPickerOpen" ng-model="$ctrl.skillGroupPickerText" type="text" placeholder="{{'SelectSkillGroup'|translate}}">
-                <i class="mdi mdi-close pointer" ng-click="$ctrl.clearSkillGroupSelection()" ng-show="$ctrl.moduleState.selectedSkillGroup" style="position: absolute; top: 0%; left: 97%;">
+                <i class="mdi mdi-close pointer" ng-click="$ctrl.clearSkillGroupSelection()" style="position: absolute; top: 0%; left: 97%;">
                     <md-tooltip>{{'Clear'|translate}}</md-tooltip>
                 </i>
             </div>

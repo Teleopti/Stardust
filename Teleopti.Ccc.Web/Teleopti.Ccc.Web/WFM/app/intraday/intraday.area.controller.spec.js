@@ -798,7 +798,7 @@ fdescribe('IntradayAreaController', function() {
 			$interval = _$interval_;
 			NoticeService = _NoticeService_;
 
-			$httpBackend.whenGET('../api/skillarea/skillareas').respond(function() {
+			$httpBackend.whenGET('../api/skillgroup/skillgroups').respond(function() {
 				return [200, skillGroupInfo];
 			});
 

@@ -155,10 +155,10 @@
 				if (vm.moduleState.selectedSkill === null || vm.moduleState.selectedSkill.Id !== skill.Id) {
 					vm.setSkill(skill);
 				} else {
+					//Clicked on same skill again
 					vm.moduleState.selectedSkill = null;
-					vm.skillPickerText = '';
+					//vm.skillPickerText = '';
 					vm.setSkillGroup(vm.moduleState.selectedSkillGroup);
-					pollActiveTabDataByDayOffset(vm.moduleState.activeTab, vm.moduleState.chosenOffset.value);
 				}
 			} else {
 				UnsupportedSkillNotice();

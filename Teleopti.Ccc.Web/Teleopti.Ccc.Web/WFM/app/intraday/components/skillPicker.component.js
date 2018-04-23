@@ -29,12 +29,6 @@
 			ctrl.onSkillSelected({ skill: skill });
 		};
 
-		ctrl.clearSkillSelection = function() {
-			ctrl.skillPickerOpen = false;
-			ctrl.skillPickerText = '';
-			ctrl.onClearSkillSelection();
-		};
-
 		ctrl.skillGroupSelected = function(skillGroup) {
 			ctrl.skillGroupPickerText = skillGroup.Name;
 			ctrl.skillGroupPickerOpen = false;
@@ -42,25 +36,33 @@
 			ctrl.onSkillGroupSelected({ skillGroup: skillGroup });
 		};
 
+		ctrl.clearSkillSelection = function() {
+			ctrl.skillPickerOpen = true;
+			ctrl.skillPickerText = '';
+			if (angular.isDefined(ctrl.onClearSkillSelection)) ctrl.onClearSkillSelection();
+		};
+
 		ctrl.clearSkillGroupSelection = function() {
-			ctrl.skillGroupPickerOpen = false;
+			ctrl.skillGroupPickerOpen = true;
 			ctrl.skillGroupPickerText = '';
-			ctrl.onClearSkillGroupSelection();
+			if (angular.isDefined(ctrl.onClearSkillGroupSelection)) ctrl.onClearSkillGroupSelection();
 		};
 
 		ctrl.$onChanges = function(changesObj) {
-			if (
-				angular.isDefined(changesObj.preselectedSkill) &&
-				changesObj.preselectedSkill !== null &&
-				changesObj.preselectedSkill.currentValue !== null
-			)
-				ctrl.skillPickerText = changesObj.preselectedSkill.currentValue.Name;
-			if (
-				angular.isDefined(changesObj.preselectedSkillGroup) &&
-				changesObj.preselectedSkillGroup !== null &&
-				changesObj.preselectedSkillGroup.currentValue !== null
-			)
-				ctrl.skillGroupPickerText = changesObj.preselectedSkillGroup.currentValue.Name;
+			if (angular.isDefined(changesObj.preselectedSkill) && changesObj.preselectedSkill !== null) {
+				if (changesObj.preselectedSkill.currentValue !== null) {
+					ctrl.skillPickerText = changesObj.preselectedSkill.currentValue.Name;
+				} else {
+					ctrl.skillPickerText = '';
+				}
+			}
+			if (angular.isDefined(changesObj.preselectedSkillGroup) && changesObj.preselectedSkillGroup !== null) {
+				if (changesObj.preselectedSkillGroup.currentValue !== null) {
+					ctrl.skillGroupPickerText = changesObj.preselectedSkillGroup.currentValue.Name;
+				} else {
+					ctrl.skillGroupPickerText = '';
+				}
+			}
 		};
 	}
 })();
