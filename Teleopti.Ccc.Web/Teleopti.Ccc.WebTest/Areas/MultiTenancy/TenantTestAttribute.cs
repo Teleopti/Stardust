@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			system.UseTestDouble<FindPersonInfoFake>().For<IFindPersonInfo>();
 			system.UseTestDouble<TenantAuthenticationFake>().For<ITenantAuthentication>();
 			system.UseTestDouble<LogLogonAttemptFake>().For<ILogLogonAttempt>();
-			//system.UseTestDouble<CurrentTenantUserFake>().For<ICurrentTenantUser>();
+			system.UseTestDouble<CurrentTenantUserFake>().For<ICurrentTenantUser>();
 			system.UseTestDouble<FakePersistExternalApplicationAccess>().For<IPersistExternalApplicationAccess>();
 			system.UseTestDouble<FakeFindExternalApplicationAccess>().For<IFindExternalApplicationAccess>();
 		}
