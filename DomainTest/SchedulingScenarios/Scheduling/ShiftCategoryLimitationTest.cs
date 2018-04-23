@@ -545,6 +545,30 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				.Should().Contain(Resources.TryingToResolveShiftCategoryLimitationsDotDotDot);
 		}
 
+		[TestCase(true)]
+		[TestCase(false)]
+		public void ShouldNotCrashWhenSchedulingHourlyEmployeesWithShiftCategoryLimitations(bool useShiftCategoryLimitations)
+		{
+			var date = new DateOnly(2017, 1, 22);
+			var shiftCat = new ShiftCategory().WithId();
+			var scenario = new Scenario();
+			var activity = new Activity();
+			var skill = new Skill().For(activity).InTimeZone(TimeZoneInfo.Utc).IsOpen().WithId();
+			var skillDay = skill.CreateSkillDayWithDemand(scenario, date, 1);
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCat));
+			var workTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(0), TimeSpan.FromHours(90), TimeSpan.FromHours(8), TimeSpan.FromHours(0));
+			var contractHourly = new Contract("_") { WorkTimeDirective = workTimeDirective, EmploymentType = EmploymentType.HourlyStaff };
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, contractHourly, skill).WithSchedulePeriodOneWeek(date);
+			agent.SchedulePeriod(date).AddShiftCategoryLimitation(new ShiftCategoryLimitation(shiftCat) { MaxNumberOf = 0 });
+			SchedulerStateHolderFrom.Fill(scenario, date, new[] { agent }, new[] { skillDay });
+			var schedulingOptions = new SchedulingOptions{UseShiftCategoryLimitations = useShiftCategoryLimitations, ScheduleEmploymentType = ScheduleEmploymentType.HourlyStaff};
+
+			Assert.DoesNotThrow(() =>
+			{
+				Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new[] {agent}, date.ToDateOnlyPeriod());
+			});
+		}
+
 		private static SchedulingOptions createSchedulingOptionsTeamSingleAgent()
 		{
 			return new SchedulingOptions

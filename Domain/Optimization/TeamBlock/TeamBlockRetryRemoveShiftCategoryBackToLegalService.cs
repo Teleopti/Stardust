@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
@@ -104,14 +105,25 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			foreach (var removedScheduleDayPro in removedScheduleDayPros)
 			{
 				var dateOnly = removedScheduleDayPro.Day;
-				var teamInfo = _teamInfoFactory.CreateTeamInfo(schedulingResultStateHolder.LoadedAgents,
-					scheduleMatrixPro.Person, dateOnly.ToDateOnlyPeriod(), allScheduleMatrixPros);
+				ITeamInfo teamInfo;
+
+				if (schedulingOptions.ScheduleEmploymentType == ScheduleEmploymentType.HourlyStaff)
+				{
+					var group = new Group(new List<IPerson> { removedScheduleDayPro.DaySchedulePart().Person }, string.Empty);
+					var scheduleMatrixProsList = new List<IList<IScheduleMatrixPro>> { new List<IScheduleMatrixPro> { scheduleMatrixPro } };
+					teamInfo = new TeamInfo(group, scheduleMatrixProsList);
+				}
+				else
+				{
+					teamInfo = _teamInfoFactory.CreateTeamInfo(schedulingResultStateHolder.LoadedAgents, scheduleMatrixPro.Person, dateOnly.ToDateOnlyPeriod(), allScheduleMatrixPros);
+				}
+
 				var teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, dateOnly, schedulingOptions.BlockFinder());
+
 				if (teamBlockInfo == null)
 					continue;
 
 				schedulingOptions.NotAllowedShiftCategories.Clear();
-
 
 				foreach (var matrixPro in teamBlockInfo.MatrixesForGroupAndBlock())
 				{
