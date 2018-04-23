@@ -1,21 +1,31 @@
 ﻿using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Domain.MessageBroker.Server;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.MessageBroker
 {
 	[TestFixture]
-	[MessageBrokerServerTest]
-	public class SignalRSubscribeTest
+	[DomainTest]
+	public class SignalRSubscribeTest : ISetup
 	{
 		public IMessageBrokerServer Server;
 		public FakeSignalR SignalR;
 		public FakeCurrentDatasource Datasource;
 		public FakeCurrentBusinessUnit BusinessUnit;
 
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.UseTestDouble(new FakeCurrentDatasource(new DataSourceState())).For<ICurrentDataSource>();
+			system.UseTestDouble(new FakeCurrentBusinessUnit()).For<ICurrentBusinessUnit>();
+		}
+		
 		[Test]
 		public void ShouldAddSubscriptionToSignalR()
 		{

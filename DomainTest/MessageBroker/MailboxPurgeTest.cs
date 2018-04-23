@@ -2,16 +2,20 @@
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Domain.MessageBroker.Server;
+using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.MessageBroker
 {
 	[TestFixture]
-	[MessageBrokerServerTest]
+	[DomainTest]
 	[Setting("MessageBrokerMailboxExpirationInSeconds", "1800")]
 	public class MailboxPurgeTest
 	{
@@ -80,5 +84,6 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 
 			Mailboxes.Data.Single().Messages.Should().Not.Be.Empty();
 		}
+
 	}
 }

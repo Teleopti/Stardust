@@ -14,7 +14,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.MessageBroker
 {
 	[TestFixture]
-	[MessageBrokerServerTest]
+	[DomainTest]
 	public class MailboxTest : ISetup
 	{
 		public IMessageBrokerServer Server;
