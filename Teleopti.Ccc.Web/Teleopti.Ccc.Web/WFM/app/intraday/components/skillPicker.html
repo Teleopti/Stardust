@@ -3,8 +3,8 @@
     <div class="wfm-form" outside-click="$ctrl.skillPickerOpen = false">
         <div class="form-input-wrap">
             <div style="position: relative">
-                <input ng-click="$ctrl.skillPickerOpen = !$ctrl.skillPickerOpen" ng-model="$ctrl.skillPickerText" type="text" placeholder="{{'SelectSkill'|translate}}">
-                <i class="mdi mdi-close pointer" ng-click="$ctrl.clearSkillSelection()" style="position: absolute; top: 0%; left: 97%;">
+                <input ng-click="$ctrl.skillPickerOpen = !$ctrl.skillPickerOpen" ng-keypress="$ctrl.skillPickerOpen=true" ng-model="$ctrl.skillPickerText" type="text" placeholder="{{'SelectSkill'|translate}}">
+                <i class="mdi mdi-close pointer" ng-click="$ctrl.clearSkillSelection()" ng-show="$ctrl.skillPickerText" style="position: absolute; top: 0%; left: 97%;">
                     <md-tooltip>{{'Clear'|translate}}</md-tooltip>
                     </i>
             </div>
@@ -25,8 +25,8 @@
     <div class="wfm-form" outside-click="$ctrl.skillGroupPickerOpen = false">
         <div class="form-input-wrap">
             <div style="position: relative">
-                <input ng-click="$ctrl.skillGroupPickerOpen = !$ctrl.skillGroupPickerOpen" ng-model="$ctrl.skillGroupPickerText" type="text" placeholder="{{'SelectSkillGroup'|translate}}">
-                <i class="mdi mdi-close pointer" ng-click="$ctrl.clearSkillGroupSelection()" style="position: absolute; top: 0%; left: 97%;">
+                <input ng-click="$ctrl.skillGroupPickerOpen = !$ctrl.skillGroupPickerOpen" ng-keypress="$ctrl.skillGroupPickerOpen=true" ng-model="$ctrl.skillGroupPickerText" type="text" placeholder="{{'SelectSkillGroup'|translate}}">
+                <i class="mdi mdi-close pointer" ng-click="$ctrl.clearSkillGroupSelection()" ng-show="$ctrl.skillGroupPickerText" style="position: absolute; top: 0%; left: 97%;">
                     <md-tooltip>{{'Clear'|translate}}</md-tooltip>
                 </i>
             </div>
