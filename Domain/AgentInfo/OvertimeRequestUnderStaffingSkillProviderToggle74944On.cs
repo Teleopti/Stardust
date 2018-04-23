@@ -12,19 +12,25 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 	public class OvertimeRequestUnderStaffingSkillProviderToggle74944On : IOvertimeRequestUnderStaffingSkillProvider
 	{
 		private readonly ISkillStaffingDataLoader _skillStaffingDataLoader;
+		private readonly ILoggedOnUser _loggedOnUser;
 
-		public OvertimeRequestUnderStaffingSkillProviderToggle74944On(ISkillStaffingDataLoader skillStaffingDataLoader)
+		public OvertimeRequestUnderStaffingSkillProviderToggle74944On(ISkillStaffingDataLoader skillStaffingDataLoader, ILoggedOnUser loggedOnUser)
 		{
 			_skillStaffingDataLoader = skillStaffingDataLoader;
+			_loggedOnUser = loggedOnUser;
 		}
 
 		public IDictionary<DateTimePeriod, IList<ISkill>> GetSeriousUnderstaffingSkills(DateTimePeriod requestDateTimePeriod,
-			IEnumerable<ISkill> skills, TimeZoneInfo timeZoneInfo)
+			IEnumerable<ISkill> skills)
 		{
+			var timeZoneInfo = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
+			var useShrinkage = _loggedOnUser.CurrentUser().WorkflowControlSet.OvertimeRequestStaffingCheckMethod ==
+							   OvertimeRequestStaffingCheckMethod.IntradayWithShrinkage;
+
 			var resolution = skills.Min(s => s.DefaultResolution);
 			var dateTimePeriod = convertToClosestPeriod(requestDateTimePeriod, resolution);
 
-			var skillStaffingDatas = loadSkillStaffingData(dateTimePeriod, skills, timeZoneInfo);
+			var skillStaffingDatas = loadSkillStaffingData(dateTimePeriod, skills, timeZoneInfo, useShrinkage);
 
 			if (!skillStaffingDatas.Any())
 				return new Dictionary<DateTimePeriod, IList<ISkill>>();
@@ -72,10 +78,10 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			return mergePeriodsWithSameSkill(skillStaffLevelDictionary, requestDateTimePeriod);
 		}
 
-		private IList<SkillStaffingData> loadSkillStaffingData(DateTimePeriod dateTimePeriod, IEnumerable<ISkill> skills, TimeZoneInfo timeZoneInfo)
+		private IList<SkillStaffingData> loadSkillStaffingData(DateTimePeriod dateTimePeriod, IEnumerable<ISkill> skills, TimeZoneInfo timeZoneInfo, bool useShrinkage)
 		{
 			var skillStaffingDatas =
-				_skillStaffingDataLoader.Load(skills.ToList(), dateTimePeriod.ToDateOnlyPeriod(timeZoneInfo), true);
+				_skillStaffingDataLoader.Load(skills.ToList(), dateTimePeriod.ToDateOnlyPeriod(timeZoneInfo), useShrinkage);
 
 			skillStaffingDatas = skillStaffingDatas.Where(x =>
 				x.Time >= dateTimePeriod.StartDateTimeLocal(timeZoneInfo) &&

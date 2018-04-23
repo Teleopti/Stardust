@@ -84,18 +84,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		public void ShouldApproveUseIntradyShrinkage()
-		{
-			setupPerson(8, 21);
-			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 8d);
-
-			var personRequest = createOvertimeRequest(18, 1);
-			getTarget().Process(personRequest);
-
-			personRequest.IsApproved.Should().Be.True();
-		}
-
-		[Test]
 		public void ShouldApproveRequestInLessThan15Minutes()
 		{
 			setupPerson(8, 21);

@@ -13,20 +13,24 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 	{
 		private readonly ISkillStaffingDataLoader _skillStaffingDataLoader;
 		private readonly IOvertimeRequestCriticalUnderStaffedSpecification _overtimeRequestCriticalUnderStaffedSpecification;
-
-		public OvertimeRequestUnderStaffingSkillProvider(ISkillStaffingDataLoader skillStaffingReadModelDataLoader, IOvertimeRequestCriticalUnderStaffedSpecification overtimeRequestCriticalUnderStaffedSpecification)
+		private readonly ILoggedOnUser _loggedOnUser;
+		public OvertimeRequestUnderStaffingSkillProvider(ISkillStaffingDataLoader skillStaffingReadModelDataLoader, IOvertimeRequestCriticalUnderStaffedSpecification overtimeRequestCriticalUnderStaffedSpecification, ILoggedOnUser loggedOnUser)
 		{
 			_skillStaffingDataLoader = skillStaffingReadModelDataLoader;
 			_overtimeRequestCriticalUnderStaffedSpecification = overtimeRequestCriticalUnderStaffedSpecification;
+			_loggedOnUser = loggedOnUser;
 		}
 
-		public IDictionary<DateTimePeriod,IList<ISkill>> GetSeriousUnderstaffingSkills(DateTimePeriod dateTimePeriod, IEnumerable<ISkill> skills,
-			TimeZoneInfo timeZoneInfo)
+		public IDictionary<DateTimePeriod,IList<ISkill>> GetSeriousUnderstaffingSkills(DateTimePeriod dateTimePeriod, IEnumerable<ISkill> skills)
 		{
+			var timeZoneInfo = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
+			var useShrinkage = _loggedOnUser.CurrentUser().WorkflowControlSet.OvertimeRequestStaffingCheckMethod ==
+							   OvertimeRequestStaffingCheckMethod.IntradayWithShrinkage;
 			var resolution = skills.Min(s => s.DefaultResolution);
 			dateTimePeriod = convertToClosestPeriod(dateTimePeriod, resolution);
+
 			var skillStaffingDatas =
-				_skillStaffingDataLoader.Load(skills.ToList(), dateTimePeriod.ToDateOnlyPeriod(timeZoneInfo), true);
+				_skillStaffingDataLoader.Load(skills.ToList(), dateTimePeriod.ToDateOnlyPeriod(timeZoneInfo), useShrinkage);
 			skillStaffingDatas = skillStaffingDatas.Where(x =>
 				x.Time >= dateTimePeriod.StartDateTimeLocal(timeZoneInfo) &&
 				x.Time.AddMinutes(x.Resolution) <= dateTimePeriod.EndDateTimeLocal(timeZoneInfo)).ToList();
@@ -52,7 +56,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			if (_overtimeRequestCriticalUnderStaffedSpecification.IsSatisfiedBy(
 				new OvertimeRequestValidatedSkillCount(seriousUnderstaffingSkills.Count, skillStaffingDataGroups.Count)))
 			{
-				//return seriousUnderstaffingSkills;
 				return new Dictionary<DateTimePeriod,IList<ISkill>>
 				{
 					{dateTimePeriod, seriousUnderstaffingSkills}
