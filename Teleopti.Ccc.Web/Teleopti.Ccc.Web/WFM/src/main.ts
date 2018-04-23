@@ -12,7 +12,8 @@ import {
 	RevokePageComponent,
 	AppLogonPageComponent,
 	PlaygroundComponent,
-	TitleBarComponent
+	TitleBarComponent,
+	IdentityLogonPageComponent
 } from './app/people/components';
 import { AppModule } from './app/app.module';
 
@@ -95,6 +96,9 @@ wfm.directive('ng2PeopleRevokePage', downgradeComponent({
 }) as angular.IDirectiveFactory);
 wfm.directive('ng2PeopleAppLogonPage', downgradeComponent({
 	component: AppLogonPageComponent
+}) as angular.IDirectiveFactory);
+wfm.directive('ng2PeopleIdentityLogonPage', downgradeComponent({
+	component: IdentityLogonPageComponent
 }) as angular.IDirectiveFactory);
 wfm.directive('ng2PeoplePlayground', downgradeComponent({
 	component: PlaygroundComponent

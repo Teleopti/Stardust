@@ -5,4 +5,5 @@ export * from './workspace.service.stub';
 export * from './fake-backend.provider';
 export * from './navigation.service';
 export * from './app-logon.service';
+export * from './identity-logon.service';
 export * from './search-overrides.service';

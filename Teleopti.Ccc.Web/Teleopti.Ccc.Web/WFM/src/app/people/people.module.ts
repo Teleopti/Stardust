@@ -28,7 +28,8 @@ import {
 	SearchPageComponent,
 	TitleBarComponent,
 	WorkspaceComponent,
-	PlaygroundComponent
+	PlaygroundComponent,
+	IdentityLogonPageComponent
 } from './components';
 import {
 	NavigationService,
@@ -36,7 +37,8 @@ import {
 	SearchService,
 	WorkspaceService,
 	AppLogonService,
-	SearchOverridesService
+	SearchOverridesService,
+	IdentityLogonService
 } from './services';
 
 @NgModule({
@@ -52,6 +54,7 @@ import {
 		TitleBarComponent,
 		PageContainerComponent,
 		AppLogonPageComponent,
+		IdentityLogonPageComponent,
 		PlaygroundComponent
 	],
 	imports: [
@@ -76,7 +79,8 @@ import {
 		SearchService,
 		SearchOverridesService,
 		NavigationService,
-		AppLogonService
+		AppLogonService,
+		IdentityLogonService
 	],
 	exports: [],
 	entryComponents: [
@@ -85,6 +89,7 @@ import {
 		GrantPageComponent,
 		RevokePageComponent,
 		AppLogonPageComponent,
+		IdentityLogonPageComponent,
 		PlaygroundComponent
 	]
 })

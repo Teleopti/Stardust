@@ -23,6 +23,10 @@ export class NavigationService {
 		this.go('#/people/access/applicationlogon');
 	}
 
+	public navToIdentityLogon() {
+		this.go('#/people/access/identitylogon');
+	}
+
 	private resetScroll() {
 		var element = document.getElementById('materialcontainer');
 		if (element) element.scrollTop = 0;

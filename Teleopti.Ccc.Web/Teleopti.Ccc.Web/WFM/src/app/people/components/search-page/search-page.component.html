@@ -17,6 +17,9 @@
         <button mat-raised-button color="primary" data-test-applicationlogon-button [disabled]="!workspaceService.isAnySelected()"
           (click)="nav.navToApplicationLogon()">
           Application logon</button>
+        <button mat-raised-button color="primary" data-test-identitylogon-button [disabled]="!workspaceService.isAnySelected()"
+          (click)="nav.navToIdentityLogon()">
+          Identity logon</button>
       </div>
     </div>
   </div>
