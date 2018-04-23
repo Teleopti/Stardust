@@ -1667,9 +1667,7 @@
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.timeline.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.timeline.service.js" />
     <Content Include="WFM\app\rta\rta\historical\_rta.card.panel.component.js" />
-    <Content Include="WFM\app\rta\rta\historical\rta-historical.adherence7DaysBack_46826.html" />
     <Content Include="WFM\app\rta\rta\historical\rta-historical.approvePreviousOOA_47230.html" />
-    <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.adherence7DaysBack_46826.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.adherence7DaysBack.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.adherencepercentage.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.approvePreviousOOA_47230.js" />

@@ -1,5 +1,4 @@
 ﻿@RTA
-@OnlyRunIfEnabled('RTA_ApprovePreviousOOA_47230')
 
 Feature: Approve out of adherences
   As a Manager I need to approve hours of Out of Adherence for a certain day and agent,
