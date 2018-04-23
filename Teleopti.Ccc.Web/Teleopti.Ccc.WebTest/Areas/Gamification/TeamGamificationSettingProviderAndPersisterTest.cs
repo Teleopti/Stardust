@@ -2,18 +2,26 @@
 using SharpTestsEx;
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider;
+using Teleopti.Ccc.Web.Core.IoC;
 
 namespace Teleopti.Ccc.WebTest.Areas.Gamification
 {
-	[TestFixture, GamificationTest]
-	public class TeamGamificationSettingProviderAndPersisterTest
+	[TestFixture, DomainTest]
+	public class TeamGamificationSettingProviderAndPersisterTest : ISetup
 	{
 		public ITeamGamificationSettingProviderAndPersister Target;
 		public FakeTeamRepository teamRepository;
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.AddModule(new WebModule(configuration, null));
+		}
 
 		[Test]
 		public void ShouldSortBySiteAndTeamName()
@@ -30,7 +38,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification
 			teamRepository.Has(t2);
 			teamRepository.Has(t3);
 
-			var result = Target.GetTeamGamificationSettingViewModels(new List<Guid> { s1.Id.Value, s2.Id.Value });
+			var result = Target.GetTeamGamificationSettingViewModels(new List<Guid> {s1.Id.Value, s2.Id.Value});
 
 			result[0].Team.text.Should().Be.EqualTo("beijing/green");
 			result[1].Team.text.Should().Be.EqualTo("shenzhen/blue");

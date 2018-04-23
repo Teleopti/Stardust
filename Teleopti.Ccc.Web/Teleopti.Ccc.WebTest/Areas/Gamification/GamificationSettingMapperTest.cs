@@ -5,19 +5,27 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.Gamification.Mapping;
 using Teleopti.Ccc.Web.Areas.Gamification.Models;
+using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Gamification
 {
 	[TestFixture]
-	[GamificationTest]
-	public class GamificationSettingMapperTest
+	[DomainTest]
+	public class GamificationSettingMapperTest : ISetup
 	{
 		public FakeExternalPerformanceRepository ExternalPerformanceRepository;
 		public IGamificationSettingMapper Target;
+		
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.AddModule(new WebModule(configuration, null));
+		}
 		
 		[Test]
 		public void ShouldMapGamificationSettingPropertiesCorrectly()

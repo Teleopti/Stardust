@@ -5,17 +5,20 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.Gamification.Core.DataProvider;
+using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Ccc.WebTest.Areas.Gamification;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Gamification
 {
-	[TestFixture, GamificationTest]
-	public class GamificationSettingProviderTest
+	[TestFixture, DomainTest]
+	public class GamificationSettingProviderTest : ISetup
 	{
 		public IGamificationSettingProvider Target;
 		public IGamificationSettingRepository GamificationSettingRepository;
@@ -67,12 +70,20 @@ namespace Teleopti.Ccc.WebTest.Core.Gamification
 			var result = Target.GetGamificationSetting();
 			result.Should().Be.Null();
 		}
+		
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.AddModule(new WebModule(configuration, null));
+			
+			var team = TeamFactory.CreateTeamWithId("myTeam");
+			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(DateOnly.MinValue, team);
+			
+			system.UseTestDouble(new FakeLoggedOnUser(person)).For<ILoggedOnUser>();
+		}
 
 		private void createTeamGamificationSetting(IGamificationSetting gamificationSetting = null)
 		{
-			var team = TeamFactory.CreateTeamWithId("myTeam");
-			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(DateOnly.MinValue, team);
-			LoggedOnUser.SetFakeLoggedOnUser(person);
+			
 			if (gamificationSetting == null) return;
 
 			var teamGamificationSetting = new TeamGamificationSetting
@@ -122,5 +133,6 @@ namespace Teleopti.Ccc.WebTest.Core.Gamification
 
 			return aSetting;
 		}
+
 	}
 }

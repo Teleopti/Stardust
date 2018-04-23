@@ -2,18 +2,26 @@
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.Gamification.Controller;
+using Teleopti.Ccc.Web.Core.IoC;
 
 namespace Teleopti.Ccc.WebTest.Areas.Gamification
 {
 	[TestFixture]
-	[GamificationTest]
-	public class GamificationControllerReadTest
+	[DomainTest]
+	public class GamificationControllerReadTest : ISetup
 	{
 		public FakeGamificationSettingRepository GamificationSettingRepository;
 		public GamificationController Target;
+		
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.AddModule(new WebModule(configuration, null));
+		}
 
 		[Test]
 		public void ShouldGetGamificationSetting()

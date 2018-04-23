@@ -216,7 +216,6 @@
     <Compile Include="Areas\Gamification\GamificationCalculationControllerTest.cs" />
     <Compile Include="Areas\Gamification\GamificationControllerPersistTest.cs" />
     <Compile Include="Areas\Gamification\GamificationControllerReadTest.cs" />
-    <Compile Include="Areas\Gamification\GamificationTestAttribute.cs" />
     <Compile Include="Areas\Gamification\GamificationControllerTeamTest.cs" />
     <Compile Include="Areas\Gamification\GamificationSettingMapperTest.cs" />
     <Compile Include="Areas\Gamification\TeamGamificationSettingProviderAndPersisterTest.cs" />

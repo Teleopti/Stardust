@@ -6,23 +6,31 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Gamification.Controller;
 using Teleopti.Ccc.Web.Areas.Gamification.Models;
+using Teleopti.Ccc.Web.Core.IoC;
 
 namespace Teleopti.Ccc.WebTest.Areas.Gamification
 {
-	[GamificationTest]
+	[DomainTest]
 	[TestFixture]
-	public class GamificationControllerPersistTest
+	public class GamificationControllerPersistTest : ISetup
 	{
 		public GamificationController Target;
 		public FakeGamificationSettingRepository GamificationSettingRepository;
 		public FakeExternalPerformanceRepository ExternalPerformanceRepository;
 
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.AddModule(new WebModule(configuration, null));
+		}
+		
 		[Test]
 		public void ShouldPersistNewGamification()
 		{

@@ -5,25 +5,33 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Gamification.Controller;
 using Teleopti.Ccc.Web.Areas.Gamification.Models;
+using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Gamification
 {
-	[GamificationTest]
+	[DomainTest]
 	[TestFixture]
-	public class GamificationCalculationControllerTest
+	public class GamificationCalculationControllerTest : ISetup
 	{
 		public GamificationCalculationController Target;
 		public FakeAgentBadgeWithRankTransactionRepository AgentBadgeWithRankTransactionRepository;
 		public FakeAgentBadgeTransactionRepository AgentBadgeTransactionRepository;
 		public FakeJobResultRepository JobResultRepository;
 		public FakePurgeSettingRepository PurgeSettingRepository;
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.AddModule(new WebModule(configuration, null));
+		}
 
 		[Test]
 		public void ShouldResetAgentBadges()

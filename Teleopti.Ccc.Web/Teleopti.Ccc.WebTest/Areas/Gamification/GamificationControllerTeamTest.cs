@@ -5,23 +5,32 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.Gamification.Controller;
 using Teleopti.Ccc.Web.Areas.Gamification.Models;
+using Teleopti.Ccc.Web.Core.IoC;
 
 namespace Teleopti.Ccc.WebTest.Areas.Gamification
 {
 	[TestFixture]
-	[GamificationTest]
-	public class GamificationControllerTeamTest
+	[DomainTest]
+	public class GamificationControllerTeamTest : ISetup
 	{
 		public FakeGamificationSettingRepository GamificationSettingRepository;
 		public FakeTeamGamificationSettingRepository TeamGamificationSettingRepository;
 		public FakeTeamRepository TeamRepository;
 		public FakeSiteRepository SiteRepository;
 		public GamificationController Target;
+		
+		
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.AddModule(new WebModule(configuration, null));
+		}
 		
 		[Test]
 		public void ShouldAddNewTeamGamificationSettingIfItDoNotExist()

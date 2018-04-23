@@ -126,6 +126,9 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<FakeKeyValueStorePersister>().For<IKeyValueStorePersister>();
 			system.UseTestDouble<FakePersonAssociationPublisherCheckSumPersister>().For<IPersonAssociationPublisherCheckSumPersister>();
 
+			// Gamification
+			system.UseTestDouble<FakePurgeSettingRepository>().For<IPurgeSettingRepository>();
+			//
 
 			// AppInsights
 			system.UseTestDouble<FakeApplicationInsights>().For<IApplicationInsights>();
@@ -256,6 +259,9 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				system.UseTestDouble<FakeAgentBadgeRepository>().For<IAgentBadgeRepository>();
 				system.UseTestDouble<SkillIntradayStaffingFactory>().For<SkillIntradayStaffingFactory>();
 				system.UseTestDouble<FakePersonScheduleDayReadModelPersister>().For<IPersonScheduleDayReadModelPersister>();
+				
+				system.UseTestDouble<FakeGamificationSettingRepository>().For<IGamificationSettingRepository>();
+				system.UseTestDouble<FakeExternalPerformanceRepository>().For<IExternalPerformanceRepository>();
 			}
 
 			system.UseTestDouble<ScheduleStorageRepositoryWrapper>().For<IScheduleStorageRepositoryWrapper>();
