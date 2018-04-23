@@ -24,10 +24,9 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 {
-	[ResourcePlanner]
+	[DomainTest]
 	public class SchedulePlanningPeriodCommandHandlerHeatMapTest : DayOffOptimizationScenario
 	{
-
 		public SchedulePlanningPeriodCommandHandler Target;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeSkillDayRepository SkillDayRepository;
@@ -72,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 1, SchedulePeriodType.Week, planningGroup);
 			PlanningGroupRepository.Has(planningGroup);
 
-			var skillDays = SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 
+			var skillDays = SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
 				5,
 				1,
 				1,
@@ -106,21 +105,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 
 		public SchedulePlanningPeriodCommandHandlerHeatMapTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerDayOffOptimizationIslands47208) : base(seperateWebRequest, resourcePlannerDayOffOptimizationIslands47208)
 		{
-		}
-	}
-
-	public class ResourcePlannerAttribute : DomainTestAttribute
-	{
-		public FakeEventPublisher Publisher;
-
-		protected override void BeforeTest()
-		{
-			base.BeforeTest();
-
-			Publisher.AddHandler<WebDayoffOptimizationStardustHandler>();
-			Publisher.AddHandler<DayOffOptimizationEventHandler>();
-			Publisher.AddHandler<WebScheduleStardustHandler>();
-			Publisher.AddHandler<SchedulingEventHandler>();
 		}
 	}
 }
