@@ -57,6 +57,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Gamification
 				var jobResultDetail = jobResult.Details.FirstOrDefault();
 				var hasException = !(jobResultDetail?.ExceptionMessage.IsNullOrEmpty() ?? true)
 								   || !(jobResultDetail?.InnerExceptionMessage.IsNullOrEmpty() ?? true);
+				var errorMessage = hasError 
+					? (hasException 
+						? Resources.InternalErrorMsg
+						: (jobResultDetail?.Message ?? Resources.TimedOutWhileWaitingforProcessing))
+					: string.Empty;
 				var status = GamificationJobStatus.InProgress;
 				if (finished) status = GamificationJobStatus.Finished;
 				if (hasError) status = GamificationJobStatus.Failed;
@@ -70,7 +75,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Gamification
 					CreateDateTime = jobResult.Timestamp.ToUniversalTime(),
 					Status = status.ToString().ToLower(),
 					HasError = hasError,
-					ErrorMessage = hasError ? (hasException ? Resources.InternalErrorMsg : jobResultDetail?.Message) : string.Empty
+					ErrorMessage = errorMessage
 				};
 			}).ToList();
 		}
