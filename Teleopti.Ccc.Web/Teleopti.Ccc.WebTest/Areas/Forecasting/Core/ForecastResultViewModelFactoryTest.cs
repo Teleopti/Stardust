@@ -5,6 +5,7 @@ using Microsoft.CSharp.RuntimeBinder;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
@@ -45,6 +46,23 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			((double)firstDay.vttt).Should().Be.EqualTo(300d);
 			((double)firstDay.vacw).Should().Be.EqualTo(200d);
 			((double)firstDay.vtacw).Should().Be.EqualTo(400d);
+		}
+
+		[Test]
+		public void ShouldReturnViewModelsByDate()
+		{
+			stubForecastDataFor2Days(new Task(8.1d, TimeSpan.FromSeconds(100), TimeSpan.FromSeconds(200)), new Percent(), 12d, TimeSpan.FromSeconds(300), TimeSpan.FromSeconds(400));
+
+			var target = new ForecastResultViewModelFactory(_workloadRepository, _skillDayRepository, _futureData);
+			var result = target.Create(_workload.Id.Value, _futurePeriod, _scenario);
+
+			result.WorkloadId.Should().Be.EqualTo(_workload.Id.Value);
+
+			dynamic firstDay = result.Days.First();
+			((object)firstDay.date).Should().Be.EqualTo(_theDate.Date);
+
+			dynamic secondDay = result.Days.Second();
+			((object)secondDay.date).Should().Be.EqualTo(_theDate.Date.AddDays(1));
 		}
 
 		[Test]
@@ -183,6 +201,30 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			Assert.Throws<RuntimeBinderException>(() => Math.Round((double)firstDay.vcampaign, 2).Should().Be.EqualTo(new Percent(150).Value));
 		}
 
+		private void stubForecastDataFor2Days(Task task, Percent campaignTasks, double? overrideTasks,
+			TimeSpan? overrideTaskTime, TimeSpan? overrideAfterTaskTime)
+		{
+			_theDate = new DateOnly(2014, 3, 1);
+			_scenario = new Scenario("s1");
+			_futurePeriod = new DateOnlyPeriod(_theDate, _theDate);
+			var skillDays = new List<ISkillDay>();
+
+			var skill = SkillFactory.CreateSkillWithWorkloadAndSources();
+			_workload = skill.WorkloadCollection.Single();
+			_workloadRepository = MockRepository.GenerateMock<IWorkloadRepository>();
+			_workloadRepository.Stub(x => x.Get(_workload.Id.Value)).Return(_workload);
+			_skillDayRepository = MockRepository.GenerateMock<ISkillDayRepository>();
+			_skillDayRepository.Stub(x => x.FindRange(_futurePeriod, skill, _scenario)).Return(skillDays);
+			_futureData = MockRepository.GenerateMock<IFutureData>();
+
+			var workload = new Workload(skill);
+			var workloadDay1 = createWorkloadDay(_theDate, workload, task, campaignTasks, overrideTasks,
+				overrideTaskTime, overrideAfterTaskTime);
+			var workloadDay2 = createWorkloadDay(_theDate.AddDays(1), workload, task, campaignTasks, overrideTasks,
+				overrideTaskTime, overrideAfterTaskTime);
+			_futureData.Stub(x => x.Fetch(_workload, skillDays, _futurePeriod)).Return(new[] {workloadDay2, workloadDay1});
+		}
+
 		private void stubForecastDataForOneDay(Task task, Percent campaignTasks, double? overrideTasks, TimeSpan? overrideTaskTime, TimeSpan? overrideAfterTaskTime)
 		{
 			_theDate = new DateOnly(2014, 3, 1);
@@ -198,18 +240,26 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			_skillDayRepository.Stub(x => x.FindRange(_futurePeriod, skill, _scenario)).Return(skillDays);
 			_futureData = MockRepository.GenerateMock<IFutureData>();
 
-			var workloadDay1 = new WorkloadDay();
-			workloadDay1.Create(_theDate, new Workload(skill), new List<TimePeriod>());
-			workloadDay1.MakeOpen24Hours();
-			workloadDay1.Tasks = task.Tasks;
-			workloadDay1.AverageTaskTime = task.AverageTaskTime;
-			workloadDay1.AverageAfterTaskTime = task.AverageAfterTaskTime;
-			workloadDay1.CampaignTasks = campaignTasks;
-			workloadDay1.SetOverrideTasks(overrideTasks, null);
-			workloadDay1.OverrideAverageTaskTime = overrideTaskTime;
-			workloadDay1.OverrideAverageAfterTaskTime = overrideAfterTaskTime;
-
+			var workloadDay1 = createWorkloadDay(_theDate, new Workload(skill), task, campaignTasks, overrideTasks,
+				overrideTaskTime, overrideAfterTaskTime);
 			_futureData.Stub(x => x.Fetch(_workload, skillDays, _futurePeriod)).Return(new[] { workloadDay1 });
+		}
+
+		private WorkloadDay createWorkloadDay(DateOnly date, Workload workload, Task task, Percent campaignTasks, double? overrideTasks,
+			TimeSpan? overrideTaskTime, TimeSpan? overrideAfterTaskTime)
+		{
+			var workloadDay = new WorkloadDay();
+			workloadDay.Create(date, workload, new List<TimePeriod>());
+			workloadDay.MakeOpen24Hours();
+			workloadDay.Tasks = task.Tasks;
+			workloadDay.AverageTaskTime = task.AverageTaskTime;
+			workloadDay.AverageAfterTaskTime = task.AverageAfterTaskTime;
+			workloadDay.CampaignTasks = campaignTasks;
+			workloadDay.SetOverrideTasks(overrideTasks, null);
+			workloadDay.OverrideAverageTaskTime = overrideTaskTime;
+			workloadDay.OverrideAverageAfterTaskTime = overrideAfterTaskTime;
+
+			return workloadDay;
 		}
 	}
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
@@ -25,7 +26,8 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 		{
 			var workload = _workloadRepository.Get(workloadId);
 			var skillDays = _skillDayRepository.FindRange(futurePeriod, workload.Skill, scenario);
-			var futureWorkloadDays = _futureData.Fetch(workload, skillDays, futurePeriod);
+			var futureWorkloadDays = _futureData.Fetch(workload, skillDays, futurePeriod)
+				.OrderBy(x => x.CurrentDate);
 			return new WorkloadForecastResultViewModel
 			{
 				WorkloadId = workload.Id.GetValueOrDefault(),
