@@ -15,29 +15,31 @@
 				<div class="con-row">
 					<teams-datetime-picker ng-model="vm.timeRange.startTime"
 										   timezone="vm.getCurrentTimezone()"
-										   ng-change="vm.updateInvalidAgents()" />
+										   ng-change="vm.updateInvalidAgents()">
+					</teams-datetime-picker>
 				</div>
 				<h3>{{'To'|translate}}: </h3>
 				<div class="con-row">
 					<teams-datetime-picker ng-model="vm.timeRange.endTime"
 										   timezone="vm.getCurrentTimezone()"
-										   ng-change="vm.updateInvalidAgents()" />
+										   ng-change="vm.updateInvalidAgents()">
+					</teams-datetime-picker>
 				</div>
 			</div>
 
 			<div ng-if="vm.isFullDayAbsence">
 				<h3>{{'From'|translate}}: </h3>
 				<div class="con-row">
-					<team-schedule-datepicker selected-date="vm.timeRange.startTime" />
+					<team-schedule-datepicker selected-date="vm.timeRange.startTime" ></team-schedule-datepicker>
 				</div>
 				<h3>{{'To'|translate}}: </h3>
 				<div class="con-row">
-					<team-schedule-datepicker selected-date="vm.timeRange.endTime" />
+					<team-schedule-datepicker selected-date="vm.timeRange.endTime" ></team-schedule-datepicker>
 				</div>
 			</div>
-			
+
 			<md-checkbox ng-if="vm.isAddFullDayAbsenceAvailable()"
-						 ng-model="vm.isFullDayAbsence" 
+						 ng-model="vm.isFullDayAbsence"
 						 ng-disabled="vm.isAddFullDayAbsenceAvailable() && !vm.isAddIntradayAbsenceAvailable()"
 						 aria-label="Checkbox">
 				{{'FullDayAbsence'|translate}}
