@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 				};
 			}
 
-			var seriousUnderstaffingSkillDictionary = _overtimeRequestUnderStaffingSkillProvider.GetSeriousUnderstaffingSkills(period, skills);
+			var seriousUnderstaffingSkillDictionary = _overtimeRequestUnderStaffingSkillProvider.GetSeriousUnderstaffingSkills( period, skills, personRequest.Person);
 			if (seriousUnderstaffingSkillDictionary.Count == 0)
 			{
 				return new OvertimeRequestAvailableSkillsValidationResult

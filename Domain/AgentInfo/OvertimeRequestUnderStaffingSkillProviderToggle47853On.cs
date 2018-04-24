@@ -13,20 +13,18 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 	{
 		private readonly ISkillStaffingDataLoader _skillStaffingDataLoader;
 		private readonly IOvertimeRequestCriticalUnderStaffedSpecification _overtimeRequestCriticalUnderStaffedSpecification;
-		private readonly ILoggedOnUser _loggedOnUser;
 
-		public OvertimeRequestUnderStaffingSkillProviderToggle47853On(ISkillStaffingDataLoader skillStaffingDataLoader, IOvertimeRequestCriticalUnderStaffedSpecification overtimeRequestCriticalUnderStaffedSpecification, ILoggedOnUser loggedOnUser)
+		public OvertimeRequestUnderStaffingSkillProviderToggle47853On(ISkillStaffingDataLoader skillStaffingDataLoader, IOvertimeRequestCriticalUnderStaffedSpecification overtimeRequestCriticalUnderStaffedSpecification)
 		{
 			_skillStaffingDataLoader = skillStaffingDataLoader;
 			_overtimeRequestCriticalUnderStaffedSpecification = overtimeRequestCriticalUnderStaffedSpecification;
-			_loggedOnUser = loggedOnUser;
 		}
 
 		public IDictionary<DateTimePeriod,IList<ISkill>> GetSeriousUnderstaffingSkills(DateTimePeriod dateTimePeriod,
-			IEnumerable<ISkill> skills)
+			IEnumerable<ISkill> skills, IPerson person)
 		{
-			var timeZoneInfo = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
-			var useShrinkage = _loggedOnUser.CurrentUser().WorkflowControlSet.OvertimeRequestStaffingCheckMethod ==
+			var timeZoneInfo = person.PermissionInformation.DefaultTimeZone();
+			var useShrinkage = person.WorkflowControlSet.OvertimeRequestStaffingCheckMethod ==
 							   OvertimeRequestStaffingCheckMethod.IntradayWithShrinkage;
 
 			var resolution = skills.Min(s => s.DefaultResolution);

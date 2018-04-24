@@ -12,19 +12,17 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 	public class OvertimeRequestUnderStaffingSkillProviderToggle74944On : IOvertimeRequestUnderStaffingSkillProvider
 	{
 		private readonly ISkillStaffingDataLoader _skillStaffingDataLoader;
-		private readonly ILoggedOnUser _loggedOnUser;
 
-		public OvertimeRequestUnderStaffingSkillProviderToggle74944On(ISkillStaffingDataLoader skillStaffingDataLoader, ILoggedOnUser loggedOnUser)
+		public OvertimeRequestUnderStaffingSkillProviderToggle74944On(ISkillStaffingDataLoader skillStaffingDataLoader)
 		{
 			_skillStaffingDataLoader = skillStaffingDataLoader;
-			_loggedOnUser = loggedOnUser;
 		}
 
 		public IDictionary<DateTimePeriod, IList<ISkill>> GetSeriousUnderstaffingSkills(DateTimePeriod requestDateTimePeriod,
-			IEnumerable<ISkill> skills)
+			IEnumerable<ISkill> skills, IPerson person)
 		{
-			var timeZoneInfo = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
-			var useShrinkage = _loggedOnUser.CurrentUser().WorkflowControlSet.OvertimeRequestStaffingCheckMethod ==
+			var timeZoneInfo = person.PermissionInformation.DefaultTimeZone();
+			var useShrinkage = person.WorkflowControlSet.OvertimeRequestStaffingCheckMethod ==
 							   OvertimeRequestStaffingCheckMethod.IntradayWithShrinkage;
 
 			var resolution = skills.Min(s => s.DefaultResolution);

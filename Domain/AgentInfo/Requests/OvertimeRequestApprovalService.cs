@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 				return getBusinessRuleResponses(Resources.PeriodIsOutOfSkillOpenHours, period, person);
 			}
 
-			var seriousUnderstaffingSkillDictionary = _overtimeRequestUnderStaffingSkillProvider.GetSeriousUnderstaffingSkills(period, skills);
+			var seriousUnderstaffingSkillDictionary = _overtimeRequestUnderStaffingSkillProvider.GetSeriousUnderstaffingSkills(period, skills, person);
 			if (seriousUnderstaffingSkillDictionary.Count == 0)
 			{
 				var activityId = skills.FirstOrDefault().Activity.Id.GetValueOrDefault();
