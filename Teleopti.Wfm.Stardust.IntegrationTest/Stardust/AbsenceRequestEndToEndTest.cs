@@ -22,7 +22,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 {
-	[StardustTest]
+	[Ignore("Ignoring for now"), StardustTest]
 	public class AbsenceRequestEndToEndTest
 	{
 		public WithUnitOfWork WithUnitOfWork;
