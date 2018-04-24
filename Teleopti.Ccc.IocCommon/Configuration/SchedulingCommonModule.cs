@@ -342,6 +342,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<MatrixDataWithToFewDaysOff>().As<IMatrixDataWithToFewDaysOff>().InstancePerLifetimeScope();
 
 			builder.RegisterType<ScheduleResultDataExtractorProvider>().As<IScheduleResultDataExtractorProvider>().SingleInstance();
+			if (_configuration.Toggle(Toggles.ResourcePlanner_MinimumStaffing_75339))
+			{
+				builder.RegisterType<CreatePersonalSkillDataExtractor>().As<ICreatePersonalSkillDataExtractor>().SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<CreatePersonalSkillDataExtractorOLD>().As<ICreatePersonalSkillDataExtractor>().SingleInstance();				
+			}
 			builder.RegisterType<TrueFalseRandomizer>().As<ITrueFalseRandomizer>().SingleInstance();
 			builder.RegisterType<OfficialWeekendDays>().As<IOfficialWeekendDays>().SingleInstance();
 			builder.RegisterType<CMSBOneFreeWeekendMax5WorkingDaysDecisionMaker>().As<IDayOffDecisionMaker>().SingleInstance();

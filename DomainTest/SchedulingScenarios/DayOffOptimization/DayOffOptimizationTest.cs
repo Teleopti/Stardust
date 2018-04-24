@@ -471,7 +471,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				.DayOff().Should().Not.Be.Null();
 		}
 
-		public DayOffOptimizationTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerDayOffOptimizationIslands47208, bool resourcePlannerDayOffUsePredictorEverywhere75667) : base(seperateWebRequest, resourcePlannerDayOffOptimizationIslands47208, resourcePlannerDayOffUsePredictorEverywhere75667)
+		public DayOffOptimizationTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerDayOffOptimizationIslands47208, bool resourcePlannerDayOffUsePredictorEverywhere75667, bool resourcePlannerMinimumStaffing75339) : base(seperateWebRequest, resourcePlannerDayOffOptimizationIslands47208, resourcePlannerDayOffUsePredictorEverywhere75667, resourcePlannerMinimumStaffing75339)
 		{
 		}
 	}

@@ -9,29 +9,41 @@ using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 {
-	[TestFixture(SeperateWebRequest.SimulateFirstRequest, true, true)]
-	[TestFixture(SeperateWebRequest.SimulateFirstRequest, false, true)]
-	[TestFixture(SeperateWebRequest.SimulateSecondRequestOrScheduler, true, true)]
-	[TestFixture(SeperateWebRequest.SimulateSecondRequestOrScheduler, false, true)]
-	[TestFixture(SeperateWebRequest.SimulateFirstRequest, true, false)]
-	[TestFixture(SeperateWebRequest.SimulateFirstRequest, false, false)]
-	[TestFixture(SeperateWebRequest.SimulateSecondRequestOrScheduler, true, false)]
-	[TestFixture(SeperateWebRequest.SimulateSecondRequestOrScheduler, false, false)]
+	[TestFixture(SeperateWebRequest.SimulateFirstRequest, true, true, false)]
+	[TestFixture(SeperateWebRequest.SimulateFirstRequest, false, true, false)]
+	[TestFixture(SeperateWebRequest.SimulateSecondRequestOrScheduler, true, true, false)]
+	[TestFixture(SeperateWebRequest.SimulateSecondRequestOrScheduler, false, true, false)]
+	[TestFixture(SeperateWebRequest.SimulateFirstRequest, true, false, false)]
+	[TestFixture(SeperateWebRequest.SimulateFirstRequest, false, false, false)]
+	[TestFixture(SeperateWebRequest.SimulateSecondRequestOrScheduler, true, false, false)]
+	[TestFixture(SeperateWebRequest.SimulateSecondRequestOrScheduler, false, false, false)]
+	[TestFixture(SeperateWebRequest.SimulateFirstRequest, true, true, true)]
+	[TestFixture(SeperateWebRequest.SimulateFirstRequest, false, true, true)]
+	[TestFixture(SeperateWebRequest.SimulateSecondRequestOrScheduler, true, true, true)]
+	[TestFixture(SeperateWebRequest.SimulateSecondRequestOrScheduler, false, true, true)]
+	[TestFixture(SeperateWebRequest.SimulateFirstRequest, true, false, true)]
+	[TestFixture(SeperateWebRequest.SimulateFirstRequest, false, false, true)]
+	[TestFixture(SeperateWebRequest.SimulateSecondRequestOrScheduler, true, false, true)]
+	[TestFixture(SeperateWebRequest.SimulateSecondRequestOrScheduler, false, false, true)]
 	[LoggedOnAppDomain]
 	public abstract class DayOffOptimizationScenario : ISetup, IConfigureToggleManager, ITestInterceptor
 	{
 		private readonly SeperateWebRequest _seperateWebRequest;
 		protected readonly bool _resourcePlannerDayOffOptimizationIslands47208;
 		private readonly bool _resourcePlannerDayOffUsePredictorEverywhere75667;
+		protected readonly bool _resourcePlannerMinimumStaffing75339;
 
 		public IIoCTestContext IoCTestContext;
 
 		protected DayOffOptimizationScenario(SeperateWebRequest seperateWebRequest,
-			bool resourcePlannerDayOffOptimizationIslands47208, bool resourcePlannerDayOffUsePredictorEverywhere75667) //TODO
+			bool resourcePlannerDayOffOptimizationIslands47208, 
+			bool resourcePlannerDayOffUsePredictorEverywhere75667,
+			bool resourcePlannerMinimumStaffing75339)
 		{
 			_seperateWebRequest = seperateWebRequest;
 			_resourcePlannerDayOffOptimizationIslands47208 = resourcePlannerDayOffOptimizationIslands47208;
 			_resourcePlannerDayOffUsePredictorEverywhere75667 = resourcePlannerDayOffUsePredictorEverywhere75667;
+			_resourcePlannerMinimumStaffing75339 = resourcePlannerMinimumStaffing75339;
 		}
 		
 		public virtual void Setup(ISystem system, IIocConfiguration configuration)
@@ -48,6 +60,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				toggleManager.Enable(Toggles.ResourcePlanner_DayOffOptimizationIslands_47208);
 			if(_resourcePlannerDayOffUsePredictorEverywhere75667)
 				toggleManager.Enable(Toggles.ResourcePlanner_DayOffUsePredictorEverywhere_75667);
+			if(_resourcePlannerMinimumStaffing75339)
+				toggleManager.Enable(Toggles.ResourcePlanner_MinimumStaffing_75339);
 		}
 
 		public void OnBefore()

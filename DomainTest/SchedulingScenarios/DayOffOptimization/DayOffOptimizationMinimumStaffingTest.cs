@@ -3,6 +3,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -30,21 +31,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public FakeActivityRepository ActivityRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 
-		
-		//Should not be needed here! It should default to "on" i web! Fix later
-		public OptimizationPreferencesDefaultValueProvider OptimizationPreferencesProvider;
-		//
-		
 		[Test]
-		[Ignore("75339 To be fixed")]
 		public void ShouldConsiderMinimumStaffing()
 		{
-			//Should not be needed here! It should default to "on" i web! Fix later
-			var optimizationPreferences = OptimizationPreferencesProvider.Fetch();
-	//		optimizationPreferences.Advanced.UseMinimumStaffing = true;
-		//	optimizationPreferences.Advanced.UseTweakedValues = true;
-			OptimizationPreferencesProvider.SetFromTestsOnly(optimizationPreferences);
-			//
 			var firstDay = new DateOnly(2015, 10, 12); //mon
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
@@ -75,8 +64,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		}
 
 		
-		public DayOffOptimizationMinimumStaffingTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerDayOffOptimizationIslands47208, bool resourcePlannerDayOffUsePredictorEverywhere75667) : base(seperateWebRequest, resourcePlannerDayOffOptimizationIslands47208, resourcePlannerDayOffUsePredictorEverywhere75667)
+		public DayOffOptimizationMinimumStaffingTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerDayOffOptimizationIslands47208, bool resourcePlannerDayOffUsePredictorEverywhere75667, bool resourcePlannerMinimumStaffing75339) : base(seperateWebRequest, resourcePlannerDayOffOptimizationIslands47208, resourcePlannerDayOffUsePredictorEverywhere75667, resourcePlannerMinimumStaffing75339)
 		{
+			if(!_resourcePlannerMinimumStaffing75339)
+				Assert.Ignore("Only available when ResourcePlanner_MinimumStaffing_75339 is true");
 		}
 	}
 }

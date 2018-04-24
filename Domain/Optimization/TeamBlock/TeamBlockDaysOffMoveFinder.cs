@@ -14,17 +14,17 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 	public class TeamBlockDaysOffMoveFinder : ITeamBlockDaysOffMoveFinder
 	{
-		private readonly IScheduleResultDataExtractorProvider _scheduleResultDataExtractorProvider;
 		private readonly ISmartDayOffBackToLegalStateService _daysOffBackToLegal;
 		private readonly IDayOffOptimizationDecisionMakerFactory _dayOffOptimizationDecisionMakerFactory;
+		private readonly ICreatePersonalSkillDataExtractor _createPersonalSkillDataExtractor;
 
-		public TeamBlockDaysOffMoveFinder(IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider,
-		                                  ISmartDayOffBackToLegalStateService daysOffBackToLegal,
-		                                  IDayOffOptimizationDecisionMakerFactory dayOffOptimizationDecisionMakerFactory)
+		public TeamBlockDaysOffMoveFinder(ISmartDayOffBackToLegalStateService daysOffBackToLegal,
+		                                  IDayOffOptimizationDecisionMakerFactory dayOffOptimizationDecisionMakerFactory,
+										ICreatePersonalSkillDataExtractor createPersonalSkillDataExtractor)
 		{
-			_scheduleResultDataExtractorProvider = scheduleResultDataExtractorProvider;
 			_daysOffBackToLegal = daysOffBackToLegal;
 			_dayOffOptimizationDecisionMakerFactory = dayOffOptimizationDecisionMakerFactory;
+			_createPersonalSkillDataExtractor = createPersonalSkillDataExtractor;
 		}
 
 		public ILockableBitArray TryFindMoves(IScheduleMatrixPro matrix, ILockableBitArray originalArray,
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		{
 			//should use agggregated skills
 			var scheduleResultDataExtractorValues =
-				_scheduleResultDataExtractorProvider.CreatePersonalSkillDataExtractor(matrix, optimizationPreferences.Advanced, schedulingResultStateHolder).Values();
+				_createPersonalSkillDataExtractor.Create(matrix, optimizationPreferences, schedulingResultStateHolder).Values();
 
 			// find days off to move within the common matrix period
 			IEnumerable<IDayOffDecisionMaker> decisionMakers =
