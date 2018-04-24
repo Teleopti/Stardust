@@ -467,10 +467,6 @@
     <value>Servicenivåberäkning:</value>
     <comment>Servicenivåberäkning:</comment>
   </data>
-  <data name="ResReportAgentScheduleAdherence" xml:space="preserve">
-    <value>Agent - Schemaföljsamhet</value>
-    <comment>Agent - Schemaföljsamhet</comment>
-  </data>
   <data name="ResSortByColon" xml:space="preserve">
     <value>Sortera efter:</value>
     <comment>Sortera efter:</comment>
@@ -1358,5 +1354,14 @@
   </data>
   <data name="ResPlannedOvertimeH" xml:space="preserve">
     <value>Planerad övertid (tt:mm)</value>
+  </data>
+  <data name="ResESLInclShrinkagePercent" xml:space="preserve">
+    <value>ESL inkl. shrinkage (%)</value>
+  </data>
+  <data name="ResESLPercent" xml:space="preserve">
+    <value>ESL (%)</value>
+  </data>
+  <data name="ResRequestTypeOvertime" xml:space="preserve">
+    <value>Övertid</value>
   </data>
 </root>

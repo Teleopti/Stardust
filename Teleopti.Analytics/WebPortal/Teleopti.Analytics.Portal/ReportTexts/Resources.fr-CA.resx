@@ -312,9 +312,6 @@
   <data name="ResServiceLevelCalcColon" xml:space="preserve">
     <value>Calcul de niveau de service:</value>
   </data>
-  <data name="ResReportAgentScheduleAdherence" xml:space="preserve">
-    <value>Agent - Adhérence Planning</value>
-  </data>
   <data name="ResSortByColon" xml:space="preserve">
     <value>Trier par:</value>
   </data>
@@ -1112,5 +1109,17 @@
   </data>
   <data name="MultipleActivitiesOrAbsences" xml:space="preserve">
     <value>Multiples activités/absences</value>
+  </data>
+  <data name="ResPlannedOvertimeH" xml:space="preserve">
+    <value>Heures supplémentaires planifiées (hh:mm)  </value>
+  </data>
+  <data name="ResRequestTypeOvertime" xml:space="preserve">
+    <value>Heures supplémentaires</value>
+  </data>
+  <data name="ResESLInclShrinkagePercent" xml:space="preserve">
+    <value>NSE incluant Réduction (%)</value>
+  </data>
+  <data name="ResESLPercent" xml:space="preserve">
+    <value>NSE (%)</value>
   </data>
 </root>
