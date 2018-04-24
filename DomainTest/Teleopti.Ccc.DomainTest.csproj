@@ -446,7 +446,6 @@
     <Compile Include="Security\ImplementationDetails\LicenseOptions\TeleoptiCccFreemiumForecastsLicenseOptionTest.cs" />
     <Compile Include="Security\ImplementationDetails\LicenseOptions\TeleoptiCccLifestyleLicenseOptionTest.cs" />
     <Compile Include="Security\ImplementationDetails\LicenseOptions\TeleoptiCccMyTeamLicenseOptionTest.cs" />
-    <Compile Include="Security\ImplementationDetails\LicenseOptions\TeleoptiCccNotifyLicenseOptionTest.cs" />
     <Compile Include="Security\ImplementationDetails\LicenseOptions\TeleoptiCccOvertimeAvailabilityLicenseOptionTest.cs" />
     <Compile Include="Security\ImplementationDetails\LicenseOptions\TeleoptiCccOvertimeRequestsLicenseOptionTest.cs" />
     <Compile Include="Security\ImplementationDetails\LicenseOptions\TeleoptiCccPayrollIntegrationLicenseOptionTest.cs" />

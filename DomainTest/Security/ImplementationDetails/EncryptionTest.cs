@@ -1,11 +1,7 @@
-﻿#region Imports
-
-using System;
+﻿using System;
 using System.Security.Cryptography;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Security;
-
-#endregion
 
 namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails
 {
