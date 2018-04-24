@@ -80,7 +80,7 @@ WHERE
 	PersonId = :PersonId AND 
 	StartTime <= :EndTime AND 
 	EndTime >= :StartTime
-	ORDER BY [StartTime] ASC
+ORDER BY [Id] ASC
 ")
 					.SetParameter("PersonId", personId)
 					.SetParameter("StartTime", period.StartDateTime)
@@ -100,7 +100,7 @@ WHERE
 	[Type] IN (:Types) AND
 	PersonId = :PersonId AND 
 	[EndTime] < :Timestamp
-	ORDER BY [StartTime] DESC
+ORDER BY [Id] DESC
 ")
 					.SetParameterList("Types", new[]
 					{
