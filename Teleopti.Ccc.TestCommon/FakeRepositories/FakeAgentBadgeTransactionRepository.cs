@@ -11,6 +11,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	public class FakeAgentBadgeTransactionRepository :IAgentBadgeTransactionRepository
 	{
 		private IList<IAgentBadgeTransaction> _agentBadgeTransactions = new List<IAgentBadgeTransaction>();
+		private int _findByPersonListWasCalledTimes = 0;
 
 		public void Add(IAgentBadgeTransaction root)
 		{
@@ -46,6 +47,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<IAgentBadgeTransaction> Find(IEnumerable<IPerson> personCollection, DateOnlyPeriod period)
 		{
+			_findByPersonListWasCalledTimes++;
 			var personIds = personCollection.Select(p => p.Id.GetValueOrDefault()).ToArray();
 
 			return _agentBadgeTransactions.Where(t => personIds.Contains(t.Person.Id.GetValueOrDefault()) && period.Contains(t.CalculatedDate)).ToList();
@@ -68,6 +70,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public void ResetAgentBadges()
 		{
 			_agentBadgeTransactions.Clear();
+		}
+
+		public int FindByPersonListCalledTimes()
+		{
+			return _findByPersonListWasCalledTimes;
 		}
 	}
 }

@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Web.Areas.Reports.Core
 {
 	public interface IAgentBadgeProvider
 	{
-		AgentBadgeOverview [] GetAgentBadge(IDictionary<PersonFinderField, string> criteriaDic, DateOnly currentDate,DateOnlyPeriod? period = null);
-		AgentBadgeOverview[] GetAllAgentBadges(DateOnly currentDate,DateOnlyPeriod? period = null);
+		AgentBadgeOverview [] GetAgentBadge(IDictionary<PersonFinderField, string> criteriaDic, DateOnly currentDate,DateOnlyPeriod period);
+		AgentBadgeOverview[] GetAllAgentBadges(DateOnly currentDate,DateOnlyPeriod period);
 	}
 }

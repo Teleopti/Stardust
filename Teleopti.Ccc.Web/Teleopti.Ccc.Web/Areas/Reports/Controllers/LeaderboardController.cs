@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Web.Areas.Reports.Controllers
 
 			var period = startDate.HasValue && endDate.HasValue
 				? new DateOnlyPeriod(new DateOnly(startDate.Value), new DateOnly(endDate.Value))
-				: (DateOnlyPeriod?) null;
+				: new DateOnlyPeriod(new DateOnly(1900, 1, 1), DateOnly.Today);
 			
 			var myTeam = _loggonUser.CurrentUser().MyTeam(currentDate);
 			var result = new List<AgentBadgeOverview>();

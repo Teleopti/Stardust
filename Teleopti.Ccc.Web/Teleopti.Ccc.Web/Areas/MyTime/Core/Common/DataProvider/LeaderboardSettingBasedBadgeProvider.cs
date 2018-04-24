@@ -21,9 +21,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			public int SilverBadgeAmount { get; set; }
 			public int GoldBadgeAmount { get; set; }
 		}
-
-		private readonly IAgentBadgeRepository _agentBadgeRepository;
-		private readonly IAgentBadgeWithRankRepository _agentBadgeWithRankRepository;
+		
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly ISiteRepository _siteRepository;
 		private readonly ITeamRepository _teamRepository;
@@ -37,8 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		private readonly IAgentBadgeTransactionRepository _agentBadgeTransactionRepository;
 		private readonly IAgentBadgeWithRankTransactionRepository _agentBadgeWithRankTransactionRepository;
 
-		public LeaderboardSettingBasedBadgeProvider(IAgentBadgeRepository agentBadgeRepository,
-			IAgentBadgeWithRankRepository agentBadgeWithRankRepository,
+		public LeaderboardSettingBasedBadgeProvider(
 			IPermissionProvider permissionProvider,
 			ISiteRepository siteRepository, ITeamRepository teamRepository,
 			IGroupingReadOnlyRepository groupingRepository,
@@ -46,8 +43,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			IAgentBadgeTransactionRepository agentBadgeTransactionRepository, 
 			IAgentBadgeWithRankTransactionRepository agentBadgeWithRankTransactionRepository, ISettingDataRepository settingDataRepository)
 		{
-			_agentBadgeRepository = agentBadgeRepository;
-			_agentBadgeWithRankRepository = agentBadgeWithRankRepository;
 			_permissionProvider = permissionProvider;
 			_siteRepository = siteRepository;
 			_teamRepository = teamRepository;
@@ -60,7 +55,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		}
 
 		public IEnumerable<AgentBadgeOverview> PermittedAgentBadgeOverviewsForEveryoneOrMyOwn(string functionPath,
-			LeaderboardQuery query, DateOnlyPeriod? period = null)
+			LeaderboardQuery query, DateOnlyPeriod period)
 		{
 			teamSettings = _teamSettingRepository.FindAllTeamGamificationSettingsSortedByTeam();
 			var queryDate = query.Date;
@@ -75,7 +70,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			return getPermittedAgentOverviews(permittedAgentBadgeList);
 		}
 
-		public IEnumerable<AgentBadgeOverview> PermittedAgentBadgeOverviewsForSite(string functionPath, LeaderboardQuery query, DateOnlyPeriod? period = null)
+		public IEnumerable<AgentBadgeOverview> PermittedAgentBadgeOverviewsForSite(string functionPath, LeaderboardQuery query, DateOnlyPeriod period)
 		{
 			teamSettings = _teamSettingRepository.FindAllTeamGamificationSettingsSortedByTeam();
 			var queryDate = query.Date;
@@ -91,7 +86,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			return getPermittedAgentOverviews(permittedAgentBadgeList);
 		}
 
-		public IEnumerable<AgentBadgeOverview> PermittedAgentBadgeOverviewsForTeam(string functionPath, LeaderboardQuery query, DateOnlyPeriod? period = null)
+		public IEnumerable<AgentBadgeOverview> PermittedAgentBadgeOverviewsForTeam(string functionPath, LeaderboardQuery query, DateOnlyPeriod period)
 		{
 			teamSettings = _teamSettingRepository.FindAllTeamGamificationSettingsSortedByTeam();
 			var queryDate = query.Date;
@@ -104,7 +99,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			return getPermittedAgentOverviews(permittedAgentBadgeList);
 		}
 
-		public IEnumerable<AgentBadgeOverview> GetAgentBadgeOverviewsForPeople(IEnumerable<Guid> personIds, DateOnly date, DateOnlyPeriod? period = null)
+		public IEnumerable<AgentBadgeOverview> GetAgentBadgeOverviewsForPeople(IEnumerable<Guid> personIds, DateOnly date, DateOnlyPeriod period)
 		{
 			teamSettings = _teamSettingRepository.FindAllTeamGamificationSettingsSortedByTeam();
 			var agentBadgeList = getAgentBadgeListForPeople(date, personIds.ToList(),period);
@@ -132,7 +127,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		private IEnumerable<agentWithBadge> getPermittedAgentBadgeListBasedOnSpecificSetting(string functionPath,
 			IEnumerable<ReadOnlyGroupDetail> allAgents,
 			DateOnly date,
-			DateOnlyPeriod? period)
+			DateOnlyPeriod period)
 		{
 			permittedPersonList = getPermittedAgents(functionPath, allAgents, date);
 			var permittedPersonIdList = permittedPersonList.Select(x => x.PersonId).ToList();
@@ -140,7 +135,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			return getAgentBadgeListForPeople(date, permittedPersonIdList, period);
 		}
 
-		private IEnumerable<agentWithBadge> getAgentBadgeListForPeople(DateOnly date, IList<Guid> permittedPersonIdList, DateOnlyPeriod? period)
+		private IEnumerable<agentWithBadge> getAgentBadgeListForPeople(DateOnly date, IList<Guid> permittedPersonIdList, DateOnlyPeriod period)
 		{
 			var agentWithBadgesConvertedFromRatio = new List<agentWithBadge>();
 			var agentListWithDifferentThreshold = new List<IPerson>();			
@@ -151,16 +146,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 				
 				var agentsInTeamWithPermission = agentsInTeam.Where(p => permittedPersonIdList.Contains(p.Id.Value)).ToList();
 	
-				ICollection<AgentBadge> agentBadgesConvertedFromRatio;
-				if (period.HasValue)
-				{					
-					agentBadgesConvertedFromRatio = AgentBadge.FromAgentBadgeTransaction(_agentBadgeTransactionRepository.Find(agentsInTeamWithPermission, period.Value));
-				}
-				else
-				{
-					var agentIdsInTeamWithPermission = agentsInTeamWithPermission.Select(x => x.Id.GetValueOrDefault()).ToList();
-					agentBadgesConvertedFromRatio = _agentBadgeRepository.Find(agentIdsInTeamWithPermission);					
-				}
+				ICollection<AgentBadge> agentBadgesConvertedFromRatio = AgentBadge.FromAgentBadgeTransaction(_agentBadgeTransactionRepository.Find(agentsInTeamWithPermission, period));
 				
 				agentWithBadgesConvertedFromRatio.AddRange(getAgentWithBadges(agentBadgesConvertedFromRatio,
 					teamSetting.GamificationSetting.SilverToBronzeBadgeRate, teamSetting.GamificationSetting.GoldToSilverBadgeRate));
@@ -168,16 +154,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 				agentListWithDifferentThreshold.AddRange(agentsInTeamWithPermission);
 			}
 
-			IList<IAgentBadgeWithRank> agentBadgesWithRank;
-			if (period.HasValue)
-			{
-				agentBadgesWithRank = AgentBadgeWithRank.FromAgentBadgeWithRanksTransaction(_agentBadgeWithRankTransactionRepository.Find(agentListWithDifferentThreshold, period.Value));
-			}
-			else
-			{
-				var agentIdList = agentListWithDifferentThreshold.Select(p => p.Id.GetValueOrDefault()).ToArray();			
-				agentBadgesWithRank = _agentBadgeWithRankRepository.Find(agentIdList).ToList();
-			}
+			IList<IAgentBadgeWithRank> agentBadgesWithRank = AgentBadgeWithRank.FromAgentBadgeWithRanksTransaction(_agentBadgeWithRankTransactionRepository.Find(agentListWithDifferentThreshold, period));
+
 			var agentWithRankedBadges = getAgentWithBadges(agentBadgesWithRank).ToList();
 			return mergeAgentWithBadges(agentWithBadgesConvertedFromRatio, agentWithRankedBadges);
 		}

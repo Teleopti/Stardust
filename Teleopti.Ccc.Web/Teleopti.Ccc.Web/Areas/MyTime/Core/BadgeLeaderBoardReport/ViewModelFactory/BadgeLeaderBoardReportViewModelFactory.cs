@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.BadgeLeaderBoardReport.ViewModelFac
 
 		public BadgeLeaderBoardReportViewModel CreateBadgeLeaderBoardReportViewModel(LeaderboardQuery query)
 		{
-			DateOnlyPeriod? period = null;
+			DateOnlyPeriod period = new DateOnlyPeriod(new DateOnly(1900, 1,1), DateOnly.Today);
 			if (query.StartDate.HasValue && query.EndDate.HasValue) period = new DateOnlyPeriod(query.StartDate.Value, query.EndDate.Value);
 
 			var personList = new List<AgentBadgeOverview>();

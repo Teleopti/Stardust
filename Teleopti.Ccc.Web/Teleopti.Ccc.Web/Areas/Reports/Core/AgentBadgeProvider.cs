@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Web.Areas.Reports.Core
 			_settingBasedBadgeProvider = settingBasedBadgeProvider;
 		}
 
-		public AgentBadgeOverview[] GetAgentBadge(IDictionary<PersonFinderField, string> criteriaDic, DateOnly currentDate, DateOnlyPeriod? period = null)
+		public AgentBadgeOverview[] GetAgentBadge(IDictionary<PersonFinderField, string> criteriaDic, DateOnly currentDate, DateOnlyPeriod period)
 		{
 			var searchCriteria = _searchProvider.CreatePersonFinderSearchCriteria(criteriaDic, 9999, 1, currentDate,
 				null);
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.Reports.Core
 			return results.ToArray();
 		}
 
-		public AgentBadgeOverview[] GetAllAgentBadges(DateOnly currentDate, DateOnlyPeriod? period = null)
+		public AgentBadgeOverview[] GetAllAgentBadges(DateOnly currentDate, DateOnlyPeriod period)
 		{
 			return _settingBasedBadgeProvider.PermittedAgentBadgeOverviewsForEveryoneOrMyOwn(
 				DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboardUnderReports, new LeaderboardQuery

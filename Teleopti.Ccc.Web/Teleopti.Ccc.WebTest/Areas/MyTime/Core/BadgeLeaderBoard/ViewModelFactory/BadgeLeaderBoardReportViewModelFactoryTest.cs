@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.BadgeLeaderBoard.ViewModelFacto
 
 			var leaderboardSettingBasedBadgeProvider = MockRepository.GenerateMock<ILeaderboardSettingBasedBadgeProvider>();
 			leaderboardSettingBasedBadgeProvider.Stub(
-				x => x.PermittedAgentBadgeOverviewsForTeam(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard, option))
+				x => x.PermittedAgentBadgeOverviewsForTeam(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard, option, new DateOnlyPeriod(new DateOnly(1900, 1, 1), DateOnly.Today)))
 				.Return(new List<AgentBadgeOverview>());
 
 			var target = new BadgeLeaderBoardReportViewModelFactory(leaderboardSettingBasedBadgeProvider);
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.BadgeLeaderBoard.ViewModelFacto
 
 			var leaderboardSettingBasedBadgeProvider = MockRepository.GenerateMock<ILeaderboardSettingBasedBadgeProvider>();
 			leaderboardSettingBasedBadgeProvider.Stub(
-				x => x.PermittedAgentBadgeOverviewsForSite(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard, option))
+				x => x.PermittedAgentBadgeOverviewsForSite(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard, option, new DateOnlyPeriod(new DateOnly(1900, 1, 1), DateOnly.Today)))
 				.Return(overviewOriginal);
 
 			var target = new BadgeLeaderBoardReportViewModelFactory(leaderboardSettingBasedBadgeProvider);

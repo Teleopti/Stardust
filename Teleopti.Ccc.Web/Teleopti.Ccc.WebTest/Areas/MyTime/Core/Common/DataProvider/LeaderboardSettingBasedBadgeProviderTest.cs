@@ -22,8 +22,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 	[TestFixture]
 	public class LeaderboardSettingBasedBadgeProviderTest
 	{
-		private FakeAgentBadgeRepository agentBadgeRepository;
-		private FakeAgentBadgeWithRankRepository agentBadgeWithRankRepository;
 		private LeaderboardSettingBasedBadgeProvider target;
 		private IPermissionProvider permissionProvider;
 		private ISiteRepository siteRepository;
@@ -60,9 +58,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		{
 			GamificationSettingRuleSet = GamificationSettingRuleSet.RuleWithDifferentThreshold,
 		};
-
-		private IList<AgentBadge> agentBadges;
-		private IList<IAgentBadgeWithRank> agentsWithRankedBadge;
+		
 		private const string personName1 = "first1 last1";
 		private const string personName2 = "first2 last2";
 		private DateOnly date;
@@ -82,30 +78,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			team1 = TeamFactory.CreateSimpleTeam("team1");
 			team1.SetId(Guid.NewGuid());
 
-			agentBadges = new[]
-			{
-				new AgentBadge
-				{
-					BadgeType = BadgeType.Adherence,
-					TotalAmount = 16,
-					Person = personDetail1.PersonId
-				},
-
-				new AgentBadge
-				{
-					BadgeType = BadgeType.AnsweredCalls,
-					TotalAmount = 25,
-					Person = personDetail2.PersonId
-				},
-
-				new AgentBadge
-				{
-					BadgeType = BadgeType.AverageHandlingTime,
-					TotalAmount = 32,
-					Person = personDetail1.PersonId
-				}
-			};
-
 			teamSettingRepository = MockRepository.GenerateMock<ITeamGamificationSettingRepository>();
 			teamSettingRepository.Stub(x => x.FindAllTeamGamificationSettingsSortedByTeam())
 				.Return(new List<ITeamGamificationSetting>
@@ -124,46 +96,69 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			person2.SetEmploymentNumber("2");
 			personRepository = new FakePersonRepository(null);
 			personRepository.Has(new List<IPerson> { person1, person2 });
-
-			agentBadgeRepository = new FakeAgentBadgeRepository();
-			agentBadgeRepository.Add(agentBadges);
-
-			agentsWithRankedBadge = new IAgentBadgeWithRank[]
+			
+			agentBadgeTransactionRepository = new FakeAgentBadgeTransactionRepository();
+			var agentBadge1 = new AgentBadgeTransaction
 			{
-				new AgentBadgeWithRank
-				{
-					Person = personDetail1.PersonId,
-					BadgeType = BadgeType.Adherence,
-					GoldBadgeAmount = 0,
-					SilverBadgeAmount = 1,
-					BronzeBadgeAmount = 3
-				},
-				new AgentBadgeWithRank
-				{
-					Person = personDetail1.PersonId,
-					BadgeType = BadgeType.AnsweredCalls,
-					GoldBadgeAmount = 3,
-					SilverBadgeAmount = 2,
-					BronzeBadgeAmount = 1
-				},
-				new AgentBadgeWithRank
-				{
-					Person = personDetail2.PersonId,
-					BadgeType = BadgeType.AverageHandlingTime,
-					GoldBadgeAmount = 4,
-					SilverBadgeAmount = 0,
-					BronzeBadgeAmount = 9
-				}
+				BadgeType = BadgeType.Adherence,
+				Amount = 16,
+				Person = person1,
+				CalculatedDate = DateOnly.Today
 			};
-			agentBadgeWithRankRepository = new FakeAgentBadgeWithRankRepository();
-			agentBadgeWithRankRepository.Add(agentsWithRankedBadge);
+			agentBadgeTransactionRepository.Add(agentBadge1);
+			var agentBadge2 = new AgentBadgeTransaction
+			{
+				BadgeType = BadgeType.AnsweredCalls,
+				Amount = 25,
+				Person = person2,
+				CalculatedDate = DateOnly.Today
+			};
+			agentBadgeTransactionRepository.Add(agentBadge2);
+			var agentBadge3 = new AgentBadgeTransaction
+			{
+				BadgeType = BadgeType.AverageHandlingTime,
+				Amount = 32,
+				Person = person1,
+				CalculatedDate = DateOnly.Today
+			};
+			agentBadgeTransactionRepository.Add(agentBadge3);
+			
+			agentBadgeWithRankTransactionRepository = new FakeAgentBadgeWithRankTransactionRepository();
+			var agentBadgeWithRank1 = new AgentBadgeWithRankTransaction
+			{
+				Person = person1,
+				BadgeType = BadgeType.Adherence,
+				GoldBadgeAmount = 0,
+				SilverBadgeAmount = 1,
+				BronzeBadgeAmount = 3,
+				CalculatedDate = DateOnly.Today
+			};
+			agentBadgeWithRankTransactionRepository.Add(agentBadgeWithRank1);
+			var agentBadgeWithRank2 = new AgentBadgeWithRankTransaction
+			{
+				Person = person1,
+				BadgeType = BadgeType.AnsweredCalls,
+				GoldBadgeAmount = 3,
+				SilverBadgeAmount = 2,
+				BronzeBadgeAmount = 1,
+				CalculatedDate = DateOnly.Today
+			};
+			agentBadgeWithRankTransactionRepository.Add(agentBadgeWithRank2);
+			var agentBadgeWithRank3 = new AgentBadgeWithRankTransaction
+			{
+				Person = person2,
+				BadgeType = BadgeType.AverageHandlingTime,
+				GoldBadgeAmount = 4,
+				SilverBadgeAmount = 0,
+				BronzeBadgeAmount = 9,
+				CalculatedDate = DateOnly.Today
+			};
+			agentBadgeWithRankTransactionRepository.Add(agentBadgeWithRank3);
 
 			permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 			siteRepository = MockRepository.GenerateMock<ISiteRepository>();
 			teamRepository = MockRepository.GenerateMock<ITeamRepository>();
 			groupingRepository = MockRepository.GenerateMock<IGroupingReadOnlyRepository>();
-			agentBadgeTransactionRepository = new FakeAgentBadgeTransactionRepository();
-			agentBadgeWithRankTransactionRepository = new FakeAgentBadgeWithRankTransactionRepository();
 
 			var personalSettingDataRepository = new FakePersonalSettingDataRepository();
 			personalSettingDataRepository.PersistSettingValue(NameFormatSettings.Key, new NameFormatSettings {NameFormatId = 0});
@@ -171,7 +166,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			settingDataRepository.PersistSettingValue("CommonNameDescription", new CommonNameDescriptionSetting());
 
 
-			target = new LeaderboardSettingBasedBadgeProvider(agentBadgeRepository, agentBadgeWithRankRepository,
+			target = new LeaderboardSettingBasedBadgeProvider(
 				permissionProvider, siteRepository, teamRepository, groupingRepository,
 				teamSettingRepository, personRepository, agentBadgeTransactionRepository,agentBadgeWithRankTransactionRepository,
 				settingDataRepository);
@@ -183,7 +178,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			var commonNameDescriptionSetting = settingDataRepository.FindValueByKey("CommonNameDescription", new CommonNameDescriptionSetting());
 			commonNameDescriptionSetting.AliasFormat = "{EmployeeNumber} {FirstName} {LastName}";
 
-			var result = target.GetAgentBadgeOverviewsForPeople(new[] { person1.Id.Value, person2.Id.Value }, DateOnly.Today);
+			var result = target.GetAgentBadgeOverviewsForPeople(new[] { person1.Id.Value, person2.Id.Value }, DateOnly.Today, new DateOnlyPeriod(new DateOnly(1900, 1,1), DateOnly.Today));
 
 			result.First().AgentName.Should().Be("1 "+personName1);
 		}
@@ -208,15 +203,15 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			};
 
 			target.PermittedAgentBadgeOverviewsForEveryoneOrMyOwn(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard,
-				option);
+				option, new DateOnlyPeriod(new DateOnly(1900, 1, 1), DateOnly.Today));
 
-			Assert.IsTrue(agentBadgeRepository.FindByPersonListCalledTimes() > 0);
+			Assert.IsTrue(agentBadgeTransactionRepository.FindByPersonListCalledTimes() > 0);
 		}
 
 		[Test]
 		public void ShouldGetBadgesForPeople()
 		{
-			var result = target.GetAgentBadgeOverviewsForPeople(new[] {person1.Id.Value, person2.Id.Value},DateOnly.Today);
+			var result = target.GetAgentBadgeOverviewsForPeople(new[] {person1.Id.Value, person2.Id.Value},DateOnly.Today, new DateOnlyPeriod(new DateOnly(1900, 1, 1), DateOnly.Today));
 
 			result.First().AgentName.Should().Be(personName1);
 		}
@@ -252,7 +247,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 
 			var result =
 				target.PermittedAgentBadgeOverviewsForEveryoneOrMyOwn(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard,
-					option);
+					option, new DateOnlyPeriod(new DateOnly(1900, 1, 1), DateOnly.Today));
 
 			result.Single().AgentName.Should().Be(personName2);
 		}
@@ -282,7 +277,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 				.Return(true);
 
 			var result =
-				target.PermittedAgentBadgeOverviewsForSite(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard, option)
+				target.PermittedAgentBadgeOverviewsForSite(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard, option, new DateOnlyPeriod(new DateOnly(1900, 1, 1), DateOnly.Today))
 					.ToList();
 
 			result.First().AgentName.Should().Be(personName1);
@@ -298,8 +293,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 				SelectedId = team0.Id.GetValueOrDefault(),
 				Type = LeadboardQueryType.Team
 			};
-			agentBadgeRepository.Remove(agentBadges[1]);
-			agentBadgeWithRankRepository.Remove(agentsWithRankedBadge[2]);
+			agentBadgeTransactionRepository.Remove(agentBadgeTransactionRepository.LoadAll().ToList()[1]);
+			agentBadgeWithRankTransactionRepository.Remove(agentBadgeWithRankTransactionRepository.LoadAll().ToList()[2]);
 			teamRepository.Stub(x => x.Get(team0.Id.GetValueOrDefault())).Return(team0);
 			groupingRepository.Stub(x => x.DetailsForGroup(team0.Id.GetValueOrDefault(), date))
 				.Return(new[] {personDetail1, personDetail2});
@@ -313,7 +308,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 				.Return(true);
 
 			var result =
-				target.PermittedAgentBadgeOverviewsForTeam(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard, option)
+				target.PermittedAgentBadgeOverviewsForTeam(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard, option, new DateOnlyPeriod(new DateOnly(1900, 1, 1), DateOnly.Today))
 					.ToList();
 
 			result.Single().AgentName.Should().Be(personName1);
@@ -330,62 +325,65 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 				SelectedId = Guid.Empty,
 				Type = LeadboardQueryType.Everyone
 			};
-
-			agentBadges = new[]
+			
+			agentBadgeTransactionRepository.ResetAgentBadges();
+			var agentBadge1 = new AgentBadgeTransaction
 			{
-				new AgentBadge
-				{
-					BadgeType = BadgeType.Adherence,
-					TotalAmount = 31, // 1 Gold, 1 Silver, 1 Bronze
-					Person = personDetail1.PersonId
-				},
-
-				new AgentBadge
-				{
-					BadgeType = BadgeType.AnsweredCalls,
-					TotalAmount = 55, // 2 Gold, 1 Silver, 0 Bronze
-					Person = personDetail1.PersonId
-				},
-
-				new AgentBadge
-				{
-					BadgeType = BadgeType.AverageHandlingTime,
-					TotalAmount = 77, // 3 Gold, 0 Silver, 2 Bronze
-					Person = personDetail1.PersonId
-				}
+				BadgeType = BadgeType.Adherence,
+				Amount = 31, // 1 Gold, 1 Silver, 1 Bronze
+				Person = person1,
+				CalculatedDate = DateOnly.Today
 			};
-			agentBadgeRepository.ClearAll();
-			agentBadgeRepository.Add(agentBadges);
-
-			agentsWithRankedBadge = new IAgentBadgeWithRank[]
+			agentBadgeTransactionRepository.Add(agentBadge1);
+			var agentBadge2 = new AgentBadgeTransaction
 			{
-				new AgentBadgeWithRank
-				{
-					Person = personDetail1.PersonId,
-					BadgeType = BadgeType.Adherence,
-					GoldBadgeAmount = 0,
-					SilverBadgeAmount = 1,
-					BronzeBadgeAmount = 3
-				},
-				new AgentBadgeWithRank
-				{
-					Person = personDetail1.PersonId,
-					BadgeType = BadgeType.AnsweredCalls,
-					GoldBadgeAmount = 3,
-					SilverBadgeAmount = 2,
-					BronzeBadgeAmount = 1
-				},
-				new AgentBadgeWithRank
-				{
-					Person = personDetail1.PersonId,
-					BadgeType = BadgeType.AverageHandlingTime,
-					GoldBadgeAmount = 4,
-					SilverBadgeAmount = 0,
-					BronzeBadgeAmount = 9
-				}
+				BadgeType = BadgeType.AnsweredCalls,
+				Amount = 55, // 2 Gold, 1 Silver, 0 Bronze
+				Person = person1,
+				CalculatedDate = DateOnly.Today
 			};
-			agentBadgeWithRankRepository.ClearAll();
-			agentBadgeWithRankRepository.Add(agentsWithRankedBadge);
+			agentBadgeTransactionRepository.Add(agentBadge2);
+			var agentBadge3 = new AgentBadgeTransaction
+			{
+				BadgeType = BadgeType.AverageHandlingTime,
+				Amount = 77, // 3 Gold, 0 Silver, 2 Bronze
+				Person = person1,
+				CalculatedDate = DateOnly.Today
+			};
+			agentBadgeTransactionRepository.Add(agentBadge3);
+			
+			agentBadgeWithRankTransactionRepository.ResetAgentBadges();
+			var agentBadgeWithRank1 = new AgentBadgeWithRankTransaction
+			{
+				Person = person1,
+				BadgeType = BadgeType.Adherence,
+				GoldBadgeAmount = 0,
+				SilverBadgeAmount = 1,
+				BronzeBadgeAmount = 3,
+				CalculatedDate = DateOnly.Today
+			};
+			agentBadgeWithRankTransactionRepository.Add(agentBadgeWithRank1);
+			var agentBadgeWithRank2 = new AgentBadgeWithRankTransaction
+			{
+				Person = person1,
+				BadgeType = BadgeType.AnsweredCalls,
+				GoldBadgeAmount = 3,
+				SilverBadgeAmount = 2,
+				BronzeBadgeAmount = 1,
+				CalculatedDate = DateOnly.Today
+			};
+			agentBadgeWithRankTransactionRepository.Add(agentBadgeWithRank2);
+			var agentBadgeWithRank3 = new AgentBadgeWithRankTransaction
+			{
+				Person = person1,
+				BadgeType = BadgeType.AverageHandlingTime,
+				GoldBadgeAmount = 4,
+				SilverBadgeAmount = 0,
+				BronzeBadgeAmount = 9,
+				CalculatedDate = DateOnly.Today
+			};
+			agentBadgeWithRankTransactionRepository.Add(agentBadgeWithRank3);
+
 
 			var teamGroupDetail = new ReadOnlyGroupDetail {GroupId = Guid.NewGuid()};
 			groupingRepository.Stub(x => x.AvailableGroups(new ReadOnlyGroupPage(), date))
@@ -399,7 +397,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 
 			var result =
 				target.PermittedAgentBadgeOverviewsForEveryoneOrMyOwn(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard,
-					option).ToArray();
+					option, new DateOnlyPeriod(new DateOnly(1900, 1, 1), DateOnly.Today)).ToArray();
 
 			result.Single().Gold.Should().Be(13);
 			result.Single().Silver.Should().Be(5);
@@ -444,6 +442,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 				}
 			};
 
+			agentBadgeTransactionRepository.ResetAgentBadges();
 			foreach (var agentBadgeTransaction in agentBadgeTransactions)
 			{
 				agentBadgeTransactionRepository.Add(agentBadgeTransaction);
@@ -480,6 +479,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 				}
 			};
 
+			agentBadgeWithRankTransactionRepository.ResetAgentBadges();
 			foreach (var agentBadgeWithRankTransaction in agentBadgeWithRankTransactions)
 			{
 				agentBadgeWithRankTransactionRepository.Add(agentBadgeWithRankTransaction);
