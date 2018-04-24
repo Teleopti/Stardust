@@ -46,7 +46,6 @@ Background:
 		  | Adherence           | 3      | 0      | 0    |
 	And I am american
 
-@ignore
 Scenario: View available business hierarchy when data available is set to Site
 	Given I have a role with
 		| Field                 | Value |
@@ -61,7 +60,6 @@ Scenario: View available business hierarchy when data available is set to Site
 		| Team green |
 		| Team red   |
 
-@ignore
 Scenario: Should only see myself on the leader board when has data available only for my own
 	Given I have a role with
 		| Field                 | Value |
@@ -71,7 +69,6 @@ Scenario: Should only see myself on the leader board when has data available onl
 	Then I should see only myself on the leaderboard
 	And I should not see hierarchy-picker
 
-@ignore
 Scenario: Default leader board should be based on my team
 	Given I have a role with
 		| Field                 | Value |
@@ -81,7 +78,6 @@ Scenario: Default leader board should be based on my team
 	Then The hierarchy-picker should have 'Team green' selected 
 	And I should see only myself on the leaderboard
 
-@ignore
 Scenario: Should view correct leader board when selecting another group from different business hierarchy level
 	Given I have a role with
 		| Field                 | Value |
@@ -93,7 +89,6 @@ Scenario: Should view correct leader board when selecting another group from dif
 		| Rank | Agent        |
 		| 1    | Pierre Baldi |
 
-@ignore
 Scenario: The rank is the same when the Gold/Silver/Bronze badge are totally the same
 	Given I have a role with
 		| Field                 | Value |
