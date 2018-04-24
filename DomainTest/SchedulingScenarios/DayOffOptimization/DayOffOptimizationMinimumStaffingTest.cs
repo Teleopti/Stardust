@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
@@ -42,7 +41,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		{
 			//Should not be needed here! It should default to "on" i web! Fix later
 			var optimizationPreferences = OptimizationPreferencesProvider.Fetch();
-			optimizationPreferences.Advanced.UseMinimumStaffing = true;
+	//		optimizationPreferences.Advanced.UseMinimumStaffing = true;
+		//	optimizationPreferences.Advanced.UseTweakedValues = true;
 			OptimizationPreferencesProvider.SetFromTestsOnly(optimizationPreferences);
 			//
 			var firstDay = new DateOnly(2015, 10, 12); //mon
@@ -56,13 +56,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
 			var agent = PersonRepository.Has(new Contract("_"), new ContractSchedule("_"), new PartTimePercentage("_"), new Team {Site = new Site("site")}, schedulePeriod, ruleSet, skill);
 			var skillDays = SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
-				1, //minimum staffing
-				2, //DO should end up here
-				5,
-				5,
-				5,
-				25, //DO from beginning
-				5)
+				0.8, //minimum staffing = 1, prevent putting DO here
+				0.9, //DO should end up here
+				1,
+				1,
+				1,
+				1, //DO from beginning
+				1)
 			);
 			skillDays.First().SetMinimumAgents(1);
 			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, new DateOnlyPeriod(firstDay, firstDay.AddDays(7)), new TimePeriod(8, 0, 16, 0));
