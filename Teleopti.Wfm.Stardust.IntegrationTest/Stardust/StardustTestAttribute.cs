@@ -36,22 +36,22 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 		{
 			base.BeforeTest(testDetails);
 
-			var dataHash = DefaultDataCreator.HashValue;
+			//var dataHash = DefaultDataCreator.HashValue;
 
 			DataSourceHelper.CreateDatabases();
-			var path = "";
-			#if DEBUG
-				path = "./";
-			#else
-				path = Path.Combine(InfraTestConfigReader.DatabaseBackupLocation, "Stardust");
-			#endif
+//			var path = "";
+//#if DEBUG
+//			path = "./";
+//#else
+//				path = Path.Combine(InfraTestConfigReader.DatabaseBackupLocation, "Stardust");
+//#endif
 
 
-			var haveDatabases =
-				DataSourceHelper.TryRestoreApplicationDatabaseBySql(path, dataHash) &&
-				DataSourceHelper.TryRestoreAnalyticsDatabaseBySql(path, dataHash);
-			
-			if (!haveDatabases)
+			//var haveDatabases =
+			//	DataSourceHelper.TryRestoreApplicationDatabaseBySql(path, dataHash) &&
+			//	DataSourceHelper.TryRestoreAnalyticsDatabaseBySql(path, dataHash);
+
+			//if (!haveDatabases)
 			{
 				StateHolderProxyHelper.SetupFakeState(
 					DataSourceHelper.CreateDataSource(Container),
@@ -65,8 +65,8 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 				DataCreator.Create();
 
 				
-				DataSourceHelper.BackupApplicationDatabaseBySql(path, dataHash);
-				DataSourceHelper.BackupAnalyticsDatabaseBySql(path, dataHash);
+				//DataSourceHelper.BackupApplicationDatabaseBySql(path, dataHash);
+				//DataSourceHelper.BackupAnalyticsDatabaseBySql(path, dataHash);
 				
 				StateHolderProxyHelper.Logout();
 				StateHolderProxyHelper.ClearStateHolder();

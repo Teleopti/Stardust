@@ -29,7 +29,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 {
-	[Ignore("Ignoring for now"),StardustTest]
+	[StardustTest]
 	public class PayrollEndToEndTest
 	{
 		public IEventPublisher EventPublisher;
