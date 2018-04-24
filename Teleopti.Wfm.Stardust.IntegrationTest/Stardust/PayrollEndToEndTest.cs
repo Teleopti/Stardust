@@ -38,7 +38,7 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 
 		private AssertRetryStrategy _assertRetryStrategy;
 
-		[Test]
+		[Test, Ignore("Optimistic Lock")]
 		public void ShouldPublishAndProcessPayrollJob()
 		{
 			_logger.Info("Starting the test for payroll");
