@@ -1,6 +1,6 @@
 (function() {
-	angular.module('wfm.intraday').component('theSkillPicker', {
-		templateUrl: 'app/intraday/components/skillPicker.html',
+	angular.module('wfm.skillPicker').component('theSkillPicker', {
+		templateUrl: 'app/global/skill-picker-2/skillPicker.html',
 		controller: theComponent,
 		bindings: {
 			skills: '<', //The list of skills to display, each object should contain at least Name and Id.
@@ -14,13 +14,14 @@
 		}
 	});
 
-	theComponent.$inject = ['$translate', '$log'];
+	theComponent.$inject = ['$translate', '$log', 'skillIconService'];
 
-	function theComponent($translate, $log) {
+	function theComponent($translate, $log, skillIconService) {
 		var ctrl = this;
 
 		ctrl.selectedSkill = '';
 		ctrl.selectedSkillGroup = '';
+		ctrl.getSkillIcon = skillIconService.get;
 
 		ctrl.skillSelected = function(skill) {
 			ctrl.skillPickerOpen = false;

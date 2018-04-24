@@ -30,7 +30,6 @@
 	</button> -->
     </div>
 </div>
-
 <!-- create skillgroup -->
 <modal-dialog show='vm.editGroupNameBox'
               ng-cloak>
@@ -59,7 +58,6 @@
         </aside>
     </div>
 </modal-dialog>
-
 <div class="con-row"
      ng-if="vm.skillGroups.length <= 0"
      ng-cloak>
@@ -73,7 +71,6 @@
         </div>
     </div>
 </div>
-
 <form name="form"
       class="wfm-form"
       novalidate
@@ -86,14 +83,12 @@
                 <div class="sub-header">
                     <h2>{{'SelectSkillGroup'|translate}}</h2>
                     <div class="head-actions panel-menu">
-
                         <div tabindex=0
                              class="context-menu card-context grow-out"
                              ng-click="vm.createSkillGroup($event)">
                             <i class="mdi mdi-plus"></i>
                             <md-tooltip>{{'AddSkillGroup'|translate}}</md-tooltip>
                         </div>
-
                     </div>
                 </div>
                 <div class="con-row">
@@ -132,7 +127,6 @@
                                     </span>
                                     <md-tooltip ng-if="!skillGroup.Saved">{{'NotSaved'|translate}}</md-tooltip>
                                 </span>
-
                                 <div class="wfm-leave-behind wfm-leave-behind-3"
                                      style="top:3px; opacity:1;">
                                     <span>
@@ -176,7 +170,6 @@
                         <h2>{{'AvailableSkills'|translate}}</h2>
                         <div class="con-row">
                             <div class="con-flex">
-
                                 <label for="filter2"
                                        class="input-icon">
                                     <i class="mdi mdi-filter-outline">
@@ -188,13 +181,12 @@
                                         <md-tooltip>{{'FilterSkills'|translate}}</md-tooltip>
                                     </i>
                                 </label>
-
                                 <ul class="wfm-list"
                                     style="width: 100%"
                                     id="available_skills_list">
                                     <li ng-repeat="skill in vm.skills | filter:skillFilter"
                                         ng-click="vm.selectSkill(skill)">
-                                        <i ng-class="vm.getSkillIcon(skill)"></i>
+                                        g
                                         <span class="list-item-container"
                                               style="margin-left: 0">
                                             {{skill.Name}}
@@ -206,7 +198,6 @@
                                         </span>
                                     </li>
                                 </ul>
-
                             </div>
                         </div>
                     </div>
@@ -227,7 +218,6 @@
                                   class="animate-show"
                                   ng-show="vm.skillGroups[vm.selectedGroupIndex].Skills.length <= 0">{{'YouHaveToSelectAtLeastOneSkill'|translate}}</span>
                         </span>
-
                         <div class="con-row">
                             <div class="con-flex">
                                 <div class="wfm-chip-wrap"
@@ -265,7 +255,6 @@
             </div>
         </div>
 </form>
-
 <!-- modals -->
 <div ng-cloak
      class="modal-box">
@@ -288,14 +277,12 @@
                                 id="cancelDeleteButton"
                                 ng-click="vm.deleteConfirmation=false; $event.stopPropagation();"
                                 class="wfm-btn wfm-btn-invis-primary">{{'No'|translate}}</button>
-
                     </aside>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
 <div ng-cloak
      class="modal-box">
     <div ng-cloak

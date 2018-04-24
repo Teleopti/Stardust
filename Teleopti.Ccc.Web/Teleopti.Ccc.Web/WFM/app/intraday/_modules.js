@@ -12,6 +12,7 @@
 			'wfm.dateOffset',
 			'wfm.utilities',
 			'wfm.skillGroup',
+			'wfm.skillPicker',
 			'skillGroupService'
 		])
 		.run(['$rootScope', '$state', '$location', intradayModule]);
