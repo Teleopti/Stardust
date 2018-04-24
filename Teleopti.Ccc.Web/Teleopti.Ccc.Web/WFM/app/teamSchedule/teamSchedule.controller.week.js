@@ -72,7 +72,7 @@
 		};
 
 		vm.onStartOfWeekChanged = function () {
-			vm.scheduleDate = new Date(vm.startOfWeek.getTime());
+			vm.scheduleDate = new Date(vm.startOfWeek);
 			if (!moment(vm.startOfWeek).startOf('week').isSame(vm.startOfWeek, 'day')) {
 				vm.startOfWeek = moment(vm.startOfWeek).startOf('week').toDate();
 			}
