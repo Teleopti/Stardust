@@ -2,20 +2,12 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.AbsenceWaitlisting;
-using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Payroll;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Payroll;
 using Teleopti.Ccc.Domain.Repositories;
@@ -32,21 +24,16 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 	[StardustTest]
 	public class PayrollEndToEndTest
 	{
-		public IEventPublisher EventPublisher;
 		public IStardustSender StardustSender;
 		public IConfigReader ConfigReader;
 		public ICurrentBusinessUnit CurrentBusinessUnit;
 		public IPersonRepository PersonRepository;
 		public WithUnitOfWork WithUnitOfWork;
-		public IUpdatedBy UpdatedBy;
 		public IPayrollExportRepository PayrollExportRepository;
 		public IPayrollFormatRepository PayrollFormatRepository;
 		public IPayrollResultRepository PayrollResultRepository;
 
 
-		public IAbsenceRepository AbsenceRepository;
-		public IPersonRequestRepository PersonRequestRepository;
-		public IQueuedAbsenceRequestRepository QueuedAbsenceRequestRepository;
 		private AssertRetryStrategy _assertRetryStrategy;
 
 		[Test]
@@ -63,6 +50,8 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 
 			performLevel2Assert();
 			_assertRetryStrategy.Reset();
+
+			Thread.Sleep(60000);
 
 		}
 
