@@ -34,12 +34,16 @@
 
 		ctrl.onTimeRangeChange = function () {
 			var isValidTime = ctrl.timeRange.startTime && ctrl.timeRange.endTime;
-			if (isValidTime && endEarlierThanStartOnTimeOnly()) {
-				ctrl.isNextDay = false;
-				ctrl.timeRange.startTime = serviceDateFormatHelper.getDateOnly(ctrl.date) + ' ' + serviceDateFormatHelper.getTimeOnly(ctrl.timeRange.startTime);
-				ctrl.timeRange.endTime = getNextDate() + ' ' + serviceDateFormatHelper.getTimeOnly(ctrl.timeRange.endTime);
+			if (isValidTime) {
+				if (endEarlierThanStartOnTimeOnly()) {
+					ctrl.isNextDay = false;
+					ctrl.timeRange.startTime = serviceDateFormatHelper.getDateOnly(ctrl.date) + ' ' + serviceDateFormatHelper.getTimeOnly(ctrl.timeRange.startTime);
+					ctrl.timeRange.endTime = getNextDate() + ' ' + serviceDateFormatHelper.getTimeOnly(ctrl.timeRange.endTime);
+				} else {
+					ctrl.onIsNextDayChanged();
+				}
 			}
-
+			
 			ctrl.timeRange = angular.copy(ctrl.timeRange);
 			ctrl.ngModelCtrl.$setViewValue(ctrl.timeRange);
 		}
