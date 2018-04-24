@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading;
+using log4net;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -32,6 +33,7 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 		public IPayrollExportRepository PayrollExportRepository;
 		public IPayrollFormatRepository PayrollFormatRepository;
 		public IPayrollResultRepository PayrollResultRepository;
+		private static readonly ILog _logger = LogManager.GetLogger(typeof(PayrollEndToEndTest));
 
 
 		private AssertRetryStrategy _assertRetryStrategy;
@@ -39,20 +41,27 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 		[Test]
 		public void ShouldPublishAndProcessPayrollJob()
 		{
+			_logger.Info("Starting the test for payroll");
 			var period = new DateOnlyPeriod(2016, 02, 20, 2016, 02, 28);
 
 			StardustSender.Send(dataSetup(period));
+			_logger.Info("Sent job to star dust");
 
 			performLevel1Assert(period);
 			_assertRetryStrategy.Reset();
 
+			_logger.Info("Performed level1 assertion");
 			startServuceBus();
+
+			_logger.Info("Started stardust");
 
 			performLevel2Assert();
 			_assertRetryStrategy.Reset();
 
-			Thread.Sleep(60000);
+			_logger.Info("performed level2 assertion");
 
+			Thread.Sleep(10000);
+			_logger.Info("Test Finished");
 		}
 
 		private void performLevel2Assert()
@@ -100,6 +109,7 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 
 		private RunPayrollExportEvent dataSetup(DateOnlyPeriod period)
 		{
+			_logger.Info("Setting the data for payroll");
 			_assertRetryStrategy = new AssertRetryStrategy(10);
 			RunPayrollExportEvent message = null;
 

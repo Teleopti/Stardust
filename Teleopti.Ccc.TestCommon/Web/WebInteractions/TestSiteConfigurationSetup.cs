@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using IISExpressAutomation;
+using log4net;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Support.Library.Config;
@@ -19,6 +20,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 		public static string WindowsClaimProvider;
 		public static string TeleoptiClaimProvider;
 		public static string UrlWindowsIdentityProvider;
+		private static readonly ILog _logger = LogManager.GetLogger(typeof(TestSiteConfigurationSetup));
 
 		private static IISExpress _server;
 		private static IDisposable _portsConfiguration;
@@ -113,8 +115,13 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 			{
 				_server?.Dispose();
 			}
-			catch (NullReferenceException)
+			catch (InvalidOperationException ex)
 			{
+				_logger.Error(ex.InnerException);
+			}
+			catch (NullReferenceException ex)
+			{
+				_logger.Error(ex.InnerException);
 				//sometimes throws "Process window not found" - don't make that exception bubble up in this teardown...
 				//https://github.com/ElemarJR/IISExpress.Automation/blob/master/src/IISExpress.Automation/ProcessEnvelope.cs
 			}
