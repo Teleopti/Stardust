@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 	{
 		private RestrictionNotAbleToBeScheduledReport _restrictionNotAbleToBeScheduledReport;
 		private IEnumerable<IPerson> _selectedAgents;
-		private DateOnly _selectedDate;
+		private DateOnlyPeriod _selectedDates;
 		private IEnumerable<RestrictionsNotAbleToBeScheduledResult> _result;
 		private SchedulerSplitters _parent;
 		private AgentRestrictionsDetailView _detailView;
@@ -66,10 +66,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 			backgroundWorker1.RunWorkerAsync();
 		}
 
-		public void SetSelected(IEnumerable<IPerson> selectedAgents, DateOnly selectedDate, AgentRestrictionsDetailView detailView)
+		public void SetSelected(IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedDates, AgentRestrictionsDetailView detailView)
 		{
 			_selectedAgents = selectedAgents;
-			_selectedDate = selectedDate;
+			_selectedDates = selectedDates;
 			_detailView = detailView;
 			_detailView.ViewPasteCompleted += detailViewViewPasteCompleted;
 			autoCreateIfNotToManyAgents();
@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 		private void backgroundWorker1DoWork(object sender, DoWorkEventArgs e)
 		{
 			backgroundWorker1.ReportProgress(0, "XXAnalyzingRestrictions");
-			_result = _restrictionNotAbleToBeScheduledReport.Create(_selectedDate,
+			_result = _restrictionNotAbleToBeScheduledReport.Create(_selectedDates,
 				_selectedAgents, new BackgroundWorkerWrapper(backgroundWorker1));
 		}
 

@@ -249,12 +249,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				newPanel.ReselectSelected();
 			}
 		}
-		public void SetSelectedAgentsOnAgentsNotPossibleToSchedule(IEnumerable<IPerson> selectedPersons, DateOnly selectedDate, AgentRestrictionsDetailView detailView)
+		public void SetSelectedAgentsOnAgentsNotPossibleToSchedule(IEnumerable<IPerson> selectedPersons, DateOnlyPeriod selectedDates, AgentRestrictionsDetailView detailView)
 		{
 			if (_schedulerRestrictionReport47013)
 			{
 				var newPanel = (AgentsNotPossibleToSchedule)teleoptiLessIntellegentSplitContainerView.Panel1.Controls[0];
-				newPanel.SetSelected(selectedPersons, selectedDate, detailView);
+				newPanel.SetSelected(selectedPersons, selectedDates, detailView);
 			}
 		}
 		[RemoveMeWithToggle(Toggles.Scheduler_RestrictionReport_47013)]

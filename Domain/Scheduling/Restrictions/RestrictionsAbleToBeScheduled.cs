@@ -265,6 +265,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 		private DateOnlyPeriod? checkWeeks(IScheduleMatrixPro matrix, IVirtualSchedulePeriod virtualSchedulePeriod, IDictionary<DateOnly, MinMax<TimeSpan>> possibleMinMaxWorkShiftLengths)
 		{
 			var weekCount = _workShiftMinMaxCalculator.WeekCount(matrix);
+			if (virtualSchedulePeriod == null || !virtualSchedulePeriod.IsValid || virtualSchedulePeriod.Contract == null)
+				return null;
 			var maxTimePerWeek = virtualSchedulePeriod.Contract.WorkTimeDirective.MaxTimePerWeek;
 			for (int weekIndex = 0; weekIndex < weekCount; weekIndex++)
 			{
@@ -272,7 +274,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 				{
 					var skipThisWeek = _workShiftMinMaxCalculatorSkipWeekCheck.SkipWeekCheck(matrix, firstDateInWeekIndex(weekIndex, matrix));
 					if (skipThisWeek)
-						return null;
+						continue;
 				}
 
 				var currentMinMaxForWeek = currentMinMax(weekIndex, possibleMinMaxWorkShiftLengths, matrix);

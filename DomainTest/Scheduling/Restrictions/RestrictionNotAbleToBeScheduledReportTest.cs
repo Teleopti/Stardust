@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
 			SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent1, agent2 }, preferenceDays, skillDays);
 
-			var result = Target.Create(period.StartDate, new[] {agent1, agent2}, new NoSchedulingProgress());
+			var result = Target.Create(period, new[] {agent1, agent2}, new NoSchedulingProgress());
 
 			result.Count().Should().Be.EqualTo(1);
 			result.First().Agent.Should().Be.EqualTo(agent2);
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
 			SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent1 }, preferenceDays, skillDays);
 
-			var result = Target.Create(period.StartDate, new[] { agent1 }, new NoSchedulingProgress());
+			var result = Target.Create(period, new[] { agent1 }, new NoSchedulingProgress());
 
 			result.Count().Should().Be.EqualTo(1);
 			result.First().Reason.Should().Be.EqualTo(RestrictionNotAbleToBeScheduledReason.TooMuchWorkTimeInPeriod);
@@ -126,13 +126,110 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent1 }, new List<IPreferenceDay>(), skillDays);
 			
 
-			var result = Target.Create(period.StartDate, new[] { agent1 }, new NoSchedulingProgress());
+			var result = Target.Create(period, new[] { agent1 }, new NoSchedulingProgress());
 
 			result.Count().Should().Be.EqualTo(0);
 			foreach (var dateOnly in period.DayCollection())
 			{
 				stateHolder.Schedules[agent1].ScheduledDay(dateOnly).PersonAssignment(true).DayOff().Should().Be.Null();
 			}
+		}
+
+		[Test]
+		public void ShouldHandleAgentWithPersonPeriodStartingLaterThanSchedulePeriod()
+		{
+			var period = new DateOnlyPeriod(2017, 12, 01, 2017, 12, 31);
+			var activity = new Activity().WithId();
+			var skill = new Skill().For(activity).DefaultResolution(60).WithId().IsOpen();
+			var scenario = new Scenario();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity,
+				new TimePeriodWithSegment(8, 0, 10, 0, 60), new TimePeriodWithSegment(16, 0, 18, 0, 60),
+				new ShiftCategory("_").WithId()));
+			var agent1 = new Person().WithId()
+				.WithPersonPeriod(period.StartDate.AddDays(3), new RuleSetBag(ruleSet), skill)
+				.WithSchedulePeriodOneMonth(period.StartDate);
+			agent1.Period(period.StartDate.AddDays(3)).PersonContract = new PersonContract(new Contract("_"), new PartTimePercentage("_"),
+				new ContractScheduleWorkingMondayToFriday());
+
+			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, period, 1);
+
+			SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent1 }, new List<IPreferenceDay>(), skillDays);
+
+			var result = Target.Create(period, new[] { agent1 }, new NoSchedulingProgress());
+
+			result.Count().Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldHandleAgentWithPersonPeriodStartingLaterThanSchedulePeriodAndIssuesInWeekNumberTwo()
+		{
+			var period = new DateOnlyPeriod(2017, 12, 01, 2017, 12, 31);
+			var activity = new Activity().WithId();
+			var skill = new Skill().For(activity).DefaultResolution(60).WithId().IsOpen();
+			var scenario = new Scenario();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity,
+				new TimePeriodWithSegment(8, 0, 10, 0, 60), new TimePeriodWithSegment(16, 0, 18, 0, 60),
+				new ShiftCategory("_").WithId()));
+			var agent1 = new Person().WithId()
+				.WithPersonPeriod(period.StartDate.AddDays(3), new RuleSetBag(ruleSet), skill)
+				.WithSchedulePeriodOneMonth(period.StartDate);
+			agent1.Period(period.StartDate.AddDays(3)).PersonContract = new PersonContract(new Contract("_"), new PartTimePercentage("_"),
+				new ContractScheduleWorkingMondayToFriday());
+
+			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, period, 1);
+			var preferenceDays = new List<IPreferenceDay>();
+			for (int i = 0; i < 7; i++)
+			{
+				var mondaySecondWeek = new DateOnly(2017,12,4);
+				preferenceDays.Add(new PreferenceDay(agent1, mondaySecondWeek.AddDays(i),
+					new PreferenceRestriction { WorkTimeLimitation = new WorkTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(8)) }));
+			}
+			
+			SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent1 }, preferenceDays, skillDays);
+
+			var result = Target.Create(period, new[] { agent1 }, new NoSchedulingProgress());
+
+			result.Count().Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldHandleMultipleMatrixesInSelection()
+		{
+			var period = new DateOnlyPeriod(2018, 4, 2, 2018, 4, 29);
+			var activity = new Activity().WithId();
+			var skill = new Skill().For(activity).DefaultResolution(60).WithId().IsOpen();
+			var scenario = new Scenario();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity,
+				new TimePeriodWithSegment(8, 0, 10, 0, 60), new TimePeriodWithSegment(16, 0, 18, 0, 60),
+				new ShiftCategory("_").WithId()));
+			var agent1 = new Person().WithId()
+				.WithPersonPeriod(period.StartDate.AddDays(3), new RuleSetBag(ruleSet), skill)
+				.WithSchedulePeriodTwoWeeks(period.StartDate);
+			agent1.Period(period.StartDate.AddDays(3)).PersonContract = new PersonContract(new Contract("_"), new PartTimePercentage("_"),
+				new ContractScheduleWorkingMondayToFriday());
+
+			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, period, 1);
+			var preferenceDays = new List<IPreferenceDay>();
+			for (int i = 0; i < 7; i++)
+			{
+				var mondaySecondWeekFirstSchedulePeriod = new DateOnly(2018, 4, 9);
+				preferenceDays.Add(new PreferenceDay(agent1, mondaySecondWeekFirstSchedulePeriod.AddDays(i),
+					new PreferenceRestriction { WorkTimeLimitation = new WorkTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(8)) }));
+
+				var mondaySecondWeekSecondSchedulePeriod = new DateOnly(2018, 4, 23);
+				preferenceDays.Add(new PreferenceDay(agent1, mondaySecondWeekSecondSchedulePeriod.AddDays(i),
+					new PreferenceRestriction { WorkTimeLimitation = new WorkTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(8)) }));
+			}
+
+			SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent1 }, preferenceDays, skillDays);
+
+			var result = Target.Create(period, new[] { agent1 }, new NoSchedulingProgress());
+
+			result.Count().Should().Be.EqualTo(2);
+			result.First().Reason.Should().Be.EqualTo(RestrictionNotAbleToBeScheduledReason.TooMuchWorkTimeInPeriod);
+			result.First().Period.Should().Be.EqualTo(new DateOnlyPeriod(new DateOnly(2018, 4, 9), new DateOnly(2018, 4, 9).AddDays(6)));
+			result.Last().Reason.Should().Be.EqualTo(RestrictionNotAbleToBeScheduledReason.TooMuchWorkTimeInPeriod);
+			result.Last().Period.Should().Be.EqualTo(new DateOnlyPeriod(new DateOnly(2018, 4, 23), new DateOnly(2018, 4, 23).AddDays(6)));
 		}
 
 		public RestrictionNotAbleToBeScheduledReportTest(SeperateWebRequest seperateWebRequest) : base(seperateWebRequest)

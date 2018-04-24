@@ -14,21 +14,31 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 		{
 			_restrictionsAbleToBeScheduled = restrictionsAbleToBeScheduled;
 		}
-		public IEnumerable<RestrictionsNotAbleToBeScheduledResult> Create(DateOnly date, IEnumerable<IPerson> persons, ISchedulingProgress backgroundWorker)
+		public IEnumerable<RestrictionsNotAbleToBeScheduledResult> Create(DateOnlyPeriod selectedPeriod, IEnumerable<IPerson> persons, ISchedulingProgress backgroundWorker)
 		{
 			var report = new List<RestrictionsNotAbleToBeScheduledResult>();
-			var totalCount = persons.Count();
+			
 			int counter = 0;
+			var virtualSchedulePeriods = new HashSet<IVirtualSchedulePeriod>();
 			foreach (var person in persons)
 			{
-				RestrictionsNotAbleToBeScheduledResult failReason = _restrictionsAbleToBeScheduled.Execute(person.VirtualSchedulePeriod(date));
-				if(failReason != null)
+				foreach (var dateOnly in selectedPeriod.DayCollection())
+				{
+					virtualSchedulePeriods.Add(person.VirtualSchedulePeriod(dateOnly));
+				}
+			}
+
+			var totalCount = virtualSchedulePeriods.Count;
+			foreach (var virtualSchedulePeriod in virtualSchedulePeriods)
+			{
+				RestrictionsNotAbleToBeScheduledResult failReason = _restrictionsAbleToBeScheduled.Execute(virtualSchedulePeriod);
+				if (failReason != null)
 					report.Add(failReason);
-				
+
 				counter++;
 				if (counter % 10 == 0)
 				{
-					backgroundWorker.ReportProgress((int)((counter / (double)totalCount)* 100), "XXAgentsAnalyzed");
+					backgroundWorker.ReportProgress((int)((counter / (double)totalCount) * 100), "XXAgentsAnalyzed");
 				}
 			}
 

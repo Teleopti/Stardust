@@ -4470,7 +4470,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		}
 
 		private void prepareAgentRestrictionView(IScheduleDay schedulePart, ScheduleViewBase detailView,
-			IList<IPerson> persons)
+			IList<IPerson> persons, DateOnlyPeriod selectedPeriod)
 		{
 			if (persons.Count == 0) return;
 			var selectedPerson = persons.FirstOrDefault();
@@ -4489,7 +4489,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				schedulerSplitters1.AgentRestrictionGrid.MergeHeaders();
 				schedulerSplitters1.AgentRestrictionGrid.LoadData(SchedulerState, persons, schedulingOptions, selectedPerson, view, schedulePart, _container);
 			}
-			schedulerSplitters1.SetSelectedAgentsOnAgentsNotPossibleToSchedule(persons, selectedDate, view);
+			schedulerSplitters1.SetSelectedAgentsOnAgentsNotPossibleToSchedule(persons, selectedPeriod, view);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"),
@@ -4501,6 +4501,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			IScheduleDay selectedPart = null;
 			IScheduleSortCommand sortCommand = null;
 			IList<IPerson> selectedPersons = null;
+			IEnumerable<DateOnly> selectedDates;
+			var selectedPeriod = new DateOnlyPeriod();
 			int currentSortColumn = 0;
 			bool isAscendingSort = false;
 
@@ -4509,6 +4511,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				_grid.ContextMenuStrip = null;
 				scheduleParts = _scheduleView.SelectedSchedules();
 				selectedPersons = new List<IPerson>(_scheduleView.AllSelectedPersons(scheduleParts));
+				selectedDates = _scheduleView.AllSelectedDates(scheduleParts);
+				selectedPeriod = new DateOnlyPeriod(selectedDates.Min(), selectedDates.Max());
 				sortCommand = _scheduleView.Presenter.SortCommand;
 				currentSortColumn = _scheduleView.Presenter.CurrentSortColumn;
 				isAscendingSort = _scheduleView.Presenter.IsAscendingSort;
@@ -4581,7 +4585,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 						_gridLockManager, SchedulePartFilter, _clipHandlerSchedule, _overriddenBusinessRulesHolder, callback,
 						_defaultScheduleTag, _workShiftWorkTime);
 					_scheduleView.TheGrid.ContextMenuStrip = contextMenuStripRestrictionView;
-					prepareAgentRestrictionView(selectedPart, _scheduleView, selectedPersons);
+					prepareAgentRestrictionView(selectedPart, _scheduleView, selectedPersons, selectedPeriod);
 
 					if (scheduleParts != null)
 					{
@@ -6889,7 +6893,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			var selectedSchedules = _scheduleView.SelectedSchedules();
 			if (_scheduleView != null && _scheduleView.HelpId == "AgentRestrictionsDetailView")
 			{
-				prepareAgentRestrictionView(null, _scheduleView, new List<IPerson>(_scheduleView.AllSelectedPersons(selectedSchedules)));
+				IEnumerable<DateOnly> selectedDates = _scheduleView.AllSelectedDates(selectedSchedules);
+				prepareAgentRestrictionView(null, _scheduleView, new List<IPerson>(_scheduleView.AllSelectedPersons(selectedSchedules)), new DateOnlyPeriod(selectedDates.Min(), selectedDates.Max()));
 			}
 			displayTimeZoneInfo();
 			_scheduleView.SetSelectedDateLocal(_dateNavigateControl.SelectedDate);
