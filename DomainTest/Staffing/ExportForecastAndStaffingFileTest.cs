@@ -598,13 +598,34 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			};
 			SkillCombinationResourceRepository.ScheduledHeadsForSkillList.AddRange(heads);
 
-			var period = new DateOnlyPeriod(new DateOnly(2017, 8, 15), new DateOnly(2017, 8, 16));
+			var period = new DateOnlyPeriod(new DateOnly(2017, 8, 15), new DateOnly(2017, 8, 15));
 			var forecastedData = Target.ExportDemand(skill, period, true);
 			var rows = forecastedData.Split(new[] { "\r\n" }, StringSplitOptions.None);
 			rows.Length.Should().Be(3);
 			rows[0].Should().Be("skill,startdatetime,enddatetime,forecasted agents,total scheduled agents,total diff,total scheduled heads");
 			rows[1].Should().Be.EqualTo("skillname,8/15/2017 8:00 AM,8/15/2017 8:15 AM,20,8,-12,8");
 			rows[2].Should().Be.EqualTo("skillname,8/15/2017 8:15 AM,8/15/2017 8:30 AM,20,6,-14,6");
+		}
+		
+		[Test]
+		public void ShouldReturnCorrectNumberOfIntervals()
+		{
+			FakeUserCulture.Is(new CultureInfo("sv-SE"));
+			var skill = createSkillWithFullOpenHours(15, "skillname");
+			skill.SetId(Guid.NewGuid());
+			var scenario = SkillSetupHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository);
+			var skillDay0 = SkillSetupHelper.CreateSkillDayWithDemand(skill, scenario, new DateTime(2017, 8, 14), new TimePeriod(0, 0, 24, 0), 15.7);
+			var skillDay = SkillSetupHelper.CreateSkillDayWithDemand(skill, scenario, new DateTime(2017, 8, 15), new TimePeriod(0, 0, 24, 0), 15.7);
+			var skillDay2 = SkillSetupHelper.CreateSkillDayWithDemand(skill, scenario, new DateTime(2017, 8, 16), new TimePeriod(0, 0, 24, 0), 15.7);
+			SkillRepository.Add(skill);
+			SkillDayRepository.Add(skillDay0);
+			SkillDayRepository.Add(skillDay);
+			SkillDayRepository.Add(skillDay2);
+			
+			var period = new DateOnlyPeriod(new DateOnly(2017, 8, 15), new DateOnly(2017, 8, 15));
+			var forecastedData = Target.ExportDemand(skill, period);
+			var rows = forecastedData.Split(new[] { "\r\n" }, StringSplitOptions.None);
+			rows.Length.Should().Be(96+1);
 		}
 		
 		private static ISkill createSkill(int intervalLength, string skillName, TimePeriod openHours)
@@ -616,6 +637,20 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 					Activity = new Activity("activity_" + skillName).WithId()
 				}.WithId();
 			var workload =  WorkloadFactory.CreateWorkloadWithOpenHours(skill, openHours);
+			workload.SetId(Guid.NewGuid());
+
+			return skill;
+		}
+		
+		private static ISkill createSkillWithFullOpenHours(int intervalLength, string skillName)
+		{
+			var skill =
+				new Skill(skillName, skillName, Color.Empty, intervalLength, new SkillTypePhone(new Description("SkillTypeInboundTelephony"), ForecastSource.InboundTelephony))
+				{
+					TimeZone = TimeZoneInfo.Utc,
+					Activity = new Activity("activity_" + skillName).WithId()
+				}.WithId();
+			var workload =  WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
 			workload.SetId(Guid.NewGuid());
 
 			return skill;
