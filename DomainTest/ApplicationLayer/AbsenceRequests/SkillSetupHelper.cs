@@ -174,23 +174,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			return listdeviationPerInterval.Aggregate((prev, next) => alpha * next + (1 - alpha) * prev);
 		}
 
-		public static double GetActualStaffing(ISkillDay skillDay, IList<SkillIntervalStatistics> actualCalls)
-		{
-			var calculatorService = new StaffingCalculatorServiceFacade();
-			var skillData = skillDay.SkillDataPeriodCollection.First().ServiceAgreement;
-			var actualStaffingSkill1 = calculatorService.AgentsUseOccupancy(
-				skillData.ServiceLevel.Percent.Value,
-				(int)skillData.ServiceLevel.Seconds,
-				actualCalls.First().Calls,
-				actualCalls.First().AverageHandleTime,
-				TimeSpan.FromMinutes(minutesPerInterval),
-				skillData.MinOccupancy.Value,
-				skillData.MaxOccupancy.Value,
-				skillDay.Skill.MaxParallelTasks);
-
-			return actualStaffingSkill1;
-		}
-
 		public static void PopulateStaffingReadModels(ISkill skill, DateTime scheduledStartTime,
 			DateTime scheduledEndTime, double staffing,
 			FakeSkillCombinationResourceRepository skillCombinationResourceRepository)
