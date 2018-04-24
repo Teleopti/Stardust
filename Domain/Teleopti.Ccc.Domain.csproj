@@ -147,11 +147,13 @@
     <Compile Include="AgentInfo\IPlanningGroupStaffLoader.cs" />
     <Compile Include="AgentInfo\IFixedStaffLoader.cs" />
     <Compile Include="AgentInfo\PrimaryPersonSkillFilter.cs" />
+    <Compile Include="AgentInfo\Requests\IOvertimeActivityBelongsToDateProvider.cs" />
     <Compile Include="AgentInfo\Requests\IOvertimeRequestDefaultStartTimeProvider.cs" />
     <Compile Include="AgentInfo\Requests\IOvertimeRequestSkillProvider.cs" />
     <Compile Include="AgentInfo\Requests\IShiftStartTimeProvider.cs" />
     <Compile Include="AgentInfo\Requests\IShiftEndTimeProvider.cs" />
     <Compile Include="AgentInfo\Requests\ISkillOpenHourFilter.cs" />
+    <Compile Include="AgentInfo\Requests\OvertimeActivityBelongsToDateProvider.cs" />
     <Compile Include="AgentInfo\Requests\OvertimeDefaultStartTimeResult.cs" />
     <Compile Include="AgentInfo\Requests\OvertimeRequestApprovalService.cs" />
     <Compile Include="AgentInfo\Requests\AbsenceRequestApprovalService.cs" />

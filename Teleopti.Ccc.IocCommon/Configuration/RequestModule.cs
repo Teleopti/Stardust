@@ -109,7 +109,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<OvertimeRequestOpenPeriodProvider>().As<IOvertimeRequestOpenPeriodProvider>();
 			builder.RegisterType<OvertimeRequestSkillProvider>().As<IOvertimeRequestSkillProvider>();
 			builder.RegisterType<SkillStaffingDataSkillTypeFilter>().As<ISkillStaffingDataSkillTypeFilter>();
-			builder.RegisterType<OvertimeActivityBelongsToDateProvider>().As<IOvertimeActivityBelongsToDateProvider>();
+			builder.RegisterType<OvertimeActivityBelongsToDateProviderToggle74984Off>().As<IOvertimeActivityBelongsToDateProvider>();
+			registerType
+				<IOvertimeActivityBelongsToDateProvider, OvertimeActivityBelongsToDateProvider, OvertimeActivityBelongsToDateProviderToggle74984Off>(builder,
+					Toggles.OvertimeRequestChangeBelongsToDateForOverNightShift_74984);
 
 			builder.RegisterType<SkillOpenHourFilter>().As<ISkillOpenHourFilter>();
 			builder.RegisterType<WaitlistPreloadService>().AsSelf().InstancePerLifetimeScope();
