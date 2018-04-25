@@ -21,7 +21,7 @@ CREATE TABLE stage.stg_acd_login_person
 	insert_date smalldatetime NULL,
 	update_date smalldatetime NULL,
 	datasource_update_date smalldatetime NULL
-	)  ON STAGE
+	)
 GO
 ALTER TABLE stage.stg_acd_login_person SET (LOCK_ESCALATION = TABLE)
 GO
@@ -64,7 +64,7 @@ CREATE TABLE stage.stg_overtime
 	update_date smalldatetime NOT NULL,
 	datasource_update_date smalldatetime NULL,
 	is_deleted bit NOT NULL
-	)  ON STAGE
+	)
 GO
 ALTER TABLE stage.stg_overtime SET (LOCK_ESCALATION = TABLE)
 GO
