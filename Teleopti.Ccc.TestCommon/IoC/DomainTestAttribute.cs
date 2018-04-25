@@ -2,11 +2,13 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.DistributedLock;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -48,7 +50,6 @@ using Teleopti.Ccc.TestCommon.Services;
 
 namespace Teleopti.Ccc.TestCommon.IoC
 {
-	
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_StoreEvents_47721)]
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_RemoveApprovedOOA_47721)]
 	public class DomainTestAttribute : IoCTestAttribute
@@ -59,6 +60,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			// stuff?
+			system.UseTestDouble<MutableNow_ExperimentalEventPublishing>().For<MutableNow, INow>();
 			system.UseTestDouble<FakeTimeZoneGuard>().For<ITimeZoneGuard>();
 			system.UseTestDouble<PersonRequestAuthorizationCheckerForTest>().For<IPersonRequestCheckAuthorization>();
 			system.UseTestDouble<FakeUserTimeZone>().For<IUserTimeZone>();
